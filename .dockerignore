@@ -1,0 +1,10 @@
+.git
+.worktrees
+.env
+**/.venv
+**/node_modules
+**/.next
+**/__pycache__
+coverage
+htmlcov
+docs/knowledge-base

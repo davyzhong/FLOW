@@ -1,0 +1,43 @@
+:root {
+  color-scheme: light;
+  font-family:
+    Inter, "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, sans-serif;
+  background: #f3f6fa;
+  color: #13233a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+.home-shell {
+  min-height: 100vh;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 0.75rem;
+}
+
+.home-shell h1,
+.home-shell p {
+  margin: 0;
+}
+
+.home-shell h1 {
+  letter-spacing: 0.08em;
+}
+
+.home-mark {
+  display: grid;
+  width: 3rem;
+  height: 3rem;
+  place-items: center;
+  border-radius: 0.75rem;
+  background: #1463ff;
+  color: white;
+  font-weight: 700;
+}

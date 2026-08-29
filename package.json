@@ -1,0 +1,16 @@
+{
+  "name": "flow",
+  "private": true,
+  "packageManager": "pnpm@10.17.1",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "unrs-resolver"
+    ]
+  },
+  "scripts": {
+    "test": "pnpm -r test",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck"
+  }
+}
