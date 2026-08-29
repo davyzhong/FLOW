@@ -1,0 +1,122 @@
+<style>
+  .flow-shell { max-width: 1180px; margin: 0 auto; }
+  .flow-grid { display:grid; grid-template-columns: 210px 1fr; gap:16px; margin-top:20px; }
+  .flow-sidebar { background:#13223a; color:#e7eef9; border-radius:14px; padding:18px 14px; min-height:520px; }
+  .flow-brand { font-size:20px; font-weight:700; letter-spacing:.08em; margin-bottom:22px; }
+  .flow-brand span { color:#67d6c2; }
+  .nav-group { font-size:11px; color:#91a2ba; text-transform:uppercase; letter-spacing:.08em; margin:18px 8px 8px; }
+  .nav-item { padding:10px 10px; border-radius:8px; margin:4px 0; font-size:13px; }
+  .nav-item.active { background:#24415f; color:white; box-shadow:inset 3px 0 #67d6c2; }
+  .flow-main { display:flex; flex-direction:column; gap:14px; }
+  .step-row { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+  .step { border:1px solid #dfe6ef; border-radius:12px; background:white; padding:13px; position:relative; min-height:84px; }
+  .step:not(:last-child):after { content:'→'; position:absolute; right:-11px; top:31px; color:#7c8da5; z-index:2; font-weight:700; }
+  .step-no { display:inline-flex; width:22px; height:22px; align-items:center; justify-content:center; background:#eaf1f8; color:#365474; border-radius:6px; font-size:11px; font-weight:700; }
+  .step strong { display:block; font-size:13px; margin:8px 0 3px; color:#142238; }
+  .step p { font-size:11px; line-height:1.4; margin:0; color:#64748b; }
+  .dash { border:1px solid #dfe6ef; border-radius:14px; background:#f7f9fc; padding:15px; }
+  .dash-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+  .dash-head strong { font-size:15px; color:#15243a; }
+  .filters { color:#607086; font-size:11px; background:white; border:1px solid #dfe6ef; padding:7px 10px; border-radius:7px; }
+  .kpis { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; }
+  .kpi { background:white; border:1px solid #e2e8f0; border-radius:9px; padding:10px; }
+  .kpi small { color:#6b7b90; font-size:10px; }
+  .kpi b { display:block; font-size:17px; color:#17243a; margin:5px 0; }
+  .bad { color:#c55252; font-size:10px; }
+  .good { color:#17836c; font-size:10px; }
+  .dash-body { display:grid; grid-template-columns:1.55fr .95fr; gap:10px; margin-top:10px; }
+  .panel { background:white; border:1px solid #e2e8f0; border-radius:10px; padding:12px; }
+  .panel-title { display:flex; justify-content:space-between; font-size:12px; font-weight:700; color:#23344d; margin-bottom:10px; }
+  .chart { height:125px; display:flex; align-items:flex-end; gap:8px; padding:10px 4px 0; border-bottom:1px solid #dbe3ed; }
+  .bar { flex:1; background:#9bb6d1; border-radius:3px 3px 0 0; }
+  .bar.warn { background:#d98574; }
+  .finding { border-left:3px solid #d15f56; padding:8px 9px; background:#fff8f6; margin:7px 0; border-radius:4px; }
+  .finding b { font-size:11px; color:#26364d; display:block; }
+  .finding span { font-size:10px; color:#69788b; }
+  .investigation { border:1px dashed #8da2bc; border-radius:10px; padding:10px 12px; background:#f1f6fb; display:flex; justify-content:space-between; align-items:center; }
+  .investigation div:first-child { font-size:12px; color:#27384e; }
+  .pill { padding:6px 9px; border-radius:7px; background:#183654; color:white; font-size:10px; }
+  .legend { display:flex; gap:18px; flex-wrap:wrap; margin-top:14px; font-size:12px; color:#5d6e84; }
+  .legend b { color:#22324a; }
+</style>
+
+<div class="flow-shell">
+  <h2>FLOW · Finance BP 工作台信息架构</h2>
+  <p class="subtitle">一个月度分析批次贯穿数据准备、经营诊断和报告交付；驾驶舱是中心，不是终点。</p>
+
+  <div class="flow-grid">
+    <aside class="flow-sidebar">
+      <div class="flow-brand">FL<span>O</span>W</div>
+      <div class="nav-group">本期工作</div>
+      <div class="nav-item">数据导入</div>
+      <div class="nav-item">数据质量</div>
+      <div class="nav-item active">经营驾驶舱</div>
+      <div class="nav-item">分析调查 <span style="float:right;color:#67d6c2">4</span></div>
+      <div class="nav-group">分析专题</div>
+      <div class="nav-item">规模与收入</div>
+      <div class="nav-item">盈利与成本</div>
+      <div class="nav-item">应收与现金</div>
+      <div class="nav-group">交付</div>
+      <div class="nav-item">洞察与结论</div>
+      <div class="nav-item">报告中心</div>
+    </aside>
+
+    <main class="flow-main">
+      <div class="step-row">
+        <div class="step"><span class="step-no">01</span><strong>导入与映射</strong><p>上传单个多 Sheet 月度数据包，AI 识别字段与结构。</p></div>
+        <div class="step"><span class="step-no">02</span><strong>校验与对账</strong><p>处理缺失、重复、单位和口径异常，确认数据可用。</p></div>
+        <div class="step"><span class="step-no">03</span><strong>诊断与结论</strong><p>从驾驶舱异常进入 Investigation，核验驱动与证据。</p></div>
+        <div class="step"><span class="step-no">04</span><strong>报告与交付</strong><p>从同一分析结果生成 PPT、Excel 和正式月报。</p></div>
+      </div>
+
+      <section class="dash">
+        <div class="dash-head"><strong>2026年7月 · 供应链业务经营驾驶舱</strong><div class="filters">当月 / YTD · 预算 · 同比 · 全部业务</div></div>
+        <div class="kpis">
+          <div class="kpi"><small>履约订单量</small><b>186.4 万</b><span class="good">预算 +8.2%</span></div>
+          <div class="kpi"><small>营业收入</small><b>4.82 亿元</b><span class="good">预算 +5.7%</span></div>
+          <div class="kpi"><small>毛利率</small><b>13.6%</b><span class="bad">预算 -2.4pt</span></div>
+          <div class="kpi"><small>经营利润</small><b>2,940 万</b><span class="bad">预算 -18.9%</span></div>
+          <div class="kpi"><small>经营现金流</small><b>-1,260 万</b><span class="bad">预算 -3,480万</span></div>
+        </div>
+        <div class="dash-body">
+          <div class="panel">
+            <div class="panel-title"><span>规模增长与盈利趋势</span><span style="font-weight:400;color:#74849a">近12个月</span></div>
+            <div class="chart">
+              <div class="bar" style="height:45%"></div><div class="bar" style="height:50%"></div><div class="bar" style="height:55%"></div>
+              <div class="bar" style="height:59%"></div><div class="bar" style="height:66%"></div><div class="bar" style="height:72%"></div>
+              <div class="bar warn" style="height:64%"></div><div class="bar warn" style="height:61%"></div><div class="bar warn" style="height:56%"></div>
+              <div class="bar warn" style="height:51%"></div><div class="bar warn" style="height:46%"></div><div class="bar warn" style="height:39%"></div>
+            </div>
+            <div style="font-size:10px;color:#758499;margin-top:7px">订单与收入持续增长，但毛利贡献自3月起连续下滑</div>
+          </div>
+          <div class="panel">
+            <div class="panel-title"><span>本期关键异常</span><span style="color:#c55252">4 项</span></div>
+            <div class="finding"><b>低毛利业务增长稀释整体毛利率</b><span>估算影响：-1.3pt / -628万元</span></div>
+            <div class="finding"><b>运输与外包履约成本超预算</b><span>估算影响：-412万元</span></div>
+            <div class="finding"><b>战略客户账期延长</b><span>现金影响：-1,860万元</span></div>
+          </div>
+        </div>
+      </section>
+
+      <div class="investigation">
+        <div><b>异常不是一句提示，而是一条可进入的分析任务</b><br><span style="font-size:10px;color:#6d7d91">异常定义 → 影响测算 → 驱动拆解 → 维度下钻 → 证据 → Finance BP 结论</span></div>
+        <div class="pill">进入 Investigation →</div>
+      </div>
+    </main>
+  </div>
+
+  <div class="legend">
+    <span><b>左侧导航：</b>按 Finance BP 工作流组织</span>
+    <span><b>中心首页：</b>总览 + 异常 + 专题入口</span>
+    <span><b>统一对象：</b>指标、Finding、证据和报告共用</span>
+  </div>
+
+  <div class="options" style="margin-top:20px">
+    <div class="option" data-choice="approve" onclick="toggleSelect(this)">
+      <div class="letter">✓</div><div class="content"><h3>结构正确，继续</h3><p>进入驾驶舱页面的详细分区设计。</p></div>
+    </div>
+    <div class="option" data-choice="adjust" onclick="toggleSelect(this)">
+      <div class="letter">↺</div><div class="content"><h3>需要调整</h3><p>告诉我希望修改的导航、流程或首页重点。</p></div>
+    </div>
+  </div>
+</div>

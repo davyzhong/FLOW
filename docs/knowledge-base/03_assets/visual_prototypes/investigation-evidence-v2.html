@@ -1,0 +1,84 @@
+<style>
+  .evapp{max-width:1240px;margin:0 auto;color:#1b2a3f}.frame{display:grid;grid-template-columns:164px minmax(0,1fr) 286px;min-height:750px;border:1px solid #d9e2ec;border-radius:12px;overflow:hidden;background:#f5f7fa;box-shadow:0 10px 30px rgba(30,48,70,.08)}
+  .side{background:#14243a;color:#dce6f1;padding:13px 10px}.brand{font-size:18px;font-weight:800;letter-spacing:.1em;padding:2px 8px 16px}.brand i{font-style:normal;color:#64d0bc}.back{font-size:8px;color:#bdcad9;border:1px solid #3b5068;border-radius:6px;padding:7px 8px;margin-bottom:16px}.sg{font-size:7px;color:#8193a9;text-transform:uppercase;letter-spacing:.1em;margin:13px 8px 5px}.step{display:grid;grid-template-columns:17px 1fr;gap:6px;align-items:center;padding:6px 7px;border-radius:5px;font-size:8px}.step b{width:15px;height:15px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#2c435d;font-size:6px}.step.done b{background:#357966}.step.active{background:#29445f}.step.active b{background:#63cdb9;color:#14382f}
+  .main{padding:10px;min-width:0}.crumb{font-size:7px;color:#75859a;margin-bottom:6px}.head{background:#fff;border:1px solid #dae3ec;border-left:4px solid #d25d57;border-radius:7px;padding:8px 9px}.head-top{display:flex;justify-content:space-between;gap:10px}.head h3{font-size:13px;margin:0 0 3px}.head p{font-size:8px;color:#647489;margin:0;line-height:1.45}.badge{font-size:7px;padding:3px 5px;border-radius:4px;background:#e7f3ef;color:#216f5d;white-space:nowrap}.review-flow{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-top:7px}.review-step{border:1px solid #dfe6ee;background:#f8fafc;border-radius:5px;padding:5px;text-align:center;font-size:7px;color:#67778c}.review-step.done{background:#e8f4f0;border-color:#cfe7df;color:#226b5a}.review-step.active{background:#fff5e7;border-color:#ead2a6;color:#996516;font-weight:700}
+  .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:6px}.metric{background:#fff;border:1px solid #dce4ed;border-radius:6px;padding:6px}.metric small{font-size:7px;color:#78879a}.metric b{display:block;font-size:12px;margin-top:2px}.red{color:#c94f49!important}.green{color:#177c67!important}.amber{color:#a9701d!important}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px}.panel{background:#fff;border:1px solid #dae3ec;border-radius:6px;padding:7px;min-width:0}.ph{display:flex;justify-content:space-between;font-size:8px;font-weight:700;margin-bottom:5px}.ph span:last-child{font-size:7px;color:#75859a;font-weight:400}.bridge{height:94px;display:flex;align-items:flex-end;gap:3px;border-bottom:1px solid #dae2eb}.w{flex:1;text-align:center;min-width:8px}.w div{border-radius:2px 2px 0 0}.w small{font-size:6px;color:#75859a;display:block;margin-top:2px;white-space:nowrap}.total{background:#496b87}.pos{background:#67aa97}.neg{background:#d97c72}
+  table{width:100%;border-collapse:collapse;font-size:7px}th{background:#f4f7f9;color:#69798e;font-weight:600;text-align:right;padding:4px;border-bottom:1px solid #dce4ed}th:first-child,td:first-child{text-align:left}td{text-align:right;padding:4px;border-bottom:1px solid #edf1f5}.bold{font-weight:700}.source-link{color:#315f82;text-decoration:underline;text-underline-offset:2px}
+  .formula{background:#182a40;color:#e9f0f7;border-radius:6px;padding:7px;font-size:7px;line-height:1.55;margin-top:6px}.formula b{color:#70dbc7}.formula code{color:#dce9f5}.checks{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:6px}.check{background:#fff;border:1px solid #dce4ed;border-radius:6px;padding:6px;font-size:7px}.check strong{display:block;font-size:8px;margin-bottom:2px}.check span{color:#718197}.check.good{border-left:3px solid #49a389}.check.warn{border-left:3px solid #d39843}
+  .source-table{margin-top:6px}.conclusion{margin-top:6px;background:#fff;border:1px solid #cad9e6;border-radius:6px;padding:7px}.fields{display:grid;grid-template-columns:1fr 1fr;gap:5px}.field{border:1px solid #e0e6ed;border-radius:5px;padding:5px}.field.full{grid-column:1/-1}.field label{font-size:6px;color:#7a899b;display:block;margin-bottom:2px}.field p{font-size:7px;line-height:1.45;margin:0}.lock{margin-top:5px;background:#fff4e8;border:1px solid #ecd7b7;color:#8b6429;border-radius:5px;padding:5px;font-size:7px}
+  .inspector{background:#edf2f6;border-left:1px solid #d7e1eb;padding:9px;min-width:0}.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;background:#dfe7ee;border-radius:6px;padding:3px}.tab{text-align:center;font-size:7px;padding:5px;border-radius:4px;color:#68788c}.tab.active{background:#fff;color:#20344c;font-weight:700;box-shadow:0 1px 4px rgba(30,50,75,.1)}.inspect-card{background:#fff;border:1px solid #d9e2eb;border-radius:7px;padding:7px;margin-top:7px}.ic-head{font-size:9px;font-weight:700;margin-bottom:6px}.kv{display:grid;grid-template-columns:72px 1fr;gap:4px;padding:4px 0;border-bottom:1px solid #edf1f5;font-size:7px}.kv span:first-child{color:#78879b}.kv:last-child{border:0}.lineage{display:flex;flex-direction:column;gap:4px}.node{background:#f5f8fa;border:1px solid #dfe6ed;border-radius:5px;padding:5px;font-size:7px;position:relative}.node:not(:last-child):after{content:'↓';display:block;position:absolute;bottom:-11px;left:50%;color:#7d8da0}.audit{display:flex;gap:6px;padding:5px 0;border-bottom:1px solid #edf1f5;font-size:7px}.avatar{width:19px;height:19px;border-radius:50%;background:#dbe7f0;color:#31546f;display:flex;align-items:center;justify-content:center;font-weight:700;flex:none}.audit b{display:block}.audit span{color:#79889a}.buttons{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:7px}.btn{border:1px solid #cbd8e4;background:#fff;border-radius:5px;text-align:center;padding:6px;font-size:7px}.btn.primary{background:#183654;color:#fff;border-color:#183654}
+  .notes{display:flex;gap:14px;flex-wrap:wrap;margin:12px 0 2px;font-size:11px;color:#637388}.notes b{color:#24364d}
+</style>
+
+<div class="evapp">
+  <h2>Investigation V2 · 证据与复核优先</h2>
+  <p class="subtitle">AI 可以提出解释，但只有完成口径、公式、数据血缘和人工审核的 Finding 才能进入正式报告。</p>
+  <div class="frame">
+    <aside class="side">
+      <div class="brand">FL<i>O</i>W</div><div class="back">← 返回经营驾驶舱</div>
+      <div class="sg">调查流程</div>
+      <div class="step done"><b>✓</b><span>确认异常</span></div><div class="step done"><b>✓</b><span>量化影响</span></div><div class="step done"><b>✓</b><span>驱动拆解</span></div><div class="step active"><b>4</b><span>证据与复核</span></div><div class="step"><b>5</b><span>形成结论</span></div><div class="step"><b>6</b><span>发布到报告</span></div>
+      <div class="sg">证据状态</div>
+      <div class="step"><b>8</b><span>已核验</span></div><div class="step"><b>1</b><span>待业务确认</span></div><div class="step"><b>0</b><span>口径冲突</span></div>
+    </aside>
+
+    <main class="main">
+      <div class="crumb">经营驾驶舱 / 盈利与成本 / F-2026-07-004 / 证据审阅</div>
+      <section class="head"><div class="head-top"><div><h3>规模增长但低毛利业务结构稀释整体毛利率</h3><p>订单量高于预算 8.2%，但毛利率低于预算 2.4pt。当前结论由 4 项驱动和 9 项证据支持。</p></div><span class="badge">计算已重现</span></div>
+        <div class="review-flow"><div class="review-step done">数据通过对账</div><div class="review-step done">指标口径锁定</div><div class="review-step done">驱动计算完成</div><div class="review-step active">1项证据待确认</div><div class="review-step">Finance BP签发</div></div>
+      </section>
+      <div class="metrics"><div class="metric"><small>毛利率预算差</small><b class="red">-2.4pt</b></div><div class="metric"><small>本月毛利影响</small><b class="red">-1,157万</b></div><div class="metric"><small>已解释比例</small><b class="green">93.6%</b></div><div class="metric"><small>证据覆盖率</small><b class="amber">8 / 9</b></div></div>
+
+      <div class="grid">
+        <section class="panel"><div class="ph"><span>毛利差异桥</span><span>点击任一驱动查看计算依据</span></div><div class="bridge">
+          <div class="w"><div class="total" style="height:82px"></div><small>预算</small></div><div class="w"><div class="pos" style="height:35px"></div><small>规模</small></div><div class="w"><div class="neg" style="height:49px"></div><small>产品结构</small></div><div class="w"><div class="neg" style="height:37px"></div><small>客户结构</small></div><div class="w"><div class="neg" style="height:43px"></div><small>履约成本</small></div><div class="w"><div class="total" style="height:59px"></div><small>实际</small></div>
+        </div></section>
+        <section class="panel"><div class="ph"><span>驱动计算明细</span><span>当前选择：产品结构</span></div><table>
+          <tr><th>驱动</th><th>计算方法</th><th>影响</th><th>状态</th></tr>
+          <tr><td class="bold">产品结构</td><td class="source-link">Mix variance</td><td class="red">-628</td><td class="green">已复核</td></tr>
+          <tr><td class="bold">履约成本</td><td class="source-link">Rate × Volume</td><td class="red">-412</td><td class="green">已复核</td></tr>
+          <tr><td class="bold">客户折扣</td><td class="source-link">Price variance</td><td class="red">-286</td><td class="amber">待确认</td></tr>
+          <tr><td class="bold">规模增长</td><td class="source-link">Volume effect</td><td class="green">+269</td><td class="green">已复核</td></tr>
+        </table></section>
+      </div>
+
+      <div class="formula"><b>当前计算公式</b><br><code>产品结构影响 = Σ[(本期产品收入占比 − 预算产品收入占比) × 预算产品毛利率 × 本期总收入]</code><br><span style="color:#99afc2">结果：-628.4 万元 · 四舍五入显示为 -628 万元 · 计算引擎版本 metric-engine@0.3.1</span></div>
+
+      <div class="checks"><div class="check good"><strong>✓ 汇总对账通过</strong><span>产品收入合计 = 财务收入 48,220万元</span></div><div class="check good"><strong>✓ 期间口径一致</strong><span>实际与预算均采用自然月 2026-07</span></div><div class="check warn"><strong>! 商务条款待确认</strong><span>2家战略客户折扣变更尚未取得审批单</span></div></div>
+
+      <section class="panel source-table"><div class="ph"><span>贡献最大的源记录</span><span>查看全部 184 条 →</span></div><table>
+        <tr><th>客户群</th><th>物流产品</th><th>区域</th><th>实际收入</th><th>预算占比</th><th>实际占比</th><th>毛利率</th><th>结构影响</th><th>来源</th></tr>
+        <tr><td class="bold">市场客户</td><td>快消</td><td>华东</td><td>2,640</td><td>3.1%</td><td>5.5%</td><td>5.9%</td><td class="red">-132</td><td class="source-link">经营实际!R2841</td></tr>
+        <tr><td class="bold">战略客户</td><td>运输</td><td>华东</td><td>3,820</td><td>5.8%</td><td>7.9%</td><td>7.6%</td><td class="red">-118</td><td class="source-link">经营实际!R912</td></tr>
+        <tr><td class="bold">市场客户</td><td>快消</td><td>华南</td><td>1,510</td><td>1.8%</td><td>3.1%</td><td>7.2%</td><td class="red">-76</td><td class="source-link">经营实际!R2960</td></tr>
+        <tr><td class="bold">战略客户</td><td>仓配</td><td>华北</td><td>2,980</td><td>5.4%</td><td>6.2%</td><td>14.8%</td><td class="red">-41</td><td class="source-link">经营实际!R604</td></tr>
+      </table></section>
+
+      <section class="conclusion"><div class="ph"><span>待签发的 Finance BP 结论</span><span>版本 2 · AI起草 / 人工编辑</span></div><div class="fields">
+        <div class="field"><label>已验证事实</label><p>低毛利快消及运输业务占比上升，形成产品结构负向影响 628 万元；该测算已通过汇总与期间口径校验。</p></div>
+        <div class="field"><label>分析判断</label><p>利润缺口的首要原因是增长结构，而非规模不足。运输外包涨价是第二大原因。</p></div>
+        <div class="field full"><label>仍待确认</label><p>两家战略客户阶梯折扣变化预计影响 286 万元，需补充商务审批单后才能作为正式原因发布。</p></div>
+      </div><div class="lock">当前 Finding 尚不可进入正式报告：存在 1 项关键证据待确认。</div></section>
+    </main>
+
+    <aside class="inspector">
+      <div class="tabs"><div class="tab active">证据</div><div class="tab">AI助手</div><div class="tab">审阅记录</div></div>
+      <div class="inspect-card"><div class="ic-head">证据 E-2026-07-031</div>
+        <div class="kv"><span>证据类型</span><b>计算结果</b></div><div class="kv"><span>支持的判断</span><b>产品结构影响 -628万</b></div><div class="kv"><span>数据批次</span><b>2026-07 / V3</b></div><div class="kv"><span>状态</span><b class="green">已复核</b></div><div class="kv"><span>复核人</span><b>Finance BP · 陈晨</b></div><div class="kv"><span>复核时间</span><b>08-12 10:36</b></div>
+      </div>
+      <div class="inspect-card"><div class="ic-head">数据血缘</div><div class="lineage">
+        <div class="node"><b>源文件</b><br>2026年7月供应链经营分析.xlsx</div><div class="node"><b>源工作表</b><br>经营实际 · 18,426行</div><div class="node"><b>标准字段</b><br>revenue / product / customer_segment</div><div class="node"><b>指标计算</b><br>gross_profit_mix_variance</div><div class="node"><b>Finding</b><br>F-2026-07-004</div>
+      </div></div>
+      <div class="inspect-card"><div class="ic-head">审阅记录</div>
+        <div class="audit"><div class="avatar">系</div><div><b>系统完成计算重现</b><span>公式、输入和输出哈希一致</span></div></div><div class="audit"><div class="avatar">陈</div><div><b>Finance BP 已复核</b><span>确认结构差异计算口径</span></div></div><div class="audit"><div class="avatar">王</div><div><b>业务负责人待确认</b><span>等待上传商务审批单</span></div></div>
+      </div>
+      <div class="buttons"><div class="btn">退回修改</div><div class="btn primary">确认此证据</div></div>
+    </aside>
+  </div>
+  <div class="notes"><span><b>可追溯：</b>从结论回到公式、字段和 Excel 源行</span><span><b>可重现：</b>记录数据批次与计算引擎版本</span><span><b>可治理：</b>证据状态决定 Finding 能否发布</span><span><b>AI有边界：</b>假设与事实必须分开</span></div>
+  <div class="options" style="margin-top:16px">
+    <div class="option" data-choice="evidence-v2-approve" onclick="toggleSelect(this)"><div class="letter">A</div><div class="content"><h3>这个方向正确</h3><p>将证据、复核和可追溯性作为 Investigation 的核心能力。</p></div></div>
+    <div class="option" data-choice="evidence-v2-adjust" onclick="toggleSelect(this)"><div class="letter">B</div><div class="content"><h3>还需要调整</h3><p>告诉我哪些验证环节过重、过轻或缺失。</p></div></div>
+  </div>
+</div>

@@ -1,0 +1,79 @@
+<style>
+  .data-app{max-width:1240px;margin:0 auto;color:#192a40}.frame{display:grid;grid-template-columns:172px 1fr;min-height:735px;border:1px solid #d8e2ed;border-radius:12px;overflow:hidden;background:#f4f7fa;box-shadow:0 10px 30px rgba(26,47,71,.08)}
+  .side{background:#092c59;color:#dce9f6;padding:14px 10px}.brand{font-size:18px;font-weight:800;letter-spacing:.1em;padding:2px 8px 17px}.brand i{font-style:normal;color:#5ed1be}.nav{padding:7px 8px;border-radius:5px;font-size:9px;margin:2px 0}.nav.active{background:#1763c5;color:#fff}.group{font-size:7px;color:#7fa0c3;text-transform:uppercase;letter-spacing:.1em;margin:15px 8px 5px}.count{float:right;background:#e05e57;color:#fff;border-radius:8px;padding:1px 5px;font-size:6px}
+  .main{padding:11px;min-width:0}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.title{font-size:15px;font-weight:750}.sub{font-size:8px;color:#748499;margin-top:2px}.btn{border:1px solid #c9d7e5;background:#fff;border-radius:5px;padding:6px 8px;font-size:8px}.btn.primary{background:#1261c9;color:#fff;border-color:#1261c9}
+  .steps{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:8px}.step{background:#fff;border:1px solid #dbe4ed;border-radius:6px;padding:7px;display:grid;grid-template-columns:20px 1fr;gap:6px;align-items:center}.step b{width:19px;height:19px;border-radius:50%;background:#e8eef4;color:#718196;display:flex;align-items:center;justify-content:center;font-size:7px}.step span{font-size:8px;color:#68788c}.step.done b{background:#3a9d84;color:#fff}.step.done span{color:#285d52}.step.active{border-color:#4e8fdc;box-shadow:inset 0 0 0 1px #4e8fdc}.step.active b{background:#1465c9;color:#fff}.step.active span{font-weight:700;color:#173b67}
+  .status{display:grid;grid-template-columns:1.35fr .65fr;gap:7px}.panel{background:#fff;border:1px solid #dbe4ed;border-radius:7px;padding:8px;min-width:0}.ph{display:flex;justify-content:space-between;align-items:center;font-size:9px;font-weight:700;margin-bottom:6px}.ph span:last-child{font-size:7px;color:#75859a;font-weight:400}.file{display:grid;grid-template-columns:34px 1fr auto;gap:8px;align-items:center;background:#f5f8fb;border:1px solid #e0e7ef;border-radius:6px;padding:7px}.excel{width:31px;height:31px;background:#1f855f;color:#fff;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}.file b{display:block;font-size:9px}.file span{font-size:7px;color:#748398}.pill{font-size:7px;padding:3px 5px;border-radius:4px;background:#e4f3ee;color:#21715d}
+  .quality{display:grid;grid-template-columns:64px 1fr;gap:8px;align-items:center}.score{width:60px;height:60px;border-radius:50%;background:conic-gradient(#25997d 0 98.7%,#e5ebf0 98.7%);display:flex;align-items:center;justify-content:center;position:relative}.score:after{content:'';position:absolute;width:48px;height:48px;background:#fff;border-radius:50%}.score b{position:relative;z-index:1;font-size:12px}.qline{font-size:7px;padding:3px 0;border-bottom:1px solid #edf1f5;display:flex;justify-content:space-between}.green{color:#177b66!important}.red{color:#ca504a!important}.amber{color:#a9721f!important}
+  .content{display:grid;grid-template-columns:196px 1fr;gap:7px;margin-top:7px}.sheets{background:#fff;border:1px solid #dbe4ed;border-radius:7px;padding:7px}.sheet{display:grid;grid-template-columns:16px 1fr auto;gap:5px;align-items:center;padding:6px 5px;border-bottom:1px solid #edf1f5;font-size:8px}.sheet.active{background:#eaf2fb;border-radius:5px;color:#174d87}.sheet b{font-size:7px}.sheet small{font-size:6px;color:#7a899b}.dot{width:8px;height:8px;border-radius:50%;background:#36a187}.dot.warn{background:#d89a43}.sheet-stat{font-size:6px;color:#63758a}
+  .mapping{background:#fff;border:1px solid #dbe4ed;border-radius:7px;padding:7px;min-width:0}.map-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:6px}.ms{background:#f5f8fb;border:1px solid #e1e7ee;border-radius:5px;padding:5px}.ms small{font-size:6px;color:#7b899b}.ms b{display:block;font-size:10px;margin-top:2px}
+  table{width:100%;border-collapse:collapse;font-size:7px}th{background:#f3f6f9;color:#63748a;text-align:left;padding:5px 4px;border-bottom:1px solid #d9e2eb;font-weight:600}td{padding:5px 4px;border-bottom:1px solid #edf1f5}.select{border:1px solid #cfdbe6;background:#fff;border-radius:4px;padding:3px 4px;color:#314a65}.confidence{height:4px;background:#e7edf2;border-radius:4px;overflow:hidden;width:44px;display:inline-block;vertical-align:middle;margin-right:3px}.confidence i{display:block;height:100%;background:#329d83}.sample{color:#75859a}.flag{font-size:6px;padding:2px 4px;border-radius:4px;background:#e6f3ef;color:#23715e}.flag.warn{background:#fff2df;color:#95631a}
+  .rules{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:7px}.rule{display:grid;grid-template-columns:18px 1fr auto;gap:6px;align-items:center;padding:5px 2px;border-bottom:1px solid #edf1f5;font-size:7px}.icon{width:16px;height:16px;border-radius:4px;background:#e7f2ee;color:#26735f;display:flex;align-items:center;justify-content:center}.rule b{display:block;font-size:8px}.rule span{color:#77869a}.switch{width:22px;height:12px;border-radius:8px;background:#2f9b80;position:relative}.switch:after{content:'';position:absolute;width:8px;height:8px;background:#fff;border-radius:50%;right:2px;top:2px}
+  .recon{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}.rec{border:1px solid #dfe6ee;border-radius:5px;padding:6px}.rec small{font-size:6px;color:#7a899c}.rec b{font-size:9px;display:block;margin:2px 0}.rec span{font-size:6px}.bottom{display:flex;justify-content:space-between;align-items:center;margin-top:7px;background:#edf4fa;border:1px solid #d5e2ee;border-radius:6px;padding:7px 9px;font-size:8px}.bottom b{color:#164d81}.actions{display:flex;gap:5px}
+  .notes{display:flex;gap:14px;flex-wrap:wrap;margin:12px 0 2px;font-size:11px;color:#637388}.notes b{color:#24364d}
+</style>
+
+<div class="data-app">
+  <h2>Excel 数据导入 · AI 识别与人工确认</h2>
+  <p class="subtitle">系统负责理解和建议，Finance BP 负责确认口径；导入结果必须可校验、可回退、可追溯。</p>
+  <div class="frame">
+    <aside class="side">
+      <div class="brand">FL<i>O</i>W</div><div class="group">本期工作</div>
+      <div class="nav active">数据导入</div><div class="nav">数据质量 <span class="count">3</span></div><div class="nav">经营驾驶舱</div><div class="nav">分析调查</div>
+      <div class="group">数据管理</div><div class="nav">分析批次</div><div class="nav">字段与口径</div><div class="nav">清洗规则</div><div class="nav">导入历史</div>
+      <div class="group">交付</div><div class="nav">报告中心</div>
+    </aside>
+    <main class="main">
+      <div class="top"><div><div class="title">创建 2026年7月经营分析批次</div><div class="sub">单工作簿 · AI辅助映射 · 用户确认后入库</div></div><div class="actions"><div class="btn">保存草稿</div><div class="btn primary">继续校验</div></div></div>
+      <div class="steps"><div class="step done"><b>✓</b><span>上传文件</span></div><div class="step done"><b>✓</b><span>识别工作表</span></div><div class="step active"><b>3</b><span>字段映射</span></div><div class="step"><b>4</b><span>清洗与校验</span></div><div class="step"><b>5</b><span>对账并发布</span></div></div>
+
+      <div class="status">
+        <section class="panel"><div class="ph"><span>已上传文件</span><span>文件指纹：8A4F…C921</span></div><div class="file"><div class="excel">X</div><div><b>2026年7月供应链经营分析.xlsx</b><span>6个工作表 · 18,426行 · 4.8 MB · 上传于 08:36</span></div><span class="pill">结构识别完成</span></div></section>
+        <section class="panel"><div class="ph"><span>预估数据质量</span><span>导入前检查</span></div><div class="quality"><div class="score"><b>98.7</b></div><div><div class="qline"><span>完整性</span><b class="green">99.4%</b></div><div class="qline"><span>映射置信度</span><b class="green">96.8%</b></div><div class="qline"><span>需人工确认</span><b class="amber">3项</b></div></div></div></section>
+      </div>
+
+      <div class="content">
+        <aside class="sheets"><div class="ph"><span>工作表识别</span><span>6 / 6</span></div>
+          <div class="sheet active"><i class="dot"></i><div><b>经营实际</b><small>事实表 · 8,420行</small></div><span class="sheet-stat">97%</span></div>
+          <div class="sheet"><i class="dot"></i><div><b>财务实际</b><small>事实表 · 84行</small></div><span class="sheet-stat">99%</span></div>
+          <div class="sheet"><i class="dot"></i><div><b>月度预算</b><small>事实表 · 672行</small></div><span class="sheet-stat">98%</span></div>
+          <div class="sheet"><i class="dot warn"></i><div><b>应收回款</b><small>事实表 · 1,246行</small></div><span class="sheet-stat">91%</span></div>
+          <div class="sheet"><i class="dot"></i><div><b>客户主数据</b><small>维表 · 386行</small></div><span class="sheet-stat">99%</span></div>
+          <div class="sheet"><i class="dot"></i><div><b>产品与区域</b><small>维表 · 52行</small></div><span class="sheet-stat">100%</span></div>
+        </aside>
+        <section class="mapping"><div class="ph"><span>经营实际 · 字段映射</span><span>AI 已识别 18 / 20 个字段</span></div>
+          <div class="map-summary"><div class="ms"><small>源字段</small><b>20</b></div><div class="ms"><small>自动匹配</small><b class="green">17</b></div><div class="ms"><small>待确认</small><b class="amber">3</b></div><div class="ms"><small>未使用</small><b>0</b></div></div>
+          <table><tr><th>Excel 源字段</th><th>样例值</th><th>标准字段</th><th>数据类型</th><th>识别置信度</th><th>状态</th></tr>
+            <tr><td><b>核算月份</b></td><td class="sample">2026/07</td><td><span class="select">期间 period_month ▾</span></td><td>年月</td><td><span class="confidence"><i style="width:99%"></i></span>99%</td><td><span class="flag">自动匹配</span></td></tr>
+            <tr><td><b>客户属性</b></td><td class="sample">战略 / 市场</td><td><span class="select">客户群 customer_segment ▾</span></td><td>枚举</td><td><span class="confidence"><i style="width:96%"></i></span>96%</td><td><span class="flag">自动匹配</span></td></tr>
+            <tr><td><b>产品大类</b></td><td class="sample">仓配一体</td><td><span class="select">物流产品 logistics_product ▾</span></td><td>文本</td><td><span class="confidence"><i style="width:97%"></i></span>97%</td><td><span class="flag">自动匹配</span></td></tr>
+            <tr><td><b>妥投票数</b></td><td class="sample">12,486</td><td><span class="select">履约订单量 fulfilled_orders ▾</span></td><td>整数</td><td><span class="confidence"><i style="width:87%;background:#d49a43"></i></span>87%</td><td><span class="flag warn">请确认单位</span></td></tr>
+            <tr><td><b>含税收入</b></td><td class="sample">326,842.17</td><td><span class="select">营业收入 revenue ▾</span></td><td>金额</td><td><span class="confidence"><i style="width:91%"></i></span>91%</td><td><span class="flag warn">含税口径</span></td></tr>
+            <tr><td><b>配送支出</b></td><td class="sample">248,491.05</td><td><span class="select">运输履约成本 transport_cost ▾</span></td><td>金额</td><td><span class="confidence"><i style="width:83%;background:#d49a43"></i></span>83%</td><td><span class="flag warn">请确认范围</span></td></tr>
+          </table>
+        </section>
+      </div>
+
+      <div class="rules">
+        <section class="panel"><div class="ph"><span>AI 建议的清洗规则</span><span>3项已启用</span></div>
+          <div class="rule"><div class="icon">✓</div><div><b>统一客户名称</b><span>“华东XX商贸有限公司”等 7 个别名归并到客户主数据</span></div><div class="switch"></div></div>
+          <div class="rule"><div class="icon">¥</div><div><b>金额由元转换为万元</b><span>应用于经营实际、预算和应收回款的 9 个金额字段</span></div><div class="switch"></div></div>
+          <div class="rule"><div class="icon">税</div><div><b>含税收入转换为不含税收入</b><span>按物流产品适用税率计算，并保留原始值</span></div><div class="switch"></div></div>
+        </section>
+        <section class="panel"><div class="ph"><span>导入对账预览</span><span>发布前必须全部通过</span></div><div class="recon">
+          <div class="rec"><small>经营收入 vs 财务收入</small><b>48,220.4 / 48,220.4</b><span class="green">差异 0.0 · 通过</span></div>
+          <div class="rec"><small>产品收入汇总</small><b>48,220.4</b><span class="green">与总收入一致</span></div>
+          <div class="rec"><small>客户主数据匹配</small><b>382 / 386</b><span class="amber">4个客户待确认</span></div>
+        </div></section>
+      </div>
+
+      <div class="bottom"><span><b>AI 建议：</b> 当前字段映射可进入校验阶段；需确认“妥投票数”单位、配送支出口径及4个客户主数据匹配。</span><div class="actions"><div class="btn">查看原始数据</div><div class="btn primary">确认映射并继续 →</div></div></div>
+    </main>
+  </div>
+  <div class="notes"><span><b>AI负责：</b>识别、建议、解释异常</span><span><b>用户负责：</b>确认业务含义与统计口径</span><span><b>系统保证：</b>原始值保留、规则留痕、结果对账、版本可回退</span></div>
+  <div class="options" style="margin-top:16px">
+    <div class="option" data-choice="import-approve" onclick="toggleSelect(this)"><div class="letter">A</div><div class="content"><h3>流程正确</h3><p>采用五步式导入，并进入报告输出工作流设计。</p></div></div>
+    <div class="option" data-choice="import-simpler" onclick="toggleSelect(this)"><div class="letter">B</div><div class="content"><h3>需要更简单</h3><p>减少 Finance BP 需要查看和确认的技术细节。</p></div></div>
+    <div class="option" data-choice="import-stronger" onclick="toggleSelect(this)"><div class="letter">C</div><div class="content"><h3>需要更强的数据治理</h3><p>增加更完整的规则配置、错误处理和批次管理。</p></div></div>
+  </div>
+</div>

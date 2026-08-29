@@ -1,0 +1,53 @@
+<style>
+  .arch{max-width:1220px;margin:0 auto;color:#1b2b40}.layer{border:1px solid #d9e3ed;border-radius:10px;background:#f6f8fb;padding:10px;margin-top:8px}.layer-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.layer-title{font-size:11px;font-weight:750;color:#1d3550}.layer-desc{font-size:8px;color:#718196}.sources{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.source{background:#fff;border:1px solid #dce5ee;border-radius:7px;padding:8px;text-align:center}.source b{font-size:9px;display:block}.source span{font-size:7px;color:#76869a}.source .ico{width:25px;height:25px;margin:0 auto 5px;border-radius:6px;background:#e8f0f8;color:#245c92;display:flex;align-items:center;justify-content:center;font-weight:800}
+  .arrow{text-align:center;color:#68829c;font-size:15px;line-height:16px}.ingest{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}.process{background:#0e5fb9;color:#fff;border-radius:7px;padding:8px;text-align:center}.process b{font-size:8px;display:block}.process span{font-size:6px;color:#cfe3f8}.raw{background:#fff;border:1px solid #dce4ed;border-left:4px solid #6d88a4;border-radius:7px;padding:7px 9px;margin-top:7px;display:flex;justify-content:space-between;align-items:center;font-size:8px}.raw b{color:#263d56}.raw span{color:#708196}
+  .canonical{background:#eaf2fa;border:2px solid #3e83cc;border-radius:11px;padding:10px;margin-top:8px}.canonical .layer-title{color:#123f70}.model{display:grid;grid-template-columns:1.25fr .75fr;gap:9px}.facts,.dims{background:#fff;border:1px solid #ccdcea;border-radius:8px;padding:8px}.model-title{font-size:9px;font-weight:750;margin-bottom:6px;display:flex;justify-content:space-between}.model-title span{font-size:7px;color:#75869a;font-weight:400}.fact-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}.table{border:1px solid #dce4ed;border-radius:6px;overflow:hidden}.table h4{font-size:8px;margin:0;background:#173b61;color:#fff;padding:6px}.table ul{list-style:none;margin:0;padding:5px 6px}.table li{font-size:6px;color:#64758a;padding:2px 0;border-bottom:1px solid #f0f2f5}.table li:last-child{border:0}.table li b{color:#243a53}.dim-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:5px}.dim{background:#f3f7fa;border:1px solid #dce4ed;border-radius:5px;padding:6px}.dim b{font-size:8px;display:block}.dim span{font-size:6px;color:#748499}.contract{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:7px}.rule{background:#fff;border:1px solid #cadae8;border-radius:5px;padding:6px;font-size:7px}.rule b{display:block;color:#1d4e80;margin-bottom:2px}.rule span{color:#718196}
+  .semantic{display:grid;grid-template-columns:.85fr 1.15fr;gap:8px}.metricbox{background:#fff;border:1px solid #dce4ed;border-radius:8px;padding:8px}.metric-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}.metric{background:#f4f7fa;border-radius:5px;padding:6px;font-size:7px}.metric b{display:block;font-size:8px;margin-bottom:2px}.metric span{color:#6f8094}.driver{background:#fff;border:1px solid #dce4ed;border-radius:8px;padding:8px}.tree{display:grid;grid-template-columns:90px 1fr;gap:6px;align-items:center;font-size:7px}.root{background:#173b61;color:#fff;border-radius:6px;padding:8px;text-align:center;font-weight:700}.branches{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}.branch{background:#edf3f8;border:1px solid #d9e4ed;border-radius:5px;padding:6px;text-align:center}.branch b{display:block;font-size:8px}.branch span{font-size:6px;color:#6e7f93}
+  .outputs{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.out{background:#fff;border:1px solid #dce4ed;border-top:3px solid #2d8f79;border-radius:7px;padding:8px;text-align:center}.out b{font-size:8px;display:block}.out span{font-size:6px;color:#748398}.principles{display:flex;gap:13px;flex-wrap:wrap;margin:12px 0 2px;font-size:10px;color:#627388}.principles b{color:#213650}
+</style>
+
+<div class="arch">
+  <h2>FLOW 标准数据中间层 · 系统主干</h2>
+  <p class="subtitle">所有上游都转换为同一套标准数据；所有下游都只依赖标准层和指标语义层。</p>
+
+  <section class="layer"><div class="layer-head"><div class="layer-title">① 外部数据源</div><div class="layer-desc">来源可以变化，不影响下游产品</div></div><div class="sources">
+    <div class="source"><div class="ico">X</div><b>非标准 Excel</b><span>历史报表、业务底表</span></div><div class="source"><div class="ico">模</div><b>FLOW 标准模板</b><span>直接填写或系统导出</span></div><div class="source"><div class="ico">财</div><b>财务系统</b><span>凭证、科目、报表</span></div><div class="source"><div class="ico">业</div><b>业务系统</b><span>订单、履约、结算</span></div><div class="source"><div class="ico">API</div><b>数据接口</b><span>未来扩展</span></div>
+  </div></section>
+  <div class="arrow">↓</div>
+  <section class="layer"><div class="layer-head"><div class="layer-title">② 数据接入与转换</div><div class="layer-desc">只解决“如何进入标准层”</div></div><div class="ingest">
+    <div class="process"><b>识别</b><span>工作表、表头、粒度</span></div><div class="process"><b>映射</b><span>源字段 → 标准字段</span></div><div class="process"><b>清洗</b><span>类型、单位、枚举、重复</span></div><div class="process"><b>校验</b><span>完整性、关系、业务规则</span></div><div class="process"><b>对账</b><span>业务、财务、预算一致性</span></div>
+  </div><div class="raw"><b>原始数据保留区</b><span>源文件、文件指纹、原始值、转换规则和错误记录永久保留</span></div></section>
+  <div class="arrow">↓</div>
+
+  <section class="canonical"><div class="layer-head"><div class="layer-title">③ FLOW 标准数据中间层 · 唯一数据契约</div><div class="layer-desc">数据库标准表是真正中间层；Excel 只是交换格式</div></div>
+    <div class="model">
+      <div class="facts"><div class="model-title"><b>主题事实表</b><span>记录发生了什么</span></div><div class="fact-grid">
+        <div class="table"><h4>经营实际 fact_operating_actual</h4><ul><li><b>粒度：</b>月 × 组织 × 客户 × 产品 × 区域</li><li>订单量、件量、收入、履约成本</li><li>单均收入、单均成本的基础字段</li></ul></div>
+        <div class="table"><h4>财务实际 fact_financial_actual</h4><ul><li><b>粒度：</b>月 × 组织 × 科目</li><li>收入、成本、费用、利润、现金流</li><li>用于财务对账和结果指标</li></ul></div>
+        <div class="table"><h4>月度预算 fact_budget</h4><ul><li><b>粒度：</b>月 × 组织 × 客户群 × 产品</li><li>经营量、收入、成本、利润预算</li><li>预算版本和批准状态</li></ul></div>
+        <div class="table"><h4>应收回款 fact_ar_collection</h4><ul><li><b>粒度：</b>月 × 客户 × 发票/账龄段</li><li>应收余额、到期、逾期、回款</li><li>账期、DSO和现金影响基础</li></ul></div>
+      </div></div>
+      <div class="dims"><div class="model-title"><b>共用维度表</b><span>统一从什么角度分析</span></div><div class="dim-grid">
+        <div class="dim"><b>期间</b><span>月份、季度、年度、YTD</span></div><div class="dim"><b>组织</b><span>集团、业务单元、利润中心</span></div><div class="dim"><b>客户</b><span>客户ID、名称、行业、等级</span></div><div class="dim"><b>客户群</b><span>战略客户、市场客户</span></div><div class="dim"><b>物流产品</b><span>仓配、运输、跨境、快消等</span></div><div class="dim"><b>区域</b><span>大区、省份、城市</span></div><div class="dim"><b>财务科目</b><span>科目及管理口径映射</span></div><div class="dim"><b>版本</b><span>实际、预算、未来预测</span></div>
+      </div></div>
+    </div>
+    <div class="contract"><div class="rule"><b>稳定字段 ID</b><span>显示名称可改，系统标识不变</span></div><div class="rule"><b>模板版本</b><span>每批数据记录使用的契约版本</span></div><div class="rule"><b>主键与关系</b><span>防止重复并保证维度关联</span></div><div class="rule"><b>质量与血缘</b><span>每条记录可回溯到源数据</span></div></div>
+  </section>
+  <div class="arrow">↓</div>
+
+  <section class="layer"><div class="layer-head"><div class="layer-title">④ 指标语义与分析层</div><div class="layer-desc">数据结构稳定，指标和分析方法可以持续演进</div></div><div class="semantic">
+    <div class="metricbox"><div class="model-title"><b>指标中心</b><span>口径、公式、目标、阈值、版本</span></div><div class="metric-grid"><div class="metric"><b>营业收入</b><span>实际 / 预算 / 同比</span></div><div class="metric"><b>毛利率</b><span>收入与成本口径</span></div><div class="metric"><b>单均成本</b><span>履约成本 ÷ 订单量</span></div><div class="metric"><b>经营利润</b><span>毛利 − 期间费用</span></div><div class="metric"><b>DSO</b><span>应收与收入联动</span></div><div class="metric"><b>现金转换</b><span>经营现金流 ÷ 利润</span></div></div></div>
+    <div class="driver"><div class="model-title"><b>驱动与 Finding 引擎</b><span>确定性计算先于 AI 解读</span></div><div class="tree"><div class="root">经营利润差异</div><div class="branches"><div class="branch"><b>规模</b><span>Volume</span></div><div class="branch"><b>价格与结构</b><span>Price / Mix</span></div><div class="branch"><b>履约成本</b><span>Rate / Efficiency</span></div><div class="branch"><b>费用与其他</b><span>OPEX / One-off</span></div></div></div></div>
+  </div></section>
+  <div class="arrow">↓</div>
+
+  <section class="layer"><div class="layer-head"><div class="layer-title">⑤ 统一消费与发布</div><div class="layer-desc">所有输出共享相同数据、指标、Finding 和证据</div></div><div class="outputs">
+    <div class="out"><b>经营驾驶舱</b><span>总览、异常、专题下钻</span></div><div class="out"><b>Investigation</b><span>驱动、证据、复核、结论</span></div><div class="out"><b>AI 分析助手</b><span>引用可信数据与已验证结论</span></div><div class="out"><b>PPT / Excel</b><span>汇报材料与分析底表</span></div><div class="out"><b>正式月报</b><span>HTML / PDF 经营分析报告</span></div>
+  </div></section>
+
+  <div class="principles"><span><b>单向依赖：</b>下游永远不直接读取原始文件</span><span><b>一次转换：</b>多处复用</span><span><b>口径统一：</b>一处计算、多端发布</span><span><b>全程可追溯：</b>报告数字可回到 Excel 源行</span></div>
+  <div class="options" style="margin-top:16px">
+    <div class="option" data-choice="canonical-approve" onclick="toggleSelect(this)"><div class="letter">A</div><div class="content"><h3>数据架构正确</h3><p>将它作为 FLOW 后续所有模块共同依赖的系统主干。</p></div></div>
+    <div class="option" data-choice="canonical-adjust" onclick="toggleSelect(this)"><div class="letter">B</div><div class="content"><h3>需要调整</h3><p>指出缺少的数据域、粒度或上下游关系。</p></div></div>
+  </div>
+</div>

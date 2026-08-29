@@ -1,0 +1,115 @@
+<style>
+  .inv-app { max-width:1240px; margin:0 auto; color:#1b2a3f; }
+  .frame { display:grid; grid-template-columns:168px minmax(0,1fr) 246px; min-height:750px; border:1px solid #dae3ed; border-radius:12px; overflow:hidden; background:#f5f7fa; box-shadow:0 10px 30px rgba(30,48,70,.08); }
+  .side { background:#14243a; color:#dbe6f2; padding:14px 10px; }
+  .brand { font-size:18px; font-weight:800; letter-spacing:.1em; padding:2px 8px 18px; }.brand i{color:#63d0bc;font-style:normal}
+  .back { border:1px solid #3b5069; border-radius:6px; padding:7px 8px; font-size:9px; margin-bottom:18px; color:#b9c8d9; }
+  .step-label { color:#8294aa; font-size:8px; text-transform:uppercase; letter-spacing:.1em; margin:13px 8px 5px; }
+  .step { display:grid; grid-template-columns:18px 1fr; gap:6px; align-items:center; font-size:9px; padding:7px 8px; border-radius:6px; margin:2px 0; }
+  .step span:first-child { width:16px;height:16px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:#2d435d;color:#b9c8d9;font-size:7px; }
+  .step.done span:first-child { background:#377866;color:#fff; }.step.active{background:#28445f;color:#fff}.step.active span:first-child{background:#65cdb9;color:#15322d}
+  .main { padding:11px; min-width:0; }
+  .crumb { font-size:8px;color:#76869a;margin-bottom:6px; }
+  .finding-head { background:#fff;border:1px solid #dce4ed;border-left:4px solid #d35e58;border-radius:8px;padding:9px 10px;display:grid;grid-template-columns:1fr auto;gap:10px; }
+  .finding-head h3 { font-size:14px;margin:0 0 4px; }.finding-head p{font-size:9px;color:#627287;margin:0;line-height:1.45}
+  .tags { display:flex;gap:5px;margin-top:6px; }.tag{font-size:7px;background:#eef2f6;color:#52647a;padding:3px 5px;border-radius:4px}.tag.high{background:#e5f3ee;color:#22715e}
+  .impact { display:grid;grid-template-columns:repeat(3,78px);gap:5px;align-content:start }.impact div{background:#f6f8fb;border:1px solid #e2e8f0;border-radius:6px;padding:6px;text-align:right}.impact small{display:block;font-size:7px;color:#78879a}.impact b{font-size:12px}.red{color:#c94f4a!important}.green{color:#18816a!important}.amber{color:#b47a22!important}
+  .grid { display:grid;grid-template-columns:1.03fr .97fr;gap:7px;margin-top:7px}.panel{background:#fff;border:1px solid #dce4ed;border-radius:7px;padding:8px;min-width:0}.p-head{display:flex;justify-content:space-between;align-items:center;font-size:9px;font-weight:700;margin-bottom:6px}.p-head span:last-child{font-size:7px;color:#75859a;font-weight:400}
+  .bridge { height:112px;display:flex;align-items:flex-end;gap:4px;border-bottom:1px solid #d9e1ea;padding:0 3px}.w{flex:1;text-align:center;min-width:10px}.w div{border-radius:2px 2px 0 0;min-height:5px}.w small{display:block;font-size:6px;color:#748398;margin-top:3px;white-space:nowrap}.total{background:#496b87}.pos{background:#69aa98}.neg{background:#d87b71}
+  .driver-list { display:flex;flex-direction:column;gap:4px}.driver{display:grid;grid-template-columns:1.1fr 52px 52px 28px;align-items:center;gap:4px;border-bottom:1px solid #edf1f5;padding:5px 2px;font-size:8px}.driver:last-child{border:0}.driver b{font-size:8px}.driver .bar-bg{height:5px;background:#edf1f5;border-radius:5px;overflow:hidden}.driver .bar-fill{height:100%;background:#d87970}.go{font-size:7px;color:#315f82;text-align:right}
+  .section-row{display:grid;grid-template-columns:1.28fr .72fr;gap:7px;margin-top:7px}
+  table{width:100%;border-collapse:collapse;font-size:7px}th{background:#f5f7fa;color:#68788d;font-weight:600;padding:4px;text-align:right;border-bottom:1px solid #dce4ed}th:first-child,td:first-child{text-align:left}td{text-align:right;padding:4px;border-bottom:1px solid #edf1f5}.strong{font-weight:700}
+  .matrix{display:grid;grid-template-columns:58px repeat(4,1fr);gap:3px;font-size:6px}.mh{text-align:center;color:#65758a;padding:3px}.mr{display:flex;align-items:center;color:#56677c}.cell{text-align:center;padding:7px 2px;border-radius:4px;font-weight:700}.c1{background:#ddf0e9;color:#1f6f5d}.c2{background:#edf1f4;color:#607085}.c3{background:#fae7e3;color:#a84640}.c4{background:#f1d7d1;color:#8f3732}
+  .evidence { margin-top:7px }.ev-row{display:grid;grid-template-columns:22px 1fr auto;gap:6px;align-items:center;padding:5px 2px;border-bottom:1px solid #edf1f5;font-size:7px}.ev-icon{width:18px;height:18px;border-radius:4px;background:#eaf0f6;display:flex;align-items:center;justify-content:center;color:#46627f}.ev-row b{font-size:8px;display:block}.ev-row span{color:#76869a}.verified{color:#19735f!important;background:#e5f3ee;padding:2px 4px;border-radius:4px}
+  .conclusion{margin-top:7px;background:#fff;border:1px solid #cfdde9;border-radius:7px;padding:8px}.conclusion-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}.field{border:1px solid #e0e6ed;border-radius:5px;padding:6px}.field label{display:block;font-size:7px;color:#78879a;margin-bottom:3px}.field p{font-size:8px;margin:0;line-height:1.45}.field.full{grid-column:1/-1}
+  .ai { background:#eef3f7;border-left:1px solid #d8e2ec;padding:11px 9px;display:flex;flex-direction:column;min-width:0 }.ai-head{display:flex;justify-content:space-between;font-size:10px;font-weight:700;margin-bottom:9px}.ai-status{font-size:7px;color:#19715e;background:#dff1eb;padding:2px 5px;border-radius:6px}.msg{font-size:8px;line-height:1.5;border-radius:7px;padding:7px;margin:4px 0}.msg.sys{background:#fff;border:1px solid #dce4ed}.msg.user{background:#dce8f2;margin-left:16px}.suggest{font-size:7px;color:#52657b;border:1px solid #ccd9e5;background:#f9fbfd;border-radius:5px;padding:5px;margin:3px 0}.ai-input{margin-top:auto;background:#fff;border:1px solid #cfdbe6;border-radius:7px;padding:7px;font-size:8px;color:#8794a5;min-height:42px}.ai-note{font-size:6px;color:#8290a1;margin-top:5px;line-height:1.4}
+  .notes{display:flex;gap:14px;flex-wrap:wrap;margin:12px 0 2px;font-size:11px;color:#637388}.notes b{color:#24364d}
+</style>
+
+<div class="inv-app">
+  <h2>Investigation Workspace · 结构化经营诊断</h2>
+  <p class="subtitle">每条异常都沿着可复核路径分析：定义问题、量化影响、拆解驱动、核验证据、形成结论。</p>
+  <div class="frame">
+    <aside class="side">
+      <div class="brand">FL<i>O</i>W</div><div class="back">← 返回经营驾驶舱</div>
+      <div class="step-label">调查进度</div>
+      <div class="step done"><span>✓</span><div>确认异常</div></div>
+      <div class="step done"><span>✓</span><div>量化财务影响</div></div>
+      <div class="step active"><span>3</span><div>分析驱动因素</div></div>
+      <div class="step"><span>4</span><div>维度下钻</div></div>
+      <div class="step"><span>5</span><div>核验证据</div></div>
+      <div class="step"><span>6</span><div>形成结论</div></div>
+      <div class="step-label">相关调查</div>
+      <div class="step"><span>•</span><div>运输成本超预算</div></div>
+      <div class="step"><span>•</span><div>战略客户回款变慢</div></div>
+    </aside>
+
+    <main class="main">
+      <div class="crumb">经营驾驶舱 / 盈利与成本 / Finding F-2026-07-004</div>
+      <section class="finding-head">
+        <div><h3>规模增长但低毛利业务结构稀释整体毛利率</h3><p>本月订单量高于预算 8.2%，收入高于预算 5.7%，但整体毛利率低于预算 2.4pt。系统识别到业务结构变化与履约成本上涨共同作用。</p><div class="tags"><span class="tag high">高置信度</span><span class="tag">盈利质量</span><span class="tag">4项驱动</span><span class="tag">9项证据</span></div></div>
+        <div class="impact"><div><small>毛利率差异</small><b class="red">-2.4pt</b></div><div><small>毛利影响</small><b class="red">-1,157万</b></div><div><small>YTD影响</small><b class="red">-4,820万</b></div></div>
+      </section>
+
+      <div class="grid">
+        <section class="panel"><div class="p-head"><span>毛利预算差异桥</span><span>预算毛利 → 实际毛利</span></div><div class="bridge">
+          <div class="w"><div class="total" style="height:92px"></div><small>预算</small></div><div class="w"><div class="pos" style="height:39px"></div><small>规模</small></div><div class="w"><div class="neg" style="height:53px"></div><small>产品结构</small></div><div class="w"><div class="neg" style="height:42px"></div><small>客户结构</small></div><div class="w"><div class="neg" style="height:47px"></div><small>履约成本</small></div><div class="w"><div class="pos" style="height:17px"></div><small>其他</small></div><div class="w"><div class="total" style="height:66px"></div><small>实际</small></div>
+        </div></section>
+        <section class="panel"><div class="p-head"><span>驱动贡献排序</span><span>点击继续下钻</span></div><div class="driver-list">
+          <div class="driver"><b>低毛利产品结构</b><span class="red">-628万</span><div class="bar-bg"><div class="bar-fill" style="width:88%"></div></div><span class="go">查看</span></div>
+          <div class="driver"><b>运输外包单价上涨</b><span class="red">-412万</span><div class="bar-bg"><div class="bar-fill" style="width:61%"></div></div><span class="go">查看</span></div>
+          <div class="driver"><b>战略客户折扣变化</b><span class="red">-286万</span><div class="bar-bg"><div class="bar-fill" style="width:43%"></div></div><span class="go">查看</span></div>
+          <div class="driver"><b>规模增长贡献</b><span class="green">+269万</span><div class="bar-bg"><div class="bar-fill" style="width:40%;background:#69aa98"></div></div><span class="go">查看</span></div>
+        </div></section>
+      </div>
+
+      <div class="section-row">
+        <section class="panel"><div class="p-head"><span>产品与客户群下钻</span><span>按毛利影响排序</span></div><table>
+          <tr><th>细分组合</th><th>收入</th><th>增速</th><th>毛利率</th><th>预算差</th><th>利润影响</th><th>证据</th></tr>
+          <tr><td class="strong">市场客户 × 快消</td><td>5,280</td><td class="green">+31.8%</td><td>6.8%</td><td class="red">-4.7pt</td><td class="red">-248</td><td>3</td></tr>
+          <tr><td class="strong">战略客户 × 运输</td><td>6,840</td><td class="green">+12.4%</td><td>8.4%</td><td class="red">-3.4pt</td><td class="red">-233</td><td>4</td></tr>
+          <tr><td class="strong">市场客户 × 运输</td><td>4,620</td><td class="green">+18.7%</td><td>7.2%</td><td class="red">-2.9pt</td><td class="red">-134</td><td>2</td></tr>
+          <tr><td class="strong">战略客户 × 仓配</td><td>9,120</td><td class="green">+8.8%</td><td>16.1%</td><td class="red">-0.8pt</td><td class="red">-73</td><td>2</td></tr>
+          <tr><td class="strong">市场客户 × 跨境</td><td>3,510</td><td class="red">-2.1%</td><td>20.3%</td><td class="green">+0.8pt</td><td class="green">+28</td><td>2</td></tr>
+        </table></section>
+        <section class="panel"><div class="p-head"><span>毛利率偏差热力图</span><span>客户群 × 产品</span></div><div class="matrix">
+          <div></div><div class="mh">仓配</div><div class="mh">运输</div><div class="mh">跨境</div><div class="mh">快消</div>
+          <div class="mr">战略客户</div><div class="cell c2">-0.8pt</div><div class="cell c4">-3.4pt</div><div class="cell c1">+0.3pt</div><div class="cell c3">-2.1pt</div>
+          <div class="mr">市场客户</div><div class="cell c3">-1.4pt</div><div class="cell c4">-2.9pt</div><div class="cell c1">+0.8pt</div><div class="cell c4">-4.7pt</div>
+          <div class="mr">YTD差异</div><div class="cell c3">-1.1pt</div><div class="cell c4">-2.7pt</div><div class="cell c2">-0.2pt</div><div class="cell c4">-3.8pt</div>
+        </div></section>
+      </div>
+
+      <section class="panel evidence"><div class="p-head"><span>关键证据</span><span>9项证据 · 8项已核验</span></div>
+        <div class="ev-row"><div class="ev-icon">表</div><div><b>业务结构变化测算</b><span>快消收入占比由 9.2% 升至 14.4%，低于组合毛利率 6.8pt</span></div><span class="verified">已核验</span></div>
+        <div class="ev-row"><div class="ev-icon">价</div><div><b>运输外包结算单价</b><span>华东干线平均单价环比上涨 7.6%，预算未包含临时运力溢价</span></div><span class="verified">已核验</span></div>
+        <div class="ev-row"><div class="ev-icon">合</div><div><b>战略客户商务条款</b><span>两家客户本月阶梯折扣触发条件变化，影响单均收入约 0.42元</span></div><span class="amber">待确认</span></div>
+      </section>
+
+      <section class="conclusion"><div class="p-head"><span>Finance BP 结论草稿</span><span>AI生成 · 等待人工确认</span></div><div class="conclusion-grid">
+        <div class="field"><label>事实</label><p>规模及收入均超预算，但毛利率低于预算 2.4pt，形成毛利缺口 1,157万元。</p></div>
+        <div class="field"><label>核心判断</label><p>利润缺口并非增长不足，而是增长结构偏向低毛利产品，并叠加运输外包成本上涨。</p></div>
+        <div class="field full"><label>建议与待验证事项</label><p>优先复核华东运输临时运力采购价格及两家战略客户折扣条款；同时测算快消业务提价 1.5% 与线路组合优化对毛利的改善空间。</p></div>
+      </div></section>
+    </main>
+
+    <aside class="ai">
+      <div class="ai-head"><span>AI 分析助手</span><span class="ai-status">引用已验证数据</span></div>
+      <div class="msg sys">我已基于当前 Finding、驱动模型和已核验证据生成初步判断。所有金额均来自分析引擎。</div>
+      <div class="msg user">为什么规模增长没有带来利润增长？</div>
+      <div class="msg sys">新增收入中约 46% 来自低于平均毛利率的快消与运输业务；同时外包运输单价上涨抵消了规模效应。两项合计影响约 1,040 万元。</div>
+      <div style="font-size:7px;color:#718196;margin:9px 0 4px">建议追问</div>
+      <div class="suggest">如果业务结构保持预算水平，毛利率会是多少？</div>
+      <div class="suggest">哪些客户贡献了最大的利润缺口？</div>
+      <div class="suggest">测算提价和运输降本情景</div>
+      <div class="ai-input">基于当前调查继续提问…</div>
+      <div class="ai-note">AI 只能引用当前分析批次、指标口径和证据库；无法验证的判断会明确标记为假设。</div>
+    </aside>
+  </div>
+  <div class="notes"><span><b>主干：</b>结构化分析步骤</span><span><b>中间：</b>影响、驱动、下钻和证据</span><span><b>右侧：</b>上下文感知的 AI 辅助</span><span><b>出口：</b>人工确认后的正式 Finding</span></div>
+  <div class="options" style="margin-top:16px">
+    <div class="option" data-choice="investigation-approve" onclick="toggleSelect(this)"><div class="letter">A</div><div class="content"><h3>结构正确</h3><p>专业分析流程与 AI 辅助的关系符合预期。</p></div></div>
+    <div class="option" data-choice="evidence-more" onclick="toggleSelect(this)"><div class="letter">B</div><div class="content"><h3>加强证据与复核</h3><p>突出数据明细、公式、口径及人工审核过程。</p></div></div>
+    <div class="option" data-choice="ai-more" onclick="toggleSelect(this)"><div class="letter">C</div><div class="content"><h3>加强 AI 交互</h3><p>让自然语言探索和动态分析占据更核心的位置。</p></div></div>
+  </div>
+</div>

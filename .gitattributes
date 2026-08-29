@@ -1,0 +1,11 @@
+# Preserve imported source artifacts byte-for-byte without whitespace normalization checks.
+docs/knowledge-base/** whitespace=-blank-at-eof
+docs/knowledge-base/01_conversations/raw/** -diff -whitespace
+docs/knowledge-base/01_conversations/readable/** -whitespace
+docs/knowledge-base/02_research/original/** -diff -whitespace
+docs/knowledge-base/02_research/synthesis/** -whitespace
+
+# Keep archived binary assets binary in Git.
+docs/knowledge-base/**/*.png binary
+docs/knowledge-base/**/*.gif binary
+docs/knowledge-base/**/*.webp binary

@@ -1,0 +1,142 @@
+<style>
+  .app { max-width:1240px; margin:0 auto; color:#19283d; }
+  .shell { display:grid; grid-template-columns:178px 1fr; border:1px solid #dce4ee; border-radius:12px; overflow:hidden; background:#f5f7fa; box-shadow:0 10px 30px rgba(31,48,70,.08); }
+  .side { background:#15243a; color:#dce6f2; padding:14px 10px; min-height:720px; }
+  .brand { font-weight:800; letter-spacing:.11em; font-size:18px; padding:2px 8px 15px; }
+  .brand i { color:#63d0bc; font-style:normal; }
+  .group { color:#8193aa; font-size:9px; text-transform:uppercase; letter-spacing:.1em; margin:15px 8px 5px; }
+  .nav { padding:7px 8px; margin:2px 0; border-radius:6px; font-size:11px; }
+  .nav.active { background:#29435f; box-shadow:inset 2px 0 #63d0bc; color:#fff; }
+  .count { float:right; background:#d75d57; color:#fff; padding:1px 5px; border-radius:8px; font-size:8px; }
+  .main { padding:12px; min-width:0; }
+  .top { display:flex; justify-content:space-between; align-items:center; margin-bottom:9px; }
+  .title { font-size:15px; font-weight:750; }
+  .sub { font-size:9px; color:#738297; margin-top:2px; }
+  .controls { display:flex; gap:5px; }
+  .control { background:#fff; border:1px solid #dce4ee; padding:5px 7px; border-radius:5px; font-size:9px; color:#526278; }
+  .control.primary { background:#183654; color:#fff; border-color:#183654; }
+  .status { display:flex; gap:12px; align-items:center; background:#edf6f3; border:1px solid #cae6dd; padding:5px 8px; border-radius:6px; margin-bottom:8px; font-size:9px; color:#3d655e; }
+  .status b { color:#174e43; }
+  .kpi-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; }
+  .kpi { background:#fff; border:1px solid #dfe6ef; border-radius:7px; padding:8px 9px; position:relative; }
+  .kpi.alert { border-top:2px solid #d45e58; padding-top:7px; }
+  .kpi.ok { border-top:2px solid #4eaa93; padding-top:7px; }
+  .k-name { font-size:9px; color:#607086; display:flex; justify-content:space-between; }
+  .k-val { font-size:17px; font-weight:750; margin:3px 0 5px; color:#18273b; }
+  .compare { display:grid; grid-template-columns:repeat(3,1fr); gap:2px; font-size:8px; color:#748398; }
+  .compare b { display:block; font-size:9px; margin-top:1px; }
+  .red { color:#c8504c!important; } .green { color:#16816a!important; } .amber { color:#b87920!important; }
+  .row { display:grid; grid-template-columns:1.25fr .85fr .9fr; gap:7px; margin-top:7px; }
+  .panel { background:#fff; border:1px solid #dfe6ef; border-radius:7px; padding:9px; min-width:0; }
+  .p-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; font-size:10px; font-weight:700; }
+  .p-head span:last-child { color:#76869b; font-size:8px; font-weight:400; }
+  .combo { height:112px; display:flex; align-items:flex-end; gap:4px; border-bottom:1px solid #d8e0ea; position:relative; padding:0 3px; }
+  .combo:before,.combo:after { content:''; position:absolute; left:0; right:0; border-top:1px dashed #e3e8ef; }
+  .combo:before { top:34%; } .combo:after { top:67%; }
+  .bar { flex:1; background:#88a9c7; border-radius:2px 2px 0 0; z-index:1; min-width:5px; }
+  .bar.hot { background:#d58a79; }
+  .axis { display:flex; justify-content:space-between; font-size:7px; color:#8794a5; margin-top:3px; }
+  .bridge { display:flex; align-items:flex-end; gap:3px; height:112px; border-bottom:1px solid #d8e0ea; padding:0 2px; }
+  .w { flex:1; min-width:9px; text-align:center; }
+  .w div { border-radius:2px 2px 0 0; min-height:5px; }
+  .w small { font-size:6px; color:#78879a; display:block; margin-top:3px; white-space:nowrap; }
+  .pos { background:#69aa99; } .neg { background:#d87d71; } .total { background:#426683; }
+  .findings { display:flex; flex-direction:column; gap:5px; }
+  .finding { border-left:3px solid #d35d57; background:#fff7f5; padding:6px 7px; border-radius:3px; }
+  .finding.warn { border-left-color:#d59a45; background:#fffaf0; }
+  .f-title { font-size:9px; font-weight:700; display:flex; justify-content:space-between; gap:5px; }
+  .f-meta { font-size:7px; color:#748398; margin-top:3px; display:flex; justify-content:space-between; }
+  .bottom { display:grid; grid-template-columns:1.35fr 1fr; gap:7px; margin-top:7px; }
+  table { width:100%; border-collapse:collapse; font-size:8px; }
+  th { text-align:right; color:#66768b; font-weight:600; background:#f5f7fa; padding:5px 4px; border-bottom:1px solid #dce3ec; }
+  th:first-child,td:first-child { text-align:left; }
+  td { text-align:right; padding:5px 4px; border-bottom:1px solid #eef1f5; }
+  tr:last-child td { border-bottom:0; }
+  .segment { font-weight:600; }
+  .matrix { display:grid; grid-template-columns:66px repeat(4,1fr); gap:3px; font-size:7px; align-items:stretch; }
+  .m-head { color:#65758a; text-align:center; padding:4px 1px; }
+  .m-row { color:#56667b; display:flex; align-items:center; }
+  .cell { border-radius:4px; padding:7px 3px; text-align:center; font-weight:700; }
+  .c1 { background:#dff1eb; color:#1e6e5b; } .c2 { background:#eef1f4; color:#5e6d7f; }
+  .c3 { background:#fae9e5; color:#a84842; } .c4 { background:#f4dfd9; color:#933b36; }
+  .footer-bar { margin-top:7px; display:grid; grid-template-columns:1fr auto; gap:7px; }
+  .insight { background:#edf3f8; border:1px solid #d8e3ed; border-radius:6px; padding:7px 9px; font-size:8px; color:#45586f; }
+  .insight b { color:#193653; }
+  .action { background:#183654; color:#fff; border-radius:6px; padding:7px 10px; font-size:8px; display:flex; align-items:center; }
+  .notes { display:flex; gap:14px; flex-wrap:wrap; margin:12px 0 2px; font-size:11px; color:#637388; }
+  .notes b { color:#24364d; }
+</style>
+
+<div class="app">
+  <h2>Finance BP 驾驶舱 · 高信息密度版本</h2>
+  <p class="subtitle">一屏完成经营结果扫描、差异判断、关键异常定位和专题分析入口。</p>
+  <div class="shell">
+    <aside class="side">
+      <div class="brand">FL<i>O</i>W</div>
+      <div class="group">本期工作</div>
+      <div class="nav">数据导入</div><div class="nav">数据质量</div>
+      <div class="nav active">经营驾驶舱</div><div class="nav">分析调查 <span class="count">4</span></div>
+      <div class="group">分析专题</div>
+      <div class="nav">规模与收入</div><div class="nav">盈利与成本</div><div class="nav">应收与现金</div>
+      <div class="group">交付</div>
+      <div class="nav">洞察与结论</div><div class="nav">报告中心</div>
+    </aside>
+    <main class="main">
+      <div class="top">
+        <div><div class="title">供应链业务经营驾驶舱</div><div class="sub">2026年7月 · 已锁定分析批次 V3 · 单位：万元 / 万单</div></div>
+        <div class="controls"><div class="control">全部客户群</div><div class="control">全部物流产品</div><div class="control">当月 + YTD</div><div class="control primary">生成报告</div></div>
+      </div>
+      <div class="status"><span><b>数据质量 98.7%</b></span><span>6张表 · 18,426行</span><span>已通过财务对账</span><span>更新于 08:42</span><span style="margin-left:auto">3项清洗规则已应用</span></div>
+
+      <div class="kpi-grid">
+        <div class="kpi ok"><div class="k-name"><span>履约订单量</span><span>规模</span></div><div class="k-val">186.4万</div><div class="compare"><span>预算<b class="green">+8.2%</b></span><span>同比<b class="green">+14.6%</b></span><span>YTD预算<b class="green">+6.9%</b></span></div></div>
+        <div class="kpi ok"><div class="k-name"><span>营业收入</span><span>增长</span></div><div class="k-val">48,220</div><div class="compare"><span>预算<b class="green">+5.7%</b></span><span>同比<b class="green">+12.1%</b></span><span>YTD预算<b class="green">+4.8%</b></span></div></div>
+        <div class="kpi alert"><div class="k-name"><span>单均收入</span><span>价格/结构</span></div><div class="k-val">25.87元</div><div class="compare"><span>预算<b class="red">-2.3%</b></span><span>同比<b class="red">-2.2%</b></span><span>YTD预算<b class="red">-1.7%</b></span></div></div>
+        <div class="kpi alert"><div class="k-name"><span>毛利率</span><span>盈利</span></div><div class="k-val">13.6%</div><div class="compare"><span>预算<b class="red">-2.4pt</b></span><span>同比<b class="red">-1.8pt</b></span><span>YTD预算<b class="red">-1.5pt</b></span></div></div>
+        <div class="kpi alert"><div class="k-name"><span>履约成本率</span><span>成本</span></div><div class="k-val">73.8%</div><div class="compare"><span>预算<b class="red">+1.9pt</b></span><span>同比<b class="red">+1.2pt</b></span><span>YTD预算<b class="red">+1.4pt</b></span></div></div>
+        <div class="kpi alert"><div class="k-name"><span>经营利润</span><span>利润</span></div><div class="k-val">2,940</div><div class="compare"><span>预算<b class="red">-18.9%</b></span><span>同比<b class="red">-8.4%</b></span><span>YTD预算<b class="red">-11.2%</b></span></div></div>
+        <div class="kpi alert"><div class="k-name"><span>应收账款</span><span>营运资本</span></div><div class="k-val">71,380</div><div class="compare"><span>预算<b class="red">+13.5%</b></span><span>同比<b class="red">+21.8%</b></span><span>DSO<b class="red">52天</b></span></div></div>
+        <div class="kpi alert"><div class="k-name"><span>经营现金流</span><span>现金</span></div><div class="k-val">-1,260</div><div class="compare"><span>预算<b class="red">-3,480</b></span><span>同比<b class="red">-2,110</b></span><span>现金转换<b class="red">-42.9%</b></span></div></div>
+      </div>
+
+      <div class="row">
+        <div class="panel"><div class="p-head"><span>规模、收入与毛利率趋势</span><span>近12个月 · 实际/预算</span></div><div class="combo">
+          <div class="bar" style="height:42%"></div><div class="bar" style="height:47%"></div><div class="bar" style="height:51%"></div><div class="bar" style="height:55%"></div><div class="bar" style="height:61%"></div><div class="bar" style="height:68%"></div><div class="bar" style="height:71%"></div><div class="bar hot" style="height:67%"></div><div class="bar hot" style="height:61%"></div><div class="bar hot" style="height:56%"></div><div class="bar hot" style="height:48%"></div><div class="bar hot" style="height:40%"></div>
+        </div><div class="axis"><span>8月</span><span>11月</span><span>2月</span><span>5月</span><span>7月</span></div></div>
+        <div class="panel"><div class="p-head"><span>经营利润预算差异桥</span><span>-685万元</span></div><div class="bridge">
+          <div class="w"><div class="total" style="height:84px"></div><small>预算</small></div><div class="w"><div class="pos" style="height:34px"></div><small>规模</small></div><div class="w"><div class="neg" style="height:48px"></div><small>结构</small></div><div class="w"><div class="neg" style="height:39px"></div><small>成本</small></div><div class="w"><div class="neg" style="height:24px"></div><small>账期</small></div><div class="w"><div class="total" style="height:58px"></div><small>实际</small></div>
+        </div></div>
+        <div class="panel"><div class="p-head"><span>关键异常 / Findings</span><span>按财务影响排序</span></div><div class="findings">
+          <div class="finding"><div class="f-title"><span>低毛利产品结构稀释毛利</span><span class="red">-628万</span></div><div class="f-meta"><span>置信度 高 · 3项证据</span><span>调查 →</span></div></div>
+          <div class="finding"><div class="f-title"><span>运输与外包成本超预算</span><span class="red">-412万</span></div><div class="f-meta"><span>置信度 高 · 4项证据</span><span>调查 →</span></div></div>
+          <div class="finding"><div class="f-title"><span>战略客户回款周期延长</span><span class="red">-1,860万</span></div><div class="f-meta"><span>现金影响 · 5项证据</span><span>调查 →</span></div></div>
+          <div class="finding warn"><div class="f-title"><span>华东区域收入增速放缓</span><span class="amber">关注</span></div><div class="f-meta"><span>连续2个月 · 2项证据</span><span>调查 →</span></div></div>
+        </div></div>
+      </div>
+
+      <div class="bottom">
+        <div class="panel"><div class="p-head"><span>物流产品经营表现</span><span>按收入贡献排序</span></div><table>
+          <tr><th>物流产品</th><th>收入</th><th>预算差</th><th>订单增速</th><th>毛利率</th><th>毛利差</th><th>利润影响</th></tr>
+          <tr><td class="segment">仓配一体</td><td>14,820</td><td class="green">+8.4%</td><td class="green">+15.2%</td><td>15.8%</td><td class="red">-1.1pt</td><td class="red">-163</td></tr>
+          <tr><td class="segment">运输配送</td><td>11,460</td><td class="green">+3.1%</td><td class="green">+9.6%</td><td>9.7%</td><td class="red">-3.8pt</td><td class="red">-436</td></tr>
+          <tr><td class="segment">跨境供应链</td><td>8,720</td><td class="red">-2.6%</td><td class="green">+4.3%</td><td>18.6%</td><td class="green">+0.7pt</td><td class="green">+61</td></tr>
+          <tr><td class="segment">快消供应链</td><td>6,930</td><td class="green">+16.2%</td><td class="green">+24.7%</td><td>8.4%</td><td class="red">-4.1pt</td><td class="red">-284</td></tr>
+          <tr><td class="segment">美妆健康</td><td>4,510</td><td class="green">+12.8%</td><td class="green">+19.1%</td><td>17.3%</td><td class="green">+1.2pt</td><td class="green">+54</td></tr>
+        </table></div>
+        <div class="panel"><div class="p-head"><span>客户群 × 物流产品毛利表现</span><span>颜色表示预算差</span></div><div class="matrix">
+          <div></div><div class="m-head">仓配</div><div class="m-head">运输</div><div class="m-head">跨境</div><div class="m-head">快消</div>
+          <div class="m-row">战略客户</div><div class="cell c1">16.1%</div><div class="cell c3">8.4%</div><div class="cell c2">17.9%</div><div class="cell c4">6.8%</div>
+          <div class="m-row">市场客户</div><div class="cell c2">14.6%</div><div class="cell c4">7.2%</div><div class="cell c1">20.3%</div><div class="cell c3">9.5%</div>
+          <div class="m-row">本月变化</div><div class="cell c3">-0.9pt</div><div class="cell c4">-3.4pt</div><div class="cell c1">+0.8pt</div><div class="cell c4">-4.7pt</div>
+        </div></div>
+      </div>
+      <div class="footer-bar"><div class="insight"><b>AI 分析摘要：</b> 本月规模增长主要由快消和市场化客户贡献，但其毛利率显著低于组合均值；运输外包单价上涨进一步放大利润缺口，应优先核查华东运输线路及战略客户账期变化。</div><div class="action">查看完整分析 →</div></div>
+    </main>
+  </div>
+  <div class="notes"><span><b>密度提升：</b>8项核心指标均含当月、同比及YTD对比</span><span><b>分析增强：</b>趋势、利润桥、异常、明细表和交叉矩阵同屏</span><span><b>仍保留层级：</b>首页定位问题，Investigation负责证明原因</span></div>
+  <div class="options" style="margin-top:16px">
+    <div class="option" data-choice="density-right" onclick="toggleSelect(this)"><div class="letter">A</div><div class="content"><h3>密度合适</h3><p>以此作为 Finance BP 驾驶舱的信息密度基线。</p></div></div>
+    <div class="option" data-choice="denser" onclick="toggleSelect(this)"><div class="letter">B</div><div class="content"><h3>还可以更密</h3><p>增加更多明细表格、指标列和业务分组。</p></div></div>
+    <div class="option" data-choice="too-dense" onclick="toggleSelect(this)"><div class="letter">C</div><div class="content"><h3>有些过密</h3><p>保留分析内容，但进一步强化折叠和层级。</p></div></div>
+  </div>
+</div>

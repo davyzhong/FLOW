@@ -1,0 +1,70 @@
+<style>
+  .xlapp{max-width:1240px;margin:0 auto;color:#1a2b40}.book{border:1px solid #d9e3ed;border-radius:12px;background:#f5f7fa;overflow:hidden;box-shadow:0 10px 30px rgba(27,48,70,.08)}.top{background:#0c315e;color:#fff;padding:11px 14px;display:flex;justify-content:space-between;align-items:center}.top h3{font-size:13px;margin:0}.top span{font-size:7px;color:#c6d8eb}.file{display:flex;gap:6px;align-items:center}.xico{width:27px;height:27px;border-radius:5px;background:#21865f;display:flex;align-items:center;justify-content:center;font-weight:800}
+  .body{display:grid;grid-template-columns:230px 1fr;min-height:650px}.toc{background:#eef3f7;border-right:1px solid #d8e2ec;padding:9px}.group{font-size:7px;color:#7b8c9f;text-transform:uppercase;letter-spacing:.1em;margin:10px 5px 4px}.sheet{background:#fff;border:1px solid #dce4ed;border-radius:6px;padding:6px;margin:4px 0;display:grid;grid-template-columns:23px 1fr auto;gap:6px;align-items:center}.sheet.active{border-color:#3f86cf;box-shadow:inset 3px 0 #3f86cf}.num{width:21px;height:21px;border-radius:4px;background:#e8eff6;color:#315978;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:700}.sheet.active .num{background:#1763bf;color:#fff}.sheet b{display:block;font-size:8px}.sheet small{display:block;font-size:6px;color:#76869a;margin-top:1px}.req{font-size:6px;padding:2px 4px;border-radius:4px;background:#e5f3ee;color:#22715d}.opt{background:#fff0dc;color:#99651b}.meta{padding:10px;min-width:0}.summary{display:grid;grid-template-columns:1.2fr repeat(4,.55fr);gap:6px;margin-bottom:7px}.summary>div{background:#fff;border:1px solid #dce4ed;border-radius:6px;padding:7px}.summary small{display:block;font-size:6px;color:#78879a}.summary b{font-size:10px}.summary .desc{font-size:7px;color:#65758b;line-height:1.45}
+  .section{background:#fff;border:1px solid #dce4ed;border-radius:7px;padding:8px;margin-top:7px}.sh{display:flex;justify-content:space-between;align-items:center;font-size:9px;font-weight:700;margin-bottom:6px}.sh span:last-child{font-size:7px;color:#75859a;font-weight:400}.grain{background:#eaf2fa;border-left:3px solid #347fc8;padding:6px 8px;border-radius:4px;font-size:7px;color:#38536f;margin-bottom:6px}.grain b{color:#174c80}
+  table{width:100%;border-collapse:collapse;font-size:7px}th{background:#f2f6f9;text-align:left;color:#64758a;padding:5px 4px;border-bottom:1px solid #d9e2eb;font-weight:600}td{padding:5px 4px;border-bottom:1px solid #edf1f5}.fieldid{color:#285f91;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.mandatory{color:#c54f49;font-weight:700}.sample{color:#708095}.tag{font-size:6px;padding:2px 4px;border-radius:4px;background:#e7f3ef;color:#23715e}.tag.calc{background:#eaf0f6;color:#4d6379}.tag.cond{background:#fff0dc;color:#97651c}
+  .rules{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.rule{border:1px solid #dfe6ee;border-radius:6px;padding:6px}.rule b{display:block;font-size:8px;margin-bottom:2px}.rule span{font-size:6px;color:#718196;line-height:1.4}.rule.good{border-top:3px solid #3c9c83}.rule.warn{border-top:3px solid #d79a43}.rule.blue{border-top:3px solid #3c82c6}
+  .rel{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;align-items:center}.relbox{background:#f3f7fa;border:1px solid #dae4ed;border-radius:5px;padding:6px;text-align:center}.relbox b{display:block;font-size:8px}.relbox span{font-size:6px;color:#75859a}.arrow{text-align:center;color:#69829b;font-size:12px}.footer{display:flex;gap:14px;flex-wrap:wrap;margin:12px 0 2px;font-size:10px;color:#627388}.footer b{color:#213650}
+</style>
+
+<div class="xlapp">
+  <h2>FLOW 标准 Excel 数据包 · V1</h2>
+  <p class="subtitle">一套可直接填写、也可由外部文件转换生成的标准交换模板；导入后映射到数据库标准表。</p>
+  <div class="book">
+    <div class="top"><div class="file"><div class="xico">X</div><div><h3>FLOW_供应链月度经营分析_标准数据包_V1.xlsx</h3><span>模板版本 1.0 · 适用场景：物流供应链月度经营分析</span></div></div><span>受控模板 · 字段 ID 不可修改</span></div>
+    <div class="body">
+      <aside class="toc">
+        <div class="group">说明与控制</div>
+        <div class="sheet"><div class="num">00</div><div><b>填写说明</b><small>范围、示例、检查清单</small></div><span class="req">必需</span></div>
+        <div class="sheet"><div class="num">01</div><div><b>分析批次</b><small>期间、版本、单位、币种</small></div><span class="req">必需</span></div>
+        <div class="group">主题事实表</div>
+        <div class="sheet active"><div class="num">02</div><div><b>经营实际</b><small>业务规模、收入与履约成本</small></div><span class="req">必需</span></div>
+        <div class="sheet"><div class="num">03</div><div><b>财务实际</b><small>利润表与现金流管理口径</small></div><span class="req">必需</span></div>
+        <div class="sheet"><div class="num">04</div><div><b>月度预算</b><small>经营及财务预算</small></div><span class="req">必需</span></div>
+        <div class="sheet"><div class="num">05</div><div><b>应收回款</b><small>余额、账龄、到期与回款</small></div><span class="req">必需</span></div>
+        <div class="group">共用维度</div>
+        <div class="sheet"><div class="num">06</div><div><b>客户主数据</b><small>客户 ID、客户群与账期</small></div><span class="req">必需</span></div>
+        <div class="sheet"><div class="num">07</div><div><b>物流产品</b><small>产品层级、服务模式</small></div><span class="req">必需</span></div>
+        <div class="sheet"><div class="num">08</div><div><b>组织与区域</b><small>组织、利润中心、地区</small></div><span class="req">必需</span></div>
+        <div class="group">可选扩展</div>
+        <div class="sheet"><div class="num">90</div><div><b>订单履约明细</b><small>订单或日级运营数据</small></div><span class="req opt">可选</span></div>
+        <div class="sheet"><div class="num">91</div><div><b>结算成本明细</b><small>供应商、线路与结算单</small></div><span class="req opt">可选</span></div>
+      </aside>
+
+      <main class="meta">
+        <div class="summary"><div><small>当前工作表</small><b>02_经营实际</b><div class="desc">提供规模、收入和直接履约成本，是收入增长、业务结构和盈利驱动分析的核心事实表。</div></div><div><small>字段数</small><b>18</b></div><div><small>必填字段</small><b>13</b></div><div><small>建议粒度</small><b>月度明细</b></div><div><small>目标表</small><b>fact_operating</b></div></div>
+
+        <section class="section"><div class="sh"><span>记录粒度与唯一性</span><span>导入时自动验证</span></div><div class="grain"><b>每行代表：</b>一个月份 × 一个组织 × 一个客户 × 一个物流产品 × 一个区域的经营结果。<br><b>推荐主键：</b>period_month + org_id + customer_id + product_id + region_id</div>
+          <table><tr><th>显示名称</th><th>标准字段 ID</th><th>必填</th><th>类型 / 单位</th><th>样例</th><th>规则</th></tr>
+            <tr><td><b>月份</b></td><td class="fieldid">period_month</td><td class="mandatory">是</td><td>YYYY-MM</td><td class="sample">2026-07</td><td><span class="tag">批次一致</span></td></tr>
+            <tr><td><b>组织编码</b></td><td class="fieldid">org_id</td><td class="mandatory">是</td><td>文本</td><td class="sample">BU_EAST</td><td><span class="tag">维度关联</span></td></tr>
+            <tr><td><b>客户编码</b></td><td class="fieldid">customer_id</td><td class="mandatory">是</td><td>文本</td><td class="sample">C000184</td><td><span class="tag">维度关联</span></td></tr>
+            <tr><td><b>物流产品编码</b></td><td class="fieldid">product_id</td><td class="mandatory">是</td><td>文本</td><td class="sample">P_TRANS</td><td><span class="tag">维度关联</span></td></tr>
+            <tr><td><b>区域编码</b></td><td class="fieldid">region_id</td><td class="mandatory">是</td><td>文本</td><td class="sample">R_EAST</td><td><span class="tag">维度关联</span></td></tr>
+            <tr><td><b>订单量</b></td><td class="fieldid">order_count</td><td class="mandatory">是</td><td>整数 / 单</td><td class="sample">12,486</td><td><span class="tag">≥ 0</span></td></tr>
+            <tr><td><b>履约件量</b></td><td class="fieldid">fulfilled_units</td><td>否</td><td>整数 / 件</td><td class="sample">31,408</td><td><span class="tag cond">产品适用</span></td></tr>
+            <tr><td><b>不含税收入</b></td><td class="fieldid">revenue_net</td><td class="mandatory">是</td><td>金额 / 元</td><td class="sample">326,842.17</td><td><span class="tag">财务对账</span></td></tr>
+            <tr><td><b>仓储履约成本</b></td><td class="fieldid">warehouse_cost</td><td>否</td><td>金额 / 元</td><td class="sample">68,420.50</td><td><span class="tag cond">产品适用</span></td></tr>
+            <tr><td><b>运输履约成本</b></td><td class="fieldid">transport_cost</td><td>否</td><td>金额 / 元</td><td class="sample">142,884.20</td><td><span class="tag cond">产品适用</span></td></tr>
+            <tr><td><b>其他直接成本</b></td><td class="fieldid">other_direct_cost</td><td>否</td><td>金额 / 元</td><td class="sample">18,410.00</td><td><span class="tag">允许为 0</span></td></tr>
+            <tr><td><b>直接履约成本合计</b></td><td class="fieldid">fulfillment_cost</td><td class="mandatory">是</td><td>金额 / 元</td><td class="sample">229,714.70</td><td><span class="tag calc">分项校验</span></td></tr>
+          </table>
+        </section>
+
+        <section class="section"><div class="sh"><span>模板级校验规则</span><span>错误阻断导入，警告允许确认后继续</span></div><div class="rules">
+          <div class="rule good"><b>结构校验</b><span>工作表、标准字段 ID、字段类型和模板版本必须合法。</span></div><div class="rule good"><b>关系校验</b><span>客户、产品、组织和区域编码必须存在于对应维表。</span></div><div class="rule warn"><b>业务校验</b><span>收入或成本异常为负、订单为零但存在收入时触发警告。</span></div><div class="rule blue"><b>财务对账</b><span>经营收入、成本汇总与财务实际差异必须在阈值内。</span></div>
+        </div></section>
+
+        <section class="section"><div class="sh"><span>跨工作表关联</span><span>通过稳定 ID 关联，不依赖 Excel 行列位置</span></div><div class="rel">
+          <div class="relbox"><b>经营实际</b><span>customer_id / product_id / org_id</span></div><div class="arrow">↔</div><div class="relbox"><b>客户、产品、组织维表</b><span>统一分类和层级</span></div><div class="relbox"><b>财务实际与预算</b><span>period / org / metric</span></div>
+        </div></section>
+      </main>
+    </div>
+  </div>
+  <div class="footer"><span><b>必需表：</b>保证首版完整月度分析</span><span><b>可选表：</b>增强订单、线路和结算诊断</span><span><b>模板不是数据库：</b>导入后进入标准事实表与维度表</span><span><b>防误用：</b>显示名称可调整，标准字段 ID 受保护</span></div>
+  <div class="options" style="margin-top:16px">
+    <div class="option" data-choice="template-approve" onclick="toggleSelect(this)"><div class="letter">A</div><div class="content"><h3>模板结构正确</h3><p>以此作为首版标准 Excel 数据包的设计基线。</p></div></div>
+    <div class="option" data-choice="template-simpler" onclick="toggleSelect(this)"><div class="letter">B</div><div class="content"><h3>模板需要简化</h3><p>减少必需工作表或必填字段。</p></div></div>
+    <div class="option" data-choice="template-more" onclick="toggleSelect(this)"><div class="letter">C</div><div class="content"><h3>模板需要增强</h3><p>补充更多业务明细、财务科目或基础维度。</p></div></div>
+  </div>
+</div>
