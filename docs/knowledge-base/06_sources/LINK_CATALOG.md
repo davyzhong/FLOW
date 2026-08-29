@@ -15,6 +15,7 @@
 
 ## 开源项目
 
+- FLOW 规范项目仓库：<https://github.com/davyzhong/FLOW>
 - Huashu Excel：<https://github.com/alchaincyf/huashu-excel>
 
 ## 外部财务驾驶舱参考图
@@ -29,4 +30,3 @@
 ## 临时链接说明
 
 设计讨论使用过 `http://localhost:59788/` 的本地视觉伴随页面。该地址和会话密钥是临时运行状态，不是长期资料入口。原型 HTML 已单独归档，后续不依赖该本地地址。
-
