@@ -1,0 +1,135 @@
+contract_version: flow.excel.v1
+workbook_name: FLOW 标准经营分析数据包 V1
+sheets:
+  - sheet_id: instructions
+    sheet_name: 00_填写说明
+    purpose: 说明模板结构、填写规则、数据口径、错误级别和示例。
+    grain: [section_code]
+    fields:
+      - {field_id: section_code, display_name: 说明编码, data_type: string, required: true, nullable: false, description: 稳定的说明条目标识。}
+      - {field_id: section_name, display_name: 说明主题, data_type: string, required: true, nullable: false, description: 说明条目的主题。}
+      - {field_id: instruction, display_name: 填写说明, data_type: string, required: true, nullable: false, description: 面向填报人与数据转换人员的完整规则。}
+      - {field_id: example, display_name: 示例, data_type: string, required: false, nullable: true, description: 规则对应的填写示例。}
+
+  - sheet_id: analysis_batch
+    sheet_name: 01_分析批次
+    purpose: 定义一次分析的版本、期间、币种和实际及预算情景。
+    grain: [batch_code]
+    fields:
+      - {field_id: batch_code, display_name: 分析批次编码, data_type: string, required: true, nullable: false, description: 一次经营分析批次的稳定业务编码。}
+      - {field_id: contract_version, display_name: 数据契约版本, data_type: string, required: true, nullable: false, description: 生成和解析工作簿所遵循的 FLOW 契约版本。}
+      - {field_id: analysis_start_month, display_name: 分析开始月份, data_type: month, required: true, nullable: false, description: 主分析窗口的首月。, format: YYYY-MM}
+      - {field_id: analysis_end_month, display_name: 分析结束月份, data_type: month, required: true, nullable: false, description: 主分析窗口的末月。, format: YYYY-MM}
+      - {field_id: comparison_start_month, display_name: 同比开始月份, data_type: month, required: true, nullable: false, description: 匹配同比窗口的首月。, format: YYYY-MM}
+      - {field_id: comparison_end_month, display_name: 同比结束月份, data_type: month, required: true, nullable: false, description: 匹配同比窗口的末月。, format: YYYY-MM}
+      - {field_id: currency, display_name: 本位币, data_type: enum, required: true, nullable: false, description: 所有金额字段使用的三位币种编码。, enum: [CNY]}
+      - {field_id: actual_scenario_code, display_name: 实际情景编码, data_type: string, required: true, nullable: false, description: 实际数据对应的稳定情景编码。}
+      - {field_id: budget_scenario_code, display_name: 预算情景编码, data_type: string, required: true, nullable: false, description: 月度预算对应的稳定情景编码。}
+      - {field_id: budget_version_label, display_name: 预算版本名称, data_type: string, required: true, nullable: false, description: 预算版本的人类可读名称。}
+      - {field_id: generated_at, display_name: 模板生成时间, data_type: datetime, required: true, nullable: false, description: 当前工作簿生成时间，使用带时区 ISO 8601。, format: ISO-8601}
+
+  - sheet_id: operating_actual
+    sheet_name: 02_经营实际
+    purpose: 记录物流业务订单、件量、收入和直接成本的月度经营事实。
+    grain: [month_key, organization_code, customer_code, logistics_product_code, region_code]
+    fields:
+      - {field_id: record_id, display_name: 记录编码, data_type: string, required: true, nullable: false, description: 源记录的稳定编码，不依赖 Excel 行号。}
+      - {field_id: month_key, display_name: 月份, data_type: month, required: true, nullable: false, description: 经营事实归属月份。, format: YYYY-MM}
+      - {field_id: organization_code, display_name: 组织编码, data_type: string, required: true, nullable: false, description: 承担经营结果的组织编码。, foreign_key: {sheet_id: organization_region, field_id: entity_code}}
+      - {field_id: customer_code, display_name: 客户编码, data_type: string, required: true, nullable: false, description: 客户稳定编码。, foreign_key: {sheet_id: customer_master, field_id: customer_code}}
+      - {field_id: logistics_product_code, display_name: 物流产品编码, data_type: string, required: true, nullable: false, description: 物流产品稳定编码。, foreign_key: {sheet_id: logistics_product, field_id: logistics_product_code}}
+      - {field_id: region_code, display_name: 区域编码, data_type: string, required: true, nullable: false, description: 经营事实所属区域编码。, foreign_key: {sheet_id: organization_region, field_id: entity_code}}
+      - {field_id: order_count, display_name: 订单量, data_type: decimal, required: true, nullable: false, description: 当月有效订单数量。, unit: order, scale: 4, minimum: "0"}
+      - {field_id: shipment_count, display_name: 履约件量, data_type: decimal, required: true, nullable: false, description: 当月完成履约的包裹或作业件数。, unit: shipment, scale: 4, minimum: "0"}
+      - {field_id: revenue, display_name: 营业收入, data_type: decimal, required: true, nullable: false, description: 与本经营粒度匹配的营业收入。, unit: CNY, scale: 4}
+      - {field_id: warehousing_cost, display_name: 仓储直接成本, data_type: decimal, required: true, nullable: false, description: 与仓储作业直接相关的成本。, unit: CNY, scale: 4}
+      - {field_id: transportation_cost, display_name: 运输直接成本, data_type: decimal, required: true, nullable: false, description: 与运输履约直接相关的成本。, unit: CNY, scale: 4}
+      - {field_id: other_direct_cost, display_name: 其他直接成本, data_type: decimal, required: true, nullable: false, description: 除仓储和运输外可直接归属的成本。, unit: CNY, scale: 4}
+
+  - sheet_id: financial_actual
+    sheet_name: 03_财务实际
+    purpose: 记录管理口径科目在组织和月份上的财务实际金额。
+    grain: [month_key, organization_code, management_account_code]
+    fields:
+      - {field_id: record_id, display_name: 记录编码, data_type: string, required: true, nullable: false, description: 财务源记录的稳定编码。}
+      - {field_id: month_key, display_name: 月份, data_type: month, required: true, nullable: false, description: 财务事实归属月份。, format: YYYY-MM}
+      - {field_id: organization_code, display_name: 组织编码, data_type: string, required: true, nullable: false, description: 承担财务结果的组织编码。, foreign_key: {sheet_id: organization_region, field_id: entity_code}}
+      - {field_id: management_account_code, display_name: 管理科目编码, data_type: string, required: true, nullable: false, description: 管理科目稳定编码。, foreign_key: {sheet_id: management_account, field_id: management_account_code}}
+      - {field_id: amount, display_name: 金额, data_type: decimal, required: true, nullable: false, description: 本位币下的管理口径金额。, unit: CNY, scale: 4}
+
+  - sheet_id: monthly_budget
+    sheet_name: 04_月度预算
+    purpose: 记录月度预算指标，可按客户板块、物流产品或管理科目细分。
+    grain: [month_key, organization_code, customer_segment_code, logistics_product_code, management_account_code, scenario_code, metric_code]
+    fields:
+      - {field_id: record_id, display_name: 记录编码, data_type: string, required: true, nullable: false, description: 预算源记录的稳定编码。}
+      - {field_id: month_key, display_name: 月份, data_type: month, required: true, nullable: false, description: 预算归属月份。, format: YYYY-MM}
+      - {field_id: organization_code, display_name: 组织编码, data_type: string, required: true, nullable: false, description: 预算责任组织。, foreign_key: {sheet_id: organization_region, field_id: entity_code}}
+      - {field_id: customer_segment_code, display_name: 客户板块编码, data_type: string, required: false, nullable: true, description: 可选的客户板块维度。, foreign_key: {sheet_id: customer_master, field_id: customer_segment_code}}
+      - {field_id: logistics_product_code, display_name: 物流产品编码, data_type: string, required: false, nullable: true, description: 可选的物流产品维度。, foreign_key: {sheet_id: logistics_product, field_id: logistics_product_code}}
+      - {field_id: management_account_code, display_name: 管理科目编码, data_type: string, required: false, nullable: true, description: 可选的管理科目维度。, foreign_key: {sheet_id: management_account, field_id: management_account_code}}
+      - {field_id: scenario_code, display_name: 预算情景编码, data_type: string, required: true, nullable: false, description: 在分析批次中声明的预算情景编码。}
+      - {field_id: metric_code, display_name: 指标编码, data_type: string, required: true, nullable: false, description: 被预算的稳定指标编码。}
+      - {field_id: amount, display_name: 预算值, data_type: decimal, required: true, nullable: false, description: 指标相同单位下的预算值。, unit: metric_unit, scale: 4}
+
+  - sheet_id: ar_collection
+    sheet_name: 05_应收回款
+    purpose: 记录客户应收余额、到期、逾期、回款及账龄结构。
+    grain: [month_key, customer_code, invoice_number, aging_bucket]
+    fields:
+      - {field_id: record_id, display_name: 记录编码, data_type: string, required: true, nullable: false, description: 应收记录的稳定编码。}
+      - {field_id: month_key, display_name: 月份, data_type: month, required: true, nullable: false, description: 应收快照或回款归属月份。, format: YYYY-MM}
+      - {field_id: customer_code, display_name: 客户编码, data_type: string, required: true, nullable: false, description: 客户稳定编码。, foreign_key: {sheet_id: customer_master, field_id: customer_code}}
+      - {field_id: invoice_number, display_name: 发票号, data_type: string, required: false, nullable: true, description: 发票级数据的业务编号；账龄汇总数据可为空。}
+      - {field_id: aging_bucket, display_name: 账龄区间, data_type: enum, required: false, nullable: true, description: 应收账龄区间；发票级数据可为空。, enum: [current, 1-30, 31-60, 61-90, 90+]}
+      - {field_id: receivable_balance, display_name: 应收余额, data_type: decimal, required: true, nullable: false, description: 期末应收账款余额。, unit: CNY, scale: 4}
+      - {field_id: due_amount, display_name: 到期金额, data_type: decimal, required: true, nullable: false, description: 截至期末已到期金额。, unit: CNY, scale: 4}
+      - {field_id: overdue_amount, display_name: 逾期金额, data_type: decimal, required: true, nullable: false, description: 截至期末已逾期金额。, unit: CNY, scale: 4}
+      - {field_id: collected_amount, display_name: 当月回款, data_type: decimal, required: true, nullable: false, description: 当月已收回款金额。, unit: CNY, scale: 4}
+
+  - sheet_id: customer_master
+    sheet_name: 06_客户主数据
+    purpose: 维护客户及其客户板块、信用期限和管理分层。
+    grain: [customer_code]
+    fields:
+      - {field_id: customer_code, display_name: 客户编码, data_type: string, required: true, nullable: false, description: 客户稳定业务编码。}
+      - {field_id: customer_name, display_name: 客户名称, data_type: string, required: true, nullable: false, description: 客户正式或管理名称。}
+      - {field_id: industry, display_name: 所属行业, data_type: string, required: false, nullable: true, description: 客户所在行业。}
+      - {field_id: tier, display_name: 客户等级, data_type: string, required: false, nullable: true, description: 客户重要性或风险等级。}
+      - {field_id: credit_term_days, display_name: 信用账期天数, data_type: integer, required: false, nullable: true, description: 合同约定信用期限。, unit: day, minimum: "0"}
+      - {field_id: customer_segment_code, display_name: 客户板块编码, data_type: string, required: true, nullable: false, description: 客户所属板块的稳定编码。}
+      - {field_id: customer_segment_name, display_name: 客户板块名称, data_type: string, required: true, nullable: false, description: 客户所属板块的显示名称。}
+
+  - sheet_id: logistics_product
+    sheet_name: 07_物流产品
+    purpose: 维护物流产品或服务层级。
+    grain: [logistics_product_code]
+    fields:
+      - {field_id: logistics_product_code, display_name: 物流产品编码, data_type: string, required: true, nullable: false, description: 物流产品稳定编码。}
+      - {field_id: logistics_product_name, display_name: 物流产品名称, data_type: string, required: true, nullable: false, description: 物流产品显示名称。}
+      - {field_id: level, display_name: 产品层级, data_type: string, required: true, nullable: false, description: 产品在层级树中的层级类型。}
+      - {field_id: parent_code, display_name: 上级产品编码, data_type: string, required: false, nullable: true, description: 可选的上级物流产品编码。, foreign_key: {sheet_id: logistics_product, field_id: logistics_product_code}}
+
+  - sheet_id: organization_region
+    sheet_name: 08_组织与区域
+    purpose: 在同一主数据表维护组织树和区域树，导入时按实体类型拆分。
+    grain: [entity_type, entity_code]
+    fields:
+      - {field_id: entity_type, display_name: 实体类型, data_type: enum, required: true, nullable: false, description: 区分组织和区域主数据。, enum: [organization, region]}
+      - {field_id: entity_code, display_name: 实体编码, data_type: string, required: true, nullable: false, description: 在对应实体类型内稳定的业务编码。}
+      - {field_id: entity_name, display_name: 实体名称, data_type: string, required: true, nullable: false, description: 组织或区域的显示名称。}
+      - {field_id: level, display_name: 层级, data_type: string, required: true, nullable: false, description: 组织或区域层级类型。}
+      - {field_id: parent_code, display_name: 上级实体编码, data_type: string, required: false, nullable: true, description: 同一实体类型内的上级编码。, foreign_key: {sheet_id: organization_region, field_id: entity_code}}
+      - {field_id: province, display_name: 省份, data_type: string, required: false, nullable: true, description: 区域实体的省份；组织实体为空。}
+      - {field_id: city, display_name: 城市, data_type: string, required: false, nullable: true, description: 区域实体的城市；组织实体为空。}
+
+  - sheet_id: management_account
+    sheet_name: 09_管理科目
+    purpose: 维护经营分析所使用的管理科目树及财务科目映射。
+    grain: [management_account_code]
+    fields:
+      - {field_id: management_account_code, display_name: 管理科目编码, data_type: string, required: true, nullable: false, description: 管理科目的稳定编码。}
+      - {field_id: management_account_name, display_name: 管理科目名称, data_type: string, required: true, nullable: false, description: 管理科目显示名称。}
+      - {field_id: category, display_name: 科目类别, data_type: enum, required: true, nullable: false, description: 管理口径科目类别。, enum: [revenue, direct_cost, operating_expense, operating_profit, cash_flow, working_capital]}
+      - {field_id: financial_account_code, display_name: 财务科目编码, data_type: string, required: false, nullable: true, description: 可选的会计科目映射编码。}
+      - {field_id: parent_code, display_name: 上级管理科目编码, data_type: string, required: false, nullable: true, description: 可选的上级管理科目编码。, foreign_key: {sheet_id: management_account, field_id: management_account_code}}
