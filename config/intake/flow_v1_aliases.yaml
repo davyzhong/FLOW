@@ -1,0 +1,98 @@
+contract_version: flow.excel.v1
+sheets:
+  analysis_batch:
+    aliases: [批次信息]
+    fields:
+      batch_code: [分析批号]
+      contract_version: [目标数据版本]
+      analysis_start_month: [分析起月]
+      analysis_end_month: [分析止月]
+      comparison_start_month: [同比起月]
+      comparison_end_month: [同比止月]
+      currency: [本位币]
+      actual_scenario_code: [实际情景]
+      budget_scenario_code: [计划情景]
+      budget_version_label: [计划版本]
+      generated_at: [生成时间]
+  operating_actual:
+    aliases: [业务明细]
+    fields:
+      record_id: [来源记录号]
+      month_key: [业务月份]
+      organization_code: [分公司编码]
+      customer_code: [客户编号]
+      logistics_product_code: [服务产品编码]
+      region_code: [经营区域编码]
+      order_count: [订单票数]
+      shipment_count: [履约件数]
+      revenue: [营业收入(元)]
+      warehousing_cost: [仓储成本(元)]
+      transportation_cost: [运输成本(元)]
+      other_direct_cost: [其他直接成本(元)]
+  financial_actual:
+    aliases: [管理账]
+    fields:
+      record_id: [来源记录号]
+      month_key: [业务月份]
+      organization_code: [分公司编码]
+      management_account_code: [管理口径科目]
+      amount: [发生额(元)]
+  monthly_budget:
+    aliases: [月度计划]
+    fields:
+      record_id: [来源记录号]
+      month_key: [业务月份]
+      organization_code: [分公司编码]
+      customer_segment_code: [客群编号]
+      logistics_product_code: [服务产品编码]
+      management_account_code: [管理口径科目]
+      scenario_code: [情景编号]
+      metric_code: [预算指标]
+      amount: [发生额(元)]
+  ar_collection:
+    aliases: [应收账龄]
+    fields:
+      record_id: [来源记录号]
+      month_key: [业务月份]
+      customer_code: [客户编号]
+      invoice_number: [发票号码]
+      aging_bucket: [账龄段]
+      receivable_balance: [应收余额(元)]
+      due_amount: [到期金额(元)]
+      overdue_amount: [逾期金额(元)]
+      collected_amount: [本期回款(元)]
+  customer_master:
+    aliases: [客户档案]
+    fields:
+      customer_code: [客户编号]
+      customer_name: [客户全称]
+      industry: [所属行业]
+      tier: [客户级别]
+      credit_term_days: [信用期(天)]
+      customer_segment_code: [客群编号]
+      customer_segment_name: [客群名称]
+  logistics_product:
+    aliases: [物流服务]
+    fields:
+      logistics_product_code: [服务产品编码]
+      logistics_product_name: [物流服务名称]
+      level: [层次]
+      parent_code: [上级编号]
+  organization_region:
+    aliases: [组织区域]
+    fields:
+      entity_type: [档案类型]
+      entity_code: [档案编码]
+      entity_name: [档案名称]
+      level: [层次]
+      parent_code: [上级编号]
+      province: [省份]
+      city: [城市]
+  management_account:
+    aliases: [管理科目表]
+    fields:
+      management_account_code: [管理口径科目]
+      management_account_name: [管理科目名称]
+      category: [科目类别]
+      financial_account_code: [财务科目编码]
+      parent_code: [上级编号]
