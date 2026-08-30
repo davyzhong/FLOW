@@ -87,9 +87,7 @@ class ObjectStore:
             raise ImmutableObjectConflictError(
                 f"existing object metadata conflicts with content address {object_key}"
             )
-        content = bytes(
-            self._client.get_object(Bucket=self._bucket, Key=object_key)["Body"].read()
-        )
+        content = bytes(self._client.get_object(Bucket=self._bucket, Key=object_key)["Body"].read())
         if len(content) != expected_size or hashlib.sha256(content).hexdigest() != sha256:
             raise ImmutableObjectConflictError(
                 f"existing object bytes conflict with content address {object_key}"

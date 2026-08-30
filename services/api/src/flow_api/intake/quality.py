@@ -135,9 +135,7 @@ def _grain_issues(package: CanonicalPackage, contract: WorkbookContract) -> list
                         "duplicate_grain",
                         "blocking",
                         f"{sheet_id} 存在重复业务粒度。",
-                        location=IssueLocation(
-                            target_sheet_id=sheet_id, record_id=record_id
-                        ),
+                        location=IssueLocation(target_sheet_id=sheet_id, record_id=record_id),
                         evidence=f"与记录 {seen[grain]} 使用相同粒度 {grain!r}。",
                         repair="删除重复记录或修正组成业务粒度的字段。",
                     )

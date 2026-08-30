@@ -270,8 +270,7 @@ def profile_workbook(source: Path | bytes) -> WorkbookProfile:
         raise InvalidWorkbookError("source is not a readable XLSX workbook") from error
     try:
         sheets = tuple(
-            _profile_sheet(worksheet, index)
-            for index, worksheet in enumerate(workbook.worksheets)
+            _profile_sheet(worksheet, index) for index, worksheet in enumerate(workbook.worksheets)
         )
     finally:
         workbook.close()

@@ -106,7 +106,10 @@ class IntakeService:
             batch_id=source.batch_id,
             sequence=self.repository.next_mapping_sequence(source.batch_id),
             mapping_hash=proposal.mapping_hash,
-            mapping_spec=asdict(proposal),
+            mapping_spec={
+                **asdict(proposal),
+                "_source_file_id": str(source.id),
+            },
             confidence_summary=dict(confidences),
             rationale_summary={
                 "unresolved_sheet_ids": list(proposal.unresolved_sheet_ids),

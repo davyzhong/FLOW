@@ -19,6 +19,7 @@ class Settings(BaseSettings):
     s3_bucket: str
     s3_access_key: SecretStr
     s3_secret_key: SecretStr
+    intake_max_upload_bytes: int = 25 * 1024 * 1024
 
 
 @lru_cache

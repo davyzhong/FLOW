@@ -85,14 +85,8 @@ def _is_null(value: Any) -> bool:
 def _transform_non_null(rule: TransformRule, field: FieldContract, raw_value: Any) -> Any:
     if field.data_type in {"string", "enum"}:
         text_value = _normalized_text(str(raw_value))
-        if (
-            field.data_type == "enum"
-            and field.enum is not None
-            and text_value not in field.enum
-        ):
-            raise TransformError(
-                f"{field.field_id} is not an allowed enum value: {text_value}"
-            )
+        if field.data_type == "enum" and field.enum is not None and text_value not in field.enum:
+            raise TransformError(f"{field.field_id} is not an allowed enum value: {text_value}")
         return text_value
     if field.data_type == "month":
         match = MONTH_PATTERN.fullmatch(_normalized_text(str(raw_value)))
@@ -161,9 +155,7 @@ def apply_transform(
         rule_id=rule.rule_id,
         rule_version=rule.version,
         status=(
-            "unchanged"
-            if type(value) is type(raw_value) and value == raw_value
-            else "transformed"
+            "unchanged" if type(value) is type(raw_value) and value == raw_value else "transformed"
         ),
         reason="源值按版本化类型规则转换。",
     )

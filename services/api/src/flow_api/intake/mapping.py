@@ -213,9 +213,7 @@ def _sheet_source(
     ]
     if len(exact) == 1:
         return exact[0], "contract_sheet_name", 1.0
-    registered = {
-        _normalize(alias) for alias in aliases.sheet_aliases.get(sheet.sheet_id, ())
-    }
+    registered = {_normalize(alias) for alias in aliases.sheet_aliases.get(sheet.sheet_id, ())}
     matched = [
         source
         for source in profile.sheets

@@ -83,9 +83,7 @@ def extract_candidate_package(
                 continue
             worksheet = workbook[sheet_mapping.source_sheet]
             target_sheet = contract.get_sheet(sheet_mapping.target_sheet_id)
-            mappings = {
-                field.target_field_id: field for field in sheet_mapping.fields
-            }
+            mappings = {field.target_field_id: field for field in sheet_mapping.fields}
             column_indexes = {
                 field_id: column_index_from_string(mapping.source_column)
                 for field_id, mapping in mappings.items()

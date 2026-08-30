@@ -59,9 +59,7 @@ def apply_ai_suggestions(
         source_columns = {column.header: column for column in source_sheet.columns}
         if suggestion.source_header not in source_columns:
             raise InvalidAISuggestionError("AI suggestion references an unknown source column")
-        if any(
-            field.source_header == suggestion.source_header for field in mapped_sheet.fields
-        ):
+        if any(field.source_header == suggestion.source_header for field in mapped_sheet.fields):
             raise InvalidAISuggestionError("AI suggestion reuses an already mapped source column")
         source_column = source_columns[suggestion.source_header]
         field_mapping = FieldMapping(

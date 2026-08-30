@@ -91,9 +91,7 @@ class WorkbookContract(BaseModel):
             raise ValueError("duplicate sheet name")
 
         targets = {
-            (sheet.sheet_id, field.field_id)
-            for sheet in self.sheets
-            for field in sheet.fields
+            (sheet.sheet_id, field.field_id) for sheet in self.sheets for field in sheet.fields
         }
         for sheet in self.sheets:
             for field in sheet.fields:
