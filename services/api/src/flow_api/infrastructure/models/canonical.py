@@ -128,6 +128,9 @@ class ScenarioVersion(CanonicalIdentityMixin, Base):
 
 
 class LineageFactMixin:
+    business_record_id: Mapped[UUID] = mapped_column(
+        PG_UUID(as_uuid=True), nullable=False, default=new_uuid7
+    )
     import_version_id: Mapped[UUID] = mapped_column(
         PG_UUID(as_uuid=True), ForeignKey("import_version.id", ondelete="RESTRICT"), nullable=False
     )
@@ -148,6 +151,7 @@ class FactOperatingActual(CanonicalIdentityMixin, LineageFactMixin, Base):
     __tablename__ = "fact_operating_actual"
     __table_args__ = (
         UniqueConstraint(
+            "import_version_id",
             "period_id",
             "organization_id",
             "customer_id",
@@ -182,6 +186,7 @@ class FactFinancialActual(CanonicalIdentityMixin, LineageFactMixin, Base):
     __tablename__ = "fact_financial_actual"
     __table_args__ = (
         UniqueConstraint(
+            "import_version_id",
             "period_id",
             "organization_id",
             "management_account_id",
@@ -206,6 +211,7 @@ class FactBudget(CanonicalIdentityMixin, LineageFactMixin, Base):
     __table_args__ = (
         Index(
             "uq_fact_budget_grain",
+            "import_version_id",
             "period_id",
             "organization_id",
             "customer_segment_id",
@@ -250,6 +256,7 @@ class FactArCollection(CanonicalIdentityMixin, LineageFactMixin, Base):
         ),
         Index(
             "uq_fact_ar_collection_grain",
+            "import_version_id",
             "period_id",
             "customer_id",
             "invoice_number",

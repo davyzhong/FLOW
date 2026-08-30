@@ -186,6 +186,8 @@ class QualityIssue(IdentityTimestampMixin, Base):
     )
     code: Mapped[str] = mapped_column(String(128), nullable=False)
     message: Mapped[str] = mapped_column(Text, nullable=False)
+    evidence: Mapped[str] = mapped_column(Text, nullable=False, default="")
+    repair_suggestion: Mapped[str] = mapped_column(Text, nullable=False, default="")
     sheet_name: Mapped[str | None] = mapped_column(String(255))
     source_row: Mapped[int | None] = mapped_column(Integer)
     source_column: Mapped[str | None] = mapped_column(String(32))

@@ -1,8 +1,9 @@
 from __future__ import annotations
 
+from collections.abc import Sequence
 from datetime import datetime
 from decimal import Decimal
-from typing import Any
+from typing import TYPE_CHECKING, Any
 from uuid import UUID, uuid5
 
 from sqlalchemy import func, select
@@ -41,11 +42,18 @@ from flow_api.infrastructure.models.canonical import (
 )
 from flow_api.infrastructure.models.intake import ImportVersion, SourceFile, SourceRecord
 
+if TYPE_CHECKING:
+    from flow_api.intake.extractor import LineageValue
+
 DATABASE_FIXTURE_NAMESPACE = UUID("23cb1107-9809-59cc-8c5c-690900ce9ef1")
 
 
 def _stable_id(entity: str, business_key: str) -> UUID:
     return uuid5(DATABASE_FIXTURE_NAMESPACE, f"{entity}:{business_key}")
+
+
+def _versioned_fact_id(entity: str, version_id: UUID, business_record_id: str) -> UUID:
+    return _stable_id(entity, f"{version_id}:{business_record_id}")
 
 
 def _json_value(value: Any) -> Any:
@@ -58,6 +66,10 @@ def _json_value(value: Any) -> Any:
     if isinstance(value, (list, tuple)):
         return [_json_value(nested) for nested in value]
     return value
+
+
+def _cell_json(value: Any) -> dict[str, Any]:
+    return {"value": _json_value(value)}
 
 
 def _validate_package(package: CanonicalPackage) -> None:
@@ -194,8 +206,33 @@ def _manifest(package: CanonicalPackage) -> dict[str, Any]:
 
 
 def _lineage_records(
-    package: CanonicalPackage, version: ImportVersion, source_file: SourceFile
+    package: CanonicalPackage,
+    version: ImportVersion,
+    source_file: SourceFile,
+    lineage_values: Sequence[LineageValue] | None = None,
 ) -> tuple[list[SourceRecord], dict[tuple[str, str], SourceRecord]]:
+    if lineage_values is not None:
+        field_records: list[SourceRecord] = []
+        field_fact_sources: dict[tuple[str, str], SourceRecord] = {}
+        for item in lineage_values:
+            source_record = SourceRecord(
+                import_version=version,
+                source_file=source_file,
+                sheet_name=item.source_sheet,
+                source_row=item.source_row,
+                source_column=item.source_column,
+                canonical_field=f"{item.target_sheet_id}.{item.target_field_id}",
+                raw_value=_cell_json(item.raw_value),
+                transformed_value=_cell_json(item.transformed_value),
+                transform_rule_id=item.rule_id,
+                transform_rule_version=item.rule_version,
+                transform_reason=item.reason,
+            )
+            field_records.append(source_record)
+            if item.target_field_id == "record_id" and isinstance(item.transformed_value, str):
+                field_fact_sources[(item.target_sheet_id, item.transformed_value)] = source_record
+        return field_records, field_fact_sources
+
     records: list[SourceRecord] = []
     fact_sources: dict[tuple[str, str], SourceRecord] = {}
     for sheet_id, rows in workbook_rows(package).items():
@@ -231,33 +268,45 @@ def _lineage_records(
 
 
 def load_canonical_package(
-    session: Session, package: CanonicalPackage, source_file: SourceFile
+    session: Session,
+    package: CanonicalPackage,
+    source_file: SourceFile,
+    *,
+    import_version: ImportVersion | None = None,
+    lineage_values: Sequence[LineageValue] | None = None,
 ) -> ImportVersion:
     _validate_package(package)
     if source_file.batch_id is None:
         session.flush()
-    next_sequence = (
-        session.scalar(
-            select(func.coalesce(func.max(ImportVersion.sequence), 0)).where(
-                ImportVersion.batch_id == source_file.batch_id
+    if import_version is None:
+        next_sequence = (
+            session.scalar(
+                select(func.coalesce(func.max(ImportVersion.sequence), 0)).where(
+                    ImportVersion.batch_id == source_file.batch_id
+                )
             )
+            or 0
+        ) + 1
+        version = ImportVersion(
+            batch_id=source_file.batch_id,
+            sequence=next_sequence,
+            is_published=False,
         )
-        or 0
-    ) + 1
-    version = ImportVersion(
-        batch_id=source_file.batch_id,
-        sequence=next_sequence,
-        is_published=False,
-        summary={
-            "batch_code": package.batch.batch_code,
-            "contract_version": package.batch.contract_version,
-            "batch": _json_value(package.batch.model_dump()),
-            "manifest": _manifest(package),
-        },
-    )
-    session.add(version)
+        session.add(version)
+    else:
+        version = import_version
+        if version.batch_id != source_file.batch_id:
+            raise ValueError("import version and source file belong to different batches")
+    version.summary = {
+        **(version.summary or {}),
+        "batch_code": package.batch.batch_code,
+        "contract_version": package.batch.contract_version,
+        "batch": _json_value(package.batch.model_dump()),
+        "manifest": _manifest(package),
+        "source_file_id": str(source_file.id),
+    }
     session.flush()
-    lineage, fact_sources = _lineage_records(package, version, source_file)
+    lineage, fact_sources = _lineage_records(package, version, source_file, lineage_values)
     session.add_all(lineage)
 
     period_by_code = {
@@ -354,23 +403,23 @@ def load_canonical_package(
         )
         for row in package.scenario_versions
     }
-    session.add_all(
-        [
-            *period_by_code.values(),
-            *organization_by_code.values(),
-            *segment_by_code.values(),
-            *customer_by_code.values(),
-            *product_by_code.values(),
-            *region_by_code.values(),
-            *account_by_code.values(),
-            *scenario_by_code.values(),
-        ]
-    )
+    dimensions: list[Any] = [
+        *period_by_code.values(),
+        *organization_by_code.values(),
+        *segment_by_code.values(),
+        *customer_by_code.values(),
+        *product_by_code.values(),
+        *region_by_code.values(),
+        *account_by_code.values(),
+        *scenario_by_code.values(),
+    ]
+    session.add_all([row for row in dimensions if session.get(type(row), row.id) is None])
     session.flush()
 
     operating_facts = [
         FactOperatingActual(
-            id=UUID(row.record_id),
+            id=_versioned_fact_id("operating_actual", version.id, row.record_id),
+            business_record_id=UUID(row.record_id),
             import_version_id=version.id,
             source_record_id=fact_sources[("operating_actual", row.record_id)].id,
             period_id=period_by_code[row.month_key].id,
@@ -389,7 +438,8 @@ def load_canonical_package(
     ]
     financial_facts = [
         FactFinancialActual(
-            id=UUID(row.record_id),
+            id=_versioned_fact_id("financial_actual", version.id, row.record_id),
+            business_record_id=UUID(row.record_id),
             import_version_id=version.id,
             source_record_id=fact_sources[("financial_actual", row.record_id)].id,
             period_id=period_by_code[row.month_key].id,
@@ -401,7 +451,8 @@ def load_canonical_package(
     ]
     budget_facts = [
         FactBudget(
-            id=UUID(row.record_id),
+            id=_versioned_fact_id("monthly_budget", version.id, row.record_id),
+            business_record_id=UUID(row.record_id),
             import_version_id=version.id,
             source_record_id=fact_sources[("monthly_budget", row.record_id)].id,
             period_id=period_by_code[row.month_key].id,
@@ -429,7 +480,8 @@ def load_canonical_package(
     ]
     ar_facts = [
         FactArCollection(
-            id=UUID(row.record_id),
+            id=_versioned_fact_id("ar_collection", version.id, row.record_id),
+            business_record_id=UUID(row.record_id),
             import_version_id=version.id,
             source_record_id=fact_sources[("ar_collection", row.record_id)].id,
             period_id=period_by_code[row.month_key].id,
@@ -452,15 +504,12 @@ def _select_by_codes(session: Session, model: Any, codes: list[str]) -> list[Any
     return list(session.scalars(select(model).where(model.code.in_(codes)).order_by(model.code)))
 
 
-def read_canonical_package(session: Session, batch_code: str) -> CanonicalPackage:
-    version = session.scalar(
-        select(ImportVersion)
-        .where(ImportVersion.summary["batch_code"].astext == batch_code)
-        .order_by(ImportVersion.sequence.desc())
-        .limit(1)
-    )
+def read_canonical_package_by_version(
+    session: Session, import_version_id: UUID
+) -> CanonicalPackage:
+    version = session.get(ImportVersion, import_version_id)
     if version is None:
-        raise LookupError(f"canonical package not found: {batch_code}")
+        raise LookupError(f"canonical package version not found: {import_version_id}")
     summary = version.summary
     manifest = summary["manifest"]
     batch = BatchRecord.model_validate(summary["batch"])
@@ -585,7 +634,7 @@ def read_canonical_package(session: Session, batch_code: str) -> CanonicalPackag
     )
     operating = tuple(
         OperatingActualRecord(
-            record_id=str(row.id),
+            record_id=str(row.business_record_id),
             month_key=month_code_by_id[row.period_id],
             organization_code=organization_code_by_id[row.organization_id],
             customer_code=customer_code_by_id[row.customer_id],
@@ -602,7 +651,7 @@ def read_canonical_package(session: Session, batch_code: str) -> CanonicalPackag
     )
     financial = tuple(
         FinancialActualRecord(
-            record_id=str(row.id),
+            record_id=str(row.business_record_id),
             month_key=month_code_by_id[row.period_id],
             organization_code=organization_code_by_id[row.organization_id],
             management_account_code=account_code_by_id[row.management_account_id],
@@ -612,7 +661,7 @@ def read_canonical_package(session: Session, batch_code: str) -> CanonicalPackag
     )
     budgets = tuple(
         MonthlyBudgetRecord(
-            record_id=str(row.id),
+            record_id=str(row.business_record_id),
             month_key=month_code_by_id[row.period_id],
             organization_code=organization_code_by_id[row.organization_id],
             customer_segment_code=(
@@ -638,7 +687,7 @@ def read_canonical_package(session: Session, batch_code: str) -> CanonicalPackag
     )
     ar_rows = tuple(
         ArCollectionRecord(
-            record_id=str(row.id),
+            record_id=str(row.business_record_id),
             month_key=month_code_by_id[row.period_id],
             customer_code=customer_code_by_id[row.customer_id],
             invoice_number=row.invoice_number,
@@ -665,3 +714,15 @@ def read_canonical_package(session: Session, batch_code: str) -> CanonicalPackag
         monthly_budgets=budgets,
         ar_collections=ar_rows,
     )
+
+
+def read_canonical_package(session: Session, batch_code: str) -> CanonicalPackage:
+    version = session.scalar(
+        select(ImportVersion)
+        .where(ImportVersion.summary["batch_code"].astext == batch_code)
+        .order_by(ImportVersion.sequence.desc())
+        .limit(1)
+    )
+    if version is None:
+        raise LookupError(f"canonical package not found: {batch_code}")
+    return read_canonical_package_by_version(session, version.id)
