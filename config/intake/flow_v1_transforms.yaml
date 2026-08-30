@@ -1,0 +1,9 @@
+transform_version: flow.transforms.v1
+null_rule: {rule_id: normalize_null, version: 1}
+rules:
+  string: {rule_id: normalize_text, version: 1}
+  enum: {rule_id: normalize_text, version: 1}
+  integer: {rule_id: parse_integer, version: 1}
+  decimal: {rule_id: parse_decimal, version: 1}
+  month: {rule_id: normalize_month, version: 1}
+  datetime: {rule_id: parse_datetime, version: 1}

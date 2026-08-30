@@ -260,7 +260,7 @@ def _validate_relationships(
                 _relationship_issue(issues, sheet_names[sheet_id], offset, field_id, str(value))
 
 
-def _build_package(rows: dict[str, tuple[dict[str, Any], ...]]) -> CanonicalPackage:
+def build_package_from_rows(rows: dict[str, tuple[dict[str, Any], ...]]) -> CanonicalPackage:
     batch = BatchRecord.model_validate(rows["analysis_batch"][0])
     customer_segments_by_code: dict[str, CustomerSegmentRecord] = {}
     customers: list[CustomerRecord] = []
@@ -422,4 +422,4 @@ def parse_workbook(path: Path, contract: WorkbookContract) -> CanonicalPackage:
         )
     if issues:
         raise WorkbookParseError(tuple(issues))
-    return _build_package(rows_by_sheet)
+    return build_package_from_rows(rows_by_sheet)
