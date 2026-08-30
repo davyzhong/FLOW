@@ -2,7 +2,7 @@ PNPM := npx --yes pnpm@10.17.1
 UV := uv
 COMPOSE := docker compose -f infra/compose.yaml
 
-.PHONY: bootstrap contracts contracts-check infra-up infra-down stack-up stack-down dev-api dev-web test-api test-web test lint typecheck
+.PHONY: bootstrap contracts contracts-check infra-up infra-down stack-up stack-down dev-api dev-web test-api test-web test lint typecheck phase-1-acceptance
 
 bootstrap:
 	$(PNPM) install --frozen-lockfile
@@ -21,7 +21,9 @@ infra-up:
 infra-down:
 	$(COMPOSE) down
 
-stack-up: infra-up
+stack-up:
+	$(COMPOSE) up -d --build
+	$(UV) run scripts/wait_for_services.py localhost:5432 localhost:6379 localhost:9000 localhost:8000 localhost:3000
 
 stack-down: infra-down
 
@@ -46,3 +48,6 @@ lint:
 typecheck:
 	cd services/api && $(UV) run mypy src
 	$(PNPM) --filter @flow/web typecheck
+
+phase-1-acceptance:
+	bash scripts/accept_phase_1.sh
