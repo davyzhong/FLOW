@@ -15,14 +15,16 @@ contracts-check:
 	bash scripts/check_contracts.sh
 
 infra-up:
-	$(COMPOSE) up -d postgres redis minio minio-init
+	$(COMPOSE) up -d --wait --wait-timeout 120 postgres redis minio
+	$(COMPOSE) up minio-init
 	$(UV) run scripts/wait_for_services.py localhost:5432 localhost:6379 localhost:9000
 
 infra-down:
 	$(COMPOSE) down
 
 stack-up:
-	$(COMPOSE) up -d --build
+	$(MAKE) infra-up
+	$(COMPOSE) up -d --build --wait --wait-timeout 120 api worker web
 	$(UV) run scripts/wait_for_services.py localhost:5432 localhost:6379 localhost:9000 localhost:8000 localhost:3000
 
 stack-down: infra-down
