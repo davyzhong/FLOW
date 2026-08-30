@@ -54,7 +54,11 @@ FLOW 是面向物流供应链企业 Finance BP 的 AI 经营分析工作台：�
 - 知识库归档：完成；
 - V1 主实施路线图：完成；
 - Phase 1 基础架构与对象契约详细计划：完成；
-- 产品代码、标准模板实体、模拟数据和报告生成器：尚未开发。
+- Phase 1 基础架构与对象契约：完成并通过本地干净检出与 GitHub Actions 验收；
+- 运行栈：Next.js、FastAPI、Celery、PostgreSQL、Redis、MinIO 已可构建启动；
+- 数据库对象：接入、血缘、标准事实、指标、分析和发布三层 migration 已落地；
+- API 合约：`/api/v1/health`、`/api/v1/workspace` 与生成式 TypeScript 类型已落地；
+- 标准 Excel 实体、模拟数据、完整导入流程、驾驶舱和报告生成器：尚未开发。
 
 ## 新 Agent 的工作规则
 
@@ -72,4 +76,4 @@ FLOW 是面向物流供应链企业 Finance BP 的 AI 经营分析工作台：�
 
 ## 当前下一步
 
-按照 [V1 主实施路线图](../../superpowers/plans/2026-08-30-flow-v1-master-roadmap.md) 和 [Phase 1 详细计划](../../superpowers/plans/2026-08-30-flow-v1-phase-1-foundation.md)，从基础架构与对象契约开始实施；完成 Phase 1 验收后，再基于真实迁移和接口编写 Phase 2 数据契约的可执行任务单。
+基于已验证的 migration、标准事实粒度和版本接口，按照 [V1 主实施路线图](../../superpowers/plans/2026-08-30-flow-v1-master-roadmap.md) 编写 Phase 2“标准 Excel 数据契约与高拟真 fixture”的可执行任务单。Phase 1 证据见 `docs/implementation/phase-1-verification.md`。

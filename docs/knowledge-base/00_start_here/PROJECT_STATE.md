@@ -2,7 +2,7 @@
 
 ## 当前状态摘要
 
-截至 2026-08-30，项目处于“产品设计完成、详细实施计划已启动、产品代码尚未开发”的阶段。工作区已经建立 Git 仓库，正式设计规格已提交。全部背景素材、原始信息、链接、图片和讨论过程已归档成可由其他 Agent 接续的知识库。规范远程仓库为 <https://github.com/davyzhong/FLOW>；用户要求每次完整任务完成后提交并推送任务成果。
+截至 2026-08-30，产品设计和 Phase 1“基础架构与对象契约”均已完成。Next.js、FastAPI、Celery、PostgreSQL、Redis 与 MinIO 组成的六服务栈可以从干净检出构建启动；接入、标准数据、指标分析与发布对象已经迁移到 `0003_analytics_and_publishing`。本地验收和 GitHub Actions 七个 jobs 全部通过。规范远程仓库为 <https://github.com/davyzhong/FLOW>；下一阶段是标准 Excel 数据契约与高拟真 fixture。
 
 ## 阶段时间线
 
@@ -113,17 +113,33 @@
 - 已建立 FLOW V1 主实施路线图，覆盖基础架构、数据契约、接入、指标、分析、驾驶舱、Investigation、AI、统一发布和运维验收十个阶段；
 - 已完成 Phase 1“基础架构与对象契约”的可执行测试先行计划；
 - 实施基线采用 Next.js Web + FastAPI 模块化单体 + Celery Worker + PostgreSQL + S3 兼容对象存储 + Redis；
-- 当前尚未开始产品代码开发。
+- Phase 1 按测试先行计划开始实施。
+
+### 阶段 10：Phase 1 基础架构与对象契约
+
+- 建立 pnpm + uv 锁定依赖的 Next.js/FastAPI/Celery 工程；
+- 建立 PostgreSQL、Redis、MinIO、API、Worker 和 Web 的 Compose 运行栈；
+- 建立接入、版本、质量、血缘、8 个公共维度、4 个核心事实表；
+- 建立指标快照、Finding、证据、评审、结论和统一发布身份；
+- 发布 Workspace OpenAPI 与生成式 TypeScript 契约；
+- 实现内容寻址对象存储和 Redis 幂等任务键；
+- 迁移头达到 `0003_analytics_and_publishing`；
+- 干净 worktree 验收通过，GitHub Actions 的 7 个 jobs 全部通过；
+- 详细证据见 `docs/implementation/phase-1-verification.md`。
 
 ## 当前尚未完成
 
 - 用户对正式规格文件的最后一次文档审阅；
 - Phase 2–10 在各阶段开工前基于已验证接口形成可执行任务单；
-- 技术栈与部署拓扑选择；
-- 标准数据库物理模型；
 - 标准 Excel 模板实体文件；
 - 高拟真模拟数据集；
 - 指标字典、公式和阈值的完整明细；
-- 前端、后端、分析引擎和报告渲染器代码；
-- 自动化测试和验收数据集；
+- Excel 识别、字段映射、清洗、校验和发布工作流；
+- Finance BP 驾驶舱、Investigation 和 AI Copilot；
+- PPT、分析 Excel、HTML/PDF 报告渲染器；
+- Phase 2–10 的功能实现与验收数据集；
 - 正式品牌命名和 FLOW 的最终英文释义。
+
+## 当前下一步
+
+基于 Phase 1 已验证的标准事实粒度、版本对象和 API 合约，形成 Phase 2“标准 Excel 数据契约与高拟真 fixture”的详细测试先行计划，然后生成模板实体、已知答案 fixture 与跨表对账规则。
