@@ -2,11 +2,17 @@ PNPM := npx --yes pnpm@10.17.1
 UV := uv
 COMPOSE := docker compose -f infra/compose.yaml
 
-.PHONY: bootstrap infra-up infra-down stack-up stack-down dev-api dev-web test-api test-web test lint typecheck
+.PHONY: bootstrap contracts contracts-check infra-up infra-down stack-up stack-down dev-api dev-web test-api test-web test lint typecheck
 
 bootstrap:
 	$(PNPM) install --frozen-lockfile
 	cd services/api && $(UV) sync --all-groups --frozen
+
+contracts:
+	bash scripts/generate_contracts.sh
+
+contracts-check:
+	bash scripts/check_contracts.sh
 
 infra-up:
 	$(COMPOSE) up -d postgres redis minio minio-init

@@ -9,6 +9,8 @@
     ]
   },
   "scripts": {
+    "contracts": "bash scripts/generate_contracts.sh",
+    "contracts:check": "bash scripts/check_contracts.sh",
     "test": "pnpm -r test",
     "lint": "pnpm -r lint",
     "typecheck": "pnpm -r typecheck"

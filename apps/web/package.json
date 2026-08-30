@@ -11,6 +11,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@flow/contracts": "workspace:*",
     "next": "16.3.3",
     "react": "19.2.0",
     "react-dom": "19.2.0"
