@@ -86,7 +86,7 @@ def _instructions() -> tuple[dict[str, str | None], ...]:
     )
 
 
-def _sheet_rows(package: CanonicalPackage) -> dict[str, tuple[Mapping[str, Any], ...]]:
+def workbook_rows(package: CanonicalPackage) -> dict[str, tuple[Mapping[str, Any], ...]]:
     segment_names = {segment.code: segment.name for segment in package.customer_segments}
     customer_rows = tuple(
         {
@@ -282,7 +282,7 @@ def render_workbook(
             f"package contract {package.batch.contract_version} does not match "
             f"{contract.contract_version}"
         )
-    rows_by_sheet = _sheet_rows(package)
+    rows_by_sheet = workbook_rows(package)
     workbook = Workbook()
     active_sheet = workbook.active
     if active_sheet is None:
