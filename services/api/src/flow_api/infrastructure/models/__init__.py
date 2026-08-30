@@ -33,6 +33,7 @@ from flow_api.infrastructure.models.intake import (
     SourceRecord,
     StoredObject,
     TransformationEvent,
+    WarningAcknowledgement,
 )
 from flow_api.infrastructure.models.publishing import (
     PublicationAttempt,
@@ -74,4 +75,5 @@ __all__ = [
     "SourceRecord",
     "StoredObject",
     "TransformationEvent",
+    "WarningAcknowledgement",
 ]

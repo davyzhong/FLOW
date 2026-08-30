@@ -93,14 +93,26 @@ class MappingVersion(IdentityTimestampMixin, Base):
     __tablename__ = "mapping_version"
     __table_args__ = (
         UniqueConstraint("batch_id", "sequence", name="uq_mapping_version_batch_sequence"),
+        UniqueConstraint("batch_id", "mapping_hash", name="uq_mapping_version_batch_hash"),
         CheckConstraint("sequence > 0", name="ck_mapping_version_sequence_positive"),
+        CheckConstraint(
+            "mapping_hash is null or length(mapping_hash) = 64",
+            name="ck_mapping_version_hash_length",
+        ),
     )
 
     batch_id: Mapped[UUID] = mapped_column(
         PG_UUID(as_uuid=True), ForeignKey("analysis_batch.id", ondelete="CASCADE"), nullable=False
     )
     sequence: Mapped[int] = mapped_column(Integer, nullable=False)
+    mapping_hash: Mapped[str | None] = mapped_column(String(64))
     mapping_spec: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False)
+    confidence_summary: Mapped[dict[str, Any]] = mapped_column(
+        JSONB, nullable=False, default=dict, server_default=text("'{}'::jsonb")
+    )
+    rationale_summary: Mapped[dict[str, Any]] = mapped_column(
+        JSONB, nullable=False, default=dict, server_default=text("'{}'::jsonb")
+    )
     created_by: Mapped[str] = mapped_column(String(255), nullable=False, default="system")
 
 
@@ -109,6 +121,10 @@ class ImportVersion(IdentityTimestampMixin, Base):
     __table_args__ = (
         UniqueConstraint("batch_id", "sequence", name="uq_import_version_batch_sequence"),
         CheckConstraint("sequence > 0", name="ck_import_version_sequence_positive"),
+        CheckConstraint(
+            "status in ('draft', 'validating', 'blocked', 'ready', 'published')",
+            name="ck_import_version_status",
+        ),
         Index(
             "uq_import_version_one_published_per_batch",
             "batch_id",
@@ -124,6 +140,7 @@ class ImportVersion(IdentityTimestampMixin, Base):
         PG_UUID(as_uuid=True), ForeignKey("mapping_version.id", ondelete="RESTRICT")
     )
     sequence: Mapped[int] = mapped_column(Integer, nullable=False)
+    status: Mapped[str] = mapped_column(String(32), nullable=False, default="draft")
     is_published: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     published_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     summary: Mapped[dict[str, Any]] = mapped_column(
@@ -172,6 +189,29 @@ class QualityIssue(IdentityTimestampMixin, Base):
     sheet_name: Mapped[str | None] = mapped_column(String(255))
     source_row: Mapped[int | None] = mapped_column(Integer)
     source_column: Mapped[str | None] = mapped_column(String(32))
+    acknowledgement: Mapped[WarningAcknowledgement | None] = relationship(
+        back_populates="quality_issue", cascade="all, delete-orphan", uselist=False
+    )
+
+
+class WarningAcknowledgement(IdentityTimestampMixin, Base):
+    __tablename__ = "warning_acknowledgement"
+    __table_args__ = (
+        UniqueConstraint("quality_issue_id", name="uq_warning_ack_issue"),
+        CheckConstraint("length(btrim(actor)) > 0", name="ck_warning_ack_actor_nonempty"),
+        CheckConstraint("length(btrim(reason)) > 0", name="ck_warning_ack_reason_nonempty"),
+    )
+
+    quality_issue_id: Mapped[UUID] = mapped_column(
+        PG_UUID(as_uuid=True), ForeignKey("quality_issue.id", ondelete="CASCADE"), nullable=False
+    )
+    actor: Mapped[str] = mapped_column(String(255), nullable=False)
+    reason: Mapped[str] = mapped_column(Text, nullable=False)
+    acknowledged_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, server_default=func.now()
+    )
+
+    quality_issue: Mapped[QualityIssue] = relationship(back_populates="acknowledgement")
 
 
 class ReconciliationResult(IdentityTimestampMixin, Base):
@@ -209,6 +249,11 @@ class SourceRecord(IdentityTimestampMixin, Base):
             name="uq_source_record_field_lineage",
         ),
         CheckConstraint("source_row >= 1", name="ck_source_record_row_positive"),
+        CheckConstraint(
+            "(transform_rule_id is null and transform_rule_version is null) or "
+            "(transform_rule_id is not null and transform_rule_version > 0)",
+            name="ck_source_record_transform_rule_complete",
+        ),
     )
 
     import_version_id: Mapped[UUID] = mapped_column(
@@ -223,6 +268,9 @@ class SourceRecord(IdentityTimestampMixin, Base):
     canonical_field: Mapped[str] = mapped_column(String(255), nullable=False)
     raw_value: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False)
     transformed_value: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False)
+    transform_rule_id: Mapped[str | None] = mapped_column(String(128))
+    transform_rule_version: Mapped[int | None] = mapped_column(Integer)
+    transform_reason: Mapped[str | None] = mapped_column(Text)
 
     import_version: Mapped[ImportVersion] = relationship(back_populates="source_records")
     source_file: Mapped[SourceFile] = relationship(back_populates="source_records")
