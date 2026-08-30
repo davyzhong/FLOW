@@ -2,7 +2,7 @@
 
 ## 当前状态摘要
 
-截至 2026-08-30，产品设计和 Phase 1“基础架构与对象契约”均已完成。Next.js、FastAPI、Celery、PostgreSQL、Redis 与 MinIO 组成的六服务栈可以从干净检出构建启动；接入、标准数据、指标分析与发布对象已经迁移到 `0003_analytics_and_publishing`。本地验收和 GitHub Actions 七个 jobs 全部通过。规范远程仓库为 <https://github.com/davyzhong/FLOW>；下一阶段是标准 Excel 数据契约与高拟真 fixture。
+截至 2026-08-30，产品设计、Phase 1“基础架构与对象契约”和 Phase 2“标准 Excel 数据契约与高拟真 fixture”均已完成。六服务栈可以从干净检出构建启动；`flow.excel.v1` 已冻结为首个可执行中间层交换契约，标准 Excel、确定性物流 fixture、已知业务答案、解析校验、PostgreSQL 持久化和再次导出均已落地。完整本地验收和 GitHub Actions 八个 jobs 全部通过。规范远程仓库为 <https://github.com/davyzhong/FLOW>；下一阶段是 Intake、Mapping & Quality。
 
 ## 阶段时间线
 
@@ -127,19 +127,29 @@
 - 干净 worktree 验收通过，GitHub Actions 的 7 个 jobs 全部通过；
 - 详细证据见 `docs/implementation/phase-1-verification.md`。
 
+### 阶段 11：Phase 2 标准 Excel 数据契约与高拟真 fixture
+
+- 冻结 `flow.excel.v1` 机器可读 YAML 契约，覆盖 10 张标准工作表；
+- 生成可直接填写和导入的 `flow_standard_v1.xlsx`，以稳定字段 ID 而不是列位置或显示名称识别语义；
+- 建立 24 个月、客户群 × 物流产品 × 组织 × 区域粒度的确定性物流供应链参考数据；
+- 冻结收入、利润、现金、预算差额、应收与跨域对账的精确已知答案；
+- 实现有类型的工作簿解析、空值语义、外键/粒度校验和错误报告；
+- 实现 Excel → canonical package → PostgreSQL → canonical package → Excel 的零差异语义往返；
+- 新增 `make test-data-contract` 与 GitHub Actions `data-contract` 门禁；
+- 干净 worktree 完整回归通过，GitHub Actions 的 8 个 jobs 全部通过；
+- 详细证据见 `docs/implementation/phase-2-verification.md`。
+
 ## 当前尚未完成
 
 - 用户对正式规格文件的最后一次文档审阅；
-- Phase 2–10 在各阶段开工前基于已验证接口形成可执行任务单；
-- 标准 Excel 模板实体文件；
-- 高拟真模拟数据集；
+- Phase 3–10 在各阶段开工前基于已验证接口形成可执行任务单；
 - 指标字典、公式和阈值的完整明细；
 - Excel 识别、字段映射、清洗、校验和发布工作流；
 - Finance BP 驾驶舱、Investigation 和 AI Copilot；
 - PPT、分析 Excel、HTML/PDF 报告渲染器；
-- Phase 2–10 的功能实现与验收数据集；
+- Phase 3–10 的功能实现与验收数据集；
 - 正式品牌命名和 FLOW 的最终英文释义。
 
 ## 当前下一步
 
-基于 Phase 1 已验证的标准事实粒度、版本对象和 API 合约，形成 Phase 2“标准 Excel 数据契约与高拟真 fixture”的详细测试先行计划，然后生成模板实体、已知答案 fixture 与跨表对账规则。
+基于冻结的 `flow.excel.v1`、标准工作簿、确定性 fixture 和已知答案，形成并执行 Phase 3“Intake、Mapping & Quality”详细测试先行计划：完成不可变源文件存储、非标准 Excel 识别、确定性与 AI 辅助字段映射、版本化清洗审计、质量门禁和批次原子发布。
