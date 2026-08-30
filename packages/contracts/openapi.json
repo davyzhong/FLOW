@@ -50,10 +50,1255 @@
           }
         }
       }
+    },
+    "/api/v1/intake/batches": {
+      "post": {
+        "tags": [
+          "intake"
+        ],
+        "summary": "Create Batch",
+        "operationId": "create_batch_api_v1_intake_batches_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BatchCreateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatchResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/intake/batches/{batch_id}/sources": {
+      "post": {
+        "tags": [
+          "intake"
+        ],
+        "summary": "Upload Source",
+        "operationId": "upload_source_api_v1_intake_batches__batch_id__sources_post",
+        "parameters": [
+          {
+            "name": "batch_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Batch Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_upload_source_api_v1_intake_batches__batch_id__sources_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SourceResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/intake/sources/{source_file_id}/profile": {
+      "get": {
+        "tags": [
+          "intake"
+        ],
+        "summary": "Get Profile",
+        "operationId": "get_profile_api_v1_intake_sources__source_file_id__profile_get",
+        "parameters": [
+          {
+            "name": "source_file_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Source File Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkbookProfileResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/intake/sources/{source_file_id}/mapping-proposals": {
+      "post": {
+        "tags": [
+          "intake"
+        ],
+        "summary": "Create Mapping Proposal",
+        "operationId": "create_mapping_proposal_api_v1_intake_sources__source_file_id__mapping_proposals_post",
+        "parameters": [
+          {
+            "name": "source_file_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Source File Id"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MappingResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/intake/mappings/{mapping_version_id}/confirm": {
+      "post": {
+        "tags": [
+          "intake"
+        ],
+        "summary": "Confirm Mapping",
+        "operationId": "confirm_mapping_api_v1_intake_mappings__mapping_version_id__confirm_post",
+        "parameters": [
+          {
+            "name": "mapping_version_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Mapping Version Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MappingConfirmationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MappingResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/intake/sources/{source_file_id}/validate": {
+      "post": {
+        "tags": [
+          "intake"
+        ],
+        "summary": "Validate Source",
+        "operationId": "validate_source_api_v1_intake_sources__source_file_id__validate_post",
+        "parameters": [
+          {
+            "name": "source_file_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Source File Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidateImportRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportVersionResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/intake/issues/{quality_issue_id}/acknowledge": {
+      "post": {
+        "tags": [
+          "intake"
+        ],
+        "summary": "Acknowledge Warning",
+        "operationId": "acknowledge_warning_api_v1_intake_issues__quality_issue_id__acknowledge_post",
+        "parameters": [
+          {
+            "name": "quality_issue_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Quality Issue Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WarningAcknowledgementRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WarningAcknowledgementResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/intake/imports/{import_version_id}/publish": {
+      "post": {
+        "tags": [
+          "intake"
+        ],
+        "summary": "Publish Import",
+        "operationId": "publish_import_api_v1_intake_imports__import_version_id__publish_post",
+        "parameters": [
+          {
+            "name": "import_version_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Import Version Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImportVersionResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/intake/batches/{batch_id}/versions": {
+      "get": {
+        "tags": [
+          "intake"
+        ],
+        "summary": "Version History",
+        "operationId": "version_history_api_v1_intake_batches__batch_id__versions_get",
+        "parameters": [
+          {
+            "name": "batch_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Batch Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VersionHistoryResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "BatchCreateRequest": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "BatchCreateRequest"
+      },
+      "BatchResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "validating",
+              "blocked",
+              "ready",
+              "published"
+            ],
+            "title": "Status"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "status",
+          "description"
+        ],
+        "title": "BatchResponse"
+      },
+      "Body_upload_source_api_v1_intake_batches__batch_id__sources_post": {
+        "properties": {
+          "workbook": {
+            "type": "string",
+            "contentMediaType": "application/octet-stream",
+            "title": "Workbook",
+            "description": "Macro-free XLSX workbook"
+          }
+        },
+        "type": "object",
+        "required": [
+          "workbook"
+        ],
+        "title": "Body_upload_source_api_v1_intake_batches__batch_id__sources_post"
+      },
+      "ColumnProfileResponse": {
+        "properties": {
+          "column": {
+            "type": "string",
+            "title": "Column"
+          },
+          "header": {
+            "type": "string",
+            "title": "Header"
+          },
+          "stable_field_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stable Field Id"
+          },
+          "inferred_type": {
+            "type": "string",
+            "title": "Inferred Type"
+          },
+          "nullable": {
+            "type": "boolean",
+            "title": "Nullable"
+          },
+          "non_null_count": {
+            "type": "integer",
+            "title": "Non Null Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "column",
+          "header",
+          "stable_field_id",
+          "inferred_type",
+          "nullable",
+          "non_null_count"
+        ],
+        "title": "ColumnProfileResponse"
+      },
+      "FieldMappingResponse": {
+        "properties": {
+          "source_header": {
+            "type": "string",
+            "title": "Source Header"
+          },
+          "source_column": {
+            "type": "string",
+            "title": "Source Column"
+          },
+          "target_field_id": {
+            "type": "string",
+            "title": "Target Field Id"
+          },
+          "method": {
+            "type": "string",
+            "title": "Method"
+          },
+          "score": {
+            "type": "number",
+            "title": "Score"
+          },
+          "confidence": {
+            "type": "string",
+            "title": "Confidence"
+          },
+          "requires_confirmation": {
+            "type": "boolean",
+            "title": "Requires Confirmation"
+          },
+          "rationale": {
+            "type": "string",
+            "title": "Rationale"
+          }
+        },
+        "type": "object",
+        "required": [
+          "source_header",
+          "source_column",
+          "target_field_id",
+          "method",
+          "score",
+          "confidence",
+          "requires_confirmation",
+          "rationale"
+        ],
+        "title": "FieldMappingResponse"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "ImportVersionResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "batch_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Batch Id"
+          },
+          "mapping_version_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mapping Version Id"
+          },
+          "sequence": {
+            "type": "integer",
+            "title": "Sequence"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "validating",
+              "blocked",
+              "ready",
+              "published"
+            ],
+            "title": "Status"
+          },
+          "is_published": {
+            "type": "boolean",
+            "title": "Is Published"
+          },
+          "source_file_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source File Id"
+          },
+          "issues": {
+            "items": {
+              "$ref": "#/components/schemas/QualityIssueResponse"
+            },
+            "type": "array",
+            "title": "Issues"
+          },
+          "reconciliations": {
+            "items": {
+              "$ref": "#/components/schemas/ReconciliationResponse"
+            },
+            "type": "array",
+            "title": "Reconciliations"
+          },
+          "next_allowed_actions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Next Allowed Actions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "batch_id",
+          "mapping_version_id",
+          "sequence",
+          "status",
+          "is_published",
+          "source_file_id",
+          "issues",
+          "reconciliations",
+          "next_allowed_actions"
+        ],
+        "title": "ImportVersionResponse"
+      },
+      "MappingConfirmationRequest": {
+        "properties": {
+          "actor": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "title": "Actor"
+          }
+        },
+        "type": "object",
+        "required": [
+          "actor"
+        ],
+        "title": "MappingConfirmationRequest"
+      },
+      "MappingResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "batch_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Batch Id"
+          },
+          "sequence": {
+            "type": "integer",
+            "title": "Sequence"
+          },
+          "mapping_hash": {
+            "type": "string",
+            "title": "Mapping Hash"
+          },
+          "contract_version": {
+            "type": "string",
+            "title": "Contract Version"
+          },
+          "sheets": {
+            "items": {
+              "$ref": "#/components/schemas/SheetMappingResponse"
+            },
+            "type": "array",
+            "title": "Sheets"
+          },
+          "unresolved_sheet_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Unresolved Sheet Ids"
+          },
+          "ignored_source_sheets": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Ignored Source Sheets"
+          },
+          "confidence_summary": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Confidence Summary"
+          },
+          "confirmed_by": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Confirmed By"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "batch_id",
+          "sequence",
+          "mapping_hash",
+          "contract_version",
+          "sheets",
+          "unresolved_sheet_ids",
+          "ignored_source_sheets",
+          "confidence_summary"
+        ],
+        "title": "MappingResponse"
+      },
+      "QualityIssueResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "blocking",
+              "warning"
+            ],
+            "title": "Severity"
+          },
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "evidence": {
+            "type": "string",
+            "title": "Evidence"
+          },
+          "repair_suggestion": {
+            "type": "string",
+            "title": "Repair Suggestion"
+          },
+          "sheet_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sheet Name"
+          },
+          "source_row": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Row"
+          },
+          "source_column": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Column"
+          },
+          "acknowledged": {
+            "type": "boolean",
+            "title": "Acknowledged"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "severity",
+          "code",
+          "message",
+          "evidence",
+          "repair_suggestion",
+          "sheet_name",
+          "source_row",
+          "source_column",
+          "acknowledged"
+        ],
+        "title": "QualityIssueResponse"
+      },
+      "ReconciliationResponse": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "passed": {
+            "type": "boolean",
+            "title": "Passed"
+          },
+          "expected_value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expected Value"
+          },
+          "actual_value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Actual Value"
+          },
+          "details": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Details"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code",
+          "passed",
+          "expected_value",
+          "actual_value",
+          "details"
+        ],
+        "title": "ReconciliationResponse"
+      },
+      "SheetMappingResponse": {
+        "properties": {
+          "source_sheet": {
+            "type": "string",
+            "title": "Source Sheet"
+          },
+          "target_sheet_id": {
+            "type": "string",
+            "title": "Target Sheet Id"
+          },
+          "method": {
+            "type": "string",
+            "title": "Method"
+          },
+          "score": {
+            "type": "number",
+            "title": "Score"
+          },
+          "fields": {
+            "items": {
+              "$ref": "#/components/schemas/FieldMappingResponse"
+            },
+            "type": "array",
+            "title": "Fields"
+          },
+          "unresolved_required_fields": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Unresolved Required Fields"
+          },
+          "ignored_source_headers": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Ignored Source Headers"
+          }
+        },
+        "type": "object",
+        "required": [
+          "source_sheet",
+          "target_sheet_id",
+          "method",
+          "score",
+          "fields",
+          "unresolved_required_fields",
+          "ignored_source_headers"
+        ],
+        "title": "SheetMappingResponse"
+      },
+      "SheetProfileResponse": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "header_row": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Header Row"
+          },
+          "data_start_row": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Data Start Row"
+          },
+          "data_end_row": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Data End Row"
+          },
+          "data_row_count": {
+            "type": "integer",
+            "title": "Data Row Count"
+          },
+          "columns": {
+            "items": {
+              "$ref": "#/components/schemas/ColumnProfileResponse"
+            },
+            "type": "array",
+            "title": "Columns"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "header_row",
+          "data_start_row",
+          "data_end_row",
+          "data_row_count",
+          "columns"
+        ],
+        "title": "SheetProfileResponse"
+      },
+      "SourceResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "batch_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Batch Id"
+          },
+          "filename": {
+            "type": "string",
+            "title": "Filename"
+          },
+          "sha256": {
+            "type": "string",
+            "title": "Sha256"
+          },
+          "size_bytes": {
+            "type": "integer",
+            "title": "Size Bytes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "batch_id",
+          "filename",
+          "sha256",
+          "size_bytes"
+        ],
+        "title": "SourceResponse"
+      },
+      "ValidateImportRequest": {
+        "properties": {
+          "mapping_version_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Mapping Version Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "mapping_version_id"
+        ],
+        "title": "ValidateImportRequest"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "VersionHistoryResponse": {
+        "properties": {
+          "batch_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Batch Id"
+          },
+          "versions": {
+            "items": {
+              "$ref": "#/components/schemas/ImportVersionResponse"
+            },
+            "type": "array",
+            "title": "Versions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "batch_id",
+          "versions"
+        ],
+        "title": "VersionHistoryResponse"
+      },
+      "WarningAcknowledgementRequest": {
+        "properties": {
+          "actor": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "title": "Actor"
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Reason"
+          }
+        },
+        "type": "object",
+        "required": [
+          "actor",
+          "reason"
+        ],
+        "title": "WarningAcknowledgementRequest"
+      },
+      "WarningAcknowledgementResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "quality_issue_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Quality Issue Id"
+          },
+          "actor": {
+            "type": "string",
+            "title": "Actor"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "quality_issue_id",
+          "actor",
+          "reason"
+        ],
+        "title": "WarningAcknowledgementResponse"
+      },
+      "WorkbookProfileResponse": {
+        "properties": {
+          "source_file_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Source File Id"
+          },
+          "sha256": {
+            "type": "string",
+            "title": "Sha256"
+          },
+          "size_bytes": {
+            "type": "integer",
+            "title": "Size Bytes"
+          },
+          "sheet_count": {
+            "type": "integer",
+            "title": "Sheet Count"
+          },
+          "sheets": {
+            "items": {
+              "$ref": "#/components/schemas/SheetProfileResponse"
+            },
+            "type": "array",
+            "title": "Sheets"
+          }
+        },
+        "type": "object",
+        "required": [
+          "source_file_id",
+          "sha256",
+          "size_bytes",
+          "sheet_count",
+          "sheets"
+        ],
+        "title": "WorkbookProfileResponse"
+      },
       "WorkspaceResponse": {
         "properties": {
           "workspace_id": {

@@ -44,8 +44,8 @@ from flow_api.infrastructure.models.intake import (
     SourceFile,
 )
 from flow_api.infrastructure.object_store import ObjectStore
-from flow_api.intake.detector import profile_workbook
-from flow_api.intake.extractor import extract_candidate_package
+from flow_api.intake.detector import WorkbookDetectionError, profile_workbook
+from flow_api.intake.extractor import CandidateExtractionError, extract_candidate_package
 from flow_api.intake.mapping import MappingProposal, load_aliases, propose_mapping
 from flow_api.intake.quality import evaluate_quality
 from flow_api.intake.service import (
@@ -171,14 +171,9 @@ def _version_response(session: Session, version: ImportVersion) -> ImportVersion
     )
     if version.status == "ready":
         has_unacknowledged_warning = any(
-            issue.severity == "warning" and issue.acknowledgement is None
-            for issue in issues
+            issue.severity == "warning" and issue.acknowledgement is None for issue in issues
         )
-        actions = (
-            ["acknowledge_warnings", "publish"]
-            if has_unacknowledged_warning
-            else ["publish"]
-        )
+        actions = ["acknowledge_warnings", "publish"] if has_unacknowledged_warning else ["publish"]
     elif version.status == "blocked":
         actions = ["create_correction"]
     elif version.status == "published":
@@ -250,7 +245,7 @@ async def upload_source(
         content.extend(chunk)
         if len(content) > maximum:
             raise _error(
-                status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+                status.HTTP_413_CONTENT_TOO_LARGE,
                 "source_too_large",
                 "上传文件超过允许大小",
                 maximum_bytes=maximum,
@@ -258,9 +253,15 @@ async def upload_source(
     try:
         stored = storage.store(bytes(content), filename)
         source = IntakeService(session).attach_source(batch_id, stored)
+    except LookupError as error:
+        raise _error(
+            status.HTTP_404_NOT_FOUND,
+            "batch_not_found",
+            str(error),
+        ) from error
     except SourceStorageError as error:
         raise _error(
-            status.HTTP_422_UNPROCESSABLE_ENTITY,
+            status.HTTP_422_UNPROCESSABLE_CONTENT,
             "invalid_source",
             str(error),
         ) from error
@@ -278,7 +279,14 @@ def get_profile(
     source_file_id: UUID, session: SessionDependency, storage: StorageDependency
 ) -> WorkbookProfileResponse:
     source = _source(session, source_file_id)
-    profile = profile_workbook(_source_bytes(source, storage))
+    try:
+        profile = profile_workbook(_source_bytes(source, storage))
+    except WorkbookDetectionError as error:
+        raise _error(
+            status.HTTP_422_UNPROCESSABLE_CONTENT,
+            "workbook_profile_failed",
+            str(error),
+        ) from error
     return WorkbookProfileResponse(
         source_file_id=source.id,
         sha256=profile.sha256,
@@ -317,7 +325,14 @@ def create_mapping_proposal(
     source_file_id: UUID, session: SessionDependency, storage: StorageDependency
 ) -> MappingResponse:
     source = _source(session, source_file_id)
-    _, proposal = _deterministic_proposal(_source_bytes(source, storage))
+    try:
+        _, proposal = _deterministic_proposal(_source_bytes(source, storage))
+    except WorkbookDetectionError as error:
+        raise _error(
+            status.HTTP_422_UNPROCESSABLE_CONTENT,
+            "workbook_mapping_failed",
+            str(error),
+        ) from error
     mapping = IntakeService(session).propose_mapping(source.id, proposal)
     return _mapping_response(mapping, proposal)
 
@@ -355,7 +370,15 @@ def validate_source(
     if mapping.batch_id != source.batch_id or mapping.mapping_hash != proposal.mapping_hash:
         raise _error(status.HTTP_409_CONFLICT, "mapping_source_mismatch", "映射与源文件不匹配")
     contract, _, transforms = _intake_configuration()
-    candidate = extract_candidate_package(content, profile, proposal, contract, transforms)
+    try:
+        candidate = extract_candidate_package(content, profile, proposal, contract, transforms)
+    except CandidateExtractionError as error:
+        raise _error(
+            status.HTTP_422_UNPROCESSABLE_CONTENT,
+            "candidate_extraction_failed",
+            str(error),
+            failed_value_count=len(error.failed_lineage),
+        ) from error
     report = evaluate_quality(candidate.package, contract, proposal)
     version = IntakeService(session).validate_import(source.id, mapping.id, candidate, report)
     return _version_response(session, version)

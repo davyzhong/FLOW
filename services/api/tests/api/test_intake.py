@@ -9,15 +9,16 @@ from alembic import command
 from alembic.config import Config
 from botocore.exceptions import ClientError
 from httpx import ASGITransport, AsyncClient
+from integration.intake_service_support import clean
 from sqlalchemy.orm import Session
 
 from flow_api.api.routes.intake import get_db_session, get_source_storage
 from flow_api.infrastructure.db import get_engine
+from flow_api.infrastructure.models.intake import AnalysisBatch, ImportVersion
 from flow_api.infrastructure.object_store import ObjectStore
 from flow_api.intake.source_storage import SourceStorage
 from flow_api.main import create_app
-
-from integration.intake_service_support import clean
+from flow_api.settings import get_settings
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[4]
 NONSTANDARD = REPOSITORY_ROOT / "fixtures/workbooks/external_logistics_nonstandard_v1.xlsx"
@@ -173,7 +174,7 @@ async def test_typed_intake_api_runs_upload_to_published_version(
 async def test_upload_and_transition_errors_are_typed(
     api_context: tuple[Any, Session],
 ) -> None:
-    app, _ = api_context
+    app, session = api_context
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as client:
         batch = (await client.post("/api/v1/intake/batches", json={"name": "Invalid input"})).json()
@@ -189,3 +190,30 @@ async def test_upload_and_transition_errors_are_typed(
         )
         assert missing.status_code == 404
         assert missing.json()["detail"]["code"] == "import_not_found"
+
+        batch_model = AnalysisBatch(name="Draft transition")
+        draft = ImportVersion(batch=batch_model, sequence=1, status="draft")
+        session.add(draft)
+        session.flush()
+        invalid_transition = await client.post(f"/api/v1/intake/imports/{draft.id}/publish")
+        assert invalid_transition.status_code == 409
+        assert invalid_transition.json()["detail"]["code"] == "publication_blocked"
+
+        invalid_request = await client.post("/api/v1/intake/batches", json={"name": ""})
+        assert invalid_request.status_code == 422
+        assert invalid_request.json()["detail"]["code"] == "request_validation_failed"
+
+        settings = get_settings()
+        original_limit = settings.intake_max_upload_bytes
+        settings.intake_max_upload_bytes = 4
+        try:
+            oversized = await client.post(
+                f"/api/v1/intake/batches/{batch['id']}/sources",
+                files={
+                    "workbook": ("large.xlsx", b"PK\x03\x04too-large", "application/octet-stream")
+                },
+            )
+        finally:
+            settings.intake_max_upload_bytes = original_limit
+        assert oversized.status_code == 413
+        assert oversized.json()["detail"]["code"] == "source_too_large"
