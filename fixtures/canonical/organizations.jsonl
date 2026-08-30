@@ -1,0 +1,3 @@
+{"code":"FLOW_GROUP","level":"group","name":"FLOW 供应链集团","parent_code":null}
+{"code":"ORG_NORTH","level":"business_unit","name":"北方经营中心","parent_code":"FLOW_GROUP"}
+{"code":"ORG_SOUTH","level":"business_unit","name":"南方经营中心","parent_code":"FLOW_GROUP"}

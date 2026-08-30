@@ -1,0 +1,8 @@
+{"code":"B2C","level":"service","name":"国内 B2C 配送","parent_code":null}
+{"code":"B2B","level":"service","name":"国内 B2B 配送","parent_code":null}
+{"code":"WAREHOUSE","level":"service","name":"仓配一体","parent_code":null}
+{"code":"CROSS_BORDER","level":"service","name":"跨境供应链","parent_code":null}
+{"code":"COLD_CHAIN","level":"service","name":"冷链物流","parent_code":null}
+{"code":"REVERSE","level":"service","name":"逆向物流","parent_code":null}
+{"code":"M2C","level":"service","name":"产地直发 M2C","parent_code":null}
+{"code":"SAME_DAY","level":"service","name":"同城即时配","parent_code":null}

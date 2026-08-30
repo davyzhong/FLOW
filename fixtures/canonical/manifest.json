@@ -1,0 +1,58 @@
+{
+  "batch_code": "FLOW_REFERENCE_2026_08",
+  "contract_version": "flow.excel.v1",
+  "files": {
+    "ar_collections.jsonl": {
+      "row_count": 1920,
+      "sha256": "8dc93d187a33e9413f8a5ccd39fed5faa31778b9842bda3e1079e7e8681144f5"
+    },
+    "batch.jsonl": {
+      "row_count": 1,
+      "sha256": "84f9fabbcf84d58e56723b7fc2eac55eb182550a240af8decad86ae4c7aaf5b6"
+    },
+    "customer_segments.jsonl": {
+      "row_count": 2,
+      "sha256": "31d0fe25a17406db2557af77fe132b0ed7041aafea3388ab01e9272ce708567f"
+    },
+    "customers.jsonl": {
+      "row_count": 16,
+      "sha256": "62332568b76a482b54931ca508d0139b3b27d1ca13726fc2841dcc983d15490b"
+    },
+    "financial_actuals.jsonl": {
+      "row_count": 432,
+      "sha256": "85085a6ba43375514aee91debe022d71210a6ea372d0d859268a73d29ce9df3d"
+    },
+    "logistics_products.jsonl": {
+      "row_count": 8,
+      "sha256": "7c860d89dfe9cbc6224dbb0f75f93fe06b0a3dda2cbc4d28334007cd2d32d422"
+    },
+    "management_accounts.jsonl": {
+      "row_count": 9,
+      "sha256": "2802026cbf8cb9ffcc7b51c17ec98adca8bb3222981f72160dd51dd83ce5a6b1"
+    },
+    "monthly_budgets.jsonl": {
+      "row_count": 120,
+      "sha256": "25dd379c45d7f5c2f26dbac42b02870ce7a58289692ae8596802411c2577c183"
+    },
+    "operating_actuals.jsonl": {
+      "row_count": 3072,
+      "sha256": "4a5fa452d5aafc099bb4fdb0e5cc2f261dadc2f206794e4a56578b1be8a90a1e"
+    },
+    "organizations.jsonl": {
+      "row_count": 3,
+      "sha256": "d3f936d4585d78583837d9a5ad462ec8e15209d3f33d15ed778e57a09dcd2cb3"
+    },
+    "periods.jsonl": {
+      "row_count": 24,
+      "sha256": "b4982495a870b4d31de96fea28591ead14d55f0a24e8d14cc7e8e33b675e472f"
+    },
+    "regions.jsonl": {
+      "row_count": 4,
+      "sha256": "db213d552a069ba347f709af1f76b75692c01a5ccaa0f258e848b74401980664"
+    },
+    "scenario_versions.jsonl": {
+      "row_count": 2,
+      "sha256": "3af45cdd23d0f13136af3f8ca4fae109a8abd1febaa5061f1c1ecdaa1c0a367b"
+    }
+  }
+}

@@ -1,0 +1,4 @@
+{"city":"北京市","code":"REGION_NORTH","name":"华北","parent_code":null,"province":"北京市"}
+{"city":"上海市","code":"REGION_EAST","name":"华东","parent_code":null,"province":"上海市"}
+{"city":"广州市","code":"REGION_SOUTH","name":"华南","parent_code":null,"province":"广东省"}
+{"city":"成都市","code":"REGION_WEST","name":"西部","parent_code":null,"province":"四川省"}

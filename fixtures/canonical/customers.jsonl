@@ -1,0 +1,16 @@
+{"code":"CUST_KEY_01","credit_term_days":60,"industry":"平台电商","name":"集团客户01","segment_code":"KEY_ACCOUNT","tier":"A"}
+{"code":"CUST_KEY_02","credit_term_days":60,"industry":"消费电子","name":"集团客户02","segment_code":"KEY_ACCOUNT","tier":"A"}
+{"code":"CUST_KEY_03","credit_term_days":60,"industry":"汽车零部件","name":"集团客户03","segment_code":"KEY_ACCOUNT","tier":"A"}
+{"code":"CUST_KEY_04","credit_term_days":60,"industry":"医药健康","name":"集团客户04","segment_code":"KEY_ACCOUNT","tier":"A"}
+{"code":"CUST_KEY_05","credit_term_days":45,"industry":"平台电商","name":"集团客户05","segment_code":"KEY_ACCOUNT","tier":"B"}
+{"code":"CUST_KEY_06","credit_term_days":45,"industry":"消费电子","name":"集团客户06","segment_code":"KEY_ACCOUNT","tier":"B"}
+{"code":"CUST_KEY_07","credit_term_days":45,"industry":"汽车零部件","name":"集团客户07","segment_code":"KEY_ACCOUNT","tier":"B"}
+{"code":"CUST_KEY_08","credit_term_days":45,"industry":"医药健康","name":"集团客户08","segment_code":"KEY_ACCOUNT","tier":"B"}
+{"code":"CUST_DOM_01","credit_term_days":30,"industry":"食品","name":"国内客户01","segment_code":"DOMESTIC","tier":"B"}
+{"code":"CUST_DOM_02","credit_term_days":30,"industry":"家居","name":"国内客户02","segment_code":"DOMESTIC","tier":"B"}
+{"code":"CUST_DOM_03","credit_term_days":30,"industry":"美妆","name":"国内客户03","segment_code":"DOMESTIC","tier":"B"}
+{"code":"CUST_DOM_04","credit_term_days":30,"industry":"服饰","name":"国内客户04","segment_code":"DOMESTIC","tier":"B"}
+{"code":"CUST_DOM_05","credit_term_days":30,"industry":"食品","name":"国内客户05","segment_code":"DOMESTIC","tier":"C"}
+{"code":"CUST_DOM_06","credit_term_days":30,"industry":"家居","name":"国内客户06","segment_code":"DOMESTIC","tier":"C"}
+{"code":"CUST_DOM_07","credit_term_days":30,"industry":"美妆","name":"国内客户07","segment_code":"DOMESTIC","tier":"C"}
+{"code":"CUST_DOM_08","credit_term_days":30,"industry":"服饰","name":"国内客户08","segment_code":"DOMESTIC","tier":"C"}
