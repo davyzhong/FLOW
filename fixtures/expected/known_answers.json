@@ -1,0 +1,194 @@
+{
+  "batch_code": "FLOW_REFERENCE_2026_08",
+  "contract_version": "flow.excel.v1",
+  "final_month_ar": {
+    "collected_amount": "2230815.3553",
+    "due_amount": "2232185.6072",
+    "overdue_amount": "1293530.5934",
+    "overdue_amount_by_customer": {
+      "CUST_DOM_01": "41355.7663",
+      "CUST_DOM_02": "42973.0226",
+      "CUST_DOM_03": "44590.2910",
+      "CUST_DOM_04": "46207.5501",
+      "CUST_DOM_05": "47824.8167",
+      "CUST_DOM_06": "49442.0842",
+      "CUST_DOM_07": "51059.3432",
+      "CUST_DOM_08": "39738.4929",
+      "CUST_KEY_01": "202209.1187",
+      "CUST_KEY_02": "210116.7711",
+      "CUST_KEY_03": "99627.8662",
+      "CUST_KEY_04": "103241.3276",
+      "CUST_KEY_05": "80141.0817",
+      "CUST_KEY_06": "82851.1563",
+      "CUST_KEY_07": "85561.2464",
+      "CUST_KEY_08": "66590.6584"
+    },
+    "receivable_balance": "3620569.1952",
+    "receivable_balance_by_bucket": {
+      "1-30": "938655.0138",
+      "31-60": "638835.9644",
+      "61-90": "395868.8316",
+      "90+": "258825.7974",
+      "current": "1388383.5880"
+    },
+    "receivable_balance_by_customer": {
+      "CUST_DOM_01": "133405.6976",
+      "CUST_DOM_02": "138622.6534",
+      "CUST_DOM_03": "143839.6485",
+      "CUST_DOM_04": "149056.6131",
+      "CUST_DOM_05": "154273.6022",
+      "CUST_DOM_06": "159490.5941",
+      "CUST_DOM_07": "164707.5586",
+      "CUST_DOM_08": "128188.6869",
+      "CUST_KEY_01": "381526.6391",
+      "CUST_KEY_02": "396446.7379",
+      "CUST_KEY_03": "321380.2136",
+      "CUST_KEY_04": "333036.5407",
+      "CUST_KEY_05": "258519.6185",
+      "CUST_KEY_06": "267261.7948",
+      "CUST_KEY_07": "276004.0207",
+      "CUST_KEY_08": "214808.5755"
+    }
+  },
+  "final_quarter": {
+    "actual": {
+      "direct_cost": "5122568.6242",
+      "gross_margin": "0.278423",
+      "gross_profit": "1976560.5029",
+      "orders": "52065.1431",
+      "revenue": "7099129.1271",
+      "shipments": "169732.3672"
+    },
+    "actual_operating_profit": "1266647.5901",
+    "budget_operating_profit": "1918227.1565",
+    "comparison": {
+      "direct_cost": "4114216.2292",
+      "gross_margin": "0.363423",
+      "gross_profit": "2348813.2742",
+      "orders": "49058.9762",
+      "revenue": "6463029.5034",
+      "shipments": "159932.2629"
+    },
+    "operating_profit_gap": "-651579.5664"
+  },
+  "headline_totals": {
+    "analysis": {
+      "cash_conversion": "0.736576",
+      "direct_cost": "17346032.7562",
+      "gross_margin": "0.340480",
+      "gross_profit": "8954957.6533",
+      "operating_cash_flow": "4941609.8078",
+      "operating_expense": "2246061.8155",
+      "operating_profit": "6708895.8378",
+      "orders": "192891.9451",
+      "revenue": "26300990.4095",
+      "shipments": "628827.7397"
+    },
+    "budget": {
+      "DIRECT_COST": "17565579.7919",
+      "OPERATING_CASH_FLOW": "6040682.2108",
+      "OPERATING_EXPENSE": "2145414.3258",
+      "OPERATING_PROFIT": "7106684.9539",
+      "REVENUE": "26817679.0716"
+    },
+    "comparison": {
+      "cash_conversion": "0.900000",
+      "direct_cost": "15242427.6111",
+      "gross_margin": "0.363423",
+      "gross_profit": "8701928.7027",
+      "operating_cash_flow": "6107742.1781",
+      "operating_expense": "1915548.5050",
+      "operating_profit": "6786380.1977",
+      "orders": "181754.6406",
+      "revenue": "23944356.3138",
+      "shipments": "592520.1304"
+    }
+  },
+  "reconciliation": {
+    "operating_to_financial_direct_cost": {
+      "difference": "0.0000",
+      "financial": "17346032.7562",
+      "operating": "17346032.7562"
+    },
+    "operating_to_financial_revenue": {
+      "difference": "0.0000",
+      "financial": "26300990.4095",
+      "operating": "26300990.4095"
+    }
+  },
+  "revenue_slices": {
+    "by_month": {
+      "2025-09": "1967228.5667",
+      "2025-10": "2095526.1072",
+      "2025-11": "2309355.2823",
+      "2025-12": "2608716.1571",
+      "2026-01": "1881696.8069",
+      "2026-02": "1945845.6123",
+      "2026-03": "2052760.2240",
+      "2026-04": "2138291.8986",
+      "2026-05": "2202440.6273",
+      "2026-06": "2266589.4144",
+      "2026-07": "2352121.0915",
+      "2026-08": "2480418.6212"
+    },
+    "by_organization": {
+      "ORG_NORTH": "13384727.8903",
+      "ORG_SOUTH": "12916262.5192"
+    },
+    "by_product": {
+      "B2B": "3992863.1589",
+      "B2C": "3913006.0164",
+      "COLD_CHAIN": "3693398.4983",
+      "CROSS_BORDER": "5031007.9280",
+      "M2C": "2459603.7520",
+      "REVERSE": "1469373.6710",
+      "SAME_DAY": "1309659.1411",
+      "WAREHOUSE": "4432078.2438"
+    },
+    "by_region": {
+      "REGION_EAST": "6692364.0430",
+      "REGION_NORTH": "6458131.2574",
+      "REGION_SOUTH": "6926596.6329",
+      "REGION_WEST": "6223898.4762"
+    },
+    "by_segment": {
+      "DOMESTIC": "12422841.4069",
+      "KEY_ACCOUNT": "13878149.0026"
+    }
+  },
+  "row_counts": {
+    "ar_collections": 1920,
+    "customer_segments": 2,
+    "customers": 16,
+    "financial_actuals": 432,
+    "logistics_products": 8,
+    "management_accounts": 9,
+    "monthly_budgets": 120,
+    "operating_actuals": 3072,
+    "organizations": 3,
+    "periods": 24,
+    "regions": 4,
+    "scenario_versions": 2
+  },
+  "story_predicates": {
+    "cash_conversion_below_one": true,
+    "domestic_orders_yoy_positive": true,
+    "gross_margin_final_quarter_down": true,
+    "growth_product_below_budget_margin": true,
+    "key_account_orders_yoy_negative": true,
+    "operating_profit_final_quarter_below_budget": true,
+    "overdue_ar_concentrated": true,
+    "revenue_yoy_positive": true,
+    "transport_cost_per_order_final_quarter_up": true
+  },
+  "windows": {
+    "analysis": [
+      "2025-09",
+      "2026-08"
+    ],
+    "comparison": [
+      "2024-09",
+      "2025-08"
+    ]
+  }
+}
