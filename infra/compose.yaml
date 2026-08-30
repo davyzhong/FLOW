@@ -53,6 +53,28 @@ services:
       /bin/sh -c "mc alias set local http://minio:9000 flow flow_dev_only &&
       mc mb --ignore-existing local/flow"
 
+  worker:
+    build:
+      context: ..
+      dockerfile: infra/api.Dockerfile
+    command: celery -A flow_api.worker:celery_app worker --loglevel=INFO --concurrency=2
+    environment:
+      FLOW_ENV: development
+      FLOW_TIMEZONE: Asia/Shanghai
+      DATABASE_URL: postgresql+psycopg://flow:flow_dev_only@postgres:5432/flow
+      REDIS_URL: redis://redis:6379/0
+      S3_ENDPOINT_URL: http://minio:9000
+      S3_BUCKET: flow
+      S3_ACCESS_KEY: flow
+      S3_SECRET_KEY: flow_dev_only
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      minio-init:
+        condition: service_completed_successfully
+
 volumes:
   flow-postgres:
   flow-minio:
