@@ -1,3 +1,13 @@
+from flow_api.infrastructure.models.analytics import (
+    Conclusion,
+    DriverContribution,
+    Evidence,
+    Finding,
+    MetricDefinition,
+    MetricSnapshot,
+    MetricValue,
+    ReviewEvent,
+)
 from flow_api.infrastructure.models.base import Base
 from flow_api.infrastructure.models.canonical import (
     Customer,
@@ -24,25 +34,41 @@ from flow_api.infrastructure.models.intake import (
     StoredObject,
     TransformationEvent,
 )
+from flow_api.infrastructure.models.publishing import (
+    PublicationAttempt,
+    ReportSnapshot,
+    ReportSnapshotItem,
+)
 
 __all__ = [
     "AnalysisBatch",
     "Base",
     "Customer",
     "CustomerSegment",
+    "Conclusion",
+    "DriverContribution",
+    "Evidence",
     "FactArCollection",
     "FactBudget",
     "FactFinancialActual",
     "FactOperatingActual",
+    "Finding",
     "ImportVersion",
     "MappingVersion",
+    "MetricDefinition",
+    "MetricSnapshot",
+    "MetricValue",
     "LogisticsProduct",
     "ManagementAccount",
     "Organization",
     "Period",
+    "PublicationAttempt",
     "QualityIssue",
     "ReconciliationResult",
     "Region",
+    "ReportSnapshot",
+    "ReportSnapshotItem",
+    "ReviewEvent",
     "ScenarioVersion",
     "SourceFile",
     "SourceRecord",
