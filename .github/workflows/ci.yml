@@ -64,6 +64,17 @@ jobs:
       - run: make infra-up
       - run: cd services/api && uv run pytest tests/integration -q
 
+  data-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.13"
+          enable-cache: true
+      - run: cd services/api && uv sync --all-groups --frozen
+      - run: make test-data-contract
+
   contracts:
     runs-on: ubuntu-latest
     steps:
