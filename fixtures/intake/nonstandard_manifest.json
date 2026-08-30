@@ -1,0 +1,206 @@
+{
+  "expected_contract_version": "flow.excel.v1",
+  "fixture_id": "external.logistics.nonstandard.v1",
+  "intentional_variations": [
+    "renamed_and_reordered_sheets",
+    "two_preamble_rows",
+    "aliased_and_reordered_columns",
+    "mixed_month_formats",
+    "comma_formatted_decimal_strings",
+    "ignorable_note_column",
+    "no_flow_field_id_row"
+  ],
+  "roles": {
+    "analysis_batch": "批次信息",
+    "ar_collection": "应收账龄",
+    "customer_master": "客户档案",
+    "financial_actual": "管理账",
+    "logistics_product": "物流服务",
+    "management_account": "管理科目表",
+    "monthly_budget": "月度计划",
+    "operating_actual": "业务明细",
+    "organization_region": "组织区域"
+  },
+  "sheet_order": [
+    "客户档案",
+    "业务明细",
+    "管理账",
+    "应收账龄",
+    "月度计划",
+    "物流服务",
+    "组织区域",
+    "管理科目表",
+    "批次信息"
+  ],
+  "sheets": {
+    "业务明细": {
+      "data_start_row": 4,
+      "expected_role": "operating_actual",
+      "field_aliases": {
+        "customer_code": "客户编号",
+        "logistics_product_code": "服务产品编码",
+        "month_key": "业务月份",
+        "order_count": "订单票数",
+        "organization_code": "分公司编码",
+        "other_direct_cost": "其他直接成本(元)",
+        "record_id": "来源记录号",
+        "region_code": "经营区域编码",
+        "revenue": "营业收入(元)",
+        "shipment_count": "履约件数",
+        "transportation_cost": "运输成本(元)",
+        "warehousing_cost": "仓储成本(元)"
+      },
+      "header_row": 3,
+      "ignored_columns": [
+        "数据备注"
+      ],
+      "row_count": 3072
+    },
+    "客户档案": {
+      "data_start_row": 4,
+      "expected_role": "customer_master",
+      "field_aliases": {
+        "credit_term_days": "信用期(天)",
+        "customer_code": "客户编号",
+        "customer_name": "客户全称",
+        "customer_segment_code": "客群编号",
+        "customer_segment_name": "客群名称",
+        "industry": "所属行业",
+        "tier": "客户级别"
+      },
+      "header_row": 3,
+      "ignored_columns": [
+        "数据备注"
+      ],
+      "row_count": 16
+    },
+    "应收账龄": {
+      "data_start_row": 4,
+      "expected_role": "ar_collection",
+      "field_aliases": {
+        "aging_bucket": "账龄段",
+        "collected_amount": "本期回款(元)",
+        "customer_code": "客户编号",
+        "due_amount": "到期金额(元)",
+        "invoice_number": "发票号码",
+        "month_key": "业务月份",
+        "overdue_amount": "逾期金额(元)",
+        "receivable_balance": "应收余额(元)",
+        "record_id": "来源记录号"
+      },
+      "header_row": 3,
+      "ignored_columns": [
+        "数据备注"
+      ],
+      "row_count": 1920
+    },
+    "批次信息": {
+      "data_start_row": 4,
+      "expected_role": "analysis_batch",
+      "field_aliases": {
+        "actual_scenario_code": "实际情景",
+        "analysis_end_month": "分析止月",
+        "analysis_start_month": "分析起月",
+        "batch_code": "分析批号",
+        "budget_scenario_code": "计划情景",
+        "budget_version_label": "计划版本",
+        "comparison_end_month": "同比止月",
+        "comparison_start_month": "同比起月",
+        "contract_version": "目标数据版本",
+        "currency": "本位币",
+        "generated_at": "生成时间"
+      },
+      "header_row": 3,
+      "ignored_columns": [
+        "数据备注"
+      ],
+      "row_count": 1
+    },
+    "月度计划": {
+      "data_start_row": 4,
+      "expected_role": "monthly_budget",
+      "field_aliases": {
+        "amount": "发生额(元)",
+        "customer_segment_code": "客群编号",
+        "logistics_product_code": "服务产品编码",
+        "management_account_code": "管理口径科目",
+        "metric_code": "预算指标",
+        "month_key": "业务月份",
+        "organization_code": "分公司编码",
+        "record_id": "来源记录号",
+        "scenario_code": "情景编号"
+      },
+      "header_row": 3,
+      "ignored_columns": [
+        "数据备注"
+      ],
+      "row_count": 120
+    },
+    "物流服务": {
+      "data_start_row": 4,
+      "expected_role": "logistics_product",
+      "field_aliases": {
+        "level": "层次",
+        "logistics_product_code": "服务产品编码",
+        "logistics_product_name": "物流服务名称",
+        "parent_code": "上级编号"
+      },
+      "header_row": 3,
+      "ignored_columns": [
+        "数据备注"
+      ],
+      "row_count": 8
+    },
+    "管理科目表": {
+      "data_start_row": 4,
+      "expected_role": "management_account",
+      "field_aliases": {
+        "category": "科目类别",
+        "financial_account_code": "财务科目编码",
+        "management_account_code": "管理口径科目",
+        "management_account_name": "管理科目名称",
+        "parent_code": "上级编号"
+      },
+      "header_row": 3,
+      "ignored_columns": [
+        "数据备注"
+      ],
+      "row_count": 9
+    },
+    "管理账": {
+      "data_start_row": 4,
+      "expected_role": "financial_actual",
+      "field_aliases": {
+        "amount": "发生额(元)",
+        "management_account_code": "管理口径科目",
+        "month_key": "业务月份",
+        "organization_code": "分公司编码",
+        "record_id": "来源记录号"
+      },
+      "header_row": 3,
+      "ignored_columns": [
+        "数据备注"
+      ],
+      "row_count": 432
+    },
+    "组织区域": {
+      "data_start_row": 4,
+      "expected_role": "organization_region",
+      "field_aliases": {
+        "city": "城市",
+        "entity_code": "档案编码",
+        "entity_name": "档案名称",
+        "entity_type": "档案类型",
+        "level": "层次",
+        "parent_code": "上级编号",
+        "province": "省份"
+      },
+      "header_row": 3,
+      "ignored_columns": [
+        "数据备注"
+      ],
+      "row_count": 7
+    }
+  },
+  "workbook_sha256": "99fc536d4efa1c791e063e93c0ec8dbf8f96f85c2f1d044488f573664143d24e"
+}
