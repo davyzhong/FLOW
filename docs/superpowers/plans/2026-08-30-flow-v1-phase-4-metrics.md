@@ -354,12 +354,12 @@ class MetricSnapshotService:
     ) -> tuple[MetricValue, ...]: ...
 ```
 
-- [ ] Write failing lifecycle tests for eligible publication, ineligible import states, idempotent retry, new snapshot after corrected import and an injected mid-write failure.
-- [ ] Upsert metric definitions by stable `(metric_code, version)` and reject conflicting content under an existing identity.
-- [ ] Persist definition dependency edges in topological position and values with exact-value/calculation traces.
-- [ ] Write values and switch snapshot `building → published` in one transaction; injected failure must leave no visible snapshot or partial values.
-- [ ] Return an existing published snapshot for the same full identity and fingerprint. A changed import version, catalog hash or engine version creates a new version.
-- [ ] Prove old snapshots and values remain unchanged after corrected import publication, then commit.
+- [x] Write failing lifecycle tests for eligible publication, ineligible import states, idempotent retry, new snapshot after corrected import and an injected mid-write failure.
+- [x] Upsert metric definitions by stable `(metric_code, version)` and reject conflicting content under an existing identity.
+- [x] Persist definition dependency edges in topological position and values with exact-value/calculation traces.
+- [x] Write values and switch snapshot `building → published` in one transaction; injected failure must leave no visible snapshot or partial values.
+- [x] Return an existing published snapshot for the same full identity and fingerprint. A changed import version, catalog hash or engine version creates a new version.
+- [x] Prove old snapshots and values remain unchanged after corrected import publication, then commit.
 
 ### Task 9: Build the End-to-end Metric Acceptance Gate
 
