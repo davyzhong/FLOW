@@ -227,11 +227,11 @@ def variance(actual: Decimal, comparison: Decimal) -> Decimal: ...
 def variance_pct(metric_code: str, actual: Decimal, comparison: Decimal) -> CalculatedDecimal: ...
 ```
 
-- [ ] Write failing tests at January, fiscal-year end and the fixture as-of month `202608` for month, calendar YTD, same-prior-year window and trailing 12 months.
-- [ ] Require missing prior-year periods to omit the comparison with a typed availability reason; never substitute zero for missing data.
-- [ ] Prove variance sign is `actual - comparison` for amount/volume metrics and ratio-point variance uses direct ratio subtraction.
-- [ ] Prove budget comparisons are emitted only for catalog-declared compatible grains.
-- [ ] Implement pure window and comparison functions with sorted deterministic output, run tests and commit.
+- [x] Write failing tests at January, fiscal-year end and the fixture as-of month `202608` for month, calendar YTD, same-prior-year window and trailing 12 months.
+- [x] Require missing prior-year periods to omit the comparison with a typed availability reason; never substitute zero for missing data.
+- [x] Prove variance sign is `actual - comparison` for amount/volume metrics and ratio-point variance uses direct ratio subtraction.
+- [x] Prove budget comparisons are emitted only for catalog-declared compatible grains.
+- [x] Implement pure window and comparison functions with sorted deterministic output, run tests and commit.
 
 ### Task 6: Calculate the Complete Metric Graph
 
