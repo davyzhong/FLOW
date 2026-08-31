@@ -379,13 +379,13 @@ class MetricSnapshotService:
 **Interfaces:**
 - Adds `make test-metrics-known-answers` and GitHub Actions job `metrics-known-answers`.
 
-- [ ] Write a failing E2E test that publishes standard and external workbook batches through the Phase 3 service, creates Metric Snapshots through the Phase 4 service and compares their fingerprints and every oracle value.
-- [ ] Assert both snapshots use different `import_version_id` values but equal definition set hashes, value fingerprints and exact business values.
-- [ ] Assert additive slice invariants, semi-additive AR behavior, same-grain ratio dependencies, no invented budget grains and append-only history.
-- [ ] Make the shell gate run Phase 4 tests, Phase 3 intake acceptance, Ruff, mypy, migration round trip, deterministic catalog/oracle checks and a concise machine-readable metric summary.
-- [ ] Document every metric formula, source, unit, allowed dimensions, time behavior, comparison availability, rounding policy and blocker code.
-- [ ] Add the CI job, run the gate from a clean worktree and record exact local/CI evidence in `phase-4-verification.md`.
-- [ ] Update project state and Agent start documents, regenerate knowledge-base inventory and SHA-256 manifests, then verify every manifest entry.
+- [x] Write a failing E2E test that publishes standard and external workbook batches through the Phase 3 service, creates Metric Snapshots through the Phase 4 service and compares their fingerprints and every oracle value.
+- [x] Assert both snapshots use different `import_version_id` values but equal definition set hashes, value fingerprints and exact business values.
+- [x] Assert additive slice invariants, semi-additive AR behavior, same-grain ratio dependencies, no invented budget grains and append-only history.
+- [x] Make the shell gate run Phase 4 tests, Phase 3 intake acceptance, Ruff, mypy, migration round trip, deterministic catalog/oracle checks and a concise machine-readable metric summary.
+- [x] Document every metric formula, source, unit, allowed dimensions, time behavior, comparison availability, rounding policy and blocker code.
+- [x] Add the CI job, run the gate from a clean worktree and record exact local/CI evidence in `phase-4-verification.md`.
+- [x] Update project state and Agent start documents, regenerate knowledge-base inventory and SHA-256 manifests, then verify every manifest entry.
 - [ ] Commit, push and require every GitHub Actions job to pass before marking Phase 4 complete.
 
 ## Expected Phase 4 Deliverable
