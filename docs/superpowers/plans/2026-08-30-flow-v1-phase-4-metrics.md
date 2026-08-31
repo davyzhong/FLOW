@@ -114,12 +114,12 @@ def calculate_ratio(
 def topological_metric_order(catalog: MetricCatalog) -> tuple[str, ...]: ...
 ```
 
-- [ ] Write table-driven failing tests for exact sums, negative values, repeating ratios, scale-6 ratios, scale-4 persistence rounding, zero denominators, missing dependencies and float rejection.
-- [ ] Run the two test files and confirm failures are caused by missing production functions.
-- [ ] Implement `ROUND_HALF_UP` calculations using explicit quantums; never call `Decimal` with a float.
-- [ ] Implement formulas for subtraction and ratios by stable formula IDs rather than evaluating arbitrary YAML expressions.
-- [ ] Prove `gross_profit = revenue - direct_cost`, `gross_margin = gross_profit / revenue`, `cash_conversion = operating_cash_flow / operating_profit`, and DSO uses multiplier `365`.
-- [ ] Run task tests plus existing known-answer tests, then commit.
+- [x] Write table-driven failing tests for exact sums, negative values, repeating ratios, scale-6 ratios, scale-4 persistence rounding, zero denominators, missing dependencies and float rejection.
+- [x] Run the two test files and confirm failures are caused by missing production functions.
+- [x] Implement `ROUND_HALF_UP` calculations using explicit quantums; never call `Decimal` with a float.
+- [x] Implement formulas for subtraction and ratios by stable formula IDs rather than evaluating arbitrary YAML expressions.
+- [x] Prove `gross_profit = revenue - direct_cost`, `gross_margin = gross_profit / revenue`, `cash_conversion = operating_cash_flow / operating_profit`, and DSO uses multiplier `365`.
+- [x] Run task tests plus existing known-answer tests, then commit.
 
 ### Task 3: Read Only Published, Version-scoped Canonical Facts
 
