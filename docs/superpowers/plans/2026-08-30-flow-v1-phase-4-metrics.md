@@ -386,7 +386,7 @@ class MetricSnapshotService:
 - [x] Document every metric formula, source, unit, allowed dimensions, time behavior, comparison availability, rounding policy and blocker code.
 - [x] Add the CI job, run the gate from a clean worktree and record exact local/CI evidence in `phase-4-verification.md`.
 - [x] Update project state and Agent start documents, regenerate knowledge-base inventory and SHA-256 manifests, then verify every manifest entry.
-- [ ] Commit, push and require every GitHub Actions job to pass before marking Phase 4 complete.
+- [x] Commit, push and require every GitHub Actions job to pass before marking Phase 4 complete.
 
 ## Expected Phase 4 Deliverable
 
