@@ -192,12 +192,12 @@ def aggregate_closing_balance(values: Iterable[PeriodValue], months: frozenset[i
 def validate_grain(metric: MetricSpec, grain: MetricGrain) -> None: ...
 ```
 
-- [ ] Write failing tests proving additive totals equal allowed child slices for organization, segment, product and region, including segment × product.
-- [ ] Prove customer and customer-segment cannot both be populated in one value and unsupported dimensions raise `UnsupportedMetricGrainError`.
-- [ ] Prove 12 monthly AR balances produce the final month balance for YTD/trailing windows rather than the sum of 12 balances.
-- [ ] Prove gross margin at total grain is `total gross profit / total revenue`, not the average or sum of child gross margins.
-- [ ] Implement deterministic grain keys and source-specific dimension projection. Do not allocate financial or AR values into dimensions absent from their sources.
-- [ ] Run task tests and commit.
+- [x] Write failing tests proving additive totals equal allowed child slices for organization, segment, product and region, including segment × product.
+- [x] Prove customer and customer-segment cannot both be populated in one value and unsupported dimensions raise `UnsupportedMetricGrainError`.
+- [x] Prove 12 monthly AR balances produce the final month balance for YTD/trailing windows rather than the sum of 12 balances.
+- [x] Prove gross margin at total grain is `total gross profit / total revenue`, not the average or sum of child gross margins.
+- [x] Implement deterministic grain keys and source-specific dimension projection. Do not allocate financial or AR values into dimensions absent from their sources.
+- [x] Run task tests and commit.
 
 ### Task 5: Build Month, YTD, Budget, YoY and Trailing-12 Windows
 
