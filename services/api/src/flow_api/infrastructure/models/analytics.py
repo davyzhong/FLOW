@@ -7,6 +7,7 @@ from uuid import UUID
 from sqlalchemy import (
     CheckConstraint,
     ForeignKey,
+    ForeignKeyConstraint,
     Index,
     Integer,
     Numeric,
@@ -14,6 +15,8 @@ from sqlalchemy import (
     Text,
     UniqueConstraint,
     event,
+    inspect,
+    select,
     text,
 )
 from sqlalchemy.dialects.postgresql import JSONB
@@ -21,7 +24,12 @@ from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from flow_api.infrastructure.models.base import Base
-from flow_api.infrastructure.models.intake import AnalysisBatch, IdentityTimestampMixin
+from flow_api.infrastructure.models.canonical import Period
+from flow_api.infrastructure.models.intake import (
+    AnalysisBatch,
+    IdentityTimestampMixin,
+    ImportVersion,
+)
 
 
 class MetricDefinition(IdentityTimestampMixin, Base):
@@ -48,20 +56,124 @@ class MetricDefinition(IdentityTimestampMixin, Base):
     )
 
 
+class MetricDefinitionDependency(IdentityTimestampMixin, Base):
+    __tablename__ = "metric_definition_dependency"
+    __table_args__ = (
+        UniqueConstraint(
+            "metric_definition_id",
+            "dependency_definition_id",
+            name="uq_metric_definition_dependency_edge",
+        ),
+        UniqueConstraint(
+            "metric_definition_id",
+            "position",
+            name="uq_metric_definition_dependency_position",
+        ),
+        CheckConstraint(
+            "position > 0", name="ck_metric_definition_dependency_position_positive"
+        ),
+        CheckConstraint(
+            "metric_definition_id <> dependency_definition_id",
+            name="ck_metric_definition_dependency_not_self",
+        ),
+    )
+
+    metric_definition_id: Mapped[UUID] = mapped_column(
+        PG_UUID(as_uuid=True),
+        ForeignKey("metric_definition.id", ondelete="RESTRICT"),
+        nullable=False,
+    )
+    dependency_definition_id: Mapped[UUID] = mapped_column(
+        PG_UUID(as_uuid=True),
+        ForeignKey("metric_definition.id", ondelete="RESTRICT"),
+        nullable=False,
+    )
+    position: Mapped[int] = mapped_column(Integer, nullable=False)
+
+    metric_definition: Mapped[MetricDefinition] = relationship(
+        foreign_keys=[metric_definition_id]
+    )
+    dependency_definition: Mapped[MetricDefinition] = relationship(
+        foreign_keys=[dependency_definition_id]
+    )
+
+
+@event.listens_for(MetricDefinitionDependency, "before_update")
+@event.listens_for(MetricDefinitionDependency, "before_delete")
+def _protect_metric_definition_dependency(*_: object) -> None:
+    raise ValueError("metric definition dependencies are append-only")
+
+
 class MetricSnapshot(IdentityTimestampMixin, Base):
     __tablename__ = "metric_snapshot"
     __table_args__ = (
-        UniqueConstraint("batch_id", "version", name="uq_metric_snapshot_batch_version"),
+        UniqueConstraint(
+            "batch_id",
+            "import_version_id",
+            "as_of_period_id",
+            "version",
+            name="uq_metric_snapshot_identity_version",
+        ),
         CheckConstraint("version > 0", name="ck_metric_snapshot_version_positive"),
+        CheckConstraint(
+            "status in ('building', 'published', 'failed')",
+            name="ck_metric_snapshot_status",
+        ),
+        CheckConstraint(
+            "length(definition_set_hash) = 64",
+            name="ck_metric_snapshot_definition_hash_length",
+        ),
+        CheckConstraint(
+            "length(fingerprint) = 64", name="ck_metric_snapshot_fingerprint_length"
+        ),
+        ForeignKeyConstraint(
+            ["import_version_id", "batch_id"],
+            ["import_version.id", "import_version.batch_id"],
+            name="fk_metric_snapshot_import_batch",
+            ondelete="RESTRICT",
+        ),
     )
 
     batch_id: Mapped[UUID] = mapped_column(
         PG_UUID(as_uuid=True), ForeignKey("analysis_batch.id", ondelete="RESTRICT"), nullable=False
     )
+    import_version_id: Mapped[UUID] = mapped_column(
+        PG_UUID(as_uuid=True), nullable=False
+    )
+    as_of_period_id: Mapped[UUID] = mapped_column(
+        PG_UUID(as_uuid=True), ForeignKey("dim_period.id", ondelete="RESTRICT"), nullable=False
+    )
     version: Mapped[int] = mapped_column(Integer, nullable=False)
     engine_version: Mapped[str] = mapped_column(String(128), nullable=False)
+    definition_set_id: Mapped[str] = mapped_column(String(128), nullable=False)
+    definition_set_hash: Mapped[str] = mapped_column(String(64), nullable=False)
+    fingerprint: Mapped[str] = mapped_column(String(64), nullable=False)
+    status: Mapped[str] = mapped_column(
+        String(32), nullable=False, default="building", server_default="building"
+    )
 
-    batch: Mapped[AnalysisBatch] = relationship()
+    batch: Mapped[AnalysisBatch] = relationship(overlaps="import_version")
+    import_version: Mapped[ImportVersion] = relationship(overlaps="batch")
+    as_of_period: Mapped[Period] = relationship()
+
+
+@event.listens_for(MetricSnapshot, "before_update")
+def _protect_published_metric_snapshot_update(
+    _mapper: object, _connection: object, target: MetricSnapshot
+) -> None:
+    prior_statuses = inspect(target).attrs.status.history.deleted
+    if (
+        target.status == "published" or "published" in prior_statuses
+    ) and list(prior_statuses) != ["building"]:
+        raise ValueError("published metric snapshots are append-only")
+
+
+@event.listens_for(MetricSnapshot, "before_delete")
+def _protect_published_metric_snapshot_delete(
+    _mapper: object, _connection: object, target: MetricSnapshot
+) -> None:
+    if target.status == "published":
+        raise ValueError("published metric snapshots are append-only")
 
 
 class MetricValue(IdentityTimestampMixin, Base):
@@ -101,9 +213,32 @@ class MetricValue(IdentityTimestampMixin, Base):
     )
     region_id: Mapped[UUID | None] = mapped_column(ForeignKey("dim_region.id"))
     value: Mapped[Decimal] = mapped_column(Numeric(24, 4), nullable=False)
+    exact_value: Mapped[str] = mapped_column(Text, nullable=False)
+    calculation_trace: Mapped[dict[str, Any]] = mapped_column(
+        JSONB, nullable=False, default=dict, server_default=text("'{}'::jsonb")
+    )
 
     metric_snapshot: Mapped[MetricSnapshot] = relationship()
     metric_definition: Mapped[MetricDefinition] = relationship()
+
+
+def _metric_value_snapshot_is_published(connection: Any, target: MetricValue) -> bool:
+    snapshot_id = target.metric_snapshot_id
+    if snapshot_id is None and target.metric_snapshot is not None:
+        snapshot_id = target.metric_snapshot.id
+    status = connection.scalar(
+        select(MetricSnapshot.status).where(MetricSnapshot.id == snapshot_id)
+    )
+    return status is not None and str(status) == "published"
+
+
+@event.listens_for(MetricValue, "before_update")
+@event.listens_for(MetricValue, "before_delete")
+def _protect_published_metric_value(
+    _mapper: object, connection: Any, target: MetricValue
+) -> None:
+    if _metric_value_snapshot_is_published(connection, target):
+        raise ValueError("published metric values are append-only")
 
 
 class Finding(IdentityTimestampMixin, Base):

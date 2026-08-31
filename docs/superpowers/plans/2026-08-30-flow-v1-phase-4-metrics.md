@@ -316,13 +316,13 @@ class MetricValue(Base):
     calculation_trace: dict[str, object]
 ```
 
-- [ ] Write failing model/migration tests for foreign keys, unique snapshot identity, definition dependency order, hash length, allowed status and append-only event listeners.
-- [ ] Add `import_version_id`, `as_of_period_id`, `definition_set_id`, `definition_set_hash`, `fingerprint` and `status` to `metric_snapshot`.
-- [ ] Add `metric_definition_dependency` with unique parent/dependency and parent/position constraints.
-- [ ] Add `exact_value` and `calculation_trace` to `metric_value`; keep existing `value Numeric(24,4)` for indexed display/query output.
-- [ ] Add model-level guards rejecting update/delete of published snapshots, their values, and definition dependency records.
-- [ ] Verify `upgrade 0005 → 0006 → downgrade 0005 → upgrade 0006` and the full isolated migration round trip.
-- [ ] Run integration/static tests, then commit and push.
+- [x] Write failing model/migration tests for foreign keys, unique snapshot identity, definition dependency order, hash length, allowed status and append-only event listeners.
+- [x] Add `import_version_id`, `as_of_period_id`, `definition_set_id`, `definition_set_hash`, `fingerprint` and `status` to `metric_snapshot`.
+- [x] Add `metric_definition_dependency` with unique parent/dependency and parent/position constraints.
+- [x] Add `exact_value` and `calculation_trace` to `metric_value`; keep existing `value Numeric(24,4)` for indexed display/query output.
+- [x] Add model-level guards rejecting update/delete of published snapshots, their values, and definition dependency records.
+- [x] Verify `upgrade 0005 → 0006 → downgrade 0005 → upgrade 0006` and the full isolated migration round trip.
+- [x] Run integration/static tests, then commit and push.
 
 ### Task 8: Persist and Publish Snapshots Atomically
 

@@ -19,7 +19,8 @@ from flow_api.infrastructure.models.analytics import (
     MetricValue,
     ReviewEvent,
 )
-from flow_api.infrastructure.models.intake import AnalysisBatch
+from flow_api.infrastructure.models.canonical import Period
+from flow_api.infrastructure.models.intake import AnalysisBatch, ImportVersion
 from flow_api.infrastructure.models.publishing import (
     PublicationAttempt,
     ReportSnapshot,
@@ -38,7 +39,9 @@ ALL_MODELS = (
     MetricValue,
     MetricSnapshot,
     MetricDefinition,
+    ImportVersion,
     AnalysisBatch,
+    Period,
 )
 
 
@@ -60,6 +63,16 @@ def session() -> Session:
 def analytics_seed(session: Session) -> dict[str, object]:
     suffix = uuid4().hex[:8]
     batch = AnalysisBatch(name=f"Analytics {suffix}", status="published")
+    import_version = ImportVersion(
+        batch=batch,
+        sequence=1,
+        status="published",
+        is_published=True,
+        summary={},
+    )
+    period = Period(month_key=202608, year=2026, quarter=3, month=8)
+    session.add_all([batch, import_version, period])
+    session.flush()
     definition = MetricDefinition(
         metric_code=f"revenue_{suffix}",
         version=1,
@@ -69,12 +82,25 @@ def analytics_seed(session: Session) -> dict[str, object]:
         aggregation="sum",
         unit="CNY",
     )
-    snapshot = MetricSnapshot(batch=batch, version=1, engine_version="flow-metrics/1")
+    snapshot = MetricSnapshot(
+        batch=batch,
+        import_version=import_version,
+        as_of_period=period,
+        version=1,
+        engine_version="flow-metrics/1",
+        definition_set_id="flow.metrics.test.v1",
+        definition_set_hash="a" * 64,
+        fingerprint="b" * 64,
+        status="published",
+    )
     value = MetricValue(
         metric_snapshot=snapshot,
         metric_definition=definition,
         value=Decimal("100.1234"),
+        exact_value="100.1234",
+        calculation_trace={},
         comparison_type="month",
+        period_id=period.id,
     )
     finding = Finding(
         metric_snapshot=snapshot,
@@ -122,7 +148,19 @@ def test_report_snapshot_references_one_metric_snapshot(session: Session) -> Non
 def test_snapshot_versions_and_metric_values_are_immutable_keys(session: Session) -> None:
     seed = analytics_seed(session)
     assert seed["value"].value == Decimal("100.1234")
-    session.add(MetricSnapshot(batch=seed["batch"], version=1, engine_version="other"))
+    snapshot = seed["snapshot"]
+    session.add(
+        MetricSnapshot(
+            batch=seed["batch"],
+            import_version_id=snapshot.import_version_id,
+            as_of_period_id=snapshot.as_of_period_id,
+            version=1,
+            engine_version="other",
+            definition_set_id="other",
+            definition_set_hash="c" * 64,
+            fingerprint="d" * 64,
+        )
+    )
     with pytest.raises(IntegrityError):
         session.commit()
 

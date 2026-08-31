@@ -120,6 +120,7 @@ class ImportVersion(IdentityTimestampMixin, Base):
     __tablename__ = "import_version"
     __table_args__ = (
         UniqueConstraint("batch_id", "sequence", name="uq_import_version_batch_sequence"),
+        UniqueConstraint("id", "batch_id", name="uq_import_version_id_batch"),
         CheckConstraint("sequence > 0", name="ck_import_version_sequence_positive"),
         CheckConstraint(
             "status in ('draft', 'validating', 'blocked', 'ready', 'published')",
