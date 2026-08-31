@@ -150,12 +150,12 @@ class MetricSourceRepository:
     def ar_rows(self, session: Session, source: PublishedMetricSource) -> tuple[ArSourceRow, ...]: ...
 ```
 
-- [ ] Write failing integration tests with two import versions in one batch; assert every returned fact belongs to the active published version and the unpublished version is absent.
-- [ ] Test typed rejection for draft, blocked, ready-without-publication, failed reconciliation and unacknowledged warning states.
-- [ ] Implement immutable source-row dataclasses containing dimension IDs/codes and Decimals, not ORM objects, so calculation code cannot mutate database state.
-- [ ] Parse analysis/comparison windows from `ImportVersion.summary["batch"]` and validate the referenced periods exist.
-- [ ] Query every fact table with an explicit `import_version_id` predicate and deterministic ordering.
-- [ ] Run integration tests and static checks, then commit.
+- [x] Write failing integration tests with two import versions in one batch; assert every returned fact belongs to the active published version and the unpublished version is absent.
+- [x] Test typed rejection for draft, blocked, ready-without-publication, failed reconciliation and unacknowledged warning states.
+- [x] Implement immutable source-row dataclasses containing dimension IDs/codes and Decimals, not ORM objects, so calculation code cannot mutate database state.
+- [x] Parse analysis/comparison windows from `ImportVersion.summary["batch"]` and validate the referenced periods exist.
+- [x] Query every fact table with an explicit `import_version_id` predicate and deterministic ordering.
+- [x] Run integration tests and static checks, then commit.
 
 ### Task 4: Enforce Dimension-safe and Semi-additive Aggregation
 
