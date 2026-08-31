@@ -4,6 +4,7 @@ set -euo pipefail
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 cd "$repo_root/services/api"
+uv run alembic upgrade head
 uv run pytest tests/metrics tests/integration/test_metric_*.py -q
 uv run pytest tests/integration/test_intake_e2e.py -q
 uv run ruff check src tests migrations
