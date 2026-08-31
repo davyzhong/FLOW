@@ -212,8 +212,10 @@ def validate_grain(metric: MetricSpec, grain: MetricGrain) -> None: ...
 ```python
 ComparisonType = Literal[
     "actual_month", "actual_ytd", "budget_month", "budget_ytd",
-    "budget_variance", "budget_variance_pct", "prior_year_month",
-    "prior_year_ytd", "yoy_variance", "yoy_variance_pct", "trailing_12"
+    "budget_variance_month", "budget_variance_month_pct",
+    "budget_variance_ytd", "budget_variance_ytd_pct", "prior_year_month",
+    "prior_year_ytd", "yoy_variance_month", "yoy_variance_month_pct",
+    "yoy_variance_ytd", "yoy_variance_ytd_pct", "trailing_12"
 ]
 
 @dataclass(frozen=True, slots=True)
@@ -273,13 +275,13 @@ class MetricCalculator:
     ) -> MetricCalculationResult: ...
 ```
 
-- [ ] Write failing tests for all 15 metrics at total grain and every allowed dimensional slice.
-- [ ] Assert orders, fulfilled units, revenue, direct cost, gross profit, operating profit and operating cash flow against direct fixture sums.
-- [ ] Assert revenue/order, cost/order, gross margin, fulfillment cost rate, collection rate, DSO and cash conversion against independently calculated Decimal oracle strings.
-- [ ] Assert budget, YoY and final-month/YTD windows, plus `sum(organization slices) == total` and equivalent allowed-slice invariants.
-- [ ] Implement source metric collection first, then derived metrics in catalog topological order; each derived value records exact same-grain dependency values.
-- [ ] Sort all results by metric code, comparison type, period and grain before fingerprinting. Prove repeated calculations are byte-identical.
-- [ ] Run unit/integration tests, Ruff and mypy, then commit.
+- [x] Write failing tests for all 15 metrics at total grain and every allowed dimensional slice.
+- [x] Assert orders, fulfilled units, revenue, direct cost, gross profit, operating profit and operating cash flow against direct fixture sums.
+- [x] Assert revenue/order, cost/order, gross margin, fulfillment cost rate, collection rate, DSO and cash conversion against independently calculated Decimal oracle strings.
+- [x] Assert budget, YoY and final-month/YTD windows, plus `sum(organization slices) == total` and equivalent allowed-slice invariants.
+- [x] Implement source metric collection first, then derived metrics in catalog topological order; each derived value records exact same-grain dependency values.
+- [x] Sort all results by metric code, comparison type, period and grain before fingerprinting. Prove repeated calculations are byte-identical.
+- [x] Run unit/integration tests, Ruff and mypy, then commit.
 
 ### Task 7: Complete Metric Snapshot Identity, Dependency and Trace Schema
 
