@@ -44,11 +44,11 @@ The command must prove that the standard and non-standard workbooks produce the 
 - Consumes: Phase 2 standard workbook and canonical package.
 - Produces: a deterministic external-workbook fixture plus a manifest of expected sheet roles, header rows, data regions and intentional aliases.
 
-- [ ] Write failing tests that require the committed fixture and verify it has no FLOW field-ID row.
-- [ ] Generate a workbook with renamed/reordered sheets, two pre-header note rows, Chinese aliases, dates represented in two safe formats, comma-formatted numbers and irrelevant note columns.
-- [ ] Preserve the same logical records and null meanings as the standard workbook; do not introduce lossy transformations.
-- [ ] Generate twice and require byte-identical artifacts and manifest.
-- [ ] Run fixture and artifact tests, then commit and push.
+- [x] Write failing tests that require the committed fixture and verify it has no FLOW field-ID row.
+- [x] Generate a workbook with renamed/reordered sheets, two pre-header note rows, Chinese aliases, dates represented in two safe formats, comma-formatted numbers and irrelevant note columns.
+- [x] Preserve the same logical records and null meanings as the standard workbook; do not introduce lossy transformations.
+- [x] Generate twice and require byte-identical artifacts and manifest.
+- [x] Run fixture and artifact tests, then commit and push.
 
 ### Task 2: Make Immutable Source Storage Collision-safe
 
@@ -61,11 +61,11 @@ The command must prove that the standard and non-standard workbooks produce the 
 **Interfaces:**
 - Produces: `StoredSource`, `SourceStorage.store(content, filename)`, `SourceStorage.read(sha256)`.
 
-- [ ] Write failing tests for identical-byte reuse, stored-byte re-read, metadata validation and a simulated existing-key hash/size mismatch.
-- [ ] Require SHA-256 content addressing under `raw/<prefix>/<sha256>` and validate an existing object's length and checksum before reuse.
-- [ ] Ensure a filename changes source-file metadata only, never object identity.
-- [ ] Reject empty files, unsupported workbook types and accidental overwrite with typed errors.
-- [ ] Run unit and MinIO integration tests, then commit and push.
+- [x] Write failing tests for identical-byte reuse, stored-byte re-read, metadata validation and a simulated existing-key hash/size mismatch.
+- [x] Require SHA-256 content addressing under `raw/<prefix>/<sha256>` and validate an existing object's length and checksum before reuse.
+- [x] Ensure a filename changes source-file metadata only, never object identity.
+- [x] Reject empty files, unsupported workbook types and accidental overwrite with typed errors.
+- [x] Run unit and MinIO integration tests, then commit and push.
 
 ### Task 3: Detect Workbook Structure Without Mutating It
 
@@ -78,12 +78,12 @@ The command must prove that the standard and non-standard workbooks produce the 
 **Interfaces:**
 - Produces: `WorkbookProfile`, `SheetProfile`, `ColumnProfile`, `CellRegion`, `profile_workbook(path_or_bytes)`.
 
-- [ ] Write failing tests for both reference workbooks and malformed/empty sheets.
-- [ ] Detect sheet names, visibility, used region, likely header rows, first/last data rows, raw headers, inferred primitive types and representative values.
-- [ ] Detect stable FLOW field IDs when present, but do not require them.
-- [ ] Infer row grain candidates from uniqueness and contract keys; return evidence, never a bare guess.
-- [ ] Cap sampled rows/cells and reject zip bombs, encrypted workbooks, formulas in required input cells and unsupported file types.
-- [ ] Prove profiling does not change bytes, then run static checks and commit.
+- [x] Write failing tests for both reference workbooks and malformed/empty sheets.
+- [x] Detect sheet names, visibility, used region, likely header rows, first/last data rows, raw headers, inferred primitive types and representative values.
+- [x] Detect stable FLOW field IDs when present, but do not require them.
+- [x] Infer row grain candidates from uniqueness and contract keys; return evidence, never a bare guess.
+- [x] Cap sampled rows/cells and reject zip bombs, encrypted workbooks, formulas in required input cells and unsupported file types.
+- [x] Prove profiling does not change bytes, then run static checks and commit.
 
 ### Task 4: Version Deterministic Mapping Proposals and AI Fallback
 
@@ -97,12 +97,12 @@ The command must prove that the standard and non-standard workbooks produce the 
 **Interfaces:**
 - Produces: `MappingProposal`, `SheetMapping`, `FieldMapping`, `MappingConfidence`, `MappingRationale`, `propose_mapping(profile, contract)`, and `AIMappingAdapter` protocol.
 
-- [ ] Write failing tests for exact field ID, exact display name, normalized alias, compatible-type and ambiguous matches.
-- [ ] Score deterministic evidence in a documented order and reject one-to-many or many-to-one required-field mappings unless explicitly resolved.
-- [ ] Return confidence, matched evidence, unresolved requirements and confirmations for every proposal.
-- [ ] Invoke the AI adapter only for unresolved/ambiguous candidates; validate its response against contract IDs and allowed source columns.
-- [ ] Ensure AI output cannot change types, formulas, grains, quality gates or publication state.
-- [ ] Persist a canonical JSON mapping specification whose hash is stable; run tests and commit.
+- [x] Write failing tests for exact field ID, exact display name, normalized alias, compatible-type and ambiguous matches.
+- [x] Score deterministic evidence in a documented order and reject one-to-many or many-to-one required-field mappings unless explicitly resolved.
+- [x] Return confidence, matched evidence, unresolved requirements and confirmations for every proposal.
+- [x] Invoke the AI adapter only for unresolved/ambiguous candidates; validate its response against contract IDs and allowed source columns.
+- [x] Ensure AI output cannot change types, formulas, grains, quality gates or publication state.
+- [x] Persist a canonical JSON mapping specification whose hash is stable; run tests and commit.
 
 ### Task 5: Build Pure, Versioned Transformations and Field Lineage
 
@@ -116,12 +116,12 @@ The command must prove that the standard and non-standard workbooks produce the 
 **Interfaces:**
 - Produces: `TransformRule`, `TransformResult`, `LineageValue`, `apply_transform(rule, raw_value)`, `extract_candidate_package(source, profile, mapping, contract)`.
 
-- [ ] Write failing table-driven tests for trimming, null normalization, Unicode normalization, dates, decimal separators, percentages, codes and safe enum aliases.
-- [ ] Require every rule to have stable ID and version; return raw value, transformed value, rule, reason and status.
-- [ ] Never coerce ambiguous values silently. Failed or lossy conversions become quality candidates.
-- [ ] Extract a typed `CanonicalPackage` candidate and exact source sheet/row/column lineage for each mapped value.
-- [ ] Prove standard and non-standard workbooks reach equal candidate semantic snapshots before persistence.
-- [ ] Run tests, Ruff and mypy, then commit.
+- [x] Write failing table-driven tests for trimming, null normalization, Unicode normalization, dates, decimal separators, percentages, codes and safe enum aliases.
+- [x] Require every rule to have stable ID and version; return raw value, transformed value, rule, reason and status.
+- [x] Never coerce ambiguous values silently. Failed or lossy conversions become quality candidates.
+- [x] Extract a typed `CanonicalPackage` candidate and exact source sheet/row/column lineage for each mapped value.
+- [x] Prove standard and non-standard workbooks reach equal candidate semantic snapshots before persistence.
+- [x] Run tests, Ruff and mypy, then commit.
 
 ### Task 6: Implement Layered Quality and Reconciliation Gates
 
@@ -134,12 +134,12 @@ The command must prove that the standard and non-standard workbooks produce the 
 **Interfaces:**
 - Produces: `QualityReport`, `Issue`, `IssueLocation`, `ReconciliationCheck`, `evaluate_quality(candidate, contract)`, `reconcile(candidate, tolerance)`.
 
-- [ ] Write failing tests for missing required roles/fields, duplicate grains, broken required relations and invalid types as blocking issues.
-- [ ] Add warning rules for unexpected negative/zero values, revenue with zero orders, suspected unit scale, optional-dimension misses and low-confidence mappings.
-- [ ] Run operating-to-financial revenue and direct-cost reconciliations with explicit CNY tolerance and exact Decimal calculations.
-- [ ] Include issue code, severity, source location, canonical target, evidence and repair suggestion.
-- [ ] Make report ordering deterministic and prove all expected bad-fixture issues are located accurately.
-- [ ] Run tests and static checks, then commit.
+- [x] Write failing tests for missing required roles/fields, duplicate grains, broken required relations and invalid types as blocking issues.
+- [x] Add warning rules for unexpected negative/zero values, revenue with zero orders, suspected unit scale, optional-dimension misses and low-confidence mappings.
+- [x] Run operating-to-financial revenue and direct-cost reconciliations with explicit CNY tolerance and exact Decimal calculations.
+- [x] Include issue code, severity, source location, canonical target, evidence and repair suggestion.
+- [x] Make report ordering deterministic and prove all expected bad-fixture issues are located accurately.
+- [x] Run tests and static checks, then commit.
 
 ### Task 7: Complete the Audit and Acknowledgement Schema
 
@@ -152,12 +152,12 @@ The command must prove that the standard and non-standard workbooks produce the 
 **Interfaces:**
 - Adds: mapping confidence/rationale/hash, import lifecycle status, per-value transformation rule identity, warning acknowledgement actor/reason/time, and published-version identity needed for an immutable history.
 
-- [ ] Write failing migration/model tests before changing the schema.
-- [ ] Add the smallest schema extension required for complete auditability; do not duplicate `SourceRecord.raw_value` and `transformed_value` unnecessarily.
-- [ ] Enforce that only warning issues can be acknowledged and actor/reason are non-empty.
-- [ ] Enforce import status transitions and one published import per batch at the database/service boundary.
-- [ ] Verify `upgrade head → downgrade 0003 → upgrade head` and full migration round trip.
-- [ ] Run integration/static tests, then commit and push.
+- [x] Write failing migration/model tests before changing the schema.
+- [x] Add the smallest schema extension required for complete auditability; do not duplicate `SourceRecord.raw_value` and `transformed_value` unnecessarily.
+- [x] Enforce that only warning issues can be acknowledged and actor/reason are non-empty.
+- [x] Enforce import status transitions and one published import per batch at the database/service boundary.
+- [x] Verify `upgrade head → downgrade 0003 → upgrade head` and full migration round trip.
+- [x] Run integration/static tests, then commit and push.
 
 ### Task 8: Orchestrate Versioned Intake and Atomic Publication
 
@@ -171,13 +171,13 @@ The command must prove that the standard and non-standard workbooks produce the 
 **Interfaces:**
 - Produces: `IntakeService.create_batch`, `attach_source`, `propose_mapping`, `confirm_mapping`, `validate_import`, `acknowledge_warning`, `publish_import`, `create_correction`.
 
-- [ ] Write failing lifecycle tests for draft → validating → blocked/ready → published.
-- [ ] Persist every source, mapping and import sequence; retrying an idempotent step must not duplicate records.
-- [ ] Store candidate canonical rows under their import version without exposing them as published state.
-- [ ] Refuse publication for any blocking issue, failed reconciliation or unacknowledged warning.
-- [ ] Publish canonical rows, lineage and batch state in one transaction; inject a mid-publication failure and prove rollback leaves no partial state.
-- [ ] Correct a failed or published import by creating a new version; prove source bytes and previous versions remain byte/row identical.
-- [ ] Run integration tests and commit.
+- [x] Write failing lifecycle tests for draft → validating → blocked/ready → published.
+- [x] Persist every source, mapping and import sequence; retrying an idempotent step must not duplicate records.
+- [x] Store candidate canonical rows under their import version without exposing them as published state.
+- [x] Refuse publication for any blocking issue, failed reconciliation or unacknowledged warning.
+- [x] Publish canonical rows, lineage and batch state in one transaction; inject a mid-publication failure and prove rollback leaves no partial state.
+- [x] Correct a failed or published import by creating a new version; prove source bytes and previous versions remain byte/row identical.
+- [x] Run integration tests and commit.
 
 ### Task 9: Expose a Typed Intake API
 
@@ -192,12 +192,12 @@ The command must prove that the standard and non-standard workbooks produce the 
 **Interfaces:**
 - Adds endpoints for batch creation, workbook upload, profile/mapping retrieval, mapping confirmation, validation, warning acknowledgement, publication and version history.
 
-- [ ] Write failing API contract tests for happy path, typed validation errors, invalid transitions and publication blockers.
-- [ ] Stream uploads with a configured size limit; never log workbook bytes or cell contents.
-- [ ] Return stable IDs, lifecycle state, mapping confidence/rationale, issue summaries and next allowed actions.
-- [ ] Make actor identity explicit in acknowledgement and mapping confirmation requests until authentication is introduced.
-- [ ] Regenerate OpenAPI and TypeScript contracts and require no generation drift.
-- [ ] Run API, contract and static tests, then commit.
+- [x] Write failing API contract tests for happy path, typed validation errors, invalid transitions and publication blockers.
+- [x] Stream uploads with a configured size limit; never log workbook bytes or cell contents.
+- [x] Return stable IDs, lifecycle state, mapping confidence/rationale, issue summaries and next allowed actions.
+- [x] Make actor identity explicit in acknowledgement and mapping confirmation requests until authentication is introduced.
+- [x] Regenerate OpenAPI and TypeScript contracts and require no generation drift.
+- [x] Run API, contract and static tests, then commit.
 
 ### Task 10: Build the End-to-end Acceptance Gate
 
@@ -212,14 +212,14 @@ The command must prove that the standard and non-standard workbooks produce the 
 **Interfaces:**
 - Adds: `make test-intake-e2e` and CI job `intake-e2e`.
 
-- [ ] Write the failing acceptance test first.
-- [ ] Ingest the standard and non-standard workbook through the same public service boundary and compare both with Phase 2 semantic snapshots and known answers.
-- [ ] Exercise blocking error, warning acknowledgement, reconciliation failure, atomic rollback and corrected-version paths.
-- [ ] Assert object hashes, raw values, mapping versions, transform rules, issue locations, canonical facts and field lineage.
-- [ ] Run Ruff, mypy, API contract drift, migrations and Phase 1/2 regression gates from the script.
-- [ ] Document operator behavior, error codes, audit trail and recovery rules.
-- [ ] Add the CI job, run the gate in a clean worktree, record evidence in `docs/implementation/phase-3-verification.md`, update project state and knowledge-base manifests.
-- [ ] Commit, push and require all GitHub Actions jobs to pass before marking Phase 3 complete.
+- [x] Write the failing acceptance test first.
+- [x] Ingest the standard and non-standard workbook through the same public service boundary and compare both with Phase 2 semantic snapshots and known answers.
+- [x] Exercise blocking error, warning acknowledgement, reconciliation failure, atomic rollback and corrected-version paths.
+- [x] Assert object hashes, raw values, mapping versions, transform rules, issue locations, canonical facts and field lineage.
+- [x] Run Ruff, mypy, API contract drift, migrations and Phase 1/2 regression gates from the script.
+- [x] Document operator behavior, error codes, audit trail and recovery rules.
+- [x] Add the CI job, run the gate in a clean worktree, record evidence in `docs/implementation/phase-3-verification.md`, update project state and knowledge-base manifests.
+- [x] Commit, push and require all GitHub Actions jobs to pass before marking Phase 3 complete.
 
 ## Expected Phase 3 Deliverable
 

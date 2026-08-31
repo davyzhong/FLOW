@@ -2,7 +2,7 @@
 
 ## 当前状态摘要
 
-截至 2026-08-30，产品设计、Phase 1“基础架构与对象契约”和 Phase 2“标准 Excel 数据契约与高拟真 fixture”均已完成。六服务栈可以从干净检出构建启动；`flow.excel.v1` 已冻结为首个可执行中间层交换契约，标准 Excel、确定性物流 fixture、已知业务答案、解析校验、PostgreSQL 持久化和再次导出均已落地。完整本地验收和 GitHub Actions 八个 jobs 全部通过。规范远程仓库为 <https://github.com/davyzhong/FLOW>；下一阶段是 Intake、Mapping & Quality。
+截至 2026-08-31，产品设计和 Phase 1–3 均已完成。六服务栈可以从干净检出构建启动；`flow.excel.v1` 已冻结为首个可执行中间层交换契约；标准 Excel 与非标准外部工作簿现可通过同一套识别、映射、转换、质量、对账和原子发布流程，形成不可变 canonical 版本及完整字段级血缘。完整本地验收、干净检出验收和 GitHub Actions 九个 jobs 全部通过。规范远程仓库为 <https://github.com/davyzhong/FLOW>；下一阶段是 Metric Snapshots。
 
 ## 阶段时间线
 
@@ -139,17 +139,30 @@
 - 干净 worktree 完整回归通过，GitHub Actions 的 8 个 jobs 全部通过；
 - 详细证据见 `docs/implementation/phase-2-verification.md`。
 
+### 阶段 12：Phase 3 Intake、Mapping & Quality
+
+- 建立非标准物流工作簿 fixture，包含重命名/乱序工作表、偏移表头、中文别名、格式变化和无关说明列；
+- 以 SHA-256 内容寻址保存不可变源文件，并验证已存在对象的长度与校验和；
+- 实现安全工作簿画像、确定性映射优先级、受约束 AI 候选接口和稳定映射哈希；
+- 实现版本化纯转换、原始值保留和精确到 sheet/row/column 的字段级血缘；
+- 实现分层质量问题、财务对账、警告确认和发布阻断；
+- 实现 draft → validating → blocked/ready → published 生命周期、事务发布、失败回滚和修订版本；
+- 发布 9 个有类型的 Intake API 路径以及同步生成的 TypeScript 合约；
+- 新增 `make test-intake-e2e` 与 GitHub Actions `intake-e2e` 门禁；
+- 标准与外部工作簿均精确匹配已知答案、语义差异为零，并各保留 57,633 个字段级血缘值；
+- 干净 worktree 完整回归和 GitHub Actions 的 9 个 jobs 全部通过；
+- 详细证据见 `docs/implementation/phase-3-verification.md`。
+
 ## 当前尚未完成
 
 - 用户对正式规格文件的最后一次文档审阅；
-- Phase 3–10 在各阶段开工前基于已验证接口形成可执行任务单；
+- Phase 4–10 在各阶段开工前基于已验证接口形成可执行任务单；
 - 指标字典、公式和阈值的完整明细；
-- Excel 识别、字段映射、清洗、校验和发布工作流；
 - Finance BP 驾驶舱、Investigation 和 AI Copilot；
 - PPT、分析 Excel、HTML/PDF 报告渲染器；
-- Phase 3–10 的功能实现与验收数据集；
+- Phase 4–10 的功能实现与验收数据集；
 - 正式品牌命名和 FLOW 的最终英文释义。
 
 ## 当前下一步
 
-基于冻结的 `flow.excel.v1`、标准工作簿、确定性 fixture 和已知答案，形成并执行 Phase 3“Intake、Mapping & Quality”详细测试先行计划：完成不可变源文件存储、非标准 Excel 识别、确定性与 AI 辅助字段映射、版本化清洗审计、质量门禁和批次原子发布。
+基于 Phase 3 已发布的 canonical 批次和已知答案，形成并执行 Phase 4“Metric Snapshots”详细测试先行计划：冻结首批经营指标定义与公式，完成维度安全聚合、月度/YTD/预算/同比/近 12 月计算、指标依赖血缘和不可变快照发布。
