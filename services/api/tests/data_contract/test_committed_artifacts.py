@@ -12,6 +12,7 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[4]
 CONTRACT_PATH = REPOSITORY_ROOT / "templates/excel/flow_v1_contract.yaml"
 COMMITTED_CANONICAL = REPOSITORY_ROOT / "fixtures/canonical"
 COMMITTED_ANSWERS = REPOSITORY_ROOT / "fixtures/expected/known_answers.json"
+COMMITTED_METRIC_ORACLE = REPOSITORY_ROOT / "fixtures/expected/metric_snapshots_v1.json"
 COMMITTED_WORKBOOK = REPOSITORY_ROOT / "fixtures/workbooks/flow_standard_v1.xlsx"
 CONTRACT_DOCUMENTATION = REPOSITORY_ROOT / "docs/data-contract/flow-v1.md"
 
@@ -75,4 +76,27 @@ def test_manifest_counts_match_known_answers() -> None:
     assert (
         manifest["files"]["financial_actuals.jsonl"]["row_count"]
         == known_answers["row_counts"]["financial_actuals"]
+    )
+
+
+def test_metric_oracle_is_anchored_to_phase_two_known_answers() -> None:
+    known_answers = json.loads(COMMITTED_ANSWERS.read_text())
+    metric_oracle = json.loads(COMMITTED_METRIC_ORACLE.read_text())
+
+    assert metric_oracle["as_of_month"] == known_answers["windows"]["analysis"][1]
+    assert (
+        metric_oracle["trailing_12"]["revenue"]
+        == known_answers["headline_totals"]["analysis"]["revenue"]
+    )
+    assert (
+        metric_oracle["trailing_12"]["gross_margin"]
+        == known_answers["headline_totals"]["analysis"]["gross_margin"]
+    )
+    assert (
+        metric_oracle["trailing_12"]["operating_cash_flow"]
+        == known_answers["headline_totals"]["analysis"]["operating_cash_flow"]
+    )
+    assert (
+        metric_oracle["actual_month"]["ar_balance"]
+        == known_answers["final_month_ar"]["receivable_balance"]
     )

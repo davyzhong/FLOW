@@ -73,12 +73,12 @@ class MetricCatalog(BaseModel):
 def load_metric_catalog(path: str | Path) -> MetricCatalog: ...
 ```
 
-- [ ] Write a failing test requiring exactly the 15 metric codes, unique `(metric_code, version)`, dependency references to existing codes, an acyclic graph and `definition_set_id == "flow.metrics.logistics.v1"`.
-- [ ] Run `cd services/api && uv run pytest tests/metrics/test_catalog.py -q`; expect failure because the catalog loader does not exist.
-- [ ] Implement strict YAML loading with `extra="forbid"`, explicit units, output scales, allowed dimension sets and stable topological ordering.
-- [ ] Freeze the exact source formulas: operating facts for volume/revenue/direct cost; financial accounts for operating profit/cash; AR facts for balance/collections; derived formulas only through declared metric dependencies.
-- [ ] Commit an independently reviewed JSON oracle containing exact month, YTD, budget, prior-year, variance, trailing-12 and final-month balance values needed by later tests. The oracle must contain strings, never JSON floats.
-- [ ] Add deterministic serialization and SHA-256 tests for both YAML and oracle, run the task tests, Ruff and mypy, then commit and push.
+- [x] Write a failing test requiring exactly the 15 metric codes, unique `(metric_code, version)`, dependency references to existing codes, an acyclic graph and `definition_set_id == "flow.metrics.logistics.v1"`.
+- [x] Run `cd services/api && uv run pytest tests/metrics/test_catalog.py -q`; expect failure because the catalog loader does not exist.
+- [x] Implement strict YAML loading with `extra="forbid"`, explicit units, output scales, allowed dimension sets and stable topological ordering.
+- [x] Freeze the exact source formulas: operating facts for volume/revenue/direct cost; financial accounts for operating profit/cash; AR facts for balance/collections; derived formulas only through declared metric dependencies.
+- [x] Commit an independently reviewed JSON oracle containing exact month, YTD, budget, prior-year, variance, trailing-12 and final-month balance values needed by later tests. The oracle must contain strings, never JSON floats.
+- [x] Add deterministic serialization and SHA-256 tests for both YAML and oracle, run the task tests, Ruff and mypy, then commit and push.
 
 ### Task 2: Implement Decimal Formula and Dependency Evaluation
 

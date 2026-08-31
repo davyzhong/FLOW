@@ -1,0 +1,214 @@
+definition_set_id: flow.metrics.logistics.v1
+engine_version: flow.metrics.engine.v1
+metrics:
+  - metric_code: orders
+    version: 1
+    name: 订单量
+    business_definition: 所选期间和维度内的订单数量之和。
+    formula: sum_operating_order_count
+    dependencies: []
+    aggregation: sum
+    time_behavior: flow
+    unit: order
+    output_scale: 4
+    allowed_dimension_sets: &operating_dimensions
+      - []
+      - [organization]
+      - [customer]
+      - [customer_segment]
+      - [logistics_product]
+      - [region]
+      - [customer_segment, logistics_product]
+    budget_dimension_sets: []
+
+  - metric_code: fulfilled_units
+    version: 1
+    name: 履约件量
+    business_definition: 所选期间和维度内的实际履约件数之和。
+    formula: sum_operating_shipment_count
+    dependencies: []
+    aggregation: sum
+    time_behavior: flow
+    unit: unit
+    output_scale: 4
+    allowed_dimension_sets: *operating_dimensions
+    budget_dimension_sets: []
+
+  - metric_code: revenue
+    version: 1
+    name: 收入
+    business_definition: 经营实际收入；必须与财务收入完成发布前对账。
+    formula: sum_operating_revenue
+    dependencies: []
+    aggregation: sum
+    time_behavior: flow
+    unit: CNY
+    output_scale: 4
+    allowed_dimension_sets: *operating_dimensions
+    budget_dimension_sets: &operating_budget_dimensions
+      - []
+      - [organization]
+      - [customer_segment]
+      - [logistics_product]
+      - [customer_segment, logistics_product]
+
+  - metric_code: revenue_per_order
+    version: 1
+    name: 单均收入
+    business_definition: 同一期间和维度粒度的收入除以订单量。
+    formula: ratio
+    dependencies: [revenue, orders]
+    aggregation: ratio
+    time_behavior: flow
+    unit: CNY/order
+    output_scale: 6
+    allowed_dimension_sets: *operating_dimensions
+    budget_dimension_sets: []
+
+  - metric_code: direct_cost
+    version: 1
+    name: 直接成本
+    business_definition: 仓储、运输和其他直接履约成本之和。
+    formula: sum_operating_direct_cost
+    dependencies: []
+    aggregation: sum
+    time_behavior: flow
+    unit: CNY
+    output_scale: 4
+    allowed_dimension_sets: *operating_dimensions
+    budget_dimension_sets: *operating_budget_dimensions
+
+  - metric_code: cost_per_order
+    version: 1
+    name: 单均成本
+    business_definition: 同一期间和维度粒度的直接成本除以订单量。
+    formula: ratio
+    dependencies: [direct_cost, orders]
+    aggregation: ratio
+    time_behavior: flow
+    unit: CNY/order
+    output_scale: 6
+    allowed_dimension_sets: *operating_dimensions
+    budget_dimension_sets: []
+
+  - metric_code: gross_profit
+    version: 1
+    name: 毛利
+    business_definition: 收入减直接成本。
+    formula: subtract
+    dependencies: [revenue, direct_cost]
+    aggregation: sum
+    time_behavior: flow
+    unit: CNY
+    output_scale: 4
+    allowed_dimension_sets: *operating_dimensions
+    budget_dimension_sets: *operating_budget_dimensions
+
+  - metric_code: gross_margin
+    version: 1
+    name: 毛利率
+    business_definition: 同一期间和维度粒度的毛利除以收入。
+    formula: ratio
+    dependencies: [gross_profit, revenue]
+    aggregation: ratio
+    time_behavior: flow
+    unit: ratio
+    output_scale: 6
+    allowed_dimension_sets: *operating_dimensions
+    budget_dimension_sets: *operating_budget_dimensions
+
+  - metric_code: fulfillment_cost_rate
+    version: 1
+    name: 履约成本率
+    business_definition: 同一期间和维度粒度的直接成本除以收入。
+    formula: ratio
+    dependencies: [direct_cost, revenue]
+    aggregation: ratio
+    time_behavior: flow
+    unit: ratio
+    output_scale: 6
+    allowed_dimension_sets: *operating_dimensions
+    budget_dimension_sets: *operating_budget_dimensions
+
+  - metric_code: operating_profit
+    version: 1
+    name: 经营利润
+    business_definition: 财务实际中经营利润管理科目的金额之和。
+    formula: sum_financial_operating_profit
+    dependencies: []
+    aggregation: sum
+    time_behavior: flow
+    unit: CNY
+    output_scale: 4
+    allowed_dimension_sets: &financial_dimensions
+      - []
+      - [organization]
+    budget_dimension_sets: *financial_dimensions
+
+  - metric_code: ar_balance
+    version: 1
+    name: 应收余额
+    business_definition: 所选窗口最后一个可用期间的应收账款余额。
+    formula: closing_ar_receivable_balance
+    dependencies: []
+    aggregation: closing_balance
+    time_behavior: balance
+    unit: CNY
+    output_scale: 4
+    allowed_dimension_sets: &ar_dimensions
+      - []
+      - [customer]
+      - [customer_segment]
+    budget_dimension_sets: []
+
+  - metric_code: collection_rate
+    version: 1
+    name: 回款率
+    business_definition: 所选期间回款金额除以到期金额。
+    formula: sum_ar_collected_over_due
+    dependencies: []
+    aggregation: ratio
+    time_behavior: flow
+    unit: ratio
+    output_scale: 6
+    allowed_dimension_sets: *ar_dimensions
+    budget_dimension_sets: []
+
+  - metric_code: operating_cash_flow
+    version: 1
+    name: 经营现金流
+    business_definition: 财务实际中经营现金流管理科目的金额之和。
+    formula: sum_financial_operating_cash_flow
+    dependencies: []
+    aggregation: sum
+    time_behavior: flow
+    unit: CNY
+    output_scale: 4
+    allowed_dimension_sets: *financial_dimensions
+    budget_dimension_sets: *financial_dimensions
+
+  - metric_code: cash_conversion
+    version: 1
+    name: 现金转换率
+    business_definition: 同一期间和维度粒度的经营现金流除以经营利润。
+    formula: ratio
+    dependencies: [operating_cash_flow, operating_profit]
+    aggregation: ratio
+    time_behavior: flow
+    unit: ratio
+    output_scale: 6
+    allowed_dimension_sets: *financial_dimensions
+    budget_dimension_sets: *financial_dimensions
+
+  - metric_code: dso
+    version: 1
+    name: 应收账款周转天数
+    business_definition: 期末应收余额除以截至期末的近十二个月收入并乘以 365 天。
+    formula: closing_ar_over_trailing_12_revenue_times_365
+    dependencies: [ar_balance, revenue]
+    aggregation: ratio
+    time_behavior: balance
+    unit: day
+    output_scale: 6
+    allowed_dimension_sets: *ar_dimensions
+    budget_dimension_sets: []
