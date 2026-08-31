@@ -50,7 +50,10 @@ jobs:
           python-version: "3.13"
           enable-cache: true
       - run: cd services/api && uv sync --all-groups --frozen
-      - run: cd services/api && uv run pytest tests/domain tests/api tests/test_health.py -q
+      - run: >-
+          cd services/api && uv run pytest
+          tests/domain tests/api tests/test_health.py
+          --ignore=tests/api/test_intake.py -q
 
   integration:
     runs-on: ubuntu-latest

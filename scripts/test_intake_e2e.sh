@@ -5,6 +5,7 @@ repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 cd "$repo_root/services/api"
 uv run pytest tests/intake -q
+uv run pytest tests/api/test_intake.py -q
 uv run pytest \
   tests/integration/test_intake_audit_schema.py \
   tests/integration/test_intake_service.py \
