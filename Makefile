@@ -2,7 +2,7 @@ PNPM := npx --yes pnpm@10.17.1
 UV := uv
 COMPOSE := docker compose -f infra/compose.yaml
 
-.PHONY: bootstrap contracts contracts-check infra-up infra-down stack-up stack-down dev-api dev-web test-api test-web test lint typecheck phase-1-acceptance test-data-contract
+.PHONY: bootstrap contracts contracts-check infra-up infra-down stack-up stack-down dev-api dev-web test-api test-web test lint typecheck phase-1-acceptance test-data-contract test-intake-e2e
 
 bootstrap:
 	$(PNPM) install --frozen-lockfile
@@ -56,3 +56,6 @@ phase-1-acceptance:
 
 test-data-contract: infra-up
 	bash scripts/test_data_contract.sh
+
+test-intake-e2e: infra-up
+	bash scripts/test_intake_e2e.sh
