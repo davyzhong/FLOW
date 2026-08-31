@@ -58,8 +58,24 @@ from flow_api.intake.transforms import load_transform_rules
 from flow_api.settings import get_settings
 
 router = APIRouter(prefix="/intake", tags=["intake"])
-REPOSITORY_ROOT = Path(__file__).resolve().parents[6]
 UPLOAD_CHUNK_SIZE = 1024 * 1024
+INTAKE_CONFIGURATION_PATHS = (
+    Path("templates/excel/flow_v1_contract.yaml"),
+    Path("config/intake/flow_v1_aliases.yaml"),
+    Path("config/intake/flow_v1_transforms.yaml"),
+)
+
+
+def resolve_intake_configuration_root(module_path: Path = Path(__file__)) -> Path:
+    resolved_module_path = module_path.resolve()
+    candidates = (resolved_module_path.parent, *resolved_module_path.parents)
+    for candidate in candidates:
+        if all(
+            (candidate / relative_path).is_file()
+            for relative_path in INTAKE_CONFIGURATION_PATHS
+        ):
+            return candidate
+    raise RuntimeError(f"FLOW intake configuration files not found from {resolved_module_path}")
 
 
 def get_db_session() -> Iterator[Session]:
@@ -86,10 +102,11 @@ def get_source_storage() -> SourceStorage:
 
 @lru_cache
 def _intake_configuration() -> tuple[Any, Any, Any]:
+    repository_root = resolve_intake_configuration_root()
     return (
-        load_contract(REPOSITORY_ROOT / "templates/excel/flow_v1_contract.yaml"),
-        load_aliases(REPOSITORY_ROOT / "config/intake/flow_v1_aliases.yaml"),
-        load_transform_rules(REPOSITORY_ROOT / "config/intake/flow_v1_transforms.yaml"),
+        load_contract(repository_root / INTAKE_CONFIGURATION_PATHS[0]),
+        load_aliases(repository_root / INTAKE_CONFIGURATION_PATHS[1]),
+        load_transform_rules(repository_root / INTAKE_CONFIGURATION_PATHS[2]),
     )
 
 

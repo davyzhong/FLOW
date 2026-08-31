@@ -4,6 +4,8 @@ COPY --from=ghcr.io/astral-sh/uv:0.10.10 /uv /usr/local/bin/uv
 WORKDIR /app
 COPY services/api/pyproject.toml services/api/uv.lock ./
 COPY services/api/src ./src
+COPY templates/excel/flow_v1_contract.yaml ./templates/excel/flow_v1_contract.yaml
+COPY config/intake ./config/intake
 RUN uv sync --frozen --no-dev
 ENV PATH="/app/.venv/bin:$PATH"
 RUN useradd --create-home --uid 10001 flow && chown -R flow:flow /app
