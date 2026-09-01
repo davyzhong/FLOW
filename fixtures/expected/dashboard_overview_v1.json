@@ -1,0 +1,2011 @@
+{
+  "active_filters": {
+    "customer_segment_id": null,
+    "is_total_scope": true,
+    "logistics_product_id": null,
+    "organization_id": null,
+    "period_view": "month",
+    "region_id": null
+  },
+  "context": {
+    "analysis_engine_version": "flow-analysis/1",
+    "analysis_policy_hash": "448b390877b20090af02f6584e79a1c9796fe5ab0a5c9aeb784f6ab497e94f5a",
+    "analysis_policy_id": "flow.analysis.logistics.v1",
+    "analysis_run_id": "639f2271-5816-51d4-8f5d-038b6d98e08c",
+    "as_of_month": "2026-08",
+    "batch_id": "934072b5-8f89-5f96-a498-c88b26483908",
+    "generated_at": "2026-09-01T00:00:00Z",
+    "import_version_id": "16595ce3-5572-5bca-ad97-abf85d04e1fe",
+    "metric_definition_set_hash": "4214ae85339eb7495defb69f1d59fdddec5e3183d5d4ba64c966be9f53270b38",
+    "metric_definition_set_id": "flow.metrics.logistics.v1",
+    "metric_engine_version": "flow.metrics.engine.v1",
+    "metric_snapshot_id": "87d9dfbb-0ac7-5dde-9675-537459961f15"
+  },
+  "data_status": {
+    "acknowledged_warning_count": 0,
+    "analysis_run_status": "published",
+    "batch_status": "published",
+    "blocking_issue_count": 0,
+    "freshness_status": "fresh",
+    "import_status": "published",
+    "metric_snapshot_status": "published",
+    "quality_status": "passed",
+    "reconciliation_status": "passed",
+    "warning_issue_count": 0
+  },
+  "degradations": [],
+  "filter_options": {
+    "dimensions": [
+      {
+        "dimension": "organization",
+        "label": "组织",
+        "options": [
+          {
+            "code": "FLOW_GROUP",
+            "id": "0668e814-4031-5e93-b16d-2024ce063b02",
+            "name": "FLOW 供应链集团"
+          },
+          {
+            "code": "ORG_NORTH",
+            "id": "e84eef73-8231-56f4-96bc-d63cd2ccfa9b",
+            "name": "北方经营中心"
+          },
+          {
+            "code": "ORG_SOUTH",
+            "id": "9ffa61f6-d99e-548c-951d-39ec87aeeb24",
+            "name": "南方经营中心"
+          }
+        ]
+      },
+      {
+        "dimension": "customer_segment",
+        "label": "客户群",
+        "options": [
+          {
+            "code": "KEY_ACCOUNT",
+            "id": "158e0a75-4853-5f1a-94b1-da561ccdd70a",
+            "name": "集团大客户"
+          },
+          {
+            "code": "DOMESTIC",
+            "id": "9351d7a0-2aa5-5b75-a09e-4af765700b0e",
+            "name": "国内营销客户"
+          }
+        ]
+      },
+      {
+        "dimension": "logistics_product",
+        "label": "物流产品",
+        "options": [
+          {
+            "code": "B2C",
+            "id": "f3aa874c-c0d5-5e2c-bf5b-d0e51a9c624c",
+            "name": "国内 B2C 配送"
+          },
+          {
+            "code": "B2B",
+            "id": "65c8d6ca-889e-5c7a-9373-ed00f0de3e3e",
+            "name": "国内 B2B 配送"
+          },
+          {
+            "code": "WAREHOUSE",
+            "id": "19e1306f-0e75-5170-be7c-6b4a7cbc2e4d",
+            "name": "仓配一体"
+          },
+          {
+            "code": "CROSS_BORDER",
+            "id": "6b4b4fd9-39df-5856-8594-be8d34fdd056",
+            "name": "跨境供应链"
+          },
+          {
+            "code": "COLD_CHAIN",
+            "id": "c466369a-77a7-54fb-a501-ea5cdc726662",
+            "name": "冷链物流"
+          },
+          {
+            "code": "REVERSE",
+            "id": "38d51fa6-880e-5063-a588-0c91c3f7f6d1",
+            "name": "逆向物流"
+          },
+          {
+            "code": "M2C",
+            "id": "2a2cb0d3-3ad1-5745-a857-a2d7420fada2",
+            "name": "产地直发 M2C"
+          },
+          {
+            "code": "SAME_DAY",
+            "id": "2c6145ea-2a3c-5a64-bcd5-e86363212bf6",
+            "name": "同城即时配"
+          }
+        ]
+      },
+      {
+        "dimension": "region",
+        "label": "区域",
+        "options": [
+          {
+            "code": "REGION_NORTH",
+            "id": "e2aa9bd1-8b1a-5360-8054-eb7bcafeb724",
+            "name": "华北"
+          },
+          {
+            "code": "REGION_EAST",
+            "id": "8213d182-a8a4-59cf-b2f5-1601f4224248",
+            "name": "华东"
+          },
+          {
+            "code": "REGION_SOUTH",
+            "id": "13028da1-03e4-5429-b33c-04f0c2cc24c8",
+            "name": "华南"
+          },
+          {
+            "code": "REGION_WEST",
+            "id": "e995253e-3cbb-558c-801b-b1a15b0cdf0f",
+            "name": "西部"
+          }
+        ]
+      }
+    ],
+    "supported_combinations": [
+      [],
+      [
+        "organization"
+      ],
+      [
+        "customer_segment"
+      ],
+      [
+        "logistics_product"
+      ],
+      [
+        "region"
+      ],
+      [
+        "customer_segment",
+        "logistics_product"
+      ]
+    ]
+  },
+  "findings": [
+    {
+      "comparison_basis": "prior_year",
+      "evidence_total": 5,
+      "evidence_verified": 5,
+      "finding_id": "5535b51a-f81f-5e6d-8ef2-fd4d2552f984",
+      "finding_type": "fulfillment_cost_increase",
+      "impact": {
+        "display_value": "2103605.1451",
+        "exact_value": "2103605.1451",
+        "semantic_direction": "negative",
+        "status": "available",
+        "unavailable_code": null,
+        "unavailable_message": null
+      },
+      "investigation_path": "/investigations/5535b51a-f81f-5e6d-8ef2-fd4d2552f984?batch_id=934072b5-8f89-5f96-a498-c88b26483908&metric_snapshot_id=87d9dfbb-0ac7-5dde-9675-537459961f15&analysis_run_id=639f2271-5816-51d4-8f5d-038b6d98e08c",
+      "scope": "global",
+      "title": "履约成本增加",
+      "total_score": "87.000000"
+    },
+    {
+      "comparison_basis": "prior_year",
+      "evidence_total": 5,
+      "evidence_verified": 5,
+      "finding_id": "598cafad-7b5f-5298-a4a6-9f2d6829e318",
+      "finding_type": "revenue_growth",
+      "impact": {
+        "display_value": "2356634.0957",
+        "exact_value": "2356634.0957",
+        "semantic_direction": "positive",
+        "status": "available",
+        "unavailable_code": null,
+        "unavailable_message": null
+      },
+      "investigation_path": "/investigations/598cafad-7b5f-5298-a4a6-9f2d6829e318?batch_id=934072b5-8f89-5f96-a498-c88b26483908&metric_snapshot_id=87d9dfbb-0ac7-5dde-9675-537459961f15&analysis_run_id=639f2271-5816-51d4-8f5d-038b6d98e08c",
+      "scope": "global",
+      "title": "收入增长",
+      "total_score": "82.000000"
+    },
+    {
+      "comparison_basis": "prior_year",
+      "evidence_total": 5,
+      "evidence_verified": 5,
+      "finding_id": "7616e23b-d0f1-58be-8572-ac6d9589e779",
+      "finding_type": "ar_cash_deterioration",
+      "impact": {
+        "display_value": "-365415.0177",
+        "exact_value": "-365415.0177",
+        "semantic_direction": "negative",
+        "status": "available",
+        "unavailable_code": null,
+        "unavailable_message": null
+      },
+      "investigation_path": "/investigations/7616e23b-d0f1-58be-8572-ac6d9589e779?batch_id=934072b5-8f89-5f96-a498-c88b26483908&metric_snapshot_id=87d9dfbb-0ac7-5dde-9675-537459961f15&analysis_run_id=639f2271-5816-51d4-8f5d-038b6d98e08c",
+      "scope": "global",
+      "title": "应收资金占用增加",
+      "total_score": "64.616601"
+    },
+    {
+      "comparison_basis": "prior_year",
+      "evidence_total": 5,
+      "evidence_verified": 5,
+      "finding_id": "9311f743-04f8-5b9b-80e1-f890c581903f",
+      "finding_type": "operating_profit_deterioration",
+      "impact": {
+        "display_value": "-77484.3599",
+        "exact_value": "-77484.3599",
+        "semantic_direction": "negative",
+        "status": "available",
+        "unavailable_code": null,
+        "unavailable_message": null
+      },
+      "investigation_path": "/investigations/9311f743-04f8-5b9b-80e1-f890c581903f?batch_id=934072b5-8f89-5f96-a498-c88b26483908&metric_snapshot_id=87d9dfbb-0ac7-5dde-9675-537459961f15&analysis_run_id=639f2271-5816-51d4-8f5d-038b6d98e08c",
+      "scope": "global",
+      "title": "经营利润下降",
+      "total_score": "53.099374"
+    }
+  ],
+  "highlights": [
+    {
+      "finding_id": "5535b51a-f81f-5e6d-8ef2-fd4d2552f984",
+      "impact_display": "2103605.1451",
+      "title": "履约成本增加"
+    },
+    {
+      "finding_id": "598cafad-7b5f-5298-a4a6-9f2d6829e318",
+      "impact_display": "2356634.0957",
+      "title": "收入增长"
+    },
+    {
+      "finding_id": "7616e23b-d0f1-58be-8572-ac6d9589e779",
+      "impact_display": "-365415.0177",
+      "title": "应收资金占用增加"
+    }
+  ],
+  "margin_matrix": {
+    "cells": [
+      {
+        "actual_margin": {
+          "display_value": "0.303000",
+          "exact_value": "0.303000",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "comparison": {
+          "display_value": "-0.085000",
+          "exact_value": "-0.085000",
+          "semantic_direction": "negative",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "customer_segment_id": "158e0a75-4853-5f1a-94b1-da561ccdd70a",
+        "logistics_product_id": "f3aa874c-c0d5-5e2c-bf5b-d0e51a9c624c"
+      },
+      {
+        "actual_margin": {
+          "display_value": "0.282000",
+          "exact_value": "0.282000",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "comparison": {
+          "display_value": "-0.085000",
+          "exact_value": "-0.085000",
+          "semantic_direction": "negative",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "customer_segment_id": "158e0a75-4853-5f1a-94b1-da561ccdd70a",
+        "logistics_product_id": "65c8d6ca-889e-5c7a-9373-ed00f0de3e3e"
+      },
+      {
+        "actual_margin": {
+          "display_value": "0.261000",
+          "exact_value": "0.261000",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "comparison": {
+          "display_value": "-0.085000",
+          "exact_value": "-0.085000",
+          "semantic_direction": "negative",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "customer_segment_id": "158e0a75-4853-5f1a-94b1-da561ccdd70a",
+        "logistics_product_id": "19e1306f-0e75-5170-be7c-6b4a7cbc2e4d"
+      },
+      {
+        "actual_margin": {
+          "display_value": "0.267000",
+          "exact_value": "0.267000",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "comparison": {
+          "display_value": "-0.085000",
+          "exact_value": "-0.085000",
+          "semantic_direction": "negative",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "customer_segment_id": "158e0a75-4853-5f1a-94b1-da561ccdd70a",
+        "logistics_product_id": "6b4b4fd9-39df-5856-8594-be8d34fdd056"
+      },
+      {
+        "actual_margin": {
+          "display_value": "0.294000",
+          "exact_value": "0.294000",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "comparison": {
+          "display_value": "-0.085000",
+          "exact_value": "-0.085000",
+          "semantic_direction": "negative",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "customer_segment_id": "158e0a75-4853-5f1a-94b1-da561ccdd70a",
+        "logistics_product_id": "c466369a-77a7-54fb-a501-ea5cdc726662"
+      },
+      {
+        "actual_margin": {
+          "display_value": "0.273000",
+          "exact_value": "0.273000",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "comparison": {
+          "display_value": "-0.085000",
+          "exact_value": "-0.085000",
+          "semantic_direction": "negative",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "customer_segment_id": "158e0a75-4853-5f1a-94b1-da561ccdd70a",
+        "logistics_product_id": "38d51fa6-880e-5063-a588-0c91c3f7f6d1"
+      },
+      {
+        "actual_margin": {
+          "display_value": "0.279000",
+          "exact_value": "0.279000",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "comparison": {
+          "display_value": "-0.085000",
+          "exact_value": "-0.085000",
+          "semantic_direction": "negative",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "customer_segment_id": "158e0a75-4853-5f1a-94b1-da561ccdd70a",
+        "logistics_product_id": "2a2cb0d3-3ad1-5745-a857-a2d7420fada2"
+      },
+      {
+        "actual_margin": {
+          "display_value": "0.258000",
+          "exact_value": "0.258000",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "comparison": {
+          "display_value": "-0.085000",
+          "exact_value": "-0.085000",
+          "semantic_direction": "negative",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "customer_segment_id": "158e0a75-4853-5f1a-94b1-da561ccdd70a",
+        "logistics_product_id": "2c6145ea-2a3c-5a64-bcd5-e86363212bf6"
+      },
+      {
+        "actual_margin": {
+          "display_value": "0.303000",
+          "exact_value": "0.303000",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "comparison": {
+          "display_value": "-0.085000",
+          "exact_value": "-0.085000",
+          "semantic_direction": "negative",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "customer_segment_id": "9351d7a0-2aa5-5b75-a09e-4af765700b0e",
+        "logistics_product_id": "f3aa874c-c0d5-5e2c-bf5b-d0e51a9c624c"
+      },
+      {
+        "actual_margin": {
+          "display_value": "0.282000",
+          "exact_value": "0.282000",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "comparison": {
+          "display_value": "-0.085000",
+          "exact_value": "-0.085000",
+          "semantic_direction": "negative",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "customer_segment_id": "9351d7a0-2aa5-5b75-a09e-4af765700b0e",
+        "logistics_product_id": "65c8d6ca-889e-5c7a-9373-ed00f0de3e3e"
+      },
+      {
+        "actual_margin": {
+          "display_value": "0.261000",
+          "exact_value": "0.261000",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "comparison": {
+          "display_value": "-0.085000",
+          "exact_value": "-0.085000",
+          "semantic_direction": "negative",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "customer_segment_id": "9351d7a0-2aa5-5b75-a09e-4af765700b0e",
+        "logistics_product_id": "19e1306f-0e75-5170-be7c-6b4a7cbc2e4d"
+      },
+      {
+        "actual_margin": {
+          "display_value": "0.267000",
+          "exact_value": "0.267000",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "comparison": {
+          "display_value": "-0.085000",
+          "exact_value": "-0.085000",
+          "semantic_direction": "negative",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "customer_segment_id": "9351d7a0-2aa5-5b75-a09e-4af765700b0e",
+        "logistics_product_id": "6b4b4fd9-39df-5856-8594-be8d34fdd056"
+      },
+      {
+        "actual_margin": {
+          "display_value": "0.294000",
+          "exact_value": "0.294000",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "comparison": {
+          "display_value": "-0.085000",
+          "exact_value": "-0.085000",
+          "semantic_direction": "negative",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "customer_segment_id": "9351d7a0-2aa5-5b75-a09e-4af765700b0e",
+        "logistics_product_id": "c466369a-77a7-54fb-a501-ea5cdc726662"
+      },
+      {
+        "actual_margin": {
+          "display_value": "0.273000",
+          "exact_value": "0.273000",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "comparison": {
+          "display_value": "-0.085000",
+          "exact_value": "-0.085000",
+          "semantic_direction": "negative",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "customer_segment_id": "9351d7a0-2aa5-5b75-a09e-4af765700b0e",
+        "logistics_product_id": "38d51fa6-880e-5063-a588-0c91c3f7f6d1"
+      },
+      {
+        "actual_margin": {
+          "display_value": "0.279000",
+          "exact_value": "0.279000",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "comparison": {
+          "display_value": "-0.085000",
+          "exact_value": "-0.085000",
+          "semantic_direction": "negative",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "customer_segment_id": "9351d7a0-2aa5-5b75-a09e-4af765700b0e",
+        "logistics_product_id": "2a2cb0d3-3ad1-5745-a857-a2d7420fada2"
+      },
+      {
+        "actual_margin": {
+          "display_value": "0.258000",
+          "exact_value": "0.258000",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "comparison": {
+          "display_value": "-0.085000",
+          "exact_value": "-0.085000",
+          "semantic_direction": "negative",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "customer_segment_id": "9351d7a0-2aa5-5b75-a09e-4af765700b0e",
+        "logistics_product_id": "2c6145ea-2a3c-5a64-bcd5-e86363212bf6"
+      }
+    ],
+    "columns": [
+      {
+        "code": "B2C",
+        "id": "f3aa874c-c0d5-5e2c-bf5b-d0e51a9c624c",
+        "name": "国内 B2C 配送"
+      },
+      {
+        "code": "B2B",
+        "id": "65c8d6ca-889e-5c7a-9373-ed00f0de3e3e",
+        "name": "国内 B2B 配送"
+      },
+      {
+        "code": "WAREHOUSE",
+        "id": "19e1306f-0e75-5170-be7c-6b4a7cbc2e4d",
+        "name": "仓配一体"
+      },
+      {
+        "code": "CROSS_BORDER",
+        "id": "6b4b4fd9-39df-5856-8594-be8d34fdd056",
+        "name": "跨境供应链"
+      },
+      {
+        "code": "COLD_CHAIN",
+        "id": "c466369a-77a7-54fb-a501-ea5cdc726662",
+        "name": "冷链物流"
+      },
+      {
+        "code": "REVERSE",
+        "id": "38d51fa6-880e-5063-a588-0c91c3f7f6d1",
+        "name": "逆向物流"
+      },
+      {
+        "code": "M2C",
+        "id": "2a2cb0d3-3ad1-5745-a857-a2d7420fada2",
+        "name": "产地直发 M2C"
+      },
+      {
+        "code": "SAME_DAY",
+        "id": "2c6145ea-2a3c-5a64-bcd5-e86363212bf6",
+        "name": "同城即时配"
+      }
+    ],
+    "comparison_label": "同比",
+    "degradation_message": null,
+    "rows": [
+      {
+        "code": "KEY_ACCOUNT",
+        "id": "158e0a75-4853-5f1a-94b1-da561ccdd70a",
+        "name": "集团大客户"
+      },
+      {
+        "code": "DOMESTIC",
+        "id": "9351d7a0-2aa5-5b75-a09e-4af765700b0e",
+        "name": "国内营销客户"
+      }
+    ],
+    "status": "complete"
+  },
+  "metric_cards": [
+    {
+      "budget": {
+        "display_value": "—",
+        "exact_value": null,
+        "semantic_direction": "neutral",
+        "status": "unavailable",
+        "unavailable_code": "comparison_not_published",
+        "unavailable_message": "当前口径未发布该比较值"
+      },
+      "category": "规模",
+      "companion": null,
+      "metric_code": "orders",
+      "primary": {
+        "display_value": "18191.4357",
+        "exact_value": "18191.4357",
+        "semantic_direction": "neutral",
+        "status": "available",
+        "unavailable_code": null,
+        "unavailable_message": null
+      },
+      "title": "履约订单量",
+      "unit": "order",
+      "yoy": {
+        "display_value": "0.061277",
+        "exact_value": "0.061277",
+        "semantic_direction": "positive",
+        "status": "available",
+        "unavailable_code": null,
+        "unavailable_message": null
+      },
+      "ytd_budget": {
+        "display_value": "—",
+        "exact_value": null,
+        "semantic_direction": "neutral",
+        "status": "unavailable",
+        "unavailable_code": "comparison_not_published",
+        "unavailable_message": "当前口径未发布该比较值"
+      }
+    },
+    {
+      "budget": {
+        "display_value": "-0.019267",
+        "exact_value": "-0.019267",
+        "semantic_direction": "negative",
+        "status": "available",
+        "unavailable_code": null,
+        "unavailable_message": null
+      },
+      "category": "增长",
+      "companion": null,
+      "metric_code": "revenue",
+      "primary": {
+        "display_value": "2480418.6212",
+        "exact_value": "2480418.6212",
+        "semantic_direction": "neutral",
+        "status": "available",
+        "unavailable_code": null,
+        "unavailable_message": null
+      },
+      "title": "营业收入",
+      "unit": "CNY",
+      "yoy": {
+        "display_value": "0.098421",
+        "exact_value": "0.098421",
+        "semantic_direction": "positive",
+        "status": "available",
+        "unavailable_code": null,
+        "unavailable_message": null
+      },
+      "ytd_budget": {
+        "display_value": "-0.019267",
+        "exact_value": "-0.019267",
+        "semantic_direction": "negative",
+        "status": "available",
+        "unavailable_code": null,
+        "unavailable_message": null
+      }
+    },
+    {
+      "budget": {
+        "display_value": "—",
+        "exact_value": null,
+        "semantic_direction": "neutral",
+        "status": "unavailable",
+        "unavailable_code": "comparison_not_published",
+        "unavailable_message": "当前口径未发布该比较值"
+      },
+      "category": "价格/结构",
+      "companion": null,
+      "metric_code": "revenue_per_order",
+      "primary": {
+        "display_value": "136.350900",
+        "exact_value": "136.350900",
+        "semantic_direction": "neutral",
+        "status": "available",
+        "unavailable_code": null,
+        "unavailable_message": null
+      },
+      "title": "单均收入",
+      "unit": "CNY/order",
+      "yoy": {
+        "display_value": "0.035000",
+        "exact_value": "0.035000",
+        "semantic_direction": "positive",
+        "status": "available",
+        "unavailable_code": null,
+        "unavailable_message": null
+      },
+      "ytd_budget": {
+        "display_value": "—",
+        "exact_value": null,
+        "semantic_direction": "neutral",
+        "status": "unavailable",
+        "unavailable_code": "comparison_not_published",
+        "unavailable_message": "当前口径未发布该比较值"
+      }
+    },
+    {
+      "budget": {
+        "display_value": "-0.066577",
+        "exact_value": "-0.066577",
+        "semantic_direction": "negative",
+        "status": "available",
+        "unavailable_code": null,
+        "unavailable_message": null
+      },
+      "category": "盈利",
+      "companion": null,
+      "metric_code": "gross_margin",
+      "primary": {
+        "display_value": "0.278423",
+        "exact_value": "0.278423",
+        "semantic_direction": "neutral",
+        "status": "available",
+        "unavailable_code": null,
+        "unavailable_message": null
+      },
+      "title": "毛利率",
+      "unit": "ratio",
+      "yoy": {
+        "display_value": "-0.085000",
+        "exact_value": "-0.085000",
+        "semantic_direction": "negative",
+        "status": "available",
+        "unavailable_code": null,
+        "unavailable_message": null
+      },
+      "ytd_budget": {
+        "display_value": "-0.016417",
+        "exact_value": "-0.016417",
+        "semantic_direction": "negative",
+        "status": "available",
+        "unavailable_code": null,
+        "unavailable_message": null
+      }
+    },
+    {
+      "budget": {
+        "display_value": "0.066577",
+        "exact_value": "0.066577",
+        "semantic_direction": "negative",
+        "status": "available",
+        "unavailable_code": null,
+        "unavailable_message": null
+      },
+      "category": "成本",
+      "companion": null,
+      "metric_code": "fulfillment_cost_rate",
+      "primary": {
+        "display_value": "0.721577",
+        "exact_value": "0.721577",
+        "semantic_direction": "neutral",
+        "status": "available",
+        "unavailable_code": null,
+        "unavailable_message": null
+      },
+      "title": "履约成本率",
+      "unit": "ratio",
+      "yoy": {
+        "display_value": "0.085000",
+        "exact_value": "0.085000",
+        "semantic_direction": "negative",
+        "status": "available",
+        "unavailable_code": null,
+        "unavailable_message": null
+      },
+      "ytd_budget": {
+        "display_value": "0.016417",
+        "exact_value": "0.016417",
+        "semantic_direction": "negative",
+        "status": "available",
+        "unavailable_code": null,
+        "unavailable_message": null
+      }
+    },
+    {
+      "budget": {
+        "display_value": "-0.339678",
+        "exact_value": "-0.339678",
+        "semantic_direction": "negative",
+        "status": "available",
+        "unavailable_code": null,
+        "unavailable_message": null
+      },
+      "category": "利润",
+      "companion": null,
+      "metric_code": "operating_profit",
+      "primary": {
+        "display_value": "442563.6186",
+        "exact_value": "442563.6186",
+        "semantic_direction": "neutral",
+        "status": "available",
+        "unavailable_code": null,
+        "unavailable_message": null
+      },
+      "title": "经营利润",
+      "unit": "CNY",
+      "yoy": {
+        "display_value": "-0.308512",
+        "exact_value": "-0.308512",
+        "semantic_direction": "negative",
+        "status": "available",
+        "unavailable_code": null,
+        "unavailable_message": null
+      },
+      "ytd_budget": {
+        "display_value": "-0.110361",
+        "exact_value": "-0.110361",
+        "semantic_direction": "negative",
+        "status": "available",
+        "unavailable_code": null,
+        "unavailable_message": null
+      }
+    },
+    {
+      "budget": {
+        "display_value": "—",
+        "exact_value": null,
+        "semantic_direction": "neutral",
+        "status": "unavailable",
+        "unavailable_code": "comparison_not_published",
+        "unavailable_message": "当前口径未发布该比较值"
+      },
+      "category": "营运资本",
+      "companion": {
+        "display_value": "50.245551",
+        "exact_value": "50.245551",
+        "semantic_direction": "neutral",
+        "status": "available",
+        "unavailable_code": null,
+        "unavailable_message": null
+      },
+      "metric_code": "ar_balance",
+      "primary": {
+        "display_value": "3620569.1952",
+        "exact_value": "3620569.1952",
+        "semantic_direction": "neutral",
+        "status": "available",
+        "unavailable_code": null,
+        "unavailable_message": null
+      },
+      "title": "应收账款",
+      "unit": "CNY",
+      "yoy": {
+        "display_value": "0.112257",
+        "exact_value": "0.112257",
+        "semantic_direction": "negative",
+        "status": "available",
+        "unavailable_code": null,
+        "unavailable_message": null
+      },
+      "ytd_budget": {
+        "display_value": "—",
+        "exact_value": null,
+        "semantic_direction": "neutral",
+        "status": "unavailable",
+        "unavailable_code": "comparison_not_published",
+        "unavailable_message": "当前口径未发布该比较值"
+      }
+    },
+    {
+      "budget": {
+        "display_value": "-0.572733",
+        "exact_value": "-0.572733",
+        "semantic_direction": "negative",
+        "status": "available",
+        "unavailable_code": null,
+        "unavailable_message": null
+      },
+      "category": "现金",
+      "companion": {
+        "display_value": "0.550000",
+        "exact_value": "0.550000",
+        "semantic_direction": "neutral",
+        "status": "available",
+        "unavailable_code": null,
+        "unavailable_message": null
+      },
+      "metric_code": "operating_cash_flow",
+      "primary": {
+        "display_value": "243409.9902",
+        "exact_value": "243409.9902",
+        "semantic_direction": "neutral",
+        "status": "available",
+        "unavailable_code": null,
+        "unavailable_message": null
+      },
+      "title": "经营现金流",
+      "unit": "CNY",
+      "yoy": {
+        "display_value": "-0.577424",
+        "exact_value": "-0.577424",
+        "semantic_direction": "negative",
+        "status": "available",
+        "unavailable_code": null,
+        "unavailable_message": null
+      },
+      "ytd_budget": {
+        "display_value": "-0.256860",
+        "exact_value": "-0.256860",
+        "semantic_direction": "negative",
+        "status": "available",
+        "unavailable_code": null,
+        "unavailable_message": null
+      }
+    }
+  ],
+  "product_table": {
+    "comparison_label": "同比",
+    "degradation_message": null,
+    "rows": [
+      {
+        "code": "CROSS_BORDER",
+        "fulfillment_cost_rate": {
+          "display_value": "0.733000",
+          "exact_value": "0.733000",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "gross_margin": {
+          "display_value": "0.267000",
+          "exact_value": "0.267000",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "gross_margin_comparison": {
+          "display_value": "-0.085000",
+          "exact_value": "-0.085000",
+          "semantic_direction": "negative",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "logistics_product_id": "6b4b4fd9-39df-5856-8594-be8d34fdd056",
+        "name": "跨境供应链",
+        "orders": {
+          "display_value": "2182.9723",
+          "exact_value": "2182.9723",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "orders_comparison": {
+          "display_value": "0.061277",
+          "exact_value": "0.061277",
+          "semantic_direction": "positive",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "revenue": {
+          "display_value": "474469.0295",
+          "exact_value": "474469.0295",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "revenue_comparison": {
+          "display_value": "0.098421",
+          "exact_value": "0.098421",
+          "semantic_direction": "positive",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        }
+      },
+      {
+        "code": "WAREHOUSE",
+        "fulfillment_cost_rate": {
+          "display_value": "0.739000",
+          "exact_value": "0.739000",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "gross_margin": {
+          "display_value": "0.261000",
+          "exact_value": "0.261000",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "gross_margin_comparison": {
+          "display_value": "-0.085000",
+          "exact_value": "-0.085000",
+          "semantic_direction": "negative",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "logistics_product_id": "19e1306f-0e75-5170-be7c-6b4a7cbc2e4d",
+        "name": "仓配一体",
+        "orders": {
+          "display_value": "2728.7153",
+          "exact_value": "2728.7153",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "orders_comparison": {
+          "display_value": "0.061277",
+          "exact_value": "0.061277",
+          "semantic_direction": "positive",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "revenue": {
+          "display_value": "417984.6097",
+          "exact_value": "417984.6097",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "revenue_comparison": {
+          "display_value": "0.098421",
+          "exact_value": "0.098421",
+          "semantic_direction": "positive",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        }
+      },
+      {
+        "code": "B2B",
+        "fulfillment_cost_rate": {
+          "display_value": "0.718000",
+          "exact_value": "0.718000",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "gross_margin": {
+          "display_value": "0.282000",
+          "exact_value": "0.282000",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "gross_margin_comparison": {
+          "display_value": "-0.085000",
+          "exact_value": "-0.085000",
+          "semantic_direction": "negative",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "logistics_product_id": "65c8d6ca-889e-5c7a-9373-ed00f0de3e3e",
+        "name": "国内 B2B 配送",
+        "orders": {
+          "display_value": "2910.6296",
+          "exact_value": "2910.6296",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "orders_comparison": {
+          "display_value": "0.061277",
+          "exact_value": "0.061277",
+          "semantic_direction": "positive",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "revenue": {
+          "display_value": "376562.7045",
+          "exact_value": "376562.7045",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "revenue_comparison": {
+          "display_value": "0.098421",
+          "exact_value": "0.098421",
+          "semantic_direction": "positive",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        }
+      },
+      {
+        "code": "B2C",
+        "fulfillment_cost_rate": {
+          "display_value": "0.697000",
+          "exact_value": "0.697000",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "gross_margin": {
+          "display_value": "0.303000",
+          "exact_value": "0.303000",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "gross_margin_comparison": {
+          "display_value": "-0.085000",
+          "exact_value": "-0.085000",
+          "semantic_direction": "negative",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "logistics_product_id": "f3aa874c-c0d5-5e2c-bf5b-d0e51a9c624c",
+        "name": "国内 B2C 配送",
+        "orders": {
+          "display_value": "3638.2871",
+          "exact_value": "3638.2871",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "orders_comparison": {
+          "display_value": "0.061277",
+          "exact_value": "0.061277",
+          "semantic_direction": "positive",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "revenue": {
+          "display_value": "369031.4606",
+          "exact_value": "369031.4606",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "revenue_comparison": {
+          "display_value": "0.098421",
+          "exact_value": "0.098421",
+          "semantic_direction": "positive",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        }
+      },
+      {
+        "code": "COLD_CHAIN",
+        "fulfillment_cost_rate": {
+          "display_value": "0.706000",
+          "exact_value": "0.706000",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "gross_margin": {
+          "display_value": "0.294000",
+          "exact_value": "0.294000",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "gross_margin_comparison": {
+          "display_value": "-0.085000",
+          "exact_value": "-0.085000",
+          "semantic_direction": "negative",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "logistics_product_id": "c466369a-77a7-54fb-a501-ea5cdc726662",
+        "name": "冷链物流",
+        "orders": {
+          "display_value": "1819.1435",
+          "exact_value": "1819.1435",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "orders_comparison": {
+          "display_value": "0.061277",
+          "exact_value": "0.061277",
+          "semantic_direction": "positive",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "revenue": {
+          "display_value": "348320.5016",
+          "exact_value": "348320.5016",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "revenue_comparison": {
+          "display_value": "0.098421",
+          "exact_value": "0.098421",
+          "semantic_direction": "positive",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        }
+      },
+      {
+        "code": "M2C",
+        "fulfillment_cost_rate": {
+          "display_value": "0.721000",
+          "exact_value": "0.721000",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "gross_margin": {
+          "display_value": "0.279000",
+          "exact_value": "0.279000",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "gross_margin_comparison": {
+          "display_value": "-0.085000",
+          "exact_value": "-0.085000",
+          "semantic_direction": "negative",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "logistics_product_id": "2a2cb0d3-3ad1-5745-a857-a2d7420fada2",
+        "name": "产地直发 M2C",
+        "orders": {
+          "display_value": "2001.0581",
+          "exact_value": "2001.0581",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "orders_comparison": {
+          "display_value": "0.061277",
+          "exact_value": "0.061277",
+          "semantic_direction": "positive",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "revenue": {
+          "display_value": "231962.6551",
+          "exact_value": "231962.6551",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "revenue_comparison": {
+          "display_value": "0.098421",
+          "exact_value": "0.098421",
+          "semantic_direction": "positive",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        }
+      },
+      {
+        "code": "REVERSE",
+        "fulfillment_cost_rate": {
+          "display_value": "0.727000",
+          "exact_value": "0.727000",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "gross_margin": {
+          "display_value": "0.273000",
+          "exact_value": "0.273000",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "gross_margin_comparison": {
+          "display_value": "-0.085000",
+          "exact_value": "-0.085000",
+          "semantic_direction": "negative",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "logistics_product_id": "38d51fa6-880e-5063-a588-0c91c3f7f6d1",
+        "name": "逆向物流",
+        "orders": {
+          "display_value": "1455.3149",
+          "exact_value": "1455.3149",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "orders_comparison": {
+          "display_value": "0.061277",
+          "exact_value": "0.061277",
+          "semantic_direction": "positive",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "revenue": {
+          "display_value": "138575.0846",
+          "exact_value": "138575.0846",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "revenue_comparison": {
+          "display_value": "0.098421",
+          "exact_value": "0.098421",
+          "semantic_direction": "positive",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        }
+      },
+      {
+        "code": "SAME_DAY",
+        "fulfillment_cost_rate": {
+          "display_value": "0.742000",
+          "exact_value": "0.742000",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "gross_margin": {
+          "display_value": "0.258000",
+          "exact_value": "0.258000",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "gross_margin_comparison": {
+          "display_value": "-0.085000",
+          "exact_value": "-0.085000",
+          "semantic_direction": "negative",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "logistics_product_id": "2c6145ea-2a3c-5a64-bcd5-e86363212bf6",
+        "name": "同城即时配",
+        "orders": {
+          "display_value": "1455.3149",
+          "exact_value": "1455.3149",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "orders_comparison": {
+          "display_value": "0.061277",
+          "exact_value": "0.061277",
+          "semantic_direction": "positive",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "revenue": {
+          "display_value": "123512.5756",
+          "exact_value": "123512.5756",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "revenue_comparison": {
+          "display_value": "0.098421",
+          "exact_value": "0.098421",
+          "semantic_direction": "positive",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        }
+      }
+    ],
+    "status": "complete"
+  },
+  "profit_bridge": {
+    "comparison_basis": "prior_year",
+    "degradation_message": null,
+    "drivers": [
+      {
+        "contribution": {
+          "display_value": "1467228.4924",
+          "exact_value": "1467228.4924",
+          "semantic_direction": "positive",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "driver_code": "revenue_volume",
+        "label": "收入业务量"
+      },
+      {
+        "contribution": {
+          "display_value": "0.1272",
+          "exact_value": "0.1272",
+          "semantic_direction": "positive",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "driver_code": "revenue_mix",
+        "label": "收入结构"
+      },
+      {
+        "contribution": {
+          "display_value": "889405.4761",
+          "exact_value": "889405.4761",
+          "semantic_direction": "positive",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "driver_code": "revenue_price",
+        "label": "收入单价"
+      },
+      {
+        "contribution": {
+          "display_value": "-287785.5535",
+          "exact_value": "-287785.5535",
+          "semantic_direction": "negative",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "driver_code": "warehousing_cost",
+        "label": "仓储成本"
+      },
+      {
+        "contribution": {
+          "display_value": "-1716840.9615",
+          "exact_value": "-1716840.9615",
+          "semantic_direction": "negative",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "driver_code": "transportation_cost",
+        "label": "运输成本"
+      },
+      {
+        "contribution": {
+          "display_value": "-98978.6301",
+          "exact_value": "-98978.6301",
+          "semantic_direction": "negative",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "driver_code": "other_direct_cost",
+        "label": "其他直接成本"
+      },
+      {
+        "contribution": {
+          "display_value": "-330513.3105",
+          "exact_value": "-330513.3105",
+          "semantic_direction": "negative",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "driver_code": "operating_expense",
+        "label": "期间费用"
+      }
+    ],
+    "impact": {
+      "display_value": "-77484.3599",
+      "exact_value": "-77484.3599",
+      "semantic_direction": "negative",
+      "status": "available",
+      "unavailable_code": null,
+      "unavailable_message": null
+    },
+    "reconciliation_difference": "0.0000",
+    "reconciliation_status": "passed",
+    "status": "complete"
+  },
+  "state": "ready",
+  "trends": {
+    "coverage_count": 12,
+    "degradation_message": null,
+    "expected_count": 12,
+    "missing_months": [],
+    "points": [
+      {
+        "gross_margin": {
+          "display_value": "0.363423",
+          "exact_value": "0.363423",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "metric_snapshot_id": "64d76549-411b-5b5a-a18f-5a25f3fc12a2",
+        "month": "2025-09",
+        "operating_cash_flow": {
+          "display_value": "434895.0303",
+          "exact_value": "434895.0303",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "operating_profit": {
+          "display_value": "557557.7311",
+          "exact_value": "557557.7311",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "revenue": {
+          "display_value": "1967228.5667",
+          "exact_value": "1967228.5667",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        }
+      },
+      {
+        "gross_margin": {
+          "display_value": "0.363423",
+          "exact_value": "0.363423",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "metric_snapshot_id": "9cc35c0d-8300-5e04-97d6-328a872d56c8",
+        "month": "2025-10",
+        "operating_cash_flow": {
+          "display_value": "463257.7556",
+          "exact_value": "463257.7556",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "operating_profit": {
+          "display_value": "593920.1995",
+          "exact_value": "593920.1995",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "revenue": {
+          "display_value": "2095526.1072",
+          "exact_value": "2095526.1072",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        }
+      },
+      {
+        "gross_margin": {
+          "display_value": "0.363423",
+          "exact_value": "0.363423",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "metric_snapshot_id": "51ced363-ed9e-501c-bfc5-989b04537ef3",
+        "month": "2025-11",
+        "operating_cash_flow": {
+          "display_value": "510528.9501",
+          "exact_value": "510528.9501",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "operating_profit": {
+          "display_value": "654524.2951",
+          "exact_value": "654524.2951",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "revenue": {
+          "display_value": "2309355.2823",
+          "exact_value": "2309355.2823",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        }
+      },
+      {
+        "gross_margin": {
+          "display_value": "0.363423",
+          "exact_value": "0.363423",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "metric_snapshot_id": "e66806f2-c31a-54a0-9d88-bfd717c807a6",
+        "month": "2025-12",
+        "operating_cash_flow": {
+          "display_value": "576708.6319",
+          "exact_value": "576708.6319",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "operating_profit": {
+          "display_value": "739370.0409",
+          "exact_value": "739370.0409",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "revenue": {
+          "display_value": "2608716.1571",
+          "exact_value": "2608716.1571",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        }
+      },
+      {
+        "gross_margin": {
+          "display_value": "0.363423",
+          "exact_value": "0.363423",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "metric_snapshot_id": "3f968639-8b95-57e7-b784-cbfde0cffadb",
+        "month": "2026-01",
+        "operating_cash_flow": {
+          "display_value": "415986.5328",
+          "exact_value": "415986.5328",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "operating_profit": {
+          "display_value": "533316.0676",
+          "exact_value": "533316.0676",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "revenue": {
+          "display_value": "1881696.8069",
+          "exact_value": "1881696.8069",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        }
+      },
+      {
+        "gross_margin": {
+          "display_value": "0.363423",
+          "exact_value": "0.363423",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "metric_snapshot_id": "5b1adc6f-ac94-506d-8a08-d59ae53ddec8",
+        "month": "2026-02",
+        "operating_cash_flow": {
+          "display_value": "430167.9024",
+          "exact_value": "430167.9024",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "operating_profit": {
+          "display_value": "551497.3108",
+          "exact_value": "551497.3108",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "revenue": {
+          "display_value": "1945845.6123",
+          "exact_value": "1945845.6123",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        }
+      },
+      {
+        "gross_margin": {
+          "display_value": "0.363423",
+          "exact_value": "0.363423",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "metric_snapshot_id": "ddaf54c9-7576-587f-9025-46c96cce4ba9",
+        "month": "2026-03",
+        "operating_cash_flow": {
+          "display_value": "453803.5058",
+          "exact_value": "453803.5058",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "operating_profit": {
+          "display_value": "581799.3664",
+          "exact_value": "581799.3664",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "revenue": {
+          "display_value": "2052760.2240",
+          "exact_value": "2052760.2240",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        }
+      },
+      {
+        "gross_margin": {
+          "display_value": "0.363423",
+          "exact_value": "0.363423",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "metric_snapshot_id": "b5b1de00-65c0-5d40-a617-1590e9c33417",
+        "month": "2026-04",
+        "operating_cash_flow": {
+          "display_value": "472711.9859",
+          "exact_value": "472711.9859",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "operating_profit": {
+          "display_value": "606041.0076",
+          "exact_value": "606041.0076",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "revenue": {
+          "display_value": "2138291.8986",
+          "exact_value": "2138291.8986",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        }
+      },
+      {
+        "gross_margin": {
+          "display_value": "0.363423",
+          "exact_value": "0.363423",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "metric_snapshot_id": "825ef86d-7126-596b-864a-478b059d8ecd",
+        "month": "2026-05",
+        "operating_cash_flow": {
+          "display_value": "486893.3384",
+          "exact_value": "486893.3384",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "operating_profit": {
+          "display_value": "624222.2287",
+          "exact_value": "624222.2287",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "revenue": {
+          "display_value": "2202440.6273",
+          "exact_value": "2202440.6273",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        }
+      },
+      {
+        "gross_margin": {
+          "display_value": "0.278423",
+          "exact_value": "0.278423",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "metric_snapshot_id": "1e1f0f18-fb13-533c-a606-770e106336dc",
+        "month": "2026-06",
+        "operating_cash_flow": {
+          "display_value": "222426.3678",
+          "exact_value": "222426.3678",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "operating_profit": {
+          "display_value": "404411.5778",
+          "exact_value": "404411.5778",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "revenue": {
+          "display_value": "2266589.4144",
+          "exact_value": "2266589.4144",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        }
+      },
+      {
+        "gross_margin": {
+          "display_value": "0.278423",
+          "exact_value": "0.278423",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "metric_snapshot_id": "9aff71fb-afe8-56f9-8011-f0fd577c9a8f",
+        "month": "2026-07",
+        "operating_cash_flow": {
+          "display_value": "230819.8166",
+          "exact_value": "230819.8166",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "operating_profit": {
+          "display_value": "419672.3937",
+          "exact_value": "419672.3937",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "revenue": {
+          "display_value": "2352121.0915",
+          "exact_value": "2352121.0915",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        }
+      },
+      {
+        "gross_margin": {
+          "display_value": "0.278423",
+          "exact_value": "0.278423",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "metric_snapshot_id": "87d9dfbb-0ac7-5dde-9675-537459961f15",
+        "month": "2026-08",
+        "operating_cash_flow": {
+          "display_value": "243409.9902",
+          "exact_value": "243409.9902",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "operating_profit": {
+          "display_value": "442563.6186",
+          "exact_value": "442563.6186",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "revenue": {
+          "display_value": "2480418.6212",
+          "exact_value": "2480418.6212",
+          "semantic_direction": "neutral",
+          "status": "available",
+          "unavailable_code": null,
+          "unavailable_message": null
+        }
+      }
+    ],
+    "status": "complete"
+  }
+}
