@@ -1,0 +1,77 @@
+{
+  "definition": "flow.analysis.logistics.v1",
+  "finding_rank": [
+    "fulfillment_cost_increase",
+    "revenue_growth",
+    "ar_cash_deterioration",
+    "operating_profit_deterioration"
+  ],
+  "finding_scores": [
+    "87.000000",
+    "82.000000",
+    "64.616601",
+    "53.099374"
+  ],
+  "results": {
+    "ar_cash_impact": {
+      "drivers": [
+        {"amount": "-59763.3857", "code": "aging_1_30"},
+        {"amount": "-85459.7542", "code": "aging_31_60"},
+        {"amount": "-102904.9555", "code": "aging_61_90"},
+        {"amount": "-96068.0886", "code": "aging_90_plus"},
+        {"amount": "-21218.8337", "code": "aging_current"}
+      ],
+      "impact_amount": "-365415.0177",
+      "status": "complete"
+    },
+    "fulfillment_cost_rve": {
+      "drivers": [
+        {"amount": "934003.9796", "code": "volume"},
+        {"amount": "-0.0899", "code": "efficiency"},
+        {"amount": "1169601.2555", "code": "rate"}
+      ],
+      "impact_amount": "2103605.1451",
+      "status": "complete"
+    },
+    "gross_profit_bridge": {
+      "drivers": [
+        {"amount": "1467228.4924", "code": "revenue_volume"},
+        {"amount": "0.1272", "code": "revenue_mix"},
+        {"amount": "889405.4761", "code": "revenue_price"},
+        {"amount": "-287785.5535", "code": "warehousing_cost"},
+        {"amount": "-1716840.9615", "code": "transportation_cost"},
+        {"amount": "-98978.6301", "code": "other_direct_cost"}
+      ],
+      "impact_amount": "253028.9506",
+      "status": "complete"
+    },
+    "operating_profit_bridge": {
+      "drivers": [
+        {"amount": "1467228.4924", "code": "revenue_volume"},
+        {"amount": "0.1272", "code": "revenue_mix"},
+        {"amount": "889405.4761", "code": "revenue_price"},
+        {"amount": "-287785.5535", "code": "warehousing_cost"},
+        {"amount": "-1716840.9615", "code": "transportation_cost"},
+        {"amount": "-98978.6301", "code": "other_direct_cost"},
+        {"amount": "-330513.3105", "code": "operating_expense"}
+      ],
+      "impact_amount": "-77484.3599",
+      "status": "complete"
+    },
+    "revenue_vpm": {
+      "drivers": [
+        {"amount": "1467228.4924", "code": "volume"},
+        {"amount": "0.1272", "code": "mix"},
+        {"amount": "889405.4761", "code": "price"}
+      ],
+      "impact_amount": "2356634.0957",
+      "status": "complete"
+    }
+  },
+  "story_predicates": {
+    "ar_cash_deterioration": true,
+    "fulfillment_cost_increase": true,
+    "operating_profit_deterioration": true,
+    "revenue_growth": true
+  }
+}
