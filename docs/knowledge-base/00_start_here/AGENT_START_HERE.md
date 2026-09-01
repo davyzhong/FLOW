@@ -59,13 +59,14 @@ FLOW 是面向物流供应链企业 Finance BP 的 AI 经营分析工作台：�
 - Phase 3 Intake、Mapping & Quality：完成并通过本地干净检出与 GitHub Actions 验收；
 - Phase 4 Metric Snapshots：完成并通过本地干净检出与 GitHub Actions 验收；
 - Phase 5 Analysis & Findings：完成并通过本地全量回归与 GitHub Actions 11 个 jobs 验收，5 个 typed Playbook、严格对账 Driver、确定性 Finding、Evidence 和不可变 Analysis Run 已落地；
+- Phase 6 Finance BP Dashboard：完成，typed 只读 Dashboard API、高密度真实页面、八指标、趋势、经营利润桥、Findings、产品表、毛利矩阵、完整状态和 Investigation 身份交接已落地并通过浏览器验收；
 - 运行栈：Next.js、FastAPI、Celery、PostgreSQL、Redis、MinIO 已可构建启动；
 - 数据库对象：接入、血缘、标准事实、指标、分析和发布三层 migration 已落地；
 - API 合约：`/api/v1/health`、`/api/v1/workspace` 与生成式 TypeScript 类型已落地；
 - 数据契约：`flow.excel.v1`、10 张工作表标准模板、确定性物流 fixture、已知答案和数据库语义往返已落地；
 - 非标准 Excel 识别与映射、版本化导入和原子发布：已落地；
 - `flow.metrics.logistics.v1` 的 15 个指标、14 条依赖、比较窗口、精确计算轨迹和不可变 Metric Snapshot：已落地；
-- Finance BP 驾驶舱、Investigation、AI Copilot 和报告生成器：尚未开发。
+- 完整 Investigation 证据工作台、AI Copilot 和报告生成器：尚未开发；Phase 6 已提供 Investigation 身份回执壳。
 
 ## 新 Agent 的工作规则
 
@@ -83,4 +84,4 @@ FLOW 是面向物流供应链企业 Finance BP 的 AI 经营分析工作台：�
 
 ## 当前下一步
 
-按照 [V1 主实施路线图](../../superpowers/plans/2026-08-30-flow-v1-master-roadmap.md) 创建 Phase 6“Finance BP Dashboard”详细测试先行计划。页面只读取已发布 Metric Snapshot 和 Analysis Run，不直接访问原始 Excel、canonical 明细或自行计算指标、Driver 与 Finding 排名。Phase 1–5 的验收证据见 `docs/implementation/phase-1-verification.md` 至 `phase-5-verification.md`。
+按照 [V1 主实施路线图](../../superpowers/plans/2026-08-30-flow-v1-master-roadmap.md) 创建 Phase 7“Evidence-first Investigation”详细测试先行计划。从 Phase 6 已保留的 Finding、batch、Metric Snapshot 和 Analysis Run 身份进入，展开同一运行中的 Driver、Evidence、公式、来源和人工复核；不得重新计算经营数字或静默切换快照。Phase 1–6 的验收证据见 `docs/implementation/phase-1-verification.md` 至 `phase-6-verification.md`。

@@ -8,8 +8,19 @@ export type DashboardFilters = NonNullable<
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_FLOW_API_URL ?? "";
 
+function requestUrl(path: string): URL {
+  if (!path.startsWith("/api/v1/") || path.includes("..")) {
+    throw new Error(`FLOW API request path is not allow-listed: ${path}`);
+  }
+  const base =
+    API_BASE_URL === "" && typeof globalThis.location?.origin === "string"
+      ? globalThis.location.origin
+      : API_BASE_URL;
+  return new URL(path, base || undefined);
+}
+
 async function request<T>(path: string, signal?: AbortSignal): Promise<T> {
-  const response = await fetch(`${API_BASE_URL}${path}`, {
+  const response = await fetch(requestUrl(path), {
     headers: { Accept: "application/json" },
     signal,
   });

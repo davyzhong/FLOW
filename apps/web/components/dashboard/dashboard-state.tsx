@@ -54,10 +54,12 @@ export function DashboardLoaded({
         <div className="dashboard-analysis-grid">
           <TrendPanel trends={dashboard.trends} />
           <ProfitBridgePanel bridge={dashboard.profit_bridge} />
+          <FindingsPanel findings={dashboard.findings} />
         </div>
-        <FindingsPanel findings={dashboard.findings} />
-        <ProductPerformanceTable table={dashboard.product_table} />
-        <MarginMatrix matrix={dashboard.margin_matrix} />
+        <div className="dashboard-detail-grid">
+          <ProductPerformanceTable table={dashboard.product_table} />
+          <MarginMatrix matrix={dashboard.margin_matrix} />
+        </div>
       </div>
     </section>
   );

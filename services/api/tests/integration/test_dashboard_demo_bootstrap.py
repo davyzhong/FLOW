@@ -1,10 +1,13 @@
 from __future__ import annotations
 
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from flow_api.dashboard.fixture import DASHBOARD_MONTHS, bootstrap_dashboard_demo
 from flow_api.dashboard.models import ActiveFilters
 from flow_api.dashboard.service import DashboardService
+from flow_api.infrastructure.db import get_engine
+from flow_api.infrastructure.models.intake import AnalysisBatch
 
 from .analysis_run_support import (
     REPOSITORY_ROOT,
@@ -18,6 +21,7 @@ from .analysis_run_support import (
 from .analysis_run_support import (
     analysis_session_fixture as _analysis_session_fixture,  # noqa: F401
 )
+from .intake_service_support import clean
 
 
 def test_dashboard_demo_bootstrap_is_complete_and_idempotent(
@@ -42,3 +46,20 @@ def test_dashboard_demo_bootstrap_is_complete_and_idempotent(
     assert dashboard.context.batch_id == first.batch_id
     assert dashboard.context.metric_snapshot_id == first.metric_snapshot_ids[-1]
     assert dashboard.context.analysis_run_id == first.analysis_run_id
+
+
+def test_intake_cleanup_removes_published_dashboard_graph() -> None:
+    with Session(get_engine(), expire_on_commit=False) as session:
+        publication = bootstrap_dashboard_demo(
+            session,
+            repository_root=REPOSITORY_ROOT,
+        )
+        session.commit()
+
+        clean(session)
+
+        assert session.scalar(
+            select(AnalysisBatch.id).where(
+                AnalysisBatch.id == publication.batch_id
+            )
+        ) is None

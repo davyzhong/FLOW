@@ -1,8 +1,8 @@
 import { expect, test } from "@playwright/test";
 
 for (const viewport of [
-  { width: 1440, height: 900, name: "dashboard-1440-linux.png" },
-  { width: 1920, height: 1080, name: "dashboard-1920-linux.png" },
+  { width: 1440, height: 900, name: "dashboard-1440.png" },
+  { width: 1920, height: 1080, name: "dashboard-1920.png" },
 ]) {
   test(`dashboard visual baseline at ${viewport.width}x${viewport.height}`, async ({ page }) => {
     await page.setViewportSize(viewport);

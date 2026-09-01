@@ -91,6 +91,21 @@
 
 修改 Playbook、比较窗口、策略阈值或评分权重后，必须生成新的 policy hash，并重新验证 Driver 对账、Finding 硬门槛、排名、Evidence 和下游快照消费边界。
 
+## 从 Dashboard / Investigation 交接节点重启
+
+适用场景：修改驾驶舱信息密度、筛选、可视化、状态、Dashboard API，或 Phase 7 Investigation 的进入身份。
+
+建议读取：
+
+1. `docs/superpowers/specs/2026-09-01-flow-v1-phase-6-dashboard-design.md`；
+2. `docs/superpowers/plans/2026-08-30-flow-v1-phase-6-dashboard.md`；
+3. `docs/implementation/phase-6-verification.md`；
+4. `docs/implementation/phase-6-dashboard-fidelity.md`；
+5. 决策日志 D033–D036；
+6. `dashboard-density-v2.html` 和最新 1440/1920 截图基线。
+
+修改 Dashboard Projection 时必须同步复核 OpenAPI/TypeScript 合约、完整身份、Decimal 表示、筛选能力矩阵、降级状态、网络边界和截图基线。修改 Investigation 跳转时必须保证 Finding、batch、Metric Snapshot 和 Analysis Run 四个身份仍共同传递，且与 Phase 7 的证据查询边界一致。
+
 ## 从发布节点重启
 
 适用场景：修改报告结构、增加格式或企业模板。

@@ -202,6 +202,26 @@
 - 决定：Dashboard、Investigation、AI 和报告共同读取已发布且不可变的 Analysis Run；下游不得重新执行分析公式或修改 Finding 排名。
 - 原因：保证所有界面和输出使用同一事实、Driver、证据和策略版本。
 
+## D034 Phase 6 Dashboard 读取边界
+
+- 状态：有效
+- 决定：浏览器只通过 typed `GET /api/v1/dashboard/overview` 读取只读投影；该投影只消费相互绑定的已发布 Metric Snapshot、Analysis Run 及治理元数据。
+- 禁止：浏览器不得读取原始文件、canonical 事实、Metric Value 或 Analysis 持久化接口，也不得重新计算指标、Driver、Finding 资格和排名。
+- 原因：让首个用户界面继承 Phase 1–5 的数字一致性、版本身份和不可变保证。
+
+## D035 Phase 6 Dashboard 桌面信息结构
+
+- 状态：有效
+- 决定：桌面端采用深色工作流侧栏、八指标、趋势/经营利润桥/Findings 三栏分析带、产品表/客户群×产品毛利矩阵双栏明细带；页面只保留一个 `h1`。
+- 响应式：窄桌面允许 Findings 跨栏、明细转单栏；移动端作为可读复核界面，不以牺牲桌面信息密度为代价。
+- 可访问性：滚动表格区域必须可键盘聚焦，表格、矩阵和状态不得只依赖颜色传达含义。
+
+## D036 Investigation 身份交接边界
+
+- 状态：有效
+- 决定：Phase 6 的每个 Finding 跳转必须保留 `finding_id`、`batch_id`、`metric_snapshot_id` 和 `analysis_run_id`，并先由不可变身份回执页确认上下文。
+- 当前边界：Phase 6 不实现证据下钻和评审；Phase 7 在该身份之上建设 Evidence-first Investigation，不得静默切换批次、快照或运行。
+
 ## 未来与未决事项
 
 - 管理层视图和角色权限：未来；

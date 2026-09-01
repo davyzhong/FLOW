@@ -7,7 +7,7 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   workers: 1,
   reporter: process.env.CI ? [["line"], ["html", { open: "never" }]] : "line",
-  snapshotPathTemplate: "{testDir}/__snapshots__/{arg}{ext}",
+  snapshotPathTemplate: "{testDir}/__snapshots__/{arg}-{platform}{ext}",
   use: {
     baseURL: process.env.PLAYWRIGHT_BASE_URL ?? "http://127.0.0.1:13100",
     trace: "retain-on-failure",

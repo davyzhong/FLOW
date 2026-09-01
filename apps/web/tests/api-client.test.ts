@@ -22,8 +22,9 @@ describe("FLOW API client", () => {
     );
 
     await expect(flowApi.getWorkspace()).resolves.toEqual(payload);
+    expect(String(fetchMock.mock.calls[0]?.[0])).toContain("/api/v1/workspace");
     expect(fetchMock).toHaveBeenCalledWith(
-      "/api/v1/workspace",
+      expect.anything(),
       expect.objectContaining({ headers: { Accept: "application/json" } }),
     );
   });
@@ -45,11 +46,14 @@ describe("FLOW API client", () => {
       }),
     ).resolves.toEqual(payload);
     expect(fetchMock).toHaveBeenCalledTimes(1);
-    expect(fetchMock).toHaveBeenCalledWith(
+    expect(String(fetchMock.mock.calls[0]?.[0])).toContain(
       "/api/v1/dashboard/overview?period_view=ytd&customer_segment_id=158e0a75-4853-5f1a-94b1-da561ccdd70a&logistics_product_id=f3aa874c-c0d5-5e2c-bf5b-d0e51a9c624c",
+    );
+    expect(fetchMock).toHaveBeenCalledWith(
+      expect.anything(),
       expect.objectContaining({ headers: { Accept: "application/json" } }),
     );
-    expect(fetchMock.mock.calls[0]?.[0]).not.toContain("canonical");
-    expect(fetchMock.mock.calls[0]?.[0]).not.toContain("metric-values");
+    expect(String(fetchMock.mock.calls[0]?.[0])).not.toContain("canonical");
+    expect(String(fetchMock.mock.calls[0]?.[0])).not.toContain("metric-values");
   });
 });

@@ -62,13 +62,15 @@ export function DashboardApp({
 
   return (
     <main className="dashboard-app">
-      <header className="dashboard-app__header">
-        <div className="dashboard-app__mark" aria-hidden="true">F</div>
-        <div>
-          <p>FLOW · FINANCE INTELLIGENCE</p>
-          <h1>Finance BP 经营驾驶舱</h1>
-        </div>
-      </header>
+      {request.kind !== "loaded" || request.dashboard.state === "empty" ? (
+        <header className="dashboard-app__header">
+          <div className="dashboard-app__mark" aria-hidden="true">F</div>
+          <div>
+            <p>FLOW · FINANCE INTELLIGENCE</p>
+            <h1>Finance BP 经营驾驶舱</h1>
+          </div>
+        </header>
+      ) : null}
       {request.kind === "loading" ? <DashboardLoading /> : null}
       {request.kind === "error" ? <DashboardError retry={retry} /> : null}
       {request.kind === "loaded" ? (

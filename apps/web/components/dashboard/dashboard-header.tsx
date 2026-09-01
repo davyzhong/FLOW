@@ -21,9 +21,9 @@ export function DashboardHeader({
   return (
     <header className="dashboard-header" id="overview">
       <div>
-        <p className="eyebrow">FINANCE BUSINESS PARTNER · 经营总览</p>
-        <h2>集团经营驾驶舱</h2>
-        <p className="dashboard-header__context">截至 {dashboard.context.as_of_month} · 物流与供应链业务</p>
+        <p className="eyebrow">FLOW · FINANCE BUSINESS PARTNER</p>
+        <h1>Finance BP 经营驾驶舱</h1>
+        <p className="dashboard-header__context">集团经营总览 · 截至 {dashboard.context.as_of_month} · 物流与供应链业务</p>
       </div>
       <div className="dashboard-filters" aria-label="驾驶舱筛选器">
         <label>期间

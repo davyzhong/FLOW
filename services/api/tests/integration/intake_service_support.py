@@ -10,6 +10,21 @@ from sqlalchemy.orm import Session
 
 from flow_api.data_contract.contract import load_contract
 from flow_api.infrastructure.db import get_engine
+from flow_api.infrastructure.models.analytics import (
+    AnalysisDriver,
+    AnalysisResult,
+    AnalysisRun,
+    Conclusion,
+    DriverContribution,
+    Evidence,
+    Finding,
+    FindingScoreComponent,
+    MetricDefinition,
+    MetricDefinitionDependency,
+    MetricSnapshot,
+    MetricValue,
+    ReviewEvent,
+)
 from flow_api.infrastructure.models.canonical import (
     Customer,
     CustomerSegment,
@@ -35,6 +50,11 @@ from flow_api.infrastructure.models.intake import (
     StoredObject,
     WarningAcknowledgement,
 )
+from flow_api.infrastructure.models.publishing import (
+    PublicationAttempt,
+    ReportSnapshot,
+    ReportSnapshotItem,
+)
 from flow_api.intake.detector import profile_workbook
 from flow_api.intake.extractor import ExtractedCandidate, extract_candidate_package
 from flow_api.intake.mapping import MappingProposal, load_aliases, propose_mapping
@@ -50,6 +70,22 @@ NONSTANDARD = REPOSITORY_ROOT / "fixtures/workbooks/external_logistics_nonstanda
 STANDARD = REPOSITORY_ROOT / "fixtures/workbooks/flow_standard_v1.xlsx"
 
 MODELS_IN_DELETE_ORDER = (
+    PublicationAttempt,
+    ReportSnapshotItem,
+    ReportSnapshot,
+    ReviewEvent,
+    Conclusion,
+    Evidence,
+    FindingScoreComponent,
+    DriverContribution,
+    Finding,
+    AnalysisDriver,
+    AnalysisResult,
+    AnalysisRun,
+    MetricValue,
+    MetricDefinitionDependency,
+    MetricSnapshot,
+    MetricDefinition,
     FactArCollection,
     FactBudget,
     FactFinancialActual,

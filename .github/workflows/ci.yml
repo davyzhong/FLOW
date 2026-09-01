@@ -53,7 +53,8 @@ jobs:
       - run: >-
           cd services/api && uv run pytest
           tests/domain tests/api tests/test_health.py
-          --ignore=tests/api/test_intake.py -q
+          --ignore=tests/api/test_intake.py
+          --ignore=tests/api/test_dashboard.py -q
 
   integration:
     runs-on: ubuntu-latest
@@ -66,7 +67,7 @@ jobs:
       - run: cd services/api && uv sync --all-groups --frozen
       - run: make infra-up
       - run: cd services/api && uv run alembic upgrade head
-      - run: cd services/api && uv run pytest tests/integration -q
+      - run: cd services/api && uv run pytest tests/integration tests/api/test_dashboard.py -q
 
   data-contract:
     runs-on: ubuntu-latest

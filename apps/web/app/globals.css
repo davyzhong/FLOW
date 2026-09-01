@@ -1,7 +1,8 @@
 :root {
   color-scheme: light;
   font-family:
-    Inter, "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, sans-serif;
+    "Inter Variable", "Noto Sans SC Variable", "PingFang SC", "Microsoft YaHei",
+    system-ui, -apple-system, sans-serif;
   background: #f3f6fa;
   color: #13233a;
 }
@@ -208,7 +209,7 @@ body {
   margin: 0;
   overflow-wrap: anywhere;
   color: #20344f;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-family: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.75rem;
 }
 

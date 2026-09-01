@@ -2,7 +2,7 @@
 
 ## 当前状态摘要
 
-截至 2026-09-01，产品设计和 Phase 1–5 均已完成。六服务栈可以从干净检出构建启动；`flow.excel.v1` 已冻结为首个可执行中间层交换契约；标准 Excel 与非标准外部工作簿可通过同一套 Intake 与 canonical 流程生成等价的受治理 Metric Snapshot。首个物流指标集包含 15 个版本化指标和 14 条依赖边；其上已经建立 5 个确定性 Analysis Playbook、严格对账的 Driver Contributions、4 个高证据 Finding 和不可变 Analysis Run。规范远程仓库为 <https://github.com/davyzhong/FLOW>；下一阶段是 Finance BP Dashboard。
+截至 2026-09-01，产品设计和 Phase 1–6 均已完成。六服务栈可以从干净检出构建启动；`flow.excel.v1` 已冻结为首个可执行中间层交换契约；标准 Excel 与非标准外部工作簿可通过同一套 Intake 与 canonical 流程生成等价的受治理 Metric Snapshot。首个物流指标集包含 15 个版本化指标和 14 条依赖边；其上已经建立 5 个确定性 Analysis Playbook、严格对账的 Driver Contributions、4 个高证据 Finding 和不可变 Analysis Run。首个真实 Finance BP 用户界面现已通过只读 Dashboard Projection API 消费这些发布对象，提供八指标、趋势、经营利润桥、Findings、产品表、毛利矩阵及 Investigation 身份交接。规范远程仓库为 <https://github.com/davyzhong/FLOW>；下一阶段是 Evidence-first Investigation。
 
 ## 阶段时间线
 
@@ -177,15 +177,26 @@
 - 本地全量 API 202 个测试和 GitHub Actions 11 个 jobs 全部通过；
 - 详细证据见 `docs/implementation/phase-5-verification.md`，设计边界见 `docs/superpowers/specs/2026-09-01-flow-v1-phase-5-analysis-design.md`。
 
+### 阶段 15：Phase 6 Finance BP Dashboard
+
+- 发布只读 `GET /api/v1/dashboard/overview`，以已发布 Metric Snapshot 和 Analysis Run 为唯一经营数字边界；
+- Dashboard Projection 固定暴露完整 batch/import/snapshot/run、指标定义和分析策略身份，所有 Decimal 以精确字符串跨越 JSON；
+- 实现当月/YTD 及组织、客户群、物流产品、区域筛选，明确拒绝不支持组合，面板缺失或降级不以零填补；
+- 以同一发布 lineage 提供 12 个月趋势、八个经营财务指标、T12 经营利润桥、排名 Findings、产品表和客户群×产品毛利矩阵；
+- 完成高密度 Finance BP 页面、完整 loading/empty/error/retry/stale/degraded 状态和 Investigation 不可变身份回执；
+- 浏览器经同源代理只访问 typed Dashboard API，不读取原始文件、canonical 明细、Metric Value 或 Analysis 持久化接口；
+- Playwright 覆盖真实数据、筛选、身份交接、网络边界、axe 无障碍和 1440/1920 截图基线；
+- 详细证据见 `docs/implementation/phase-6-verification.md`，视觉对比见 `docs/implementation/phase-6-dashboard-fidelity.md`。
+
 ## 当前尚未完成
 
-- Phase 6–10 在各阶段开工前基于已验证接口形成可执行任务单；
+- Phase 7–10 在各阶段开工前基于已验证接口形成可执行任务单；
 - 指标阈值和预警规则的完整明细；
-- Finance BP 驾驶舱、Investigation 和 AI Copilot；
+- 完整 Investigation 证据工作台和 AI Copilot；
 - PPT、分析 Excel、HTML/PDF 报告渲染器；
-- Phase 6–10 的功能实现与验收数据集；
+- Phase 7–10 的功能实现与验收数据集；
 - 正式品牌命名和 FLOW 的最终英文释义。
 
 ## 当前下一步
 
-按照主路线图创建 Phase 6“Finance BP Dashboard”详细测试先行计划。该阶段必须以已发布 Metric Snapshot 和 Analysis Run 为唯一经营数字边界，落实已批准的高信息密度 Finance BP 首页、全局期间/维度筛选、经营财务趋势、利润桥、影响排序 Findings、客户群×物流产品矩阵和 Investigation 上下文跳转。
+按照主路线图创建 Phase 7“Evidence-first Investigation”详细测试先行计划。Phase 7 应从当前 Finding 跳转保存的 `finding_id`、`batch_id`、`metric_snapshot_id` 和 `analysis_run_id` 开始，只读取同一不可变分析运行下的 Driver、Evidence、公式与来源；实现证据下钻、人工复核、判断/假设分离和 Finding 审批，不允许重新计算 Dashboard 数字或改变已发布 Finding 排名。
