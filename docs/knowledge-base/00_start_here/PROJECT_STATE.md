@@ -2,7 +2,7 @@
 
 ## 当前状态摘要
 
-截至 2026-09-02，产品设计和 Phase 1–9 均已完成。六服务栈可以从干净检出构建启动；`flow.excel.v1` 已冻结为首个可执行中间层交换契约；标准 Excel 与非标准外部工作簿可通过同一套 Intake 与 canonical 流程生成等价的受治理 Metric Snapshot。首个物流指标集包含 15 个版本化指标和 14 条依赖边；其上已经建立 5 个确定性 Analysis Playbook、严格对账的 Driver Contributions、4 个高证据 Finding 和不可变 Analysis Run。首个真实 Finance BP 用户界面现已通过只读 Dashboard Projection API 消费这些发布对象，提供八指标、趋势、经营利润桥、Findings、产品表、毛利矩阵及 Investigation 身份交接。首个证据优先 Investigation 工作台现已受控运行：Finding/Evidence 状态机、追加式 ReviewEvent、typed Investigation API、驱动桥与公式引擎版本上下文、文件/工作表/行级源记录血缘、结论四要素与证据复核均已落地并通过 `make test-investigation-e2e` 验收。规范远程仓库为 <https://github.com/davyzhong/FLOW>；下一阶段是 AI Copilot。
+截至 2026-09-02，产品设计和 Phase 1–10 均已完成，主实施路线图全部阶段关闭。六服务栈可以从干净检出构建启动；`flow.excel.v1` 已冻结为首个可执行中间层交换契约；标准 Excel 与非标准外部工作簿可通过同一套 Intake 与 canonical 流程生成等价的受治理 Metric Snapshot。首个物流指标集包含 15 个版本化指标和 14 条依赖边；其上已经建立 5 个确定性 Analysis Playbook、严格对账的 Driver Contributions、4 个高证据 Finding 和不可变 Analysis Run。首个真实 Finance BP 用户界面现已通过只读 Dashboard Projection API 消费这些发布对象，提供八指标、趋势、经营利润桥、Findings、产品表、毛利矩阵及 Investigation 身份交接。首个证据优先 Investigation 工作台现已受控运行：Finding/Evidence 状态机、追加式 ReviewEvent、typed Investigation API、驱动桥与公式引擎版本上下文、文件/工作表/行级源记录血缘、结论四要素与证据复核均已落地并通过 `make test-investigation-e2e` 验收。规范远程仓库为 <https://github.com/davyzhong/FLOW>；下一阶段是 AI Copilot。
 
 ## 阶段时间线
 
@@ -213,6 +213,12 @@
 - 发布尝试逐次持久化（queued→running→succeeded/failed），失败可独立重试而无需重建快照；存储可注入以便快速测试；
 - `make test-publishing-golden` 与 `report-golden` CI 门禁：从四个产物中提取规范关键值（报告版本、批次/快照/运行 ID、全部指标本期值、发现影响精确金额）并验证跨格式一致；
 - 详见 `docs/implementation/phase-9-verification.md`。
+
+### 阶段 19：Phase 10 Acceptance Suite
+
+- 建立 `make acceptance` 总验收命令：串联合同往返、指标已知答案、分析不变量、接入端到端、发布黄金、调查端到端与驾驶舱端到端七道门禁；
+- CI 与本地验收共用同一套门禁脚本，Phase 1–10 的 V1 验收标准全部自动化；
+- 备份演练与深度可观测性按未决的部署拓扑顺延（见 `docs/implementation/phase-10-acceptance.md`）。
 
 ## 当前尚未完成
 

@@ -203,6 +203,8 @@ jobs:
           python-version: "3.13"
           enable-cache: true
       - run: cd services/api && uv sync --all-groups --frozen
+      - run: make infra-up
+      - run: cd services/api && uv run alembic upgrade head
       - run: make test-copilot-evals
 
   migrations:

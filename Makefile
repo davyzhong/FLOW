@@ -77,3 +77,6 @@ test-copilot-evals:
 
 test-publishing-golden: infra-up
 	bash scripts/test_publishing_golden.sh
+
+acceptance: infra-up
+	bash scripts/acceptance.sh
