@@ -85,4 +85,4 @@ FLOW 是面向物流供应链企业 Finance BP 的 AI 经营分析工作台：�
 
 ## 当前下一步
 
-按照 [V1 主实施路线图](../../superpowers/plans/2026-08-30-flow-v1-master-roadmap.md) 创建 Phase 8“AI Copilot”详细测试先行计划：定义 provider 中立协议与确定性 fake、只读身份绑定上下文包、结构化输出（事实/判断/假设分离并强制引用对象 ID）、以及固定评估用例。Phase 1–7 的验收证据见 `docs/implementation/phase-1-verification.md` 至 `phase-7-verification.md`。
+V1 主实施路线图 Phase 1–10 已全部完成；后续工作从“可重启节点”出发：管理层视图与角色权限、Issue/Action 闭环、滚动预测、部署拓扑与备份演练均属 V1 之后。修改任何已冻结契约（数据、指标、分析、发布）前，先查阅决策日志与变更影响图。Phase 1–10 的验收证据见 `docs/implementation/phase-1-verification.md` 至 `phase-10-acceptance.md`。
