@@ -24,7 +24,11 @@ from flow_api.dashboard.models import (
     FilterOptions,
     FindingItem,
     Highlight,
+    MarginMatrix,
+    MatrixCell,
     MetricCard,
+    ProductPerformance,
+    ProductRow,
     ProfitBridge,
     TrendPanel,
     TrendPoint,
@@ -60,6 +64,12 @@ class DashboardAnalysisProjection:
     profit_bridge: ProfitBridge
     findings: tuple[FindingItem, ...]
     highlights: tuple[Highlight, ...]
+
+
+@dataclass(frozen=True, slots=True)
+class DashboardDimensionViews:
+    product_table: ProductPerformance
+    margin_matrix: MarginMatrix
 
 
 CARD_DEFINITIONS = (
@@ -260,6 +270,215 @@ class DashboardService:
             profit_bridge=bridge,
             findings=findings,
             highlights=highlights,
+        )
+
+    def get_dimension_views(self, session: Session) -> DashboardDimensionViews:
+        bundle = self.repository.get_latest(session)
+        options = self._filter_options(bundle)
+        products = options.dimensions[2].options
+        segments = options.dimensions[1].options
+        return DashboardDimensionViews(
+            product_table=self._product_table(bundle, products),
+            margin_matrix=self._margin_matrix(bundle, segments, products),
+        )
+
+    def _product_table(
+        self,
+        bundle: DashboardSourceBundle,
+        products: tuple[DimensionOption, ...],
+    ) -> ProductPerformance:
+        filters_by_product = {
+            product.id: ActiveFilters(
+                period_view="month",
+                logistics_product_id=product.id,
+                is_total_scope=False,
+            )
+            for product in products
+        }
+
+        def has_all(comparison_types: dict[str, str]) -> bool:
+            return all(
+                self._find_value(
+                    bundle,
+                    metric_code,
+                    comparison_type,
+                    filters_by_product[product.id],
+                )
+                is not None
+                for product in products
+                for metric_code, comparison_type in comparison_types.items()
+            )
+
+        budget_types = {
+            "revenue": "budget_variance_month_pct",
+            "orders": "budget_variance_month_pct",
+            "gross_margin": "budget_variance_month",
+        }
+        yoy_types = {
+            "revenue": "yoy_variance_month_pct",
+            "orders": "yoy_variance_month_pct",
+            "gross_margin": "yoy_variance_month",
+        }
+        comparison_label: Literal["预算", "同比", "不可用"]
+        if has_all(budget_types):
+            comparison_label = "预算"
+            comparison_types = budget_types
+        elif has_all(yoy_types):
+            comparison_label = "同比"
+            comparison_types = yoy_types
+        else:
+            comparison_label = "不可用"
+            comparison_types = yoy_types
+
+        rows: list[ProductRow] = []
+        for product in products:
+            filters = filters_by_product[product.id]
+            rows.append(
+                ProductRow(
+                    logistics_product_id=product.id,
+                    code=product.code,
+                    name=product.name,
+                    revenue=self._project_value(
+                        bundle, "revenue", "actual_month", filters, primary=True
+                    ),
+                    orders=self._project_value(
+                        bundle, "orders", "actual_month", filters, primary=True
+                    ),
+                    gross_margin=self._project_value(
+                        bundle,
+                        "gross_margin",
+                        "actual_month",
+                        filters,
+                        primary=True,
+                    ),
+                    fulfillment_cost_rate=self._project_value(
+                        bundle,
+                        "fulfillment_cost_rate",
+                        "actual_month",
+                        filters,
+                        primary=True,
+                    ),
+                    revenue_comparison=self._project_value(
+                        bundle,
+                        "revenue",
+                        comparison_types["revenue"],
+                        filters,
+                        comparison=True,
+                    ),
+                    orders_comparison=self._project_value(
+                        bundle,
+                        "orders",
+                        comparison_types["orders"],
+                        filters,
+                        comparison=True,
+                    ),
+                    gross_margin_comparison=self._project_value(
+                        bundle,
+                        "gross_margin",
+                        comparison_types["gross_margin"],
+                        filters,
+                        comparison=True,
+                    ),
+                )
+            )
+        rows.sort(
+            key=lambda row: (
+                row.revenue.exact_value is not None,
+                row.revenue.exact_value or Decimal("0"),
+                row.code,
+            ),
+            reverse=True,
+        )
+        complete = comparison_label != "不可用" and all(
+            all(
+                value.status == "available"
+                for value in (
+                    row.revenue,
+                    row.orders,
+                    row.gross_margin,
+                    row.fulfillment_cost_rate,
+                    row.revenue_comparison,
+                    row.orders_comparison,
+                    row.gross_margin_comparison,
+                )
+            )
+            for row in rows
+        )
+        return ProductPerformance(
+            status="complete" if complete else "degraded",
+            comparison_label=comparison_label,
+            rows=tuple(rows),
+            degradation_message=None if complete else "部分产品指标或比较值未发布",
+        )
+
+    def _margin_matrix(
+        self,
+        bundle: DashboardSourceBundle,
+        segments: tuple[DimensionOption, ...],
+        products: tuple[DimensionOption, ...],
+    ) -> MarginMatrix:
+        filters_by_cell = {
+            (segment.id, product.id): ActiveFilters(
+                period_view="month",
+                customer_segment_id=segment.id,
+                logistics_product_id=product.id,
+                is_total_scope=False,
+            )
+            for segment in segments
+            for product in products
+        }
+
+        def comparison_available(comparison_type: str) -> bool:
+            return all(
+                self._find_value(bundle, "gross_margin", comparison_type, filters)
+                is not None
+                for filters in filters_by_cell.values()
+            )
+
+        comparison_label: Literal["预算", "同比", "不可用"]
+        if comparison_available("budget_variance_month"):
+            comparison_label = "预算"
+            comparison_type = "budget_variance_month"
+        elif comparison_available("yoy_variance_month"):
+            comparison_label = "同比"
+            comparison_type = "yoy_variance_month"
+        else:
+            comparison_label = "不可用"
+            comparison_type = "yoy_variance_month"
+        cells = tuple(
+            MatrixCell(
+                customer_segment_id=segment.id,
+                logistics_product_id=product.id,
+                actual_margin=self._project_value(
+                    bundle,
+                    "gross_margin",
+                    "actual_month",
+                    filters_by_cell[(segment.id, product.id)],
+                    primary=True,
+                ),
+                comparison=self._project_value(
+                    bundle,
+                    "gross_margin",
+                    comparison_type,
+                    filters_by_cell[(segment.id, product.id)],
+                    comparison=True,
+                ),
+            )
+            for segment in segments
+            for product in products
+        )
+        complete = comparison_label != "不可用" and all(
+            cell.actual_margin.status == "available"
+            and cell.comparison.status == "available"
+            for cell in cells
+        )
+        return MarginMatrix(
+            status="complete" if complete else "degraded",
+            comparison_label=comparison_label,
+            rows=segments,
+            columns=products,
+            cells=cells,
+            degradation_message=None if complete else "部分矩阵指标或比较值未发布",
         )
 
     @staticmethod
@@ -606,6 +825,7 @@ class DashboardService:
 __all__ = [
     "DashboardCoreProjection",
     "DashboardAnalysisProjection",
+    "DashboardDimensionViews",
     "DashboardFilterError",
     "DashboardService",
 ]
