@@ -7,6 +7,8 @@ import pytest
 from sqlalchemy import delete
 from sqlalchemy.orm import Session
 
+from flow_api.analysis.policy import load_analysis_policy
+from flow_api.analysis.service import AnalysisRunService
 from flow_api.infrastructure.models.analytics import (
     AnalysisDriver,
     AnalysisResult,
@@ -49,6 +51,14 @@ def publish_snapshot(session: Session):
     _, batch, _ = _publish_reference(session)
     return MetricSnapshotService().create_snapshot(
         session, batch_id=batch.id, as_of_month=202608, catalog=CATALOG
+    )
+
+
+def publish_analysis_run(session: Session) -> AnalysisRun:
+    snapshot = publish_snapshot(session)
+    policy = load_analysis_policy(Path(ANALYSIS_POLICY))
+    return AnalysisRunService().create_run(
+        session, snapshot_id=snapshot.id, loaded_policy=policy
     )
 
 
