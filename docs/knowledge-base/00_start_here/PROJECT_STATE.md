@@ -2,7 +2,7 @@
 
 ## 当前状态摘要
 
-截至 2026-09-01，产品设计和 Phase 1–4 均已完成。六服务栈可以从干净检出构建启动；`flow.excel.v1` 已冻结为首个可执行中间层交换契约；标准 Excel 与非标准外部工作簿可通过同一套 Intake 与 canonical 流程生成等价的受治理 Metric Snapshot。首个物流指标集包含 15 个版本化指标、14 条依赖边、月度/YTD/预算/同比/T12 比较、精确计算轨迹和不可变发布身份。本地、干净检出与 GitHub Actions 十个 jobs 全部通过。规范远程仓库为 <https://github.com/davyzhong/FLOW>；下一阶段是 Analysis & Findings。
+截至 2026-09-01，产品设计和 Phase 1–5 均已完成。六服务栈可以从干净检出构建启动；`flow.excel.v1` 已冻结为首个可执行中间层交换契约；标准 Excel 与非标准外部工作簿可通过同一套 Intake 与 canonical 流程生成等价的受治理 Metric Snapshot。首个物流指标集包含 15 个版本化指标和 14 条依赖边；其上已经建立 5 个确定性 Analysis Playbook、严格对账的 Driver Contributions、4 个高证据 Finding 和不可变 Analysis Run。规范远程仓库为 <https://github.com/davyzhong/FLOW>；下一阶段是 Finance BP Dashboard。
 
 ## 阶段时间线
 
@@ -165,16 +165,27 @@
 - 本地、干净检出和 GitHub Actions 十个 jobs 全部通过；
 - 详细证据见 `docs/implementation/phase-4-verification.md`，完整口径见 `docs/metrics/flow-v1-metrics.md`。
 
+### 阶段 14：Phase 5 Analysis & Findings
+
+- 冻结 `flow.analysis.logistics.v1` 策略集和 typed playbook 共同协议；
+- 实现 Revenue V/P/M、履约成本 R/V/E、毛利桥、经营利润桥和 AR 现金影响 5 个分析结果；
+- 所有金额使用 Decimal，Driver Contributions 与影响金额在 `0.01 CNY` 内严格对账并保留计算轨迹；
+- 建立 materiality、persistence、证据完整性和管理相关性四项透明评分，生成 4 个确定性 Finding；
+- 每个 Finding 保存 5 个已验证 Evidence，对缺字段和无法匹配的 mix cell 明确降级且不生成推测性 Finding；
+- 建立 `building → published` 原子发布、完整身份幂等、发布后不可变和故障回滚；
+- 新增 `make test-analysis-invariants` 与 GitHub Actions `analysis-invariants` 门禁；
+- 本地全量 API 202 个测试和 GitHub Actions 11 个 jobs 全部通过；
+- 详细证据见 `docs/implementation/phase-5-verification.md`，设计边界见 `docs/superpowers/specs/2026-09-01-flow-v1-phase-5-analysis-design.md`。
+
 ## 当前尚未完成
 
-- 用户对正式规格文件的最后一次文档审阅；
-- Phase 5–10 在各阶段开工前基于已验证接口形成可执行任务单；
+- Phase 6–10 在各阶段开工前基于已验证接口形成可执行任务单；
 - 指标阈值和预警规则的完整明细；
 - Finance BP 驾驶舱、Investigation 和 AI Copilot；
 - PPT、分析 Excel、HTML/PDF 报告渲染器；
-- Phase 5–10 的功能实现与验收数据集；
+- Phase 6–10 的功能实现与验收数据集；
 - 正式品牌命名和 FLOW 的最终英文释义。
 
 ## 当前下一步
 
-按照主路线图创建 Phase 5“Analysis & Findings”详细测试先行计划。该阶段只读取已发布 Metric Snapshot 与受约束 canonical 明细 repository，建立利润/现金 Driver Model、variance bridge、Finding 候选、影响排序、证据引用和可重现性验收。
+按照主路线图创建 Phase 6“Finance BP Dashboard”详细测试先行计划。该阶段必须以已发布 Metric Snapshot 和 Analysis Run 为唯一经营数字边界，落实已批准的高信息密度 Finance BP 首页、全局期间/维度筛选、经营财务趋势、利润桥、影响排序 Findings、客户群×物流产品矩阵和 Investigation 上下文跳转。

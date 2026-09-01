@@ -83,6 +83,14 @@
 3. Investigation 原型；
 4. 报告资料中的瀑布图、因果链和利润漏损页面。
 
+当前可执行分析基线还应读取：
+
+5. `docs/superpowers/specs/2026-09-01-flow-v1-phase-5-analysis-design.md`；
+6. `docs/superpowers/plans/2026-09-01-flow-v1-phase-5-analysis.md`；
+7. `docs/implementation/phase-5-verification.md`。
+
+修改 Playbook、比较窗口、策略阈值或评分权重后，必须生成新的 policy hash，并重新验证 Driver 对账、Finding 硬门槛、排名、Evidence 和下游快照消费边界。
+
 ## 从发布节点重启
 
 适用场景：修改报告结构、增加格式或企业模板。
@@ -104,4 +112,3 @@
 - 新方案的生效范围；
 - 受影响的文档、数据对象、页面和测试；
 - 是否需要迁移历史数据或重新生成报告。
-
