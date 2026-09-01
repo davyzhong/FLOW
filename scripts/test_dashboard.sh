@@ -27,7 +27,7 @@ cleanup() {
 trap cleanup EXIT
 
 (cd services/api && uv run alembic upgrade head)
-(cd services/api && uv run python ../../scripts/seed_dashboard_demo.py)
+(cd services/api && uv run python ../../scripts/seed_dashboard_demo.py --fresh-batch)
 
 (cd services/api && uv run uvicorn flow_api.main:app --host 127.0.0.1 --port 18080) \
   >"${dashboard_logs}/api.log" 2>&1 &
