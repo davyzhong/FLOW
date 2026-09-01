@@ -65,6 +65,7 @@ jobs:
           enable-cache: true
       - run: cd services/api && uv sync --all-groups --frozen
       - run: make infra-up
+      - run: cd services/api && uv run alembic upgrade head
       - run: cd services/api && uv run pytest tests/integration -q
 
   data-contract:
