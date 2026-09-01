@@ -66,8 +66,7 @@ body {
   font-weight: 800;
 }
 
-.dashboard-state,
-.dashboard-loaded {
+.dashboard-state {
   max-width: 1120px;
   min-height: 360px;
   margin: 0 auto;
@@ -114,30 +113,6 @@ body {
 .dashboard-state-banner--degraded {
   color: #8a5b0a;
   background: #fff8e8;
-}
-
-.dashboard-preview-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
-  padding: 1rem;
-}
-
-.dashboard-preview-grid > div {
-  display: grid;
-  gap: 0.25rem;
-  border: 1px solid #e3eaf3;
-  border-radius: 0.7rem;
-  padding: 1rem;
-}
-
-.dashboard-preview-grid strong {
-  font-size: 1.5rem;
-}
-
-.dashboard-preview-grid span {
-  color: #607089;
-  font-size: 0.8rem;
 }
 
 @keyframes dashboard-spin {

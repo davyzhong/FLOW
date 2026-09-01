@@ -1,5 +1,14 @@
-import type { DashboardResponse } from "../../lib/api/client";
+import type { DashboardFilters, DashboardResponse } from "../../lib/api/client";
 import { dashboardStateMessage } from "./dashboard-format";
+import { DashboardHeader } from "./dashboard-header";
+import { DataStatusBar } from "./data-status-bar";
+import { FindingsPanel } from "./findings-panel";
+import { MarginMatrix } from "./margin-matrix";
+import { MetricGrid } from "./metric-grid";
+import { ProductPerformanceTable } from "./product-performance-table";
+import { ProfitBridgePanel } from "./profit-bridge-panel";
+import { TrendPanel } from "./trend-panel";
+import { WorkflowNav } from "./workflow-nav";
 
 export function DashboardLoading() {
   return (
@@ -21,29 +30,34 @@ export function DashboardError({ retry }: { retry: () => void }) {
   );
 }
 
-export function DashboardLoaded({ dashboard }: { dashboard: DashboardResponse }) {
+export function DashboardLoaded({
+  dashboard,
+  onFiltersChange,
+}: {
+  dashboard: DashboardResponse;
+  onFiltersChange?: (filters: DashboardFilters) => void;
+}) {
   const message = dashboardStateMessage(dashboard.state);
   if (dashboard.state === "empty") {
     return <div className="dashboard-state dashboard-state--empty">{message}</div>;
   }
   return (
     <section className="dashboard-loaded" aria-label="经营驾驶舱内容">
-      <div className={`dashboard-state-banner dashboard-state-banner--${dashboard.state}`}>
-        {message}
-      </div>
-      <div className="dashboard-preview-grid" aria-label="驾驶舱摘要">
-        <div>
-          <strong>{dashboard.metric_cards.length}</strong>
-          <span>核心指标</span>
+      <WorkflowNav />
+      <div className="dashboard-workspace">
+        <DashboardHeader dashboard={dashboard} onFiltersChange={onFiltersChange} />
+        <div className={`dashboard-state-banner dashboard-state-banner--${dashboard.state}`}>
+          {message}
         </div>
-        <div>
-          <strong>{dashboard.trends.coverage_count}/12</strong>
-          <span>趋势覆盖</span>
+        <DataStatusBar dashboard={dashboard} />
+        <MetricGrid cards={dashboard.metric_cards} />
+        <div className="dashboard-analysis-grid">
+          <TrendPanel trends={dashboard.trends} />
+          <ProfitBridgePanel bridge={dashboard.profit_bridge} />
         </div>
-        <div>
-          <strong>{dashboard.findings.length}</strong>
-          <span>经营发现</span>
-        </div>
+        <FindingsPanel findings={dashboard.findings} />
+        <ProductPerformanceTable table={dashboard.product_table} />
+        <MarginMatrix matrix={dashboard.margin_matrix} />
       </div>
     </section>
   );

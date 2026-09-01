@@ -32,7 +32,7 @@ export function DashboardApp({
   loadDashboard?: DashboardLoad;
   initialFilters?: DashboardFilters;
 }) {
-  const [filters] = useState<DashboardFilters>(initialFilters);
+  const [filters, setFilters] = useState<DashboardFilters>(initialFilters);
   const [requestKey, setRequestKey] = useState(0);
   const [request, setRequest] = useState<DashboardRequestState>({ kind: "loading" });
   const serializedFilters = useMemo(() => queryString(filters), [filters]);
@@ -71,7 +71,9 @@ export function DashboardApp({
       </header>
       {request.kind === "loading" ? <DashboardLoading /> : null}
       {request.kind === "error" ? <DashboardError retry={retry} /> : null}
-      {request.kind === "loaded" ? <DashboardLoaded dashboard={request.dashboard} /> : null}
+      {request.kind === "loaded" ? (
+        <DashboardLoaded dashboard={request.dashboard} onFiltersChange={setFilters} />
+      ) : null}
     </main>
   );
 }
