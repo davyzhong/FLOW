@@ -140,3 +140,99 @@ body {
   color: white;
   font-weight: 700;
 }
+
+.investigation-shell {
+  min-height: 100vh;
+  padding: clamp(1.25rem, 5vw, 4rem);
+  background: #eef2f7;
+}
+
+.investigation-shell__back {
+  display: inline-block;
+  margin-bottom: 1rem;
+  color: #1769e8;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.investigation-receipt {
+  max-width: 820px;
+  margin: 0 auto;
+  border: 1px solid #dce4ee;
+  border-top: 4px solid #1769e8;
+  border-radius: 0.75rem;
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+  background: #fff;
+  box-shadow: 0 18px 45px rgb(24 48 79 / 8%);
+}
+
+.investigation-receipt h1 {
+  margin: 0.35rem 0 0;
+  color: #15243b;
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+}
+
+.investigation-receipt__lead {
+  max-width: 650px;
+  color: #66758b;
+  line-height: 1.7;
+}
+
+.investigation-receipt dl {
+  display: grid;
+  gap: 1px;
+  margin: 1.5rem 0;
+  overflow: hidden;
+  border: 1px solid #dfe6ef;
+  border-radius: 0.5rem;
+  background: #dfe6ef;
+}
+
+.investigation-receipt dl > div {
+  display: grid;
+  grid-template-columns: 130px minmax(0, 1fr);
+  gap: 1rem;
+  padding: 0.75rem 0.9rem;
+  background: #fff;
+}
+
+.investigation-receipt dt {
+  color: #66758b;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.investigation-receipt dd {
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: #20344f;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.75rem;
+}
+
+.investigation-receipt__next {
+  display: grid;
+  gap: 0.3rem;
+  border-left: 3px solid #1769e8;
+  padding: 0.8rem 1rem;
+  background: #f2f7ff;
+}
+
+.investigation-receipt__next strong {
+  color: #17355f;
+  font-size: 0.9rem;
+}
+
+.investigation-receipt__next span {
+  color: #66758b;
+  font-size: 0.75rem;
+}
+
+@media (max-width: 560px) {
+  .investigation-receipt dl > div {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
+}
