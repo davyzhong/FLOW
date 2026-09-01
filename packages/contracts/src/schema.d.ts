@@ -191,10 +191,45 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/dashboard/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Dashboard Overview */
+        get: operations["dashboard_overview_api_v1_dashboard_overview_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** ActiveFilters */
+        ActiveFilters: {
+            /**
+             * Period View
+             * @enum {string}
+             */
+            period_view: "month" | "ytd";
+            /** Organization Id */
+            organization_id?: string | null;
+            /** Customer Segment Id */
+            customer_segment_id?: string | null;
+            /** Logistics Product Id */
+            logistics_product_id?: string | null;
+            /** Region Id */
+            region_id?: string | null;
+            /** Is Total Scope */
+            is_total_scope: boolean;
+        };
         /** BatchCreateRequest */
         BatchCreateRequest: {
             /** Name */
@@ -227,6 +262,14 @@ export interface components {
              */
             workbook: string;
         };
+        /** BridgeDriver */
+        BridgeDriver: {
+            /** Driver Code */
+            driver_code: string;
+            /** Label */
+            label: string;
+            contribution: components["schemas"]["DashboardValue"];
+        };
         /** ColumnProfileResponse */
         ColumnProfileResponse: {
             /** Column */
@@ -241,6 +284,179 @@ export interface components {
             nullable: boolean;
             /** Non Null Count */
             non_null_count: number;
+        };
+        /** DashboardContext */
+        DashboardContext: {
+            /**
+             * Batch Id
+             * Format: uuid
+             */
+            batch_id: string;
+            /**
+             * Import Version Id
+             * Format: uuid
+             */
+            import_version_id: string;
+            /**
+             * Metric Snapshot Id
+             * Format: uuid
+             */
+            metric_snapshot_id: string;
+            /**
+             * Analysis Run Id
+             * Format: uuid
+             */
+            analysis_run_id: string;
+            /** As Of Month */
+            as_of_month: string;
+            /** Metric Definition Set Id */
+            metric_definition_set_id: string;
+            /** Metric Definition Set Hash */
+            metric_definition_set_hash: string;
+            /** Metric Engine Version */
+            metric_engine_version: string;
+            /** Analysis Policy Id */
+            analysis_policy_id: string;
+            /** Analysis Policy Hash */
+            analysis_policy_hash: string;
+            /** Analysis Engine Version */
+            analysis_engine_version: string;
+            /**
+             * Generated At
+             * Format: date-time
+             */
+            generated_at: string;
+        };
+        /** DashboardDegradation */
+        DashboardDegradation: {
+            /**
+             * Panel
+             * @enum {string}
+             */
+            panel: "metric_cards" | "trends" | "profit_bridge" | "findings" | "product_table" | "margin_matrix";
+            /** Code */
+            code: string;
+            /** Message */
+            message: string;
+        };
+        /** DashboardErrorResponse */
+        DashboardErrorResponse: {
+            detail: components["schemas"]["ErrorDetail"];
+        };
+        /**
+         * DashboardOverviewResponse
+         * @description Public read-only Finance BP dashboard response.
+         */
+        DashboardOverviewResponse: {
+            /**
+             * State
+             * @enum {string}
+             */
+            state: "ready" | "empty" | "error" | "degraded" | "stale";
+            context: components["schemas"]["DashboardContext"];
+            filter_options: components["schemas"]["FilterOptions"];
+            active_filters: components["schemas"]["ActiveFilters"];
+            data_status: components["schemas"]["DataStatus"];
+            /** Metric Cards */
+            metric_cards: components["schemas"]["MetricCard"][];
+            trends: components["schemas"]["TrendPanel"];
+            profit_bridge: components["schemas"]["ProfitBridge"];
+            /** Findings */
+            findings: components["schemas"]["FindingItem"][];
+            product_table: components["schemas"]["ProductPerformance"];
+            margin_matrix: components["schemas"]["MarginMatrix"];
+            /** Highlights */
+            highlights: components["schemas"]["Highlight"][];
+            /** Degradations */
+            degradations: components["schemas"]["DashboardDegradation"][];
+        };
+        /** DashboardValue */
+        DashboardValue: {
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "available" | "unavailable" | "degraded";
+            /** Exact Value */
+            exact_value?: string | null;
+            /** Display Value */
+            display_value: string;
+            /**
+             * Semantic Direction
+             * @enum {string}
+             */
+            semantic_direction: "positive" | "negative" | "warning" | "neutral";
+            /** Unavailable Code */
+            unavailable_code?: string | null;
+            /** Unavailable Message */
+            unavailable_message?: string | null;
+        };
+        /** DataStatus */
+        DataStatus: {
+            /**
+             * Batch Status
+             * @enum {string}
+             */
+            batch_status: "draft" | "validating" | "blocked" | "ready" | "published";
+            /**
+             * Import Status
+             * @enum {string}
+             */
+            import_status: "draft" | "validating" | "blocked" | "ready" | "published";
+            /**
+             * Quality Status
+             * @enum {string}
+             */
+            quality_status: "passed" | "warning" | "blocked";
+            /** Blocking Issue Count */
+            blocking_issue_count: number;
+            /** Warning Issue Count */
+            warning_issue_count: number;
+            /** Acknowledged Warning Count */
+            acknowledged_warning_count: number;
+            /**
+             * Reconciliation Status
+             * @enum {string}
+             */
+            reconciliation_status: "passed" | "failed" | "not_available";
+            /**
+             * Metric Snapshot Status
+             * @constant
+             */
+            metric_snapshot_status: "published";
+            /**
+             * Analysis Run Status
+             * @constant
+             */
+            analysis_run_status: "published";
+            /**
+             * Freshness Status
+             * @enum {string}
+             */
+            freshness_status: "fresh" | "stale";
+        };
+        /** DimensionOption */
+        DimensionOption: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Code */
+            code: string;
+            /** Name */
+            name: string;
+        };
+        /** ErrorDetail */
+        ErrorDetail: {
+            /** Code */
+            code: string;
+            /** Message */
+            message: string;
+            /** Details */
+            details?: {
+                [key: string]: unknown;
+            };
         };
         /** FieldMappingResponse */
         FieldMappingResponse: {
@@ -261,10 +477,72 @@ export interface components {
             /** Rationale */
             rationale: string;
         };
+        /** FilterDimension */
+        FilterDimension: {
+            /**
+             * Dimension
+             * @enum {string}
+             */
+            dimension: "organization" | "customer_segment" | "logistics_product" | "region";
+            /** Label */
+            label: string;
+            /** Options */
+            options: components["schemas"]["DimensionOption"][];
+        };
+        /** FilterOptions */
+        FilterOptions: {
+            /** Dimensions */
+            dimensions: components["schemas"]["FilterDimension"][];
+            /** Supported Combinations */
+            supported_combinations: ("organization" | "customer_segment" | "logistics_product" | "region")[][];
+        };
+        /** FindingItem */
+        FindingItem: {
+            /**
+             * Finding Id
+             * Format: uuid
+             */
+            finding_id: string;
+            /** Finding Type */
+            finding_type: string;
+            /** Title */
+            title: string;
+            impact: components["schemas"]["DashboardValue"];
+            /** Total Score */
+            total_score: string;
+            /**
+             * Comparison Basis
+             * @enum {string}
+             */
+            comparison_basis: "prior_year" | "budget";
+            /** Evidence Verified */
+            evidence_verified: number;
+            /** Evidence Total */
+            evidence_total: number;
+            /**
+             * Scope
+             * @constant
+             */
+            scope: "global";
+            /** Investigation Path */
+            investigation_path: string;
+        };
         /** HTTPValidationError */
         HTTPValidationError: {
             /** Detail */
             detail?: components["schemas"]["ValidationError"][];
+        };
+        /** Highlight */
+        Highlight: {
+            /**
+             * Finding Id
+             * Format: uuid
+             */
+            finding_id: string;
+            /** Title */
+            title: string;
+            /** Impact Display */
+            impact_display: string;
         };
         /** ImportVersionResponse */
         ImportVersionResponse: {
@@ -333,6 +611,125 @@ export interface components {
             };
             /** Confirmed By */
             confirmed_by?: string | null;
+        };
+        /** MarginMatrix */
+        MarginMatrix: {
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "complete" | "degraded";
+            /**
+             * Comparison Label
+             * @enum {string}
+             */
+            comparison_label: "预算" | "同比" | "不可用";
+            /** Rows */
+            rows: components["schemas"]["DimensionOption"][];
+            /** Columns */
+            columns: components["schemas"]["DimensionOption"][];
+            /** Cells */
+            cells: components["schemas"]["MatrixCell"][];
+            /** Degradation Message */
+            degradation_message?: string | null;
+        };
+        /** MatrixCell */
+        MatrixCell: {
+            /**
+             * Customer Segment Id
+             * Format: uuid
+             */
+            customer_segment_id: string;
+            /**
+             * Logistics Product Id
+             * Format: uuid
+             */
+            logistics_product_id: string;
+            actual_margin: components["schemas"]["DashboardValue"];
+            comparison: components["schemas"]["DashboardValue"];
+        };
+        /** MetricCard */
+        MetricCard: {
+            /**
+             * Metric Code
+             * @enum {string}
+             */
+            metric_code: "orders" | "revenue" | "revenue_per_order" | "gross_margin" | "fulfillment_cost_rate" | "operating_profit" | "ar_balance" | "operating_cash_flow";
+            /** Title */
+            title: string;
+            /** Category */
+            category: string;
+            /**
+             * Unit
+             * @enum {string}
+             */
+            unit: "order" | "CNY" | "CNY/order" | "ratio" | "day";
+            primary: components["schemas"]["DashboardValue"];
+            budget: components["schemas"]["DashboardValue"];
+            yoy: components["schemas"]["DashboardValue"];
+            ytd_budget: components["schemas"]["DashboardValue"];
+            companion: components["schemas"]["DashboardValue"] | null;
+        };
+        /** ProductPerformance */
+        ProductPerformance: {
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "complete" | "degraded";
+            /**
+             * Comparison Label
+             * @enum {string}
+             */
+            comparison_label: "预算" | "同比" | "不可用";
+            /** Rows */
+            rows: components["schemas"]["ProductRow"][];
+            /** Degradation Message */
+            degradation_message?: string | null;
+        };
+        /** ProductRow */
+        ProductRow: {
+            /**
+             * Logistics Product Id
+             * Format: uuid
+             */
+            logistics_product_id: string;
+            /** Code */
+            code: string;
+            /** Name */
+            name: string;
+            revenue: components["schemas"]["DashboardValue"];
+            orders: components["schemas"]["DashboardValue"];
+            gross_margin: components["schemas"]["DashboardValue"];
+            fulfillment_cost_rate: components["schemas"]["DashboardValue"];
+            revenue_comparison: components["schemas"]["DashboardValue"];
+            orders_comparison: components["schemas"]["DashboardValue"];
+            gross_margin_comparison: components["schemas"]["DashboardValue"];
+        };
+        /** ProfitBridge */
+        ProfitBridge: {
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "complete" | "degraded" | "not_applicable";
+            /**
+             * Comparison Basis
+             * @enum {string}
+             */
+            comparison_basis: "prior_year" | "budget";
+            impact: components["schemas"]["DashboardValue"];
+            /**
+             * Reconciliation Status
+             * @enum {string}
+             */
+            reconciliation_status: "passed" | "failed" | "not_applicable";
+            /** Reconciliation Difference */
+            reconciliation_difference: string;
+            /** Drivers */
+            drivers: components["schemas"]["BridgeDriver"][];
+            /** Degradation Message */
+            degradation_message?: string | null;
         };
         /** QualityIssueResponse */
         QualityIssueResponse: {
@@ -428,6 +825,41 @@ export interface components {
             sha256: string;
             /** Size Bytes */
             size_bytes: number;
+        };
+        /** TrendPanel */
+        TrendPanel: {
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "complete" | "partial_series" | "degraded";
+            /** Coverage Count */
+            coverage_count: number;
+            /**
+             * Expected Count
+             * @constant
+             */
+            expected_count: 12;
+            /** Missing Months */
+            missing_months: string[];
+            /** Points */
+            points: components["schemas"]["TrendPoint"][];
+            /** Degradation Message */
+            degradation_message?: string | null;
+        };
+        /** TrendPoint */
+        TrendPoint: {
+            /** Month */
+            month: string;
+            /**
+             * Metric Snapshot Id
+             * Format: uuid
+             */
+            metric_snapshot_id: string;
+            revenue: components["schemas"]["DashboardValue"];
+            operating_profit: components["schemas"]["DashboardValue"];
+            gross_margin: components["schemas"]["DashboardValue"];
+            operating_cash_flow: components["schemas"]["DashboardValue"];
         };
         /** ValidateImportRequest */
         ValidateImportRequest: {
@@ -874,6 +1306,50 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    dashboard_overview_api_v1_dashboard_overview_get: {
+        parameters: {
+            query?: {
+                period_view?: "month" | "ytd";
+                organization_id?: string | null;
+                customer_segment_id?: string | null;
+                logistics_product_id?: string | null;
+                region_id?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DashboardOverviewResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DashboardErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DashboardErrorResponse"];
                 };
             };
         };

@@ -16,6 +16,8 @@ from flow_api.dashboard.models import (
     ActiveFilters,
     BridgeDriver,
     DashboardContext,
+    DashboardDegradation,
+    DashboardOverview,
     DashboardValue,
     DataStatus,
     DimensionName,
@@ -195,6 +197,98 @@ class DashboardService:
             active_filters=filters,
             data_status=self._data_status(bundle, generated_at),
             metric_cards=self._metric_cards(bundle, filters),
+        )
+
+    def get_overview(
+        self,
+        session: Session,
+        *,
+        filters: ActiveFilters,
+        now: datetime | None = None,
+    ) -> DashboardOverview:
+        bundle = self.repository.get_latest(session)
+        generated_at = now or datetime.now(UTC)
+        options = self._filter_options(bundle)
+        self._validate_filters(filters, options)
+        data_status = self._data_status(bundle, generated_at)
+        trends = self.get_trends(session)
+        bridge = self._profit_bridge(bundle)
+        findings = self._finding_items(bundle)
+        products = options.dimensions[2].options
+        segments = options.dimensions[1].options
+        product_table = self._product_table(bundle, products)
+        margin_matrix = self._margin_matrix(bundle, segments, products)
+        highlights = tuple(
+            Highlight(
+                finding_id=item.finding_id,
+                title=item.title,
+                impact_display=item.impact.display_value,
+            )
+            for item in findings[:3]
+        )
+        degradations: list[DashboardDegradation] = []
+        if trends.status != "complete":
+            degradations.append(
+                DashboardDegradation(
+                    panel="trends",
+                    code=trends.status,
+                    message=trends.degradation_message or "趋势序列不完整",
+                )
+            )
+        if bridge.status != "complete":
+            degradations.append(
+                DashboardDegradation(
+                    panel="profit_bridge",
+                    code=bridge.status,
+                    message=bridge.degradation_message or "经营利润桥不完整",
+                )
+            )
+        if not findings:
+            degradations.append(
+                DashboardDegradation(
+                    panel="findings",
+                    code="findings_not_published",
+                    message="经营发现尚未发布",
+                )
+            )
+        if product_table.status != "complete":
+            degradations.append(
+                DashboardDegradation(
+                    panel="product_table",
+                    code=product_table.status,
+                    message=product_table.degradation_message or "产品经营视图不完整",
+                )
+            )
+        if margin_matrix.status != "complete":
+            degradations.append(
+                DashboardDegradation(
+                    panel="margin_matrix",
+                    code=margin_matrix.status,
+                    message=margin_matrix.degradation_message or "毛利矩阵不完整",
+                )
+            )
+        if data_status.freshness_status == "stale":
+            state: Literal["ready", "empty", "error", "degraded", "stale"] = (
+                "stale"
+            )
+        elif degradations or data_status.quality_status != "passed":
+            state = "degraded"
+        else:
+            state = "ready"
+        return DashboardOverview(
+            state=state,
+            context=self._context(bundle, generated_at),
+            filter_options=options,
+            active_filters=filters,
+            data_status=data_status,
+            metric_cards=self._metric_cards(bundle, filters),
+            trends=trends,
+            profit_bridge=bridge,
+            findings=findings,
+            product_table=product_table,
+            margin_matrix=margin_matrix,
+            highlights=highlights,
+            degradations=tuple(degradations),
         )
 
     def get_trends(self, session: Session) -> TrendPanel:

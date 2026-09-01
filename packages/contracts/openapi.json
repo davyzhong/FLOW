@@ -475,10 +475,206 @@
           }
         }
       }
+    },
+    "/api/v1/dashboard/overview": {
+      "get": {
+        "tags": [
+          "dashboard"
+        ],
+        "summary": "Dashboard Overview",
+        "operationId": "dashboard_overview_api_v1_dashboard_overview_get",
+        "parameters": [
+          {
+            "name": "period_view",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "month",
+                "ytd"
+              ],
+              "type": "string",
+              "default": "month",
+              "title": "Period View"
+            }
+          },
+          {
+            "name": "organization_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Organization Id"
+            }
+          },
+          {
+            "name": "customer_segment_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Customer Segment Id"
+            }
+          },
+          {
+            "name": "logistics_product_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Logistics Product Id"
+            }
+          },
+          {
+            "name": "region_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Region Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DashboardOverviewResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DashboardErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DashboardErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "ActiveFilters": {
+        "properties": {
+          "period_view": {
+            "type": "string",
+            "enum": [
+              "month",
+              "ytd"
+            ],
+            "title": "Period View"
+          },
+          "organization_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Organization Id"
+          },
+          "customer_segment_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Customer Segment Id"
+          },
+          "logistics_product_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Logistics Product Id"
+          },
+          "region_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Region Id"
+          },
+          "is_total_scope": {
+            "type": "boolean",
+            "title": "Is Total Scope"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "period_view",
+          "is_total_scope"
+        ],
+        "title": "ActiveFilters"
+      },
       "BatchCreateRequest": {
         "properties": {
           "name": {
@@ -563,6 +759,29 @@
         ],
         "title": "Body_upload_source_api_v1_intake_batches__batch_id__sources_post"
       },
+      "BridgeDriver": {
+        "properties": {
+          "driver_code": {
+            "type": "string",
+            "title": "Driver Code"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "contribution": {
+            "$ref": "#/components/schemas/DashboardValue"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "driver_code",
+          "label",
+          "contribution"
+        ],
+        "title": "BridgeDriver"
+      },
       "ColumnProfileResponse": {
         "properties": {
           "column": {
@@ -607,6 +826,424 @@
           "non_null_count"
         ],
         "title": "ColumnProfileResponse"
+      },
+      "DashboardContext": {
+        "properties": {
+          "batch_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Batch Id"
+          },
+          "import_version_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Import Version Id"
+          },
+          "metric_snapshot_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Metric Snapshot Id"
+          },
+          "analysis_run_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Analysis Run Id"
+          },
+          "as_of_month": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}$",
+            "title": "As Of Month"
+          },
+          "metric_definition_set_id": {
+            "type": "string",
+            "title": "Metric Definition Set Id"
+          },
+          "metric_definition_set_hash": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 64,
+            "title": "Metric Definition Set Hash"
+          },
+          "metric_engine_version": {
+            "type": "string",
+            "title": "Metric Engine Version"
+          },
+          "analysis_policy_id": {
+            "type": "string",
+            "title": "Analysis Policy Id"
+          },
+          "analysis_policy_hash": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 64,
+            "title": "Analysis Policy Hash"
+          },
+          "analysis_engine_version": {
+            "type": "string",
+            "title": "Analysis Engine Version"
+          },
+          "generated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Generated At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "batch_id",
+          "import_version_id",
+          "metric_snapshot_id",
+          "analysis_run_id",
+          "as_of_month",
+          "metric_definition_set_id",
+          "metric_definition_set_hash",
+          "metric_engine_version",
+          "analysis_policy_id",
+          "analysis_policy_hash",
+          "analysis_engine_version",
+          "generated_at"
+        ],
+        "title": "DashboardContext"
+      },
+      "DashboardDegradation": {
+        "properties": {
+          "panel": {
+            "type": "string",
+            "enum": [
+              "metric_cards",
+              "trends",
+              "profit_bridge",
+              "findings",
+              "product_table",
+              "margin_matrix"
+            ],
+            "title": "Panel"
+          },
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "panel",
+          "code",
+          "message"
+        ],
+        "title": "DashboardDegradation"
+      },
+      "DashboardErrorResponse": {
+        "properties": {
+          "detail": {
+            "$ref": "#/components/schemas/ErrorDetail"
+          }
+        },
+        "type": "object",
+        "required": [
+          "detail"
+        ],
+        "title": "DashboardErrorResponse"
+      },
+      "DashboardOverviewResponse": {
+        "properties": {
+          "state": {
+            "type": "string",
+            "enum": [
+              "ready",
+              "empty",
+              "error",
+              "degraded",
+              "stale"
+            ],
+            "title": "State"
+          },
+          "context": {
+            "$ref": "#/components/schemas/DashboardContext"
+          },
+          "filter_options": {
+            "$ref": "#/components/schemas/FilterOptions"
+          },
+          "active_filters": {
+            "$ref": "#/components/schemas/ActiveFilters"
+          },
+          "data_status": {
+            "$ref": "#/components/schemas/DataStatus"
+          },
+          "metric_cards": {
+            "items": {
+              "$ref": "#/components/schemas/MetricCard"
+            },
+            "type": "array",
+            "title": "Metric Cards"
+          },
+          "trends": {
+            "$ref": "#/components/schemas/TrendPanel"
+          },
+          "profit_bridge": {
+            "$ref": "#/components/schemas/ProfitBridge"
+          },
+          "findings": {
+            "items": {
+              "$ref": "#/components/schemas/FindingItem"
+            },
+            "type": "array",
+            "title": "Findings"
+          },
+          "product_table": {
+            "$ref": "#/components/schemas/ProductPerformance"
+          },
+          "margin_matrix": {
+            "$ref": "#/components/schemas/MarginMatrix"
+          },
+          "highlights": {
+            "items": {
+              "$ref": "#/components/schemas/Highlight"
+            },
+            "type": "array",
+            "title": "Highlights"
+          },
+          "degradations": {
+            "items": {
+              "$ref": "#/components/schemas/DashboardDegradation"
+            },
+            "type": "array",
+            "title": "Degradations"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "state",
+          "context",
+          "filter_options",
+          "active_filters",
+          "data_status",
+          "metric_cards",
+          "trends",
+          "profit_bridge",
+          "findings",
+          "product_table",
+          "margin_matrix",
+          "highlights",
+          "degradations"
+        ],
+        "title": "DashboardOverviewResponse",
+        "description": "Public read-only Finance BP dashboard response."
+      },
+      "DashboardValue": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "available",
+              "unavailable",
+              "degraded"
+            ],
+            "title": "Status"
+          },
+          "exact_value": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Exact Value"
+          },
+          "display_value": {
+            "type": "string",
+            "title": "Display Value"
+          },
+          "semantic_direction": {
+            "type": "string",
+            "enum": [
+              "positive",
+              "negative",
+              "warning",
+              "neutral"
+            ],
+            "title": "Semantic Direction"
+          },
+          "unavailable_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unavailable Code"
+          },
+          "unavailable_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unavailable Message"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "status",
+          "display_value",
+          "semantic_direction"
+        ],
+        "title": "DashboardValue"
+      },
+      "DataStatus": {
+        "properties": {
+          "batch_status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "validating",
+              "blocked",
+              "ready",
+              "published"
+            ],
+            "title": "Batch Status"
+          },
+          "import_status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "validating",
+              "blocked",
+              "ready",
+              "published"
+            ],
+            "title": "Import Status"
+          },
+          "quality_status": {
+            "type": "string",
+            "enum": [
+              "passed",
+              "warning",
+              "blocked"
+            ],
+            "title": "Quality Status"
+          },
+          "blocking_issue_count": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Blocking Issue Count"
+          },
+          "warning_issue_count": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Warning Issue Count"
+          },
+          "acknowledged_warning_count": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Acknowledged Warning Count"
+          },
+          "reconciliation_status": {
+            "type": "string",
+            "enum": [
+              "passed",
+              "failed",
+              "not_available"
+            ],
+            "title": "Reconciliation Status"
+          },
+          "metric_snapshot_status": {
+            "type": "string",
+            "const": "published",
+            "title": "Metric Snapshot Status"
+          },
+          "analysis_run_status": {
+            "type": "string",
+            "const": "published",
+            "title": "Analysis Run Status"
+          },
+          "freshness_status": {
+            "type": "string",
+            "enum": [
+              "fresh",
+              "stale"
+            ],
+            "title": "Freshness Status"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "batch_status",
+          "import_status",
+          "quality_status",
+          "blocking_issue_count",
+          "warning_issue_count",
+          "acknowledged_warning_count",
+          "reconciliation_status",
+          "metric_snapshot_status",
+          "analysis_run_status",
+          "freshness_status"
+        ],
+        "title": "DataStatus"
+      },
+      "DimensionOption": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "code",
+          "name"
+        ],
+        "title": "DimensionOption"
+      },
+      "ErrorDetail": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "details": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Details"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "title": "ErrorDetail"
       },
       "FieldMappingResponse": {
         "properties": {
@@ -656,6 +1293,141 @@
         ],
         "title": "FieldMappingResponse"
       },
+      "FilterDimension": {
+        "properties": {
+          "dimension": {
+            "type": "string",
+            "enum": [
+              "organization",
+              "customer_segment",
+              "logistics_product",
+              "region"
+            ],
+            "title": "Dimension"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "options": {
+            "items": {
+              "$ref": "#/components/schemas/DimensionOption"
+            },
+            "type": "array",
+            "title": "Options"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "dimension",
+          "label",
+          "options"
+        ],
+        "title": "FilterDimension"
+      },
+      "FilterOptions": {
+        "properties": {
+          "dimensions": {
+            "items": {
+              "$ref": "#/components/schemas/FilterDimension"
+            },
+            "type": "array",
+            "title": "Dimensions"
+          },
+          "supported_combinations": {
+            "items": {
+              "items": {
+                "type": "string",
+                "enum": [
+                  "organization",
+                  "customer_segment",
+                  "logistics_product",
+                  "region"
+                ]
+              },
+              "type": "array"
+            },
+            "type": "array",
+            "title": "Supported Combinations"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "dimensions",
+          "supported_combinations"
+        ],
+        "title": "FilterOptions"
+      },
+      "FindingItem": {
+        "properties": {
+          "finding_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Finding Id"
+          },
+          "finding_type": {
+            "type": "string",
+            "title": "Finding Type"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "impact": {
+            "$ref": "#/components/schemas/DashboardValue"
+          },
+          "total_score": {
+            "type": "string",
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Total Score"
+          },
+          "comparison_basis": {
+            "type": "string",
+            "enum": [
+              "prior_year",
+              "budget"
+            ],
+            "title": "Comparison Basis"
+          },
+          "evidence_verified": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Evidence Verified"
+          },
+          "evidence_total": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Evidence Total"
+          },
+          "scope": {
+            "type": "string",
+            "const": "global",
+            "title": "Scope"
+          },
+          "investigation_path": {
+            "type": "string",
+            "pattern": "^/investigations/",
+            "title": "Investigation Path"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "finding_id",
+          "finding_type",
+          "title",
+          "impact",
+          "total_score",
+          "comparison_basis",
+          "evidence_verified",
+          "evidence_total",
+          "scope",
+          "investigation_path"
+        ],
+        "title": "FindingItem"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -668,6 +1440,31 @@
         },
         "type": "object",
         "title": "HTTPValidationError"
+      },
+      "Highlight": {
+        "properties": {
+          "finding_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Finding Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "impact_display": {
+            "type": "string",
+            "title": "Impact Display"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "finding_id",
+          "title",
+          "impact_display"
+        ],
+        "title": "Highlight"
       },
       "ImportVersionResponse": {
         "properties": {
@@ -853,6 +1650,338 @@
           "confidence_summary"
         ],
         "title": "MappingResponse"
+      },
+      "MarginMatrix": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "complete",
+              "degraded"
+            ],
+            "title": "Status"
+          },
+          "comparison_label": {
+            "type": "string",
+            "enum": [
+              "预算",
+              "同比",
+              "不可用"
+            ],
+            "title": "Comparison Label"
+          },
+          "rows": {
+            "items": {
+              "$ref": "#/components/schemas/DimensionOption"
+            },
+            "type": "array",
+            "title": "Rows"
+          },
+          "columns": {
+            "items": {
+              "$ref": "#/components/schemas/DimensionOption"
+            },
+            "type": "array",
+            "title": "Columns"
+          },
+          "cells": {
+            "items": {
+              "$ref": "#/components/schemas/MatrixCell"
+            },
+            "type": "array",
+            "title": "Cells"
+          },
+          "degradation_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Degradation Message"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "status",
+          "comparison_label",
+          "rows",
+          "columns",
+          "cells"
+        ],
+        "title": "MarginMatrix"
+      },
+      "MatrixCell": {
+        "properties": {
+          "customer_segment_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Customer Segment Id"
+          },
+          "logistics_product_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Logistics Product Id"
+          },
+          "actual_margin": {
+            "$ref": "#/components/schemas/DashboardValue"
+          },
+          "comparison": {
+            "$ref": "#/components/schemas/DashboardValue"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "customer_segment_id",
+          "logistics_product_id",
+          "actual_margin",
+          "comparison"
+        ],
+        "title": "MatrixCell"
+      },
+      "MetricCard": {
+        "properties": {
+          "metric_code": {
+            "type": "string",
+            "enum": [
+              "orders",
+              "revenue",
+              "revenue_per_order",
+              "gross_margin",
+              "fulfillment_cost_rate",
+              "operating_profit",
+              "ar_balance",
+              "operating_cash_flow"
+            ],
+            "title": "Metric Code"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "category": {
+            "type": "string",
+            "title": "Category"
+          },
+          "unit": {
+            "type": "string",
+            "enum": [
+              "order",
+              "CNY",
+              "CNY/order",
+              "ratio",
+              "day"
+            ],
+            "title": "Unit"
+          },
+          "primary": {
+            "$ref": "#/components/schemas/DashboardValue"
+          },
+          "budget": {
+            "$ref": "#/components/schemas/DashboardValue"
+          },
+          "yoy": {
+            "$ref": "#/components/schemas/DashboardValue"
+          },
+          "ytd_budget": {
+            "$ref": "#/components/schemas/DashboardValue"
+          },
+          "companion": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DashboardValue"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "metric_code",
+          "title",
+          "category",
+          "unit",
+          "primary",
+          "budget",
+          "yoy",
+          "ytd_budget",
+          "companion"
+        ],
+        "title": "MetricCard"
+      },
+      "ProductPerformance": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "complete",
+              "degraded"
+            ],
+            "title": "Status"
+          },
+          "comparison_label": {
+            "type": "string",
+            "enum": [
+              "预算",
+              "同比",
+              "不可用"
+            ],
+            "title": "Comparison Label"
+          },
+          "rows": {
+            "items": {
+              "$ref": "#/components/schemas/ProductRow"
+            },
+            "type": "array",
+            "title": "Rows"
+          },
+          "degradation_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Degradation Message"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "status",
+          "comparison_label",
+          "rows"
+        ],
+        "title": "ProductPerformance"
+      },
+      "ProductRow": {
+        "properties": {
+          "logistics_product_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Logistics Product Id"
+          },
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "revenue": {
+            "$ref": "#/components/schemas/DashboardValue"
+          },
+          "orders": {
+            "$ref": "#/components/schemas/DashboardValue"
+          },
+          "gross_margin": {
+            "$ref": "#/components/schemas/DashboardValue"
+          },
+          "fulfillment_cost_rate": {
+            "$ref": "#/components/schemas/DashboardValue"
+          },
+          "revenue_comparison": {
+            "$ref": "#/components/schemas/DashboardValue"
+          },
+          "orders_comparison": {
+            "$ref": "#/components/schemas/DashboardValue"
+          },
+          "gross_margin_comparison": {
+            "$ref": "#/components/schemas/DashboardValue"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "logistics_product_id",
+          "code",
+          "name",
+          "revenue",
+          "orders",
+          "gross_margin",
+          "fulfillment_cost_rate",
+          "revenue_comparison",
+          "orders_comparison",
+          "gross_margin_comparison"
+        ],
+        "title": "ProductRow"
+      },
+      "ProfitBridge": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "complete",
+              "degraded",
+              "not_applicable"
+            ],
+            "title": "Status"
+          },
+          "comparison_basis": {
+            "type": "string",
+            "enum": [
+              "prior_year",
+              "budget"
+            ],
+            "title": "Comparison Basis"
+          },
+          "impact": {
+            "$ref": "#/components/schemas/DashboardValue"
+          },
+          "reconciliation_status": {
+            "type": "string",
+            "enum": [
+              "passed",
+              "failed",
+              "not_applicable"
+            ],
+            "title": "Reconciliation Status"
+          },
+          "reconciliation_difference": {
+            "type": "string",
+            "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+            "title": "Reconciliation Difference"
+          },
+          "drivers": {
+            "items": {
+              "$ref": "#/components/schemas/BridgeDriver"
+            },
+            "type": "array",
+            "title": "Drivers"
+          },
+          "degradation_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Degradation Message"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "status",
+          "comparison_basis",
+          "impact",
+          "reconciliation_status",
+          "reconciliation_difference",
+          "drivers"
+        ],
+        "title": "ProfitBridge"
       },
       "QualityIssueResponse": {
         "properties": {
@@ -1134,6 +2263,102 @@
           "size_bytes"
         ],
         "title": "SourceResponse"
+      },
+      "TrendPanel": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "complete",
+              "partial_series",
+              "degraded"
+            ],
+            "title": "Status"
+          },
+          "coverage_count": {
+            "type": "integer",
+            "maximum": 12.0,
+            "minimum": 0.0,
+            "title": "Coverage Count"
+          },
+          "expected_count": {
+            "type": "integer",
+            "const": 12,
+            "title": "Expected Count"
+          },
+          "missing_months": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Missing Months"
+          },
+          "points": {
+            "items": {
+              "$ref": "#/components/schemas/TrendPoint"
+            },
+            "type": "array",
+            "title": "Points"
+          },
+          "degradation_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Degradation Message"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "status",
+          "coverage_count",
+          "expected_count",
+          "missing_months",
+          "points"
+        ],
+        "title": "TrendPanel"
+      },
+      "TrendPoint": {
+        "properties": {
+          "month": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}$",
+            "title": "Month"
+          },
+          "metric_snapshot_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Metric Snapshot Id"
+          },
+          "revenue": {
+            "$ref": "#/components/schemas/DashboardValue"
+          },
+          "operating_profit": {
+            "$ref": "#/components/schemas/DashboardValue"
+          },
+          "gross_margin": {
+            "$ref": "#/components/schemas/DashboardValue"
+          },
+          "operating_cash_flow": {
+            "$ref": "#/components/schemas/DashboardValue"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "month",
+          "metric_snapshot_id",
+          "revenue",
+          "operating_profit",
+          "gross_margin",
+          "operating_cash_flow"
+        ],
+        "title": "TrendPoint"
       },
       "ValidateImportRequest": {
         "properties": {
