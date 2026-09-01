@@ -23,7 +23,7 @@ describe("FLOW API client", () => {
 
     await expect(flowApi.getWorkspace()).resolves.toEqual(payload);
     expect(fetchMock).toHaveBeenCalledWith(
-      "http://localhost:8000/api/v1/workspace",
+      "/api/v1/workspace",
       expect.objectContaining({ headers: { Accept: "application/json" } }),
     );
   });
@@ -46,7 +46,7 @@ describe("FLOW API client", () => {
     ).resolves.toEqual(payload);
     expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(fetchMock).toHaveBeenCalledWith(
-      "http://localhost:8000/api/v1/dashboard/overview?period_view=ytd&customer_segment_id=158e0a75-4853-5f1a-94b1-da561ccdd70a&logistics_product_id=f3aa874c-c0d5-5e2c-bf5b-d0e51a9c624c",
+      "/api/v1/dashboard/overview?period_view=ytd&customer_segment_id=158e0a75-4853-5f1a-94b1-da561ccdd70a&logistics_product_id=f3aa874c-c0d5-5e2c-bf5b-d0e51a9c624c",
       expect.objectContaining({ headers: { Accept: "application/json" } }),
     );
     expect(fetchMock.mock.calls[0]?.[0]).not.toContain("canonical");

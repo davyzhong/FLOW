@@ -6,7 +6,7 @@ export type DashboardFilters = NonNullable<
   operations["dashboard_overview_api_v1_dashboard_overview_get"]["parameters"]["query"]
 >;
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_FLOW_API_URL ?? "http://localhost:8000";
+const API_BASE_URL = process.env.NEXT_PUBLIC_FLOW_API_URL ?? "";
 
 async function request<T>(path: string, signal?: AbortSignal): Promise<T> {
   const response = await fetch(`${API_BASE_URL}${path}`, {

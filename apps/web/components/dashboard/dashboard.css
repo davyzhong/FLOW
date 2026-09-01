@@ -1,12 +1,12 @@
 .dashboard-app {
   --ink: #15243b;
-  --muted: #66758b;
+  --muted: #52637a;
   --line: #dfe6ef;
   --blue: #1769e8;
   --navy: #13223a;
-  --green: #13966a;
-  --red: #d95757;
-  --amber: #b87515;
+  --green: #075f45;
+  --red: #912f3b;
+  --amber: #805000;
   padding: 18px;
   background: #eef2f7;
 }
@@ -14,6 +14,10 @@
 .dashboard-app__header {
   max-width: 1600px;
   margin-bottom: 12px;
+}
+
+.dashboard-app__header p {
+  color: #53647b;
 }
 
 .dashboard-loaded {
@@ -106,7 +110,7 @@
 }
 
 .workflow-rail li small {
-  color: #7f93ae;
+  color: #b2c0d1;
   font-size: 9px;
 }
 
@@ -117,7 +121,7 @@
   margin-top: auto;
   padding: 16px 8px 0;
   border-top: 1px solid rgb(255 255 255 / 10%);
-  color: #8fa3bd;
+  color: #afbdd0;
   font-size: 9px;
 }
 
@@ -266,7 +270,7 @@
 
 .section-heading small,
 .panel-heading small {
-  color: #8491a3;
+  color: #5f6f84;
   font-size: 8px;
 }
 
@@ -328,7 +332,7 @@
 }
 
 .metric-comparison small {
-  color: #8a96a7;
+  color: #607087;
   font-size: 7px;
   font-weight: 500;
 }
@@ -373,8 +377,8 @@
 }
 
 .trend-line--revenue { stroke: #1769e8; }
-.trend-line--profit { stroke: #18a47b; }
-.trend-line--cash { stroke: #e38b2c; }
+.trend-line--profit { stroke: #075f45; }
+.trend-line--cash { stroke: #8a4b00; }
 
 .chart-legend {
   display: flex;
@@ -395,8 +399,8 @@
 }
 
 .chart-legend .revenue { color: #1769e8; }
-.chart-legend .profit { color: #18a47b; }
-.chart-legend .cash { color: #e38b2c; }
+.chart-legend .profit { color: #075f45; }
+.chart-legend .cash { color: #8a4b00; }
 
 .trend-details {
   border-top: 1px solid #edf1f5;
@@ -483,7 +487,7 @@
 .findings-panel li:nth-last-child(-n + 2) { border-bottom: 0; }
 
 .finding-rank {
-  color: #a0adbd;
+  color: #62738a;
   font-size: 12px;
   font-weight: 800;
 }
@@ -530,7 +534,7 @@ tbody tr:last-child td { border-bottom: 0; }
 
 thead th {
   background: #f7f9fc;
-  color: #6c798c;
+  color: #526278;
   font-size: 7px;
   font-weight: 700;
 }
@@ -547,7 +551,7 @@ tbody th:first-child { text-align: left; }
 .product-panel tbody th span,
 .product-panel tbody th small { display: block; }
 .product-panel tbody th span { color: var(--ink); }
-.product-panel tbody th small { margin-top: 2px; color: #9aa6b5; font-size: 6px; }
+.product-panel tbody th small { margin-top: 2px; color: #617187; font-size: 6px; }
 
 .matrix-panel td {
   min-width: 90px;

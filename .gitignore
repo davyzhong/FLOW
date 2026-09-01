@@ -18,3 +18,5 @@ htmlcov/
 __pycache__/
 *.py[cod]
 *.tsbuildinfo
+playwright-report/
+test-results/

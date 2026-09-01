@@ -4,11 +4,11 @@ import argparse
 from pathlib import Path
 from uuid import UUID
 
-from sqlalchemy import select
-
-from flow_api.dashboard.fixture import publish_dashboard_snapshot_series
+from flow_api.dashboard.fixture import (
+    bootstrap_dashboard_demo,
+    publish_dashboard_snapshot_series,
+)
 from flow_api.infrastructure.db import get_session_factory
-from flow_api.infrastructure.models.intake import AnalysisBatch
 from flow_api.metrics.catalog import load_metric_catalog
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
@@ -30,19 +30,23 @@ def main() -> None:
     with get_session_factory()() as session:
         batch_id = arguments.batch_id
         if batch_id is None:
-            batch_id = session.scalar(
-                select(AnalysisBatch.id)
-                .where(AnalysisBatch.status == "published")
-                .order_by(AnalysisBatch.created_at.desc(), AnalysisBatch.id.desc())
-                .limit(1)
+            publication = bootstrap_dashboard_demo(
+                session,
+                repository_root=REPOSITORY_ROOT,
             )
-        if batch_id is None:
-            raise SystemExit("no published analysis batch is available")
-        snapshots = publish_dashboard_snapshot_series(
-            session, batch_id=batch_id, catalog=catalog
-        )
+            batch_id = publication.batch_id
+            snapshots_count = len(publication.metric_snapshot_ids)
+            analysis_run_id = publication.analysis_run_id
+        else:
+            snapshots = publish_dashboard_snapshot_series(
+                session, batch_id=batch_id, catalog=catalog
+            )
+            snapshots_count = len(snapshots)
+            analysis_run_id = None
         session.commit()
-        print(f"published {len(snapshots)} dashboard snapshots for batch {batch_id}")
+        print(f"published {snapshots_count} dashboard snapshots for batch {batch_id}")
+        if analysis_run_id is not None:
+            print(f"published dashboard analysis run {analysis_run_id}")
 
 
 if __name__ == "__main__":
