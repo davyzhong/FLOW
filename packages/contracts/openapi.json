@@ -600,6 +600,351 @@
           }
         }
       }
+    },
+    "/api/v1/investigations/{finding_id}": {
+      "get": {
+        "tags": [
+          "investigations"
+        ],
+        "summary": "Investigation Context",
+        "operationId": "investigation_context_api_v1_investigations__finding_id__get",
+        "parameters": [
+          {
+            "name": "finding_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Finding Id"
+            }
+          },
+          {
+            "name": "batch_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Batch Id"
+            }
+          },
+          {
+            "name": "metric_snapshot_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Metric Snapshot Id"
+            }
+          },
+          {
+            "name": "analysis_run_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Analysis Run Id"
+            }
+          },
+          {
+            "name": "source_record_limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 12,
+              "title": "Source Record Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvestigationContextResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvestigationErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvestigationErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/investigations/{finding_id}/evidence/{evidence_id}/decision": {
+      "post": {
+        "tags": [
+          "investigations"
+        ],
+        "summary": "Decide Evidence",
+        "operationId": "decide_evidence_api_v1_investigations__finding_id__evidence__evidence_id__decision_post",
+        "parameters": [
+          {
+            "name": "finding_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Finding Id"
+            }
+          },
+          {
+            "name": "evidence_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Evidence Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EvidenceDecisionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EvidenceDecisionResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvestigationErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvestigationErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/investigations/{finding_id}/conclusion": {
+      "put": {
+        "tags": [
+          "investigations"
+        ],
+        "summary": "Save Conclusion",
+        "operationId": "save_conclusion_api_v1_investigations__finding_id__conclusion_put",
+        "parameters": [
+          {
+            "name": "finding_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Finding Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConclusionUpsertRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConclusionResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvestigationErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/investigations/{finding_id}/transition": {
+      "post": {
+        "tags": [
+          "investigations"
+        ],
+        "summary": "Transition Finding",
+        "operationId": "transition_finding_api_v1_investigations__finding_id__transition_post",
+        "parameters": [
+          {
+            "name": "finding_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Finding Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FindingTransitionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FindingTransitionResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvestigationErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvestigationErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -674,6 +1019,89 @@
           "is_total_scope"
         ],
         "title": "ActiveFilters"
+      },
+      "AnalysisResultContext": {
+        "properties": {
+          "analysis_result_id": {
+            "type": "string",
+            "title": "Analysis Result Id"
+          },
+          "playbook_code": {
+            "type": "string",
+            "title": "Playbook Code"
+          },
+          "playbook_version": {
+            "type": "integer",
+            "title": "Playbook Version"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "comparison_basis": {
+            "type": "string",
+            "title": "Comparison Basis"
+          },
+          "impact_amount": {
+            "type": "string",
+            "title": "Impact Amount"
+          },
+          "unit": {
+            "type": "string",
+            "title": "Unit"
+          },
+          "reconciliation_difference": {
+            "type": "string",
+            "title": "Reconciliation Difference"
+          },
+          "reconciliation_tolerance": {
+            "type": "string",
+            "title": "Reconciliation Tolerance"
+          },
+          "source_record_count": {
+            "type": "integer",
+            "title": "Source Record Count"
+          },
+          "degradation_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Degradation Code"
+          },
+          "degradation_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Degradation Message"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "analysis_result_id",
+          "playbook_code",
+          "playbook_version",
+          "status",
+          "comparison_basis",
+          "impact_amount",
+          "unit",
+          "reconciliation_difference",
+          "reconciliation_tolerance",
+          "source_record_count",
+          "degradation_code",
+          "degradation_message"
+        ],
+        "title": "AnalysisResultContext"
       },
       "BatchCreateRequest": {
         "properties": {
@@ -826,6 +1254,109 @@
           "non_null_count"
         ],
         "title": "ColumnProfileResponse"
+      },
+      "ConclusionResponse": {
+        "properties": {
+          "finding_id": {
+            "type": "string",
+            "title": "Finding Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "review_sequence": {
+            "type": "integer",
+            "title": "Review Sequence"
+          },
+          "decision": {
+            "type": "string",
+            "title": "Decision"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "finding_id",
+          "status",
+          "review_sequence",
+          "decision"
+        ],
+        "title": "ConclusionResponse",
+        "description": "Acknowledgement of a stored Finance BP conclusion."
+      },
+      "ConclusionState": {
+        "properties": {
+          "exists": {
+            "type": "boolean",
+            "title": "Exists"
+          },
+          "verified_facts": {
+            "type": "string",
+            "title": "Verified Facts",
+            "default": ""
+          },
+          "analysis_judgment": {
+            "type": "string",
+            "title": "Analysis Judgment",
+            "default": ""
+          },
+          "open_questions": {
+            "type": "string",
+            "title": "Open Questions",
+            "default": ""
+          },
+          "recommendation": {
+            "type": "string",
+            "title": "Recommendation",
+            "default": ""
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "exists"
+        ],
+        "title": "ConclusionState"
+      },
+      "ConclusionUpsertRequest": {
+        "properties": {
+          "verified_facts": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Verified Facts"
+          },
+          "analysis_judgment": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Analysis Judgment"
+          },
+          "open_questions": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Open Questions"
+          },
+          "recommendation": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Recommendation"
+          },
+          "editor": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Editor"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "verified_facts",
+          "analysis_judgment",
+          "open_questions",
+          "recommendation",
+          "editor"
+        ],
+        "title": "ConclusionUpsertRequest"
       },
       "DashboardContext": {
         "properties": {
@@ -1222,6 +1753,54 @@
         ],
         "title": "DimensionOption"
       },
+      "DriverLine": {
+        "properties": {
+          "position": {
+            "type": "integer",
+            "title": "Position"
+          },
+          "driver_code": {
+            "type": "string",
+            "title": "Driver Code"
+          },
+          "calculation_method": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Calculation Method"
+          },
+          "contribution_amount": {
+            "type": "string",
+            "title": "Contribution Amount"
+          },
+          "contribution_ratio": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Contribution Ratio"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "position",
+          "driver_code",
+          "calculation_method",
+          "contribution_amount",
+          "contribution_ratio"
+        ],
+        "title": "DriverLine"
+      },
       "ErrorDetail": {
         "properties": {
           "code": {
@@ -1244,6 +1823,125 @@
           "message"
         ],
         "title": "ErrorDetail"
+      },
+      "EvidenceDecisionRequest": {
+        "properties": {
+          "decision": {
+            "type": "string",
+            "title": "Decision"
+          },
+          "reviewer": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Reviewer"
+          },
+          "comment": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Comment"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "decision",
+          "reviewer"
+        ],
+        "title": "EvidenceDecisionRequest"
+      },
+      "EvidenceDecisionResponse": {
+        "properties": {
+          "finding_id": {
+            "type": "string",
+            "title": "Finding Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "review_sequence": {
+            "type": "integer",
+            "title": "Review Sequence"
+          },
+          "decision": {
+            "type": "string",
+            "title": "Decision"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "finding_id",
+          "status",
+          "review_sequence",
+          "decision"
+        ],
+        "title": "EvidenceDecisionResponse",
+        "description": "Acknowledgement of an evidence review decision."
+      },
+      "EvidenceLine": {
+        "properties": {
+          "evidence_id": {
+            "type": "string",
+            "title": "Evidence Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "evidence_type": {
+            "type": "string",
+            "title": "Evidence Type"
+          },
+          "object_type": {
+            "type": "string",
+            "title": "Object Type"
+          },
+          "object_id": {
+            "type": "string",
+            "title": "Object Id"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          },
+          "evidence_digest": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Evidence Digest"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "evidence_id",
+          "status",
+          "evidence_type",
+          "object_type",
+          "object_id",
+          "note",
+          "evidence_digest"
+        ],
+        "title": "EvidenceLine"
       },
       "FieldMappingResponse": {
         "properties": {
@@ -1360,6 +2058,122 @@
         ],
         "title": "FilterOptions"
       },
+      "FindingContext": {
+        "properties": {
+          "finding_id": {
+            "type": "string",
+            "title": "Finding Id"
+          },
+          "finding_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finding Type"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "impact_amount": {
+            "type": "string",
+            "title": "Impact Amount"
+          },
+          "unit": {
+            "type": "string",
+            "title": "Unit"
+          },
+          "confidence": {
+            "type": "string",
+            "title": "Confidence"
+          },
+          "business_meaning": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Business Meaning"
+          },
+          "fact_statement": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fact Statement"
+          },
+          "comparison_basis": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Comparison Basis"
+          },
+          "total_score": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total Score"
+          },
+          "policy_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Policy Version"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "finding_id",
+          "finding_type",
+          "title",
+          "status",
+          "impact_amount",
+          "unit",
+          "confidence",
+          "business_meaning",
+          "fact_statement",
+          "comparison_basis",
+          "total_score",
+          "policy_version",
+          "created_at"
+        ],
+        "title": "FindingContext"
+      },
       "FindingItem": {
         "properties": {
           "finding_id": {
@@ -1427,6 +2241,67 @@
           "investigation_path"
         ],
         "title": "FindingItem"
+      },
+      "FindingTransitionRequest": {
+        "properties": {
+          "decision": {
+            "type": "string",
+            "title": "Decision"
+          },
+          "reviewer": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Reviewer"
+          },
+          "comment": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Comment"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "decision",
+          "reviewer"
+        ],
+        "title": "FindingTransitionRequest"
+      },
+      "FindingTransitionResponse": {
+        "properties": {
+          "finding_id": {
+            "type": "string",
+            "title": "Finding Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "review_sequence": {
+            "type": "integer",
+            "title": "Review Sequence"
+          },
+          "decision": {
+            "type": "string",
+            "title": "Decision"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "finding_id",
+          "status",
+          "review_sequence",
+          "decision"
+        ],
+        "title": "FindingTransitionResponse",
+        "description": "Acknowledgement of a governed Finding state transition."
       },
       "HTTPValidationError": {
         "properties": {
@@ -1557,6 +2432,140 @@
           "next_allowed_actions"
         ],
         "title": "ImportVersionResponse"
+      },
+      "InvestigationContextResponse": {
+        "properties": {
+          "identity": {
+            "$ref": "#/components/schemas/InvestigationIdentity"
+          },
+          "finding": {
+            "$ref": "#/components/schemas/FindingContext"
+          },
+          "result": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AnalysisResultContext"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "metric": {
+            "$ref": "#/components/schemas/MetricContext"
+          },
+          "drivers": {
+            "items": {
+              "$ref": "#/components/schemas/DriverLine"
+            },
+            "type": "array",
+            "title": "Drivers"
+          },
+          "evidence": {
+            "items": {
+              "$ref": "#/components/schemas/EvidenceLine"
+            },
+            "type": "array",
+            "title": "Evidence"
+          },
+          "reviews": {
+            "items": {
+              "$ref": "#/components/schemas/ReviewLine"
+            },
+            "type": "array",
+            "title": "Reviews"
+          },
+          "quality_issues": {
+            "items": {
+              "$ref": "#/components/schemas/QualityIssueLine"
+            },
+            "type": "array",
+            "title": "Quality Issues"
+          },
+          "reconciliations": {
+            "items": {
+              "$ref": "#/components/schemas/ReconciliationLine"
+            },
+            "type": "array",
+            "title": "Reconciliations"
+          },
+          "conclusion": {
+            "$ref": "#/components/schemas/ConclusionState"
+          },
+          "source_records": {
+            "items": {
+              "$ref": "#/components/schemas/SourceRecordLine"
+            },
+            "type": "array",
+            "title": "Source Records"
+          },
+          "eligibility_blockers": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Eligibility Blockers"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "identity",
+          "finding",
+          "result",
+          "metric",
+          "drivers",
+          "evidence",
+          "reviews",
+          "quality_issues",
+          "reconciliations",
+          "conclusion",
+          "source_records",
+          "eligibility_blockers"
+        ],
+        "title": "InvestigationContextResponse",
+        "description": "Read-only evidence-first Investigation context."
+      },
+      "InvestigationErrorResponse": {
+        "properties": {
+          "detail": {
+            "$ref": "#/components/schemas/ErrorDetail"
+          }
+        },
+        "type": "object",
+        "required": [
+          "detail"
+        ],
+        "title": "InvestigationErrorResponse"
+      },
+      "InvestigationIdentity": {
+        "properties": {
+          "finding_id": {
+            "type": "string",
+            "title": "Finding Id"
+          },
+          "batch_id": {
+            "type": "string",
+            "title": "Batch Id"
+          },
+          "metric_snapshot_id": {
+            "type": "string",
+            "title": "Metric Snapshot Id"
+          },
+          "analysis_run_id": {
+            "type": "string",
+            "title": "Analysis Run Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "finding_id",
+          "batch_id",
+          "metric_snapshot_id",
+          "analysis_run_id"
+        ],
+        "title": "InvestigationIdentity"
       },
       "MappingConfirmationRequest": {
         "properties": {
@@ -1816,6 +2825,102 @@
         ],
         "title": "MetricCard"
       },
+      "MetricContext": {
+        "properties": {
+          "metric_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Metric Code"
+          },
+          "metric_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Metric Name"
+          },
+          "business_definition": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Business Definition"
+          },
+          "formula": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Formula"
+          },
+          "unit": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unit"
+          },
+          "definition_version": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Definition Version"
+          },
+          "engine_version": {
+            "type": "string",
+            "title": "Engine Version"
+          },
+          "policy_id": {
+            "type": "string",
+            "title": "Policy Id"
+          },
+          "policy_set_hash": {
+            "type": "string",
+            "title": "Policy Set Hash"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "metric_code",
+          "metric_name",
+          "business_definition",
+          "formula",
+          "unit",
+          "definition_version",
+          "engine_version",
+          "policy_id",
+          "policy_set_hash"
+        ],
+        "title": "MetricContext"
+      },
       "ProductPerformance": {
         "properties": {
           "status": {
@@ -1983,6 +3088,35 @@
         ],
         "title": "ProfitBridge"
       },
+      "QualityIssueLine": {
+        "properties": {
+          "severity": {
+            "type": "string",
+            "title": "Severity"
+          },
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "acknowledged": {
+            "type": "boolean",
+            "title": "Acknowledged"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "severity",
+          "code",
+          "message",
+          "acknowledged"
+        ],
+        "title": "QualityIssueLine"
+      },
       "QualityIssueResponse": {
         "properties": {
           "id": {
@@ -2067,6 +3201,49 @@
         ],
         "title": "QualityIssueResponse"
       },
+      "ReconciliationLine": {
+        "properties": {
+          "reconciliation_code": {
+            "type": "string",
+            "title": "Reconciliation Code"
+          },
+          "passed": {
+            "type": "boolean",
+            "title": "Passed"
+          },
+          "expected_value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expected Value"
+          },
+          "actual_value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Actual Value"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "reconciliation_code",
+          "passed",
+          "expected_value",
+          "actual_value"
+        ],
+        "title": "ReconciliationLine"
+      },
       "ReconciliationResponse": {
         "properties": {
           "code": {
@@ -2114,6 +3291,47 @@
           "details"
         ],
         "title": "ReconciliationResponse"
+      },
+      "ReviewLine": {
+        "properties": {
+          "sequence": {
+            "type": "integer",
+            "title": "Sequence"
+          },
+          "reviewer": {
+            "type": "string",
+            "title": "Reviewer"
+          },
+          "decision": {
+            "type": "string",
+            "title": "Decision"
+          },
+          "comment": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Comment"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "sequence",
+          "reviewer",
+          "decision",
+          "comment",
+          "created_at"
+        ],
+        "title": "ReviewLine"
       },
       "SheetMappingResponse": {
         "properties": {
@@ -2228,6 +3446,61 @@
           "columns"
         ],
         "title": "SheetProfileResponse"
+      },
+      "SourceRecordLine": {
+        "properties": {
+          "fact_id": {
+            "type": "string",
+            "title": "Fact Id"
+          },
+          "month_key": {
+            "type": "integer",
+            "title": "Month Key"
+          },
+          "labels": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Labels"
+          },
+          "values": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Values"
+          },
+          "source_file_name": {
+            "type": "string",
+            "title": "Source File Name"
+          },
+          "sheet_name": {
+            "type": "string",
+            "title": "Sheet Name"
+          },
+          "source_row": {
+            "type": "integer",
+            "title": "Source Row"
+          },
+          "source_column": {
+            "type": "string",
+            "title": "Source Column"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "fact_id",
+          "month_key",
+          "labels",
+          "values",
+          "source_file_name",
+          "sheet_name",
+          "source_row",
+          "source_column"
+        ],
+        "title": "SourceRecordLine"
       },
       "SourceResponse": {
         "properties": {

@@ -208,6 +208,74 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/investigations/{finding_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Investigation Context */
+        get: operations["investigation_context_api_v1_investigations__finding_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/investigations/{finding_id}/evidence/{evidence_id}/decision": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Decide Evidence */
+        post: operations["decide_evidence_api_v1_investigations__finding_id__evidence__evidence_id__decision_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/investigations/{finding_id}/conclusion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Save Conclusion */
+        put: operations["save_conclusion_api_v1_investigations__finding_id__conclusion_put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/investigations/{finding_id}/transition": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Transition Finding */
+        post: operations["transition_finding_api_v1_investigations__finding_id__transition_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -229,6 +297,33 @@ export interface components {
             region_id?: string | null;
             /** Is Total Scope */
             is_total_scope: boolean;
+        };
+        /** AnalysisResultContext */
+        AnalysisResultContext: {
+            /** Analysis Result Id */
+            analysis_result_id: string;
+            /** Playbook Code */
+            playbook_code: string;
+            /** Playbook Version */
+            playbook_version: number;
+            /** Status */
+            status: string;
+            /** Comparison Basis */
+            comparison_basis: string;
+            /** Impact Amount */
+            impact_amount: string;
+            /** Unit */
+            unit: string;
+            /** Reconciliation Difference */
+            reconciliation_difference: string;
+            /** Reconciliation Tolerance */
+            reconciliation_tolerance: string;
+            /** Source Record Count */
+            source_record_count: number;
+            /** Degradation Code */
+            degradation_code: string | null;
+            /** Degradation Message */
+            degradation_message: string | null;
         };
         /** BatchCreateRequest */
         BatchCreateRequest: {
@@ -284,6 +379,58 @@ export interface components {
             nullable: boolean;
             /** Non Null Count */
             non_null_count: number;
+        };
+        /**
+         * ConclusionResponse
+         * @description Acknowledgement of a stored Finance BP conclusion.
+         */
+        ConclusionResponse: {
+            /** Finding Id */
+            finding_id: string;
+            /** Status */
+            status: string;
+            /** Review Sequence */
+            review_sequence: number;
+            /** Decision */
+            decision: string;
+        };
+        /** ConclusionState */
+        ConclusionState: {
+            /** Exists */
+            exists: boolean;
+            /**
+             * Verified Facts
+             * @default
+             */
+            verified_facts: string;
+            /**
+             * Analysis Judgment
+             * @default
+             */
+            analysis_judgment: string;
+            /**
+             * Open Questions
+             * @default
+             */
+            open_questions: string;
+            /**
+             * Recommendation
+             * @default
+             */
+            recommendation: string;
+        };
+        /** ConclusionUpsertRequest */
+        ConclusionUpsertRequest: {
+            /** Verified Facts */
+            verified_facts: string;
+            /** Analysis Judgment */
+            analysis_judgment: string;
+            /** Open Questions */
+            open_questions: string;
+            /** Recommendation */
+            recommendation: string;
+            /** Editor */
+            editor: string;
         };
         /** DashboardContext */
         DashboardContext: {
@@ -447,6 +594,19 @@ export interface components {
             /** Name */
             name: string;
         };
+        /** DriverLine */
+        DriverLine: {
+            /** Position */
+            position: number;
+            /** Driver Code */
+            driver_code: string;
+            /** Calculation Method */
+            calculation_method: string | null;
+            /** Contribution Amount */
+            contribution_amount: string;
+            /** Contribution Ratio */
+            contribution_ratio: string | null;
+        };
         /** ErrorDetail */
         ErrorDetail: {
             /** Code */
@@ -457,6 +617,46 @@ export interface components {
             details?: {
                 [key: string]: unknown;
             };
+        };
+        /** EvidenceDecisionRequest */
+        EvidenceDecisionRequest: {
+            /** Decision */
+            decision: string;
+            /** Reviewer */
+            reviewer: string;
+            /** Comment */
+            comment?: string | null;
+        };
+        /**
+         * EvidenceDecisionResponse
+         * @description Acknowledgement of an evidence review decision.
+         */
+        EvidenceDecisionResponse: {
+            /** Finding Id */
+            finding_id: string;
+            /** Status */
+            status: string;
+            /** Review Sequence */
+            review_sequence: number;
+            /** Decision */
+            decision: string;
+        };
+        /** EvidenceLine */
+        EvidenceLine: {
+            /** Evidence Id */
+            evidence_id: string;
+            /** Status */
+            status: string;
+            /** Evidence Type */
+            evidence_type: string;
+            /** Object Type */
+            object_type: string;
+            /** Object Id */
+            object_id: string;
+            /** Note */
+            note: string | null;
+            /** Evidence Digest */
+            evidence_digest: string | null;
         };
         /** FieldMappingResponse */
         FieldMappingResponse: {
@@ -496,6 +696,35 @@ export interface components {
             /** Supported Combinations */
             supported_combinations: ("organization" | "customer_segment" | "logistics_product" | "region")[][];
         };
+        /** FindingContext */
+        FindingContext: {
+            /** Finding Id */
+            finding_id: string;
+            /** Finding Type */
+            finding_type: string | null;
+            /** Title */
+            title: string;
+            /** Status */
+            status: string;
+            /** Impact Amount */
+            impact_amount: string;
+            /** Unit */
+            unit: string;
+            /** Confidence */
+            confidence: string;
+            /** Business Meaning */
+            business_meaning: string | null;
+            /** Fact Statement */
+            fact_statement: string | null;
+            /** Comparison Basis */
+            comparison_basis: string | null;
+            /** Total Score */
+            total_score: string | null;
+            /** Policy Version */
+            policy_version: string | null;
+            /** Created At */
+            created_at: string;
+        };
         /** FindingItem */
         FindingItem: {
             /**
@@ -526,6 +755,29 @@ export interface components {
             scope: "global";
             /** Investigation Path */
             investigation_path: string;
+        };
+        /** FindingTransitionRequest */
+        FindingTransitionRequest: {
+            /** Decision */
+            decision: string;
+            /** Reviewer */
+            reviewer: string;
+            /** Comment */
+            comment?: string | null;
+        };
+        /**
+         * FindingTransitionResponse
+         * @description Acknowledgement of a governed Finding state transition.
+         */
+        FindingTransitionResponse: {
+            /** Finding Id */
+            finding_id: string;
+            /** Status */
+            status: string;
+            /** Review Sequence */
+            review_sequence: number;
+            /** Decision */
+            decision: string;
         };
         /** HTTPValidationError */
         HTTPValidationError: {
@@ -575,6 +827,46 @@ export interface components {
             reconciliations: components["schemas"]["ReconciliationResponse"][];
             /** Next Allowed Actions */
             next_allowed_actions: string[];
+        };
+        /**
+         * InvestigationContextResponse
+         * @description Read-only evidence-first Investigation context.
+         */
+        InvestigationContextResponse: {
+            identity: components["schemas"]["InvestigationIdentity"];
+            finding: components["schemas"]["FindingContext"];
+            result: components["schemas"]["AnalysisResultContext"] | null;
+            metric: components["schemas"]["MetricContext"];
+            /** Drivers */
+            drivers: components["schemas"]["DriverLine"][];
+            /** Evidence */
+            evidence: components["schemas"]["EvidenceLine"][];
+            /** Reviews */
+            reviews: components["schemas"]["ReviewLine"][];
+            /** Quality Issues */
+            quality_issues: components["schemas"]["QualityIssueLine"][];
+            /** Reconciliations */
+            reconciliations: components["schemas"]["ReconciliationLine"][];
+            conclusion: components["schemas"]["ConclusionState"];
+            /** Source Records */
+            source_records: components["schemas"]["SourceRecordLine"][];
+            /** Eligibility Blockers */
+            eligibility_blockers: string[];
+        };
+        /** InvestigationErrorResponse */
+        InvestigationErrorResponse: {
+            detail: components["schemas"]["ErrorDetail"];
+        };
+        /** InvestigationIdentity */
+        InvestigationIdentity: {
+            /** Finding Id */
+            finding_id: string;
+            /** Batch Id */
+            batch_id: string;
+            /** Metric Snapshot Id */
+            metric_snapshot_id: string;
+            /** Analysis Run Id */
+            analysis_run_id: string;
         };
         /** MappingConfirmationRequest */
         MappingConfirmationRequest: {
@@ -670,6 +962,27 @@ export interface components {
             ytd_budget: components["schemas"]["DashboardValue"];
             companion: components["schemas"]["DashboardValue"] | null;
         };
+        /** MetricContext */
+        MetricContext: {
+            /** Metric Code */
+            metric_code: string | null;
+            /** Metric Name */
+            metric_name: string | null;
+            /** Business Definition */
+            business_definition: string | null;
+            /** Formula */
+            formula: string | null;
+            /** Unit */
+            unit: string | null;
+            /** Definition Version */
+            definition_version: number | null;
+            /** Engine Version */
+            engine_version: string;
+            /** Policy Id */
+            policy_id: string;
+            /** Policy Set Hash */
+            policy_set_hash: string;
+        };
         /** ProductPerformance */
         ProductPerformance: {
             /**
@@ -731,6 +1044,17 @@ export interface components {
             /** Degradation Message */
             degradation_message?: string | null;
         };
+        /** QualityIssueLine */
+        QualityIssueLine: {
+            /** Severity */
+            severity: string;
+            /** Code */
+            code: string;
+            /** Message */
+            message: string;
+            /** Acknowledged */
+            acknowledged: boolean;
+        };
         /** QualityIssueResponse */
         QualityIssueResponse: {
             /**
@@ -760,6 +1084,17 @@ export interface components {
             /** Acknowledged */
             acknowledged: boolean;
         };
+        /** ReconciliationLine */
+        ReconciliationLine: {
+            /** Reconciliation Code */
+            reconciliation_code: string;
+            /** Passed */
+            passed: boolean;
+            /** Expected Value */
+            expected_value: string | null;
+            /** Actual Value */
+            actual_value: string | null;
+        };
         /** ReconciliationResponse */
         ReconciliationResponse: {
             /** Code */
@@ -774,6 +1109,19 @@ export interface components {
             details: {
                 [key: string]: unknown;
             };
+        };
+        /** ReviewLine */
+        ReviewLine: {
+            /** Sequence */
+            sequence: number;
+            /** Reviewer */
+            reviewer: string;
+            /** Decision */
+            decision: string;
+            /** Comment */
+            comment: string | null;
+            /** Created At */
+            created_at: string;
         };
         /** SheetMappingResponse */
         SheetMappingResponse: {
@@ -806,6 +1154,29 @@ export interface components {
             data_row_count: number;
             /** Columns */
             columns: components["schemas"]["ColumnProfileResponse"][];
+        };
+        /** SourceRecordLine */
+        SourceRecordLine: {
+            /** Fact Id */
+            fact_id: string;
+            /** Month Key */
+            month_key: number;
+            /** Labels */
+            labels: {
+                [key: string]: string;
+            };
+            /** Values */
+            values: {
+                [key: string]: string;
+            };
+            /** Source File Name */
+            source_file_name: string;
+            /** Sheet Name */
+            sheet_name: string;
+            /** Source Row */
+            source_row: number;
+            /** Source Column */
+            source_column: string;
         };
         /** SourceResponse */
         SourceResponse: {
@@ -1350,6 +1721,211 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["DashboardErrorResponse"];
+                };
+            };
+        };
+    };
+    investigation_context_api_v1_investigations__finding_id__get: {
+        parameters: {
+            query?: {
+                batch_id?: string | null;
+                metric_snapshot_id?: string | null;
+                analysis_run_id?: string | null;
+                source_record_limit?: number;
+            };
+            header?: never;
+            path: {
+                finding_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InvestigationContextResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InvestigationErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InvestigationErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    decide_evidence_api_v1_investigations__finding_id__evidence__evidence_id__decision_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                finding_id: string;
+                evidence_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EvidenceDecisionRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EvidenceDecisionResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InvestigationErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InvestigationErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    save_conclusion_api_v1_investigations__finding_id__conclusion_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                finding_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ConclusionUpsertRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConclusionResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InvestigationErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    transition_finding_api_v1_investigations__finding_id__transition_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                finding_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FindingTransitionRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FindingTransitionResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InvestigationErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InvestigationErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
