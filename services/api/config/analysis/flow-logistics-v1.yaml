@@ -1,0 +1,33 @@
+policy_id: flow.analysis.logistics.v1
+engine_version: flow-analysis/1
+reconciliation_tolerance: "0.01"
+persistence_periods: 3
+ranking_weights:
+  materiality: "0.40"
+  persistence: "0.20"
+  evidence_completeness: "0.20"
+  management_relevance: "0.20"
+qualification_materiality:
+  revenue_growth: "100000.00"
+  gross_profit_deterioration: "100000.00"
+  operating_profit_deterioration: "100000.00"
+  fulfillment_cost_increase: "100000.00"
+  ar_cash_deterioration: "100000.00"
+high_materiality_amount:
+  revenue_growth: "1000000.00"
+  gross_profit_deterioration: "1000000.00"
+  operating_profit_deterioration: "1000000.00"
+  fulfillment_cost_increase: "1000000.00"
+  ar_cash_deterioration: "1000000.00"
+management_relevance:
+  revenue_growth: "60"
+  gross_profit_deterioration: "90"
+  operating_profit_deterioration: "100"
+  fulfillment_cost_increase: "85"
+  ar_cash_deterioration: "100"
+required_evidence:
+  - metric_value
+  - calculation
+  - source_record_set
+  - lineage
+  - invariant
