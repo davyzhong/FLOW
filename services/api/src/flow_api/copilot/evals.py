@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 import yaml
 
@@ -17,7 +18,7 @@ DEFAULT_EVALS_PATH = Path(__file__).resolve().parents[3] / "config/copilot/flow-
 class EvalCase:
     case_id: str
     use_case: CopilotUseCase
-    packet: dict
+    packet: dict[str, Any]
     answer: StructuredAnswer
     expect_accepted: bool
     required_reason: str | None
@@ -72,7 +73,7 @@ def run_all(path: Path = DEFAULT_EVALS_PATH) -> tuple[EvalResult, ...]:
     return tuple(run_case(case) for case in load_cases(path))
 
 
-def _sections(payloads: list[dict]) -> tuple[CopilotSection, ...]:
+def _sections(payloads: list[dict[str, Any]]) -> tuple[CopilotSection, ...]:
     return tuple(CopilotSection.model_validate(item) for item in payloads)
 
 

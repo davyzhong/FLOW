@@ -1120,6 +1120,122 @@
           }
         }
       }
+    },
+    "/api/v1/publishing/snapshots/{report_snapshot_id}/publish": {
+      "post": {
+        "tags": [
+          "publishing"
+        ],
+        "summary": "Publish Report",
+        "operationId": "publish_report_api_v1_publishing_snapshots__report_snapshot_id__publish_post",
+        "parameters": [
+          {
+            "name": "report_snapshot_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Report Snapshot Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PublishRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublishResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublishingErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/publishing/snapshots/{report_snapshot_id}/attempts": {
+      "get": {
+        "tags": [
+          "publishing"
+        ],
+        "summary": "Publication Attempts",
+        "operationId": "publication_attempts_api_v1_publishing_snapshots__report_snapshot_id__attempts_get",
+        "parameters": [
+          {
+            "name": "report_snapshot_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Report Snapshot Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicationAttemptsResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublishingErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -3413,6 +3529,128 @@
           "drivers"
         ],
         "title": "ProfitBridge"
+      },
+      "PublicationAttemptLine": {
+        "properties": {
+          "sequence": {
+            "type": "integer",
+            "title": "Sequence"
+          },
+          "format": {
+            "type": "string",
+            "title": "Format"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "stored_object_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stored Object Id"
+          },
+          "error_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "sequence",
+          "format",
+          "status",
+          "stored_object_id",
+          "error_message"
+        ],
+        "title": "PublicationAttemptLine"
+      },
+      "PublicationAttemptsResponse": {
+        "properties": {
+          "report_snapshot_id": {
+            "type": "string",
+            "title": "Report Snapshot Id"
+          },
+          "attempts": {
+            "items": {
+              "$ref": "#/components/schemas/PublicationAttemptLine"
+            },
+            "type": "array",
+            "title": "Attempts"
+          }
+        },
+        "type": "object",
+        "required": [
+          "report_snapshot_id",
+          "attempts"
+        ],
+        "title": "PublicationAttemptsResponse"
+      },
+      "PublishRequest": {
+        "properties": {
+          "formats": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Formats"
+          },
+          "actor": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Actor"
+          }
+        },
+        "type": "object",
+        "required": [
+          "actor"
+        ],
+        "title": "PublishRequest"
+      },
+      "PublishResponse": {
+        "properties": {
+          "report_snapshot_id": {
+            "type": "string",
+            "title": "Report Snapshot Id"
+          },
+          "outcomes": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Outcomes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "report_snapshot_id",
+          "outcomes"
+        ],
+        "title": "PublishResponse"
+      },
+      "PublishingErrorResponse": {
+        "properties": {
+          "detail": {
+            "$ref": "#/components/schemas/ErrorDetail"
+          }
+        },
+        "type": "object",
+        "required": [
+          "detail"
+        ],
+        "title": "PublishingErrorResponse"
       },
       "QualityIssueLine": {
         "properties": {
