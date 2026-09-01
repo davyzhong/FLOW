@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import UTC, datetime
+from decimal import Decimal
 from typing import Literal
 
 from sqlalchemy.orm import Session
@@ -13,6 +14,7 @@ from flow_api.dashboard.formatting import (
 )
 from flow_api.dashboard.models import (
     ActiveFilters,
+    BridgeDriver,
     DashboardContext,
     DashboardValue,
     DataStatus,
@@ -20,7 +22,10 @@ from flow_api.dashboard.models import (
     DimensionOption,
     FilterDimension,
     FilterOptions,
+    FindingItem,
+    Highlight,
     MetricCard,
+    ProfitBridge,
     TrendPanel,
     TrendPoint,
 )
@@ -48,6 +53,13 @@ class DashboardCoreProjection:
     active_filters: ActiveFilters
     data_status: DataStatus
     metric_cards: tuple[MetricCard, ...]
+
+
+@dataclass(frozen=True, slots=True)
+class DashboardAnalysisProjection:
+    profit_bridge: ProfitBridge
+    findings: tuple[FindingItem, ...]
+    highlights: tuple[Highlight, ...]
 
 
 CARD_DEFINITIONS = (
@@ -89,6 +101,22 @@ DIMENSION_ORDER = {
         "REGION_WEST": 3,
     },
 }
+BRIDGE_DRIVER_LABELS = {
+    "revenue_volume": "收入业务量",
+    "revenue_mix": "收入结构",
+    "revenue_price": "收入单价",
+    "warehousing_cost": "仓储成本",
+    "transportation_cost": "运输成本",
+    "other_direct_cost": "其他直接成本",
+    "operating_expense": "期间费用",
+}
+INVERSE_FINDING_TYPES = frozenset(
+    {
+        "fulfillment_cost_increase",
+        "ar_cash_deterioration",
+        "operating_profit_deterioration",
+    }
+)
 UNAVAILABLE_MESSAGE = "当前口径未发布该比较值"
 
 
@@ -212,6 +240,122 @@ class DashboardService:
             points=tuple(points),
             degradation_message=message,
         )
+
+    def get_analysis_projection(
+        self, session: Session, *, filters: ActiveFilters
+    ) -> DashboardAnalysisProjection:
+        bundle = self.repository.get_latest(session)
+        self._validate_filters(filters, self._filter_options(bundle))
+        bridge = self._profit_bridge(bundle)
+        findings = self._finding_items(bundle)
+        highlights = tuple(
+            Highlight(
+                finding_id=item.finding_id,
+                title=item.title,
+                impact_display=item.impact.display_value,
+            )
+            for item in findings[:3]
+        )
+        return DashboardAnalysisProjection(
+            profit_bridge=bridge,
+            findings=findings,
+            highlights=highlights,
+        )
+
+    @staticmethod
+    def _profit_bridge(bundle: DashboardSourceBundle) -> ProfitBridge:
+        published = next(
+            (
+                item
+                for item in bundle.analysis_results
+                if item.playbook_code == "operating_profit_bridge"
+            ),
+            None,
+        )
+        if published is None:
+            return ProfitBridge(
+                status="degraded",
+                comparison_basis="prior_year",
+                impact=unavailable_value(
+                    "analysis_result_not_published",
+                    "经营利润桥尚未发布",
+                ),
+                reconciliation_status="not_applicable",
+                reconciliation_difference=Decimal("0.0000"),
+                drivers=(),
+                degradation_message="经营利润桥尚未发布",
+            )
+        result = published.result
+        drivers = tuple(
+            BridgeDriver(
+                driver_code=driver.driver_code,
+                label=BRIDGE_DRIVER_LABELS.get(
+                    driver.driver_code, driver.driver_code
+                ),
+                contribution=comparison_value(driver.contribution_amount),
+            )
+            for driver in published.drivers
+        )
+        if result.status == "not_applicable":
+            reconciliation_status: Literal["passed", "failed", "not_applicable"] = (
+                "not_applicable"
+            )
+        elif abs(result.reconciliation_difference) <= result.reconciliation_tolerance:
+            reconciliation_status = "passed"
+        else:
+            reconciliation_status = "failed"
+        return ProfitBridge(
+            status=result.status,  # type: ignore[arg-type]
+            comparison_basis=result.comparison_basis,  # type: ignore[arg-type]
+            impact=comparison_value(result.impact_amount),
+            reconciliation_status=reconciliation_status,
+            reconciliation_difference=result.reconciliation_difference,
+            drivers=drivers,
+            degradation_message=result.degradation_message,
+        )
+
+    @staticmethod
+    def _finding_items(bundle: DashboardSourceBundle) -> tuple[FindingItem, ...]:
+        items: list[FindingItem] = []
+        for published in bundle.findings:
+            finding = published.finding
+            if (
+                finding.finding_type is None
+                or finding.total_score is None
+                or finding.comparison_basis not in {"prior_year", "budget"}
+            ):
+                continue
+            verified = sum(
+                evidence.status == "verified" for evidence in published.evidence
+            )
+            path = (
+                f"/investigations/{finding.id}"
+                f"?batch_id={bundle.batch.id}"
+                f"&metric_snapshot_id={bundle.snapshot.id}"
+                f"&analysis_run_id={bundle.run.id}"
+            )
+            items.append(
+                FindingItem(
+                    finding_id=finding.id,
+                    finding_type=finding.finding_type,
+                    title=finding.title,
+                    impact=available_value(
+                        finding.impact_amount,
+                        direction=(
+                            "negative"
+                            if finding.finding_type in INVERSE_FINDING_TYPES
+                            else "positive"
+                        ),
+                    ),
+                    total_score=finding.total_score,
+                    comparison_basis=finding.comparison_basis,  # type: ignore[arg-type]
+                    evidence_verified=verified,
+                    evidence_total=len(published.evidence),
+                    scope="global",
+                    investigation_path=path,
+                )
+            )
+        return tuple(items)
 
     @staticmethod
     def _context(bundle: DashboardSourceBundle, now: datetime) -> DashboardContext:
@@ -461,6 +605,7 @@ class DashboardService:
 
 __all__ = [
     "DashboardCoreProjection",
+    "DashboardAnalysisProjection",
     "DashboardFilterError",
     "DashboardService",
 ]
