@@ -8,7 +8,7 @@ from integration.analysis_run_support import (
     _metric_session_fixture as _metric_session_fixture,  # noqa: F401
 )
 from integration.analysis_run_support import (
-    analysis_session_fixture as analysis_session,  # noqa: F401
+    analysis_session_fixture as _analysis_session_fixture,  # noqa: F401
 )
 from integration.analysis_run_support import publish_analysis_run
 from sqlalchemy import select
@@ -29,7 +29,15 @@ from flow_api.investigation.state_machines import (
 class TestFindingTransitions:
     def test_allowed_transitions_resolve_to_expected_states(self) -> None:
         assert decide_finding_transition("candidate", "submitted") == "in_review"
-        assert decide_finding_transition("in_review", "approved", evidence_statuses=("verified",), conclusion_complete=True) == "approved"
+        assert (
+            decide_finding_transition(
+                "in_review",
+                "approved",
+                evidence_statuses=("verified",),
+                conclusion_complete=True,
+            )
+            == "approved"
+        )
         assert decide_finding_transition("in_review", "rejected") == "rejected"
         assert decide_finding_transition("in_review", "returned") == "candidate"
         assert decide_finding_transition("approved", "returned") == "in_review"

@@ -105,7 +105,7 @@ def decide_evidence_transition(current_status: str, decision: str) -> EvidenceSt
 
 def _next_sequence(session: Session, finding_id: object) -> int:
     current = session.scalar(
-        select(func.max(ReviewEvent.sequence)).where(ReviewEvent.finding_id == finding_id)  # type: ignore[arg-type]
+        select(func.max(ReviewEvent.sequence)).where(ReviewEvent.finding_id == finding_id)
     )
     return int(current or 0) + 1
 
