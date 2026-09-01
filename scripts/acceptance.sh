@@ -11,6 +11,14 @@ export S3_BUCKET="${S3_BUCKET:-flow}"
 export S3_ACCESS_KEY="${S3_ACCESS_KEY:-flow}"
 export S3_SECRET_KEY="${S3_SECRET_KEY:-flow_dev_only}"
 
+# CI runs every gate against a fresh database; the chained local run does the
+# same so cross-gate committed rows cannot leak between gates. Only the
+# deterministic demo fixture data lives here.
+echo "[0/7] reset local acceptance database to a clean migrated state"
+docker compose -f infra/compose.yaml exec -T postgres psql -U flow -d flow \
+  -c "drop schema public cascade; create schema public;" >/dev/null
+(cd services/api && uv run alembic upgrade head)
+
 echo "[1/7] contract round trip"
 bash scripts/test_data_contract.sh
 

@@ -152,7 +152,10 @@ def _normalize_xlsx(path: Path) -> None:
                     content = re.sub(
                         rb"<dcterms:modified[^>]*>[^<]*</dcterms:modified>",
                         (
-                            b'<dcterms:modified xsi:type="dcterms:W3CDTF">'
+                            b'<dcterms:modified '
+                            b'xmlns:dcterms="http://purl.org/dc/terms/" '
+                            b'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
+                            b'xsi:type="dcterms:W3CDTF">'
                             b"2026-08-30T00:00:00Z</dcterms:modified>"
                         ),
                         content,
