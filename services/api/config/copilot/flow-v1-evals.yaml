@@ -1,0 +1,107 @@
+# FLOW V1 Copilot fixed evaluation cases (offline, deterministic).
+# Each case pairs a context packet and a scripted answer with the required
+# governance verdict. CI runs these through the ScriptedProvider offline.
+
+cases:
+  - case_id: citation_complete_fact
+    use_case: investigation_qa
+    packet:
+      snapshot:
+        id: snap-e1
+      metric_definitions:
+        - code: gross_margin
+          formula: gross_profit / revenue
+      findings:
+        - id: f-1
+          status: approved
+          impact_amount: "-11570000.0000"
+          evidence:
+            - id: ev-1
+              status: verified
+          drivers:
+            - code: rate_effect
+              contribution_amount: "-7800000.0000"
+    answer:
+      facts:
+        - text: "影响金额 -11570000.0000，与快照一致。"
+          citations: ["finding:f-1", "evidence:ev-1", "metric:gross_margin"]
+      judgments:
+        - text: "成本单价上涨是最大驱动。"
+          citations: ["finding:f-1"]
+    expect_accepted: true
+
+  - case_id: uncited_number_rejected
+    use_case: investigation_qa
+    packet:
+      findings:
+        - id: f-2
+          status: in_review
+          impact_amount: "-100.0000"
+          evidence: []
+          drivers: []
+    answer:
+      judgments:
+        - text: "影响约为 -9999999.1234 元。"
+          citations: []
+    expect_accepted: false
+    required_reason: uncited_number
+
+  - case_id: unknown_citation_rejected
+    use_case: investigation_qa
+    packet:
+      findings:
+        - id: f-3
+          status: in_review
+          evidence: []
+          drivers: []
+    answer:
+      judgments:
+        - text: "引用了不存在的对象。"
+          citations: ["finding:nope"]
+    expect_accepted: false
+    required_reason: unknown_citation
+
+  - case_id: insufficient_data_degradation
+    use_case: investigation_qa
+    packet:
+      batch: {}
+      findings: []
+    answer:
+      questions:
+        - text: "请提供分区域回款明细以便继续分析。"
+          citations: []
+      degradation: insufficient_data
+    expect_accepted: true
+
+  - case_id: report_outline_prohibits_unapproved
+    use_case: report_outline
+    packet:
+      findings:
+        - id: f-5
+          status: candidate
+          impact_amount: "0.0000"
+          evidence: []
+          drivers: []
+    answer:
+      judgments:
+        - text: "建议纳入该发现。"
+          citations: ["finding:f-5"]
+    expect_accepted: false
+    required_reason: unapproved_finding
+
+  - case_id: report_outline_allows_approved
+    use_case: report_outline
+    packet:
+      findings:
+        - id: f-6
+          status: approved
+          impact_amount: "-100.0000"
+          evidence:
+            - id: ev-6
+              status: verified
+          drivers: []
+    answer:
+      judgments:
+        - text: "建议纳入该发现。"
+          citations: ["finding:f-6"]
+    expect_accepted: true

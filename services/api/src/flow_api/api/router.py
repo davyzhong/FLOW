@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 
+from flow_api.api.routes.copilot import router as copilot_router
 from flow_api.api.routes.dashboard import router as dashboard_router
 from flow_api.api.routes.health import router as health_router
 from flow_api.api.routes.intake import router as intake_router
@@ -12,3 +13,4 @@ api_router.include_router(workspace_router)
 api_router.include_router(intake_router)
 api_router.include_router(dashboard_router)
 api_router.include_router(investigations_router)
+api_router.include_router(copilot_router)

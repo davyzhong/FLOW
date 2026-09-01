@@ -15,6 +15,7 @@ import type {
   InvestigationQuery,
 } from "../../lib/api/client";
 import "./investigation.css";
+import { CopilotPanel } from "./copilot-panel";
 import {
   InvestigationCheckRow,
   InvestigationConclusionEditor,
@@ -239,6 +240,7 @@ function InvestigationWorkspace({
             busy={busy}
             onTransition={onTransition}
           />
+          <CopilotPanel context={context} query={query} />
         </aside>
       </div>
       <dl

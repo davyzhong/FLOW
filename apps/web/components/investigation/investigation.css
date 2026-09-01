@@ -652,3 +652,57 @@
     grid-template-columns: 1fr;
   }
 }
+
+.investigation-copilot-note {
+  margin: 0 0 0.5rem;
+  color: #718197;
+  font-size: 0.66rem;
+}
+
+.investigation-copilot-question span {
+  display: block;
+  color: #7a899b;
+  font-size: 0.66rem;
+  margin-bottom: 0.2rem;
+}
+
+.investigation-copilot-question textarea {
+  width: 100%;
+  border: 1px solid #dbe3ec;
+  border-radius: 6px;
+  padding: 0.4rem;
+  font: inherit;
+  font-size: 0.72rem;
+  color: #20344f;
+  resize: vertical;
+  margin-bottom: 0.4rem;
+}
+
+.investigation-copilot-section h3 {
+  margin: 0.5rem 0 0.2rem;
+  font-size: 0.72rem;
+  color: #31546f;
+}
+
+.investigation-copilot-section p {
+  margin: 0 0 0.3rem;
+  font-size: 0.72rem;
+  line-height: 1.5;
+  color: #20344f;
+}
+
+.investigation-copilot-citations code {
+  display: inline-block;
+  margin-left: 0.25rem;
+  background: #eef3f8;
+  border-radius: 4px;
+  padding: 0.05rem 0.25rem;
+  font-size: 0.6rem;
+  color: #315f82;
+}
+
+.investigation-copilot-answer {
+  margin-top: 0.5rem;
+  border-top: 1px solid #edf1f5;
+  padding-top: 0.3rem;
+}

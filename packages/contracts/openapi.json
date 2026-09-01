@@ -945,6 +945,181 @@
           }
         }
       }
+    },
+    "/api/v1/copilot/investigations/{finding_id}/ask": {
+      "post": {
+        "tags": [
+          "copilot"
+        ],
+        "summary": "Ask Investigation Question",
+        "operationId": "ask_investigation_question_api_v1_copilot_investigations__finding_id__ask_post",
+        "parameters": [
+          {
+            "name": "finding_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Finding Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InvestigationQuestionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CopilotInteractionResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CopilotErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CopilotErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CopilotErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        }
+      }
+    },
+    "/api/v1/copilot/explain-mapping": {
+      "post": {
+        "tags": [
+          "copilot"
+        ],
+        "summary": "Explain Mapping",
+        "operationId": "explain_mapping_api_v1_copilot_explain_mapping_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MappingExplanationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CopilotInteractionResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CopilotErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CopilotErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/copilot/report-outline": {
+      "post": {
+        "tags": [
+          "copilot"
+        ],
+        "summary": "Draft Report Outline",
+        "operationId": "draft_report_outline_api_v1_copilot_report_outline_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReportOutlineRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CopilotInteractionResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CopilotErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CopilotErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1357,6 +1532,83 @@
           "editor"
         ],
         "title": "ConclusionUpsertRequest"
+      },
+      "CopilotErrorResponse": {
+        "properties": {
+          "detail": {
+            "$ref": "#/components/schemas/ErrorDetail"
+          }
+        },
+        "type": "object",
+        "required": [
+          "detail"
+        ],
+        "title": "CopilotErrorResponse"
+      },
+      "CopilotInteractionResponse": {
+        "properties": {
+          "interaction_id": {
+            "type": "string",
+            "title": "Interaction Id"
+          },
+          "outcome": {
+            "type": "string",
+            "title": "Outcome"
+          },
+          "context_digest": {
+            "type": "string",
+            "title": "Context Digest"
+          },
+          "provider": {
+            "type": "string",
+            "title": "Provider"
+          },
+          "model": {
+            "type": "string",
+            "title": "Model"
+          },
+          "template_version": {
+            "type": "string",
+            "title": "Template Version"
+          },
+          "answer": {
+            "$ref": "#/components/schemas/StructuredAnswer"
+          }
+        },
+        "type": "object",
+        "required": [
+          "interaction_id",
+          "outcome",
+          "context_digest",
+          "provider",
+          "model",
+          "template_version",
+          "answer"
+        ],
+        "title": "CopilotInteractionResponse"
+      },
+      "CopilotSection": {
+        "properties": {
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Text"
+          },
+          "citations": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Citations",
+            "default": []
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "text"
+        ],
+        "title": "CopilotSection"
       },
       "DashboardContext": {
         "properties": {
@@ -2567,6 +2819,60 @@
         ],
         "title": "InvestigationIdentity"
       },
+      "InvestigationQuestionRequest": {
+        "properties": {
+          "question": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Question"
+          },
+          "actor": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Actor"
+          },
+          "batch_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Batch Id"
+          },
+          "metric_snapshot_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Metric Snapshot Id"
+          },
+          "analysis_run_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Analysis Run Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "question",
+          "actor"
+        ],
+        "title": "InvestigationQuestionRequest"
+      },
       "MappingConfirmationRequest": {
         "properties": {
           "actor": {
@@ -2581,6 +2887,26 @@
           "actor"
         ],
         "title": "MappingConfirmationRequest"
+      },
+      "MappingExplanationRequest": {
+        "properties": {
+          "import_version_id": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Import Version Id"
+          },
+          "actor": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Actor"
+          }
+        },
+        "type": "object",
+        "required": [
+          "import_version_id",
+          "actor"
+        ],
+        "title": "MappingExplanationRequest"
       },
       "MappingResponse": {
         "properties": {
@@ -3292,6 +3618,26 @@
         ],
         "title": "ReconciliationResponse"
       },
+      "ReportOutlineRequest": {
+        "properties": {
+          "batch_id": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Batch Id"
+          },
+          "actor": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Actor"
+          }
+        },
+        "type": "object",
+        "required": [
+          "batch_id",
+          "actor"
+        ],
+        "title": "ReportOutlineRequest"
+      },
       "ReviewLine": {
         "properties": {
           "sequence": {
@@ -3536,6 +3882,54 @@
           "size_bytes"
         ],
         "title": "SourceResponse"
+      },
+      "StructuredAnswer": {
+        "properties": {
+          "facts": {
+            "items": {
+              "$ref": "#/components/schemas/CopilotSection"
+            },
+            "type": "array",
+            "title": "Facts",
+            "default": []
+          },
+          "judgments": {
+            "items": {
+              "$ref": "#/components/schemas/CopilotSection"
+            },
+            "type": "array",
+            "title": "Judgments",
+            "default": []
+          },
+          "hypotheses": {
+            "items": {
+              "$ref": "#/components/schemas/CopilotSection"
+            },
+            "type": "array",
+            "title": "Hypotheses",
+            "default": []
+          },
+          "questions": {
+            "items": {
+              "$ref": "#/components/schemas/CopilotSection"
+            },
+            "type": "array",
+            "title": "Questions",
+            "default": []
+          },
+          "degradation": {
+            "type": "string",
+            "enum": [
+              "none",
+              "insufficient_data"
+            ],
+            "title": "Degradation",
+            "default": "none"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "StructuredAnswer"
       },
       "TrendPanel": {
         "properties": {

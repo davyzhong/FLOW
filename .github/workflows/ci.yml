@@ -55,7 +55,8 @@ jobs:
           tests/domain tests/api tests/test_health.py
           --ignore=tests/api/test_intake.py
           --ignore=tests/api/test_dashboard.py
-          --ignore=tests/api/test_investigations.py -q
+          --ignore=tests/api/test_investigations.py
+          --ignore=tests/api/test_copilot.py -q
 
   integration:
     runs-on: ubuntu-latest
@@ -69,8 +70,8 @@ jobs:
       - run: make infra-up
       - run: cd services/api && uv run alembic upgrade head
       - run: >-
-          cd services/api && uv run pytest tests/integration tests/investigation
-          tests/api/test_dashboard.py tests/api/test_investigations.py -q
+          cd services/api && uv run pytest tests/integration tests/investigation tests/copilot
+          tests/api/test_dashboard.py tests/api/test_investigations.py tests/api/test_copilot.py -q
 
   data-contract:
     runs-on: ubuntu-latest
@@ -192,6 +193,17 @@ jobs:
           cache: pnpm
       - run: make bootstrap
       - run: make contracts-check
+
+  copilot-evals:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.13"
+          enable-cache: true
+      - run: cd services/api && uv sync --all-groups --frozen
+      - run: make test-copilot-evals
 
   migrations:
     runs-on: ubuntu-latest

@@ -276,6 +276,57 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/copilot/investigations/{finding_id}/ask": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Ask Investigation Question */
+        post: operations["ask_investigation_question_api_v1_copilot_investigations__finding_id__ask_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/copilot/explain-mapping": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Explain Mapping */
+        post: operations["explain_mapping_api_v1_copilot_explain_mapping_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/copilot/report-outline": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Draft Report Outline */
+        post: operations["draft_report_outline_api_v1_copilot_report_outline_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -431,6 +482,36 @@ export interface components {
             recommendation: string;
             /** Editor */
             editor: string;
+        };
+        /** CopilotErrorResponse */
+        CopilotErrorResponse: {
+            detail: components["schemas"]["ErrorDetail"];
+        };
+        /** CopilotInteractionResponse */
+        CopilotInteractionResponse: {
+            /** Interaction Id */
+            interaction_id: string;
+            /** Outcome */
+            outcome: string;
+            /** Context Digest */
+            context_digest: string;
+            /** Provider */
+            provider: string;
+            /** Model */
+            model: string;
+            /** Template Version */
+            template_version: string;
+            answer: components["schemas"]["StructuredAnswer"];
+        };
+        /** CopilotSection */
+        CopilotSection: {
+            /** Text */
+            text: string;
+            /**
+             * Citations
+             * @default []
+             */
+            citations: string[];
         };
         /** DashboardContext */
         DashboardContext: {
@@ -868,8 +949,28 @@ export interface components {
             /** Analysis Run Id */
             analysis_run_id: string;
         };
+        /** InvestigationQuestionRequest */
+        InvestigationQuestionRequest: {
+            /** Question */
+            question: string;
+            /** Actor */
+            actor: string;
+            /** Batch Id */
+            batch_id?: string | null;
+            /** Metric Snapshot Id */
+            metric_snapshot_id?: string | null;
+            /** Analysis Run Id */
+            analysis_run_id?: string | null;
+        };
         /** MappingConfirmationRequest */
         MappingConfirmationRequest: {
+            /** Actor */
+            actor: string;
+        };
+        /** MappingExplanationRequest */
+        MappingExplanationRequest: {
+            /** Import Version Id */
+            import_version_id: string;
             /** Actor */
             actor: string;
         };
@@ -1110,6 +1211,13 @@ export interface components {
                 [key: string]: unknown;
             };
         };
+        /** ReportOutlineRequest */
+        ReportOutlineRequest: {
+            /** Batch Id */
+            batch_id: string;
+            /** Actor */
+            actor: string;
+        };
         /** ReviewLine */
         ReviewLine: {
             /** Sequence */
@@ -1196,6 +1304,35 @@ export interface components {
             sha256: string;
             /** Size Bytes */
             size_bytes: number;
+        };
+        /** StructuredAnswer */
+        StructuredAnswer: {
+            /**
+             * Facts
+             * @default []
+             */
+            facts: components["schemas"]["CopilotSection"][];
+            /**
+             * Judgments
+             * @default []
+             */
+            judgments: components["schemas"]["CopilotSection"][];
+            /**
+             * Hypotheses
+             * @default []
+             */
+            hypotheses: components["schemas"]["CopilotSection"][];
+            /**
+             * Questions
+             * @default []
+             */
+            questions: components["schemas"]["CopilotSection"][];
+            /**
+             * Degradation
+             * @default none
+             * @enum {string}
+             */
+            degradation: "none" | "insufficient_data";
         };
         /** TrendPanel */
         TrendPanel: {
@@ -1926,6 +2063,143 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    ask_investigation_question_api_v1_copilot_investigations__finding_id__ask_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                finding_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["InvestigationQuestionRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CopilotInteractionResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CopilotErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CopilotErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CopilotErrorResponse"];
+                };
+            };
+        };
+    };
+    explain_mapping_api_v1_copilot_explain_mapping_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MappingExplanationRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CopilotInteractionResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CopilotErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CopilotErrorResponse"];
+                };
+            };
+        };
+    };
+    draft_report_outline_api_v1_copilot_report_outline_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReportOutlineRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CopilotInteractionResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CopilotErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CopilotErrorResponse"];
                 };
             };
         };

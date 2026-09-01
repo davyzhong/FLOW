@@ -119,6 +119,35 @@ function dashboardQuery(filters: DashboardFilters): string {
   return query ? `?${query}` : "";
 }
 
+export type CopilotAnswer = {
+  interaction_id: string;
+  outcome: string;
+  context_digest: string;
+  provider: string;
+  model: string;
+  template_version: string;
+  answer: {
+    facts: CopilotSectionInput[];
+    judgments: CopilotSectionInput[];
+    hypotheses: CopilotSectionInput[];
+    questions: CopilotSectionInput[];
+    degradation: "none" | "insufficient_data";
+  };
+};
+
+export type CopilotSectionInput = {
+  text: string;
+  citations: readonly string[];
+};
+
+export type CopilotQuestionInput = {
+  question: string;
+  actor: string;
+  batch_id?: string | null;
+  metric_snapshot_id?: string | null;
+  analysis_run_id?: string | null;
+};
+
 export const flowApi = {
   getWorkspace(): Promise<WorkspaceResponse> {
     return request<WorkspaceResponse>("/api/v1/workspace");
@@ -174,6 +203,16 @@ export const flowApi = {
   ): Promise<InvestigationAcknowledgement> {
     return submit<InvestigationAcknowledgement>(
       `/api/v1/investigations/${findingId}/transition`,
+      "POST",
+      input,
+    );
+  },
+  askCopilot(
+    findingId: string,
+    input: CopilotQuestionInput,
+  ): Promise<CopilotAnswer> {
+    return submit<CopilotAnswer>(
+      `/api/v1/copilot/investigations/${findingId}/ask`,
       "POST",
       input,
     );

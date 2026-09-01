@@ -2,7 +2,7 @@
 
 ## 当前状态摘要
 
-截至 2026-09-02，产品设计和 Phase 1–7 均已完成。六服务栈可以从干净检出构建启动；`flow.excel.v1` 已冻结为首个可执行中间层交换契约；标准 Excel 与非标准外部工作簿可通过同一套 Intake 与 canonical 流程生成等价的受治理 Metric Snapshot。首个物流指标集包含 15 个版本化指标和 14 条依赖边；其上已经建立 5 个确定性 Analysis Playbook、严格对账的 Driver Contributions、4 个高证据 Finding 和不可变 Analysis Run。首个真实 Finance BP 用户界面现已通过只读 Dashboard Projection API 消费这些发布对象，提供八指标、趋势、经营利润桥、Findings、产品表、毛利矩阵及 Investigation 身份交接。首个证据优先 Investigation 工作台现已受控运行：Finding/Evidence 状态机、追加式 ReviewEvent、typed Investigation API、驱动桥与公式引擎版本上下文、文件/工作表/行级源记录血缘、结论四要素与证据复核均已落地并通过 `make test-investigation-e2e` 验收。规范远程仓库为 <https://github.com/davyzhong/FLOW>；下一阶段是 AI Copilot。
+截至 2026-09-02，产品设计和 Phase 1–8 均已完成。六服务栈可以从干净检出构建启动；`flow.excel.v1` 已冻结为首个可执行中间层交换契约；标准 Excel 与非标准外部工作簿可通过同一套 Intake 与 canonical 流程生成等价的受治理 Metric Snapshot。首个物流指标集包含 15 个版本化指标和 14 条依赖边；其上已经建立 5 个确定性 Analysis Playbook、严格对账的 Driver Contributions、4 个高证据 Finding 和不可变 Analysis Run。首个真实 Finance BP 用户界面现已通过只读 Dashboard Projection API 消费这些发布对象，提供八指标、趋势、经营利润桥、Findings、产品表、毛利矩阵及 Investigation 身份交接。首个证据优先 Investigation 工作台现已受控运行：Finding/Evidence 状态机、追加式 ReviewEvent、typed Investigation API、驱动桥与公式引擎版本上下文、文件/工作表/行级源记录血缘、结论四要素与证据复核均已落地并通过 `make test-investigation-e2e` 验收。规范远程仓库为 <https://github.com/davyzhong/FLOW>；下一阶段是 AI Copilot。
 
 ## 阶段时间线
 
@@ -197,15 +197,23 @@
 - `make test-investigation-e2e` 与 GitHub Actions `investigation-e2e` 门禁落地；Playwright 4 个用例覆盖交接、复核、阻断批准、签发与审计历史；
 - 本地与 CI 全部门禁通过；详细证据见 `docs/implementation/phase-7-verification.md`。
 
+### 阶段 17：Phase 8 AI Copilot
+
+- 冻结 provider 中立 `CopilotProvider` 协议，落地确定性 `ScriptedProvider` 与基于上下文包模板的 `DeterministicProvider`；live provider 保持 opt-in 且永不进入 CI；
+- 上下文包只含身份绑定对象（批次、快照、运行、指标定义与公式、Finding、Driver、Evidence），由 Phase 7 同一仓库层构建；
+- 结构化输出强制分离事实/判断/假设/追问并引用对象 ID；验证器拒绝未引用数字、未知引用、未验证事实与未批准 Finding 的报告大纲，数据不足时显式降级；
+- 每次交互持久化 `CopilotInteraction` 审计行（迁移 0009）：模板版本、provider/model、请求引用、响应、结论与拒绝原因、操作者；
+- 发布 typed Copilot API（investigations/ask、explain-mapping、report-outline）；工作台新增 AI 分析助手面板（引用徽章、降级提示）；
+- `make test-copilot-evals` 与 GitHub Actions `copilot-evals` 门禁落地；6 个固定评估用例全部通过，详见 `docs/implementation/phase-8-verification.md`。
+
 ## 当前尚未完成
 
 - Phase 7–10 在各阶段开工前基于已验证接口形成可执行任务单；
 - 指标阈值和预警规则的完整明细；
-- AI Copilot；
 - PPT、分析 Excel、HTML/PDF 报告渲染器；
 - Phase 7–10 的功能实现与验收数据集；
 - 正式品牌命名和 FLOW 的最终英文释义。
 
 ## 当前下一步
 
-按照主路线图创建 Phase 8“AI Copilot”详细测试先行计划：定义 provider 中立 `CopilotProvider` 协议与确定性 fake provider，构建只含当前 Batch/Snapshot/Finding/Evidence/公式引用的 allow-list 上下文包，要求结构化输出分离事实、判断、假设、追问并强制引用对象 ID，拒绝未引用数字与未知 ID，落地映射解释、调查问答与报告大纲用例，以及固定评估门禁 `make test-copilot-evals`。
+按照主路线图创建 Phase 9“Unified Publishing”详细测试先行计划：先冻结 Report Snapshot 的内容与源对象引用，再实现 PPTX（结论先行）、分析 Excel、语义 HTML 与 PDF 渲染器，全部从同一不可变 Report Snapshot 渲染；发布尝试独立持久化以支持失败重试；以黄金文件比对与全格式关键值一致性检查作为 `make test-publishing-golden` 验收。只读 approved 状态的 Finding。
