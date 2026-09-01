@@ -2,8 +2,8 @@ from fastapi import APIRouter
 
 from flow_api.api.routes.dashboard import router as dashboard_router
 from flow_api.api.routes.health import router as health_router
-from flow_api.api.routes.investigations import router as investigations_router
 from flow_api.api.routes.intake import router as intake_router
+from flow_api.api.routes.investigations import router as investigations_router
 from flow_api.api.routes.workspace import router as workspace_router
 
 api_router = APIRouter(prefix="/api/v1")

@@ -19,6 +19,11 @@ def _arguments() -> argparse.Namespace:
         description="Publish the idempotent 12-month FLOW dashboard snapshot series."
     )
     parser.add_argument("--batch-id", type=UUID)
+    parser.add_argument(
+        "--fresh-batch",
+        action="store_true",
+        help="Publish a brand-new demo batch so findings start in candidate review state.",
+    )
     return parser.parse_args()
 
 
@@ -33,6 +38,7 @@ def main() -> None:
             publication = bootstrap_dashboard_demo(
                 session,
                 repository_root=REPOSITORY_ROOT,
+                fresh_batch=arguments.fresh_batch,
             )
             batch_id = publication.batch_id
             snapshots_count = len(publication.metric_snapshot_ids)

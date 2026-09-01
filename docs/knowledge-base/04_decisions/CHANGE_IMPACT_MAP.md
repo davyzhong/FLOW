@@ -30,6 +30,7 @@
 | Driver Model 改变 | Analysis Engine | Investigation、证据需求、AI 解释和报告结论 |
 | AI 权限扩大 | 风险与可信机制 | 数字一致性测试、审阅、引用和发布规则 |
 | 证据发布门槛改变 | Finding 生命周期 | 报告编排、审阅状态和审计记录 |
+| Investigation 审批资格规则改变（D037） | 状态机与迁移 0008 | Investigation API/工作台、Phase 8 AI 上下文、Phase 9 报告资格判定 |
 | 输出格式增加 Word | Publishing Renderer | 模板、分页、字体、回归测试和版本记录 |
 | 部署方式确定 | 技术架构 | 鉴权、存储、文件安全、模型接入和运维 |
 

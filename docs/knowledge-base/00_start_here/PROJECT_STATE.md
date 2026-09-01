@@ -2,7 +2,7 @@
 
 ## 当前状态摘要
 
-截至 2026-09-01，产品设计和 Phase 1–6 均已完成。六服务栈可以从干净检出构建启动；`flow.excel.v1` 已冻结为首个可执行中间层交换契约；标准 Excel 与非标准外部工作簿可通过同一套 Intake 与 canonical 流程生成等价的受治理 Metric Snapshot。首个物流指标集包含 15 个版本化指标和 14 条依赖边；其上已经建立 5 个确定性 Analysis Playbook、严格对账的 Driver Contributions、4 个高证据 Finding 和不可变 Analysis Run。首个真实 Finance BP 用户界面现已通过只读 Dashboard Projection API 消费这些发布对象，提供八指标、趋势、经营利润桥、Findings、产品表、毛利矩阵及 Investigation 身份交接。规范远程仓库为 <https://github.com/davyzhong/FLOW>；下一阶段是 Evidence-first Investigation。
+截至 2026-09-02，产品设计和 Phase 1–7 均已完成。六服务栈可以从干净检出构建启动；`flow.excel.v1` 已冻结为首个可执行中间层交换契约；标准 Excel 与非标准外部工作簿可通过同一套 Intake 与 canonical 流程生成等价的受治理 Metric Snapshot。首个物流指标集包含 15 个版本化指标和 14 条依赖边；其上已经建立 5 个确定性 Analysis Playbook、严格对账的 Driver Contributions、4 个高证据 Finding 和不可变 Analysis Run。首个真实 Finance BP 用户界面现已通过只读 Dashboard Projection API 消费这些发布对象，提供八指标、趋势、经营利润桥、Findings、产品表、毛利矩阵及 Investigation 身份交接。首个证据优先 Investigation 工作台现已受控运行：Finding/Evidence 状态机、追加式 ReviewEvent、typed Investigation API、驱动桥与公式引擎版本上下文、文件/工作表/行级源记录血缘、结论四要素与证据复核均已落地并通过 `make test-investigation-e2e` 验收。规范远程仓库为 <https://github.com/davyzhong/FLOW>；下一阶段是 AI Copilot。
 
 ## 阶段时间线
 
@@ -188,15 +188,24 @@
 - Playwright 覆盖真实数据、筛选、身份交接、网络边界、axe 无障碍和 1440/1920 截图基线；
 - 详细证据见 `docs/implementation/phase-6-verification.md`，视觉对比见 `docs/implementation/phase-6-dashboard-fidelity.md`。
 
+### 阶段 16：Phase 7 Evidence-first Investigation & Review
+
+- 冻结 Finding 状态机（candidate → in_review → approved/rejected，含退回路径）与 Evidence 决策迁移（pending/verified/rejected），每次决策追加序列化 ReviewEvent，迁移 0008 扩展 evidence_verified/evidence_rejected；
+- 发布 typed Investigation API：身份绑定读取（404/409 语义）、证据决策、结论保存与状态迁移，错误码稳定（evidence_pending/evidence_rejected/conclusion_incomplete/invalid_transition）；
+- 完成证据优先工作台：调查流程栏、复核流程条、影响桥与驱动明细、公式与计算引擎版本、对账与质量检查、文件/工作表/行级源记录血缘、结论四要素编辑、证据复核与审阅历史；
+- 审批资格硬约束：任一证据非 verified 或结论不完整即阻断批准；记录级表格只展示 canonical 数值与血缘，不重算分析金额；
+- `make test-investigation-e2e` 与 GitHub Actions `investigation-e2e` 门禁落地；Playwright 4 个用例覆盖交接、复核、阻断批准、签发与审计历史；
+- 本地与 CI 全部门禁通过；详细证据见 `docs/implementation/phase-7-verification.md`。
+
 ## 当前尚未完成
 
 - Phase 7–10 在各阶段开工前基于已验证接口形成可执行任务单；
 - 指标阈值和预警规则的完整明细；
-- 完整 Investigation 证据工作台和 AI Copilot；
+- AI Copilot；
 - PPT、分析 Excel、HTML/PDF 报告渲染器；
 - Phase 7–10 的功能实现与验收数据集；
 - 正式品牌命名和 FLOW 的最终英文释义。
 
 ## 当前下一步
 
-按照主路线图创建 Phase 7“Evidence-first Investigation”详细测试先行计划。Phase 7 应从当前 Finding 跳转保存的 `finding_id`、`batch_id`、`metric_snapshot_id` 和 `analysis_run_id` 开始，只读取同一不可变分析运行下的 Driver、Evidence、公式与来源；实现证据下钻、人工复核、判断/假设分离和 Finding 审批，不允许重新计算 Dashboard 数字或改变已发布 Finding 排名。
+按照主路线图创建 Phase 8“AI Copilot”详细测试先行计划：定义 provider 中立 `CopilotProvider` 协议与确定性 fake provider，构建只含当前 Batch/Snapshot/Finding/Evidence/公式引用的 allow-list 上下文包，要求结构化输出分离事实、判断、假设、追问并强制引用对象 ID，拒绝未引用数字与未知 ID，落地映射解释、调查问答与报告大纲用例，以及固定评估门禁 `make test-copilot-evals`。

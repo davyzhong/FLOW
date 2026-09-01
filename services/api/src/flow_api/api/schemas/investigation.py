@@ -2,6 +2,7 @@
 
 from pydantic import BaseModel
 
+from flow_api.api.schemas.intake import ErrorDetail
 from flow_api.investigation.models import (
     ConclusionUpsertRequest,
     EvidenceDecisionRequest,
@@ -9,7 +10,6 @@ from flow_api.investigation.models import (
     InvestigationContext,
     MutationAcknowledgement,
 )
-from flow_api.api.schemas.intake import ErrorDetail
 
 
 class InvestigationContextResponse(InvestigationContext):

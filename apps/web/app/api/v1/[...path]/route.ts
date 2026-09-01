@@ -2,16 +2,22 @@ import type { NextRequest } from "next/server";
 
 const apiInternalUrl = process.env.FLOW_API_INTERNAL_URL ?? "http://127.0.0.1:8000";
 
-export async function GET(
-  request: NextRequest,
-  context: { params: Promise<{ path: string[] }> },
-) {
+type RouteContext = { params: Promise<{ path: string[] }> };
+
+async function forward(request: NextRequest, context: RouteContext): Promise<Response> {
   const { path } = await context.params;
   const upstream = new URL(`/api/v1/${path.join("/")}`, apiInternalUrl);
   upstream.search = request.nextUrl.search;
   try {
     const response = await fetch(upstream, {
-      headers: { Accept: "application/json" },
+      method: request.method,
+      headers: {
+        Accept: "application/json",
+        ...(request.method === "GET" || request.method === "HEAD"
+          ? {}
+          : { "Content-Type": request.headers.get("content-type") ?? "application/json" }),
+      },
+      body: request.method === "GET" || request.method === "HEAD" ? undefined : await request.text(),
       cache: "no-store",
     });
     return new Response(response.body, {
@@ -24,4 +30,16 @@ export async function GET(
       { status: 502 },
     );
   }
+}
+
+export async function GET(request: NextRequest, context: RouteContext): Promise<Response> {
+  return forward(request, context);
+}
+
+export async function POST(request: NextRequest, context: RouteContext): Promise<Response> {
+  return forward(request, context);
+}
+
+export async function PUT(request: NextRequest, context: RouteContext): Promise<Response> {
+  return forward(request, context);
 }

@@ -60,6 +60,7 @@ FLOW 是面向物流供应链企业 Finance BP 的 AI 经营分析工作台：�
 - Phase 4 Metric Snapshots：完成并通过本地干净检出与 GitHub Actions 验收；
 - Phase 5 Analysis & Findings：完成并通过本地全量回归与 GitHub Actions 11 个 jobs 验收，5 个 typed Playbook、严格对账 Driver、确定性 Finding、Evidence 和不可变 Analysis Run 已落地；
 - Phase 6 Finance BP Dashboard：完成，typed 只读 Dashboard API、高密度真实页面、八指标、趋势、经营利润桥、Findings、产品表、毛利矩阵、完整状态和 Investigation 身份交接已落地并通过浏览器验收；
+- Phase 7 Evidence-first Investigation：完成，受控 Finding/Evidence 状态机与追加式 ReviewEvent（迁移 0008）、typed Investigation API、证据优先工作台（驱动桥、公式与引擎版本、对账与质量检查、文件/工作表/行级血缘、结论四要素、证据复核与审阅历史）已落地并通过 `make test-investigation-e2e` 验收；
 - 运行栈：Next.js、FastAPI、Celery、PostgreSQL、Redis、MinIO 已可构建启动；
 - 数据库对象：接入、血缘、标准事实、指标、分析和发布三层 migration 已落地；
 - API 合约：`/api/v1/health`、`/api/v1/workspace` 与生成式 TypeScript 类型已落地；
@@ -84,4 +85,4 @@ FLOW 是面向物流供应链企业 Finance BP 的 AI 经营分析工作台：�
 
 ## 当前下一步
 
-按照 [V1 主实施路线图](../../superpowers/plans/2026-08-30-flow-v1-master-roadmap.md) 创建 Phase 7“Evidence-first Investigation”详细测试先行计划。从 Phase 6 已保留的 Finding、batch、Metric Snapshot 和 Analysis Run 身份进入，展开同一运行中的 Driver、Evidence、公式、来源和人工复核；不得重新计算经营数字或静默切换快照。Phase 1–6 的验收证据见 `docs/implementation/phase-1-verification.md` 至 `phase-6-verification.md`。
+按照 [V1 主实施路线图](../../superpowers/plans/2026-08-30-flow-v1-master-roadmap.md) 创建 Phase 8“AI Copilot”详细测试先行计划：定义 provider 中立协议与确定性 fake、只读身份绑定上下文包、结构化输出（事实/判断/假设分离并强制引用对象 ID）、以及固定评估用例。Phase 1–7 的验收证据见 `docs/implementation/phase-1-verification.md` 至 `phase-7-verification.md`。

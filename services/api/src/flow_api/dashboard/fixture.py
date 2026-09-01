@@ -124,16 +124,19 @@ def bootstrap_dashboard_demo(
     session: Session,
     *,
     repository_root: Path = DEFAULT_REPOSITORY_ROOT,
+    fresh_batch: bool = False,
 ) -> DashboardDemoPublication:
-    batch = session.scalar(
-        select(AnalysisBatch)
-        .where(
-            AnalysisBatch.name == DEMO_BATCH_NAME,
-            AnalysisBatch.status == "published",
+    batch: AnalysisBatch | None = None
+    if not fresh_batch:
+        batch = session.scalar(
+            select(AnalysisBatch)
+            .where(
+                AnalysisBatch.name == DEMO_BATCH_NAME,
+                AnalysisBatch.status == "published",
+            )
+            .order_by(AnalysisBatch.created_at.desc(), AnalysisBatch.id.desc())
+            .limit(1)
         )
-        .order_by(AnalysisBatch.created_at.desc(), AnalysisBatch.id.desc())
-        .limit(1)
-    )
     if batch is None:
         batch = _publish_demo_import(session, repository_root)
 

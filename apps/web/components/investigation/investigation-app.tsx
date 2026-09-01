@@ -27,6 +27,15 @@ import {
   InvestigationSourceRecordsTable,
 } from "./investigation-view";
 
+const ACTION_ERROR_LABELS: Record<string, string> = {
+  evidence_pending: "存在待确认证据，批准被拒绝",
+  evidence_rejected: "存在被否定证据，批准被拒绝",
+  conclusion_incomplete: "结论四要素尚未完成，批准被拒绝",
+  invalid_transition: "当前状态不允许该操作",
+  investigation_not_found: "未找到该经营发现",
+  investigation_identity_mismatch: "数据血缘与驾驶舱上下文不一致",
+};
+
 export type InvestigationRequestState =
   | { kind: "loading" }
   | { kind: "error"; message?: string }
@@ -85,7 +94,6 @@ export function InvestigationApp({
   }, [loadInvestigation, query, requestKey]);
 
   const refresh = useCallback(() => {
-    setRequest({ kind: "loading" });
     setRequestKey((value) => value + 1);
   }, []);
 
@@ -98,7 +106,11 @@ export function InvestigationApp({
         refresh();
       } catch (error) {
         const typed = toMessage(error);
-        setActionError(typed ? typed.message : "操作失败，请稍后重试");
+        setActionError(
+          typed
+            ? (ACTION_ERROR_LABELS[typed.code] ?? typed.message)
+            : "操作失败，请稍后重试",
+        );
       } finally {
         setBusy(false);
       }

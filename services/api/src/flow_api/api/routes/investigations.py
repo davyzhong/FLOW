@@ -7,6 +7,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 
+from flow_api.api.schemas.intake import ErrorDetail
 from flow_api.api.schemas.investigation import (
     ConclusionResponse,
     ConclusionUpsertRequest,
@@ -17,7 +18,6 @@ from flow_api.api.schemas.investigation import (
     InvestigationContextResponse,
     InvestigationErrorResponse,
 )
-from flow_api.api.schemas.intake import ErrorDetail
 from flow_api.infrastructure.db import get_session_factory
 from flow_api.investigation.repositories import (
     InvestigationIdentityMismatchError,

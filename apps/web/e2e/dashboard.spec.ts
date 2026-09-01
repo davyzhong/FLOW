@@ -12,12 +12,13 @@ test("real governed dashboard filters and hands off immutable investigation cont
   await expect(page.getByTestId("metric-card")).toHaveCount(8);
 
   await page.getByRole("link", { name: /履约成本增加：进入调查/ }).click();
-  await expect(page.getByRole("heading", { name: "经营调查上下文" })).toBeVisible();
+  await expect(page.getByRole("region", { name: "不可变分析上下文" })).toBeVisible();
   const receipt = page.getByRole("region", { name: "不可变分析上下文" });
   await expect(receipt).toContainText("Finding ID");
   await expect(receipt).toContainText("数据批次 ID");
   await expect(receipt).toContainText("指标快照 ID");
   await expect(receipt).toContainText("分析运行 ID");
+  await expect(page.getByRole("region", { name: "证据复核" })).toBeVisible();
 });
 
 test("dashboard has no serious or critical axe violations", async ({ page }) => {

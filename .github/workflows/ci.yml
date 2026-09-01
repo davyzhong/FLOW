@@ -149,6 +149,32 @@ jobs:
           path: playwright-report/
           retention-days: 14
 
+  investigation-e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.13"
+          enable-cache: true
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.17.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: pnpm
+      - run: make bootstrap
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: make test-investigation-e2e
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: investigation-playwright-report
+          path: playwright-report/
+          retention-days: 14
+
   contracts:
     runs-on: ubuntu-latest
     steps:

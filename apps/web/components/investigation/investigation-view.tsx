@@ -535,8 +535,8 @@ export function InvestigationEvidenceInspector({
               </div>
             ) : null}
           </dl>
-          {item.status !== "verified" ? (
-            <div className="investigation-evidence__actions">
+          <div className="investigation-evidence__actions">
+            {item.status !== "verified" ? (
               <button
                 type="button"
                 disabled={busy}
@@ -549,22 +549,22 @@ export function InvestigationEvidenceInspector({
               >
                 确认此证据
               </button>
-              {item.status === "pending" ? (
-                <button
-                  type="button"
-                  disabled={busy}
-                  onClick={() =>
-                    void onDecision(
-                      { decision: "rejected", reviewer: "Finance BP", comment: "否定此证据" },
-                      item.evidence_id,
-                    )
-                  }
-                >
-                  否定
-                </button>
-              ) : null}
-            </div>
-          ) : null}
+            ) : null}
+            {item.status !== "rejected" ? (
+              <button
+                type="button"
+                disabled={busy}
+                onClick={() =>
+                  void onDecision(
+                    { decision: "rejected", reviewer: "Finance BP", comment: "否定此证据" },
+                    item.evidence_id,
+                  )
+                }
+              >
+                否定
+              </button>
+            ) : null}
+          </div>
         </article>
       ))}
     </section>
