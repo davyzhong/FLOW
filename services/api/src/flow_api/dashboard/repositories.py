@@ -105,6 +105,19 @@ class DashboardQualitySummary:
 
 
 @dataclass(frozen=True, slots=True)
+class DashboardTrendMetric:
+    metric_code: str
+    exact_value: str
+
+
+@dataclass(frozen=True, slots=True)
+class DashboardTrendSourcePoint:
+    snapshot_id: UUID
+    month_key: int
+    metrics: tuple[DashboardTrendMetric, ...]
+
+
+@dataclass(frozen=True, slots=True)
 class DashboardSourceBundle:
     run: AnalysisRun
     snapshot: MetricSnapshot
@@ -220,6 +233,89 @@ class DashboardSourceRepository:
             dimension_options=self._dimension_options(session),
             quality=self._quality(session, import_version.id),
         )
+
+    def get_snapshot_series(
+        self, session: Session, bundle: DashboardSourceBundle
+    ) -> tuple[DashboardTrendSourcePoint, ...]:
+        start_month = self._shift_month(bundle.as_of_period.month_key, -11)
+        rows = tuple(
+            session.execute(
+                select(MetricSnapshot, Period)
+                .join(Period, Period.id == MetricSnapshot.as_of_period_id)
+                .where(
+                    MetricSnapshot.status == "published",
+                    MetricSnapshot.batch_id == bundle.snapshot.batch_id,
+                    MetricSnapshot.import_version_id
+                    == bundle.snapshot.import_version_id,
+                    MetricSnapshot.definition_set_hash
+                    == bundle.snapshot.definition_set_hash,
+                    MetricSnapshot.engine_version == bundle.snapshot.engine_version,
+                    Period.month_key.between(
+                        start_month, bundle.as_of_period.month_key
+                    ),
+                )
+                .order_by(Period.month_key, MetricSnapshot.version.desc())
+            ).tuples()
+        )
+        latest_by_month: dict[int, MetricSnapshot] = {}
+        for snapshot, period in rows:
+            latest_by_month.setdefault(period.month_key, snapshot)
+        snapshot_ids = tuple(snapshot.id for snapshot in latest_by_month.values())
+        if not snapshot_ids:
+            return ()
+        values = tuple(
+            session.execute(
+                select(MetricValue, MetricDefinition)
+                .join(
+                    MetricDefinition,
+                    MetricDefinition.id == MetricValue.metric_definition_id,
+                )
+                .where(
+                    MetricValue.metric_snapshot_id.in_(snapshot_ids),
+                    MetricValue.comparison_type == "actual_month",
+                    MetricValue.organization_id.is_(None),
+                    MetricValue.customer_id.is_(None),
+                    MetricValue.customer_segment_id.is_(None),
+                    MetricValue.logistics_product_id.is_(None),
+                    MetricValue.region_id.is_(None),
+                    MetricDefinition.metric_code.in_(
+                        (
+                            "revenue",
+                            "operating_profit",
+                            "gross_margin",
+                            "operating_cash_flow",
+                        )
+                    ),
+                )
+                .order_by(
+                    MetricValue.metric_snapshot_id,
+                    MetricDefinition.metric_code,
+                )
+            ).tuples()
+        )
+        by_snapshot: dict[UUID, list[DashboardTrendMetric]] = {}
+        for value, definition in values:
+            by_snapshot.setdefault(value.metric_snapshot_id, []).append(
+                DashboardTrendMetric(
+                    metric_code=definition.metric_code,
+                    exact_value=value.exact_value,
+                )
+            )
+        return tuple(
+            DashboardTrendSourcePoint(
+                snapshot_id=snapshot.id,
+                month_key=month_key,
+                metrics=tuple(by_snapshot.get(snapshot.id, ())),
+            )
+            for month_key, snapshot in sorted(latest_by_month.items())
+        )
+
+    @staticmethod
+    def _shift_month(month_key: int, offset: int) -> int:
+        year, month = divmod(month_key, 100)
+        absolute = year * 12 + month - 1 + offset
+        shifted_year, shifted_month = divmod(absolute, 12)
+        return shifted_year * 100 + shifted_month + 1
 
     @staticmethod
     def _metric_values(
@@ -430,6 +526,7 @@ __all__ = [
     "DashboardSourceBundle",
     "DashboardSourceRepository",
     "DashboardSourceUnavailableError",
+    "DashboardTrendSourcePoint",
     "PublishedAnalysisResult",
     "PublishedFinding",
     "PublishedMetricValue",

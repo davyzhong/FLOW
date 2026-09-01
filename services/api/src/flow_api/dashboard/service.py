@@ -21,6 +21,8 @@ from flow_api.dashboard.models import (
     FilterDimension,
     FilterOptions,
     MetricCard,
+    TrendPanel,
+    TrendPoint,
 )
 from flow_api.dashboard.repositories import (
     DashboardSourceBundle,
@@ -124,6 +126,16 @@ def _matches_filters(item: PublishedMetricValue, filters: ActiveFilters) -> bool
     )
 
 
+def _trend_value(values: dict[str, str], code: str) -> DashboardValue:
+    value = values.get(code)
+    if value is None:
+        return unavailable_value(
+            "trend_metric_not_published",
+            "该月快照未发布趋势指标",
+        )
+    return available_value(value)
+
+
 class DashboardService:
     def __init__(self, repository: DashboardSourceRepository | None = None) -> None:
         self.repository = repository or DashboardSourceRepository()
@@ -145,6 +157,60 @@ class DashboardService:
             active_filters=filters,
             data_status=self._data_status(bundle, generated_at),
             metric_cards=self._metric_cards(bundle, filters),
+        )
+
+    def get_trends(self, session: Session) -> TrendPanel:
+        bundle = self.repository.get_latest(session)
+        source_points = self.repository.get_snapshot_series(session, bundle)
+        expected = tuple(
+            self.repository._shift_month(bundle.as_of_period.month_key, offset)
+            for offset in range(-11, 1)
+        )
+        available_months = {point.month_key for point in source_points}
+        missing = tuple(
+            _month(month_key)
+            for month_key in expected
+            if month_key not in available_months
+        )
+        required = {
+            "revenue",
+            "operating_profit",
+            "gross_margin",
+            "operating_cash_flow",
+        }
+        degraded = any(
+            {metric.metric_code for metric in point.metrics} != required
+            for point in source_points
+        )
+        points: list[TrendPoint] = []
+        for point in source_points:
+            values = {item.metric_code: item.exact_value for item in point.metrics}
+            points.append(
+                TrendPoint(
+                    month=_month(point.month_key),
+                    metric_snapshot_id=point.snapshot_id,
+                    revenue=_trend_value(values, "revenue"),
+                    operating_profit=_trend_value(values, "operating_profit"),
+                    gross_margin=_trend_value(values, "gross_margin"),
+                    operating_cash_flow=_trend_value(values, "operating_cash_flow"),
+                )
+            )
+        if degraded:
+            status: Literal["complete", "partial_series", "degraded"] = "degraded"
+            message = "部分月度快照缺少趋势指标"
+        elif missing:
+            status = "partial_series"
+            message = "部分月份尚未发布指标快照"
+        else:
+            status = "complete"
+            message = None
+        return TrendPanel(
+            status=status,
+            coverage_count=len(points),
+            expected_count=12,
+            missing_months=missing,
+            points=tuple(points),
+            degradation_message=message,
         )
 
     @staticmethod
