@@ -188,9 +188,9 @@ git push origin main
 
 ### Steps
 
-1. Write failing tests for product revenue, revenue budget variance, order YoY, actual gross margin, margin budget point variance, and gross-profit budget impact from persisted Metric Value grains.
-2. Write failing matrix tests for every customer-segment × logistics-product cell, stable row/column order, exact actual margin, and exact budget point variance.
-3. Assert no organization-only operating profit is allocated to product rows.
+1. Write failing tests for product revenue, orders, actual gross margin, fulfillment-cost rate, and the best available explicitly labelled published comparison from Metric Value grains.
+2. Write failing matrix tests for every customer-segment × logistics-product cell, stable row/column order, exact actual margin, and exact published YoY point variance when that grain has no budget.
+3. Assert no organization-only operating profit or organization-only budget is allocated to product rows or matrix cells.
 4. Implement projections and panel-scoped degradation.
 5. Run:
 

@@ -110,8 +110,8 @@ The endpoint selects the latest eligible published Analysis Run and its bound sn
 - `trends`: up to 12 published month snapshots from the same import/definition lineage, with explicit coverage count and missing months;
 - `profit_bridge`: Phase 5 `operating_profit_bridge` result and ordered Driver Contributions, reconciliation and comparison basis;
 - `findings`: Phase 5 order, score, exact impact, evidence count/status, Finding IDs, scope label, and Investigation URL inputs;
-- `product_table`: revenue, budget variance, order YoY, gross margin, margin budget variance, and gross-profit impact fields from snapshot grains;
-- `margin_matrix`: customer-segment × logistics-product actual gross margin and budget point variance;
+- `product_table`: revenue, orders, gross margin, fulfillment-cost rate, and the best available explicitly labelled published comparison from snapshot grains;
+- `margin_matrix`: customer-segment × logistics-product actual gross margin and an explicitly labelled published comparison point variance;
 - `highlights`: deterministic projection of the leading published Findings, without new causal or recommendation text;
 - `degradations`: typed, panel-scoped codes and messages.
 
@@ -203,9 +203,9 @@ No `confidence` marketing label is generated from evidence counts. The persisted
 
 ### 6.5 Product table and margin matrix
 
-The product table uses persisted logistics-product grains. It never allocates organization-only operating profit to products; `利润影响` therefore uses available gross-profit/budget variance semantics and is labelled accordingly.
+The product table uses persisted logistics-product grains. It never allocates organization-only operating profit or organization-only budget to products. Comparison columns use the available published grain with this priority: budget comparison when that exact grain exists, otherwise YoY comparison, otherwise typed unavailability. The visible header always names the selected basis.
 
-The matrix uses the supported customer-segment × logistics-product grain. Cell color maps the persisted budget point variance, while the displayed number is actual gross margin. A legend and non-color text value make the matrix accessible.
+The matrix uses the supported customer-segment × logistics-product grain. Cell color maps the persisted gross-margin point variance for the explicitly labelled comparison basis. Current fixture budget exists only at organization grain, so V1 uses the published YoY point variance for matrix cells and states `同比`; it never allocates organization budget. The displayed primary number is actual gross margin. A legend and non-color comparison value make the matrix accessible.
 
 ## 7. State model
 
