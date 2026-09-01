@@ -7,7 +7,9 @@ describe("FLOW home", () => {
   it("identifies the Finance BP workspace", () => {
     render(<HomePage />);
 
-    expect(screen.getByRole("heading", { name: "FLOW" })).toBeVisible();
-    expect(screen.getByText("Finance BP 经营分析工作台")).toBeVisible();
+    expect(
+      screen.getByRole("heading", { name: "Finance BP 经营驾驶舱" }),
+    ).toBeVisible();
+    expect(screen.getByText("FLOW · FINANCE INTELLIGENCE")).toBeVisible();
   });
 });

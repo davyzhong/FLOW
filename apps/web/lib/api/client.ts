@@ -8,9 +8,10 @@ export type DashboardFilters = NonNullable<
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_FLOW_API_URL ?? "http://localhost:8000";
 
-async function request<T>(path: string): Promise<T> {
+async function request<T>(path: string, signal?: AbortSignal): Promise<T> {
   const response = await fetch(`${API_BASE_URL}${path}`, {
     headers: { Accept: "application/json" },
+    signal,
   });
   if (!response.ok) {
     throw new Error(`FLOW API request failed with status ${response.status}`);
@@ -41,9 +42,13 @@ export const flowApi = {
   getWorkspace(): Promise<WorkspaceResponse> {
     return request<WorkspaceResponse>("/api/v1/workspace");
   },
-  getDashboard(filters: DashboardFilters = {}): Promise<DashboardResponse> {
+  getDashboard(
+    filters: DashboardFilters = {},
+    signal?: AbortSignal,
+  ): Promise<DashboardResponse> {
     return request<DashboardResponse>(
       `/api/v1/dashboard/overview${dashboardQuery(filters)}`,
+      signal,
     );
   },
 };

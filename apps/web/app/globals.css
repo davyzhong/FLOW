@@ -14,12 +14,136 @@ body {
   margin: 0;
 }
 
-.home-shell {
+.home-shell,
+.dashboard-app {
   min-height: 100vh;
+}
+
+.home-shell {
   display: grid;
   place-content: center;
   justify-items: center;
   gap: 0.75rem;
+}
+
+.dashboard-app {
+  padding: 1.5rem;
+}
+
+.dashboard-app__header {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  max-width: 1120px;
+  margin: 0 auto 1rem;
+}
+
+.dashboard-app__header p,
+.dashboard-app__header h1 {
+  margin: 0;
+}
+
+.dashboard-app__header p {
+  color: #607089;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.dashboard-app__header h1 {
+  margin-top: 0.15rem;
+  font-size: 1.3rem;
+}
+
+.dashboard-app__mark {
+  display: grid;
+  width: 2.6rem;
+  height: 2.6rem;
+  place-items: center;
+  border-radius: 0.65rem;
+  background: #1463ff;
+  color: #fff;
+  font-weight: 800;
+}
+
+.dashboard-state,
+.dashboard-loaded {
+  max-width: 1120px;
+  min-height: 360px;
+  margin: 0 auto;
+  border: 1px solid #dce5f0;
+  border-radius: 0.9rem;
+  background: #fff;
+}
+
+.dashboard-state {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 0.8rem;
+  color: #607089;
+}
+
+.dashboard-state__pulse {
+  width: 2rem;
+  height: 2rem;
+  border: 3px solid #dbe8ff;
+  border-top-color: #1463ff;
+  border-radius: 50%;
+  animation: dashboard-spin 0.9s linear infinite;
+}
+
+.dashboard-state button {
+  border: 0;
+  border-radius: 0.5rem;
+  padding: 0.65rem 1rem;
+  background: #1463ff;
+  color: #fff;
+  cursor: pointer;
+}
+
+.dashboard-state-banner {
+  border-bottom: 1px solid #e5ebf3;
+  padding: 0.7rem 1rem;
+  color: #2d684a;
+  background: #f0faf5;
+  font-size: 0.85rem;
+}
+
+.dashboard-state-banner--stale,
+.dashboard-state-banner--degraded {
+  color: #8a5b0a;
+  background: #fff8e8;
+}
+
+.dashboard-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.dashboard-preview-grid > div {
+  display: grid;
+  gap: 0.25rem;
+  border: 1px solid #e3eaf3;
+  border-radius: 0.7rem;
+  padding: 1rem;
+}
+
+.dashboard-preview-grid strong {
+  font-size: 1.5rem;
+}
+
+.dashboard-preview-grid span {
+  color: #607089;
+  font-size: 0.8rem;
+}
+
+@keyframes dashboard-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .home-shell h1,
