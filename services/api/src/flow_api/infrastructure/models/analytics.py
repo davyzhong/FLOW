@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from decimal import Decimal
-from typing import Any
+from typing import Any, cast
 from uuid import UUID
 
 from sqlalchemy import (
@@ -241,6 +241,201 @@ def _protect_published_metric_value(
         raise ValueError("published metric values are append-only")
 
 
+class AnalysisRun(IdentityTimestampMixin, Base):
+    __tablename__ = "analysis_run"
+    __table_args__ = (
+        UniqueConstraint(
+            "metric_snapshot_id",
+            "policy_set_hash",
+            "engine_version",
+            name="uq_analysis_run_identity",
+        ),
+        CheckConstraint(
+            "status in ('building', 'published', 'failed')",
+            name="ck_analysis_run_status",
+        ),
+        CheckConstraint(
+            "length(policy_set_hash) = 64", name="ck_analysis_run_policy_hash_length"
+        ),
+        CheckConstraint(
+            "length(fingerprint) = 64", name="ck_analysis_run_fingerprint_length"
+        ),
+    )
+
+    metric_snapshot_id: Mapped[UUID] = mapped_column(
+        PG_UUID(as_uuid=True),
+        ForeignKey("metric_snapshot.id", ondelete="RESTRICT"),
+        nullable=False,
+    )
+    import_version_id: Mapped[UUID] = mapped_column(
+        PG_UUID(as_uuid=True),
+        ForeignKey("import_version.id", ondelete="RESTRICT"),
+        nullable=False,
+    )
+    policy_id: Mapped[str] = mapped_column(String(128), nullable=False)
+    policy_set_hash: Mapped[str] = mapped_column(String(64), nullable=False)
+    engine_version: Mapped[str] = mapped_column(String(128), nullable=False)
+    fingerprint: Mapped[str] = mapped_column(String(64), nullable=False)
+    status: Mapped[str] = mapped_column(
+        String(32), nullable=False, default="building", server_default="building"
+    )
+
+    metric_snapshot: Mapped[MetricSnapshot] = relationship()
+    import_version: Mapped[ImportVersion] = relationship()
+    results: Mapped[list[AnalysisResult]] = relationship(
+        back_populates="analysis_run", cascade="all, delete-orphan"
+    )
+
+
+@event.listens_for(AnalysisRun, "before_update")
+def _protect_published_analysis_run_update(
+    _mapper: object, _connection: object, target: AnalysisRun
+) -> None:
+    status_history = inspect(target).attrs.status.history
+    publishing = list(status_history.deleted) == ["building"] and list(
+        status_history.added
+    ) == ["published"]
+    if target.status == "published" and not publishing:
+        raise ValueError("published analysis runs are append-only")
+
+
+@event.listens_for(AnalysisRun, "before_delete")
+def _protect_published_analysis_run_delete(
+    _mapper: object, _connection: object, target: AnalysisRun
+) -> None:
+    if target.status == "published":
+        raise ValueError("published analysis runs are append-only")
+
+
+class AnalysisResult(IdentityTimestampMixin, Base):
+    __tablename__ = "analysis_result"
+    __table_args__ = (
+        UniqueConstraint(
+            "analysis_run_id",
+            "playbook_code",
+            "comparison_basis",
+            name="uq_analysis_result_run_playbook_basis",
+        ),
+        CheckConstraint("playbook_version > 0", name="ck_analysis_result_version_positive"),
+        CheckConstraint(
+            "status in ('complete', 'degraded', 'not_applicable')",
+            name="ck_analysis_result_status",
+        ),
+        CheckConstraint(
+            "comparison_basis in ('prior_year', 'budget')",
+            name="ck_analysis_result_comparison_basis",
+        ),
+        CheckConstraint(
+            "reconciliation_tolerance >= 0",
+            name="ck_analysis_result_tolerance_nonnegative",
+        ),
+        CheckConstraint(
+            "source_record_count >= 0", name="ck_analysis_result_source_count_nonnegative"
+        ),
+    )
+
+    analysis_run_id: Mapped[UUID] = mapped_column(
+        PG_UUID(as_uuid=True),
+        ForeignKey("analysis_run.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    playbook_code: Mapped[str] = mapped_column(String(128), nullable=False)
+    playbook_version: Mapped[int] = mapped_column(Integer, nullable=False)
+    status: Mapped[str] = mapped_column(String(32), nullable=False)
+    comparison_basis: Mapped[str] = mapped_column(String(32), nullable=False)
+    impact_amount: Mapped[Decimal] = mapped_column(Numeric(24, 4), nullable=False)
+    unit: Mapped[str] = mapped_column(String(32), nullable=False)
+    reconciliation_difference: Mapped[Decimal] = mapped_column(Numeric(24, 4), nullable=False)
+    reconciliation_tolerance: Mapped[Decimal] = mapped_column(Numeric(24, 4), nullable=False)
+    required_fields: Mapped[list[str]] = mapped_column(
+        JSONB, nullable=False, default=list, server_default=text("'[]'::jsonb")
+    )
+    available_fields: Mapped[list[str]] = mapped_column(
+        JSONB, nullable=False, default=list, server_default=text("'[]'::jsonb")
+    )
+    missing_fields: Mapped[list[str]] = mapped_column(
+        JSONB, nullable=False, default=list, server_default=text("'[]'::jsonb")
+    )
+    source_record_count: Mapped[int] = mapped_column(Integer, nullable=False)
+    calculation_trace: Mapped[dict[str, Any]] = mapped_column(
+        JSONB, nullable=False, default=dict, server_default=text("'{}'::jsonb")
+    )
+    degradation_code: Mapped[str | None] = mapped_column(String(64))
+    degradation_message: Mapped[str | None] = mapped_column(Text)
+
+    analysis_run: Mapped[AnalysisRun] = relationship(back_populates="results")
+    drivers: Mapped[list[AnalysisDriver]] = relationship(
+        back_populates="analysis_result", cascade="all, delete-orphan"
+    )
+
+
+class AnalysisDriver(IdentityTimestampMixin, Base):
+    __tablename__ = "analysis_driver"
+    __table_args__ = (
+        UniqueConstraint("analysis_result_id", "position", name="uq_analysis_driver_order"),
+        UniqueConstraint(
+            "analysis_result_id", "driver_code", name="uq_analysis_driver_result_code"
+        ),
+        CheckConstraint("position > 0", name="ck_analysis_driver_position_positive"),
+    )
+
+    analysis_result_id: Mapped[UUID] = mapped_column(
+        PG_UUID(as_uuid=True),
+        ForeignKey("analysis_result.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    position: Mapped[int] = mapped_column(Integer, nullable=False)
+    driver_code: Mapped[str] = mapped_column(String(128), nullable=False)
+    calculation_method: Mapped[str | None] = mapped_column(Text)
+    contribution_amount: Mapped[Decimal] = mapped_column(Numeric(24, 4), nullable=False)
+    contribution_ratio: Mapped[Decimal | None] = mapped_column(Numeric(16, 6))
+    calculation_trace: Mapped[dict[str, Any]] = mapped_column(
+        JSONB, nullable=False, default=dict, server_default=text("'{}'::jsonb")
+    )
+
+    analysis_result: Mapped[AnalysisResult] = relationship(back_populates="drivers")
+
+
+def _analysis_run_is_published(connection: Any, analysis_run_id: UUID | None) -> bool:
+    if analysis_run_id is None:
+        return False
+    status = connection.scalar(
+        select(AnalysisRun.status).where(AnalysisRun.id == analysis_run_id)
+    )
+    return status is not None and str(status) == "published"
+
+
+def _result_run_id(connection: Any, result_id: UUID | None) -> UUID | None:
+    if result_id is None:
+        return None
+    return cast(
+        UUID | None,
+        connection.scalar(
+            select(AnalysisResult.analysis_run_id).where(AnalysisResult.id == result_id)
+        ),
+    )
+
+
+@event.listens_for(AnalysisResult, "before_update")
+@event.listens_for(AnalysisResult, "before_delete")
+def _protect_published_analysis_result(
+    _mapper: object, connection: Any, target: AnalysisResult
+) -> None:
+    if _analysis_run_is_published(connection, target.analysis_run_id):
+        raise ValueError("published analysis results are append-only")
+
+
+@event.listens_for(AnalysisDriver, "before_update")
+@event.listens_for(AnalysisDriver, "before_delete")
+def _protect_published_analysis_driver(
+    _mapper: object, connection: Any, target: AnalysisDriver
+) -> None:
+    if _analysis_run_is_published(
+        connection, _result_run_id(connection, target.analysis_result_id)
+    ):
+        raise ValueError("published analysis drivers are append-only")
+
+
 class Finding(IdentityTimestampMixin, Base):
     __tablename__ = "finding"
     __table_args__ = (
@@ -249,6 +444,13 @@ class Finding(IdentityTimestampMixin, Base):
             name="ck_finding_status",
         ),
         CheckConstraint("confidence between 0 and 1", name="ck_finding_confidence_range"),
+        CheckConstraint(
+            "total_score is null or total_score between 0 and 100",
+            name="ck_finding_total_score_range",
+        ),
+        UniqueConstraint(
+            "analysis_run_id", "fingerprint", name="uq_finding_run_fingerprint"
+        ),
     )
 
     metric_snapshot_id: Mapped[UUID] = mapped_column(
@@ -257,15 +459,35 @@ class Finding(IdentityTimestampMixin, Base):
     metric_definition_id: Mapped[UUID | None] = mapped_column(
         PG_UUID(as_uuid=True), ForeignKey("metric_definition.id", ondelete="RESTRICT")
     )
+    analysis_run_id: Mapped[UUID | None] = mapped_column(
+        PG_UUID(as_uuid=True), ForeignKey("analysis_run.id", ondelete="CASCADE")
+    )
+    analysis_result_id: Mapped[UUID | None] = mapped_column(
+        PG_UUID(as_uuid=True), ForeignKey("analysis_result.id", ondelete="CASCADE")
+    )
+    finding_type: Mapped[str | None] = mapped_column(String(128))
     title: Mapped[str] = mapped_column(String(512), nullable=False)
     status: Mapped[str] = mapped_column(String(32), nullable=False, default="candidate")
     impact_amount: Mapped[Decimal] = mapped_column(Numeric(24, 4), nullable=False)
     confidence: Mapped[Decimal] = mapped_column(Numeric(5, 4), nullable=False)
     business_meaning: Mapped[str | None] = mapped_column(Text)
+    fact_statement: Mapped[str | None] = mapped_column(Text)
+    comparison_basis: Mapped[str | None] = mapped_column(String(32))
+    total_score: Mapped[Decimal | None] = mapped_column(Numeric(12, 6))
+    policy_version: Mapped[str | None] = mapped_column(String(128))
+    fingerprint: Mapped[str | None] = mapped_column(String(64))
+    qualification_trace: Mapped[dict[str, Any]] = mapped_column(
+        JSONB, nullable=False, default=dict, server_default=text("'{}'::jsonb")
+    )
 
     metric_snapshot: Mapped[MetricSnapshot] = relationship()
     metric_definition: Mapped[MetricDefinition | None] = relationship()
+    analysis_run: Mapped[AnalysisRun | None] = relationship()
+    analysis_result: Mapped[AnalysisResult | None] = relationship()
     drivers: Mapped[list[DriverContribution]] = relationship(
+        back_populates="finding", cascade="all, delete-orphan"
+    )
+    score_components: Mapped[list[FindingScoreComponent]] = relationship(
         back_populates="finding", cascade="all, delete-orphan"
     )
 
@@ -284,7 +506,10 @@ class DriverContribution(IdentityTimestampMixin, Base):
     driver_code: Mapped[str] = mapped_column(String(128), nullable=False)
     calculation_method: Mapped[str | None] = mapped_column(Text)
     contribution_amount: Mapped[Decimal] = mapped_column(Numeric(24, 4), nullable=False)
-    contribution_ratio: Mapped[Decimal] = mapped_column(Numeric(12, 4), nullable=False)
+    contribution_ratio: Mapped[Decimal | None] = mapped_column(Numeric(16, 6))
+    calculation_trace: Mapped[dict[str, Any]] = mapped_column(
+        JSONB, nullable=False, default=dict, server_default=text("'{}'::jsonb")
+    )
 
     finding: Mapped[Finding] = relationship(back_populates="drivers")
 
@@ -294,7 +519,9 @@ class Evidence(IdentityTimestampMixin, Base):
     __table_args__ = (
         CheckConstraint("status in ('pending', 'verified', 'rejected')", name="ck_evidence_status"),
         CheckConstraint(
-            "object_type in ('metric', 'finding', 'evidence', 'source_record')",
+            "object_type in ('metric', 'finding', 'evidence', 'source_record', "
+            "'analysis_run', 'analysis_result', 'canonical_record_set', 'lineage', "
+            "'invariant')",
             name="ck_evidence_object_type",
         ),
     )
@@ -305,10 +532,68 @@ class Evidence(IdentityTimestampMixin, Base):
     status: Mapped[str] = mapped_column(String(32), nullable=False, default="pending")
     evidence_type: Mapped[str] = mapped_column(String(64), nullable=False)
     object_type: Mapped[str] = mapped_column(String(32), nullable=False)
-    object_id: Mapped[str] = mapped_column(String(128), nullable=False)
+    object_id: Mapped[str] = mapped_column(String(256), nullable=False)
     note: Mapped[str | None] = mapped_column(Text)
+    evidence_digest: Mapped[str | None] = mapped_column(String(64))
+    verification_trace: Mapped[dict[str, Any]] = mapped_column(
+        JSONB, nullable=False, default=dict, server_default=text("'{}'::jsonb")
+    )
 
     finding: Mapped[Finding] = relationship()
+
+
+class FindingScoreComponent(IdentityTimestampMixin, Base):
+    __tablename__ = "finding_score_component"
+    __table_args__ = (
+        UniqueConstraint(
+            "finding_id", "component_code", name="uq_finding_score_component_code"
+        ),
+        CheckConstraint(
+            "normalized_score between 0 and 100",
+            name="ck_finding_score_normalized_range",
+        ),
+        CheckConstraint("weight between 0 and 1", name="ck_finding_score_weight_range"),
+        CheckConstraint(
+            "weighted_score between 0 and 100",
+            name="ck_finding_score_weighted_range",
+        ),
+    )
+
+    finding_id: Mapped[UUID] = mapped_column(
+        PG_UUID(as_uuid=True), ForeignKey("finding.id", ondelete="CASCADE"), nullable=False
+    )
+    component_code: Mapped[str] = mapped_column(String(64), nullable=False)
+    raw_value: Mapped[Decimal] = mapped_column(Numeric(24, 6), nullable=False)
+    normalized_score: Mapped[Decimal] = mapped_column(Numeric(12, 6), nullable=False)
+    weight: Mapped[Decimal] = mapped_column(Numeric(12, 6), nullable=False)
+    weighted_score: Mapped[Decimal] = mapped_column(Numeric(12, 6), nullable=False)
+    calculation_trace: Mapped[dict[str, Any]] = mapped_column(
+        JSONB, nullable=False, default=dict, server_default=text("'{}'::jsonb")
+    )
+
+    finding: Mapped[Finding] = relationship(back_populates="score_components")
+
+
+def _finding_run_id(connection: Any, finding_id: UUID | None) -> UUID | None:
+    if finding_id is None:
+        return None
+    return cast(
+        UUID | None,
+        connection.scalar(
+            select(Finding.analysis_run_id).where(Finding.id == finding_id)
+        ),
+    )
+
+
+@event.listens_for(FindingScoreComponent, "before_update")
+@event.listens_for(FindingScoreComponent, "before_delete")
+def _protect_published_finding_score(
+    _mapper: object, connection: Any, target: FindingScoreComponent
+) -> None:
+    if _analysis_run_is_published(
+        connection, _finding_run_id(connection, target.finding_id)
+    ):
+        raise ValueError("published finding scores are append-only")
 
 
 class ReviewEvent(IdentityTimestampMixin, Base):

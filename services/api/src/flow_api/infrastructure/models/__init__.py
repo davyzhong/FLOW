@@ -1,8 +1,12 @@
 from flow_api.infrastructure.models.analytics import (
+    AnalysisDriver,
+    AnalysisResult,
+    AnalysisRun,
     Conclusion,
     DriverContribution,
     Evidence,
     Finding,
+    FindingScoreComponent,
     MetricDefinition,
     MetricDefinitionDependency,
     MetricSnapshot,
@@ -44,6 +48,9 @@ from flow_api.infrastructure.models.publishing import (
 
 __all__ = [
     "AnalysisBatch",
+    "AnalysisDriver",
+    "AnalysisResult",
+    "AnalysisRun",
     "Base",
     "Customer",
     "CustomerSegment",
@@ -55,6 +62,7 @@ __all__ = [
     "FactFinancialActual",
     "FactOperatingActual",
     "Finding",
+    "FindingScoreComponent",
     "ImportVersion",
     "MappingVersion",
     "MetricDefinition",
