@@ -10,7 +10,7 @@ ranking_weights:
 qualification_materiality:
   revenue_growth: "100000.00"
   gross_profit_deterioration: "100000.00"
-  operating_profit_deterioration: "100000.00"
+  operating_profit_deterioration: "50000.00"
   fulfillment_cost_increase: "100000.00"
   ar_cash_deterioration: "100000.00"
 high_materiality_amount:
