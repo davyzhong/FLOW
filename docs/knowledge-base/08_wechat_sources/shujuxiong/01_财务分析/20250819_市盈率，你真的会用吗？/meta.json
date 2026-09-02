@@ -1,0 +1,35 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "albums": [
+  "财务分析"
+ ],
+ "author": "数据熊",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "01_财务分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0rh9Al5qwLMMjo0odPhVvmaTzsHibf55G20dSibkXCSf5X56MyW2ciaDolBes0kwC6D89KlzEib1xAag/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T11:37:47+08:00",
+ "digest": "市盈率不是买卖的唯一依据，而是一个起点。",
+ "image_failures": [
+  {
+   "error": "host 不在白名单内: mmecoa.qpic.cn",
+   "file": null,
+   "url": "https://mmecoa.qpic.cn/mmecoa_png/p7HuDKJB4T17hmgN4ia9GQKG4cKp1tBh6oJW3VxeuBxnh3lPjT9ibFFJCOouHNxa9C3plmiceqkqYta4Ap41IEfLw/640?wx_fmt=png&from=appmsg"
+  }
+ ],
+ "images": [],
+ "publish_time": "2025-08-19 06:58",
+ "relevance": "relevant",
+ "relevance_score": 12.0,
+ "title": "市盈率，你真的会用吗？",
+ "title_hits": [],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247489095&idx=1&sn=102153e368af2dc87835923bccf77796&chksm=ce114b12f966c204416021d3b291c2f59f4d180205f9f49fb94af334568c8de68874a41e1c12",
+ "word_count": 1897
+}

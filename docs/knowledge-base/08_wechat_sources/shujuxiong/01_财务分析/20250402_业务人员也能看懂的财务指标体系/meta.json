@@ -1,0 +1,36 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "albums": [
+  "财务分析",
+  "财务管理",
+  "财务报表"
+ ],
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "01_财务分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1gV4hpVcibbhicgh2jSh0VYpWib5X13iaBRC3z1CeUanOURYW9enwRFPvCEKnnhAsHCNnyUY3qtCiaCLQ/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T11:32:24+08:00",
+ "digest": "财务数据是企业的“望远镜”，看懂了它，你就能清楚地掌握现在，预见未来。",
+ "image_failures": [],
+ "images": [],
+ "publish_time": "2025-04-02 07:00",
+ "relevance": "relevant",
+ "relevance_score": 32.4,
+ "title": "业务人员也能看懂的财务指标体系",
+ "title_hits": [
+  "业务",
+  "指标",
+  "财务"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487800&idx=1&sn=30c2bf7783ca021e8c22750ba7ac05c7&chksm=ce114c6df966c57bf3361162d6e55c16e20fa4675a30af831f7aa6d5be94f5c8968121b0d176",
+ "word_count": 1881
+}

@@ -1,0 +1,32 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "albums": [
+  "财务分析"
+ ],
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "01_财务分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0RyFpLM6OTSYKZOiaOIqPXmO69Bpx19KN2Idz4LlgmYNDhUOhNIbHA5JIawve0O6uEBiavTVq4pZbA/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T11:35:20+08:00",
+ "digest": "资产负债表常被调侃是“最难读”的报表，但它却像一张企业的“CT 扫描片”，藏着最真实的脉络与风险。",
+ "image_failures": [],
+ "images": [],
+ "publish_time": "2025-06-06 07:00",
+ "relevance": "relevant",
+ "relevance_score": 21.0,
+ "title": "资产负债表分析：如何快速摸清企业家底？",
+ "title_hits": [
+  "资产负债"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488283&idx=1&sn=485252f81c7f1e62fce05c82e71d7a2f&chksm=ce114e4ef966c758c81a02239623c9a88f8313c8f46e421c2fed697d79cf88915b91f6db521e",
+ "word_count": 1511
+}
