@@ -1,0 +1,45 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "albums": [
+  "财务管理"
+ ],
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "数据方法与工具"
+ ],
+ "collection": "02_财务管理",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm30J66WjY5xI32Yyg7htFrAjro6yjXf0rUKvcbLC1ZHwibemXicnuvV9qRiaxBgR86vLgVJdEkmJEkCw/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T12:08:38+08:00",
+ "digest": "会计是一门商业语言",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.png",
+   "sha256": "17bddb1ccd91104880ad4264bf84d6a0224950eab5bd429765ea1231382e372e",
+   "size": 71307,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3xfQPjMyxNGwj8R5EGZYIg06HibxgqKbafApoJJUAxdzqE1m6Sibaf394W44LrbjbBgq807pNqTv7A/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img002.gif",
+   "sha256": "6e5826c75dc6fda91cbe4b70102063ab7e99520bd66704863d50bae65f33298d",
+   "size": 7063,
+   "url": "http://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm1eCHSDQ1FT41crSwIq5ZQuez5bEOnUCzPmARmhic0lm221AAwtWTwHosaT1CiaGoiaicgCSV7KmQRnJw/640?wx_fmt=gif"
+  }
+ ],
+ "publish_time": "2025-06-23 07:00",
+ "relevance": "relevant",
+ "relevance_score": 21.6,
+ "title": "如何通俗的看懂财务三大报表？",
+ "title_hits": [
+  "报表",
+  "财务"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488422&idx=1&sn=792a3642aa21bedb6b4ca54a2f94c7d2&chksm=ce114ef3f966c7e54ddf138fa8d3a5271f46a32d465791276ddf2438a4a96e99c2bbc5ac7100",
+ "word_count": 1795
+}

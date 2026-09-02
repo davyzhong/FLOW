@@ -1,0 +1,93 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "albums": [
+  "财务管理"
+ ],
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "数据方法与工具"
+ ],
+ "collection": "02_财务管理",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm24rJ7E77M2dbdmibiaC5iaNKJP8J6o1ljdbHHqpWtxGHu7CgsV4p1vibWDXBTJFznZK1W432u0APpPxg/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T11:58:32+08:00",
+ "digest": null,
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.gif",
+   "sha256": "6e5826c75dc6fda91cbe4b70102063ab7e99520bd66704863d50bae65f33298d",
+   "size": 7063,
+   "url": "https://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm1eCHSDQ1FT41crSwIq5ZQuez5bEOnUCzPmARmhic0lm221AAwtWTwHosaT1CiaGoiaicgCSV7KmQRnJw/640?wx_fmt=gif"
+  },
+  {
+   "file": "images/img002.jpg",
+   "sha256": "5daca76da4d0d7f011a08672e4f63e6ce59790bfc9325850f975ac9f8bfae429",
+   "size": 69901,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm24rJ7E77M2dbdmibiaC5iaNKJxDBxD3icRvpib8z0jr5iax69m6ltPictjDIiaXhWsp9hOysJabsUKshpQwQ/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img003.jpg",
+   "sha256": "32c9649a8b2ca75b3dd213da7ae4db6118dc45dfa888eae629ede6d7bbf5f160",
+   "size": 44726,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm24rJ7E77M2dbdmibiaC5iaNKJdpxQjBIHXk1c9J2yhmRkNvJsxGmQrDxaaEcVf99KAGVsj7oM0qSPjg/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img004.jpg",
+   "sha256": "4c41a152e23b1e884191b17ae178ee40e0811557b574cc36d3601545cfb27c23",
+   "size": 71659,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm24rJ7E77M2dbdmibiaC5iaNKJJVET7bSFaUCucN2picy1ae0XxYUxorFyshHEVNsXbTXBySmHOvEoXoQ/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img005.jpg",
+   "sha256": "c18e39665caccd8ecaeeeeabe1d1c58f3cc45eec49c842a860b6e04d1e15cca1",
+   "size": 59624,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm24rJ7E77M2dbdmibiaC5iaNKJGfDNUrnu4bfZdbSLGJWJUGSnIFDLxRBOOCEJPrEjzv4L8020ufBt2g/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img006.jpg",
+   "sha256": "8adf457e78cf914f7ad6c0cc833bf9c5daef68d6da1d233df5c24ad74ce6dced",
+   "size": 52342,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm24rJ7E77M2dbdmibiaC5iaNKJ4kXVc8hHf2iclj1tyC5aJHy82twnqvBXhMvsvzy5jF9zUpawKMb4Vmg/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img007.jpg",
+   "sha256": "38a09422e071d72d253183fb25614cfbd83c5f572d9a960a7fed4d9c13cbe92e",
+   "size": 76532,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm24rJ7E77M2dbdmibiaC5iaNKJLdUOtnQyia1RtANtMvpphx7CrwPm84cnoN4WyjGNVDjoLmtYISldFqA/640?wx_fmt=jpeg&from=appmsg"
+  },
+  {
+   "file": "images/img008.jpg",
+   "sha256": "7b85be18e5cf7a523b1e32d49abfb0a815aea8d0b185d14af862f89975c969d2",
+   "size": 42266,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3n6CRDYiaLFicgAGfIy1es3R0zcKTjy9tpYluSLVLIZA1JXhYyHzAQo8ibzBba5YJJ3DrtbGC6UtYlw/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img009.jpg",
+   "sha256": "9ac810200df9efa80b060fd3990e92100120fdcdd946304ddd9815b67780c629",
+   "size": 35289,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3lvNiasME0WH6ZoaZav9LlIicsos0tYs656BKBXaichFnQZ0ngVenianGCibCm2nmiaS7zseEibG0NBX7jw/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img010.jpg",
+   "sha256": "59215e635c439e69fc20172af9d94be44b76c6f0cae3d7161c88b885651054f1",
+   "size": 60184,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2nHkzR7Mhlzg54JXuMPEp1ltJwtvQMxtia4IibicTAypLOeAZiafhp5g7juFzYDhdgN84oECkiaQicXmXQ/640?wx_fmt=jpeg"
+  }
+ ],
+ "publish_time": "2024-11-03 06:45",
+ "relevance": "relevant",
+ "relevance_score": 14.6,
+ "title": "全面预算管理的实质",
+ "title_hits": [
+  "管理",
+  "预算"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247485140&idx=1&sn=a406f9c312aefca36b30350bc566dea8&chksm=ce115b81f966d297d6f0ef0e434275c3e9973fcaf8b4d8b075f7a91a1a3d88fcfce40a29714f",
+ "word_count": 2250
+}

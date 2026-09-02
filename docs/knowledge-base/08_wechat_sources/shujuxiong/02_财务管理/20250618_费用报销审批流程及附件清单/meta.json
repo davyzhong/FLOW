@@ -1,0 +1,32 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "albums": [
+  "财务管理"
+ ],
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "02_财务管理",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2gd3HDY0s08qERmzKdu4mpyHtHdLtFvOMCKCwZVcjkxRoZsVzkK6xRtxsF4lv17ASOz3UX8Lvqog/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T12:08:27+08:00",
+ "digest": "今天聊个所有人都关心的“痛点”——报～销～。流程不清、附件缺失、单据打回 N 次？别急，这篇文章带你一次搞定，拒绝“走廊往返一万步”！",
+ "image_failures": [],
+ "images": [],
+ "publish_time": "2025-06-18 07:00",
+ "relevance": "relevant",
+ "relevance_score": 13.0,
+ "title": "费用报销审批流程及附件清单",
+ "title_hits": [
+  "报销",
+  "流程"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488382&idx=2&sn=6a112d8c274906bb697927f5fc010924&chksm=ce114e2bf966c73dad01ca72203952f182591cf185cccdaf7dc8ce39eeba7cfd0f735e552406",
+ "word_count": 1219
+}

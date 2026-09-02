@@ -1,0 +1,53 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "albums": [
+  "财务管理"
+ ],
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "数据方法与工具"
+ ],
+ "collection": "02_财务管理",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3ibTf9sroJ6tpFf5bh0ZqPNOE0VcXIH9IwAnBWDgAicnZoPkKElOiaXtoNrkqUO6a6S6UXIUq4ZMgWg/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T12:00:53+08:00",
+ "digest": "管理得当的每一笔账款，都是企业成功的基石。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.gif",
+   "sha256": "6e5826c75dc6fda91cbe4b70102063ab7e99520bd66704863d50bae65f33298d",
+   "size": 7063,
+   "url": "https://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm1eCHSDQ1FT41crSwIq5ZQuez5bEOnUCzPmARmhic0lm221AAwtWTwHosaT1CiaGoiaicgCSV7KmQRnJw/640?wx_fmt=gif"
+  },
+  {
+   "file": "images/img002.png",
+   "sha256": "0e64eb7aa1968db1f267cec66c2b7d3a59ba65151bc1ff6d610e53e602421207",
+   "size": 100010,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3ibTf9sroJ6tpFf5bh0ZqPN61NeJwiaBjJoJIA3WoyyibxDXABfqOP8NNYnDK2YPdC4ibu5iagvQ3GNQg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img003.png",
+   "sha256": "ad6d1bb534d68be1c66d4d4f677fb411fae58b46299e025cca547a0fd0116300",
+   "size": 73490,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3ibTf9sroJ6tpFf5bh0ZqPNr5f0qrZnFgIK9PU2Xkl72rnrQchbcJWpPy0au3SNDj0FRhNT2Cu5bw/640?wx_fmt=png&from=appmsg"
+  }
+ ],
+ "publish_time": "2025-01-12 14:14",
+ "relevance": "relevant",
+ "relevance_score": 21.4,
+ "title": "应收账款管理，财务部门应该承担哪些责任？",
+ "title_hits": [
+  "应收",
+  "管理",
+  "财务",
+  "账款"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247486505&idx=1&sn=4822f84adec6e01d043f1da7c08df9b5&chksm=ce11517cf966d86a5a469f78cd6a93ca069ef9693817592cb192f51c03be8a51ef5d4bf95942",
+ "word_count": 1876
+}

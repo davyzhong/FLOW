@@ -1,0 +1,33 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "albums": [
+  "财务管理"
+ ],
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "02_财务管理",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0Lxkibq07Y2jzcMVpyUXJC5A3CaImYcDgCemHNYxTWVn0kRg1QH0GSY0QSrZs64QKSRNfPcic0nteA/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T12:08:15+08:00",
+ "digest": "在大多数人眼里，财务部就等于“算账的”。",
+ "image_failures": [],
+ "images": [],
+ "publish_time": "2025-06-17 07:00",
+ "relevance": "relevant",
+ "relevance_score": 31.6,
+ "title": "财务各岗位主要工作流程（附详细清单）",
+ "title_hits": [
+  "流程",
+  "财务"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488374&idx=1&sn=cc8a8571fe52806825fee3e24027380c&chksm=ce114e23f966c735d967efe500cd6e19734f185098b02718b1a39674ba10f142e22b8bb71db3",
+ "word_count": 1850
+}

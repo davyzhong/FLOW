@@ -1,0 +1,56 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "albums": [
+  "财务管理"
+ ],
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "数据方法与工具"
+ ],
+ "collection": "02_财务管理",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3WScGMlEAcRsRRLluCqmqia9a1aUKb6icIaDiaJKjb67f5ao7xlOsiaHQSShFibS0gqzMfC9thr5VtrNA/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T12:03:47+08:00",
+ "digest": "无论是创业公司还是行业巨头，成本核算都是实现公司战略目标不可或缺的基石。未来，随着技术的不断发展，成本核算将更加精细化、智能化，帮助企业在日益复杂的市场环境中稳步前行。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.gif",
+   "sha256": "6e5826c75dc6fda91cbe4b70102063ab7e99520bd66704863d50bae65f33298d",
+   "size": 7063,
+   "url": "https://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm1eCHSDQ1FT41crSwIq5ZQuez5bEOnUCzPmARmhic0lm221AAwtWTwHosaT1CiaGoiaicgCSV7KmQRnJw/640?wx_fmt=gif"
+  },
+  {
+   "file": "images/img002.png",
+   "sha256": "ad1e0e504cea06e6ea9c240486176245e8c2648aa743e38b14ab04b9405e73c7",
+   "size": 83726,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3WScGMlEAcRsRRLluCqmqia8kicjIGkkLJQuVvNyicWbexgbjyeXQ5uPNtQzzKialqcEictzuJIicmXFKw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img003.png",
+   "sha256": "48c035ece97f86ac44cf033d27da794e55a541f9ccc6553709f65f5f5f732856",
+   "size": 421268,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3WScGMlEAcRsRRLluCqmqiab4blibQUW316fKiayicnicRvsTTU7u8g0gnPpiaiaKYUnWV8yArGIKUciamNQ/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img004.png",
+   "sha256": "9242d1c6882f2597797438f3e4519df1d2cc64f3d36e0fdb8c97e221666b2277",
+   "size": 32081,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3WScGMlEAcRsRRLluCqmqiaeV6VI1amPCF3DLdibdwRNfBf5te0I2TRNqUPRsdGz5bB7qiccHbuan1g/640?wx_fmt=png&from=appmsg"
+  }
+ ],
+ "publish_time": "2025-01-24 07:00",
+ "relevance": "relevant",
+ "relevance_score": 7.4,
+ "title": "​成本核算如何影响公司战略",
+ "title_hits": [
+  "战略"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247486711&idx=1&sn=a1ef7b650b7186bb5bf5c00c786403c0&chksm=ce1151a2f966d8b44592ae3374af5923c4c652ecef2480d5858653d55e8a20a68eec8015512c",
+ "word_count": 1621
+}
