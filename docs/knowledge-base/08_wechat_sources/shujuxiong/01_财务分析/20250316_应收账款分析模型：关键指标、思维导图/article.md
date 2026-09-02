@@ -14,7 +14,7 @@ word_count: 1387
 
 # 应收账款分析模型：关键指标、思维导图
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-03-16 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-03-16 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487702&idx=1&sn=f7465d3f08d5dbf97da87e8a9c653d64&chksm=ce114d83f966c4952544cf97394bbac3fa527ffb6a5bebe567529bb49e3a4a1c03b7036e89a8
 
 ![图片](images/img001.gif)

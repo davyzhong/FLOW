@@ -15,7 +15,7 @@ word_count: 1685
 
 # 2025年5月经营分析PPT模板
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-03 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-03 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488257&idx=1&sn=c08f8b50a5fdbf4e3969c5cf6e3be2b0&chksm=ce114e54f966c742205d4ae1aded0c7047296ef85bad91af54755a792d740cc89cbcbf0585e1
 > 摘要：把复杂留给自己，把简单交给别人；数据会说谎，但趋势不会。
 

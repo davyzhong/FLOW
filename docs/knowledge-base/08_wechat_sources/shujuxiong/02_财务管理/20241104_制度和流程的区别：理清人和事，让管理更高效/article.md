@@ -14,7 +14,7 @@ word_count: 2090
 
 # 制度和流程的区别：理清人和事，让管理更高效
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2024-11-04 06:45  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2024-11-04 06:45
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247485153&idx=1&sn=e6281b2b245546dc1fe674db93f922b0&chksm=ce115bb4f966d2a27f86a024f749e688f5455aad929bae842f06b36607a9d51eebe94fa4140a
 
 ![图片](images/img001.gif)

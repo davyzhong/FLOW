@@ -14,7 +14,7 @@ word_count: 1734
 
 # 财务人，如何提升逻辑思维能力
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-05-18 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-05-18 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488136&idx=1&sn=2ba07773fb95c3fc9fc500af43d08a34&chksm=ce114fddf966c6cbfdfb769ad2b7ba3c603b01ef4286d0a55afa00447018d63b28d250675b46
 > 摘要：“思考的本质，是对混沌世界的一次次结构化整理。 —— 德·波诺”
 

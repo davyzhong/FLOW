@@ -14,7 +14,7 @@ word_count: 1921
 
 # 财务管理的核心逻辑：杜邦分析模型深度解析
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-05-31 07:03  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-05-31 07:03
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488234&idx=1&sn=21714e75fec07ad21fb802cf331046e8&chksm=ce114fbff966c6a9a8216118c04fb68acf2df7851e9f93afe524bb1f0f027ed1ec5a81c36626
 > 摘要：只有不断拆解问题，才能不断看见本质。
 

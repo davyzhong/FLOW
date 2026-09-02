@@ -15,7 +15,7 @@ word_count: 1652
 
 # 经营分析报告模板（附PPT模板）
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-07-30 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-07-30 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488735&idx=1&sn=2ab557f8b0273ba31fd3a2a9b3ca039a&chksm=ce11498af966c09c346e7d398fc94e39c2f06196b41d1d4a1e7f144fad3bd99d2fae58cddd81
 > 摘要：一份好的经营分析报告，不仅是数据堆砌，更是战略指南。
 

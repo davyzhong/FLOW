@@ -15,7 +15,7 @@ word_count: 399
 
 # 经营分析报告模板（含PPT模板）
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-01-14 20:51  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-01-14 20:51
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247486538&idx=1&sn=3e7a04ec6c4d4b36706854333c620c94&chksm=ce11511ff966d809468c2e522823e4e1a994f9a3802c4094b58645538805b0fac2a7d5c070cf
 
 ![图片](images/img001.gif)

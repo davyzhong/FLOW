@@ -14,7 +14,7 @@ word_count: 1394
 
 # 新会计法下，财务人员一定要坚守底线
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-29 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-29 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488488&idx=2&sn=4e0f00c4d050df5fa7bf28d57d79f517&chksm=ce114ebdf966c7ab86609e769d8a0172742e5c6720e70ef6119c2edb2eaddbdbec365626abc5
 > 摘要：与其事后灭火，不如事前防火；与其盯着报表美不美，不如守住底线硬不硬。
 

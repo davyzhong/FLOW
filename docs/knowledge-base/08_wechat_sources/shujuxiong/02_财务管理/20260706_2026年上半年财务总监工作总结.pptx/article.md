@@ -14,7 +14,7 @@ word_count: 1
 
 # 2026年上半年财务总监工作总结.pptx
 
-> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-07-06 09:15  
+> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-07-06 09:15
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247500316&idx=1&sn=ae3af0ca7ea879b81c3744e76969a32f&chksm=ce129f49f965165fbe258900992df361b641244961ab4fff2da8e90805b5012853e7de0f8739
 
 ![图片](images/img001.jpg)

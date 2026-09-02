@@ -14,7 +14,7 @@ word_count: 1519
 
 # 财务共享中心：建好了是效率，建不好就是累赘（附方案及案例）
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-04-10 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-04-10 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487840&idx=1&sn=26f3942e23f08ae16690e7f6e1fb8239&chksm=ce114c35f966c523e7facdd5f707ca5c366e4ac701ec6ca5bc62a5c09961aa2e2bc60cfe602d
 > 摘要：财务共享中心，搞好了是效率的发动机，搞不好就是效率的终结者。
 

@@ -14,7 +14,7 @@ word_count: 212
 
 # 财务总监2025年工作总结及2026年工作计划
 
-> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-01-27 07:30  
+> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-01-27 07:30
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247495895&idx=1&sn=42322df2b1d2d33490d8e8dd50953db6&chksm=ce12ad82f96524949cce50c0c713f8db860b073a0f0c3baa8f73a900958f55bb0ca508c0e12f
 
 ![图片](images/img001.jpg)

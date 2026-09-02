@@ -14,7 +14,7 @@ word_count: 238
 
 # 财务部各岗位工作流程详解
 
-> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-02-19 08:00  
+> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-02-19 08:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247496600&idx=1&sn=3ea759a6ca1b5cd6c9a3d202a9ffb3d8&chksm=ce12aecdf96527db160e829aa04b377b60787f58a307ef0664fccc1003113774d494e4967efa
 
 ![图片](images/img001.jpg)

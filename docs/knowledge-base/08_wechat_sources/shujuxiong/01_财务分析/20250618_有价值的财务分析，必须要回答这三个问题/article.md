@@ -14,7 +14,7 @@ word_count: 1934
 
 # 有价值的财务分析，必须要回答这三个问题
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-18 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-18 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488382&idx=1&sn=e94e4454f4ff5bb38b13b403d331be4d&chksm=ce114e2bf966c73d903841dcd1c0caf0f070bdfa9bf700a8f003adf23ada6466e3dca5447c65
 > 摘要：方向比努力更重要；提问比回答更关键。
 

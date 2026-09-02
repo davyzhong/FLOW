@@ -14,7 +14,7 @@ word_count: 1760
 
 # 财务总监2024年度工作总结及2025年工作计划（经典模板）
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2024-12-22 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2024-12-22 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247486316&idx=1&sn=1c84bc8b0b590dd134b412e3a1ac911b&chksm=ce115639f966df2f94c131e4e56f6bd418f6af99abd841902e4d4fabc40055b25764f6b2a63a
 
 ![图片](images/img001.gif)

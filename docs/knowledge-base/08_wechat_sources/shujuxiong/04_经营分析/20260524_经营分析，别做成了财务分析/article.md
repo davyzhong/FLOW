@@ -15,7 +15,7 @@ word_count: 1
 
 # 经营分析，别做成了财务分析
 
-> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-05-24 08:22  
+> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-05-24 08:22
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247499500&idx=1&sn=9fbaaa2c58d958e4ecf58ad474301361&chksm=ce12a3b9f9652aafa560a496deba468dc729f25c759b2ac739f0aae34536a66a0162ee3eda87
 
 ![图片](images/img001.jpg)

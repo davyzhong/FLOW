@@ -15,7 +15,7 @@ word_count: 171
 
 # 经营分析，如何看各指标的联动
 
-> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-04-25 09:16  
+> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-04-25 09:16
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247498549&idx=1&sn=6d3e7d829b3c22563734a0a1a81c2bc6&chksm=ce12a660f9652f7645bee9a3d0f42fb4f593921add33fa523a9275c2ac4509da741cbffb91d5
 
 ![图片](images/img001.jpg)

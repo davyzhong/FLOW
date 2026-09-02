@@ -15,7 +15,7 @@ word_count: 1209
 
 # 突破部门壁垒：用数据讲好财务与业务的故事（案例与方法）
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2024-12-15 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2024-12-15 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247486199&idx=1&sn=590c6f5107328a2793c358f715de545a&chksm=ce1157a2f966deb467d489f22132c977824ecbcf989e5ae4f9c4edeee7e43cd0be8308ccdbbd
 > 摘要：管理的本质是沟通、沟通、再沟通。——德鲁克
 

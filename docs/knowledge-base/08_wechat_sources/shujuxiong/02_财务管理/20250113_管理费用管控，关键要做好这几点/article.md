@@ -14,7 +14,7 @@ word_count: 1431
 
 # 管理费用管控，关键要做好这几点
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-01-13 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-01-13 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247486525&idx=1&sn=a90f6a159b32b75ba2bbe950ef70aae3&chksm=ce115168f966d87eea676491b25791c26d7b5f7cc8dd2465531887e1969fd85d10b92c9903e6
 > 摘要：合理管控管理费用，不是压缩，而是优化。
 

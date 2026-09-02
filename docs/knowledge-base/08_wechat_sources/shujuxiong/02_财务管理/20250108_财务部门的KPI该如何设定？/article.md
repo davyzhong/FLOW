@@ -14,7 +14,7 @@ word_count: 1437
 
 # 财务部门的KPI该如何设定？
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-01-08 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-01-08 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247486460&idx=1&sn=4301e24ef2d59f72297e166fbbc8213a&chksm=ce1156a9f966dfbf0f4f28a494650b936680933dfd281515fc8a9a0ae35ae58fa16f58e929e4
 > 摘要：如果你不能衡量它，你就不能管理它。——彼得·德鲁克
 

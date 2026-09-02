@@ -14,7 +14,7 @@ word_count: 2485
 
 # 构建内部控制体系的几个常见误区
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-01-20 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-01-20 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247486670&idx=1&sn=918870280d0b2ea7350d860d952df7b0&chksm=ce11519bf966d88d7620ffea4b1a9c6a486c4b583bbac80b1d1c46061cbe7bf38262754b42ef
 > 摘要：没有强有力的内部控制，企业的战略执行将如空中楼阁。
 

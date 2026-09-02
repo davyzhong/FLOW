@@ -14,7 +14,7 @@ word_count: 179
 
 # 2025年应收账款分析报告.pptx
 
-> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-01-06 07:30  
+> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-01-06 07:30
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247494983&idx=2&sn=193bb92dcdcaa15acd08894d687956d6&chksm=ce12b012f965390429a9e1346ed9d962a7f4bd6c977f3c6f8ecef85049717df44e42561ec7ad
 
 ![图片](images/img001.jpg)

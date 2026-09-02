@@ -14,7 +14,7 @@ word_count: 1297
 
 # 做好成本核算，一定要从BOM开始（附案例）
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-04-13 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-04-13 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487861&idx=1&sn=7b60674e6bf639a760a1e755a15859d9&chksm=ce114c20f966c536f26f1d917ecf34dcfac70de9ca626600d322ae4006596c41a745b0369063
 > 摘要：“成功的秘诀，就是在最基础的地方，做到极致。”
 

@@ -15,7 +15,7 @@ word_count: 214
 
 # 经营分析，全流程sop
 
-> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-04-14 09:15  
+> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-04-14 09:15
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247498363&idx=1&sn=b3a11c08faffe3be1dfee54da7c900c6&chksm=ce12a72ef9652e3890834e74ab93628048b326a96c7166b6f88436c1e5a799693f850fe0d3c4
 
 ![图片](images/img001.jpg)

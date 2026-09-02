@@ -14,7 +14,7 @@ word_count: 2057
 
 # 财务应该具备的七个经营思维
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-20 07:05  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-20 07:05
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488398&idx=1&sn=d9f6ec77f0a704cda3f0d20ef0f24526&chksm=ce114edbf966c7cd22a08f37486dc204ea253f7d2db26b4fb1c3bf6af14fdb211bbda20d6942
 > 摘要：别把自己困在凭证里，抬头看看生意本身。
 

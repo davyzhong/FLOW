@@ -14,7 +14,7 @@ word_count: 1709
 
 # 一流的财务总监是这样看现金流量表的
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-05 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-05 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488277&idx=1&sn=793874e38a607e745cd0dcbaacb44039&chksm=ce114e40f966c7565befe254ecdcd48fb6f999da84087774236dfd372898d4d84aa9182ffb8f
 > 摘要：利润是观点，现金才是真相
 

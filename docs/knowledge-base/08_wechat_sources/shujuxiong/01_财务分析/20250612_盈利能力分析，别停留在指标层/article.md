@@ -14,7 +14,7 @@ word_count: 1764
 
 # 盈利能力分析，别停留在指标层
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-12 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-12 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488332&idx=1&sn=c7ce37e4e5f1ac54eaa612467d7b60fd&chksm=ce114e19f966c70f68a70d60801c5d14c1493bd7c361e237c5243f967ad4a5bd0cd5ea2fefe6
 > 摘要：没有被量化的管理只是口号，没有被拆解的指标只是幻影。
 

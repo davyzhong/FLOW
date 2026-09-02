@@ -15,7 +15,7 @@ word_count: 184
 
 # 美的集团经营指标体系（附excel）
 
-> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-01-11 07:30  
+> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-01-11 07:30
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247495385&idx=2&sn=73ed9697fd2389040dd8a9156e7d6220&chksm=ce12b38cf9653a9adeb1c2e855c473fd8264e4c805ee11e357cfc1704c969a8413b65175f7da
 
 ![图片](images/img001.jpg)

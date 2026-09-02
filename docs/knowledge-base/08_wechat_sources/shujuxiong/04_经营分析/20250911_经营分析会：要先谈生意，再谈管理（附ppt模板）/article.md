@@ -15,7 +15,7 @@ word_count: 216
 
 # 经营分析会：要先谈生意，再谈管理（附ppt模板）
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-09-11 00:57  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-09-11 00:57
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247489800&idx=1&sn=f0e8ab12523d013722d3045afe01f5b2&chksm=ce11445df966cd4be9dc3a911221c67a82ce8e295b49cfaedeba278911440f10206017dc792b
 > 摘要：先生意，后管理；先抓能在30天内改变结果的那几颗螺丝，再去拧流程与制度。
 

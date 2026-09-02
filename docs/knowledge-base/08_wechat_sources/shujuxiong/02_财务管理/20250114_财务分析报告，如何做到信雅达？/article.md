@@ -14,7 +14,7 @@ word_count: 1420
 
 # 财务分析报告，如何做到信雅达？
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-01-14 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-01-14 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247486536&idx=1&sn=0c0fdd3cb61c9079552ee2ab9fd06203&chksm=ce11511df966d80b4fa7891444c8bc8c6bd27fb0c3f444733db46b7b92240d5225e7e56992a2
 > 摘要：信，让人信服；\x0d\x0a雅，赏心悦目；\x0d\x0a达，直抵人心。
 
@@ -121,7 +121,7 @@ word_count: 1420
 
 ---
 
-### 
+###
 ![图片](images/img004.png)
 
 ![图片](images/img003.png)

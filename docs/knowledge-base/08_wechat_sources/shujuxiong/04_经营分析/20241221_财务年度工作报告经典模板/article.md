@@ -15,7 +15,7 @@ word_count: 1716
 
 # 财务年度工作报告经典模板
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2024-12-21 13:16  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2024-12-21 13:16
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247486311&idx=1&sn=cbcc46dc2424805a6881f745fb260568&chksm=ce115632f966df247e1c58e0f89f8fa6e74e2d5fe57e2832b5b7aced88d5834a0f5a52a82f52
 
 ![图片](images/img001.gif)

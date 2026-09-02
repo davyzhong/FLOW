@@ -15,7 +15,7 @@ word_count: 1632
 
 # 如何通俗的理解资产负债表各个科目
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2024-10-03 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2024-10-03 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247484783&idx=1&sn=6e2e4a17b8e6ed59d7e081aabe44064f&chksm=ce11583af966d12ce532ceb41722741cdf66284476e9b8b7b4b868d786fe0671da4c4359f301
 
 通俗地理解资产负债表，可以把它看作一张显示

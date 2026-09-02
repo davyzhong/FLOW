@@ -14,7 +14,7 @@ word_count: 1345
 
 # 经营分析和财务分析，关键区别在这五点
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-04-17 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-04-17 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487891&idx=1&sn=3c6ad169a6e400ad5beab9337002b0b1&chksm=ce114cc6f966c5d0f1c30c1149a8149e74e26af670243739d895afcd5bce98a4fbde93c362fd
 > 摘要：“分析之道，思辨为先。”
 

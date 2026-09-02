@@ -15,7 +15,7 @@ word_count: 199
 
 # 从数据到动作：经营分析全流程
 
-> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-01-01 11:58  
+> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-01-01 11:58
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247494656&idx=1&sn=13f1be7b9e21c1f214472a118eb85ecd&chksm=ce12b155f9653843dde6cf1196cbfee201254f850856e28ed540c84c89e9ff137f515380b642
 
 ![图片](images/img001.jpg)

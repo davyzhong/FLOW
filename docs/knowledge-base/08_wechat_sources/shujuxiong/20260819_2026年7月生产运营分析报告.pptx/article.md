@@ -14,7 +14,7 @@ word_count: 1
 
 # 2026年7月生产运营分析报告.pptx
 
-> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-08-19 09:10  
+> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-08-19 09:10
 > 原文链接：https://mp.weixin.qq.com/s/mN2YjzSnQUKJKZy3NjKf6w
 
 ![图片](images/img001.png)

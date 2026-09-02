@@ -15,7 +15,7 @@ word_count: 713
 
 # 三步搞清 EBIT、EBITDA 和净利润的区别，新手也能读懂！
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2024-12-16 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2024-12-16 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247486224&idx=1&sn=eb28e17e3b37e007cae3a528948e6488&chksm=ce115645f966df535fd3c31e21c59930aa44a84ef611d36ccf419ce1f8684fc26715720355b6
 > 摘要：学会读懂财务指标，不只是提升职业技能，更是看透商业本质的第一步！
 

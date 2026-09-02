@@ -14,7 +14,7 @@ word_count: 1732
 
 # 财务尽职调查：工作流程及审查要点（附案例报告模板）
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-22 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-22 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488411&idx=1&sn=c0edaa5c13a2578cfa0c8e4555461c0d&chksm=ce114ecef966c7d8031af9d2de8ba9cbe22396f3c9a0eb426bb4fbc8053a13de4d7cc44e2686
 > 摘要：一、需要财务尽调的场景投资并购前的“CT 扫描”：帮买方（或投资方）看清标的公司的“肌理”与“暗伤”。
 

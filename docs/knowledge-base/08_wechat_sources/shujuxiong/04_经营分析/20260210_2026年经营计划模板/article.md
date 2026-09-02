@@ -15,7 +15,7 @@ word_count: 206
 
 # 2026年经营计划模板
 
-> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-02-10 07:30  
+> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-02-10 07:30
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247496296&idx=1&sn=f11fc34d71e2579a40e24ec2e2c94f9b&chksm=ce12af3df965262b067350f2cdbf7e8433001f46d476bccd9b56be0ec72e3e798ceb0d48faf5
 
 ![图片](images/img001.jpg)

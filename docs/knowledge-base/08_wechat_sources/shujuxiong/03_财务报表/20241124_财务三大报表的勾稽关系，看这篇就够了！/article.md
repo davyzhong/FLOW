@@ -15,7 +15,7 @@ word_count: 2705
 
 # 财务三大报表的勾稽关系，看这篇就够了！
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2024-11-24 06:50  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2024-11-24 06:50
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247485452&idx=1&sn=132f83bc423aa0efd3f2c256cb8bf9f4&chksm=ce115559f966dc4f49e0b37487cb8ff4451caa7945164ba6120a8019706a8b0c5efd4c403fed
 
 ![图片](images/img001.gif)

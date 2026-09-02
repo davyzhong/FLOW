@@ -14,7 +14,7 @@ word_count: 1173
 
 # 财务分析的尽头，是经营洞察
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-05-15 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-05-15 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488100&idx=2&sn=e6d1498217fe48a717d11cab66b09a8d&chksm=ce114f31f966c627703f443d3a4042c536cda26ed151d93e2dee40808bfd6ca6d550eb611151
 > 摘要：真正的洞察，不是预知未来，而是用今天的行动，创造你想要的未来。
 

@@ -14,7 +14,7 @@ word_count: 1642
 
 # 八项规定下，业务招待费审核细则
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-05-08 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-05-08 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488025&idx=2&sn=a52b590beb7a563fba1b7dc3d8695cec&chksm=ce114f4cf966c65abf9a5f1f2eb843c13f04a8bd42a2e1e5bf6bba18b16ec1d08aa70717a29a
 > 摘要：真正的自律，是在无人监督时依旧保持原则。
 

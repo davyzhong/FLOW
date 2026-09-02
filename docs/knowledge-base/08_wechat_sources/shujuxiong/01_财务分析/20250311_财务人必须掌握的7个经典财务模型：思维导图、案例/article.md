@@ -14,7 +14,7 @@ word_count: 1623
 
 # 财务人必须掌握的7个经典财务模型：思维导图、案例
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-03-11 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-03-11 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487673&idx=1&sn=e2043fe8eb5c90ce66e349f52586e603&chksm=ce114decf966c4fa2255f4db561d6d11438a49df501c4bbc58f294d1a09db7b8cd75a3fe7b95
 > 摘要：用数据说话，用模型决策，让财务真正成为企业战略的引擎！
 

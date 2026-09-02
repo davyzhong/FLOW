@@ -15,7 +15,7 @@ word_count: 1
 
 # 2026年8月经营分析报告.pptx
 
-> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-08-23 08:03  
+> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-08-23 08:03
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247501059&idx=1&sn=b243e6f123c084c7706210ff21dbb565&chksm=ce129856f96511400deb82963db000f5d03262e4a902b20bc99a2c2700b26e5bbff8187c2fa8
 
 ![图片](images/img001.jpg)

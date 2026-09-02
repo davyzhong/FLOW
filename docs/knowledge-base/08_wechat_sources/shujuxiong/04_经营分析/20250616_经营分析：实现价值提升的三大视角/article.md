@@ -15,7 +15,7 @@ word_count: 958
 
 # 经营分析：实现价值提升的三大视角
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-16 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-16 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488363&idx=1&sn=446b27848ab8f139e1312ed5b20de93d&chksm=ce114e3ef966c7287d2e0c546d59b26afe06ce57bc358872efe0539445870f224f83d6e5cdb8
 > 摘要：要想让企业真正涨身价，必须同时驾驭三座灯塔：客户、产品、运营。
 

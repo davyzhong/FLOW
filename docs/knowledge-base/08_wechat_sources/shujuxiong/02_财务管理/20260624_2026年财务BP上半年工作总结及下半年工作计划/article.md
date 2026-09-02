@@ -14,7 +14,7 @@ word_count: 1
 
 # 2026年财务BP上半年工作总结及下半年工作计划
 
-> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-06-24 09:02  
+> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-06-24 09:02
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247500077&idx=1&sn=f0e36cd72e4acf410a88fe08d46307f8&chksm=ce129c78f965156ea363d0d1d0f698986e9d76e4c405dc01b5e2f4795ef631228bf3b2c8eb1e
 
 ![图片](images/img001.jpg)

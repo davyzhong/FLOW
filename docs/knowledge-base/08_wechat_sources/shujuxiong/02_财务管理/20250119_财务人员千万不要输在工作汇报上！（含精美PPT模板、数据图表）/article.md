@@ -14,7 +14,7 @@ word_count: 1768
 
 # 财务人员千万不要输在工作汇报上！（含精美PPT模板、数据图表）
 
-> 来源：微信公众号「数据熊」 · 作者 数据熊 · 发布于 2025-01-19 07:00  
+> 来源：微信公众号「数据熊」 · 作者 数据熊 · 发布于 2025-01-19 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247486652&idx=1&sn=668ab0cf6b9cf73afc3ab4e8bccadfde&chksm=ce1151e9f966d8ff793cd508fac29e47a3396e5715c4fe231352b1a3425eec1fe0d61066813e
 > 摘要：“汇报的目的不是展示数据，而是让数据讲述故事。” — 安妮·D·希尔顿 (Annie D. Hilton)
 

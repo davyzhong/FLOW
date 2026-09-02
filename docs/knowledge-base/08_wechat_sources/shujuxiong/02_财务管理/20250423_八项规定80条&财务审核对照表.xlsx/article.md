@@ -14,7 +14,7 @@ word_count: 1565
 
 # 八项规定80条&财务审核对照表.xlsx
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-04-23 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-04-23 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487924&idx=2&sn=740d9730d45f1f962da80b3ed334beef&chksm=ce114ce1f966c5f7c1b24ad2826d0eb44cf1ebee8f80714bde47b5f1d2ce96642824dbb06bcd
 > 摘要：关于八项规定，你需要的内容，我已经帮你整理好了。
 

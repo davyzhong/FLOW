@@ -14,7 +14,7 @@ word_count: 1691
 
 # 2025年4月成本分析PPT框架（附PPT模板）
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-05-07 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-05-07 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488018&idx=1&sn=813b09a4c8a53f6809dea80b10223a08&chksm=ce114f47f966c65195456e25c44ac561f558177d687605bf6af0dfa04dd223abcaa4d79a1a98
 > 摘要：成本是船，效率是帆。风高浪急时，唯有扬帆掌舵，方能抵达彼岸。
 

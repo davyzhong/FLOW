@@ -15,7 +15,7 @@ word_count: 1788
 
 # 经营分析报告的核心价值：问题、根因与行动建议（附PPT模板）
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-07-08 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-07-08 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488569&idx=1&sn=b19ddc1219c01e2cf2f9e7486c45fe51&chksm=ce11496cf966c07a5c824531e20083bcaa2ce63c437e584b627c1be2db4ef295b3d66dcf9d1a
 > 摘要：财务BP的核心能力，就是把“数据”变成“洞察”，再把“洞察”变成“决策”。
 

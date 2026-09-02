@@ -14,7 +14,7 @@ word_count: 1
 
 # 2026年7月库存分析报告.pptx
 
-> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-08-15 08:21  
+> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-08-15 08:21
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247500931&idx=1&sn=6f3fc141eda80ccd255dc5ae5330e168&chksm=ce1299d6f96510c0496ae14e1906cc80eb7af6fabdf1c797844a9df25c3d68a8f4eef93aec67
 
 ![图片](images/img001.jpg)

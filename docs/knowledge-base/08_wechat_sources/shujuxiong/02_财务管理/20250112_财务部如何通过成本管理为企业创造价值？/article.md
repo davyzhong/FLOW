@@ -14,7 +14,7 @@ word_count: 2092
 
 # 财务部如何通过成本管理为企业创造价值？
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-01-12 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-01-12 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247486496&idx=1&sn=b884df690253f4d2c8d10dde9989bcaa&chksm=ce115175f966d8635f85d55693c48029c20cc1c4ba84f103d6d20aaa9e56ba8a41432f9d9cca
 > 摘要：成本管理不只关乎数字，更关乎如何为企业创造更大的价值！
 

@@ -61,13 +61,16 @@ FLOW 是面向物流供应链企业 Finance BP 的 AI 经营分析工作台：�
 - Phase 5 Analysis & Findings：完成并通过本地全量回归与 GitHub Actions 11 个 jobs 验收，5 个 typed Playbook、严格对账 Driver、确定性 Finding、Evidence 和不可变 Analysis Run 已落地；
 - Phase 6 Finance BP Dashboard：完成，typed 只读 Dashboard API、高密度真实页面、八指标、趋势、经营利润桥、Findings、产品表、毛利矩阵、完整状态和 Investigation 身份交接已落地并通过浏览器验收；
 - Phase 7 Evidence-first Investigation：完成，受控 Finding/Evidence 状态机与追加式 ReviewEvent（迁移 0008）、typed Investigation API、证据优先工作台（驱动桥、公式与引擎版本、对账与质量检查、文件/工作表/行级血缘、结论四要素、证据复核与审阅历史）已落地并通过 `make test-investigation-e2e` 验收；
+- Phase 8 Bounded AI Copilot：完成，强制对象引用、数字一致性、事实/判断/假设分离、数据不足降级与交互审计均有固定评估门禁；
+- Phase 9 Unified Publishing：完成，PPTX/XLSX/HTML/PDF 均从同一冻结 Report Snapshot 渲染并通过跨格式关键值一致性门禁；
+- Phase 10 Acceptance Suite：功能验收组合门禁已完成；部署、权限、备份恢复和深度可观测性明确顺延到 Pilot Readiness；
 - 运行栈：Next.js、FastAPI、Celery、PostgreSQL、Redis、MinIO 已可构建启动；
 - 数据库对象：接入、血缘、标准事实、指标、分析和发布三层 migration 已落地；
 - API 合约：`/api/v1/health`、`/api/v1/workspace` 与生成式 TypeScript 类型已落地；
 - 数据契约：`flow.excel.v1`、10 张工作表标准模板、确定性物流 fixture、已知答案和数据库语义往返已落地；
 - 非标准 Excel 识别与映射、版本化导入和原子发布：已落地；
 - `flow.metrics.logistics.v1` 的 15 个指标、14 条依赖、比较窗口、精确计算轨迹和不可变 Metric Snapshot：已落地；
-- 完整 Investigation 证据工作台、AI Copilot 和报告生成器：尚未开发；Phase 6 已提供 Investigation 身份回执壳。
+- 当前缺口不是核心计算引擎，而是 Excel 导入与报告下载的可用用户闭环、最小安全部署和脱敏真实数据试点。
 
 ## 新 Agent 的工作规则
 
@@ -85,4 +88,4 @@ FLOW 是面向物流供应链企业 Finance BP 的 AI 经营分析工作台：�
 
 ## 当前下一步
 
-V1 主实施路线图 Phase 1–10 已全部完成；后续工作从“可重启节点”出发：管理层视图与角色权限、Issue/Action 闭环、滚动预测、部署拓扑与备份演练均属 V1 之后。修改任何已冻结契约（数据、指标、分析、发布）前，先查阅决策日志与变更影响图。Phase 1–10 的验收证据见 `docs/implementation/phase-1-verification.md` 至 `phase-10-acceptance.md`。
+当前处于 Pilot Readiness。严格按 D038 顺序推进：仓库与验收基线修复 → Excel 导入和报告下载用户闭环 → 最小安全部署 → 脱敏真实数据试点 → 依据试点证据决定 V1.1。不要把“Phase 1–10 功能窄切片完成”误写成“已生产就绪”，也不要在真实试点前凭研究材料扩张 V1.1。修改任何已冻结契约前，先查阅决策日志与变更影响图。

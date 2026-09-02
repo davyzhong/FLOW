@@ -14,7 +14,7 @@ word_count: 1622
 
 # 财务分析，必须基于业务逻辑
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-12-25 19:42  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-12-25 19:42
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247494014&idx=1&sn=577112c179d4fe72fd606a0eb23998a9&chksm=ce12b42bf9653d3d13ab25fc6abe8b9402d33641d7ab50fc3f477968b992b142344ec3103152
 > 摘要：看透财务数字背后的业务逻辑，是每个财务人的必修课
 

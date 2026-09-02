@@ -14,7 +14,7 @@ word_count: 1365
 
 # 经营分析会，财务的四争、四不争
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-04-07 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-04-07 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487826&idx=1&sn=162a1ffda95c82f9b28253a96f56940e&chksm=ce114c07f966c511e0e3873cac70601a9749fd023c3d5a9c9bad62b2257bcb0e79a7a9ab3fb9
 > 摘要：既不过分低调，也不过分抢戏，这才是财务在经营分析会上的最佳状态。
 

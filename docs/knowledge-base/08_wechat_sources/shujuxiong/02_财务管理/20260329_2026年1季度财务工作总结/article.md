@@ -14,7 +14,7 @@ word_count: 217
 
 # 2026年1季度财务工作总结
 
-> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-03-29 09:10  
+> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-03-29 09:10
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247497884&idx=1&sn=06d33b13981fa436a178e7eb408c1ed9&chksm=ce12a5c9f9652cdfc11e0f0b9a40fe86fcbcff2f8f34a80ce44acd793887406fb1027c638c35
 
 ![图片](images/img001.jpg)

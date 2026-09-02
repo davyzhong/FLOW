@@ -14,7 +14,7 @@ word_count: 1821
 
 # 2025年5月财务分析PPT模板
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-04 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-04 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488265&idx=1&sn=747456e8d74bd6620db2b1c1f43dd09b&chksm=ce114e5cf966c74a075c7fba149352acdf3adc5fe8dd18101cb3fee679062fb341cd993d8798
 > 摘要：这篇文章，给你的不仅仅是思路，而是可直接套用的分析模板，快人不只一步。
 

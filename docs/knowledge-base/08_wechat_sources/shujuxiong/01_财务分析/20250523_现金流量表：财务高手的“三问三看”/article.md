@@ -14,7 +14,7 @@ word_count: 1599
 
 # 现金流量表：财务高手的“三问三看”
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-05-23 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-05-23 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488178&idx=2&sn=2fd52cae44a13146f327cc0b11321591&chksm=ce114fe7f966c6f17eb44d04ea4dd4547aed71cfe0ba87a52937f5923d41a32b15672d3f54f9
 > 摘要：现金流如同企业的脉搏，只有脉搏强劲，梦想才能奔跑。
 

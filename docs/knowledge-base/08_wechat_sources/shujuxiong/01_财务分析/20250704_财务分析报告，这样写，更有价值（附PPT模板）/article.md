@@ -14,7 +14,7 @@ word_count: 1600
 
 # 财务分析报告，这样写，更有价值（附PPT模板）
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-07-04 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-07-04 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488548&idx=1&sn=faea2ada0ce53b3b541e424169c3a3ed&chksm=ce114971f966c067e41674998998f24c9b06adae6c9b3bdb4173061f7872b13c9a9b538b5a47
 > 摘要：真正的价值不在于数字本身，而在于数字背后的行动。
 

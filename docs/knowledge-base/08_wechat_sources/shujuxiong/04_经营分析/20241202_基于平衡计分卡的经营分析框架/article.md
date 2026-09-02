@@ -15,7 +15,7 @@ word_count: 1723
 
 # 基于平衡计分卡的经营分析框架
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2024-12-02 07:25  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2024-12-02 07:25
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247485703&idx=1&sn=abf974bab627eee1596b90240e4a94fc&chksm=ce115452f966dd44ab28682e89c0e3d997f646a43841728df468eac9ef8f0fd839ab26b26298
 
 ![图片](images/img001.gif)

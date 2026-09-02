@@ -14,7 +14,7 @@ word_count: 1890
 
 # 从业务预算到财务预算：详解全面预算编制流程（后附详细案例、预算PPT模板）
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-01-16 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-01-16 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247486595&idx=1&sn=077f31af55b314ea796e8a07b79e6cc2&chksm=ce1151d6f966d8c029a10d0ff4356debf589aa3a99ddc75e59fabe16601161ecef6b7d5ef187
 > 摘要：工作最后的汇报和总结才是检验成果的关键。
 

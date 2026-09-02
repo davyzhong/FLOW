@@ -15,7 +15,7 @@ word_count: 206
 
 # 详解美的集团经营分析体系
 
-> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-01-11 07:30  
+> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-01-11 07:30
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247495385&idx=1&sn=4ea93293be23f35380b1df69a9b4feb5&chksm=ce12b38cf9653a9adb8be452f0c3a3f636b3e86288576678d417267d1fe5b8e308d65e386c5e
 
 ![图片](images/img001.jpg)

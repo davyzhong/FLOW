@@ -14,7 +14,7 @@ word_count: 1778
 
 # 2025年4月财务分析PPT框架（附PPT模板）
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-05-06 07:40  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-05-06 07:40
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488014&idx=1&sn=019401e90b47798b39f73ca35c4d878f&chksm=ce114f5bf966c64d2f961cf21a2efe291d82858e1323f295ff8b84066ad3a998ec9a92576fd1
 > 摘要：别让 PPT 只好看；让数字驱动行动，才好用。
 

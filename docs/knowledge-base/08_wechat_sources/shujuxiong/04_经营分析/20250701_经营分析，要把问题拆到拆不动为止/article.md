@@ -15,7 +15,7 @@ word_count: 1761
 
 # 经营分析，要把问题拆到拆不动为止
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-07-01 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-07-01 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488505&idx=2&sn=1a9dc5236f9654155ee1ae19d5d9169b&chksm=ce114eacf966c7babd03373ded8d798828a36c04f36327377930584ca48dfb7f1e0dd0b722be
 > 摘要：伟大的结果，往往诞生于对细节的执着打磨；拆到极致，就是卓越的开始。
 

@@ -14,7 +14,7 @@ word_count: 1533
 
 # 从泡泡玛特看产品定价：商业逻辑与启示
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-13 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-13 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488342&idx=1&sn=86b703b3478c1d6d95d2e8d8c0dbe8ad&chksm=ce114e03f966c715a3fdb8ed5449cb0f75b51f6865f7a8c0d1081d4644de59a1bccb2c603d81
 > 摘要：价格是价值的影子，而价值常常藏在情绪里。
 

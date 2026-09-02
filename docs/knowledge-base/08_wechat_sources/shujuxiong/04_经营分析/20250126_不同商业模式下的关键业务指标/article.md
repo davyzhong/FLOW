@@ -15,7 +15,7 @@ word_count: 1298
 
 # 不同商业模式下的关键业务指标
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-01-26 10:01  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-01-26 10:01
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247486760&idx=1&sn=4a8b496a597a2c269dc5d68a8a9ac570&chksm=ce11507df966d96b512108a6d807496d3f81fa8ed13edcddb4190aaf251b458b7d8ff50d2b02
 > 摘要：\x26quot;数据不是万能的，但没有数据，你连正确的方向都摸不着。\x26quot;
 

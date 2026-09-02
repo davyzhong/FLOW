@@ -15,7 +15,7 @@ word_count: 1
 
 # 2026年上半年经营分析报告.pptx
 
-> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-07-08 09:03  
+> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-07-08 09:03
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247500320&idx=1&sn=147befea898c6899324447c733a5e780&chksm=ce129f75f9651663edfe0f4f07cc58c8c7b86a5fe41f3da52fd759286aa8611a450a0f347adb
 
 ![图片](images/img001.jpg)

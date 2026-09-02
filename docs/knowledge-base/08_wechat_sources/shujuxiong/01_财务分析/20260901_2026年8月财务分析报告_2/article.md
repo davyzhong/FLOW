@@ -14,7 +14,7 @@ word_count: 1
 
 # 2026年8月财务分析报告
 
-> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-09-01 09:09  
+> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-09-01 09:09
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247501275&idx=1&sn=7a43b1ed26bb098a2c385bdd5ef008ca&chksm=ce12988ef9651198a2731ba0745a243d7b094276e03dae09b33261f2fca97282d6ad6c17ba8f
 
 ![图片](images/img001.jpg)

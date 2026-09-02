@@ -15,7 +15,7 @@ word_count: 231
 
 # 真正的经营分析，必须回答这三个根本性问题
 
-> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-01-17 07:30  
+> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-01-17 07:30
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247495642&idx=1&sn=b6ca4d82bc7725b46eaa524de0c5bffd&chksm=ce12b28ff9653b99fbd3b72f6a9394cb6c02b36b9d21ce30a4eca5c364134d79f83530463e3c
 
 ![图片](images/img001.jpg)

@@ -14,7 +14,7 @@ word_count: 1401
 
 # 八项规定，这7类票据明令禁止
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-05-17 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-05-17 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488125&idx=2&sn=7449d6423218db5773a02aa2cc892dff&chksm=ce114f28f966c63e8af1787d1d7911f3966b861a0048cc908531b978321c5bc1dff794b7a68b
 > 摘要：会做账的是能手，守住底线的是高手。
 

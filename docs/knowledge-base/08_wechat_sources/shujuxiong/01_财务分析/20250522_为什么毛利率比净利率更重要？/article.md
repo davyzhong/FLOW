@@ -14,7 +14,7 @@ word_count: 1590
 
 # 为什么毛利率比净利率更重要？
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-05-22 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-05-22 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488171&idx=1&sn=67d9be7ac84872dc8fed092f446b346d&chksm=ce114ffef966c6e8a4178a917fb61bd5773cc721ab3cfa0b3f39bfe244a1adf7323b42413a94
 > 摘要：毛利率，是企业经营的“真相”；  \x0d\x0a净利率，可能只是一次会计“修辞”。
 

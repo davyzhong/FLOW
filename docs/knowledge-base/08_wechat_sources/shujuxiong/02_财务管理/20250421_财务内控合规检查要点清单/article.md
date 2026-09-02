@@ -14,7 +14,7 @@ word_count: 1658
 
 # 财务内控合规检查要点清单
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-04-21 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-04-21 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487909&idx=1&sn=01dec159b7bd974713a0dfd18165b93d&chksm=ce114cf0f966c5e694ecb07c2f980c6dc8a2a53a59f3daaaf555c352ea908e2375fdcc4797c9
 > 摘要：\x26quot;财务管理，合规先行，防范未然，行稳致远！\x26quot;
 

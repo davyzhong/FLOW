@@ -14,7 +14,7 @@ word_count: 1204
 
 # 高效工作汇报的黄金法则（附预算汇报PPT模板）
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-04-06 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-04-06 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487822&idx=1&sn=21c04f824f52b24a44723aa317e60307&chksm=ce114c1bf966c50d7940e52ac98094147179ddc0aab9cda95acb8dede63d39d03c087357b5b2
 > 摘要：\x26quot;机会总是留给有准备的人，汇报如此，人生亦然。\x26quot;
 

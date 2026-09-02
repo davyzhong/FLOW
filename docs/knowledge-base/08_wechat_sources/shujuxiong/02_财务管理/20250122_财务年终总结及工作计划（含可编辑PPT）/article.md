@@ -14,7 +14,7 @@ word_count: 2308
 
 # 财务年终总结及工作计划（含可编辑PPT）
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-01-22 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-01-22 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247486691&idx=1&sn=11dc157bb2687bc9619759cda832201d&chksm=ce1151b6f966d8a0340a7957dd9bda0351dd07f224ae754b5386f53e6edc3a9058c9cf41e7e7
 > 摘要：好的汇报，是工作成功的一半。
 

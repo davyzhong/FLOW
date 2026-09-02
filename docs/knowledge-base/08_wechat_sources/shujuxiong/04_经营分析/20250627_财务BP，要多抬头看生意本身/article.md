@@ -15,7 +15,7 @@ word_count: 1552
 
 # 财务BP，要多抬头看生意本身
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-27 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-27 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488466&idx=2&sn=90b8b6bdae7907bdd3f4691fe80bfe44&chksm=ce114e87f966c791e777e332192b68cef631a3e3701fc0ca3d0a3f417e6f00a3b7a45956008e
 > 摘要：只看财报的人，注定永远看不懂好生意。
 

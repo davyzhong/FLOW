@@ -15,7 +15,7 @@ word_count: 202
 
 # 2025年经营分析报告（简约版）
 
-> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-01-23 07:44  
+> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-01-23 07:44
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247495784&idx=1&sn=5ab38f34f1cec63a2acc1bf4f7a9c2d7&chksm=ce12ad3df965242b79ed093b59ce2bacd892bb0466428b414d20526445aaf82b8876135a368b
 
 ![图片](images/img001.jpg)

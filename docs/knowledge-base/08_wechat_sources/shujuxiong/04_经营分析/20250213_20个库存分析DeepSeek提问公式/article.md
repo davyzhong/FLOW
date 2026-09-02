@@ -15,7 +15,7 @@ word_count: 1459
 
 # 20个库存分析DeepSeek提问公式
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-02-13 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-02-13 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247486940&idx=1&sn=ea4c9df8353cdcceba457a4b13e7a99e&chksm=ce115089f966d99fb117ed4dfe8fec02003ccceeca60dda9c7950deb57678531c21d08cfd2ca
 
 ![图片](images/img001.gif)

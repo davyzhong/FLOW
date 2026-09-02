@@ -14,7 +14,7 @@ word_count: 1176
 
 # 八项规定下，财务审核费用报销的“八步法”
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-04-23 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-04-23 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487924&idx=1&sn=e7c3fe8aec5c6e71033a4dc1d1a344ad&chksm=ce114ce1f966c5f7b53b582c2f9481d4633398859e4f0cabaf07a718ca934cd1b40131326f47
 > 摘要：合规不是多贴几张发票，而是让每一分钱在阳光下流动。
 

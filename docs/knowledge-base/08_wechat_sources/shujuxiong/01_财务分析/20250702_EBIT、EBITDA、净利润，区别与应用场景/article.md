@@ -14,7 +14,7 @@ word_count: 1886
 
 # EBIT、EBITDA、净利润，区别与应用场景
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-07-02 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-07-02 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488522&idx=2&sn=6ebfedded8f6ac53f349860e0e2d24e3&chksm=ce11495ff966c0490f6bd9453da3cafd4ebde033bf12e5a5932a533560736db0bfdda6c21289
 > 摘要：数字会说话，但真正的价值在于我们如何倾听。
 

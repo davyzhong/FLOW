@@ -15,7 +15,7 @@ word_count: 1
 
 # 2026年总经理年中工作总结.pptx
 
-> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-07-07 09:02  
+> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-07-07 09:02
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247500318&idx=1&sn=f38871e3a93c971f8485450db58f9f96&chksm=ce129f4bf965165d79ad6e06bae118628f38d94a8388247253092fa435dd0e8fdc65ae06609a
 
 ![图片](images/img001.jpg)

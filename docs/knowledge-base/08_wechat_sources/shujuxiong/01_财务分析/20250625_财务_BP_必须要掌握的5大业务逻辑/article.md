@@ -14,7 +14,7 @@ word_count: 1858
 
 # 财务 BP 必须要掌握的5大业务逻辑
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-25 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-25 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488446&idx=1&sn=6285659fedd220a13c96e2642ee7b30b&chksm=ce114eebf966c7fdb33ff4bb101b5de9cd8405989b7f637c4b9d6087d818f3f576d5d37fe5fd
 > 摘要：算得了账，更要算得进未来；这才是合格的财务 BP。
 

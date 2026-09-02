@@ -16,21 +16,13 @@ class ManifestBuildTest(unittest.TestCase):
             manifest_directory.mkdir()
             readme = knowledge_base / "README.md"
             readme.write_text("FLOW knowledge base\n", encoding="utf-8")
-            (manifest_directory / "inventory.tsv").write_text(
-                "stale inventory\n", encoding="utf-8"
-            )
-            (manifest_directory / "sha256sums.txt").write_text(
-                "stale hashes\n", encoding="utf-8"
-            )
+            (manifest_directory / "inventory.tsv").write_text("stale inventory\n", encoding="utf-8")
+            (manifest_directory / "sha256sums.txt").write_text("stale hashes\n", encoding="utf-8")
 
             row_count, hash_count = build(knowledge_base)
 
-            inventory = (manifest_directory / "inventory.tsv").read_text(
-                encoding="utf-8"
-            )
-            hashes = (manifest_directory / "sha256sums.txt").read_text(
-                encoding="utf-8"
-            )
+            inventory = (manifest_directory / "inventory.tsv").read_text(encoding="utf-8")
+            hashes = (manifest_directory / "sha256sums.txt").read_text(encoding="utf-8")
             expected_digest = hashlib.sha256(readme.read_bytes()).hexdigest()
             self.assertEqual((row_count, hash_count), (1, 1))
             self.assertNotIn("99_manifest/inventory.tsv", inventory)

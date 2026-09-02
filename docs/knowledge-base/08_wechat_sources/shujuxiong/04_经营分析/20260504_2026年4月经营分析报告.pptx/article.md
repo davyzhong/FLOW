@@ -15,7 +15,7 @@ word_count: 203
 
 # 2026年4月经营分析报告.pptx
 
-> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-05-04 09:27  
+> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-05-04 09:27
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247498996&idx=1&sn=6aa47c86d46b4489a40afc331c37eb53&chksm=ce12a1a1f96528b7546b47d72150d9a2e1b499d3bf861abb274e3e0dceecb6197530b242ec88
 
 ![图片](images/img001.jpg)

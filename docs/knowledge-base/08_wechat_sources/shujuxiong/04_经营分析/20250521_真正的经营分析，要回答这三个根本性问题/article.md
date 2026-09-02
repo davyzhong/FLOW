@@ -15,7 +15,7 @@ word_count: 1616
 
 # 真正的经营分析，要回答这三个根本性问题
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-05-21 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-05-21 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488164&idx=1&sn=54e83942cd10295ab2d7d568fa996c6b&chksm=ce114ff1f966c6e72f6d0ff460334935ffbff2744ab6ad3cc3f2daa9b8418dccd5363f6f4a66
 > 摘要：数据只是手段，真正的分析，是让企业看清自己。
 

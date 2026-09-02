@@ -15,7 +15,7 @@ word_count: 2294
 
 # 总经理年中述职报告PPT模板
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-30 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-30 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488494&idx=1&sn=d31c9682cf28df7bd474018736d2fdfe&chksm=ce114ebbf966c7ada3c0a55a7a3aeedfc7dc9485e87d748a3eaac9c482cc3161d7f030b6588d
 > 摘要：战略的价值在于落地，落地的关键在于当下的一小步。
 

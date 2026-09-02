@@ -15,7 +15,7 @@ word_count: 211
 
 # 经营分析，常用的15个工具
 
-> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-04-01 09:30  
+> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-04-01 09:30
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247497939&idx=1&sn=10e90ce290262c9a92c4a223a8c5c08a&chksm=ce12a586f9652c909e72b23ee0f2bf33c531605075139639c918d5b12def79ea0ff920a26ebe
 
 ![图片](images/img001.jpg)

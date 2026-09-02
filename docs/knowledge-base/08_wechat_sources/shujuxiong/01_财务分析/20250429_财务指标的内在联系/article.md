@@ -14,7 +14,7 @@ word_count: 1236
 
 # 财务指标的内在联系
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-04-29 07:41  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-04-29 07:41
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487969&idx=1&sn=44387751e66f0cb04b2ff8f7b64f1125&chksm=ce114cb4f966c5a20106ae76a426e606d8f0cd682fef12c5506c814a1730cb6c0a3f07c8c06b
 > 摘要：让每一分钱都流向价值最高处，让每一项指标都服务企业的终极目标——创造价值。
 

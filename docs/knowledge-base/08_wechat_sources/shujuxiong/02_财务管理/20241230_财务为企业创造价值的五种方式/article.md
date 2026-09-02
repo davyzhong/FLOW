@@ -14,7 +14,7 @@ word_count: 1857
 
 # 财务为企业创造价值的五种方式
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2024-12-30 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2024-12-30 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247486391&idx=1&sn=5d3d1f35bbadc539c46c7fd94cf9e5e1&chksm=ce1156e2f966dff443b9472e5e92ccc29dfd2716f38febb5442f641bae4ad4a59d6d9e42df72
 
 ![图片](images/img001.gif)

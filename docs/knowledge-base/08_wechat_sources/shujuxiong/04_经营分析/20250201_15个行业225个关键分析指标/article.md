@@ -15,7 +15,7 @@ word_count: 2610
 
 # 15个行业225个关键分析指标
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-02-01 12:27  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-02-01 12:27
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247486869&idx=1&sn=084f3c45a1db63723e6cb63c6cbbb717&chksm=ce1150c0f966d9d62666b8cb033d877c1dbe63d8d65906c4342c7aaabaedbfc8f4f0472355c9
 
 ![图片](images/img001.gif)

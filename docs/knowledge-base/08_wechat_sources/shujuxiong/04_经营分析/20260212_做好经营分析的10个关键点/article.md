@@ -15,7 +15,7 @@ word_count: 228
 
 # 做好经营分析的10个关键点
 
-> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-02-12 07:30  
+> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-02-12 07:30
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247496409&idx=1&sn=a0297a93e115814a970868d1ff483dc7&chksm=ce12af8cf965269ada329c9bc6497476cc15458ca44e9937b50af4654b53d5246f84ee5f36ac
 
 ![图片](images/img001.jpg)

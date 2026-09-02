@@ -14,7 +14,7 @@ word_count: 204
 
 # 2025年财务分析报告
 
-> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-02-22 16:02  
+> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-02-22 16:02
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247496754&idx=1&sn=c04d2153ed6fa025a4d14cc65ec71d3d&chksm=ce12a967f96520710bbeb54346fcd14cf219f36e473e4975a6116a951dba1406741854305f6f
 
 ![图片](images/img001.jpg)

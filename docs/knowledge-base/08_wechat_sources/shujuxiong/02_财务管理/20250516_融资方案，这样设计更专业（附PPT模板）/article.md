@@ -14,7 +14,7 @@ word_count: 2174
 
 # 融资方案，这样设计更专业（附PPT模板）
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-05-16 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-05-16 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488118&idx=1&sn=82894914ca244e3380a5f111d1d3d200&chksm=ce114f23f966c635da6cfe5b024e319ac5621f7a5c1c5de79507deb8b6b2ebee5a74985e45eb
 > 摘要：融资方案写得专业，才能在投资人“5 分钟快问快答”中占得先机。
 

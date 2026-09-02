@@ -15,7 +15,7 @@ word_count: 2002
 
 # 经营分析案例：以价值链为基础
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-05-13 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-05-13 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488094&idx=1&sn=dbeea01c6a928413ab8f300d4e86fdee&chksm=ce114f0bf966c61d5d068064d9f8435fd409a59d5de9b1c591e90f9cbb7235b609d2f98fdc38
 > 摘要：“财务不是冷冰冰的数字，而是一条条会说话的价值链。
 

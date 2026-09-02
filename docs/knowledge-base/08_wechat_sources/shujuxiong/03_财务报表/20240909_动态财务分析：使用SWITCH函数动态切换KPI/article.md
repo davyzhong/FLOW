@@ -15,7 +15,7 @@ word_count: 2081
 
 # 动态财务分析：使用SWITCH函数动态切换KPI
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2024-09-09 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2024-09-09 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247484323&idx=1&sn=ca4217774fec7617ce73e8421dc3b34a&chksm=ce115ef6f966d7e0d3f18168a5f459f5184b4de9de4d974c29ee1968d2c4ba38baa4d7f103e2
 > 摘要：通过SWITCH函数，我们可以根据用户需求切换不同的度量值、时间范围或财务指标，使报表更加灵活、智能。
 

@@ -14,7 +14,7 @@ word_count: 1566
 
 # 经营分析会，这几件事一定要吵明白
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-04-11 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-04-11 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487848&idx=1&sn=ec0684ddd86b8a9ea72ae8785ff91ad7&chksm=ce114c3df966c52b1ae303f1d9420ebc827524fff2ece4b1ded98fcde5a31fc9ff6892124063
 > 摘要：“真正的共识，源于彼此认真的倾听与理性的争论。”
 

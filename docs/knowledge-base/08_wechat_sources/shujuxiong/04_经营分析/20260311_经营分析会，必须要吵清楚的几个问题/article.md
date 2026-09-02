@@ -15,7 +15,7 @@ word_count: 273
 
 # 经营分析会，必须要吵清楚的几个问题
 
-> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-03-11 10:24  
+> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-03-11 10:24
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247497329&idx=1&sn=7086a43054fe2d7be0ca0a263b07377f&chksm=ce12ab24f9652232313d9bed3c64bacfe40cc980f2bde275490b2e9a0f94c2e8129563ef7e8c
 
 ![图片](images/img001.jpg)

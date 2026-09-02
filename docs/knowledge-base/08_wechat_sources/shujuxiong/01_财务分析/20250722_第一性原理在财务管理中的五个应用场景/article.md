@@ -14,7 +14,7 @@ word_count: 1382
 
 # 第一性原理在财务管理中的五个应用场景
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-07-22 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-07-22 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488673&idx=1&sn=d41bec1622d4c94ac2d9d45ef0424f7b&chksm=ce1149f4f966c0e25bd4cc9135c65e1c79b10bbecf46f6db60bf179c1cc5e6ec16e8e5de1908
 > 摘要：把复杂问题拆解到不能再拆的最小单位（底层真理），再从这些基础单元出发，重新构建解决方案。
 

@@ -15,7 +15,7 @@ word_count: 1410
 
 # DeepSeek+Power BI：低成本打造智能经营分析平台含模板
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-02-21 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-02-21 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487175&idx=1&sn=a1eb92e5e44e0a8b8bc185ea9548ec60&chksm=ce115392f966da84912e1e1c364ce3f226e9e59d7e626fccd0a0fe67c01c349c996d7f5ee910
 
 ![图片](images/img001.gif)

@@ -14,7 +14,7 @@ word_count: 1376
 
 # 全面成本控制的核心方法和环节
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-03-22 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-03-22 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487733&idx=1&sn=68f4bd65bf7e3c31e941eb7a7ca89212&chksm=ce114da0f966c4b6fa1af8415d2cadb5c8b284448a0eb1f301f085c3adbb33fae8a78ff510bd
 > 摘要：在企业经营中，成本控制就像汽车的刹车系统——不是为了限制你前进，而是为了让你更安全、更高效地奔向目标。
 

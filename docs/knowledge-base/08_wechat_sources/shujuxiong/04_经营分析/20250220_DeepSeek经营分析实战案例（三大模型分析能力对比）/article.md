@@ -15,7 +15,7 @@ word_count: 1580
 
 # DeepSeek经营分析实战案例（三大模型分析能力对比）
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-02-20 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-02-20 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487150&idx=1&sn=ca4ef33869176801ce692645d2e70ba9&chksm=ce1153fbf966daed488ef82526194c58a060d2085d631141b38ec7eb06e78ecb3bcca8354d45
 
 ![图片](images/img001.gif)

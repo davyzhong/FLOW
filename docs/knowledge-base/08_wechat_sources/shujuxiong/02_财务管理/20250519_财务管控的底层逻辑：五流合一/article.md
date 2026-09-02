@@ -14,7 +14,7 @@ word_count: 1836
 
 # 财务管控的底层逻辑：五流合一
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-05-19 07:31  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-05-19 07:31
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488144&idx=1&sn=dde3d2848d2b1d092131b53c4a76d9ae&chksm=ce114fc5f966c6d3baf6deb10e5f1b4c340d61f9e9d223987c268761cf02515aa3a1931a2916
 > 摘要：真正的内控，不是“堵住漏洞”，而是“让风险无处可藏”。
 

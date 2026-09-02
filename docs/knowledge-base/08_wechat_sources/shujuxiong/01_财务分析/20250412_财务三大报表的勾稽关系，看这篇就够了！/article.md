@@ -14,7 +14,7 @@ word_count: 1863
 
 # 财务三大报表的勾稽关系，看这篇就够了！
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-04-12 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-04-12 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487855&idx=1&sn=e0bcf2eb6e924754f610fec90c09dcab&chksm=ce114c3af966c52cd812c38245f910e8f4cd189d5dacbd55fb335f6fc90c9caec3498710282c
 > 摘要：“数字不会说谎，透过报表看本质，才能真正了解公司的价值。”
 

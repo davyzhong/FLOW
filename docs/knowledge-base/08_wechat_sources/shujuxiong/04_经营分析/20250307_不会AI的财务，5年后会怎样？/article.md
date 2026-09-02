@@ -15,7 +15,7 @@ word_count: 1417
 
 # 不会AI的财务，5年后会怎样？
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-03-07 07:53  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-03-07 07:53
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487551&idx=1&sn=fb2155ad5de07fddcc617027b6ded5f8&chksm=ce114d6af966c47cc1976d9d1aa1c3f67a00f87945143228d6d7976bf5fb34bc96cb79a4e8f3
 
 ![图片](images/img001.gif)

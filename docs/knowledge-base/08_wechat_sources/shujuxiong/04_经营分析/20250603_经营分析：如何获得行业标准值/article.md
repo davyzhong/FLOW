@@ -15,7 +15,7 @@ word_count: 1454
 
 # 经营分析：如何获得行业标准值
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-03 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-03 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488257&idx=2&sn=303f043f2e19bd5c7bd430b6dc8bade7&chksm=ce114e54f966c7425f270a934d7587d7f5d1c91db83b55ba8e63d6b64998609a23f94c01b4c7
 > 摘要：知己知彼，方能百战不殆。
 

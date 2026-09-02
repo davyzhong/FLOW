@@ -15,7 +15,7 @@ word_count: 1
 
 # 集团运营驾驶舱
 
-> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-08-29 09:16  
+> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-08-29 09:16
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247501228&idx=1&sn=dfd97eedcabe01a2b2f7e04cc4889db7&chksm=ce1298f9f96511efbfa093a4099cc894675962a38cb648baa28bb573843755d3cc34dad30315
 
 ![图片](images/img001.jpg)

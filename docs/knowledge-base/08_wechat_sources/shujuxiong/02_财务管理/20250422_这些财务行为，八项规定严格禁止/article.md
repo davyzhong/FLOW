@@ -14,7 +14,7 @@ word_count: 1612
 
 # 这些财务行为，八项规定严格禁止
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-04-22 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-04-22 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487917&idx=1&sn=88eafc1cb0b2ff06c6b542351807f010&chksm=ce114cf8f966c5ee4baa58f635f219c3f595fda7b90e78afca7ea16f5ab8cea52974eaaf6f5e
 > 摘要：近年来，中央八项规定以其雷霆之势，规范了公职人员的职务行为，特别是在财务管理领域，划定了不可触碰的红线。
 

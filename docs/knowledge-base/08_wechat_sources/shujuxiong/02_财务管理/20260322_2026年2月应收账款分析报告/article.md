@@ -14,7 +14,7 @@ word_count: 223
 
 # 2026年2月应收账款分析报告
 
-> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-03-22 08:48  
+> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-03-22 08:48
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247497670&idx=1&sn=2fac6fd2588c2397a4d5ce2200dd3ba3&chksm=ce12aa93f9652385f991925fbefce131f8d231904718655a377e76e778a86c4d9474e646cb43
 
 ![图片](images/img001.jpg)

@@ -14,7 +14,7 @@ word_count: 1971
 
 # 财务管理的核心框架：通俗解读
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2024-11-02 06:45  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2024-11-02 06:45
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247485101&idx=1&sn=4a3bcf3c4d40ea898c039607916c6645&chksm=ce115bf8f966d2ee5c38612ed2218f8671d6de15aa6dfc089f94413dc2f6b562306bd31e422d
 
 ![图片](images/img001.gif)

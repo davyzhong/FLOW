@@ -15,7 +15,7 @@ word_count: 106
 
 # 利润表大白话
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2024-10-07 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2024-10-07 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247484844&idx=1&sn=e98e9d7efd121fa3c4c385639bfe8435&chksm=ce1158f9f966d1efb21e7b72e9c38e1140d075893a2464d9d61fe2d016a4363361e377fb062f
 
 ![图片](images/img001.gif)

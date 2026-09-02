@@ -15,7 +15,7 @@ word_count: 1975
 
 # 财务为企业创造价值的五种方式
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-10 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-10 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488311&idx=1&sn=8743a36b56d157b59614f95b715c2e4d&chksm=ce114e62f966c774f002d941f5d7aa10c93cfbcd5cd43da2afce18f9afc15112a28ff3de3429
 > 摘要：敢做价值创造的疯子，才能成为改变企业命运的高手。
 

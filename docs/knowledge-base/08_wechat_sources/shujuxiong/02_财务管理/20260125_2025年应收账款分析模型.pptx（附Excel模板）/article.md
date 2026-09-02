@@ -14,7 +14,7 @@ word_count: 227
 
 # 2025年应收账款分析模型.pptx（附Excel模板）
 
-> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-01-25 11:00  
+> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-01-25 11:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247495836&idx=1&sn=07a5b37b8936320d26e7f7319a80a427&chksm=ce12adc9f96524dfd7531f0b326d29cb4857f16b1bb1ff8fffd96742750d8255beb707b86a6b
 
 ![图片](images/img001.jpg)

@@ -14,7 +14,7 @@ word_count: 1228
 
 # 十种典型融资模式（附案例）
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-04-05 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-04-05 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487812&idx=1&sn=a67354c2dac808311fc149762dfdb7ca&chksm=ce114c11f966c50749ece8fae896ff6bc18f35d41c7027a44966392279c39a303705df67f2df
 > 摘要：成功属于那些善于筹划未来的人，把握融资技巧，企业前程无忧！
 

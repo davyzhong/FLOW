@@ -14,7 +14,7 @@ word_count: 2250
 
 # 全面预算管理的实质
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2024-11-03 06:45  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2024-11-03 06:45
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247485140&idx=1&sn=a406f9c312aefca36b30350bc566dea8&chksm=ce115b81f966d297d6f0ef0e434275c3e9973fcaf8b4d8b075f7a91a1a3d88fcfce40a29714f
 
 ![图片](images/img001.gif)

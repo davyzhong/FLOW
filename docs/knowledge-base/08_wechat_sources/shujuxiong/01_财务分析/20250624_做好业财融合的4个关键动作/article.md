@@ -14,7 +14,7 @@ word_count: 1868
 
 # 做好业财融合的4个关键动作
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-24 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-24 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488439&idx=1&sn=5e16958e2334600b755ee0f0344b7a91&chksm=ce114ee2f966c7f4c8f4e1a52fbc285dfaf12e6c118acafdb4ad0af6703d2c31f4633c282973
 > 摘要：做到思维、流程、数据、目标四件套闭环，业财融合才不只是 PPT 花字，而是每天真金白银的 ROI。
 

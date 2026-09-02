@@ -14,7 +14,7 @@ word_count: 1450
 
 # 35岁的财务，就不要迷恋CPA了
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-26 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-26 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488455&idx=2&sn=fa6481c87dcfa7b53a5cd04d68f956da&chksm=ce114e92f966c784449e6f5871df9ded10321c5a5f28db68927bf5d1355d513b52a08140230f
 > 摘要：35 岁以后，你的核心资产是跨学科的复合能力 + 行业化的深度洞察 + 影响他人的软实力。
 

@@ -14,7 +14,7 @@ word_count: 968
 
 # 财务分析的五个基本原则
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-20 07:05  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-20 07:05
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488398&idx=2&sn=9221d1037e92f51dee13c01f0653a822&chksm=ce114edbf966c7cd02d2708093b886ff2b6e46eef5436c42beee146431e0505fb4853f2a2087
 > 摘要：方向对了，就不怕路远；原则对了，就不怕变量。
 

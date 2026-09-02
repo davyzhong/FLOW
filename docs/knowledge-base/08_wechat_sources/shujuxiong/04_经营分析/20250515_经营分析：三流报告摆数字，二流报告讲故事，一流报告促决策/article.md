@@ -15,7 +15,7 @@ word_count: 1652
 
 # 经营分析：三流报告摆数字，二流报告讲故事，一流报告促决策
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-05-15 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-05-15 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488100&idx=1&sn=7ce77c6c0bed4d5e153bcf52ea501071&chksm=ce114f31f966c6275d9ccd095604fd28f950e7b6d7803b3d2af08468138fea41cb5c011fd28b
 > 摘要：“Data will talk to you if you’re willing to listen.” ——Jim Bergeson
 

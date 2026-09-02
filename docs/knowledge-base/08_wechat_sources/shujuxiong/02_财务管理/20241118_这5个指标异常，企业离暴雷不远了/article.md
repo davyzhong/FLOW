@@ -14,7 +14,7 @@ word_count: 1300
 
 # 这5个指标异常，企业离暴雷不远了
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2024-11-18 06:45  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2024-11-18 06:45
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247485327&idx=1&sn=6f66ebb371a644a5d41f338d0994a314&chksm=ce115adaf966d3cc22424ed43d78133e4bc672b1d07f8aa7d899218123ac333a9bce741dd24c
 
 ![图片](images/img001.gif)

@@ -15,7 +15,7 @@ word_count: 1675
 
 # 毛利率分析的三个维度：行业、区域和产品（附PPT模板）
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-05 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-05 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488277&idx=2&sn=141f96505c68baf3c8e3ae854c3c4df5&chksm=ce114e40f966c75692074daf3fa5d13e7ad5aba7e0c3a991f5f1003bda4040c03a75e4da0d81
 > 摘要：把毛利率拆进行业、区域、产品三台“CT 扫描机”，才能精准找出利润“漏点”。
 

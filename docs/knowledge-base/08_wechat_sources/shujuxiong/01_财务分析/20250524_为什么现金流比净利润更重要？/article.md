@@ -14,7 +14,7 @@ word_count: 1206
 
 # 为什么现金流比净利润更重要？
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-05-24 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-05-24 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488184&idx=1&sn=83ca4e2dff093e7b7ba245537866453c&chksm=ce114fedf966c6fb5cfbf446fc6e9c4db305a7c20d89135fa708752b1be16c9f4024d1ac59ad
 > 摘要：掌握现金流，你不仅能看到企业当下的呼吸，更能判断它有没有体力跑向未来。
 

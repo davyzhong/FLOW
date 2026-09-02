@@ -15,7 +15,7 @@ word_count: 1493
 
 # 管理人员应该有的财务思维
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-02 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-02 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488248&idx=1&sn=d2ef46e04fa94a7c3899d18397adc72d&chksm=ce114fadf966c6bbb88e99c77cef3bb6c282fb602ed492dbea4d32e41c69e931bb9d54067677
 > 摘要：财务思维是管理者的“操作系统”，没有它，再炫酷的业务 App 也跑不动。
 

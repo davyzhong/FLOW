@@ -15,7 +15,7 @@ word_count: 1549
 
 # 从会计视角到经营视角：财务BP应该掌握的5个思维模型
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-05-20 07:24  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-05-20 07:24
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488157&idx=1&sn=09af0238c9f1c5dcaccc8de445dea5da&chksm=ce114fc8f966c6de96c25134e3cb210debd77263f4ef9595c68dbedcb19aee87353bc390422d
 > 摘要：财务的尽头，是经营；经营的逻辑，藏在财务数据里。在财务职业发展的路径中，会计是基础，而经营分析是进阶。
 

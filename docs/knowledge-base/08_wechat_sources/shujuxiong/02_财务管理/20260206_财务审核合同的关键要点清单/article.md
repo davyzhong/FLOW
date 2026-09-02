@@ -14,7 +14,7 @@ word_count: 91
 
 # 财务审核合同的关键要点清单
 
-> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-02-06 07:30  
+> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-02-06 07:30
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247496190&idx=1&sn=bce92f5790df683d832d6fdc5769b0fd&chksm=ce12acabf96525bdf20a83fa7a7bf962b9c94bc93d878481b13b062809318d07465c69536e5f
 
 ![图片](images/img001.jpg)

@@ -14,7 +14,7 @@ word_count: 1342
 
 # 盈亏平衡分析：案例与excel模板
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-05-28 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-05-28 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488211&idx=2&sn=2cd3caaaa80e6ac440bfd61f57ba041d&chksm=ce114f86f966c6909edf07fa67fcaf241278ad47ec8e9245b91820c4f98e40e927b0b646b342
 > 摘要：预测未来的最好方式，是亲手把它算出来。
 

@@ -14,7 +14,7 @@ word_count: 1682
 
 # 半年度财务分析报告模板（附PPT模板）
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-29 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-29 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488488&idx=1&sn=90aa642a69132173571af4eeb6de30d6&chksm=ce114ebdf966c7ab551b3ffa55fe7ebd46d8fe7c7fafb0abfbd30c7b3308fbad708a222f736c
 > 摘要：凡是过去，皆为序章。
 

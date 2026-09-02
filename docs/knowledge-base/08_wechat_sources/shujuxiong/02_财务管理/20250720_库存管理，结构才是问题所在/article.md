@@ -14,7 +14,7 @@ word_count: 1144
 
 # 库存管理，结构才是问题所在
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-07-20 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-07-20 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488652&idx=2&sn=01e93ea7e46ef9ab7039cc89ff70f5be&chksm=ce1149d9f966c0cf6d47038d14c24c766fb0dc1da167cf743ada201130a54ec4ff11320f663b
 > 摘要：结构优化，才是解决库存问题、提高企业盈利能力的根本所在。
 

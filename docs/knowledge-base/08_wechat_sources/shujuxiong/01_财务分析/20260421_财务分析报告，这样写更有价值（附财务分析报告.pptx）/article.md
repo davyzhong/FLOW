@@ -14,7 +14,7 @@ word_count: 209
 
 # 财务分析报告，这样写更有价值（附财务分析报告.pptx）
 
-> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-04-21 09:15  
+> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-04-21 09:15
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247498482&idx=1&sn=58a9e7d370fd06772c5b5ce2a4f18f9e&chksm=ce12a7a7f9652eb1c09a8ecaa09751d9efefdb234b39f876a52fe0a274a8b87aef3703905bc8
 
 ![图片](images/img001.png)

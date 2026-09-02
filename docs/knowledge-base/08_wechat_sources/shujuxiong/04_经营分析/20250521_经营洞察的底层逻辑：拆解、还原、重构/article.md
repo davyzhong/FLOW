@@ -15,7 +15,7 @@ word_count: 1507
 
 # 经营洞察的底层逻辑：拆解、还原、重构
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-05-21 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-05-21 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488164&idx=2&sn=49df252fd8b63256de2e2ffa02b48dfb&chksm=ce114ff1f966c6e72d365cbf612f8a2db21c201bc48b1db7816b81ab006dde228f3c1e6a1850
 > 摘要：你不是在汇报数据，你是在引导决策。
 

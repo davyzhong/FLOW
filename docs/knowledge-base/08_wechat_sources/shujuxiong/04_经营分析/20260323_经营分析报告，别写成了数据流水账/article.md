@@ -15,7 +15,7 @@ word_count: 225
 
 # 经营分析报告，别写成了数据流水账
 
-> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-03-23 11:35  
+> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-03-23 11:35
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247497688&idx=1&sn=5b43d5be6982685f1f108dda1d1391c7&chksm=ce12aa8df965239ba4da2cfeeaa79150304e4de01c535ebd43d5400c4b5ab31aa7abbcb95174
 
 ![图片](images/img001.jpg)

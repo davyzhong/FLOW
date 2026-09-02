@@ -15,7 +15,7 @@ word_count: 1506
 
 # 财务高手是如何思考业务的
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-02 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-02 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488248&idx=2&sn=ca91b8f13a5c693f2fb960613dd7f8cc&chksm=ce114fadf966c6bb1b6c9a499a288a2d069374235240fb536c1201ba1ee412415a770b559fa9
 > 摘要：真正的财务高手，不是躲在后台算账，而是走到前线用数据改造业务。
 

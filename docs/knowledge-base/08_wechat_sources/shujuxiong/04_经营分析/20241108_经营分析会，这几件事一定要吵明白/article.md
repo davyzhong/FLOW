@@ -15,7 +15,7 @@ word_count: 1534
 
 # 经营分析会，这几件事一定要吵明白
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2024-11-08 06:45  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2024-11-08 06:45
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247485180&idx=1&sn=e388c7d142da6c7b7248fbcf0f204e3b&chksm=ce115ba9f966d2bfe283c16d36f22b07190a667e889339952200e269a29cfabe005742c87464
 
 ![图片](images/img001.gif)

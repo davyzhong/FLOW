@@ -15,7 +15,7 @@ word_count: 2672
 
 # 总经理2024年度工作总结及2025年工作计划（典型话术、免费ppt模板）
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2024-12-24 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2024-12-24 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247486321&idx=1&sn=fa752918f7de0b9a66507b637088da54&chksm=ce115624f966df32be7709711245e71223f28d62539df93e9e6a5ffd30ad0d6a60c0d92cea45
 > 摘要：关注数据熊，工作更​敏捷
 

@@ -14,7 +14,7 @@ word_count: 1480
 
 # 财务审核合同的七个关键要点
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-04-04 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-04-04 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487809&idx=1&sn=3997df1e6d7fe740c4d4a7e6a3267caf&chksm=ce114c14f966c5024dd938e936e3a17f1f0168530ba5aeb315c68b3f33f7558836a9d60fae2a
 > 摘要：“细节决定成败，专业成就未来！”
 

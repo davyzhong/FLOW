@@ -14,7 +14,7 @@ word_count: 1701
 
 # 财务共享，到底在共享什么？
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-01 07:24  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-01 07:24
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488241&idx=1&sn=3f63148b986105cfedaf0a25165dbd57&chksm=ce114fa4f966c6b270d3f87e00611c3da246e1c0586ffd499a3a9b5231a293c7962071b2cb09
 > 摘要：财务共享为了让财务更好地支持业务
 

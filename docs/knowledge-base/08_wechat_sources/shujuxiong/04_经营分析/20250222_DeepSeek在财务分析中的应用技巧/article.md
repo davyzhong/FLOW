@@ -15,7 +15,7 @@ word_count: 2515
 
 # DeepSeek在财务分析中的应用技巧
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-02-22 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-02-22 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487197&idx=1&sn=bcf9285933e5c724ec7104dd48a7dae8&chksm=ce115388f966da9ee3edbe5b59bb815a00c4507a3d960823a7d50ed3a8ebe96907941073cec8
 
 ![图片](images/img001.gif)

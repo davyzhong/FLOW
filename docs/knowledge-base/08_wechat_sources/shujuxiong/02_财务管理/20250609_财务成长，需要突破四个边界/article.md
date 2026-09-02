@@ -14,7 +14,7 @@ word_count: 1245
 
 # 财务成长，需要突破四个边界
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-09 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-09 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488305&idx=2&sn=b322709fb841b828be6b3ac9dc5aa8cd&chksm=ce114e64f966c772dcfd8ea9e543b9830055d428c22382d79e3202504e50e146a1abad02924f
 > 摘要：财务的成长，从来不是一条线性通道，而是一次次越界
 

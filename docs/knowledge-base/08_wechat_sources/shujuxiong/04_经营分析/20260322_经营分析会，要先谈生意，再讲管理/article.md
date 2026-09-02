@@ -15,7 +15,7 @@ word_count: 239
 
 # 经营分析会，要先谈生意，再讲管理
 
-> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-03-22 14:10  
+> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-03-22 14:10
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247497672&idx=1&sn=cdaa394f5007cd1fcbb6c8b2e7cf3e05&chksm=ce12aa9df965238bdddc893c273c6923f052a6b4adffc779bf6cf5156a2d50620c6720a50093
 
 ![图片](images/img001.jpg)

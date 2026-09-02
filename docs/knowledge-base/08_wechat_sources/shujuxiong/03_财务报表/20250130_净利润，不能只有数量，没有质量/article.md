@@ -15,7 +15,7 @@ word_count: 1725
 
 # 净利润，不能只有数量，没有质量
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-01-30 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-01-30 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247486838&idx=1&sn=bc3abc65b8a098304ea32036c417124c&chksm=ce115023f966d93528bab36057738aeffc6c67efbaa4fe52505fcfcde393c96409043f5f5e2a
 
 ![图片](images/img001.gif)

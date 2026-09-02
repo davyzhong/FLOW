@@ -15,7 +15,7 @@ word_count: 1970
 
 # 一文讲清净利润和现金流的逻辑关系
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2024-11-19 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2024-11-19 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247485349&idx=1&sn=cc3a42ab73fca463e9098f6b9e3de964&chksm=ce115af0f966d3e62f74b2c6fcdba9437bc8e06f8d05ce25ff0c314aec33491f93d27dd5d9d5
 
 ![图片](images/img001.gif)

@@ -14,7 +14,7 @@ word_count: 4138
 
 # 小米集团2024年财报深度解析：业务全面高歌猛进
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-03-30 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-03-30 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487782&idx=1&sn=44f33681aece5d1ca13f2e9959c3ab3e&chksm=ce114c73f966c5652cfb3f223cf402cc7599a5734d2ba8be510db380c08d618785ff07c1ba1e
 > 摘要：在高端手机市场，小米的品牌溢价和生态黏性与苹果仍有较大差距
 

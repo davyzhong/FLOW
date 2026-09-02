@@ -2,7 +2,7 @@
 
 ## 当前状态摘要
 
-截至 2026-09-02，产品设计和 Phase 1–10 均已完成，主实施路线图全部阶段关闭。六服务栈可以从干净检出构建启动；`flow.excel.v1` 已冻结为首个可执行中间层交换契约；标准 Excel 与非标准外部工作簿可通过同一套 Intake 与 canonical 流程生成等价的受治理 Metric Snapshot。首个物流指标集包含 15 个版本化指标和 14 条依赖边；其上已经建立 5 个确定性 Analysis Playbook、严格对账的 Driver Contributions、4 个高证据 Finding 和不可变 Analysis Run。首个真实 Finance BP 用户界面现已通过只读 Dashboard Projection API 消费这些发布对象，提供八指标、趋势、经营利润桥、Findings、产品表、毛利矩阵及 Investigation 身份交接。首个证据优先 Investigation 工作台现已受控运行：Finding/Evidence 状态机、追加式 ReviewEvent、typed Investigation API、驱动桥与公式引擎版本上下文、文件/工作表/行级源记录血缘、结论四要素与证据复核均已落地并通过 `make test-investigation-e2e` 验收。规范远程仓库为 <https://github.com/davyzhong/FLOW>；下一阶段是 AI Copilot。
+截至 2026-09-02，产品设计和 Phase 1–10 的**功能窄切片**均已完成：从 Excel 数据契约、Intake/canonical 中间层、15 个版本化指标、5 个确定性 Analysis Playbook、4 个高证据 Finding，到 Finance BP Dashboard、Evidence-first Investigation、受约束 AI Copilot 和同一冻结快照生成 PPTX/XLSX/HTML/PDF，均已有可执行实现与独立门禁。这里的“完成”不等于产品已经可供真实客户安全使用：Excel 上传/映射尚无完整用户界面，报告产物尚无用户可发现的下载中心，身份权限、备份恢复、部署加固与深度可观测性尚未完成，也尚未用脱敏真实物流数据验证业务价值。规范远程仓库为 <https://github.com/davyzhong/FLOW>；当前阶段是 **Pilot Readiness（试点就绪）**。
 
 ## 阶段时间线
 
@@ -211,7 +211,7 @@
 - Report Snapshot 冻结：仅接受 approved Finding（状态机签发产物），按 (metric_snapshot_id, version) 幂等版本化，条目引用 evidence/finding 对象；
 - 四格式渲染：PPTX（结论先行 + 指标页 + 证据索引）、分析 Excel（指标/发现/驱动/质量对账/版本血缘工作表）、语义 HTML（表格 + 证据脚注 + 身份页脚）、PDF（冻结 HTML 经固定 Chromium 打印）；
 - 发布尝试逐次持久化（queued→running→succeeded/failed），失败可独立重试而无需重建快照；存储可注入以便快速测试；
-- `make test-publishing-golden` 与 `report-golden` CI 门禁：从四个产物中提取规范关键值（报告版本、批次/快照/运行 ID、全部指标本期值、发现影响精确金额）并验证跨格式一致；
+- `make test-publishing-golden` 与 `publishing-golden` CI 门禁：从四个产物中提取规范关键值（报告版本、批次/快照/运行 ID、全部指标本期值、发现影响精确金额）并验证跨格式一致；
 - 详见 `docs/implementation/phase-9-verification.md`。
 
 ### 阶段 19：Phase 10 Acceptance Suite
@@ -230,11 +230,13 @@
 
 ## 当前尚未完成
 
-- Phase 7–10 在各阶段开工前基于已验证接口形成可执行任务单；
+- Excel 上传、字段映射、质量修复与发布的 Finance BP 用户闭环；
+- Report Center、产物状态与 PPTX/XLSX/HTML/PDF 下载用户闭环；
+- 最小身份权限、密钥与网络边界、备份恢复、结构化日志和运行健康检查；
+- 脱敏真实物流企业月度数据试点及可复核的业务价值证据；
 - 指标阈值和预警规则的完整明细；
-- Phase 10 运维加固项（备份演练、结构化日志与关联 ID 的完整覆盖）与 `make acceptance` 总验收；
 - 正式品牌命名和 FLOW 的最终英文释义。
 
 ## 当前下一步
 
-按照主路线图创建 Phase 9“Unified Publishing”详细测试先行计划：先冻结 Report Snapshot 的内容与源对象引用，再实现 PPTX（结论先行）、分析 Excel、语义 HTML 与 PDF 渲染器，全部从同一不可变 Report Snapshot 渲染；发布尝试独立持久化以支持失败重试；以黄金文件比对与全格式关键值一致性检查作为 `make test-publishing-golden` 验收。只读 approved 状态的 Finding。
+按照 D038 已批准顺序连续推进：先修复仓库与验收基线并发布更正基线；再补齐 Excel 导入与报告下载用户闭环；随后建立最小安全部署；再以脱敏真实物流数据完成端到端试点；最后只依据试点证据确定 V1.1，不用功能清单替代真实使用结果。

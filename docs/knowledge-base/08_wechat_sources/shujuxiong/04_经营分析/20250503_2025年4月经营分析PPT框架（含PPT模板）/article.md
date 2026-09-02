@@ -15,7 +15,7 @@ word_count: 2050
 
 # 2025年4月经营分析PPT框架（含PPT模板）
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-05-03 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-05-03 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487991&idx=1&sn=40a3e7bd4e8d5bcbdacc0a7a4458ef7c&chksm=ce114ca2f966c5b4f70a2fa3a42403545efb121bcec7ad7ef349e6d966159084015ecef8ae38
 > 摘要：方向比速度更重要，顺风时提速，逆风时调帆。
 

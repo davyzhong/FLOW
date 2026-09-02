@@ -33,6 +33,8 @@
 | Investigation 审批资格规则改变（D037） | 状态机与迁移 0008 | Investigation API/工作台、Phase 8 AI 上下文、Phase 9 报告资格判定 |
 | 输出格式增加 Word | Publishing Renderer | 模板、分页、字体、回归测试和版本记录 |
 | 部署方式确定 | 技术架构 | 鉴权、存储、文件安全、模型接入和运维 |
+| 试点数据字段或口径改变 | Intake Mapping、canonical 与指标目录 | 对账、Driver、Finding、Dashboard、报告及脱敏规则 |
+| 依据试点调整 V1.1 范围（D038） | 产品优先级与验收标准 | 决策日志、实施计划、数据契约、用户旅程和发布说明 |
 
 ## 可从头重启
 
@@ -117,6 +119,19 @@
 2. `unified-publishing.html`；
 3. 两份 PPT 研究资料；
 4. 正式规格第 13 章。
+
+## 从 Pilot Readiness 节点重启
+
+适用场景：补齐 Excel 导入/报告下载闭环、确定部署拓扑、开展脱敏真实数据试点或据此调整 V1.1。
+
+建议读取：
+
+1. 决策日志 D038；
+2. `docs/implementation/phase-10-acceptance.md`；
+3. 当前 Pilot Readiness 实施计划与试点证据目录；
+4. Phase 3 Intake、Phase 6 Dashboard、Phase 7 Investigation 和 Phase 9 Publishing 的验证记录。
+
+试点修改不得绕过数据中间层或重新定义已发布历史；新增字段、指标或 Driver 必须版本化，并重新运行全部受影响门禁。只有试点中的可复核证据才能改变 V1.1 优先级。
 
 ## 变更记录要求
 

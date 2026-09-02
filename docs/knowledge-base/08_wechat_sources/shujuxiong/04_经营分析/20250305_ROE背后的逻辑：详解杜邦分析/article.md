@@ -15,7 +15,7 @@ word_count: 1737
 
 # ROE背后的逻辑：详解杜邦分析
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-03-05 07:15  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-03-05 07:15
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487519&idx=1&sn=85ed2eaad064a947bb63d46583bf0944&chksm=ce114d4af966c45c67d0caffe2a8e9f4fef72821799346fb443dec2d6f1e351f21f3f8fcda58
 
 ![图片](images/img001.gif)
@@ -168,5 +168,5 @@ ROE
 >
 > 获取完整ROE思维导图。
 >
-> 
+>
 ![图片](images/img008.jpg)

@@ -14,7 +14,7 @@ word_count: 1616
 
 # 应收账款周转率：拆细了才能管得住
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-04-30 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-04-30 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487975&idx=1&sn=eab1a32be28406ef9eab0527cf275fde&chksm=ce114cb2f966c5a4d2503b130c3cd232d5496b08bb8d1892ec17190a1da2b2049f9bfca47e29
 > 摘要：看似繁琐的拆分，其实是管理的“放大镜”。把复杂揉碎，你就拥有了掌控全局的能力。
 

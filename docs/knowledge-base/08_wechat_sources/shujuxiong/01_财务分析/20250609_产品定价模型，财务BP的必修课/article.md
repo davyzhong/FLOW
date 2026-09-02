@@ -14,7 +14,7 @@ word_count: 1873
 
 # 产品定价模型，财务BP的必修课
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-09 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-09 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488305&idx=1&sn=0dce63ccc01281cbf2790b34b2fec7ab&chksm=ce114e64f966c772e29cb29c4cfb7814481b7e662cc47512163da67650924a934891e7d5aaed
 > 摘要：“再好的商业模式，如果定价出问题，赚钱的算盘也就落空。
 

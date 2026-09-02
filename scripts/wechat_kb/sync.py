@@ -40,6 +40,7 @@ import classify
 import make_manifest
 import organize_albums
 import providers
+from article_markdown import compose_article_markdown
 from wechatlib import (
     CST,
     FetchError,
@@ -57,13 +58,6 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 KB_DIR = REPO_ROOT / "docs" / "knowledge-base" / "08_wechat_sources"
 WORK_DIR = REPO_ROOT / "work" / "wechat_kb"
 CRED_PATH = WORK_DIR / "mp_credentials.json"
-
-FRONTMATTER_KEYS = (
-    "title", "account", "account_id", "author", "publish_time", "url",
-    "crawled_at", "collection", "categories", "relevance", "relevance_score",
-    "word_count",
-)
-
 
 def load_state(kb_dir: Path) -> dict:
     path = kb_dir / "state" / "seen_urls.json"
@@ -191,23 +185,7 @@ def ingest_from_html(html_text: str, url: str, article_root: Path | None,
     meta["image_failures"] = [s for s in saved_images if not s.get("file")]
     meta["word_count"] = len(classify.content_to_text(body_md))
 
-    fm = ["---"]
-    for key in FRONTMATTER_KEYS:
-        fm.append("%s: %s" % (key, json.dumps(meta.get(key), ensure_ascii=False)))
-    fm.append("---")
-
-    src_line = "> 来源：微信公众号「%s」" % (meta.get("account") or "未知")
-    if meta.get("author"):
-        src_line += " · 作者 %s" % meta["author"]
-    if meta.get("publish_time"):
-        src_line += " · 发布于 %s" % meta["publish_time"]
-    src_line += "  \n> 原文链接：%s" % url
-    if meta.get("digest"):
-        src_line += "\n> 摘要：%s" % meta["digest"]
-
-    article_md = "%s\n\n# %s\n\n%s\n\n%s" % (
-        "\n".join(fm), meta.get("title") or "无标题", src_line, body_md
-    )
+    article_md = compose_article_markdown(meta, url, body_md)
     (article_root / "article.md").write_text(article_md, encoding="utf-8")
     meta_clean = {k: v for k, v in meta.items() if k != "excluded"}
     (article_root / "meta.json").write_text(

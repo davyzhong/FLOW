@@ -14,7 +14,7 @@ word_count: 919
 
 # 35岁还未当上领导的财务，需要着重提升这几项能力
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-04-05 14:55  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-04-05 14:55
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487816&idx=1&sn=8b1e44fec18c53a0709a70b10ee66aa6&chksm=ce114c1df966c50bd98ccc1297cee35fa5a8e2993ff5e484fe9c1fd221c0bf034a05c260b579
 > 摘要：所谓天赋，就是不断地努力。
 

@@ -14,7 +14,7 @@ word_count: 1594
 
 # 利润表分析：掌握“五步闭环法”，轻松读懂利润表
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-04 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-04 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488265&idx=2&sn=e253997c8ff2c42fecbc59e4e8470191&chksm=ce114e5cf966c74adbc6e4838ede15146d3fe84e7c71ffe6cf9334bebf661c2fd62457204449
 > 摘要：在三张主表里，利润表像是一条长镜头，记录企业如何把投入变成产出。
 

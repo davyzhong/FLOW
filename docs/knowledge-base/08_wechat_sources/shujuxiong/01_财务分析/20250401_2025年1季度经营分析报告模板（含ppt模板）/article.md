@@ -14,7 +14,7 @@ word_count: 1296
 
 # 2025年1季度经营分析报告模板（含ppt模板）
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-04-01 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-04-01 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487792&idx=1&sn=78e5d693d508f74af3f52dd27ebe64bb&chksm=ce114c65f966c573035e3fb397c6aff78cc314880a43ada1d88a5006a51067db7bdd634e18b1
 > 摘要：报告不在多，而在精；分析不在复杂，而在到位。
 

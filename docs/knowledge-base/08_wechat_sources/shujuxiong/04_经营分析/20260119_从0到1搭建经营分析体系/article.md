@@ -15,7 +15,7 @@ word_count: 268
 
 # 从0到1搭建经营分析体系
 
-> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-01-19 07:27  
+> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-01-19 07:27
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247495710&idx=1&sn=bfbaddad0bf34b4b4b107283251303e9&chksm=ce12ad4bf965245d45b5d548ea3121c1ccb8cfe00ec35bd58c21d9a764db8dfd12c11aec2955
 
 ![图片](images/img001.jpg)

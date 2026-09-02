@@ -15,7 +15,7 @@ word_count: 1400
 
 # 通过财务报表预判经营业绩的几个关键技巧
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2024-11-30 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2024-11-30 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247485614&idx=1&sn=396ea9e86bb3c54cc9567860ed86b4e1&chksm=ce1155fbf966dced4812f60426e5fb4585709d6d825c8f7a015fb5ce44827cf9de9fdb6898cb
 
 ![图片](images/img001.gif)

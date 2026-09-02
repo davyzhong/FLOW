@@ -14,7 +14,7 @@ word_count: 1876
 
 # 应收账款管理，财务部门应该承担哪些责任？
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-01-12 14:14  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-01-12 14:14
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247486505&idx=1&sn=4822f84adec6e01d043f1da7c08df9b5&chksm=ce11517cf966d86a5a469f78cd6a93ca069ef9693817592cb192f51c03be8a51ef5d4bf95942
 > 摘要：管理得当的每一笔账款，都是企业成功的基石。
 

@@ -14,7 +14,7 @@ word_count: 1408
 
 # 做好资金管理，先用对模型：五大经典模型对比分析
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-12 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-12 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488332&idx=2&sn=6177b76e975c89d87ce7bfaf66294a0e&chksm=ce114e19f966c70f9676c26e19b81c9171fc4afa6ef74e2ffd90c71885fc0800dd03f4d1ba6d
 > 摘要：企业经营就像一场马拉松，能不能跑得远，取决于有没有稳定的“现金呼吸系统”。
 

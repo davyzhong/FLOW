@@ -14,7 +14,7 @@ word_count: 1643
 
 # ROE和ROA，区别与适用场景
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-07 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-06-07 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488292&idx=2&sn=21faae68539194b96c5004e0b307f7f8&chksm=ce114e71f966c767ab49d3a29c5c135d49cbb3e10375172159d5e4f7af40ce1d1bccc19f89a5
 > 摘要：ROE（净资产收益率）和 ROA（资产回报率）被视为企业绩效评估的“双子星”。
 

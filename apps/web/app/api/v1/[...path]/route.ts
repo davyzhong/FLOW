@@ -4,6 +4,14 @@ const apiInternalUrl = process.env.FLOW_API_INTERNAL_URL ?? "http://127.0.0.1:80
 
 type RouteContext = { params: Promise<{ path: string[] }> };
 
+export async function bufferedProxyResponse(response: Response): Promise<Response> {
+  const body = await response.arrayBuffer();
+  return new Response(body, {
+    status: response.status,
+    headers: { "content-type": response.headers.get("content-type") ?? "application/json" },
+  });
+}
+
 async function forward(request: NextRequest, context: RouteContext): Promise<Response> {
   const { path } = await context.params;
   const upstream = new URL(`/api/v1/${path.join("/")}`, apiInternalUrl);
@@ -20,10 +28,7 @@ async function forward(request: NextRequest, context: RouteContext): Promise<Res
       body: request.method === "GET" || request.method === "HEAD" ? undefined : await request.text(),
       cache: "no-store",
     });
-    return new Response(response.body, {
-      status: response.status,
-      headers: { "content-type": response.headers.get("content-type") ?? "application/json" },
-    });
+    return bufferedProxyResponse(response);
   } catch {
     return Response.json(
       { detail: { code: "upstream_unavailable", message: "FLOW API 暂时不可用" } },

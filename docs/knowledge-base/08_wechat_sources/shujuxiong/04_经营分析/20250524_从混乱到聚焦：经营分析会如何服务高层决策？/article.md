@@ -15,7 +15,7 @@ word_count: 1304
 
 # 从混乱到聚焦：经营分析会如何服务高层决策？
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-05-24 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-05-24 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488184&idx=2&sn=f6d02a148bc7b2d5e97d6bff83459ae9&chksm=ce114fedf966c6fb504bfacf6b099947be067e39e193506e4c12eded85ec9c728253c2efded3
 > 摘要：高质量的会议，是一把解放决策力的钥匙。聚焦本质，才能赢得未来。
 

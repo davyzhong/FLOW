@@ -15,7 +15,7 @@ word_count: 228
 
 # 经营分析，一定要有系统性思维
 
-> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-03-12 11:20  
+> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-03-12 11:20
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247497402&idx=1&sn=e221dff954c525af70207dcd2739d033&chksm=ce12abeff96522f9ec70f2736fad362788eb7a3647bc31232e65f02b74a0fc05845cd4dd6688
 
 ![图片](images/img001.jpg)

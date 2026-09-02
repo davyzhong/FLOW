@@ -15,7 +15,7 @@ word_count: 202
 
 # 2026年1月经营分析报告（案例）
 
-> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-02-25 07:29  
+> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-02-25 07:29
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247496879&idx=1&sn=c79ed0bd94ba3356ea3055f3fc3c39a5&chksm=ce12a9faf96520ece45bd41569d8c79ae65474fdcbd7a98feeea7e5b8c7510ca40545df00e0e
 
 ![图片](images/img001.jpg)

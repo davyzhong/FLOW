@@ -15,7 +15,7 @@ word_count: 201
 
 # 财务真正的价值，是帮老板看清经营问题
 
-> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-03-31 09:30  
+> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-03-31 09:30
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247497918&idx=1&sn=da529436d906a602aa711fa49d2bb759&chksm=ce12a5ebf9652cfd16cced629e977f1a238d78e2ae60ba6d22cfc754091847e121301ae4c3f6
 
 ![图片](images/img001.jpg)

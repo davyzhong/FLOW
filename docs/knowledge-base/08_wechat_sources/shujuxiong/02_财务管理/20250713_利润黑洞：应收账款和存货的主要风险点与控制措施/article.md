@@ -14,7 +14,7 @@ word_count: 1934
 
 # 利润黑洞：应收账款和存货的主要风险点与控制措施
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-07-13 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-07-13 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488591&idx=1&sn=ecd1a9a9e56fb7160c7bea1d2d0e662d&chksm=ce11491af966c00c2157fca0df83bdfbdc38c6d98d96653b8bba678bf9c06a555eaabd8a3020
 > 摘要：真正的勇士，敢于直面呆坏账与过季品，也敢于正视枯燥的盘点。
 

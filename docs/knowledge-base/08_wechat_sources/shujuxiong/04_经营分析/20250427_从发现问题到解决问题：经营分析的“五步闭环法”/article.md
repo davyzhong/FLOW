@@ -15,7 +15,7 @@ word_count: 1577
 
 # 从发现问题到解决问题：经营分析的“五步闭环法”
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-04-27 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-04-27 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487953&idx=1&sn=0bd9861baf65096faa3b021919ee2a0a&chksm=ce114c84f966c592bfa6b2aba4b11607237b5705481fab2c40faac4be0589cca0b78d52efd11
 > 摘要：做一次对，叫侥幸；次次都对，靠的是闭环。
 

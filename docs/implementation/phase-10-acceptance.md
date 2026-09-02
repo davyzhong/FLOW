@@ -9,11 +9,12 @@ Scope: `docs/superpowers/plans/2026-08-30-flow-v1-master-roadmap.md` §Phase 10.
   seven governed gates on a live compose stack —
   data-contract round trip → metric known answers → analysis invariants →
   intake e2e → publishing golden → investigation e2e → dashboard e2e.
-- The CI workflow (`FLOW CI`) runs the same gates as isolated jobs
+- The CI workflow (`FLOW CI`) defines the functional gates as isolated jobs
   (static-python, static-web, unit, integration, data-contract,
   intake-e2e, metrics-known-answers, analysis-invariants, dashboard,
-  investigation-e2e, copilot-evals, publishing-golden via acceptance,
-  contracts, migrations, smoke).
+  investigation-e2e, copilot-evals, publishing-golden, contracts, migrations,
+  smoke). `make acceptance` remains the local composite gate; CI executes the
+  component gates independently so a failure identifies its product boundary.
 
 ## V1 acceptance criteria status (product spec §3.1)
 
@@ -38,5 +39,12 @@ Scope: `docs/superpowers/plans/2026-08-30-flow-v1-master-roadmap.md` §Phase 10.
 - Structured-log/correlation-ID completeness and worker dead-letter
   dashboards — current Celery/uvicorn logging is functional; deeper
   observability belongs to the private-cloud deployment workstream.
-- These do not block the V1 narrow slice: every phase 1–9 exit gate is
-  automated and green.
+- These do not invalidate the implemented V1 functional narrow slice, but they
+  do block any claim of pilot or production readiness. They are carried into
+  the Pilot Readiness workstream under D038.
+
+## Current release boundary
+
+`v0.1.0` records the first functional narrow slice. The corrected baseline
+release must not be tagged until the final `main` commit has passed the local
+composite gate and all 15 isolated CI jobs, including `publishing-golden`.

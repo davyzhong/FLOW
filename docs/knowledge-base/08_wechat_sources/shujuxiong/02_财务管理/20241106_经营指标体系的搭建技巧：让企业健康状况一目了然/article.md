@@ -14,7 +14,7 @@ word_count: 1753
 
 # 经营指标体系的搭建技巧：让企业健康状况一目了然
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2024-11-06 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2024-11-06 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247485166&idx=1&sn=22049cfb0f40267c48bacc729629354d&chksm=ce115bbbf966d2adcf00f04a2374b9d239ba1fb75f352486b01eeedd3eedadd47f5193813f59
 
 ![图片](images/img001.gif)

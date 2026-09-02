@@ -14,7 +14,7 @@ word_count: 1721
 
 # EBIT、EBITDA和净利润：三者的本质区别与适用场景
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-04-25 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-04-25 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487942&idx=2&sn=0dba2940b5704b1a76835cd1531f7ec1&chksm=ce114c93f966c58551e1966ba0d4f1d34a5a1c82dd902bb0f9bc2b4a17f27343bb4fa435a3b9
 > 摘要：“真正的高手，不是看一张报表，而是看穿数字背后的商业逻辑。”
 

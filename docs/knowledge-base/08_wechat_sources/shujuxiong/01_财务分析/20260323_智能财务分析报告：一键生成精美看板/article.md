@@ -14,7 +14,7 @@ word_count: 144
 
 # 智能财务分析报告：一键生成精美看板
 
-> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-03-23 16:30  
+> 来源：微信公众号「数据熊」 · 作者 宋岳清 · 发布于 2026-03-23 16:30
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247497690&idx=1&sn=3b7f199c3d242310eb3ee6e8d161ceef&chksm=ce12aa8ff9652399a3c3029ac1dabd4bfe1b8f86091e220b8ceef88a0504923f860982dc9711
 
 ![图片](images/img001.gif)

@@ -15,7 +15,7 @@ word_count: 1836
 
 # DeepSeek+PowerBI：一键实现多表合并、自动分析
 
-> 来源：微信公众号「数据熊」 · 作者 捷智数据分析 · 发布于 2025-02-14 07:00  
+> 来源：微信公众号「数据熊」 · 作者 捷智数据分析 · 发布于 2025-02-14 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247486949&idx=1&sn=52cc0eb8d385c1a49c8a6a951eab5344&chksm=ce1150b0f966d9a6d69ed1ad0aba0bf60fdb3d0fbd4d6c6b270fa8a4b4b3a20836f1eaf9797d
 > 摘要：在数据分析过程中，我们经常需要将多个表格合并成一个，以便进行全面的分析。
 

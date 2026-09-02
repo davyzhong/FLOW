@@ -14,7 +14,7 @@ word_count: 2136
 
 # 资金预测：核心流程与常见方法（附Excel模型）
 
-> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-07-09 07:00  
+> 来源：微信公众号「数据熊」 · 作者 Data Bear · 发布于 2025-07-09 07:00
 > 原文链接：http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488573&idx=1&sn=8ecf981c1fbfd709a36a8d433e47b865&chksm=ce114968f966c07e775ae84214886c976d45c4f785136446938939cd9bea4c3489a2a935cbaa
 > 摘要：每天积累一点，慢慢就成为了专业高手。
 
