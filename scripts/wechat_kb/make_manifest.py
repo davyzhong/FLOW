@@ -17,6 +17,12 @@ from pathlib import Path
 KB_DIR = Path(__file__).resolve().parents[2] / "docs" / "knowledge-base"
 
 HEADER = "relative_path\tsize_bytes\tmodified_time\tmime_type"
+GENERATED_MANIFEST_PATHS = frozenset(
+    {
+        "99_manifest/inventory.tsv",
+        "99_manifest/sha256sums.txt",
+    }
+)
 
 
 def build(kb_dir: Path = KB_DIR) -> tuple[int, int]:
@@ -26,6 +32,8 @@ def build(kb_dir: Path = KB_DIR) -> tuple[int, int]:
         if not path.is_file():
             continue
         rel = path.relative_to(kb_dir).as_posix()
+        if rel in GENERATED_MANIFEST_PATHS:
+            continue
         stat = path.stat()
         mtime = datetime.fromtimestamp(stat.st_mtime).astimezone().isoformat(timespec="seconds")
         rows.append("%s\t%d\t%s\tapplication/octet-stream" % (rel, stat.st_size, mtime))

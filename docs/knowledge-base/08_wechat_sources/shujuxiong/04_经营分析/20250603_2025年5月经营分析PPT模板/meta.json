@@ -1,0 +1,39 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm31u9lbhq3CKJ6pHHqAozwQQLWibmLggXibY36clrqKpZeWh9stc8scXyeKiaKUK1vic6cEYzUpbZzE8w/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T14:07:02+08:00",
+ "digest": "把复杂留给自己，把简单交给别人；数据会说谎，但趋势不会。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.png",
+   "sha256": "a539e3020e39d7d21013567b423f4ab806ec24341e90f2c24fa1a54ecf55c6c5",
+   "size": 98947,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm31u9lbhq3CKJ6pHHqAozwQsGccnJZM103spapPup17Y0CoGLkicBPJgY9C8eYIBZib4mrOU6ruNckA/640?wx_fmt=png&from=appmsg"
+  }
+ ],
+ "publish_time": "2025-06-03 07:00",
+ "relevance": "relevant",
+ "relevance_score": 25.0,
+ "title": "2025年5月经营分析PPT模板",
+ "title_hits": [
+  "PPT",
+  "模板",
+  "经营",
+  "经营分析"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488257&idx=1&sn=c08f8b50a5fdbf4e3969c5cf6e3be2b0&chksm=ce114e54f966c742205d4ae1aded0c7047296ef85bad91af54755a792d740cc89cbcbf0585e1",
+ "word_count": 1685
+}

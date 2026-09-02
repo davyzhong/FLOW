@@ -1,0 +1,60 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "数据方法与工具"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm31EcFREtzbyO87pGeWYQQwvpNRQOVgx6r8Dw5wuWmvzRibMVU76K5kBA8gLdnsezzWqibnlXsCYMnw/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T13:58:04+08:00",
+ "digest": null,
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.gif",
+   "sha256": "6e5826c75dc6fda91cbe4b70102063ab7e99520bd66704863d50bae65f33298d",
+   "size": 7063,
+   "url": "https://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm1eCHSDQ1FT41crSwIq5ZQuez5bEOnUCzPmARmhic0lm221AAwtWTwHosaT1CiaGoiaicgCSV7KmQRnJw/640?wx_fmt=gif"
+  },
+  {
+   "file": "images/img002.jpg",
+   "sha256": "bbdea91355e9cd0545ca15ee91683062a5dfb6f7ea7a1ca22eb9dc41f86f514f",
+   "size": 77925,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm31EcFREtzbyO87pGeWYQQwSUx1cEulTEv6TGLD2ibVDSHjmGSEDbL6bmmibXbcWA0tV7WaReKc8MVg/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img003.jpg",
+   "sha256": "445a21c4e40017cad288a96095ab36136bb2cb7754719bf9759d076efc3b1fea",
+   "size": 51463,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm31EcFREtzbyO87pGeWYQQwWYf65p8dTfhBn30aJysOSlvVQB37EwZHOuSFRLDglpkLD6GiamNu68Q/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img004.jpg",
+   "sha256": "38f3e1462ee47ad92fa21c9cac209e81a0fa7aa56b9d213379c879252f2ab90a",
+   "size": 56558,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm31EcFREtzbyO87pGeWYQQwNHNb3drbkEjz0MMRzZXpbNXJqbXnKjGRIvyh0Fzog0FGYcElXfiaz4Q/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img005.jpg",
+   "sha256": "eee316eef80fc4e024da6e5485ad722ea43de3a827a0798966838f17b3fcfb02",
+   "size": 73506,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm31EcFREtzbyO87pGeWYQQwibTzuG8U8GttxPC81iam50TYcYYyHsrJgQKOj0XZ9ibxG9TldvFjWHsdg/640?wx_fmt=jpeg"
+  }
+ ],
+ "publish_time": "2024-11-08 06:45",
+ "relevance": "relevant",
+ "relevance_score": 21.6,
+ "title": "经营分析会，这几件事一定要吵明白",
+ "title_hits": [
+  "经营",
+  "经营分析"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247485180&idx=1&sn=e388c7d142da6c7b7248fbcf0f204e3b&chksm=ce115ba9f966d2bfe283c16d36f22b07190a667e889339952200e269a29cfabe005742c87464",
+ "word_count": 1534
+}

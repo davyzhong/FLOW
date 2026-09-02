@@ -1,0 +1,84 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "数据方法与工具"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0fgr10YHFbeumesN4nI2JSBlJraibrhvp7chDUz4Fh21xVyFT1icRMNkkKPbAGsI74BIQrFGrvsWlw/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T14:00:38+08:00",
+ "digest": "未来的商业竞争将是数据的竞争，谁能更好地运用数据，谁就能更快地找到市场机会，赢得消费者的青睐，成为行业的领导者。数据驱动的经营分析，是企业迈向未来的一条必经之路。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.gif",
+   "sha256": "6e5826c75dc6fda91cbe4b70102063ab7e99520bd66704863d50bae65f33298d",
+   "size": 7063,
+   "url": "https://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm1eCHSDQ1FT41crSwIq5ZQuez5bEOnUCzPmARmhic0lm221AAwtWTwHosaT1CiaGoiaicgCSV7KmQRnJw/640?wx_fmt=gif"
+  },
+  {
+   "file": "images/img002.jpg",
+   "sha256": "bafcb66c1978d2e232aef5770174156c1f8557cdc416a50a9ebb76169ef1de03",
+   "size": 84999,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0fgr10YHFbeumesN4nI2JSupOEW2U7KduXJ8X5Obp9LaHYawibgWZZHUGGib8BzFxogdxwZpiaVNM9w/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img003.png",
+   "sha256": "afdbb820803e24db42397b43f53a9e72e73db9b096af72919fef00428ee4f8fd",
+   "size": 220581,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0fgr10YHFbeumesN4nI2JSZBcIK2vhqwPcoTTC0F8ly9S5DB1LELNibBGibOaL4g6icjxKetx7olCicw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img004.png",
+   "sha256": "53cba25480fe72d1e53c3d9dde66ca977d52f99d0283c0e9b966ba9f66c1abd0",
+   "size": 356831,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0fgr10YHFbeumesN4nI2JSo1hHdLxsrovD677hExF8bI17Ut9JO2JUs17EQdXDzZHoatpXt1MEvw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img005.png",
+   "sha256": "4b41737bdc52fda2f294fabe7835b79ee31fcf4d717c77164dc7c952b69bc884",
+   "size": 223046,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1qKQviaVAfFcdwIHxkb4hmwHOophibShALglLOhxv9IhoiaVgBmItf2M4fD7PQmbKPM7D1t7zWBAibMA/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img006.jpg",
+   "sha256": "b2a956e2a33eca8a8e4832efa559916ac3dd08852af3c3e474a22d250f91d333",
+   "size": 41361,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0fgr10YHFbeumesN4nI2JSRrD548cs9EUPJlrbgMWoEicial3odBMbmv8Uh2oVAIVBLdXGq9gTibsWw/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img007.png",
+   "sha256": "06ab76b6f1ec8dce1ba78853d18639e49fa53af4049b28dbfb970df627babcd2",
+   "size": 240733,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0fgr10YHFbeumesN4nI2JSsicdrpH0ZXBVdPACoY6jwlnHTNrYh0kwLialO0OpO6SEdlDia0t74lk7Q/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img008.png",
+   "sha256": "d2ce1fadf23ae47ecc7c40b2bfb040f28039e2d1c49f5955b7f3f3b71aaf7efb",
+   "size": 28140,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3jiaHDzGNGNhMgO08DFOfV1wKb1I1RaJibhNGcxicH1vyzMwaB9o0suzFxs2U0wkt4djMiadgJENKyCw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img009.png",
+   "sha256": "cad0dfbd4a166d1b0d309736a49948107d258f9fc23ef454715fa1d4e6a92e3c",
+   "size": 323339,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0fgr10YHFbeumesN4nI2JSddhvlEmbGw2TrGeDhqnDpMrAQcB315C7aL2TIt7MdTYYJZibn9pXvnw/640?wx_fmt=png&from=appmsg"
+  }
+ ],
+ "publish_time": "2025-01-27 07:00",
+ "relevance": "relevant",
+ "relevance_score": 13.0,
+ "title": "数据驱动的经营分析：理论与实践",
+ "title_hits": [
+  "数据",
+  "经营",
+  "经营分析"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247486785&idx=1&sn=47251782a3557233e7bb9bc30251a571&chksm=ce115014f966d902d29cb5b0723d05ed8d698c60b794793b03cf400e983f16f1572b6c264ce4",
+ "word_count": 2305
+}

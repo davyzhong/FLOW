@@ -1,0 +1,67 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "03_财务报表",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0GD5YWErSC8iave5KEqhiaFzN4uPXw5rRquV6ewJjcjOCwHG9ZY58kW2uE77pLRrIiaWSFHGHYPNg6Q/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T13:55:54+08:00",
+ "digest": null,
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.gif",
+   "sha256": "6e5826c75dc6fda91cbe4b70102063ab7e99520bd66704863d50bae65f33298d",
+   "size": 7063,
+   "url": "https://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm1eCHSDQ1FT41crSwIq5ZQuez5bEOnUCzPmARmhic0lm221AAwtWTwHosaT1CiaGoiaicgCSV7KmQRnJw/640?wx_fmt=gif"
+  },
+  {
+   "file": "images/img002.jpg",
+   "sha256": "3bbae56dc528dbbf33e1c8c786d389b72bf75b393d33e1ab11d94dbde99d1f26",
+   "size": 29885,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0GD5YWErSC8iave5KEqhiaFz2jRw6rMTJpNDMPGUf597ib0yMib0bEMOLOvkFZczSGNH5zJVMfkZJVfg/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img003.jpg",
+   "sha256": "99e52175d88c245c0d60e03bea0e3e0ab7f11ba455390071a81b49b7b069ce3b",
+   "size": 46943,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0GD5YWErSC8iave5KEqhiaFzuAA4DPJnBh6tzum7LjzR5MloCCKodiaaQwYckH1YbIqbzchC3IxTW3Q/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img004.jpg",
+   "sha256": "9f3152b7fd9532fadc98ccf8463d3ffbd0dac08583fd8b3d8d05de52b9671ebc",
+   "size": 26468,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0GD5YWErSC8iave5KEqhiaFzB998uXgxsicmpcumqE9mjicTY8YfL92MLYia2wHYmALzlicGIJpBPAO3Ww/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img005.jpg",
+   "sha256": "850f321ed9cc366e9dd8156d52a3987c8c98f61877fdd39ffb7003d014f8dcc4",
+   "size": 66951,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0GD5YWErSC8iave5KEqhiaFzseibXIaZee2pcndwnpNziczbdL2KyibIGq4d9ua0XCviaax5rrVykCF0Zg/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img006.jpg",
+   "sha256": "065e2fa956274cc5e55c1d79443e4eb2ee34470d7dc08ec2fedb0f9e3f9d1333",
+   "size": 79744,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0GD5YWErSC8iave5KEqhiaFzhr8D01hBFicts6NFBjoLbibtvGEetVrMZP7SF9EDvxaAgayw7OQgoQYA/640?wx_fmt=jpeg&from=appmsg"
+  }
+ ],
+ "publish_time": "2024-11-24 06:50",
+ "relevance": "relevant",
+ "relevance_score": 23.6,
+ "title": "财务三大报表的勾稽关系，看这篇就够了！",
+ "title_hits": [
+  "报表",
+  "财务"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247485452&idx=1&sn=132f83bc423aa0efd3f2c256cb8bf9f4&chksm=ce115559f966dc4f49e0b37487cb8ff4451caa7945164ba6120a8019706a8b0c5efd4c403fed",
+ "word_count": 2705
+}

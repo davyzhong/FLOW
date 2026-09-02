@@ -1,0 +1,93 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "宋岳清",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/gZ0Mp1agcZibMQEiaGzS91AGQeOgt5suq5xIbJXBAIkB3Elch4TuOh99uibX1U3RBItGW4uKxGwAbLTWUeG85Dn0OxPZkUTr6OC2BtP8hX3EwM/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T15:42:40+08:00",
+ "digest": null,
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.jpg",
+   "recompressed": true,
+   "sha256": "2ab35572b5e9e13ed0d7d2bca4b0e9f9c380147931c0ada74f9ea67af18c346a",
+   "size": 148206,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZ8PibvsfvXDuJYmGDtLoYFEnZ1aqicoPv90arJ5qA7aZic9DicNgOzlZhtWt4fibtuKpicyib9hDicNIkIMwHeOm1FIM1YlYqtxOvRp51E/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img002.jpg",
+   "recompressed": true,
+   "sha256": "0956e426b5823b648bdeed738f25831e31e35ae9f01e89a5552f6ef4e7efdb7e",
+   "size": 189331,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/gZ0Mp1agcZib0PVgz6ahPdichuL4xCCIMvlySAypI48v6ngHsGHu64icWx4CQqpsa4B5mPDjcqP1sWB58a8gz4eUSB69fZQMOgnH55td1LezpQ/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img003.jpg",
+   "recompressed": true,
+   "sha256": "4f4e3108c864cd832b17377602d9fa770bd272d806f85cf62e723227ac5de746",
+   "size": 205101,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/gZ0Mp1agcZicSmFLpI1cATp1iardS6BVN2HdXshiaXTxZu862Ze9yEubBah6s5N7iaibI5nodu7DKKib116UKsylmIFdYum8AiagHyAhJKeiaXn3wGU/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img004.jpg",
+   "recompressed": true,
+   "sha256": "0eb1690197339e56170018c3d517884d721e57c817aef94e0e318edee3583ed4",
+   "size": 214548,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/gZ0Mp1agcZ87kDXnx8Lpvb7icaibZLuHeHMW03PQFyGW1nicmv4telyYOkvye2e4V2icoda0aVkIbnBoSGhyZBTGBg1SbUT1micWNxS4gphjWgyM/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img005.jpg",
+   "recompressed": true,
+   "sha256": "915bf3ba0d82f20fbb04fa8fd0f54ebcc05d63e6df4e438e94e5700396f4c6e9",
+   "size": 194418,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/gZ0Mp1agcZ8QGYLX1MY5V04l43iap3MaVgeLn9l8SQ3nDqHsSXU5chxdxicibZKRNxuEuuEaiamFxxEN6ncU7kuEzrNALkZI1BXHrER7EG7ptiaM/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img006.jpg",
+   "recompressed": true,
+   "sha256": "aff0882f8cb825a47d3672ea7679c79a0d2f72d996907e61d8c4510e807b269a",
+   "size": 206236,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/gZ0Mp1agcZ8d7qWa9mylCBenPPJgZt0GI07tHPw4bwBjkuc94uMNKvNnwyH9ypRvPZ6lrBcE2IIWlQ2uOeaN3XiaqB0S2YtvLpN6V1lgJgicw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img007.jpg",
+   "recompressed": true,
+   "sha256": "a2d044e1a735f84012115a849b24454114c584a44de1e85fe359522c916ba90f",
+   "size": 189821,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZ9fJDubk9aeupR0NPNFFSibMWd7pR6sqeOXwgaFsE0JZOmB1Dcr0ibCfic84vMicWR8HO3ur3zflaZxemibmYcyiaWfwkUAPsIBwGWtQ/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img008.jpg",
+   "recompressed": true,
+   "sha256": "973b7c0765ffa77144fd726253805fee961da40effa9e460dc16f89b65763ee4",
+   "size": 197273,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZ9VRic5jr8o1Mt35M8D4icb5TibqrDXFendqpeWzfsEZJhFlRUic6DCIPA6LZCIPCw5DQtYJhxVT2wt9lGAtahWdlblMosl76YqhAY/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img009.webp",
+   "sha256": "e0aa5dd9330118edab17515831b816812fc377037194c57324d195804c6b4523",
+   "size": 34868,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/gZ0Mp1agcZ8s9jCLIISaTiciaHAOWTPB1tYy7RTjTo9BtmP1W5CvgEvLVs1K1bA3iclWxvttUHqCJ9h82SlXc31APtsXnOVugf8icwoY9TRMzTY/640?wx_fmt=other&watermark=1&wxfrom=5&wx_lazy=1&tp=webp#imgIndex=11"
+  }
+ ],
+ "publish_time": "2026-03-22 14:10",
+ "relevance": "relevant",
+ "relevance_score": 12.2,
+ "title": "经营分析会，要先谈生意，再讲管理",
+ "title_hits": [
+  "管理",
+  "经营",
+  "经营分析"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247497672&idx=1&sn=cdaa394f5007cd1fcbb6c8b2e7cf3e05&chksm=ce12aa9df965238bdddc893c273c6923f052a6b4adffc779bf6cf5156a2d50620c6720a50093",
+ "word_count": 239
+}

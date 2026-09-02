@@ -1,0 +1,38 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3LLh8lpdcUGTl9Iz5OicLTZuaEr1vU8HRib6opZ3yCPSHyN9Eib3Nf1T8SojfVMjdjr84NdiaSJf4cOg/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T14:06:08+08:00",
+ "digest": "“业务分析不是算术游戏，而是一场闭环接力赛——数据只负责鸣枪，行动才算冲线。”",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.png",
+   "sha256": "2a09251df141ebc56b768b6ca40c5b4b1defcc1e2812ff2f3889ec8897033ed7",
+   "size": 30651,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3LLh8lpdcUGTl9Iz5OicLTZ0qWkzHmpGtto7WTengDcs1Q7Fic407PutXkkuEeXxuXONA2npHKA2iaA/640?wx_fmt=png&from=appmsg"
+  }
+ ],
+ "publish_time": "2025-05-18 07:00",
+ "relevance": "relevant",
+ "relevance_score": 23.2,
+ "title": "财务做不好经营分析，是因为没搞清“这个闭环”",
+ "title_hits": [
+  "经营",
+  "经营分析",
+  "财务"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488136&idx=2&sn=7439366734fa93e4999b291b5aeab24b&chksm=ce114fddf966c6cba2364c05f9d29b5914a328317c5f6211916f70f3d10298306d1075340e9f",
+ "word_count": 1498
+}

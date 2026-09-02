@@ -1,0 +1,38 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "数据熊",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2TFhtByvBz43hSvTpnjJ9QJjeBUOCxDeYzkZEuiaRIAHKKb9QdqhsibM5mjFxKwLmu3ibFue2hTNISg/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T14:09:15+08:00",
+ "digest": "把经营装进“系统”的盒子里，数据就不再是“故事”，而是“证据指向的行动”。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.png",
+   "sha256": "6647f51310a5180d882fa0d95001cc632bfe989d5cfefcbfc06f278c55d47aed",
+   "size": 18568,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2TFhtByvBz43hSvTpnjJ9QBTKzM16XATbicmLZQrkV8icrcdSNO62xG6WuZMY8elLQXY2TYibvGyLpA/640?wx_fmt=png&from=appmsg"
+  }
+ ],
+ "publish_time": "2025-08-24 08:00",
+ "relevance": "relevant",
+ "relevance_score": 29.2,
+ "title": "经营分析，一定要有系统性思维",
+ "title_hits": [
+  "思维",
+  "经营",
+  "经营分析"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247489201&idx=1&sn=c28085978205ba321876f660606d40ce&chksm=ce114be4f966c2f2c3c267af6f2db4239bcc2f52617881af2bb12459cf116ed6d9385f87a8ac",
+ "word_count": 3049
+}

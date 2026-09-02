@@ -1,0 +1,41 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "数据熊",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "数据方法与工具"
+ ],
+ "collection": "03_财务报表",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2kt5JMJFib67OFwazoUqFbVB8SicgXacavZHjTFWia7TLFDdSjcad1HCKmUoKuMK8SAzIUAvkMwNPtQ/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T13:57:54+08:00",
+ "digest": "路虽远，行则将至",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.gif",
+   "sha256": "6e5826c75dc6fda91cbe4b70102063ab7e99520bd66704863d50bae65f33298d",
+   "size": 7063,
+   "url": "https://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm1eCHSDQ1FT41crSwIq5ZQuez5bEOnUCzPmARmhic0lm221AAwtWTwHosaT1CiaGoiaicgCSV7KmQRnJw/640?wx_fmt=gif"
+  },
+  {
+   "file": "images/img002.jpg",
+   "sha256": "9c5b19fbb9c1d365c3e906e0576a3b889a0df861945b3947d355340e43d9c3f7",
+   "size": 20135,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2kt5JMJFib67OFwazoUqFbVs9kIhOia7RLUXvvEKnuqa0u94TrwwDZsakwQCNaPSPk9YI9aUTrka5Q/640?wx_fmt=jpeg"
+  }
+ ],
+ "publish_time": "2025-06-08 07:00",
+ "relevance": "relevant",
+ "relevance_score": 21.2,
+ "title": "合并报表步骤详解：含案例详解，建议收藏",
+ "title_hits": [
+  "报表"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488298&idx=2&sn=bffa865b01333807e46b4d3844b96b23&chksm=ce114e7ff966c769db6a6242d8458ddb172f2d494628a860b4aa2b4534773ab0082cae05473c",
+ "word_count": 5115
+}

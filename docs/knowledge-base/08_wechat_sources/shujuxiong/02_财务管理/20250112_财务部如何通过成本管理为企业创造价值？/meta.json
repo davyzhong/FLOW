@@ -1,0 +1,52 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "albums": [
+  "财务管理"
+ ],
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "02_财务管理",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm12YKQq0dGd7fTVsXN5zWSuFia3FGfIgRrpHM8jtdTrnicQIlAJcia9UqMOJkCTiaicHwCfUbmicO6sQhmA/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T12:00:40+08:00",
+ "digest": "成本管理不只关乎数字，更关乎如何为企业创造更大的价值！",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.gif",
+   "sha256": "6e5826c75dc6fda91cbe4b70102063ab7e99520bd66704863d50bae65f33298d",
+   "size": 7063,
+   "url": "https://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm1eCHSDQ1FT41crSwIq5ZQuez5bEOnUCzPmARmhic0lm221AAwtWTwHosaT1CiaGoiaicgCSV7KmQRnJw/640?wx_fmt=gif"
+  },
+  {
+   "file": "images/img002.png",
+   "sha256": "77e5b6a0bdb3db3582e52d84e6312ef44c257748da4082e89c3ab16dfc9c16b9",
+   "size": 82679,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm12YKQq0dGd7fTVsXN5zWSu1uc1QiceASWdhdicgJicqxmQZ2wshhaibBve32KOh0rC0yvATmRXV8iaTicA/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img003.png",
+   "sha256": "3fe35bfa1f776abde63087f4313ea61bafa6a1b41420878c09ff90c037bf5d91",
+   "size": 44552,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm12YKQq0dGd7fTVsXN5zWSuzod3R0ECkB9lQiajqwlpWWSyv0hkMGPhfejZvlk8GhUo1vzUG9njwqA/640?wx_fmt=png&from=appmsg"
+  }
+ ],
+ "publish_time": "2025-01-12 07:00",
+ "relevance": "relevant",
+ "relevance_score": 13.6,
+ "title": "财务部如何通过成本管理为企业创造价值？",
+ "title_hits": [
+  "管理",
+  "财务"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247486496&idx=1&sn=b884df690253f4d2c8d10dde9989bcaa&chksm=ce115175f966d8635f85d55693c48029c20cc1c4ba84f103d6d20aaa9e56ba8a41432f9d9cca",
+ "word_count": 2092
+}

@@ -1,0 +1,86 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "运营兔",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "经营分析",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3ZPN4SCejnxUEnMtVfWh7HZH7GIoqEVzWicZ0AKq9MMvfiaPlxTz9uoCNZZCO8BkOMT9dWFzLbhr1A/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T14:34:55+08:00",
+ "digest": "财务端：我把报表都做成彩虹了，你们业务怎么还说“看不懂、没结论”？\\x0d\\x0a业务端：我把市场、客户、竞品都讲透了，你们财务怎么还说\\x26quot;没有数据证据、没有现金约束\\x26quot;？",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.jpg",
+   "sha256": "cf2b6a7af86298cbaa121a87aedb4461ef3b0ca726d8a05389bbc792fc0d0849",
+   "size": 152522,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3ZPN4SCejnxUEnMtVfWh7H2h23Qh0PmoPOOB4ZA8VtN7vVsGz90Ys8dmyfQZrxEdr8Q9alnchomw/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img002.jpg",
+   "recompressed": true,
+   "sha256": "615a2c02ebb9325fe6b61b78ec2d9a4d6aad854f479ac0058dc935706dff69a7",
+   "size": 89216,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3ZPN4SCejnxUEnMtVfWh7H1mdlAM1KsPDv6ArX6SmULibwDSoqiaHTy9aT9u1llTPicwez2eK6p5Iwg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img003.jpg",
+   "sha256": "ee82d2565a5fd00aec750c196e76b39f5b36af5d9fd16b809bc04e5feecfe2f5",
+   "size": 163703,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3ZPN4SCejnxUEnMtVfWh7HRpnGIw4MuS8CmX8vKXXDpKxaiaU8DcRFpqVFCIdvFBib64qsE6xJMS4Q/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img004.jpg",
+   "sha256": "63742252d2a15565c4b858730492e64f5eb697ae09c40b5fdf8e7f238f73eba8",
+   "size": 212051,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3ZPN4SCejnxUEnMtVfWh7Hugw7sArXFvZspFUsmwTtbDCgQShibpQ8B6ic5DjcNicQCVAE5htOTjcUg/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img005.jpg",
+   "sha256": "df8412d832c8dedfeac930fe374bc2e95462ff4a17b652c4e7e43d2a1596a6cd",
+   "size": 186472,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3ZPN4SCejnxUEnMtVfWh7HhH3yRYLH0ssYfZib2OQ1PsiaFtibeLQzpbwML6etxTRUedMwL7EibguKVQ/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img006.jpg",
+   "sha256": "49c2e0108585e75c9127d73f2e6a1d65e93c2c0df58d0d8653509c128306a348",
+   "size": 142393,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3ZPN4SCejnxUEnMtVfWh7Hh5MNUSvfNLFHS8lFvlpQX4GHzMnzYxgzruu6N4LbLaX1jmxuwFXJ4g/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img007.jpg",
+   "sha256": "8d2862f9719a6a59def3245b7b7c38c9a74faac9227fa13c588df07fab2e2585",
+   "size": 125755,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3ZPN4SCejnxUEnMtVfWh7H6x2TbQAC59Kb2niaZZMTibrzg1wWLL7iauY2PjOsxU3Op4wH8YPogRJBg/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img008.jpg",
+   "sha256": "90b34959472cab77edbfaf3a2c198b21c51f9b5d0495f9e58a9674fa004330f2",
+   "size": 150637,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3ZPN4SCejnxUEnMtVfWh7Hzjx0icTjfnpQYLBibHGUyz1pco4JtjVV7YA8iaBvNs5WWpSCP5R1BUAOg/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img009.png",
+   "sha256": "05b08f961cfd33c9278f2213b5d91ef0cb488a9a6f3d7dd3299a2fbcecbc0d5b",
+   "size": 226164,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0m6LNY29dRdic7HI2stlKnEaIdkJMa28ljy5oTDoPTJlyTrAwNc8TicobHqyXicgiczdPaVZBX3Nkkrg/640?wx_fmt=other&watermark=1&wxfrom=5&wx_lazy=1&tp=webp#imgIndex=11"
+  }
+ ],
+ "publish_time": "2025-12-21 07:30",
+ "relevance": "relevant",
+ "relevance_score": 12.6,
+ "title": "经营分析，到底是财务的事还是业务的？",
+ "title_hits": [
+  "业务",
+  "经营",
+  "经营分析",
+  "财务"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247493668&idx=1&sn=6358b8b3b500ed47795cbc5a34102f55&chksm=ce12b571f9653c67d00ac3f497a3969f583465a83c98c33a9ed32cc73bce360c98fc60ac7c49",
+ "word_count": 115
+}

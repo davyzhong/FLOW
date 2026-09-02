@@ -1,0 +1,47 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "数据熊",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2LEClSaKbmwbmXSPRZ9cDOQbdnRxwa78N8iaYUKFgEh6FLCDQb0tBialyLCwGHFSPqCZJnUJLEnzFA/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T14:09:05+08:00",
+ "digest": "一眼看毛利，三表盯现金",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.jpg",
+   "sha256": "9462ad3fc2d178cf88aeee0b16d6f091361b8f54d8add6386ea28f907f816123",
+   "size": 54812,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2LEClSaKbmwbmXSPRZ9cDOAbIs0Pzr51q3B0TbDVxHxKp9jEL0qCmG2WEP8VcY6Pj73ur4icicaTFg/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img002.jpg",
+   "sha256": "9aef521ef9c59d17b5642d6a2714a6ba694de51f3884d4731037c02bc527dd9b",
+   "size": 18762,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2LEClSaKbmwbmXSPRZ9cDOvh7LiceMskePH5hiaU6Q52iaR4CQ1XpibicKuBWCCK5MKicSoCT4DYBvd30g/640?wx_fmt=jpeg"
+  }
+ ],
+ "publish_time": "2025-08-22 07:30",
+ "relevance": "relevant",
+ "relevance_score": 39.8,
+ "title": "毛利率+现金流：经营分析指标的黄金组合",
+ "title_hits": [
+  "指标",
+  "毛利",
+  "毛利率",
+  "现金流",
+  "经营",
+  "经营分析"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247489159&idx=1&sn=4c552f1d8cb7cf39ce86317c9d5478d0&chksm=ce114bd2f966c2c44ca9c33e81d576e96b92cbc37f0d85141c8ec336dc013832b9de38995212",
+ "word_count": 2561
+}

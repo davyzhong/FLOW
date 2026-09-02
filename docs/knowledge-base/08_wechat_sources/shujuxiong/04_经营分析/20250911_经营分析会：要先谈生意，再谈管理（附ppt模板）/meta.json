@@ -1,0 +1,124 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2zHKBGdUFEV5iaNfzwC7icmIRFfC12FXNdaoebnvkEd80TMmaY7d77JibSbceFkiayBa2XDjAVib2psEw/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T14:13:29+08:00",
+ "digest": "先生意，后管理；先抓能在30天内改变结果的那几颗螺丝，再去拧流程与制度。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.png",
+   "sha256": "fe1fc703330f0c441a95ea574442abdffd76fd7fa1ab75f447f557fb140c5e78",
+   "size": 61930,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2zHKBGdUFEV5iaNfzwC7icmIlrkt7lq7aZBcicDvMO0z3HsIRYcpOWwjpP2OibUsJL1bNyzYPfFXBtdA/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img002.gif",
+   "sha256": "617a387a87ef3b47d8f838ce4b1a97e6519e9e354ed9c5ce1d8dbca9ce496706",
+   "size": 32631,
+   "url": "https://mmbiz.qpic.cn/mmbiz_gif/uxBHPYQvnrMjnCThxT2ULQZJjRClL67d09YFva0wK9aibdiayJfpv2ldQK0BT5tsdLzjnsgwc6JiaZhdlgoNOJQ3w/640?from=appmsg"
+  },
+  {
+   "file": "images/img003.png",
+   "sha256": "1da797504365d77f35ddf036d1fb721b3633bd8aa0db1e73f37d21d06fced526",
+   "size": 82645,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2zHKBGdUFEV5iaNfzwC7icmIwJsxIP4xnxSa9GcZbwOKiahuXIwTUe59pkW14vxJwP2r8ltriarlKO4g/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img004.png",
+   "sha256": "01ef31b463904d261f2dd873c9a0ec9ddea130e2b48d0a4cd4913bf736a23dfa",
+   "size": 65814,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2zHKBGdUFEV5iaNfzwC7icmIKhia9HoQQib3IaldpD9uWnwgcj4ST0oRbC7iblkKJcLV6ZdhCbab2NzhA/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img005.png",
+   "sha256": "32a3b354c1454b0ae9293b1f777517fa5f6dbffe8c5ba1ab33988ee9ee6783ce",
+   "size": 69514,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2zHKBGdUFEV5iaNfzwC7icmI6rIQA43icziadLy8TnLbLicwdyTzAoRnRuWGDceMgazl18H8K41y25Erw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img006.jpg",
+   "recompressed": true,
+   "sha256": "445d74aa574e76409c3887effd251b4b0eb10de7f5b2d7521f71befb049b2471",
+   "size": 135181,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2zHKBGdUFEV5iaNfzwC7icmIVNXyR7vP2fa6Cr95OA98icyJNDHOO7heoOIgspRMdWhzicoNiavtN2YDg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img007.png",
+   "sha256": "654cd05b31f1a3de93271b72689560f7cc20aca542d054150d2efd82d10f968b",
+   "size": 68901,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2zHKBGdUFEV5iaNfzwC7icmIqT8w8qAYnjgrXpPIdpRT9v0ew4OCacchjOFvepY5xpdKiaaF2PYkV0A/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img008.png",
+   "sha256": "e947dc1892161d32c66105489dd4ac0f85dcd1955820c8acb825b38cce224284",
+   "size": 52815,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2zHKBGdUFEV5iaNfzwC7icmIz4RtVLpDhsfUiclyhPldGKtaxhTmhEcyn9cfKrcr6zB8RA5ytpQ1uhg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img009.png",
+   "sha256": "dc963c8ec415e5b07d0f7aef337d0f6690f57bc1d357f2be160260262f343b87",
+   "size": 68505,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2zHKBGdUFEV5iaNfzwC7icmI6Z6gQhicFV2oYIvZUVdYUZz50cOx3NnAn36ZEtt6qvowHusMQGG4picQ/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img010.png",
+   "sha256": "f0b007063829b4a607e1043ce1ea5a0bd763a0f7faa11adfd63ef885086a1e5c",
+   "size": 26504,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2zHKBGdUFEV5iaNfzwC7icmIcJvM7oEL8xpk6HpXibZjK8MkD6uaLedS8IhWDAWL8ApdKgBTqkxo6hg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img011.png",
+   "sha256": "ec5e2c331c1d7fbc0808970ee1f082305391a93b786595a8c76c621ad687d478",
+   "size": 46241,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2zHKBGdUFEV5iaNfzwC7icmIblNNlgAjUhwjwWqX8RMcw1F10FL5OMiaCcFL8mwSY5XuYBDtt72MNQA/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img012.png",
+   "sha256": "7a3ca7a435686c9c1889b6e594d702036d71684fef608b912ca7475c2d022a06",
+   "size": 7883,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2n79b8fvYr3QzrBS83iaJwupvHYWETmO3m9PQicYB4xSNTSR4ejP48HZ72gYPCOEuoD2xApibmo9nkg/640?wx_fmt=png&from=appmsg&tp=webp&wxfrom=5&wx_lazy=1#imgIndex=10"
+  },
+  {
+   "file": "images/img013.png",
+   "sha256": "e55b18a54c09f5446cea2e0f8815a3589ac41af3a01b8696577873f394366d40",
+   "size": 13368,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2n79b8fvYr3QzrBS83iaJwumsj0HHiaeVy2hPkYzGkf5XzCDCLsbIa8Zc0wgjU2sCeESyz9koJkjeQ/640?wx_fmt=png&from=appmsg&tp=webp&wxfrom=5&wx_lazy=1#imgIndex=11"
+  },
+  {
+   "file": "images/img014.png",
+   "sha256": "3df061f333903b47615096ce89fdd18646da1a159bbb907e6bd31044856598f6",
+   "size": 5692,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3voSdrj5RPzpZz5mh1hNZibtWJLGibhYtxXZuj4kcLC41NSxytaJIkoMj78sGVS9v0FL40T7Jbv4zQ/640?wx_fmt=png&from=appmsg&wxfrom=5&wx_lazy=1&tp=webp#imgIndex=5"
+  },
+  {
+   "file": "images/img015.png",
+   "sha256": "e7744ab277835f40f670171694f565a98e0dbcfece5b1084fec65584c4211e55",
+   "size": 34210,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1Tr9hj7JNYaibgWTiclBX5zY4J5PbfYhD0WiaR9RAibru2weSpUDsILjKmsRR7ZicibPGZMAibvc7a9HsOQ/640?wx_fmt=png&watermark=1&tp=webp&wxfrom=5&wx_lazy=1#imgIndex=13"
+  }
+ ],
+ "publish_time": "2025-09-11 00:57",
+ "relevance": "relevant",
+ "relevance_score": 13.0,
+ "title": "经营分析会：要先谈生意，再谈管理（附ppt模板）",
+ "title_hits": [
+  "ppt",
+  "模板",
+  "管理",
+  "经营",
+  "经营分析"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247489800&idx=1&sn=f0e8ab12523d013722d3045afe01f5b2&chksm=ce11445df966cd4be9dc3a911221c67a82ce8e295b49cfaedeba278911440f10206017dc792b",
+ "word_count": 216
+}

@@ -1,0 +1,62 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "03_财务报表",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3YayDu3H1PIB0sWHDP22zXTIE8lBibIalmSrLndk1MHL60tzicuS4updjHjoBUjRkM3sfYlvu7jFKA/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T13:54:09+08:00",
+ "digest": "通过SWITCH函数，我们可以根据用户需求切换不同的度量值、时间范围或财务指标，使报表更加灵活、智能。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.gif",
+   "sha256": "6e5826c75dc6fda91cbe4b70102063ab7e99520bd66704863d50bae65f33298d",
+   "size": 7063,
+   "url": "https://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm1eCHSDQ1FT41crSwIq5ZQuez5bEOnUCzPmARmhic0lm221AAwtWTwHosaT1CiaGoiaicgCSV7KmQRnJw/640?wx_fmt=gif&from=appmsg"
+  },
+  {
+   "file": "images/img002.png",
+   "sha256": "71f355d8c08db7a463255fe9288a5b34dead78c631f74f6a0bf7dbbcaa9414c8",
+   "size": 256278,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3YayDu3H1PIB0sWHDP22zXsviaDdYEOB6jO3NPyJq7aRJ4wFUlunZ0n3eibKFHSnfscXCaGGpVrGMg/640?&wx_fmt=png"
+  },
+  {
+   "file": "images/img003.jpg",
+   "sha256": "0645fff23c1d655b6f945eac0a485057fde3daf4129f5d68563961c9f5330eb6",
+   "size": 24343,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3aibjW972q9hGbWCyJj3ibTdfhjN64iadAa76NT2bfAUhkthIEf6jrmjdoaFDxHXOHN9ytapCh9JOXg/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img004.jpg",
+   "sha256": "84d27e6cf2fa503ce1c5da46ed4ec610712e42c4a6eaa3a95bdd14598d6cb7e9",
+   "size": 32671,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0xglNfq8QIztFA5syfss3LceUT6R8z06qw2hKK4nG0ibnXbPF6fPNPpVw6ww6U1V7x7VzGPrcictcQ/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img005.jpg",
+   "sha256": "2dfc6469661d04a88289e393ff7ebcb1cb9778aea2cd2c54c35bace993014802",
+   "size": 169400,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1gjs7aqG4vq2fOFD8tINFP6O14Jibs3bVe4wqel0n2eVg7YkpDibvsm4RpibrTRov726kYic4ZGqcuRA/640?wx_fmt=jpeg"
+  }
+ ],
+ "publish_time": "2024-09-09 07:00",
+ "relevance": "relevant",
+ "relevance_score": 20.6,
+ "title": "动态财务分析：使用SWITCH函数动态切换KPI",
+ "title_hits": [
+  "KPI",
+  "财务",
+  "财务分析"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247484323&idx=1&sn=ca4217774fec7617ce73e8421dc3b34a&chksm=ce115ef6f966d7e0d3f18168a5f459f5184b4de9de4d974c29ee1968d2c4ba38baa4d7f103e2",
+ "word_count": 2081
+}

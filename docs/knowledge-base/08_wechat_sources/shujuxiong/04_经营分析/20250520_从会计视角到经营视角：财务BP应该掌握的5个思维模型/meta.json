@@ -1,0 +1,41 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1BDTC97m7zb2SthIv0Y85056uQhpL4yn5X7Nnaz0icCEqXCwPJMHyOzkkUfem9XKbFV2WEydp99Cg/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T14:06:18+08:00",
+ "digest": "财务的尽头，是经营；经营的逻辑，藏在财务数据里。在财务职业发展的路径中，会计是基础，而经营分析是进阶。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.png",
+   "sha256": "2a09251df141ebc56b768b6ca40c5b4b1defcc1e2812ff2f3889ec8897033ed7",
+   "size": 30651,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1BDTC97m7zb2SthIv0Y850Jpd4JReK7E5lmwq3s92QVHGFDYAgmchkuPC1R4eysSuM3HX86GsSVA/640?wx_fmt=png&from=appmsg"
+  }
+ ],
+ "publish_time": "2025-05-20 07:24",
+ "relevance": "relevant",
+ "relevance_score": 32.4,
+ "title": "从会计视角到经营视角：财务BP应该掌握的5个思维模型",
+ "title_hits": [
+  "会计",
+  "思维",
+  "模型",
+  "经营",
+  "财务",
+  "财务BP"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488157&idx=1&sn=09af0238c9f1c5dcaccc8de445dea5da&chksm=ce114fc8f966c6de96c25134e3cb210debd77263f4ef9595c68dbedcb19aee87353bc390422d",
+ "word_count": 1549
+}

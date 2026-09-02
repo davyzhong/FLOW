@@ -38,6 +38,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build_index
 import classify
 import make_manifest
+import organize_albums
 import providers
 from wechatlib import (
     CST,
@@ -59,7 +60,8 @@ CRED_PATH = WORK_DIR / "mp_credentials.json"
 
 FRONTMATTER_KEYS = (
     "title", "account", "account_id", "author", "publish_time", "url",
-    "crawled_at", "categories", "relevance", "relevance_score", "word_count",
+    "crawled_at", "collection", "categories", "relevance", "relevance_score",
+    "word_count",
 )
 
 
@@ -137,7 +139,7 @@ def unique_dir(base: Path) -> Path:
 
 
 def ingest_from_html(html_text: str, url: str, article_root: Path | None,
-                     recompress: bool = False) -> dict:
+                     recompress: bool = False, collection: str | None = None) -> dict:
     """解析 HTML → 分类 →（非 excluded 且给定目录时）落盘。返回 meta。"""
     meta = parse_article_meta(html_text)
     meta["url"] = url
@@ -158,6 +160,7 @@ def ingest_from_html(html_text: str, url: str, article_root: Path | None,
 
     cls = classify.classify(meta.get("title") or "", classify.content_to_text(body_md))
     meta.update({
+        "collection": collection,
         "categories": cls["categories"],
         "relevance": cls["relevance"],
         "relevance_score": cls["score"],
@@ -239,6 +242,10 @@ def main() -> int:
         sid = source["id"]
         inbox = bool(source.get("inbox"))
         label = source.get("name") or sid
+        # 合集归位映射：url → (类别目录, topic, [全部归属])
+        album_map: dict[str, tuple[str, str, list[str]]] = {}
+        if source.get("albums"):
+            album_map, _ = organize_albums.load_album_map(kb_dir, source)
         print("== 来源 %s（%s）%s ==" % (label, sid, "[收件箱]" if inbox else ""))
         urls = providers.discover(queue_dir, source, CRED_PATH, consume=not args.dry_run)
         new_urls = [u for u in urls if u not in state]
@@ -280,11 +287,19 @@ def main() -> int:
                     print("  [跳过] %s（早于 %s）" % (meta0.get("title"), args.since))
                     continue
 
-                target = unique_dir(kb_dir / article_sid / ("%s_%s" % (date_part, slugify_title(meta0.get("title") or "untitled"))))
+                # 合集归位：已知合集的文章进入类别子目录
+                collection_dir: str | None = None
+                if album_map:
+                    hit = album_map.get(url)
+                    if hit:
+                        collection_dir = hit[0]
+                parent = kb_dir / article_sid / collection_dir if collection_dir else kb_dir / article_sid
+                target = unique_dir(parent / ("%s_%s" % (date_part, slugify_title(meta0.get("title") or "untitled"))))
 
                 meta = ingest_from_html(html_text, url,
                                         None if args.dry_run else target,
-                                        recompress=args.recompress)
+                                        recompress=args.recompress,
+                                        collection=collection_dir)
 
                 if meta.get("excluded") or (args.exclude_borderline and meta.get("relevance") == "borderline"):
                     stat["excluded"] += 1

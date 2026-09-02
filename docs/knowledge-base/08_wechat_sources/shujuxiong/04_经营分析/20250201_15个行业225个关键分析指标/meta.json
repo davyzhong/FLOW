@@ -1,0 +1,53 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "数据方法与工具"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3CPsVvhRIDcbyr3TtpVxSCSs5OaYLeZksBxWDibPHh2mSJg9g7aDGP1YodrxYaLmQncVic1VI7xibuA/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T14:01:14+08:00",
+ "digest": null,
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.gif",
+   "sha256": "6e5826c75dc6fda91cbe4b70102063ab7e99520bd66704863d50bae65f33298d",
+   "size": 7063,
+   "url": "https://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm1eCHSDQ1FT41crSwIq5ZQuez5bEOnUCzPmARmhic0lm221AAwtWTwHosaT1CiaGoiaicgCSV7KmQRnJw/640?wx_fmt=gif"
+  },
+  {
+   "file": "images/img002.jpg",
+   "sha256": "32fb8ef31f8e011994e6879f7ab761ff4fc7549d898c05ea5c645b2d5ac8252c",
+   "size": 91294,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3fahL7ASNtTiaWvPDG212HfictYp5YGXl5ZudXEicLkxheP4HfDLgzZFSrpDerJUVaXy7YtrY4XElbQ/640?wx_fmt=jpeg&from=appmsg"
+  },
+  {
+   "file": "images/img003.png",
+   "sha256": "2c5750ea359205b3a0c0c49953e1c3d4e307200f3fb919d67fb7f868a0cb3c41",
+   "size": 479911,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3CPsVvhRIDcbyr3TtpVxSCx4nC6dWw6SnhTpibpUr0Qmib6Fpqz94ckPhYonZyHq2jnHsySVZI67wg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img004.png",
+   "sha256": "9242d1c6882f2597797438f3e4519df1d2cc64f3d36e0fdb8c97e221666b2277",
+   "size": 32081,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3reShzkZgWxL12Arp6VBAatSic8mPxO6XqrSGAJtAEv8xBUd88alswdqPWSfkadiaw3twE8oGT5oug/640?wx_fmt=png&from=appmsg"
+  }
+ ],
+ "publish_time": "2025-02-01 12:27",
+ "relevance": "relevant",
+ "relevance_score": 11.6,
+ "title": "15个行业225个关键分析指标",
+ "title_hits": [
+  "指标"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247486869&idx=1&sn=084f3c45a1db63723e6cb63c6cbbb717&chksm=ce1150c0f966d9d62666b8cb033d877c1dbe63d8d65906c4342c7aaabaedbfc8f4f0472355c9",
+ "word_count": 2610
+}

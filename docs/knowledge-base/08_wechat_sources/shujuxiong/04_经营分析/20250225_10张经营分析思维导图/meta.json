@@ -1,0 +1,96 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "数据方法与工具"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3jjwwTKbtg4Kgv89jGaKWlbianammgFF6xXJyfyNwy0ArVonDicGgEOrjWKKCdWjpuMPOwKCM78Wow/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T14:03:20+08:00",
+ "digest": null,
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.png",
+   "sha256": "3ec55c7dc5086b0696d09bad56df18f90e966443a55d9b75a041d07983edf42b",
+   "size": 292792,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3jjwwTKbtg4Kgv89jGaKWlzLHibQVwvK2ib8vJY0wCygGECHutYZXUVPTiaCEzcmCCdM4roscEjMzmA/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img002.png",
+   "sha256": "f98e7725a4e8cc7936e02ddd17e9920455395f9b266c81da3bbf90ef6e1061a1",
+   "size": 143429,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3jjwwTKbtg4Kgv89jGaKWlBKWHgq3zd84vyoiaiax34cfsqRNKSpkWzuc5PYq1fJy22f84LEiaCaCgQ/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img003.png",
+   "sha256": "47873bac4627e32216064fdac92aca10f9f3b0cbd2051b8fc8043f71fccdc4f0",
+   "size": 94488,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3jjwwTKbtg4Kgv89jGaKWljG9RZVA8iaWMJiarha6JuJQbbqclrhudZ1uibclATXuYwz78GxMicSBTEQ/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img004.png",
+   "sha256": "d71093d78d54839415f056c12a4938acdde3d8cc84d92738cb7b452bdafe9546",
+   "size": 49988,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3jjwwTKbtg4Kgv89jGaKWlHefv58SicpR2COrk2Lib9BU5tRGWQYujiceSuNYgbCdMRicBzVmyqGVcww/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img005.png",
+   "sha256": "60b06c2c0227cf8052809d7fa9ebe8f34a488c362592b075cf65c59ab4fbdb46",
+   "size": 28388,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3jjwwTKbtg4Kgv89jGaKWllLVJBKoHokS3h8kcMrlQ9Plru55MulicaUF1CmSGx8laqyPdlLugKCg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img006.png",
+   "sha256": "fd78675bb73acdcf68e105aea9d534fad86ae977dfe5bb3f9dd7551836503194",
+   "size": 12791,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3jjwwTKbtg4Kgv89jGaKWl0Tb9ibhvdEXia8OgmvpTcsXf8hEp2X9YDq2VCrFaQLGPsyqoicicviaSvqA/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img007.png",
+   "sha256": "5ca904cffa0d33dd9979641845aaf3a54dbc2349d54074a3ee0c3f9576d3d2f3",
+   "size": 43060,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3jjwwTKbtg4Kgv89jGaKWl8vNSo12YfYAup9ic33BxZdvLtzUOnkSLTTxDroUFPJfV9n7yTGXzGdQ/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img008.png",
+   "sha256": "65475855d09e686b8ea53014018fc10ae60acc5893446fb4db4b06b9760f9689",
+   "size": 52497,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3jjwwTKbtg4Kgv89jGaKWlQ7HsMicbuxYBmBETicviaepx7icS5mSrdKxC94wtpaS0WeJHhSUMnrIuCg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img009.png",
+   "sha256": "6478037751c56935f1554825d3bc6b62198ab6806138590ecf72e3c7fc01a19a",
+   "size": 42153,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3jjwwTKbtg4Kgv89jGaKWlBulLHibLx0XUFD6a7ym8LesqIFLmAzJaoYfhnv7cvgRtO2l3yOibLvCg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img010.png",
+   "sha256": "9fa001533be91eb10b517064e993d72f2fc104384b9cd61ed83c2a45863e1938",
+   "size": 34062,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3jjwwTKbtg4Kgv89jGaKWlic9xnk4on09wjwlDcc20Ev9UzzcuVE4UULiarU65oOqvHQ0aXeKhj5qw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img011.png",
+   "sha256": "9242d1c6882f2597797438f3e4519df1d2cc64f3d36e0fdb8c97e221666b2277",
+   "size": 32081,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0NcBX8ytIOncGjEzshuRibFIpZeKVBRyBQTqXkEPa9wMAvJWuXIKm136m1pUl5cLCycRtJSrp6TmA/640?wx_fmt=png&from=appmsg"
+  }
+ ],
+ "publish_time": "2025-02-25 13:08",
+ "relevance": "relevant",
+ "relevance_score": 13.2,
+ "title": "10张经营分析思维导图",
+ "title_hits": [
+  "思维",
+  "经营",
+  "经营分析"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487284&idx=1&sn=2fc63ebfd92d28bc1a61934fc7db550d&chksm=ce115261f966db774e3503918a9ac01de8faa47da121fb8d4a876a8ee54f880743ae793b4db6",
+ "word_count": 439
+}

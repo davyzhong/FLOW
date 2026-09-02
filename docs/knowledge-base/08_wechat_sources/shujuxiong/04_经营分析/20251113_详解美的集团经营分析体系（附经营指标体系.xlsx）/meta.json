@@ -1,0 +1,128 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "宋岳清",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1VqAOTjp2DEPEVFteY6ic59gUebylU8iaYlt9gwyDwOZeEltYJhMaZrZX8Pe8azhebVkib4biaAllbwA/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T14:20:24+08:00",
+ "digest": "这份 Excel 以美的集团的经营管理实践为参照，将“一个标准、一个节奏、一套方法、一个结果”落到可执行的指标",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.jpg",
+   "sha256": "d4008eb9326b359a505bf1839e7472b9df88d22c603ecc6b9dc7ebdf5211513c",
+   "size": 93398,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1VqAOTjp2DEPEVFteY6ic598GcJY0TBUFiacgnaicMKUcoWxHCEFR1NQZP9QoYuvticlodvJPjZZkdGg/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img002.png",
+   "sha256": "dc2f9c0ffbcae3bc8671a0353754025013e8f4c8d3eeb971388a6f0275042a38",
+   "size": 190696,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1VqAOTjp2DEPEVFteY6ic59naQEE5zXjup1ef0bvk9R5WibfoC46w6ueBzK0lvbd3Eia8BmnvLTPiapw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img003.jpg",
+   "sha256": "b4a9333a38e022f359355f35abdc6b7b531f486d66d476d0c8ebd5ac0f6b00fd",
+   "size": 151713,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1VqAOTjp2DEPEVFteY6ic59ibafd4s3US4ibVD0femZ92baiaicUMQNHQZHqnDON3W9DTP0O04tJolFBg/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img004.jpg",
+   "sha256": "aa00c035b9b59733dfe0513054b5c2a894ef0bd2c5b0ee0be8d6f92ba26eed1f",
+   "size": 161558,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1VqAOTjp2DEPEVFteY6ic592tEoYY3ICHuqficQfOYJMa7a1WtjVIp0BTdc0cW54Q8oujxiaCIl4bXw/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img005.jpg",
+   "sha256": "a427715a05a1c6f8d48ff814e3a03a3318c881e824cec03d8226e1780a4a1483",
+   "size": 173857,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1VqAOTjp2DEPEVFteY6ic59Z3mAibzn5Var4pnmicIJOKxZU57DSp6hmzibO0clagyDGicJicQFgZFjyPA/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img006.jpg",
+   "sha256": "df9c0d7664bdd1598c0bf8fe414abd39ca304a769268ed28e1c9822a689ebcf3",
+   "size": 150224,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1VqAOTjp2DEPEVFteY6ic59EXfYAD77fia9rqUIAexWKLFGVDR3Jw2RibBOibH57SJY6ib7NakAmg24dA/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img007.jpg",
+   "sha256": "3840dc0949f5ec11120301a85832e451a7cff2f384bea6ede00d7c8cfb78034a",
+   "size": 143004,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1VqAOTjp2DEPEVFteY6ic598QqwRp2jH6WmsG7lHMl8C45g3ichj9025Hg9vL1xwezxy4S9Y6jmziaw/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img008.jpg",
+   "sha256": "761b3b6555795028164dca69dc745d72c756f1bb7231c1930ebf052804d1e574",
+   "size": 147869,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1VqAOTjp2DEPEVFteY6ic592m5v3vODX7LrrXmPibvcwUB5cPVyUK3a0rjiconiaGta6ibxbp2ibyG4Jag/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img009.jpg",
+   "sha256": "490911886d98557c56f334f488efcea8f71dc46a28f0e4c40892ca3f7da036ac",
+   "size": 139261,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1VqAOTjp2DEPEVFteY6ic59MxzSwKGM8pbLI2r5IfNLHo9uKpmic5N3dFrHic41YVxsia4BcwlIDkUog/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img010.jpg",
+   "sha256": "9327b7b6c26f044bda95c788ed23d04b17ae73ddf8eff77d08cb36b51c62d95d",
+   "size": 154586,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1VqAOTjp2DEPEVFteY6ic593qurxdybLFEia5M8X34L5CzPCVffrUibI3IyWATTiaoum7AS9iaqhqD6gQ/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img011.jpg",
+   "sha256": "f5a7f6a7feb4596a4324d1cb6a6cd80eb6423d32cc8ad8da13fdea409d69fc08",
+   "size": 168118,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1VqAOTjp2DEPEVFteY6ic59ibib1qdYGcoG7mKibaLJ3fuhgzOFeQ71Ge3tmOgxqoxMpjdldO8AJBK7g/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img012.jpg",
+   "sha256": "57477a691d122d628c257268cf02f7a2db06fcac8bd800776e2d495d12b2ec34",
+   "size": 159160,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1VqAOTjp2DEPEVFteY6ic59XPKBxtiawc7xwuqSP5tE9eVvmjEX7iaen3c4dyFUhibjrUTLP03MrB5nQ/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img013.jpg",
+   "sha256": "5803dbb61addca46b41288cb478759f6e322968bb1d8f68748576c7803ca9078",
+   "size": 164319,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1VqAOTjp2DEPEVFteY6ic59icWric8Mia4VNttPtHTfxIWsDObicQnUibYAbQsw1uFiaAKTiak4m1fzSFmicg/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img014.jpg",
+   "sha256": "4993428161e4385e3f93b5edc19846d53dd9d66df69199caf09cbc1fb8ce3e5a",
+   "size": 148461,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1VqAOTjp2DEPEVFteY6ic59BOicXDzOfGdbryfFW7Eo2uUgIOztHfuqKgJ3ciakYHVu28kPnBUbnDdQ/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img015.jpg",
+   "sha256": "2441ed9192a31d970ef6125f7fd1ed8d4740c3da89ce01f3c4d7f8428a707500",
+   "size": 76413,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1VqAOTjp2DEPEVFteY6ic59fa56ibI7C14icbnz7NAEJyib8QQ2TMt8nvqxl70wB5hytHhibGibthMLvbg/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img016.png",
+   "sha256": "53f92ec21966c6ed8ac546cb577be30930665bc4aa7c69b98a503accbe85254a",
+   "size": 226930,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm23BKibA0gYQDsZnCw7aJvpGUlDeCycxTX4DVdM6Q22q2FNQHOdR5XFqe8yGhqfNlBic59q6EW1NVbA/640?wx_fmt=other&watermark=1&wxfrom=5&wx_lazy=1&tp=webp#imgIndex=11"
+  }
+ ],
+ "publish_time": "2025-11-13 07:30",
+ "relevance": "relevant",
+ "relevance_score": 17.4,
+ "title": "详解美的集团经营分析体系（附经营指标体系.xlsx）",
+ "title_hits": [
+  "指标",
+  "经营",
+  "经营分析"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247491697&idx=1&sn=23dcfac334eb9412edd298e36ede12aa&chksm=ce12bd24f965343247cd08e1ec0e09d1ea93b90a40337b4cf11c83edef33a9b74092dde80c50",
+ "word_count": 314
+}

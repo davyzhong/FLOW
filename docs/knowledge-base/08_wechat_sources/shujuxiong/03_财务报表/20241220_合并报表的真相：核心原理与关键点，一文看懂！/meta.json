@@ -1,0 +1,47 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "Daniel",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "数据方法与工具"
+ ],
+ "collection": "03_财务报表",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1MApTdzXbWLjfA1cFyhY0nGuPO0Tib2cgnIkryzsr8OwdXBQfW1N2ZFlwyaF3O1RMnPtNdBBicGctA/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T13:56:42+08:00",
+ "digest": "母公司是“家长”，子公司是“家里的几个孩子”。家长和孩子虽然各自有账本，但对外，大家关心的其实是整个家庭的经济情况。所以，合并报表的作用就是给外界一个“全家总账”。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.gif",
+   "sha256": "6e5826c75dc6fda91cbe4b70102063ab7e99520bd66704863d50bae65f33298d",
+   "size": 7063,
+   "url": "https://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm1eCHSDQ1FT41crSwIq5ZQuez5bEOnUCzPmARmhic0lm221AAwtWTwHosaT1CiaGoiaicgCSV7KmQRnJw/640?wx_fmt=gif"
+  },
+  {
+   "file": "images/img002.jpg",
+   "sha256": "a10f513394a666414143c392291a5d9b19362596454b51683c5f8ca09237d4d8",
+   "size": 82201,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1MApTdzXbWLjfA1cFyhY0nGicSiaXhq2bw9K8KzPQCQ87RtXia977zxJa42KIJ8qXynrcLmgMBrNH0Q/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img003.jpg",
+   "sha256": "008444987822903e812c64d1da139f8fdaf05f57312de113a695734636d67f8c",
+   "size": 84521,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1MApTdzXbWLjfA1cFyhY0nr9mlMbrkoPL7lNBdibkN2lUg8TEtnzW1HleY5bl7gZM1YBSmpAjzjTA/640?wx_fmt=jpeg&from=appmsg"
+  }
+ ],
+ "publish_time": "2024-12-20 02:33",
+ "relevance": "relevant",
+ "relevance_score": 8.4,
+ "title": "合并报表的真相：核心原理与关键点，一文看懂！",
+ "title_hits": [
+  "报表"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247486295&idx=1&sn=7a2fe183ad91e0a3166e77a7adf651d1&chksm=ce115602f966df148a9f17ece867fd97d073e576ff4ebf102357a1680f43993764f85bdae75c",
+ "word_count": 1231
+}

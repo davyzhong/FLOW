@@ -1,0 +1,69 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "03_财务报表",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1pxXQ6LjnoAJ3Jwg4zOwKQRkbPgUhrwu62mQZnaTml8WROyWuFwtGJk69ChBVcgSKRmv2wdOQZ9A/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T16:28:19+08:00",
+ "digest": "管理利润则根据企业需要，从会计利润中筛选出更有用的部分，帮助管理层决策",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.gif",
+   "sha256": "6e5826c75dc6fda91cbe4b70102063ab7e99520bd66704863d50bae65f33298d",
+   "size": 7063,
+   "url": "https://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm1eCHSDQ1FT41crSwIq5ZQuez5bEOnUCzPmARmhic0lm221AAwtWTwHosaT1CiaGoiaicgCSV7KmQRnJw/640?wx_fmt=gif"
+  },
+  {
+   "file": "images/img002.jpg",
+   "sha256": "de8cf9b1a44a1574f4eddf8848f5ed1378173735a3e32a2c824c089289617c2e",
+   "size": 46820,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1pxXQ6LjnoAJ3Jwg4zOwKQPMniaQtAoAyg3y04kkeyp9Ya2CSfBPTUdwIgtSVWtTRGjDib9dPykYDA/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img003.png",
+   "sha256": "d1d6508b150c3d810306fbff4130fa63d91672c9a315cd84c4a0ffa724cb94af",
+   "size": 442530,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1pxXQ6LjnoAJ3Jwg4zOwKQolnGegwshgDjZvCbPnSwyedYuibN9l3arekS7y2ibqnNmdotwMwSyElA/640?&wx_fmt=png"
+  },
+  {
+   "file": "images/img004.jpg",
+   "sha256": "7e47e517113acb8bfbd9c481097c2de1204daf859602295d29df52865f70e34b",
+   "size": 45202,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1pxXQ6LjnoAJ3Jwg4zOwKQiavegY5VYVcrVHK5VvhdZ9opsaaZrlccaUQ49I3EbwQ7twYNcIkdzGA/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img005.png",
+   "sha256": "397c303628d730382dcb360cdc7871b0d458c82da36866141924e91306676f1a",
+   "size": 24550,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1pxXQ6LjnoAJ3Jwg4zOwKQ5v85Jm93ib7CmfX6hfRdMokjJJzaSkTI3BTTbw0ibeglia0cLJQ3XtSVg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img006.jpg",
+   "sha256": "29fa1140386c3fa881294bd5be520253c7b4d65c62c60c61ecd82c0fd1a34d77",
+   "size": 51171,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1pxXQ6LjnoAJ3Jwg4zOwKQYk3f1RuCheLDufmvUHNibC0WAL2UIxS2fyIBp0fox0mibwh0memYibuFQ/640?wx_fmt=jpeg"
+  }
+ ],
+ "publish_time": "2025-06-11 07:00",
+ "relevance": "relevant",
+ "relevance_score": 26.6,
+ "title": "会计利润、财务利润和管理利润，有什么不一样？",
+ "title_hits": [
+  "会计",
+  "利润",
+  "管理",
+  "财务"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488317&idx=2&sn=e5a4e3b6e5813aea23106e74c621a357&chksm=ce114e68f966c77e4c197e6e02c7a1a64e0f137f74e614eb8a8541353c4746da294518b960ee",
+ "word_count": 1626
+}

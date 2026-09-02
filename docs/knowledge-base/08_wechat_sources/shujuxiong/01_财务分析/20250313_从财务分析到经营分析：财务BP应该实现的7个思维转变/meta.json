@@ -1,0 +1,46 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "albums": [
+  "财务分析",
+  "财务管理",
+  "经营分析"
+ ],
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "01_财务分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1rhcpqWrVaWqZfcWUF5ia4RHsDf87oSMxpP4y7BDjbtD74ScP94DlIicOEcHJETLiceQz9k07Q9wAfg/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T11:31:34+08:00",
+ "digest": "未来的财务BP，绝不仅仅是财务部门的一员，而是经营团队的核心，是真正帮企业赚钱、节约、管控风险的战略伙伴。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.gif",
+   "sha256": "6e5826c75dc6fda91cbe4b70102063ab7e99520bd66704863d50bae65f33298d",
+   "size": 7063,
+   "url": "http://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm1eCHSDQ1FT41crSwIq5ZQuez5bEOnUCzPmARmhic0lm221AAwtWTwHosaT1CiaGoiaicgCSV7KmQRnJw/640?wx_fmt=gif"
+  }
+ ],
+ "publish_time": "2025-03-13 07:00",
+ "relevance": "relevant",
+ "relevance_score": 36.0,
+ "title": "从财务分析到经营分析：财务BP应该实现的7个思维转变",
+ "title_hits": [
+  "思维",
+  "经营",
+  "经营分析",
+  "财务",
+  "财务BP",
+  "财务分析"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487683&idx=1&sn=763ec687bd8a5d89138a53d36fc88113&chksm=ce114d96f966c4800c3c3d0fe14e03411ff0834abfc89663396eee8263843360cb0312077ac5",
+ "word_count": 1875
+}

@@ -1,0 +1,52 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm07cwakJaJw6cUZ1v9vqePsgRQAyN7DslN2Ipm1KkJWFd8vjb9d7g2zFMYMKtfoGn2n3Fk00UykXQ/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T13:59:30+08:00",
+ "digest": null,
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.gif",
+   "sha256": "6e5826c75dc6fda91cbe4b70102063ab7e99520bd66704863d50bae65f33298d",
+   "size": 7063,
+   "url": "https://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm1eCHSDQ1FT41crSwIq5ZQuez5bEOnUCzPmARmhic0lm221AAwtWTwHosaT1CiaGoiaicgCSV7KmQRnJw/640?wx_fmt=gif"
+  },
+  {
+   "file": "images/img002.png",
+   "sha256": "d1b0cd9f03529ec723679a1fffe1d7de91fa74c40d0a017aad1c3744d502ac5a",
+   "size": 218837,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3lWYH8MUU6sQ5qGgJ5V5B3aokdnxTTK4ZmIauy1Kv1CbowuKcgEXjH2MLibyzXkxJgSnI2BqXpJpA/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img003.png",
+   "sha256": "463508c29f2a256701602355196ea461df32a26af5a45d3e02bcc91f562926e8",
+   "size": 517476,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm07cwakJaJw6cUZ1v9vqePsVIVia5EGXGZcicSY1UEVZNX3vxP0o7WbZDcuL1ujsiac4UrlA175A3Kcg/640?wx_fmt=png&from=appmsg"
+  }
+ ],
+ "publish_time": "2025-01-14 20:51",
+ "relevance": "relevant",
+ "relevance_score": 17.6,
+ "title": "经营分析报告模板（含PPT模板）",
+ "title_hits": [
+  "PPT",
+  "分析报告",
+  "模板",
+  "经营",
+  "经营分析"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247486538&idx=1&sn=3e7a04ec6c4d4b36706854333c620c94&chksm=ce11511ff966d809468c2e522823e4e1a994f9a3802c4094b58645538805b0fac2a7d5c070cf",
+ "word_count": 399
+}

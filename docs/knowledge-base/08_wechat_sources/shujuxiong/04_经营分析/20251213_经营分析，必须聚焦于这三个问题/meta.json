@@ -1,0 +1,85 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "宋岳清",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3AyH1Jquicpc4jvXfg0Bcfnq8U7J5yoEge9LFDibmuon8Ga8csU2DPoiaZA0rMlUxJg5NIIG9VXJoLg/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T14:31:13+08:00",
+ "digest": "经营分析其实就干一件事：把数据变成决策。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.jpg",
+   "sha256": "cde6a3dfcd73da2631a257bcc71120e8db03e168f06090f7035f40f45da71ceb",
+   "size": 133009,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3AyH1Jquicpc4jvXfg0Bcfn5Nzb3I2npes6c29ySVq2pweqV4ChW4xTvC9kSSn9o48B2z1GDUib2gg/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img002.gif",
+   "sha256": "54a0b2c12df319f2d06e1a08f239c34713fb97296633d7974c756b50c5f99bcc",
+   "size": 4278062,
+   "url": "https://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm3AyH1Jquicpc4jvXfg0BcfnXtDnLDs2yedcnJpccLlc0F5QhQq28XiaU4iaUSSuPGbC5njbfPxDxhnA/640?wx_fmt=gif&from=appmsg"
+  },
+  {
+   "file": "images/img003.jpg",
+   "sha256": "21507c096e464b1ce0a277371bd816037e3e4748dd96dfbf7d73e8e7594d3b2e",
+   "size": 237384,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3AyH1Jquicpc4jvXfg0Bcfnu0pJNfibMpt6T5J2NicBQ6gdGKA7rTaiarc1ibcnrpFjnaQ95Pd7MBv5Qw/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img004.jpg",
+   "sha256": "cf40dacc7b26c3c931df9e89baa98e8ca2f4db1344c325f65e9cb76b7a4ff3c8",
+   "size": 280174,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3AyH1Jquicpc4jvXfg0Bcfn31CK7W6fmRVQKStzfCkSSurWFjia5NWGGhA7eKX8qIia7ko39VhAZAlw/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img005.jpg",
+   "sha256": "6621df9fc673f1e33cfa41186ca868960d0ad779ce90dde1c3128b722cc0daba",
+   "size": 199568,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3AyH1Jquicpc4jvXfg0BcfnxAzhhvELJ8rI4tLMxREOrn8icQ6PVONrOE4apO8IZOhahU1dKNVosXQ/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img006.jpg",
+   "sha256": "ca015231bb1047d4c9356ffb248b9967c1d1fedaca51223025e3b494d2d06d8b",
+   "size": 182081,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3AyH1Jquicpc4jvXfg0BcfnKT9nia0E6R7XPK6BXchDZtWYicIDvbgviceCQMunOnPtmVUE0Lx1Lxr5g/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img007.gif",
+   "sha256": "54a0b2c12df319f2d06e1a08f239c34713fb97296633d7974c756b50c5f99bcc",
+   "size": 4278062,
+   "url": "https://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm1oo59CWgY2icLwIicn3zfdgSLo2HUtwXTviaQR1BOicTQ9GklkC7xqhvfiaicr2vSdib8YXHnm2FiaqicsKXg/640?wx_fmt=gif&from=appmsg&wxfrom=5&wx_lazy=1&tp=webp#imgIndex=11"
+  },
+  {
+   "file": "images/img008.gif",
+   "sha256": "7de89db04fc98a81b734ac6f70448a1802a8bcde5138af1b2caad1268302aea7",
+   "size": 1055395,
+   "url": "https://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm3nj4PPj0Qiatwpcvjk5EnLS55Vt6B1Q3p3ElkQgvJoB0nLH0DMZQDcsribQMveK8mE0MBvMYo5ubTA/640?wx_fmt=gif&from=appmsg&wxfrom=5&wx_lazy=1&tp=webp#imgIndex=12"
+  },
+  {
+   "file": "images/img009.png",
+   "sha256": "52b755ad44cf697c0df8c04f773c61598a7de585e4e319e2116da1ff6fb27127",
+   "size": 226233,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1z8ibwTLaxhgYRUnSoMVM7TYmjmUfY6qxiaZibURibW3r4Sj26mZQO58Lh4U6A1lHttKgylFUYVicEfLw/640?wx_fmt=other&watermark=1&wxfrom=5&wx_lazy=1&tp=webp#imgIndex=11"
+  }
+ ],
+ "publish_time": "2025-12-13 18:03",
+ "relevance": "relevant",
+ "relevance_score": 17.8,
+ "title": "经营分析，必须聚焦于这三个问题",
+ "title_hits": [
+  "经营",
+  "经营分析"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247493183&idx=1&sn=40101482700a3664707b4429a0c5a605&chksm=ce12bb6af965327c3e363d95a3c7636196f6291964d6e5df0dcb430eec96b9ea486e02e2c9a0",
+ "word_count": 315
+}

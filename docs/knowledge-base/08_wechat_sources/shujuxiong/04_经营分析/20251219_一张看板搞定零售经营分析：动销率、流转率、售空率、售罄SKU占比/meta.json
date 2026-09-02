@@ -1,0 +1,65 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "宋岳清",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1TLaGuGznlHK7IWPac3Kiaf29lCVSZtCoZIgwib37QKvrkoEtghWmrvI27Xswpalr6lpLx9dcrxF7Q/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T14:34:31+08:00",
+ "digest": null,
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.png",
+   "sha256": "7106abdfd9a97991616799e0050341bf3489ff2174cdfc4602cc4d616c9580c7",
+   "size": 170223,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1TLaGuGznlHK7IWPac3Kiaf2ntYaNg03UnmLHnsNl8brsYMUZ1RLpBUBo28PPCVSopWfmic2kjAqKg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img002.jpg",
+   "recompressed": true,
+   "sha256": "605b2f5789bd5db04de9735ee363c2b8e88852b4785672165a308f04922eb658",
+   "size": 101645,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1TLaGuGznlHK7IWPac3KiafClN5wP1KXwFagYQxupibFQ7d4TjETlqsZ4hMEOLZtZvIvU4Y65ClskA/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img003.jpg",
+   "recompressed": true,
+   "sha256": "f64970d0c469085e6255b9d79c5f9928af4483c3c0ea2495e2a70244d0eb1994",
+   "size": 82285,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1TLaGuGznlHK7IWPac3Kiaf7NojBSPk6wlgMhIpFCJNCvngD6aQb7ZqXXaD7Kic2MXOmTbR7kz8Aibw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img004.jpg",
+   "recompressed": true,
+   "sha256": "2d520abd935ec027d10ed31eb6372e159831e875eda2ae766b80ba1eaa499c81",
+   "size": 92829,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1TLaGuGznlHK7IWPac3KiafMjSXsrFXfibHP97iavUQeS3CYcRYO4icGD2Bhd000icicuLbMHrXLanicGOw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img005.webp",
+   "sha256": "51ee33c67a2e3d3b547445d3cce1b037830f94dd44cc1bf13f4be664c2916c1a",
+   "size": 34878,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1TLaGuGznlHK7IWPac3KiafmKicMMd4NLgqk5fS9tWoq8QIH721fm0tbgstib8zDqsaibB0F5AtHDKmA/640?wx_fmt=other&watermark=1&wxfrom=5&wx_lazy=1&tp=webp#imgIndex=11"
+  }
+ ],
+ "publish_time": "2025-12-19 07:30",
+ "relevance": "relevant",
+ "relevance_score": 21.0,
+ "title": "一张看板搞定零售经营分析：动销率、流转率、售空率、售罄SKU占比",
+ "title_hits": [
+  "看板",
+  "经营",
+  "经营分析"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247493572&idx=1&sn=a624138a477e176ca2441937fc1bd670&chksm=ce12ba91f965338745b03f780ae1c976cc8f0f19155783d1382198189f5a7724832f15cc8220",
+ "word_count": 2228
+}

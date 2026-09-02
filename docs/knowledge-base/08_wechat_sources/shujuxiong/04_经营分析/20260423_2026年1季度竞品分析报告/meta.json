@@ -1,0 +1,78 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "宋岳清",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/gZ0Mp1agcZ8TLs7xOAH0VjMjA96RLZSwOglx1MEMXZSjtxTLmbu5yssfRsyfvouLrURny19zEH5mEX3oV9RyfJgl7d6vL4vjImPDib0TZj2M/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T16:00:12+08:00",
+ "digest": null,
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.jpg",
+   "sha256": "2778941f07ab9098eb5ec1915d438c3ceab042a6647d1da16f28bc31482bccb7",
+   "size": 204300,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_jpg/gZ0Mp1agcZib64ba1517oOHAvaoIgvQohMZj4OZ3aZ5t7D3VWxDHKXpggwWianIGThEqEHPn8x0RL57n9wbNPvxd39Anf8wbWCt0LSRELp4zI/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img002.jpg",
+   "sha256": "9a8ca4acb84a28e8f1c4e410b163dfff05c582919f3a5adb855afb13e8984338",
+   "size": 91356,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_jpg/gZ0Mp1agcZ9QzxNNUxeabEkInMn0e3DqK5iciclfRicVW7JmQCHke0UAWLPzPAiciaRwGXibvIiaT35JYFJSbNuqKIKstzwedx0O4CCacIYQ8Wh3iak/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img003.jpg",
+   "sha256": "73480f622bb9a0f6deb8579c18651b124a7e65fc92f5e223e2d3120f73485a29",
+   "size": 106223,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_jpg/gZ0Mp1agcZ9oRT4yu7q9eVCR9fkfCib7OOG5tDyB6PorG3DoC4Dxxibv4cxic1MuL6UU4C2XF4zSQnHnGM2DibJIunehOz4nh8vo0g1EejhhD7E/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img004.jpg",
+   "sha256": "e09df221f1531d56595e1468bf63e3ef545477cd4447c382a3f5fa665ef9cbdb",
+   "size": 107959,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/gZ0Mp1agcZ8GiaZequhhibUaztteVm77xx1ibH3Qk4KSDEjtwqbzN9UhaW7mT7bcqic7A5DgQtbrIgWgTeuHTacOwx6sL32qXXj9f5DF7WZmQSc/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img005.jpg",
+   "sha256": "e0095e865e92ce78f19e9da5f0591029d4551225faca1327c74d545e06dad40b",
+   "size": 133074,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/gZ0Mp1agcZ8lr5hDGiarF841rAc41jS1zmK5DkoicsjVQh1FQsbbF8qjyJK33IR0IEwFnWLZLozIHj14q3gpAMxSiaNOqtaqY9tffANr1hlluM/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img006.jpg",
+   "sha256": "04fd22d4ff26bbecd15253055c59dcb7fdca062375de3f7bc1f14dcb3072926a",
+   "size": 124461,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_jpg/gZ0Mp1agcZ8NkWyBJIOHcdEAYOFcMOdyYwaBrY4S5upVD11FhEUWdOKBSdY7V3XUwPnc1b0odl2ucs9H6jrQMAjGNmiaGxFbd5Eib2b4nd5DU/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img007.jpg",
+   "sha256": "3d540668dafc3fb2b0955e0397cd2f6042f5dffe57d0ea57fb04b668911df338",
+   "size": 121697,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/gZ0Mp1agcZibbDWGSLSPQkZ2VQp2icWoDxFqGQOEwBgmQNO4VoLBJ0Xw9cTHxicrZGhNXfMIXCQ0J9z9ibiaiavxIyVyH8vZZMiacib2bmUo2w2Hbsc/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img008.jpg",
+   "recompressed": true,
+   "sha256": "819c947f27f48797ec0f70aa0d93f5b446596e2f3b9c31c197eb5bc965f81a71",
+   "size": 116621,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/gZ0Mp1agcZicnicBSicNYQRYuNNecPlmBkTjmuRkVZvkTmSibZxLPO2zb3thmAl9LVX8ETHt1Kd3Kjn3BXOCPrnicwKrusaAziavx3IghCgZeVKAw/640?wx_fmt=png&from=appmsg"
+  }
+ ],
+ "publish_time": "2026-04-23 09:15",
+ "relevance": "relevant",
+ "relevance_score": 12.0,
+ "title": "2026年1季度竞品分析报告",
+ "title_hits": [
+  "分析报告"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247498495&idx=1&sn=015f98e4cb984aa3506c20b0a468d3ec&chksm=ce12a7aaf9652ebc9e8ab4e05db31985fb47f51a73b424818691c88f0aef2dca5cda7dcafa00",
+ "word_count": 170
+}

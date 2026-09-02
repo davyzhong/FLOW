@@ -1,0 +1,80 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm23dm6EDHLuzSoCqmbQHGYyUh7VL0RDz6R32NrCyRSBRceDx4zzqF6WkDz26D0TuhwP7S7sHBPSUw/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T14:02:20+08:00",
+ "digest": null,
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.gif",
+   "sha256": "6e5826c75dc6fda91cbe4b70102063ab7e99520bd66704863d50bae65f33298d",
+   "size": 7063,
+   "url": "http://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm1eCHSDQ1FT41crSwIq5ZQuez5bEOnUCzPmARmhic0lm221AAwtWTwHosaT1CiaGoiaicgCSV7KmQRnJw/640?wx_fmt=gif"
+  },
+  {
+   "file": "images/img002.jpg",
+   "sha256": "5724f1f44de5552dd312733333e544c0ea97a224a2691330192d283959324ca9",
+   "size": 89902,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2m8HVrbE1U6JPZIeDH8DBbffia0gKHzIGMyibuR60BtVLCdyNJGicE4gOqmshDfGf4pv1Hk5hAX46TA/640?wx_fmt=jpeg&from=appmsg"
+  },
+  {
+   "file": "images/img003.png",
+   "sha256": "120aba24cad9ffa89ebba67eac5f99d57cc6b990af227db2601cc2cc9e44c9be",
+   "size": 35389,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm23dm6EDHLuzSoCqmbQHGYyEPVWgLtcIrJ9tHb4IX8xroxRuVgzbic2eUbpqRzgBxjcfXqiahBqMyKg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img004.png",
+   "sha256": "f475ad8c3137343b20db7a449afa3a497a8e305808661daddf165cd65bf1bd58",
+   "size": 91674,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm23dm6EDHLuzSoCqmbQHGYyzSszusUxBR8koaWpO3K3GIwLS1mbWNUFiaLmXS6jh0sbibZI3BhDFdUg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img005.png",
+   "sha256": "3a2438c762da4e4e937084aca8b0c780abe9651ca9b73c90f6ab820151b63101",
+   "size": 156323,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm23dm6EDHLuzSoCqmbQHGYyNqSgjicWCvNG4X6CryHC8IbEHQiboPw6iay8dkc04hM6xvzPh9Dj7tTgA/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img006.png",
+   "sha256": "0570398b282cf65484e43083030646389c404bca90eedda5fd5a58e097ec13cc",
+   "size": 72769,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm23dm6EDHLuzSoCqmbQHGYy4z91p6EqbnAyvHeWp1MNZia1vuK5rTXqPftdzBUPSFQohicCbXJXLesg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img007.png",
+   "sha256": "9242d1c6882f2597797438f3e4519df1d2cc64f3d36e0fdb8c97e221666b2277",
+   "size": 32081,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0NcBX8ytIOncGjEzshuRibFIpZeKVBRyBQTqXkEPa9wMAvJWuXIKm136m1pUl5cLCycRtJSrp6TmA/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img008.png",
+   "sha256": "4b41737bdc52fda2f294fabe7835b79ee31fcf4d717c77164dc7c952b69bc884",
+   "size": 223046,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1qKQviaVAfFcdwIHxkb4hmwHOophibShALglLOhxv9IhoiaVgBmItf2M4fD7PQmbKPM7D1t7zWBAibMA/640?wx_fmt=png&from=appmsg"
+  }
+ ],
+ "publish_time": "2025-02-20 07:00",
+ "relevance": "relevant",
+ "relevance_score": 13.8,
+ "title": "DeepSeek经营分析实战案例（三大模型分析能力对比）",
+ "title_hits": [
+  "模型",
+  "经营",
+  "经营分析"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487150&idx=1&sn=ca4ef33869176801ce692645d2e70ba9&chksm=ce1153fbf966daed488ef82526194c58a060d2085d631141b38ec7eb06e78ecb3bcca8354d45",
+ "word_count": 1580
+}

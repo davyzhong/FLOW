@@ -1,0 +1,50 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2XRRibccQ295nibxHpwL2f802aI2YL5yTt1iaaxKg0vDKbp92UUibdiaUUYYWAD6kldtCibKPSZDMf593g/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T13:59:17+08:00",
+ "digest": "关注数据熊，工作更​敏捷",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.gif",
+   "sha256": "6e5826c75dc6fda91cbe4b70102063ab7e99520bd66704863d50bae65f33298d",
+   "size": 7063,
+   "url": "https://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm1eCHSDQ1FT41crSwIq5ZQuez5bEOnUCzPmARmhic0lm221AAwtWTwHosaT1CiaGoiaicgCSV7KmQRnJw/640?wx_fmt=gif"
+  },
+  {
+   "file": "images/img002.jpg",
+   "sha256": "a62c0ccfd98336336e35ec0f7f66e65d02dfd2f03b7b837eaa051ae2402dc6a9",
+   "size": 71431,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2zo5eHWtAGJ6AytpFgPjicCUy3d7q6KKK2sGpXoBqS64EUUgJ5gM0bLMiavkg3rWW8Uc242Ybu3k0g/640?wx_fmt=jpeg&from=appmsg"
+  },
+  {
+   "file": "images/img003.png",
+   "sha256": "30ab12165196afb12e4a853ace05088bac31f3bc12f6ac4c511aaeb22c3b2976",
+   "size": 350991,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2XRRibccQ295nibxHpwL2f80ictak05abUYr80FMmicRcMziaMpDqns5ETDwmcDWV7kp8TibXaw5u9gm3w/640?wx_fmt=png&from=appmsg"
+  }
+ ],
+ "publish_time": "2024-12-24 07:00",
+ "relevance": "relevant",
+ "relevance_score": 17.0,
+ "title": "总经理2024年度工作总结及2025年工作计划（典型话术、免费ppt模板）",
+ "title_hits": [
+  "ppt",
+  "总结",
+  "模板"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247486321&idx=1&sn=fa752918f7de0b9a66507b637088da54&chksm=ce115624f966df32be7709711245e71223f28d62539df93e9e6a5ffd30ad0d6a60c0d92cea45",
+ "word_count": 2672
+}

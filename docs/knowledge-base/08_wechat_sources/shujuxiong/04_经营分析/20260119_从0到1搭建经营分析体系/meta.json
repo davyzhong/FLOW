@@ -1,0 +1,185 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "宋岳清",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1yNjvbxoC4IicQkHcpOmab1p8uawx49meia68PgvCyMo2nuLbiaOQHm2tJJ6qZAUd4Pd2dwJuFeF59A/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T14:55:31+08:00",
+ "digest": null,
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.jpg",
+   "recompressed": true,
+   "sha256": "03c41908318b2f808896f1888cb2123c02aaf40e877f2916c09647931bd41d87",
+   "size": 100380,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1yNjvbxoC4IicQkHcpOmab1y3m6LJDG8AUpCmgicYQ2utPu8dbBiakqZXy5RUa7pydnNWxiciaz9leGgw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img002.jpg",
+   "recompressed": true,
+   "sha256": "0186cd56328686c3cda0f4ba133f5aec23ed94ca7e42cc91d587ec9b2fb99bd3",
+   "size": 92789,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1yNjvbxoC4IicQkHcpOmab1mBE9AsqwVLNsOSASV6U0hfjmGa4O7vew2JavYPxYLEht3E1Ir4szTQ/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img003.jpg",
+   "recompressed": true,
+   "sha256": "77e2c885e044c0343abb81ab5d8d926ce8c9e9839f29ed0481a427592be8aa8f",
+   "size": 122628,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1yNjvbxoC4IicQkHcpOmab1nZAcoREN1cZBvAxAkR2Ck69Oo7vl6yIE7pLrxiaAa3vFwz72AsWK5dw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img004.jpg",
+   "recompressed": true,
+   "sha256": "c9877c3a3d145f30d47e556730110f314638c319f1943040ae96d263566ae7a4",
+   "size": 113216,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1yNjvbxoC4IicQkHcpOmab1dmRKJiak4nw9s2xLmce0LnxFGo9nYaVIL7oGjzVy5twTibHuC4EZqviaQ/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img005.jpg",
+   "recompressed": true,
+   "sha256": "aab2cbb4ce078fce79ffa2eb0a2d909b072e2447c800cf689f8bec9a3362bba3",
+   "size": 120635,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1yNjvbxoC4IicQkHcpOmab1EA4hTeXS3cqXp6olZcHp6fJnWmia35KibyIGh7J6Q8OJO2ry6u5HOEKw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img006.jpg",
+   "recompressed": true,
+   "sha256": "59e4c5c4c04f21bd23b3f386c45f8124bfb6d6181c39981f5044bcdc4e612160",
+   "size": 113044,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1yNjvbxoC4IicQkHcpOmab1EWpiaYmibJjFuc6yNphibyy7nn5Njp40XDVD715Db3nt99urdKLvl6ogw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img007.jpg",
+   "recompressed": true,
+   "sha256": "651b6035d5a35ae6da5cd2b3f07ba46e019532d64a751eb2ae69d7e04eefe9de",
+   "size": 125246,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1yNjvbxoC4IicQkHcpOmab1N9g7rFicsJVc3A3E7komnSNu4WyvuGCMqBWhRQ1sqX71mcib3HlnnBtg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img008.jpg",
+   "recompressed": true,
+   "sha256": "41a6fc53acc0572eac1c31daa8294177d42b73a72f5ce425c20cb0386fc9321f",
+   "size": 101905,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1yNjvbxoC4IicQkHcpOmab14jiaKoxIdvCwCoamHTRJKkpxqoJyn0ic1VrNBm99EoBb2t8icqMqjl2Rw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img009.jpg",
+   "recompressed": true,
+   "sha256": "553e609fa6a153a562b83a5bcc4ce2dc2962ccf26f950dd99bc78503be92c2f6",
+   "size": 121742,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1yNjvbxoC4IicQkHcpOmab1nA4GgckWyiaVJd7E4VYGDMbfB8IQk08ZnQUGMXHWE0t9lel1TXhcZRw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img010.jpg",
+   "recompressed": true,
+   "sha256": "22aa72cb394defa1285887c29061a23e58d5dd4321f5b5931c1eb70148ad2ba8",
+   "size": 120833,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1yNjvbxoC4IicQkHcpOmab1gc9rKXgOhG4sPgaqjvIIICr1Pib8aqVsMAvS39wr3Z8V2DR1DGZRib2Q/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img011.jpg",
+   "recompressed": true,
+   "sha256": "09f9ef742dae4851c0b1cd2147fff5adca91f5d296e5621bc461389af32c2cc1",
+   "size": 141602,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1yNjvbxoC4IicQkHcpOmab12zCMbNxQwzI1P67Lf6tj0C4ZbAGsNmOy3icJal4DDONYOgapbGUIxGg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img012.jpg",
+   "recompressed": true,
+   "sha256": "f1f85e6906dde91a98d93d2232e7f33c9d329143b5b662097b3f91e13e3ef832",
+   "size": 140440,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1yNjvbxoC4IicQkHcpOmab19LCxPrVwTB1P52fcOTApHXFyt90zVS1cl1DNfyMcBg09dFd6G50tkQ/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img013.jpg",
+   "recompressed": true,
+   "sha256": "b4c350dc2a6f0ff07a4f13492078a2f74111e8860c1208c9ee106e7c66d9b702",
+   "size": 122419,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1yNjvbxoC4IicQkHcpOmab1bmenms5RdestkbF93O0DhE6L5PZz2LYn2a9TYMbhicXDpFnicb8vx4SA/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img014.jpg",
+   "recompressed": true,
+   "sha256": "71dabc132bf1ee38f214beb3935a953b13603292041e11209a733c0f98e8c737",
+   "size": 153575,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1yNjvbxoC4IicQkHcpOmab1wJbibKYYBoBbvAfP94ic6RgzRIJZewJ6gP0icPnZbl2BgG8XAywBVibcxw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img015.jpg",
+   "recompressed": true,
+   "sha256": "0a5216dde749bf332c75798f4dcb46ac65f29d05e3fa121db2cd5ebaee4b2dc3",
+   "size": 130683,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1yNjvbxoC4IicQkHcpOmab1j8g6sbOyqqFMrUlc0eqTOZCJegpzCibA4OsQIwEEmV0qwO2EvSbrnoQ/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img016.jpg",
+   "recompressed": true,
+   "sha256": "4e14f8d463017ec0e15e448b691ddda581b1ace1551671dc9285ece8d6c991b6",
+   "size": 138676,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1yNjvbxoC4IicQkHcpOmab1DGnHzOn0jvfbYYBtSQlZUkhpnLuh3F45DNoWKicfuSVPg1uapJsafYg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img017.jpg",
+   "recompressed": true,
+   "sha256": "e4fb7ea66d522d0e7c4e349c6166ee5130b9acf9268a59e3950bb08b7de1f269",
+   "size": 141818,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1yNjvbxoC4IicQkHcpOmab1G8L0kQuQwa8AKAhfiamJSqWLW8LCg441RK7JaiaRzAoO1ibCVoz0KCzMw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img018.jpg",
+   "recompressed": true,
+   "sha256": "fab3baaced1b1667fc68d09c9f6c12fb9a7a3a5d7b233d41e13153cc002d59fb",
+   "size": 134522,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1yNjvbxoC4IicQkHcpOmab1OBxFCK4CtcKZMhmvrJZkbq3NEhjP1gMnzjZm7tklqntsV8UDVXNiaOg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img019.jpg",
+   "recompressed": true,
+   "sha256": "cc5bb117e3d53c7527094fc1b7b2c427a231f9cf5748e8bbf3313d8a88bb1d62",
+   "size": 108559,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1yNjvbxoC4IicQkHcpOmab131FLVWGfricAntrBuARjaumpLtuCuic7cfllOpIZJqQXsRBgOwRQ1BtA/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img020.jpg",
+   "recompressed": true,
+   "sha256": "1a1c196228bad6a7a969be993584373ea503f4d528c7e9f39a80ca5a16b58d64",
+   "size": 133639,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1yNjvbxoC4IicQkHcpOmab1icHNFhwyTickib5WjXSM2icA7GXU1Xnbsgz9iaRF3EVpWT3nAicnvO80Lezg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img021.jpg",
+   "recompressed": true,
+   "sha256": "309132025c21798f4ccf63c1e62b25dbc84ad5d54d36f9bac8e15d3831cdd6c2",
+   "size": 133887,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1yNjvbxoC4IicQkHcpOmab1ia9ic6PibXSrfr22tsrlsK3MopxElRdpCuPibJVSvia8BylHPibiaEM3x8DcA/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img022.jpg",
+   "recompressed": true,
+   "sha256": "68b7adc8a9a0074fe7930e06a24bfbf8dc8c56071605bcca9fac796c4125e867",
+   "size": 138091,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1yNjvbxoC4IicQkHcpOmab18nBVXGzydGs9L4AaATUFApeg4ibR0q2zPczLJA1uPjnebNgZq5ibG2ZA/640?wx_fmt=png&from=appmsg"
+  }
+ ],
+ "publish_time": "2026-01-19 07:27",
+ "relevance": "relevant",
+ "relevance_score": 16.4,
+ "title": "从0到1搭建经营分析体系",
+ "title_hits": [
+  "经营",
+  "经营分析"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247495710&idx=1&sn=bfbaddad0bf34b4b4b107283251303e9&chksm=ce12ad4bf965245d45b5d548ea3121c1ccb8cfe00ec35bd58c21d9a764db8dfd12c11aec2955",
+ "word_count": 268
+}

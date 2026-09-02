@@ -1,0 +1,46 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "宋岳清",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0lSvhHSdHqXHU1uownOqGcNEIGqabntE2MoqxrEgsTLGYNN4Psy3k3eUxWCQZH8CZzibLFibnoF0nw/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T14:15:57+08:00",
+ "digest": "很多公司做所谓的“经营分析”，会议开到半夜，PPT翻到第89页，大家却依然不知道明天要做什么。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.jpg",
+   "recompressed": true,
+   "sha256": "58a6b8f983c28c69c3f37c755872437c3a1ea817a064932e08e3ffed806eedd8",
+   "size": 71581,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0lSvhHSdHqXHU1uownOqGctV1G5As9xAgnDibUC2icO5yMicYQsHqHlyxTRSwiamMz0Vvpxiasn1ianRibA/640?wx_fmt=png"
+  },
+  {
+   "file": "images/img002.png",
+   "sha256": "23564e2ac4affa77bb50ddc237413a267c0d4f6885e1e69a70bccc44c7624791",
+   "size": 227097,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3dzTibTMZh5YITRd19Zd8bRia3O5eE72OTanagNmbr6pWRsaX0BQvPmTtF94R7EvMa2qbFAqs2HlrQ/640?wx_fmt=png"
+  }
+ ],
+ "publish_time": "2025-10-14 07:30",
+ "relevance": "relevant",
+ "relevance_score": 22.4,
+ "title": "经营分析的关键是做好“路径分析”，而不是“数据分析”",
+ "title_hits": [
+  "数据",
+  "数据分析",
+  "经营",
+  "经营分析"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247490336&idx=1&sn=43458e7da02b864ea34a98e13896d404&chksm=ce114675f966cf63e6dcc88465bb587b0f121debbcae24ccb694bd9c4e8cd828064ac8eff7da",
+ "word_count": 2216
+}

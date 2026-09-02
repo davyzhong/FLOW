@@ -1,0 +1,55 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "03_财务报表",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3iaGzZlImBwbQCf93baic3OJpqqEg9hmKmNwQEmJrtUC2IS7iaZiaETpTwKtlibE0OrcePQWXVSpWBibGg/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T13:56:31+08:00",
+ "digest": "学会读懂财务指标，不只是提升职业技能，更是看透商业本质的第一步！",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.gif",
+   "sha256": "6e5826c75dc6fda91cbe4b70102063ab7e99520bd66704863d50bae65f33298d",
+   "size": 7063,
+   "url": "https://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm1eCHSDQ1FT41crSwIq5ZQuez5bEOnUCzPmARmhic0lm221AAwtWTwHosaT1CiaGoiaicgCSV7KmQRnJw/640?wx_fmt=gif"
+  },
+  {
+   "file": "images/img002.png",
+   "sha256": "19098e9613aa734f4242dd5be213580c948fc83e5f05b83cd20fc944a8b115cc",
+   "size": 64176,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3iaGzZlImBwbQCf93baic3OJxXqgtmXw8XeYib7JaTQWEytIibCsAZJibN80xuauhXg2ZCMjtcxXB7Krg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img003.png",
+   "sha256": "d63684600cae9bb064297cedec14248c0c7aa2bb4034693f50132dd8192a9420",
+   "size": 30692,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3iaGzZlImBwbQCf93baic3OJmAPv1jqwtAO71WjfBUPMfscrwh4Hedgl4He3bgvq0plo1X6ricyuN1A/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img004.png",
+   "sha256": "5a1adedf4d5fafd2ea6f56f33368d6e93099530f8e61f0642abb93e4d67aa52c",
+   "size": 34285,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3iaGzZlImBwbQCf93baic3OJp2GiahyH2iaicy6rxib5tveFTgBdJYLbE8cskCmLWNA5hUaibBjI2t073Yw/640?wx_fmt=png&from=appmsg"
+  }
+ ],
+ "publish_time": "2024-12-16 07:00",
+ "relevance": "relevant",
+ "relevance_score": 15.6,
+ "title": "三步搞清 EBIT、EBITDA 和净利润的区别，新手也能读懂！",
+ "title_hits": [
+  "净利",
+  "利润"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247486224&idx=1&sn=eb28e17e3b37e007cae3a528948e6488&chksm=ce115645f966df535fd3c31e21c59930aa44a84ef611d36ccf419ce1f8684fc26715720355b6",
+ "word_count": 713
+}

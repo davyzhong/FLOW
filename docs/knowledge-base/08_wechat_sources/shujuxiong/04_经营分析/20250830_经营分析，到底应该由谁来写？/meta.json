@@ -1,0 +1,85 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "数据熊",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1J7ghfX9IRMTuUVsgWXaIROQOCDUXHeXaAQoicibBpjwicTkxOAT281LXnXmZZ0lwwYBYeT8hp6GFog/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T14:10:42+08:00",
+ "digest": "写得好不好不重要，能不能把钱和动作对上号，才重要。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.png",
+   "sha256": "696e615397c1a3319cb7bf1eb4ca2d046d0bdf77e44aea1602fcc216dedd399a",
+   "size": 2844,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1J7ghfX9IRMTuUVsgWXaIRgUrd1n8XNJ7Ng4iaqKp38VSiaJMDyIibcU3GlzK0BR5bIWpH3a4GtvP7g/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img002.jpg",
+   "sha256": "d0fd485bd7221c45056a7646cc102e00b4af86ab8a889edf2885835ce2123a15",
+   "size": 219593,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1J7ghfX9IRMTuUVsgWXaIRNvVULmCg7YrsK9FGZ5E0VtIho9SUVgewh5o57csxicTVFzIRm5Mt4WA/640?wx_fmt=jpeg&from=appmsg"
+  },
+  {
+   "file": "images/img003.png",
+   "sha256": "2503c7bd517e2fe7bb4648ce02ba1d9d9ae74c3d6428615332a81b987ef1ee29",
+   "size": 34516,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1J7ghfX9IRMTuUVsgWXaIRDxUibkMwCcMpHjzCCJhkXY9Hy8OdlYr7ricgZ42ibSmAUYiapTOuOl9arw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img004.png",
+   "sha256": "69becc444d45d4baf492ce436cf7e30f491a480d6bc8e49ecfd3620fd037b45e",
+   "size": 94527,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1J7ghfX9IRMTuUVsgWXaIRxjOrgs4bziaHWia0Qh9UbcVcJVV5YlFUXFQOJ9ISMqP8NHORnzQAG8FQ/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img005.png",
+   "sha256": "0662b447f0b1db6caba15722e886907c20265b6b186ef59213ab87fd2dd9d83c",
+   "size": 76884,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1J7ghfX9IRMTuUVsgWXaIRKgTLyIPXFesQicxiccGmybgmOvjaicwcz7e2YKJ4NyTgEZhibS5c7zUJqg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img006.png",
+   "sha256": "3d69ea11c1e2c2d8e3bc3b29d53cf76ab9305e13f7f7bdea7b6f913fda574de8",
+   "size": 22468,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1J7ghfX9IRMTuUVsgWXaIRMGqIIXv8DrCkmZoWhgpqBUw0m3t7uBcYPdLGF5IOAOQSGBX2aE4mDA/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img007.jpg",
+   "sha256": "8f33f3ac377a248d82e07e7140973b18b1a6a1ce9a8107905a3e08d0ee822774",
+   "size": 74583,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1J7ghfX9IRMTuUVsgWXaIRicPTpJlRyn5K4bbnJdojxSETPjLMoS02DzphzQiafCHYwxJNfkej7Z4Q/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img008.png",
+   "sha256": "61beb163eb00d57e76e0d22d04f30e3759bac49a25a130df79619a7f6ece5618",
+   "size": 63497,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1J7ghfX9IRMTuUVsgWXaIRNIHhX6aHDb82ZwIqTNia9bYF1ab39GbXLcWTljDtPGCmrHV7UZNt4icA/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img009.jpg",
+   "sha256": "af63aa1f75d97a7d96c677ff25ef7d8524854e61ad9a6f2399076d9e70fee4b5",
+   "size": 131107,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1J7ghfX9IRMTuUVsgWXaIRT4bKTunG1OicE7VuviaI2FnJNTKzl45U3aQuGHwqS6thPicgOV13X5IcQ/640?wx_fmt=jpeg"
+  }
+ ],
+ "publish_time": "2025-08-30 08:00",
+ "relevance": "relevant",
+ "relevance_score": 20.2,
+ "title": "经营分析，到底应该由谁来写？",
+ "title_hits": [
+  "经营",
+  "经营分析"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247489368&idx=1&sn=e79bc82f3b7b7978c800a159e500d1b0&chksm=ce114a0df966c31b90906c7dc8ce03460d0eea0b9f7ffb25bd0c6728e82d849195558c41b7b0",
+ "word_count": 1515
+}

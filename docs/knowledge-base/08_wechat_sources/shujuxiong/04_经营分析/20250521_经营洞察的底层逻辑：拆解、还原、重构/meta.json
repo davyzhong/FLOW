@@ -1,0 +1,29 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3xy28fMc6kUm2FHcHjatlcibOqdoiaYStnnS0vSYyxoC7xADicdiaCHPaAkUClUURe2V1fjJXeXlUMvA/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T14:06:31+08:00",
+ "digest": "你不是在汇报数据，你是在引导决策。",
+ "image_failures": [],
+ "images": [],
+ "publish_time": "2025-05-21 07:00",
+ "relevance": "relevant",
+ "relevance_score": 17.4,
+ "title": "经营洞察的底层逻辑：拆解、还原、重构",
+ "title_hits": [
+  "经营"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488164&idx=2&sn=49df252fd8b63256de2e2ffa02b48dfb&chksm=ce114ff1f966c6e72d365cbf612f8a2db21c201bc48b1db7816b81ab006dde228f3c1e6a1850",
+ "word_count": 1507
+}

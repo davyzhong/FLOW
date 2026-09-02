@@ -1,0 +1,85 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "宋岳清",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3AyH1Jquicpc4jvXfg0BcfnlqyEkpJpiaVmdXth7gYC33c3m1icACFS48lBXia9mH2m6xkaIJEWSbpqA/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T14:32:25+08:00",
+ "digest": "12月的经营分析，和每个月都不一样。它不是\\x26quot;复盘一张报表\\x26quot;，而是把全年算明白、把风险定清楚、把明年看透一点点。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.png",
+   "sha256": "1a25cf794a5bc0533527f3aaf59b725424a2ac9fc88bcde03f6fd4872c8194a1",
+   "size": 752237,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3AyH1Jquicpc4jvXfg0Bcfnt15O24WgibugUDmtDYiaKn49gLYxaT2vhXQFibiabpFZIOUWnpyLdezsYQ/640?from=appmsg"
+  },
+  {
+   "file": "images/img002.gif",
+   "sha256": "54a0b2c12df319f2d06e1a08f239c34713fb97296633d7974c756b50c5f99bcc",
+   "size": 4278062,
+   "url": "https://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm3AyH1Jquicpc4jvXfg0BcfnXtDnLDs2yedcnJpccLlc0F5QhQq28XiaU4iaUSSuPGbC5njbfPxDxhnA/640?wx_fmt=gif&from=appmsg"
+  },
+  {
+   "file": "images/img003.jpg",
+   "sha256": "7dd607cd1f0629f5d710bca762dd5c04aa935b4da7ab624d942d02c6511fc9d3",
+   "size": 306217,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3AyH1Jquicpc4jvXfg0BcfnGZOFWV4gMfnB3ZCoIkOB7xYO851IbEzFp9YhiaqvWR1ww3a1WgXpdicg/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img004.jpg",
+   "sha256": "9487e3785ed6fb671e5d14dfa0a068fb6890738c40e8f7ac1bef1ba99f31f061",
+   "size": 341574,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3AyH1Jquicpc4jvXfg0BcfnjJaXRTD0q4d6gcTjxPW75gcD0eN1RoPWNzGTjVzL86RThcglHVWicEg/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img005.jpg",
+   "sha256": "800b15996b24504154e0da71241c344a1b25311d0a1bfc813815f6280e2466ca",
+   "size": 305683,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3AyH1Jquicpc4jvXfg0BcfnhKFia6PO4kicOyJFNQhM99dUZ7Zn4g4cQZzJzjBZibfaz65jUVnlrYt2A/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img006.jpg",
+   "sha256": "73b01ea7d9c24d7f37727ef01c4fef46a2dbad89686449a277625b446439a79d",
+   "size": 141838,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3AyH1Jquicpc4jvXfg0Bcfner7LIRN0v7jQkW4TeDHZxm6yPtyEPWicUDKicDbJF5DO34erA0ZfZOiaA/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img007.gif",
+   "sha256": "54a0b2c12df319f2d06e1a08f239c34713fb97296633d7974c756b50c5f99bcc",
+   "size": 4278062,
+   "url": "https://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm1oo59CWgY2icLwIicn3zfdgSLo2HUtwXTviaQR1BOicTQ9GklkC7xqhvfiaicr2vSdib8YXHnm2FiaqicsKXg/640?wx_fmt=gif&from=appmsg&wxfrom=5&wx_lazy=1&tp=webp#imgIndex=11"
+  },
+  {
+   "file": "images/img008.gif",
+   "sha256": "7de89db04fc98a81b734ac6f70448a1802a8bcde5138af1b2caad1268302aea7",
+   "size": 1055395,
+   "url": "https://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm3nj4PPj0Qiatwpcvjk5EnLS55Vt6B1Q3p3ElkQgvJoB0nLH0DMZQDcsribQMveK8mE0MBvMYo5ubTA/640?wx_fmt=gif&from=appmsg&wxfrom=5&wx_lazy=1&tp=webp#imgIndex=12"
+  },
+  {
+   "file": "images/img009.webp",
+   "sha256": "4924ae31378a436014d5022f42949c94bcd3280fb0981e0879130fc4142ccf85",
+   "size": 34886,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3AyH1Jquicpc4jvXfg0Bcfng7Fuq42wHKtb6hOjib81piaKgSBtibrg7CSF7K3kHakvvSB5uCRyQSw2A/640?wx_fmt=other&watermark=1&wxfrom=5&wx_lazy=1&tp=webp#imgIndex=11"
+  }
+ ],
+ "publish_time": "2025-12-14 18:39",
+ "relevance": "relevant",
+ "relevance_score": 17.8,
+ "title": "2025年12月经营分析要点：算总账、定生死、看未来",
+ "title_hits": [
+  "经营",
+  "经营分析"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247493280&idx=1&sn=54366713a59d2c20ac6cd0aa36c65b68&chksm=ce12bbf5f96532e38b9ace56dc13b21cf25cc6672786d5758eb620db391a29f2cf78be456022",
+ "word_count": 315
+}

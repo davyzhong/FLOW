@@ -1,0 +1,105 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "albums": [
+  "财务管理"
+ ],
+ "author": "宋岳清",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "其他"
+ ],
+ "collection": "02_财务管理",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/gZ0Mp1agcZ9Kb1tSWaibY4tLiaicU4kEAahcAQdEuO6R8iaq1FoZia5f7aCibZ9DJu0aBbfrFxgl7RdjUPtDT6u3bBOcAcwYVGu1b21Cezw3QiawTI/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T12:40:40+08:00",
+ "digest": null,
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.jpg",
+   "recompressed": true,
+   "sha256": "d66b8cb1d61cad191a23451c4fab23f0222e24e015303981bf9ace9a5c406197",
+   "size": 273732,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZibbDp5MnPOw24l0PmgoWsdDCb8IFJwbTzKXb8CRppnJbdYjuU70siaWNxYa1rs7ibTic6a6NSmn30uqcia5osnoyib1eSWRhcg8hJ1o/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img002.jpg",
+   "recompressed": true,
+   "sha256": "8c463b69e5e34ab3b79628248d6f724f2a85a5fbcd15b2c8ab1aa310d3d1982d",
+   "size": 297894,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/gZ0Mp1agcZ9INm7gUmyhfHPicqrHmcsQo0jhC1ic1tFPNUDKJt8FxDLAAHwbbCOuHVx6C5LjXRZdmHZic0RZHtQtAOjIPhYzWvjtreicSMR1SAE/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img003.jpg",
+   "recompressed": true,
+   "sha256": "7f6c25f3bc638009842f287a10436a59329ad7cb6ea567a1f0c92f2aebfbe6a8",
+   "size": 255122,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZ8XSKeyDJnLc4dmziaVCnCqUlMO9dBNLNCKk17vbib2NSibomVUZtE9toaAMpAkuRP2S8bk0lNBYCN0bbObfLSXh0lywNDhg5ZvcE/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img004.jpg",
+   "recompressed": true,
+   "sha256": "7febea33f51d3922163d34fe616a98675a806134475ae75917043cbdf2499d16",
+   "size": 274975,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZ9UkEOzEjlGAfIQ6S6EZR1ONhP1A1Nicev8BmsFAvp7JqJoF2IhgkhSWHQk5ibRfiavwetLl28vhVKS23IBMOn5vKUeqGOPNK5d5s/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img005.jpg",
+   "recompressed": true,
+   "sha256": "22efb66de0677739a9b80935f1034fd574129dcb96356cbd3cd17d4e4c369c9a",
+   "size": 279132,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZicC2AiaEcic3UKUITjn9XpjAgrb8EI3GdMIUfH3iaV8Cxp5M11OMlnViaqqmt52E4HkpibQicx0fpSaxFAqsDmq6aewrncjBP5JRy7Uw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img006.jpg",
+   "recompressed": true,
+   "sha256": "5d3fd854abc07ec446adf6eda4bcdd8aff890ce205a10d91c7b7f1a1043d5bec",
+   "size": 275010,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZibI7AicN3p7p6iccA7l32wUpT6fvExzFD7HRiaHTN0Dr3Uap8opuUwmHg2yIKUnenz95rNMde3piayOYdlNFbhB11YnFUVrVop9Zhg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img007.jpg",
+   "recompressed": true,
+   "sha256": "6c592cbdee402c25ff9960c1fe9951ee3b292295ed2991e38bfa96b4b9a6e5d9",
+   "size": 288465,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/gZ0Mp1agcZibjEtCdpRuDwT9oICQoo6sluQhESSt9rUJgTSsewnnI12MbKdwKnniaKMiaTaWFhicZAvRmibs3Q8ibqJtC6fpQBMcYqlRcpuwdJKow/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img008.jpg",
+   "recompressed": true,
+   "sha256": "855d495ff1e15f7ffc4903ba4923ac62adafbe26f542f330a4d74efb8c0968fd",
+   "size": 295060,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZ9iaG2kkqNNb6KwHXpLmYRXlPnGHlCBcnYpGeZoQBRLWfTnsz0wTibsxSTssUxvvz1BXHksEriajnknPpf0mweHXh8SkibrKkI8ECU/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img009.jpg",
+   "recompressed": true,
+   "sha256": "67aa5ccc5aa6a273272e60b0398321554f7724cdb20644c460bd75e297093642",
+   "size": 252259,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/gZ0Mp1agcZ8ZvnAa3MHiakGtW9XricVNR88wURVSmUEMlvSodsp9KSqRhtCndLLamcMBxXua7vcYQRhiacPFaLmHthRdzRYWYicAKfv4kVt3PS4/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img010.jpg",
+   "recompressed": true,
+   "sha256": "bc8be46021cff78150263296f5713e3e221b870cba415c3c9352f765f2a2e212",
+   "size": 300786,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZibV80YibSNJqLI0Ct0yJ17sro6BAo7zm7Y2fhVczpzIRl88R0rPWaUWaLTUzxDKGWQxff7P3IMbH5YDrfJAxlTMjHic8V7Rfr6hE/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img011.jpg",
+   "sha256": "9416f8175adc8044eb5be03a952e3c73ca2f9e852b8922cf03f78d8e078fef4b",
+   "size": 76722,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_jpg/gZ0Mp1agcZ9480qZOFnwjhIJYvMwukQTNg4OMqcdZGHZ1cWX3fzUs8lhkDMBazrVlkhslX6YDF5ZPvpE6zfDcJRen9KbK1ynCKhhSolBXUY/640?wx_fmt=jpeg&from=appmsg"
+  }
+ ],
+ "publish_time": "2026-05-03 08:43",
+ "relevance": "relevant",
+ "relevance_score": 3.0,
+ "title": "财务审核合同的关键要点（附详细清单.xlsx)",
+ "title_hits": [
+  "财务"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247498961&idx=1&sn=e2d3de429c248ae55503523725e2a021&chksm=ce12a184f9652892b36e0e2ae276b39f67d057b4cf4290daeae851584853956b9a43ff40f9c7",
+ "word_count": 1
+}

@@ -1,0 +1,67 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "数据方法与工具"
+ ],
+ "collection": "03_财务报表",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm09TtXuJZO5cvFIicdpD5U9ibEMf3PmhRA3jiaqgk1lYKe9oRO1tAfTCrfMfSOfycsIW0h9bGEticodWw/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T13:56:13+08:00",
+ "digest": null,
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.gif",
+   "sha256": "6e5826c75dc6fda91cbe4b70102063ab7e99520bd66704863d50bae65f33298d",
+   "size": 7063,
+   "url": "https://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm1eCHSDQ1FT41crSwIq5ZQuez5bEOnUCzPmARmhic0lm221AAwtWTwHosaT1CiaGoiaicgCSV7KmQRnJw/640?wx_fmt=gif"
+  },
+  {
+   "file": "images/img002.jpg",
+   "sha256": "1ef25b31df85184e1615ba6fd8a8d70cc88367b85629f4205a59a8e55d94b7cf",
+   "size": 45442,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm09TtXuJZO5cvFIicdpD5U9iba2ibV78LeKKzAmw7GuthsyxLOBqZaIvhbzd3z4S0Siat862zznxTVutw/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img003.jpg",
+   "sha256": "34e6d53478c352508c318c024c826d861e999b8aa8b10229e10424e955ad5c1a",
+   "size": 66305,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm09TtXuJZO5cvFIicdpD5U9ibIHYb21zo8WibWCsme2JFQx9bSR2YtRwLichKfR7ZOVxzJfduEX56PWmg/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img004.jpg",
+   "sha256": "b1b0e0643274b96dec71d915f95bb27ddede0f65aa5b51effb630bf2d6114c88",
+   "size": 53714,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm09TtXuJZO5cvFIicdpD5U9ibuUR3MO0y6yjaSYrW1hU5YK3Fh6GqFNBGVeFc7nEEibneicquCxrneAibQ/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img005.jpg",
+   "sha256": "66ab48da26ecea3bb6255c027153fc2ae73e4bbe65ec99f5c1a3a4265181498b",
+   "size": 41737,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm09TtXuJZO5cvFIicdpD5U9ibdialSvUHL8NicSXsf9m2ticxASWicKIiaticFGYIB0IEu2xQmh31iaG7O1bHQ/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img006.jpg",
+   "sha256": "dbddab2e75eb1fb140bf6bf0559705ba2a33ade3144cb748fd1aa0847336255b",
+   "size": 48854,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm09TtXuJZO5cvFIicdpD5U9ib2BG0oibbx0q0dzwia7U3Wc1FJOQaLHzS3UWKd2jqYhMJRA0JSgPiaj6eQ/640?wx_fmt=jpeg"
+  }
+ ],
+ "publish_time": "2024-11-30 07:00",
+ "relevance": "relevant",
+ "relevance_score": 26.8,
+ "title": "通过财务报表预判经营业绩的几个关键技巧",
+ "title_hits": [
+  "报表",
+  "经营",
+  "财务"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247485614&idx=1&sn=396ea9e86bb3c54cc9567860ed86b4e1&chksm=ce1155fbf966dced4812f60426e5fb4585709d6d825c8f7a015fb5ce44827cf9de9fdb6898cb",
+ "word_count": 1400
+}

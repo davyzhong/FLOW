@@ -1,0 +1,93 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "宋岳清",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0EeQ2EtBwHhs6fX7P5E8BeOAm1zHqxicsrjDkyPn21nuWYsvBB7LFECR3nWbNSNUKwfOX3w92vLiaw/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T14:38:24+08:00",
+ "digest": "点击阅读原文，下载《2025年经营分析报告.pptx》。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.jpg",
+   "sha256": "5a03462d6845a6c9031a6c58f6263b7a2e88863b419764da46d88f12d9c24a3d",
+   "size": 106608,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0EeQ2EtBwHhs6fX7P5E8BeibticibYibpgmadwpgKGfrjE2eicYANXpzDXlicyzqk3QicFkc1LnHSwlZKYQ/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img002.png",
+   "sha256": "3e3729b01858e983e57ef948e86727b0ed0bd68371f181336c0a63be1ab32e0a",
+   "size": 159553,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0EeQ2EtBwHhs6fX7P5E8Be2l7hWic9UDMRJwo82MkUxPLW54FXnJHBmb6QfDJDjqx2JkLy9OPiaFsw/640?wx_fmt=other&from=appmsg&watermark=1&tp=webp&wxfrom=5&wx_lazy=1#imgIndex=1"
+  },
+  {
+   "file": "images/img003.jpg",
+   "sha256": "c119f968f1432aafb754709ce9f9a5f2ca9b4d32004b2dcf3ce0dee7b503be4a",
+   "size": 128082,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0EeQ2EtBwHhs6fX7P5E8BewMibTyu2czicgJ43XUBeicdfictRhuegfMiaWs4PE3PO9icRu2VcKVXa8wGQ/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img004.jpg",
+   "sha256": "b36f440cd148b94ca22ffb56bb0922f4d1d673bb5785bcb2b45fc0db133541ee",
+   "size": 148559,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0EeQ2EtBwHhs6fX7P5E8BeIgv4JQ5qhyddBBecnur1uFHWlqhXfXNbicHsnvBcA7mc7DHc4br474A/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img005.jpg",
+   "sha256": "f8a5881deae5af971afca4a23b50336cd0b18cda3ef2a18d9653d2285a80b7ee",
+   "size": 119955,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0EeQ2EtBwHhs6fX7P5E8BesNfq5VwuEBDCsRicRLVnuusBIb4VU9WKOjiaMNzT2NRcjYibOibC0ibTLEw/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img006.jpg",
+   "sha256": "b593480cf1427bae79459891e3119de92015b814224dc987504d3ece1c2cc32f",
+   "size": 178209,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0EeQ2EtBwHhs6fX7P5E8Beiaved0E5bXViat0hianEdSZfadLpLyJibFZo5PdMUnU8NKUFzZWM3w8uRQ/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img007.jpg",
+   "sha256": "c4810146e7c2c30aeaf495f5116a15869a245774b48043b21a14f0d91606bac3",
+   "size": 156563,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0EeQ2EtBwHhs6fX7P5E8BevCd02F9CNVv4Fah2RwagDjooic6BGhiaNzibWvjFEJfHaYBibzhd71MfFA/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img008.jpg",
+   "sha256": "eb70bda54131d89fc69b15f832b1edafb3f8ba3856f46effb4eb839000e68326",
+   "size": 127027,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0EeQ2EtBwHhs6fX7P5E8BeldhCmagTAiaGCAPxIhRmvTmkSSbhFt727O7ricYBp8YslHyhOTxr5Hmg/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img009.jpg",
+   "sha256": "6c37ff0e1a927c565fff85e371246774f89f83747773b50adfdef67458f1a66f",
+   "size": 110635,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0EeQ2EtBwHhs6fX7P5E8BetCibicKicTRIPJZIyndgKZZoN6CfjvLxibWJiceuOm2Bk8B8vg9lXDPewlA/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img010.webp",
+   "sha256": "e0aa5dd9330118edab17515831b816812fc377037194c57324d195804c6b4523",
+   "size": 34868,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0EeQ2EtBwHhs6fX7P5E8BeOlDV1KwlEbxJDwyQ4gneeInlpheqnnx3XLY8O41NK3HEib10gfn3QGQ/640?wx_fmt=other&watermark=1&wxfrom=5&wx_lazy=1&tp=webp#imgIndex=11"
+  }
+ ],
+ "publish_time": "2025-12-28 07:41",
+ "relevance": "relevant",
+ "relevance_score": 20.2,
+ "title": "经营分析报告，要交付的不是数据，而是决策",
+ "title_hits": [
+  "分析报告",
+  "数据",
+  "经营",
+  "经营分析"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247494154&idx=1&sn=1b98d351269a11af72d5520e7eca53e8&chksm=ce12b75ff9653e4916c9a02b9585fa6c7b0159daf4f000e0ef979628ceb052762d67e25d982f",
+ "word_count": 176
+}

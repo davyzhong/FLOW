@@ -1,0 +1,29 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "albums": [
+  "财务管理",
+  "财务报表"
+ ],
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "预算与成本",
+  "报告与汇报模板"
+ ],
+ "collection": "02_财务管理",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1b3sQuZDJQrB8k6XzLt8Y0NXfNuNHKMYoTgJfrCmMsQjozHhibKuw1Fia0kJBe0pC07OtWicCbFdn5A/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T12:06:03+08:00",
+ "digest": "投资测算，说白了就是预测投资能不能赚钱、能赚多少钱。但很多人以为掌握几个公式就够了，实际上，背后的逻辑更重要。",
+ "image_failures": [],
+ "images": [],
+ "publish_time": "2025-04-20 07:00",
+ "relevance": "relevant",
+ "relevance_score": 9.4,
+ "title": "投资测算：五个关键公式和三大底层逻辑（含案例）",
+ "title_hits": [],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487903&idx=1&sn=bee693bce65c51496a292d605b487bea&chksm=ce114ccaf966c5dc3b8120a2582b9ea96d2dd0e8ea592a54d051ada69b471a4a69eb17ee4407",
+ "word_count": 1172
+}

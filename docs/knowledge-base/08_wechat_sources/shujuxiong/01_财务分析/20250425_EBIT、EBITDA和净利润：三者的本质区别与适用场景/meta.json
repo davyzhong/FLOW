@@ -1,0 +1,32 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "albums": [
+  "财务分析"
+ ],
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "数据方法与工具"
+ ],
+ "collection": "01_财务分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm32jKOMrf9bwu1H9iallkK7aiaVUXxaG5xzsIFoeJibgUIdTjIp08Movxc2tYzWv40vlPKTwrQticfNVg/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T11:33:08+08:00",
+ "digest": "“真正的高手，不是看一张报表，而是看穿数字背后的商业逻辑。”",
+ "image_failures": [],
+ "images": [],
+ "publish_time": "2025-04-25 07:00",
+ "relevance": "relevant",
+ "relevance_score": 23.0,
+ "title": "EBIT、EBITDA和净利润：三者的本质区别与适用场景",
+ "title_hits": [
+  "净利",
+  "利润"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487942&idx=2&sn=0dba2940b5704b1a76835cd1531f7ec1&chksm=ce114c93f966c58551e1966ba0d4f1d34a5a1c82dd902bb0f9bc2b4a17f27343bb4fa435a3b9",
+ "word_count": 1721
+}

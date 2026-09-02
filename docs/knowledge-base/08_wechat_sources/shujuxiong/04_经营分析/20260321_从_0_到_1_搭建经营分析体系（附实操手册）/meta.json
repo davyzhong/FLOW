@@ -1,0 +1,107 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "宋岳清",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "经营分析",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2mNH1icdFs6mZfoJWRgpAadxXFKq89fQCITGWN7w99Z8GRz9hriaml0ku08VibmoUybW9eSCwpduI9w/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T15:41:44+08:00",
+ "digest": null,
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.jpg",
+   "sha256": "5013c9bbcbc350ecd735840141340e714f579db828f99397968b24cbcf93894b",
+   "size": 120873,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2mNH1icdFs6mZfoJWRgpAadjHhPGaNl7aGniccvBmpKXy42GNUep6UAuCHc8Ew5Dks0psYje0staHw/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img002.png",
+   "sha256": "e5e5dae32b72d06b5655ef4295ee4afb6616a08fe4d3111628730179a489bc2e",
+   "size": 540889,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2mNH1icdFs6mZfoJWRgpAad9y9tuJYnEBrnmgRcYb0QD0kfLqgx36y49iabYLTQDa2e2R1LfbqqeeA/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img003.png",
+   "sha256": "dcbb8892672642e1f03d1f2cae3a8899dd0d7ad6a1c7dbf5fd4c1e4dd5490f6e",
+   "size": 379161,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2mNH1icdFs6mZfoJWRgpAadu2MN1NFSneMkJPWUzkKwQp113IKcxVFvBADg6rib9uPfWByB9ZsZY4g/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img004.png",
+   "sha256": "acaad6f79a43aebf3389f04a638527bca05ac9adfa721fcd34a6ee6bb327c5fb",
+   "size": 528379,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2mNH1icdFs6mZfoJWRgpAadw4jBGljwXcyJ8mAkJl0rxcn5euq15ichefbUdc0pjmCpVAhbpHhOYFg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img005.jpg",
+   "sha256": "56643d5deb1ce725bf2966370134b37a37e8ed3b69c25c251dc2a26b363e9006",
+   "size": 258245,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2mNH1icdFs6mZfoJWRgpAadumFUDSSjW6fWiaC1kT5UJITmTWwSovGsQpwhRdMNQZOVRgUn9CGFgjg/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img006.jpg",
+   "sha256": "02395bcb6ca31013a13bf061b729c1904dcc6fd4a6db47ddc8fe78da0dd6fefa",
+   "size": 253223,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2mNH1icdFs6mZfoJWRgpAadWH4rBicVxE0IhFln8a7KRqgRZdfkFJK7hX1EVug78EBNoDVicicbl4RIA/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img007.jpg",
+   "sha256": "b8324a54e1a189cfecf930b00ceb4363071ce89e5029b32c4a6508ab8b3e8285",
+   "size": 266850,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2mNH1icdFs6mZfoJWRgpAadX3zSXk66gFZrdaQ3n81ibibzQdnW4xZQmmDdbbZdlJg8DQkP7vBWBeUA/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img008.jpg",
+   "sha256": "5efdae33f7fcb85cc4730bf17ce6673d241c630b9990b4303de203a2d49d9acc",
+   "size": 256554,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2mNH1icdFs6mZfoJWRgpAadKvGulKvSicuKnFQhahhvoLD51GOqicwzG4j4fUYBvDwGPTuaF9aiavDJQ/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img009.jpg",
+   "sha256": "5ea0896750bf6ab867310287a010ab606dd8f1119c056db3150a358871f4d65b",
+   "size": 231099,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2mNH1icdFs6mZfoJWRgpAadTra9uhbbl6Y7iae48xL7Uoe1cnnBq2PvncFveZs0pVDNsiby0sG3BUiaw/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img010.jpg",
+   "sha256": "cc3518bacd829f55b4009d33c771fb6fdbe4058f18f31e22e1c872caa2fb1630",
+   "size": 232194,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2mNH1icdFs6mZfoJWRgpAadD8qnb2wV6ZX2ZSZQ22uciaq0XGT6gkJsl8cfQqCz2VdafLuGYDaPhgA/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img011.jpg",
+   "sha256": "e1149b071a88696e1d59033351d8a2c33f10947c021e82493ce57e728fa9a551",
+   "size": 154124,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2mNH1icdFs6mZfoJWRgpAadTAGNxk8K2F4oeTpNtQbZeicrz79ZVtFPGMQCRkmc1LNOrXk1MYYLO2Q/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img012.gif",
+   "sha256": "b4aca0646dcfe1c8b2f78da64d4d54662b87130be9aea013e2df4aaec766b641",
+   "size": 360914,
+   "url": "https://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm0ggtbjwD1X60MpWgY4SKeONArzwfSe5niaXXOeHH88HIFI0gZqbZYxvxG3fXVVtV8ibkS077R9v97w/640?wx_fmt=gif&from=appmsg&wxfrom=5&wx_lazy=1&tp=webp#imgIndex=12"
+  },
+  {
+   "file": "images/img013.webp",
+   "sha256": "dd2075b1b00a4574720162b0745f3acaed10127e8cac5ebb2f68f5276faa264d",
+   "size": 34762,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3iaSHqalq8kvc85BOn57icI3DYf4hx648U1MW1vUEsgmH7cm1ESpMT10qpTmibX5dQIEHT2icWAJWJPw/640?wx_fmt=other&watermark=1&wxfrom=5&wx_lazy=1&tp=webp#imgIndex=13"
+  }
+ ],
+ "publish_time": "2026-03-21 14:12",
+ "relevance": "relevant",
+ "relevance_score": 9.6,
+ "title": "从 0 到 1 搭建经营分析体系（附实操手册）",
+ "title_hits": [
+  "经营",
+  "经营分析"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247497621&idx=1&sn=b4f09a54577ef38b20ed1409fb7c3b14&chksm=ce12aac0f96523d643da7c45b6564b69557997bfca82670c044a880f6243983d2df28512891a",
+ "word_count": 115
+}

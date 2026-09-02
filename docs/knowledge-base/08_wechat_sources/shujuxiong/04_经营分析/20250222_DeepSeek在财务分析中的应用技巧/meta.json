@@ -1,0 +1,73 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0QOEwLicjuYJzxd0icLibfDEibykqD84kQdgV2S16la4NbeGiaFHTwErvbso0BUkjOJib7asu3PxDbzibpA/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T14:02:57+08:00",
+ "digest": null,
+ "image_failures": [
+  {
+   "error": "image too small (145 bytes)",
+   "file": null,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0QOEwLicjuYJzxd0icLibfDEibMKbEzIFsjNSGDswwKxOeF7pSKMOVZkHf2zAEYcsC8NRYd55XciaoIdA/640?wx_fmt=png"
+  }
+ ],
+ "images": [
+  {
+   "file": "images/img001.gif",
+   "sha256": "6e5826c75dc6fda91cbe4b70102063ab7e99520bd66704863d50bae65f33298d",
+   "size": 7063,
+   "url": "http://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm1eCHSDQ1FT41crSwIq5ZQuez5bEOnUCzPmARmhic0lm221AAwtWTwHosaT1CiaGoiaicgCSV7KmQRnJw/640?wx_fmt=gif"
+  },
+  {
+   "file": "images/img002.jpg",
+   "sha256": "36daf06d98d90ec08afc4637c91c724150f6b9f38e3625331892936d3b3f229e",
+   "size": 80595,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0QOEwLicjuYJzxd0icLibfDEib0FxAuia3fOagDFCdIJpZFrQYdugyhrcpNcNGvQ8JiaLLcf90U3ZkTiaUA/640?wx_fmt=jpeg&from=appmsg"
+  },
+  {
+   "file": "images/img004.jpg",
+   "sha256": "6649736bab2280ed5132e33735cc9d46299bb2c6f3732ade220fa76b440d6d56",
+   "size": 126912,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0QOEwLicjuYJzxd0icLibfDEib6WZOAD3ibBQclX9zQWMQnibgfMCcPBFnRicUqFbpJa7gf6YBBO6dKsRibg/640?wx_fmt=jpeg&from=appmsg"
+  },
+  {
+   "file": "images/img005.jpg",
+   "sha256": "58398d65cd83bc0004c4f7b9b7c7015089f67baf78817bbf787452168e84777f",
+   "size": 84060,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0QOEwLicjuYJzxd0icLibfDEibjETnrOXFocjKvicAEdFiaDScrWriajXibBEhVDdCBdMWBHuYSfib0cKUricQ/640?wx_fmt=jpeg&from=appmsg"
+  },
+  {
+   "file": "images/img006.png",
+   "sha256": "d1b0cd9f03529ec723679a1fffe1d7de91fa74c40d0a017aad1c3744d502ac5a",
+   "size": 218837,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0ubjMQ6jCibVGyIJyAHzEZuODhO3o9CsepGcP4mEtYwz0sUqngcrZdtASdyCNNkCJfgRWZkLI7dyQ/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img007.png",
+   "sha256": "9242d1c6882f2597797438f3e4519df1d2cc64f3d36e0fdb8c97e221666b2277",
+   "size": 32081,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0NcBX8ytIOncGjEzshuRibFIpZeKVBRyBQTqXkEPa9wMAvJWuXIKm136m1pUl5cLCycRtJSrp6TmA/640?wx_fmt=png&from=appmsg"
+  }
+ ],
+ "publish_time": "2025-02-22 07:00",
+ "relevance": "relevant",
+ "relevance_score": 20.2,
+ "title": "DeepSeek在财务分析中的应用技巧",
+ "title_hits": [
+  "财务",
+  "财务分析"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487197&idx=1&sn=bcf9285933e5c724ec7104dd48a7dae8&chksm=ce115388f966da9ee3edbe5b59bb815a00c4507a3d960823a7d50ed3a8ebe96907941073cec8",
+ "word_count": 2515
+}

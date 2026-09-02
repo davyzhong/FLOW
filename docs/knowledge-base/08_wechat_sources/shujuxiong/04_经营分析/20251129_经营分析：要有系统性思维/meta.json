@@ -1,0 +1,104 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "宋岳清",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3UFsaSSxGU4GHI8dcjcW2yA5P2yoX0X9Pl54tFcHOz3S4h3NxHb5Mf96yXOH6nLSw9pfISVYTic2A/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T14:26:02+08:00",
+ "digest": "\\x26quot;利润下降了,我知道是因为成本高了。但我由于什么高了?是采购贵了,还是废品率高了?还是因为销售结构变了?下一步我们该怎么办?\\x26quot;",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.jpg",
+   "sha256": "9512a4871a44e1da97737a6738499394f799920aa3806d566afededf81a76e5e",
+   "size": 157270,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3UFsaSSxGU4GHI8dcjcW2yqsmzaLbJKMXsvRNhX0mM85COpA6Pt5ibG1wib6Vbbh8uOlwkohKYlOiaQ/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img002.webp",
+   "sha256": "7a171fab19428a7c5efa2ecdb49b46f9b989dbf06a57350f239c0b8f60cb6102",
+   "size": 101644,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2mNH1icdFs6mZfoJWRgpAadzPwzpg4nrSiaPI2vA0oUOERtd5SEicCb1wnb9014buv8j6b4u4PxltWA/640?wx_fmt=other&from=appmsg&watermark=1&tp=webp&wxfrom=5&wx_lazy=1#imgIndex=1"
+  },
+  {
+   "file": "images/img003.jpg",
+   "sha256": "94b8704e2d39ba56e15443d7e8d955c48e7624ecdf1249f2e2bf66aa54c32abc",
+   "size": 186945,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3UFsaSSxGU4GHI8dcjcW2yib1jS6oTk4jicy7zjrwBHa2UNYTl24Z7g31MD5BF73AKHRg7FuicEDLsQ/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img004.jpg",
+   "sha256": "895bd1a12f672ade0b2c7f9b12c5022690163507f52d76113f9df16b0742a867",
+   "size": 183625,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3UFsaSSxGU4GHI8dcjcW2yNN1j7vIiaJm4FR2sYoSmmPUPM1xQOxSgiben54YrUpySDafHH37sTMkQ/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img005.jpg",
+   "sha256": "47414c63f8ef65c78fac31b305fbc0ea11714141498ed573f4e52f7be4d1c83d",
+   "size": 224231,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3UFsaSSxGU4GHI8dcjcW2yibznKeg7frDcCdLFv0aBF0Yxl3XjJiaRuIIz6NZA8X3wGCcp54WH53fQ/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img006.jpg",
+   "sha256": "8862ed6c8036d3a5580dbec3ae52aefe6e1d55b1aee491935ff6412798c7c80b",
+   "size": 62437,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3UFsaSSxGU4GHI8dcjcW2yNCNohknscZQda8DaaMQlpdib8jtte8uXEZfcNqoY5rty7TVUY856b5w/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img007.jpg",
+   "sha256": "5a944b783db6b6ec2705bc229753c5fdc549958da332c1e5e8194c5b2fd6b1b4",
+   "size": 286942,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3UFsaSSxGU4GHI8dcjcW2yaSicqqbSO1QoZrc1uzrzeABL27Rv2ibb8KS0MFib8gLZmiaIyVNgicfqWzw/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img008.jpg",
+   "sha256": "d41c85b6bd3773cc0dbd3f68e26fa4dbb2a848e0ce9fc3c18b5625be41042253",
+   "size": 163337,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3UFsaSSxGU4GHI8dcjcW2ywwPprkibPIQcJibmmpKMmic9D6iaBn6WtNUEb5qVPOLnNmfiaNuyH6dM6xA/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img009.jpg",
+   "sha256": "191b858d940d97cfe87259a23c3db1e5b5742335f8e164aebbe047ec57e959ed",
+   "size": 125067,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3UFsaSSxGU4GHI8dcjcW2y4guJ4vERejg0dfqsH9hiaYdXCLB4sdiaiaKlk7fsN7Dfy2QPia1q7ZibAjg/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img010.jpg",
+   "sha256": "9f08a407fa1da0aab08903b11f4dace44e5069e0970b841c7010c2a95c5472ca",
+   "size": 147415,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3UFsaSSxGU4GHI8dcjcW2yxfbGicHfZjhrknFsLiaxjgfGPzash8ZImxD86kg9yvUibvicalRZnFibf3Q/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img011.jpg",
+   "sha256": "20b9f920dc77732eb280b34f9805c14ae4b66202012c78db6ae00ec10ee62917",
+   "size": 61744,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3UFsaSSxGU4GHI8dcjcW2yXQJCKCVI8KyR95WNnSpXibRrib1WwCWU5K909ibyytN6zYlqZUbwtxIow/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img012.png",
+   "sha256": "b37ab284315065a96860dc3ed5741355a76245c77b46b61bc08cfb15b17737f6",
+   "size": 226613,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2EUv3wCeW43Ulc9ibbtgEN7hT3ZZCibRsj3ZHiaIW0ZAicp14Eonnva9RicZq8k0OUhY1dteMNLUmra7Q/640?wx_fmt=other&watermark=1&wxfrom=5&wx_lazy=1&tp=webp#imgIndex=11"
+  }
+ ],
+ "publish_time": "2025-11-29 11:00",
+ "relevance": "relevant",
+ "relevance_score": 13.0,
+ "title": "经营分析：要有系统性思维",
+ "title_hits": [
+  "思维",
+  "经营",
+  "经营分析"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247492633&idx=1&sn=0bd98dd834e16f9a415cb8d25b260150&chksm=ce12b94cf965305a44b513216fcc45bec626107fcfaadec5594ad8800278b192e43d25a680c4",
+ "word_count": 225
+}

@@ -1,0 +1,31 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1pYPLB6yiajkMGkrzB5h3TUdNuGNYewxbGRuKfFmUyE3cvzohwywrURicCvYvuOX7Nbr2jCODVe3Aw/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T14:06:50+08:00",
+ "digest": "财务思维是管理者的“操作系统”，没有它，再炫酷的业务 App 也跑不动。",
+ "image_failures": [],
+ "images": [],
+ "publish_time": "2025-06-02 07:00",
+ "relevance": "relevant",
+ "relevance_score": 30.0,
+ "title": "管理人员应该有的财务思维",
+ "title_hits": [
+  "思维",
+  "管理",
+  "财务"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488248&idx=1&sn=d2ef46e04fa94a7c3899d18397adc72d&chksm=ce114fadf966c6bbb88e99c77cef3bb6c282fb602ed492dbea4d32e41c69e931bb9d54067677",
+ "word_count": 1493
+}

@@ -1,0 +1,37 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "03_财务报表",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3WwWxW49Q05oNm1ic1HO1nqprCMBGEIQZxC1Yp7dAN82OKgtz4ByYSKCVadh4dMSP4EbgMA7iafDEQ/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T13:57:22+08:00",
+ "digest": "成本核算不仅仅是“算账”，更是企业经营管理的“放大镜”。只有建立高效、透明的成本核算体系，才能真正助力企业降本增效，实现可持续发展。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.gif",
+   "sha256": "6e5826c75dc6fda91cbe4b70102063ab7e99520bd66704863d50bae65f33298d",
+   "size": 7063,
+   "url": "http://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm1eCHSDQ1FT41crSwIq5ZQuez5bEOnUCzPmARmhic0lm221AAwtWTwHosaT1CiaGoiaicgCSV7KmQRnJw/640?wx_fmt=gif"
+  }
+ ],
+ "publish_time": "2025-03-20 07:00",
+ "relevance": "relevant",
+ "relevance_score": 27.6,
+ "title": "从车间到报表：成本核算全流程",
+ "title_hits": [
+  "报表",
+  "流程"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487725&idx=1&sn=f45c6f108bed057b35ea37b711da91a6&chksm=ce114db8f966c4aeec31dde374800fb99aceef8eac94e7c75b83f1b66f42145abc4a45e74d76",
+ "word_count": 2248
+}

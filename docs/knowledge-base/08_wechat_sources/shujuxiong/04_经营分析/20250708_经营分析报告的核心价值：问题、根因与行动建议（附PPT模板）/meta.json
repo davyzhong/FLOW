@@ -1,0 +1,40 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1zFJjLzv5bkf3Hia4NMCZn770UBPiaMm7FRIcpuE3c3oG7OAgVicrjZZDHovDU2oibNick7T8nq6J3qfw/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T14:08:17+08:00",
+ "digest": "财务BP的核心能力，就是把“数据”变成“洞察”，再把“洞察”变成“决策”。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.png",
+   "sha256": "ee73345fda39dbc40717d6762c61ccbd3ec58470d78a1fa5ccb201a047bc1215",
+   "size": 20444,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3Kk4Bf7O52PhXcFUYsJODrNszQPw6iazcsmCc4mBaMd8EqFxAqiaRdY33baiaicmENooUQicFWVOfI1Sg/640?wx_fmt=png&from=appmsg&watermark=1&wxfrom=5&wx_lazy=1&tp=webp"
+  }
+ ],
+ "publish_time": "2025-07-08 07:00",
+ "relevance": "relevant",
+ "relevance_score": 21.2,
+ "title": "经营分析报告的核心价值：问题、根因与行动建议（附PPT模板）",
+ "title_hits": [
+  "PPT",
+  "分析报告",
+  "模板",
+  "经营",
+  "经营分析"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488569&idx=1&sn=b19ddc1219c01e2cf2f9e7486c45fe51&chksm=ce11496cf966c07a5c824531e20083bcaa2ce63c437e584b627c1be2db4ef295b3d66dcf9d1a",
+ "word_count": 1788
+}

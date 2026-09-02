@@ -1,0 +1,60 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "数据方法与工具"
+ ],
+ "collection": "03_财务报表",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2LpvTuDtiaia5AWp3SSsYUJjicy1Eh0g8AaDDjrDNYcGqAreic22VCzMbTABv97IK27XD6m5GVyBqibGw/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T13:56:57+08:00",
+ "digest": null,
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.gif",
+   "sha256": "6e5826c75dc6fda91cbe4b70102063ab7e99520bd66704863d50bae65f33298d",
+   "size": 7063,
+   "url": "https://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm1eCHSDQ1FT41crSwIq5ZQuez5bEOnUCzPmARmhic0lm221AAwtWTwHosaT1CiaGoiaicgCSV7KmQRnJw/640?wx_fmt=gif"
+  },
+  {
+   "file": "images/img002.jpg",
+   "sha256": "62ba0cdd9a5325175d28e1e7989ac173bf81e68c4b7bedb92d3c09abae1526de",
+   "size": 58754,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2LpvTuDtiaia5AWp3SSsYUJjnic04zibjthzRkkO4GCRO39HRYsm0zpwbULFbtrC8uIA6lQK0epxGgDA/640?wx_fmt=jpeg&from=appmsg"
+  },
+  {
+   "file": "images/img003.png",
+   "sha256": "580e0e3e4b651e0bbd47ad5ed05c8d167ecb69a7b8f78ab5d36a301ebe266641",
+   "size": 203169,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2LpvTuDtiaia5AWp3SSsYUJjVVtVDricgEOGTqduleQMfVBTiby2cwMbMPwOk8QFn6LMibgicv3UtuguRg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img004.png",
+   "sha256": "88a8535897f5edc9c1b1d6233d6f593d42f5acfbaa2107cfc4b76d193d6ce2a5",
+   "size": 546175,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2LpvTuDtiaia5AWp3SSsYUJjp4G4mk5hyp15XWU30ibmuLW2Ov03OThFRkml4NiaBn3B2oTYKicF137Sw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img005.png",
+   "sha256": "9242d1c6882f2597797438f3e4519df1d2cc64f3d36e0fdb8c97e221666b2277",
+   "size": 32081,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3reShzkZgWxL12Arp6VBAatSic8mPxO6XqrSGAJtAEv8xBUd88alswdqPWSfkadiaw3twE8oGT5oug/640?wx_fmt=png&from=appmsg"
+  }
+ ],
+ "publish_time": "2025-01-30 07:00",
+ "relevance": "relevant",
+ "relevance_score": 18.0,
+ "title": "净利润，不能只有数量，没有质量",
+ "title_hits": [
+  "净利",
+  "利润"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247486838&idx=1&sn=bc3abc65b8a098304ea32036c417124c&chksm=ce115023f966d93528bab36057738aeffc6c67efbaa4fe52505fcfcde393c96409043f5f5e2a",
+ "word_count": 1725
+}

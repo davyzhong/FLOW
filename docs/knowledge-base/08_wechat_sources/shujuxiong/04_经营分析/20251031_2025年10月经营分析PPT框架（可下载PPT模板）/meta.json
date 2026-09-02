@@ -1,0 +1,109 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "宋岳清",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "经营分析",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1Ks7n01jKFm25GdibXlyReBSzlFEX2NdEOk3fGtme6RUMBVGb9P8oDrR6WCicDwXVNic8LibicB9uLpJg/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T14:16:27+08:00",
+ "digest": "0月还剩最后1天,全年窗口只剩下62天。这不是简单的月度汇报,而是一次\\x26quot;双线并行\\x26quot;的复盘与预演:一条线把Q4目标打穿、把现金收回口袋;另一条线用10月的真实经营数据去锚定2026年的预算假设。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.gif",
+   "sha256": "0b4b2d765c1a964aa0de1e709ad41326d03a1a707426c0f73da7c63f470de5e7",
+   "size": 6180,
+   "url": "https://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm1Ks7n01jKFm25GdibXlyReBd2EnrcjvLod2PBPZlKLreCv9FcouQM3LTBBa8XXCSgqZBbK9xib0S8w/640?wx_fmt=gif&from=appmsg"
+  },
+  {
+   "file": "images/img002.jpg",
+   "sha256": "37de1e76b5c60932ebd334899c257fb9633c9339acea42865552ceeccbd18ad7",
+   "size": 115875,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1Ks7n01jKFm25GdibXlyReBCAACEAFdPK3eqYxBYU9G9v3X00356UCXY6DM8PFvFm72GxLRnKxWKw/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img003.jpg",
+   "sha256": "c2e912162565877f6ac18b3ce268f4e6178ac7e921831d16112da0e71eda2b94",
+   "size": 164838,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1Ks7n01jKFm25GdibXlyReBCYKsh4RgFxpFK2knN1X9Sn84NcicdlibTJLBPRQ1kCKkIufuwV8RTxZw/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img004.jpg",
+   "sha256": "4101e7cb451905f2a9afdf675f70c2a7b43d41ed5a0a606fff36a5aa71c76c63",
+   "size": 184252,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1Ks7n01jKFm25GdibXlyReBapPmRxSxxr1RErXCVDbZzx1oYg7gSJpVvJlRSCs1XGHDsicsoSk90ng/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img005.jpg",
+   "sha256": "e07737e1345455342f4d9ef072a67b04f64b559f6a1edaf44b3bb6d61eb47d09",
+   "size": 154990,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1Ks7n01jKFm25GdibXlyReBdice1JpC21zQqBevR40T3rK1ME1SOGNDnEZa3jqcSaM5fsmu34skgQQ/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img006.jpg",
+   "sha256": "0560f41b6cbd358547ef7125cf7861e20b7b22dbc0febeb76c5a9a6058b1f4dc",
+   "size": 121964,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1Ks7n01jKFm25GdibXlyReBj7kevGlY0N6zj65NLWCWbEicUc5u8sTEImG0PUjF3OOL4F4JicdNJQdA/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img007.jpg",
+   "sha256": "363d785d96f44854967cecb473b3b60b51adf603385adb832cdcec0d5a199c0c",
+   "size": 111816,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1Ks7n01jKFm25GdibXlyReBH1Slibiaq5rCP9vAAhMgmenEwoxzdn5b0LFJY6UhhF4ADCCLNrqIOiaLg/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img008.jpg",
+   "sha256": "ec4a4a0b35eaa29b96abe61ee5165be8411d1be75e1f41aaa343bd359177ac99",
+   "size": 122343,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1Ks7n01jKFm25GdibXlyReBY4aOK6icDfVPaXlftypsw1YkcUROP80fqGDTIXLr5KibzuuHG3pBib2Fw/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img009.jpg",
+   "sha256": "b9d25f34fa6db5ef70ba95ab17c318c87a929731e003d3b4dbb53189cc7fe7ee",
+   "size": 97190,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1Ks7n01jKFm25GdibXlyReBxHlb9AomH6qHyuXiaPmTzvanib8v2QT1ebjvq6gq2zMU7xmk7mtFSwOQ/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img010.jpg",
+   "sha256": "18dc7fe92ba744ffcb98f297d67cbc48d1367ef7335141af9b3113d6f05a4dc6",
+   "size": 83038,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1Ks7n01jKFm25GdibXlyReBqGEFX2tsTzWcVUn6uicIo8T1lxiaCsuy6ntc8e6pZw8fk1zGMTEBf0yA/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img011.jpg",
+   "sha256": "3cf21e564cefae4d7786cd2eef37f61ad4531e4b6537119cfc0150b582e7557f",
+   "size": 86694,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1Ks7n01jKFm25GdibXlyReBZ52cslrhBKaoAvWvNgSFzuhUbS3UV8hrsTswdc9AROibvX45fkhLA0Q/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img012.webp",
+   "sha256": "31c3b15dd89c65d01bb98b6e724ab8c7aee7c1224f42e0bd972f321e4754b233",
+   "size": 34816,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm16WU16SCNfLmguVuialG4uskl28A2iclRF2j9niaCjgM6hG3CrjtYIibsAia9F0RLbrs0ibTsmrIgbSmow/640?wx_fmt=other&from=appmsg&watermark=1&tp=webp&wxfrom=5&wx_lazy=1#imgIndex=10"
+  },
+  {
+   "file": "images/img013.webp",
+   "sha256": "43f440e44af733971fe4cb7cfb7f2347f3baec68a231cd3224362d8cf9e4e3a1",
+   "size": 34858,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm16WU16SCNfLmguVuialG4usnMWr6824Gzn1kdiaH5kC5sG5Mq0gW2qZ1EjsQGmaWa085c5Wib3nwcRg/640?wx_fmt=other&watermark=1&wxfrom=5&wx_lazy=1&tp=webp#imgIndex=11"
+  }
+ ],
+ "publish_time": "2025-10-31 07:30",
+ "relevance": "relevant",
+ "relevance_score": 11.6,
+ "title": "2025年10月经营分析PPT框架（可下载PPT模板）",
+ "title_hits": [
+  "PPT",
+  "模板",
+  "经营",
+  "经营分析"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247490912&idx=1&sn=cf1137acd60ca472225fd4be640902b4&chksm=ce114035f966c9234aacf69bc249082348dea46b867b56ad5d2bfebe930ed0407af12d752e51",
+ "word_count": 145
+}

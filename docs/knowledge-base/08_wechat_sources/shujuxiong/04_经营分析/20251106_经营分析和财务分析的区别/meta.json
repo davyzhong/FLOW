@@ -1,0 +1,104 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "宋岳清",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1uw5R0G8ytatYpXqO5kqUoGdu3SapCo7faTXl0Pfh8FYsYj5Dl3TMuAhV5SgtCfXE0TOFANMkq7Q/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T14:17:52+08:00",
+ "digest": "\\x26quot;经常有人问我:经营分析和财务分析到底有什么区别?是不是做了财务分析,就等于把经营分析也做了?\\x26quot;",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.jpg",
+   "sha256": "235113d35dd72e93483388ea6f999636fe501f744535f107c2e798bac74c8907",
+   "size": 148891,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1uw5R0G8ytatYpXqO5kqUoiasCUuNVWjNkRwIr1shW9zb9BFrEwawKcLrjxsYVA8N3FLjvemlhk3Q/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img002.jpg",
+   "sha256": "e428abf0b4176599871fc64c6d64d6bd80f9ef330601b366faa8d1c062fd743a",
+   "size": 125481,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1uw5R0G8ytatYpXqO5kqUohEEyhP56UgVu32Wn7AWBkDnAte5vynoHZlGdGBDv0C3QTicWV4zQwibQ/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img003.jpg",
+   "sha256": "dfe62932f80b6d4d86880906c607ed2ceb2205b3a936c24f55a426741f320adf",
+   "size": 106490,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1uw5R0G8ytatYpXqO5kqUoepkibO73zOQUIkFYLTpooZtDO6DY3mugEsxbYq6Mlyaw9f1o72ytSnQ/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img004.jpg",
+   "sha256": "c599ddb6203223eebb636c5162237d650a5ad6b185bcf9f1ab7cc45ab9b681d9",
+   "size": 97977,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1uw5R0G8ytatYpXqO5kqUo151KA9PiaYuCbyibCTp2UblK2ZR2HicRpC5loqmPTghVbSkO1blGdYQyQ/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img005.jpg",
+   "sha256": "bf0de389fe02296400f029d94540469d3531698442d42e849ad42c012e169710",
+   "size": 125575,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1uw5R0G8ytatYpXqO5kqUoZMSP3Eh8g2YQEtic4AibuLYmiaY5lqFg4fruwqwuyG7wqZ9hWO9HS7vqQ/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img006.jpg",
+   "sha256": "9f5a91a3d9ff49c5694d96e2565aef6b1463c4973a515b95cfcf57880e6180c8",
+   "size": 183260,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1uw5R0G8ytatYpXqO5kqUoEENmaFxXGl6v6voc7vskpSo0uBguXEP86chVs8Oz8q9wQgWJEaYPgA/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img007.jpg",
+   "sha256": "8bbb354a1feeb7b0d011683c76c5cb2e29b2b18490a9b6dc997346655020e419",
+   "size": 153285,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1uw5R0G8ytatYpXqO5kqUowV662UWayPT6xZmxpjibJiaVhNbMU1IGDV8th0BolUUAeVKibPicpcturw/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img008.jpg",
+   "sha256": "9b73fb4ec3c727019d9d99e515a02456dfd0d3a5a06dd2450947a882311959de",
+   "size": 104735,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1uw5R0G8ytatYpXqO5kqUoqtPZPyqxcWibQ5dJMJw2dvCJhLWlgK2uW5Gez6kgspmoLHGgnjHI2HQ/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img009.jpg",
+   "sha256": "8a798864d3462220aef2933be043c18f020d0cd749db3244dfbd43a5b84c63d1",
+   "size": 56030,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1uw5R0G8ytatYpXqO5kqUoAdLbibL5jH6xebEia34QiclefKYZsOqZVyFMx96giccA3wRFOibQyfWcXFQ/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img010.webp",
+   "sha256": "63873a472f9742f7545438e0b5705278b77ce49b5a6a98b16fc7250e242f864f",
+   "size": 35460,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1Ks7n01jKFm25GdibXlyReBj1iaCibnpd1iaI7pz0icN9asqpz51FDmqLBL82KFYFF8hbibWLqKRriahgqA/640?wx_fmt=other&from=appmsg&watermark=1&wxfrom=5&wx_lazy=1&tp=webp#imgIndex=10"
+  },
+  {
+   "file": "images/img011.gif",
+   "sha256": "b4aca0646dcfe1c8b2f78da64d4d54662b87130be9aea013e2df4aaec766b641",
+   "size": 360914,
+   "url": "https://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm0ggtbjwD1X60MpWgY4SKeONArzwfSe5niaXXOeHH88HIFI0gZqbZYxvxG3fXVVtV8ibkS077R9v97w/640?wx_fmt=gif&from=appmsg&tp=webp&wxfrom=5&wx_lazy=1#imgIndex=12"
+  },
+  {
+   "file": "images/img012.webp",
+   "sha256": "a165c2d6fa01e1ba057a0b5c712caaa06a022cd945c3f76f92bd8b3bc469e650",
+   "size": 34886,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0ggtbjwD1X60MpWgY4SKeOJobUo3XQwXByVuK4nHiaibTqDKU37Pqs7JyRQ1Rc5jKRr1PpqPl7INqw/640?wx_fmt=other&watermark=1&wxfrom=5&wx_lazy=1&tp=webp#imgIndex=11"
+  }
+ ],
+ "publish_time": "2025-11-06 07:30",
+ "relevance": "relevant",
+ "relevance_score": 16.8,
+ "title": "经营分析和财务分析的区别",
+ "title_hits": [
+  "经营",
+  "经营分析",
+  "财务",
+  "财务分析"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247491196&idx=1&sn=bb5a90e6109b779e7fad7582c9e5eb8d&chksm=ce114329f966ca3fb05629665b6dc9bc16a1c76193fe995af16653ffce2101492b465138b7d7",
+ "word_count": 199
+}

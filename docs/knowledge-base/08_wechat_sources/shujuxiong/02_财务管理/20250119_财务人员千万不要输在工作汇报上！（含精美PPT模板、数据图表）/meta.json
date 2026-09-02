@@ -1,0 +1,66 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "albums": [
+  "财务管理"
+ ],
+ "author": "数据熊",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "02_财务管理",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2TwWfBcwdd22LmyGDbAoEKLNJh9SMuq8OnDVsgIA7ISVz93iacFRust4CdBoXoHZ9miaTPO6NsDUYg/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T12:02:14+08:00",
+ "digest": "“汇报的目的不是展示数据，而是让数据讲述故事。” — 安妮·D·希尔顿 (Annie D. Hilton)",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.gif",
+   "sha256": "6e5826c75dc6fda91cbe4b70102063ab7e99520bd66704863d50bae65f33298d",
+   "size": 7063,
+   "url": "https://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm1eCHSDQ1FT41crSwIq5ZQuez5bEOnUCzPmARmhic0lm221AAwtWTwHosaT1CiaGoiaicgCSV7KmQRnJw/640?wx_fmt=gif"
+  },
+  {
+   "file": "images/img002.jpg",
+   "sha256": "6cb783304beb7d71edc0309981c4a672fb6b415c64526540b72c62bb79c6b11a",
+   "size": 25289,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2TwWfBcwdd22LmyGDbAoEKG3QiaFiaA7UqR95mXcEibIVcq3KmFibm5Ls4L8AiaoFo1AqfGZkFA8XqicwQ/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img003.png",
+   "sha256": "7c00161cf9ea99bd31d6362eced14bed660236b86998983b3de530f5672c07a7",
+   "size": 377761,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2TwWfBcwdd22LmyGDbAoEKiaG3zEXONZO98lAiawQ6ClF4GvzTya2F12akS4ibUibZib7xVjIeXu7hv4w/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img004.png",
+   "sha256": "6bc681b3242ddd55ab9f7c46443db5f8eabdafe42a637a38778d60cadbd0f69c",
+   "size": 168443,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2TwWfBcwdd22LmyGDbAoEKzoo3VjEEiayibQLNl5dDAzLCmfVjk2ibjM9pXTzgOHXibc8rLNkUpSiaibWg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img005.png",
+   "sha256": "26255ef652feb5412b958d20bbe5fed9cf76cd8c3b703228833c716955a5124b",
+   "size": 205523,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2TwWfBcwdd22LmyGDbAoEK7teMQfwSwgWq39icIChQoLy6GAMGeLxhl57QkDzgWrl3pSs1iadxbgibQ/640?wx_fmt=png&from=appmsg"
+  }
+ ],
+ "publish_time": "2025-01-19 07:00",
+ "relevance": "relevant",
+ "relevance_score": 11.4,
+ "title": "财务人员千万不要输在工作汇报上！（含精美PPT模板、数据图表）",
+ "title_hits": [
+  "PPT",
+  "数据",
+  "模板",
+  "汇报",
+  "财务"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247486652&idx=1&sn=668ab0cf6b9cf73afc3ab4e8bccadfde&chksm=ce1151e9f966d8ff793cd508fac29e47a3396e5715c4fe231352b1a3425eec1fe0d61066813e",
+ "word_count": 1768
+}

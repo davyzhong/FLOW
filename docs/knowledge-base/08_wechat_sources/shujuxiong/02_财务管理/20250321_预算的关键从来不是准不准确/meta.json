@@ -1,0 +1,38 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "albums": [
+  "财务管理"
+ ],
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板"
+ ],
+ "collection": "02_财务管理",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3YqyjzM0VnHlQ8eVzia0EMyAVeXatfibVYFQ1ulQPfYLfwGoDsic2OpoyInnP1SIU7kqqUtGOLUqvTA/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T12:04:25+08:00",
+ "digest": "在很多人眼里，做预算就好像是“算命”——如果最后的实际支出跟预算偏差太多，就会觉得这份预算很“失败”。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.gif",
+   "sha256": "6e5826c75dc6fda91cbe4b70102063ab7e99520bd66704863d50bae65f33298d",
+   "size": 7063,
+   "url": "http://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm1eCHSDQ1FT41crSwIq5ZQuez5bEOnUCzPmARmhic0lm221AAwtWTwHosaT1CiaGoiaicgCSV7KmQRnJw/640?wx_fmt=gif"
+  }
+ ],
+ "publish_time": "2025-03-21 07:00",
+ "relevance": "relevant",
+ "relevance_score": 8.6,
+ "title": "预算的关键从来不是准不准确",
+ "title_hits": [
+  "预算"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487729&idx=1&sn=9532d2104bd70528944ecf1a16994637&chksm=ce114da4f966c4b23b4fb0e4d9c46b0293f74d33ca86481a66a0e3fac9d86ca3f4ae8ec02370",
+ "word_count": 1625
+}

@@ -1,0 +1,74 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "数据方法与工具"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2kjJHnjnj0IJ5IbhINbBojT0lLJHRFvm62kpYs8o22icUrOH949YDMVnyK1nibIdaicUibzwObWTJaTw/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T13:59:44+08:00",
+ "digest": "对于管理者而言，只有深入理解业务活动的来龙去脉，才能真正读懂财务数据背后的逻辑，为企业规划更长远的战略目标。从运营到财务的紧密结合，正是企业基业长青、行稳致远的核心保障。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.gif",
+   "sha256": "6e5826c75dc6fda91cbe4b70102063ab7e99520bd66704863d50bae65f33298d",
+   "size": 7063,
+   "url": "https://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm1eCHSDQ1FT41crSwIq5ZQuez5bEOnUCzPmARmhic0lm221AAwtWTwHosaT1CiaGoiaicgCSV7KmQRnJw/640?wx_fmt=gif"
+  },
+  {
+   "file": "images/img002.png",
+   "sha256": "f5aeacc889efa13cb1d16144abe8d03ae2789a684fbf15daf830f1634d4785ce",
+   "size": 244890,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2kjJHnjnj0IJ5IbhINbBojE0Yibf0OibgsdFGHdetGLibbia0kgOiaIqlnrs74KKPgzFiaAYwXHWPMUbgQ/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img003.png",
+   "sha256": "5f5478ab539a363b6e5a03b5df3f77e9c6e418ba6b98c1ab7a4299110901ee15",
+   "size": 342525,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2kjJHnjnj0IJ5IbhINbBojdBvOh60CrsAIJ3K9WiaZG2BmjlOaEZu32cCY0dKTZiaHuOKXaHH3F3Ng/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img004.png",
+   "sha256": "074eeb0df770432eb1710647780ea9b0279db1bffd6078a90c37c58198a8be5a",
+   "size": 247359,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2kjJHnjnj0IJ5IbhINbBoj0I4ibzN31NAlJ6Y8NqSQm2eHqwTvicAKicUmYvGMgRJAZwiblBxUKXu0xg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img005.png",
+   "sha256": "72f6cfb9923f4f0c1a0c0d39154696c54bba635f6d4d4841330d9a2f8d28fa6c",
+   "size": 334670,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2kjJHnjnj0IJ5IbhINbBojB5s7OOB1jH7N66FzQXu4SYuTIiaxyVvP5bt6Tfjvkm7kcchtuC4Yk3Q/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img006.png",
+   "sha256": "d2ce1fadf23ae47ecc7c40b2bfb040f28039e2d1c49f5955b7f3f3b71aaf7efb",
+   "size": 28140,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1y3SHecXr3xrsicvnLBy6gibuUdwicQV1uhQzbBBMPCauJCh9MVWicux1Oy3fUVRJ7Kp0lgaVBiayjjbw/640?wx_fmt=png"
+  },
+  {
+   "file": "images/img007.png",
+   "sha256": "473b1e682a33a78817ce95b45a5d58945a810b569e89cd98b2866d81b0aa7a86",
+   "size": 301018,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2kjJHnjnj0IJ5IbhINbBojwm7VYn7pckNZbqsLqSVHNabYrQ9ialjBPVNnSsW3Gm8jnWFJhMqFrPQ/640?wx_fmt=png&from=appmsg"
+  }
+ ],
+ "publish_time": "2025-01-26 07:03",
+ "relevance": "relevant",
+ "relevance_score": 20.4,
+ "title": "从运营到财务：业务活动如何影响财务指标？",
+ "title_hits": [
+  "业务",
+  "指标",
+  "财务",
+  "运营"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247486745&idx=1&sn=cde7aa2afeebb5d75da96342d2a9c6c8&chksm=ce11504cf966d95a096bea4eb26765bf63397653541eb70d6ed6ce46f26f0b1ba300db09aa63",
+ "word_count": 524
+}

@@ -1,0 +1,155 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "宋岳清",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/sz_mmbiz_jpg/gZ0Mp1agcZ9dawMuBYiaWX3fm87t6uuiaVxs3iancicUgWqbbbNLr8vHzbbZNxoTFQ5h8J6h9GJcSzv4JZBP6ZcViaj501VS91iaUE0lGtHhS9M7U/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T16:07:40+08:00",
+ "digest": "很多企业经营分析做不深，表面看是财务分析能力不够，实际根源往往是业务管理报表这块基础没有打牢：指标口径不统一，",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.jpg",
+   "recompressed": true,
+   "sha256": "abc00527bdccf8e7730a5dda412f0057a40e647e72c81b3effab5831bc469453",
+   "size": 215747,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZ9tTd9SwSpARNEK3mJKzqdjW5ianOTxcI923nefBKoNWqovgZh6nFUVtFEI5fiaRBW3NMjphvaKYYTtXT5wibM4gmJM98icaKtLdvI/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img002.jpg",
+   "recompressed": true,
+   "sha256": "c9e5462950c34a1d6516c91376dba59d55efc5bfa42f68c7ce5783913e7af09d",
+   "size": 206069,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZ8aTlc40hW0TScR1AsCHZlznLuLXOONbQmTC5TG37DhyLh6bgKlnYRiaV3BvfcdqFaDeHdV99fDop5gicDibDtm6soxyh52gsfOe0/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img003.jpg",
+   "recompressed": true,
+   "sha256": "3daba7a356caf9fdc2ebbe51ef327687127342b6a448b1c45831a86e62a1f3d6",
+   "size": 213334,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/gZ0Mp1agcZ8iag7UfofsOg6rNtnicjxq4HGrZkx0znd9oYxbztCbRmTpxfqKSWxavsz9WibAvdfNzgILdReOMZfNVGAP0DRzfUdFuics9nzVwibQ/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img004.jpg",
+   "recompressed": true,
+   "sha256": "d1abfab6d0da29a41ca5aa470da060d0b71623f22ca0e13f0e854585bb609737",
+   "size": 191074,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZicJrRyEz9yYTRhYNVibp6AlH9JNA81krqeqObag1ibicYw6y5xTsGzuSLMQh5P1NbpOnCe36LlxET6OQ1wJlrTCoicrzXdbcVuUUy8/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img005.jpg",
+   "recompressed": true,
+   "sha256": "919632a20222d8c6c3c2a31e66c6f8c8b08da3b802711415410a787a8da6a3b8",
+   "size": 217353,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZibfM5akA7ghicwQv5Tdb1DiaoBSb1pibj3rHy9PratYFIRAs3Gf1zqMhodeswfiaP5oHqSN0iaGMmwQrNtzFgm67GHSibZF58q6gWs0U/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img006.jpg",
+   "recompressed": true,
+   "sha256": "3df0327f5d50cdf1a0094e2e83371f879af41c64e672c22b95e2f3516723020c",
+   "size": 214365,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZ8iae4ibGASYS9LJFg5SN1VJDsV0ibuUIgQ4Ap2rXebfDEFPbmEicWJBvcK4Mkice0qEia55ZLl4VumSbd3NWonGEF7tYsXPRe2KnLso/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img007.jpg",
+   "recompressed": true,
+   "sha256": "4a921497f172d67fe7a696e0a0fc2cbda0f0750be8268cf3460eb3ff973abf7d",
+   "size": 196792,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/gZ0Mp1agcZib3WKLYVuhq6xIgkLgSIibZYumGgibhlES7f2L0uicM4iaLGADy8qYEyfbqNLklJWC3yDumN2vBdI4CsRzCVx4mPqmBr2LjiasT6CHw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img008.jpg",
+   "recompressed": true,
+   "sha256": "494d47bcbd05dd611634416f91163f2f2d541b1bef73b13a452f3736756570d1",
+   "size": 204156,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/gZ0Mp1agcZ9DiaveyK8d7ovYY2NY3OrMpQrGpiaCK3hxNubErJqTYdkiaRTmMBdU73yMHfd3x19R9ibd9ObH3xNPBFOxfCF2nNnB7l5GtB8Zayc/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img009.jpg",
+   "recompressed": true,
+   "sha256": "8619ba3c3a7e05919828c0c963cedc77ce433a85c53195c8c26b5ec84d868b08",
+   "size": 184071,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZic1npkbVunBWExPmSYBSoYqXyES0mlVSIW179HsVqe0Nibnl7RePvZ82M6AArqvtJmYum1CyNbIs4LibZwsNaEE3FibcBGVHiaGZX4/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img010.jpg",
+   "recompressed": true,
+   "sha256": "20a6df289a2e94d5a31573d03b90e5c43ed232ee5d9eaac47de0581a371215a6",
+   "size": 247777,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/gZ0Mp1agcZ9wOVVtwF9ibhnlprJhhZwBmEqG9bE52CLSbVHRtQvIB7EqTBgIdzvRrCfXGiajXbR260tWYN0mwUkRex965d0GFaKiaxHqBvVIhs/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img011.jpg",
+   "recompressed": true,
+   "sha256": "483e2d85db4da0069c990f4e3a4d8b4ece8479e813e3059480ba0e2e7520a464",
+   "size": 229928,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZ9y3ysRS2IrIbz1w6XOUHiclEEKr58dLgXsHK355medH9Jk1d6eBu0qGKgN2LLTvhwcgIic5YQw5Leia8wH8icoZLmoVZiaQqvPfYfk/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img012.jpg",
+   "recompressed": true,
+   "sha256": "bdfbdbb260ba1c55334de6a60964c55f3dd5a073cd2de43abb4a9c56459ee800",
+   "size": 253630,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZ9GlpD31X0wLGUov7HjGVBRH26Bz99EVEpuq9JuMKiaOZW1SOOmcLwQTx6pFspbrE5eUFQhib07sLKT7vQbMkeic07J63PeMKjJjs/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img013.jpg",
+   "recompressed": true,
+   "sha256": "6b819c5146a390a18c61882a3c526231b99825c61cd202633a73c0beb34d0cc5",
+   "size": 246015,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZibQFENwvOUrbXQBpFkvqTiawibfMcNlZt53Nge05YITIxibe8scr251fDjmh62vkDWRHgjsjibqMok7xBfI8sIdas13ee9cPWb89pw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img014.jpg",
+   "recompressed": true,
+   "sha256": "14c9c44fd272197913213ec5d5738e54766949840907302a23c197ae9d7a4336",
+   "size": 255692,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZ9suGasw3FIWbxuGVJy5PyIqVukGnX6vHAdKvTlEo60sAI7bPsCASUiaMfdESIK9nh0OiagtpGQnZXibPg6RDacqV1brf7pPPt2UU/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img015.jpg",
+   "recompressed": true,
+   "sha256": "eb25bbc32416925e214ab57ef8d489b348956bbd6ca2bbe0ddcb19a914077acb",
+   "size": 238153,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZ9Eo5Vxa9kzQPlx7kvwsaK7lw2W7cmKMEtlolDx6ibiaysgegkyfIDY1icwgH8SVu1c3DKg5heR1W89HAKC45w2yKouUDAGeGTdK4/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img016.jpg",
+   "recompressed": true,
+   "sha256": "3ae38c2f18d483e89c1713f1d470747fb9b3518ed5de8efa18df00a48420a368",
+   "size": 237209,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZ8BZLXooVfAvQklD3XgquBgRXxEbNrJdO3O27c2V3EGEtZeL5vGmEyqGxOenqibYLvqy3SqN9pibiaOXYC1qOqHE3PPKiaZJG844LI/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img017.jpg",
+   "recompressed": true,
+   "sha256": "4929478050daf3788ebbaf5bb50aec9f424de70f6e760993ce913892cc10316f",
+   "size": 219078,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZic8oc5kXWyO6UJKupl6XzVz2Q23UgEn52uiaNWQGPwhXNzxeu3r3x6098yLbCy9qrCXUaKfT9XY6wJcib5RgjK9JKLnA6MY9Qy7g/640?wx_fmt=png&from=appmsg"
+  }
+ ],
+ "publish_time": "2026-05-21 09:03",
+ "relevance": "relevant",
+ "relevance_score": 25.6,
+ "title": "经营分析，建好业务管理报表是基础（附Excel模板）",
+ "title_hits": [
+  "Excel",
+  "业务",
+  "报表",
+  "模板",
+  "管理",
+  "经营",
+  "经营分析"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247499451&idx=1&sn=ad15f62dce7658713c53542995d9c2b3&chksm=ce12a3eef9652af8632bc61fd2fa48509cf5e0483474e81e7f2b3ff0e56aa48a0c2d3ac0f342",
+ "word_count": 273
+}

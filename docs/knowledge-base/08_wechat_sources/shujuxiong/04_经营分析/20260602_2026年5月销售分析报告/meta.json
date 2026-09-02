@@ -1,0 +1,135 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "宋岳清",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/gZ0Mp1agcZicf2EJtFdAOwuCfg4FHW9kQo7VDZOPNW07HoREOhYJJwE7WLM8p3BhRT4xkzdLG3ujxF4ToZuXCD4w8puoWJok2OG4I3M0ZEiaw/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T16:10:31+08:00",
+ "digest": "很多企业每个月都在做销售分析报告，但真正有价值的报告，并不是把销售额、同比、环比、完成率简单罗列出来，而是要透",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.jpg",
+   "recompressed": true,
+   "sha256": "561dfae780ab68192209f6931de6c7d1b79096280166f5840c161664d1e622a3",
+   "size": 381418,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/gZ0Mp1agcZicqfNA4zdogXoov9q7szxofCIVocb992RU9FibL3dWMgpQSp7sZ5t6xBVgERibquyX9rWqWgXTLLK1e0CRFdBcgl1gYTtlNaUm1w/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img002.jpg",
+   "recompressed": true,
+   "sha256": "ca2db78721d8d5332222099413f7ffb5764cc34cb6e709fd81b23ebe45d7b939",
+   "size": 140662,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/gZ0Mp1agcZ8gkC6RtOmCGQ77U9pzGPZXiaLp3pHx6kdO8AqQ1ickjs489R6BrgSFGEBHH4micqpU9ibFM1zicfaibkZIhYpngaYzyOgy187EHes9w/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img003.jpg",
+   "recompressed": true,
+   "sha256": "722d5257eccc586af9818803ed7d82c129fe810e5deda3c89e3e029610b0a9f2",
+   "size": 87425,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZ9bH0icfXZ3epDZOtC9qvD4G45NicVE7GgibR8QONc9JSawDTtBjMAkhNXHJic7G01qEwfrh8Ec1oQHhicNrmR7QUSOJNoic64eZEyXw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img004.jpg",
+   "recompressed": true,
+   "sha256": "7911e3d36beb0c17b78db618c4cac22d74dad6a793a939c02aebf584bc45476f",
+   "size": 95825,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZicnEjfDZsQZgde5UyYHuT0kevfYknoEAa6GKkb6Y2hfEa75gBFhg5m9ia91veo0QYdOHE3ibtibBx0hMsnBvw5l2M5SZynAGcTOCo/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img005.jpg",
+   "recompressed": true,
+   "sha256": "0dca443e60755d64e3fe01c63773f1d7190d8ef57a642dd4292761e793798bc6",
+   "size": 104699,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/gZ0Mp1agcZ93bjttD6sHDSodH72ZlDYyicLicx9MLoALicd1arfjRgjhTCSNfic5VJ5T1eNRZAIPnGYC93licfQmgoMOFYd607l0OMcwALDA9gOw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img006.jpg",
+   "recompressed": true,
+   "sha256": "5fd0b3256d95bfdb415742ac6c2e2d396d4e0ff07019e13ea90004b76ce240d9",
+   "size": 102880,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/gZ0Mp1agcZicVjwPZ3otOCia0JqE6sm00HNLC7MDoEllaxM2T0sttjgldJHERHiaWINn9aNzhOA0PDR5s99IdkIygbUIkC5NASLIn9G3X4RiagA/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img007.jpg",
+   "recompressed": true,
+   "sha256": "c3d19048e045d83811cbbc7c4d82f45fba970d0a90be361ec438227523e7e5a0",
+   "size": 110983,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/gZ0Mp1agcZicw6dhI6Zgibb24DonStjaB8eoic1eTMbt5wkgFammqWlS84SLcvunoKrjsYJmCXBdH2dJrjw4dKoxYGibZfibsa8Z4LCEjt7p4M0Q/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img008.jpg",
+   "recompressed": true,
+   "sha256": "10ccda7da0852f491b294877bfd8d331f9c656d01d07f4be13608bdce5a6422a",
+   "size": 108448,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZ8FzTKlyxevDpvhsxRo0I9VNXtibNicV7kPX1PI6cC9qZfHFJyUFrKG9ujiaER6w7cDNlMqtTibP8udJl9TqpWTCDCbs57DkGBianyo/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img009.jpg",
+   "recompressed": true,
+   "sha256": "41a7b897cf9b21d4c80619f9f59d5c7c17546642fcb891d18e7f79d2adc7a4af",
+   "size": 110123,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZicX1cWzB7CcPaSpkxDI3vjgIIKnA8axjwUHyzOhebZm2fRx7jHCN3jPwwHnTKTFFqUSFticLWvibNVRSXYLxaLZjjOeIeiaOAsyu4/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img010.jpg",
+   "recompressed": true,
+   "sha256": "f3fe905149bc5b38b30ee9bebe4e6e09253003eaa01e9cae10bbb4786432c921",
+   "size": 100526,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/gZ0Mp1agcZicdW2QpdHcHsaVrJft3ODjCbLMibHW6ksTsNFCK50w5FdZnAhibDA2ticUgI8ibGEaGQzBtr3SIY6PCLYqrTUx0LUH1WEse0700tY0/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img011.jpg",
+   "recompressed": true,
+   "sha256": "cec5bce3fd2dc455fb1d9270f0f603f98d4254211a5cedc6d5598d85daddd857",
+   "size": 100749,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZ8HakR9WYJvQFZEo7o2SSTiaibnAWWfq81zluibxwmqwsImIMAHWRJBb6qgI1icJsaITsVoEfOjHibiaGbOmDhPrLDvCOtUzruLTcT6k/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img012.jpg",
+   "recompressed": true,
+   "sha256": "37a1a3bec8b7578bb6a984b5d785552d89744d9ea2c486a6204269e6e60da24b",
+   "size": 115026,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZ8ic3lMSPicazKSW5ticVEXBflZx7GwmmJ04IPkqOW27sQhEUYQ6dx81TzQEZ0MbsZUAkc5CKkJwFSmGVl2hEHAgia107aVH63vnjU/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img013.jpg",
+   "recompressed": true,
+   "sha256": "e6e7783dd825ba44e38008981271669d2b83ce296499571f054db98821da6bec",
+   "size": 116665,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/gZ0Mp1agcZicRH7OWbec0ReEWaOQqnrqZiaE0HVRYXibFUROxJf5bO3wKeNsfcibAyExyP6U6d7AyB7auP1P8qglWCDibHHrkRWWkIWVIk7bIeKc/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img014.jpg",
+   "recompressed": true,
+   "sha256": "d3f15a12c4814edf5477f77df9988cad20428dd55483c857557bee67b9bce7f9",
+   "size": 125835,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/gZ0Mp1agcZ9meB3icgcURiaUn4QcVoiak8dmbUcCDqyicrC4Xuxk3icTEp0OZic6s0va0THdKqPTY1230nFRIaBXYIq5PXX7glxwSiaBnxSHtzNkt0/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img015.jpg",
+   "recompressed": true,
+   "sha256": "6857d815c7675a0114687306bef00f3ee91de919aa481def5a731565e4f24471",
+   "size": 83255,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/gZ0Mp1agcZibyHIXCC3wNnzwsxEZibjlVAn2PlU6O3LD5R5DQaQG70pHBpAj6lTGyyPBKSmaKArefqcp2PKlCtYXPjBeyKcZ1OdG8OLWcXjm8/640?wx_fmt=png&from=appmsg"
+  }
+ ],
+ "publish_time": "2026-06-02 09:07",
+ "relevance": "relevant",
+ "relevance_score": 7.6,
+ "title": "2026年5月销售分析报告",
+ "title_hits": [
+  "分析报告"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247499669&idx=1&sn=16f1c420fd434a09e3cf795dda504dd1&chksm=ce12a2c0f9652bd6d95aadac40116200cbaa674c174f66eb4cc273ebcd53fff8f54f99a3ce77",
+ "word_count": 269
+}

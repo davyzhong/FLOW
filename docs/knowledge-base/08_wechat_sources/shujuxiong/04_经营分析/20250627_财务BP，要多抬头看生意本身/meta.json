@@ -1,0 +1,37 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0YT8gr5pWdwicYo6HI77zylv3obaibJmvMrDva6MRHjcfZXH8vqYI0sZic2NLwUhTMWGDNdL3TjXZtA/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T14:07:42+08:00",
+ "digest": "只看财报的人，注定永远看不懂好生意。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.png",
+   "sha256": "aeebc87df30443084734ec325fe3994e9a6eff8a6f62152754e89a8f0a5bc3c9",
+   "size": 41294,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0YT8gr5pWdwicYo6HI77zyldXnwfIwvZBTwH6jZwmWJr4p3ocoC6t60f39we07MbRWamWyQ5dJZ1g/640?wx_fmt=png&from=appmsg"
+  }
+ ],
+ "publish_time": "2025-06-27 07:00",
+ "relevance": "relevant",
+ "relevance_score": 20.8,
+ "title": "财务BP，要多抬头看生意本身",
+ "title_hits": [
+  "财务",
+  "财务BP"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488466&idx=2&sn=90b8b6bdae7907bdd3f4691fe80bfe44&chksm=ce114e87f966c791e777e332192b68cef631a3e3701fc0ca3d0a3f417e6f00a3b7a45956008e",
+ "word_count": 1552
+}

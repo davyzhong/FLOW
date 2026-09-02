@@ -1,0 +1,78 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3ffLVNrFSLgOHLYqueCJ8t0GOE2U1nZosMtaP7yrd195uCPsYhA6KENxBuIuN6weXsHTTE7GkJzA/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T14:03:56+08:00",
+ "digest": null,
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.gif",
+   "sha256": "6e5826c75dc6fda91cbe4b70102063ab7e99520bd66704863d50bae65f33298d",
+   "size": 7063,
+   "url": "http://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm1eCHSDQ1FT41crSwIq5ZQuez5bEOnUCzPmARmhic0lm221AAwtWTwHosaT1CiaGoiaicgCSV7KmQRnJw/640?wx_fmt=gif"
+  },
+  {
+   "file": "images/img002.png",
+   "sha256": "920e9a5d8042728d7ab7d6099d74c8786ea05fff6df7e53c80145f3f4a6ed5ab",
+   "size": 51460,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3ffLVNrFSLgOHLYqueCJ8t9nXpZ9MjyCpyccc1jnNI1LdJiaWibarsXxBYRkrWmpNXo22sowI9ZvjQ/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img003.jpg",
+   "sha256": "49f04b10b27cf3bbe58e54b4245c0b66881a0d5b1e4e16e7e87eb43f0f5f05c4",
+   "size": 41215,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3ffLVNrFSLgOHLYqueCJ8tHO6xcdHOhIF7eZHFZ8gwkaqeAyiayBt6Jz5ZO5EbD6g7Gm210YuUB2Q/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img004.jpg",
+   "sha256": "f15968223eb2d4ba5bb146322d12f9c222118911570523e8f5e4357099406886",
+   "size": 31578,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3ffLVNrFSLgOHLYqueCJ8tubeSywviaylu6311FicMvfJmOWIh4vl1j7WBJhC4L0b0OGO8NtdFRQvA/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img005.jpg",
+   "sha256": "f808dbb90308b908853b26309858365253491fd27e361754e9f1166dd6f5ff89",
+   "size": 31670,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3ffLVNrFSLgOHLYqueCJ8tTDlt6ISbDowuQQV962jzKyOrOicYdzRrzdHBkib1DJ7LTboN5jpbwglg/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img006.jpg",
+   "sha256": "a38bdfbbf90ad25a2cae91eb715432389a5ac4b9bdeeed2a323105ff348f577d",
+   "size": 30777,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3ffLVNrFSLgOHLYqueCJ8tBd8l11iakWJPU6WZWwbftThWDiaJiagBTHkpGV0ZibncGE3mmyiaSU65Igw/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img007.jpg",
+   "sha256": "4698e234c22a9774dbcce903a11585defbe2df54847d75f775db1a60331576b3",
+   "size": 18876,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3ffLVNrFSLgOHLYqueCJ8twG8uNdRJs6ePpU3E4v8LA6h3IfHMYwD1pry416FMlUmvPZYdLw6nhg/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img008.jpg",
+   "sha256": "02eb44c3da52db232646b52a1abc079c8442deb0401991065f463f5d2797d835",
+   "size": 66954,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3ffLVNrFSLgOHLYqueCJ8taUOkyjxzXHgACfguXLPzHNic3r2wWhgk1MPajTGyhvSOuTMRccGMMIA/640?wx_fmt=jpeg"
+  }
+ ],
+ "publish_time": "2025-03-05 07:15",
+ "relevance": "relevant",
+ "relevance_score": 15.2,
+ "title": "ROE背后的逻辑：详解杜邦分析",
+ "title_hits": [
+  "杜邦"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487519&idx=1&sn=85ed2eaad064a947bb63d46583bf0944&chksm=ce114d4af966c45c67d0caffe2a8e9f4fef72821799346fb443dec2d6f1e351f21f3f8fcda58",
+ "word_count": 1737
+}

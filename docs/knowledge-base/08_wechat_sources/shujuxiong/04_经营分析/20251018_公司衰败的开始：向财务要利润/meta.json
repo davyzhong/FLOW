@@ -1,0 +1,60 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "宋岳清",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "数据方法与工具"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0qyXkkxaHWUl8J3RzlqMJoHxciaibicNybicNBRfqdeTmgI114gtPXoIfgwQow0xsnic3Np4JcYX3Lj0w/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T14:16:10+08:00",
+ "digest": "很多企业不是败给竞争对手，而是败给一句话——“这个月把利润做上去。”这句话像刀，先割向财务，再割向产品、客户与现金，最后把组织的真相割没了。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.png",
+   "sha256": "f12414ec107aa2546d47458eb8c74c2a117d000ff5c27d5846bd5ee8470b804e",
+   "size": 48045,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0qyXkkxaHWUl8J3RzlqMJoRV1gvaSWTGvEJECn6go6aqfb0NKaebauUZD59775ohXjicxbHLXibJmA/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img002.png",
+   "sha256": "0db588accaf838a6b4aafedf0af80cd44d9bd34b3843b3c408802d88a68bb99a",
+   "size": 41650,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0qyXkkxaHWUl8J3RzlqMJorpib7zbyUWeYcGh1pRqGcscInLQzgpd9pHicJGWLCBER6vtrQ19PNeCA/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img003.png",
+   "sha256": "ce69e3d18927743636cc0ceb2c71382b542b95c52311176653092c62d71e0778",
+   "size": 52912,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0qyXkkxaHWUl8J3RzlqMJoicRia811AlWNQYA1cB5UJRtfHkOZvakdiaHsw09WbTL2b9TDGwBh1mNvw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img004.png",
+   "sha256": "d0e0efaf632fc8db76d7b24311a934909535dce587a2b75ab78b2215860ee681",
+   "size": 51965,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0qyXkkxaHWUl8J3RzlqMJoJXlpKsDfoa5tqNUAEGJws8LCeoynWpicOjhZ1BGSxW5jVB954G3xloQ/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img005.png",
+   "sha256": "e662810b266f64ff497a65edfa7f7bc25e7598ba1d868dacc5e27c515db94211",
+   "size": 34686,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0qyXkkxaHWUl8J3RzlqMJoP88j2f4u2jjRzH1MXUyevJSa7VRM9rDsPFmADjeEYg96Aw2u6Hpu8A/640?wx_fmt=png&watermark=1&wxfrom=5&wx_lazy=1&tp=webp#imgIndex=7"
+  }
+ ],
+ "publish_time": "2025-10-18 19:12",
+ "relevance": "relevant",
+ "relevance_score": 22.8,
+ "title": "公司衰败的开始：向财务要利润",
+ "title_hits": [
+  "利润",
+  "财务"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247490438&idx=1&sn=ab1eeb870675695d39bce9e6852ed521&chksm=ce1146d3f966cfc5f4f72bccafb297ebaa65562405b2fd67ca2be0e74d8f32aed700e1a1b722",
+ "word_count": 2240
+}

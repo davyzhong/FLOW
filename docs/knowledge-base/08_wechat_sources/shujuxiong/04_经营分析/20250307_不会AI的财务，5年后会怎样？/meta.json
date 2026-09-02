@@ -1,0 +1,54 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm33COGhKnVMoB0ZYARq0EmECuVP96dljuSGIMymL83IMXcCFWwxdoicKrvibiaYQ3ibibtEmficy54SsmgA/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T14:04:47+08:00",
+ "digest": null,
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.gif",
+   "sha256": "6e5826c75dc6fda91cbe4b70102063ab7e99520bd66704863d50bae65f33298d",
+   "size": 7063,
+   "url": "http://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm1eCHSDQ1FT41crSwIq5ZQuez5bEOnUCzPmARmhic0lm221AAwtWTwHosaT1CiaGoiaicgCSV7KmQRnJw/640?wx_fmt=gif"
+  },
+  {
+   "file": "images/img002.jpg",
+   "sha256": "993326ab4620118f7b39139f3d623f317830906e81749e8468ac32b782accc51",
+   "size": 34732,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm33COGhKnVMoB0ZYARq0EmEcep4qjGs7uiblYsPicyX8hGo0vdJAZYiaLG55YY0gYPkGVW8x3rorcDnw/640?wx_fmt=jpeg&from=appmsg"
+  },
+  {
+   "file": "images/img003.png",
+   "sha256": "aef5e9253377df9ea1c77f8d373455d619280cfab7ceb9e0c5bc69c20ad6a3ad",
+   "size": 385437,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3lWYH8MUU6sQ5qGgJ5V5B3fDX7Bm89XxyjUkWUtia1tKKMTqDVWGfp9wGHxNZkbe7xI7nf8Pd2kOA/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img004.png",
+   "sha256": "909108f64474028921efb04090449f158a77dbcc861e78b463a69eea432d0003",
+   "size": 223580,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0YUB0ZPDEKibiaVEK9E6744zvTkhvcz9a3WT8HmU4hr4moUZ1j3NbTznownyLiapPyRqd1JBiaOmxXuQ/640?wx_fmt=png&from=appmsg"
+  }
+ ],
+ "publish_time": "2025-03-07 07:53",
+ "relevance": "relevant",
+ "relevance_score": 12.6,
+ "title": "不会AI的财务，5年后会怎样？",
+ "title_hits": [
+  "AI",
+  "财务"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487551&idx=1&sn=fb2155ad5de07fddcc617027b6ded5f8&chksm=ce114d6af966c47cc1976d9d1aa1c3f67a00f87945143228d6d7976bf5fb34bc96cb79a4e8f3",
+ "word_count": 1417
+}

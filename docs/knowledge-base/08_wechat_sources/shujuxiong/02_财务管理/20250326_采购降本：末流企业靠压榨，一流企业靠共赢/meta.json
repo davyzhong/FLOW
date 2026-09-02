@@ -1,0 +1,31 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "albums": [
+  "财务管理"
+ ],
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "数据方法与工具"
+ ],
+ "collection": "02_财务管理",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3rpafmX5tgdIwibdNicdCWtO6W3tD7vBHDhSSeebu5geKBzBozuP6FOTgGkAzQbStsh0u9EgaFGeQQ/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T12:05:00+08:00",
+ "digest": "采购降本，这个词财务人、采购人都不陌生。每年预算制定时、业绩考核时、现金流紧张时，采购降本就成了企业的头号任务。",
+ "image_failures": [],
+ "images": [],
+ "publish_time": "2025-03-26 07:00",
+ "relevance": "relevant",
+ "relevance_score": 20.0,
+ "title": "采购降本：末流企业靠压榨，一流企业靠共赢",
+ "title_hits": [
+  "降本"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487754&idx=1&sn=85e8e7a684586b9954f0afc936d4d232&chksm=ce114c5ff966c54926b55f07abf53fa3b92634d1d281ac61c52d9f1b4330079b465dd7bb4e63",
+ "word_count": 1663
+}

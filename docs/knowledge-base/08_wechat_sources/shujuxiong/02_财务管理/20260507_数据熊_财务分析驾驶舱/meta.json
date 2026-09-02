@@ -1,0 +1,111 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "albums": [
+  "财务管理"
+ ],
+ "author": "宋岳清",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "数据方法与工具"
+ ],
+ "collection": "02_财务管理",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/gZ0Mp1agcZ87Iefy84fRo9wia3wzCz9RG0FR9nibnyPVChyJMftSEqYMZMv0bh5mEMibbkhAiaYRXFiaKWicg1NvElhPKNYE7DlEcS1khXmUZOYAE/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T12:41:00+08:00",
+ "digest": null,
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.jpg",
+   "recompressed": true,
+   "sha256": "b47fad5b945d2aa5f3c106362d18961cb3fc04bc60d70dd734856ed8d28f1934",
+   "size": 244084,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZicPgYuTIEA5agLA28icVCzXQnndpvvIZJicKsYZPPZ60jfIUq72QCTlVlH2UuJ2SQvNQloiclOYMeZW1MxcLpAY8n5wrowH1gTFPw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img002.jpg",
+   "recompressed": true,
+   "sha256": "6d31bac852f14ef94ee5d3aadf55db36cfda00897220e67e95edb9144874ccce",
+   "size": 241212,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZ9nxP9Z41AZnOLV88PQrl781SkrJvZibNBeUticrmoUzad5vuZ4PsjNQ2vXticfYWOha5SFFRkqfNFkHaerHfCXgibT4FCzKvHPU1Q/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img003.jpg",
+   "recompressed": true,
+   "sha256": "41dc65bacf8ed54cee13668788edeb904e18ebbe0c2f7569962904068eff23c0",
+   "size": 246765,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZibDFKbgjk2diaQFB3zGlqxHicbVWdQ7arjesSqeYj5gYj5iaQtwEhQEZMFkH9GjLPz4SNaH6SMGHp84Jwk4icrhzQjydq89EGb8Ab0/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img004.jpg",
+   "recompressed": true,
+   "sha256": "8002378f81f2657863672b782feb7b5c8250a90482087bf06f2ff243091f2f52",
+   "size": 252033,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZ8W0u2vaJWia3SRkj4QD7ibk1gETzTciaLBAobQBYSTQnT5EPuJRWarZxkMo7cjBvnIxDrvRQ9Ar0eKnvHhI4Zibl1WY7ebiacIYibPk/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img005.jpg",
+   "recompressed": true,
+   "sha256": "8d0b0b65d4906527f50ad56f95a03b3418b36fbcf4fe7f997d24c57a6b99dee2",
+   "size": 244579,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZic1EIevWbybqxp2PTC4TMDe3yRcYhwBvXEvA6z7vPmMMJDXuibriaN46gZoVvYicfVFZbQI8usRuzicCvIPTqDtcUxtiaCCucMylIibw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img006.jpg",
+   "recompressed": true,
+   "sha256": "a2781fe3863666a9d1140f78026a8bbd74e379df05a563ba1f7297b5b65f5784",
+   "size": 245778,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/gZ0Mp1agcZ8tWNVk9uwdz9kZ2H4PLsJfCTyzF6m6ZVDJQ43eYo02BpG7fYNmhKM43nicgCLqn9lOUkA5W7X9XjIXNNkt8t2OMjGxxEEM9FAQ/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img007.jpg",
+   "recompressed": true,
+   "sha256": "bfdc0e54e151ba935da30c38a1449ff06ea223d937dbda9ff07c59cea6dc0755",
+   "size": 241241,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZicLTDU1ibmCL7O2NGVfUibgVXmDsFiaSR4pI634PrISZJn84kcMAqJdhOU6cdTyAUrusMlmgHcYoO2WPOu7dsW2bU1fm51lGxVvEk/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img008.jpg",
+   "recompressed": true,
+   "sha256": "3ea7071fb8edeb37e80072822f2609cd2dcd9fa411f18931774e0b3e3a503e0a",
+   "size": 236917,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/gZ0Mp1agcZ8W9vfaibjSibQCIfOV8PGNIK65G4pqGiav1SwFwNeY5Iel2EeyiaiaAtdXvUf2jZACia72dvOeyuHpqm0t0lOUPiaQpzLljmic3k1WBsg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img009.jpg",
+   "recompressed": true,
+   "sha256": "56c23cb3bb70efbb2e562aeef94a1e869116056546cf8b750d28367c88dc98ba",
+   "size": 237461,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/gZ0Mp1agcZ97ibPUF2oILZo5rHAxxjt4GqPQM0bYkFbSBaFGQ5ibdFAFxjQbFaxXn3OBSBRBg1H6orZO20LiclTQOHpJtDPY0FMpt1nzTjicpsM/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img010.jpg",
+   "recompressed": true,
+   "sha256": "7ae1da799cb71f994473d52f93a688d3136feae0f4dfda06165d422182cfb140",
+   "size": 242301,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/gZ0Mp1agcZic4gdLRqbJ4JosTZRDwuWUjraMmfJaFfGQXyskPFTmo6iaibuNdGRWSLR1licod9VKr2IcDvQ3JicTa9jaagQue1F04pu93DFbWnc8/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img011.jpg",
+   "recompressed": true,
+   "sha256": "5f8c636ea6454cceab7047954d8b0dd0d8a8f7749421defc84f91e5b4dedb65e",
+   "size": 116279,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/gZ0Mp1agcZ96Nlzp520r5axB9r3fMl3DUobOnL7sWAGV6X1KIXnJcbJ8xVL5hfd9j8FFVBcu5LwlvgoicuhxlIH1JCp0v7wZf70iaickcmBjXM/640?wx_fmt=png&from=appmsg"
+  }
+ ],
+ "publish_time": "2026-05-07 09:01",
+ "relevance": "relevant",
+ "relevance_score": 10.0,
+ "title": "数据熊 | 财务分析驾驶舱",
+ "title_hits": [
+  "数据",
+  "财务",
+  "财务分析",
+  "驾驶舱"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247499056&idx=1&sn=b4ef4d75def4845fdaa314145e70344b&chksm=ce12a065f9652973cf641d5e51cfb6d40b53f37a328c38d95f3a739b4912304b1da0c831b934",
+ "word_count": 1
+}

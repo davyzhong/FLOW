@@ -1,0 +1,142 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "数据熊",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0zLcmqicTDru96ygw9lJWcKQ51NibfrTeoicF6dK12ymGOicyvYqPo99HHAARicRU4NCn6uJkSfQLlLqg/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T14:12:31+08:00",
+ "digest": "经营分析的终点不在PPT，而在一线动作。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.png",
+   "sha256": "9663fe445a06d7ed0621c01d9e1c1172b457a58d94a00421dd7fbbffce7820d4",
+   "size": 56403,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0zLcmqicTDru96ygw9lJWcKPsA3xtiaibGDDj06xzs2D9jc5L1OEpAEvmvlT9BicNibAOukOTTEuhbLyw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img002.png",
+   "sha256": "f0465bb42610060e5ac98de9ba9004832b93b7cd3be4796b93689f4efd6ce20b",
+   "size": 46032,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0zLcmqicTDru96ygw9lJWcKR7iaQN5Wn9UicSNrDBHuWMzdtq9fIKtMk30K1ze4XSCsSOx2TrPehibKQ/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img003.jpg",
+   "recompressed": true,
+   "sha256": "98ef57cc07ecf7175dafdba185476e78cdc3e5fa0454033cfe340e20ee9cfd55",
+   "size": 96786,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0zLcmqicTDru96ygw9lJWcK6gqpKjc5KibeZiaxgNPnKribJ0QnHfC72axC9Ej5tj7WutGpWplh6biaNA/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img004.png",
+   "sha256": "e81c2725e07f1c9209738ac791c40c810876ab67dad401d624c8b8e00e40a687",
+   "size": 125456,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0zLcmqicTDru96ygw9lJWcK7EiaXPXia7Ojt7OsYoSMzxlKR6pmaP4F5EZ7QgIriaH63pZTsrW3CFdvw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img005.png",
+   "sha256": "dc19545e190c5a0fd0b0c3c087afc776b21f6b3ba38ae7acf6ac43ac8dd9c1f7",
+   "size": 60343,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0zLcmqicTDru96ygw9lJWcKptWvoL9ybBGrXaM3pN0cStCic7BDcSRTaGia7xonAHVibsd6iaBDnEZYpg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img006.png",
+   "sha256": "c310b190ea035ff8fe507db97ebcdd6faeb29ef91a5d5b18977de75e07f126bf",
+   "size": 85772,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0zLcmqicTDru96ygw9lJWcKHriaHZJKaiaAd41pJo6Ct9afKeEr95y99Rhia8YAHwHGBxicRV6ju4FrPA/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img007.png",
+   "sha256": "b02c890abfb53f8e368e38301f9ce0d976045cded6f87edb778f582a18401646",
+   "size": 115749,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0zLcmqicTDru96ygw9lJWcKNYhd4ZJZWn94rpZDyG64fGTAmYbyjWdAQAsib1LEdTsULaS1Kq0NmAw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img008.png",
+   "sha256": "90925946032357b7003ec4a9e171ae4489ac22c63452e2a008be2cba7c36c359",
+   "size": 188348,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0zLcmqicTDru96ygw9lJWcKJ0ia0tbPkGJektd3NavZ47PvBXWTEcarsNVsmejgDSubicVtnKDPiccJg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img009.png",
+   "sha256": "9ad84d5b0ba1003213273f505c07becb03bd69ed17c392b478ac0d8558c7c3ec",
+   "size": 116774,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0zLcmqicTDru96ygw9lJWcKXykd7DFfgmkCTNDnI7EPjXYN99FnBhk5icovmBjgoTtEenibV3klOONQ/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img010.png",
+   "sha256": "4682a54a7591fba98f7edb90849c9134b0f91d5cd45faeca1046a5444321073b",
+   "size": 191922,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0zLcmqicTDru96ygw9lJWcKRsYWiaia0DGAyrpPl1iaShlQricrOnKag0VWFGicMM3kQ0WLxAxrrgwWjjQ/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img011.jpg",
+   "sha256": "e4e4d04b2c7e19611845b6c1f504a13ffc7f67a8eb2141535d23ebb2187d23e4",
+   "size": 27478,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0zLcmqicTDru96ygw9lJWcKXSm9znnGSSdtkruFTrzaX7iadkZa7pffCnKsZDNIV6oNeNiaHz9K2iacg/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img012.png",
+   "sha256": "8c0ee7e131e092b6f041514750e58ff336c73bb5a40c7a566d15acc2582346a3",
+   "size": 85622,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0zLcmqicTDru96ygw9lJWcKcrliaHwJ5t4diaXl1ajV0yCQdl1ZI9iavAjOeXrNoicxHSNkIl3CcJFH9A/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img013.png",
+   "sha256": "91a991baa6792afa886cf20b40c3607329f89d83a80a1b57c5508e11c4c0e577",
+   "size": 187922,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0zLcmqicTDru96ygw9lJWcKzB1wkG7dJiaXJnSTxtIXZicamgk4a2o17LEFI3TbMiaJQIYMAXmJzGSQA/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img014.png",
+   "sha256": "d3ca4ea911961cff32acc72babdcc73fd4c0e7c37250f8ebf93adc5f64f41324",
+   "size": 111660,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0zLcmqicTDru96ygw9lJWcKxO6iaDm4M83R3hguLoyQx6YKaFyklFCTArF90S0DILOBF4C4U2mGWaA/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img015.png",
+   "sha256": "50103e6646de411409027e0c6a55f132e25b9d10f2a1efdf822e8db21becec63",
+   "size": 54198,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0zLcmqicTDru96ygw9lJWcKRxOZYZ7MFmquxTq8G2gORNEg3VQaxqmmxltBlMNcx9HiazYeluyialBg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img016.png",
+   "sha256": "e8abb334a0924c5511c72463b46cebe3569043ca0201f63453cff52f9ece9c29",
+   "size": 96034,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0zLcmqicTDru96ygw9lJWcKbQeH9krvlWIVkT7Ypyuj246CTMJY7oic7cyJacpN9f8ugpnlC0Jkh6Q/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img017.png",
+   "sha256": "70c144414320e88dd5c3efbfa56dc92a3f9320d6ad423d16b54d4dd331859213",
+   "size": 138742,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0zLcmqicTDru96ygw9lJWcKPJMIJc8uXrAEIHbdKKGLcebxqhicx2Pz7321byousDUGGS0RoZXw9Kg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img018.jpg",
+   "sha256": "74442daeaa5ede622651b7bf2702e08f55ce3f70bc12b29c631da90e3d251dd4",
+   "size": 65022,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0gmq4AEuwibvHRFY5FaTwBzFhfJwCLusNiancsiaBY0qoQMafG3QOkgdjrg7w5Xe8n0fuicPnObvC9wg/640?wx_fmt=jpeg&watermark=1&tp=webp&wxfrom=5&wx_lazy=1#imgIndex=9"
+  }
+ ],
+ "publish_time": "2025-09-03 07:30",
+ "relevance": "relevant",
+ "relevance_score": 21.0,
+ "title": "经营分析PPT模板：别只提问题，要配动作",
+ "title_hits": [
+  "PPT",
+  "模板",
+  "经营",
+  "经营分析"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247489582&idx=1&sn=9b4b6ecf60120cbb0d98a6245cac18d1&chksm=ce11457bf966cc6d541be78c748bb1cf1a1007649c008c925b4879f19d05994606af70b64cb2",
+ "word_count": 2041
+}

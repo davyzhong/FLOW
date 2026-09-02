@@ -1,0 +1,50 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0YN00lU7rebiaNunl1Zqj6fVI2wnvSyvMqLFxJTXWJdQ59iaJicTYsVOeekmL9N7MdTpAGuMAI4AsPg/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T14:02:44+08:00",
+ "digest": null,
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.gif",
+   "sha256": "6e5826c75dc6fda91cbe4b70102063ab7e99520bd66704863d50bae65f33298d",
+   "size": 7063,
+   "url": "http://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm1eCHSDQ1FT41crSwIq5ZQuez5bEOnUCzPmARmhic0lm221AAwtWTwHosaT1CiaGoiaicgCSV7KmQRnJw/640?wx_fmt=gif"
+  },
+  {
+   "file": "images/img002.png",
+   "sha256": "438c44cf1c6970db9b4b7aa12b443642282173b652f3ed04e537b798c03d1942",
+   "size": 174627,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0YN00lU7rebiaNunl1Zqj6fKFxYicEKLF7KlgX4icdO1JnV6p0T3jGIicARWF5j47moCyDicrN8jzE5qw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img003.png",
+   "sha256": "9242d1c6882f2597797438f3e4519df1d2cc64f3d36e0fdb8c97e221666b2277",
+   "size": 32081,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0NcBX8ytIOncGjEzshuRibFIpZeKVBRyBQTqXkEPa9wMAvJWuXIKm136m1pUl5cLCycRtJSrp6TmA/640?wx_fmt=png&from=appmsg"
+  }
+ ],
+ "publish_time": "2025-02-21 07:00",
+ "relevance": "relevant",
+ "relevance_score": 11.0,
+ "title": "DeepSeek+Power BI：低成本打造智能经营分析平台含模板",
+ "title_hits": [
+  "模板",
+  "经营",
+  "经营分析"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487175&idx=1&sn=a1eb92e5e44e0a8b8bc185ea9548ec60&chksm=ce115392f966da84912e1e1c364ce3f226e9e59d7e626fccd0a0fe67c01c349c996d7f5ee910",
+ "word_count": 1410
+}

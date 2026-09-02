@@ -1,0 +1,95 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "宋岳清",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "04_经营分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2vEIFETleCmNJMQDOu9iaJR5iatAn0iaZs5cryAK2VndrQoAjiaslk5ls8TCtXTGnjicbqoibXcoltdWKw/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T14:17:12+08:00",
+ "digest": "很多团队一谈盈利,就盯着\\x26quot;净利率低\\x26quot;这一个点。可经营是系统工程,哪怕只抬高一个指标,利润也可能\\x26quot;从别处漏走\\x26quot;。把复杂问题拆成可落地的三把刀——这正是杜邦分析的价值。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.jpg",
+   "sha256": "811b7f1faf8dd0c014e5a4987034eb6b613ddb78be6ada331fed8f672ebc25e6",
+   "size": 126180,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2vEIFETleCmNJMQDOu9iaJR7rZql5zeI8ln377gMhYCuovTYnODw2lebLTMSVjzuFTPXWPA0jyY9Q/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img002.jpg",
+   "sha256": "08133b8db7decf189fdffb3503f33aa97a361cc3ee390f5b6102702f83782fea",
+   "size": 169951,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2vEIFETleCmNJMQDOu9iaJRk6sqVDqjvEZrib33GMyAvCPbWrOfnFWqJueVGyMEFXQ9baE9DV7RUeA/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img003.jpg",
+   "sha256": "80b46a0b770df9fcdc608320a3686002317405c75d67c2a003fbc4260b08b7f5",
+   "size": 160566,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2vEIFETleCmNJMQDOu9iaJRPB6gibNqTqLPgibVlib2hyAMlMLia8LzKESRTIiadWCHWkicd4EygEt6gmmA/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img004.jpg",
+   "sha256": "a58e4a1241da4ac8fcd53992a84b3448dc5063b6e36cdbcdcabe452174b9fa02",
+   "size": 156268,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2vEIFETleCmNJMQDOu9iaJRwE0ibYPdYK6SkrFGBk9ExQ9hfqGPlviabJZH2yVBbKnNnS6ygIIMUaZw/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img005.jpg",
+   "sha256": "4b9d132a37bc478b5c05901719dd4c3ed36d0c8ebb997fe7c708db796a1eeff0",
+   "size": 181356,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2vEIFETleCmNJMQDOu9iaJRCfU4Jxe6rO8RicX8t9gn5YFhsw9bxboN8RYvUM6uX8kaCd6CYpFeTHw/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img006.jpg",
+   "sha256": "c988a04c4bb5c9d5590f02054693d89876fcd768f4539768b7544f3d8efb9d82",
+   "size": 164550,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2vEIFETleCmNJMQDOu9iaJRO4oKwNRicZCc95ysDVia3ib7JRQdRH4sj2ZV6pMp1dugPldib3j2G7ArQg/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img007.jpg",
+   "sha256": "1584ebf65d3043ec7c6fa7cf5f0aac2dae760fd3debdb1009357027a3ed3ecfc",
+   "size": 93599,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2vEIFETleCmNJMQDOu9iaJRibOxNYHAFhbDOtuOQt2UwR7S8I1dIGt6t884stibU3a6vOlA0Wicbfd3g/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img008.jpg",
+   "sha256": "825cc06fb310353e53985c2ea73bf6ceec76354425116379d9dcc4eff94da620",
+   "size": 149122,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2vEIFETleCmNJMQDOu9iaJR0ZCIfGickFL4eb0KoWS0ZIiaicdHAic0PETrZMWR2N4L9MSiaSSWfXz7SXA/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img009.jpg",
+   "sha256": "28caaaaa6f3ed0bf865ea7afc78ea073951563cb91e2b1192585213b569ef3a4",
+   "size": 112613,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2vEIFETleCmNJMQDOu9iaJRm3E1aVqTyG7tgVjHgPMaEm5Dr4hmCrL6j3Ag5v1YfbsjRFjATPVdgA/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img010.png",
+   "sha256": "ccc4c7e6c8d41532ff7abcda383265cf83476522868f7d9d4699cacccb6b0940",
+   "size": 309375,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1Ks7n01jKFm25GdibXlyReBj1iaCibnpd1iaI7pz0icN9asqpz51FDmqLBL82KFYFF8hbibWLqKRriahgqA/640?wx_fmt=other&from=appmsg&watermark=1&wxfrom=5&wx_lazy=1&tp=webp#imgIndex=10"
+  },
+  {
+   "file": "images/img011.webp",
+   "sha256": "3fe6a4d4e6315e6432f04788a9d291c0a26ffb73ca0ff4e756e6412800be1f74",
+   "size": 34874,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1Ks7n01jKFm25GdibXlyReB5r97HrHvz0OtF6aeiaw5cRV7GL64ztHe8N8Y9BibpqxibAVicCtqAHCXpg/640?wx_fmt=other&watermark=1&wxfrom=5&wx_lazy=1&tp=webp#imgIndex=11"
+  }
+ ],
+ "publish_time": "2025-11-02 07:30",
+ "relevance": "relevant",
+ "relevance_score": 6.6,
+ "title": "杜邦分析法：深度拆解公司盈利能力",
+ "title_hits": [
+  "杜邦"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247491029&idx=1&sn=a0fd6f44144e11a14a3ccf3ed9379a6e&chksm=ce114080f966c996a5a5b072987c7e720273b48cc092546c29de3aa6d13e58e6731c82995b14",
+ "word_count": 145
+}

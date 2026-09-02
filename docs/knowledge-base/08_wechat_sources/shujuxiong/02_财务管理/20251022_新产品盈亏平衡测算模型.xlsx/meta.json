@@ -1,0 +1,70 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "albums": [
+  "财务管理"
+ ],
+ "author": "宋岳清",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "02_财务管理",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0picISvLPrIvMAick9AiaEH0xDNBXdDT09RaGplXRRPfViaNw6Z2z6sY0cgonOmc7wg2Ecc8mKRdcTEQ/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T12:10:28+08:00",
+ "digest": "新产品上线后，老板第一句话往往不是“能卖多少”，而是“什么时候不亏”。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.png",
+   "sha256": "48f78dd2457473fe0b3c4ae46a3ce29ac05b7d861c4646bfe73c7f7a0f561b3e",
+   "size": 9092,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0picISvLPrIvMAick9AiaEH0x3Seic6jX37hdzBVPyiaIm1jRF7p9Tyzm2icv3ua4FZoexOKQ1VXialWmoQ/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img002.png",
+   "sha256": "8fc54cb34499daf5b822840870a86709bf01f4d65868739acf2ae35189d33903",
+   "size": 7357,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0picISvLPrIvMAick9AiaEH0xu2LQVQia5r39QpSMaBYibrrxKs7TfEkHFAdvXHAeNOA0md5PYfMoRwlw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img003.png",
+   "sha256": "8c0b3b3391c7f2f68ebf40a337b4ac372c5e6913122d260373758803b6869e13",
+   "size": 9579,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0picISvLPrIvMAick9AiaEH0xuJUdUKBvibH58zll4PMIfGKPPYSmlw6SkkEsyFia1R5agt8n8qQFU3VQ/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img004.png",
+   "sha256": "6687f0fdcda98cbc8123f72caf9b0a54d056246bdc121dc912cb3bdcf53ce146",
+   "size": 10140,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0picISvLPrIvMAick9AiaEH0xRswnrRbeQZnxtU6eLQicbmHR5mpqVMdGCmvJiajCmtlNYaXow6ccaJcQ/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img005.png",
+   "sha256": "64e2024b3ba047673c64f59b08a7a95c40b2b032ff1fc378439b97884f81d66c",
+   "size": 13885,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0picISvLPrIvMAick9AiaEH0x22yvWaX6Fb5ib0SzAwl7H1ic6eMwHfKtUkNoEhiaMaKH1R2l15FHn6icvw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img006.png",
+   "sha256": "6b109dad668bd4e3324365caf1e301319cb21dd4eb325aa677c149723797f689",
+   "size": 227350,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3XkhdZQ9h4Yoa3lk3nnvVZiclKsQkHT8JBNO5iayEAU8DSjQickgVvnb30JpficjRasIPqLLzGITambQ/640?wx_fmt=png&watermark=1&tp=webp&wxfrom=5&wx_lazy=1#imgIndex=3"
+  }
+ ],
+ "publish_time": "2025-10-22 07:30",
+ "relevance": "relevant",
+ "relevance_score": 18.8,
+ "title": "新产品盈亏平衡测算模型.xlsx",
+ "title_hits": [
+  "模型",
+  "盈亏"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247490510&idx=1&sn=11c533b2222838b0922af83531c70b29&chksm=ce11469bf966cf8d00ddac7d3dc5c0c096ce24b20d180e5fc00b16b87218d40530e15ee31209",
+ "word_count": 2367
+}
