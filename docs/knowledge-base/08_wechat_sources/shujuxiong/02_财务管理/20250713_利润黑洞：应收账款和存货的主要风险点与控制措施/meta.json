@@ -1,0 +1,42 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "albums": [
+  "财务管理"
+ ],
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "02_财务管理",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2e9aY8Xicn7bf5PZ3yWiaAicN9MXbZOgEqb1DTwse7cibTl1h21BKaoCvFicsysJticIRaht4NQK9TSp4Q/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T12:09:11+08:00",
+ "digest": "真正的勇士，敢于直面呆坏账与过季品，也敢于正视枯燥的盘点。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.png",
+   "sha256": "88b5896b8f66758e379aa4757f59357fc2d3f47c6ca1fdb2fca74ea671b996ce",
+   "size": 48072,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2tQpB7ty4A5p3HkN11B2JHvH7hsEN6KoGKUZyUsuzDedCqicCK5tIV04p5KGhpYiaPRxJwHc1icO46Q/640?wx_fmt=png&from=appmsg&watermark=1&tp=webp&wxfrom=5&wx_lazy=1"
+  }
+ ],
+ "publish_time": "2025-07-13 07:00",
+ "relevance": "relevant",
+ "relevance_score": 29.8,
+ "title": "利润黑洞：应收账款和存货的主要风险点与控制措施",
+ "title_hits": [
+  "利润",
+  "存货",
+  "应收",
+  "账款"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488591&idx=1&sn=ecd1a9a9e56fb7160c7bea1d2d0e662d&chksm=ce11491af966c00c2157fca0df83bdfbdc38c6d98d96653b8bba678bf9c06a555eaabd8a3020",
+ "word_count": 1934
+}

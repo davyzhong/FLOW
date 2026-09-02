@@ -1,0 +1,72 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "albums": [
+  "财务管理"
+ ],
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "02_财务管理",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0Zefy4nCx3ibbY822A8kazibWGQicezOVIQDPiaTWJ5IgQdwvgGFjVrIZrHObVDKdwB7ERJ89GvhHjzg/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T12:03:24+08:00",
+ "digest": "企业必须认识到，真正的成本管控不仅是短期的节省，更是长期的价值创造。通过系统的成本管控，企业能够实现低成本高效益，为未来的成功奠定坚实的基础。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.gif",
+   "sha256": "6e5826c75dc6fda91cbe4b70102063ab7e99520bd66704863d50bae65f33298d",
+   "size": 7063,
+   "url": "https://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm1eCHSDQ1FT41crSwIq5ZQuez5bEOnUCzPmARmhic0lm221AAwtWTwHosaT1CiaGoiaicgCSV7KmQRnJw/640?wx_fmt=gif"
+  },
+  {
+   "file": "images/img002.png",
+   "sha256": "cea430cd10740c2ad8cb711f45cb54f58c19f78f0e909cac4f45fa854b099033",
+   "size": 72900,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0Zefy4nCx3ibbY822A8kazib7oPyibib3oJlfNWqRxmyw955RECopqAplTczibcSDc0T4BrHmJNiaRll3Q/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img003.png",
+   "sha256": "57caeb4f3f94035cb5889b79cd364ce6079ff2c4278c83b115b6e104d3ccdcdc",
+   "size": 54257,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0Zefy4nCx3ibbY822A8kazib7icg7zq5LNaCmItQdCeBFToO1TYIMedLmasSqscmjL9vMxpmmcJm7mg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img004.png",
+   "sha256": "50eb735c9aba8b144c96428efb28d44b8935773973a732d278fc01299a43df76",
+   "size": 40085,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0Zefy4nCx3ibbY822A8kazibBemcmJ8qW6rIBuia7koLCibeLgvcaVVa1xQZbWHhWmMXtbmv4tKOoKTw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img005.png",
+   "sha256": "90f75241562167b6403dc3fcf97e7a3b1a9fa2c6cee70c5715ff37a304ef9d3d",
+   "size": 36092,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0Zefy4nCx3ibbY822A8kazibIRDFS97ibJfuHjur5lQC1jMIgMJTXCC6bwfg2oIMSueeRKVbdfwjvzA/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img006.png",
+   "sha256": "31842fd78ebfa194f597d9b2e1ef93e15cda9069e378142fa5bb96a4b831d21f",
+   "size": 50847,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0Zefy4nCx3ibbY822A8kazibbMug8C5In7BuqMiakTRQSs1nuMm5O3g5ZPkgzzN2S1B4oVCfV8oenPg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img007.png",
+   "sha256": "09c01a120a0e1dd075ef29f1f7cc193abaf9cd3ab5fdfb5dfd8ab2f5256ae2af",
+   "size": 469594,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0Zefy4nCx3ibbY822A8kazib0aIqe8oyflUvSHNQt89ByrmiaLDia6e6FVQanQf0NJaCQYK6MZIZPByQ/640?wx_fmt=png&from=appmsg"
+  }
+ ],
+ "publish_time": "2025-01-23 07:00",
+ "relevance": "relevant",
+ "relevance_score": 5.2,
+ "title": "成本管控的底层逻辑——如何从“节流”到“创效”",
+ "title_hits": [],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247486702&idx=1&sn=40b11736c9e37ece796b0aad176fcc07&chksm=ce1151bbf966d8addcffe232ddfd6546d2d7323e89b781fb4d1b5ead964c96f2cfb7dff88a7f",
+ "word_count": 2307
+}

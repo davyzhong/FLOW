@@ -1,0 +1,36 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "albums": [
+  "财务管理"
+ ],
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板"
+ ],
+ "collection": "02_财务管理",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3pWMawACBLBVYP3cVUWJat5ANW3COvkDYeyg726jXbic6qhkMrv9vVfKC1gx2yrTltrg0Ay0T7yGA/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T12:04:46+08:00",
+ "digest": "在很多企业中，成本被看作是“算出来”的——财务根据原材料、人工、制造费用一通计算，最后得出一个产品成本。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.gif",
+   "sha256": "6e5826c75dc6fda91cbe4b70102063ab7e99520bd66704863d50bae65f33298d",
+   "size": 7063,
+   "url": "http://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm1eCHSDQ1FT41crSwIq5ZQuez5bEOnUCzPmARmhic0lm221AAwtWTwHosaT1CiaGoiaicgCSV7KmQRnJw/640?wx_fmt=gif"
+  }
+ ],
+ "publish_time": "2025-03-24 07:00",
+ "relevance": "relevant",
+ "relevance_score": 10.2,
+ "title": "产品成本是规划出来的",
+ "title_hits": [],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487742&idx=1&sn=6a5eba7b2f0228751c17420b5c31b3dc&chksm=ce114dabf966c4bdc5302971054dab02dc4f12061a5e10882da95528bb8540525405ec1b3146",
+ "word_count": 1828
+}

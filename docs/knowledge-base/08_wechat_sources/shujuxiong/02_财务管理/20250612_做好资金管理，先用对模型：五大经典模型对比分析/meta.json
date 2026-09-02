@@ -1,0 +1,34 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "albums": [
+  "财务管理"
+ ],
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "02_财务管理",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0cfuHa1ZN8a3VmMnPV81lgoY3MyuSWqZVoz2fERjugRPrCHbzeuHiaxw546cteIIDej1lyx3FWWTw/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T12:07:56+08:00",
+ "digest": "企业经营就像一场马拉松，能不能跑得远，取决于有没有稳定的“现金呼吸系统”。",
+ "image_failures": [],
+ "images": [],
+ "publish_time": "2025-06-12 07:00",
+ "relevance": "relevant",
+ "relevance_score": 16.8,
+ "title": "做好资金管理，先用对模型：五大经典模型对比分析",
+ "title_hits": [
+  "模型",
+  "管理",
+  "资金"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488332&idx=2&sn=6177b76e975c89d87ce7bfaf66294a0e&chksm=ce114e19f966c70f9676c26e19b81c9171fc4afa6ef74e2ffd90c71885fc0800dd03f4d1ba6d",
+ "word_count": 1408
+}

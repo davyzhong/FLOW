@@ -1,0 +1,54 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "albums": [
+  "财务管理"
+ ],
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "02_财务管理",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm25SAVhN5vicuf28XYLJa5OHUsuvk11OHkvTkkV8jQ3ZxgFWLeYYaAnNzEMxylsQy509sfoFDbich4w/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T12:02:33+08:00",
+ "digest": "没有强有力的内部控制，企业的战略执行将如空中楼阁。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.gif",
+   "sha256": "6e5826c75dc6fda91cbe4b70102063ab7e99520bd66704863d50bae65f33298d",
+   "size": 7063,
+   "url": "https://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm1eCHSDQ1FT41crSwIq5ZQuez5bEOnUCzPmARmhic0lm221AAwtWTwHosaT1CiaGoiaicgCSV7KmQRnJw/640?wx_fmt=gif"
+  },
+  {
+   "file": "images/img002.png",
+   "sha256": "b5b68f51bd432be9c337cfab87d78aebaf508a146cf3cea9d77b8f425eee8a93",
+   "size": 84450,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm25SAVhN5vicuf28XYLJa5OH3END3nWFnph3wf092IxGt9sQURWDbapvEg32Kkibzokgw2calCBwILg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img003.png",
+   "sha256": "fdb3068018cf81d587d0e603e049a3f601f77c8f08f28df10eedce174eecfd8d",
+   "size": 60692,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm25SAVhN5vicuf28XYLJa5OH2D4hH8UB7DjntLyEriatWIP3gTKlrMc1cFZyz15DObicf5R230x2kPkQ/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img004.png",
+   "sha256": "41383c2070f1d685603d193e97fcd177b976e76fdad803621e44ead159704b07",
+   "size": 849964,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm25SAVhN5vicuf28XYLJa5OHLnNTbxvOa1mZgtIicMtYfOcSvlM06HHegVWFJte2IbazmZtBicEp23zQ/640?wx_fmt=png&from=appmsg"
+  }
+ ],
+ "publish_time": "2025-01-20 07:00",
+ "relevance": "relevant",
+ "relevance_score": 7.0,
+ "title": "构建内部控制体系的几个常见误区",
+ "title_hits": [],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247486670&idx=1&sn=918870280d0b2ea7350d860d952df7b0&chksm=ce11519bf966d88d7620ffea4b1a9c6a486c4b583bbac80b1d1c46061cbe7bf38262754b42ef",
+ "word_count": 2485
+}
