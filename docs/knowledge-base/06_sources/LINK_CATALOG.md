@@ -13,15 +13,18 @@
 4. 总经理经营决策驾驶舱：<https://mp.weixin.qq.com/s/ZMuBnCKvjM9UsqpG-nxzxA>
 5. Huashu Excel 数据分析 Skill：<https://mp.weixin.qq.com/s/7gYbxcW81EtUZQOvpZTOkw>
 
-## 公众号素材库（持续更新）
+## 公众号素材库（内容在 Obsidian vault，多机同步）
 
-- 数据熊（gh_d55144ba7fe2）：
-  - 2026年8月财务分析报告：<https://mp.weixin.qq.com/s/HMwy9dOscTPneWF8knRoMA>
-- 数研复盘狮（gh_78506a7234d3）：
-  - 8月毛利润与净利润分析报告（第二版）：<https://mp.weixin.qq.com/s/Af581zMEpYjwyO5pogT_3A>
+- vault 内容根：`/Users/qiming/ObsidianWiki/Clippings/微信知识库/`
+  （obsidian://open?path=/Users/qiming/ObsidianWiki/Clippings/微信知识库/目录入口：各账号「目录.md」）
+- 仓库侧引用索引（每篇的 vault 笔记链接 + 原文链接）：
+  [`../08_wechat_sources/INDEX.md`](../08_wechat_sources/INDEX.md)
+- 数据熊（gh_d55144ba7fe2）：4 合集 412 篇（财务分析 84 / 财务管理 138 / 财务报表 26 / 经营分析 191）
+- 数研复盘狮（gh_78506a7234d3）：8月毛利润与净利润分析报告（第二版）：
+  <https://mp.weixin.qq.com/s/Af581zMEpYjwyO5pogT_3A>
+- 花叔（gh_13cc971d267c）：Huashu-Excel 发布：<https://mp.weixin.qq.com/s/7gYbxcW81EtUZQOvpZTOkw>
 
-后续新增文章不逐条登记在本文件，统一由 [`../08_wechat_sources/INDEX.md`](../08_wechat_sources/INDEX.md)
-自动索引（含本地归档路径与原文链接）。
+后续新增文章不逐条登记，统一由 `08_wechat_sources/INDEX.md` 自动索引。
 
 ## 开源项目
 

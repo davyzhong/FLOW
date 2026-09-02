@@ -60,11 +60,12 @@ docs/knowledge-base/
 ├── 07_handoff/
 │   ├── CONTINUATION_GUIDE.md
 │   └── RESTART_PROMPTS.md
-├── 08_wechat_sources/
+├── 08_wechat_sources/        # 公众号素材流水线：内容在 Obsidian vault，仓库只留配置与链接
 │   ├── README.md
-│   ├── sources.yaml
-│   ├── INDEX.md
-│   └── <来源id>/<日期>_<标题>/
+│   ├── sources.yaml          # 来源注册表 + content_root（vault 路径）
+│   ├── INDEX.md              # 引用索引（vault 笔记链接，自动生成）
+│   ├── albums/               # 合集清单 json
+│   ├── queue/ state/ logs/
 └── 99_manifest/
     ├── inventory.tsv
     └── sha256sums.txt

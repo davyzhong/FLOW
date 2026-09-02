@@ -13,11 +13,11 @@
 """公众号素材库同步入口。
 
 用法（仓库根目录）：
-    uv run scripts/wechat_kb/sync.py [--dry-run] [--limit N] [--skip-manifest]
+    uv run scripts/wechat_kb/sync.py [--dry-run] [--limit N] [--skip-manifest] [--recompress]
 
-流程：发现新文章 URL（seed/mp_platform/rss）→ 逐篇抓取正文与图片 →
-财经相关性筛选 → 写入 docs/knowledge-base/08_wechat_sources/ →
-重建索引与 99_manifest。低相关性文章只记入 logs/excluded.jsonl，不入库。
+流程：发现新文章 URL（seed/合集/mp_platform/rss）→ 逐篇抓取正文与图片 →
+财经相关性筛选 → 经 work/ staging 写入 Obsidian vault（内容唯一仓库）→
+重建 vault 目录页与仓库内引用索引。低相关性文章只记 logs/excluded.jsonl。
 """
 
 from __future__ import annotations
@@ -37,6 +37,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import build_index
 import classify
+import export_obsidian
 import make_manifest
 import organize_albums
 import providers
@@ -58,6 +59,10 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 KB_DIR = REPO_ROOT / "docs" / "knowledge-base" / "08_wechat_sources"
 WORK_DIR = REPO_ROOT / "work" / "wechat_kb"
 CRED_PATH = WORK_DIR / "mp_credentials.json"
+# 内容仓库 = Obsidian vault（多机同步）；仓库内不存正文，staging 只是摄取中转
+STAGING_ROOT = WORK_DIR / "staging"
+DEFAULT_CONTENT_ROOT = Path.home() / "ObsidianWiki" / "Clippings" / "微信知识库"
+
 
 def load_state(kb_dir: Path) -> dict:
     path = kb_dir / "state" / "seen_urls.json"
@@ -88,6 +93,16 @@ def load_sources(kb_dir: Path) -> list[dict]:
         if path.exists():
             sources += yaml.safe_load(path.read_text(encoding="utf-8"))["sources"]
     return sources
+
+
+def load_content_root(kb_dir: Path) -> Path:
+    """知识内容唯一存储（sources.yaml 顶层 content_root，默认本机 Obsidian vault）。"""
+    path = kb_dir / "sources.yaml"
+    if path.exists():
+        data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+        if data.get("content_root"):
+            return Path(data["content_root"])
+    return DEFAULT_CONTENT_ROOT
 
 
 def register_source(kb_dir: Path, meta: dict) -> str:
@@ -211,9 +226,11 @@ def main() -> int:
 
     kb_dir: Path = args.kb_dir
     sources = load_sources(kb_dir)
+    content_root = load_content_root(kb_dir)
     state = load_state(kb_dir)
     queue_dir = kb_dir / "queue"
-    report = {"started_at": datetime.now(CST).isoformat(timespec="seconds"), "sources": {}}
+    report = {"started_at": datetime.now(CST).isoformat(timespec="seconds"),
+              "content_root": str(content_root), "sources": {}}
     included_total = 0
 
     for source in sources:
@@ -265,13 +282,13 @@ def main() -> int:
                     print("  [跳过] %s（早于 %s）" % (meta0.get("title"), args.since))
                     continue
 
-                # 合集归位：已知合集的文章进入类别子目录
+                # 合集归位：已知合集的文章进入类别子目录（staging 中转，最终写 vault）
                 collection_dir: str | None = None
                 if album_map:
                     hit = album_map.get(url)
                     if hit:
                         collection_dir = hit[0]
-                parent = kb_dir / article_sid / collection_dir if collection_dir else kb_dir / article_sid
+                parent = STAGING_ROOT / article_sid / collection_dir if collection_dir else STAGING_ROOT / article_sid
                 target = unique_dir(parent / ("%s_%s" % (date_part, slugify_title(meta0.get("title") or "untitled"))))
 
                 meta = ingest_from_html(html_text, url,
@@ -291,11 +308,17 @@ def main() -> int:
                 else:
                     stat["included"] += 1
                     included_total += 1
-                    state[url] = {"status": "done", "dir": "%s/%s" % (article_sid, target.name),
+                    note_rel = None
+                    if not args.dry_run:
+                        note_path = export_obsidian.write_article(target, content_root)
+                        note_rel = str(note_path.relative_to(content_root))
+                        shutil.rmtree(target, ignore_errors=True)
+                    state[url] = {"status": "done", "note": note_rel,
                                   "title": meta.get("title"),
                                   "date": datetime.now(CST).isoformat(timespec="seconds")}
-                    print("  [入库] %s（%s，得分 %s）" % (
-                        meta.get("title"), meta.get("relevance"), meta.get("relevance_score")))
+                    print("  [入库] %s（%s，得分 %s）→ %s" % (
+                        meta.get("title"), meta.get("relevance"),
+                        meta.get("relevance_score"), note_rel or "dry-run"))
                 time.sleep(2.5)
             except Exception as exc:
                 stat["errors"] += 1
@@ -314,7 +337,9 @@ def main() -> int:
 
     if not args.dry_run:
         save_state(kb_dir, state)
-        print("索引已更新：%s" % build_index.build(kb_dir))
+        for moc in export_obsidian.regen_mocs(content_root):
+            print("vault 目录页：%s" % moc)
+        print("引用索引已更新：%s" % build_index.build(kb_dir, content_root))
         if not args.skip_manifest:
             n = make_manifest.build()
             print("manifest 已重建：inventory=%d 条" % n[0])

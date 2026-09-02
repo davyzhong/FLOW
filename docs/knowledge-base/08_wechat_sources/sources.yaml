@@ -1,5 +1,6 @@
 # 公众号来源注册表：scripts/wechat_kb/sync.py 读取
-# id: 目录名（ASCII）；name: 公众号昵称（mp_platform 检索用）；feed: 可选 RSS 源
+# content_root: 知识内容唯一存储（Obsidian vault，多机同步；仓库内不存正文）
+content_root: /Users/qiming/ObsidianWiki/Clippings/微信知识库
 sources:
   - id: shujuxiong
     name: 数据熊

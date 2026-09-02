@@ -3,18 +3,22 @@
 # dependencies = ["pyyaml>=6.0"]
 # ///
 # -*- coding: utf-8 -*-
-"""把公众号素材库导出为 Obsidian 笔记（本地图片 + frontmatter + MOC 目录页）。
+"""公众号素材库 ↔ Obsidian 库（唯一内容仓库）。
 
-用法（仓库根目录）：
-    uv run scripts/wechat_kb/export_obsidian.py \
-        [--vault /Users/qiming/ObsidianWiki/Clippings/微信知识库] [--force]
+Obsidian vault 是知识内容的唯一存储（多机同步）；FLOW 仓库只保留流水线配置、
+队列/状态/日志与链接引用，不存正文。
 
-- 笔记结构：<vault>/<公众号>/<合集目录>/<YYYY-MM-DD 标题>.md；
-- 图片统一复制到 <合集目录>/attachments/<笔记名>-imgNNN.<ext> 并改写链接（离线可读）；
-- frontmatter 对齐用户既有 Web Clipper 习惯：title/source/author([[wikilink]])/published/
-  created/album/categories/tags（含 clippings）；
-- 每个公众号目录生成「目录.md」MOC（wikilink 索引，按时间倒序）；
-- 幂等：目标内容一致则跳过（--force 强制重写）；图片按缺失才复制。
+用法：
+    # 周期维护：只重建各账号「目录.md」MOC（从 vault 自扫描，幂等）
+    uv run scripts/wechat_kb/export_obsidian.py --moc-only
+
+    # 迁移/回填模式：把一个 KB 格式文章目录（article.md+meta.json+images/）
+    # 写入 vault（供 sync.py 之外的手工迁移使用）
+    uv run scripts/wechat_kb/export_obsidian.py --article-dir <dir>
+
+库内结构：<vault>/<公众号>/<合集目录>/<YYYY-MM-DD 标题>.md + attachments/ + 目录.md。
+frontmatter 对齐用户 Web Clipper 习惯（author 用 [[wikilink]]、tags 含 clippings）。
+同名同日期冲突时自动追加序号，绝不覆盖不同内容。
 """
 
 from __future__ import annotations
@@ -36,6 +40,7 @@ KB_DIR = REPO_ROOT / "docs" / "knowledge-base" / "08_wechat_sources"
 DEFAULT_VAULT = Path.home() / "ObsidianWiki" / "Clippings" / "微信知识库"
 
 BAD_FN = re.compile(r'[\\/:*?"<>|#^\[\]\r\n\t]')
+FM_RE = re.compile(r"\A---\n(.*?)\n---\n", re.S)
 
 
 def obsidian_filename(title: str, published: str) -> str:
@@ -46,41 +51,14 @@ def obsidian_filename(title: str, published: str) -> str:
     return ("%s %s" % (day, t)) if day else t
 
 
-def load_accounts(kb_dir: Path) -> dict[str, list[dict]]:
-    """{账号显示名: [{meta, article_dir}]}；合集子目录与平铺层都扫。"""
-    accounts: dict[str, list[dict]] = {}
-    for account_dir in sorted(kb_dir.iterdir()):
-        if not account_dir.is_dir() or account_dir.name in ("queue", "logs", "albums", "state"):
-            continue
-        metas: list[dict] = []
-
-        def scan(level: Path, collection: str | None):
-            for child in sorted(level.iterdir()):
-                if not child.is_dir():
-                    continue
-                if (child / "meta.json").exists():
-                    meta = json.loads((child / "meta.json").read_text(encoding="utf-8"))
-                    meta["_dir"] = child
-                    meta["_collection"] = collection
-                    metas.append(meta)
-                elif child.name != "attachments":
-                    scan(child, child.name)
-
-        scan(account_dir, None)
-        if metas:
-            name = metas[0].get("account") or account_dir.name
-            accounts.setdefault(name, []).extend(metas)
-    return accounts
-
-
 def album_topic(meta: dict) -> str:
-    c = meta.get("collection")
+    c = meta.get("collection") or meta.get("_collection")
     if not c:
-        return meta.get("albums", ["未分类"])[0] if meta.get("albums") else "未分类"
+        return (meta.get("albums") or ["未分类"])[0] if meta.get("albums") else "未分类"
     return re.sub(r"^\d+[_\-]?", "", c)
 
 
-def build_note(meta: dict, image_map: dict[str, str]) -> str:
+def build_note(meta: dict, article_dir: Path, image_map: dict[str, str]) -> str:
     topic = album_topic(meta)
     fm = {
         "title": meta.get("title"),
@@ -105,11 +83,11 @@ def build_note(meta: dict, image_map: dict[str, str]) -> str:
     if meta.get("digest"):
         src += "\n> 摘要：%s" % meta["digest"]
 
-    body = (meta["_dir"] / "article.md").read_text(encoding="utf-8")
-    # 去掉知识库版 frontmatter 与重复的一级标题/来源块（导出时重建）
+    body = (article_dir / "article.md").read_text(encoding="utf-8")
     body = re.sub(r"\A---\n.*?\n---\n", "", body, count=1, flags=re.S)
     body = re.sub(r"\A\s*#\s*[^\n]*\n", "", body, count=1)
-    body = re.sub(r"\A\s*(> 来源：[^\n]*\n)+\s*(> 原文链接：[^\n]*\n)?\s*(> 摘要：[^\n]*\n)?", "", body, count=1)
+    body = re.sub(
+        r"\A\s*(> 来源：[^\n]*\n)+\s*(> 原文链接：[^\n]*\n)?\s*(> 摘要：[^\n]*\n)?", "", body, count=1)
 
     def repl(m):
         rel = m.group(1)
@@ -117,86 +95,121 @@ def build_note(meta: dict, image_map: dict[str, str]) -> str:
         return "![图片](attachments/%s)" % target if target else m.group(0)
 
     body = re.sub(r"!\[[^\]]*\]\((images/[^)]+)\)", repl, body)
-
     return "---\n%s\n---\n\n# %s\n\n%s\n\n%s" % (
         head, meta.get("title") or "无标题", src, body.strip())
 
 
-def export_account(account: str, metas: list[dict], vault: Path, force: bool) -> dict:
-    account_dir = vault / account
-    stats = {"notes": 0, "skipped": 0, "images": 0, "moc": None}
-    toc: list[tuple[str, str, str, str]] = []  # (published, title, relpath, section)
+def write_article(article_dir: Path, vault: Path, force: bool = False) -> Path:
+    """把一个 KB 格式文章目录写入 vault（单篇；供 sync 与迁移调用），返回笔记路径。"""
+    meta = json.loads((article_dir / "meta.json").read_text(encoding="utf-8"))
+    account = BAD_FN.sub(" ", meta.get("account") or "未知账号").strip() or "未知账号"
+    collection = meta.get("collection")
+    target_dir = vault / account / collection if collection else vault / account
+    base = obsidian_filename(meta.get("title"), meta.get("publish_time") or "")
 
-    for meta in sorted(metas, key=lambda m: m.get("publish_time") or ""):
-        collection = meta.get("_collection")
-        target_dir = account_dir / collection if collection else account_dir
-        note_name = obsidian_filename(meta.get("title"), meta.get("publish_time") or "")
-        note_path = target_dir / (note_name + ".md")
+    image_map: dict[str, str] = {}
+    attachments = target_dir / "attachments"
+    for img in meta.get("images", []):
+        rel = img.get("file")
+        if not rel:
+            continue
+        src_img = article_dir / rel
+        if not src_img.exists():
+            continue
+        target_name = "%s-%s" % (base, Path(rel).name)
+        dst = attachments / target_name
+        if not dst.exists() or dst.stat().st_size != src_img.stat().st_size:
+            attachments.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(src_img, dst)
+        image_map[rel] = target_name
 
-        # 图片：复制到合集 attachments/，以笔记名做前缀防冲突
-        image_map: dict[str, str] = {}
-        attachments = target_dir / "attachments"
-        for img in meta.get("images", []):
-            rel = img.get("file")
-            if not rel:
+    content = build_note(meta, article_dir, image_map)
+    note_path = target_dir / (base + ".md")
+    n = 2
+    while note_path.exists() and not force and note_path.read_text(encoding="utf-8") != content:
+        note_path = target_dir / ("%s (%d).md" % (base, n))  # 同名不同文：加序号不覆盖
+        n += 1
+    note_path.parent.mkdir(parents=True, exist_ok=True)
+    note_path.write_text(content, encoding="utf-8")
+    return note_path
+
+
+def parse_note(note_path: Path) -> tuple[str, str, str]:
+    """读 vault 笔记 frontmatter → (published, title, source)。"""
+    text = note_path.read_text(encoding="utf-8")
+    m = FM_RE.match(text)
+    fm = yaml.safe_load(m.group(1)) if m else {}
+    return str(fm.get("published") or ""), str(fm.get("title") or note_path.stem), str(fm.get("source") or "")
+
+
+def regen_mocs(vault: Path) -> list[Path]:
+    """从 vault 自扫描重建各账号「目录.md」（不依赖仓库内容）。"""
+    mocs: list[Path] = []
+    for account_dir in sorted(p for p in vault.iterdir() if p.is_dir()):
+        rows: list[tuple[str, str, str, str]] = []  # published, title, relpath, section
+        for md in account_dir.rglob("*.md"):
+            if md.name == "目录.md":
                 continue
-            src_img = meta["_dir"] / rel
-            if not src_img.exists():
-                continue
-            target_name = "%s-%s" % (note_name, Path(rel).name)
-            dst = attachments / target_name
-            if not dst.exists() or dst.stat().st_size != src_img.stat().st_size:
-                attachments.mkdir(parents=True, exist_ok=True)
-                shutil.copy2(src_img, dst)
-                stats["images"] += 1
-            image_map[rel] = target_name
-
-        content = build_note(meta, image_map)
-        if note_path.exists() and not force and note_path.read_text(encoding="utf-8") == content:
-            stats["skipped"] += 1
-        else:
-            note_path.parent.mkdir(parents=True, exist_ok=True)
-            note_path.write_text(content, encoding="utf-8")
-            stats["notes"] += 1
-        section = meta.get("_collection")
-        section = re.sub(r"^\d+[_\-]?", "", section) if section else "未分类"
-        toc.append(((meta.get("publish_time") or "")[:10], meta.get("title") or "",
-                    str(note_path.relative_to(account_dir)), section))
-
-    # MOC 目录页
-    if toc:
-        lines = ["# %s 文章目录" % account, "",
-                 "> 由 `export_obsidian.py` 自动生成；共 %d 篇。" % len(toc), ""]
+            published, title, _ = parse_note(md)
+            rel = md.relative_to(account_dir)
+            section = re.sub(r"^\d+[_\-]?", "", rel.parts[0]) if len(rel.parts) > 1 else "未分类"
+            rows.append((published, title, md.stem, section))
+        if not rows:
+            continue
+        rows.sort(key=lambda r: r[0])
+        lines = ["# %s 文章目录" % account_dir.name, "",
+                 "> 由 `export_obsidian.py` 自动生成；共 %d 篇。" % len(rows), ""]
         cur = None
-        for published, title, rel, section in reversed(toc):
+        for published, title, stem, section in rows:
             if section != cur:
                 lines += ["## %s" % section, ""]
                 cur = section
-            lines.append("- %s [[%s|%s]]" % (
-                (published or "未知") + " · ", Path(rel).stem, title))
+            lines.append("- %s [[%s|%s]]" % ((published or "未知") + " · ", stem, title))
         lines.append("")
         moc = account_dir / "目录.md"
-        moc.parent.mkdir(parents=True, exist_ok=True)
         moc.write_text("\n".join(lines), encoding="utf-8")
-        stats["moc"] = str(moc)
-    return stats
+        mocs.append(moc)
+    return mocs
+
+
+def load_accounts(kb_dir: Path) -> dict[str, list[Path]]:
+    """迁移模式：扫 KB 文章目录（含合集子目录与平铺层）。"""
+    accounts: dict[str, list[Path]] = {}
+    for account_dir in sorted(kb_dir.iterdir()):
+        if not account_dir.is_dir() or account_dir.name in ("queue", "logs", "albums", "state"):
+            continue
+        for meta_path in account_dir.rglob("meta.json"):
+            meta = json.loads(meta_path.read_text(encoding="utf-8"))
+            name = meta.get("account") or account_dir.name
+            accounts.setdefault(name, []).append(meta_path.parent)
+    return accounts
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="导出公众号素材库到 Obsidian")
-    parser.add_argument("--kb-dir", type=Path, default=KB_DIR)
+    parser = argparse.ArgumentParser(description="公众号素材库 Obsidian 写入/维护")
     parser.add_argument("--vault", type=Path, default=DEFAULT_VAULT)
-    parser.add_argument("--force", action="store_true", help="内容未变也重写笔记")
+    parser.add_argument("--moc-only", action="store_true", help="只重建各账号目录.md")
+    parser.add_argument("--article-dir", type=Path, default=None,
+                        help="把单个 KB 文章目录写入 vault（迁移用）")
+    parser.add_argument("--kb-dir", type=Path, default=KB_DIR,
+                        help="配合 --migrate 使用：从 KB 全量迁移")
+    parser.add_argument("--migrate", action="store_true", help="把 kb-dir 下全部文章写入 vault")
+    parser.add_argument("--force", action="store_true")
     args = parser.parse_args()
 
-    accounts = load_accounts(args.kb_dir)
-    total_notes = 0
-    for account, metas in accounts.items():
-        stats = export_account(account, metas, args.vault, args.force)
-        total_notes += stats["notes"] + stats["skipped"]
-        print("%s：新写 %d、跳过 %d（图片复制 %d）；MOC → %s" % (
-            account, stats["notes"], stats["skipped"], stats["images"], stats["moc"]))
-    print("完成：共 %d 篇笔记在 %s" % (total_notes, args.vault))
+    if args.article_dir:
+        print(write_article(args.article_dir, args.vault, args.force))
+    if args.migrate:
+        total = 0
+        for account, dirs in load_accounts(args.kb_dir).items():
+            for d in dirs:
+                write_article(d, args.vault, args.force)
+                total += 1
+            print("%s：迁移 %d 篇" % (account, len(dirs)))
+        print("迁移完成：%d 篇" % total)
+    mocs = regen_mocs(args.vault)
+    for m in mocs:
+        print("MOC →", m)
     return 0
 
 

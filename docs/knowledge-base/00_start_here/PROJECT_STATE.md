@@ -226,7 +226,8 @@
 - 数据熊按公众号官方 4 个合集分类归档为 4 个知识库合集：01_财务分析 84 篇、02_财务管理 138 篇、03_财务报表 26 篇、04_经营分析 191 篇（清单存 `albums/`，跨合集文章取主归属、meta 记全部归属）；
 - 落地抓取流水线 `scripts/wechat_kb/`：文章发现（合集公开接口 / seed 队列 / 收件箱自动归类 / 微信公众平台接口 / RSS 五通道）、正文与图片抓取、Markdown 转换、大图压缩、财经相关性筛选、索引与 99_manifest 自动重建，出站请求带 host 白名单与内网地址防护；
 - 沉淀 `wechat-kb-sync` 技能与每周一 09:00 定时同步；通用引擎另沉淀为跨项目 `wechat-article-harvest` 技能；
-- 合集之外的散篇可按 wechat-kb-sync 技能第 4 节的慢节奏流程补齐（浏览器页面内 fetch，受公众平台 200013 频率限制约束）。
+- 2026-09-03 架构变更：Obsidian vault（多机同步）成为知识内容唯一仓库（`sources.yaml: content_root` 指向 `/Users/qiming/ObsidianWiki/Clippings/微信知识库/`）；仓库 08_wechat_sources 只保留流水线、来源配置、队列/状态/日志与链接引用索引（INDEX.md 含每篇 vault 笔记 `obsidian://` 链接），同步流水线改为 staging 中转后直写 vault；
+- 合集之外的散篇可按 wechat-kb-sync 技能第 5 节的慢节奏流程补齐（浏览器页面内 fetch，受公众平台 200013 频率限制约束）。
 
 ## 当前尚未完成
 
