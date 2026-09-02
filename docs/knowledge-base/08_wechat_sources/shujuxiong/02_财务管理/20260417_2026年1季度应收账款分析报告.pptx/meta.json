@@ -1,0 +1,109 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "albums": [
+  "财务管理"
+ ],
+ "author": "宋岳清",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板"
+ ],
+ "collection": "02_财务管理",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/gZ0Mp1agcZic6uEg7eqRMrmHFiaibFz67ibsZfdbUz0xojn77Kembjr4WxnOnxPicfZv5lHR4teUul2oWicbHXt8FAgNVTOlErORcdCnNzq2r0hec/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T12:40:26+08:00",
+ "digest": null,
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.jpg",
+   "sha256": "b6488b63a47497d4672af9e3e5b074e35f87ebacd2925b04cc160618ebebbf27",
+   "size": 301515,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/gZ0Mp1agcZ8HjJ7m8mP3X1dOicD3jHIU0lSnEzef9YIPJtU9icUNhPE3tE7csFB3dbh7S0LfBXZ6H0zke2vcrEATOfjUSNEsVpnFtrtQPICk8/640?wx_fmt=jpeg&from=appmsg"
+  },
+  {
+   "file": "images/img002.jpg",
+   "recompressed": true,
+   "sha256": "13063d3c52664f517de3aa8280dfd3136cf62dc9bec5db52eeee06291366c019",
+   "size": 82274,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZ8w1S8E4RwqMTrBesHUMD8P9ym8R4wDR3LeROkH1xViclFUy9dcIUwCvo0uaFuuxNYFSDUBfL7jdibP1xoMfXHIolKg9Yflw7K14/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img003.jpg",
+   "recompressed": true,
+   "sha256": "c384a07153e60b821f1fc34b94bb79ad9176ed8d32692401538606ca4afaa400",
+   "size": 134711,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/gZ0Mp1agcZ8sC9Lm1KH75cFElJNdDibIoYkZxCz7CpHGOSDl54lxzSUaPGN4FWjGIvLLiazThm2EEeheF0siakvqKxeicepIBrqGl5brAybhcicE/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img004.jpg",
+   "recompressed": true,
+   "sha256": "d5f107637d0c8803582d556739b6a31b478371a6cf02e765628cd212417773d3",
+   "size": 124212,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZicmIua49QcfrPlB9x7E3us6RJvEWM85C2jdcwgic8iasAOUcB6ozghG8t8paRLztWb7vTVyc9zr5nvF5A8EmmKgSHJpgHxib1tgDc/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img005.jpg",
+   "recompressed": true,
+   "sha256": "0778d19011df36a3b070775e2d73256d7997a18dbb371526de426b7f4b475615",
+   "size": 100776,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/gZ0Mp1agcZicLCC4HQZfG9ap0QaJqwyHkrTrVA2ZY8fYFSrE7xPknEVXNMY0MHibhyrct4BABibCW9pLiaG0kwTjTjtFqDuiaiayYHwlyu99PibPmE/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img006.jpg",
+   "recompressed": true,
+   "sha256": "20e07abc125ed1996562d5af2391c3006514f15d91cd9e6a101ed7cb8f6d296d",
+   "size": 127554,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/gZ0Mp1agcZ9Hkw8APvZW6LkliaLP1OpjaD13ROibKWlj26oHPLCTwXtG6UaXPK8WH2wcCCe6WF85nKPf7RaRuFnyyWLibIaBibq10OX1icbfIAS4/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img007.jpg",
+   "recompressed": true,
+   "sha256": "24b4f41425aa749f8b93a619e25edfd8d8480115d09d5fdaaef60401672ae84a",
+   "size": 145219,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZ8pWHicMBYTZRic5SGDIhtZ44T3UVb5RwBwicmBBBvpl9Pbibg6uQbJMnq63jDfyiaApmcEutMhkTNMG5l3TK5dVib2gFY6O2TsNjkjs/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img008.jpg",
+   "recompressed": true,
+   "sha256": "ea487e20ca10b50f657fc56fcac04552cd40b9e4dba7ab5ed1bfee40d602209a",
+   "size": 131665,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZ915K3Azhtnib1bU8SaIlw6g063x0Gm0ZOO6mFaGdWCLmcOwxs7xVCzXrwOFAx5iaev1yzk3ibfnTxqhNxemeQia39Uicicm3HeQvLhY/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img009.jpg",
+   "recompressed": true,
+   "sha256": "7b00083f4e5d5cdb63e35a7e96d1cdba2092c202df81bdb14652bac13a377d70",
+   "size": 164025,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZic2BBt9VJCFy1pzcoNkpdW9KZZVbGtvSXmxuxlcLsLnWHeSf5grb6SS6NAYxHRttM8EUfaDQfaU38s7ichibYK1sHVibUmKpbd0eE/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img010.png",
+   "sha256": "735bf3d052ac2faaede104bfa91bf85c7115f50359b693bc185e7cc6d31f6f59",
+   "size": 658409,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZ8439jO6VWNn5G4O0qgPIZf70zCibtCDScL93D6tpg7uHVoowL280TDgQXM60JYHiahknp14icT1HS5QnpmBdqiaotvDU8B0KibPv5w/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img011.png",
+   "sha256": "766159d5be4b5da896fb2d24f66f286ec33c3d73d7232b53f0e728ed729daabc",
+   "size": 65396,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZ8Hico4niboCjibz6uOd0z4Fu8NjFlh6A7BTvEicxLs7S5uDunXQGibL43RnicoibPLF7IEzb3xLzO6bIYUQQUNOBiaGrwv1EgJrwntD7Y/640?wx_fmt=png&from=appmsg&watermark=1&tp=webp&wxfrom=5&wx_lazy=1#imgIndex=11"
+  }
+ ],
+ "publish_time": "2026-04-17 09:15",
+ "relevance": "relevant",
+ "relevance_score": 19.6,
+ "title": "2026年1季度应收账款分析报告.pptx",
+ "title_hits": [
+  "ppt",
+  "分析报告",
+  "应收",
+  "账款"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247498399&idx=1&sn=88af3590e898a71d3c8e029c74878166&chksm=ce12a7caf9652edc045084cc5ea07acec1e324e2479e1591f966313a1ce09421d440e954093f",
+ "word_count": 156
+}
