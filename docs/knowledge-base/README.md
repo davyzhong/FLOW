@@ -60,6 +60,11 @@ docs/knowledge-base/
 ├── 07_handoff/
 │   ├── CONTINUATION_GUIDE.md
 │   └── RESTART_PROMPTS.md
+├── 08_wechat_sources/
+│   ├── README.md
+│   ├── sources.yaml
+│   ├── INDEX.md
+│   └── <来源id>/<日期>_<标题>/
 └── 99_manifest/
     ├── inventory.tsv
     └── sha256sums.txt

@@ -39,6 +39,17 @@
 | 浏览器视觉原型 | `.superpowers/brainstorm/68961-1787989304/content/` | `03_assets/visual_prototypes/` |
 | V1 正式设计规格 | `docs/superpowers/specs/2026-08-29-flow-v1-design.md` | `05_design/approved/` 保存归档快照 |
 
+## 来源组 F：公众号素材库（持续更新）
+
+| 公众号 | 账号 ID | 归档位置 | 说明 |
+|---|---|---|---|
+| 数据熊 | gh_d55144ba7fe2 | `../08_wechat_sources/shujuxiong/` | 财务分析实务与月度经营分析报告模板 |
+| 数研复盘狮 | gh_78506a7234d3 | `../08_wechat_sources/shuyan_fupanshi/` | 经营分析报告、毛利与净利润专题复盘 |
+
+抓取方式、更新协议与全量文章索引见 [`../08_wechat_sources/README.md`](../08_wechat_sources/README.md)。
+该目录为持续更新的外部素材库：正文转 Markdown、图片本地归档、按财经相关性筛选；
+低相关性文章仅记录于 `08_wechat_sources/logs/excluded.jsonl`。
+
 ## 完整文件级记录
 
 逐文件路径、大小和修改时间见 `../99_manifest/inventory.tsv`；内容哈希见 `../99_manifest/sha256sums.txt`。

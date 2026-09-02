@@ -1,0 +1,134 @@
+{
+ "account": "数研复盘狮",
+ "account_id": "gh_78506a7234d3",
+ "author": null,
+ "biz": "MzY5NTM2NTA5NA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/sz_mmbiz_jpg/zYjgyxwMA6IIrP7XZVcRpHP9twar3tHeYhestnWMRnGAZYkQ70NToKLog1H0BwYOUJrB5QmavNwR1MFLTj2yoEqDASZbEImslF5NlAf4KAo/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T08:53:09+08:00",
+ "digest": "103--8月毛利润与净利润分析报告  （第二版）告--一目了然（该份PPT图标均可编辑）企业盈利有明暗两条核",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.png",
+   "sha256": "cf40dde8e927e452a618949e4033c1ef88b0ce5cf104183b94471ade7e1ca8de",
+   "size": 845068,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/zYjgyxwMA6Lp0zwYEl3CjuYMXOb5nK2ics6IjXZAgiasTfS5xgxgZwVfJphejvA5A1gQ6N0DxKzCj8LuUTFg6YkvYLrjmP7iaZfCekXicBeJhvs/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img002.png",
+   "sha256": "da86f4b9b3b63985fae1b7bb7a6c0b46395e35661e666be9e22fda0f8168dc9f",
+   "size": 793072,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/zYjgyxwMA6IicicB7hOq0uM3FH1J1o8GLy0eXibRyTltblbjg489uYHiaeTEWVnpK1kMMoaCYPjuVLTRhVBOmHnxgGZJr0cVDqh3Iz2djrxpcicA/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img003.png",
+   "sha256": "3ad1dacabbb1683ffa5878ee73a440bc55a9ca6a75bc97f9b409c07c2bc8b3d9",
+   "size": 836588,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/zYjgyxwMA6Khpaws0J3ceHRovaw0e58A6ibElxySDB62J4GLazFrib5cKf2XgBhDnBzL1NZAtpQhqvZ0uTVbGYayuaIreOjgQcbRzx0Glxl7g/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img004.png",
+   "sha256": "acb97cef4e63d46c42f0b97d04c87a0cfa70d5ab8ff846445b3787435a1f81cb",
+   "size": 897124,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/zYjgyxwMA6KH2GxyUWspA30jMKUjX3vd6aGkJOQJkX1teqpyvicIyibfWX9bqibywdPtIL92HUIaU7SLO0JfkS8sRfqic6Qs6dicWJ4XicdYlW5ws/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img005.png",
+   "sha256": "fe9687f3e5c01db486416a311e9ad93dbd4edaea1c937eb7e8ef838ab5f58e1c",
+   "size": 756471,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/zYjgyxwMA6LBQX6LDdflQrgeWaKAf07xG79fRKawsqLIrkKBhbjGeh4WYyI64CicDfLrRu2pme6crGg9oLLhRL7RibCRyAcmNtvLwkVr3iae7k/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img006.png",
+   "sha256": "a8d8c6adc5bc19a209f2197c42364618eb3c56db23d94b9b47e6b64f339efa2f",
+   "size": 854786,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/zYjgyxwMA6KvQcoplX0oRYMjuu8zKv88uTnPcdN8WAQFgCT6w6bkzFJsm4CAuCcLYPicia3NibvnZqaRGoCT6FKVapVDOMeSlvKmlHcFF84Zps/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img007.png",
+   "sha256": "bce4bc86ae12d51b3c47675c8a922e131f2d6e9d1d924099b9d818c7f5b3e0a8",
+   "size": 777754,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/zYjgyxwMA6IViadWBSibw0mDwlvXIu7jQTvvIuUicrBpeRFianzOBOTeVMMuH9ZY5tlP7HeoibdPDq9yufqWxBKrBLaia5dibgFlsdC1tg8kkKEpEs/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img008.png",
+   "sha256": "0a49e9ecaafc0a665a599bb368d68a8ce296bbe5c68ea577e890844e6b2ea938",
+   "size": 866516,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/zYjgyxwMA6KtE06G8goTHPmicf8p1U8IicaEr90DB8A2xgbLGk2RgDp74CrpPibEhibbCickfLEtLjm3C0sDv7I4Bu98nlfhGYol4mHjSSDNhoKg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img009.png",
+   "sha256": "4224c5485ac3b815a8b1c3eb45263411ba9e1cbeddde41e7e95b320682e0614f",
+   "size": 784583,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/zYjgyxwMA6IMaZiaibF6hMYzRJ4SymHTwich3bhkbwCC5UXmPVzqyEUxIobicia5r8ABxVIeM5MzePJQrtpJytk8TFlGQfqBGrjSUibpEk3n5VEEA/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img010.png",
+   "sha256": "ad079d2ea51b0a9a83cde055a8e26ea015a6f32e3219823b19223ab8d16cb69c",
+   "size": 824510,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/zYjgyxwMA6JnHibwcADYShHFb3uf2jhW0z5YwX3HQkCMicmGRKibKDYTQGKtcXiaXOWDhicic2vLkviaQLI1ibtLzPibU1NGjymtKLmtgPrzGVQxZepQ/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img011.png",
+   "sha256": "87370c9405d9087d440c1b8c33639f3e7985616ee353f19c49b9634d40f38f16",
+   "size": 878041,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/zYjgyxwMA6JQnk1rWLTyJwwf60nfxkibJpZr1AgXslLqk9QbvPbIMjlaVVdw7TxrRia6JLIEGy3tUDnY3b7pwTyMND5R4OIJEFiaicXYvQqj7nU/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img012.png",
+   "sha256": "80a024fda0b306c89f90c878e2db94c213b29336139ab4793c40b7d47e035147",
+   "size": 937042,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/zYjgyxwMA6LFaxibZia2ysYHyjibGVds8PiaZKSOEfMmOdAbby4UEx19GJYjeINGPtRr044QmM2WgXDCNwuVZptNaTOmpyVImZPDImJjbbrHEfw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img013.png",
+   "sha256": "2327a959ae0cf3d7e4fe8268fe667c11a3d39345e4495baea8727c9cce203346",
+   "size": 897743,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/zYjgyxwMA6I16qoZaYQ2VqRVrSG3GcQdAibtegSAqUZT6t96qRfSULJib96mOrbEBiaK90zdbeOYj5gAlC9G977vZSkXsibRicPQBrkPSr05jsibs/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img014.png",
+   "sha256": "afea306cd0eb85f3dd4bac7934832d06b870796d6c7b1e69222a986c98c4d67f",
+   "size": 897666,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/zYjgyxwMA6LNC7HwcfQ87oJtWnuT3W9Jd36VIm0CpHHJTa4YX5fmfIsrSGicBagxC4H9FibWSnIK0gBeygmTg2ug8XIIeLl3tvKgxOyMmE4icU/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img015.png",
+   "sha256": "d990aedc18eceb0d85b5f3df30dd9ba7e461c59ff427d0d7b8ff24206b2be958",
+   "size": 881766,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/zYjgyxwMA6I8H1K95leVYesZMlNSXSjI3ibibicgo0oEKnVQVE91zfiadl4SD1AwfKySebVGkQQINeX9JV21eQe4sXsbvGbSIj9bFiasyvOS1okM/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img016.png",
+   "sha256": "33f1149356138d54ea84133368a8b4964b247ee08bec248ebb9eafa31c09828b",
+   "size": 910562,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/zYjgyxwMA6JVO6M46pGgjibCnv35XJYyxZMupNxtrS24xE1QQo68bjExC9qpI3Mx8Mq8tq0e8Rznwh428QgPahYgoTZXdtO3AicFXFicsCKrvs/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img017.png",
+   "sha256": "1b1a805d7af3d631ec249eeae8c68b75ad82bbf8f4c89fd82f6a1eea2d28a173",
+   "size": 811204,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/zYjgyxwMA6LtB5BwRvrevaD9XxrHP4tCMl1yPMJJOcUWCx4cHTkD97GQ2icwsEicLguL3Hhsqp5QGdRaIda8qGnwWmvryN9ZiblvCNlQsq6jg4/640?wx_fmt=png&from=appmsg"
+  }
+ ],
+ "publish_time": "2026-08-30 00:00",
+ "relevance": "relevant",
+ "relevance_score": 24.8,
+ "title": "8月毛利润与净利润分析报告  （第二版）",
+ "title_hits": [
+  "净利",
+  "分析报告",
+  "利润",
+  "毛利"
+ ],
+ "url": "https://mp.weixin.qq.com/s/Af581zMEpYjwyO5pogT_3A",
+ "word_count": 1809
+}
