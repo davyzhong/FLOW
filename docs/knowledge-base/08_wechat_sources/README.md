@@ -105,6 +105,13 @@ sha256 可溯源。此约定与 `02_research/original/` 保留完整 HTML 的做
 PNG），幻灯片截图类体积降 70%+，meta.json 保留原图 URL 与压缩后 sha256 可溯源。2026-09 首批种子
 文章（无压缩）保留原始 PNG 作为高保真样例。
 
+### Obsidian 导出
+
+`uv run scripts/wechat_kb/export_obsidian.py` 把素材库导出到本机 Obsidian 库
+`/Users/qiming/ObsidianWiki/Clippings/微信知识库/`（仓库外，不提交）：按 公众号/合集 目录组织、
+图片本地化到各合集 `attachments/`、frontmatter 对齐 Web Clipper 习惯、每公众号生成「目录.md」MOC。
+幂等，内容未变的笔记自动跳过；每周同步有新增后建议顺手执行。
+
 ## 更新协议（每周）
 
 1. 运行 `uv run scripts/wechat_kb/sync.py`；
