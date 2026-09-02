@@ -39,7 +39,9 @@ npx --yes pnpm@10.17.1 --filter @flow/web exec next dev --hostname 127.0.0.1 --p
 web_pid=$!
 
 uv run scripts/wait_for_services.py "127.0.0.1:${api_port}" "127.0.0.1:${web_port}"
-uv run scripts/summarize_dashboard.py "${PLAYWRIGHT_BASE_URL##*:}"
+curl -sf "http://127.0.0.1:${api_port}/api/v1/dashboard/overview" \
+  -o "${dashboard_logs}/dashboard_overview.json"
+uv run scripts/summarize_dashboard.py "${dashboard_logs}/dashboard_overview.json"
 if [[ "${PLAYWRIGHT_UPDATE_SNAPSHOTS:-0}" == "1" ]]; then
   npx --yes playwright test apps/web/e2e/dashboard*.spec.ts --update-snapshots
 else
