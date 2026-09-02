@@ -1,0 +1,141 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "宋岳清",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0NOUsjXhbFWjsCUDADnQ1dRZwXbJM33NiaTo50iaV6BeOFxOichmtSxvazL6dSc2JPwicYVwlHXzav9A/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T12:12:53+08:00",
+ "digest": "很多老板都会有这样的错觉\\x26quot;现在公司还小,找个会记账的就够了,财务体系以后再说。\\x26quot;真相是:绝大多数公司死在\\x26quot;没钱了\\x26quot;,而不是\\x26quot;没订单\\x26quot;。而\\x26quot;没钱了\\x26quot;的背后,往往就是——从一开始就没有搭好财务体系。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.jpg",
+   "sha256": "2e0e9f0122407c61a5c0127285666a31f3c6315fedc771a5ee5af05234d8c7bc",
+   "size": 148625,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0NOUsjXhbFWjsCUDADnQ1dA3EYfS03q2Wh1TNOqYW8vyd46QHBE0LwVmnvDfLkicMq1LzZiaZxF9Sw/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img002.png",
+   "sha256": "a1027aacb983417638853b61501a8ae304a7d12e5b9da2bd843df407c67f18d7",
+   "size": 518753,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0NOUsjXhbFWjsCUDADnQ1dnLwdJdg9egiaLfQaZ111VZDicGWjSX7CpJSh1gEGf7v6cIAg9b94PWpA/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img003.png",
+   "sha256": "eaea5cb61ff237a3441edc9f03a4054277c0520edc8fa7d7022d23a44ff5d477",
+   "size": 425167,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0NOUsjXhbFWjsCUDADnQ1doW3ibgXZIjbSgHc3ibicFojp1sNzibtecOricUx0ztXUhicnVt9cfCH5IrUQ/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img004.jpg",
+   "sha256": "76c2cb0c44ed1c83f0f417b429ee928421459ef67aa9a810edac4db0bd8fd08f",
+   "size": 140341,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0NOUsjXhbFWjsCUDADnQ1dX16WEOg6RWpJFFIPUxZhcjKkicWAWS4CxsINqCTHMEkUMBUCZLia3icHg/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img005.jpg",
+   "sha256": "9c381aa0564b47e950b19c8547aa6684cb8a5913ecc1d00b021e92f2ac0d0247",
+   "size": 124183,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0NOUsjXhbFWjsCUDADnQ1dvqWLOHLXbTOgyvIibBzgDt9yQZiaPvibUFhicRgViakEPbDP0mVDTWJBtew/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img006.jpg",
+   "sha256": "6ba19cfeb4e5b298b9a6e23f71f231bf2d8e6471fa11fbc87e3d1e9a7e9d92c8",
+   "size": 262300,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0NOUsjXhbFWjsCUDADnQ1dVXAiaCibXnicGY8MPTn52YjkbhwkSth32kuK5B4hwPX8dWIu0MBAbv0Hg/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img007.jpg",
+   "sha256": "95c9dd44d5bddc8f4e358fb644a2ff2bf1f412de4fa52fcca3d17a4b3ce1a2a8",
+   "size": 117096,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0NOUsjXhbFWjsCUDADnQ1dBDdrMVFEuZuKZlaG6mqWxpbibcV0wAJc31CZtIjYxQdv6uWibojNwxpA/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img008.jpg",
+   "sha256": "b22337fd967507b974d111afbe23e9aa654f8055ff51ba4a1856811ef9ca9814",
+   "size": 268638,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0NOUsjXhbFWjsCUDADnQ1dk6iamJqJ2ycib2PS6NB6FVQYJGZ1KGmciab8piaYqfObIgYRq76yJTfpxA/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img009.jpg",
+   "sha256": "be9521d73b42605620ae69b8ba6cb09a7044857b12610eb1f0433ce30f36d78d",
+   "size": 280916,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0NOUsjXhbFWjsCUDADnQ1dhLgiaQcogryhftHJt2zFljECd4nU5b2sKU3tIhlcycqgYqw9jXA6O1g/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img010.jpg",
+   "sha256": "aeaaf8788d67cb471317af8e61e95a6a5f494af69784da28d3bd0172e1f9a59d",
+   "size": 126764,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0NOUsjXhbFWjsCUDADnQ1dTDBeKVDcN0MviccUROTovEBDRbejOjK4ia9ggick8QLa9icibQRND7VUANg/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img011.jpg",
+   "sha256": "5fd46085a4bc9782cf4be9e7b3f008d0e550b59090963bc2edea3b01bd61219a",
+   "size": 141530,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0NOUsjXhbFWjsCUDADnQ1dWvKP7V8dc5N66LOL8ib6Aj7NCDC1hT2ibQKLkDUVfkRSl9V3LbmVltWA/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img012.jpg",
+   "sha256": "3bfdde9afb3689d02de4ec6658538b8834f0abcdb4526d9c7384a941c21ce354",
+   "size": 152174,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0NOUsjXhbFWjsCUDADnQ1dlD3bmzKqFruQoAiaWAMOwVDRteasycLxqnxPlsYBC3BIkoVI1iatuSag/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img013.jpg",
+   "sha256": "32c93f9f74491bf6ac3625d5871295fbc2d8e3388fbcd8a67619fa9a7c732858",
+   "size": 187696,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0NOUsjXhbFWjsCUDADnQ1d3GdrElRynQNTlUj5r9RMGnpiahB4LVNd8DqlnhL7OlfeOyTycgh3iaoA/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img014.jpg",
+   "sha256": "14bfbd2a0a24788606d1fcf6d15469f8f7b6d016bbf33b687cdd3fa316dc746e",
+   "size": 154265,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0NOUsjXhbFWjsCUDADnQ1dr9awgX8GgAicHpjrLD1SaJS7ywWicbSMpWyibVC56B2UaJia4ISYWvxjzA/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img015.jpg",
+   "sha256": "4eb7bc175af217c09424b1f98e4b74b0e9f61adc48ba034f88546cdc69c06f5c",
+   "size": 159479,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0NOUsjXhbFWjsCUDADnQ1dmmIPWTnhgQhPUKVUQPoaEdXAG0tXzozaZdIiazzTEuwXibbtLFnrgkBQ/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img016.jpg",
+   "sha256": "2e9c954a50896ecfbe6cd68ceff53164ceb6ede9d2f8e885b1e2011e8915ae94",
+   "size": 248584,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0NOUsjXhbFWjsCUDADnQ1dvJBzbPjv72ExzgyxrMKjslgRNUXbEIeOMJmlziakCMUiajGm4g3PSYsQ/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img017.jpg",
+   "sha256": "0ae2ed12a1d702246b695adaaaaed96e6bd60a1ee6c47d7ca99e810a1675746b",
+   "size": 173620,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0NOUsjXhbFWjsCUDADnQ1dyRzbiaaF5fBhAEewdibxIiaqMSIhAib9wRWDMZcOWAFP2WR51A2CJcPUjw/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img018.gif",
+   "sha256": "b4aca0646dcfe1c8b2f78da64d4d54662b87130be9aea013e2df4aaec766b641",
+   "size": 360914,
+   "url": "https://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm0ggtbjwD1X60MpWgY4SKeONArzwfSe5niaXXOeHH88HIFI0gZqbZYxvxG3fXVVtV8ibkS077R9v97w/640?wx_fmt=gif&from=appmsg&wxfrom=5&wx_lazy=1&tp=webp#imgIndex=12"
+  },
+  {
+   "file": "images/img019.webp",
+   "sha256": "1d4a200af7cc2e72d9b3d5ece6a7b8a0613ea98782f376bac899270d1bcef296",
+   "size": 34822,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm0GmFgE4bnX1EVIdh8H4icAGicdMiaQU0EnSjia0rMvCnofrnqjUwbFhRoQNuicibaZvFu5e0EOVgQeicjMQ/640?wx_fmt=other&watermark=1&wxfrom=5&wx_lazy=1&tp=webp#imgIndex=13"
+  }
+ ],
+ "publish_time": "2025-11-22 07:30",
+ "relevance": "relevant",
+ "relevance_score": 5.6,
+ "title": "从0到1搭建公司财务体系（附思维导图、实操手册）",
+ "title_hits": [
+  "思维",
+  "财务"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247492303&idx=1&sn=9140ca136d252eaf4e0affb899bcef13&chksm=ce12bf9af965368cb6d0b5ff4e031fef1333411e0984ab7f8c0c4b501aff9acf900de8f53497",
+ "word_count": 115
+}

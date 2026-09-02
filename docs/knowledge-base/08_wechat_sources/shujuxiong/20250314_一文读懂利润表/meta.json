@@ -1,0 +1,36 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm00hUiaIVYMMRKE72EdLInS0EWUQXIt3ml7S4lMsO9WfBLnS7ZC6MzKMxwbTRlXCPruF6iatjRlnlUw/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T11:31:42+08:00",
+ "digest": null,
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.gif",
+   "sha256": "6e5826c75dc6fda91cbe4b70102063ab7e99520bd66704863d50bae65f33298d",
+   "size": 7063,
+   "url": "http://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm1eCHSDQ1FT41crSwIq5ZQuez5bEOnUCzPmARmhic0lm221AAwtWTwHosaT1CiaGoiaicgCSV7KmQRnJw/640?wx_fmt=gif"
+  }
+ ],
+ "publish_time": "2025-03-14 07:00",
+ "relevance": "relevant",
+ "relevance_score": 15.8,
+ "title": "一文读懂利润表",
+ "title_hits": [
+  "利润",
+  "利润表"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487688&idx=1&sn=70dcac7180b18881b3ebec966f7dbbdd&chksm=ce114d9df966c48b79b62dddb4b9c29889520d2e2e60b6d17100d6f74e73d648b135da28c1ec",
+ "word_count": 1247
+}

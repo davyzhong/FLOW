@@ -1,0 +1,70 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "数据方法与工具"
+ ],
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1feQicHt4ED21J8HKThFJakfjGOtjibfJbTNLngUeMibnQjTaEDKFySLcbcVPZSxeWk9DtxbH39VdAw/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T11:59:33+08:00",
+ "digest": null,
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.gif",
+   "sha256": "6e5826c75dc6fda91cbe4b70102063ab7e99520bd66704863d50bae65f33298d",
+   "size": 7063,
+   "url": "https://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm1eCHSDQ1FT41crSwIq5ZQuez5bEOnUCzPmARmhic0lm221AAwtWTwHosaT1CiaGoiaicgCSV7KmQRnJw/640?wx_fmt=gif"
+  },
+  {
+   "file": "images/img002.jpg",
+   "sha256": "4d0d51081b0f2a07dd1af489ad10773103097f23d495738f1a2925eb6867095c",
+   "size": 48213,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1feQicHt4ED21J8HKThFJakNIw3Ggz70wUXsh0woXxiaOmPPibvFdXG11fPpKhJSIZAsEQCEnNbEecg/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img003.jpg",
+   "sha256": "2c9cfe66f5203b6b702da0fbec00c8e0270315914f92f9cf84fc17fbdd5ffb19",
+   "size": 37783,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1feQicHt4ED21J8HKThFJakJRNsib6duZhEibuh5K4KjKGVKr9CBGccYMzRI8KlibCLaCWAnHGiaKKaxw/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img004.jpg",
+   "sha256": "356bdf7c8fa3abd00fe34386ac8d39f0cca0c45de916dbe8765ca2f1942e8991",
+   "size": 41058,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1feQicHt4ED21J8HKThFJaktlCicV8DctnqlIF3MO43SGxSILnjBpmyhFYstbicFJxYZA3dZibXkMEOQ/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img005.jpg",
+   "sha256": "a9a6024487bfbf0bccfaf9eee35d34aea09b8f9a0fb163956af5d64162eb5987",
+   "size": 56605,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1feQicHt4ED21J8HKThFJak3JKrzMrtknSVvqT1DLSZlW5XtsevlNY9zLf7c0aIV2Gbwl1JX1qW2Q/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img006.jpg",
+   "sha256": "7739d27212d9ca5b2c36b4f6ffbeadcabf97199b9b135482d5d84f2976c720c0",
+   "size": 35078,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1feQicHt4ED21J8HKThFJakk3iaJ6zIL5PsaFhk8apSr3OYCZrGzYbibybiaibsjkm956Gg78riaPxXSYw/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img007.jpg",
+   "sha256": "b4a621203e9948f46c5300d393e8aacab79af52021df02985d0e554f9914d458",
+   "size": 41696,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1feQicHt4ED21J8HKThFJak9PyOwZwx8DRm0FiaF6pibrknPczTFX56G9hNiaKZiaRsULViaDSckqLCjEw/640?wx_fmt=jpeg"
+  }
+ ],
+ "publish_time": "2024-11-18 06:45",
+ "relevance": "relevant",
+ "relevance_score": 14.6,
+ "title": "这5个指标异常，企业离暴雷不远了",
+ "title_hits": [
+  "指标"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247485327&idx=1&sn=6f66ebb371a644a5d41f338d0994a314&chksm=ce115adaf966d3cc22424ed43d78133e4bc672b1d07f8aa7d899218123ac333a9bce741dd24c",
+ "word_count": 1300
+}

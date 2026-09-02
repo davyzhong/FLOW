@@ -1,0 +1,75 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "数据熊",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2Ne7tubH44L3bpmrTEtI3eK7OAG2v8iapVjmPH7Mak9p0X3b1L5YFTA1HfxQgNMbYqSbOuiaoQkhPg/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T11:37:53+08:00",
+ "digest": "财务分析如果不穿透到业务，最多是“数字播报”",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.png",
+   "sha256": "dcbe09f85d0dc7970547dc9769c3b016805159a296db93d37ec46e76d5b8c60b",
+   "size": 545,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/6tDwnZOicnTWU6vAo6ePq4RDI69OnlqO63Olu9u9e5LdBPhdZlxxaacb1jGzzGhvwk3pJA7M460KMnn6Oia715BQ/640?from=appmsg"
+  },
+  {
+   "file": "images/img002.png",
+   "sha256": "66cffd96b3117becda37667409de25b2d59d5c949b9e403a7def7527375e0a65",
+   "size": 121874,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2Ne7tubH44L3bpmrTEtI3ep3KUYLqeQAu2TTYsIm1ViaUtJvcIaLScVAnA3HrgUI6MI6qpKC9SYUQ/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img003.png",
+   "sha256": "464e9b02a89f64073beb239d44511ed60ae9281108acfb24a91ed920e0008313",
+   "size": 45982,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2Ne7tubH44L3bpmrTEtI3eJUGA3mS27LqV0FSCz6vib1mcMricUMt1awlgtVrVOErU0AcTVaB9kReQ/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img004.png",
+   "sha256": "71db1a4f9d49f4e9a60c3a88f9fd7c655dea0a6fafa4bb41579f330b4cb850de",
+   "size": 79052,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2Ne7tubH44L3bpmrTEtI3eg9xULZW54Re892p7ma80CGVbwQxWDzKT3ASosBLtyLPJ1ZniczLIsRA/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img005.png",
+   "sha256": "88ef93ea31ffaf814b0b63a0e4ffbe2834a911eb6fa651cf13672f9b0ff00e53",
+   "size": 28728,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2Ne7tubH44L3bpmrTEtI3e9mW5jjNQv8NPGHlY3LrZtaChVaOic3SEmscwdtkMpPaozL4MZbHlZuw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img006.png",
+   "sha256": "b129514942d013d98b05a52c3c95d27bd2c2e189cf05ba2aaca8d0f8c845e69c",
+   "size": 58134,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2Ne7tubH44L3bpmrTEtI3esuoItC9XR0A5liaNKv1S8nUx1qkR7nKjkFN2FfnBYfhCkPS58WHfChQ/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img007.jpg",
+   "sha256": "107c5fdcb7f53b9aeb2333a61d1812e9643084b46408811ba66aa6516ceecbce",
+   "size": 70492,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0zLcmqicTDru96ygw9lJWcKps57rIia5ziaZLb0cbMq4d1gQ1Ol99wqTicPqaK0QAbBxGZJoIYGibc1WQ/640?wx_fmt=jpeg&watermark=1&wxfrom=5&wx_lazy=1&tp=webp#imgIndex=9"
+  }
+ ],
+ "publish_time": "2025-09-04 07:44",
+ "relevance": "relevant",
+ "relevance_score": 23.6,
+ "title": "真正有效的财务分析，必须穿透到业务（附PPT模板）",
+ "title_hits": [
+  "PPT",
+  "业务",
+  "模板",
+  "财务",
+  "财务分析"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247489640&idx=1&sn=730155fc97e10f1235a7b7475e1f51af&chksm=ce11453df966cc2b06f9031863f97bf212b9633ad63f3389a3d9d26cfc04b68bd865719a88db",
+ "word_count": 1637
+}

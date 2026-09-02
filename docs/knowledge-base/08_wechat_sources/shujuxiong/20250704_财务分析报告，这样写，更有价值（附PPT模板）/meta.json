@@ -1,0 +1,39 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3ZiaibXY3eicYphdXu4wN2tqVmpK3f1libPP20D6kPVQNZicaSBGiaZ3eyrSx4PxSkRibaQnNTryOJKqMlg/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T11:37:08+08:00",
+ "digest": "真正的价值不在于数字本身，而在于数字背后的行动。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.png",
+   "sha256": "aeebc87df30443084734ec325fe3994e9a6eff8a6f62152754e89a8f0a5bc3c9",
+   "size": 41294,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3ZiaibXY3eicYphdXu4wN2tqV9AdN1POAzJRU76wwT2wGF68E6VHOHdQYOfgmfFsZIicwibLHicOMVzwYQ/640?wx_fmt=png&from=appmsg"
+  }
+ ],
+ "publish_time": "2025-07-04 07:00",
+ "relevance": "relevant",
+ "relevance_score": 33.8,
+ "title": "财务分析报告，这样写，更有价值（附PPT模板）",
+ "title_hits": [
+  "PPT",
+  "分析报告",
+  "模板",
+  "财务",
+  "财务分析"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488548&idx=1&sn=faea2ada0ce53b3b541e424169c3a3ed&chksm=ce114971f966c067e41674998998f24c9b06adae6c9b3bdb4173061f7872b13c9a9b538b5a47",
+ "word_count": 1600
+}

@@ -1,0 +1,84 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2PKnmTB3DVrLc6Whl1ianibS6QRSmSLhdyehLaMMgNzhiaRPiagL7O1oM2kF8d7aHy4myZ1xGnWObNoA/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T11:58:06+08:00",
+ "digest": null,
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.gif",
+   "sha256": "6e5826c75dc6fda91cbe4b70102063ab7e99520bd66704863d50bae65f33298d",
+   "size": 7063,
+   "url": "https://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm1eCHSDQ1FT41crSwIq5ZQuez5bEOnUCzPmARmhic0lm221AAwtWTwHosaT1CiaGoiaicgCSV7KmQRnJw/640?wx_fmt=gif"
+  },
+  {
+   "file": "images/img002.jpg",
+   "sha256": "e1a939376606da5dbc1021eb037c58026d69386891f3f96e703b4fe5c179c181",
+   "size": 76855,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2PKnmTB3DVrLc6Whl1ianibSX8sLBpygwb6FAQ9W0ibbJKLSzu9MvdK7g2G8IJjCcrAboUB8KqibPjQA/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img003.jpg",
+   "sha256": "9128817f361506d7cee782d5b5d631a4d9155b8178736d088507d8e57f746aa2",
+   "size": 74062,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2PKnmTB3DVrLc6Whl1ianibSjTmQMrwibS75x4Ja88ADdg1NziauPlmwyfViaj136TGicYHsEJLm9JH9YQ/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img004.jpg",
+   "sha256": "165a74cf8f0fd0e89b14b2a4ba7ee10c3767d4a2135048a0a6d3ded6e35f2dbe",
+   "size": 57042,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2PKnmTB3DVrLc6Whl1ianibSEYTJdEGoGeomUmBuRXWicSzJrIhiaRbKLrJVbN64Za7vR4Cvzg0XqRUw/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img005.jpg",
+   "sha256": "787921db538ab9d5803e3ee4c7d57feabf94d7f38c903c197729373e8dba03aa",
+   "size": 30331,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2PKnmTB3DVrLc6Whl1ianibSzaX82sq9bEomBVIibkVCKqibTSbC3I3zLlHpbp2pxuhBqvLuRP3Z3ANQ/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img006.jpg",
+   "sha256": "5db2540bca2a224c6bfd9cf96bb7517f6bad2d0c0d324bbd81fc0471cb9e678e",
+   "size": 50482,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2PKnmTB3DVrLc6Whl1ianibSLDnqaRBgs92OmfOPuz4QRPJzZebsRzJpMepaic7cInmDPcz5q7Hg2Hg/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img007.jpg",
+   "sha256": "72a20798ea8b4e54621c24f91a262c123bc1f08f0e30007d8cbf863591e91264",
+   "size": 87459,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2PKnmTB3DVrLc6Whl1ianibSfNibwwU0fmxnLlbHPriaC2qj6QM5ibe2bSAqdSSuicR7fL1ujxn7ofVxzw/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img008.jpg",
+   "sha256": "8489f31dc11173f67652d6f71b78972039745731b363023d9aa2d55668b06b05",
+   "size": 50823,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1m45lJjN68OMKF0nCGaDuewOCaV94OuyLbuOiaafiauc1EVM4gS2gCSdlIRCbkibDnYKmic5JQBGo9Ow/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img009.jpg",
+   "sha256": "7b85be18e5cf7a523b1e32d49abfb0a815aea8d0b185d14af862f89975c969d2",
+   "size": 42266,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3n6CRDYiaLFicgAGfIy1es3R0zcKTjy9tpYluSLVLIZA1JXhYyHzAQo8ibzBba5YJJ3DrtbGC6UtYlw/640?wx_fmt=jpeg"
+  }
+ ],
+ "publish_time": "2024-11-02 06:45",
+ "relevance": "relevant",
+ "relevance_score": 18.8,
+ "title": "财务管理的核心框架：通俗解读",
+ "title_hits": [
+  "管理",
+  "财务"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247485101&idx=1&sn=4a3bcf3c4d40ea898c039607916c6645&chksm=ce115bf8f966d2ee5c38612ed2218f8671d6de15aa6dfc089f94413dc2f6b562306bd31e422d",
+ "word_count": 1971
+}

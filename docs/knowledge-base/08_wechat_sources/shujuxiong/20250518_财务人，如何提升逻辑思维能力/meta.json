@@ -1,0 +1,36 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3LLh8lpdcUGTl9Iz5OicLTZCLjBeLC1wAVW7PY25zLcW58tm4zvloJ0Z1xPde2dth58YhicAfMMl1g/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T11:33:55+08:00",
+ "digest": "“思考的本质，是对混沌世界的一次次结构化整理。 —— 德·波诺”",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.png",
+   "sha256": "2a09251df141ebc56b768b6ca40c5b4b1defcc1e2812ff2f3889ec8897033ed7",
+   "size": 30651,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3LLh8lpdcUGTl9Iz5OicLTZ0qWkzHmpGtto7WTengDcs1Q7Fic407PutXkkuEeXxuXONA2npHKA2iaA/640?wx_fmt=png&from=appmsg"
+  }
+ ],
+ "publish_time": "2025-05-18 07:00",
+ "relevance": "relevant",
+ "relevance_score": 18.8,
+ "title": "财务人，如何提升逻辑思维能力",
+ "title_hits": [
+  "思维",
+  "财务"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488136&idx=1&sn=2ba07773fb95c3fc9fc500af43d08a34&chksm=ce114fddf966c6cbfdfb769ad2b7ba3c603b01ef4286d0a55afa00447018d63b28d250675b46",
+ "word_count": 1734
+}

@@ -1,0 +1,37 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "数据方法与工具"
+ ],
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1t4jGcoBrYWVVs7QEOrfHlf2p7uj5ArOgdpC2kTLwjQKXhBmiaDajoRQppCvzqEiaN08ujicHbJKbZQ/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T12:00:21+08:00",
+ "digest": "收账的路很难，但业务和财务携手同行，就能走得远！",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.png",
+   "sha256": "f52604640c063d266e35849e9c81f2eb55d4df3589d8c02a402089f91cb3a54b",
+   "size": 28433,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1t4jGcoBrYWVVs7QEOrfHllXmiaDrdyGia0WtQVcOw8a3evbVibP35ICw4XQTz2L1WtOGdIPmic8f11Q/640?wx_fmt=png&from=appmsg"
+  }
+ ],
+ "publish_time": "2025-01-09 07:00",
+ "relevance": "relevant",
+ "relevance_score": 19.0,
+ "title": "业务拼命卖，财务焦虑收：如何破解应收账款协同难题？",
+ "title_hits": [
+  "业务",
+  "应收",
+  "财务",
+  "账款"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247486467&idx=1&sn=cda85e80c398ef609fecd80051a671fe&chksm=ce115156f966d8402750aeb2e04759cdfa4183c3700118e7db090f70d1a2dd82941dd3729d32",
+ "word_count": 1327
+}

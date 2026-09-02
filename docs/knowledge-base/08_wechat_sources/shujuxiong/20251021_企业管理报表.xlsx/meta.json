@@ -1,0 +1,54 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "宋岳清",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3XkhdZQ9h4Yoa3lk3nnvVZGcT17Wby8kFHgCmFZU1QeojWph16JdWjrYLicURf1IQavCUfMd2Yyyw/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T12:10:11+08:00",
+ "digest": "很多公司报表很多、数据很杂，但开会依旧“靠感觉”。数据熊今天为大家带来一份《企业管理报表.xlsx》,整套表格共18张，文末左下角点击阅读原文获取。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.gif",
+   "sha256": "0b4b2d765c1a964aa0de1e709ad41326d03a1a707426c0f73da7c63f470de5e7",
+   "size": 6180,
+   "url": "https://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm3XkhdZQ9h4Yoa3lk3nnvVZCKPQ7wRxOxPBXqdyI8P1GKyHoYlOdXEQibYznFj8TElzwyGfHdZt1gQ/640?wx_fmt=gif"
+  },
+  {
+   "file": "images/img002.png",
+   "sha256": "cd5bb3462efbf2ac1bab5f0a1c4fc373ce6ef05ff6f1f2f2032b207d143a2894",
+   "size": 16185,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3XkhdZQ9h4Yoa3lk3nnvVZDwnKX7Zud1LgoSZv0e6FVYL6ibLO1YR95EdyNUCaqnl6Sr0lxxLiciczw/640?wx_fmt=png"
+  },
+  {
+   "file": "images/img003.png",
+   "sha256": "32c95391fd724073e53de6e21857eb92c6e65243673fd0fab39d0f641eeadd47",
+   "size": 95718,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3XkhdZQ9h4Yoa3lk3nnvVZ00iaBia9ugU19jBphSDibXsWcib80W3Z3F49VkvSW5ouQvZbdovV4jLzAw/640?wx_fmt=png"
+  },
+  {
+   "file": "images/img004.png",
+   "sha256": "4066669e00cb356386391454d76ac236e210da91fe96f86daad5b1e9e821cf31",
+   "size": 227262,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2SRsvEbKGBbxPaA1ffhH7oX4aD7ia2aoICkxyY1or8Pu23R5J5ytzU2BOyj0lPrV5RS5MKjabNOyQ/640?wx_fmt=png"
+  }
+ ],
+ "publish_time": "2025-10-21 07:30",
+ "relevance": "relevant",
+ "relevance_score": 26.6,
+ "title": "企业管理报表.xlsx",
+ "title_hits": [
+  "报表",
+  "管理"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247490473&idx=1&sn=ba313977a3fe833d2818d78dc9bd9dba&chksm=ce1146fcf966cfeaa3654f50de8f22e2ff06ffdfd13959ba37059372e85d18d9ede4c183dd43",
+ "word_count": 2263
+}

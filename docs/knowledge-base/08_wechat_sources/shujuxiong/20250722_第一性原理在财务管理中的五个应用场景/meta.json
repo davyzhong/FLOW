@@ -1,0 +1,48 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm00iaVKxWzSHOH17IpdmvEqubx8Dab1l21Ye9KxpMlzJ0Ed7c3poPJ5p3tMaxeRUCXRiaQtCIce8sAA/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T11:37:31+08:00",
+ "digest": "把复杂问题拆解到不能再拆的最小单位（底层真理），再从这些基础单元出发，重新构建解决方案。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.png",
+   "sha256": "85816eea48e2ffb361555743b5491e3d5059da73ea96bb6bc18e75e7af112668",
+   "size": 27280,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm00iaVKxWzSHOH17IpdmvEquIdK3tv3928k6lryCWOVKdxcrE0hIgugQrqK3tfYC1gPryZ4cqAibXAg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img002.png",
+   "sha256": "674fb24663aa0b1a91dfd875ae21985394fdebb5a6cfb2828cb15007c1e89b44",
+   "size": 49945,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm00iaVKxWzSHOH17IpdmvEqu6hrfcQelUv5jsVjBibZmyia3jAefCRibzoibhS3SkPYpgPJhSqd6GicoV1Q/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img003.png",
+   "sha256": "e7719cd2b316a9bfc09ddc5beca144b0b47ccbad2cb629c4d2e093ee4209d688",
+   "size": 71804,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm00iaVKxWzSHOH17IpdmvEquh23X0MYvtEQm8ykqSBKibwZ3pyibGWcH5y8CMU9o4eKF8QB5sYRn6Xeg/640?wx_fmt=png&from=appmsg"
+  }
+ ],
+ "publish_time": "2025-07-22 07:00",
+ "relevance": "relevant",
+ "relevance_score": 20.0,
+ "title": "第一性原理在财务管理中的五个应用场景",
+ "title_hits": [
+  "管理",
+  "财务"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488673&idx=1&sn=d41bec1622d4c94ac2d9d45ef0424f7b&chksm=ce1149f4f966c0e25bd4cc9135c65e1c79b10bbecf46f6db60bf179c1cc5e6ec16e8e5de1908",
+ "word_count": 1382
+}

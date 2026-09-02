@@ -1,0 +1,42 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "数据熊",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3cGIn5mNTWV9A0csnZsLaAib89oI56workyb6jdHHRLx1wasTXNeqxK7LqSicDKe83vbvexQDk2Uibw/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T12:09:39+08:00",
+ "digest": "很多企业“利润在报表、风险在合同”。对合同风险把关不严，可能最终导致严重的财务风险，这样的事，数据熊经历过多次，数额高达数亿元。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.jpg",
+   "recompressed": true,
+   "sha256": "7c069cbc83c272b09de963a00decb38c4aa4537582d0b9bbd92179e4f5641cca",
+   "size": 135632,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3cGIn5mNTWV9A0csnZsLaA5vuWv0JoZT0wG3RkTrae72ycxDlYMQ3B1nWdVk4fsjuYPU9obVibsrg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img002.png",
+   "sha256": "6b109dad668bd4e3324365caf1e301319cb21dd4eb325aa677c149723797f689",
+   "size": 227350,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3cGIn5mNTWV9A0csnZsLaAqeqZ1eIBGQTpDQOHTDaDRdwlR447kXmbRfSSicGmjicibUWufxL6QZ3nQ/640?wx_fmt=png&watermark=1&wxfrom=5&wx_lazy=1&tp=webp#imgIndex=13"
+  }
+ ],
+ "publish_time": "2025-10-05 08:00",
+ "relevance": "relevant",
+ "relevance_score": 19.2,
+ "title": "财务审核合同的关键要点清单",
+ "title_hits": [
+  "财务"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247490163&idx=1&sn=cd6815c8385b5d84ccf986b8fd7f5cdc&chksm=ce114726f966ce30e012ef647751ea81c2387f77f4cf9700921b40036c35e696295d6d436ad9",
+ "word_count": 3223
+}

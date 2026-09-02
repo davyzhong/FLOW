@@ -1,0 +1,67 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3LXzibZrLTu1ZVfQeODy8knOARLr2Iq5O1A8Ur0FNcL91N4jb9rOuOeJAribfBLZkJ9ECK1jQCK58g/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T12:02:50+08:00",
+ "digest": "好的汇报，是工作成功的一半。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.gif",
+   "sha256": "6e5826c75dc6fda91cbe4b70102063ab7e99520bd66704863d50bae65f33298d",
+   "size": 7063,
+   "url": "https://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm1eCHSDQ1FT41crSwIq5ZQuez5bEOnUCzPmARmhic0lm221AAwtWTwHosaT1CiaGoiaicgCSV7KmQRnJw/640?wx_fmt=gif"
+  },
+  {
+   "file": "images/img002.png",
+   "sha256": "d720ff39819909f0230989ba2fa681b21cff1c6cecdf4b67fe62ac09a657d3c6",
+   "size": 452074,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3LXzibZrLTu1ZVfQeODy8knX3GqkMiaoPlQE0PvHFHzuqeibxlrBY8fbQOe0nX6eoicrdHPM1IuvUZAg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img003.png",
+   "sha256": "4b41737bdc52fda2f294fabe7835b79ee31fcf4d717c77164dc7c952b69bc884",
+   "size": 223046,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1qKQviaVAfFcdwIHxkb4hmwHOophibShALglLOhxv9IhoiaVgBmItf2M4fD7PQmbKPM7D1t7zWBAibMA/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img004.png",
+   "sha256": "dc23e58b264ad8e07496d5215e02f55f43de7c546d69b72e6e2283fd08158711",
+   "size": 392339,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3LXzibZrLTu1ZVfQeODy8kn9lEFCosmXt3Yjt7xZf6Uv71cT99Uvz4bicElDNr2MsflQZC5fmficAzQ/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img005.png",
+   "sha256": "c00a8afe8144037943449ab4899cc04851bf318435ffe370234d872253deaea0",
+   "size": 606669,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3LXzibZrLTu1ZVfQeODy8knL7NyZ81D1icUrVibvbXpyzicxt6hnVBOugpK1Urz7DAHlBam8buKIaKibg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img006.png",
+   "sha256": "26255ef652feb5412b958d20bbe5fed9cf76cd8c3b703228833c716955a5124b",
+   "size": 205523,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3LXzibZrLTu1ZVfQeODy8knBqUMYRCfkVF7pqkqiao8TLYXsicsjdREwDKzO8bdNrSjY7XTmnJNibVpw/640?wx_fmt=png&from=appmsg"
+  }
+ ],
+ "publish_time": "2025-01-22 07:00",
+ "relevance": "relevant",
+ "relevance_score": 21.4,
+ "title": "财务年终总结及工作计划（含可编辑PPT）",
+ "title_hits": [
+  "PPT",
+  "总结",
+  "财务"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247486691&idx=1&sn=11dc157bb2687bc9619759cda832201d&chksm=ce1151b6f966d8a0340a7957dd9bda0351dd07f224ae754b5386f53e6edc3a9058c9cf41e7e7",
+ "word_count": 2308
+}

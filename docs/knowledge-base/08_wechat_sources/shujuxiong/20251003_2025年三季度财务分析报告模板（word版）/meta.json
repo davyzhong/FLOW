@@ -1,0 +1,38 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "数据熊",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm3IEJeelW7VFy71tr5Lia55wj4iaZ107V9m3XgictT982AFVxo1Nnia911UtIVAhID8CvlsTgb4SVhjew/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T11:39:12+08:00",
+ "digest": "昨天的经营分析报告模板反响很好，今天继续为大家提供财务分析报告模板。下面这份是通用版《财务分析报告模板》（可直接复制到 Word）。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.png",
+   "sha256": "b9533793c33e300fcd280c004168124fac28d2f42e3ab4565d6fe0b4317b7fa2",
+   "size": 226940,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3JwQZiaWqOPwA7HAo4icf6RiaVkC7sOnSraC7nIeFl9wwVJFAyjHALvu3mJtZPBp9CWOIQADDJ3yWyA/640?wx_fmt=png&watermark=1&wxfrom=5&wx_lazy=1&tp=webp#imgIndex=13"
+  }
+ ],
+ "publish_time": "2025-10-03 09:05",
+ "relevance": "relevant",
+ "relevance_score": 29.6,
+ "title": "2025年三季度财务分析报告模板（word版）",
+ "title_hits": [
+  "分析报告",
+  "模板",
+  "财务",
+  "财务分析"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247490151&idx=1&sn=f48c45350dea1b4d395aad3550f7a519&chksm=ce114732f966ce24cd02daacea2f02caaeaea490ef1eb3785c966d88a9b7193b7098cf4a8362",
+ "word_count": 2057
+}

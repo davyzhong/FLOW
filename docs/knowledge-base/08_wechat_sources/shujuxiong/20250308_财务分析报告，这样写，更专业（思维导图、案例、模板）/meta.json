@@ -1,0 +1,99 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2iczyAcARQtKkoX15qU24vZyGalRyD1Lxs8YhQJZdcwrmyTJbZvcUCibMHKSWy1tLDA7n288PiaL0JQ/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T11:27:14+08:00",
+ "digest": "撰写一份专业的财务分析报告需要系统的方法和深入的洞察力。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.gif",
+   "sha256": "6e5826c75dc6fda91cbe4b70102063ab7e99520bd66704863d50bae65f33298d",
+   "size": 7063,
+   "url": "http://mmbiz.qpic.cn/mmbiz_gif/SZdByekibNm1eCHSDQ1FT41crSwIq5ZQuez5bEOnUCzPmARmhic0lm221AAwtWTwHosaT1CiaGoiaicgCSV7KmQRnJw/640?wx_fmt=gif"
+  },
+  {
+   "file": "images/img002.jpg",
+   "sha256": "6a7b99bf64dbf66563fe52bba46e8696fdfd4ec4ed41bccc1502ce11d10c53b4",
+   "size": 17179,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2iczyAcARQtKkoX15qU24vZFcSa0ibG2BYLFRfwO0J5uSS3G2wMNABT5ImvlGf1rI6gckwaC7NJfoA/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img003.jpg",
+   "sha256": "6df676cec10583d061edf0d0aab13e76ba0c587458c3505b0e0a06b15bf79345",
+   "size": 25457,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2iczyAcARQtKkoX15qU24vZko5gyHjozVqsAz91leJGWlzQicuVTD7uPE7ddt2e0DOr87hlWkyZyibA/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img004.jpg",
+   "sha256": "c490185f14da77d38e8812eecb7008670d73fc6df183925850bb8a1fad97094c",
+   "size": 41495,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2iczyAcARQtKkoX15qU24vZf7Ao6pbCBPC16ODWajhMsibLhjedLyzkTBlKAKCPH3LMoFZycgcoicbQ/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img005.jpg",
+   "sha256": "cec09e78b3c954f33514e39fe541ce10b26cdfbda6cb645ac96076df5ee00071",
+   "size": 46884,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2iczyAcARQtKkoX15qU24vZYH4cibicFHiakqDXqSmEMR1T7vBePql53IiaOEpguXKtZdOpBGSXhYAxtQ/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img006.jpg",
+   "sha256": "02020fac2342c757637a9522d36501a4532e14ccd64b91f994fec4da77847b4c",
+   "size": 17508,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2iczyAcARQtKkoX15qU24vZWcwib3sfQp2KN7LyHwqppRp8IZOVxBSuGq3Ya9PrZzoXzEpOYK0adFw/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img007.jpg",
+   "sha256": "fe3d75481c03927650385332054bed68e0b4b4c2f6c70ff0147b4ee24d0831a0",
+   "size": 29127,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2iczyAcARQtKkoX15qU24vZYcVdlXlIrgLQiaL5t3CQrbadrgdEX6rJrD0JuAMDCk7KYTdK9GzoxSw/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img008.jpg",
+   "sha256": "b446789349ff0a381939bb49f371b4f220a2c48ad811fdcaf59393cadbf809a4",
+   "size": 16974,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2iczyAcARQtKkoX15qU24vZBWia9SJgVyoRLaicaF4QVIT7LzRWlcPWlgmZa1pjzvWISAlGqWaMLVSw/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img009.jpg",
+   "sha256": "69925aa6d722708077b9e07fcbb850fe7cc44f3b2d50cd3dac4256275d7aa61b",
+   "size": 14277,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2iczyAcARQtKkoX15qU24vZJLN1plnN3vWibDYXRkNqsvV0336oadVwJt5ib65wODw28f91PEvRHuHQ/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img010.jpg",
+   "sha256": "c90066ff9468ba6cd79237a82df0b6b22cb6162b5bbab850cf3f0b221788f9f3",
+   "size": 88865,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2iczyAcARQtKkoX15qU24vZx44rbW01YRSbj4jST7jZjkxqW7HYmr5dmwwBgdGViaaql7yO6lxeVpg/640?wx_fmt=jpeg"
+  },
+  {
+   "file": "images/img011.png",
+   "sha256": "807f58a98cdc6d546896793b79bc46b4ed12f5f147b2b7bbec700f056fa20939",
+   "size": 280142,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2iczyAcARQtKkoX15qU24vZTUT3KK6SlfDfIOGdQgD9BgOZMSrC2eofy5aBeyAibUfibVNI7kqlRGDw/640?wx_fmt=png&from=appmsg"
+  }
+ ],
+ "publish_time": "2025-03-08 07:00",
+ "relevance": "relevant",
+ "relevance_score": 27.4,
+ "title": "财务分析报告，这样写，更专业（思维导图、案例、模板）",
+ "title_hits": [
+  "分析报告",
+  "思维",
+  "模板",
+  "财务",
+  "财务分析"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487584&idx=1&sn=b31874f065ef29f532a093aa27cfe9dd&chksm=ce114d35f966c4237d5fe87d07e2882a57a9838fbb4951513d51c4353296f92bad3b6f6e3b18",
+ "word_count": 1968
+}

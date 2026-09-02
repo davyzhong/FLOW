@@ -1,0 +1,39 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0Xt3Oynicr7P9RyfYSV3pBfd5VicRlTtrOHwgvq9uI9WIae1xrJnr4AvOvWXVjWDm3BicHDQwSsCgNg/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T11:32:15+08:00",
+ "digest": "报告不在多，而在精；分析不在复杂，而在到位。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.png",
+   "sha256": "4b41737bdc52fda2f294fabe7835b79ee31fcf4d717c77164dc7c952b69bc884",
+   "size": 223046,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1qKQviaVAfFcdwIHxkb4hmwHOophibShALglLOhxv9IhoiaVgBmItf2M4fD7PQmbKPM7D1t7zWBAibMA/640?wx_fmt=png&from=appmsg"
+  }
+ ],
+ "publish_time": "2025-04-01 07:00",
+ "relevance": "relevant",
+ "relevance_score": 24.6,
+ "title": "2025年1季度经营分析报告模板（含ppt模板）",
+ "title_hits": [
+  "ppt",
+  "分析报告",
+  "模板",
+  "经营",
+  "经营分析"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487792&idx=1&sn=78e5d693d508f74af3f52dd27ebe64bb&chksm=ce114c65f966c573035e3fb397c6aff78cc314880a43ada1d88a5006a51067db7bdd634e18b1",
+ "word_count": 1296
+}

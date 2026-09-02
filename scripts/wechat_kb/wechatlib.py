@@ -98,12 +98,14 @@ def safe_get(
     referer: str | None = None,
     timeout: int = 30,
     allowed_suffixes: tuple[str, ...] | None = ALLOWED_HOST_SUFFIXES,
+    params: dict | None = None,
 ) -> requests.Response:
     url = check_url(url, allowed_suffixes=allowed_suffixes)
     headers = {"User-Agent": WECHAT_UA}
     if referer:
         headers["Referer"] = referer
-    resp = requests.get(url, headers=headers, timeout=timeout)
+    resp = requests.get(url, params=params, headers=headers, timeout=timeout,
+                        allow_redirects=False)
     resp.raise_for_status()
     return resp
 
@@ -401,6 +403,42 @@ def render_images(markdown: str, builder: MarkdownBuilder, saved: list[dict]) ->
     markdown = re.sub(r"\x00IMG:#(\d+)\x00", repl_inline, markdown)
     markdown = re.sub(r"\n{3,}", "\n\n", markdown)
     return markdown.strip() + "\n"
+
+
+def recompress_pngs(images_dir: Path, saved: list[dict], quality: int = 88,
+                    min_bytes: int = 200_000) -> None:
+    """大 PNG → JPEG（幻灯片/照片类截图体积降 70%+；带透明通道的保留 PNG）。
+
+    就地更新 saved 列表里的 file/size/sha256；仅当压缩后更小时才替换。
+    """
+    try:
+        from PIL import Image
+    except ImportError:
+        return
+    for item in saved:
+        rel = item.get("file")
+        if not rel or not rel.endswith(".png"):
+            continue
+        path = images_dir / Path(rel).name
+        if not path.exists() or path.stat().st_size < min_bytes:
+            continue
+        try:
+            with Image.open(path) as im:
+                if im.mode in ("RGBA", "LA") or (im.mode == "P" and "transparency" in im.info):
+                    continue  # 透明图保留 PNG
+                rgb = im.convert("RGB")
+                jpg_path = path.with_suffix(".jpg")
+                rgb.save(jpg_path, "JPEG", quality=quality, optimize=True, progressive=True)
+            if jpg_path.stat().st_size < path.stat().st_size:
+                path.unlink()
+                item["file"] = "images/" + jpg_path.name
+                item["size"] = jpg_path.stat().st_size
+                item["sha256"] = hashlib.sha256(jpg_path.read_bytes()).hexdigest()
+                item["recompressed"] = True
+            else:
+                jpg_path.unlink()
+        except Exception:
+            continue
 
 
 def download_named_image(url: str, images_dir: Path, stem: str) -> str | None:

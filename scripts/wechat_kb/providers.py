@@ -37,24 +37,19 @@ def extract_article_url(line: str) -> str | None:
 
 
 def discover_seed(queue_dir: Path, source_id: str, consume: bool = True) -> list[str]:
-    """读取该账号的 pending 队列文件；consume 时标记已处理行，避免重复。"""
+    """读取该账号的 pending 队列文件，返回全部链接。
+
+    不再原地标记"已处理"：去重统一由 sync 的 state/seen_urls.json 负责（含 excluded/
+    skipped 状态），队列文件因此可以安全地批量预灌，--limit 截断也不会丢链接。
+    """
     path = queue_dir / ("pending_%s.txt" % source_id)
     if not path.exists():
         return []
     urls = []
-    kept = []
     for line in path.read_text(encoding="utf-8").splitlines():
         url = extract_article_url(line)
         if url:
             urls.append(url)
-            if consume:
-                kept.append("# done: " + line.strip())
-            else:
-                kept.append(line)
-        else:
-            kept.append(line)
-    if consume:
-        path.write_text("\n".join(kept).rstrip("\n") + ("\n" if kept else ""), encoding="utf-8")
     return urls
 
 

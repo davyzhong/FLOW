@@ -1,0 +1,39 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "宋岳清",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1nWScauntWxOgC04oF5Lfqx30M7skH9dibRbbfx3nZxqL5yboc1iaYA54ES2Yd0uUowkV81XYaae1w/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T12:09:51+08:00",
+ "digest": "很多企业不是“不会算账”，而是不肯从今天重新开始算。重大决策，只看未来的增量价值；过去花掉的，最多写进复盘。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.png",
+   "sha256": "6b629cb8fd5916c3f787755d59643f129b1b883dd3fefd03ad49f7e24881c661",
+   "size": 76043,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1nWScauntWxOgC04oF5LfqqLLzZX3uNiasnYxBZk0hcic5yMIoBFmoxxpH1FTXyqS5Gwiccndm5mVEw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img002.png",
+   "sha256": "dd2075b1b00a4574720162b0745f3acaed10127e8cac5ebb2f68f5276faa264d",
+   "size": 34762,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1nWScauntWxOgC04oF5LfqJqescibic6Lcg5Jmic58h4ibVTFEaUQraVChlm2oCxQAgwXNthUkmaibpNA/640?wx_fmt=png&watermark=1&wxfrom=5&wx_lazy=1&tp=webp#imgIndex=13"
+  }
+ ],
+ "publish_time": "2025-10-06 07:30",
+ "relevance": "relevant",
+ "relevance_score": 11.2,
+ "title": "沉没成本，不能参与重大决策！",
+ "title_hits": [],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247490172&idx=1&sn=b789ac297cedcc35b889d12390e07a45&chksm=ce114729f966ce3f083b468b45d2b669abf721094842bb0b207801d9b607c0a5988c555fe96e",
+ "word_count": 2805
+}

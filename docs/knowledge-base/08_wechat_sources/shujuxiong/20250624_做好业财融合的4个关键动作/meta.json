@@ -1,0 +1,33 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0WTvY5Esks6VHdoqlxD9nVYKdOCBXI9Hd6tFjpibu95BqqVWKgp2xoXEA7ibaicQumicViaVH3c7UuqMQ/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T11:36:29+08:00",
+ "digest": "做到思维、流程、数据、目标四件套闭环，业财融合才不只是 PPT 花字，而是每天真金白银的 ROI。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.jpg",
+   "sha256": "f847b9251dee391cd55c5f244906a4921084ef78c1d4f9e0d51af83b73572a6f",
+   "size": 20268,
+   "url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm0WTvY5Esks6VHdoqlxD9nV8IcbF2HWia2k6ia0BAGK59zQG67ic758v33m64caEq0ZfR8p8l4gD9XeA/640?wx_fmt=jpeg"
+  }
+ ],
+ "publish_time": "2025-06-24 07:00",
+ "relevance": "relevant",
+ "relevance_score": 17.8,
+ "title": "做好业财融合的4个关键动作",
+ "title_hits": [],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488439&idx=1&sn=5e16958e2334600b755ee0f0344b7a91&chksm=ce114ee2f966c7f4c8f4e1a52fbc285dfaf12e6c118acafdb4ad0af6703d2c31f4633c282973",
+ "word_count": 1868
+}

@@ -1,0 +1,114 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2n79b8fvYr3QzrBS83iaJwus2qYu8heflaO4l3f2XjQHPbwCQUj9U0PXQDxlCcQOWAd0dViaQKMsQA/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T11:38:36+08:00",
+ "digest": "财务分析不是“算出来给你看”，而是“算明白、说清楚、做得成”。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.png",
+   "sha256": "83513b0ea107a8bf3878ebbdbd5d5d330135d7ea9c1bf846bfe4f4ee717a0ae7",
+   "size": 85657,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2n79b8fvYr3QzrBS83iaJwuSnQZdVp0QCVcaCCLAvfFUNdkQr9MK3wVUuh0VpfRtBMI78KVl0V6ZA/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img002.png",
+   "sha256": "2ca986d69dfb29fd26ebd054249a4b6ebcf473b796b75dc0b672a9d49a0bbd22",
+   "size": 67241,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2n79b8fvYr3QzrBS83iaJwu3vmA6uMgK4mqNAUmxV259AgMp2eOBr6DibzZLuPtkBao3F2jibDA8fLw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img003.png",
+   "sha256": "fb7c492599fd5bb3aadacdaa09fca5210ce158c3483946c0a78ab26635414d12",
+   "size": 87361,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2n79b8fvYr3QzrBS83iaJwuQ4hXBKKruHuyuYOTib0ocxldCYtBMjLcicIWqiaGZAwlgbZoFwruxR0Ig/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img004.png",
+   "sha256": "b2f5fd72c366f54c47c67d20041143b801e3969f799a8c0f877afa54a2ddb7bc",
+   "size": 106439,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2n79b8fvYr3QzrBS83iaJwuG3OPPDvdXy5tHqk7htTDicRFY8awzHOJ38joLAZyCFnlLLfnrFHwPRA/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img005.png",
+   "sha256": "810a48bf6dc4dabb209881232039ec35d5220420ed352bc3abd2ff34945298db",
+   "size": 91759,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2n79b8fvYr3QzrBS83iaJwubIa1t2iaXYlQ9BpXq723ynlTXjoNsNmmAKia2kydzhtnLSj093OYnXRA/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img006.png",
+   "sha256": "e0cb340edf295be3ca4e1ce3084c846ea61af6f85cd61609d56b4ae47ed8cae4",
+   "size": 57796,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2n79b8fvYr3QzrBS83iaJwuMaEEkTY52lxwoQct08HQZjutOjJPZvS6BX43FnPzCiaxdx3kCbaibUjw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img007.png",
+   "sha256": "d503ff45a3a5f2aedbfaa196076ff9cbda858604ca992c52e48348d5fd070fb6",
+   "size": 149988,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2n79b8fvYr3QzrBS83iaJwuf5X6yx6DdYCqxT8eorchKBYPL1oyT0oFvDfPtkP4gFWzFiam4iaBuUPg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img008.png",
+   "sha256": "2dc7918332a281e5c1fae42d63a40133175868cd8c2bbbfd55692ac8617c99ff",
+   "size": 102431,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2n79b8fvYr3QzrBS83iaJwuZwKdtxqpCPkceAcG830xxMyFT4tSly82ZVp3SQh4ric8gM0kuZGKxMA/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img009.png",
+   "sha256": "d6736f8e0cd37f26468e5804f3c7e33f97d7d71c83e328746c4b3c5a4763f425",
+   "size": 62781,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2n79b8fvYr3QzrBS83iaJwuPAx9Z3JsN7sG1WyDxxf1vywaAVA79xFJ4ARbwb6GMWydwnOuXv9s9Q/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img010.png",
+   "sha256": "a56a74c027baeedef35b696a4376b4e90f324bfa2aa51a51ca7070994ca80b4c",
+   "size": 68954,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2n79b8fvYr3QzrBS83iaJwu4UkuRda9mhwQ3pe1oR13R0Qgu71S5obr8OJHdIAKP4cAJg0Bhe5jWw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img011.png",
+   "sha256": "7a3ca7a435686c9c1889b6e594d702036d71684fef608b912ca7475c2d022a06",
+   "size": 7883,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2n79b8fvYr3QzrBS83iaJwupvHYWETmO3m9PQicYB4xSNTSR4ejP48HZ72gYPCOEuoD2xApibmo9nkg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img012.png",
+   "sha256": "e55b18a54c09f5446cea2e0f8815a3589ac41af3a01b8696577873f394366d40",
+   "size": 13368,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2n79b8fvYr3QzrBS83iaJwumsj0HHiaeVy2hPkYzGkf5XzCDCLsbIa8Zc0wgjU2sCeESyz9koJkjeQ/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img013.png",
+   "sha256": "b7d996564498d3a28d864fcfd540d3fe68f0a7c005c17f60c3315f68bdfb697c",
+   "size": 4254,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm3voSdrj5RPzpZz5mh1hNZibtWJLGibhYtxXZuj4kcLC41NSxytaJIkoMj78sGVS9v0FL40T7Jbv4zQ/640?wx_fmt=png&from=appmsg&tp=webp&wxfrom=5&wx_lazy=1#imgIndex=5"
+  },
+  {
+   "file": "images/img014.png",
+   "sha256": "0358125bc31c7ff6abeb872c2aea0aa27f5b524a03fd69af5bad305765560758",
+   "size": 222355,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm1Tr9hj7JNYaibgWTiclBX5zYic6xIg4AaJU6y0yhJIGWY9UuPHmX6lIr3H2ic5B0OWhxvOuZ4TsVSRJg/640?wx_fmt=png"
+  }
+ ],
+ "publish_time": "2025-09-10 07:30",
+ "relevance": "relevant",
+ "relevance_score": 15.0,
+ "title": "财务分析，不能脱离业务逻辑！",
+ "title_hits": [
+  "业务",
+  "财务",
+  "财务分析"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247489782&idx=1&sn=2afd092c712733c0c55605142705c14f&chksm=ce1145a3f966ccb5885c3728af882a31ae8801eda716ed90284de01e2f811cc6501ad67cdf95",
+ "word_count": 330
+}

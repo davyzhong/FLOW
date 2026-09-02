@@ -6,6 +6,7 @@
 #   "lxml>=5.0",
 #   "pyyaml>=6.0",
 #   "defusedxml>=0.7",
+#   "pillow>=10.0",
 # ]
 # ///
 # -*- coding: utf-8 -*-
@@ -46,6 +47,7 @@ from wechatlib import (
     download_named_image,
     fetch_article_html,
     parse_article_meta,
+    recompress_pngs,
     render_images,
     slugify_title,
 )
@@ -134,7 +136,8 @@ def unique_dir(base: Path) -> Path:
     return base.with_name(base.name + "_%d" % n)
 
 
-def ingest_from_html(html_text: str, url: str, article_root: Path | None) -> dict:
+def ingest_from_html(html_text: str, url: str, article_root: Path | None,
+                     recompress: bool = False) -> dict:
     """解析 HTML → 分类 →（非 excluded 且给定目录时）落盘。返回 meta。"""
     meta = parse_article_meta(html_text)
     meta["url"] = url
@@ -148,6 +151,10 @@ def ingest_from_html(html_text: str, url: str, article_root: Path | None) -> dic
     body_md = builder.container(js_content) if js_content else ""
     if not body_md.strip():
         raise FetchError("正文为空（js_content 未解析到内容）")
+    # 标题/表格等行内上下文的图片占位符是原始 URL 形式，统一登记并转为序号形式
+    body_md = re.sub(r"\x00IMG:(https?://[^\x00]+)\x00",
+                     lambda m: "\x00IMG:#%d\x00" % builder.register(m.group(1)),
+                     body_md)
 
     cls = classify.classify(meta.get("title") or "", classify.content_to_text(body_md))
     meta.update({
@@ -172,6 +179,8 @@ def ingest_from_html(html_text: str, url: str, article_root: Path | None) -> dic
             cover_file = None
 
     saved_images = download_images(builder.image_urls, images_dir)
+    if recompress:
+        recompress_pngs(images_dir, saved_images)
     body_md = render_images(body_md, builder, saved_images)
 
     meta["cover_file"] = cover_file
@@ -215,6 +224,8 @@ def main() -> int:
                         help="只入库该日期（含）之后发布的文章，更早的标记跳过")
     parser.add_argument("--discover-only", action="store_true",
                         help="只发现并记录新文章 URL，不抓取（用于全量回填前评估规模）")
+    parser.add_argument("--recompress", action="store_true",
+                        help="大 PNG 图片转 JPEG（幻灯片截图类体积降 70%+，推荐批量入库时开启）")
     args = parser.parse_args()
 
     kb_dir: Path = args.kb_dir
@@ -271,7 +282,9 @@ def main() -> int:
 
                 target = unique_dir(kb_dir / article_sid / ("%s_%s" % (date_part, slugify_title(meta0.get("title") or "untitled"))))
 
-                meta = ingest_from_html(html_text, url, None if args.dry_run else target)
+                meta = ingest_from_html(html_text, url,
+                                        None if args.dry_run else target,
+                                        recompress=args.recompress)
 
                 if meta.get("excluded") or (args.exclude_borderline and meta.get("relevance") == "borderline"):
                     stat["excluded"] += 1

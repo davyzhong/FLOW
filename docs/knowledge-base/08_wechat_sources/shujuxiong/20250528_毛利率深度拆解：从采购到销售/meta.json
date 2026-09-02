@@ -1,0 +1,29 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2yjiaiciauRpIwU9fxicqNMcgVj4cGDJg6yJbJCa4M9DBcdDfz2AaR3g3UAv0B0XicyCzHnfXxicQjru8g/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T11:34:32+08:00",
+ "digest": "毛利率不是孤立的财务指标，而是一张覆盖产品、市场、供应链、制造的“经营体检报告”。只有在多指标联动的系统工程下，才能让毛利率真正“长高长壮”，撑起企业的长期竞争优势。",
+ "image_failures": [],
+ "images": [],
+ "publish_time": "2025-05-28 07:00",
+ "relevance": "relevant",
+ "relevance_score": 18.6,
+ "title": "毛利率深度拆解：从采购到销售",
+ "title_hits": [
+  "毛利",
+  "毛利率"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488211&idx=1&sn=fd4bae3cda5e6afe0836f1c1763d3c7f&chksm=ce114f86f966c6901b61532f6024d03f91580598fd0deec5e85053269cf43870c4ff966c44c4",
+ "word_count": 1754
+}
