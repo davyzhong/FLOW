@@ -1,0 +1,33 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "albums": [
+  "财务分析"
+ ],
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "01_财务分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm1OnapLCk1d3NR8kzc9WccuJPre2eBqSPyWbF9O5lLatqSBOWqJa8iasXMohCvfqxXg9aicxKQ1sibhw/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T11:33:20+08:00",
+ "digest": "让每一分钱都流向价值最高处，让每一项指标都服务企业的终极目标——创造价值。",
+ "image_failures": [],
+ "images": [],
+ "publish_time": "2025-04-29 07:41",
+ "relevance": "relevant",
+ "relevance_score": 25.2,
+ "title": "财务指标的内在联系",
+ "title_hits": [
+  "指标",
+  "财务"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487969&idx=1&sn=44387751e66f0cb04b2ff8f7b64f1125&chksm=ce114cb4f966c5a20106ae76a426e606d8f0cd682fef12c5506c814a1730cb6c0a3f07c8c06b",
+ "word_count": 1236
+}

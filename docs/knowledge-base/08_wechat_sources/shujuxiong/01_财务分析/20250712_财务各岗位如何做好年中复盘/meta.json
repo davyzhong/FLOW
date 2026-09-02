@@ -1,0 +1,40 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "albums": [
+  "财务分析"
+ ],
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "01_财务分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm2tQpB7ty4A5p3HkN11B2JHibUWgkm1z3apsEfhQKmXPWpzkJW9ZqunhoYnANc6CBUyJIeyL1TWHHg/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T11:37:15+08:00",
+ "digest": "复盘不是为了总结过去，而是为了更好地赢得未来。",
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.png",
+   "sha256": "64dd923831cca98fdec3a59cdaa5cddec29fa01557c56032a8d7bfaff7cc88f5",
+   "size": 43718,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/SZdByekibNm2tQpB7ty4A5p3HkN11B2JHFFKZce3RCT8bfE2VoNXdZ8S3OmkYdVoqKpLar35Co2YnTSakWiaRvVA/640?wx_fmt=png&from=appmsg"
+  }
+ ],
+ "publish_time": "2025-07-12 07:00",
+ "relevance": "relevant",
+ "relevance_score": 32.0,
+ "title": "财务各岗位如何做好年中复盘",
+ "title_hits": [
+  "复盘",
+  "财务"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247488586&idx=1&sn=d2906bc69bc8892fa177508411b13132&chksm=ce11491ff966c0095999d9142587c65108dc3a750932dffa76910a5e4f97a06c0adbe63eb062",
+ "word_count": 1759
+}

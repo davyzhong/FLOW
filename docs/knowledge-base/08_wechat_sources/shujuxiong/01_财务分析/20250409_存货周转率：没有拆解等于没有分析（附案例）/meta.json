@@ -1,0 +1,34 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "albums": [
+  "财务分析",
+  "财务管理",
+  "经营分析"
+ ],
+ "author": "Data Bear",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "财务分析",
+  "经营分析",
+  "预算与成本",
+  "报告与汇报模板",
+  "数据方法与工具"
+ ],
+ "collection": "01_财务分析",
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/mmbiz_jpg/SZdByekibNm32uDOj5ibicYicRljd7XYWueB7AjGEM1ejoPSE70mJvjFmjznpsesiavyKIv5fbFMh2rFCMYUw3svib4A/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T11:32:37+08:00",
+ "digest": "真正的分析，不是报数，而是要看出趋势，找出原因，拿出对策。",
+ "image_failures": [],
+ "images": [],
+ "publish_time": "2025-04-09 07:00",
+ "relevance": "relevant",
+ "relevance_score": 18.2,
+ "title": "存货周转率：没有拆解等于没有分析（附案例）",
+ "title_hits": [
+  "存货"
+ ],
+ "url": "http://mp.weixin.qq.com/s?__biz=Mzg2MTg5OTgzNA==&mid=2247487834&idx=1&sn=1cc0ae3881c016d1a275cbc41dc5010b&chksm=ce114c0ff966c5193e306fd026926f5750103969e195291d59c9a9e9934b7dc8932542858c67",
+ "word_count": 1700
+}
