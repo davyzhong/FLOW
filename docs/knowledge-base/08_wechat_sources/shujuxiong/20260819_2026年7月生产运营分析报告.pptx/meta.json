@@ -1,0 +1,142 @@
+{
+ "account": "数据熊",
+ "account_id": "gh_d55144ba7fe2",
+ "author": "宋岳清",
+ "biz": "Mzg2MTg5OTgzNA==",
+ "categories": [
+  "经营分析",
+  "报告与汇报模板"
+ ],
+ "cover_file": "images/cover.jpg",
+ "cover_url": "https://mmbiz.qpic.cn/sz_mmbiz_jpg/gZ0Mp1agcZicI3AyUgTkQSgQ6rp6rynMdK27zy81lib2U6afrbt345HHwYjDPM8fia6QvIIq0GSxQwCfHkZS5BaByBg2A7rPw1crYAzAgZhNhc/0?wx_fmt=jpeg",
+ "crawled_at": "2026-09-02T09:59:46+08:00",
+ "digest": null,
+ "image_failures": [],
+ "images": [
+  {
+   "file": "images/img001.png",
+   "sha256": "44cf2ea4de09a4538d380b5a6d6381c96a0a25dd9f3c98123eaa1df7b66c779e",
+   "size": 692670,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZ8JPjkhtiaPCTyBpN0sXAZzZiadLAw4SAAV6z8xw3dFD4XIhxCcZvzFm6Ecyib8vlUfjCQDQnQicEQ747OmCHfpPl4Ka9Id9sRCptg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img002.png",
+   "sha256": "1c6fa3977753d722a4c23007758767f7dd5933c15beebc7c5483c344a716280d",
+   "size": 576380,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZ8ttbo3q23t3xouFCPEnwBuZXrqJOg0EKps8VPTJ7e5tYRiasRibgevadYXh4bWeV6vicSecGPiaEjTy6vEEpGt3N2Q2qg41tQwZsk/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img003.png",
+   "sha256": "8492ad49ddba1756023a9e4251fa0fe7621e8b10fe419c831ace727cb71c031c",
+   "size": 586324,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZibqHo4LdV84TVwlmibgV6Yg1cSd3ENxWgMEibFzZ6SZ8WFnOMZGGAHibXibZxm0y4nMOVIWtPst47RX6icnlImDfARHnG3ZTHT8orCI/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img004.png",
+   "sha256": "16437d0f05a7653e99160380f362a2822987e934ee52059802f8d1b1c6fca3ca",
+   "size": 579159,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/gZ0Mp1agcZ831VNofS2t2tSdq20tht1C2IicwIHo5eoLibnGtIxibA2uGmhWXOTiap02H6vibQeK6Sv8pGXIP9pvhE3LRpwYBrPmzs4TlJY4c5Ps/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img005.png",
+   "sha256": "578754c5162978b0a62e3e44f3b6a10b26334ee26ba855cc661135cc49637618",
+   "size": 603659,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZ98pyCsCWN0qzdtQT3AicGia3aVg7Fib6rljlKTCSkuA5bg9bBdsr4ggicZMeeNNQaECYFL8rI7Kh5gGXg3LvIXgjTxJKCgrsTHUuI/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img006.png",
+   "sha256": "3f33b185199f270136e64e6d4789774fd4200a29b59f52a4e0dbdce2f369b614",
+   "size": 562217,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZib05o4y1x765eZsiadkEUPZPI89vKmyKpXCjKTmYQOLb77A51PeyZsq9vJzKLpQngZapA4Ld2JJFrfEemeq82MhYeGdIakmibtCY/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img007.png",
+   "sha256": "62c26de76b0776ef98f3f776b9b57190f1e41f6789caa886078d1eb3de79658d",
+   "size": 592396,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZibzomOPVjic40ZrrGwO0J15vNWUs9Ap5rHUkQssPxSgiaMU2LOV3QjFHyJkaxu9pgdMpVEN86FibHoMeX0qXicMZITP5mEouQOTjKE/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img008.png",
+   "sha256": "6ad7c529737efb6297a9a8c58e773b4e9bb489f5a71309bb43064e29728d8324",
+   "size": 614360,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZ9JwMORycPA45tEJKUJUcoSyiayVjj4GM5r55WiayRGGCgpWNgZr1Wjeth5aL7wNyEIIeMLNUMymGQtHBQibbgyluXZsic8U0AyNxs/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img009.png",
+   "sha256": "9252fcc531d95b623b82b890b18c50130be6d93d59856afbf244d97234c56803",
+   "size": 583870,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/gZ0Mp1agcZ9YYbQicMwghibIjmVNfEibaWj3icvWGUepoILh23ibibyxpUoQia0hmBICVbO1shXIk4wKG5KmbF5eTFhXFddaupF0L7JTG5eFfHzrIo/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img010.png",
+   "sha256": "fee0415faf242fbf70f9adf2d57b6a0c54c2b8be651fd8e469c62df6d30ebbaf",
+   "size": 580494,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZ9VpWY3tET6U5zgvPH4To5zPRu1NemDscibjmhPBRvSibRKNe6EIWReO98zjQDATeUApuJA2kPqYdaanhjxe7ZFwOY0uOIlq3hy0/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img011.png",
+   "sha256": "e029947ff89a165fca8f85b700129e5f1a5a09fe468aaaeeecea9c43c2a7a8c3",
+   "size": 609041,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/gZ0Mp1agcZ9ATjGujfKITRmxMEtLrf7UR9RicWytA2ich7ApbsayaU1LV3F6Y2aTGD3M10x45qlDRicicwria4pfD7P8w5jKfCOicibsGVyibI9Lyd8/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img012.png",
+   "sha256": "d2ee4a5230e7f4b1338712db43d827040fc76d11d6036c46432c8c30a608812d",
+   "size": 566639,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/gZ0Mp1agcZ9c2X7nCoDIFLEwicgWLK0BxmibVUic9xSrPS2Qnic4Dsc8saFG4bIh77xm86bohNVhY3mC4ejjj3HDbhShvEk52kAvTQJwkxPC0x0/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img013.png",
+   "sha256": "1f79bd9daed9fa9382b59289642adac9d9645c3a21acddd268c761dfd6f090bc",
+   "size": 626953,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/gZ0Mp1agcZib2LZSx18vqd2NLthGubiaoxGWhibFkNpUltoqlK9iaabTB9OzibO5ktLZUHvicD853voXV20FwkmUr0Qxp4kvtQ9ia3mrdQMicffz3dg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img014.png",
+   "sha256": "52751f78c53b0827930847cfba40ddf64dcf126ec80d4c434a5f65b2523f5167",
+   "size": 566659,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/gZ0Mp1agcZ9dETpLXQHnBAbqGO4d6r1gRNvrNBVGyN7JibjX7zHKb0zJib13OhoAEzx1PKlBRZl4UjBmYUerbUngoLeyHfd0C7C7SoibqiaAabw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img015.png",
+   "sha256": "a420d3ce0c7cd7d4eb06a955924e0d53301c5d66673a223c162ec84d9b547a77",
+   "size": 628753,
+   "url": "https://mmbiz.qpic.cn/sz_mmbiz_png/gZ0Mp1agcZ8z7PZcpgnnIz5GIdzNKjTUsa9djJm9Hy0zrwMT3xGVUtPNFiaITTQeTghtYDiaUsMQLXb2tbYaDo9XVzFqIicBA761BREqFibPVRw/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img016.png",
+   "sha256": "8c0d88b0df34e26b8c821bc0dd5b4080557a96bc414792b9dde43ac4e8d03025",
+   "size": 594906,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZibXFNWJLcepmywRW9W3NpZE1VfDPdI79yGANONQuHFRgfWEabRD8BnVLPTAXERojqemXXXicib3FMEs9xQZyAPftWMjZIJp0Lkhg/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img017.png",
+   "sha256": "3f4dee84c455efdaad3c838d5a32a0af28b539940e17795c39b720fba4b5df1c",
+   "size": 629415,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZ9JbDWfGKmo6x2rUvEKTojMoc8pic1q6MBqPEibssJxib5KVUH8uxPKFfg2XR4CTBvpnTw7xtS0yV9KTEIQh2RIxrlUPmEbcwFQDI/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img018.png",
+   "sha256": "56ab845dda47b29d2a603e20f14068a510dfc633043586993d28e5c4136aad4e",
+   "size": 653120,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZ8xnVgHxctVFyWXJpibnOtj8mBdzsJsW1ysfg0fDW6j11pdicRBBH7Jictupfrnc9I0XqTaVDe4vuYtuJflnVxtRtV2SMsSbWCkJI/640?wx_fmt=png&from=appmsg"
+  },
+  {
+   "file": "images/img019.png",
+   "sha256": "2911239f91922d5ffc5a3c1a16f6411c220fd641acf18c29df25d3e49e1636c9",
+   "size": 326385,
+   "url": "https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZ8iaaEjznDDryzXib4hhn6Hzia4GxJbLJCiceE5pR6CFUfKJUXhDKgaPPZex6BBiaA9oLDU9vKANbtJwO7BKzKX2uBAAur7pQFKTGY4/640?wx_fmt=png&from=appmsg"
+  }
+ ],
+ "publish_time": "2026-08-19 09:10",
+ "relevance": "relevant",
+ "relevance_score": 5.0,
+ "title": "2026年7月生产运营分析报告.pptx",
+ "title_hits": [
+  "ppt",
+  "分析报告",
+  "运营"
+ ],
+ "url": "https://mp.weixin.qq.com/s/mN2YjzSnQUKJKZy3NjKf6w",
+ "word_count": 1
+}

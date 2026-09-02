@@ -2,10 +2,14 @@
 
 本目录持续收录对 FLOW 有参考价值的微信公众号文章，初始来源：
 
-| 来源 id | 公众号 | 账号 ID | biz | 定位 |
+| 来源 id | 公众号 | 账号 ID | fakeid | 定位 |
 |---|---|---|---|---|
 | `shujuxiong` | 数据熊 | gh_d55144ba7fe2 | Mzg2MTg5OTgzNA== | 财务分析实务、月度经营分析报告模板 |
 | `shuyan_fupanshi` | 数研复盘狮 | gh_78506a7234d3 | MzY5NTM2NTA5NA== | 经营分析报告、毛利/净利润专题复盘 |
+| `花叔`（自动登记） | 花叔 | gh_13cc971d267c | Mzg2OTA1OTAxNA== | Excel 数据处理 skill 与数据方法（Huashu Excel 作者） |
+
+> 背景：项目"阶段 0"的五篇奠基研究材料（`02_research/original/`）经原始链接复核，
+> 4 篇来自数据熊、1 篇来自花叔——这些账号正是项目早期灵感来源，全量归档价值高。
 
 这些公众号与项目"阶段 0"的五篇研究资料（`02_research/original/`）主题同源，是下一阶段方向验证的重要外部参照。
 
@@ -46,13 +50,16 @@ uv run scripts/wechat_kb/sync.py --limit 5  # 限制本批处理篇数
 ### 文章发现通道
 
 1. **seed 队列**（保底）：把文章链接粘到 `queue/pending_<来源id>.txt`，微信里"复制链接"即可；
-2. **mp_platform 全量通道**：微信公众平台接口可枚举账号**全部历史文章**。需要任一公众号账号登录
-   `mp.weixin.qq.com` 后，把浏览器 Cookie 与 URL 中的 `token` 存为 `work/wechat_kb/mp_credentials.json`
-   （`work/` 不入 git，凭据严禁提交）：
-   ```json
-   {"cookie": "slave_sid=...; ...", "token": "123456"}
-   ```
-3. **RSS**：`sources.yaml` 中给来源加 `feed:` 字段即可接入 wechat2rss 等付费源。
+2. **收件箱自动归类**：不确定来源的链接放 `queue/pending_inbox.txt`，抓取时按文章实际公众号
+   自动归档并登记到 `sources.auto.yaml`；
+3. **mp_platform 全量通道**：微信公众平台接口可枚举账号**全部历史文章**。注意：
+   - 会话 cookie（slave_sid）是 httpOnly，脚本读不到值，推荐用**浏览器页面内 fetch** 调
+     `searchbiz` / `appmsg` 接口拉列表（同源自动带 cookie），把链接写入队列后再同步；
+     操作步骤见 `wechat-kb-sync` 技能或 `wechat-article-harvest` 技能；
+   - `sources.yaml` 已沉淀各账号稳定 `fakeid`，拉列表可跳过 searchbiz 直接分页 appmsg；
+   - 列表接口有严格频率限制（`ret=200013`，冷却 1 分钟到 1 小时）：每页间隔 ≥4 秒、
+     每会话每账号只 searchbiz 一次；正文抓取不受该配额影响；
+4. **RSS**：`sources.yaml` 中给来源加 `feed:` 字段即可接入 wechat2rss 等付费源。
 
 ### 筛选规则
 

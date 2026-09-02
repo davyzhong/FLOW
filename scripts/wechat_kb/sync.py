@@ -23,6 +23,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import shutil
 import sys
 import time
@@ -79,6 +80,49 @@ def append_jsonl(path: Path, record: dict) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("a", encoding="utf-8") as fh:
         fh.write(json.dumps(record, ensure_ascii=False) + "\n")
+
+
+def load_sources(kb_dir: Path) -> list[dict]:
+    """合并手工 sources.yaml 与自动登记的 sources.auto.yaml。"""
+    sources: list[dict] = []
+    for name in ("sources.yaml", "sources.auto.yaml"):
+        path = kb_dir / name
+        if path.exists():
+            sources += yaml.safe_load(path.read_text(encoding="utf-8"))["sources"]
+    return sources
+
+
+def register_source(kb_dir: Path, meta: dict) -> str:
+    """按文章实际公众号自动登记来源（sources.auto.yaml），返回来源 id。"""
+    nickname = (meta.get("account") or "").strip()
+    if not nickname:
+        return "inbox"
+    existing = load_sources(kb_dir)
+    for s in existing:
+        if s.get("name") == nickname or (
+            meta.get("account_id") and s.get("account_id") == meta.get("account_id")
+        ):
+            return s["id"]
+    slug = re.sub(r'[\\/:*?"<>|\s·（）()]+', "", nickname) or "unknown"
+    for s in existing:
+        if s["id"] == slug:
+            slug = slug + "_" + (meta.get("account_id") or "x").replace("gh_", "")
+    auto_path = kb_dir / "sources.auto.yaml"
+    data = {"sources": []}
+    if auto_path.exists():
+        data = yaml.safe_load(auto_path.read_text(encoding="utf-8")) or data
+    data.setdefault("sources", []).append({
+        "id": slug,
+        "name": nickname,
+        "account_id": meta.get("account_id"),
+        "biz": meta.get("biz"),
+        "note": "自动登记于 %s" % datetime.now(CST).strftime("%Y-%m-%d"),
+    })
+    auto_path.write_text(
+        yaml.safe_dump(data, allow_unicode=True, sort_keys=False), encoding="utf-8"
+    )
+    print("  [新来源] %s（%s）已自动登记" % (nickname, slug))
+    return slug
 
 
 def unique_dir(base: Path) -> Path:
@@ -167,10 +211,14 @@ def main() -> int:
     parser.add_argument("--limit", type=int, default=0, help="每次最多处理文章数（0=不限）")
     parser.add_argument("--skip-manifest", action="store_true", help="跳过 99_manifest 重建")
     parser.add_argument("--exclude-borderline", action="store_true", help="相关性不足的文章不入库")
+    parser.add_argument("--since", default=None, metavar="YYYY-MM-DD",
+                        help="只入库该日期（含）之后发布的文章，更早的标记跳过")
+    parser.add_argument("--discover-only", action="store_true",
+                        help="只发现并记录新文章 URL，不抓取（用于全量回填前评估规模）")
     args = parser.parse_args()
 
     kb_dir: Path = args.kb_dir
-    sources = yaml.safe_load((kb_dir / "sources.yaml").read_text(encoding="utf-8"))["sources"]
+    sources = load_sources(kb_dir)
     state = load_state(kb_dir)
     queue_dir = kb_dir / "queue"
     report = {"started_at": datetime.now(CST).isoformat(timespec="seconds"), "sources": {}}
@@ -178,12 +226,23 @@ def main() -> int:
 
     for source in sources:
         sid = source["id"]
-        print("== 来源 %s（%s）==" % (source["name"], sid))
+        inbox = bool(source.get("inbox"))
+        label = source.get("name") or sid
+        print("== 来源 %s（%s）%s ==" % (label, sid, "[收件箱]" if inbox else ""))
         urls = providers.discover(queue_dir, source, CRED_PATH, consume=not args.dry_run)
         new_urls = [u for u in urls if u not in state]
         print("  发现 %d 个链接，其中新文章 %d 篇" % (len(urls), len(new_urls)))
         stat = {"discovered": len(urls), "new": len(new_urls),
                 "included": 0, "excluded": 0, "errors": 0}
+
+        if args.discover_only:
+            for url in new_urls:
+                append_jsonl(kb_dir / "logs" / "discovered.jsonl", {
+                    "source_hint": sid, "url": url,
+                    "discovered_at": datetime.now(CST).isoformat(timespec="seconds")})
+            stat["note"] = "discover-only：未抓取，URL 已记录到 logs/discovered.jsonl"
+            report["sources"][sid] = stat
+            continue
 
         for url in new_urls:
             if args.limit and (stat["included"] + stat["excluded"]) >= args.limit:
@@ -193,9 +252,24 @@ def main() -> int:
             try:
                 html_text = fetch_article_html(url, cache_dir=WORK_DIR / "html_cache")
                 meta0 = parse_article_meta(html_text)
+
+                # 收件箱：按文章实际公众号自动归类登记
+                article_sid = sid
+                if inbox and not args.dry_run:
+                    article_sid = register_source(kb_dir, meta0)
+
                 date_part = (meta0.get("publish_time")
                              or datetime.now(CST).strftime("%Y-%m-%d %H:%M"))[:10].replace("-", "")
-                target = unique_dir(kb_dir / sid / ("%s_%s" % (date_part, slugify_title(meta0.get("title") or "untitled"))))
+
+                # --since：更早的文章跳过（在下载图片前判定）
+                if args.since and (meta0.get("publish_time") or "")[:10] < args.since:
+                    stat["excluded"] += 1
+                    state[url] = {"status": "skipped_old", "title": meta0.get("title"),
+                                  "date": datetime.now(CST).isoformat(timespec="seconds")}
+                    print("  [跳过] %s（早于 %s）" % (meta0.get("title"), args.since))
+                    continue
+
+                target = unique_dir(kb_dir / article_sid / ("%s_%s" % (date_part, slugify_title(meta0.get("title") or "untitled"))))
 
                 meta = ingest_from_html(html_text, url, None if args.dry_run else target)
 
@@ -211,7 +285,7 @@ def main() -> int:
                 else:
                     stat["included"] += 1
                     included_total += 1
-                    state[url] = {"status": "done", "dir": "%s/%s" % (sid, target.name),
+                    state[url] = {"status": "done", "dir": "%s/%s" % (article_sid, target.name),
                                   "title": meta.get("title"),
                                   "date": datetime.now(CST).isoformat(timespec="seconds")}
                     print("  [入库] %s（%s，得分 %s）" % (

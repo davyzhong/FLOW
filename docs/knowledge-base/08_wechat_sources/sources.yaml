@@ -5,10 +5,18 @@ sources:
     name: 数据熊
     account_id: gh_d55144ba7fe2
     biz: Mzg2MTg5OTgzNA==
+    fakeid: Mzg2MTg5OTgzNA==
     note: 财务分析实务与月度经营分析报告模板
 
   - id: shuyan_fupanshi
     name: 数研复盘狮
     account_id: gh_78506a7234d3
     biz: MzY5NTM2NTA5NA==
+    fakeid: MzY5NTM2NTA5NA==
     note: 经营分析报告、毛利与净利润专题复盘
+
+  # 收件箱：未指定来源的一次性链接；抓取时按文章实际公众号自动归类并登记到 sources.auto.yaml
+  - id: inbox
+    name: 收件箱
+    inbox: true
+    note: 一次性链接入口，自动归类

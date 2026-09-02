@@ -58,13 +58,21 @@ def discover_seed(queue_dir: Path, source_id: str, consume: bool = True) -> list
     return urls
 
 
-def load_mp_credentials(cred_path: Path) -> tuple[str, str] | None:
+def load_mp_credentials(cred_path: Path | None = None) -> tuple[str, str] | None:
     cookie = os.environ.get("WECHAT_MP_COOKIE", "").strip()
     token = os.environ.get("WECHAT_MP_TOKEN", "").strip()
-    if not cookie and cred_path.exists():
-        data = json.loads(cred_path.read_text(encoding="utf-8"))
-        cookie = str(data.get("cookie", "")).strip()
-        token = str(data.get("token", "")).strip()
+    candidates = []
+    if cred_path is not None:
+        candidates.append(cred_path)
+    candidates.append(Path.home() / ".config" / "wx-harvest" / "credentials.json")
+    if not cookie:
+        for cand in candidates:
+            if cand.exists():
+                data = json.loads(cand.read_text(encoding="utf-8"))
+                cookie = str(data.get("cookie", "")).strip()
+                token = str(data.get("token", "")).strip()
+                if cookie and token:
+                    break
     if cookie and token:
         return cookie, token
     return None
@@ -100,20 +108,21 @@ def discover_mp_platform(source: dict, cred_path: Path) -> list[str]:
     session.headers.update({"User-Agent": WECHAT_UA, "Cookie": cookie, "Referer": MP_HOST})
     check_url(MP_HOST)
 
-    # 1) 昵称 → fakeid
-    search_url = (
-        MP_HOST + "/cgi-bin/searchbiz?action=search_biz&begin=0&count=5"
-        "&query=%s&token=%s&lang=zh_CN&f=json&ajax=1&random=%s"
-        % (requests.utils.quote(nickname), token, secrets.token_hex(16))
-    )
-    data = _mp_get(session, search_url)
-    fakeid = None
-    for item in data.get("list", []):
-        if item.get("nickname") == nickname:
-            fakeid = item.get("fakeid")
-            break
+    # 1) fakeid：优先用 sources 配置里的稳定值，避免 searchbiz 调用触发 200013
+    fakeid = source.get("fakeid")
     if not fakeid:
-        raise RuntimeError("mp_platform 未找到公众号: %s" % nickname)
+        search_url = (
+            MP_HOST + "/cgi-bin/searchbiz?action=search_biz&begin=0&count=5"
+            "&query=%s&token=%s&lang=zh_CN&f=json&ajax=1&random=%s"
+            % (requests.utils.quote(nickname), token, secrets.token_hex(16))
+        )
+        data = _mp_get(session, search_url)
+        for item in data.get("list", []):
+            if item.get("nickname") == nickname:
+                fakeid = item.get("fakeid")
+                break
+        if not fakeid:
+            raise RuntimeError("mp_platform 未找到公众号: %s" % nickname)
 
     # 2) 分页枚举全部文章
     urls = []
