@@ -61,7 +61,7 @@ WORK_DIR = REPO_ROOT / "work" / "wechat_kb"
 CRED_PATH = WORK_DIR / "mp_credentials.json"
 # 内容仓库 = Obsidian vault（多机同步）；仓库内不存正文，staging 只是摄取中转
 STAGING_ROOT = WORK_DIR / "staging"
-DEFAULT_CONTENT_ROOT = Path.home() / "ObsidianWiki" / "Clippings" / "微信知识库"
+DEFAULT_CONTENT_ROOT = Path.home() / "ObsidianWiki" / "processed" / "微信知识库"
 
 
 def load_state(kb_dir: Path) -> dict:

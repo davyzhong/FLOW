@@ -37,7 +37,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 KB_DIR = REPO_ROOT / "docs" / "knowledge-base" / "08_wechat_sources"
-DEFAULT_VAULT = Path.home() / "ObsidianWiki" / "Clippings" / "微信知识库"
+DEFAULT_VAULT = Path.home() / "ObsidianWiki" / "processed" / "微信知识库"
 
 BAD_FN = re.compile(r'[\\/:*?"<>|#^\[\]\r\n\t]')
 FM_RE = re.compile(r"\A---\n(.*?)\n---\n", re.S)
@@ -58,7 +58,8 @@ def album_topic(meta: dict) -> str:
     return re.sub(r"^\d+[_\-]?", "", c)
 
 
-def build_note(meta: dict, article_dir: Path, image_map: dict[str, str]) -> str:
+def build_note(meta: dict, article_dir: Path, image_map: dict[str, str],
+               subpath: str = "") -> str:
     topic = album_topic(meta)
     fm = {
         "title": meta.get("title"),
@@ -92,7 +93,8 @@ def build_note(meta: dict, article_dir: Path, image_map: dict[str, str]) -> str:
     def repl(m):
         rel = m.group(1)
         target = image_map.get(rel)
-        return "![图片](attachments/%s)" % target if target else m.group(0)
+        # wikilink 嵌入：Obsidian 原生支持空格/中文/括号文件名，且移动文件夹时自动更新
+        return "![[%s/attachments/%s]]" % (subpath, target) if target else m.group(0)
 
     body = re.sub(r"!\[[^\]]*\]\((images/[^)]+)\)", repl, body)
     return "---\n%s\n---\n\n# %s\n\n%s\n\n%s" % (
@@ -105,6 +107,7 @@ def write_article(article_dir: Path, vault: Path, force: bool = False) -> Path:
     account = BAD_FN.sub(" ", meta.get("account") or "未知账号").strip() or "未知账号"
     collection = meta.get("collection")
     target_dir = vault / account / collection if collection else vault / account
+    subpath = "%s/%s" % (account, collection) if collection else account
     base = obsidian_filename(meta.get("title"), meta.get("publish_time") or "")
 
     image_map: dict[str, str] = {}
@@ -123,7 +126,7 @@ def write_article(article_dir: Path, vault: Path, force: bool = False) -> Path:
             shutil.copy2(src_img, dst)
         image_map[rel] = target_name
 
-    content = build_note(meta, article_dir, image_map)
+    content = build_note(meta, article_dir, image_map, subpath)
     note_path = target_dir / (base + ".md")
     n = 2
     while note_path.exists() and not force and note_path.read_text(encoding="utf-8") != content:

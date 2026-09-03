@@ -1,6 +1,7 @@
 # 公众号来源注册表：scripts/wechat_kb/sync.py 读取
 # content_root: 知识内容唯一存储（Obsidian vault，多机同步；仓库内不存正文）
-content_root: /Users/qiming/ObsidianWiki/Clippings/微信知识库
+# 2026-09-03 用户在 Obsidian 内将库从 Clippings/ 移至 processed/
+content_root: /Users/qiming/ObsidianWiki/processed/微信知识库
 sources:
   - id: shujuxiong
     name: 数据熊

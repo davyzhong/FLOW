@@ -128,7 +128,7 @@ relative_path	size_bytes	modified_time	mime_type
 07_handoff/CONTINUATION_GUIDE.md	3076	2026-08-30T00:43:28+08:00	application/octet-stream
 07_handoff/RESTART_PROMPTS.md	1570	2026-08-29T23:44:55+08:00	application/octet-stream
 08_wechat_sources/.mimosa/hook-status/sess_84a89803-bb78-4d0c-8e49-d505f742e991-bdba5d7883.json	1006	2026-09-03T06:46:44+08:00	application/octet-stream
-08_wechat_sources/INDEX.md	272499	2026-09-03T06:48:36+08:00	application/octet-stream
+08_wechat_sources/INDEX.md	272499	2026-09-03T08:25:08+08:00	application/octet-stream
 08_wechat_sources/README.md	3671	2026-09-03T06:46:21+08:00	application/octet-stream
 08_wechat_sources/albums/经营分析.json	74221	2026-09-02T13:48:33+08:00	application/octet-stream
 08_wechat_sources/albums/财务分析.json	32764	2026-09-02T13:48:33+08:00	application/octet-stream
@@ -141,7 +141,7 @@ relative_path	size_bytes	modified_time	mime_type
 08_wechat_sources/queue/pending_shujuxiong.txt	108501	2026-09-02T13:54:06+08:00	application/octet-stream
 08_wechat_sources/queue/pending_shuyan_fupanshi.txt	219	2026-09-02T11:29:53+08:00	application/octet-stream
 08_wechat_sources/sources.auto.yaml	126	2026-09-02T10:02:44+08:00	application/octet-stream
-08_wechat_sources/sources.yaml	1461	2026-09-03T06:45:23+08:00	application/octet-stream
+08_wechat_sources/sources.yaml	1535	2026-09-03T08:24:30+08:00	application/octet-stream
 08_wechat_sources/state/seen_urls.json	170458	2026-09-03T06:45:42+08:00	application/octet-stream
 99_manifest/ARCHIVE_NOTES.md	1780	2026-08-29T23:45:57+08:00	application/octet-stream
 99_manifest/READER_TEST.md	2455	2026-08-29T23:45:57+08:00	application/octet-stream

@@ -21,7 +21,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import export_obsidian
 
 KB_DIR = Path(__file__).resolve().parents[2] / "docs" / "knowledge-base" / "08_wechat_sources"
-DEFAULT_CONTENT_ROOT = Path.home() / "ObsidianWiki" / "Clippings" / "微信知识库"
+DEFAULT_CONTENT_ROOT = Path.home() / "ObsidianWiki" / "processed" / "微信知识库"
 
 
 def build(kb_dir: Path = KB_DIR, content_root: Path | None = None) -> str:
