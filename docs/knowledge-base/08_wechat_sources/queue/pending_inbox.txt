@@ -1,0 +1,7 @@
+# 收件箱：未指定来源的公众号文章链接（一行一个），按文章实际公众号自动归类
+# 2026-09-02 用户提供（阶段0研究材料的原始五篇）
+# done: https://mp.weixin.qq.com/s/AEhX1pkJhGyMmMC-oNQj8w
+# done: https://mp.weixin.qq.com/s/mN2YjzSnQUKJKZy3NjKf6w
+# done: https://mp.weixin.qq.com/s/YWmKQftjveqpNjOydDmT_A
+# done: https://mp.weixin.qq.com/s/ZMuBnCKvjM9UsqpG-nxzxA
+# done: https://mp.weixin.qq.com/s/7gYbxcW81EtUZQOvpZTOkw
