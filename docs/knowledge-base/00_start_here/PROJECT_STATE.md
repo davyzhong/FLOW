@@ -228,7 +228,7 @@
 - 沉淀 `wechat-kb-sync` 技能与每周一 09:00 定时同步；通用引擎另沉淀为跨项目 `wechat-article-harvest` 技能；
 - 2026-09-03 架构变更：Obsidian vault（多机同步）成为知识内容唯一仓库（`sources.yaml: content_root` 指向 `/Users/qiming/ObsidianWiki/Clippings/微信知识库/`）；仓库 08_wechat_sources 只保留流水线、来源配置、队列/状态/日志与链接引用索引（INDEX.md 含每篇 vault 笔记 `obsidian://` 链接），同步流水线改为 staging 中转后直写 vault；
 - 合集之外的散篇可按 wechat-kb-sync 技能第 5 节的慢节奏流程补齐（浏览器页面内 fetch，受公众平台 200013 频率限制约束）；
-- 2026-09-03 移交决定：公众号→Obsidian 知识库能力整体移交 DavyBase 项目（多渠道知识抓取 → Obsidian 知识库，定位重合）；标准化工具沉淀于用户技能 `wechat-article-harvest`（wxkb CLI）；FLOW 侧删除流水线与配置（历史版本见 git），仅保留 `08_wechat_sources/` 的引用入口（INDEX.md + HANDOFF.md）；每周一定时任务已删除，交接清单见 `08_wechat_sources/HANDOFF.md`。
+- 2026-09-03 移交决定：公众号→Obsidian 知识库能力整体移交 DavyBase 项目（多渠道知识抓取 → Obsidian 知识库，定位重合）；标准化工具沉淀于用户技能 `wechat-article-harvest`（wxkb CLI）；每周一定时任务已删除；**流水线与配置先恢复保留（自 e5919b4 恢复，提交 c681067），待 DavyBase 确认接收后再删除**，届时仅保留 `08_wechat_sources/` 的引用入口（INDEX.md + HANDOFF.md）；交接清单见 `08_wechat_sources/HANDOFF.md`。
 
 ## 当前尚未完成
 
