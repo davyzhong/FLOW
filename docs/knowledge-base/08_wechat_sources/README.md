@@ -1,9 +1,9 @@
-# 08 公众号素材库（交接中：待 DavyBase 接收后删除本目录）
+# 08 公众号素材库（已移交 DavyBase，此处仅保留引用入口）
 
-**状态（2026-09-03）**：公众号 → Obsidian 知识库能力已决定移交 **DavyBase 项目**
-（多渠道知识抓取 → Obsidian 知识库）。**DavyBase 尚未完成接收**，因此本目录与
-`scripts/wechat_kb/` 流水线暂时保留（自 `e5919b4` 恢复）；**DavyBase 确认接收后，
-按 [HANDOFF.md](HANDOFF.md) 第 5 节删除本目录与流水线**。
+**状态（2026-09-03）**：公众号 → Obsidian 知识库能力已移交 **DavyBase 项目**
+（多渠道知识抓取 → Obsidian 知识库），此处仅保留引用入口。
+
+**2026-09-03 移交完成**：管线代码与队列/状态数据已删除，历史见本仓库 git（提交 c681067 及之前）；新管线在 davybase 仓库 `src/sources/wechat/`。
 
 ## 引用入口（长期保留，即使目录删除）
 
@@ -14,7 +14,7 @@
   - 快捷入口：`obsidian://open?path=/Users/qiming/ObsidianWiki/processed/微信知识库/数据熊/目录.md`
 - **全量引用索引**：[INDEX.md](INDEX.md)（每篇含 vault 笔记 file:// 与 obsidian:// 链接 + 原文链接）
 
-## 目录结构（交接期临时保留）
+## 目录结构（历史：下列数据与 `scripts/wechat_kb/` 流水线已于 2026-09-03 随移交删除）
 
 ```text
 08_wechat_sources/

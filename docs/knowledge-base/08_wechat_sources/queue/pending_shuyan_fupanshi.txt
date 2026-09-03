@@ -1,3 +1,0 @@
-# 数研复盘狮 待抓队列：一行一个 mp.weixin.qq.com 文章链接（# 为注释），处理成功后自动标记
-# 种子（2026-09-02 用户提供）
-# done: https://mp.weixin.qq.com/s/Af581zMEpYjwyO5pogT_3A
