@@ -9,12 +9,13 @@
 | 当前 Codex 会话 2026-08-29 | `~/.codex/sessions/2026/08/29/...jsonl` | `01_conversations/raw/codex/` | 机器级原始会话 |
 | Codex 可读转录 | 由上述 JSONL 机械提取 | `01_conversations/readable/` | 仅保留 user/assistant 消息 |
 
-## 来源组 B：五篇研究资料
+## 来源组 B：研究资料
 
 | 内容 | 原始位置 | 归档位置 |
 |---|---|---|
-| 研究 Markdown、文本、HTML 和图片 | `/Users/qiming/.zcode/workspace/default/research/` | `02_research/original/` |
+| 研究 Markdown、文本、HTML 和图片（01–05） | `/Users/qiming/.zcode/workspace/default/research/` | `02_research/original/` |
 | 系统研究综合结论 | `/Users/qiming/Documents/Codex/2026-08-28/referenced-chatgpt-conversation-this-is-an/outputs/Finance_Intelligence_OS_系统研究结论.md` | `02_research/synthesis/` |
+| 《经营分析和财务分析的区别》（06，2026-09-04 增补） | 微信公众号 CDN（原文 <https://mp.weixin.qq.com/s/SpwCQzXNwE0if2PpepQd9g>），HTML 与 9 张正文卡片图于抓取当日归档 | `02_research/original/`（`06_…_资料.md`、`html/`、`images/06_*.png`） |
 
 原始研究目录中的 `.mimosa` 运行状态不属于研究内容，未复制。
 

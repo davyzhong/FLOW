@@ -5,13 +5,14 @@
 - ChatGPT 分享链接：<https://chatgpt.com/share/6a913133-66a8-83ec-939d-a88cfa12734b>
 - ChatGPT 对话引用：`chatgpt-conversation://6a91167c-5538-83ec-b1e1-59884f96982c`
 
-## 五篇微信公众号来源
+## 微信公众号研究来源
 
 1. 集团财务总监驾驶舱：<https://mp.weixin.qq.com/s/AEhX1pkJhGyMmMC-oNQj8w>
 2. 生产运营分析报告 PPT：<https://mp.weixin.qq.com/s/mN2YjzSnQUKJKZy3NjKf6w>
 3. 财务总监工作总结 PPT：<https://mp.weixin.qq.com/s/YWmKQftjveqpNjOydDmT_A>
 4. 总经理经营决策驾驶舱：<https://mp.weixin.qq.com/s/ZMuBnCKvjM9UsqpG-nxzxA>
 5. Huashu Excel 数据分析 Skill：<https://mp.weixin.qq.com/s/7gYbxcW81EtUZQOvpZTOkw>
+6. 经营分析和财务分析的区别（接地气的陈老师，2026-09-03；D039 参照，2026-09-04 用户提供）：<https://mp.weixin.qq.com/s/SpwCQzXNwE0if2PpepQd9g>
 
 ## 公众号素材库（内容在 Obsidian vault，多机同步）
 
