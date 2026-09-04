@@ -21,7 +21,9 @@ from alembic import command
 from alembic.config import Config
 from httpx import ASGITransport, AsyncClient
 from integration.intake_service_support import clean
-from integration.metric_snapshot_support import metric_session_fixture as metric_session  # noqa: F401
+from integration.metric_snapshot_support import (
+    metric_session_fixture as metric_session,  # noqa: F401
+)
 from publishing.publishing_support import approve_top_findings, publish_analysis_run
 from sqlalchemy import select
 from sqlalchemy.orm import Session

@@ -150,8 +150,9 @@ def test_succeeded_attempt_persists_reusable_stored_object(publishing_session: S
     """Task 6 契约：成功 attempt 必须持久化并复用 StoredObject 行（下载授权边界）。"""
     import hashlib
 
-    from flow_api.infrastructure.models.intake import StoredObject
     from publishing.publishing_support import fresh_approved_report
+
+    from flow_api.infrastructure.models.intake import StoredObject
 
     report, _view = fresh_approved_report(publishing_session)
     payload = b"%PDF-1.4 persisted object"
