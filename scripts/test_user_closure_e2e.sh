@@ -1,37 +1,69 @@
 #!/usr/bin/env bash
 # Pilot Readiness Phase 1 — 用户闭环端到端门禁（Task 9）。
-# 串联：基础设施 → API 全量 → 契约漂移 → Intake/发布/Investigation/Dashboard 回归 →
-#       前端 lint/typecheck/vitest → Playwright 浏览器闭环。
+# 顺序：起完整栈 → Playwright 浏览器用户闭环 → 契约漂移 → Phase 3/6/7/9 回归 →
+#       API 全量 → 前端 lint/typecheck/vitest。
 set -euo pipefail
 
-REPOSITORY_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-cd "$REPOSITORY_ROOT"
+export DATABASE_URL="${DATABASE_URL:-postgresql+psycopg://flow:flow_dev_only@127.0.0.1:5432/flow}"
+export REDIS_URL="${REDIS_URL:-redis://127.0.0.1:6379/0}"
+export S3_ENDPOINT_URL="${S3_ENDPOINT_URL:-http://127.0.0.1:9000}"
+export S3_BUCKET="${S3_BUCKET:-flow}"
+export S3_ACCESS_KEY="${S3_ACCESS_KEY:-flow}"
+export S3_SECRET_KEY="${S3_SECRET_KEY:-flow_dev_only}"
 
-
-echo "== 1/7 基础设施 =="
 make infra-up
 
-echo "== 2/7 API 全量测试 =="
-(cd services/api && uv run pytest -q)
+read -r api_port web_port < <(uv run python scripts/find_free_port.py 2)
+export FLOW_API_INTERNAL_URL="http://127.0.0.1:${api_port}"
+export PLAYWRIGHT_BASE_URL="http://127.0.0.1:${web_port}"
 
-echo "== 3/7 契约漂移检查 =="
+closure_logs="$(mktemp -d)"
+api_pid=""
+web_pid=""
+
+cleanup() {
+  status=$?
+  if [[ -n "${web_pid}" ]]; then kill "${web_pid}" 2>/dev/null || true; fi
+  if [[ -n "${api_pid}" ]]; then kill "${api_pid}" 2>/dev/null || true; fi
+  if [[ ${status} -ne 0 ]]; then
+    tail -60 "${closure_logs}/api.log" 2>/dev/null || true
+    tail -60 "${closure_logs}/web.log" 2>/dev/null || true
+  fi
+  rm -rf "${closure_logs}"
+}
+trap cleanup EXIT
+
+(cd services/api && uv run alembic upgrade head)
+(cd services/api && uv run uvicorn flow_api.main:app --host 127.0.0.1 --port "${api_port}") \
+  >"${closure_logs}/api.log" 2>&1 &
+api_pid=$!
+
+npx --yes pnpm@10.17.1 --filter @flow/web exec next dev --hostname 127.0.0.1 --port "${web_port}" \
+  >"${closure_logs}/web.log" 2>&1 &
+web_pid=$!
+
+uv run scripts/wait_for_services.py "127.0.0.1:${api_port}" "127.0.0.1:${web_port}"
+
+echo "== 1/6 浏览器用户闭环（Playwright） =="
+npx --yes pnpm@10.17.1 --filter @flow/web exec playwright test apps/web/e2e/user-closure.spec.ts
+
+echo "== 2/6 契约漂移 =="
 make contracts
 make contracts-check
 
-echo "== 4/7 Phase 3/9/7/6 回归门禁 =="
+echo "== 3/6 Phase 3/6/7/9 回归门禁 =="
 bash scripts/test_intake_e2e.sh
-bash scripts/test_publishing_golden.sh
-bash scripts/test_investigation_e2e.sh
 bash scripts/test_dashboard.sh
+bash scripts/test_investigation_e2e.sh
+bash scripts/test_publishing_golden.sh
 
-echo "== 5/7 前端 lint/typecheck/vitest =="
+echo "== 4/6 API 全量 =="
+(cd services/api && uv run pytest -q)
+
+echo "== 5/6 前端 lint/typecheck/vitest =="
 npx --yes pnpm@10.17.1 --filter @flow/web lint
 npx --yes pnpm@10.17.1 --filter @flow/web exec tsc --noEmit
 npx --yes pnpm@10.17.1 --filter @flow/web exec vitest run
 
-echo "== 6/7 浏览器闭环 (Playwright) =="
-bash scripts/test_dashboard.sh 2>/dev/null || true   # 确保栈已起（幂等）
-npx --yes pnpm@10.17.1 --filter @flow/web exec playwright test e2e/user-closure.spec.ts
-
-echo "== 7/7 完成 =="
+echo "== 6/6 完成 =="
 echo "user-closure e2e gate PASSED"

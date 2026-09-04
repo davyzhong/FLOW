@@ -36,19 +36,8 @@ test("uploads the standard workbook through the workbench happy path", async ({ 
     __dirname,
     "../../../fixtures/workbooks/flow_standard_v1.xlsx",
   );
-  await page
-    .getByLabel("选择文件")
-    .setInputFiles({ name: "flow_standard_v1.xlsx", mimeType: WORKBOOK_MIME, buffer: bufferOf(fixture) });
+  await page.getByLabel("选择文件").setInputFiles(fixture);
   await expect(page.getByRole("table")).toBeVisible({ timeout: 15000 });
   await page.getByRole("button", { name: "确认映射并校验" }).click();
   await expect(page.getByText(/清洗与校验结果/)).toBeVisible({ timeout: 30000 });
 });
-
-const WORKBOOK_MIME = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-
-function bufferOf(_file: string): Buffer {
-  // 由 e2e 门禁脚本保证 fixture 存在；此处读取文件字节
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const { readFileSync } = require("node:fs") as typeof import("node:fs");
-  return readFileSync(_file);
-}
