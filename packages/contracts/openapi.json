@@ -51,6 +51,47 @@
         }
       }
     },
+    "/api/v1/intake/templates/{template_id}": {
+      "get": {
+        "tags": [
+          "intake"
+        ],
+        "summary": "Download Template",
+        "description": "下载治理化的空白标准工作簿模板（确定性字节输出）。",
+        "operationId": "download_template_api_v1_intake_templates__template_id__get",
+        "parameters": [
+          {
+            "name": "template_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Template Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/intake/batches": {
       "post": {
         "tags": [
