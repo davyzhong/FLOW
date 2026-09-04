@@ -1,0 +1,4 @@
+.reports-center { padding: 24px; display: grid; gap: 16px; }
+.reports-center__error { color: #b42318; font-weight: 600; }
+.reports-center table { border-collapse: collapse; }
+.reports-center th, .reports-center td { border: 1px solid #d5dae3; padding: 6px 10px; text-align: left; }
