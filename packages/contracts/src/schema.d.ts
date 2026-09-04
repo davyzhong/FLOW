@@ -441,6 +441,47 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/publishing/snapshots": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Report Snapshots */
+        get: operations["list_report_snapshots_api_v1_publishing_snapshots_get"];
+        put?: never;
+        /**
+         * Freeze Report Snapshot Route
+         * @description 从已发布指标快照与已批准 findings 冻结报告快照（append-only 身份）。
+         */
+        post: operations["freeze_report_snapshot_route_api_v1_publishing_snapshots_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/publishing/attempts/{attempt_id}/download": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Download Publication Attempt
+         * @description 下载成功产物的持久化字节：服务端命名 + sha 校验 + no-store/nosniff。
+         */
+        get: operations["download_publication_attempt_api_v1_publishing_attempts__attempt_id__download_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1286,6 +1327,8 @@ export interface components {
         };
         /** PublicationAttemptLine */
         PublicationAttemptLine: {
+            /** Attempt Id */
+            attempt_id: string;
             /** Sequence */
             sequence: number;
             /** Format */
@@ -1296,6 +1339,19 @@ export interface components {
             stored_object_id: string | null;
             /** Error Message */
             error_message: string | null;
+            /** Size Bytes */
+            size_bytes?: number | null;
+            /** Content Type */
+            content_type?: string | null;
+            /** Created At */
+            created_at?: string | null;
+            /**
+             * Download Available
+             * @default false
+             */
+            download_available: boolean;
+            /** Stored Sha256 */
+            stored_sha256?: string | null;
         };
         /** PublicationAttemptsResponse */
         PublicationAttemptsResponse: {
@@ -1396,6 +1452,42 @@ export interface components {
             batch_id: string;
             /** Actor */
             actor: string;
+        };
+        /** ReportSnapshotCreatedResponse */
+        ReportSnapshotCreatedResponse: {
+            /** Id */
+            id: string;
+            /** Metric Snapshot Id */
+            metric_snapshot_id: string;
+            /** Version */
+            version: number;
+            /** Title */
+            title: string;
+            /** Created At */
+            created_at?: string | null;
+        };
+        /** ReportSnapshotFreezeRequest */
+        ReportSnapshotFreezeRequest: {
+            /** Metric Snapshot Id */
+            metric_snapshot_id: string;
+        };
+        /** ReportSnapshotLine */
+        ReportSnapshotLine: {
+            /** Id */
+            id: string;
+            /** Metric Snapshot Id */
+            metric_snapshot_id: string;
+            /** Version */
+            version: number;
+            /** Title */
+            title: string;
+            /** Created At */
+            created_at?: string | null;
+        };
+        /** ReportSnapshotListResponse */
+        ReportSnapshotListResponse: {
+            /** Snapshots */
+            snapshots: components["schemas"]["ReportSnapshotLine"][];
         };
         /** ReviewLine */
         ReviewLine: {
@@ -2579,6 +2671,117 @@ export interface operations {
             };
             /** @description Not Found */
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublishingErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_report_snapshots_api_v1_publishing_snapshots_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReportSnapshotListResponse"];
+                };
+            };
+        };
+    };
+    freeze_report_snapshot_route_api_v1_publishing_snapshots_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReportSnapshotFreezeRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReportSnapshotCreatedResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublishingErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    download_publication_attempt_api_v1_publishing_attempts__attempt_id__download_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                attempt_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublishingErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
                 headers: {
                     [name: string]: unknown;
                 };

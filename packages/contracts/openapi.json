@@ -1419,6 +1419,139 @@
           }
         }
       }
+    },
+    "/api/v1/publishing/snapshots": {
+      "get": {
+        "tags": [
+          "publishing"
+        ],
+        "summary": "List Report Snapshots",
+        "operationId": "list_report_snapshots_api_v1_publishing_snapshots_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportSnapshotListResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "publishing"
+        ],
+        "summary": "Freeze Report Snapshot Route",
+        "description": "从已发布指标快照与已批准 findings 冻结报告快照（append-only 身份）。",
+        "operationId": "freeze_report_snapshot_route_api_v1_publishing_snapshots_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReportSnapshotFreezeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportSnapshotCreatedResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublishingErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/publishing/attempts/{attempt_id}/download": {
+      "get": {
+        "tags": [
+          "publishing"
+        ],
+        "summary": "Download Publication Attempt",
+        "description": "下载成功产物的持久化字节：服务端命名 + sha 校验 + no-store/nosniff。",
+        "operationId": "download_publication_attempt_api_v1_publishing_attempts__attempt_id__download_get",
+        "parameters": [
+          {
+            "name": "attempt_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Attempt Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublishingErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublishingErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -3784,6 +3917,10 @@
       },
       "PublicationAttemptLine": {
         "properties": {
+          "attempt_id": {
+            "type": "string",
+            "title": "Attempt Id"
+          },
           "sequence": {
             "type": "integer",
             "title": "Sequence"
@@ -3817,10 +3954,60 @@
               }
             ],
             "title": "Error Message"
+          },
+          "size_bytes": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Size Bytes"
+          },
+          "content_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Content Type"
+          },
+          "created_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created At"
+          },
+          "download_available": {
+            "type": "boolean",
+            "title": "Download Available",
+            "default": false
+          },
+          "stored_sha256": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stored Sha256"
           }
         },
         "type": "object",
         "required": [
+          "attempt_id",
           "sequence",
           "format",
           "status",
@@ -4127,6 +4314,114 @@
           "actor"
         ],
         "title": "ReportOutlineRequest"
+      },
+      "ReportSnapshotCreatedResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "metric_snapshot_id": {
+            "type": "string",
+            "title": "Metric Snapshot Id"
+          },
+          "version": {
+            "type": "integer",
+            "title": "Version"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "created_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "metric_snapshot_id",
+          "version",
+          "title"
+        ],
+        "title": "ReportSnapshotCreatedResponse"
+      },
+      "ReportSnapshotFreezeRequest": {
+        "properties": {
+          "metric_snapshot_id": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Metric Snapshot Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "metric_snapshot_id"
+        ],
+        "title": "ReportSnapshotFreezeRequest"
+      },
+      "ReportSnapshotLine": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "metric_snapshot_id": {
+            "type": "string",
+            "title": "Metric Snapshot Id"
+          },
+          "version": {
+            "type": "integer",
+            "title": "Version"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "created_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "metric_snapshot_id",
+          "version",
+          "title"
+        ],
+        "title": "ReportSnapshotLine"
+      },
+      "ReportSnapshotListResponse": {
+        "properties": {
+          "snapshots": {
+            "items": {
+              "$ref": "#/components/schemas/ReportSnapshotLine"
+            },
+            "type": "array",
+            "title": "Snapshots"
+          }
+        },
+        "type": "object",
+        "required": [
+          "snapshots"
+        ],
+        "title": "ReportSnapshotListResponse"
       },
       "ReviewLine": {
         "properties": {
