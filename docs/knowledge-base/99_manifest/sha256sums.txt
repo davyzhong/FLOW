@@ -1,9 +1,10 @@
-95a1ad08cd5d24a580dd9d70b648054e311802c7912c894e13e8037734147650  ./00_start_here/AGENT_START_HERE.md
+104cd5c7b56e9eac706f8f6b09689653b0cd0b79b1c4194e0d112f328a39374d  ./00_start_here/AGENT_START_HERE.md
 29031ba8269437f8df528fffc4d813543ba7e98d2cb8bdda6a12e24068d43c20  ./00_start_here/PROJECT_STATE.md
 4ed3f3af1111b7d26148d0600841ea3fc6198d214ad1fa1e3c6bcfb8d8663050  ./01_conversations/INDEX.md
 2f76b9a257f0baa1c30d5995a49f17bdbacf519f3a33668383f1f39c69c7faea  ./01_conversations/raw/chatgpt/Finance_Intelligence_OS_完整会话归档.md
 a033649eabf7c8cdb40f14defd513fcc046feacace1ccf6fb8a2d84801f6ba6c  ./01_conversations/raw/codex/rollout-2026-08-28T14-41-27-01a0471a-1689-7270-8dc5-f2bf084e4db9.jsonl
 85bf416f907d5f80fb480a64da479a27507dac35a840338cf520536097de2422  ./01_conversations/raw/codex/rollout-2026-08-29T14-00-01-01a0471a-1689-7270-8dc5-f2bf084e4db9_01a04c1a-86bd-7960-9db5-80ae486d1bd4.jsonl
+3a020825b1e05497138c644f828634c0d765cf1a43bf6f6bf8d246cc5eccf320  ./01_conversations/readable/2026-09-02-positioning-accurate-financial-analysis.md
 9899e55cb849d3ae6f31fd74adfb12562e94f24d15a8ecf023ed2e95ec11cefa  ./01_conversations/readable/rollout-2026-08-28T14-41-27-01a0471a-1689-7270-8dc5-f2bf084e4db9.md
 1922b4ea1b3a752be450f8d60b27d6c6fc22516a4a019822997e0065273e2b90  ./01_conversations/readable/rollout-2026-08-29T14-00-01-01a0471a-1689-7270-8dc5-f2bf084e4db9_01a04c1a-86bd-7960-9db5-80ae486d1bd4.md
 5e078420241307fc8c4fabe616e9df6eaf46514a2a0edda139fbcfb48d178dda  ./02_research/INDEX.md
@@ -117,8 +118,8 @@ dc5dacf44f2ad15eff80c3b8088965a00dba2374178b883a1a7dfdbc59257a1d  ./03_assets/vi
 0f0f0ae971e5b67308d6232379794a2e3180ad094ff6aa064f2f97b3cf964435  ./03_assets/visual_prototypes/unified-publishing.html
 b985e51b87f37264c1d0881d2a23a59cb8e3919970785d215c88c71587e50f43  ./03_assets/visual_prototypes/waiting-data-contract.html
 68f20600655271943135b83ab42a8cc4e5120b205255706fe2f47fbbf6c4930a  ./03_assets/visual_prototypes/waiting-template-scope.html
-b8bea8f02e861a999c7c8ef1282fa97c38a02fbe526c8f77f81e6f5267934c45  ./04_decisions/CHANGE_IMPACT_MAP.md
-ab35d5386314a3b02d98b46d7b80a6abe1508c1b16d0c29fa622480b181d13af  ./04_decisions/DECISION_LOG.md
+82c60b145ad5cc98e8305c16a25702edd603fb9afe3125485fdec2bbed766911  ./04_decisions/CHANGE_IMPACT_MAP.md
+2fe2e87f97c320d38eb423455498057530a21709a4a05a7d310f6457877c095d  ./04_decisions/DECISION_LOG.md
 90e385476d3aa54abefabe32f873c5a7468a0df9aa8d961fa692db574eb91582  ./05_design/PROTOTYPE_INDEX.md
 6a2be2f105fb958c70fcf4b54261148706a10353af7a8c0147802679ba405bba  ./05_design/approved/2026-08-29-flow-v1-design.md
 2c569f77ef1e2a034c0f883e078d0d18a981b2c7eb307274af35cb48fd01bffd  ./06_sources/LINK_CATALOG.md
@@ -130,6 +131,4 @@ efc8bf3edf2f804634d94f62e3e5c56854a545e95ec0a4a0c00609bf37aaef2b  ./08_wechat_so
 fdd8e20350547c00ab10abd022170b0a832f9b958631444d13cd0313ed412dcf  ./08_wechat_sources/HANDOFF.md
 a69df22f9e705eba64136d4e4166318862ff591b6a68c24b3492566962272abf  ./08_wechat_sources/INDEX.md
 a65c35c08aebfa900c5dbe2d2bcb4cb72856709120aa1dbadadcc6564bf075b3  ./08_wechat_sources/README.md
-652e09252586aacf2c767e0b3a81a7901e92688b87376f8f9fd94ce7076012d9  ./99_manifest/ARCHIVE_NOTES.md
-05f5798e8113b3448f3306a92b7d446bc2e93fa24abba4678b553039bbcc4442  ./99_manifest/READER_TEST.md
 bdda7e6208e39e63be228e03be8408608e3d23c42dfdeda140953b73cc784f99  ./README.md
