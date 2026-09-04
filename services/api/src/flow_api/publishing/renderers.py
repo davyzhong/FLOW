@@ -26,7 +26,7 @@ def render_pptx(view: ReportView) -> bytes:
     from io import BytesIO
 
     from pptx import Presentation
-    from pptx.util import Pt
+    from pptx.util import Inches, Pt
 
     presentation = Presentation()
     identity = view.identity
@@ -45,55 +45,53 @@ def render_pptx(view: ReportView) -> bytes:
         paragraph.text = line
         paragraph.font.size = Pt(12)
 
-    overview = presentation.slides.add_slide(presentation.slide_layouts[5])
-    overview.shapes.title.text = "经营概览"
-    body_box = (
-        overview.placeholders[1].text_frame
-        if len(overview.placeholders) > 1
-        else overview.shapes.add_textbox(0, 0, 0, 0).text_frame
-    )
-    body_box.text = f"共 {len(view.metrics)} 项指标、{len(view.findings)} 项已签发发现"
-    for metric in view.metrics:
-        paragraph = body_box.add_paragraph()
-        paragraph.text = f"{metric.code} = {metric.value} {metric.unit}"
-        paragraph.font.size = Pt(10)
-
-    for metric in view.metrics[:8]:
+    def add_body_slide(title: str, lines: list[str], font_size: int = 16) -> None:
         slide = presentation.slides.add_slide(presentation.slide_layouts[5])
-        slide.shapes.title.text = f"{metric.name}（{metric.code}）"
-        frame = (
-            slide.placeholders[1].text_frame
-            if len(slide.placeholders) > 1
-            else slide.shapes.add_textbox(0, 0, 0, 0).text_frame
+        slide.shapes.title.text = title
+        for paragraph in slide.shapes.title.text_frame.paragraphs:
+            paragraph.font.size = Pt(24)
+        frame = slide.shapes.add_textbox(
+            Inches(0.5), Inches(1.5), presentation.slide_width - Inches(1), Inches(5.4)
+        ).text_frame
+        frame.word_wrap = True
+        frame.margin_left = Inches(0.1)
+        frame.margin_right = Inches(0.1)
+        for index, line in enumerate(lines):
+            paragraph = frame.paragraphs[0] if index == 0 else frame.add_paragraph()
+            paragraph.text = line
+            paragraph.font.size = Pt(font_size)
+            paragraph.space_after = Pt(10)
+
+    metric_lines = [f"{metric.code} = {metric.value} {metric.unit}" for metric in view.metrics]
+    for offset in range(0, max(len(metric_lines), 1), 10):
+        add_body_slide(
+            "经营概览" if offset == 0 else f"经营概览（续 {offset // 10 + 1}）",
+            [
+                f"共 {len(view.metrics)} 项指标、{len(view.findings)} 项已签发发现",
+                *metric_lines[offset : offset + 10],
+            ],
+            font_size=13,
         )
-        frame.text = f"本期 {metric.value} {metric.unit}"
-        if metric.budget:
-            paragraph = frame.add_paragraph()
-            paragraph.text = f"预算 {metric.budget} · 差异 {metric.variance or '—'}"
+    for metric in view.metrics[:8]:
+        lines = [f"本期 {metric.value} {metric.unit}"]
+        if metric.budget is not None:
+            lines.append(f"预算 {metric.budget} · 差异 {metric.variance or '—'}")
+        add_body_slide(f"{metric.name}（{metric.code}）", lines)
 
-    if view.findings:
-        slide = presentation.slides.add_slide(presentation.slide_layouts[1])
-        slide.shapes.title.text = "已签发发现与建议"
-        frame = slide.placeholders[1].text_frame
-        frame.text = "结论 / 证据索引见附录"
-        for finding in view.findings:
-            paragraph = frame.add_paragraph()
-            exact = finding.impact_amount
-            paragraph.text = (
-                f"{finding.title} · 影响 {_money(exact)}（精确 {exact}）"
-            )
-
-    evidence_slide = presentation.slides.add_slide(presentation.slide_layouts[5])
-    evidence_slide.shapes.title.text = "证据索引"
-    evidence_frame = (
-        evidence_slide.placeholders[1].text_frame
-        if len(evidence_slide.placeholders) > 1
-        else evidence_slide.shapes.add_textbox(0, 0, 0, 0).text_frame
-    )
-    evidence_frame.text = "；".join(
+    finding_lines = [
+        f"{finding.title} · 影响 {_money(finding.impact_amount)}（精确 {finding.impact_amount}）"
+        for finding in view.findings
+    ]
+    for offset in range(0, len(finding_lines), 4):
+        add_body_slide("已签发发现与建议", finding_lines[offset : offset + 4], font_size=14)
+    evidence_lines = [
         f"{finding.finding_id[:8]} ← {len(finding.evidence_ids)} 项证据"
         for finding in view.findings
-    )
+    ]
+    for offset in range(0, max(len(evidence_lines), 1), 10):
+        add_body_slide(
+            "证据索引", evidence_lines[offset : offset + 10] or ["无已签发发现"], font_size=14
+        )
 
     buffer = BytesIO()
     presentation.save(buffer)
@@ -109,9 +107,7 @@ def render_xlsx(view: ReportView) -> bytes:
     metrics_sheet = workbook.active
     assert metrics_sheet is not None, "new workbook always has an active sheet"
     metrics_sheet.title = "指标结果"
-    metrics_sheet.append(
-        ["指标", "代码", "本期", "预算", "差异", "单位", "公式", "口径版本"]
-    )
+    metrics_sheet.append(["指标", "代码", "本期", "预算", "差异", "单位", "公式", "口径版本"])
     for metric in view.metrics:
         metrics_sheet.append(
             [

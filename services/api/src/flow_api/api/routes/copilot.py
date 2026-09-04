@@ -66,15 +66,11 @@ def ask_investigation_question(
             finding_id,
             question=request.question,
             actor=request.actor,
-            batch_id=(
-                UUID(request.batch_id) if request.batch_id else None
-            ),
+            batch_id=(UUID(request.batch_id) if request.batch_id else None),
             metric_snapshot_id=(
                 UUID(request.metric_snapshot_id) if request.metric_snapshot_id else None
             ),
-            analysis_run_id=(
-                UUID(request.analysis_run_id) if request.analysis_run_id else None
-            ),
+            analysis_run_id=(UUID(request.analysis_run_id) if request.analysis_run_id else None),
         )
     except CopilotValidationError as error:
         session.commit()
@@ -89,6 +85,7 @@ def ask_investigation_question(
         raise _error(
             status.HTTP_409_CONFLICT, "investigation_identity_mismatch", str(error)
         ) from error
+    session.commit()
     return _interaction_response(result)
 
 
@@ -120,6 +117,7 @@ def explain_mapping(
         ) from error
     except InvestigationNotFoundError as error:
         raise _error(status.HTTP_404_NOT_FOUND, "investigation_not_found", str(error)) from error
+    session.commit()
     return _interaction_response(result)
 
 
@@ -151,6 +149,7 @@ def draft_report_outline(
         ) from error
     except InvestigationNotFoundError as error:
         raise _error(status.HTTP_404_NOT_FOUND, "investigation_not_found", str(error)) from error
+    session.commit()
     return _interaction_response(result)
 
 

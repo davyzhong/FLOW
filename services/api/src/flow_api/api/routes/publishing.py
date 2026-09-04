@@ -77,6 +77,7 @@ def _service() -> PublicationService:
     response_model=PublishResponse,
     responses={
         status.HTTP_404_NOT_FOUND: {"model": PublishingErrorResponse},
+        status.HTTP_409_CONFLICT: {"model": PublishingErrorResponse},
     },
 )
 def publish_report(

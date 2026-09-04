@@ -1775,7 +1775,9 @@ export interface operations {
     get_workspace_api_v1_workspace_get: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                authorization?: string | null;
+            };
             path?: never;
             cookie?: never;
         };
@@ -1790,12 +1792,23 @@ export interface operations {
                     "application/json": components["schemas"]["WorkspaceResponse"];
                 };
             };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
         };
     };
     download_template_api_v1_intake_templates__template_id__get: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                authorization?: string | null;
+            };
             path: {
                 template_id: string;
             };
@@ -1826,7 +1839,9 @@ export interface operations {
     create_batch_api_v1_intake_batches_post: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                authorization?: string | null;
+            };
             path?: never;
             cookie?: never;
         };
@@ -1859,7 +1874,9 @@ export interface operations {
     upload_source_api_v1_intake_batches__batch_id__sources_post: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                authorization?: string | null;
+            };
             path: {
                 batch_id: string;
             };
@@ -1894,7 +1911,9 @@ export interface operations {
     get_profile_api_v1_intake_sources__source_file_id__profile_get: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                authorization?: string | null;
+            };
             path: {
                 source_file_id: string;
             };
@@ -1925,7 +1944,9 @@ export interface operations {
     create_mapping_proposal_api_v1_intake_sources__source_file_id__mapping_proposals_post: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                authorization?: string | null;
+            };
             path: {
                 source_file_id: string;
             };
@@ -1956,7 +1977,9 @@ export interface operations {
     confirm_mapping_api_v1_intake_mappings__mapping_version_id__confirm_post: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                authorization?: string | null;
+            };
             path: {
                 mapping_version_id: string;
             };
@@ -1991,7 +2014,9 @@ export interface operations {
     override_mapping_api_v1_intake_mappings__mapping_version_id__overrides_post: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                authorization?: string | null;
+            };
             path: {
                 mapping_version_id: string;
             };
@@ -2026,7 +2051,9 @@ export interface operations {
     validate_source_api_v1_intake_sources__source_file_id__validate_post: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                authorization?: string | null;
+            };
             path: {
                 source_file_id: string;
             };
@@ -2061,7 +2088,9 @@ export interface operations {
     acknowledge_warning_api_v1_intake_issues__quality_issue_id__acknowledge_post: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                authorization?: string | null;
+            };
             path: {
                 quality_issue_id: string;
             };
@@ -2096,7 +2125,9 @@ export interface operations {
     publish_import_api_v1_intake_imports__import_version_id__publish_post: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                authorization?: string | null;
+            };
             path: {
                 import_version_id: string;
             };
@@ -2127,7 +2158,9 @@ export interface operations {
     version_history_api_v1_intake_batches__batch_id__versions_get: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                authorization?: string | null;
+            };
             path: {
                 batch_id: string;
             };
@@ -2158,7 +2191,9 @@ export interface operations {
     cleaning_summary_api_v1_intake_imports__import_version_id__cleaning_summary_get: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                authorization?: string | null;
+            };
             path: {
                 import_version_id: string;
             };
@@ -2191,7 +2226,9 @@ export interface operations {
     export_standardized_workbook_api_v1_intake_imports__import_version_id__standardized_workbook_get: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                authorization?: string | null;
+            };
             path: {
                 import_version_id: string;
             };
@@ -2228,7 +2265,9 @@ export interface operations {
                 logistics_product_id?: string | null;
                 region_id?: string | null;
             };
-            header?: never;
+            header?: {
+                authorization?: string | null;
+            };
             path?: never;
             cookie?: never;
         };
@@ -2271,7 +2310,9 @@ export interface operations {
                 analysis_run_id?: string | null;
                 source_record_limit?: number;
             };
-            header?: never;
+            header?: {
+                authorization?: string | null;
+            };
             path: {
                 finding_id: string;
             };
@@ -2320,7 +2361,9 @@ export interface operations {
     decide_evidence_api_v1_investigations__finding_id__evidence__evidence_id__decision_post: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                authorization?: string | null;
+            };
             path: {
                 finding_id: string;
                 evidence_id: string;
@@ -2374,7 +2417,9 @@ export interface operations {
     save_conclusion_api_v1_investigations__finding_id__conclusion_put: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                authorization?: string | null;
+            };
             path: {
                 finding_id: string;
             };
@@ -2418,7 +2463,9 @@ export interface operations {
     transition_finding_api_v1_investigations__finding_id__transition_post: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                authorization?: string | null;
+            };
             path: {
                 finding_id: string;
             };
@@ -2471,7 +2518,9 @@ export interface operations {
     ask_investigation_question_api_v1_copilot_investigations__finding_id__ask_post: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                authorization?: string | null;
+            };
             path: {
                 finding_id: string;
             };
@@ -2524,7 +2573,9 @@ export interface operations {
     explain_mapping_api_v1_copilot_explain_mapping_post: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                authorization?: string | null;
+            };
             path?: never;
             cookie?: never;
         };
@@ -2566,7 +2617,9 @@ export interface operations {
     draft_report_outline_api_v1_copilot_report_outline_post: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                authorization?: string | null;
+            };
             path?: never;
             cookie?: never;
         };
@@ -2608,7 +2661,9 @@ export interface operations {
     publish_report_api_v1_publishing_snapshots__report_snapshot_id__publish_post: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                authorization?: string | null;
+            };
             path: {
                 report_snapshot_id: string;
             };
@@ -2638,6 +2693,15 @@ export interface operations {
                     "application/json": components["schemas"]["PublishingErrorResponse"];
                 };
             };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublishingErrorResponse"];
+                };
+            };
             /** @description Validation Error */
             422: {
                 headers: {
@@ -2652,7 +2716,9 @@ export interface operations {
     publication_attempts_api_v1_publishing_snapshots__report_snapshot_id__attempts_get: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                authorization?: string | null;
+            };
             path: {
                 report_snapshot_id: string;
             };
@@ -2692,7 +2758,9 @@ export interface operations {
     list_report_snapshots_api_v1_publishing_snapshots_get: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                authorization?: string | null;
+            };
             path?: never;
             cookie?: never;
         };
@@ -2707,12 +2775,23 @@ export interface operations {
                     "application/json": components["schemas"]["ReportSnapshotListResponse"];
                 };
             };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
         };
     };
     freeze_report_snapshot_route_api_v1_publishing_snapshots_post: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                authorization?: string | null;
+            };
             path?: never;
             cookie?: never;
         };
@@ -2754,7 +2833,9 @@ export interface operations {
     download_publication_attempt_api_v1_publishing_attempts__attempt_id__download_get: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                authorization?: string | null;
+            };
             path: {
                 attempt_id: string;
             };

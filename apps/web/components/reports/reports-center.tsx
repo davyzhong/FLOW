@@ -133,7 +133,7 @@ export function ReportsCenter() {
     }
   }, [selected, formats, refreshAttempts]);
 
-  const download = useCallback(async (attemptId: string) => {
+  const download = useCallback(async (attemptId: string, format: string) => {
     const response = await fetch(`/api/v1/publishing/attempts/${attemptId}/download`);
     if (!response.ok) {
       setError("下载不可用");
@@ -145,7 +145,7 @@ export function ReportsCenter() {
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement("a");
     anchor.href = url;
-    anchor.download = match?.[1] ?? "flow-report";
+    anchor.download = match?.[1] ?? `flow-report.${FORMATS.find((item) => item === format) ?? "bin"}`;
     document.body.append(anchor);
     anchor.click();
     anchor.remove();
@@ -246,7 +246,7 @@ export function ReportsCenter() {
                   <td>{attempt.size_bytes ?? "-"}</td>
                   <td>
                     {attempt.download_available ? (
-                      <button type="button" onClick={() => void download(attempt.attempt_id)}>
+                      <button type="button" onClick={() => void download(attempt.attempt_id, attempt.format)}>
                         下载
                       </button>
                     ) : attempt.status === "failed" ? (

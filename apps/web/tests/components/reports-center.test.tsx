@@ -59,3 +59,22 @@ describe("ReportsCenter", () => {
     expect(screen.getByText("succeeded")).toBeInTheDocument();
   });
 });
+
+it.each(["pptx", "xlsx", "html", "pdf"])("downloads %s with its extension when upstream filename is absent", async (format) => {
+  vi.stubGlobal("fetch", vi.fn(async (input: RequestInfo | URL) => {
+    const url = String(input);
+    if (url.endsWith("/download")) return new Response(new Uint8Array([0, 1, 255]));
+    if (url.endsWith("/attempts")) return jsonResponse({ attempts: [{ ...ATTEMPT, format }] });
+    return jsonResponse({ snapshots: [SNAPSHOT] });
+  }));
+  Object.defineProperty(URL, "createObjectURL", { configurable: true, value: vi.fn(() => "blob:report") });
+  Object.defineProperty(URL, "revokeObjectURL", { configurable: true, value: vi.fn() });
+  let filename = "";
+  const click = vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(function(this: HTMLAnchorElement) {
+    filename = this.download;
+  });
+  render(<ReportsCenter />);
+  fireEvent.click(await screen.findByRole("button", { name: "下载" }));
+  await vi.waitFor(() => expect(filename).toMatch(new RegExp(`\\.${format}$`)));
+  click.mockRestore();
+});

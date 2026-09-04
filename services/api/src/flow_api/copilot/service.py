@@ -93,9 +93,7 @@ class CopilotService:
 
         import_version = session.get(ImportVersion, import_version_id)
         if import_version is None:
-            raise InvestigationNotFoundError(
-                f"import version does not exist: {import_version_id}"
-            )
+            raise InvestigationNotFoundError(f"import version does not exist: {import_version_id}")
         packet = build_mapping_packet(session, import_version)
         return self._run(
             session,
@@ -117,12 +115,17 @@ class CopilotService:
     ) -> CopilotInteractionResult:
         from sqlalchemy import select
 
-        from flow_api.infrastructure.models.analytics import AnalysisRun, Finding
+        from flow_api.infrastructure.models.analytics import AnalysisRun, Finding, MetricSnapshot
 
         run = session.scalar(
             select(AnalysisRun)
-            .join(Finding, Finding.analysis_run_id == AnalysisRun.id)
-            .order_by(AnalysisRun.created_at.desc())
+            .join(MetricSnapshot, MetricSnapshot.id == AnalysisRun.metric_snapshot_id)
+            .where(
+                MetricSnapshot.batch_id == batch_id,
+                MetricSnapshot.status == "published",
+                AnalysisRun.status == "published",
+            )
+            .order_by(AnalysisRun.created_at.desc(), AnalysisRun.id.desc())
             .limit(1)
         )
         if run is None or run.metric_snapshot.batch_id != batch_id:
@@ -143,20 +146,20 @@ class CopilotService:
             analysis_run_id=run.id,
         )
         packet = build_investigation_packet(session, binding)
-        findings = session.scalars(
-            select(Finding).where(Finding.analysis_run_id == run.id)
-        ).all()
-        packet["findings"] = [
-            {
-                "id": str(item.id),
-                "title": str(item.title),
-                "status": str(item.status),
-                "impact_amount": str(item.impact_amount),
-                "evidence": [],
-                "drivers": [],
-            }
-            for item in findings
-        ]
+        findings = session.scalars(select(Finding).where(Finding.analysis_run_id == run.id)).all()
+        packet["findings"] = []
+        for item in findings:
+            item_binding = self.repository.load_binding(
+                session,
+                item.id,
+                batch_id=batch_id,
+                metric_snapshot_id=run.metric_snapshot_id,
+                analysis_run_id=run.id,
+            )
+            # Preserve verified evidence for every finding. An outline must pass
+            # the same fact validation as an individual investigation answer.
+            item_packet = build_investigation_packet(session, item_binding)
+            packet["findings"].extend(item_packet["findings"])
         return self._run(
             session,
             use_case="report_outline",
@@ -215,5 +218,6 @@ class CopilotService:
             context_digest=digest,
             response=response,
         )
+
 
 __all__ = ["CopilotInteractionResult", "CopilotService", "CopilotValidationError"]

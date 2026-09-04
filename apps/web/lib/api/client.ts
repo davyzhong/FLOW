@@ -243,6 +243,16 @@ export type IntakeImport = {
   id: string;
   status: string;
   is_published: boolean;
+  issues: {
+    id: string; severity: "blocking" | "warning"; code: string; message: string;
+    evidence: string; repair_suggestion: string; sheet_name: string | null;
+    source_row: number | null; source_column: string | null; acknowledged: boolean;
+  }[];
+  reconciliations: {
+    code: string; passed: boolean; expected_value: string | null;
+    actual_value: string | null; details: Record<string, unknown>;
+  }[];
+  next_allowed_actions: string[];
 };
 
 export type MappingOverrideInput = {
@@ -318,6 +328,12 @@ export const intakeApi = {
     return submit<IntakeImport>(`/api/v1/intake/sources/${sourceId}/validate`, "POST", {
       mapping_version_id: mappingId,
     });
+  },
+  async getImportVersion(batchId: string, importId: string): Promise<IntakeImport> {
+    const history = await request<{ versions: IntakeImport[] }>(`/api/v1/intake/batches/${batchId}/versions`);
+    const version = history.versions.find((item) => item.id === importId);
+    if (!version) throw new Error("导入版本不存在");
+    return version;
   },
   acknowledgeWarning(issueId: string, actor: string, reason: string) {
     return submit<unknown>(`/api/v1/intake/issues/${issueId}/acknowledge`, "POST", {

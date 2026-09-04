@@ -27,7 +27,7 @@ type WorkbenchState =
   | { phase: "prepare" }
   | { phase: "uploading"; filename: string }
   | { phase: "mapping"; batchId: string; source: IntakeSource; mapping: IntakeMapping }
-  | { phase: "cleaning"; importVersion: IntakeImport; summary: CleaningSummary }
+  | { phase: "cleaning"; batchId: string; source: IntakeSource; mapping: IntakeMapping; importVersion: IntakeImport; summary: CleaningSummary }
   | { phase: "published"; importVersion: IntakeImport };
 
 export type CleaningSummary = {
@@ -53,6 +53,13 @@ export function DataWorkbench() {
   const [error, setError] = useState<string | null>(null);
   const [dragActive, setDragActive] = useState(false);
   const [overrides, setOverrides] = useState<Record<string, string>>({});
+
+  const [reasons, setReasons] = useState<Record<string, string>>({});
+  const [busy, setBusy] = useState(false);
+  const canPublish = state.phase === "cleaning" && state.importVersion.status === "ready"
+    && state.importVersion.next_allowed_actions.includes("publish")
+    && state.importVersion.issues.every((issue) => issue.severity !== "blocking" && issue.acknowledged)
+    && state.importVersion.reconciliations.every((item) => item.passed);
 
   const mapping =
     state.phase === "mapping" ? state.mapping : null;
@@ -99,39 +106,54 @@ export function DataWorkbench() {
   }, [mapping, overrides]);
 
   const confirmMapping = useCallback(async () => {
-    if (!mapping) return;
+    if (!mapping || state.phase !== "mapping" || busy) return;
     setError(null);
+    setBusy(true);
     try {
       let confirmed = mapping;
       if (overrideEntries.length > 0) {
         confirmed = await intakeApi.applyOverrides(
           mapping.id,
-          state.phase === "mapping" ? state.source.id : "",
-          "",
+          state.source.id,
+          state.source.sha256,
           overrideEntries,
           ACTOR,
         );
       }
       confirmed = await intakeApi.confirmMapping(confirmed.id, ACTOR);
-      setState((prev) =>
-        prev.phase === "mapping"
-          ? { ...prev, mapping: confirmed }
-          : { phase: "mapping", batchId: "", source: null as never, mapping: confirmed },
-      );
+      setState({ ...state, mapping: confirmed });
       const importVersion = await intakeApi.validateImport(
-        state.phase === "mapping" ? state.source.id : "",
+        state.source.id,
         confirmed.id,
       );
       const summary = await intakeApi.getCleaningSummary(importVersion.id);
-      setState({ phase: "cleaning", importVersion, summary });
+      setState({ ...state, phase: "cleaning", mapping: confirmed, importVersion, summary });
+      setReasons({});
       setStage("clean");
     } catch (cause) {
       setError(isFlowApiError(cause) ? cause.message : "映射确认失败");
+    } finally {
+      setBusy(false);
     }
-  }, [mapping, overrideEntries, state]);
+  }, [mapping, overrideEntries, state, busy]);
+
+  const acknowledge = async (issueId: string) => {
+    if (state.phase !== "cleaning" || busy || !reasons[issueId]?.trim()) return;
+    setBusy(true);
+    setError(null);
+    try {
+      await intakeApi.acknowledgeWarning(issueId, ACTOR, reasons[issueId].trim());
+      const importVersion = await intakeApi.getImportVersion(state.batchId, state.importVersion.id);
+      setState({ ...state, importVersion });
+    } catch (cause) {
+      setError(isFlowApiError(cause) ? cause.message : "警告确认或状态刷新失败，请重试");
+    } finally {
+      setBusy(false);
+    }
+  };
 
   const publish = useCallback(async () => {
-    if (state.phase !== "cleaning") return;
+    if (state.phase !== "cleaning" || !canPublish || busy) return;
     setError(null);
     try {
       const published = await intakeApi.publishImport(state.importVersion.id);
@@ -140,7 +162,7 @@ export function DataWorkbench() {
     } catch (cause) {
       setError(isFlowApiError(cause) ? cause.message : "发布被阻断，请先处理质量问题");
     }
-  }, [state]);
+  }, [state, canPublish, busy]);
 
   return (
     <section aria-label="数据工作台" className="data-workbench">
@@ -216,7 +238,10 @@ export function DataWorkbench() {
             </thead>
             <tbody>
               {mapping.sheets.flatMap((sheet) =>
-                sheet.fields.map((field) => {
+                [...sheet.fields, ...sheet.unresolved_required_fields
+                  .filter((id) => !sheet.fields.some((field) => field.target_field_id === id))
+                  .map((id) => ({ target_field_id: id, source_header: "", confidence: "待映射" }))
+                ].map((field) => {
                   const key = `${sheet.target_sheet_id}|${field.target_field_id}`;
                   return (
                     <tr key={key}>
@@ -243,7 +268,7 @@ export function DataWorkbench() {
               )}
             </tbody>
           </table>
-          <button type="button" onClick={() => void confirmMapping()}>
+          <button type="button" disabled={busy} onClick={() => void confirmMapping()}>
             确认映射并校验
           </button>
         </div>
@@ -268,7 +293,41 @@ export function DataWorkbench() {
               </li>
             ))}
           </ul>
-          <button type="button" onClick={() => void publish()}>
+          <p>导入状态：{state.importVersion.status}</p>
+          <p>可执行操作：{state.importVersion.next_allowed_actions.map((action) => ({
+            acknowledge_warnings: "确认警告", publish: "发布", create_correction: "修改映射", validate: "重新校验", export: "导出",
+          }[action] ?? action)).join("、")}</p>
+          <ul aria-label="质量问题详情">
+            {state.importVersion.issues.map((issue) => (
+              <li key={issue.id}>
+                <p>{issue.severity === "blocking" ? "阻断" : "警告"}：{issue.message}（{issue.code}）</p>
+                <p>来源：{issue.sheet_name ?? "未知工作表"} · 行 {issue.source_row ?? "—"} · 列 {issue.source_column ?? "—"}</p>
+                <p>证据：{issue.evidence}</p>
+                <p>修复建议：{issue.repair_suggestion}</p>
+                {issue.severity === "warning" ? issue.acknowledged ? <p>已确认</p> : (
+                  <div>
+                    <label>确认原因
+                      <input aria-label={`警告 ${issue.id} 确认原因`} value={reasons[issue.id] ?? ""}
+                        onChange={(event) => setReasons((prev) => ({ ...prev, [issue.id]: event.target.value }))} />
+                    </label>
+                    <button type="button" aria-label={`确认警告 ${issue.id}`} disabled={busy || !reasons[issue.id]?.trim()}
+                      onClick={() => void acknowledge(issue.id)}>确认此警告</button>
+                  </div>
+                ) : null}
+              </li>
+            ))}
+          </ul>
+          <ul aria-label="对账详情">
+            {state.importVersion.reconciliations.map((item) => (
+              <li key={item.code}>{item.code}：{item.passed ? "通过" : "失败"} · 预期 {item.expected_value ?? "—"} · 实际 {item.actual_value ?? "—"}</li>
+            ))}
+          </ul>
+          <button type="button" disabled={busy} onClick={() => {
+            setError(null);
+            setState({ phase: "mapping", batchId: state.batchId, source: state.source, mapping: state.mapping });
+            setStage("map");
+          }}>返回修改映射</button>
+          <button type="button" disabled={busy || !canPublish} onClick={() => void publish()}>
             发布此导入版本
           </button>
         </div>
