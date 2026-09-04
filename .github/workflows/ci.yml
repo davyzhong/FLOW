@@ -260,3 +260,22 @@ jobs:
       - run: curl --fail http://localhost:8000/api/v1/health
       - run: curl --fail http://localhost:3000/
       - run: docker compose -f infra/compose.yaml exec -T worker celery -A flow_api.worker:celery_app inspect ping
+
+  user-closure-e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.13"
+          enable-cache: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npx --yes pnpm@10.17.1 install --frozen-lockfile
+      - run: cd services/api && uv sync --all-groups --frozen
+      - run: npx --yes pnpm@10.17.1 --filter @flow/web exec playwright install --with-deps chromium
+      - run: bash scripts/test_user_closure_e2e.sh
+      - if: failure()
+        run: find apps/web/test-results -name "*.md" -exec cat {} \; 2>/dev/null || true
