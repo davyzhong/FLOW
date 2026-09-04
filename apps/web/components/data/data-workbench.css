@@ -1,0 +1,8 @@
+.data-workbench { padding: 24px; display: grid; gap: 16px; }
+.data-workbench__stages { display: flex; gap: 16px; list-style: none; padding: 0; }
+.data-workbench__stages li[aria-current="step"] { font-weight: 700; text-decoration: underline; }
+.data-workbench__dropzone { border: 2px dashed #8a94a6; padding: 32px; text-align: center; }
+.data-workbench__dropzone[data-drag="true"] { border-color: #1d4ed8; background: #eef4ff; }
+.data-workbench__error { color: #b42318; font-weight: 600; }
+.data-workbench__mapping table { width: 100%; border-collapse: collapse; }
+.data-workbench__mapping th, .data-workbench__mapping td { border: 1px solid #d5dae3; padding: 6px 10px; text-align: left; }

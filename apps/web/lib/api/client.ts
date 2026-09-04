@@ -218,3 +218,137 @@ export const flowApi = {
     );
   },
 };
+
+export type IntakeBatch = { id: string; name: string; status: string };
+export type IntakeSource = { id: string; sha256: string; size_bytes: number };
+export type IntakeMapping = {
+  id: string;
+  sequence: number;
+  sheets: {
+    source_sheet: string;
+    target_sheet_id: string;
+    fields: {
+      target_field_id: string;
+      source_header: string;
+      source_column: string;
+      method: string;
+      confidence: string;
+    }[];
+    unresolved_required_fields: string[];
+  }[];
+  confidence_summary: Record<string, number>;
+  confirmed_by: string | null;
+};
+export type IntakeImport = {
+  id: string;
+  status: string;
+  is_published: boolean;
+};
+
+export type MappingOverrideInput = {
+  target_sheet_id: string;
+  target_field_id: string;
+  source_sheet: string;
+  source_header: string;
+};
+
+async function download(path: string, fallbackFilename: string): Promise<void> {
+  const response = await fetch(requestUrl(path), {
+    headers: { Accept: "application/octet-stream" },
+  });
+  if (!response.ok) {
+    throw new FlowApiError(response.status, `upstream_status_${response.status}`, "下载失败");
+  }
+  const disposition = response.headers.get("content-disposition") ?? "";
+  const match = /filename="([^"]+)"/.exec(disposition);
+  const blob = await response.blob();
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = match?.[1] ?? fallbackFilename;
+  document.body.append(anchor);
+  anchor.click();
+  anchor.remove();
+  URL.revokeObjectURL(url);
+}
+
+async function uploadFile<T>(path: string, file: File): Promise<T> {
+  const form = new FormData();
+  form.append("workbook", file, file.name);
+  const response = await fetch(requestUrl(path), { method: "POST", body: form });
+  if (!response.ok) {
+    throw new FlowApiError(response.status, `upstream_status_${response.status}`, "上传失败");
+  }
+  return (await response.json()) as T;
+}
+
+export const intakeApi = {
+  createBatch(name: string): Promise<IntakeBatch> {
+    return submit<IntakeBatch>("/api/v1/intake/batches", "POST", { name });
+  },
+  uploadSource(batchId: string, file: File): Promise<IntakeSource> {
+    return uploadFile<IntakeSource>(`/api/v1/intake/batches/${batchId}/sources`, file);
+  },
+  async downloadTemplate(): Promise<void> {
+    await download("/api/v1/intake/templates/flow.excel.v1", "flow.excel.v1.template.xlsx");
+  },
+  proposeMapping(sourceId: string): Promise<IntakeMapping> {
+    return submit<IntakeMapping>(`/api/v1/intake/sources/${sourceId}/mapping-proposals`, "POST", {});
+  },
+  confirmMapping(mappingId: string, actor: string): Promise<IntakeMapping> {
+    return submit<IntakeMapping>(`/api/v1/intake/mappings/${mappingId}/confirm`, "POST", {
+      actor,
+    });
+  },
+  applyOverrides(
+    mappingId: string,
+    sourceFileId: string,
+    sourceSha256: string,
+    overrides: MappingOverrideInput[],
+    actor: string,
+  ): Promise<IntakeMapping> {
+    return submit<IntakeMapping>(`/api/v1/intake/mappings/${mappingId}/overrides`, "POST", {
+      actor,
+      source_file_id: sourceFileId,
+      source_sha256: sourceSha256,
+      overrides,
+    });
+  },
+  validateImport(sourceId: string, mappingId: string): Promise<IntakeImport> {
+    return submit<IntakeImport>(`/api/v1/intake/sources/${sourceId}/validate`, "POST", {
+      mapping_version_id: mappingId,
+    });
+  },
+  acknowledgeWarning(issueId: string, actor: string, reason: string) {
+    return submit<unknown>(`/api/v1/intake/issues/${issueId}/acknowledge`, "POST", {
+      actor,
+      reason,
+    });
+  },
+  publishImport(importId: string): Promise<IntakeImport> {
+    return submit<IntakeImport>(`/api/v1/intake/imports/${importId}/publish`, "POST", {});
+  },
+  async exportStandardizedWorkbook(importId: string): Promise<void> {
+    await download(
+      `/api/v1/intake/imports/${importId}/standardized-workbook`,
+      "flow.excel.v1.standardized.xlsx",
+    );
+  },
+  getCleaningSummary(
+    importId: string,
+    signal?: AbortSignal,
+  ): Promise<{
+    status: string;
+    totals: { raw_values: number; transformed_values: number; records: number };
+    transform_rules: {
+      rule_id: string;
+      rule_version: number;
+      applied_count: number;
+      samples: Record<string, unknown>[];
+    }[];
+    quality_issues: { blocking: number; warning: number };
+    reconciliation: { passed: number; failed: number };
+  }> {
+    return request(`/api/v1/intake/imports/${importId}/cleaning-summary`, signal);
+  },
+};
