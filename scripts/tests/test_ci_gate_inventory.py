@@ -23,11 +23,12 @@ EXPECTED_GATES = {
     "publishing-golden",
     "migrations",
     "smoke",
+    "user-closure-e2e",
 }
 
 
 class CiGateInventoryTests(unittest.TestCase):
-    def test_ci_contains_all_fifteen_acceptance_gates(self) -> None:
+    def test_ci_contains_all_sixteen_acceptance_gates(self) -> None:
         workflow = CI_WORKFLOW.read_text(encoding="utf-8")
         jobs = workflow.split("\njobs:\n", maxsplit=1)[1]
         actual = set(re.findall(r"^  ([a-z0-9-]+):\s*$", jobs, re.MULTILINE))

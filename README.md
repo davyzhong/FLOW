@@ -374,7 +374,7 @@ make contracts-check
 | `make test-investigation-e2e` | 调查与复核流程 | PostgreSQL + Playwright Chromium |
 | `make test-copilot-evals` | 引用、数字、降级与审计 | 按脚本准备数据库 |
 | `make test-publishing-golden` | 四格式关键值一致性 | Playwright Chromium 与领域测试环境 |
-| `make test-user-closure-e2e` | 组合回归与用户入口冒烟 | 会启动服务；脚本会终止匹配的 Next 开发进程，仅隔离环境使用 |
+| `make test-user-closure-e2e` | 组合回归与用户入口冒烟 | 会启动服务；监督器仅清理本次启动的进程组，数据库仍须隔离 |
 | `make acceptance` | Phase 1–10 的七组组合验收 | **会清空 Compose `flow` 库的 public schema，不可用于业务库** |
 
 需要浏览器门禁时安装仓库对应的 Chromium：

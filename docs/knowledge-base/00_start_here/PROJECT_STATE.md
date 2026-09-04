@@ -272,4 +272,4 @@ flowchart LR
 
 ## 本轮文档核对发现的剩余运行问题
 
-2026-09-04 查询 c1a59d1 的[远端 CI](https://github.com/davyzhong/FLOW/actions/runs/33888190706)：独立 unit/contracts 等门禁已通过，但组合 user-closure-e2e 因前一子门禁残留 Next dev 进程而启动冲突，随后浏览器连接拒绝；该脚本问题尚待修复，不标当前全量 CI 绿色。当前还没有面向任意新上传批次的一键指标/分析入口；PDF 默认无打印器，Copilot 默认离线确定性提供器。详见[文档核对记录](../../implementation/2026-09-04-documentation-refresh.md)。
+2026-09-04 查询 c1a59d1 的[远端 CI](https://github.com/davyzhong/FLOW/actions/runs/33888190706)：独立 unit/contracts 等门禁已通过，但组合 user-closure-e2e 因前一子门禁残留 Next dev 进程而启动冲突，随后浏览器连接拒绝；该历史失败已定位，后续[CI 修复](../../implementation/2026-09-05-ci-repair.md)补齐自有进程组清理与回归；完整远端状态按对应提交核对。当前还没有面向任意新上传批次的一键指标/分析入口；PDF 默认无打印器，Copilot 默认离线确定性提供器。详见[文档核对记录](../../implementation/2026-09-04-documentation-refresh.md)。

@@ -46,7 +46,7 @@ flowchart TD
 | 远端 CI | 查看具体提交和 job，不将单个成功门禁视为全量通过 |
 | 真实业务验收 | 仍需脱敏客户数据与目标部署环境的证据 |
 
-2026-09-04 对 [`c1a59d1` 的 CI](https://github.com/davyzhong/FLOW/actions/runs/33888190706)进行核对：unit、contracts、static-web、static-python、intake-e2e、dashboard、investigation-e2e、publishing-golden 等已通过；`user-closure-e2e` 已失败，其日志显示组合脚本启动 Investigation 门禁时已有 Next dev 进程占用同一应用目录，随后浏览器连接被拒绝。该进程清理问题尚未在本次文档更新中修复。记录时 integration 仍在运行，整个 workflow 不能标为绿色；实时状态以链接为准。
+2026-09-04 对 [`c1a59d1` 的 CI](https://github.com/davyzhong/FLOW/actions/runs/33888190706)进行核对：unit、contracts、static-web、static-python、intake-e2e、dashboard、investigation-e2e、publishing-golden 等已通过；`user-closure-e2e` 已失败，其日志显示组合脚本启动 Investigation 门禁时已有 Next dev 进程占用同一应用目录，随后浏览器连接被拒绝。该记录属于修复前状态；后续[CI 修复](implementation/2026-09-05-ci-repair.md)已补进程组监督与回归，并补回数据契约阶段说明。记录时 integration 仍在运行，整个 workflow 不能标为绿色；实时状态以链接为准。
 
 本次全量文档整理的范围、验证和保留规则见[更新记录](implementation/2026-09-04-documentation-refresh.md)。
 

@@ -26,6 +26,7 @@ jobs:
           enable-cache: true
       - run: cd services/api && uv sync --all-groups --frozen
       - run: cd services/api && uv run ruff check src tests && uv run mypy src
+      - run: python3 -m unittest discover -s scripts/tests -v
 
   static-web:
     runs-on: ubuntu-latest

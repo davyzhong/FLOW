@@ -52,6 +52,10 @@ flowchart TD
 | 区分用户闭环历史验收和最新结果 | [Pilot Phase 1 验证](../implementation/phase-pilot-1-user-closure.md) |
 | 交接给新 Agent | [接续指南](07_handoff/CONTINUATION_GUIDE.md) · [接续提示词](07_handoff/RESTART_PROMPTS.md) |
 
+## CI 运行维护
+
+组合门禁的 Next 子进程残留和数据契约文档阶段断言已定位并修复，本地回归与执行机制见[CI 修复记录](../implementation/2026-09-05-ci-repair.md)。完整 CI 状态仍以对应提交的远端运行为准。
+
 ## 当前审查修复
 
 2026-09-04：按用户批准顺序修复原审查三项 P1、六项 P2，保留既有财务口径。参见[修复设计](../superpowers/specs/2026-09-04-review-repairs-design.md)和[执行计划](../superpowers/plans/2026-09-04-review-repairs.md)；原九项及追加 N1–N3 均已修复，单用户认证已补齐；真实 MinIO PutObject 超时仍限制完整链路验收。验证范围与部署兼容见[修复验收](../implementation/2026-09-04-review-repairs.md)。
