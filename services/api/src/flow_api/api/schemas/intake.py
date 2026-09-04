@@ -99,6 +99,20 @@ class MappingConfirmationRequest(BaseModel):
     actor: str = Field(min_length=1, max_length=255)
 
 
+class MappingOverrideItem(BaseModel):
+    target_sheet_id: str = Field(min_length=1)
+    target_field_id: str = Field(min_length=1)
+    source_sheet: str = Field(min_length=1)
+    source_header: str = Field(min_length=1)
+
+
+class MappingOverrideRequest(BaseModel):
+    actor: str = Field(min_length=1, max_length=255)
+    source_file_id: UUID
+    source_sha256: str = Field(min_length=64, max_length=64)
+    overrides: list[MappingOverrideItem] = Field(min_length=1)
+
+
 class ValidateImportRequest(BaseModel):
     mapping_version_id: UUID
 

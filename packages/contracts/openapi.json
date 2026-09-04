@@ -325,6 +325,60 @@
         }
       }
     },
+    "/api/v1/intake/mappings/{mapping_version_id}/overrides": {
+      "post": {
+        "tags": [
+          "intake"
+        ],
+        "summary": "Override Mapping",
+        "description": "应用 Finance BP 手工映射修正：产生新的 append-only MappingVersion。",
+        "operationId": "override_mapping_api_v1_intake_mappings__mapping_version_id__overrides_post",
+        "parameters": [
+          {
+            "name": "mapping_version_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Mapping Version Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MappingOverrideRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MappingResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/intake/sources/{source_file_id}/validate": {
       "post": {
         "tags": [
@@ -3064,6 +3118,75 @@
           "actor"
         ],
         "title": "MappingExplanationRequest"
+      },
+      "MappingOverrideItem": {
+        "properties": {
+          "target_sheet_id": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Target Sheet Id"
+          },
+          "target_field_id": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Target Field Id"
+          },
+          "source_sheet": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Source Sheet"
+          },
+          "source_header": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Source Header"
+          }
+        },
+        "type": "object",
+        "required": [
+          "target_sheet_id",
+          "target_field_id",
+          "source_sheet",
+          "source_header"
+        ],
+        "title": "MappingOverrideItem"
+      },
+      "MappingOverrideRequest": {
+        "properties": {
+          "actor": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "title": "Actor"
+          },
+          "source_file_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Source File Id"
+          },
+          "source_sha256": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 64,
+            "title": "Source Sha256"
+          },
+          "overrides": {
+            "items": {
+              "$ref": "#/components/schemas/MappingOverrideItem"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Overrides"
+          }
+        },
+        "type": "object",
+        "required": [
+          "actor",
+          "source_file_id",
+          "source_sha256",
+          "overrides"
+        ],
+        "title": "MappingOverrideRequest"
       },
       "MappingResponse": {
         "properties": {

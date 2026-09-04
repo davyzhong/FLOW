@@ -10,6 +10,7 @@ from uuid import UUID
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
+from flow_api.data_contract.models import WorkbookContract
 from flow_api.data_contract.persistence import load_canonical_package
 from flow_api.infrastructure.models.intake import (
     AnalysisBatch,
@@ -22,7 +23,15 @@ from flow_api.infrastructure.models.intake import (
     WarningAcknowledgement,
 )
 from flow_api.intake.extractor import ExtractedCandidate
-from flow_api.intake.mapping import MappingProposal
+from flow_api.intake.mapping import (
+    FieldMapping,
+    MappingOverride,
+    MappingProposal,
+    SheetMapping,
+    _source_type_compatible,
+    proposal_from_spec,
+)
+from flow_api.intake.models import WorkbookProfile
 from flow_api.intake.quality import QualityReport
 from flow_api.intake.repositories import IntakeRepository
 from flow_api.intake.source_storage import StoredSource
@@ -34,6 +43,37 @@ class InvalidIntakeTransitionError(ValueError):
 
 class PublicationBlockedError(ValueError):
     pass
+
+
+class MappingOverrideRuleError(ValueError):
+    code = "mapping_override_invalid"
+    http_status = 422
+
+
+class UnknownMappingTargetError(MappingOverrideRuleError):
+    code = "unknown_target"
+
+
+class UnknownSourceColumnError(MappingOverrideRuleError):
+    code = "unknown_source_column"
+
+
+class DuplicateSourceColumnError(MappingOverrideRuleError):
+    code = "duplicate_source_column"
+
+
+class IncompatibleMappingTargetError(MappingOverrideRuleError):
+    code = "incompatible_target"
+
+
+class StaleSourceError(MappingOverrideRuleError):
+    code = "stale_source"
+    http_status = 409
+
+
+class CrossBatchSourceError(MappingOverrideRuleError):
+    code = "cross_batch_source"
+    http_status = 409
 
 
 class IntakeService:
@@ -138,6 +178,166 @@ class IntakeService:
         mapping.created_by = actor.strip()
         self.session.flush()
         return mapping
+
+    def apply_mapping_overrides(
+        self,
+        mapping_version_id: UUID,
+        overrides: tuple[MappingOverride, ...],
+        *,
+        actor: str,
+        contract: WorkbookContract,
+        profile: WorkbookProfile,
+        expected_source_file_id: UUID,
+        expected_source_sha256: str,
+    ) -> tuple[MappingVersion, MappingProposal]:
+        """应用 Finance BP 手工映射修正：产生新的 MappingVersion（append-only）。
+
+        规则：目标必须是冻结契约中的 sheet/field；源列必须是已 profile 的表头且类型
+        兼容；同一目标工作表内不允许两个目标字段共用同一源列；请求必须引用映射的
+        不可变源（hash 与批次一致）。
+        """
+        if not actor.strip():
+            raise ValueError("mapping override actor must not be empty")
+        if not overrides:
+            raise ValueError("mapping override requires at least one override")
+        mapping = self.repository.mapping(mapping_version_id)
+        spec = dict(mapping.mapping_spec)
+        source = self.repository.source(UUID(spec["_source_file_id"]))
+        if expected_source_file_id != source.id:
+            raise CrossBatchSourceError("override references a source from another batch")
+        if expected_source_sha256 != source.stored_object.sha256:
+            raise StaleSourceError("override was built against a stale source hash")
+
+        proposal = proposal_from_spec(spec)
+        sheet_contract_by_id = {sheet.sheet_id: sheet for sheet in contract.sheets}
+        profile_sheets = {sheet.name: sheet for sheet in profile.sheets}
+        fields_by_sheet: dict[str, dict[str, FieldMapping]] = {
+            sheet.target_sheet_id: {field.target_field_id: field for field in sheet.fields}
+            for sheet in proposal.sheets
+        }
+        unresolved_by_sheet = {
+            sheet.target_sheet_id: set(sheet.unresolved_required_fields)
+            for sheet in proposal.sheets
+        }
+
+        for override in overrides:
+            sheet_contract = sheet_contract_by_id.get(override.target_sheet_id)
+            if sheet_contract is None:
+                raise UnknownMappingTargetError(
+                    f"未知目标工作表: {override.target_sheet_id}"
+                )
+            field_contract = next(
+                (
+                    field
+                    for field in sheet_contract.fields
+                    if field.field_id == override.target_field_id
+                ),
+                None,
+            )
+            if field_contract is None:
+                raise UnknownMappingTargetError(
+                    f"未知目标字段: {override.target_sheet_id}.{override.target_field_id}"
+                )
+            profile_sheet = profile_sheets.get(override.source_sheet)
+            if profile_sheet is None:
+                raise UnknownSourceColumnError(
+                    f"源工作簿不存在工作表: {override.source_sheet}"
+                )
+            column = next(
+                (
+                    column
+                    for column in profile_sheet.columns
+                    if column.header == override.source_header
+                ),
+                None,
+            )
+            if column is None:
+                raise UnknownSourceColumnError(
+                    f"源工作表 {override.source_sheet} 不存在表头: {override.source_header}"
+                )
+            if not _source_type_compatible(column, field_contract):
+                raise IncompatibleMappingTargetError(
+                    f"目标字段 {override.target_field_id} 与源列类型 "
+                    f"{column.inferred_type} 不兼容"
+                )
+            fields_by_sheet[override.target_sheet_id][override.target_field_id] = FieldMapping(
+                source_header=column.header,
+                source_column=column.column_letter,
+                target_field_id=override.target_field_id,
+                method="manual_override",
+                score=1.0,
+                confidence="high",
+                requires_confirmation=False,
+                rationale="Finance BP 手工修正。",
+            )
+            unresolved_by_sheet[override.target_sheet_id].discard(override.target_field_id)
+
+        for _target_sheet_id, fields in fields_by_sheet.items():
+            used: dict[str, str] = {}
+            for target_field_id, field in fields.items():
+                if field.source_column in used:
+                    raise DuplicateSourceColumnError(
+                        f"{used[field.source_column]} 与 {target_field_id} 同时映射到源列 "
+                        f"{field.source_column}"
+                    )
+                used[field.source_column] = target_field_id
+
+        new_sheets = tuple(
+            SheetMapping(
+                source_sheet=sheet.source_sheet,
+                target_sheet_id=sheet.target_sheet_id,
+                method=sheet.method,
+                score=sheet.score,
+                fields=tuple(fields_by_sheet[sheet.target_sheet_id].values()),
+                unresolved_required_fields=tuple(
+                    sorted(unresolved_by_sheet[sheet.target_sheet_id])
+                ),
+                ignored_source_headers=sheet.ignored_source_headers,
+            )
+            for sheet in proposal.sheets
+        )
+        new_proposal = MappingProposal(
+            contract_version=proposal.contract_version,
+            source_sha256=proposal.source_sha256,
+            sheets=new_sheets,
+            unresolved_sheet_ids=proposal.unresolved_sheet_ids,
+            ignored_source_sheets=proposal.ignored_source_sheets,
+        )
+        existing = self.repository.mapping_by_hash(mapping.batch_id, new_proposal.mapping_hash)
+        if existing is not None:
+            return existing, new_proposal
+
+        confidences = Counter(
+            field.confidence for sheet in new_proposal.sheets for field in sheet.fields
+        )
+        new_spec = {
+            **asdict(new_proposal),
+            "_source_file_id": spec["_source_file_id"],
+            "confirmation": {
+                "actor": actor.strip(),
+                "confirmed_at": datetime.now(UTC).isoformat(),
+            },
+        }
+        new_mapping = MappingVersion(
+            batch_id=mapping.batch_id,
+            sequence=self.repository.next_mapping_sequence(mapping.batch_id),
+            mapping_hash=new_proposal.mapping_hash,
+            mapping_spec=new_spec,
+            confidence_summary=dict(confidences),
+            rationale_summary={
+                "unresolved_sheet_ids": list(new_proposal.unresolved_sheet_ids),
+                "unresolved_required_fields": {
+                    sheet.target_sheet_id: list(sheet.unresolved_required_fields)
+                    for sheet in new_proposal.sheets
+                    if sheet.unresolved_required_fields
+                },
+                "overrides": [asdict(override) for override in overrides],
+            },
+            created_by=actor.strip(),
+        )
+        self.session.add(new_mapping)
+        self.session.flush()
+        return new_mapping, new_proposal
 
     def validate_import(
         self,

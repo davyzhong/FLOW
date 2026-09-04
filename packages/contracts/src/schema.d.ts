@@ -143,6 +143,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/intake/mappings/{mapping_version_id}/overrides": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Override Mapping
+         * @description 应用 Finance BP 手工映射修正：产生新的 append-only MappingVersion。
+         */
+        post: operations["override_mapping_api_v1_intake_mappings__mapping_version_id__overrides_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/intake/sources/{source_file_id}/validate": {
         parameters: {
             query?: never;
@@ -1028,6 +1048,31 @@ export interface components {
             /** Actor */
             actor: string;
         };
+        /** MappingOverrideItem */
+        MappingOverrideItem: {
+            /** Target Sheet Id */
+            target_sheet_id: string;
+            /** Target Field Id */
+            target_field_id: string;
+            /** Source Sheet */
+            source_sheet: string;
+            /** Source Header */
+            source_header: string;
+        };
+        /** MappingOverrideRequest */
+        MappingOverrideRequest: {
+            /** Actor */
+            actor: string;
+            /**
+             * Source File Id
+             * Format: uuid
+             */
+            source_file_id: string;
+            /** Source Sha256 */
+            source_sha256: string;
+            /** Overrides */
+            overrides: components["schemas"]["MappingOverrideItem"][];
+        };
         /** MappingResponse */
         MappingResponse: {
             /**
@@ -1793,6 +1838,41 @@ export interface operations {
         responses: {
             /** @description Successful Response */
             200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MappingResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    override_mapping_api_v1_intake_mappings__mapping_version_id__overrides_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                mapping_version_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MappingOverrideRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
                 headers: {
                     [name: string]: unknown;
                 };

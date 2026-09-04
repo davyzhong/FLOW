@@ -21,6 +21,7 @@ from flow_api.api.schemas.intake import (
     ImportVersionResponse,
     IntakeStatus,
     MappingConfirmationRequest,
+    MappingOverrideRequest,
     MappingResponse,
     QualityIssueResponse,
     ReconciliationResponse,
@@ -52,11 +53,12 @@ from flow_api.infrastructure.models.intake import (
 from flow_api.infrastructure.object_store import ObjectStore
 from flow_api.intake.detector import WorkbookDetectionError, profile_workbook
 from flow_api.intake.extractor import CandidateExtractionError, extract_candidate_package
-from flow_api.intake.mapping import MappingProposal, load_aliases, propose_mapping
+from flow_api.intake.mapping import MappingOverride, MappingProposal, load_aliases, propose_mapping
 from flow_api.intake.quality import evaluate_quality
 from flow_api.intake.service import (
     IntakeService,
     InvalidIntakeTransitionError,
+    MappingOverrideRuleError,
     PublicationBlockedError,
 )
 from flow_api.intake.source_storage import SourceStorage, SourceStorageError
@@ -399,6 +401,53 @@ def confirm_mapping(
         raise _error(status.HTTP_409_CONFLICT, "mapping_source_mismatch", "映射与源文件不匹配")
     confirmed = IntakeService(session).confirm_mapping(mapping.id, actor=request.actor)
     return _mapping_response(confirmed, proposal)
+
+
+@router.post(
+    "/mappings/{mapping_version_id}/overrides",
+    response_model=MappingResponse,
+    status_code=status.HTTP_201_CREATED,
+)
+def override_mapping(
+    mapping_version_id: UUID,
+    request: MappingOverrideRequest,
+    session: SessionDependency,
+    storage: StorageDependency,
+) -> MappingResponse:
+    """应用 Finance BP 手工映射修正：产生新的 append-only MappingVersion。"""
+    mapping = _mapping(session, mapping_version_id)
+    source_id = mapping.mapping_spec.get("_source_file_id")
+    source = session.get(SourceFile, UUID(source_id)) if isinstance(source_id, str) else None
+    if source is None:
+        raise _error(status.HTTP_409_CONFLICT, "source_missing", "映射版本没有可用源文件")
+    if request.source_file_id != source.id:
+        raise _error(
+            status.HTTP_409_CONFLICT,
+            "cross_batch_source",
+            "override 引用了其他批次或映射的源文件",
+        )
+    if request.source_sha256 != source.stored_object.sha256:
+        raise _error(
+            status.HTTP_409_CONFLICT,
+            "stale_source",
+            "override 基于过期的源文件哈希",
+        )
+    contract, _, _ = _intake_configuration()
+    profile = profile_workbook(_source_bytes(source, storage))
+    overrides = tuple(MappingOverride(**item.model_dump()) for item in request.overrides)
+    try:
+        new_mapping, proposal = IntakeService(session).apply_mapping_overrides(
+            mapping.id,
+            overrides,
+            actor=request.actor,
+            contract=contract,
+            profile=profile,
+            expected_source_file_id=source.id,
+            expected_source_sha256=request.source_sha256,
+        )
+    except MappingOverrideRuleError as error:
+        raise _error(error.http_status, error.code, str(error)) from error
+    return _mapping_response(new_mapping, proposal)
 
 
 @router.post("/sources/{source_file_id}/validate", response_model=ImportVersionResponse)

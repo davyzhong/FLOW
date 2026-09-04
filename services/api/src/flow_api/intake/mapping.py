@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+from collections.abc import Mapping
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any, Literal
@@ -19,6 +20,7 @@ MappingMethod = Literal[
     "registered_alias",
     "compatible_type",
     "ai_suggestion",
+    "manual_override",
 ]
 NON_DATA_SHEET_IDS = frozenset({"instructions"})
 
@@ -79,6 +81,39 @@ class MappingProposal:
             asdict(self), ensure_ascii=False, sort_keys=True, separators=(",", ":")
         )
         return hashlib.sha256(payload.encode()).hexdigest()
+
+
+@dataclass(frozen=True, slots=True)
+class MappingOverride:
+    """Finance BP 对单个目标字段的手工映射修正。"""
+
+    target_sheet_id: str
+    target_field_id: str
+    source_sheet: str
+    source_header: str
+
+
+def proposal_from_spec(spec: Mapping[str, Any]) -> MappingProposal:
+    """从 MappingVersion.mapping_spec（asdict 快照）重建提案对象。"""
+    sheets = tuple(
+        SheetMapping(
+            source_sheet=sheet["source_sheet"],
+            target_sheet_id=sheet["target_sheet_id"],
+            method=sheet["method"],
+            score=sheet["score"],
+            fields=tuple(FieldMapping(**field) for field in sheet["fields"]),
+            unresolved_required_fields=tuple(sheet["unresolved_required_fields"]),
+            ignored_source_headers=tuple(sheet["ignored_source_headers"]),
+        )
+        for sheet in spec["sheets"]
+    )
+    return MappingProposal(
+        contract_version=spec["contract_version"],
+        source_sha256=spec["source_sha256"],
+        sheets=sheets,
+        unresolved_sheet_ids=tuple(spec["unresolved_sheet_ids"]),
+        ignored_source_sheets=tuple(spec["ignored_source_sheets"]),
+    )
 
 
 def _tuple_strings(value: Any, location: str) -> tuple[str, ...]:
