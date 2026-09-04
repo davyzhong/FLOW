@@ -16,16 +16,22 @@ async function forward(request: NextRequest, context: RouteContext): Promise<Res
   const { path } = await context.params;
   const upstream = new URL(`/api/v1/${path.join("/")}`, apiInternalUrl);
   upstream.search = request.nextUrl.search;
+  const contentType = request.headers.get("content-type") ?? "application/json";
+  const isRead = request.method === "GET" || request.method === "HEAD";
   try {
+    // multipart（文件上传）必须整体转发：request.text() 会破坏二进制边界
+    const body = isRead
+      ? undefined
+      : contentType.includes("multipart/form-data")
+        ? await request.formData()
+        : await request.text();
     const response = await fetch(upstream, {
       method: request.method,
       headers: {
         Accept: "application/json",
-        ...(request.method === "GET" || request.method === "HEAD"
-          ? {}
-          : { "Content-Type": request.headers.get("content-type") ?? "application/json" }),
+        ...(isRead || body instanceof FormData ? {} : { "Content-Type": contentType }),
       },
-      body: request.method === "GET" || request.method === "HEAD" ? undefined : await request.text(),
+      body,
       cache: "no-store",
     });
     return bufferedProxyResponse(response);

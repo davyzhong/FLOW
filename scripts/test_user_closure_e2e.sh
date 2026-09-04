@@ -42,10 +42,12 @@ npx --yes pnpm@10.17.1 --filter @flow/web exec next dev --hostname 127.0.0.1 --p
   >"${closure_logs}/web.log" 2>&1 &
 web_pid=$!
 
+echo "DEBUG api_port=${api_port} web_port=${web_port} PLAYWRIGHT_BASE_URL=${PLAYWRIGHT_BASE_URL-UNSET}"
 uv run scripts/wait_for_services.py "127.0.0.1:${api_port}" "127.0.0.1:${web_port}"
+(cd services/api && uv run python ../../scripts/seed_dashboard_demo.py --fresh-batch)
 
 echo "== 1/6 浏览器用户闭环（Playwright） =="
-npx --yes pnpm@10.17.1 --filter @flow/web exec playwright test apps/web/e2e/user-closure.spec.ts
+npx --yes pnpm@10.17.1 --filter @flow/web exec playwright test e2e/user-closure.spec.ts
 
 echo "== 2/6 契约漂移 =="
 make contracts

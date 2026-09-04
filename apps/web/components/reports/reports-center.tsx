@@ -28,6 +28,20 @@ type AttemptLine = {
 
 const FORMATS = ["pptx", "xlsx", "html", "pdf"] as const;
 
+async function fetchSnapshots(): Promise<SnapshotLine[]> {
+  const response = await fetch("/api/v1/publishing/snapshots", {
+    headers: { Accept: "application/json" },
+  });
+  if (!response.ok) throw new FlowApiError(response.status, "upstream", "加载失败");
+  return ((await response.json()) as { snapshots: SnapshotLine[] }).snapshots;
+}
+
+async function fetchAttempts(snapshotId: string): Promise<AttemptLine[]> {
+  const response = await fetch(`/api/v1/publishing/snapshots/${snapshotId}/attempts`);
+  if (!response.ok) return [];
+  return ((await response.json()) as { attempts: AttemptLine[] }).attempts;
+}
+
 export function ReportsCenter() {
   const [snapshots, setSnapshots] = useState<SnapshotLine[]>([]);
   const [selected, setSelected] = useState<string | null>(null);
@@ -38,36 +52,46 @@ export function ReportsCenter() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const loadSnapshots = useCallback(async () => {
-    setLoading(true);
-    try {
-      const response = await fetch("/api/v1/publishing/snapshots", {
-        headers: { Accept: "application/json" },
+  useEffect(() => {
+    let cancelled = false;
+    fetchSnapshots()
+      .then((rows) => {
+        if (cancelled) return;
+        setSnapshots(rows);
+        if (rows[0]) setSelected(rows[0].id);
+      })
+      .catch((cause: unknown) => {
+        if (!cancelled) setError(cause instanceof Error ? cause.message : "加载失败");
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
       });
-      if (!response.ok) throw new FlowApiError(response.status, "upstream", "加载失败");
-      const body = (await response.json()) as { snapshots: SnapshotLine[] };
-      setSnapshots(body.snapshots);
-      if (body.snapshots[0]) setSelected(body.snapshots[0].id);
-    } catch (cause) {
-      setError(cause instanceof Error ? cause.message : "加载失败");
-    } finally {
-      setLoading(false);
-    }
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
-  useEffect(() => {
-    void loadSnapshots();
-  }, [loadSnapshots]);
-
-  const loadAttempts = useCallback(async (snapshotId: string) => {
-    const response = await fetch(`/api/v1/publishing/snapshots/${snapshotId}/attempts`);
-    if (!response.ok) return;
-    setAttempts((await response.json()).attempts);
-  }, []);
+  const snapshot = snapshots.find((row) => row.id === selected) ?? null;
 
   useEffect(() => {
-    if (selected) void loadAttempts(selected);
-  }, [selected, loadAttempts]);
+    if (!selected) return;
+    let cancelled = false;
+    fetchAttempts(selected)
+      .then((rows) => {
+        if (!cancelled) setAttempts(rows);
+      })
+      .catch(() => {
+        if (!cancelled) setAttempts([]);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [selected]);
+
+  const refreshAttempts = useCallback(async () => {
+    if (!selected) return;
+    setAttempts(await fetchAttempts(selected));
+  }, [selected]);
 
   const freeze = useCallback(async () => {
     setError(null);
@@ -82,13 +106,13 @@ export function ReportsCenter() {
         const body = (await response.json()) as { detail?: { message?: string } };
         throw new Error(body.detail?.message ?? "冻结失败");
       }
-      await loadSnapshots();
+      setSnapshots(await fetchSnapshots());
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "冻结失败");
     } finally {
       setBusy(false);
     }
-  }, [metricSnapshotId, loadSnapshots]);
+  }, [metricSnapshotId]);
 
   const publish = useCallback(async () => {
     if (!selected) return;
@@ -101,35 +125,32 @@ export function ReportsCenter() {
         body: JSON.stringify({ formats, actor: "finance.bp@example.com" }),
       });
       if (!response.ok) throw new Error("产物生成失败");
-      await loadAttempts(selected);
+      await refreshAttempts();
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "产物生成失败");
     } finally {
       setBusy(false);
     }
-  }, [selected, formats, loadAttempts]);
+  }, [selected, formats, refreshAttempts]);
 
-  const download = useCallback(
-    async (attemptId: string) => {
-      const response = await fetch(`/api/v1/publishing/attempts/${attemptId}/download`);
-      if (!response.ok) {
-        setError("下载不可用");
-        return;
-      }
-      const disposition = response.headers.get("content-disposition") ?? "";
-      const match = /filename="([^"]+)"/.exec(disposition);
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-      const anchor = document.createElement("a");
-      anchor.href = url;
-      anchor.download = match?.[1] ?? "flow-report";
-      document.body.append(anchor);
-      anchor.click();
-      anchor.remove();
-      URL.revokeObjectURL(url);
-    },
-    [],
-  );
+  const download = useCallback(async (attemptId: string) => {
+    const response = await fetch(`/api/v1/publishing/attempts/${attemptId}/download`);
+    if (!response.ok) {
+      setError("下载不可用");
+      return;
+    }
+    const disposition = response.headers.get("content-disposition") ?? "";
+    const match = /filename="([^"]+)"/.exec(disposition);
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = match?.[1] ?? "flow-report";
+    document.body.append(anchor);
+    anchor.click();
+    anchor.remove();
+    URL.revokeObjectURL(url);
+  }, []);
 
   return (
     <section aria-label="报告中心" className="reports-center">
@@ -166,23 +187,23 @@ export function ReportsCenter() {
       <div className="reports-center__snapshots">
         <h2>报告快照</h2>
         <ul aria-label="报告快照列表">
-          {snapshots.map((snapshot) => (
-            <li key={snapshot.id}>
+          {snapshots.map((row) => (
+            <li key={row.id}>
               <label>
                 <input
                   type="radio"
                   name="report-snapshot"
-                  checked={selected === snapshot.id}
-                  onChange={() => setSelected(snapshot.id)}
+                  checked={selected === row.id}
+                  onChange={() => setSelected(row.id)}
                 />
-                v{snapshot.version} · {snapshot.title} · {snapshot.created_at?.slice(0, 10)}
+                v{row.version} · {row.title} · {row.created_at?.slice(0, 10)}
               </label>
             </li>
           ))}
         </ul>
       </div>
 
-      {selected ? (
+      {snapshot ? (
         <div className="reports-center__publish">
           <h2>生成产物</h2>
           {FORMATS.map((format) => (
@@ -225,10 +246,7 @@ export function ReportsCenter() {
                   <td>{attempt.size_bytes ?? "-"}</td>
                   <td>
                     {attempt.download_available ? (
-                      <button
-                        type="button"
-                        onClick={() => void download(attempt.attempt_id)}
-                      >
+                      <button type="button" onClick={() => void download(attempt.attempt_id)}>
                         下载
                       </button>
                     ) : attempt.status === "failed" ? (

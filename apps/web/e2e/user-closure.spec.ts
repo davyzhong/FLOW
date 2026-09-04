@@ -8,6 +8,7 @@ import path from "node:path";
 // 完整上传→发布旅程由 make test-user-closure-e2e 中的 API 契约测试与组件测试共同覆盖。
 
 test("data workbench loads and offers the governed template", async ({ page }) => {
+    console.log("SPEC ENV:", JSON.stringify({ b: process.env.PLAYWRIGHT_BASE_URL ?? null }));
   await page.goto("/data");
   await expect(page.getByRole("heading", { name: "数据工作台" })).toBeVisible();
   await expect(page.getByText(/准备/)).toBeVisible();
