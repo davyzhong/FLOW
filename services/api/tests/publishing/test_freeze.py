@@ -144,3 +144,39 @@ def test_publication_attempts_persist_and_retry(publishing_session: Session) -> 
 
     attempt_formats = publishing_session.scalars(select(PublicationAttempt.format)).all()
     assert attempt_formats.count("pdf") >= 2
+
+
+def test_succeeded_attempt_persists_reusable_stored_object(publishing_session: Session) -> None:
+    """Task 6 契约：成功 attempt 必须持久化并复用 StoredObject 行（下载授权边界）。"""
+    import hashlib
+
+    from flow_api.infrastructure.models.intake import StoredObject
+    from publishing.publishing_support import fresh_approved_report
+
+    report, _view = fresh_approved_report(publishing_session)
+    payload = b"%PDF-1.4 persisted object"
+    service = PublicationService(pdf_printer=lambda _html: payload, store=FakeStore())
+    outcomes = service.publish(publishing_session, report.id, formats=("pdf",))
+    assert outcomes["pdf"] == "succeeded"
+
+    attempt = publishing_session.scalar(
+        select(PublicationAttempt).where(
+            PublicationAttempt.report_snapshot_id == report.id,
+            PublicationAttempt.format == "pdf",
+            PublicationAttempt.status == "succeeded",
+        )
+    )
+    assert attempt is not None
+    assert attempt.stored_object_id is not None
+    stored_row = publishing_session.get(StoredObject, attempt.stored_object_id)
+    assert stored_row is not None
+    assert stored_row.sha256 == hashlib.sha256(payload).hexdigest()
+    assert stored_row.size_bytes == len(payload)
+    assert stored_row.object_key.startswith("raw/")
+
+    # 内容寻址：同 payload 再次发布复用同一 StoredObject 行
+    service.publish(publishing_session, report.id, formats=("pdf",))
+    duplicate_rows = publishing_session.scalars(
+        select(StoredObject).where(StoredObject.sha256 == stored_row.sha256)
+    ).all()
+    assert len(duplicate_rows) == 1

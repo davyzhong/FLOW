@@ -9,6 +9,7 @@ from uuid import UUID
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from flow_api.infrastructure.models.intake import StoredObject
 from flow_api.infrastructure.models.publishing import (
     PublicationAttempt,
     ReportSnapshot,
@@ -88,7 +89,19 @@ class PublicationService:
                 else:
                     raise PublicationError(f"unsupported publication format: {fmt}")
                 stored = store.put_immutable(payload, f"report.{fmt}")
-                attempt.stored_object_id = stored.id
+                stored_object = session.scalar(
+                    select(StoredObject).where(StoredObject.sha256 == stored.sha256)
+                )
+                if stored_object is None:
+                    stored_object = StoredObject(
+                        sha256=stored.sha256,
+                        object_key=stored.object_key,
+                        size_bytes=stored.size_bytes,
+                        content_type=stored.content_type,
+                    )
+                    session.add(stored_object)
+                    session.flush()
+                attempt.stored_object_id = stored_object.id
                 attempt.status = "succeeded"
                 outcomes[fmt] = "succeeded"
             except Exception as error:  # noqa: BLE001 - attempt history must persist
