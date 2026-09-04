@@ -8,7 +8,7 @@ from typing import Annotated, Any, cast
 from uuid import UUID
 
 import boto3  # type: ignore[import-untyped]
-from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
+from fastapi import APIRouter, Depends, File, HTTPException, Response, UploadFile, status
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -35,6 +35,12 @@ from flow_api.api.schemas.intake import (
     WorkbookProfileResponse,
 )
 from flow_api.data_contract.contract import load_contract
+from flow_api.data_contract.template import (
+    TEMPLATE_FILENAME,
+    TEMPLATE_ID,
+    TEMPLATE_MIME,
+    render_blank_template,
+)
 from flow_api.infrastructure.db import get_session_factory
 from flow_api.infrastructure.models.intake import (
     ImportVersion,
@@ -117,6 +123,28 @@ StorageDependency = Annotated[SourceStorage, Depends(get_source_storage)]
 def _error(http_status: int, code: str, message: str, **details: Any) -> HTTPException:
     payload = ErrorDetail(code=code, message=message, details=details)
     return HTTPException(status_code=http_status, detail=payload.model_dump(mode="json"))
+
+
+@router.get("/templates/{template_id}")
+def download_template(template_id: str) -> Response:
+    """下载治理化的空白标准工作簿模板（确定性字节输出）。"""
+    if template_id != TEMPLATE_ID:
+        raise _error(
+            status.HTTP_404_NOT_FOUND,
+            "template_not_found",
+            f"未知模板: {template_id}",
+            known_templates=[TEMPLATE_ID],
+        )
+    contract, _, _ = _intake_configuration()
+    content = render_blank_template(contract)
+    return Response(
+        content=content,
+        media_type=TEMPLATE_MIME,
+        headers={
+            "content-disposition": f'attachment; filename="{TEMPLATE_FILENAME}"',
+            "cache-control": "no-store",
+        },
+    )
 
 
 def _source(session: Session, source_file_id: UUID) -> SourceFile:
