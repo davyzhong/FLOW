@@ -231,6 +231,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/intake/imports/{import_version_id}/cleaning-summary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Cleaning Summary
+         * @description 导入版本的清洗摘要：计数、转换规则与有界血缘样本、质量与对账计数。
+         */
+        get: operations["cleaning_summary_api_v1_intake_imports__import_version_id__cleaning_summary_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/intake/imports/{import_version_id}/standardized-workbook": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Export Standardized Workbook
+         * @description 由 canonical 包确定性渲染标准化工作簿（派生数据，绝不替代源字节）。
+         */
+        get: operations["export_standardized_workbook_api_v1_intake_imports__import_version_id__standardized_workbook_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/dashboard/overview": {
         parameters: {
             query?: never;
@@ -2010,6 +2050,70 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["VersionHistoryResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    cleaning_summary_api_v1_intake_imports__import_version_id__cleaning_summary_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                import_version_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    export_standardized_workbook_api_v1_intake_imports__import_version_id__standardized_workbook_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                import_version_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
                 };
             };
             /** @description Validation Error */

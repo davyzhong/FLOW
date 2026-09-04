@@ -9,7 +9,7 @@ from uuid import UUID
 
 import boto3  # type: ignore[import-untyped]
 from fastapi import APIRouter, Depends, File, HTTPException, Response, UploadFile, status
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from flow_api.api.schemas.intake import (
@@ -36,12 +36,15 @@ from flow_api.api.schemas.intake import (
     WorkbookProfileResponse,
 )
 from flow_api.data_contract.contract import load_contract
+from flow_api.data_contract.persistence import read_canonical_package_by_version
 from flow_api.data_contract.template import (
     TEMPLATE_FILENAME,
     TEMPLATE_ID,
     TEMPLATE_MIME,
     render_blank_template,
+    stable_zip_bytes,
 )
+from flow_api.data_contract.workbook import render_workbook
 from flow_api.infrastructure.db import get_session_factory
 from flow_api.infrastructure.models.intake import (
     ImportVersion,
@@ -49,6 +52,7 @@ from flow_api.infrastructure.models.intake import (
     QualityIssue,
     ReconciliationResult,
     SourceFile,
+    SourceRecord,
 )
 from flow_api.infrastructure.object_store import ObjectStore
 from flow_api.intake.detector import WorkbookDetectionError, profile_workbook
@@ -523,4 +527,130 @@ def version_history(batch_id: UUID, session: SessionDependency) -> VersionHistor
     return VersionHistoryResponse(
         batch_id=batch_id,
         versions=[_version_response(session, version) for version in versions],
+    )
+
+
+@router.get("/imports/{import_version_id}/cleaning-summary")
+def cleaning_summary(
+    import_version_id: UUID,
+    session: SessionDependency,
+) -> dict[str, Any]:
+    """导入版本的清洗摘要：计数、转换规则与有界血缘样本、质量与对账计数。"""
+    version = session.get(ImportVersion, import_version_id)
+    if version is None:
+        raise _error(status.HTTP_404_NOT_FOUND, "import_not_found", "导入版本不存在")
+    records = session.scalars(
+        select(SourceRecord).where(SourceRecord.import_version_id == version.id)
+    ).all()
+
+    rule_groups: dict[tuple[str, int], list[SourceRecord]] = {}
+    for record in records:
+        if record.transform_rule_id is None:
+            continue
+        key = (record.transform_rule_id, record.transform_rule_version or 0)
+        rule_groups.setdefault(key, []).append(record)
+
+    transform_rules = []
+    for (rule_id, rule_version), group in sorted(rule_groups.items()):
+        samples = [
+            {
+                "sheet_name": record.sheet_name,
+                "source_row": record.source_row,
+                "source_column": record.source_column,
+                "canonical_field": record.canonical_field,
+                "raw_value": record.raw_value,
+                "transformed_value": record.transformed_value,
+            }
+            for record in group[:3]
+        ]
+        transform_rules.append(
+            {
+                "rule_id": rule_id,
+                "rule_version": rule_version,
+                "applied_count": len(group),
+                "samples": samples,
+            }
+        )
+
+    transformed_count = sum(1 for record in records if record.transform_rule_id is not None)
+    record_keys = {(record.sheet_name, record.source_row) for record in records}
+
+    blocking = session.scalar(
+        select(func.count())
+        .select_from(QualityIssue)
+        .where(
+            QualityIssue.import_version_id == version.id,
+            QualityIssue.severity == "blocking",
+        )
+    )
+    warning = session.scalar(
+        select(func.count())
+        .select_from(QualityIssue)
+        .where(QualityIssue.import_version_id == version.id, QualityIssue.severity == "warning")
+    )
+    passed = session.scalar(
+        select(func.count())
+        .select_from(ReconciliationResult)
+        .where(
+            ReconciliationResult.import_version_id == version.id,
+            ReconciliationResult.passed.is_(True),
+        )
+    )
+    failed = session.scalar(
+        select(func.count())
+        .select_from(ReconciliationResult)
+        .where(
+            ReconciliationResult.import_version_id == version.id,
+            ReconciliationResult.passed.is_(False),
+        )
+    )
+
+    return {
+        "import_version_id": str(version.id),
+        "status": version.status,
+        "totals": {
+            "raw_values": len(records),
+            "transformed_values": transformed_count,
+            "unchanged_values": len(records) - transformed_count,
+            "records": len(record_keys),
+        },
+        "transform_rules": transform_rules,
+        "quality_issues": {
+            "blocking": int(blocking or 0),
+            "warning": int(warning or 0),
+        },
+        "reconciliation": {"passed": int(passed or 0), "failed": int(failed or 0)},
+    }
+
+
+@router.get("/imports/{import_version_id}/standardized-workbook")
+def export_standardized_workbook(
+    import_version_id: UUID,
+    session: SessionDependency,
+) -> Response:
+    """由 canonical 包确定性渲染标准化工作簿（派生数据，绝不替代源字节）。"""
+    import tempfile
+
+    version = session.get(ImportVersion, import_version_id)
+    if version is None:
+        raise _error(status.HTTP_404_NOT_FOUND, "import_not_found", "导入版本不存在")
+    if version.status not in ("ready", "published"):
+        raise _error(
+            status.HTTP_409_CONFLICT,
+            "export_blocked",
+            f"导入版本状态为 {version.status}，仅 ready/published 可导出",
+        )
+    package = read_canonical_package_by_version(session, version.id)
+    contract, _, _ = _intake_configuration()
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        destination = Path(tmp_dir) / "standardized.xlsx"
+        render_workbook(contract, package, destination)
+        content = stable_zip_bytes(destination.read_bytes())
+    return Response(
+        content=content,
+        media_type=TEMPLATE_MIME,
+        headers={
+            "content-disposition": 'attachment; filename="flow.excel.v1.standardized.xlsx"',
+            "cache-control": "no-store",
+        },
     )

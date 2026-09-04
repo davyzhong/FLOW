@@ -7,6 +7,7 @@
 
 from __future__ import annotations
 
+import zipfile
 from io import BytesIO
 from typing import Any
 
@@ -29,6 +30,24 @@ _INSTRUCTIONS = (
     ("3. 日期统一为 YYYY-MM-DD；金额单位为元，保留两位小数。", False),
     ("4. 完整字段口径见模板同目录的契约文件与 FLOW 使用手册。", False),
 )
+
+
+def stable_zip_bytes(data: bytes, when: Any = FIXED_WORKBOOK_TIME) -> bytes:
+    """把 xlsx（zip 容器）内全部条目的时间戳归一，保证字节级确定性。
+
+    openpyxl 保存时会写入当前时间作为 zip 条目时间戳；不归一的话两次渲染
+    的字节不相同。
+    """
+    source = zipfile.ZipFile(BytesIO(data))
+    out = BytesIO()
+    fixed_time = when.timetuple()[:6]
+    with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as target:
+        for info in source.infolist():
+            normalized = zipfile.ZipInfo(info.filename, date_time=fixed_time)
+            normalized.compress_type = zipfile.ZIP_DEFLATED
+            normalized.external_attr = info.external_attr
+            target.writestr(normalized, source.read(info.filename))
+    return out.getvalue()
 
 
 def render_blank_template(contract: Any) -> bytes:
@@ -75,4 +94,4 @@ def render_blank_template(contract: Any) -> bytes:
 
     buffer = BytesIO()
     workbook.save(buffer)
-    return buffer.getvalue()
+    return stable_zip_bytes(buffer.getvalue())

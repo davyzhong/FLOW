@@ -571,6 +571,94 @@
         }
       }
     },
+    "/api/v1/intake/imports/{import_version_id}/cleaning-summary": {
+      "get": {
+        "tags": [
+          "intake"
+        ],
+        "summary": "Cleaning Summary",
+        "description": "导入版本的清洗摘要：计数、转换规则与有界血缘样本、质量与对账计数。",
+        "operationId": "cleaning_summary_api_v1_intake_imports__import_version_id__cleaning_summary_get",
+        "parameters": [
+          {
+            "name": "import_version_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Import Version Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Cleaning Summary Api V1 Intake Imports  Import Version Id  Cleaning Summary Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/intake/imports/{import_version_id}/standardized-workbook": {
+      "get": {
+        "tags": [
+          "intake"
+        ],
+        "summary": "Export Standardized Workbook",
+        "description": "由 canonical 包确定性渲染标准化工作簿（派生数据，绝不替代源字节）。",
+        "operationId": "export_standardized_workbook_api_v1_intake_imports__import_version_id__standardized_workbook_get",
+        "parameters": [
+          {
+            "name": "import_version_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Import Version Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/dashboard/overview": {
       "get": {
         "tags": [
