@@ -7,6 +7,7 @@
 
 from __future__ import annotations
 
+import re
 import zipfile
 from io import BytesIO
 from typing import Any
@@ -35,18 +36,27 @@ _INSTRUCTIONS = (
 def stable_zip_bytes(data: bytes, when: Any = FIXED_WORKBOOK_TIME) -> bytes:
     """把 xlsx（zip 容器）内全部条目的时间戳归一，保证字节级确定性。
 
-    openpyxl 保存时会写入当前时间作为 zip 条目时间戳；不归一的话两次渲染
-    的字节不相同。
+    openpyxl 保存时会写入当前时间：zip 条目时间戳，以及 docProps/core.xml 的
+    dcterms:modified（properties.modified 会被保存流程覆盖）。两者都归一到
+    FIXED_WORKBOOK_TIME。
     """
+    fixed_time = when.timetuple()[:6]
+    fixed_stamp = when.strftime("%Y-%m-%dT%H:%M:%SZ").encode()
     source = zipfile.ZipFile(BytesIO(data))
     out = BytesIO()
-    fixed_time = when.timetuple()[:6]
     with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as target:
         for info in source.infolist():
+            payload = source.read(info.filename)
+            if info.filename == "docProps/core.xml":
+                payload = re.sub(
+                    rb"(<dcterms:(?:modified|created)[^>]*>)[^<]*(</dcterms:(?:modified|created)>)",
+                    rb"\g<1>" + fixed_stamp + rb"\g<2>",
+                    payload,
+                )
             normalized = zipfile.ZipInfo(info.filename, date_time=fixed_time)
             normalized.compress_type = zipfile.ZIP_DEFLATED
             normalized.external_attr = info.external_attr
-            target.writestr(normalized, source.read(info.filename))
+            target.writestr(normalized, payload)
     return out.getvalue()
 
 

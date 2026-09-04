@@ -616,20 +616,53 @@ def read_canonical_package_by_version(
     )
     operating_db = list(
         session.scalars(
-            select(FactOperatingActual).where(FactOperatingActual.import_version_id == version.id)
+            select(FactOperatingActual)
+            .where(FactOperatingActual.import_version_id == version.id)
+            .order_by(
+                FactOperatingActual.period_id,
+                FactOperatingActual.organization_id,
+                FactOperatingActual.customer_id,
+                FactOperatingActual.logistics_product_id,
+                FactOperatingActual.region_id,
+            )
         )
     )
     financial_db = list(
         session.scalars(
-            select(FactFinancialActual).where(FactFinancialActual.import_version_id == version.id)
+            select(FactFinancialActual)
+            .where(FactFinancialActual.import_version_id == version.id)
+            .order_by(
+                FactFinancialActual.period_id,
+                FactFinancialActual.organization_id,
+                FactFinancialActual.management_account_id,
+            )
         )
     )
     budgets_db = list(
-        session.scalars(select(FactBudget).where(FactBudget.import_version_id == version.id))
+        session.scalars(
+            select(FactBudget)
+            .where(FactBudget.import_version_id == version.id)
+            .order_by(
+                FactBudget.period_id,
+                FactBudget.organization_id,
+                FactBudget.customer_segment_id,
+                FactBudget.logistics_product_id,
+                FactBudget.management_account_id,
+                FactBudget.scenario_version_id,
+                FactBudget.metric_code,
+            )
+        )
     )
     ar_db = list(
         session.scalars(
-            select(FactArCollection).where(FactArCollection.import_version_id == version.id)
+            select(FactArCollection)
+            .where(FactArCollection.import_version_id == version.id)
+            .order_by(
+                FactArCollection.period_id,
+                FactArCollection.customer_id,
+                FactArCollection.invoice_number,
+                FactArCollection.aging_bucket,
+            )
         )
     )
     operating = tuple(
