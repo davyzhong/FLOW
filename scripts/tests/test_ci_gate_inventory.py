@@ -6,6 +6,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 CI_WORKFLOW = REPO_ROOT / ".github" / "workflows" / "ci.yml"
+PUBLISHING_GATE = REPO_ROOT / "scripts" / "test_publishing_golden.sh"
 
 EXPECTED_GATES = {
     "static-python",
@@ -44,6 +45,12 @@ class CiGateInventoryTests(unittest.TestCase):
             "FLOW_USER_CLOSURE_ONLY=1 bash scripts/test_user_closure_e2e.sh",
             workflow,
         )
+
+    def test_publishing_gate_uses_the_workspace_playwright_version(self) -> None:
+        script = PUBLISHING_GATE.read_text(encoding="utf-8")
+
+        self.assertIn("pnpm exec playwright pdf", script)
+        self.assertNotIn("npx --yes playwright pdf", script)
 
 
 if __name__ == "__main__":

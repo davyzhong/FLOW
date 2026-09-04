@@ -18,7 +18,7 @@ trap 'rm -rf "${golden_dir}"' EXIT
 
 (cd services/api && uv run python "${repo_root}/scripts/render_golden.py" --out "${golden_dir}")
 
-(cd "${golden_dir}" && npx --yes playwright pdf "file://${golden_dir}/report.html" "report.pdf")
+pnpm exec playwright pdf "file://${golden_dir}/report.html" "${golden_dir}/report.pdf"
 
 python3 - "${golden_dir}" <<'PYEOF'
 import sys
