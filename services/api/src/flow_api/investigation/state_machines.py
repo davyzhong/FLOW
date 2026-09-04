@@ -77,6 +77,8 @@ def decide_finding_transition(
             f"finding cannot move from {current_status} by {decision}",
         )
     if decision == "approved":
+        if not evidence_statuses:
+            raise ReviewBlockedError("evidence_pending", "approval requires verified evidence")
         if any(status != "verified" for status in evidence_statuses):
             blocked = next(
                 status for status in evidence_statuses if status in ("pending", "rejected")
@@ -127,6 +129,7 @@ def apply_finding_decision(
     comment: str | None,
     evidence_statuses: Mapping[object, str] | None = None,
 ) -> ReviewEvent:
+    session.refresh(finding, with_for_update=True)
     if evidence_statuses is None:
         statuses = [
             str(status)
@@ -164,7 +167,24 @@ def apply_evidence_decision(
     reviewer: str,
     comment: str | None,
 ) -> ReviewEvent:
+    finding = session.scalar(
+        select(Finding)
+        .where(Finding.id == evidence.finding_id)
+        .with_for_update()
+        .execution_options(populate_existing=True)
+    )
+    if finding is None:
+        raise ReviewBlockedError("finding_missing", "evidence finding is missing")
+    session.refresh(evidence)
     target = decide_evidence_transition(evidence.status, decision)
+    if target != "verified" and finding.status == "approved":
+        apply_finding_decision(
+            session,
+            finding,
+            "returned",
+            reviewer=reviewer,
+            comment="证据已被否决，退回重新复核",
+        )
     event = ReviewEvent(
         finding_id=evidence.finding_id,
         sequence=_next_sequence(session, evidence.finding_id),

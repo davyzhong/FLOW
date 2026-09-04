@@ -131,7 +131,7 @@ relative_path	size_bytes	modified_time	mime_type
 03_assets/visual_prototypes/waiting-data-contract.html	269	2026-08-29T21:37:06+08:00	text/html
 03_assets/visual_prototypes/waiting-template-scope.html	280	2026-08-29T22:56:42+08:00	text/html
 04_decisions/CHANGE_IMPACT_MAP.md	6420	2026-09-04T10:00:31+08:00	text/markdown
-04_decisions/DECISION_LOG.md	13127	2026-09-04T10:15:33+08:00	text/markdown
+04_decisions/DECISION_LOG.md	13790	2026-09-04T22:26:37+08:00	text/markdown
 05_design/PROTOTYPE_INDEX.md	2053	2026-08-29T23:44:55+08:00	text/markdown
 05_design/approved/2026-08-29-flow-v1-design.md	19714	2026-08-29T23:35:13+08:00	text/markdown
 06_sources/LINK_CATALOG.md	2800	2026-09-04T10:13:43+08:00	text/markdown
@@ -139,8 +139,7 @@ relative_path	size_bytes	modified_time	mime_type
 06_sources/all_urls_extracted.txt	203281	2026-08-29T23:46:26+08:00	text/plain
 07_handoff/CONTINUATION_GUIDE.md	3076	2026-08-30T00:43:28+08:00	text/markdown
 07_handoff/RESTART_PROMPTS.md	1570	2026-08-29T23:44:55+08:00	text/markdown
-08_wechat_sources/.mimosa/hook-status/sess_84a89803-bb78-4d0c-8e49-d505f742e991-bdba5d7883.json	1006	2026-09-03T06:46:44+08:00	application/json
 08_wechat_sources/HANDOFF.md	5082	2026-09-03T22:01:50+08:00	text/markdown
 08_wechat_sources/INDEX.md	272499	2026-09-03T08:25:08+08:00	text/markdown
 08_wechat_sources/README.md	2328	2026-09-03T22:01:57+08:00	text/markdown
-README.md	3672	2026-09-03T11:33:28+08:00	text/markdown
+README.md	3985	2026-09-04T22:37:33+08:00	text/markdown

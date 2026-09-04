@@ -203,12 +203,18 @@ class IntakeService:
         mapping = self.repository.mapping(mapping_version_id)
         spec = dict(mapping.mapping_spec)
         source = self.repository.source(UUID(spec["_source_file_id"]))
-        if expected_source_file_id != source.id:
+        if expected_source_file_id != source.id or mapping.batch_id != source.batch_id:
             raise CrossBatchSourceError("override references a source from another batch")
-        if expected_source_sha256 != source.stored_object.sha256:
+        if (
+            expected_source_sha256 != source.stored_object.sha256
+            or profile.sha256 != source.stored_object.sha256
+            or spec.get("source_sha256") != source.stored_object.sha256
+        ):
             raise StaleSourceError("override was built against a stale source hash")
 
         proposal = proposal_from_spec(spec)
+        if mapping.mapping_hash != proposal.mapping_hash:
+            raise StaleSourceError("persisted mapping hash does not match its proposal")
         sheet_contract_by_id = {sheet.sheet_id: sheet for sheet in contract.sheets}
         profile_sheets = {sheet.name: sheet for sheet in profile.sheets}
         fields_by_sheet: dict[str, dict[str, FieldMapping]] = {
@@ -238,6 +244,15 @@ class IntakeService:
                 raise UnknownMappingTargetError(
                     f"未知目标字段: {override.target_sheet_id}.{override.target_field_id}"
                 )
+            mapped_sheet = next(
+                (
+                    sheet for sheet in proposal.sheets
+                    if sheet.target_sheet_id == override.target_sheet_id
+                ),
+                None,
+            )
+            if mapped_sheet is None or mapped_sheet.source_sheet != override.source_sheet:
+                raise UnknownSourceColumnError("字段修正必须引用目标映射绑定的源工作表")
             profile_sheet = profile_sheets.get(override.source_sheet)
             if profile_sheet is None:
                 raise UnknownSourceColumnError(

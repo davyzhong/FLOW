@@ -86,10 +86,17 @@ def view_to_json(view: ReportView) -> dict[str, Any]:
     return dataclasses.asdict(view)
 
 
+def view_from_json(payload: dict[str, Any]) -> ReportView:
+    from pydantic import TypeAdapter
+
+    return TypeAdapter(ReportView).validate_python(payload)
+
+
 __all__ = [
     "ReportView",
     "SnapshotFinding",
     "SnapshotIdentity",
     "SnapshotMetric",
     "view_to_json",
+    "view_from_json",
 ]

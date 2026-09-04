@@ -94,23 +94,20 @@ async def client() -> Any:
         app.dependency_overrides[get_source_storage] = lambda: storage
         transport = ASGITransport(app=app)
         async with AsyncClient(transport=transport, base_url="http://test") as async_client:
+            async_client.test_session = session  # type: ignore[attr-defined]
             yield async_client
         session.rollback()
         clean(session)
 
 
 async def _create_mapping_with_source(client: Any, batch_name: str) -> dict[str, Any]:
-    batch = (
-        await client.post("/api/v1/intake/batches", json={"name": batch_name})
-    ).json()
+    batch = (await client.post("/api/v1/intake/batches", json={"name": batch_name})).json()
     upload = await client.post(
         f"/api/v1/intake/batches/{batch['id']}/sources",
         files={"workbook": (NONSTANDARD.name, NONSTANDARD.read_bytes(), WORKBOOK_MIME)},
     )
     source = upload.json()
-    mapping = (
-        await client.post(f"/api/v1/intake/sources/{source['id']}/mapping-proposals")
-    ).json()
+    mapping = (await client.post(f"/api/v1/intake/sources/{source['id']}/mapping-proposals")).json()
     return {"batch": batch, "source": source, "mapping": mapping}
 
 
@@ -264,3 +261,117 @@ async def test_override_rejects_cross_batch_source(client: Any) -> None:
     )
     assert response.status_code == 409
     assert response.json()["detail"]["code"] == "cross_batch_source"
+
+
+@pytest.mark.parametrize("operation", ["confirm", "validate"])
+async def test_persisted_override_can_be_confirmed_and_extracted(
+    client: Any, operation: str
+) -> None:
+    from uuid import UUID
+
+    from openpyxl import load_workbook
+    from sqlalchemy import select
+
+    from flow_api.infrastructure.models.intake import SourceRecord
+
+    ctx = await _create_mapping_with_source(client, "persisted override")
+    overrides = _swap_overrides(ctx["mapping"])
+    response = await client.post(
+        f"/api/v1/intake/mappings/{ctx['mapping']['id']}/overrides",
+        json={
+            "actor": ACTOR,
+            "source_file_id": ctx["source"]["id"],
+            "source_sha256": ctx["source"]["sha256"],
+            "overrides": overrides,
+        },
+    )
+    assert response.status_code == 201, response.text
+    mapping = response.json()
+    if operation == "confirm":
+        confirmed = await client.post(
+            f"/api/v1/intake/mappings/{mapping['id']}/confirm", json={"actor": ACTOR}
+        )
+        assert confirmed.status_code == 200, confirmed.text
+        assert confirmed.json()["mapping_hash"] == mapping["mapping_hash"]
+        assert confirmed.json()["sheets"] == mapping["sheets"]
+    validated = await client.post(
+        f"/api/v1/intake/sources/{ctx['source']['id']}/validate",
+        json={"mapping_version_id": mapping["id"]},
+    )
+    assert validated.status_code == 200, validated.text
+    records = client.test_session.scalars(
+        select(SourceRecord).where(SourceRecord.import_version_id == UUID(validated.json()["id"]))
+    ).all()
+    sheet = mapping["sheets"][0]
+    field = next(
+        f for f in sheet["fields"] if f["target_field_id"] == overrides[0]["target_field_id"]
+    )
+    record = next(
+        r
+        for r in records
+        if r.canonical_field == f"{sheet['target_sheet_id']}.{field['target_field_id']}"
+    )
+    assert record.source_column == field["source_column"]
+    workbook = load_workbook(NONSTANDARD, read_only=True)
+    try:
+        expected = workbook[sheet["source_sheet"]][
+            f"{field['source_column']}{record.source_row}"
+        ].value
+        assert record.raw_value == {"value": expected}
+    finally:
+        workbook.close()
+
+
+async def test_override_rejects_column_from_another_sheet(client: Any) -> None:
+    ctx = await _create_mapping_with_source(client, "cross sheet")
+    mapping = ctx["mapping"]
+    overrides = _swap_overrides(mapping)
+    overrides[0]["source_sheet"] = mapping["sheets"][1]["source_sheet"]
+    overrides[0]["source_header"] = mapping["sheets"][1]["fields"][0]["source_header"]
+    response = await client.post(
+        f"/api/v1/intake/mappings/{mapping['id']}/overrides",
+        json={
+            "actor": ACTOR,
+            "source_file_id": ctx["source"]["id"],
+            "source_sha256": ctx["source"]["sha256"],
+            "overrides": overrides,
+        },
+    )
+    assert response.status_code == 422, response.text
+
+
+@pytest.mark.parametrize("operation", ["confirm", "validate"])
+@pytest.mark.parametrize("corruption", ["hash", "sha", "source_id", "batch"])
+async def test_mapping_rejects_corrupted_persisted_identity(
+    client: Any,
+    operation: str,
+    corruption: str,
+) -> None:
+    from uuid import UUID, uuid4
+
+    from flow_api.infrastructure.models.intake import MappingVersion
+
+    ctx = await _create_mapping_with_source(client, "identity check")
+    mapping = client.test_session.get(MappingVersion, UUID(ctx["mapping"]["id"]))
+    spec = dict(mapping.mapping_spec)
+    if corruption == "hash":
+        mapping.mapping_hash = "0" * 64
+    elif corruption == "sha":
+        spec["source_sha256"] = "0" * 64
+    elif corruption == "source_id":
+        spec["_source_file_id"] = str(uuid4())
+    else:
+        other = (await client.post("/api/v1/intake/batches", json={"name": "other batch"})).json()
+        mapping.batch_id = UUID(other["id"])
+    mapping.mapping_spec = spec
+    client.test_session.flush()
+    if operation == "confirm":
+        response = await client.post(
+            f"/api/v1/intake/mappings/{mapping.id}/confirm", json={"actor": ACTOR}
+        )
+    else:
+        response = await client.post(
+            f"/api/v1/intake/sources/{ctx['source']['id']}/validate",
+            json={"mapping_version_id": str(mapping.id)},
+        )
+    assert response.status_code == 409, response.text

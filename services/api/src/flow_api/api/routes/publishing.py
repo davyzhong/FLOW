@@ -87,6 +87,8 @@ def publish_report(
     service = _service()
     try:
         outcomes = service.publish(session, report_snapshot_id, formats=tuple(request.formats))
+    except PublishingFreezeError as error:
+        raise _error(status.HTTP_409_CONFLICT, "freeze_blocked", str(error)) from error
     except Exception as error:  # noqa: BLE001
         raise _error(status.HTTP_404_NOT_FOUND, "publishing_failed", str(error)[:200]) from error
     return PublishResponse(
@@ -172,6 +174,7 @@ def freeze_report_snapshot_route(
         )
     except PublishingFreezeError as error:
         raise _error(status.HTTP_409_CONFLICT, "freeze_blocked", str(error)) from error
+    session.commit()
     return ReportSnapshotCreatedResponse(
         id=str(report.id),
         metric_snapshot_id=str(report.metric_snapshot_id),

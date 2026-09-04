@@ -57,7 +57,13 @@ from flow_api.infrastructure.models.intake import (
 from flow_api.infrastructure.object_store import ObjectStore
 from flow_api.intake.detector import WorkbookDetectionError, profile_workbook
 from flow_api.intake.extractor import CandidateExtractionError, extract_candidate_package
-from flow_api.intake.mapping import MappingOverride, MappingProposal, load_aliases, propose_mapping
+from flow_api.intake.mapping import (
+    MappingOverride,
+    MappingProposal,
+    load_aliases,
+    proposal_from_spec,
+    propose_mapping,
+)
 from flow_api.intake.quality import evaluate_quality
 from flow_api.intake.service import (
     IntakeService,
@@ -175,6 +181,28 @@ def _deterministic_proposal(content: bytes) -> tuple[Any, MappingProposal]:
     contract, aliases, _ = _intake_configuration()
     profile = profile_workbook(content)
     return profile, propose_mapping(profile, contract, aliases)
+
+
+def _persisted_proposal(
+    mapping: MappingVersion, source: SourceFile, content: bytes
+) -> tuple[Any, MappingProposal]:
+    try:
+        proposal = proposal_from_spec(mapping.mapping_spec)
+        source_id = UUID(mapping.mapping_spec["_source_file_id"])
+    except (KeyError, TypeError, ValueError, AttributeError) as error:
+        raise _error(
+            status.HTTP_409_CONFLICT, "mapping_source_mismatch", "映射版本数据无效"
+        ) from error
+    profile = profile_workbook(content)
+    if (
+        source_id != source.id
+        or mapping.batch_id != source.batch_id
+        or proposal.source_sha256 != source.stored_object.sha256
+        or proposal.source_sha256 != profile.sha256
+        or mapping.mapping_hash != proposal.mapping_hash
+    ):
+        raise _error(status.HTTP_409_CONFLICT, "mapping_source_mismatch", "映射与源文件不匹配")
+    return profile, proposal
 
 
 def _mapping_response(mapping: MappingVersion, proposal: MappingProposal) -> MappingResponse:
@@ -400,9 +428,7 @@ def confirm_mapping(
     source = session.get(SourceFile, UUID(source_id)) if isinstance(source_id, str) else None
     if source is None:
         raise _error(status.HTTP_409_CONFLICT, "source_missing", "映射版本没有可用源文件")
-    _, proposal = _deterministic_proposal(_source_bytes(source, storage))
-    if mapping.mapping_hash != proposal.mapping_hash:
-        raise _error(status.HTTP_409_CONFLICT, "mapping_source_mismatch", "映射与源文件不匹配")
+    _, proposal = _persisted_proposal(mapping, source, _source_bytes(source, storage))
     confirmed = IntakeService(session).confirm_mapping(mapping.id, actor=request.actor)
     return _mapping_response(confirmed, proposal)
 
@@ -464,9 +490,7 @@ def validate_source(
     source = _source(session, source_file_id)
     mapping = _mapping(session, request.mapping_version_id)
     content = _source_bytes(source, storage)
-    profile, proposal = _deterministic_proposal(content)
-    if mapping.batch_id != source.batch_id or mapping.mapping_hash != proposal.mapping_hash:
-        raise _error(status.HTTP_409_CONFLICT, "mapping_source_mismatch", "映射与源文件不匹配")
+    profile, proposal = _persisted_proposal(mapping, source, content)
     contract, _, transforms = _intake_configuration()
     try:
         candidate = extract_candidate_package(content, profile, proposal, contract, transforms)

@@ -152,3 +152,20 @@ class TestSessionBoundAppliers:
         assert evidence.status == "rejected"
         assert event.decision == "evidence_rejected"
         assert event.sequence >= 1
+
+
+def test_approval_rejects_empty_evidence_set() -> None:
+    with pytest.raises(ReviewBlockedError, match="evidence"):
+        decide_finding_transition(
+            "in_review", "approved", evidence_statuses=(), conclusion_complete=True
+        )
+
+
+def test_empty_evidence_is_visible_as_eligibility_blocker() -> None:
+    from flow_api.investigation.service import InvestigationService
+
+    assert "evidence_pending" in InvestigationService()._eligibility_blockers(
+        "in_review",
+        (),
+        True,
+    )

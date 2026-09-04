@@ -93,9 +93,9 @@ async def test_freeze_list_publish_and_download(client: Any) -> None:
     # 未接打印机时 pdf 必须是显式 failed（可重试），不允许假成功
     assert publish.json()["outcomes"]["pdf"] == "failed"
 
-    attempts = (
-        await client.get(f"/api/v1/publishing/snapshots/{report['id']}/attempts")
-    ).json()["attempts"]
+    attempts = (await client.get(f"/api/v1/publishing/snapshots/{report['id']}/attempts")).json()[
+        "attempts"
+    ]
     html_attempts = [a for a in attempts if a["format"] == "html" and a["status"] == "succeeded"]
     assert html_attempts, "应有成功的 html attempt"
     line = html_attempts[0]
@@ -128,14 +128,12 @@ async def test_download_of_failed_attempt_is_blocked(client: Any) -> None:
         f"/api/v1/publishing/snapshots/{report_id}/publish",
         json={"formats": ["pdf"], "actor": "finance.bp@example.com"},
     )
-    attempts = (
-        await client.get(f"/api/v1/publishing/snapshots/{report_id}/attempts")
-    ).json()["attempts"]
+    attempts = (await client.get(f"/api/v1/publishing/snapshots/{report_id}/attempts")).json()[
+        "attempts"
+    ]
     failed_pdf = [a for a in attempts if a["status"] == "failed"][0]
 
-    download = await client.get(
-        f"/api/v1/publishing/attempts/{failed_pdf['attempt_id']}/download"
-    )
+    download = await client.get(f"/api/v1/publishing/attempts/{failed_pdf['attempt_id']}/download")
     assert download.status_code == 409
     assert download.json()["detail"]["code"] == "download_not_available"
 
@@ -159,3 +157,22 @@ async def test_freeze_blocked_without_approved_findings(client: Any) -> None:
     body = missing.json()["detail"]
     assert body["code"] == "freeze_blocked"
     assert "approv" in body["message"].lower() or "finding" in body["message"].lower()
+
+
+async def test_freeze_persists_beyond_request_session(client: Any) -> None:
+    from flow_api.infrastructure.models.publishing import ReportSnapshot
+
+    with Session(get_engine(), expire_on_commit=False) as setup:
+        snapshot_id = await _approved_snapshot_id(setup)
+    # No dependency override: exercise the real session close/rollback boundary.
+    app = create_app()
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as http:
+        response = await http.post(
+            "/api/v1/publishing/snapshots",
+            json={"metric_snapshot_id": str(snapshot_id)},
+        )
+    assert response.status_code == 201
+    with Session(get_engine()) as reader:
+        stored = reader.get(ReportSnapshot, response.json()["id"])
+        assert stored is not None
+        assert stored.frozen_view is not None

@@ -25,6 +25,10 @@
 
 需要核对原始上下文时，再进入会话、研究和素材目录。
 
+## 当前审查修复
+
+2026-09-04：按用户批准顺序修复原审查三项 P1、六项 P2，保留既有财务口径。参见[修复设计](../superpowers/specs/2026-09-04-review-repairs-design.md)和[执行计划](../superpowers/plans/2026-09-04-review-repairs.md)；验收结果待任务完成后记录。
+
 ## 目录
 
 ```text

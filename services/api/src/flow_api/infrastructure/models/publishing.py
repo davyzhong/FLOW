@@ -30,6 +30,10 @@ class ReportSnapshot(IdentityTimestampMixin, Base):
         JSONB, nullable=False, default=dict, server_default=text("'{}'::jsonb")
     )
 
+    frozen_view: Mapped[dict[str, Any] | None] = mapped_column(
+        JSONB(none_as_null=True), nullable=True
+    )
+
     metric_snapshot: Mapped[MetricSnapshot] = relationship()
     items: Mapped[list[ReportSnapshotItem]] = relationship(
         back_populates="report_snapshot",

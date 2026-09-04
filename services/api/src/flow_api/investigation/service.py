@@ -133,26 +133,14 @@ class InvestigationService:
                 else None
             ),
             metric=MetricContext(
-                metric_code=(
-                    str(metric_definition.metric_code)
-                    if metric_definition
-                    else None
-                ),
-                metric_name=(
-                    str(metric_definition.name) if metric_definition else None
-                ),
+                metric_code=(str(metric_definition.metric_code) if metric_definition else None),
+                metric_name=(str(metric_definition.name) if metric_definition else None),
                 business_definition=(
-                    str(metric_definition.business_definition)
-                    if metric_definition
-                    else None
+                    str(metric_definition.business_definition) if metric_definition else None
                 ),
-                formula=(
-                    str(metric_definition.formula) if metric_definition else None
-                ),
+                formula=(str(metric_definition.formula) if metric_definition else None),
                 unit=str(metric_definition.unit) if metric_definition else None,
-                definition_version=(
-                    int(metric_definition.version) if metric_definition else None
-                ),
+                definition_version=(int(metric_definition.version) if metric_definition else None),
                 engine_version=str(binding.run.engine_version),
                 policy_id=str(binding.run.policy_id),
                 policy_set_hash=str(binding.run.policy_set_hash),
@@ -301,11 +289,9 @@ class InvestigationService:
         blockers: list[str] = []
         if status == "candidate":
             blockers.append("finding_not_submitted")
-        elif status == "approved":
-            return ()
         elif status == "rejected":
             blockers.append("finding_rejected")
-        if any(item == "pending" for item in evidence_statuses):
+        if not evidence_statuses or any(item == "pending" for item in evidence_statuses):
             blockers.append("evidence_pending")
         if any(item == "rejected" for item in evidence_statuses):
             blockers.append("evidence_rejected")
@@ -366,6 +352,14 @@ class InvestigationService:
                 reviewer=request.editor,
                 comment="结论已更新并提交复核",
             )
+        elif finding.status == "approved":
+            event = state_machines.apply_finding_decision(
+                session,
+                finding,
+                "returned",
+                reviewer=request.editor,
+                comment="签发后结论已更新，退回重新复核",
+            )
         else:
             event = self.repository.latest_review_event(session, finding)
             if event is None:
@@ -409,6 +403,7 @@ class InvestigationService:
             metric_snapshot_id=None,
             analysis_run_id=None,
         )
+        session.refresh(binding.finding, with_for_update=True)
         return binding.finding
 
 

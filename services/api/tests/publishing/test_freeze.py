@@ -36,9 +36,7 @@ def _approve_top_findings(session: Session, count: int = 1) -> None:
     findings = session.scalars(select(Finding).order_by(Finding.total_score.desc())).all()
     assert findings
     for finding in findings[:count]:
-        evidence = session.scalars(
-            select(Evidence).where(Evidence.finding_id == finding.id)
-        ).all()
+        evidence = session.scalars(select(Evidence).where(Evidence.finding_id == finding.id)).all()
         assert all(item.status == "verified" for item in evidence)
         session.add(
             Conclusion(
@@ -181,3 +179,207 @@ def test_succeeded_attempt_persists_reusable_stored_object(publishing_session: S
         select(StoredObject).where(StoredObject.sha256 == stored_row.sha256)
     ).all()
     assert len(duplicate_rows) == 1
+
+
+def test_frozen_report_survives_review_changes_and_reloads(publishing_session: Session) -> None:
+    from publishing.publishing_support import fresh_approved_report
+
+    from flow_api.publishing.models import view_to_json
+    from flow_api.publishing.service import build_report_view
+
+    report, view = fresh_approved_report(publishing_session)
+    original = view_to_json(view)
+    finding = publishing_session.get(Finding, view.findings[0].finding_id)
+    apply_finding_decision(publishing_session, finding, "returned", reviewer="review", comment=None)
+    publishing_session.commit()
+    publishing_session.expire_all()
+    assert view_to_json(build_report_view(publishing_session, report)) == original
+    assert render_html(build_report_view(publishing_session, report)) == render_html(view)
+
+
+def test_freeze_versions_changed_content_and_reuses_identical_content(
+    publishing_session: Session,
+) -> None:
+    from publishing.publishing_support import fresh_approved_report
+
+    report, view = fresh_approved_report(publishing_session)
+    same, _ = freeze_report_snapshot(
+        publishing_session, metric_snapshot_id=report.metric_snapshot_id
+    )
+    assert same.id == report.id
+    conclusion = publishing_session.scalar(
+        select(Conclusion).where(Conclusion.finding_id == view.findings[0].finding_id)
+    )
+    conclusion.recommendation = "新的经批准建议"
+    publishing_session.flush()
+    changed, changed_view = freeze_report_snapshot(
+        publishing_session, metric_snapshot_id=report.metric_snapshot_id
+    )
+    assert changed.id != report.id
+    assert changed.version == report.version + 1
+    assert changed_view.findings[0].conclusion["recommendation"] == "新的经批准建议"
+
+
+def test_freeze_rejects_wrong_explicit_run(publishing_session: Session) -> None:
+    from uuid import uuid4
+
+    from publishing.publishing_support import fresh_approved_report
+
+    report, _ = fresh_approved_report(publishing_session)
+    with pytest.raises(PublishingFreezeError):
+        freeze_report_snapshot(
+            publishing_session,
+            metric_snapshot_id=report.metric_snapshot_id,
+            analysis_run_id=uuid4(),
+        )
+
+
+def test_legacy_report_cannot_rebuild_current_state(publishing_session: Session) -> None:
+    from publishing.publishing_support import fresh_approved_report
+
+    from flow_api.infrastructure.models.publishing import ReportSnapshot
+    from flow_api.publishing.service import build_report_view
+
+    report, _ = fresh_approved_report(publishing_session)
+    legacy = ReportSnapshot(
+        metric_snapshot_id=report.metric_snapshot_id,
+        version=report.version + 1,
+        title="legacy",
+        template_code=report.template_code,
+    )
+    publishing_session.add(legacy)
+    publishing_session.flush()
+    with pytest.raises(PublishingFreezeError, match="重新冻结|frozen"):
+        build_report_view(publishing_session, legacy)
+
+
+def test_rejecting_evidence_returns_finding_and_preserves_frozen_history(
+    publishing_session: Session,
+) -> None:
+    from publishing.publishing_support import fresh_approved_report
+
+    from flow_api.infrastructure.models.analytics import ReviewEvent
+    from flow_api.investigation.state_machines import apply_evidence_decision
+    from flow_api.publishing.service import build_report_view
+
+    report, view = fresh_approved_report(publishing_session)
+    finding = publishing_session.get(Finding, view.findings[0].finding_id)
+    evidence = publishing_session.scalar(select(Evidence).where(Evidence.finding_id == finding.id))
+    apply_evidence_decision(
+        publishing_session, evidence, "rejected", reviewer="review", comment="否决"
+    )
+    publishing_session.commit()
+    assert finding.status == "in_review"
+    events = publishing_session.scalars(
+        select(ReviewEvent)
+        .where(ReviewEvent.finding_id == finding.id)
+        .order_by(ReviewEvent.sequence)
+    ).all()
+    assert {event.decision for event in events[-2:]} == {"returned", "evidence_rejected"}
+    with pytest.raises(PublishingFreezeError):
+        freeze_report_snapshot(publishing_session, metric_snapshot_id=report.metric_snapshot_id)
+    assert build_report_view(publishing_session, report) == view
+
+
+def test_freeze_checks_evidence_even_for_legacy_approved_finding(
+    publishing_session: Session,
+) -> None:
+    from publishing.publishing_support import fresh_approved_report
+
+    report, view = fresh_approved_report(publishing_session)
+    evidence = publishing_session.scalar(
+        select(Evidence).where(Evidence.finding_id == view.findings[0].finding_id)
+    )
+    evidence.status = "rejected"
+    publishing_session.flush()
+    with pytest.raises(PublishingFreezeError, match="evidence"):
+        freeze_report_snapshot(publishing_session, metric_snapshot_id=report.metric_snapshot_id)
+
+
+def test_new_analysis_run_does_not_rebind_old_report(publishing_session: Session) -> None:
+    from pathlib import Path
+
+    from publishing.publishing_support import (
+        ANALYSIS_POLICY,
+        approve_top_findings,
+        fresh_approved_report,
+    )
+
+    from flow_api.analysis.policy import load_analysis_policy
+    from flow_api.analysis.service import AnalysisRunService
+    from flow_api.publishing.service import build_report_view
+
+    report, original = fresh_approved_report(publishing_session)
+    policy = load_analysis_policy(Path(ANALYSIS_POLICY))
+    policy = policy.model_copy(
+        update={
+            "policy": policy.policy.model_copy(update={"engine_version": "review-test-v2"}),
+            "policy_hash": "a" * 64,
+        }
+    )
+    run = AnalysisRunService().create_run(
+        publishing_session,
+        snapshot_id=report.metric_snapshot_id,
+        loaded_policy=policy,
+    )
+    approve_top_findings(publishing_session, run_id=run.id)
+    assert build_report_view(publishing_session, report) == original
+    new_report, new_view = freeze_report_snapshot(
+        publishing_session,
+        metric_snapshot_id=report.metric_snapshot_id,
+        analysis_run_id=run.id,
+    )
+    assert new_report.version == report.version + 1
+    assert new_view.identity.analysis_run_id == str(run.id)
+    assert build_report_view(publishing_session, report) == original
+
+
+def test_frozen_payload_is_immutable_in_database(publishing_session: Session) -> None:
+    from publishing.publishing_support import fresh_approved_report
+    from sqlalchemy import text
+    from sqlalchemy.exc import DBAPIError
+
+    report, _ = fresh_approved_report(publishing_session)
+    with pytest.raises(DBAPIError, match="immutable"), publishing_session.begin_nested():
+        publishing_session.execute(
+            text("UPDATE report_snapshot SET frozen_view = '{}'::jsonb WHERE id = :id"),
+            {"id": report.id},
+        )
+
+
+def test_freeze_waits_for_evidence_rejection_and_refreshes_approval(
+    publishing_session: Session,
+) -> None:
+    from concurrent.futures import ThreadPoolExecutor, TimeoutError
+    from threading import Event
+
+    from publishing.publishing_support import fresh_approved_report
+
+    from flow_api.investigation.state_machines import apply_evidence_decision
+
+    report, view = fresh_approved_report(publishing_session)
+    started = Event()
+    with Session(publishing_session.bind) as writer, Session(publishing_session.bind) as reader:
+        # Preload the old approval in the reader to exercise ORM identity-map refresh.
+        stale = reader.get(Finding, view.findings[0].finding_id)
+        assert stale.status == "approved"
+        evidence = writer.scalar(select(Evidence).where(Evidence.finding_id == stale.id))
+        apply_evidence_decision(writer, evidence, "rejected", reviewer="review", comment=None)
+
+        def freeze_after_lock() -> None:
+            started.set()
+            try:
+                freeze_report_snapshot(reader, metric_snapshot_id=report.metric_snapshot_id)
+            finally:
+                reader.rollback()
+
+        with ThreadPoolExecutor(max_workers=1) as executor:
+            pending = executor.submit(freeze_after_lock)
+            assert started.wait(5)
+            try:
+                with pytest.raises(TimeoutError):
+                    pending.result(timeout=0.2)
+            finally:
+                writer.commit()
+            with pytest.raises(PublishingFreezeError, match="approved"):
+                pending.result(timeout=5)
