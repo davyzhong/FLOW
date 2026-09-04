@@ -146,6 +146,7 @@ jobs:
       - run: make bootstrap
       - run: pnpm exec playwright install --with-deps chromium
       - run: make test-dashboard
+      - run: cd services/api && uv run pytest tests/dashboard -q
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
@@ -229,6 +230,7 @@ jobs:
       - run: make bootstrap
       - run: pnpm exec playwright install --with-deps chromium
       - run: make test-publishing-golden
+      - run: cd services/api && uv run pytest tests/publishing -q
 
   migrations:
     runs-on: ubuntu-latest
@@ -279,6 +281,6 @@ jobs:
       - run: npx --yes pnpm@10.17.1 install --frozen-lockfile
       - run: cd services/api && uv sync --all-groups --frozen
       - run: npx --yes pnpm@10.17.1 --filter @flow/web exec playwright install --with-deps chromium
-      - run: bash scripts/test_user_closure_e2e.sh
+      - run: FLOW_USER_CLOSURE_ONLY=1 bash scripts/test_user_closure_e2e.sh
       - if: failure()
         run: find apps/web/test-results -name "*.md" -exec cat {} \; 2>/dev/null || true

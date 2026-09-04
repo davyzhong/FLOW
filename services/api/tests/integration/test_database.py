@@ -1,3 +1,5 @@
+from uuid import uuid4
+
 import pytest
 from pydantic import SecretStr
 from sqlalchemy import text
@@ -21,16 +23,23 @@ def test_postgres_transaction_is_available() -> None:
 
 
 def test_transaction_rolls_back_on_error() -> None:
-    marker = "flow_transaction_rollback_probe"
+    # A PostgreSQL temporary table belongs to one physical connection. The
+    # transaction helper deliberately returns connections to a pool, so a
+    # later transaction is not guaranteed to see the same temporary table.
+    marker = f"flow_transaction_rollback_probe_{uuid4().hex}"
 
     with transaction() as session:
-        session.execute(text(f"create temporary table {marker} (value integer)"))
+        session.execute(text(f"create table {marker} (value integer)"))
 
-    with pytest.raises(RuntimeError, match="force rollback"), transaction() as session:
-        session.execute(text(f"insert into {marker} values (1)"))
-        raise RuntimeError("force rollback")
+    try:
+        with pytest.raises(RuntimeError, match="force rollback"), transaction() as session:
+            session.execute(text(f"insert into {marker} values (1)"))
+            raise RuntimeError("force rollback")
 
-    with transaction() as session:
-        count = session.scalar(text(f"select count(*) from {marker}"))
+        with transaction() as session:
+            count = session.scalar(text(f"select count(*) from {marker}"))
+    finally:
+        with transaction() as session:
+            session.execute(text(f"drop table if exists {marker}"))
 
     assert count == 0

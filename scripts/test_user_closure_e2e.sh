@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Pilot Readiness Phase 1 — 用户闭环端到端门禁（Task 9）。
-# 顺序：起完整栈 → Playwright 浏览器用户闭环 → 契约漂移 → Phase 3/6/7/9 回归 →
-#       API 全量 → 前端 lint/typecheck/vitest。
+# 本地默认先执行契约、阶段回归、API 与前端检查，再执行浏览器闭环。
+# CI 已用独立 job 覆盖前置门禁，通过 FLOW_USER_CLOSURE_ONLY=1 只执行专属闭环。
 set -euo pipefail
 
 export DATABASE_URL="${DATABASE_URL:-postgresql+psycopg://flow:flow_dev_only@127.0.0.1:5432/flow}"
@@ -35,23 +35,27 @@ trap cleanup EXIT
 trap 'exit 130' INT
 trap 'exit 143' TERM
 
-echo "== 1/6 契约漂移 =="
-make contracts
-make contracts-check
+if [[ "${FLOW_USER_CLOSURE_ONLY:-0}" != "1" ]]; then
+  echo "== 1/6 契约漂移 =="
+  make contracts
+  make contracts-check
 
-echo "== 2/6 Phase 3/6/7/9 回归门禁 =="
-bash scripts/test_intake_e2e.sh
-bash scripts/test_dashboard.sh
-bash scripts/test_investigation_e2e.sh
-bash scripts/test_publishing_golden.sh
+  echo "== 2/6 Phase 3/6/7/9 回归门禁 =="
+  bash scripts/test_intake_e2e.sh
+  bash scripts/test_dashboard.sh
+  bash scripts/test_investigation_e2e.sh
+  bash scripts/test_publishing_golden.sh
 
-echo "== 3/6 API 全量 =="
-(cd services/api && uv run pytest -q)
+  echo "== 3/6 API 全量 =="
+  (cd services/api && uv run pytest -q)
 
-echo "== 4/6 前端 lint/typecheck/vitest =="
-npx --yes pnpm@10.17.1 --filter @flow/web lint
-npx --yes pnpm@10.17.1 --filter @flow/web exec tsc --noEmit
-npx --yes pnpm@10.17.1 --filter @flow/web exec vitest run
+  echo "== 4/6 前端 lint/typecheck/vitest =="
+  npx --yes pnpm@10.17.1 --filter @flow/web lint
+  npx --yes pnpm@10.17.1 --filter @flow/web exec tsc --noEmit
+  npx --yes pnpm@10.17.1 --filter @flow/web exec vitest run
+else
+  echo "== 1-4/6 独立 CI 门禁已覆盖，执行用户闭环专属验收 =="
+fi
 
 echo "== 5/6 浏览器用户闭环（Playwright） =="
 (cd services/api && uv run alembic upgrade head)

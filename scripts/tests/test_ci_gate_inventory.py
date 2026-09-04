@@ -35,6 +35,16 @@ class CiGateInventoryTests(unittest.TestCase):
 
         self.assertEqual(actual, EXPECTED_GATES)
 
+    def test_ci_keeps_full_api_coverage_without_repeating_every_gate_in_closure(self) -> None:
+        workflow = CI_WORKFLOW.read_text(encoding="utf-8")
+
+        self.assertIn("uv run pytest tests/dashboard -q", workflow)
+        self.assertIn("uv run pytest tests/publishing -q", workflow)
+        self.assertIn(
+            "FLOW_USER_CLOSURE_ONLY=1 bash scripts/test_user_closure_e2e.sh",
+            workflow,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

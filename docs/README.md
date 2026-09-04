@@ -64,7 +64,7 @@ flowchart TD
 | Phase 8 Copilot | [验收](implementation/phase-8-verification.md) | 成功审计持久化和批次大纲选择已修复 |
 | Phase 9 发布 | [验收](implementation/phase-9-verification.md) | 报告 JSONB 冻结、PPT 排版和下载头已修复 |
 | Phase 10 组合门禁 | [验收](implementation/phase-10-acceptance.md) | 生产部署与真实试点仍单独验收 |
-| Pilot Phase 1 用户入口 | [验收](implementation/phase-pilot-1-user-closure.md) | 页面已落地，组合 CI 仍有运行问题 |
+| Pilot Phase 1 用户入口 | [验收](implementation/phase-pilot-1-user-closure.md) | 页面已落地；组合 CI 已改为专属闭环验收，修复记录见下方 |
 | 代码审查修复 | [当前修复证据](implementation/2026-09-04-review-repairs.md) | R1–R9、N1–N3 已处理；不意味着所有其他缺口均关闭 |
 
 ## 规格、决策与接续
