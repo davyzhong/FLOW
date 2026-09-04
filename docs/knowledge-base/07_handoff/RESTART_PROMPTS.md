@@ -6,10 +6,16 @@
 请先完整阅读 docs/knowledge-base/README.md 指定的最短阅读路径，再阅读原始资料索引。不要开始实现。请输出：1）FLOW 的产品定位；2）V1 用户、行业和核心场景；3）已批准架构；4）有效、被取代和未决的关键决定；5）当前下一步；6）你发现的任何矛盾或资料缺口。每个结论请引用对应本地文件。
 ```
 
-## 从当前节点进入实施计划
+## 从当前节点继续 Pilot Readiness
 
 ```text
-请阅读 docs/knowledge-base/00_start_here/AGENT_START_HERE.md、docs/knowledge-base/04_decisions/DECISION_LOG.md 和 docs/superpowers/specs/2026-08-29-flow-v1-design.md。先确认用户已完成正式规格的最终审阅。确认后，基于“端到端窄切片”原则编写详细实施计划；不要扩大 V1 范围，也不要直接写代码。
+请按 docs/knowledge-base/README.md 的最短阅读路径读取当前状态、正式规格、D038/D039 和变更影响图，再读 docs/implementation/2026-09-04-review-repairs.md、docs/operations/authentication.md 与 docs/superpowers/plans/2026-09-03-flow-pilot-readiness-phase-2-security-deployment.md。核对当前代码与迁移头；文档基线是 2026-09-04 的 c1a59d1、0010_frozen_reports。Phase 1–10、数据工作台、报告中心与单用户认证已实现，R1–R9/N1–N3 已修复。继续安全部署剩余工作与真实对象存储补验，保留既有财务口径和不可变历史。明确区分历史门禁、本次验证、存储替身和真实存储证据；不要在真实试点前扩大 V1.1。按仓库 AGENTS.md 完成范围内验证、文档更新、清单哈希再生成、提交并推送。
+```
+
+## 核查当前部署与验收缺口
+
+```text
+请先读取当前项目状态和 2026-09-04 修复验收，再核对代码与运行环境。重点检查单用户认证的完整配置、0010_frozen_reports 升级兼容、真实 MinIO PutObject 超时、HTTPS/网络边界、备份恢复演练和结构化日志。不要改动业务数据或伪造旧报告 payload；旧快照缺少 payload 时应重新冻结。输出已验证事实、尚未验证的链路和所需补验步骤，历史测试通过不能替代当前生产就绪证据。
 ```
 
 ## 修改某个历史决定

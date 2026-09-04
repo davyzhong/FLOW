@@ -1,5 +1,8 @@
 # Phase 9 Verification — Unified Publishing
 
+> **适用性说明（2026-09-04，代码基线 `c1a59d1`）**：本文结果属于所列日期/阶段的验收快照，保留当时测试数量、环境和结论；不代表对当前提交重新执行全量测试或完成生产验收。 文末待补的报告 API/下载已在 Pilot Phase 1 落地；冻结内容持久化、存储对象与 PPT 正文等后续修复以最新验收为准。PDF 魔数/体积检查不等于逐项提取 PDF 文本验证。
+> 当前入口见[文档导航](../README.md)，后续缺陷修复与验证边界见[2026-09-04 修复验收](../implementation/2026-09-04-review-repairs.md)。
+
 Date: 2026-09-02
 Scope: `docs/superpowers/plans/2026-09-02-flow-v1-phase-9-publishing.md`
 Design: `docs/superpowers/specs/2026-08-29-flow-v1-design.md` §13.

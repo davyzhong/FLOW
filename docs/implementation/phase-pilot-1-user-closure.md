@@ -1,5 +1,8 @@
 # Pilot Readiness Phase 1 — 验证证据
 
+> **适用性说明（2026-09-04，代码基线 `c1a59d1`）**：本文结果属于所列日期/阶段的验收快照，保留当时测试数量、环境和结论；不代表对当前提交重新执行全量测试或完成生产验收。 Pilot Phase 1 的实现和历史门禁已交付；后续审查发现的跨步骤缺陷另有补修。最新真实对象存储发布验收仍有限制。
+> 当前入口见[文档导航](../README.md)，后续缺陷修复与验证边界见[2026-09-04 修复验收](../implementation/2026-09-04-review-repairs.md)。
+
 > 对应计划：`docs/superpowers/plans/2026-09-02-flow-pilot-readiness-phase-1-user-closure.md`
 > 状态：**✅ 出口门禁已通过（exit=0）**，Task 1–9 全部完成；CI job 独立化与基线 tag 已落地。
 
@@ -40,8 +43,8 @@
 5. Next 16 单 dev 服务器限制导致并发栈互踢 —— 门禁顺序调整为回归先行、
    浏览器闭环最后自管栈（本轮）。
 
-## 待完成（移入下一阶段）
+## 后续状态（2026-09-04 更正）
 
-- CI workflow 的 user-closure 独立 job（门禁脚本已就绪，仅剩 workflow YAML）；
+- CI workflow 的 `user-closure-e2e` 独立 job 已在 `a1662e8` 落地（2026-09-04 更正：不再列为下一阶段待办）；
 - 指标阈值和预警规则明细；最小安全部署（D038 下一步）。
 

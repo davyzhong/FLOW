@@ -1,5 +1,8 @@
 # FLOW Review Repairs Implementation Plan
 
+> **适用性说明（2026-09-04，代码基线 `c1a59d1`）**：本计划 R1–R9 已实施；随后追加 N1–N3 亦已修复。正文任务记录保留，不能将已关闭缺陷重新列为待实现范围。
+> 当前入口见[文档导航](../../README.md)，后续缺陷修复与验证边界见[2026-09-04 修复验收](../../implementation/2026-09-04-review-repairs.md)。
+
 > **For agentic workers:** Use subagent-driven-development or executing-plans task-by-task; user has authorized implementation of the reviewed fixes.
 
 **Goal:** 修复 R1–R9，先完成三项 P1 再处理六项 P2。

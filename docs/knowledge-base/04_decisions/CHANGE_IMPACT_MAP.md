@@ -6,14 +6,18 @@
 
 ## 核心依赖链
 
-```text
-行业与用户
-→ 数据域和标准模板
-→ 标准数据中间层
-→ 指标与 Driver Model
-→ 驾驶舱和 Investigation
-→ Finding、证据和 AI 上下文
-→ PPT、Excel 和正式月报
+```mermaid
+flowchart LR
+    A[行业与用户] --> B[数据契约 / 模板 / 映射]
+    B --> C[标准数据中间层]
+    C --> D[指标快照与分析运行]
+    D --> E[驾驶舱与 Investigation]
+    E --> F[Finding / Evidence / 审批]
+    F --> G[冻结报告 JSONB]
+    G --> H[PPTX / XLSX / HTML / PDF]
+    F --> I[受约束 AI 与审计]
+    J[认证 / 代理 / 存储 / 部署] -. 运行边界 .-> E
+    J -. 运行边界 .-> H
 ```
 
 ## 变更影响表
@@ -33,6 +37,10 @@
 | Investigation 审批资格规则改变（D037） | 状态机与迁移 0008 | Investigation API/工作台、Phase 8 AI 上下文、Phase 9 报告资格判定 |
 | 产品定位收敛为准确财务分析（D039） | 路线图排序、叙事与品牌约束 | 经营判断相关远期项、试点验证重点（准确性承诺）、报告章节结构、正式品牌释义 |
 | 输出格式增加 Word | Publishing Renderer | 模板、分页、字体、回归测试和版本记录 |
+| 冻结报告载荷或渲染规则改变（D028，迁移 0010） | JSONB 冻结内容、版本判定、不可变触发器 | 四格式黄金值、并发冻结/审批锁、事务提交；旧无 payload 快照需重新冻结，不能补造历史 |
+| 人工映射与质量警告确认改变 | MappingVersion、源 SHA/批次身份、发布资格 | `/data` 状态刷新、失败恢复、标准化导出、Intake API 与生成契约 |
+| 单用户登录与代理认证改变 | AUTH_TOKEN、签名会话、公开 origin | 匿名拒绝、会话到期/轮换、Origin 检查、HTTPS cookie、下载头与同源浏览器链路 |
+| 对象存储配置或传输改变 | 原始文件、内容寻址、发布产物 | 真实 PutObject/GetObject、SHA 校验、下载、重试、备份恢复；存储替身不能替代真实链路验收 |
 | 部署方式确定 | 技术架构 | 鉴权、存储、文件安全、模型接入和运维 |
 | 试点数据字段或口径改变 | Intake Mapping、canonical 与指标目录 | 对账、Driver、Finding、Dashboard、报告及脱敏规则 |
 | 依据试点调整 V1.1 范围（D038） | 产品优先级与验收标准 | 决策日志、实施计划、数据契约、用户旅程和发布说明 |
@@ -119,18 +127,24 @@
 1. 决策日志 D025–D028；
 2. `unified-publishing.html`；
 3. 两份 PPT 研究资料；
-4. 正式规格第 13 章。
+4. 正式规格第 13 章；
+5. `docs/implementation/2026-09-04-review-repairs.md` 与迁移 `0010_frozen_reports`。
+
+当前冻结内容已完整持久化为 JSONB，渲染只能消费冻结内容；审批、冻结与证据变更需要一致的锁和事务边界。改变已批准结论或拒绝证据会退回复核，不能依靠旧 approved 状态继续冻结。
 
 ## 从 Pilot Readiness 节点重启
 
-适用场景：补齐 Excel 导入/报告下载闭环、确定部署拓扑、开展脱敏真实数据试点或据此调整 V1.1。
+适用场景：维护已实现的 Excel 导入/报告下载闭环、完成安全部署和真实对象存储补验、开展脱敏真实数据试点或据此调整 V1.1。状态基线为 2026-09-04 的 `c1a59d1`。
 
 建议读取：
 
 1. 决策日志 D038；
 2. `docs/implementation/phase-10-acceptance.md`；
-3. 当前 Pilot Readiness 实施计划与试点证据目录；
-4. Phase 3 Intake、Phase 6 Dashboard、Phase 7 Investigation 和 Phase 9 Publishing 的验证记录。
+3. `docs/superpowers/plans/2026-09-03-flow-pilot-readiness-phase-2-security-deployment.md`；
+4. `docs/operations/authentication.md` 与 `docs/implementation/2026-09-04-review-repairs.md`；
+5. `docs/implementation/phase-pilot-1-user-closure.md` 与 Phase 3/6/7/9 历史验证记录。
+
+当前已完成单用户认证，但备份恢复、HTTPS 部署、结构化日志及真实试点仍待完成。独立 MinIO 建桶/列桶成功不等于上传链路成功；PutObject 超时须独立解决并补验，不得以历史门禁或存储替身替代。
 
 试点修改不得绕过数据中间层或重新定义已发布历史；新增字段、指标或 Driver 必须版本化，并重新运行全部受影响门禁。只有试点中的可复核证据才能改变 V1.1 优先级。
 

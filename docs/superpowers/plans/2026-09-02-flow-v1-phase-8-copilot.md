@@ -1,5 +1,8 @@
 # FLOW V1 Phase 8 AI Copilot Implementation Plan
 
+> **适用性说明（2026-09-04，代码基线 `c1a59d1`）**：Phase 8 功能切片已有实现与[阶段验收](../../implementation/phase-8-verification.md)。正文步骤、示例代码及未勾选项保留当时计划语境，不构成当前待办清单，也不表示已对当前提交重跑全部门禁。 接入映射、审批资格、Copilot 审计或冻结报告相关实现以本次修复验收为补充。
+> 当前入口见[文档导航](../../README.md)，后续缺陷修复与验证边界见[2026-09-04 修复验收](../../implementation/2026-09-04-review-repairs.md)。
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:executing-plans` task-by-task. Apply `superpowers:test-driven-development` to every behavior change and `superpowers:verification-before-completion` before declaring the phase complete. Keep the seven root-level user files untracked and out of every commit.
 
 **Goal:** Ship a bounded, evidence-first AI Copilot that can explain mappings, answer investigation questions, and draft report outlines — using only allow-listed context packets, always separating facts/judgments/hypotheses/questions, always citing referenced object IDs, and never inventing numbers or touching unapproved findings.

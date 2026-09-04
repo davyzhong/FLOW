@@ -1,5 +1,7 @@
 # FLOW V1 指标语义字典
 
+核对基线：2026-09-04，代码 `c1a59d1`。
+
 版本：`flow.metrics.logistics.v1`<br>
 引擎：`flow.metrics.engine.v1`<br>
 默认分析截止月：`2026-08`
@@ -67,18 +69,22 @@
 
 ## 4. 依赖图
 
-```text
-orders ───────────────┐
-revenue ──────────────┼─> revenue_per_order
-                      │
-direct_cost ──────────┼─> cost_per_order
-                      │
-revenue + direct_cost ──> gross_profit
-gross_profit + revenue ─> gross_margin
-direct_cost + revenue ──> fulfillment_cost_rate
-
-operating_cash_flow + operating_profit ─> cash_conversion
-ar_balance + trailing_12 revenue ────────> dso
+```mermaid
+flowchart LR
+  orders --> revenue_per_order
+  revenue --> revenue_per_order
+  orders --> cost_per_order
+  direct_cost --> cost_per_order
+  revenue --> gross_profit
+  direct_cost --> gross_profit
+  gross_profit --> gross_margin
+  revenue --> gross_margin
+  direct_cost --> fulfillment_cost_rate
+  revenue --> fulfillment_cost_rate
+  operating_cash_flow --> cash_conversion
+  operating_profit --> cash_conversion
+  ar_balance --> dso
+  revenue -->|trailing_12| dso
 ```
 
 持久化时，每条依赖按目录声明顺序写入 `metric_definition_dependency.position`；每个值的 `calculation_trace` 保存依赖指标的精确值与源事实行数。
@@ -109,3 +115,17 @@ ar_balance + trailing_12 revenue ────────> dso
 - 机器可读摘要：`scripts/summarize_metrics.py`。
 
 标准 FLOW 工作簿与非标准外部物流工作簿必须通过完整 Intake→canonical→Metric Snapshot 链路得到不同的 `import_version_id`，但得到相同的定义哈希、值指纹与全部精确业务值。
+
+## 7. 构建与下游消费
+
+`MetricSnapshotService.create_snapshot` 同步读取当前已发布导入、计算完整结果、按完整身份复用历史或创建 `building → published` 快照；事务由调用方完成提交。失败不留下部分发布结果。Intake HTTP 发布入口目前没有自动调用该服务，Celery 骨架也没有执行指标计算，不能把导入成功等同于 Dashboard 已更新。
+
+| 消费者 | 读取边界 |
+|---|---|
+| Analysis Engine | 绑定快照与 canonical 来源，按策略版本生成 AnalysisRun / Drivers / Findings |
+| Dashboard | 已发布 MetricSnapshot 与 AnalysisRun 的只读投影；保留 batch/import/snapshot/run 身份 |
+| Investigation | 同一 Finding 与四项交接身份；只展示、追溯和复核，不重算分析金额 |
+| Copilot | 受约束对象上下文、引用与数字校验；不自行计算 |
+| Publishing | 冻结时读取合格对象，后续多格式渲染只读 JSONB ReportView，不随实时复核状态变化 |
+
+修改指标公式、目录或引擎身份必须创建新版本，并同时复核已知答案、分析不变量与下游报告。财务口径与业务阈值以目录和正式决策为准，不由文档同步任务调整。

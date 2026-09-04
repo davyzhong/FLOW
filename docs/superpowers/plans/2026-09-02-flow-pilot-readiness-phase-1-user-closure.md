@@ -1,5 +1,8 @@
 # FLOW Pilot Readiness Phase 1 — Excel Intake and Report Delivery Plan
 
+> **适用性说明（2026-09-04，代码基线 `c1a59d1`）**：Pilot Phase 1 已有[历史出口门禁记录](../../implementation/phase-pilot-1-user-closure.md)，用户闭环实现及后续发现的映射、警告确认、冻结和下载问题已有补修。原始步骤保留；历史门禁通过不等于当前真实对象存储发布链路已通过验收。
+> 当前入口见[文档导航](../../README.md)，后续缺陷修复与验证边界见[2026-09-04 修复验收](../../implementation/2026-09-04-review-repairs.md)。
+
 > **Execution rule:** Apply `superpowers:test-driven-development` to every behavior change,
 > `superpowers:systematic-debugging` to failures, and
 > `superpowers:verification-before-completion` before closing the phase. Keep the seven

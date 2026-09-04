@@ -1,5 +1,8 @@
 # FLOW V1 Phase 2 Canonical Fixture & Excel Contract Implementation Plan
 
+> **适用性说明（2026-09-04，代码基线 `c1a59d1`）**：Phase 2 功能切片已有实现与[阶段验收](../../implementation/phase-2-verification.md)。正文步骤、示例代码及未勾选项保留当时计划语境，不构成当前待办清单，也不表示已对当前提交重跑全部门禁。
+> 当前入口见[文档导航](../../README.md)，后续缺陷修复与验证边界见[2026-09-04 修复验收](../../implementation/2026-09-04-review-repairs.md)。
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:executing-plans` to implement this plan task-by-task. Every implementation task follows test-driven development and ends with a scoped commit and push.
 
 **Goal:** Freeze `flow.excel.v1` as FLOW's first executable data contract, produce a deterministic logistics-supply-chain reference dataset and standard Excel workbook, and prove that workbook import, PostgreSQL canonical persistence, and workbook export preserve meaning exactly.

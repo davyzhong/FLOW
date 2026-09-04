@@ -1,5 +1,7 @@
 # FLOW 视觉原型索引
 
+> 2026-09-04：本文登记历史设计原型；当前已实现页面请看[真实截图](../../assets/screenshots/README.md)与[项目 README](../../../README.md)。原型是方向依据，不代表当前代码已经达到全部视觉细节。
+
 位置：[visual_prototypes](../03_assets/visual_prototypes)
 
 这些 HTML 文件是浏览器视觉伴随工具保存的设计片段。它们用于记录设计过程，不是生产前端代码。

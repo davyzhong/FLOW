@@ -1,5 +1,8 @@
 # FLOW Phase 6 驾驶舱视觉保真记录
 
+> **适用性说明（2026-09-04，代码基线 `c1a59d1`）**：本文结果属于所列日期/阶段的验收快照，保留当时测试数量、环境和结论；不代表对当前提交重新执行全量测试或完成生产验收。
+> 当前入口见[文档导航](../README.md)，后续缺陷修复与验证边界见[2026-09-04 修复验收](../implementation/2026-09-04-review-repairs.md)。
+
 对比日期：2026-09-01
 
 批准参考：`docs/knowledge-base/03_assets/visual_prototypes/dashboard-density-v2.html`

@@ -1,5 +1,8 @@
 # FLOW V1 Phase 5 Analysis & Findings Implementation Plan
 
+> **适用性说明（2026-09-04，代码基线 `c1a59d1`）**：Phase 5 功能切片已有实现与[阶段验收](../../implementation/phase-5-verification.md)。正文步骤、示例代码及未勾选项保留当时计划语境，不构成当前待办清单，也不表示已对当前提交重跑全部门禁。
+> 当前入口见[文档导航](../../README.md)，后续缺陷修复与验证边界见[2026-09-04 修复验收](../../implementation/2026-09-04-review-repairs.md)。
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:executing-plans` task-by-task. Apply `superpowers:test-driven-development` to every behavior change and `superpowers:verification-before-completion` before declaring the phase complete. Keep the seven root-level user files untracked and out of every commit.
 
 **Goal:** Publish one immutable Analysis Run from a Phase 4 Metric Snapshot and its version-bound canonical detail, with five reconciled analysis results, deterministic evidence-complete Finding candidates, transparent ranking, and explicit degradation.

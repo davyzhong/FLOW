@@ -1,5 +1,8 @@
 # FLOW V1 Phase 1 Foundation & Contracts Implementation Plan
 
+> **适用性说明（2026-09-04，代码基线 `c1a59d1`）**：Phase 1 功能切片已有实现与[阶段验收](../../implementation/phase-1-verification.md)。正文步骤、示例代码及未勾选项保留当时计划语境，不构成当前待办清单，也不表示已对当前提交重跑全部门禁。
+> 当前入口见[文档导航](../../README.md)，后续缺陷修复与验证边界见[2026-09-04 修复验收](../../implementation/2026-09-04-review-repairs.md)。
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Establish a reproducible FLOW development stack, durable object identities, initial PostgreSQL schema, versioned API contract, generated web client, and CI gates on which every later V1 phase can safely build.

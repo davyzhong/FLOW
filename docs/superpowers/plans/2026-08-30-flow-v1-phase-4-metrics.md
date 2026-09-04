@@ -1,5 +1,8 @@
 # FLOW V1 Phase 4 Metric Snapshots Implementation Plan
 
+> **适用性说明（2026-09-04，代码基线 `c1a59d1`）**：Phase 4 功能切片已有实现与[阶段验收](../../implementation/phase-4-verification.md)。正文步骤、示例代码及未勾选项保留当时计划语境，不构成当前待办清单，也不表示已对当前提交重跑全部门禁。
+> 当前入口见[文档导航](../../README.md)，后续缺陷修复与验证边界见[2026-09-04 修复验收](../../implementation/2026-09-04-review-repairs.md)。
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:executing-plans` to implement this plan task-by-task. Apply `superpowers:test-driven-development` to every behavior change and `superpowers:verification-before-completion` before the phase is declared complete. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Turn one published canonical import into an immutable, versioned Metric Snapshot whose month, YTD, budget, prior-year and trailing-12 values exactly match frozen Decimal oracles and can be reused unchanged by dashboards, Investigation and reports.

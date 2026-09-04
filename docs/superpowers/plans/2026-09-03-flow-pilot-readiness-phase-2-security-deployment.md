@@ -1,5 +1,8 @@
 # FLOW Pilot Readiness Phase 2 — 最小安全部署计划
 
+> **适用性说明（2026-09-04，代码基线 `c1a59d1`）**：本计划仍是当前推进依据，但仅 Task A/B 的 API 认证及浏览器登录会话已实现并有定向验收；以[认证运行说明](../../operations/authentication.md)中的配置与实际路由行为为准。Task C–G（密钥与部署加固、备份恢复、日志、完整出口门禁及阶段证据）尚未完成；`make test-security-deployment-e2e` 仍是计划目标，不能直接当作现有命令。
+> 当前入口见[文档导航](../../README.md)，后续缺陷修复与验证边界见[2026-09-04 修复验收](../../implementation/2026-09-04-review-repairs.md)。
+
 > **Execution rule:** Apply `superpowers:test-driven-development` to every behavior change,
 > `superpowers:systematic-debugging` to failures, and
 > `superpowers:verification-before-completion` before closing the phase. Keep the seven

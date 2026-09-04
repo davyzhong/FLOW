@@ -22,9 +22,19 @@
 
 ## 场景二：从当前状态继续
 
-V1 主实施路线图和 Phase 1 详细计划已经完成。当前可按 `docs/superpowers/plans/2026-08-30-flow-v1-phase-1-foundation.md` 开始基础架构与对象契约实施，不应跳过测试先行步骤或阶段验收门槛。
+截至 2026-09-04（代码基线 `c1a59d1`），Phase 1–10 功能窄切片、Pilot Phase 1 数据工作台/报告中心和单用户认证已实现；当前从 Pilot Phase 2 安全部署剩余工作继续，不再从 Phase 1 基础架构启动。
 
-Phase 1 完成后，依据已验证的迁移版本和接口契约编写 Phase 2 数据契约可执行任务单，再进入标准 Excel 模板与模拟数据开发。完整顺序、依赖关系和十阶段退出门槛见 `docs/superpowers/plans/2026-08-30-flow-v1-master-roadmap.md`。
+优先阅读以下文件（路径以仓库根目录为基准）：
+
+1. `docs/implementation/2026-09-04-review-repairs.md`：R1–R9、N1–N3 最新修复、定向验收与真实存储限制；
+2. `docs/operations/authentication.md`：AUTH_TOKEN、FLOW_WEB_PASSWORD、FLOW_WEB_ORIGIN 与签名会话；
+3. `docs/superpowers/plans/2026-09-03-flow-pilot-readiness-phase-2-security-deployment.md`：核对已完成 A/B，补齐其余安全部署任务；
+4. `docs/implementation/phase-pilot-1-user-closure.md` 与 `docs/implementation/phase-10-acceptance.md`：历史门禁及其边界；
+5. `docs/knowledge-base/04_decisions/CHANGE_IMPACT_MAP.md`：确定变更传播范围。
+
+先检查当前代码、迁移与服务配置。迁移头为 `0010_frozen_reports`，升级执行 `cd services/api && uv run alembic upgrade head`；旧快照缺少冻结 payload 时不可重渲染，已有产物可下载，需要新输出时从符合审批条件的数据重新冻结。
+
+剩余工作包括真实 MinIO PutObject 超时调查与全链路补验、备份恢复、HTTPS 部署/回滚、密钥与网络边界、结构化日志。完成独立部署验收后再用脱敏真实数据检验准确性，依据试点证据确定 V1.1。浏览器导入的存储替身验证、真实认证验证与真实 S3 验收必须分别记录，不得互相替代。
 
 ## 场景三：修改已批准设计
 
@@ -54,18 +64,13 @@ Phase 1 完成后，依据已验证的迁移版本和接口契约编写 Phase 2 
 - 任何新指标都必须说明标准数据依赖和计算口径；
 - 任何新输出都必须引用同一 Report Snapshot。
 
-## 当前未决但不阻塞归档的事项
+## 已确定与仍待完成的边界
 
-- Web 技术栈和应用框架；
-- 数据库和文件存储产品；
-- 模型供应商与 AI 执行方式；
-- 部署拓扑、鉴权和企业安全细节；
-- 标准 Excel 模板的最终字段全集；
-- 完整指标字典和阈值；
-- PPT 与月报的品牌视觉规范；
-- FLOW 的最终英文全称。
-
-这些事项应在实施计划或对应子系统设计阶段逐项确认。
+- 已确定：Next.js + FastAPI + Celery，PostgreSQL + Redis + S3 兼容存储；`flow.excel.v1` 标准契约、15 个版本化指标、5 个确定性 Playbook；
+- 已实现：数据工作台、报告中心、API Bearer token 和单用户登录；未实现多角色、SSO 或多租户；
+- 待完成：安全部署拓扑落地与验收、备份恢复、结构化日志、真实存储补验及真实数据试点；
+- 待试点细化：指标阈值、企业报告品牌模板与正式品牌释义；
+- AI 默认确定性/脚本 provider 与固定评估已落地，live provider 仍为 opt-in，不进入 CI。
 
 ## 任务完成与 GitHub 交付
 

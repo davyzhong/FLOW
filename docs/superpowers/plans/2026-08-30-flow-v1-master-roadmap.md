@@ -1,5 +1,8 @@
 # FLOW V1 Master Implementation Roadmap
 
+> **适用性说明（2026-09-04，代码基线 `c1a59d1`）**：本路线图保留 V1 Phase 1–10 原始分期；功能窄切片已交付，Phase 10 的部署、备份恢复和深度可观测性按 D038 转入 Pilot Readiness。当前为 Pilot Phase 2 部分完成，不应从历史任务列表推断生产就绪。
+> 当前入口见[文档导航](../../README.md)，后续缺陷修复与验证边界见[2026-09-04 修复验收](../../implementation/2026-09-04-review-repairs.md)。
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Deliver a deployable end-to-end FLOW V1 that converts logistics-supply-chain Excel data into a canonical financial data layer, deterministic analysis, evidence-backed Finance BP findings, and consistent PPTX/XLSX/HTML/PDF outputs.

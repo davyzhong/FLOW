@@ -1,5 +1,8 @@
 # FLOW V1 Phase 3 Intake, Mapping & Quality Implementation Plan
 
+> **适用性说明（2026-09-04，代码基线 `c1a59d1`）**：Phase 3 功能切片已有实现与[阶段验收](../../implementation/phase-3-verification.md)。正文步骤、示例代码及未勾选项保留当时计划语境，不构成当前待办清单，也不表示已对当前提交重跑全部门禁。 接入映射、审批资格、Copilot 审计或冻结报告相关实现以本次修复验收为补充。
+> 当前入口见[文档导航](../../README.md)，后续缺陷修复与验证边界见[2026-09-04 修复验收](../../implementation/2026-09-04-review-repairs.md)。
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:executing-plans` task-by-task. Apply `superpowers:test-driven-development` to every behavior change and `superpowers:verification-before-completion` before the phase is declared complete.
 
 **Goal:** Accept both a valid `flow.excel.v1` workbook and a deliberately non-standard external workbook, preserve the original bytes, identify and map their data into the frozen canonical contract, produce auditable transformations and quality results, and atomically publish an immutable import version only when every blocking gate passes.

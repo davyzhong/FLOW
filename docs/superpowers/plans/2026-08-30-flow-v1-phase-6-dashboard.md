@@ -1,5 +1,8 @@
 # FLOW V1 Phase 6 Finance BP Dashboard Implementation Plan
 
+> **适用性说明（2026-09-04，代码基线 `c1a59d1`）**：Phase 6 功能切片已有实现与[阶段验收](../../implementation/phase-6-verification.md)。正文步骤、示例代码及未勾选项保留当时计划语境，不构成当前待办清单，也不表示已对当前提交重跑全部门禁。
+> 当前入口见[文档导航](../../README.md)，后续缺陷修复与验证边界见[2026-09-04 修复验收](../../implementation/2026-09-04-review-repairs.md)。
+
 > **Execution mode:** Autonomous, test-driven, checkpoint commits to `main`, push every completed task.
 
 **Goal:** Deliver a production Finance BP dashboard that projects published Metric Snapshots and Analysis Runs through one typed API/client boundary, preserves the approved high-density design, and passes API, component, accessibility, network-boundary, and visual-regression gates.

@@ -45,6 +45,8 @@ FLOW 是面向物流供应链企业 Finance BP 的 AI 财务分析工作台：�
 
 ## 当前状态
 
+状态核对日期：2026-09-04，代码基线 `c1a59d1`。下列 Phase 1–10 的验收描述是各阶段历史结果；最新修复证据见[审查修复验收](../../implementation/2026-09-04-review-repairs.md)，不代表重新运行全部历史门禁。
+
 - 产品研究：完成；
 - 关键产品决策：完成；
 - 信息架构和核心页面原型：完成并确认；
@@ -65,12 +67,15 @@ FLOW 是面向物流供应链企业 Finance BP 的 AI 财务分析工作台：�
 - Phase 9 Unified Publishing：完成，PPTX/XLSX/HTML/PDF 均从同一冻结 Report Snapshot 渲染并通过跨格式关键值一致性门禁；
 - Phase 10 Acceptance Suite：功能验收组合门禁已完成；部署、权限、备份恢复和深度可观测性明确顺延到 Pilot Readiness；
 - 运行栈：Next.js、FastAPI、Celery、PostgreSQL、Redis、MinIO 已可构建启动；
-- 数据库对象：接入、血缘、标准事实、指标、分析和发布三层 migration 已落地；
+- 数据库对象：接入、血缘、标准事实、指标、分析、审阅、Copilot 审计与报告冻结内容均已落地，迁移头为 `0010_frozen_reports`；
 - API 合约：`/api/v1/health`、`/api/v1/workspace` 与生成式 TypeScript 类型已落地；
 - 数据契约：`flow.excel.v1`、10 张工作表标准模板、确定性物流 fixture、已知答案和数据库语义往返已落地；
 - 非标准 Excel 识别与映射、版本化导入和原子发布：已落地；
 - `flow.metrics.logistics.v1` 的 15 个指标、14 条依赖、比较窗口、精确计算轨迹和不可变 Metric Snapshot：已落地；
-- 当前缺口不是核心计算引擎，而是 Excel 导入与报告下载的可用用户闭环、最小安全部署和脱敏真实数据试点。
+- Pilot 用户闭环：`/data` 数据工作台和 `/reports` 报告中心已落地，包含模板下载、上传、映射修正、质量警告确认、发布、标准化 XLSX 导出及报告冻结/生成/下载；
+- 单用户认证：API Bearer token、Web 登录会话、受保护同源代理与反代公开 origin 已落地，配置见[认证说明](../../operations/authentication.md)；不包含多角色权限或多租户；
+- 审查 R1–R9 与追加 N1–N3 已修复；报告持久化完整冻结 JSONB 内容，旧快照缺少 payload 时不能重新渲染，需重新冻结；
+- 当前缺口：真实对象存储上传链路的超时尚未解决，备份恢复、HTTPS 部署、网络加固、结构化日志及脱敏真实数据试点尚未完成。
 
 ## 新 Agent 的工作规则
 
@@ -88,4 +93,4 @@ FLOW 是面向物流供应链企业 Finance BP 的 AI 财务分析工作台：�
 
 ## 当前下一步
 
-当前处于 Pilot Readiness。严格按 D038 顺序推进：仓库与验收基线修复 → Excel 导入和报告下载用户闭环 → 最小安全部署 → 脱敏真实数据试点 → 依据试点证据决定 V1.1。不要把“Phase 1–10 功能窄切片完成”误写成“已生产就绪”，也不要在真实试点前凭研究材料扩张 V1.1。修改任何已冻结契约前，先查阅决策日志与变更影响图。
+当前处于 Pilot Readiness。D038 前两步已有实现与历史验收，当前继续[最小安全部署计划](../../superpowers/plans/2026-09-03-flow-pilot-readiness-phase-2-security-deployment.md)：以已实现的单用户认证为起点，补齐密钥与网络边界、备份恢复、HTTPS、结构化日志及部署门禁，同时解决真实 MinIO PutObject 超时并补验完整上传/发布/下载链路；随后开展脱敏真实数据试点，再依据证据决定 V1.1。不要把“Phase 1–10 功能窄切片完成”误写成“已生产就绪”，也不要在真实试点前凭研究材料扩张 V1.1。修改任何已冻结契约前，先查阅决策日志与变更影响图。
