@@ -27,7 +27,7 @@
 
 ## 当前审查修复
 
-2026-09-04：按用户批准顺序修复原审查三项 P1、六项 P2，保留既有财务口径。参见[修复设计](../superpowers/specs/2026-09-04-review-repairs-design.md)和[执行计划](../superpowers/plans/2026-09-04-review-repairs.md)；九项均已修复，验证范围与部署兼容见[修复验收](../implementation/2026-09-04-review-repairs.md)。
+2026-09-04：按用户批准顺序修复原审查三项 P1、六项 P2，保留既有财务口径。参见[修复设计](../superpowers/specs/2026-09-04-review-repairs-design.md)和[执行计划](../superpowers/plans/2026-09-04-review-repairs.md)；原九项及追加 N1–N3 均已修复，验证范围与部署兼容见[修复验收](../implementation/2026-09-04-review-repairs.md)。
 
 ## 目录
 

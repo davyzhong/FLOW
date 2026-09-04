@@ -43,6 +43,9 @@ jobs:
 
   unit:
     runs-on: ubuntu-latest
+    env:
+      # Keep this job independent of PostgreSQL, including on developer machines.
+      DATABASE_URL: postgresql+psycopg://flow:flow_dev_only@127.0.0.1:1/flow
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
@@ -52,11 +55,8 @@ jobs:
       - run: cd services/api && uv sync --all-groups --frozen
       - run: >-
           cd services/api && uv run pytest
-          tests/domain tests/api tests/test_health.py
-          --ignore=tests/api/test_intake.py
-          --ignore=tests/api/test_dashboard.py
-          --ignore=tests/api/test_investigations.py
-          --ignore=tests/api/test_copilot.py -q
+          tests/domain tests/api/test_auth_boundary.py
+          tests/api/test_workspace.py tests/test_health.py -q
 
   integration:
     runs-on: ubuntu-latest
@@ -71,7 +71,9 @@ jobs:
       - run: cd services/api && uv run alembic upgrade head
       - run: >-
           cd services/api && uv run pytest tests/integration tests/investigation tests/copilot
-          tests/api/test_dashboard.py tests/api/test_investigations.py tests/api/test_copilot.py -q
+          tests/api -q
+          --ignore=tests/api/test_auth_boundary.py
+          --ignore=tests/api/test_workspace.py
 
   data-contract:
     runs-on: ubuntu-latest

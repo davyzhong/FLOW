@@ -49,7 +49,8 @@ export class FlowApiError extends Error {
   }
 }
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_FLOW_API_URL ?? "";
+// Browser sessions belong to the same-origin proxy; never call a protected API directly.
+const API_BASE_URL = "";
 
 function requestUrl(path: string): URL {
   if (!path.startsWith("/api/v1/") || path.includes("..")) {

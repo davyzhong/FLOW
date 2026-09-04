@@ -11,19 +11,12 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
-from alembic import command
-from alembic.config import Config
 from httpx import ASGITransport, AsyncClient
 
 from flow_api.main import create_app
 from flow_api.settings import get_settings
 
 TEST_TOKEN = "unit-test-token-0123456789"
-
-
-@pytest.fixture(scope="module", autouse=True)
-def migrated_database() -> None:
-    command.upgrade(Config("alembic.ini"), "head")
 
 
 @pytest.fixture(scope="module", autouse=True)

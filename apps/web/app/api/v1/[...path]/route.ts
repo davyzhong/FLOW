@@ -1,4 +1,5 @@
 import type { NextRequest } from "next/server";
+import { authConfig, sameOrigin, SESSION_COOKIE, validSession } from "../../../../lib/auth/session";
 
 const apiInternalUrl = process.env.FLOW_API_INTERNAL_URL ?? "http://127.0.0.1:8000";
 
@@ -20,6 +21,21 @@ export async function bufferedProxyResponse(response: Response): Promise<Respons
 }
 
 async function forward(request: NextRequest, context: RouteContext): Promise<Response> {
+  let authorization = request.headers.get("authorization");
+  try {
+    const config = authConfig();
+    if (config) {
+      if (!validSession(request.cookies.get(SESSION_COOKIE)?.value, config)) {
+        return Response.json({ detail: { code: "unauthorized", message: "请先登录" } }, { status: 401 });
+      }
+      if (!["GET", "HEAD"].includes(request.method) && !sameOrigin(request)) {
+        return Response.json({ detail: { code: "invalid_origin", message: "请求来源无效" } }, { status: 403 });
+      }
+      authorization = `Bearer ${config.token}`;
+    }
+  } catch {
+    return Response.json({ detail: { code: "auth_unavailable", message: "登录配置不完整" } }, { status: 503 });
+  }
   const { path } = await context.params;
   const upstream = new URL(`/api/v1/${path.join("/")}`, apiInternalUrl);
   upstream.search = request.nextUrl.search;
@@ -36,6 +52,7 @@ async function forward(request: NextRequest, context: RouteContext): Promise<Res
       method: request.method,
       headers: {
         Accept: "application/json",
+        ...(authorization ? { Authorization: authorization } : {}),
         ...(isRead || body instanceof FormData ? {} : { "Content-Type": contentType }),
       },
       body,

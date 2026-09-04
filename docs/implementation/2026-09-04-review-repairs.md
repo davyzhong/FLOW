@@ -16,7 +16,7 @@
 | R8 P2 PPT 正文不可见 | 正文使用有效宽高、明确字号和分页；完整指标总览保留所有指标。 |
 | R9 P2 下载名称丢失 | 代理透传 Content-Disposition、no-store 和 nosniff；无文件名时按实际格式补扩展名。 |
 
-同步生成 OpenAPI 与 TypeScript 契约，顺带解决最新审查的 N2 契约漂移。最新审查 N1（启用认证后的前端代理凭证）和 N3（认证测试与 CI 数据库依赖）仍待单独处理，不属于本次九项范围。
+同步生成 OpenAPI 与 TypeScript 契约，顺带解决最新审查的 N2 契约漂移。用户随后要求继续修复，现已补齐 N1 与 N3：N1 增加单用户登录会话、受保护代理与反代公开 origin；N3 移除认证测试迁移并修正 CI 分组。配置见[认证说明](../operations/authentication.md)。
 
 ## 验证证据
 
@@ -43,3 +43,10 @@
 部署新代码前执行 `cd services/api && uv run alembic upgrade head`，应用新增 `0010_frozen_reports`。迁移不伪造历史冻结内容：旧快照已生成的产物仍可下载，但缺少冻结 payload 的旧快照不能重新渲染，需从当前满足审批条件的数据重新冻结。PDF 成功打印仍需既有 Chromium 打印运行环境，本次未替代该部署依赖。
 
 修复不改变财务指标口径，不扩大原始档案或用户文件修改范围。
+
+## 追加修复 N1/N3
+
+- N1：匿名代理拒绝、完整配置校验、登录签名会话、篡改与到期拒绝、凭据轮换失效、HttpOnly/Secure、跨来源写请求拒绝、退出清 cookie、反代公开 origin 均有定向测试。初始代理测试 3 failed；反代测试修复前 403、修复后通过。Next.js 生产构建通过。
+- N3：原 CI 选择在不可达数据库端口下 13 passed / 32 setup errors；修复后的 unit 分组 18 passed。所有依赖数据库的 API 模块仍纳入 integration；收集验证 150 项，未冒称该分组全量运行成功。
+
+追加验收：`make lint typecheck test-web` 通过，前端总计 42 passed；认证独立复核 11 passed；生产构建及契约一致性检查通过。真实 Chrome 连接生产 Next.js 构建与启用 AUTH_TOKEN 的 FastAPI：匿名业务代理 401 → 错误密码拒绝 → 正确密码登录 → workspace API 200 → 退出后 401；确认 HttpOnly/Secure，无页面异常。该认证链路使用真实服务，不使用认证替身，不涉及对象存储。

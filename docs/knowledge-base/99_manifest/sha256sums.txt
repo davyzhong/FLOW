@@ -1,5 +1,5 @@
 104cd5c7b56e9eac706f8f6b09689653b0cd0b79b1c4194e0d112f328a39374d  ./00_start_here/AGENT_START_HERE.md
-0e4bf0ef889fd8ae571a29dec166372684d090e8d8f2e12dfa6baf42a38dd70b  ./00_start_here/PROJECT_STATE.md
+35b82a7a754c85a43bd7f9c1e2ec5ffcc479df174118613aaa1587347e315003  ./00_start_here/PROJECT_STATE.md
 4ed3f3af1111b7d26148d0600841ea3fc6198d214ad1fa1e3c6bcfb8d8663050  ./01_conversations/INDEX.md
 2f76b9a257f0baa1c30d5995a49f17bdbacf519f3a33668383f1f39c69c7faea  ./01_conversations/raw/chatgpt/Finance_Intelligence_OS_完整会话归档.md
 a033649eabf7c8cdb40f14defd513fcc046feacace1ccf6fb8a2d84801f6ba6c  ./01_conversations/raw/codex/rollout-2026-08-28T14-41-27-01a0471a-1689-7270-8dc5-f2bf084e4db9.jsonl
@@ -141,4 +141,4 @@ f30c7720a8f75a822e689575c9546bbff04f629f3db248977f7dafb6ee8a574f  ./07_handoff/C
 fdd8e20350547c00ab10abd022170b0a832f9b958631444d13cd0313ed412dcf  ./08_wechat_sources/HANDOFF.md
 a69df22f9e705eba64136d4e4166318862ff591b6a68c24b3492566962272abf  ./08_wechat_sources/INDEX.md
 a65c35c08aebfa900c5dbe2d2bcb4cb72856709120aa1dbadadcc6564bf075b3  ./08_wechat_sources/README.md
-7fcaddcc60a72cd0298a0c6d38ac7c58a65ccad9078ee9bd98fb990a2308b20a  ./README.md
+4af1b608bd7fad49ccba34c0166bc143d201b79e5cdec51f5ca83a98d291df05  ./README.md
