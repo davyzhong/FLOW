@@ -482,6 +482,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/statements": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Statement Reports */
+        get: operations["list_statement_reports_api_v1_statements_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/statements/{report_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Statement Report */
+        get: operations["get_statement_report_api_v1_statements__report_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1575,6 +1609,101 @@ export interface components {
             sha256: string;
             /** Size Bytes */
             size_bytes: number;
+        };
+        /** StatementErrorResponse */
+        StatementErrorResponse: {
+            detail: components["schemas"]["ErrorDetail"];
+        };
+        /** StatementLineResponse */
+        StatementLineResponse: {
+            /** Item Name */
+            item_name: string;
+            /** Sort Order */
+            sort_order: number;
+            /** Value End */
+            value_end?: string | null;
+            /** Value Begin */
+            value_begin?: string | null;
+            /** Value Current */
+            value_current?: string | null;
+            /** Value Prior */
+            value_prior?: string | null;
+        };
+        /** StatementReportDetailResponse */
+        StatementReportDetailResponse: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Company Name */
+            company_name: string;
+            /** Stock Code */
+            stock_code: string;
+            /** Report Kind */
+            report_kind: string;
+            /** Period Label */
+            period_label: string;
+            /** Unit Note */
+            unit_note: string;
+            /** Source Ref */
+            source_ref: string;
+            /** Source Sha256 */
+            source_sha256?: string | null;
+            /** Statement Types */
+            statement_types: string[];
+            /** Line Item Count */
+            line_item_count: number;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Sections */
+            sections: components["schemas"]["StatementSectionResponse"][];
+        };
+        /** StatementReportListResponse */
+        StatementReportListResponse: {
+            /** Reports */
+            reports: components["schemas"]["StatementReportSummaryResponse"][];
+        };
+        /** StatementReportSummaryResponse */
+        StatementReportSummaryResponse: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Company Name */
+            company_name: string;
+            /** Stock Code */
+            stock_code: string;
+            /** Report Kind */
+            report_kind: string;
+            /** Period Label */
+            period_label: string;
+            /** Unit Note */
+            unit_note: string;
+            /** Source Ref */
+            source_ref: string;
+            /** Source Sha256 */
+            source_sha256?: string | null;
+            /** Statement Types */
+            statement_types: string[];
+            /** Line Item Count */
+            line_item_count: number;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+        };
+        /** StatementSectionResponse */
+        StatementSectionResponse: {
+            /** Statement Type */
+            statement_type: string;
+            /** Items */
+            items: components["schemas"]["StatementLineResponse"][];
         };
         /** StructuredAnswer */
         StructuredAnswer: {
@@ -2877,6 +3006,88 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_statement_reports_api_v1_statements_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StatementReportListResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StatementErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StatementErrorResponse"];
+                };
+            };
+        };
+    };
+    get_statement_report_api_v1_statements__report_id__get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                report_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StatementReportDetailResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StatementErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StatementErrorResponse"];
                 };
             };
         };

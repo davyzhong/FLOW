@@ -2026,6 +2026,134 @@
           }
         }
       }
+    },
+    "/api/v1/statements": {
+      "get": {
+        "tags": [
+          "statements"
+        ],
+        "summary": "List Statement Reports",
+        "operationId": "list_statement_reports_api_v1_statements_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatementReportListResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatementErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatementErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        }
+      }
+    },
+    "/api/v1/statements/{report_id}": {
+      "get": {
+        "tags": [
+          "statements"
+        ],
+        "summary": "Get Statement Report",
+        "operationId": "get_statement_report_api_v1_statements__report_id__get",
+        "parameters": [
+          {
+            "name": "report_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Report Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatementReportDetailResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatementErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatementErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -5141,6 +5269,279 @@
           "size_bytes"
         ],
         "title": "SourceResponse"
+      },
+      "StatementErrorResponse": {
+        "properties": {
+          "detail": {
+            "$ref": "#/components/schemas/ErrorDetail"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "detail"
+        ],
+        "title": "StatementErrorResponse"
+      },
+      "StatementLineResponse": {
+        "properties": {
+          "item_name": {
+            "type": "string",
+            "title": "Item Name"
+          },
+          "sort_order": {
+            "type": "integer",
+            "title": "Sort Order"
+          },
+          "value_end": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value End"
+          },
+          "value_begin": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value Begin"
+          },
+          "value_current": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value Current"
+          },
+          "value_prior": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value Prior"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "item_name",
+          "sort_order"
+        ],
+        "title": "StatementLineResponse"
+      },
+      "StatementReportDetailResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "company_name": {
+            "type": "string",
+            "title": "Company Name"
+          },
+          "stock_code": {
+            "type": "string",
+            "title": "Stock Code"
+          },
+          "report_kind": {
+            "type": "string",
+            "title": "Report Kind"
+          },
+          "period_label": {
+            "type": "string",
+            "title": "Period Label"
+          },
+          "unit_note": {
+            "type": "string",
+            "title": "Unit Note"
+          },
+          "source_ref": {
+            "type": "string",
+            "title": "Source Ref"
+          },
+          "source_sha256": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Sha256"
+          },
+          "statement_types": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Statement Types"
+          },
+          "line_item_count": {
+            "type": "integer",
+            "title": "Line Item Count"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "sections": {
+            "items": {
+              "$ref": "#/components/schemas/StatementSectionResponse"
+            },
+            "type": "array",
+            "title": "Sections"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "company_name",
+          "stock_code",
+          "report_kind",
+          "period_label",
+          "unit_note",
+          "source_ref",
+          "statement_types",
+          "line_item_count",
+          "created_at",
+          "sections"
+        ],
+        "title": "StatementReportDetailResponse"
+      },
+      "StatementReportListResponse": {
+        "properties": {
+          "reports": {
+            "items": {
+              "$ref": "#/components/schemas/StatementReportSummaryResponse"
+            },
+            "type": "array",
+            "title": "Reports"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "reports"
+        ],
+        "title": "StatementReportListResponse"
+      },
+      "StatementReportSummaryResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "company_name": {
+            "type": "string",
+            "title": "Company Name"
+          },
+          "stock_code": {
+            "type": "string",
+            "title": "Stock Code"
+          },
+          "report_kind": {
+            "type": "string",
+            "title": "Report Kind"
+          },
+          "period_label": {
+            "type": "string",
+            "title": "Period Label"
+          },
+          "unit_note": {
+            "type": "string",
+            "title": "Unit Note"
+          },
+          "source_ref": {
+            "type": "string",
+            "title": "Source Ref"
+          },
+          "source_sha256": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Sha256"
+          },
+          "statement_types": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Statement Types"
+          },
+          "line_item_count": {
+            "type": "integer",
+            "title": "Line Item Count"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "company_name",
+          "stock_code",
+          "report_kind",
+          "period_label",
+          "unit_note",
+          "source_ref",
+          "statement_types",
+          "line_item_count",
+          "created_at"
+        ],
+        "title": "StatementReportSummaryResponse"
+      },
+      "StatementSectionResponse": {
+        "properties": {
+          "statement_type": {
+            "type": "string",
+            "title": "Statement Type"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/StatementLineResponse"
+            },
+            "type": "array",
+            "title": "Items"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "statement_type",
+          "items"
+        ],
+        "title": "StatementSectionResponse"
       },
       "StructuredAnswer": {
         "properties": {

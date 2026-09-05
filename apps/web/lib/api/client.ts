@@ -10,6 +10,11 @@ export type InvestigationAcknowledgement =
   | components["schemas"]["EvidenceDecisionResponse"]
   | components["schemas"]["ConclusionResponse"]
   | components["schemas"]["FindingTransitionResponse"];
+export type StatementReportSummary = components["schemas"]["StatementReportSummaryResponse"];
+export type StatementReportList = components["schemas"]["StatementReportListResponse"];
+export type StatementReportDetail = components["schemas"]["StatementReportDetailResponse"];
+export type StatementSection = components["schemas"]["StatementSectionResponse"];
+export type StatementLine = components["schemas"]["StatementLineResponse"];
 
 export type InvestigationQuery = {
   finding_id: string;
@@ -261,6 +266,15 @@ export type MappingOverrideInput = {
   target_field_id: string;
   source_sheet: string;
   source_header: string;
+};
+
+export const statementApi = {
+  listReports(signal?: AbortSignal): Promise<StatementReportList> {
+    return request<StatementReportList>("/api/v1/statements", signal);
+  },
+  getReport(reportId: string, signal?: AbortSignal): Promise<StatementReportDetail> {
+    return request<StatementReportDetail>(`/api/v1/statements/${reportId}`, signal);
+  },
 };
 
 async function download(path: string, fallbackFilename: string): Promise<void> {

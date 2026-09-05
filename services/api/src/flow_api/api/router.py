@@ -7,6 +7,7 @@ from flow_api.api.routes.health import router as health_router
 from flow_api.api.routes.intake import router as intake_router
 from flow_api.api.routes.investigations import router as investigations_router
 from flow_api.api.routes.publishing import router as publishing_router
+from flow_api.api.routes.statements import router as statements_router
 from flow_api.api.routes.workspace import router as workspace_router
 
 api_router = APIRouter(prefix="/api/v1")
@@ -19,3 +20,4 @@ api_router.include_router(dashboard_router, dependencies=[Depends(require_bearer
 api_router.include_router(investigations_router, dependencies=[Depends(require_bearer_auth)])
 api_router.include_router(copilot_router, dependencies=[Depends(require_bearer_auth)])
 api_router.include_router(publishing_router, dependencies=[Depends(require_bearer_auth)])
+api_router.include_router(statements_router, dependencies=[Depends(require_bearer_auth)])

@@ -1,0 +1,232 @@
+/* 报表分析（/statements）样式：跟随全局 CSS 惯例，BEM 风格类名。 */
+
+.statements-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f4f6fb;
+  /* WorkflowNav 依赖 dashboard-app 作用域的调色板变量，这里补齐同一套。 */
+  --ink: #15243b;
+  --muted: #52637a;
+  --line: #dfe6ef;
+  --blue: #1769e8;
+  --navy: #13223a;
+  --green: #075f45;
+  --red: #912f3b;
+  --amber: #805000;
+}
+
+.stmt-main {
+  flex: 1;
+  padding: 24px 32px 64px;
+  max-width: 1180px;
+}
+
+.stmt-page-header h1 {
+  font-size: 22px;
+  margin: 0 0 4px;
+}
+
+.stmt-page-header p {
+  color: var(--muted, #52637a);
+  font-size: 13px;
+  margin: 0 0 18px;
+  max-width: 860px;
+}
+
+.stmt-status {
+  padding: 18px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  color: #475569;
+}
+
+.stmt-status.is-error {
+  border-color: #fecaca;
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.stmt-status button {
+  margin-top: 8px;
+  padding: 6px 14px;
+  border: 0;
+  border-radius: 8px;
+  background: #2563eb;
+  color: #fff;
+  cursor: pointer;
+}
+
+.stmt-report-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.stmt-report-tabs button {
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  border-radius: 10px;
+  padding: 8px 14px;
+  cursor: pointer;
+  display: grid;
+  text-align: left;
+}
+
+.stmt-report-tabs button span {
+  color: var(--muted, #52637a);
+  font-size: 12px;
+}
+
+.stmt-report-tabs button.is-active {
+  border-color: #2563eb;
+  background: #eff6ff;
+}
+
+.stmt-detail__header h2 {
+  font-size: 18px;
+  margin: 0 0 4px;
+}
+
+.stmt-meta {
+  color: var(--muted, #52637a);
+  font-size: 13px;
+  font-weight: 400;
+  margin-left: 10px;
+}
+
+.stmt-source {
+  color: var(--muted, #52637a);
+  font-size: 12px;
+  margin: 0 0 14px;
+}
+
+.stmt-source code,
+.stmt-sha {
+  background: #eef2f7;
+  border-radius: 6px;
+  padding: 1px 7px;
+  margin-right: 8px;
+  font-size: 11.5px;
+}
+
+.stmt-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin: 0 0 16px;
+}
+
+.stmt-kpi {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px 14px;
+}
+
+.stmt-kpi dt {
+  color: #64748b;
+  font-size: 12px;
+}
+
+.stmt-kpi dd {
+  margin: 2px 0 0;
+  font-size: 18px;
+  font-weight: 650;
+}
+
+.stmt-chart-card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+}
+
+.stmt-chart-card h3 {
+  font-size: 14px;
+  margin: 0 0 8px;
+  color: #1e293b;
+}
+
+.stmt-chart-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+@media (max-width: 980px) {
+  .stmt-chart-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stmt-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.stmt-tick { font-size: 10px; fill: #94a3b8; }
+.stmt-xlab { font-size: 11.5px; fill: #475569; }
+.stmt-vlabel { font-size: 10.5px; fill: #334155; font-weight: 600; }
+.stmt-legend { font-size: 11px; fill: #475569; }
+.stmt-donut-total { font-size: 17px; font-weight: 700; fill: #1e293b; }
+
+.stmt-tables h3 {
+  font-size: 14px;
+  color: #1e293b;
+  margin: 18px 0 8px;
+}
+
+.stmt-section {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  padding: 10px 14px;
+}
+
+.stmt-section summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.stmt-section summary small {
+  color: var(--muted, #52637a);
+  font-weight: 400;
+  margin-left: 10px;
+}
+
+.stmt-table-wrap {
+  max-height: 480px;
+  overflow: auto;
+  margin-top: 10px;
+}
+
+.stmt-table-wrap table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+
+.stmt-table-wrap th,
+.stmt-table-wrap td {
+  padding: 6px 10px;
+  border-bottom: 1px solid #f1f5f9;
+  text-align: left;
+}
+
+.stmt-table-wrap th {
+  position: sticky;
+  top: 0;
+  background: #f8fafc;
+}
+
+.stmt-table-wrap td.is-num,
+.stmt-table-wrap th.is-num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}

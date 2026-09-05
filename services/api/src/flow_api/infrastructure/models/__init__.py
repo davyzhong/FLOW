@@ -45,6 +45,10 @@ from flow_api.infrastructure.models.publishing import (
     ReportSnapshot,
     ReportSnapshotItem,
 )
+from flow_api.infrastructure.models.statement import (
+    StatementLineItem,
+    StatementReport,
+)
 
 __all__ = [
     "AnalysisBatch",
@@ -83,6 +87,8 @@ __all__ = [
     "ScenarioVersion",
     "SourceFile",
     "SourceRecord",
+    "StatementLineItem",
+    "StatementReport",
     "StoredObject",
     "TransformationEvent",
     "WarningAcknowledgement",
