@@ -113,8 +113,8 @@ describe("StatementApp", () => {
     render(<StatementApp />);
     expect(await screen.findByRole("alert")).toBeInTheDocument();
     const retry = screen.getByRole("button", { name: "重试" });
-    fetchStub.mockImplementation((input: RequestInfo | URL) => {
-      const path = String(input).replace(/^https?:\/\/[^/]+/, "");
+    fetchStub.mockImplementation((input?: RequestInfo | URL) => {
+      const path = String(input ?? "").replace(/^https?:\/\/[^/]+/, "");
       const body = path === `/api/v1/statements/${REPORT_ID}` ? DETAIL_RESPONSE : { reports: LIST_RESPONSE.reports };
       return Promise.resolve(
         new Response(JSON.stringify(body), { status: 200, headers: { "content-type": "application/json" } }),
