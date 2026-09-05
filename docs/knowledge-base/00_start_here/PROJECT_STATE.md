@@ -259,7 +259,9 @@ flowchart LR
 - 归档调研资料 07–10 号：CAS 准则体系与 2006 版 156 科目 / 2024 汇编 171 科目、四大能力与杜邦体系、评级机构口径、四大方法论与物流行业口径；10 号增补完成来源逐项验证（财政部准则通知原文、维基文库科目全表、国资委 22 项逐项公式、CPA 口径差异与管理用报表推导链、四大资料可得性结论）；
 - 形成设计草案与初始数据集 v0 草案：`flow.metric_dictionary.v0-draft` 含通用 40 指标（偿债 10 / 营运 9 / 盈利 11 / 发展 5 / 现金流 5）+ 物流行业 15 指标（与 `flow.metrics.logistics.v1` 全量对齐），结构化公式、显式依赖边、CAS↔IFRS 报表项目取数映射、caliber 与 provenance 字段齐备，YAML 校验通过；
 - D040 立项（2026-09-05 用户逐项确认）：会计基础数据做查阅级 + 取数映射（不做核算级总账）；CAS + IFRS 对照；通用 40 + 物流 15 起步；`flow.metrics.logistics.v1` 建成后迁移为库内行业指标集版本；与 Pilot Phase 2 并行推进；
-- 详见[设计草案](../02_research/synthesis/会计与财务指标知识库_设计草案.md)、[初始数据集 v0](../02_research/synthesis/指标库初始数据集_v0_草案.yaml) 与决策日志 D040；正式工程规格与实施计划待编写并经用户批准。
+- 正式规格 `docs/superpowers/specs/2026-09-05-flow-metric-dictionary-design.md` 已编写（含分期 P1–P5 与验收）；可视化产物已归并为唯一的指标库评审台 `docs/knowledge-base/03_assets/visual_prototypes/metric-library-v0-review.html`（逐项 纳入/待定/剔除 评审 + localStorage + MPM 过滤 + 生成时间戳，由 `scripts/generate_metric_library_review.py` 生成，Playwright 验证通过）；
+- D041（2026-09-05 用户补充确认）：分析标准以「四表一注」为基准输出物，对象模型新增报表项目（StatementLineItem），取数链补全为「业务 → 分录 → 科目 → 报表项目 → 指标」；验证方式为真实财报反向解析实验（典型互联网/物流公司年度+季度财报导入 → 重建四表一注与分析报告 → 与已发布披露逐项比对，差异分级留痕），排入 P5，样本公司清单待确认；
+- 详见[设计草案](../02_research/synthesis/会计与财务指标知识库_设计草案.md)、[初始数据集 v0](../02_research/synthesis/指标库初始数据集_v0_草案.yaml) 与决策日志 D040/D041；下一步是用户在评审台完成指标逐项评审后定稿首批实施范围。
 
 ## 当前尚未完成
 
@@ -271,7 +273,7 @@ flowchart LR
 
 ## 当前下一步
 
-按 D038 继续 Pilot Phase 2：[最小安全部署计划](../../superpowers/plans/2026-09-03-flow-pilot-readiness-phase-2-security-deployment.md)。先核对已交付认证配置与剩余任务，补齐真实存储及部署验证，再开展脱敏真实数据试点；只依据试点证据确定 V1.1。不要重新从 Phase 1 基础架构开工，也不要把导入/报告页面或单用户登录列为尚无实现。D040 会计知识与指标库工作流按其决策第 5 点与 Pilot Phase 2 并行推进：下一步是依据设计草案编写正式规格与实施计划，经用户批准后实施。
+按 D038 继续 Pilot Phase 2：[最小安全部署计划](../../superpowers/plans/2026-09-03-flow-pilot-readiness-phase-2-security-deployment.md)。先核对已交付认证配置与剩余任务，补齐真实存储及部署验证，再开展脱敏真实数据试点；只依据试点证据确定 V1.1。不要重新从 Phase 1 基础架构开工，也不要把导入/报告页面或单用户登录列为尚无实现。D040/D041 会计知识与指标库工作流按 D040 决策第 5 点与 Pilot Phase 2 并行推进：正式规格已就位（含四表一注输出与 P5 反向解析验证实验），下一步是用户在评审台完成指标逐项 纳入/待定/剔除 评审，并确认 P5 样本公司清单，随后定稿首批实施范围与实施计划。
 
 ## 2026-09-04 审查修复补充
 
