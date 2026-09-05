@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P5 反向解析 · 腾讯控股 2Q2026 IFRS→Non-IFRS 调节分析</title>
+<style>
+:root{--bg:#0b1020;--card:#141b31;--line:#24304f;--txt:#e8ecf6;--sub:#93a0bd;--acc:#4c8dff;--up:#e5534b;--down:#3fb68b;--gold:#e8b34b;--teal:#3fb68b;--purple:#9d7bea}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--txt);font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;padding:28px;max-width:1280px;margin:0 auto}
+h1{font-size:22px}h2{font-size:16px;margin:34px 0 14px;padding-left:10px;border-left:3px solid var(--acc)}
+.meta{color:var(--sub);font-size:12px;margin-top:6px;line-height:1.7}
+.badge{display:inline-block;background:#16324f;color:#7db4ff;border:1px solid #2a4a73;border-radius:20px;padding:3px 12px;font-size:12px;margin:10px 6px 0 0}
+.badge.ok{background:#12362c;color:#5ed3a5;border-color:#1f5c46}
+.grid{display:grid;gap:14px}
+.g4{grid-template-columns:repeat(4,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g2{grid-template-columns:repeat(2,1fr)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
+.kpi .v{font-size:26px;font-weight:700;margin:4px 0}.kpi .u{font-size:12px;color:var(--sub)}
+.yoy{font-size:12px;font-weight:600}.yoy.up{color:var(--up)}.yoy.down{color:var(--down)}
+.metric .v{font-size:20px;font-weight:700;color:var(--gold)}.metric .f{font-size:11px;color:var(--sub);margin-top:6px}
+.lbl{font-size:13px;color:var(--sub)}
+svg{width:100%;height:auto;display:block}
+.legend{display:flex;gap:16px;font-size:12px;color:var(--sub);margin-top:8px;flex-wrap:wrap}
+.dot{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:middle}
+details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-top:10px}
+summary{cursor:pointer;font-weight:600;font-size:14px}
+table{width:100%;border-collapse:collapse;font-size:12px;margin-top:10px}
+th,td{padding:5px 8px;text-align:right;border-bottom:1px solid #1c2540}
+th:first-child,td:first-child{text-align:left}
+th{color:var(--sub);font-weight:500}
+tr.tot td{font-weight:700;background:#182139}
+.note{font-size:11px;color:var(--sub);margin-top:8px}
+@media(max-width:900px){.g4{grid-template-columns:repeat(2,1fr)}.g3,.g2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<script id="data" type="application/json">{"company": "腾讯控股有限公司", "code": "0700.HK / 80700.HK", "period": "2026 年第二季度（2026-04-01 至 2026-06-30），未经审核", "source": "腾讯官网业绩公告原文 PDF（tencent_0700/Tencent_2026_Q2_results.pdf）", "generated_at": "2026-09-06T05:42:19", "unit_note": "图表单位：人民币亿元（原始披露为百万元，已换算）", "kpis": [{"name": "营业收入", "cur": 2047.85, "yoy": 11.0}, {"name": "毛利", "cur": 1184.33, "yoy": 12.8}, {"name": "IFRS 归母盈利", "cur": 560.22, "yoy": 0.7}, {"name": "Non-IFRS 归母盈利", "cur": 684.15, "yoy": 8.5}], "metrics": [{"name": "毛利率", "value": "57.8%", "formula": "毛利÷收入（公告披露 58%）"}, {"name": "IFRS 归母净利率", "value": "27.4%", "formula": "IFRS 归母盈利÷收入"}, {"name": "Non-IFRS 归母净利率", "value": "33.4%", "formula": "Non-IFRS 归母盈利÷收入"}, {"name": "调节幅度", "value": "22.1%", "formula": "（Non-IFRS−IFRS）归母盈利÷IFRS 归母盈利"}, {"name": "经营盈利率（IFRS）", "value": "32.9%", "formula": "经营盈利÷收入（公告披露 33%）"}, {"name": "Non-IFRS 经营盈利率", "value": "36.9%", "formula": "Non-IFRS 经营盈利÷收入（公告披露 37%）"}], "trend3": {"labels": ["2Q2025", "1Q2026", "2Q2026"], "revenue": [1845.04, 1964.58, 2047.85], "ifrs_np": [556.28, 580.93, 560.22], "nifrs_np": [630.52, 679.05, 684.15]}, "recon": [{"label": "IFRS 归母盈利", "value": 560.22, "type": "total"}, {"label": "股份酬金", "value": 77.56, "type": "delta"}, {"label": "来自投资公司的（收益）/亏损净额", "value": 45.27, "type": "delta"}, {"label": "无形资产摊销（收购产生）", "value": 26.11, "type": "delta"}, {"label": "减值拨备/（拨回）", "value": -20.64, "type": "delta"}, {"label": "SSV及CPP及其他捐款", "value": 8.61, "type": "delta"}, {"label": "其他（合规/诉讼等）", "value": 6.47, "type": "delta"}, {"label": "所得税影响", "value": -19.45, "type": "delta"}, {"label": "Non-IFRS 归母盈利", "value": 684.15, "type": "total"}], "segments": [{"label": "增值服务", "value": 984.14}, {"label": "营销服务", "value": 435.65}, {"label": "金融科技及企业服务", "value": 602.86}, {"label": "其他", "value": 25.2}], "rev_total": 2047.85, "stmt_rows": [{"label": "收入", "vals": [204785, 184504, 196458]}, {"label": "增值服务", "vals": [98414, 91368, 96110]}, {"label": "营销服务", "vals": [43565, 35762, 38171]}, {"label": "金融科技及企业服务", "vals": [60286, 55536, 59885]}, {"label": "其他", "vals": [2520, 1838, 2292]}, {"label": "收入成本", "vals": [-86352, -79491, -85193]}, {"label": "毛利", "vals": [118433, 105013, 111265]}, {"label": "销售及市场推广开支", "vals": [-11869, -9410, -11343]}, {"label": "一般及行政开支", "vals": [-38808, -31921, -33800]}, {"label": "其他收益/（亏损）净额", "vals": [-480, -3578, 1253]}, {"label": "经营盈利", "vals": [67276, 60104, 67375]}, {"label": "投资收益/（亏损）净额及其他", "vals": [11184, 2638, 1928]}, {"label": "利息收入", "vals": [4202, 4121, 4025]}, {"label": "财务成本", "vals": [-2979, -3941, -2979]}, {"label": "分占联营公司及合营公司盈利/（亏损）净额", "vals": [-9993, 4473, 3620]}, {"label": "除税前盈利", "vals": [69690, 67395, 73969]}, {"label": "所得税开支", "vals": [-11713, -11351, -14577]}, {"label": "期内盈利", "vals": [57977, 56044, 59392]}, {"label": "本公司权益持有人", "vals": [56022, 55628, 58093]}, {"label": "非控制性权益", "vals": [1955, 416, 1299]}, {"label": "非国际财务报告准则经营盈利", "vals": [75636, 69248, 75627]}, {"label": "本公司权益持有人应占盈利", "vals": [68415, 63052, 67905]}], "adj_notes": [["股份酬金", "+77.56", "授予雇员（含投资公司雇员）的股份奖励及认沽期权等非现金薪酬"], ["来自投资公司的（收益）/亏损净额", "+45.27", "视同处置/处置投资公司、投资公司公允价值变动等非经营项"], ["无形资产摊销（收购产生）", "+26.11", "收购产生的无形资产摊销（非现金）"], ["减值拨备/（拨回）", "−20.64", "联营/合营公司、商誉及收购无形资产的减值拨回净额（负值=拨回冲减调整）"], ["SSV及CPP及其他捐款", "+8.61", "可持续社会价值及共同富裕计划项目的捐款及开支"], ["其他（合规/诉讼等）", "+6.47", "非经常性合规相关成本及若干诉讼和解费用"], ["所得税影响", "−19.45", "上述 Non-IFRS 调整的所得税影响"]]}</script>
+<script>
+const D = JSON.parse(document.getElementById('data').textContent);
+const C = {acc:'#4c8dff',up:'#e5534b',down:'#3fb68b',gold:'#e8b34b',teal:'#3fb68b',purple:'#9d7bea',sub:'#93a0bd',line:'#24304f',txt:'#e8ecf6'};
+const PAL = ['#4c8dff','#3fb68b','#e8b34b','#9d7bea','#e5534b','#54c8e8','#8a97b8','#d17db8'];
+const fmt = v => v==null?'—':v.toLocaleString('zh-CN',{maximumFractionDigits:2});
+
+function axis(maxV, minV, w, h, pad){
+  const span = maxV - minV || 1;
+  const y = v => pad.t + (maxV - v)/span*(h-pad.t-pad.b);
+  let s = '';
+  for(let i=0;i<=4;i++){
+    const v = minV + (maxV-minV)*i/4, yy = y(v);
+    s += `<line x1="${pad.l}" y1="${yy}" x2="${w-pad.r}" y2="${yy}" stroke="${C.line}" stroke-width="1"/>`;
+    s += `<text x="${pad.l-8}" y="${yy+4}" fill="${C.sub}" font-size="10" text-anchor="end">${fmt(Math.round(v*10)/10)}</text>`;
+  }
+  return {s, y};
+}
+
+function trend3Chart(t){
+  const w=760,h=300,pad={l:56,r:16,t:16,b:34};
+  const maxV=Math.max(...t.revenue,...t.ifrs_np,...t.nifrs_np)*1.12;
+  const {s,y}=axis(maxV,0,w,h,pad);
+  const bw=(w-pad.l-pad.r)/t.labels.length;
+  let out=`<svg viewBox="0 0 ${w} ${h}">`+s;
+  const series=[['revenue',C.acc,'营业收入',-56],['ifrs_np',C.gold,'IFRS 归母盈利',-14],['nifrs_np',C.teal,'Non-IFRS 归母盈利',28]];
+  t.labels.forEach((lb,i)=>{
+    const gx=pad.l+i*bw+bw/2;
+    series.forEach(([key,col,nm,off])=>{
+      const v=t[key][i];
+      out+=`<rect x="${gx+off-13}" y="${y(v)}" width="26" height="${y(0)-y(v)}" rx="3" fill="${col}" opacity=".88"/>`;
+      out+=`<text x="${gx+off}" y="${y(v)-6}" fill="${C.txt}" font-size="10" text-anchor="middle">${fmt(v)}</text>`;
+    });
+    out+=`<text x="${gx}" y="${h-12}" fill="${C.sub}" font-size="12" text-anchor="middle">${lb}</text>`;
+  });
+  return out+'</svg>';
+}
+
+function waterfallChart(wf){
+  const w=760,h=340,pad={l:56,r:16,t:16,b:78};
+  let run=0; const bars=wf.map(d=>{
+    if(d.type==='total'){const b={...d,from:0,to:d.value};run=d.value;return b;}
+    const from=run; run=Math.round((run+d.value)*100)/100; return {...d,from,to:run};
+  });
+  const maxV=Math.max(...bars.map(b=>Math.max(b.from,b.to)))*1.08, minV=0;
+  const {s,y}=axis(maxV,minV,w,h,pad);
+  const bw=(w-pad.l-pad.r)/bars.length;
+  let out=`<svg viewBox="0 0 ${w} ${h}">`+s, prevX=null,prevY=null;
+  bars.forEach((b,i)=>{
+    const x=pad.l+i*bw+bw*0.14, wd=bw*0.72;
+    const y1=y(Math.max(b.from,b.to)), y2=y(Math.min(b.from,b.to));
+    const col=b.type==='total'?(i===0?C.acc:C.gold):(b.value>=0?C.down:C.up);
+    if(prevX!==null) out+=`<line x1="${prevX}" y1="${prevY}" x2="${x}" y2="${prevY}" stroke="${C.sub}" stroke-dasharray="3,3" stroke-width="1"/>`;
+    out+=`<rect x="${x}" y="${y1}" width="${wd}" height="${Math.max(y2-y1,2)}" rx="3" fill="${col}" opacity=".9"/>`;
+    out+=`<text x="${x+wd/2}" y="${y1-6}" fill="${C.txt}" font-size="10" text-anchor="middle">${b.value>0&&b.type==='delta'?'+':''}${fmt(b.value)}</text>`;
+    out+=`<text x="${x+wd/2}" y="${h-58}" fill="${C.sub}" font-size="10" text-anchor="middle" transform="rotate(-30 ${x+wd/2} ${h-58})">${b.label}</text>`;
+    prevX=x+wd; prevY=y(b.to);
+  });
+  return out+'</svg>';
+}
+
+function donut(items, title){
+  const total=items.reduce((a,b)=>a+b.value,0);
+  const cx=150,cy=130,r=95,ir=55;
+  let ang=-Math.PI/2, arcs='';
+  items.forEach((d,i)=>{
+    const a2=ang+d.value/total*Math.PI*2;
+    const large=(a2-ang)>Math.PI?1:0;
+    const p=(a,rr)=>[cx+rr*Math.cos(a),cy+rr*Math.sin(a)];
+    const [x1,y1]=p(ang,r),[x2,y2]=p(a2,r),[x3,y3]=p(a2,ir),[x4,y4]=p(ang,ir);
+    arcs+=`<path d="M${x1} ${y1} A${r} ${r} 0 ${large} 1 ${x2} ${y2} L${x3} ${y3} A${ir} ${ir} 0 ${large} 0 ${x4} ${y4} Z" fill="${PAL[i%PAL.length]}" opacity=".92"/>`;
+    ang=a2;
+  });
+  let legend=`<div class="legend" style="flex-direction:column;gap:6px;align-items:flex-start">`;
+  items.forEach((d,i)=>{legend+=`<span><span class="dot" style="background:${PAL[i%PAL.length]}"></span>${d.label} · ${fmt(d.value)} 亿（${(d.value/total*100).toFixed(1)}%）</span>`;});
+  legend+='</div>';
+  return `<div style="display:flex;gap:18px;align-items:center;flex-wrap:wrap"><svg viewBox="0 0 300 260" style="max-width:300px">${arcs}<text x="${cx}" y="${cy-4}" fill="${C.sub}" font-size="11" text-anchor="middle">${title}</text><text x="${cx}" y="${cy+16}" fill="${C.txt}" font-size="16" font-weight="700" text-anchor="middle">${fmt(total)} 亿</text></svg>${legend}</div>`;
+}
+
+const kpiHtml = D.kpis.map(k=>{
+  const dir=k.yoy>=0?'up':'down';
+  return `<div class="card kpi"><div class="lbl">${k.name}</div><div class="v">${fmt(k.cur)}<span class="u"> 亿元</span></div><div class="yoy ${dir}">${k.yoy>=0?'▲':'▼'} ${Math.abs(k.yoy)}% <span style="color:${C.sub};font-weight:400">同比</span></div></div>`;
+}).join('');
+const metricHtml = D.metrics.map(m=>`<div class="card metric"><div class="lbl">${m.name}</div><div class="v">${m.value}</div><div class="f">口径：${m.formula}</div></div>`).join('');
+
+const f3=v=>(v<0?'(':'')+Math.abs(v).toLocaleString('zh-CN')+(v<0?')':'');
+const totRows=new Set(['收入','毛利','经营盈利','除税前盈利','期内盈利','非国际财务报告准则经营盈利','本公司权益持有人应占盈利']);
+const stmtHtml = `<table><tr><th>项目</th><th>2Q2026</th><th>2Q2025</th><th>1Q2026</th></tr>`+
+  D.stmt_rows.map(r=>`<tr class="${totRows.has(r.label)?'tot':''}"><td>${r.label}</td>${r.vals.map(v=>`<td>${f3(v)}</td>`).join('')}</tr>`).join('')+`</table>`;
+const reconTbl = `<table><tr><th>调整项（公告附注 a–g）</th><th>金额（亿元）</th><th>性质说明</th></tr>`+
+  D.adj_notes.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td style="text-align:left;color:${C.sub}">${r[2]}</td></tr>`).join('')+
+  `<tr class="tot"><td>合计调整</td><td>${(D.recon[D.recon.length-1].value-D.recon[0].value).toFixed(2)}</td><td style="text-align:left;color:${C.sub}">${D.recon[0].label} ${D.recon[0].value} → ${D.recon[D.recon.length-1].label} ${D.recon[D.recon.length-1].value}（亿元，链已闭合校验）</td></tr></table>`;
+
+document.body.innerHTML = `
+<h1>P5 反向解析验证 · ${D.company}（${D.code}）</h1>
+<div class="meta">报告期：${D.period} ｜ 数据来源：${D.source} ｜ 生成时间：${D.generated_at}<br>${D.unit_note} ｜ 原始披露单位：人民币百万元</div>
+<div><span class="badge ok">✓ IFRS→Non-IFRS 调节链闭合校验通过</span><span class="badge ok">✓ 调节表与收益表交叉勾稽一致</span><span class="badge">P5 管道自动解析 · 未经手工调整</span></div>
+
+<h2>① 核心指标（KPI）</h2>
+<div class="grid g4">${kpiHtml}</div>
+
+<h2>② 三期对比：2Q2025 / 1Q2026 / 2Q2026（亿元）</h2>
+<div class="card">${trend3Chart(D.trend3)}<div class="legend"><span><span class="dot" style="background:${C.acc}"></span>营业收入</span><span><span class="dot" style="background:${C.gold}"></span>IFRS 归母盈利</span><span><span class="dot" style="background:${C.teal}"></span>Non-IFRS 归母盈利</span></div></div>
+
+<h2>③ IFRS → Non-IFRS 调节瀑布（2Q2026 归母盈利口径，亿元）</h2>
+<div class="card" id="sec-recon">${waterfallChart(D.recon)}<div class="note">调节链在生成期断言闭合：IFRS 归母 + 七项调整 = Non-IFRS 归母，且与收益表 IFRS/Non-IFRS 归母行交叉勾稽一致，任一环节断裂则构建失败。负向调整（减值拨回、所得税影响）会拉低 Non-IFRS 值，方向已如实绘制。</div>${reconTbl}</div>
+
+<h2>④ 盈利率指标（按公告披露口径复核）</h2>
+<div class="grid g3">${metricHtml}</div>
+
+<h2>⑤ 收入结构（2Q2026，亿元）</h2>
+<div class="card">${donut(D.segments,'营业收入')}<div class="note">四个分部加总 = 营业收入，已在生成期闭合校验。</div></div>
+
+<h2>⑥ 简明综合收益表全量（单位：人民币百万元，括号 = 负数）</h2>
+<details open><summary>三列对照：2Q2026 / 2Q2025 / 1Q2026（未经审核）</summary>${stmtHtml}</details>
+<div class="note" style="margin-top:18px">本页由 scripts/p5_build_report_view.py 自腾讯 2Q2026 业绩公告 PDF 机械生成，数字零手工调整；用途：验证指标库 MPM（IFRS→Non-IFRS 调节）链路的可解析性与可校验性。</div>
+`;
+</script>
+</body>
+</html>
