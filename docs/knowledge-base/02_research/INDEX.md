@@ -34,7 +34,7 @@
 
 配套初始数据集：[指标库初始数据集 v0（YAML）](synthesis/指标库初始数据集_v0_草案.yaml) 收录通用指标 40 个（五大能力域，CAS + IFRS 对照、口径版本、依赖边、MPM 调节关系齐全）与物流行业指标 15 个（自 `flow.metrics.logistics.v1` 迁移）；[指标库初始目录 v0（评审版）](synthesis/指标库初始目录_v0_草案.md) 由 YAML 机械生成，供人读评审。[会计基础数据集 v0（YAML）](synthesis/会计基础数据集_v0_草案.yaml) 收录会计科目 164 条（2006 附录 156 + 2024 演进 8）、准则登记册 11 条、物流业务分录模板 17 个，分录与指标库已通过 related_metrics 建立映射链。
 
-可视化：[字典浏览器 v0（HTML）](synthesis/字典浏览器_v0.html) 由 `scripts/build_dictionary_viewer.py` 从两个 YAML 数据集生成，顶部统计带直观展示建设进展，支持按能力域/科目类别浏览、搜索与指标卡片展开；每次数据演进后重建。正式规格见 `docs/superpowers/specs/2026-09-05-flow-metric-dictionary-design.md`（D040）。
+可视化：[指标库 v0 评审台（HTML）](../03_assets/visual_prototypes/metric-library-v0-review.html) 由 `scripts/generate_metric_library_review.py` 从两个 YAML 数据集生成，头部含生成时间戳，总览统计带直观展示建设进展；支持按能力域/科目类别浏览、搜索、仅看 MPM 过滤、逐项 纳入/待定/剔除 评审（localStorage 持久化，可复制筛选结果）、杜邦依赖树与 CAS↔IFRS 映射；每次数据演进后重建。正式规格见 `docs/superpowers/specs/2026-09-05-flow-metric-dictionary-design.md`（D040）。
 
 ## 综合研究结论
 

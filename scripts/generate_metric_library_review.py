@@ -10,6 +10,7 @@
 from __future__ import annotations
 
 import json
+from datetime import datetime
 from pathlib import Path
 
 import yaml
@@ -54,6 +55,7 @@ DOMAIN_META = {
 }
 
 payload = {
+    "generated_at": datetime.now().isoformat(timespec="seconds"),
     "dictionary_id": data["dictionary_id"],
     "accounting_id": acc["dataset_id"],
     "accounting_gaps": acc.get("known_gaps", []),
@@ -137,7 +139,7 @@ h2{font-size:16.5px;margin:4px 0 10px}
   <h1>FLOW 指标库 v0 评审台</h1>
   <span class="meta" id="dicid"></span>
   <span class="spacer"></span>
-  <span class="meta">依据 D040 · 数据源：指标库初始数据集_v0_草案.yaml + 会计基础数据集_v0_草案.yaml</span>
+  <span class="meta">依据 D040 · 数据源：指标库初始数据集_v0_草案.yaml + 会计基础数据集_v0_草案.yaml · 生成时间 <span id="genat"></span></span>
 </header>
 <div class="tabs" id="tabs">
   <button data-t="overview" class="active">总览</button>
@@ -152,13 +154,13 @@ h2{font-size:16.5px;margin:4px 0 10px}
   <section id="page-general" class="hide">
     <h2>通用财务指标 · 逐项判断</h2>
     <div class="section-note">对每个指标选择「纳入 / 待定 / 剔除」。卡片可看公式、口径要点、CAS/IFRS 取数与依赖。完成后点底部「复制筛选结果」发回对话。</div>
-    <div class="filters"><input id="q-general" placeholder="搜索编码 / 名称 / 公式…"><span id="fchips-general" style="display:flex;gap:8px;flex-wrap:wrap"></span></div>
+    <div class="filters"><input id="q-general" placeholder="搜索编码 / 名称 / 公式…"><span id="fchips-general" style="display:flex;gap:8px;flex-wrap:wrap"></span><label style="font-size:12.8px;color:var(--sub);display:flex;align-items:center;gap:4px"><input type="checkbox" id="mpm-general"> 仅看 MPM</label></div>
     <div id="list-general"></div>
   </section>
   <section id="page-logistics" class="hide">
     <h2>物流行业指标集 · 15 个（迁移自 flow.metrics.logistics.v1）</h2>
     <div class="section-note">该 15 个指标已在 V1 引擎落地并有已知答案门禁；此处的判断将决定它们迁移为库内「行业指标集版本」时的取舍。</div>
-    <div class="filters"><input id="q-logistics" placeholder="搜索编码 / 名称 / 公式…"></div>
+    <div class="filters"><input id="q-logistics" placeholder="搜索编码 / 名称 / 公式…"><label style="font-size:12.8px;color:var(--sub);display:flex;align-items:center;gap:4px"><input type="checkbox" id="mpm-logistics"> 仅看 MPM</label></div>
     <div id="list-logistics"></div>
   </section>
   <section id="page-relations" class="hide">
@@ -236,9 +238,11 @@ function card(m, kind){
 
 function renderList(id, list, kind, qid, domainFilter){
   const q = (document.getElementById(qid)?.value||"").trim().toLowerCase();
+  const mpmOnly = document.getElementById("mpm-"+kind)?.checked;
   const el = document.getElementById(id);
   const shown = list.filter(m=>{
     if(domainFilter && domainFilter!=="all" && m.domain!==domainFilter) return false;
+    if(mpmOnly && !m.mpm) return false;
     if(!q) return true;
     return [m.metric_code,m.name,m.formula_text,m.definition,m.caliber].join(" ").toLowerCase().includes(q);
   });
@@ -415,6 +419,11 @@ document.getElementById("tabs").addEventListener("click",e=>{
   else renderList("list-logistics",DATA.metrics_logistics,"logistics","q-logistics",null);
 }));
 document.getElementById("dicid").textContent = DATA.dictionary_id + " · " + DATA.accounting_id;
+document.getElementById("genat").textContent = DATA.generated_at;
+["mpm-general","mpm-logistics"].forEach(id=>document.getElementById(id).addEventListener("change",()=>{
+  if(id==="mpm-general") renderList("list-general",DATA.metrics_general,"general","q-general",document.querySelector("#fchips-general .fchip.active")?.dataset.d||"all");
+  else renderList("list-logistics",DATA.metrics_logistics,"logistics","q-logistics",null);
+}));
 render();
 function resultText(){
   const g={in:[],maybe:[],out:[]},l={in:[],maybe:[],out:[]};
