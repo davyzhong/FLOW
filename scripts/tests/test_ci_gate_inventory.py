@@ -36,6 +36,19 @@ class CiGateInventoryTests(unittest.TestCase):
 
         self.assertEqual(actual, EXPECTED_GATES)
 
+    def test_every_ci_gate_has_an_explicit_timeout(self) -> None:
+        workflow = CI_WORKFLOW.read_text(encoding="utf-8")
+        jobs = workflow.split("\njobs:\n", maxsplit=1)[1]
+        matches = list(re.finditer(r"^  ([a-z0-9-]+):\s*$", jobs, re.MULTILINE))
+
+        missing = []
+        for index, match in enumerate(matches):
+            end = matches[index + 1].start() if index + 1 < len(matches) else len(jobs)
+            if not re.search(r"^    timeout-minutes: [1-9][0-9]*$", jobs[match.end():end], re.MULTILINE):
+                missing.append(match.group(1))
+
+        self.assertEqual(missing, [])
+
     def test_ci_keeps_full_api_coverage_without_repeating_every_gate_in_closure(self) -> None:
         workflow = CI_WORKFLOW.read_text(encoding="utf-8")
 
