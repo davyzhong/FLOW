@@ -1,6 +1,6 @@
 path	size_bytes	modified	mime
 00_start_here/AGENT_START_HERE.md	7400	2026-09-04T23:19:45+08:00	text/markdown
-00_start_here/PROJECT_STATE.md	24075	2026-09-05T22:56:41+08:00	text/markdown
+00_start_here/PROJECT_STATE.md	24501	2026-09-05T23:06:15+08:00	text/markdown
 01_conversations/INDEX.md	2253	2026-08-29T23:44:55+08:00	text/markdown
 01_conversations/raw/chatgpt/Finance_Intelligence_OS_完整会话归档.md	63937	2026-08-28T15:04:51+08:00	text/markdown
 01_conversations/raw/codex/rollout-2026-08-28T14-41-27-01a0471a-1689-7270-8dc5-f2bf084e4db9.jsonl	23125789	2026-08-29T13:57:29+08:00	application/octet-stream
@@ -8,7 +8,7 @@ path	size_bytes	modified	mime
 01_conversations/readable/2026-09-02-positioning-accurate-financial-analysis.md	2636	2026-09-04T21:09:02+08:00	text/markdown
 01_conversations/readable/rollout-2026-08-28T14-41-27-01a0471a-1689-7270-8dc5-f2bf084e4db9.md	56461	2026-08-29T23:39:55+08:00	text/markdown
 01_conversations/readable/rollout-2026-08-29T14-00-01-01a0471a-1689-7270-8dc5-f2bf084e4db9_01a04c1a-86bd-7960-9db5-80ae486d1bd4.md	39363	2026-08-29T23:46:26+08:00	text/markdown
-02_research/INDEX.md	5838	2026-09-05T22:40:17+08:00	text/markdown
+02_research/INDEX.md	6239	2026-09-05T23:05:42+08:00	text/markdown
 02_research/original/00_研究资料总览.md	7563	2026-09-04T21:09:02+08:00	text/markdown
 02_research/original/01_cfo_dashboard_text.txt	1300	2026-08-28T13:32:42+08:00	text/plain
 02_research/original/01_集团财务总监驾驶舱_资料.md	23377	2026-08-28T13:46:39+08:00	text/markdown
@@ -25,6 +25,7 @@ path	size_bytes	modified	mime
 02_research/original/08_财务分析指标体系_资料.md	8065	2026-09-05T21:46:23+08:00	text/markdown
 02_research/original/09_专业机构方法论与物流行业口径_资料.md	7219	2026-09-05T21:47:00+08:00	text/markdown
 02_research/original/10_权威来源增补调研_资料.md	11761	2026-09-05T22:11:24+08:00	text/markdown
+02_research/original/11_验证样本财报可得性调研_资料.md	7665	2026-09-05T23:05:26+08:00	text/markdown
 02_research/original/html/01_cfo_dashboard.html	3190807	2026-08-28T13:28:15+08:00	text/html
 02_research/original/html/02_ops_report.html	3214168	2026-08-28T13:28:17+08:00	text/html
 02_research/original/html/03_cfo_summary.html	3208032	2026-08-28T13:28:19+08:00	text/html
@@ -114,7 +115,7 @@ path	size_bytes	modified	mime
 02_research/original/images/06_8.png	668503	2026-09-04T21:09:02+08:00	image/png
 02_research/original/images/06_9.png	585182	2026-09-04T21:09:02+08:00	image/png
 02_research/synthesis/Finance_Intelligence_OS_系统研究结论.md	19272	2026-08-28T14:51:02+08:00	text/markdown
-02_research/synthesis/会计与财务指标知识库_设计草案.md	8531	2026-09-05T22:12:15+08:00	text/markdown
+02_research/synthesis/会计与财务指标知识库_设计草案.md	12501	2026-09-05T23:06:21+08:00	text/markdown
 02_research/synthesis/会计基础数据集_v0_草案.yaml	36912	2026-09-05T22:25:08+08:00	text/yaml
 02_research/synthesis/指标库初始数据集_v0_草案.yaml	46816	2026-09-05T22:09:42+08:00	text/yaml
 02_research/synthesis/指标库初始目录_v0_草案.md	14720	2026-09-05T22:03:47+08:00	text/markdown
