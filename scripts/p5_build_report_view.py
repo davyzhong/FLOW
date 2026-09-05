@@ -61,6 +61,7 @@ def parse_jdl():
     q1 = {
         "revenue": grab(q1_sum, "收入"),
         "gross": grab(q1_sum, "毛利"),
+        "profit": grab(q1_sum, "期間利潤"),
         "attr_np": grab(q1_sum, "本公司所有者"),
         "non_ifrs_attr": grab(q1_nif, "本公司所有者"),
     }

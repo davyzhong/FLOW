@@ -8,7 +8,7 @@
 
 **版本化数据 · 确定性指标 · 证据复核 · 冻结报告**
 
-[快速开始](#快速开始) · [界面导览](#界面导览) · [系统架构](#系统架构) · [当前边界](#当前边界与下一步) · [文档中心](docs/README.md)
+[快速开始](#快速开始) · [界面导览](#界面导览) · [图形化报告](#图形化分析报告真实财报反向解析p5) · [系统架构](#系统架构) · [当前边界](#当前边界与下一步) · [文档中心](docs/README.md)
 
 </div>
 
@@ -119,6 +119,51 @@ flowchart TB
 </details>
 
 截图环境、数据来源和操作记录见 [界面截图说明](docs/assets/screenshots/README.md)。
+
+## 图形化分析报告：真实财报反向解析（P5）
+
+除产品界面外，项目正在用真实公开财报验证「准确性承诺」（[D041/D042](docs/knowledge-base/04_decisions/DECISION_LOG.md)）：管道自动抽取财报 PDF 中的报表行项目，经勾稽与跨文档比对后重建四表一注，并以同一批冻结数据生成图形化分析。所有图表在生成期做闭合校验，数字零手工调整；口径差异与披露缺失显式标注，不推测填补。
+
+### 顺丰控股 2026Q1：四表可视化分析
+
+从 2026 一季报原文抽取 163 个报表行项目（报表内勾稽 20/20、与 FY2025 年报跨文档比对 12/12 一致），生成十个板块的分析视图：
+
+![顺丰 2026Q1：核心指标、五季度趋势与利润形成瀑布](docs/assets/screenshots/p5/sf-overview.png)
+
+![顺丰 2026Q1：杜邦分析树（三因子乘积生成期断言闭合）](docs/assets/screenshots/p5/sf-dupont.png)
+
+<details>
+<summary><strong>展开：结构堆叠、同业对比与现金流板块</strong></summary>
+
+![营业总成本与资产构成结构堆叠](docs/assets/screenshots/p5/sf-structure.png)
+
+![顺丰控股 vs 京东物流同业对比（IFRS/CAS 口径差异显式标注）](docs/assets/screenshots/p5/sf-peer.png)
+
+![资产/资本结构环形图与现金流三活动对比](docs/assets/screenshots/p5/sf-cashflow.png)
+
+</details>
+
+完整交互页面：[sf_2026q1_report_view.html](docs/implementation/p5/sf_2026q1_report_view.html)；差异比对记录：[sf_2026q1_diff_report.md](docs/implementation/p5/sf_2026q1_diff_report.md)；验证证据：[P5 首次抽取验证记录](docs/implementation/2026-09-05-p5-first-extraction.md)。
+
+### 腾讯控股 2Q2026：IFRS → Non-IFRS 调节分析
+
+同一生成器复用于港股 IFRS 样本：从业绩公告抽取三期数据，重建简明综合收益表，并把 IFRS 归母盈利到 Non-IFRS 归母盈利的七项调节做成闭合瀑布（调节链与公告披露值交叉勾稽一致）。
+
+![腾讯 2Q2026：KPI、三期对比与 IFRS→Non-IFRS 调节瀑布](docs/assets/screenshots/p5/tencent-reconciliation.png)
+
+![腾讯 2Q2026：盈利率指标与收入结构](docs/assets/screenshots/p5/tencent-segments.png)
+
+完整交互页面：[tencent_2026q2_report_view.html](docs/implementation/p5/tencent_2026q2_report_view.html)。
+
+### 指标库 v0 评审台
+
+配合 [D040 指标库立项](docs/superpowers/specs/2026-09-05-flow-metric-dictionary-design.md) 的可视化评审工具：通用 40 指标 + 物流行业 15 指标 + 会计基础数据（164 科目、28 项 CAS↔IFRS 取数映射）逐项「纳入/待定/剔除」评审，勾稽关系与杜邦分解树内置展示。
+
+![指标库评审台总览](docs/assets/screenshots/p5/metric-library-overview.png)
+
+![指标勾稽关系与杜邦分解树](docs/assets/screenshots/p5/metric-library-relations.png)
+
+评审台页面：[metric-library-v0-review.html](docs/knowledge-base/03_assets/visual_prototypes/metric-library-v0-review.html)。以上截图由 [capture_p5_report_screenshots.mjs](scripts/capture_p5_report_screenshots.mjs) 从报告页面机械截取，未做拼接或修饰；图片来源与采集方式见[截图说明](docs/assets/screenshots/README.md)。
 
 ## 能力与实现状态
 
