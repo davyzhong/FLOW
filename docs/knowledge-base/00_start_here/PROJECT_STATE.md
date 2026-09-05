@@ -262,6 +262,7 @@ flowchart LR
 - 正式规格 `docs/superpowers/specs/2026-09-05-flow-metric-dictionary-design.md` 已编写（含分期 P1–P5 与验收）；可视化产物已归并为唯一的指标库评审台 `docs/knowledge-base/03_assets/visual_prototypes/metric-library-v0-review.html`（逐项 纳入/待定/剔除 评审 + localStorage + MPM 过滤 + 生成时间戳，由 `scripts/generate_metric_library_review.py` 生成，Playwright 验证通过）；
 - D041（2026-09-05 用户补充确认）：分析标准以「四表一注」为基准输出物，对象模型新增报表项目（StatementLineItem），取数链补全为「业务 → 分录 → 科目 → 报表项目 → 指标」；验证方式为真实财报反向解析实验（典型互联网/物流公司年度+季度财报导入 → 重建四表一注与分析报告 → 与已发布披露逐项比对，差异分级留痕），排入 P5；
 - P5 样本可得性调研完成（11 号资料，2026-09-05 逐项核查官方披露渠道）；同日用户确认首批样本（D042）：顺丰控股 + 腾讯控股 + 京东物流；三家共 10 份财报原文 PDF（年报/季报/中报/业绩公告）已从巨潮、腾讯官网、披露易下载校验（SHA-256 溯源），归档为不可变档案 `02_research/original/p5_samples/`；XBRL 管道样本中通/阿里（US GAAP 口径待核）待管道打通后启用；
+- P5 管道第一跑完成（2026-09-05）：顺丰 2026 一季报三大报表抽取为 163 行结构化行项目，报表内勾稽 20/20 一致，跨文档比对（一季报 vs FY2025 年报）12/12 一致；发现并已修复 1 处跨行排版解析缺陷；脚本 `scripts/p5_extract_statements.py`、`scripts/p5_cross_validate_sf.py`，证据见 [P5 首次抽取验证记录](../../implementation/2026-09-05-p5-first-extraction.md)；
 - 详见[设计草案](../02_research/synthesis/会计与财务指标知识库_设计草案.md)、[初始数据集 v0](../02_research/synthesis/指标库初始数据集_v0_草案.yaml) 与决策日志 D040/D041；下一步是用户在评审台完成指标逐项评审后定稿首批实施范围。
 
 ## 当前尚未完成
