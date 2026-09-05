@@ -296,7 +296,10 @@ function renderOverview(){
         <div>① 剔除当前用不到的指标——剔除不删除定义，仅标记不进入首批实施；</div>
         <div>② 口径分歧大的指标（卡片「口径要点」注明多口径并存）——可标记待定，进入正式规格时敲定默认口径；</div>
         <div>③ 物流 15 指标是否原样迁移——它们已有引擎实现与门禁，默认全部纳入。</div>
-      </div></div>`;
+      </div></div>
+    <div class="card"><h3>四表可视化与图形分析（D043）</h3>
+      <div class="detail"><div>真实报表的可视化分析（KPI 卡、五季度真实趋势、利润瀑布、结构环形、现金流同比、四表全量表）由 P5 抽取数据驱动，见
+        <a href="sf_2026q1_report_view.html" target="_blank" rel="noopener">顺丰 2026 一季报可视化分析报告 →</a>；后续每家公司抽取后按同布局重建。</div></div></div>`;
 }
 
 function renderRelations(){
