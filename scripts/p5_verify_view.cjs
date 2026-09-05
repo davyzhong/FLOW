@@ -12,16 +12,22 @@ const { chromium } = require('@playwright/test');
     kpis: await page.locator('.kpi').count(),
     metrics: await page.locator('.metric').count(),
     svgs: await page.locator('svg').count(),
+    stackbars: await page.locator('.stackbar').count(),
     tables: await page.locator('table').count(),
     badges: await page.locator('.badge').allTextContents(),
+    dupont_text: await page.locator('#sec-dupont svg text').allTextContents(),
+    peer_text: await page.locator('#sec-peer table').textContent(),
   };
   console.log(JSON.stringify(checks, null, 1));
   console.log('JS errors:', errors.length ? errors : 'none');
   await page.screenshot({ path: '/tmp/p5_view_top.png' });
-  await page.evaluate(() => window.scrollTo(0, 1400));
+  await page.locator('#sec-dupont').scrollIntoViewIfNeeded();
   await page.waitForTimeout(300);
-  await page.screenshot({ path: '/tmp/p5_view_mid.png' });
-  await page.evaluate(() => window.scrollTo(0, 3000));
+  await page.screenshot({ path: '/tmp/p5_view_dupont.png' });
+  await page.locator('#sec-peer').scrollIntoViewIfNeeded();
+  await page.waitForTimeout(300);
+  await page.screenshot({ path: '/tmp/p5_view_peer.png' });
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
   await page.waitForTimeout(300);
   await page.screenshot({ path: '/tmp/p5_view_low.png' });
   await browser.close();
