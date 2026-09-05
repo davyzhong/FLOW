@@ -747,6 +747,7 @@ metrics_logistics:
     formula: {op: sum, args: [operating.order_count]}
     unit: 单
     time_behavior: period_flow
+    caliber: 非会计科目经营量指标，取自经营事实表订单数；与财务科目无勾稽关系，仅用于经营比率与 Driver 分解。
     source_cas: [经营数据（非会计科目）]
     source_ifrs: 非财务业绩指标（IFRS 18 MPM 类别之非财务计量）
     depends_on: []
@@ -762,6 +763,7 @@ metrics_logistics:
     formula: {op: sum, args: [operating.shipment_count]}
     unit: 件
     time_behavior: period_flow
+    caliber: 非会计科目经营量指标，取自经营事实表实际履约件数；与财务科目无勾稽关系。
     source_cas: [经营数据（非会计科目）]
     source_ifrs: 非财务业绩指标
     depends_on: []
@@ -793,6 +795,7 @@ metrics_logistics:
     formula: {op: div, args: [revenue, orders]}
     unit: 元/单
     time_behavior: period_flow
+    caliber: 派生比率：分子分母须同期间同粒度（继承 revenue 与 orders 口径）；非 CAS 报表项目。
     depends_on: [revenue, orders]
     migrates_from: flow.metrics.logistics.v1#revenue_per_order v1
     mpm: false
@@ -824,6 +827,7 @@ metrics_logistics:
     formula: {op: div, args: [direct_cost, orders]}
     unit: 元/单
     time_behavior: period_flow
+    caliber: 派生比率：分子为直接成本（履约成本口径，见 cost），分母为订单量，须同期间同粒度；非 CAS 报表项目。
     depends_on: [direct_cost, orders]
     migrates_from: flow.metrics.logistics.v1#cost_per_order v1
     mpm: false
@@ -837,6 +841,7 @@ metrics_logistics:
     formula: {op: sub, args: [revenue, direct_cost]}
     unit: 元
     time_behavior: period_flow
+    caliber: 经营口径毛利 = 收入 − 直接成本（履约成本），与 CAS 财务毛利（营业收入 − 营业成本）口径不同：直接成本不含期间费用与税金，解读与对账时不得混同。
     depends_on: [revenue, direct_cost]
     migrates_from: flow.metrics.logistics.v1#gross_profit v1
     mpm: false
@@ -864,6 +869,7 @@ metrics_logistics:
     formula: {op: div, args: [direct_cost, revenue]}
     unit: "%"
     time_behavior: period_flow
+    caliber: 经营口径比率：分子为直接成本（履约成本），与财务「营业成本率」（营业成本 ÷ 营业收入）口径存在差异。
     depends_on: [direct_cost, revenue]
     migrates_from: flow.metrics.logistics.v1#fulfillment_cost_rate v1
     mpm: false
@@ -894,6 +900,7 @@ metrics_logistics:
     formula: {op: closing, args: [ar.receivable_balance]}
     unit: 元
     time_behavior: point_balance
+    caliber: 时点余额：取财务事实应收账款，仅取窗口最后一个可用期间，缺失期间记录 missing 而非零填补；对应 CAS 1122。
     source_cas: [应收账款 1122]
     source_ifrs: trade receivables (IFRS 9 预期信用损失口径须关注)
     depends_on: []
@@ -909,6 +916,7 @@ metrics_logistics:
     formula: {op: div, args: [{op: sum, args: [ar.collected]}, {op: sum, args: [ar.due]}]}
     unit: "%"
     time_behavior: period_flow
+    caliber: 经营口径比率：期间回款金额 ÷ 到期金额，依赖应收账期事实；非 CAS 报表直接项目。
     source_cas: [应收账款 1122（回款核销记录）]
     source_ifrs: collection effectiveness（非准则指标）
     depends_on: []
@@ -925,6 +933,7 @@ metrics_logistics:
     formula: {op: sum, args: [financial.operating_cash_flow]}
     unit: 元
     time_behavior: period_flow
+    caliber: 财务口径：财务事实经营现金流管理科目金额之和，对应 CAS 现金流量表「经营活动产生的现金流量净额」（会企03表 / IAS 7）。
     source_cas: [经营活动产生的现金流量净额]
     source_ifrs: net cash from operating activities (IAS 7)
     depends_on: []
