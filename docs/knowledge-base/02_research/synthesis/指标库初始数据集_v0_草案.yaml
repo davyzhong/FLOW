@@ -37,7 +37,7 @@ report_items:
   bs.ar:                 {cas: 应收账款, ifrs: trade receivables (IFRS 15 / IFRS 9)}
   bs.inventory:          {cas: 存货, ifrs: inventories (IAS 2)}
   bs.current_assets:     {cas: 流动资产合计, ifrs: total current assets (IAS 1)}
-  bs.fixed_assets:       {cas: 固定资产, ifrs: property, plant and equipment (IAS 16)}
+  bs.fixed_assets:       {cas: 固定资产, ifrs: "property, plant and equipment (IAS 16)"}
   bs.total_assets:       {cas: 资产总计, ifrs: total assets (IAS 1)}
   bs.short_debt:         {cas: 短期借款及一年内到期的非流动负债等短期债务, ifrs: current borrowings}
   bs.ap:                 {cas: 应付账款, ifrs: trade payables}
@@ -50,8 +50,8 @@ report_items:
   is.taxes_surcharges:   {cas: 税金及附加, ifrs: taxes and surcharges (CAS 特有行项目)}
   is.selling_exp:        {cas: 销售费用, ifrs: selling and distribution expenses}
   is.admin_exp:          {cas: 管理费用, ifrs: administrative expenses}
-  is.fin_exp:            {cas: 财务费用, ifrs: finance costs, net (IAS 1 / IFRS 18)}
-  is.interest_exp:       {cas: 利息费用（费用化）, ifrs: interest expense (effective interest method, IFRS 9)}
+  is.fin_exp:            {cas: 财务费用, ifrs: "finance costs, net (IAS 1 / IFRS 18)"}
+  is.interest_exp:       {cas: 利息费用（费用化）, ifrs: "interest expense (effective interest method, IFRS 9)"}
   is.operating_profit:   {cas: 营业利润, ifrs: operating profit (IFRS 18 法定小计)}
   is.total_profit:       {cas: 利润总额, ifrs: profit before tax}
   is.income_tax:         {cas: 所得税费用, ifrs: income tax expense (IAS 12)}
