@@ -303,6 +303,14 @@ flowchart LR
 - `/metric-library` API 与页面切换 v1 数据源（schema 增口径裁决字段），API/前端/契约测试全绿并经浏览器验收；三个定稿脚本沉淀于 `scripts/finalize_*.py`（幂等可再生）；
 - 主计划表滚动更新见 `docs/superpowers/plans/2026-09-06-finance-track-master-plan.md`。
 
+### 阶段 29：WS-2 P3 指标库数据库化与发布后编排（主计划 WS-2）
+
+- 迁移 `0012_metric_library_objects`：metric_dictionary_entry / accounting_standard / accounting_subject / entry_template / statement_line_mapping 五张表（版本状态 CheckConstraint、自然键唯一、往返迁移验证通过）；
+- 幂等导入器与治理端点：`POST /api/v1/metric-library/import`（整版导入 v1 配置，55 指标/167 科目/48 准则/32 分录/28 映射）、`POST /retire`（版本化退役 + JSONL 审计留痕）；`GET /metric-library` 改为数据库优先、空库回退 YAML；
+- 报表项目 ↔ 科目映射闭合：28 个报表项目的取数科目编码显式落库（如 bs.ar→1122、is.revenue→6001/6051），映射编码存在性由测试守护；
+- 发布后编排入口（PROJECT_STATE 历史遗留项收口）：`POST /api/v1/orchestration/batches/{id}/build` 将已发布批次一键串联为指标快照序列 + 分析运行（幂等；未发布 409 / 未知 404 typed 错误）；
+- 验证：迁移往返、mypy/ruff、契约再生成无漂移、新增 12 项契约测试全绿；详见主计划表 WS-2。
+
 ## 当前尚未完成
 
 - 最小安全部署剩余工作：密钥与网络边界、备份恢复演练、HTTPS 与回滚、结构化日志及统一部署验收；

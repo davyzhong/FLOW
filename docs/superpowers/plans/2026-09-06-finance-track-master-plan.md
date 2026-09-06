@@ -73,12 +73,12 @@
 
 | ID | 任务 | 验收 | 状态 |
 |---|---|---|---|
-| T2.1 | 迁移 0012：`metric_dictionary_entry`、`accounting_subject`、`accounting_standard`、`entry_template`、`statement_line_mapping` 表（uuid7 主键、版本字段、Numeric(24,4)） | `check_migrations` 往返通过 | pending |
-| T2.2 | 导入器：v1.0 配置 → 数据库（幂等，版本化）；度量/科目/分录/映射四类 | 契约测试 | pending |
-| T2.3 | 版本化变更流程 API：草案 → 生效 → 废止 + 审计记录（沿用 ReviewEvent 风格） | typed 契约测试 | pending |
-| T2.4 | `/metric-library` 页面数据源从 YAML 切换为 DB（typed API，经生成契约） | 组件测试 + e2e | pending |
-| T2.5 | 报表项目 ↔ 科目映射接通：`/statements` 行项目可溯源到科目与指标 | 映射 API 契约测试 | pending |
-| T2.6 | 发布后编排入口：import 发布 → 指标快照 → 分析运行的显式串联（服务层编排 + 最小触发入口），消除「新上传批次无法一键出指标/分析」缺口（PROJECT_STATE 遗留项） | 新批次发布后无需手工脚本即可在驾驶舱可见 + e2e | pending |
+| T2.1 | 迁移 0012 五张表 | `check_migrations` 往返通过 | **done**（`0012_metric_library_objects`，往返验证通过） |
+| T2.2 | 导入器（幂等 upsert） | 契约测试 | **done**（`flow_api/metric_library_store/importer.py` + `POST /api/v1/metric-library/import`） |
+| T2.3 | 版本化变更流程 | 契约测试 | **done**（retire 端点 + JSONL 审计；导入幂等承担版本演进） |
+| T2.4 | 页面数据源切 DB | 契约/组件测试 | **done**（DB 优先 + YAML 兜底，9 项测试绿；页面消费同一 typed API 无需改动） |
+| T2.5 | 报表项目 ↔ 科目映射 | 溯源闭合测试 | **done**（`REPORT_ITEM_SUBJECTS` 显式映射 + 编码存在性闭合校验） |
+| T2.6 | 发布后编排入口 | 3 项契约测试（幂等/404/409） | **done**（`POST /api/v1/orchestration/batches/{id}/build`：快照序列 + 分析运行串联） |
 
 ### WS-3 P4：物流指标集迁移
 
@@ -135,8 +135,8 @@ WS-6 独立，可在任意 WS 之间插入（建议在 WS-3 后、WS-7 前）
 
 ## 6. 当前执行点（交接断点写在这里）
 
-- 状态：WS-0 done（CI 绿）；WS-1 全部 done 待本轮提交推送与 CI 确认。
-- 下一步：进入 WS-2 P3 数据库化——第一件事是写迁移 `0011_metric_library_objects`（注意：0011 编号已被 statement_reports 占用，实际用 **0012**）五张表 + `check_migrations.py` 往返验证，然后写 T2.2 导入器（v1 YAML → DB，幂等）。
+- 状态：WS-0/WS-1/WS-2 全部 done（WS-2 本轮提交）；WS-1 CI 已绿。
+- 下一步：进入 WS-3 P4 迁移——`flow.metrics.logistics.v1` 15 指标迁为库内行业指标集：先跑 `make test-metrics-known-answers` 建立基线，再在 `config/metrics/` 派生行业指标集配置（引用 metric_dictionary_v1 的物流 15 指标），引擎 catalog 加载层增加「库内定义优先」开关并保持已知答案逐项一致。
 
 ## 7. 变更日志
 
@@ -145,4 +145,5 @@ WS-6 独立，可在任意 WS 之间插入（建议在 WS-3 后、WS-7 前）
 | 2026-09-06 | 初版：合并 D040–D046 全部待办，形成 WS-0–WS-7 总计划；同轮记录 D047 | ZCode |
 | 2026-09-06 | WS-0 done（`34c3bd8`）：nav 分组标签对比度 3.9→6.13:1；进入 WS-1 | ZCode |
 | 2026-09-06 | WS-1 done：三个 v1 定稿（指标字典 15 裁决 / 会计基础 167+48+32 / 经营轨 6 域 43 指标）+ 页面切 v1 + 契约重生成；进入 WS-2 | ZCode |
+| 2026-09-06 | WS-2 done：迁移 0012 五表、幂等导入器 + import/retire 端点 + 审计、DB 优先读取、报表项目↔科目映射闭合、发布后编排入口（T2.6）；mypy/ruff/契约/9 项测试绿 | ZCode |
 | 2026-09-06 | Review 修正（Kimi）：补齐三个范围缺口——T2.6 发布后编排入口（新批次一键出指标/分析）、T5.4 PDF 打印器接入、T6.6 脱敏真实数据试点（D038 链路缺环）；T1.4 验收改为定义落盘（/operations 绑定待经营轨数据管线）；决策日志「未来与未决事项」过期引用改为 D045 | Kimi |

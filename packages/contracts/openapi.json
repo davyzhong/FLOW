@@ -2261,7 +2261,7 @@
           "metric-library"
         ],
         "summary": "Get Metric Library",
-        "description": "只读返回指标库与会计基础数据集（v1.0 定稿，D047 默认推荐策略）。",
+        "description": "只读返回指标库（数据库优先，空库回退 v1 YAML；D047 定稿）。",
         "operationId": "get_metric_library_api_v1_metric_library_get",
         "parameters": [
           {
@@ -2291,6 +2291,215 @@
                 }
               }
             }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/metric-library/import": {
+      "post": {
+        "tags": [
+          "metric-library"
+        ],
+        "summary": "Import Metric Library",
+        "description": "整版幂等导入 v1 配置到数据库（受保护操作，审计留痕）。",
+        "operationId": "import_metric_library_api_v1_metric_library_import_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImportRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "integer"
+                  },
+                  "title": "Response Import Metric Library Api V1 Metric Library Import Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/metric-library/retire": {
+      "post": {
+        "tags": [
+          "metric-library"
+        ],
+        "summary": "Retire Metric Library",
+        "description": "版本化退役：将指定字典全部条目置 retired（不可逆操作走新版本导入恢复）。",
+        "operationId": "retire_metric_library_api_v1_metric_library_retire_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RetireRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Retire Metric Library Api V1 Metric Library Retire Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/orchestration/batches/{batch_id}/build": {
+      "post": {
+        "tags": [
+          "orchestration"
+        ],
+        "summary": "Build Batch Analysis",
+        "operationId": "build_batch_analysis_api_v1_orchestration_batches__batch_id__build_post",
+        "parameters": [
+          {
+            "name": "batch_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Batch Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrchestrationBuildResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response 404 Build Batch Analysis Api V1 Orchestration Batches  Batch Id  Build Post"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response 409 Build Batch Analysis Api V1 Orchestration Batches  Batch Id  Build Post"
+                }
+              }
+            },
+            "description": "Conflict"
           },
           "422": {
             "description": "Validation Error",
@@ -4229,6 +4438,21 @@
         ],
         "title": "Highlight"
       },
+      "ImportRequest": {
+        "properties": {
+          "actor": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Actor"
+          }
+        },
+        "type": "object",
+        "required": [
+          "actor"
+        ],
+        "title": "ImportRequest"
+      },
       "ImportVersionResponse": {
         "properties": {
           "id": {
@@ -5324,6 +5548,43 @@
         ],
         "title": "MetricRelation"
       },
+      "OrchestrationBuildResponse": {
+        "properties": {
+          "batch_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Batch Id"
+          },
+          "metric_snapshot_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "title": "Metric Snapshot Ids"
+          },
+          "analysis_run_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Analysis Run Id"
+          },
+          "as_of_months": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "As Of Months"
+          }
+        },
+        "type": "object",
+        "required": [
+          "batch_id",
+          "metric_snapshot_ids",
+          "analysis_run_id",
+          "as_of_months"
+        ],
+        "title": "OrchestrationBuildResponse"
+      },
       "ProductPerformance": {
         "properties": {
           "status": {
@@ -6021,6 +6282,35 @@
           "snapshots"
         ],
         "title": "ReportSnapshotListResponse"
+      },
+      "RetireRequest": {
+        "properties": {
+          "dictionary_id": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Dictionary Id"
+          },
+          "actor": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Actor"
+          },
+          "reason": {
+            "type": "string",
+            "maxLength": 512,
+            "minLength": 1,
+            "title": "Reason"
+          }
+        },
+        "type": "object",
+        "required": [
+          "dictionary_id",
+          "actor",
+          "reason"
+        ],
+        "title": "RetireRequest"
       },
       "ReviewLine": {
         "properties": {

@@ -565,11 +565,68 @@ export interface paths {
         };
         /**
          * Get Metric Library
-         * @description 只读返回指标库与会计基础数据集（v1.0 定稿，D047 默认推荐策略）。
+         * @description 只读返回指标库（数据库优先，空库回退 v1 YAML；D047 定稿）。
          */
         get: operations["get_metric_library_api_v1_metric_library_get"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/metric-library/import": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Import Metric Library
+         * @description 整版幂等导入 v1 配置到数据库（受保护操作，审计留痕）。
+         */
+        post: operations["import_metric_library_api_v1_metric_library_import_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/metric-library/retire": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Retire Metric Library
+         * @description 版本化退役：将指定字典全部条目置 retired（不可逆操作走新版本导入恢复）。
+         */
+        post: operations["retire_metric_library_api_v1_metric_library_retire_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/orchestration/batches/{batch_id}/build": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Build Batch Analysis */
+        post: operations["build_batch_analysis_api_v1_orchestration_batches__batch_id__build_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1275,6 +1332,11 @@ export interface components {
             /** Impact Display */
             impact_display: string;
         };
+        /** ImportRequest */
+        ImportRequest: {
+            /** Actor */
+            actor: string;
+        };
         /** ImportVersionResponse */
         ImportVersionResponse: {
             /**
@@ -1629,6 +1691,23 @@ export interface components {
             /** Provenance */
             provenance?: string | null;
         };
+        /** OrchestrationBuildResponse */
+        OrchestrationBuildResponse: {
+            /**
+             * Batch Id
+             * Format: uuid
+             */
+            batch_id: string;
+            /** Metric Snapshot Ids */
+            metric_snapshot_ids: string[];
+            /**
+             * Analysis Run Id
+             * Format: uuid
+             */
+            analysis_run_id: string;
+            /** As Of Months */
+            as_of_months: number[];
+        };
         /** ProductPerformance */
         ProductPerformance: {
             /**
@@ -1862,6 +1941,15 @@ export interface components {
         ReportSnapshotListResponse: {
             /** Snapshots */
             snapshots: components["schemas"]["ReportSnapshotLine"][];
+        };
+        /** RetireRequest */
+        RetireRequest: {
+            /** Dictionary Id */
+            dictionary_id: string;
+            /** Actor */
+            actor: string;
+            /** Reason */
+            reason: string;
         };
         /** ReviewLine */
         ReviewLine: {
@@ -3519,6 +3607,135 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MetricLibraryResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    import_metric_library_api_v1_metric_library_import_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ImportRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: number;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    retire_metric_library_api_v1_metric_library_retire_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RetireRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    build_batch_analysis_api_v1_orchestration_batches__batch_id__build_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                batch_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OrchestrationBuildResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
                 };
             };
             /** @description Validation Error */
