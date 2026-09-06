@@ -1038,6 +1038,56 @@
         }
       }
     },
+    "/api/v1/investigations": {
+      "get": {
+        "tags": [
+          "investigations"
+        ],
+        "summary": "List Findings",
+        "description": "列出全部 Finding（含身份交接标识），供「分析与归因」入口选择调查对象。",
+        "operationId": "list_findings_api_v1_investigations_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FindingListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/investigations/{finding_id}": {
       "get": {
         "tags": [
@@ -1949,6 +1999,56 @@
         }
       }
     },
+    "/api/v1/publishing/freeze-candidates": {
+      "get": {
+        "tags": [
+          "publishing"
+        ],
+        "summary": "List Freeze Candidates",
+        "description": "已发布指标快照及已批准 Finding 数，供冻结表单选择。",
+        "operationId": "list_freeze_candidates_api_v1_publishing_freeze_candidates_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FreezeCandidateListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/publishing/attempts/{attempt_id}/download": {
       "get": {
         "tags": [
@@ -2154,10 +2254,210 @@
           }
         }
       }
+    },
+    "/api/v1/metric-library": {
+      "get": {
+        "tags": [
+          "metric-library"
+        ],
+        "summary": "Get Metric Library",
+        "description": "只读返回指标库与会计基础数据集（v0 草案，D040）。",
+        "operationId": "get_metric_library_api_v1_metric_library_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MetricLibraryResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "AccountingAccount": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "category": {
+            "type": "string",
+            "title": "Category"
+          },
+          "balance_side": {
+            "type": "string",
+            "title": "Balance Side"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "standard_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Standard Ref"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code",
+          "name",
+          "category",
+          "balance_side",
+          "status"
+        ],
+        "title": "AccountingAccount"
+      },
+      "AccountingFoundation": {
+        "properties": {
+          "dataset_id": {
+            "type": "string",
+            "title": "Dataset Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "known_gaps": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Known Gaps",
+            "default": []
+          },
+          "categories": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Categories",
+            "default": []
+          },
+          "accounts": {
+            "items": {
+              "$ref": "#/components/schemas/AccountingAccount"
+            },
+            "type": "array",
+            "title": "Accounts"
+          },
+          "superseded_notes": {
+            "items": {
+              "$ref": "#/components/schemas/SupersededNote"
+            },
+            "type": "array",
+            "title": "Superseded Notes",
+            "default": []
+          },
+          "standards": {
+            "items": {
+              "$ref": "#/components/schemas/AccountingStandard"
+            },
+            "type": "array",
+            "title": "Standards",
+            "default": []
+          },
+          "entry_templates": {
+            "items": {
+              "$ref": "#/components/schemas/EntryTemplate"
+            },
+            "type": "array",
+            "title": "Entry Templates",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "dataset_id",
+          "status",
+          "accounts"
+        ],
+        "title": "AccountingFoundation"
+      },
+      "AccountingStandard": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "issuer": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Issuer"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "title": "AccountingStandard"
+      },
       "ActiveFilters": {
         "properties": {
           "period_view": {
@@ -3087,6 +3387,85 @@
         ],
         "title": "DriverLine"
       },
+      "EntryLine": {
+        "properties": {
+          "direction": {
+            "type": "string",
+            "title": "Direction"
+          },
+          "account": {
+            "type": "string",
+            "title": "Account"
+          },
+          "amount_rule": {
+            "type": "string",
+            "title": "Amount Rule"
+          }
+        },
+        "type": "object",
+        "required": [
+          "direction",
+          "account",
+          "amount_rule"
+        ],
+        "title": "EntryLine"
+      },
+      "EntryTemplate": {
+        "properties": {
+          "template_id": {
+            "type": "string",
+            "title": "Template Id"
+          },
+          "scenario": {
+            "type": "string",
+            "title": "Scenario"
+          },
+          "business_context": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Business Context"
+          },
+          "lines": {
+            "items": {
+              "$ref": "#/components/schemas/EntryLine"
+            },
+            "type": "array",
+            "title": "Lines"
+          },
+          "standard_ref": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Standard Ref"
+          },
+          "related_metrics": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Related Metrics",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "template_id",
+          "scenario",
+          "lines"
+        ],
+        "title": "EntryTemplate"
+      },
       "ErrorDetail": {
         "properties": {
           "code": {
@@ -3528,6 +3907,128 @@
         ],
         "title": "FindingItem"
       },
+      "FindingListItem": {
+        "properties": {
+          "finding_id": {
+            "type": "string",
+            "title": "Finding Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "finding_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finding Type"
+          },
+          "impact_amount": {
+            "type": "string",
+            "title": "Impact Amount"
+          },
+          "comparison_basis": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Comparison Basis"
+          },
+          "total_score": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total Score"
+          },
+          "batch_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Batch Id"
+          },
+          "metric_snapshot_id": {
+            "type": "string",
+            "title": "Metric Snapshot Id"
+          },
+          "analysis_run_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Analysis Run Id"
+          },
+          "created_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "finding_id",
+          "title",
+          "status",
+          "finding_type",
+          "impact_amount",
+          "comparison_basis",
+          "total_score",
+          "batch_id",
+          "metric_snapshot_id",
+          "analysis_run_id",
+          "created_at"
+        ],
+        "title": "FindingListItem",
+        "description": "调查列表项：携带 Investigation 身份交接所需的全部标识（D036）。"
+      },
+      "FindingListResponse": {
+        "properties": {
+          "findings": {
+            "items": {
+              "$ref": "#/components/schemas/FindingListItem"
+            },
+            "type": "array",
+            "title": "Findings"
+          }
+        },
+        "type": "object",
+        "required": [
+          "findings"
+        ],
+        "title": "FindingListResponse"
+      },
       "FindingTransitionRequest": {
         "properties": {
           "decision": {
@@ -3588,6 +4089,74 @@
         ],
         "title": "FindingTransitionResponse",
         "description": "Acknowledgement of a governed Finding state transition."
+      },
+      "FreezeCandidateLine": {
+        "properties": {
+          "metric_snapshot_id": {
+            "type": "string",
+            "title": "Metric Snapshot Id"
+          },
+          "batch_id": {
+            "type": "string",
+            "title": "Batch Id"
+          },
+          "period_label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Period Label"
+          },
+          "version": {
+            "type": "integer",
+            "title": "Version"
+          },
+          "approved_findings": {
+            "type": "integer",
+            "title": "Approved Findings"
+          },
+          "created_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "metric_snapshot_id",
+          "batch_id",
+          "period_label",
+          "version",
+          "approved_findings"
+        ],
+        "title": "FreezeCandidateLine",
+        "description": "可冻结的已发布指标快照：报告中心冻结表单的选择项。"
+      },
+      "FreezeCandidateListResponse": {
+        "properties": {
+          "candidates": {
+            "items": {
+              "$ref": "#/components/schemas/FreezeCandidateLine"
+            },
+            "type": "array",
+            "title": "Candidates"
+          }
+        },
+        "type": "object",
+        "required": [
+          "candidates"
+        ],
+        "title": "FreezeCandidateListResponse"
       },
       "HTTPValidationError": {
         "properties": {
@@ -4350,6 +4919,348 @@
         ],
         "title": "MetricContext"
       },
+      "MetricDecomposition": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "formula_text": {
+            "type": "string",
+            "title": "Formula Text"
+          },
+          "factors": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Factors"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "formula_text",
+          "factors"
+        ],
+        "title": "MetricDecomposition"
+      },
+      "MetricEntry": {
+        "properties": {
+          "metric_code": {
+            "type": "string",
+            "title": "Metric Code"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "domain": {
+            "type": "string",
+            "title": "Domain"
+          },
+          "definition": {
+            "type": "string",
+            "title": "Definition"
+          },
+          "formula_text": {
+            "type": "string",
+            "title": "Formula Text"
+          },
+          "formula": {
+            "$ref": "#/components/schemas/MetricFormula"
+          },
+          "unit": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unit"
+          },
+          "time_behavior": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Time Behavior"
+          },
+          "caliber": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Caliber"
+          },
+          "source_cas": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Source Cas",
+            "default": []
+          },
+          "source_ifrs": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Ifrs"
+          },
+          "depends_on": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Depends On",
+            "default": []
+          },
+          "decompositions": {
+            "items": {
+              "$ref": "#/components/schemas/MetricDecomposition"
+            },
+            "type": "array",
+            "title": "Decompositions",
+            "default": []
+          },
+          "benchmark": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Benchmark"
+          },
+          "mpm": {
+            "type": "boolean",
+            "title": "Mpm",
+            "default": false
+          },
+          "reconciliation": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reconciliation"
+          },
+          "migrates_from": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Migrates From"
+          },
+          "aliases": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Aliases",
+            "default": []
+          },
+          "provenance": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Provenance"
+          },
+          "collection": {
+            "type": "string",
+            "enum": [
+              "general",
+              "logistics"
+            ],
+            "title": "Collection"
+          }
+        },
+        "type": "object",
+        "required": [
+          "metric_code",
+          "name",
+          "domain",
+          "definition",
+          "formula_text",
+          "formula",
+          "collection"
+        ],
+        "title": "MetricEntry"
+      },
+      "MetricFormula": {
+        "properties": {
+          "op": {
+            "type": "string",
+            "title": "Op"
+          },
+          "args": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "$ref": "#/components/schemas/MetricFormula"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Args"
+          }
+        },
+        "type": "object",
+        "required": [
+          "op",
+          "args"
+        ],
+        "title": "MetricFormula"
+      },
+      "MetricLibraryResponse": {
+        "properties": {
+          "dictionary_id": {
+            "type": "string",
+            "title": "Dictionary Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "decision_ref": {
+            "type": "string",
+            "title": "Decision Ref"
+          },
+          "created": {
+            "type": "string",
+            "title": "Created"
+          },
+          "standards_scope": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Standards Scope"
+          },
+          "domains": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Domains"
+          },
+          "report_items": {
+            "items": {
+              "$ref": "#/components/schemas/ReportItem"
+            },
+            "type": "array",
+            "title": "Report Items"
+          },
+          "metrics": {
+            "items": {
+              "$ref": "#/components/schemas/MetricEntry"
+            },
+            "type": "array",
+            "title": "Metrics"
+          },
+          "relations": {
+            "items": {
+              "$ref": "#/components/schemas/MetricRelation"
+            },
+            "type": "array",
+            "title": "Relations"
+          },
+          "accounting": {
+            "$ref": "#/components/schemas/AccountingFoundation"
+          }
+        },
+        "type": "object",
+        "required": [
+          "dictionary_id",
+          "status",
+          "decision_ref",
+          "created",
+          "standards_scope",
+          "domains",
+          "report_items",
+          "metrics",
+          "relations",
+          "accounting"
+        ],
+        "title": "MetricLibraryResponse"
+      },
+      "MetricRelation": {
+        "properties": {
+          "relation": {
+            "type": "string",
+            "title": "Relation"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "expression": {
+            "type": "string",
+            "title": "Expression"
+          },
+          "note": {
+            "type": "string",
+            "title": "Note"
+          },
+          "provenance": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Provenance"
+          }
+        },
+        "type": "object",
+        "required": [
+          "relation",
+          "name",
+          "expression",
+          "note"
+        ],
+        "title": "MetricRelation"
+      },
       "ProductPerformance": {
         "properties": {
           "status": {
@@ -4896,6 +5807,29 @@
           "details"
         ],
         "title": "ReconciliationResponse"
+      },
+      "ReportItem": {
+        "properties": {
+          "item_id": {
+            "type": "string",
+            "title": "Item Id"
+          },
+          "cas": {
+            "type": "string",
+            "title": "Cas"
+          },
+          "ifrs": {
+            "type": "string",
+            "title": "Ifrs"
+          }
+        },
+        "type": "object",
+        "required": [
+          "item_id",
+          "cas",
+          "ifrs"
+        ],
+        "title": "ReportItem"
       },
       "ReportOutlineRequest": {
         "properties": {
@@ -5590,6 +6524,24 @@
         "additionalProperties": false,
         "type": "object",
         "title": "StructuredAnswer"
+      },
+      "SupersededNote": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "note": {
+            "type": "string",
+            "title": "Note"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code",
+          "note"
+        ],
+        "title": "SupersededNote"
       },
       "TrendPanel": {
         "properties": {

@@ -1,0 +1,35 @@
+.app-shell {
+  --ink: #15243b;
+  --muted: #52637a;
+  --line: #dfe6ef;
+  --blue: #1769e8;
+  --navy: #13223a;
+  --green: #075f45;
+  --red: #912f3b;
+  --amber: #805000;
+  display: grid;
+  min-height: 100vh;
+  grid-template-columns: 188px minmax(0, 1fr);
+  background: #eef1f6;
+}
+
+.app-shell__main {
+  min-width: 0;
+  padding: 28px 32px 56px;
+}
+
+@media (max-width: 1200px) {
+  .app-shell {
+    grid-template-columns: 62px minmax(0, 1fr);
+  }
+
+  .app-shell .workflow-rail__brand strong,
+  .app-shell .workflow-rail li a > span,
+  .app-shell .workflow-rail__footer {
+    display: none;
+  }
+
+  .app-shell__main {
+    padding: 20px 18px 48px;
+  }
+}

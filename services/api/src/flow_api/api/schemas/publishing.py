@@ -58,11 +58,28 @@ class ReportSnapshotListResponse(BaseModel):
     snapshots: list[ReportSnapshotLine]
 
 
+class FreezeCandidateLine(BaseModel):
+    """可冻结的已发布指标快照：报告中心冻结表单的选择项。"""
+
+    metric_snapshot_id: str
+    batch_id: str
+    period_label: str | None
+    version: int
+    approved_findings: int
+    created_at: str | None = None
+
+
+class FreezeCandidateListResponse(BaseModel):
+    candidates: list[FreezeCandidateLine]
+
+
 class PublishingErrorResponse(BaseModel):
     detail: ErrorDetail
 
 
 __all__ = [
+    "FreezeCandidateLine",
+    "FreezeCandidateListResponse",
     "PublishRequest",
     "PublishResponse",
     "PublicationAttemptLine",

@@ -1,4 +1,5 @@
 import type { DashboardFilters, DashboardResponse } from "../../lib/api/client";
+import { AppShell } from "../shell/app-shell";
 import { dashboardStateMessage } from "./dashboard-format";
 import { DashboardHeader } from "./dashboard-header";
 import { DataStatusBar } from "./data-status-bar";
@@ -21,12 +22,14 @@ export function DashboardLoading() {
 
 export function DashboardError({ retry }: { retry: () => void }) {
   return (
-    <div className="dashboard-state dashboard-state--error" role="alert">
-      <p>经营驾驶舱暂时无法加载</p>
-      <button type="button" onClick={retry}>
-        重试
-      </button>
-    </div>
+    <AppShell>
+      <div className="dashboard-state dashboard-state--error" role="alert">
+        <p>经营驾驶舱暂时无法加载</p>
+        <button type="button" onClick={retry}>
+          重试
+        </button>
+      </div>
+    </AppShell>
   );
 }
 
@@ -39,7 +42,11 @@ export function DashboardLoaded({
 }) {
   const message = dashboardStateMessage(dashboard.state);
   if (dashboard.state === "empty") {
-    return <div className="dashboard-state dashboard-state--empty">{message}</div>;
+    return (
+      <AppShell>
+        <div className="dashboard-state dashboard-state--empty">{message}</div>
+      </AppShell>
+    );
   }
   return (
     <section className="dashboard-loaded" aria-label="经营驾驶舱内容">

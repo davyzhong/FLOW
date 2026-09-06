@@ -10,7 +10,14 @@ const items = [
   ["analysis", "分析与归因", "/investigations"],
   ["report", "报告与导出", "/reports"],
   ["chart", "报表分析", "/statements"],
+  ["library", "指标库", "/metric-library"],
 ] as const;
+
+function isActiveItem(pathname: string | null, target: string): boolean {
+  const current = pathname ?? "";
+  if (target === "/") return current === "/";
+  return current === target || current.startsWith(`${target}/`);
+}
 
 export function WorkflowNav() {
   const pathname = usePathname();
@@ -20,7 +27,7 @@ export function WorkflowNav() {
         <div className="workflow-rail__brand"><span>F</span><strong>FLOW</strong></div>
         <ol>
           {items.map(([icon, label, target]) => {
-            const isActive = pathname === target;
+            const isActive = isActiveItem(pathname, target);
             return (
               <li key={label} className={isActive ? "is-active" : undefined}>
                 <a href={target} aria-current={isActive ? "page" : undefined}>

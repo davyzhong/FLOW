@@ -26,6 +26,15 @@ type AttemptLine = {
   stored_sha256: string | null;
 };
 
+type FreezeCandidate = {
+  metric_snapshot_id: string;
+  batch_id: string;
+  period_label: string | null;
+  version: number;
+  approved_findings: number;
+  created_at: string | null;
+};
+
 const FORMATS = ["pptx", "xlsx", "html", "pdf"] as const;
 
 async function fetchSnapshots(): Promise<SnapshotLine[]> {
@@ -34,6 +43,15 @@ async function fetchSnapshots(): Promise<SnapshotLine[]> {
   });
   if (!response.ok) throw new FlowApiError(response.status, "upstream", "加载失败");
   return ((await response.json()) as { snapshots: SnapshotLine[] }).snapshots;
+}
+
+async function fetchFreezeCandidates(): Promise<FreezeCandidate[]> {
+  const response = await fetch("/api/v1/publishing/freeze-candidates", {
+    headers: { Accept: "application/json" },
+  });
+  if (!response.ok) return [];
+  const body = (await response.json()) as { candidates?: FreezeCandidate[] };
+  return body.candidates ?? [];
 }
 
 async function fetchAttempts(snapshotId: string): Promise<AttemptLine[]> {
@@ -46,6 +64,7 @@ export function ReportsCenter() {
   const [snapshots, setSnapshots] = useState<SnapshotLine[]>([]);
   const [selected, setSelected] = useState<string | null>(null);
   const [metricSnapshotId, setMetricSnapshotId] = useState("");
+  const [candidates, setCandidates] = useState<FreezeCandidate[]>([]);
   const [formats, setFormats] = useState<string[]>(["html"]);
   const [attempts, setAttempts] = useState<AttemptLine[]>([]);
   const [loading, setLoading] = useState(true);
@@ -65,6 +84,13 @@ export function ReportsCenter() {
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
+      });
+    fetchFreezeCandidates()
+      .then((rows) => {
+        if (!cancelled) setCandidates(rows);
+      })
+      .catch(() => {
+        if (!cancelled) setCandidates([]);
       });
     return () => {
       cancelled = true;
@@ -106,7 +132,10 @@ export function ReportsCenter() {
         const body = (await response.json()) as { detail?: { message?: string } };
         throw new Error(body.detail?.message ?? "冻结失败");
       }
-      setSnapshots(await fetchSnapshots());
+      const refreshed = await fetchSnapshots();
+      setSnapshots(refreshed);
+      if (refreshed[0]) setSelected(refreshed[0].id);
+      setCandidates(await fetchFreezeCandidates());
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "冻结失败");
     } finally {
@@ -167,12 +196,24 @@ export function ReportsCenter() {
       <div className="reports-center__freeze">
         <h2>冻结新报告快照</h2>
         <label>
-          指标快照 ID
-          <input
+          指标快照
+          <select
             value={metricSnapshotId}
             onChange={(event) => setMetricSnapshotId(event.target.value)}
-            placeholder="已发布的 metric snapshot id"
-          />
+          >
+            <option value="">选择已发布的指标快照…</option>
+            {candidates.map((candidate) => (
+              <option
+                key={candidate.metric_snapshot_id}
+                value={candidate.metric_snapshot_id}
+                disabled={candidate.approved_findings === 0}
+              >
+                {candidate.period_label ?? "未知期间"} · 批次 {candidate.batch_id.slice(0, 8)} · v
+                {candidate.version} · 已批准发现 {candidate.approved_findings}
+                {candidate.approved_findings === 0 ? "（不可冻结）" : ""}
+              </option>
+            ))}
+          </select>
         </label>
         <button type="button" disabled={busy || !metricSnapshotId} onClick={() => void freeze()}>
           冻结快照

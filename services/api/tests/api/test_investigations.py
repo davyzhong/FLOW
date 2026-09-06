@@ -145,3 +145,20 @@ async def test_investigation_api_full_review_flow(analysis_session: Session) -> 
             "approved",
         ]
 
+
+
+async def test_findings_list_carries_identity(analysis_session: Session) -> None:
+    run = publish_analysis_run(analysis_session)
+    app = create_app()
+    app.dependency_overrides[get_investigation_session] = _override(analysis_session)
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        listing = await client.get("/api/v1/investigations")
+        assert listing.status_code == 200, listing.text
+        findings = listing.json()["findings"]
+        assert findings, "分析运行后应有 Finding"
+        target = next(f for f in findings if f["analysis_run_id"] == str(run.id))
+        assert target["batch_id"] == str(run.metric_snapshot.batch_id)
+        assert target["metric_snapshot_id"] == str(run.metric_snapshot_id)
+        assert target["title"]
+        assert target["status"] in {"candidate", "in_review", "approved", "rejected"}

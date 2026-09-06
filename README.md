@@ -66,7 +66,7 @@ flowchart TB
 
 ## 界面导览
 
-当前浏览器入口包括 `/`、`/data`、`/investigations/{findingId}`、`/reports` 和 `/login`。驾驶舱与调查页采用高密度分析布局；导入、报告与登录页目前以功能完整性为主，视觉细化仍有空间。
+当前浏览器入口包括 `/`、`/data`、`/investigations`、`/reports`、`/statements`、`/metric-library` 和 `/login`。全部功能页共享同一左侧工作流导航；驾驶舱与调查页采用高密度分析布局，报表分析与指标库为只读分析视图。
 
 ### 1. Finance BP 驾驶舱
 
@@ -375,6 +375,7 @@ sequenceDiagram
 | `REDIS_URL` | API / Worker | Redis 连接 |
 | `S3_ENDPOINT_URL`、`S3_BUCKET` | API / Worker | 对象存储地址与桶 |
 | `S3_ACCESS_KEY`、`S3_SECRET_KEY` | API / Worker | 对象存储凭据 |
+| `S3_USE_SYSTEM_PROXY` | API / Worker | 默认 `false`：S3 客户端绕过系统/环境代理（防止本机代理未运行时请求挂起）；经代理访问外部对象存储时设 `true` |
 | `FLOW_API_INTERNAL_URL` | Web 服务端 | 内部 API 地址 |
 | `AUTH_TOKEN` | API + Web | 相同的服务端共享 token |
 | `FLOW_WEB_PASSWORD` | Web 服务端 | 单用户访问密码 |
@@ -484,6 +485,6 @@ flowchart LR
     style D fill:#fff0cd,stroke:#aa7918,stroke-width:2px
 ```
 
-下一步仍需完成：新导入批次的计算与分析编排、PDF 打印器和真实对象存储的目标环境验收、生产 HTTPS/网络边界/密钥管理、备份恢复演练、可观测性，以及脱敏真实物流数据试点。最小安全计划中的登录/API 认证已落地，不能据此把其余部署任务标为完成。
+下一步仍需完成：新导入批次的计算与分析编排、PDF 打印器注入、生产 HTTPS/网络边界/密钥管理、备份恢复演练、可观测性，以及脱敏真实物流数据试点。真实对象存储链路已于 2026-09-06 修复并验证（根因：boto3 拾取 macOS 系统代理导致请求挂起，详见[本轮记录](docs/implementation/2026-09-06-shell-metric-library-s3-proxy.md)）。最小安全计划中的登录/API 认证已落地，不能据此把其余部署任务标为完成。
 
 本仓库尚未提供独立的 LICENSE 文件；使用与分发授权请向项目维护者确认。贡献与协作遵循 [AGENTS.md](AGENTS.md)：先读项目状态和正式决策，保护原始档案，按风险验证，每个完整任务只提交相关文件并推送规范远端。

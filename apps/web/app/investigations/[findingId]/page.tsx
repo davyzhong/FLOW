@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { InvestigationApp } from "../../../components/investigation/investigation-app";
+import { AppShell } from "../../../components/shell/app-shell";
 
 export const metadata: Metadata = {
   title: "FLOW · 经营调查",
@@ -21,13 +22,15 @@ export default async function InvestigationPage({
 }) {
   const [{ findingId }, query] = await Promise.all([params, searchParams]);
   return (
-    <InvestigationApp
-      query={{
-        finding_id: findingId,
-        batch_id: first(query.batch_id),
-        metric_snapshot_id: first(query.metric_snapshot_id),
-        analysis_run_id: first(query.analysis_run_id),
-      }}
-    />
+    <AppShell>
+      <InvestigationApp
+        query={{
+          finding_id: findingId,
+          batch_id: first(query.batch_id),
+          metric_snapshot_id: first(query.metric_snapshot_id),
+          analysis_run_id: first(query.analysis_run_id),
+        }}
+      />
+    </AppShell>
   );
 }

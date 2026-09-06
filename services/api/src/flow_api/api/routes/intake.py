@@ -7,7 +7,6 @@ from pathlib import Path
 from typing import Annotated, Any, cast
 from uuid import UUID
 
-import boto3  # type: ignore[import-untyped]
 from fastapi import APIRouter, Depends, File, HTTPException, Response, UploadFile, status
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
@@ -55,6 +54,7 @@ from flow_api.infrastructure.models.intake import (
     SourceRecord,
 )
 from flow_api.infrastructure.object_store import ObjectStore
+from flow_api.infrastructure.s3_client import build_s3_client
 from flow_api.intake.detector import WorkbookDetectionError, profile_workbook
 from flow_api.intake.extractor import CandidateExtractionError, extract_candidate_package
 from flow_api.intake.mapping import (
@@ -109,13 +109,7 @@ def get_db_session() -> Iterator[Session]:
 @lru_cache
 def get_source_storage() -> SourceStorage:
     settings = get_settings()
-    client = boto3.client(
-        "s3",
-        endpoint_url=settings.s3_endpoint_url,
-        aws_access_key_id=settings.s3_access_key.get_secret_value(),
-        aws_secret_access_key=settings.s3_secret_key.get_secret_value(),
-    )
-    return SourceStorage(ObjectStore(client=client, bucket=settings.s3_bucket))
+    return SourceStorage(ObjectStore(client=build_s3_client(settings), bucket=settings.s3_bucket))
 
 
 @lru_cache

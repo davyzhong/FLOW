@@ -1,0 +1,70 @@
+/* 分析与归因入口（/investigations）样式 */
+
+.investigations-index {
+  display: grid;
+  gap: 16px;
+}
+
+.investigations-index header h1 {
+  margin: 0 0 8px;
+  font-size: 22px;
+}
+
+.investigations-index header p {
+  margin: 0;
+  color: #52637a;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.investigations-index__error {
+  color: #b42318;
+  font-weight: 600;
+}
+
+.investigations-index__empty {
+  color: #52637a;
+}
+
+.investigations-index__table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  font-size: 13px;
+}
+
+.investigations-index__table th,
+.investigations-index__table td {
+  padding: 8px 12px;
+  border: 1px solid #dfe6ef;
+  text-align: left;
+}
+
+.investigations-index__table th {
+  background: #f5f7fa;
+  color: #52637a;
+  font-weight: 600;
+}
+
+.investigations-index__status {
+  padding: 2px 10px;
+  border-radius: 10px;
+  font-size: 12px;
+  background: #eef2f7;
+  color: #33465e;
+}
+
+.investigations-index__status--approved {
+  background: #e3f3ec;
+  color: #075f45;
+}
+
+.investigations-index__status--in_review {
+  background: #fdf0dc;
+  color: #805000;
+}
+
+.investigations-index__status--rejected {
+  background: #fbe7ea;
+  color: #912f3b;
+}

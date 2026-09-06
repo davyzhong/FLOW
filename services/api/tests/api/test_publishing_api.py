@@ -176,3 +176,16 @@ async def test_freeze_persists_beyond_request_session(client: Any) -> None:
         stored = reader.get(ReportSnapshot, response.json()["id"])
         assert stored is not None
         assert stored.frozen_view is not None
+
+
+async def test_freeze_candidates_list(client: Any) -> None:
+    with Session(get_engine(), expire_on_commit=False) as session:
+        snapshot_id = await _approved_snapshot_id(session)
+    response = await client.get("/api/v1/publishing/freeze-candidates")
+    assert response.status_code == 200, response.text
+    candidates = response.json()["candidates"]
+    assert candidates, "应至少有一个已发布指标快照"
+    target = next(c for c in candidates if c["metric_snapshot_id"] == str(snapshot_id))
+    assert target["approved_findings"] >= 1
+    assert target["period_label"]
+    assert target["batch_id"]

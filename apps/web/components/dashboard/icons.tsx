@@ -7,6 +7,7 @@ export function FlowIcon({ name, ...props }: SVGProps<SVGSVGElement> & { name: s
     analysis: "M4 19V9m6 10V5m6 14v-7m4 7H2",
     report: "M6 3h9l3 3v15H6zm3 6h6m-6 4h6m-6 4h4",
     chart: "M4 20h16M7 16v-5m5 5V7m5 9v-3",
+    library: "M4 19V5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zm0 0a2 2 0 0 0 2 2h13",
     alert: "M12 3 2 21h20zm0 6v5m0 3v1",
     arrow: "M5 12h14m-5-5 5 5-5 5",
   };

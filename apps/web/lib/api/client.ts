@@ -277,6 +277,27 @@ export const statementApi = {
   },
 };
 
+export type MetricLibrary = components["schemas"]["MetricLibraryResponse"];export type MetricLibraryEntry = components["schemas"]["MetricEntry"];
+export type MetricLibraryReportItem = components["schemas"]["ReportItem"];
+export type MetricLibraryRelation = components["schemas"]["MetricRelation"];
+export type MetricLibraryAccount = components["schemas"]["AccountingAccount"];
+export type MetricLibraryEntryTemplate = components["schemas"]["EntryTemplate"];
+
+export const metricLibraryApi = {
+  get(signal?: AbortSignal): Promise<MetricLibrary> {
+    return request<MetricLibrary>("/api/v1/metric-library", signal);
+  },
+};
+
+export type FindingListItem = components["schemas"]["FindingListItem"];
+export type FindingList = components["schemas"]["FindingListResponse"];
+
+export const findingApi = {
+  list(signal?: AbortSignal): Promise<FindingList> {
+    return request<FindingList>("/api/v1/investigations", signal);
+  },
+};
+
 async function download(path: string, fallbackFilename: string): Promise<void> {
   const response = await fetch(requestUrl(path), {
     headers: { Accept: "application/octet-stream" },

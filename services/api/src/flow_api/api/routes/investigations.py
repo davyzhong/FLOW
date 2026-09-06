@@ -5,6 +5,7 @@ from typing import Annotated
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from flow_api.api.schemas.intake import ErrorDetail
@@ -13,12 +14,15 @@ from flow_api.api.schemas.investigation import (
     ConclusionUpsertRequest,
     EvidenceDecisionRequest,
     EvidenceDecisionResponse,
+    FindingListItem,
+    FindingListResponse,
     FindingTransitionRequest,
     FindingTransitionResponse,
     InvestigationContextResponse,
     InvestigationErrorResponse,
 )
 from flow_api.infrastructure.db import get_session_factory
+from flow_api.infrastructure.models.analytics import Finding, MetricSnapshot
 from flow_api.investigation.repositories import (
     InvestigationIdentityMismatchError,
     InvestigationNotFoundError,
@@ -40,6 +44,38 @@ SessionDependency = Annotated[Session, Depends(get_investigation_session)]
 def _error(http_status: int, code: str, message: str) -> HTTPException:
     detail = ErrorDetail(code=code, message=message)
     return HTTPException(status_code=http_status, detail=detail.model_dump(mode="json"))
+
+
+@router.get("", response_model=FindingListResponse)
+def list_findings(session: SessionDependency) -> FindingListResponse:
+    """列出全部 Finding（含身份交接标识），供「分析与归因」入口选择调查对象。"""
+    rows = session.execute(
+        select(Finding, MetricSnapshot.batch_id)
+        .join(MetricSnapshot, Finding.metric_snapshot_id == MetricSnapshot.id)
+        .order_by(Finding.total_score.desc().nulls_last(), Finding.created_at.desc())
+    ).all()
+    return FindingListResponse(
+        findings=[
+            FindingListItem(
+                finding_id=str(finding.id),
+                title=finding.title,
+                status=finding.status,
+                finding_type=finding.finding_type,
+                impact_amount=str(finding.impact_amount),
+                comparison_basis=finding.comparison_basis,
+                total_score=str(finding.total_score) if finding.total_score is not None else None,
+                batch_id=str(batch_id) if batch_id else None,
+                metric_snapshot_id=str(finding.metric_snapshot_id),
+                analysis_run_id=(
+                    str(finding.analysis_run_id) if finding.analysis_run_id else None
+                ),
+                created_at=(
+                    finding.created_at.isoformat(timespec="seconds") if finding.created_at else None
+                ),
+            )
+            for finding, batch_id in rows
+        ]
+    )
 
 
 @router.get(

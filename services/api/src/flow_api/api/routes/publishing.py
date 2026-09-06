@@ -5,14 +5,15 @@ from functools import lru_cache
 from typing import Annotated
 from uuid import UUID
 
-import boto3  # type: ignore[import-untyped]
 from fastapi import APIRouter, Depends, HTTPException, Response, status
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from flow_api.api.routes.investigations import get_investigation_session
 from flow_api.api.schemas.intake import ErrorDetail
 from flow_api.api.schemas.publishing import (
+    FreezeCandidateLine,
+    FreezeCandidateListResponse,
     PublicationAttemptLine,
     PublicationAttemptsResponse,
     PublishingErrorResponse,
@@ -23,12 +24,15 @@ from flow_api.api.schemas.publishing import (
     ReportSnapshotLine,
     ReportSnapshotListResponse,
 )
+from flow_api.infrastructure.models.analytics import Finding, MetricSnapshot
+from flow_api.infrastructure.models.canonical import Period
 from flow_api.infrastructure.models.intake import StoredObject
 from flow_api.infrastructure.models.publishing import (
     PublicationAttempt,
     ReportSnapshot,
 )
 from flow_api.infrastructure.object_store import ObjectStore
+from flow_api.infrastructure.s3_client import build_s3_client
 from flow_api.publishing.publication import PublicationService
 from flow_api.publishing.service import PublishingFreezeError
 from flow_api.settings import get_settings
@@ -49,13 +53,7 @@ FORMAT_CONTENT_TYPES = {
 @lru_cache
 def get_publication_object_store() -> ObjectStore:
     settings = get_settings()
-    client = boto3.client(
-        "s3",
-        endpoint_url=settings.s3_endpoint_url,
-        aws_access_key_id=settings.s3_access_key.get_secret_value(),
-        aws_secret_access_key=settings.s3_secret_key.get_secret_value(),
-    )
-    return ObjectStore(client=client, bucket=settings.s3_bucket)
+    return ObjectStore(client=build_s3_client(settings), bucket=settings.s3_bucket)
 
 
 def _error(http_status: int, code: str, message: str) -> HTTPException:
@@ -182,6 +180,44 @@ def freeze_report_snapshot_route(
         version=int(report.version),
         title=report.title,
         created_at=report.created_at.isoformat(timespec="seconds") if report.created_at else None,
+    )
+
+
+@router.get("/freeze-candidates", response_model=FreezeCandidateListResponse)
+def list_freeze_candidates(session: SessionDependency) -> FreezeCandidateListResponse:
+    """已发布指标快照及已批准 Finding 数，供冻结表单选择。"""
+    approved_counts = (
+        select(Finding.metric_snapshot_id, func.count().label("approved"))
+        .where(Finding.status == "approved")
+        .group_by(Finding.metric_snapshot_id)
+        .subquery()
+    )
+    rows = session.execute(
+        select(MetricSnapshot, Period, approved_counts.c.approved)
+        .join(Period, MetricSnapshot.as_of_period_id == Period.id)
+        .outerjoin(
+            approved_counts,
+            MetricSnapshot.id == approved_counts.c.metric_snapshot_id,
+        )
+        .where(MetricSnapshot.status == "published")
+        .order_by(Period.month_key.desc(), MetricSnapshot.created_at.desc())
+    ).all()
+    return FreezeCandidateListResponse(
+        candidates=[
+            FreezeCandidateLine(
+                metric_snapshot_id=str(snapshot.id),
+                batch_id=str(snapshot.batch_id),
+                period_label=f"{period.year}-{period.month:02d}" if period else None,
+                version=int(snapshot.version),
+                approved_findings=int(approved or 0),
+                created_at=(
+                    snapshot.created_at.isoformat(timespec="seconds")
+                    if snapshot.created_at
+                    else None
+                ),
+            )
+            for snapshot, period, approved in rows
+        ]
     )
 
 

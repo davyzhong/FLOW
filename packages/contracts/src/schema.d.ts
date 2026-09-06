@@ -288,6 +288,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/investigations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Findings
+         * @description 列出全部 Finding（含身份交接标识），供「分析与归因」入口选择调查对象。
+         */
+        get: operations["list_findings_api_v1_investigations_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/investigations/{finding_id}": {
         parameters: {
             query?: never;
@@ -462,6 +482,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/publishing/freeze-candidates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Freeze Candidates
+         * @description 已发布指标快照及已批准 Finding 数，供冻结表单选择。
+         */
+        get: operations["list_freeze_candidates_api_v1_publishing_freeze_candidates_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/publishing/attempts/{attempt_id}/download": {
         parameters: {
             query?: never;
@@ -516,10 +556,90 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/metric-library": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Metric Library
+         * @description 只读返回指标库与会计基础数据集（v0 草案，D040）。
+         */
+        get: operations["get_metric_library_api_v1_metric_library_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        /** AccountingAccount */
+        AccountingAccount: {
+            /** Code */
+            code: string;
+            /** Name */
+            name: string;
+            /** Category */
+            category: string;
+            /** Balance Side */
+            balance_side: string;
+            /** Status */
+            status: string;
+            /** Standard Ref */
+            standard_ref?: string | null;
+        };
+        /** AccountingFoundation */
+        AccountingFoundation: {
+            /** Dataset Id */
+            dataset_id: string;
+            /** Status */
+            status: string;
+            /**
+             * Known Gaps
+             * @default []
+             */
+            known_gaps: string[];
+            /**
+             * Categories
+             * @default []
+             */
+            categories: string[];
+            /** Accounts */
+            accounts: components["schemas"]["AccountingAccount"][];
+            /**
+             * Superseded Notes
+             * @default []
+             */
+            superseded_notes: components["schemas"]["SupersededNote"][];
+            /**
+             * Standards
+             * @default []
+             */
+            standards: components["schemas"]["AccountingStandard"][];
+            /**
+             * Entry Templates
+             * @default []
+             */
+            entry_templates: components["schemas"]["EntryTemplate"][];
+        };
+        /** AccountingStandard */
+        AccountingStandard: {
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+            /** Issuer */
+            issuer?: string | null;
+            /** Note */
+            note?: string | null;
+        };
         /** ActiveFilters */
         ActiveFilters: {
             /**
@@ -877,6 +997,33 @@ export interface components {
             /** Contribution Ratio */
             contribution_ratio: string | null;
         };
+        /** EntryLine */
+        EntryLine: {
+            /** Direction */
+            direction: string;
+            /** Account */
+            account: string;
+            /** Amount Rule */
+            amount_rule: string;
+        };
+        /** EntryTemplate */
+        EntryTemplate: {
+            /** Template Id */
+            template_id: string;
+            /** Scenario */
+            scenario: string;
+            /** Business Context */
+            business_context?: string | null;
+            /** Lines */
+            lines: components["schemas"]["EntryLine"][];
+            /** Standard Ref */
+            standard_ref?: string | null;
+            /**
+             * Related Metrics
+             * @default []
+             */
+            related_metrics: string[];
+        };
         /** ErrorDetail */
         ErrorDetail: {
             /** Code */
@@ -1026,6 +1173,39 @@ export interface components {
             /** Investigation Path */
             investigation_path: string;
         };
+        /**
+         * FindingListItem
+         * @description 调查列表项：携带 Investigation 身份交接所需的全部标识（D036）。
+         */
+        FindingListItem: {
+            /** Finding Id */
+            finding_id: string;
+            /** Title */
+            title: string;
+            /** Status */
+            status: string;
+            /** Finding Type */
+            finding_type: string | null;
+            /** Impact Amount */
+            impact_amount: string;
+            /** Comparison Basis */
+            comparison_basis: string | null;
+            /** Total Score */
+            total_score: string | null;
+            /** Batch Id */
+            batch_id: string | null;
+            /** Metric Snapshot Id */
+            metric_snapshot_id: string;
+            /** Analysis Run Id */
+            analysis_run_id: string | null;
+            /** Created At */
+            created_at: string | null;
+        };
+        /** FindingListResponse */
+        FindingListResponse: {
+            /** Findings */
+            findings: components["schemas"]["FindingListItem"][];
+        };
         /** FindingTransitionRequest */
         FindingTransitionRequest: {
             /** Decision */
@@ -1048,6 +1228,29 @@ export interface components {
             review_sequence: number;
             /** Decision */
             decision: string;
+        };
+        /**
+         * FreezeCandidateLine
+         * @description 可冻结的已发布指标快照：报告中心冻结表单的选择项。
+         */
+        FreezeCandidateLine: {
+            /** Metric Snapshot Id */
+            metric_snapshot_id: string;
+            /** Batch Id */
+            batch_id: string;
+            /** Period Label */
+            period_label: string | null;
+            /** Version */
+            version: number;
+            /** Approved Findings */
+            approved_findings: number;
+            /** Created At */
+            created_at?: string | null;
+        };
+        /** FreezeCandidateListResponse */
+        FreezeCandidateListResponse: {
+            /** Candidates */
+            candidates: components["schemas"]["FreezeCandidateLine"][];
         };
         /** HTTPValidationError */
         HTTPValidationError: {
@@ -1298,6 +1501,119 @@ export interface components {
             /** Policy Set Hash */
             policy_set_hash: string;
         };
+        /** MetricDecomposition */
+        MetricDecomposition: {
+            /** Name */
+            name: string;
+            /** Formula Text */
+            formula_text: string;
+            /** Factors */
+            factors: string[];
+        };
+        /** MetricEntry */
+        MetricEntry: {
+            /** Metric Code */
+            metric_code: string;
+            /** Name */
+            name: string;
+            /** Domain */
+            domain: string;
+            /** Definition */
+            definition: string;
+            /** Formula Text */
+            formula_text: string;
+            formula: components["schemas"]["MetricFormula"];
+            /** Unit */
+            unit?: string | null;
+            /** Time Behavior */
+            time_behavior?: string | null;
+            /** Caliber */
+            caliber?: string | null;
+            /**
+             * Source Cas
+             * @default []
+             */
+            source_cas: string[];
+            /** Source Ifrs */
+            source_ifrs?: string | null;
+            /**
+             * Depends On
+             * @default []
+             */
+            depends_on: string[];
+            /**
+             * Decompositions
+             * @default []
+             */
+            decompositions: components["schemas"]["MetricDecomposition"][];
+            /** Benchmark */
+            benchmark?: string | null;
+            /**
+             * Mpm
+             * @default false
+             */
+            mpm: boolean;
+            /** Reconciliation */
+            reconciliation?: string | null;
+            /** Migrates From */
+            migrates_from?: string | null;
+            /**
+             * Aliases
+             * @default []
+             */
+            aliases: string[];
+            /** Provenance */
+            provenance?: string | null;
+            /**
+             * Collection
+             * @enum {string}
+             */
+            collection: "general" | "logistics";
+        };
+        /** MetricFormula */
+        MetricFormula: {
+            /** Op */
+            op: string;
+            /** Args */
+            args: (string | number | components["schemas"]["MetricFormula"])[];
+        };
+        /** MetricLibraryResponse */
+        MetricLibraryResponse: {
+            /** Dictionary Id */
+            dictionary_id: string;
+            /** Status */
+            status: string;
+            /** Decision Ref */
+            decision_ref: string;
+            /** Created */
+            created: string;
+            /** Standards Scope */
+            standards_scope: string[];
+            /** Domains */
+            domains: {
+                [key: string]: string;
+            };
+            /** Report Items */
+            report_items: components["schemas"]["ReportItem"][];
+            /** Metrics */
+            metrics: components["schemas"]["MetricEntry"][];
+            /** Relations */
+            relations: components["schemas"]["MetricRelation"][];
+            accounting: components["schemas"]["AccountingFoundation"];
+        };
+        /** MetricRelation */
+        MetricRelation: {
+            /** Relation */
+            relation: string;
+            /** Name */
+            name: string;
+            /** Expression */
+            expression: string;
+            /** Note */
+            note: string;
+            /** Provenance */
+            provenance?: string | null;
+        };
         /** ProductPerformance */
         ProductPerformance: {
             /**
@@ -1479,6 +1795,15 @@ export interface components {
             details: {
                 [key: string]: unknown;
             };
+        };
+        /** ReportItem */
+        ReportItem: {
+            /** Item Id */
+            item_id: string;
+            /** Cas */
+            cas: string;
+            /** Ifrs */
+            ifrs: string;
         };
         /** ReportOutlineRequest */
         ReportOutlineRequest: {
@@ -1733,6 +2058,13 @@ export interface components {
              * @enum {string}
              */
             degradation: "none" | "insufficient_data";
+        };
+        /** SupersededNote */
+        SupersededNote: {
+            /** Code */
+            code: string;
+            /** Note */
+            note: string;
         };
         /** TrendPanel */
         TrendPanel: {
@@ -2431,6 +2763,37 @@ export interface operations {
             };
         };
     };
+    list_findings_api_v1_investigations_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FindingListResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     investigation_context_api_v1_investigations__finding_id__get: {
         parameters: {
             query?: {
@@ -2959,6 +3322,37 @@ export interface operations {
             };
         };
     };
+    list_freeze_candidates_api_v1_publishing_freeze_candidates_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FreezeCandidateListResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     download_publication_attempt_api_v1_publishing_attempts__attempt_id__download_get: {
         parameters: {
             query?: never;
@@ -3088,6 +3482,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["StatementErrorResponse"];
+                };
+            };
+        };
+    };
+    get_metric_library_api_v1_metric_library_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MetricLibraryResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };

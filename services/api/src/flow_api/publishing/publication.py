@@ -114,14 +114,9 @@ class PublicationService:
 
 
 def _store_client(settings: Any) -> Any:
-    import boto3  # type: ignore[import-untyped]
+    from flow_api.infrastructure.s3_client import build_s3_client
 
-    return boto3.client(
-        "s3",
-        endpoint_url=settings.s3_endpoint_url,
-        aws_access_key_id=settings.s3_access_key.get_secret_value(),
-        aws_secret_access_key=settings.s3_secret_key.get_secret_value(),
-    )
+    return build_s3_client(settings)
 
 
 __all__ = ["PublicationError", "PublicationService", "PdfPrinter"]

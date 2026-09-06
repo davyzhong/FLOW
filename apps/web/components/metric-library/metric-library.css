@@ -1,0 +1,278 @@
+/* 指标库（/metric-library）样式 */
+
+.metric-library {
+  display: grid;
+  gap: 18px;
+}
+
+.ml-header h1 {
+  margin: 0 0 8px;
+  font-size: 22px;
+}
+
+.ml-header p {
+  margin: 0 0 6px;
+  color: #52637a;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.ml-header__note {
+  color: #805000;
+}
+
+.ml-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ml-tabs button {
+  padding: 7px 14px;
+  border: 1px solid #d5dae3;
+  border-radius: 7px;
+  background: #fff;
+  color: #33465e;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.ml-tabs button.is-active {
+  border-color: #1769e8;
+  background: #1769e8;
+  color: #fff;
+}
+
+.ml-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+.ml-toolbar input[type="search"] {
+  width: 320px;
+  padding: 7px 12px;
+  border: 1px solid #d5dae3;
+  border-radius: 7px;
+  font-size: 13px;
+}
+
+.ml-toolbar__mpm {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #52637a;
+}
+
+.ml-toolbar__count {
+  margin-left: auto;
+  font-size: 12px;
+  color: #52637a;
+}
+
+.ml-metric-list {
+  display: grid;
+  gap: 12px;
+}
+
+.ml-metric {
+  padding: 14px 16px;
+  border: 1px solid #dfe6ef;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.ml-metric__head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.ml-metric__head strong {
+  font-size: 15px;
+}
+
+.ml-metric__head code,
+.ml-dep {
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: #eef2f7;
+  color: #33465e;
+  font-size: 12px;
+}
+
+.ml-dep {
+  margin-right: 6px;
+}
+
+.ml-chip {
+  padding: 1px 8px;
+  border-radius: 10px;
+  background: #e8eef9;
+  color: #1769e8;
+  font-size: 12px;
+}
+
+.ml-chip--mpm {
+  background: #fdf0dc;
+  color: #805000;
+}
+
+.ml-metric__definition {
+  margin: 8px 0;
+  font-size: 13px;
+  color: #33465e;
+}
+
+.ml-metric__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px 24px;
+  margin: 0;
+}
+
+.ml-metric__grid div {
+  display: grid;
+  grid-template-columns: 84px minmax(0, 1fr);
+  gap: 8px;
+  font-size: 12.5px;
+}
+
+.ml-metric__grid dt {
+  color: #52637a;
+}
+
+.ml-metric__grid dd {
+  margin: 0;
+}
+
+.ml-metric__caliber {
+  margin: 8px 0 0;
+  font-size: 12.5px;
+  color: #52637a;
+}
+
+.ml-metric__decomp {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  font-size: 12.5px;
+  color: #33465e;
+}
+
+.ml-metric__foot {
+  display: flex;
+  gap: 18px;
+  margin-top: 8px;
+  font-size: 11.5px;
+  color: #8a97a8;
+}
+
+.ml-relations {
+  display: grid;
+  gap: 12px;
+}
+
+.ml-relation {
+  padding: 14px 16px;
+  border: 1px solid #dfe6ef;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.ml-relation header {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.ml-relation__expr {
+  font-family: "JetBrains Mono Variable", monospace;
+  font-size: 13px;
+  color: #13223a;
+}
+
+.ml-relation footer {
+  font-size: 11.5px;
+  color: #8a97a8;
+}
+
+.ml-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  font-size: 12.5px;
+}
+
+.ml-table th,
+.ml-table td {
+  padding: 6px 10px;
+  border: 1px solid #dfe6ef;
+  text-align: left;
+}
+
+.ml-table th {
+  background: #f5f7fa;
+  color: #52637a;
+  font-weight: 600;
+}
+
+.ml-accounting h2 {
+  margin: 22px 0 10px;
+  font-size: 15px;
+}
+
+.ml-standards,
+.ml-gaps {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 13px;
+  line-height: 1.9;
+}
+
+.ml-entries {
+  display: grid;
+  gap: 8px;
+}
+
+.ml-entry {
+  border: 1px solid #dfe6ef;
+  border-radius: 8px;
+  background: #fff;
+  padding: 10px 14px;
+}
+
+.ml-entry summary {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.ml-muted {
+  color: #52637a;
+  font-size: 12px;
+}
+
+.ml-state {
+  padding: 80px 0;
+  text-align: center;
+  color: #52637a;
+}
+
+.ml-state--error button {
+  padding: 7px 16px;
+  border: none;
+  border-radius: 7px;
+  background: #1769e8;
+  color: #fff;
+  cursor: pointer;
+}
+
+.ml-state__detail {
+  font-size: 12px;
+  color: #8a97a8;
+}

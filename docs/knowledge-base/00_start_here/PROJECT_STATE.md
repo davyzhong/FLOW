@@ -270,11 +270,20 @@ flowchart LR
 - D043 落地·系统整合（2026-09-06）：「报表分析」进入 B/S 系统界面——迁移 `0011_statement_reports` 落库 P5 抽取数据，typed 只读 API `GET /api/v1/statements[/{id}]`（路由级 Bearer 保护、Decimal 以精确字符串跨 JSON），Next.js `/statements` 页面以 KPI 卡、利润瀑布、资产/资本构成环形、现金流同比柱与四表全量表渲染顺丰 2026 一季报（千元原值，不在展示层重算）；导航加入「报表分析」入口并修复激活态为按 pathname 判断；新门禁 `make test-statements-e2e`（3 用例含 axe）通过，API 契约测试 5 项、前端组件测试 3 项、lint/typecheck/vitest 全绿，独立静态报告页保留为 P5 证据；
 - 详见[设计草案](../02_research/synthesis/会计与财务指标知识库_设计草案.md)、[初始数据集 v0](../02_research/synthesis/指标库初始数据集_v0_草案.yaml)、[P5 可视化分析报告](../../implementation/p5/sf_2026q1_report_view.html) 与决策日志 D040/D041/D042/D043；下一步是用户在评审台完成指标逐项评审后定稿首批实施范围。
 
+### 阶段 24：2026-09-06 导航统一、指标库入系统与 S3 代理根因修复
+
+- **导航统一**：新增 `AppShell` 外壳，左侧工作流导航（含新增「指标库」入口）覆盖 `/data`、`/reports`、`/investigations`、`/statements`、`/metric-library` 及驾驶舱错误/空态；修复导航「分析与归因」指向不存在的 `/investigations` 列表页问题（新增调查列表页与 `GET /api/v1/investigations`，携带完整身份交接参数）。
+- **指标库入系统（D040 落地第一步）**：v0 草案数据集复制为系统配置 `config/metrics/metric_dictionary_v0.yaml` 与 `accounting_foundation_v0.yaml`；新增只读 `GET /api/v1/metric-library` 与 `/metric-library` 页面（通用 40 + 物流 15 指标、28 项 CAS↔IFRS 映射、3 条勾稽关系、164 科目 / 11 准则 / 17 分录模板）。
+- **报告中心快照选择器**：新增 `GET /api/v1/publishing/freeze-candidates`（已发布快照 + 期间标签 + 已批准发现数），冻结表单从手填 ID 改为下拉选择，无已批准发现的快照不可选。
+- **S3 超时根因修复**：历史「真实 MinIO PutObject 超时」的根因是 boto3 经 `getproxies()` 拾取 macOS 系统代理（127.0.0.1:1082，代理未运行时请求挂起）。新增 `flow_api.infrastructure.s3_client.build_s3_client` 统一构造客户端，默认绕过系统代理并带连接/读取超时，`S3_USE_SYSTEM_PROXY=true` 可恢复；真实对象存储上传→画像→清洗→发布与报告生成→下载链路已通过浏览器验证。
+- 验证：API 回归 14 项、Web 45 项、契约检查、lint/typecheck 全部通过；详见[本轮验收记录](../../implementation/2026-09-06-shell-metric-library-s3-proxy.md)。
+
 ## 当前尚未完成
 
-- 解决真实 MinIO PutObject 超时并补验实际对象存储的上传、发布和下载链路；
 - 最小安全部署剩余工作：密钥与网络边界、备份恢复演练、HTTPS 与回滚、结构化日志及统一部署验收；
 - 脱敏真实物流企业月度数据试点及可复核的业务价值证据；
+- 任意新上传批次的一键指标/分析编排（当前须由服务层或演示脚本显式串联）；
+- 指标库 v0 草案的逐项评审定稿与 P1–P5 分期实施；
 - 指标阈值和预警规则的完整明细、企业报告模板品牌规范；
 - 正式品牌命名和 FLOW 的最终英文释义。
 
