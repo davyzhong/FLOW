@@ -103,7 +103,7 @@ flowchart LR
   - 测试/证据（新增目标）：`tests/statements/test_extraction_adapters.py`。
   - 完成标准：原样本结果不退化；跨页/附注号/负号/括号/多币种均有用例；未知版式显式降级。
 
-- [ ] **B03 · 规范化、取数映射与修订版本** — 状态：todo
+- [x] **B03 · 规范化、取数映射与修订版本** — 状态：done
   - 依赖：B02。
   - 主要位置：statements/importer.py、statements/repository.py；新 statements/normalization.py。
   - 工作：保留原始标签/值，标准项目映射与修订版本分离；单位符号转换留痕；同期间重述保留原版。
@@ -372,8 +372,8 @@ flowchart LR
 | 2026-09-06 | A03 验收数据集登记 | **done** | `validation/financial_reports/`（manifest + README）：3 基线 + 2 留出（腾讯 FY2025 新期间、圆通 2026Q1 新公司，新增下载校验 SHA）；独立答案逐项带定位、容差预登记、回填禁令 | B01 |
 | 2026-09-06 | B01 上传与来源登记 | **done** | 迁移 0014（statement_source）；`statements/intake.py` + `POST/GET /api/v1/statements/sources`；`tests/statements/test_source_intake.py` 10 项通过；迁移往返通过；真实 MinIO 上传圆通 PDF（201、候选全中、重复幂等、对象可读） | B02 |
 | 2026-09-06 | B02 抽取适配接口 | **done** | `statements/extraction.py`：三适配器（A 股/港股繁体/业绩公告）+ 统一入口 + 显式降级；脚本改薄入口且输出零退化（与已提交 YAML 逐字节一致，JDL/腾讯重跑验证）；`tests/statements/test_extraction_adapters.py` 9 项通过（含圆通留出公司直抽、附注号/括号负数/双单位、勾稽全过）；mypy/ruff 绿 | B03 |
-| 2026-09-06 | B03 规范化与修订版本 | doing | 迁移 0015（报表版本化 content_sha256 + statement_normalized_item）；`statements/normalization.py`（别名映射、合成行留痕、映射版本并存）；`tests/statements/test_normalization.py` 4 项 + test_statement_api 重述用例共 42 项通过；迁移往返通过；契约再生成 | B04 |
-| 2026-09-06 | B04 四表覆盖与质量规则 | doing | `statements/reconciliation.py`：四态覆盖（passed/failed/missing/not_applicable）、按报告种类的必需表集合、年报缺权益表/附注永不得标完整、关键勾稽阻断发布；`tests/statements/test_reconciliation.py` 5 项通过（三真实样本 + 合成阻断例） | B05 |
+| 2026-09-06 | B03 规范化与修订版本 | **done** | 迁移 0015（报表版本化 content_sha256 + statement_normalized_item）；`statements/normalization.py`（别名映射、合成行留痕、映射版本并存）；`tests/statements/test_normalization.py` 4 项 + test_statement_api 重述用例共 42 项通过；迁移往返通过；契约再生成 | B04 |
+| 2026-09-06 | B04 四表覆盖与质量规则 | **done** | `statements/reconciliation.py`：四态覆盖（passed/failed/missing/not_applicable）、按报告种类的必需表集合、年报缺权益表/附注永不得标完整、关键勾稽阻断发布；`tests/statements/test_reconciliation.py` 5 项通过（三真实样本 + 合成阻断例） | B05 |
 | 2026-09-06 | B05 复核更正与事实发布 | doing | 迁移 0016（statement_correction 只增不改审计 + report.status 状态机）；`statements/review.py`（更正审计、修正视图重跑勾稽、关键不平衡阻断发布、发布后锁定）；更正/发布 API + `/statements` 复核面板；`tests/statements/test_fact_review.py` 3 项 + e2e/statements-review.spec.ts 通过（并入 statements e2e 门禁） | B06 |
 | 2026-09-06 | B06 通用期间与可恢复编排 | doing | 迁移 0017（build_job）；编排期间改由批次分析窗口（事实期间）生成 + 请求范围收窄，固定演示月份移出生产路径；任务持久化（状态/结果身份/失败留痕）、同范围幂等回放、失败可重试；`tests/api/test_orchestration_api.py` 5 项通过（含范围收窄/回放/任务列表/422） | C01 |
 
