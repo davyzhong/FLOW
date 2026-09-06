@@ -6778,6 +6778,11 @@
             "type": "string",
             "title": "Period Label"
           },
+          "version": {
+            "type": "integer",
+            "title": "Version",
+            "default": 1
+          },
           "unit_note": {
             "type": "string",
             "title": "Unit Note"
@@ -6877,6 +6882,11 @@
           "period_label": {
             "type": "string",
             "title": "Period Label"
+          },
+          "version": {
+            "type": "integer",
+            "title": "Version",
+            "default": 1
           },
           "unit_note": {
             "type": "string",

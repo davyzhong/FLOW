@@ -55,6 +55,7 @@ from flow_api.infrastructure.models.publishing import (
 )
 from flow_api.infrastructure.models.statement import (
     StatementLineItem,
+    StatementNormalizedItem,
     StatementReport,
     StatementSource,
 )
@@ -102,6 +103,7 @@ __all__ = [
     "SourceFile",
     "SourceRecord",
     "StatementLineItem",
+    "StatementNormalizedItem",
     "StatementLineMapping",
     "StatementReport",
     "StatementSource",

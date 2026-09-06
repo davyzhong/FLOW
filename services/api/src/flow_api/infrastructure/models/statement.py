@@ -7,6 +7,7 @@
 from __future__ import annotations
 
 from decimal import Decimal
+from typing import Any
 from uuid import UUID
 
 from sqlalchemy import (
@@ -18,7 +19,9 @@ from sqlalchemy import (
     Numeric,
     String,
     UniqueConstraint,
+    text,
 )
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -33,14 +36,18 @@ class StatementReport(CanonicalIdentityMixin, Base):
             "stock_code",
             "period_label",
             "report_kind",
+            "version",
             name="uq_statement_report_identity",
         ),
+        CheckConstraint("version > 0", name="ck_statement_report_version_positive"),
     )
 
     company_name: Mapped[str] = mapped_column(String(255), nullable=False)
     stock_code: Mapped[str] = mapped_column(String(32), nullable=False)
     report_kind: Mapped[str] = mapped_column(String(32), nullable=False)
     period_label: Mapped[str] = mapped_column(String(64), nullable=False)
+    version: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+    content_sha256: Mapped[str | None] = mapped_column(String(64), nullable=True)
     unit_note: Mapped[str] = mapped_column(String(64), nullable=False)
     source_ref: Mapped[str] = mapped_column(String(512), nullable=False)
     source_sha256: Mapped[str | None] = mapped_column(String(64), nullable=True)
@@ -105,4 +112,53 @@ class StatementSource(CanonicalIdentityMixin, Base):
     report_kind_candidate: Mapped[str | None] = mapped_column(String(64), nullable=True)
 
 
-__all__ = ["StatementLineItem", "StatementReport", "StatementSource"]
+class StatementNormalizedItem(CanonicalIdentityMixin, Base):
+    """原始行 → 标准报表项目 item_id 的归一化结果（B03）。
+
+    按 (report_id, mapping_version) 修订并存：同一映射版本重复归一幂等重建，
+    新映射版本新增行集、旧版保留；原始行（statement_line_item）不受影响。
+    """
+
+    __tablename__ = "statement_normalized_item"
+    __table_args__ = (
+        UniqueConstraint(
+            "report_id",
+            "mapping_version",
+            "statement_type",
+            "item_name",
+            name="uq_statement_normalized_item",
+        ),
+        Index(
+            "ix_statement_normalized_item_report",
+            "report_id",
+            "mapping_version",
+            "statement_type",
+        ),
+    )
+
+    report_id: Mapped[UUID] = mapped_column(
+        PG_UUID(as_uuid=True),
+        ForeignKey("statement_report.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    mapping_version: Mapped[str] = mapped_column(String(32), nullable=False)
+    statement_type: Mapped[str] = mapped_column(String(64), nullable=False)
+    item_name: Mapped[str] = mapped_column(String(255), nullable=False)
+    item_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    value_end: Mapped[Decimal | None] = mapped_column(Numeric(24, 4), nullable=True)
+    value_begin: Mapped[Decimal | None] = mapped_column(Numeric(24, 4), nullable=True)
+    value_current: Mapped[Decimal | None] = mapped_column(Numeric(24, 4), nullable=True)
+    value_prior: Mapped[Decimal | None] = mapped_column(Numeric(24, 4), nullable=True)
+    trace: Mapped[dict[str, Any]] = mapped_column(
+        JSONB, nullable=False, default=dict, server_default=text("'{}'::jsonb")
+    )
+
+    report: Mapped[StatementReport] = relationship()
+
+
+__all__ = [
+    "StatementLineItem",
+    "StatementNormalizedItem",
+    "StatementReport",
+    "StatementSource",
+]

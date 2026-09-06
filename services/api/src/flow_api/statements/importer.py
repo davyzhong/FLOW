@@ -1,11 +1,15 @@
 """把 P5 抽取的财报 YAML 载荷写入 statement_report / statement_line_item。
 
-按 (stock_code, period_label, report_kind) 幂等：同身份重导入保留报表 id、
-整体重建行项目。数值存披露原文的原始值，不换算单位。
+版本规则（B03）：同一 (stock_code, period_label, report_kind) 身份下——
+内容哈希相同则幂等重建行项目（报表 id 不变）；内容不同视为重述，
+递增 version 新建报表行，旧版及其行项目完整保留。
+数值存披露原文的原始值，不换算单位。
 """
 
 from __future__ import annotations
 
+import hashlib
+import json
 from decimal import Decimal, InvalidOperation
 from typing import Any
 
@@ -32,6 +36,11 @@ class StatementImportError(Exception):
         super().__init__(message)
         self.code = code
         self.message = message
+
+
+def _content_hash(payload: dict[str, Any]) -> str:
+    canonical = json.dumps(payload, ensure_ascii=False, sort_keys=True, default=str)
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
 
 
 def _to_decimal(raw: Any, *, statement_type: str, item: str, column: str) -> Decimal:
@@ -70,23 +79,42 @@ def import_statement_report(
         raise StatementImportError("missing_statements", "payload 缺少 statements 或为空")
 
     report = session.scalar(
-        select(StatementReport).where(
+        select(StatementReport)
+        .where(
             StatementReport.stock_code == stock_code,
             StatementReport.period_label == period_label,
             StatementReport.report_kind == report_kind,
         )
+        .order_by(StatementReport.version.desc())
+        .limit(1)
     )
+    content_sha256 = _content_hash(payload)
+    if report is not None and report.content_sha256 != content_sha256:
+        # 重述：旧版完整保留，新版本从既有最大版本号递增。
+        report = None
     if report is None:
+        latest_version = session.scalar(
+            select(StatementReport.version)
+            .where(
+                StatementReport.stock_code == stock_code,
+                StatementReport.period_label == period_label,
+                StatementReport.report_kind == report_kind,
+            )
+            .order_by(StatementReport.version.desc())
+            .limit(1)
+        )
         report = StatementReport(
             company_name=company_name,
             stock_code=stock_code,
             report_kind=report_kind,
             period_label=period_label,
+            version=(latest_version or 0) + 1,
         )
         session.add(report)
     report.unit_note = unit_note
     report.source_ref = source_ref
     report.source_sha256 = source_sha256
+    report.content_sha256 = content_sha256
 
     # 同身份整体重建行项目，保证重导入幂等且不留旧行。
     for existing in report.items:

@@ -1,0 +1,106 @@
+# P5 报表项目接入层：抽取行名 → 标准报表项目 item_id 别名映射（v0 草案）
+#
+# 定位（规格 §3.6 / §5）：
+#   - 这是「原始披露行名 → StatementLineItem item_id」的可更改映射层，数据集修订 = 新版本文件，不原地覆盖；
+#   - item_id 体系继承指标库 v0 数据集的 report_items 字典（28 个 CAS↔IFRS 对照）；
+#   - v0 之外、P5 实测需要的项目登记在 new_items（待用户评审后并入指标库数据集）；
+#   - 映射值可以是单个 item_id（字符串），也可以是 {sum: [行名...]} 组合映射（如短/长期债务口径）。
+#
+# 角色（role）约定：BS 列 = end/open（期末/期初）；IS/CF 列 = cur/prev_yoy（本期/上年同期）；
+# 腾讯三列 = cur(2Q2026)/prev_yoy(2Q2025)/prev_qoq(1Q2026)。
+
+version: v0
+generated: 2026-09-06
+extends_report_items: docs/knowledge-base/02_research/synthesis/指标库初始数据集_v0_草案.yaml
+
+# v0 28 项之外、P5 实测需要的新报表项目（进入评审流程后再并库）
+new_items:
+  is.gross_profit:      {cas: 毛利（营业收入−营业成本，A股不单列）, ifrs: gross profit}
+  is.attr_net_profit:   {cas: 归属于母公司所有者的净利润, ifrs: profit attributable to owners of the Company}
+  bs.attr_equity:       {cas: 归属于母公司所有者权益合计, ifrs: equity attributable to owners of the Company}
+  bs.noncurrent_liab:   {cas: 非流动负债合计, ifrs: total non-current liabilities (IAS 1)}
+  is.rnd_exp:           {cas: 研发费用, ifrs: research and development expenses}
+  is.total_op_cost:     {cas: 营业总成本（CAS 特有行项目）, ifrs: n/a}
+  is.interest_income:   {cas: 利息收入, ifrs: interest income (IFRS 9)}
+  cf.icf:               {cas: 投资活动产生的现金流量净额, ifrs: net cash from investing activities (IAS 7)}
+  cf.fin_cf:            {cas: 筹资活动产生的现金流量净额, ifrs: net cash from financing activities (IAS 7)}
+  mpm.non_ifrs_operating_profit: {cas: n/a, ifrs: non-IFRS operating profit（MPM，须有调节表）, mpm: true}
+  mpm.non_ifrs_attr_profit:      {cas: n/a, ifrs: non-IFRS profit attributable to owners（MPM，须有调节表）, mpm: true}
+
+companies:
+  sf_002352:  # 顺丰控股，CAS，单位：千元
+    statements:
+      合并资产负债表:
+        roles: {期末余额: end, 期初余额: open}
+        map:
+          货币资金: bs.cash
+          应收票据: bs.notes_receivable
+          应收账款: bs.ar
+          存货: bs.inventory
+          流动资产合计: bs.current_assets
+          固定资产: bs.fixed_assets
+          资产总计: bs.total_assets
+          应付账款: bs.ap
+          流动负债合计: bs.current_liab
+          非流动负债合计: bs.noncurrent_liab
+          负债合计: bs.total_liab
+          所有者权益合计: bs.equity
+          归属于母公司所有者权益合计: bs.attr_equity
+          _bs.short_debt: {sum: [短期借款, 一年内到期的非流动负债]}
+          _bs.long_debt: {sum: [长期借款, 应付债券, 租赁负债], note: 含租赁负债（IFRS16 口径影响待评审）}
+      合并利润表:
+        roles: {本期发生额: cur, 上期发生额: prev_yoy}
+        map:
+          一、营业总收入: is.revenue
+          其中：营业成本: is.cogs
+          税金及附加: is.taxes_surcharges
+          销售费用: is.selling_exp
+          管理费用: is.admin_exp
+          研发费用: is.rnd_exp
+          财务费用: is.fin_exp
+          其中：利息费用: is.interest_exp
+          二、营业总成本: is.total_op_cost
+          三、营业利润（亏损以“－”号填列）: is.operating_profit
+          四、利润总额（亏损总额以“－”号填列）: is.total_profit
+          减：所得税费用: is.income_tax
+          五、净利润（净亏损以“－”号填列）: is.net_profit
+          1.归属于母公司所有者的净利润: is.attr_net_profit
+      合并现金流量表:
+        roles: {本期发生额: cur, 上期发生额: prev_yoy}
+        map:
+          销售商品、提供劳务收到的现金: cf.cash_from_sales
+          经营活动产生的现金流量净额: cf.ocf
+          投资活动产生的现金流量净额: cf.icf
+          筹资活动产生的现金流量净额: cf.fin_cf
+          购建固定资产、无形资产和其他长期资产支付的现金: cf.capex
+
+  tencent_0700:  # 腾讯控股，IFRS，单位：百万元；来源 p5 简明综合收益表三列
+    statements:
+      简明综合收益表:
+        roles: {col0: cur, col1: prev_yoy, col2: prev_qoq}
+        map:
+          收入: is.revenue
+          收入成本: {item: is.cogs, abs: true}
+          毛利: is.gross_profit
+          销售及市场推广开支: {item: is.selling_exp, abs: true}
+          一般及行政开支: {item: is.admin_exp, abs: true, note: IFRS 一般及行政开支含研发投入，与 CAS 管理费用口径不同（§10.2 口径差异）}
+          财务成本: {item: is.fin_exp, abs: true}
+          利息收入: is.interest_income
+          经营盈利: is.operating_profit
+          除税前盈利: is.total_profit
+          所得税开支: {item: is.income_tax, abs: true}
+          期内盈利: is.net_profit
+          本公司权益持有人: is.attr_net_profit
+          非国际财务报告准则经营盈利: mpm.non_ifrs_operating_profit
+          本公司权益持有人应占盈利: mpm.non_ifrs_attr_profit
+
+  jd_logistics_2618:  # 京东物流，IFRS，单位：千元；业绩摘要级事实（Q1 财务资料 + FY2025 业绩公告）
+    statements:
+      业绩摘要:
+        roles: {value: cur}
+        map:
+          revenue: is.revenue
+          gross: is.gross_profit
+          profit: is.net_profit
+          attr_np: is.attr_net_profit
+          non_ifrs_attr: mpm.non_ifrs_attr_profit

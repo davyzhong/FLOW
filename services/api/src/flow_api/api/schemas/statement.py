@@ -35,6 +35,7 @@ class StatementReportSummaryResponse(FrozenResponse):
     stock_code: str
     report_kind: str
     period_label: str
+    version: int = 1
     unit_note: str
     source_ref: str
     source_sha256: str | None = None

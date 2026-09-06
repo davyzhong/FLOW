@@ -148,6 +148,12 @@ async def test_reimport_same_identity_is_idempotent(
     first = _import(db_session)
     db_session.commit()
 
+    # 同内容重导入：幂等，报表 id 与行项目不变
+    second = _import(db_session)
+    db_session.commit()
+    assert second.id == first.id
+
+    # 同身份不同内容（重述）：递增版本，旧版保留（B03）
     extended = {
         "unit": "人民币千元",
         "statements": {
@@ -157,14 +163,13 @@ async def test_reimport_same_identity_is_idempotent(
             ],
         },
     }
-    second = _import(db_session, extended)
+    restated = _import(db_session, extended)
     db_session.commit()
-    assert second.id == first.id
+    assert restated.id != first.id
+    assert restated.version == 2
     db_session.expire_all()  # 让 GET 经数据库回读，验证 Numeric(24,4) 规范化
 
-    listed = await client.get("/api/v1/statements")
-    assert len(listed.json()["reports"]) == 1
-    detail = await client.get(f"/api/v1/statements/{first.id}")
+    detail = await client.get(f"/api/v1/statements/{restated.id}")
     bs_items = detail.json()["sections"][0]["items"]
     assert [item["item_name"] for item in bs_items] == ["货币资金", "应收账款"]
     assert bs_items[0]["value_end"] == "1.0000"

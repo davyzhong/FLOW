@@ -2101,6 +2101,11 @@ export interface components {
             report_kind: string;
             /** Period Label */
             period_label: string;
+            /**
+             * Version
+             * @default 1
+             */
+            version: number;
             /** Unit Note */
             unit_note: string;
             /** Source Ref */
@@ -2139,6 +2144,11 @@ export interface components {
             report_kind: string;
             /** Period Label */
             period_label: string;
+            /**
+             * Version
+             * @default 1
+             */
+            version: number;
             /** Unit Note */
             unit_note: string;
             /** Source Ref */
