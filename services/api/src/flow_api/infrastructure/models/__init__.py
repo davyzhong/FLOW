@@ -30,6 +30,7 @@ from flow_api.infrastructure.models.canonical import (
 )
 from flow_api.infrastructure.models.intake import (
     AnalysisBatch,
+    BuildJob,
     ImportVersion,
     MappingVersion,
     QualityIssue,
@@ -65,6 +66,7 @@ __all__ = [
     "AccountingStandard",
     "AccountingSubject",
     "AnalysisBatch",
+    "BuildJob",
     "AnalysisDriver",
     "AnalysisResult",
     "AnalysisRun",

@@ -86,3 +86,66 @@ async def test_unpublished_batch_returns_409(client: AsyncClient, db_session: Se
     response = await client.post(f"/api/v1/orchestration/batches/{batch.id}/build")
     assert response.status_code == 409
     assert response.json()["detail"]["code"] == "batch_not_published"
+
+
+async def test_build_with_request_range_and_replay(
+    client: AsyncClient, db_session: Session
+) -> None:
+    publication = bootstrap_dashboard_demo(
+        db_session, repository_root=REPOSITORY_ROOT, fresh_batch=True
+    )
+    db_session.commit()
+
+    # 请求范围收窄：2025-11 ~ 2026-02（4 个月），覆盖非默认期间
+    scoped = await client.post(
+        f"/api/v1/orchestration/batches/{publication.batch_id}/build",
+        json={"from_month": "2025-11", "to_month": "2026-02"},
+    )
+    assert scoped.status_code == 200, scoped.text
+    body = scoped.json()
+    assert body["months"] == [202511, 202512, 202601, 202602]
+    assert len(body["metric_snapshot_ids"]) == 4
+    assert body["replayed"] is False
+
+    # 同范围重复提交：幂等回放既有任务
+    again = await client.post(
+        f"/api/v1/orchestration/batches/{publication.batch_id}/build",
+        json={"from_month": "2025-11", "to_month": "2026-02"},
+    )
+    assert again.status_code == 200
+    assert again.json()["replayed"] is True
+    assert again.json()["job_id"] == body["job_id"]
+
+    # 任务列表可查（浏览器进度入口的 API 面）
+    listing = await client.get(f"/api/v1/orchestration/batches/{publication.batch_id}/builds")
+    assert listing.status_code == 200
+    jobs = listing.json()["jobs"]
+    assert len(jobs) == 1
+    assert jobs[0]["status"] == "succeeded"
+    assert jobs[0]["finished_at"]
+
+    detail = await client.get(f"/api/v1/orchestration/builds/{body['job_id']}")
+    assert detail.status_code == 200
+    assert detail.json()["months"] == [202511, 202512, 202601, 202602]
+
+
+async def test_build_rejects_out_of_window_range(
+    client: AsyncClient, db_session: Session
+) -> None:
+    publication = bootstrap_dashboard_demo(
+        db_session, repository_root=REPOSITORY_ROOT, fresh_batch=True
+    )
+    db_session.commit()
+    rejected = await client.post(
+        f"/api/v1/orchestration/batches/{publication.batch_id}/build",
+        json={"from_month": "2020-01", "to_month": "2020-12"},
+    )
+    assert rejected.status_code == 422
+    assert rejected.json()["detail"]["code"] == "no_periods_in_scope"
+
+    bad = await client.post(
+        f"/api/v1/orchestration/batches/{publication.batch_id}/build",
+        json={"from_month": "2025-13"},
+    )
+    assert bad.status_code == 422
+    assert bad.json()["detail"]["code"] == "invalid_period_range"

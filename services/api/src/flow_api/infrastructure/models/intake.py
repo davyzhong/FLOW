@@ -277,3 +277,32 @@ class SourceRecord(IdentityTimestampMixin, Base):
 
     import_version: Mapped[ImportVersion] = relationship(back_populates="source_records")
     source_file: Mapped[SourceFile] = relationship(back_populates="source_records")
+
+
+class BuildJob(IdentityTimestampMixin, Base):
+    """发布后编排的构建任务（B06）：状态持久化、幂等回放、失败留痕可重试。"""
+
+    __tablename__ = "build_job"
+    __table_args__ = (
+        CheckConstraint(
+            "status in ('queued', 'running', 'succeeded', 'failed')",
+            name="ck_build_job_status",
+        ),
+        Index("ix_build_job_batch", "batch_id", "created_at"),
+    )
+
+    batch_id: Mapped[UUID] = mapped_column(
+        PG_UUID(as_uuid=True),
+        ForeignKey("analysis_batch.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    status: Mapped[str] = mapped_column(String(32), nullable=False, default="queued")
+    months: Mapped[list[int]] = mapped_column(JSONB, nullable=False)
+    metric_snapshot_ids: Mapped[list[str]] = mapped_column(
+        JSONB, nullable=False, default=list, server_default=text("'[]'::jsonb")
+    )
+    analysis_run_id: Mapped[UUID | None] = mapped_column(PG_UUID(as_uuid=True), nullable=True)
+    error: Mapped[str | None] = mapped_column(Text)
+    finished_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+    batch: Mapped[AnalysisBatch] = relationship()

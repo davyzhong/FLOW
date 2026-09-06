@@ -124,7 +124,7 @@ flowchart LR
   - 测试/证据（新增目标）：`tests/statements/test_fact_review.py；e2e/statements-review.spec.ts`。
   - 完成标准：修改有审计；权限校验；旧版不变；未解决关键错误不可发布。
 
-- [ ] **B06 · 通用期间与可恢复编排** — 状态：todo
+- [ ] **B06 · 通用期间与可恢复编排** — 状态：doing（证据已落盘，待 CI 绿后勾选）
   - 依赖：B05。
   - 主要位置：api/routes/orchestration.py、metrics/service.py、worker.py。
   - 工作：由事实期间与请求范围生成月份，移除生产路径固定演示月份；长任务提供状态、幂等键、失败重试和部分结果隔离。
@@ -360,7 +360,7 @@ flowchart LR
 
 ## 7. 当前执行点与滚动记录
 
-**当前：B05 已提交待 CI；下一任务：B06。**
+**当前：B06 已提交待 CI；M1 完成，下一任务：C01。**
 
 第一条命令（A02）：阅读方向规格第 3 节五条链与 `baseline-audit.md` §2/§4，起草 `docs/superpowers/specs/financial-facts-contract.md`，随后 `cd services/api && uv run pytest tests/statements/test_fact_contract.py -q`。
 
@@ -375,5 +375,6 @@ flowchart LR
 | 2026-09-06 | B03 规范化与修订版本 | doing | 迁移 0015（报表版本化 content_sha256 + statement_normalized_item）；`statements/normalization.py`（别名映射、合成行留痕、映射版本并存）；`tests/statements/test_normalization.py` 4 项 + test_statement_api 重述用例共 42 项通过；迁移往返通过；契约再生成 | B04 |
 | 2026-09-06 | B04 四表覆盖与质量规则 | doing | `statements/reconciliation.py`：四态覆盖（passed/failed/missing/not_applicable）、按报告种类的必需表集合、年报缺权益表/附注永不得标完整、关键勾稽阻断发布；`tests/statements/test_reconciliation.py` 5 项通过（三真实样本 + 合成阻断例） | B05 |
 | 2026-09-06 | B05 复核更正与事实发布 | doing | 迁移 0016（statement_correction 只增不改审计 + report.status 状态机）；`statements/review.py`（更正审计、修正视图重跑勾稽、关键不平衡阻断发布、发布后锁定）；更正/发布 API + `/statements` 复核面板；`tests/statements/test_fact_review.py` 3 项 + e2e/statements-review.spec.ts 通过（并入 statements e2e 门禁） | B06 |
+| 2026-09-06 | B06 通用期间与可恢复编排 | doing | 迁移 0017（build_job）；编排期间改由批次分析窗口（事实期间）生成 + 请求范围收窄，固定演示月份移出生产路径；任务持久化（状态/结果身份/失败留痕）、同范围幂等回放、失败可重试；`tests/api/test_orchestration_api.py` 5 项通过（含范围收窄/回放/任务列表/422） | C01 |
 
 执行者每次收尾补表：任务 ID、变更、定向测试、远端 CI、外部阻塞、下一条命令；未知内容标 unknown，不沿用过期状态。

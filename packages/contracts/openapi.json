@@ -2808,6 +2808,23 @@
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/OrchestrationBuildRequest"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Request"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -2842,6 +2859,126 @@
               }
             },
             "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response 422 Build Batch Analysis Api V1 Orchestration Batches  Batch Id  Build Post"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        }
+      }
+    },
+    "/api/v1/orchestration/batches/{batch_id}/builds": {
+      "get": {
+        "tags": [
+          "orchestration"
+        ],
+        "summary": "List Batch Builds",
+        "operationId": "list_batch_builds_api_v1_orchestration_batches__batch_id__builds_get",
+        "parameters": [
+          {
+            "name": "batch_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Batch Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BuildJobListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/orchestration/builds/{job_id}": {
+      "get": {
+        "tags": [
+          "orchestration"
+        ],
+        "summary": "Get Build Job",
+        "operationId": "get_build_job_api_v1_orchestration_builds__job_id__get",
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Job Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BuildJobLine"
+                }
+              }
+            }
           },
           "422": {
             "description": "Validation Error",
@@ -3306,6 +3443,104 @@
           "contribution"
         ],
         "title": "BridgeDriver"
+      },
+      "BuildJobLine": {
+        "properties": {
+          "job_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Job Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "months": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Months"
+          },
+          "metric_snapshot_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Metric Snapshot Ids"
+          },
+          "analysis_run_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Analysis Run Id"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          },
+          "created_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created At"
+          },
+          "finished_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finished At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "job_id",
+          "status",
+          "months",
+          "metric_snapshot_ids",
+          "analysis_run_id",
+          "error",
+          "created_at"
+        ],
+        "title": "BuildJobLine"
+      },
+      "BuildJobListResponse": {
+        "properties": {
+          "jobs": {
+            "items": {
+              "$ref": "#/components/schemas/BuildJobLine"
+            },
+            "type": "array",
+            "title": "Jobs"
+          }
+        },
+        "type": "object",
+        "required": [
+          "jobs"
+        ],
+        "title": "BuildJobListResponse"
       },
       "ColumnProfileResponse": {
         "properties": {
@@ -6039,12 +6274,58 @@
         ],
         "title": "MetricRelation"
       },
+      "OrchestrationBuildRequest": {
+        "properties": {
+          "from_month": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "From Month",
+            "description": "分析窗口起点 YYYY-MM（含）"
+          },
+          "to_month": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "To Month",
+            "description": "分析窗口终点 YYYY-MM（含）"
+          }
+        },
+        "type": "object",
+        "title": "OrchestrationBuildRequest"
+      },
       "OrchestrationBuildResponse": {
         "properties": {
+          "job_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Job Id"
+          },
           "batch_id": {
             "type": "string",
             "format": "uuid",
             "title": "Batch Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "months": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Months"
           },
           "metric_snapshot_ids": {
             "items": {
@@ -6055,24 +6336,31 @@
             "title": "Metric Snapshot Ids"
           },
           "analysis_run_id": {
-            "type": "string",
-            "format": "uuid",
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Analysis Run Id"
           },
-          "as_of_months": {
-            "items": {
-              "type": "integer"
-            },
-            "type": "array",
-            "title": "As Of Months"
+          "replayed": {
+            "type": "boolean",
+            "title": "Replayed"
           }
         },
         "type": "object",
         "required": [
+          "job_id",
           "batch_id",
+          "status",
+          "months",
           "metric_snapshot_ids",
           "analysis_run_id",
-          "as_of_months"
+          "replayed"
         ],
         "title": "OrchestrationBuildResponse"
       },

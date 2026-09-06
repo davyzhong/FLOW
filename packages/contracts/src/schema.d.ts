@@ -689,6 +689,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/orchestration/batches/{batch_id}/builds": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Batch Builds */
+        get: operations["list_batch_builds_api_v1_orchestration_batches__batch_id__builds_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/orchestration/builds/{job_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Build Job */
+        get: operations["get_build_job_api_v1_orchestration_builds__job_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -849,6 +883,33 @@ export interface components {
             /** Label */
             label: string;
             contribution: components["schemas"]["DashboardValue"];
+        };
+        /** BuildJobLine */
+        BuildJobLine: {
+            /**
+             * Job Id
+             * Format: uuid
+             */
+            job_id: string;
+            /** Status */
+            status: string;
+            /** Months */
+            months: number[];
+            /** Metric Snapshot Ids */
+            metric_snapshot_ids: string[];
+            /** Analysis Run Id */
+            analysis_run_id: string | null;
+            /** Error */
+            error: string | null;
+            /** Created At */
+            created_at: string | null;
+            /** Finished At */
+            finished_at?: string | null;
+        };
+        /** BuildJobListResponse */
+        BuildJobListResponse: {
+            /** Jobs */
+            jobs: components["schemas"]["BuildJobLine"][];
         };
         /** ColumnProfileResponse */
         ColumnProfileResponse: {
@@ -1807,22 +1868,41 @@ export interface components {
             /** Provenance */
             provenance?: string | null;
         };
+        /** OrchestrationBuildRequest */
+        OrchestrationBuildRequest: {
+            /**
+             * From Month
+             * @description 分析窗口起点 YYYY-MM（含）
+             */
+            from_month?: string | null;
+            /**
+             * To Month
+             * @description 分析窗口终点 YYYY-MM（含）
+             */
+            to_month?: string | null;
+        };
         /** OrchestrationBuildResponse */
         OrchestrationBuildResponse: {
+            /**
+             * Job Id
+             * Format: uuid
+             */
+            job_id: string;
             /**
              * Batch Id
              * Format: uuid
              */
             batch_id: string;
+            /** Status */
+            status: string;
+            /** Months */
+            months: number[];
             /** Metric Snapshot Ids */
             metric_snapshot_ids: string[];
-            /**
-             * Analysis Run Id
-             * Format: uuid
-             */
-            analysis_run_id: string;
-            /** As Of Months */
-            as_of_months: number[];
+            /** Analysis Run Id */
+            analysis_run_id: string | null;
+            /** Replayed */
+            replayed: boolean;
         };
         /** ProductPerformance */
         ProductPerformance: {
@@ -4107,7 +4187,11 @@ export interface operations {
             };
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["OrchestrationBuildRequest"] | null;
+            };
+        };
         responses: {
             /** @description Successful Response */
             200: {
@@ -4138,6 +4222,74 @@ export interface operations {
                     "application/json": {
                         [key: string]: unknown;
                     };
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+        };
+    };
+    list_batch_builds_api_v1_orchestration_batches__batch_id__builds_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                batch_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BuildJobListResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_build_job_api_v1_orchestration_builds__job_id__get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                job_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BuildJobLine"];
                 };
             };
             /** @description Validation Error */
