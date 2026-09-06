@@ -110,7 +110,7 @@ flowchart LR
   - 测试/证据（新增目标）：`tests/statements/test_normalization.py`。
   - 完成标准：原始值可还原；重复导入幂等，冲突版本不覆盖，历史查询稳定。
 
-- [ ] **B04 · 四表一注覆盖与质量规则** — 状态：todo
+- [ ] **B04 · 四表一注覆盖与质量规则** — 状态：doing（证据已落盘，待 CI 绿后勾选）
   - 依赖：B03。
   - 主要位置：新 statements/reconciliation.py；api/schemas/statement.py。
   - 工作：建立资产负债、利润、现金、权益变动校验；附注只做披露清单与取数定位；区分通过/不适用/缺失/失败。
@@ -360,7 +360,7 @@ flowchart LR
 
 ## 7. 当前执行点与滚动记录
 
-**当前：B03 已提交待 CI；下一任务：B04。**
+**当前：B04 已提交待 CI；下一任务：B05。**
 
 第一条命令（A02）：阅读方向规格第 3 节五条链与 `baseline-audit.md` §2/§4，起草 `docs/superpowers/specs/financial-facts-contract.md`，随后 `cd services/api && uv run pytest tests/statements/test_fact_contract.py -q`。
 
@@ -373,5 +373,6 @@ flowchart LR
 | 2026-09-06 | B01 上传与来源登记 | **done** | 迁移 0014（statement_source）；`statements/intake.py` + `POST/GET /api/v1/statements/sources`；`tests/statements/test_source_intake.py` 10 项通过；迁移往返通过；真实 MinIO 上传圆通 PDF（201、候选全中、重复幂等、对象可读） | B02 |
 | 2026-09-06 | B02 抽取适配接口 | **done** | `statements/extraction.py`：三适配器（A 股/港股繁体/业绩公告）+ 统一入口 + 显式降级；脚本改薄入口且输出零退化（与已提交 YAML 逐字节一致，JDL/腾讯重跑验证）；`tests/statements/test_extraction_adapters.py` 9 项通过（含圆通留出公司直抽、附注号/括号负数/双单位、勾稽全过）；mypy/ruff 绿 | B03 |
 | 2026-09-06 | B03 规范化与修订版本 | doing | 迁移 0015（报表版本化 content_sha256 + statement_normalized_item）；`statements/normalization.py`（别名映射、合成行留痕、映射版本并存）；`tests/statements/test_normalization.py` 4 项 + test_statement_api 重述用例共 42 项通过；迁移往返通过；契约再生成 | B04 |
+| 2026-09-06 | B04 四表覆盖与质量规则 | doing | `statements/reconciliation.py`：四态覆盖（passed/failed/missing/not_applicable）、按报告种类的必需表集合、年报缺权益表/附注永不得标完整、关键勾稽阻断发布；`tests/statements/test_reconciliation.py` 5 项通过（三真实样本 + 合成阻断例） | B05 |
 
 执行者每次收尾补表：任务 ID、变更、定向测试、远端 CI、外部阻塞、下一条命令；未知内容标 unknown，不沿用过期状态。
