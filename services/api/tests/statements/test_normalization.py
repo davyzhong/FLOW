@@ -34,6 +34,7 @@ from flow_api.statements.normalization import (
 
 REPO_ROOT = Path(__file__).resolve().parents[4]
 SF_YAML = REPO_ROOT / "docs/implementation/p5/sf_2026q1_statements.yaml"
+TENCENT_YAML = REPO_ROOT / "docs/implementation/p5/tencent_2026q2_statements.yaml"
 
 IMPORT_KWARGS = {
     "company_name": "顺丰控股",
@@ -130,10 +131,135 @@ def test_normalize_resolves_sums_traces_and_preserves_original(db_session: Sessi
     assert after == original_rows, "归一化不得改动原始行"
 
 
+def test_structured_mapping_applies_sign_rule_and_keeps_trace(db_session: Session) -> None:
+    payload = yaml.safe_load(TENCENT_YAML.read_text())
+    report = import_statement_report(
+        db_session,
+        company_name="腾讯控股",
+        stock_code="0700.HK",
+        report_kind="二季报",
+        period_label="2026Q2",
+        payload=payload,
+        source_ref="p5_samples/tencent_0700/Tencent_2026_Q2_results.pdf",
+        source_sha256="b" * 64,
+    )
+
+    summary = normalize_report(db_session, report)
+    rows = normalized_items(db_session, report.id, mapping_version="v1")
+    cost = next(row for row in rows if row.item_id == "is.cogs")
+
+    assert summary.resolved > 0
+    assert cost.value_current == Decimal("86352")
+    assert cost.value_prior == Decimal("79491")
+    assert cost.trace == {"kind": "mapped", "transformation": "absolute_value"}
+    admin = next(row for row in rows if row.item_id == "is.admin_exp")
+    assert admin.value_current == Decimal("38808")
+    assert "IFRS" in admin.trace["note"]
+    assert {row.item_id for row in rows if row.item_id} >= {
+        "is.revenue",
+        "is.cogs",
+        "is.gross_profit",
+        "is.operating_profit",
+        "is.net_profit",
+    }
+
+
+def test_synthetic_mapping_propagates_missing_components(db_session: Session) -> None:
+    payload = {
+        "unit": "人民币元",
+        "statements": {
+            "合并资产负债表": [
+                {"item": "短期借款", "期末余额": 100, "期初余额": 80},
+            ]
+        },
+    }
+    report = import_statement_report(
+        db_session,
+        company_name="顺丰控股",
+        stock_code="002352.SZ",
+        report_kind="测试报表",
+        period_label="2026Q2",
+        payload=payload,
+        source_ref="test.pdf",
+    )
+
+    normalize_report(db_session, report)
+    rows = normalized_items(db_session, report.id, mapping_version="v1")
+    short_debt = next(row for row in rows if row.item_id == "bs.short_debt")
+
+    assert short_debt.value_end is None
+    assert short_debt.value_begin is None
+    assert short_debt.trace["status"] == "incomplete"
+    assert short_debt.trace["missing_parts"] == ["一年内到期的非流动负债"]
+
+
+def test_synthetic_mapping_marks_a_missing_column_value_incomplete(db_session: Session) -> None:
+    payload = {
+        "unit": "人民币元",
+        "statements": {
+            "合并资产负债表": [
+                {"item": "短期借款", "期末余额": 100, "期初余额": 80},
+                {"item": "一年内到期的非流动负债", "期末余额": 20, "期初余额": None},
+            ]
+        },
+    }
+    report = import_statement_report(
+        db_session,
+        company_name="顺丰控股",
+        stock_code="002352.SZ",
+        report_kind="测试报表",
+        period_label="2026Q3",
+        payload=payload,
+        source_ref="test.pdf",
+    )
+
+    normalize_report(db_session, report)
+    rows = normalized_items(db_session, report.id, mapping_version="v1")
+    short_debt = next(row for row in rows if row.item_id == "bs.short_debt")
+
+    assert short_debt.value_end == Decimal("120")
+    assert short_debt.value_begin is None
+    assert short_debt.trace["status"] == "incomplete"
+    assert short_debt.trace["missing_parts_by_column"] == {
+        "value_begin": ["一年内到期的非流动负债"]
+    }
+
+
+def test_synthetic_mapping_marks_an_entire_applicable_column_missing(db_session: Session) -> None:
+    payload = {
+        "unit": "人民币元",
+        "statements": {
+            "合并资产负债表": [
+                {"item": "短期借款", "期末余额": 100, "期初余额": None},
+                {"item": "一年内到期的非流动负债", "期末余额": 20, "期初余额": None},
+            ]
+        },
+    }
+    report = import_statement_report(
+        db_session,
+        company_name="顺丰控股",
+        stock_code="002352.SZ",
+        report_kind="测试报表",
+        period_label="2026Q4",
+        payload=payload,
+        source_ref="test.pdf",
+    )
+
+    normalize_report(db_session, report)
+    rows = normalized_items(db_session, report.id, mapping_version="v1")
+    short_debt = next(row for row in rows if row.item_id == "bs.short_debt")
+
+    assert short_debt.value_begin is None
+    assert short_debt.trace["status"] == "incomplete"
+    assert short_debt.trace["missing_parts_by_column"] == {
+        "value_begin": ["短期借款", "一年内到期的非流动负债"]
+    }
+
+
 def test_normalize_idempotent_and_mapping_versions_coexist(db_session: Session) -> None:
     report = _import_sf(db_session)
     first = normalize_report(db_session, report)
-    count_v0 = db_session.scalar(select(func.count()).select_from(StatementNormalizedItem))
+    count_v1 = db_session.scalar(select(func.count()).select_from(StatementNormalizedItem))
 
     second = normalize_report(db_session, report)
     assert (second.resolved, second.unresolved, second.synthetic) == (
@@ -141,13 +267,13 @@ def test_normalize_idempotent_and_mapping_versions_coexist(db_session: Session) 
         first.unresolved,
         first.synthetic,
     )
-    assert db_session.scalar(select(func.count()).select_from(StatementNormalizedItem)) == count_v0
+    assert db_session.scalar(select(func.count()).select_from(StatementNormalizedItem)) == count_v1
 
-    normalize_report(db_session, report, mapping_version="v0-test-2")
+    normalize_report(db_session, report, mapping_version="v1-test-2")
     total = db_session.scalar(select(func.count()).select_from(StatementNormalizedItem))
-    assert total == 2 * count_v0
-    assert len(normalized_items(db_session, report.id, mapping_version="v0")) == count_v0
-    assert len(normalized_items(db_session, report.id, mapping_version="v0-test-2")) == count_v0
+    assert total == 2 * count_v1
+    assert len(normalized_items(db_session, report.id, mapping_version="v1")) == count_v1
+    assert len(normalized_items(db_session, report.id, mapping_version="v1-test-2")) == count_v1
 
 
 def test_unmapped_company_items_kept_unresolved(db_session: Session) -> None:

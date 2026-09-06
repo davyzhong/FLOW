@@ -33,7 +33,13 @@ COMPANY_KEY_BY_STOCK: dict[str, str] = {
     "600233": "yto_600233",
 }
 
-ALIAS_MAP_PATH = Path("config/statements/item_alias_map_v0.yaml")
+ALIAS_MAP_PATH = Path("config/statements/item_alias_map_v1.yaml")
+ROLE_VALUE_COLUMNS = {
+    "end": "value_end",
+    "open": "value_begin",
+    "cur": "value_current",
+    "prev_yoy": "value_prior",
+}
 
 
 class NormalizationError(ValueError):
@@ -89,6 +95,41 @@ def _lookup(mapping: dict[str, Any], item_name: str) -> Any:
     return None
 
 
+def _mapped_values(
+    line: StatementLineItem, target: Any
+) -> tuple[str | None, dict[str, Decimal | None], dict[str, str]]:
+    if isinstance(target, str):
+        return target, {
+            "value_end": line.value_end,
+            "value_begin": line.value_begin,
+            "value_current": line.value_current,
+            "value_prior": line.value_prior,
+        }, {"kind": "mapped"}
+    if isinstance(target, dict) and isinstance(target.get("item"), str):
+        use_absolute = target.get("abs") is True
+        values = {
+            name: abs(value) if use_absolute and value is not None else value
+            for name, value in {
+                "value_end": line.value_end,
+                "value_begin": line.value_begin,
+                "value_current": line.value_current,
+                "value_prior": line.value_prior,
+            }.items()
+        }
+        trace = {
+            "kind": "mapped",
+            **({"transformation": "absolute_value"} if use_absolute else {}),
+            **({"note": str(target["note"])} if target.get("note") else {}),
+        }
+        return target["item"], values, trace
+    return None, {
+        "value_end": line.value_end,
+        "value_begin": line.value_begin,
+        "value_current": line.value_current,
+        "value_prior": line.value_prior,
+    }, {"note": "unmapped"}
+
+
 def normalize_report(
     session: Session,
     report: StatementReport,
@@ -119,16 +160,21 @@ def normalize_report(
     for statement_type, lines in by_type.items():
         section = (statements or {}).get(statement_type, {})
         mapping = section.get("map", {}) if isinstance(section, dict) else {}
+        roles = section.get("roles", {}) if isinstance(section, dict) else {}
+        applicable_columns = {
+            ROLE_VALUE_COLUMNS[role]
+            for role in roles.values()
+            if role in ROLE_VALUE_COLUMNS
+        }
         for line in lines:
             target = _lookup(mapping, line.item_name)
             if isinstance(target, dict) and "sum" in target:
                 # 组合映射在合成行生成，原始行本身不再单独映射
                 continue
-            if isinstance(target, str):
-                item_id: str | None = target
+            item_id, values, trace = _mapped_values(line, target)
+            if item_id is not None:
                 resolved += 1
             else:
-                item_id = None
                 unresolved += 1
                 unresolved_names.append(line.item_name)
             session.add(
@@ -138,11 +184,11 @@ def normalize_report(
                     statement_type=statement_type,
                     item_name=line.item_name,
                     item_id=item_id,
-                    value_end=line.value_end,
-                    value_begin=line.value_begin,
-                    value_current=line.value_current,
-                    value_prior=line.value_prior,
-                    trace={} if item_id else {"note": "unmapped"},
+                    value_end=values["value_end"],
+                    value_begin=values["value_begin"],
+                    value_current=values["value_current"],
+                    value_prior=values["value_prior"],
+                    trace=trace,
                 )
             )
 
@@ -160,13 +206,36 @@ def normalize_report(
                 if part is not None:
                     parts[part_name] = part
 
-            def _sum(col: str, parts: dict[str, StatementLineItem] = parts) -> Decimal | None:
+            missing_parts = [name for name in target["sum"] if name not in parts]
+            value_columns = ("value_end", "value_begin", "value_current", "value_prior")
+            missing_parts_by_column: dict[str, list[str]] = {}
+            for column in value_columns:
+                column_has_value = any(
+                    getattr(part, column) is not None for part in parts.values()
+                )
+                if column not in applicable_columns and not column_has_value:
+                    continue
+                missing_for_column = [
+                    name
+                    for name in target["sum"]
+                    if name not in parts or getattr(parts[name], column) is None
+                ]
+                if missing_for_column:
+                    missing_parts_by_column[column] = missing_for_column
+
+            def _sum(
+                col: str,
+                parts: dict[str, StatementLineItem] = parts,
+                missing_parts: list[str] = missing_parts,
+            ) -> Decimal | None:
+                if missing_parts:
+                    return None
                 values = [getattr(part, col) for part in parts.values()]
-                present = [v for v in values if v is not None]
-                if not present:
+                if not values or any(value is None for value in values):
                     return None
                 total: Decimal = Decimal(0)
-                for value in present:
+                for value in values:
+                    assert value is not None
                     total += value
                 return total
 
@@ -184,10 +253,14 @@ def normalize_report(
                     value_prior=_sum("value_prior"),
                     trace={
                         "kind": "sum",
+                        "status": (
+                            "incomplete"
+                            if missing_parts or missing_parts_by_column
+                            else "complete"
+                        ),
                         "parts": sorted(parts),
-                        "missing_parts": [
-                            name for name in target["sum"] if name not in parts
-                        ],
+                        "missing_parts": missing_parts,
+                        "missing_parts_by_column": missing_parts_by_column,
                         **({"note": target["note"]} if target.get("note") else {}),
                     },
                 )
