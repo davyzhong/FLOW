@@ -103,5 +103,33 @@ __all__ = [
     "EntryTemplate",
     "MetricCatalogDocument",
     "MetricDictionaryEntry",
+    "MetricGovernanceEvent",
     "StatementLineMapping",
 ]
+
+
+class MetricGovernanceEvent(CanonicalIdentityMixin, Base):
+    """指标治理审计事件（C04）：草稿/生效/退役，只增不改。"""
+
+    __tablename__ = "metric_governance_event"
+
+    dictionary_id: Mapped[str] = mapped_column()
+    collection: Mapped[str] = mapped_column()
+    metric_code: Mapped[str] = mapped_column()
+    version: Mapped[int] = mapped_column()
+    action: Mapped[str] = mapped_column()
+    operator: Mapped[str] = mapped_column()
+    reason: Mapped[str] = mapped_column()
+    diff: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict)
+
+
+__all__ = [
+    "AccountingStandard",
+    "AccountingSubject",
+    "EntryTemplate",
+    "MetricCatalogDocument",
+    "MetricDictionaryEntry",
+    "MetricGovernanceEvent",
+    "StatementLineMapping",
+]
+

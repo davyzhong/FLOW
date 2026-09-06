@@ -672,6 +672,74 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/metric-library/entries/{entry_id}/drafts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Draft Metric Change */
+        post: operations["draft_metric_change_api_v1_metric_library_entries__entry_id__drafts_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/metric-library/entries/{entry_id}/activate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Activate Metric Change */
+        post: operations["activate_metric_change_api_v1_metric_library_entries__entry_id__activate_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/metric-library/entries/{entry_id}/retire": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Retire Metric Change */
+        post: operations["retire_metric_change_api_v1_metric_library_entries__entry_id__retire_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/metric-library/events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Metric Governance Events */
+        get: operations["list_metric_governance_events_api_v1_metric_library_events_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/orchestration/batches/{batch_id}/build": {
         parameters: {
             query?: never;
@@ -1703,6 +1771,13 @@ export interface components {
             actual_margin: components["schemas"]["DashboardValue"];
             comparison: components["schemas"]["DashboardValue"];
         };
+        /** MetricActionRequest */
+        MetricActionRequest: {
+            /** Operator */
+            operator: string;
+            /** Reason */
+            reason: string;
+        };
         /** MetricCard */
         MetricCard: {
             /**
@@ -1754,6 +1829,17 @@ export interface components {
             formula_text: string;
             /** Factors */
             factors: string[];
+        };
+        /** MetricDraftRequest */
+        MetricDraftRequest: {
+            /** Changes */
+            changes: {
+                [key: string]: unknown;
+            };
+            /** Operator */
+            operator: string;
+            /** Reason */
+            reason: string;
         };
         /** MetricEntry */
         MetricEntry: {
@@ -1824,12 +1910,49 @@ export interface components {
              */
             collection: "general" | "logistics";
         };
+        /** MetricEntryActionResponse */
+        MetricEntryActionResponse: {
+            /** Id */
+            id: string;
+            /** Metric Code */
+            metric_code: string;
+            /** Version */
+            version: number;
+            /** Status */
+            status: string;
+        };
         /** MetricFormula */
         MetricFormula: {
             /** Op */
             op: string;
             /** Args */
             args: (string | number | components["schemas"]["MetricFormula"])[];
+        };
+        /** MetricGovernanceEventLine */
+        MetricGovernanceEventLine: {
+            /** Id */
+            id: string;
+            /** Metric Code */
+            metric_code: string;
+            /** Version */
+            version: number;
+            /** Action */
+            action: string;
+            /** Operator */
+            operator: string;
+            /** Reason */
+            reason: string;
+            /** Diff */
+            diff: {
+                [key: string]: unknown;
+            };
+            /** Created At */
+            created_at?: string | null;
+        };
+        /** MetricGovernanceEventListResponse */
+        MetricGovernanceEventListResponse: {
+            /** Events */
+            events: components["schemas"]["MetricGovernanceEventLine"][];
         };
         /** MetricLibraryResponse */
         MetricLibraryResponse: {
@@ -4163,6 +4286,150 @@ export interface operations {
                     "application/json": {
                         [key: string]: unknown;
                     };
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    draft_metric_change_api_v1_metric_library_entries__entry_id__drafts_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                entry_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MetricDraftRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MetricEntryActionResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    activate_metric_change_api_v1_metric_library_entries__entry_id__activate_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                entry_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MetricActionRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MetricEntryActionResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    retire_metric_change_api_v1_metric_library_entries__entry_id__retire_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                entry_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MetricActionRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MetricEntryActionResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_metric_governance_events_api_v1_metric_library_events_get: {
+        parameters: {
+            query?: {
+                metric_code?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MetricGovernanceEventListResponse"];
                 };
             };
             /** @description Validation Error */

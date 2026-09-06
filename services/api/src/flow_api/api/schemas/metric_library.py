@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from typing import Literal
+from typing import Any, Literal
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class MetricFormula(BaseModel):
@@ -117,3 +117,36 @@ class MetricLibraryResponse(BaseModel):
     metrics: list[MetricEntry]
     relations: list[MetricRelation]
     accounting: AccountingFoundation
+
+
+class MetricDraftRequest(BaseModel):
+    changes: dict[str, Any]
+    operator: str = Field(min_length=1, max_length=128)
+    reason: str = Field(min_length=1, max_length=512)
+
+
+class MetricActionRequest(BaseModel):
+    operator: str = Field(min_length=1, max_length=128)
+    reason: str = Field(min_length=1, max_length=512)
+
+
+class MetricEntryActionResponse(BaseModel):
+    id: str
+    metric_code: str
+    version: int
+    status: str
+
+
+class MetricGovernanceEventLine(BaseModel):
+    id: str
+    metric_code: str
+    version: int
+    action: str
+    operator: str
+    reason: str
+    diff: dict[str, Any]
+    created_at: str | None = None
+
+
+class MetricGovernanceEventListResponse(BaseModel):
+    events: list[MetricGovernanceEventLine]

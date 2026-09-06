@@ -6,19 +6,25 @@ from datetime import datetime
 from functools import lru_cache
 from pathlib import Path
 from typing import Annotated, Any
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 import yaml
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from flow_api.api.schemas.intake import ErrorDetail
 from flow_api.api.schemas.metric_library import (
     AccountingAccount,
     AccountingFoundation,
     EntryLine,
+    MetricActionRequest,
+    MetricDraftRequest,
     MetricEntry,
+    MetricEntryActionResponse,
+    MetricGovernanceEventLine,
+    MetricGovernanceEventListResponse,
     MetricLibraryResponse,
     ReportItem,
 )
@@ -36,6 +42,7 @@ from flow_api.infrastructure.models.metric_library import (
     MetricDictionaryEntry,
     StatementLineMapping,
 )
+from flow_api.metric_library_store.governance import GovernanceError, MetricGovernance
 from flow_api.metric_library_store.importer import import_all
 
 router = APIRouter(prefix="/metric-library", tags=["metric-library"])
@@ -266,3 +273,94 @@ def retire_metric_library(request: RetireRequest, session: SessionDependency) ->
 
 
 __all__ = ["get_metric_library_session", "router"]
+
+
+def _entry_action_response(entry: MetricDictionaryEntry) -> MetricEntryActionResponse:
+    return MetricEntryActionResponse(
+        id=str(entry.id),
+        metric_code=entry.metric_code,
+        version=entry.version,
+        status=entry.status,
+    )
+
+
+@router.post(
+    "/entries/{entry_id}/drafts",
+    response_model=MetricEntryActionResponse,
+    status_code=status.HTTP_201_CREATED,
+)
+def draft_metric_change(
+    entry_id: UUID, request: MetricDraftRequest, session: SessionDependency
+) -> MetricEntryActionResponse:
+    try:
+        draft = MetricGovernance(session).draft_change(
+            entry_id,
+            changes=request.changes,
+            operator=request.operator,
+            reason=request.reason,
+        )
+    except GovernanceError as error:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=ErrorDetail(code=error.code, message=error.message).model_dump(mode="json"),
+        ) from error
+    session.commit()
+    return _entry_action_response(draft)
+
+
+@router.post("/entries/{entry_id}/activate", response_model=MetricEntryActionResponse)
+def activate_metric_change(
+    entry_id: UUID, request: MetricActionRequest, session: SessionDependency
+) -> MetricEntryActionResponse:
+    try:
+        entry = MetricGovernance(session).activate(
+            entry_id, operator=request.operator, reason=request.reason
+        )
+    except GovernanceError as error:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=ErrorDetail(code=error.code, message=error.message).model_dump(mode="json"),
+        ) from error
+    session.commit()
+    return _entry_action_response(entry)
+
+
+@router.post("/entries/{entry_id}/retire", response_model=MetricEntryActionResponse)
+def retire_metric_change(
+    entry_id: UUID, request: MetricActionRequest, session: SessionDependency
+) -> MetricEntryActionResponse:
+    try:
+        entry = MetricGovernance(session).retire(
+            entry_id, operator=request.operator, reason=request.reason
+        )
+    except GovernanceError as error:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=ErrorDetail(code=error.code, message=error.message).model_dump(mode="json"),
+        ) from error
+    session.commit()
+    return _entry_action_response(entry)
+
+
+@router.get("/events", response_model=MetricGovernanceEventListResponse)
+def list_metric_governance_events(
+    session: SessionDependency, metric_code: str | None = None
+) -> MetricGovernanceEventListResponse:
+    events = MetricGovernance(session).events(metric_code)
+    return MetricGovernanceEventListResponse(
+        events=[
+            MetricGovernanceEventLine(
+                id=str(event.id),
+                metric_code=event.metric_code,
+                version=event.version,
+                action=event.action,
+                operator=event.operator,
+                reason=event.reason,
+                diff=event.diff,
+                created_at=(
+                    event.created_at.isoformat(timespec="seconds") if event.created_at else None
+                ),
+            )
+            for event in events
+        ]
+    )

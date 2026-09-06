@@ -47,6 +47,7 @@ from flow_api.infrastructure.models.metric_library import (
     EntryTemplate,
     MetricCatalogDocument,
     MetricDictionaryEntry,
+    MetricGovernanceEvent,
     StatementLineMapping,
 )
 from flow_api.infrastructure.models.publishing import (
@@ -88,6 +89,7 @@ __all__ = [
     "MetricDefinition",
     "MetricDefinitionDependency",
     "MetricDictionaryEntry",
+    "MetricGovernanceEvent",
     "MetricCatalogDocument",
     "MetricSnapshot",
     "MetricValue",
