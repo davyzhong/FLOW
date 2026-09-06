@@ -134,7 +134,7 @@ flowchart LR
 
 ### M2：会计知识与可执行指标治理
 
-- [ ] **C01 · 来源与专业口径核验** — 状态：todo
+- [ ] **C01 · 来源与专业口径核验** — 状态：doing（证据已落盘，待 CI 绿后勾选）
   - 依赖：A03。
   - 主要位置：config/metrics/*_v1.yaml、metric_library_store/importer.py。
   - 工作：核查启用项来源、准则有效期、企业自定义与行业惯例；MPM 范围和 Non-IFRS 关系单列；不确定项标记待核。
@@ -376,5 +376,6 @@ flowchart LR
 | 2026-09-06 | B04 四表覆盖与质量规则 | **done** | `statements/reconciliation.py`：四态覆盖（passed/failed/missing/not_applicable）、按报告种类的必需表集合、年报缺权益表/附注永不得标完整、关键勾稽阻断发布；`tests/statements/test_reconciliation.py` 5 项通过（三真实样本 + 合成阻断例） | B05 |
 | 2026-09-06 | B05 复核更正与事实发布 | doing | 迁移 0016（statement_correction 只增不改审计 + report.status 状态机）；`statements/review.py`（更正审计、修正视图重跑勾稽、关键不平衡阻断发布、发布后锁定）；更正/发布 API + `/statements` 复核面板；`tests/statements/test_fact_review.py` 3 项 + e2e/statements-review.spec.ts 通过（并入 statements e2e 门禁） | B06 |
 | 2026-09-06 | B06 通用期间与可恢复编排 | doing | 迁移 0017（build_job）；编排期间改由批次分析窗口（事实期间）生成 + 请求范围收窄，固定演示月份移出生产路径；任务持久化（状态/结果身份/失败留痕）、同范围幂等回放、失败可重试；`tests/api/test_orchestration_api.py` 5 项通过（含范围收窄/回放/任务列表/422） | C01 |
+| 2026-09-06 | C01 来源与口径核验 | doing | `docs/implementation/objective-analysis/caliber-audit.md`：55 指标来源/口径/MPM 全量核验 + 167 科目/48 准则/32 分录模板核验；待核项显式标记（经验阈值、IFRS 18 生效期、2024 汇编编号） | C02 |
 
 执行者每次收尾补表：任务 ID、变更、定向测试、远端 CI、外部阻塞、下一条命令；未知内容标 unknown，不沿用过期状态。
