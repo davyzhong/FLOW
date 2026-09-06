@@ -38,6 +38,10 @@
 
 可视化：[指标库 v0 评审台（HTML）](../03_assets/visual_prototypes/metric-library-v0-review.html) 由 `scripts/generate_metric_library_review.py` 从两个 YAML 数据集生成，头部含生成时间戳，总览统计带直观展示建设进展；支持按能力域/科目类别浏览、搜索、仅看 MPM 过滤、逐项 纳入/待定/剔除 评审（localStorage 持久化，可复制筛选结果）、杜邦依赖树与 CAS↔IFRS 映射；每次数据演进后重建。正式规格见 `docs/superpowers/specs/2026-09-05-flow-metric-dictionary-design.md`（D040）。
 
+## 经营分析轨数据定义
+
+[经营分析轨数据定义 v0（草案）](synthesis/经营分析轨数据定义_v0_草案.md)（D045/D046，2026-09-06）：由 Agent 从知识库提炼——数据熊 04_经营分析 合集 182 篇（驾驶舱板块、报告模板、指标体系方法论）为参考基底，Obsidian 菜鸟材料（经营架构树、成本管理单元、CFO 指标口径与目标值）为事实依据；含维度模型、六域指标目录、报告结构范式与数据契约扩展方向，并如实标注物流专营指标（妥投/车效/仓效/线路）在现有语料中零命中的缺口。待用户逐项评审后版本化进入 `config/`。
+
 ## 综合研究结论
 
 [Finance Intelligence OS 系统研究结论](synthesis/Finance_Intelligence_OS_系统研究结论.md) 是对上述资料及早期对话的综合研究成果。它提出了以下关键方向：
