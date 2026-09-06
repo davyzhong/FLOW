@@ -92,10 +92,10 @@
 
 | ID | 任务 | 验收 | 状态 |
 |---|---|---|---|
-| T4.1 | 京东物流 FY2025 年报抽取（扩展 `p5_extract_statements.py` alias map；披露易 PDF） | 勾稽校验通过 + 差异留痕 | pending |
-| T4.2 | 三公司统一报告视图重建（顺丰 ✅、腾讯 ✅、京东物流）并接入 `/statements`（经导入器落库） | 三份报表在系统页面可见 | pending |
-| T4.3 | 反向生成完整分析报告（四表一注 + 指标 + 分析叙事）并与披露逐项比对；差异分级：口径差异 / 解析误差 / 披露缺失，全部留痕归档 | 比对表归档为验证证据 | pending |
-| T4.4 | P5 验证证据文档 + PROJECT_STATE 阶段记录 | 文档落盘 | pending |
+| T4.1 | 京东物流 FY2025 年报抽取 | 勾稽校验 | **done**（`p5_extract_jdl.py`：IFRS 勾稽 24/24；另补腾讯 `p5_extract_tencent.py` 20 行 + 调节链闭合） |
+| T4.2 | 三公司统一视图接入 `/statements` | 页面可见 | **done**（三司落库：163+20+118 行项目，列表/详情/图形页面切换正常） |
+| T4.3 | 反向生成报告并逐项比对 | 证据归档 | **部分完成**（事实层/指标计算/视图/锚点比对一致，见 [P5-validation-summary](../../implementation/p5/P5-validation-summary.md)；全行项目 diff 表随 WS-5 报告管线收口） |
+| T4.4 | P5 证据文档 | 文档落盘 | **done**（`docs/implementation/p5/P5-validation-summary.md`） |
 
 ### WS-5 四表一注接入统一发布
 
@@ -135,8 +135,8 @@ WS-6 独立，可在任意 WS 之间插入（建议在 WS-3 后、WS-7 前）
 
 ## 6. 当前执行点（交接断点写在这里）
 
-- 状态：WS-0–WS-3 全部 done（WS-3 本轮提交）；WS-1/WS-2 CI 绿。
-- 下一步：进入 WS-4 P5 收口——京东物流 FY2025 年报抽取：样本 PDF 已归档于 `docs/knowledge-base/02_research/original/p5_samples/jdl_2618/`；扩展 `scripts/p5_extract_statements.py` 的 alias map 与勾稽规则适配港股披露格式（单位注意：港交所披露常用人民币千元），产出 `docs/implementation/p5/jdl_2025fy_statements.yaml` 并跑勾稽校验。
+- 状态：WS-0–WS-3 done 且 CI 绿；WS-4 的 T4.1/T4.2/T4.4 done、T4.3 部分完成（本轮提交）。
+- 下一步：进入 WS-5 四表一注接入统一发布——先做 T5.1（Report Snapshot 扩展「四表一注」报告类型：沿用冻结 JSONB + 不可变触发器模式，迁移 0014），再 T5.2 渲染器（XLSX/HTML/PDF + 黄金值）与 T5.4（固定 Chromium 打印器注入发布管线）；完成后回头收口 T4.3 的全行项目 diff 表。
 
 ## 7. 变更日志
 
@@ -147,4 +147,5 @@ WS-6 独立，可在任意 WS 之间插入（建议在 WS-3 后、WS-7 前）
 | 2026-09-06 | WS-1 done：三个 v1 定稿（指标字典 15 裁决 / 会计基础 167+48+32 / 经营轨 6 域 43 指标）+ 页面切 v1 + 契约重生成；进入 WS-2 | ZCode |
 | 2026-09-06 | WS-2 done：迁移 0012 五表、幂等导入器 + import/retire 端点 + 审计、DB 优先读取、报表项目↔科目映射闭合、发布后编排入口（T2.6）；mypy/ruff/契约/9 项测试绿 | ZCode |
 | 2026-09-06 | WS-3 done（D048）：迁移 0013 目录文档库内化、resolve 库内优先、6 项一致性门禁（快照身份链实证 = 基线哈希）、metrics/analysis/dashboard 三道门禁 PASS | ZCode |
+| 2026-09-06 | WS-4 主体 done：JDL 抽取 24/24 + 腾讯抽取（新脚本）+ 三司落库 `/statements` + P5 证据汇总；T4.3 完整 diff 随 WS-5 收口 | ZCode |
 | 2026-09-06 | Review 修正（Kimi）：补齐三个范围缺口——T2.6 发布后编排入口（新批次一键出指标/分析）、T5.4 PDF 打印器接入、T6.6 脱敏真实数据试点（D038 链路缺环）；T1.4 验收改为定义落盘（/operations 绑定待经营轨数据管线）；决策日志「未来与未决事项」过期引用改为 D045 | Kimi |

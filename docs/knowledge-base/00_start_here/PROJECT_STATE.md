@@ -318,6 +318,13 @@ flowchart LR
 - 等价性门禁 `tests/integration/test_metric_catalog_store.py` 六项：双源 `definition_set_hash` 一致且等于已发布基线 `4214ae85…`、导入幂等、空库兜底、未知定义集 typed 错误、**库内目录实际构建快照的身份链哈希等于基线**（实证）；
 - 已知答案门禁脚本加入「目录先入库再执行」步骤；metrics-known-answers（PASS，哈希一致）、analysis-invariants（PASS）、dashboard e2e（7/7）本地全绿；决策 D048 记录兼容读取期（YAML 兜底保留至 V1.1 评审后议退役）。
 
+### 阶段 31：WS-4 P5 三公司反向解析收口（主体完成）
+
+- 京东物流 FY2025 年报抽取（`p5_extract_jdl.py`，港股繁体 IFRS 文本行解析 + 附注号识别 + 显式页边界）：118 行项目，IFRS 勾稽 24/24（毛利链、除稅前逐项加总、利润归属、资产=权益+负债、现金桥、财状表现金=现金流年末，两期全验）；
+- 腾讯控股 2026 Q2 业绩公告抽取（`p5_extract_tencent.py`）：简明收益表 20 行 + IFRS→Non-IFRS 调节链闭合断言（2Q2026 收入 204,785 百万 / 归母 56,022 / Non-IFRS 归母 68,415）；
+- 三公司统一落库并接入 `/statements` 系统页面（163 + 20 + 118 行项目，`statement_report` 迁移 0011 通道，单位随报告记录）；
+- P5 证据汇总：[P5-validation-summary](../../implementation/p5/P5-validation-summary.md)——CAS+IFRS×2 双准则、物流+互联网双行业的反向解析链路全通，全部已验证锚点与披露一致；完整全行项目 diff 表随 WS-5 报告管线收口。
+
 ## 当前尚未完成
 
 - 最小安全部署剩余工作：密钥与网络边界、备份恢复演练、HTTPS 与回滚、结构化日志及统一部署验收；
