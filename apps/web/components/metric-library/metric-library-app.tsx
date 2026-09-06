@@ -131,11 +131,18 @@ function MetricList({ metrics, domains }: { metrics: MetricLibraryEntry[]; domai
   );
 }
 
-function GovernanceSection() {
+function GovernanceSection({ metrics }: { metrics: MetricLibraryEntry[] }) {
   const [events, setEvents] = useState<MetricGovernanceEventLine[] | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [metricCode, setMetricCode] = useState(metrics[0]?.metric_code ?? "");
+  const [changesText, setChangesText] = useState("{}");
+  const [operator, setOperator] = useState("");
+  const [reason, setReason] = useState("");
 
-  useEffect(() => {
+  const refreshEvents = useCallback(() => {
     const controller = new AbortController();
     metricLibraryApi
       .listEvents(undefined, controller.signal)
@@ -144,14 +151,113 @@ function GovernanceSection() {
         if (controller.signal.aborted) return;
         setError(cause instanceof Error ? cause.message : "加载失败");
       });
-    return () => controller.abort();
+    return controller;
   }, []);
+
+  useEffect(() => {
+    const controller = refreshEvents();
+    return () => controller.abort();
+  }, [refreshEvents]);
+
+  const selected = metrics.find((m) => m.metric_code === metricCode);
+
+  const runAction = async (kind: "draft" | "activate" | "retire") => {
+    setActionError(null);
+    setNotice(null);
+    if (!selected?.entry_id) {
+      setActionError("该指标尚无库内条目（请先导入指标库）。");
+      return;
+    }
+    if (!operator.trim() || !reason.trim()) {
+      setActionError("操作者与理由均为必填（审计要求）。");
+      return;
+    }
+    let changes: Record<string, unknown> | null = null;
+    if (kind === "draft") {
+      try {
+        const parsed: unknown = JSON.parse(changesText);
+        if (parsed === null || typeof parsed !== "object" || Array.isArray(parsed)) {
+          throw new Error("not an object");
+        }
+        changes = parsed as Record<string, unknown>;
+      } catch {
+        setActionError("变更内容必须是合法的 JSON 对象，例如 {\"benchmark\": \"…\"}。");
+        return;
+      }
+    }
+    setBusy(true);
+    try {
+      const input = { operator: operator.trim(), reason: reason.trim() };
+      if (kind === "draft") {
+        await metricLibraryApi.draftChange(selected.entry_id, { ...input, changes: changes! });
+        setNotice(`已创建草稿：${selected.metric_code}（待验证与激活）`);
+      } else if (kind === "activate") {
+        await metricLibraryApi.activateChange(selected.entry_id, input);
+        setNotice(`已激活：${selected.metric_code}`);
+      } else {
+        await metricLibraryApi.retireChange(selected.entry_id, input);
+        setNotice(`已退役：${selected.metric_code}`);
+      }
+      refreshEvents();
+    } catch (cause: unknown) {
+      const message = cause instanceof Error ? cause.message : "操作失败";
+      setActionError(`${message}（草稿需先通过验证才能激活）`);
+    } finally {
+      setBusy(false);
+    }
+  };
 
   return (
     <section aria-label="指标治理记录" className="ml-governance">
       <p className="ml-muted">
         指标定义的草稿 / 生效 / 退役审计（持久化事件，只增不改；C04）。
       </p>
+      <div className="ml-governance__form">
+        <h3>发起治理操作（无需修改 YAML）</h3>
+        <label>
+          指标
+          <select value={metricCode} onChange={(e) => setMetricCode(e.target.value)}>
+            {metrics.map((m) => (
+              <option key={m.metric_code} value={m.metric_code}>
+                {m.metric_code}（{m.name}）
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          变更内容（JSON，仅草稿需要）
+          <textarea
+            rows={3}
+            value={changesText}
+            onChange={(e) => setChangesText(e.target.value)}
+            placeholder='{"benchmark": "国资委 2025 标准值…"}'
+            aria-label="变更内容 JSON"
+          />
+        </label>
+        <label>
+          操作者
+          <input value={operator} onChange={(e) => setOperator(e.target.value)} placeholder="如：finance-bp" />
+        </label>
+        <label>
+          理由
+          <input value={reason} onChange={(e) => setReason(e.target.value)} placeholder="如：更新基准值来源" />
+        </label>
+        <div className="ml-governance__actions">
+          <button type="button" disabled={busy} onClick={() => void runAction("draft")}>
+            创建草稿
+          </button>
+          <button type="button" disabled={busy} onClick={() => void runAction("activate")}>
+            激活
+          </button>
+          <button type="button" disabled={busy} onClick={() => void runAction("retire")}>
+            退役
+          </button>
+        </div>
+        {actionError ? (
+          <p role="alert" className="ml-governance__error">{actionError}</p>
+        ) : null}
+        {notice ? <p className="ml-governance__notice">{notice}</p> : null}
+      </div>
       {error ? <p className="ml-governance__error">{error}</p> : null}
       {events === null ? <p role="status">正在读取治理记录…</p> : null}
       {events !== null && events.length === 0 ? (
@@ -263,7 +369,9 @@ export function MetricLibraryApp() {
 
       {tab === "general" ? <MetricList metrics={general} domains={library.domains} /> : null}
       {tab === "logistics" ? <MetricList metrics={logistics} domains={library.domains} /> : null}
-      {tab === "governance" ? <GovernanceSection /> : null}
+      {tab === "governance" && state.kind === "loaded" ? (
+        <GovernanceSection metrics={state.library.metrics} />
+      ) : null}
 
       {tab === "relations" ? (
         <section className="ml-relations">

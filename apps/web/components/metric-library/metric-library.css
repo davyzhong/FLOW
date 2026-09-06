@@ -276,3 +276,36 @@
   font-size: 12px;
   color: #8a97a8;
 }
+
+/* C06 治理操作表单 */
+.ml-governance__form {
+  background: #fff;
+  border: 1px solid var(--ml-line, #dfe3ec);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  display: grid;
+  gap: 10px;
+  max-width: 560px;
+}
+.ml-governance__form h3 { margin: 0; font-size: 14px; }
+.ml-governance__form label { display: grid; gap: 4px; font-size: 12.5px; color: #3d4a63; }
+.ml-governance__form select,
+.ml-governance__form input,
+.ml-governance__form textarea {
+  font: inherit;
+  padding: 6px 9px;
+  border: 1px solid #c9d2e3;
+  border-radius: 7px;
+}
+.ml-governance__actions { display: flex; gap: 8px; }
+.ml-governance__actions button {
+  border: 0;
+  border-radius: 8px;
+  padding: 7px 14px;
+  cursor: pointer;
+  background: #1769e8;
+  color: #fff;
+}
+.ml-governance__actions button:disabled { opacity: 0.55; cursor: wait; }
+.ml-governance__notice { color: #075f45; font-size: 13px; margin: 0; }
