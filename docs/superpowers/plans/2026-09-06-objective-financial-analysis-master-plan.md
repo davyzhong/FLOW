@@ -65,7 +65,7 @@ flowchart LR
 
 ### M0：基线、范围与验收契约
 
-- [ ] **A01 · 复核最新代码与 Zcode 完成证据** — 状态：todo
+- [ ] **A01 · 复核最新代码与 Zcode 完成证据** — 状态：doing（证据已落盘，待 CI 绿后勾选）
   - 依赖：无。
   - 主要位置：旧总计划、PROJECT_STATE、CI、api/routes/orchestration.py。
   - 工作：建立功能/实现/测试/缺口矩阵，核查固定月份、报表完整性、PDF 与字典多源；记录当前提交和未提交修改。
@@ -360,12 +360,13 @@ flowchart LR
 
 ## 7. 当前执行点与滚动记录
 
-**当前：计划已制定，尚未开始本计划代码修改。下一任务：A01。**
+**当前：A01 证据已提交，CI 确认中；下一任务：A02。**
 
-第一条命令：`git status -sb && git log -5 --oneline`；随后读取本计划、方向规格与最新 CI，建立 baseline-audit.md。完成 A 后先报告发现的基础缺口与实施细化，再按既定依赖继续。
+第一条命令（A02）：阅读方向规格第 3 节五条链与 `baseline-audit.md` §2/§4，起草 `docs/superpowers/specs/financial-facts-contract.md`，随后 `cd services/api && uv run pytest tests/statements/test_fact_contract.py -q`。
 
 | 日期 | 任务 | 状态 | 提交 / 测试 / CI 证据 | 下一步 |
 |---|---|---|---|---|
 | 2026-09-06 | 总计划与方向规格 | planned | 本次文档提交；不代表产品功能完成 | A01 |
+| 2026-09-06 | A01 基线审计 | doing | `docs/implementation/objective-analysis/baseline-audit.md`（基线 `63907ba`，16 jobs 绿、固定月份/报表完整性/PDF/字典多源四核查点结论）；CI 待本次提交运行 | A02 |
 
 执行者每次收尾补表：任务 ID、变更、定向测试、远端 CI、外部阻塞、下一条命令；未知内容标 unknown，不沿用过期状态。
