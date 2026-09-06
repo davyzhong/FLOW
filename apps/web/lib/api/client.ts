@@ -309,7 +309,28 @@ export const metricLibraryApi = {
   get(signal?: AbortSignal): Promise<MetricLibrary> {
     return request<MetricLibrary>("/api/v1/metric-library", signal);
   },
+  listEvents(metricCode?: string, signal?: AbortSignal): Promise<MetricGovernanceEventList> {
+    const query = metricCode ? `?metric_code=${encodeURIComponent(metricCode)}` : "";
+    return request<MetricGovernanceEventList>(`/api/v1/metric-library/events${query}`, signal);
+  },
+  draftChange(entryId: string, input: MetricDraftInput): Promise<MetricEntryAction> {
+    return submit(`/api/v1/metric-library/entries/${entryId}/drafts`, "POST", input);
+  },
+  activateChange(entryId: string, input: MetricActionInput): Promise<MetricEntryAction> {
+    return submit(`/api/v1/metric-library/entries/${entryId}/activate`, "POST", input);
+  },
+  retireChange(entryId: string, input: MetricActionInput): Promise<MetricEntryAction> {
+    return submit(`/api/v1/metric-library/entries/${entryId}/retire`, "POST", input);
+  },
 };
+
+export type MetricGovernanceEventList =
+  components["schemas"]["MetricGovernanceEventListResponse"];
+export type MetricGovernanceEventLine =
+  components["schemas"]["MetricGovernanceEventLine"];
+export type MetricEntryAction = components["schemas"]["MetricEntryActionResponse"];
+export type MetricDraftInput = { changes: Record<string, unknown>; operator: string; reason: string };
+export type MetricActionInput = { operator: string; reason: string };
 
 export type FindingListItem = components["schemas"]["FindingListItem"];
 export type FindingList = components["schemas"]["FindingListResponse"];

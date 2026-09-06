@@ -622,6 +622,8 @@ export interface paths {
         /**
          * Get Metric Library
          * @description 只读返回指标库（数据库优先，空库回退 v1 YAML；D047 定稿）。
+         *
+         *     每个指标附带执行绑定（C02：engine/facts/narrative 与执行器或缺失原因）。
          */
         get: operations["get_metric_library_api_v1_metric_library_get"];
         put?: never;
@@ -1929,6 +1931,14 @@ export interface components {
              * @enum {string}
              */
             collection: "general" | "logistics";
+            /** Execution Kind */
+            execution_kind?: ("engine" | "facts" | "narrative") | null;
+            /** Execution Detail */
+            execution_detail?: string | null;
+            /** Entry Id */
+            entry_id?: string | null;
+            /** Status */
+            status?: string | null;
         };
         /** MetricEntryActionResponse */
         MetricEntryActionResponse: {

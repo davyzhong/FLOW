@@ -169,7 +169,7 @@ flowchart LR
   - 测试/证据（新增目标）：`tests/integration/test_metric_impact.py`。
   - 完成标准：依赖遍历完整无循环；变更能说明影响对象与数字差异，失败试算不污染正式数据。
 
-- [ ] **C06 · 指标库管理界面与知识查询** — 状态：todo
+- [ ] **C06 · 指标库管理界面与知识查询** — 状态：in_progress
   - 依赖：C05。
   - 主要位置：components/metric-library、app/metric-library；api/routes/metric_library.py。
   - 工作：搜索科目/分录/准则/指标，展示公式与依赖、来源、可算状态、使用方、版本比较及修订流程。
@@ -362,6 +362,7 @@ flowchart LR
 
 ## 7. 当前执行点与滚动记录
 
+- 2026-09-06（ZCode 接续）：C04/C05 后端已由 GPT 提交；其未提交的 C06 前端半成品经验证全绿（API 治理/影响测试 10/10、vitest 45/45、契约无漂移、浏览器验收 execution 绑定分布 facts 39 + engine 16、revenue=engine 带 entry_id），已代为提交。C06 剩余：治理操作（草稿/激活/退役）组件测试、`e2e/metric-library-governance.spec.ts`、修订流程交互验收。
 - 2026-09-06：FineBI 看板借鉴分析（GPT，提交 80132ed）并入——D01 增补问题域组织/比较镜头/两种下钻/AnalysisTopic 检查清单；指导文档同步沉淀至 Obsidian 知识库 `wiki/FLOW分析工作台设计指导（源自FineBI看板借鉴）.md`；六条不可照搬边界与五条链约束一致，无决策变更。
 
 - 2026-09-06：李启方《财务分析必看10个指标》文章借鉴（用户提供，webReader 抓取）并入——D01 增补四问骨架/核心十指标默认视图/增长质量联查候选；指标目录缺口（期间费用率、净现比，已实查 v1 YAML 确认）转 v1.1 治理候选；原文全文归档 `02_research/original/12_财务分析必看10个指标_资料.md`，借鉴清单见 `02_research/synthesis/财务分析十指标文章_借鉴升级清单.md`，Obsidian 知识库同步入库（数据分析星球/）；无决策变更。

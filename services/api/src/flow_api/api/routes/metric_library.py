@@ -44,6 +44,7 @@ from flow_api.infrastructure.models.metric_library import (
     MetricDictionaryEntry,
     StatementLineMapping,
 )
+from flow_api.metric_library_store.binding import build_execution_binding
 from flow_api.metric_library_store.governance import GovernanceError, MetricGovernance
 from flow_api.metric_library_store.impact import ImpactError, MetricImpactService
 from flow_api.metric_library_store.importer import import_all
@@ -151,6 +152,8 @@ def _db_payload(session: Session) -> MetricLibraryResponse | None:
             reconciliation=m.reconciliation,
             migrates_from=m.migrates_from,
             provenance=m.provenance,
+            entry_id=str(by_code[(m.collection, m.metric_code)].id),
+            status=by_code[(m.collection, m.metric_code)].status,
         )
         for m in fallback.metrics
         if (m.collection, m.metric_code) in by_code
@@ -231,8 +234,26 @@ SessionDependency = Annotated[Session, Depends(get_metric_library_session)]
 
 @router.get("", response_model=MetricLibraryResponse)
 def get_metric_library(session: SessionDependency) -> MetricLibraryResponse:
-    """只读返回指标库（数据库优先，空库回退 v1 YAML；D047 定稿）。"""
-    return _db_payload(session) or _yaml_payload()
+    """只读返回指标库（数据库优先，空库回退 v1 YAML；D047 定稿）。
+
+    每个指标附带执行绑定（C02：engine/facts/narrative 与执行器或缺失原因）。
+    """
+    payload = _db_payload(session) or _yaml_payload()
+    bindings = {b.metric_code: b for b in build_execution_binding()}
+    metrics = []
+    for metric in payload.metrics:
+        binding = bindings.get(metric.metric_code)
+        metrics.append(
+            metric.model_copy(
+                update={
+                    "execution_kind": binding.kind if binding else None,
+                    "execution_detail": (
+                        (binding.executor or binding.reason) if binding else None
+                    ),
+                }
+            )
+        )
+    return payload.model_copy(update={"metrics": metrics})
 
 
 class ImportRequest(BaseModel):

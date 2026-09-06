@@ -40,6 +40,10 @@ class MetricEntry(BaseModel):
     aliases: list[str] = []
     provenance: str | None = None
     collection: Literal["general", "logistics"]
+    execution_kind: Literal["engine", "facts", "narrative"] | None = None
+    execution_detail: str | None = None
+    entry_id: str | None = None
+    status: str | None = None
 
 
 class ReportItem(BaseModel):

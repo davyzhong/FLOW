@@ -6,12 +6,13 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 import {
   metricLibraryApi,
+  type MetricGovernanceEventLine,
   type MetricLibrary,
   type MetricLibraryEntry,
 } from "../../lib/api/client";
 import "./metric-library.css";
 
-type Tab = "general" | "logistics" | "relations" | "mapping" | "accounting";
+type Tab = "general" | "logistics" | "relations" | "mapping" | "accounting" | "governance";
 
 const TABS: { id: Tab; label: string }[] = [
   { id: "general", label: "通用指标" },
@@ -19,7 +20,14 @@ const TABS: { id: Tab; label: string }[] = [
   { id: "relations", label: "勾稽与分解关系" },
   { id: "mapping", label: "取数映射（CAS↔IFRS）" },
   { id: "accounting", label: "会计基础数据" },
+  { id: "governance", label: "治理记录" },
 ];
+
+const EXECUTION_LABELS: Record<string, string> = {
+  engine: "引擎执行",
+  facts: "事实 AST 执行",
+  narrative: "叙述定义",
+};
 
 const TIME_BEHAVIOR_LABELS: Record<string, string> = {
   period_flow: "期间流量",
@@ -78,6 +86,12 @@ function MetricCard({ metric, domains }: { metric: MetricLibraryEntry; domains: 
         </ul>
       ) : null}
       <footer className="ml-metric__foot">
+        {metric.execution_kind ? (
+          <span className={`ml-exec ml-exec--${metric.execution_kind}`}>
+            {EXECUTION_LABELS[metric.execution_kind] ?? metric.execution_kind}
+            {metric.execution_detail ? `：${metric.execution_detail}` : ""}
+          </span>
+        ) : null}
         {metric.migrates_from ? <span>迁移自 {metric.migrates_from}</span> : null}
         {metric.provenance ? <span>来源：{metric.provenance}</span> : null}
       </footer>
@@ -113,6 +127,57 @@ function MetricList({ metrics, domains }: { metrics: MetricLibraryEntry[]; domai
           <MetricCard key={metric.metric_code} metric={metric} domains={domains} />
         ))}
       </div>
+    </section>
+  );
+}
+
+function GovernanceSection() {
+  const [events, setEvents] = useState<MetricGovernanceEventLine[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    metricLibraryApi
+      .listEvents(undefined, controller.signal)
+      .then((list) => setEvents([...list.events]))
+      .catch((cause: unknown) => {
+        if (controller.signal.aborted) return;
+        setError(cause instanceof Error ? cause.message : "加载失败");
+      });
+    return () => controller.abort();
+  }, []);
+
+  return (
+    <section aria-label="指标治理记录" className="ml-governance">
+      <p className="ml-muted">
+        指标定义的草稿 / 生效 / 退役审计（持久化事件，只增不改；C04）。
+      </p>
+      {error ? <p className="ml-governance__error">{error}</p> : null}
+      {events === null ? <p role="status">正在读取治理记录…</p> : null}
+      {events !== null && events.length === 0 ? (
+        <p className="ml-muted">尚无治理事件。</p>
+      ) : null}
+      {events && events.length > 0 ? (
+        <table className="ml-table">
+          <thead>
+            <tr>
+              <th>时间</th><th>指标</th><th>版本</th><th>动作</th><th>操作者</th><th>理由</th>
+            </tr>
+          </thead>
+          <tbody>
+            {events.map((event) => (
+              <tr key={event.id}>
+                <td>{event.created_at?.slice(0, 19).replace("T", " ") ?? "—"}</td>
+                <td><code>{event.metric_code}</code></td>
+                <td>v{event.version}</td>
+                <td>{event.action}</td>
+                <td>{event.operator}</td>
+                <td>{event.reason}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : null}
     </section>
   );
 }
@@ -198,6 +263,7 @@ export function MetricLibraryApp() {
 
       {tab === "general" ? <MetricList metrics={general} domains={library.domains} /> : null}
       {tab === "logistics" ? <MetricList metrics={logistics} domains={library.domains} /> : null}
+      {tab === "governance" ? <GovernanceSection /> : null}
 
       {tab === "relations" ? (
         <section className="ml-relations">
