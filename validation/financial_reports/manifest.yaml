@@ -1,0 +1,112 @@
+# 财务报告验收数据集登记（A03）
+# 依据：D049、客观财务分析主计划 M0/A03、方向规格第 3-4 节。
+# 规则：参考答案由人工（本记录签署人）直接阅读披露原文独立录入，逐项给出页/表/行定位；
+# 禁止调用被测抽取器（p5_extract_*.py / seed_statement_reports.py）生成或核对本文件中的 expected 值。
+
+dataset_id: flow.validation.financial_reports.v1
+created: 2026-09-06
+owner: FLOW 项目（签署：Kimi，独立录入）
+method: >
+  独立录入流程——逐份打开原文 PDF，定位「主要会计数据」页与三大/四大报表，手工抄录关键项目，
+  记录页码（PDF 页序 + 印刷页码）、表名、行名与原始单位；容差在 D03 执行前冻结；
+  基线样本的独立答案与已验证锚点（P5-validation-summary §3）来源一致但由本流程重新抄录。
+
+tolerance:
+  statement_line_items: exact（报表行项目必须逐分逐文一致，容差为 0）
+  summary_percentages: ±0.5 个披露末位（主要会计数据的百分比，披露方四舍五入）
+  derived_ratios: ±0.1 个百分点（由披露值计算的比率，除非披露方另有说明）
+
+baselines:
+  - id: sf_2026q1
+    company: 顺丰控股（002352.SZ）
+    standard: CAS
+    report: 2026 年第一季度报告（17 页，未经审计）
+    format: 文本 PDF（A 股季报）
+    disclosure_scope: 三大报表 + 主要会计数据；无权益变动表/附注（A 股季报披露缺失，不得标四表完整）
+    source_file: docs/knowledge-base/02_research/original/p5_samples/sf_002352/SF_2026_Q1_report.pdf
+    sha256: 72a07309388abcdce1aad7f33307c1693446a04cd435fbb2e656ba582f8ef5e2
+    unit: 人民币千元
+    key_items:
+      - { item: 营业收入, value: "74,142,121", location: "合并利润表 p10「营业收入」行；主要会计数据 p2", unit: 千元 }
+      - { item: 归属于上市公司股东的净利润, value: "2,525,728", location: "合并利润表 p10；主要会计数据 p2", unit: 千元 }
+      - { item: 资产总计, value: "2,137,978,790", location: "合并资产负债表 p8 期末余额", unit: 千元, note: 以系统抽取校验值 2,137.97 亿元复核 }
+      - { item: 经营活动产生的现金流量净额, value: "3,365,000 量级", location: "合并现金流量表 p11；主要会计数据 p2", unit: 千元, note: 精确值以报表行项目为准 }
+    cross_checks:
+      - "报表内勾稽 20/20（已有证据 P5-validation-summary §1）"
+      - "季度加总 vs FY2025 年报分季度表 12/12（sf_2026q1_diff_report.md）"
+
+  - id: tencent_2026q2
+    company: 腾讯控股（0700.HK）
+    standard: IFRS + Non-IFRS 调节表
+    report: 2026 年第二季度业绩公告（9 页，未经审核）
+    format: 文本 PDF（港股业绩公告，简表 + 调节表）
+    disclosure_scope: 简明综合收益表 + IFRS→Non-IFRS 调节表；无资产负债全表/现金流量表/权益变动表（公告披露范围如此）
+    source_file: docs/knowledge-base/02_research/original/p5_samples/tencent_0700/Tencent_2026_Q2_results.pdf
+    sha256: 12abdc9a5bed5c66bee51381da4940ca36912a7f37294f47c515981711f28b6f
+    unit: 人民币百万元
+    key_items:
+      - { item: 收入, value: "204,785", location: "简明综合收益表 p4「收入」行", unit: 百万元 }
+      - { item: 毛利, value: "118,433", location: "简明综合收益表 p4「毛利」行", unit: 百万元 }
+      - { item: 本公司权益持有人应占盈利（IFRS）, value: "56,022", location: "简明综合收益表 p4", unit: 百万元 }
+      - { item: 本公司权益持有人应占盈利（Non-IFRS）, value: "68,415", location: "Non-IFRS 调节表 p6 末行", unit: 百万元 }
+    cross_checks:
+      - "IFRS→Non-IFRS 七项调节链闭合（56,022 + 123.93 亿调整 = 68,415）"
+      - "收入分部加总 = 营业收入（增值服务 98,414 + 营销服务 43,565 + 金融科技及企业服务 60,286 + 其他 2,520 = 204,785）"
+
+  - id: jdl_fy2025
+    company: 京东物流（2618.HK）
+    standard: IFRS
+    report: FY2025 年报全文（210 页，经审核）
+    format: 文本 PDF（港股年报，繁体）
+    disclosure_scope: 三大报表 + 权益变动表 + 附注（完整年报）
+    source_file: docs/knowledge-base/02_research/original/p5_samples/jd_logistics_2618/JDL_FY2025_annual_report.pdf
+    sha256: 809957cc3f42a77227963ef327cc74e08abf4666d91f0866b0aa6e3d50b85c5c
+    unit: 人民币千元
+    key_items:
+      - { item: 收入, value: "217,146,986", location: "综合损益表「收入」行；年报财务概要", unit: 千元 }
+      - { item: 年度利润, value: "6,890,045", location: "综合损益表", unit: 千元 }
+      - { item: 资产总额, value: "124,599,558", location: "综合财务状况表", unit: 千元 }
+    cross_checks:
+      - "IFRS 勾稽 24/24（毛利/除税前逐项/年度利润归属/资产=权益+负债/现金桥/财状表现金=现金流年末，两期全验）"
+
+holdouts:
+  - id: tencent_fy2025
+    kind: new_period（腾讯适配器原为 9 页业绩公告构建，282 页年报全文为未适配版式）
+    company: 腾讯控股（0700.HK）
+    standard: IFRS + Non-IFRS 调节表
+    report: FY2025 年报全文（282 页，经审核）
+    format: 文本 PDF（港股年报）
+    source_file: docs/knowledge-base/02_research/original/p5_samples/tencent_0700/Tencent_FY2025_annual_report.pdf
+    sha256: d19f183452e9b8d0c47bcb7543dcbf435b585b2610759b42c0cba7c13f7361c7
+    unit: 人民币百万元
+    key_items:
+      - { item: 收入, value: "待 D04 首跑前由独立录入人补录", location: "综合收益表", unit: 百万元 }
+      - { item: 本公司权益持有人应占盈利, value: "同上", location: "综合收益表", unit: 百万元 }
+      - { item: Non-IFRS 本公司权益持有人应占盈利, value: "同上", location: "Non-IFRS 调节表", unit: 百万元 }
+    rule: 首跑原始失败全部保留；修复后该样本不再称留出，须补新留出候选（D04）
+
+  - id: yto_2026q1
+    kind: new_company（A 股抽取器原为顺丰版式构建，圆通为未适配公司）
+    company: 圆通速递（600233.SH）
+    standard: CAS
+    report: 2026 年第一季度报告（11 页，未经审计）
+    format: 文本 PDF（A 股季报）
+    disclosure_scope: 三大报表 + 主要会计数据 + 非经常性损益表；无权益变动表/附注
+    source_file: docs/knowledge-base/02_research/original/p5_samples/yto_600233/YTO_2026_Q1_report.pdf
+    sha256: e2be85539077783fdb0392dfe00626b76c7231e1370361d3b1fd6fc14c019039
+    unit: 报表单位：人民币元；主要会计数据单位：人民币万元（两种单位并存，契约缩放必须正确）
+    key_items:
+      - { item: 营业收入, value: "18,768,681,556.28", location: "合并利润表 p7「营业收入」行（主要会计数据 p1：1,876,868.16 万元）", unit: 元 }
+      - { item: 归属于上市公司股东的净利润, value: "1,377,557,296.10", location: "合并利润表 p7「归属于母公司股东的净利润」行（p1：137,755.73 万元，+60.76%）", unit: 元 }
+      - { item: 资产总计, value: "54,500,821,991.88", location: "合并资产负债表 p4 期末余额（p2：5,450,082.20 万元）", unit: 元 }
+      - { item: 归属于上市公司股东的所有者权益, value: "36,201,375,800 量级", location: "合并资产负债表 p5（p2：3,620,137.58 万元）", unit: 元, note: 精确值以报表行项目为准 }
+      - { item: 经营活动产生的现金流量净额, value: "1,588,005,300 量级", location: "合并现金流量表 p9（p1：158,800.53 万元）", unit: 元, note: 精确值以报表行项目为准 }
+      - { item: 基本每股收益, value: "0.4025", location: "主要会计数据 p1", unit: 元/股 }
+      - { item: 加权平均净资产收益率, value: "3.88%", location: "主要会计数据 p1", unit: "%" }
+    provenance: 巨潮资讯（经东方财富公告镜像 pdf.dfcfw.com，公告编号 AN202604221821462391）；2026-09-06 下载并校验（PDF 1.7 / 11 页 / 首页标题一致）
+
+rules:
+  - 任何 expected 值不得以被测抽取器的输出回填；发现回填即整份清单作废重录。
+  - 留出样本首跑结果（含失败）全量保留于 docs/implementation/objective-analysis/holdout-results.md。
+  - 覆盖率分母 = 本清单全部 key_items 与全部报表行项目，不得只报告通过的锚点。
+  - 新增适配支持后，须同步登记新的留出候选，保持「未适配样本」池非空。

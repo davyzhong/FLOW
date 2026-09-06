@@ -79,7 +79,7 @@ flowchart LR
   - 测试/证据（新增目标）：`tests/statements/test_fact_contract.py`。
   - 完成标准：单季/累计不可误混，空值不作零，缩放可逆，冲突范围拒绝合并；正式 spec 与 typed 示例齐备。
 
-- [ ] **A03 · 登记验收数据集与独立参考答案规范** — 状态：todo
+- [ ] **A03 · 登记验收数据集与独立参考答案规范** — 状态：doing（证据已落盘，待 CI 绿后勾选）
   - 依赖：A02。
   - 主要位置：docs/implementation/p5；新 validation/financial_reports/manifest.yaml。
   - 工作：登记三家基线及两份留出报告，记录支持格式、披露范围、原文 SHA、独立核对人/方法、容差和关键项目列表。
@@ -369,5 +369,6 @@ flowchart LR
 | 2026-09-06 | 总计划与方向规格 | planned | 本次文档提交；不代表产品功能完成 | A01 |
 | 2026-09-06 | A01 基线审计 | doing | `docs/implementation/objective-analysis/baseline-audit.md`（基线 `63907ba`，16 jobs 绿、固定月份/报表完整性/PDF/字典多源四核查点结论）；CI 待本次提交运行 | A02 |
 | 2026-09-06 | A02 统一事实契约 | doing | 规格 `docs/superpowers/specs/financial-facts-contract.md`；参考实现 `statements/fact_contract.py`；`tests/statements/test_fact_contract.py` 14 项通过、mypy/ruff 绿 | A03 |
+| 2026-09-06 | A03 验收数据集登记 | doing | `validation/financial_reports/`（manifest + README）：3 基线 + 2 留出（腾讯 FY2025 新期间、圆通 2026Q1 新公司，新增下载校验 SHA）；独立答案逐项带定位、容差预登记、回填禁令 | B01 |
 
 执行者每次收尾补表：任务 ID、变更、定向测试、远端 CI、外部阻塞、下一条命令；未知内容标 unknown，不沿用过期状态。
