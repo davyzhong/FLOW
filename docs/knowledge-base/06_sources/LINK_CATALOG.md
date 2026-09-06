@@ -37,6 +37,19 @@
 - 原始 CDN：<https://mmbiz.qpic.cn/mmbiz_png/gZ0Mp1agcZib3Wr7WMRHeic5Vo5e9HX8nweVhxzEw5joZhrhvU283hmyxG05ib9m9Mdqib5IOGzH10MGpIvarMWnPV2J2c1e7KBXNWtCaDiaZ16E/640?wx_fmt=png&from=appmsg&watermark=1&tp=webp&wxfrom=5&wx_lazy=1>
 - 本地归档：`../03_assets/external_reference/reference-dashboard.webp`
 
+## FineBI 财务经营分析看板参照（2026-09-06 用户提供）
+
+- 用户提供的领取入口（需帆软通行证登录，未归档受限领取包）：<https://s.fanruan.com/ax7fg>
+- 帆软认证机构号·三套底层模型：<https://zhuanlan.zhihu.com/p/2062480411658287019>
+- 帆软认证机构号·经营分析会六个问题：<https://zhuanlan.zhihu.com/p/2063936369307735603>
+- FineBI 产品与模板入口：<https://finebi.com/>
+- 帆软应用市场·毛利分析：<https://app.fanruan.com/templates/20001291>
+- 帆软应用市场·连锁餐饮经营分析：<https://app.fanruan.com/templates/20001612>
+- FineBI 帮助·交互功能：<https://help.fanruan.com/finebi/doc-view-144.html>
+- FineBI 帮助·钻取：<https://help.fanruan.com/finebi/doc-view-1630.html>
+- FineBI 帮助·仪表板过滤：<https://help.fanruan.com/finebi6.X/doc-view-806.html>
+- 综合分析：[`../02_research/synthesis/FineBI财务经营分析看板_架构借鉴分析.md`](../02_research/synthesis/FineBI财务经营分析看板_架构借鉴分析.md)
+
 ## 完整机器提取链接
 
 [all_urls_extracted.txt](all_urls_extracted.txt) 保存了从会话、研究 Markdown、原始 HTML 和文本中机械提取的全部 URL 记录。原始 HTML 包含大量微信运行脚本、广告、头像和 CDN 链接，因此该文件有噪声，只用于追溯，不作为首读清单。
