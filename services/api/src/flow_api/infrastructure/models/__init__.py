@@ -56,6 +56,7 @@ from flow_api.infrastructure.models.publishing import (
 from flow_api.infrastructure.models.statement import (
     StatementLineItem,
     StatementReport,
+    StatementSource,
 )
 
 __all__ = [
@@ -103,6 +104,7 @@ __all__ = [
     "StatementLineItem",
     "StatementLineMapping",
     "StatementReport",
+    "StatementSource",
     "StoredObject",
     "TransformationEvent",
     "WarningAcknowledgement",

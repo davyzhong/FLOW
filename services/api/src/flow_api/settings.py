@@ -20,6 +20,7 @@ class Settings(BaseSettings):
     s3_access_key: SecretStr
     s3_secret_key: SecretStr
     intake_max_upload_bytes: int = 25 * 1024 * 1024
+    statement_max_upload_bytes: int = 80 * 1024 * 1024
     s3_use_system_proxy: bool = False
     auth_token: str | None = None  # 配置后启用 Bearer 认证边界；留空 = 开发模式
 

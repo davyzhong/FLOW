@@ -9,7 +9,8 @@ from collections.abc import Iterator
 from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, Path, status
+from fastapi import APIRouter, Depends, File, HTTPException, Path, UploadFile, status
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from flow_api.api.schemas.intake import ErrorDetail
@@ -20,9 +21,17 @@ from flow_api.api.schemas.statement import (
     StatementReportListResponse,
     StatementReportSummaryResponse,
     StatementSectionResponse,
+    StatementSourceCandidatesResponse,
+    StatementSourceListResponse,
+    StatementSourceResponse,
     exact,
 )
 from flow_api.infrastructure.db import get_session_factory
+from flow_api.infrastructure.models.statement import StatementSource
+from flow_api.infrastructure.object_store import ObjectStore
+from flow_api.infrastructure.s3_client import build_s3_client
+from flow_api.settings import get_settings
+from flow_api.statements.intake import StatementSourceError, StatementSourceIntake
 from flow_api.statements.repository import StatementReportUnavailableError
 from flow_api.statements.service import StatementService
 
@@ -36,12 +45,85 @@ def get_statement_session() -> Iterator[Session]:
 
 SessionDependency = Annotated[Session, Depends(get_statement_session)]
 
+UPLOAD_CHUNK_SIZE = 1024 * 1024
+
+
+def get_statement_source_intake() -> StatementSourceIntake:
+    settings = get_settings()
+    return StatementSourceIntake(
+        ObjectStore(client=build_s3_client(settings), bucket=settings.s3_bucket),
+        max_bytes=settings.statement_max_upload_bytes,
+    )
+
+
+IntakeDependency = Annotated[StatementSourceIntake, Depends(get_statement_source_intake)]
+
 
 def _error(http_status: int, code: str, message: str) -> HTTPException:
     detail = ErrorDetail(code=code, message=message)
     return HTTPException(
         status_code=http_status,
         detail=detail.model_dump(mode="json"),
+    )
+
+
+def _source_response(source: StatementSource, *, duplicate: bool) -> StatementSourceResponse:
+    return StatementSourceResponse(
+        id=source.id,
+        sha256=source.sha256,
+        original_filename=source.original_filename,
+        size_bytes=source.size_bytes,
+        page_count=source.page_count,
+        text_chars=source.text_chars,
+        duplicate=duplicate,
+        candidates=StatementSourceCandidatesResponse(
+            company_name=source.company_candidate,
+            stock_code=source.stock_code_candidate,
+            period_label=source.period_candidate,
+            report_kind=source.report_kind_candidate,
+        ),
+        created_at=source.created_at,
+    )
+
+
+@router.post(
+    "/sources",
+    response_model=StatementSourceResponse,
+    status_code=status.HTTP_201_CREATED,
+    responses={status.HTTP_422_UNPROCESSABLE_CONTENT: {"model": StatementErrorResponse}},
+)
+async def upload_statement_source(
+    session: SessionDependency,
+    intake: IntakeDependency,
+    workbook: Annotated[UploadFile, File(description="公开财报原文 PDF（仅支持文本 PDF）")],
+) -> StatementSourceResponse:
+    """登记公开财报原始文件：内容寻址不可变存储 + 幂等（同 sha256 返回既有登记）。"""
+    filename = workbook.filename or "statement.pdf"
+    maximum = get_settings().statement_max_upload_bytes
+    content = bytearray()
+    while chunk := await workbook.read(UPLOAD_CHUNK_SIZE):
+        content.extend(chunk)
+        if len(content) > maximum:
+            raise _error(
+                status.HTTP_413_CONTENT_TOO_LARGE,
+                "source_too_large",
+                f"上传文件超过允许大小 {maximum} 字节",
+            )
+    try:
+        source, created = intake.register(session, content=bytes(content), filename=filename)
+    except StatementSourceError as error:
+        raise _error(status.HTTP_422_UNPROCESSABLE_CONTENT, error.code, error.message) from error
+    session.commit()
+    return _source_response(source, duplicate=not created)
+
+
+@router.get("/sources", response_model=StatementSourceListResponse)
+def list_statement_sources(session: SessionDependency) -> StatementSourceListResponse:
+    sources = session.scalars(
+        select(StatementSource).order_by(StatementSource.created_at.desc())
+    ).all()
+    return StatementSourceListResponse(
+        sources=tuple(_source_response(source, duplicate=False) for source in sources)
     )
 
 

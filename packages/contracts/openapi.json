@@ -2127,6 +2127,113 @@
         }
       }
     },
+    "/api/v1/statements/sources": {
+      "post": {
+        "tags": [
+          "statements"
+        ],
+        "summary": "Upload Statement Source",
+        "description": "登记公开财报原始文件：内容寻址不可变存储 + 幂等（同 sha256 返回既有登记）。",
+        "operationId": "upload_statement_source_api_v1_statements_sources_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_upload_statement_source_api_v1_statements_sources_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatementSourceResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatementErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "statements"
+        ],
+        "summary": "List Statement Sources",
+        "operationId": "list_statement_sources_api_v1_statements_sources_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatementSourceListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/statements": {
       "get": {
         "tags": [
@@ -2926,6 +3033,21 @@
           "workbook"
         ],
         "title": "Body_upload_source_api_v1_intake_batches__batch_id__sources_post"
+      },
+      "Body_upload_statement_source_api_v1_statements_sources_post": {
+        "properties": {
+          "workbook": {
+            "type": "string",
+            "contentMediaType": "application/octet-stream",
+            "title": "Workbook",
+            "description": "公开财报原文 PDF（仅支持文本 PDF）"
+          }
+        },
+        "type": "object",
+        "required": [
+          "workbook"
+        ],
+        "title": "Body_upload_statement_source_api_v1_statements_sources_post"
       },
       "BridgeDriver": {
         "properties": {
@@ -6829,6 +6951,129 @@
           "items"
         ],
         "title": "StatementSectionResponse"
+      },
+      "StatementSourceCandidatesResponse": {
+        "properties": {
+          "company_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Company Name"
+          },
+          "stock_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stock Code"
+          },
+          "period_label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Period Label"
+          },
+          "report_kind": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Report Kind"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "StatementSourceCandidatesResponse"
+      },
+      "StatementSourceListResponse": {
+        "properties": {
+          "sources": {
+            "items": {
+              "$ref": "#/components/schemas/StatementSourceResponse"
+            },
+            "type": "array",
+            "title": "Sources"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "sources"
+        ],
+        "title": "StatementSourceListResponse"
+      },
+      "StatementSourceResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "sha256": {
+            "type": "string",
+            "title": "Sha256"
+          },
+          "original_filename": {
+            "type": "string",
+            "title": "Original Filename"
+          },
+          "size_bytes": {
+            "type": "integer",
+            "title": "Size Bytes"
+          },
+          "page_count": {
+            "type": "integer",
+            "title": "Page Count"
+          },
+          "text_chars": {
+            "type": "integer",
+            "title": "Text Chars"
+          },
+          "duplicate": {
+            "type": "boolean",
+            "title": "Duplicate"
+          },
+          "candidates": {
+            "$ref": "#/components/schemas/StatementSourceCandidatesResponse"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "sha256",
+          "original_filename",
+          "size_bytes",
+          "page_count",
+          "text_chars",
+          "duplicate",
+          "candidates",
+          "created_at"
+        ],
+        "title": "StatementSourceResponse"
       },
       "StructuredAnswer": {
         "properties": {

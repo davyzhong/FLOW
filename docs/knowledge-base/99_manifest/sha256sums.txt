@@ -1,5 +1,5 @@
 2a87bae923f48d784aa17804a43a411db3fe7bf4635201d27e75b2817d34b156  ./00_start_here/AGENT_START_HERE.md
-919cf1a33b6b6d397acb6c1a360d3639649318c3668c7074901ca0b25e032fa1  ./00_start_here/PROJECT_STATE.md
+c6e87d091dc9994d28b6f732415667d723ccc3f5d53d44dc145473af63bdb276  ./00_start_here/PROJECT_STATE.md
 4ed3f3af1111b7d26148d0600841ea3fc6198d214ad1fa1e3c6bcfb8d8663050  ./01_conversations/INDEX.md
 2f76b9a257f0baa1c30d5995a49f17bdbacf519f3a33668383f1f39c69c7faea  ./01_conversations/raw/chatgpt/Finance_Intelligence_OS_完整会话归档.md
 a033649eabf7c8cdb40f14defd513fcc046feacace1ccf6fb8a2d84801f6ba6c  ./01_conversations/raw/codex/rollout-2026-08-28T14-41-27-01a0471a-1689-7270-8dc5-f2bf084e4db9.jsonl

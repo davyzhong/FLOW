@@ -522,6 +522,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/statements/sources": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Statement Sources */
+        get: operations["list_statement_sources_api_v1_statements_sources_get"];
+        put?: never;
+        /**
+         * Upload Statement Source
+         * @description 登记公开财报原始文件：内容寻址不可变存储 + 幂等（同 sha256 返回既有登记）。
+         */
+        post: operations["upload_statement_source_api_v1_statements_sources_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/statements": {
         parameters: {
             query?: never;
@@ -775,6 +796,14 @@ export interface components {
             /**
              * Workbook
              * @description Macro-free XLSX workbook
+             */
+            workbook: string;
+        };
+        /** Body_upload_statement_source_api_v1_statements_sources_post */
+        Body_upload_statement_source_api_v1_statements_sources_post: {
+            /**
+             * Workbook
+             * @description 公开财报原文 PDF（仅支持文本 PDF）
              */
             workbook: string;
         };
@@ -2132,6 +2161,48 @@ export interface components {
             statement_type: string;
             /** Items */
             items: components["schemas"]["StatementLineResponse"][];
+        };
+        /** StatementSourceCandidatesResponse */
+        StatementSourceCandidatesResponse: {
+            /** Company Name */
+            company_name?: string | null;
+            /** Stock Code */
+            stock_code?: string | null;
+            /** Period Label */
+            period_label?: string | null;
+            /** Report Kind */
+            report_kind?: string | null;
+        };
+        /** StatementSourceListResponse */
+        StatementSourceListResponse: {
+            /** Sources */
+            sources: components["schemas"]["StatementSourceResponse"][];
+        };
+        /** StatementSourceResponse */
+        StatementSourceResponse: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Sha256 */
+            sha256: string;
+            /** Original Filename */
+            original_filename: string;
+            /** Size Bytes */
+            size_bytes: number;
+            /** Page Count */
+            page_count: number;
+            /** Text Chars */
+            text_chars: number;
+            /** Duplicate */
+            duplicate: boolean;
+            candidates: components["schemas"]["StatementSourceCandidatesResponse"];
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
         };
         /** StructuredAnswer */
         StructuredAnswer: {
@@ -3503,6 +3574,72 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_statement_sources_api_v1_statements_sources_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StatementSourceListResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    upload_statement_source_api_v1_statements_sources_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["Body_upload_statement_source_api_v1_statements_sources_post"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StatementSourceResponse"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StatementErrorResponse"];
                 };
             };
         };

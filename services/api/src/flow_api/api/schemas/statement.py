@@ -66,3 +66,26 @@ def exact(value: object | None) -> str | None:
     if value is None:
         return None
     return format(value, "f")
+
+
+class StatementSourceCandidatesResponse(FrozenResponse):
+    company_name: str | None = None
+    stock_code: str | None = None
+    period_label: str | None = None
+    report_kind: str | None = None
+
+
+class StatementSourceResponse(FrozenResponse):
+    id: UUID
+    sha256: str
+    original_filename: str
+    size_bytes: int
+    page_count: int
+    text_chars: int
+    duplicate: bool
+    candidates: StatementSourceCandidatesResponse
+    created_at: datetime
+
+
+class StatementSourceListResponse(FrozenResponse):
+    sources: tuple[StatementSourceResponse, ...]

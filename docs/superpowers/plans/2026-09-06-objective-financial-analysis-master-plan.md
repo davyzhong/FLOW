@@ -89,7 +89,7 @@ flowchart LR
 
 ### M1：来源、抽取与可追溯事实
 
-- [ ] **B01 · 建立公开财报上传与来源登记** — 状态：todo
+- [ ] **B01 · 建立公开财报上传与来源登记** — 状态：doing（证据已落盘，待 CI 绿后勾选）
   - 依赖：A02。
   - 主要位置：api/routes/statements.py、statements/importer.py、infrastructure/object_store.py；新 statements/intake.py。
   - 工作：注册不可变文件、格式/大小限制、文件哈希、公司/期间识别候选；明确首批支持文本 PDF，扫描件/OCR 不支持时可解释拒绝。
@@ -370,5 +370,6 @@ flowchart LR
 | 2026-09-06 | A01 基线审计 | doing | `docs/implementation/objective-analysis/baseline-audit.md`（基线 `63907ba`，16 jobs 绿、固定月份/报表完整性/PDF/字典多源四核查点结论）；CI 待本次提交运行 | A02 |
 | 2026-09-06 | A02 统一事实契约 | doing | 规格 `docs/superpowers/specs/financial-facts-contract.md`；参考实现 `statements/fact_contract.py`；`tests/statements/test_fact_contract.py` 14 项通过、mypy/ruff 绿 | A03 |
 | 2026-09-06 | A03 验收数据集登记 | doing | `validation/financial_reports/`（manifest + README）：3 基线 + 2 留出（腾讯 FY2025 新期间、圆通 2026Q1 新公司，新增下载校验 SHA）；独立答案逐项带定位、容差预登记、回填禁令 | B01 |
+| 2026-09-06 | B01 上传与来源登记 | doing | 迁移 0014（statement_source）；`statements/intake.py` + `POST/GET /api/v1/statements/sources`；`tests/statements/test_source_intake.py` 10 项通过；迁移往返通过；真实 MinIO 上传圆通 PDF（201、候选全中、重复幂等、对象可读） | B02 |
 
 执行者每次收尾补表：任务 ID、变更、定向测试、远端 CI、外部阻塞、下一条命令；未知内容标 unknown，不沿用过期状态。
