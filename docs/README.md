@@ -1,5 +1,7 @@
 # FLOW 文档中心
 
+> **当前执行计划**：[客观财务分析完整计划与待办](superpowers/plans/2026-09-06-objective-financial-analysis-master-plan.md) · [产品方向规格](superpowers/specs/2026-09-06-objective-financial-analysis-direction.md)。
+
 核对日期：2026-09-04。当前工程基线 `c1a59d1`：V1 功能窄切片、导入与报告页面、两轮代码审查修复和单用户认证已落地；当前继续完成 Pilot Readiness 的运行链路、部署和真实数据验收。
 
 [返回项目 README](../README.md) · [当前项目状态](knowledge-base/00_start_here/PROJECT_STATE.md) · [文档适用性登记](documentation-status.md)

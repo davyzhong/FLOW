@@ -1,5 +1,7 @@
 # FLOW 项目知识库
 
+> **最新计划（D049，2026-09-06）**：[客观财务分析完整计划与待办](../superpowers/plans/2026-09-06-objective-financial-analysis-master-plan.md)接替旧 WS 后续排序；公开财报当前交付、内部数据后续试点，客观基础优先。
+
 原始归档基准日期：2026-08-29；当前工程状态更新：2026-09-04（代码 `c1a59d1`）
 
 规范 GitHub 仓库：<https://github.com/davyzhong/FLOW>
