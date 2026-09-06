@@ -148,7 +148,7 @@ flowchart LR
   - 测试/证据（新增目标）：`tests/metrics/test_dictionary_execution_parity.py`。
   - 完成标准：服务、报告与脚本对同一指标同输入同结果；覆盖清单列出全部 55 项支持/缺失原因；旧哈希与已知答案不变。
 
-- [ ] **C03 · 实现期间、范围、精度与异常语义** — 状态：todo
+- [ ] **C03 · 实现期间、范围、精度与异常语义** — 状态：doing（证据已落盘，待 CI 绿后勾选）
   - 依赖：C02。
   - 主要位置：新 metrics/financial_semantics.py。
   - 工作：明确平均/期末余额、单季/累计转换条件、年化政策、零分母、负权益、币种与合并范围、重述比较；不擅自做汇率换算。
@@ -360,7 +360,7 @@ flowchart LR
 
 ## 7. 当前执行点与滚动记录
 
-**当前：C02 已提交待 CI；下一任务：C03。**
+**当前：C03 已提交待 CI；下一任务：C04。**
 
 第一条命令（A02）：阅读方向规格第 3 节五条链与 `baseline-audit.md` §2/§4，起草 `docs/superpowers/specs/financial-facts-contract.md`，随后 `cd services/api && uv run pytest tests/statements/test_fact_contract.py -q`。
 
@@ -378,5 +378,6 @@ flowchart LR
 | 2026-09-06 | B06 通用期间与可恢复编排 | doing | 迁移 0017（build_job）；编排期间改由批次分析窗口（事实期间）生成 + 请求范围收窄，固定演示月份移出生产路径；任务持久化（状态/结果身份/失败留痕）、同范围幂等回放、失败可重试；`tests/api/test_orchestration_api.py` 5 项通过（含范围收窄/回放/任务列表/422） | C01 |
 | 2026-09-06 | C01 来源与口径核验 | doing | `docs/implementation/objective-analysis/caliber-audit.md`：55 指标来源/口径/MPM 全量核验 + 167 科目/48 准则/32 分录模板核验；待核项显式标记（经验阈值、IFRS 18 生效期、2024 汇编编号） | C02 |
 | 2026-09-06 | C02 统一指标身份与可执行定义 | doing | `metric_library_store/binding.py`：55 项全部绑定（引擎 15 / 事实 AST 40 / 叙述 0，缺失原因如实记录）；双路径对等门禁 `tests/metrics/test_dictionary_execution_parity.py`；覆盖清单 `metric-execution-coverage.md` 机械生成防漂移；旧物流哈希由既有 parity 门禁保护 | C03 |
+| 2026-09-06 | C03 期间/精度/异常语义 | doing | `metrics/financial_semantics.py`：余额口径显式（期末/平均）、单季↔累计转换规则、年化默认禁止、零分母/负权益/币种/合并范围 typed 拒绝、比率聚合先汇总分子分母、重述比较取重述版；`tests/metrics/test_financial_semantics.py` 7 组正反例通过 | C04 |
 
 执行者每次收尾补表：任务 ID、变更、定向测试、远端 CI、外部阻塞、下一条命令；未知内容标 unknown，不沿用过期状态。
