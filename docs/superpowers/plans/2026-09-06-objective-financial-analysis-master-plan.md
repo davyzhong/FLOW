@@ -72,7 +72,7 @@ flowchart LR
   - 测试/证据（新增目标）：`docs/implementation/objective-analysis/baseline-audit.md`。
   - 完成标准：矩阵每项附代码与测试出处；不因旧表 done 就自动验收。
 
-- [ ] **A02 · 冻结两个入口的统一事实契约** — 状态：todo
+- [ ] **A02 · 冻结两个入口的统一事实契约** — 状态：doing（证据已落盘，待 CI 绿后勾选）
   - 依赖：A01。
   - 主要位置：statements/models.py、infrastructure/models/statements.py；新 docs/superpowers/specs/financial-facts-contract.md。
   - 工作：定义主体、期间起止、时点/流量、币种单位、合并范围、准则、重述、来源定位、缺失原因、符号与精度。
@@ -368,5 +368,6 @@ flowchart LR
 |---|---|---|---|---|
 | 2026-09-06 | 总计划与方向规格 | planned | 本次文档提交；不代表产品功能完成 | A01 |
 | 2026-09-06 | A01 基线审计 | doing | `docs/implementation/objective-analysis/baseline-audit.md`（基线 `63907ba`，16 jobs 绿、固定月份/报表完整性/PDF/字典多源四核查点结论）；CI 待本次提交运行 | A02 |
+| 2026-09-06 | A02 统一事实契约 | doing | 规格 `docs/superpowers/specs/financial-facts-contract.md`；参考实现 `statements/fact_contract.py`；`tests/statements/test_fact_contract.py` 14 项通过、mypy/ruff 绿 | A03 |
 
 执行者每次收尾补表：任务 ID、变更、定向测试、远端 CI、外部阻塞、下一条命令；未知内容标 unknown，不沿用过期状态。
