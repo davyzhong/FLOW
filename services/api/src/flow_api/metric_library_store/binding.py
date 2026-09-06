@@ -43,7 +43,8 @@ def _load(path: Path) -> dict[str, Any]:
     for root in (Path.cwd(), *Path.cwd().parents):
         full = root / path
         if full.is_file():
-            return yaml.safe_load(full.read_text())
+            data: dict[str, Any] = yaml.safe_load(full.read_text())
+            return data
     raise FileNotFoundError(f"配置不存在：{path}")
 
 

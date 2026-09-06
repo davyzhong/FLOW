@@ -150,3 +150,21 @@ class MetricGovernanceEventLine(BaseModel):
 
 class MetricGovernanceEventListResponse(BaseModel):
     events: list[MetricGovernanceEventLine]
+
+
+class SandboxDiffLine(BaseModel):
+    company: str
+    period: str
+    current_value: str | None = None
+    draft_value: str | None = None
+    delta: str | None = None
+    error: str | None = None
+
+
+class MetricImpactResponse(BaseModel):
+    metric_code: str
+    draft_version: int
+    downstream_metrics: list[str]
+    referenced_items: list[str]
+    frozen_snapshots_untouched: int
+    sandbox: list[SandboxDiffLine]

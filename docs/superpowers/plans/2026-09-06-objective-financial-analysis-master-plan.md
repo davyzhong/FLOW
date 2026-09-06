@@ -162,7 +162,7 @@ flowchart LR
   - 测试/证据（新增目标）：`tests/integration/test_metric_library_governance.py`。
   - 完成标准：旧定义及旧快照不变；非法 AST/循环依赖/引用缺失阻止生效；操作者、差异、时间与理由可查询。
 
-- [ ] **C05 · 影响分析与新旧试算** — 状态：todo
+- [ ] **C05 · 影响分析与新旧试算** — 状态：doing（证据已落盘，待 CI 绿后勾选）
   - 依赖：C04。
   - 主要位置：新 metric_library_store/impact.py；api/schemas/metric_library.py。
   - 工作：查找引用指标、报告、快照与取数映射；沙盒试算差异；区分计划影响与已冻结结果，不批量改写历史。
@@ -363,7 +363,7 @@ flowchart LR
 
 - 2026-09-06：FineBI 看板借鉴分析（GPT，提交 80132ed）并入——D01 增补问题域组织/比较镜头/两种下钻/AnalysisTopic 检查清单；指导文档同步沉淀至 Obsidian 知识库 `wiki/FLOW分析工作台设计指导（源自FineBI看板借鉴）.md`；六条不可照搬边界与五条链约束一致，无决策变更。
 
-**当前：C04 已提交待 CI；下一任务：C05。**
+**当前：C05 已提交待 CI；下一任务：C06。**
 
 第一条命令（A02）：阅读方向规格第 3 节五条链与 `baseline-audit.md` §2/§4，起草 `docs/superpowers/specs/financial-facts-contract.md`，随后 `cd services/api && uv run pytest tests/statements/test_fact_contract.py -q`。
 
@@ -383,5 +383,6 @@ flowchart LR
 | 2026-09-06 | C02 统一指标身份与可执行定义 | doing | `metric_library_store/binding.py`：55 项全部绑定（引擎 15 / 事实 AST 40 / 叙述 0，缺失原因如实记录）；双路径对等门禁 `tests/metrics/test_dictionary_execution_parity.py`；覆盖清单 `metric-execution-coverage.md` 机械生成防漂移；旧物流哈希由既有 parity 门禁保护 | C03 |
 | 2026-09-06 | C03 期间/精度/异常语义 | doing | `metrics/financial_semantics.py`：余额口径显式（期末/平均）、单季↔累计转换规则、年化默认禁止、零分母/负权益/币种/合并范围 typed 拒绝、比率聚合先汇总分子分母、重述比较取重述版；`tests/metrics/test_financial_semantics.py` 7 组正反例通过 | C04 |
 | 2026-09-06 | C04 指标变更治理 | doing | 迁移 0018（metric_governance_event 持久化审计，替代 JSONL）；`metric_library_store/governance.py`（草稿/验证/生效/退役 + 非法 AST/循环依赖/引用缺失/并发草稿拒绝）；API：entries 三端点 + events 查询；`tests/integration/test_metric_library_governance.py` 5 项 + `test_metric_governance_api.py` 2 项通过 | C05 |
+| 2026-09-06 | C05 影响分析与新旧试算 | doing | `metric_library_store/impact.py`（下游依赖传递闭包 + Decimal 独立沙盒试算 + 冻结历史只读统计）+ `POST /entries/{id}/impact`；`tests/integration/test_metric_impact.py` 3 项通过（差异真实、缺项降级、快照不动） | C06 |
 
 执行者每次收尾补表：任务 ID、变更、定向测试、远端 CI、外部阻塞、下一条命令；未知内容标 unknown，不沿用过期状态。

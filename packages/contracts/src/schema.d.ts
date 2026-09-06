@@ -740,6 +740,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/metric-library/entries/{entry_id}/impact": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Analyze Metric Impact
+         * @description 草稿影响分析：下游依赖 + 取数映射 + 沙盒新旧试算（只读，不写入）。
+         */
+        post: operations["analyze_metric_impact_api_v1_metric_library_entries__entry_id__impact_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/orchestration/batches/{batch_id}/build": {
         parameters: {
             query?: never;
@@ -1954,6 +1974,21 @@ export interface components {
             /** Events */
             events: components["schemas"]["MetricGovernanceEventLine"][];
         };
+        /** MetricImpactResponse */
+        MetricImpactResponse: {
+            /** Metric Code */
+            metric_code: string;
+            /** Draft Version */
+            draft_version: number;
+            /** Downstream Metrics */
+            downstream_metrics: string[];
+            /** Referenced Items */
+            referenced_items: string[];
+            /** Frozen Snapshots Untouched */
+            frozen_snapshots_untouched: number;
+            /** Sandbox */
+            sandbox: components["schemas"]["SandboxDiffLine"][];
+        };
         /** MetricLibraryResponse */
         MetricLibraryResponse: {
             /** Dictionary Id */
@@ -2282,6 +2317,21 @@ export interface components {
             comment: string | null;
             /** Created At */
             created_at: string;
+        };
+        /** SandboxDiffLine */
+        SandboxDiffLine: {
+            /** Company */
+            company: string;
+            /** Period */
+            period: string;
+            /** Current Value */
+            current_value?: string | null;
+            /** Draft Value */
+            draft_value?: string | null;
+            /** Delta */
+            delta?: string | null;
+            /** Error */
+            error?: string | null;
         };
         /** SheetMappingResponse */
         SheetMappingResponse: {
@@ -4430,6 +4480,39 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MetricGovernanceEventListResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    analyze_metric_impact_api_v1_metric_library_entries__entry_id__impact_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                entry_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MetricImpactResponse"];
                 };
             };
             /** @description Validation Error */

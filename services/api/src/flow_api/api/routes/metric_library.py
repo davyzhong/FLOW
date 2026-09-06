@@ -25,8 +25,10 @@ from flow_api.api.schemas.metric_library import (
     MetricEntryActionResponse,
     MetricGovernanceEventLine,
     MetricGovernanceEventListResponse,
+    MetricImpactResponse,
     MetricLibraryResponse,
     ReportItem,
+    SandboxDiffLine,
 )
 from flow_api.api.schemas.metric_library import (
     AccountingStandard as AccountingStandardRow,
@@ -43,6 +45,7 @@ from flow_api.infrastructure.models.metric_library import (
     StatementLineMapping,
 )
 from flow_api.metric_library_store.governance import GovernanceError, MetricGovernance
+from flow_api.metric_library_store.impact import ImpactError, MetricImpactService
 from flow_api.metric_library_store.importer import import_all
 
 router = APIRouter(prefix="/metric-library", tags=["metric-library"])
@@ -363,4 +366,39 @@ def list_metric_governance_events(
             )
             for event in events
         ]
+    )
+
+
+@router.post(
+    "/entries/{entry_id}/impact",
+    response_model=MetricImpactResponse,
+)
+def analyze_metric_impact(
+    entry_id: UUID, session: SessionDependency
+) -> MetricImpactResponse:
+    """草稿影响分析：下游依赖 + 取数映射 + 沙盒新旧试算（只读，不写入）。"""
+    try:
+        report = MetricImpactService(session).analyze(entry_id)
+    except ImpactError as error:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=ErrorDetail(code=error.code, message=error.message).model_dump(mode="json"),
+        ) from error
+    return MetricImpactResponse(
+        metric_code=report.metric_code,
+        draft_version=report.draft_version,
+        downstream_metrics=list(report.downstream_metrics),
+        referenced_items=list(report.referenced_items),
+        frozen_snapshots_untouched=report.frozen_snapshots_untouched,
+        sandbox=[
+            SandboxDiffLine(
+                company=diff.company,
+                period=diff.period,
+                current_value=diff.current_value,
+                draft_value=diff.draft_value,
+                delta=diff.delta,
+                error=diff.error,
+            )
+            for diff in report.sandbox
+        ],
     )

@@ -3045,6 +3045,66 @@
         }
       }
     },
+    "/api/v1/metric-library/entries/{entry_id}/impact": {
+      "post": {
+        "tags": [
+          "metric-library"
+        ],
+        "summary": "Analyze Metric Impact",
+        "description": "草稿影响分析：下游依赖 + 取数映射 + 沙盒新旧试算（只读，不写入）。",
+        "operationId": "analyze_metric_impact_api_v1_metric_library_entries__entry_id__impact_post",
+        "parameters": [
+          {
+            "name": "entry_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Entry Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MetricImpactResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/orchestration/batches/{batch_id}/build": {
       "post": {
         "tags": [
@@ -6584,6 +6644,53 @@
         ],
         "title": "MetricGovernanceEventListResponse"
       },
+      "MetricImpactResponse": {
+        "properties": {
+          "metric_code": {
+            "type": "string",
+            "title": "Metric Code"
+          },
+          "draft_version": {
+            "type": "integer",
+            "title": "Draft Version"
+          },
+          "downstream_metrics": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Downstream Metrics"
+          },
+          "referenced_items": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Referenced Items"
+          },
+          "frozen_snapshots_untouched": {
+            "type": "integer",
+            "title": "Frozen Snapshots Untouched"
+          },
+          "sandbox": {
+            "items": {
+              "$ref": "#/components/schemas/SandboxDiffLine"
+            },
+            "type": "array",
+            "title": "Sandbox"
+          }
+        },
+        "type": "object",
+        "required": [
+          "metric_code",
+          "draft_version",
+          "downstream_metrics",
+          "referenced_items",
+          "frozen_snapshots_untouched",
+          "sandbox"
+        ],
+        "title": "MetricImpactResponse"
+      },
       "MetricLibraryResponse": {
         "properties": {
           "dictionary_id": {
@@ -7552,6 +7659,68 @@
           "created_at"
         ],
         "title": "ReviewLine"
+      },
+      "SandboxDiffLine": {
+        "properties": {
+          "company": {
+            "type": "string",
+            "title": "Company"
+          },
+          "period": {
+            "type": "string",
+            "title": "Period"
+          },
+          "current_value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Current Value"
+          },
+          "draft_value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Draft Value"
+          },
+          "delta": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Delta"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          }
+        },
+        "type": "object",
+        "required": [
+          "company",
+          "period"
+        ],
+        "title": "SandboxDiffLine"
       },
       "SheetMappingResponse": {
         "properties": {
