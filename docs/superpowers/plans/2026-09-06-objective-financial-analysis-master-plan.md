@@ -65,7 +65,7 @@ flowchart LR
 
 ### M0：基线、范围与验收契约
 
-- [ ] **A01 · 复核最新代码与 Zcode 完成证据** — 状态：doing（证据已落盘，待 CI 绿后勾选）
+- [x] **A01 · 复核最新代码与 Zcode 完成证据** — 状态：done
   - 依赖：无。
   - 主要位置：旧总计划、PROJECT_STATE、CI、api/routes/orchestration.py。
   - 工作：建立功能/实现/测试/缺口矩阵，核查固定月份、报表完整性、PDF 与字典多源；记录当前提交和未提交修改。
@@ -367,7 +367,7 @@ flowchart LR
 | 日期 | 任务 | 状态 | 提交 / 测试 / CI 证据 | 下一步 |
 |---|---|---|---|---|
 | 2026-09-06 | 总计划与方向规格 | planned | 本次文档提交；不代表产品功能完成 | A01 |
-| 2026-09-06 | A01 基线审计 | doing | `docs/implementation/objective-analysis/baseline-audit.md`（基线 `63907ba`，16 jobs 绿、固定月份/报表完整性/PDF/字典多源四核查点结论）；CI 待本次提交运行 | A02 |
+| 2026-09-06 | A01 基线审计 | **done** | `docs/implementation/objective-analysis/baseline-audit.md`；CI run 34026603117 success（16 jobs） | A02 |
 | 2026-09-06 | A02 统一事实契约 | doing | 规格 `docs/superpowers/specs/financial-facts-contract.md`；参考实现 `statements/fact_contract.py`；`tests/statements/test_fact_contract.py` 14 项通过、mypy/ruff 绿 | A03 |
 | 2026-09-06 | A03 验收数据集登记 | doing | `validation/financial_reports/`（manifest + README）：3 基线 + 2 留出（腾讯 FY2025 新期间、圆通 2026Q1 新公司，新增下载校验 SHA）；独立答案逐项带定位、容差预登记、回填禁令 | B01 |
 | 2026-09-06 | B01 上传与来源登记 | doing | 迁移 0014（statement_source）；`statements/intake.py` + `POST/GET /api/v1/statements/sources`；`tests/statements/test_source_intake.py` 10 项通过；迁移往返通过；真实 MinIO 上传圆通 PDF（201、候选全中、重复幂等、对象可读） | B02 |
