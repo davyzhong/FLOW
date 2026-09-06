@@ -64,10 +64,10 @@
 | ID | 任务 | 验收 | 状态 |
 |---|---|---|---|
 | T1.1 | 记录 D047 默认推荐策略进决策日志 | DECISION_LOG D047 条目 | done（本计划同轮提交） |
-| T1.2 | 指标字典 v0 → **v1.0 定稿**：口径分歧项按 D047 规则敲定默认口径（ROE 平均口径、DSO 360 天、存货周转营业成本分子等，以准则/CPA/国资委为据），备选口径并存；补齐 benchmark 字段（国资委标准值/联合资信基线）；产出 `config/metrics/metric_dictionary_v1.yaml`（新版本文件，不改 v0） | YAML schema 校验脚本 + `make contracts-check` + `/metric-library` 显示 v1.0 | pending |
-| T1.3 | 会计基础补全：科目 164 → 171 全量（缺口 8 个 2024 新增，按调研 10 号来源策略交叉拼合并标注置信度与出处）；准则登记册 11 → 42 项全量；分录模板 17 → 30+（数据熊分录大全 + 菜鸟场景，参照调研 07 号） | 会计基础 v1.0 配置 + 结构校验 | pending |
+| T1.2 | 指标字典 v0 → v1.0 定稿（15 项口径裁决：default_caliber/default_basis/alternative_calibers） | 脚本 `scripts/finalize_metric_dictionary.py` 自检 + API 契约测试 | **done**（`config/metrics/metric_dictionary_v1.yaml`，status=effective） |
+| T1.3 | 会计基础补全 | 结构自检（科目唯一/准则唯一/模板唯一/引用闭合）+ API 契约测试 | **done**（`accounting_foundation_v1.yaml`：科目 167、准则 48=基本+42 项+汇编+IFRS 对照、分录 32；1802/2703 编号正式化；剩余缺口如实标注） |
 | T1.4 | 经营轨数据定义 v0 → **v1.0 定稿**（D047 策略，数据熊方案为默认结构 + 行业标准校准）：`config/metrics/operations_dictionary_v1.yaml`；物流专营指标缺口保留显式标注 | 结构校验通过 + 定义文件落盘（`/operations` 页改读经营轨定义，待经营轨数据管线接通后另行绑定，不在本任务验收内） | pending |
-| T1.5 | 系统指标库页面与评审台数据源切换 v1.0 | `/metric-library` 渲染 v1.0 内容 | pending |
+| T1.5 | 系统指标库页面切换 v1.0 数据源 | API/页面/契约测试全绿 + 浏览器验收 | **done**（路由切 v1 路径、schema 增 default_caliber 等字段、测试锁定 v1；本地栈验证 `/metric-library` 经代理返回 v1） |
 
 ### WS-2 P3：指标库/报表项目数据库化
 
@@ -135,8 +135,8 @@ WS-6 独立，可在任意 WS 之间插入（建议在 WS-3 后、WS-7 前）
 
 ## 6. 当前执行点（交接断点写在这里）
 
-- 状态：WS-0 已完成待 CI 确认（`34c3bd8` 已推送）；WS-1 进行中。
-- 下一步第一条命令：`uv run --project services/api python scripts/finalize_metric_dictionary.py`（若 T1.2 定稿脚本已就绪）或直接编辑 `config/metrics/metric_dictionary_v0.yaml` 派生 `metric_dictionary_v1.yaml`（默认口径敲定规则见 WS-1 T1.2 行内说明，依据 D047 与调研 07–10 号资料）。
+- 状态：WS-0 done（CI 绿）；WS-1 全部 done 待本轮提交推送与 CI 确认。
+- 下一步：进入 WS-2 P3 数据库化——第一件事是写迁移 `0011_metric_library_objects`（注意：0011 编号已被 statement_reports 占用，实际用 **0012**）五张表 + `check_migrations.py` 往返验证，然后写 T2.2 导入器（v1 YAML → DB，幂等）。
 
 ## 7. 变更日志
 
@@ -144,4 +144,5 @@ WS-6 独立，可在任意 WS 之间插入（建议在 WS-3 后、WS-7 前）
 |---|---|---|
 | 2026-09-06 | 初版：合并 D040–D046 全部待办，形成 WS-0–WS-7 总计划；同轮记录 D047 | ZCode |
 | 2026-09-06 | WS-0 done（`34c3bd8`）：nav 分组标签对比度 3.9→6.13:1；进入 WS-1 | ZCode |
+| 2026-09-06 | WS-1 done：三个 v1 定稿（指标字典 15 裁决 / 会计基础 167+48+32 / 经营轨 6 域 43 指标）+ 页面切 v1 + 契约重生成；进入 WS-2 | ZCode |
 | 2026-09-06 | Review 修正（Kimi）：补齐三个范围缺口——T2.6 发布后编排入口（新批次一键出指标/分析）、T5.4 PDF 打印器接入、T6.6 脱敏真实数据试点（D038 链路缺环）；T1.4 验收改为定义落盘（/operations 绑定待经营轨数据管线）；决策日志「未来与未决事项」过期引用改为 D045 | Kimi |

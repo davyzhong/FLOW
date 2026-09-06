@@ -565,7 +565,7 @@ export interface paths {
         };
         /**
          * Get Metric Library
-         * @description 只读返回指标库与会计基础数据集（v0 草案，D040）。
+         * @description 只读返回指标库与会计基础数据集（v1.0 定稿，D047 默认推荐策略）。
          */
         get: operations["get_metric_library_api_v1_metric_library_get"];
         put?: never;
@@ -594,6 +594,10 @@ export interface components {
             status: string;
             /** Standard Ref */
             standard_ref?: string | null;
+            /** Code Note */
+            code_note?: string | null;
+            /** Source Note */
+            source_note?: string | null;
         };
         /** AccountingFoundation */
         AccountingFoundation: {
@@ -1023,6 +1027,8 @@ export interface components {
              * @default []
              */
             related_metrics: string[];
+            /** Note */
+            note?: string | null;
         };
         /** ErrorDetail */
         ErrorDetail: {
@@ -1529,6 +1535,15 @@ export interface components {
             time_behavior?: string | null;
             /** Caliber */
             caliber?: string | null;
+            /** Default Caliber */
+            default_caliber?: string | null;
+            /** Default Basis */
+            default_basis?: string | null;
+            /**
+             * Alternative Calibers
+             * @default []
+             */
+            alternative_calibers: string[];
             /**
              * Source Cas
              * @default []

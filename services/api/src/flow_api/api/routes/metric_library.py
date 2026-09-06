@@ -17,8 +17,8 @@ from flow_api.api.schemas.metric_library import (
 router = APIRouter(prefix="/metric-library", tags=["metric-library"])
 
 METRIC_LIBRARY_PATHS = (
-    Path("config/metrics/metric_dictionary_v0.yaml"),
-    Path("config/metrics/accounting_foundation_v0.yaml"),
+    Path("config/metrics/metric_dictionary_v1.yaml"),
+    Path("config/metrics/accounting_foundation_v1.yaml"),
 )
 
 
@@ -61,7 +61,7 @@ def load_metric_library() -> MetricLibraryResponse:
 
 @router.get("", response_model=MetricLibraryResponse)
 def get_metric_library() -> MetricLibraryResponse:
-    """只读返回指标库与会计基础数据集（v0 草案，D040）。"""
+    """只读返回指标库与会计基础数据集（v1.0 定稿，D047 默认推荐策略）。"""
     return load_metric_library()
 
 

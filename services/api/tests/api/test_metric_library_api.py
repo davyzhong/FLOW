@@ -1,9 +1,9 @@
 """指标库只读 API 契约测试。
 
-GET /api/v1/metric-library 返回 flow.metric_dictionary.v0-draft 全量内容：
-通用 40 + 物流 15 指标（含嵌套公式与 MPM 标记）、28 项 CAS↔IFRS 取数映射、
-3 条勾稽关系、会计基础 164 科目 / 11 准则 / 17 分录模板。数据集为 config/metrics/
-下的版本化 YAML（D040），本测试锁定结构完整性而非数值内容。
+GET /api/v1/metric-library 返回 flow.metric_dictionary.v1（D047 定稿）全量内容：
+通用 40 + 物流 15 指标（含嵌套公式、MPM 标记与默认口径裁决）、28 项 CAS↔IFRS 取数映射、
+3 条勾稽关系、会计基础 167 科目 / 48 准则 / 32 分录模板。数据集为 config/metrics/
+下的版本化 YAML，本测试锁定结构完整性而非数值内容。
 """
 
 from __future__ import annotations
@@ -23,9 +23,9 @@ async def test_metric_library_returns_full_dictionary() -> None:
     assert response.status_code == 200, response.text
     body: dict[str, Any] = response.json()
 
-    assert body["dictionary_id"] == "flow.metric_dictionary.v0-draft"
-    assert body["status"] == "draft"
-    assert body["decision_ref"] == "D040"
+    assert body["dictionary_id"] == "flow.metric_dictionary.v1"
+    assert body["status"] == "effective"
+    assert body["decision_ref"] == "D047"
 
     metrics = body["metrics"]
     assert len(metrics) == 55
@@ -39,14 +39,27 @@ async def test_metric_library_returns_full_dictionary() -> None:
     ), "嵌套公式必须保留"
     dupont = next(m for m in metrics if m["metric_code"] == "roe")
     assert dupont["depends_on"] == ["net_margin", "total_asset_turnover", "equity_multiplier"]
+    # D047：口径分歧项必须有默认口径裁决与依据
+    assert dupont["default_caliber"].startswith("净利润 ÷ 平均净资产")
+    assert dupont["default_basis"]
+    assert dupont["alternative_calibers"]
+    ruled = [m for m in metrics if m.get("default_caliber")]
+    assert len(ruled) == 15, "15 项口径裁决必须全部生效"
 
     assert len(body["report_items"]) == 28
     assert {item["item_id"] for item in body["report_items"]} >= {"bs.total_assets", "is.revenue"}
     assert len(body["relations"]) == 3
 
     accounting = body["accounting"]
-    assert accounting["dataset_id"] == "flow.accounting_foundation.v0-draft"
-    assert len(accounting["accounts"]) == 164
-    assert len(accounting["standards"]) == 11
-    assert len(accounting["entry_templates"]) == 17
+    assert accounting["dataset_id"] == "flow.accounting_foundation.v1"
+    assert len(accounting["accounts"]) == 167
+    assert len(accounting["standards"]) == 48
+    assert len(accounting["entry_templates"]) == 32
+    cas_numbers = sorted(
+        int(s["id"].split("-")[1])
+        for s in accounting["standards"]
+        if s["id"].startswith("CAS-") and s["id"].split("-")[1].isdigit()
+    )
+    assert cas_numbers == list(range(1, 43)), "42 项具体准则必须全量登记"
+    assert any(a["code"] == "1802" for a in accounting["accounts"]), "使用权资产编号正式化"
     assert accounting["known_gaps"], "已知缺口必须如实呈现"

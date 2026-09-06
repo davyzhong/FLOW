@@ -1,0 +1,190 @@
+#!/usr/bin/env python3
+"""从经营分析轨数据定义 v0 草案派生 v1.0 定稿（D047 默认推荐策略）。
+
+D047：不做逐项人工评审。数据熊方案（驾驶舱板块 + 报告范式）为默认推荐结构，
+菜鸟材料为事实依据（口径基线与目标值标注来源），行业标准定义校准口径。
+本脚本把草案的结构化内容固化为 config/metrics/operations_dictionary_v1.yaml，
+不改任何已冻结契约；物流专营指标缺口显式保留。
+
+用法：uv run --project services/api python scripts/finalize_operations_dictionary.py
+"""
+
+from __future__ import annotations
+
+from pathlib import Path
+
+import yaml
+
+ROOT = Path(__file__).resolve().parents[1]
+OUT = ROOT / "config/metrics/operations_dictionary_v1.yaml"
+
+HEADER = """# FLOW 经营分析轨数据定义 v1.0（定稿）
+# 状态：effective；定稿依据：D045（双轨）、D046 步骤 2、D047（默认推荐策略）
+# 派生自：docs/knowledge-base/02_research/synthesis/经营分析轨数据定义_v0_草案.md（v0 保留不改写）
+# 默认结构：数据熊 04_经营分析合集（驾驶舱板块与报告范式）
+# 事实依据：Obsidian 菜鸟材料（口径基线与目标值，来源标注于各条 provenance）
+# 边界：与财务轨共享底座（D045），仅数据定义分轨；主观归因显式标记，不入正式输出
+"""
+
+DATA = {
+    "dictionary_id": "flow.operations_dictionary.v1",
+    "status": "effective",
+    "decision_ref": "D047",
+    "created": "2026-09-06",
+    "track": "operations",
+    "audience": "经营/业务管理者（总经理、事业部/经营单元负责人、运营负责人）",
+    "shared_foundation": "数据接入 / 标准数据中间层 / 确定性引擎 / 证据与复核机制（D045：一套底座，仅数据定义分轨）",
+    "dimensions": [
+        {"name": "组织", "values": "集团/事业部/经营单元/子单元/工厂/仓库/班组",
+         "note": "对应菜鸟经营架构树三层：事业部=预算考核层(EBITA) → 经营单元=预算编制层 → 子单元=毛利口径",
+         "provenance": "数据熊驾驶舱系列 + 菜鸟经营架构树"},
+        {"name": "区域", "values": "华东/华南/华北/华中/西南/西北/东北/海外", "provenance": "数据熊"},
+        {"name": "产品", "values": "产品线/服务产品/SKU/ABC 分类",
+         "note": "菜鸟「服务产品」= 收入记账基本颗粒度（仓配一体/干线运输/进口直邮/纯仓/纯配等 L1）",
+         "provenance": "菜鸟主数据标准"},
+        {"name": "客户", "values": "战略/重点/成长/一般/长尾 + 信用等级 AAA–BB", "provenance": "数据熊 + 菜鸟信控"},
+        {"name": "渠道", "values": "直销/经销/电商/代理/项目", "provenance": "数据熊"},
+        {"name": "订单", "values": "订单号级明细", "note": "支撑负边际订单识别", "provenance": "数据熊多维盈利"},
+        {"name": "时间", "values": "月/周/日/13 周滚动", "provenance": "数据熊"},
+        {"name": "分档", "values": "账龄/库龄/效期（0-30/31-60(90)/91-180/180+）",
+         "note": "应收与库存共用分档语义", "provenance": "数据熊库存驾驶舱"},
+    ],
+    "domains": {
+        "growth": {
+            "name": "增长与收入",
+            "metrics": [
+                {"metric_code": "revenue_completion_rate", "name": "营业收入完成率", "formula_text": "实际收入 ÷ 目标收入；附差距与达成概率", "provenance": "数据熊驾驶舱"},
+                {"metric_code": "revenue_growth_waterfall", "name": "收入增长来源瀑布", "formula_text": "老客增长 + 新客贡献 + 价格变化 + 产品结构 + 渠道贡献 − 客户流失", "provenance": "美的体系、总经理驾驶舱"},
+                {"metric_code": "win_rate", "name": "赢单率", "formula_text": "签约数 ÷ 有效商机数（商机分 A/B/C 层）", "provenance": "集团经营分析驾驶舱"},
+                {"metric_code": "order_income_ratio", "name": "订单收入比", "formula_text": "新增订单 ÷ 确认收入", "provenance": "总经理驾驶舱"},
+                {"metric_code": "customer_concentration", "name": "客户集中度", "formula_text": "TOP5/TOP10 客户收入占比", "provenance": "集团运营驾驶舱"},
+                {"metric_code": "customer_lifecycle", "name": "客户生命周期状态", "formula_text": "新增/活跃/沉睡/流失 + 转化率", "provenance": "集团运营驾驶舱"},
+                {"metric_code": "avg_sales_cycle", "name": "平均销售周期", "formula_text": "商机到签约平均天数", "provenance": "路径拆解"},
+            ],
+        },
+        "profitability": {
+            "name": "盈利",
+            "metrics": [
+                {"metric_code": "operating_profit_bridge", "name": "经营利润差距桥", "formula_text": "价格/销量/结构/材料成本/效率改善分解", "provenance": "数据熊综合经营总览"},
+                {"metric_code": "unit_contribution_margin", "name": "单位贡献毛利拆解", "formula_text": "销售单价 − 材料 − 人工 − 物流成本 − 销售费用", "provenance": "集团运营驾驶舱（物流成本为正式拆解项）"},
+                {"metric_code": "profit_matrix", "name": "多维盈利矩阵", "formula_text": "产品×客户×区域×渠道；盈利产品占比、亏损客户数、负边际订单数", "provenance": "数据熊多维盈利分析"},
+                {"metric_code": "profit_three_views", "name": "利润三口径", "formula_text": "会计利润 / 财务利润(EBIT/EBITDA/FCF) / 管理利润(剔一次性)", "provenance": "wiki/利润三维度模型"},
+                {"metric_code": "breakeven_safety_margin", "name": "盈亏平衡与安全边际", "formula_text": "固定成本 ÷ 综合边际贡献率；安全边际率", "provenance": "数据熊盈亏平衡分析模型(高级版)"},
+            ],
+        },
+        "delivery": {
+            "name": "运营与交付",
+            "metrics": [
+                {"metric_code": "otd_rate", "name": "准时交付率 OTD", "formula_text": "准时交付订单 ÷ 应交付订单",
+                 "benchmark_note": "各驾驶舱目标 95–96%", "provenance": "15 行业 225 指标（物流 3 项之一）"},
+                {"metric_code": "avg_delivery_time", "name": "平均交付时间", "formula_text": "出库到签收平均时长", "provenance": "15 行业 225 指标"},
+                {"metric_code": "damage_rate", "name": "破损率", "formula_text": "破损件 ÷ 总件数",
+                 "benchmark_note": "亦为菜鸟计费优惠阶梯要素", "provenance": "15 行业 225 指标"},
+                {"metric_code": "forecast_accuracy", "name": "预测准确率", "formula_text": "供应链计划链指标", "provenance": "集团经营分析驾驶舱"},
+                {"metric_code": "procurement_fill_rate", "name": "采购满足率", "formula_text": "供应链计划链指标", "provenance": "同上"},
+                {"metric_code": "kitting_rate", "name": "齐套率", "formula_text": "供应链计划链指标", "provenance": "同上"},
+                {"metric_code": "schedule_achievement", "name": "排产达成率", "formula_text": "供应链计划链指标", "provenance": "同上"},
+                {"metric_code": "capacity_utilization", "name": "产能利用率", "formula_text": "实际产出 ÷ 设计产能", "provenance": "生产运营分析报告"},
+                {"metric_code": "oee", "name": "OEE 设备综合效率", "formula_text": "可用率 × 性能效率 × 质量率", "provenance": "生产运营分析报告"},
+                {"metric_code": "labor_productivity", "name": "人均产值/人效", "formula_text": "收入、毛利 ÷ 平均人数；分部门拆解", "provenance": "人效分析报告模板"},
+                {"metric_code": "delay_pareto", "name": "延期原因帕累托", "formula_text": "关键物料/产能冲突/质量返工/客户变更/物流延误", "provenance": "订单交付路径页"},
+            ],
+        },
+        "inventory": {
+            "name": "库存与供应链",
+            "metrics": [
+                {"metric_code": "inventory_turnover_days", "name": "库存周转天数", "formula_text": "分原材料/在制品/产成品/商品/备件分段周转",
+                 "benchmark_note": "数据熊实例 76 天 / 4.8 次", "provenance": "集团库存分析驾驶舱"},
+                {"metric_code": "stagnant_over_stock", "name": "呆滞/超储/缺货/临期库存", "formula_text": "库龄五档 + 风险类型 + 影响金额", "provenance": "同上"},
+                {"metric_code": "inventory_health_quadrant", "name": "库存健康度四象限", "formula_text": "周转天数 × 销售增速（备货/健康/清理）", "provenance": "同上"},
+                {"metric_code": "inventory_change_waterfall", "name": "库存变化归因瀑布", "formula_text": "期初 + 规模增长 + 价格因素 + 结构变化 + 降库举措 = 期末", "provenance": "经营看板"},
+                {"metric_code": "fifo_execution_rate", "name": "FIFO 执行率", "formula_text": "批次级先进先出执行率",
+                 "benchmark_note": "数据熊实例 92.6%", "provenance": "批次效期质量页"},
+            ],
+        },
+        "cash": {
+            "name": "现金与回款",
+            "metrics": [
+                {"metric_code": "cash_conversion_cycle", "name": "现金转换周期 CCC", "formula_text": "DSO + DIO − DPO",
+                 "benchmark_note": "美的实例 29 天 = 45+52−68", "provenance": "美的体系"},
+                {"metric_code": "collection_rate", "name": "回款率", "formula_text": "当期回款 ÷ 当期赊销；附未来 8 周概率加权预测", "provenance": "总经理驾驶舱"},
+                {"metric_code": "ar_aging_overdue", "name": "应收账龄与逾期", "formula_text": "账龄五档 × 客户分层；逾期率、高风险客户数", "provenance": "应收分析模型(01_财务分析)"},
+                {"metric_code": "profit_to_cash_bridge", "name": "利润→现金转换桥", "formula_text": "税前利润 + 折旧摊销 + 减值 ± 营运资金变动 − 所得税 ∓ 利息", "provenance": "集团运营驾驶舱"},
+                {"metric_code": "rolling_13w_cash_forecast", "name": "13 周滚动现金流预测", "formula_text": "流入/流出/期末余额/最低安全线", "provenance": "同上"},
+                {"metric_code": "dso_operations", "name": "DSO（经营口径）", "formula_text": "平均应收 ÷ 期间收入 × 天数",
+                 "benchmark_note": "菜鸟基线 37.10 日（目标 <28）", "provenance": "菜鸟 CFO Metrics 2025-06"},
+                {"metric_code": "dpo_operations", "name": "DPO（经营口径）", "formula_text": "平均应付 ÷ 期间成本 × 天数",
+                 "benchmark_note": "菜鸟基线 43.09 日", "provenance": "菜鸟 CFO Metrics 2025-06"},
+                {"metric_code": "bad_debt_rate", "name": "坏账率", "formula_text": "坏账损失 ÷ 赊销收入",
+                 "benchmark_note": "菜鸟基线 0.6%（目标 <0.5%，信控目标 <0.25%）", "provenance": "菜鸟 CFO Metrics 2025-06"},
+            ],
+        },
+        "finance_ops_quality": {
+            "name": "业财运营质量（系统健康）",
+            "metrics": [
+                {"metric_code": "biz_finance_digitization_rate", "name": "业财线上化率", "formula_text": "线上处理业财单据 ÷ 全部单据",
+                 "benchmark_note": "菜鸟 88.43%（目标 90%）", "provenance": "菜鸟 CFO Metrics / 数字化经营治理平台"},
+                {"metric_code": "bill_adjustment_rate", "name": "账单调整率", "formula_text": "调整账单 ÷ 全部账单",
+                 "benchmark_note": "菜鸟 14.22%", "provenance": "同上"},
+                {"metric_code": "next_month_reconciliation_rate", "name": "次月对账完成率", "formula_text": "次月完成对账账单 ÷ 应对账账单",
+                 "benchmark_note": "菜鸟 87.22%（目标 90%）", "provenance": "同上"},
+                {"metric_code": "cross_period_adjustment_rate", "name": "跨期调账率", "formula_text": "跨期调整分录 ÷ 全部分录",
+                 "benchmark_note": "菜鸟 2.1%", "provenance": "同上"},
+                {"metric_code": "first_time_accuracy_rate", "name": "一次性账务准确率", "formula_text": "一次入账正确分录 ÷ 全部分录",
+                 "benchmark_note": "菜鸟 95.12%（目标 97%）", "provenance": "同上"},
+                {"metric_code": "billing_digitization_rate", "name": "计费线上化率", "formula_text": "线上计费单 ÷ 全部计费单",
+                 "benchmark_note": "菜鸟 94–98.2%", "provenance": "同上"},
+                {"metric_code": "billing_accuracy_rate", "name": "计费准确率", "formula_text": "准确计费单 ÷ 全部计费单",
+                 "benchmark_note": "菜鸟 99.85%", "provenance": "同上"},
+            ],
+        },
+    },
+    "report_paradigm": {
+        "monthly_report_sections": [
+            "核心结论页（每页一结论：总体判断/目标差距/经营质量/行动闭环）",
+            "指标驾驶舱（KPI 卡：实际/目标/差距/同比/环比/状态灯 + 累计缺口）",
+            "滚动预测（年度目标 × 乐观/基准/保守三情景，各带前提假设）",
+            "收入结构（产品线/渠道/客户三维拆解 + 增长来源瀑布）",
+            "利润分析（利润形成瀑布 + 净利率对比 + 多维盈利矩阵）",
+            "成本与降本（成本差异瀑布 + 降本路线图）",
+            "专题页（按需：库存/应收/人效/交付/质量）",
+            "问题闭环（TOP 问题清单：影响金额/责任人/期限/状态机）",
+        ],
+        "process_coverage_checklist": "菜鸟八条地铁线：定价/应收/应付/财资/经分/财务风控/业财控制/合规",
+        "provenance": "数据熊约 60 份月度/专题报告模板归纳",
+    },
+    "data_contract_extensions": {
+        "candidate_worksheets": [
+            {"sheet": "10_商机漏斗", "fields": "阶段/金额/负责人/预计成交日（线索→商机→报价→签约）"},
+            {"sheet": "11_交付履约", "fields": "订单级交付节点（计划/实际、延期天数、原因、OTD 分子分母）"},
+            {"sheet": "12_库存快照", "fields": "物料×仓库×批次（库龄、效期、质量状态、冻结标记）"},
+            {"sheet": "13_人效", "fields": "部门×人数×人工成本×产出"},
+        ],
+        "rule": "按版本化新增，不改已冻结契约；评审并入 flow.excel 下一版本",
+    },
+    "known_gaps": [
+        "物流专营指标（妥投率、车效、仓效、装载率、线路维度）语料零命中，待补来源后按版本化流程增补；",
+        "菜鸟基线值为参照（非 FLOW 目标值），正式目标值由脱敏试点真实口径确定（D038 约束）。",
+    ],
+}
+
+
+def main() -> int:
+    OUT.write_text(
+        HEADER + yaml.safe_dump(DATA, allow_unicode=True, sort_keys=False, width=110),
+        encoding="utf-8",
+    )
+    check = yaml.safe_load(OUT.read_text(encoding="utf-8"))
+    domains = check["domains"]
+    total = sum(len(d["metrics"]) for d in domains.values())
+    codes = [m["metric_code"] for d in domains.values() for m in d["metrics"]]
+    assert len(codes) == len(set(codes)), "指标编码重复"
+    print(
+        f"已生成 {OUT.name}：{len(domains)} 域 {total} 指标，"
+        f"维度 {len(check['dimensions'])}，报告范式 {len(check['report_paradigm']['monthly_report_sections'])} 节"
+    )
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

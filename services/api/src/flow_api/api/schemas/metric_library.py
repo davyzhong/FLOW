@@ -26,6 +26,9 @@ class MetricEntry(BaseModel):
     unit: str | None = None
     time_behavior: str | None = None
     caliber: str | None = None
+    default_caliber: str | None = None
+    default_basis: str | None = None
+    alternative_calibers: list[str] = []
     source_cas: list[str] = []
     source_ifrs: str | None = None
     depends_on: list[str] = []
@@ -60,6 +63,8 @@ class AccountingAccount(BaseModel):
     balance_side: str
     status: str
     standard_ref: str | None = None
+    code_note: str | None = None
+    source_note: str | None = None
 
 
 class SupersededNote(BaseModel):
@@ -87,6 +92,7 @@ class EntryTemplate(BaseModel):
     lines: list[EntryLine]
     standard_ref: str | None = None
     related_metrics: list[str] = []
+    note: str | None = None
 
 
 class AccountingFoundation(BaseModel):

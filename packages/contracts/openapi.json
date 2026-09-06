@@ -2261,7 +2261,7 @@
           "metric-library"
         ],
         "summary": "Get Metric Library",
-        "description": "只读返回指标库与会计基础数据集（v0 草案，D040）。",
+        "description": "只读返回指标库与会计基础数据集（v1.0 定稿，D047 默认推荐策略）。",
         "operationId": "get_metric_library_api_v1_metric_library_get",
         "parameters": [
           {
@@ -2340,6 +2340,28 @@
               }
             ],
             "title": "Standard Ref"
+          },
+          "code_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Code Note"
+          },
+          "source_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Note"
           }
         },
         "type": "object",
@@ -3456,6 +3478,17 @@
             "type": "array",
             "title": "Related Metrics",
             "default": []
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
           }
         },
         "type": "object",
@@ -5002,6 +5035,36 @@
               }
             ],
             "title": "Caliber"
+          },
+          "default_caliber": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Default Caliber"
+          },
+          "default_basis": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Default Basis"
+          },
+          "alternative_calibers": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Alternative Calibers",
+            "default": []
           },
           "source_cas": {
             "items": {

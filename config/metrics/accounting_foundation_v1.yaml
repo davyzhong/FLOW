@@ -1,0 +1,1690 @@
+# FLOW 会计基础数据 v1.0（定稿）
+# 状态：effective；定稿依据：D047（知识库默认推荐 + 行业标准校准）
+# 派生自：accounting_foundation_v0.yaml（v0 保留不改写）
+# 科目体系：2006 附录 156 基线 + 2024 汇编新增（编号以公开来源交叉核对，source_note 标注置信度）
+# 准则登记册：基本准则 + 42 项具体准则全量（财政部文号见各条）
+# 分录模板：17（v0）+ 15（新准则/物流场景）= 32
+dataset_id: flow.accounting_foundation.v1
+status: effective
+decision_ref: D047
+created: 2026-09-05
+standards_scope:
+- CAS
+- IFRS
+known_gaps:
+- 171 科目体系的最终编号以《企业会计准则应用指南汇编 2024》正式出版物为准；使用权资产 1802 / 租赁负债 2703 为实务通行编号，正式出版物核对后如不同需版本化修订。
+categories:
+- 资产
+- 负债
+- 共同
+- 所有者权益
+- 成本
+- 损益
+accounts:
+- code: '1001'
+  name: 库存现金
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1002'
+  name: 银行存款
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1003'
+  name: 存放中央银行款项
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1011'
+  name: 存放同业
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1012'
+  name: 其他货币资金
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1021'
+  name: 结算备付金
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1031'
+  name: 存出保证金
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1101'
+  name: 交易性金融资产
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1111'
+  name: 买入返售金融资产
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1121'
+  name: 应收票据
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1122'
+  name: 应收账款
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1123'
+  name: 预付账款
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1131'
+  name: 应收股利
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1132'
+  name: 应收利息
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1201'
+  name: 应收代位追偿款
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1211'
+  name: 应收分保账款
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1212'
+  name: 应收分保合同准备金
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1221'
+  name: 其他应收款
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1231'
+  name: 坏账准备
+  category: 资产
+  balance_side: 贷（备抵）
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1301'
+  name: 贴现资产
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1302'
+  name: 拆出资金
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1303'
+  name: 贷款
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1304'
+  name: 贷款损失准备
+  category: 资产
+  balance_side: 贷（备抵）
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1311'
+  name: 代理兑付证券
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1321'
+  name: 代理业务资产
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1401'
+  name: 材料采购
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1402'
+  name: 在途物资
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1403'
+  name: 原材料
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1404'
+  name: 材料成本差异
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1405'
+  name: 库存商品
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1406'
+  name: 发出商品
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1407'
+  name: 商品进销差价
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1408'
+  name: 委托加工物资
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1411'
+  name: 周转材料
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1421'
+  name: 消耗性生物资产
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1431'
+  name: 贵金属
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1441'
+  name: 抵债资产
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1451'
+  name: 损余物资
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1461'
+  name: 融资租赁资产
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1471'
+  name: 存货跌价准备
+  category: 资产
+  balance_side: 贷（备抵）
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1472'
+  name: 合同取得成本
+  category: 资产
+  balance_side: 借
+  status: added_2024
+  standard_ref: CAS 14 收入（2017 修订）应用指南
+  source_note: 2024 汇编新增；MaoDocs 2024 索引核对
+- code: '1481'
+  name: 持有待售资产
+  category: 资产
+  balance_side: 借
+  status: added_2024
+  standard_ref: 财会〔2017〕30号 / 持有待售准则解读
+- code: '1482'
+  name: 持有待售资产减值准备
+  category: 资产
+  balance_side: 贷（备抵）
+  status: added_2024
+  standard_ref: 持有待售准则解读
+- code: '1501'
+  name: 持有至到期投资
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1502'
+  name: 持有至到期投资减值准备
+  category: 资产
+  balance_side: 贷（备抵）
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1503'
+  name: 可供出售金融资产
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1511'
+  name: 长期股权投资
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1512'
+  name: 长期股权投资减值准备
+  category: 资产
+  balance_side: 贷（备抵）
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1521'
+  name: 投资性房地产
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1531'
+  name: 长期应收款
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1532'
+  name: 未实现融资收益
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1541'
+  name: 存出资本保证金
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1601'
+  name: 固定资产
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1602'
+  name: 累计折旧
+  category: 资产
+  balance_side: 贷（备抵）
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1603'
+  name: 固定资产减值准备
+  category: 资产
+  balance_side: 贷（备抵）
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1604'
+  name: 在建工程
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1605'
+  name: 工程物资
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1606'
+  name: 固定资产清理
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1611'
+  name: 未担保余值
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1621'
+  name: 生产性生物资产
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1622'
+  name: 生产性生物资产累计折旧
+  category: 资产
+  balance_side: 贷（备抵）
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1623'
+  name: 公益性生物资产
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1631'
+  name: 油气资产
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1632'
+  name: 累计折耗
+  category: 资产
+  balance_side: 贷（备抵）
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1641'
+  name: 油气资产累计折耗
+  category: 资产
+  balance_side: 贷（备抵）
+  status: current
+  standard_ref: CAS 27 石油天然气开采应用指南
+  source_note: 2006 附录原文遗漏补齐；维基文库核对
+- code: '1701'
+  name: 无形资产
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1702'
+  name: 累计摊销
+  category: 资产
+  balance_side: 贷（备抵）
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1703'
+  name: 无形资产减值准备
+  category: 资产
+  balance_side: 贷（备抵）
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1711'
+  name: 商誉
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1801'
+  name: 长期待摊费用
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1802'
+  name: 使用权资产
+  category: 资产
+  balance_side: 借
+  status: added_2024
+  standard_ref: CAS 21 租赁（2018 修订）
+  code_note: 汇编编号待核，实务常用 1802 或单设
+  source_note: 编号 1802 为汇编通行编号（自 v0 暂记 1501a 正式化）
+- code: '1811'
+  name: 递延所得税资产
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1821'
+  name: 独立账户资产
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '1901'
+  name: 待处理财产损溢
+  category: 资产
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '2001'
+  name: 短期借款
+  category: 负债
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '2002'
+  name: 存入保证金
+  category: 负债
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '2003'
+  name: 拆入资金
+  category: 负债
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '2004'
+  name: 向中央银行借款
+  category: 负债
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '2011'
+  name: 吸收存款
+  category: 负债
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '2012'
+  name: 同业存放
+  category: 负债
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '2021'
+  name: 贴现负债
+  category: 负债
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '2101'
+  name: 交易性金融负债
+  category: 负债
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '2111'
+  name: 卖出回购金融资产款
+  category: 负债
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '2201'
+  name: 应付票据
+  category: 负债
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '2202'
+  name: 应付账款
+  category: 负债
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '2203'
+  name: 预收账款
+  category: 负债
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '2211'
+  name: 应付职工薪酬
+  category: 负债
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '2221'
+  name: 应交税费
+  category: 负债
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '2231'
+  name: 应付利息
+  category: 负债
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '2232'
+  name: 应付股利
+  category: 负债
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '2241'
+  name: 其他应付款
+  category: 负债
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '2245'
+  name: 持有待售负债
+  category: 负债
+  balance_side: 贷
+  status: added_2024
+  standard_ref: 持有待售准则解读
+- code: '2251'
+  name: 应付保单红利
+  category: 负债
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '2261'
+  name: 应付分保账款
+  category: 负债
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '2311'
+  name: 代理买卖证券款
+  category: 负债
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '2312'
+  name: 代理承销证券款
+  category: 负债
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '2313'
+  name: 代理兑付证券款
+  category: 负债
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '2314'
+  name: 代理业务负债
+  category: 负债
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '2401'
+  name: 递延收益
+  category: 负债
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '2501'
+  name: 长期借款
+  category: 负债
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '2502'
+  name: 应付债券
+  category: 负债
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '2601'
+  name: 未到期责任准备金
+  category: 负债
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '2602'
+  name: 保险责任准备金
+  category: 负债
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '2611'
+  name: 保户储金
+  category: 负债
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '2621'
+  name: 独立账户负债
+  category: 负债
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '2701'
+  name: 长期应付款
+  category: 负债
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '2702'
+  name: 未确认融资费用
+  category: 负债
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '2703'
+  name: 租赁负债
+  category: 负债
+  balance_side: 贷
+  status: added_2024
+  standard_ref: CAS 21 租赁（2018 修订）
+  code_note: 汇编编号待核
+  source_note: 编号 2703 为汇编通行编号（自 v0 暂记 2701a 正式化）
+- code: '2711'
+  name: 专项应付款
+  category: 负债
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '2801'
+  name: 预计负债
+  category: 负债
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '2901'
+  name: 递延所得税负债
+  category: 负债
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '3001'
+  name: 清算资金往来
+  category: 共同
+  balance_side: 双向
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '3002'
+  name: 货币兑换
+  category: 共同
+  balance_side: 双向
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '3101'
+  name: 衍生工具
+  category: 共同
+  balance_side: 双向
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '3201'
+  name: 套期工具
+  category: 共同
+  balance_side: 双向
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '3202'
+  name: 被套期项目
+  category: 共同
+  balance_side: 双向
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '4001'
+  name: 实收资本
+  category: 所有者权益
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '4002'
+  name: 资本公积
+  category: 所有者权益
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '4003'
+  name: 其他综合收益
+  category: 所有者权益
+  balance_side: 贷
+  status: added_2024
+  standard_ref: CAS 30 财务报表列报（2014 修订）
+  source_note: 2024 汇编体系单列；维基文库利润表行项对应
+- code: '4101'
+  name: 盈余公积
+  category: 所有者权益
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '4102'
+  name: 一般风险准备
+  category: 所有者权益
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '4103'
+  name: 本年利润
+  category: 所有者权益
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '4104'
+  name: 利润分配
+  category: 所有者权益
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '4201'
+  name: 库存股
+  category: 所有者权益
+  balance_side: 借（减项）
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '5001'
+  name: 生产成本
+  category: 成本
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '5101'
+  name: 制造费用
+  category: 成本
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '5201'
+  name: 劳务成本
+  category: 成本
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '5301'
+  name: 研发支出
+  category: 成本
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '5401'
+  name: 工程施工
+  category: 成本
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '5402'
+  name: 工程结算
+  category: 成本
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '5403'
+  name: 机械作业
+  category: 成本
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '6001'
+  name: 主营业务收入
+  category: 损益
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '6011'
+  name: 利息收入
+  category: 损益
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '6021'
+  name: 手续费及佣金收入
+  category: 损益
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '6031'
+  name: 保费收入
+  category: 损益
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '6041'
+  name: 租赁收入
+  category: 损益
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '6051'
+  name: 其他业务收入
+  category: 损益
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '6061'
+  name: 汇兑损益
+  category: 损益
+  balance_side: 双向
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '6101'
+  name: 公允价值变动损益
+  category: 损益
+  balance_side: 双向
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '6111'
+  name: 投资收益
+  category: 损益
+  balance_side: 双向
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '6115'
+  name: 资产处置损益
+  category: 损益
+  balance_side: 双向
+  status: added_2024
+  standard_ref: 持有待售准则解读 / 财会〔2017〕30号
+- code: '6117'
+  name: 其他收益
+  category: 损益
+  balance_side: 贷
+  status: added_2024
+  standard_ref: 政府补助准则解读（财会〔2017〕15号配套）
+- code: '6201'
+  name: 摊回保险责任准备金
+  category: 损益
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '6202'
+  name: 摊回赔付支出
+  category: 损益
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '6203'
+  name: 摊回分保费用
+  category: 损益
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '6301'
+  name: 营业外收入
+  category: 损益
+  balance_side: 贷
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '6401'
+  name: 主营业务成本
+  category: 损益
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '6402'
+  name: 其他业务成本
+  category: 损益
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '6403'
+  name: 营业税金及附加
+  category: 损益
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '6411'
+  name: 利息支出
+  category: 损益
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '6421'
+  name: 手续费及佣金支出
+  category: 损益
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '6501'
+  name: 提取未到期责任准备金
+  category: 损益
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '6502'
+  name: 提取保险责任准备金
+  category: 损益
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '6511'
+  name: 赔付支出
+  category: 损益
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '6521'
+  name: 保单红利支出
+  category: 损益
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '6531'
+  name: 退保金
+  category: 损益
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '6541'
+  name: 分出保费
+  category: 损益
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '6542'
+  name: 分保费用
+  category: 损益
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '6601'
+  name: 销售费用
+  category: 损益
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '6602'
+  name: 管理费用
+  category: 损益
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '6603'
+  name: 财务费用
+  category: 损益
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '6604'
+  name: 勘探费用
+  category: 损益
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '6701'
+  name: 资产减值损失
+  category: 损益
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '6702'
+  name: 信用减值损失
+  category: 损益
+  balance_side: 借
+  status: added_2024
+  standard_ref: CAS 22 金融工具确认和计量（2017 修订）应用指南
+  code_note: 新金融工具准则下应收款项等预期信用损失计入本科目
+- code: '6711'
+  name: 营业外支出
+  category: 损益
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '6801'
+  name: 所得税费用
+  category: 损益
+  balance_side: 借
+  status: current
+  standard_ref: CAS应用指南2006附录
+- code: '6901'
+  name: 以前年度损益调整
+  category: 损益
+  balance_side: 双向
+  status: current
+  standard_ref: CAS应用指南2006附录
+superseded_notes:
+- code: '1501'
+  note: 持有至到期投资：新金融工具准则（CAS 22，2017）下金融资产分类改为摊余成本/公允价值体系，本科目由「债权投资」等新分类取代
+- code: '1503'
+  note: 可供出售金融资产：同上，由「其他债权投资/其他权益工具投资」取代
+- code: '6403'
+  note: 营业税金及附加：营改增后更名为「税金及附加」（财会〔2016〕22号）
+standards:
+- id: CAS-1
+  name: 企业会计准则第 1 号——存货
+  issuer: 财政部
+  note: 现行有效
+- id: CAS-10
+  name: 企业会计准则第 10 号——企业年金基金
+  issuer: 财政部
+  note: 现行有效
+- id: CAS-11
+  name: 企业会计准则第 11 号——股份支付
+  issuer: 财政部
+  note: 现行有效
+- id: CAS-12
+  name: 企业会计准则第 12 号——债务重组
+  issuer: 财政部
+  note: 2019 修订（财会〔2019〕8 号）
+- id: CAS-13
+  name: 企业会计准则第 13 号——或有事项
+  issuer: 财政部
+  note: 现行有效
+- id: CAS-14
+  name: 企业会计准则第 14 号——收入（2017 修订）
+  note: 五步法收入确认；对照 IFRS 15
+- id: CAS-15
+  name: 企业会计准则第 15 号——建造合同
+  issuer: 财政部
+  note: 执行新收入准则的企业废止
+- id: CAS-16
+  name: 企业会计准则第 16 号——政府补助
+  issuer: 财政部
+  note: 2017 修订（财会〔2017〕15 号）
+- id: CAS-17
+  name: 企业会计准则第 17 号——借款费用
+  issuer: 财政部
+  note: 现行有效
+- id: CAS-18
+  name: 企业会计准则第 18 号——所得税
+  issuer: 财政部
+  note: 现行有效
+- id: CAS-19
+  name: 企业会计准则第 19 号——外币折算
+  issuer: 财政部
+  note: 现行有效
+- id: CAS-2
+  name: 企业会计准则第 2 号——长期股权投资
+  issuer: 财政部
+  note: 2014 修订（财会〔2014〕14 号）
+- id: CAS-20
+  name: 企业会计准则第 20 号——企业合并
+  issuer: 财政部
+  note: 现行有效
+- id: CAS-21
+  name: 企业会计准则第 21 号——租赁（2018 修订）
+  note: 使用权资产 / 租赁负债；对照 IFRS 16
+- id: CAS-22
+  name: 企业会计准则第 22 号——金融工具确认和计量（2017 修订）
+  note: 预期信用损失模型；对照 IFRS 9
+- id: CAS-23
+  name: 企业会计准则第 23 号——金融资产转移
+  issuer: 财政部
+  note: 2017 修订（财会〔2017〕8 号）
+- id: CAS-24
+  name: 企业会计准则第 24 号——套期会计
+  issuer: 财政部
+  note: 2017 修订（财会〔2017〕9 号）
+- id: CAS-25
+  name: 企业会计准则第 25 号——保险合同
+  issuer: 财政部
+  note: 2020 全面修订（财会〔2020〕20 号）
+- id: CAS-26
+  name: 企业会计准则第 26 号——再保险合同
+  issuer: 财政部
+  note: 现行有效
+- id: CAS-27
+  name: 企业会计准则第 27 号——石油天然气开采
+  issuer: 财政部
+  note: 现行有效
+- id: CAS-28
+  name: 企业会计准则第 28 号——会计政策、会计估计变更和差错更正
+  issuer: 财政部
+  note: 现行有效
+- id: CAS-29
+  name: 企业会计准则第 29 号——资产负债表日后事项
+  issuer: 财政部
+  note: 现行有效
+- id: CAS-3
+  name: 企业会计准则第 3 号——投资性房地产
+  issuer: 财政部
+  note: 现行有效
+- id: CAS-30
+  name: 企业会计准则第 30 号——财务报表列报
+  issuer: 财政部
+  note: 2014 修订（财会〔2014〕7 号）
+- id: CAS-31
+  name: 企业会计准则第 31 号——现金流量表
+  issuer: 财政部
+  note: 现行有效
+- id: CAS-32
+  name: 企业会计准则第 32 号——中期财务报告
+  issuer: 财政部
+  note: 现行有效
+- id: CAS-33
+  name: 企业会计准则第 33 号——合并财务报表
+  issuer: 财政部
+  note: 2014 修订（财会〔2014〕10 号）
+- id: CAS-34
+  name: 企业会计准则第 34 号——每股收益
+  issuer: 财政部
+  note: 现行有效
+- id: CAS-35
+  name: 企业会计准则第 35 号——分部报告
+  issuer: 财政部
+  note: 现行有效
+- id: CAS-36
+  name: 企业会计准则第 36 号——关联方披露
+  issuer: 财政部
+  note: 现行有效
+- id: CAS-37
+  name: 企业会计准则第 37 号——金融工具列报
+  issuer: 财政部
+  note: 2017 修订（财会〔2017〕14 号）
+- id: CAS-38
+  name: 企业会计准则第 38 号——首次执行企业会计准则
+  issuer: 财政部
+  note: 现行有效
+- id: CAS-39
+  name: 企业会计准则第 39 号——公允价值计量
+  issuer: 财政部
+  note: 2014 新增（财会〔2014〕6 号）
+- id: CAS-4
+  name: 企业会计准则第 4 号——固定资产
+  note: 固定资产确认与折旧
+- id: CAS-40
+  name: 企业会计准则第 40 号——合营安排
+  issuer: 财政部
+  note: 2014 新增（财会〔2014〕11 号）
+- id: CAS-41
+  name: 企业会计准则第 41 号——在其他主体中权益的披露
+  issuer: 财政部
+  note: 2014 新增（财会〔2014〕16 号）
+- id: CAS-42
+  name: 企业会计准则第 42 号——持有待售的非流动资产、处置组和终止经营
+  issuer: 财政部
+  note: 2017 新增（财会〔2017〕13 号）
+- id: CAS-5
+  name: 企业会计准则第 5 号——生物资产
+  issuer: 财政部
+  note: 现行有效
+- id: CAS-6
+  name: 企业会计准则第 6 号——无形资产
+  issuer: 财政部
+  note: 现行有效
+- id: CAS-7
+  name: 企业会计准则第 7 号——非货币性资产交换
+  issuer: 财政部
+  note: 2019 修订（财会〔2019〕9 号）
+- id: CAS-8
+  name: 企业会计准则第 8 号——资产减值
+  issuer: 财政部
+  note: 现行有效
+- id: CAS-9
+  name: 企业会计准则第 9 号——职工薪酬
+  note: 应付职工薪酬核算
+- id: CAS-APPENDIX-2006
+  name: 企业会计准则应用指南（2006）附录：会计科目和主要账务处理
+  issuer: 财政部
+  note: 156 科目六大类；accounts 主表来源
+- id: CAS-BASIC
+  name: 企业会计准则——基本准则
+  issuer: 财政部
+  note: 六大会计要素、确认计量原则、会计信息质量要求
+- id: CAS-COMPILATION-2024
+  name: 企业会计准则应用指南汇编（2024）
+  issuer: 财政部
+  note: 171 科目；演进依据见致同研究梳理
+- id: IAS-1
+  name: IAS 1 Presentation of Financial Statements
+  issuer: IASB
+  note: 报表行项目与小计
+- id: IAS-7
+  name: IAS 7 Statement of Cash Flows
+  issuer: IASB
+  note: 现金流量表口径
+- id: IFRS-18
+  name: IFRS 18 Presentation and Disclosures in Financial Statements
+  issuer: IASB
+  note: 2027 生效；经营利润法定小计与 MPM 披露（research/09 §3）
+entry_templates:
+- template_id: ET01_service_revenue_credit
+  scenario: 提供运输/仓储服务，月末按账单确认收入（赊销）
+  business_context: 物流核心收入确认；战略客户月结账期场景
+  lines:
+  - direction: 借
+    account: 1122 应收账款
+    amount_rule: 价税合计账单金额
+  - direction: 贷
+    account: 6001 主营业务收入
+    amount_rule: 不含税服务费
+  - direction: 贷
+    account: 2221 应交税费——应交增值税（销项税额）
+    amount_rule: 适用税率计算
+  standard_ref: CAS-14 / CAS-APPENDIX-2006「1122」「6001」
+  related_metrics:
+  - revenue
+  - ar_balance
+  - dso
+  - ar_turnover
+- template_id: ET02_service_revenue_cash
+  scenario: 现结服务收入
+  lines:
+  - direction: 借
+    account: 1002 银行存款
+    amount_rule: 实收价税合计
+  - direction: 贷
+    account: 6001 主营业务收入
+    amount_rule: 不含税金额
+  - direction: 贷
+    account: 2221 应交税费——应交增值税（销项税额）
+    amount_rule: 适用税率计算
+  standard_ref: CAS-14
+  related_metrics:
+  - revenue
+  - cash_revenue_ratio
+- template_id: ET03_customer_collection
+  scenario: 收到客户回款
+  lines:
+  - direction: 借
+    account: 1002 银行存款
+    amount_rule: 实际到账金额
+  - direction: 贷
+    account: 1122 应收账款
+    amount_rule: 核销对应账单
+  standard_ref: CAS-APPENDIX-2006「1122」
+  related_metrics:
+  - collection_rate
+  - ar_balance
+  - dso
+  - ocf_net_profit_ratio
+- template_id: ET04_notes_receivable
+  scenario: 客户以商业汇票结算
+  lines:
+  - direction: 借
+    account: 1121 应收票据
+    amount_rule: 票面金额
+  - direction: 贷
+    account: 1122 应收账款
+    amount_rule: 票面金额
+  standard_ref: CAS-APPENDIX-2006「1121」
+  related_metrics:
+  - ar_balance
+  - ar_turnover
+- template_id: ET05_bad_debt_provision
+  scenario: 期末按预期信用损失计提坏账准备
+  lines:
+  - direction: 借
+    account: 6702 信用减值损失
+    amount_rule: 预期信用损失模型计算（账龄矩阵等）
+  - direction: 贷
+    account: 1231 坏账准备
+    amount_rule: 同左
+  standard_ref: CAS-22 / IFRS 9 预期信用损失模型
+  related_metrics:
+  - ar_balance
+  - dso
+  note: 旧准则口径借记「6701 资产减值损失」；新金融工具准则后应收款项减值计入信用减值损失。
+- template_id: ET06_outsource_capacity
+  scenario: 外协运力成本入账（运输外包）
+  lines:
+  - direction: 借
+    account: 6401 主营业务成本
+    amount_rule: 不含税外协费用
+  - direction: 借
+    account: 2221 应交税费——应交增值税（进项税额）
+    amount_rule: 专用发票税额
+  - direction: 贷
+    account: 2202 应付账款
+    amount_rule: 价税合计
+  standard_ref: CAS-APPENDIX-2006「6401」「2202」
+  related_metrics:
+  - direct_cost
+  - fulfillment_cost_rate
+  - ap_turnover
+- template_id: ET07_fuel_toll
+  scenario: 支付燃油费、路桥费等直接运营成本
+  lines:
+  - direction: 借
+    account: 6401 主营业务成本
+    amount_rule: 不含税金额
+  - direction: 借
+    account: 2221 应交税费——应交增值税（进项税额）
+    amount_rule: 可抵扣税额
+  - direction: 贷
+    account: 1002 银行存款
+    amount_rule: 实付金额
+  standard_ref: CAS-APPENDIX-2006「6401」
+  related_metrics:
+  - direct_cost
+  - cost_per_order
+- template_id: ET08_payroll_accrual
+  scenario: 计提司机/操作人员薪酬
+  lines:
+  - direction: 借
+    account: 6401 主营业务成本
+    amount_rule: 直接履约人员薪酬
+  - direction: 借
+    account: 6602 管理费用
+    amount_rule: 管理人员薪酬
+  - direction: 贷
+    account: 2211 应付职工薪酬
+    amount_rule: 应发合计
+  standard_ref: CAS-9
+  related_metrics:
+  - direct_cost
+  - fulfillment_cost_rate
+  note: 也可先经「5201 劳务成本」归集再结转主营业务成本，按企业成本核算口径选择。
+- template_id: ET09_payroll_payment
+  scenario: 发放薪酬
+  lines:
+  - direction: 借
+    account: 2211 应付职工薪酬
+    amount_rule: 实发及代扣合计
+  - direction: 贷
+    account: 1002 银行存款
+    amount_rule: 实发金额
+  - direction: 贷
+    account: 2221 应交税费——应交个人所得税
+    amount_rule: 代扣个税
+  standard_ref: CAS-9
+  related_metrics: []
+- template_id: ET10_vehicle_purchase
+  scenario: 购置运输车辆/仓储设备
+  lines:
+  - direction: 借
+    account: 1601 固定资产
+    amount_rule: 不含税购置成本及达到可使用状态前必要支出
+  - direction: 借
+    account: 2221 应交税费——应交增值税（进项税额）
+    amount_rule: 可抵扣税额
+  - direction: 贷
+    account: 1002 银行存款 / 2701 长期应付款
+    amount_rule: 支付方式
+  standard_ref: CAS-4
+  related_metrics:
+  - fixed_asset_turnover
+  - free_cash_flow
+- template_id: ET11_depreciation
+  scenario: 计提车辆/设备折旧
+  lines:
+  - direction: 借
+    account: 6401 主营业务成本
+    amount_rule: 直接履约资产折旧
+  - direction: 借
+    account: 6602 管理费用
+    amount_rule: 管理用资产折旧
+  - direction: 贷
+    account: 1602 累计折旧
+    amount_rule: 月度折旧额
+  standard_ref: CAS-4
+  related_metrics:
+  - ebitda
+  - direct_cost
+- template_id: ET12_lease_new_standard
+  scenario: 仓库/场地租赁（新租赁准则承租人）
+  lines:
+  - direction: 借
+    account: 1501a 使用权资产
+    amount_rule: 租赁付款额现值 + 初始直接费用
+  - direction: 贷
+    account: 2701a 租赁负债
+    amount_rule: 租赁付款额现值
+  standard_ref: CAS-21（2018 修订）/ IFRS 16
+  related_metrics:
+  - debt_asset_ratio
+  - ebitda
+  note: 后续计量：计提使用权资产折旧（借成本/费用，贷累计折旧）；确认租赁负债利息（借财务费用，贷租赁负债）；支付租金（借租赁负债，贷银行存款）。
+- template_id: ET13_tax_surcharge
+  scenario: 计提税金及附加
+  lines:
+  - direction: 借
+    account: 6403 税金及附加
+    amount_rule: 城建税、教育费附加等
+  - direction: 贷
+    account: 2221 应交税费
+    amount_rule: 同左
+  standard_ref: 财会〔2016〕22号
+  related_metrics:
+  - operating_margin
+- template_id: ET14_vat_payment
+  scenario: 缴纳增值税
+  lines:
+  - direction: 借
+    account: 2221 应交税费——未交增值税
+    amount_rule: 申报应纳税额
+  - direction: 贷
+    account: 1002 银行存款
+    amount_rule: 实缴金额
+  standard_ref: 财会〔2016〕22号
+  related_metrics: []
+- template_id: ET15_income_tax
+  scenario: 计提企业所得税
+  lines:
+  - direction: 借
+    account: 6801 所得税费用
+    amount_rule: 当期所得税费用
+  - direction: 贷
+    account: 2221 应交税费——应交企业所得税
+    amount_rule: 同左
+  standard_ref: CAS-18 所得税
+  related_metrics:
+  - net_margin
+- template_id: ET16_short_term_loan
+  scenario: 取得短期借款 / 计提利息
+  lines:
+  - direction: 借
+    account: 1002 银行存款
+    amount_rule: 借款本金
+  - direction: 贷
+    account: 2001 短期借款
+    amount_rule: 借款本金
+  - direction: 借
+    account: 6603 财务费用
+    amount_rule: 计提利息
+  - direction: 贷
+    account: 2231 应付利息
+    amount_rule: 计提利息
+  standard_ref: CAS-APPENDIX-2006「2001」「6603」
+  related_metrics:
+  - debt_asset_ratio
+  - interest_coverage
+  - cash_short_debt_ratio
+- template_id: ET17_period_close
+  scenario: 月末损益结转
+  lines:
+  - direction: 借
+    account: 6001 主营业务收入等收入类科目
+    amount_rule: 本期贷方发生额
+  - direction: 贷
+    account: 4103 本年利润
+    amount_rule: 收入合计
+  - direction: 借
+    account: 4103 本年利润
+    amount_rule: 成本费用合计
+  - direction: 贷
+    account: 6401/6601/6602/6603 等成本费用类科目
+    amount_rule: 本期借方发生额
+  standard_ref: CAS-APPENDIX-2006「4103」
+  related_metrics:
+  - net_margin
+  - operating_margin
+- template_id: ET18_tenant_lease_recognition
+  scenario: 承租人确认租赁（新租赁准则）
+  business_context: 物流仓配/运输设备租赁，非短期/低价值租赁
+  lines:
+  - direction: 借
+    account: 1802 使用权资产
+    amount_rule: 租赁负债初始计量金额 + 预付租金 + 初始直接费用
+  - direction: 贷
+    account: 2703 租赁负债
+    amount_rule: 未付租赁付款额现值
+  standard_ref: CAS-21（2018）
+  related_metrics: []
+- template_id: ET19_lease_liability_interest
+  scenario: 租赁负债计提利息
+  business_context: 按实际利率法确认各期利息
+  lines:
+  - direction: 借
+    account: 6603 财务费用——利息费用
+    amount_rule: 期初租赁负债 × 折现率
+  - direction: 贷
+    account: 2703 租赁负债
+    amount_rule: 同左
+  standard_ref: CAS-21（2018）
+  related_metrics:
+  - interest_coverage
+- template_id: ET20_rou_asset_depreciation
+  scenario: 使用权资产计提折旧
+  business_context: 按租赁期与资产受益对象分摊
+  lines:
+  - direction: 借
+    account: 6601 销售费用 / 6602 管理费用 / 5101 制造费用
+    amount_rule: 使用权资产成本 ÷ 租赁期
+  - direction: 贷
+    account: 1802 使用权资产——累计折旧
+    amount_rule: 同左
+  standard_ref: CAS-21（2018）
+  related_metrics: []
+- template_id: ET21_contract_liability_advance
+  scenario: 预收服务款确认合同负债
+  business_context: 物流服务预收账单款项
+  lines:
+  - direction: 借
+    account: 1002 银行存款
+    amount_rule: 预收金额
+  - direction: 贷
+    account: 2203 预收账款 / 合同负债
+    amount_rule: 同左
+  standard_ref: CAS-14（2017）
+  related_metrics: []
+- template_id: ET22_revenue_over_time
+  scenario: 按时段法确认运输服务收入
+  business_context: 客户月结合同，按履约进度确认
+  lines:
+  - direction: 借
+    account: 1122 应收账款 / 合同资产
+    amount_rule: 履约进度 × 交易价格
+  - direction: 贷
+    account: 6001 主营业务收入
+    amount_rule: 不含税金额
+  - direction: 贷
+    account: 2221 应交税费——待转销项税额
+    amount_rule: 纳税义务未发生部分
+  standard_ref: CAS-14（2017）五步法
+  related_metrics:
+  - revenue
+  - ar_balance
+- template_id: ET23_contract_fulfillment_cost
+  scenario: 确认合同履约成本
+  business_context: 为履行合同发生的直接增量成本
+  lines:
+  - direction: 借
+    account: 1471 合同履约成本（存货类）
+    amount_rule: 直接人工+直接材料+分摊费用
+  - direction: 贷
+    account: 1002 银行存款 / 2211 应付职工薪酬
+    amount_rule: 同左
+  standard_ref: CAS-14（2017）
+  related_metrics:
+  - direct_cost
+- template_id: ET24_expected_credit_loss
+  scenario: 按预期信用损失计提坏账（ECL）
+  business_context: 账龄组合计提；菜鸟口径坏账率基线 0.6%
+  lines:
+  - direction: 借
+    account: 6702 信用减值损失
+    amount_rule: 应收账款余额 × 预期损失率
+  - direction: 贷
+    account: 1122 应收账款——坏账准备
+    amount_rule: 同左
+  standard_ref: CAS-22（2017）
+  related_metrics:
+  - ar_balance
+  note: 菜鸟 CFO 域另有坏账率指标（基线 0.6%），属经营轨指标目录，见经营分析轨数据定义 v1
+- template_id: ET25_finance_guarantee_provision
+  scenario: 计提财务担保/保证类预计负债
+  business_context: 为客户或合作方提供担保
+  lines:
+  - direction: 借
+    account: 6602 管理费用 / 6702 信用减值损失
+    amount_rule: 按担保余额与违约率估计
+  - direction: 贷
+    account: 2801 预计负债
+    amount_rule: 同左
+  standard_ref: CAS-13 或有事项
+  related_metrics: []
+- template_id: ET26_settlement_with_cp
+  scenario: 与履约供应商（CP）结算服务成本
+  business_context: 菜鸟模式：向 CP 采购履约服务，月度对账结算
+  lines:
+  - direction: 借
+    account: 6401 主营业务成本
+    amount_rule: 对账确认的应付服务费
+  - direction: 借
+    account: 2221 应交税费——进项税额
+    amount_rule: 可抵扣进项税
+  - direction: 贷
+    account: 2202 应付账款
+    amount_rule: 价税合计
+  standard_ref: CAS应用指南2006附录 + 财会〔2016〕22 号
+  related_metrics:
+  - direct_cost
+  - dpo_days
+- template_id: ET27_platform_service_fee_income
+  scenario: 平台技术服务费收入确认
+  business_context: 向商家收取的平台服务费（菜鸟向商家收费模式）
+  lines:
+  - direction: 借
+    account: 1122 应收账款 / 合同资产
+    amount_rule: 账单金额
+  - direction: 贷
+    account: 6001 主营业务收入
+    amount_rule: 不含税服务费
+  - direction: 贷
+    account: 2221 应交税费——销项税额
+    amount_rule: 适用税率
+  standard_ref: CAS-14（2017）
+  related_metrics:
+  - revenue
+- template_id: ET28_inventory_obsolescence
+  scenario: 存货跌价准备计提
+  business_context: 仓储存货可变现净值低于成本
+  lines:
+  - direction: 借
+    account: 6702 资产减值损失（存货跌价）
+    amount_rule: 成本 − 可变现净值
+  - direction: 贷
+    account: 1471 存货跌价准备
+    amount_rule: 同左
+  standard_ref: CAS-1 存货
+  related_metrics:
+  - inventory_turnover
+- template_id: ET29_equity_method_income
+  scenario: 权益法确认联营投资收益
+  business_context: 对联营/合营企业按持股比例确认
+  lines:
+  - direction: 借
+    account: 1511 长期股权投资——损益调整
+    amount_rule: 被投资方净利润 × 持股比例
+  - direction: 贷
+    account: 6111 投资收益
+    amount_rule: 同左
+  standard_ref: CAS-2（2014）
+  related_metrics: []
+- template_id: ET30_vat_output_input_net
+  scenario: 月末增值税结转（销项−进项）
+  business_context: 应交增值税月末转未交增值税
+  lines:
+  - direction: 借
+    account: 2221 应交税费——应交增值税（转出未交增值税）
+    amount_rule: 销项 − 进项
+  - direction: 贷
+    account: 2221 应交税费——未交增值税
+    amount_rule: 同左
+  standard_ref: 财会〔2016〕22 号
+  related_metrics: []
+- template_id: ET31_surplus_reserve
+  scenario: 提取法定盈余公积
+  business_context: 净利润 × 10%（法定）
+  lines:
+  - direction: 借
+    account: 4104 利润分配——提取法定盈余公积
+    amount_rule: 净利润 × 10%
+  - direction: 贷
+    account: 4101 盈余公积——法定盈余公积
+    amount_rule: 同左
+  standard_ref: 公司法 + CAS应用指南
+  related_metrics: []
+- template_id: ET32_comprehensive_income_close
+  scenario: 其他综合收益结转
+  business_context: 外币报表折算差额等 OCI 期末结转
+  lines:
+  - direction: 借
+    account: 4003 其他综合收益
+    amount_rule: 按明细科目结转
+  - direction: 贷
+    account: 4104 利润分配 / 4003 其他综合收益（对转）
+    amount_rule: 同左
+  standard_ref: CAS-30（2014）
+  related_metrics: []
+derived_from: flow.accounting_foundation.v0-draft

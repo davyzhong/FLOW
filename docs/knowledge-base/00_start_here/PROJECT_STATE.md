@@ -296,6 +296,13 @@ flowchart LR
 - 财务轨完成状态总计划落盘：`docs/superpowers/plans/2026-09-06-finance-track-master-plan.md`（WS-0 基线修复 → WS-1 定稿 → WS-2 P3 数据库化 → WS-3 P4 迁移 → WS-4 P5 收口 → WS-5 四表一注进发布 → WS-6 D038 收尾 → WS-7 V1.1 决策包），含转移协议与滚动更新规则；主 CI 红（导航重组 axe 违规）列为 WS-0 首任务；
 - 本计划表为财务轨唯一总计划，任何 Agent 接手以该文件为起点，随任务完成滚动更新。
 
+### 阶段 28：WS-0/WS-1 完成——红线修复与三个 v1.0 定稿（D047 落地）
+
+- WS-0：修复 D045 导航重组引入的 axe serious 违规（nav 分组标签对比度 3.9→6.13:1，`34c3bd8`），CI 恢复全绿；
+- WS-1（D047 默认推荐策略落地）：`flow.metric_dictionary.v1` 定稿（40+15 指标，15 项口径分歧裁决：默认口径 + 依据 + 备选并存）；`flow.accounting_foundation.v1` 定稿（科目 167、准则 48=基本准则+42 项具体准则+汇编+IFRS 对照、分录模板 32 含新租赁/新收入/菜鸟物流场景）；`flow.operations_dictionary.v1` 定稿（6 域 43 指标、8 维度、8 节报告范式、4 张候选数据表，菜鸟基线标注来源）；
+- `/metric-library` API 与页面切换 v1 数据源（schema 增口径裁决字段），API/前端/契约测试全绿并经浏览器验收；三个定稿脚本沉淀于 `scripts/finalize_*.py`（幂等可再生）；
+- 主计划表滚动更新见 `docs/superpowers/plans/2026-09-06-finance-track-master-plan.md`。
+
 ## 当前尚未完成
 
 - 最小安全部署剩余工作：密钥与网络边界、备份恢复演练、HTTPS 与回滚、结构化日志及统一部署验收；
