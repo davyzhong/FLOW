@@ -22,8 +22,8 @@ from flow_api.api.schemas.intake import ErrorDetail
 from flow_api.dashboard.fixture import DASHBOARD_MONTHS
 from flow_api.infrastructure.db import get_session_factory
 from flow_api.infrastructure.models.intake import AnalysisBatch
-from flow_api.metrics.catalog import load_metric_catalog
 from flow_api.metrics.service import MetricSnapshotService
+from flow_api.metrics_store import resolve_metric_catalog
 
 router = APIRouter(prefix="/orchestration", tags=["orchestration"])
 
@@ -83,7 +83,7 @@ def build_batch_analysis(
             "批次尚未发布，不能构建指标快照与分析",
         )
 
-    catalog = load_metric_catalog(METRICS_CONFIG)
+    catalog = resolve_metric_catalog(session, METRICS_CONFIG)
     snapshot_service = MetricSnapshotService()
     months = list(DASHBOARD_MONTHS)
     snapshots = [

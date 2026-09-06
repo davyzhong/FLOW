@@ -44,6 +44,7 @@ from flow_api.infrastructure.models.metric_library import (
     AccountingStandard,
     AccountingSubject,
     EntryTemplate,
+    MetricCatalogDocument,
     MetricDictionaryEntry,
     StatementLineMapping,
 )
@@ -82,6 +83,7 @@ __all__ = [
     "MetricDefinition",
     "MetricDefinitionDependency",
     "MetricDictionaryEntry",
+    "MetricCatalogDocument",
     "MetricSnapshot",
     "MetricValue",
     "LogisticsProduct",

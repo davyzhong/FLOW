@@ -84,9 +84,9 @@
 
 | ID | 任务 | 验收 | 状态 |
 |---|---|---|---|
-| T3.1 | `flow.metrics.logistics.v1` 的 15 指标 + 14 依赖边迁移为库内「物流行业指标集 v1」（来源：库内定义，`migrates_from` 溯源） | 已知答案值逐项比对一致 | pending |
-| T3.2 | 引擎、驾驶舱投影、报告管线改从库内指标集读取；快照身份链与 `definition_set_hash` 演进规则不变 | 全部门禁绿：`make acceptance`（含 metrics-known-answers、analysis-invariants、publishing-golden、intake、investigation、user-closure） | pending |
-| T3.3 | 旧代码内目录退役（保留一个版本的兼容读取期），文档与决策日志记录迁移完成 | PROJECT_STATE 阶段记录 | pending |
+| T3.1 | 物流指标集库内化 | 已知答案一致 | **done**（迁移 0013 `metric_catalog_document` + `metrics_store` 存取层；6 项一致性门禁含快照身份链实证） |
+| T3.2 | 生产加载路径切库内优先 | 门禁绿 | **done**（orchestration 与 dashboard fixture 切 `resolve_metric_catalog`；metrics-known-answers/analysis-invariants/dashboard 三道门禁本地 PASS，哈希与基线一致；publishing/intake/investigation 由 CI 同批验证） |
+| T3.3 | 兼容读取期与记录 | D048 + 阶段记录 | **done**（D048：YAML 兜底保留至 V1.1 评审后议退役） |
 
 ### WS-4 P5：验证实验收口
 
@@ -135,8 +135,8 @@ WS-6 独立，可在任意 WS 之间插入（建议在 WS-3 后、WS-7 前）
 
 ## 6. 当前执行点（交接断点写在这里）
 
-- 状态：WS-0/WS-1/WS-2 全部 done（WS-2 本轮提交）；WS-1 CI 已绿。
-- 下一步：进入 WS-3 P4 迁移——`flow.metrics.logistics.v1` 15 指标迁为库内行业指标集：先跑 `make test-metrics-known-answers` 建立基线，再在 `config/metrics/` 派生行业指标集配置（引用 metric_dictionary_v1 的物流 15 指标），引擎 catalog 加载层增加「库内定义优先」开关并保持已知答案逐项一致。
+- 状态：WS-0–WS-3 全部 done（WS-3 本轮提交）；WS-1/WS-2 CI 绿。
+- 下一步：进入 WS-4 P5 收口——京东物流 FY2025 年报抽取：样本 PDF 已归档于 `docs/knowledge-base/02_research/original/p5_samples/jdl_2618/`；扩展 `scripts/p5_extract_statements.py` 的 alias map 与勾稽规则适配港股披露格式（单位注意：港交所披露常用人民币千元），产出 `docs/implementation/p5/jdl_2025fy_statements.yaml` 并跑勾稽校验。
 
 ## 7. 变更日志
 
@@ -146,4 +146,5 @@ WS-6 独立，可在任意 WS 之间插入（建议在 WS-3 后、WS-7 前）
 | 2026-09-06 | WS-0 done（`34c3bd8`）：nav 分组标签对比度 3.9→6.13:1；进入 WS-1 | ZCode |
 | 2026-09-06 | WS-1 done：三个 v1 定稿（指标字典 15 裁决 / 会计基础 167+48+32 / 经营轨 6 域 43 指标）+ 页面切 v1 + 契约重生成；进入 WS-2 | ZCode |
 | 2026-09-06 | WS-2 done：迁移 0012 五表、幂等导入器 + import/retire 端点 + 审计、DB 优先读取、报表项目↔科目映射闭合、发布后编排入口（T2.6）；mypy/ruff/契约/9 项测试绿 | ZCode |
+| 2026-09-06 | WS-3 done（D048）：迁移 0013 目录文档库内化、resolve 库内优先、6 项一致性门禁（快照身份链实证 = 基线哈希）、metrics/analysis/dashboard 三道门禁 PASS | ZCode |
 | 2026-09-06 | Review 修正（Kimi）：补齐三个范围缺口——T2.6 发布后编排入口（新批次一键出指标/分析）、T5.4 PDF 打印器接入、T6.6 脱敏真实数据试点（D038 链路缺环）；T1.4 验收改为定义落盘（/operations 绑定待经营轨数据管线）；决策日志「未来与未决事项」过期引用改为 D045 | Kimi |

@@ -316,6 +316,13 @@
 - 边界：不改变 D016/D028/D031/D033/D037 确定性与不可变边界；定稿仍走版本化文件（新版本文件，不改写 v0）+ 门禁流程；用户保留以版本修订方式调整的权利。
 - 落地：财务轨完成状态总计划 `docs/superpowers/plans/2026-09-06-finance-track-master-plan.md` WS-1。
 
+## D048 引擎指标目录库内化（P4 物流指标集迁移完成）
+
+- 状态：有效；2026-09-06 按主计划 WS-3 执行，D040 决策 4 的落地。
+- 决定：`flow.metrics.logistics.v1` 引擎目录以 `metric_catalog_document`（迁移 0013）库内版本化文档为权威源；生产加载路径（seed 演示与编排入口）经 `resolve_metric_catalog` 库内优先；仓库 YAML `config/metrics/flow_v1_metrics.yaml` 保留为兼容读取期的兜底与 CI 已知答案锚点。
+- 等价性保障：目录哈希由解析后模型计算（与文件字节无关），库内文档与 YAML 双源加载 `definition_set_hash` 按构造一致；由 `tests/integration/test_metric_catalog_store.py` 六项门禁守护（含「库内目录实际建快照的身份链哈希 = 已发布基线 4214ae85…」的实证）。
+- 边界：不改引擎计算、不改快照身份规则；`flow.metrics.logistics.v1` 契约内容未变（哈希一致），仅运行时读取源切换；YAML 兜底保留期至 V1.1 评审后再议退役。
+
 ## 未来与未决事项
 
 - 经营分析能力扩展（经营侧数据 + 业务假设的主观归因）：已由 D045 修订为并行第二轨（经营分析轨，demo 起步），D039 的准确性约束不变；

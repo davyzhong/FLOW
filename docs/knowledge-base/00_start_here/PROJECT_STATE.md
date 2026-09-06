@@ -311,6 +311,13 @@ flowchart LR
 - 发布后编排入口（PROJECT_STATE 历史遗留项收口）：`POST /api/v1/orchestration/batches/{id}/build` 将已发布批次一键串联为指标快照序列 + 分析运行（幂等；未发布 409 / 未知 404 typed 错误）；
 - 验证：迁移往返、mypy/ruff、契约再生成无漂移、新增 12 项契约测试全绿；详见主计划表 WS-2。
 
+### 阶段 30：WS-3 P4 引擎指标目录库内化（D048）
+
+- 迁移 `0013_metric_catalog_documents`：引擎目录以 `metric_catalog_document` 库内版本化文档为权威源（definition_set_id + version 唯一，effective/retired 状态）；
+- `flow_api/metrics_store`：幂等导入（入库前先过 MetricCatalog 契约验证）、库内加载、`resolve_metric_catalog` 库内优先 + YAML 兜底；生产调用点（dashboard seed、发布后编排入口）已切换；
+- 等价性门禁 `tests/integration/test_metric_catalog_store.py` 六项：双源 `definition_set_hash` 一致且等于已发布基线 `4214ae85…`、导入幂等、空库兜底、未知定义集 typed 错误、**库内目录实际构建快照的身份链哈希等于基线**（实证）；
+- 已知答案门禁脚本加入「目录先入库再执行」步骤；metrics-known-answers（PASS，哈希一致）、analysis-invariants（PASS）、dashboard e2e（7/7）本地全绿；决策 D048 记录兼容读取期（YAML 兜底保留至 V1.1 评审后议退役）。
+
 ## 当前尚未完成
 
 - 最小安全部署剩余工作：密钥与网络边界、备份恢复演练、HTTPS 与回滚、结构化日志及统一部署验收；

@@ -76,6 +76,17 @@ class EntryTemplate(CanonicalIdentityMixin, Base):
     note: Mapped[str | None] = mapped_column(default=None)
 
 
+class MetricCatalogDocument(CanonicalIdentityMixin, Base):
+    """引擎指标目录的库内版本化文档（P4：库内行业指标集权威源）。"""
+
+    __tablename__ = "metric_catalog_document"
+
+    definition_set_id: Mapped[str] = mapped_column()
+    version: Mapped[int] = mapped_column(default=1)
+    status: Mapped[str] = mapped_column(default="effective")
+    payload: Mapped[dict[str, Any]] = mapped_column(JSONB)
+
+
 class StatementLineMapping(CanonicalIdentityMixin, Base):
     __tablename__ = "statement_line_mapping"
 
@@ -90,6 +101,7 @@ __all__ = [
     "AccountingStandard",
     "AccountingSubject",
     "EntryTemplate",
+    "MetricCatalogDocument",
     "MetricDictionaryEntry",
     "StatementLineMapping",
 ]

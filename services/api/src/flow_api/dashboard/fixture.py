@@ -20,9 +20,9 @@ from flow_api.intake.quality import evaluate_quality
 from flow_api.intake.service import IntakeService
 from flow_api.intake.source_storage import StoredSource
 from flow_api.intake.transforms import load_transform_rules
-from flow_api.metrics.catalog import load_metric_catalog
 from flow_api.metrics.models import MetricCatalog
 from flow_api.metrics.service import MetricSnapshotService
+from flow_api.metrics_store import import_metric_catalog_document, resolve_metric_catalog
 
 DEMO_BATCH_NAME = "FLOW Finance BP dashboard demo"
 DEFAULT_REPOSITORY_ROOT = Path(__file__).resolve().parents[5]
@@ -147,8 +147,11 @@ def bootstrap_dashboard_demo(
     if published_import is None:
         raise RuntimeError("dashboard demo batch has no published import")
 
-    catalog = load_metric_catalog(
-        repository_root / "config/metrics/flow_v1_metrics.yaml"
+    import_metric_catalog_document(
+        session, repository_root / "config/metrics/flow_v1_metrics.yaml"
+    )
+    catalog = resolve_metric_catalog(
+        session, repository_root / "config/metrics/flow_v1_metrics.yaml"
     )
     snapshots = publish_dashboard_snapshot_series(
         session,
