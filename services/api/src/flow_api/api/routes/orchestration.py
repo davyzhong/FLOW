@@ -19,7 +19,7 @@ from sqlalchemy.orm import Session
 from flow_api.analysis.policy import load_analysis_policy
 from flow_api.analysis.service import AnalysisRunService
 from flow_api.api.schemas.intake import ErrorDetail
-from flow_api.dashboard.fixture import DASHBOARD_MONTHS
+from flow_api.dashboard.constants import DASHBOARD_MONTHS
 from flow_api.infrastructure.db import get_session_factory
 from flow_api.infrastructure.models.intake import AnalysisBatch
 from flow_api.metrics.service import MetricSnapshotService
@@ -27,11 +27,14 @@ from flow_api.metrics_store import resolve_metric_catalog
 
 router = APIRouter(prefix="/orchestration", tags=["orchestration"])
 
-REPOSITORY_ROOT = Path(__file__).resolve().parents[6]
-METRICS_CONFIG = REPOSITORY_ROOT / "config/metrics/flow_v1_metrics.yaml"
-ANALYSIS_POLICY_CONFIG = (
-    REPOSITORY_ROOT / "services/api/config/analysis/flow-logistics-v1.yaml"
-)
+def _repository_root() -> Path:
+    """惰性解析仓库根（容器内代码在 /app 下，层级与开发机不同）。"""
+
+    current = Path(__file__).resolve()
+    for candidate in current.parents:
+        if (candidate / "config/metrics/flow_v1_metrics.yaml").is_file():
+            return candidate
+    raise RuntimeError(f"FLOW repository root not found from {current}")
 
 
 def get_orchestration_session() -> Iterator[Session]:
@@ -83,7 +86,8 @@ def build_batch_analysis(
             "批次尚未发布，不能构建指标快照与分析",
         )
 
-    catalog = resolve_metric_catalog(session, METRICS_CONFIG)
+    metrics_config = _repository_root() / "config/metrics/flow_v1_metrics.yaml"
+    catalog = resolve_metric_catalog(session, metrics_config)
     snapshot_service = MetricSnapshotService()
     months = list(DASHBOARD_MONTHS)
     snapshots = [
@@ -94,7 +98,10 @@ def build_batch_analysis(
     ]
     session.flush()
 
-    policy = load_analysis_policy(ANALYSIS_POLICY_CONFIG)
+    policy_config = (
+        _repository_root() / "services/api/config/analysis/flow-logistics-v1.yaml"
+    )
+    policy = load_analysis_policy(policy_config)
     run = AnalysisRunService().create_run(
         session, snapshot_id=snapshots[-1].id, loaded_policy=policy
     )
