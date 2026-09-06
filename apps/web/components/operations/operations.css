@@ -1,0 +1,60 @@
+/* 经营分析轨演示页（/operations）样式：复用 dashboard.css 卡片/面板类，仅补布局与页头。 */
+
+.operations-app {
+  display: grid;
+  gap: 18px;
+}
+
+.operations-header h1 {
+  margin: 4px 0 8px;
+  font-size: 22px;
+}
+
+.operations-header p {
+  margin: 0;
+  max-width: 860px;
+  color: #52637a;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.operations-header__track {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 10px;
+  background: #e8eef9;
+  color: #1769e8;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.operations-state {
+  padding: 48px 0;
+  text-align: center;
+  color: #52637a;
+}
+
+.operations-state button {
+  padding: 7px 16px;
+  border: none;
+  border-radius: 7px;
+  background: #1769e8;
+  color: #fff;
+  cursor: pointer;
+}
+
+.operations-trend {
+  min-width: 0;
+}
+
+.operations-detail-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(420px, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 1100px) {
+  .operations-detail-grid {
+    grid-template-columns: 1fr;
+  }
+}

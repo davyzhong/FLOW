@@ -66,7 +66,7 @@ flowchart TB
 
 ## 界面导览
 
-当前浏览器入口包括 `/`、`/data`、`/investigations`、`/reports`、`/statements`、`/metric-library` 和 `/login`。全部功能页共享同一左侧工作流导航；驾驶舱与调查页采用高密度分析布局，报表分析与指标库为只读分析视图。
+当前浏览器入口包括 `/`、`/data`、`/investigations`、`/reports`、`/statements`、`/metric-library`、`/operations` 和 `/login`。系统按 [D045 双轨结构](docs/knowledge-base/04_decisions/DECISION_LOG.md)组织：「数据层」（接入）两轨共用；「财务分析」轨面向 Finance BP（驾驶舱、归因、报告、报表分析、指标库）；「经营分析」轨面向经营/业务管理者（`/operations` 演示页）。全部功能页共享同一左侧工作流导航；驾驶舱与调查页采用高密度分析布局，报表分析与指标库为只读分析视图。
 
 ### 1. Finance BP 驾驶舱
 

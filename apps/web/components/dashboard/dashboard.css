@@ -73,6 +73,20 @@
   list-style: none;
 }
 
+.workflow-rail__group {
+  display: grid;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+
+.workflow-rail__group-label {
+  margin: 0;
+  padding: 0 10px;
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  color: #6d7f99;
+}
+
 .workflow-rail li a {
   display: grid;
   grid-template-columns: 22px 1fr;
@@ -601,6 +615,7 @@ tbody th:first-child { text-align: left; }
   .dashboard-loaded { grid-template-columns: 62px minmax(0, 1fr); }
   .workflow-rail__brand strong,
   .workflow-rail li a > span,
+  .workflow-rail__group-label,
   .workflow-rail__footer { display: none; }
   .workflow-rail__brand { padding-inline: 4px; }
   .workflow-rail li a { display: grid; grid-template-columns: 1fr; place-items: center; padding-inline: 7px; }

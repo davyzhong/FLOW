@@ -25,6 +25,7 @@
 
   .app-shell .workflow-rail__brand strong,
   .app-shell .workflow-rail li a > span,
+  .app-shell .workflow-rail__group-label,
   .app-shell .workflow-rail__footer {
     display: none;
   }
