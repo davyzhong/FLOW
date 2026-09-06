@@ -135,7 +135,7 @@ WS-6 独立，可在任意 WS 之间插入（建议在 WS-3 后、WS-7 前）
 
 ## 6. 当前执行点（交接断点写在这里）
 
-- 状态：WS-0–WS-3 done 且 CI 绿；WS-4 的 T4.1/T4.2/T4.4 done、T4.3 部分完成（本轮提交）。
+- 状态：WS-0–WS-4（主体）全部 done 且 CI 全绿（最新 `0c263d6`，run 34020791625 全 16 job 通过，含 smoke 容器栈验证）；期间修复编排路由在容器内路径越界导致 smoke 红的问题（DASHBOARD_MONTHS 抽 constants 模块 + 惰性仓库根解析）。
 - 下一步：进入 WS-5 四表一注接入统一发布——先做 T5.1（Report Snapshot 扩展「四表一注」报告类型：沿用冻结 JSONB + 不可变触发器模式，迁移 0014），再 T5.2 渲染器（XLSX/HTML/PDF + 黄金值）与 T5.4（固定 Chromium 打印器注入发布管线）；完成后回头收口 T4.3 的全行项目 diff 表。
 
 ## 7. 变更日志
@@ -148,4 +148,5 @@ WS-6 独立，可在任意 WS 之间插入（建议在 WS-3 后、WS-7 前）
 | 2026-09-06 | WS-2 done：迁移 0012 五表、幂等导入器 + import/retire 端点 + 审计、DB 优先读取、报表项目↔科目映射闭合、发布后编排入口（T2.6）；mypy/ruff/契约/9 项测试绿 | ZCode |
 | 2026-09-06 | WS-3 done（D048）：迁移 0013 目录文档库内化、resolve 库内优先、6 项一致性门禁（快照身份链实证 = 基线哈希）、metrics/analysis/dashboard 三道门禁 PASS | ZCode |
 | 2026-09-06 | WS-4 主体 done：JDL 抽取 24/24 + 腾讯抽取（新脚本）+ 三司落库 `/statements` + P5 证据汇总；T4.3 完整 diff 随 WS-5 收口 | ZCode |
+| 2026-09-06 | 修复 smoke：编排路由模块级 `parents[6]` 在容器内越界 → DASHBOARD_MONTHS 抽 `dashboard/constants.py`、仓库根改惰性解析（`0c263d6`，CI 恢复全绿） | ZCode |
 | 2026-09-06 | Review 修正（Kimi）：补齐三个范围缺口——T2.6 发布后编排入口（新批次一键出指标/分析）、T5.4 PDF 打印器接入、T6.6 脱敏真实数据试点（D038 链路缺环）；T1.4 验收改为定义落盘（/operations 绑定待经营轨数据管线）；决策日志「未来与未决事项」过期引用改为 D045 | Kimi |
