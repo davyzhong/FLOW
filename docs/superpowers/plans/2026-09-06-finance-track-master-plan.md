@@ -30,7 +30,7 @@
 4. `flow.metrics.logistics.v1` 迁移为库内行业指标集，引擎从库读取，**全部既有门禁保持绿**（P4）;
 5. P5 验证实验完成：顺丰（已完）、腾讯（已完）、京东物流（待做）三公司四表一注重建 + 反向生成完整分析报告并与披露逐项比对，差异三级分类留痕；
 6. 四表一注作为报告类型接入统一发布管线（冻结快照 → XLSX/HTML/PDF，黄金值门禁）；
-7. Pilot Phase 2 收尾：备份恢复演练、部署拓扑与 HTTPS、结构化日志、验收证据（D038 Task D–G）；
+7. Pilot Phase 2 收尾：备份恢复演练、部署拓扑与 HTTPS、结构化日志、验收证据（D038 Task D–G），以及**脱敏真实数据试点**（T6.6）；
 8. 试点/验证证据汇总为 V1.1 决策包；全程 CI 保持绿。
 
 ## 2. 当前基线快照（2026-09-06，HEAD `6c38f62`）
@@ -57,7 +57,7 @@
 
 | ID | 任务 | 验收 | 状态 |
 |---|---|---|---|
-| T0.1 | 修复 `7e3640e` 导航三组重组引入的 axe serious 违规（`dashboard` 与 `investigation-e2e` 两 job 红；违规为对比度/页面结构类，涉及 `workflow-nav.tsx`、`operations.css`），修后本地 `npx playwright test apps/web/e2e/dashboard*.spec.ts apps/web/e2e/investigation.spec.ts` 复现路径验证 | CI 全部 16 job 绿 | pending |
+| T0.1 | 修复 `7e3640e` 导航三组重组引入的 axe serious 违规 | CI 全部 16 job 绿 | **done**（`34c3bd8`：根因为 `.workflow-rail__group-label` 灰蓝 `#6d7f99` 对深底 3.9:1，调亮为 `#8fa2bd` 达 6.13:1；本地 dashboard 7/7、investigation 4/4 通过） |
 
 ### WS-1 定稿与默认推荐策略（D047）
 
@@ -66,7 +66,7 @@
 | T1.1 | 记录 D047 默认推荐策略进决策日志 | DECISION_LOG D047 条目 | done（本计划同轮提交） |
 | T1.2 | 指标字典 v0 → **v1.0 定稿**：口径分歧项按 D047 规则敲定默认口径（ROE 平均口径、DSO 360 天、存货周转营业成本分子等，以准则/CPA/国资委为据），备选口径并存；补齐 benchmark 字段（国资委标准值/联合资信基线）；产出 `config/metrics/metric_dictionary_v1.yaml`（新版本文件，不改 v0） | YAML schema 校验脚本 + `make contracts-check` + `/metric-library` 显示 v1.0 | pending |
 | T1.3 | 会计基础补全：科目 164 → 171 全量（缺口 8 个 2024 新增，按调研 10 号来源策略交叉拼合并标注置信度与出处）；准则登记册 11 → 42 项全量；分录模板 17 → 30+（数据熊分录大全 + 菜鸟场景，参照调研 07 号） | 会计基础 v1.0 配置 + 结构校验 | pending |
-| T1.4 | 经营轨数据定义 v0 → **v1.0 定稿**（D047 策略，数据熊方案为默认结构 + 行业标准校准）：`config/metrics/operations_dictionary_v1.yaml`；物流专营指标缺口保留显式标注 | 结构校验 + `/operations` 页与定义一致 | pending |
+| T1.4 | 经营轨数据定义 v0 → **v1.0 定稿**（D047 策略，数据熊方案为默认结构 + 行业标准校准）：`config/metrics/operations_dictionary_v1.yaml`；物流专营指标缺口保留显式标注 | 结构校验通过 + 定义文件落盘（`/operations` 页改读经营轨定义，待经营轨数据管线接通后另行绑定，不在本任务验收内） | pending |
 | T1.5 | 系统指标库页面与评审台数据源切换 v1.0 | `/metric-library` 渲染 v1.0 内容 | pending |
 
 ### WS-2 P3：指标库/报表项目数据库化
@@ -78,6 +78,7 @@
 | T2.3 | 版本化变更流程 API：草案 → 生效 → 废止 + 审计记录（沿用 ReviewEvent 风格） | typed 契约测试 | pending |
 | T2.4 | `/metric-library` 页面数据源从 YAML 切换为 DB（typed API，经生成契约） | 组件测试 + e2e | pending |
 | T2.5 | 报表项目 ↔ 科目映射接通：`/statements` 行项目可溯源到科目与指标 | 映射 API 契约测试 | pending |
+| T2.6 | 发布后编排入口：import 发布 → 指标快照 → 分析运行的显式串联（服务层编排 + 最小触发入口），消除「新上传批次无法一键出指标/分析」缺口（PROJECT_STATE 遗留项） | 新批次发布后无需手工脚本即可在驾驶舱可见 + e2e | pending |
 
 ### WS-3 P4：物流指标集迁移
 
@@ -103,6 +104,7 @@
 | T5.1 | Report Snapshot 扩展「四表一注」报告类型（沿用冻结 JSONB + 不可变触发器模式） | 迁移 + 契约测试 | pending |
 | T5.2 | XLSX / HTML / PDF 渲染器 + 黄金值门禁（跨格式关键值一致） | `make test-publishing-golden` 扩展 | pending |
 | T5.3 | 报告中心 UI：四表一注与现有月报并列可选 | 组件测试 + e2e | pending |
+| T5.4 | PDF 打印器接入（固定 Chromium 打印进程注入发布管线），现有月报 PDF 从「无打印器必 failed」转为可生成；README 边界说明同步更新 | PDF 产物黄金值门禁含 PDF | pending |
 
 ### WS-6 Pilot Phase 2 收尾（D038 Task D–G）
 
@@ -113,6 +115,7 @@
 | T6.3 | 部署拓扑与 HTTPS（Task E：反向代理、证书、网络边界） | 部署手册 + 实测 | pending |
 | T6.4 | 结构化日志与关联 ID（Task F） | 日志含 request/batch 关联 ID | pending |
 | T6.5 | 验收门禁与证据（Task G：运维验收文档） | 文档 + 门禁脚本 | pending |
+| T6.6 | 脱敏真实数据试点（D038 关键链路：安全部署之后、V1.1 之前；脱敏规则 + 试点数据导入 + 可复核业务价值证据）——缺此任务则 WS-7 无试点证据可用 | 试点证据文档落盘 | pending |
 
 ### WS-7 V1.1 决策包
 
@@ -132,11 +135,13 @@ WS-6 独立，可在任意 WS 之间插入（建议在 WS-3 后、WS-7 前）
 
 ## 6. 当前执行点（交接断点写在这里）
 
-- 状态：**计划已批准待开工**；未执行任何任务。
-- 下一步第一条命令：`make test-dashboard`（复现 WS-0 的 axe 红CI）→ 修 `workflow-nav.tsx` / `operations.css` 相关样式 → 本地 `npx playwright test apps/web/e2e/dashboard*.spec.ts` 验证 → push 看 CI。
+- 状态：WS-0 已完成待 CI 确认（`34c3bd8` 已推送）；WS-1 进行中。
+- 下一步第一条命令：`uv run --project services/api python scripts/finalize_metric_dictionary.py`（若 T1.2 定稿脚本已就绪）或直接编辑 `config/metrics/metric_dictionary_v0.yaml` 派生 `metric_dictionary_v1.yaml`（默认口径敲定规则见 WS-1 T1.2 行内说明，依据 D047 与调研 07–10 号资料）。
 
 ## 7. 变更日志
 
 | 日期 | 变更 | 操作者 |
 |---|---|---|
 | 2026-09-06 | 初版：合并 D040–D046 全部待办，形成 WS-0–WS-7 总计划；同轮记录 D047 | ZCode |
+| 2026-09-06 | WS-0 done（`34c3bd8`）：nav 分组标签对比度 3.9→6.13:1；进入 WS-1 | ZCode |
+| 2026-09-06 | Review 修正（Kimi）：补齐三个范围缺口——T2.6 发布后编排入口（新批次一键出指标/分析）、T5.4 PDF 打印器接入、T6.6 脱敏真实数据试点（D038 链路缺环）；T1.4 验收改为定义落盘（/operations 绑定待经营轨数据管线）；决策日志「未来与未决事项」过期引用改为 D045 | Kimi |
