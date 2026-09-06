@@ -577,6 +577,41 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/statements/{report_id}/corrections": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Statement Corrections */
+        get: operations["list_statement_corrections_api_v1_statements__report_id__corrections_get"];
+        put?: never;
+        /** Add Statement Correction */
+        post: operations["add_statement_correction_api_v1_statements__report_id__corrections_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/statements/{report_id}/publish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Publish Statement Report */
+        post: operations["publish_statement_report_api_v1_statements__report_id__publish_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/metric-library": {
         parameters: {
             query?: never;
@@ -911,6 +946,58 @@ export interface components {
              * @default []
              */
             citations: string[];
+        };
+        /** CorrectionCreateRequest */
+        CorrectionCreateRequest: {
+            /** Statement Type */
+            statement_type: string;
+            /** Item Name */
+            item_name: string;
+            /** Column Key */
+            column_key: string;
+            /** Value */
+            value: string;
+            /** Reason */
+            reason: string;
+            /** Operator */
+            operator: string;
+        };
+        /** CorrectionListResponse */
+        CorrectionListResponse: {
+            /** Corrections */
+            corrections: components["schemas"]["CorrectionResponse"][];
+        };
+        /** CorrectionResponse */
+        CorrectionResponse: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /**
+             * Report Id
+             * Format: uuid
+             */
+            report_id: string;
+            /** Statement Type */
+            statement_type: string;
+            /** Item Name */
+            item_name: string;
+            /** Column Key */
+            column_key: string;
+            /** Old Value */
+            old_value?: string | null;
+            /** New Value */
+            new_value?: string | null;
+            /** Reason */
+            reason: string;
+            /** Operator */
+            operator: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
         };
         /** DashboardContext */
         DashboardContext: {
@@ -2086,6 +2173,16 @@ export interface components {
             /** Value Prior */
             value_prior?: string | null;
         };
+        /** StatementPublishResponse */
+        StatementPublishResponse: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Status */
+            status: string;
+        };
         /** StatementReportDetailResponse */
         StatementReportDetailResponse: {
             /**
@@ -2106,6 +2203,11 @@ export interface components {
              * @default 1
              */
             version: number;
+            /**
+             * Status
+             * @default draft
+             */
+            status: string;
             /** Unit Note */
             unit_note: string;
             /** Source Ref */
@@ -2149,6 +2251,11 @@ export interface components {
              * @default 1
              */
             version: number;
+            /**
+             * Status
+             * @default draft
+             */
+            status: string;
             /** Unit Note */
             unit_note: string;
             /** Source Ref */
@@ -3732,6 +3839,154 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["StatementErrorResponse"];
+                };
+            };
+        };
+    };
+    list_statement_corrections_api_v1_statements__report_id__corrections_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                report_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CorrectionListResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StatementErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    add_statement_correction_api_v1_statements__report_id__corrections_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                report_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CorrectionCreateRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CorrectionResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StatementErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StatementErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StatementErrorResponse"];
+                };
+            };
+        };
+    };
+    publish_statement_report_api_v1_statements__report_id__publish_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                report_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StatementPublishResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StatementErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StatementErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };

@@ -55,4 +55,4 @@ assert data["reports"], "statements 列表为空"
 print(f"statements API OK：{len(data['reports'])} 份财报已入库")
 EOF
 chmod +x scripts/test_statements_e2e.sh 2>/dev/null || true
-npx --yes playwright test apps/web/e2e/statements.spec.ts
+npx --yes playwright test apps/web/e2e/statements.spec.ts apps/web/e2e/statements-review.spec.ts

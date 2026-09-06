@@ -6,7 +6,7 @@ from datetime import datetime
 from typing import Literal
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 from flow_api.api.schemas.intake import ErrorDetail
 
@@ -36,6 +36,7 @@ class StatementReportSummaryResponse(FrozenResponse):
     report_kind: str
     period_label: str
     version: int = 1
+    status: str = "draft"
     unit_note: str
     source_ref: str
     source_sha256: str | None = None
@@ -90,3 +91,34 @@ class StatementSourceResponse(FrozenResponse):
 
 class StatementSourceListResponse(FrozenResponse):
     sources: tuple[StatementSourceResponse, ...]
+
+
+class CorrectionCreateRequest(BaseModel):
+    statement_type: str = Field(min_length=1)
+    item_name: str = Field(min_length=1)
+    column_key: str = Field(min_length=1)
+    value: str
+    reason: str = Field(min_length=1)
+    operator: str = Field(min_length=1)
+
+
+class CorrectionResponse(FrozenResponse):
+    id: UUID
+    report_id: UUID
+    statement_type: str
+    item_name: str
+    column_key: str
+    old_value: str | None = None
+    new_value: str | None = None
+    reason: str
+    operator: str
+    created_at: datetime
+
+
+class CorrectionListResponse(FrozenResponse):
+    corrections: tuple[CorrectionResponse, ...]
+
+
+class StatementPublishResponse(FrozenResponse):
+    id: UUID
+    status: str

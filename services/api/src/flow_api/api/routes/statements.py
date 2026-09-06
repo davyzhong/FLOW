@@ -15,8 +15,12 @@ from sqlalchemy.orm import Session
 
 from flow_api.api.schemas.intake import ErrorDetail
 from flow_api.api.schemas.statement import (
+    CorrectionCreateRequest,
+    CorrectionListResponse,
+    CorrectionResponse,
     StatementErrorResponse,
     StatementLineResponse,
+    StatementPublishResponse,
     StatementReportDetailResponse,
     StatementReportListResponse,
     StatementReportSummaryResponse,
@@ -27,12 +31,13 @@ from flow_api.api.schemas.statement import (
     exact,
 )
 from flow_api.infrastructure.db import get_session_factory
-from flow_api.infrastructure.models.statement import StatementSource
+from flow_api.infrastructure.models.statement import StatementCorrection, StatementSource
 from flow_api.infrastructure.object_store import ObjectStore
 from flow_api.infrastructure.s3_client import build_s3_client
 from flow_api.settings import get_settings
 from flow_api.statements.intake import StatementSourceError, StatementSourceIntake
 from flow_api.statements.repository import StatementReportUnavailableError
+from flow_api.statements.review import ReviewError, ReviewService
 from flow_api.statements.service import StatementService
 
 router = APIRouter(prefix="/statements", tags=["statements"])
@@ -188,3 +193,95 @@ def get_statement_report(
 
 
 __all__ = ["get_statement_session", "router"]
+
+
+def _correction_response(correction: StatementCorrection) -> CorrectionResponse:
+    return CorrectionResponse(
+        id=correction.id,
+        report_id=correction.report_id,
+        statement_type=correction.statement_type,
+        item_name=correction.item_name,
+        column_key=correction.column_key,
+        old_value=exact(correction.old_value),
+        new_value=exact(correction.new_value),
+        reason=correction.reason,
+        operator=correction.operator,
+        created_at=correction.created_at,
+    )
+
+
+@router.post(
+    "/{report_id}/corrections",
+    response_model=CorrectionResponse,
+    status_code=status.HTTP_201_CREATED,
+    responses={
+        status.HTTP_404_NOT_FOUND: {"model": StatementErrorResponse},
+        status.HTTP_409_CONFLICT: {"model": StatementErrorResponse},
+        status.HTTP_422_UNPROCESSABLE_CONTENT: {"model": StatementErrorResponse},
+    },
+)
+def add_statement_correction(
+    session: SessionDependency,
+    request: CorrectionCreateRequest,
+    report_id: Annotated[UUID, Path()],
+) -> CorrectionResponse:
+    try:
+        correction = ReviewService(session).add_correction(
+            report_id,
+            statement_type=request.statement_type,
+            item_name=request.item_name,
+            column_key=request.column_key,
+            new_value=request.value,
+            reason=request.reason,
+            operator=request.operator,
+        )
+    except ReviewError as error:
+        http_status = (
+            status.HTTP_404_NOT_FOUND
+            if error.code in ("statement_report_not_found", "item_not_found")
+            else status.HTTP_409_CONFLICT
+        )
+        raise _error(http_status, error.code, error.message) from error
+    session.commit()
+    return _correction_response(correction)
+
+
+@router.get(
+    "/{report_id}/corrections",
+    response_model=CorrectionListResponse,
+    responses={status.HTTP_404_NOT_FOUND: {"model": StatementErrorResponse}},
+)
+def list_statement_corrections(
+    session: SessionDependency, report_id: Annotated[UUID, Path()]
+) -> CorrectionListResponse:
+    try:
+        corrections = ReviewService(session).list_corrections(report_id)
+    except ReviewError as error:
+        raise _error(status.HTTP_404_NOT_FOUND, error.code, error.message) from error
+    return CorrectionListResponse(
+        corrections=tuple(_correction_response(c) for c in corrections)
+    )
+
+
+@router.post(
+    "/{report_id}/publish",
+    response_model=StatementPublishResponse,
+    responses={
+        status.HTTP_404_NOT_FOUND: {"model": StatementErrorResponse},
+        status.HTTP_409_CONFLICT: {"model": StatementErrorResponse},
+    },
+)
+def publish_statement_report(
+    session: SessionDependency, report_id: Annotated[UUID, Path()]
+) -> StatementPublishResponse:
+    try:
+        report = ReviewService(session).publish(report_id, operator="finance.bp")
+    except ReviewError as error:
+        http_status = (
+            status.HTTP_404_NOT_FOUND
+            if error.code == "statement_report_not_found"
+            else status.HTTP_409_CONFLICT
+        )
+        raise _error(http_status, error.code, error.message) from error
+    session.commit()
+    return StatementPublishResponse(id=report.id, status=report.status)

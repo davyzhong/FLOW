@@ -275,6 +275,28 @@ export const statementApi = {
   getReport(reportId: string, signal?: AbortSignal): Promise<StatementReportDetail> {
     return request<StatementReportDetail>(`/api/v1/statements/${reportId}`, signal);
   },
+  listCorrections(reportId: string, signal?: AbortSignal): Promise<CorrectionList> {
+    return request<CorrectionList>(`/api/v1/statements/${reportId}/corrections`, signal);
+  },
+  addCorrection(reportId: string, input: CorrectionInput): Promise<unknown> {
+    return submit(`/api/v1/statements/${reportId}/corrections`, "POST", input);
+  },
+  publishReport(reportId: string): Promise<StatementPublishResult> {
+    return submit<StatementPublishResult>(`/api/v1/statements/${reportId}/publish`, "POST", {});
+  },
+};
+
+export type CorrectionList = components["schemas"]["CorrectionListResponse"];
+export type Correction = components["schemas"]["CorrectionResponse"];
+export type StatementPublishResult = components["schemas"]["StatementPublishResponse"];
+
+export type CorrectionInput = {
+  statement_type: string;
+  item_name: string;
+  column_key: string;
+  value: string;
+  reason: string;
+  operator: string;
 };
 
 export type MetricLibrary = components["schemas"]["MetricLibraryResponse"];export type MetricLibraryEntry = components["schemas"]["MetricEntry"];

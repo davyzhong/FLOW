@@ -248,6 +248,8 @@ class AShareTableExtractor:
                    g("所有者权益合计", "股东权益合计"),
                    (_dec(g("归属于母公司所有者权益合计", "归属于母公司股东权益合计")) or 0)
                    + (_dec(g("少数股东权益")) or 0))
+        if "合并利润表" not in st:
+            return diffs
         is_ = st["合并利润表"]
         for col in ("本期发生额", "上期发生额"):
             g = partial(_g, is_, col)
@@ -259,6 +261,8 @@ class AShareTableExtractor:
                    g("四、利润总额（亏损总额以“－”号填列）"),
                    (_dec(g("三、营业利润（亏损以“－”号填列）")) or 0)
                    + (_dec(g("加：营业外收入")) or 0) - (_dec(g("减：营业外支出")) or 0))
+        if "合并现金流量表" not in st:
+            return diffs
         cf = st["合并现金流量表"]
         for col in ("本期发生额", "上期发生额"):
             g = partial(_g, cf, col)
@@ -411,6 +415,8 @@ class HkTraditionalExtractor:
 
     def _reconcile(self, st: dict[str, list[dict[str, Any]]]) -> list[ExtractionCheck]:
         diffs: list[ExtractionCheck] = []
+        if "合并利润表" not in st:
+            return diffs
         is_ = st["合并利润表"]
         bs = st["合并资产负债表"]
         cf = st["合并现金流量表"]

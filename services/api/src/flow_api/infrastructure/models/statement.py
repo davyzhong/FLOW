@@ -18,6 +18,7 @@ from sqlalchemy import (
     Integer,
     Numeric,
     String,
+    Text,
     UniqueConstraint,
     text,
 )
@@ -40,6 +41,7 @@ class StatementReport(CanonicalIdentityMixin, Base):
             name="uq_statement_report_identity",
         ),
         CheckConstraint("version > 0", name="ck_statement_report_version_positive"),
+        CheckConstraint("status in ('draft', 'published')", name="ck_statement_report_status"),
     )
 
     company_name: Mapped[str] = mapped_column(String(255), nullable=False)
@@ -47,6 +49,7 @@ class StatementReport(CanonicalIdentityMixin, Base):
     report_kind: Mapped[str] = mapped_column(String(32), nullable=False)
     period_label: Mapped[str] = mapped_column(String(64), nullable=False)
     version: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+    status: Mapped[str] = mapped_column(String(32), nullable=False, default="draft")
     content_sha256: Mapped[str | None] = mapped_column(String(64), nullable=True)
     unit_note: Mapped[str] = mapped_column(String(64), nullable=False)
     source_ref: Mapped[str] = mapped_column(String(512), nullable=False)
@@ -56,6 +59,11 @@ class StatementReport(CanonicalIdentityMixin, Base):
         back_populates="report",
         cascade="all, delete-orphan",
         order_by="StatementLineItem.statement_type, StatementLineItem.sort_order",
+    )
+    corrections: Mapped[list[StatementCorrection]] = relationship(
+        back_populates="report",
+        cascade="all, delete-orphan",
+        order_by="StatementCorrection.created_at",
     )
 
 
@@ -156,7 +164,41 @@ class StatementNormalizedItem(CanonicalIdentityMixin, Base):
     report: Mapped[StatementReport] = relationship()
 
 
+class StatementCorrection(CanonicalIdentityMixin, Base):
+    """人工修正审计（B05）：只增不改；发布后不得再新增。"""
+
+    __tablename__ = "statement_correction"
+    __table_args__ = (
+        CheckConstraint(
+            "column_key in ('value_end', 'value_begin', 'value_current', 'value_prior')",
+            name="ck_statement_correction_column",
+        ),
+        Index(
+            "ix_statement_correction_report",
+            "report_id",
+            "statement_type",
+            "item_name",
+        ),
+    )
+
+    report_id: Mapped[UUID] = mapped_column(
+        PG_UUID(as_uuid=True),
+        ForeignKey("statement_report.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    statement_type: Mapped[str] = mapped_column(String(64), nullable=False)
+    item_name: Mapped[str] = mapped_column(String(255), nullable=False)
+    column_key: Mapped[str] = mapped_column(String(32), nullable=False)
+    old_value: Mapped[Decimal | None] = mapped_column(Numeric(24, 4), nullable=True)
+    new_value: Mapped[Decimal | None] = mapped_column(Numeric(24, 4), nullable=True)
+    reason: Mapped[str] = mapped_column(Text, nullable=False)
+    operator: Mapped[str] = mapped_column(String(128), nullable=False)
+
+    report: Mapped[StatementReport] = relationship(back_populates="corrections")
+
+
 __all__ = [
+    "StatementCorrection",
     "StatementLineItem",
     "StatementNormalizedItem",
     "StatementReport",

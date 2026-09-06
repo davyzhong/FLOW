@@ -54,6 +54,7 @@ from flow_api.infrastructure.models.publishing import (
     ReportSnapshotItem,
 )
 from flow_api.infrastructure.models.statement import (
+    StatementCorrection,
     StatementLineItem,
     StatementNormalizedItem,
     StatementReport,
@@ -102,6 +103,7 @@ __all__ = [
     "ScenarioVersion",
     "SourceFile",
     "SourceRecord",
+    "StatementCorrection",
     "StatementLineItem",
     "StatementNormalizedItem",
     "StatementLineMapping",

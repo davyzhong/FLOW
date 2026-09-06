@@ -2362,6 +2362,241 @@
         }
       }
     },
+    "/api/v1/statements/{report_id}/corrections": {
+      "post": {
+        "tags": [
+          "statements"
+        ],
+        "summary": "Add Statement Correction",
+        "operationId": "add_statement_correction_api_v1_statements__report_id__corrections_post",
+        "parameters": [
+          {
+            "name": "report_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Report Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CorrectionCreateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CorrectionResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatementErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatementErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatementErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "statements"
+        ],
+        "summary": "List Statement Corrections",
+        "operationId": "list_statement_corrections_api_v1_statements__report_id__corrections_get",
+        "parameters": [
+          {
+            "name": "report_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Report Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CorrectionListResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatementErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/statements/{report_id}/publish": {
+      "post": {
+        "tags": [
+          "statements"
+        ],
+        "summary": "Publish Statement Report",
+        "operationId": "publish_statement_report_api_v1_statements__report_id__publish_post",
+        "parameters": [
+          {
+            "name": "report_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Report Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatementPublishResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatementErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatementErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/metric-library": {
       "get": {
         "tags": [
@@ -3296,6 +3531,140 @@
           "text"
         ],
         "title": "CopilotSection"
+      },
+      "CorrectionCreateRequest": {
+        "properties": {
+          "statement_type": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Statement Type"
+          },
+          "item_name": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Item Name"
+          },
+          "column_key": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Column Key"
+          },
+          "value": {
+            "type": "string",
+            "title": "Value"
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Reason"
+          },
+          "operator": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Operator"
+          }
+        },
+        "type": "object",
+        "required": [
+          "statement_type",
+          "item_name",
+          "column_key",
+          "value",
+          "reason",
+          "operator"
+        ],
+        "title": "CorrectionCreateRequest"
+      },
+      "CorrectionListResponse": {
+        "properties": {
+          "corrections": {
+            "items": {
+              "$ref": "#/components/schemas/CorrectionResponse"
+            },
+            "type": "array",
+            "title": "Corrections"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "corrections"
+        ],
+        "title": "CorrectionListResponse"
+      },
+      "CorrectionResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "report_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Report Id"
+          },
+          "statement_type": {
+            "type": "string",
+            "title": "Statement Type"
+          },
+          "item_name": {
+            "type": "string",
+            "title": "Item Name"
+          },
+          "column_key": {
+            "type": "string",
+            "title": "Column Key"
+          },
+          "old_value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Old Value"
+          },
+          "new_value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "New Value"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          },
+          "operator": {
+            "type": "string",
+            "title": "Operator"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "report_id",
+          "statement_type",
+          "item_name",
+          "column_key",
+          "reason",
+          "operator",
+          "created_at"
+        ],
+        "title": "CorrectionResponse"
       },
       "DashboardContext": {
         "properties": {
@@ -6755,6 +7124,26 @@
         ],
         "title": "StatementLineResponse"
       },
+      "StatementPublishResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "status"
+        ],
+        "title": "StatementPublishResponse"
+      },
       "StatementReportDetailResponse": {
         "properties": {
           "id": {
@@ -6782,6 +7171,11 @@
             "type": "integer",
             "title": "Version",
             "default": 1
+          },
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "draft"
           },
           "unit_note": {
             "type": "string",
@@ -6887,6 +7281,11 @@
             "type": "integer",
             "title": "Version",
             "default": 1
+          },
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "draft"
           },
           "unit_note": {
             "type": "string",

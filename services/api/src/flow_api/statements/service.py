@@ -36,6 +36,8 @@ def _summary_from(
         stock_code=report.stock_code,
         report_kind=report.report_kind,
         period_label=report.period_label,
+        version=report.version,
+        status=report.status,
         unit_note=report.unit_note,
         source_ref=report.source_ref,
         source_sha256=report.source_sha256,

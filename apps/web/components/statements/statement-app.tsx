@@ -11,6 +11,7 @@ import {
   type StatementReportList,
 } from "../../lib/api/client";
 import { WorkflowNav } from "../dashboard/workflow-nav";
+import { ReviewPanel } from "./review-panel";
 import { DonutChart } from "./charts/donut-chart";
 import { GroupedBarChart } from "./charts/grouped-bar-chart";
 import { KpiCards } from "./charts/kpi-cards";
@@ -97,7 +98,13 @@ function StatementTable({
   );
 }
 
-function ReportDetail({ detail }: { detail: StatementReportDetail }) {
+function ReportDetail({
+  detail,
+  onChanged,
+}: {
+  detail: StatementReportDetail;
+  onChanged: () => void;
+}) {
   const kpis = buildKpis(detail);
   const waterfall = buildIncomeWaterfall(detail);
   const assetDonut = buildAssetDonut(detail);
@@ -169,6 +176,7 @@ function ReportDetail({ detail }: { detail: StatementReportDetail }) {
           <StatementTable key={section.statement_type} detail={detail} statementType={section.statement_type} />
         ))}
       </section>
+      <ReviewPanel detail={detail} onChanged={onChanged} />
     </div>
   );
 }
@@ -266,7 +274,10 @@ export function StatementApp() {
             <button type="button" onClick={retry}>重试</button>
           </div>
         ) : detailState.kind === "loaded" ? (
-          <ReportDetail detail={detailState.detail} />
+          <ReportDetail
+            detail={detailState.detail}
+            onChanged={() => setRequestKey((key) => key + 1)}
+          />
         ) : null}
       </>
     );
