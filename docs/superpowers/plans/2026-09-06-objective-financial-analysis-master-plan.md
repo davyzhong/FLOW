@@ -96,7 +96,7 @@ flowchart LR
   - 测试/证据（新增目标）：`tests/statements/test_source_intake.py`。
   - 完成标准：重复上传幂等、错误格式拒绝、认证生效、真实 S3 读写校验通过。
 
-- [ ] **B02 · 把公司专用解析脚本抽成适配接口** — 状态：todo
+- [ ] **B02 · 把公司专用解析脚本抽成适配接口** — 状态：doing（证据已落盘，待 CI 绿后勾选）
   - 依赖：B01。
   - 主要位置：scripts/p5_extract_*.py；新 statements/extraction.py。
   - 工作：定义统一抽取结果及页/表/行定位、置信与异常；脚本改为同一服务入口；保留既有三家公司适配器。
@@ -371,5 +371,6 @@ flowchart LR
 | 2026-09-06 | A02 统一事实契约 | doing | 规格 `docs/superpowers/specs/financial-facts-contract.md`；参考实现 `statements/fact_contract.py`；`tests/statements/test_fact_contract.py` 14 项通过、mypy/ruff 绿 | A03 |
 | 2026-09-06 | A03 验收数据集登记 | doing | `validation/financial_reports/`（manifest + README）：3 基线 + 2 留出（腾讯 FY2025 新期间、圆通 2026Q1 新公司，新增下载校验 SHA）；独立答案逐项带定位、容差预登记、回填禁令 | B01 |
 | 2026-09-06 | B01 上传与来源登记 | doing | 迁移 0014（statement_source）；`statements/intake.py` + `POST/GET /api/v1/statements/sources`；`tests/statements/test_source_intake.py` 10 项通过；迁移往返通过；真实 MinIO 上传圆通 PDF（201、候选全中、重复幂等、对象可读） | B02 |
+| 2026-09-06 | B02 抽取适配接口 | doing | `statements/extraction.py`：三适配器（A 股/港股繁体/业绩公告）+ 统一入口 + 显式降级；脚本改薄入口且输出零退化（与已提交 YAML 逐字节一致，JDL/腾讯重跑验证）；`tests/statements/test_extraction_adapters.py` 9 项通过（含圆通留出公司直抽、附注号/括号负数/双单位、勾稽全过）；mypy/ruff 绿 | B03 |
 
 执行者每次收尾补表：任务 ID、变更、定向测试、远端 CI、外部阻塞、下一条命令；未知内容标 unknown，不沿用过期状态。
