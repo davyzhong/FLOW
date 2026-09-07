@@ -110,7 +110,7 @@ def generate(out_dir: Path, company_filter: str | None) -> list[Path]:
         StatementReport,
     )
     from flow_api.statements.normalization import load_alias_map, normalize_report
-    from flow_api.statements.objective_report_html import render_objective_report_v2
+    from flow_api.statements.objective_report_html import render_objective_report_v3
     from flow_api.statements.objective_report_pdf import print_pdf
     from sqlalchemy import delete, func, select
     from sqlalchemy.orm import Session
@@ -151,7 +151,7 @@ def generate(out_dir: Path, company_filter: str | None) -> list[Path]:
             ).all()
             result = ObjectiveAnalysisService(session).analyze(report.id)
             generated_at = datetime.now(CST)
-            html = render_objective_report_v2(
+            html = render_objective_report_v3(
                 report, result, normalized_items, generated_at=generated_at
             )
             filename = "%s_%s_%s.pdf" % (

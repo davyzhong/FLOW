@@ -17,7 +17,7 @@ from flow_api.analysis.objective import (
     ObjectiveEntryResult,
     ObjectiveStatus,
 )
-from flow_api.statements.objective_report_html import render_objective_report_v2
+from flow_api.statements.objective_report_html import render_objective_report_v3
 from flow_api.statements.objective_report_pdf import ChromiumNotFoundError, print_pdf
 
 REPORT = SimpleNamespace(
@@ -112,7 +112,7 @@ def _result() -> ObjectiveAnalysisResult:
 
 
 def _render() -> str:
-    return render_objective_report_v2(REPORT, _result(), NORMALIZED, generated_at=GENERATED)
+    return render_objective_report_v3(REPORT, _result(), NORMALIZED, generated_at=GENERATED)
 
 
 def test_v2_cover_summary_and_structure() -> None:
@@ -120,7 +120,7 @@ def test_v2_cover_summary_and_structure() -> None:
     assert "测试公司" in html and "000000.SZ" in html and "2026Q1" in html
     assert "flow.analysis.objective_finance.v1" in html
     # 摘要：金额格式化（亿）与同比
-    assert "营业收入 213.70 万" in html or "213.70" in html
+    assert "21.37 亿" in html
     assert "同比" in html
     # 章节
     for heading in ("摘要", "盈利与现金", "资产、资本与偿债",
@@ -130,10 +130,10 @@ def test_v2_cover_summary_and_structure() -> None:
 
 def test_v2_comparison_bars_and_dupont() -> None:
     html = _render()
-    assert "bar-fill" in html
+    assert "data:image/png;base64," in html
     assert "上年同期" in html
     # 杜邦：期末口径三因子
-    assert "ROE（期末权益口径）" in html
+    assert "杜邦分解" in html and "ROE" in html
     assert "净利率" in html and "总资产周转率" in html and "权益乘数" in html
     # 数值格式化：亿/万
     assert "亿" in html or "万" in html
@@ -144,7 +144,7 @@ def test_v2_boundary_and_appendix() -> None:
     assert "毛利率" in html and "数据不足" in html
     assert "归一化报表逐行对比" in html
     assert "营业收入" in html  # 附录含逐行
-    assert "该报告未披露对应数据" in html or "流动负债合计" in html
+    assert "现金流量表" in html
 
 
 def test_v2_escapes_html() -> None:
@@ -153,7 +153,7 @@ def test_v2_escapes_html() -> None:
         item_name="<script>x</script>", item_id=None,
         value_current=1, value_prior=None, value_begin=None, value_end=None,
     )
-    html = render_objective_report_v2(REPORT, _result(), [malicious], generated_at=GENERATED)
+    html = render_objective_report_v3(REPORT, _result(), [malicious], generated_at=GENERATED)
     assert "<script>x</script>" not in html
 
 
