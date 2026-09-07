@@ -36,7 +36,11 @@ def _finish(fig: Any) -> bytes:
     import io
 
     buffer = io.BytesIO()
-    fig.savefig(buffer, format="png", dpi=DPI, facecolor="white")
+    # bbox_inches="tight" 把画布外的元素（如 suptitle y>1）一并纳入输出，避免裁切
+    fig.savefig(
+        buffer, format="png", dpi=DPI, facecolor="white",
+        bbox_inches="tight", pad_inches=0.08,
+    )
     plt.close(fig)
     return buffer.getvalue()
 

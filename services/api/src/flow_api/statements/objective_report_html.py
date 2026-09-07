@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import base64
 import html
+import re
 from datetime import datetime
 from decimal import Decimal, InvalidOperation
 from typing import Any
@@ -23,7 +24,7 @@ from flow_api.statements.objective_report_charts import (
 )
 
 _PRINT_CSS = """
-  @page { size: A4; margin: 14mm 12mm; }
+  /* 纸张与页边距由 CDP Page.printToPDF 控制（页脚页码需其 margin 空间） */
   :root { color-scheme: light; }
   * { box-sizing: border-box; }
   body { font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
@@ -59,9 +60,6 @@ _PRINT_CSS = """
   .reason { color: #9a6700; font-size: 8.8pt; }
   .refs { color: #6b7280; font-size: 8pt; font-family: "JetBrains Mono", Menlo, monospace; }
   .muted { color: #6b7280; }
-  .footer { margin-top: 24px; padding-top: 8px; border-top: 1px solid #ccd3e0;
-            color: #6b7280; font-size: 8.3pt; }
-  .pagebreak { page-break-before: always; }
   .keep { page-break-inside: avoid; }
   li { page-break-inside: avoid; }
 """
@@ -136,6 +134,22 @@ def _delta_tone(current: Decimal | None, prior: Decimal | None) -> str:
     if delta is None:
         return ""
     return "up" if delta >= 0 else "down"
+
+
+_NUMBER_RE = re.compile(r"^-?\d+(\.\d+)?$")
+
+
+def _round_engine_value(value: Any) -> str:
+    """引擎数值展示取整：比率 4 位小数、百分数 2 位小数；非纯数值原样返回。"""
+    text = str(value).strip()
+    is_percent = text.endswith("%")
+    core = text[:-1] if is_percent else text
+    if not _NUMBER_RE.fullmatch(core):
+        return text
+    number = Decimal(core)
+    quantum = Decimal("0.01") if is_percent else Decimal("0.0001")
+    rounded = format(number.quantize(quantum).normalize(), "f")
+    return f"{rounded}%" if is_percent else rounded
 
 
 class _Facts:
@@ -394,11 +408,12 @@ def render_objective_report_v3(
     engine_rows = []
     not_computable: list[str] = []
     for entry in result.entries:
+        display_value = _esc(_round_engine_value(entry.value)) if entry.value else "—"
         engine_rows.append(
             "<tr>"
             f"<td>{_esc(entry.name)}</td>"
             f"<td class='status-{_esc(entry.status.value)}'>{_esc(entry.status.value)}</td>"
-            f"<td class='value'>{_esc(entry.value) if entry.value else '—'}</td>"
+            f"<td class='value'>{display_value}</td>"
             f"<td>{_esc(entry.caliber_note)}"
             + (f'<div class="reason">{_esc(entry.reason)}</div>' if entry.reason else "")
             + f"<div class='refs'>{_esc('、'.join(entry.refs))}</div></td>"
@@ -503,7 +518,8 @@ def render_objective_report_v3(
   <h1>客观财务分析报告｜{_esc(report.company_name)}</h1>
   <div class="meta">
     股票代码 {_esc(report.stock_code)} · 报告类型 {_esc(report.report_kind)} ·
-    期间 {_esc(report.period_label)} · 单位 {unit}<br>
+    期间 {_esc(report.period_label)}<br>
+    源数据单位 {unit} · 展示量纲 亿元为主（小值自动万元，每股类为元）<br>
     分析目录 {_esc(result.catalog_id)} · 生成时间 {generated}（Asia/Shanghai）
   </div>
 </div>
@@ -570,18 +586,12 @@ if current_ratio is not None else '—'}</li>
 <tbody>{''.join(engine_rows)}</tbody>
 </table>
 
-<div class="pagebreak"></div>
 <h2>六、数据边界与不可算项</h2>
 {boundary}
 <p class="muted">未披露的数据不做推断；上述边界以披露原文为准。</p>
 
 <h2>附录：归一化报表逐行对比</h2>
 {appendix}
-
-<div class="footer">
-{_esc(report.company_name)} {_esc(report.period_label)} · FLOW 客观财务分析引擎
-（目录 {_esc(result.catalog_id)}）· 生成时间 {generated} · 数据以披露原文为准
-</div>
 </body>
 </html>
 """

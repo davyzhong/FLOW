@@ -22,6 +22,7 @@ dependencies = [
   "uvicorn[standard]>=0.35,<1",
   "pdfplumber>=0.11",
   "matplotlib>=3.11.1",
+  "websockets>=17.1",
 ]
 
 [dependency-groups]

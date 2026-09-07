@@ -12,7 +12,6 @@ HTML 渲染 → 固定 Chromium 打印 PDF。
 from __future__ import annotations
 
 import argparse
-import subprocess
 import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -68,7 +67,6 @@ def seed_reports() -> None:
     import hashlib
 
     import yaml as yaml_lib
-
     from flow_api.infrastructure.db import get_session_factory
     from flow_api.statements.importer import import_statement_report
 
@@ -104,7 +102,7 @@ def seed_reports() -> None:
 
 def generate(out_dir: Path, company_filter: str | None) -> list[Path]:
     from flow_api.analysis.objective import ObjectiveAnalysisService
-    from flow_api.infrastructure.db import get_engine, get_session_factory
+    from flow_api.infrastructure.db import get_engine
     from flow_api.infrastructure.models.statement import (
         StatementNormalizedItem,
         StatementReport,
@@ -112,7 +110,7 @@ def generate(out_dir: Path, company_filter: str | None) -> list[Path]:
     from flow_api.statements.normalization import load_alias_map, normalize_report
     from flow_api.statements.objective_report_html import render_objective_report_v3
     from flow_api.statements.objective_report_pdf import print_pdf
-    from sqlalchemy import delete, func, select
+    from sqlalchemy import delete, select
     from sqlalchemy.orm import Session
 
     run_migrations()
@@ -154,13 +152,20 @@ def generate(out_dir: Path, company_filter: str | None) -> list[Path]:
             html = render_objective_report_v3(
                 report, result, normalized_items, generated_at=generated_at
             )
-            filename = "%s_%s_%s.pdf" % (
+            filename = "{}_{}_{}.pdf".format(
                 (report.period_label or "").replace("/", "-"),
                 (report.company_name or "company").replace("/", "-"),
                 generated_at.strftime("%Y%m%d%H%M%S"),
             )
             out_path = out_dir / filename
-            print_pdf(html, out_path=out_path)
+            print_pdf(
+                html,
+                out_path=out_path,
+                footer_left=(
+                    f"{report.company_name} {report.period_label}"
+                    " · FLOW 客观财务分析引擎"
+                ),
+            )
             computed = sum(
                 1 for entry in result.entries if entry.status.value == "computed"
             )
