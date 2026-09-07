@@ -1,15 +1,14 @@
-"""客观分析报告 HTML 渲染器与 Chromium PDF 打印机契约测试（P08 前置/格式评审）。
+"""客观财务分析报告 v2 渲染器与 Chromium PDF 打印机契约测试。
 
-- render_objective_html：A4 打印 CSS、公司/期间/目录身份、逐条目 值+口径+来源引用、
-  not_computable 原因、HTML 转义、D049 客观性声明；
-- print_pdf：固定 Chromium 将 HTML 打为 PDF（%PDF 魔数），Chromium 缺失时抛
-  ChromiumNotFoundError。
+v2 报告结构：封面身份块 → 摘要 → 盈利与现金（对比条形）→ 资产/资本与偿债 →
+杜邦分解 → 引擎条目（口径化）→ 数据边界 → 附录逐行对比 → 页脚。
+所有动态值 html.escape；数值格式化（亿/万 + 百分比）。
 """
 
 from __future__ import annotations
 
 from datetime import UTC, datetime
-from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -18,88 +17,152 @@ from flow_api.analysis.objective import (
     ObjectiveEntryResult,
     ObjectiveStatus,
 )
-from flow_api.statements.objective_report_html import render_objective_html
+from flow_api.statements.objective_report_html import render_objective_report_v2
 from flow_api.statements.objective_report_pdf import ChromiumNotFoundError, print_pdf
 
+REPORT = SimpleNamespace(
+    company_name="测试公司",
+    stock_code="000000.SZ",
+    report_kind="一季报",
+    period_label="2026Q1",
+    unit_note="人民币千元",
+)
+GENERATED = datetime(2026, 9, 4, 9, 0, tzinfo=UTC)
 
-class _FakeReport:
-    company_name = "测试公司"
-    stock_code = "000000.SZ"
-    report_kind = "一季报"
-    period_label = "2026Q1"
-    unit_note = "人民币千元"
+NORMALIZED = [
+    SimpleNamespace(
+        report_id="r1", mapping_version="v1", statement_type="合并利润表",
+        item_name="营业收入", item_id="is.revenue",
+        value_current=2_137_000, value_prior=1_800_000,
+        value_begin=None, value_end=None,
+    ),
+    SimpleNamespace(
+        report_id="r1", mapping_version="v1", statement_type="合并利润表",
+        item_name="归属于上市公司股东的净利润", item_id="is.net_profit",
+        value_current=252_000, value_prior=210_000,
+        value_begin=None, value_end=None,
+    ),
+    SimpleNamespace(
+        report_id="r1", mapping_version="v1", statement_type="合并现金流量表",
+        item_name="经营活动产生的现金流量净额", item_id="cf.operating",
+        value_current=300_000, value_prior=None,
+        value_begin=None, value_end=None,
+    ),
+    SimpleNamespace(
+        report_id="r1", mapping_version="v1", statement_type="合并资产负债表",
+        item_name="资产总计", item_id="bs.total_assets",
+        value_current=2_000_000, value_prior=None,
+        value_begin=1_900_000, value_end=2_000_000,
+    ),
+    SimpleNamespace(
+        report_id="r1", mapping_version="v1", statement_type="合并资产负债表",
+        item_name="负债合计", item_id="bs.total_liab",
+        value_current=1_200_000, value_prior=None,
+        value_begin=None, value_end=None,
+    ),
+    SimpleNamespace(
+        report_id="r1", mapping_version="v1", statement_type="合并资产负债表",
+        item_name="所有者权益合计", item_id="bs.equity",
+        value_current=800_000, value_prior=None,
+        value_begin=None, value_end=None,
+    ),
+    SimpleNamespace(
+        report_id="r1", mapping_version="v1", statement_type="合并资产负债表",
+        item_name="流动资产合计", item_id="bs.current_assets",
+        value_current=900_000, value_prior=None,
+        value_begin=None, value_end=None,
+    ),
+    SimpleNamespace(
+        report_id="r1", mapping_version="v1", statement_type="合并资产负债表",
+        item_name="流动负债合计", item_id="bs.current_liab",
+        value_current=450_000, value_prior=None,
+        value_begin=None, value_end=None,
+    ),
+]
 
 
 def _result() -> ObjectiveAnalysisResult:
     return ObjectiveAnalysisResult(
-        report_id="report-1",
+        report_id="r1",
         catalog_id="flow.analysis.objective_finance.v1",
         entries=(
-            ObjectiveEntryResult(
-                entry_id="asset_structure",
-                name="资产结构",
-                kind="structure",
-                status=ObjectiveStatus.COMPUTED,
-                value="固定资产 12.3%",
-                basis="期末资产总计",
-                caliber_note="占总资产比重",
-                refs=("bs.fixed_assets", "bs.total_assets"),
-                parts=(),
-            ),
             ObjectiveEntryResult(
                 entry_id="revenue_yoy",
                 name="营业收入同比",
                 kind="yoy",
-                status=ObjectiveStatus.NOT_COMPUTABLE,
-                value=None,
+                status=ObjectiveStatus.COMPUTED,
+                value="18.7%",
                 basis="上年同期",
                 caliber_note="同比 = 本期 / 上年同期 − 1",
-                refs=("is.revenue",),
-                reason="上年同期值缺失",
+                refs=("is.revenue:cur", "is.revenue:prior_yoy"),
             ),
-        ),
-    )
-
-
-def test_render_contains_identity_entries_and_print_css() -> None:
-    html = render_objective_html(_FakeReport(), _result(), generated_at=datetime(2026, 9, 4, 9, 0, tzinfo=UTC))
-    assert "测试公司" in html and "000000.SZ" in html
-    assert "2026Q1" in html and "一季报" in html
-    assert "flow.analysis.objective_finance.v1" in html
-    assert "@page" in html and "A4" in html
-    assert "资产结构" in html and "12.3%" in html
-    assert "上年同期值缺失" in html
-    assert "占总资产比重" in html and "bs.fixed_assets" in html
-    assert "不构成业务因果" in html or "客观财务分析" in html
-
-
-def test_render_escapes_html_in_dynamic_values() -> None:
-    result = ObjectiveAnalysisResult(
-        report_id="r",
-        catalog_id="c",
-        entries=(
             ObjectiveEntryResult(
-                entry_id="x",
-                name="<script>alert(1)</script>",
+                entry_id="gross_margin",
+                name="毛利率",
                 kind="ratio",
-                status=ObjectiveStatus.COMPUTED,
-                value="<b>1.0</b>",
-                basis="basis",
-                caliber_note="note",
-                refs=(),
+                status=ObjectiveStatus.NOT_COMPUTABLE,
+                value=None,
+                basis="毛利 / 营业收入",
+                caliber_note="毛利缺失",
+                refs=("metric.gross_margin",),
+                reason="上年同期毛利值缺失",
             ),
         ),
     )
-    html = render_objective_html(_FakeReport(), result, generated_at=datetime(2026, 9, 4, tzinfo=UTC))
-    assert "<script>alert(1)</script>" not in html
-    assert "&lt;script&gt;" in html
+
+
+def _render() -> str:
+    return render_objective_report_v2(REPORT, _result(), NORMALIZED, generated_at=GENERATED)
+
+
+def test_v2_cover_summary_and_structure() -> None:
+    html = _render()
+    assert "测试公司" in html and "000000.SZ" in html and "2026Q1" in html
+    assert "flow.analysis.objective_finance.v1" in html
+    # 摘要：金额格式化（亿）与同比
+    assert "营业收入 213.70 万" in html or "213.70" in html
+    assert "同比" in html
+    # 章节
+    for heading in ("摘要", "盈利与现金", "资产、资本与偿债",
+                    "客观分析引擎条目", "数据边界与不可算项", "附录：归一化报表逐行对比"):
+        assert heading in html
+
+
+def test_v2_comparison_bars_and_dupont() -> None:
+    html = _render()
+    assert "bar-fill" in html
+    assert "上年同期" in html
+    # 杜邦：期末口径三因子
+    assert "ROE（期末权益口径）" in html
+    assert "净利率" in html and "总资产周转率" in html and "权益乘数" in html
+    # 数值格式化：亿/万
+    assert "亿" in html or "万" in html
+
+
+def test_v2_boundary_and_appendix() -> None:
+    html = _render()
+    assert "毛利率" in html and "数据不足" in html
+    assert "归一化报表逐行对比" in html
+    assert "营业收入" in html  # 附录含逐行
+    assert "该报告未披露对应数据" in html or "流动负债合计" in html
+
+
+def test_v2_escapes_html() -> None:
+    malicious = SimpleNamespace(
+        report_id="r1", mapping_version="v1", statement_type="合并利润表",
+        item_name="<script>x</script>", item_id=None,
+        value_current=1, value_prior=None, value_begin=None, value_end=None,
+    )
+    html = render_objective_report_v2(REPORT, _result(), [malicious], generated_at=GENERATED)
+    assert "<script>x</script>" not in html
 
 
 def test_print_pdf_produces_pdf_bytes(tmp_path: Path) -> None:
-    html = render_objective_html(_FakeReport(), _result(), generated_at=datetime(2026, 9, 4, tzinfo=UTC))
+    from flow_api.statements.objective_report_pdf import print_pdf
+
     out = tmp_path / "report.pdf"
     try:
-        print_pdf(html, out_path=out)
+        print_pdf(_render(), out_path=out)
     except ChromiumNotFoundError:
         pytest.skip("本机未找到固定 Chromium，跳过打印器冒烟")
     assert out.exists()

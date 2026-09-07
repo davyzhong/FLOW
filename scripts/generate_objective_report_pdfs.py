@@ -110,7 +110,7 @@ def generate(out_dir: Path, company_filter: str | None) -> list[Path]:
         StatementReport,
     )
     from flow_api.statements.normalization import load_alias_map, normalize_report
-    from flow_api.statements.objective_report_html import render_objective_html
+    from flow_api.statements.objective_report_html import render_objective_report_v2
     from flow_api.statements.objective_report_pdf import print_pdf
     from sqlalchemy import delete, func, select
     from sqlalchemy.orm import Session
@@ -143,9 +143,17 @@ def generate(out_dir: Path, company_filter: str | None) -> list[Path]:
                 failures.append((report.company_name, str(error)[:160]))
                 print(f"  [跳过] {report.company_name} {report.period_label}：归一化失败")
                 continue
+            normalized_items = session.scalars(
+                select(StatementNormalizedItem).where(
+                    StatementNormalizedItem.report_id == report.id,
+                    StatementNormalizedItem.mapping_version == alias_version,
+                )
+            ).all()
             result = ObjectiveAnalysisService(session).analyze(report.id)
             generated_at = datetime.now(CST)
-            html = render_objective_html(report, result, generated_at=generated_at)
+            html = render_objective_report_v2(
+                report, result, normalized_items, generated_at=generated_at
+            )
             filename = "%s_%s_%s.pdf" % (
                 (report.period_label or "").replace("/", "-"),
                 (report.company_name or "company").replace("/", "-"),
