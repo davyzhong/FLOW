@@ -22,6 +22,32 @@
 - 本文件其余章节（第 1–5 节）为 2026-09-04 登记内容，按登记纪律原样保留；
   与上述刷新冲突之处以本节为准。
 
+## 0.1 P01 + P02 实施记录（2026-09-07，接 §0 刷新）
+
+**P01（00e5655）**：C02 已实施——MPM 语义重构（`metrics/mpm_semantics.py` + 迁移 0019
+`mpm_review` JSONB，前向 NULL=未核验；七条 `mpm: true` 全部改 false 并逐项判定：
+FCF/EBITDA 家族 candidate、operating_profit management_caliber、direct_cost/
+collection_rate not_applicable），导入器加载即强制不变量；C03/C04/C18 术语订正随
+YAML 条目落地；C01 净现比复用确认（单位倍）+ 渲染层负净利降级；别名 resolver
+（`metric_library_store/search.py`）；I08 盘点完成——费用率定为派生展示不新增定义，
+is.rnd_exp 缺科目映射登记进 P02；C05 盘点结论——净债务不收录，未来默认口径=
+有息债务−现金及现金等价物。守护测试 `tests/metrics/test_mpm_classification.py`。
+
+**P02（本提交）**：I06/I14 已实现（合同层）——`config/analysis/objective_topics_v1.yaml`
++ `analysis/topics.py`：四问（增长/利润/资金/现金）× 七专题（六专题 + 横向偿债风险）
+多对多映射，主题合同含 topic_id/metric_refs/required_facts/allowed_grains/
+comparison_modes/unavailable_reasons；I07 已实现——essential 十指标默认子集（每项带
+替代与不可用条件，元数据标记不缩减词典）；I15/C16/C17 已实现（合同层）——
+`metrics/comparison_contract.py`：币种/范围/期间/重述/存量流量五类类型化不可比原因 +
+预算完成率守卫（无版本/粒度不匹配/零负预算均类型化拒绝）；C09/C11 已实现（合同层）——
+账龄披露层与客户下钻按可用性禁用规则入主题合同；`metric_library_store/coverage.py`
+四层覆盖率（登记/可执行/源数据覆盖/展示启用分层蕴含、逐指标行 + 分层 summary）。
+对应行状态更新：I06 缺口→合同层已实现（展示层待 P07）；I07 部分→合同层完成；
+I13 缺口→合同规则落地（样本级记录待 P04）；I14 缺口→合同层已实现；
+I15 部分→比较合同落地（同行比较前提待 P04+）；C09/C11/C16/C17 待修→合同层落地。
+守护测试 `tests/analysis/test_topic_contracts.py`（12 项）、
+`tests/metrics/test_coverage_layers.py`（3 项）。
+
 ---
 
 - 登记日期：2026-09-04（执行 P00 时点）；登记人：FLOW 会话（机器可核验部分）

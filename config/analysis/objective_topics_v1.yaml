@@ -1,0 +1,154 @@
+# 客观分析主题合同 v1（P02，I06/I07/I14；四问统领 + 六专题展开 + 横向偿债风险）
+#
+# 原则：
+# - 主题是"阅读路线 + 可用性合同"，不是新指标口径；metric_refs 只引用
+#   flow.metric_dictionary.v1 已登记代码，不另建第二套口径（D047/D049）。
+# - 四问（增长/利润/资金/现金）与专题是多对多：收入服务增长与盈利；
+#   效率同时影响资金和利润；预算执行是贯穿性比较场景；偿债与风险为横向专题。
+# - 每个主题声明可用性前提：required_facts 缺失、维度事实缺失、比较前提缺失时，
+#   主题给出解释性空状态（unavailable_reasons），不返回 0、不静默换期间。
+# - essential 十指标是默认阅读子集（元数据标记），完整词典继续承担解释与治理。
+
+topics_catalog_id: flow.analysis.objective_topics.v1
+status: draft
+decision_ref: D049
+created: 2026-09-07
+
+questions:
+  growth:
+    name: 增长怎样
+    default_metrics: [revenue_growth, net_profit_growth]
+  profit:
+    name: 利润怎样
+    default_metrics: [gross_margin, net_margin]
+  capital:
+    name: 资金用得怎样
+    default_metrics: [dso_days, total_asset_turnover]
+  cash:
+    name: 现金怎样
+    default_metrics: [ocf_net_profit_ratio, free_cash_flow]
+
+# 十指标默认子集（每项含替代与不可用条件；标记是元数据，不新增口径）
+essential_metrics:
+  - metric_code: revenue_growth
+    question: growth
+    unavailable_when: 上年同期收入缺失（not_computable，原因 missing_operand）
+  - metric_code: net_profit_growth
+    question: growth
+    unavailable_when: 上年同期净利润缺失或基数为零（not_computable）
+  - metric_code: gross_margin
+    question: profit
+    unavailable_when: 营业成本缺失（not_computable，原因 missing_operand）
+  - metric_code: net_margin
+    question: profit
+    unavailable_when: 收入或净利润缺失
+  - metric_code: roe
+    question: profit
+    unavailable_when: 权益缺失或为零/为负（negative_denominator，需人工解读）
+  - metric_code: debt_asset_ratio
+    question: capital
+    unavailable_when: 负债或资产缺失（横向偿债提示）
+  - metric_code: current_ratio
+    question: capital
+    unavailable_when: 流动资产或流动负债缺失
+  - metric_code: dso_days
+    question: capital
+    alternative: ar_turnover
+    unavailable_when: 应收或收入缺失；单季未年化提示
+  - metric_code: ocf_net_profit_ratio
+    question: cash
+    unavailable_when: 净利润为负或为零（降级为绝对额展示，不显示正常倍数）
+  - metric_code: free_cash_flow
+    question: cash
+    unavailable_when: 经营现金流或资本开支缺失；管理口径候选（MPM candidate）标注保留
+
+topics:
+  - topic_id: revenue
+    name: 收入
+    questions: [growth, profit]
+    metric_refs: [revenue_growth, operating_profit_growth]
+    required_facts: [is.revenue]
+    allowed_grains: [consolidated, segment_disclosure]
+    comparison_modes: [yoy, prior_year, budget_when_available]
+    charts: [kpi, trend, segment_contribution]
+    unavailable_reasons:
+      missing_fact: 收入事实缺失，主题不可用（不输出 0）
+      no_segment_disclosure: 无披露分部时禁用分部下钻，不把集团总额平均分配
+    notes: 应收增速与收入增速联看（信号非因果）在 P03 接入。
+  - topic_id: cost
+    name: 成本
+    questions: [profit]
+    metric_refs: [gross_margin, direct_cost]
+    required_facts: [is.revenue, is.cogs]
+    allowed_grains: [consolidated]
+    comparison_modes: [yoy, prior_year]
+    charts: [ratio_trend, cost_structure]
+    unavailable_reasons:
+      missing_fact: 成本事实缺失，收入成本配比不可用
+      no_volume_fact: 无业务量事实时不制造单位成本（cost_per_order 需订单事实）
+    notes: 可加和成本桥在 P03 拆解层实现，须守恒。
+  - topic_id: profit
+    name: 利润
+    questions: [growth, profit]
+    metric_refs: [gross_margin, operating_margin, net_margin, operating_profit_growth]
+    required_facts: [is.revenue, is.net_profit]
+    allowed_grains: [consolidated]
+    comparison_modes: [yoy, prior_year]
+    charts: [profit_bridge, margin_trend]
+    unavailable_reasons:
+      missing_fact: 利润事实缺失
+      no_adjusted_disclosure: 无披露调整项时禁用调整后利润展示（只列法定层次）
+    notes: 主营经营利润、营业利润、调整后利润分列，不混同（C04/C18）。
+  - topic_id: budget_execution
+    name: 预算执行
+    questions: [growth]
+    metric_refs: [revenue_growth]
+    required_facts: [is.revenue]
+    required_extra: [budget_version]
+    allowed_grains: [consolidated, budget_grain_matched]
+    comparison_modes: [budget_month, budget_ytd]
+    charts: [actual_vs_budget, variance_contribution]
+    unavailable_reasons:
+      no_budget_version: 无预算版本时主题不可用；不拿同比冒充预算
+      budget_version_ambiguous: 多个预算版本未指定时不可比
+      nonpositive_budget: 预算为零或为负时不输出完成率（无意义且误导）
+      grain_mismatch: 预算粒度与实际粒度不一致时禁止重复联接放大
+    notes: 预算是贯穿主题的比较场景；前提具备才可选。
+  - topic_id: expense
+    name: 费用
+    questions: [profit]
+    metric_refs: [net_margin]
+    required_facts: [is.selling_exp, is.admin_exp, is.fin_exp]
+    required_facts_optional: [is.rnd_exp]
+    allowed_grains: [consolidated]
+    comparison_modes: [yoy, prior_year]
+    charts: [expense_structure, expense_trend]
+    unavailable_reasons:
+      missing_fact: 费用科目事实缺失
+      no_revenue_denominator: 收入分母缺失时不输出费用率（不输出伪精确比率）
+    notes: 期间费用率为派生展示（P01 决定），研发费用映射补齐前按三费+研发缺失降级。
+  - topic_id: efficiency
+    name: 经营效率
+    questions: [capital, profit]
+    metric_refs: [total_asset_turnover, dso_days, dio_days]
+    required_facts: [is.revenue, bs.total_assets]
+    required_facts_optional: [bs.ar, bs.inventory]
+    allowed_grains: [consolidated]
+    comparison_modes: [yoy, prior_year]
+    charts: [turnover_trend]
+    unavailable_reasons:
+      missing_fact: 周转类指标依赖余额与流量同现，缺失则不可算
+      no_aging_disclosure: 无账龄附注时禁用账龄披露层（不推断账龄分布）
+      no_customer_fact: 无客户事实时禁用客户下钻
+    notes: 公开披露到哪层做到哪层（C09）。
+  - topic_id: solvency_risk
+    name: 偿债与风险（横向）
+    questions: [capital, cash]
+    metric_refs: [debt_asset_ratio, current_ratio, interest_coverage, cash_short_debt_ratio]
+    required_facts: [bs.total_liab, bs.total_assets]
+    allowed_grains: [consolidated]
+    comparison_modes: [yoy, prior_year]
+    charts: [solvency_kpi]
+    unavailable_reasons:
+      missing_fact: 资产负债事实缺失
+    notes: 横向专题——不被六主题排除，作为资产负债/现金的补充提示。
