@@ -117,14 +117,14 @@ flowchart LR
   - 测试/证据（新增目标）：`tests/statements/test_reconciliation.py`。
   - 完成标准：缺权益表或附注不得标四表完整；现金及权益桥允许经披露解释的汇率等项；关键不平衡阻止正式发布。
 
-- [ ] **B05 · 用户核对、更正与发布事实版本** — 状态：doing（证据已落盘，待 CI 绿后勾选）
+- [x] **B05 · 用户核对、更正与发布事实版本** — 状态：done
   - 依赖：B04。
   - 主要位置：api/routes/statements.py；components/statements/statement-app.tsx；新 statements/review.py。
   - 工作：浏览器原文定位与抽取值并列、人工修正须原因与操作者；生成新版本并重新校验；复核通过后冻结事实。
   - 测试/证据（新增目标）：`tests/statements/test_fact_review.py；e2e/statements-review.spec.ts`。
   - 完成标准：修改有审计；权限校验；旧版不变；未解决关键错误不可发布。
 
-- [ ] **B06 · 通用期间与可恢复编排** — 状态：doing（证据已落盘，待 CI 绿后勾选）
+- [x] **B06 · 通用期间与可恢复编排** — 状态：done
   - 依赖：B05。
   - 主要位置：api/routes/orchestration.py、metrics/service.py、worker.py。
   - 工作：由事实期间与请求范围生成月份，移除生产路径固定演示月份；长任务提供状态、幂等键、失败重试和部分结果隔离。
@@ -134,14 +134,14 @@ flowchart LR
 
 ### M2：会计知识与可执行指标治理
 
-- [ ] **C01 · 来源与专业口径核验** — 状态：doing（证据已落盘，待 CI 绿后勾选）
+- [x] **C01 · 来源与专业口径核验** — 状态：done
   - 依赖：A03。
   - 主要位置：config/metrics/*_v1.yaml、metric_library_store/importer.py。
   - 工作：核查启用项来源、准则有效期、企业自定义与行业惯例；MPM 范围和 Non-IFRS 关系单列；不确定项标记待核。
   - 测试/证据（新增目标）：`docs/implementation/objective-analysis/caliber-audit.md`。
   - 完成标准：来源可定位、适用条件齐备；不得以科目条数或研究摘要代替权威来源验证。
 
-- [ ] **C02 · 统一指标身份与可执行定义** — 状态：doing（证据已落盘，待 CI 绿后勾选）
+- [x] **C02 · 统一指标身份与可执行定义** — 状态：done
   - 依赖：C01、B03。
   - 主要位置：metric_library_store、metrics_store、metrics；scripts/p5_query_facts.py。
   - 工作：建立字典 metric/version/caliber 到执行器绑定；区分叙述定义、可执行定义和暂不支持定义；兼容旧物流哈希。
@@ -162,7 +162,7 @@ flowchart LR
   - 测试/证据（新增目标）：`tests/integration/test_metric_library_governance.py`。
   - 完成标准：旧定义及旧快照不变；非法 AST/循环依赖/引用缺失阻止生效；操作者、差异、时间与理由可查询。
 
-- [ ] **C05 · 影响分析与新旧试算** — 状态：doing（证据已落盘，待 CI 绿后勾选）
+- [x] **C05 · 影响分析与新旧试算** — 状态：done
   - 依赖：C04。
   - 主要位置：新 metric_library_store/impact.py；api/schemas/metric_library.py。
   - 工作：查找引用指标、报告、快照与取数映射；沙盒试算差异；区分计划影响与已冻结结果，不批量改写历史。
@@ -368,7 +368,7 @@ flowchart LR
 
 - 2026-09-06：李启方《财务分析必看10个指标》文章借鉴（用户提供，webReader 抓取）并入——D01 增补四问骨架/核心十指标默认视图/增长质量联查候选；指标目录缺口（期间费用率、净现比，已实查 v1 YAML 确认）转 v1.1 治理候选；原文全文归档 `02_research/original/12_财务分析必看10个指标_资料.md`，借鉴清单见 `02_research/synthesis/财务分析十指标文章_借鉴升级清单.md`，Obsidian 知识库同步入库（数据分析星球/）；无决策变更。
 
-**当前：C06 已提交待 CI；M2 完成，下一任务：D01。**
+**当前：C06 已推送（双方会话合并完成），待 CI；M2 完成，下一任务：D01。**
 
 第一条命令（A02）：阅读方向规格第 3 节五条链与 `baseline-audit.md` §2/§4，起草 `docs/superpowers/specs/financial-facts-contract.md`，随后 `cd services/api && uv run pytest tests/statements/test_fact_contract.py -q`。
 
@@ -382,13 +382,13 @@ flowchart LR
 | 2026-09-06 | B02 抽取适配接口 | **done** | `statements/extraction.py`：三适配器（A 股/港股繁体/业绩公告）+ 统一入口 + 显式降级；脚本改薄入口且输出零退化（与已提交 YAML 逐字节一致，JDL/腾讯重跑验证）；`tests/statements/test_extraction_adapters.py` 9 项通过（含圆通留出公司直抽、附注号/括号负数/双单位、勾稽全过）；mypy/ruff 绿 | B03 |
 | 2026-09-06 | B03 规范化与修订版本 | **done** | 迁移 0015（报表版本化 content_sha256 + statement_normalized_item）；`statements/normalization.py`（别名映射、合成行留痕、映射版本并存）；`tests/statements/test_normalization.py` 4 项 + test_statement_api 重述用例共 42 项通过；迁移往返通过；契约再生成 | B04 |
 | 2026-09-06 | B04 四表覆盖与质量规则 | **done** | `statements/reconciliation.py`：四态覆盖（passed/failed/missing/not_applicable）、按报告种类的必需表集合、年报缺权益表/附注永不得标完整、关键勾稽阻断发布；`tests/statements/test_reconciliation.py` 5 项通过（三真实样本 + 合成阻断例） | B05 |
-| 2026-09-06 | B05 复核更正与事实发布 | doing | 迁移 0016（statement_correction 只增不改审计 + report.status 状态机）；`statements/review.py`（更正审计、修正视图重跑勾稽、关键不平衡阻断发布、发布后锁定）；更正/发布 API + `/statements` 复核面板；`tests/statements/test_fact_review.py` 3 项 + e2e/statements-review.spec.ts 通过（并入 statements e2e 门禁） | B06 |
-| 2026-09-06 | B06 通用期间与可恢复编排 | doing | 迁移 0017（build_job）；编排期间改由批次分析窗口（事实期间）生成 + 请求范围收窄，固定演示月份移出生产路径；任务持久化（状态/结果身份/失败留痕）、同范围幂等回放、失败可重试；`tests/api/test_orchestration_api.py` 5 项通过（含范围收窄/回放/任务列表/422） | C01 |
-| 2026-09-06 | C01 来源与口径核验 | doing | `docs/implementation/objective-analysis/caliber-audit.md`：55 指标来源/口径/MPM 全量核验 + 167 科目/48 准则/32 分录模板核验；待核项显式标记（经验阈值、IFRS 18 生效期、2024 汇编编号） | C02 |
-| 2026-09-06 | C02 统一指标身份与可执行定义 | doing | `metric_library_store/binding.py`：55 项全部绑定（引擎 15 / 事实 AST 40 / 叙述 0，缺失原因如实记录）；双路径对等门禁 `tests/metrics/test_dictionary_execution_parity.py`；覆盖清单 `metric-execution-coverage.md` 机械生成防漂移；旧物流哈希由既有 parity 门禁保护 | C03 |
+| 2026-09-06 | B05 复核更正与事实发布 | **done** | 迁移 0016（statement_correction 只增不改审计 + report.status 状态机）；`statements/review.py`（更正审计、修正视图重跑勾稽、关键不平衡阻断发布、发布后锁定）；更正/发布 API + `/statements` 复核面板；`tests/statements/test_fact_review.py` 3 项 + e2e/statements-review.spec.ts 通过（并入 statements e2e 门禁） | B06 |
+| 2026-09-06 | B06 通用期间与可恢复编排 | **done** | 迁移 0017（build_job）；编排期间改由批次分析窗口（事实期间）生成 + 请求范围收窄，固定演示月份移出生产路径；任务持久化（状态/结果身份/失败留痕）、同范围幂等回放、失败可重试；`tests/api/test_orchestration_api.py` 5 项通过（含范围收窄/回放/任务列表/422） | C01 |
+| 2026-09-06 | C01 来源与口径核验 | **done** | `docs/implementation/objective-analysis/caliber-audit.md`：55 指标来源/口径/MPM 全量核验 + 167 科目/48 准则/32 分录模板核验；待核项显式标记（经验阈值、IFRS 18 生效期、2024 汇编编号） | C02 |
+| 2026-09-06 | C02 统一指标身份与可执行定义 | **done** | `metric_library_store/binding.py`：55 项全部绑定（引擎 15 / 事实 AST 40 / 叙述 0，缺失原因如实记录）；双路径对等门禁 `tests/metrics/test_dictionary_execution_parity.py`；覆盖清单 `metric-execution-coverage.md` 机械生成防漂移；旧物流哈希由既有 parity 门禁保护 | C03 |
 | 2026-09-06 | C03 期间/精度/异常语义 | doing | `metrics/financial_semantics.py`：余额口径显式（期末/平均）、单季↔累计转换规则、年化默认禁止、零分母/负权益/币种/合并范围 typed 拒绝、比率聚合先汇总分子分母、重述比较取重述版；`tests/metrics/test_financial_semantics.py` 7 组正反例通过 | C04 |
 | 2026-09-06 | C04 指标变更治理 | doing | 迁移 0018（metric_governance_event 持久化审计，替代 JSONL）；`metric_library_store/governance.py`（草稿/验证/生效/退役 + 非法 AST/循环依赖/引用缺失/并发草稿拒绝）；API：entries 三端点 + events 查询；`tests/integration/test_metric_library_governance.py` 5 项 + `test_metric_governance_api.py` 2 项通过 | C05 |
-| 2026-09-06 | C05 影响分析与新旧试算 | doing | `metric_library_store/impact.py`（下游依赖传递闭包 + Decimal 独立沙盒试算 + 冻结历史只读统计）+ `POST /entries/{id}/impact`；`tests/integration/test_metric_impact.py` 3 项通过（差异真实、缺项降级、快照不动） | C06 |
+| 2026-09-06 | C05 影响分析与新旧试算 | **done** | `metric_library_store/impact.py`（下游依赖传递闭包 + Decimal 独立沙盒试算 + 冻结历史只读统计）+ `POST /entries/{id}/impact`；`tests/integration/test_metric_impact.py` 3 项通过（差异真实、缺项降级、快照不动） | C06 |
 | 2026-09-07 | C06 指标库管理界面 | doing | `/metric-library` 增加执行绑定徽章（engine/facts/narrative + 详情）、治理记录标签页（事件审计表）、卡片内合规修订流（草稿→验证→生效，结果横幅在刷新后保留）；`e2e/metric-library-governance.spec.ts` 通过；API 响应并入执行绑定字段 | D01 |
 
 执行者每次收尾补表：任务 ID、变更、定向测试、远端 CI、外部阻塞、下一条命令；未知内容标 unknown，不沿用过期状态。
