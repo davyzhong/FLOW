@@ -62,6 +62,8 @@ _PRINT_CSS = """
   .footer { margin-top: 24px; padding-top: 8px; border-top: 1px solid #ccd3e0;
             color: #6b7280; font-size: 8.3pt; }
   .pagebreak { page-break-before: always; }
+  .keep { page-break-inside: avoid; }
+  li { page-break-inside: avoid; }
 """
 
 
@@ -181,6 +183,23 @@ def _img(png: bytes, alt: str) -> str:
     return f'<div class="chart"><img alt="{_esc(alt)}" src="{_b64(png)}"></div>'
 
 
+_ASSET_LABELS = {
+    "fixed_assets": "固定资产",
+    "ar": "应收账款",
+    "cash": "货币资金",
+    "inventory": "存货",
+    "prepayments": "预付款项",
+    "prepaid": "预付款项",
+    "other_receivables": "其他应收款",
+    "noncurrent_assets": "其他非流动资产",
+    "cip": "在建工程",
+    "intangibles": "无形资产",
+    "goodwill": "商誉",
+    "investments": "投资类资产",
+    "deferred_tax_assets": "递延所得税资产",
+}
+
+
 def render_objective_report_v3(
     report: Any,
     result: Any,
@@ -228,21 +247,24 @@ def render_objective_report_v3(
     revenue_yoy = _change_pct(revenue, revenue_prior)
     profit_yoy = _change_pct(net_profit, net_profit_prior)
 
-    # ---- 图表（matplotlib → PNG base64）----
+    # ---- 图表（matplotlib → PNG base64；金额统一换算为元后交给图表量纲） ----
+    def yuan(value: Decimal | None) -> Decimal | None:
+        if value is None:
+            return None
+        return value * (Decimal(100_000_000) / facts.scale)
+
     try:
-        chart_revenue = bar_compare("营业收入", revenue, revenue_prior)
+        chart_revenue = bar_compare("营业收入", yuan(revenue), yuan(revenue_prior))
     except ValueError:
         chart_revenue = b""
     try:
         chart_profit = bar_compare(
-            "归母净利润", net_profit, net_profit_prior, color="#e08a3c"
+            "归母净利润", yuan(net_profit), yuan(net_profit_prior), color="#e08a3c"
         )
     except ValueError:
         chart_profit = b""
     try:
-        chart_cashflow = cashflow_bars(
-            ocf, icf, fin_cf, unit_note=getattr(report, "unit_note", "")
-        )
+        chart_cashflow = cashflow_bars(yuan(ocf), yuan(icf), yuan(fin_cf))
     except ValueError:
         chart_cashflow = b""
     try:
@@ -250,33 +272,35 @@ def render_objective_report_v3(
     except ValueError:
         chart_dupont = b""
 
-    excluded_assets = (
-        "bs.total_assets", "bs.total_liab", "bs.equity",
-        "bs.current_assets", "bs.current_liab", "bs.noncurrent_liab",
-        "bs.attr_equity",
-    )
+    liability_markers = ("debt", "liab", "payable", "equity")
     asset_items = sorted(
         (
-            (name[len("bs."):], slot.get("end"))
+            (_ASSET_LABELS.get(name[len("bs."):], name[len("bs."):]),
+             yuan(slot.get("end")))
             for name, slot in facts.by_id.items()
             if name.startswith("bs.")
-            and name not in excluded_assets
+            and not name.startswith("bs._")
+            and name not in (
+                "bs.total_assets", "bs.current_assets", "bs.noncurrent_assets",
+                "bs.ap", "bs.accrued_exp", "bs.deferred_exp",
+            )
+            and not any(marker in name for marker in liability_markers)
             and _has(slot.get("end"))
         ),
-        key=lambda pair: abs(pair[1] or 0),
+        key=lambda pair: abs(pair[1]) if pair[1] is not None else Decimal(0),
         reverse=True,
     )
     try:
-        chart_assets = donut("资产结构（期末，占总资产）", asset_items[:6])
+        chart_assets = donut("资产结构（期末，选列主要资产项）", asset_items[:6])
     except ValueError:
         chart_assets = b""
     try:
         chart_capital = donut(
             "资本结构（期末）",
             [
-                ("流动负债", current_liab),
-                ("非流动负债", raw("bs.noncurrent_liab", "end")),
-                ("所有者权益", equity),
+                ("流动负债", yuan(current_liab)),
+                ("非流动负债", yuan(raw("bs.noncurrent_liab", "end"))),
+                ("所有者权益", yuan(equity)),
             ],
         )
     except ValueError:
@@ -289,13 +313,11 @@ def render_objective_report_v3(
             ("is.rnd_exp", "研发费用"),
             ("is.fin_exp", "财务费用"),
         )
-        for value in [raw(item_id, "current")]
+        for value in [yuan(raw(item_id, "current"))]
         if value is not None
     ]
     chart_expenses = (
-        hbar_structure(
-            "期间费用（本期）", expense_bars, unit_note=getattr(report, "unit_note", "")
-        )
+        hbar_structure("期间费用（本期）", expense_bars)
         if expense_bars
         else b""
     )
@@ -406,13 +428,39 @@ def render_objective_report_v3(
         )
     )
 
-    # ---- 附录（直接按归一化行渲染，item_id 或名称键均可，全部转义） ----
+    # ---- 附录（直接按归一化行渲染；块内统一量纲；每股行固定元；过滤辅助行） ----
     appendix_blocks = []
-    for statement in sorted({item.statement_type for item in normalized_items}):
+    report_items = [item for item in normalized_items
+                    if not str(item.item_name).startswith("_")]
+    for statement in sorted({item.statement_type for item in report_items}):
+        block = [item for item in report_items if item.statement_type == statement]
+        block_values: list[Decimal | None] = []
+        for item in block:
+            block_values.extend((
+                _dec(item.value_current) or _dec(item.value_end),
+                _dec(item.value_prior) or _dec(item.value_begin),
+            ))
+        peak_scaled = max(
+            (abs(v) for v in block_values if v is not None),
+            default=Decimal(0),
+        ) / facts.scale
+        block_in_yi = peak_scaled >= Decimal("0.01")
+
+        def fmt_block(value: Decimal | None, item: Any,
+                      in_yi: bool = block_in_yi) -> str:
+            if value is None:
+                return "—"
+            if "每股" in str(item.item_name):
+                return f"{value:,.2f} 元"
+            scaled = value / facts.scale
+            if in_yi:
+                text = f"{abs(scaled):,.2f} 亿"
+                return f"-{text}" if scaled < 0 else text
+            text = f"{abs(scaled) * 10000:,.0f} 万"
+            return f"-{text}" if scaled < 0 else text
+
         rows = []
-        for item in normalized_items:
-            if item.statement_type != statement:
-                continue
+        for item in block:
             current = _dec(item.value_current)
             prior = _dec(item.value_prior)
             if current is None:
@@ -428,10 +476,8 @@ def render_objective_report_v3(
             )
             rows.append(
                 f"<tr><td>{_esc(item.item_name)}</td>"
-                f"<td class='num'>"
-                f"{_fmt_yi(current / facts.scale) if current is not None else '—'}</td>"
-                f"<td class='num'>"
-                f"{_fmt_yi(prior / facts.scale) if prior is not None else '—'}</td>"
+                f"<td class='num'>{fmt_block(current, item)}</td>"
+                f"<td class='num'>{fmt_block(prior, item)}</td>"
                 f"{delta_text}</tr>"
             )
         if rows:
@@ -510,11 +556,13 @@ if current_ratio is not None else '—'}</li>
 </ul>
 
 <h2>四、杜邦分解</h2>
+<div class="keep">
 {_img(chart_dupont, "杜邦分解")}
 <table><thead><tr><th>因子</th><th>数值</th></tr></thead><tbody>
 {dupont_rows}
 </tbody></table>
 <p class="muted">口径：期末权益与总资产（未做平均余额），与平均余额口径不可直接比较。</p>
+</div>
 
 <h2>五、客观分析引擎条目（口径化结果）</h2>
 <table>
@@ -531,8 +579,8 @@ if current_ratio is not None else '—'}</li>
 {appendix}
 
 <div class="footer">
-生成：FLOW 客观财务分析引擎（目录 {_esc(result.catalog_id)}）· 生成时间 {generated} ·
-图表由 matplotlib 渲染，数据以披露原文为准。
+{_esc(report.company_name)} {_esc(report.period_label)} · FLOW 客观财务分析引擎
+（目录 {_esc(result.catalog_id)}）· 生成时间 {generated} · 数据以披露原文为准
 </div>
 </body>
 </html>
