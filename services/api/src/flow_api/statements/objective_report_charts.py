@@ -90,7 +90,8 @@ def hbar_structure(title: str, items: list[tuple[str, Decimal]], unit_note: str 
     ax.spines[["top", "right"]].set_visible(False)
     ax.grid(axis="x", alpha=0.25)
     total = sum(abs(value) for _, value in pairs) or Decimal(1)
-    for bar, (_, value) in zip(ax.patches, pairs, strict=False):
+    patches: Any = ax.patches
+    for bar, (_, value) in zip(patches, pairs, strict=False):
         share = abs(Decimal(value)) / total * 100
         ax.annotate(f"{float(value):,.0f}（{share:.0f}%）",
                     (bar.get_width(), bar.get_y() + bar.get_height() / 2),

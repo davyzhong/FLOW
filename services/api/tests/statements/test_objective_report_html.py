@@ -8,6 +8,7 @@ v2 报告结构：封面身份块 → 摘要 → 盈利与现金（对比条形�
 from __future__ import annotations
 
 from datetime import UTC, datetime
+from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
@@ -158,8 +159,6 @@ def test_v2_escapes_html() -> None:
 
 
 def test_print_pdf_produces_pdf_bytes(tmp_path: Path) -> None:
-    from flow_api.statements.objective_report_pdf import print_pdf
-
     out = tmp_path / "report.pdf"
     try:
         print_pdf(_render(), out_path=out)

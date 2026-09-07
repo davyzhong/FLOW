@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """客观财务分析报告渲染器 v3：KPI 卡片 + matplotlib 图表 + 多章节富报告。
 
 图表由 objective_report_charts 生成（PNG base64 内嵌），PDF 由固定 Chromium 打印。
@@ -103,13 +102,13 @@ def _fmt_pct_raw(value: Decimal) -> str:
 
 
 def _safe_div(numerator: Decimal | None, denominator: Decimal | None) -> Decimal | None:
-    if numerator is None or denominator in (None, Decimal(0)):
+    if numerator is None or denominator is None or denominator == 0:
         return None
     return numerator / denominator
 
 
 def _change_pct(current: Decimal | None, prior: Decimal | None) -> Decimal | None:
-    if current is None or prior in (None, Decimal(0)):
+    if current is None or prior is None or prior == 0:
         return None
     return (current - prior) / abs(prior)
 
@@ -305,13 +304,13 @@ def render_objective_report_v3(
     kpis = "".join([
         _kpi_card(
             "营业收入",
-            _fmt_yi(revenue / facts.scale) if _has(revenue) else "—",
+            _fmt_yi(revenue / facts.scale) if revenue is not None else "—",
             _delta_badge(revenue, revenue_prior),
             _delta_tone(revenue, revenue_prior),
         ),
         _kpi_card(
             "归母净利润",
-            _fmt_yi(net_profit / facts.scale) if _has(net_profit) else "—",
+            _fmt_yi(net_profit / facts.scale) if net_profit is not None else "—",
             _delta_badge(net_profit, net_profit_prior),
             _delta_tone(net_profit, net_profit_prior),
         ),
@@ -325,19 +324,21 @@ def render_objective_report_v3(
 
     # ---- 摘要叙述（纯客观） ----
     summary_sentences: list[str] = []
-    if _has(revenue):
+    if revenue is not None:
         text = f"本期营业收入 {_fmt_yi(revenue / facts.scale)}"
         if revenue_yoy is not None:
-            text += f"，同比 {_fmt_pct_raw(abs(revenue_yoy))}（{'增' if revenue_yoy >= 0 else '减'}）"
+            direction = "增" if revenue_yoy >= 0 else "减"
+            text += f"，同比 {_fmt_pct_raw(abs(revenue_yoy))}（{direction}）"
         summary_sentences.append(text + "。")
-    if _has(net_profit):
+    if net_profit is not None:
         text = f"归母净利润 {_fmt_yi(net_profit / facts.scale)}"
         if profit_yoy is not None:
-            text += f"，同比 {_fmt_pct_raw(abs(profit_yoy))}（{'增' if profit_yoy >= 0 else '减'}）"
+            direction = "增" if profit_yoy >= 0 else "减"
+            text += f"，同比 {_fmt_pct_raw(abs(profit_yoy))}（{direction}）"
         summary_sentences.append(text + "。")
-    if _has(ocf):
+    if ocf is not None:
         summary_sentences.append(f"经营活动现金流净额 {_fmt_yi(ocf / facts.scale)}。")
-    if _has(total_assets):
+    if total_assets is not None:
         summary_sentences.append(f"期末资产总计 {_fmt_yi(total_assets / facts.scale)}。")
 
     # ---- 费用表 ----
@@ -386,7 +387,9 @@ def render_objective_report_v3(
 
     boundary = (
         "<ul>"
-        + "".join(f"<li>{_esc(name)}：数据不足，未计算</li>" for name in not_computable)
+        + "".join(
+            f"<li>{_esc(name)}：数据不足，未计算</li>" for name in not_computable
+        )
         + "</ul>"
     )
 
@@ -425,8 +428,10 @@ def render_objective_report_v3(
             )
             rows.append(
                 f"<tr><td>{_esc(item.item_name)}</td>"
-                f"<td class='num'>{_fmt_yi(current / facts.scale) if current is not None else '—'}</td>"
-                f"<td class='num'>{_fmt_yi(prior / facts.scale) if prior is not None else '—'}</td>"
+                f"<td class='num'>"
+                f"{_fmt_yi(current / facts.scale) if current is not None else '—'}</td>"
+                f"<td class='num'>"
+                f"{_fmt_yi(prior / facts.scale) if prior is not None else '—'}</td>"
                 f"{delta_text}</tr>"
             )
         if rows:
@@ -466,7 +471,8 @@ def render_objective_report_v3(
 <div class="kpi-row">{kpis}</div>
 
 <h2>摘要</h2>
-{''.join(f'<p class="summary">{_esc(sentence)}</p>' for sentence in summary_sentences) or '<p class="muted">关键项目缺失。</p>'}
+{''.join(f'<p class="summary">{_esc(s)}</p>' for s in summary_sentences)
+ or '<p class="muted">关键项目缺失。</p>'}
 
 <h2>一、盈利与现金</h2>
 {_img(chart_revenue, "营业收入对比")}
@@ -475,7 +481,8 @@ def render_objective_report_v3(
 <table><thead><tr><th>指标</th><th>数值</th></tr></thead><tbody>
 <tr><td>毛利率</td><td class="num">{_fmt_pct(gross_margin)}</td></tr>
 <tr><td>净利率</td><td class="num">{_fmt_pct(net_margin)}</td></tr>
-<tr><td>净现比（经营现金流÷归母净利润）</td><td class="num">{f'{abs(ocf_ratio):.2f}' if ocf_ratio is not None else '—'}</td></tr>
+<tr><td>净现比（经营现金流÷归母净利润）</td>
+<td class="num">{f'{abs(ocf_ratio):.2f}' if ocf_ratio is not None else '—'}</td></tr>
 <tr><td>ROE（期末权益口径）</td><td class="num">{_fmt_pct(roe)}</td></tr>
 </tbody></table>
 <h3>现金流量</h3>
@@ -498,7 +505,8 @@ def render_objective_report_v3(
 {_img(chart_capital, "资本结构")}
 <ul>
 <li>资产负债率（期末）：{_fmt_pct(debt_ratio)}</li>
-<li>流动比率（期末）：{f'{current_ratio:.2f}' if current_ratio is not None else '—'}</li>
+<li>流动比率（期末）：{f'{current_ratio:.2f}'
+if current_ratio is not None else '—'}</li>
 </ul>
 
 <h2>四、杜邦分解</h2>
