@@ -2,6 +2,8 @@
 """客观财务分析报告渲染器 v3：KPI 卡片 + matplotlib 图表 + 多章节富报告。
 
 图表由 objective_report_charts 生成（PNG base64 内嵌），PDF 由固定 Chromium 打印。
+章节契约：封面身份块 → 摘要 → 盈利与现金 → 成本与费用 → 资产、资本与偿债 →
+杜邦分解 → 客观分析引擎条目 → 数据边界与不可算项 → 附录逐行对比 → 页脚。
 所有动态值 html.escape；金额格式化按报告 unit_note 换算（亿/万）。
 """
 
@@ -96,6 +98,10 @@ def _fmt_pct(value: Decimal | None) -> str:
     return f"{value * 100:.2f}%"
 
 
+def _fmt_pct_raw(value: Decimal) -> str:
+    return f"{value * 100:.1f}%"
+
+
 def _safe_div(numerator: Decimal | None, denominator: Decimal | None) -> Decimal | None:
     if numerator is None or denominator in (None, Decimal(0)):
         return None
@@ -108,29 +114,27 @@ def _change_pct(current: Decimal | None, prior: Decimal | None) -> Decimal | Non
     return (current - prior) / abs(prior)
 
 
-def _kpi_card(label: str, value: str, delta: str = "") -> str:
+def _kpi_card(label: str, value: str, delta: str = "", tone: str = "") -> str:
     return (
         f'<div class="kpi"><div class="label">{_esc(label)}</div>'
         f'<div class="value">{_esc(value)}</div>'
-        f'<div class="delta">{_esc(delta)}</div></div>'
+        f'<div class="delta {_esc(tone)}">{_esc(delta)}</div></div>'
     )
-
-
-def _fmt_pct_raw(value: Decimal) -> str:
-    return f"{value * 100:.1f}%"
 
 
 def _delta_badge(current: Decimal | None, prior: Decimal | None) -> str:
     delta = _change_pct(current, prior)
     if delta is None:
         return "—"
-    cls = "up" if delta >= 0 else "down"
     arrow = "▲" if delta >= 0 else "▼"
-    return f'{_fmt_pct_raw(abs(delta))} {arrow}'
+    return f"{_fmt_pct_raw(abs(delta))} {arrow}"
 
 
-def _fmt_pct_raw(value: Decimal) -> str:
-    return f"{value * 100:.1f}%"
+def _delta_tone(current: Decimal | None, prior: Decimal | None) -> str:
+    delta = _change_pct(current, prior)
+    if delta is None:
+        return ""
+    return "up" if delta >= 0 else "down"
 
 
 class _Facts:
@@ -163,13 +167,8 @@ class _Facts:
         slot = self.by_id.get(item_id)
         return slot.get(column) if slot else None
 
-    def fmt(self, item_id: str, column: str) -> str:
-        value = self.raw(item_id, column)
-        if value is None:
-            return "—"
-        return _fmt_yi(value / self.scale)
-
-
+    def fmt(self, value: Decimal | None, column: str = "") -> str:
+        return _fmt_yi(value / self.scale) if value is not None else "—"
 
 
 def _b64(png: bytes) -> str:
@@ -203,17 +202,27 @@ def render_objective_report_v3(
         raw("is.attr_net_profit", "prior") or raw("is.net_profit", "prior"),
     )
     cogs = raw("is.cogs", "current")
-    ocf, icf, fin_cf = (raw("cf.ocf", "current"), raw("cf.icf", "current"),
-                        raw("cf.fin_cf", "current"))
+    ocf, icf, fin_cf = (
+        raw("cf.ocf", "current"),
+        raw("cf.icf", "current"),
+        raw("cf.fin_cf", "current"),
+    )
     total_assets, total_liab = raw("bs.total_assets", "end"), raw("bs.total_liab", "end")
     equity, current_assets, current_liab = (
-        raw("bs.equity", "end"), raw("bs.current_assets", "end"),
-        raw("bs.current_liab", "end"))
+        raw("bs.equity", "end"),
+        raw("bs.current_assets", "end"),
+        raw("bs.current_liab", "end"),
+    )
 
-    gross_margin = _safe_div(revenue - cogs, revenue) if (
-        revenue is not None and cogs is not None) else None
+    gross_margin = (
+        _safe_div(revenue - cogs, revenue)
+        if (revenue is not None and cogs is not None)
+        else None
+    )
     net_margin = _safe_div(net_profit, revenue)
     roe = _safe_div(net_profit, equity)
+    asset_turnover = _safe_div(revenue, total_assets)
+    equity_multiplier = _safe_div(total_assets, equity)
     debt_ratio = _safe_div(total_liab, total_assets)
     current_ratio = _safe_div(current_assets, current_liab)
     ocf_ratio = _safe_div(ocf, net_profit)
@@ -226,26 +235,33 @@ def render_objective_report_v3(
     except ValueError:
         chart_revenue = b""
     try:
-        chart_profit = bar_compare("归母净利润", net_profit, net_profit_prior, color="#e08a3c")
+        chart_profit = bar_compare(
+            "归母净利润", net_profit, net_profit_prior, color="#e08a3c"
+        )
     except ValueError:
         chart_profit = b""
     try:
-        chart_cashflow = cashflow_bars(ocf, icf, fin_cf, unit_note=getattr(report, "unit_note", ""))
+        chart_cashflow = cashflow_bars(
+            ocf, icf, fin_cf, unit_note=getattr(report, "unit_note", "")
+        )
     except ValueError:
         chart_cashflow = b""
     try:
-        chart_dupont = dupont_chart(net_margin, _safe_div(revenue, total_assets),
-                                    _safe_div(total_assets, equity), roe)
+        chart_dupont = dupont_chart(net_margin, asset_turnover, equity_multiplier, roe)
     except ValueError:
         chart_dupont = b""
+
+    excluded_assets = (
+        "bs.total_assets", "bs.total_liab", "bs.equity",
+        "bs.current_assets", "bs.current_liab", "bs.noncurrent_liab",
+        "bs.attr_equity",
+    )
     asset_items = sorted(
         (
             (name[len("bs."):], slot.get("end"))
             for name, slot in facts.by_id.items()
             if name.startswith("bs.")
-            and name not in ("bs.total_assets", "bs.total_liab", "bs.equity",
-                             "bs.current_assets", "bs.current_liab",
-                             "bs.noncurrent_liab", "bs.attr_equity")
+            and name not in excluded_assets
             and _has(slot.get("end"))
         ),
         key=lambda pair: abs(pair[1] or 0),
@@ -258,94 +274,53 @@ def render_objective_report_v3(
     try:
         chart_capital = donut(
             "资本结构（期末）",
-            [("流动负债", current_liab), ("非流动负债", raw("bs.noncurrent_liab", "end")),
-             ("所有者权益", equity)],
+            [
+                ("流动负债", current_liab),
+                ("非流动负债", raw("bs.noncurrent_liab", "end")),
+                ("所有者权益", equity),
+            ],
         )
     except ValueError:
         chart_capital = b""
     expense_bars = [
         (label, value)
         for item_id, label in (
-            ("is.selling_exp", "销售费用"), ("is.admin_exp", "管理费用"),
-            ("is.rnd_exp", "研发费用"), ("is.fin_exp", "财务费用"),
+            ("is.selling_exp", "销售费用"),
+            ("is.admin_exp", "管理费用"),
+            ("is.rnd_exp", "研发费用"),
+            ("is.fin_exp", "财务费用"),
         )
         for value in [raw(item_id, "current")]
         if value is not None
     ]
-    try:
-        chart_expenses = hbar_structure("期间费用（本期）", expense_bars,
-                                        unit_note=getattr(report, "unit_note", ""))
-    except ValueError:
-        chart_expenses = b""
-
-    # ---- 图表 ----
-    try:
-        chart_revenue = bar_compare("营业收入", revenue, revenue_prior)
-    except ValueError:
-        chart_revenue = b""
-    try:
-        chart_profit = bar_compare("归母净利润", net_profit, net_profit_prior, color="#e08a3c")
-    except ValueError:
-        chart_profit = b""
-    try:
-        chart_cashflow = cashflow_bars(ocf, icf, fin_cf, unit_note=getattr(report, "unit_note", ""))
-    except ValueError:
-        chart_cashflow = b""
-    asset_items = [
-        (name[len("bs."):], slot.get("end"))
-        for name, slot in facts.by_id.items()
-        if name.startswith("bs.") and name not in (
-            "bs.total_assets", "bs.total_liab", "bs.equity",
-            "bs.current_assets", "bs.current_liab", "bs.noncurrent_liab",
-            "bs.attr_equity")
-        and _has(slot.get("end"))
-    ]
-    asset_items.sort(key=lambda pair: abs(pair[1] or 0), reverse=True)
-    try:
-        chart_assets = donut("资产结构（期末，占总资产）", asset_items[:6])
-    except ValueError:
-        chart_assets = b""
-    try:
-        chart_capital = donut(
-            "资本结构（期末）",
-            [("流动负债", current_liab), ("非流动负债", raw("bs.noncurrent_liab", "end")),
-             ("所有者权益", equity)],
+    chart_expenses = (
+        hbar_structure(
+            "期间费用（本期）", expense_bars, unit_note=getattr(report, "unit_note", "")
         )
-    except ValueError:
-        chart_capital = b""
-    expense_bars = [
-        (label, value)
-        for item_id, label in (
-            ("is.selling_exp", "销售费用"), ("is.admin_exp", "管理费用"),
-            ("is.rnd_exp", "研发费用"), ("is.fin_exp", "财务费用"),
-        )
-        for value in [raw(item_id, "current")]
-        if value is not None
-    ]
-    try:
-        chart_expenses = hbar_structure("期间费用（本期）", expense_bars,
-                                        unit_note=getattr(report, "unit_note", ""))
-    except ValueError:
-        chart_expenses = b""
-    chart_dupont = dupont_chart(
-        net_margin, _safe_div(revenue, total_assets),
-        _safe_div(total_assets, equity), roe)
+        if expense_bars
+        else b""
+    )
 
     # ---- KPI 卡片 ----
     kpis = "".join([
-        _kpi_card("营业收入", _fmt_yi(revenue / facts.scale) if _has(revenue) else "—",
-                  _fmt_pct_raw(revenue_yoy) + (" ▲" if (revenue_yoy or 0) >= 0 else " ▼")
-                  if revenue_yoy is not None else ""),
-        _kpi_card("归母净利润",
-                  _fmt_yi(net_profit / facts.scale) if _has(net_profit) else "—",
-                  _fmt_pct_raw(profit_yoy) + (" ▲" if (profit_yoy or 0) >= 0 else " ▼")
-                  if profit_yoy is not None else ""),
-        _kpi_card("毛利率", _fmt_pct(gross_margin) if gross_margin is not None else "—"),
-        _kpi_card("净利率", _fmt_pct(net_margin) if net_margin is not None else "—"),
-        _kpi_card("资产负债率", _fmt_pct(debt_ratio) if debt_ratio is not None else "—"),
+        _kpi_card(
+            "营业收入",
+            _fmt_yi(revenue / facts.scale) if _has(revenue) else "—",
+            _delta_badge(revenue, revenue_prior),
+            _delta_tone(revenue, revenue_prior),
+        ),
+        _kpi_card(
+            "归母净利润",
+            _fmt_yi(net_profit / facts.scale) if _has(net_profit) else "—",
+            _delta_badge(net_profit, net_profit_prior),
+            _delta_tone(net_profit, net_profit_prior),
+        ),
+        _kpi_card("毛利率", _fmt_pct(gross_margin)),
+        _kpi_card("净利率", _fmt_pct(net_margin)),
+        _kpi_card("资产负债率", _fmt_pct(debt_ratio)),
         _kpi_card("流动比率", f"{current_ratio:.2f}" if current_ratio is not None else "—"),
         _kpi_card("净现比", f"{abs(ocf_ratio):.2f}" if ocf_ratio is not None else "—"),
-        _kpi_card("ROE（期末权益口径）", _fmt_pct(roe) if roe is not None else "—"),
+        _kpi_card("ROE（期末权益口径）", _fmt_pct(roe)),
     ])
 
     # ---- 摘要叙述（纯客观） ----
@@ -368,21 +343,28 @@ def render_objective_report_v3(
     # ---- 费用表 ----
     expense_rows = []
     for item_id, label in (
-        ("is.cogs", "营业成本"), ("is.selling_exp", "销售费用"),
-        ("is.admin_exp", "管理费用"), ("is.rnd_exp", "研发费用"),
+        ("is.cogs", "营业成本"),
+        ("is.selling_exp", "销售费用"),
+        ("is.admin_exp", "管理费用"),
+        ("is.rnd_exp", "研发费用"),
         ("is.fin_exp", "财务费用"),
     ):
         current = raw(item_id, "current")
         prior = raw(item_id, "prior")
         if current is None and prior is None:
             continue
-        share = _fmt_pct(_safe_div(current, revenue)) if (current is not None and revenue) else "—"
-        delta = _delta_badge(current, prior)
+        share = (
+            _fmt_pct(_safe_div(current, revenue))
+            if (current is not None and revenue)
+            else "—"
+        )
         expense_rows.append(
             f"<tr><td>{_esc(label)}</td>"
-            f"<td class='num'>{facts.fmt(current, 'current')}</td>"
-            f"<td class='num'>{facts.fmt(prior, 'prior')}</td>"
-            f"<td class='num'>{share}</td><td>{delta}</td></tr>"
+            f"<td class='num'>{facts.fmt(current)}</td>"
+            f"<td class='num'>{facts.fmt(prior)}</td>"
+            f"<td class='num'>{share}</td>"
+            f"<td class='delta {_esc(_delta_tone(current, prior))}'>"
+            f"{_esc(_delta_badge(current, prior))}</td></tr>"
         )
 
     # ---- 引擎条目 ----
@@ -408,22 +390,41 @@ def render_objective_report_v3(
         + "</ul>"
     )
 
-    # ---- 附录 ----
+    # ---- 杜邦三因子（HTML 文本，与图表同源） ----
+    dupont_rows = "".join(
+        f"<tr><td>{label}</td><td class='num'>{value}</td></tr>"
+        for label, value in (
+            ("净利率（归母净利润 ÷ 营业收入）", _fmt_pct(net_margin)),
+            ("总资产周转率（营业收入 ÷ 期末总资产）",
+             f"{asset_turnover:.3f}" if asset_turnover is not None else "—"),
+            ("权益乘数（期末总资产 ÷ 期末权益）",
+             f"{equity_multiplier:.3f}" if equity_multiplier is not None else "—"),
+            ("ROE（期末权益口径）", _fmt_pct(roe)),
+        )
+    )
+
+    # ---- 附录（直接按归一化行渲染，item_id 或名称键均可，全部转义） ----
     appendix_blocks = []
-    for statement in sorted(facts.names_by_statement):
+    for statement in sorted({item.statement_type for item in normalized_items}):
         rows = []
-        for name in facts.names_by_statement[statement]:
-            slot = facts.by_id.get(f"name:{statement}:{name}")
-            if not slot:
+        for item in normalized_items:
+            if item.statement_type != statement:
                 continue
-            current, prior = slot.get("current"), slot.get("prior")
+            current = _dec(item.value_current)
+            prior = _dec(item.value_prior)
+            if current is None:
+                current = _dec(item.value_end)
+            if prior is None:
+                prior = _dec(item.value_begin)
             delta = _change_pct(current, prior)
             delta_text = (
-                f'<td class="num {"up" if (delta or 0) >= 0 else "down"}">'
-                f'{_fmt_pct(abs(delta))}</td>' if delta is not None else "<td>—</td>"
+                f'<td class="num delta {"up" if (delta or 0) >= 0 else "down"}">'
+                f"{_fmt_pct(abs(delta))}</td>"
+                if delta is not None
+                else "<td>—</td>"
             )
             rows.append(
-                f"<tr><td>{_esc(name)}</td>"
+                f"<tr><td>{_esc(item.item_name)}</td>"
                 f"<td class='num'>{_fmt_yi(current / facts.scale) if current is not None else '—'}</td>"
                 f"<td class='num'>{_fmt_yi(prior / facts.scale) if prior is not None else '—'}</td>"
                 f"{delta_text}</tr>"
@@ -433,7 +434,8 @@ def render_objective_report_v3(
                 f"<h3>{_esc(statement)}</h3>"
                 "<table><thead><tr><th>项目</th><th>本期/期末</th>"
                 "<th>上年同期/期初</th><th>变动</th></tr></thead><tbody>"
-                + "".join(rows) + "</tbody></table>"
+                + "".join(rows)
+                + "</tbody></table>"
             )
     appendix = "".join(appendix_blocks) or "<p class='muted'>（无逐行数据）</p>"
 
@@ -466,7 +468,7 @@ def render_objective_report_v3(
 <h2>摘要</h2>
 {''.join(f'<p class="summary">{_esc(sentence)}</p>' for sentence in summary_sentences) or '<p class="muted">关键项目缺失。</p>'}
 
-<h2>一、盈利能力</h2>
+<h2>一、盈利与现金</h2>
 {_img(chart_revenue, "营业收入对比")}
 {_img(chart_profit, "归母净利润对比")}
 <h3>盈利比率</h3>
@@ -476,21 +478,7 @@ def render_objective_report_v3(
 <tr><td>净现比（经营现金流÷归母净利润）</td><td class="num">{f'{abs(ocf_ratio):.2f}' if ocf_ratio is not None else '—'}</td></tr>
 <tr><td>ROE（期末权益口径）</td><td class="num">{_fmt_pct(roe)}</td></tr>
 </tbody></table>
-
-<h2>二、成本与费用结构</h2>
-{_img(chart_expenses, "期间费用与成本结构")}
-
-<h2>三、资产结构与运营</h2>
-{_img(chart_assets, "资产结构")}
-
-<h2>四、资本结构与偿债</h2>
-{_img(chart_capital, "资本结构")}
-<ul>
-<li>资产负债率（期末）：{_fmt_pct(debt_ratio)}</li>
-<li>流动比率（期末）：{f'{current_ratio:.2f}' if current_ratio is not None else '—'}</li>
-</ul>
-
-<h2>五、现金流</h2>
+<h3>现金流量</h3>
 {_img(chart_cashflow, "现金流量净额")}
 <ul>
 <li>经营活动现金流净额：{_fmt_yi(ocf / facts.scale) if ocf is not None else '—'}</li>
@@ -498,18 +486,36 @@ def render_objective_report_v3(
 <li>筹资活动现金流净额：{_fmt_yi(fin_cf / facts.scale) if fin_cf is not None else '—'}</li>
 </ul>
 
-<h2>六、杜邦分解</h2>
+<h2>二、成本与费用结构</h2>
+{_img(chart_expenses, "期间费用与成本结构")}
+<table>
+<thead><tr><th>项目</th><th>本期</th><th>上年同期</th><th>占收入</th><th>变动</th></tr></thead>
+<tbody>{''.join(expense_rows)}</tbody>
+</table>
+
+<h2>三、资产、资本与偿债</h2>
+{_img(chart_assets, "资产结构")}
+{_img(chart_capital, "资本结构")}
+<ul>
+<li>资产负债率（期末）：{_fmt_pct(debt_ratio)}</li>
+<li>流动比率（期末）：{f'{current_ratio:.2f}' if current_ratio is not None else '—'}</li>
+</ul>
+
+<h2>四、杜邦分解</h2>
 {_img(chart_dupont, "杜邦分解")}
+<table><thead><tr><th>因子</th><th>数值</th></tr></thead><tbody>
+{dupont_rows}
+</tbody></table>
 <p class="muted">口径：期末权益与总资产（未做平均余额），与平均余额口径不可直接比较。</p>
 
-<h2>七、客观分析引擎条目（口径化结果）</h2>
+<h2>五、客观分析引擎条目（口径化结果）</h2>
 <table>
 <thead><tr><th>条目</th><th>状态</th><th>值</th><th>口径说明 / 来源引用</th></tr></thead>
 <tbody>{''.join(engine_rows)}</tbody>
 </table>
 
 <div class="pagebreak"></div>
-<h2>八、数据边界与不可算项</h2>
+<h2>六、数据边界与不可算项</h2>
 {boundary}
 <p class="muted">未披露的数据不做推断；上述边界以披露原文为准。</p>
 

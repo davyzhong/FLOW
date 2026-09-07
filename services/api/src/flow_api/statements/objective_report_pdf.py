@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """固定 Chromium PDF 打印机：把报告 HTML 打为独立 PDF 文件。
 
 Chromium 定位顺序：环境变量 FLOW_CHROMIUM_PATH → Playwright 浏览器缓存
@@ -9,7 +8,6 @@ ChromiumNotFoundError（调用方决定跳过或失败，不产生假成功）�
 from __future__ import annotations
 
 import os
-import shutil
 import subprocess
 import tempfile
 from pathlib import Path

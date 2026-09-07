@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """报告图表生成（matplotlib → PNG bytes，供 HTML 内嵌 base64）。
 
 风格：蓝金配色、浅色背景、中文标注（PingFang SC 等 macOS/中文环境自带字体）。
@@ -7,8 +6,9 @@
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from decimal import Decimal
-from typing import Any, Sequence
+from typing import Any
 
 import matplotlib
 
@@ -60,7 +60,7 @@ def bar_compare(title: str, current: Decimal | None, prior: Decimal | None,
     labels = ["上年同期", "本期"]
     fig, ax = plt.subplots(figsize=(4.6, 2.9))
     bars = ax.bar(labels, floats, color=[LIGHT_BLUE, color], width=0.5)
-    for bar, value in zip(bars, values):
+    for bar, value in zip(bars, values, strict=False):
         if value is not None:
             ax.annotate(f"{float(value):,.0f}", (bar.get_x() + bar.get_width() / 2,
                         bar.get_height()), ha="center", va="bottom", fontsize=9)
@@ -90,7 +90,7 @@ def hbar_structure(title: str, items: list[tuple[str, Decimal]], unit_note: str 
     ax.spines[["top", "right"]].set_visible(False)
     ax.grid(axis="x", alpha=0.25)
     total = sum(abs(value) for _, value in pairs) or Decimal(1)
-    for bar, (name, value) in zip(ax.patches, pairs):
+    for bar, (_, value) in zip(ax.patches, pairs, strict=False):
         share = abs(Decimal(value)) / total * 100
         ax.annotate(f"{float(value):,.0f}（{share:.0f}%）",
                     (bar.get_width(), bar.get_y() + bar.get_height() / 2),
@@ -128,7 +128,7 @@ def cashflow_bars(operating: Decimal | None, investing: Decimal | None,
     fig, ax = plt.subplots(figsize=(5.6, 2.9))
     bars = ax.bar(labels, floats, color=colors, width=0.5)
     ax.axhline(0, color="#5b6478", linewidth=0.8)
-    for bar, value in zip(bars, (operating, investing, financing)):
+    for bar, value in zip(bars, (operating, investing, financing), strict=False):
         if value is not None:
             ax.annotate(f"{float(value):,.0f}",
                         (bar.get_x() + bar.get_width() / 2, bar.get_height()),
@@ -142,8 +142,7 @@ def cashflow_bars(operating: Decimal | None, investing: Decimal | None,
 def dupont_chart(net_margin: Decimal | None, asset_turnover: Decimal | None,
                  equity_multiplier: Decimal | None, roe: Decimal | None) -> bytes:
     factors = ["净利率", "总资产周转率", "权益乘数"]
-    values = [
-        float(net_margin * 100) if net_margin is not None else 0.0,
+    values = [        float(net_margin * 100) if net_margin is not None else 0.0,
         float(asset_turnover) if asset_turnover is not None else 0.0,
         float(equity_multiplier) if equity_multiplier is not None else 0.0,
     ]
@@ -153,9 +152,7 @@ def dupont_chart(net_margin: Decimal | None, asset_turnover: Decimal | None,
         f"{float(equity_multiplier):.3f}" if equity_multiplier is not None else "—",
     ]
     fig, axes = plt.subplots(1, 3, figsize=(7.2, 2.4))
-    for ax, label, value, text in zip(
-        axes, ["净利率", "总资产周转率", "权益乘数"], values, formatted
-    ):
+    for ax, label, value, text in zip(axes, factors, values, formatted, strict=False):
         ax.bar([label], [value], color=BLUE, width=0.45)
         ax.set_title(f"{label}\n{text}", fontsize=10)
         ax.spines[["top", "right"]].set_visible(False)
