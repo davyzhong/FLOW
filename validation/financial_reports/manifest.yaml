@@ -85,8 +85,45 @@ holdouts:
       - { item: Non-IFRS 本公司权益持有人应占盈利, value: "同上", location: "Non-IFRS 调节表", unit: 百万元 }
     rule: 首跑原始失败全部保留；修复后该样本不再称留出，须补新留出候选（D04）
 
+  - id: sf_2026h1
+    kind: new_period（半年报全文版式与已适配的 Q1 季报不同，含半年报特有章节）
+    company: 顺丰控股（002352.SZ / 6936.HK）
+    standard: CAS
+    report: 2026 年半年度报告（213 页，半年度报告全文）
+    format: 文本 PDF（A 股半年报）
+    disclosure_scope: 四表 + 主要会计数据 + 管理层讨论（以原文为准，不得预标四表完整）
+    source_file: docs/knowledge-base/02_research/original/p5_samples/sf_002352/SF_2026_H1_report.pdf
+    sha256: 8f7b0cd6d0dc2d8f2d10d14e7eedd0fdf64e697fbdd675c588c087782be014f0
+    unit: 人民币千元
+    key_items:
+      - { item: 收入, value: "待独立录入人按 oracle-register §1 规程补录", location: "合并利润表", unit: 千元 }
+      - { item: 归属于上市公司股东的净利润, value: "同上", location: "合并利润表", unit: 千元 }
+      - { item: 经营活动产生的现金流量净额, value: "同上", location: "合并现金流量表", unit: 千元 }
+      - { item: 资产总计, value: "同上", location: "合并资产负债表", unit: 千元 }
+    provenance: 巨潮资讯（经东方财富公告镜像 pdf.dfcfw.com，公告编号 AN202608280006758205）；原件 2026-09-05 已入 p5_samples 不可变档案（页数 + 首页标题 + SHA-256 校验），2026-09-07 登记冻结
+    rule: 首跑原始失败全部保留；修复后该样本不再称留出，须按 oracle-register §3 补新候选
+
+  - id: zto_2026q1
+    kind: new_company（港交所 US 口径业绩公告版式未参与任何适配；D042 预留样本）
+    company: "中通快递（开曼）有限公司（2057.HK / NYSE: ZTO）"
+    standard: 待核（业绩公告为美股 ADS 主体口径，US GAAP 与港股披露关系以原文为准；对齐 D042「中通 US GAAP 口径待核」）
+    report: 2026 年第一季度未经审计财务业绩公告（15 页）
+    format: 文本 PDF（港交所业绩公告，繁体中文，文本层可提取）
+    disclosure_scope: 季度财务摘要 + 简明综合利润表/资产负债表/现金流量表 + Non-GAAP 调节（以原文为准）
+    source_file: validation/financial_reports/original/zto_2026q1/ZTO_2026_Q1_results_announcement_c.pdf
+    sha256: 1f511d5a48dab761aaa6d3f918d63b69fce59569f2f311c693ab45e08f3277bc
+    unit: 摘要为人民币百万元（收入 13,282.4 百万），报表单位以原文为准
+    key_items:
+      - { item: 收入, value: "待独立录入人按 oracle-register §1 规程补录", location: "简明综合利润表", unit: 百万元 }
+      - { item: 净利润, value: "同上", location: "简明综合利润表", unit: 百万元 }
+      - { item: Adjusted（Non-GAAP）净利润, value: "同上", location: "Non-GAAP 调节表", unit: 百万元 }
+      - { item: 经营活动产生的现金流量净额, value: "同上", location: "简明综合现金流量表", unit: 百万元 }
+    provenance: 港交所披露易 www1.hkexnews.hk /listedco/listconews/sehk/2026/0520/2026052000006_c.pdf；2026-09-07 下载并校验（PDF 1.4 / 15 页 / 首页标题「2026年第一季度未經審計財務業績公告」一致 / pdftotext 文本抽取正常）
+    rule: 首跑原始失败全部保留；修复后该样本不再称留出，须按 oracle-register §3 补新候选
+
+regression:
   - id: yto_2026q1
-    kind: new_company（A 股抽取器原为顺丰版式构建，圆通为未适配公司）
+    demoted_from_holdout: 2026-09-07（C10 处置：已参与 A 股抽取适配，见 oracle-register §5 污染史）
     company: 圆通速递（600233.SH）
     standard: CAS
     report: 2026 年第一季度报告（11 页，未经审计）
@@ -104,6 +141,7 @@ holdouts:
       - { item: 基本每股收益, value: "0.4025", location: "主要会计数据 p1", unit: 元/股 }
       - { item: 加权平均净资产收益率, value: "3.88%", location: "主要会计数据 p1", unit: "%" }
     provenance: 巨潮资讯（经东方财富公告镜像 pdf.dfcfw.com，公告编号 AN202604221821462391）；2026-09-06 下载并校验（PDF 1.7 / 11 页 / 首页标题一致）
+    regression_use: 保留全部答案与勾稽证据，作为适配回归用例；不得再计为首次泛化证据
 
 rules:
   - 任何 expected 值不得以被测抽取器的输出回填；发现回填即整份清单作废重录。
