@@ -1,6 +1,6 @@
-# 单用户登录与 API 认证
+# FLOW 单用户登录与 API 认证｜2026-09-07
 
-核对基线：2026-09-04，代码 `c1a59d1`。浏览器统一访问同源 `/api/v1` 代理；不使用 `NEXT_PUBLIC_FLOW_API_URL` 绕过代理。API 的共享 Bearer token 仅由服务端持有，不写入浏览器 JavaScript、表单或 cookie。
+文档复核：2026-09-07，读取基线 `04ba4d7`；原认证实现来自 `c1a59d1`，本次未重新执行认证验收。浏览器统一访问同源 `/api/v1` 代理；不使用 `NEXT_PUBLIC_FLOW_API_URL` 绕过代理。API 的共享 Bearer token 仅由服务端持有，不写入浏览器 JavaScript、表单或 cookie。
 
 ## 配置与加载
 

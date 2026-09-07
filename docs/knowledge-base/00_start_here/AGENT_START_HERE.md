@@ -1,99 +1,31 @@
-# Agent 起点
+# FLOW Agent 起点｜2026-09-07
 
-> **最新接续（D049）**：先读[客观财务分析总计划](../../superpowers/plans/2026-09-06-objective-financial-analysis-master-plan.md)及配套方向规格；现阶段以公开财报打牢客观事实与计算，主观归因和改善后置。下文旧阶段状态保留为历史参考。
+状态：当前接续入口。不要从历史 Phase 或研究材料直接开始实施。
 
-## 一句话理解项目
+## 最短阅读路径
 
-FLOW 是面向物流供应链企业 Finance BP 的 AI 财务分析工作台：把不同来源的 Excel 数据转换到统一数据中间层，再基于同一套数据完成经营驾驶舱、异常诊断、证据复核以及 PPT、Excel、正式月报输出。产品定位遵循 D039：当前阶段聚焦财务数据的收集与基于客观数据的准确财务分析这一确定性任务；经营分析（经营侧数据 + 业务假设的主观归因）是明确的未来扩展方向。
+1. [当前项目状态](PROJECT_STATE.md)：基线、已实现、未验收、在途改动。
+2. [D049 正式方向](../../superpowers/specs/2026-09-06-objective-financial-analysis-direction.md)与[事实合同](../../superpowers/specs/financial-facts-contract.md)。
+3. [决策日志](../04_decisions/DECISION_LOG.md)与[影响图](../04_decisions/CHANGE_IMPACT_MAP.md)。
+4. [下一阶段详细计划](../../superpowers/plans/2026-09-07-next-stage-upgrade-plan.md)及[A–H 执行台账](../../superpowers/plans/2026-09-06-objective-financial-analysis-master-plan.md)。
+5. [参考订正总册](../02_research/synthesis/2026-09-07-reference-and-improvement-master.md)与[文档适用性登记](../../documentation-status.md)。
 
-长期产品方向是 Finance Intelligence OS，但 V1 采用一个可验证的物流供应链月度经营分析窄切片。
+## 项目定位
 
-## 当前已经确定的产品主线
+FLOW 建设可追溯、确定性、可复核的财务分析工作台。当前从公开财报交付客观分析，内部企业数据另行授权试点；既有物流 Excel 窄切片继续复用，经营轨保留定义和只读演示。当前不是总账、自动因果判断或自动经营决策系统。
 
-```text
-外部 Excel 或 FLOW 标准模板
-→ AI 识别、字段映射、清洗、校验和财务对账
-→ 数据库标准数据中间层
-→ 指标语义与确定性分析引擎
-→ Finance BP 高密度经营驾驶舱
-→ Investigation：影响、驱动、下钻、公式、证据和复核
-→ AI 辅助解释、追问和报告编排
-→ PPT、分析 Excel、HTML/PDF 正式月报
-```
+## 不可绕过的原则
 
-## 必须保留的架构原则
+- 原始文件、原始值、批准快照和冻结报告不能覆盖；更正形成新版本。
+- 数据接入、标准事实、指标计算、图表投影和报告输出分层；显示层和 AI 不另算财务数字。
+- 主体、期间、币种、合并范围、粒度、口径及来源身份必须一致；缺失不等于零。
+- 事实、数学拆解、关联信号、假设与因果分别标记；无量价数据不生成量价桥。
+- 旧 Finding 报告保留证据审批；客观报告独立资格尚按计划建设，不擅自放松旧门禁。
+- 单用户认证不等于企业角色权限；公开财报验收不等于内部业务或生产部署验收。
+- D047 默认推荐、D048 数据库版本权威/YAML 兼容、D049 客观优先共同有效；不重启逐项 v0 审批。
 
-1. 下游不能直接读取原始 Excel，只能依赖标准数据中间层；
-2. Excel 标准模板是交换格式，不是内部数据库；
-3. 原始文件和原始值不可覆盖；
-4. 数据中间层与指标语义层分离；
-5. 财务数字、差异和驱动由确定性引擎计算；
-6. AI 负责识别、解释、追问和编排，不自行创造数字；
-7. 事实、判断和假设必须分开；
-8. 未完成关键证据复核的 Finding 不得进入正式报告；
-9. 驾驶舱、Investigation 和全部输出引用同一 Metric Snapshot；
-10. 架构不绑定纯本地离线部署。
+## 接续动作
 
-## V1 用户和场景
+先读取 git 状态、已提交实现、最新 CI 和未提交文件，确认当前请求是否授权实施。下一阶段先按 P00 校准差异、独立答案与留出，再执行订正和客观分析增量。已存在的 C 阶段能力不重建；D01 在途文件不因存在即标完成。
 
-- 主用户：Finance BP；
-- 行业：物流企业；
-- 业务：供应链业务；
-- 分析周期：月度；
-- 默认视角：当月 + YTD；
-- 对比：预算、同比、近 12 个月趋势；
-- 核心维度：客户群 × 物流产品；
-- 核心经营故事：规模和收入增长，但低毛利业务结构、履约成本上涨和回款放缓导致利润与现金恶化。
-
-## 当前状态
-
-状态核对日期：2026-09-04，代码基线 `c1a59d1`。下列 Phase 1–10 的验收描述是各阶段历史结果；最新修复证据见[审查修复验收](../../implementation/2026-09-04-review-repairs.md)，不代表重新运行全部历史门禁。
-
-- 产品研究：完成；
-- 关键产品决策：完成；
-- 信息架构和核心页面原型：完成并确认；
-- 数据中间层和标准 Excel 数据包方向：完成并确认；
-- 统一报告输出方向：完成并确认；
-- FLOW V1 正式设计规格：已写入并提交；
-- 知识库归档：完成；
-- V1 主实施路线图：完成；
-- Phase 1 基础架构与对象契约详细计划：完成；
-- Phase 1 基础架构与对象契约：完成并通过本地干净检出与 GitHub Actions 验收；
-- Phase 2 标准 Excel 数据契约与高拟真 fixture：完成并通过本地干净检出与 GitHub Actions 验收；
-- Phase 3 Intake、Mapping & Quality：完成并通过本地干净检出与 GitHub Actions 验收；
-- Phase 4 Metric Snapshots：完成并通过本地干净检出与 GitHub Actions 验收；
-- Phase 5 Analysis & Findings：完成并通过本地全量回归与 GitHub Actions 11 个 jobs 验收，5 个 typed Playbook、严格对账 Driver、确定性 Finding、Evidence 和不可变 Analysis Run 已落地；
-- Phase 6 Finance BP Dashboard：完成，typed 只读 Dashboard API、高密度真实页面、八指标、趋势、经营利润桥、Findings、产品表、毛利矩阵、完整状态和 Investigation 身份交接已落地并通过浏览器验收；
-- Phase 7 Evidence-first Investigation：完成，受控 Finding/Evidence 状态机与追加式 ReviewEvent（迁移 0008）、typed Investigation API、证据优先工作台（驱动桥、公式与引擎版本、对账与质量检查、文件/工作表/行级血缘、结论四要素、证据复核与审阅历史）已落地并通过 `make test-investigation-e2e` 验收；
-- Phase 8 Bounded AI Copilot：完成，强制对象引用、数字一致性、事实/判断/假设分离、数据不足降级与交互审计均有固定评估门禁；
-- Phase 9 Unified Publishing：完成，PPTX/XLSX/HTML/PDF 均从同一冻结 Report Snapshot 渲染并通过跨格式关键值一致性门禁；
-- Phase 10 Acceptance Suite：功能验收组合门禁已完成；部署、权限、备份恢复和深度可观测性明确顺延到 Pilot Readiness；
-- 运行栈：Next.js、FastAPI、Celery、PostgreSQL、Redis、MinIO 已可构建启动；
-- 数据库对象：接入、血缘、标准事实、指标、分析、审阅、Copilot 审计与报告冻结内容均已落地，迁移头为 `0010_frozen_reports`；
-- API 合约：`/api/v1/health`、`/api/v1/workspace` 与生成式 TypeScript 类型已落地；
-- 数据契约：`flow.excel.v1`、10 张工作表标准模板、确定性物流 fixture、已知答案和数据库语义往返已落地；
-- 非标准 Excel 识别与映射、版本化导入和原子发布：已落地；
-- `flow.metrics.logistics.v1` 的 15 个指标、14 条依赖、比较窗口、精确计算轨迹和不可变 Metric Snapshot：已落地；
-- Pilot 用户闭环：`/data` 数据工作台和 `/reports` 报告中心已落地，包含模板下载、上传、映射修正、质量警告确认、发布、标准化 XLSX 导出及报告冻结/生成/下载；
-- 单用户认证：API Bearer token、Web 登录会话、受保护同源代理与反代公开 origin 已落地，配置见[认证说明](../../operations/authentication.md)；不包含多角色权限或多租户；
-- 审查 R1–R9 与追加 N1–N3 已修复；报告持久化完整冻结 JSONB 内容，旧快照缺少 payload 时不能重新渲染，需重新冻结；
-- 2026-09-06：全站统一左侧导航外壳；指标库 v0（通用 40 + 物流 15 指标、会计基础数据）经 `/metric-library` 与只读 API 进入系统；报告中心冻结改为快照选择器；S3 客户端默认绕过系统代理，历史「MinIO PutObject 超时」根因（boto3 拾取 macOS 系统代理）已修复；
-- 当前缺口：备份恢复、HTTPS 部署、网络加固、结构化日志及脱敏真实数据试点尚未完成；任意新批次的一键指标/分析编排尚未接通。
-
-## 新 Agent 的工作规则
-
-开始任何修改前：
-
-1. 阅读 [项目状态](PROJECT_STATE.md)；
-2. 阅读 [决策日志](../04_decisions/DECISION_LOG.md)；
-3. 阅读 [正式设计规格](../../superpowers/specs/2026-08-29-flow-v1-design.md)；
-4. 确认要修改的是哪一个历史决策或系统边界；
-5. 查阅 [变更影响图](../04_decisions/CHANGE_IMPACT_MAP.md)；
-6. 明确旧决定是保留、扩展还是被取代；
-7. 修改设计文档和决策日志后，再进入实施计划或代码。
-
-不要把研究资料中的功能清单直接当成 V1 需求，也不要因为历史会话里出现过某个建议就默认它仍然有效。
-
-## 当前下一步
-
-当前处于 Pilot Readiness。D038 前两步已有实现与历史验收，当前继续[最小安全部署计划](../../superpowers/plans/2026-09-03-flow-pilot-readiness-phase-2-security-deployment.md)：以已实现的单用户认证为起点，补齐密钥与网络边界、备份恢复、HTTPS、结构化日志及部署门禁，同时解决真实 MinIO PutObject 超时并补验完整上传/发布/下载链路；随后开展脱敏真实数据试点，再依据证据决定 V1.1。不要把“Phase 1–10 功能窄切片完成”误写成“已生产就绪”，也不要在真实试点前凭研究材料扩张 V1.1。修改任何已冻结契约前，先查阅决策日志与变更影响图。
+每项变更遵循根目录 AGENTS.md：保护用户文件和不可变档案；必要验证后更新相关文档与清单，只提交本任务文件并推送 origin。若仅要求 review 或计划，不实施程序改造。

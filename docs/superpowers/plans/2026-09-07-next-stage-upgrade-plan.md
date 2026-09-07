@@ -1,4 +1,4 @@
-# FLOW 下一阶段升级与改造详细计划书
+# FLOW 下一阶段升级改造执行准备计划｜2026-09-07
 
 > **给后续执行者**：仅在用户另行明确启动后，使用 executing-plans 逐项执行；行为变更先写失败测试，完成前做 verification-before-completion。每个工作包内部按测试、最小改动、复验、任务范围提交拆成小步。本次不进入执行流程。
 
@@ -8,23 +8,23 @@
 
 **Tech Stack:** 现有 TypeScript、Pydantic、SQLAlchemy、Alembic、Decimal、Celery/Redis、S3/MinIO、Playwright；不为本轮引入替代技术栈。实际 PDF 打印能力列为明确交付，不能用假文件或测试替身验收。
 
-日期：2026-09-07。状态：**计划已编制，尚未授权执行；所有任务复选框均为未开始。本次只变更文档。**
+建立/更新：2026-09-07。状态：**下一阶段首读详细计划，准备执行；本次仅更新文档，不授权实施。** P00–P12 的复选框表示本计划增量及验收是否交付，不意味着 A/B/C 旧能力尚未实现。
 
 ## 1. 依据、约束与优先级
 
 主要输入：[外部借鉴、参考资料与优化订正总册](../../knowledge-base/02_research/synthesis/2026-09-07-reference-and-improvement-master.md)，下文 S、C、I 编号均来自该册。正式约束：[D049 方向规格](../specs/2026-09-06-objective-financial-analysis-direction.md)、[财务事实合同](../specs/financial-facts-contract.md)、[指标库规格](../specs/2026-09-05-flow-metric-dictionary-design.md)、[变更影响图](../../knowledge-base/04_decisions/CHANGE_IMPACT_MAP.md)。
 
-本计划是[现有客观分析总计划](2026-09-06-objective-financial-analysis-master-plan.md)的细化和订正候选，不自动替换已批准方向，不重新打开已完成 A/B/C 全部工作，不撤销历史验收。开始执行须有用户后续明确指令；届时先做 P00，发现规格冲突先提交决策，不默默实施。
+本计划作为下一阶段详细任务入口；[A01–H01 里程碑台账](2026-09-06-objective-financial-analysis-master-plan.md)保留阶段出口与历史证据。本计划细化后续增量和验收，不替换已批准方向，不重新打开已完成 A/B/C 全部工作，不撤销历史验收。开始执行须有用户后续明确指令；届时先做 P00，发现规格冲突先提交决策，不默默实施。
 
 优先级：P0 正确性、可追溯性和独立验证；P1 用户阅读、报告和交付链路；P2 内部数据准备；P3 预测、因果与行动闭环。本次不写程序、不改指标配置、不跑迁移、不部署，也不触发新的持续开发任务。
 
 ### 1.1 基线与已具备资产
 
-本次读取基线 `8c7dbf39520e151a9a0ebac61b3ddf34f67b2e44`，迁移到 0018。A/B 财务事实链和 C01–C06 指标管理已有连续实现记录，包含执行绑定、语义、版本治理、影响沙箱和用户界面。保留并复用 55 财务指标、167 科目、48 准则登记、32 分录模板及经营轨配置，不能将登记数量解释为可执行覆盖。
+本轮更新读取基线 `04ba4d7`（包含 `0554dca`、`751169f`），迁移到 0018。A/B 财务事实链和 C01–C06 指标管理已有连续实现记录，包含执行绑定、语义、版本治理、影响沙箱和用户界面。保留并复用 55 财务指标、167 科目、48 准则登记、32 分录模板及经营轨配置，不能将登记数量解释为可执行覆盖。
 
 已发现差异：`ocf_net_profit_ratio` 已存在，原 U3 不应再次新增同义指标；FCF 的 IFRS 18 MPM 标记需订正；部分验证答案仍为占位/量级，圆通已用于适配；入口状态较旧，不能据其标题认定全部尚未实现。详见总册 C01–C18。
 
-本次读取时最新基线 CI 尚在运行；当前工作树还有其他任务的指标库界面修改。上述状态不是本计划的全量测试结果，未来执行必须重新读取，禁止覆盖并行改动。
+本轮读取时 `8c7dbf3` CI 已成功，`04ba4d7` 运行尚在进行。另有 D01 的 `config/analysis/`、`analysis/objective.py` 与对应测试在途，尚不据此判定验收完成。P00 必须先核验和复用其已提交结果，不创建平行分析目录覆盖另一任务。实时状态见 PROJECT_STATE。
 
 ### 1.2 下一阶段成功的用户结果
 
@@ -94,7 +94,7 @@ P11 通过且另获授权 → P12 内部试点；预测/因果/行动再单独�
 
 来源 I06/I07/I13–I15，订正 C09/C11/C16/C17；对应 D01。负责人：产品/财务 + 后端。
 
-文件：读取 `services/api/src/flow_api/metrics/{catalog,grain,windows,comparisons}.py`；新增 `services/api/src/flow_api/analysis/objective_catalog.py`、`services/api/tests/analysis/test_objective_catalog.py`；按现有机制扩展 `services/api/src/flow_api/api/schemas/dashboard.py` 和生成合同。
+文件：读取 `services/api/src/flow_api/metrics/{catalog,grain,windows,comparisons}.py`；优先复用 A–H 台账的 `config/analysis/objective_finance_v1.yaml`、`services/api/src/flow_api/analysis/objective.py`、`services/api/tests/analysis/test_objective_finance.py`（已有在途工作，获准后先协同核验，不另建重复目录）；按现有机制扩展 `services/api/src/flow_api/api/schemas/dashboard.py` 和生成合同。
 
 - [ ] 先定义四问与六专题的多对多映射；现金、偿债横向关联。列默认十指标选择及每项替代/不可用条件，不删除大词典。
 - [ ] 每个主题定义 metric/version、必要事实、允许维度、粒度、期间窗口、比较场景、图表类型与证据要求。新对象至少包含 `topic_id`、`metric_refs`、`required_facts`、`allowed_grains`、`comparison_modes`、`unavailable_reasons`。
@@ -137,7 +137,7 @@ P11 通过且另获授权 → P12 内部试点；预测/因果/行动再单独�
 
 来源 I03；对应 D03/D04。依赖 P00 答案冻结、P01/P03/P04。负责人：独立财务复核者主签，开发修复不得自行替代签字。
 
-文件：`validation/financial_reports/manifest.yaml`；新增 `validation/financial_reports/expected/`、`validation/financial_reports/results/` 和 `scripts/validate_financial_report_oracles.py`；复用 `services/api/tests/statements/` 与 `services/api/tests/metrics/test_metric_oracle.py`。
+文件：`validation/financial_reports/manifest.yaml`；新增 `validation/financial_reports/expected/`、`validation/financial_reports/results/` 和 `scripts/validate_financial_reports.py`；复用 `services/api/tests/statements/` 与 `services/api/tests/metrics/test_metric_oracle.py`。
 
 - [ ] 运行前检查答案与源文件哈希、样本污染状态和复核签名。建立所有范围内报表行的期望集合，不只验收入/净利润几个指标。
 - [ ] 差异输出缺行、多行、错位、符号、单位、主体/期间、重复、小计和金额；每行状态可追到 PDF 与预期值。附注范围要显式列出，不能对未纳入的附注宣称全行覆盖。

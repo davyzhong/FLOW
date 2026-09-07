@@ -2,9 +2,9 @@
 
 # FLOW
 
-### 从 Excel 到可复核的财务分析与正式报告
+### 从公开财报与 Excel 到可复核的财务分析
 
-面向物流与供应链企业 Finance BP 的财务分析工作台
+公开财报客观分析优先，面向企业内部财务分析持续演进
 
 **版本化数据 · 确定性指标 · 证据复核 · 冻结报告**
 
@@ -14,13 +14,13 @@
 
 ![FLOW Finance BP 驾驶舱：核心指标、趋势、利润桥、经营发现与毛利矩阵](docs/assets/screenshots/dashboard.png)
 
-> 截图来自 `c1a59d1` 的真实页面和确定性物流演示数据，不是客户数据或设计效果图。文档核对日期：2026-09-04。当前阶段为 **Pilot Readiness（试点就绪建设）**，功能实现与生产部署验收分别记录。
+> 截图来自 `c1a59d1` 的真实页面和确定性物流演示数据，不是客户数据或设计效果图。文档核对日期：2026-09-07，读取基线 `04ba4d7`。截图保留原拍摄日期，不代表本次最新界面。当前阶段为 **公开财报客观分析建设**，功能实现与生产部署验收分别记录。
 
 ## FLOW 解决什么问题
 
 Finance BP 的月度工作通常横跨多份 Excel：业务量、收入与履约成本、财务实际、预算、应收和现金。FLOW 将这些文件转换为有版本、有质量检查、有血缘的数据，再用同一份指标与分析上下文支持驾驶舱、异常调查和报告输出。
 
-项目长期方向是 Finance Intelligence OS。当前 V1 依据 [D039 产品定位](docs/knowledge-base/04_decisions/DECISION_LOG.md)，聚焦**财务数据收集与基于客观数据的准确财务分析**。涉及业务假设的经营归因和更广泛决策支持，保留为后续扩展；项目中的“经营驾驶舱”等页面名称沿用既有实现。
+项目长期方向是 Finance Intelligence OS。当前阶段依据 [D049 产品定位](docs/knowledge-base/04_decisions/DECISION_LOG.md)，聚焦**财务数据收集与基于客观数据的准确财务分析**。涉及业务假设的经营归因和更广泛决策支持，保留为后续扩展；项目中的“经营驾驶舱”等页面名称沿用既有实现。
 
 | 工作问题 | FLOW 的处理方式 | 可复核的结果 |
 | --- | --- | --- |
@@ -52,7 +52,7 @@ flowchart TB
         I[冻结 Report Snapshot] --> J[PPTX / XLSX / HTML]
         I -. 需要注入打印器 .-> K[PDF]
     end
-    Intake -. 服务层或演示脚本编排 .-> Analysis
+    Intake -. 显式构建 API .-> Analysis
     Analysis --> Publishing
     classDef data fill:#eaf3ff,stroke:#2463eb,color:#14243a
     classDef review fill:#ecf8f1,stroke:#2e8562,color:#14243a
@@ -62,17 +62,17 @@ flowchart TB
     class I,J,K output
 ```
 
-实线表示已有领域处理关系；虚线标出尚需显式编排或部署集成的环节。当前“发布导入版本”只发布标准事实，**不会自动启动该批次的指标计算与分析运行**。演示初始化脚本会显式串联这些服务；不能将演示链路等同于任意上传文件后的自动全流程。
+实线表示已有领域处理关系；虚线标出尚需显式编排或部署集成的环节。当前“发布导入版本”只发布标准事实，**不会自动启动该批次的指标计算与分析运行**。已提供 `POST /api/v1/orchestration/batches/{id}/build`，按批次期间同步构建并保留任务状态；发布不等于自动完成全流程，公开财报浏览器闭环仍按下一阶段验收。
 
 ## 界面导览
 
-当前浏览器入口包括 `/`、`/data`、`/investigations`、`/reports`、`/statements`、`/metric-library`、`/operations` 和 `/login`。系统按 [D045 双轨结构](docs/knowledge-base/04_decisions/DECISION_LOG.md)组织：「数据层」（接入）两轨共用；「财务分析」轨面向 Finance BP（驾驶舱、归因、报告、报表分析、指标库）；「经营分析」轨面向经营/业务管理者（`/operations` 演示页）。全部功能页共享同一左侧工作流导航；驾驶舱与调查页采用高密度分析布局，报表分析与指标库为只读分析视图。
+当前浏览器入口包括 `/`、`/data`、`/investigations`、`/reports`、`/statements`、`/metric-library`、`/operations` 和 `/login`。系统按 [D045 双轨结构](docs/knowledge-base/04_decisions/DECISION_LOG.md)组织：「数据层」（接入）两轨共用；「财务分析」轨面向 Finance BP（驾驶舱、归因、报告、报表分析、指标库）；「经营分析」轨面向经营/业务管理者（`/operations` 演示页）。全部功能页共享同一左侧工作流导航；驾驶舱与调查页采用高密度分析布局，报表分析支持事实链核对，指标库已有草稿、验证、生效、退役及影响分析；经营轨保持只读演示。
 
 ### 1. Finance BP 驾驶舱
 
 首页汇集八个核心指标卡、12 个月趋势、经营利润变动桥、重点 Findings、产品表现表和客户群 × 产品毛利矩阵。筛选维度包括期间、组织、客户群、物流产品和区域；进入调查时携带批次、指标快照和分析运行身份。
 
-上方大图即当前驾驶舱。指标目录共 15 项，首页选择其中八项展示，不代表系统只有八个指标。
+上方大图是注明版本的历史实际驾驶舱。物流执行子集原有 15 项、首页八项；财务知识库现有 55 项定义，登记数不等于任意财报可算数。
 
 ### 2. 数据工作台：把文件转换为可发布数据
 
@@ -103,7 +103,7 @@ flowchart TB
 
 ### 4. 报告中心：冻结、生成、追踪与下载
 
-报告中心可以冻结已发布指标快照中的批准 Findings，选择报告版本和输出格式，查看各次生成尝试并下载成功产物。当前冻结表单需要填写指标快照 ID，尚未提供完整的可视化快照选择器。
+报告中心可以冻结已发布指标快照中的批准 Findings，选择报告版本和输出格式，查看各次生成尝试并下载成功产物。冻结表单已提供可视化快照候选选择器；下图为较早版本，不能用于判断最新交互。
 
 ![报告中心的冻结快照与格式选择](docs/assets/screenshots/reports.png)
 
@@ -206,7 +206,7 @@ flowchart TB
 | --- | --- |
 | Web | Next.js 16.3.3、React 19.2、TypeScript、服务端同源代理 |
 | API | Python 3.13、FastAPI、Pydantic、SQLAlchemy、Alembic |
-| 计算 | Python Decimal、版本化 YAML 数据/指标/分析配置 |
+| 计算 | Python Decimal、数据库版本化指标目录与治理，YAML 兼容配置 |
 | 文件 | openpyxl、python-pptx、HTML 渲染、可注入 PDF 打印器 |
 | 存储 | PostgreSQL NUMERIC、S3 内容寻址对象、Redis |
 | 工程 | pnpm 10.17.1、uv 锁文件、pytest、Vitest、Playwright、GitHub Actions |
@@ -479,12 +479,12 @@ FLOW/
 flowchart LR
     A[Phase 1–10<br/>功能窄切片已实现] --> B[Pilot 1<br/>导入与报告页面已落地]
     B --> C[审查修复<br/>R1–R9 / N1–N3 已处理]
-    C --> D[当前<br/>补齐部署与运行链路验收]
-    D --> E[脱敏真实数据试点]
+    C --> D[当前<br/>客观分析与独立验证、报告交付]
+    D --> E[部署验收后另行内部试点]
     E --> F[依据证据确定 V1.1]
     style D fill:#fff0cd,stroke:#aa7918,stroke-width:2px
 ```
 
-下一步仍需完成：新导入批次的计算与分析编排、PDF 打印器注入、生产 HTTPS/网络边界/密钥管理、备份恢复演练、可观测性，以及脱敏真实物流数据试点。真实对象存储链路已于 2026-09-06 修复并验证（根因：boto3 拾取 macOS 系统代理导致请求挂起，详见[本轮记录](docs/implementation/2026-09-06-shell-metric-library-s3-proxy.md)）。最小安全计划中的登录/API 认证已落地，不能据此把其余部署任务标为完成。
+下一阶段按[详细计划](docs/superpowers/plans/2026-09-07-next-stage-upgrade-plan.md)先校准在途工作、订正指标语义、准备独立答案与留出，再完成客观分析、统一报告/真实 PDF、完整旅程及部署恢复验收。批次构建编排已经实现，不重复列为缺失；内部真实数据另行授权试点。真实对象存储链路已于 2026-09-06 修复并验证（根因：boto3 拾取 macOS 系统代理导致请求挂起，详见[本轮记录](docs/implementation/2026-09-06-shell-metric-library-s3-proxy.md)）。最小安全计划中的登录/API 认证已落地，不能据此把其余部署任务标为完成。
 
 本仓库尚未提供独立的 LICENSE 文件；使用与分发授权请向项目维护者确认。贡献与协作遵循 [AGENTS.md](AGENTS.md)：先读项目状态和正式决策，保护原始档案，按风险验证，每个完整任务只提交相关文件并推送规范远端。

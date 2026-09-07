@@ -1,10 +1,10 @@
-# FLOW V1 指标语义字典
+# FLOW 物流指标子集与共享指标治理｜2026-09-07
 
-核对基线：2026-09-04，代码 `c1a59d1`。
+核对基线：2026-09-07，代码 `04ba4d7`。本文详细表格描述已冻结的物流执行子集，不是完整财务指标库。当前知识库 55 项、数据库版本治理/执行绑定/影响分析已有实现；具体可算性取决于事实覆盖。
 
 版本：`flow.metrics.logistics.v1`<br>
 引擎：`flow.metrics.engine.v1`<br>
-默认分析截止月：`2026-08`
+历史 fixture 截止月：`2026-08`（非生产固定值；构建 API 使用批次期间）
 
 ## 1. 语义层边界
 
@@ -106,7 +106,7 @@ flowchart LR
 
 `missing_periods` 是窗口不可用码：它表示相应比较窗口不完整，因此不生成该比较值；它不同于整个快照的来源或计算阻断。
 
-## 6. 验收基线
+## 6. 物流子集历史验收基线
 
 - 冻结总粒度答案：`fixtures/expected/metric_snapshots_v1.json`；
 - 指标目录：`config/metrics/flow_v1_metrics.yaml`；
@@ -118,7 +118,7 @@ flowchart LR
 
 ## 7. 构建与下游消费
 
-`MetricSnapshotService.create_snapshot` 同步读取当前已发布导入、计算完整结果、按完整身份复用历史或创建 `building → published` 快照；事务由调用方完成提交。失败不留下部分发布结果。Intake HTTP 发布入口目前没有自动调用该服务，Celery 骨架也没有执行指标计算，不能把导入成功等同于 Dashboard 已更新。
+`MetricSnapshotService.create_snapshot` 同步读取当前已发布导入、计算完整结果、按完整身份复用历史或创建 `building → published` 快照；事务由调用方完成提交。失败不留下部分发布结果。Intake HTTP 发布入口目前没有自动调用该服务，Celery 骨架也没有执行指标计算；现可通过显式构建 API 按批次期间创建结果及任务记录，不能把导入成功等同于 Dashboard 已更新。
 
 | 消费者 | 读取边界 |
 |---|---|
@@ -129,3 +129,7 @@ flowchart LR
 | Publishing | 冻结时读取合格对象，后续多格式渲染只读 JSONB ReportView，不随实时复核状态变化 |
 
 修改指标公式、目录或引擎身份必须创建新版本，并同时复核已知答案、分析不变量与下游报告。财务口径与业务阈值以目录和正式决策为准，不由文档同步任务调整。
+
+## 8. 后续订正与复用
+
+`ocf_net_profit_ratio` 已存在，不能因别名“净现比”再次创建同义指标。FCF/单独比率的 IFRS 18 MPM 分类与管理指标分类须分开；当前配置的相关错误仍待按新版本治理修正。本次不改变公式。详细订正见[总册 C01–C18](../knowledge-base/02_research/synthesis/2026-09-07-reference-and-improvement-master.md)，执行顺序见下一阶段 P01/P03。

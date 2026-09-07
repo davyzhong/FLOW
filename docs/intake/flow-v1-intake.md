@@ -1,6 +1,6 @@
-# FLOW V1 Excel 接入、映射、质量与发布
+# FLOW Excel 接入、映射、质量与发布｜2026-09-07
 
-核对基线：2026-09-04，代码 `c1a59d1`。
+核对基线：2026-09-07，代码 `04ba4d7`。本篇针对 Excel 接入；公开 PDF 来源另走 statements API，见[API 索引](../api-reference.md)。
 
 ## 1. 目标与边界
 
@@ -45,7 +45,7 @@ stateDiagram-v2
   published --> draft: 修订，创建新版本
 ```
 
-图中返回 draft 表示创建下一版本，不表示覆盖已发布记录。发布 API 仅切换 canonical 当前版本，尚未自动构建指标快照和 AnalysisRun；页面跳转 Dashboard 不等于新数据已有分析结果。
+图中返回 draft 表示创建下一版本，不表示覆盖已发布记录。发布 API 仅切换 canonical 当前版本，尚未自动构建指标快照和 AnalysisRun；已有显式构建 API `/api/v1/orchestration/batches/{id}/build` 按批次窗口构建并保留任务；页面跳转 Dashboard 不等于新数据已有分析结果。
 
 ## 4. HTTP API
 
@@ -123,4 +123,4 @@ make test-intake-e2e
 
 ## 9. 验证范围
 
-导入工作台和人工映射/警告确认已有 API 与组件回归；运行时使用真实 MinIO 保存原件。本次文档核对的真实上传验证遭遇环境超时，不能以 mock 存储测试或容器健康代替真实上传通过记录。阶段历史证据见[审查修复验收](../implementation/2026-09-04-review-repairs.md)。
+导入工作台和人工映射/警告确认已有 API 与组件回归；运行时使用真实 MinIO 保存原件。2026-09-06 S3 系统代理根因已修复，并有真实上传/发布/下载记录，见[存储修复验收](../implementation/2026-09-06-shell-metric-library-s3-proxy.md)。本次没有新跑应用旅程，目标部署仍需独立回归；不能以 mock 或容器健康代替真实链路。

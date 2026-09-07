@@ -1,6 +1,6 @@
-# FLOW V1 领域对象
+# FLOW 领域对象与版本身份｜2026-09-07
 
-核对基线：2026-09-04，代码 `c1a59d1`。对象契约遵循 D028、D033、D037，金额使用 PostgreSQL `NUMERIC` 与 Python `Decimal`；API 财务数值以精确字符串传递。
+核对基线：2026-09-07，代码 `04ba4d7`。对象契约遵循 D028、D033、D037，金额使用 PostgreSQL `NUMERIC` 与 Python `Decimal`；API 财务数值以精确字符串传递。
 
 ## 标识与版本
 
@@ -15,6 +15,9 @@
 | 分析调查 | AnalysisRun、AnalysisResult、Finding、DriverContribution、Evidence、Conclusion、ReviewEvent | 确定性分析不可变；复核按受控状态机变更 |
 | AI | CopilotInteraction | 追加交互审计，记录请求、provider/model、引用、结果与拒绝原因 |
 | 报告 | ReportSnapshot、ReportSnapshotItem、PublicationAttempt | 冻结内容与格式尝试分离 |
+| 财报事实 | 来源、报表行、归一化版本与复核事件 | `statements` 模块保留来源定位、主体、期间、币种和更正 |
+| 指标治理 | 库内定义版本、执行绑定、治理事件、影响试算 | 0012/0013/0018，历史版本与快照不随新定义漂移 |
+| 构建 | BuildJob | 0017，按批次期间构建、状态与重试记录；不等于已异步执行 |
 
 ## 身份与血缘
 
@@ -70,6 +73,8 @@ stateDiagram-v2
 | 历史 NULL 载荷 | 迁移不补造历史；旧产物可下载，新渲染需重新冻结 |
 | PublicationAttempt | 同一报告每次每格式一个新序号；实现直接 running → succeeded/failed，queued 仅是模型允许状态 |
 
-当前迁移链：0001 接入基础 → 0002 canonical → 0003 分析发布 → 0004 接入审计与发布 → 0005 版本化事实 → 0006 指标身份 → 0007 AnalysisRun → 0008 调查复核 → 0009 Copilot 审计 → 0010 冻结报告。
+当前迁移链：0001 接入基础 → 0002 canonical → 0003 分析发布 → 0004 接入审计与发布 → 0005 版本化事实 → 0006 指标身份 → 0007 AnalysisRun → 0008 调查复核 → 0009 Copilot 审计 → 0010 冻结报告 → 0011 报表 → 0012 指标知识对象 → 0013 引擎目录 → 0014 财报来源 → 0015 事实归一 → 0016 事实复核 → 0017 构建任务 → 0018 指标治理。
+
+上方 Finding 状态机与冻结流程描述既有报告路径。下一阶段客观报告独立资格尚需按计划实现，不能据此绕过旧证据门禁；新旧类型及事实快照身份须分别验证。
 
 核对入口：[模型](../../services/api/src/flow_api/infrastructure/models)、[迁移](../../services/api/migrations/versions)、[复核状态机](../../services/api/src/flow_api/investigation/state_machines.py)、[冻结服务](../../services/api/src/flow_api/publishing/service.py)。

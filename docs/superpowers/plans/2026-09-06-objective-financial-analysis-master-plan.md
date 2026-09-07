@@ -1,6 +1,6 @@
-# FLOW 客观财务分析完整项目计划与 To-do List
+# FLOW 客观财务分析里程碑与执行台账｜2026-09-06 建立，2026-09-07 更新
 
-> **2026-09-07 规划补充**：[下一阶段详细计划](2026-09-07-next-stage-upgrade-plan.md)与[参考订正总册](../../knowledge-base/02_research/synthesis/2026-09-07-reference-and-improvement-master.md)已整合累计外部借鉴。新文档只细化候选任务和验收，不自动启动实施或替代 D049。当前已存在 C06 后续提交 `8c7dbf3`，本文件初始“待执行”及旧复选框应结合后文完成记录理解；执行前由新计划 P00 校准，不重复建设已有能力。
+> **2026-09-07 接续关系**：[下一阶段详细计划](2026-09-07-next-stage-upgrade-plan.md)与[参考订正总册](../../knowledge-base/02_research/synthesis/2026-09-07-reference-and-improvement-master.md)已整合累计外部借鉴。P 计划是下一阶段详细任务入口，本文件保留 A–H 阶段出口和已完成证据，不再单独形成冲突排期。本次仅文档更新，实施需另行明确；A/B/C 已有实现，P00 刷新验收差异和在途 D01，不重复建设。
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use executing-plans to implement this plan task-by-task. Each checkbox is a tracked deliverable; before behavior changes use test-driven-development and before completion use verification-before-completion. Do not start unrelated parallel edits in a shared working tree.
 
@@ -10,7 +10,7 @@
 
 **Tech Stack:** Next.js、TypeScript、FastAPI、Pydantic、SQLAlchemy、Alembic、PostgreSQL、S3/MinIO、Celery/Redis、Decimal、Playwright。
 
-日期：2026-09-06。计划状态：**待执行；方向已批准**。读取基线：`33f777a`（已有迁移至 0013）；执行前重新检查 HEAD、工作树与 CI。
+建立：2026-09-06；更新：2026-09-07。状态：**A/B/C 已有交付记录，D/E/F 待增量建设与验收；本文件为里程碑台账**。本轮读取 `04ba4d7`、迁移至 0018；具体未提交 D01 和 CI 见当前状态页。
 正式方向：[产品方向规格](../specs/2026-09-06-objective-financial-analysis-direction.md)。本文件接替旧财务轨总计划的后续排序；旧完成证据保留，不重写为新验收已完成。
 
 ## 1. 已有资产与重新验收边界
@@ -40,9 +40,9 @@ flowchart LR
  O --> F
 ```
 
-优先顺序：A01–A03 → B01–B06 → C01–C06 → D01–D05 → E01–E06 → F01–F06 → G01–G03 → H01。F 的运行保障可提前插入，但不抢占事实与语义设计。E 报告类型须在 B/C 的冻结契约确定后实现，迁移编号取执行时最新值，禁止预占 0014。
+原始阶段顺序为 A → B → C → D → E → F → G → H。当前接续按 P00 差异与独立答案准备 → P01 口径订正 → D/E/F 对应增量；D03/D04 的答案准备提前，不等待全部图表完成。F 的运行保障可提前插入，但不抢占事实与语义设计。E 报告类型须在 B/C 的冻结契约确定后实现，迁移编号取执行时最新值，禁止预占 0014。
 
-状态：`todo / doing / blocked / done`；复选框只在证据和 CI 达到要求后勾选。当前所有新任务为 todo。每项依赖除明列外默认包含前一个同组任务；可以在独立分支上提前做只读研究，不推断为允许共享文件并行修改。
+状态：`todo / doing / blocked / done`；复选框只在证据和 CI 达到要求后勾选。A/B/C 依现有逐项证据标记；D01 存在在途工作但未在本轮验收，其他 D/E/F 任务依下表。每项依赖除明列外默认包含前一个同组任务；可以在独立分支上提前做只读研究，不推断为允许共享文件并行修改。
 
 ## 3. 通用执行步骤与验收纪律
 
@@ -185,8 +185,8 @@ flowchart LR
   - 依赖：B06、C03。
   - 主要位置：新 config/analysis/objective_finance_v1.yaml、analysis/objective.py。
   - 工作：定义财务结构、趋势、同比、盈利/现金/偿债/营运比率和杜邦等；公开数据不足的分解拒绝；不生成业务原因。
-  - FineBI 吸收（2026-09-06 并入，依据 synthesis/FineBI财务经营分析看板_架构借鉴分析.md）：目录按问题域组织（收入质量/利润变化/成本压力/费用效率/现金安全/未来趋势）；预算/同比/环比/YTD 作为共同比较镜头贯穿；区分层级下钻与驱动下钻两条路径；AnalysisTopic 元数据字段（问题/受众/主指标/比较镜头/允许维度/驱动方法/联查/降级原因/报告章节）作为 D01/D02 设计契约检查清单；公开数据阶段不得声称客户/订单/内部预算下钻。
-  - 十指标文章吸收（2026-09-06 并入，依据 synthesis/财务分析十指标文章_借鉴升级清单.md）：以「有没有增长→增长有没有带来利润→利润占用了多少资产和资金→资产和资金有没有转化为现金」四问作为最小问题骨架（FineBI 六问题域的粗粒度上层）；「核心十指标」作为 40 指标库的默认视图子集（元数据标记，不另建口径）；增长质量联查（收入增速 vs 应收增速剪刀差、净现比多期趋势）作为确定性检查候选，只呈现偏差不贴健康标签；期间费用率、净现比两项缺口转 v1.1 指标治理。
+  - FineBI 吸收（2026-09-06 并入，依据 synthesis/FineBI财务经营分析看板_架构借鉴分析.md）：目录按问题域组织（收入质量/利润变化/成本压力/费用效率/现金安全/未来趋势）；预算/同比/环比/YTD 作为共同比较镜头贯穿；区分层级下钻与驱动下钻两条路径；AnalysisTopic 元数据字段（问题/受众/主指标/比较镜头/允许维度/驱动方法/联查/降级原因/报告章节）作为 D01/D02 设计契约检查清单；公开数据按实际披露允许下钻，未披露的客户/订单/内部预算不得构造。
+  - 十指标文章吸收（2026-09-06 并入，依据 synthesis/财务分析十指标文章_借鉴升级清单.md）：以「有没有增长→增长有没有带来利润→利润占用了多少资产和资金→资产和资金有没有转化为现金」四问作为最小问题骨架（FineBI 六问题域的粗粒度上层）；「核心十指标」作为 40 指标库的默认视图子集（元数据标记，不另建口径）；增长质量联查（收入增速 vs 应收增速剪刀差、净现比多期趋势）作为确定性检查候选，只呈现偏差不贴健康标签；期间费用率为治理候选，净现比已有 `ocf_net_profit_ratio`，先核验绑定与展示，不新增同义项。
   - 测试/证据（新增目标）：`tests/analysis/test_objective_finance.py`。
   - 完成标准：事实陈述携带值、比较基准、口径及引用；主观因果用语和无来源行业阈值不进入事实报告。
 
@@ -368,7 +368,7 @@ flowchart LR
 - 2026-09-07（ZCode）：C06 done——治理操作表单（选指标/变更 JSON/操作者/理由 → 草稿/激活/退役，必填与 JSON 校验行内报错，成功后事件流刷新）；组件测试 3 项 + e2e 2 项（含 axe，普通用户无需改 YAML 完成一次草稿修订并留痕）；vitest 48/48、tsc/eslint 绿。C 阶段（指标治理）整体闭环，下一步 D01（含 FineBI 吸收清单）。
 - 2026-09-06：FineBI 看板借鉴分析（GPT，提交 80132ed）并入——D01 增补问题域组织/比较镜头/两种下钻/AnalysisTopic 检查清单；指导文档同步沉淀至 Obsidian 知识库 `wiki/FLOW分析工作台设计指导（源自FineBI看板借鉴）.md`；六条不可照搬边界与五条链约束一致，无决策变更。
 
-- 2026-09-06：李启方《财务分析必看10个指标》文章借鉴（用户提供，webReader 抓取）并入——D01 增补四问骨架/核心十指标默认视图/增长质量联查候选；指标目录缺口（期间费用率、净现比，已实查 v1 YAML 确认）转 v1.1 治理候选；原文全文归档 `02_research/original/12_财务分析必看10个指标_资料.md`，借鉴清单见 `02_research/synthesis/财务分析十指标文章_借鉴升级清单.md`，Obsidian 知识库同步入库（数据分析星球/）；无决策变更。
+- 2026-09-06：李启方《财务分析必看10个指标》文章借鉴（用户提供，webReader 抓取）并入——D01 增补四问骨架/核心十指标默认视图/增长质量联查候选；原记录误判净现比缺失：2026-09-07 核对 `ocf_net_profit_ratio` 已有定义，改为复用检查；期间费用率保留治理候选；原文全文归档 `02_research/original/12_财务分析必看10个指标_资料.md`，借鉴清单见 `02_research/synthesis/财务分析十指标文章_借鉴升级清单.md`，Obsidian 知识库同步入库（数据分析星球/）；无决策变更。
 
 **当前：D01 已提交待 CI；下一任务：D02。**
 
@@ -391,7 +391,7 @@ flowchart LR
 | 2026-09-06 | C03 期间/精度/异常语义 | doing | `metrics/financial_semantics.py`：余额口径显式（期末/平均）、单季↔累计转换规则、年化默认禁止、零分母/负权益/币种/合并范围 typed 拒绝、比率聚合先汇总分子分母、重述比较取重述版；`tests/metrics/test_financial_semantics.py` 7 组正反例通过 | C04 |
 | 2026-09-06 | C04 指标变更治理 | doing | 迁移 0018（metric_governance_event 持久化审计，替代 JSONL）；`metric_library_store/governance.py`（草稿/验证/生效/退役 + 非法 AST/循环依赖/引用缺失/并发草稿拒绝）；API：entries 三端点 + events 查询；`tests/integration/test_metric_library_governance.py` 5 项 + `test_metric_governance_api.py` 2 项通过 | C05 |
 | 2026-09-06 | C05 影响分析与新旧试算 | **done** | `metric_library_store/impact.py`（下游依赖传递闭包 + Decimal 独立沙盒试算 + 冻结历史只读统计）+ `POST /entries/{id}/impact`；`tests/integration/test_metric_impact.py` 3 项通过（差异真实、缺项降级、快照不动） | C06 |
-| 2026-09-07 | C06 指标库管理界面 | doing | `/metric-library` 增加执行绑定徽章（engine/facts/narrative + 详情）、治理记录标签页（事件审计表）、卡片内合规修订流（草稿→验证→生效，结果横幅在刷新后保留）；`e2e/metric-library-governance.spec.ts` 通过；API 响应并入执行绑定字段 | D01 |
+| 2026-09-07 | C06 指标库管理界面 | done（历史交付） | `/metric-library` 增加执行绑定徽章（engine/facts/narrative + 详情）、治理记录标签页（事件审计表）、卡片内合规修订流（草稿→验证→生效，结果横幅在刷新后保留）；`e2e/metric-library-governance.spec.ts` 通过；API 响应并入执行绑定字段 | D01 |
 | 2026-09-07 | D01 客观分析目录与适用性规则 | doing | `config/analysis/objective_finance_v1.yaml`（11 条目：结构/趋势/同比/比率/杜邦）+ `analysis/objective.py`（归一化事实求值，缺失 typed 降级，因果用语禁入）；`tests/analysis/test_objective_finance.py` 4 项通过（顺丰真实值、杜邦闭合、零分母、禁语检查） | D02 |
 
 执行者每次收尾补表：任务 ID、变更、定向测试、远端 CI、外部阻塞、下一条命令；未知内容标 unknown，不沿用过期状态。

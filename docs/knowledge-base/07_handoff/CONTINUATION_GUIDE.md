@@ -1,79 +1,27 @@
-# Agent 接续指南
+# FLOW 接续指南｜2026-09-07
 
-## 场景一：从零理解项目
+状态：当前操作入口；取代旧“直接进入 Pilot 安全部署/B02”的交接顺序。
 
-阅读顺序：
+## 从零理解
 
-1. `00_start_here/AGENT_START_HERE.md`
-2. `00_start_here/PROJECT_STATE.md`
-3. `04_decisions/DECISION_LOG.md`
-4. `docs/superpowers/specs/2026-08-29-flow-v1-design.md`
-5. `05_design/PROTOTYPE_INDEX.md`
-6. `02_research/INDEX.md`
+按[Agent 起点](../00_start_here/AGENT_START_HERE.md)读取当前状态、D049、事实合同、决策、影响图和下一阶段计划。来源结论查[参考总册](../02_research/synthesis/2026-09-07-reference-and-improvement-master.md)，文档是否过时查[全量登记](../../documentation-status.md)。
 
-完成后应能够准确回答：
+## 从当前工作继续
 
-- FLOW 为谁解决什么问题？
-- 为什么必须有数据中间层？
-- Excel 模板与数据库标准层有什么区别？
-- 为什么 AI 不能直接计算或发布数字？
-- V1 包含和不包含什么？
-- 当前下一步是什么？
+1. 确认用户当前授权：文档、诊断、计划或实施分别处理。
+2. 读取实际 HEAD、工作树、最新迁移、CI；当前说明是有日期的快照，不代替实时核对。
+3. 对照[下一阶段计划](../../superpowers/plans/2026-09-07-next-stage-upgrade-plan.md) P00 及[A–H 台账](../../superpowers/plans/2026-09-06-objective-financial-analysis-master-plan.md)，将已实现、已验收、未知和在途工作分开。
+4. 优先补语义订正与独立验收基础，再推进客观分析、报告和发布保障；共享文件有其他任务改动时先协调。
+5. 每项结束记录范围、提交、测试、未验证边界和下一动作，不将研究清单或旧 checkbox 直接等同实施范围。
 
-## 场景二：从当前状态继续
+## 修改已有决定
 
-截至 2026-09-04（代码基线 `c1a59d1`），Phase 1–10 功能窄切片、Pilot Phase 1 数据工作台/报告中心和单用户认证已实现；当前从 Pilot Phase 2 安全部署剩余工作继续，不再从 Phase 1 基础架构启动。
+先定位决策 ID 和影响图，列旧约束、拟改内容、上下游与兼容策略；正式合同变化需明确确认。不要在文档整理中悄悄批准累计差分、业务阈值、自动因果或扩大内部数据范围。
 
-优先阅读以下文件（路径以仓库根目录为基准）：
+## 查历史
 
-1. `docs/implementation/2026-09-04-review-repairs.md`：R1–R9、N1–N3 最新修复、定向验收与真实存储限制；
-2. `docs/operations/authentication.md`：AUTH_TOKEN、FLOW_WEB_PASSWORD、FLOW_WEB_ORIGIN 与签名会话；
-3. `docs/superpowers/plans/2026-09-03-flow-pilot-readiness-phase-2-security-deployment.md`：核对已完成 A/B，补齐其余安全部署任务；
-4. `docs/implementation/phase-pilot-1-user-closure.md` 与 `docs/implementation/phase-10-acceptance.md`：历史门禁及其边界；
-5. `docs/knowledge-base/04_decisions/CHANGE_IMPACT_MAP.md`：确定变更传播范围。
+原始会话/研究/图片和批准规格快照保持不变；历史计划与验收有状态说明和日期命名。历史状态见[完整快照](../00_start_here/2026-09-07-project-state-history.md)，旧下一步不再有效。公众号管线已移交 DavyBase，本仓库只保留引用，不恢复旧采集任务。
 
-先检查当前代码、迁移与服务配置。迁移头为 `0010_frozen_reports`，升级执行 `cd services/api && uv run alembic upgrade head`；旧快照缺少冻结 payload 时不可重渲染，已有产物可下载，需要新输出时从符合审批条件的数据重新冻结。
+## 收尾
 
-剩余工作包括真实 MinIO PutObject 超时调查与全链路补验、备份恢复、HTTPS 部署/回滚、密钥与网络边界、结构化日志。完成独立部署验收后再用脱敏真实数据检验准确性，依据试点证据确定 V1.1。浏览器导入的存储替身验证、真实认证验证与真实 S3 验收必须分别记录，不得互相替代。
-
-## 场景三：修改已批准设计
-
-1. 在决策日志中找到对应决策 ID；
-2. 阅读变更影响图；
-3. 说明修改原因和被替代方案；
-4. 新增决策记录，不删除历史记录；
-5. 修改正式规格并更新快照；
-6. 重新检查所有下游对象和验收标准；
-7. 重新生成文件清单和哈希。
-
-## 场景四：核查原始依据
-
-- 核查用户原话：读取可读 Codex 转录或历史 ChatGPT 会话；
-- 核查机器级事件：读取 raw Codex JSONL；
-- 核查研究来源：读取研究 Markdown，再查看对应图片；
-- 核查页面演进：读取原型索引和相关 HTML；
-- 核查文件未被修改：验证 `sha256sums.txt`。
-
-## 防止上下文漂移
-
-- 不把未来方向自动加入 V1；
-- 不把被取代决策恢复为当前需求；
-- 不让前端页面直接依赖 Excel；
-- 不让 AI 绕过指标、证据和审阅；
-- 不把外部参考图中的数据、品牌和水印当成 FLOW 内容；
-- 任何新指标都必须说明标准数据依赖和计算口径；
-- 任何新输出都必须引用同一 Report Snapshot。
-
-## 已确定与仍待完成的边界
-
-- 已确定：Next.js + FastAPI + Celery，PostgreSQL + Redis + S3 兼容存储；`flow.excel.v1` 标准契约、15 个版本化指标、5 个确定性 Playbook；
-- 已实现：数据工作台、报告中心、API Bearer token 和单用户登录；未实现多角色、SSO 或多租户；
-- 待完成：安全部署拓扑落地与验收、备份恢复、结构化日志、真实存储补验及真实数据试点；
-- 待试点细化：指标阈值、企业报告品牌模板与正式品牌释义；
-- AI 默认确定性/脚本 provider 与固定评估已落地，live provider 仍为 opt-in，不进入 CI。
-
-## 任务完成与 GitHub 交付
-
-规范仓库为 <https://github.com/davyzhong/FLOW>，本地远程名称为 `origin`。
-
-用户已授权并要求：每次完整任务完成后，验证任务结果，将范围内的变更独立提交并推送当前分支到 `origin`。不得强制推送，不得夹带无关用户文件；推送失败时应保留本地提交并报告认证、权限或冲突等具体原因。
+更新当前状态与相关索引；知识库变化重新生成 inventory 和 SHA-256。只提交本任务文件，推送规范 origin，报告验证、提交和推送结果；不提交用户归档、截图、临时数据或其他任务代码。
