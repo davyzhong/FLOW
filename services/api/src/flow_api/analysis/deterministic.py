@@ -79,4 +79,59 @@ def compound_annual_growth_rate(
     return growth.quantize(_Q)
 
 
-__all__ = ["LinkageReviewPrompt", "compound_annual_growth_rate", "growth_linkage_check"]
+@dataclass(frozen=True, slots=True)
+class AdditiveBridgeResult:
+    """C08 可加和桥守恒结果：分项和 vs 总变化额，残差显式。"""
+
+    reconciled: bool
+    total_change: Decimal
+    allocated: dict[str, Decimal]
+    residual: Decimal
+    note: str
+
+
+_TOLERANCE = Decimal("0.01")
+
+
+def reconcile_additive_bridge(
+    *,
+    total_change: Decimal | None,
+    parts: dict[str, Decimal | None],
+) -> AdditiveBridgeResult | None:
+    """可加和驱动拆解守恒检查（C08）。
+
+    分项之和与总变化额的差（容差 0.01）作为「未分配残差」显式返回；
+    不做静默分摊或凑整；任一输入缺失返回 None。
+    """
+
+    if total_change is None:
+        return None
+    if any(value is None for value in parts.values()):
+        return None
+    allocated = {name: value for name, value in parts.items() if value is not None}
+    parts_sum = sum(allocated.values(), Decimal("0"))
+    residual = (total_change - parts_sum).quantize(Decimal("0.01"))
+    reconciled = abs(residual) <= _TOLERANCE
+    if reconciled:
+        note = f"分项之和 {parts_sum} 对总变化额 {total_change} 守恒（容差 0.01）"
+    else:
+        note = (
+            f"分项之和 {parts_sum} ≠ 总变化额 {total_change}，"
+            f"未分配残差 {residual} 显式列示，禁止静默凑整"
+        )
+    return AdditiveBridgeResult(
+        reconciled=reconciled,
+        total_change=total_change,
+        allocated=allocated,
+        residual=residual,
+        note=note,
+    )
+
+
+__all__ = [
+    "AdditiveBridgeResult",
+    "LinkageReviewPrompt",
+    "compound_annual_growth_rate",
+    "growth_linkage_check",
+    "reconcile_additive_bridge",
+]
