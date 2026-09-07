@@ -181,7 +181,7 @@ flowchart LR
 
 ### M3：客观分析与独立准确性验证
 
-- [ ] **D01 · 构建客观分析目录与适用性规则** — 状态：doing（证据已落盘，待 CI 绿后勾选）
+- [x] **D01 · 构建客观分析目录与适用性规则** — 状态：done（`c009823`，CI 绿已确认；本地 objective 测试 4/4 复验）
   - 依赖：B06、C03。
   - 主要位置：新 config/analysis/objective_finance_v1.yaml、analysis/objective.py。
   - 工作：定义财务结构、趋势、同比、盈利/现金/偿债/营运比率和杜邦等；公开数据不足的分解拒绝；不生成业务原因。
@@ -366,6 +366,7 @@ flowchart LR
 
 - 2026-09-06（ZCode 接续）：C04/C05 后端已由 GPT 提交；其未提交的 C06 前端半成品经验证全绿（API 治理/影响测试 10/10、vitest 45/45、契约无漂移、浏览器验收 execution 绑定分布 facts 39 + engine 16、revenue=engine 带 entry_id），已代为提交。
 - 2026-09-07（ZCode 接续）：文档治理与改名校准轮——并行文档任务提交治理轮 `de3a672`（PROJECT_STATE 拆分历史、治理规则 `docs/2026-09-07-documentation-governance.md` 落盘）与归档 `22061da`（根目录二次会话导出/六张接收截图/var 审计日志原位保留）；接续任务按治理规则为 20 个计划/验收/研究文档补建立日期前缀并同步全部引用，`documentation-status.md` 增第二轮登记，LINK_CATALOG/01_conversations INDEX 补登。仅文档变更，无决策变更，不改产品行为。
+- 2026-09-07（ZCode）：D01 勾选 done（`c009823` CI 绿 + tests/analysis/test_objective_finance.py 4/4 复验）。注意：工作区另有代理未提交的 21 文件文档重构半成品（README/架构文档，净删 566 行），未审阅未收编，接手者先审 `git diff` 再决定；下一步 D02。
 - 2026-09-07（ZCode）：C06 done——治理操作表单（选指标/变更 JSON/操作者/理由 → 草稿/激活/退役，必填与 JSON 校验行内报错，成功后事件流刷新）；组件测试 3 项 + e2e 2 项（含 axe，普通用户无需改 YAML 完成一次草稿修订并留痕）；vitest 48/48、tsc/eslint 绿。C 阶段（指标治理）整体闭环，下一步 D01（含 FineBI 吸收清单）。
 - 2026-09-06：FineBI 看板借鉴分析（GPT，提交 80132ed）并入——D01 增补问题域组织/比较镜头/两种下钻/AnalysisTopic 检查清单；指导文档同步沉淀至 Obsidian 知识库 `wiki/FLOW分析工作台设计指导（源自FineBI看板借鉴）.md`；六条不可照搬边界与五条链约束一致，无决策变更。
 
