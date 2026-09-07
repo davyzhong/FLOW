@@ -5,6 +5,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import {
+  FlowApiError,
   metricLibraryApi,
   type MetricGovernanceEventLine,
   type MetricLibrary,
@@ -54,7 +55,88 @@ function matches(metric: MetricLibraryEntry, query: string): boolean {
   return haystack.includes(query.toLowerCase());
 }
 
-function MetricCard({ metric, domains }: { metric: MetricLibraryEntry; domains: Record<string, string> }) {
+const DRAFT_FIELDS = [
+  ["caliber", "口径说明"],
+  ["benchmark", "参考基准"],
+  ["definition", "定义"],
+  ["formula_text", "公式（文本）"],
+] as const;
+
+function MetricDraftForm({
+  metric,
+  onChanged,
+}: {
+  metric: MetricLibraryEntry;
+  onChanged: (message: string) => void;
+}) {
+  const [field, setField] = useState<string>("caliber");
+  const [value, setValue] = useState("");
+  const [reason, setReason] = useState("");
+  const [operator, setOperator] = useState("finance.bp");
+  const [message, setMessage] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+
+  const submit = useCallback(async () => {
+    if (!metric.entry_id) return;
+    setBusy(true);
+    setMessage(null);
+    try {
+      const draft = await metricLibraryApi.draftChange(metric.entry_id, {
+        changes: { [field]: value },
+        operator,
+        reason,
+      });
+      await metricLibraryApi.activateChange(draft.id, { operator, reason });
+      onChanged(`已合规修订为 v${draft.version}（草稿→验证→生效，审计留痕）`);
+    } catch (error) {
+      setMessage(
+        error instanceof FlowApiError
+          ? `修订被拒绝（${error.code}）：${error.message}`
+          : "修订失败",
+      );
+    } finally {
+      setBusy(false);
+    }
+  }, [field, metric.entry_id, onChanged, operator, reason, value]);
+
+  return (
+    <div className="ml-draft">
+      <select aria-label="修订字段" value={field} onChange={(e) => setField(e.target.value)}>
+        {DRAFT_FIELDS.map(([key, label]) => (
+          <option key={key} value={key}>{label}</option>
+        ))}
+      </select>
+      <input
+        aria-label="修订内容"
+        placeholder="新内容"
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+      />
+      <input
+        aria-label="修订理由"
+        placeholder="理由（必填）"
+        value={reason}
+        onChange={(e) => setReason(e.target.value)}
+      />
+      <input
+        aria-label="操作者"
+        value={operator}
+        onChange={(e) => setOperator(e.target.value)}
+      />
+      <button
+        type="button"
+        disabled={busy || !value.trim() || !reason.trim()}
+        onClick={() => void submit()}
+      >
+        提交修订
+      </button>
+      {message ? <p className="ml-draft__message">{message}</p> : null}
+    </div>
+  );
+}
+
+function MetricCard({ metric, domains, onChanged }: { metric: MetricLibraryEntry; domains: Record<string, string>; onChanged?: (message: string) => void }) {
+  const [drafting, setDrafting] = useState(false);
   return (
     <article className="ml-metric">
       <header className="ml-metric__head">
@@ -94,12 +176,24 @@ function MetricCard({ metric, domains }: { metric: MetricLibraryEntry; domains: 
         ) : null}
         {metric.migrates_from ? <span>迁移自 {metric.migrates_from}</span> : null}
         {metric.provenance ? <span>来源：{metric.provenance}</span> : null}
+        {metric.entry_id && onChanged ? (
+          <button
+            type="button"
+            className="ml-revise"
+            onClick={() => setDrafting((open) => !open)}
+          >
+            {drafting ? "收起修订" : "修订"}
+          </button>
+        ) : null}
       </footer>
+      {drafting && metric.entry_id && onChanged ? (
+        <MetricDraftForm metric={metric} onChanged={onChanged} />
+      ) : null}
     </article>
   );
 }
 
-function MetricList({ metrics, domains }: { metrics: MetricLibraryEntry[]; domains: Record<string, string> }) {
+function MetricList({ metrics, domains, onChanged }: { metrics: MetricLibraryEntry[]; domains: Record<string, string>; onChanged?: (message: string) => void }) {
   const [query, setQuery] = useState("");
   const [mpmOnly, setMpmOnly] = useState(false);
   const visible = useMemo(
@@ -124,7 +218,7 @@ function MetricList({ metrics, domains }: { metrics: MetricLibraryEntry[]; domai
       </div>
       <div className="ml-metric-list">
         {visible.map((metric) => (
-          <MetricCard key={metric.metric_code} metric={metric} domains={domains} />
+          <MetricCard key={metric.metric_code} metric={metric} domains={domains} onChanged={onChanged} />
         ))}
       </div>
     </section>
@@ -290,6 +384,7 @@ function GovernanceSection({ metrics }: { metrics: MetricLibraryEntry[] }) {
 
 export function MetricLibraryApp() {
   const [state, setState] = useState<LoadState>({ kind: "loading" });
+  const [notice, setNotice] = useState<string | null>(null);
   const [tab, setTab] = useState<Tab>("general");
   const [accountQuery, setAccountQuery] = useState("");
 
@@ -308,6 +403,12 @@ export function MetricLibraryApp() {
   useEffect(() => {
     const controller = load();
     return () => controller.abort();
+  }, [load]);
+
+  const revised = useCallback((message: string) => {
+    setNotice(message);
+    setState({ kind: "loading" });
+    load();
   }, [load]);
 
   const retry = useCallback(() => {
@@ -353,6 +454,10 @@ export function MetricLibraryApp() {
         </p>
       </header>
 
+      {notice ? (
+        <p className="ml-notice" role="status">{notice}</p>
+      ) : null}
+
       <nav className="ml-tabs" aria-label="指标库分区">
         {TABS.map((t) => (
           <button
@@ -367,8 +472,8 @@ export function MetricLibraryApp() {
         ))}
       </nav>
 
-      {tab === "general" ? <MetricList metrics={general} domains={library.domains} /> : null}
-      {tab === "logistics" ? <MetricList metrics={logistics} domains={library.domains} /> : null}
+      {tab === "general" ? <MetricList metrics={general} domains={library.domains} onChanged={revised} /> : null}
+      {tab === "logistics" ? <MetricList metrics={logistics} domains={library.domains} onChanged={revised} /> : null}
       {tab === "governance" && state.kind === "loaded" ? (
         <GovernanceSection metrics={state.library.metrics} />
       ) : null}

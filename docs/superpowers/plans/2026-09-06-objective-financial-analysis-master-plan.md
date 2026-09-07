@@ -368,7 +368,7 @@ flowchart LR
 
 - 2026-09-06：李启方《财务分析必看10个指标》文章借鉴（用户提供，webReader 抓取）并入——D01 增补四问骨架/核心十指标默认视图/增长质量联查候选；指标目录缺口（期间费用率、净现比，已实查 v1 YAML 确认）转 v1.1 治理候选；原文全文归档 `02_research/original/12_财务分析必看10个指标_资料.md`，借鉴清单见 `02_research/synthesis/财务分析十指标文章_借鉴升级清单.md`，Obsidian 知识库同步入库（数据分析星球/）；无决策变更。
 
-**当前：C05 已提交待 CI；下一任务：C06。**
+**当前：C06 已提交待 CI；M2 完成，下一任务：D01。**
 
 第一条命令（A02）：阅读方向规格第 3 节五条链与 `baseline-audit.md` §2/§4，起草 `docs/superpowers/specs/financial-facts-contract.md`，随后 `cd services/api && uv run pytest tests/statements/test_fact_contract.py -q`。
 
@@ -389,5 +389,6 @@ flowchart LR
 | 2026-09-06 | C03 期间/精度/异常语义 | doing | `metrics/financial_semantics.py`：余额口径显式（期末/平均）、单季↔累计转换规则、年化默认禁止、零分母/负权益/币种/合并范围 typed 拒绝、比率聚合先汇总分子分母、重述比较取重述版；`tests/metrics/test_financial_semantics.py` 7 组正反例通过 | C04 |
 | 2026-09-06 | C04 指标变更治理 | doing | 迁移 0018（metric_governance_event 持久化审计，替代 JSONL）；`metric_library_store/governance.py`（草稿/验证/生效/退役 + 非法 AST/循环依赖/引用缺失/并发草稿拒绝）；API：entries 三端点 + events 查询；`tests/integration/test_metric_library_governance.py` 5 项 + `test_metric_governance_api.py` 2 项通过 | C05 |
 | 2026-09-06 | C05 影响分析与新旧试算 | doing | `metric_library_store/impact.py`（下游依赖传递闭包 + Decimal 独立沙盒试算 + 冻结历史只读统计）+ `POST /entries/{id}/impact`；`tests/integration/test_metric_impact.py` 3 项通过（差异真实、缺项降级、快照不动） | C06 |
+| 2026-09-07 | C06 指标库管理界面 | doing | `/metric-library` 增加执行绑定徽章（engine/facts/narrative + 详情）、治理记录标签页（事件审计表）、卡片内合规修订流（草稿→验证→生效，结果横幅在刷新后保留）；`e2e/metric-library-governance.spec.ts` 通过；API 响应并入执行绑定字段 | D01 |
 
 执行者每次收尾补表：任务 ID、变更、定向测试、远端 CI、外部阻塞、下一条命令；未知内容标 unknown，不沿用过期状态。
