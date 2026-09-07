@@ -1,6 +1,6 @@
 relative_path	size_bytes	modified_time	mime_type
 00_start_here/AGENT_START_HERE.md	8042	2026-09-06T16:52:13+08:00	application/octet-stream
-00_start_here/PROJECT_STATE.md	39159	2026-09-06T18:35:08+08:00	application/octet-stream
+00_start_here/PROJECT_STATE.md	39769	2026-09-07T08:22:46+08:00	application/octet-stream
 01_conversations/INDEX.md	2253	2026-08-29T23:44:55+08:00	application/octet-stream
 01_conversations/raw/chatgpt/Finance_Intelligence_OS_完整会话归档.md	63937	2026-08-28T15:04:51+08:00	application/octet-stream
 01_conversations/raw/codex/rollout-2026-08-28T14-41-27-01a0471a-1689-7270-8dc5-f2bf084e4db9.jsonl	23125789	2026-08-29T13:57:29+08:00	application/octet-stream
@@ -8,7 +8,7 @@ relative_path	size_bytes	modified_time	mime_type
 01_conversations/readable/2026-09-02-positioning-accurate-financial-analysis.md	2636	2026-09-04T21:09:02+08:00	application/octet-stream
 01_conversations/readable/rollout-2026-08-28T14-41-27-01a0471a-1689-7270-8dc5-f2bf084e4db9.md	56461	2026-08-29T23:39:55+08:00	application/octet-stream
 01_conversations/readable/rollout-2026-08-29T14-00-01-01a0471a-1689-7270-8dc5-f2bf084e4db9_01a04c1a-86bd-7960-9db5-80ae486d1bd4.md	39363	2026-08-29T23:46:26+08:00	application/octet-stream
-02_research/INDEX.md	8832	2026-09-06T23:26:44+08:00	application/octet-stream
+02_research/INDEX.md	9476	2026-09-07T08:22:46+08:00	application/octet-stream
 02_research/original/00_研究资料总览.md	7563	2026-09-04T21:09:02+08:00	application/octet-stream
 02_research/original/01_cfo_dashboard_text.txt	1300	2026-08-28T13:32:42+08:00	text/plain
 02_research/original/01_集团财务总监驾驶舱_资料.md	23377	2026-08-28T13:46:39+08:00	application/octet-stream
@@ -128,6 +128,7 @@ relative_path	size_bytes	modified_time	mime_type
 02_research/original/p5_samples/tencent_0700/Tencent_2026_Q2_results.pdf	537315	2026-09-05T23:11:54+08:00	application/pdf
 02_research/original/p5_samples/tencent_0700/Tencent_FY2025_annual_report.pdf	4428270	2026-09-05T23:12:19+08:00	application/pdf
 02_research/original/p5_samples/yto_600233/YTO_2026_Q1_report.pdf	188156	2026-09-06T18:14:31+08:00	application/pdf
+02_research/synthesis/2026-09-07-reference-and-improvement-master.md	152580	2026-09-07T08:21:46+08:00	application/octet-stream
 02_research/synthesis/Finance_Intelligence_OS_系统研究结论.md	19272	2026-08-28T14:51:02+08:00	application/octet-stream
 02_research/synthesis/FineBI财务经营分析看板_架构借鉴分析.md	14747	2026-09-06T22:44:27+08:00	application/octet-stream
 02_research/synthesis/会计与财务指标知识库_设计草案.md	8531	2026-09-05T23:10:47+08:00	application/octet-stream
@@ -157,12 +158,12 @@ relative_path	size_bytes	modified_time	mime_type
 03_assets/visual_prototypes/unified-publishing.html	13157	2026-08-29T23:00:35+08:00	text/html
 03_assets/visual_prototypes/waiting-data-contract.html	269	2026-08-29T21:37:06+08:00	text/html
 03_assets/visual_prototypes/waiting-template-scope.html	280	2026-08-29T22:56:42+08:00	text/html
-04_decisions/CHANGE_IMPACT_MAP.md	9905	2026-09-06T16:52:13+08:00	application/octet-stream
-04_decisions/DECISION_LOG.md	26615	2026-09-06T16:52:13+08:00	application/octet-stream
+04_decisions/CHANGE_IMPACT_MAP.md	10798	2026-09-07T08:22:46+08:00	application/octet-stream
+04_decisions/DECISION_LOG.md	27545	2026-09-07T08:22:46+08:00	application/octet-stream
 05_design/PROTOTYPE_INDEX.md	2984	2026-09-06T00:02:17+08:00	application/octet-stream
 05_design/approved/2026-08-29-flow-v1-design.md	19714	2026-08-29T23:35:13+08:00	application/octet-stream
 06_sources/LINK_CATALOG.md	3856	2026-09-06T22:44:27+08:00	application/octet-stream
-06_sources/SOURCE_CATALOG.md	3435	2026-09-04T21:09:02+08:00	application/octet-stream
+06_sources/SOURCE_CATALOG.md	3980	2026-09-07T08:22:46+08:00	application/octet-stream
 06_sources/all_urls_extracted.txt	248946	2026-09-06T22:44:42+08:00	text/plain
 07_handoff/CONTINUATION_GUIDE.md	4359	2026-09-04T23:19:45+08:00	application/octet-stream
 07_handoff/RESTART_PROMPTS.md	2591	2026-09-04T23:19:45+08:00	application/octet-stream
@@ -171,4 +172,4 @@ relative_path	size_bytes	modified_time	mime_type
 08_wechat_sources/README.md	2328	2026-09-04T21:09:02+08:00	application/octet-stream
 99_manifest/ARCHIVE_NOTES.md	1903	2026-09-04T21:09:02+08:00	application/octet-stream
 99_manifest/READER_TEST.md	2455	2026-08-29T23:45:57+08:00	application/octet-stream
-README.md	6644	2026-09-06T16:52:13+08:00	application/octet-stream
+README.md	7139	2026-09-07T08:22:46+08:00	application/octet-stream

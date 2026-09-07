@@ -1,5 +1,10 @@
 # 研究资料索引
 
+## 累计资料整合入口（2026-09-07）
+
+- [外部借鉴、参考资料与优化订正总册](synthesis/2026-09-07-reference-and-improvement-master.md)：覆盖核心研究 00–12、FineBI、早期样板、会计与指标方法、主数据背景、工程复盘；包含 30 项采纳建议、18 项订正及 417 条公众号素材登记。全量索引不等于本次逐篇重新核验。
+- [下一阶段升级改造详细计划书](../../superpowers/plans/2026-09-07-next-stage-upgrade-plan.md)：P00–P11 阶段任务与 P12 后续储备，明确依赖、文件、验收和范围。仅规划，未实施；不覆盖 D049 正式方向。
+
 ## 原始研究目录
 
 [original](original) 是 `/Users/qiming/.zcode/workspace/default/research/` 的归档副本，排除了与内容无关的 `.mimosa` 运行状态文件。

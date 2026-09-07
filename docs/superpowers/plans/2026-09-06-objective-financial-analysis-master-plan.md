@@ -1,5 +1,7 @@
 # FLOW 客观财务分析完整项目计划与 To-do List
 
+> **2026-09-07 规划补充**：[下一阶段详细计划](2026-09-07-next-stage-upgrade-plan.md)与[参考订正总册](../../knowledge-base/02_research/synthesis/2026-09-07-reference-and-improvement-master.md)已整合累计外部借鉴。新文档只细化候选任务和验收，不自动启动实施或替代 D049。当前已存在 C06 后续提交 `8c7dbf3`，本文件初始“待执行”及旧复选框应结合后文完成记录理解；执行前由新计划 P00 校准，不重复建设已有能力。
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use executing-plans to implement this plan task-by-task. Each checkbox is a tracked deliverable; before behavior changes use test-driven-development and before completion use verification-before-completion. Do not start unrelated parallel edits in a shared working tree.
 
 **Goal:** 以公开财报完成准确、可复核、可使用的客观财务分析产品，为未来企业内部数据分析提供共享底座。

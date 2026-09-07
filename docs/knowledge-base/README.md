@@ -1,5 +1,7 @@
 # FLOW 项目知识库
 
+> **资料整合与升级规划（2026-09-07，仅文档）**：[外部借鉴与优化订正总册](02_research/synthesis/2026-09-07-reference-and-improvement-master.md)整合累计研究、30 项建议、18 项订正及 417 条素材索引；[下一阶段详细计划](../superpowers/plans/2026-09-07-next-stage-upgrade-plan.md)细化 D049 后续工作，尚未授权执行。读取基线 `8c7dbf3`，C01–C06 已有后续实现记录，不能将下方旧日期理解为全部尚未实施。
+
 > **最新计划（D049，2026-09-06）**：[客观财务分析完整计划与待办](../superpowers/plans/2026-09-06-objective-financial-analysis-master-plan.md)接替旧 WS 后续排序；公开财报当前交付、内部数据后续试点，客观基础优先。
 
 原始归档基准日期：2026-08-29；当前工程状态更新：2026-09-04（代码 `c1a59d1`）
