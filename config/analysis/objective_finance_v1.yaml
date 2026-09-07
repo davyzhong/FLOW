@@ -1,0 +1,90 @@
+# 客观财务分析目录 v1（D01）
+#
+# 原则（方向规格 §1）：只做客观分析——趋势、结构、比率、可复算的数学分解；
+# 数学贡献不代表业务因果；公开数据不足的分解拒绝生成；不生成业务原因。
+# 每条事实陈述必须携带：值、比较基准、口径、来源项目引用。
+
+catalog_id: flow.analysis.objective_finance.v1
+status: draft
+decision_ref: D049
+
+# 分析种类：structure 结构 / trend 趋势 / yoy 同比 / ratio 比率 / dupont 杜邦分解
+entries:
+  # ---- 财务结构 ----
+  - id: asset_structure
+    name: 资产结构
+    kind: structure
+    basis: 期末资产总计
+    items: [bs.fixed_assets, bs.ar, bs.cash, bs.inventory]
+    denominator: bs.total_assets
+    scope_note: 占总资产比重；分母缺失则整体不适用
+  - id: capital_structure
+    name: 资本结构
+    kind: structure
+    basis: 期末负债与权益总计
+    items: [bs.total_liab, bs.equity]
+    denominator: bs.total_assets
+    scope_note: 资产负债率与权益占比
+  # ---- 趋势与同比 ----
+  - id: revenue_yoy
+    name: 营业收入同比
+    kind: yoy
+    basis: 上年同期
+    numerator: { item: is.revenue, role: cur }
+    denominator: { item: is.revenue, role: prev_yoy }
+    scope_note: 同比 = 本期 / 上年同期 − 1；上年同期缺失则不适用
+  - id: net_profit_yoy
+    name: 净利润同比
+    kind: yoy
+    basis: 上年同期
+    numerator: { item: is.net_profit, role: cur }
+    denominator: { item: is.net_profit, role: prev_yoy }
+    scope_note: 同上
+  - id: asset_trend
+    name: 总资产变动
+    kind: trend
+    basis: 期初
+    numerator: { item: bs.total_assets, role: end }
+    denominator: { item: bs.total_assets, role: open }
+    scope_note: 期末 vs 期初
+  # ---- 盈利比率 ----
+  - id: gross_margin
+    name: 毛利率
+    kind: ratio
+    formula_ref: gross_margin
+    scope_note: 指标库 facts 执行（is.revenue / is.cogs）
+  - id: net_margin
+    name: 净利率
+    kind: ratio
+    formula_ref: net_margin
+    scope_note: 指标库 facts 执行
+  # ---- 现金与偿债 ----
+  - id: ocf_to_net_profit
+    name: 利润现金含量
+    kind: ratio
+    numerator: { item: cf.ocf, role: cur }
+    denominator: { item: is.net_profit, role: cur }
+    scope_note: 经营现金流净额 ÷ 净利润；净利润为负时比率符号失真，如实标注
+  - id: current_ratio
+    name: 流动比率
+    kind: ratio
+    formula_ref: current_ratio
+    scope_note: 指标库 facts 执行
+  - id: debt_asset_ratio
+    name: 资产负债率
+    kind: ratio
+    formula_ref: debt_asset_ratio
+    scope_note: 指标库 facts 执行
+  # ---- 杜邦分解（数学分解，非业务因果） ----
+  - id: dupont_three_factor
+    name: 杜邦三分解
+    kind: dupont
+    formula_ref: roe
+    factors: [net_margin, total_asset_turnover, equity_multiplier]
+    scope_note: ROE = 净利率 × 总资产周转率 × 权益乘数；乘积闭合为数学恒等，不解释为业务因果
+
+rules:
+  - 分子或分母缺失 → 该条目状态 not_computable（附 typed 原因），不生成数值
+  - 分母为零/为负 → not_computable（zero_denominator / negative_denominator）
+  - 比率不做平均；期间口径在结果中显式标注（期末/平均、本期/上年同期）
+  - 事实陈述模板：「{name}：{value}（{basis}；口径：{scope_note}；来源：{refs}）」
