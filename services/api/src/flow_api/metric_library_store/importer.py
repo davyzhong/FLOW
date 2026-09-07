@@ -8,6 +8,7 @@ metric_code, version)；subject/standard/template/mapping 以自然键。
 from __future__ import annotations
 
 from pathlib import Path
+from types import SimpleNamespace
 from typing import Any
 
 import yaml
@@ -21,12 +22,13 @@ from flow_api.infrastructure.models.metric_library import (
     MetricDictionaryEntry,
     StatementLineMapping,
 )
+from flow_api.metrics.mpm_semantics import assert_mpm_labels_valid
 
 METRIC_FIELDS = {
     "unit", "time_behavior", "caliber", "default_caliber", "default_basis",
     "alternative_calibers", "source_cas", "source_ifrs", "depends_on",
     "decompositions", "aliases", "benchmark", "reconciliation", "migrates_from",
-    "provenance",
+    "provenance", "mpm_review",
 }
 
 
@@ -76,6 +78,18 @@ REPORT_ITEM_SUBJECTS: dict[str, list[str]] = {
 
 def import_metric_dictionary(session: Session, config_path: Path) -> dict[str, int]:
     data: dict[str, Any] = yaml.safe_load(config_path.read_text(encoding="utf-8"))
+    # MPM 分类不变量（P01/C02）：mpm=true 必须携带已核验结构化判定，加载即拒绝
+    assert_mpm_labels_valid(
+        [
+            SimpleNamespace(
+                metric_code=entry["metric_code"],
+                mpm=bool(entry.get("mpm", False)),
+                mpm_review=entry.get("mpm_review"),
+            )
+            for collection in ("metrics_general", "metrics_logistics")
+            for entry in data[collection]
+        ]
+    )
     counts = {"metrics": 0}
     status = data.get("status", "effective")
     for collection in ("metrics_general", "metrics_logistics"):

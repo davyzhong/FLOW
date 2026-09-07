@@ -48,3 +48,34 @@
 ## 4. 2026-09-07 订正说明
 
 上表 `MPM 7/7` 证明当时标记项目存在调节字段，不能证明 IFRS 18 分类正确。FCF、单独比率等仍存在误标，参[参考总册 C02–C05](../../knowledge-base/02_research/synthesis/2026-09-07-reference-and-improvement-master.md)。因此“来源字段齐备”“可定位”“内容已核实”“可执行”必须分别验收。C01 的历史交付保留，新一轮来源/分类订正进入 P01，不因本次文档解释宣称配置已修。
+
+## 5. P01 订正实施记录（2026-09-07）
+
+**C02（MPM 分类）：已实施，语义订正非文案改动。**
+
+- 原状态：7 条指标带裸布尔 `mpm: true`（ebitda、adjusted_ebitda、ebitda_margin、free_cash_flow、direct_cost、operating_profit、collection_rate），把"管理常用"与"IFRS 18 监管定义 MPM"混为一谈。
+- 新语义（`flow_api/metrics/mpm_semantics.py` + 迁移 0019 新增 `mpm_review` JSONB 列，前向默认 NULL=未核验，不伪造历史）：
+  - `mpm: true` 为监管级断言，必须携带 `mpm_review{determination: verified_applicable, verified: true, basis}`，否则数据无效；
+  - 管理常用指标只允许 `determination: candidate`（是否属 MPM 依公司实际财报逐例判定）；
+  - 准则定义小计 / 成本口径 / 内部经营指标 `determination: not_applicable` 或 `management_caliber`。
+- 七条逐项判定（均改为 `mpm: false`）：
+  | 指标 | 判定 | 依据 |
+  | --- | --- | --- |
+  | free_cash_flow | candidate | IFRS 18（IASB 2024-05 发布，2027-01-01 生效）B116–B118；EY/KPMG 指引（提前参照） |
+  | ebitda / adjusted_ebitda / ebitda_margin | candidate | 同上；adjusted_ebitda 另注 IFRS 18.B116–B117 |
+  | operating_profit | management_caliber | FLOW V1 工程契约；管理口径合计须调节至 CAS 营业利润法定行项目（财会〔2018〕15 号） |
+  | direct_cost | not_applicable | 成本会计口径，非业绩指标列报 |
+  | collection_rate | not_applicable | 内部经营指标，不在法定财报列报 |
+- 不变量已在导入器强制（加载即拒绝违规配置），守护测试 `tests/metrics/test_mpm_classification.py`（7 项，含负净利净现比降级与别名同身份）。
+
+**C03（EBITDA/FCF 当现金）：已实施。** ebitda、free_cash_flow 口径说明补"不是现金流量表定义的现金，禁止与货币资金或经营活动现金流量净额混称"。
+
+**C04（营业利润公式简化）：已实施。** operating_profit 口径注明"不得简化为营业收入−营业成本"，法定形成关系依财会〔2018〕15 号，调节要求保留。
+
+**C18（调整后利润）：已实施。** adjusted_ebitda 口径注明"不得与法定利润混同，展示必须带'调整后 / Non-GAAP'标签并引用调节表"。
+
+**C05（净债务）：盘点结论——本库不收录净债务指标。** 如未来收录，默认口径为**有息债务（短期借款 + 一年内到期的非流动负债 + 长期借款 + 应付债券 + 租赁负债）− 现金及现金等价物**；备选口径（含/不含租赁负债）并存记录；禁止"总负债 − 现金"简化口径进入任何展示。
+
+**I08（费用率）：盘点结论——派生展示，不新增定义。** 期间费用率（销售/管理/研发/财务费用 ÷ 营业收入）为派生比率，分子科目已映射（is.selling_exp 6601、is.admin_exp 6602、is.fin_exp 6603）；**缺口：is.rnd_exp（研发费用）无科目映射**（研发费用在 2024 汇编中的列报口径待原文核对），进入 P02 报表映射增量；报告层费用率展示由派生计算承担，不新增静态指标定义。
+
+**C01（净现比复用）：确认。** `ocf_net_profit_ratio` 在册（名称"盈利现金比率"、单位倍、口径注明负净利润失真降级）；本日渲染层 KPI 补齐同规则：净利润为负时显示"—（净利润为负）"而非绝对值。

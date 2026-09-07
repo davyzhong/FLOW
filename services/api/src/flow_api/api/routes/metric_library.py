@@ -149,6 +149,7 @@ def _db_payload(session: Session) -> MetricLibraryResponse | None:
             aliases=m.aliases or [],
             benchmark=m.benchmark,
             mpm=m.mpm,
+            mpm_review=by_code[(m.collection, m.metric_code)].mpm_review or m.mpm_review,
             reconciliation=m.reconciliation,
             migrates_from=m.migrates_from,
             provenance=m.provenance,

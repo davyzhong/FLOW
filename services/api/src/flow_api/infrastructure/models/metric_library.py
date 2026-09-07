@@ -37,6 +37,7 @@ class MetricDictionaryEntry(CanonicalIdentityMixin, Base):
     aliases: Mapped[list[Any] | None] = mapped_column(JSONB, default=None)
     benchmark: Mapped[str | None] = mapped_column(default=None)
     mpm: Mapped[bool] = mapped_column(default=False)
+    mpm_review: Mapped[dict[str, Any] | None] = mapped_column(JSONB, default=None)
     reconciliation: Mapped[str | None] = mapped_column(default=None)
     migrates_from: Mapped[str | None] = mapped_column(default=None)
     provenance: Mapped[str | None] = mapped_column(default=None)

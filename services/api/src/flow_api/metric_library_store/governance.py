@@ -201,7 +201,7 @@ class MetricGovernance:
             "name", "definition", "formula_text", "formula", "unit", "time_behavior",
             "caliber", "default_caliber", "default_basis", "alternative_calibers",
             "source_cas", "source_ifrs", "depends_on", "decompositions", "aliases",
-            "benchmark", "reconciliation", "mpm",
+            "benchmark", "reconciliation", "mpm", "mpm_review",
         }
         unknown = set(changes) - allowed
         if unknown:

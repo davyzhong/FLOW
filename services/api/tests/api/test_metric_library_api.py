@@ -33,7 +33,11 @@ async def test_metric_library_returns_full_dictionary() -> None:
     logistics = [m for m in metrics if m["collection"] == "logistics"]
     assert len(general) == 40
     assert len(logistics) == 15
-    assert any(m["mpm"] for m in metrics), "应存在 MPM 指标"
+    # P01/C02：MPM 是监管级断言，静态字典不得授予——须携带结构化判定（候选/不适用）
+    assert not any(m["mpm"] for m in metrics), "静态字典不得打监管 MPM 标签"
+    ebitda = next(m for m in metrics if m["metric_code"] == "ebitda")
+    assert (ebitda.get("mpm_review") or {}).get("determination") == "candidate"
+    assert (ebitda.get("mpm_review") or {}).get("basis"), "候选判定必须携带依据（IFRS 18 条款）"
     assert any(
         any(isinstance(arg, dict) for arg in m["formula"]["args"]) for m in metrics
     ), "嵌套公式必须保留"

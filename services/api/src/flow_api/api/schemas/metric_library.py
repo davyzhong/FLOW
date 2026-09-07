@@ -35,6 +35,7 @@ class MetricEntry(BaseModel):
     decompositions: list[MetricDecomposition] = []
     benchmark: str | None = None
     mpm: bool = False
+    mpm_review: dict[str, Any] | None = None
     reconciliation: str | None = None
     migrates_from: str | None = None
     aliases: list[str] = []

@@ -354,7 +354,13 @@ def render_objective_report_v3(
         _kpi_card("净利率", _fmt_pct(net_margin)),
         _kpi_card("资产负债率", _fmt_pct(debt_ratio)),
         _kpi_card("流动比率", f"{current_ratio:.2f}" if current_ratio is not None else "—"),
-        _kpi_card("净现比", f"{abs(ocf_ratio):.2f}" if ocf_ratio is not None else "—"),
+        _kpi_card(
+            "净现比",
+            # 负净利润（或亏损）时净现比失真：不得显示正常数值，显式降级（P01/C01）
+            "—（净利润为负）"
+            if (net_profit is not None and net_profit < 0)
+            else (f"{abs(ocf_ratio):.2f}" if ocf_ratio is not None else "—"),
+        ),
         _kpi_card("ROE（期末权益口径）", _fmt_pct(roe)),
     ])
 
@@ -544,7 +550,14 @@ def render_objective_report_v3(
 <tr><td>毛利率</td><td class="num">{_fmt_pct(gross_margin)}</td></tr>
 <tr><td>净利率</td><td class="num">{_fmt_pct(net_margin)}</td></tr>
 <tr><td>净现比（经营现金流÷归母净利润）</td>
-<td class="num">{f'{abs(ocf_ratio):.2f}' if ocf_ratio is not None else '—'}</td></tr>
+<td class="num">{
+    '—' if ocf_ratio is None
+    else (
+        '—（净利润为负）'
+        if (net_profit is not None and net_profit < 0)
+        else f'{abs(ocf_ratio):.2f}'
+    )
+}</td></tr>
 <tr><td>ROE（期末权益口径）</td><td class="num">{_fmt_pct(roe)}</td></tr>
 </tbody></table>
 <h3>现金流量</h3>

@@ -835,7 +835,7 @@ metrics_general:
     - is.dep_amort
   unit: 元
   time_behavior: period_flow
-  caliber: 间接法口径；是否含投资收益、公允价值变动等须按口径版本记录；IFRS 未定义 EBITDA。
+  caliber: 间接法口径；是否含投资收益、公允价值变动等须按口径版本记录；IFRS 未定义 EBITDA。EBITDA 不是现金，禁止与经营活动现金流量净额混称（C03）。
   source_cas:
   - 利润总额
   - 利息费用
@@ -843,7 +843,12 @@ metrics_general:
   source_ifrs: earnings before interest, taxes, depreciation and amortisation（非 IFRS 定义指标）
   depends_on: []
   benchmark: 物流央企实例 47–82 亿元（中国物流集团）。
-  mpm: true
+  mpm: false
+  mpm_review:
+    determination: candidate
+    verified: false
+    condition: 仅当企业在公开财务报表中实际列报 EBITDA 时即属 IFRS 18 MPM，须调节至最接近法定小计（利润总额）并在单一附注披露；本库不静态授予监管标签。
+    basis: IFRS 18（IASB，2024-05 发布，2027-01-01 起生效）B116–B118；EY/KPMG 实务指引（提前参照）。
   reconciliation: 以利润总额（profit before tax）为最直接可比法定小计，调节项为利息费用、折旧与摊销。
   provenance: research/08 §3；research/09 §2
   default_caliber: 利润总额 + 计入财务费用的利息支出 + 固定资产折旧 + 无形资产摊销 + 长期待摊费用摊销（间接法）
@@ -864,18 +869,23 @@ metrics_general:
     note: 调整项清单为口径版本的核心内容，须逐项列明
   unit: 元
   time_behavior: period_flow
-  caliber: IFRS 未定义，企业间口径不可直接比较；IFRS 18 生效后属 MPM，须单一附注集中披露计算方式与调节表（EY/KPMG 指引）。
+  caliber: IFRS 未定义，企业间口径不可直接比较；调整后利润不得与法定利润（利润总额/净利润）混同，展示必须带"调整后 / Non-GAAP"标签并引用调节表（C18）；若于公开财报列报则属 IFRS 18 MPM，须单一附注集中披露计算方式与调节表（EY/KPMG 指引）。
   source_cas:
   - 利润总额
   - 利息费用
   - 折旧与摊销
   - 资产减值损失
   - 投资收益
-  source_ifrs: adjusted EBITDA as MPM (IFRS 18.B116–B117；KPMG illustrative disclosures)
+  source_ifrs: adjusted EBITDA as MPM candidate (IFRS 18.B116–B117；KPMG illustrative disclosures)
   depends_on:
   - ebitda
   benchmark: 仅作管理层口径展示，禁止跨企业直接对比。
-  mpm: true
+  mpm: false
+  mpm_review:
+    determination: candidate
+    verified: false
+    condition: 仅当于公开财报列报时属 IFRS 18 MPM（须调节与单一附注披露）；本库不静态授予监管标签。
+    basis: IFRS 18（IASB，2024-05 发布，2027-01-01 起生效）B116–B118；KPMG 示例披露（提前参照）。
   reconciliation: 调节至持续经营利润：持续经营利润 + 所得税 + 净财务费用 + 折旧 + 摊销 ± 减值及处置调整 ∓ 权益法收益（KPMG 示例结构）。
   provenance: research/09 §2、§3
 - metric_code: ebitda_margin
@@ -900,7 +910,12 @@ metrics_general:
   depends_on:
   - ebitda
   benchmark: 物流央企实例 3.4%–3.7%（中国物流集团）。
-  mpm: true
+  mpm: false
+  mpm_review:
+    determination: candidate
+    verified: false
+    condition: 随 EBITDA 继承——仅当于公开财报列报时属 IFRS 18 MPM 候选；本库不静态授予监管标签。
+    basis: IFRS 18（IASB，2024-05 发布，2027-01-01 起生效）B116–B118（提前参照）。
   reconciliation: 随 EBITDA 口径继承调节关系。
   provenance: research/08 §3
 - metric_code: revenue_growth
@@ -1096,14 +1111,19 @@ metrics_general:
     - cf.capex
   unit: 元
   time_behavior: period_flow
-  caliber: FCF 属典型管理层口径指标（EY 列举的 MPM 类别），资本开支边界（是否含租赁付款、并购）须按口径版本记录。
+  caliber: FCF 属管理常用口径指标，资本开支边界（是否含租赁付款、并购）须按口径版本记录。FCF 不是现金流量表定义的现金科目，禁止与货币资金或经营活动现金流量净额混称（C03）。
   source_cas:
   - 经营活动产生的现金流量净额
   - 购建固定资产、无形资产和其他长期资产支付的现金
-  source_ifrs: free cash flow as MPM (IFRS 18；EY guidance)
+  source_ifrs: free cash flow（非 IFRS 定义指标；如于公开财报列报则属 IFRS 18 MPM 候选）
   depends_on: []
   benchmark: 持续为负须解释资金来源。
-  mpm: true
+  mpm: false
+  mpm_review:
+    determination: candidate
+    verified: false
+    condition: 仅当企业在公开财务报表中实际列报 FCF 时即属 IFRS 18 MPM，须调节并披露；本库不静态授予监管标签。
+    basis: IFRS 18（IASB，2024-05 发布，2027-01-01 起生效）B116–B118 管理定义业绩指标；EY/KPMG 实务指引（提前参照）。
   reconciliation: 调节至经营活动现金流量净额（法定现金流量表行项目），调节项为资本开支等。
   provenance: research/09 §3
   default_caliber: 经营活动现金流量净额 − 购建固定资产、无形资产和其他长期资产支付的现金（资本开支仅含购建付现）
@@ -1261,7 +1281,12 @@ metrics_logistics:
   source_ifrs: cost of sales / fulfilment costs
   depends_on: []
   migrates_from: flow.metrics.logistics.v1#direct_cost v1
-  mpm: true
+  mpm: false
+  mpm_review:
+    determination: not_applicable
+    verified: false
+    condition: 成本会计口径（内部管理），不在公开财报中作为管理定义业绩指标列报，不属于 MPM 判定范畴。
+    basis: FLOW V1 工程契约 + CAS 主营业务成本（6401）/ 劳务成本（5201）科目映射。
   reconciliation: 与主营业务成本科目的对账差额须在质量检查中披露。
   provenance: FLOW V1 工程契约；research/07 §2
 - metric_code: cost_per_order
@@ -1351,13 +1376,18 @@ metrics_logistics:
     - financial.operating_profit
   unit: 元
   time_behavior: period_flow
-  caliber: 管理口径经营利润与 CAS 营业利润存在调节关系，须披露调节项。
+  caliber: 管理口径经营利润与 CAS 营业利润存在调节关系，须披露调节项；不得简化为"营业收入 − 营业成本"（C04，法定形成关系含其他收益、投资收益、公允价值变动、减值等，依财会〔2018〕15 号报表格式）。本条为管理口径科目合计，非 CAS 营业利润定义。
   source_cas:
   - 营业利润
   source_ifrs: operating profit (IFRS 18)
   depends_on: []
   migrates_from: flow.metrics.logistics.v1#operating_profit v1
-  mpm: true
+  mpm: false
+  mpm_review:
+    determination: management_caliber
+    verified: false
+    condition: 管理口径科目合计（内部使用），不属于 IFRS 18 MPM 判定范畴；如改为在公开财报列报须重新判定。
+    basis: FLOW V1 工程契约 + 财会〔2018〕15 号利润表法定形成关系。
   reconciliation: 调节至营业利润法定行项目。
   provenance: FLOW V1 工程契约
 - metric_code: ar_balance
@@ -1401,7 +1431,12 @@ metrics_logistics:
   source_ifrs: collection effectiveness（非准则指标）
   depends_on: []
   migrates_from: flow.metrics.logistics.v1#collection_rate v1
-  mpm: true
+  mpm: false
+  mpm_review:
+    determination: not_applicable
+    verified: false
+    condition: 内部经营指标（依赖应收账期事实），不在法定财报列报，不属于 MPM 判定范畴。
+    basis: FLOW V1 工程契约；非准则指标（source_ifrs 已注明）。
   reconciliation: 到期金额口径（合同账期）须在口径版本中定义。
   provenance: FLOW V1 工程契约
 - metric_code: operating_cash_flow
