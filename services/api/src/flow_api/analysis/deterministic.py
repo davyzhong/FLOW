@@ -6,9 +6,55 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 from decimal import Context, Decimal, localcontext
 
 _Q = Decimal("0.000001")
+
+
+@dataclass(frozen=True, slots=True)
+class LinkageReviewPrompt:
+    """I09 联动提示：只陈述增速偏差事实并引导复核，不作因果断言（C14）。"""
+
+    kind: str  # 恒为 "linkage_review"
+    period_label: str
+    receivable_growth: Decimal
+    revenue_growth: Decimal
+    gap: Decimal
+    prompt: str
+
+
+def growth_linkage_check(
+    *,
+    receivable_growth: Decimal | None,
+    revenue_growth: Decimal | None,
+    period_label: str,
+) -> LinkageReviewPrompt | None:
+    """应收增速与收入增速联看（I09）。
+
+    仅当同期间两增速齐备且应收增速高于收入增速时输出复核提示；
+    提示语为事实陈述（两增速与差距），不含回款恶化/风险类因果用语。
+    """
+
+    if receivable_growth is None or revenue_growth is None:
+        return None
+    if receivable_growth <= revenue_growth:
+        return None
+    gap = (receivable_growth - revenue_growth).quantize(_Q)
+    receivable_text = f"{(receivable_growth * 100):.2f}%"
+    revenue_text = f"{(revenue_growth * 100):.2f}%"
+    prompt = (
+        f"{period_label} 应收增速 {receivable_text} 高于收入增速 {revenue_text}"
+        f"（差距 {gap * 100:.2f}%）；两项趋势存在偏离，建议复核应收与收入的期间口径及构成。"
+    )
+    return LinkageReviewPrompt(
+        kind="linkage_review",
+        period_label=period_label,
+        receivable_growth=receivable_growth,
+        revenue_growth=revenue_growth,
+        gap=gap,
+        prompt=prompt,
+    )
 
 
 def compound_annual_growth_rate(
@@ -33,4 +79,4 @@ def compound_annual_growth_rate(
     return growth.quantize(_Q)
 
 
-__all__ = ["compound_annual_growth_rate"]
+__all__ = ["LinkageReviewPrompt", "compound_annual_growth_rate", "growth_linkage_check"]
