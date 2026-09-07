@@ -6,6 +6,7 @@
 - 原始位置：`/Users/qiming/workspace/FLOW/Finance_Intelligence_OS_完整会话归档.md`
 - 内容：早期 Finance Intelligence OS 产品讨论、五篇资料补充、产品抽象、分析层级、Driver Model、对象模型和 MVP 思路。
 - 用途：理解最初为什么从“财务驾驶舱”上升到“AI 原生财务经营分析平台”。
+- 2026-09-07 增补：同一会话的第二次完整导出（3921 行）按原位保留在仓库根 `Finance_Intelligence_OS_完整会话归档.md`（提交 `22061da`）；与 `raw/chatgpt/` 首份导出同源，两份均不合并、不移动。同批入库的还有六张微信接收截图（仓库根 `微信图片_20260828*.png`，阶段 0/2 素材原件）。
 
 相关 ChatGPT 标识：
 

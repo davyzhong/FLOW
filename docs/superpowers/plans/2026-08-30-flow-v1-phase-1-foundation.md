@@ -1,6 +1,6 @@
 # FLOW V1 Phase 1 Foundation & Contracts Implementation Plan
 
-> **适用性说明（2026-09-04，代码基线 `c1a59d1`）**：Phase 1 功能切片已有实现与[阶段验收](../../implementation/phase-1-verification.md)。正文步骤、示例代码及未勾选项保留当时计划语境，不构成当前待办清单，也不表示已对当前提交重跑全部门禁。
+> **适用性说明（2026-09-04，代码基线 `c1a59d1`）**：Phase 1 功能切片已有实现与[阶段验收](../../implementation/2026-08-30-phase-1-verification.md)。正文步骤、示例代码及未勾选项保留当时计划语境，不构成当前待办清单，也不表示已对当前提交重跑全部门禁。
 > 当前入口见[文档导航](../../README.md)，后续缺陷修复与验证边界见[2026-09-04 修复验收](../../implementation/2026-09-04-review-repairs.md)。
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
@@ -671,7 +671,7 @@ git push origin main
 ### Task 10: Phase 1 Review and Handoff
 
 **Files:**
-- Create: `docs/implementation/phase-1-verification.md`
+- Create: `docs/implementation/2026-08-30-phase-1-verification.md`
 - Modify: `docs/knowledge-base/00_start_here/PROJECT_STATE.md`
 - Modify: `docs/knowledge-base/99_manifest/inventory.tsv`
 - Modify: `docs/knowledge-base/99_manifest/sha256sums.txt`
@@ -693,7 +693,7 @@ Expected: both commands pass without files from the developer's original working
 
 - [ ] **Step 2: Record exact evidence**
 
-Write `docs/implementation/phase-1-verification.md` with commit hash, lock-file hashes, migration heads, command outputs summarized as pass/fail, service image versions, and any accepted non-blocking limitations. Do not include secrets or `.env` values.
+Write `docs/implementation/2026-08-30-phase-1-verification.md` with commit hash, lock-file hashes, migration heads, command outputs summarized as pass/fail, service image versions, and any accepted non-blocking limitations. Do not include secrets or `.env` values.
 
 - [ ] **Step 3: Update project state and knowledge manifest**
 
@@ -706,7 +706,7 @@ Run: `git diff --check && make phase-1-acceptance`
 Expected: no whitespace errors and the complete gate passes.
 
 ```bash
-git add docs/implementation/phase-1-verification.md docs/knowledge-base/00_start_here/PROJECT_STATE.md docs/knowledge-base/99_manifest
+git add docs/implementation/2026-08-30-phase-1-verification.md docs/knowledge-base/00_start_here/PROJECT_STATE.md docs/knowledge-base/99_manifest
 git commit -m "docs: record FLOW foundation verification"
 git push origin main
 ```

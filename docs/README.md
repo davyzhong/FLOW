@@ -1,6 +1,6 @@
 # FLOW 文档中心｜2026-09-07
 
-状态：当前导航。工程读取基线 `04ba4d7`，迁移至 0018；不以文档更新代替功能验收。
+状态：当前导航。工程读取基线 `22061da`，迁移至 0018；不以文档更新代替功能验收。
 
 ## 01｜先看当前结论
 
@@ -10,7 +10,7 @@
 | 2 | [下一阶段执行准备计划](superpowers/plans/2026-09-07-next-stage-upgrade-plan.md) | P00–P12 详细顺序、依赖、交付和验收；本次不实施 |
 | 3 | [参考与优化订正总册](knowledge-base/02_research/synthesis/2026-09-07-reference-and-improvement-master.md) | 来源、30 项建议、18 项订正、417 条素材索引 |
 | 4 | [文档全量登记](documentation-status.md) | 每份文档的状态、日期、命名和处置 |
-| 5 | [本次整理记录](implementation/2026-09-07-documentation-review-and-reorganization.md) | 发现、修订、命名映射与验证边界 |
+| 5 | [文档治理规则](2026-09-07-documentation-governance.md) | 分类、命名与维护规则；改名映射见[文档全量登记](documentation-status.md) |
 
 ## 02｜有效规格与计划
 

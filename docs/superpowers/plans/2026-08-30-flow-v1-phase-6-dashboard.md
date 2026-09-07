@@ -1,6 +1,6 @@
 # FLOW V1 Phase 6 Finance BP Dashboard Implementation Plan
 
-> **适用性说明（2026-09-04，代码基线 `c1a59d1`）**：Phase 6 功能切片已有实现与[阶段验收](../../implementation/phase-6-verification.md)。正文步骤、示例代码及未勾选项保留当时计划语境，不构成当前待办清单，也不表示已对当前提交重跑全部门禁。
+> **适用性说明（2026-09-04，代码基线 `c1a59d1`）**：Phase 6 功能切片已有实现与[阶段验收](../../implementation/2026-09-02-phase-6-verification.md)。正文步骤、示例代码及未勾选项保留当时计划语境，不构成当前待办清单，也不表示已对当前提交重跑全部门禁。
 > 当前入口见[文档导航](../../README.md)，后续缺陷修复与验证边界见[2026-09-04 修复验收](../../implementation/2026-09-04-review-repairs.md)。
 
 > **Execution mode:** Autonomous, test-driven, checkpoint commits to `main`, push every completed task.
@@ -398,8 +398,8 @@ git push origin main
 
 **Files:**
 
-- Create: `docs/implementation/phase-6-dashboard-fidelity.md`
-- Create: `docs/implementation/phase-6-verification.md`
+- Create: `docs/implementation/2026-09-02-phase-6-dashboard-fidelity.md`
+- Create: `docs/implementation/2026-09-02-phase-6-verification.md`
 - Modify: `docs/knowledge-base/00_start_here/PROJECT_STATE.md`
 - Modify: `docs/knowledge-base/00_start_here/AGENT_START_HERE.md`
 - Modify: `docs/knowledge-base/04_decisions/DECISION_LOG.md`
@@ -428,7 +428,7 @@ git diff --check
 
 Expected: all PASS.
 
-6. Record exact results, known limitations, screenshots, CI URL, and the next Phase 7 boundary in `phase-6-verification.md`.
+6. Record exact results, known limitations, screenshots, CI URL, and the next Phase 7 boundary in `2026-09-02-phase-6-verification.md`.
 7. Update project state/decision navigation and regenerate/verify all knowledge-base hashes.
 8. Stage only Phase 6 files, preserving the seven unrelated root user files.
 9. Commit and push:

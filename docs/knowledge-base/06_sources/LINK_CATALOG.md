@@ -48,7 +48,13 @@
 - FineBI 帮助·交互功能：<https://help.fanruan.com/finebi/doc-view-144.html>
 - FineBI 帮助·钻取：<https://help.fanruan.com/finebi/doc-view-1630.html>
 - FineBI 帮助·仪表板过滤：<https://help.fanruan.com/finebi6.X/doc-view-806.html>
-- 综合分析：[`../02_research/synthesis/FineBI财务经营分析看板_架构借鉴分析.md`](../02_research/synthesis/FineBI财务经营分析看板_架构借鉴分析.md)
+- 综合分析：[`../02_research/synthesis/2026-09-06-FineBI财务经营分析看板_架构借鉴分析.md`](../02_research/synthesis/2026-09-06-FineBI财务经营分析看板_架构借鉴分析.md)
+
+## 财务分析十指标方法论文章（2026-09-06 用户提供）
+
+- 原文：<https://mp.weixin.qq.com/s/5qjGYRpc6TfgYwpTK1k3_Q>（李启方，「数据分析星球」内容矩阵；发布日期未知，直接抓取被微信风控拦截，正文经 webReader 快照获取）
+- 全文转录：[`../02_research/original/12_财务分析必看10个指标_资料.md`](../02_research/original/12_财务分析必看10个指标_资料.md)
+- 借鉴清单：[`../02_research/synthesis/2026-09-06-财务分析十指标文章_借鉴升级清单.md`](../02_research/synthesis/2026-09-06-财务分析十指标文章_借鉴升级清单.md)
 
 ## 完整机器提取链接
 

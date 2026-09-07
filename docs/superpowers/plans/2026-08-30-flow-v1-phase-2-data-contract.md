@@ -1,6 +1,6 @@
 # FLOW V1 Phase 2 Canonical Fixture & Excel Contract Implementation Plan
 
-> **适用性说明（2026-09-04，代码基线 `c1a59d1`）**：Phase 2 功能切片已有实现与[阶段验收](../../implementation/phase-2-verification.md)。正文步骤、示例代码及未勾选项保留当时计划语境，不构成当前待办清单，也不表示已对当前提交重跑全部门禁。
+> **适用性说明（2026-09-04，代码基线 `c1a59d1`）**：Phase 2 功能切片已有实现与[阶段验收](../../implementation/2026-08-30-phase-2-verification.md)。正文步骤、示例代码及未勾选项保留当时计划语境，不构成当前待办清单，也不表示已对当前提交重跑全部门禁。
 > 当前入口见[文档导航](../../README.md)，后续缺陷修复与验证边界见[2026-09-04 修复验收](../../implementation/2026-09-04-review-repairs.md)。
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:executing-plans` to implement this plan task-by-task. Every implementation task follows test-driven development and ends with a scoped commit and push.
@@ -502,7 +502,7 @@ git push origin feature/flow-v1-implementation
 ### Task 8: Verify Phase 2 From a Clean Checkout and Update the Knowledge Base
 
 **Files:**
-- Create: `docs/implementation/phase-2-verification.md`
+- Create: `docs/implementation/2026-08-30-phase-2-verification.md`
 - Modify: `docs/knowledge-base/00_start_here/PROJECT_STATE.md`
 - Modify: `docs/knowledge-base/00_start_here/AGENT_START_HERE.md`
 - Regenerate: `docs/knowledge-base/99_manifest/inventory.tsv`
@@ -538,12 +538,12 @@ Mark Phase 2 complete and Phase 3 next. Regenerate the knowledge-base inventory 
 
 - [ ] **Step 5: Write verification evidence**
 
-`phase-2-verification.md` includes commands, environment, commit, test counts, row counts, known answers, round-trip proof, CI URL, limitations, and the exact Phase 3 handoff contract.
+`2026-08-30-phase-2-verification.md` includes commands, environment, commit, test counts, row counts, known answers, round-trip proof, CI URL, limitations, and the exact Phase 3 handoff contract.
 
 - [ ] **Step 6: Commit and push**
 
 ```bash
-git add docs/implementation/phase-2-verification.md docs/knowledge-base/00_start_here/PROJECT_STATE.md docs/knowledge-base/00_start_here/AGENT_START_HERE.md docs/knowledge-base/99_manifest/inventory.tsv docs/knowledge-base/99_manifest/sha256sums.txt
+git add docs/implementation/2026-08-30-phase-2-verification.md docs/knowledge-base/00_start_here/PROJECT_STATE.md docs/knowledge-base/00_start_here/AGENT_START_HERE.md docs/knowledge-base/99_manifest/inventory.tsv docs/knowledge-base/99_manifest/sha256sums.txt
 git commit -m "docs: record FLOW data contract verification"
 git push origin feature/flow-v1-implementation
 ```

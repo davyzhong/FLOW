@@ -20,11 +20,11 @@
 
 ### 1.1 基线与已具备资产
 
-本轮更新读取基线 `04ba4d7`（包含 `0554dca`、`751169f`），迁移到 0018。A/B 财务事实链和 C01–C06 指标管理已有连续实现记录，包含执行绑定、语义、版本治理、影响沙箱和用户界面。保留并复用 55 财务指标、167 科目、48 准则登记、32 分录模板及经营轨配置，不能将登记数量解释为可执行覆盖。
+本轮更新读取基线 `22061da`（含 D01 `c009823` 与文档治理轮 `de3a672`），迁移到 0018。A/B 财务事实链和 C01–C06 指标管理已有连续实现记录，包含执行绑定、语义、版本治理、影响沙箱和用户界面。保留并复用 55 财务指标、167 科目、48 准则登记、32 分录模板及经营轨配置，不能将登记数量解释为可执行覆盖。
 
 已发现差异：`ocf_net_profit_ratio` 已存在，原 U3 不应再次新增同义指标；FCF 的 IFRS 18 MPM 标记需订正；部分验证答案仍为占位/量级，圆通已用于适配；入口状态较旧，不能据其标题认定全部尚未实现。详见总册 C01–C18。
 
-本轮读取时 `8c7dbf3` CI 已成功，`04ba4d7` 运行尚在进行。另有 D01 的 `config/analysis/`、`analysis/objective.py` 与对应测试在途，尚不据此判定验收完成。P00 必须先核验和复用其已提交结果，不创建平行分析目录覆盖另一任务。实时状态见 PROJECT_STATE。
+基线 `8c7dbf3`、`0554dca` 的 CI 已成功；D01 已随 `c009823` 提交（`config/analysis/objective_finance_v1.yaml` 11 条目、`analysis/objective.py`、4 项测试），其与后续文档提交的 CI 结果以远端为准。P00 必须核验和复用 D01 已提交结果，不创建平行分析目录。实时状态见 PROJECT_STATE。
 
 ### 1.2 下一阶段成功的用户结果
 
@@ -66,7 +66,7 @@ P11 通过且另获授权 → P12 内部试点；预测/因果/行动再单独�
 
 来源 I01/I03/I30；对应旧 A01/A03、D03/D04 的前置部分。负责人：技术负责人 + 独立财务复核者。
 
-文件：读取现有总计划、`docs/implementation/objective-analysis/baseline-audit.md`、`validation/financial_reports/manifest.yaml`；未来更新 `docs/knowledge-base/00_start_here/PROJECT_STATE.md`；新增 `docs/implementation/objective-analysis/next-stage-baseline.md`、`validation/financial_reports/oracle-register.md`。
+文件：读取现有总计划、`docs/implementation/objective-analysis/2026-09-06-baseline-audit.md`、`validation/financial_reports/manifest.yaml`；未来更新 `docs/knowledge-base/00_start_here/PROJECT_STATE.md`；新增 `docs/implementation/objective-analysis/next-stage-baseline.md`、`validation/financial_reports/oracle-register.md`。
 
 - [ ] 记录执行时 HEAD、分支、迁移头、工作树、最新 CI 与 A/B/C 实现证据。列“已验收/已实现待补验/缺口/未知”，解决旧复选框冲突，保留历史记录。
 - [ ] 对 I01–I30 和 C01–C18 逐条标记已有实现、新增差异、回归路径和负责人；尤其确认净现比和费用率是否定义/绑定/显示。
@@ -80,7 +80,7 @@ P11 通过且另获授权 → P12 内部试点；预测/因果/行动再单独�
 
 来源 I01/I04/I05/I08/I11，订正 C01–C05/C18；对应 C01–C06 的增量，不重建目录。负责人：财务口径负责人 + 后端。
 
-文件：`config/metrics/metric_dictionary_v1.yaml`、`services/api/src/flow_api/metric_library_store/{binding,governance,importer}.py`、`services/api/src/flow_api/metrics/financial_semantics.py`；测试 `services/api/tests/metrics/test_financial_semantics.py`、`services/api/tests/integration/test_metric_library_governance.py`；更新 `docs/implementation/objective-analysis/caliber-audit.md`。
+文件：`config/metrics/metric_dictionary_v1.yaml`、`services/api/src/flow_api/metric_library_store/{binding,governance,importer}.py`、`services/api/src/flow_api/metrics/financial_semantics.py`；测试 `services/api/tests/metrics/test_financial_semantics.py`、`services/api/tests/integration/test_metric_library_governance.py`；更新 `docs/implementation/objective-analysis/2026-09-06-caliber-audit.md`。
 
 - [ ] 先写失败测试：现金流 FCF/单独比率不得因“管理常用”自动获得 IFRS MPM 标签；负净利润时净现比不得显示为正常健康评分；别名搜索返回同一指标身份。
 - [ ] 逐项补来源机构、文档标题、版本/生效信息、具体条款/页码、适用主体和核验状态。分开“企业管理口径”和“监管定义 MPM”，不得以布尔替换静默改掉所有历史语义。
@@ -94,7 +94,7 @@ P11 通过且另获授权 → P12 内部试点；预测/因果/行动再单独�
 
 来源 I06/I07/I13–I15，订正 C09/C11/C16/C17；对应 D01。负责人：产品/财务 + 后端。
 
-文件：读取 `services/api/src/flow_api/metrics/{catalog,grain,windows,comparisons}.py`；优先复用 A–H 台账的 `config/analysis/objective_finance_v1.yaml`、`services/api/src/flow_api/analysis/objective.py`、`services/api/tests/analysis/test_objective_finance.py`（已有在途工作，获准后先协同核验，不另建重复目录）；按现有机制扩展 `services/api/src/flow_api/api/schemas/dashboard.py` 和生成合同。
+文件：读取 `services/api/src/flow_api/metrics/{catalog,grain,windows,comparisons}.py`；优先复用 A–H 台账的 `config/analysis/objective_finance_v1.yaml`、`services/api/src/flow_api/analysis/objective.py`、`services/api/tests/analysis/test_objective_finance.py`（已提交 `c009823`，复用前先核验测试与 CI，不另建重复目录）；按现有机制扩展 `services/api/src/flow_api/api/schemas/dashboard.py` 和生成合同。
 
 - [ ] 先定义四问与六专题的多对多映射；现金、偿债横向关联。列默认十指标选择及每项替代/不可用条件，不删除大词典。
 - [ ] 每个主题定义 metric/version、必要事实、允许维度、粒度、期间窗口、比较场景、图表类型与证据要求。新对象至少包含 `topic_id`、`metric_refs`、`required_facts`、`allowed_grains`、`comparison_modes`、`unavailable_reasons`。

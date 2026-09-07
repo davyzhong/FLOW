@@ -5,7 +5,7 @@
 
 Date: 2026-09-02
 Design: `docs/superpowers/specs/2026-08-29-flow-v1-design.md` §9
-Fidelity record: `docs/implementation/phase-6-dashboard-fidelity.md`
+Fidelity record: `docs/implementation/2026-09-02-phase-6-dashboard-fidelity.md`
 
 ## Exit gate
 

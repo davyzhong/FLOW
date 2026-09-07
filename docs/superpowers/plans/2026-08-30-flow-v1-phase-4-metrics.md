@@ -1,6 +1,6 @@
 # FLOW V1 Phase 4 Metric Snapshots Implementation Plan
 
-> **适用性说明（2026-09-04，代码基线 `c1a59d1`）**：Phase 4 功能切片已有实现与[阶段验收](../../implementation/phase-4-verification.md)。正文步骤、示例代码及未勾选项保留当时计划语境，不构成当前待办清单，也不表示已对当前提交重跑全部门禁。
+> **适用性说明（2026-09-04，代码基线 `c1a59d1`）**：Phase 4 功能切片已有实现与[阶段验收](../../implementation/2026-09-01-phase-4-verification.md)。正文步骤、示例代码及未勾选项保留当时计划语境，不构成当前待办清单，也不表示已对当前提交重跑全部门禁。
 > 当前入口见[文档导航](../../README.md)，后续缺陷修复与验证边界见[2026-09-04 修复验收](../../implementation/2026-09-04-review-repairs.md)。
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:executing-plans` to implement this plan task-by-task. Apply `superpowers:test-driven-development` to every behavior change and `superpowers:verification-before-completion` before the phase is declared complete. Steps use checkbox (`- [ ]`) syntax for tracking.
@@ -373,7 +373,7 @@ class MetricSnapshotService:
 - Create: `docs/metrics/flow-v1-metrics.md`
 - Modify: `Makefile`
 - Modify: `.github/workflows/ci.yml`
-- Create: `docs/implementation/phase-4-verification.md`
+- Create: `docs/implementation/2026-09-01-phase-4-verification.md`
 - Modify: `docs/knowledge-base/00_start_here/PROJECT_STATE.md`
 - Modify: `docs/knowledge-base/00_start_here/AGENT_START_HERE.md`
 - Modify: `docs/knowledge-base/99_manifest/inventory.tsv`
@@ -387,7 +387,7 @@ class MetricSnapshotService:
 - [x] Assert additive slice invariants, semi-additive AR behavior, same-grain ratio dependencies, no invented budget grains and append-only history.
 - [x] Make the shell gate run Phase 4 tests, Phase 3 intake acceptance, Ruff, mypy, migration round trip, deterministic catalog/oracle checks and a concise machine-readable metric summary.
 - [x] Document every metric formula, source, unit, allowed dimensions, time behavior, comparison availability, rounding policy and blocker code.
-- [x] Add the CI job, run the gate from a clean worktree and record exact local/CI evidence in `phase-4-verification.md`.
+- [x] Add the CI job, run the gate from a clean worktree and record exact local/CI evidence in `2026-09-01-phase-4-verification.md`.
 - [x] Update project state and Agent start documents, regenerate knowledge-base inventory and SHA-256 manifests, then verify every manifest entry.
 - [x] Commit, push and require every GitHub Actions job to pass before marking Phase 4 complete.
 

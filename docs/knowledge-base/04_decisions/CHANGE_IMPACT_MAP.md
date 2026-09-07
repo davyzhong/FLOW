@@ -114,7 +114,7 @@ flowchart LR
 
 5. `docs/superpowers/specs/2026-09-01-flow-v1-phase-5-analysis-design.md`；
 6. `docs/superpowers/plans/2026-09-01-flow-v1-phase-5-analysis.md`；
-7. `docs/implementation/phase-5-verification.md`。
+7. `docs/implementation/2026-09-01-phase-5-verification.md`。
 
 修改 Playbook、比较窗口、策略阈值或评分权重后，必须生成新的 policy hash，并重新验证 Driver 对账、Finding 硬门槛、排名、Evidence 和下游快照消费边界。
 
@@ -126,8 +126,8 @@ flowchart LR
 
 1. `docs/superpowers/specs/2026-09-01-flow-v1-phase-6-dashboard-design.md`；
 2. `docs/superpowers/plans/2026-08-30-flow-v1-phase-6-dashboard.md`；
-3. `docs/implementation/phase-6-verification.md`；
-4. `docs/implementation/phase-6-dashboard-fidelity.md`；
+3. `docs/implementation/2026-09-02-phase-6-verification.md`；
+4. `docs/implementation/2026-09-02-phase-6-dashboard-fidelity.md`；
 5. 决策日志 D033–D036；
 6. `dashboard-density-v2.html` 和最新 1440/1920 截图基线。
 
@@ -154,10 +154,10 @@ flowchart LR
 建议读取：
 
 1. 决策日志 D038；
-2. `docs/implementation/phase-10-acceptance.md`；
+2. `docs/implementation/2026-09-02-phase-10-acceptance.md`；
 3. `docs/superpowers/plans/2026-09-03-flow-pilot-readiness-phase-2-security-deployment.md`；
 4. `docs/operations/authentication.md` 与 `docs/implementation/2026-09-04-review-repairs.md`；
-5. `docs/implementation/phase-pilot-1-user-closure.md` 与 Phase 3/6/7/9 历史验证记录。
+5. `docs/implementation/2026-09-04-phase-pilot-1-user-closure.md` 与 Phase 3/6/7/9 历史验证记录。
 
 当前已完成单用户认证，但备份恢复、HTTPS 部署、结构化日志及真实试点仍待完成。独立 MinIO 建桶/列桶成功不等于上传链路成功；PutObject 超时须独立解决并补验，不得以历史门禁或存储替身替代。
 

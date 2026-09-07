@@ -10,7 +10,7 @@
 
 **Tech Stack:** Next.js、TypeScript、FastAPI、Pydantic、SQLAlchemy、Alembic、PostgreSQL、S3/MinIO、Celery/Redis、Decimal、Playwright。
 
-建立：2026-09-06；更新：2026-09-07。状态：**A/B/C 已有交付记录，D/E/F 待增量建设与验收；本文件为里程碑台账**。本轮读取 `04ba4d7`、迁移至 0018；具体未提交 D01 和 CI 见当前状态页。
+建立：2026-09-06；更新：2026-09-07。状态：**A/B/C 已有交付记录，D/E/F 待增量建设与验收；本文件为里程碑台账**。本轮读取 `22061da`、迁移至 0018；D01 已提交 `c009823`，CI 与勾选状态见当前状态页。
 正式方向：[产品方向规格](../specs/2026-09-06-objective-financial-analysis-direction.md)。本文件接替旧财务轨总计划的后续排序；旧完成证据保留，不重写为新验收已完成。
 
 ## 1. 已有资产与重新验收边界
@@ -42,7 +42,7 @@ flowchart LR
 
 原始阶段顺序为 A → B → C → D → E → F → G → H。当前接续按 P00 差异与独立答案准备 → P01 口径订正 → D/E/F 对应增量；D03/D04 的答案准备提前，不等待全部图表完成。F 的运行保障可提前插入，但不抢占事实与语义设计。E 报告类型须在 B/C 的冻结契约确定后实现，迁移编号取执行时最新值，禁止预占 0014。
 
-状态：`todo / doing / blocked / done`；复选框只在证据和 CI 达到要求后勾选。A/B/C 依现有逐项证据标记；D01 存在在途工作但未在本轮验收，其他 D/E/F 任务依下表。每项依赖除明列外默认包含前一个同组任务；可以在独立分支上提前做只读研究，不推断为允许共享文件并行修改。
+状态：`todo / doing / blocked / done`；复选框只在证据和 CI 达到要求后勾选。A/B/C 依现有逐项证据标记；D01 已提交（`c009823`）待 CI 绿色后勾选，其他 D/E/F 任务依下表。每项依赖除明列外默认包含前一个同组任务；可以在独立分支上提前做只读研究，不推断为允许共享文件并行修改。
 
 ## 3. 通用执行步骤与验收纪律
 
@@ -71,7 +71,7 @@ flowchart LR
   - 依赖：无。
   - 主要位置：旧总计划、PROJECT_STATE、CI、api/routes/orchestration.py。
   - 工作：建立功能/实现/测试/缺口矩阵，核查固定月份、报表完整性、PDF 与字典多源；记录当前提交和未提交修改。
-  - 测试/证据（新增目标）：`docs/implementation/objective-analysis/baseline-audit.md`。
+  - 测试/证据（新增目标）：`docs/implementation/objective-analysis/2026-09-06-baseline-audit.md`。
   - 完成标准：矩阵每项附代码与测试出处；不因旧表 done 就自动验收。
 
 - [x] **A02 · 冻结两个入口的统一事实契约** — 状态：done
@@ -140,7 +140,7 @@ flowchart LR
   - 依赖：A03。
   - 主要位置：config/metrics/*_v1.yaml、metric_library_store/importer.py。
   - 工作：核查启用项来源、准则有效期、企业自定义与行业惯例；MPM 范围和 Non-IFRS 关系单列；不确定项标记待核。
-  - 测试/证据（新增目标）：`docs/implementation/objective-analysis/caliber-audit.md`。
+  - 测试/证据（新增目标）：`docs/implementation/objective-analysis/2026-09-06-caliber-audit.md`。
   - 完成标准：来源可定位、适用条件齐备；不得以科目条数或研究摘要代替权威来源验证。
 
 - [x] **C02 · 统一指标身份与可执行定义** — 状态：done
@@ -185,8 +185,8 @@ flowchart LR
   - 依赖：B06、C03。
   - 主要位置：新 config/analysis/objective_finance_v1.yaml、analysis/objective.py。
   - 工作：定义财务结构、趋势、同比、盈利/现金/偿债/营运比率和杜邦等；公开数据不足的分解拒绝；不生成业务原因。
-  - FineBI 吸收（2026-09-06 并入，依据 synthesis/FineBI财务经营分析看板_架构借鉴分析.md）：目录按问题域组织（收入质量/利润变化/成本压力/费用效率/现金安全/未来趋势）；预算/同比/环比/YTD 作为共同比较镜头贯穿；区分层级下钻与驱动下钻两条路径；AnalysisTopic 元数据字段（问题/受众/主指标/比较镜头/允许维度/驱动方法/联查/降级原因/报告章节）作为 D01/D02 设计契约检查清单；公开数据按实际披露允许下钻，未披露的客户/订单/内部预算不得构造。
-  - 十指标文章吸收（2026-09-06 并入，依据 synthesis/财务分析十指标文章_借鉴升级清单.md）：以「有没有增长→增长有没有带来利润→利润占用了多少资产和资金→资产和资金有没有转化为现金」四问作为最小问题骨架（FineBI 六问题域的粗粒度上层）；「核心十指标」作为 40 指标库的默认视图子集（元数据标记，不另建口径）；增长质量联查（收入增速 vs 应收增速剪刀差、净现比多期趋势）作为确定性检查候选，只呈现偏差不贴健康标签；期间费用率为治理候选，净现比已有 `ocf_net_profit_ratio`，先核验绑定与展示，不新增同义项。
+  - FineBI 吸收（2026-09-06 并入，依据 synthesis/2026-09-06-FineBI财务经营分析看板_架构借鉴分析.md）：目录按问题域组织（收入质量/利润变化/成本压力/费用效率/现金安全/未来趋势）；预算/同比/环比/YTD 作为共同比较镜头贯穿；区分层级下钻与驱动下钻两条路径；AnalysisTopic 元数据字段（问题/受众/主指标/比较镜头/允许维度/驱动方法/联查/降级原因/报告章节）作为 D01/D02 设计契约检查清单；公开数据按实际披露允许下钻，未披露的客户/订单/内部预算不得构造。
+  - 十指标文章吸收（2026-09-06 并入，依据 synthesis/2026-09-06-财务分析十指标文章_借鉴升级清单.md）：以「有没有增长→增长有没有带来利润→利润占用了多少资产和资金→资产和资金有没有转化为现金」四问作为最小问题骨架（FineBI 六问题域的粗粒度上层）；「核心十指标」作为 40 指标库的默认视图子集（元数据标记，不另建口径）；增长质量联查（收入增速 vs 应收增速剪刀差、净现比多期趋势）作为确定性检查候选，只呈现偏差不贴健康标签；期间费用率为治理候选，净现比已有 `ocf_net_profit_ratio`，先核验绑定与展示，不新增同义项。
   - 测试/证据（新增目标）：`tests/analysis/test_objective_finance.py`。
   - 完成标准：事实陈述携带值、比较基准、口径及引用；主观因果用语和无来源行业阈值不进入事实报告。
 
@@ -365,19 +365,20 @@ flowchart LR
 ## 7. 当前执行点与滚动记录
 
 - 2026-09-06（ZCode 接续）：C04/C05 后端已由 GPT 提交；其未提交的 C06 前端半成品经验证全绿（API 治理/影响测试 10/10、vitest 45/45、契约无漂移、浏览器验收 execution 绑定分布 facts 39 + engine 16、revenue=engine 带 entry_id），已代为提交。
+- 2026-09-07（ZCode 接续）：文档治理与改名校准轮——并行文档任务提交治理轮 `de3a672`（PROJECT_STATE 拆分历史、治理规则 `docs/2026-09-07-documentation-governance.md` 落盘）与归档 `22061da`（根目录二次会话导出/六张接收截图/var 审计日志原位保留）；接续任务按治理规则为 20 个计划/验收/研究文档补建立日期前缀并同步全部引用，`documentation-status.md` 增第二轮登记，LINK_CATALOG/01_conversations INDEX 补登。仅文档变更，无决策变更，不改产品行为。
 - 2026-09-07（ZCode）：C06 done——治理操作表单（选指标/变更 JSON/操作者/理由 → 草稿/激活/退役，必填与 JSON 校验行内报错，成功后事件流刷新）；组件测试 3 项 + e2e 2 项（含 axe，普通用户无需改 YAML 完成一次草稿修订并留痕）；vitest 48/48、tsc/eslint 绿。C 阶段（指标治理）整体闭环，下一步 D01（含 FineBI 吸收清单）。
 - 2026-09-06：FineBI 看板借鉴分析（GPT，提交 80132ed）并入——D01 增补问题域组织/比较镜头/两种下钻/AnalysisTopic 检查清单；指导文档同步沉淀至 Obsidian 知识库 `wiki/FLOW分析工作台设计指导（源自FineBI看板借鉴）.md`；六条不可照搬边界与五条链约束一致，无决策变更。
 
-- 2026-09-06：李启方《财务分析必看10个指标》文章借鉴（用户提供，webReader 抓取）并入——D01 增补四问骨架/核心十指标默认视图/增长质量联查候选；原记录误判净现比缺失：2026-09-07 核对 `ocf_net_profit_ratio` 已有定义，改为复用检查；期间费用率保留治理候选；原文全文归档 `02_research/original/12_财务分析必看10个指标_资料.md`，借鉴清单见 `02_research/synthesis/财务分析十指标文章_借鉴升级清单.md`，Obsidian 知识库同步入库（数据分析星球/）；无决策变更。
+- 2026-09-06：李启方《财务分析必看10个指标》文章借鉴（用户提供，webReader 抓取）并入——D01 增补四问骨架/核心十指标默认视图/增长质量联查候选；原记录误判净现比缺失：2026-09-07 核对 `ocf_net_profit_ratio` 已有定义，改为复用检查；期间费用率保留治理候选；原文全文归档 `02_research/original/12_财务分析必看10个指标_资料.md`，借鉴清单见 `02_research/synthesis/2026-09-06-财务分析十指标文章_借鉴升级清单.md`，Obsidian 知识库同步入库（数据分析星球/）；无决策变更。
 
 **当前：D01 已提交待 CI；下一任务：D02。**
 
-第一条命令（A02）：阅读方向规格第 3 节五条链与 `baseline-audit.md` §2/§4，起草 `docs/superpowers/specs/financial-facts-contract.md`，随后 `cd services/api && uv run pytest tests/statements/test_fact_contract.py -q`。
+第一条命令（A02）：阅读方向规格第 3 节五条链与 `2026-09-06-baseline-audit.md` §2/§4，起草 `docs/superpowers/specs/financial-facts-contract.md`，随后 `cd services/api && uv run pytest tests/statements/test_fact_contract.py -q`。
 
 | 日期 | 任务 | 状态 | 提交 / 测试 / CI 证据 | 下一步 |
 |---|---|---|---|---|
 | 2026-09-06 | 总计划与方向规格 | planned | 本次文档提交；不代表产品功能完成 | A01 |
-| 2026-09-06 | A01 基线审计 | **done** | `docs/implementation/objective-analysis/baseline-audit.md`；CI run 34026603117 success（16 jobs） | A02 |
+| 2026-09-06 | A01 基线审计 | **done** | `docs/implementation/objective-analysis/2026-09-06-baseline-audit.md`；CI run 34026603117 success（16 jobs） | A02 |
 | 2026-09-06 | A02 统一事实契约 | **done** | 规格 `docs/superpowers/specs/financial-facts-contract.md`；参考实现 `statements/fact_contract.py`；`tests/statements/test_fact_contract.py` 14 项通过、mypy/ruff 绿 | A03 |
 | 2026-09-06 | A03 验收数据集登记 | **done** | `validation/financial_reports/`（manifest + README）：3 基线 + 2 留出（腾讯 FY2025 新期间、圆通 2026Q1 新公司，新增下载校验 SHA）；独立答案逐项带定位、容差预登记、回填禁令 | B01 |
 | 2026-09-06 | B01 上传与来源登记 | **done** | 迁移 0014（statement_source）；`statements/intake.py` + `POST/GET /api/v1/statements/sources`；`tests/statements/test_source_intake.py` 10 项通过；迁移往返通过；真实 MinIO 上传圆通 PDF（201、候选全中、重复幂等、对象可读） | B02 |
@@ -386,7 +387,7 @@ flowchart LR
 | 2026-09-06 | B04 四表覆盖与质量规则 | **done** | `statements/reconciliation.py`：四态覆盖（passed/failed/missing/not_applicable）、按报告种类的必需表集合、年报缺权益表/附注永不得标完整、关键勾稽阻断发布；`tests/statements/test_reconciliation.py` 5 项通过（三真实样本 + 合成阻断例） | B05 |
 | 2026-09-06 | B05 复核更正与事实发布 | **done** | 迁移 0016（statement_correction 只增不改审计 + report.status 状态机）；`statements/review.py`（更正审计、修正视图重跑勾稽、关键不平衡阻断发布、发布后锁定）；更正/发布 API + `/statements` 复核面板；`tests/statements/test_fact_review.py` 3 项 + e2e/statements-review.spec.ts 通过（并入 statements e2e 门禁） | B06 |
 | 2026-09-06 | B06 通用期间与可恢复编排 | **done** | 迁移 0017（build_job）；编排期间改由批次分析窗口（事实期间）生成 + 请求范围收窄，固定演示月份移出生产路径；任务持久化（状态/结果身份/失败留痕）、同范围幂等回放、失败可重试；`tests/api/test_orchestration_api.py` 5 项通过（含范围收窄/回放/任务列表/422） | C01 |
-| 2026-09-06 | C01 来源与口径核验 | **done** | `docs/implementation/objective-analysis/caliber-audit.md`：55 指标来源/口径/MPM 全量核验 + 167 科目/48 准则/32 分录模板核验；待核项显式标记（经验阈值、IFRS 18 生效期、2024 汇编编号） | C02 |
+| 2026-09-06 | C01 来源与口径核验 | **done** | `docs/implementation/objective-analysis/2026-09-06-caliber-audit.md`：55 指标来源/口径/MPM 全量核验 + 167 科目/48 准则/32 分录模板核验；待核项显式标记（经验阈值、IFRS 18 生效期、2024 汇编编号） | C02 |
 | 2026-09-06 | C02 统一指标身份与可执行定义 | **done** | `metric_library_store/binding.py`：55 项全部绑定（引擎 15 / 事实 AST 40 / 叙述 0，缺失原因如实记录）；双路径对等门禁 `tests/metrics/test_dictionary_execution_parity.py`；覆盖清单 `metric-execution-coverage.md` 机械生成防漂移；旧物流哈希由既有 parity 门禁保护 | C03 |
 | 2026-09-06 | C03 期间/精度/异常语义 | doing | `metrics/financial_semantics.py`：余额口径显式（期末/平均）、单季↔累计转换规则、年化默认禁止、零分母/负权益/币种/合并范围 typed 拒绝、比率聚合先汇总分子分母、重述比较取重述版；`tests/metrics/test_financial_semantics.py` 7 组正反例通过 | C04 |
 | 2026-09-06 | C04 指标变更治理 | doing | 迁移 0018（metric_governance_event 持久化审计，替代 JSONL）；`metric_library_store/governance.py`（草稿/验证/生效/退役 + 非法 AST/循环依赖/引用缺失/并发草稿拒绝）；API：entries 三端点 + events 查询；`tests/integration/test_metric_library_governance.py` 5 项 + `test_metric_governance_api.py` 2 项通过 | C05 |

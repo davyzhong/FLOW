@@ -4,7 +4,7 @@
 日期：2026-09-05
 决策依据：D040（会计基础数据与财务分析指标库立项，2026-09-05 用户逐项确认）
 调研依据：`docs/knowledge-base/02_research/original/07–09` 号资料
-配套草案与数据集：`docs/knowledge-base/02_research/synthesis/会计与财务指标知识库_设计草案.md`、`指标库初始数据集_v0_草案.yaml`、`会计基础数据集_v0_草案.yaml`
+配套草案与数据集：`docs/knowledge-base/02_research/synthesis/2026-09-05-会计与财务指标知识库_设计草案.md`、`指标库初始数据集_v0_草案.yaml`、`会计基础数据集_v0_草案.yaml`
 
 ## 1. 目标
 

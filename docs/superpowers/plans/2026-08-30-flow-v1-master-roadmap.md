@@ -343,7 +343,7 @@ Expected: all formats open, contain identical key values and versions, and pass 
 
 ### Phase 10: Operational Hardening and V1 Acceptance
 
-Create the executable plan at `docs/superpowers/plans/2026-08-30-flow-v1-phase-10-acceptance.md` after the complete narrow slice works.
+Create the executable plan at `docs/superpowers/plans/2026-08-30-flow-v1-2026-09-02-phase-10-acceptance.md` after the complete narrow slice works.
 
 Required tasks and gates:
 

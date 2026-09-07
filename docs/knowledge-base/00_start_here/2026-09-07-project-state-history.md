@@ -140,7 +140,7 @@ flowchart LR
 - 实现内容寻址对象存储和 Redis 幂等任务键；
 - 迁移头达到 `0003_analytics_and_publishing`；
 - 干净 worktree 验收通过，GitHub Actions 的 7 个 jobs 全部通过；
-- 详细证据见 `docs/implementation/phase-1-verification.md`。
+- 详细证据见 `docs/implementation/2026-08-30-phase-1-verification.md`。
 
 ### 阶段 11：Phase 2 标准 Excel 数据契约与高拟真 fixture
 
@@ -152,7 +152,7 @@ flowchart LR
 - 实现 Excel → canonical package → PostgreSQL → canonical package → Excel 的零差异语义往返；
 - 新增 `make test-data-contract` 与 GitHub Actions `data-contract` 门禁；
 - 干净 worktree 完整回归通过，GitHub Actions 的 8 个 jobs 全部通过；
-- 详细证据见 `docs/implementation/phase-2-verification.md`。
+- 详细证据见 `docs/implementation/2026-08-30-phase-2-verification.md`。
 
 ### 阶段 12：Phase 3 Intake、Mapping & Quality
 
@@ -166,7 +166,7 @@ flowchart LR
 - 新增 `make test-intake-e2e` 与 GitHub Actions `intake-e2e` 门禁；
 - 标准与外部工作簿均精确匹配已知答案、语义差异为零，并各保留 57,633 个字段级血缘值；
 - 干净 worktree 完整回归和 GitHub Actions 的 9 个 jobs 全部通过；
-- 详细证据见 `docs/implementation/phase-3-verification.md`。
+- 详细证据见 `docs/implementation/2026-08-31-phase-3-verification.md`。
 
 ### 阶段 13：Phase 4 Metric Snapshots
 
@@ -178,7 +178,7 @@ flowchart LR
 - 标准与外部工作簿经过完整链路后，拥有不同 import 身份但产生相同定义哈希、值指纹和全部精确业务值；
 - 新增 `make test-metrics-known-answers` 与 GitHub Actions `metrics-known-answers` 门禁；
 - 本地、干净检出和 GitHub Actions 十个 jobs 全部通过；
-- 详细证据见 `docs/implementation/phase-4-verification.md`，完整口径见 `docs/metrics/flow-v1-metrics.md`。
+- 详细证据见 `docs/implementation/2026-09-01-phase-4-verification.md`，完整口径见 `docs/metrics/flow-v1-metrics.md`。
 
 ### 阶段 14：Phase 5 Analysis & Findings
 
@@ -190,7 +190,7 @@ flowchart LR
 - 建立 `building → published` 原子发布、完整身份幂等、发布后不可变和故障回滚；
 - 新增 `make test-analysis-invariants` 与 GitHub Actions `analysis-invariants` 门禁；
 - 本地全量 API 202 个测试和 GitHub Actions 11 个 jobs 全部通过；
-- 详细证据见 `docs/implementation/phase-5-verification.md`，设计边界见 `docs/superpowers/specs/2026-09-01-flow-v1-phase-5-analysis-design.md`。
+- 详细证据见 `docs/implementation/2026-09-01-phase-5-verification.md`，设计边界见 `docs/superpowers/specs/2026-09-01-flow-v1-phase-5-analysis-design.md`。
 
 ### 阶段 15：Phase 6 Finance BP Dashboard
 
@@ -201,7 +201,7 @@ flowchart LR
 - 完成高密度 Finance BP 页面、完整 loading/empty/error/retry/stale/degraded 状态和 Investigation 不可变身份回执；
 - 浏览器经同源代理只访问 typed Dashboard API，不读取原始文件、canonical 明细、Metric Value 或 Analysis 持久化接口；
 - Playwright 覆盖真实数据、筛选、身份交接、网络边界、axe 无障碍和 1440/1920 截图基线；
-- 详细证据见 `docs/implementation/phase-6-verification.md`，视觉对比见 `docs/implementation/phase-6-dashboard-fidelity.md`。
+- 详细证据见 `docs/implementation/2026-09-02-phase-6-verification.md`，视觉对比见 `docs/implementation/2026-09-02-phase-6-dashboard-fidelity.md`。
 
 ### 阶段 16：Phase 7 Evidence-first Investigation & Review
 
@@ -210,7 +210,7 @@ flowchart LR
 - 完成证据优先工作台：调查流程栏、复核流程条、影响桥与驱动明细、公式与计算引擎版本、对账与质量检查、文件/工作表/行级源记录血缘、结论四要素编辑、证据复核与审阅历史；
 - 审批资格硬约束：任一证据非 verified 或结论不完整即阻断批准；记录级表格只展示 canonical 数值与血缘，不重算分析金额；
 - `make test-investigation-e2e` 与 GitHub Actions `investigation-e2e` 门禁落地；Playwright 4 个用例覆盖交接、复核、阻断批准、签发与审计历史；
-- 本地与 CI 全部门禁通过；详细证据见 `docs/implementation/phase-7-verification.md`。
+- 本地与 CI 全部门禁通过；详细证据见 `docs/implementation/2026-09-02-phase-7-verification.md`。
 
 ### 阶段 17：Phase 8 AI Copilot
 
@@ -219,7 +219,7 @@ flowchart LR
 - 结构化输出强制分离事实/判断/假设/追问并引用对象 ID；验证器拒绝未引用数字、未知引用、未验证事实与未批准 Finding 的报告大纲，数据不足时显式降级；
 - 每次交互持久化 `CopilotInteraction` 审计行（迁移 0009）：模板版本、provider/model、请求引用、响应、结论与拒绝原因、操作者；
 - 发布 typed Copilot API（investigations/ask、explain-mapping、report-outline）；工作台新增 AI 分析助手面板（引用徽章、降级提示）；
-- `make test-copilot-evals` 与 GitHub Actions `copilot-evals` 门禁落地；6 个固定评估用例全部通过，详见 `docs/implementation/phase-8-verification.md`。
+- `make test-copilot-evals` 与 GitHub Actions `copilot-evals` 门禁落地；6 个固定评估用例全部通过，详见 `docs/implementation/2026-09-02-phase-8-verification.md`。
 
 ### 阶段 18：Phase 9 Unified Publishing
 
@@ -227,13 +227,13 @@ flowchart LR
 - 四格式渲染：PPTX（结论先行 + 指标页 + 证据索引）、分析 Excel（指标/发现/驱动/质量对账/版本血缘工作表）、语义 HTML（表格 + 证据脚注 + 身份页脚）、PDF（冻结 HTML 经固定 Chromium 打印）；
 - 发布尝试逐次持久化（queued→running→succeeded/failed），失败可独立重试而无需重建快照；存储可注入以便快速测试；
 - `make test-publishing-golden` 与 `publishing-golden` CI 门禁：从四个产物中提取规范关键值（报告版本、批次/快照/运行 ID、全部指标本期值、发现影响精确金额）并验证跨格式一致；
-- 详见 `docs/implementation/phase-9-verification.md`。
+- 详见 `docs/implementation/2026-09-02-phase-9-verification.md`。
 
 ### 阶段 19：Phase 10 Acceptance Suite
 
 - 建立 `make acceptance` 总验收命令：串联合同往返、指标已知答案、分析不变量、接入端到端、发布黄金、调查端到端与驾驶舱端到端七道门禁；
 - CI 与本地验收共用同一套门禁脚本，Phase 1–10 的 V1 验收标准全部自动化；
-- 备份演练与深度可观测性按未决的部署拓扑顺延（见 `docs/implementation/phase-10-acceptance.md`）。
+- 备份演练与深度可观测性按未决的部署拓扑顺延（见 `docs/implementation/2026-09-02-phase-10-acceptance.md`）。
 
 ### 阶段 20：外部素材管道与公众号素材库
 
@@ -249,7 +249,7 @@ flowchart LR
 
 - `/data` 五阶段工作台、标准模板下载、映射人工覆盖、清洗摘要与标准化 XLSX 导出已落地；
 - `/reports` 报告中心、冻结快照列表、四格式生成、产物状态及带 SHA 校验的下载已落地；
-- `make test-user-closure-e2e` 有历史 exit=0 记录，CI 独立 `user-closure` job 已加入；详见[阶段证据](../../implementation/phase-pilot-1-user-closure.md)。该阶段证据早于后续正确性修复，不能替代最新代码或真实对象存储验收。
+- `make test-user-closure-e2e` 有历史 exit=0 记录，CI 独立 `user-closure` job 已加入；详见[阶段证据](../../implementation/2026-09-04-phase-pilot-1-user-closure.md)。该阶段证据早于后续正确性修复，不能替代最新代码或真实对象存储验收。
 
 ### 阶段 22：2026-09-04 审查修复与单用户认证
 
@@ -272,7 +272,7 @@ flowchart LR
 - 腾讯 2Q2026 接入同一生成器完成（2026-09-06）：`tencent_2026q2_report_view.html` 六板块，核心为 **IFRS→Non-IFRS 调节瀑布**（归母口径：560.22 亿 + 七项调整 = 684.15 亿，生成期三层校验——调节链闭合、与收益表交叉勾稽、收入分部加总闭合）；MPM 调节链路的第一个真实样本验证通过；指标卡与公告披露约数（毛利率 58%、经营盈利率 33%、Non-IFRS 37%）一致；
 - 抽取层接入 StatementLineItem 对象模型完成（2026-09-06，规格 §3.6/§5 落地）：别名映射层 `p5/item_alias_map_v0.yaml`（继承 v0 28 项 + 新增 11 项待评审、组合映射、负数符号归一）→ 事实库 `p5/statement_facts.yaml`（120 项事实、111 项未映射留痕、会计恒等式生成期断言）→ 查询+AST 指标引擎 `scripts/p5_query_facts.py`（指标库首次成为唯一口径计算来源）→ 覆盖率矩阵 `p5/metric_coverage_matrix.md`（顺丰 35/40、腾讯 7/40、京东物流 1/40 可算，缺口逐项标注）；两路径一致性自检通过（顺丰毛利率/资产负债率、腾讯毛利率对披露约数）；
 - D043 落地·系统整合（2026-09-06）：「报表分析」进入 B/S 系统界面——迁移 `0011_statement_reports` 落库 P5 抽取数据，typed 只读 API `GET /api/v1/statements[/{id}]`（路由级 Bearer 保护、Decimal 以精确字符串跨 JSON），Next.js `/statements` 页面以 KPI 卡、利润瀑布、资产/资本构成环形、现金流同比柱与四表全量表渲染顺丰 2026 一季报（千元原值，不在展示层重算）；导航加入「报表分析」入口并修复激活态为按 pathname 判断；新门禁 `make test-statements-e2e`（3 用例含 axe）通过，API 契约测试 5 项、前端组件测试 3 项、lint/typecheck/vitest 全绿，独立静态报告页保留为 P5 证据；
-- 详见[设计草案](../02_research/synthesis/会计与财务指标知识库_设计草案.md)、[初始数据集 v0](../02_research/synthesis/指标库初始数据集_v0_草案.yaml)、[P5 可视化分析报告](../../implementation/p5/sf_2026q1_report_view.html) 与决策日志 D040/D041/D042/D043；下一步是用户在评审台完成指标逐项评审后定稿首批实施范围。
+- 详见[设计草案](../02_research/synthesis/2026-09-05-会计与财务指标知识库_设计草案.md)、[初始数据集 v0](../02_research/synthesis/指标库初始数据集_v0_草案.yaml)、[P5 可视化分析报告](../../implementation/p5/sf_2026q1_report_view.html) 与决策日志 D040/D041/D042/D043；下一步是用户在评审台完成指标逐项评审后定稿首批实施范围。
 
 ### 阶段 24：2026-09-06 导航统一、指标库入系统与 S3 代理根因修复
 
@@ -291,7 +291,7 @@ flowchart LR
 ### 阶段 26：2026-09-06 双轨执行计划与经营轨数据定义草案（D046）
 
 - D046：三步骤执行计划——① 财务轨优先做全，经营相关内容归入经营册不阻塞主线；② 经营轨数据定义由知识库提炼（微信知识库 417 篇为参考基底，Obsidian 菜鸟材料为事实依据），用户暂不手工提供；③ 最后用公开财报/管报反向生成经营+财务分析报告做验证（P5 思路的扩展）；
-- 产出：[经营分析轨数据定义 v0 草案](../02_research/synthesis/经营分析轨数据定义_v0_草案.md)——维度模型（组织/区域/产品/客户/渠道/订单/时间/账龄库龄分档，对照菜鸟经营架构树与主数据标准）、六域指标目录（增长收入/盈利/运营交付/库存供应链/现金回款/业财运营质量，含菜鸟 CFO 真实口径基线）、报告结构范式、数据契约扩展方向；物流专营指标（妥投/车效/仓效/线路）语料零命中，缺口如实标注；
+- 产出：[经营分析轨数据定义 v0 草案](../02_research/synthesis/2026-09-06-经营分析轨数据定义_v0_草案.md)——维度模型（组织/区域/产品/客户/渠道/订单/时间/账龄库龄分档，对照菜鸟经营架构树与主数据标准）、六域指标目录（增长收入/盈利/运营交付/库存供应链/现金回款/业财运营质量，含菜鸟 CFO 真实口径基线）、报告结构范式、数据契约扩展方向；物流专营指标（妥投/车效/仓效/线路）语料零命中，缺口如实标注；
 - 待办：用户逐项评审草案后版本化进入 `config/`。
 
 ### 阶段 27：财务轨完成状态总计划与默认推荐策略（D047）
@@ -332,7 +332,7 @@ flowchart LR
 ### 阶段 32：D049 客观财务分析主计划启动（M0 完成、B01 完成）
 
 - D049：产品方向收敛为客观财务分析——公开财报为长期保留的建设与验证入口，顺序「客观事实 → 原因推断 → 改善行动」，当前只承诺第一阶段；新主计划 `2026-09-06-objective-financial-analysis-master-plan.md` 接替旧 WS 排序（旧证据保留）；
-- A01 基线审计：功能/实现/测试/缺口矩阵与四核查点（固定月份、报表完整性、PDF、字典多源），见 `docs/implementation/objective-analysis/baseline-audit.md`；
+- A01 基线审计：功能/实现/测试/缺口矩阵与四核查点（固定月份、报表完整性、PDF、字典多源），见 `docs/implementation/objective-analysis/2026-09-06-baseline-audit.md`；
 - A02 统一事实契约：规格 `docs/superpowers/specs/financial-facts-contract.md` + 参考实现 `statements/fact_contract.py` + 14 项契约测试（期间语义、空值≠零、可逆缩放、冲突拒绝）；
 - A03 验收数据集：`validation/financial_reports/` 登记 3 基线 + 2 留出（腾讯 FY2025 新期间、圆通 2026Q1 新公司）；圆通 PDF 官方渠道下载校验归档，独立答案逐项带定位、容差预登记；
 - B01 上传与来源登记：迁移 `0014_statement_sources`；`POST/GET /api/v1/statements/sources`（文本 PDF 探针、扫描件可解释拒绝、公司/期间识别候选、内容寻址幂等）；真实 MinIO 上传圆通 PDF 验证（201、候选全中、重复幂等、对象可读）；

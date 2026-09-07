@@ -1,6 +1,45 @@
 # 文档适用性与历史证据索引
 
-核对日期：2026-09-04；代码基线：`c1a59d1`。当前阅读入口见[文档导航](README.md)。本表逐份覆盖 `docs/superpowers/plans/`、`docs/superpowers/specs/`、`docs/implementation/` 和 `docs/reviews/` 的 Markdown，原始研究、会话与图片档案不在本表改写范围。本文是文档状态核对，不是新一轮全量功能测试。
+核对日期：2026-09-07 第二轮；代码基线：`22061da`（第一轮 2026-09-04、基线 `c1a59d1` 的下表登记继续有效）。当前阅读入口见[文档导航](README.md)。本表逐份覆盖 `docs/superpowers/plans/`、`docs/superpowers/specs/`、`docs/implementation/` 和 `docs/reviews/` 的 Markdown，原始研究、会话与图片档案不在本表改写范围。本文是文档状态核对，不是新一轮全量功能测试。
+
+## 2026-09-07 第二轮：治理、归档与改名登记
+
+本轮包含三个前后衔接的提交，前两个由并行文档任务执行，改名与状态校准由接续任务执行；全程未交叉覆盖共享文件。
+
+1. **治理轮 `de3a672`**：按基线 `04ba4d7` 重审 architecture/intake/metrics/operations 与各计划；精简 PROJECT_STATE 并把历史时间线拆分至 [2026-09-07-project-state-history.md](knowledge-base/00_start_here/2026-09-07-project-state-history.md)；新增 [文档治理规则](2026-09-07-documentation-governance.md)；`.gitignore` 收录 `.zcode/`。
+2. **归档 `22061da`**：仓库根原位保留第二次会话完整导出 `Finance_Intelligence_OS_完整会话归档.md`（3921 行，首份导出在 `01_conversations/raw/chatgpt/`）、六张微信接收截图（`微信图片_20260828*.png`，阶段 0/2 素材原件）与 `var/metric_library_audit.jsonl`（C06 种子/治理审计轨迹）；均不在知识库目录内，`99_manifest` 不覆盖。
+3. **改名轮（本轮）**：按治理规则第 1 节，为无日期的叙述性计划、验收与研究方向补 Git 首次登记日期前缀，共 20 个文件；可变文档中的引用已同步替换。
+
+| 旧路径 | 新路径 |
+| --- | --- |
+| implementation/phase-1-verification.md | implementation/2026-08-30-phase-1-verification.md |
+| implementation/phase-2-verification.md | implementation/2026-08-30-phase-2-verification.md |
+| implementation/phase-3-verification.md | implementation/2026-08-31-phase-3-verification.md |
+| implementation/phase-4-verification.md | implementation/2026-09-01-phase-4-verification.md |
+| implementation/phase-5-verification.md | implementation/2026-09-01-phase-5-verification.md |
+| implementation/phase-6-verification.md | implementation/2026-09-02-phase-6-verification.md |
+| implementation/phase-6-dashboard-fidelity.md | implementation/2026-09-02-phase-6-dashboard-fidelity.md |
+| implementation/phase-7-verification.md | implementation/2026-09-02-phase-7-verification.md |
+| implementation/phase-8-verification.md | implementation/2026-09-02-phase-8-verification.md |
+| implementation/phase-9-verification.md | implementation/2026-09-02-phase-9-verification.md |
+| implementation/phase-10-acceptance.md | implementation/2026-09-02-phase-10-acceptance.md |
+| implementation/phase-pilot-1-user-closure.md | implementation/2026-09-04-phase-pilot-1-user-closure.md |
+| implementation/objective-analysis/baseline-audit.md | implementation/objective-analysis/2026-09-06-baseline-audit.md |
+| implementation/objective-analysis/caliber-audit.md | implementation/objective-analysis/2026-09-06-caliber-audit.md |
+| synthesis/Finance_Intelligence_OS_系统研究结论.md | synthesis/2026-08-29-Finance_Intelligence_OS_系统研究结论.md |
+| synthesis/会计与财务指标知识库_设计草案.md | synthesis/2026-09-05-会计与财务指标知识库_设计草案.md |
+| synthesis/指标库初始目录_v0_草案.md | synthesis/2026-09-05-指标库初始目录_v0_草案.md |
+| synthesis/经营分析轨数据定义_v0_草案.md | synthesis/2026-09-06-经营分析轨数据定义_v0_草案.md |
+| synthesis/FineBI财务经营分析看板_架构借鉴分析.md | synthesis/2026-09-06-FineBI财务经营分析看板_架构借鉴分析.md |
+| synthesis/财务分析十指标文章_借鉴升级清单.md | synthesis/2026-09-06-财务分析十指标文章_借鉴升级清单.md |
+
+（synthesis 均指 `knowledge-base/02_research/synthesis/`。）
+
+**保持原路径及原因**：`superpowers/specs/financial-facts-contract.md`（`fact_contract.py` 与其测试 docstring 引用）；`implementation/objective-analysis/metric-execution-coverage.md`（`generate_metric_coverage_doc.py` 生成并经 `test_dictionary_execution_parity.py` 断言）；`implementation/p5/metric_coverage_matrix.md`、`implementation/p5/sf_2026q1_diff_report.md`（脚本生成产物）；`implementation/p5/P5-validation-summary.md`（`validation/financial_reports/manifest.yaml` 引用）。固定导航（README/INDEX/PROJECT_STATE/AGENT_START_HERE/DECISION_LOG/CHANGE_IMPACT_MAP/CONTINUATION_GUIDE/RESTART_PROMPTS/各目录清单）与不可变档案按治理规则保持。
+
+**不可变档案中的旧路径**：`01_conversations/readable/rollout-2026-08-28T14-41-27-*.md` 对《系统研究结论》的旧名引用按原字节保留，以本节映射表追溯；`02_research/original/12_财务分析必看10个指标_资料.md` 属归档转录，其中指向两个改名后 synthesis 文件的链接以映射表为准。
+
+**本轮新登记文档**：[文档治理规则](2026-09-07-documentation-governance.md)、[项目状态历史](knowledge-base/00_start_here/2026-09-07-project-state-history.md)、[下一阶段计划 P00–P12](superpowers/plans/2026-09-07-next-stage-upgrade-plan.md)、[参考订正总册](knowledge-base/02_research/synthesis/2026-09-07-reference-and-improvement-master.md)、[12 号资料](knowledge-base/02_research/original/12_财务分析必看10个指标_资料.md)、`objective-analysis/2026-09-06-baseline-audit.md`、`objective-analysis/2026-09-06-caliber-audit.md`、`objective-analysis/metric-execution-coverage.md`。
 
 ## 当前与历史的边界
 
@@ -28,17 +67,17 @@
 | 文档 | 分类 | 保留与使用理由 |
 | --- | --- | --- |
 | [2026-08-30-flow-v1-master-roadmap.md](superpowers/plans/2026-08-30-flow-v1-master-roadmap.md) | 持续适用的分期基线 | 本路线图保留 V1 Phase 1–10 原始分期；功能窄切片已交付，Phase 10 的部署、备份恢复和深度可观测性按 D038 转入 Pilot Readiness。当前为 Pilot Phase 2 部分完成，不应从历史任务列表推断生产就绪。 |
-| [2026-08-30-flow-v1-phase-1-foundation.md](superpowers/plans/2026-08-30-flow-v1-phase-1-foundation.md) | 历史实施计划 | Phase 1 功能切片已有实现与[阶段验收](implementation/phase-1-verification.md)。正文步骤、示例代码及未勾选项保留当时计划语境，不构成当前待办清单，也不表示已对当前提交重跑全部门禁。 |
-| [2026-08-30-flow-v1-phase-2-data-contract.md](superpowers/plans/2026-08-30-flow-v1-phase-2-data-contract.md) | 历史实施计划 | Phase 2 功能切片已有实现与[阶段验收](implementation/phase-2-verification.md)。正文步骤、示例代码及未勾选项保留当时计划语境，不构成当前待办清单，也不表示已对当前提交重跑全部门禁。 |
-| [2026-08-30-flow-v1-phase-3-intake.md](superpowers/plans/2026-08-30-flow-v1-phase-3-intake.md) | 历史实施计划 | Phase 3 功能切片已有实现与[阶段验收](implementation/phase-3-verification.md)。正文步骤、示例代码及未勾选项保留当时计划语境，不构成当前待办清单，也不表示已对当前提交重跑全部门禁。 接入映射、审批资格、Copilot 审计或冻结报告相关实现以本次修复验收为补充。 |
-| [2026-08-30-flow-v1-phase-4-metrics.md](superpowers/plans/2026-08-30-flow-v1-phase-4-metrics.md) | 历史实施计划 | Phase 4 功能切片已有实现与[阶段验收](implementation/phase-4-verification.md)。正文步骤、示例代码及未勾选项保留当时计划语境，不构成当前待办清单，也不表示已对当前提交重跑全部门禁。 |
-| [2026-08-30-flow-v1-phase-6-dashboard.md](superpowers/plans/2026-08-30-flow-v1-phase-6-dashboard.md) | 历史实施计划 | Phase 6 功能切片已有实现与[阶段验收](implementation/phase-6-verification.md)。正文步骤、示例代码及未勾选项保留当时计划语境，不构成当前待办清单，也不表示已对当前提交重跑全部门禁。 |
-| [2026-09-01-flow-v1-phase-5-analysis.md](superpowers/plans/2026-09-01-flow-v1-phase-5-analysis.md) | 历史实施计划 | Phase 5 功能切片已有实现与[阶段验收](implementation/phase-5-verification.md)。正文步骤、示例代码及未勾选项保留当时计划语境，不构成当前待办清单，也不表示已对当前提交重跑全部门禁。 |
-| [2026-09-02-flow-pilot-readiness-phase-1-user-closure.md](superpowers/plans/2026-09-02-flow-pilot-readiness-phase-1-user-closure.md) | 历史实施计划 | Pilot Phase 1 已有[历史出口门禁记录](implementation/phase-pilot-1-user-closure.md)，用户闭环实现及后续发现的映射、警告确认、冻结和下载问题已有补修。原始步骤保留；历史门禁通过不等于当前真实对象存储发布链路已通过验收。 |
+| [2026-08-30-flow-v1-phase-1-foundation.md](superpowers/plans/2026-08-30-flow-v1-phase-1-foundation.md) | 历史实施计划 | Phase 1 功能切片已有实现与[阶段验收](implementation/2026-08-30-phase-1-verification.md)。正文步骤、示例代码及未勾选项保留当时计划语境，不构成当前待办清单，也不表示已对当前提交重跑全部门禁。 |
+| [2026-08-30-flow-v1-phase-2-data-contract.md](superpowers/plans/2026-08-30-flow-v1-phase-2-data-contract.md) | 历史实施计划 | Phase 2 功能切片已有实现与[阶段验收](implementation/2026-08-30-phase-2-verification.md)。正文步骤、示例代码及未勾选项保留当时计划语境，不构成当前待办清单，也不表示已对当前提交重跑全部门禁。 |
+| [2026-08-30-flow-v1-phase-3-intake.md](superpowers/plans/2026-08-30-flow-v1-phase-3-intake.md) | 历史实施计划 | Phase 3 功能切片已有实现与[阶段验收](implementation/2026-08-31-phase-3-verification.md)。正文步骤、示例代码及未勾选项保留当时计划语境，不构成当前待办清单，也不表示已对当前提交重跑全部门禁。 接入映射、审批资格、Copilot 审计或冻结报告相关实现以本次修复验收为补充。 |
+| [2026-08-30-flow-v1-phase-4-metrics.md](superpowers/plans/2026-08-30-flow-v1-phase-4-metrics.md) | 历史实施计划 | Phase 4 功能切片已有实现与[阶段验收](implementation/2026-09-01-phase-4-verification.md)。正文步骤、示例代码及未勾选项保留当时计划语境，不构成当前待办清单，也不表示已对当前提交重跑全部门禁。 |
+| [2026-08-30-flow-v1-phase-6-dashboard.md](superpowers/plans/2026-08-30-flow-v1-phase-6-dashboard.md) | 历史实施计划 | Phase 6 功能切片已有实现与[阶段验收](implementation/2026-09-02-phase-6-verification.md)。正文步骤、示例代码及未勾选项保留当时计划语境，不构成当前待办清单，也不表示已对当前提交重跑全部门禁。 |
+| [2026-09-01-flow-v1-phase-5-analysis.md](superpowers/plans/2026-09-01-flow-v1-phase-5-analysis.md) | 历史实施计划 | Phase 5 功能切片已有实现与[阶段验收](implementation/2026-09-01-phase-5-verification.md)。正文步骤、示例代码及未勾选项保留当时计划语境，不构成当前待办清单，也不表示已对当前提交重跑全部门禁。 |
+| [2026-09-02-flow-pilot-readiness-phase-1-user-closure.md](superpowers/plans/2026-09-02-flow-pilot-readiness-phase-1-user-closure.md) | 历史实施计划 | Pilot Phase 1 已有[历史出口门禁记录](implementation/2026-09-04-phase-pilot-1-user-closure.md)，用户闭环实现及后续发现的映射、警告确认、冻结和下载问题已有补修。原始步骤保留；历史门禁通过不等于当前真实对象存储发布链路已通过验收。 |
 | [2026-09-02-flow-v0.1.1-baseline-repair.md](superpowers/plans/2026-09-02-flow-v0.1.1-baseline-repair.md) | 历史实施计划 | 基线修复提交 `6f6b401` 已落地 manifest 排除自身、Markdown 生成清理、状态补证及 publishing-golden CI 等改动；公众号流水线随后移交 DavyBase，原计划脚本路径不再是当前执行入口。未发现本地 `v0.1.1` tag（现有 `v0.1.0`、`v0.2-pilot-baseline`），不能把 Task 5 发布或全计划标为完成；保留原 checkbox 作为历史计划。 |
-| [2026-09-02-flow-v1-phase-7-investigation.md](superpowers/plans/2026-09-02-flow-v1-phase-7-investigation.md) | 历史实施计划 | Phase 7 功能切片已有实现与[阶段验收](implementation/phase-7-verification.md)。正文步骤、示例代码及未勾选项保留当时计划语境，不构成当前待办清单，也不表示已对当前提交重跑全部门禁。 接入映射、审批资格、Copilot 审计或冻结报告相关实现以本次修复验收为补充。 |
-| [2026-09-02-flow-v1-phase-8-copilot.md](superpowers/plans/2026-09-02-flow-v1-phase-8-copilot.md) | 历史实施计划 | Phase 8 功能切片已有实现与[阶段验收](implementation/phase-8-verification.md)。正文步骤、示例代码及未勾选项保留当时计划语境，不构成当前待办清单，也不表示已对当前提交重跑全部门禁。 接入映射、审批资格、Copilot 审计或冻结报告相关实现以本次修复验收为补充。 |
-| [2026-09-02-flow-v1-phase-9-publishing.md](superpowers/plans/2026-09-02-flow-v1-phase-9-publishing.md) | 历史实施计划 | Phase 9 功能切片已有实现与[阶段验收](implementation/phase-9-verification.md)。正文步骤、示例代码及未勾选项保留当时计划语境，不构成当前待办清单，也不表示已对当前提交重跑全部门禁。 接入映射、审批资格、Copilot 审计或冻结报告相关实现以本次修复验收为补充。 |
+| [2026-09-02-flow-v1-phase-7-investigation.md](superpowers/plans/2026-09-02-flow-v1-phase-7-investigation.md) | 历史实施计划 | Phase 7 功能切片已有实现与[阶段验收](implementation/2026-09-02-phase-7-verification.md)。正文步骤、示例代码及未勾选项保留当时计划语境，不构成当前待办清单，也不表示已对当前提交重跑全部门禁。 接入映射、审批资格、Copilot 审计或冻结报告相关实现以本次修复验收为补充。 |
+| [2026-09-02-flow-v1-phase-8-copilot.md](superpowers/plans/2026-09-02-flow-v1-phase-8-copilot.md) | 历史实施计划 | Phase 8 功能切片已有实现与[阶段验收](implementation/2026-09-02-phase-8-verification.md)。正文步骤、示例代码及未勾选项保留当时计划语境，不构成当前待办清单，也不表示已对当前提交重跑全部门禁。 接入映射、审批资格、Copilot 审计或冻结报告相关实现以本次修复验收为补充。 |
+| [2026-09-02-flow-v1-phase-9-publishing.md](superpowers/plans/2026-09-02-flow-v1-phase-9-publishing.md) | 历史实施计划 | Phase 9 功能切片已有实现与[阶段验收](implementation/2026-09-02-phase-9-verification.md)。正文步骤、示例代码及未勾选项保留当时计划语境，不构成当前待办清单，也不表示已对当前提交重跑全部门禁。 接入映射、审批资格、Copilot 审计或冻结报告相关实现以本次修复验收为补充。 |
 | [2026-09-03-flow-pilot-readiness-phase-2-security-deployment.md](superpowers/plans/2026-09-03-flow-pilot-readiness-phase-2-security-deployment.md) | 当前计划：部分完成 | 本计划仍是当前推进依据，但仅 Task A/B 的 API 认证及浏览器登录会话已实现并有定向验收；以[认证运行说明](operations/authentication.md)中的配置与实际路由行为为准。Task C–G（密钥与部署加固、备份恢复、日志、完整出口门禁及阶段证据）尚未完成；`make test-security-deployment-e2e` 仍是计划目标，不能直接当作现有命令。 |
 | [2026-09-04-review-repairs.md](superpowers/plans/2026-09-04-review-repairs.md) | 已完成修复计划 | 本计划 R1–R9 已实施；随后追加 N1–N3 亦已修复。正文任务记录保留，不能将已关闭缺陷重新列为待实现范围。 |
 | [2026-08-29-flow-v1-design.md](superpowers/specs/2026-08-29-flow-v1-design.md) | 有效设计基线 | 正式 V1 规格仍是架构与对象契约基线；产品定位按较晚决策 D039 聚焦客观财务分析，主观经营归因属未来扩展，确定性 V/P/M 与 R/V/E 保留。交付顺序及生产就绪边界按 D038；设计中的目标与原型表述不等于当前生产能力。 |
@@ -46,18 +85,18 @@
 | [2026-09-01-flow-v1-phase-6-dashboard-design.md](superpowers/specs/2026-09-01-flow-v1-phase-6-dashboard-design.md) | 有效设计基线 | 本设计的已批准对象边界、财务口径与交互约束继续适用，对应 Phase 已实现；正文的实施前状态和后续阶段描述保留历史语境，不代表当前开发排期或生产部署认证。 |
 | [2026-09-04-review-repairs-design.md](superpowers/specs/2026-09-04-review-repairs-design.md) | 有效设计基线 | R1–R9 修复设计已实施；N1–N3 的追加实现与验证记录见修复验收。原设计继续约束冻结内容、审批资格、映射身份及财务口径。 |
 | [2026-09-04-review-repairs.md](implementation/2026-09-04-review-repairs.md) | 当前修复验收 | 保留正文：记录 R1–R9/N1–N3、迁移兼容与真实对象存储限制。 |
-| [phase-1-verification.md](implementation/phase-1-verification.md) | 历史验收证据 | 本文结果属于所列日期/阶段的验收快照，保留当时测试数量、环境和结论；不代表对当前提交重新执行全量测试或完成生产验收。 |
-| [phase-10-acceptance.md](implementation/phase-10-acceptance.md) | 历史验收证据 | 本文结果属于所列日期/阶段的验收快照，保留当时测试数量、环境和结论；不代表对当前提交重新执行全量测试或完成生产验收。 功能组合门禁与生产就绪须分开；文末更正基线发版条件是历史要求，不能据此推断存在 `v0.1.1` 发布。 |
-| [phase-2-verification.md](implementation/phase-2-verification.md) | 历史验收证据 | 本文结果属于所列日期/阶段的验收快照，保留当时测试数量、环境和结论；不代表对当前提交重新执行全量测试或完成生产验收。 |
-| [phase-3-verification.md](implementation/phase-3-verification.md) | 历史验收证据 | 本文结果属于所列日期/阶段的验收快照，保留当时测试数量、环境和结论；不代表对当前提交重新执行全量测试或完成生产验收。 人工覆盖映射的恢复及前端警告确认属于后续补修，不由本阶段自动映射门禁单独证明。 |
-| [phase-4-verification.md](implementation/phase-4-verification.md) | 历史验收证据 | 本文结果属于所列日期/阶段的验收快照，保留当时测试数量、环境和结论；不代表对当前提交重新执行全量测试或完成生产验收。 |
-| [phase-5-verification.md](implementation/phase-5-verification.md) | 历史验收证据 | 本文结果属于所列日期/阶段的验收快照，保留当时测试数量、环境和结论；不代表对当前提交重新执行全量测试或完成生产验收。 |
-| [phase-6-dashboard-fidelity.md](implementation/phase-6-dashboard-fidelity.md) | 历史验收证据 | 本文结果属于所列日期/阶段的验收快照，保留当时测试数量、环境和结论；不代表对当前提交重新执行全量测试或完成生产验收。 |
-| [phase-6-verification.md](implementation/phase-6-verification.md) | 历史验收证据 | 本文结果属于所列日期/阶段的验收快照，保留当时测试数量、环境和结论；不代表对当前提交重新执行全量测试或完成生产验收。 |
-| [phase-7-verification.md](implementation/phase-7-verification.md) | 历史验收证据 | 本文结果属于所列日期/阶段的验收快照，保留当时测试数量、环境和结论；不代表对当前提交重新执行全量测试或完成生产验收。 批准后证据拒绝、结论修改退回复核与冻结资格的并发约束已在后续修复补强。 |
-| [phase-8-verification.md](implementation/phase-8-verification.md) | 历史验收证据 | 本文结果属于所列日期/阶段的验收快照，保留当时测试数量、环境和结论；不代表对当前提交重新执行全量测试或完成生产验收。 成功交互审计持久化及报告大纲批次选择已在后续修复补强。 |
-| [phase-9-verification.md](implementation/phase-9-verification.md) | 历史验收证据 | 本文结果属于所列日期/阶段的验收快照，保留当时测试数量、环境和结论；不代表对当前提交重新执行全量测试或完成生产验收。 文末待补的报告 API/下载已在 Pilot Phase 1 落地；冻结内容持久化、存储对象与 PPT 正文等后续修复以最新验收为准。PDF 魔数/体积检查不等于逐项提取 PDF 文本验证。 |
-| [phase-pilot-1-user-closure.md](implementation/phase-pilot-1-user-closure.md) | 历史验收证据 | 本文结果属于所列日期/阶段的验收快照，保留当时测试数量、环境和结论；不代表对当前提交重新执行全量测试或完成生产验收。 Pilot Phase 1 的实现和历史门禁已交付；后续审查发现的跨步骤缺陷另有补修。最新真实对象存储发布验收仍有限制。 |
+| [2026-08-30-phase-1-verification.md](implementation/2026-08-30-phase-1-verification.md) | 历史验收证据 | 本文结果属于所列日期/阶段的验收快照，保留当时测试数量、环境和结论；不代表对当前提交重新执行全量测试或完成生产验收。 |
+| [2026-09-02-phase-10-acceptance.md](implementation/2026-09-02-phase-10-acceptance.md) | 历史验收证据 | 本文结果属于所列日期/阶段的验收快照，保留当时测试数量、环境和结论；不代表对当前提交重新执行全量测试或完成生产验收。 功能组合门禁与生产就绪须分开；文末更正基线发版条件是历史要求，不能据此推断存在 `v0.1.1` 发布。 |
+| [2026-08-30-phase-2-verification.md](implementation/2026-08-30-phase-2-verification.md) | 历史验收证据 | 本文结果属于所列日期/阶段的验收快照，保留当时测试数量、环境和结论；不代表对当前提交重新执行全量测试或完成生产验收。 |
+| [2026-08-31-phase-3-verification.md](implementation/2026-08-31-phase-3-verification.md) | 历史验收证据 | 本文结果属于所列日期/阶段的验收快照，保留当时测试数量、环境和结论；不代表对当前提交重新执行全量测试或完成生产验收。 人工覆盖映射的恢复及前端警告确认属于后续补修，不由本阶段自动映射门禁单独证明。 |
+| [2026-09-01-phase-4-verification.md](implementation/2026-09-01-phase-4-verification.md) | 历史验收证据 | 本文结果属于所列日期/阶段的验收快照，保留当时测试数量、环境和结论；不代表对当前提交重新执行全量测试或完成生产验收。 |
+| [2026-09-01-phase-5-verification.md](implementation/2026-09-01-phase-5-verification.md) | 历史验收证据 | 本文结果属于所列日期/阶段的验收快照，保留当时测试数量、环境和结论；不代表对当前提交重新执行全量测试或完成生产验收。 |
+| [2026-09-02-phase-6-dashboard-fidelity.md](implementation/2026-09-02-phase-6-dashboard-fidelity.md) | 历史验收证据 | 本文结果属于所列日期/阶段的验收快照，保留当时测试数量、环境和结论；不代表对当前提交重新执行全量测试或完成生产验收。 |
+| [2026-09-02-phase-6-verification.md](implementation/2026-09-02-phase-6-verification.md) | 历史验收证据 | 本文结果属于所列日期/阶段的验收快照，保留当时测试数量、环境和结论；不代表对当前提交重新执行全量测试或完成生产验收。 |
+| [2026-09-02-phase-7-verification.md](implementation/2026-09-02-phase-7-verification.md) | 历史验收证据 | 本文结果属于所列日期/阶段的验收快照，保留当时测试数量、环境和结论；不代表对当前提交重新执行全量测试或完成生产验收。 批准后证据拒绝、结论修改退回复核与冻结资格的并发约束已在后续修复补强。 |
+| [2026-09-02-phase-8-verification.md](implementation/2026-09-02-phase-8-verification.md) | 历史验收证据 | 本文结果属于所列日期/阶段的验收快照，保留当时测试数量、环境和结论；不代表对当前提交重新执行全量测试或完成生产验收。 成功交互审计持久化及报告大纲批次选择已在后续修复补强。 |
+| [2026-09-02-phase-9-verification.md](implementation/2026-09-02-phase-9-verification.md) | 历史验收证据 | 本文结果属于所列日期/阶段的验收快照，保留当时测试数量、环境和结论；不代表对当前提交重新执行全量测试或完成生产验收。 文末待补的报告 API/下载已在 Pilot Phase 1 落地；冻结内容持久化、存储对象与 PPT 正文等后续修复以最新验收为准。PDF 魔数/体积检查不等于逐项提取 PDF 文本验证。 |
+| [2026-09-04-phase-pilot-1-user-closure.md](implementation/2026-09-04-phase-pilot-1-user-closure.md) | 历史验收证据 | 本文结果属于所列日期/阶段的验收快照，保留当时测试数量、环境和结论；不代表对当前提交重新执行全量测试或完成生产验收。 Pilot Phase 1 的实现和历史门禁已交付；后续审查发现的跨步骤缺陷另有补修。最新真实对象存储发布验收仍有限制。 |
 | [2026-09-04-project-code-review.md](reviews/2026-09-04-project-code-review.md) | 已关闭问题的历史审查 | 本文是修复前代码的审查快照，保留原问题、行号、测试失败和当时 CI 结果。R1–R9 及追加 N1–N3 已分别由 `fa171ec`、`e688f1b`、`c1a59d1` 修复，不再是当前待修缺陷；历史 CI 状态不代表当前提交。真实 S3 发布链路、Pilot Phase 2 剩余部署工作和真实数据试点仍须单独验收。 |
 | [2026-09-04-synced-project-code-review.md](reviews/2026-09-04-synced-project-code-review.md) | 已关闭问题的历史审查 | 本文是修复前代码的审查快照，保留原问题、行号、测试失败和当时 CI 结果。R1–R9 及追加 N1–N3 已分别由 `fa171ec`、`e688f1b`、`c1a59d1` 修复，不再是当前待修缺陷；历史 CI 状态不代表当前提交。真实 S3 发布链路、Pilot Phase 2 剩余部署工作和真实数据试点仍须单独验收。 |
 
