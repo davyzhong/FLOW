@@ -1,5 +1,7 @@
 # FLOW 客观财务分析里程碑与执行台账｜2026-09-06 建立，2026-09-07 更新
 
+> **2026-09-07 起执行队列由 [统一执行计划](2026-09-07-unified-next-plan.md)（U 系列）单一承载**：本文（M 系列）任务书细节仍有效，勾选时与 U 系列双写映射。
+
 > **2026-09-07 接续关系**：[下一阶段详细计划](2026-09-07-next-stage-upgrade-plan.md)与[参考订正总册](../../knowledge-base/02_research/synthesis/2026-09-07-reference-and-improvement-master.md)已整合累计外部借鉴。P 计划是下一阶段详细任务入口，本文件保留 A–H 阶段出口和已完成证据，不再单独形成冲突排期。本次仅文档更新，实施需另行明确；A/B/C 已有实现，P00 刷新验收差异和在途 D01，不重复建设。
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use executing-plans to implement this plan task-by-task. Each checkbox is a tracked deliverable; before behavior changes use test-driven-development and before completion use verification-before-completion. Do not start unrelated parallel edits in a shared working tree.
