@@ -61,9 +61,9 @@ U1 → U2 → U3 ─┬→ U4（可与 U5 并行）→ U5 → U6 → U7 → U8 �
   3. CAGR 间隔数（C07）：**done**（`e089e36`：deterministic.py + 6 项 TDD 含反例锁定；期间语义=年度点数，除数 n−1）；
   4. 比率阈值适用条件（C06）：**done**（`8b15cd1`：experience_threshold_hint，无适用范围返回 None、无判定字段）；
   5. ROE 分母口径标签（I12）：**done**（`8b15cd1`：caliber_labeled_value + REGISTERED_CALIBERS 登记制，未注册口径拒绝）；
-  6. 登记缺陷三项：JDL 同名行项目唯一键（先契约决策再动 schema：分组维度入唯一键 vs 归一层合并）、腾讯种子利润表缺行——**done**（实际根因是归一化映射缺"投资收益净额及其他"等三行而非种子数据缺失；已补 `item_alias_map_v1` 三行 + 新增 is.other_income/is.investment_income/is.share_of_associates 全局条目，守恒锁定测试：逐行加总=除税前 69690；`statements` 55 passed）、引擎杜邦三分解口径标注（总额 vs 归母口径，待做）；
+  6. 登记缺陷三项：JDL 同名行项目唯一键（先契约决策再动 schema：分组维度入唯一键 vs 归一层合并）、腾讯种子利润表缺行——**done**（实际根因是归一化映射缺"投资收益净额及其他"等三行而非种子数据缺失；已补 `item_alias_map_v1` 三行 + 新增 is.other_income/is.investment_income/is.share_of_associates 全局条目，守恒锁定测试：逐行加总=除税前 69690；`statements` 55 passed）、引擎杜邦三分解口径标注——**done**（`f557547`：条目名/因子/basis 全链携带「净利润总额口径·期末权益·未年化」+ 锁定测试；与正文归母口径同名不同值问题消除）；
   7. rnd_exp 科目映射（需《应用指南汇编 2024》原文核对）。
-  断点（2026-09-07 更新 2）：C07/I09/C08/C06/I12 五项 done（deterministic.py 五个原语 + 18 项 TDD，tests/analysis 64 passed）；U2 剩余：6.1 JDL 同名行唯一键契约决策（建议：唯一键加入分组序号维度——保留披露原文分组语义；先提决策建议再动迁移）、6.2 腾讯种子缺行对照 PDF 补录、6.3 引擎杜邦口径标注、7 rnd_exp 科目核对。
+  断点（2026-09-07 更新 3）：U2 可执行项全部完成——五原语（C07/I09/C08/C06/I12）+ 6.2 腾讯映射补行（守恒锁定）+ 6.3 杜邦口径标注；tests/analysis + tests/statements 119 passed。U2 仅剩两项外部依赖：6.1 JDL 唯一键契约决策（**待用户确认**：建议唯一键加入分组序号维度，保留披露原文分组语义，迁移加 column）与 7 rnd_exp 科目编号（待《应用指南汇编 2024》原文）。U2 视为实质完成，可进入 U3（P04 同源证据与快照投影）。
 - U4 前置（P00 人工剩余，不阻塞开发）：oracle 逐行独立录入需未参与抽取器开发的独立会话执行（铁律），本会话/任何参与过抽取的代理不得代录。
 - 第一条命令：确认 CI（`gh run list --limit 1`）后，读 `2026-09-07-next-stage-upgrade-plan.md` §P02 任务书，起草 `config/analysis/` 主题合同配置并写 `tests/analysis/test_topics_contract.py`（先测后码）。
 
