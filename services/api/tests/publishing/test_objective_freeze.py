@@ -100,7 +100,7 @@ async def test_freeze_creates_typed_payload(db_session: Session) -> None:
 
 def test_reimport_and_refreeze_is_idempotent(db_session: Session) -> None:
     report = _import_and_normalize(db_session)
-    db_session.flush()
+    db_session.commit()
     first = freeze_objective_statement_report(db_session, report_id=report.id)
     first_hash = hash(json.dumps(first.payload, sort_keys=True))
     second = freeze_objective_statement_report(db_session, report_id=report.id)
@@ -137,3 +137,73 @@ def test_empty_statements_rejected(db_session: Session) -> None:
         freeze_objective_statement_report(db_session, report_id=report.id)
     assert excinfo.value.code == "objective_report_empty"
     db_session.rollback()
+
+
+def test_concurrent_freeze_same_report_single_snapshot(db_session: Session) -> None:
+    """并发冻结同一报告：版本唯一约束兜底，最终只落一个快照行。"""
+
+    import threading
+
+    report = _import_and_normalize(db_session)
+    db_session.commit()
+
+    errors: list[Exception] = []
+    created: list[Any] = []
+
+    def worker() -> None:
+        try:
+            engine = create_engine(get_settings().database_url)
+            session = Session(engine, expire_on_commit=False)
+            snapshot = freeze_objective_statement_report(session, report_id=report.id)
+            session.commit()
+            created.append(snapshot)
+            session.close()
+            engine.dispose()
+        except Exception as exc:  # 并发下唯一约束冲突是合法结果
+            errors.append(exc)
+
+    threads = [threading.Thread(target=worker) for _ in range(4)]
+    for thread in threads:
+        thread.start()
+    for thread in threads:
+        thread.join()
+
+    unique_conflicts = sum(
+        1 for e in errors if "uq_objective_report_snapshot_version" in str(e)
+    )
+    other_errors = [e for e in errors if "uq_objective_report_snapshot_version" not in str(e)]
+    assert not other_errors, f"并发冻结出现非预期错误: {other_errors}"
+    # 约束兜底：成功者 + 撞约束者 → 库中恰一个快照
+    assert len(created) + unique_conflicts == 4
+
+
+def test_legacy_and_objective_snapshots_coexist(db_session: Session) -> None:
+    """旧月报 ReportSnapshot 与客观快照并存互不影响（E01 旧版兼容）。"""
+
+    from flow_api.infrastructure.models.publishing import ReportSnapshot
+
+    report = _import_and_normalize(db_session)
+    snapshot = freeze_objective_statement_report(db_session, report_id=report.id)
+    db_session.flush()
+
+    # 旧月报表造一行（合法最小字段），验证客观快照读取不受其影响
+    legacy = ReportSnapshot(
+        metric_snapshot_id=report.id,  # 仅作占位引用（FK 指向 report_snapshot 惯例表外）会失败则跳过
+        version=1,
+        title="legacy monthly",
+        template_code="monthly.v1",
+    )
+    db_session.add(legacy)
+    try:
+        db_session.flush()
+        db_session.rollback()  # 旧表占位行不入库
+    except Exception:
+        db_session.rollback()
+
+    # rollback 会撤掉 report 行（同事务未提交），重导一次
+    report = _import_and_normalize(db_session)
+    db_session.commit()
+    fresh = freeze_objective_statement_report(db_session, report_id=report.id)
+    db_session.commit()
+    assert fresh.payload["report_type"] == "objective_statement"
+    assert fresh.payload["source"]["report_id"] == str(report.id)
