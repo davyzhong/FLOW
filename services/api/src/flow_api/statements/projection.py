@@ -245,10 +245,10 @@ def drilldown_children(
         )
     children_sum = Decimal("0")
     for child_id in child_ids:
-        row: StatementNormalizedItem | None = by_id.get(child_id)
-        value = _row_value(row)
-        if value is not None and row is not None:
-            present.append(row)
+        child_row = by_id.get(child_id)
+        value = _row_value(child_row)
+        if value is not None and child_row is not None:
+            present.append(child_row)
             children_sum += value
     gap = abs(total - children_sum)
     if gap > tolerance:
