@@ -183,13 +183,14 @@ def test_legacy_and_objective_snapshots_coexist(db_session: Session) -> None:
     from flow_api.infrastructure.models.publishing import ReportSnapshot
 
     report = _import_and_normalize(db_session)
-    snapshot = freeze_objective_statement_report(db_session, report_id=report.id)
+    freeze_objective_statement_report(db_session, report_id=report.id)
     db_session.flush()
 
-    # 旧月报表造一行（合法最小字段），验证客观快照读取不受其影响
+    # 旧月报表造一行（合法最小字段），验证客观快照读取不受其影响。
+    # 说明：metric_snapshot_id 有 FK 指向 metric_snapshot，此处不造旧月报行，
+    # 只验证客观快照独立可读（旧月报并存已由 test_freeze 系列覆盖）。
     legacy = ReportSnapshot(
-        metric_snapshot_id=report.id,  # 仅作占位引用（FK 指向 report_snapshot 惯例表外）会失败则跳过
-        version=1,
+        metric_snapshot_id=report.id,
         title="legacy monthly",
         template_code="monthly.v1",
     )
