@@ -193,8 +193,9 @@ class ObjectiveAnalysisService:
             )
         if denominator < 0:
             return ObjectiveEntryResult(
-                entry["id"], entry["name"], entry["kind"], ObjectiveStatus.COMPUTED,
-                str(numerator / denominator), basis, note + "（分母为负，符号如实保留）", refs,
+                entry["id"], entry["name"], entry["kind"], ObjectiveStatus.NOT_COMPUTABLE,
+                None, basis, note, refs,
+                reason="negative_denominator: 分母为负，比率符号失真，不伪造数值",
             )
         value = numerator / denominator
         if entry["kind"] == "yoy":

@@ -18,7 +18,7 @@ from typing import Any
 import yaml
 
 DICTIONARY_PATH = Path("config/metrics/metric_dictionary_v1.yaml")
-ALIAS_MAP_PATH = Path("config/statements/item_alias_map_v0.yaml")
+ALIAS_MAP_PATH = Path("config/statements/item_alias_map_v1.yaml")
 
 SUPPORTED_OPS = {"identity", "avg", "prior", "div", "sub", "add", "mul", "sum"}
 
@@ -74,7 +74,9 @@ def _registered_item_ids(dictionary: dict[str, Any], alias_map: dict[str, Any]) 
                 if isinstance(target, str):
                     ids.add(target)
                 elif isinstance(target, dict):
-                    ids.add(str(key).lstrip("_"))
+                    # {sum: [...]} 组合映射取合成 item_id；{item: x, abs: true} 取显式 item
+                    explicit = target.get("item")
+                    ids.add(str(explicit) if explicit else str(key).lstrip("_"))
     return ids
 
 

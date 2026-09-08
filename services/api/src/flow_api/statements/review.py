@@ -76,7 +76,7 @@ def corrected_statements(
             override = corrections.get((item.statement_type, item.item_name, column_key))
             if override is not None:
                 value = override.new_value
-            row[label] = float(value) if value is not None else None
+            row[label] = value  # 保持 Decimal 精度，不经 float（发布门禁输入）
         grouped[item.statement_type].append(row)
     return dict(grouped)
 
@@ -97,7 +97,7 @@ def evaluate_stored_report(
             row: dict[str, Any] = {"item": item.item_name}
             for column_key, label in COLUMN_LABELS.items():
                 value = getattr(item, column_key)
-                row[label] = float(value) if value is not None else None
+                row[label] = value  # 保持 Decimal 精度，不经 float（发布门禁输入）
             grouped[item.statement_type].append(row)
         statements = dict(grouped)
     # 简化/繁体自适应：繁体版式用港股勾稽，其余用 A 股勾稽

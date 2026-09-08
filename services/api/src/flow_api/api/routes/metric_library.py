@@ -187,8 +187,9 @@ def _db_payload(session: Session) -> MetricLibraryResponse | None:
         accounting=AccountingFoundation(
             dataset_id="flow.accounting_foundation.v1",
             status="effective",
-            known_gaps=[],
-            categories=[],
+            # 元数据（已知缺口/类别/取代说明）库内无列，取 YAML 权威值，不伪造为空
+            known_gaps=fallback.accounting.known_gaps,
+            categories=fallback.accounting.categories,
             accounts=[
                 AccountingAccount(
                     code=s.code,
@@ -202,7 +203,7 @@ def _db_payload(session: Session) -> MetricLibraryResponse | None:
                 )
                 for s in subjects
             ],
-            superseded_notes=[],
+            superseded_notes=fallback.accounting.superseded_notes,
             standards=[
                 AccountingStandardRow(
                     id=s.standard_id, name=s.name, issuer=s.issuer, note=s.note

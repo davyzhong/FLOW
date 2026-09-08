@@ -230,24 +230,26 @@ class AShareTableExtractor:
 
     def _reconcile(self, st: dict[str, list[dict[str, Any]]]) -> list[ExtractionCheck]:
         diffs: list[ExtractionCheck] = []
-        bs = st["合并资产负债表"]
-        for col in ("期末余额", "期初余额"):
-            g = partial(_g, bs, col)
-            _check(diffs, f"资产总计=流动资产合计+非流动资产合计 [{col}]",
-                   g("资产总计"),
-                   (_dec(g("流动资产合计")) or 0) + (_dec(g("非流动资产合计")) or 0))
-            _check(diffs, f"负债合计=流动负债合计+非流动负债合计 [{col}]",
-                   g("负债合计"),
-                   (_dec(g("流动负债合计")) or 0) + (_dec(g("非流动负债合计")) or 0))
-            _check(diffs, f"资产总计=负债合计+所有者权益合计 [{col}]",
-                   g("资产总计"),
-                   (_dec(g("负债合计")) or 0) + (_dec(g("所有者权益合计", "股东权益合计")) or 0))
-            _check(diffs, f"负债和所有者权益总计=资产总计 [{col}]",
-                   g("负债和所有者权益总计", "负债和股东权益总计"), g("资产总计"))
-            _check(diffs, f"所有者权益合计=归母+少数股东 [{col}]",
-                   g("所有者权益合计", "股东权益合计"),
-                   (_dec(g("归属于母公司所有者权益合计", "归属于母公司股东权益合计")) or 0)
-                   + (_dec(g("少数股东权益")) or 0))
+        if "合并资产负债表" in st:
+            bs = st["合并资产负债表"]
+            for col in ("期末余额", "期初余额"):
+                g = partial(_g, bs, col)
+                _check(diffs, f"资产总计=流动资产合计+非流动资产合计 [{col}]",
+                       g("资产总计"),
+                       (_dec(g("流动资产合计")) or 0) + (_dec(g("非流动资产合计")) or 0))
+                _check(diffs, f"负债合计=流动负债合计+非流动负债合计 [{col}]",
+                       g("负债合计"),
+                       (_dec(g("流动负债合计")) or 0) + (_dec(g("非流动负债合计")) or 0))
+                _check(diffs, f"资产总计=负债合计+所有者权益合计 [{col}]",
+                       g("资产总计"),
+                       (_dec(g("负债合计")) or 0)
+                       + (_dec(g("所有者权益合计", "股东权益合计")) or 0))
+                _check(diffs, f"负债和所有者权益总计=资产总计 [{col}]",
+                       g("负债和所有者权益总计", "负债和股东权益总计"), g("资产总计"))
+                _check(diffs, f"所有者权益合计=归母+少数股东 [{col}]",
+                       g("所有者权益合计", "股东权益合计"),
+                       (_dec(g("归属于母公司所有者权益合计", "归属于母公司股东权益合计")) or 0)
+                       + (_dec(g("少数股东权益")) or 0))
         if "合并利润表" not in st:
             return diffs
         is_ = st["合并利润表"]
@@ -418,8 +420,8 @@ class HkTraditionalExtractor:
         if "合并利润表" not in st:
             return diffs
         is_ = st["合并利润表"]
-        bs = st["合并资产负债表"]
-        cf = st["合并现金流量表"]
+        bs = st.get("合并资产负债表", [])
+        cf = st.get("合并现金流量表", [])
         for col in ("本期发生额", "上期发生额"):
             def g(n: str, col: str = col) -> Any:
                 return (_find(is_, n) or {}).get(col)
@@ -491,7 +493,7 @@ class HkTraditionalExtractor:
 # 业绩公告简表适配器（腾讯版式：简明综合收益表 + IFRS→Non-IFRS 调节表）
 # ---------------------------------------------------------------------------
 
-_TENCENT_PARENUM = r"-?[\d,]+(?:\.\d+)?| \([-\d,]+\)"
+_TENCENT_PARENUM = r"\([-\d,]+\)|-?[\d,]+(?:\.\d+)?"
 _TENCENT_LABELS = [
     "收入", "增值服务", "营销服务", "金融科技及企业服务", "其他", "收入成本", "毛利",
     "销售及市场推广开支", "一般及行政开支", "其他收益/（亏损）净额", "经营盈利",

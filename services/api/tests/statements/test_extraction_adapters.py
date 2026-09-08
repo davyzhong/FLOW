@@ -131,3 +131,16 @@ def test_tencent_result_carries_scope_warning() -> None:
     assert result.adapter_id == "hk_results_announcement"
     assert any("简表" in warning for warning in result.warnings)
     assert set(result.statements) == {"合并利润表"}
+
+
+def test_tencent_paren_negative_without_leading_space_keeps_sign() -> None:
+    # 括号紧跟 CJK（PDF 常见排印）也必须解析为负数，不得丢负号
+    import re
+
+    from flow_api.statements.extraction import _TENCENT_PARENUM, _parse_signed
+
+    line = "应占联营公司及合营公司盈利/(亏损)净额 (9,993) 4,473 3,620"
+    found = re.findall(_TENCENT_PARENUM, line)
+    assert len(found) == 3
+    assert _parse_signed(found[0]) == -9993
+    assert _parse_signed(found[1]) == 4473

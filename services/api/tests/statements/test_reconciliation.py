@@ -82,3 +82,29 @@ def test_unknown_report_kind_rejected() -> None:
     result = extract_statements(_load("sf_002352/SF_2026_Q1_report.pdf"))
     with pytest.raises(ValueError, match="未知报告种类"):
         evaluate_report_quality(result, report_kind="旬报")
+
+
+def test_missing_core_statement_blocks_publish() -> None:
+    fake = ExtractionResult(
+        adapter_id="cn_ashare_table",
+        unit_note="人民币千元",
+        statements={
+            "合并利润表": [{"item": "五、净利润", "本期发生额": 1}],
+        },
+        checks=(),
+        warnings=(),
+        page_count=1,
+        source_sha256="a" * 64,
+    )
+    quality = evaluate_report_quality(fake, report_kind="一季报")
+    assert not quality.publishable
+    assert any("missing_required_statement" in blocker for blocker in quality.blockers)
+
+
+def test_announcement_publish_is_not_blocked_by_missing_tables() -> None:
+    result = extract_statements(
+        (REPO_ROOT / "docs/knowledge-base/02_research/original/p5_samples"
+         / "tencent_0700/Tencent_2026_Q2_results.pdf").read_bytes()
+    )
+    quality = evaluate_report_quality(result, report_kind="业绩公告")
+    assert quality.publishable

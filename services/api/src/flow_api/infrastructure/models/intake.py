@@ -298,6 +298,7 @@ class BuildJob(IdentityTimestampMixin, Base):
     )
     status: Mapped[str] = mapped_column(String(32), nullable=False, default="queued")
     months: Mapped[list[int]] = mapped_column(JSONB, nullable=False)
+    fingerprint: Mapped[str | None] = mapped_column(String(128), nullable=True)
     metric_snapshot_ids: Mapped[list[str]] = mapped_column(
         JSONB, nullable=False, default=list, server_default=text("'[]'::jsonb")
     )

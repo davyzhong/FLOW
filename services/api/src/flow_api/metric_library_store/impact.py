@@ -133,7 +133,7 @@ class _SandboxEvaluator:
             return values[0] / values[1]
         if op == "sub":
             return values[0] - values[1]
-        if op == "add":
+        if op in ("add", "sum"):
             return sum(values, Decimal(0))
         if op == "mul":
             result = Decimal(1)

@@ -229,9 +229,11 @@ def render_objective_report_v3(
         return facts.raw(item_id, column)
 
     revenue, revenue_prior = raw("is.revenue", "current"), raw("is.revenue", "prior")
+    attr_current = raw("is.attr_net_profit", "current")
+    attr_prior = raw("is.attr_net_profit", "prior")
     net_profit, net_profit_prior = (
-        raw("is.attr_net_profit", "current") or raw("is.net_profit", "current"),
-        raw("is.attr_net_profit", "prior") or raw("is.net_profit", "prior"),
+        attr_current if attr_current is not None else raw("is.net_profit", "current"),
+        attr_prior if attr_prior is not None else raw("is.net_profit", "prior"),
     )
     cogs = raw("is.cogs", "current")
     ocf, icf, fin_cf = (
@@ -359,7 +361,7 @@ def render_objective_report_v3(
             # 负净利润（或亏损）时净现比失真：不得显示正常数值，显式降级（P01/C01）
             "—（净利润为负）"
             if (net_profit is not None and net_profit < 0)
-            else (f"{abs(ocf_ratio):.2f}" if ocf_ratio is not None else "—"),
+            else (f"{ocf_ratio:.2f}" if ocf_ratio is not None else "—"),
         ),
         _kpi_card("ROE（期末权益口径）", _fmt_pct(roe)),
     ])
@@ -458,8 +460,12 @@ def render_objective_report_v3(
         block_values: list[Decimal | None] = []
         for item in block:
             block_values.extend((
-                _dec(item.value_current) or _dec(item.value_end),
-                _dec(item.value_prior) or _dec(item.value_begin),
+                _dec(item.value_current)
+                if item.value_current is not None
+                else _dec(item.value_end),
+                _dec(item.value_prior)
+                if item.value_prior is not None
+                else _dec(item.value_begin),
             ))
         peak_scaled = max(
             (abs(v) for v in block_values if v is not None),
@@ -555,7 +561,7 @@ def render_objective_report_v3(
     else (
         '—（净利润为负）'
         if (net_profit is not None and net_profit < 0)
-        else f'{abs(ocf_ratio):.2f}'
+        else f'{ocf_ratio:.2f}'
     )
 }</td></tr>
 <tr><td>ROE（期末权益口径）</td><td class="num">{_fmt_pct(roe)}</td></tr>

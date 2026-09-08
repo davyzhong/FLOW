@@ -67,13 +67,37 @@ async def client(db_session: Session) -> Iterator[AsyncClient]:
 
 
 def _import_payload(session: Session, rows: list[dict[str, Any]]) -> StatementReport:
+    # 季报发布门禁要求三大报表齐备（B04 修复后核心表缺失阻断发布）
+    statements = {
+        "合并资产负债表": rows,
+        "合并利润表": [
+            {"item": "三、营业利润（亏损以“－”号填列）", "本期发生额": 9, "上期发生额": 8},
+            {"item": "加：营业外收入", "本期发生额": 2, "上期发生额": 1},
+            {"item": "减：营业外支出", "本期发生额": 1, "上期发生额": 1},
+            {"item": "四、利润总额（亏损总额以“－”号填列）", "本期发生额": 10, "上期发生额": 8},
+            {"item": "五、净利润（净亏损以“－”号填列）", "本期发生额": 10, "上期发生额": 8},
+            {"item": "1.归属于母公司所有者的净利润", "本期发生额": 9, "上期发生额": 7},
+            {"item": "2.少数股东损益", "本期发生额": 1, "上期发生额": 1},
+        ],
+        "合并现金流量表": [
+            {"item": "经营活动现金流入小计", "本期发生额": 12, "上期发生额": 10},
+            {"item": "经营活动现金流出小计", "本期发生额": 5, "上期发生额": 4},
+            {"item": "经营活动产生的现金流量净额", "本期发生额": 7, "上期发生额": 6},
+            {"item": "投资活动产生的现金流量净额", "本期发生额": -2, "上期发生额": -1},
+            {"item": "筹资活动产生的现金流量净额", "本期发生额": 0, "上期发生额": 0},
+            {"item": "四、汇率变动对现金及现金等价物的影响", "本期发生额": 0, "上期发生额": 0},
+            {"item": "五、现金及现金等价物净增加额", "本期发生额": 5, "上期发生额": 5},
+            {"item": "加：期初现金及现金等价物余额", "本期发生额": 10, "上期发生额": 5},
+            {"item": "六、期末现金及现金等价物余额", "本期发生额": 15, "上期发生额": 10},
+        ],
+    }
     return import_statement_report(
         session,
         company_name="测试股份",
         stock_code="600000",
         report_kind="一季报",
         period_label="2026Q1",
-        payload={"unit": "人民币千元", "statements": {"合并资产负债表": rows}},
+        payload={"unit": "人民币千元", "statements": statements},
         source_ref="test.pdf",
     )
 
@@ -248,3 +272,30 @@ async def test_correction_validation_errors(
     )
     assert no_change.status_code == 409
     assert no_change.json()["detail"]["code"] == "no_change"
+
+
+async def test_announcement_publish_does_not_crash(
+    client: AsyncClient, db_session: Session
+) -> None:
+    # 业绩公告（简表，无资产负债/现金流量表）：发布不得 500，缺表按披露范围放行
+    report = import_statement_report(
+        db_session,
+        company_name="腾讯控股",
+        stock_code="0700.HK",
+        report_kind="业绩公告",
+        period_label="2026Q2",
+        payload={
+            "unit": "人民币百万元",
+            "statements": {
+                "合并利润表": [
+                    {"item": "收入", "本期发生额": 204785, "上期发生额": 184504},
+                    {"item": "毛利", "本期发生额": 118433, "上期发生额": 105013},
+                ]
+            },
+        },
+        source_ref="tencent_q2.pdf",
+    )
+    db_session.commit()
+    published = await client.post(f"/api/v1/statements/{report.id}/publish")
+    assert published.status_code == 200, published.text
+    assert published.json()["status"] == "published"

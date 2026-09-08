@@ -135,7 +135,15 @@ def evaluate_report_quality(
             )
         )
 
-    blockers = tuple(
+    # 核心报表（资产负债表/利润表/现金流量表）缺失 = 无勾稽可验，同样阻断发布；
+    # 业绩公告的缺失为 NOT_APPLICABLE（披露范围如此），不受影响。
+    core_statements = (STATEMENT_BS, STATEMENT_IS, STATEMENT_CF)
+    missing_core = tuple(
+        f"missing_required_statement: {c.statement_type}"
+        for c in coverage
+        if c.statement_type in core_statements and c.status == CoverageStatus.MISSING
+    )
+    blockers = missing_core + tuple(
         label for label in failed_labels if _is_critical(label)
     )
     # 「四表一注完整」只适用于年报：权益变动表与附注同备且全部勾稽通过。

@@ -9,10 +9,11 @@ B06 起：
 
 from __future__ import annotations
 
+import hashlib
 from collections.abc import Iterator
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Annotated
+from typing import Annotated, Any
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -124,6 +125,12 @@ def _job_line(job: BuildJob) -> BuildJobLine:
     )
 
 
+def _catalog_fingerprint(catalog: Any) -> str:
+    policy_path = _repository_root() / "services/api/config/analysis/flow-logistics-v1.yaml"
+    policy_hash = hashlib.sha256(policy_path.read_bytes()).hexdigest()[:16]
+    return f"{catalog.definition_set_id}:{catalog.engine_version}:{policy_hash}"
+
+
 def _resolve_months(
     session: Session, batch_id: UUID, request: OrchestrationBuildRequest
 ) -> list[int]:
@@ -177,12 +184,28 @@ def build_batch_analysis(
 
     months = _resolve_months(session, batch_id, request)
 
-    # 幂等回放：同批次同期间范围已有成功任务时直接复用
+    metrics_config = _repository_root() / "config/metrics/flow_v1_metrics.yaml"
+    catalog = resolve_metric_catalog(session, metrics_config)
+    fingerprint = _catalog_fingerprint(catalog)
+
+    # 回收同批次残留的 running 任务（进程崩溃后的可恢复语义）
+    stale = session.scalars(
+        select(BuildJob).where(
+            BuildJob.batch_id == batch_id, BuildJob.status == "running"
+        )
+    ).all()
+    for job in stale:
+        job.status = "failed"
+        job.error = "interrupted: 任务在进程崩溃后被回收标记"
+        job.finished_at = datetime.now(UTC)
+
+    # 幂等回放：同批次同期间范围同版本指纹的成功任务直接复用
     replay = session.scalar(
         select(BuildJob).where(
             BuildJob.batch_id == batch_id,
             BuildJob.status == "succeeded",
             BuildJob.months == months,
+            BuildJob.fingerprint == fingerprint,
         )
     )
     if replay is not None:
@@ -196,12 +219,10 @@ def build_batch_analysis(
             replayed=True,
         )
 
-    job = BuildJob(batch_id=batch_id, status="running", months=months)
+    job = BuildJob(batch_id=batch_id, status="running", months=months, fingerprint=fingerprint)
     session.add(job)
     session.flush()
 
-    metrics_config = _repository_root() / "config/metrics/flow_v1_metrics.yaml"
-    catalog = resolve_metric_catalog(session, metrics_config)
     snapshot_service = MetricSnapshotService()
     try:
         snapshots = [
