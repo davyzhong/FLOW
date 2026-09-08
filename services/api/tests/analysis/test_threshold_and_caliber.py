@@ -10,8 +10,6 @@ from __future__ import annotations
 
 from decimal import Decimal
 
-import pytest
-
 from flow_api.analysis.deterministic import (
     caliber_labeled_value,
     experience_threshold_hint,
