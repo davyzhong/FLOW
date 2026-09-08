@@ -7,10 +7,11 @@
 from __future__ import annotations
 
 import io
-from typing import Any
+from typing import Any, cast
 
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Font
+from openpyxl.worksheet.worksheet import Worksheet
 
 _GOLDEN_SCALE_NOTE = "单位以 unit_note 为准，数值为披露原值的字符串投影"
 
@@ -26,7 +27,7 @@ def _source_lines(payload: dict[str, Any]) -> list[str]:
 
 
 def _statements(payload: dict[str, Any]) -> dict[str, list[dict[str, Any]]]:
-    return payload.get("statements", {})
+    return cast(dict[str, list[dict[str, Any]]], payload.get("statements", {}))
 
 
 def render_html_from_payload(payload: dict[str, Any]) -> str:
@@ -63,7 +64,7 @@ def render_xlsx_bytes_from_payload(payload: dict[str, Any]) -> bytes:
     """XLSX：口径与证据页 + 各报表逐行原值（金额列右对齐）。"""
 
     wb = Workbook()
-    evidence = wb.active
+    evidence = cast(Worksheet, wb.active)
     evidence.title = "口径与证据"
     evidence["A1"] = "FLOW 客观财报分析（冻结载荷投影）"
     evidence["A1"].font = Font(bold=True)
