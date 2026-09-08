@@ -57,7 +57,9 @@ class ObjectiveFreezeError(Exception):
         self.message = message
 
 
-def freeze_objective_statement_report(session: Session, *, report_id: UUID) -> ObjectiveReportSnapshot:
+def freeze_objective_statement_report(
+    session: Session, *, report_id: UUID
+) -> ObjectiveReportSnapshot:
     """把已导入并归一化的客观财报冻结为 typed 载荷（幂等，同内容同版本）。"""
 
     report = session.get(StatementReport, report_id)

@@ -114,7 +114,7 @@ def test_empty_statements_rejected(db_session: Session) -> None:
 
     from flow_api.statements.importer import StatementImportError  # noqa: F401
 
-    empty: dict[str, Any] = {
+    _empty: dict[str, Any] = {
         "unit": "人民币千元",
         "statements": {},
         "source_pdf": "none",
