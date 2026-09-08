@@ -9,6 +9,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from decimal import Decimal
 from typing import Any
 from uuid import UUID
 
@@ -158,6 +159,105 @@ def build_topic_projection(
         unit_note=report.unit_note,
         entries=tuple(entries),
     )
+
+
+
+
+# ---- 维度下钻粒度校验（P04：合计与明细相加约束，未披露维度拒绝） ----
+
+# item_id → 其归一化明细子集的 item_id 契约（公开财报披露结构）。
+# 合计行本身也作为明细存在时，从明细集中剔除自身。
+DRILLDOWN_TAXONOMY: dict[str, dict[str, list[str]]] = {
+    "合并资产负债表": {
+        # 流动资产合计的全部归一化子项（调研 07/10 + 财会〔2018〕15 号格式）
+        "bs.current_assets": [
+            "bs.cash", "bs.notes_receivable", "bs.ar", "bs.inventory",
+        ],
+        # 资产总计 = 流动 + 非流动（两级合计均守恒）
+        "bs.total_assets": ["bs.current_assets", "bs.noncurrent_assets"],
+        "bs.current_liab": ["bs.ap", "bs.short_debt"],
+        "bs.total_liab": ["bs.current_liab", "bs.noncurrent_liab"],
+        # 权益总额 = 归母 + 非控制性权益（归母存在映射；非控制性权益行按披露原文匹配）
+        "bs.equity": ["bs.attr_equity"],
+    },
+}
+
+_UNDISCLOSED_PREFIXES = ("customer", "order", "supplier", "internal_budget", "channel")
+
+
+def drilldown_children(
+    session: Session,
+    report_id: UUID,
+    mapping_version: str,
+    item_id: str,
+    *,
+    tolerance: Decimal | None = None,
+) -> list[StatementNormalizedItem]:
+    """合计行项目的维度下钻：返回归一化明细并做相加守恒校验。
+
+    - item_id 在下钻分类中没有契约 → drilldown_not_disclosed（缺失不补造）；
+    - 明细分项之和与合计的偏差超出容差 → drilldown_not_consistent；
+    容差默认 0.01（与 Driver 对账一致）。
+    """
+
+    flat_taxonomy: dict[str, list[str]] = {}
+    for sub in DRILLDOWN_TAXONOMY.values():
+        flat_taxonomy.update(sub)
+    taxonomy = flat_taxonomy.get(item_id)
+    if taxonomy is None and any(item_id.startswith(pre) for pre in _UNDISCLOSED_PREFIXES):
+        raise ProjectionError(
+            "drilldown_not_disclosed",
+            f"维度 {item_id} 在公开财报中未披露，不得由模型构造下钻",
+        )
+    if taxonomy is None:
+        # 叶子科目（已映射、无下钻子项契约）：返回空明细，非错误
+        return []
+    child_ids = taxonomy
+    tolerance = tolerance or Decimal("0.01")
+
+    report = session.get(StatementReport, report_id)
+    if report is None:
+        raise ProjectionError("statement_report_not_found", "快照对应的财报不存在")
+    rows = list(
+        session.scalars(
+            select(StatementNormalizedItem).where(
+                StatementNormalizedItem.report_id == report_id,
+                StatementNormalizedItem.mapping_version == mapping_version,
+            )
+        )
+    )
+    by_id: dict[str, StatementNormalizedItem] = {}
+    for row in rows:
+        if row.item_id and row.item_id not in by_id:
+            by_id[row.item_id] = row
+
+    def _row_value(row: StatementNormalizedItem | None) -> Decimal | None:
+        if row is None:
+            return None
+        return row.value_current or row.value_end or row.value_prior or row.value_begin
+
+    present: list[StatementNormalizedItem] = []
+    total_row = by_id.get(item_id)
+    total = _row_value(total_row)
+    if total is None:
+        raise ProjectionError(
+            "drilldown_not_disclosed", f"合计行 {item_id} 缺少数值，无法下钻"
+        )
+    children_sum = Decimal("0")
+    for child_id in child_ids:
+        row: StatementNormalizedItem | None = by_id.get(child_id)
+        value = _row_value(row)
+        if value is not None and row is not None:
+            present.append(row)
+            children_sum += value
+    gap = abs(total - children_sum)
+    if gap > tolerance:
+        raise ProjectionError(
+            "drilldown_not_consistent",
+            f"下钻明细之和 {children_sum} 与合计 {total} 偏差 {gap} 超出容差；"
+            "不得在不守恒的明细上继续分析",
+        )
+    return present
 
 
 __all__ = [
