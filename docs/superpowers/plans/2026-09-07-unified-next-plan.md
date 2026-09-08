@@ -63,7 +63,7 @@ U1 → U2 → U3 ─┬→ U4（可与 U5 并行）→ U5 → U6 → U7 → U8 �
   5. ROE 分母口径标签（I12）：**done**（`8b15cd1`：caliber_labeled_value + REGISTERED_CALIBERS 登记制，未注册口径拒绝）；
   6. 登记缺陷三项：JDL 同名行项目唯一键（先契约决策再动 schema：分组维度入唯一键 vs 归一层合并）、腾讯种子利润表缺行——**done**（实际根因是归一化映射缺"投资收益净额及其他"等三行而非种子数据缺失；已补 `item_alias_map_v1` 三行 + 新增 is.other_income/is.investment_income/is.share_of_associates 全局条目，守恒锁定测试：逐行加总=除税前 69690；`statements` 55 passed）、引擎杜邦三分解口径标注——**done**（`f557547`：条目名/因子/basis 全链携带「净利润总额口径·期末权益·未年化」+ 锁定测试；与正文归母口径同名不同值问题消除）；
   7. rnd_exp 科目映射（需《应用指南汇编 2024》原文核对）。
-  断点（2026-09-07 更新 6）：U3 切片三（维度下钻粒度校验）done：`drilldown_children` + DRILLDOWN_TAXONOMY（流动资产/负债、两级合计、权益）、守恒拒绝 drilldown_not_consistent、未披露维度 drilldown_not_disclosed、叶子空明细；3 项 TDD 绿。U3 剩余：幂等/原子性回归并入既有任务（多数已由 B 链测试覆盖）。U2 可执行项全部完成——五原语（C07/I09/C08/C06/I12）+ 6.2 腾讯映射补行（守恒锁定）+ 6.3 杜邦口径标注；tests/analysis + tests/statements 119 passed。U2 仅剩两项外部依赖：6.1 JDL 唯一键契约决策（**待用户确认**：建议唯一键加入分组序号维度，保留披露原文分组语义，迁移加 column）与 7 rnd_exp 科目编号（待《应用指南汇编 2024》原文）。U2 视为实质完成，可进入 U3（P04 同源证据与快照投影）。
+  断点（2026-09-08）：**U3 整体 done**（CI run 34214219945 全绿确认）——切片一快照投影、切片二投影 API、切片三维度下钻粒度校验（守恒拒绝/未披露拒绝/叶子空明细）；幂等与原子性已由 B 链既有测试覆盖（importer 幂等重导、原子发布测试）。U4 前置的 oracle 独立逐行录入仍待独立会话人工执行（铁律）；6.1 JDL 唯一键与 7 rnd_exp 待外部输入。下一步：U5（客观事实报告与主观证据门禁分离，原 P06）或 U6（统一冻结载荷与多格式报告，原 P08）。——五原语（C07/I09/C08/C06/I12）+ 6.2 腾讯映射补行（守恒锁定）+ 6.3 杜邦口径标注；tests/analysis + tests/statements 119 passed。U2 仅剩两项外部依赖：6.1 JDL 唯一键契约决策（**待用户确认**：建议唯一键加入分组序号维度，保留披露原文分组语义，迁移加 column）与 7 rnd_exp 科目编号（待《应用指南汇编 2024》原文）。U2 视为实质完成，可进入 U3（P04 同源证据与快照投影）。
 - U4 前置（P00 人工剩余，不阻塞开发）：oracle 逐行独立录入需未参与抽取器开发的独立会话执行（铁律），本会话/任何参与过抽取的代理不得代录。
 - 第一条命令：确认 CI（`gh run list --limit 1`）后，读 `2026-09-07-next-stage-upgrade-plan.md` §P02 任务书，起草 `config/analysis/` 主题合同配置并写 `tests/analysis/test_topics_contract.py`（先测后码）。
 
