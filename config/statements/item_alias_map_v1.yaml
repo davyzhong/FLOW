@@ -12,6 +12,9 @@ new_items:
   is.rnd_exp: {cas: 研发费用, ifrs: research and development expenses}
   is.total_op_cost: {cas: 营业总成本（CAS 特有行项目）, ifrs: n/a}
   is.interest_income: {cas: 利息收入, ifrs: interest income (IFRS 9)}
+  is.other_income: {cas: 其他收益（CAS 单列；IFS 其他收入净额）, ifrs: other income/gains (losses), net}
+  is.investment_income: {cas: 投资收益（CAS）/ 投资收益净额及其他（IFRS）, ifrs: investment income/(loss), net and others}
+  is.share_of_associates: {cas: 对联营企业和合营企业的投资收益, ifrs: share of profits/(losses) of associates and JVs}
   cf.icf: {cas: 投资活动产生的现金流量净额, ifrs: net cash from investing activities (IAS 7)}
   cf.fin_cf: {cas: 筹资活动产生的现金流量净额, ifrs: net cash from financing activities (IAS 7)}
   mpm.non_ifrs_operating_profit: {cas: n/a, ifrs: non-IFRS operating profit（MPM，须有调节表）, mpm: true}
@@ -76,6 +79,9 @@ companies:
           一般及行政开支: {item: is.admin_exp, abs: true, note: IFRS 一般及行政开支含研发投入，与 CAS 管理费用口径不同（§10.2 口径差异）}
           财务成本: {item: is.fin_exp, abs: true}
           利息收入: is.interest_income
+          其他收益/（亏损）净额: is.other_income
+          投资收益/（亏损）净额及其他: is.investment_income
+          分占联营公司及合营公司盈利/（亏损）净额: is.share_of_associates
           经营盈利: is.operating_profit
           除税前盈利: is.total_profit
           所得税开支: {item: is.income_tax, abs: true}

@@ -299,3 +299,45 @@ def test_unmapped_company_items_kept_unresolved(db_session: Session) -> None:
     assert summary.resolved == 0
     assert summary.unresolved == 2
     assert set(summary.unresolved_items) == {"货币资金", "某未收录科目"}
+
+
+def test_tencent_income_statement_normalization_is_complete_and_conservative(
+    db_session: Session,
+) -> None:
+    """U2/6.2 缺陷锁定：腾讯利润表归一化必须包含投资收益等其他收益类行，
+    且逐行加总守恒（此前附录缺"投资收益/（亏损）净额及其他"导致差 111.84 亿）。"""
+
+    payload = yaml.safe_load(TENCENT_YAML.read_text())
+    report = import_statement_report(
+        db_session,
+        company_name="腾讯控股",
+        stock_code="0700.HK",
+        report_kind="二季报",
+        period_label="2026Q2",
+        payload=payload,
+        source_ref="p5_samples/tencent_0700/Tencent_2026_Q2_results.pdf",
+        source_sha256="b" * 64,
+    )
+    normalize_report(db_session, report)
+    rows = normalized_items(db_session, report.id, mapping_version="v1")
+
+    by_item = {row.item_id: row for row in rows}
+    # 三行此前缺失（缺行根因），必须全部归一化成功
+    investment = by_item.get("is.investment_income")
+    assert investment is not None and investment.value_current == Decimal("11184")
+    assert by_item.get("is.other_income") is not None
+    assert by_item.get("is.share_of_associates") is not None
+
+    # 附录守恒：除税前 = 收入 − 成本/三费/财务成本（abs 归一化的减项）
+    #           + 其他收益 + 投资收益 + 利息收入 + 分占联营（带符号项）
+    add_items = ["is.revenue", "is.other_income", "is.investment_income",
+                 "is.interest_income", "is.share_of_associates"]
+    sub_items = ["is.cogs", "is.selling_exp", "is.admin_exp", "is.fin_exp"]
+    total = sum(
+        (by_item[item].value_current for item in add_items if by_item.get(item)),
+        Decimal("0"),
+    ) - sum(
+        (by_item[item].value_current for item in sub_items if by_item.get(item)),
+        Decimal("0"),
+    )
+    assert total == by_item["is.total_profit"].value_current == Decimal("69690")
