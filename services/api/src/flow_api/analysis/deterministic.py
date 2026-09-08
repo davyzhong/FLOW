@@ -128,10 +128,109 @@ def reconcile_additive_bridge(
     )
 
 
+
+# ---- C06：经验参考值只能作提示 ----
+
+
+@dataclass(frozen=True, slots=True)
+class ExperienceThresholdHint:
+    """C06 经验参考提示：无判定字段，必须携带适用范围。"""
+
+    kind: str  # 恒为 "reference_hint"
+    metric_code: str
+    observed: Decimal
+    reference: Decimal
+    reference_note: str
+    applicability: str
+    note: str
+
+
+def experience_threshold_hint(
+    *,
+    metric_code: str,
+    observed: Decimal,
+    reference: Decimal,
+    reference_note: str,
+    applicability: str,
+) -> ExperienceThresholdHint | None:
+    """经验参考值提示（C06）。
+
+    只输出"观察值 vs 参考值 + 适用范围"的事实性提示；
+    无适用范围标注（普适化）返回 None；永不输出健康/异常判定。
+    """
+
+    if not applicability.strip():
+        return None
+    note = (
+        f"{metric_code} 观察值 {observed}，参考值 {reference}"
+        f"（{reference_note}）；该参考值适用范围：{applicability}，"
+        f"仅作对照提示，不构成判定。"
+    )
+    return ExperienceThresholdHint(
+        kind="reference_hint",
+        metric_code=metric_code,
+        observed=observed,
+        reference=reference,
+        reference_note=reference_note,
+        applicability=applicability,
+        note=note,
+    )
+
+
+# ---- I12：口径标签强制 ----
+
+# 已登记口径集：指标 → {口径码: 展示标签}。新增指标口径先登记再引用。
+REGISTERED_CALIBERS: dict[str, dict[str, str]] = {
+    "roe": {
+        "average_equity": "ROE（平均净资产口径）",
+        "closing_equity": "ROE（期末净资产口径）",
+        "weighted_average": "ROE（加权平均口径，证监会披露口径）",
+    },
+    "dso_days": {
+        "days_360": "DSO（360 天口径）",
+        "days_365": "DSO（365 天口径）",
+    },
+}
+
+
+@dataclass(frozen=True, slots=True)
+class CaliberLabeledValue:
+    """I12 口径标签值：分析层引用比率必须携带。"""
+
+    metric_code: str
+    value: Decimal
+    caliber: str
+    display_label: str
+
+
+def caliber_labeled_value(
+    *, metric_code: str, value: Decimal, caliber: str
+) -> CaliberLabeledValue | None:
+    """带口径标签的比率值（I12）。
+
+    仅当指标已登记口径集且口径码注册时返回；否则拒绝（None），
+    不做默认口径静默回退。
+    """
+
+    labels = REGISTERED_CALIBERS.get(metric_code)
+    if not labels:
+        return None
+    display = labels.get(caliber)
+    if display is None:
+        return None
+    return CaliberLabeledValue(
+        metric_code=metric_code, value=value, caliber=caliber, display_label=display
+    )
+
+
 __all__ = [
     "AdditiveBridgeResult",
+    "CaliberLabeledValue",
+    "ExperienceThresholdHint",
     "LinkageReviewPrompt",
+    "caliber_labeled_value",
     "compound_annual_growth_rate",
+    "experience_threshold_hint",
     "growth_linkage_check",
     "reconcile_additive_bridge",
 ]
