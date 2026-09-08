@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datetime import datetime
+from typing import Any
 from typing import Literal
 from uuid import UUID
 
@@ -55,6 +56,36 @@ class StatementReportListResponse(FrozenResponse):
 
 class StatementErrorResponse(FrozenResponse):
     detail: ErrorDetail
+
+
+class ProvenancePointResponse(FrozenResponse):
+    item_id: str
+    statement_type: str
+    item_name: str
+    role: str
+    source_sha256: str | None = None
+    trace: dict[str, Any] | None = None
+
+
+class ProjectionEntryResponse(FrozenResponse):
+    entry_id: str
+    name: str
+    status: str
+    value: str | None = None
+    caliber: str | None = None
+    provenance: tuple[ProvenancePointResponse, ...] = ()
+
+
+class SnapshotIdentityResponse(FrozenResponse):
+    report_id: str
+    mapping_version: str
+
+
+class TopicProjectionResponse(FrozenResponse):
+    identity: SnapshotIdentityResponse
+    catalog_id: str
+    unit_note: str
+    entries: tuple[ProjectionEntryResponse, ...]
 
 
 StatementErrorCode = Literal[

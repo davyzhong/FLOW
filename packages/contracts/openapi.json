@@ -2362,6 +2362,96 @@
         }
       }
     },
+    "/api/v1/statements/{report_id}/projection": {
+      "get": {
+        "tags": [
+          "statements"
+        ],
+        "summary": "Get Statement Projection",
+        "description": "主题快照投影：同身份预计算条目 + 来源定位（前端只格式化，U3/P04）。",
+        "operationId": "get_statement_projection_api_v1_statements__report_id__projection_get",
+        "parameters": [
+          {
+            "name": "report_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Report Id"
+            }
+          },
+          {
+            "name": "mapping_version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "v1",
+              "title": "Mapping Version"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TopicProjectionResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatementErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatementErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/statements/{report_id}/corrections": {
       "post": {
         "tags": [
@@ -6449,6 +6539,18 @@
             "title": "Mpm",
             "default": false
           },
+          "mpm_review": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mpm Review"
+          },
           "reconciliation": {
             "anyOf": [
               {
@@ -7107,6 +7209,112 @@
           "drivers"
         ],
         "title": "ProfitBridge"
+      },
+      "ProjectionEntryResponse": {
+        "properties": {
+          "entry_id": {
+            "type": "string",
+            "title": "Entry Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          },
+          "caliber": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Caliber"
+          },
+          "provenance": {
+            "items": {
+              "$ref": "#/components/schemas/ProvenancePointResponse"
+            },
+            "type": "array",
+            "title": "Provenance",
+            "default": []
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "entry_id",
+          "name",
+          "status"
+        ],
+        "title": "ProjectionEntryResponse"
+      },
+      "ProvenancePointResponse": {
+        "properties": {
+          "item_id": {
+            "type": "string",
+            "title": "Item Id"
+          },
+          "statement_type": {
+            "type": "string",
+            "title": "Statement Type"
+          },
+          "item_name": {
+            "type": "string",
+            "title": "Item Name"
+          },
+          "role": {
+            "type": "string",
+            "title": "Role"
+          },
+          "source_sha256": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Sha256"
+          },
+          "trace": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Trace"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "item_id",
+          "statement_type",
+          "item_name",
+          "role"
+        ],
+        "title": "ProvenancePointResponse"
       },
       "PublicationAttemptLine": {
         "properties": {
@@ -7885,6 +8093,25 @@
         ],
         "title": "SheetProfileResponse"
       },
+      "SnapshotIdentityResponse": {
+        "properties": {
+          "report_id": {
+            "type": "string",
+            "title": "Report Id"
+          },
+          "mapping_version": {
+            "type": "string",
+            "title": "Mapping Version"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "report_id",
+          "mapping_version"
+        ],
+        "title": "SnapshotIdentityResponse"
+      },
       "SourceRecordLine": {
         "properties": {
           "fact_id": {
@@ -8476,6 +8703,37 @@
           "note"
         ],
         "title": "SupersededNote"
+      },
+      "TopicProjectionResponse": {
+        "properties": {
+          "identity": {
+            "$ref": "#/components/schemas/SnapshotIdentityResponse"
+          },
+          "catalog_id": {
+            "type": "string",
+            "title": "Catalog Id"
+          },
+          "unit_note": {
+            "type": "string",
+            "title": "Unit Note"
+          },
+          "entries": {
+            "items": {
+              "$ref": "#/components/schemas/ProjectionEntryResponse"
+            },
+            "type": "array",
+            "title": "Entries"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "identity",
+          "catalog_id",
+          "unit_note",
+          "entries"
+        ],
+        "title": "TopicProjectionResponse"
       },
       "TrendPanel": {
         "properties": {

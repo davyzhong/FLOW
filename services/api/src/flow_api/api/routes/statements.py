@@ -18,6 +18,9 @@ from flow_api.api.schemas.statement import (
     CorrectionCreateRequest,
     CorrectionListResponse,
     CorrectionResponse,
+    ProjectionEntryResponse,
+    ProvenancePointResponse,
+    SnapshotIdentityResponse,
     StatementErrorResponse,
     StatementLineResponse,
     StatementPublishResponse,
@@ -28,6 +31,7 @@ from flow_api.api.schemas.statement import (
     StatementSourceCandidatesResponse,
     StatementSourceListResponse,
     StatementSourceResponse,
+    TopicProjectionResponse,
     exact,
 )
 from flow_api.infrastructure.db import get_session_factory
@@ -36,6 +40,11 @@ from flow_api.infrastructure.object_store import ObjectStore
 from flow_api.infrastructure.s3_client import build_s3_client
 from flow_api.settings import get_settings
 from flow_api.statements.intake import StatementSourceError, StatementSourceIntake
+from flow_api.statements.projection import (
+    ProjectionError,
+    SnapshotIdentity,
+    build_topic_projection,
+)
 from flow_api.statements.repository import StatementReportUnavailableError
 from flow_api.statements.review import ReviewError, ReviewService
 from flow_api.statements.service import StatementService
@@ -189,6 +198,63 @@ def get_statement_report(
             )
             for section in detail.sections
         ),
+    )
+
+
+@router.get(
+    "/{report_id}/projection",
+    response_model=TopicProjectionResponse,
+    responses={
+        status.HTTP_404_NOT_FOUND: {"model": StatementErrorResponse},
+        status.HTTP_409_CONFLICT: {"model": StatementErrorResponse},
+    },
+)
+def get_statement_projection(
+    session: SessionDependency,
+    report_id: Annotated[UUID, Path()],
+    mapping_version: str = "v1",
+) -> TopicProjectionResponse:
+    """主题快照投影：同身份预计算条目 + 来源定位（前端只格式化，U3/P04）。"""
+    try:
+        projection = build_topic_projection(
+            session, SnapshotIdentity(report_id=str(report_id), mapping_version=mapping_version)
+        )
+    except ProjectionError as error:
+        http_status = (
+            status.HTTP_404_NOT_FOUND
+            if error.code in ("statement_report_not_found",)
+            else status.HTTP_409_CONFLICT
+        )
+        raise _error(http_status, error.code, "快照不可投影：见消息") from error
+    entries = tuple(
+        ProjectionEntryResponse(
+            entry_id=entry.entry_id,
+            name=entry.name,
+            status=entry.status,
+            value=entry.value,
+            caliber=entry.caliber,
+            provenance=tuple(
+                ProvenancePointResponse(
+                    item_id=p.item_id,
+                    statement_type=p.statement_type,
+                    item_name=p.item_name,
+                    role=p.role,
+                    source_sha256=p.source_sha256,
+                    trace=p.trace,
+                )
+                for p in entry.provenance
+            ),
+        )
+        for entry in projection.entries
+    )
+    return TopicProjectionResponse(
+        identity=SnapshotIdentityResponse(
+            report_id=projection.identity.report_id,
+            mapping_version=projection.identity.mapping_version,
+        ),
+        catalog_id=projection.catalog_id,
+        unit_note=projection.unit_note,
+        entries=entries,
     )
 
 

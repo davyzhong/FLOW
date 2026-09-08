@@ -577,6 +577,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/statements/{report_id}/projection": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Statement Projection
+         * @description 主题快照投影：同身份预计算条目 + 来源定位（前端只格式化，U3/P04）。
+         */
+        get: operations["get_statement_projection_api_v1_statements__report_id__projection_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/statements/{report_id}/corrections": {
         parameters: {
             query?: never;
@@ -1915,6 +1935,10 @@ export interface components {
              * @default false
              */
             mpm: boolean;
+            /** Mpm Review */
+            mpm_review?: {
+                [key: string]: unknown;
+            } | null;
             /** Reconciliation */
             reconciliation?: string | null;
             /** Migrates From */
@@ -2132,6 +2156,41 @@ export interface components {
             drivers: components["schemas"]["BridgeDriver"][];
             /** Degradation Message */
             degradation_message?: string | null;
+        };
+        /** ProjectionEntryResponse */
+        ProjectionEntryResponse: {
+            /** Entry Id */
+            entry_id: string;
+            /** Name */
+            name: string;
+            /** Status */
+            status: string;
+            /** Value */
+            value?: string | null;
+            /** Caliber */
+            caliber?: string | null;
+            /**
+             * Provenance
+             * @default []
+             */
+            provenance: components["schemas"]["ProvenancePointResponse"][];
+        };
+        /** ProvenancePointResponse */
+        ProvenancePointResponse: {
+            /** Item Id */
+            item_id: string;
+            /** Statement Type */
+            statement_type: string;
+            /** Item Name */
+            item_name: string;
+            /** Role */
+            role: string;
+            /** Source Sha256 */
+            source_sha256?: string | null;
+            /** Trace */
+            trace?: {
+                [key: string]: unknown;
+            } | null;
         };
         /** PublicationAttemptLine */
         PublicationAttemptLine: {
@@ -2374,6 +2433,13 @@ export interface components {
             data_row_count: number;
             /** Columns */
             columns: components["schemas"]["ColumnProfileResponse"][];
+        };
+        /** SnapshotIdentityResponse */
+        SnapshotIdentityResponse: {
+            /** Report Id */
+            report_id: string;
+            /** Mapping Version */
+            mapping_version: string;
         };
         /** SourceRecordLine */
         SourceRecordLine: {
@@ -2619,6 +2685,16 @@ export interface components {
             code: string;
             /** Note */
             note: string;
+        };
+        /** TopicProjectionResponse */
+        TopicProjectionResponse: {
+            identity: components["schemas"]["SnapshotIdentityResponse"];
+            /** Catalog Id */
+            catalog_id: string;
+            /** Unit Note */
+            unit_note: string;
+            /** Entries */
+            entries: components["schemas"]["ProjectionEntryResponse"][];
         };
         /** TrendPanel */
         TrendPanel: {
@@ -4102,6 +4178,59 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["StatementErrorResponse"];
+                };
+            };
+        };
+    };
+    get_statement_projection_api_v1_statements__report_id__projection_get: {
+        parameters: {
+            query?: {
+                mapping_version?: string;
+            };
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                report_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TopicProjectionResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StatementErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StatementErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
