@@ -90,12 +90,14 @@ def test_sf_objective_analysis_computed_with_provenance(session: Session) -> Non
 
     dupont = by_id["dupont_three_factor"]
     assert dupont.status == ObjectiveStatus.COMPUTED
+    # U2/6.3 口径标注锁定：条目名与因子必须携带口径，防止与归母口径同名混淆
+    assert "净利润总额口径" in dupont.name
     factors = {p["factor"]: p["value"] for p in dupont.parts}
-    roe = Decimal(factors["roe(期末口径,未年化)"])
+    roe = Decimal(factors["roe(净利润总额口径·期末权益·未年化)"])
     product = (
-        Decimal(factors["net_margin"])
+        Decimal(factors["net_margin(净利润总额口径)"])
         * Decimal(factors["total_asset_turnover"])
-        * Decimal(factors["equity_multiplier"])
+        * Decimal(factors["equity_multiplier(期末权益)"])
     )
     assert abs(roe - product) < Decimal("0.000001"), "杜邦乘积必须闭合"
 

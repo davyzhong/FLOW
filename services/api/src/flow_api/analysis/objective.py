@@ -240,10 +240,10 @@ class ObjectiveAnalysisService:
         multiplier = assets / equity
         roe = net_margin * turnover * multiplier
         parts = [
-            {"factor": "net_margin", "value": str(net_margin)},
+            {"factor": "net_margin(净利润总额口径)", "value": str(net_margin)},
             {"factor": "total_asset_turnover", "value": str(turnover)},
-            {"factor": "equity_multiplier", "value": str(multiplier)},
-            {"factor": "roe(期末口径,未年化)", "value": str(roe)},
+            {"factor": "equity_multiplier(期末权益)", "value": str(multiplier)},
+            {"factor": "roe(净利润总额口径·期末权益·未年化)", "value": str(roe)},
         ]
         return ObjectiveEntryResult(
             entry["id"], entry["name"], entry["kind"], ObjectiveStatus.COMPUTED,

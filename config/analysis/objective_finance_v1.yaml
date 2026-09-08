@@ -77,10 +77,11 @@ entries:
     scope_note: 指标库 facts 执行
   # ---- 杜邦分解（数学分解，非业务因果） ----
   - id: dupont_three_factor
-    name: 杜邦三分解
+    name: 杜邦三分解（净利润总额口径 · 期末权益 · 未年化）
     kind: dupont
     formula_ref: roe
     factors: [net_margin, total_asset_turnover, equity_multiplier]
+    caliber_note: 分子取净利润总额（含少数股东损益）；报告正文若用归母口径杜邦，两者同名不同值，引用时必须携带本条目完整口径标注
     scope_note: ROE = 净利率 × 总资产周转率 × 权益乘数；乘积闭合为数学恒等，不解释为业务因果
 
 rules:
