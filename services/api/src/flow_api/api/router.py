@@ -11,6 +11,7 @@ from flow_api.api.routes.objective_reports import router as objective_reports_ro
 from flow_api.api.routes.orchestration import router as orchestration_router
 from flow_api.api.routes.publishing import router as publishing_router
 from flow_api.api.routes.statements import router as statements_router
+from flow_api.api.routes.workbench import router as workbench_router
 from flow_api.api.routes.workspace import router as workspace_router
 
 api_router = APIRouter(prefix="/api/v1")
@@ -27,3 +28,4 @@ api_router.include_router(statements_router, dependencies=[Depends(require_beare
 api_router.include_router(metric_library_router, dependencies=[Depends(require_bearer_auth)])
 api_router.include_router(orchestration_router, dependencies=[Depends(require_bearer_auth)])
 api_router.include_router(objective_reports_router, dependencies=[Depends(require_bearer_auth)])
+api_router.include_router(workbench_router, dependencies=[Depends(require_bearer_auth)])
