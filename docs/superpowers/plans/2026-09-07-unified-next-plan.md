@@ -69,7 +69,7 @@ U1 → U2 → U3 ─┬→ U4（可与 U5 并行）→ U5 → U6 → U7 → U8 �
 
 ### 借鉴落地附录（2026-09-09 增补：外部资料借鉴项并入 U 任务）
 
-来源：[《财务经营驾驶舱》Power BI 版借鉴分析](../../knowledge-base/02_research/synthesis/2026-09-09-finance-cockpit-pbi-assessment.md)（展示层七项）、[经营分析 SOP 分析判断/D050](../../knowledge-base/02_research/synthesis/2026-09-09-operations-sop-assessment.md)（经营轨方法论，走 [O 系列并行线](2026-09-09-operations-track-plan.md)）、[报告四步法借鉴分析](../../knowledge-base/02_research/synthesis/2026-09-09-report-4steps-assessment.md)（报告叙事与分解纪律）。全部为展示层与口径约定采纳，不修改 D01/D049 合同：
+来源：[《财务经营驾驶舱》Power BI 版借鉴分析](../../knowledge-base/02_research/synthesis/2026-09-09-finance-cockpit-pbi-assessment.md)（展示层七项）、[经营分析 SOP 分析判断/D050](../../knowledge-base/02_research/synthesis/2026-09-09-operations-sop-assessment.md)（经营轨方法论，走 [O 系列并行线](2026-09-09-operations-track-plan.md)）、[报告四步法借鉴分析](../../knowledge-base/02_research/synthesis/2026-09-09-report-4steps-assessment.md)（报告叙事与分解纪律）、[指标联动借鉴分析](../../knowledge-base/02_research/synthesis/2026-09-09-metric-linkage-assessment.md)（联动类型学与信号词典）。全部为展示层与口径约定采纳，不修改 D01/D049 合同：
 
 | # | 借鉴项 | 挂接任务 | 说明 |
 |---|---|---|---|
@@ -83,6 +83,7 @@ U1 → U2 → U3 ─┬→ U4（可与 U5 并行）→ U5 → U6 → U7 → U8 �
 | 8 | 差异分解口径约定（分解顺序显式声明：先按预算率算量差再按实际价算率差；固定成本分摊变化≠实际耗用增加；同一对象多项优化收益去重） | **U6**（渲染）+ C08 口径参数 | 来源：[报告四步法借鉴分析](../../knowledge-base/02_research/synthesis/2026-09-09-report-4steps-assessment.md)；与 #2 口径附表合并落地 |
 | 9 | 报告四步叙事结构（现状判断→优先问题→原因与证据链→行动安排，每章输入为上一章输出；行动章受 U5 门禁约束） | **U5/U6** | 同上来源；与 D050 OP-5 五环、Investigation 流对齐 |
 | 10 | 问题优先级模型（影响×持续性四象限+紧迫性+可干预程度）；行动层四件套（行动卡/净效益测算/反事实验证/滚动预测） | 登记候选 | 前者挂 U7 排序语义（客观可算部分），后者挂 D050 L4/O5/U9（内部数据授权后） |
+| 11 | 联动信号类型学与信号词典：五种关系（因果/结构/制约/平衡/时间）作为 I09 扩展框架——结构/平衡类 L1 可判，因果类须 L2 证据；库存三信号/回款三信号/增长质量分级为 O2 词典候选，语义一律「提示复核不断言因果」 | **O2**（词典候选）+ U 遗留原语扩展 | 来源：[指标联动借鉴分析](../../knowledge-base/02_research/synthesis/2026-09-09-metric-linkage-assessment.md)；五层指标体系与 D050 OP-1 互相印证 |
 
 **O 系列并行线（D050，不阻塞财务轨）**：经营轨经 [O1–O5 计划](2026-09-09-operations-track-plan.md)执行——O1 done（`ff75240`：六主题目录 + 业务事件簿合同 + `operations_catalog.py` + 8 TDD），断点 O2（L1 指标计算接线，复用指标库 facts 与 U2 原语）；O3 渲染同样适用本附录 #1–#4。财务轨优先级不变（D046）。
 
