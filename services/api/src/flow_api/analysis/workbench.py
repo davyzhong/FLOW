@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from decimal import Decimal
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 from uuid import UUID
 
 import yaml
@@ -32,7 +32,7 @@ def load_topics_catalog(path: Path | None = None) -> dict[str, Any]:
         *(parent / "config/analysis/objective_topics_v1.yaml" for parent in resolved.parents),
     ):
         if candidate.is_file():
-            return yaml.safe_load(candidate.read_text(encoding="utf-8"))
+            return cast(dict[str, Any], yaml.safe_load(candidate.read_text(encoding="utf-8")))
     raise FileNotFoundError(f"主题合同配置不存在：{resolved}")
 
 
@@ -43,11 +43,12 @@ def _facts_from_rows(  # noqa: E501
     for row in rows:
         if not row.item_id:
             continue
-        for column in ("value_current", "value_end", "value_prior", "value_begin"):
-            value = getattr(row, column)
-            if value is not None:
-                facts.setdefault(row.item_id, value)
-                break
+        current = row.value_current if row.value_current is not None else row.value_end
+        prior = row.value_prior if row.value_prior is not None else row.value_begin
+        if current is not None:
+            facts.setdefault(row.item_id, current)
+        if prior is not None:
+            facts.setdefault(f"{row.item_id}__prev", prior)
     return facts
 
 
@@ -79,7 +80,7 @@ _METRIC_CALCS = {
 def _growth(facts: dict[str, Decimal], item_id: str) -> Decimal | None:
     cur = facts.get(item_id)
     prev = facts.get(f"{item_id}__prev")
-    if cur is None or prev in (None, Decimal("0")):
+    if cur is None or prev is None or prev == Decimal("0"):
         return None
     return ((cur - prev) / abs(prev)).quantize(Decimal("0.0001"))
 
@@ -87,9 +88,66 @@ def _growth(facts: dict[str, Decimal], item_id: str) -> Decimal | None:
 def _ratio_pct(facts: dict[str, Decimal], num_id: str, den_id: str) -> Decimal | None:
     num = facts.get(num_id)
     den = facts.get(den_id)
-    if num is None or den in (None, Decimal("0")):
+    if num is None or den is None or den == Decimal("0"):
         return None
     return (num / den).quantize(Decimal("0.0001"))
+
+
+def management_watch(facts: dict[str, Decimal]) -> list[dict[str, str]]:
+    """管理关注（借鉴 #5）：≤3 条、条条带值带向，确定性规则、无普适阈值。
+
+    信号全部为「提示复核」语义（C14）：不解释原因、不输出正面表扬、
+    缺口径时静默跳过（不编造）。
+    """
+
+    watches: list[dict[str, str]] = []
+    revenue_growth = _growth(facts, "is.revenue")
+    ar_growth = _growth(facts, "bs.ar")
+    if revenue_growth is not None and ar_growth is not None and ar_growth > revenue_growth:
+        watches.append(
+            {
+                "code": "ar_outpacing_revenue",
+                "message": (
+                    f"应收账款增速 {ar_growth} 高于营业收入增速 {revenue_growth}，"
+                    "建议核对回款与账龄（联动提示，不构成原因判断）"
+                ),
+                "direction": "warning",
+            }
+        )
+    cash_ratio = _ratio_pct(facts, "cf.ocf", "is.net_profit")
+    if cash_ratio is not None and cash_ratio < Decimal("1"):
+        watches.append(
+            {
+                "code": "cash_content_below_one",
+                "message": f"净利润现金含量 {cash_ratio}，经营现金流低于净利润",
+                "direction": "negative",
+            }
+        )
+    if revenue_growth is not None and revenue_growth < Decimal("0"):
+        watches.append(
+            {
+                "code": "revenue_decline",
+                "message": f"营业收入同比 {revenue_growth}，同比下降",
+                "direction": "negative",
+            }
+        )
+    leverage_current = _ratio_pct(facts, "bs.total_liab", "bs.total_assets")
+    leverage_prior = _ratio_pct(
+        facts, "bs.total_liab__prev", "bs.total_assets__prev"
+    )
+    if (
+        leverage_current is not None
+        and leverage_prior is not None
+        and leverage_current > leverage_prior
+    ):
+        watches.append(
+            {
+                "code": "leverage_rising",
+                "message": f"资产负债率较上期上升至 {leverage_current}",
+                "direction": "warning",
+            }
+        )
+    return watches[:3]
 
 
 def build_four_question_workbench(
@@ -147,8 +205,9 @@ def build_four_question_workbench(
             "unit_note": report.unit_note,
         },
         "questions": questions,
+        "management_watch": management_watch(facts),
         "facts_available": sorted(facts.keys()),
     }
 
 
-__all__ = ["build_four_question_workbench", "load_topics_catalog"]
+__all__ = ["build_four_question_workbench", "load_topics_catalog", "management_watch"]
