@@ -1,6 +1,6 @@
 df51c9b65fd77b34d5f53d3607d39d3ec40e0c56c410ebe5f105bdfc66c5f96c  ./00_start_here/2026-09-07-project-state-history.md
 702c8d5519e12e458055fe6d3a3faa9ab1e37fce983e1785181e193fcf223ba4  ./00_start_here/AGENT_START_HERE.md
-157d7bb88a7a9f25e20764fee3ca76a4615491fa53c91861b3d0d7adb7297d68  ./00_start_here/PROJECT_STATE.md
+b4d21c70ea56e2cd70cc6ffb5fc813d547b567f943151eb58b80869cc15c8236  ./00_start_here/PROJECT_STATE.md
 5046991b7f56353e4d4c97a7c8532fbd76b83a844ecaa383c5ed4a1dfe7cb7b8  ./01_conversations/INDEX.md
 2f76b9a257f0baa1c30d5995a49f17bdbacf519f3a33668383f1f39c69c7faea  ./01_conversations/raw/chatgpt/Finance_Intelligence_OS_完整会话归档.md
 a033649eabf7c8cdb40f14defd513fcc046feacace1ccf6fb8a2d84801f6ba6c  ./01_conversations/raw/codex/rollout-2026-08-28T14-41-27-01a0471a-1689-7270-8dc5-f2bf084e4db9.jsonl
@@ -8,7 +8,7 @@ a033649eabf7c8cdb40f14defd513fcc046feacace1ccf6fb8a2d84801f6ba6c  ./01_conversat
 38ef6164ca0bfcc761b2f653a16d1478c7a06e196a1e703054cdb9c61208b630  ./01_conversations/readable/2026-09-02-positioning-accurate-financial-analysis.md
 9899e55cb849d3ae6f31fd74adfb12562e94f24d15a8ecf023ed2e95ec11cefa  ./01_conversations/readable/rollout-2026-08-28T14-41-27-01a0471a-1689-7270-8dc5-f2bf084e4db9.md
 1922b4ea1b3a752be450f8d60b27d6c6fc22516a4a019822997e0065273e2b90  ./01_conversations/readable/rollout-2026-08-29T14-00-01-01a0471a-1689-7270-8dc5-f2bf084e4db9_01a04c1a-86bd-7960-9db5-80ae486d1bd4.md
-fef92222495147829d4405d29e559e11fb83ce4709e47c91056d2628ee4e24a0  ./02_research/INDEX.md
+50b08437aad57f281bc4c5eb61291da90d03703dbd878fa5a7f921c0d1cd158b  ./02_research/INDEX.md
 4ed59cac8f4d71bf3720218b89c94d9f257a683efe460ac5a20654af3ba435e8  ./02_research/original/00_研究资料总览.md
 6baa74c935539a5c0816926e869f9fec2d709364e21e4197dcc8aba86fcf1fec  ./02_research/original/01_cfo_dashboard_text.txt
 3b75d5f479c9da57a3b3441d1ac9eb07918b8035d865246d6396b6286468fdb6  ./02_research/original/01_集团财务总监驾驶舱_资料.md
@@ -27,6 +27,22 @@ db94f4ded101df57d877c9302bc4727696f4c179fe0ba8bfb53f6cea4f383f43  ./02_research/
 290421ca0226eac729495a55bc0a5bc8b4a69a1371b5688bdf23fb2dc260e97f  ./02_research/original/10_权威来源增补调研_资料.md
 c5f79766bbc0bd87ebe97de52cc53bb5cf82e16aa54029f4a97fa7bc3b626a22  ./02_research/original/11_验证样本财报可得性调研_资料.md
 0152c0508fe606622d5304d948b66717a4f4d1d470c1ecbe274ac8e587ac43d8  ./02_research/original/12_财务分析必看10个指标_资料.md
+6e00859df1179bbae5e6033c2b0667912ed093810ef1e91dcf219dc39be13981  ./02_research/original/2026-09-09-operations-sop-article/README.md
+ef474f2d7e2af9b684e3b95f3891a4371324e8ea5e5a06bd3624b4c94c886b66  ./02_research/original/2026-09-09-operations-sop-article/article-raw.html.gz
+8daf5137e7173adaefaf93608a0fdb6fa5a151d4d0b59946d34c8d4c54587411  ./02_research/original/2026-09-09-operations-sop-article/p01.png
+8eec82f203f85cccb8efb188afb161275c2d32134feb126d3e0ce825f02ca3fb  ./02_research/original/2026-09-09-operations-sop-article/p02.png
+3a40a25a5f27682cb4210975d0d27135af2bd0b7a5e11fcff261e7c328c7ad39  ./02_research/original/2026-09-09-operations-sop-article/p03.png
+e881e59f0346255dbde34197131c85dedabf285d2d5313c189827b096aa61095  ./02_research/original/2026-09-09-operations-sop-article/p04.png
+9afce32ab3b60fd0a971c4a4288c0b7e957e4de1a2ce4ec2680bf90278caf314  ./02_research/original/2026-09-09-operations-sop-article/p05.jpg
+df61d79e768636855dd065fc13e7b0a551b0b360e8c008baf355c3c59f484df2  ./02_research/original/2026-09-09-operations-sop-article/p06.jpg
+c9a83e6c1f903ce54e07bc908b585104aaa67f13e321c5f3a321fdf6c4485497  ./02_research/original/2026-09-09-operations-sop-article/p07.jpg
+c65698b4beb3e4c56ef5907c5e8934c521d7e1a6ecdce3c98a81efd03c7f5f3a  ./02_research/original/2026-09-09-operations-sop-article/p08.png
+55aaa31185af3f161d2a127ba1ce93fd4a4bdaa6cc4c28df6bba662756b55b14  ./02_research/original/2026-09-09-operations-sop-article/p09.png
+2aa0e560207595fc9db5519f77f3f69f80df53630d0fb3e6e4454da7a37730c1  ./02_research/original/2026-09-09-operations-sop-article/p10.png
+2196c7ea32da05125a1b00c88209a663ec5a58c8a57cb3b741900543428976ba  ./02_research/original/2026-09-09-operations-sop-article/p12.png
+cf6a440fbf740dfb7b2d1d2af693ca02cd43cc6e35e99ca83f2df07f2173953c  ./02_research/original/2026-09-09-operations-sop-article/p13.png
+2e1c1674fe072ba9bd42f831668ca7510eba0969da277d4113ee45a3c71d2fb1  ./02_research/original/2026-09-09-operations-sop-article/p14.png
+65c03860cd969ca48b7295967a60780c5741f6e90deb530a812f7a7f2069ccf9  ./02_research/original/2026-09-09-operations-sop-article/p15.png
 581847a207e1e5803666712dffe8b0fa8dc403ffd457b00768677a6a0885ef26  ./02_research/original/html/01_cfo_dashboard.html
 c0fc09bcedc9f5567ca301314e3e300f52d09e6d4be07a153a1e7d515f5af4ef  ./02_research/original/html/02_ops_report.html
 1d0ebb476065b3ae0205e85a79134b9d02413cc94f176edd8de4314c2286d37a  ./02_research/original/html/03_cfo_summary.html
@@ -135,6 +151,7 @@ e18c2d20a363d8c60838f96f3951c4d1965cfc2b6a105786897248c48d86f1fb  ./02_research/
 737382454faacd519bed1de73359c486a1b6b63e0877374a811614301e03d0d1  ./02_research/synthesis/2026-09-06-经营分析轨数据定义_v0_草案.md
 5fccd431b80708bd7f1501bce6a7579d49e3f228e795aeb66c36db75dd6006e6  ./02_research/synthesis/2026-09-06-财务分析十指标文章_借鉴升级清单.md
 3c506307ce891067db1cdb2d8ed3a07b6b4ec9dcd5b0331e9a87d9f5fcfba371  ./02_research/synthesis/2026-09-07-reference-and-improvement-master.md
+e3003bb54491f4aee02b18e8c6e5cc90a93c44b92730136e2b24ebe41114e584  ./02_research/synthesis/2026-09-09-operations-sop-assessment.md
 8f549ddb606aeb29fdc7a65f874ef948358220dc59f37c58f06657c823a6d437  ./02_research/synthesis/会计基础数据集_v0_草案.yaml
 1035c288bbbac379d2b160d55692c80027a169d356add40a30c458cde588ab42  ./02_research/synthesis/指标库初始数据集_v0_草案.yaml
 c47a514dc0fd3fd9df3f604566b41537981e6fabff7042e1b5af54a2c7c092a0  ./03_assets/IMAGE_CATALOG.md
@@ -159,7 +176,7 @@ dc5dacf44f2ad15eff80c3b8088965a00dba2374178b883a1a7dfdbc59257a1d  ./03_assets/vi
 b985e51b87f37264c1d0881d2a23a59cb8e3919970785d215c88c71587e50f43  ./03_assets/visual_prototypes/waiting-data-contract.html
 68f20600655271943135b83ab42a8cc4e5120b205255706fe2f47fbbf6c4930a  ./03_assets/visual_prototypes/waiting-template-scope.html
 132cf29177c1447879c0ca90a9e58f86312c4dd79ef7083723556c0a25a8dd2e  ./04_decisions/CHANGE_IMPACT_MAP.md
-0ba1a948de948a5066d77978a19ac3123881e193c9e355337ef1687440c6a1fc  ./04_decisions/DECISION_LOG.md
+32ad8fadf31eed6ab560818eb75431bf5b5f47760e09c455173675af3e1ccf74  ./04_decisions/DECISION_LOG.md
 002dea73e7e1cd6f225f01e3dff3874c704bb41d234567b1ab450aae365818d2  ./05_design/PROTOTYPE_INDEX.md
 6a2be2f105fb958c70fcf4b54261148706a10353af7a8c0147802679ba405bba  ./05_design/approved/2026-08-29-flow-v1-design.md
 d6afc8ae3e882b23ffe0d1349b3cf651608a9b23ad33c8ad3549fc78c8f88ce9  ./06_sources/LINK_CATALOG.md

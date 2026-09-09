@@ -1,0 +1,83 @@
+# 经营轨主题目录 v1（O1 / D050）
+#
+# 方法论（OP 规格）：数据可得性分层是第一原则——financial_report（L1 结果层，
+# 公开财报）/ internal_process（L2 过程层）/ internal_events（L3 事件层）/
+# action_loop（L4 行动层，后置）。数据层不可得 → not_applicable（typed 原因），
+# 不返回 0、不静默换期间、缺失不补造、无量价数据不生成量价链。
+# 主题是注册与校验合同：metric_refs 只引用指标字典已登记口径（不另建第二套），
+# 拆解一律复用 U2 原语（C07/C08/C06/I12/I09）；O2 才接计算。
+
+catalog_id: flow.analysis.operations_track.v1
+status: draft
+decision_ref: D050
+methodology_ref: docs/superpowers/specs/2026-09-09-operations-track-methodology.md
+
+themes:
+  # ---- L1 结果层（公开财报可建） ----
+  - theme_id: growth_quality
+    name: 增长质量
+    board_slot: 1
+    availability: financial_report
+    metric_refs: [revenue, revenue_growth, operating_profit_growth, net_profit_growth]
+    primitives: [cagr, growth_linkage]
+    enhanced_by: internal_events
+    scope_note: 营收趋势/同比与增速联看提示；投产比趋势为 L3 增强，财报期不展示数值
+  - theme_id: revenue_structure
+    name: 收入结构
+    board_slot: 2
+    availability: financial_report
+    metric_refs: [revenue]
+    primitives: [additive_bridge]
+    scope_note: 分部/产品线/区域收入占比与变动；无分部披露时仅汇总层结构可算，逐行加总须守恒
+  - theme_id: cost_structure
+    name: 成本费用结构
+    board_slot: 3
+    availability: financial_report
+    metric_refs: [revenue, gross_margin, direct_cost, cost_expense_profit_ratio]
+    primitives: [additive_bridge]
+    scope_note: 成本结构桥与费用率结构；分项之和必须还原总额，残差显式禁止凑整
+  - theme_id: profit_quality
+    name: 盈利质量
+    board_slot: 4
+    availability: financial_report
+    metric_refs: [net_margin, operating_margin, roe, total_asset_turnover, equity_multiplier, ocf_net_profit_ratio]
+    primitives: [dupont, caliber_labeled_value]
+    caliber_note: 杜邦为净利润总额口径 · 期末权益 · 未年化；与归母口径同名不同值，引用必带完整口径标注
+    scope_note: 杜邦三分解为数学恒等，不解释为业务因果；净现比衡量利润现金含量
+  - theme_id: operational_efficiency
+    name: 运营效率
+    board_slot: 5
+    availability: financial_report
+    metric_refs: [inventory_turnover, ar_turnover, ap_turnover, dso_days, total_asset_turnover, current_asset_turnover]
+    primitives: [threshold_hint]
+    scope_note: 周转类比率；经验阈值仅作 scope-labeled hint，无普适判定
+  # ---- L2/L3（内部数据授权后启用，财报期注册占位） ----
+  - theme_id: users_channels
+    name: 用户与渠道
+    board_slot: 6
+    availability: internal_process
+    required_layers: [internal_process]
+    metric_refs: []
+    primitives: []
+    scope_note: 用户分级（频次×金额）、渠道 CAC/LTV；财报无过程与用户数据，一律 not_applicable
+
+# 业务事件簿（L3 一等公民数据模型）：常规投入与增量投入分账，支撑活动效果评估
+event_book:
+  availability: internal_events
+  fields:
+    - {field_name: event_type, field_type: enum, allowed: [marketing_campaign, new_product, channel_change, price_adjustment, capacity_change], scope_note: 事件类型枚举}
+    - {field_name: period, field_type: period_range, scope_note: 事件生效期间（起止）}
+    - {field_name: incremental_spend, field_type: decimal, scope_note: 增量投入额；与常规投入分账，只登记增量部分}
+    - {field_name: coverage, field_type: jsonb, scope_note: 覆盖范围（区域/渠道/客群）}
+    - {field_name: evaluation, field_type: jsonb, scope_note: 效益评估记录（复盘回填），允许为空}
+  rules:
+    - 常规投入与增量投入必须分账；事件簿只登记增量投入，禁止把常规费用伪装成活动增量
+    - 考核效益前做规则去重检查：同一客群/商品的优惠规则不得重叠计入多个事件
+    - 事件效果与财务结果的关联输出为「关联信号」，仅提示复核，不断言因果（C14）
+    - 事件数据缺失时事件相关分析 not_applicable（internal_data_required），不补造
+
+rules:
+  - 主题数据层不可得 → 该主题 not_applicable（typed：internal_data_required），不生成数值
+  - metric_refs 只引用指标字典已登记代码；口径引用必带口径标签（I12 登记制）
+  - 加法桥按 C08 守恒合同（残差显式）；乘法链（量价/漏斗）在财报期一律不生成
+  - 本目录为注册与校验合同，数值输出须待 O2 接线，且走指标快照与冻结发布链（OP-6）
