@@ -1,0 +1,30 @@
+sample: cainiao_segment_series
+company: 菜鸟智慧物流网络（阿里巴巴集团分部披露口径）
+unit: 人民币百万元
+note: FY2026 起阿里巴巴将菜鸟重分类至「所有其他」分部，单独分部数据止于 FY2025；FY2019-FY2022 经调整 EBITA 未在公告分部表中单列，如实缺省。
+sources:
+  FY2019: BABA_FY2020_annual_results.pdf
+  FY2020: BABA_FY2020_annual_results.pdf
+  FY2021: BABA_FY2021_annual_results.pdf
+  FY2022: BABA_FY2022_annual_results.pdf
+  FY2023: BABA_FY2024_annual_results.pdf
+  FY2024: BABA_FY2024_annual_results.pdf
+  FY2025: BABA_FY2025_annual_results.pdf
+series:
+  FY2019:
+    segment_revenue: 14885
+  FY2020:
+    segment_revenue: 22233
+  FY2021:
+    segment_revenue: 37258
+  FY2022:
+    segment_revenue: 46107
+  FY2023:
+    segment_revenue: 77512
+    adjusted_ebita: -391
+  FY2024:
+    segment_revenue: 99020
+    adjusted_ebita: 1402
+  FY2025:
+    segment_revenue: 101272
+    adjusted_ebita: 302

@@ -235,7 +235,7 @@ relative_path	size_bytes	modified_time	mime_type
 02_research/original/images/06_8.png	668503	2026-09-04T21:09:02+08:00	image/png
 02_research/original/images/06_9.png	585182	2026-09-04T21:09:02+08:00	image/png
 02_research/original/images/12_1.jpg	76090	2026-09-06T23:25:55+08:00	image/jpeg
-02_research/original/p5_samples/README.md	4267	2026-09-06T18:17:06+08:00	text/markdown
+02_research/original/p5_samples/README.md	6375	2026-09-10T00:38:46+08:00	text/markdown
 02_research/original/p5_samples/jd_logistics_2618/JDL_2026_Q1_financial_info.pdf	734273	2026-09-05T23:13:48+08:00	application/pdf
 02_research/original/p5_samples/jd_logistics_2618/JDL_2026_interim_report.pdf	3050365	2026-09-05T23:13:47+08:00	application/pdf
 02_research/original/p5_samples/jd_logistics_2618/JDL_FY2025_annual_report.pdf	4098118	2026-09-05T23:13:46+08:00	application/pdf
@@ -1853,3 +1853,10 @@ relative_path	size_bytes	modified_time	mime_type
 08_wechat_sources/shujuxiong/02_财务管理/20260417_2026年1季度应收账款分析报告.pptx/images/img011.png	65396	2026-09-07T23:44:57+08:00	image/png
 08_wechat_sources/shujuxiong/02_财务管理/20260417_2026年1季度应收账款分析报告.pptx/meta.json	4868	2026-09-07T23:44:57+08:00	application/json
 README.md	3826	2026-09-07T08:34:11+08:00	text/markdown
+02_research/original/p5_samples/alibaba_9988/BABA_FY2020_annual_results.pdf	1879894	2026-09-10T00:38:46+08:00	application/pdf
+02_research/original/p5_samples/alibaba_9988/BABA_FY2021_annual_results.pdf	1830576	2026-09-10T00:38:46+08:00	application/pdf
+02_research/original/p5_samples/alibaba_9988/BABA_FY2022_annual_results.pdf	2015919	2026-09-10T00:38:46+08:00	application/pdf
+02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf	1278403	2026-09-10T00:38:46+08:00	application/pdf
+02_research/original/p5_samples/alibaba_9988/BABA_FY2025_annual_results.pdf	1064710	2026-09-10T00:38:46+08:00	application/pdf
+02_research/original/p5_samples/alibaba_9988/BABA_FY2026_annual_results.pdf	1155822	2026-09-10T00:38:46+08:00	application/pdf
+02_research/original/p5_samples/cainiao_private/Cainiao_application_proof_20230926.pdf	9116126	2026-09-10T00:38:46+08:00	application/pdf

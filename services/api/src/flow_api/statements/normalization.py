@@ -31,6 +31,8 @@ COMPANY_KEY_BY_STOCK: dict[str, str] = {
     "0700.HK": "tencent_0700",
     "2618.HK": "jd_logistics_2618",
     "600233": "yto_600233",
+    "9988.HK": "alibaba_9988",
+    "CAINIAO": "cainiao_private",
 }
 
 ALIAS_MAP_PATH = Path("config/statements/item_alias_map_v1.yaml")

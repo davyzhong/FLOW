@@ -100,3 +100,79 @@ companies:
           profit: is.net_profit
           attr_np: is.attr_net_profit
           non_ifrs_attr: mpm.non_ifrs_attr_profit
+
+  cainiao_private:
+    statements:
+      合并利润表:
+        roles: {本期发生额: cur, 上期发生额: prev_yoy}
+        map:
+          收入: is.revenue
+          营业成本: {item: is.cogs, abs: true}
+          毛利: is.gross_profit
+          销售及市场推广开支: {item: is.selling_exp, abs: true}
+          一般及行政开支: {item: is.admin_exp, abs: true, note: IFRS 口径，与 CAS 管理费用不同}
+          产品开发开支: {item: is.rnd_exp, abs: true}
+          经营亏损/利润: is.operating_profit
+          财务收入: is.interest_income
+          财务成本: {item: is.fin_exp, abs: true}
+          其他收入: is.other_income
+          应占联营及合营损益: is.share_of_associates
+          除税前亏损/利润: is.total_profit
+          所得税开支: {item: is.income_tax, abs: true}
+          年度亏损/利润: is.net_profit
+          归属公司所有者: is.attr_net_profit
+      合并资产负债表:
+        roles: {期末余额: end, 期初余额: open}
+        map:
+          现金及现金等价物: bs.cash
+          借款: bs.long_debt
+          非流动资产合计: []
+          流动资产合计: bs.current_assets
+          资产总计: bs.total_assets
+          归属于公司所有者权益: bs.attr_equity
+          非流动负债合计: bs.noncurrent_liab
+          流动负债合计: bs.current_liab
+          负债合计: bs.total_liab
+          权益总额: bs.equity
+      合并现金流量表:
+        roles: {本期发生额: cur, 上期发生额: prev_yoy}
+        map:
+          经营活动所得现金净额: cf.ocf
+          投资活动所用现金净额: cf.icf
+          融资活动(所用)所得现金净额: cf.fin_cf
+          购置物业设备、投资物业、土地使用权及无形资产: cf.capex
+
+  alibaba_9988:
+    statements:
+      合并利润表:
+        roles: {本期发生额: cur, 上期发生额: prev_yoy}
+        map:
+          收入: is.revenue
+          營業成本: {item: is.cogs, abs: true}
+          產品開發費用: {item: is.rnd_exp, abs: true}
+          銷售和市場費用: {item: is.selling_exp, abs: true}
+          一般及行政費用: {item: is.admin_exp, abs: true, note: US GAAP 口径，与 CAS 管理费用不同}
+          經營利潤（虧損）: is.operating_profit
+          利息收入和投資淨收益: is.investment_income
+          利息費用: {item: is.interest_exp, abs: true}
+          其他淨收支: is.other_income
+          所得稅費用: {item: is.income_tax, abs: true}
+          權益法核算的投資損益: is.share_of_associates
+          淨利潤: is.net_profit
+          歸屬於阿里巴巴集團股東的淨利潤: is.attr_net_profit
+      合并资产负债表:
+        roles: {期末余额: end, 期初余额: open}
+        map:
+          現金及現金等價物: bs.cash
+          流動資產總額: bs.current_assets
+          資產總額: bs.total_assets
+          流動負債總額: bs.current_liab
+          負債總額: bs.total_liab
+          股東權益總額: bs.attr_equity
+          權益總額: bs.equity
+      合并现金流量表:
+        roles: {本期发生额: cur, 上期发生额: prev_yoy}
+        map:
+          經營活動產生的現金流量淨額: cf.ocf
+          投資活動所用現金流量淨額: cf.icf
+          融資活動所用現金流量淨額: cf.fin_cf
