@@ -2175,6 +2175,12 @@ export interface components {
             caliber_note: string;
             /** Reason */
             reason?: string | null;
+            /**
+             * Source
+             * @default d01_entry
+             * @enum {string}
+             */
+            source: "d01_entry" | "metric_dictionary";
         };
         /** OperationsOverview */
         OperationsOverview: {
