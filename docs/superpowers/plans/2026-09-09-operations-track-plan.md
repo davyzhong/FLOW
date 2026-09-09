@@ -14,7 +14,7 @@
 |---|---|---|---|
 | O1 | 数据定义合同：`config/operations/operations_track_v1.yaml` 六主题注册表 + pydantic 加载器 + TDD | availability 分层标注；L2/L3 条目不得挂财报 formula_ref；口径标签必带；`not_applicable` typed 状态 | **doing（本次交付）** |
 | O2 | L1 指标计算接线：结果层指标（趋势/同比/结构/比率）复用指标库 facts 与 U2 原语出数 | 财报样本（sf/tencent/zto）可算条目出数正确；L2/L3 全部 not_applicable；守恒桥残差显式 | todo |
-| O3 | 经营分析条目报告：六主题客观分析条目 + 报告渲染（复用 objective 渲染链） | 每条事实陈述四要素（值/基准/口径/来源）；数学分解标注非因果 | todo |
+| O3 | 经营分析条目报告：六主题客观分析条目 + 报告渲染（复用 objective 渲染链） | 每条事实陈述四要素（值/基准/口径/来源）；数学分解标注非因果；渲染采纳[统一计划 §4 借鉴附录](2026-09-07-unified-next-plan.md)#1–#4（KPI 卡基准注/口径附表/守恒瀑布+核对块/建议列脚注） | todo |
 | O4 | `/operations` 看板改版：OP-4 信息架构，DB→typed API→Next.js | 先总体后细分；数字可溯源；L2/L3 板块「待内部数据」态展示 | todo |
 | O5 | L2/L3 内部数据接入与业务事件簿数据模型 | 依赖内部数据授权（同 U9 前提）；事件簿表结构先行定义 | todo（数据依赖） |
 
