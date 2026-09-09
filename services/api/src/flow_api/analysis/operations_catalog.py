@@ -11,7 +11,7 @@ internal_events= L3 事件层 / action_loop= L4 行动层，后置）。
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any, Literal
+from typing import Any, Literal, cast
 
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, model_validator
@@ -75,7 +75,9 @@ class OperationsCatalog(BaseModel):
 
 
 def _load_raw(path: str | Path) -> dict[str, Any]:
-    return yaml.safe_load(Path(path).read_text(encoding="utf-8"))
+    return cast(
+        dict[str, Any], yaml.safe_load(Path(path).read_text(encoding="utf-8"))
+    )
 
 
 def load_operations_catalog(path: str | Path) -> OperationsCatalog:
