@@ -888,6 +888,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/operations/overview/{report_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Operations Overview
+         * @description 六主题经营概览：L1 出数，L2/L3 typed not_applicable（U 遗留/O2）。
+         */
+        get: operations["get_operations_overview_api_v1_operations_overview__report_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -2129,6 +2149,66 @@ export interface components {
             note: string;
             /** Provenance */
             provenance?: string | null;
+        };
+        /**
+         * OperationsMetricItem
+         * @description 事实卡片（D01 事实合同）：值、比较基准、口径、来源引用缺一不可。
+         */
+        OperationsMetricItem: {
+            /** Entry Id */
+            entry_id: string;
+            /** Name */
+            name: string;
+            /** Status */
+            status: string;
+            /** Value */
+            value?: string | null;
+            /**
+             * Basis
+             * @default
+             */
+            basis: string;
+            /**
+             * Caliber Note
+             * @default
+             */
+            caliber_note: string;
+            /** Reason */
+            reason?: string | null;
+        };
+        /** OperationsOverview */
+        OperationsOverview: {
+            /** Report Id */
+            report_id: string;
+            /** Catalog Id */
+            catalog_id: string;
+            /** Themes */
+            themes: components["schemas"]["OperationsTheme"][];
+            /** Management Watch */
+            management_watch: {
+                [key: string]: string;
+            }[];
+        };
+        /** OperationsTheme */
+        OperationsTheme: {
+            /** Theme Id */
+            theme_id: string;
+            /** Name */
+            name: string;
+            /**
+             * Availability
+             * @enum {string}
+             */
+            availability: "financial_report" | "internal_process" | "internal_events";
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "available" | "not_applicable";
+            /** Reason */
+            reason?: string | null;
+            /** Metrics */
+            metrics: components["schemas"]["OperationsMetricItem"][];
         };
         /** OrchestrationBuildRequest */
         OrchestrationBuildRequest: {
@@ -5070,6 +5150,39 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["WorkbenchResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_operations_overview_api_v1_operations_overview__report_id__get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                report_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsOverview"];
                 };
             };
             /** @description Validation Error */

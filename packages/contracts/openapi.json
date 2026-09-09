@@ -3690,6 +3690,66 @@
           }
         }
       }
+    },
+    "/api/v1/operations/overview/{report_id}": {
+      "get": {
+        "tags": [
+          "operations"
+        ],
+        "summary": "Get Operations Overview",
+        "description": "六主题经营概览：L1 出数，L2/L3 typed not_applicable（U 遗留/O2）。",
+        "operationId": "get_operations_overview_api_v1_operations_overview__report_id__get",
+        "parameters": [
+          {
+            "name": "report_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Report Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationsOverview"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -7257,6 +7317,158 @@
           "note"
         ],
         "title": "MetricRelation"
+      },
+      "OperationsMetricItem": {
+        "properties": {
+          "entry_id": {
+            "type": "string",
+            "title": "Entry Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          },
+          "basis": {
+            "type": "string",
+            "title": "Basis",
+            "default": ""
+          },
+          "caliber_note": {
+            "type": "string",
+            "title": "Caliber Note",
+            "default": ""
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "entry_id",
+          "name",
+          "status"
+        ],
+        "title": "OperationsMetricItem",
+        "description": "事实卡片（D01 事实合同）：值、比较基准、口径、来源引用缺一不可。"
+      },
+      "OperationsOverview": {
+        "properties": {
+          "report_id": {
+            "type": "string",
+            "title": "Report Id"
+          },
+          "catalog_id": {
+            "type": "string",
+            "title": "Catalog Id"
+          },
+          "themes": {
+            "items": {
+              "$ref": "#/components/schemas/OperationsTheme"
+            },
+            "type": "array",
+            "title": "Themes"
+          },
+          "management_watch": {
+            "items": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Management Watch"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "report_id",
+          "catalog_id",
+          "themes",
+          "management_watch"
+        ],
+        "title": "OperationsOverview"
+      },
+      "OperationsTheme": {
+        "properties": {
+          "theme_id": {
+            "type": "string",
+            "title": "Theme Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "availability": {
+            "type": "string",
+            "enum": [
+              "financial_report",
+              "internal_process",
+              "internal_events"
+            ],
+            "title": "Availability"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "available",
+              "not_applicable"
+            ],
+            "title": "Status"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          },
+          "metrics": {
+            "items": {
+              "$ref": "#/components/schemas/OperationsMetricItem"
+            },
+            "type": "array",
+            "title": "Metrics"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "theme_id",
+          "name",
+          "availability",
+          "status",
+          "metrics"
+        ],
+        "title": "OperationsTheme"
       },
       "OrchestrationBuildRequest": {
         "properties": {
