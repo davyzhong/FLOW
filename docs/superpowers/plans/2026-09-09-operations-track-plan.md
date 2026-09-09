@@ -13,7 +13,7 @@
 | ID | 任务 | 验收要点 | 状态 |
 |---|---|---|---|
 | O1 | 数据定义合同：`config/operations/operations_track_v1.yaml` 六主题注册表 + pydantic 加载器 + TDD | availability 分层标注；L2/L3 条目不得挂财报 formula_ref；口径标签必带；`not_applicable` typed 状态 | **doing（本次交付）** |
-| O2 | L1 指标计算接线：结果层指标（趋势/同比/结构/比率）复用指标库 facts 与 U2 原语出数 | 财报样本（sf/tencent/zto）可算条目出数正确；L2/L3 全部 not_applicable；守恒桥残差显式 | todo |
+| O2 | L1 指标计算接线：结果层指标（趋势/同比/结构/比率）复用指标库 facts 与 U2 原语出数 | 财报样本可算条目出数正确；L2/L3 全部 not_applicable；守恒桥残差显式 | **doing（slice-1 done `a8a73c5`：六主题概览引擎复用 D01 条目出数 + OP-0 分层 typed + 联动信号 ≤3 + typed 端点；顺丰样本测试锁定。剩余：周转类 avg 公式求值、tencent/zto 样本泛化）** |
 | O3 | 经营分析条目报告：六主题客观分析条目 + 报告渲染（复用 objective 渲染链） | 每条事实陈述四要素（值/基准/口径/来源）；数学分解标注非因果；渲染采纳[统一计划 §4 借鉴附录](2026-09-07-unified-next-plan.md)#1–#4（KPI 卡基准注/口径附表/守恒瀑布+核对块/建议列脚注） | todo |
 | O4 | `/operations` 看板改版：OP-4 信息架构，DB→typed API→Next.js | 先总体后细分；数字可溯源；L2/L3 板块「待内部数据」态展示 | todo |
 | O5 | L2/L3 内部数据接入与业务事件簿数据模型 | 依赖内部数据授权（同 U9 前提）；事件簿表结构先行定义 | todo（数据依赖） |
@@ -28,7 +28,7 @@ O2–O4 依赖 O1 合同冻结；O5 依赖 U9 同款数据授权，表结构（�
 
 ## 断点
 
-2026-09-09（用户确认按统一计划「执行顺序总览」顺序执行）：O1 done（`ff75240`）；**O2 为经营轨下一领取项，可立即开始**（不阻塞财务轨 U5–U8）；O3 随 O2 之后；O4 依赖 O3；O5 依赖内部数据授权（同 U9 前提）。后续领取者从 O2 验收起点开始：读 O1 合同（`config/operations/operations_track_v1.yaml` + `operations_catalog.py` + `tests/analysis/test_operations_catalog.py` 8 项）后按 TDD 接 L1 指标计算（复用指标库 facts 与 U2 原语，落地借鉴 #11 联动信号词典财报可判部分）。
+2026-09-09（用户确认按统一计划「执行顺序总览」顺序执行）：O1 done（`ff75240`）；**O2 slice-1 done**（`a8a73c5`：六主题概览引擎 + typed 端点，顺丰样本锁定；复用 D01 引擎出数，OP-0 分层 typed）。O2 剩余：周转类 avg 公式（字典口径）、tencent/zto 样本泛化。此后 O3（六主题报告渲染，复用 objective 渲染链 + 借鉴 #1–#4/#13）。O4 依赖 O3；O5 依赖内部数据授权（同 U9 前提）。
 
 ## 变更日志
 
