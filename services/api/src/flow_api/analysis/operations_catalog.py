@@ -65,7 +65,7 @@ class OperationsCatalog(BaseModel):
     rules: tuple[str, ...] = Field(default_factory=tuple)
 
     @model_validator(mode="after")
-    def _theme_ids_unique(self) -> "OperationsCatalog":
+    def _theme_ids_unique(self) -> OperationsCatalog:
         seen: set[str] = set()
         for theme in self.themes:
             if theme.theme_id in seen:
