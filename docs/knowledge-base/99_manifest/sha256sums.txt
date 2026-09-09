@@ -47,7 +47,6 @@ dec7295e4db9eb82d9fcd18ccaab3da1a5950f31f0a0fc681ce7c92fceab68da  ./02_research/
 d0c809d851bb6c5cc48f940df0382fba7fa0af62ed6bc9b6d3fbac1269458d70  ./02_research/original/2026-09-09-break-even-tool-article/p16.png
 1f0749fe36659f59014bec6f4670852021210611ad4b7d991e4c833da7cf6dce  ./02_research/original/2026-09-09-break-even-tool-article/p17.png
 53462b569c2f8f38d27a9071201f8ba0d4eed3c699ec620ced492b9f939c1e0c  ./02_research/original/2026-09-09-break-even-tool-article/p18.jpg
-53462b569c2f8f38d27a9071201f8ba0d4eed3c699ec620ced492b9f939c1e0c  ./02_research/original/2026-09-09-break-even-tool-article/p18.png
 0ab46056903134debc99685a9c0054f76b744714688c706e9771df9968c169a7  ./02_research/original/2026-09-09-finance-cockpit-pbi-article/README.md
 0e707cd590119a06e209072ce0e3dc236309ac6a4cd13d8a39332ac18f0c905b  ./02_research/original/2026-09-09-finance-cockpit-pbi-article/article-raw.html.gz
 7db7ef068633e68e79b5f480fd7f7254172a4e3f112d6f8f55282a16ec317bed  ./02_research/original/2026-09-09-finance-cockpit-pbi-article/d01.jpg
