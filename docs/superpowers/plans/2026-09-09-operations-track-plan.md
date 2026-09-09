@@ -28,7 +28,7 @@ O2–O4 依赖 O1 合同冻结；O5 依赖 U9 同款数据授权，表结构（�
 
 ## 断点
 
-2026-09-09：O1 进行中——本计划与 `operations_track_v1.yaml`、加载器、测试同批交付。后续领取者从 O1 验收（`pytest services/api/tests/analysis/test_operations_catalog.py`）开始。
+2026-09-09（用户确认按统一计划「执行顺序总览」顺序执行）：O1 done（`ff75240`）；**O2 为经营轨下一领取项，可立即开始**（不阻塞财务轨 U5–U8）；O3 随 O2 之后；O4 依赖 O3；O5 依赖内部数据授权（同 U9 前提）。后续领取者从 O2 验收起点开始：读 O1 合同（`config/operations/operations_track_v1.yaml` + `operations_catalog.py` + `tests/analysis/test_operations_catalog.py` 8 项）后按 TDD 接 L1 指标计算（复用指标库 facts 与 U2 原语，落地借鉴 #11 联动信号词典财报可判部分）。
 
 ## 变更日志
 
