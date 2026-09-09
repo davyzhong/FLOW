@@ -133,6 +133,7 @@ class StatementNormalizedItem(CanonicalIdentityMixin, Base):
             "report_id",
             "mapping_version",
             "statement_type",
+            "group_ordinal",
             "item_name",
             name="uq_statement_normalized_item",
         ),
@@ -152,6 +153,9 @@ class StatementNormalizedItem(CanonicalIdentityMixin, Base):
     mapping_version: Mapped[str] = mapped_column(String(32), nullable=False)
     statement_type: Mapped[str] = mapped_column(String(64), nullable=False)
     item_name: Mapped[str] = mapped_column(String(255), nullable=False)
+    group_ordinal: Mapped[int] = mapped_column(
+        Integer, nullable=False, default=0, server_default=text("'0'")
+    )
     item_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
     value_end: Mapped[Decimal | None] = mapped_column(Numeric(24, 4), nullable=True)
     value_begin: Mapped[Decimal | None] = mapped_column(Numeric(24, 4), nullable=True)

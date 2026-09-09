@@ -71,6 +71,9 @@ REPORT_ITEM_SUBJECTS: dict[str, list[str]] = {
     "is.selling_exp": ["6601"],
     "is.admin_exp": ["6602"],
     "is.fin_exp": ["6603"],
+    # is.rnd_exp 研发费用：暂按「4301 研发支出」归集口径登记；待《应用指南
+    # 汇编 2024》原文核对后修订（用户 2026-09-09 确认：常见口径 + 待核标注）。
+    "is.rnd_exp": ["4301"],
     "is.interest_exp": [],
     "is.dep_amort": ["1602", "1702"],
 }

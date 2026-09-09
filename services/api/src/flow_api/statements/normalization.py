@@ -166,7 +166,13 @@ def normalize_report(
             for role in roles.values()
             if role in ROLE_VALUE_COLUMNS
         }
+        # 同名行序号（U2/6.1 契约）：港股 IFRS 合法同名行（借款等在流动/
+        # 非流动分组下各一行）按披露出现序 0,1,2… 编号，保留分组语义，
+        # 不合并原始行；唯一键为 (report, version, type, group_ordinal, item_name)。
+        ordinal_by_name: dict[str, int] = {}
         for line in lines:
+            group_ordinal = ordinal_by_name.get(line.item_name, 0)
+            ordinal_by_name[line.item_name] = group_ordinal + 1
             target = _lookup(mapping, line.item_name)
             if isinstance(target, dict) and "sum" in target:
                 # 组合映射在合成行生成，原始行本身不再单独映射
@@ -183,6 +189,7 @@ def normalize_report(
                     mapping_version=version,
                     statement_type=statement_type,
                     item_name=line.item_name,
+                    group_ordinal=group_ordinal,
                     item_id=item_id,
                     value_end=values["value_end"],
                     value_begin=values["value_begin"],

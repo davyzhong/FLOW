@@ -341,3 +341,53 @@ def test_tencent_income_statement_normalization_is_complete_and_conservative(
         Decimal("0"),
     )
     assert total == by_item["is.total_profit"].value_current == Decimal("69690")
+
+
+# ---- U2/6.1 契约：同名行按分组序号保留（用户已确认：唯一键加分组序号维度） ----
+
+
+def test_jdl_duplicate_item_names_survive_normalization_with_group_ordinal(
+    db_session: Session,
+) -> None:
+    """港股 IFRS 合法同名行（借款/租赁负债等在流动、非流动分组下各一行）
+    按披露出现序获得 group_ordinal（0,1,…），归一化不再撞唯一键；原始行不合并。
+    """
+    import yaml as yaml_lib
+
+    jdl_yaml = REPO_ROOT / "docs/implementation/p5/jdl_2025fy_statements.yaml"
+    payload = yaml_lib.safe_load(jdl_yaml.read_text())
+    report = import_statement_report(
+        db_session,
+        company_name="京东物流",
+        stock_code="02618.HK",
+        report_kind="年报",
+        period_label="FY2025",
+        payload=payload,
+        source_ref="p5_samples/jdl_02618/JDL_FY2025_report.pdf",
+        source_sha256="j" * 64,
+    )
+    normalize_report(db_session, report)
+
+    rows = list(
+        db_session.scalars(
+            select(StatementNormalizedItem).where(
+                StatementNormalizedItem.report_id == report.id
+            )
+        )
+    )
+    assert rows, "JDL 归一化应产出归一行"
+    assert any(r.group_ordinal > 0 for r in rows), "同名行应获得非零分组序号"
+
+    # 同一 (type, item_name) 内 ordinal 互不重复（唯一键语义）
+    seen: dict[tuple[str, str], list[int]] = {}
+    for row in rows:
+        seen.setdefault((row.statement_type, row.item_name), []).append(
+            row.group_ordinal
+        )
+    for key, ordinals in seen.items():
+        assert len(ordinals) == len(set(ordinals)), f"{key} 序号重复"
+
+    # 借款两行都被保留（不合并原始行），序号为 0 和 1
+    borrowings = [r for r in rows if r.item_name == "借款"]
+    assert len(borrowings) == 2
+    assert {r.group_ordinal for r in borrowings} == {0, 1}
