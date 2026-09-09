@@ -7,6 +7,7 @@ from flow_api.api.routes.health import router as health_router
 from flow_api.api.routes.intake import router as intake_router
 from flow_api.api.routes.investigations import router as investigations_router
 from flow_api.api.routes.metric_library import router as metric_library_router
+from flow_api.api.routes.objective_reports import router as objective_reports_router
 from flow_api.api.routes.orchestration import router as orchestration_router
 from flow_api.api.routes.publishing import router as publishing_router
 from flow_api.api.routes.statements import router as statements_router
@@ -25,3 +26,4 @@ api_router.include_router(publishing_router, dependencies=[Depends(require_beare
 api_router.include_router(statements_router, dependencies=[Depends(require_bearer_auth)])
 api_router.include_router(metric_library_router, dependencies=[Depends(require_bearer_auth)])
 api_router.include_router(orchestration_router, dependencies=[Depends(require_bearer_auth)])
+api_router.include_router(objective_reports_router, dependencies=[Depends(require_bearer_auth)])

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-import { FlowApiError } from "../../lib/api/client";
+import { FlowApiError, statementApi, type StatementReportList } from "../../lib/api/client";
 import "./reports-center.css";
 
 type SnapshotLine = {
@@ -62,6 +62,7 @@ async function fetchAttempts(snapshotId: string): Promise<AttemptLine[]> {
 
 export function ReportsCenter() {
   const [snapshots, setSnapshots] = useState<SnapshotLine[]>([]);
+  const [objectiveReports, setObjectiveReports] = useState<StatementReportList["reports"]>([]);
   const [selected, setSelected] = useState<string | null>(null);
   const [metricSnapshotId, setMetricSnapshotId] = useState("");
   const [candidates, setCandidates] = useState<FreezeCandidate[]>([]);
@@ -73,6 +74,12 @@ export function ReportsCenter() {
 
   useEffect(() => {
     let cancelled = false;
+    fetch("/api/v1/statements", { headers: { Accept: "application/json" } })
+      .then((response) => (response.ok ? response.json() : { reports: [] }))
+      .then((body: { reports?: StatementReportList["reports"] }) =>
+        setObjectiveReports(body.reports ?? []),
+      )
+      .catch(() => setObjectiveReports([]));
     fetchSnapshots()
       .then((rows) => {
         if (cancelled) return;
@@ -192,6 +199,31 @@ export function ReportsCenter() {
           {error}
         </p>
       ) : null}
+
+      <div className="reports-center__objective">
+        <h2>客观财报分析报告（四表一注）</h2>
+        <p className="reports-center__objective-note">
+          基于公开财报反向解析的客观分析（D041/D043）：HTML 由冻结载荷渲染，数值与披露原文一致。
+        </p>
+        {objectiveReports.length === 0 ? (
+          <p className="ml-muted">尚无已导入的公开财报。请先在数据接入导入或在 P5 抽取后运行种子脚本。</p>
+        ) : (
+          <ul className="reports-center__objective-list">
+            {objectiveReports.map((report) => (
+              <li key={report.id}>
+                <a
+                  href={statementApi.objectiveSnapshotHtmlUrl(report.id)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {report.company_name} · {report.period_label} {report.report_kind}
+                  （行项目 {report.line_item_count}）
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
 
       <div className="reports-center__freeze">
         <h2>冻结新报告快照</h2>

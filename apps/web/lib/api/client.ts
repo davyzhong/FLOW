@@ -275,6 +275,12 @@ export const statementApi = {
   getReport(reportId: string, signal?: AbortSignal): Promise<StatementReportDetail> {
     return request<StatementReportDetail>(`/api/v1/statements/${reportId}`, signal);
   },
+  freezeObjectiveSnapshot(reportId: string): Promise<{ snapshot_id: string; version: number }> {
+    return submit(`/api/v1/statements/${reportId}/objective-snapshot`, "POST", {});
+  },
+  objectiveSnapshotHtmlUrl(reportId: string): string {
+    return `/api/v1/statements/${reportId}/objective-snapshot/html`;
+  },
   listCorrections(reportId: string, signal?: AbortSignal): Promise<CorrectionList> {
     return request<CorrectionList>(`/api/v1/statements/${reportId}/corrections`, signal);
   },
