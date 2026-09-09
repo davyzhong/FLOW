@@ -130,3 +130,56 @@ def test_pdf_is_real_chromium_output(tmp_path: Path, db_session: Session) -> Non
         assert b"/Page" in data or b"Pages" in data
     except RuntimeError as error:
         pytest.skip(f"Chromium 不可用，跳过真 PDF 验证：{error}")
+
+
+# ---- slice-4：借鉴渲染增强（统一计划附录 #1/#2/#3；渲染只消费载荷，不新算数字） ----
+
+
+def test_html_carries_caliber_and_traceability_section(db_session: Session) -> None:
+    """借鉴 #2：HTML 渲染口径与溯源节（单位口径、来源、SHA-256 指纹、比较基准声明）。"""
+    from flow_api.publishing.objective_renderers import render_html_from_payload
+
+    report = _seed(db_session)
+    snapshot = freeze_objective_statement_report(db_session, report_id=report.id)
+    db_session.flush()
+    html = render_html_from_payload(snapshot.payload)
+    source = snapshot.payload["source"]
+    assert "口径与溯源" in html, "HTML 必须有口径与溯源节（借鉴 #2 口径附表）"
+    assert source["unit_note"] in html, "单位口径必须可见"
+    assert source["source_ref"] in html, "来源引用必须可见"
+    assert source["source_sha256"][:16] in html, "来源 SHA-256 指纹必须可见（截断展示）"
+    assert "比较基准" in html, "比较基准声明必须可见"
+
+
+def test_html_marks_prior_column_as_comparison_basis(db_session: Session) -> None:
+    """借鉴 #1：报表列头必须显式标注本期/上期（比较基准），数值不裸奔。"""
+    from flow_api.publishing.objective_renderers import render_html_from_payload
+
+    report = _seed(db_session)
+    snapshot = freeze_objective_statement_report(db_session, report_id=report.id)
+    db_session.flush()
+    html = render_html_from_payload(snapshot.payload)
+    assert "本期/期末" in html
+    assert "上期/期初（比较基准）" in html
+
+
+def test_html_reconciliation_block_flags_normalized_raw_divergence(
+    db_session: Session,
+) -> None:
+    """借鉴 #3：勾稽核对块——归一行 vs 原始行逐表值集合核对，篡改必须显式报不一致。"""
+    import copy
+
+    from flow_api.publishing.objective_renderers import render_html_from_payload
+
+    report = _seed(db_session)
+    snapshot = freeze_objective_statement_report(db_session, report_id=report.id)
+    db_session.flush()
+    html = render_html_from_payload(snapshot.payload)
+    assert "勾稽核对" in html, "HTML 必须有勾稽核对块"
+    assert "一致" in html, "顺丰冻结载荷归一化不改值，应全部一致"
+
+    tampered = copy.deepcopy(snapshot.payload)
+    first_type = next(iter(tampered["statements_raw"]))
+    tampered["statements_raw"][first_type][0]["value_current"] = "999999"
+    html_tampered = render_html_from_payload(tampered)
+    assert "不一致" in html_tampered, "归一值与原始值背离必须显式暴露，不得静默"
