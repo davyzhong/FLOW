@@ -10,10 +10,11 @@ from __future__ import annotations
 
 from decimal import Decimal
 from pathlib import Path
-from typing import Any, cast
+from typing import Any, Literal, cast
 from uuid import UUID
 
 import yaml
+from pydantic import BaseModel, ConfigDict
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -150,6 +151,54 @@ def management_watch(facts: dict[str, Decimal]) -> list[dict[str, str]]:
     return watches[:3]
 
 
+class ManagementWatchItem(BaseModel):
+    """管理关注条目：确定性信号，带值带向，不解释原因。"""
+
+    model_config = ConfigDict(extra="forbid")
+
+    code: str
+    message: str
+    direction: Literal["negative", "warning"]
+
+
+class WorkbenchMetricItem(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    metric_code: str
+    available: bool
+    value: str | None = None
+    unavailable_reason: str | None = None
+
+
+class WorkbenchQuestion(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    key: str
+    name: str
+    metrics: list[WorkbenchMetricItem]
+
+
+class WorkbenchReportIdentity(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    report_id: str
+    company_name: str
+    period_label: str
+    unit_note: str
+
+
+class WorkbenchResponse(BaseModel):
+    """四问工作台响应：只读投影 + 管理关注（≤3 条）。"""
+
+    model_config = ConfigDict(extra="forbid")
+
+    workbench_id: str
+    report: WorkbenchReportIdentity
+    questions: list[WorkbenchQuestion]
+    management_watch: list[ManagementWatchItem]
+    facts_available: list[str]
+
+
 def build_four_question_workbench(
     session: Session,
     *,
@@ -210,4 +259,13 @@ def build_four_question_workbench(
     }
 
 
-__all__ = ["build_four_question_workbench", "load_topics_catalog", "management_watch"]
+__all__ = [
+    "ManagementWatchItem",
+    "WorkbenchMetricItem",
+    "WorkbenchQuestion",
+    "WorkbenchReportIdentity",
+    "WorkbenchResponse",
+    "build_four_question_workbench",
+    "load_topics_catalog",
+    "management_watch",
+]

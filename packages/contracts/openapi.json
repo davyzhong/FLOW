@@ -3630,6 +3630,66 @@
           }
         }
       }
+    },
+    "/api/v1/analysis/workbench/{report_id}": {
+      "get": {
+        "tags": [
+          "analysis"
+        ],
+        "summary": "Get Workbench",
+        "description": "四问分析工作台：问题域导航 + 每问指标可用性与预计算值（U7/P07）。",
+        "operationId": "get_workbench_api_v1_analysis_workbench__report_id__get",
+        "parameters": [
+          {
+            "name": "report_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Report Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WorkbenchResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -6096,6 +6156,35 @@
           "actor"
         ],
         "title": "InvestigationQuestionRequest"
+      },
+      "ManagementWatchItem": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "direction": {
+            "type": "string",
+            "enum": [
+              "negative",
+              "warning"
+            ],
+            "title": "Direction"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "code",
+          "message",
+          "direction"
+        ],
+        "title": "ManagementWatchItem",
+        "description": "管理关注条目：确定性信号，带值带向，不解释原因。"
       },
       "MappingConfirmationRequest": {
         "properties": {
@@ -9173,6 +9262,146 @@
           "reason"
         ],
         "title": "WarningAcknowledgementResponse"
+      },
+      "WorkbenchMetricItem": {
+        "properties": {
+          "metric_code": {
+            "type": "string",
+            "title": "Metric Code"
+          },
+          "available": {
+            "type": "boolean",
+            "title": "Available"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          },
+          "unavailable_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unavailable Reason"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "metric_code",
+          "available"
+        ],
+        "title": "WorkbenchMetricItem"
+      },
+      "WorkbenchQuestion": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "metrics": {
+            "items": {
+              "$ref": "#/components/schemas/WorkbenchMetricItem"
+            },
+            "type": "array",
+            "title": "Metrics"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "key",
+          "name",
+          "metrics"
+        ],
+        "title": "WorkbenchQuestion"
+      },
+      "WorkbenchReportIdentity": {
+        "properties": {
+          "report_id": {
+            "type": "string",
+            "title": "Report Id"
+          },
+          "company_name": {
+            "type": "string",
+            "title": "Company Name"
+          },
+          "period_label": {
+            "type": "string",
+            "title": "Period Label"
+          },
+          "unit_note": {
+            "type": "string",
+            "title": "Unit Note"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "report_id",
+          "company_name",
+          "period_label",
+          "unit_note"
+        ],
+        "title": "WorkbenchReportIdentity"
+      },
+      "WorkbenchResponse": {
+        "properties": {
+          "workbench_id": {
+            "type": "string",
+            "title": "Workbench Id"
+          },
+          "report": {
+            "$ref": "#/components/schemas/WorkbenchReportIdentity"
+          },
+          "questions": {
+            "items": {
+              "$ref": "#/components/schemas/WorkbenchQuestion"
+            },
+            "type": "array",
+            "title": "Questions"
+          },
+          "management_watch": {
+            "items": {
+              "$ref": "#/components/schemas/ManagementWatchItem"
+            },
+            "type": "array",
+            "title": "Management Watch"
+          },
+          "facts_available": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Facts Available"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "workbench_id",
+          "report",
+          "questions",
+          "management_watch",
+          "facts_available"
+        ],
+        "title": "WorkbenchResponse",
+        "description": "四问工作台响应：只读投影 + 管理关注（≤3 条）。"
       },
       "WorkbookProfileResponse": {
         "properties": {

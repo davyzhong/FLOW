@@ -16,6 +16,7 @@ const groups = [
     items: [
       ["dashboard", "经营总览", "/"],
       ["analysis", "分析与归因", "/investigations"],
+      ["report", "四问工作台", "/analysis"],
       ["report", "报告与导出", "/reports"],
       ["chart", "报表分析", "/statements"],
       ["library", "指标库", "/metric-library"],

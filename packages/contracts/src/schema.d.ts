@@ -868,6 +868,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/analysis/workbench/{report_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Workbench
+         * @description 四问分析工作台：问题域导航 + 每问指标可用性与预计算值（U7/P07）。
+         */
+        get: operations["get_workbench_api_v1_analysis_workbench__report_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1743,6 +1763,21 @@ export interface components {
             metric_snapshot_id?: string | null;
             /** Analysis Run Id */
             analysis_run_id?: string | null;
+        };
+        /**
+         * ManagementWatchItem
+         * @description 管理关注条目：确定性信号，带值带向，不解释原因。
+         */
+        ManagementWatchItem: {
+            /** Code */
+            code: string;
+            /** Message */
+            message: string;
+            /**
+             * Direction
+             * @enum {string}
+             */
+            direction: "negative" | "warning";
         };
         /** MappingConfirmationRequest */
         MappingConfirmationRequest: {
@@ -2820,6 +2855,52 @@ export interface components {
             actor: string;
             /** Reason */
             reason: string;
+        };
+        /** WorkbenchMetricItem */
+        WorkbenchMetricItem: {
+            /** Metric Code */
+            metric_code: string;
+            /** Available */
+            available: boolean;
+            /** Value */
+            value?: string | null;
+            /** Unavailable Reason */
+            unavailable_reason?: string | null;
+        };
+        /** WorkbenchQuestion */
+        WorkbenchQuestion: {
+            /** Key */
+            key: string;
+            /** Name */
+            name: string;
+            /** Metrics */
+            metrics: components["schemas"]["WorkbenchMetricItem"][];
+        };
+        /** WorkbenchReportIdentity */
+        WorkbenchReportIdentity: {
+            /** Report Id */
+            report_id: string;
+            /** Company Name */
+            company_name: string;
+            /** Period Label */
+            period_label: string;
+            /** Unit Note */
+            unit_note: string;
+        };
+        /**
+         * WorkbenchResponse
+         * @description 四问工作台响应：只读投影 + 管理关注（≤3 条）。
+         */
+        WorkbenchResponse: {
+            /** Workbench Id */
+            workbench_id: string;
+            report: components["schemas"]["WorkbenchReportIdentity"];
+            /** Questions */
+            questions: components["schemas"]["WorkbenchQuestion"][];
+            /** Management Watch */
+            management_watch: components["schemas"]["ManagementWatchItem"][];
+            /** Facts Available */
+            facts_available: string[];
         };
         /** WorkbookProfileResponse */
         WorkbookProfileResponse: {
@@ -4956,6 +5037,39 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["StatementErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_workbench_api_v1_analysis_workbench__report_id__get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                report_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkbenchResponse"];
                 };
             };
             /** @description Validation Error */

@@ -15,6 +15,9 @@ export type StatementReportList = components["schemas"]["StatementReportListResp
 export type StatementReportDetail = components["schemas"]["StatementReportDetailResponse"];
 export type StatementSection = components["schemas"]["StatementSectionResponse"];
 export type StatementLine = components["schemas"]["StatementLineResponse"];
+export type WorkbenchResponse = components["schemas"]["WorkbenchResponse"];
+export type WorkbenchQuestion = components["schemas"]["WorkbenchQuestion"];
+export type ManagementWatchItem = components["schemas"]["ManagementWatchItem"];
 
 export type InvestigationQuery = {
   finding_id: string;
@@ -280,6 +283,9 @@ export const statementApi = {
   },
   objectiveSnapshotHtmlUrl(reportId: string): string {
     return `/api/v1/statements/${reportId}/objective-snapshot/html`;
+  },
+  fetchWorkbench(reportId: string, signal?: AbortSignal): Promise<WorkbenchResponse> {
+    return request<WorkbenchResponse>(`/api/v1/analysis/workbench/${reportId}`, signal);
   },
   listCorrections(reportId: string, signal?: AbortSignal): Promise<CorrectionList> {
     return request<CorrectionList>(`/api/v1/statements/${reportId}/corrections`, signal);
