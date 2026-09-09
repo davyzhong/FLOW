@@ -12,6 +12,7 @@ internal_process / internal_events 主题一律 not_applicable（typed 原因）
 from __future__ import annotations
 
 from decimal import Decimal
+from pathlib import Path
 from typing import Any, Literal
 from uuid import UUID
 
@@ -36,6 +37,18 @@ THEME_ENTRIES: dict[str, tuple[str, ...]] = {
     # revenue_structure：L1 需分部/产品线披露，当前财报样本无分部表 → typed 缺失
     "revenue_structure": (),
     "users_channels": (),
+}
+
+# 字典口径求值的指标（code → 指标字典 formula，与指标库同一口径来源）
+DICTIONARY_METRICS: dict[str, tuple[str, ...]] = {
+    "operational_efficiency": (
+        "inventory_turnover",
+        "ar_turnover",
+        "ap_turnover",
+        "dso_days",
+        "current_asset_turnover",
+    ),
+    "growth_quality": ("revenue_growth", "net_profit_growth", "operating_profit_growth"),
 }
 
 THEME_UNAVAILABLE_REASON: dict[str, str] = {
@@ -65,6 +78,7 @@ class OperationsMetricItem(BaseModel):
     basis: str = ""
     caliber_note: str = ""
     reason: str | None = None
+    source: Literal["d01_entry", "metric_dictionary"] = "d01_entry"
 
 
 class OperationsTheme(BaseModel):
@@ -101,11 +115,129 @@ def _facts_from_normalized(rows: list[Any]) -> dict[str, Decimal]:
     return facts
 
 
+def _facts_with_roles(rows: list[Any]) -> dict[tuple[str, str], Decimal]:
+    """role 键事实（与 D01 引擎同构）：end/begin/cur/prior。"""
+
+    facts: dict[tuple[str, str], Decimal] = {}
+    for row in rows:
+        if row.item_id is None:
+            continue
+        for column, role in (
+            ("value_end", "end"),
+            ("value_begin", "begin"),
+            ("value_current", "cur"),
+            ("value_prior", "prior"),
+        ):
+            value = getattr(row, column)
+            if value is not None:
+                facts.setdefault((row.item_id, role), value)
+    return facts
+
+
+def _eval_formula(
+    formula: Any, facts: dict[tuple[str, str], Decimal]
+) -> Decimal | None:
+    """指标字典公式递归求值（div/add/sub/mul/sum/avg/prior/identity）。
+
+    叶子（item_id）按 cur→end→prior→begin 宽容取值；财报点值下 trailing12
+    无窗口事实 → not_computable（不近似、不编造）。任何缺口 → None。
+    """
+
+    if formula is None:
+        return None
+    if isinstance(formula, (int, float)):
+        return Decimal(str(formula))
+    if isinstance(formula, str):
+        for role in ("cur", "end", "prior", "begin"):
+            value = facts.get((formula, role))
+            if value is not None:
+                return value
+        return None
+    op = formula.get("op")
+    args = formula.get("args", [])
+    if op == "prior":
+        leaf = args[0]
+        if not isinstance(leaf, str):
+            return None
+        return facts.get((leaf, "prior"))
+    if op == "avg":
+        leaf = args[0]
+        if not isinstance(leaf, str):
+            return None
+        end = facts.get((leaf, "end"))
+        begin = facts.get((leaf, "begin"))
+        if end is None or begin is None:
+            return None
+        return (end + begin) / Decimal("2")
+    if op == "trailing12":
+        return None
+    values = [_eval_formula(arg, facts) for arg in args]
+    if any(value is None for value in values):
+        return None
+    decimals = [value for value in values if value is not None]
+    if op == "div":
+        numerator, denominator = decimals[0], decimals[1]
+        if denominator == 0:
+            return None
+        return (numerator / denominator).quantize(Decimal("0.0001"))
+    if op in ("add", "sum"):
+        result = Decimal("0")
+        for value in decimals:
+            result += value
+        return result
+    if op == "sub":
+        result = decimals[0]
+        for value in decimals[1:]:
+            result -= value
+        return result
+    if op == "mul":
+        result = Decimal("1")
+        for value in decimals:
+            result *= value
+        return result
+    if op == "identity":
+        return decimals[0]
+    return None
+
+
+def _load_metric_formulas() -> dict[str, tuple[dict[str, Any], str]]:
+    import yaml
+
+    relative = Path("config/metrics/metric_dictionary_v1.yaml")
+    data: dict[str, Any] | None = None
+    for root in (Path.cwd(), *Path.cwd().parents):
+        candidate = root / relative
+        if candidate.is_file():
+            data = yaml.safe_load(candidate.read_text(encoding="utf-8"))
+            break
+    if data is None:
+        return {}
+    formulas: dict[str, tuple[dict[str, Any], str]] = {}
+    for group in ("metrics_general", "metrics_logistics"):
+        for entry in data.get(group, []):
+            formula = entry.get("formula")
+            if isinstance(formula, dict):
+                formulas[entry["metric_code"]] = (formula, entry.get("name", entry["metric_code"]))
+    return formulas
+
+
 def build_operations_overview(session: Any, *, report_id: str | UUID) -> OperationsOverview:
     """六主题经营概览：D01 条目按主题分组 + 分层判定 + 联动信号（≤3）。"""
 
     analysis = ObjectiveAnalysisService(session).analyze(report_id)
     entry_by_id = {entry.entry_id: entry for entry in analysis.entries}
+
+    from sqlalchemy import select
+
+    from flow_api.infrastructure.models.statement import StatementNormalizedItem
+
+    rows = list(
+        session.scalars(
+            select(StatementNormalizedItem).where(
+                StatementNormalizedItem.report_id == report_id
+            )
+        )
+    )
 
     themes: list[OperationsTheme] = []
     for theme_id in (
@@ -155,6 +287,40 @@ def build_operations_overview(session: Any, *, report_id: str | UUID) -> Operati
                     reason=entry.reason,
                 )
             )
+        dictionary_codes = DICTIONARY_METRICS.get(theme_id, ())
+        if dictionary_codes:
+            role_facts = _facts_with_roles(rows)
+            formulas = _load_metric_formulas()
+            for code in dictionary_codes:
+                if code in {m.entry_id for m in metrics}:
+                    continue
+                formula = formulas.get(code)
+                if formula is None:
+                    metrics.append(
+                        OperationsMetricItem(
+                            entry_id=code,
+                            name=code,
+                            status=ObjectiveStatus.NOT_COMPUTABLE.value,
+                            reason="metric_not_in_dictionary",
+                            source="metric_dictionary",
+                        )
+                    )
+                    continue
+                formula_dict, name = formula
+                value = _eval_formula(formula_dict, role_facts)
+                metrics.append(
+                    OperationsMetricItem(
+                        entry_id=code,
+                        name=name,
+                        status=ObjectiveStatus.COMPUTED.value
+                        if value is not None
+                        else ObjectiveStatus.NOT_COMPUTABLE.value,
+                        value=str(value) if value is not None else None,
+                        basis="指标字典公式（财报归一化事实）",
+                        reason=None if value is not None else "fact_missing",
+                        source="metric_dictionary",
+                    )
+                )
         themes.append(
             OperationsTheme(
                 theme_id=theme_id,
@@ -165,17 +331,6 @@ def build_operations_overview(session: Any, *, report_id: str | UUID) -> Operati
             )
         )
 
-    from sqlalchemy import select
-
-    from flow_api.infrastructure.models.statement import StatementNormalizedItem
-
-    rows = list(
-        session.scalars(
-            select(StatementNormalizedItem).where(
-                StatementNormalizedItem.report_id == report_id
-            )
-        )
-    )
     facts = _facts_from_normalized(rows)
 
     return OperationsOverview(

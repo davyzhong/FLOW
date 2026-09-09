@@ -116,3 +116,60 @@ def test_management_watch_present_and_bounded(db_session: Session) -> None:
     assert len(overview.management_watch) <= 3
     for item in overview.management_watch:
         assert set(item) >= {"code", "message", "direction"}
+
+
+# ---- O2 slice-2：字典口径周转类求值 + 样本泛化 ----
+
+
+def test_efficiency_theme_evaluates_dictionary_turnover_formulas(
+    db_session: Session,
+) -> None:
+    """周转类指标按指标字典公式求值（avg=期初期末平均，同口径不出第二套）；
+    财报事实齐备时 computed，缺口时 not_computable（typed），永不编造。"""
+    report = _seed(db_session)
+    overview = build_operations_overview(db_session, report_id=str(report.id))
+    efficiency = {t.theme_id: t for t in overview.themes}["operational_efficiency"]
+    codes = {m.entry_id: m for m in efficiency.metrics}
+    assert {"current_ratio", "debt_asset_ratio", "inventory_turnover", "dso_days"} <= set(codes)
+    for metric in efficiency.metrics:
+        if metric.entry_id in {"current_ratio", "debt_asset_ratio"}:
+            assert metric.source == "d01_entry", "已有 D01 条目复用，不重复求值"
+        else:
+            assert metric.source == "metric_dictionary"
+        if metric.status == "computed":
+            assert metric.value is not None and metric.basis
+        else:
+            assert metric.reason, f"{metric.entry_id} 不可算必须给 typed 原因"
+
+
+def test_tencent_sample_generalizes(db_session: Session) -> None:
+    """同引擎复用于港股 IFRS 样本：结构完整、分层语义一致、不抛错。"""
+    import yaml as yaml_lib
+
+    tencent_yaml = REPO_ROOT / "docs/implementation/p5/tencent_2026q2_statements.yaml"
+    payload = yaml_lib.safe_load(tencent_yaml.read_text())
+    report = import_statement_report(
+        db_session,
+        company_name="腾讯控股",
+        stock_code="0700.HK",
+        report_kind="二季报",
+        period_label="2026Q2",
+        payload=payload,
+        source_ref="p5_samples/tencent_0700/Tencent_2026_Q2_results.pdf",
+        source_sha256="t" * 64,
+    )
+    report.status = "published"
+    db_session.flush()
+    normalize_report(db_session, report)
+
+    overview = build_operations_overview(db_session, report_id=str(report.id))
+    by_id = {t.theme_id: t for t in overview.themes}
+    assert len(by_id) == 6
+    assert by_id["users_channels"].reason == "internal_data_required"
+    computed = [
+        m
+        for t in overview.themes
+        for m in t.metrics
+        if m.status == "computed" and m.value is not None
+    ]
+    assert computed, "腾讯样本至少应有可算条目（如净现比/利润率类）"
