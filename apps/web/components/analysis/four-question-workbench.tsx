@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   FlowApiError,
@@ -50,26 +50,32 @@ export function FourQuestionWorkbench() {
     };
   }, []);
 
-  const loadWorkbench = useCallback((reportId: string) => {
-    if (!reportId) return;
-    setState({ status: "loading" });
+  useEffect(() => {
+    if (!selectedReportId) return;
+    let cancelled = false;
     statementApi
-      .fetchWorkbench(reportId)
+      .fetchWorkbench(selectedReportId)
       .then((body) => {
+        if (cancelled) return;
         setWorkbench(body);
         setState({ status: "ready" });
       })
       .catch((error: unknown) => {
+        if (cancelled) return;
         setState({
           status: "error",
           message: error instanceof FlowApiError ? error.message : "加载工作台失败",
         });
       });
-  }, []);
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedReportId]);
 
-  useEffect(() => {
-    loadWorkbench(selectedReportId);
-  }, [selectedReportId, loadWorkbench]);
+  const pending =
+    state.status !== "error" &&
+    selectedReportId !== "" &&
+    (workbench === null || workbench.report.report_id !== selectedReportId);
 
   return (
     <section aria-labelledby="workbench-heading" className="workbench">
@@ -99,7 +105,7 @@ export function FourQuestionWorkbench() {
           {state.message}
         </p>
       ) : null}
-      {state.status === "loading" ? <p aria-live="polite">加载中…</p> : null}
+      {pending ? <p aria-live="polite">加载中…</p> : null}
 
       {workbench ? (
         <>
