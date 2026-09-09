@@ -74,6 +74,8 @@ def _import_and_normalize(session: Session) -> Any:
     )
     session.flush()
     normalize_report(session, report)
+    report.status = "published"
+    session.flush()
     return report
 
 
@@ -128,7 +130,11 @@ def test_empty_statements_rejected(db_session: Session) -> None:
         period_label="2026Q1",
         payload=payload_full,
         source_ref="t",
+        source_sha256="e" * 64,
     )
+    # U5 资格合同：先满足发布（批准）与来源指纹，才能到达空载荷检查
+    report.status = "published"
+    db_session.flush()
     # 手工清空归一化行，模拟"空报表冻结被拒"
     for row in list(report.items):
         db_session.delete(row)

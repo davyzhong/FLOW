@@ -57,14 +57,95 @@ class ObjectiveFreezeError(Exception):
         self.message = message
 
 
+class ObjectiveEligibility:
+    """客观报告资格合同（U5/P06）：与主观 Finding 证据审批分离。
+
+    - published：财报发布是用户批准的事实动作（B 链发布门禁：阻断项/警告确认）；
+    - 来源指纹完整：source_ref 与 source_sha256 齐备，报告可溯源到原文；
+    - 归一化行存在；未解析行不阻断，但作为不可用项说明如实入载荷。
+    """
+
+    __slots__ = (
+        "published",
+        "source_complete",
+        "has_normalized_rows",
+        "unresolved_names",
+        "statement_types",
+    )
+
+    def __init__(
+        self,
+        *,
+        published: bool,
+        source_complete: bool,
+        has_normalized_rows: bool,
+        unresolved_names: list[str],
+        statement_types: list[str],
+    ) -> None:
+        self.published = published
+        self.source_complete = source_complete
+        self.has_normalized_rows = has_normalized_rows
+        self.unresolved_names = unresolved_names
+        self.statement_types = statement_types
+
+    @property
+    def blockers(self) -> list[tuple[str, str]]:
+        result: list[tuple[str, str]] = []
+        if not self.published:
+            result.append(
+                ("report_not_published", "财报未发布：事实发布是冻结前必须的用户批准动作")
+            )
+        if not self.source_complete:
+            result.append(
+                ("source_incomplete", "来源身份不完整：缺少 source_ref 或 source_sha256")
+            )
+        if not self.has_normalized_rows:
+            result.append(("objective_report_empty", "财报没有任何归一化行项目"))
+        return result
+
+    @property
+    def eligible(self) -> bool:
+        return not self.blockers
+
+
+def evaluate_objective_eligibility(
+    session: Session, report: StatementReport
+) -> ObjectiveEligibility:
+    """评估客观报告冻结资格；阻断项与不可用项均 typed 返回，不静默。"""
+
+    normalized = session.scalars(
+        select(StatementNormalizedItem).where(
+            StatementNormalizedItem.report_id == report.id
+        )
+    ).all()
+    unresolved = sorted({row.item_name for row in normalized if row.item_id is None})
+    statement_types = sorted({row.statement_type for row in normalized})
+    return ObjectiveEligibility(
+        published=report.status == "published",
+        source_complete=bool(report.source_ref) and bool(report.source_sha256),
+        has_normalized_rows=bool(normalized),
+        unresolved_names=unresolved,
+        statement_types=statement_types,
+    )
+
+
 def freeze_objective_statement_report(
     session: Session, *, report_id: UUID
 ) -> ObjectiveReportSnapshot:
-    """把已导入并归一化的客观财报冻结为 typed 载荷（幂等，同内容同版本）。"""
+    """把已导入并归一化的客观财报冻结为 typed 载荷（幂等，同内容同版本）。
+
+    冻结前执行客观资格合同（U5/P06）：财报未发布、来源指纹不完整或无归一化
+    行即拒绝；主观 Finding 证据审批不在本链，也不被本链替代或放松。
+    """
 
     report = session.get(StatementReport, report_id)
     if report is None:
         raise ObjectiveFreezeError("statement_report_not_found", "财报不存在")
+
+    eligibility = evaluate_objective_eligibility(session, report)
+    for code, message in eligibility.blockers:
+        raise ObjectiveFreezeError(code, message)
+
     rows = (
         session.scalars(
             select(StatementNormalizedItem).where(
@@ -129,6 +210,17 @@ def freeze_objective_statement_report(
         },
         "statements": _statements_payload(normalized_rows),
         "statements_raw": _statements_payload(raw_rows_sorted),
+        "eligibility": {
+            "published": eligibility.published,
+            "unresolved_count": len(eligibility.unresolved_names),
+            "unavailable_notes": [
+                f"{len(eligibility.unresolved_names)} 行未映射到标准报表项目，"
+                "如实保留原文，不参与指标计算"
+            ]
+            if eligibility.unresolved_names
+            else [],
+            "statement_types": eligibility.statement_types,
+        },
         "frozen_at": datetime.now().astimezone().isoformat(timespec="seconds"),
     }
 

@@ -72,6 +72,8 @@ def _seed(session: Session) -> Any:
     )
     session.flush()
     normalize_report(session, report)
+    report.status = "published"
+    session.flush()
     return report
 
 

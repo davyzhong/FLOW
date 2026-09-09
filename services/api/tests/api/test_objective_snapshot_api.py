@@ -74,6 +74,8 @@ def _import(db_session: Session) -> Any:
     )
     db_session.flush()
     normalize_report(db_session, report)
+    report.status = "published"
+    db_session.flush()
     return report
 
 
