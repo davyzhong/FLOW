@@ -56,6 +56,12 @@ THEME_UNAVAILABLE_REASON: dict[str, str] = {
     "users_channels": "internal_data_required",
 }
 
+# 分部系列数据集（L1：公开分部报告披露，可溯源）。按公司键约定路径读取；
+# 数据集不存在时 revenue_structure 回退 typed 缺失，不编造。
+SEGMENT_SERIES_BY_STOCK: dict[str, Path] = {
+    "CAINIAO": Path("docs/implementation/p5/cainiao_segment_series.yaml"),
+}
+
 # formula_ref 条目的财报直接执行：标准 item_id 组合（与指标字典 definition
 # 同一口径，仅取数角色为财报归一化事实）。D01 引擎对 formula_ref 有意不算
 # （归 D02 统一快照）；O2 在快照未建时按同一口径直算，避免主题空转。
@@ -232,6 +238,86 @@ def _load_metric_formulas() -> dict[str, tuple[dict[str, Any], str]]:
     return formulas
 
 
+def load_segment_series(stock_code: str) -> dict[str, Any] | None:
+    """加载公司分部系列数据集（L1 公开分部披露，可溯源到年报原文）。"""
+
+    relative = SEGMENT_SERIES_BY_STOCK.get(stock_code)
+    if relative is None:
+        return None
+    import yaml
+
+    for root in (Path.cwd(), *Path.cwd().parents):
+        candidate = root / relative
+        if candidate.is_file():
+            loaded: dict[str, Any] = yaml.safe_load(
+                candidate.read_text(encoding="utf-8")
+            )
+            return loaded
+    return None
+
+
+def _segment_revenue_theme(series: dict[str, Any]) -> OperationsTheme:
+    """分部收入主题（L1 公开分部披露）：确定性同比 + 缺口如实说明。"""
+
+    series_data: dict[str, dict[str, Any]] = series.get("series", {})
+    periods = sorted(series_data.keys())
+    metrics: list[OperationsMetricItem] = []
+    notes: list[str] = []
+
+    revenue_values: list[tuple[str, Decimal]] = []
+    for period in periods:
+        revenue = series_data[period].get("segment_revenue")
+        if revenue is not None:
+            revenue_values.append((period, Decimal(str(revenue))))
+    if len(revenue_values) >= 2:
+        (prev_period, prev_value), (cur_period, cur_value) = revenue_values[-2:]
+        yoy = ((cur_value - prev_value) / abs(prev_value)).quantize(Decimal("0.0001"))
+        metrics.append(
+            OperationsMetricItem(
+                entry_id="segment_revenue_yoy",
+                name=f"分部收入同比（{cur_period} vs {prev_period}）",
+                status=ObjectiveStatus.COMPUTED.value,
+                value=str(yoy),
+                basis=f"{prev_period} 分部收入 {prev_value}",
+                caliber_note=series.get("unit", ""),
+                source="fact_direct",
+            )
+        )
+    ebita = [
+        (period, series_data[period].get("adjusted_ebita"))
+        for period in periods
+        if series_data[period].get("adjusted_ebita") is not None
+    ]
+    if ebita:
+        last_period, last_value = ebita[-1]
+        metrics.append(
+            OperationsMetricItem(
+                entry_id="segment_adjusted_ebita",
+                name=f"经调整 EBITA（{last_period}，MPM 口径）",
+                status=ObjectiveStatus.COMPUTED.value,
+                value=str(last_value),
+                basis=f"自 FY{ebita[0][0].lstrip('FY')} 起单列" if len(ebita) > 1 else "分部披露",
+                caliber_note="经调整 EBITA 为 MPM，须有调节表（D047）",
+                source="fact_direct",
+            )
+        )
+        notes.append(
+            f"经调整 EBITA 仅 {ebita[0][0]} 起单列，此前年度如实缺省"
+            if len(ebita) < len(periods)
+            else ""
+        )
+
+    note_text = "；".join(note for note in notes if note) or None
+    return OperationsTheme(
+        theme_id="revenue_structure",
+        name=_THEME_NAMES["revenue_structure"],
+        availability="financial_report",
+        status="available",
+        reason=note_text,
+        metrics=metrics,
+    )
+
+
 def build_operations_overview(session: Any, *, report_id: str | UUID) -> OperationsOverview:
     """六主题经营概览：D01 条目按主题分组 + 分层判定 + 联动信号（≤3）。"""
 
@@ -240,7 +326,10 @@ def build_operations_overview(session: Any, *, report_id: str | UUID) -> Operati
 
     from sqlalchemy import select
 
-    from flow_api.infrastructure.models.statement import StatementNormalizedItem
+    from flow_api.infrastructure.models.statement import (
+        StatementNormalizedItem,
+        StatementReport,
+    )
 
     rows = list(
         session.scalars(
@@ -252,6 +341,13 @@ def build_operations_overview(session: Any, *, report_id: str | UUID) -> Operati
 
     role_facts = _facts_with_roles(rows)
 
+    report_for_segments = session.get(StatementReport, report_id)
+    segment_series = (
+        load_segment_series(report_for_segments.stock_code)
+        if report_for_segments is not None
+        else None
+    )
+
     themes: list[OperationsTheme] = []
     for theme_id in (
         "growth_quality",
@@ -261,6 +357,9 @@ def build_operations_overview(session: Any, *, report_id: str | UUID) -> Operati
         "users_channels",
         "operational_efficiency",
     ):
+        if theme_id == "revenue_structure" and segment_series is not None:
+            themes.append(_segment_revenue_theme(segment_series))
+            continue
         entry_ids = THEME_ENTRIES.get(theme_id, ())
         if not entry_ids:
             themes.append(
