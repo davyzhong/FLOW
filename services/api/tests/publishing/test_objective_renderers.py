@@ -177,7 +177,7 @@ def test_html_reconciliation_block_flags_normalized_raw_divergence(
     snapshot = freeze_objective_statement_report(db_session, report_id=report.id)
     db_session.flush()
     html = render_html_from_payload(snapshot.payload)
-    assert "勾稽核对" in html, "HTML 必须有勾稽核对块"
+    assert "勾稽与质量核对" in html, "HTML 必须有勾稽与质量核对章"
     assert "一致" in html, "顺丰冻结载荷归一化不改值，应全部一致"
 
     tampered = copy.deepcopy(snapshot.payload)

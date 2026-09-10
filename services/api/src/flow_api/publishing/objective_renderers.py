@@ -71,7 +71,7 @@ def render_html_from_payload(payload: dict[str, Any]) -> str:
             for row in rows
         )
         blocks.append(
-            f"<h2>{statement_type}</h2><table>"
+            f"<h3>{statement_type}</h3><table>"
             "<tr><th>项目</th><th>本期/期末</th><th>上期/期初（比较基准）</th></tr>"
             f"{row_html}</table>"
         )
@@ -87,6 +87,8 @@ def render_html_from_payload(payload: dict[str, Any]) -> str:
     )
     source = payload.get("source", {})
     sha256 = str(source.get("source_sha256", ""))
+    # 叙事结构（借鉴 #9 客观部分）：现状判断 → 勾稽与质量核对 → 口径与溯源。
+    # 原因推断与行动章不在客观报告范围（U5 主观证据门禁），显式标注。
     return (
         "<!DOCTYPE html><html lang='zh-CN'><head><meta charset='utf-8'>"
         "<title>客观财报分析报告</title>"
@@ -96,21 +98,34 @@ def render_html_from_payload(payload: dict[str, Any]) -> str:
         "th{color:#475569;font-weight:600}"
         ".num{text-align:right;font-variant-numeric:tabular-nums}"
         "h1{font-size:22px}h2{font-size:16px;margin-top:24px}"
+        "h3{font-size:14px;margin-top:16px}"
         ".src{color:#64748b;font-size:13px;margin-bottom:18px}"
         ".ok{color:#15803d}.bad{color:#b91c1c;font-weight:600}"
-        ".note{color:#64748b;font-size:12px}</style></head><body>"
+        ".note{color:#64748b;font-size:12px}"
+        ".chapter{margin-top:28px;border-top:2px solid #e2e8f0;padding-top:8px}"
+        ".chapter-label{color:#94a3b8;font-size:12px;font-weight:600;"
+        "letter-spacing:0.1em}</style></head><body>"
         "<h1>客观财报分析报告</h1>"
         f"<div class='src'>{src_block}冻结时间：{frozen_at}</div>"
+        "<div class='chapter'><span class='chapter-label'>第一章 · 现状判断</span>"
+        "<h2>披露原值（比较基准：上期/期初）</h2></div>"
         f"{''.join(blocks)}"
-        "<h2>勾稽核对（归一化 vs 原始披露）</h2>"
+        "<div class='chapter'><span class='chapter-label'>第二章 · 勾稽与质量核对</span>"
+        "<h2>归一化 vs 原始披露</h2></div>"
         f"<table><tr><th>报表</th><th>核对结果</th></tr>{recon_rows}</table>"
         "<p class='note'>核对仅验证归一化未改变披露值；本报告不产生新财务数字，"
-        "所有数值均为冻结载荷原值的投影。</p>"
-        "<h2>口径与溯源</h2>"
+        "所有数值均为冻结载荷原值的投影。差额分解仅解释金额构成，"
+        "不证明业务原因（C14）。</p>"
+        "<div class='chapter'><span class='chapter-label'>第三章 · 口径与溯源</span>"
+        "<h2>口径声明</h2></div>"
         f"<div class='src'>单位口径：{source.get('unit_note', '')}<br/>"
         f"比较基准：上期/期初为披露同期对照值<br/>"
         f"来源文件：{source.get('source_ref', '')}<br/>"
         f"来源 SHA-256：<code>{sha256[:16]}</code>…（完整值见冻结载荷）</div>"
+        "<div class='scope'><strong>范围说明：</strong>本报告为客观事实层"
+        "（现状判断与质量核对）。原因推断、改善行动章<b>不在客观报告范围</b>"
+        "——主观内容须经证据门槛审批后方可进入独立报告（U5 门禁，"
+        "确定性原语仅输出提示复核信号，不断言因果）。</div>"
         "</body></html>"
     )
 
