@@ -42,7 +42,7 @@
 **下一批领取（按 [统一计划 §4 执行顺序总览](../../superpowers/plans/2026-09-07-unified-next-plan.md)）**
 
 4. **U5 客观报告门禁（doing，slice-1 done `cd4e7a7`）**：客观资格合同已落地（published 用户批准 + 来源指纹 + 归一化行 + eligibility 节如实说明未解析行；主观链不放松回归锁定）；剩余状态矩阵扩展与 #1/#9 渲染章节。U2 已全部关闭（JDL 迁移 `0022` 解锁 JDL 样本；rnd_exp 暂登记 4301 待核——用户 2026-09-09 确认）。
-5. **O 系列（经营轨）快速推进**：O1 done；O2 done（`a8a73c5`/`a6abb0e`/`ec4d198`：六主题引擎 + 字典口径周转 + 顺丰/腾讯/菜鸟三样本）；O3 slice-1/2/3 done（`14faa6b`/`b0e431f`/`debc715`：渲染 + 冻结/html/pdf 端点 + /operations 真实数据页）。剩余：objective 四表叙事重排、/operations 打磨、阿里 PDF 抽取（目录已备）与 zto 样本（待抽取）。
+5. **O 系列（经营轨）推进**：O1–O4 done（O2 含顺丰/腾讯/菜鸟三样本泛化 + 菜鸟分部系列解锁 revenue_structure；O4 看板验收达成）；O3 剩 objective 四表叙事重排与前端打磨。**U5 slice-2 done**（`0f945f2` 客观报告三章节叙事 + 范围说明）。阿里 9988 六份 PDF 已归档待抽取；zto 样本待抽取。
 6. **U8 运行保障收尾**：真实存储完整旅程、HTTPS 部署拓扑、结构化日志、统一 CI 门禁（备份恢复已 done）。
 
 **第三梯队 · 依赖外部输入（到料即启）**

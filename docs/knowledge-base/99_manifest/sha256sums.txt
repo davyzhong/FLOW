@@ -1,6 +1,6 @@
 df51c9b65fd77b34d5f53d3607d39d3ec40e0c56c410ebe5f105bdfc66c5f96c  ./00_start_here/2026-09-07-project-state-history.md
 702c8d5519e12e458055fe6d3a3faa9ab1e37fce983e1785181e193fcf223ba4  ./00_start_here/AGENT_START_HERE.md
-9757f66ecb38cf97f48277f34c36d53bac48aac7ecea3846fde5fbb927dc0fc1  ./00_start_here/PROJECT_STATE.md
+1aca1b742edd21afe674dd8124be9953ff25ac334143c411e292e1fb2f6df758  ./00_start_here/PROJECT_STATE.md
 5046991b7f56353e4d4c97a7c8532fbd76b83a844ecaa383c5ed4a1dfe7cb7b8  ./01_conversations/INDEX.md
 2f76b9a257f0baa1c30d5995a49f17bdbacf519f3a33668383f1f39c69c7faea  ./01_conversations/raw/chatgpt/Finance_Intelligence_OS_完整会话归档.md
 a033649eabf7c8cdb40f14defd513fcc046feacace1ccf6fb8a2d84801f6ba6c  ./01_conversations/raw/codex/rollout-2026-08-28T14-41-27-01a0471a-1689-7270-8dc5-f2bf084e4db9.jsonl
