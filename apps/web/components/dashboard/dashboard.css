@@ -21,8 +21,9 @@
 }
 
 .dashboard-loaded {
+  /* AppShell 化后导航由页面级 shell 提供，本组件只剩单列工作区 */
   display: grid;
-  grid-template-columns: 188px minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   max-width: 1600px;
   min-height: calc(100vh - 100px);
   margin: 0 auto;
