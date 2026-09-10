@@ -525,22 +525,21 @@ export function MetricLibraryApp() {
             />
             <span className="ml-toolbar__count">{accounts.length} / {library.accounting.accounts.length} 个科目</span>
           </div>
-          <table className="ml-table">
-            <thead>
-              <tr><th>编号</th><th>科目名称</th><th>类别</th><th>余额方向</th><th>状态</th></tr>
-            </thead>
-            <tbody>
-              {accounts.map((account) => (
-                <tr key={account.code}>
-                  <td><code>{account.code}</code></td>
-                  <td>{account.name}</td>
-                  <td>{account.category}</td>
-                  <td>{account.balance_side}</td>
-                  <td>{account.status}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="ml-accounts-grid" role="list" aria-label="会计科目列表">
+            {accounts.map((account) => (
+              <div key={account.code} className="ml-account" role="listitem">
+                <code>{account.code}</code>
+                <strong>{account.name}</strong>
+                <span className="ml-account__tags">
+                  <span className="ml-account__tag">{account.category}</span>
+                  <span className="ml-account__tag">{account.balance_side}</span>
+                  {account.status !== "current" ? (
+                    <span className="ml-account__tag">{account.status}</span>
+                  ) : null}
+                </span>
+              </div>
+            ))}
+          </div>
 
           <h2>准则登记册</h2>
           <ul className="ml-standards">
