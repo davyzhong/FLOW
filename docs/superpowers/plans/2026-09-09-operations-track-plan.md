@@ -14,7 +14,7 @@
 |---|---|---|---|
 | O1 | 数据定义合同：`config/operations/operations_track_v1.yaml` 六主题注册表 + pydantic 加载器 + TDD | availability 分层标注；L2/L3 条目不得挂财报 formula_ref；口径标签必带；`not_applicable` typed 状态 | **doing（本次交付）** |
 | O2 | L1 指标计算接线：结果层指标（趋势/同比/结构/比率）复用指标库 facts 与 U2 原语出数 | 财报样本可算条目出数正确；L2/L3 全部 not_applicable；守恒桥残差显式 | **doing（slice-1 done `a8a73c5`：六主题概览引擎 + OP-0 分层 + 联动信号 + typed 端点；slice-2 done `a6abb0e`/`ec4d198`：字典口径周转求值 + 腾讯/菜鸟泛化 + fact_direct 直算。剩余：zto 样本未抽取（如实标注）、收入结构的分部披露接入）** |
-| O3 | 经营分析条目报告：六主题客观分析条目 + 报告渲染（复用 objective 渲染链） | 每条事实陈述四要素（值/基准/口径/来源）；行动章显式标注不在客观范围；渲染采纳借鉴附录 #1–#4/#13 | **doing（slice-1 `render_operations_html` 事实卡片/待内部数据/管理关注/范围说明；slice-2 done：冻结接入 U5 资格合同 + report_type=operations_overview 快照（迁移 0023）+ freeze/html/pdf 三端点，PDF 真 Chromium。剩余：objective 四表叙事重排、前端接线）** |
+| O3 | 经营分析条目报告：六主题客观分析条目 + 报告渲染（复用 objective 渲染链） | 每条事实陈述四要素（值/基准/口径/来源）；行动章显式标注不在客观范围；渲染采纳借鉴附录 #1–#4/#13 | **doing（slice-1/2 done；slice-3 done `debc715`：/operations 从静态演示升级为真实六主题概览——报告选择、事实卡片、管理关注、冻结反馈、HTML/PDF 链接，导航 label 去「演示」。剩余：objective 四表叙事重排、/operations 与冻结后 UI 细节打磨）** |
 | O4 | `/operations` 看板改版：OP-4 信息架构，DB→typed API→Next.js | 先总体后细分；数字可溯源；L2/L3 板块「待内部数据」态展示 | todo |
 | O5 | L2/L3 内部数据接入与业务事件簿数据模型 | 依赖内部数据授权（同 U9 前提）；事件簿表结构先行定义 | todo（数据依赖） |
 
