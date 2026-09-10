@@ -24,7 +24,7 @@ const groups = [
   },
   {
     label: "经营分析 · 业务管理",
-    items: [["chart", "经营概览（演示）", "/operations"]],
+    items: [["chart", "经营概览", "/operations"]],
   },
 ] as const;
 

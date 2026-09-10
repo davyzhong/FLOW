@@ -16,6 +16,9 @@ export type StatementReportDetail = components["schemas"]["StatementReportDetail
 export type StatementSection = components["schemas"]["StatementSectionResponse"];
 export type StatementLine = components["schemas"]["StatementLineResponse"];
 export type WorkbenchResponse = components["schemas"]["WorkbenchResponse"];
+export type OperationsOverview = components["schemas"]["OperationsOverview"];
+export type OperationsTheme = components["schemas"]["OperationsTheme"];
+export type OperationsMetricItem = components["schemas"]["OperationsMetricItem"];
 export type WorkbenchQuestion = components["schemas"]["WorkbenchQuestion"];
 export type ManagementWatchItem = components["schemas"]["ManagementWatchItem"];
 
@@ -286,6 +289,23 @@ export const statementApi = {
   },
   fetchWorkbench(reportId: string, signal?: AbortSignal): Promise<WorkbenchResponse> {
     return request<WorkbenchResponse>(`/api/v1/analysis/workbench/${reportId}`, signal);
+  },
+  fetchOperationsOverview(reportId: string, signal?: AbortSignal): Promise<OperationsOverview> {
+    return request<OperationsOverview>(`/api/v1/operations/overview/${reportId}`, signal);
+  },
+  freezeOperationsOverview(reportId: string): Promise<{
+    snapshot_id: string;
+    version: number;
+    report_type: string;
+    payload_hash: string;
+  }> {
+    return submit(`/api/v1/operations/overview/${reportId}/freeze`, "POST", {});
+  },
+  operationsOverviewHtmlUrl(reportId: string): string {
+    return `/api/v1/operations/overview/${reportId}/html`;
+  },
+  operationsOverviewPdfUrl(reportId: string): string {
+    return `/api/v1/operations/overview/${reportId}/pdf`;
   },
   listCorrections(reportId: string, signal?: AbortSignal): Promise<CorrectionList> {
     return request<CorrectionList>(`/api/v1/statements/${reportId}/corrections`, signal);
