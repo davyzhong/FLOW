@@ -1,0 +1,48 @@
+# 菜鸟网络运营指标序列（招股书申请版本，2023-09-26 递交 / 2024-03 撤回）
+# 来源：Cainiao_application_proof_20230926.pdf（p5_samples/cainiao_private/）
+# 口径声明：
+#   - 全部为招股书管理层披露；Selected Operating Data 与 Non-IFRS 调节为申报口径，
+#     stub 期间（Q1）未经审计（原文标注 Unaudited）；
+#   - 金额单位为人民币百万元（招股书 Summary 口径），与财务轨报表的千元口径不同，不换算混用；
+#   - 单一经营分部（会计师报告注 5）；业务线拆分为管理层口径，非分部报告。
+# 用途：O2 经营轨 L1 指标计算的数据输入（与 cainiao_segment_series.yaml 互补）。
+
+sample: cainiao_operating_metrics
+source_pdf: docs/knowledge-base/02_research/original/p5_samples/cainiao_private/Cainiao_application_proof_20230926.pdf
+source_sha256_prefix: 3e2c367958eacf3b
+
+periods: [FY2021, FY2022, FY2023]   # stub（Q1FY2022/Q1FY2023 三个月）见 stub_periods
+stub_periods:
+  Q1FY2023: {months: "2022-04 ~ 2022-06", unaudited: true}
+  Q1FY2024: {months: "2023-04 ~ 2023-06", unaudited: true}
+
+operating_volume:   # Selected Operating Data（p22，百万件/百万单）
+  unit: 百万件
+  international_parcels:            {FY2021: 1381, FY2022: 1679, FY2023: 1519, Q1FY2023: 347, Q1FY2024: 439}
+  china_orders_fulfilled:           {FY2021: 1116, FY2022: 1462, FY2023: 2311, Q1FY2023: 545, Q1FY2024: 736}
+
+non_ifrs:           # Non-IFRS measures（p18-20，人民币百万元；调节含股份酬金、集团内贷款汇率差异等）
+  adjusted_net_profit:              {FY2021: -829, FY2022: -1030, FY2023: 279, Q1FY2023: 30, Q1FY2024: 1093}
+  adjusted_net_profit_margin:       {FY2021: -0.016, FY2022: -0.015, FY2023: 0.004, Q1FY2023: 0.002, Q1FY2024: 0.047}
+  adjusted_ebitda:                  {FY2021: 1036, FY2022: 1155, FY2023: 2873, Q1FY2023: 634, Q1FY2024: 1807}
+  adjusted_ebitda_margin:           {FY2021: 0.020, FY2022: 0.017, FY2023: 0.037, Q1FY2023: 0.037, Q1FY2024: 0.078}
+
+business_line_revenue_share:   # OUR SERVICE OFFERINGS（p253，管理层口径，FY2023 占收入比）
+  international_logistics: 0.474
+  china_logistics: 0.462
+  technology_and_other_services: 0.064
+
+network_snapshot:   # 截至 2023-06-30（p245/p243/p274；点值非年度序列）
+  as_of: "2023-06-30"
+  countries_and_regions_served: "200+"
+  e_hubs: {count: 2, gfa_sqm: "150,000+"}
+  warehouses: {count: "1,100+", gfa_sqm: "约 1,650 万", cross_border_dedicated: "360+", tmall_supermarket: "90+"}
+  pickup_dropoff_stations_connected: "170,000+"
+  linehaul_trucking_routes_global: "2,700+"
+  chartered_flights: "约 170 架（2023-06 月度）"
+  liege_e_hub: {annual_air_freight_kilotons: "200+", linehaul_routes: "230+", countries_reachable: 38}
+  end_to_end_parcel_visibility_countries: 179
+
+related_party:
+  alibaba_stake_before_ipo: "69.54%（10,690,860,833 股，最新实际可行日期）"
+  note: 与阿里生态框架协议（云服务/供应链/快递/干线等 9 项）为关联交易主线，收入约三成来自阿里（财联社引述口径，未见原文精确表）。
