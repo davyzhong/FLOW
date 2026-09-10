@@ -39,3 +39,7 @@
 {"id": "0ab40bf7-4c4f-4579-b76b-907a92e77900", "action": "import", "actor": "seed", "summary": {"metrics": 55, "mappings": 28, "subjects": 167, "standards": 48, "templates": 32}, "recorded_at": "2026-09-07T22:55:47+08:00"}
 {"id": "48d06abb-d6da-4bc2-88c0-6d8f002f4763", "action": "import", "actor": "seed", "summary": {"metrics": 55, "mappings": 28, "subjects": 167, "standards": 48, "templates": 32}, "recorded_at": "2026-09-07T22:55:48+08:00"}
 {"id": "2d969dfb-a5c7-43f3-bef0-fefd7546f6da", "action": "retire", "actor": "admin", "summary": {"dictionary_id": "flow.metric_dictionary.v1", "retired": 55, "reason": "v2 上线"}, "recorded_at": "2026-09-07T22:55:48+08:00"}
+{"id": "772acd78-22f6-4db2-93dc-04ecde415023", "action": "import", "actor": "seed", "summary": {"metrics": 55, "mappings": 28, "subjects": 167, "standards": 48, "templates": 32}, "recorded_at": "2026-09-09T21:56:02+08:00"}
+{"id": "00bf3955-daa7-49bf-8f73-1d2d12f33596", "action": "import", "actor": "seed", "summary": {"metrics": 55, "mappings": 28, "subjects": 167, "standards": 48, "templates": 32}, "recorded_at": "2026-09-09T21:56:02+08:00"}
+{"id": "cf322ab3-a7d1-40c0-9abf-d1a6c0c8e5c3", "action": "import", "actor": "seed", "summary": {"metrics": 55, "mappings": 28, "subjects": 167, "standards": 48, "templates": 32}, "recorded_at": "2026-09-09T21:56:03+08:00"}
+{"id": "024cf63c-1ee3-4515-b2bf-ee410f64770f", "action": "retire", "actor": "admin", "summary": {"dictionary_id": "flow.metric_dictionary.v1", "retired": 55, "reason": "v2 上线"}, "recorded_at": "2026-09-09T21:56:03+08:00"}
