@@ -8,12 +8,18 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 from flow_api.operations.engine import OperationsOverview
 
 _DIRECTION_LABEL = {"negative": "关注", "warning": "提示复核"}
 
 
-def render_operations_html(overview: OperationsOverview) -> str:
+def render_operations_html(overview: OperationsOverview | dict[str, Any]) -> str:
+    """接受 typed 概览或冻结载荷 dict（schema 同构）。"""
+
+    if not isinstance(overview, OperationsOverview):
+        overview = OperationsOverview.model_validate(overview["overview"])
     blocks: list[str] = []
     for theme in overview.themes:
         if theme.status == "not_applicable":
