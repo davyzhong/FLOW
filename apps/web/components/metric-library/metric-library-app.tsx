@@ -231,7 +231,8 @@ function GovernanceSection({ metrics }: { metrics: MetricLibraryEntry[] }) {
   const [actionError, setActionError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
-  const [metricCode, setMetricCode] = useState(metrics[0]?.metric_code ?? "");
+  // entry_id 是库内唯一键；metric_code 跨域可重复（如 general/logistics 各有一条 gross_margin）
+  const [entryId, setEntryId] = useState(metrics[0]?.entry_id ?? "");
   const [changesText, setChangesText] = useState("{}");
   const [operator, setOperator] = useState("");
   const [reason, setReason] = useState("");
@@ -253,7 +254,7 @@ function GovernanceSection({ metrics }: { metrics: MetricLibraryEntry[] }) {
     return () => controller.abort();
   }, [refreshEvents]);
 
-  const selected = metrics.find((m) => m.metric_code === metricCode);
+  const selected = metrics.find((m) => m.entry_id === entryId);
 
   const runAction = async (kind: "draft" | "activate" | "retire") => {
     setActionError(null);
@@ -310,13 +311,21 @@ function GovernanceSection({ metrics }: { metrics: MetricLibraryEntry[] }) {
         <h3>发起治理操作（无需修改 YAML）</h3>
         <label>
           指标
-          <select value={metricCode} onChange={(e) => setMetricCode(e.target.value)}>
-            {metrics.map((m) => (
-              <option key={m.metric_code} value={m.metric_code}>
-                {m.metric_code}（{m.name}）
-              </option>
-            ))}
+          <select value={entryId} onChange={(e) => setEntryId(e.target.value)}>
+            {metrics
+              .filter((m): m is MetricLibraryEntry & { entry_id: string } => Boolean(m.entry_id))
+              .map((m) => (
+                <option key={m.entry_id} value={m.entry_id}>
+                  {m.metric_code}（{m.name} ·{" "}
+                  {m.collection === "logistics" ? "物流口径" : "通用口径"}）
+                </option>
+              ))}
           </select>
+          {metrics.some((m) => !m.entry_id) ? (
+            <p className="ml-muted">
+              {metrics.filter((m) => !m.entry_id).length} 个指标尚无库内条目，不能发起治理操作。
+            </p>
+          ) : null}
         </label>
         <label>
           变更内容（JSON，仅草稿需要）
