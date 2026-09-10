@@ -3750,6 +3750,175 @@
           }
         }
       }
+    },
+    "/api/v1/operations/overview/{report_id}/freeze": {
+      "post": {
+        "tags": [
+          "operations"
+        ],
+        "summary": "Freeze Operations Snapshot",
+        "description": "六主题概览冻结：过 U5 客观资格合同后幂等落快照（O3 slice-2）。",
+        "operationId": "freeze_operations_snapshot_api_v1_operations_overview__report_id__freeze_post",
+        "parameters": [
+          {
+            "name": "report_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Report Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "integer"
+                      }
+                    ]
+                  },
+                  "title": "Response Freeze Operations Snapshot Api V1 Operations Overview  Report Id  Freeze Post"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {},
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {},
+            "description": "Unprocessable Content"
+          }
+        }
+      }
+    },
+    "/api/v1/operations/overview/{report_id}/html": {
+      "get": {
+        "tags": [
+          "operations"
+        ],
+        "summary": "Get Operations Overview Html",
+        "operationId": "get_operations_overview_html_api_v1_operations_overview__report_id__html_get",
+        "parameters": [
+          {
+            "name": "report_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Report Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {},
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {},
+            "description": "Unprocessable Content"
+          }
+        }
+      }
+    },
+    "/api/v1/operations/overview/{report_id}/pdf": {
+      "get": {
+        "tags": [
+          "operations"
+        ],
+        "summary": "Get Operations Overview Pdf",
+        "operationId": "get_operations_overview_pdf_api_v1_operations_overview__report_id__pdf_get",
+        "parameters": [
+          {
+            "name": "report_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Report Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {},
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {},
+            "description": "Unprocessable Content"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -7368,7 +7537,8 @@
             "type": "string",
             "enum": [
               "d01_entry",
-              "metric_dictionary"
+              "metric_dictionary",
+              "fact_direct"
             ],
             "title": "Source",
             "default": "d01_entry"
