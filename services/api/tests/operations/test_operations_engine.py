@@ -173,3 +173,74 @@ def test_tencent_sample_generalizes(db_session: Session) -> None:
         if m.status == "computed" and m.value is not None
     ]
     assert computed, "腾讯样本至少应有可算条目（如净现比/利润率类）"
+
+
+# ---- O2 slice-2 续：菜鸟（CAINIAO）样本接入——物流企业，经营轨重点样本 ----
+
+
+def test_cainiao_sample_core_calibers_compute(db_session: Session) -> None:
+    """菜鸟 FY2023：核心口径（收入/毛利/净利/现金流）出数；IFRS 明细行如实保留。"""
+    import yaml as yaml_lib
+
+    cainiao_yaml = REPO_ROOT / "docs/implementation/p5/cainiao_2023fy_statements.yaml"
+    payload = yaml_lib.safe_load(cainiao_yaml.read_text())
+    report = import_statement_report(
+        db_session,
+        company_name="菜鸟集团",
+        stock_code="CAINIAO",
+        report_kind="年报",
+        period_label="FY2023",
+        payload=payload,
+        source_ref="p5_samples/cainiao/cainiao_2023fy.pdf",
+        source_sha256="c" * 64,
+    )
+    report.status = "published"
+    db_session.flush()
+    normalize_report(db_session, report)
+
+    overview = build_operations_overview(db_session, report_id=str(report.id))
+    by_id = {t.theme_id: t for t in overview.themes}
+
+    profit = {m.entry_id: m for m in by_id["profit_quality"].metrics}
+    gross = profit["gross_margin"]
+    assert gross.status == "computed" and gross.value is not None, "毛利可算（菜鸟有毛利行）"
+    net = profit["net_margin"]
+    assert net.status == "computed" and net.value is not None
+
+    growth = {m.entry_id: m for m in by_id["growth_quality"].metrics}
+    revenue_yoy = growth["revenue_yoy"]
+    assert revenue_yoy.status == "computed", "本期/上期两列齐备，同比可算"
+
+    efficiency = {m.entry_id: m for m in by_id["operational_efficiency"].metrics}
+    current = efficiency["current_ratio"]
+    assert current.status == "computed", "流动资产/流动负债合计行齐备"
+
+
+def test_cainiao_unresolved_rows_preserved(db_session: Session) -> None:
+    """IFRS 明细行（投融资活动等 80 行）无标准 item_id，如实保留不编造。"""
+    import yaml as yaml_lib
+
+    from flow_api.infrastructure.models.statement import StatementNormalizedItem
+
+    cainiao_yaml = REPO_ROOT / "docs/implementation/p5/cainiao_2023fy_statements.yaml"
+    payload = yaml_lib.safe_load(cainiao_yaml.read_text())
+    report = import_statement_report(
+        db_session,
+        company_name="菜鸟集团",
+        stock_code="CAINIAO",
+        report_kind="年报",
+        period_label="FY2023",
+        payload=payload,
+        source_ref="p5_samples/cainiao/cainiao_2023fy.pdf",
+        source_sha256="c" * 64,
+    )
+    normalize_report(db_session, report)
+    unresolved = (
+        db_session.query(StatementNormalizedItem)
+        .filter(
+            StatementNormalizedItem.report_id == report.id,
+            StatementNormalizedItem.item_id.is_(None),
+        )
+        .count()
+    )
+    assert unresolved > 50, "未解析行必须如实保留（缺失不补造）"

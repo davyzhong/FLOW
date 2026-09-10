@@ -176,3 +176,46 @@ companies:
           經營活動產生的現金流量淨額: cf.ocf
           投資活動所用現金流量淨額: cf.icf
           融資活動所用現金流量淨額: cf.fin_cf
+      合并现金流量表:
+        roles: {本期发生额: cur, 上期发生额: prev_yoy}
+        map:
+          經營活動產生的現金流量淨額: cf.ocf
+          投資活動所用現金流量淨額: cf.icf
+          融資活動所用現金流量淨額: cf.fin_cf
+  cainiao_private:
+    statements:
+      合并利润表:
+        roles: {本期发生额: cur, 上期发生额: prev_yoy}
+        map:
+          收入: is.revenue
+          营业成本: {item: is.cogs, abs: true}
+          毛利: is.gross_profit
+          销售及市场推广开支: {item: is.selling_exp, abs: true}
+          一般及行政开支: {item: is.admin_exp, abs: true}
+          产品开发开支: {item: is.rnd_exp, abs: true, note: IFRS 下产品开发开支即研发投入口径}
+          经营亏损/利润: is.operating_profit
+          除税前亏损/利润: is.total_profit
+          所得税开支: {item: is.income_tax, abs: true}
+          年度亏损/利润: is.net_profit
+          归属公司所有者: is.attr_net_profit
+          财务成本: {item: is.interest_exp, abs: true}
+          应占联营及合营损益: is.share_of_associates
+      合并资产负债表:
+        roles: {本期发生额: end, 上期发生额: begin}
+        map:
+          存货: bs.inventory
+          贸易应收及其他预付款(流动): {item: bs.ar, note: 含其他预付款，混合口径待分拆}
+          现金及现金等价物: bs.cash
+          流动资产合计: bs.current_assets
+          资产总计: bs.total_assets
+          流动负债合计: bs.current_liab
+          非流动负债合计: bs.noncurrent_liab
+          负债合计: bs.total_liab
+          权益总额: bs.equity
+          归属于公司所有者权益: bs.attr_equity
+      合并现金流量表:
+        roles: {本期发生额: cur, 上期发生额: prev_yoy}
+        map:
+          经营活动所得现金净额: cf.ocf
+          投资活动所用现金净额: cf.icf
+          筹资活动所用现金净额: cf.fin_cf

@@ -56,6 +56,17 @@ THEME_UNAVAILABLE_REASON: dict[str, str] = {
     "users_channels": "internal_data_required",
 }
 
+# formula_ref 条目的财报直接执行：标准 item_id 组合（与指标字典 definition
+# 同一口径，仅取数角色为财报归一化事实）。D01 引擎对 formula_ref 有意不算
+# （归 D02 统一快照）；O2 在快照未建时按同一口径直算，避免主题空转。
+FACT_DIRECT_CALCS: dict[str, tuple[str, str, str]] = {
+    # code: (numerator_item, denominator_item, label)
+    "gross_margin": ("is.gross_profit", "is.revenue", "毛利率"),
+    "net_margin": ("is.net_profit", "is.revenue", "净利率"),
+    "current_ratio": ("bs.current_assets", "bs.current_liab", "流动比率"),
+    "debt_asset_ratio": ("bs.total_liab", "bs.total_assets", "资产负债率"),
+}
+
 _THEME_NAMES = {
     "growth_quality": "增长质量",
     "revenue_structure": "收入结构",
@@ -78,7 +89,7 @@ class OperationsMetricItem(BaseModel):
     basis: str = ""
     caliber_note: str = ""
     reason: str | None = None
-    source: Literal["d01_entry", "metric_dictionary"] = "d01_entry"
+    source: Literal["d01_entry", "metric_dictionary", "fact_direct"] = "d01_entry"
 
 
 class OperationsTheme(BaseModel):
@@ -239,6 +250,8 @@ def build_operations_overview(session: Any, *, report_id: str | UUID) -> Operati
         )
     )
 
+    role_facts = _facts_with_roles(rows)
+
     themes: list[OperationsTheme] = []
     for theme_id in (
         "growth_quality",
@@ -276,6 +289,34 @@ def build_operations_overview(session: Any, *, report_id: str | UUID) -> Operati
                     )
                 )
                 continue
+            if (
+                entry.status == ObjectiveStatus.NOT_APPLICABLE
+                and entry.entry_id in FACT_DIRECT_CALCS
+                and role_facts is not None
+            ):
+                numerator_item, denominator_item, label = FACT_DIRECT_CALCS[
+                    entry.entry_id
+                ]
+                numerator = role_facts.get((numerator_item, "cur"))
+                denominator = role_facts.get((denominator_item, "cur"))
+                if (
+                    numerator is not None
+                    and denominator is not None
+                    and denominator != 0
+                ):
+                    value = (numerator / denominator).quantize(Decimal("0.0001"))
+                    metrics.append(
+                        OperationsMetricItem(
+                            entry_id=entry.entry_id,
+                            name=label,
+                            status=ObjectiveStatus.COMPUTED.value,
+                            value=str(value),
+                            basis="本期归一化事实（财报直接口径）",
+                            caliber_note=f"{numerator_item} ÷ {denominator_item}",
+                            source="fact_direct",
+                        )
+                    )
+                    continue
             metrics.append(
                 OperationsMetricItem(
                     entry_id=entry.entry_id,
@@ -289,7 +330,6 @@ def build_operations_overview(session: Any, *, report_id: str | UUID) -> Operati
             )
         dictionary_codes = DICTIONARY_METRICS.get(theme_id, ())
         if dictionary_codes:
-            role_facts = _facts_with_roles(rows)
             formulas = _load_metric_formulas()
             for code in dictionary_codes:
                 if code in {m.entry_id for m in metrics}:
@@ -307,17 +347,23 @@ def build_operations_overview(session: Any, *, report_id: str | UUID) -> Operati
                     )
                     continue
                 formula_dict, name = formula
-                value = _eval_formula(formula_dict, role_facts)
+                dictionary_value: Decimal | None = _eval_formula(
+                    formula_dict, role_facts
+                )
                 metrics.append(
                     OperationsMetricItem(
                         entry_id=code,
                         name=name,
                         status=ObjectiveStatus.COMPUTED.value
-                        if value is not None
+                        if dictionary_value is not None
                         else ObjectiveStatus.NOT_COMPUTABLE.value,
-                        value=str(value) if value is not None else None,
+                        value=str(dictionary_value)
+                        if dictionary_value is not None
+                        else None,
                         basis="指标字典公式（财报归一化事实）",
-                        reason=None if value is not None else "fact_missing",
+                        reason=None
+                        if dictionary_value is not None
+                        else "fact_missing",
                         source="metric_dictionary",
                     )
                 )
