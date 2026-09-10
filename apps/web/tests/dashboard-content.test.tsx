@@ -2,6 +2,7 @@ import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import oracle from "../../../fixtures/expected/dashboard_overview_v1.json";
+import { AppShell } from "../components/shell/app-shell";
 import { DashboardLoaded } from "../components/dashboard/dashboard-state";
 import type { DashboardResponse } from "../lib/api/client";
 
@@ -9,7 +10,11 @@ const dashboard = oracle as DashboardResponse;
 
 describe("Finance BP dashboard content", () => {
   it("renders the approved dense information architecture", () => {
-    render(<DashboardLoaded dashboard={dashboard} />);
+    render(
+      <AppShell>
+        <DashboardLoaded dashboard={dashboard} />
+      </AppShell>,
+    );
 
     expect(screen.getByRole("navigation", { name: "FLOW 工作流" })).toBeVisible();
     expect(screen.getByText("数据接入")).toBeVisible();
@@ -25,7 +30,11 @@ describe("Finance BP dashboard content", () => {
   });
 
   it("preserves filters, chart alternatives, and table anatomy", () => {
-    render(<DashboardLoaded dashboard={dashboard} />);
+    render(
+      <AppShell>
+        <DashboardLoaded dashboard={dashboard} />
+      </AppShell>,
+    );
 
     for (const label of ["期间", "组织", "客户群", "物流产品", "区域"]) {
       expect(screen.getByLabelText(label)).toBeVisible();

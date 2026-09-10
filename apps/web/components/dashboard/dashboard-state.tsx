@@ -1,5 +1,4 @@
 import type { DashboardFilters, DashboardResponse } from "../../lib/api/client";
-import { AppShell } from "../shell/app-shell";
 import { dashboardStateMessage } from "./dashboard-format";
 import { DashboardHeader } from "./dashboard-header";
 import { DataStatusBar } from "./data-status-bar";
@@ -9,7 +8,6 @@ import { MetricGrid } from "./metric-grid";
 import { ProductPerformanceTable } from "./product-performance-table";
 import { ProfitBridgePanel } from "./profit-bridge-panel";
 import { TrendPanel } from "./trend-panel";
-import { WorkflowNav } from "./workflow-nav";
 
 export function DashboardLoading() {
   return (
@@ -22,14 +20,12 @@ export function DashboardLoading() {
 
 export function DashboardError({ retry }: { retry: () => void }) {
   return (
-    <AppShell>
-      <div className="dashboard-state dashboard-state--error" role="alert">
-        <p>经营驾驶舱暂时无法加载</p>
-        <button type="button" onClick={retry}>
-          重试
-        </button>
-      </div>
-    </AppShell>
+    <div className="dashboard-state dashboard-state--error" role="alert">
+      <p>经营驾驶舱暂时无法加载</p>
+      <button type="button" onClick={retry}>
+        重试
+      </button>
+    </div>
   );
 }
 
@@ -42,15 +38,10 @@ export function DashboardLoaded({
 }) {
   const message = dashboardStateMessage(dashboard.state);
   if (dashboard.state === "empty") {
-    return (
-      <AppShell>
-        <div className="dashboard-state dashboard-state--empty">{message}</div>
-      </AppShell>
-    );
+    return <div className="dashboard-state dashboard-state--empty">{message}</div>;
   }
   return (
     <section className="dashboard-loaded" aria-label="经营驾驶舱内容">
-      <WorkflowNav />
       <div className="dashboard-workspace">
         <DashboardHeader dashboard={dashboard} onFiltersChange={onFiltersChange} />
         <div className={`dashboard-state-banner dashboard-state-banner--${dashboard.state}`}>

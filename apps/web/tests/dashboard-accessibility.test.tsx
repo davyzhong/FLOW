@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import oracle from "../../../fixtures/expected/dashboard_overview_v1.json";
+import { AppShell } from "../components/shell/app-shell";
 import { DashboardApp } from "../components/dashboard/dashboard-app";
 import type { DashboardResponse } from "../lib/api/client";
 
@@ -9,7 +10,11 @@ const dashboard = oracle as DashboardResponse;
 
 describe("Dashboard accessibility structure", () => {
   it("has one page heading and named landmark/content regions", async () => {
-    render(<DashboardApp loadDashboard={async () => dashboard} />);
+    render(
+      <AppShell>
+        <DashboardApp loadDashboard={async () => dashboard} />
+      </AppShell>,
+    );
 
     expect(await screen.findByRole("navigation", { name: "FLOW 工作流" })).toBeVisible();
     expect(

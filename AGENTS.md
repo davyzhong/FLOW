@@ -16,6 +16,16 @@
 - 不移动、删除或提交范围外的用户文件；
 - 知识库内容发生变化时，更新相关索引，并重新生成 `99_manifest/inventory.tsv` 与 `sha256sums.txt`。
 
+## 前端页面规范（2026-09-10 起）
+
+- `apps/web` 新增任何交互页面必须包裹 `<AppShell>`（左侧工作流导航），并在
+  `apps/web/components/dashboard/workflow-nav.tsx` 的分组里登记入口链接；
+- 登录页 `/login` 是唯一例外；
+- 组件（components/）只渲染内容，不自带 shell/导航——shell 职责统一在
+  page.tsx 层；
+- 守护测试：`apps/web/e2e/navigation.spec.ts` 遍历全部交互路由断言导航可见
+  且链接齐备；新增页面必须同步把路由加入该清单。
+
 ## 每个完整任务的收尾协议
 
 用户已明确要求：每一次完整任务完成后，都把该任务产生的内容提交并推送到 GitHub。

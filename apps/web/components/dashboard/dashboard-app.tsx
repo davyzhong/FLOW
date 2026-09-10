@@ -61,7 +61,7 @@ export function DashboardApp({
   }, []);
 
   return (
-    <main className="dashboard-app">
+    <div className="dashboard-app">
       {request.kind !== "loaded" || request.dashboard.state === "empty" ? (
         <header className="dashboard-app__header">
           <div className="dashboard-app__mark" aria-hidden="true">F</div>
@@ -76,6 +76,6 @@ export function DashboardApp({
       {request.kind === "loaded" ? (
         <DashboardLoaded dashboard={request.dashboard} onFiltersChange={setFilters} />
       ) : null}
-    </main>
+    </div>
   );
 }
