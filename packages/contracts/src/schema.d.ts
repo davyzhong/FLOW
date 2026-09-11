@@ -948,6 +948,57 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/operations/snapshots": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Operations Snapshots */
+        get: operations["list_operations_snapshots_api_v1_operations_snapshots_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/overview/{report_id}/publish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Publish Operations Overview */
+        post: operations["publish_operations_overview_api_v1_operations_overview__report_id__publish_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/snapshots/{snapshot_id}/attempts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Operations Publication Attempts */
+        get: operations["operations_publication_attempts_api_v1_operations_snapshots__snapshot_id__attempts_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/operations/overview/{report_id}/freeze": {
         parameters: {
             query?: never;
@@ -977,6 +1028,40 @@ export interface paths {
         };
         /** Get Operations Overview Html */
         get: operations["get_operations_overview_html_api_v1_operations_overview__report_id__html_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/overview/{report_id}/xlsx": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Operations Overview Xlsx */
+        get: operations["get_operations_overview_xlsx_api_v1_operations_overview__report_id__xlsx_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/overview/{report_id}/pptx": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Operations Overview Pptx */
+        get: operations["get_operations_overview_pptx_api_v1_operations_overview__report_id__pptx_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2318,6 +2403,30 @@ export interface components {
             management_watch: {
                 [key: string]: string;
             }[];
+        };
+        /** OperationsSnapshotLine */
+        OperationsSnapshotLine: {
+            /** Id */
+            id: string;
+            /** Statement Report Id */
+            statement_report_id: string;
+            /** Version */
+            version: number;
+            /** Company Name */
+            company_name: string;
+            /** Stock Code */
+            stock_code: string;
+            /** Period Label */
+            period_label: string;
+            /** Payload Hash */
+            payload_hash: string;
+            /** Created At */
+            created_at?: string | null;
+        };
+        /** OperationsSnapshotList */
+        OperationsSnapshotList: {
+            /** Snapshots */
+            snapshots: components["schemas"]["OperationsSnapshotLine"][];
         };
         /** OperationsTheme */
         OperationsTheme: {
@@ -5411,6 +5520,107 @@ export interface operations {
             };
         };
     };
+    list_operations_snapshots_api_v1_operations_snapshots_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsSnapshotList"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    publish_operations_overview_api_v1_operations_overview__report_id__publish_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                report_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PublishRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublishResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    operations_publication_attempts_api_v1_operations_snapshots__snapshot_id__attempts_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                snapshot_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublicationAttemptsResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     freeze_operations_snapshot_api_v1_operations_overview__report_id__freeze_post: {
         parameters: {
             query?: never;
@@ -5452,6 +5662,78 @@ export interface operations {
         };
     };
     get_operations_overview_html_api_v1_operations_overview__report_id__html_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                report_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    get_operations_overview_xlsx_api_v1_operations_overview__report_id__xlsx_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                report_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    get_operations_overview_pptx_api_v1_operations_overview__report_id__pptx_get: {
         parameters: {
             query?: never;
             header?: {

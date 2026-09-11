@@ -3871,6 +3871,183 @@
         }
       }
     },
+    "/api/v1/operations/snapshots": {
+      "get": {
+        "tags": [
+          "operations"
+        ],
+        "summary": "List Operations Snapshots",
+        "operationId": "list_operations_snapshots_api_v1_operations_snapshots_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationsSnapshotList"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/operations/overview/{report_id}/publish": {
+      "post": {
+        "tags": [
+          "operations"
+        ],
+        "summary": "Publish Operations Overview",
+        "operationId": "publish_operations_overview_api_v1_operations_overview__report_id__publish_post",
+        "parameters": [
+          {
+            "name": "report_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Report Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PublishRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublishResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/operations/snapshots/{snapshot_id}/attempts": {
+      "get": {
+        "tags": [
+          "operations"
+        ],
+        "summary": "Operations Publication Attempts",
+        "operationId": "operations_publication_attempts_api_v1_operations_snapshots__snapshot_id__attempts_get",
+        "parameters": [
+          {
+            "name": "snapshot_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Snapshot Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicationAttemptsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/operations/overview/{report_id}/freeze": {
       "post": {
         "tags": [
@@ -3947,6 +4124,106 @@
         ],
         "summary": "Get Operations Overview Html",
         "operationId": "get_operations_overview_html_api_v1_operations_overview__report_id__html_get",
+        "parameters": [
+          {
+            "name": "report_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Report Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {},
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {},
+            "description": "Unprocessable Content"
+          }
+        }
+      }
+    },
+    "/api/v1/operations/overview/{report_id}/xlsx": {
+      "get": {
+        "tags": [
+          "operations"
+        ],
+        "summary": "Get Operations Overview Xlsx",
+        "operationId": "get_operations_overview_xlsx_api_v1_operations_overview__report_id__xlsx_get",
+        "parameters": [
+          {
+            "name": "report_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Report Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {},
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {},
+            "description": "Unprocessable Content"
+          }
+        }
+      }
+    },
+    "/api/v1/operations/overview/{report_id}/pptx": {
+      "get": {
+        "tags": [
+          "operations"
+        ],
+        "summary": "Get Operations Overview Pptx",
+        "operationId": "get_operations_overview_pptx_api_v1_operations_overview__report_id__pptx_get",
         "parameters": [
           {
             "name": "report_id",
@@ -7742,6 +8019,78 @@
           "management_watch"
         ],
         "title": "OperationsOverview"
+      },
+      "OperationsSnapshotLine": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "statement_report_id": {
+            "type": "string",
+            "title": "Statement Report Id"
+          },
+          "version": {
+            "type": "integer",
+            "title": "Version"
+          },
+          "company_name": {
+            "type": "string",
+            "title": "Company Name"
+          },
+          "stock_code": {
+            "type": "string",
+            "title": "Stock Code"
+          },
+          "period_label": {
+            "type": "string",
+            "title": "Period Label"
+          },
+          "payload_hash": {
+            "type": "string",
+            "title": "Payload Hash"
+          },
+          "created_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "statement_report_id",
+          "version",
+          "company_name",
+          "stock_code",
+          "period_label",
+          "payload_hash"
+        ],
+        "title": "OperationsSnapshotLine"
+      },
+      "OperationsSnapshotList": {
+        "properties": {
+          "snapshots": {
+            "items": {
+              "$ref": "#/components/schemas/OperationsSnapshotLine"
+            },
+            "type": "array",
+            "title": "Snapshots"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "snapshots"
+        ],
+        "title": "OperationsSnapshotList"
       },
       "OperationsTheme": {
         "properties": {

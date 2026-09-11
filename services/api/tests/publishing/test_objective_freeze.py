@@ -174,10 +174,9 @@ def test_concurrent_freeze_same_report_single_snapshot(db_session: Session) -> N
     for thread in threads:
         thread.join()
 
-    unique_conflicts = sum(
-        1 for e in errors if "uq_objective_report_snapshot_version" in str(e)
-    )
-    other_errors = [e for e in errors if "uq_objective_report_snapshot_version" not in str(e)]
+    constraint = "uq_objective_report_snapshot_type_version"
+    unique_conflicts = sum(1 for error in errors if constraint in str(error))
+    other_errors = [error for error in errors if constraint not in str(error)]
     assert not other_errors, f"并发冻结出现非预期错误: {other_errors}"
     # 约束兜底：成功者 + 撞约束者 → 库中恰一个快照
     assert len(created) + unique_conflicts == 4

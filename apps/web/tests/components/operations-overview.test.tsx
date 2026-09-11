@@ -144,6 +144,8 @@ describe("OperationsOverviewApp", () => {
     expect(screen.getByText(/净利润现金含量 0.6000/)).toBeTruthy();
     // 范围说明（#9 客观部分）
     expect(screen.getByText(/不在客观报告范围/)).toBeTruthy();
+    expect(screen.getByRole("link", { name: "下载 Excel" })).toBeTruthy();
+    expect(screen.getByRole("link", { name: "下载 PPT" })).toBeTruthy();
 
     // 冻结按钮 → 显示快照信息
     fireEvent.click(screen.getByRole("button", { name: "冻结概览" }));

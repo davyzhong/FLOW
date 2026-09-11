@@ -8,7 +8,16 @@ from datetime import datetime
 from typing import Any
 from uuid import UUID
 
-from sqlalchemy import DateTime, ForeignKey, Integer, String, func, select
+from sqlalchemy import (
+    CheckConstraint,
+    DateTime,
+    ForeignKey,
+    Integer,
+    String,
+    UniqueConstraint,
+    func,
+    select,
+)
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy.orm import Mapped, Session, mapped_column
@@ -29,6 +38,20 @@ class ObjectiveReportSnapshot(CanonicalIdentityMixin, Base):
     """客观财报冻结快照：typed payload + 不可变（CHECK 阻止 UPDATE）。"""
 
     __tablename__ = "objective_report_snapshot"
+    __table_args__ = (
+        UniqueConstraint(
+            "statement_report_id",
+            "report_type",
+            "version",
+            name="uq_objective_report_snapshot_type_version",
+        ),
+        CheckConstraint("version > 0", name="ck_objective_report_version_positive"),
+        CheckConstraint("length(payload_hash) = 64", name="ck_objective_payload_hash"),
+        CheckConstraint(
+            "report_type in ('objective_statement', 'operations_overview')",
+            name="ck_objective_report_type",
+        ),
+    )
 
     statement_report_id: Mapped[UUID] = mapped_column(
         PG_UUID(as_uuid=True),

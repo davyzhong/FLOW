@@ -35,6 +35,17 @@ type FreezeCandidate = {
   created_at: string | null;
 };
 
+type OperationsSnapshot = {
+  id: string;
+  statement_report_id: string;
+  version: number;
+  company_name: string;
+  stock_code: string;
+  period_label: string;
+  payload_hash: string;
+  created_at: string | null;
+};
+
 const FORMATS = ["pptx", "xlsx", "html", "pdf"] as const;
 
 async function fetchSnapshots(): Promise<SnapshotLine[]> {
@@ -60,6 +71,26 @@ async function fetchAttempts(snapshotId: string): Promise<AttemptLine[]> {
   return ((await response.json()) as { attempts: AttemptLine[] }).attempts;
 }
 
+async function fetchOperationsSnapshots(): Promise<OperationsSnapshot[]> {
+  const response = await fetch("/api/v1/operations/snapshots", {
+    headers: { Accept: "application/json" },
+  });
+  if (!response.ok) return [];
+  const rows = ((await response.json()) as { snapshots?: OperationsSnapshot[] }).snapshots ?? [];
+  return rows.filter(
+    (row) =>
+      typeof row.statement_report_id === "string" &&
+      typeof row.company_name === "string" &&
+      typeof row.payload_hash === "string",
+  );
+}
+
+async function fetchOperationsAttempts(snapshotId: string): Promise<AttemptLine[]> {
+  const response = await fetch(`/api/v1/operations/snapshots/${snapshotId}/attempts`);
+  if (!response.ok) return [];
+  return ((await response.json()) as { attempts?: AttemptLine[] }).attempts ?? [];
+}
+
 export function ReportsCenter() {
   const [snapshots, setSnapshots] = useState<SnapshotLine[]>([]);
   const [objectiveReports, setObjectiveReports] = useState<StatementReportList["reports"]>([]);
@@ -68,6 +99,10 @@ export function ReportsCenter() {
   const [candidates, setCandidates] = useState<FreezeCandidate[]>([]);
   const [formats, setFormats] = useState<string[]>(["html"]);
   const [attempts, setAttempts] = useState<AttemptLine[]>([]);
+  const [operationsSnapshots, setOperationsSnapshots] = useState<OperationsSnapshot[]>([]);
+  const [selectedOperations, setSelectedOperations] = useState<string | null>(null);
+  const [operationsFormats, setOperationsFormats] = useState<string[]>(["pptx", "xlsx"]);
+  const [operationsAttempts, setOperationsAttempts] = useState<AttemptLine[]>([]);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -99,6 +134,15 @@ export function ReportsCenter() {
       .catch(() => {
         if (!cancelled) setCandidates([]);
       });
+    fetchOperationsSnapshots()
+      .then((rows) => {
+        if (cancelled) return;
+        setOperationsSnapshots(rows);
+        if (rows[0]) setSelectedOperations(rows[0].id);
+      })
+      .catch(() => {
+        if (!cancelled) setOperationsSnapshots([]);
+      });
     return () => {
       cancelled = true;
     };
@@ -120,6 +164,21 @@ export function ReportsCenter() {
       cancelled = true;
     };
   }, [selected]);
+
+  useEffect(() => {
+    if (!selectedOperations) return;
+    let cancelled = false;
+    fetchOperationsAttempts(selectedOperations)
+      .then((rows) => {
+        if (!cancelled) setOperationsAttempts(rows);
+      })
+      .catch(() => {
+        if (!cancelled) setOperationsAttempts([]);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedOperations]);
 
   const refreshAttempts = useCallback(async () => {
     if (!selected) return;
@@ -168,6 +227,36 @@ export function ReportsCenter() {
       setBusy(false);
     }
   }, [selected, formats, refreshAttempts]);
+
+  const publishOperations = useCallback(async () => {
+    const snapshot = operationsSnapshots.find((row) => row.id === selectedOperations);
+    if (!snapshot) return;
+    setError(null);
+    setBusy(true);
+    try {
+      const response = await fetch(
+        `/api/v1/operations/overview/${snapshot.statement_report_id}/publish`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            formats: operationsFormats,
+            actor: "finance.bp@example.com",
+          }),
+        },
+      );
+      if (!response.ok) throw new Error("经营报告产物生成失败");
+      const body = (await response.json()) as { report_snapshot_id: string };
+      const refreshed = await fetchOperationsSnapshots();
+      setOperationsSnapshots(refreshed);
+      setSelectedOperations(body.report_snapshot_id);
+      setOperationsAttempts(await fetchOperationsAttempts(body.report_snapshot_id));
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "经营报告产物生成失败");
+    } finally {
+      setBusy(false);
+    }
+  }, [operationsSnapshots, selectedOperations, operationsFormats]);
 
   const download = useCallback(async (attemptId: string, format: string) => {
     const response = await fetch(`/api/v1/publishing/attempts/${attemptId}/download`);
@@ -222,6 +311,102 @@ export function ReportsCenter() {
               </li>
             ))}
           </ul>
+        )}
+      </div>
+
+      <div className="reports-center__objective">
+        <h2>经营分析报告（六主题）</h2>
+        <p className="reports-center__objective-note">
+          每项事实保留值、比较基准、口径与来源；PPTX、Excel、HTML 与 PDF
+          均由同一不可变快照生成，发布历史只追加不覆盖。
+        </p>
+        {operationsSnapshots.length === 0 ? (
+          <p className="ml-muted">
+            尚无经营报告快照。请先在“经营分析”选择完整财报并冻结概览。
+          </p>
+        ) : (
+          <>
+            <ul aria-label="经营报告快照列表" className="reports-center__objective-list">
+              {operationsSnapshots.map((row) => (
+                <li key={row.id}>
+                  <label>
+                    <input
+                      type="radio"
+                      name="operations-snapshot"
+                      checked={selectedOperations === row.id}
+                      onChange={() => setSelectedOperations(row.id)}
+                    />
+                    {row.company_name} · {row.period_label} · v{row.version} · 指纹 {row.payload_hash.slice(0, 12)}…
+                  </label>
+                </li>
+              ))}
+            </ul>
+            <div className="reports-center__publish">
+              {FORMATS.map((format) => (
+                <label key={`operations-${format}`}>
+                  <input
+                    type="checkbox"
+                    checked={operationsFormats.includes(format)}
+                    onChange={(event) =>
+                      setOperationsFormats((previous) =>
+                        event.target.checked
+                          ? [...previous, format]
+                          : previous.filter((item) => item !== format),
+                      )
+                    }
+                  />
+                  {format.toUpperCase()}
+                </label>
+              ))}
+              <button
+                type="button"
+                disabled={busy || operationsFormats.length === 0}
+                onClick={() => void publishOperations()}
+              >
+                生成经营报告产物
+              </button>
+              <h3>经营报告产物历史（append-only）</h3>
+              {operationsAttempts.length === 0 ? (
+                <p className="ml-muted">尚未生成正式产物。</p>
+              ) : (
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">格式</th>
+                      <th scope="col">状态</th>
+                      <th scope="col">大小</th>
+                      <th scope="col">操作</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {operationsAttempts.map((attempt) => (
+                      <tr key={attempt.attempt_id}>
+                        <td>{attempt.sequence}</td>
+                        <td>{attempt.format.toUpperCase()}</td>
+                        <td>{attempt.status}</td>
+                        <td>{attempt.size_bytes ?? "-"}</td>
+                        <td>
+                          {attempt.download_available ? (
+                            <button
+                              type="button"
+                              onClick={() => void download(attempt.attempt_id, attempt.format)}
+                            >
+                              下载
+                            </button>
+                          ) : attempt.status === "failed" ? (
+                            <span>失败：{attempt.error_message?.slice(0, 60)}</span>
+                          ) : (
+                            <span>-</span>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+          </>
         )}
       </div>
 

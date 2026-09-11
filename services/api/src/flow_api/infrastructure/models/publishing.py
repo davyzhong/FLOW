@@ -75,6 +75,11 @@ class PublicationAttempt(IdentityTimestampMixin, Base):
         UniqueConstraint(
             "report_snapshot_id", "sequence", name="uq_publication_attempt_report_sequence"
         ),
+        UniqueConstraint(
+            "objective_report_snapshot_id",
+            "sequence",
+            name="uq_publication_attempt_objective_sequence",
+        ),
         CheckConstraint("sequence > 0", name="ck_publication_attempt_sequence_positive"),
         CheckConstraint(
             "format in ('pptx', 'xlsx', 'html', 'pdf')", name="ck_publication_attempt_format"
@@ -83,10 +88,19 @@ class PublicationAttempt(IdentityTimestampMixin, Base):
             "status in ('queued', 'running', 'succeeded', 'failed')",
             name="ck_publication_attempt_status",
         ),
+        CheckConstraint(
+            "num_nonnulls(report_snapshot_id, objective_report_snapshot_id) = 1",
+            name="ck_publication_attempt_single_parent",
+        ),
     )
 
-    report_snapshot_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("report_snapshot.id", ondelete="CASCADE"), nullable=False
+    report_snapshot_id: Mapped[UUID | None] = mapped_column(
+        PG_UUID(as_uuid=True), ForeignKey("report_snapshot.id", ondelete="CASCADE"), nullable=True
+    )
+    objective_report_snapshot_id: Mapped[UUID | None] = mapped_column(
+        PG_UUID(as_uuid=True),
+        ForeignKey("objective_report_snapshot.id", ondelete="CASCADE"),
+        nullable=True,
     )
     sequence: Mapped[int] = mapped_column(Integer, nullable=False)
     format: Mapped[str] = mapped_column(String(16), nullable=False)
@@ -96,5 +110,7 @@ class PublicationAttempt(IdentityTimestampMixin, Base):
     )
     error_message: Mapped[str | None] = mapped_column(Text)
 
-    report_snapshot: Mapped[ReportSnapshot] = relationship(back_populates="publication_attempts")
+    report_snapshot: Mapped[ReportSnapshot | None] = relationship(
+        back_populates="publication_attempts"
+    )
     stored_object: Mapped[StoredObject | None] = relationship()

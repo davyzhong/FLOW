@@ -225,6 +225,12 @@ export function OperationsOverviewApp() {
                 >
                   下载 PDF
                 </a>
+                <a href={statementApi.operationsOverviewXlsxUrl(selectedReportId)}>
+                  下载 Excel
+                </a>
+                <a href={statementApi.operationsOverviewPptxUrl(selectedReportId)}>
+                  下载 PPT
+                </a>
               </>
             ) : null}
           </>

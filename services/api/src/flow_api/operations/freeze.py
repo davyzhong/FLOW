@@ -57,17 +57,25 @@ def freeze_operations_overview(
     overview: OperationsOverview = build_operations_overview(
         session, report_id=report_id
     )
-    payload: dict[str, Any] = {
+    content: dict[str, Any] = {
         "schema_version": SCHEMA_VERSION,
         "report_type": REPORT_TYPE,
         "overview": overview.model_dump(),
-        "frozen_at": datetime.now().astimezone().isoformat(timespec="seconds"),
     }
 
-    digest = payload_hash(payload)
     latest = _latest_overview_snapshot(session, report_id)
-    if latest is not None and latest.payload_hash == digest:
-        return latest  # 内容相同：幂等复用，不新建版本
+    if latest is not None:
+        latest_content = {
+            key: value for key, value in latest.payload.items() if key != "frozen_at"
+        }
+        if latest_content == content:
+            return latest  # 冻结时间不是业务内容；内容相同即幂等复用
+
+    payload = {
+        **content,
+        "frozen_at": datetime.now().astimezone().isoformat(timespec="seconds"),
+    }
+    digest = payload_hash(payload)
 
     snapshot = ObjectiveReportSnapshot(
         statement_report_id=report.id,

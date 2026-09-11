@@ -321,6 +321,12 @@ export const statementApi = {
   operationsOverviewPdfUrl(reportId: string): string {
     return `/api/v1/operations/overview/${reportId}/pdf`;
   },
+  operationsOverviewXlsxUrl(reportId: string): string {
+    return `/api/v1/operations/overview/${reportId}/xlsx`;
+  },
+  operationsOverviewPptxUrl(reportId: string): string {
+    return `/api/v1/operations/overview/${reportId}/pptx`;
+  },
   listCorrections(reportId: string, signal?: AbortSignal): Promise<CorrectionList> {
     return request<CorrectionList>(`/api/v1/statements/${reportId}/corrections`, signal);
   },

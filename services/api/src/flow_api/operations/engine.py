@@ -152,6 +152,25 @@ class PublicOperatingPeriodList(BaseModel):
     periods: list[PublicOperatingPeriod]
 
 
+class OperationsSnapshotLine(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    id: str
+    statement_report_id: str
+    version: int
+    company_name: str
+    stock_code: str
+    period_label: str
+    payload_hash: str
+    created_at: str | None = None
+
+
+class OperationsSnapshotList(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    snapshots: list[OperationsSnapshotLine]
+
+
 _OPERATING_FACT_THEME = {
     "international_parcels": "growth_quality",
     "china_orders_fulfilled": "growth_quality",
@@ -733,6 +752,8 @@ def build_operations_overview(session: Any, *, report_id: str | UUID) -> Operati
 
 __all__ = [
     "OperationsOverview",
+    "OperationsSnapshotLine",
+    "OperationsSnapshotList",
     "OperationsTheme",
     "PublicOperatingPeriod",
     "PublicOperatingPeriodList",

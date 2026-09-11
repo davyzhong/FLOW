@@ -31,7 +31,11 @@ from flow_api.infrastructure.models.publishing import (
     PublicationAttempt,
     ReportSnapshot,
 )
-from flow_api.infrastructure.object_store import ObjectStore
+from flow_api.infrastructure.object_store import (
+    ImmutableObjectConflictError,
+    ImmutableObjectNotFoundError,
+    ObjectStore,
+)
 from flow_api.infrastructure.s3_client import build_s3_client
 from flow_api.publishing.publication import PublicationService
 from flow_api.publishing.service import PublishingFreezeError
@@ -133,9 +137,7 @@ def _attempt_line(session: Session, attempt: PublicationAttempt) -> PublicationA
         session.get(StoredObject, attempt.stored_object_id) if attempt.stored_object_id else None
     )
     download_available = (
-        attempt.status == "succeeded"
-        and stored is not None
-        and attempt.format in FORMAT_EXTENSIONS
+        attempt.status == "succeeded" and stored is not None and attempt.format in FORMAT_EXTENSIONS
     )
     return PublicationAttemptLine(
         attempt_id=str(attempt.id),
@@ -168,9 +170,7 @@ def freeze_report_snapshot_route(
     from flow_api.publishing.service import freeze_report_snapshot as _freeze
 
     try:
-        report, _view = _freeze(
-            session, metric_snapshot_id=UUID(request.metric_snapshot_id)
-        )
+        report, _view = _freeze(session, metric_snapshot_id=UUID(request.metric_snapshot_id))
     except PublishingFreezeError as error:
         raise _error(status.HTTP_409_CONFLICT, "freeze_blocked", str(error)) from error
     session.commit()
@@ -272,7 +272,20 @@ def download_publication_attempt(attempt_id: UUID, session: SessionDependency) -
             f"attempt {attempt_id} references a missing stored object",
         )
     store = get_publication_object_store()
-    payload = store.read_by_sha(stored.sha256)
+    try:
+        payload = store.read_by_sha(stored.sha256)
+    except ImmutableObjectNotFoundError as error:
+        raise _error(
+            status.HTTP_409_CONFLICT,
+            "download_not_available",
+            "登记的发布产物已不在对象存储中，请重新发布",
+        ) from error
+    except ImmutableObjectConflictError as error:
+        raise _error(
+            status.HTTP_409_CONFLICT,
+            "integrity_check_failed",
+            "对象存储内容与登记的 sha256 不一致，已拒绝提供",
+        ) from error
     if hashlib.sha256(payload).hexdigest() != stored.sha256:
         raise _error(
             status.HTTP_409_CONFLICT,
@@ -280,7 +293,9 @@ def download_publication_attempt(attempt_id: UUID, session: SessionDependency) -
             "下载内容与登记的 sha256 不一致，已拒绝提供",
         )
     extension = FORMAT_EXTENSIONS[attempt.format]
-    filename = f"flow-report-{attempt.report_snapshot_id}-{attempt.sequence}.{extension}"
+    parent_id = attempt.report_snapshot_id or attempt.objective_report_snapshot_id
+    report_family = "flow-operations" if attempt.objective_report_snapshot_id else "flow-report"
+    filename = f"{report_family}-{parent_id}-{attempt.sequence}.{extension}"
     return Response(
         content=payload,
         media_type=stored.content_type

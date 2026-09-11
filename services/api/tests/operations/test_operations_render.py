@@ -13,7 +13,11 @@ from flow_api.operations.engine import (
     OperationsOverview,
     OperationsTheme,
 )
-from flow_api.operations.renderers import render_operations_html
+from flow_api.operations.renderers import (
+    render_operations_html,
+    render_operations_pptx,
+    render_operations_xlsx,
+)
 
 
 def _overview() -> OperationsOverview:
@@ -103,3 +107,38 @@ def test_narrative_marks_action_layer_out_of_scope() -> None:
     assert "行动" in html and "不在客观报告范围" in html, (
         "#9：行动章必须显式标注不在客观报告范围（U5 门禁）"
     )
+
+
+def test_xlsx_carries_golden_value_caliber_and_source() -> None:
+    import io
+
+    from openpyxl import load_workbook
+
+    workbook = load_workbook(io.BytesIO(render_operations_xlsx(_overview())))
+    assert workbook.sheetnames == ["六主题概览", "管理关注", "版本与溯源"]
+    cells = {
+        str(cell.value)
+        for sheet in workbook.worksheets
+        for row in sheet.iter_rows()
+        for cell in row
+        if cell.value is not None
+    }
+    assert {"0.1260", "本期/上年同期−1", "Q1FY2024", "docs/source.pdf"} <= cells
+    assert "a" * 64 in cells
+
+
+def test_pptx_carries_same_golden_value_and_scope_boundary() -> None:
+    import io
+
+    from pptx import Presentation
+
+    presentation = Presentation(io.BytesIO(render_operations_pptx(_overview())))
+    text = "\n".join(
+        shape.text
+        for slide in presentation.slides
+        for shape in slide.shapes
+        if hasattr(shape, "text")
+    )
+    assert "营业收入同比" in text and "0.1260" in text
+    assert "本期/上年同期−1" in text and "docs/source.pdf" in text
+    assert "行动建议不在客观报告范围" in text
