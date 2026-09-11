@@ -244,3 +244,57 @@ def test_cainiao_unresolved_rows_preserved(db_session: Session) -> None:
         .count()
     )
     assert unresolved > 50, "未解析行必须如实保留（缺失不补造）"
+
+
+# ---- 阿里巴巴（9988.HK，US GAAP）样本接入——8 份年报抽取（4f4dbfb 脚本） ----
+
+
+def _import_alibaba(session: Session, fy: int = 2026) -> Any:
+    import yaml as yaml_lib
+
+    alibaba_yaml = REPO_ROOT / f"docs/implementation/p5/alibaba_{fy}fy_statements.yaml"
+    payload = yaml_lib.safe_load(alibaba_yaml.read_text())
+    report = import_statement_report(
+        session,
+        company_name="阿里巴巴集团",
+        stock_code="9988.HK",
+        report_kind="年报",
+        period_label=f"FY{fy}",
+        payload=payload,
+        source_ref=f"p5_samples/alibaba_9988/BABA_FY{fy}_annual_results.pdf",
+        source_sha256="b" * 64,
+    )
+    report.status = "published"
+    session.flush()
+    normalize_report(session, report)
+    return report
+
+
+def test_alibaba_sample_core_calibers_compute(db_session: Session) -> None:
+    """阿里（US GAAP）核心口径出数：收入/净利/杜邦/毛利率（fact_direct）。"""
+    report = _import_alibaba(db_session, fy=2026)
+    overview = build_operations_overview(db_session, report_id=str(report.id))
+    by_id = {t.theme_id: t for t in overview.themes}
+
+    profit = {m.entry_id: m for m in by_id["profit_quality"].metrics}
+    net = profit["net_margin"]
+    assert net.status == "computed" and net.value is not None, "US GAAP 净利率可算"
+    dupont = profit["dupont_three_factor"]
+    assert dupont.status == "computed" and dupont.value is not None
+    assert "净利润总额口径" in dupont.name, "杜邦条目名必须携带口径标注（U2/6.3）"
+
+    growth = {m.entry_id: m for m in by_id["growth_quality"].metrics}
+    revenue_growth = growth["revenue_growth"]
+    assert revenue_growth.status == "computed" and revenue_growth.value is not None, (
+        "年报含本期+上期年度列，收入增长可算"
+    )
+
+
+def test_alibaba_revenue_structure_theme(db_session: Session) -> None:
+    """阿里归一化行含收入但无分部拆分；分部系列挂菜鸟（CAINIAO）不混入阿里。"""
+    report = _import_alibaba(db_session, fy=2026)
+    overview = build_operations_overview(db_session, report_id=str(report.id))
+    revenue_structure = {t.theme_id: t for t in overview.themes}["revenue_structure"]
+    # 阿里报告不注入菜鸟分部系列：公司键隔离
+    assert revenue_structure.status == "not_applicable"
+    assert revenue_structure.reason == "segment_disclosure_missing"

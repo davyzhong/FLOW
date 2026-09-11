@@ -285,9 +285,16 @@ def main() -> int:
                     if len(vals) <= cur_i:
                         print(f"  [warn] 跳过短行: {st_key}/{name} vals={vals}")
                         continue
-                    item = {"item": name, "本期发生额": vals[cur_i]}
-                    if prior_i is not None and prior_i >= 0:
-                        item["上期发生额"] = vals[prior_i]
+                    # 财状列语义为期末/期初（存 value_end/begin，供杜邦平均口径）；
+                    # 利润表/现金流量表为流量（cur/prev_yoy）
+                    if rows is bs:
+                        item = {"item": name, "期末余额": vals[cur_i]}
+                        if prior_i is not None and prior_i >= 0:
+                            item["期初余额"] = vals[prior_i]
+                    else:
+                        item = {"item": name, "本期发生额": vals[cur_i]}
+                        if prior_i is not None and prior_i >= 0:
+                            item["上期发生额"] = vals[prior_i]
                     items.append(item)
                 payload["statements"][st_key] = items
             out = OUT_DIR / f"alibaba_{year}fy_statements.yaml"
