@@ -24,7 +24,7 @@ from flow_api.infrastructure.models.statement import (
     StatementNormalizedItem,
     StatementReport,
 )
-from flow_api.operations.engine import build_operations_overview
+from flow_api.operations.engine import _segment_revenue_theme, build_operations_overview
 from flow_api.settings import get_settings
 from flow_api.statements.importer import import_statement_report
 from flow_api.statements.normalization import normalize_report
@@ -214,6 +214,52 @@ def test_cainiao_sample_core_calibers_compute(db_session: Session) -> None:
     efficiency = {m.entry_id: m for m in by_id["operational_efficiency"].metrics}
     current = efficiency["current_ratio"]
     assert current.status == "computed", "流动资产/流动负债合计行齐备"
+
+    volume = {m.entry_id: m for m in by_id["growth_quality"].metrics}[
+        "international_parcels"
+    ]
+    assert volume.value == "1519"
+    assert "FY2022" in volume.basis and "1679" in volume.basis
+    assert volume.source == "operating_fact"
+    assert volume.period_label == "FY2023"
+    assert volume.source_page == "22" and len(volume.source_sha256) == 64
+
+    adjusted = {m.entry_id: m for m in by_id["profit_quality"].metrics}
+    assert adjusted["adjusted_ebitda"].value == "2873"
+    assert adjusted["adjusted_net_profit_margin"].value == "0.004"
+
+    structure = {m.entry_id: m for m in by_id["revenue_structure"].metrics}
+    assert structure["business_line_share.international_logistics"].value == "0.474"
+    assert structure["business_line_share.china_logistics"].value == "0.462"
+    assert structure["business_line_share.technology_and_other_services"].value == "0.064"
+
+
+def test_cainiao_historical_report_never_reads_future_segment_periods() -> None:
+    """FY2023 只能读取 FY2023 与 FY2022；不得拿数据集末尾 FY2025 代替。"""
+    series = yaml.safe_load(
+        (REPO_ROOT / "docs/implementation/p5/cainiao_segment_series.yaml").read_text()
+    )
+
+    theme = _segment_revenue_theme(series, selected_period="FY2023")
+
+    rendered = " ".join(
+        " ".join((metric.name, metric.basis, metric.caliber_note))
+        for metric in theme.metrics
+    )
+    assert "FY2023" in rendered and "FY2022" in rendered
+    assert "FY2024" not in rendered and "FY2025" not in rendered
+
+
+def test_segment_series_does_not_mix_annual_data_into_quarter() -> None:
+    series = yaml.safe_load(
+        (REPO_ROOT / "docs/implementation/p5/cainiao_segment_series.yaml").read_text()
+    )
+
+    theme = _segment_revenue_theme(series, selected_period="Q1FY2024")
+
+    assert theme.status == "not_applicable"
+    assert theme.reason == "segment_period_not_available"
+    assert theme.metrics == []
 
 
 def test_cainiao_unresolved_rows_preserved(db_session: Session) -> None:

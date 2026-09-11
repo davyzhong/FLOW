@@ -8,11 +8,17 @@
 
 from __future__ import annotations
 
+from html import escape
 from typing import Any
 
 from flow_api.operations.engine import OperationsOverview
 
 _DIRECTION_LABEL = {"negative": "关注", "warning": "提示复核"}
+_ASSURANCE_LABEL = {
+    "audited": "经审计",
+    "unaudited": "未经审计",
+    "management_disclosure": "管理层披露",
+}
 
 
 def render_operations_html(overview: OperationsOverview | dict[str, Any]) -> str:
@@ -37,10 +43,23 @@ def render_operations_html(overview: OperationsOverview | dict[str, Any]) -> str
                     if metric.caliber_note
                     else ""
                 )
+                evidence = ""
+                if metric.source == "operating_fact":
+                    assurance = _ASSURANCE_LABEL.get(
+                        metric.assurance, metric.assurance or "未标注"
+                    )
+                    page = f" · 第 {escape(metric.source_page)} 页" if metric.source_page else ""
+                    evidence = (
+                        "<div class='evidence'>"
+                        f"期间：{escape(metric.period_label)} · {escape(assurance)} · "
+                        f"来源：{escape(metric.source_ref)}{page} · "
+                        f"SHA-256：{escape(metric.source_sha256[:16])}…"
+                        "</div>"
+                    )
                 rows.append(
                     f"<tr><td>{metric.name}</td>"
                     f"<td class='num'>{metric.value}</td>"
-                    f"<td>{metric.basis or '—'}{caliber}</td></tr>"
+                    f"<td>{metric.basis or '—'}{caliber}{evidence}</td></tr>"
                 )
             else:
                 rows.append(
@@ -77,6 +96,7 @@ def render_operations_html(overview: OperationsOverview | dict[str, Any]) -> str
         "h1{font-size:22px}h2{font-size:16px;margin-top:24px}"
         ".muted{color:#64748b;font-size:13px}"
         ".caliber{color:#64748b;font-size:12px}"
+        ".evidence{color:#64748b;font-size:11px;margin-top:3px;overflow-wrap:anywhere}"
         ".watch{list-style:none;padding:0;display:flex;flex-direction:column;gap:8px}"
         ".watch li{border:1px solid #e2e8f0;border-left-width:4px;border-radius:6px;"
         "padding:8px 12px;font-size:14px}"

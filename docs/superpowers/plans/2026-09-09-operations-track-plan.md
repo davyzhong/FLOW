@@ -12,9 +12,9 @@
 
 | ID | 任务 | 验收要点 | 状态 |
 |---|---|---|---|
-| O1 | 数据定义合同：`config/operations/operations_track_v1.yaml` 六主题注册表 + pydantic 加载器 + TDD | availability 分层标注；L2/L3 条目不得挂财报 formula_ref；口径标签必带；`not_applicable` typed 状态 | **doing（本次交付）** |
-| O2 | L1 指标计算接线：结果层指标（趋势/同比/结构/比率）复用指标库 facts 与 U2 原语出数 | 财报样本可算条目出数正确；L2/L3 全部 not_applicable；守恒桥残差显式 | **doing（slice-1 done `a8a73c5`：六主题概览引擎 + OP-0 分层 + 联动信号 + typed 端点；slice-2 done `a6abb0e`/`ec4d198`：字典口径周转求值 + 腾讯/菜鸟泛化 + fact_direct 直算。剩余：zto 样本未抽取（如实标注）、收入结构的分部披露接入）** |
-| O3 | 经营分析条目报告：六主题客观分析条目 + 报告渲染（复用 objective 渲染链） | 每条事实陈述四要素（值/基准/口径/来源）；行动章显式标注不在客观范围；渲染采纳借鉴附录 #1–#4/#13 | **doing（slice-1/2 done；slice-3 done `debc715`：/operations 从静态演示升级为真实六主题概览——报告选择、事实卡片、管理关注、冻结反馈、HTML/PDF 链接，导航 label 去「演示」。剩余：objective 四表叙事重排、/operations 与冻结后 UI 细节打磨）** |
+| O1 | 数据定义合同：`config/operations/operations_track_v1.yaml` 六主题注册表 + pydantic 加载器 + TDD | availability 分层标注；L2/L3 条目不得挂财报 formula_ref；口径标签必带；`not_applicable` typed 状态 | **done**（`ff75240`） |
+| O2 | L1 指标计算接线：结果层指标（趋势/同比/结构/比率）复用指标库 facts 与 U2 原语出数 | 财报样本可算条目出数正确；L2/L3 全部 not_applicable；守恒桥残差显式；经营事实严格按报告期间匹配 | **done（财报 L1 + 字典周转 + 顺丰/腾讯/菜鸟泛化 + 菜鸟年度分部系列 + 经营指标 typed 中间层 `operations/facts.py`：OperatingFact 合同、严格期间筛选不摊分不回退、同频可比基期、来源 SHA-256 前缀校验、Q1 stub 如实标注 unaudited；公开期间目录与无财报期间概览 typed API；zto 未抽取如实标注。CI 同口径 operations/api/analysis 175 通过、web 组件测试/tsc/eslint 绿，2026-09-11 复验）** |
+| O3 | 经营分析条目报告：六主题客观分析条目 + 报告渲染（复用 objective 渲染链） | 每条事实陈述四要素（值/基准/口径/来源）；行动章显式标注不在客观范围；经营报告进入统一发布与下载链 | **doing**（页面、冻结、HTML、真 PDF 已完成；剩余：XLSX/PPTX、PublicationAttempt/报告中心登记、跨格式黄金值一致性和 production UI 收口） |
 | O4 | `/operations` 看板改版：OP-4 信息架构，DB→typed API→Next.js | 先总体后细分；数字可溯源；L2/L3 板块「待内部数据」态展示 | **done（slice-3 `debc715` 达成全部验收要点：管理关注 + 六主题网格、事实卡片带基准/口径、L2/L3「待内部数据」态）** |
 | O5 | L2/L3 内部数据接入与业务事件簿数据模型 | 依赖内部数据授权（同 U9 前提）；事件簿表结构先行定义 | todo（数据依赖） |
 
@@ -30,7 +30,7 @@ O2–O4 依赖 O1 合同冻结；O5 依赖 U9 同款数据授权，表结构（�
 
 ## 断点
 
-2026-09-09（用户确认按统一计划「执行顺序总览」顺序执行）：O1 done（`ff75240`）；**O2 slice-1 done**（`a8a73c5`：六主题概览引擎 + typed 端点，顺丰样本锁定；复用 D01 引擎出数，OP-0 分层 typed）。O2 剩余：周转类 avg 公式（字典口径）、tencent/zto 样本泛化。此后 O3（六主题报告渲染，复用 objective 渲染链 + 借鉴 #1–#4/#13）。O4 依赖 O3；O5 依赖内部数据授权（同 U9 前提）。
+2026-09-11（晚，ZCode 续 Codex 在途工作）：**O2 done**——Codex 遗留的 typed 经营事实中间层（`operations/facts.py` + 公开期间/公开概览 typed API + 前端公开期间选择与保障标签）已验证完整并随本提交入库；菜鸟 Q1 stub 以 `is_stub`/`unaudited` 如实标注，严格期间对齐（不摊分、不回退最新值、不跨频率替代）与"历史报告不读未来事实"由 `facts_for_period`/`operating_fact_metrics_for_period` 严格相等筛选保证。剩余：O3 的 XLSX/PPTX、PublicationAttempt/报告中心登记、跨格式黄金值一致性与 production UI 收口；O5 依赖内部数据授权（同 U9 前提）。
 
 ## 变更日志
 

@@ -34,6 +34,13 @@ def _overview() -> OperationsOverview:
                         value="0.1260",
                         basis="上年同期",
                         caliber_note="本期/上年同期−1",
+                        source="operating_fact",
+                        period_label="Q1FY2024",
+                        period_type="fiscal_quarter",
+                        assurance="unaudited",
+                        source_ref="docs/source.pdf",
+                        source_sha256="a" * 64,
+                        source_page="22",
                     ),
                     OperationsMetricItem(
                         entry_id="revenue_growth",
@@ -68,6 +75,13 @@ def test_renders_fact_cards_with_basis_and_caliber() -> None:
     assert "营业收入同比" in html and "0.1260" in html
     assert "上年同期" in html, "值必须伴随比较基准（借鉴 #1）"
     assert "本期/上年同期−1" in html, "口径必须可见（借鉴 #2）"
+
+
+def test_renders_operating_fact_period_and_source_evidence() -> None:
+    html = render_operations_html(_overview())
+    assert "Q1FY2024" in html and "未经审计" in html
+    assert "docs/source.pdf" in html and "第 22 页" in html
+    assert "aaaaaaaaaaaaaaaa" in html
 
 
 def test_renders_not_applicable_with_typed_reason() -> None:

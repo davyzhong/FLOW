@@ -22,6 +22,15 @@
   color: #1769e8;
 }
 
+.ops-overview__context-note {
+  margin: 0;
+  border-left: 3px solid #2563eb;
+  background: #eff6ff;
+  padding: 8px 12px;
+  color: #334155;
+  font-size: 13px;
+}
+
 .ops-overview__error {
   color: #b91c1c;
   font-weight: 600;
@@ -121,6 +130,14 @@
 .ops-overview__caliber {
   color: #8a97a8;
   font-size: 12px;
+}
+
+.ops-overview__evidence {
+  display: block;
+  margin-top: 4px;
+  color: #64748b;
+  font-size: 11px;
+  overflow-wrap: anywhere;
 }
 
 .ops-overview__scope {

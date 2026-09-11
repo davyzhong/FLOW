@@ -888,6 +888,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/operations/public-periods": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Public Operating Periods
+         * @description 列出公开经营事实的真实期间；不合成月度期间。
+         */
+        get: operations["get_public_operating_periods_api_v1_operations_public_periods_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/operations/public/{stock_code}/{period_label}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Public Operating Overview
+         * @description 读取没有完整财报的公开经营期间，只呈现严格同期间事实。
+         */
+        get: operations["get_public_operating_overview_api_v1_operations_public__stock_code___period_label__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/operations/overview/{report_id}": {
         parameters: {
             query?: never;
@@ -2234,7 +2274,37 @@ export interface components {
              * @default d01_entry
              * @enum {string}
              */
-            source: "d01_entry" | "metric_dictionary" | "fact_direct";
+            source: "d01_entry" | "metric_dictionary" | "fact_direct" | "operating_fact";
+            /**
+             * Period Label
+             * @default
+             */
+            period_label: string;
+            /**
+             * Period Type
+             * @default
+             */
+            period_type: string;
+            /**
+             * Assurance
+             * @default
+             */
+            assurance: string;
+            /**
+             * Source Ref
+             * @default
+             */
+            source_ref: string;
+            /**
+             * Source Sha256
+             * @default
+             */
+            source_sha256: string;
+            /**
+             * Source Page
+             * @default
+             */
+            source_page: string;
         };
         /** OperationsOverview */
         OperationsOverview: {
@@ -2401,6 +2471,26 @@ export interface components {
             trace?: {
                 [key: string]: unknown;
             } | null;
+        };
+        /** PublicOperatingPeriod */
+        PublicOperatingPeriod: {
+            /** Company Name */
+            company_name: string;
+            /** Stock Code */
+            stock_code: string;
+            /** Period Label */
+            period_label: string;
+            /** Period Type */
+            period_type: string;
+            /** Assurance */
+            assurance: string;
+            /** Is Stub */
+            is_stub: boolean;
+        };
+        /** PublicOperatingPeriodList */
+        PublicOperatingPeriodList: {
+            /** Periods */
+            periods: components["schemas"]["PublicOperatingPeriod"][];
         };
         /** PublicationAttemptLine */
         PublicationAttemptLine: {
@@ -5210,6 +5300,71 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["WorkbenchResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_public_operating_periods_api_v1_operations_public_periods_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublicOperatingPeriodList"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_public_operating_overview_api_v1_operations_public__stock_code___period_label__get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                stock_code: string;
+                period_label: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OperationsOverview"];
                 };
             };
             /** @description Validation Error */

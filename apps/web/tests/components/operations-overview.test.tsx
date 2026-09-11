@@ -26,6 +26,19 @@ const REPORTS = {
   ],
 };
 
+const PUBLIC_PERIODS = {
+  periods: [
+    {
+      company_name: "菜鸟智慧物流网络",
+      stock_code: "CAINIAO",
+      period_label: "Q1FY2024",
+      period_type: "fiscal_quarter",
+      assurance: "unaudited",
+      is_stub: true,
+    },
+  ],
+};
+
 const OVERVIEW = {
   report_id: "report-1",
   catalog_id: "flow.analysis.objective_finance.v1",
@@ -56,6 +69,22 @@ const OVERVIEW = {
           caliber_note: "is.gross_profit ÷ is.revenue",
           reason: null,
           source: "fact_direct",
+        },
+        {
+          entry_id: "international_parcels",
+          name: "国际物流包裹量",
+          status: "computed",
+          value: "439",
+          basis: "Q1FY2023 347 百万件",
+          caliber_note: "Selected Operating Data；期间累计值",
+          reason: null,
+          source: "operating_fact",
+          period_label: "Q1FY2024",
+          period_type: "fiscal_quarter",
+          assurance: "unaudited",
+          source_ref: "docs/source.pdf",
+          source_sha256: "a".repeat(64),
+          source_page: "22",
         },
       ],
     },
@@ -93,6 +122,7 @@ describe("OperationsOverviewApp", () => {
       const url = String(input);
       if (init?.method === "POST") return freezeSpy(input);
       if (url.endsWith("/statements")) return jsonResponse(REPORTS);
+      if (url.endsWith("/operations/public-periods")) return jsonResponse(PUBLIC_PERIODS);
       if (url.includes("/operations/overview/")) return jsonResponse(OVERVIEW);
       return jsonResponse({ detail: "not found" }, 404);
     });
@@ -105,6 +135,9 @@ describe("OperationsOverviewApp", () => {
     // 事实卡片：值 + 基准 + 口径（借鉴 #1/#2）
     expect(screen.getByText("0.1600")).toBeTruthy();
     expect(screen.getByText(/口径：净利润总额口径/)).toBeTruthy();
+    expect(screen.getByText(/Q1FY2024 · 未经审计/)).toBeTruthy();
+    expect(screen.getByText(/docs\/source.pdf · 第 22 页/)).toBeTruthy();
+    expect(screen.getByText(/aaaaaaaaaaaaaaaa…/)).toBeTruthy();
     // 诚实 N/A
     expect(screen.getByText(/待内部数据（internal_data_required）/)).toBeTruthy();
     // 管理关注 ≤3 带方向
@@ -117,5 +150,43 @@ describe("OperationsOverviewApp", () => {
     await waitFor(() => {
       expect(screen.getByText(/已冻结：版本 1/)).toBeTruthy();
     });
+  });
+
+  it("loads a public quarter without pretending it is a full statement report", async () => {
+    const publicOverview = {
+      ...OVERVIEW,
+      report_id: "operating:CAINIAO:Q1FY2024",
+      management_watch: [],
+    };
+    const fetchMock = vi.fn(async (input: RequestInfo | URL) => {
+      const url = String(input);
+      if (url.endsWith("/statements")) return jsonResponse(REPORTS);
+      if (url.endsWith("/operations/public-periods")) {
+        return jsonResponse(PUBLIC_PERIODS);
+      }
+      if (url.endsWith("/operations/public/CAINIAO/Q1FY2024")) {
+        return jsonResponse(publicOverview);
+      }
+      if (url.includes("/operations/overview/")) return jsonResponse(OVERVIEW);
+      return jsonResponse({ detail: "not found" }, 404);
+    });
+    vi.stubGlobal("fetch", fetchMock);
+    render(<OperationsOverviewApp />);
+
+    const selector = await screen.findByLabelText("分析数据与期间");
+    fireEvent.change(selector, {
+      target: { value: "public:CAINIAO:Q1FY2024" },
+    });
+
+    await waitFor(() => {
+      expect(
+        fetchMock.mock.calls.some(([input]) =>
+          String(input).includes("/operations/public/CAINIAO/Q1FY2024"),
+        ),
+      ).toBe(true);
+    });
+    expect(screen.getByText(/公开经营披露 · 未经审计/)).toBeTruthy();
+    expect(screen.queryByRole("button", { name: "冻结概览" })).toBeNull();
+    expect(screen.queryByRole("link", { name: "下载 PDF" })).toBeNull();
   });
 });

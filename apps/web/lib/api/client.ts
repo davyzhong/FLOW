@@ -19,6 +19,7 @@ export type WorkbenchResponse = components["schemas"]["WorkbenchResponse"];
 export type OperationsOverview = components["schemas"]["OperationsOverview"];
 export type OperationsTheme = components["schemas"]["OperationsTheme"];
 export type OperationsMetricItem = components["schemas"]["OperationsMetricItem"];
+export type PublicOperatingPeriodList = components["schemas"]["PublicOperatingPeriodList"];
 export type WorkbenchQuestion = components["schemas"]["WorkbenchQuestion"];
 export type ManagementWatchItem = components["schemas"]["ManagementWatchItem"];
 
@@ -292,6 +293,19 @@ export const statementApi = {
   },
   fetchOperationsOverview(reportId: string, signal?: AbortSignal): Promise<OperationsOverview> {
     return request<OperationsOverview>(`/api/v1/operations/overview/${reportId}`, signal);
+  },
+  listPublicOperatingPeriods(signal?: AbortSignal): Promise<PublicOperatingPeriodList> {
+    return request<PublicOperatingPeriodList>("/api/v1/operations/public-periods", signal);
+  },
+  fetchPublicOperatingOverview(
+    stockCode: string,
+    periodLabel: string,
+    signal?: AbortSignal,
+  ): Promise<OperationsOverview> {
+    return request<OperationsOverview>(
+      `/api/v1/operations/public/${encodeURIComponent(stockCode)}/${encodeURIComponent(periodLabel)}`,
+      signal,
+    );
   },
   freezeOperationsOverview(reportId: string): Promise<{
     snapshot_id: string;

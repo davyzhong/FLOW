@@ -3691,6 +3691,126 @@
         }
       }
     },
+    "/api/v1/operations/public-periods": {
+      "get": {
+        "tags": [
+          "operations"
+        ],
+        "summary": "Get Public Operating Periods",
+        "description": "列出公开经营事实的真实期间；不合成月度期间。",
+        "operationId": "get_public_operating_periods_api_v1_operations_public_periods_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicOperatingPeriodList"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/operations/public/{stock_code}/{period_label}": {
+      "get": {
+        "tags": [
+          "operations"
+        ],
+        "summary": "Get Public Operating Overview",
+        "description": "读取没有完整财报的公开经营期间，只呈现严格同期间事实。",
+        "operationId": "get_public_operating_overview_api_v1_operations_public__stock_code___period_label__get",
+        "parameters": [
+          {
+            "name": "stock_code",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 32,
+              "title": "Stock Code"
+            }
+          },
+          {
+            "name": "period_label",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 64,
+              "title": "Period Label"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationsOverview"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/operations/overview/{report_id}": {
       "get": {
         "tags": [
@@ -7538,10 +7658,41 @@
             "enum": [
               "d01_entry",
               "metric_dictionary",
-              "fact_direct"
+              "fact_direct",
+              "operating_fact"
             ],
             "title": "Source",
             "default": "d01_entry"
+          },
+          "period_label": {
+            "type": "string",
+            "title": "Period Label",
+            "default": ""
+          },
+          "period_type": {
+            "type": "string",
+            "title": "Period Type",
+            "default": ""
+          },
+          "assurance": {
+            "type": "string",
+            "title": "Assurance",
+            "default": ""
+          },
+          "source_ref": {
+            "type": "string",
+            "title": "Source Ref",
+            "default": ""
+          },
+          "source_sha256": {
+            "type": "string",
+            "title": "Source Sha256",
+            "default": ""
+          },
+          "source_page": {
+            "type": "string",
+            "title": "Source Page",
+            "default": ""
           }
         },
         "additionalProperties": false,
@@ -8011,6 +8162,62 @@
           "role"
         ],
         "title": "ProvenancePointResponse"
+      },
+      "PublicOperatingPeriod": {
+        "properties": {
+          "company_name": {
+            "type": "string",
+            "title": "Company Name"
+          },
+          "stock_code": {
+            "type": "string",
+            "title": "Stock Code"
+          },
+          "period_label": {
+            "type": "string",
+            "title": "Period Label"
+          },
+          "period_type": {
+            "type": "string",
+            "title": "Period Type"
+          },
+          "assurance": {
+            "type": "string",
+            "title": "Assurance"
+          },
+          "is_stub": {
+            "type": "boolean",
+            "title": "Is Stub"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "company_name",
+          "stock_code",
+          "period_label",
+          "period_type",
+          "assurance",
+          "is_stub"
+        ],
+        "title": "PublicOperatingPeriod"
+      },
+      "PublicOperatingPeriodList": {
+        "properties": {
+          "periods": {
+            "items": {
+              "$ref": "#/components/schemas/PublicOperatingPeriod"
+            },
+            "type": "array",
+            "title": "Periods"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "periods"
+        ],
+        "title": "PublicOperatingPeriodList"
       },
       "PublicationAttemptLine": {
         "properties": {

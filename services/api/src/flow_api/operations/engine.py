@@ -23,6 +23,11 @@ from flow_api.analysis.objective import (
     ObjectiveStatus,
 )
 from flow_api.analysis.workbench import management_watch
+from flow_api.operations.facts import (
+    OperatingFact,
+    load_cainiao_operating_facts,
+    previous_comparable_period,
+)
 
 THEME_ENTRIES: dict[str, tuple[str, ...]] = {
     "growth_quality": ("revenue_yoy", "net_profit_yoy", "asset_trend"),
@@ -62,6 +67,10 @@ SEGMENT_SERIES_BY_STOCK: dict[str, Path] = {
     "CAINIAO": Path("docs/implementation/p5/cainiao_segment_series.yaml"),
 }
 
+OPERATING_FACTS_BY_STOCK: dict[str, Path] = {
+    "CAINIAO": Path("docs/implementation/p5/cainiao_operating_metrics.yaml"),
+}
+
 # formula_ref 条目的财报直接执行：标准 item_id 组合（与指标字典 definition
 # 同一口径，仅取数角色为财报归一化事实）。D01 引擎对 formula_ref 有意不算
 # （归 D02 统一快照）；O2 在快照未建时按同一口径直算，避免主题空转。
@@ -95,7 +104,15 @@ class OperationsMetricItem(BaseModel):
     basis: str = ""
     caliber_note: str = ""
     reason: str | None = None
-    source: Literal["d01_entry", "metric_dictionary", "fact_direct"] = "d01_entry"
+    source: Literal[
+        "d01_entry", "metric_dictionary", "fact_direct", "operating_fact"
+    ] = "d01_entry"
+    period_label: str = ""
+    period_type: str = ""
+    assurance: str = ""
+    source_ref: str = ""
+    source_sha256: str = ""
+    source_page: str = ""
 
 
 class OperationsTheme(BaseModel):
@@ -116,6 +133,179 @@ class OperationsOverview(BaseModel):
     catalog_id: str
     themes: list[OperationsTheme]
     management_watch: list[dict[str, str]]
+
+
+class PublicOperatingPeriod(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    company_name: str
+    stock_code: str
+    period_label: str
+    period_type: str
+    assurance: str
+    is_stub: bool
+
+
+class PublicOperatingPeriodList(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    periods: list[PublicOperatingPeriod]
+
+
+_OPERATING_FACT_THEME = {
+    "international_parcels": "growth_quality",
+    "china_orders_fulfilled": "growth_quality",
+    "adjusted_net_profit": "profit_quality",
+    "adjusted_net_profit_margin": "profit_quality",
+    "adjusted_ebitda": "profit_quality",
+    "adjusted_ebitda_margin": "profit_quality",
+    "business_line_share.international_logistics": "revenue_structure",
+    "business_line_share.china_logistics": "revenue_structure",
+    "business_line_share.technology_and_other_services": "revenue_structure",
+}
+
+
+def operating_fact_metrics_for_period(
+    facts: list[OperatingFact], *, selected_period: str
+) -> dict[str, list[OperationsMetricItem]]:
+    """把严格同期间经营事实投影到主题；比较基准只取同频上年同期。"""
+
+    current = [fact for fact in facts if fact.period_label == selected_period]
+    previous_label = previous_comparable_period(selected_period)
+    previous = {
+        fact.metric_code: fact
+        for fact in facts
+        if previous_label is not None and fact.period_label == previous_label
+    }
+    grouped: dict[str, list[OperationsMetricItem]] = {}
+    for fact in current:
+        theme_id = _OPERATING_FACT_THEME.get(fact.metric_code)
+        if theme_id is None:
+            continue
+        prior = previous.get(fact.metric_code)
+        value = (
+            str(fact.numeric_value)
+            if fact.numeric_value is not None
+            else fact.text_value
+        )
+        if prior is not None:
+            prior_value = (
+                str(prior.numeric_value)
+                if prior.numeric_value is not None
+                else prior.text_value
+            )
+            basis = f"{previous_label} {prior_value} {prior.unit}"
+        else:
+            basis = f"{selected_period} 原始披露；无同频可比期间"
+        grouped.setdefault(theme_id, []).append(
+            OperationsMetricItem(
+                entry_id=fact.metric_code,
+                name=fact.metric_name,
+                status=ObjectiveStatus.COMPUTED.value,
+                value=value,
+                basis=basis,
+                caliber_note=fact.caliber_note,
+                source="operating_fact",
+                period_label=fact.period_label,
+                period_type=fact.period_type,
+                assurance=fact.assurance,
+                source_ref=fact.source_ref,
+                source_sha256=fact.source_sha256,
+                source_page=fact.source_page,
+            )
+        )
+    return grouped
+
+
+def list_public_operating_periods() -> list[PublicOperatingPeriod]:
+    """列出真实披露期间；不合成月度选项。"""
+
+    periods: list[PublicOperatingPeriod] = []
+    for stock_code in OPERATING_FACTS_BY_STOCK:
+        facts = load_operating_facts(stock_code)
+        seen: set[str] = set()
+        for fact in facts:
+            if fact.period_label in seen:
+                continue
+            seen.add(fact.period_label)
+            periods.append(
+                PublicOperatingPeriod(
+                    company_name=fact.company_name,
+                    stock_code=fact.stock_code,
+                    period_label=fact.period_label,
+                    period_type=fact.period_type,
+                    assurance=fact.assurance,
+                    is_stub=fact.is_stub,
+                )
+            )
+    return periods
+
+
+def build_public_operating_overview(
+    *, stock_code: str, selected_period: str
+) -> OperationsOverview:
+    """为没有完整财报的公开经营期间生成只读六主题概览。"""
+
+    facts = load_operating_facts(stock_code)
+    if not any(fact.period_label == selected_period for fact in facts):
+        raise ValueError("operating_period_not_found")
+    operating_metrics = operating_fact_metrics_for_period(
+        facts, selected_period=selected_period
+    )
+    segment_series = load_segment_series(stock_code)
+    themes: list[OperationsTheme] = []
+    for theme_id in (
+        "growth_quality",
+        "revenue_structure",
+        "cost_structure",
+        "profit_quality",
+        "users_channels",
+        "operational_efficiency",
+    ):
+        extra_metrics = operating_metrics.get(theme_id, [])
+        if theme_id == "revenue_structure" and segment_series is not None:
+            theme = _segment_revenue_theme(
+                segment_series, selected_period=selected_period
+            )
+            theme.metrics.extend(extra_metrics)
+            if extra_metrics and theme.status == "not_applicable":
+                theme.status = "available"
+            themes.append(theme)
+            continue
+        if extra_metrics:
+            themes.append(
+                OperationsTheme(
+                    theme_id=theme_id,
+                    name=_THEME_NAMES[theme_id],
+                    availability="financial_report",
+                    status="available",
+                    metrics=extra_metrics,
+                )
+            )
+            continue
+        reason = (
+            "internal_data_required"
+            if theme_id == "users_channels"
+            else "statement_report_required"
+        )
+        themes.append(
+            OperationsTheme(
+                theme_id=theme_id,
+                name=_THEME_NAMES[theme_id],
+                availability="internal_process"
+                if theme_id == "users_channels"
+                else "financial_report",
+                status="not_applicable",
+                reason=reason,
+                metrics=[],
+            )
+        )
+    return OperationsOverview(
+        report_id=f"operating:{stock_code}:{selected_period}",
+        catalog_id="flow.analysis.objective_finance.v1",
+        themes=themes,
+        management_watch=[],
+    )
 
 
 def _facts_from_normalized(rows: list[Any]) -> dict[str, Decimal]:
@@ -256,26 +446,51 @@ def load_segment_series(stock_code: str) -> dict[str, Any] | None:
     return None
 
 
-def _segment_revenue_theme(series: dict[str, Any]) -> OperationsTheme:
+def load_operating_facts(stock_code: str) -> list[OperatingFact]:
+    """加载公司经营事实并在适配器边界转换为统一 typed 合同。"""
+
+    relative = OPERATING_FACTS_BY_STOCK.get(stock_code)
+    if relative is None:
+        return []
+    for root in (Path.cwd(), *Path.cwd().parents):
+        candidate = root / relative
+        if candidate.is_file() and stock_code == "CAINIAO":
+            return load_cainiao_operating_facts(candidate, repo_root=root)
+    return []
+
+
+def _segment_revenue_theme(
+    series: dict[str, Any], *, selected_period: str
+) -> OperationsTheme:
     """分部收入主题（L1 公开分部披露）：确定性同比 + 缺口如实说明。"""
 
     series_data: dict[str, dict[str, Any]] = series.get("series", {})
-    periods = sorted(series_data.keys())
     metrics: list[OperationsMetricItem] = []
     notes: list[str] = []
+    selected = series_data.get(selected_period)
+    if selected is None:
+        return OperationsTheme(
+            theme_id="revenue_structure",
+            name=_THEME_NAMES["revenue_structure"],
+            availability="financial_report",
+            status="not_applicable",
+            reason="segment_period_not_available",
+            metrics=[],
+        )
 
-    revenue_values: list[tuple[str, Decimal]] = []
-    for period in periods:
-        revenue = series_data[period].get("segment_revenue")
-        if revenue is not None:
-            revenue_values.append((period, Decimal(str(revenue))))
-    if len(revenue_values) >= 2:
-        (prev_period, prev_value), (cur_period, cur_value) = revenue_values[-2:]
+    prev_period = previous_comparable_period(selected_period)
+    cur_revenue = selected.get("segment_revenue")
+    prev_revenue = (
+        series_data.get(prev_period, {}).get("segment_revenue") if prev_period else None
+    )
+    if cur_revenue is not None and prev_revenue is not None and prev_period is not None:
+        cur_value = Decimal(str(cur_revenue))
+        prev_value = Decimal(str(prev_revenue))
         yoy = ((cur_value - prev_value) / abs(prev_value)).quantize(Decimal("0.0001"))
         metrics.append(
             OperationsMetricItem(
                 entry_id="segment_revenue_yoy",
-                name=f"分部收入同比（{cur_period} vs {prev_period}）",
+                name=f"分部收入同比（{selected_period} vs {prev_period}）",
                 status=ObjectiveStatus.COMPUTED.value,
                 value=str(yoy),
                 basis=f"{prev_period} 分部收入 {prev_value}",
@@ -283,29 +498,21 @@ def _segment_revenue_theme(series: dict[str, Any]) -> OperationsTheme:
                 source="fact_direct",
             )
         )
-    ebita = [
-        (period, series_data[period].get("adjusted_ebita"))
-        for period in periods
-        if series_data[period].get("adjusted_ebita") is not None
-    ]
-    if ebita:
-        last_period, last_value = ebita[-1]
+    ebita_value = selected.get("adjusted_ebita")
+    if ebita_value is not None:
         metrics.append(
             OperationsMetricItem(
                 entry_id="segment_adjusted_ebita",
-                name=f"经调整 EBITA（{last_period}，MPM 口径）",
+                name=f"经调整 EBITA（{selected_period}，MPM 口径）",
                 status=ObjectiveStatus.COMPUTED.value,
-                value=str(last_value),
-                basis=f"自 FY{ebita[0][0].lstrip('FY')} 起单列" if len(ebita) > 1 else "分部披露",
+                value=str(ebita_value),
+                basis=f"{selected_period} 分部披露",
                 caliber_note="经调整 EBITA 为 MPM，须有调节表（D047）",
                 source="fact_direct",
             )
         )
-        notes.append(
-            f"经调整 EBITA 仅 {ebita[0][0]} 起单列，此前年度如实缺省"
-            if len(ebita) < len(periods)
-            else ""
-        )
+    elif any(row.get("adjusted_ebita") is not None for row in series_data.values()):
+        notes.append(f"{selected_period} 未单列经调整 EBITA，如实缺省")
 
     note_text = "；".join(note for note in notes if note) or None
     return OperationsTheme(
@@ -347,6 +554,14 @@ def build_operations_overview(session: Any, *, report_id: str | UUID) -> Operati
         if report_for_segments is not None
         else None
     )
+    operating_metrics = (
+        operating_fact_metrics_for_period(
+            load_operating_facts(report_for_segments.stock_code),
+            selected_period=report_for_segments.period_label,
+        )
+        if report_for_segments is not None
+        else {}
+    )
 
     themes: list[OperationsTheme] = []
     for theme_id in (
@@ -357,8 +572,37 @@ def build_operations_overview(session: Any, *, report_id: str | UUID) -> Operati
         "users_channels",
         "operational_efficiency",
     ):
-        if theme_id == "revenue_structure" and segment_series is not None:
-            themes.append(_segment_revenue_theme(segment_series))
+        if theme_id == "revenue_structure":
+            extra_metrics = operating_metrics.get(theme_id, [])
+            if segment_series is not None:
+                segment_theme = _segment_revenue_theme(
+                    segment_series, selected_period=report_for_segments.period_label
+                )
+                segment_theme.metrics.extend(extra_metrics)
+                if extra_metrics and segment_theme.status == "not_applicable":
+                    segment_theme.status = "available"
+                themes.append(segment_theme)
+            elif extra_metrics:
+                themes.append(
+                    OperationsTheme(
+                        theme_id=theme_id,
+                        name=_THEME_NAMES[theme_id],
+                        availability="financial_report",
+                        status="available",
+                        metrics=extra_metrics,
+                    )
+                )
+            else:
+                themes.append(
+                    OperationsTheme(
+                        theme_id=theme_id,
+                        name=_THEME_NAMES[theme_id],
+                        availability="financial_report",
+                        status="not_applicable",
+                        reason=THEME_UNAVAILABLE_REASON.get(theme_id),
+                        metrics=[],
+                    )
+                )
             continue
         entry_ids = THEME_ENTRIES.get(theme_id, ())
         if not entry_ids:
@@ -466,6 +710,7 @@ def build_operations_overview(session: Any, *, report_id: str | UUID) -> Operati
                         source="metric_dictionary",
                     )
                 )
+        metrics.extend(operating_metrics.get(theme_id, []))
         themes.append(
             OperationsTheme(
                 theme_id=theme_id,
@@ -486,4 +731,13 @@ def build_operations_overview(session: Any, *, report_id: str | UUID) -> Operati
     )
 
 
-__all__ = ["build_operations_overview", "OperationsOverview", "OperationsTheme"]
+__all__ = [
+    "OperationsOverview",
+    "OperationsTheme",
+    "PublicOperatingPeriod",
+    "PublicOperatingPeriodList",
+    "build_public_operating_overview",
+    "build_operations_overview",
+    "list_public_operating_periods",
+    "operating_fact_metrics_for_period",
+]

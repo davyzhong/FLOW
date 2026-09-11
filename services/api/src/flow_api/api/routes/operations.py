@@ -10,7 +10,13 @@ from fastapi import APIRouter, Depends, HTTPException, Path, Response, status
 from sqlalchemy.orm import Session
 
 from flow_api.infrastructure.db import get_session_factory
-from flow_api.operations.engine import OperationsOverview, build_operations_overview
+from flow_api.operations.engine import (
+    OperationsOverview,
+    PublicOperatingPeriodList,
+    build_operations_overview,
+    build_public_operating_overview,
+    list_public_operating_periods,
+)
 from flow_api.publishing.objective_freeze import ObjectiveFreezeError
 
 router = APIRouter(prefix="/operations", tags=["operations"])
@@ -22,6 +28,34 @@ def get_operations_session() -> Iterator[Session]:
 
 
 SessionDependency = Annotated[Session, Depends(get_operations_session)]
+
+
+@router.get("/public-periods", response_model=PublicOperatingPeriodList)
+def get_public_operating_periods() -> PublicOperatingPeriodList:
+    """列出公开经营事实的真实期间；不合成月度期间。"""
+
+    return PublicOperatingPeriodList(periods=list_public_operating_periods())
+
+
+@router.get("/public/{stock_code}/{period_label}", response_model=OperationsOverview)
+def get_public_operating_overview(
+    stock_code: Annotated[str, Path(max_length=32)],
+    period_label: Annotated[str, Path(max_length=64)],
+) -> OperationsOverview:
+    """读取没有完整财报的公开经营期间，只呈现严格同期间事实。"""
+
+    try:
+        return build_public_operating_overview(
+            stock_code=stock_code, selected_period=period_label
+        )
+    except ValueError as error:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail={
+                "code": "operating_period_not_found",
+                "message": "未找到该公司的公开经营披露期间",
+            },
+        ) from error
 
 
 @router.get("/overview/{report_id}", response_model=OperationsOverview)
