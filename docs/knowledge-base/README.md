@@ -25,6 +25,7 @@
 | [06_sources](06_sources/SOURCE_CATALOG.md) | 来源、访问限制和链接 |
 | [07_handoff](07_handoff/CONTINUATION_GUIDE.md) | 当前接续步骤和提示词 |
 | [08_wechat_sources](08_wechat_sources/README.md) | 已移交 DavyBase，只保留引用和历史移交证据 |
+| [09_competitive](09_competitive/INDEX.md) | BI/FP&A 竞品调研素材（C01–C20，界面/图表/方法/公式四维借鉴） |
 | [99_manifest](99_manifest) | 文件清单、SHA-256 与档案说明 |
 
 全项目导航见[文档中心](../README.md)，逐份状态与改名见[文档登记](../documentation-status.md)，命名和维护见[文档治理规则](../2026-09-07-documentation-governance.md)。
