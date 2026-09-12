@@ -53,13 +53,22 @@ class DecisionIntegrityTests(unittest.TestCase):
                 for ref in re.findall(r"FLOW-DECISION-D\d+", meta.get(ref_field, "") or ""):
                     self.assertIn(ref, metas, f"{doc_id} {ref_field} -> {ref} unresolved")
 
-    def test_legacy_log_is_compatible_superseded(self) -> None:
+    def test_legacy_log_is_byte_frozen_historical_original(self) -> None:
+        """Task 5 (M1.3)：旧日志按原字节恢复并锁定（无 frontmatter 是预期）。"""
+        import hashlib
+
         legacy = REPO / "docs/knowledge-base/04_decisions/DECISION_LOG.md"
-        meta = parse_frontmatter(legacy.read_text(encoding="utf-8"))
-        self.assertIsNotNone(meta)
-        self.assertEqual(meta.get("status"), "superseded")
         body = legacy.read_text(encoding="utf-8")
-        self.assertIn("DECISION_INDEX.md", body)
+        self.assertIsNone(parse_frontmatter(body))  # 原件无 frontmatter
+        frozen = hashlib.sha256(legacy.read_bytes()).hexdigest()
+        # 锁哈希须同时出现在 legacy-exemptions 与 legacy sidecar
+        exempt = (REPO / "docs/10_governance/legacy-exemptions.tsv").read_text(encoding="utf-8")
+        sidecar = (REPO / "docs/10_governance/legacy/DECISION_LOG.source.yaml").read_text(encoding="utf-8")
+        self.assertIn(frozen, exempt)
+        self.assertIn(frozen, sidecar)
+        self.assertIn(frozen, sidecar)  # sidecar 双重记录 source_sha256
+        # 当前入口仍可解析访问
+        self.assertTrue((REPO / "docs/10_governance/DECISION_INDEX.md").is_file())
 
 
 if __name__ == "__main__":

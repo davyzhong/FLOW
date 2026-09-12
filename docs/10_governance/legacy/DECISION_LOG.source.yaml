@@ -1,0 +1,22 @@
+doc_id: FLOW-DECISION-LOG-LEGACY
+title: 历史完整决策日志（原字节保留）
+doc_type: governance
+status: historical
+version: 1.0
+created_at: 2026-09-12
+updated_at: 2026-09-12
+owner: FLOW
+applies_to: repository
+canonical_index: docs/10_governance/DECISION_INDEX.md
+source_file: docs/knowledge-base/04_decisions/DECISION_LOG.md
+source_sha256: 5310f753365fc3687da8ab07960173b99dcfb1fb21e668c66d6cb143b99902c6
+restored_from:
+  git_commit: c668a4c3f26a0255a6fb11f95d770997bb9d96a7
+  note: |-
+    a99a5b2 曾将本文件改写为兼容页，违反「历史原件字节不变」纪律；
+    Task 5 (M1.3) 从 M0 前最后一个包含原始日志的提交 c668a4c 按字节恢复
+    （sha256 与 2016306/d461ea2 冻结基线一致）。恢复后本文件由
+    legacy-exemptions.tsv 哈希锁保护：任何字节变更都会导致 check_docs 失败。
+supersession_note: |-
+  当前决策查询入口为 DECISION_INDEX.md 与 docs/10_governance/decisions/D001--D051
+  拆分文件；本日志仅作历史来源只读访问，不可变会话中的旧链接仍可直接读取。
