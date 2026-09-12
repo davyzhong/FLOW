@@ -2,7 +2,7 @@
 doc_id: GOV-AUTH-001
 title: 内部数据授权边界（U9/O5 门禁）
 doc_type: knowledge-card
-status: verified
+status: canonical
 version: "1.0"
 created_at: 2026-09-12
 updated_at: 2026-09-12

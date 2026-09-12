@@ -2,7 +2,7 @@
 doc_id: FIN-EBITDA-001
 title: EBIT/EBITDA 与三种利润口径
 doc_type: knowledge-card
-status: verified
+status: canonical
 version: "1.0"
 created_at: 2026-09-12
 updated_at: 2026-09-12

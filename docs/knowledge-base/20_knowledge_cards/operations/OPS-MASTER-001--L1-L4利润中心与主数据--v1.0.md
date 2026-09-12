@@ -2,7 +2,7 @@
 doc_id: OPS-MASTER-001
 title: L1-L4 利润中心与经营主数据
 doc_type: knowledge-card
-status: verified
+status: canonical
 version: "1.0"
 created_at: 2026-09-12
 updated_at: 2026-09-12

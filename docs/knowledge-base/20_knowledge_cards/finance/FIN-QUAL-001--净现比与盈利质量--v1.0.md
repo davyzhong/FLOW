@@ -2,7 +2,7 @@
 doc_id: FIN-QUAL-001
 title: 净现比与盈利质量
 doc_type: knowledge-card
-status: verified
+status: canonical
 version: "1.0"
 created_at: 2026-09-12
 updated_at: 2026-09-12

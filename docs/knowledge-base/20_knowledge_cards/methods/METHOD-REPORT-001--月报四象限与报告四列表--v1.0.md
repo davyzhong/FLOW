@@ -2,7 +2,7 @@
 doc_id: METHOD-REPORT-001
 title: 月报四象限与报告四列表
 doc_type: knowledge-card
-status: verified
+status: canonical
 version: "1.0"
 created_at: 2026-09-12
 updated_at: 2026-09-12

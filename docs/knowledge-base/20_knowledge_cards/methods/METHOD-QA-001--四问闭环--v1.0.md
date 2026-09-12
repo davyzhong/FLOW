@@ -2,7 +2,7 @@
 doc_id: METHOD-QA-001
 title: 四问闭环（发生了什么/为什么/会怎样/怎么办）
 doc_type: knowledge-card
-status: verified
+status: canonical
 version: "1.0"
 created_at: 2026-09-12
 updated_at: 2026-09-12

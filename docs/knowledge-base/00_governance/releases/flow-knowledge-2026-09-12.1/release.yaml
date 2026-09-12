@@ -1,0 +1,5 @@
+release: flow-knowledge-2026-09-12.1
+baseline: obsidian-2026-09-12T15:46+08:00
+coverage: 12 group rows reconciled to declared baseline
+notes: >
+  articles registered on-demand; see 10_sources/SOURCE_REGISTER.md

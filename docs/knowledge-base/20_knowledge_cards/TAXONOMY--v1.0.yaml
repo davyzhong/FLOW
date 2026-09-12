@@ -1,7 +1,7 @@
 # 知识 taxonomy v1.0（K1-K8 → 领域手册映射；分类不构成产品批准）
 taxonomy_id: FLOW-TAXONOMY-001
 version: "1.0"
-status: verified
+status: canonical
 knowledge_release: pre-static-obsidian-2026-09-12T15:46+08:00
 k_domains:
   K1: {name: 财务报表基础, handbook: finance_statements}

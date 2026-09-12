@@ -2,7 +2,7 @@
 doc_id: FLOW-PMAP-001
 title: FLOW 产品知识映射 v1.0
 doc_type: product-mapping
-status: verified
+status: canonical
 version: "1.0"
 created_at: 2026-09-12
 updated_at: 2026-09-12

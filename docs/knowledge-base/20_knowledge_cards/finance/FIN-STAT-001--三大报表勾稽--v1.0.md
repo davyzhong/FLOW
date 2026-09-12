@@ -2,7 +2,7 @@
 doc_id: FIN-STAT-001
 title: 三大报表勾稽关系
 doc_type: knowledge-card
-status: verified
+status: canonical
 version: "1.0"
 created_at: 2026-09-12
 updated_at: 2026-09-12

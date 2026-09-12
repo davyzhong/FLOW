@@ -2,7 +2,7 @@
 doc_id: HANDBOOK-FINANCIAL-ANALYSIS-001
 title: 财务分析（比率/杜邦/趋势/结构） 领域手册
 doc_type: domain-handbook
-status: verified
+status: canonical
 version: "1.0"
 created_at: 2026-09-12
 updated_at: 2026-09-12

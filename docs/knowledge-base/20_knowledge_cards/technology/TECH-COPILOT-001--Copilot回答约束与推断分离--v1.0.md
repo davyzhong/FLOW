@@ -2,7 +2,7 @@
 doc_id: TECH-COPILOT-001
 title: Copilot 回答约束与推断分离
 doc_type: knowledge-card
-status: verified
+status: canonical
 version: "1.0"
 created_at: 2026-09-12
 updated_at: 2026-09-12

@@ -2,7 +2,7 @@
 doc_id: HANDBOOK-CASH-AND-WORKING-CAPITAL-001
 title: 现金流与营运资本 领域手册
 doc_type: domain-handbook
-status: verified
+status: canonical
 version: "1.0"
 created_at: 2026-09-12
 updated_at: 2026-09-12

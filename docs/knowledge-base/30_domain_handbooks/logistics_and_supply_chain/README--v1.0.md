@@ -2,7 +2,7 @@
 doc_id: HANDBOOK-LOGISTICS-AND-SUPPLY-CHAIN-001
 title: 物流与供应链分部经营 领域手册
 doc_type: domain-handbook
-status: verified
+status: canonical
 version: "1.0"
 created_at: 2026-09-12
 updated_at: 2026-09-12

@@ -2,7 +2,7 @@
 doc_id: FIN-MARGIN-001
 title: 毛利率与净利率的结构差异
 doc_type: knowledge-card
-status: verified
+status: canonical
 version: "1.0"
 created_at: 2026-09-12
 updated_at: 2026-09-12

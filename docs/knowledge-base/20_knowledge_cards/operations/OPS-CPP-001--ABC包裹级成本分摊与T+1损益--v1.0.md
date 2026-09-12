@@ -2,7 +2,7 @@
 doc_id: OPS-CPP-001
 title: ABC 包裹级成本分摊与 T+1 损益
 doc_type: knowledge-card
-status: verified
+status: canonical
 version: "1.0"
 created_at: 2026-09-12
 updated_at: 2026-09-12

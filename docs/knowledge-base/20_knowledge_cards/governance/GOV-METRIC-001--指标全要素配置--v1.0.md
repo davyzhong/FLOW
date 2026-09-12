@@ -2,7 +2,7 @@
 doc_id: GOV-METRIC-001
 title: 指标全要素配置与版本留痕
 doc_type: knowledge-card
-status: verified
+status: canonical
 version: "1.0"
 created_at: 2026-09-12
 updated_at: 2026-09-12

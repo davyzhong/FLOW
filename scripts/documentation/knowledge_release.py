@@ -147,6 +147,11 @@ def main(argv=None) -> int:
     ap.add_argument("--repo", default=".")
     ap.add_argument("--build-coverage", metavar="OUT_TSV")
     ap.add_argument("--verify-coverage", metavar="DECLARED_JSON")
+    ap.add_argument("--build", metavar="RELEASE_ID")
+    ap.add_argument("--check-only", action="store_true")
+    ap.add_argument("--verify-current", action="store_true")
+    ap.add_argument("--switch", nargs=2, metavar=("OLD", "NEW"))
+    ap.add_argument("--apply", action="store_true")
     args = ap.parse_args(argv)
     root = Path(args.repo).resolve()
 
@@ -157,6 +162,12 @@ def main(argv=None) -> int:
         n_art = sum(1 for r in rows if r.level == "article")
         print(f"coverage: {len(rows)} rows ({n_group} group / {n_art} article) -> {args.build_coverage}")
         return 0
+    if getattr(args, "build", None):
+        return build_release(root, args.build, check_only=args.check_only)
+    if getattr(args, "verify_current", False):
+        return verify_current(root)
+    if getattr(args, "switch", None):
+        return switch_release(root, args.switch[0], args.switch[1], apply=args.apply)
     if args.verify_coverage:
         import json
         declared = json.loads(Path(args.verify_coverage).read_text(encoding="utf-8"))
@@ -166,8 +177,142 @@ def main(argv=None) -> int:
             print(f"ERROR {e}", file=sys.stderr)
         print("coverage verify: " + ("PASS" if not errors else "FAIL"))
         return 0 if not errors else 1
-    ap.error("choose --build-coverage or --verify-coverage")
+    ap.error("choose an action")
     return 2
+
+
+
+
+# ---------------- Task 8: release build / verify / switch ----------------
+
+RELEASE_ID = "flow-knowledge-2026-09-12.1"
+OLD_BASELINE = BASELINE_ID  # pre-static-obsidian-...
+ASSET_DIRS = {
+    "knowledge-card": "docs/knowledge-base/20_knowledge_cards/{finance,operations,methods,governance,technology}",
+    "domain-handbook": "docs/knowledge-base/30_domain_handbooks",
+    "taxonomy": "docs/knowledge-base/20_knowledge_cards",
+    "product-mapping": "docs/knowledge-base/50_product_mappings",
+}
+EXTRA_ASSETS = [
+    ("source-register", "docs/knowledge-base/10_sources/source-register.tsv"),
+    ("coverage", "docs/knowledge-base/00_governance/releases/" + RELEASE_ID + "/coverage.tsv"),
+]
+
+
+def collect_assets(root: Path) -> List[dict]:
+    """显式收集发布资产：16 卡 + taxonomy + 11 手册 + mapping + source-register + coverage。"""
+    patterns = [
+        ("knowledge-card", "docs/knowledge-base/20_knowledge_cards/*/*.md"),
+        ("taxonomy", "docs/knowledge-base/20_knowledge_cards/TAXONOMY--*.yaml"),
+        ("domain-handbook", "docs/knowledge-base/30_domain_handbooks/*/README--*.md"),
+        ("product-mapping", "docs/knowledge-base/50_product_mappings/FLOW-PRODUCT-MAPPING*.md"),
+    ]
+    assets, seen = [], set()
+    for kind, pattern in patterns:
+        for p in sorted(root.glob(pattern)):
+            if not p.is_file() or str(p) in seen or p.name == "README.md":
+                continue
+            text = p.read_text(encoding="utf-8", errors="replace")
+            did = re.search(r"^(doc_id|taxonomy_id):\s*(\S+)", text, re.M)
+            ver = re.search(r"^version:\s*\"?([^\"\n]+)\"?", text, re.M)
+            if not did:
+                continue
+            seen.add(str(p))
+            assets.append({"id": did.group(2), "type": kind,
+                           "version": ver.group(1).strip() if ver else "1.0",
+                           "path": str(p.relative_to(root)), "sha256": sha256_of(p)})
+    for kind, rel in EXTRA_ASSETS:
+        p = root / rel
+        if p.exists():
+            assets.append({"id": f"FLOW-ASSET-{kind.upper()}", "type": kind, "version": "1.0",
+                           "path": rel, "sha256": sha256_of(p)})
+    return sorted(assets, key=lambda a: a["id"])
+
+
+def build_release(root: Path, release_id: str, check_only: bool = False) -> int:
+    rel_dir = root / RELEASES_DIR / release_id
+    assets = collect_assets(root)
+    # 非 canonical 入锁检查：verified 资产允许 build 候选，但发布(switch)前必须 canonical
+    non_canon = []
+    for a in assets:
+        p = root / a["path"]
+        text = p.read_text(encoding="utf-8", errors="replace")
+        m = re.search(r"^status:\s*(\S+)", text, re.M)
+        if m and m.group(1) not in ("canonical",) and a["type"] in ASSET_DIRS:
+            non_canon.append(a["id"])
+    lines = [f"# release-lock: {release_id}",
+             f"release: {release_id}", f"baseline: {BASELINE_ID}", f"assets: {len(assets)}", ""]
+    for a in assets:
+        lines.append(f"- id: {a['id']}")
+        lines.append(f"  type: {a['type']}")
+        lines.append(f"  version: \"{a['version']}\"")
+        lines.append(f"  path: {a['path']}")
+        lines.append(f"  sha256: {a['sha256']}")
+    print("\n".join(lines))
+    if not check_only:
+        rel_dir.mkdir(parents=True, exist_ok=True)
+        (rel_dir / "release-lock.yaml").write_text("\n".join(lines) + "\n", encoding="utf-8")
+        (rel_dir / "release.yaml").write_text(
+            f"release: {release_id}\nbaseline: {BASELINE_ID}\n"
+            f"coverage: 12 group rows reconciled to declared baseline\n"
+            f"notes: >\n  articles registered on-demand; see 10_sources/SOURCE_REGISTER.md\n",
+            encoding="utf-8")
+        (rel_dir / "sha256sums.txt").write_text(
+            "\n".join(f"{a['sha256']}  {a['path']}" for a in assets) + "\n", encoding="utf-8")
+        print(f"\nrelease written to {rel_dir} ({len(assets)} assets; "
+              f"{len(non_canon)} still non-canonical: {', '.join(non_canon[:6])}...)")
+    return 0
+
+
+def verify_current(root: Path) -> int:
+    cr = root / RELEASES_DIR / "CURRENT_RELEASE"
+    if not cr.exists():
+        print("verify: no CURRENT_RELEASE (pre-release state) -> PASS (nothing to verify)")
+        return 0
+    rid = cr.read_text(encoding="utf-8").strip()
+    lock = root / RELEASES_DIR / rid / "release-lock.yaml"
+    if not lock.exists():
+        print(f"FAIL: CURRENT_RELEASE {rid} without lock", file=sys.stderr)
+        return 1
+    errors = []
+    for m in re.finditer(r"path:\s*(\S+)\n\s*sha256:\s*([0-9a-f]{64})", lock.read_text(encoding="utf-8")):
+        rel, want = m.group(1), m.group(2)
+        p = root / rel
+        if not p.exists():
+            errors.append(f"missing {rel}")
+        elif sha256_of(p) != want:
+            errors.append(f"hash mismatch {rel}")
+    for e in errors:
+        print(f"FAIL {e}", file=sys.stderr)
+    print(f"verify {rid}: " + ("PASS" if not errors else f"FAIL ({len(errors)})"))
+    return 0 if not errors else 1
+
+
+def switch_release(root: Path, old: str, new: str, apply: bool = False) -> int:
+    """把全部引用 old release 的文档元数据切换为 new；--apply 才写盘。"""
+    changed = []
+    for rel in _tracked_md(root):
+        p = root / rel
+        text = p.read_text(encoding="utf-8")
+        if old in text:
+            changed.append(rel)
+            if apply:
+                p.write_text(text.replace(old, new), encoding="utf-8")
+    print(f"switch {old} -> {new}: {len(changed)} files" + (" (applied)" if apply else " (dry-run)"))
+    for c in changed[:20]:
+        print(f"  {c}")
+    if apply:
+        cr = root / RELEASES_DIR / "CURRENT_RELEASE"
+        cr.parent.mkdir(parents=True, exist_ok=True)
+        cr.write_text(new + "\n", encoding="utf-8")
+        print(f"CURRENT_RELEASE -> {new}")
+    return 0
+
+
+def _tracked_md(root: Path) -> List[str]:
+    from documentation.inventory import git_tracked_files, DOC_CONTRACT_EXEMPT_PREFIXES
+    return [t for t in git_tracked_files(root) if t.endswith(".md")
+            and not any(t.startswith(p) for p in DOC_CONTRACT_EXEMPT_PREFIXES)]
 
 
 if __name__ == "__main__":

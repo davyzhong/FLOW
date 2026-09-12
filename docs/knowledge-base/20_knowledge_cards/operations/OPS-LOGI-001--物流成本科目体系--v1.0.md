@@ -2,7 +2,7 @@
 doc_id: OPS-LOGI-001
 title: 物流成本科目体系
 doc_type: knowledge-card
-status: verified
+status: canonical
 version: "1.0"
 created_at: 2026-09-12
 updated_at: 2026-09-12
