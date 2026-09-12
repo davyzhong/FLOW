@@ -1,3 +1,20 @@
+---
+doc_id: FLOW-PLAN-UNIFIED-000
+title: 统一执行计划 U1–U10（历史）
+doc_type: plan
+status: archived
+version: 1.0
+created_at: 2026-09-07
+updated_at: 2026-09-12
+owner: FLOW
+depends_on: []
+acceptance_refs: []
+superseded_by: FLOW-PLAN-CURRENT
+do_not_execute: true
+---
+
+> **已接替**：唯一路线图见 [docs/50_plans/CURRENT_ROADMAP.md](../../../docs/50_plans/CURRENT_ROADMAP.md)。本文件保留任务细节与完成证据，不得领取新任务。
+
 # FLOW 下一阶段统一执行计划（单一队列 U）｜2026-09-12 修订
 
 - 制定日期：2026-09-07；本次修订：2026-09-12（吸收当前实现状态与 Obsidian 固定截面知识基线）

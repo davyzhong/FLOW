@@ -1,3 +1,20 @@
+---
+doc_id: FLOW-PLAN-OPS-000
+title: 经营轨 O 系列计划（历史）
+doc_type: plan
+status: archived
+version: 1.0
+created_at: 2026-09-07
+updated_at: 2026-09-12
+owner: FLOW
+depends_on: []
+acceptance_refs: []
+superseded_by: FLOW-PLAN-CURRENT
+do_not_execute: true
+---
+
+> **已接替**：唯一路线图见 [docs/50_plans/CURRENT_ROADMAP.md](../../../docs/50_plans/CURRENT_ROADMAP.md)。本文件保留任务细节与完成证据，不得领取新任务。
+
 # 经营分析轨执行计划（O 系列）
 
 - 制定日期：2026-09-09；依据：[D050](../../knowledge-base/04_decisions/DECISION_LOG.md)、[OP 方法论规格](../specs/2026-09-09-operations-track-methodology.md)、D045/D046 双轨结构

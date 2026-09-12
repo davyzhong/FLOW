@@ -25,7 +25,8 @@ applies_to: docs
 | `docs/operations/` | `docs/70_operations/` | M3 | 未开始 |
 | `docs/implementation/` | `docs/60_delivery/implementation/` | M5 | 未开始（p5 机器路径永久 keep） |
 | `docs/reviews/` | `docs/80_reviews/` | M5 | 未开始 |
-| `docs/superpowers/plans/2026-09-07-unified-next-plan.md` | `docs/50_plans/CURRENT_ROADMAP.md` | M4 | 未开始（M4 前旧路径为权威） |
+| `docs/superpowers/plans/2026-09-07-unified-next-plan.md` | `docs/50_plans/CURRENT_ROADMAP.md` | M4 | **已生效**（旧计划 superseded） |
+| `docs/superpowers/plans/2026-09-09-operations-track-plan.md` | `docs/50_plans/work_items/U09-O05--*.md` | M4 | 已生效 |
 | 历史 plans（Phase/WS/M/P 系列） | `docs/90_archive/` | M5 | 未开始 |
 | `HANDOFF.md`（仓库顶层） | `docs/knowledge-base/07_handoff/` | M5 | 未开始 |
 | `Finance_Intelligence_OS_完整会话归档.md`（顶层） | `docs/90_archive/` | M5 | 未开始 |
