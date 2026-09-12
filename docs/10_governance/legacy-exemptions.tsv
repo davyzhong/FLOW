@@ -1,10 +1,8 @@
 path	sha256	doc_id
-AGENTS.md	248b6f54e2874712340b3dcdf025d4e219e856240e9134af85125aa3ea627aed	-
 Finance_Intelligence_OS_完整会话归档.md	2f76b9a257f0baa1c30d5995a49f17bdbacf519f3a33668383f1f39c69c7faea	-
 HANDOFF.md	24edd5a19aebe5b3ceafd7caf965acfd309187b855ed864c1bf0c746b893b26b	-
 README.md	6704ae9782348ba32a68437fb7c731ea51790b45a19343f92267015130b9c171	-
 docs/2026-09-07-documentation-governance.md	dec7df19fe5ae3922251d7f4c9413c4d4e717b380b179dc46b5c68ec285d170c	-
-docs/README.md	966a02c97825f293b2e300e30540c7fd4ff96b1dd6ad302506d5d2b934572c1e	-
 docs/api-reference.md	56ecacf2a18ca0dd70e8d43f7fb2eb90f51381784957631fcf54b6d3e4fffb44	-
 docs/architecture/flow-v1-domain-objects.md	64c60a27d3b9179ed85a75225d3abedfc25987fb0dd49f365dedb932217edcfa	-
 docs/architecture/flow-v1-runtime.md	32f09ffba1f25d6dc8e79469594aedfe77724e6e7b292b79ff277867a638e736	-
@@ -39,8 +37,6 @@ docs/implementation/p5/metric_coverage_matrix.md	6ec85ccc0af6068d615d92a968e0868
 docs/implementation/p5/sf_2026q1_diff_report.md	85b2c4fa34704750658d9c234f801dc8ffd1f5a32fa89da5115aff5f00a8d766	-
 docs/intake/flow-v1-intake.md	c7e5af56cc44b8723fbb26c3a8a06aa79d3a531869807e46ffbb3851718cae33	-
 docs/knowledge-base/00_start_here/2026-09-07-project-state-history.md	df51c9b65fd77b34d5f53d3607d39d3ec40e0c56c410ebe5f105bdfc66c5f96c	-
-docs/knowledge-base/00_start_here/AGENT_START_HERE.md	5e3c0d7a1c8597906a865442b729124f53100dea7566c9f660e66a4445ec975c	-
-docs/knowledge-base/00_start_here/PROJECT_STATE.md	fe7b25ab4725ededddb644df1a49b1fca4350a1c2b134236d95607efc9f2605d	-
 docs/knowledge-base/01_conversations/INDEX.md	5046991b7f56353e4d4c97a7c8532fbd76b83a844ecaa383c5ed4a1dfe7cb7b8	-
 docs/knowledge-base/01_conversations/readable/2026-09-02-positioning-accurate-financial-analysis.md	38ef6164ca0bfcc761b2f653a16d1478c7a06e196a1e703054cdb9c61208b630	-
 docs/knowledge-base/01_conversations/readable/rollout-2026-08-28T14-41-27-01a0471a-1689-7270-8dc5-f2bf084e4db9.md	9899e55cb849d3ae6f31fd74adfb12562e94f24d15a8ecf023ed2e95ec11cefa	-

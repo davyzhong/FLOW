@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-MIGRATION-001
 title: FLOW Documentation and Static Knowledge Migration Implementation Plan
 doc_type: plan
 status: active
-version: 1.1
+version: 1.2
 created_at: 2026-09-12
 updated_at: 2026-09-12
 owner: FLOW
@@ -28,13 +28,13 @@ acceptance_refs: [M0-baseline, M1-entrypoints, M2-knowledge-release, M3-specs, M
 | 字段 | 值 |
 |---|---|
 | Plan ID | FLOW-DOC-MIGRATION-001 |
-| 状态 | proposed；尚未授权执行 |
+| 状态 | active；仅已明确批准的批次可执行 |
 | 版本 | 1.2 |
 | 建立日期 | 2026-09-12 |
 | 设计依据 | `docs/superpowers/specs/2026-09-12-static-knowledge-and-document-architecture-design.md` **V1.1** |
 | 来源基线 | `obsidian-2026-09-12T15:46+08:00` |
 | 目标知识发布 | `flow-knowledge-2026-09-12.1` |
-| 编写与复审基线 | Git `6f3e90e`；执行每一批前必须重新盘点 |
+| 编写与复审基线 | Git `0fc3488`；执行每一批前必须重新盘点 |
 | 决策依据 | D049、D051 |
 
 **V1.1 修订记录（2026-09-12）**：同步设计 V1.1——(1) Task 15 接续测试十题降为五题（第 1/2/4 题 critical，通过线 4/5）；(2) Task 6/8 验收从写死 3035 改为 M0 基线清单哈希对账；(3) Task 3/7 的 JSON Schema 优先路径收敛为 `scripts/check_docs.py` 单一检查入口，Schema 文件后置为可选增强；(4) Task 2 补 M0 二进制存储分级盘点（设计 §4.9）；(5) Task 8 补 release 批量切换工具；(6) Task 12 补顶层 HANDOFF/会话归档归宿；(7) §0 补角色门禁映射引用。
@@ -55,6 +55,8 @@ acceptance_refs: [M0-baseline, M1-entrypoints, M2-knowledge-release, M3-specs, M
 4. 记录当前提交、远端状态、不可变基线和机器消费者；
 5. 只暂存当前任务文件，验证后提交并推送 `origin`；
 6. 若不可变哈希变化、规范入口重复、消费者失败或知识覆盖不能闭合，立即停止当前批次。
+
+文件名中的 `<checkpoint-commit>`、`<execution-date>`、`<agent-id>` 和 `<n>` 是执行时占位符；每个批次开始时必须解析为一个精确值，写入该批批准记录和 staging 清单，之后不得在批次内漂移。
 
 以下目录永久原位：
 
@@ -148,13 +150,15 @@ M2 和 M3 不可并行，因为 M3 正式文档必须引用可解析的知识发
 
 ---
 
-### Task 1: M0.1 建立可重复的文档清单工具
+### Task 1: M0.1 修订并闭合可重复的文档清单工具
+
+现状：初版扫描器已由 `6f3e90e` 提交，但本计划 V1.2 复审重新打开其验收；checkpoint tree、来源级基线、完整消费者发现和 manifest 工具未闭合前，不得把 Task 1 视为完成。
 
 **Files:**
-- Create: `scripts/documentation/__init__.py`
-- Create: `scripts/documentation/inventory.py`
+- Existing: `scripts/documentation/__init__.py`
+- Modify: `scripts/documentation/inventory.py`
 - Create: `scripts/documentation/kb_manifest.py`
-- Create: `scripts/tests/test_document_inventory.py`
+- Modify: `scripts/tests/test_document_inventory.py`
 - Create: `scripts/tests/test_kb_manifest.py`
 
 - [ ] **Step 1: 写失败测试，固定扫描边界**
@@ -171,8 +175,8 @@ def test_inventory_marks_raw_and_original_as_immutable(tmp_path: Path) -> None:
 
 - [ ] **Step 2: 运行测试确认失败**
 
-Run: `python3 -m unittest scripts.tests.test_document_inventory -v`
-Expected: FAIL，提示 `scripts.documentation.inventory` 不存在。
+Run: `python3 -m unittest scripts.tests.test_document_inventory scripts.tests.test_kb_manifest -v`
+Expected: FAIL，初版扫描器不支持 checkpoint tree/完整消费者规则，且 `kb_manifest.py` 尚不存在。
 
 - [ ] **Step 3: 实现最小扫描器**
 
@@ -197,7 +201,7 @@ Expected: PASS，且 fixture 的路径、哈希和消费者数量稳定。
 git add scripts/documentation/__init__.py scripts/documentation/inventory.py \
   scripts/documentation/kb_manifest.py scripts/tests/test_document_inventory.py \
   scripts/tests/test_kb_manifest.py
-git commit -m "docs(tooling): add documentation inventory scanner"
+git commit -m "docs(tooling): close documentation baseline tooling"
 git push origin HEAD
 ```
 
@@ -278,11 +282,13 @@ M0 验收记录必须包含提交、计数、baseline hash、消费者数量和�
 
 ### Task 3: M1.1 建立文档元数据校验器与统一检查入口
 
+现状：初版元数据检查已由 `0fc3488` 提交，但 CLI 仍位于 `scripts/documentation/check_docs.py`，且 M0 checkpoint/source/consumer 闭环尚未满足 V1.2。本任务在这些差异修正并重验前保持 reopened。
+
 **Files:**
-- Create: `docs/10_governance/legacy-exemptions.tsv`
-- Create: `scripts/documentation/metadata.py`
-- Create: `scripts/check_docs.py`
-- Create: `scripts/tests/test_document_metadata.py`
+- Existing: `docs/10_governance/legacy-exemptions.tsv`
+- Existing: `scripts/documentation/metadata.py`
+- Move: `scripts/documentation/check_docs.py` → `scripts/check_docs.py`
+- Modify: `scripts/tests/test_document_metadata.py`
 - Modify: `.github/workflows/ci.yml`
 
 - [ ] **Step 1: 写状态与引用失败测试**
@@ -593,14 +599,14 @@ Commit: `docs(knowledge): prepare flow knowledge 2026-09-12.1`。
 
 - [ ] **Step 9: 验证原子激活**
 
-Run: `cd services/api && uv run python ../../scripts/check_docs.py --phase m2`  
+Run: `cd services/api && uv run python ../../scripts/check_docs.py --phase m2`
 Expected: canonical 资产均能在最终 lock 中以激活后哈希解析；current pointer、当前正式文档和 release 状态一致；candidate lock 只作签项证据。
 
 - [ ] **Step 10: 按 activation plan 精确暂存并提交**
 
 激活命令输出唯一允许的 staging 清单；执行者逐项与 `activation-plan.tsv` 对照后暂存，禁止使用 `git add -A`。
 
-Commit: `docs(knowledge): activate flow knowledge 2026-09-12.1`。  
+Commit: `docs(knowledge): activate flow knowledge 2026-09-12.1`。
 推送成功并通过 CI 后，M2 才完成；M3 仍需另行批准。
 
 ---
@@ -912,7 +918,7 @@ Expected: 5 题、critical 集合准确、总分和通过规则有效。
 
 `knowledge-base/99_manifest/READER_TEST.md` 只链接新测试体系，并明确旧记录是历史快照。
 
-Run: `python3 scripts/documentation/kb_manifest.py --write && python3 scripts/documentation/kb_manifest.py --check`  
+Run: `python3 scripts/documentation/kb_manifest.py --write && python3 scripts/documentation/kb_manifest.py --check`
 Expected: PASS。
 
 - [ ] **Step 7: 提交并推送**
@@ -922,11 +928,11 @@ Commit: `test(docs): verify context-free project handoff`。
 ### Task 16: M6.3 最终迁移验收与关闭
 
 **Files:**
-- Create: `docs/60_delivery/releases/2026-09-12--release--documentation-system-v1.md`
+- Create: `docs/60_delivery/releases/<execution-date>--release--documentation-system-v1.md`
 - Modify: `docs/00_start_here/PROJECT_STATE.md`
 - Modify: `docs/README.md`
 - Modify: `docs/knowledge-base/README.md`
-- Modify: `docs/60_delivery/verification/2026-09-12--verification--documentation-migration--v1.md`
+- Modify: `docs/60_delivery/verification/<execution-date>--verification--documentation-migration--v1.md`
 - Modify: `docs/knowledge-base/99_manifest/inventory.tsv`
 - Modify: `docs/knowledge-base/99_manifest/sha256sums.txt`
 
@@ -958,7 +964,8 @@ Expected: 全部 PASS；immutable baseline 与所有 delta 可重放；current r
 
 - [ ] **Step 6: 重建知识库 manifest**
 
-验证清单不含自身、排序稳定、旧不可变哈希未变。
+Run: `python3 scripts/documentation/kb_manifest.py --write && python3 scripts/documentation/kb_manifest.py --check`
+Expected: 清单不含自身、排序稳定、旧不可变哈希未变。
 
 - [ ] **Step 7: 提交、推送并等待 GitHub CI**
 

@@ -1,3 +1,17 @@
+---
+doc_id: FLOW-NAV-DOCS-001
+title: docs navigation
+doc_type: navigation
+status: current
+version: 1.0
+created_at: 2026-09-12
+updated_at: 2026-09-12
+owner: FLOW
+applies_to: docs
+---
+
+> 文档唯一入口：[00_start_here](00_start_here/README.md)（PROJECT_STATE / READING_ORDER / DOCUMENT_MAP）。M1–M5 迁移期间 superpowers/ 与旧目录仍有效，接替关系见 DOCUMENT_MAP。
+
 # FLOW 文档中心｜2026-09-12
 
 状态：当前导航。当前 HEAD `9f00cc9` 的 CI run `34676253964` 成功，迁移头 `0024_operations_publication`；不以文档更新代替功能验收。
