@@ -1,0 +1,17 @@
+# 评分 rubric v1.0（附于验证记录；无独立版本化机制）
+pass_rule: 4-of-5 pass, questions 1/2/4 critical must have no key error
+question_1_points: 2
+question_1_critical: true
+question_1_must: 定位=可追溯确定性可复核的财务与经营分析平台；非目标含总账/自动因果/多租户中至少两项
+question_2_points: 2
+question_2_critical: true
+question_2_must: 状态读 docs/00_start_here/PROJECT_STATE.md；计划读 docs/50_plans/CURRENT_ROADMAP.md；确认无第二份总计划
+question_3_points: 2
+question_3_critical: false
+question_3_must: 公式=指标库/financial-facts-contract；方法=知识库卡/手册；功能=40_specs/SPEC_INDEX
+question_4_points: 2
+question_4_critical: true
+question_4_must: 可以（静态知识 flow-knowledge-*）；刷新仅在用户发起知识维护时；五个不可变根+机器keep路径不可动
+question_5_points: 2
+question_5_critical: false
+question_5_must: U9/O5 授权门禁+脱敏+审计；完成=60_delivery 验证证据+CI 绿
