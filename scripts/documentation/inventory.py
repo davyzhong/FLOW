@@ -375,3 +375,42 @@ def main(argv: Optional[List[str]] = None) -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
+
+
+def write_status_view(root: Path, out: Path) -> None:
+    """Task 13: 生成式 DOCUMENT_STATUS（由清单+元数据推导，手改后 --check 失败）。"""
+    rows = build_inventory(root)
+    from documentation.metadata import check_repository
+    result = check_repository(root)
+    from collections import Counter
+    by_kind = Counter(r.kind for r in rows)
+    by_mut = Counter(r.mutability for r in rows)
+    lines = [
+        "---",
+        "doc_id: FLOW-GEN-DOCSTATUS-001",
+        "title: 文档状态总览（生成式）",
+        "doc_type: generated",
+        "status: generated",
+        "version: 1.0",
+        "created_at: 2026-09-12",
+        "updated_at: 2026-09-12",
+        "owner: FLOW",
+        "generator_ref: scripts/documentation/inventory.py::write_status_view",
+        f"input_hash: {repo_head(root) or 'n/a'}",
+        "applies_to: repository",
+        "---",
+        "",
+        "# 文档状态总览（生成式，勿手改）",
+        "",
+        f"- 仓库跟踪文件：{len(rows)}（immutable {by_mut.get('immutable', 0)} / mutable {by_mut.get('mutable', 0)}）",
+        f"- 类型分布：{', '.join(f'{k} {v}' for k, v in by_kind.most_common(8))}",
+        f"- 元数据合同：checked {result.checked} / legacy-exempt {result.exempt} / errors {len(result.errors)}",
+        f"- 当前知识发布：{(root / RELEASES_DIR / 'CURRENT_RELEASE').read_text().strip() if (root / RELEASES_DIR / 'CURRENT_RELEASE').exists() else 'pre-release'}",
+        "",
+        "> 状态明细见同目录 document-inventory.tsv；接替关系见 00_start_here/DOCUMENT_MAP.md。",
+    ]
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+RELEASES_DIR = "docs/knowledge-base/00_governance/releases"
