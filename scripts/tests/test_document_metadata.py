@@ -8,6 +8,7 @@
 from __future__ import annotations
 
 import tempfile
+import sys
 import unittest
 from pathlib import Path
 
@@ -139,6 +140,40 @@ class MetadataContractTests(unittest.TestCase):
         legacy.write_text("# legacy changed\n", encoding="utf-8")
         errors = " ".join(self.check().errors)
         self.assertIn("legacy-exempt", errors)
+
+
+class CheckDocsCliTests(unittest.TestCase):
+    """Task 3 (M1.1)：scripts/check_docs.py 唯一入口与 phase fail-closed 行为。"""
+
+    def test_single_entrypoint(self) -> None:
+        root = Path(__file__).resolve().parent.parent.parent
+        self.assertTrue((root / "scripts/check_docs.py").is_file())
+        self.assertFalse(
+            (root / "scripts/documentation/check_docs.py").exists(),
+            "旧 CLI 路径必须移除，scripts/check_docs.py 是唯一入口",
+        )
+
+    def _run(self, *args: str) -> subprocess.CompletedProcess:
+        import subprocess
+
+        root = Path(__file__).resolve().parent.parent.parent
+        return subprocess.run(
+            [sys.executable, str(root / "scripts/check_docs.py"), *args],
+            cwd=str(root), capture_output=True, text=True,
+        )
+
+    def test_phase_required(self) -> None:
+        self.assertNotEqual(self._run().returncode, 0)
+        self.assertNotEqual(self._run("--phase", "nope").returncode, 0)
+
+    def test_phase_m1_runs(self) -> None:
+        proc = self._run("--phase", "m1")
+        self.assertIn("m1", proc.stdout + proc.stderr)
+
+    def test_phase_m6_fails_closed_when_modules_missing(self) -> None:
+        """links/reader_rubric 模块（M5/M6 交付）缺失时 m6 必须失败。"""
+        proc = self._run("--phase", "m6")
+        self.assertNotEqual(proc.returncode, 0)
 
 
 if __name__ == "__main__":
