@@ -15,7 +15,7 @@ superseded_by: FLOW-STATE-001
 
 新会话请直接读取：
 
-1. [docs/00_start_here/PROJECT_STATE.md](../../../00_start_here/PROJECT_STATE.md)
-2. [READING_ORDER.md](../../../00_start_here/READING_ORDER.md)（最短五份文档路径）
+1. [docs/00_start_here/PROJECT_STATE.md](../../00_start_here/PROJECT_STATE.md)
+2. [READING_ORDER.md](../../00_start_here/READING_ORDER.md)（最短五份文档路径）
 
 本页保留仅为兼容历史引用，不再更新。

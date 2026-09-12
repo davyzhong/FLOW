@@ -782,7 +782,7 @@ Commit: `docs(specs): consolidate architecture and specification authority`。
 - Create: `docs/50_plans/views/active.md`
 - Create: `docs/50_plans/views/blocked.md`
 - Create: `docs/50_plans/views/completed.md`
-- Modify: `docs/90_archive/plans/2026-09-07-unified-next-plan.md`
+- Modify: `docs/superpowers/plans/2026-09-07-unified-next-plan.md`
 - Modify: `docs/superpowers/plans/2026-09-09-operations-track-plan.md`
 - Modify: `docs/00_start_here/PROJECT_STATE.md`
 - Modify: `docs/00_start_here/READING_ORDER.md`

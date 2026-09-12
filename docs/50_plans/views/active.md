@@ -17,4 +17,4 @@ applies_to: planning
 > 首版手工生成；M5.2 起由 work_items 元数据自动生成，手改将失效。
 
 - [U08 生产就绪收口](../work_items/U08--production-readiness.md)
-- [DOC-M5 历史整理](../../../superpowers/plans/2026-09-12-static-knowledge-and-document-migration.md)（待批次批准）
+- [DOC-M5 历史整理](../../superpowers/plans/2026-09-12-static-knowledge-and-document-migration.md)（待批次批准）

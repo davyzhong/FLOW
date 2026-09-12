@@ -16,9 +16,9 @@ historical_scope: phase-and-track-era
 
 # FLOW 下一阶段升级改造执行准备计划｜2026-09-07
 
-> **【已归档 2026-09-07】本计划（P 系列（升级计划））已并入 [统一执行计划](2026-09-07-unified-next-plan.md)（U 系列），不再是独立执行入口**：未完任务的领取、勾选与提交一律以 U 编号进行（映射见统一计划 §1/§3）；本文保留为任务书细节与历史证据，不再直接更新。
+> **【已归档 2026-09-07】本计划（P 系列（升级计划））已并入 [统一执行计划](../../superpowers/plans/2026-09-07-unified-next-plan.md)（U 系列），不再是独立执行入口**：未完任务的领取、勾选与提交一律以 U 编号进行（映射见统一计划 §1/§3）；本文保留为任务书细节与历史证据，不再直接更新。
 
-> **2026-09-07 起执行队列由 [统一执行计划](2026-09-07-unified-next-plan.md)（U 系列）单一承载**：本文（P 系列）任务书细节仍有效，勾选时与 U 系列双写映射。
+> **2026-09-07 起执行队列由 [统一执行计划](../../superpowers/plans/2026-09-07-unified-next-plan.md)（U 系列）单一承载**：本文（P 系列）任务书细节仍有效，勾选时与 U 系列双写映射。
 
 > **给后续执行者**：仅在用户另行明确启动后，使用 executing-plans 逐项执行；行为变更先写失败测试，完成前做 verification-before-completion。每个工作包内部按测试、最小改动、复验、任务范围提交拆成小步。本次不进入执行流程。
 
@@ -32,7 +32,7 @@ historical_scope: phase-and-track-era
 
 ## 1. 依据、约束与优先级
 
-主要输入：[外部借鉴、参考资料与优化订正总册](../../knowledge-base/02_research/synthesis/2026-09-07-reference-and-improvement-master.md)，下文 S、C、I 编号均来自该册。正式约束：[D049 方向规格](../specs/2026-09-06-objective-financial-analysis-direction.md)、[财务事实合同](../specs/financial-facts-contract.md)、[指标库规格](../specs/2026-09-05-flow-metric-dictionary-design.md)、[变更影响图](../../knowledge-base/04_decisions/CHANGE_IMPACT_MAP.md)。
+主要输入：[外部借鉴、参考资料与优化订正总册](../../knowledge-base/02_research/synthesis/2026-09-07-reference-and-improvement-master.md)，下文 S、C、I 编号均来自该册。正式约束：[D049 方向规格](../../superpowers/specs/2026-09-06-objective-financial-analysis-direction.md)、[财务事实合同](../../superpowers/specs/financial-facts-contract.md)、[指标库规格](../../superpowers/specs/2026-09-05-flow-metric-dictionary-design.md)、[变更影响图](../../knowledge-base/04_decisions/CHANGE_IMPACT_MAP.md)。
 
 本计划作为下一阶段详细任务入口；[A01–H01 里程碑台账](2026-09-06-objective-financial-analysis-master-plan.md)保留阶段出口与历史证据。本计划细化后续增量和验收，不替换已批准方向，不重新打开已完成 A/B/C 全部工作，不撤销历史验收。开始执行须有用户后续明确指令；届时先做 P00，发现规格冲突先提交决策，不默默实施。
 

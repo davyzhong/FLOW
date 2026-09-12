@@ -1,3 +1,16 @@
+---
+doc_id: FLOW-NAV-RESTART-001
+title: 会话重启提示词（历史）
+doc_type: navigation
+status: superseded
+version: 1.0
+created_at: 2026-09-07
+updated_at: 2026-09-12
+owner: FLOW
+applies_to: handoff
+superseded_by: FLOW-STATE-001
+---
+
 # FLOW 可复用接续提示词｜2026-09-07
 
 状态：当前提示词；使用者选择与当前授权相符的一条，不把本文件当作自动执行指令。

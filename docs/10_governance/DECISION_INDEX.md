@@ -68,4 +68,4 @@ applies_to: repository
 | D050 | 经营分析轨方法论采纳（外部 SOP 分析判断后的默认推荐） | accepted | | [D050--经营分析轨方法论采纳外部SOP分析判断后的默认推.md](decisions/D050--经营分析轨方法论采纳外部SOP分析判断后的默认推.md)|
 | D051 | Obsidian 常驻内部知识源与任务取用门禁 | accepted | | [D051--Obsidian常驻内部知识源与任务取用门禁.md](decisions/D051--Obsidian常驻内部知识源与任务取用门禁.md)|
 
-修订规则：已接受决策不抹改；修订以 amends/supersedes 新版本表达，编号不复用。历史原日志见 [DECISION_LOG.md（兼容页）](../../knowledge-base/04_decisions/DECISION_LOG.md)。
+修订规则：已接受决策不抹改；修订以 amends/supersedes 新版本表达，编号不复用。历史原日志见 [DECISION_LOG.md（兼容页）](../knowledge-base/04_decisions/DECISION_LOG.md)。

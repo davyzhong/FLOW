@@ -77,7 +77,6 @@ docs/knowledge-base/06_sources/LINK_CATALOG.md	d6afc8ae3e882b23ffe0d1349b3cf6516
 docs/knowledge-base/06_sources/SOURCE_CATALOG.md	94ce399b50a0dc60ebd63539d73fe2f1d3d836ce0d397f6d85e9a0c87649c2ed	-
 docs/knowledge-base/07_handoff/2026-09-07-machine-handoff-p03-plan.md	19fc41430dd99d853ca2682f88acbf0f9fbac823b013ec18ea9ee6591a600de9	-
 docs/knowledge-base/07_handoff/CONTINUATION_GUIDE.md	4777507f8e40b67ede2c051ba671ee7a91b3b0d595fc1a45c2567398a63d07fb	-
-docs/knowledge-base/07_handoff/RESTART_PROMPTS.md	597bfaa3ae2641aaba0b5e789ffbaf3417023d3d8975cdcb50855e085f19666d	-
 docs/knowledge-base/09_competitive/C01-powerbi.md	dd9cef4dec4b4a8aea167cc958c107206c4b85c4a12160ad8baf0956c67b916a	-
 docs/knowledge-base/09_competitive/C02-tableau.md	262d1335aa6aaf5efb537a762f9e5bf93f1d254578437c145642079583e77249	-
 docs/knowledge-base/09_competitive/C03-qlik-sense.md	92b7f1a504a7126ed56c22387ed7299708f347cf9525085856ed47e953f05600	-
@@ -99,7 +98,6 @@ docs/knowledge-base/09_competitive/C18-redash.md	93c99df679639c960cc293129827542
 docs/knowledge-base/09_competitive/C19-dataease.md	11c1d009302373d407aacdaf15b275ea1e9bfd2072534343be12e5eddb7c97f5	-
 docs/knowledge-base/09_competitive/C20-jimu-report.md	fa86fc4e8fe4899554d17f91a7a58424208d2159ab0e1cb276d58164fc24a490	-
 docs/knowledge-base/09_competitive/INDEX.md	eaa05df9741f855a36f2bfeb23c22044d0456ef7292af14dcb7c8d45c5190cc3	-
-docs/knowledge-base/README.md	68c8daeb75ed07b96743d599dec2f9071b4565cc98bffa0f329df6b9776ae1bb	-
 docs/metrics/flow-v1-metrics.md	87c25edc64384c1bcd918d02866257a0fc80058f24bce14cfd3e845db5dcbb91	-
 docs/operations/authentication.md	01ca7bbbdf0dc642145bd574c0b1a24527a0e599a70bd0b1fffd7e9fc7cdff4b	-
 docs/reviews/2026-09-04-project-code-review.md	7b7db8a1739d02bae3ffbaa3ece5733a5cfccefd52d191146a49047327beb2e0	-

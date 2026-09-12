@@ -13,7 +13,7 @@ knowledge_release: flow-knowledge-2026-09-12.1
 
 # 文档治理规则
 
-依据：[静态知识库与文档体系总体设计 V1.1](../../superpowers/specs/2026-09-12-static-knowledge-and-document-architecture-design.md)。本页为执行摘要，冲突时以设计规格为准。
+依据：[静态知识库与文档体系总体设计 V1.1](../superpowers/specs/2026-09-12-static-knowledge-and-document-architecture-design.md)。本页为执行摘要，冲突时以设计规格为准。
 
 ## 生命周期与状态
 

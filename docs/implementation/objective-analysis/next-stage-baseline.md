@@ -60,7 +60,7 @@ I15 部分→比较合同落地（同行比较前提待 P04+）；C09/C11/C16/C1
 - 上游输入：[A01 基线审计](2026-09-06-baseline-audit.md)、
   [参考与订正总册](../../knowledge-base/02_research/synthesis/2026-09-07-reference-and-improvement-master.md)、
   [验证清单 manifest](../../../validation/financial_reports/manifest.yaml)、
-  [P00–P12 计划](../../../90_archive/plans/2026-09-07-next-stage-upgrade-plan.md)
+  [P00–P12 计划](../../90_archive/plans/2026-09-07-next-stage-upgrade-plan.md)
 
 ## 1. 实现状态分层（回答 C11：四层分开计数）
 

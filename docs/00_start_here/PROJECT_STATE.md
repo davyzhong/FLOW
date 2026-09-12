@@ -18,7 +18,7 @@ applies_to: repository
 
 - **[CURRENT_ROADMAP.md](../50_plans/CURRENT_ROADMAP.md)**（唯一执行入口，M4 起生效）：U08 active；U4 等外部到料；U9+O5 等授权；U10 硬依赖三者
 - 旧统一计划与 O 系列计划已 superseded（保留任务细节与证据）
-- 文档迁移：[迁移实施计划 M0–M6](../../superpowers/plans/2026-09-12-static-knowledge-and-document-migration.md)（M0–M4 完成；M5 历史整理待批次批准）
+- 文档迁移：[迁移实施计划 M0–M6](../superpowers/plans/2026-09-12-static-knowledge-and-document-migration.md)（M0–M4 完成；M5 历史整理待批次批准）
 
 ## 进行中 / 阻塞 / 待授权
 
@@ -33,7 +33,7 @@ applies_to: repository
 
 ## 能力矩阵与历史证据
 
-已实现能力（物流窄切片、来源与财务事实 B01–B05、指标库 v1.1、报告中心、认证等）与历史验收细节见[历史状态快照](../../knowledge-base/00_start_here/2026-09-07-project-state-history.md)与 [HANDOFF](../../knowledge-base/07_handoff/)；本页只维护当前事实。
+已实现能力（物流窄切片、来源与财务事实 B01–B05、指标库 v1.1、报告中心、认证等）与历史验收细节见[历史状态快照](../knowledge-base/00_start_here/2026-09-07-project-state-history.md)与 [HANDOFF](../../knowledge-base/07_handoff/)；本页只维护当前事实。
 
 ## 更新纪律
 

@@ -16,9 +16,9 @@ historical_scope: phase-and-track-era
 
 # FLOW 客观财务分析里程碑与执行台账｜2026-09-06 建立，2026-09-07 更新
 
-> **【已归档 2026-09-07】本计划（M 系列（客观财务分析主计划））已并入 [统一执行计划](2026-09-07-unified-next-plan.md)（U 系列），不再是独立执行入口**：未完任务的领取、勾选与提交一律以 U 编号进行（映射见统一计划 §1/§3）；本文保留为任务书细节与历史证据，不再直接更新。
+> **【已归档 2026-09-07】本计划（M 系列（客观财务分析主计划））已并入 [统一执行计划](../../superpowers/plans/2026-09-07-unified-next-plan.md)（U 系列），不再是独立执行入口**：未完任务的领取、勾选与提交一律以 U 编号进行（映射见统一计划 §1/§3）；本文保留为任务书细节与历史证据，不再直接更新。
 
-> **2026-09-07 起执行队列由 [统一执行计划](2026-09-07-unified-next-plan.md)（U 系列）单一承载**：本文（M 系列）任务书细节仍有效，勾选时与 U 系列双写映射。
+> **2026-09-07 起执行队列由 [统一执行计划](../../superpowers/plans/2026-09-07-unified-next-plan.md)（U 系列）单一承载**：本文（M 系列）任务书细节仍有效，勾选时与 U 系列双写映射。
 
 > **2026-09-07 接续关系**：[下一阶段详细计划](2026-09-07-next-stage-upgrade-plan.md)与[参考订正总册](../../knowledge-base/02_research/synthesis/2026-09-07-reference-and-improvement-master.md)已整合累计外部借鉴。P 计划是下一阶段详细任务入口，本文件保留 A–H 阶段出口和已完成证据，不再单独形成冲突排期。本次仅文档更新，实施需另行明确；A/B/C 已有实现，P00 刷新验收差异和在途 D01，不重复建设。
 
@@ -31,7 +31,7 @@ historical_scope: phase-and-track-era
 **Tech Stack:** Next.js、TypeScript、FastAPI、Pydantic、SQLAlchemy、Alembic、PostgreSQL、S3/MinIO、Celery/Redis、Decimal、Playwright。
 
 建立：2026-09-06；更新：2026-09-07。状态：**A/B/C 已有交付记录，D/E/F 待增量建设与验收；本文件为里程碑台账**。本轮读取 `22061da`、迁移至 0018；D01 已提交 `c009823`，CI 与勾选状态见当前状态页。
-正式方向：[产品方向规格](../specs/2026-09-06-objective-financial-analysis-direction.md)。本文件接替旧财务轨总计划的后续排序；旧完成证据保留，不重写为新验收已完成。
+正式方向：[产品方向规格](../../superpowers/specs/2026-09-06-objective-financial-analysis-direction.md)。本文件接替旧财务轨总计划的后续排序；旧完成证据保留，不重写为新验收已完成。
 
 ## 1. 已有资产与重新验收边界
 
