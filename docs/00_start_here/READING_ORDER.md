@@ -16,7 +16,7 @@ applies_to: docs
 
 1. [PROJECT_STATE.md](PROJECT_STATE.md) —— 现状、阻塞、唯一执行入口
 2. [统一计划 U1–U10](../../superpowers/plans/2026-09-07-unified-next-plan.md) —— 当前任务顺序与完成证据（M4 前为路线图权威）
-3. [客观财务分析方向 D049](../../superpowers/specs/2026-09-06-objective-financial-analysis-direction.md) —— 产品定位与边界（M3 前暂代 PRODUCT_SCOPE）
+3. [PRODUCT_SCOPE](../20_product/PRODUCT_SCOPE.md) —— 产品范围、含/不含与冲突裁决矩阵（含 [能力地图](../20_product/CAPABILITY_MAP.md)）
 4. [财务事实合同](../../superpowers/specs/financial-facts-contract.md) —— 领域对象与不变量的机器合同
 5. [决策索引](../../10_governance/DECISION_INDEX.md) —— D001–D051 正式决策；历史完整日志按字节保留于 `knowledge-base/04_decisions/DECISION_LOG.md`（只读，见 legacy sidecar）
 

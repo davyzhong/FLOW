@@ -19,7 +19,8 @@ applies_to: docs
 | `docs/knowledge-base/00_start_here/PROJECT_STATE.md` | `docs/00_start_here/PROJECT_STATE.md` | M1 | 已生效（旧页转兼容导航） |
 | `docs/knowledge-base/00_start_here/AGENT_START_HERE.md` | `docs/00_start_here/READING_ORDER.md` | M1 | 已生效 |
 | `docs/knowledge-base/04_decisions/DECISION_LOG.md` | `docs/10_governance/DECISION_INDEX.md` + `decisions/Dxxx` | M1 | 进行中 |
-| `docs/superpowers/specs/*` | `docs/40_specs/` + `SPEC_INDEX.md` | M3 | 未开始（原路径当前有效） |
+| `docs/superpowers/specs/*` | `docs/40_specs/SPEC_INDEX.md`（原位登记，机器路径 keep） | M3 | 进行中 |
+| 产品定位（散于 D049/旧 README） | `docs/20_product/` 六份单一职责文档 | M3 | 已生效 |
 | `docs/architecture|data-contract|intake|metrics/` | `docs/30_architecture/` / `docs/40_specs/<域>/` | M3 | 未开始 |
 | `docs/operations/` | `docs/70_operations/` | M3 | 未开始 |
 | `docs/implementation/` | `docs/60_delivery/implementation/` | M5 | 未开始（p5 机器路径永久 keep） |
