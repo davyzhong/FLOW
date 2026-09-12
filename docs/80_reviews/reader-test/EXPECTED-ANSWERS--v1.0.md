@@ -1,3 +1,15 @@
+---
+doc_id: FLOW-RT-EXPECTED-001
+title: 期望答案 v1.0（内部评分参照）
+doc_type: navigation
+status: superseded
+version: 1.0
+created_at: 2026-09-12
+updated_at: 2026-09-12
+owner: FLOW
+applies_to: reader-test
+---
+
 # 期望答案 v1.0（内部评分参照，不发给受测 Agent）
 
 1. Finance Intelligence OS：可追溯、确定性、可复核的财务与经营分析平台；双轨（财务分析+经营分析）；非目标：总账、自动因果、伪造事实、多租户/SSO、市场分析。

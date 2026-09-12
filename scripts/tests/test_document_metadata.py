@@ -7,6 +7,7 @@
 
 from __future__ import annotations
 
+import subprocess
 import tempfile
 import sys
 import unittest
@@ -17,6 +18,9 @@ from scripts.documentation.metadata import (
     check_repository,
     load_legacy_exemptions,
 )
+
+REPO = Path(__file__).resolve().parent.parent.parent
+import subprocess  # noqa: E402
 
 
 def write_doc(root: Path, rel: str, frontmatter: dict, body: str = "x\n") -> Path:
@@ -171,9 +175,32 @@ class CheckDocsCliTests(unittest.TestCase):
         self.assertIn("m1", proc.stdout + proc.stderr)
 
     def test_phase_m6_fails_closed_when_modules_missing(self) -> None:
-        """links/reader_rubric 模块（M5/M6 交付）缺失时 m6 必须失败。"""
-        proc = self._run("--phase", "m6")
-        self.assertNotEqual(proc.returncode, 0)
+        """links/reader_rubric 模块（M5/M6 交付）缺失时 m6 必须失败。
+
+        构造缺失 fixture：复制 check_docs + documentation 工具到临时仓库，
+        但移除三个 M6 交付物 → m6 必须非零退出（fail-closed）。
+        """
+        import shutil
+        import tempfile
+
+        with tempfile.TemporaryDirectory() as td:
+            tmp = Path(td)
+            (tmp / "scripts/documentation").mkdir(parents=True)
+            (tmp / "docs").mkdir()
+            shutil.copy(REPO / "scripts/check_docs.py", tmp / "scripts/check_docs.py")
+            for f in (REPO / "scripts/documentation").glob("*.py"):
+                shutil.copy(f, tmp / "scripts/documentation" / f.name)
+            # 三个 M6 交付物保持在缺失状态（links.py 已随工具复制，删除以模拟交付前）
+            for rel in ("links.py", "reader_rubric.py"):
+                target = tmp / "scripts/documentation" / rel
+                if target.exists():
+                    target.unlink()
+            proc = subprocess.run(
+                [sys.executable, str(tmp / "scripts/check_docs.py"), "--phase", "m6"],
+                cwd=str(tmp), capture_output=True, text=True,
+            )
+            self.assertNotEqual(proc.returncode, 0)
+            self.assertIn("m6", proc.stdout + proc.stderr)
 
 
 class UniqueCurrentStateTests(unittest.TestCase):
