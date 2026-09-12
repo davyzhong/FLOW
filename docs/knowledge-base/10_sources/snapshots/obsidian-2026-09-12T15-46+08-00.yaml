@@ -1,0 +1,20 @@
+# 截面定义（手写 YAML，无运行时依赖）
+snapshot_id: obsidian-2026-09-12T15:46+08:00
+captured_at: 2026-09-12T15:46:23+08:00
+vault_root: /Users/qiming/ObsidianWiki
+scope:
+  wechat_pool:
+    dirs: 11            # 10 个有正文 + 1 空
+    articles: 1460
+    total_bytes: 17380445
+    post_cutoff_excluded: true   # 截面后新增不属本基线
+  non_wechat:
+    groups: [03_财务与会计, 02_企业管理, 04_跨境物流, wiki 财务关键词命中]
+    articles: 1575
+  total_articles: 3035
+anchors:
+  assessment: docs/knowledge-base/02_research/synthesis/2026-09-12-obsidian-internal-kb-assessment.md
+  scan_details: docs/knowledge-base/02_research/synthesis/2026-09-12-obsidian-scan/
+notes: >
+  组级计数与声明值对账（12 组）；逐篇 mtime 重建存在同步噪声，篇级登记按需追加。
+  动态源变化不触发项目变更；新截面须用户发起。

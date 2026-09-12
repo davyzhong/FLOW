@@ -1,0 +1,15 @@
+source_id	level	title	locator	snapshot_id	declared_count	disposition	k_domain	sensitivity
+GRP-A-finance	group	A 财务与会计	vault:obsidian-2026-09-12T15:46+08:00#group=GRP-A-finance	obsidian-2026-09-12T15:46+08:00	231	adopted-candidate	K1-K8:mixed	public
+GRP-B-management	group	B 企业管理	vault:obsidian-2026-09-12T15:46+08:00#group=GRP-B-management	obsidian-2026-09-12T15:46+08:00	441	adopted-candidate	K1-K8:mixed	public
+GRP-C-logistics	group	C 跨境物流	vault:obsidian-2026-09-12T15:46+08:00#group=GRP-C-logistics	obsidian-2026-09-12T15:46+08:00	125	adopted-candidate	K1-K8:mixed	public
+GRP-D-wiki	group	D wiki 编译层财务关键词	vault:obsidian-2026-09-12T15:46+08:00#group=GRP-D-wiki	obsidian-2026-09-12T15:46+08:00	778	adopted-candidate	K1-K8:mixed	public
+GRP-W1-wechat	group	W1 微信·数据分析星球+数据熊	vault:obsidian-2026-09-12T15:46+08:00#group=GRP-W1-wechat	obsidian-2026-09-12T15:46+08:00	435	adopted-candidate	K1-K8:mixed	public
+GRP-W2-wechat	group	W2 微信·客观分析报告+数研复盘狮	vault:obsidian-2026-09-12T15:46+08:00#group=GRP-W2-wechat	obsidian-2026-09-12T15:46+08:00	2	adopted-candidate	K1-K8:mixed	public
+GRP-W3-wechat	group	W3 微信·数据分析不是个事儿+花叔	vault:obsidian-2026-09-12T15:46+08:00#group=GRP-W3-wechat	obsidian-2026-09-12T15:46+08:00	176	adopted-candidate	K1-K8:mixed	public
+GRP-W4-benxiang	group	W4 微信·奔向自由的果	vault:obsidian-2026-09-12T15:46+08:00#group=GRP-W4-benxiang	obsidian-2026-09-12T15:46+08:00	183	pending-verification	K1-K8:mixed	public
+GRP-W4-chenfan	group	W4 微信·宸帆海财会咨询服务	vault:obsidian-2026-09-12T15:46+08:00#group=GRP-W4-chenfan	obsidian-2026-09-12T15:46+08:00	179	pending-verification	K1-K8:mixed	public
+GRP-W4-jiejue	group	W4 微信·解决方案研究所	vault:obsidian-2026-09-12T15:46+08:00#group=GRP-W4-jiejue	obsidian-2026-09-12T15:46+08:00	2	pending-verification	K1-K8:mixed	public
+GRP-W4-mumuziyou	group	W4 微信·木木自由	vault:obsidian-2026-09-12T15:46+08:00#group=GRP-W4-mumuziyou	obsidian-2026-09-12T15:46+08:00	482	pending-verification	K1-K8:mixed	public
+GRP-W4-zhanlue	group	W4 微信·战略领航家	vault:obsidian-2026-09-12T15:46+08:00#group=GRP-W4-zhanlue	obsidian-2026-09-12T15:46+08:00	1	pending-verification	K1-K8:mixed	public
+SRC-H-1918937918732913424	article	财务总监经营分析驾驶舱：纯本地运行的11大经营分析模块全解析	vault:obsidian-2026-09-12T15:46+08:00#wechat-or-note-id=1918937918732913424	obsidian-2026-09-12T15:46+08:00	1	adopted-candidate	K1-K8:routed	public
+SRC-H-wechat-72e4a10ae09e	article	财务经营分析的四步闭环逻辑	vault:obsidian-2026-09-12T15:46+08:00#wechat-or-note-id=wechat-72e4a10ae09e	obsidian-2026-09-12T15:46+08:00	1	adopted-candidate	K1-K8:routed	public
