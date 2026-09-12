@@ -47,7 +47,7 @@ from flow_api.infrastructure.models.metric_library import (
 from flow_api.metric_library_store.binding import build_execution_binding
 from flow_api.metric_library_store.governance import GovernanceError, MetricGovernance
 from flow_api.metric_library_store.impact import ImpactError, MetricImpactService
-from flow_api.metric_library_store.importer import import_all
+from flow_api.metric_library_store.importer import import_all, resolve_dictionary_file
 
 router = APIRouter(prefix="/metric-library", tags=["metric-library"])
 
@@ -93,7 +93,9 @@ class MetricLibraryAudit:
 @lru_cache
 def _yaml_payload() -> MetricLibraryResponse:
     root = resolve_metric_library_root()
-    dictionary: dict[str, Any] = yaml.safe_load((root / METRIC_LIBRARY_PATHS[0]).read_text())
+    dictionary: dict[str, Any] = yaml.safe_load(
+        resolve_dictionary_file(root / CONFIG_ROOT).read_text()
+    )
     foundation: dict[str, Any] = yaml.safe_load((root / METRIC_LIBRARY_PATHS[1]).read_text())
     metrics = [
         MetricEntry(collection="general", **entry) for entry in dictionary["metrics_general"]
@@ -127,7 +129,12 @@ def _db_payload(session: Session) -> MetricLibraryResponse | None:
         return None
     fallback = _yaml_payload()
     by_code = {(e.collection, e.metric_code): e for e in entries}
-    metrics = [
+    metrics = []
+    for m in fallback.metrics:
+        if (m.collection, m.metric_code) not in by_code:
+            continue
+        fallback_entry = m
+        metrics.append(
         MetricEntry(
             collection=m.collection,
             metric_code=m.metric_code,
@@ -153,12 +160,12 @@ def _db_payload(session: Session) -> MetricLibraryResponse | None:
             reconciliation=m.reconciliation,
             migrates_from=m.migrates_from,
             provenance=m.provenance,
+            tier=m.tier or fallback_entry.tier,
+            analysis_dimensions=m.analysis_dimensions or fallback_entry.analysis_dimensions,
             entry_id=str(by_code[(m.collection, m.metric_code)].id),
             status=by_code[(m.collection, m.metric_code)].status,
         )
-        for m in fallback.metrics
-        if (m.collection, m.metric_code) in by_code
-    ]
+    )
     mappings = session.scalars(select(StatementLineMapping)).all()
     report_items = (
         [

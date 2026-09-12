@@ -185,10 +185,16 @@ def import_accounting_foundation(
     return counts
 
 
+def resolve_dictionary_file(config_root: Path) -> Path:
+    """字典配置解析：优先 v1.1（内部指标库扩充版），不存在时回退 v1。"""
+    candidate = config_root / "metric_dictionary_v1_1.yaml"
+    return candidate if candidate.is_file() else config_root / "metric_dictionary_v1.yaml"
+
+
 def import_all(session: Session, config_root: Path) -> dict[str, int]:
     summary: dict[str, int] = {}
     summary.update(
-        import_metric_dictionary(session, config_root / "metric_dictionary_v1.yaml")
+        import_metric_dictionary(session, resolve_dictionary_file(config_root))
     )
     summary.update(
         import_accounting_foundation(

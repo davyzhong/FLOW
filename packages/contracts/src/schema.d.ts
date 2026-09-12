@@ -2219,6 +2219,13 @@ export interface components {
             aliases: string[];
             /** Provenance */
             provenance?: string | null;
+            /** Tier */
+            tier?: ("core" | "professional") | null;
+            /**
+             * Analysis Dimensions
+             * @default []
+             */
+            analysis_dimensions: string[];
             /**
              * Collection
              * @enum {string}

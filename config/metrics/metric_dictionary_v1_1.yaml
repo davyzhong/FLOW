@@ -1,0 +1,2001 @@
+dictionary_id: flow.metric_dictionary.v1
+status: effective
+decision_ref: D047；2026-09-12 用户指令：内部指标库扩充与分层（tier + analysis_dimensions + 9 新增 +
+  口径变体，D047）
+created: 2026-09-05
+standards_scope:
+- CAS
+- IFRS
+domains:
+  solvency: 偿债能力
+  operation: 营运能力
+  profitability: 盈利能力
+  growth: 发展能力
+  cashflow: 现金流
+  scale: 规模（物流行业集专用）
+  value: 价值创造
+report_items:
+  bs.cash:
+    cas: 货币资金
+    ifrs: cash and cash equivalents (IAS 1 / IAS 7)
+  bs.notes_receivable:
+    cas: 应收票据
+    ifrs: notes receivable
+  bs.ar:
+    cas: 应收账款
+    ifrs: trade receivables (IFRS 15 / IFRS 9)
+  bs.inventory:
+    cas: 存货
+    ifrs: inventories (IAS 2)
+  bs.current_assets:
+    cas: 流动资产合计
+    ifrs: total current assets (IAS 1)
+  bs.fixed_assets:
+    cas: 固定资产
+    ifrs: property, plant and equipment (IAS 16)
+  bs.total_assets:
+    cas: 资产总计
+    ifrs: total assets (IAS 1)
+  bs.short_debt:
+    cas: 短期借款及一年内到期的非流动负债等短期债务
+    ifrs: current borrowings
+  bs.ap:
+    cas: 应付账款
+    ifrs: trade payables
+  bs.current_liab:
+    cas: 流动负债合计
+    ifrs: total current liabilities (IAS 1)
+  bs.long_debt:
+    cas: 长期借款及应付债券等长期债务
+    ifrs: non-current borrowings
+  bs.total_liab:
+    cas: 负债合计
+    ifrs: total liabilities (IAS 1)
+  bs.equity:
+    cas: 所有者权益合计
+    ifrs: total equity (IAS 1)
+  is.revenue:
+    cas: 营业收入
+    ifrs: revenue (IFRS 15)
+  is.cogs:
+    cas: 营业成本
+    ifrs: cost of sales
+  is.taxes_surcharges:
+    cas: 税金及附加
+    ifrs: taxes and surcharges (CAS 特有行项目)
+  is.selling_exp:
+    cas: 销售费用
+    ifrs: selling and distribution expenses
+  is.admin_exp:
+    cas: 管理费用
+    ifrs: administrative expenses
+  is.fin_exp:
+    cas: 财务费用
+    ifrs: finance costs, net (IAS 1 / IFRS 18)
+  is.interest_exp:
+    cas: 利息费用（费用化）
+    ifrs: interest expense (effective interest method, IFRS 9)
+  is.operating_profit:
+    cas: 营业利润
+    ifrs: operating profit (IFRS 18 法定小计)
+  is.total_profit:
+    cas: 利润总额
+    ifrs: profit before tax
+  is.income_tax:
+    cas: 所得税费用
+    ifrs: income tax expense (IAS 12)
+  is.net_profit:
+    cas: 净利润
+    ifrs: profit for the year
+  is.dep_amort:
+    cas: 折旧与摊销（现金流量表补充资料）
+    ifrs: depreciation and amortisation (IAS 7)
+  cf.ocf:
+    cas: 经营活动产生的现金流量净额
+    ifrs: net cash from operating activities (IAS 7)
+  cf.cash_from_sales:
+    cas: 销售商品、提供劳务收到的现金
+    ifrs: cash receipts from customers (IAS 7)
+  cf.capex:
+    cas: 购建固定资产、无形资产和其他长期资产支付的现金
+    ifrs: purchase of PP&E and intangibles (IAS 7)
+metrics_general:
+- metric_code: current_ratio
+  name: 流动比率
+  domain: solvency
+  definition: 流动资产对流动负债的保障程度，衡量短期偿债能力。
+  formula_text: 流动资产 ÷ 流动负债
+  formula:
+    op: div
+    args:
+    - bs.current_assets
+    - bs.current_liab
+  unit: 倍
+  time_behavior: point_balance
+  caliber: 教科书标准口径，无重大分歧。
+  source_cas:
+  - 流动资产合计
+  - 流动负债合计
+  source_ifrs: total current assets / total current liabilities (IAS 1)
+  depends_on: []
+  benchmark: 经验参考约 2；过高可能资金闲置；行业差异大。
+  mpm: false
+  provenance: research/08 §1
+  tier: core
+  analysis_dimensions: &id001
+  - trend
+  - warning
+  - benchmark
+- metric_code: quick_ratio
+  name: 速动比率
+  domain: solvency
+  definition: 剔除存货后的流动资产对流动负债的保障程度，更严格的短期偿债口径。
+  formula_text: （流动资产 − 存货）÷ 流动负债
+  formula:
+    op: div
+    args:
+    - op: sub
+      args:
+      - bs.current_assets
+      - bs.inventory
+    - bs.current_liab
+  unit: 倍
+  time_behavior: point_balance
+  caliber: 部分口径再剔除预付账款等其他流动资产，须按口径版本记录。
+  source_cas:
+  - 流动资产合计
+  - 存货
+  - 流动负债合计
+  source_ifrs: (current assets − inventories) / current liabilities
+  depends_on: []
+  benchmark: 经验参考约 1。
+  mpm: false
+  provenance: research/08 §1
+  tier: core
+  analysis_dimensions: *id001
+- metric_code: cash_ratio
+  name: 现金比率
+  domain: solvency
+  definition: 货币资金对流动负债的直接覆盖，最保守的即时支付能力口径。
+  formula_text: 货币资金 ÷ 流动负债
+  formula:
+    op: div
+    args:
+    - bs.cash
+    - bs.current_liab
+  unit: 倍
+  time_behavior: point_balance
+  caliber: 部分口径含交易性金融资产（现金等价物），须标注。
+  source_cas:
+  - 货币资金
+  - 流动负债合计
+  source_ifrs: cash and cash equivalents / current liabilities
+  depends_on: []
+  benchmark: 无统一经验值，结合行业与账期结构判断。
+  mpm: false
+  provenance: research/08 §1
+  default_caliber: 分子仅取货币资金（最保守口径）
+  default_basis: CPA《财务成本管理》标准定义
+  alternative_calibers:
+  - 分子含交易性金融资产（现金等价物扩展口径）
+  tier: core
+  analysis_dimensions: *id001
+- metric_code: ocf_current_liab_ratio
+  name: 现金流量比率
+  aliases:
+  - 经营现金流动负债比
+  domain: solvency
+  definition: 经营活动现金流量净额对流动负债的保障程度，现金视角的短期偿债能力。
+  formula_text: 经营活动现金流量净额 ÷ 流动负债
+  formula:
+    op: div
+    args:
+    - cf.ocf
+    - bs.current_liab
+  unit: 倍
+  time_behavior: period_flow
+  caliber: 分子为期间流量、分母为时点余额；评级机构口径同（经营现金流动负债比，%）。
+  source_cas:
+  - 经营活动产生的现金流量净额
+  - 流动负债合计
+  source_ifrs: net cash from operating activities / current liabilities (IAS 7 / IAS
+    1)
+  depends_on: []
+  benchmark: 结合现金流稳定性判断。
+  mpm: false
+  provenance: research/08 §1、§3
+  tier: core
+  analysis_dimensions: *id001
+- metric_code: debt_asset_ratio
+  name: 资产负债率
+  domain: solvency
+  definition: 总资产中由债务形成的比例，长期偿债能力总览。
+  formula_text: 负债总额 ÷ 资产总额 × 100%
+  formula:
+    op: div
+    args:
+    - bs.total_liab
+    - bs.total_assets
+  unit: '%'
+  time_behavior: point_balance
+  caliber: 无重大分歧。
+  source_cas:
+  - 负债合计
+  - 资产总计
+  source_ifrs: total liabilities / total assets (IAS 1)
+  depends_on: []
+  benchmark: 参考 40%–60%，行业差异大，须与同行对比。物流央企口径约 47%–57%（中国物流集团）。
+  mpm: false
+  provenance: research/08 §1、§3；research/09 §4.1
+  tier: core
+  analysis_dimensions: *id001
+- metric_code: debt_equity_ratio
+  name: 产权比率
+  domain: solvency
+  definition: 负债总额与所有者权益之比，反映资本结构。
+  formula_text: 负债总额 ÷ 所有者权益
+  formula:
+    op: div
+    args:
+    - bs.total_liab
+    - bs.equity
+  unit: 倍
+  time_behavior: point_balance
+  caliber: 与资产负债率互为变形（产权比率 = 资产负债率 ÷ (1 − 资产负债率)）。
+  source_cas:
+  - 负债合计
+  - 所有者权益合计
+  source_ifrs: total liabilities / total equity
+  depends_on: []
+  benchmark: 结合行业资本结构判断。
+  mpm: false
+  provenance: research/08 §1
+  tier: professional
+  analysis_dimensions: *id001
+  alternative_calibers:
+  - 有息债务口径：有息负债 ÷ 股东权益（剔除无息经营性负债，更严格反映财务杠杆；与全额负债口径的产权比率差异须标注）
+- metric_code: interest_coverage
+  name: 利息保障倍数
+  aliases:
+  - 已获利息倍数
+  domain: solvency
+  definition: 息税前利润对利息费用的覆盖能力。
+  formula_text: （利润总额 + 利息费用）÷ 利息费用
+  formula:
+    op: div
+    args:
+    - op: add
+      args:
+      - is.total_profit
+      - is.interest_exp
+    - is.interest_exp
+  unit: 倍
+  time_behavior: period_flow
+  caliber: 分子即 EBIT 的间接算法；利息费用口径区分费用化/资本化时须标注。
+  source_cas:
+  - 利润总额
+  - 利息费用
+  source_ifrs: EBIT / interest expense
+  depends_on: []
+  benchmark: '>3 较安全。'
+  mpm: false
+  provenance: research/08 §1
+  default_caliber: 分子 EBIT = 利润总额 + 费用化利息费用；分母 = 费用化 + 资本化全部利息
+  default_basis: CPA《财务成本管理》2025（费用化/资本化口径区分）
+  alternative_calibers:
+  - 分母仅费用化利息（简化口径）
+  tier: core
+  analysis_dimensions: *id001
+- metric_code: ebitda_interest_coverage
+  name: EBITDA 利息倍数
+  domain: solvency
+  definition: EBITDA 对利息支出的覆盖能力，评级机构长期偿债核心口径。
+  formula_text: EBITDA ÷ 利息支出
+  formula:
+    op: div
+    args:
+    - ebitda
+    - is.interest_exp
+  unit: 倍
+  time_behavior: period_flow
+  caliber: 联合资信评级口径；利息支出含费用化与资本化时须标注。
+  source_cas:
+  - 利润总额
+  - 利息费用
+  - 折旧与摊销
+  source_ifrs: EBITDA / interest expense
+  depends_on:
+  - ebitda
+  benchmark: 物流央企实例 5.45–9.31 倍（中国物流集团 2022–2025）。
+  mpm: false
+  provenance: research/08 §3；research/09 §4.1
+  default_caliber: 利息支出 = 费用化 + 资本化全部利息
+  default_basis: 联合资信评级口径（全口径利息更审慎）
+  alternative_calibers:
+  - 仅费用化利息
+  tier: professional
+  analysis_dimensions:
+  - warning
+  - cash_link
+- metric_code: total_debt_capitalization
+  name: 全部债务资本化比率
+  domain: solvency
+  definition: 全部债务占全部债务与所有者权益之和的比例，评级机构债务结构口径。
+  formula_text: 全部债务 ÷（长期债务 + 短期债务 + 所有者权益）× 100%
+  formula:
+    op: div
+    args:
+    - op: add
+      args:
+      - bs.short_debt
+      - bs.long_debt
+    - op: add
+      args:
+      - bs.short_debt
+      - bs.long_debt
+      - bs.equity
+  unit: '%'
+  time_behavior: point_balance
+  caliber: 全部债务 = 短期债务 + 长期债务（联合资信口径）；债务边界（是否含应付票据、租赁负债）须按口径版本记录。
+  source_cas:
+  - 短期借款
+  - 长期借款
+  - 应付债券
+  - 所有者权益合计
+  source_ifrs: total debt / (total debt + equity)；对照 KPMG 净债务/调整后权益管理口径
+  depends_on: []
+  benchmark: 物流央企实例 33%–44%（中国物流集团）。
+  mpm: false
+  provenance: research/08 §3；research/09 §2
+  default_caliber: 全部债务 = 短期借款 + 一年内到期非流动负债 + 长期借款 + 应付债券；不含应付票据与租赁负债
+  default_basis: 联合资信评级附件口径（带息债务不含经营性应付款项）
+  alternative_calibers:
+  - 含租赁负债（新租赁准则口径，标注后可用）
+  tier: professional
+  analysis_dimensions:
+  - structure
+  - warning
+- metric_code: long_debt_capitalization
+  name: 长期债务资本化比率
+  domain: solvency
+  definition: 长期债务占长期资本（长期债务 + 所有者权益）的比例。
+  formula_text: 长期债务 ÷（长期债务 + 所有者权益）× 100%
+  formula:
+    op: div
+    args:
+    - bs.long_debt
+    - op: add
+      args:
+      - bs.long_debt
+      - bs.equity
+  unit: '%'
+  time_behavior: point_balance
+  caliber: 联合资信评级口径。
+  source_cas:
+  - 长期借款
+  - 应付债券
+  - 所有者权益合计
+  source_ifrs: non-current debt / (non-current debt + equity)
+  depends_on: []
+  benchmark: 结合债务期限结构判断。
+  mpm: false
+  provenance: research/08 §3
+  tier: professional
+  analysis_dimensions:
+  - structure
+  - warning
+- metric_code: ar_turnover
+  name: 应收账款周转率
+  domain: operation
+  definition: 营业收入与平均应收账款之比，衡量回款效率。
+  formula_text: 营业收入 ÷ 平均应收账款
+  formula:
+    op: div
+    args:
+    - is.revenue
+    - op: avg
+      args:
+      - bs.ar
+  unit: 次
+  time_behavior: average_balance
+  caliber: 评级机构扩展口径（销售债权周转次数）分母含应收票据与应收款项融资；两口径并存。
+  source_cas:
+  - 营业收入
+  - 应收账款
+  source_ifrs: revenue / average trade receivables
+  depends_on: []
+  benchmark: 越高回款越快；应收增速持续超过营收增速为回款变慢信号。
+  mpm: false
+  provenance: research/08 §1、§3；research/09 §4.4
+  default_caliber: 分母 = 平均应收账款（不含应收票据）
+  default_basis: CPA 教材标准口径（周转率族教科书定义）
+  alternative_calibers:
+  - 销售债权周转次数：分母含应收票据与应收款项融资（联合资信扩展口径）
+  tier: core
+  analysis_dimensions: &id002
+  - trend
+  - benchmark
+- metric_code: dso_days
+  name: 应收账款周转天数
+  aliases:
+  - DSO
+  - 平均收账期
+  domain: operation
+  definition: 应收账款平均回收所需天数。
+  formula_text: 360 ÷ 应收账款周转率
+  formula:
+    op: div
+    args:
+    - 360
+    - ar_turnover
+  unit: 天
+  time_behavior: average_balance
+  caliber: 教科书用 360 天；部分机构与 FLOW 物流集（dso）用 365 天 / T12 收入口径，属不同口径版本。
+  source_cas:
+  - 营业收入
+  - 应收账款
+  source_ifrs: days sales outstanding
+  depends_on:
+  - ar_turnover
+  benchmark: 结合合同账期判断；连续上升为预警。
+  mpm: false
+  provenance: research/08 §1
+  default_caliber: 360 ÷ 应收账款周转率（360 天基准）
+  default_basis: CPA 教材与国资委细则惯例
+  alternative_calibers:
+  - 365 天口径
+  - T12 收入滚动口径（FLOW 物流集 dso）
+  tier: core
+  analysis_dimensions: *id002
+- metric_code: inventory_turnover
+  name: 存货周转率
+  domain: operation
+  definition: 营业成本与平均存货之比，衡量库存管理与变现效率。
+  formula_text: 营业成本 ÷ 平均存货
+  formula:
+    op: div
+    args:
+    - is.cogs
+    - op: avg
+      args:
+      - bs.inventory
+  unit: 次
+  time_behavior: average_balance
+  caliber: 评级机构口径分母用平均存货净额。
+  source_cas:
+  - 营业成本
+  - 存货
+  source_ifrs: cost of sales / average inventories (IAS 2)
+  depends_on: []
+  benchmark: 越高周转越快；过低警惕积压跌价。
+  mpm: false
+  provenance: research/08 §1、§3
+  tier: core
+  analysis_dimensions: *id002
+- metric_code: dio_days
+  name: 存货周转天数
+  aliases:
+  - DIO
+  domain: operation
+  definition: 存货平均持有天数。
+  formula_text: 360 ÷ 存货周转率
+  formula:
+    op: div
+    args:
+    - 360
+    - inventory_turnover
+  unit: 天
+  time_behavior: average_balance
+  caliber: 同 dso_days 的天数口径规则。
+  source_cas:
+  - 营业成本
+  - 存货
+  source_ifrs: days inventory outstanding
+  depends_on:
+  - inventory_turnover
+  benchmark: 结合行业（物流企业存货极轻，周转 25 次以上，见中国物流集团）。
+  mpm: false
+  provenance: research/08 §1；research/09 §4.1
+  tier: core
+  analysis_dimensions: *id002
+- metric_code: ap_turnover
+  name: 应付账款周转率
+  domain: operation
+  definition: 采购/成本与平均应付账款之比，衡量对供应商账期的占用。
+  formula_text: 营业成本 ÷ 平均应付账款
+  formula:
+    op: div
+    args:
+    - is.cogs
+    - op: avg
+      args:
+      - bs.ap
+  unit: 次
+  time_behavior: average_balance
+  caliber: 分子可用营业成本或采购成本，两种口径并存，须标注。
+  source_cas:
+  - 营业成本
+  - 应付账款
+  source_ifrs: purchases / average trade payables
+  depends_on: []
+  benchmark: 与 DSO/DIO 联看净营业周期。
+  mpm: false
+  provenance: research/08 §1
+  default_caliber: 分子 = 营业成本
+  default_basis: CPA 教材标准口径（与存货周转分子一致）
+  alternative_calibers:
+  - 分子 = 采购成本（联合资信扩展口径）
+  tier: core
+  analysis_dimensions: *id002
+- metric_code: dpo_days
+  name: 应付账款周转天数
+  aliases:
+  - DPO
+  domain: operation
+  definition: 应付账款平均支付天数。
+  formula_text: 360 ÷ 应付账款周转率
+  formula:
+    op: div
+    args:
+    - 360
+    - ap_turnover
+  unit: 天
+  time_behavior: average_balance
+  caliber: 同 dso_days 的天数口径规则。
+  source_cas:
+  - 营业成本
+  - 应付账款
+  source_ifrs: days payable outstanding
+  depends_on:
+  - ap_turnover
+  benchmark: 过长可能损害供应商关系。
+  mpm: false
+  provenance: research/08 §1
+  tier: core
+  analysis_dimensions: *id002
+- metric_code: current_asset_turnover
+  name: 流动资产周转率
+  domain: operation
+  definition: 营业收入与平均流动资产之比。
+  formula_text: 营业收入 ÷ 平均流动资产
+  formula:
+    op: div
+    args:
+    - is.revenue
+    - op: avg
+      args:
+      - bs.current_assets
+  unit: 次
+  time_behavior: average_balance
+  caliber: 教科书标准口径。
+  source_cas:
+  - 营业收入
+  - 流动资产合计
+  source_ifrs: revenue / average current assets
+  depends_on: []
+  benchmark: 流动资产增长快于收入时该指标下降。
+  mpm: false
+  provenance: research/08 §1；research/09 §4.3
+  tier: professional
+  analysis_dimensions: *id002
+- metric_code: fixed_asset_turnover
+  name: 固定资产周转率
+  domain: operation
+  definition: 营业收入与平均固定资产之比，衡量固定资产投入产出。
+  formula_text: 营业收入 ÷ 平均固定资产
+  formula:
+    op: div
+    args:
+    - is.revenue
+    - op: avg
+      args:
+      - bs.fixed_assets
+  unit: 次
+  time_behavior: average_balance
+  caliber: 分母可用固定资产净值或原值，须标注。
+  source_cas:
+  - 营业收入
+  - 固定资产
+  source_ifrs: revenue / average PP&E (IAS 16)
+  depends_on: []
+  benchmark: 重资产与轻资产行业不可比。
+  mpm: false
+  provenance: research/08 §1
+  default_caliber: 分母 = 平均固定资产净值
+  default_basis: CPA 教材标准口径（账面净值）
+  alternative_calibers:
+  - 固定资产原值口径
+  tier: professional
+  analysis_dimensions: *id002
+- metric_code: total_asset_turnover
+  name: 总资产周转率
+  domain: operation
+  definition: 营业收入与平均资产总额之比，整体资产运营效率；杜邦三分解因子之一。
+  formula_text: 营业收入 ÷ 平均资产总额
+  formula:
+    op: div
+    args:
+    - is.revenue
+    - op: avg
+      args:
+      - bs.total_assets
+  unit: 次
+  time_behavior: average_balance
+  caliber: 杜邦分解中必须使用平均余额口径，保证与 ROE 分解勾稽。
+  source_cas:
+  - 营业收入
+  - 资产总计
+  source_ifrs: revenue / average total assets
+  depends_on: []
+  benchmark: 物流企业实例 1.23–1.39 次（中国物流集团）。
+  mpm: false
+  provenance: research/08 §1、§2；research/09 §4.1
+  tier: core
+  analysis_dimensions:
+  - trend
+  - dupont
+  - benchmark
+- metric_code: gross_margin
+  name: 毛利率
+  domain: profitability
+  definition: 每一元营业收入扣除营业成本后的毛利占比，产品「先天赚钱能力」。
+  formula_text: （营业收入 − 营业成本）÷ 营业收入 × 100%
+  formula:
+    op: div
+    args:
+    - op: sub
+      args:
+      - is.revenue
+      - is.cogs
+    - is.revenue
+  unit: '%'
+  time_behavior: period_flow
+  caliber: 无重大分歧。
+  source_cas:
+  - 营业收入
+  - 营业成本
+  source_ifrs: gross profit / revenue
+  depends_on: []
+  benchmark: 毛利率下滑常先于净利率下滑，是竞争加剧的早期信号。
+  mpm: false
+  provenance: research/08 §1
+  tier: core
+  analysis_dimensions: &id006
+  - trend
+  - structure
+  - benchmark
+  - warning
+- metric_code: operating_margin
+  name: 营业利润率
+  domain: profitability
+  definition: 营业利润占营业收入的比例。
+  formula_text: 营业利润 ÷ 营业收入 × 100%
+  formula:
+    op: div
+    args:
+    - is.operating_profit
+    - is.revenue
+  unit: '%'
+  time_behavior: period_flow
+  caliber: 评级机构口径为（营业总收入 − 营业成本 − 税金及附加）÷ 营业总收入，与报表营业利润口径不同，须按口径版本记录。
+  source_cas:
+  - 营业利润
+  - 营业收入
+  source_ifrs: operating profit / revenue（IFRS 18 起 operating profit 为法定小计）
+  depends_on: []
+  benchmark: 物流央企实例 4.9%–6.1%（中国物流集团），行业性低利润率。
+  mpm: false
+  provenance: research/08 §1、§3；research/09 §4.1
+  default_caliber: 营业利润 ÷ 营业收入（报表营业利润口径）
+  default_basis: 财会〔2018〕15 号利润表行项目（报表口径为默认）
+  alternative_calibers:
+  - （营业总收入 − 营业成本 − 税金及附加）÷ 营业总收入（联合资信口径）
+  tier: core
+  analysis_dimensions: &id003
+  - trend
+  - structure
+  - benchmark
+- metric_code: net_margin
+  name: 净利率
+  aliases:
+  - 销售净利率
+  domain: profitability
+  definition: 净利润占营业收入的比例；杜邦三分解因子之一。
+  formula_text: 净利润 ÷ 营业收入 × 100%
+  formula:
+    op: div
+    args:
+    - is.net_profit
+    - is.revenue
+  unit: '%'
+  time_behavior: period_flow
+  caliber: 可再分解为毛利率、期间费用率、税率（杜邦扩展分解）。
+  source_cas:
+  - 净利润
+  - 营业收入
+  source_ifrs: profit for the year / revenue
+  depends_on: []
+  benchmark: 结合毛利率与费用率联动分析。
+  mpm: false
+  provenance: research/08 §1、§2
+  tier: core
+  analysis_dimensions:
+  - trend
+  - dupont
+  - structure
+- metric_code: roe
+  name: 净资产收益率
+  aliases:
+  - ROE
+  - 权益净利率
+  domain: profitability
+  definition: 净利润与平均净资产之比，股东视角核心回报指标，杜邦体系核心。
+  formula_text: 净利润 ÷ 平均净资产 × 100%
+  formula:
+    op: div
+    args:
+    - is.net_profit
+    - op: avg
+      args:
+      - bs.equity
+  unit: '%'
+  time_behavior: average_balance
+  caliber: 平均净资产口径与期末净资产口径并存（评级机构用期末口径：净利润 ÷ 所有者权益）；上市公司另有加权平均口径（证监会规则）。杜邦分解必须使用平均口径。
+  decompositions:
+  - name: 杜邦三分解
+    formula_text: ROE = 销售净利率 × 总资产周转率 × 权益乘数
+    factors:
+    - net_margin
+    - total_asset_turnover
+    - equity_multiplier
+  source_cas:
+  - 净利润
+  - 所有者权益合计
+  source_ifrs: profit / average equity
+  depends_on:
+  - net_margin
+  - total_asset_turnover
+  - equity_multiplier
+  benchmark: 物流央企实例 2.2%–9.9%（中国物流集团 2022–2025）。
+  mpm: false
+  provenance: research/08 §1、§2、§3
+  default_caliber: 净利润 ÷ 平均净资产（期初期末平均）；杜邦分解必须用本口径
+  default_basis: 国资委《实施细则》与 CPA 教材一致采用平均口径
+  alternative_calibers:
+  - 期末净资产口径（联合资信）
+  - 加权平均口径（证监会 10 号文，上市公司披露）
+  tier: core
+  analysis_dimensions:
+  - trend
+  - dupont
+  - benchmark
+- metric_code: total_assets_return
+  name: 总资产报酬率
+  aliases:
+  - ROA-EBIT口径
+  domain: profitability
+  definition: 息税前利润与平均资产总额之比，衡量全部资金（自有 + 借入）的回报。
+  formula_text: （利润总额 + 利息支出）÷ 平均资产总额 × 100%
+  formula:
+    op: div
+    args:
+    - op: add
+      args:
+      - is.total_profit
+      - is.interest_exp
+    - op: avg
+      args:
+      - bs.total_assets
+  unit: '%'
+  time_behavior: average_balance
+  caliber: 另有总资产净利率口径（净利润 ÷ 平均总资产），本版作为变体口径记录，不单列指标。
+  source_cas:
+  - 利润总额
+  - 利息费用
+  - 资产总计
+  source_ifrs: EBIT / average total assets
+  depends_on: []
+  benchmark: 物流央企实例 2.9%–3.8%（中国物流集团）。
+  mpm: false
+  provenance: research/08 §1、§3
+  tier: professional
+  analysis_dimensions: *id003
+  alternative_calibers:
+  - ROA 净利润口径：净利润 ÷ 总资产（期末或平均分母均有流派；科普与投研常用，与库内联合资信总资产报酬率口径对比时须先对齐分子分母）
+- metric_code: roce
+  name: 总资本收益率
+  aliases:
+  - ROCE
+  domain: profitability
+  definition: 净利润加费用化利息与投入资本（权益 + 全部债务）之比。
+  formula_text: （净利润 + 费用化利息支出）÷（所有者权益 + 长期债务 + 短期债务）× 100%
+  formula:
+    op: div
+    args:
+    - op: add
+      args:
+      - is.net_profit
+      - is.interest_exp
+    - op: add
+      args:
+      - bs.equity
+      - bs.long_debt
+      - bs.short_debt
+  unit: '%'
+  time_behavior: point_balance
+  caliber: 联合资信评级口径；国际 ROCE 常用 EBIT ÷ 资本占用，属不同口径版本。
+  source_cas:
+  - 净利润
+  - 利息费用
+  - 所有者权益合计
+  - 长期借款
+  - 短期借款
+  source_ifrs: return on capital employed
+  depends_on: []
+  benchmark: 结合融资成本判断资本回报是否覆盖代价。
+  mpm: false
+  provenance: research/08 §3
+  default_caliber: (净利润 + 费用化利息支出) ÷ (所有者权益 + 长期债务 + 短期债务)
+  default_basis: 联合资信评级附件口径（中国市场主流评级口径）
+  alternative_calibers:
+  - EBIT ÷ 资本占用（国际口径）
+  tier: professional
+  analysis_dimensions: *id003
+- metric_code: cost_expense_profit_ratio
+  name: 成本费用利润率
+  domain: profitability
+  definition: 利润总额与成本费用总额之比，衡量投入产出的费用效率。
+  formula_text: 利润总额 ÷（营业成本 + 销售费用 + 管理费用 + 财务费用）× 100%
+  formula:
+    op: div
+    args:
+    - is.total_profit
+    - op: add
+      args:
+      - is.cogs
+      - is.selling_exp
+      - is.admin_exp
+      - is.fin_exp
+  unit: '%'
+  time_behavior: period_flow
+  caliber: 成本费用总额是否含税金及附加、研发费用，按口径版本记录。
+  source_cas:
+  - 利润总额
+  - 营业成本
+  - 销售费用
+  - 管理费用
+  - 财务费用
+  source_ifrs: profit before tax / total costs and expenses
+  depends_on: []
+  benchmark: 结合费用结构分析。
+  mpm: false
+  provenance: research/08 §1
+  default_caliber: 成本费用总额 = 营业成本 + 税金及附加 + 销售费用 + 管理费用 + 研发费用 + 财务费用（全口径）
+  default_basis: 国资委《实施细则》成本费用利润率口径
+  alternative_calibers:
+  - 不含税金及附加与研发费用的窄口径
+  tier: professional
+  analysis_dimensions: *id003
+- metric_code: equity_multiplier
+  name: 权益乘数
+  domain: profitability
+  definition: 平均总资产相当于平均净资产的倍数，财务杠杆水平；杜邦三分解因子之一。
+  formula_text: 平均总资产 ÷ 平均净资产
+  formula:
+    op: div
+    args:
+    - op: avg
+      args:
+      - bs.total_assets
+    - op: avg
+      args:
+      - bs.equity
+  unit: 倍
+  time_behavior: average_balance
+  caliber: 与资产负债率同向变动；杜邦分解必须使用平均口径。
+  source_cas:
+  - 资产总计
+  - 所有者权益合计
+  source_ifrs: average total assets / average equity
+  depends_on: []
+  benchmark: 过高须结合利息保障倍数与流动比率交叉验证，避免 ROE 虚高。
+  mpm: false
+  provenance: research/08 §2
+  tier: professional
+  analysis_dimensions:
+  - structure
+  - dupont
+  - warning
+- metric_code: ebitda
+  name: EBITDA
+  aliases:
+  - 息税折旧摊销前利润
+  domain: profitability
+  definition: 利润总额加回利息费用与折旧摊销，剔除资本结构与会计估计影响的盈利口径。
+  formula_text: 利润总额 + 利息费用 + 折旧与摊销
+  formula:
+    op: add
+    args:
+    - is.total_profit
+    - is.interest_exp
+    - is.dep_amort
+  unit: 元
+  time_behavior: period_flow
+  caliber: 间接法口径；是否含投资收益、公允价值变动等须按口径版本记录；IFRS 未定义 EBITDA。EBITDA 不是现金，禁止与经营活动现金流量净额混称（C03）。
+  source_cas:
+  - 利润总额
+  - 利息费用
+  - 折旧与摊销
+  source_ifrs: earnings before interest, taxes, depreciation and amortisation（非 IFRS
+    定义指标）
+  depends_on: []
+  benchmark: 物流央企实例 47–82 亿元（中国物流集团）。
+  mpm: false
+  mpm_review:
+    determination: candidate
+    verified: false
+    condition: 仅当企业在公开财务报表中实际列报 EBITDA 时即属 IFRS 18 MPM，须调节至最接近法定小计（利润总额）并在单一附注披露；本库不静态授予监管标签。
+    basis: IFRS 18（IASB，2024-05 发布，2027-01-01 起生效）B116–B118；EY/KPMG 实务指引（提前参照）。
+  reconciliation: 以利润总额（profit before tax）为最直接可比法定小计，调节项为利息费用、折旧与摊销。
+  provenance: research/08 §3；research/09 §2
+  default_caliber: 利润总额 + 计入财务费用的利息支出 + 固定资产折旧 + 无形资产摊销 + 长期待摊费用摊销（间接法）
+  default_basis: 中国评级与信贷市场通行间接法（联合资信附件）
+  alternative_calibers:
+  - 含投资收益与公允价值变动的宽口径（须标注）
+  tier: professional
+  analysis_dimensions: *id003
+- metric_code: adjusted_ebitda
+  name: 调整后 EBITDA
+  aliases:
+  - Adjusted EBITDA
+  domain: profitability
+  definition: 在 EBITDA 基础上进一步剔除减值、处置损益、权益法投资收益等非经常/非现金项目的管理层口径指标。
+  formula_text: EBITDA ± 减值损失/转回 ± 处置组重计量 ∓ 权益法投资收益等调整项
+  formula:
+    op: identity
+    args:
+    - ebitda
+    note: 调整项清单为口径版本的核心内容，须逐项列明
+  unit: 元
+  time_behavior: period_flow
+  caliber: IFRS 未定义，企业间口径不可直接比较；调整后利润不得与法定利润（利润总额/净利润）混同，展示必须带"调整后 / Non-GAAP"标签并引用调节表（C18）；若于公开财报列报则属
+    IFRS 18 MPM，须单一附注集中披露计算方式与调节表（EY/KPMG 指引）。
+  source_cas:
+  - 利润总额
+  - 利息费用
+  - 折旧与摊销
+  - 资产减值损失
+  - 投资收益
+  source_ifrs: adjusted EBITDA as MPM candidate (IFRS 18.B116–B117；KPMG illustrative
+    disclosures)
+  depends_on:
+  - ebitda
+  benchmark: 仅作管理层口径展示，禁止跨企业直接对比。
+  mpm: false
+  mpm_review:
+    determination: candidate
+    verified: false
+    condition: 仅当于公开财报列报时属 IFRS 18 MPM（须调节与单一附注披露）；本库不静态授予监管标签。
+    basis: IFRS 18（IASB，2024-05 发布，2027-01-01 起生效）B116–B118；KPMG 示例披露（提前参照）。
+  reconciliation: 调节至持续经营利润：持续经营利润 + 所得税 + 净财务费用 + 折旧 + 摊销 ± 减值及处置调整 ∓ 权益法收益（KPMG
+    示例结构）。
+  provenance: research/09 §2、§3
+  tier: professional
+  analysis_dimensions: *id003
+- metric_code: ebitda_margin
+  name: EBITDA 利润率
+  domain: profitability
+  definition: EBITDA 占营业收入的比例。
+  formula_text: EBITDA ÷ 营业总收入 × 100%
+  formula:
+    op: div
+    args:
+    - ebitda
+    - is.revenue
+  unit: '%'
+  time_behavior: period_flow
+  caliber: 联合资信评级口径。
+  source_cas:
+  - 利润总额
+  - 利息费用
+  - 折旧与摊销
+  - 营业收入
+  source_ifrs: EBITDA / revenue
+  depends_on:
+  - ebitda
+  benchmark: 物流央企实例 3.4%–3.7%（中国物流集团）。
+  mpm: false
+  mpm_review:
+    determination: candidate
+    verified: false
+    condition: 随 EBITDA 继承——仅当于公开财报列报时属 IFRS 18 MPM 候选；本库不静态授予监管标签。
+    basis: IFRS 18（IASB，2024-05 发布，2027-01-01 起生效）B116–B118（提前参照）。
+  reconciliation: 随 EBITDA 口径继承调节关系。
+  provenance: research/08 §3
+  tier: professional
+  analysis_dimensions: *id003
+- metric_code: revenue_growth
+  name: 营业收入增长率
+  domain: growth
+  definition: 本期营业收入相对上期的增长速度。
+  formula_text: （本期营业收入 − 上期营业收入）÷ 上期营业收入 × 100%
+  formula:
+    op: div
+    args:
+    - op: sub
+      args:
+      - is.revenue
+      - op: prior
+        args:
+        - is.revenue
+    - op: prior
+      args:
+      - is.revenue
+  unit: '%'
+  time_behavior: period_flow
+  caliber: 多年复合口径：[(本期 ÷ 前 n 年）^(1/(n−1)) − 1] × 100%（评级机构口径），作为口径版本记录。
+  source_cas:
+  - 营业收入
+  source_ifrs: revenue growth
+  depends_on: []
+  benchmark: 结合行业周期与战略阶段判断。
+  mpm: false
+  provenance: research/08 §1、§3
+  tier: core
+  analysis_dimensions:
+  - trend
+  - benchmark
+- metric_code: net_profit_growth
+  name: 净利润增长率
+  domain: growth
+  definition: 本期净利润相对上期的增长速度。
+  formula_text: （本期净利润 − 上期净利润）÷ 上期净利润 × 100%
+  formula:
+    op: div
+    args:
+    - op: sub
+      args:
+      - is.net_profit
+      - op: prior
+        args:
+        - is.net_profit
+    - op: prior
+      args:
+      - is.net_profit
+  unit: '%'
+  time_behavior: period_flow
+  caliber: 上期为负或接近零时增长率失真，须降级为绝对变动额展示。
+  source_cas:
+  - 净利润
+  source_ifrs: profit growth
+  depends_on: []
+  benchmark: 与收入增长率联看增收是否增利。
+  mpm: false
+  provenance: research/08 §1
+  tier: core
+  analysis_dimensions:
+  - trend
+  - benchmark
+  - warning
+- metric_code: operating_profit_growth
+  name: 营业利润增长率
+  domain: growth
+  definition: 本期营业利润相对上期的增长速度，剔除营业外扰动的成长性口径。
+  formula_text: （本期营业利润 − 上期营业利润）÷ 上期营业利润 × 100%
+  formula:
+    op: div
+    args:
+    - op: sub
+      args:
+      - is.operating_profit
+      - op: prior
+        args:
+        - is.operating_profit
+    - op: prior
+      args:
+      - is.operating_profit
+  unit: '%'
+  time_behavior: period_flow
+  caliber: 同 net_profit_growth 的失真处理规则。
+  source_cas:
+  - 营业利润
+  source_ifrs: operating profit growth
+  depends_on: []
+  benchmark: 结合毛利率与费用率变化定位增长质量。
+  mpm: false
+  provenance: research/08 §1
+  tier: professional
+  analysis_dimensions: &id004
+  - trend
+  - benchmark
+- metric_code: total_asset_growth
+  name: 总资产增长率
+  domain: growth
+  definition: 期末总资产相对期初的增长速度。
+  formula_text: （期末总资产 − 期初总资产）÷ 期初总资产 × 100%
+  formula:
+    op: div
+    args:
+    - op: sub
+      args:
+      - bs.total_assets
+      - op: prior
+        args:
+        - bs.total_assets
+    - op: prior
+      args:
+      - bs.total_assets
+  unit: '%'
+  time_behavior: point_balance
+  caliber: 教科书标准口径。
+  source_cas:
+  - 资产总计
+  source_ifrs: total assets growth
+  depends_on: []
+  benchmark: 资产扩张须与收入/利润增长匹配。
+  mpm: false
+  provenance: research/08 §1
+  tier: professional
+  analysis_dimensions: *id004
+- metric_code: equity_growth
+  name: 净资产增长率
+  domain: growth
+  definition: 本期净资产相对上期的增长速度，反映资本积累。
+  formula_text: （本期净资产 − 上期净资产）÷ 上期净资产 × 100%
+  formula:
+    op: div
+    args:
+    - op: sub
+      args:
+      - bs.equity
+      - op: prior
+        args:
+        - bs.equity
+    - op: prior
+      args:
+      - bs.equity
+  unit: '%'
+  time_behavior: point_balance
+  caliber: 教科书标准口径。
+  source_cas:
+  - 所有者权益合计
+  source_ifrs: equity growth
+  depends_on: []
+  benchmark: 结合分红政策与利润留存判断。
+  mpm: false
+  provenance: research/08 §1
+  tier: professional
+  analysis_dimensions: *id004
+- metric_code: cash_revenue_ratio
+  name: 现金收入比
+  domain: cashflow
+  definition: 销售商品、提供劳务收到的现金与营业总收入之比，收入的现金含量。
+  formula_text: 销售商品、提供劳务收到的现金 ÷ 营业总收入 × 100%
+  formula:
+    op: div
+    args:
+    - cf.cash_from_sales
+    - is.revenue
+  unit: '%'
+  time_behavior: period_flow
+  caliber: 联合资信评级口径；分子含增值税销项税，指标可大于 100%。
+  source_cas:
+  - 销售商品、提供劳务收到的现金
+  - 营业收入
+  source_ifrs: cash receipts from customers / revenue (IAS 7)
+  depends_on: []
+  benchmark: 物流央企实例约 108%（中国物流集团）；持续低于 100% 须查收入质量。
+  mpm: false
+  provenance: research/08 §3；research/09 §4.1
+  tier: professional
+  analysis_dimensions:
+  - cash_link
+  - benchmark
+- metric_code: ocf_net_profit_ratio
+  name: 盈利现金比率
+  aliases:
+  - 净利润现金含量
+  domain: cashflow
+  definition: 经营活动现金流量净额与净利润之比，利润的现金成色。
+  formula_text: 经营活动现金流量净额 ÷ 净利润
+  formula:
+    op: div
+    args:
+    - cf.ocf
+    - is.net_profit
+  unit: 倍
+  time_behavior: period_flow
+  caliber: 净利润为负时指标失真，降级为绝对额展示。
+  source_cas:
+  - 经营活动产生的现金流量净额
+  - 净利润
+  source_ifrs: operating cash flow / profit
+  depends_on: []
+  benchmark: 长期显著小于 1 提示利润质量或回款问题。
+  mpm: false
+  provenance: research/08 §1
+  tier: core
+  analysis_dimensions:
+  - cash_link
+  - warning
+  - trend
+- metric_code: free_cash_flow
+  name: 自由现金流
+  aliases:
+  - FCF
+  domain: cashflow
+  definition: 经营现金流扣除资本开支后可自由支配的现金。
+  formula_text: 经营活动现金流量净额 − 购建长期资产支付的现金
+  formula:
+    op: sub
+    args:
+    - cf.ocf
+    - cf.capex
+  unit: 元
+  time_behavior: period_flow
+  caliber: FCF 属管理常用口径指标，资本开支边界（是否含租赁付款、并购）须按口径版本记录。FCF 不是现金流量表定义的现金科目，禁止与货币资金或经营活动现金流量净额混称（C03）。
+  source_cas:
+  - 经营活动产生的现金流量净额
+  - 购建固定资产、无形资产和其他长期资产支付的现金
+  source_ifrs: free cash flow（非 IFRS 定义指标；如于公开财报列报则属 IFRS 18 MPM 候选）
+  depends_on: []
+  benchmark: 持续为负须解释资金来源。
+  mpm: false
+  mpm_review:
+    determination: candidate
+    verified: false
+    condition: 仅当企业在公开财务报表中实际列报 FCF 时即属 IFRS 18 MPM，须调节并披露；本库不静态授予监管标签。
+    basis: IFRS 18（IASB，2024-05 发布，2027-01-01 起生效）B116–B118 管理定义业绩指标；EY/KPMG 实务指引（提前参照）。
+  reconciliation: 调节至经营活动现金流量净额（法定现金流量表行项目），调节项为资本开支等。
+  provenance: research/09 §3
+  default_caliber: 经营活动现金流量净额 − 购建固定资产、无形资产和其他长期资产支付的现金（资本开支仅含购建付现）
+  default_basis: CPA 教材标准口径（管理用报表简化版）
+  alternative_calibers:
+  - 含租赁付款本金与并购的扩展资本开支口径（MPM，须调节披露）
+  tier: core
+  analysis_dimensions:
+  - cash_link
+  - value
+- metric_code: cash_short_debt_ratio
+  name: 现金短期债务比
+  domain: cashflow
+  definition: 现金类资产对短期债务的覆盖倍数。
+  formula_text: 现金类资产 ÷ 短期债务
+  formula:
+    op: div
+    args:
+    - bs.cash
+    - bs.short_debt
+  unit: 倍
+  time_behavior: point_balance
+  caliber: 联合资信评级口径；现金类资产是否含交易性金融资产须标注。
+  source_cas:
+  - 货币资金
+  - 短期借款
+  source_ifrs: cash / current borrowings
+  depends_on: []
+  benchmark: 物流央企实例 0.9–1.34 倍（中国物流集团）。
+  mpm: false
+  provenance: research/08 §3
+  default_caliber: 现金类资产 = 货币资金 + 交易性金融资产
+  default_basis: 联合资信评级附件口径
+  alternative_calibers:
+  - 仅货币资金（最保守）
+  tier: professional
+  analysis_dimensions:
+  - warning
+  - trend
+- metric_code: debt_ebitda
+  name: 全部债务 / EBITDA
+  domain: cashflow
+  definition: 全部债务相当于 EBITDA 的倍数，债务清偿所需年限的近似度量。
+  formula_text: （短期债务 + 长期债务）÷ EBITDA
+  formula:
+    op: div
+    args:
+    - op: add
+      args:
+      - bs.short_debt
+      - bs.long_debt
+    - ebitda
+  unit: 倍
+  time_behavior: period_flow
+  caliber: 联合资信评级口径；分子为时点、分母为期间，须注意口径混合。
+  source_cas:
+  - 短期借款
+  - 长期借款
+  - 利润总额
+  - 利息费用
+  - 折旧与摊销
+  source_ifrs: total debt / EBITDA
+  depends_on:
+  - ebitda
+  benchmark: 物流央企实例 4.5–7.5 倍（中国物流集团）；倍数越高偿债压力越大。
+  mpm: false
+  provenance: research/08 §3
+  tier: professional
+  analysis_dimensions:
+  - warning
+  - benchmark
+- metric_code: ccc_days
+  name: 现金周转周期
+  domain: operation
+  definition: 从付现给供应商到从客户收现的平均天数（净营业周期），衡量营运资金占用时长。
+  formula_text: 存货周转天数（DIO）+ 应收账款周转天数（DSO）− 应付账款周转天数（DPO）
+  formula:
+    op: sub
+    args:
+    - op: add
+      args:
+      - dio_days
+      - dso_days
+    - dpo_days
+  unit: 天
+  time_behavior: period
+  caliber: CFA/CFI 标准定义（净营业周期）；与联合资信附件「净营业周期」同族。
+  source_cas:
+  - 存货
+  - 应收账款
+  - 应付账款
+  - 营业收入
+  - 营业成本
+  source_ifrs: inventories / trade receivables / trade payables (IAS 1)
+  depends_on:
+  - dio_days
+  - dso_days
+  - dpo_days
+  benchmark: 行业差异大；负值表示占用上游资金（强议价）；持续上升提示营运资金占用恶化，需结合业务模式评估。
+  mpm: false
+  provenance: 'research/2026-09-11-25-indicators-article #20 + 调研 08 §3（联合资信净营业周期）'
+  tier: core
+  analysis_dimensions:
+  - trend
+  - benchmark
+  - warning
+- metric_code: ocf_interest_coverage
+  name: 现金流利息覆盖
+  domain: solvency
+  definition: 经营活动现金流量净额对利息费用的保障倍数，从收付实现制衡量付息能力。
+  formula_text: 经营活动产生的现金流量净额 ÷ 利息费用
+  formula:
+    op: div
+    args:
+    - cf.ocf
+    - is.interest_exp
+  unit: 倍
+  time_behavior: period
+  caliber: 收付实现制口径；分母为费用化利息支出。与 interest_coverage（EBIT 权责口径）配对阅读。
+  source_cas:
+  - 经营活动产生的现金流量净额
+  - 财务费用—利息费用
+  source_ifrs: net cash from operating activities (IAS 7) / finance costs
+  depends_on: []
+  benchmark: 显著低于 EBIT 口径利息保障倍数，提示利润未转化为付息现金；两口径长期背离须复核利润质量。
+  mpm: false
+  provenance: 'research/2026-09-11-25-indicators-article #16'
+  tier: professional
+  analysis_dimensions:
+  - warning
+  - cash_link
+- metric_code: ocf_total_debt_ratio
+  name: 现金流总债务比
+  domain: cashflow
+  definition: 经营活动现金流量净额对全部债务的覆盖程度，衡量以经营现金偿还全部有息债务的能力。
+  formula_text: 经营活动产生的现金流量净额 ÷（短期有息债务 + 长期有息债务）
+  formula:
+    op: div
+    args:
+    - cf.ocf
+    - op: sum
+      args:
+      - bs.short_debt
+      - bs.long_debt
+  unit: 倍
+  time_behavior: point_balance
+  caliber: 分母为有息债务合计；信用分析与杠杆收购语境常用，使用时须结合资本性支出需求。
+  source_cas:
+  - 经营活动产生的现金流量净额
+  - 短期借款
+  - 长期借款
+  - 应付债券
+  source_ifrs: borrowings (IFRS 7/9)
+  depends_on: []
+  benchmark: 与 free_cash_flow 交叉验证（扣除 CAPEX 后的真偿债能力）；持续低于行业均值提示再融资依赖。
+  mpm: false
+  provenance: 'research/2026-09-11-25-indicators-article #17'
+  tier: professional
+  analysis_dimensions:
+  - warning
+  - cash_link
+- metric_code: roic
+  name: 投入资本回报率
+  domain: profitability
+  definition: 税后净营业利润（NOPAT）对投入资本（有息负债+股东权益）的回报率，与资本成本（WACC）对比判断是否创造价值。
+  formula_text: NOPAT ÷（有息负债 + 股东权益）；NOPAT = 净利润 +（利息支出 + 研发费用调整项）×（1 − 所得税率）
+  formula:
+    op: div
+    args:
+    - nopat
+    - op: sum
+      args:
+      - bs.short_debt
+      - bs.long_debt
+      - bs.equity
+  unit: '%'
+  time_behavior: period
+  caliber: NOPAT 口径（税后经营利润，利息加回）。与 roce（联合资信总资本收益率：(净利润+利息支出)÷(权益+全部债务)）为同族不同口径，跨源对比须先对齐。
+  source_cas:
+  - 净利润
+  - 利息费用
+  - 研发费用
+  - 短期借款
+  - 长期借款
+  - 所有者权益
+  source_ifrs: invested capital = interest-bearing debt + equity
+  depends_on: []
+  benchmark: ROIC > WACC 才创造价值；WACC 估算主观，结论须给出资本成本取值区间。
+  mpm: false
+  provenance: '借鉴 #13/#18 v1.1 候选落地（2026-09-12）；NOPAT 调整项按国资委 EVA 口径'
+  tier: professional
+  analysis_dimensions:
+  - value
+  - benchmark
+- metric_code: eva
+  name: 经济增加值
+  domain: value
+  definition: 税后净营业利润减去全部资本成本后的余额（国资委央企负责人业绩考核核心指标），衡量超过资本成本的价值创造。
+  formula_text: EVA = NOPAT − 调整后资本 × 资本成本率；央企口径资本成本率原则上 5.5%（军工等 4.1%；资产负债率超标上浮 0.5
+    个百分点），研发费用视同利润加回
+  formula:
+    op: sub
+    args:
+    - nopat
+    - op: mul
+      args:
+      - invested_capital
+      - wacc
+  unit: 元
+  time_behavior: period
+  caliber: 国资委《中央企业负责人经营业绩考核暂行办法》口径；NOPAT = 净利润 +（利息支出 + 研发费用调整项）×（1 − 所得税率），调整项含非经常性收益与无息流动负债。
+  source_cas:
+  - 净利润
+  - 利息费用
+  - 研发费用
+  - 所有者权益
+  - 有息债务
+  source_ifrs: residual income (Stern Stewart EVA framework)
+  depends_on: []
+  benchmark: WACC/资本成本率取值主观性强，只作长期价值分析参考，不得仅凭 EVA 单独下创造价值结论（原文与国资委口径一致）。
+  mpm: false
+  provenance: 'research/2026-09-11-25-indicators-article #24 + 国资委考核办法（2026-09-12
+    权威口径核查）'
+  tier: professional
+  analysis_dimensions:
+  - value
+  - benchmark
+- metric_code: sgr
+  name: 可持续增长率
+  domain: growth
+  definition: 不追加外部融资、仅靠留存利润支撑的理论最大销售增长率。
+  formula_text: ROE ×（1 − 分红率）
+  formula:
+    op: mul
+    args:
+    - roe
+    - op: sub
+      args:
+      - identity_1
+      - payout_ratio
+  unit: '%'
+  time_behavior: period
+  caliber: Higgins 经典口径（期初权益）；实务常用期末权益 ROE 近似，须标注分母口径。
+  source_cas:
+  - 净利润
+  - 所有者权益
+  - 应付股利
+  source_ifrs: sustainable growth rate (Higgins)
+  depends_on:
+  - roe
+  benchmark: 理论上限口径，不等于实际增长潜力（企业常通过融资与并购超速增长）；实际增速持续高于 SGR 须提示融资依赖。
+  mpm: false
+  provenance: 'research/2026-09-11-25-indicators-article #25'
+  tier: professional
+  analysis_dimensions:
+  - trend
+  - value
+- metric_code: period_expense_ratio
+  name: 期间费用率
+  domain: profitability
+  definition: 期间费用（销售+管理+研发+财务）占营业收入的比重，衡量费用管控与经营杠杆。
+  formula_text: （销售费用 + 管理费用 + 研发费用 + 财务费用）÷ 营业收入
+  formula:
+    op: div
+    args:
+    - op: sum
+      args:
+      - is.selling_exp
+      - is.admin_exp
+      - is.rnd_exp
+      - is.fin_exp
+    - is.revenue
+  unit: '%'
+  time_behavior: period
+  caliber: CAS 期间费用四项合计口径；财务费用含利息净支出，与运营口径费用（BP 管理）区分须标注。
+  source_cas:
+  - 销售费用
+  - 管理费用
+  - 研发费用
+  - 财务费用
+  - 营业收入
+  source_ifrs: selling / general & administrative / R&D / finance costs
+  depends_on: []
+  benchmark: '与 BP26 借鉴 #15 登记 gap 一致；拆分费用明细看结构（sales/admin/R&D 各自占比）更有行动意义。'
+  mpm: false
+  provenance: '借鉴 #15（BP26）v1.1 gap 落地（2026-09-12）'
+  tier: core
+  analysis_dimensions:
+  - trend
+  - structure
+  - benchmark
+- metric_code: volume_growth
+  name: 销量增长率
+  domain: growth
+  definition: 本期销量相对上期销量的增长，量价拆解（规模/价格/结构）中的量因子。
+  formula_text: （本期销量 − 上期销量）÷ 上期销量
+  formula:
+    op: div
+    args:
+    - op: sub
+      args:
+      - volume_current
+      - volume_prior
+    - volume_prior
+  unit: '%'
+  time_behavior: period
+  caliber: 需要分产品量价数据（内部经营事实，L2 过程数据）；财报不可直接取数——绑定按缺失如实标注。
+  source_cas: []
+  source_ifrs: n/a（经营量纲）
+  depends_on: []
+  benchmark: 与 price_change_rate 联合拆解收入增长（量·价·结构三因子）；物流行业对应业务量口径（件/单/吨）。
+  mpm: false
+  provenance: '借鉴 #15（BP26）v1.1 gap 落地；C08 量价三因子桥（借鉴 #6）配套'
+  tier: professional
+  analysis_dimensions:
+  - trend
+  - structure
+- metric_code: price_change_rate
+  name: 单价变动率
+  domain: growth
+  definition: 本期平均单价相对上期的变动，量价拆解中的价因子。
+  formula_text: （本期平均单价 − 上期平均单价）÷ 上期平均单价
+  formula:
+    op: div
+    args:
+    - op: sub
+      args:
+      - price_current
+      - price_prior
+    - price_prior
+  unit: '%'
+  time_behavior: period
+  caliber: 平均单价 = 收入 ÷ 销量，需分产品量价数据（L2）；财报不可直接取数——绑定按缺失如实标注。
+  source_cas: []
+  source_ifrs: n/a（经营量纲）
+  depends_on: []
+  benchmark: 降价促销期与 volume_growth 组合解读收入增长质量；物流行业对应单均收入变动。
+  mpm: false
+  provenance: '借鉴 #15（BP26）v1.1 gap 落地；C08 量价三因子桥（借鉴 #6）配套'
+  tier: professional
+  analysis_dimensions:
+  - trend
+  - structure
+metrics_logistics:
+- metric_code: orders
+  name: 订单量
+  domain: scale
+  definition: 所选期间和维度内的订单数量之和。
+  formula_text: Σ 订单数
+  formula:
+    op: sum
+    args:
+    - operating.order_count
+  unit: 单
+  time_behavior: period_flow
+  caliber: 非会计科目经营量指标，取自经营事实表订单数；与财务科目无勾稽关系，仅用于经营比率与 Driver 分解。
+  source_cas:
+  - 经营数据（非会计科目）
+  source_ifrs: 非财务业绩指标（IFRS 18 MPM 类别之非财务计量）
+  depends_on: []
+  migrates_from: flow.metrics.logistics.v1#orders v1
+  mpm: false
+  provenance: FLOW V1 工程契约
+  tier: core
+  analysis_dimensions: &id005
+  - trend
+  - benchmark
+- metric_code: fulfilled_units
+  name: 履约件量
+  domain: scale
+  definition: 所选期间和维度内的实际履约件数之和。
+  formula_text: Σ 履约件数
+  formula:
+    op: sum
+    args:
+    - operating.shipment_count
+  unit: 件
+  time_behavior: period_flow
+  caliber: 非会计科目经营量指标，取自经营事实表实际履约件数；与财务科目无勾稽关系。
+  source_cas:
+  - 经营数据（非会计科目）
+  source_ifrs: 非财务业绩指标
+  depends_on: []
+  migrates_from: flow.metrics.logistics.v1#fulfilled_units v1
+  mpm: false
+  provenance: FLOW V1 工程契约
+  tier: core
+  analysis_dimensions: *id005
+- metric_code: revenue
+  name: 收入
+  domain: scale
+  definition: 经营实际收入；必须与财务收入完成发布前对账。
+  formula_text: Σ 经营收入（与财务收入对账）
+  formula:
+    op: sum
+    args:
+    - operating.revenue
+  unit: 元
+  time_behavior: period_flow
+  caliber: 经营口径收入与 CAS 营业收入（6001 主营业务收入 + 6051 其他业务收入）之间存在对账关系，对账不通过不得发布。
+  source_cas:
+  - 主营业务收入 6001
+  - 其他业务收入 6051
+  source_ifrs: revenue from contracts with customers (IFRS 15)
+  depends_on: []
+  migrates_from: flow.metrics.logistics.v1#revenue v1
+  mpm: false
+  provenance: FLOW V1 工程契约；research/07 §2
+  tier: core
+  analysis_dimensions: *id005
+- metric_code: revenue_per_order
+  name: 单均收入
+  domain: scale
+  definition: 同一期间和维度粒度的收入除以订单量。
+  formula_text: 收入 ÷ 订单量
+  formula:
+    op: div
+    args:
+    - revenue
+    - orders
+  unit: 元/单
+  time_behavior: period_flow
+  caliber: 派生比率：分子分母须同期间同粒度（继承 revenue 与 orders 口径）；非 CAS 报表项目。
+  depends_on:
+  - revenue
+  - orders
+  migrates_from: flow.metrics.logistics.v1#revenue_per_order v1
+  mpm: false
+  provenance: FLOW V1 工程契约
+  tier: core
+  analysis_dimensions: *id005
+- metric_code: direct_cost
+  name: 直接成本
+  aliases:
+  - 履约成本
+  domain: profitability
+  definition: 仓储、运输和其他直接履约成本之和。
+  formula_text: Σ（仓储成本 + 运输成本 + 其他直接履约成本）
+  formula:
+    op: sum
+    args:
+    - operating.direct_cost
+  unit: 元
+  time_behavior: period_flow
+  caliber: 管理口径；与 CAS 主营业务成本（6401）/ 劳务成本（5201）存在映射与对账关系。
+  source_cas:
+  - 主营业务成本 6401
+  - 劳务成本 5201
+  source_ifrs: cost of sales / fulfilment costs
+  depends_on: []
+  migrates_from: flow.metrics.logistics.v1#direct_cost v1
+  mpm: false
+  mpm_review:
+    determination: not_applicable
+    verified: false
+    condition: 成本会计口径（内部管理），不在公开财报中作为管理定义业绩指标列报，不属于 MPM 判定范畴。
+    basis: FLOW V1 工程契约 + CAS 主营业务成本（6401）/ 劳务成本（5201）科目映射。
+  reconciliation: 与主营业务成本科目的对账差额须在质量检查中披露。
+  provenance: FLOW V1 工程契约；research/07 §2
+  tier: professional
+  analysis_dimensions: *id003
+- metric_code: cost_per_order
+  name: 单均成本
+  domain: profitability
+  definition: 同一期间和维度粒度的直接成本除以订单量。
+  formula_text: 直接成本 ÷ 订单量
+  formula:
+    op: div
+    args:
+    - direct_cost
+    - orders
+  unit: 元/单
+  time_behavior: period_flow
+  caliber: 派生比率：分子为直接成本（履约成本口径，见 cost），分母为订单量，须同期间同粒度；非 CAS 报表项目。
+  depends_on:
+  - direct_cost
+  - orders
+  migrates_from: flow.metrics.logistics.v1#cost_per_order v1
+  mpm: false
+  provenance: FLOW V1 工程契约
+  tier: core
+  analysis_dimensions: *id003
+- metric_code: gross_profit
+  name: 毛利
+  domain: profitability
+  definition: 收入减直接成本。
+  formula_text: 收入 − 直接成本
+  formula:
+    op: sub
+    args:
+    - revenue
+    - direct_cost
+  unit: 元
+  time_behavior: period_flow
+  caliber: 经营口径毛利 = 收入 − 直接成本（履约成本），与 CAS 财务毛利（营业收入 − 营业成本）口径不同：直接成本不含期间费用与税金，解读与对账时不得混同。
+  depends_on:
+  - revenue
+  - direct_cost
+  migrates_from: flow.metrics.logistics.v1#gross_profit v1
+  mpm: false
+  provenance: FLOW V1 工程契约
+  tier: professional
+  analysis_dimensions: *id003
+- metric_code: gross_margin
+  name: 毛利率（物流口径）
+  domain: profitability
+  definition: 同一期间和维度粒度的毛利除以收入。
+  formula_text: 毛利 ÷ 收入
+  formula:
+    op: div
+    args:
+    - gross_profit
+    - revenue
+  unit: '%'
+  time_behavior: period_flow
+  caliber: 与通用集 gross_margin 同构，但分子分母为经营管理口径（经对账），属行业集独立口径版本。
+  depends_on:
+  - gross_profit
+  - revenue
+  migrates_from: flow.metrics.logistics.v1#gross_margin v1
+  mpm: false
+  provenance: FLOW V1 工程契约
+  tier: core
+  analysis_dimensions: *id006
+- metric_code: fulfillment_cost_rate
+  name: 履约成本率
+  domain: profitability
+  definition: 同一期间和维度粒度的直接成本除以收入。
+  formula_text: 直接成本 ÷ 收入
+  formula:
+    op: div
+    args:
+    - direct_cost
+    - revenue
+  unit: '%'
+  time_behavior: period_flow
+  caliber: 经营口径比率：分子为直接成本（履约成本），与财务「营业成本率」（营业成本 ÷ 营业收入）口径存在差异。
+  depends_on:
+  - direct_cost
+  - revenue
+  migrates_from: flow.metrics.logistics.v1#fulfillment_cost_rate v1
+  mpm: false
+  provenance: FLOW V1 工程契约
+  tier: core
+  analysis_dimensions: *id003
+- metric_code: operating_profit
+  name: 经营利润
+  domain: profitability
+  definition: 财务实际中经营利润管理科目的金额之和。
+  formula_text: Σ 经营利润管理科目金额
+  formula:
+    op: sum
+    args:
+    - financial.operating_profit
+  unit: 元
+  time_behavior: period_flow
+  caliber: 管理口径经营利润与 CAS 营业利润存在调节关系，须披露调节项；不得简化为"营业收入 − 营业成本"（C04，法定形成关系含其他收益、投资收益、公允价值变动、减值等，依财会〔2018〕15
+    号报表格式）。本条为管理口径科目合计，非 CAS 营业利润定义。
+  source_cas:
+  - 营业利润
+  source_ifrs: operating profit (IFRS 18)
+  depends_on: []
+  migrates_from: flow.metrics.logistics.v1#operating_profit v1
+  mpm: false
+  mpm_review:
+    determination: management_caliber
+    verified: false
+    condition: 管理口径科目合计（内部使用），不属于 IFRS 18 MPM 判定范畴；如改为在公开财报列报须重新判定。
+    basis: FLOW V1 工程契约 + 财会〔2018〕15 号利润表法定形成关系。
+  reconciliation: 调节至营业利润法定行项目。
+  provenance: FLOW V1 工程契约
+  tier: professional
+  analysis_dimensions: *id003
+- metric_code: ar_balance
+  name: 应收余额
+  domain: operation
+  definition: 所选窗口最后一个可用期间的应收账款余额。
+  formula_text: 期末应收账款余额
+  formula:
+    op: closing
+    args:
+    - ar.receivable_balance
+  unit: 元
+  time_behavior: point_balance
+  caliber: 时点余额：取财务事实应收账款，仅取窗口最后一个可用期间，缺失期间记录 missing 而非零填补；对应 CAS 1122。
+  source_cas:
+  - 应收账款 1122
+  source_ifrs: trade receivables (IFRS 9 预期信用损失口径须关注)
+  depends_on: []
+  migrates_from: flow.metrics.logistics.v1#ar_balance v1
+  mpm: false
+  provenance: FLOW V1 工程契约；research/07 §2
+  tier: professional
+  analysis_dimensions: *id002
+- metric_code: collection_rate
+  name: 回款率
+  domain: cashflow
+  definition: 所选期间回款金额除以到期金额。
+  formula_text: Σ 回款金额 ÷ Σ 到期金额
+  formula:
+    op: div
+    args:
+    - op: sum
+      args:
+      - ar.collected
+    - op: sum
+      args:
+      - ar.due
+  unit: '%'
+  time_behavior: period_flow
+  caliber: 经营口径比率：期间回款金额 ÷ 到期金额，依赖应收账期事实；非 CAS 报表直接项目。
+  source_cas:
+  - 应收账款 1122（回款核销记录）
+  source_ifrs: collection effectiveness（非准则指标）
+  depends_on: []
+  migrates_from: flow.metrics.logistics.v1#collection_rate v1
+  mpm: false
+  mpm_review:
+    determination: not_applicable
+    verified: false
+    condition: 内部经营指标（依赖应收账期事实），不在法定财报列报，不属于 MPM 判定范畴。
+    basis: FLOW V1 工程契约；非准则指标（source_ifrs 已注明）。
+  reconciliation: 到期金额口径（合同账期）须在口径版本中定义。
+  provenance: FLOW V1 工程契约
+  tier: core
+  analysis_dimensions: &id007
+  - trend
+  - cash_link
+  - warning
+- metric_code: operating_cash_flow
+  name: 经营现金流
+  domain: cashflow
+  definition: 财务实际中经营现金流管理科目的金额之和。
+  formula_text: Σ 经营现金流管理科目金额
+  formula:
+    op: sum
+    args:
+    - financial.operating_cash_flow
+  unit: 元
+  time_behavior: period_flow
+  caliber: 财务口径：财务事实经营现金流管理科目金额之和，对应 CAS 现金流量表「经营活动产生的现金流量净额」（会企03表 / IAS 7）。
+  source_cas:
+  - 经营活动产生的现金流量净额
+  source_ifrs: net cash from operating activities (IAS 7)
+  depends_on: []
+  migrates_from: flow.metrics.logistics.v1#operating_cash_flow v1
+  mpm: false
+  provenance: FLOW V1 工程契约
+  tier: core
+  analysis_dimensions: *id007
+- metric_code: cash_conversion
+  name: 现金转换率
+  domain: cashflow
+  definition: 同一期间和维度粒度的经营现金流除以经营利润。
+  formula_text: 经营现金流 ÷ 经营利润
+  formula:
+    op: div
+    args:
+    - operating_cash_flow
+    - operating_profit
+  unit: 倍
+  time_behavior: period_flow
+  caliber: 与通用集 ocf_net_profit_ratio 同构，分母为管理口径经营利润。
+  depends_on:
+  - operating_cash_flow
+  - operating_profit
+  migrates_from: flow.metrics.logistics.v1#cash_conversion v1
+  mpm: false
+  provenance: FLOW V1 工程契约
+  tier: professional
+  analysis_dimensions: *id007
+- metric_code: dso
+  name: 应收账款周转天数（T12 口径）
+  aliases:
+  - DSO-T12
+  domain: operation
+  definition: 期末应收余额除以截至期末的近十二个月收入并乘以 365 天。
+  formula_text: 期末应收余额 ÷ 近 12 个月收入 × 365
+  formula:
+    op: mul
+    args:
+    - op: div
+      args:
+      - ar_balance
+      - op: trailing12
+        args:
+        - revenue
+    - 365
+  unit: 天
+  time_behavior: point_balance
+  caliber: 与通用集 dso_days（360/周转率口径）为不同口径版本；T12 口径对月度波动更稳健。
+  source_cas:
+  - 应收账款 1122
+  - 营业收入
+  source_ifrs: days sales outstanding
+  depends_on:
+  - ar_balance
+  - revenue
+  migrates_from: flow.metrics.logistics.v1#dso v1
+  mpm: false
+  provenance: FLOW V1 工程契约
+  tier: professional
+  analysis_dimensions: *id002
+relations:
+- relation: dupont_three_factor
+  name: 杜邦三分解
+  expression: roe = net_margin × total_asset_turnover × equity_multiplier
+  note: 三个因子须同期间同口径（平均余额）；净利率可再分解为毛利率、费用率、税率，周转率可再分解为各项资产周转率。
+  provenance: research/08 §2
+- relation: net_operating_cycle
+  name: 净营业周期（候选指标，评级机构口径）
+  expression: net_operating_cycle = dso_days + dio_days − dpo_days
+  note: 物流央企实例约 31–34 天（中国物流集团）；如需入通用集须走指标新增流程。
+  provenance: research/08 §3；research/09 §4.1
+- relation: debt_structure_cross_check
+  name: 偿债指标交叉验证
+  expression: 资产负债率 ↑ + 利息保障倍数 ↓ ⇒ 偿债风险高
+  note: 多指标交叉验证规则，供分析 playbook 引用，不产生数值。
+  provenance: research/08 §1
+derived_from:
+- f
+- l
+- o
+- w
+- .
+- m
+- e
+- t
+- r
+- i
+- c
+- _
+- d
+- i
+- c
+- t
+- i
+- o
+- n
+- a
+- r
+- y
+- .
+- v
+- '0'
+- '-'
+- d
+- r
+- a
+- f
+- t
+- config/metrics/metric_dictionary_v1.yaml (v1.0)
+revision: v1.1

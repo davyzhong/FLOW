@@ -7523,6 +7523,29 @@
             ],
             "title": "Provenance"
           },
+          "tier": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "core",
+                  "professional"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tier"
+          },
+          "analysis_dimensions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Analysis Dimensions",
+            "default": []
+          },
           "collection": {
             "type": "string",
             "enum": [

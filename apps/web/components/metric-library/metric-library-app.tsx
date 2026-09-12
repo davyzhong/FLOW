@@ -11,13 +11,15 @@ import {
   type MetricLibrary,
   type MetricLibraryEntry,
 } from "../../lib/api/client";
+import { DependencyGraph } from "./dependency-graph";
 import "./metric-library.css";
 
-type Tab = "general" | "logistics" | "relations" | "mapping" | "accounting" | "governance";
+type Tab = "general" | "logistics" | "graph" | "relations" | "mapping" | "accounting" | "governance";
 
 const TABS: { id: Tab; label: string }[] = [
   { id: "general", label: "通用指标" },
   { id: "logistics", label: "物流行业指标" },
+  { id: "graph", label: "依赖图谱" },
   { id: "relations", label: "勾稽与分解关系" },
   { id: "mapping", label: "取数映射（CAS↔IFRS）" },
   { id: "accounting", label: "会计基础数据" },
@@ -143,6 +145,9 @@ function MetricCard({ metric, domains, onChanged }: { metric: MetricLibraryEntry
         <strong>{metric.name}</strong>
         <code>{metric.metric_code}</code>
         <span className="ml-chip">{domains[metric.domain] ?? metric.domain}</span>
+        <span className="ml-chip ml-chip--tier">
+          {metric.tier === "core" ? "常用" : "专业"}
+        </span>
         {metric.mpm ? <span className="ml-chip ml-chip--mpm">MPM</span> : null}
       </header>
       <p className="ml-metric__definition">{metric.definition}</p>
@@ -155,6 +160,9 @@ function MetricCard({ metric, domains, onChanged }: { metric: MetricLibraryEntry
           <div><dt>依赖指标</dt><dd>{metric.depends_on.map((d) => <code key={d} className="ml-dep">{d}</code>)}</dd></div>
         ) : null}
         {metric.benchmark ? <div><dt>参考基准</dt><dd>{metric.benchmark}</dd></div> : null}
+        {metric.analysis_dimensions && metric.analysis_dimensions.length > 0 ? (
+          <div><dt>分析维度</dt><dd>{metric.analysis_dimensions.join(" · ")}</dd></div>
+        ) : null}
       </dl>
       {metric.caliber ? <p className="ml-metric__caliber">口径：{metric.caliber}</p> : null}
       {metric.mpm && metric.reconciliation ? (
@@ -486,6 +494,8 @@ export function MetricLibraryApp() {
       {tab === "governance" && state.kind === "loaded" ? (
         <GovernanceSection metrics={state.library.metrics} />
       ) : null}
+
+      {tab === "graph" ? <DependencyGraph metrics={library.metrics} domains={library.domains} /> : null}
 
       {tab === "relations" ? (
         <section className="ml-relations">

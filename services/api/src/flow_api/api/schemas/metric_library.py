@@ -40,6 +40,8 @@ class MetricEntry(BaseModel):
     migrates_from: str | None = None
     aliases: list[str] = []
     provenance: str | None = None
+    tier: Literal["core", "professional"] | None = None
+    analysis_dimensions: list[str] = []
     collection: Literal["general", "logistics"]
     execution_kind: Literal["engine", "facts", "narrative"] | None = None
     execution_detail: str | None = None

@@ -75,7 +75,7 @@ async def test_metric_library_falls_back_to_yaml_when_db_empty(client: AsyncClie
     assert response.status_code == 200
     body: dict[str, Any] = response.json()
     assert body["dictionary_id"] == "flow.metric_dictionary.v1"
-    assert len(body["metrics"]) == 55
+    assert len(body["metrics"]) == 64
     assert len(body["accounting"]["accounts"]) == 167
 
 
@@ -85,7 +85,7 @@ async def test_import_then_read_from_db(
     response = await client.post("/api/v1/metric-library/import", json={"actor": "seed"})
     assert response.status_code == 200, response.text
     summary: dict[str, Any] = response.json()
-    assert summary["metrics"] == 55
+    assert summary["metrics"] == 64
     assert summary["subjects"] == 167
     assert summary["standards"] == 48
     assert summary["templates"] == 32
@@ -94,13 +94,13 @@ async def test_import_then_read_from_db(
     listing = await client.get("/api/v1/metric-library")
     body = listing.json()
     assert body["dictionary_id"] == "flow.metric_dictionary.v1"
-    assert len(body["metrics"]) == 55
+    assert len(body["metrics"]) == 64
     roe = next(m for m in body["metrics"] if m["metric_code"] == "roe")
     assert roe["default_caliber"].startswith("净利润 ÷ 平均净资产")
     # 幂等：重复导入不产生重复行
     await client.post("/api/v1/metric-library/import", json={"actor": "seed"})
     rows = db_session.query(MetricDictionaryEntry).count()
-    assert rows == 55
+    assert rows == 64
     subjects = db_session.query(AccountingSubject).count()
     assert subjects == 167
 
@@ -119,7 +119,7 @@ async def test_retire_dictionary_hides_it_from_default_read(
         .filter(MetricDictionaryEntry.status == "retired")
         .count()
     )
-    assert retired == 55
+    assert retired == 64
     # 默认读取回退 YAML（DB 无 effective 集），仍可用
     listing = await client.get("/api/v1/metric-library")
     assert listing.status_code == 200
@@ -129,7 +129,7 @@ async def test_retire_dictionary_hides_it_from_default_read(
 def test_importer_direct_counts(db_session: Session) -> None:
     summary = import_all(db_session, CONFIG_ROOT)
     assert summary == {
-        "metrics": 55,
+        "metrics": 64,
         "mappings": 28,
         "subjects": 167,
         "standards": 48,

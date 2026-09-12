@@ -25,13 +25,13 @@ async def test_metric_library_returns_full_dictionary() -> None:
 
     assert body["dictionary_id"] == "flow.metric_dictionary.v1"
     assert body["status"] == "effective"
-    assert body["decision_ref"] == "D047"
+    assert body["decision_ref"].startswith("D047")
 
     metrics = body["metrics"]
-    assert len(metrics) == 55
+    assert len(metrics) == 64
     general = [m for m in metrics if m["collection"] == "general"]
     logistics = [m for m in metrics if m["collection"] == "logistics"]
-    assert len(general) == 40
+    assert len(general) == 49
     assert len(logistics) == 15
     # P01/C02：MPM 是监管级断言，静态字典不得授予——须携带结构化判定（候选/不适用）
     assert not any(m["mpm"] for m in metrics), "静态字典不得打监管 MPM 标签"
