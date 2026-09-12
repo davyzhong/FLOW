@@ -1,0 +1,26 @@
+snapshot_id: obsidian-2026-09-12T16:17:36+08:00
+status: current-canonical-baseline
+supersedes: obsidian-2026-09-12T15:46+08:00
+vault_git_tree: ada825ce
+vault_backup_commit_message: "vault backup: 2026-09-12 16:17:36"
+declared_by: FLOW-DOC-MIGRATION-001 Task 2 Step 5c
+approved_by: qiming（2026-09-12 迁移执行会话，逐条截面决策）
+rationale: |-
+  原截面 15:46 在 vault git 历史中不存在精确快照（15:06 与 16:17 之间有 1746 个
+  文件变更，微信知识库同步仍在进行）；16:17:36 的 vault git tree 可永久复现，
+  经用户批准后作为 M0 逐条来源基线（source-baseline.tsv）的固定截面。
+counts:
+  wechat_article_md: 1630        # processed/微信知识库 正文（排除 目录.md）
+  finance_md: 285                # processed/03_财务与会计 + processed/财务与会计
+  management_md: 453             # processed/02_企业管理 + processed/企业管理
+  logistics_md: 125              # processed/04_跨境物流
+  wiki_keyword_md: 824           # wiki/ 文件名命中财务关键词（D 组口径）
+  total: 3317
+count_correction:
+  prior_declaration: 3035       # 15:46 瞬态读数（W4 报告）
+  delta: 282
+  note: expected_count 保持 3035，delta +282 记录于 source-inputs.yaml corrections
+reproduction: |-
+  cd /Users/qiming/ObsidianWiki
+  git -c core.quotepath=false ls-tree -r --name-only ada825ce -- <组路径>
+  内容指纹：git cat-file blob ada825ce:<path> | sha256sum

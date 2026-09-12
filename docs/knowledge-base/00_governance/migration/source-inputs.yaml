@@ -1,0 +1,18 @@
+# 来源基线固定输入（Task 2 Step 5c）｜2026-09-12 用户批准的截面订正
+#
+# 订正决策（用户 2026-09-12 批准）：原声明截面 obsidian-2026-09-12T15:46+08:00
+# 在 vault git 历史中不存在精确快照（15:06 与 16:17 之间有 1746 个文件变更），
+# 改用可永久复现的 vault git tree ada825ce（vault backup 2026-09-12 16:17:36 +0800）。
+# count 由 3035（15:46 瞬态读数）重声明为 3317（tree 实际计数）：
+#   wechat 1630 / finance 285 / management 453 / logistics 125 / wiki-keyword 824。
+# 本次订正 delta：+282（3317 - 3035）。
+
+snapshot_id: obsidian-2026-09-12T16:17:36+08:00
+vault_tree: ada825ce
+expected_count: 3035
+corrections:
+  - {"reason": "snapshot 15:46 not reproducible in vault git; redeclared on tree ada825ce per user approval 2026-09-12", "delta": 282}
+groups:
+  - id: vault-scan-entries
+    type: entries-tsv
+    path: docs/knowledge-base/00_governance/migration/scan-entries.tsv

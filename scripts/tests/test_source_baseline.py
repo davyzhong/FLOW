@@ -36,10 +36,10 @@ def make_fixture(tmp: Path) -> Path:
     scan = tmp / "migration/scan-entries.tsv"
     scan.parent.mkdir(parents=True, exist_ok=True)
     rows = [
-        ["source_id", "locator", "title", "author", "k_route", "availability", "evidence_path"],
-        ["scan-001", "vault:/processed/微信知识库/甲/1.md", "扫描来源一", "", "K4", "locator-only", "scan/W1.md"],
-        ["scan-002", "vault:/processed/微信知识库/乙/2.md", "扫描来源二", "", "K3", "locator-only", "scan/W2.md"],
-        ["scan-003", "vault:/wiki/经营分析.md", "扫描来源三", "丙", "K4", "locator-only", "scan/D-wiki.md"],
+        ["source_id", "locator", "title", "author", "k_route", "availability", "evidence_path", "duplicate_group"],
+        ["scan-001", "vault:/processed/微信知识库/甲/1.md", "扫描来源一", "", "K4", "locator-only", "scan/W1.md", ""],
+        ["scan-002", "vault:/processed/微信知识库/乙/2.md", "扫描来源二", "", "K3", "locator-only", "scan/W2.md", ""],
+        ["scan-003", "vault:/wiki/经营分析.md", "扫描来源三", "丙", "K4", "locator-only", "scan/D-wiki.md", ""],
     ]
     with open(scan, "w", encoding="utf-8", newline="") as f:
         import csv
@@ -115,7 +115,7 @@ class SourceBaselineTests(unittest.TestCase):
             self._build(expected=6)
 
     def test_build_allows_approved_correction(self) -> None:
-        out = self._build(expected=4, corrections='[{"reason": "dup withdrawn", "delta": -1}]')
+        out = self._build(expected=4, corrections='[{"reason": "new sync batch", "delta": 1}]')
         self.assertEqual(len(out.read_text(encoding="utf-8").splitlines()) - 1, 5)
 
     def test_build_rejects_duplicate_source_id(self) -> None:

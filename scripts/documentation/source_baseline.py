@@ -28,7 +28,7 @@ HEADER = [
 ]
 
 ENTRY_HEADER = ["source_id", "locator", "title", "author", "k_route",
-                "availability", "evidence_path"]
+                "availability", "evidence_path", "duplicate_group"]
 
 
 class BaselineError(ValueError):
@@ -40,31 +40,55 @@ def _sha256(data: bytes) -> str:
 
 
 def parse_inputs(text: str) -> dict:
-    """受限 YAML 子集：顶层标量、inline JSON 列表、groups 块列表（一层嵌套字段）。"""
+    """受限 YAML 子集：顶层标量、块列表（corrections/groups）与一层嵌套字段。
+
+    groups 的列表项展开为 dict；corrections 的列表项按 inline JSON 解析。
+    """
     result: Dict[str, object] = {}
     groups: List[dict] = []
+    corrections: List[dict] = []
     current: Optional[dict] = None
+    target: Optional[str] = None  # 当前列表名：groups / corrections
     for raw in text.splitlines():
         if not raw.strip() or raw.lstrip().startswith("#"):
             continue
-        if raw.startswith("  - "):  # 新 group 项
-            current = {}
-            groups.append(current)
-            raw = "  " + raw[4:]
-        if raw.startswith("    ") and current is not None:
-            key, _, value = raw.strip().partition(": ")
-            current[key] = value.strip().strip("'\"")
+        if not raw.startswith(" ") and raw.rstrip().endswith(":") and ":" in raw:
+            key = raw.strip()[:-1]
+            if key in ("groups", "corrections"):
+                target = key
+                current = None
+                result[key] = [] if key not in result else result[key]
+            else:
+                target = None
+                result[key] = ""
+            continue
+        if raw.lstrip().startswith("- "):
+            item = raw.lstrip()[2:].strip()
+            if target == "corrections":
+                corrections.append(json.loads(item))
+            elif target == "groups":
+                current = {}
+                groups.append(current)
+                key, _, value = item.partition(": ")
+                if _:
+                    current[key.strip()] = value.strip().strip("'\"")
+            continue
+        stripped = raw.strip()
+        if stripped and current is not None:
+            key, _, value = stripped.partition(": ")
+            if _:
+                current[key.strip()] = value.strip().strip("'\"")
             continue
         key, _, value = raw.partition(": ")
-        key = key.strip()
-        value = value.strip()
-        if key == "groups":
-            continue
-        if value.startswith("[") or value.startswith("{"):
-            result[key] = json.loads(value)
-        else:
-            result[key] = value.strip("'\"")
+        if key.strip() and not raw.startswith(" "):
+            value = value.strip()
+            if value.startswith("[") or value.startswith("{"):
+                result[key.strip()] = json.loads(value)
+            else:
+                result[key.strip()] = value.strip("'\"")
     result["groups"] = groups
+    # 块列表与 inline JSON 二选一：块列表非空优先，否则保留 inline 解析结果
+    result["corrections"] = corrections if corrections else result.get("corrections", [])
     return result
 
 
@@ -128,11 +152,12 @@ def _entry_rows(root: Path, snapshot_id: str, group: dict) -> List[List[object]]
                 continue
             if len(rec) != len(ENTRY_HEADER):
                 raise BaselineError(f"entries 行字段数错误: {rec}")
-            sid, locator, title, author, k_route, availability, evidence = rec
+            sid, locator, title, author, k_route, availability, evidence, dup = rec
             if locator.startswith("repo:") and not (root / locator[5:]).is_file():
                 raise BaselineError(f"repo locator 文件不存在: {locator}")
+            # entries 8 列 → baseline 11 列（bytes/sha256 留空：locator-only）
             rows.append([sid, snapshot_id, locator, title, author, "", "",
-                         "", k_route, availability, evidence])
+                         dup, k_route, availability, evidence])
     return rows
 
 
@@ -158,9 +183,9 @@ def build(root: Path, inputs_path: Path, snapshot_id: str, expected_count: int,
     rows.sort(key=lambda r: str(r[0]).encode("utf-8"))
     corrections = spec.get("corrections", [])
     delta = sum(int(c.get("delta", 0)) for c in corrections)
-    if len(rows) + delta != expected_count:
+    if expected_count + delta != len(rows):
         raise BaselineError(
-            f"count 不符: 实际 {len(rows)} + 订正 {delta} != 预期 {expected_count}"
+            f"count 不符: 预期 {expected_count} + 订正 {delta} != 实际 {len(rows)}"
             f"（未经批准不得放宽，需把订正写入 source-inputs.yaml 的 corrections）")
     output.parent.mkdir(parents=True, exist_ok=True)
     with open(output, "w", encoding="utf-8", newline="") as f:
