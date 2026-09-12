@@ -49,7 +49,7 @@ class DecisionIntegrityTests(unittest.TestCase):
             meta = parse_frontmatter(f.read_text(encoding="utf-8"))
             metas[meta.get("doc_id", "")] = meta
         for doc_id, meta in metas.items():
-            for ref_field in ("supersedes", "superseded_by"):
+            for ref_field in ("supersedes", "superseded_by", "amends", "amended_by"):
                 for ref in re.findall(r"FLOW-DECISION-D\d+", meta.get(ref_field, "") or ""):
                     self.assertIn(ref, metas, f"{doc_id} {ref_field} -> {ref} unresolved")
 

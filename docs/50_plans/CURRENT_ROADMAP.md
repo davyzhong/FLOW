@@ -28,8 +28,8 @@ superseded_by: null
 | 2 | 战略边界重构门禁（D053 阶段 1） | **gated(U08 完成后)** | U08 | 冻结 U8 版本；重构共享底座/公开模块/内部工作台边界与规格；[设计](../superpowers/specs/2026-09-13-flow-strategic-reset-design.md) |
 | 3 | [U09+O05 授权内部试点](work_items/U09-O05--authorized-internal-pilot.md) | **blocked(授权 + 待按 D053 重新裁决)** | U08 + 数据授权 | 无授权不得摊月/伪造 L2-L3 |
 | 4 | [U10 V1.1 证据决策](work_items/U10--v1-1-evidence-decision.md) | **blocked(依赖链 + 待按 D053 重新裁决)** | U04+U08+U09/O05 | go/hold/drop 逐项 |
-| 5 | [DOC-M5 历史整理](../superpowers/plans/2026-09-12-static-knowledge-and-document-migration.md) | **active**（迁移批次，待批准推进） | M0–M4 done | 962b651 发布 / df7f6e3 规格统一 |
-| 6 | [DOC-M6 全面验证](../superpowers/plans/2026-09-12-static-knowledge-and-document-migration.md) | proposed | M5 | 五题接续测试 |
+| 5 | [DOC-M5 历史整理](../superpowers/plans/2026-09-12-static-knowledge-and-document-migration.md) | **done**（迁移关闭，bfc1271 / e373e25） | — | M0–M6 全部关闭 |
+| 6 | [DOC-M6 全面验证](../superpowers/plans/2026-09-12-static-knowledge-and-document-migration.md) | **done**（用户确认关闭 2026-09-13） | — | e373e25 |
 
 战略方向（2026-09-13，D052–D054）：企业内部月度财务经营分析工作台为最终产品，公开财报模块独立并先行成熟共享底座；顺序为 U8 → 边界重构 → 公开模块 C 级出口 → 内部工作台 → 四级验证。详见[战略重构设计](../superpowers/specs/2026-09-13-flow-strategic-reset-design.md)。
 

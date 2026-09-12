@@ -26,7 +26,7 @@ knowledge_release: flow-knowledge-2026-09-12.1
 | objective direction | product-cross | approved | `docs/superpowers/specs/2026-09-06-objective-financial-analysis-direction.md` | D049 载体 |
 | operations methodology | operations | approved | `docs/superpowers/specs/2026-09-09-operations-track-methodology.md` | O 轨 + L1-L4 |
 | static knowledge architecture | platform | approved | `docs/superpowers/specs/2026-09-12-static-knowledge-and-document-architecture-design.md` | V1.1，本迁移设计 |
-| strategic reset design | product-cross | review | `docs/superpowers/specs/2026-09-13-flow-strategic-reset-design.md` | D052–D054 载体；三层两模块目标结构 |
+| strategic reset design | product-cross | approved | `docs/superpowers/specs/2026-09-13-flow-strategic-reset-design.md` | D052–D054 载体；三层两模块目标结构 |
 | data contract | financial-facts | approved | `docs/data-contract/flow-v1.md`（原位，机器消费） | data-contract 域 |
 | intake spec | data-intake | approved | `docs/intake/flow-v1-intake.md`（原位） | |
 | metrics spec | metrics | approved | `docs/metrics/flow-v1-metrics.md`（原位） | |

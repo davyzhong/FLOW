@@ -7,7 +7,7 @@ version: 1.1
 created_at: 2026-09-12
 updated_at: 2026-09-13
 owner: FLOW
-decision_refs: [D049, D052, D053]
+decision_refs: [D049, D052, D053, D054]
 knowledge_release: flow-knowledge-2026-09-12.1
 applies_to: product
 supersedes: []

@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 战略重构讨论交接｜2026-09-12
 
-> **状态更新（2026-09-13）**：本交接所述沉淀任务主体已完成——D052–D054 决策已创建并更新索引与接替关系，canonical 产品文档与 PRODUCT_PRINCIPLES 已更新，README/导航/状态/路线图已同步。独立规格审查按 brainstorming 流程执行中，通过后设计稿 status 转 approved。以下 §4/§5 保留为历史记录。
+> **状态更新（2026-09-13）**：本交接所述沉淀任务已完成——D052–D054 决策已创建并更新索引与接替关系（D002/D010/D045/D046 superseded，D039/D049/D050 amended），canonical 产品文档与 PRODUCT_PRINCIPLES 已更新，README/导航/状态/路线图已同步，独立规格审查两轮通过后设计稿 status 已转 approved。以下 §4/§5 保留为历史记录。
 
 ## 1. 当前任务
 
