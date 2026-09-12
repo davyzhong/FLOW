@@ -1,3 +1,19 @@
+---
+doc_id: FLOW-ARCHIVE-PLAN-007
+title: 2026-09-02-flow-pilot-readiness-phase-1-user-closure（历史计划）
+doc_type: plan
+status: archived
+version: 1.0
+created_at: 2026-09-12
+updated_at: 2026-09-12
+owner: FLOW
+depends_on: []
+acceptance_refs: []
+superseded_by: FLOW-PLAN-CURRENT
+do_not_execute: true
+historical_scope: phase-and-track-era
+---
+
 # FLOW Pilot Readiness Phase 1 — Excel Intake and Report Delivery Plan
 
 > **适用性说明（2026-09-04，代码基线 `c1a59d1`）**：Pilot Phase 1 已有[历史出口门禁记录](../../implementation/2026-09-04-phase-pilot-1-user-closure.md)，用户闭环实现及后续发现的映射、警告确认、冻结和下载问题已有补修。原始步骤保留；历史门禁通过不等于当前真实对象存储发布链路已通过验收。

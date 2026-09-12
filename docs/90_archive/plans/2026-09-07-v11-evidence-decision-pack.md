@@ -1,3 +1,19 @@
+---
+doc_id: FLOW-ARCHIVE-PLAN-017
+title: 2026-09-07-v11-evidence-decision-pack（历史计划）
+doc_type: plan
+status: archived
+version: 1.0
+created_at: 2026-09-12
+updated_at: 2026-09-12
+owner: FLOW
+depends_on: []
+acceptance_refs: []
+superseded_by: FLOW-PLAN-CURRENT
+do_not_execute: true
+historical_scope: phase-and-track-era
+---
+
 # V1.1 证据决策包（U10/H01 前置框架）
 
 - 制定日期：2026-09-08

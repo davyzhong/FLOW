@@ -1,3 +1,19 @@
+---
+doc_id: FLOW-ARCHIVE-PLAN-014
+title: 2026-09-06-finance-track-master-plan（历史计划）
+doc_type: plan
+status: archived
+version: 1.0
+created_at: 2026-09-12
+updated_at: 2026-09-12
+owner: FLOW
+depends_on: []
+acceptance_refs: []
+superseded_by: FLOW-PLAN-CURRENT
+do_not_execute: true
+historical_scope: phase-and-track-era
+---
+
 # 财务轨完成状态总计划（Master Plan）
 
 > **接续更新（D049，2026-09-06）**：本文件保留 WS 历史任务与证据；后续执行顺序已由[客观财务分析总计划](2026-09-06-objective-financial-analysis-master-plan.md)接替。不要直接按旧第 6 节进入 WS-5；先执行新计划 A01–A03。

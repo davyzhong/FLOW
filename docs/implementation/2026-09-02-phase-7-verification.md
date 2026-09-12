@@ -4,7 +4,7 @@
 > 当前入口见[文档导航](../README.md)，后续缺陷修复与验证边界见[2026-09-04 修复验收](../implementation/2026-09-04-review-repairs.md)。
 
 Date: 2026-09-02
-Scope: `docs/superpowers/plans/2026-09-02-flow-v1-phase-7-investigation.md`
+Scope: `docs/90_archive/plans/2026-09-02-flow-v1-phase-7-investigation.md`
 Design: `docs/superpowers/specs/2026-08-29-flow-v1-design.md` §10; visual reference `investigation-evidence-v2.html`.
 
 ## Exit gate

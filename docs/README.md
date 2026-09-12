@@ -21,7 +21,7 @@ applies_to: docs
 | 顺序 | 文档 | 用途 |
 |---|---|---|
 | 1 | [当前项目状态](knowledge-base/00_start_here/PROJECT_STATE.md) | 已提交能力、真实缺口、CI 时点与下一步 |
-| 2 | [下一阶段统一执行计划](superpowers/plans/2026-09-07-unified-next-plan.md) | 唯一 U 队列、Obsidian Knowledge Gate、U8/U9/O5/U10 顺序与验收 |
+| 2 | [下一阶段统一执行计划](90_archive/plans/2026-09-07-unified-next-plan.md) | 唯一 U 队列、Obsidian Knowledge Gate、U8/U9/O5/U10 顺序与验收 |
 | 3 | [财经分析知识地图与 Obsidian 扫描](knowledge-base/02_research/2026-09-11-finance-knowledge-map.md) | K1–K8、15:46 固定截面 3035 篇正文、采用/拒绝与权限边界 |
 | 4 | [文档全量登记](documentation-status.md) | 每份文档的状态、日期、命名和处置 |
 | 5 | [文档治理规则](2026-09-07-documentation-governance.md) | 分类、命名与维护规则；改名映射见[文档全量登记](documentation-status.md) |
@@ -30,7 +30,7 @@ applies_to: docs
 
 [D049 方向与验收](superpowers/specs/2026-09-06-objective-financial-analysis-direction.md)优先；[统一财务事实合同](superpowers/specs/financial-facts-contract.md)、[指标治理规格](superpowers/specs/2026-09-05-flow-metric-dictionary-design.md)和既有领域规格共同约束实现。较晚的已确认决策覆盖旧范围，不因整理文档改变财务公式。
 
-[统一 U 计划](superpowers/plans/2026-09-07-unified-next-plan.md)是唯一当前执行入口；A–H、P、早期 Phase、WS 和 Pilot 计划保留历史任务细节与证据，不再各自声称当前优先级。
+[统一 U 计划](90_archive/plans/2026-09-07-unified-next-plan.md)是唯一当前执行入口；A–H、P、早期 Phase、WS 和 Pilot 计划保留历史任务细节与证据，不再各自声称当前优先级。
 
 ## 03｜使用与开发
 

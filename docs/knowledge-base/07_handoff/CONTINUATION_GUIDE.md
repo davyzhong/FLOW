@@ -10,7 +10,7 @@
 
 1. 确认用户当前授权：文档、诊断、计划或实施分别处理。
 2. 读取实际 HEAD、工作树、最新迁移、CI；当前说明是有日期的快照，不代替实时核对。
-3. 对照[下一阶段计划](../../superpowers/plans/2026-09-07-next-stage-upgrade-plan.md) P00 及[A–H 台账](../../superpowers/plans/2026-09-06-objective-financial-analysis-master-plan.md)，将已实现、已验收、未知和在途工作分开。
+3. 对照[下一阶段计划](../../../90_archive/plans/2026-09-07-next-stage-upgrade-plan.md) P00 及[A–H 台账](../../../90_archive/plans/2026-09-06-objective-financial-analysis-master-plan.md)，将已实现、已验收、未知和在途工作分开。
 4. 优先补语义订正与独立验收基础，再推进客观分析、报告和发布保障；共享文件有其他任务改动时先协调。
 5. 每项结束记录范围、提交、测试、未验证边界和下一动作，不将研究清单或旧 checkbox 直接等同实施范围。
 

@@ -1,3 +1,19 @@
+---
+doc_id: FLOW-ARCHIVE-PLAN-013
+title: 2026-09-04-review-repairs（历史计划）
+doc_type: plan
+status: archived
+version: 1.0
+created_at: 2026-09-12
+updated_at: 2026-09-12
+owner: FLOW
+depends_on: []
+acceptance_refs: []
+superseded_by: FLOW-PLAN-CURRENT
+do_not_execute: true
+historical_scope: phase-and-track-era
+---
+
 # FLOW Review Repairs Implementation Plan
 
 > **适用性说明（2026-09-04，代码基线 `c1a59d1`）**：本计划 R1–R9 已实施；随后追加 N1–N3 亦已修复。正文任务记录保留，不能将已关闭缺陷重新列为待实现范围。

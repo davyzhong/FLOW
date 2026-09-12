@@ -2,7 +2,7 @@
 
 ## 2026-09-07 规划候选的影响入口
 
-本次仅新增[参考订正总册](../02_research/synthesis/2026-09-07-reference-and-improvement-master.md)和[详细计划](../../superpowers/plans/2026-09-07-next-stage-upgrade-plan.md)，不改变运行行为。未来获准执行时重点检查：
+本次仅新增[参考订正总册](../02_research/synthesis/2026-09-07-reference-and-improvement-master.md)和[详细计划](../../../90_archive/plans/2026-09-07-next-stage-upgrade-plan.md)，不改变运行行为。未来获准执行时重点检查：
 
 | 候选改造 | 下游必须同步验证 | 任务 |
 |---|---|---|
@@ -128,7 +128,7 @@ Obsidian 新增或更新内容本身不触发代码、指标或合同变更。�
 当前可执行分析基线还应读取：
 
 5. `docs/superpowers/specs/2026-09-01-flow-v1-phase-5-analysis-design.md`；
-6. `docs/superpowers/plans/2026-09-01-flow-v1-phase-5-analysis.md`；
+6. `docs/90_archive/plans/2026-09-01-flow-v1-phase-5-analysis.md`；
 7. `docs/implementation/2026-09-01-phase-5-verification.md`。
 
 修改 Playbook、比较窗口、策略阈值或评分权重后，必须生成新的 policy hash，并重新验证 Driver 对账、Finding 硬门槛、排名、Evidence 和下游快照消费边界。
@@ -140,7 +140,7 @@ Obsidian 新增或更新内容本身不触发代码、指标或合同变更。�
 建议读取：
 
 1. `docs/superpowers/specs/2026-09-01-flow-v1-phase-6-dashboard-design.md`；
-2. `docs/superpowers/plans/2026-08-30-flow-v1-phase-6-dashboard.md`；
+2. `docs/90_archive/plans/2026-08-30-flow-v1-phase-6-dashboard.md`；
 3. `docs/implementation/2026-09-02-phase-6-verification.md`；
 4. `docs/implementation/2026-09-02-phase-6-dashboard-fidelity.md`；
 5. 决策日志 D033–D036；
@@ -170,7 +170,7 @@ Obsidian 新增或更新内容本身不触发代码、指标或合同变更。�
 
 1. 决策日志 D038；
 2. `docs/implementation/2026-09-02-phase-10-acceptance.md`；
-3. `docs/superpowers/plans/2026-09-03-flow-pilot-readiness-phase-2-security-deployment.md`；
+3. `docs/90_archive/plans/2026-09-03-flow-pilot-readiness-phase-2-security-deployment.md`；
 4. `docs/operations/authentication.md` 与 `docs/implementation/2026-09-04-review-repairs.md`；
 5. `docs/implementation/2026-09-04-phase-pilot-1-user-closure.md` 与 Phase 3/6/7/9 历史验证记录。
 
@@ -192,4 +192,4 @@ Obsidian 新增或更新内容本身不触发代码、指标或合同变更。�
 
 ## D049 客观基础优先的变更影响
 
-公开财报/内部数据入口 → 统一事实契约 → 可执行指标版本 → 分析快照 → 客观结论 → 冻结报告；依次验收来源、口径、计算、追溯、独立验证。旧 WS-5 延后至事实/语义契约确定；P5 独立答案与全行 diff 提前；部署与公开版本验收、内部真实试点分为不同出口。D049 方向仍有效；自 2026-09-07 起当前执行入口为[统一执行计划 U1–U10](../../superpowers/plans/2026-09-07-unified-next-plan.md)，旧 M/P 计划仅作历史证据。
+公开财报/内部数据入口 → 统一事实契约 → 可执行指标版本 → 分析快照 → 客观结论 → 冻结报告；依次验收来源、口径、计算、追溯、独立验证。旧 WS-5 延后至事实/语义契约确定；P5 独立答案与全行 diff 提前；部署与公开版本验收、内部真实试点分为不同出口。D049 方向仍有效；自 2026-09-07 起当前执行入口为[统一执行计划 U1–U10](../../../90_archive/plans/2026-09-07-unified-next-plan.md)，旧 M/P 计划仅作历史证据。

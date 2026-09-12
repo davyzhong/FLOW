@@ -2,7 +2,7 @@
 
 日期：2026-09-07。性质：研究整合与下一阶段规划输入，**不是新增产品规格的批准，也不是执行指令**。
 
-配套文件：[下一阶段升级改造详细计划书](../../../superpowers/plans/2026-09-07-next-stage-upgrade-plan.md)。现行方向仍以 [D049 方向规格](../../../superpowers/specs/2026-09-06-objective-financial-analysis-direction.md)及[决策日志](../../04_decisions/DECISION_LOG.md)为准。
+配套文件：[下一阶段升级改造详细计划书](../../../../90_archive/plans/2026-09-07-next-stage-upgrade-plan.md)。现行方向仍以 [D049 方向规格](../../../superpowers/specs/2026-09-06-objective-financial-analysis-direction.md)及[决策日志](../../04_decisions/DECISION_LOG.md)为准。
 
 ## 1. 结论与使用方法
 
@@ -53,7 +53,7 @@
 | S16 | Obsidian 公司经营架构树、主数据应用要求、利润三维度、业财一体化八条线等，见下方定位 | 经营组织与人事组织区分、实体和组织映射、业财链路、对账控制 | 企业实践线索；wiki 多为二次整理，不是企业正式制度；不复制受限明细和目标数 |
 | S17 | [系统研究结论](2026-08-29-Finance_Intelligence_OS_系统研究结论.md)、[会计指标知识库草案](2026-09-05-会计与财务指标知识库_设计草案.md) | 八项能力、统一对象、知识/计算分层、历史发展路线 | 保留系统性；早期 L3–L5 和所有功能并行建设的冲动服从 D049 |
 | S18 | [设计规格](../../../superpowers/specs/2026-08-29-flow-v1-design.md)、[决策日志](../../04_decisions/DECISION_LOG.md)、[影响图](../../04_decisions/CHANGE_IMPACT_MAP.md) | 原型、正式边界和需求演变 | 这是内部约束，不冒充外部佐证；历史原型不是当前验收截图 |
-| S19 | [代码复核](../../../reviews/2026-09-04-synced-project-code-review.md)、[修复记录](../../../implementation/2026-09-04-review-repairs.md)、[客观分析总计划](../../../superpowers/plans/2026-09-06-objective-financial-analysis-master-plan.md) | R1–R9、N1–N3 修复与 A–H 阶段进度 | 已修问题变成回归门禁，不重复列为现存故障 |
+| S19 | [代码复核](../../../reviews/2026-09-04-synced-project-code-review.md)、[修复记录](../../../implementation/2026-09-04-review-repairs.md)、[客观分析总计划](../../../../90_archive/plans/2026-09-06-objective-financial-analysis-master-plan.md) | R1–R9、N1–N3 修复与 A–H 阶段进度 | 已修问题变成回归门禁，不重复列为现存故障 |
 | S20 | [IFRS 18 官方关键术语](https://www.ifrs.org/supporting-implementation/supporting-materials-by-ifrs-standards/ifrs-18/key-terms/)、[已发布准则 B116–B117](https://www.ifrs.org/content/dam/ifrs/publications/pdf-standards/english/2026/issued/part-a/ifrs-18-presentation-and-disclosure-in-financial-statements.pdf?bypass=on) | MPM 范围和不属于 MPM 的项目 | 本次针对性核验：一般现金流、FCF、非财务指标、单独比率不是 IFRS 18 意义的 MPM；比率的合格分子另判 |
 
 S16 本地定位：`/Users/qiming/ObsidianWiki/wiki/公司经营架构树.md`、`/Users/qiming/ObsidianWiki/wiki/主数据应用要求.md`、`/Users/qiming/ObsidianWiki/wiki/利润三维度模型.md`、`/Users/qiming/ObsidianWiki/wiki/业财一体化八条地铁线模型.md`。更接近原材料的文件位于 `processed/企业管理/`、`processed/跨境物流/` 和 `processed/财务与会计/`。仓库读者未必拥有此 vault；不可访问时明确“待取得授权来源”，不能以 wiki 推断原制度已核实。

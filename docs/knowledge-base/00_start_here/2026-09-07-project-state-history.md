@@ -1,8 +1,8 @@
 # FLOW 项目当前状态与时间线
 
-> **最新规划补充（2026-09-07，仅文档）**：完成[累计参考与订正总册](../02_research/synthesis/2026-09-07-reference-and-improvement-master.md)及[下一阶段详细计划](../../superpowers/plans/2026-09-07-next-stage-upgrade-plan.md)。本次读取工程基线 `8c7dbf3`、迁移至 0018，C01–C06 已有后续实现记录；下方 `33f777a`/“下一步 A01”等属于历史时点，不能作为今日待办。新计划是 D049 总计划的增量细化候选，P00–P12 未在本次执行，最新工程全量验收须重新核实。本次没有改代码、配置或运行环境。
+> **最新规划补充（2026-09-07，仅文档）**：完成[累计参考与订正总册](../02_research/synthesis/2026-09-07-reference-and-improvement-master.md)及[下一阶段详细计划](../../../90_archive/plans/2026-09-07-next-stage-upgrade-plan.md)。本次读取工程基线 `8c7dbf3`、迁移至 0018，C01–C06 已有后续实现记录；下方 `33f777a`/“下一步 A01”等属于历史时点，不能作为今日待办。新计划是 D049 总计划的增量细化候选，P00–P12 未在本次执行，最新工程全量验收须重新核实。本次没有改代码、配置或运行环境。
 
-> **当前方向覆盖说明（2026-09-06，D049）**：当前从公开财报建设客观财务分析产品，最终面向内部财务数据；后续以[客观财务分析总计划](../../superpowers/plans/2026-09-06-objective-financial-analysis-master-plan.md)为唯一总计划。读取基线 33f777a，迁移至 0013；旧段落的逐项评审、MinIO 未修复与直接进入 WS-5 等描述按 D047–D049 和近期证据理解。当前新计划仅制定，未执行，下一步 A01 基线核查。
+> **当前方向覆盖说明（2026-09-06，D049）**：当前从公开财报建设客观财务分析产品，最终面向内部财务数据；后续以[客观财务分析总计划](../../../90_archive/plans/2026-09-06-objective-financial-analysis-master-plan.md)为唯一总计划。读取基线 33f777a，迁移至 0013；旧段落的逐项评审、MinIO 未修复与直接进入 WS-5 等描述按 D047–D049 和近期证据理解。当前新计划仅制定，未执行，下一步 A01 基线核查。
 
 ## 当前状态摘要
 
@@ -297,7 +297,7 @@ flowchart LR
 ### 阶段 27：财务轨完成状态总计划与默认推荐策略（D047）
 
 - 用户于 2026-09-06 确认 D047：指标库与经营轨数据定义不再逐项人工评审，以知识库默认推荐方案（数据熊结构 + 菜鸟事实依据）+ 行业标准定义（CAS/国资委/CPA/CFA）直接定稿，口径分歧以行业标准为默认、备选并存；
-- 财务轨完成状态总计划落盘：`docs/superpowers/plans/2026-09-06-finance-track-master-plan.md`（WS-0 基线修复 → WS-1 定稿 → WS-2 P3 数据库化 → WS-3 P4 迁移 → WS-4 P5 收口 → WS-5 四表一注进发布 → WS-6 D038 收尾 → WS-7 V1.1 决策包），含转移协议与滚动更新规则；主 CI 红（导航重组 axe 违规）列为 WS-0 首任务；
+- 财务轨完成状态总计划落盘：`docs/90_archive/plans/2026-09-06-finance-track-master-plan.md`（WS-0 基线修复 → WS-1 定稿 → WS-2 P3 数据库化 → WS-3 P4 迁移 → WS-4 P5 收口 → WS-5 四表一注进发布 → WS-6 D038 收尾 → WS-7 V1.1 决策包），含转移协议与滚动更新规则；主 CI 红（导航重组 axe 违规）列为 WS-0 首任务；
 - 本计划表为财务轨唯一总计划，任何 Agent 接手以该文件为起点，随任务完成滚动更新。
 
 ### 阶段 28：WS-0/WS-1 完成——红线修复与三个 v1.0 定稿（D047 落地）
@@ -305,7 +305,7 @@ flowchart LR
 - WS-0：修复 D045 导航重组引入的 axe serious 违规（nav 分组标签对比度 3.9→6.13:1，`34c3bd8`），CI 恢复全绿；
 - WS-1（D047 默认推荐策略落地）：`flow.metric_dictionary.v1` 定稿（40+15 指标，15 项口径分歧裁决：默认口径 + 依据 + 备选并存）；`flow.accounting_foundation.v1` 定稿（科目 167、准则 48=基本准则+42 项具体准则+汇编+IFRS 对照、分录模板 32 含新租赁/新收入/菜鸟物流场景）；`flow.operations_dictionary.v1` 定稿（6 域 43 指标、8 维度、8 节报告范式、4 张候选数据表，菜鸟基线标注来源）；
 - `/metric-library` API 与页面切换 v1 数据源（schema 增口径裁决字段），API/前端/契约测试全绿并经浏览器验收；三个定稿脚本沉淀于 `scripts/finalize_*.py`（幂等可再生）；
-- 主计划表滚动更新见 `docs/superpowers/plans/2026-09-06-finance-track-master-plan.md`。
+- 主计划表滚动更新见 `docs/90_archive/plans/2026-09-06-finance-track-master-plan.md`。
 
 ### 阶段 29：WS-2 P3 指标库数据库化与发布后编排（主计划 WS-2）
 
@@ -349,7 +349,7 @@ flowchart LR
 
 ## 当前下一步
 
-按 D049 客观财务分析主计划执行：`docs/superpowers/plans/2026-09-06-objective-financial-analysis-master-plan.md`（M0–M7，A01–H01）。M0（A01–A03）与 B01 已完成（证据与 CI 状态见计划表第 7 节）；下一任务 **B02**（把公司专用解析脚本抽成统一适配接口 `statements/extraction.py`，保留三家适配器，未知版式显式降级）。计划的转移协议与完成动作见该文件第 0、3 节；旧 WS 计划仅作历史证据。不要重新从 Phase 1 基础架构开工。修改任何已冻结契约前，先查阅决策日志与变更影响图。
+按 D049 客观财务分析主计划执行：`docs/90_archive/plans/2026-09-06-objective-financial-analysis-master-plan.md`（M0–M7，A01–H01）。M0（A01–A03）与 B01 已完成（证据与 CI 状态见计划表第 7 节）；下一任务 **B02**（把公司专用解析脚本抽成统一适配接口 `statements/extraction.py`，保留三家适配器，未知版式显式降级）。计划的转移协议与完成动作见该文件第 0、3 节；旧 WS 计划仅作历史证据。不要重新从 Phase 1 基础架构开工。修改任何已冻结契约前，先查阅决策日志与变更影响图。
 
 ## 2026-09-04 审查修复补充
 

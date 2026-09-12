@@ -3,7 +3,7 @@
 > **适用性说明（2026-09-04，代码基线 `c1a59d1`）**：本文结果属于所列日期/阶段的验收快照，保留当时测试数量、环境和结论；不代表对当前提交重新执行全量测试或完成生产验收。 Pilot Phase 1 的实现和历史门禁已交付；后续审查发现的跨步骤缺陷另有补修。最新真实对象存储发布验收仍有限制。
 > 当前入口见[文档导航](../README.md)，后续缺陷修复与验证边界见[2026-09-04 修复验收](../implementation/2026-09-04-review-repairs.md)。
 
-> 对应计划：`docs/superpowers/plans/2026-09-02-flow-pilot-readiness-phase-1-user-closure.md`
+> 对应计划：`docs/90_archive/plans/2026-09-02-flow-pilot-readiness-phase-1-user-closure.md`
 > 状态：**✅ 出口门禁已通过（exit=0）**，Task 1–9 全部完成；CI job 独立化与基线 tag 已落地。
 
 ## 出口门禁执行记录（2026-09-04）

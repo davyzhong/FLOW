@@ -1,3 +1,19 @@
+---
+doc_id: FLOW-ARCHIVE-PLAN-012
+title: 2026-09-03-flow-pilot-readiness-phase-2-security-deployment（历史计划）
+doc_type: plan
+status: archived
+version: 1.0
+created_at: 2026-09-12
+updated_at: 2026-09-12
+owner: FLOW
+depends_on: []
+acceptance_refs: []
+superseded_by: FLOW-PLAN-CURRENT
+do_not_execute: true
+historical_scope: phase-and-track-era
+---
+
 # FLOW Pilot Readiness Phase 2 — 最小安全部署计划
 
 > **适用性说明（2026-09-04，代码基线 `c1a59d1`）**：本计划仍是当前推进依据，但仅 Task A/B 的 API 认证及浏览器登录会话已实现并有定向验收；以[认证运行说明](../../operations/authentication.md)中的配置与实际路由行为为准。Task C–G（密钥与部署加固、备份恢复、日志、完整出口门禁及阶段证据）尚未完成；`make test-security-deployment-e2e` 仍是计划目标，不能直接当作现有命令。

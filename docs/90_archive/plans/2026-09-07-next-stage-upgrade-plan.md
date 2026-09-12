@@ -1,3 +1,19 @@
+---
+doc_id: FLOW-ARCHIVE-PLAN-016
+title: 2026-09-07-next-stage-upgrade-plan（历史计划）
+doc_type: plan
+status: archived
+version: 1.0
+created_at: 2026-09-12
+updated_at: 2026-09-12
+owner: FLOW
+depends_on: []
+acceptance_refs: []
+superseded_by: FLOW-PLAN-CURRENT
+do_not_execute: true
+historical_scope: phase-and-track-era
+---
+
 # FLOW 下一阶段升级改造执行准备计划｜2026-09-07
 
 > **【已归档 2026-09-07】本计划（P 系列（升级计划））已并入 [统一执行计划](2026-09-07-unified-next-plan.md)（U 系列），不再是独立执行入口**：未完任务的领取、勾选与提交一律以 U 编号进行（映射见统一计划 §1/§3）；本文保留为任务书细节与历史证据，不再直接更新。

@@ -1,3 +1,19 @@
+---
+doc_id: FLOW-ARCHIVE-PLAN-000
+title: 2026-08-30-flow-v1-master-roadmap（历史计划）
+doc_type: plan
+status: archived
+version: 1.0
+created_at: 2026-09-12
+updated_at: 2026-09-12
+owner: FLOW
+depends_on: []
+acceptance_refs: []
+superseded_by: FLOW-PLAN-CURRENT
+do_not_execute: true
+historical_scope: phase-and-track-era
+---
+
 # FLOW V1 Master Implementation Roadmap
 
 > **适用性说明（2026-09-04，代码基线 `c1a59d1`）**：本路线图保留 V1 Phase 1–10 原始分期；功能窄切片已交付，Phase 10 的部署、备份恢复和深度可观测性按 D038 转入 Pilot Readiness。当前为 Pilot Phase 2 部分完成，不应从历史任务列表推断生产就绪。

@@ -1,3 +1,19 @@
+---
+doc_id: FLOW-ARCHIVE-PLAN-003
+title: 2026-08-30-flow-v1-phase-3-intake（历史计划）
+doc_type: plan
+status: archived
+version: 1.0
+created_at: 2026-09-12
+updated_at: 2026-09-12
+owner: FLOW
+depends_on: []
+acceptance_refs: []
+superseded_by: FLOW-PLAN-CURRENT
+do_not_execute: true
+historical_scope: phase-and-track-era
+---
+
 # FLOW V1 Phase 3 Intake, Mapping & Quality Implementation Plan
 
 > **适用性说明（2026-09-04，代码基线 `c1a59d1`）**：Phase 3 功能切片已有实现与[阶段验收](../../implementation/2026-08-31-phase-3-verification.md)。正文步骤、示例代码及未勾选项保留当时计划语境，不构成当前待办清单，也不表示已对当前提交重跑全部门禁。 接入映射、审批资格、Copilot 审计或冻结报告相关实现以本次修复验收为补充。

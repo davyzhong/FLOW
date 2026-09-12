@@ -18,5 +18,5 @@ superseded_by: null
 # U10 V1.1 证据决策
 
 - **范围**：基于 U4 验证证据、U8 部署验收、U9/O5 试点结果，逐项决定 V1.1 候选能力的 go/hold/drop。
-- **形式**：证据决策包（superpowers/plans/2026-09-07-v11-evidence-decision-pack.md 为底稿）→ 正式 D 系列决策。
+- **形式**：证据决策包（90_archive/plans/2026-09-07-v11-evidence-decision-pack.md 为底稿）→ 正式 D 系列决策。
 - **门禁**：每项决策必须引用验证证据链；无证据项默认 hold。
