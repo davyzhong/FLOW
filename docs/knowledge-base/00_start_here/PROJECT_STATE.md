@@ -1,6 +1,6 @@
 # FLOW 当前项目状态｜2026-09-12
 
-状态：当前入口。已提交基线 `293308c` 完成 O2 且 CI run `34604843637` 的 16 个 job 全绿；本轮 O3 实现已完成验证并进入提交收口。数据库迁移头为 `0024_operations_publication`。U 系列推进以[统一计划](../../superpowers/plans/2026-09-07-unified-next-plan.md)为唯一入口，经营轨以 [O 系列计划](../../superpowers/plans/2026-09-09-operations-track-plan.md)记录断点。本页取代此前同文件的当前状态摘要，完整时间线保存在[历史状态快照](2026-09-07-project-state-history.md)，不再把历史“下一步”当今日待办。
+状态：当前入口。O2 已由 `293308c` 完成，O3 已由 `2dc88c7` 完成并进入 `main`；其后 `8f7f5bc` 将失效的 Docker Hub MinIO 镜像切换到官方 Quay 注册表。当前主链 `8a2b984` 的 GitHub Actions run `34661736460` 共 16 个 job 全绿。数据库迁移头为 `0024_operations_publication`。U 系列推进以[统一计划](../../superpowers/plans/2026-09-07-unified-next-plan.md)为唯一入口，经营轨以 [O 系列计划](../../superpowers/plans/2026-09-09-operations-track-plan.md)记录断点。本页取代此前同文件的当前状态摘要，完整时间线保存在[历史状态快照](2026-09-07-project-state-history.md)，不再把历史“下一步”当今日待办。
 
 ## 1. 当前方向与计划关系
 
@@ -27,7 +27,7 @@
 
 ## 3. 本次读取的验证状态
 
-截至本轮登记：`293308c` 已推送；GitHub Actions run `34604843637` 于 2026-09-11 对该 HEAD 验证，16 个 job 全绿。O3 本轮验证包括后端 183 项受影响测试、前端 52 项组件测试、类型/静态检查、契约与迁移往返、Next production build，以及 PostgreSQL/MinIO 真实发布下载烟测；最终提交的 CI 状态以 GitHub 为准。迁移检查确认唯一 head 为 `0024_operations_publication`。本地生产栈是否正在运行属于瞬时运行状态，不以历史交接中的“当前健康”代替实时检查。
+截至本轮登记：O3 提交 `2dc88c7` 已推送且为当前 `main` 的祖先；其最初 CI 因 Docker Hub 下架 `minio/minio:latest` 导致多个基础设施 job 同源失败，后续 `8f7f5bc` 切换到官方 Quay 镜像后恢复。当前主链 `8a2b984` 的 CI run `34661736460` 共 16 个 job 全绿。O3 本地验证包括后端 183 项受影响测试、前端 52 项组件测试、类型/静态检查、契约与迁移往返、Next production build，以及 PostgreSQL/MinIO 真实发布下载烟测。迁移检查确认唯一 head 为 `0024_operations_publication`。本地生产栈是否正在运行属于瞬时运行状态，不以历史交接中的“当前健康”代替实时检查。
 
 2026-09-07 的文档治理轮（`de3a672`、`22061da`）与改名/状态校准轮只变更文档，不重跑应用全套、不启动基础设施、不作生产认证。
 
