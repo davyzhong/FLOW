@@ -15,9 +15,9 @@ c5b63620ec6a7d66c13d64f17eca4a54b85e2a2161336619f6daa5ca9c87d295  ./00_governanc
 014c8680a1975e5f25dcc35c0ac73d9d14e7b4425e33f667862aabca9c881ed0  ./00_governance/releases/flow-knowledge-2026-09-12.1/release-lock.yaml
 f005c99ffa0cea5d0ee7feb6bebe1878507650dd3cb56dab5e468b42eb13cf8e  ./00_governance/releases/flow-knowledge-2026-09-12.1/release.yaml
 da4181b120df55179f601b922b37435bf122c4d208a086af70e43750e13b51a5  ./00_governance/releases/flow-knowledge-2026-09-12.1/sha256sums.txt
-df51c9b65fd77b34d5f53d3607d39d3ec40e0c56c410ebe5f105bdfc66c5f96c  ./00_start_here/2026-09-07-project-state-history.md
-436a0e27602c18c9468a471b8191882fbaa6714e071d651450843a2028a26e6f  ./00_start_here/AGENT_START_HERE.md
-f1793da635743031c0310978ea13c0450a7c5049e030e7d6bb34c51211998e94  ./00_start_here/PROJECT_STATE.md
+ff0e8775ed39df86d65530d17b1f9db352c312af5ff2727b08ee7dafc2393a82  ./00_start_here/2026-09-07-project-state-history.md
+b1438e636ead1a47f5a025b67eb2990f14d5d81e0ca7856e63710e35edcaac5a  ./00_start_here/AGENT_START_HERE.md
+e61d473b7cba10990287cb7e18136872c7615d492a33bc6178c44b77110ac4f9  ./00_start_here/PROJECT_STATE.md
 5046991b7f56353e4d4c97a7c8532fbd76b83a844ecaa383c5ed4a1dfe7cb7b8  ./01_conversations/INDEX.md
 2f76b9a257f0baa1c30d5995a49f17bdbacf519f3a33668383f1f39c69c7faea  ./01_conversations/raw/chatgpt/Finance_Intelligence_OS_完整会话归档.md
 a033649eabf7c8cdb40f14defd513fcc046feacace1ccf6fb8a2d84801f6ba6c  ./01_conversations/raw/codex/rollout-2026-08-28T14-41-27-01a0471a-1689-7270-8dc5-f2bf084e4db9.jsonl
@@ -26,7 +26,7 @@ a033649eabf7c8cdb40f14defd513fcc046feacace1ccf6fb8a2d84801f6ba6c  ./01_conversat
 9899e55cb849d3ae6f31fd74adfb12562e94f24d15a8ecf023ed2e95ec11cefa  ./01_conversations/readable/rollout-2026-08-28T14-41-27-01a0471a-1689-7270-8dc5-f2bf084e4db9.md
 1922b4ea1b3a752be450f8d60b27d6c6fc22516a4a019822997e0065273e2b90  ./01_conversations/readable/rollout-2026-08-29T14-00-01-01a0471a-1689-7270-8dc5-f2bf084e4db9_01a04c1a-86bd-7960-9db5-80ae486d1bd4.md
 79a3765df24b9c3b9ff6ed3996061c7b3b684768360dae9193af00d5367605ce  ./02_research/2026-09-11-finance-knowledge-map.md
-ecb84f8637f47a30c82637e06da750adba1da9ad1147f13ec33995f05084748f  ./02_research/INDEX.md
+1cb2ebd698193d2c3d004038bdb33df8d1b8c0e0d2c69be56e39b6cf5cae23eb  ./02_research/INDEX.md
 4ed59cac8f4d71bf3720218b89c94d9f257a683efe460ac5a20654af3ba435e8  ./02_research/original/00_研究资料总览.md
 6baa74c935539a5c0816926e869f9fec2d709364e21e4197dcc8aba86fcf1fec  ./02_research/original/01_cfo_dashboard_text.txt
 3b75d5f479c9da57a3b3441d1ac9eb07918b8035d865246d6396b6286468fdb6  ./02_research/original/01_集团财务总监驾驶舱_资料.md
@@ -427,7 +427,7 @@ e18c2d20a363d8c60838f96f3951c4d1965cfc2b6a105786897248c48d86f1fb  ./02_research/
 95e2989c29088c061974799229163edd10faed271e6402385afd6ddac1010584  ./02_research/synthesis/2026-09-06-FineBI财务经营分析看板_架构借鉴分析.md
 737382454faacd519bed1de73359c486a1b6b63e0877374a811614301e03d0d1  ./02_research/synthesis/2026-09-06-经营分析轨数据定义_v0_草案.md
 5fccd431b80708bd7f1501bce6a7579d49e3f228e795aeb66c36db75dd6006e6  ./02_research/synthesis/2026-09-06-财务分析十指标文章_借鉴升级清单.md
-3c506307ce891067db1cdb2d8ed3a07b6b4ec9dcd5b0331e9a87d9f5fcfba371  ./02_research/synthesis/2026-09-07-reference-and-improvement-master.md
+f1ddeb75416268dbbe34238ebbc977acc887949a1cedfff0bfa46defa7b2be25  ./02_research/synthesis/2026-09-07-reference-and-improvement-master.md
 22195bf869b22f16cf1e9ee98e81a1db5f6186321df90f4fe17cb89b7a2bb733  ./02_research/synthesis/2026-09-09-15-models-assessment.md
 2c54d3060d73b2712414a1f76c26c82923e4f73718af8bde3b90b64e9208f8af  ./02_research/synthesis/2026-09-09-break-even-tool-assessment.md
 23b91528e4b82b8e4a034f3d598d9e757167de3cea13bb4af733ea683785017f  ./02_research/synthesis/2026-09-09-finance-cockpit-pbi-assessment.md
@@ -471,7 +471,7 @@ dc5dacf44f2ad15eff80c3b8088965a00dba2374178b883a1a7dfdbc59257a1d  ./03_assets/vi
 0f0f0ae971e5b67308d6232379794a2e3180ad094ff6aa064f2f97b3cf964435  ./03_assets/visual_prototypes/unified-publishing.html
 b985e51b87f37264c1d0881d2a23a59cb8e3919970785d215c88c71587e50f43  ./03_assets/visual_prototypes/waiting-data-contract.html
 68f20600655271943135b83ab42a8cc4e5120b205255706fe2f47fbbf6c4930a  ./03_assets/visual_prototypes/waiting-template-scope.html
-1ed5641b9c50e681b4e562281823e6b5006700d48837c8df0d91bbf762739a1d  ./04_decisions/CHANGE_IMPACT_MAP.md
+e1527a74f73ca02dd3b31bebf45568318c3da093be7a2d2490143fb59ada95de  ./04_decisions/CHANGE_IMPACT_MAP.md
 5310f753365fc3687da8ab07960173b99dcfb1fb21e668c66d6cb143b99902c6  ./04_decisions/DECISION_LOG.md
 002dea73e7e1cd6f225f01e3dff3874c704bb41d234567b1ab450aae365818d2  ./05_design/PROTOTYPE_INDEX.md
 6a2be2f105fb958c70fcf4b54261148706a10353af7a8c0147802679ba405bba  ./05_design/approved/2026-08-29-flow-v1-design.md
@@ -480,7 +480,8 @@ d6afc8ae3e882b23ffe0d1349b3cf651608a9b23ad33c8ad3549fc78c8f88ce9  ./06_sources/L
 10e5196720ba38d79951bb8293a5956d962b38be859047767bf7ad891e806d7b  ./06_sources/all_urls_extracted.txt
 19fc41430dd99d853ca2682f88acbf0f9fbac823b013ec18ea9ee6591a600de9  ./07_handoff/2026-09-07-machine-handoff-p03-plan.md
 4777507f8e40b67ede2c051ba671ee7a91b3b0d595fc1a45c2567398a63d07fb  ./07_handoff/CONTINUATION_GUIDE.md
-597bfaa3ae2641aaba0b5e789ffbaf3417023d3d8975cdcb50855e085f19666d  ./07_handoff/RESTART_PROMPTS.md
+33674e5e1d57768cb0c245f067b830a7f871ba00ca0e20e36a6a84c124cf49e2  ./07_handoff/HANDOFF.md
+7eb4e4cf213c9d09330dab6e86a458f402a6f3121d4a8acd77d61ef89068c2b6  ./07_handoff/RESTART_PROMPTS.md
 fdd8e20350547c00ab10abd022170b0a832f9b958631444d13cd0313ed412dcf  ./08_wechat_sources/HANDOFF.md
 a69df22f9e705eba64136d4e4166318862ff591b6a68c24b3492566962272abf  ./08_wechat_sources/INDEX.md
 a65c35c08aebfa900c5dbe2d2bcb4cb72856709120aa1dbadadcc6564bf075b3  ./08_wechat_sources/README.md
@@ -2122,4 +2123,4 @@ ace8b24161011617a94c4a2a1b87adcb76121bac3aaa4b49b4df4914b11defc2  ./30_domain_ha
 d80f509de5c36c24d86bbbac07d7c35eddedc862c536f9b5d21e6a6e178d9e74  ./40_methods_and_patterns/README.md
 4666243e7af893feec890f24d28c4ea8d9271f3cc752f56f40f6f1998e267434  ./50_product_mappings/FLOW-PRODUCT-MAPPING--v1.0.md
 b4d200cc989f4642c66da1061742f842d83467caa4d92774df4d2caf4b0cb56d  ./50_product_mappings/README.md
-68c8daeb75ed07b96743d599dec2f9071b4565cc98bffa0f329df6b9776ae1bb  ./README.md
+2a8b434c5307e29debad17f189f4ad1eba3a1aba7232710464d4a2a287a551e2  ./README.md
