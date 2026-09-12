@@ -13,6 +13,8 @@
 
 Obsidian 侧同构导航页：`/Users/qiming/ObsidianWiki/wiki/FLOW财经分析知识地图.md`（用 wiki 双链组织，内容与本文一致）。
 
+**存量全量扫描（2026-09-12）**：vault 财经相关内容远不止新增文章——`processed/` 四个主分类（微信知识库 618、财务与会计 231、企业管理 441、跨境物流 125）+ `wiki/` 编译层财务关键词命中 778 篇，合计 2189 篇中 HIGH 相关约 1008 篇。全量评估与按 FLOW 模块映射的借鉴富矿见 [Obsidian 内部知识库全量扫描评估](synthesis/2026-09-12-obsidian-internal-kb-assessment.md)（借鉴附录 #19）。
+
 ## 1. 八个知识域与 FLOW 落点
 
 ### K1 财务报表基础（三大报表、科目、勾稽）
@@ -73,7 +75,7 @@ Obsidian 侧同构导航页：`/Users/qiming/ObsidianWiki/wiki/FLOW财经分析�
 
 ## 2. 存取与入库协议
 
-**取用**（FLOW 会话中）：按上述 K1–K8 定位到 vault 分类目录，用 `mcp__web_reader__webReader` 或直接 Read vault 文件；引用时注明「Obsidian 转载文章，研究线索」。
+**取用（工作协议，2026-09-12 用户确认）**：**此后每次做计划、做功能、做更新，均以 Obsidian 为内部知识来源**——先按 K1–K8 域定位 vault 分类与 wiki 关键词（优先读 wiki 编译层已提炼笔记，原文按需回溯 `processed/`），再对照[全量扫描评估的富矿清单](synthesis/2026-09-12-obsidian-internal-kb-assessment.md)与 7 份明细取用 HIGH 素材；涉及菜鸟/阿里内部资料仅作方法论参照，内部数值一律待 U9 授权、不进产品与对外材料。
 
 **入库**（新增知识）：
 1. 抓取公开文章全文为 Markdown，frontmatter 必含 `title` / `source` / `author` / `clipped` / `tags`（YAML 闭合，`tags` 带 `财经分析知识库`），放入 `/Users/qiming/ObsidianWiki/Clippings/`；

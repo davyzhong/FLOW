@@ -9,6 +9,7 @@
 3. [决策日志](../04_decisions/DECISION_LOG.md)与[影响图](../04_decisions/CHANGE_IMPACT_MAP.md)。
 4. [下一阶段详细计划](../../superpowers/plans/2026-09-07-next-stage-upgrade-plan.md)及[A–H 执行台账](../../superpowers/plans/2026-09-06-objective-financial-analysis-master-plan.md)。
 5. [参考订正总册](../02_research/synthesis/2026-09-07-reference-and-improvement-master.md)与[文档适用性登记](../../documentation-status.md)。
+6. [财经分析知识地图](../02_research/2026-09-11-finance-knowledge-map.md)与[Obsidian 内部知识库扫描评估](../02_research/synthesis/2026-09-12-obsidian-internal-kb-assessment.md)：**每次做计划、做功能、做更新前，以 Obsidian vault（本地 `/Users/qiming/ObsidianWiki/`）为内部知识来源**，按 K1–K8 域取用；借鉴登记走统一计划借鉴附录（已至 #19）。
 
 ## 项目定位
 
