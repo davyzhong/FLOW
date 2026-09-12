@@ -176,5 +176,30 @@ class CheckDocsCliTests(unittest.TestCase):
         self.assertNotEqual(proc.returncode, 0)
 
 
+class UniqueCurrentStateTests(unittest.TestCase):
+    """Task 4 (M1.2)：全仓恰有一个 current state（对真实仓库断言）。"""
+
+    def test_exactly_one_current_state(self) -> None:
+        from scripts.documentation.metadata import iter_markdown, parse_frontmatter
+
+        root = Path(__file__).resolve().parent.parent.parent
+        current = []
+        for entry in iter_markdown(root):
+            path = entry[0] if isinstance(entry, tuple) else entry
+            meta = parse_frontmatter(path.read_text(encoding="utf-8"))
+            if meta and meta.get("doc_type") == "state" and meta.get("status") == "current":
+                current.append((str(path.relative_to(root)), meta.get("doc_id")))
+        self.assertEqual(current, [("docs/00_start_here/PROJECT_STATE.md", "FLOW-STATE-001")])
+
+    def test_legacy_state_is_superseded(self) -> None:
+        from scripts.documentation.metadata import parse_frontmatter
+
+        root = Path(__file__).resolve().parent.parent.parent
+        legacy = root / "docs/knowledge-base/00_start_here/PROJECT_STATE.md"
+        meta = parse_frontmatter(legacy.read_text(encoding="utf-8"))
+        self.assertEqual(meta.get("status"), "superseded")
+        self.assertEqual(meta.get("superseded_by"), "FLOW-STATE-001")
+
+
 if __name__ == "__main__":
     unittest.main()
