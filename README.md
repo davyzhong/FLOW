@@ -4,7 +4,7 @@
 
 ### Finance Intelligence OS · 可追溯、确定性、可复核的财务分析平台
 
-**公开财报客观分析优先 · 面向企业内部财务分析持续演进**
+**企业内部 AI 财务分析工作台为最终产品 · 公开财报分析模块先行成熟共享底座（D052–D054）**
 
 [![CI](https://github.com/davyzhong/FLOW/actions/workflows/ci.yml/badge.svg)](https://github.com/davyzhong/FLOW/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/Python-3.13-3776AB?logo=python&logoColor=white)
@@ -24,13 +24,13 @@
 
 ![FLOW Finance BP 驾驶舱：核心指标、趋势、利润桥、经营发现与毛利矩阵](docs/assets/screenshots/dashboard.png)
 
-> 截图来自 `c1a59d1` 的真实页面和确定性物流演示数据，不是客户数据或设计效果图。文档核对日期：**2026-09-08**，读取基线 `861acad`。截图保留原拍摄日期，不代表本次最新界面。当前阶段为 **公开财报客观分析建设**，功能实现与生产部署验收分别记录。
+> 截图来自 `c1a59d1` 的真实页面和确定性物流演示数据，不是客户数据或设计效果图。文档核对日期：**2026-09-08**，读取基线 `861acad`。截图保留原拍摄日期，不代表本次最新界面。当前产品方向已由 2026-09-13 战略重构（[D052–D054](docs/10_governance/DECISION_INDEX.md)）重新定义为**三层两模块**：企业内部月度财务经营分析工作台是最终目标产品，公开财报分析是先行成熟共享底座的独立模块；功能实现与生产部署验收分别记录。
 
 ## 🎯 FLOW 解决什么问题
 
-Finance BP 的月度工作通常横跨多份 Excel：业务量、收入与履约成本、财务实际、预算、应收和现金。FLOW 将这些文件转换为有版本、有质量检查、有血缘的数据，再用同一份指标与分析上下文支持驾驶舱、异常调查和报告输出。
+财务经营分析专员（经分专员）的月度工作通常横跨多份 Excel：业务量、收入与履约成本、财务实际、预算、应收和现金。FLOW 将这些文件转换为有版本、有质量检查、有血缘的数据，再由确定性引擎与 AI 角色协同完成标准扫描、调查、Finding 和双版本报告；经分专员一次终审后正式发布（[D052](docs/10_governance/decisions/D052--内部月度财务经营分析工作台成为核心产品.md)、[D054](docs/10_governance/decisions/D054--AI生产链与证据计算学习原则.md)）。
 
-项目长期方向是 Finance Intelligence OS。当前阶段依据 [D049 产品定位](docs/knowledge-base/04_decisions/DECISION_LOG.md)，聚焦**财务数据收集与基于客观数据的准确财务分析**；涉及业务假设的经营归因保留为后续扩展。
+项目长期方向是 Finance Intelligence OS。目标结构为**三层两模块**（[D053](docs/10_governance/decisions/D053--三层两模块边界与执行顺序.md)）：可见的专业治理底座 + 共享分析底座，支撑**企业内部分析工作台**（最终目标产品）与**公开财报分析模块**（先行成熟底座、独立入口与验收）。当前执行主线仍是 U8 生产就绪收口；U8 后按 [战略重构设计](docs/superpowers/specs/2026-09-13-flow-strategic-reset-design.md) 冻结版本并重构模块边界，旧 U9/U10 任务届时重新裁决。固定产品原则见 [PRODUCT_PRINCIPLES](docs/20_product/PRODUCT_PRINCIPLES.md)。
 
 <details open>
 <summary><strong>六类工作问题 → 可复核的结果</strong></summary>
@@ -81,7 +81,7 @@ flowchart TB
 
 ## 🖥️ 界面导览
 
-当前浏览器入口：`/`（驾驶舱）、`/data`、`/investigations`、`/reports`、`/statements`、`/metric-library`、`/operations`、`/login`。系统按 [D045 双轨结构](docs/knowledge-base/04_decisions/DECISION_LOG.md)组织：**「数据层」两轨共用**；**「财务分析」轨**面向 Finance BP（驾驶舱、归因、报告、报表分析、指标库）；**「经营分析」轨**面向经营/业务管理者（`/operations` 只读演示页）。全部功能页共享同一左侧工作流导航。
+当前浏览器入口：`/`（驾驶舱）、`/data`、`/investigations`、`/reports`、`/statements`、`/metric-library`、`/operations`、`/login`。现有页面仍按历史双轨结构（D045，已被 [D053](docs/10_governance/decisions/D053--三层两模块边界与执行顺序.md) 取代）组织：**「数据层」两轨共用**；**「财务分析」轨**（驾驶舱、归因、报告、报表分析、指标库）；**「经营分析」轨**（`/operations` 只读演示页）。全部功能页共享同一左侧工作流导航。主导航与工作流的大规模改造将在 U8 收口后的边界重构阶段按三层两模块目标结构进行。
 
 ### 1. Finance BP 驾驶舱
 
@@ -181,7 +181,7 @@ flowchart TB
 
 ## 📍 当前进度
 
-客观财务分析主线以[统一执行计划 U1–U10](docs/superpowers/plans/2026-09-07-unified-next-plan.md)为唯一入口（2026-09-07 起，M/P 系列已归档并入）。
+执行入口以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为唯一权威（M4 起生效；[统一执行计划 U1–U10](docs/superpowers/plans/2026-09-07-unified-next-plan.md) 保留任务细节与证据）。战略方向见 [战略重构设计](docs/superpowers/specs/2026-09-13-flow-strategic-reset-design.md)（D052–D054）：U8 收口后冻结版本并重构模块边界，U9/U10 不自动续跑。
 
 | 阶段 | 任务 | 状态 |
 | --- | --- | --- |
@@ -496,8 +496,8 @@ FLOW/
 | 你想了解什么 | 推荐入口 |
 | --- | --- |
 | 全部文档与哪份是最新 | [文档中心](docs/README.md)、[文档状态登记](docs/documentation-status.md) |
-| 产品为什么这样设计 | [正式 V1 规格](docs/superpowers/specs/2026-08-29-flow-v1-design.md)、[决策日志](docs/knowledge-base/04_decisions/DECISION_LOG.md) |
-| 当前完成到哪一步 | [项目状态](docs/knowledge-base/00_start_here/PROJECT_STATE.md)、[统一执行计划 U1–U10](docs/superpowers/plans/2026-09-07-unified-next-plan.md) |
+| 产品为什么这样设计 | [战略重构设计（D052–D054）](docs/superpowers/specs/2026-09-13-flow-strategic-reset-design.md)、[固定产品原则](docs/20_product/PRODUCT_PRINCIPLES.md)、[正式 V1 规格](docs/superpowers/specs/2026-08-29-flow-v1-design.md)、[决策索引 D001–D054](docs/10_governance/DECISION_INDEX.md) |
+| 当前完成到哪一步 | [项目状态](docs/00_start_here/PROJECT_STATE.md)、[当前路线图](docs/50_plans/CURRENT_ROADMAP.md) |
 | 新 Agent 接续 | [Agent 起点](docs/knowledge-base/00_start_here/AGENT_START_HERE.md)、[交接指南](docs/knowledge-base/07_handoff/CONTINUATION_GUIDE.md) |
 | API 方法、路径与类型 | [API 路径索引](docs/api-reference.md)、[OpenAPI](packages/contracts/openapi.json) |
 | 文件如何进入标准数据层 | [Intake 说明](docs/intake/flow-v1-intake.md) |
@@ -509,12 +509,12 @@ FLOW/
 flowchart LR
     A["Phase 1–10<br/>窄切片 ✅"] --> B["P5 真实财报反向解析<br/>顺丰 + 腾讯 ✅"]
     B --> C["客观分析主线<br/>U1–U2 ✅ · U3 🚧"]
-    C --> D["报告门禁 · 真实 PDF<br/>U5–U7 ⬜"]
-    D --> E["部署验收后<br/>内部试点 U8–U9 ⬜"]
-    E --> F["依据证据确定 V1.1<br/>U10 ⬜"]
-    style C fill:#fff0cd,stroke:#aa7918,stroke-width:2px
+    C --> D["U8 生产就绪收口<br/>🚧 active"]
+    D --> E["边界重构（D053 阶段 1）<br/>⬜ gated"]
+    E --> F["公开模块 C 级出口 → 内部工作台<br/>→ 四级验证 ⬜"]
+    style D fill:#fff0cd,stroke:#aa7918,stroke-width:2px
 ```
 
-下一阶段按[统一执行计划 U1–U10](docs/superpowers/plans/2026-09-07-unified-next-plan.md)推进：当前断点 U3（同源证据与快照投影）；U2 剩两项外部依赖（JDL 唯一键契约决策待用户确认、rnd_exp 科目编号待准则原文）。真实对象存储链路已于 2026-09-06 修复并验证（根因：boto3 拾取 macOS 系统代理导致请求挂起，详见[本轮记录](docs/implementation/2026-09-06-shell-metric-library-s3-proxy.md)）。批次构建编排已实现；内部真实数据另行授权试点；最小安全计划中的登录/API 认证已落地，不能据此把其余部署任务标为完成。
+下一阶段按 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 推进：当前主线 U8（生产就绪收口；U8-C 结构化日志已交付）；U3（同源证据与快照投影）为客观分析断点；U2 剩两项外部依赖（JDL 唯一键契约决策待用户确认、rnd_exp 科目编号待准则原文）。U8 完成后的旧 U9/U10 将按 [D053](docs/10_governance/decisions/D053--三层两模块边界与执行顺序.md) 重新裁决。真实对象存储链路已于 2026-09-06 修复并验证（根因：boto3 拾取 macOS 系统代理导致请求挂起，详见[本轮记录](docs/implementation/2026-09-06-shell-metric-library-s3-proxy.md)）。批次构建编排已实现；内部真实数据另行授权试点；最小安全计划中的登录/API 认证已落地，不能据此把其余部署任务标为完成。
 
 本仓库尚未提供独立的 LICENSE 文件；使用与分发授权请向项目维护者确认。贡献与协作遵循 [AGENTS.md](AGENTS.md)：先读项目状态和正式决策，保护原始档案，按风险验证，每个完整任务只提交相关文件并推送规范远端。

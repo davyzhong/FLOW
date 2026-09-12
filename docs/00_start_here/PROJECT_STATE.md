@@ -5,14 +5,16 @@ doc_type: state
 status: current
 version: 1.0
 created_at: 2026-09-12
-updated_at: 2026-09-12
+updated_at: 2026-09-13
 owner: FLOW
 applies_to: repository
 ---
 
 # FLOW 当前项目状态（唯一 current state）
 
-截至 `0fc3488`（2026-09-12）：数据库迁移头 `0024_operations_publication`；最近 CI run `34696597772` 验证中（M0/M1 文档批次）；产品主线 **U8 进行中**——U8-C 结构化日志已由 `088977b` 交付，剩余真实存储完整旅程、HTTPS 部署拓扑与统一部署验收。
+截至 `1a4d009`（2026-09-13）：数据库迁移头 `0024_operations_publication`；产品主线 **U8 进行中**——U8-C 结构化日志已由 `088977b` 交付，剩余真实存储完整旅程、HTTPS 部署拓扑与统一部署验收。
+
+**战略方向（2026-09-13 已批准）**：D052–D054 + [战略重构设计](../superpowers/specs/2026-09-13-flow-strategic-reset-design.md)生效——企业内部月度财务经营分析工作台为最终产品，公开财报为独立模块（三层两模块）；固定原则见 [PRODUCT_PRINCIPLES](../20_product/PRODUCT_PRINCIPLES.md)。这是目标态定义：不改变当前执行入口，U8 仍 active，U8 后路线按 D053 重新裁决（旧 U9/U10 不自动续跑）。
 
 ## 当前执行入口
 
@@ -24,8 +26,9 @@ applies_to: repository
 
 1. **U8（进行中）**：真实存储完整旅程、HTTPS 部署拓扑、统一部署验收；备份恢复已 done。
 2. **U4（外部到料即并行）**：独立会话录入 oracle，全行 diff 与留出泛化验收。
-3. **U9/O5（待授权）**：硬依赖内部数据授权 + U8 收口。
-4. **U10（硬依赖 U4+U8+U9/O5）**：V1.1 证据 go/hold/drop 决策。
+3. **U9/O5（待授权 + 待按 D053 重新裁决）**：硬依赖内部数据授权 + U8 收口。
+4. **U10（硬依赖 U4+U8+U9/O5）**：V1.1 证据 go/hold/drop 决策；范围待按 D053 重新裁决。
+5. **战略边界重构门禁（U8 完成后、公开模块 C 级出口前）**：冻结 U8 版本，重构共享底座/公开模块/内部工作台边界与规格（D053 阶段 1）。
 
 ## 知识基线
 
