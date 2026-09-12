@@ -27,11 +27,11 @@ from flow_api.infrastructure.models.metric_library import (
     StatementLineMapping,
 )
 from flow_api.metric_library_store.governance import GovernanceError, MetricGovernance
-from flow_api.metric_library_store.importer import import_metric_dictionary
+from flow_api.metric_library_store.importer import import_metric_dictionary, resolve_dictionary_file
 from flow_api.settings import get_settings
 
 REPO_ROOT = Path(__file__).resolve().parents[4]
-DICT_YAML = REPO_ROOT / "config/metrics/metric_dictionary_v1.yaml"
+DICT_YAML = resolve_dictionary_file(REPO_ROOT / "config/metrics")
 
 
 @pytest.fixture(scope="module", autouse=True)
