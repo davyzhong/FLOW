@@ -19,7 +19,7 @@ acceptance_refs: [M0-baseline, M1-entrypoints, M2-knowledge-release, M3-specs, M
 
 **Architecture:** 迁移按 M0–M6 七个独立批准批次推进：先建立清单和不可变基线，再建立治理工具与目录骨架，随后发布静态知识版本，最后统一产品/规格/计划、整理历史并执行无上下文接续验收。所有移动都由消费者清单驱动；状态通过元数据和索引表达，发布内容通过版本化文件、release lock 与 SHA-256 固定。
 
-**Tech Stack:** Markdown、YAML、TSV、JSON Schema Draft 2020-12、Python 3.13、PyYAML、`unittest`、Git、GitHub Actions。
+**Tech Stack:** Markdown、YAML、TSV、Python 3.13、PyYAML、`unittest`、Git、GitHub Actions。
 
 ---
 
@@ -34,12 +34,12 @@ acceptance_refs: [M0-baseline, M1-entrypoints, M2-knowledge-release, M3-specs, M
 | 设计依据 | `docs/superpowers/specs/2026-09-12-static-knowledge-and-document-architecture-design.md` **V1.1** |
 | 来源基线 | `obsidian-2026-09-12T15:46+08:00` |
 | 目标知识发布 | `flow-knowledge-2026-09-12.1` |
-| 编写与复审基线 | Git `0fc3488`；执行每一批前必须重新盘点 |
+| 编写与复审基线 | Git `a99a5b2`；执行每一批前必须重新盘点 |
 | 决策依据 | D049、D051 |
 
 **V1.1 修订记录（2026-09-12）**：同步设计 V1.1——(1) Task 15 接续测试十题降为五题（第 1/2/4 题 critical，通过线 4/5）；(2) Task 6/8 验收从写死 3035 改为 M0 基线清单哈希对账；(3) Task 3/7 的 JSON Schema 优先路径收敛为 `scripts/check_docs.py` 单一检查入口，Schema 文件后置为可选增强；(4) Task 2 补 M0 二进制存储分级盘点（设计 §4.9）；(5) Task 8 补 release 批量切换工具；(6) Task 12 补顶层 HANDOFF/会话归档归宿；(7) §0 补角色门禁映射引用。
 
-**V1.2 复审修订（2026-09-12）**：补齐来源级冻结清单；用 checkpoint tree 消除 M0 自包含漂移；扩充不可变文本、相对路径和人工外部消费者发现；把知识发布拆为 verified 候选、用户签项、原子 canonical 激活；统一 `scripts/check_docs.py`；前移 reader rubric；要求每个知识库提交即时重建 manifest；特殊历史原件只做字节不变迁移。
+**V1.2 复审修订（2026-09-12）**：补齐来源级冻结清单；用 checkpoint tree 消除 M0 自包含漂移；扩充不可变文本、相对路径和人工外部消费者发现；把知识发布拆为 verified 候选、用户签项、原子 canonical 激活；统一 `scripts/check_docs.py`；前移 reader rubric；要求每个知识库提交即时重建 manifest；特殊历史原件只做字节不变迁移。复审期间主分支已落地 `d461ea2` 与 `a99a5b2`，但两项都要按本版新增门禁补齐后才能关闭，不能仅凭既有提交信息判定完成。
 
 ## 0. 执行授权与停止规则
 
@@ -74,16 +74,20 @@ acceptance_refs: [M0-baseline, M1-entrypoints, M2-knowledge-release, M3-specs, M
 |---|---|
 | `scripts/documentation/__init__.py` | 文档治理工具包边界 |
 | `scripts/documentation/inventory.py` | 生成文档、消费者和不可变文件清单 |
+| `scripts/documentation/source_baseline.py` | 从固定输入清单生成、冻结和校验来源级基线 |
 | `scripts/documentation/metadata.py` | 读取 frontmatter，执行 doc ID、状态与引用校验 |
 | `scripts/documentation/links.py` | 检查 Markdown 相对链接、兼容入口和 allowlist |
 | `scripts/documentation/knowledge_release.py` | 生成并验证 coverage、release lock 和发布哈希 |
+| `scripts/documentation/plan_views.py` | 从稳定工作包确定性生成路线图状态视图 |
 | `scripts/documentation/reader_rubric.py` | 校验 M6 固定题集、rubric 和评分记录 |
 | `scripts/documentation/kb_manifest.py` | 确定性生成和校验知识库 `99_manifest` |
 | `scripts/check_docs.py` | 唯一检查入口：按 M1/M2/M6 阶段显式聚合 metadata/links/inventory/release/rubric 校验 |
 | `scripts/tests/test_document_inventory.py` | M0 清单与不可变基线测试 |
+| `scripts/tests/test_source_baseline.py` | M0 来源字段、截面、计数、排序和哈希测试 |
 | `scripts/tests/test_document_metadata.py` | M1 元数据与跨文档状态测试 |
 | `scripts/tests/test_document_links.py` | M5/M6 链接和兼容入口测试 |
 | `scripts/tests/test_knowledge_release.py` | M2 静态知识发布测试 |
+| `scripts/tests/test_plan_views.py` | M4 唯一路线图和状态视图测试 |
 | `scripts/tests/test_reader_rubric.py` | M6 读者测试记录测试 |
 
 ### 1.2 新增治理与发布文件
@@ -94,6 +98,7 @@ acceptance_refs: [M0-baseline, M1-entrypoints, M2-knowledge-release, M3-specs, M
 | `docs/knowledge-base/00_governance/immutable-paths.lock.tsv` | M0 固定路径、逐文件哈希和基线归属 |
 | `docs/knowledge-base/00_governance/migration/document-inventory.tsv` | 全量文档类型、状态、权威和目标处置 |
 | `docs/knowledge-base/00_governance/migration/storage-inventory.tsv` | M0 二进制体积分布与 A/B/C/D 存储分级标注（设计 §4.9） |
+| `docs/knowledge-base/00_governance/migration/source-inputs.yaml` | 固定来源输入、截面和解析规则 |
 | `docs/knowledge-base/00_governance/migration/source-baseline.tsv` | 固定截面的来源级身份、定位符、字节数和内容指纹 |
 | `docs/knowledge-base/00_governance/migration/source-baseline.sha256` | 来源级基线文件自身的固定哈希 |
 | `docs/knowledge-base/00_governance/migration/consumer-registry.tsv` | 代码、测试、配置、脚本和文档消费者 |
@@ -157,8 +162,10 @@ M2 和 M3 不可并行，因为 M3 正式文档必须引用可解析的知识发
 **Files:**
 - Existing: `scripts/documentation/__init__.py`
 - Modify: `scripts/documentation/inventory.py`
+- Create: `scripts/documentation/source_baseline.py`
 - Create: `scripts/documentation/kb_manifest.py`
 - Modify: `scripts/tests/test_document_inventory.py`
+- Create: `scripts/tests/test_source_baseline.py`
 - Create: `scripts/tests/test_kb_manifest.py`
 
 - [ ] **Step 1: 写失败测试，固定扫描边界**
@@ -175,8 +182,8 @@ def test_inventory_marks_raw_and_original_as_immutable(tmp_path: Path) -> None:
 
 - [ ] **Step 2: 运行测试确认失败**
 
-Run: `python3 -m unittest scripts.tests.test_document_inventory scripts.tests.test_kb_manifest -v`
-Expected: FAIL，初版扫描器不支持 checkpoint tree/完整消费者规则，且 `kb_manifest.py` 尚不存在。
+Run: `python3 -m unittest scripts.tests.test_document_inventory scripts.tests.test_source_baseline scripts.tests.test_kb_manifest -v`
+Expected: FAIL，初版扫描器不支持 checkpoint tree/完整消费者规则，且来源与 manifest 工具尚不存在。
 
 - [ ] **Step 3: 实现最小扫描器**
 
@@ -186,20 +193,25 @@ Expected: FAIL，初版扫描器不支持 checkpoint tree/完整消费者规则�
 
 只读扫描全部文本，包括 immutable 文本；`mutability` 独立记录，绝不因此改写原件。识别 Markdown 相对链接、仓库根路径、`docs/` 字面量、Python `Path`/字符串拼接、JS/TS path、shell、YAML 配置字段和根目录 HANDOFF。与人工维护的 `external-consumers.tsv` 合并；无法可靠解析或无法验证的目标默认 `keep`。二进制文件只记录哈希，不尝试解码。
 
-- [ ] **Step 5: 实现知识库 manifest 的确定性生成与校验**
+- [ ] **Step 5: 写来源基线失败测试并实现专用命令**
+
+`source_baseline.py build` 读取固定的 `source-inputs.yaml`，规范化并排序来源；`check` 验证必填字段、snapshot ID、允许的 count/订正记录、UTF-8 排序、逐行稳定身份、文件自身 SHA-256 及 `baseline.yaml` 引用。测试包含正常 3035、批准订正数、重复 ID、动态路径混入和哈希漂移 fixture。
+
+- [ ] **Step 6: 实现知识库 manifest 的确定性生成与校验**
 
 `kb_manifest.py --write` 生成 `99_manifest/inventory.tsv` 和 `sha256sums.txt`，两份 manifest 排除自身，路径按 UTF-8 字节排序。`--check` 在临时目录重建并逐字节比较，同时校验每个 SHA-256。
 
-- [ ] **Step 6: 运行定向测试**
+- [ ] **Step 7: 运行定向测试**
 
-Run: `python3 -m unittest scripts.tests.test_document_inventory scripts.tests.test_kb_manifest -v`
+Run: `python3 -m unittest scripts.tests.test_document_inventory scripts.tests.test_source_baseline scripts.tests.test_kb_manifest -v`
 Expected: PASS，且 fixture 的路径、哈希和消费者数量稳定。
 
-- [ ] **Step 7: 提交并推送**
+- [ ] **Step 8: 提交并推送**
 
 ```bash
 git add scripts/documentation/__init__.py scripts/documentation/inventory.py \
-  scripts/documentation/kb_manifest.py scripts/tests/test_document_inventory.py \
+  scripts/documentation/source_baseline.py scripts/documentation/kb_manifest.py \
+  scripts/tests/test_document_inventory.py scripts/tests/test_source_baseline.py \
   scripts/tests/test_kb_manifest.py
 git commit -m "docs(tooling): close documentation baseline tooling"
 git push origin HEAD
@@ -212,6 +224,7 @@ git push origin HEAD
 - Create: `docs/knowledge-base/00_governance/immutable-paths.lock.tsv`
 - Create: `docs/knowledge-base/00_governance/migration/document-inventory.tsv`
 - Create: `docs/knowledge-base/00_governance/migration/storage-inventory.tsv`
+- Create: `docs/knowledge-base/00_governance/migration/source-inputs.yaml`
 - Create: `docs/knowledge-base/00_governance/migration/source-baseline.tsv`
 - Create: `docs/knowledge-base/00_governance/migration/source-baseline.sha256`
 - Create: `docs/knowledge-base/00_governance/migration/consumer-registry.tsv`
@@ -255,6 +268,23 @@ Expected: 输出按 UTF-8 路径排序；`baseline.yaml` 保存 checkpoint commi
 
 预期 count-of-day 为 3035。若仓库静态证据不能恢复 3035 个稳定 locator，不得扫描“现在的动态 vault”冒充历史截面；M0 阻断，并请求用户提供 2026-09-12 15:46 的只读快照或导出。只有该固定快照获单独批准后可读取一次并立刻冻结，之后 M2 只消费仓库中的 `source-baseline.tsv` 和其哈希。
 
+Run:
+
+```bash
+python3 scripts/documentation/source_baseline.py build \
+  --input-manifest docs/knowledge-base/00_governance/migration/source-inputs.yaml \
+  --snapshot-id obsidian-2026-09-12T15:46+08:00 \
+  --expected-count 3035 \
+  --output docs/knowledge-base/00_governance/migration/source-baseline.tsv \
+  --hash-output docs/knowledge-base/00_governance/migration/source-baseline.sha256
+python3 scripts/documentation/source_baseline.py check \
+  --baseline docs/knowledge-base/00_governance/migration/source-baseline.tsv \
+  --hash-file docs/knowledge-base/00_governance/migration/source-baseline.sha256 \
+  --metadata docs/knowledge-base/00_governance/migration/baseline.yaml
+```
+
+Expected: 恰有 3035 个唯一 source ID、固定 snapshot ID、排序稳定且 hash 与 `baseline.yaml` 一致；若有用户批准的 count 订正，先把 `--expected-count` 和订正 decision 写入 `source-inputs.yaml`，不能临时放宽。
+
 - [ ] **Step 6: 验证基线可重复**
 
 Run: `python3 scripts/documentation/inventory.py --repo . --tree-ish <checkpoint-commit> --check docs/knowledge-base/00_governance/migration/baseline.yaml`
@@ -291,14 +321,14 @@ M0 验收记录必须包含提交、计数、baseline hash、消费者数量和�
 - Modify: `scripts/tests/test_document_metadata.py`
 - Modify: `.github/workflows/ci.yml`
 
-- [ ] **Step 1: 写状态与引用失败测试**
+- [ ] **Step 1: 写本轮 CLI 与阶段行为失败测试**
 
-覆盖：重复 `doc_id`；plan 引用未 approved spec；canonical 文档引用不存在 release；非法状态转换；`PROJECT_STATE` current 重复；legacy-exempt 修改后仍绕过校验。
+保留既有元数据用例，并新增：根 `scripts/check_docs.py` 是唯一入口；旧 CLI 路径不可作为入口；`--phase m1/m2/m6` 只启用声明的检查集；缺少阶段模块或输入时非零退出；重复 `doc_id`、未 approved spec、非法状态转换和 current state 重复仍失败。
 
 - [ ] **Step 2: 运行失败测试**
 
 Run: `cd services/api && uv run python ../../scripts/tests/test_document_metadata.py -v`
-Expected: FAIL，校验模块不存在。
+Expected: FAIL，当前初版仍暴露旧 CLI 路径且没有完整 phase/fail-closed 行为。
 
 - [ ] **Step 3: 以纯 Python 实现元数据合同校验（设计 V1.1 §6.3）**
 
@@ -325,7 +355,7 @@ Expected: 当前迁移阶段仅校验新/修改正式文档和唯一入口，历
 ```bash
 cd services/api
 uv run python ../../scripts/tests/test_document_metadata.py -v
-uv run ruff check ../../scripts/documentation ../../scripts/tests
+uv run ruff check ../../scripts/check_docs.py ../../scripts/documentation ../../scripts/tests
 uv run python ../../scripts/check_docs.py --phase m1
 ```
 
@@ -337,20 +367,22 @@ Commit: `docs(governance): enforce document metadata contracts`。
 
 ### Task 4: M1.2 建立目标目录骨架与唯一接续入口
 
+现状：目录和入口初版已由 `d461ea2` 提交，但该提交没有按 V1.2 为知识库导航变更同步重建两份 manifest；完成本任务前还须复核唯一 current state、五文档阅读顺序和全仓导航，并补齐 manifest 证据。因此本任务保持 reopened。
+
 **Files:**
-- Create: `docs/00_start_here/README.md`
-- Create: `docs/00_start_here/PROJECT_STATE.md`
-- Create: `docs/00_start_here/READING_ORDER.md`
-- Create: `docs/00_start_here/DOCUMENT_MAP.md`
-- Create: `docs/10_governance/README.md`
-- Create: `docs/20_product/README.md`
-- Create: `docs/30_architecture/README.md`
-- Create: `docs/40_specs/README.md`
-- Create: `docs/50_plans/README.md`
-- Create: `docs/60_delivery/README.md`
-- Create: `docs/70_operations/README.md`
-- Create: `docs/80_reviews/README.md`
-- Create: `docs/90_archive/README.md`
+- Modify: `docs/00_start_here/README.md`
+- Modify: `docs/00_start_here/PROJECT_STATE.md`
+- Modify: `docs/00_start_here/READING_ORDER.md`
+- Modify: `docs/00_start_here/DOCUMENT_MAP.md`
+- Modify: `docs/10_governance/README.md`
+- Modify: `docs/20_product/README.md`
+- Modify: `docs/30_architecture/README.md`
+- Modify: `docs/40_specs/README.md`
+- Modify: `docs/50_plans/README.md`
+- Modify: `docs/60_delivery/README.md`
+- Modify: `docs/70_operations/README.md`
+- Modify: `docs/80_reviews/README.md`
+- Modify: `docs/90_archive/README.md`
 - Modify: `docs/README.md`
 - Modify: `docs/knowledge-base/00_start_here/PROJECT_STATE.md`
 - Modify: `docs/knowledge-base/00_start_here/AGENT_START_HERE.md`
@@ -358,6 +390,7 @@ Commit: `docs(governance): enforce document metadata contracts`。
 - Modify: `docs/knowledge-base/99_manifest/inventory.tsv`
 - Modify: `docs/knowledge-base/99_manifest/sha256sums.txt`
 - Modify: `AGENTS.md`
+- Modify: `scripts/tests/test_document_metadata.py`
 
 - [ ] **Step 1: 为唯一 current state 写失败测试**
 
@@ -395,18 +428,23 @@ Commit: `docs(structure): establish canonical documentation entrypoints`。
 
 ### Task 5: M1.3 建立决策索引和治理规则
 
+现状：决策拆分初版已由 `a99a5b2` 提交，但它把历史 `DECISION_LOG.md` 从基线 SHA-256 `5310f753...b99902c6` 改成兼容页 SHA-256 `e0b79d24...8dc8326`，且未生成约定的来源 sidecar、未同步知识库 manifest。执行本任务时须从 M0 checkpoint 精确恢复原日志的完整字节到原路径，再把兼容说明放入 sidecar/导航文件；完成全部测试与 manifest 对账前，本任务保持 reopened。
+
 **Files:**
-- Create: `docs/10_governance/DOCUMENT_GOVERNANCE.md`
-- Create: `docs/10_governance/KNOWLEDGE_GOVERNANCE.md`
-- Create: `docs/10_governance/TERMS_AND_NAMESPACES.md`
-- Create: `docs/10_governance/DECISION_INDEX.md`
-- Create: `docs/10_governance/decisions/D001--product-not-dashboard.md` through `D051--obsidian-knowledge-gate.md`
+- Modify: `docs/10_governance/DOCUMENT_GOVERNANCE.md`
+- Modify: `docs/10_governance/KNOWLEDGE_GOVERNANCE.md`
+- Modify: `docs/10_governance/TERMS_AND_NAMESPACES.md`
+- Modify: `docs/10_governance/DECISION_INDEX.md`
+- Modify: `docs/10_governance/decisions/D001--product-not-dashboard.md` through `D051--obsidian-knowledge-gate.md`
 - Create: `docs/10_governance/legacy/DECISION_LOG.source.yaml`
 - Modify: `docs/knowledge-base/04_decisions/CHANGE_IMPACT_MAP.md`
 - Modify: `docs/knowledge-base/99_manifest/inventory.tsv`
 - Modify: `docs/knowledge-base/99_manifest/sha256sums.txt`
 - Modify: `docs/2026-09-07-documentation-governance.md`
 - Modify: `docs/00_start_here/DOCUMENT_MAP.md`
+- Modify: `docs/00_start_here/READING_ORDER.md`
+- Modify: `scripts/tests/test_document_metadata.py`
+- Modify: `scripts/tests/test_decision_integrity.py`
 
 - [ ] **Step 1: 写决策完整性测试**
 
@@ -416,15 +454,26 @@ Commit: `docs(structure): establish canonical documentation entrypoints`。
 
 每个 D 文件保存原决定、原因和历史状态，新增标准元数据、`source_refs`、`amends`/`supersedes`。对“有效但被较晚方向收窄”的决定，不擅自改为 rejected；用影响关系表达适用范围。
 
-- [ ] **Step 3: 原位保留旧日志正文**
+- [ ] **Step 3: 从 M0 checkpoint 恢复并原位保留旧日志正文**
 
-`docs/knowledge-base/04_decisions/DECISION_LOG.md` 不改字节，避免只能依赖 Git 历史恢复。`DECISION_LOG.source.yaml` 保存其 SHA-256、historical 状态、canonical index 和接替说明；所有当前导航改指 `DECISION_INDEX.md`，不可变会话中的旧链接仍可直接读取原日志。
+从 `baseline.yaml` 记录的 M0 checkpoint 读取 `docs/knowledge-base/04_decisions/DECISION_LOG.md` 对应 blob，按 `immutable-paths.lock.tsv`/`document-inventory.tsv` 中的基线 SHA-256 验证后恢复到原路径；来源必须是固定 checkpoint，不能手工重建正文。恢复后该文件保持字节不变，避免只能依赖 Git 历史读取。`DECISION_LOG.source.yaml` 保存其 SHA-256、historical 状态、canonical index、恢复来源和接替说明；`READING_ORDER.md`、`DOCUMENT_MAP.md` 等当前导航改指 `DECISION_INDEX.md`，不可变会话中的旧链接仍可直接读取原日志。
 
 - [ ] **Step 4: 固化命名空间**
 
 在 `TERMS_AND_NAMESPACES.md` 区分 K1–K8、L1–L4、D、U、O 与历史 Phase/WS/M/P；具体任务状态仍不得写入该长期治理文档。
 
 - [ ] **Step 5: 运行完整性与链接验证**
+
+Run:
+
+```bash
+cd services/api
+uv run python ../../scripts/tests/test_document_metadata.py -v
+uv run python ../../scripts/tests/test_decision_integrity.py -v
+uv run python ../../scripts/check_docs.py --phase m1
+cd ../..
+git diff --check
+```
 
 Expected: D001–D051 全覆盖；无重复当前决策源；旧链接有兼容入口。
 
@@ -495,6 +544,9 @@ Commit: `docs(knowledge): establish fixed source coverage`。
 - Create: `docs/knowledge-base/40_methods_and_patterns/README.md`
 - Create: `docs/knowledge-base/50_product_mappings/README.md`
 - Create: `docs/knowledge-base/50_product_mappings/FLOW-PRODUCT-MAPPING--v1.0.md`
+- Modify: `scripts/documentation/metadata.py`
+- Modify: `scripts/check_docs.py`
+- Modify: `scripts/tests/test_document_metadata.py`
 - Modify: `docs/knowledge-base/99_manifest/inventory.tsv`
 - Modify: `docs/knowledge-base/99_manifest/sha256sums.txt`
 
@@ -528,7 +580,7 @@ Commit: `docs(knowledge): establish fixed source coverage`。
 
 - [ ] **Step 8: 运行每批校验并提交**
 
-Run: `cd services/api && uv run python ../../scripts/check_docs.py --phase m2-authoring`
+Run: `cd services/api && uv run python ../../scripts/tests/test_document_metadata.py -v && uv run ruff check ../../scripts/check_docs.py ../../scripts/documentation ../../scripts/tests && uv run python ../../scripts/check_docs.py --phase m2-authoring`
 Expected: 当前批字段、source_refs、ID 和 verified/null-release 规则全部通过。
 
 每个作者批次先运行 `python3 scripts/documentation/kb_manifest.py --write && python3 scripts/documentation/kb_manifest.py --check`，再单独提交并推送，提交信息为 `docs(knowledge): add <domain> knowledge batch <n>`；不得把全部内容压成一个不可审阅提交。
@@ -546,6 +598,9 @@ Expected: 当前批字段、source_refs、ID 和 verified/null-release 规则全
 - Create: `docs/knowledge-base/00_governance/releases/flow-knowledge-2026-09-12.1/activation-after.tsv`
 - Create: `docs/knowledge-base/00_governance/releases/flow-knowledge-2026-09-12.1/activation.diff`
 - Create: `docs/knowledge-base/00_governance/releases/CURRENT_RELEASE`
+- Modify: `scripts/documentation/knowledge_release.py`
+- Modify: `scripts/tests/test_knowledge_release.py`
+- Modify: `scripts/check_docs.py`
 - Modify: every exact asset/document path frozen in `activation-plan.tsv`
 - Modify: `docs/knowledge-base/README.md`
 - Modify: `docs/knowledge-base/99_manifest/inventory.tsv`
@@ -599,7 +654,7 @@ Commit: `docs(knowledge): prepare flow knowledge 2026-09-12.1`。
 
 - [ ] **Step 9: 验证原子激活**
 
-Run: `cd services/api && uv run python ../../scripts/check_docs.py --phase m2`
+Run: `cd services/api && uv run python ../../scripts/tests/test_knowledge_release.py -v && uv run ruff check ../../scripts/check_docs.py ../../scripts/documentation ../../scripts/tests && uv run python ../../scripts/check_docs.py --phase m2`
 Expected: canonical 资产均能在最终 lock 中以激活后哈希解析；current pointer、当前正式文档和 release 状态一致；candidate lock 只作签项证据。
 
 - [ ] **Step 10: 按 activation plan 精确暂存并提交**
@@ -643,6 +698,7 @@ README 只保留产品简介、运行入口和规范导航；删除过时的瞬�
 
 - [ ] **Step 5: 验证单一产品范围**
 
+Run: `cd services/api && uv run python ../../scripts/check_docs.py --phase m2 && cd ../.. && git diff --check`
 Expected: 全仓只有一套 canonical 产品范围；历史设计仍可访问但标明接替关系；产品定义不声称未实现能力。
 
 - [ ] **Step 6: 提交并推送**
@@ -699,6 +755,9 @@ cd services/api
 uv run pytest tests/data_contract/test_committed_artifacts.py \
   tests/statements/test_fact_contract.py \
   tests/metrics/test_dictionary_execution_parity.py -q
+uv run python ../../scripts/check_docs.py --phase m2
+cd ../..
+git diff --check
 ```
 
 Expected: PASS；所有已登记硬编码路径继续存在。
@@ -718,6 +777,8 @@ Commit: `docs(specs): consolidate architecture and specification authority`。
 - Create: `docs/50_plans/work_items/U08--production-readiness.md`
 - Create: `docs/50_plans/work_items/U09-O05--authorized-internal-pilot.md`
 - Create: `docs/50_plans/work_items/U10--v1-1-evidence-decision.md`
+- Create: `docs/50_plans/work_items/DOC-M05--history-migration.md`
+- Create: `docs/50_plans/work_items/DOC-M06--verification-and-closeout.md`
 - Create: `docs/50_plans/views/active.md`
 - Create: `docs/50_plans/views/blocked.md`
 - Create: `docs/50_plans/views/completed.md`
@@ -727,6 +788,9 @@ Commit: `docs(specs): consolidate architecture and specification authority`。
 - Modify: `docs/00_start_here/READING_ORDER.md`
 - Modify: `docs/README.md`
 - Modify: `README.md`
+- Modify: `docs/superpowers/plans/2026-09-12-static-knowledge-and-document-migration.md`
+- Create: `scripts/documentation/plan_views.py`
+- Create: `scripts/tests/test_plan_views.py`
 
 - [ ] **Step 1: 在执行时重新核对实际状态**
 
@@ -738,19 +802,31 @@ Commit: `docs(specs): consolidate architecture and specification authority`。
 
 - [ ] **Step 3: 创建稳定工作包**
 
-每个工作包引用 approved spec、accepted decision、产品映射、knowledge release、验收和授权边界。已完成 U/O 项只进入 generated completed view，不重新创建可领取任务。
+每个工作包引用 approved spec、accepted decision、产品映射、knowledge release、验收和授权边界。已完成 U/O 项只进入 generated completed view，不重新创建可领取任务。另创建 DOC-M05 与 DOC-M06，分别承载本计划 Task 12–13 和 Task 14–16；它们必须进入 `CURRENT_ROADMAP.md`，否则 M4 不得切换。
 
 - [ ] **Step 4: 把旧计划标为历史接替**
 
-旧统一计划和经营计划保留原始任务细节，顶部新增 `superseded_by: FLOW-PLAN-CURRENT`、`do_not_execute: true`；不改写历史 checkbox 和提交证据。
+旧统一计划和经营计划保留原始任务细节，顶部新增 `superseded_by: FLOW-PLAN-CURRENT`、`do_not_execute: true`；不改写历史 checkbox 和提交证据。同一提交把本迁移计划改为 `status: archived`、`superseded_by: FLOW-PLAN-CURRENT`、`do_not_execute: true`，并声明只作为 DOC-M05/DOC-M06 的只读步骤参考；M4 后任何任务只能从 roadmap 工作包领取，不能直接从本文件领取。
 
 - [ ] **Step 5: 生成视图**
 
-active/blocked/completed 由元数据生成，禁止移动工作包表达状态。
+Run: `python3 scripts/documentation/plan_views.py --write`
+Expected: 从工作包元数据确定性生成 active/blocked/completed，禁止移动工作包表达状态。
 
 - [ ] **Step 6: 验证唯一执行入口**
 
-Expected: 恰有一个 `CURRENT_ROADMAP.md`；旧 Phase/WS/M/P/U/O 历史文档不再自称当前总计划；所有 active 工作包通过 approved-spec 门禁。
+Run:
+
+```bash
+python3 scripts/documentation/plan_views.py --check
+cd services/api
+uv run python ../../scripts/tests/test_plan_views.py -v
+uv run python ../../scripts/check_docs.py --phase m2
+cd ../..
+git diff --check
+```
+
+Expected: 恰有一个 `CURRENT_ROADMAP.md`；DOC-M05/DOC-M06 可领取；本计划和旧 Phase/WS/M/P/U/O 均不可直接执行；所有 active 工作包通过 approved-spec 门禁。
 
 - [ ] **Step 7: 提交、推送并等待 M4 验收**
 
@@ -765,6 +841,8 @@ Commit: `docs(planning): establish canonical roadmap and work items`。
 - Create: `docs/90_archive/spec-index.md`
 - Create: `docs/90_archive/review-index.md`
 - Create: `docs/90_archive/path-compatibility.tsv`
+- Create: `scripts/documentation/links.py`
+- Create: `scripts/tests/test_document_links.py`
 - Create: `docs/knowledge-base/07_handoff/HANDOFF.md`（由根文件 byte-identical `git mv`）
 - Create: `docs/90_archive/Finance_Intelligence_OS_完整会话归档.md`（由根文件 byte-identical `git mv`）
 - Create: `docs/90_archive/original-file-provenance.tsv`
@@ -778,34 +856,56 @@ Commit: `docs(planning): establish canonical roadmap and work items`。
 - Modify: all mutable consumers listed for those paths
 - Create: compatibility entries at old paths where consumers cannot move
 
-- [ ] **Step 1: 冻结本批移动清单**
+- [ ] **Step 1: 先写链接、兼容和跨平台路径失败测试**
+
+覆盖 Markdown 相对链接、目录/锚点、中文与空格、macOS 大小写冲突、兼容入口循环、immutable 文本旧链接和消费者目标失效；实现 `links.py --check`，使它在任何移动发生前可用。
+
+- [ ] **Step 2: 冻结本批移动清单**
 
 从 `path-map.tsv` 选择一个最多 20 文件的小批次；记录源哈希、目标、消费者和回滚提交。raw/original/原图/approved 以及机器 keep 路径不得进入。
 
-- [ ] **Step 2: 先更新可变消费者**
+- [ ] **Step 3: 先更新可变消费者**
 
 修改 README、索引和可变说明中的链接；不可变档案中的旧链接不改，必须由兼容入口或 `DOCUMENT_MAP.md` 解释。
 
-- [ ] **Step 3: 先处理两个特殊原件**
+- [ ] **Step 4: 先处理两个特殊原件**
 
 对根 `HANDOFF.md` 和 `Finance_Intelligence_OS_完整会话归档.md` 先记录 SHA-256，再 byte-identical `git mv` 到明确目标，移动后复算哈希必须相同。归档状态、接替关系和原哈希写入 `original-file-provenance.tsv`，不向移动后的原件添加 frontmatter；旧位置随后新建纯导航 stub。
 
-- [ ] **Step 4: 移动普通已批准文件**
+- [ ] **Step 5: 移动普通已批准文件**
 
 一次只移动当前小批次。仅可变普通历史文档可增加 archived 元数据、接替 ID 和 `do_not_execute: true`；不改写历史事实。
 
-- [ ] **Step 5: 为未清零消费者保留兼容入口**
+- [ ] **Step 6: 为未清零消费者保留兼容入口**
 
 兼容入口只导航，不复制正文；`path-compatibility.tsv` 记录消费者、建立 release、最早移除 release 和审批状态。
 
-- [ ] **Step 6: 重建 manifest 并执行链接、消费者和不可变校验**
+- [ ] **Step 7: 重建 manifest 并执行链接、消费者和不可变校验**
 
-Run: `python3 scripts/documentation/kb_manifest.py --write && python3 scripts/documentation/kb_manifest.py --check`。任一失败用新的 forward revert 提交撤回本小批次，不使用 `reset --hard` 或强推。
+Run:
 
-- [ ] **Step 7: 小批次提交并推送**
+```bash
+python3 scripts/documentation/kb_manifest.py --write
+python3 scripts/documentation/kb_manifest.py --check
+python3 scripts/documentation/links.py --check \
+  --compatibility docs/90_archive/path-compatibility.tsv
+python3 scripts/documentation/inventory.py consumers --check \
+  --registry docs/knowledge-base/00_governance/migration/consumer-registry.tsv
+python3 scripts/documentation/inventory.py immutable --check \
+  --baseline docs/knowledge-base/00_governance/immutable-paths.lock.tsv
+cd services/api
+uv run python ../../scripts/tests/test_document_links.py -v
+uv run python ../../scripts/check_docs.py --phase m2
+cd ../..
+git diff --check
+```
+
+Expected: 链接、兼容循环、消费者、大小写路径、不可变哈希和 manifest 全部通过。任一失败不提交；需要撤回已写工作树内容时使用精确反向补丁，若已经形成提交则用新的 forward revert，不使用 `reset --hard` 或强推。
+
+- [ ] **Step 8: 小批次提交并推送**
 
 Commit: `docs(archive): migrate legacy documentation batch <n>`。
-重复 Step 1–7，直到所有 M0 可变文档均有最终处置。
+重复 Step 2–8，直到所有 M0 可变文档均有最终处置。
 
 ### Task 13: M5.2 退役手工状态登记，建立生成索引
 
@@ -813,23 +913,49 @@ Commit: `docs(archive): migrate legacy documentation batch <n>`。
 - Create: `docs/60_delivery/generated/DOCUMENT_STATUS.md`
 - Create: `docs/60_delivery/generated/document-inventory.tsv`
 - Modify: `scripts/documentation/inventory.py`
+- Modify: `scripts/tests/test_document_inventory.py`
 - Modify: `docs/documentation-status.md`
 - Modify: `docs/README.md`
 - Modify: `docs/00_start_here/DOCUMENT_MAP.md`
+- Modify: `docs/50_plans/CURRENT_ROADMAP.md`
+- Modify: `docs/50_plans/work_items/DOC-M05--history-migration.md`
+- Modify: `docs/50_plans/work_items/DOC-M06--verification-and-closeout.md`
+- Modify: `docs/50_plans/views/active.md`
+- Modify: `docs/50_plans/views/blocked.md`
+- Modify: `docs/50_plans/views/completed.md`
 
 - [ ] **Step 1: 写生成一致性测试**
 
-测试 `DOCUMENT_STATUS.md` 完全由文档元数据、Git 和 path map 生成；手改后 `--check` 必须失败。
+测试 `inventory.py status --write` 从文档元数据、Git 和 path map 确定性生成 `DOCUMENT_STATUS.md` 与 `document-inventory.tsv`；`status --check` 在临时目录重建并比较，手改后必须失败。
 
 - [ ] **Step 2: 生成全量状态视图**
 
-列出当前、历史、legacy-exempt、机器路径和知识资产，但不重复正文中的状态解释。
+Run: `python3 scripts/documentation/inventory.py status --write --output-dir docs/60_delivery/generated`
+Expected: 列出当前、历史、legacy-exempt、机器路径和知识资产，但不重复正文中的状态解释。
 
 - [ ] **Step 3: 将旧 `documentation-status.md` 改为兼容入口**
 
 保留历史核对记录的 Git 可追溯性，当前内容只链接生成视图和 `DOCUMENT_MAP.md`。
 
-- [ ] **Step 4: 验证并提交**
+- [ ] **Step 4: 原子关闭 M5 并交接 M6**
+
+将 DOC-M05 标为 completed 并引用 M5 提交证据；按 M6 是否已获批准，将 DOC-M06 标为 active 或 blocked。更新 `CURRENT_ROADMAP.md` 最近证据，再运行 `python3 scripts/documentation/plan_views.py --write` 重建三个视图。
+
+- [ ] **Step 5: 验证并提交**
+
+Run:
+
+```bash
+python3 scripts/documentation/inventory.py status --check --output-dir docs/60_delivery/generated
+python3 scripts/documentation/plan_views.py --check
+cd services/api && uv run python ../../scripts/check_docs.py --phase m2
+uv run python ../../scripts/tests/test_document_inventory.py -v
+uv run python ../../scripts/tests/test_plan_views.py -v
+cd ../..
+git diff --check
+```
+
+Expected: PASS；暂存文件严格等于本任务 Files 清单。
 
 Commit: `docs(status): replace manual registry with generated inventory`。
 M5 验收必须证明无移动中的路径、无未登记兼容入口、不可变基线完全一致。
@@ -839,9 +965,9 @@ M5 验收必须证明无移动中的路径、无未登记兼容入口、不可�
 ### Task 14: M6.1 建立全仓链接、发布和消费者总门禁
 
 **Files:**
-- Create: `scripts/documentation/links.py`
+- Modify: `scripts/documentation/links.py`
 - Create: `scripts/documentation/reader_rubric.py`
-- Create: `scripts/tests/test_document_links.py`
+- Modify: `scripts/tests/test_document_links.py`
 - Create: `scripts/tests/test_reader_rubric.py`
 - Create: `docs/10_governance/link-allowlist.tsv`
 - Create: `docs/80_reviews/reader-test/QUESTIONS--v1.0.md`
@@ -932,19 +1058,25 @@ Commit: `test(docs): verify context-free project handoff`。
 - Modify: `docs/00_start_here/PROJECT_STATE.md`
 - Modify: `docs/README.md`
 - Modify: `docs/knowledge-base/README.md`
+- Modify: `docs/50_plans/CURRENT_ROADMAP.md`
+- Modify: `docs/50_plans/work_items/DOC-M06--verification-and-closeout.md`
+- Modify: `docs/50_plans/views/active.md`
+- Modify: `docs/50_plans/views/blocked.md`
+- Modify: `docs/50_plans/views/completed.md`
 - Modify: `docs/60_delivery/verification/<execution-date>--verification--documentation-migration--v1.md`
 - Modify: `docs/knowledge-base/99_manifest/inventory.tsv`
 - Modify: `docs/knowledge-base/99_manifest/sha256sums.txt`
 
-- [ ] **Step 1: 重跑 M0–M6 全部门禁**
+- [ ] **Step 1: 执行发布前只读预检**
 
 ```bash
 make docs-check
 cd services/api && uv run python -m unittest discover -s ../../scripts/tests -v
+cd ../..
 git diff --check
 ```
 
-Expected: 全部 PASS；immutable baseline 与所有 delta 可重放；current release 可恢复；唯一入口断言通过。
+Expected: 全部 PASS。此时结果仅用于发现发布前问题，不作为最终完成证据。
 
 - [ ] **Step 2: 验证 Obsidian 脱离**
 
@@ -962,12 +1094,36 @@ Expected: 全部 PASS；immutable baseline 与所有 delta 可重放；current r
 
 `PROJECT_STATE.md` 只记录“静态知识和文档体系已迁移”的事实与剩余边界；不得把历史迁移步骤留作当前待办。
 
-- [ ] **Step 6: 重建知识库 manifest**
+- [ ] **Step 6: 原子关闭 M6 工作项和当前路线图**
+
+把 `DOC-M06--verification-and-closeout.md` 改为 `completed`，同步更新 `CURRENT_ROADMAP.md`，再从工作项元数据生成三个视图：
+
+```bash
+python3 scripts/documentation/plan_views.py --write
+python3 scripts/documentation/plan_views.py --check
+```
+
+Expected: M5、M6 均不再出现在 active/blocked 视图；M6 出现在 completed 视图；路线图、工作项和派生视图状态一致。
+
+- [ ] **Step 7: 重建知识库 manifest**
 
 Run: `python3 scripts/documentation/kb_manifest.py --write && python3 scripts/documentation/kb_manifest.py --check`
 Expected: 清单不含自身、排序稳定、旧不可变哈希未变。
 
-- [ ] **Step 7: 提交、推送并等待 GitHub CI**
+- [ ] **Step 8: 在所有最终文档和状态更新后执行提交总闸门**
+
+```bash
+python3 scripts/documentation/plan_views.py --check
+make docs-check
+cd services/api
+uv run python -m unittest discover -s ../../scripts/tests -v
+cd ../..
+git diff --check
+```
+
+Expected: 全部 PASS；immutable baseline 与所有 delta 可重放；current release 可恢复；唯一入口断言通过；最终路线图和视图中没有未关闭的 M5/M6 工作项。该次结果才是最终完成证据，并写入 verification 与 release 记录。
+
+- [ ] **Step 9: 提交、推送并等待 GitHub CI**
 
 Commit: `docs(release): complete static knowledge and documentation migration`。
 只有远端推送成功、CI 通过、M6 读者测试通过并取得用户确认，迁移才可标记 complete。
