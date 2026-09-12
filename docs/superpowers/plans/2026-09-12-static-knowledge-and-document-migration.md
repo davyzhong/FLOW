@@ -2,7 +2,7 @@
 doc_id: FLOW-PLAN-MIGRATION-001
 title: FLOW Documentation and Static Knowledge Migration Implementation Plan
 doc_type: plan
-status: active
+status: completed
 version: 1.2
 created_at: 2026-09-12
 updated_at: 2026-09-12
