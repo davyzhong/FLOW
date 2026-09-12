@@ -1,4 +1,4 @@
-# FLOW 项目知识库｜2026-09-07
+# FLOW 项目知识库｜2026-09-12
 
 状态：当前索引。当前工程状态和下一步只维护在[PROJECT_STATE](00_start_here/PROJECT_STATE.md)；历史时间线已独立留档，不再与当前摘要并列争夺优先级。
 
@@ -7,10 +7,10 @@
 1. [Agent 起点](00_start_here/AGENT_START_HERE.md)与[当前状态](00_start_here/PROJECT_STATE.md)。
 2. [D049 客观财务分析方向](../superpowers/specs/2026-09-06-objective-financial-analysis-direction.md)、[事实合同](../superpowers/specs/financial-facts-contract.md)。
 3. [决策日志](04_decisions/DECISION_LOG.md)、[变更影响图](04_decisions/CHANGE_IMPACT_MAP.md)。
-4. [下一阶段执行准备计划](../superpowers/plans/2026-09-07-next-stage-upgrade-plan.md)：详细 P 任务；[A–H 台账](../superpowers/plans/2026-09-06-objective-financial-analysis-master-plan.md)：既有里程碑证据。
-5. [累计参考与订正总册](02_research/synthesis/2026-09-07-reference-and-improvement-master.md)：30 项建议、18 项订正、417 条素材索引；不是全部原文已复核或功能已批准。
+4. [下一阶段统一执行计划](../superpowers/plans/2026-09-07-unified-next-plan.md)：唯一 U 队列、Knowledge Gate，以及 U8 主线、U4 外部到料、U9/O5 授权试点、U10 证据决策的详细计划；旧 P/A–H 台账只作历史证据。
+5. [财经分析知识地图](02_research/2026-09-11-finance-knowledge-map.md)、[Obsidian 固定截面扫描评估](02_research/synthesis/2026-09-12-obsidian-internal-kb-assessment.md)与[累计参考订正总册](02_research/synthesis/2026-09-07-reference-and-improvement-master.md)：研究与候选来源，不自动批准功能。
 
-当前迁移至 0018；来源/事实链、构建编排、指标版本治理和管理界面已有实现。下一阶段补语义订正、独立验证、客观分析及报告/运行验收，不从 Phase 1/B02 重新开工，不把 v0 逐项审批作为前置。当前 CI 和在途工作见状态页，本次仅文档更新。
+当前迁移至 `0024_operations_publication`；U1–U3、U5–U7 与 O1–O4 已完成。下一阶段先收口 U8 运行保障；U4 等独立 oracle 到料可并行；U9/O5 等内部数据授权与 U8 收口；U10 再以四方证据决定 V1.1，不从旧 Phase 重开。每个后续任务必须按 D051 默认引用 `obsidian-2026-09-12T15:46+08:00` 并完成知识取用门禁；只有显式知识库维护才建新截面。当前 CI 和在途工作见状态页。
 
 ## 分类导航
 

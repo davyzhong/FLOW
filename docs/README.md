@@ -1,14 +1,14 @@
-# FLOW 文档中心｜2026-09-07
+# FLOW 文档中心｜2026-09-12
 
-状态：当前导航。工程读取基线 `22061da`，迁移至 0018；不以文档更新代替功能验收。
+状态：当前导航。当前 HEAD `9f00cc9` 的 CI run `34676253964` 成功，迁移头 `0024_operations_publication`；不以文档更新代替功能验收。
 
 ## 01｜先看当前结论
 
 | 顺序 | 文档 | 用途 |
 |---|---|---|
 | 1 | [当前项目状态](knowledge-base/00_start_here/PROJECT_STATE.md) | 已提交能力、真实缺口、CI 时点与下一步 |
-| 2 | [下一阶段执行准备计划](superpowers/plans/2026-09-07-next-stage-upgrade-plan.md) | P00–P12 详细顺序、依赖、交付和验收；本次不实施 |
-| 3 | [参考与优化订正总册](knowledge-base/02_research/synthesis/2026-09-07-reference-and-improvement-master.md) | 来源、30 项建议、18 项订正、417 条素材索引 |
+| 2 | [下一阶段统一执行计划](superpowers/plans/2026-09-07-unified-next-plan.md) | 唯一 U 队列、Obsidian Knowledge Gate、U8/U9/O5/U10 顺序与验收 |
+| 3 | [财经分析知识地图与 Obsidian 扫描](knowledge-base/02_research/2026-09-11-finance-knowledge-map.md) | K1–K8、15:46 固定截面 3035 篇正文、采用/拒绝与权限边界 |
 | 4 | [文档全量登记](documentation-status.md) | 每份文档的状态、日期、命名和处置 |
 | 5 | [文档治理规则](2026-09-07-documentation-governance.md) | 分类、命名与维护规则；改名映射见[文档全量登记](documentation-status.md) |
 
@@ -16,7 +16,7 @@
 
 [D049 方向与验收](superpowers/specs/2026-09-06-objective-financial-analysis-direction.md)优先；[统一财务事实合同](superpowers/specs/financial-facts-contract.md)、[指标治理规格](superpowers/specs/2026-09-05-flow-metric-dictionary-design.md)和既有领域规格共同约束实现。较晚的已确认决策覆盖旧范围，不因整理文档改变财务公式。
 
-[A01–H01 总台账](superpowers/plans/2026-09-06-objective-financial-analysis-master-plan.md)保留既有阶段进度；P 计划细化后续增量和验收，两者按映射表衔接。早期 Phase、WS 和 Pilot 计划是历史或被接替的排期，不再各自声称“唯一当前计划”。
+[统一 U 计划](superpowers/plans/2026-09-07-unified-next-plan.md)是唯一当前执行入口；A–H、P、早期 Phase、WS 和 Pilot 计划保留历史任务细节与证据，不再各自声称当前优先级。
 
 ## 03｜使用与开发
 
