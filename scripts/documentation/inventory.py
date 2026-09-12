@@ -100,6 +100,13 @@ class StorageRow:
     reason: str
 
 
+# 文档元数据合同不适用的区域 = 五个不可变根 + 基线设施 + 已移交微信档案（M2 拟追加 immutable delta）
+DOC_CONTRACT_EXEMPT_PREFIXES = IMMUTABLE_ROOTS + (
+    "docs/knowledge-base/00_governance/migration/",
+    "docs/knowledge-base/99_manifest/",
+    "docs/knowledge-base/08_wechat_sources/",
+)
+
 # 基线设施自排除：迁移登记产物不进入清单（自指会导致基线永远漂移）
 SELF_EXCLUDE_PREFIXES = ("docs/knowledge-base/00_governance/migration/",)
 SELF_EXCLUDE_EXACT = ("docs/knowledge-base/00_governance/immutable-paths.lock.tsv",)

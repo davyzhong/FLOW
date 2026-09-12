@@ -1,3 +1,16 @@
+---
+doc_id: FLOW-PLAN-MIGRATION-001
+title: FLOW Documentation and Static Knowledge Migration Implementation Plan
+doc_type: plan
+status: active
+version: 1.1
+created_at: 2026-09-12
+updated_at: 2026-09-12
+owner: FLOW
+depends_on: [FLOW-DOC-ARCH-001]
+acceptance_refs: [M0-baseline, M1-entrypoints, M2-knowledge-release, M3-specs, M4-roadmap, M5-archive, M6-verification]
+---
+
 # FLOW Documentation and Static Knowledge Migration Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
@@ -6,7 +19,7 @@
 
 **Architecture:** 迁移按 M0–M6 七个独立批准批次推进：先建立清单和不可变基线，再建立治理工具与目录骨架，随后发布静态知识版本，最后统一产品/规格/计划、整理历史并执行无上下文接续验收。所有移动都由消费者清单驱动；状态通过元数据和索引表达，发布内容通过版本化文件、release lock 与 SHA-256 固定。
 
-**Tech Stack:** Markdown、YAML、TSV、JSON Schema Draft 2020-12、Python 3.13、PyYAML、jsonschema、`unittest`、Git、GitHub Actions。
+**Tech Stack:** Markdown、YAML、TSV、JSON Schema Draft 2020-12、Python 3.13、PyYAML、`unittest`、Git、GitHub Actions。
 
 ---
 
@@ -15,16 +28,18 @@
 | 字段 | 值 |
 |---|---|
 | Plan ID | FLOW-DOC-MIGRATION-001 |
-| 状态 | draft；尚未授权执行 |
-| 版本 | 1.1 |
+| 状态 | proposed；尚未授权执行 |
+| 版本 | 1.2 |
 | 建立日期 | 2026-09-12 |
 | 设计依据 | `docs/superpowers/specs/2026-09-12-static-knowledge-and-document-architecture-design.md` **V1.1** |
 | 来源基线 | `obsidian-2026-09-12T15:46+08:00` |
 | 目标知识发布 | `flow-knowledge-2026-09-12.1` |
-| 编写基线 | Git `05f614b`（设计 V1.1）；执行每一批前必须重新盘点 |
+| 编写与复审基线 | Git `6f3e90e`；执行每一批前必须重新盘点 |
 | 决策依据 | D049、D051 |
 
-**V1.1 修订记录（2026-09-12）**：同步设计 V1.1——(1) Task 15 接续测试十题降为五题（第 1/2/4 题 critical，通过线 4/5）；(2) Task 6/8 验收从写死 3035 改为 M0 基线清单哈希对账；(3) Task 3/7 的 JSON Schema 优先路径收敛为 `scripts/documentation/check_docs.py` 单一检查入口，Schema 文件后置为可选增强；(4) Task 2 补 M0 二进制存储分级盘点（设计 §4.9）；(5) Task 8 补 release 批量切换工具；(6) Task 12 补顶层 HANDOFF/会话归档归宿；(7) §0 补角色门禁映射引用。
+**V1.1 修订记录（2026-09-12）**：同步设计 V1.1——(1) Task 15 接续测试十题降为五题（第 1/2/4 题 critical，通过线 4/5）；(2) Task 6/8 验收从写死 3035 改为 M0 基线清单哈希对账；(3) Task 3/7 的 JSON Schema 优先路径收敛为 `scripts/check_docs.py` 单一检查入口，Schema 文件后置为可选增强；(4) Task 2 补 M0 二进制存储分级盘点（设计 §4.9）；(5) Task 8 补 release 批量切换工具；(6) Task 12 补顶层 HANDOFF/会话归档归宿；(7) §0 补角色门禁映射引用。
+
+**V1.2 复审修订（2026-09-12）**：补齐来源级冻结清单；用 checkpoint tree 消除 M0 自包含漂移；扩充不可变文本、相对路径和人工外部消费者发现；把知识发布拆为 verified 候选、用户签项、原子 canonical 激活；统一 `scripts/check_docs.py`；前移 reader rubric；要求每个知识库提交即时重建 manifest；特殊历史原件只做字节不变迁移。
 
 ## 0. 执行授权与停止规则
 
@@ -61,7 +76,8 @@
 | `scripts/documentation/links.py` | 检查 Markdown 相对链接、兼容入口和 allowlist |
 | `scripts/documentation/knowledge_release.py` | 生成并验证 coverage、release lock 和发布哈希 |
 | `scripts/documentation/reader_rubric.py` | 校验 M6 固定题集、rubric 和评分记录 |
-| `scripts/documentation/check_docs.py` | 统一检查入口：聚合 metadata/links/inventory/release 校验（设计 V1.1 §6.3），供 `make docs-check` 与 CI 调用 |
+| `scripts/documentation/kb_manifest.py` | 确定性生成和校验知识库 `99_manifest` |
+| `scripts/check_docs.py` | 唯一检查入口：按 M1/M2/M6 阶段显式聚合 metadata/links/inventory/release/rubric 校验 |
 | `scripts/tests/test_document_inventory.py` | M0 清单与不可变基线测试 |
 | `scripts/tests/test_document_metadata.py` | M1 元数据与跨文档状态测试 |
 | `scripts/tests/test_document_links.py` | M5/M6 链接和兼容入口测试 |
@@ -76,7 +92,10 @@
 | `docs/knowledge-base/00_governance/immutable-paths.lock.tsv` | M0 固定路径、逐文件哈希和基线归属 |
 | `docs/knowledge-base/00_governance/migration/document-inventory.tsv` | 全量文档类型、状态、权威和目标处置 |
 | `docs/knowledge-base/00_governance/migration/storage-inventory.tsv` | M0 二进制体积分布与 A/B/C/D 存储分级标注（设计 §4.9） |
+| `docs/knowledge-base/00_governance/migration/source-baseline.tsv` | 固定截面的来源级身份、定位符、字节数和内容指纹 |
+| `docs/knowledge-base/00_governance/migration/source-baseline.sha256` | 来源级基线文件自身的固定哈希 |
 | `docs/knowledge-base/00_governance/migration/consumer-registry.tsv` | 代码、测试、配置、脚本和文档消费者 |
+| `docs/knowledge-base/00_governance/migration/external-consumers.tsv` | 无法从仓库文本发现的人工/外部消费者登记 |
 | `docs/knowledge-base/00_governance/migration/path-map.tsv` | 旧路径、新路径、兼容策略和批准状态 |
 | `docs/knowledge-base/00_governance/migration/baseline.yaml` | M0 提交、计数和清单哈希 |
 | `docs/knowledge-base/00_governance/releases/release-lock.schema.json` | 静态发布锁合同（机器合同，保留；元数据 schema 已收敛为 check_docs.py 内置校验，见设计 V1.1 §6.3） |
@@ -134,11 +153,13 @@ M2 和 M3 不可并行，因为 M3 正式文档必须引用可解析的知识发
 **Files:**
 - Create: `scripts/documentation/__init__.py`
 - Create: `scripts/documentation/inventory.py`
+- Create: `scripts/documentation/kb_manifest.py`
 - Create: `scripts/tests/test_document_inventory.py`
+- Create: `scripts/tests/test_kb_manifest.py`
 
 - [ ] **Step 1: 写失败测试，固定扫描边界**
 
-测试必须证明：Git 跟踪文件为主清单；`.git`、缓存、构建产物不进入；raw/original 会被识别为 immutable；每行至少包含 `path`、`kind`、`mutability`、`consumer_count`、`sha256`。
+测试必须证明：指定 checkpoint tree 是主清单；`.git`、缓存、构建产物不进入；raw/original 会被识别为 immutable；每行至少包含 `path`、`kind`、`mutability`、`consumer_count`、`sha256`。另加提交前、提交后和后续新增治理产物三个 fixture，证明固定 tree 的基线不随生成文件加入而漂移。
 
 ```python
 def test_inventory_marks_raw_and_original_as_immutable(tmp_path: Path) -> None:
@@ -155,22 +176,27 @@ Expected: FAIL，提示 `scripts.documentation.inventory` 不存在。
 
 - [ ] **Step 3: 实现最小扫描器**
 
-`inventory.py` 使用 `git ls-files -z` 获取受控文件，使用 `pathlib` 和 `hashlib.sha256`；禁止跟随目录外符号链接。分类规则与不可变根路径定义为具名常量，不把路径散落在测试中。
+`inventory.py` 接受必填 `--tree-ish <checkpoint>`，使用 `git ls-tree -r -z <checkpoint>` 和对应 blob 内容建立永久基线；当前工作树清单使用单独的 `--working-tree` 模式，不得与永久基线混算。分类规则与不可变根路径定义为具名常量。
 
 - [ ] **Step 4: 增加消费者识别**
 
-扫描非 raw/original 文本文件中的 `docs/` 路径字面量，记录消费者文件、行号、消费者类型和是否可同步。二进制文件只记录哈希，不尝试解码。
+只读扫描全部文本，包括 immutable 文本；`mutability` 独立记录，绝不因此改写原件。识别 Markdown 相对链接、仓库根路径、`docs/` 字面量、Python `Path`/字符串拼接、JS/TS path、shell、YAML 配置字段和根目录 HANDOFF。与人工维护的 `external-consumers.tsv` 合并；无法可靠解析或无法验证的目标默认 `keep`。二进制文件只记录哈希，不尝试解码。
 
-- [ ] **Step 5: 运行定向测试**
+- [ ] **Step 5: 实现知识库 manifest 的确定性生成与校验**
 
-Run: `python3 -m unittest scripts.tests.test_document_inventory -v`
+`kb_manifest.py --write` 生成 `99_manifest/inventory.tsv` 和 `sha256sums.txt`，两份 manifest 排除自身，路径按 UTF-8 字节排序。`--check` 在临时目录重建并逐字节比较，同时校验每个 SHA-256。
+
+- [ ] **Step 6: 运行定向测试**
+
+Run: `python3 -m unittest scripts.tests.test_document_inventory scripts.tests.test_kb_manifest -v`
 Expected: PASS，且 fixture 的路径、哈希和消费者数量稳定。
 
-- [ ] **Step 6: 提交并推送**
+- [ ] **Step 7: 提交并推送**
 
 ```bash
 git add scripts/documentation/__init__.py scripts/documentation/inventory.py \
-  scripts/tests/test_document_inventory.py
+  scripts/documentation/kb_manifest.py scripts/tests/test_document_inventory.py \
+  scripts/tests/test_kb_manifest.py
 git commit -m "docs(tooling): add documentation inventory scanner"
 git push origin HEAD
 ```
@@ -181,7 +207,11 @@ git push origin HEAD
 - Create: `docs/knowledge-base/00_governance/IMMUTABLE_PATHS.md`
 - Create: `docs/knowledge-base/00_governance/immutable-paths.lock.tsv`
 - Create: `docs/knowledge-base/00_governance/migration/document-inventory.tsv`
+- Create: `docs/knowledge-base/00_governance/migration/storage-inventory.tsv`
+- Create: `docs/knowledge-base/00_governance/migration/source-baseline.tsv`
+- Create: `docs/knowledge-base/00_governance/migration/source-baseline.sha256`
 - Create: `docs/knowledge-base/00_governance/migration/consumer-registry.tsv`
+- Create: `docs/knowledge-base/00_governance/migration/external-consumers.tsv`
 - Create: `docs/knowledge-base/00_governance/migration/path-map.tsv`
 - Create: `docs/knowledge-base/00_governance/migration/baseline.yaml`
 - Modify: `docs/knowledge-base/README.md`
@@ -195,7 +225,7 @@ Expected: 当前任务工作树无无关改动；两个提交可明确记录。�
 
 - [ ] **Step 2: 生成只读候选清单**
 
-Run: `python3 scripts/documentation/inventory.py --repo . --output-dir /tmp/flow-doc-m0`
+Run: `python3 scripts/documentation/inventory.py --repo . --tree-ish <checkpoint-commit> --output-dir /tmp/flow-doc-m0`
 Expected: 生成 inventory、consumer registry、immutable lock 和 baseline；命令不修改仓库。
 
 - [ ] **Step 3: 人工审阅不可变根和消费者**
@@ -204,27 +234,39 @@ Expected: 生成 inventory、consumer registry、immutable lock 和 baseline；�
 
 - [ ] **Step 4: 写入批准后的基线文件**
 
-Run: `python3 scripts/documentation/inventory.py --repo . --output-dir docs/knowledge-base/00_governance/migration --write-lock docs/knowledge-base/00_governance/immutable-paths.lock.tsv`
-Expected: 输出按 UTF-8 路径排序；`baseline.yaml` 保存当前提交、文件数、逐清单哈希和生成器版本。
+Run: `python3 scripts/documentation/inventory.py --repo . --tree-ish <checkpoint-commit> --output-dir docs/knowledge-base/00_governance/migration --write-lock docs/knowledge-base/00_governance/immutable-paths.lock.tsv`
+Expected: 输出按 UTF-8 路径排序；`baseline.yaml` 保存 checkpoint commit、tree hash、文件数、逐清单哈希和生成器版本。生成治理产物不属于该历史 tree，因此提交后重验仍以相同 tree 为准。
 
 - [ ] **Step 5: 建立完整 `path-map.tsv`**
 
-每个可变 Markdown 都必须有 `keep`、`move`、`rewrite`、`archive` 或 `compatibility` 处置；所有机器消费者路径默认 `keep`，不得留空。M0 只登记，不移动。
+每个可变 Markdown 都必须有 `keep`、`move`、`rewrite`、`archive` 或 `compatibility` 处置；所有机器消费者路径默认 `keep`，不得留空。`external-consumers.tsv` 必须登记人工维护工具、外部自动化和无法由仓库扫描发现的消费者；无人确认的条目按 keep。M0 只登记，不移动。
 
 - [ ] **Step 5b: 生成二进制存储分级清单**
 
 `inventory.py` 按 `size`、`extension` 和目录特征为全部二进制（png/jpg/pdf/html 单体/zip/jsonl 等）生成 `storage-inventory.tsv`，每行含 `path`、`size`、`sha256`、`proposed_tier`（A git / B lfs / C release / D redundant-candidate，判定顺序 D→C→B→A，规则见设计 §4.9）。已知量级参考（2026-09-12 盘点）：知识库图片约 1544 张 / 268MB，`02_research/original` 含 8–23MB PDF 年报，`01_conversations/raw` 含 22MB jsonl——proposed_tier 仅登记建议，B/C/D 的实际处置独立成批并单独批准，本步骤不移动任何文件。重复候选（D）必须先与库内其他文件 SHA-256 对账确认。
 
+- [ ] **Step 5c: 冻结来源级基线**
+
+从仓库内 A/B/C/D、W1–W4 扫描记录、`08_wechat_sources` 静态移交内容和既有 source catalog 恢复逐条来源身份。`source-baseline.tsv` 每行必须包含 `source_id`、固定 snapshot ID、仓库或固定快照 locator、标题、作者（未知显式为空）、字节数、SHA-256/允许保存的内容指纹、重复组、K1–K8 路由、可用性和证据路径。
+
+预期 count-of-day 为 3035。若仓库静态证据不能恢复 3035 个稳定 locator，不得扫描“现在的动态 vault”冒充历史截面；M0 阻断，并请求用户提供 2026-09-12 15:46 的只读快照或导出。只有该固定快照获单独批准后可读取一次并立刻冻结，之后 M2 只消费仓库中的 `source-baseline.tsv` 和其哈希。
+
 - [ ] **Step 6: 验证基线可重复**
 
-Run: `python3 scripts/documentation/inventory.py --repo . --check docs/knowledge-base/00_governance/migration/baseline.yaml`
-Expected: PASS；第二次生成与首次字节一致。
+Run: `python3 scripts/documentation/inventory.py --repo . --tree-ish <checkpoint-commit> --check docs/knowledge-base/00_governance/migration/baseline.yaml`
+Expected: PASS；提交前、提交后及后续批次均以同一 checkpoint tree 得到相同基线；source baseline count、文件哈希和 `baseline.yaml` 记录一致。
 
 - [ ] **Step 7: 重建知识库 manifest**
 
-使用现有 manifest 规则生成 `inventory.tsv` 与 `sha256sums.txt`，明确排除这两个清单自身；再运行：
+从仓库根运行：
 
-Run: `git diff --check && python3 -m unittest scripts.tests.test_document_inventory -v`
+```bash
+python3 scripts/documentation/kb_manifest.py --write
+python3 scripts/documentation/kb_manifest.py --check
+git diff --check
+python3 -m unittest scripts.tests.test_document_inventory scripts.tests.test_kb_manifest -v
+```
+
 Expected: PASS；旧不可变文件哈希全部保持不变。
 
 - [ ] **Step 8: 提交、推送并等待 M0 验收**
@@ -239,7 +281,7 @@ M0 验收记录必须包含提交、计数、baseline hash、消费者数量和�
 **Files:**
 - Create: `docs/10_governance/legacy-exemptions.tsv`
 - Create: `scripts/documentation/metadata.py`
-- Create: `scripts/documentation/check_docs.py`
+- Create: `scripts/check_docs.py`
 - Create: `scripts/tests/test_document_metadata.py`
 - Modify: `.github/workflows/ci.yml`
 
@@ -254,7 +296,7 @@ Expected: FAIL，校验模块不存在。
 
 - [ ] **Step 3: 以纯 Python 实现元数据合同校验（设计 V1.1 §6.3）**
 
-按 doc_type 在 `metadata.py` 内实现必填字段、状态枚举与七项跨文档检查（ID 唯一 / 引用存在 / 上游状态 / release 可解析 / 状态转换合法 / canonical 有来源 / 工作包不绕过 approved spec），不引入 `jsonschema` 依赖、不新建 schema.json 文件；`document-metadata.schema.json` 与 `knowledge-artifact.schema.json` 后置为可选增强，仅当出现纯 Python 校验无法表达的复杂约束时另行立项。`check_docs.py` 作为统一 CLI 入口聚合调用。
+按 doc_type 在 `metadata.py` 内实现必填字段、状态枚举与七项跨文档检查（ID 唯一 / 引用存在 / 上游状态 / release 可解析 / 状态转换合法 / canonical 有来源 / 工作包不绕过 approved spec），不引入 `jsonschema` 依赖、不新建 schema.json 文件；`document-metadata.schema.json` 与 `knowledge-artifact.schema.json` 后置为可选增强，仅当出现纯 Python 校验无法表达的复杂约束时另行立项。根路径 `scripts/check_docs.py` 是唯一 CLI：`--phase m1` 启用 metadata、checkpoint inventory 和唯一入口检查；`--phase m2` 明确再启用 source/release；`--phase m6` 才启用 links、compatibility 和 reader rubric。请求某阶段时若对应模块或输入不存在必须失败，不能静默跳过。
 
 - [ ] **Step 4: 实现跨文档完整性校验与历史豁免**
 
@@ -267,7 +309,7 @@ Expected: FAIL，校验模块不存在。
 ```bash
 cd services/api
 uv run python -m unittest discover -s ../../scripts/tests -v
-uv run python ../../scripts/documentation/check_docs.py --check
+uv run python ../../scripts/check_docs.py --phase m1
 ```
 
 Expected: 当前迁移阶段仅校验新/修改正式文档和唯一入口，历史豁免有明确报告；原有脚本测试仍全部执行。
@@ -278,7 +320,7 @@ Expected: 当前迁移阶段仅校验新/修改正式文档和唯一入口，历
 cd services/api
 uv run python ../../scripts/tests/test_document_metadata.py -v
 uv run ruff check ../../scripts/documentation ../../scripts/tests
-uv run python ../../scripts/documentation/check_docs.py --check
+uv run python ../../scripts/check_docs.py --phase m1
 ```
 
 Expected: 全部 PASS。
@@ -307,6 +349,8 @@ Commit: `docs(governance): enforce document metadata contracts`。
 - Modify: `docs/knowledge-base/00_start_here/PROJECT_STATE.md`
 - Modify: `docs/knowledge-base/00_start_here/AGENT_START_HERE.md`
 - Modify: `docs/knowledge-base/README.md`
+- Modify: `docs/knowledge-base/99_manifest/inventory.tsv`
+- Modify: `docs/knowledge-base/99_manifest/sha256sums.txt`
 - Modify: `AGENTS.md`
 
 - [ ] **Step 1: 为唯一 current state 写失败测试**
@@ -331,10 +375,15 @@ Commit: `docs(governance): enforce document metadata contracts`。
 
 - [ ] **Step 6: 验证唯一入口**
 
-Run: `cd services/api && uv run python ../../scripts/documentation/metadata.py --check`
+Run: `cd services/api && uv run python ../../scripts/check_docs.py --phase m1`
 Expected: 一个 current state；README 无复制的任务状态；所有新入口可达。
 
-- [ ] **Step 7: 提交并推送**
+- [ ] **Step 7: 重建知识库 manifest**
+
+Run: `python3 scripts/documentation/kb_manifest.py --write && python3 scripts/documentation/kb_manifest.py --check`
+Expected: PASS；两份 manifest 只反映本任务的知识库导航变更。
+
+- [ ] **Step 8: 提交并推送**
 
 Commit: `docs(structure): establish canonical documentation entrypoints`。
 
@@ -346,8 +395,10 @@ Commit: `docs(structure): establish canonical documentation entrypoints`。
 - Create: `docs/10_governance/TERMS_AND_NAMESPACES.md`
 - Create: `docs/10_governance/DECISION_INDEX.md`
 - Create: `docs/10_governance/decisions/D001--product-not-dashboard.md` through `D051--obsidian-knowledge-gate.md`
-- Modify: `docs/knowledge-base/04_decisions/DECISION_LOG.md`
+- Create: `docs/10_governance/legacy/DECISION_LOG.source.yaml`
 - Modify: `docs/knowledge-base/04_decisions/CHANGE_IMPACT_MAP.md`
+- Modify: `docs/knowledge-base/99_manifest/inventory.tsv`
+- Modify: `docs/knowledge-base/99_manifest/sha256sums.txt`
 - Modify: `docs/2026-09-07-documentation-governance.md`
 - Modify: `docs/00_start_here/DOCUMENT_MAP.md`
 
@@ -359,9 +410,9 @@ Commit: `docs(structure): establish canonical documentation entrypoints`。
 
 每个 D 文件保存原决定、原因和历史状态，新增标准元数据、`source_refs`、`amends`/`supersedes`。对“有效但被较晚方向收窄”的决定，不擅自改为 rejected；用影响关系表达适用范围。
 
-- [ ] **Step 3: 将旧日志改为兼容索引**
+- [ ] **Step 3: 原位保留旧日志正文**
 
-保留开头的历史说明和 Git 历史入口，正文链接 `DECISION_INDEX.md`；若迁移会让不可变会话中的旧路径失效，则旧路径永久保留。
+`docs/knowledge-base/04_decisions/DECISION_LOG.md` 不改字节，避免只能依赖 Git 历史恢复。`DECISION_LOG.source.yaml` 保存其 SHA-256、historical 状态、canonical index 和接替说明；所有当前导航改指 `DECISION_INDEX.md`，不可变会话中的旧链接仍可直接读取原日志。
 
 - [ ] **Step 4: 固化命名空间**
 
@@ -371,7 +422,12 @@ Commit: `docs(structure): establish canonical documentation entrypoints`。
 
 Expected: D001–D051 全覆盖；无重复当前决策源；旧链接有兼容入口。
 
-- [ ] **Step 6: 提交、推送并等待 M1 验收**
+- [ ] **Step 6: 重建知识库 manifest**
+
+Run: `python3 scripts/documentation/kb_manifest.py --write && python3 scripts/documentation/kb_manifest.py --check`
+Expected: PASS，且旧 `DECISION_LOG.md` 哈希与 M0 一致。
+
+- [ ] **Step 7: 提交、推送并等待 M1 验收**
 
 Commit: `docs(governance): normalize decisions and documentation policy`。
 M1 验收后才申请 M2；此时尚未发布 `flow-knowledge-2026-09-12.1`。
@@ -388,10 +444,12 @@ M1 验收后才申请 M2；此时尚未发布 `flow-knowledge-2026-09-12.1`。
 - Create: `docs/knowledge-base/00_governance/releases/flow-knowledge-2026-09-12.1/coverage.tsv`
 - Create: `scripts/documentation/knowledge_release.py`
 - Create: `scripts/tests/test_knowledge_release.py`
+- Modify: `docs/knowledge-base/99_manifest/inventory.tsv`
+- Modify: `docs/knowledge-base/99_manifest/sha256sums.txt`
 
 - [ ] **Step 1: 写来源覆盖失败测试（基线对账，设计 V1.1 §10.1）**
 
-测试必须检查 `source_id` 唯一、条目集合与 M0 冻结的来源基线清单一一对应（数量由基线清单定义，**不写死篇数数字**）、固定 snapshot ID、内容指纹、处置、K1–K8 路由、敏感等级和来源定位符；不得把“程序关键词命中”当成人工 verified。基线冻结与发布之间的已登记差异必须以 `added`/`withdrawn` delta 说明。
+测试必须检查 `source_id` 唯一、条目集合与 M0 的 `source-baseline.tsv` 及其 SHA-256 一一对应、固定 snapshot ID、内容指纹、处置、K1–K8 路由、敏感等级和来源定位符；不得把“程序关键词命中”当成人工 verified。首版预期 3035 条，若 M0 经用户批准记录了订正数量，则以该基线数量和订正决策为准；基线冻结与发布之间的差异必须以 `added`/`withdrawn` delta 说明。
 
 - [ ] **Step 2: 定义来源身份规则**
 
@@ -399,7 +457,7 @@ M1 验收后才申请 M2；此时尚未发布 `flow-knowledge-2026-09-12.1`。
 
 - [ ] **Step 3: 从现有静态材料重建覆盖**
 
-输入仅限仓库已有的 A/B/C/D、W1–W4 扫描评估、`08_wechat_sources` 移交内容、既有 original/synthesis 和来源目录；不重新动态扫描 Obsidian。若基线清单条目无法一一恢复稳定定位符，M2 停止并报告缺口，不伪造记录。
+输入只允许 M0 已冻结到仓库的 `source-baseline.tsv` 及其证据路径；不重新扫描 Obsidian，也不在 M2 临时补来源身份。若条目或哈希无法对应，退回 M0 修正并重新批准。
 
 - [ ] **Step 4: 区分处置与核验**
 
@@ -408,9 +466,14 @@ M1 验收后才申请 M2；此时尚未发布 `flow-knowledge-2026-09-12.1`。
 - [ ] **Step 5: 运行确定性测试**
 
 Run: `cd services/api && uv run python ../../scripts/tests/test_knowledge_release.py -v`
-Expected: coverage 与 M0 基线清单一一对应（哈希对账通过）、唯一、排序稳定；两次生成哈希一致。
+Expected: coverage 与 M0 来源基线一一对应（哈希对账通过）、唯一、排序稳定；两次生成哈希一致。
 
-- [ ] **Step 6: 提交来源层**
+- [ ] **Step 6: 重建并校验知识库 manifest**
+
+Run: `python3 scripts/documentation/kb_manifest.py --write && python3 scripts/documentation/kb_manifest.py --check`
+Expected: PASS。
+
+- [ ] **Step 7: 提交来源层**
 
 Commit: `docs(knowledge): establish fixed source coverage`。
 此提交不创建 `CURRENT_RELEASE`，因为知识资产尚未完成。
@@ -426,10 +489,12 @@ Commit: `docs(knowledge): establish fixed source coverage`。
 - Create: `docs/knowledge-base/40_methods_and_patterns/README.md`
 - Create: `docs/knowledge-base/50_product_mappings/README.md`
 - Create: `docs/knowledge-base/50_product_mappings/FLOW-PRODUCT-MAPPING--v1.0.md`
+- Modify: `docs/knowledge-base/99_manifest/inventory.tsv`
+- Modify: `docs/knowledge-base/99_manifest/sha256sums.txt`
 
 - [ ] **Step 1: 写知识资产校验失败测试（纯 Python，设计 V1.1 §6.3）**
 
-覆盖 knowledge-card、domain-handbook、taxonomy、product-mapping 四类资产的必填字段与状态枚举（校验逻辑并入 `metadata.py`/`check_docs.py`，不新建 schema.json）；canonical 资产必须有稳定 ID、版本、来源、权威、敏感性和 release；source 引用不能形成无源闭环。
+覆盖 knowledge-card、domain-handbook、taxonomy、product-mapping 四类资产的必填字段与状态枚举（校验逻辑并入 `metadata.py`/`scripts/check_docs.py`，不新建 schema.json）。作者阶段只允许 candidate/verified，`knowledge_release: null`；canonical 条件留给 Task 8 原子激活。source 引用不能形成无源闭环。
 
 - [ ] **Step 2: 建立 taxonomy**
 
@@ -445,7 +510,7 @@ Commit: `docs(knowledge): establish fixed source coverage`。
 
 - [ ] **Step 5: 每批执行双层复核**
 
-第一层检查来源和准确转述；第二层检查财务/经营含义、冲突和权限。未通过者保持 candidate/verified，不进入首版 canonical lock。
+第一层检查来源和准确转述；第二层检查财务/经营含义、冲突和权限。通过者保持 verified 并成为候选发布输入；未通过者保持 candidate，不进入候选 lock。
 
 - [ ] **Step 6: 编写 11 个领域手册**
 
@@ -457,19 +522,25 @@ Commit: `docs(knowledge): establish fixed source coverage`。
 
 - [ ] **Step 8: 运行每批校验并提交**
 
-Run: `cd services/api && uv run python ../../scripts/documentation/metadata.py --check-knowledge`
-Expected: 当前批 schema、source_refs 和 ID 全部通过。
+Run: `cd services/api && uv run python ../../scripts/check_docs.py --phase m2-authoring`
+Expected: 当前批字段、source_refs、ID 和 verified/null-release 规则全部通过。
 
-每个作者批次单独提交并推送，提交信息为 `docs(knowledge): add <domain> knowledge batch <n>`；不得把全部内容压成一个不可审阅提交。
+每个作者批次先运行 `python3 scripts/documentation/kb_manifest.py --write && python3 scripts/documentation/kb_manifest.py --check`，再单独提交并推送，提交信息为 `docs(knowledge): add <domain> knowledge batch <n>`；不得把全部内容压成一个不可审阅提交。
 
 ### Task 8: M2.3 构建并发布首个静态知识版本
 
 **Files:**
 - Create: `docs/knowledge-base/00_governance/releases/release-lock.schema.json`
 - Create: `docs/knowledge-base/00_governance/releases/flow-knowledge-2026-09-12.1/release.yaml`
+- Create: `docs/knowledge-base/00_governance/releases/flow-knowledge-2026-09-12.1/candidate-release-lock.yaml`
+- Create: `docs/knowledge-base/00_governance/releases/flow-knowledge-2026-09-12.1/activation-plan.tsv`
 - Create: `docs/knowledge-base/00_governance/releases/flow-knowledge-2026-09-12.1/release-lock.yaml`
 - Create: `docs/knowledge-base/00_governance/releases/flow-knowledge-2026-09-12.1/sha256sums.txt`
+- Create: `docs/knowledge-base/00_governance/releases/flow-knowledge-2026-09-12.1/activation-before.tsv`
+- Create: `docs/knowledge-base/00_governance/releases/flow-knowledge-2026-09-12.1/activation-after.tsv`
+- Create: `docs/knowledge-base/00_governance/releases/flow-knowledge-2026-09-12.1/activation.diff`
 - Create: `docs/knowledge-base/00_governance/releases/CURRENT_RELEASE`
+- Modify: every exact asset/document path frozen in `activation-plan.tsv`
 - Modify: `docs/knowledge-base/README.md`
 - Modify: `docs/knowledge-base/99_manifest/inventory.tsv`
 - Modify: `docs/knowledge-base/99_manifest/sha256sums.txt`
@@ -477,43 +548,60 @@ Expected: 当前批 schema、source_refs 和 ID 全部通过。
 
 - [ ] **Step 1: 写发布失败测试**
 
-覆盖：资产漏锁、路径不存在、哈希不符、非 canonical 入锁、coverage 与 M0 基线不符、source 引用失效、旧 release 不可恢复、先切 `CURRENT_RELEASE`。
+覆盖：资产漏锁、路径不存在、候选哈希不符、非 verified 进入候选、coverage 与 M0 基线不符、source 引用失效、未批准激活、canonical 与最终 lock 不一致、旧 release 不可恢复、先切 `CURRENT_RELEASE`。
 
 - [ ] **Step 2: 实现 release builder**
 
-`knowledge_release.py build` 从批准的 canonical 资产生成 lock；lock 必须枚举 knowledge-card、domain-handbook、taxonomy、product-mapping、source-register、coverage 的 ID、类型、版本、路径、SHA-256 和上游关系。
+`knowledge_release.py propose` 从通过双层复核的 verified 资产生成 `candidate-release-lock.yaml`；候选 lock 必须枚举 knowledge-card、domain-handbook、taxonomy、product-mapping、source-register、coverage 的 ID、类型、版本、路径、候选 SHA-256 和上游关系。`activation-plan.tsv` 同时冻结将由激活提交修改的每个知识资产、当前正式文档、导航、release 文件、CI 和 manifest 路径；未列入者不得被激活命令修改。
 
 - [ ] **Step 3: 生成候选发布，不切 current**
 
-Run: `cd services/api && uv run python ../../scripts/documentation/knowledge_release.py build --release flow-knowledge-2026-09-12.1 --check-only`
-Expected: PASS，并给出确定性的候选 lock 摘要。
+Run: `cd services/api && uv run python ../../scripts/documentation/knowledge_release.py propose --release flow-knowledge-2026-09-12.1 --check-only`
+Expected: PASS；输入全部为 verified/null-release，输出候选 lock 和精确 activation plan，未创建 canonical 或 current。
 
 - [ ] **Step 4: 独立复核 coverage 和敏感信息**
 
 抽样覆盖每个 K 域、每种权威等级、每种处置和所有 authorized-internal/restricted 条目；确认仓库未复制未授权原文、内部数值或文件。
 
-- [ ] **Step 5: 写入发布文件并验证旧基线**
+- [ ] **Step 5: 写入 proposed release 并验证旧基线**
 
-生成 `release.yaml`、`release-lock.yaml` 和发布 `sha256sums.txt`；重跑 M0 immutable lock，必须证明所有基线文件字节未变。
+生成状态为 proposed 的 `release.yaml`、`candidate-release-lock.yaml` 和 `activation-plan.tsv`；重跑 M0 checkpoint/immutable/source baseline，必须证明所有基线文件字节未变。
 
-- [ ] **Step 6: 提交尚未切 current 的发布内容**
+- [ ] **Step 6: 重建 manifest，提交候选发布**
 
-提交 `release.yaml`、`release-lock.yaml`、coverage、知识资产版本和发布哈希：
+Run: `python3 scripts/documentation/kb_manifest.py --write && python3 scripts/documentation/kb_manifest.py --check`
 
 Commit: `docs(knowledge): prepare flow knowledge 2026-09-12.1`。
 
-- [ ] **Step 7: 提供 release 批量切换工具并最后切换 `CURRENT_RELEASE`**
+- [ ] **Step 7: 停止并取得 M2 激活签项**
 
-`knowledge_release.py` 增加 `switch` 子命令（设计 V1.1 §4.8）：把全部引用旧 release 的文档元数据一次更新为新 release ID，随即运行 `check_docs.py` 全量验证，输出切换前后 doc 清单与逐文件 diff 作为验证记录。只有前六步通过后，才用该工具执行首次切换（`pre-static-*` → `flow-knowledge-2026-09-12.1`）：`CURRENT_RELEASE` 写入与元数据批量更新作为同一独立提交。CI 增加 `knowledge_release.py verify --current`，仍放入 static-python job。
+向用户提供候选提交、coverage/source hash、候选资产清单、敏感信息审阅、activation plan 和预计 diff。没有明确批准，不执行 activate、不创建 `release-lock.yaml`、不写 `CURRENT_RELEASE`、不把 verified 改为 canonical。
 
-- [ ] **Step 8: 重建知识库总 manifest**
+- [ ] **Step 8: 获批后执行一次原子激活**
 
-总 manifest 不进入自己的哈希计算；验证 release lock 与归档 manifest 的职责不混淆。
+`knowledge_release.py activate` 只按已签项 `activation-plan.tsv` 执行以下不可拆步骤：
 
-- [ ] **Step 9: 单独提交 current 指针、推送并等待 M2 用户确认**
+1. 保存 `activation-before.tsv`；
+2. 将候选知识资产从 verified/null-release 改为 canonical/目标 release；
+3. 将计划中全部当前正式文档从 `pre-static-*` 切到目标 release；
+4. 用激活后的字节生成最终 `release-lock.yaml` 和 `sha256sums.txt`；
+5. 将 `release.yaml` 改为 active，写入批准记录；
+6. 写 `CURRENT_RELEASE`；
+7. 保存 `activation-after.tsv` 和逐文件 `activation.diff`；
+8. 更新 static-python 调用 `scripts/check_docs.py --phase m2`；
+9. 重建知识库总 manifest。
 
-`CURRENT_RELEASE`、总 manifest 和 CI 切换使用第二个提交：`docs(knowledge): activate flow knowledge 2026-09-12.1`。
-M2 未经用户确认，不把任何产品文档从 `pre-static` 切到该 release。
+- [ ] **Step 9: 验证原子激活**
+
+Run: `cd services/api && uv run python ../../scripts/check_docs.py --phase m2`  
+Expected: canonical 资产均能在最终 lock 中以激活后哈希解析；current pointer、当前正式文档和 release 状态一致；candidate lock 只作签项证据。
+
+- [ ] **Step 10: 按 activation plan 精确暂存并提交**
+
+激活命令输出唯一允许的 staging 清单；执行者逐项与 `activation-plan.tsv` 对照后暂存，禁止使用 `git add -A`。
+
+Commit: `docs(knowledge): activate flow knowledge 2026-09-12.1`。  
+推送成功并通过 CI 后，M2 才完成；M3 仍需另行批准。
 
 ---
 
@@ -671,10 +759,15 @@ Commit: `docs(planning): establish canonical roadmap and work items`。
 - Create: `docs/90_archive/spec-index.md`
 - Create: `docs/90_archive/review-index.md`
 - Create: `docs/90_archive/path-compatibility.tsv`
+- Create: `docs/knowledge-base/07_handoff/HANDOFF.md`（由根文件 byte-identical `git mv`）
+- Create: `docs/90_archive/Finance_Intelligence_OS_完整会话归档.md`（由根文件 byte-identical `git mv`）
+- Create: `docs/90_archive/original-file-provenance.tsv`
+- Create: `HANDOFF.md`（移动后新建导航 stub）
+- Create: `Finance_Intelligence_OS_完整会话归档.md`（移动后新建导航 stub）
 - Modify: `docs/documentation-status.md`
 - Modify: `docs/00_start_here/DOCUMENT_MAP.md`
-- Modify: `HANDOFF.md`（迁至 `docs/knowledge-base/07_handoff/`，设计 V1.1 §5.2）
-- Modify: `Finance_Intelligence_OS_完整会话归档.md`（迁至 `docs/90_archive/`）
+- Modify: `docs/knowledge-base/99_manifest/inventory.tsv`
+- Modify: `docs/knowledge-base/99_manifest/sha256sums.txt`
 - Modify: files marked `move` or `archive` in `path-map.tsv`
 - Modify: all mutable consumers listed for those paths
 - Create: compatibility entries at old paths where consumers cannot move
@@ -687,22 +780,26 @@ Commit: `docs(planning): establish canonical roadmap and work items`。
 
 修改 README、索引和可变说明中的链接；不可变档案中的旧链接不改，必须由兼容入口或 `DOCUMENT_MAP.md` 解释。
 
-- [ ] **Step 3: 使用 `git mv` 移动已批准文件**
+- [ ] **Step 3: 先处理两个特殊原件**
 
-一次只移动当前小批次。历史文件增加 archived 元数据、接替 ID 和 `do_not_execute: true`，不改写历史事实。
+对根 `HANDOFF.md` 和 `Finance_Intelligence_OS_完整会话归档.md` 先记录 SHA-256，再 byte-identical `git mv` 到明确目标，移动后复算哈希必须相同。归档状态、接替关系和原哈希写入 `original-file-provenance.tsv`，不向移动后的原件添加 frontmatter；旧位置随后新建纯导航 stub。
 
-- [ ] **Step 4: 为未清零消费者保留兼容入口**
+- [ ] **Step 4: 移动普通已批准文件**
+
+一次只移动当前小批次。仅可变普通历史文档可增加 archived 元数据、接替 ID 和 `do_not_execute: true`；不改写历史事实。
+
+- [ ] **Step 5: 为未清零消费者保留兼容入口**
 
 兼容入口只导航，不复制正文；`path-compatibility.tsv` 记录消费者、建立 release、最早移除 release 和审批状态。
 
-- [ ] **Step 5: 执行链接、消费者和不可变校验**
+- [ ] **Step 6: 重建 manifest 并执行链接、消费者和不可变校验**
 
-任一失败用新的 forward revert 提交撤回本小批次，不使用 `reset --hard` 或强推。
+Run: `python3 scripts/documentation/kb_manifest.py --write && python3 scripts/documentation/kb_manifest.py --check`。任一失败用新的 forward revert 提交撤回本小批次，不使用 `reset --hard` 或强推。
 
-- [ ] **Step 6: 小批次提交并推送**
+- [ ] **Step 7: 小批次提交并推送**
 
 Commit: `docs(archive): migrate legacy documentation batch <n>`。
-重复 Step 1–6，直到所有 M0 可变文档均有最终处置。
+重复 Step 1–7，直到所有 M0 可变文档均有最终处置。
 
 ### Task 13: M5.2 退役手工状态登记，建立生成索引
 
@@ -737,56 +834,62 @@ M5 验收必须证明无移动中的路径、无未登记兼容入口、不可�
 
 **Files:**
 - Create: `scripts/documentation/links.py`
+- Create: `scripts/documentation/reader_rubric.py`
 - Create: `scripts/tests/test_document_links.py`
+- Create: `scripts/tests/test_reader_rubric.py`
 - Create: `docs/10_governance/link-allowlist.tsv`
-- Create: `docs/60_delivery/verification/2026-09-12--verification--documentation-migration--v1.md`
+- Create: `docs/80_reviews/reader-test/QUESTIONS--v1.0.md`
+- Create: `docs/80_reviews/reader-test/RUBRIC--v1.0.yaml`
+- Create: `docs/80_reviews/reader-test/EXPECTED-ANSWERS--v1.0.md`
+- Create: `docs/60_delivery/verification/<execution-date>--verification--documentation-migration--v1.md`
 - Modify: `.github/workflows/ci.yml`
 - Modify: `Makefile`
 
-- [ ] **Step 1: 写断链和逃逸失败测试**
+- [ ] **Step 1: 先固定五题、rubric 和期望答案**
 
-覆盖相对链接、目录链接、锚点、中文/空格路径、不可变档案 allowlist、仓库外逃逸和兼容入口循环。HTTP 链接只登记，不把瞬时网络可达性作为 CI 硬门禁。
+使用设计规范 V1.1 §10.3 的五题。每题列必答事实、规范来源、允许表述、关键错误和分值；第 1、2、4 题标记 critical。先提交到工作树，再写检查器，避免实现反向塑造 rubric。
 
-- [ ] **Step 2: 实现链接检查器**
+- [ ] **Step 2: 写断链、逃逸和 rubric 失败测试**
+
+链接测试覆盖相对链接、目录链接、锚点、中文/空格路径、不可变档案 allowlist、仓库外逃逸和兼容入口循环；rubric 测试固定五题、critical 集合和通过线。HTTP 链接只登记，不把瞬时网络可达性作为 CI 硬门禁。
+
+- [ ] **Step 3: 实现链接与 rubric 检查器**
 
 默认扫描除 raw/original 字节档案外的 Markdown；历史故意断链必须在 allowlist 中记录来源、旧目标、接替入口和原因。
 
-- [ ] **Step 3: 增加 `make docs-check`**
+- [ ] **Step 4: 增加 `make docs-check`**
 
-命令顺序：元数据→链接→inventory 漂移→immutable lock→knowledge release→reader rubric schema。任何一步失败返回非零。
+`make docs-check` 只调用 `scripts/check_docs.py --phase m6`；内部顺序为元数据→链接→inventory 漂移→immutable lock→source baseline→knowledge release→reader rubric。任何模块或输入缺失、任何检查失败均返回非零。
 
-- [ ] **Step 4: 接入 static-python CI**
+- [ ] **Step 5: 接入 static-python CI**
 
 继续使用现有 16 job，不新增 job；添加 `make docs-check`。更新 `test_ci_gate_inventory.py` 只在命令合同确有变化时调整，不能放宽已有门禁。
 
-- [ ] **Step 5: 运行本地总门禁**
+- [ ] **Step 6: 运行本地总门禁**
 
 Run: `make docs-check && cd services/api && uv run python -m unittest discover -s ../../scripts/tests -v`
 Expected: PASS；零未登记断链、零哈希漂移、零权威入口重复。
 
-- [ ] **Step 6: 记录验证证据**
+- [ ] **Step 7: 记录验证证据**
 
 验证文档记录提交、命令、计数、allowlist、兼容入口、发布 ID、不可变 hash 和已知非阻塞边界；不得声称应用功能因文档门禁而重新验收。
 
-- [ ] **Step 7: 提交并推送**
+- [ ] **Step 8: 提交并推送**
 
 Commit: `ci(docs): enforce documentation and knowledge integrity`。
 
 ### Task 15: M6.2 执行固定五题无上下文接续测试
 
 **Files:**
-- Create: `docs/80_reviews/reader-test/QUESTIONS--v1.0.md`
-- Create: `docs/80_reviews/reader-test/RUBRIC--v1.0.yaml`
-- Create: `docs/80_reviews/reader-test/EXPECTED-ANSWERS--v1.0.md`
 - Create: `docs/80_reviews/reader-test/RUN-<date>-<agent-id>.md`
-- Create: `scripts/documentation/reader_rubric.py`
-- Create: `scripts/tests/test_reader_rubric.py`
 - Modify: `docs/knowledge-base/99_manifest/READER_TEST.md`
-- Modify: `docs/60_delivery/verification/2026-09-12--verification--documentation-migration--v1.md`
+- Modify: `docs/knowledge-base/99_manifest/inventory.tsv`
+- Modify: `docs/knowledge-base/99_manifest/sha256sums.txt`
+- Modify: `docs/60_delivery/verification/<execution-date>--verification--documentation-migration--v1.md`
 
-- [ ] **Step 1: 固定题目和 rubric 后再邀请读者**
+- [ ] **Step 1: 复核已冻结题目和 rubric**
 
-使用设计规范 V1.1 `10.3` 的五题。每题列必答事实、规范来源、允许表述、关键错误和分值；第 1、2、4 题标记 critical。
+确认 Task 14 提交后的题目、rubric 和期望答案未变；如当前状态确有变化，先以新版本提交修订，再开始盲测，不能在看到回答后改标准。
 
 - [ ] **Step 2: 校验 rubric 可评分**
 
@@ -805,9 +908,12 @@ Expected: 5 题、critical 集合准确、总分和通过规则有效。
 
 不得为了让测试通过放宽 rubric。修改后增加 rubric/expected answer 版本或新 run，不覆盖旧失败证据。
 
-- [ ] **Step 6: 更新历史 reader test 入口**
+- [ ] **Step 6: 更新历史 reader test 入口并重建 manifest**
 
 `knowledge-base/99_manifest/READER_TEST.md` 只链接新测试体系，并明确旧记录是历史快照。
+
+Run: `python3 scripts/documentation/kb_manifest.py --write && python3 scripts/documentation/kb_manifest.py --check`  
+Expected: PASS。
 
 - [ ] **Step 7: 提交并推送**
 
