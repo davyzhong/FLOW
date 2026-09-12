@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 from collections.abc import Iterator
 from typing import Annotated
 from uuid import UUID
@@ -17,6 +18,7 @@ from flow_api.api.schemas.publishing import (
     PublishResponse,
 )
 from flow_api.infrastructure.db import get_session_factory
+from flow_api.infrastructure.logging import log_event
 from flow_api.infrastructure.models.intake import StoredObject
 from flow_api.infrastructure.models.publishing import PublicationAttempt
 from flow_api.infrastructure.models.statement import StatementReport
@@ -137,10 +139,25 @@ def publish_operations_overview(
             if error.code == "statement_report_not_found"
             else status.HTTP_422_UNPROCESSABLE_CONTENT
         )
+        log_event(
+            logging.getLogger("flow.operations"),
+            logging.WARNING,
+            "operations.publish_blocked",
+            report_id=str(report_id),
+            code=error.code,
+        )
         raise HTTPException(
             status_code=http_status,
             detail={"code": error.code, "message": error.message},
         ) from error
+    log_event(
+        logging.getLogger("flow.operations"),
+        logging.INFO,
+        "operations.published",
+        report_id=str(report_id),
+        snapshot_id=str(snapshot.id),
+        formats=[o.format for o in outcomes],
+    )
     return PublishResponse(report_snapshot_id=str(snapshot.id), outcomes=outcomes)
 
 

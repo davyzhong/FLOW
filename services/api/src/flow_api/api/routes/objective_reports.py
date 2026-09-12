@@ -10,6 +10,7 @@ GET /api/v1/statements/{report_id}/objective-snapshot/html
 
 from __future__ import annotations
 
+import logging
 from collections.abc import Iterator
 from typing import Annotated, Any
 from uuid import UUID
@@ -20,6 +21,7 @@ from sqlalchemy.orm import Session
 from flow_api.api.schemas.intake import ErrorDetail
 from flow_api.api.schemas.statement import StatementErrorResponse
 from flow_api.infrastructure.db import get_session_factory
+from flow_api.infrastructure.logging import log_event
 from flow_api.publishing.objective_freeze import (
     ObjectiveFreezeError,
     ObjectiveReportSnapshot,
@@ -96,6 +98,14 @@ def freeze_objective_snapshot(
     session: SessionDependency, report_id: Annotated[UUID, Path()]
 ) -> Any:
     snapshot = _freeze_or_error(session, report_id)
+    log_event(
+        logging.getLogger("flow.objective"),
+        logging.INFO,
+        "objective.snapshot_frozen",
+        report_id=str(report_id),
+        snapshot_id=str(snapshot.id),
+        payload_hash=snapshot.payload_hash,
+    )
     return {
         "snapshot_id": str(snapshot.id),
         "version": snapshot.version,

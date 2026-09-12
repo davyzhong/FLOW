@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from collections.abc import Iterator
 from dataclasses import asdict
 from functools import lru_cache
@@ -45,6 +46,7 @@ from flow_api.data_contract.template import (
 )
 from flow_api.data_contract.workbook import render_workbook
 from flow_api.infrastructure.db import get_session_factory
+from flow_api.infrastructure.logging import log_event
 from flow_api.infrastructure.models.intake import (
     ImportVersion,
     MappingVersion,
@@ -527,7 +529,21 @@ def publish_import(import_version_id: UUID, session: SessionDependency) -> Impor
     except LookupError as error:
         raise _error(status.HTTP_404_NOT_FOUND, "import_not_found", str(error)) from error
     except (InvalidIntakeTransitionError, PublicationBlockedError) as error:
+        log_event(
+            logging.getLogger("flow.intake"),
+            logging.WARNING,
+            "import.blocked",
+            import_version_id=str(import_version_id),
+            detail=str(error)[:200],
+        )
         raise _error(status.HTTP_409_CONFLICT, "publication_blocked", str(error)) from error
+    log_event(
+        logging.getLogger("flow.intake"),
+        logging.INFO,
+        "import.published",
+        import_version_id=str(import_version_id),
+        batch_id=str(version.batch_id),
+    )
     return _version_response(session, version)
 
 

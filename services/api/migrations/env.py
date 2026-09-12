@@ -8,7 +8,9 @@ from flow_api.settings import get_settings
 
 config = context.config
 if config.config_file_name is not None:
-    fileConfig(config.config_file_name)
+    # 进程内执行迁移（测试/种子链）时不能禁用既有 logger，
+    # 否则应用在 import 期创建的 flow.* logger 全部失效（U8-C）。
+    fileConfig(config.config_file_name, disable_existing_loggers=False)
 
 config.set_main_option("sqlalchemy.url", get_settings().database_url.replace("%", "%%"))
 target_metadata = Base.metadata

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import logging
 from functools import lru_cache
 from typing import Annotated
 from uuid import UUID
@@ -24,6 +25,7 @@ from flow_api.api.schemas.publishing import (
     ReportSnapshotLine,
     ReportSnapshotListResponse,
 )
+from flow_api.infrastructure.logging import log_event
 from flow_api.infrastructure.models.analytics import Finding, MetricSnapshot
 from flow_api.infrastructure.models.canonical import Period
 from flow_api.infrastructure.models.intake import StoredObject
@@ -40,6 +42,8 @@ from flow_api.infrastructure.s3_client import build_s3_client
 from flow_api.publishing.publication import PublicationService
 from flow_api.publishing.service import PublishingFreezeError
 from flow_api.settings import get_settings
+
+logger = logging.getLogger("flow.publishing")
 
 router = APIRouter(prefix="/publishing", tags=["publishing"])
 
@@ -91,9 +95,31 @@ def publish_report(
     try:
         outcomes = service.publish(session, report_snapshot_id, formats=tuple(request.formats))
     except PublishingFreezeError as error:
+        log_event(
+            logger,
+            logging.WARNING,
+            "publication.blocked",
+            report_snapshot_id=str(report_snapshot_id),
+            code="freeze_blocked",
+        )
         raise _error(status.HTTP_409_CONFLICT, "freeze_blocked", str(error)) from error
     except Exception as error:  # noqa: BLE001
+        log_event(
+            logger,
+            logging.ERROR,
+            "publication.failed",
+            report_snapshot_id=str(report_snapshot_id),
+            detail=str(error)[:200],
+        )
         raise _error(status.HTTP_404_NOT_FOUND, "publishing_failed", str(error)[:200]) from error
+    log_event(
+        logger,
+        logging.INFO,
+        "publication.succeeded",
+        report_snapshot_id=str(report_snapshot_id),
+        formats=sorted(outcomes),
+        attempts=dict(outcomes),
+    )
     return PublishResponse(
         report_snapshot_id=str(report_snapshot_id),
         outcomes=outcomes,
@@ -172,8 +198,22 @@ def freeze_report_snapshot_route(
     try:
         report, _view = _freeze(session, metric_snapshot_id=UUID(request.metric_snapshot_id))
     except PublishingFreezeError as error:
+        log_event(
+            logger,
+            logging.WARNING,
+            "report.freeze_blocked",
+            metric_snapshot_id=request.metric_snapshot_id,
+        )
         raise _error(status.HTTP_409_CONFLICT, "freeze_blocked", str(error)) from error
     session.commit()
+    log_event(
+        logger,
+        logging.INFO,
+        "report.snapshot_frozen",
+        report_id=str(report.id),
+        metric_snapshot_id=request.metric_snapshot_id,
+        version=report.version,
+    )
     return ReportSnapshotCreatedResponse(
         id=str(report.id),
         metric_snapshot_id=str(report.metric_snapshot_id),
@@ -253,6 +293,13 @@ def download_publication_attempt(attempt_id: UUID, session: SessionDependency) -
     """下载成功产物的持久化字节：服务端命名 + sha 校验 + no-store/nosniff。"""
     attempt = session.get(PublicationAttempt, attempt_id)
     if attempt is None:
+        log_event(
+            logger,
+            logging.WARNING,
+            "download.blocked",
+            attempt_id=str(attempt_id),
+            code="publication_not_found",
+        )
         raise _error(
             status.HTTP_404_NOT_FOUND,
             "publication_not_found",
@@ -275,6 +322,13 @@ def download_publication_attempt(attempt_id: UUID, session: SessionDependency) -
     try:
         payload = store.read_by_sha(stored.sha256)
     except ImmutableObjectNotFoundError as error:
+        log_event(
+            logger,
+            logging.ERROR,
+            "download.missing_object",
+            attempt_id=str(attempt_id),
+            sha256=stored.sha256,
+        )
         raise _error(
             status.HTTP_409_CONFLICT,
             "download_not_available",
@@ -287,6 +341,13 @@ def download_publication_attempt(attempt_id: UUID, session: SessionDependency) -
             "对象存储内容与登记的 sha256 不一致，已拒绝提供",
         ) from error
     if hashlib.sha256(payload).hexdigest() != stored.sha256:
+        log_event(
+            logger,
+            logging.ERROR,
+            "download.integrity_failed",
+            attempt_id=str(attempt_id),
+            sha256=stored.sha256,
+        )
         raise _error(
             status.HTTP_409_CONFLICT,
             "integrity_check_failed",
@@ -296,6 +357,15 @@ def download_publication_attempt(attempt_id: UUID, session: SessionDependency) -
     parent_id = attempt.report_snapshot_id or attempt.objective_report_snapshot_id
     report_family = "flow-operations" if attempt.objective_report_snapshot_id else "flow-report"
     filename = f"{report_family}-{parent_id}-{attempt.sequence}.{extension}"
+    log_event(
+        logger,
+        logging.INFO,
+        "download.served",
+        attempt_id=str(attempt_id),
+        format=str(attempt.format),
+        sha256=stored.sha256,
+        size=len(payload),
+    )
     return Response(
         content=payload,
         media_type=stored.content_type
