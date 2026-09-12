@@ -123,6 +123,36 @@ def git_tracked_files(root: Path) -> List[str]:
     ]
 
 
+def git_tree_files(root: Path, treeish: str) -> List[str]:
+    """计划 Task 1 Step 3：checkpoint tree 是永久基线主清单（blob 只读，不含工作树漂移）。"""
+    proc = subprocess.run(
+        ["git", "ls-tree", "-r", "-z", "--", treeish],
+        cwd=str(root), capture_output=True,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"bad tree-ish {treeish!r}: {proc.stderr.decode(errors='replace').strip()}")
+    out = proc.stdout.decode("utf-8")
+    files = []
+    for entry in out.split("\0"):
+        if not entry:
+            continue
+        meta, path = entry.split("\t", 1)
+        mode, otype, _sha = meta.split()
+        if otype != "blob":
+            continue
+        if path.startswith(SELF_EXCLUDE_PREFIXES) or path in SELF_EXCLUDE_EXACT:
+            continue
+        files.append(path)
+    return files
+
+
+def git_blob(root: Path, treeish: str, rel: str) -> bytes:
+    return subprocess.run(
+        ["git", "cat-file", "blob", f"{treeish}:{rel}"],
+        cwd=str(root), check=True, capture_output=True,
+    ).stdout
+
+
 def sha256_of(path: Path) -> str:
     h = hashlib.sha256()
     with open(path, "rb") as f:
@@ -139,16 +169,19 @@ def is_immutable(rel: str) -> bool:
     return any(rel.startswith(root) for root in IMMUTABLE_ROOTS)
 
 
-def find_consumers(root: Path, tracked: Iterable[str]) -> List[Consumer]:
+def find_consumers(root: Path, tracked: Iterable[str], treeish: Optional[str] = None) -> List[Consumer]:
     consumers: List[Consumer] = []
     tracked_set = set(tracked)
     for rel in sorted(tracked_set):
         if is_immutable(rel) or classify_kind(rel) not in CONSUMER_TEXT_KINDS:
             continue
-        p = root / rel
         try:
-            text = p.read_text(encoding="utf-8", errors="strict")
-        except (UnicodeDecodeError, ValueError):
+            if treeish is not None:
+                raw = git_blob(root, treeish, rel)
+            else:
+                raw = (root / rel).read_bytes()
+            text = raw.decode("utf-8")
+        except (UnicodeDecodeError, ValueError, subprocess.CalledProcessError):
             continue  # 二进制误判为文本：跳过不阻塞
         for lineno, line in enumerate(text.splitlines(), start=1):
             for match in DOCS_PATH_RE.finditer(line):
@@ -159,24 +192,33 @@ def find_consumers(root: Path, tracked: Iterable[str]) -> List[Consumer]:
     return consumers
 
 
-def build_inventory(root: Path) -> List[Row]:
-    tracked = git_tracked_files(root)
-    consumers = find_consumers(root, tracked)
+def build_inventory(root: Path, treeish: Optional[str] = None) -> List[Row]:
+    tracked = (
+        git_tree_files(root, treeish) if treeish is not None else git_tracked_files(root)
+    )
+    consumers = find_consumers(root, tracked, treeish=treeish)
     count_by_ref = {}
     for c in consumers:
         count_by_ref[c.referenced_path] = count_by_ref.get(c.referenced_path, 0) + 1
     rows: List[Row] = []
     for rel in sorted(tracked):
-        p = root / rel
-        if not p.is_file() or p.is_symlink():
-            continue  # 不跟随符号链接，跳过坏条目
+        if treeish is not None:
+            content = git_blob(root, treeish, rel)
+            size = len(content)
+            sha = hashlib.sha256(content).hexdigest()
+        else:
+            p = root / rel
+            if not p.is_file() or p.is_symlink():
+                continue  # 不跟随符号链接，跳过坏条目
+            size = p.stat().st_size
+            sha = sha256_of(p)
         rows.append(Row(
             path=rel,
             kind=classify_kind(rel),
             mutability="immutable" if is_immutable(rel) else "mutable",
             consumer_count=count_by_ref.get(rel, 0),
-            sha256=sha256_of(p),
-            size=p.stat().st_size,
+            sha256=sha,
+            size=size,
         ))
     return rows
 
@@ -227,10 +269,14 @@ def repo_head(root: Path) -> Optional[str]:
     return out.stdout.strip() if out.returncode == 0 else None
 
 
-def generate(root: Path, output_dir: Path, write_lock: Optional[Path] = None) -> dict:
+def generate(root: Path, output_dir: Path, write_lock: Optional[Path] = None,
+             treeish: Optional[str] = None) -> dict:
     """Generate all inventory artifacts deterministically; return manifest of hashes."""
-    rows = build_inventory(root)
-    consumers = find_consumers(root, git_tracked_files(root))
+    rows = build_inventory(root, treeish=treeish)
+    tracked = (
+        git_tree_files(root, treeish) if treeish is not None else git_tracked_files(root)
+    )
+    consumers = find_consumers(root, tracked, treeish=treeish)
     storage = build_storage(rows)
     immutable = [r for r in rows if r.mutability == "immutable"]
 
@@ -263,10 +309,11 @@ def generate(root: Path, output_dir: Path, write_lock: Optional[Path] = None) ->
     return manifest
 
 
-def write_baseline(output_dir: Path, root: Path, manifest: dict) -> None:
+def write_baseline(output_dir: Path, root: Path, manifest: dict,
+                   treeish: Optional[str] = None) -> None:
     lines = [
         "# M0 baseline (generated; hand-edit only the exempt list)",
-        f"repo_head: {repo_head(root) or 'unknown'}",
+        f"checkpoint: {treeish or repo_head(root) or 'unknown'}",
         f"generator: scripts/documentation/inventory.py",
     ]
     lines += [f"{k}: {v}" for k, v in sorted(manifest.items())]
@@ -303,6 +350,10 @@ def check_baseline(root: Path, baseline_path: Path) -> int:
 def main(argv: Optional[List[str]] = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--repo", default=".")
+    ap.add_argument("--tree-ish", dest="treeish",
+                    help="checkpoint tree to baseline (blob-level, ignores working tree)")
+    ap.add_argument("--working-tree", action="store_true",
+                    help="scan the current working tree instead (must not mix with --tree-ish)")
     ap.add_argument("--output-dir", type=Path)
     ap.add_argument("--write-lock", type=Path, help="also write immutable lock tsv to this path")
     ap.add_argument("--check", type=Path, help="verify regenerable outputs against baseline")
@@ -313,8 +364,10 @@ def main(argv: Optional[List[str]] = None) -> int:
         return check_baseline(root, args.check.resolve())
     if args.output_dir is None:
         ap.error("--output-dir or --check required")
-    manifest = generate(root, args.output_dir, args.write_lock)
-    write_baseline(args.output_dir, root, manifest)
+    if args.treeish and args.working_tree:
+        ap.error("--tree-ish and --working-tree are mutually exclusive")
+    manifest = generate(root, args.output_dir, args.write_lock, treeish=args.treeish)
+    write_baseline(args.output_dir, root, manifest, treeish=args.treeish)
     print(f"inventory written to {args.output_dir} ({len(manifest)} artifacts hashed)")
     return 0
 
