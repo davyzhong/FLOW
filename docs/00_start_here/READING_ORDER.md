@@ -20,4 +20,4 @@ applies_to: docs
 4. [财务事实合同](../../superpowers/specs/financial-facts-contract.md) —— 领域对象与不变量的机器合同
 5. [决策索引](../../knowledge-base/04_decisions/DECISION_LOG.md) —— D001–D051 正式决策（M1 Task 5 后以 `docs/10_governance/DECISION_INDEX.md` 为准）
 
-知识引用：产品设计类文档的 `knowledge_release` 使用 `pre-static-obsidian-2026-09-12T15:46+08:00`（M2 后切换 `flow-knowledge-2026-09-12.1`）。
+知识引用：产品设计类文档的 `knowledge_release` 使用 `flow-knowledge-2026-09-12.1`（M2 后切换 `flow-knowledge-2026-09-12.1`）。

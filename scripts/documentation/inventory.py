@@ -320,7 +320,7 @@ def write_baseline(output_dir: Path, root: Path, manifest: dict,
     (output_dir / "baseline.yaml").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
-def check_baseline(root: Path, baseline_path: Path) -> int:
+def check_baseline(root: Path, baseline_path: Path, treeish: Optional[str] = None) -> int:
     baseline = {}
     for line in baseline_path.read_text(encoding="utf-8").splitlines():
         if ": " in line and not line.startswith("#"):
@@ -328,12 +328,13 @@ def check_baseline(root: Path, baseline_path: Path) -> int:
             baseline[k] = v
     stored = {k: v for k, v in baseline.items() if k.endswith(".tsv")}
     output_dir = baseline_path.parent
+    frozen_tree = treeish or baseline.get("checkpoint")
     import tempfile
 
     with tempfile.TemporaryDirectory() as td:
-        fresh = generate(root, Path(td))  # 无副作用重生成
+        fresh = generate(root, Path(td), treeish=frozen_tree)  # 同一 checkpoint 重生成
     ok = True
-    for name, want in stored.items():
+    for name, want in sorted(stored.items()):
         got = fresh.get(name)
         if got is None:
             # 非重生成工件（如不可变锁位于 baseline 目录的兄弟位置）：校验现存文件
@@ -361,7 +362,7 @@ def main(argv: Optional[List[str]] = None) -> int:
 
     root = Path(args.repo).resolve()
     if args.check:
-        return check_baseline(root, args.check.resolve())
+        return check_baseline(root, args.check.resolve(), treeish=args.treeish)
     if args.output_dir is None:
         ap.error("--output-dir or --check required")
     if args.treeish and args.working_tree:

@@ -2340,3 +2340,103 @@ validation/financial_reports/manifest.yaml	keep		M5	待 M5 逐项评估（兜底
 validation/financial_reports/oracle-register.md	keep		M5	待 M5 逐项评估（兜底）
 validation/financial_reports/original/zto_2026q1/ZTO_2026_Q1_results_announcement_c.pdf	keep		M5	待 M5 逐项评估（兜底）
 var/metric_library_audit.jsonl	keep		M5	待 M5 逐项评估（兜底）
+docs/00_start_here/DOCUMENT_MAP.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/00_start_here/PROJECT_STATE.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/00_start_here/READING_ORDER.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/00_start_here/README.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/DECISION_INDEX.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/DOCUMENT_GOVERNANCE.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/KNOWLEDGE_GOVERNANCE.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/README.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/TERMS_AND_NAMESPACES.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D001--产品不是单一驾驶舱.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D002--V1产品定位.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D003--部署方式.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D004--项目名称.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D005--首版行业与业务.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D006--首版数据真实性.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D007--时间范围和粒度.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D008--首版经营故事.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D009--分析维度.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D010--首版用户视角.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D011--驾驶舱首页结构.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D012--默认分析周期.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D013--指标组织方式.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D014--驾驶舱信息密度.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D015--外部驾驶舱参考方式.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D016--智能分析方式.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D017--Investigation形态.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D018--Investigation信任机制.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D019--Excel导入进入V1.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D020--Excel识别方式.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D021--单批次文件形式.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D022--标准模板与数据中间层.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D023--数据中间层建模.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D024--标准Excel数据包结构.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D025--报告输出进入V1.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D026--报告生成机制.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D027--正式月报格式.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D028--统一发布对象.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D029--V1开发策略.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D030--当前设计批准状态.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D031--Phase5分析输出边界.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D032--Phase5分析架构.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D033--AnalysisRun消费边界.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D034--Phase6Dashboard读取边界.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D035--Phase6Dashboard桌面信息结构.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D036--Investigation身份交接边界.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D037--Investigation审批资格与审计边界.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D038--PilotReadiness推进顺序.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D039--产品定位准确性优先的财务分析经营分析列为未来扩展.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D040--会计基础数据与财务分析指标库立项.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D041--四表一注标准输出与真实财报反向解析验证.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D042--P5验证实验样本选定与原文归档.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D043--报表可视化与图形化分析要求.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D044--项目名称保持FLOW.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D045--双轨产品结构财务分析轨+经营分析轨.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D046--双轨执行计划三步骤.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D047--知识库默认推荐策略替代逐项人工评审.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D048--引擎指标目录库内化P4物流指标集迁移完成.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D049--客观基础优先与公开数据阶段交付.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D050--经营分析轨方法论采纳外部SOP分析判断后的默认推.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/10_governance/decisions/D051--Obsidian常驻内部知识源与任务取用门禁.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/20_product/README.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/30_architecture/README.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/40_specs/README.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/50_plans/README.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/60_delivery/README.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/70_operations/README.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/80_reviews/README.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/90_archive/README.md	keep		M0	M1+ canonical entry/target doc (Task 4/9/10/11 产物), keep
+docs/knowledge-base/10_sources/README.md	keep		M0	M2 knowledge asset (Task 6/7 产物), keep
+docs/knowledge-base/10_sources/SOURCE_REGISTER.md	keep		M0	M2 knowledge asset (Task 6/7 产物), keep
+docs/knowledge-base/20_knowledge_cards/finance/FIN-DUPONT-001--杜邦分解--v1.0.md	keep		M0	M2 knowledge asset (Task 6/7 产物), keep
+docs/knowledge-base/20_knowledge_cards/finance/FIN-EBITDA-001--EBIT-EBITDA与三种利润口径--v1.0.md	keep		M0	M2 knowledge asset (Task 6/7 产物), keep
+docs/knowledge-base/20_knowledge_cards/finance/FIN-MARGIN-001--毛利率与净利率结构差异--v1.0.md	keep		M0	M2 knowledge asset (Task 6/7 产物), keep
+docs/knowledge-base/20_knowledge_cards/finance/FIN-QUAL-001--净现比与盈利质量--v1.0.md	keep		M0	M2 knowledge asset (Task 6/7 产物), keep
+docs/knowledge-base/20_knowledge_cards/finance/FIN-RECV-001--DSO与应收质量--v1.0.md	keep		M0	M2 knowledge asset (Task 6/7 产物), keep
+docs/knowledge-base/20_knowledge_cards/finance/FIN-STAT-001--三大报表勾稽--v1.0.md	keep		M0	M2 knowledge asset (Task 6/7 产物), keep
+docs/knowledge-base/20_knowledge_cards/governance/GOV-AUTH-001--内部数据授权边界--v1.0.md	keep		M0	M2 knowledge asset (Task 6/7 产物), keep
+docs/knowledge-base/20_knowledge_cards/governance/GOV-METRIC-001--指标全要素配置--v1.0.md	keep		M0	M2 knowledge asset (Task 6/7 产物), keep
+docs/knowledge-base/20_knowledge_cards/methods/METHOD-QA-001--四问闭环--v1.0.md	keep		M0	M2 knowledge asset (Task 6/7 产物), keep
+docs/knowledge-base/20_knowledge_cards/methods/METHOD-REPORT-001--月报四象限与报告四列表--v1.0.md	keep		M0	M2 knowledge asset (Task 6/7 产物), keep
+docs/knowledge-base/20_knowledge_cards/operations/OPS-CFO-001--红黄绿灯指标治理--v1.0.md	keep		M0	M2 knowledge asset (Task 6/7 产物), keep
+docs/knowledge-base/20_knowledge_cards/operations/OPS-CPP-001--ABC包裹级成本分摊与T+1损益--v1.0.md	keep		M0	M2 knowledge asset (Task 6/7 产物), keep
+docs/knowledge-base/20_knowledge_cards/operations/OPS-LOGI-001--物流成本科目体系--v1.0.md	keep		M0	M2 knowledge asset (Task 6/7 产物), keep
+docs/knowledge-base/20_knowledge_cards/operations/OPS-MASTER-001--L1-L4利润中心与主数据--v1.0.md	keep		M0	M2 knowledge asset (Task 6/7 产物), keep
+docs/knowledge-base/20_knowledge_cards/operations/OPS-PROFIT-001--单票利润拆解--v1.0.md	keep		M0	M2 knowledge asset (Task 6/7 产物), keep
+docs/knowledge-base/20_knowledge_cards/technology/TECH-COPILOT-001--Copilot回答约束与推断分离--v1.0.md	keep		M0	M2 knowledge asset (Task 6/7 产物), keep
+docs/knowledge-base/30_domain_handbooks/budget_and_forecast/README--v1.0.md	keep		M0	new governance/verification doc, keep
+docs/knowledge-base/30_domain_handbooks/cash_and_working_capital/README--v1.0.md	keep		M0	new governance/verification doc, keep
+docs/knowledge-base/30_domain_handbooks/cost_and_expense/README--v1.0.md	keep		M0	new governance/verification doc, keep
+docs/knowledge-base/30_domain_handbooks/finance_ai_governance/README--v1.0.md	keep		M0	new governance/verification doc, keep
+docs/knowledge-base/30_domain_handbooks/finance_statements/README--v1.0.md	keep		M0	new governance/verification doc, keep
+docs/knowledge-base/30_domain_handbooks/financial_analysis/README--v1.0.md	keep		M0	new governance/verification doc, keep
+docs/knowledge-base/30_domain_handbooks/logistics_and_supply_chain/README--v1.0.md	keep		M0	new governance/verification doc, keep
+docs/knowledge-base/30_domain_handbooks/management_reporting/README--v1.0.md	keep		M0	new governance/verification doc, keep
+docs/knowledge-base/30_domain_handbooks/operational_efficiency/README--v1.0.md	keep		M0	new governance/verification doc, keep
+docs/knowledge-base/30_domain_handbooks/profitability/README--v1.0.md	keep		M0	new governance/verification doc, keep
+docs/knowledge-base/30_domain_handbooks/revenue_and_growth/README--v1.0.md	keep		M0	new governance/verification doc, keep
+docs/knowledge-base/40_methods_and_patterns/README.md	keep		M0	new governance/verification doc, keep
+docs/knowledge-base/50_product_mappings/FLOW-PRODUCT-MAPPING--v1.0.md	keep		M0	new governance/verification doc, keep
+docs/knowledge-base/50_product_mappings/README.md	keep		M0	new governance/verification doc, keep

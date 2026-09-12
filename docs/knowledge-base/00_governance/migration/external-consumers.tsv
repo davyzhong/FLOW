@@ -1,0 +1,5 @@
+consumer	kind	paths_or_pattern	resolution	reason	confirmed_by
+Obsidian vault FLOW 知识地图（wiki/FLOW财经分析知识地图.md 及 processed 关联笔记）	external-personal-kb	docs/knowledge-base/02_research/2026-09-11-finance-knowledge-map.md; docs/knowledge-base/02_research/synthesis/2026-09-12-obsidian-internal-kb-assessment.md; docs/knowledge-base/09_competitive/	keep	用户指令（2026-09-12）将 vault 建立为 FLOW 常驻内部知识源，双向引用为长期设计而非待迁移遗留	qiming（2026-09-12 会话指令）
+qiming 个人 memory（.zcode memories，flow-* 系列）	external-agent-memory	docs/knowledge-base/02_research/synthesis/; docs/superpowers/plans/2026-09-07-unified-next-plan.md; docs/superpowers/plans/2026-09-12-static-knowledge-and-document-migration.md	keep	跨会话记忆按相对路径引用计划与评估文档，改名会静默失效	qiming（多会话工作流）
+微信公众号移交管线（davybase）回链	external-toolchain	docs/knowledge-base/08_wechat_sources/	keep	08_wechat_sources 为已移交档案区，davybase 的 HANDOFF/索引按固定路径引用；该目录整区原位	davybase docs/WECHAT_HANDOFF_20260907.md
+浏览器/聊天中分享的 GitHub 文件深链	external-human-links	docs/knowledge-base/00_start_here/PROJECT_STATE.md; docs/superpowers/plans/2026-09-07-unified-next-plan.md	compatibility	历史对话与外部协作者可能收藏旧路径；M5 兼容入口覆盖，最早两个发布周期后复议	GPT 迁移会话登记，用户未逐一确认（按计划默认 keep）

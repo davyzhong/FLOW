@@ -8,7 +8,7 @@ created_at: 2026-09-12
 updated_at: 2026-09-12
 owner: FLOW
 applies_to: knowledge-base
-knowledge_release: pre-static-obsidian-2026-09-12T15:46+08:00
+knowledge_release: flow-knowledge-2026-09-12.1
 ---
 
 # 知识治理规则

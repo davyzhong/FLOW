@@ -7,7 +7,7 @@ version: "1.0"
 created_at: 2026-09-12
 updated_at: 2026-09-12
 owner: FLOW
-knowledge_release: pre-static-obsidian-2026-09-12T15:46+08:00
+knowledge_release: flow-knowledge-2026-09-12.1
 source_refs: [METHOD-REPORT-001, METHOD-QA-001]
 authority_level: D
 sensitivity: public

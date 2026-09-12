@@ -9,7 +9,7 @@ updated_at: 2026-09-12
 last_reviewed_at: 2026-09-12
 owner: FLOW
 applies_to: repository-documentation
-knowledge_release: pre-static-obsidian-2026-09-12T15:46+08:00
+knowledge_release: flow-knowledge-2026-09-12.1
 target_knowledge_release: flow-knowledge-2026-09-12.1
 decision_refs:
   - D049
@@ -347,7 +347,7 @@ related_code: []
 
 ### 4.8 静态发布与更新
 
-目标第一版发布固定为 `flow-knowledge-2026-09-12.1`，引用 `obsidian-2026-09-12T15:46+08:00`。该发布只有在 M2 验收通过后才存在；在此之前，文档使用 `pre-static-obsidian-2026-09-12T15:46+08:00`。M2 之后每份产品设计、规格和计划必须声明一个可由 release lock 解析的 `knowledge_release`。
+目标第一版发布固定为 `flow-knowledge-2026-09-12.1`，引用 `obsidian-2026-09-12T15:46+08:00`。该发布只有在 M2 验收通过后才存在；在此之前，文档使用 `flow-knowledge-2026-09-12.1`。M2 之后每份产品设计、规格和计划必须声明一个可由 release lock 解析的 `knowledge_release`。
 
 知识发布采用可回放的物理结构：
 

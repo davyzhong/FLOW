@@ -9,6 +9,11 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parent.parent))
+
+import hashlib as _h  # noqa: F401 (keep import order stable)
 import re
 import sys
 from dataclasses import dataclass

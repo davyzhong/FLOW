@@ -1,7 +1,7 @@
 # M0 baseline (generated; hand-edit only the exempt list)
-checkpoint: 938d3acad45ecfc9d9e78c898eb84410422b02f4
+checkpoint: 7567e0a
 generator: scripts/documentation/inventory.py
-consumer-registry.tsv: 7702cec3d72d027a13a7c403c0b79a17e574f8e8c08c0f4e5341d8cd4e6f9b51
-document-inventory.tsv: 97bd8b54ee3705fe03f11351864b07b3bb8b4abc7c5852e1856b377ba58127bd
+consumer-registry.tsv: 2f58a1921b69af8dcc3455bfea9a61d4fc61fa38c716c47fd6bb4d0bb69125ce
+document-inventory.tsv: bae7964385e7cdcaf57ef5bc90094f3b5efbd74827e2a382a71a48c38774d1b5
 immutable-paths.lock.tsv: 9caf15ecafd8fdf8168d0b02ef3626bd1abfe54fa24280543ab1b641f0441e6f
-storage-inventory.tsv: d8756e3c5087f5bf99e8884c77c05a64bc4438dfb23686834742b62fb04815fc
+storage-inventory.tsv: 0a13823803f106a4368f3f97a3f40d85bae2b26da7679fd4735003a64faf7a1f

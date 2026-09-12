@@ -29,7 +29,7 @@ applies_to: repository
 
 ## 知识基线
 
-静态知识基线 `pre-static-obsidian-2026-09-12T15:46+08:00`（D051）；M2 发布 `flow-knowledge-2026-09-12.1` 前，产品设计引用一律使用该前缀。日常执行不读取动态 Obsidian。
+静态知识基线 `flow-knowledge-2026-09-12.1`（D051）；M2 发布 `flow-knowledge-2026-09-12.1` 前，产品设计引用一律使用该前缀。日常执行不读取动态 Obsidian。
 
 ## 能力矩阵与历史证据
 
