@@ -27,10 +27,15 @@ applies_to: docs
 | `docs/reviews/` | `docs/80_reviews/` | M5 | 未开始 |
 | `docs/superpowers/plans/2026-09-07-unified-next-plan.md` | `docs/50_plans/CURRENT_ROADMAP.md` | M4 | **已生效**（旧计划 superseded） |
 | `docs/superpowers/plans/2026-09-09-operations-track-plan.md` | `docs/50_plans/work_items/U09-O05--*.md` | M4 | 已生效 |
-| 历史 plans（Phase/WS/M/P 系列） | `docs/90_archive/` | M5 | 未开始 |
-| `HANDOFF.md`（仓库顶层） | `docs/knowledge-base/07_handoff/` | M5 | 未开始 |
-| `Finance_Intelligence_OS_完整会话归档.md`（顶层） | `docs/90_archive/` | M5 | 未开始 |
+| 历史 plans（Phase/WS/M/P 系列 18 份） | `docs/90_archive/plans/` | M5 | **已生效** |
+| `HANDOFF.md`（仓库顶层） | `docs/knowledge-base/07_handoff/HANDOFF.md` | M5 | **已生效** |
+| `Finance_Intelligence_OS_完整会话归档.md`（顶层） | `docs/90_archive/plans/` | M5 | **已生效** |
 | `docs/documentation-status.md` | `docs/60_delivery/generated/DOCUMENT_STATUS.md` | M5.2 | 未开始 |
 | `docs/knowledge-base/02_research/synthesis/` | `docs/knowledge-base/10_sources/source_notes/` | M2 | 未开始 |
 
 永久原位（不迁移）：五个不可变根（见 `00_governance/immutable-paths.lock.tsv`）、`docs/implementation/p5/` 机器数据、`08_wechat_sources/`（M2 拟追加 immutable delta）。
+
+
+## M5 处置修订（2026-09-12）
+
+以下条目由 move 改判 **keep**（引用密集/事实登记位，移动断链风险大于收益，遵循「不以搬迁换取表面整齐」）：`02_research/synthesis/`（来源层事实登记位，SOURCE_REGISTER 引用）、`06_sources/`（来源目录权威）、`09_competitive/`（内部 INDEX 自洽）、`implementation/` 非机器部分（验证记录与提交绑定）。逐文件处置见 `00_governance/migration/path-map.tsv`。

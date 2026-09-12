@@ -1,3 +1,15 @@
+---
+doc_id: FLOW-NAV-LEGACY-2933
+title: 参考与订正总册
+doc_type: navigation
+status: current
+version: 1.0
+created_at: 2026-09-12
+updated_at: 2026-09-12
+owner: FLOW
+applies_to: docs
+---
+
 # FLOW 外部借鉴、参考资料与优化订正总册
 
 日期：2026-09-07。性质：研究整合与下一阶段规划输入，**不是新增产品规格的批准，也不是执行指令**。

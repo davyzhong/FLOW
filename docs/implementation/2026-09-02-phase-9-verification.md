@@ -1,3 +1,15 @@
+---
+doc_id: FLOW-NAV-LEGACY-9992
+title: 2026-09-02-phase-9-verification
+doc_type: navigation
+status: current
+version: 1.0
+created_at: 2026-09-12
+updated_at: 2026-09-12
+owner: FLOW
+applies_to: docs
+---
+
 # Phase 9 Verification — Unified Publishing
 
 > **适用性说明（2026-09-04，代码基线 `c1a59d1`）**：本文结果属于所列日期/阶段的验收快照，保留当时测试数量、环境和结论；不代表对当前提交重新执行全量测试或完成生产验收。 文末待补的报告 API/下载已在 Pilot Phase 1 落地；冻结内容持久化、存储对象与 PPT 正文等后续修复以最新验收为准。PDF 魔数/体积检查不等于逐项提取 PDF 文本验证。

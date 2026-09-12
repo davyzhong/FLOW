@@ -1,3 +1,15 @@
+---
+doc_id: FLOW-NAV-LEGACY-0301
+title: 决策变更影响图
+doc_type: navigation
+status: current
+version: 1.0
+created_at: 2026-09-12
+updated_at: 2026-09-12
+owner: FLOW
+applies_to: docs
+---
+
 # 变更影响图与可重启节点
 
 ## 2026-09-07 规划候选的影响入口

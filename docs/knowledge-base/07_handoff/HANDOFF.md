@@ -1,3 +1,15 @@
+---
+doc_id: FLOW-NAV-HANDOFF-001
+title: FLOW 交接文档
+doc_type: navigation
+status: current
+version: 1.0
+created_at: 2026-09-11
+updated_at: 2026-09-12
+owner: FLOW
+applies_to: handoff
+---
+
 # FLOW 交接文档（HANDOFF）
 
 ## 0. 2026-09-12 最新续接：O2/O3 已收口

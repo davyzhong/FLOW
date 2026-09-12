@@ -1,3 +1,15 @@
+---
+doc_id: FLOW-NAV-LEGACY-9833
+title: 2026-09-02-phase-8-verification
+doc_type: navigation
+status: current
+version: 1.0
+created_at: 2026-09-12
+updated_at: 2026-09-12
+owner: FLOW
+applies_to: docs
+---
+
 # Phase 8 Verification — Bounded AI Copilot
 
 > **适用性说明（2026-09-04，代码基线 `c1a59d1`）**：本文结果属于所列日期/阶段的验收快照，保留当时测试数量、环境和结论；不代表对当前提交重新执行全量测试或完成生产验收。 成功交互审计持久化及报告大纲批次选择已在后续修复补强。

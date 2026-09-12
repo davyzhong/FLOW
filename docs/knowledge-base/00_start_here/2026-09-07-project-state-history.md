@@ -1,3 +1,15 @@
+---
+doc_id: FLOW-NAV-LEGACY-2345
+title: 2026-09-07-project-state-history
+doc_type: navigation
+status: current
+version: 1.0
+created_at: 2026-09-12
+updated_at: 2026-09-12
+owner: FLOW
+applies_to: docs
+---
+
 # FLOW 项目当前状态与时间线
 
 > **最新规划补充（2026-09-07，仅文档）**：完成[累计参考与订正总册](../02_research/synthesis/2026-09-07-reference-and-improvement-master.md)及[下一阶段详细计划](../../90_archive/plans/2026-09-07-next-stage-upgrade-plan.md)。本次读取工程基线 `8c7dbf3`、迁移至 0018，C01–C06 已有后续实现记录；下方 `33f777a`/“下一步 A01”等属于历史时点，不能作为今日待办。新计划是 D049 总计划的增量细化候选，P00–P12 未在本次执行，最新工程全量验收须重新核实。本次没有改代码、配置或运行环境。

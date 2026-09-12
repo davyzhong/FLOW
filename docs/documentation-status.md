@@ -1,3 +1,15 @@
+---
+doc_id: FLOW-NAV-LEGACY-6932
+title: documentation-status
+doc_type: navigation
+status: current
+version: 1.0
+created_at: 2026-09-12
+updated_at: 2026-09-12
+owner: FLOW
+applies_to: docs
+---
+
 # 文档适用性与历史证据索引
 
 核对日期：2026-09-07 第二轮；代码基线：`22061da`（第一轮 2026-09-04、基线 `c1a59d1` 的下表登记继续有效）。当前阅读入口见[文档导航](README.md)。本表逐份覆盖 `docs/superpowers/plans/`、`docs/superpowers/specs/`、`docs/implementation/` 和 `docs/reviews/` 的 Markdown，原始研究、会话与图片档案不在本表改写范围。本文是文档状态核对，不是新一轮全量功能测试。

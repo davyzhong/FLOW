@@ -1,3 +1,15 @@
+---
+doc_id: FLOW-NAV-LEGACY-9618
+title: INDEX
+doc_type: navigation
+status: current
+version: 1.0
+created_at: 2026-09-12
+updated_at: 2026-09-12
+owner: FLOW
+applies_to: docs
+---
+
 # 研究资料索引
 
 ## Obsidian 财经/经营预设范围固定截面扫描（2026-09-12）

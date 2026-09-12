@@ -1,3 +1,15 @@
+---
+doc_id: FLOW-NAV-LEGACY-9614
+title: 2026-09-02-phase-7-verification
+doc_type: navigation
+status: current
+version: 1.0
+created_at: 2026-09-12
+updated_at: 2026-09-12
+owner: FLOW
+applies_to: docs
+---
+
 # Phase 7 Verification — Evidence-first Investigation & Review
 
 > **适用性说明（2026-09-04，代码基线 `c1a59d1`）**：本文结果属于所列日期/阶段的验收快照，保留当时测试数量、环境和结论；不代表对当前提交重新执行全量测试或完成生产验收。 批准后证据拒绝、结论修改退回复核与冻结资格的并发约束已在后续修复补强。

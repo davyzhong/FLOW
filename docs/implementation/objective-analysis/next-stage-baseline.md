@@ -1,3 +1,15 @@
+---
+doc_id: FLOW-NAV-LEGACY-0706
+title: next-stage-baseline
+doc_type: navigation
+status: current
+version: 1.0
+created_at: 2026-09-12
+updated_at: 2026-09-12
+owner: FLOW
+applies_to: docs
+---
+
 # 下一阶段工程基线与差异登记（P00）
 
 ## 0. 基线刷新（2026-09-07，执行前校准）

@@ -1,3 +1,15 @@
+---
+doc_id: FLOW-NAV-LEGACY-9322
+title: 2026-09-02-phase-10-acceptance
+doc_type: navigation
+status: current
+version: 1.0
+created_at: 2026-09-12
+updated_at: 2026-09-12
+owner: FLOW
+applies_to: docs
+---
+
 # Phase 10 Verification — Acceptance Suite and Release
 
 > **适用性说明（2026-09-04，代码基线 `c1a59d1`）**：本文结果属于所列日期/阶段的验收快照，保留当时测试数量、环境和结论；不代表对当前提交重新执行全量测试或完成生产验收。 功能组合门禁与生产就绪须分开；文末更正基线发版条件是历史要求，不能据此推断存在 `v0.1.1` 发布。

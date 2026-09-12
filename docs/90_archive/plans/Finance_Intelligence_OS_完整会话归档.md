@@ -1,3 +1,19 @@
+---
+doc_id: FLOW-ARCHIVE-CONV-001
+title: Finance Intelligence OS 完整会话归档（历史）
+doc_type: plan
+status: archived
+version: 1.0
+created_at: 2026-09-12
+updated_at: 2026-09-12
+owner: FLOW
+depends_on: []
+acceptance_refs: []
+superseded_by: null
+do_not_execute: true
+historical_scope: early-product-discussions
+---
+
 # Finance Intelligence OS / AI 原生财务经营分析平台
 ## 当前会话完整归档（Markdown）
 
