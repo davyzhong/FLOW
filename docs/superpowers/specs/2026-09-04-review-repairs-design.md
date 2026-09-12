@@ -1,3 +1,19 @@
+---
+doc_id: FLOW-SPEC-REPAIRS-001
+title: Review 修复设计
+doc_type: specification
+status: approved
+version: 1.0
+created_at: 2026-09-12
+updated_at: 2026-09-12
+owner: FLOW
+decision_refs: [D049]
+knowledge_release: flow-knowledge-2026-09-12.1
+applies_to: specs
+supersedes: []
+superseded_by: null
+---
+
 # 审查九项修复设计
 
 > **适用性说明（2026-09-04，代码基线 `c1a59d1`）**：R1–R9 修复设计已实施；N1–N3 的追加实现与验证记录见修复验收。原设计继续约束冻结内容、审批资格、映射身份及财务口径。

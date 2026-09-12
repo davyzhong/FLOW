@@ -1,3 +1,19 @@
+---
+doc_id: FLOW-SPEC-OPSMETHOD-001
+title: 经营轨方法论
+doc_type: specification
+status: approved
+version: 1.0
+created_at: 2026-09-12
+updated_at: 2026-09-12
+owner: FLOW
+decision_refs: [D045, D050]
+knowledge_release: flow-knowledge-2026-09-12.1
+applies_to: specs
+supersedes: []
+superseded_by: null
+---
+
 # 经营分析轨方法论规格 v1（OP 方法论）
 
 - 日期：2026-09-09；决策依据：[D050](../../knowledge-base/04_decisions/DECISION_LOG.md)（采纳自外部 SOP 资料的分析判断）、D045（双轨结构）、D046（经营轨数据定义由知识库提炼）、D047（默认推荐策略）、D049（客观基础优先）

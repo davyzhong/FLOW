@@ -1,3 +1,19 @@
+---
+doc_id: FLOW-SPEC-OBJDIR-001
+title: 客观财务分析方向
+doc_type: specification
+status: approved
+version: 1.0
+created_at: 2026-09-12
+updated_at: 2026-09-12
+owner: FLOW
+decision_refs: [D049]
+knowledge_release: flow-knowledge-2026-09-12.1
+applies_to: specs
+supersedes: []
+superseded_by: null
+---
+
 # FLOW 客观财务分析产品方向与阶段验收规格
 
 日期：2026-09-06。状态：方向已由用户在本次讨论确认；实施细节按总计划分工作包细化。

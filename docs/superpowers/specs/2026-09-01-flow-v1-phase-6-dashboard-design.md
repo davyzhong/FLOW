@@ -1,3 +1,19 @@
+---
+doc_id: FLOW-SPEC-DASHBOARD-001
+title: Phase 6 Dashboard 设计
+doc_type: specification
+status: approved
+version: 1.0
+created_at: 2026-09-12
+updated_at: 2026-09-12
+owner: FLOW
+decision_refs: [D034, D035]
+knowledge_release: flow-knowledge-2026-09-12.1
+applies_to: specs
+supersedes: []
+superseded_by: null
+---
+
 # FLOW V1 Phase 6 Finance BP Dashboard Design
 
 > **适用性说明（2026-09-04，代码基线 `c1a59d1`）**：本设计的已批准对象边界、财务口径与交互约束继续适用，对应 Phase 已实现；正文的实施前状态和后续阶段描述保留历史语境，不代表当前开发排期或生产部署认证。

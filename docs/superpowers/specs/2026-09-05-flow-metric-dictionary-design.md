@@ -1,3 +1,19 @@
+---
+doc_id: FLOW-SPEC-METRIC-DICT-001
+title: 指标字典设计
+doc_type: specification
+status: approved
+version: 1.0
+created_at: 2026-09-12
+updated_at: 2026-09-12
+owner: FLOW
+decision_refs: [D040, D047]
+knowledge_release: flow-knowledge-2026-09-12.1
+applies_to: specs
+supersedes: []
+superseded_by: null
+---
+
 # FLOW 会计基础数据与财务分析指标库 设计规格
 
 状态：有效的指标知识/治理规格基线；D040/D047/D048 后已实施 v1 定稿、数据库化和 C01–C06 治理。本次 2026-09-07 更新适用状态；正文 v0 分期作为原设计语境，后续按 D049 和下一阶段计划增量订正，不再等待逐项 v0 审批。

@@ -1,3 +1,19 @@
+---
+doc_id: FLOW-SPEC-V1-DESIGN-001
+title: FLOW V1 总设计
+doc_type: specification
+status: approved
+version: 1.0
+created_at: 2026-09-12
+updated_at: 2026-09-12
+owner: FLOW
+decision_refs: [D029]
+knowledge_release: flow-knowledge-2026-09-12.1
+applies_to: specs
+supersedes: []
+superseded_by: null
+---
+
 # FLOW V1 产品与系统设计规格
 
 > **适用性说明（2026-09-04，代码基线 `c1a59d1`）**：正式 V1 规格仍是架构与对象契约基线；产品定位按较晚决策 D039 聚焦客观财务分析，主观经营归因属未来扩展，确定性 V/P/M 与 R/V/E 保留。交付顺序及生产就绪边界按 D038；设计中的目标与原型表述不等于当前生产能力。
