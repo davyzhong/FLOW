@@ -5,7 +5,7 @@ doc_type: navigation
 status: current
 version: 1.0
 created_at: 2026-09-12
-updated_at: 2026-09-12
+updated_at: 2026-09-13
 owner: FLOW
 applies_to: docs
 ---
@@ -28,7 +28,7 @@ applies_to: docs
 
 ## 02｜有效规格与计划
 
-[D049 方向与验收](superpowers/specs/2026-09-06-objective-financial-analysis-direction.md)优先；[统一财务事实合同](superpowers/specs/financial-facts-contract.md)、[指标治理规格](superpowers/specs/2026-09-05-flow-metric-dictionary-design.md)和既有领域规格共同约束实现。较晚的已确认决策覆盖旧范围，不因整理文档改变财务公式。
+[战略重构设计（D052–D054）](superpowers/specs/2026-09-13-flow-strategic-reset-design.md)是当前最高产品方向：企业内部 AI 财务分析工作台为最终产品，公开财报为独立模块；固定原则见 [PRODUCT_PRINCIPLES](20_product/PRODUCT_PRINCIPLES.md)。[D049 方向与验收](superpowers/specs/2026-09-06-objective-financial-analysis-direction.md)继续约束公开模块；[统一财务事实合同](superpowers/specs/financial-facts-contract.md)、[指标治理规格](superpowers/specs/2026-09-05-flow-metric-dictionary-design.md)和既有领域规格共同约束实现。较晚的已确认决策覆盖旧范围，不因整理文档改变财务公式。
 
 [统一 U 计划](superpowers/plans/2026-09-07-unified-next-plan.md)是唯一当前执行入口；A–H、P、早期 Phase、WS 和 Pilot 计划保留历史任务细节与证据，不再各自声称当前优先级。
 
