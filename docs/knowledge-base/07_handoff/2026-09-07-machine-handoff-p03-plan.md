@@ -66,7 +66,7 @@
 ### 2.2 P03：确定性拆解、联动提示和边界测试（4–6 人日，P0）
 
 任务书原文见
-[`docs/90_archive/plans/2026-09-07-next-stage-upgrade-plan.md`](../../90_archive/plans/2026-09-07-next-stage-upgrade-plan.md)
+[`docs/superpowers/plans/2026-09-07-next-stage-upgrade-plan.md`](../../superpowers/plans/2026-09-07-next-stage-upgrade-plan.md)
 §3 P03。TDD 纪律：每条规则先写失败测试（正例+反例），再最小实现。要点：
 
 1. **应收与收入增速联看**（I09）：两指标期间对齐（同期间流量）；应收增速

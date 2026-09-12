@@ -1,0 +1,7 @@
+path	pattern	reason
+docs/knowledge-base/04_decisions/DECISION_LOG.md	superpowers/plans/2026-*	字节冻结历史原件；旧路径接替见 docs/00_start_here/DOCUMENT_MAP.md
+docs/knowledge-base/07_handoff/*	superpowers/plans/2026-*	历史交接档案；同上
+docs/knowledge-base/01_conversations/raw/*	*	不可变会话档案
+docs/knowledge-base/02_research/original/*	*	不可变研究档案
+docs/knowledge-base/08_wechat_sources/*	*	已移交微信档案
+docs/90_archive/plans/*	superpowers/plans/2026-*	归档原件内的历史链接
