@@ -1,0 +1,30 @@
+# 知识 taxonomy v1.0（K1-K8 → 领域手册映射；分类不构成产品批准）
+taxonomy_id: FLOW-TAXONOMY-001
+version: "1.0"
+status: verified
+knowledge_release: pre-static-obsidian-2026-09-12T15:46+08:00
+k_domains:
+  K1: {name: 财务报表基础, handbook: finance_statements}
+  K2: {name: 财务分析方法, handbook: financial_analysis}
+  K3: {name: 指标公式库, handbook: financial_analysis}
+  K4: {name: 经营分析方法, handbook: operational_efficiency}
+  K5: {name: 看板与报告, handbook: management_reporting}
+  K6: {name: 预算与预测, handbook: budget_and_forecast}
+  K7: {name: 物流供应链与分部经营, handbook: logistics_and_supply_chain}
+  K8: {name: AI 与知识工程, handbook: finance_ai_governance}
+handbooks:
+  - finance_statements      # K1 主域
+  - financial_analysis      # K2/K3 主域
+  - revenue_and_growth
+  - cost_and_expense
+  - profitability
+  - cash_and_working_capital
+  - budget_and_forecast     # K6 主域
+  - operational_efficiency  # K4 主域
+  - logistics_and_supply_chain  # K7 主域
+  - management_reporting    # K5 主域
+  - finance_ai_governance   # K8 主域
+rules:
+  - 一卡一域（primary），跨域用 related_knowledge
+  - 同主题转载聚合一卡，多来源挂 source_refs
+  - 拒绝标签：无来源观点、AI 摘要未核验（authority E 不得成卡）
