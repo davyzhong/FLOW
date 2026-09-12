@@ -100,12 +100,20 @@ class StorageRow:
     reason: str
 
 
+# 基线设施自排除：迁移登记产物不进入清单（自指会导致基线永远漂移）
+SELF_EXCLUDE_PREFIXES = ("docs/knowledge-base/00_governance/migration/",)
+SELF_EXCLUDE_EXACT = ("docs/knowledge-base/00_governance/immutable-paths.lock.tsv",)
+
+
 def git_tracked_files(root: Path) -> List[str]:
     out = subprocess.run(
         ["git", "ls-files", "-z"],
         cwd=str(root), check=True, capture_output=True,
     ).stdout.decode("utf-8")
-    return [p for p in out.split("\0") if p]
+    return [
+        p for p in out.split("\0")
+        if p and not p.startswith(SELF_EXCLUDE_PREFIXES) and p not in SELF_EXCLUDE_EXACT
+    ]
 
 
 def sha256_of(path: Path) -> str:
@@ -177,8 +185,11 @@ def build_storage(rows: List[Row]) -> List[StorageRow]:
     out: List[StorageRow] = []
     for r in sorted(rows, key=lambda x: x.path):
         dups = [p for p in seen_hash[r.sha256] if p != r.path]
-        if r.kind in ("markdown", "yaml", "json", "tsv", "csv", "python", "typescript",
-                      "javascript", "shell", "html", "css", "text", "jsonl", "sql", "toml"):
+        if r.mutability == "immutable":
+            # 不可变档案永久原位：不参与 LFS/Release/冗余清除（计划 §0）
+            tier, reason = "immutable-keep", "legacy-immutable-root"
+        elif r.kind in ("markdown", "yaml", "json", "tsv", "csv", "python", "typescript",
+                        "javascript", "shell", "html", "css", "text", "jsonl", "sql", "toml"):
             tier, reason = "A", "text"
         elif dups:
             tier, reason = "D", "duplicate-hash:" + dups[0]
@@ -263,10 +274,18 @@ def check_baseline(root: Path, baseline_path: Path) -> int:
             baseline[k] = v
     stored = {k: v for k, v in baseline.items() if k.endswith(".tsv")}
     output_dir = baseline_path.parent
-    fresh = generate(root, output_dir)
+    import tempfile
+
+    with tempfile.TemporaryDirectory() as td:
+        fresh = generate(root, Path(td))  # 无副作用重生成
     ok = True
     for name, want in stored.items():
-        got = fresh.get(name) or (sha256_of(output_dir / name) if (output_dir / name).exists() else "missing")
+        got = fresh.get(name)
+        if got is None:
+            # 非重生成工件（如不可变锁位于 baseline 目录的兄弟位置）：校验现存文件
+            candidates = [output_dir / name, output_dir.parent / name, root / name]
+            cand = next((c for c in candidates if c.is_file()), None)
+            got = sha256_of(cand) if cand else "missing"
         if got != want:
             print(f"BASELINE MISMATCH {name}: want {want} got {got}", file=sys.stderr)
             ok = False

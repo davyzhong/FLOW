@@ -1,0 +1,7 @@
+# M0 baseline (generated; hand-edit only the exempt list)
+repo_head: 6f3e90ea10f10c038ed8d41029130470c0b2d9e7
+generator: scripts/documentation/inventory.py
+consumer-registry.tsv: 430b834515fb736e648dac709ed25a1d6f8080ae2d88853351a47a29b50096ee
+document-inventory.tsv: bc10f0a1529ba3367aa7738dcc1dfe9116ea9c983b925b0dca06657f6af810a4
+immutable-paths.lock.tsv: 9caf15ecafd8fdf8168d0b02ef3626bd1abfe54fa24280543ab1b641f0441e6f
+storage-inventory.tsv: 45d0659cbf49dfa86d0550b01c234d53f31e2cbd9db83f771c9e59ce5ab5df62
