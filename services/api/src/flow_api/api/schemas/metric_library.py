@@ -175,3 +175,39 @@ class MetricImpactResponse(BaseModel):
     referenced_items: list[str]
     frozen_snapshots_untouched: int
     sandbox: list[SandboxDiffLine]
+
+
+class CoverageCell(BaseModel):
+    """单个 指标 × 公司期间 的覆盖结果：display 为格式化值，missing 为首个缺口。"""
+
+    display: str | None = None
+    missing: str | None = None
+
+
+class CoverageSnapshot(BaseModel):
+    company: str
+    period: str
+    unit: str
+    computable: int
+    total: int
+
+
+class CoverageMetricRow(BaseModel):
+    metric_code: str
+    name: str
+    unit: str
+    cells: dict[str, CoverageCell]
+
+
+class MetricCoverageResponse(BaseModel):
+    """P5 真实财报指标覆盖矩阵（config/metrics/p5_metric_coverage_v1.yaml 只读投影）。"""
+
+    dataset_id: str
+    title: str
+    generator: str
+    generated_at: str
+    facts_source: str
+    alias_map: str
+    caliber_notes: list[str]
+    snapshots: list[CoverageSnapshot]
+    metrics: list[CoverageMetricRow]

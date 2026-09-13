@@ -55,6 +55,12 @@ target-version = "py313"
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM"]
 
+[tool.ruff.lint.per-file-ignores]
+# Alembic migrations contain long SQL strings that are clearer on one line.
+"migrations/versions/*" = ["E501"]
+# FastAPI dependency pattern (Depends in default) is a known false positive.
+"src/flow_api/api/auth.py" = ["B008"]
+
 [tool.mypy]
 python_version = "3.13"
 strict = true

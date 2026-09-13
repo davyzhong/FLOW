@@ -23,6 +23,14 @@ class Settings(BaseSettings):
     statement_max_upload_bytes: int = 80 * 1024 * 1024
     s3_use_system_proxy: bool = False
     auth_token: str | None = None  # 配置后启用 Bearer 认证边界；留空 = 开发模式
+    # §3.1 identity JSON：每项必须含 token_sha256/actor_id/role/enterprise_id/is_service_account；
+    # 留空（非 development）= 启动失败。development 仅当显式配置 dev_actor_id 时启用。
+    flow_identity_bindings_json: str | None = None
+    flow_dev_actor_id: str | None = None
+    # §3.2 旧 Bearer 截止（默认规格 §3.2 2026-10-31T15:59:59Z）
+    flow_legacy_bearer_cutoff: str = "2026-10-31T15:59:59+00:00"
+    # §8.2 audit retention days，默认 365，365 <= value <= 36500
+    flow_audit_retention_days: int = 365
 
 
 @lru_cache

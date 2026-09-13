@@ -11,6 +11,8 @@ const INTERACTIVE_ROUTES = [
   "/statements",
   "/metric-library",
   "/operations",
+  "/public",
+  "/internal",
 ];
 
 test.describe("navigation integrity", () => {

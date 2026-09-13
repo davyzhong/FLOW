@@ -7,6 +7,8 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   FlowApiError,
   metricLibraryApi,
+  type MetricCoverage,
+  type MetricCoverageSnapshot,
   type MetricGovernanceEventLine,
   type MetricLibrary,
   type MetricLibraryEntry,
@@ -14,7 +16,15 @@ import {
 import { DependencyGraph } from "./dependency-graph";
 import "./metric-library.css";
 
-type Tab = "general" | "logistics" | "graph" | "relations" | "mapping" | "accounting" | "governance";
+type Tab =
+  | "general"
+  | "logistics"
+  | "graph"
+  | "relations"
+  | "mapping"
+  | "accounting"
+  | "coverage"
+  | "governance";
 
 const TABS: { id: Tab; label: string }[] = [
   { id: "general", label: "通用指标" },
@@ -23,6 +33,7 @@ const TABS: { id: Tab; label: string }[] = [
   { id: "relations", label: "勾稽与分解关系" },
   { id: "mapping", label: "取数映射（CAS↔IFRS）" },
   { id: "accounting", label: "会计基础数据" },
+  { id: "coverage", label: "真实财报覆盖" },
   { id: "governance", label: "治理记录" },
 ];
 
@@ -399,6 +410,144 @@ function GovernanceSection({ metrics }: { metrics: MetricLibraryEntry[] }) {
   );
 }
 
+const COVERAGE_COMPANY_NAMES: Record<string, string> = {
+  alibaba_9988: "阿里巴巴",
+  cainiao: "菜鸟",
+  jd_logistics_2618: "京东物流",
+  sf_002352: "顺丰控股",
+  tencent_0700: "腾讯控股",
+};
+
+function coverageCellKey(snapshot: MetricCoverageSnapshot): string {
+  return `${snapshot.company} ${snapshot.period}`;
+}
+
+type CoverageLoadState =
+  | { kind: "loading" }
+  | { kind: "error"; message: string }
+  | { kind: "loaded"; coverage: MetricCoverage };
+
+function CoverageSection() {
+  const [state, setState] = useState<CoverageLoadState>({ kind: "loading" });
+
+  const load = useCallback(() => {
+    const controller = new AbortController();
+    metricLibraryApi.getCoverage(controller.signal).then(
+      (coverage) => setState({ kind: "loaded", coverage }),
+      (error: unknown) => {
+        if (controller.signal.aborted) return;
+        setState({
+          kind: "error",
+          message: error instanceof Error ? error.message : "加载失败",
+        });
+      },
+    );
+    return controller;
+  }, []);
+
+  useEffect(() => {
+    const controller = load();
+    return () => controller.abort();
+  }, [load]);
+
+  const retry = useCallback(() => {
+    setState({ kind: "loading" });
+    load();
+  }, [load]);
+
+  if (state.kind === "loading") {
+    return <div className="ml-state" role="status">正在读取真实财报覆盖矩阵…</div>;
+  }
+  if (state.kind === "error") {
+    return (
+      <div className="ml-state ml-state--error" role="alert">
+        <p>覆盖矩阵暂时无法加载</p>
+        <p className="ml-state__detail">{state.message}</p>
+        <button type="button" onClick={retry}>重试</button>
+      </div>
+    );
+  }
+
+  const { coverage } = state;
+  const snapshots = coverage.snapshots;
+
+  return (
+    <section className="ml-coverage" aria-label="真实财报指标覆盖矩阵">
+      <p className="ml-muted">
+        {coverage.title}（<code>{coverage.dataset_id}</code>）：
+        40 个通用指标 × {snapshots.length} 个公司期间快照，
+        数值来自 P5 反向解析事实库（{coverage.facts_source}），
+        口径映射见 {coverage.alias_map}，由 {coverage.generator} 生成。
+      </p>
+      <ul className="ml-coverage__notes">
+        {coverage.caliber_notes.map((note) => (
+          <li key={note}>{note}</li>
+        ))}
+      </ul>
+      <div className="ml-coverage__scroll">
+        <table className="ml-table ml-coverage__table">
+          <thead>
+            <tr>
+              <th className="ml-coverage__metric">指标</th>
+              {snapshots.map((snapshot) => (
+                <th key={coverageCellKey(snapshot)}>
+                  <strong>
+                    {COVERAGE_COMPANY_NAMES[snapshot.company] ?? snapshot.company}
+                  </strong>
+                  <span className="ml-coverage__period">{snapshot.period}</span>
+                  <span
+                    className={
+                      snapshot.computable === snapshot.total
+                        ? "ml-coverage__ratio ml-coverage__ratio--full"
+                        : "ml-coverage__ratio"
+                    }
+                  >
+                    {snapshot.computable}/{snapshot.total}
+                  </span>
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {coverage.metrics.map((metric) => (
+              <tr key={metric.metric_code}>
+                <th className="ml-coverage__metric" scope="row">
+                  <code>{metric.metric_code}</code> {metric.name}
+                  {metric.unit ? `（${metric.unit}）` : ""}
+                </th>
+                {snapshots.map((snapshot) => {
+                  const key = coverageCellKey(snapshot);
+                  const cell = metric.cells[key];
+                  if (!cell || cell.display === null || cell.display === undefined) {
+                    return (
+                      <td
+                        key={key}
+                        className="ml-coverage__missing"
+                        title={cell?.missing ? `缺口：${cell.missing}` : undefined}
+                      >
+                        {cell?.missing ? `缺 ${cell.missing}` : "—"}
+                      </td>
+                    );
+                  }
+                  return (
+                    <td key={key} className="ml-coverage__value">
+                      {cell.display}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p className="ml-muted">
+        覆盖详情与逐格取数说明见 docs/implementation/p5/metric_coverage_matrix.md；
+        重新生成：python scripts/p5_query_facts.py。
+      </p>
+    </section>
+  );
+}
+
 export function MetricLibraryApp() {
   const [state, setState] = useState<LoadState>({ kind: "loading" });
   const [notice, setNotice] = useState<string | null>(null);
@@ -491,6 +640,7 @@ export function MetricLibraryApp() {
 
       {tab === "general" ? <MetricList metrics={general} domains={library.domains} onChanged={revised} /> : null}
       {tab === "logistics" ? <MetricList metrics={logistics} domains={library.domains} onChanged={revised} /> : null}
+      {tab === "coverage" ? <CoverageSection /> : null}
       {tab === "governance" && state.kind === "loaded" ? (
         <GovernanceSection metrics={state.library.metrics} />
       ) : null}

@@ -1,0 +1,141 @@
+# P5 报表项目接入层：抽取行名 → 标准报表项目 item_id 别名映射（v1）
+#
+# 相对 v0 的变化（v0 草案保留，不原地覆盖）：
+#   - 新增阿里巴巴 9988.HK（FY2019–FY2026 八份年报）、菜鸟集团（FY2021–FY2023 招股书申报稿）、
+#     京东物流 2618.HK FY2025 全量三表映射（v0 仅有业绩摘要级 5 项）；
+#   - 行名支持「名称#n」第 n 次出现语法（京东物流借款/租赁负债/年度利潤等重名行）；
+#   - {abs: true} 表示披露为负数、入库取绝对值（IFRS 费用/成本行）；
+#   - 组合映射 {sum: [...]} 支持出现语法与口径备注。
+#
+# 口径注意：
+#   - 阿里巴巴「利息收入和投资净收益」含投资损益，未映射到 is.interest_income（口径不纯）；
+#   - 阿里巴巴 is.total_profit = 披露「扣除所得税及权益法核算的投资损益前的利润」+ 权益法投资损益；
+#   - 菜鸟「贸易应收及其他预付款」为合并行，未映射 bs.ar（口径不纯）；
+#   - 菜鸟 is.interest_exp 取「财务成本」总行（含租赁利息等），非纯利息口径；
+#   - 菜鸟 FY2021 与阿里巴巴 FY2019/FY2023 抽取产物缺上期/期初列，prior 与 avg 类指标自然缺数。
+#
+# 角色（role）约定：BS 列 = end/open（期末/期初）；IS/CF 列 = cur/prev_yoy（本期/上年同期）；
+# 菜鸟 BS 余额存于「本期发生额/上期发生额」列（抽取器约定），roles 逐表声明。
+
+version: v1
+generated: 2026-09-14
+extends: docs/implementation/p5/item_alias_map_v0.yaml
+extends_report_items: docs/knowledge-base/02_research/synthesis/指标库初始数据集_v0_草案.yaml
+
+companies:
+  alibaba_9988:  # 阿里巴巴，IFRS（US GAAP 口径披露），单位：百万元
+    statements:
+      合并资产负债表:
+        roles: {期末余额: end, 期初余额: open, 本期发生额: end, 上期发生额: open}  # FY2019/FY2023 缺 期末/期初余额 列，回退到 发生额 列
+        map:
+          現金及現金等價物: bs.cash
+          流動資產總額: bs.current_assets
+          物業及設備（淨值）: bs.fixed_assets
+          資產總額: bs.total_assets
+          短期銀行借款: bs.short_debt
+          流動負債總額: bs.current_liab
+          負債總額: bs.total_liab
+          權益總額: bs.equity
+          股東權益總額: bs.attr_equity
+      合并利润表:
+        roles: {本期发生额: cur, 上期发生额: prev_yoy}
+        map:
+          收入: is.revenue
+          營業成本: {item: is.cogs, abs: true}
+          產品開發費用: {item: is.rnd_exp, abs: true}
+          銷售和市場費用: {item: is.selling_exp, abs: true}
+          一般及行政費用: {item: is.admin_exp, abs: true}
+          經營利潤（虧損）: is.operating_profit
+          利息費用: {item: is.interest_exp, abs: true}
+          _is.total_profit: {sum: [扣除所得稅及權益法核算的投資損益前的利潤, 權益法核算的投資損益], note: 除税前利润=披露「扣除所得税及权益法前利润」+权益法投资损益}
+          所得稅費用: {item: is.income_tax, abs: true}
+          淨利潤: is.net_profit
+          歸屬於阿里巴巴集團股東的淨利潤: is.attr_net_profit
+      合并现金流量表:
+        roles: {本期发生额: cur, 上期发生额: prev_yoy}
+        map:
+          經營活動產生的現金流量淨額: cf.ocf
+          投資活動所用現金流量淨額: cf.icf
+          融資活動所用現金流量淨額: cf.fin_cf
+
+  cainiao:  # 菜鸟集团（未上市），IFRS，招股书申报稿，单位：千元
+    statements:
+      合并资产负债表:
+        roles: {本期发生额: end, 上期发生额: open}  # 抽取器把余额列存为 本期/上期发生额
+        map:
+          现金及现金等价物: bs.cash
+          存货: bs.inventory
+          流动资产合计: bs.current_assets
+          物业、厂房及设备: bs.fixed_assets
+          资产总计: bs.total_assets
+          流动负债合计: bs.current_liab
+          非流动负债合计: bs.noncurrent_liab
+          负债合计: bs.total_liab
+          权益总额: bs.equity
+          归属于公司所有者权益: bs.attr_equity
+      合并利润表:
+        roles: {本期发生额: cur, 上期发生额: prev_yoy}
+        map:
+          收入: is.revenue
+          营业成本: {item: is.cogs, abs: true}
+          毛利: is.gross_profit
+          销售及市场推广开支: {item: is.selling_exp, abs: true}
+          一般及行政开支: {item: is.admin_exp, abs: true}
+          产品开发开支: {item: is.rnd_exp, abs: true}
+          经营亏损/利润: is.operating_profit
+          财务收入: is.interest_income
+          财务成本净额: {item: is.fin_exp, abs: true}
+          财务成本: {item: is.interest_exp, abs: true, note: 财务成本总行（含租赁利息等），非纯利息口径}
+          除税前亏损/利润: is.total_profit
+          所得税开支: {item: is.income_tax, abs: true}
+          年度亏损/利润: is.net_profit
+          归属公司所有者: is.attr_net_profit
+      合并现金流量表:
+        roles: {本期发生额: cur, 上期发生额: prev_yoy}
+        map:
+          经营活动所得现金净额: cf.ocf
+          投资活动所用现金净额: cf.icf
+          融资活动(所用)所得现金净额: cf.fin_cf
+          购置物业设备、投资物业、土地使用权及无形资产: {item: cf.capex, abs: true}
+
+  jd_logistics_2618_full:  # 京东物流 FY2025 年报全量三表，IFRS，单位：千元（承接 v0 业绩摘要级映射）
+    statements:
+      合并资产负债表:
+        roles: {期末余额: end, 期初余额: open}
+        map:
+          現金及現金等價物: bs.cash
+          貿易應收款項: bs.ar
+          存貨: bs.inventory
+          流動資產總額: bs.current_assets
+          物業及設備: bs.fixed_assets
+          資產總額: bs.total_assets
+          貿易應付款項: bs.ap
+          流動負債總額: bs.current_liab
+          非流動負債總額: bs.noncurrent_liab
+          負債總額: bs.total_liab
+          權益總額: bs.equity
+          歸屬於本公司所有者的權益: bs.attr_equity
+          _bs.short_debt: {sum: ["借款#2", "租賃負債#2"], note: 流动部分借款+租赁负债}
+          _bs.long_debt: {sum: ["借款#1", "租賃負債#1"], note: 非流动部分借款+租赁负债}
+      合并利润表:
+        roles: {本期发生额: cur, 上期发生额: prev_yoy}
+        map:
+          收入: is.revenue
+          營業成本: {item: is.cogs, abs: true}
+          毛利: is.gross_profit
+          銷售及市場推廣開支: {item: is.selling_exp, abs: true}
+          研發開支: {item: is.rnd_exp, abs: true}
+          一般及行政開支: {item: is.admin_exp, abs: true}
+          財務收入: is.interest_income
+          財務成本: {item: is.fin_exp, abs: true, note: 财务成本总行，含租赁负债利息等}
+          除稅前利潤: is.total_profit
+          所得稅開支: {item: is.income_tax, abs: true}
+          年度利潤#1: is.net_profit  # 第一次出现为年度利润行，第二次为综合收益部分的重名行
+          本公司所有者#1: is.attr_net_profit
+      合并现金流量表:
+        roles: {本期发生额: cur, 上期发生额: prev_yoy}
+        map:
+          經營活動所得現金淨額: cf.ocf
+          投資活動所用現金淨額: cf.icf
+          融資活動所用現金淨額: cf.fin_cf
+          購買物業、設備及投資物業: {item: cf.capex, abs: true}

@@ -44,10 +44,10 @@ GPT-5.6 因额度到期卸任主协调者；用户指定 Kimi K3 接任，协调
 | 安全规格 V1.1 | 精确化完成（含 route-inventory-v1.tsv 64 条），status=review，等待独立复审 + 用户重新批准 | 62d48b4；TSV 与真实挂载双向差集为空（脚本核验） |
 | CI 核验器 | 三重修复完成（fail closed / 保留治理测试 / 防同名 job 假绿 + 防挂起），26 项目标测试绿 | d4379cc 链 |
 | Kimi `0841ff9`（route-policy） | **前任裁决：拒绝整包合并**，仅路由清单作素材，Task 2B 待正确安全基线重做；接任者维持该裁决 | S01 work-item 状态行 |
-| GLM `07d82f2`（module-ui） | 候选；两项已知待修（Make 目标跑错脚本、旧导航未归兼容分组） | GLM-S01-DELIVERY.md + 前任交接 |
+| GLM `9799485`（module-ui，v1.1 修复后） | 候选；两项待修已修复并实证（Make 目标映射分离，`make test-module-boundaries-e2e` 15 passed 跑对脚本；旧八条入口归「旧路由兼容入口」组，vitest 5/5） | GLM-S01-DELIVERY.md + 前任交接 |
 | GLM `4beae65`（module-boundaries） | 候选；Kimi 只读审查已完成（主体通过，F1/F2 待裁决，F3 已消解——见 §4 注） | 审查报告（见 evidence_refs） |
 | GLM `a4051ea`（full-verification） | **v1.1 新增**：Task 6A 全链验证已交付并实跑 PASS（U8 dump→恢复→upgrade head→HTTPS 三方对账，黄金值 77,799,675 千元）；runner 目标 alembic head，0026 落地后自动覆盖 | GLM 清单 v1.1（main 73e175f） |
-| Sol（GPT 执行线）Task 2A Bootstrap | **未交付**——Task 6 未关闭的最大缺口 | PROJECT_STATE / S01 work-item |
+| Sol/Mavis Task 2A Bootstrap | **已交付并合入**（9081fda→4af1ef5，CI 接线 ccc579b）；剩余 0026 审计迁移+RoleBinding 持久化+发布四阶段 ABI 为 Wave 1 主缺 | PROJECT_STATE / S01 work-item |
 
 > v1.1 注：用户「三 Agent 并行各自完成、统一合并审计」指令经转发后，GLM 从 Bootstrap 基线（b8a3edd）并行交付了 Task 4 与 Task 6A，base-lineage 偏差已在 GLM 清单 v1.1 正式登记——审查发现 F3（时序越门禁）据此消解；合并顺序仍由本协调者按 §3 关键路径掌握。
 

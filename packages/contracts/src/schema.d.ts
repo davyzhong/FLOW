@@ -745,6 +745,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/metric-library/coverage": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Metric Coverage
+         * @description 指标库 v0 通用指标 × 五家真实财报快照的可计算覆盖（含缺口原因）。
+         */
+        get: operations["get_metric_coverage_api_v1_metric_library_coverage_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/metric-library/events": {
         parameters: {
             query?: never;
@@ -1423,6 +1443,42 @@ export interface components {
              * Format: date-time
              */
             created_at: string;
+        };
+        /**
+         * CoverageCell
+         * @description 单个 指标 × 公司期间 的覆盖结果：display 为格式化值，missing 为首个缺口。
+         */
+        CoverageCell: {
+            /** Display */
+            display?: string | null;
+            /** Missing */
+            missing?: string | null;
+        };
+        /** CoverageMetricRow */
+        CoverageMetricRow: {
+            /** Metric Code */
+            metric_code: string;
+            /** Name */
+            name: string;
+            /** Unit */
+            unit: string;
+            /** Cells */
+            cells: {
+                [key: string]: components["schemas"]["CoverageCell"];
+            };
+        };
+        /** CoverageSnapshot */
+        CoverageSnapshot: {
+            /** Company */
+            company: string;
+            /** Period */
+            period: string;
+            /** Unit */
+            unit: string;
+            /** Computable */
+            computable: number;
+            /** Total */
+            total: number;
         };
         /** DashboardContext */
         DashboardContext: {
@@ -2131,6 +2187,30 @@ export interface components {
             policy_id: string;
             /** Policy Set Hash */
             policy_set_hash: string;
+        };
+        /**
+         * MetricCoverageResponse
+         * @description P5 真实财报指标覆盖矩阵（config/metrics/p5_metric_coverage_v1.yaml 只读投影）。
+         */
+        MetricCoverageResponse: {
+            /** Dataset Id */
+            dataset_id: string;
+            /** Title */
+            title: string;
+            /** Generator */
+            generator: string;
+            /** Generated At */
+            generated_at: string;
+            /** Facts Source */
+            facts_source: string;
+            /** Alias Map */
+            alias_map: string;
+            /** Caliber Notes */
+            caliber_notes: string[];
+            /** Snapshots */
+            snapshots: components["schemas"]["CoverageSnapshot"][];
+            /** Metrics */
+            metrics: components["schemas"]["CoverageMetricRow"][];
         };
         /** MetricDecomposition */
         MetricDecomposition: {
@@ -5048,6 +5128,46 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MetricEntryActionResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_metric_coverage_api_v1_metric_library_coverage_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MetricCoverageResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorDetail"];
                 };
             };
             /** @description Validation Error */

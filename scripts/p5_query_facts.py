@@ -23,6 +23,7 @@ ROOT = Path(__file__).resolve().parent.parent
 FACTS = ROOT / "docs/implementation/p5/statement_facts.yaml"
 METRICS_YAML = ROOT / "docs/knowledge-base/02_research/synthesis/指标库初始数据集_v0_草案.yaml"
 MATRIX_OUT = ROOT / "docs/implementation/p5/metric_coverage_matrix.md"
+DATASET_OUT = ROOT / "config/metrics/p5_metric_coverage_v1.yaml"
 
 UNIT_TO_YI = {"千元": 1e5, "百万元": 1e2}
 
@@ -161,6 +162,44 @@ def main():
     print(f"written -> {MATRIX_OUT}")
     for s in snapshots:
         print(f"  {s[0]} {s[1]}: {computable[s]}/{len(metrics_doc['metrics_general'])} 指标可计算")
+
+    # ---- 机读数据集：供 /api/v1/metric-library/coverage 与 /metric-library 页面消费 ----
+    total_metrics = len(metrics_doc["metrics_general"])
+    dataset = {
+        "dataset_id": "flow.p5_metric_coverage.v1",
+        "title": "P5 真实财报指标覆盖矩阵",
+        "generator": "scripts/p5_query_facts.py",
+        "generated_at": datetime.datetime.now().isoformat(timespec="seconds"),
+        "facts_source": "docs/implementation/p5/statement_facts.yaml",
+        "alias_map": "docs/implementation/p5/item_alias_map_v1.yaml",
+        "caliber_notes": [
+            "avg 为（期末+期初）/2、prior 为上年同期列；单季数据未年化",
+            "腾讯一般及行政开支含研发（口径差异）",
+            "阿里巴巴利息收入和投资净收益为合并行，未映射纯利息收入",
+            "菜鸟财务成本为含租赁利息的总行，非纯利息口径",
+            "绝对额指标已按披露单位换算为亿元",
+        ],
+        "snapshots": [
+            {"company": co, "period": pd_, "unit": eng.units[(co, pd_)],
+             "computable": computable[(co, pd_)], "total": total_metrics}
+            for co, pd_ in snapshots
+        ],
+        "metrics": [],
+    }
+    for m in metrics_doc["metrics_general"]:
+        cells = {}
+        for co, pd_ in snapshots:
+            key = f"{co} {pd_}"
+            try:
+                v = eng.ev_metric(m["metric_code"], co, pd_)
+                cells[key] = {"display": fmt_value(m, v, eng.units[(co, pd_)]), "missing": None}
+            except Missing as e:
+                cells[key] = {"display": None, "missing": str(e)}
+        dataset["metrics"].append(
+            {"metric_code": m["metric_code"], "name": m["name"], "unit": m["unit"], "cells": cells}
+        )
+    DATASET_OUT.write_text(yaml.safe_dump(dataset, allow_unicode=True, sort_keys=False), encoding="utf-8")
+    print(f"written -> {DATASET_OUT}")
 
     # ---- 一致性自检：引擎路径 vs 独立直算路径（防映射错误）----
     st = yaml.safe_load((ROOT / "docs/implementation/p5/sf_2026q1_statements.yaml").read_text())["statements"]

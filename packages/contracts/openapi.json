@@ -3070,6 +3070,66 @@
         }
       }
     },
+    "/api/v1/metric-library/coverage": {
+      "get": {
+        "tags": [
+          "metric-library"
+        ],
+        "summary": "Get Metric Coverage",
+        "description": "指标库 v0 通用指标 × 五家真实财报快照的可计算覆盖（含缺口原因）。",
+        "operationId": "get_metric_coverage_api_v1_metric_library_coverage_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MetricCoverageResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/metric-library/events": {
       "get": {
         "tags": [
@@ -5225,6 +5285,99 @@
         ],
         "title": "CorrectionResponse"
       },
+      "CoverageCell": {
+        "properties": {
+          "display": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Display"
+          },
+          "missing": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Missing"
+          }
+        },
+        "type": "object",
+        "title": "CoverageCell",
+        "description": "单个 指标 × 公司期间 的覆盖结果：display 为格式化值，missing 为首个缺口。"
+      },
+      "CoverageMetricRow": {
+        "properties": {
+          "metric_code": {
+            "type": "string",
+            "title": "Metric Code"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "unit": {
+            "type": "string",
+            "title": "Unit"
+          },
+          "cells": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/CoverageCell"
+            },
+            "type": "object",
+            "title": "Cells"
+          }
+        },
+        "type": "object",
+        "required": [
+          "metric_code",
+          "name",
+          "unit",
+          "cells"
+        ],
+        "title": "CoverageMetricRow"
+      },
+      "CoverageSnapshot": {
+        "properties": {
+          "company": {
+            "type": "string",
+            "title": "Company"
+          },
+          "period": {
+            "type": "string",
+            "title": "Period"
+          },
+          "unit": {
+            "type": "string",
+            "title": "Unit"
+          },
+          "computable": {
+            "type": "integer",
+            "title": "Computable"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          }
+        },
+        "type": "object",
+        "required": [
+          "company",
+          "period",
+          "unit",
+          "computable",
+          "total"
+        ],
+        "title": "CoverageSnapshot"
+      },
       "DashboardContext": {
         "properties": {
           "batch_id": {
@@ -7276,6 +7429,69 @@
           "policy_set_hash"
         ],
         "title": "MetricContext"
+      },
+      "MetricCoverageResponse": {
+        "properties": {
+          "dataset_id": {
+            "type": "string",
+            "title": "Dataset Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "generator": {
+            "type": "string",
+            "title": "Generator"
+          },
+          "generated_at": {
+            "type": "string",
+            "title": "Generated At"
+          },
+          "facts_source": {
+            "type": "string",
+            "title": "Facts Source"
+          },
+          "alias_map": {
+            "type": "string",
+            "title": "Alias Map"
+          },
+          "caliber_notes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Caliber Notes"
+          },
+          "snapshots": {
+            "items": {
+              "$ref": "#/components/schemas/CoverageSnapshot"
+            },
+            "type": "array",
+            "title": "Snapshots"
+          },
+          "metrics": {
+            "items": {
+              "$ref": "#/components/schemas/CoverageMetricRow"
+            },
+            "type": "array",
+            "title": "Metrics"
+          }
+        },
+        "type": "object",
+        "required": [
+          "dataset_id",
+          "title",
+          "generator",
+          "generated_at",
+          "facts_source",
+          "alias_map",
+          "caliber_notes",
+          "snapshots",
+          "metrics"
+        ],
+        "title": "MetricCoverageResponse",
+        "description": "P5 真实财报指标覆盖矩阵（config/metrics/p5_metric_coverage_v1.yaml 只读投影）。"
       },
       "MetricDecomposition": {
         "properties": {
