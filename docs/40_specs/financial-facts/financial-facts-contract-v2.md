@@ -2,7 +2,7 @@
 doc_id: FLOW-SPEC-FINANCIAL-FACTS-V2
 title: 统一财务事实契约 V2（Financial Facts Contract V2）
 doc_type: specification
-status: review
+status: approved
 version: 2.0
 created_at: 2026-09-13
 updated_at: 2026-09-13

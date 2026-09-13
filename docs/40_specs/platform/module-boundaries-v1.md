@@ -2,7 +2,7 @@
 doc_id: FLOW-SPEC-MODULE-BOUNDARIES-V1
 title: 模块边界规格 V1（三层两模块）
 doc_type: specification
-status: review
+status: approved
 version: 1.0
 created_at: 2026-09-13
 updated_at: 2026-09-13

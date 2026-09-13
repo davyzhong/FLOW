@@ -2,7 +2,7 @@
 doc_id: FLOW-SPEC-INTERNAL-RBAC-AUDIT-V1
 title: 内部工作台 RBAC 与追加式审计规格 V1
 doc_type: specification
-status: review
+status: approved
 version: 1.0
 created_at: 2026-09-13
 updated_at: 2026-09-13
