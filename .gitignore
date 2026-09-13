@@ -21,3 +21,4 @@ __pycache__/
 *.tsbuildinfo
 playwright-report/
 test-results/
+backups/
