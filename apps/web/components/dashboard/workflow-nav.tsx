@@ -4,29 +4,34 @@ import { usePathname } from "next/navigation";
 
 import { FlowIcon } from "./icons";
 
-// 双轨产品结构（D045）：一套底座、两条轨道。数据接入两轨共用；
-// 财务分析轨面向 Finance BP，经营分析轨面向经营/业务管理者。
-const groups = [
+// 三模块产品语义入口（S01 Task 2C）+ 旧路由兼容分组（Task 5 集成前保留可达，
+// 待模块化重组后归位）。旧入口保持在兼容分组而非散落顶层。
+const moduleGroups = [
   {
-    label: "数据层",
-    items: [["upload", "数据接入", "/data"]],
-  },
-  {
-    label: "财务分析 · Finance BP",
+    label: "模块入口",
     items: [
-      ["dashboard", "经营总览", "/"],
-      ["analysis", "分析与归因", "/investigations"],
-      ["report", "四问工作台", "/analysis"],
-      ["report", "报告与导出", "/reports"],
-      ["chart", "报表分析", "/statements"],
-      ["library", "指标库", "/metric-library"],
+      ["library", "公开财报分析", "/public"],
+      ["report", "企业内部分析工作台", "/internal"],
+      ["library", "专业治理底座", "/internal#governance"],
     ],
   },
-  {
-    label: "经营分析 · 业务管理",
-    items: [["chart", "经营概览", "/operations"]],
-  },
 ] as const;
+
+const legacyCompatGroup = {
+  label: "旧路由兼容入口",
+  items: [
+    ["upload", "数据接入", "/data"],
+    ["dashboard", "经营总览", "/"],
+    ["analysis", "分析与归因", "/investigations"],
+    ["report", "四问工作台", "/analysis"],
+    ["report", "报告与导出", "/reports"],
+    ["chart", "报表分析", "/statements"],
+    ["library", "指标库", "/metric-library"],
+    ["chart", "经营概览", "/operations"],
+  ],
+} as const;
+
+const groups = [moduleGroups[0], legacyCompatGroup] as const;
 
 function isActiveItem(pathname: string | null, target: string): boolean {
   const current = pathname ?? "";
