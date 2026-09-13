@@ -2,8 +2,8 @@
 doc_id: FLOW-PLAN-POST-U8-BOUNDARY-001
 title: U8 后战略边界、事实合同与安全门禁实施计划
 doc_type: plan
-status: proposed
-version: 1.0
+status: active
+version: 1.1
 created_at: 2026-09-13
 updated_at: 2026-09-13
 owner: FLOW

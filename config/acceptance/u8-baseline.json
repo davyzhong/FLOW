@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "migration_head": "0024_operations_publication",
+  "critical_tables": {
+    "statement_report": 11,
+    "objective_report_snapshot": 12,
+    "metric_dictionary_entry": 65
+  },
+  "payload_hash_aggregate": "88ee9b8ae97bb7805a60b4641ebf4f273e92f3cfe316bd6275cbe5c73d7b2412"
+}

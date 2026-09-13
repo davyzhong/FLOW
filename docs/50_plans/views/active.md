@@ -5,16 +5,15 @@ doc_type: generated
 status: generated
 version: 1.0
 created_at: 2026-09-12
-updated_at: 2026-09-12
+updated_at: 2026-09-13
 owner: FLOW
-generator_ref: manual-first-generation
-input_hash: pending-automation
+generator_ref: scripts/documentation/plan_views.py
+input_hash: c82aa09ab1cbfa88287c6527ed7de43d3f90cff60851bee5ee224720266189a5
 applies_to: planning
 ---
 
-# 活动工作包（视图）
+# 活动工作包
 
-> 首版手工生成；M5.2 起由 work_items 元数据自动生成，手改将失效。
+> 本页由工作包元数据确定性生成，请勿手工修改。
 
-- [U08 生产就绪收口](../work_items/U08--production-readiness.md)
-- [DOC-M5 历史整理](../../superpowers/plans/2026-09-12-static-knowledge-and-document-migration.md)（待批次批准）
+- [S01 U8 后战略边界、事实合同与安全门禁](../work_items/S01--post-u8-boundary-contract-security.md) — `active`

@@ -2,8 +2,8 @@
 doc_id: FLOW-WI-S01
 title: S01 U8 后战略边界、事实合同与安全门禁
 doc_type: work-item
-status: blocked
-version: 1.0
+status: active
+version: 1.1
 created_at: 2026-09-13
 updated_at: 2026-09-13
 owner: FLOW
@@ -17,7 +17,7 @@ superseded_by: null
 
 # S01 U8 后战略边界、事实合同与安全门禁
 
-- **当前状态**：blocked；等待 U8 完成并形成可恢复冻结点。
+- **当前状态**：active；U8 已完成并形成可恢复冻结点，当前领取项为三份实施子规格的编写与批准。
 - **范围**：三层两模块工程边界、Financial Facts Contract V2、企业/月度周期身份、RBAC、追加式审计、两模块入口与旧路由兼容。
 - **详细计划**：[2026-09-13-flow-post-u8-boundary-gate.md](../../superpowers/plans/2026-09-13-flow-post-u8-boundary-gate.md)。
 - **前置规格**：战略设计 V1.1 已 approved；模块边界、Facts V2、安全/RBAC/审计三份实施子规格须在代码任务前另行 approved。

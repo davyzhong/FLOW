@@ -1,4 +1,4 @@
-{"step":"journey_start","detail":"report_id":"01a09849-7840-74f6-9482-9a3082f5ad00"}
+{"step":"journey_start","detail":{"report_id":"01a09849-7840-74f6-9482-9a3082f5ad00"}}
 {"step":"objective_frozen","detail":{"snapshot_id":"01a09859-213e-77a8-bcd7-36e49715e2d6","payload_hash":"86bf337faa3045fe202c7bf8d84cad2cc8744148251f9831a9f89e7512ef18da"}}
 {"step":"operations_published","detail":{"snapshot_id":"01a0984c-6928-760f-8252-464d2e1f2397"}}
 {"step":"downloads","detail":"见 u8a_download_attempts.py 输出（checked=N sha_ok=N）"}

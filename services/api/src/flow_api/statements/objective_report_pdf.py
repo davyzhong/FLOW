@@ -92,6 +92,21 @@ def _footer_template(footer_left: str) -> str:
     )
 
 
+def _chromium_command(binary: Path, port: int, profile_dir: Path) -> list[str]:
+    command = [
+        str(binary),
+        "--headless=new",
+        "--disable-gpu",
+        "--no-first-run",
+        f"--remote-debugging-port={port}",
+        f"--user-data-dir={profile_dir}",
+        "about:blank",
+    ]
+    if os.environ.get("FLOW_CHROMIUM_NO_SANDBOX") == "1":
+        command.insert(1, "--no-sandbox")
+    return command
+
+
 async def _print_via_cdp(
     ws_url: str,
     page_url: str,
@@ -161,15 +176,7 @@ def print_pdf(
         port = _free_port()
         profile_dir = Path(tmp) / "chromium-profile"
         process = subprocess.Popen(
-            [
-                str(binary),
-                "--headless=new",
-                "--disable-gpu",
-                "--no-first-run",
-                f"--remote-debugging-port={port}",
-                f"--user-data-dir={profile_dir}",
-                "about:blank",
-            ],
+            _chromium_command(binary, port, profile_dir),
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
         )

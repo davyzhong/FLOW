@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "mode": "full",
+  "base_url": "https://localhost:3443",
+  "tls_verified": true,
+  "health_status": 200,
+  "web_status": 200,
+  "downloads": [
+    {
+      "expected_sha256": "0100ff77ba31e6a5f3c5be58b8cc5db8ecea736faba387b2a24f51e2be097981",
+      "actual_sha256": "0100ff77ba31e6a5f3c5be58b8cc5db8ecea736faba387b2a24f51e2be097981"
+    },
+    {
+      "expected_sha256": "1123bc27e41c2b12d633caaefe50c55a77c5310f5d21c896d4c33e5cd345bea2",
+      "actual_sha256": "1123bc27e41c2b12d633caaefe50c55a77c5310f5d21c896d4c33e5cd345bea2"
+    }
+  ],
+  "restore_exit_code": 0,
+  "critical_tables": {
+    "statement_report": {"before": 1, "after": 1},
+    "objective_report_snapshot": {"before": 2, "after": 2}
+  },
+  "expected_payload_hash": "cd1325f30a6ec4ecf3b9c6102b27f7e72ea8ce7aff9457132d6d8c7c3dc8886e",
+  "restored_payload_hash": "cd1325f30a6ec4ecf3b9c6102b27f7e72ea8ce7aff9457132d6d8c7c3dc8886e",
+  "skipped": []
+}

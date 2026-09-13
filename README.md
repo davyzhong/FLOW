@@ -42,7 +42,7 @@ applies_to: repository
 
 财务经营分析专员（经分专员）的月度工作通常横跨多份 Excel：业务量、收入与履约成本、财务实际、预算、应收和现金。FLOW 将这些文件转换为有版本、有质量检查、有血缘的数据，再由确定性引擎与 AI 角色协同完成标准扫描、调查、Finding 和双版本报告；经分专员一次终审后正式发布（[D052](docs/10_governance/decisions/D052--内部月度财务经营分析工作台成为核心产品.md)、[D054](docs/10_governance/decisions/D054--AI生产链与证据计算学习原则.md)）。
 
-项目长期方向是 Finance Intelligence OS。目标结构为**三层两模块**（[D053](docs/10_governance/decisions/D053--三层两模块边界与执行顺序.md)）：可见的专业治理底座 + 共享分析底座，支撑**企业内部分析工作台**（最终目标产品）与**公开财报分析模块**（先行成熟底座、独立入口与验收）。当前执行主线仍是 U8 生产就绪收口；U8 后按 [战略重构设计](docs/superpowers/specs/2026-09-13-flow-strategic-reset-design.md) 冻结版本并重构模块边界，旧 U9/U10 任务届时重新裁决。固定产品原则见 [PRODUCT_PRINCIPLES](docs/20_product/PRODUCT_PRINCIPLES.md)。
+项目长期方向是 Finance Intelligence OS。目标结构为**三层两模块**（[D053](docs/10_governance/decisions/D053--三层两模块边界与执行顺序.md)）：可见的专业治理底座 + 共享分析底座，支撑**企业内部分析工作台**（最终目标产品）与**公开财报分析模块**（先行成熟底座、独立入口与验收）。U8 已完成并冻结，当前执行主线为 S01 战略边界、Financial Facts Contract V2 与安全/RBAC/审计门禁；旧 U9/U10 任务重新裁决。固定产品原则见 [PRODUCT_PRINCIPLES](docs/20_product/PRODUCT_PRINCIPLES.md)。
 
 <details open>
 <summary><strong>六类工作问题 → 可复核的结果</strong></summary>
@@ -93,7 +93,7 @@ flowchart TB
 
 ## 🖥️ 界面导览
 
-当前浏览器入口：`/`（驾驶舱）、`/data`、`/investigations`、`/reports`、`/statements`、`/metric-library`、`/operations`、`/login`。现有页面仍按历史双轨结构（D045，已被 [D053](docs/10_governance/decisions/D053--三层两模块边界与执行顺序.md) 取代）组织：**「数据层」两轨共用**；**「财务分析」轨**（驾驶舱、归因、报告、报表分析、指标库）；**「经营分析」轨**（`/operations` 只读演示页）。全部功能页共享同一左侧工作流导航。主导航与工作流的大规模改造将在 U8 收口后的边界重构阶段按三层两模块目标结构进行。
+当前浏览器入口：`/`（驾驶舱）、`/data`、`/investigations`、`/reports`、`/statements`、`/metric-library`、`/operations`、`/login`。现有页面仍按历史双轨结构（D045，已被 [D053](docs/10_governance/decisions/D053--三层两模块边界与执行顺序.md) 取代）组织：**「数据层」两轨共用**；**「财务分析」轨**（驾驶舱、归因、报告、报表分析、指标库）；**「经营分析」轨**（`/operations` 只读演示页）。全部功能页共享同一左侧工作流导航。主导航与工作流的大规模改造由当前 S01 按三层两模块目标结构推进。
 
 ### 1. Finance BP 驾驶舱
 
@@ -193,7 +193,7 @@ flowchart TB
 
 ## 📍 当前进度
 
-执行入口以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为唯一权威（M4 起生效；[统一执行计划 U1–U10](docs/superpowers/plans/2026-09-07-unified-next-plan.md) 保留任务细节与证据）。战略方向见 [战略重构设计](docs/superpowers/specs/2026-09-13-flow-strategic-reset-design.md)（D052–D054）：U8 收口后冻结版本并重构模块边界，U9/U10 不自动续跑。
+执行入口以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为唯一权威（[统一执行计划 U1–U10](docs/superpowers/plans/2026-09-07-unified-next-plan.md) 仅保留历史任务细节与证据）。战略方向见 [战略重构设计](docs/superpowers/specs/2026-09-13-flow-strategic-reset-design.md)（D052–D054）：U8 已冻结，当前执行 S01；旧 U9/U10 不自动续跑。
 
 | 阶段 | 任务 | 状态 |
 | --- | --- | --- |
@@ -203,7 +203,8 @@ flowchart TB
 | U1–U3 | 主题/比较合同、确定性拆解、同源证据与快照投影 | ✅ 已完成（U2 剩 2 项外部依赖登记中） |
 | U4 | 独立全行验证与留出泛化（依赖 oracle 人工录入） | ⬜ 外部到料即并行 |
 | U5–U7 | 客观报告门禁、统一冻结、四问工作台 | ✅ 已交付 |
-| **U8** | 生产就绪收口（真实存储旅程、HTTPS 拓扑、统一部署验收） | 🚧 active（U8-C 结构化日志 `088977b` 已交付） |
+| **U8** | 生产就绪收口（真实存储旅程、HTTPS 拓扑、统一部署验收） | ✅ completed；严格冻结门禁通过 |
+| **S01** | 战略边界、Financial Facts V2、安全/RBAC/审计门禁 | 🚧 active（当前：三份实施子规格） |
 | U9–U10 | 内部试点、V1.1 证据决策 | ⬜ 待授权，且 U8 后按 [D053](docs/10_governance/decisions/D053--三层两模块边界与执行顺序.md) 重新裁决 |
 
 已登记的确定性原语：CAGR（n−1 间隔）、可加和守恒桥（残差显式）、经验阈值提示（无普适判定）、口径标签值（登记制）、应收-收入增速联看提示。
@@ -221,7 +222,7 @@ flowchart TB
 | 驾驶舱与调查 | 多维浏览、身份交接、证据复核、四要素结论、审阅历史 | 演示数据通过不替代真实客户试点 |
 | Copilot | 上下文绑定、引用和数字校验、降级与持久审计 | 默认是离线 `DeterministicProvider`，尚无现成在线大模型适配器 |
 | 报告发布 | JSONB 冻结内容、版本幂等、独立尝试、下载头与字节校验 | API 默认没有 PDF 打印器；PPTX/XLSX/HTML 仍依赖可用对象存储 |
-| 认证 | 单用户密码、会话、服务端 Bearer 与同源代理 | 非多租户/角色权限/SSO；生产仍需 HTTPS 与部署加固 |
+| 认证 | 单用户密码、会话、服务端 Bearer、同源代理与 HTTPS 拓扑 | 非多租户/角色权限/SSO；生产部署需替换真实 CA，RBAC 在 S01 实施 |
 | 异步基础设施 | Celery、Redis、任务身份与 Worker 健康检查 | Worker 示例任务仅返回 accepted，核心业务未全面接入队列 |
 
 ## 🏗️ 系统架构
@@ -520,12 +521,12 @@ FLOW/
 flowchart LR
     A["Phase 1–10<br/>窄切片 ✅"] --> B["P5 真实财报反向解析<br/>顺丰 + 腾讯 ✅"]
     B --> C["客观分析主线<br/>U1–U7 ✅（U2 剩 2 项外部依赖）"]
-    C --> D["U8 生产就绪收口<br/>🚧 active"]
-    D --> E["边界重构（D053 阶段 1）<br/>⬜ gated"]
+    C --> D["U8 生产就绪收口<br/>✅ completed"]
+    D --> E["S01 边界与合同门禁<br/>🚧 active"]
     E --> F["公开模块 C 级出口 → 内部工作台<br/>→ 四级验证 ⬜"]
-    style D fill:#fff0cd,stroke:#aa7918,stroke-width:2px
+    style E fill:#fff0cd,stroke:#aa7918,stroke-width:2px
 ```
 
-下一阶段按 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 推进：当前主线 U8（生产就绪收口；U8-C 结构化日志已交付）；U1–U7 已交付，U2 剩两项外部依赖（JDL 唯一键契约决策待用户确认、rnd_exp 科目编号待准则原文）。U8 完成后的旧 U9/U10 将按 [D053](docs/10_governance/decisions/D053--三层两模块边界与执行顺序.md) 重新裁决。真实对象存储链路已于 2026-09-06 修复并验证（根因：boto3 拾取 macOS 系统代理导致请求挂起，详见[本轮记录](docs/implementation/2026-09-06-shell-metric-library-s3-proxy.md)）。批次构建编排已实现；内部真实数据另行授权试点；最小安全计划中的登录/API 认证已落地，不能据此把其余部署任务标为完成。
+下一阶段按 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 推进：U1–U8 已交付并冻结，当前主线为 S01 战略边界、Financial Facts Contract V2 与安全/RBAC/审计门禁；三份实施子规格 approved 前不进入代码重构。U2 仍有外部核验项（rnd_exp 科目编号待准则原文）；旧 U9/O5、U10 按 [D053](docs/10_governance/decisions/D053--三层两模块边界与执行顺序.md) 重新裁决，内部真实数据仍需另行授权。
 
 本仓库尚未提供独立的 LICENSE 文件；使用与分发授权请向项目维护者确认。贡献与协作遵循 [AGENTS.md](AGENTS.md)：先读项目状态和正式决策，保护原始档案，按风险验证，每个完整任务只提交相关文件并推送规范远端。

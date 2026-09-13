@@ -21,6 +21,7 @@ sys.path.insert(0, str(ROOT))
 
 from scripts.documentation import inventory  # noqa: E402
 from scripts.documentation.metadata import check_repository  # noqa: E402
+from scripts.documentation.plan_views import check as check_plan_views  # noqa: E402
 
 PHASES = ("m1", "m2", "m6")
 
@@ -45,6 +46,17 @@ def _run_m0_baseline(root: Path, errors: list) -> None:
         return
     if code != 0:
         errors.append("M0 基线 --check 失败（checkpoint tree 不可重放）")
+
+
+def _run_plan_views(root: Path, errors: list) -> None:
+    try:
+        view_errors = check_plan_views(root)
+    except Exception as exc:  # noqa: BLE001 — 缺输入或解析异常都必须类型化失败
+        errors.append(f"plan views 校验异常（路线图或工作包输入不完整）: {exc}")
+        print("plan views: FAIL")
+        return
+    print(f"plan views: {'PASS' if not view_errors else 'FAIL'}")
+    errors.extend(view_errors)
 
 
 def _run_source_and_release(root: Path, errors: list) -> None:
@@ -84,6 +96,7 @@ def run_phase(root: Path, phase: str) -> int:
     errors: list = []
     _run_metadata(root, errors)
     _run_m0_baseline(root, errors)
+    _run_plan_views(root, errors)
     if phase in ("m2", "m6"):
         _run_source_and_release(root, errors)
     if phase == "m6":

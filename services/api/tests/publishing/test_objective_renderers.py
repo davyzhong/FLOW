@@ -38,6 +38,28 @@ REPO_ROOT = Path(__file__).resolve().parents[4]
 SF_YAML = REPO_ROOT / "docs/implementation/p5/sf_2026q1_statements.yaml"
 
 
+def test_chromium_no_sandbox_is_explicitly_container_scoped(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    from flow_api.statements.objective_report_pdf import _chromium_command
+
+    monkeypatch.delenv("FLOW_CHROMIUM_NO_SANDBOX", raising=False)
+    normal = _chromium_command(Path("/usr/bin/chromium"), 9222, tmp_path)
+    assert "--no-sandbox" not in normal
+    monkeypatch.setenv("FLOW_CHROMIUM_NO_SANDBOX", "1")
+    container = _chromium_command(Path("/usr/bin/chromium"), 9222, tmp_path)
+    assert "--no-sandbox" in container
+
+
+def test_pdf_footer_template_is_a_string() -> None:
+    from flow_api.statements.objective_report_pdf import _footer_template
+
+    footer = _footer_template("FLOW 验收")
+    assert isinstance(footer, str)
+    assert "FLOW 验收" in footer
+    assert "pageNumber" in footer
+
+
 @pytest.fixture(scope="module", autouse=True)
 def migrated_database() -> None:
     command.upgrade(Config("alembic.ini"), "head")

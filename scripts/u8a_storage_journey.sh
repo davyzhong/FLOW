@@ -8,6 +8,7 @@ set -euo pipefail
 API="${API:-http://localhost:8000}"
 REPORT_ID="${1:-}"
 OUT="${OUT:-docs/operations/u8a-journey-evidence.jsonl}"
+DOWNLOAD_SUMMARY="${U8_DOWNLOAD_SUMMARY:-work/u8-acceptance/downloads.json}"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 mkdir -p "$(dirname "$OUT")"
 : > "$OUT"
@@ -24,7 +25,7 @@ if [[ -z "$REPORT_ID" ]]; then
   exit 1
 fi
 say "U8-A 旅程开始 report_id=${REPORT_ID}"
-log "journey_start" "\"report_id\":\"$REPORT_ID\""
+log "journey_start" "{\"report_id\":\"$REPORT_ID\"}"
 
 # 2. 冻结客观快照（幂等）
 freeze=$(curl -sf -X POST "$API/api/v1/statements/$REPORT_ID/objective-snapshot")
@@ -43,16 +44,18 @@ log "operations_published" "{\"snapshot_id\":\"$PUB_SNAPSHOT\"}"
 
 # 4. 逐个下载并校验 SHA-256
 export PUB_SNAPSHOT API
-# 渲染异步进行：轮询等待任一尝试可下载（最长 60s）
+# 渲染异步进行：轮询等待全部尝试可下载（最长 60s）
 ATTEMPTS_JSON=""
 for _ in $(seq 1 30); do
   ATTEMPTS_JSON=$(curl -sf "$API/api/v1/operations/snapshots/$PUB_SNAPSHOT/attempts" || true)
-  READY=$(echo "$ATTEMPTS_JSON" | python3 -c "import json,sys; a=json.load(sys.stdin).get('attempts', []); print(sum(1 for x in a if x.get('download_available')))" 2>/dev/null || echo 0)
-  [[ "$READY" != "0" ]] && break
+  COUNTS=$(echo "$ATTEMPTS_JSON" | python3 -c "import json,sys; a=json.load(sys.stdin).get('attempts', []); print(len(a), sum(1 for x in a if x.get('download_available')))" 2>/dev/null || echo "0 0")
+  TOTAL=${COUNTS%% *}
+  READY=${COUNTS##* }
+  [[ "$TOTAL" != "0" && "$READY" == "$TOTAL" ]] && break
   sleep 2
 done
 printf '%s' "$ATTEMPTS_JSON" > /tmp/u8a_attempts.json
-python3 "$SCRIPT_DIR/u8a_download_attempts.py" /tmp/u8a_attempts.json
+python3 "$SCRIPT_DIR/u8a_download_attempts.py" /tmp/u8a_attempts.json "$DOWNLOAD_SUMMARY"
 log "downloads" "\"见 u8a_download_attempts.py 输出（checked=N sha_ok=N）\""
 
 # 5. 失败态：未知尝试（404）
@@ -61,6 +64,7 @@ code404=$(curl -s -o /dev/null -w "%{http_code}" \
   "$API/api/v1/publishing/attempts/$BAD_ID/download")
 say "失败态 未知尝试 HTTP ${code404}（期望 404）"
 log "failure_unknown_attempt" "{\"http\":$code404}"
+[[ "$code404" == "404" ]] || { say "FAIL: 未知尝试未返回 404"; exit 1; }
 
 # 6. 失败态：删 MinIO 对象后下载（409 missing_object）
 OBJECT_KEY=$(PG_CONTAINER=$(docker ps --format '{{.Names}}' | grep -m1 postgres)
@@ -76,8 +80,10 @@ if [[ -n "$OBJECT_KEY" && -n "$FIRST_ATTEMPT" ]]; then
     "$API/api/v1/publishing/attempts/$FIRST_ATTEMPT/download")
   say "失败态 对象缺失 HTTP ${code_missing}（期望 409）"
   log "failure_object_missing" "{\"http\":$code_missing,\"deleted_key\":\"$OBJECT_KEY\"}"
+  [[ "$code_missing" == "409" ]] || { say "FAIL: 对象缺失未返回 409"; exit 1; }
 else
-  say "（无可删对象，跳过对象缺失用例）"
+  say "FAIL: 无可删对象，不能跳过对象缺失用例"
+  exit 1
 fi
 
 say "U8-A 旅程结束，证据写入 $OUT"

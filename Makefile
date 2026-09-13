@@ -2,7 +2,7 @@ PNPM := npx --yes pnpm@10.17.1
 UV := uv
 COMPOSE := docker compose -f infra/compose.yaml
 
-.PHONY: docs-check bootstrap contracts contracts-check infra-up infra-down stack-up stack-down dev-api dev-web test-api test-web test lint typecheck phase-1-acceptance test-data-contract test-intake-e2e test-metrics-known-answers test-analysis-invariants test-dashboard test-investigation-e2e test-copilot-evals test-publishing-golden test-user-closure-e2e test-statements-e2e
+.PHONY: docs-check plan-views bootstrap contracts contracts-check infra-up infra-down stack-up stack-down dev-api dev-web test-api test-web test lint typecheck phase-1-acceptance test-data-contract test-intake-e2e test-metrics-known-answers test-analysis-invariants test-dashboard test-investigation-e2e test-copilot-evals test-publishing-golden test-user-closure-e2e test-statements-e2e
 
 bootstrap:
 	$(PNPM) install --frozen-lockfile
@@ -89,5 +89,9 @@ test-statements-e2e: infra-up
 
 docs-check:
 	python3 scripts/check_docs.py --phase m6
+
+plan-views:
+	python3 scripts/documentation/plan_views.py --write
+	python3 scripts/documentation/plan_views.py --check
 	python3 scripts/documentation/links.py --check
 	python3 -m unittest discover -s scripts/tests -p 'test_*.py'
