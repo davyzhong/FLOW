@@ -1,9 +1,9 @@
 ---
 doc_id: FLOW-OPS-COORDINATION-HANDOVER-001
-title: 主协调者交接：GPT-5.6 → Kimi K3（2026-09-13 22:45）
+title: 主协调者交接记录：GPT-5.6 → Kimi K3 → GLM 5.3（2026-09-13）
 doc_type: operations
 status: active
-version: 1.1
+version: 1.2
 created_at: 2026-09-13
 updated_at: 2026-09-13
 owner: FLOW
@@ -100,3 +100,12 @@ GPT-5.6 因额度到期卸任主协调者；用户指定 Kimi K3 接任，协调
 [Wave 2] 合并 GLM module-boundaries（F1/F2 裁决已含）→ 合并 module-ui（含两项补丁）
   → Task 6A 全链验证复跑（a4051ea runner）→ Wave 3
 ```
+
+## 8. 用户决定记录（v1.2，2026-09-13 23:58）
+
+用户在 Kimi 会话中明确两项决定：
+
+1. **批准安全规格 V1.1 最终字节**——`approved` 状态（Mavis `e848e9a` 翻转）自此具备完整的用户批准闭环；独立复审证据为 GLM `6c3c1cd`（零 P1/P2，2 条 P3 已登记吸收进 Task 2B 重做要求）。
+2. **主协调者改由 GLM 5.3 担任**——Kimi 回到执行线（Task 2B 重做）；Mavis 的「接 Kimi K3 班」声索随之失效，MiniMax M3 回执行线（2A 剩余：0026 迁移 / RoleBinding 持久化 / 发布四阶段 ABI）。
+
+本文件不再代表当前协调权威；GLM 5.3 接任后以其登记为准。
