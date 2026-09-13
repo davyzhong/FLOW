@@ -27,6 +27,7 @@ import {
   formatRaw,
   getSection,
   toYi,
+  yiScale,
 } from "./statement-view";
 import "./statements.css";
 
@@ -58,11 +59,14 @@ function StatementTable({
   const section = getSection(detail, statementType);
   if (!section) return null;
   const columns = columnLayout(section);
+  const scale = yiScale(detail.unit_note);
   return (
     <details className="stmt-section" open>
       <summary>
         {statementType}
-        <small>{section.items.length} 行 · 单位 {detail.unit_note}</small>
+        <small>
+          {section.items.length} 行 · 表中数值为亿元（披露单位 {detail.unit_note}，悬停查看精确原值）
+        </small>
       </summary>
       <div className="stmt-table-wrap">
         <table aria-label={statementType}>
@@ -82,7 +86,7 @@ function StatementTable({
                 <td>{line.item_name}</td>
                 {columns.map((column) => {
                   const exact = line[column.key];
-                  const numeric = toYi(exact);
+                  const numeric = toYi(exact, scale);
                   return (
                     <td key={column.key} className="is-num" title={exact ?? undefined}>
                       {numeric === null ? "" : formatRaw(numeric)}

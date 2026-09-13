@@ -3,7 +3,7 @@ doc_id: FLOW-DELIVERY-GLM-S01-CHECKLIST-001
 title: GLM 5.3 三 Agent 并行任务交付清单（S01 Task 0 部分 + Task 2C + 阻塞登记）
 doc_type: delivery
 status: verified
-version: 1.0
+version: 1.1
 created_at: 2026-09-13
 updated_at: 2026-09-13
 last_reviewed_at: 2026-09-13
@@ -15,7 +15,7 @@ supersedes: []
 superseded_by: null
 source_refs: [docs/superpowers/plans/2026-09-13-flow-three-agent-parallel-restructuring.md]
 related_code: [scripts/ci/verify_workflow_jobs.py, apps/web/components/modules/module-landing.tsx, scripts/test_module_boundaries_e2e.sh]
-commit_refs: [b8a3edd, 07d82f2]
+commit_refs: [b8a3edd, 07d82f2, 4a47917, 4beae65, a4051ea]
 evidence_refs: [docs/70_operations/three-agent-parallel-execution-runbook.md]
 confidentiality: project-internal
 ---
@@ -53,14 +53,31 @@ confidentiality: project-internal
 | 范围检查 | 零越界（提交文件 = 白名单逐项一致；未触碰 API client、生成契约、路线图、PROJECT_STATE、S01 状态、HANDOFF） |
 | 残余风险 | ①worktree 依赖经 pnpm 真实安装（2.4s store 硬链接），非符号链接；②E2E runner 仅启动 Next dev（静态 fixture 页面，无需 API/DB），与计划 Step 3「不调用 /api/v1/modules」一致 |
 
-## 二、阻塞登记（按计划波次门禁，非执行者可解）
+## 二、v1.1 追加（用户指令「三 Agent 并行各自完成，最后统一合并审计」）：Task 4 与 Task 6A 已交付
 
-| 任务 | 阻塞原因 | 解锁条件 | 解锁后动作 |
-|---|---|---|---|
-| Task 4（S01 Task 7 模块边界后端） | 需要 Task 6 关闭后的 integration 绿 SHA（Sol 2A 审计/0026 与 Kimi 2B 路由接线合并完成） | 主协调者完成 Task 3 合并序列并推送 task6 checkpoint | 从该 SHA 建 `codex/s01-module-boundaries`，按计划 TDD 交付 registry/ownership/AST 守护/`/api/v1/modules` + 契约重生成 |
-| Task 6A（S01 Task 9 全链验证） | 需要 Wave 2 绿色 SHA（Task 7+8 集成完成） | 主协调者完成 Task 5 集成并核验 | 从该 SHA 建 `codex/s01-full-verification`，交付独立验收 compose + `verify_s01_upgrade_from_u8.sh`（U8 dump 恢复→0026 升级→HTTPS 三方对账） |
+Task 4/6A 原按波次等待 task6/Wave2 检查点；按用户并行指令改从 Bootstrap base（b8a3edd）交付，base lineage 偏差已登记，合并顺序仍由主协调者按计划掌握（Sol 2A → Kimi 2B → Sol 发布 route 串行接线 → 本车道）。
 
-说明：Task 4/6A 的红灯测试可在解锁后立即编写；Task 4 的 ownership manifest 必须覆盖 Task 6 新增的 security 文件，提前编写会违反「不猜测接口」纪律（Sol 的 ABI 已冻结部分可预填，但不抢先提交）。
+### 3. Task 4：S01 Task 7 模块边界后端（done，ready-for-integration）
+
+| 项 | 值 |
+|---|---|
+| 分支 | `codex/s01-module-boundaries`（已推送；提交 `4a47917` + `4beae65`） |
+| base_sha | `b8a3edd`（Bootstrap；task6 SHA 未公布，偏差为本清单登记的授权并行交付） |
+| 新文件 | `modules/{shared_core,public_analysis,internal_workbench}/__init__.py`、`modules/registry.py`、`api/routes/modules.py`、`config/modules/ownership_v1.yaml`、`tests/architecture/test_module_imports.py`、`tests/api/test_module_boundaries.py` |
+| 修改 | `api/router.py`（注册 /modules）；契约从 FastAPI 重生成（openapi.json 含 `/api/v1/modules`，非手改） |
+| 红灯证据 | architecture 3 failed + api 端点 404 |
+| 绿色证据 | 模块/架构 7/7；tests/api 回归 80 passed；ruff/mypy 清；contracts-check PASS |
+| ownership | 覆盖 modules 全部文件恰好一次 + 按计划预登记 security 六文件（Sol=principal/authorization/audit/models、Kimi=route_policy），Task 6 合并后自动生效 |
+| 残余风险 | AST 守护当前只约束 modules 树；建议 Task 6 合并后把 security 纳入同一扫描（测试已留断言位） |
+
+### 4. Task 6A：S01 Task 9 全链技术验证（done，验证实跑 PASS）
+
+| 项 | 值 |
+|---|---|
+| 分支 | `codex/s01-full-verification`（已推送；提交 `a4051ea`） |
+| 新文件 | `infra/compose.s01-acceptance.yaml`（隔离验收栈：专用端口 55432/18000/13000/13443，redis/minio 不映射宿主端口）、`scripts/verify_s01_upgrade_from_u8.sh`、`scripts/tests/test_s01_upgrade_gate.py`（5 测试） |
+| 实跑证据 | U8 dump（SHA 1811ebb266625415…）→ 隔离卷恢复 11 份财报 → alembic upgrade head → HTTPS(13443) 健康检查 → `菜鸟网络 FY2023` 三方对账（HTTPS ↔ 恢复库 SQL ↔ 客观快照哈希；黄金值 77,799,675 千元）→ 清理销毁；证据 `work/s01-verification/` |
+| 说明 | runner 目标 `alembic upgrade head`，0026（Sol 审计迁移）落地后自动覆盖，无需改脚本 |
 
 ## 三、执行过程中的并发事件与处置
 
