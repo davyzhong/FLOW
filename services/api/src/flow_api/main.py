@@ -1,6 +1,8 @@
 import logging
+import sys
 import time
 from collections.abc import Awaitable, Callable
+from datetime import datetime
 from uuid import uuid4
 
 from fastapi import FastAPI, Request, Response, status
@@ -14,12 +16,98 @@ from flow_api.infrastructure.logging import (
     configure_logging,
     log_event,
 )
+from flow_api.settings import get_settings
 
 configure_logging()
 logger = logging.getLogger("flow.api")
 
 
+def _validate_security_startup() -> None:
+    """S01 §3.1 / §3.2 / §8.2 启动 fail-fast 校验。
+
+    校验项：
+    - 旧 Bearer 截止时间可解析且未过期（过期则配置无效，启动失败）
+    - identity bindings JSON 可解析且 token_sha256 不重复（生产环境必须）
+    - audit retention days 在 [365, 36500] 范围内
+
+    development 模式：identity bindings 留空时仅允许 flow_dev_actor_id 单点回退。
+    """
+    settings = get_settings()
+    # §3.2 旧 Bearer 截止
+    try:
+        cutoff = datetime.fromisoformat(settings.flow_legacy_bearer_cutoff)
+    except ValueError as error:
+        print(
+            f"[security] FATAL: flow_legacy_bearer_cutoff 不可解析: {error}",
+            file=sys.stderr,
+        )
+        raise SystemExit(2) from error
+    now = datetime.now(tz=cutoff.tzinfo)
+    if now > cutoff:
+        print(
+            f"[security] FATAL: 旧 Bearer 截止 {cutoff.isoformat()} 已过（§3.2 启动 fail-fast）",
+            file=sys.stderr,
+        )
+        raise SystemExit(2)
+    # §3.1 identity bindings（生产环境必须）
+    if settings.flow_env != "development":
+        if not settings.flow_identity_bindings_json:
+            print(
+                "[security] FATAL: flow_identity_bindings_json 未配置（非 development 环境必须）",
+                file=sys.stderr,
+            )
+            raise SystemExit(2)
+        try:
+            from flow_api.api.auth import _load_identity_bindings
+
+            _load_identity_bindings(_SettingsLikeProxy(settings))  # type: ignore[arg-type]
+        except Exception as error:
+            print(
+                f"[security] FATAL: flow_identity_bindings_json 解析失败: {error}",
+                file=sys.stderr,
+            )
+            raise SystemExit(2) from error
+    # §8.2 retention range
+    if not (365 <= settings.flow_audit_retention_days <= 36500):
+        print(
+            f"[security] FATAL: flow_audit_retention_days={settings.flow_audit_retention_days} "
+            "不在 [365, 36500] 范围（§8.2）",
+            file=sys.stderr,
+        )
+        raise SystemExit(2)
+
+
+class _SettingsLikeProxy:
+    """最小代理，仅暴露 _load_identity_bindings 需要的字段。"""
+
+    def __init__(self, settings: object) -> None:
+        self._settings = settings
+
+    @property
+    def auth_token(self) -> str | None:
+        return getattr(self._settings, "auth_token", None)
+
+    @property
+    def flow_env(self) -> str:
+        return getattr(self._settings, "flow_env", "production")
+
+    @property
+    def flow_identity_bindings_json(self) -> str | None:
+        return getattr(self._settings, "flow_identity_bindings_json", None)
+
+    @property
+    def flow_dev_actor_id(self) -> str | None:
+        return getattr(self._settings, "flow_dev_actor_id", None)
+
+    @property
+    def flow_legacy_bearer_cutoff(self) -> str:
+        return getattr(
+            self._settings, "flow_legacy_bearer_cutoff", "2026-10-31T15:59:59+00:00"
+        )
+
+
 def create_app() -> FastAPI:
+    _validate_security_startup()
     app = FastAPI(title="FLOW API", version="0.1.0")
 
     @app.middleware("http")
