@@ -59,6 +59,60 @@ class ObjectStore:
             raise ValueError("sha256 must be 64 lowercase hexadecimal characters")
         return f"raw/{sha256[:2]}/{sha256}"
 
+    def write_if_absent(
+        self,
+        *,
+        object_key: str,
+        content: bytes,
+        content_type: str,
+        content_sha256: str,
+    ) -> tuple[str, bool]:
+        """§7.1 显式 write_if_absent Protocol。
+
+        返回 (sha256, created)。`created=True` 表示本次写入了；`False` 表示已存在
+        且字节级一致。content_sha256 与实际内容字节必须一致，否则抛
+        ImmutableObjectConflictError。
+        """
+        if not isinstance(content, (bytes, bytearray)):
+            raise TypeError("content must be bytes")
+        actual_sha256 = hashlib.sha256(content).hexdigest()
+        if actual_sha256 != content_sha256:
+            raise ValueError(
+                f"content_sha256 mismatch: declared {content_sha256} but actual {actual_sha256}"
+            )
+        if not SHA256_PATTERN.fullmatch(content_sha256):
+            raise ValueError("content_sha256 must be 64 lowercase hexadecimal characters")
+        try:
+            self._client.head_object(Bucket=self._bucket, Key=object_key)
+        except ClientError as error:
+            status = error.response.get("ResponseMetadata", {}).get("HTTPStatusCode")
+            if status != 404:
+                raise
+            self._client.put_object(
+                Bucket=self._bucket,
+                Key=object_key,
+                Body=content,
+                ContentType=content_type,
+                Metadata={"sha256": content_sha256},
+            )
+            return (content_sha256, True)
+        # 已存在：与新内容字节级一致
+        head = self._client.head_object(Bucket=self._bucket, Key=object_key)
+        if head.get("ContentLength") != len(content) or head.get("Metadata", {}).get(
+            "sha256"
+        ) != content_sha256:
+            raise ImmutableObjectConflictError(
+                f"existing object {object_key} conflicts with content {content_sha256}"
+            )
+        existing = bytes(
+            self._client.get_object(Bucket=self._bucket, Key=object_key)["Body"].read()
+        )
+        if hashlib.sha256(existing).hexdigest() != content_sha256:
+            raise ImmutableObjectConflictError(
+                f"existing object {object_key} bytes conflict with content {content_sha256}"
+            )
+        return (content_sha256, False)
+
     def read_by_sha(self, sha256: str) -> bytes:
         object_key = self.object_key_for_sha(sha256)
         try:
