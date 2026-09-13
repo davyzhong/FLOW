@@ -1,6 +1,7 @@
 method	path	actual_side_effect	action	resource_loader	owner	exemption_reason
 GET	/api/v1/health	process_health_read	system.health.read	load_public_health	route-policy	anonymous_public_health
 GET	/api/v1/workspace	static_workspace_metadata_read	workspace.metadata.read	load_public_workspace_metadata	route-policy	read_only_static_metadata_no_business_data
+GET	/api/v1/modules	static_module_catalog_read	-	load_public_module_catalog	module-boundaries	read_only_static_module_catalog_fixture_no_business_data
 GET	/api/v1/intake/templates/{template_id}	static_template_file_read	intake.template.read	load_public_intake_template	route-policy	read_only_governed_empty_template
 POST	/api/v1/intake/batches	database_write:create_legacy_batch	intake.batch.create	blocked:create_schema_has_no_module_kind_analysis_cycle_or_owner	route-policy	-
 POST	/api/v1/intake/batches/{batch_id}/sources	object_store_write_and_database_write:source_registration	intake.source.upload	load_batch_scope_owner_or_deny_legacy	route-policy	-
