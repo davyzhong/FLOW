@@ -1,0 +1,20 @@
+# S01 需必需的 FLOW CI job 清单（Bootstrap checkpoint，v1）。
+# 核验器：scripts/ci/verify_workflow_jobs.py --phase bootstrap 使用本清单。
+# 新增 job 在未接入的 checkpoint 由阶段参数豁免；不得静默缺失。
+static-python
+integration
+intake-e2e
+analysis-invariants
+unit
+data-contract
+metrics-known-answers
+static-web
+migrations
+investigation-e2e
+dashboard
+publishing-golden
+user-closure-e2e
+copilot-evals
+contracts
+smoke
+module-boundaries-e2e
