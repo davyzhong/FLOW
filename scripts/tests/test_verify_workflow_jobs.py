@@ -1,16 +1,10 @@
-"""Task 0 Step 8（S01 编排）：FLOW CI 结果核验器的红灯测试。
-
-核验器契约（三 Agent 并行计划 Task 0 Step 8）：
-- 接收 run id 与 expected SHA；
-- 断言 workflow 名为 FLOW CI、head_sha 精确匹配、conclusion 为 success；
-- 清单（config/ci/required_jobs_s01.txt）中每个 job success 且无 skipped；
-- 阶段参数（bootstrap|task6|wave2|final）选择清单版本，未接入的 job 显式豁免。
-"""
+"""S01 FLOW CI 结果核验器的 fail-closed 契约测试。"""
 
 from __future__ import annotations
 
 import importlib.util
-import sys
+import io
+import json
 from pathlib import Path
 from unittest import mock
 
@@ -18,6 +12,8 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[2]
 MODULE_PATH = ROOT / "scripts/ci/verify_workflow_jobs.py"
+REQUIRED_JOBS_PATH = ROOT / "config/ci/required_jobs_s01.txt"
+WORKFLOW_PATH = ROOT / ".github/workflows/ci.yml"
 
 
 def _load_module():
@@ -27,75 +23,225 @@ def _load_module():
     return module
 
 
-def test_module_exists() -> None:
-    assert MODULE_PATH.is_file(), "核验器脚本必须存在"
+class _Response(io.BytesIO):
+    def __init__(self, payload: dict):
+        super().__init__(json.dumps(payload).encode("utf-8"))
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *args):
+        self.close()
 
 
-def test_required_jobs_file_lists_s01_jobs() -> None:
+def _success_run(*, jobs: list[dict], sha: str = "a" * 40) -> dict:
+    return {
+        "name": "FLOW CI",
+        "headSha": sha,
+        "status": "completed",
+        "conclusion": "success",
+        "jobs": jobs,
+    }
+
+
+def _success_job(name: str) -> dict:
+    return {"name": name, "status": "completed", "conclusion": "success"}
+
+
+def test_required_jobs_file_is_unique_and_lists_s01_jobs() -> None:
     module = _load_module()
-    jobs = module.load_required_jobs(ROOT / "config/ci/required_jobs_s01.txt")
+    jobs = module.load_required_jobs(REQUIRED_JOBS_PATH)
     assert "static-python" in jobs
     assert "module-boundaries-e2e" in jobs
     assert len(jobs) == 17
+    assert len(jobs) == len(set(jobs))
+
+
+def test_load_required_jobs_rejects_duplicates(tmp_path: Path) -> None:
+    module = _load_module()
+    path = tmp_path / "required.txt"
+    path.write_text("static-python\nstatic-python\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="重复"):
+        module.load_required_jobs(path)
+
+
+def test_fetch_run_uses_real_github_shapes_and_separate_endpoints() -> None:
+    module = _load_module()
+    responses = [
+        _Response({
+            "name": "FLOW CI",
+            "head_sha": "a" * 40,
+            "status": "completed",
+            "conclusion": "success",
+        }),
+        _Response({"total_count": 1, "jobs": [_success_job("static-python")]}),
+    ]
+
+    with mock.patch.object(module.urllib.request, "urlopen", side_effect=responses) as open_url:
+        run = module.fetch_run("123")
+
+    assert run == _success_run(jobs=[_success_job("static-python")])
+    urls = [call.args[0].full_url for call in open_url.call_args_list]
+    assert urls[0].endswith("/actions/runs/123")
+    assert urls[1].endswith("/actions/runs/123/jobs?per_page=100&page=1")
+
+
+def test_fetch_run_paginates_jobs() -> None:
+    module = _load_module()
+    first_page = [_success_job(f"job-{index}") for index in range(100)]
+    responses = [
+        _Response({
+            "name": "FLOW CI",
+            "head_sha": "a" * 40,
+            "status": "completed",
+            "conclusion": "success",
+        }),
+        _Response({"total_count": 101, "jobs": first_page}),
+        _Response({"total_count": 101, "jobs": [_success_job("job-100")]}),
+    ]
+
+    with mock.patch.object(module.urllib.request, "urlopen", side_effect=responses) as open_url:
+        run = module.fetch_run("456")
+
+    assert len(run["jobs"]) == 101
+    assert open_url.call_args_list[-1].args[0].full_url.endswith(
+        "/actions/runs/456/jobs?per_page=100&page=2"
+    )
+
+
+@pytest.mark.parametrize("variable", ["GH_TOKEN", "GITHUB_TOKEN"])
+def test_fetch_run_authenticates_with_supported_tokens(variable: str) -> None:
+    module = _load_module()
+    responses = [
+        _Response({
+            "name": "FLOW CI",
+            "head_sha": "a" * 40,
+            "status": "completed",
+            "conclusion": "success",
+        }),
+        _Response({"total_count": 0, "jobs": []}),
+    ]
+
+    with (
+        mock.patch.dict(module.os.environ, {variable: "secret-token"}, clear=True),
+        mock.patch.object(
+            module.urllib.request, "urlopen", side_effect=responses
+        ) as open_url,
+    ):
+        module.fetch_run("789")
+
+    for call in open_url.call_args_list:
+        assert call.args[0].get_header("Authorization") == "Bearer secret-token"
 
 
 def test_verify_accepts_matching_success_run() -> None:
     module = _load_module()
-    run = {
-        "name": "FLOW CI",
-        "headSha": "a" * 40,
-        "conclusion": "success",
-        "status": "completed",
-        "jobs": [
-            {"name": job, "conclusion": "success", "skipped": False}
-            for job in module.load_required_jobs(ROOT / "config/ci/required_jobs_s01.txt")
-        ],
-    }
-    errors = module.verify(run, expected_sha="a" * 40, jobs=None)
-    assert errors == []
+    required = module.load_required_jobs(REQUIRED_JOBS_PATH)
+    run = _success_run(jobs=[_success_job(job) for job in required])
+    assert module.verify(run, expected_sha="a" * 40, jobs=required, phase="final") == []
 
 
-def test_verify_rejects_sha_mismatch() -> None:
+@pytest.mark.parametrize("phase", ["bootstrap", "task6"])
+def test_early_phases_only_exempt_module_boundaries(phase: str) -> None:
     module = _load_module()
-    run = {"name": "FLOW CI", "headSha": "b" * 40, "conclusion": "success",
-           "status": "completed", "jobs": []}
-    errors = module.verify(run, expected_sha="a" * 40, jobs=[])
-    assert any("head_sha" in e for e in errors)
+    required = ["static-python", "module-boundaries-e2e"]
+    run = _success_run(jobs=[_success_job("static-python")])
+    assert module.verify(run, expected_sha="a" * 40, jobs=required, phase=phase) == []
 
 
-def test_verify_rejects_non_success_and_wrong_workflow() -> None:
+@pytest.mark.parametrize("phase", ["wave2", "final"])
+def test_late_phases_do_not_exempt_module_boundaries(phase: str) -> None:
     module = _load_module()
-    run = {"name": "Other CI", "headSha": "a" * 40, "conclusion": "failure",
-           "status": "completed", "jobs": []}
-    errors = module.verify(run, expected_sha="a" * 40, jobs=[])
-    assert any("workflow" in e for e in errors)
-    assert any("conclusion" in e for e in errors)
+    required = ["static-python", "module-boundaries-e2e"]
+    run = _success_run(jobs=[_success_job("static-python")])
+    errors = module.verify(run, expected_sha="a" * 40, jobs=required, phase=phase)
+    assert any("module-boundaries-e2e" in error and "缺失" in error for error in errors)
 
 
-def test_verify_rejects_missing_and_skipped_jobs() -> None:
+def test_verify_rejects_empty_non_exempt_set() -> None:
     module = _load_module()
-    run = {"name": "FLOW CI", "headSha": "a" * 40, "conclusion": "success",
-           "status": "completed",
-           "jobs": [{"name": "static-python", "conclusion": "success", "skipped": False},
-                    {"name": "unit", "conclusion": "success", "skipped": True}]}
-    errors = module.verify(run, expected_sha="a" * 40,
-                           jobs=["static-python", "unit", "smoke"])
-    assert any("smoke" in e for e in errors)
-    assert any("skipped" in e and "unit" in e for e in errors)
+    run = _success_run(jobs=[])
+    errors = module.verify(
+        run,
+        expected_sha="a" * 40,
+        jobs=["module-boundaries-e2e"],
+        phase="bootstrap",
+    )
+    assert any("非豁免" in error and "为空" in error for error in errors)
 
 
-def test_phase_exempts_not_yet_wired_jobs() -> None:
+def test_verify_rejects_duplicate_required_jobs() -> None:
     module = _load_module()
-    run = {"name": "FLOW CI", "headSha": "a" * 40, "conclusion": "success",
-           "status": "completed",
-           "jobs": [{"name": "static-python", "conclusion": "success", "skipped": False}]}
-    # bootstrap 阶段：清单中未接入的 job 显式豁免，不阻断
-    errors = module.verify(run, expected_sha="a" * 40,
-                           jobs=module.load_required_jobs(
-                               ROOT / "config/ci/required_jobs_s01.txt"),
-                           exempt={"module-boundaries-e2e"})
-    assert errors == []
+    run = _success_run(jobs=[_success_job("static-python")])
+    errors = module.verify(
+        run,
+        expected_sha="a" * 40,
+        jobs=["static-python", "static-python"],
+        phase="final",
+    )
+    assert any("重复" in error for error in errors)
 
 
-if __name__ == "__main__":
-    sys.exit(pytest.main([__file__, "-v"]))
+@pytest.mark.parametrize(
+    ("override", "expected_fragment"),
+    [
+        ({"name": "Other CI"}, "workflow"),
+        ({"headSha": "b" * 40}, "head_sha"),
+        ({"status": "in_progress"}, "未完成"),
+        ({"conclusion": "failure"}, "conclusion"),
+    ],
+)
+def test_verify_rejects_wrong_run_identity_or_result(
+    override: dict, expected_fragment: str
+) -> None:
+    module = _load_module()
+    run = _success_run(jobs=[_success_job("static-python")])
+    run.update(override)
+    errors = module.verify(
+        run, expected_sha="a" * 40, jobs=["static-python"], phase="final"
+    )
+    assert any(expected_fragment in error for error in errors)
+
+
+@pytest.mark.parametrize(
+    ("jobs", "expected_job", "expected_fragment"),
+    [
+        ([], "static-python", "缺失"),
+        ([{"name": "static-python", "status": "completed", "conclusion": "failure"}],
+         "static-python", "未成功"),
+        ([{"name": "static-python", "status": "completed", "conclusion": "skipped"}],
+         "static-python", "跳过"),
+    ],
+)
+def test_verify_rejects_missing_failed_and_skipped_jobs(
+    jobs: list[dict], expected_job: str, expected_fragment: str
+) -> None:
+    module = _load_module()
+    errors = module.verify(
+        _success_run(jobs=jobs),
+        expected_sha="a" * 40,
+        jobs=["static-python"],
+        phase="final",
+    )
+    assert any(expected_job in error and expected_fragment in error for error in errors)
+
+
+def test_cli_rejects_arbitrary_exemptions() -> None:
+    module = _load_module()
+    with pytest.raises(SystemExit) as exc_info:
+        module.main([
+            "--run-id", "123",
+            "--expected-sha", "a" * 40,
+            "--phase", "final",
+            "--exempt", "static-python",
+        ])
+    assert exc_info.value.code == 2
+
+
+def test_static_python_runs_this_pytest_in_locked_environment() -> None:
+    workflow = WORKFLOW_PATH.read_text(encoding="utf-8")
+    assert (
+        "cd services/api && uv run pytest "
+        "../../scripts/tests/test_verify_workflow_jobs.py -q"
+    ) in workflow
+    assert "unittest discover -s ../../scripts/tests" not in workflow
