@@ -3,7 +3,7 @@ doc_id: FLOW-PROD-BOUND-001
 title: 产品边界
 doc_type: product
 status: canonical
-version: 1.1
+version: 1.2
 created_at: 2026-09-12
 updated_at: 2026-09-13
 owner: FLOW
@@ -41,3 +41,10 @@ superseded_by: null
 12. **历史报告不漂移**：报告绑定签发时的规则版本，新配置不回写旧报告；修订采用追加版本和审阅事件。
 13. **数字同源**：不允许两套口径各自计算；共享底座承载唯一事实层。
 14. 经营侧主观归因在证据治理就绪前不得进入正式输出。
+
+## 发布、权限与合同边界
+
+15. **人工例外不能改事实**：关键事实错误、数字无法复算、重大对账不闭合，以及把高影响 hypothesis/unknown 写成正式结论，均不得通过人工 override 放行；例外只决定是否在完整披露未决项后发布。
+16. **发布与规则审批分权**：经分专员拥有唯一人工发布权；AI 无发布凭据；影响正式计算的规则变更不得由提议人自批；关键动作必须追加式审计。
+17. **内部事实合同先于内部工作台**：实施内部月报前必须发布向后兼容的 Financial Facts Contract V2（或等价扩展合同），明确 actual/budget/forecast、企业与分析周期、源工作簿定位及导入/映射/口径版本。
+18. **单一路线图**：`docs/50_plans/CURRENT_ROADMAP.md` 是唯一执行入口；模块 workstream/backlog 只能提供不可领取的范围视图，不得产生第二份任务状态真相。

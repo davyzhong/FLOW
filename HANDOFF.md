@@ -3,16 +3,16 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 战略重构讨论交接
 doc_type: navigation
 status: current
-version: 1.0
+version: 1.1
 created_at: 2026-09-12
-updated_at: 2026-09-12
+updated_at: 2026-09-13
 owner: FLOW
 applies_to: repository
 ---
 
 # FLOW 战略重构讨论交接｜2026-09-12
 
-> **状态更新（2026-09-13）**：本交接所述沉淀任务已完成——D052–D054 决策已创建并更新索引与接替关系（D002/D010/D045/D046 superseded，D039/D049/D050 amended），canonical 产品文档与 PRODUCT_PRINCIPLES 已更新，README/导航/状态/路线图已同步，独立规格审查两轮通过后设计稿 status 已转 approved。以下 §4/§5 保留为历史记录。
+> **状态更新（2026-09-13）**：本交接所述沉淀任务已完成——D052–D054 决策已创建并更新索引与接替关系（D002/D010/D045/D046 superseded，D039/D049/D050 amended），canonical 产品文档与 PRODUCT_PRINCIPLES 已更新，README/导航/状态/路线图已同步，战略设计 V1.1 经三轮独立规格审查后转为 approved。以下 §4/§5 保留为历史记录，不再表示当前待办。
 
 ## 1. 当前任务
 
@@ -84,7 +84,7 @@ applies_to: repository
 ### 2.6 两个产品模块与共享底座
 
 - **企业内部分析工作台**是最终目标产品。
-- **公开财报分析模块**作为独立产品模块保留在同一仓库，拥有独立入口、规格、路线图和验收，不再与内部工作台混成一条用户流程。
+- **公开财报分析模块**作为独立产品模块保留在同一仓库，拥有独立入口、规格、验收和模块 workstream/backlog 视图，不再与内部工作台混成一条用户流程；全仓仍只有一份可执行路线图。
 - 两者共享财务事实、指标、计算、证据、Finding 和报告发布底座。
 - 在内部工作台真实验证前，公开模块仍优先用于成熟共享底座。
 - 公开模块阶段出口为 C：自动完成公开材料接入、事实计算、Finding、交互式报告、人工复核、冻结和导出，报告接近可发布。
@@ -123,7 +123,7 @@ applies_to: repository
   3. 执行顺序、失败边界和验收体系。
 - 用户随后授权把全部结论写入关键文档、README、固定准则和原则。
 
-## 4. 尚未完成 / 当前卡点
+## 4. 历史记录：当时尚未完成 / 当前均已闭合
 
 - **尚未创建**正式战略重构设计文档。
 - **尚未新增**承载本轮决定的 D052+ 决策，也未更新旧决策的接替关系。
@@ -140,7 +140,7 @@ applies_to: repository
   - `scripts/tests/test_document_links.py`
 - 当前 HEAD（写交接前）为 `2f48df4`。文档迁移已推进至 M5.2；工作区和 HEAD 仍可能被并行任务推进，接续时必须重新盘点。
 
-## 5. 下一会话建议步骤
+## 5. 历史记录：当时的下一会话建议步骤
 
 1. 先读 `AGENTS.md`、`docs/knowledge-base/README.md`、`docs/knowledge-base/00_start_here/AGENT_START_HERE.md`、`docs/00_start_here/PROJECT_STATE.md` 和本文件。
 2. 检查 `git status --short` 与最新提交，等待或避开上述 M6 在途文件；不要暂存、覆盖或回退它们。

@@ -3,26 +3,26 @@ doc_id: FLOW-NAV-KB-README-001
 title: 知识库导航
 doc_type: navigation
 status: current
-version: 1.0
+version: 1.1
 created_at: 2026-09-12
-updated_at: 2026-09-12
+updated_at: 2026-09-13
 owner: FLOW
 applies_to: knowledge-base
 ---
 
-# FLOW 项目知识库｜2026-09-12
+# FLOW 项目知识库｜2026-09-13
 
 状态：当前索引。当前工程状态和下一步只维护在[PROJECT_STATE](00_start_here/PROJECT_STATE.md)；历史时间线已独立留档，不再与当前摘要并列争夺优先级。
 
 ## 阅读顺序
 
-1. [Agent 起点](00_start_here/AGENT_START_HERE.md)与[当前状态](00_start_here/PROJECT_STATE.md)。
-2. [D049 客观财务分析方向](../superpowers/specs/2026-09-06-objective-financial-analysis-direction.md)、[事实合同](../superpowers/specs/financial-facts-contract.md)。
-3. [决策日志](04_decisions/DECISION_LOG.md)、[变更影响图](04_decisions/CHANGE_IMPACT_MAP.md)。
-4. [下一阶段统一执行计划](../superpowers/plans/2026-09-07-unified-next-plan.md)：唯一 U 队列、Knowledge Gate，以及 U8 主线、U4 外部到料、U9/O5 授权试点、U10 证据决策的详细计划；旧 P/A–H 台账只作历史证据。
-5. [财经分析知识地图](02_research/2026-09-11-finance-knowledge-map.md)、[Obsidian 固定截面扫描评估](02_research/synthesis/2026-09-12-obsidian-internal-kb-assessment.md)与[累计参考订正总册](02_research/synthesis/2026-09-07-reference-and-improvement-master.md)：研究与候选来源，不自动批准功能。
+1. [Agent 兼容入口](00_start_here/AGENT_START_HERE.md)跳转到唯一[当前状态](../00_start_here/PROJECT_STATE.md)与[最短阅读顺序](../00_start_here/READING_ORDER.md)。
+2. [当前路线图](../50_plans/CURRENT_ROADMAP.md)是唯一执行入口；历史统一 U 计划和其他旧计划只保留任务细节与证据。
+3. [战略重构设计 V1.1](../superpowers/specs/2026-09-13-flow-strategic-reset-design.md)、[固定产品原则](../20_product/PRODUCT_PRINCIPLES.md)与[决策索引 D001–D054](../10_governance/DECISION_INDEX.md)定义当前产品方向和裁决。
+4. [现行事实合同 V1](../superpowers/specs/financial-facts-contract.md)约束当前实现；内部工作台所需 Financial Facts Contract V2 是 U8 后前置规格，不得把目标字段误称为已实现。
+5. [财经分析知识地图](02_research/2026-09-11-finance-knowledge-map.md)、[Obsidian 固定截面扫描评估](02_research/synthesis/2026-09-12-obsidian-internal-kb-assessment.md)与[累计参考订正总册](02_research/synthesis/2026-09-07-reference-and-improvement-master.md)是静态素材与方法来源，不自动批准功能或成为企业事实。
 
-当前迁移至 `0024_operations_publication`；U1–U3、U5–U7 与 O1–O4 已完成。下一阶段先收口 U8 运行保障；U4 等独立 oracle 到料可并行；U9/O5 等内部数据授权与 U8 收口；U10 再以四方证据决定 V1.1，不从旧 Phase 重开。每个后续任务必须按 D051 默认引用 `obsidian-2026-09-12T15:46+08:00` 并完成知识取用门禁；只有显式知识库维护才建新截面。当前 CI 和在途工作见状态页。
+当前迁移头为 `0024_operations_publication`；U1–U3、U5–U7 与 O1–O4 已完成，U8 仍是当前主线，U4 等独立 oracle 到料可并行。U8 后依次经过边界重构、Facts V2 与安全/权限门禁、公开模块 C 级量化出口、内部工作台和真实企业验证；旧 U9/O5、U10 必须重新裁决，不自动续跑。每个后续任务按 D051 默认引用静态知识发布 `flow-knowledge-2026-09-12.1`；只有显式知识库维护才建立新截面。当前 CI 和在途工作见状态页。
 
 ## 分类导航
 

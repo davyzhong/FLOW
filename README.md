@@ -1,3 +1,15 @@
+---
+doc_id: FLOW-NAV-ROOT-README-001
+title: FLOW repository README
+doc_type: navigation
+status: current
+version: 1.0
+created_at: 2026-08-29
+updated_at: 2026-09-13
+owner: FLOW
+applies_to: repository
+---
+
 <div align="center">
 
 # 💧 FLOW

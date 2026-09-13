@@ -3,7 +3,7 @@ doc_id: FLOW-PROD-CAPMAP-001
 title: 能力地图
 doc_type: product
 status: canonical
-version: 1.1
+version: 1.2
 created_at: 2026-09-12
 updated_at: 2026-09-13
 owner: FLOW
@@ -36,9 +36,13 @@ superseded_by: null
 - AI 报告生产链：分析型 AI → CFO 角色 AI → 经分专员终审（D054）
 - 可见专业治理：规则来源/版本/使用位置的外显查看与企业级配置版本化
 - 公开财报模块 C 级出口：多级公开证据分级、自动 Finding、双 AI 角色、例外终审
+- Financial Facts Contract V2：actual/budget/forecast、企业/分析周期、源工作簿定位和导入/映射/口径版本；内部工作台实施前置门禁
+- 安全/权限子规格：角色×对象×动作、跨角色拒绝、规则审批分权、AI 无发布权限、模型输入和审计日志治理
 - actual_vs_budget 预算比较（需内部版本事实；FIN-COMPARE 转换链示例）
 - 多维盈利守恒、窄主题分析包、一报一会闭环（原 U9/O5 范围，U8 后按 D053 重新裁决）
 - 独立全行 oracle 验证（U4，待外部到料）
+
+designed 能力的阶段完成不得仅凭功能存在判断；公开模块 C 级出口和真实企业验证分别执行战略重构设计 §14.1/§14.2 的量化协议。
 
 ## external-dependency
 

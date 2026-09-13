@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 1.0
+version: 1.1
 created_at: 2026-09-12
 updated_at: 2026-09-13
 owner: FLOW
@@ -12,9 +12,9 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-截至 `e373e25`（2026-09-13）：数据库迁移头 `0024_operations_publication`；产品主线 **U8 进行中**——U8-C 结构化日志已由 `088977b` 交付，剩余真实存储完整旅程、HTTPS 部署拓扑与统一部署验收。
+截至 2026-09-13 文档基线（战略同步证据 `a708bd5`）：数据库迁移头 `0024_operations_publication`；产品主线 **U8 进行中**——U8-C 结构化日志已由 `088977b` 交付，剩余真实存储完整旅程、HTTPS 部署拓扑与统一部署验收。
 
-**战略方向（2026-09-13 已批准）**：D052–D054 + [战略重构设计](../superpowers/specs/2026-09-13-flow-strategic-reset-design.md)生效——企业内部月度财务经营分析工作台为最终产品，公开财报为独立模块（三层两模块）；固定原则见 [PRODUCT_PRINCIPLES](../20_product/PRODUCT_PRINCIPLES.md)。这是目标态定义：不改变当前执行入口，U8 仍 active，U8 后路线按 D053 重新裁决（旧 U9/U10 不自动续跑）。
+**战略方向（2026-09-13 已批准）**：D052–D054 + 经三轮独立规格审查通过的[战略重构设计 V1.1](../superpowers/specs/2026-09-13-flow-strategic-reset-design.md)生效——企业内部月度财务经营分析工作台为最终产品，公开财报为独立模块（三层两模块）；固定原则见 [PRODUCT_PRINCIPLES](../20_product/PRODUCT_PRINCIPLES.md)。这是目标态定义：不改变当前执行入口，U8 仍 active，U8 后先完成 Financial Facts Contract V2、安全/权限子规格和模块边界门禁，旧 U9/U10 不自动续跑。
 
 ## 当前执行入口
 
@@ -26,9 +26,10 @@ applies_to: repository
 
 1. **U8（进行中）**：真实存储完整旅程、HTTPS 部署拓扑、统一部署验收；备份恢复已 done。
 2. **U4（外部到料即并行）**：独立会话录入 oracle，全行 diff 与留出泛化验收。
-3. **U9/O5（待授权 + 待按 D053 重新裁决）**：硬依赖内部数据授权 + U8 收口。
-4. **U10（硬依赖 U4+U8+U9/O5）**：V1.1 证据 go/hold/drop 决策；范围待按 D053 重新裁决。
-5. **战略边界重构门禁（U8 完成后、公开模块 C 级出口前）**：冻结 U8 版本，重构共享底座/公开模块/内部工作台边界与规格（D053 阶段 1）。
+3. **战略边界重构门禁（U8 完成后）**：冻结 U8 版本，重构共享底座/公开模块/内部工作台边界与规格，并先发布 Financial Facts Contract V2 与安全/权限子规格。
+4. **公开模块 C 级出口（门禁后）**：执行冻结样本、company-level holdout、可复算/可追源和独立盲评量化协议。
+5. **内部工作台与真实企业验证（C 级出口后）**：需内部数据授权；至少连续三个完整月度周期，与同输入人工基准逐周期比较。
+6. **旧 U9/O5、U10（待重新裁决）**：仅保留历史工作包身份，不按旧依赖链自动领取。
 
 ## 知识基线
 
