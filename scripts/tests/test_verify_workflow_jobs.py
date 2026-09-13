@@ -238,10 +238,13 @@ def test_cli_rejects_arbitrary_exemptions() -> None:
     assert exc_info.value.code == 2
 
 
-def test_static_python_runs_this_pytest_in_locked_environment() -> None:
+def test_static_python_preserves_governance_tests_and_runs_verifier_pytest() -> None:
     workflow = WORKFLOW_PATH.read_text(encoding="utf-8")
+    assert (
+        "cd services/api && uv run python -m unittest discover "
+        "-s ../../scripts/tests -t ../.. -v"
+    ) in workflow
     assert (
         "cd services/api && uv run pytest "
         "../../scripts/tests/test_verify_workflow_jobs.py -q"
     ) in workflow
-    assert "unittest discover -s ../../scripts/tests" not in workflow
