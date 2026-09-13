@@ -13,28 +13,28 @@ cd "$(dirname "${BASH_SOURCE[0]}")/.."
 
 echo "== 1/5 备份 =="
 mkdir -p "$BACKUP_DIR"
-docker compose -f infra/compose.yaml exec -T postgres \
+docker compose -p "${COMPOSE_PROJECT:-flow}" -f infra/compose.yaml exec -T postgres \
   pg_dump -U flow -Fc flow > "$BACKUP_FILE"
 SIZE=$(stat -f%z "$BACKUP_FILE" 2>/dev/null || stat -c%s "$BACKUP_FILE")
 echo "备份完成: $BACKUP_FILE ($SIZE bytes)"
 test "$SIZE" -gt 1000
 
 echo "== 2/5 记录恢复前基线 =="
-BEFORE_COUNT=$(docker compose -f infra/compose.yaml exec -T postgres \
+BEFORE_COUNT=$(docker compose -p "${COMPOSE_PROJECT:-flow}" -f infra/compose.yaml exec -T postgres \
   psql -U flow -d flow -tAc "SELECT count(*) FROM statement_report" 2>/dev/null || echo 0)
 echo "恢复前 statement_report 行数：$BEFORE_COUNT"
 
 echo "== 3/5 毁库 =="
-docker compose -f infra/compose.yaml exec -T postgres psql -U flow -d flow -c \
+docker compose -p "${COMPOSE_PROJECT:-flow}" -f infra/compose.yaml exec -T postgres psql -U flow -d flow -c \
   "DROP SCHEMA public CASCADE; CREATE SCHEMA public;" >/dev/null
 echo "schema 已清空"
 
 echo "== 4/5 从备份恢复 =="
-cat "$BACKUP_FILE" | docker compose -f infra/compose.yaml exec -T postgres \
+cat "$BACKUP_FILE" | docker compose -p "${COMPOSE_PROJECT:-flow}" -f infra/compose.yaml exec -T postgres \
   pg_restore -U flow -d flow --no-owner 2>&1 | grep -v 'already exists' || true
 
 echo "== 5/5 恢复后校验 =="
-AFTER_COUNT=$(docker compose -f infra/compose.yaml exec -T postgres \
+AFTER_COUNT=$(docker compose -p "${COMPOSE_PROJECT:-flow}" -f infra/compose.yaml exec -T postgres \
   psql -U flow -d flow -tAc "SELECT count(*) FROM statement_report")
 echo "恢复后 statement_report 行数：$AFTER_COUNT"
 if [[ "$BEFORE_COUNT" != "$AFTER_COUNT" ]]; then

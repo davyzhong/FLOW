@@ -43,7 +43,14 @@ log "operations_published" "{\"snapshot_id\":\"$PUB_SNAPSHOT\"}"
 
 # 4. 逐个下载并校验 SHA-256
 export PUB_SNAPSHOT API
-ATTEMPTS_JSON=$(curl -sf "$API/api/v1/operations/snapshots/$PUB_SNAPSHOT/attempts")
+# 渲染异步进行：轮询等待任一尝试可下载（最长 60s）
+ATTEMPTS_JSON=""
+for _ in $(seq 1 30); do
+  ATTEMPTS_JSON=$(curl -sf "$API/api/v1/operations/snapshots/$PUB_SNAPSHOT/attempts" || true)
+  READY=$(echo "$ATTEMPTS_JSON" | python3 -c "import json,sys; a=json.load(sys.stdin).get('attempts', []); print(sum(1 for x in a if x.get('download_available')))" 2>/dev/null || echo 0)
+  [[ "$READY" != "0" ]] && break
+  sleep 2
+done
 printf '%s' "$ATTEMPTS_JSON" > /tmp/u8a_attempts.json
 python3 "$SCRIPT_DIR/u8a_download_attempts.py" /tmp/u8a_attempts.json
 log "downloads" "\"见 u8a_download_attempts.py 输出（checked=N sha_ok=N）\""
@@ -56,7 +63,8 @@ say "失败态 未知尝试 HTTP ${code404}（期望 404）"
 log "failure_unknown_attempt" "{\"http\":$code404}"
 
 # 6. 失败态：删 MinIO 对象后下载（409 missing_object）
-OBJECT_KEY=$(docker exec flow-postgres-1 psql -U flow -d flow -t -A -c \
+OBJECT_KEY=$(PG_CONTAINER=$(docker ps --format '{{.Names}}' | grep -m1 postgres)
+docker exec "$PG_CONTAINER" psql -U flow -d flow -t -A -c \
   "SELECT so.object_key FROM stored_object so JOIN publication_attempt pa ON pa.stored_object_id = so.id WHERE (pa.report_snapshot_id = '$PUB_SNAPSHOT' OR pa.objective_report_snapshot_id = '$PUB_SNAPSHOT') AND pa.status='succeeded' AND pa.stored_object_id IS NOT NULL LIMIT 1" \
   | head -1)
 FIRST_ATTEMPT=$(echo "$ATTEMPTS_JSON" | python3 -c "import json,sys; a=[x for x in json.load(sys.stdin)['attempts'] if x.get('download_available')]; print(a[0]['attempt_id'] if a else '')")

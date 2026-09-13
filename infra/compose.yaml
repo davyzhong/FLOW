@@ -116,6 +116,21 @@ services:
     environment: *application-environment
     depends_on: *application-dependencies
 
+  nginx:
+    image: nginx:1.27-alpine
+    ports:
+      - "3443:443"
+      - "3080:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./nginx/dev-tls.crt:/etc/nginx/tls/dev-tls.crt:ro
+      - ./nginx/dev-tls.key:/etc/nginx/tls/dev-tls.key:ro
+    depends_on:
+      api:
+        condition: service_healthy
+      web:
+        condition: service_healthy
+
 volumes:
   flow-postgres:
   flow-minio:
