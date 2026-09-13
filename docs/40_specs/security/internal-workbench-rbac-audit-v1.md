@@ -40,7 +40,7 @@ S01 Task 6 必须同时交付：
 ```python
 from dataclasses import dataclass
 from enum import StrEnum
-from typing import Literal, Protocol
+from typing import Literal
 from uuid import UUID
 
 
@@ -222,7 +222,7 @@ RoleBinding 的冻结数据库字段为 `id UUID`、`actor_id str`、`role Role`
 - `enterprise` 表示企业内部数据、配置、知识上下文、对象、任务和审计；ResourceRef 必须带由数据库链解析出的 enterprise。
 - endpoint 若可处理 public/internal 两类对象，loader 必须按数据库 `module_kind` 分流；`legacy` 或断裂 lineage 返回 `RESOURCE_SCOPE_UNRESOLVED`，不得借 Principal enterprise 猜测。
 - service account 与其他角色执行相同 scope 比较，没有跨企业、平台级或“内部服务可信”例外。
-- 仅 `system.health.read` 和 `operations.public.read` 可显式 `allow_anonymous=True`；其他 public 动作仍需 Principal 和角色检查。
+- 仅 `system.health.read` 可显式 `allow_anonymous=True`。`public` 只描述数据 scope，不授予匿名访问；operations、statements、workbench 和其他 public 动作仍需 Principal 与角色检查。本规格不扩大任何现有匿名面。
 
 ### 4.2 精确判定顺序
 
@@ -346,6 +346,19 @@ class PublicationAttemptStatus(StrEnum):
     STORE_FAILED = "store_failed"
 
 
+class PublicationErrorCode(StrEnum):
+    NOT_FOUND = "publication_not_found"
+    SCOPE_CONFLICT = "publication_scope_conflict"
+    FREEZE_CONFLICT = "publication_freeze_conflict"
+    IDEMPOTENCY_CONFLICT = "publication_idempotency_conflict"
+    RENDER_FAILURE = "publication_render_failure"
+    OBJECT_STORE_FAILURE = "publication_object_store_failure"
+    INTEGRITY_FAILURE = "publication_integrity_failure"
+    INTENT_NOT_DURABLE = "publication_intent_not_durable"
+    OUTCOME_NOT_DURABLE = "publication_outcome_not_durable"
+    AUDIT_UNAVAILABLE = "audit_unavailable"
+
+
 @dataclass(frozen=True)
 class ModelBoundary:
     provider: str
@@ -371,7 +384,7 @@ class AuditContext:
 
 @dataclass(frozen=True)
 class PublicationRequest:
-    publication_id: UUID
+    publication_id: UUID | None
     idempotency_key: str
     resource_type: str
     resource_id: str
@@ -410,7 +423,7 @@ class ObjectOutcome:
     content_sha256: str | None
     size_bytes: int | None
     stored_object_id: UUID | None
-    error_type: str | None
+    error_type: PublicationErrorCode | None
     error_message: str | None
 
 
@@ -420,17 +433,12 @@ class ObjectBatchOutcome:
     outcomes: tuple[ObjectOutcome, ...]
 
 
-class PublicationFailureType(StrEnum):
-    RENDER = "render"
-    OBJECT_STORE = "object_store"
-    INTEGRITY = "integrity"
-
-
 @dataclass(frozen=True)
 class PublicationFailure:
-    failure_type: PublicationFailureType
+    error_code: PublicationErrorCode
     failed_attempt_ids: tuple[UUID, ...]
     retryable: bool
+    http_status: int
     message: str
 
 
@@ -450,7 +458,7 @@ class FinalizedPublication:
     outcomes: tuple[ObjectOutcome, ...]
 ```
 
-所有 tuple 不可为 `None`；formats 非空、无重复，并按枚举值排序。`ObjectOutcome.content_sha256` 是 render 后产物 hash；prepare 的 `source_payload_sha256` 是冻结输入 hash，不得混用。error_message 经 §8 脱敏并限 256 字符。
+所有 tuple 不可为 `None`；formats 非空、无重复，并按枚举值排序。`Idempotency-Key` 必须是 1–128 字节可打印 ASCII 且每次发布必填；初次请求 `publication_id=None`，prepare 生成 UUID7，重试必须传回原 id。`ObjectOutcome.content_sha256` 是 render 后产物 hash；prepare 的 `source_payload_sha256` 是冻结输入 hash，不得混用。error_message 经 §8 脱敏并限 256 字符。
 
 ### 7.2 精确签名和 Session 归属
 
@@ -511,7 +519,7 @@ prepare 和 finalize 只使用 route 传入的同一个业务 Session，只 flus
 
 1. **prepare intent**：验证冻结资源、batch formats、idempotency；每 format 写 PENDING attempt，追加 intent AuditEvent，flush。不得 render/写对象。
 2. **caller commit**：route 显式 commit 使 PENDING 与 intent durable；失败返回 503，且不得 render/object write。
-3. **execute object**：按 canonical formats 逐项 render → SHA-256/size/content type → immutable object write，形成 ObjectOutcome。render 也只能在 durable intent 后发生。
+3. **execute object**：按 canonical formats 逐项 render → SHA-256/size/content type → immutable object write，形成 ObjectOutcome。render 也只能在 durable intent 后发生。预期的 render/store/integrity 错误不得丢失 partial outcome：函数捕获后写入该 format 的失败 ObjectOutcome 并继续处理其余 format，最后正常返回完整 ObjectBatchOutcome。
 4. **finalize + caller commit**：全部 succeeded 调 `finalize_success`，任一失败调 `finalize_failure`；追加逐项 outcome 并 flush。仅全成功可置 published，route 再显式 commit；failure outcome durable 后才返回原失败。
 
 format 批次是 all-or-failed：部分对象成功可保留，但 publication 仍 `failed`。failure finalize commit 失败返回 503 `publication_outcome_not_durable` 并按 publication_id 对账，不得谎报已持久化。
@@ -526,7 +534,7 @@ format 批次是 all-or-failed：部分对象成功可保留，但 publication �
 
 ### 7.5 错误类型
 
-| exception | 条件 | HTTP / 持久化 |
+| error type | 条件 | HTTP / 持久化 |
 |---|---|---|
 | `PublicationNotFound` | 资源不存在 | 404；decision/error 审计 durable |
 | `PublicationScopeConflict` | scope/enterprise 不匹配 | 403；deny 审计 durable |
@@ -550,10 +558,10 @@ AuditEvent 至少含：`id UUID`、`event_type str`、`actor_id str|null`、`act
 
 ### 8.2 保留和 archive eligibility
 
-- 唯一配置 `FLOW_AUDIT_RETENTION_DAYS`；缺失默认 365，须十进制整数且 `>=365`。空串、浮点、负数、低于下限、溢出均在所有环境启动失败。
+- 唯一配置 `FLOW_AUDIT_RETENTION_DAYS`；缺失默认 365，须十进制整数且 `365 <= value <= 36500`。空串、浮点、负数、低于下限、超过上限或日期运算溢出均在所有环境启动失败。
 - 写入固定 `retention_class="security_default"`、`retain_until=created_at + retention_days`；配置变长只影响新增事件，既有不得缩短。
 - 不更新原事件。到期扫描仅追加 `audit.archive_eligibility_marked`，其 `resource_type="audit_event"`、`resource_id=<target id>`，metadata 含 `target_retain_until`、`policy_days`。
-- 机器谓词：目标 `retain_until <= trusted_now`、存在 committed eligibility marker、且不存在 legal-hold 事件，三项全满足才可被未来归档规格选择。S01 无物理归档/删除。
+- 机器谓词：目标 `retain_until <= trusted_now`、存在 committed eligibility marker，且按 `(created_at, id)` 排序后不存在未被更晚 `audit.legal_hold_released` 配对解除的 `audit.legal_hold_placed`；三项全满足才可被未来归档规格选择。S01 无物理归档/删除。
 
 ### 8.3 确定性 redact
 
@@ -594,12 +602,12 @@ LONG_NUMBER_RE = re.compile(r"(?<!\d)\d{8,}(?!\d)")
 
 原文件、单元格、完整 prompt/output、credential、PII 不得传入此函数；它是末端防线，不是记录许可。
 
-| input | exact `text` |
-|---|---|
-| `联系 a.b+flow@example.com，手机 13800138000` | `联系 [REDACTED_EMAIL]，手机 [REDACTED_PHONE]` |
-| `Authorization: Bearer abc.DEF-123_xyz` | `Authorization: [REDACTED_TOKEN]` |
-| `订单 12345678；短号 1234567` | `订单 [REDACTED_NUMBER]；短号 1234567` |
-| `e\u0301\r\nOK` | `é\nOK` |
+| input | exact `text` | `utf8_bytes` | `sha256` |
+|---|---|---:|---|
+| `联系 a.b+flow@example.com，手机 13800138000` | `联系 [REDACTED_EMAIL]，手机 [REDACTED_PHONE]` | 49 | `d33073982144f9c0c18dadf5cfbc19ab7a75511eac24b84aab7d0d0a746c5f92` |
+| `Authorization: Bearer abc.DEF-123_xyz` | `[REDACTED_TOKEN]` | 16 | `265aaf89fab192cf70170814678ffcedc2476f24fda97f424e23f1c89db9cc33` |
+| `订单 12345678；短号 1234567` | `订单 [REDACTED_NUMBER]；短号 1234567` | 41 | `f542c8590be85e8d0de33f0e36375f4d78b664b028cb7276edaa6823bd1e09b9` |
+| `e\u0301\r\nOK` | `é\nOK` | 5 | `fa7c7668f78837dc314ad2892e64778f8b43b7521910104f85bb8455f6588b24` |
 
 还须测试 257 个汉字截为 256、非法类型 fail-closed，以及各输出精确 byte count/SHA-256。
 
