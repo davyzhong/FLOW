@@ -1,3 +1,25 @@
+---
+doc_id: FLOW-DELIVERY-U8D-ACCEPT-001
+title: U8-D 干净环境部署验收记录
+doc_type: delivery
+status: verified
+version: 1.0
+created_at: 2026-09-13
+updated_at: 2026-09-13
+last_reviewed_at: 2026-09-13
+owner: FLOW
+applies_to: deployment
+knowledge_release: pre-static-obsidian-2026-09-12T15:46+08:00
+decision_refs: [D049, D051]
+supersedes: []
+superseded_by: null
+source_refs: [docs/superpowers/plans/2026-09-07-unified-next-plan.md]
+related_code: [scripts/u8d_acceptance.sh, scripts/u8a_storage_journey.sh, scripts/backup_restore_drill.sh]
+commit_refs: [b3b2c22, d965cf6]
+evidence_refs: [docs/operations/u8a-journey-evidence.jsonl]
+confidentiality: project-internal
+---
+
 # U8-D 干净环境部署验收记录
 
 - 时间：2026-09-13 09:31:24 +0800
