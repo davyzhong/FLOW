@@ -14,112 +14,649 @@ applies_to: services/api
 
 # 内部工作台 RBAC 与追加式审计规格 V1
 
-- 依据：战略重构设计 V1.1 §4（用户与责任）、§4.1（权限与审计最低合同）、§11（部署、安全和模型边界）；产品原则；S01 计划 Task 6。
-- 目标：deny-by-default 授权、企业级隔离、追加式审计，作为内部工作台及全部敏感入口的上线前置门禁。
+- 依据：战略重构设计 V1.1 §4、§4.1、§11；产品原则；S01 Task 6。
+- 目标：deny-by-default 授权、企业隔离、不可伪造身份、追加式审计，以及发布对象副作用的可恢复事务边界。
+- 状态纪律：本文保持 `review`，直到本轮独立审查清零且用户再次批准最终字节；既有批准不自动覆盖本次合同收紧。
+- 路由权威清单：[`route-inventory-v1.tsv`](route-inventory-v1.tsv)。清单按最终 `api_router` 的实际挂载结果生成，路径名和 HTTP method 均不能替代实际副作用判断。
 
-## 1. 输入
+## 1. 范围与强制输出
 
-- 请求凭据（credential）：旧 Bearer token（兼容期内）、新身份配置；
-- 路由与动作清单：intake、investigations、metric_library、publishing、objective_reports、statements、operations、copilot、orchestration 中全部 freeze / publish / approve / review / mutate / model-call / build 入口；dashboard、workbench、workspace 等读取入口也必须登记只读豁免；
-- 角色集合与权限矩阵（§3、§4）；
-- 运行环境标识（development / 非 development）。
+S01 Task 6 必须同时交付：
 
-## 2. 输出
+1. 本文 §2 的不可变身份、动作、资源和判定类型；
+2. 纯函数 `authorize` 与集中 dependency `require_action`；
+3. credential → Principal 解析、数据库 RoleBinding 和 route policy；
+4. 迁移 `0026_security_audit`：RoleBinding、AuditEvent、追加式约束与索引；
+5. publishing 与 operations 共用的四阶段发布 ABI；
+6. 全挂载路由的机器可读 inventory、守护扫描和逐入口测试；
+7. 认证、允许、拒绝均在业务执行前完成独立、短事务、durable 的审计。
 
-- 纯函数 `authorize(principal, action, resource) -> allow / deny(reason)`；
-- 集中 FastAPI dependency `require_action(action, resource_loader)`；
-- credential→Principal 解析与路由→action/resource 映射（route_policy）；
-- 迁移 0026：角色绑定表与 AuditEvent 追加式存储（含拒 UPDATE/DELETE 的数据库 trigger）；
-- 逐入口端到端安全测试与审计事件断言。
+## 2. 冻结类型
 
-## 3. 对象
+### 2.1 Role、Principal、Action、ResourceRef、Decision
 
-| 对象 | 字段 | 说明 |
-|---|---|---|
-| Principal | `actor_id`、`role`、`enterprise_id`、`is_service_account` | 由 credential 解析；非 development 环境缺身份配置时**启动失败**；development 保留 development principal |
-| Role | 枚举 | `finance_bp` / `analyst`（经分专员）/ `rule_owner`（财务规则负责人）/ `ai_analyst` / `ai_cfo` / `service_account` |
-| AuditEvent | `event_type`、`actor/role`、`enterprise_id`、`resource`、`decision(allow/deny)`、`reason`、`correlation_id`、`model_boundary`（模型/用途/输入边界/输出）、`created_at` | 追加式；敏感输入只记哈希/摘要 |
+以下枚举值是 V1.1 的完整集合。实现可换用等价的 `StrEnum`/冻结 dataclass，但不得新增隐式角色、通配动作或 `superuser` 分支。
 
-### 3.1 凭据与 Principal 配置合同
+```python
+from dataclasses import dataclass
+from enum import StrEnum
+from typing import Literal, Protocol
+from uuid import UUID
 
-- 新身份配置使用 `FLOW_IDENTITY_BINDINGS_JSON`，值为对象数组；每项精确包含 `token_sha256`、`actor_id`、`role`、`enterprise_id`、`is_service_account`。配置与日志均不得保存原始 token；解析时对请求 token 计算 SHA-256 后做常量时间匹配。
-- 企业资源要求 Principal 与资源均有 `enterprise_id` 且完全相等；任一缺失均拒绝。`enterprise_id = null` 只适用于显式标为 `public` 的资源，不代表跨企业通配。
-- 旧 `FLOW_AUTH_TOKEN` 兼容映射为 `service_account`；企业范围必须由 `FLOW_LEGACY_ENTERPRISE_ID` 明确提供。非 development 环境配置旧 token 却未配置企业范围时启动失败。
-- correlation id 使用 `X-Correlation-ID`；只接受 1–128 字节可打印 ASCII，缺失时生成 UUID4，非法值返回 400；授权、审计和外部副作用使用同一值。
 
-### 3.2 发布与对象存储事务 ABI
+class Role(StrEnum):
+    FINANCE_BP = "finance_bp"
+    ANALYST = "analyst"
+    RULE_OWNER = "rule_owner"
+    AI_ANALYST = "ai_analyst"
+    AI_CFO = "ai_cfo"
+    SERVICE_ACCOUNT = "service_account"
 
-publishing 与 operations 两条发布链固定为以下四阶段，不允许 route 或 service 自创第二套时序：
 
-1. `prepare_intent(..., audit_context: AuditContext) -> PreparedPublication`：在调用方 Session 中写 PENDING 业务态与 audit intent，只 flush，不执行对象写、不 commit；
-2. 调用 route 显式 commit，使 intent durable；intent commit 失败时不得调用对象存储；
-3. `execute_object(prepared: PreparedPublication) -> ObjectOutcome`：只执行对象副作用，不改变正式 published 状态；
-4. `finalize_success(prepared, outcome, audit_context)` 或 `finalize_failure(prepared, error, audit_context)`：在调用方 Session 中追加 outcome；仅 success 可把业务态转为 published，随后由 route 显式 commit。failure outcome 必须可持久读取，原请求返回失败。
+class Action(StrEnum):
+    SYSTEM_HEALTH_READ = "system.health.read"
+    WORKSPACE_METADATA_READ = "workspace.metadata.read"
+    INTAKE_TEMPLATE_READ = "intake.template.read"
+    INTAKE_BATCH_CREATE = "intake.batch.create"
+    INTAKE_SOURCE_UPLOAD = "intake.source.upload"
+    INTAKE_SOURCE_PROFILE_READ = "intake.source.profile.read"
+    INTAKE_MAPPING_PROPOSE = "intake.mapping.propose"
+    INTAKE_MAPPING_CONFIRM = "intake.mapping.confirm"
+    INTAKE_MAPPING_OVERRIDE = "intake.mapping.override"
+    INTAKE_SOURCE_VALIDATE = "intake.source.validate"
+    INTAKE_ISSUE_ACKNOWLEDGE = "intake.issue.acknowledge"
+    INTAKE_IMPORT_PUBLISH = "intake.import.publish"
+    INTAKE_VERSION_READ = "intake.version.read"
+    INTAKE_CLEANING_SUMMARY_READ = "intake.cleaning_summary.read"
+    INTAKE_STANDARDIZED_WORKBOOK_READ = "intake.standardized_workbook.read"
+    DASHBOARD_OVERVIEW_READ = "dashboard.overview.read"
+    INVESTIGATION_LIST = "investigation.list"
+    INVESTIGATION_READ = "investigation.read"
+    INVESTIGATION_EVIDENCE_DECIDE = "investigation.evidence.decide"
+    INVESTIGATION_CONCLUSION_WRITE = "investigation.conclusion.write"
+    INVESTIGATION_TRANSITION = "investigation.transition"
+    COPILOT_INVESTIGATION_ASK = "copilot.investigation.ask"
+    COPILOT_MAPPING_EXPLAIN = "copilot.mapping.explain"
+    COPILOT_REPORT_OUTLINE_GENERATE = "copilot.report_outline.generate"
+    PUBLISHING_REPORT_PUBLISH = "publishing.report.publish"
+    PUBLISHING_ATTEMPT_READ = "publishing.attempt.read"
+    PUBLISHING_SNAPSHOT_FREEZE = "publishing.snapshot.freeze"
+    PUBLISHING_CANDIDATE_READ = "publishing.candidate.read"
+    PUBLISHING_SNAPSHOT_READ = "publishing.snapshot.read"
+    PUBLISHING_ARTIFACT_DOWNLOAD = "publishing.artifact.download"
+    STATEMENT_SOURCE_UPLOAD = "statement.source.upload"
+    STATEMENT_SOURCE_READ = "statement.source.read"
+    STATEMENT_REPORT_READ = "statement.report.read"
+    STATEMENT_PROJECTION_READ = "statement.projection.read"
+    STATEMENT_CORRECTION_CREATE = "statement.correction.create"
+    STATEMENT_CORRECTION_READ = "statement.correction.read"
+    STATEMENT_REPORT_PUBLISH = "statement.report.publish"
+    METRIC_LIBRARY_READ = "metric_library.read"
+    METRIC_LIBRARY_IMPORT = "metric_library.import"
+    METRIC_LIBRARY_RETIRE = "metric_library.retire"
+    METRIC_CHANGE_PROPOSE = "metric.change.propose"
+    METRIC_CHANGE_ACTIVATE = "metric.change.activate"
+    METRIC_CHANGE_RETIRE = "metric.change.retire"
+    METRIC_EVENT_READ = "metric.event.read"
+    METRIC_IMPACT_ANALYZE = "metric.impact.analyze"
+    ORCHESTRATION_BUILD_START = "orchestration.build.start"
+    ORCHESTRATION_BUILD_READ = "orchestration.build.read"
+    OBJECTIVE_SNAPSHOT_READ_AND_FREEZE = "objective_snapshot.read_and_freeze"
+    OBJECTIVE_SNAPSHOT_FREEZE = "objective_snapshot.freeze"
+    OBJECTIVE_SNAPSHOT_RENDER_AND_FREEZE = "objective_snapshot.render_and_freeze"
+    WORKBENCH_REPORT_READ = "workbench.report.read"
+    OPERATIONS_PUBLIC_READ = "operations.public.read"
+    OPERATIONS_OVERVIEW_READ = "operations.overview.read"
+    OPERATIONS_SNAPSHOT_READ = "operations.snapshot.read"
+    OPERATIONS_REPORT_PUBLISH = "operations.report.publish"
+    OPERATIONS_ATTEMPT_READ = "operations.attempt.read"
+    OPERATIONS_SNAPSHOT_FREEZE = "operations.snapshot.freeze"
+    OPERATIONS_RENDER_AND_FREEZE = "operations.render_and_freeze"
 
-`AuditContext` 精确包含 `actor_id`、`role`、`enterprise_id`、`correlation_id`、`action`、`resource_type`、`resource_id`、`model_boundary`；`PreparedPublication` 至少包含稳定的 attempt/resource id、enterprise id、对象键、内容 SHA-256 和 intent event id。audit writer、publication service 与 object store 都不得自行 commit。S01 不引入通用 outbox。
 
-## 4. 权限矩阵（逐动作 allow/deny）
+ResourceScope = Literal["public", "enterprise"]
 
-| 动作 | finance_bp | analyst | rule_owner | ai_analyst | ai_cfo | service_account |
-|---|---|---|---|---|---|---|
-| 数据提交/补充 | allow（仅本人任务） | allow（企业范围） | deny | deny | deny | 仅工具调用最小范围 |
-| 查看本人任务退回原因 | allow | allow | deny | deny | deny | deny |
-| 企业配置提议/维护 | deny | allow | 审阅受控配置 | deny | deny | deny |
-| 正式规则提议 | deny | allow（不得自批本人变更） | allow | 仅 exploratory 候选 | deny | deny |
-| 正式规则审批/退回/停用 | deny | deny（本人发起时） | allow | deny | deny | deny |
-| Finding/证据调查、确认、驳回、例外 | deny | allow | 查看规则影响 | 生成候选 | 挑战/降级/冲突（不得提升证据等级） | deny |
-| 回答被指派的补证问题 | allow | allow | deny | deny | deny | deny |
-| 按任务读取最小必要输入/证据投影 | deny | allow | 按需只读 | allow（最小必要输入） | allow（专业版及证据投影） | allow（工具调用最小范围） |
-| 报告发布（唯一人工发布权） | deny | allow | deny（无默认发布权） | **deny（禁止）** | **deny（禁止）** | deny |
-| 跨企业访问 | deny | deny | deny | deny | deny | deny（默认拒绝，显式授权例外） |
 
-矩阵的硬规则：
+@dataclass(frozen=True)
+class Principal:
+    actor_id: str
+    role: Role
+    enterprise_id: UUID | None
+    is_service_account: bool
 
-1. **deny-by-default**：没有明确 allow 即拒绝；路由代码不得散落角色字符串，一律经 `require_action`；
-2. **规则不可自批**：rule 变更的提议者与审批者不得为同一 actor，无论角色；
-3. **AI 无发布权**：两个 AI 角色无任何发布/冻结凭据；
-4. **跨企业默认拒绝**：principal 的 enterprise_id 与资源不一致即 403。
 
-## 5. 不变量
+@dataclass(frozen=True)
+class ResourceRef:
+    scope: ResourceScope
+    resource_type: str
+    resource_id: str
+    enterprise_id: UUID | None
+    owner_actor_id: str | None
+    proposed_by_actor_id: str | None
 
-1. 所有敏感路由（freeze/publish/approve/review/mutate）必须在 route_policy 登记；OpenAPI/路由扫描守护测试发现未登记路由即失败；
-2. 审计日志追加式：数据库 trigger 拒绝 UPDATE/DELETE，直接 SQL 测试证明不可变；
-3. 至少记录：登录/授权变化、数据上传与哈希、映射确认、规则提议与审批、事实/证据修订、AI 模型与输入边界、工具调用、角色间冲突、人工 override、报告冻结与发布；
-4. 敏感输入只记哈希/摘要，审计日志不保存明文敏感内容；
-5. 旧 Bearer 在兼容期内可用但**不得绕过任一发布路径**；兼容期截止为 `2026-10-31T23:59:59+08:00`。超过该时间后，非 development 环境若仍仅配置旧 Bearer 必须启动失败；旧映射永远没有 freeze/publish/approve 权限；
-6. 企业数据、配置、知识上下文、对象存储与审计日志按企业隔离。
-7. 全挂载路由必须进入机器可读 inventory，记录 method、normalized path、实际副作用、action、resource loader、owner 或只读豁免理由；隐藏写 GET 按实际副作用保护。
 
-## 6. 失败行为
+class ReasonCode(StrEnum):
+    ALLOW = "allow"
+    AUTHENTICATION_REQUIRED = "authentication_required"
+    CREDENTIAL_INVALID = "credential_invalid"
+    LEGACY_TOKEN_EXPIRED = "legacy_token_expired"
+    INVALID_PRINCIPAL = "invalid_principal"
+    INVALID_RESOURCE = "invalid_resource"
+    ACTION_RESOURCE_MISMATCH = "action_resource_mismatch"
+    RESOURCE_SCOPE_UNRESOLVED = "resource_scope_unresolved"
+    ENTERPRISE_REQUIRED = "enterprise_required"
+    CROSS_ENTERPRISE = "cross_enterprise"
+    ROLE_FORBIDDEN = "role_forbidden"
+    OWNER_REQUIRED = "owner_required"
+    NOT_RESOURCE_OWNER = "not_resource_owner"
+    PROPOSER_REQUIRED = "proposer_required"
+    SELF_APPROVAL_FORBIDDEN = "self_approval_forbidden"
+    ROUTE_BLOCKED = "route_blocked"
+    AUDIT_UNAVAILABLE = "audit_unavailable"
 
-| 情况 | 必须行为 |
+
+@dataclass(frozen=True)
+class Decision:
+    allowed: bool
+    reason_code: ReasonCode
+```
+
+字段约束：
+
+- `actor_id` 为认证系统的稳定、非空主体 ID，不是显示名；大小写敏感。
+- `role == Role.SERVICE_ACCOUNT` 当且仅当 `is_service_account is True`；任何不一致 Principal 无效。
+- 人类和 AI 角色的 `is_service_account` 必须为 `False`；服务账号不得假扮 AI 或人类角色。
+- `scope == "enterprise"` 时 `enterprise_id` 必须非空，并由数据库资源链解析；不得从 request body、query 或 Principal 回填。
+- `scope == "public"` 时 `enterprise_id` 必须为空，且 `resource_type` 必须在 route policy 的显式 public 类型集合中。
+- `owner_actor_id` 只用于“本人任务/被指派任务”约束；需要 owner 却无法从数据库解析时拒绝。
+- `proposed_by_actor_id` 用于不可自批；审批动作缺该值必须拒绝，不能把“未知提议者”当作可审批。
+
+### 2.2 development principal 不是超级用户
+
+development 不得绕过 `authorize`。本地无 Bearer 的兼容入口仅在 `FLOW_ENV=development` 且显式配置 `FLOW_DEV_ACTOR_ID` 时存在：实现用该 actor 查询数据库中唯一 active RoleBinding 生成普通 Principal。缺 binding、binding 不唯一、enterprise 不一致均 401；不自动创建 binding，也没有 `allow_all`、跨企业、发布或审批例外。未配置 `FLOW_DEV_ACTOR_ID` 时，除显式匿名 public 路由外仍为 401。
+
+## 3. 身份配置与 RoleBinding 权威
+
+### 3.1 `FLOW_IDENTITY_BINDINGS_JSON`
+
+值必须是非空 JSON 数组；每项必须**恰好**包含 `token_sha256`、`actor_id`、`role`、`enterprise_id`、`is_service_account` 五字段，未知字段、缺字段、空数组和非数组均令服务启动失败。
+
+digest 唯一合法格式为：
+
+```python
+token_sha256 = hashlib.sha256(token.encode("utf-8")).hexdigest()
+```
+
+它必须匹配 `^[0-9a-f]{64}$`，不接受 `sha256:` 前缀、大写、base64、空白、对原始 header 的 hash 或二次 hash。请求端去掉 `Bearer ` scheme 后，对 token 的原始 UTF-8 字节计算一次 SHA-256，再使用 `hmac.compare_digest` 与配置 digest 比较；不得日志记录 token。
+
+启动校验按以下规则 fail-fast，所有环境相同：
+
+1. `token_sha256` 重复，拒绝；`actor_id` 重复，即使五字段相同也拒绝；
+2. 同一 actor 同时出现在新配置、legacy 映射或 development 配置且声明冲突，拒绝；
+3. `role=service_account` 与 `is_service_account=true` 必须同时成立，其他组合拒绝；
+4. 人类、AI、服务账号均必须有固定 `enterprise_id`，不存在跨企业 service account；
+5. 数据库是 role 和 enterprise 的唯一运行时权威：每个配置 actor 必须恰好匹配一条 active RoleBinding，且数据库的 `role`、`enterprise_id`、`is_service_account` 与配置声明完全相同，否则启动失败；配置声明只用于启动对账，不可覆盖数据库；
+6. 非 development 环境配置缺失或合法项为零时启动失败；数据库不可达、查询失败或重复 active binding 同样启动失败；
+7. 每次解析 Principal 都读取或使用有明确失效机制的 RoleBinding 缓存；binding 被撤销后不得继续使用无期限缓存。
+
+RoleBinding 的冻结数据库字段为 `id UUID`、`actor_id str`、`role Role`、`enterprise_id UUID`、`is_service_account bool`、`active bool`、`created_at timestamptz`、`revoked_at timestamptz|null`。数据库必须用 partial unique constraint 保证每个 `actor_id` 最多一条 `active=true`；`active=false` 必须有 `revoked_at`，active binding 的 `revoked_at` 必须为空。角色或企业变更采用“撤销旧行、追加新行”，不覆盖审计历史。
+
+### 3.2 旧 Bearer 的无条件截止
+
+- 兼容变量为 `FLOW_AUTH_TOKEN`，其 actor、企业固定为 `FLOW_LEGACY_ACTOR_ID`、`FLOW_LEGACY_ENTERPRISE_ID`，数据库必须存在完全匹配的 active `service_account` RoleBinding。
+- 截止瞬间为 `2026-10-31T23:59:59+08:00`（`2026-10-31T15:59:59Z`），仅当可信 UTC 时钟 `now <= cutoff` 时可解析。
+- 当 `now > cutoff` 时，所有环境无条件拒绝旧 token：配置了 `FLOW_AUTH_TOKEN` 则启动失败；请求携带该 token 仍返回 401 / `legacy_token_expired`。development、仅剩旧 token、binding active 均不是例外。
+- 截止前 legacy Principal 仍走完整 matrix，只拥有 service_account 的显式最小动作，永远没有 freeze/publish/approve 权限。
+
+### 3.3 请求体身份字段不可成为权威
+
+授权和审计中的 actor、role、enterprise 只能来自 Principal。request body/query/path 内名为 `actor`、`actor_id`、`operator`、`reviewer`、`approved_by`、`enterprise_id` 的字段不得进入 Principal、ResourceRef enterprise、Decision 或 AuditEvent actor 字段。
+
+新 schema 删除这些身份字段。兼容 schema 尚未删除时：相同值也仅忽略并向 service 传 `principal.actor_id`；与 Principal 冲突则在 allow 审计 durable 后返回 409 `actor_conflict`，另追加业务校验事件。任何情况下都不得把请求值写成审计 actor。资源 enterprise 只允许由数据库 lineage 或显式 public policy 得出。
+
+## 4. public / enterprise 语义和授权顺序
+
+### 4.1 scope 语义
+
+- `public` 表示不含企业私有数据的公开财报、公开经营披露、静态健康/模板/产品元数据；它不是“可跨企业读取”。public ResourceRef 必须 `enterprise_id=None`。
+- `enterprise` 表示企业内部数据、配置、知识上下文、对象、任务和审计；ResourceRef 必须带由数据库链解析出的 enterprise。
+- endpoint 若可处理 public/internal 两类对象，loader 必须按数据库 `module_kind` 分流；`legacy` 或断裂 lineage 返回 `RESOURCE_SCOPE_UNRESOLVED`，不得借 Principal enterprise 猜测。
+- service account 与其他角色执行相同 scope 比较，没有跨企业、平台级或“内部服务可信”例外。
+- 仅 `system.health.read` 和 `operations.public.read` 可显式 `allow_anonymous=True`；其他 public 动作仍需 Principal 和角色检查。
+
+### 4.2 精确判定顺序
+
+```python
+def authorize(principal: Principal, action: Action, resource: ResourceRef) -> Decision:
+    raise NotImplementedError
+```
+
+实现必须按以下顺序短路，测试断言首个 reason code：
+
+1. Principal 合法且 role/service flag 一致，否则 `INVALID_PRINCIPAL`；
+2. ResourceRef 及 scope/enterprise 组合合法，否则 `INVALID_RESOURCE`；loader 无法解析时在进入纯函数前形成 deny `RESOURCE_SCOPE_UNRESOLVED`；
+3. action 与 `resource_type` 是 policy 的精确组合，否则 `ACTION_RESOURCE_MISMATCH`；
+4. enterprise scope 下 Principal enterprise 为空返回 `ENTERPRISE_REQUIRED`，不相等返回 `CROSS_ENTERPRISE`；public 不做 enterprise 相等比较；
+5. role 不在 action 显式 allow set 返回 `ROLE_FORBIDDEN`；未知 action 默认拒绝；
+6. 要求本人资源时，owner 缺失返回 `OWNER_REQUIRED`，不相等返回 `NOT_RESOURCE_OWNER`；
+7. 正式规则审批/激活/退役缺 proposed_by 返回 `PROPOSER_REQUIRED`，与 Principal actor 相同返回 `SELF_APPROVAL_FORBIDDEN`；
+8. 全部通过才返回 `Decision(True, ReasonCode.ALLOW)`。
+
+认证缺失/无效发生在 `authorize` 前，分别为 401 `authentication_required` / `credential_invalid` / `legacy_token_expired`，但仍须按 §6 先写 durable 审计。
+
+### 4.3 完整 allow set
+
+下列集合是权限矩阵机器真相；每个 Role × 每个 Action 不在集合中即 deny。`*_PUBLISH`、`*_FREEZE`、`*_RENDER_AND_FREEZE` 只允许 analyst，AI、finance_bp、rule_owner、service_account 均没有报告或导入发布/冻结权。
+
+| role | 显式 allow actions |
 |---|---|
-| 无凭据/凭据无效 | 401 |
-| 跨企业或角色不足 | 403，并写 deny 审计事件（含 reason） |
-| 非 development 缺身份配置 | 启动失败（fail fast），不降级为匿名 |
-| 未登记敏感路由出现 | 守护测试失败，合并阻断 |
-| 审计写入失败 | 原操作失败（不允许「操作成功但无审计」） |
-| audit intent 未 durable | 不执行对象存储或渲染副作用 |
-| 对象存储/渲染失败 | 不形成 published；追加 failure outcome 后返回失败 |
-| AI 角色请求发布/冻结 | 403 + 审计事件，无例外通道 |
+| `finance_bp` | `system.health.read`, `workspace.metadata.read`, `intake.template.read`, `intake.batch.create`, `intake.source.upload`, `intake.source.profile.read`, `intake.mapping.confirm`, `intake.mapping.override`, `intake.issue.acknowledge`, `intake.version.read`, `intake.cleaning_summary.read`, `intake.standardized_workbook.read`, `investigation.read`, `statement.source.read`, `statement.report.read`, `statement.projection.read`, `statement.correction.read`, `workbench.report.read`, `operations.public.read`, `operations.overview.read`, `operations.snapshot.read`, `operations.attempt.read` |
+| `analyst` | 全部 Action，除 `metric.change.activate`, `metric.change.retire`；inventory 为 `blocked:*` 的入口仍无条件阻断 |
+| `rule_owner` | `system.health.read`, `workspace.metadata.read`, `intake.template.read`, `investigation.read`, `metric_library.read`, `metric.change.propose`, `metric.change.activate`, `metric.change.retire`, `metric.event.read`, `metric.impact.analyze`, `statement.source.read`, `statement.report.read`, `statement.projection.read`, `statement.correction.read`, `workbench.report.read`, `operations.public.read`, `operations.overview.read`, `operations.snapshot.read`, `operations.attempt.read` |
+| `ai_analyst` | `system.health.read`, `workspace.metadata.read`, `intake.source.profile.read`, `investigation.read`, `copilot.investigation.ask`, `copilot.mapping.explain`, `metric_library.read`, `metric.impact.analyze`, `statement.source.read`, `statement.report.read`, `statement.projection.read`, `workbench.report.read`, `operations.public.read`, `operations.overview.read` |
+| `ai_cfo` | `system.health.read`, `workspace.metadata.read`, `investigation.read`, `copilot.investigation.ask`, `copilot.report_outline.generate`, `statement.report.read`, `statement.projection.read`, `workbench.report.read`, `operations.public.read`, `operations.overview.read` |
+| `service_account` | `system.health.read`, `workspace.metadata.read`, `intake.template.read`, `intake.source.profile.read`, `intake.source.validate`, `orchestration.build.start`, `orchestration.build.read`, `statement.source.read`, `statement.report.read`, `statement.projection.read`, `operations.public.read` |
 
-## 7. 迁移
+补充硬规则：
 
-- 迁移 0026：新增角色绑定表、AuditEvent 表与拒 UPDATE/DELETE trigger；只加不改，回滚为删表，存量业务数据不受影响；
-- 旧 Bearer 兼容：解析层把旧 token 映射为受限 Principal（默认 service_account 最小权限），兼容期内并行；兼容期结束后删除映射分支（另行决策，见 §5 第 5 条）；
-- 在线审计保留期默认且最低为 365 天，只允许向上配置；S01 不提供 UPDATE/DELETE/物理归档路径，到期只允许标记 `archive_eligible`，物理归档另立规格。
-- 审计读取按企业隔离：analyst 可读本企业事件；rule_owner 只读本企业规则治理事件；finance_bp 只读本人任务相关事件；AI 角色与 service_account 没有通用审计查询权。S01 只实现存储和访问策略守护，不新增通用审计浏览 UI。
-- 脱敏阈值：不得记录原始文件、单元格值、完整 prompt、模型完整输出、凭据或个人信息；二进制/文本输入只记录 SHA-256、字节数、类型和稳定 artifact id；必要摘要最多 256 个 UTF-8 字符，并在写入前移除 token、邮箱、手机号和连续 8 位以上数字。`model_boundary` 只记录模型、用途、输入/输出 artifact id 与哈希。
+- finance_bp 的 intake 写/读与调查读取必须 owner 为本人或显式指派本人；现有模型不能提供 owner 时 route 保持 blocked，而不是降低为企业级访问。
+- `metric.change.activate` / `metric.change.retire` 只允许 rule_owner 且不可审批本人提议；`metric.change.propose` 可由 analyst/rule_owner 发起。
+- AI 只能生成候选、解释、挑战或读取最小证据投影；不能提升 evidence 等级，不能调用 publish/freeze/approve。
+- 新增 Action 必须先修订本文、全矩阵测试与 inventory；不能以字符串前缀或 wildcard 自动授权。
 
-## 8. 验收
+## 5. `require_action` 与 route policy
 
-1. `authorize` 纯函数单测覆盖矩阵全部单元格（角色×动作），含 deny-by-default 兜底；
-2. 逐入口端到端测试：intake 提交、Finding/证据审批、规则审批、publishing/objective_reports/statements/operations、copilot 模型调用、orchestration build 每个敏感入口分别覆盖 401、跨企业/跨角色 403、合法 allow 与对应审计事件；旧 bearer 不得绕过任一发布路径；
-3. 直接 SQL 尝试 UPDATE/DELETE AuditEvent 被 trigger 拒绝的测试通过；
-4. 路由扫描守护测试：构造未登记敏感路由 fixture，测试正确失败；
-5. `cd services/api && uv run pytest tests/security tests/api/test_auth_boundary.py tests/integration/test_security_schema.py -v` 全绿；
-6. 本规格转 approved 后，Task 6 实现与本规格逐条对账，偏差回本规格修订。
+```python
+from collections.abc import Callable
+from dataclasses import dataclass
 
-## 9. 批准记录
+from fastapi import Request
+from sqlalchemy.orm import Session
 
-- 2026-09-13：用户明确回复“批准安全规格，开始执行”。该批准适用于本 V1.1 冻结值；独立规格审查若要求改变上述合同，必须重新取得批准。
+
+ResourceLoader = Callable[[Request, Session], ResourceRef]
+
+
+@dataclass(frozen=True)
+class AuthorizationContext:
+    principal: Principal
+    action: Action
+    resource: ResourceRef
+    decision: Decision
+    correlation_id: str
+
+
+AuthorizationDependency = Callable[[Request, Principal, Session], AuthorizationContext]
+
+
+def require_action(
+    action: Action,
+    resource_loader: ResourceLoader,
+) -> AuthorizationDependency:
+    raise NotImplementedError
+```
+
+生成 dependency 的实际参数必须是 `request: Request`、认证 dependency 返回的 `principal: Principal` 和 route 同一个只读预加载 `session: Session`。loader 只允许 SELECT，须禁用 autoflush，不得 commit、写审计、调用模型、渲染或访问对象存储。`require_action` 执行 §6 的独立决策审计；handler 只能在它返回 AuthorizationContext 后运行。
+
+policy 每项精确包含 `method`、normalized `path`、`actual_side_effect`、`action`、`resource_loader`、`owner`、`exemption_reason`。以下均合并阻断：最终 router 与 inventory 非双向一致；重复 method/path；未知 Action/loader；副作用被标只读豁免；`blocked:*` 被接线为 allow；GET 内有 flush/commit、write service、freeze、render-to-file、object write 或模型调用却登记为纯 read。
+
+## 6. 认证/授权审计的独立 durable 屏障
+
+对 401、deny、allow 使用同一顺序：
+
+1. 建立 §9 correlation id，尚未执行 handler；
+2. 解析 credential；缺失/无效时构造 actor 为空的认证拒绝事件；
+3. 有效 Principal 经只读 loader 得到 ResourceRef，再调用 `authorize`；
+4. 使用**新建 Audit Session** 开启独立短事务，插入认证拒绝或 authorization allow/deny AuditEvent 并 commit，不复用业务 Session；
+5. audit commit 失败或结果不确定，rollback 并返回 503 `audit_unavailable`；不得继续 handler，也不得返回原本的 401/403/2xx；
+6. durable 后，认证拒绝返回 401，authorization deny 返回 403，allow 才进入 handler；
+7. 业务事务成功/失败另追加 outcome。业务 rollback 不得回滚第 4 步 decision。
+
+durable allow 前禁止数据库 mutation/autoflush、对象写、render、模型/工具调用或外部网络副作用。资源不存在可在只读 loader 得到 404 候选，但仍先记含 action、path 和 locator hash 的 deny/error 审计再返回，且不得泄漏跨企业对象存在性。
+
+有效认证事件的 `actor_id`、`actor_role`、`enterprise_id` 只复制 Principal。401 三字段必须全为 `NULL`；可记录 credential digest 的不可逆短指纹，不能用 body actor 替代。body 身份字段即使相等也只能在 redacted metadata 记 `identity_field_present=true`。
+
+## 7. 发布与对象存储四阶段 ABI
+
+publishing 与 operations 必须共用以下类型、签名、异常和时序。
+
+### 7.1 完整类型
+
+```python
+from collections.abc import Callable, Mapping
+from dataclasses import dataclass
+from enum import StrEnum
+from typing import Literal, Protocol
+from uuid import UUID
+
+from sqlalchemy.orm import Session
+
+
+class PublicationFormat(StrEnum):
+    HTML = "html"
+    XLSX = "xlsx"
+    PPTX = "pptx"
+    PDF = "pdf"
+
+
+class PublicationAttemptStatus(StrEnum):
+    PENDING = "pending"
+    SUCCEEDED = "succeeded"
+    RENDER_FAILED = "render_failed"
+    STORE_FAILED = "store_failed"
+
+
+@dataclass(frozen=True)
+class ModelBoundary:
+    provider: str
+    model: str
+    purpose: str
+    input_artifact_ids: tuple[str, ...]
+    input_sha256: tuple[str, ...]
+    output_artifact_ids: tuple[str, ...]
+    output_sha256: tuple[str, ...]
+
+
+@dataclass(frozen=True)
+class AuditContext:
+    actor_id: str
+    role: Role
+    enterprise_id: UUID | None
+    correlation_id: str
+    action: Action
+    resource_type: str
+    resource_id: str
+    model_boundary: ModelBoundary | None
+
+
+@dataclass(frozen=True)
+class PublicationRequest:
+    publication_id: UUID
+    idempotency_key: str
+    resource_type: str
+    resource_id: str
+    enterprise_id: UUID | None
+    source_payload_sha256: str
+    formats: tuple[PublicationFormat, ...]
+
+
+@dataclass(frozen=True)
+class ObjectPlan:
+    attempt_id: UUID
+    format: PublicationFormat
+    object_key: str
+
+
+@dataclass(frozen=True)
+class PreparedPublication:
+    publication_id: UUID
+    idempotency_key: str
+    resource_type: str
+    resource_id: str
+    enterprise_id: UUID | None
+    source_payload_sha256: str
+    formats: tuple[PublicationFormat, ...]
+    object_plans: tuple[ObjectPlan, ...]
+    intent_event_id: UUID
+
+
+@dataclass(frozen=True)
+class ObjectOutcome:
+    attempt_id: UUID
+    format: PublicationFormat
+    status: PublicationAttemptStatus
+    object_key: str
+    content_type: str | None
+    content_sha256: str | None
+    size_bytes: int | None
+    stored_object_id: UUID | None
+    error_type: str | None
+    error_message: str | None
+
+
+@dataclass(frozen=True)
+class ObjectBatchOutcome:
+    publication_id: UUID
+    outcomes: tuple[ObjectOutcome, ...]
+
+
+class PublicationFailureType(StrEnum):
+    RENDER = "render"
+    OBJECT_STORE = "object_store"
+    INTEGRITY = "integrity"
+
+
+@dataclass(frozen=True)
+class PublicationFailure:
+    failure_type: PublicationFailureType
+    failed_attempt_ids: tuple[UUID, ...]
+    retryable: bool
+    message: str
+
+
+@dataclass(frozen=True)
+class StoredObjectRef:
+    stored_object_id: UUID
+    object_key: str
+    content_type: str
+    content_sha256: str
+    size_bytes: int
+
+
+@dataclass(frozen=True)
+class FinalizedPublication:
+    publication_id: UUID
+    status: Literal["published", "failed"]
+    outcomes: tuple[ObjectOutcome, ...]
+```
+
+所有 tuple 不可为 `None`；formats 非空、无重复，并按枚举值排序。`ObjectOutcome.content_sha256` 是 render 后产物 hash；prepare 的 `source_payload_sha256` 是冻结输入 hash，不得混用。error_message 经 §8 脱敏并限 256 字符。
+
+### 7.2 精确签名和 Session 归属
+
+```python
+RendererRegistry = Mapping[PublicationFormat, Callable[[PreparedPublication, ObjectPlan], bytes]]
+
+
+class PublicationObjectStore(Protocol):
+    def write_if_absent(
+        self,
+        *,
+        object_key: str,
+        content: bytes,
+        content_type: str,
+        content_sha256: str,
+    ) -> StoredObjectRef:
+        raise NotImplementedError
+
+
+def prepare_intent(
+    session: Session,
+    request: PublicationRequest,
+    audit_context: AuditContext,
+) -> PreparedPublication:
+    raise NotImplementedError
+
+
+def execute_object(
+    prepared: PreparedPublication,
+    renderers: RendererRegistry,
+    object_store: PublicationObjectStore,
+) -> ObjectBatchOutcome:
+    raise NotImplementedError
+
+
+def finalize_success(
+    session: Session,
+    prepared: PreparedPublication,
+    outcome: ObjectBatchOutcome,
+    audit_context: AuditContext,
+) -> FinalizedPublication:
+    raise NotImplementedError
+
+
+def finalize_failure(
+    session: Session,
+    prepared: PreparedPublication,
+    outcome: ObjectBatchOutcome,
+    failure: PublicationFailure,
+    audit_context: AuditContext,
+) -> FinalizedPublication:
+    raise NotImplementedError
+```
+
+prepare 和 finalize 只使用 route 传入的同一个业务 Session，只 flush、不 commit/rollback。`execute_object` 无 Session，禁止开数据库连接。audit writer、renderer、publication/operations service、object store 都不得自行 commit。
+
+### 7.3 固定四阶段
+
+1. **prepare intent**：验证冻结资源、batch formats、idempotency；每 format 写 PENDING attempt，追加 intent AuditEvent，flush。不得 render/写对象。
+2. **caller commit**：route 显式 commit 使 PENDING 与 intent durable；失败返回 503，且不得 render/object write。
+3. **execute object**：按 canonical formats 逐项 render → SHA-256/size/content type → immutable object write，形成 ObjectOutcome。render 也只能在 durable intent 后发生。
+4. **finalize + caller commit**：全部 succeeded 调 `finalize_success`，任一失败调 `finalize_failure`；追加逐项 outcome 并 flush。仅全成功可置 published，route 再显式 commit；failure outcome durable 后才返回原失败。
+
+format 批次是 all-or-failed：部分对象成功可保留，但 publication 仍 `failed`。failure finalize commit 失败返回 503 `publication_outcome_not_durable` 并按 publication_id 对账，不得谎报已持久化。
+
+### 7.4 幂等与重试
+
+- identity 为 `(resource_type, resource_id, sorted_formats, idempotency_key)`；同 key 同 source hash 返回既有状态，不新增 intent/attempt/object。
+- 同 key 但 resource、formats 或 source hash 不同抛 `PublicationIdempotencyConflict`，409。
+- 重试携带原 publication_id/key；已 succeeded format 校验 object hash 后复用，只为失败 format 新增 sequence attempt；全批成功后才 published。
+- object key 至少含 `resource_type/resource_id/publication_id/format/source_payload_sha256`，if-absent 写并校验 hash；同 key 异内容拒绝覆盖。
+- client 断连/崩溃/超时不改变重放规则；PENDING 恢复器只依据 durable intent，不依赖内存。
+
+### 7.5 错误类型
+
+| exception | 条件 | HTTP / 持久化 |
+|---|---|---|
+| `PublicationNotFound` | 资源不存在 | 404；decision/error 审计 durable |
+| `PublicationScopeConflict` | scope/enterprise 不匹配 | 403；deny 审计 durable |
+| `PublicationFreezeConflict` | 未冻结或状态不允许 | 409；无对象副作用 |
+| `PublicationIdempotencyConflict` | 同 key 参数不同 | 409；无对象副作用 |
+| `PublicationRenderFailure` | renderer 失败 | failure outcome，503 |
+| `PublicationObjectStoreFailure` | 对象写/校验失败 | failure outcome，503 |
+| `PublicationIntentNotDurable` | 第 2 阶段 commit 失败/不确定 | 503；render/store 调用 0 次 |
+| `PublicationOutcomeNotDurable` | 第 4 阶段 commit 失败/不确定 | 503；进入对账，不能成功 |
+| `AuditUnavailable` | 授权或 intent audit 失败 | 503；fail closed |
+
+## 8. AuditEvent、保留与确定性脱敏
+
+### 8.1 机器字段
+
+AuditEvent 至少含：`id UUID`、`event_type str`、`actor_id str|null`、`actor_role Role|null`、`enterprise_id UUID|null`、`resource_scope`、`resource_type`、`resource_id`、`action Action|null`、`decision allow|deny|error`、`reason_code ReasonCode|str`、`correlation_id str`、`request_id str`、`model_boundary json|null`、`artifact_refs json`、`redacted_metadata json`、`created_at timestamptz`、`retention_class str`、`retain_until timestamptz`。
+
+机器读取不能从自由文本推断 scope、decision、actor、hash、保留或 archive eligibility。artifact_refs 每项固定 `artifact_id`、`sha256`、`size_bytes`、`content_type`；model_boundary 只含 §7.1 字段，不含 prompt/output 原文。
+
+数据库 trigger 拒绝 AuditEvent UPDATE/DELETE；ORM 重复防线。直接 SQL、ORM bulk、cascade、maintenance role 测试均证明应用角色不可修改/删除。
+
+### 8.2 保留和 archive eligibility
+
+- 唯一配置 `FLOW_AUDIT_RETENTION_DAYS`；缺失默认 365，须十进制整数且 `>=365`。空串、浮点、负数、低于下限、溢出均在所有环境启动失败。
+- 写入固定 `retention_class="security_default"`、`retain_until=created_at + retention_days`；配置变长只影响新增事件，既有不得缩短。
+- 不更新原事件。到期扫描仅追加 `audit.archive_eligibility_marked`，其 `resource_type="audit_event"`、`resource_id=<target id>`，metadata 含 `target_retain_until`、`policy_days`。
+- 机器谓词：目标 `retain_until <= trusted_now`、存在 committed eligibility marker、且不存在 legal-hold 事件，三项全满足才可被未来归档规格选择。S01 无物理归档/删除。
+
+### 8.3 确定性 redact
+
+```python
+@dataclass(frozen=True)
+class RedactedText:
+    text: str
+    utf8_bytes: int
+    sha256: str
+
+
+def redact_audit_text(value: str) -> RedactedText:
+    raise NotImplementedError
+```
+
+算法顺序固定：
+
+1. 输入必须 str；解码失败、非 str、正则异常抛 `AuditRedactionFailure`，writer rollback 并返回 503，不能保存原文或尽力结果；
+2. Unicode NFC，CRLF/CR 转 LF，移除 LF/TAB 外 C0/C1 控制字符；
+3. 顺序替换 Bearer/Basic/API key/JWT token → `[REDACTED_TOKEN]`；邮箱 → `[REDACTED_EMAIL]`；中国大陆或带国家码手机号 → `[REDACTED_PHONE]`；连续 8 位以上数字 → `[REDACTED_NUMBER]`；
+4. 按 Unicode code point 截到 256 字符；
+5. `utf8_bytes=len(text.encode("utf-8"))`；`sha256=hashlib.sha256(text.encode("utf-8")).hexdigest()`。
+
+正则使用 Python `re`、Unicode 模式和以下冻结 pattern；每个 pattern 全局替换，先后次序就是上文第 3 步，不得交换：
+
+```python
+CREDENTIAL_RE = re.compile(
+    r"(?i)(?:\bauthorization\s*:\s*)?(?:bearer|basic)\s+[A-Za-z0-9._~+/=-]+"
+    r"|\b(?:api[_-]?key|token|secret)\s*[:=]\s*[A-Za-z0-9._~+/=-]{8,}"
+    r"|\beyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\b"
+)
+EMAIL_RE = re.compile(r"(?i)(?<![\w.+-])[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}(?![\w.-])")
+PHONE_RE = re.compile(r"(?<!\d)(?:\+?86[- ]?)?1[3-9]\d{9}(?!\d)")
+LONG_NUMBER_RE = re.compile(r"(?<!\d)\d{8,}(?!\d)")
+```
+
+每个允许写入 `redacted_metadata` 的 key 必须在事件类型 schema 中显式声明；未知 key、嵌套自由文本、非有限数值或无法 canonical-JSON 序列化同样 fail-closed。所有自由文本值先过 `redact_audit_text`。
+
+原文件、单元格、完整 prompt/output、credential、PII 不得传入此函数；它是末端防线，不是记录许可。
+
+| input | exact `text` |
+|---|---|
+| `联系 a.b+flow@example.com，手机 13800138000` | `联系 [REDACTED_EMAIL]，手机 [REDACTED_PHONE]` |
+| `Authorization: Bearer abc.DEF-123_xyz` | `Authorization: [REDACTED_TOKEN]` |
+| `订单 12345678；短号 1234567` | `订单 [REDACTED_NUMBER]；短号 1234567` |
+| `e\u0301\r\nOK` | `é\nOK` |
+
+还须测试 257 个汉字截为 256、非法类型 fail-closed，以及各输出精确 byte count/SHA-256。
+
+### 8.4 审计读取
+
+analyst 只读本企业；rule_owner 只读本企业规则治理；finance_bp 只读 `actor_id=principal.actor_id` 且本人任务资源。AI/service_account 无通用审计查询权。过滤先 scope/enterprise，再应用其他 query。
+
+## 9. correlation / request id 合同
+
+1. `X-Correlation-ID` / `X-Request-ID` 均只接受 1–128 字节可打印 ASCII；trim 后校验，控制字符、逗号多值、空值、超长返回 400；
+2. 两者都存在必须逐字相等，否则 400 `request_id_conflict`；
+3. 仅一个则采用；都无则生成小写带连字符 UUID4；
+4. canonical 值同时写 `request.state.correlation_id` / `.request_id`；审计、日志、模型、工具、publication context 只从 state 读取；
+5. 所有响应含异常路径均回写 `X-Correlation-ID` / `X-Request-ID`，两者与 state 完全相等；不得在响应末尾另生成。
+
+验收覆盖各单 header、相同/冲突双 header、非法 ASCII/长度、自动 UUID、正常/异常响应；断言 response 双 header、request.state、AuditEvent、日志 capture 五处完全相同。
+
+## 10. 迁移与启动失败
+
+- `0026_security_audit.down_revision == "0025_enterprise_cycle"`；新增 RoleBinding、AuditEvent、publication intent/outcome 字段、拒 UPDATE/DELETE trigger。
+- 迁移只加不改现有事实。downgrade 可删新增对象，但生产执行另需授权，不是常规审计删除路径。
+- identity JSON、RoleBinding 对账、legacy 截止、retention、审计 schema、inventory 装载失败均须接流量前 fail-fast；不得退回匿名、development allow-all 或旧 bearer。
+
+## 11. 验收与精确命令
+
+实现后本地门禁如下，缺文件/缺测试即失败，不能删参数绕过：
+
+```bash
+cd services/api
+uv run pytest tests/security/test_authorization.py tests/security/test_principal_resolution.py tests/security/test_route_policy.py -v
+uv run pytest tests/api/test_auth_boundary.py tests/integration/test_audit_atomicity.py tests/integration/test_security_schema.py -v
+uv run pytest tests/publishing/test_publication.py tests/api/test_publishing_api.py tests/operations/test_operations_publication.py tests/operations/test_operations_public_api.py tests/integration/test_object_store.py -v
+uv run pytest tests/api/test_copilot.py tests/api/test_orchestration_api.py tests/api/test_intake.py tests/api/test_investigations.py tests/api/test_metric_library.py tests/api/test_statements.py -v
+uv run pytest tests/integration/test_migrations.py -v
+uv run ruff check src tests
+uv run mypy src
+cd ../..
+python3 scripts/documentation/require_approved_specs.py FLOW-SPEC-MODULE-BOUNDARIES-V1 FLOW-SPEC-FINANCIAL-FACTS-V2 FLOW-SPEC-INTERNAL-RBAC-AUDIT-V1
+make docs-check
+git diff --check
+```
+
+最低断言：
+
+1. Role × 完整 Action 全笛卡尔积；default deny、owner、自批、AI、scope、service account 和 reason 顺序；
+2. identity digest/未知字段/空数组/重复/actor 冲突/role-service flag/DB 权威/development/legacy 截止；
+3. router/TSV 双向一致；隐藏写 GET、copilot、orchestration、dashboard/workbench/workspace；`blocked:*` 不进入 handler；
+4. 401/403/allow 独立 durable audit，audit fail 503，业务 rollback 不回滚 decision，body actor 不可伪造；
+5. AuditEvent SQL/ORM 不可变、retention、marker、redact vectors、读取隔离；
+6. publication 时序、Session 不偷 commit、batch/partial/idempotency/retry、故障注入；intent 未 durable 时 renderer/store 均 0 次；
+7. object if-absent、同 key 异内容拒绝、下载 hash、失败不 published；
+8. 0025→0026 upgrade/downgrade/upgrade、RoleBinding 唯一 active、trigger；
+9. correlation 双 header/state/AuditEvent/log 一致，覆盖错误路径。
+
+本文只有重新转 `approved` 后才能作为 Task 6 门禁；ABI、枚举、allow set、截止或 retention 偏差须先修订并重新审批。
+
+## 12. 批准记录
+
+- 2026-09-13：用户批准初版 V1.1 冻结值并授权执行。
+- 2026-09-13：独立审查提出 P1/P2 后进入本轮精确化；因合同字节已变化，保持 `review` 等待复审与用户重新批准。
