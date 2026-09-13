@@ -20,6 +20,7 @@ from flow_api.api.schemas.metric_library import (
     AccountingFoundation,
     EntryLine,
     MetricActionRequest,
+    MetricCoverageResponse,
     MetricDraftRequest,
     MetricEntry,
     MetricEntryActionResponse,
@@ -373,6 +374,34 @@ def retire_metric_change(
         ) from error
     session.commit()
     return _entry_action_response(entry)
+
+
+@lru_cache
+def _coverage_payload() -> MetricCoverageResponse | None:
+    """P5 真实财报指标覆盖矩阵：生成期由 p5_query_facts.py 计算并落盘，API 只读投影。"""
+    root = resolve_metric_library_root()
+    path = root / CONFIG_ROOT / "p5_metric_coverage_v1.yaml"
+    if not path.is_file():
+        return None
+    return MetricCoverageResponse(**yaml.safe_load(path.read_text(encoding="utf-8")))
+
+
+@router.get(
+    "/coverage",
+    response_model=MetricCoverageResponse,
+    responses={status.HTTP_404_NOT_FOUND: {"model": ErrorDetail}},
+)
+def get_metric_coverage() -> MetricCoverageResponse:
+    """指标库 v0 通用指标 × 五家真实财报快照的可计算覆盖（含缺口原因）。"""
+    payload = _coverage_payload()
+    if payload is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=ErrorDetail(
+                code="coverage_dataset_missing", message="覆盖矩阵数据集未生成"
+            ).model_dump(mode="json"),
+        )
+    return payload
 
 
 @router.get("/events", response_model=MetricGovernanceEventListResponse)

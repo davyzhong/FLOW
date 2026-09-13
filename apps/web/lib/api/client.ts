@@ -356,10 +356,17 @@ export type MetricLibraryReportItem = components["schemas"]["ReportItem"];
 export type MetricLibraryRelation = components["schemas"]["MetricRelation"];
 export type MetricLibraryAccount = components["schemas"]["AccountingAccount"];
 export type MetricLibraryEntryTemplate = components["schemas"]["EntryTemplate"];
+export type MetricCoverage = components["schemas"]["MetricCoverageResponse"];
+export type MetricCoverageSnapshot = components["schemas"]["CoverageSnapshot"];
+export type MetricCoverageMetricRow = components["schemas"]["CoverageMetricRow"];
+export type MetricCoverageCell = components["schemas"]["CoverageCell"];
 
 export const metricLibraryApi = {
   get(signal?: AbortSignal): Promise<MetricLibrary> {
     return request<MetricLibrary>("/api/v1/metric-library", signal);
+  },
+  getCoverage(signal?: AbortSignal): Promise<MetricCoverage> {
+    return request<MetricCoverage>("/api/v1/metric-library/coverage", signal);
   },
   listEvents(metricCode?: string, signal?: AbortSignal): Promise<MetricGovernanceEventList> {
     const query = metricCode ? `?metric_code=${encodeURIComponent(metricCode)}` : "";

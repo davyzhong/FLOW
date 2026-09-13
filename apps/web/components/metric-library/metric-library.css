@@ -382,3 +382,93 @@
 .ml-graph__warning { color: #b45309; font-size: 12px; }
 .ml-graph__selected { color: #1d4ed8; font-size: 13px; }
 .ml-chip--tier { background: #fef3c7; color: #92400e; }
+
+.ml-coverage__notes {
+  margin: 8px 0 14px;
+  padding-left: 18px;
+  font-size: 12.5px;
+  color: #8a97a8;
+  line-height: 1.8;
+}
+
+.ml-coverage__scroll {
+  overflow-x: auto;
+  border: 1px solid #dfe6ef;
+  border-radius: 8px;
+}
+
+.ml-coverage__table {
+  min-width: 1200px;
+  white-space: nowrap;
+}
+
+.ml-coverage__table th,
+.ml-coverage__table td {
+  border: none;
+  border-bottom: 1px solid #edf1f6;
+}
+
+.ml-coverage__table thead th {
+  vertical-align: bottom;
+  text-align: right;
+}
+
+.ml-coverage__table thead th strong {
+  display: block;
+  color: #233043;
+}
+
+.ml-coverage__period {
+  display: block;
+  font-weight: 400;
+  color: #8a97a8;
+  font-size: 12px;
+}
+
+.ml-coverage__ratio {
+  display: inline-block;
+  margin-top: 2px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: #eef2f7;
+  color: #52637a;
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+.ml-coverage__ratio--full {
+  background: #e5f5ec;
+  color: #18794e;
+}
+
+.ml-coverage__metric {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: #f5f7fa;
+  text-align: left;
+  font-weight: 500;
+  min-width: 220px;
+}
+
+.ml-coverage__table tbody .ml-coverage__metric {
+  background: #fff;
+  color: #233043;
+}
+
+.ml-coverage__metric code {
+  color: #8a97a8;
+  font-size: 12px;
+}
+
+.ml-coverage__value {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: #233043;
+}
+
+.ml-coverage__missing {
+  text-align: right;
+  color: #a8b3c2;
+  font-size: 12px;
+}
