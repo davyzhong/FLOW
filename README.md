@@ -3,7 +3,7 @@ doc_id: FLOW-NAV-ROOT-README-001
 title: FLOW repository README
 doc_type: navigation
 status: current
-version: 1.0
+version: 1.1
 created_at: 2026-08-29
 updated_at: 2026-09-13
 owner: FLOW
@@ -148,6 +148,18 @@ flowchart TB
 
 项目用真实公开财报验证「准确性承诺」（[D041/D042](docs/knowledge-base/04_decisions/DECISION_LOG.md)）：管道自动抽取财报 PDF 中的报表行项目，经勾稽与跨文档比对后重建四表一注，并以同一批冻结数据生成图形化分析。**所有图表在生成期做闭合校验，数字零手工调整；口径差异与披露缺失显式标注，不推测填补。**
 
+目前已完成 **5 家公司、14 份报告**的反向解析并全部导入系统（`statement_report` / `statement_line_item`），在 **`/statements` 报表分析页**按报告切换呈现 KPI 卡、利润形成瀑布、资产/资本结构环形、现金流三活动柱状、现金桥与四表全量行项目；数值保持披露原值与单位，展示层只做单位缩放，溯源到原文 SHA-256：
+
+| 公司 | 报告 | 准则 | 行项目 | 勾稽验证 |
+| --- | --- | --- | --- | --- |
+| 顺丰控股 002352.SZ | 2026 一季报 | CAS | 163 | 报表内 20/20；跨文档 12/12 |
+| 腾讯控股 0700.HK | 2026 Q2 业绩公告 | IFRS + Non-IFRS | 20 | 分部加总、毛利链、IFRS→Non-IFRS 调节链全闭合 |
+| 京东物流 2618.HK | FY2025 年报 | IFRS | 118 | IFRS 勾稽 24/24（两期全验） |
+| 阿里巴巴 9988.HK | FY2019–FY2026 八份年报 | IFRS（US GAAP 口径披露） | 52–53 × 8 | 八年连续期间序列 |
+| 菜鸟集团（未上市） | FY2021–FY2023 招股书申报稿 | IFRS | 105 × 3 | 招股书三期连续 |
+
+重建数据库后执行 `bash scripts/seed_p5_statements.sh` 即可幂等恢复全部 14 份报告。抽取产物与验证记录见 [docs/implementation/p5](docs/implementation/p5/P5-validation-summary.md)。
+
 ### 顺丰控股 2026Q1：四表可视化分析
 
 从 2026 一季报原文抽取 **163 个报表行项目**（报表内勾稽 20/20、与 FY2025 年报跨文档比对 12/12 一致），生成十个板块的分析视图：
@@ -181,6 +193,10 @@ flowchart TB
 
 完整交互页面：[tencent_2026q2_report_view.html](docs/implementation/p5/tencent_2026q2_report_view.html)。
 
+### 京东物流、阿里巴巴与菜鸟：IFRS 样本扩展
+
+同一条「抽取 → 勾稽 → 落库 → 图形化」链路复用到更多 IFRS 样本：京东物流 FY2025 年报 118 个行项目（IFRS 勾稽 24/24）；阿里巴巴 FY2019–FY2026 连续八份年报（每年 52–53 行，构成八年期间序列）；菜鸟集团招股书申报稿 FY2021–FY2023 三期（每年 105 行）。这些报告全部可在 `/statements` 页面切换查看；IFRS 繁体/简体行名与千元/百万元单位差异由视图层按披露单位缩放与命名适配处理，缺失关键行的报告不伪造图形。
+
 ### 指标库 v0 评审台
 
 配合 [D040 指标库立项](docs/superpowers/specs/2026-09-05-flow-metric-dictionary-design.md) 的可视化评审工具：通用 40 指标 + 物流行业 15 指标 + 会计基础数据（164 科目、28 项 CAS↔IFRS 取数映射）逐项「纳入/待定/剔除」评审，勾稽关系与杜邦分解树内置展示。
@@ -198,7 +214,7 @@ flowchart TB
 | 阶段 | 任务 | 状态 |
 | --- | --- | --- |
 | 奠基 | Phase 1–10 窄切片 + Pilot + 双轮审查修复（R1–R9/N1–N3） | ✅ 已完成 |
-| 真实验证 | P5 财报反向解析（顺丰 163 行项目 + 腾讯 IFRS 调节） | ✅ 已交付 |
+| 真实验证 | P5 财报反向解析（顺丰 + 腾讯 + 京东物流 + 阿里巴巴八年 + 菜鸟三期，14 份报告已落库至 `/statements`） | ✅ 已交付 |
 | 基线 | P00–P02 基线刷新、口径订正、主题/比较合同 | ✅ 已完成 |
 | U1–U3 | 主题/比较合同、确定性拆解、同源证据与快照投影 | ✅ 已完成（U2 剩 2 项外部依赖登记中） |
 | U4 | 独立全行验证与留出泛化（依赖 oracle 人工录入） | ⬜ 外部到料即并行 |
@@ -360,6 +376,9 @@ make infra-up
 
 # 可选：初始化确定性演示数据、12 个月指标快照和分析运行
 (cd services/api && uv run python ../../scripts/seed_dashboard_demo.py)
+
+# 可选：导入 P5 反向解析的真实财报（5 家公司 14 份报告，幂等）
+bash scripts/seed_p5_statements.sh
 
 make dev-api
 ```
