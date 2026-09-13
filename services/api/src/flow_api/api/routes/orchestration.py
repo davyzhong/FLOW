@@ -29,8 +29,11 @@ from flow_api.infrastructure.models.intake import AnalysisBatch, BuildJob
 from flow_api.metrics.repositories import MetricSourceRepository
 from flow_api.metrics.service import MetricSnapshotService
 from flow_api.metrics_store import resolve_metric_catalog
+from flow_api.security.route_policy import enforce_route_policy
 
-router = APIRouter(prefix="/orchestration", tags=["orchestration"])
+router = APIRouter(
+    prefix="/orchestration", tags=["orchestration"], dependencies=[Depends(enforce_route_policy)]
+)
 
 
 def _repository_root() -> Path:
@@ -190,9 +193,7 @@ def build_batch_analysis(
 
     # 回收同批次残留的 running 任务（进程崩溃后的可恢复语义）
     stale = session.scalars(
-        select(BuildJob).where(
-            BuildJob.batch_id == batch_id, BuildJob.status == "running"
-        )
+        select(BuildJob).where(BuildJob.batch_id == batch_id, BuildJob.status == "running")
     ).all()
     for job in stale:
         job.status = "failed"
@@ -268,9 +269,7 @@ def build_batch_analysis(
 @router.get("/batches/{batch_id}/builds", response_model=BuildJobListResponse)
 def list_batch_builds(session: SessionDependency, batch_id: UUID) -> BuildJobListResponse:
     jobs = session.scalars(
-        select(BuildJob)
-        .where(BuildJob.batch_id == batch_id)
-        .order_by(BuildJob.created_at.desc())
+        select(BuildJob).where(BuildJob.batch_id == batch_id).order_by(BuildJob.created_at.desc())
     ).all()
     return BuildJobListResponse(jobs=[_job_line(job) for job in jobs])
 

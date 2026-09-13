@@ -79,6 +79,7 @@ class EvidenceLine(StrictModel):
 
 class ReviewLine(StrictModel):
     sequence: int
+    # S01: 仅为业务备注/审计留痕；授权身份只来自凭据解析的 Principal（api/auth.resolve_principal）
     reviewer: str
     decision: str
     comment: str | None
@@ -135,6 +136,7 @@ class InvestigationContext(StrictModel):
 
 class EvidenceDecisionRequest(StrictModel):
     decision: str
+    # S01: 仅为业务备注/审计留痕；授权身份只来自凭据解析的 Principal（api/auth.resolve_principal）
     reviewer: str = Field(min_length=1)
     comment: str | None = None
 
@@ -149,6 +151,7 @@ class ConclusionUpsertRequest(StrictModel):
 
 class FindingTransitionRequest(StrictModel):
     decision: str
+    # S01: 仅为业务备注/审计留痕；授权身份只来自凭据解析的 Principal（api/auth.resolve_principal）
     reviewer: str = Field(min_length=1)
     comment: str | None = None
 

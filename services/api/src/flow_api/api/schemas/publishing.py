@@ -7,6 +7,7 @@ from flow_api.api.schemas.intake import ErrorDetail
 
 class PublishRequest(BaseModel):
     formats: list[str] = Field(default_factory=lambda: ["pptx", "xlsx", "html", "pdf"])
+    # S01: 仅为业务备注/审计留痕；授权身份只来自凭据解析的 Principal（api/auth.resolve_principal）
     actor: str = Field(min_length=1)
 
 

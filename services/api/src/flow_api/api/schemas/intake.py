@@ -96,6 +96,7 @@ class MappingResponse(BaseModel):
 
 
 class MappingConfirmationRequest(BaseModel):
+    # S01: 仅为业务备注/审计留痕；授权身份只来自凭据解析的 Principal（api/auth.resolve_principal）
     actor: str = Field(min_length=1, max_length=255)
 
 
@@ -107,6 +108,7 @@ class MappingOverrideItem(BaseModel):
 
 
 class MappingOverrideRequest(BaseModel):
+    # S01: 仅为业务备注/审计留痕；授权身份只来自凭据解析的 Principal（api/auth.resolve_principal）
     actor: str = Field(min_length=1, max_length=255)
     source_file_id: UUID
     source_sha256: str = Field(min_length=64, max_length=64)
@@ -118,6 +120,7 @@ class ValidateImportRequest(BaseModel):
 
 
 class WarningAcknowledgementRequest(BaseModel):
+    # S01: 仅为业务备注/审计留痕；授权身份只来自凭据解析的 Principal（api/auth.resolve_principal）
     actor: str = Field(min_length=1, max_length=255)
     reason: str = Field(min_length=1)
 
@@ -125,6 +128,7 @@ class WarningAcknowledgementRequest(BaseModel):
 class WarningAcknowledgementResponse(BaseModel):
     id: UUID
     quality_issue_id: UUID
+    # S01: 仅为业务备注/审计留痕；授权身份只来自凭据解析的 Principal（api/auth.resolve_principal）
     actor: str
     reason: str
 

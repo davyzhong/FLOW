@@ -27,8 +27,11 @@ from flow_api.publishing.objective_freeze import (
     ObjectiveReportSnapshot,
     freeze_objective_statement_report,
 )
+from flow_api.security.route_policy import enforce_route_policy
 
-router = APIRouter(prefix="/statements", tags=["statements"])
+router = APIRouter(
+    prefix="/statements", tags=["statements"], dependencies=[Depends(enforce_route_policy)]
+)
 
 
 def get_objective_session() -> Iterator[Session]:
@@ -84,9 +87,7 @@ def get_objective_snapshot(session: SessionDependency, report_id: Annotated[UUID
         "payload_hash": snapshot.payload_hash,
         "source": source,
         "golden": golden,
-        "statements_count": {
-            name: len(rows) for name, rows in statements.items()
-        },
+        "statements_count": {name: len(rows) for name, rows in statements.items()},
     }
 
 

@@ -87,9 +87,7 @@ class TopicProjectionResponse(FrozenResponse):
     entries: tuple[ProjectionEntryResponse, ...]
 
 
-StatementErrorCode = Literal[
-    "statement_report_not_found",
-]
+StatementErrorCode = Literal["statement_report_not_found",]
 
 
 def exact(value: object | None) -> str | None:
@@ -129,6 +127,7 @@ class CorrectionCreateRequest(BaseModel):
     column_key: str = Field(min_length=1)
     value: str
     reason: str = Field(min_length=1)
+    # S01: 仅为业务备注/审计留痕；授权身份只来自凭据解析的 Principal（api/auth.resolve_principal）
     operator: str = Field(min_length=1)
 
 
@@ -141,6 +140,7 @@ class CorrectionResponse(FrozenResponse):
     old_value: str | None = None
     new_value: str | None = None
     reason: str
+    # S01: 仅为业务备注/审计留痕；授权身份只来自凭据解析的 Principal（api/auth.resolve_principal）
     operator: str
     created_at: datetime
 

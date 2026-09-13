@@ -128,11 +128,13 @@ class MetricLibraryResponse(BaseModel):
 
 class MetricDraftRequest(BaseModel):
     changes: dict[str, Any]
+    # S01: 仅为业务备注/审计留痕；授权身份只来自凭据解析的 Principal（api/auth.resolve_principal）
     operator: str = Field(min_length=1, max_length=128)
     reason: str = Field(min_length=1, max_length=512)
 
 
 class MetricActionRequest(BaseModel):
+    # S01: 仅为业务备注/审计留痕；授权身份只来自凭据解析的 Principal（api/auth.resolve_principal）
     operator: str = Field(min_length=1, max_length=128)
     reason: str = Field(min_length=1, max_length=512)
 
@@ -149,6 +151,7 @@ class MetricGovernanceEventLine(BaseModel):
     metric_code: str
     version: int
     action: str
+    # S01: 仅为业务备注/审计留痕；授权身份只来自凭据解析的 Principal（api/auth.resolve_principal）
     operator: str
     reason: str
     diff: dict[str, Any]

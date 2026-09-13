@@ -38,6 +38,7 @@ from flow_api.infrastructure.db import get_session_factory
 from flow_api.infrastructure.models.statement import StatementCorrection, StatementSource
 from flow_api.infrastructure.object_store import ObjectStore
 from flow_api.infrastructure.s3_client import build_s3_client
+from flow_api.security.route_policy import enforce_route_policy
 from flow_api.settings import get_settings
 from flow_api.statements.intake import StatementSourceError, StatementSourceIntake
 from flow_api.statements.projection import (
@@ -49,7 +50,9 @@ from flow_api.statements.repository import StatementReportUnavailableError
 from flow_api.statements.review import ReviewError, ReviewService
 from flow_api.statements.service import StatementService
 
-router = APIRouter(prefix="/statements", tags=["statements"])
+router = APIRouter(
+    prefix="/statements", tags=["statements"], dependencies=[Depends(enforce_route_policy)]
+)
 
 
 def get_statement_session() -> Iterator[Session]:
@@ -324,9 +327,7 @@ def list_statement_corrections(
         corrections = ReviewService(session).list_corrections(report_id)
     except ReviewError as error:
         raise _error(status.HTTP_404_NOT_FOUND, error.code, error.message) from error
-    return CorrectionListResponse(
-        corrections=tuple(_correction_response(c) for c in corrections)
-    )
+    return CorrectionListResponse(corrections=tuple(_correction_response(c) for c in corrections))
 
 
 @router.post(

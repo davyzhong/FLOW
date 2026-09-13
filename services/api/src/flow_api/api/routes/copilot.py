@@ -25,8 +25,11 @@ from flow_api.investigation.repositories import (
     InvestigationIdentityMismatchError,
     InvestigationNotFoundError,
 )
+from flow_api.security.route_policy import enforce_route_policy
 
-router = APIRouter(prefix="/copilot", tags=["copilot"])
+router = APIRouter(
+    prefix="/copilot", tags=["copilot"], dependencies=[Depends(enforce_route_policy)]
+)
 
 SessionDependency = Annotated[Session, Depends(get_investigation_session)]
 

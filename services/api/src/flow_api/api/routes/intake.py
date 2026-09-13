@@ -75,9 +75,10 @@ from flow_api.intake.service import (
 )
 from flow_api.intake.source_storage import SourceStorage, SourceStorageError
 from flow_api.intake.transforms import load_transform_rules
+from flow_api.security.route_policy import enforce_route_policy
 from flow_api.settings import get_settings
 
-router = APIRouter(prefix="/intake", tags=["intake"])
+router = APIRouter(prefix="/intake", tags=["intake"], dependencies=[Depends(enforce_route_policy)])
 UPLOAD_CHUNK_SIZE = 1024 * 1024
 INTAKE_CONFIGURATION_PATHS = (
     Path("templates/excel/flow_v1_contract.yaml"),
@@ -91,8 +92,7 @@ def resolve_intake_configuration_root(module_path: Path = Path(__file__)) -> Pat
     candidates = (resolved_module_path.parent, *resolved_module_path.parents)
     for candidate in candidates:
         if all(
-            (candidate / relative_path).is_file()
-            for relative_path in INTAKE_CONFIGURATION_PATHS
+            (candidate / relative_path).is_file() for relative_path in INTAKE_CONFIGURATION_PATHS
         ):
             return candidate
     raise RuntimeError(f"FLOW intake configuration files not found from {resolved_module_path}")

@@ -1,3 +1,4 @@
+from datetime import date
 from functools import lru_cache
 
 from pydantic import SecretStr
@@ -23,6 +24,11 @@ class Settings(BaseSettings):
     statement_max_upload_bytes: int = 80 * 1024 * 1024
     s3_use_system_proxy: bool = False
     auth_token: str | None = None  # 配置后启用 Bearer 认证边界；留空 = 开发模式
+    # S01 Task 2B：登记主体凭据（env PRINCIPAL_TOKENS，JSON：
+    # {"<token>": {"actor_id": "...", "role": "analyst", "enterprise_id": "<uuid>|null"}}）
+    principal_tokens: dict[str, dict[str, str | None]] = {}
+    # 旧 auth_token 兼容期截止日（env LEGACY_BEARER_UNTIL，ISO 日期）；过期后旧凭据 401
+    legacy_bearer_until: date | None = None
 
 
 @lru_cache

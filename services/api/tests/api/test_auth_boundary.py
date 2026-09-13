@@ -53,9 +53,7 @@ async def test_missing_token_is_rejected_when_auth_enabled() -> None:
 async def test_wrong_token_is_rejected_with_constant_time_compare() -> None:
     client = _client_with_token(TEST_TOKEN)
     async with client as http:
-        wrong = await http.get(
-            "/api/v1/workspace", headers={"Authorization": "Bearer wrong-token"}
-        )
+        wrong = await http.get("/api/v1/workspace", headers={"Authorization": "Bearer wrong-token"})
         assert wrong.status_code == 401
         assert wrong.json()["detail"]["code"] == "unauthorized"
         malformed = await http.get(
@@ -87,4 +85,72 @@ async def test_auth_disabled_when_token_not_configured() -> None:
     client = _client_with_token(None)
     async with client as http:
         response = await http.get("/api/v1/workspace")
+        assert response.status_code == 200
+
+
+# --- S01 Task 2B：scoped RBAC 边界 ---
+
+from uuid import uuid4  # noqa: E402
+
+
+@pytest.mark.asyncio
+async def test_legacy_bearer_cannot_publish_statement_report() -> None:
+    """旧 Bearer 映射为 service_account，无报告发布权（规格 §4/§5）。"""
+    client = _client_with_token(TEST_TOKEN)
+    async with client as http:
+        response = await http.post(
+            f"/api/v1/statements/{uuid4()}/publish",
+            headers={"Authorization": f"Bearer {TEST_TOKEN}"},
+            json={"actor": "legacy", "formats": ["html"]},
+        )
+        assert response.status_code == 403
+        assert response.json()["detail"]["code"] == "forbidden"
+
+
+@pytest.mark.asyncio
+async def test_legacy_bearer_cannot_freeze_via_hidden_write_get() -> None:
+    """会冻结快照的 GET 按写入口处理：旧 Bearer 被 403 拦截在 DB 之前。"""
+    client = _client_with_token(TEST_TOKEN)
+    async with client as http:
+        for suffix in ("objective-snapshot", "objective-snapshot/html"):
+            response = await http.get(
+                f"/api/v1/statements/{uuid4()}/{suffix}",
+                headers={"Authorization": f"Bearer {TEST_TOKEN}"},
+            )
+            assert response.status_code == 403, suffix
+
+
+@pytest.mark.asyncio
+async def test_legacy_bearer_cannot_approve_metric_rule() -> None:
+    client = _client_with_token(TEST_TOKEN)
+    async with client as http:
+        response = await http.post(
+            f"/api/v1/metric-library/entries/{uuid4()}/activate",
+            headers={"Authorization": f"Bearer {TEST_TOKEN}"},
+            json={"operator": "legacy"},
+        )
+        assert response.status_code == 403
+
+
+@pytest.mark.asyncio
+async def test_request_body_actor_cannot_spoof_identity() -> None:
+    """请求体 reviewer/actor 不得覆盖 Principal：旧 Bearer 提交 reviewer=admin 仍 403。"""
+    client = _client_with_token(TEST_TOKEN)
+    async with client as http:
+        response = await http.post(
+            f"/api/v1/investigations/{uuid4()}/evidence/{uuid4()}/decision",
+            headers={"Authorization": f"Bearer {TEST_TOKEN}"},
+            json={"decision": "confirm", "reviewer": "admin"},
+        )
+        assert response.status_code == 403
+
+
+@pytest.mark.asyncio
+async def test_legacy_bearer_keeps_read_access() -> None:
+    """兼容期内旧 Bearer 保留只读能力。"""
+    client = _client_with_token(TEST_TOKEN)
+    async with client as http:
+        response = await http.get(
+            "/api/v1/workspace", headers={"Authorization": f"Bearer {TEST_TOKEN}"}
+        )
         assert response.status_code == 200

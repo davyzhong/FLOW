@@ -29,8 +29,11 @@ from flow_api.investigation.repositories import (
 )
 from flow_api.investigation.service import InvestigationService
 from flow_api.investigation.state_machines import ReviewBlockedError
+from flow_api.security.route_policy import enforce_route_policy
 
-router = APIRouter(prefix="/investigations", tags=["investigations"])
+router = APIRouter(
+    prefix="/investigations", tags=["investigations"], dependencies=[Depends(enforce_route_policy)]
+)
 
 
 def get_investigation_session() -> Iterator[Session]:
@@ -66,9 +69,7 @@ def list_findings(session: SessionDependency) -> FindingListResponse:
                 total_score=str(finding.total_score) if finding.total_score is not None else None,
                 batch_id=str(batch_id) if batch_id else None,
                 metric_snapshot_id=str(finding.metric_snapshot_id),
-                analysis_run_id=(
-                    str(finding.analysis_run_id) if finding.analysis_run_id else None
-                ),
+                analysis_run_id=(str(finding.analysis_run_id) if finding.analysis_run_id else None),
                 created_at=(
                     finding.created_at.isoformat(timespec="seconds") if finding.created_at else None
                 ),

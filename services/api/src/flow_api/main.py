@@ -14,12 +14,29 @@ from flow_api.infrastructure.logging import (
     configure_logging,
     log_event,
 )
+from flow_api.settings import get_settings
 
 configure_logging()
 logger = logging.getLogger("flow.api")
 
 
+def _assert_auth_configured_for_env() -> None:
+    """非开发环境必须配置认证凭据，否则启动即失败（S01 安全 fail-fast）。"""
+
+    settings = get_settings()
+    if (
+        settings.flow_env != "development"
+        and not settings.auth_token
+        and not settings.principal_tokens
+    ):
+        raise RuntimeError(
+            f"flow_env={settings.flow_env!r} 下必须配置 AUTH_TOKEN 或 PRINCIPAL_TOKENS；"
+            "拒绝以无认证状态启动"
+        )
+
+
 def create_app() -> FastAPI:
+    _assert_auth_configured_for_env()
     app = FastAPI(title="FLOW API", version="0.1.0")
 
     @app.middleware("http")
