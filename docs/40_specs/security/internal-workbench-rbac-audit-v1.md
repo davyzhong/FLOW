@@ -2,7 +2,7 @@
 doc_id: FLOW-SPEC-INTERNAL-RBAC-AUDIT-V1
 title: 内部工作台 RBAC 与追加式审计规格 V1
 doc_type: specification
-status: review
+status: approved
 version: 1.1
 created_at: 2026-09-13
 updated_at: 2026-09-13
@@ -16,7 +16,7 @@ applies_to: services/api
 
 - 依据：战略重构设计 V1.1 §4、§4.1、§11；产品原则；S01 Task 6。
 - 目标：deny-by-default 授权、企业隔离、不可伪造身份、追加式审计，以及发布对象副作用的可恢复事务边界。
-- 状态纪律：本文保持 `review`，直到本轮独立审查清零且用户再次批准最终字节；既有批准不自动覆盖本次合同收紧。
+- 状态纪律：本文已转为 `approved`（2026-09-13 主协调者终审清零 P1/P2 + F1/F2 裁决后由用户明确批准；见 `docs/80_reviews/2026-09-13-s01-security-spec-v1.1-coordinator-review.md`）。本轮合同收紧后的最终字节即本文件，任何 ABI/枚举/allow set/截止/retention 偏差必须先修订本文并重新批准。
 - 路由权威清单：[`route-inventory-v1.tsv`](route-inventory-v1.tsv)。清单按最终 `api_router` 的实际挂载结果生成，路径名和 HTTP method 均不能替代实际副作用判断。
 
 ## 1. 范围与强制输出

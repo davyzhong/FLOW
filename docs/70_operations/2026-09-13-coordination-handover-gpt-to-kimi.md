@@ -1,9 +1,9 @@
 ---
 doc_id: FLOW-OPS-COORDINATION-HANDOVER-001
-title: 主协调者交接：GPT-5.6 → Kimi K3（2026-09-13 22:45）
+title: 主协调者交接记录：GPT-5.6 → Kimi K3 → GLM 5.3（2026-09-13）
 doc_type: operations
 status: active
-version: 1.0
+version: 1.2
 created_at: 2026-09-13
 updated_at: 2026-09-13
 owner: FLOW
@@ -45,8 +45,11 @@ GPT-5.6 因额度到期卸任主协调者；用户指定 Kimi K3 接任，协调
 | CI 核验器 | 三重修复完成（fail closed / 保留治理测试 / 防同名 job 假绿 + 防挂起），26 项目标测试绿 | d4379cc 链 |
 | Kimi `0841ff9`（route-policy） | **前任裁决：拒绝整包合并**，仅路由清单作素材，Task 2B 待正确安全基线重做；接任者维持该裁决 | S01 work-item 状态行 |
 | GLM `07d82f2`（module-ui） | 候选；两项已知待修（Make 目标跑错脚本、旧导航未归兼容分组） | GLM-S01-DELIVERY.md + 前任交接 |
-| GLM `4beae65`（module-boundaries） | 候选；Kimi 只读审查已完成（主体通过，F1/F2/F3 待处理） | 审查报告（见 evidence_refs） |
+| GLM `4beae65`（module-boundaries） | 候选；Kimi 只读审查已完成（主体通过，F1/F2 待裁决，F3 已消解——见 §4 注） | 审查报告（见 evidence_refs） |
+| GLM `a4051ea`（full-verification） | **v1.1 新增**：Task 6A 全链验证已交付并实跑 PASS（U8 dump→恢复→upgrade head→HTTPS 三方对账，黄金值 77,799,675 千元）；runner 目标 alembic head，0026 落地后自动覆盖 | GLM 清单 v1.1（main 73e175f） |
 | Sol（GPT 执行线）Task 2A Bootstrap | **未交付**——Task 6 未关闭的最大缺口 | PROJECT_STATE / S01 work-item |
+
+> v1.1 注：用户「三 Agent 并行各自完成、统一合并审计」指令经转发后，GLM 从 Bootstrap 基线（b8a3edd）并行交付了 Task 4 与 Task 6A，base-lineage 偏差已在 GLM 清单 v1.1 正式登记——审查发现 F3（时序越门禁）据此消解；合并顺序仍由本协调者按 §3 关键路径掌握。
 
 ## 3. 当前关键路径（唯一阻塞链）
 
@@ -62,9 +65,9 @@ GPT-5.6 因额度到期卸任主协调者；用户指定 Kimi K3 接任，协调
 
 | 执行方 | 当前任务 | 说明 |
 |---|---|---|
-| **GLM 5.3** | ① 补 F3 门禁解除依据；② module-ui 两项已知修复暂存，待 Task 6 绿 SHA 后补丁；③ 候选：**安全规格 V1.1 独立复审**（GLM 非规格作者，满足独立性） | 经用户转发指令 |
+| **GLM 5.3** | ① ~~补 F3 门禁解除依据~~（已消解：用户并行指令，v1.1 清单登记）；② module-ui 两项已知修复暂存，待 Task 6 绿 SHA 后补丁；③ **安全规格 V1.1 独立复审**（GLM 非规格作者，满足独立性） | 经用户转发指令 |
 | **MiniMax M3**（待加入） | 加入后首选：**Task 2A 安全 ABI Bootstrap**（严格按 approved 后的 V1.1 规格编码：RoleBinding、AuditEvent、0026 迁移、发布四阶段 ABI） | 规格 approved 前不得开工 |
-| **Kimi K3**（兼执行） | ① 规格复审通过后重做主协调 Task 2B（route policy 按 TSV 权威清单）；② 维护集成分支与权威状态 | 自我冲突规避：Kimi 写的代码不自我审查，审查归 GLM/MiniMax |
+| **Kimi K3**（兼执行） | ① 规格 approved 后重做 Task 2B（route policy 按 TSV 权威清单）；② 维护集成分支与权威状态；③ Wave 2 合并执行（Task 4/8 分支均已是候选） | 自我冲突规避：Kimi 写的代码不自我审查，审查归 GLM/MiniMax |
 
 **反冲突纪律**：Kimi 接任协调后仍是 Task 2B 的实现者；凡 Kimi 实现的代码，审查必须由 GLM 或 MiniMax 完成，主协调者只做门禁核验不做自我代码审查背书。
 
@@ -77,6 +80,32 @@ GPT-5.6 因额度到期卸任主协调者；用户指定 Kimi K3 接任，协调
 
 ## 6. 未决风险登记
 
-- GLM module-boundaries 分支基于 Task 6 前基线（F3），合并顺序须等 Task 6 关闭后 rebase/重建；
+- GLM 两个候选分支均基于 Task 6 前基线（b8a3edd），合并顺序须等 Task 6 关闭后按 Sol 2A → Kimi 2B → 发布接线 → GLM 车道串行推进；Task 6A runner 以 alembic head 为目标，0026 落地后无需改脚本即可复验；
 - 旧 Bearer 兼容截止日已在规格 V1.1 冻结（以规格为准），实现侧勿再留空；
 - 并行会话共用主检出曾致分支误植（GLM/Kimi 各一次，均已纠正）；协调工作固定在 `.worktrees/s01-parallel-integration`，执行方一律独立 worktree。
+
+## 7. 更新后的后续计划（v1.1，2026-09-13 23:20）
+
+```
+[现在]  GLM 独立复审安全规格 V1.1（等用户转发指令）
+  ↓ 复审意见清零
+[门禁]  用户重新批准规格 → Kimi 转 status=approved、恢复 approved-spec 门禁
+  ↓
+[Wave 1] MiniMax M3 执行 Task 2A Bootstrap（规格 approved 才开工）
+  ↓ 审查（Kimi 门禁核验 + GLM 代码审查）
+[Wave 1] Kimi 重做 Task 2B（TSV 权威清单 + route policy，含 modules 路由补登记）
+  ↓
+[Wave 1] 发布路由串行接线（publishing/operations 四阶段 ABI）
+  ↓ CI 核验器确认绿 → Task 6 关闭
+[Wave 2] 合并 GLM module-boundaries（F1/F2 裁决已含）→ 合并 module-ui（含两项补丁）
+  → Task 6A 全链验证复跑（a4051ea runner）→ Wave 3
+```
+
+## 8. 用户决定记录（v1.2，2026-09-13 23:58）
+
+用户在 Kimi 会话中明确两项决定：
+
+1. **批准安全规格 V1.1 最终字节**——`approved` 状态（Mavis `e848e9a` 翻转）自此具备完整的用户批准闭环；独立复审证据为 GLM `6c3c1cd`（零 P1/P2，2 条 P3 已登记吸收进 Task 2B 重做要求）。
+2. **主协调者改由 GLM 5.3 担任**——Kimi 回到执行线（Task 2B 重做）；Mavis 的「接 Kimi K3 班」声索随之失效，MiniMax M3 回执行线（2A 剩余：0026 迁移 / RoleBinding 持久化 / 发布四阶段 ABI）。
+
+本文件不再代表当前协调权威；GLM 5.3 接任后以其登记为准。

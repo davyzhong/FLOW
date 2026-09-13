@@ -35,7 +35,7 @@ knowledge_release: flow-knowledge-2026-09-12.1
 | domain objects | platform | approved | `docs/architecture/flow-v1-domain-objects.md`（原位） | |
 | module boundaries v1 | platform | approved | `docs/40_specs/platform/module-boundaries-v1.md` | S01 子规格：三层两模块边界（D052–D054） |
 | financial facts contract v2 | financial-facts | approved | `docs/40_specs/financial-facts/financial-facts-contract-v2.md` | S01 子规格：Facts V2 向后兼容扩展 |
-| internal workbench rbac audit v1 | security | review | `docs/40_specs/security/internal-workbench-rbac-audit-v1.md` | S01 V1.1；P1/P2 精确化修订后保持 review，等待复审与用户重新批准 |
-| security route inventory v1 | security | review | `docs/40_specs/security/route-inventory-v1.tsv` | 最终 `api_router` 的 64 个挂载入口；按实际副作用登记 action/loader/owner/blocker |
+| internal workbench rbac audit v1 | security | approved | `docs/40_specs/security/internal-workbench-rbac-audit-v1.md` | S01 V1.1；2026-09-13 主协调者终审清零 P1/P2 + F1/F2 裁决后由用户明确批准 |
+| security route inventory v1 | security | approved | `docs/40_specs/security/route-inventory-v1.tsv` | 最终 `api_router` 的 64 个挂载入口；按实际副作用登记 action/loader/owner/blocker |
 
 机器 keep 路径（消费者清单 `migration/consumer-registry.tsv`）：`docs/implementation/p5/`、`docs/implementation/objective-analysis/`、`02_research/synthesis/` 两数据集 YAML。

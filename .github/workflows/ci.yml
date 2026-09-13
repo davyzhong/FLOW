@@ -64,7 +64,8 @@ jobs:
       - run: >-
           cd services/api && uv run pytest
           tests/domain tests/api/test_auth_boundary.py
-          tests/api/test_workspace.py tests/test_health.py -q
+          tests/api/test_workspace.py tests/test_health.py
+          tests/security/test_authorization.py -q
 
   integration:
     runs-on: ubuntu-latest
