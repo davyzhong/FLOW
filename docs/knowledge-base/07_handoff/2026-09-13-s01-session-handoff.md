@@ -33,7 +33,7 @@ applies_to: handoff
 | Task 2：三份实施子规格 + approved-spec 门禁 | 0a8ebab（review）→ 4298f7b（用户批准后 approved） | CI 绿 |
 | Task 3：Facts V2 纯领域模型（TDD，27 测试） | 28a551c | CI 绿 |
 | Task 4：V1/canonical 显式适配器（TDD，14+16 测试） | 2033db4 | CI 绿 |
-| Task 5：企业空间/月度周期 + 迁移 0025（TDD，22+1 测试） | 15c57c6 + f366cc2 | 已推送，**CI 运行中（run 34754338585），会话结束时未确认绿** |
+| Task 5：企业空间/月度周期 + 迁移 0025（TDD，22+1 测试） | 15c57c6 + f366cc2 | CI 绿（20:31 复核 confirmed） |
 
 三份 approved 子规格（Task 3–8 的共同 Step 0 门禁对象）：
 
@@ -46,11 +46,25 @@ applies_to: handoff
 
 ## 3. 卡住/未决事项
 
-1. **Task 5 CI 未确认**：提交 `f366cc2` 的 CI（run 34754338585）会话结束时仍 in_progress。
-   接手第一件事：`gh run list --repo davyzhong/FLOW --limit 2` 确认绿后再开工；若红，先修。
+1. ~~Task 5 CI 未确认~~ **已闭环（20:31 复核：f366cc2 CI completed/success）**。
+   新未决项：三智能体并行计划（`cb99044`，docs-only，推送时 CI 在跑）+ 主协调者 Task 0
+   Gate 0 与 Sol Task 1 Bootstrap 未落地前，Kimi K3 的 Task 2B 不得开工（见 §7）。
 2. **RBAC 规格有一处待冻结项**：`internal-workbench-rbac-audit-v1.md` §5 第 5 条——
-   旧 Bearer 兼容期限留空（`____`），须在 Task 6 Step 1 冻结并修订规格。
+   旧 Bearer 兼容期限留空（`____`），按三智能体计划由主协调者在 Gate 0 Step 3 冻结。
 3. **本地全套集成测试 >5 分钟会超时**：跑子集验证，全套交给 CI。
+
+## 7. 三智能体并行计划下的任务分配（2026-09-13 晚 GPT 推送，cb99044）
+
+- 计划：`docs/superpowers/plans/2026-09-13-flow-three-agent-parallel-restructuring.md`；
+  手册：`docs/70_operations/three-agent-parallel-execution-runbook.md` §5.2。
+- **Kimi K3（本会话角色）= 跨仓路由与证据负责人**：Task 2B 路由盘点与权限接线
+  （route_policy + 7 routes + 6 schemas + 4 测试文件，白名单严格）、Task 4 只读审查、
+  Task 6B 旧工作包裁决备忘（只读 review 草案）。
+- **开工前置**：主协调者 Task 0（Gate 0：安全规格降 review 修订 ABI 并再批准、
+  integration 基线、CI 核验器）+ Sol Task 1（安全 ABI Bootstrap）合并公布 base_sha。
+- **预热产物**：只读路由盘点草稿在 `work/s01-route-inventory-draft.md`（gitignored，
+  53 端点全表、2 个 GET 隐藏写、6 个 schema 的 actor/operator 伪造面、action 建议）。
+  正式 inventory 必须在 `codex/s01-route-policy` 分支对最终 api_router 机器重新生成。
 
 ## 4. 下一步计划（按序，每任务远端 CI 绿后才进下一个）
 
