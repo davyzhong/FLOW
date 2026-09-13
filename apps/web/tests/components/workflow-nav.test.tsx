@@ -36,11 +36,12 @@ describe("WorkflowNav 模块入口（Task 2C）", () => {
     expect(link).toHaveAttribute("href", "/internal#governance");
   });
 
-  it("旧路由兼容分组保留：数据接入/驾驶舱/工作台/报表/指标库", () => {
+  it("旧路由兼容分组保留：八条旧入口全部可达", () => {
     renderAt("/");
-    for (const label of ["数据接入", "经营总览", "四问工作台", "报告与导出", "报表分析", "指标库"]) {
+    for (const label of ["数据接入", "经营总览", "分析与归因", "四问工作台", "报告与导出", "报表分析", "指标库", "经营概览"]) {
       expect(screen.getByRole("link", { name: new RegExp(label) })).toBeInTheDocument();
     }
+    expect(screen.getByText("旧路由兼容入口")).toBeInTheDocument();
   });
 
   it("各路由下 AppShell 导航可见（单一导航）", () => {

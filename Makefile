@@ -84,7 +84,10 @@ acceptance: infra-up
 test-user-closure-e2e:
 	bash scripts/test_user_closure_e2e.sh
 
-test-statements-e2e test-module-boundaries-e2e: infra-up
+test-module-boundaries-e2e:
+	bash scripts/test_module_boundaries_e2e.sh
+
+test-statements-e2e: infra-up
 	bash scripts/test_statements_e2e.sh
 
 docs-check:
