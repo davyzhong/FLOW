@@ -22,3 +22,4 @@ __pycache__/
 playwright-report/
 test-results/
 backups/
+packages/contracts/node_modules
