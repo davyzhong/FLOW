@@ -1,14 +1,182 @@
 ---
 doc_id: FLOW-HANDOFF-STRATEGY-20260912
-title: FLOW 战略重构讨论交接
+title: FLOW 三智能体并行重构总交接
 doc_type: navigation
 status: current
-version: 1.1
+version: 2.0
 created_at: 2026-09-12
 updated_at: 2026-09-13
 owner: FLOW
 applies_to: repository
 ---
+
+# FLOW 三智能体并行重构总交接｜2026-09-13
+
+> 本页是 GPT-5.6 Sol、Kimi K3、GLM 5.3 和主协调者的统一交接入口。下面“历史战略交接”保留原有 D052–D054 背景，当前执行以本页前半部分和链接的正式计划为准。
+
+## 0. 当前结论
+
+U8 已冻结并可恢复；S01 Task 1–5 已形成代码提交。下一阶段不再由一个智能体串行承担全部 Task 6–10，而采用三执行者独立 worktree、主协调者串行集成。
+
+设计本交接时的仓库基线：
+
+- `main` / `origin/main`: `4ec50bc`；
+- U8 严格冻结：`914a473`，标签 `flow-u8-freeze-20260913`；
+- Task 5 企业周期实现：`15c57c6`，迁移目标 `0025_enterprise_cycle`；
+- `4ec50bc` 的 FLOW CI run `34755147722` 已 success；执行 Gate 0 时仍以最新 main 和最新绿色 run 为准；
+- 本页是计划，不代表 Task 6 已经开工。
+
+接手时必须重新 `git fetch` 并以最新绿色 main 为准，不得机械使用这里的旧 SHA 创建执行分支。
+
+## 1. 必读文档
+
+1. [三智能体并行编排设计](docs/superpowers/specs/2026-09-13-flow-three-agent-parallel-orchestration-design.md)——为什么这样分工、合同、所有权、失败边界；
+2. [三智能体并行实施计划](docs/superpowers/plans/2026-09-13-flow-three-agent-parallel-restructuring.md)——Task 0–7、精确文件和测试；
+3. [三智能体执行使用手册](docs/70_operations/three-agent-parallel-execution-runbook.md)——派发提示词、交付格式、合并方法；
+4. [原 S01 详细计划](docs/superpowers/plans/2026-09-13-flow-post-u8-boundary-gate.md)——Task 6–10 的功能范围；
+5. [S01 工作包](docs/50_plans/work_items/S01--post-u8-boundary-contract-security.md)与[唯一当前路线图](docs/50_plans/CURRENT_ROADMAP.md)——唯一状态真相。
+
+新计划是原 S01 计划的执行编排层，不是第二份路线图，不扩大产品范围。
+
+## 2. 三个智能体的固定职责
+
+| 智能体 | 主要工作 | 不得修改 |
+|---|---|---|
+| GPT-5.6 Sol | 安全 ABI、授权纯函数、身份解析、0026、审计持久化、publication/object-store 事务边界、负向安全验证 | 除串行 publishing/operations 外的业务 route、前端、路线图、HANDOFF |
+| Kimi K3 | 全挂载路由盘点、route policy、七组敏感入口接线、旧工作包/证据继承 review 备忘 | publishing/operations 两条 Sol 路由、Principal/authorize 第二实现、迁移、前端、权威状态与 backlog 修改 |
+| GLM 5.3 | 两模块前端、模块 registry/ownership/AST、API 契约生成、受控 E2E runner、Task 9 全链验证 | 安全迁移、产品状态裁决、HANDOFF |
+| 主协调者 | 规格冻结、共同基线、分支派发、diff 审查、合并、CI 门禁、交付记录、权威状态和最终关闭 | 不把未经验证的执行者总结直接当完成证据 |
+
+初始分配依据：Sol 是当前环境中的可靠代理型工程模型；Kimi K3 官方资料强调 1M 上下文和长程 coding/知识工作；GLM 5.3 官方仓库强调复杂 coding 与长程工程增强。厂商描述不是验收证据，Wave 1 后按 FLOW 的 CI、越界文件、冲突和返工数据调整。
+
+## 3. 启动顺序
+
+### Gate 0：主协调者串行完成
+
+1. 等最新 main CI 全绿；
+2. 修正当前文档漂移：PROJECT_STATE 的迁移头/Task 3、CURRENT_ROADMAP 的三规格状态、READING_ORDER 的“V2 待设计”、S01 工作包的 Task 4/5 状态；
+3. 将安全规格从 approved 降回 review，完成修订和独立审查，取得用户对最终字节的明确批准后才恢复 approved；
+4. 冻结安全 ABI、审计事务语义、旧 Bearer 截止和模块描述合同；
+5. 运行 approved-spec + docs-check；该脚本只校验状态和索引，不能替代第 3 步的用户批准；
+6. 创建并推送 `codex/s01-parallel-integration`，公布 Gate 0 `base_sha`；后续每个 checkpoint 重新公布其 CI 绿色 SHA。
+
+当前安全规格虽为 approved，但仍有必须先关闭的空白：旧 Bearer 截止日期、审计访问/保留/脱敏阈值、public/legacy 无企业身份时的授权语义。默认提案写在编排设计 §5；必须经过 `review → 独立审查 → 用户明确批准 → approved`，未完成前不得启动 Task 6。
+
+### Bootstrap：Sol 先建立可依赖 ABI
+
+Sol 在 `codex/s01-security-abi` 交付 Principal/Role/Action/Resource/Decision、纯 authorize 和 audit writer Protocol。主协调者先合并并等 CI 绿，再让三条 lane 从新的共同 SHA 并行。
+
+### Wave 1：三路并行
+
+| Lane | 分支 | 交付 |
+|---|---|---|
+| Sol | `codex/s01-security-audit` | 身份、审计 ORM/writer、0026、trigger、startup fail-fast、publication/object-store 调用方事务与 intent/outcome |
+| Kimi | `codex/s01-route-policy` | 全挂载 route inventory；intake、investigations、metric library、objective reports、statements、copilot、orchestration 权限接线；publishing/operations 标为 Sol 待串行接线；API/扫描测试 |
+| GLM | `codex/s01-module-ui` | `/public`、`/internal`、导航语义、Vitest/Playwright 与可供 CI 调用的受控 E2E runner |
+
+主协调者先合并 Sol，再合并 Kimi；随后从两者合并 SHA 派发 Sol 串行发布路由分支，接入 publishing/operations 的最终 route policy 和持久 intent 调用序列，完整复验后关闭 Task 6。GLM 前端分支暂存，不提前宣称 Task 8 完成。
+
+### Wave 2：模块边界和前端集成
+
+Task 6 CI 绿后，GLM 从新基线创建 `codex/s01-module-boundaries` 完成 Task 7。Kimi 只读复核 ownership/route inventory，Sol 只读复核安全副作用。主协调者先合并 Task 7 并重生契约，再从 Task 7 SHA 新建 `codex/s01-module-ui-integration`，cherry-pick 已审 UI commit 后合并 Task 8；不 rebase 已推送分支。
+
+### Wave 3：验证与预关闭
+
+- GLM：`codex/s01-full-verification`，执行 Task 9 全链、U8/0024 恢复→0026 升级→再验证；
+- Kimi：`codex/s01-work-item-disposition-review`，只创建 Task 10 旧工作包裁决 review 备忘，不修改权威状态、CAPABILITY_MAP 或 backlog；
+- Sol：独立安全复核，P1/P2 不清零不得关闭。
+
+主协调者按 Task 9 → Task 10 review 备忘合并；由主协调者应用裁决、创建或修改 backlog，最后独占更新 PROJECT_STATE、CURRENT_ROADMAP、S01 work-item、CAPABILITY_MAP、计划视图和交付记录。
+
+## 4. 派发使用说明
+
+每条工作单必须写清：任务名、`base_sha`、分支、规格、允许和禁止文件、前置接口、红灯测试、绿色测试、提交信息、交付格式和停机条件。三种模型的完整可复制提示词见[执行使用手册 §5](docs/70_operations/three-agent-parallel-execution-runbook.md#5-三个智能体的固定工作说明)。
+
+执行者必须返回：
+
+```text
+状态 / base_sha / branch / commit / push
+逐项修改文件
+红灯证据与绿色证据
+范围检查
+迁移或契约结果
+残余风险
+建议合并顺序
+```
+
+没有提交、测试结果或文件清单的工作不进入合并队列。
+
+## 5. 文件所有权与禁止事项
+
+- Sol 独占 security core、auth/settings/main、ORM、0026、两条串行发布 route、`publishing/publication.py`、`operations/publication.py`、`infrastructure/object_store.py` 及其安全/事务测试；
+- Kimi 独占 route_policy、工作单逐项列出的七组业务 routes/schemas、全路由 inventory、路由扫描和 auth boundary 测试；可写 Task 10 review 备忘，不得写两条发布 route 或权威状态；
+- GLM 独占模块 facade/registry/router/ownership/AST、两入口页面、导航、模块 E2E runner、S01 独立验收 compose 和升级验证 runner；
+- 主协调者独占 `.github/workflows/ci.yml`、所有状态、计划视图、知识清单、backlog、CAPABILITY_MAP、交付记录和 integration 分支；
+- 三个执行者都不得修改 `docs/knowledge-base` 的不可变档案；
+- 不得 force-push、`reset --hard`、直接推 main、手改生成契约或为解决冲突删除用户文件。
+
+发现两个 lane 需要同一文件时，两边都停止，由主协调者重新指定唯一 owner。
+
+## 6. 合并和验收
+
+固定顺序：
+
+```text
+安全 ABI
+→ Sol 审计/0026/发布事务
+→ Kimi 路由接线
+→ Sol 串行接入 publishing/operations route
+→ 完整安全复验并关闭 Task 6
+→ GLM 模块 API/ownership
+→ GLM 前端
+→ Task 9 全链证据
+→ Task 10 review 备忘
+→ 主协调者状态关闭
+```
+
+每次合并前检查当前 checkpoint base 和文件白名单；同一波次共享 base，后续波次使用上一 checkpoint 的 CI 绿色 SHA。每个候选合并后只运行本地目标测试与交叉测试；在 Bootstrap、Task 6 security、Wave 2、最终 Wave 3 四个检查点各推送一次 integration。由于 main 当前没有 branch protection required checks，必须用仓库内 S01 job 清单核验目标 SHA 的 FLOW CI：workflow success、清单 job 全 success 且无 skip。`.github/workflows/ci.yml` 必须纳入安全纯测试/集成测试、模块 AST/API、导航 Vitest 和 `make test-module-boundaries-e2e`。最终 main 只从上述门禁全绿的 integration 前进。
+
+Task 9 的关键恢复序列：
+
+```text
+用专属 compose project 在一次性隔离库恢复 U8/0024 基线
+→ 核验关键表和 frozen payload 哈希
+→ alembic upgrade 到唯一 0026 head
+→ 核验 enterprise/cycle/security schema
+→ 直接 SQL 验证 AuditEvent UPDATE/DELETE trigger
+→ 专属 API/动态 HTTPS 读取恢复库独有载荷并与 SQL/哈希对账
+→ 旧入口与新模块全链回归
+```
+
+任何 skip、哈希不一致、第二 migration head、AI 可发布、规则可自批或跨企业可访问，均令 S01 保持 active。
+
+## 7. 卡住的问题与默认裁决
+
+1. 基线 `4ec50bc` 的 FLOW CI 已 success；接手仍必须重新查询最新 main，不能把历史 run 当成新 checkpoint 证据；
+2. 权威状态文档落后于 Git：只能由主协调者成组修正，并在原 S01 计划、CURRENT_ROADMAP、S01 work-item、计划 README 登记“原计划定义范围、新计划定义并行执行”的权威关系；
+3. 安全规格有空白：默认 Bearer 截止 `2026-10-31T23:59:59+08:00`，只映射最小 service account；审计至少在线保留 365 天且 S01 不物理删除；这些仍是待审提案，必须经独立审查和用户明确批准才能成为 approved 规格；
+4. 现有部分 GET 实际冻结/写入：按实际副作用保护，不能按 HTTP 方法猜；
+5. publication service 内部 commit 和对象存储副作用可能破坏审计原子性：固定 `prepare_intent → route commit → execute_object → finalize success/failure → route commit`；两条发布 route 与 service 统一归 Sol，并在 Sol/Kimi 主分支合并后串行接线，不能在 route 尾部补日志冒充闭环；
+6. Task 7 新 API 会改变 OpenAPI：该任务同批重生契约，Task 9 再从最终状态复验；
+7. 当前 CI 没有覆盖新增安全、架构、Vitest 和 Playwright 门禁：Task 6/8 的完成条件包含由主协调者补齐 FLOW CI job 并由 S01 清单逐项核验，不能用本地证据替代。
+
+## 8. 故障恢复
+
+- lane 失败：不合并，保留分支修复；
+- integration 合并导致失败：普通 `git revert -m 1`，不改写历史；
+- 0026 失败：只在一次性验收库 downgrade；
+- generated contract 冲突：从最终 FastAPI 重生；
+- Task 9 恢复失败：停止 Task 10 关闭；
+- main 被其他会话推进：暂停合并，fetch 后重新评估 base，不盲目 rebase 状态文档；
+- 始终保留 `u8-final-baseline`、`flow-u8-freeze-20260913` 和本地 U8 备份。
+
+## 9. 下一步
+
+接手者只执行 Gate 0，不直接领取三条 lane。Gate 0 提交和 CI 绿色后，先派发 Sol Bootstrap；Bootstrap 授权测试已接入远端 CI 且 checkpoint 核验绿色后，才同时派发 Wave 1 三个智能体。
+
+---
+
+## 历史战略交接（原 2026-09-12 内容，保留供 D052–D054 追溯）
 
 # FLOW 战略重构讨论交接｜2026-09-12
 
