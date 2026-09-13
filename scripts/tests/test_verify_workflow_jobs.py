@@ -9,6 +9,7 @@ from pathlib import Path
 from unittest import mock
 
 import pytest
+import yaml
 
 ROOT = Path(__file__).resolve().parents[2]
 MODULE_PATH = ROOT / "scripts/ci/verify_workflow_jobs.py"
@@ -65,6 +66,13 @@ def test_load_required_jobs_rejects_duplicates(tmp_path: Path) -> None:
         module.load_required_jobs(path)
 
 
+def test_load_required_jobs_ignores_indented_comments(tmp_path: Path) -> None:
+    module = _load_module()
+    path = tmp_path / "required.txt"
+    path.write_text("  # explanatory comment\nstatic-python\n", encoding="utf-8")
+    assert module.load_required_jobs(path) == ["static-python"]
+
+
 def test_fetch_run_uses_real_github_shapes_and_separate_endpoints() -> None:
     module = _load_module()
     responses = [
@@ -84,6 +92,26 @@ def test_fetch_run_uses_real_github_shapes_and_separate_endpoints() -> None:
     urls = [call.args[0].full_url for call in open_url.call_args_list]
     assert urls[0].endswith("/actions/runs/123")
     assert urls[1].endswith("/actions/runs/123/jobs?per_page=100&page=1")
+
+
+def test_fetch_run_applies_timeout_to_every_request() -> None:
+    module = _load_module()
+    responses = [
+        _Response({
+            "name": "FLOW CI",
+            "head_sha": "a" * 40,
+            "status": "completed",
+            "conclusion": "success",
+        }),
+        _Response({"total_count": 0, "jobs": []}),
+    ]
+
+    with mock.patch.object(
+        module.urllib.request, "urlopen", side_effect=responses
+    ) as open_url:
+        module.fetch_run("123")
+
+    assert [call.kwargs["timeout"] for call in open_url.call_args_list] == [15, 15]
 
 
 def test_fetch_run_paginates_jobs() -> None:
@@ -182,6 +210,21 @@ def test_verify_rejects_duplicate_required_jobs() -> None:
     assert any("重复" in error for error in errors)
 
 
+def test_verify_rejects_duplicate_observed_required_job() -> None:
+    module = _load_module()
+    run = _success_run(jobs=[
+        {"name": "static-python", "status": "completed", "conclusion": "failure"},
+        _success_job("static-python"),
+    ])
+    errors = module.verify(
+        run,
+        expected_sha="a" * 40,
+        jobs=["static-python"],
+        phase="final",
+    )
+    assert any("static-python" in error and "2 次" in error for error in errors)
+
+
 @pytest.mark.parametrize(
     ("override", "expected_fragment"),
     [
@@ -238,13 +281,29 @@ def test_cli_rejects_arbitrary_exemptions() -> None:
     assert exc_info.value.code == 2
 
 
+def test_cli_fails_closed_on_network_timeout(capsys: pytest.CaptureFixture[str]) -> None:
+    module = _load_module()
+    with mock.patch.object(
+        module.urllib.request, "urlopen", side_effect=TimeoutError("timed out")
+    ):
+        result = module.main([
+            "--run-id", "123",
+            "--expected-sha", "a" * 40,
+            "--phase", "final",
+        ])
+    assert result == 1
+    assert "timed out" in capsys.readouterr().err
+
+
 def test_static_python_preserves_governance_tests_and_runs_verifier_pytest() -> None:
-    workflow = WORKFLOW_PATH.read_text(encoding="utf-8")
+    workflow = yaml.safe_load(WORKFLOW_PATH.read_text(encoding="utf-8"))
+    static_python_steps = workflow["jobs"]["static-python"]["steps"]
+    run_commands = [step["run"] for step in static_python_steps if "run" in step]
     assert (
         "cd services/api && uv run python -m unittest discover "
         "-s ../../scripts/tests -t ../.. -v"
-    ) in workflow
+    ) in run_commands
     assert (
         "cd services/api && uv run pytest "
         "../../scripts/tests/test_verify_workflow_jobs.py -q"
-    ) in workflow
+    ) in run_commands

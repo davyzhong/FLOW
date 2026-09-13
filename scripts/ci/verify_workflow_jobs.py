@@ -22,6 +22,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 REQUIRED_JOBS_FILE = ROOT / "config/ci/required_jobs_s01.txt"
 WORKFLOW_NAME = "FLOW CI"
+REQUEST_TIMEOUT_SECONDS = 15
 
 # 阶段豁免：该 checkpoint 尚未接入 CI 的清单 job（显式声明，不静默缺失）
 PHASE_EXEMPTIONS: dict[str, set[str]] = {
@@ -33,11 +34,10 @@ PHASE_EXEMPTIONS: dict[str, set[str]] = {
 
 
 def load_required_jobs(path: Path = REQUIRED_JOBS_FILE) -> list[str]:
-    jobs = [
-        line.strip()
-        for line in path.read_text(encoding="utf-8").splitlines()
-        if line.strip() and not line.startswith("#")
-    ]
+    lines = (
+        line.strip() for line in path.read_text(encoding="utf-8").splitlines()
+    )
+    jobs = [line for line in lines if line and not line.startswith("#")]
     duplicates = sorted({job for job in jobs if jobs.count(job) > 1})
     if duplicates:
         raise ValueError(f"required job 重复: {', '.join(duplicates)}")
@@ -75,15 +75,19 @@ def verify(
     if run.get("conclusion") != "success":
         errors.append(f"conclusion 不是 success: {run.get('conclusion')!r}")
 
-    by_name: dict[str, dict] = {}
+    by_name: dict[str, list[dict]] = {}
     for job in run.get("jobs", []):
-        by_name[job.get("name", "")] = job
+        by_name.setdefault(job.get("name", ""), []).append(job)
 
     for job in required:
-        info = by_name.get(job)
-        if info is None:
+        matches = by_name.get(job, [])
+        if not matches:
             errors.append(f"清单 job 缺失: {job}")
             continue
+        if len(matches) != 1:
+            errors.append(f"清单 job {job} 出现 {len(matches)} 次，要求恰好一次")
+            continue
+        info = matches[0]
         if info.get("conclusion") == "skipped":
             errors.append(f"清单 job 被跳过: {job}")
         elif info.get("conclusion") != "success":
@@ -107,7 +111,9 @@ def _fetch_json(url: str) -> dict:
         url,
         headers=_request_headers(),
     )
-    with urllib.request.urlopen(request) as response:
+    with urllib.request.urlopen(
+        request, timeout=REQUEST_TIMEOUT_SECONDS
+    ) as response:
         return json.load(response)
 
 
