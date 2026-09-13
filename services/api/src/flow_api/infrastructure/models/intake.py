@@ -41,11 +41,31 @@ class AnalysisBatch(IdentityTimestampMixin, Base):
             "status in ('draft', 'validating', 'blocked', 'ready', 'published')",
             name="ck_analysis_batch_status",
         ),
+        # Facts V2 合法组合矩阵（规格 §4）：单一 CHECK 为最终防线。
+        CheckConstraint(
+            "(module_kind = 'legacy' AND fact_context_version = 1"
+            " AND analysis_cycle_id IS NULL)"
+            " OR (module_kind = 'public' AND fact_context_version IN (1, 2)"
+            " AND analysis_cycle_id IS NULL)"
+            " OR (module_kind = 'internal' AND fact_context_version = 2"
+            " AND analysis_cycle_id IS NOT NULL)",
+            name="ck_analysis_batch_module_combo",
+        ),
     )
 
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     status: Mapped[str] = mapped_column(String(32), nullable=False, default=BatchStatus.DRAFT.value)
     description: Mapped[str | None] = mapped_column(Text)
+    module_kind: Mapped[str] = mapped_column(
+        String(32), nullable=False, default="legacy", server_default="legacy"
+    )
+    fact_context_version: Mapped[int] = mapped_column(
+        Integer, nullable=False, default=1, server_default="1"
+    )
+    analysis_cycle_id: Mapped[UUID | None] = mapped_column(
+        PG_UUID(as_uuid=True),
+        ForeignKey("analysis_cycle.id", ondelete="RESTRICT"),
+    )
 
     source_files: Mapped[list[SourceFile]] = relationship(
         back_populates="batch", cascade="all, delete-orphan"

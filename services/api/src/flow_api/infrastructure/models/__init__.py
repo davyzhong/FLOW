@@ -1,3 +1,7 @@
+# 企业空间 ORM（enterprise/analysis_cycle）：纯模块导入完成 Base.metadata 注册；
+# 不能用 from-import 名字——enterprise.models 依赖本包的 base/intake，
+# 反向 from-import 会在部分初始化时构成循环导入。
+import flow_api.enterprise.models as _enterprise_models  # noqa: E402,F401
 from flow_api.infrastructure.models.analytics import (
     AnalysisDriver,
     AnalysisResult,
