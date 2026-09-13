@@ -2687,6 +2687,30 @@
         }
       }
     },
+    "/api/v1/modules": {
+      "get": {
+        "tags": [
+          "modules"
+        ],
+        "summary": "List Modules",
+        "description": "返回产品可见模块清单；shared_core 为内部架构 owner，不在列表中。",
+        "operationId": "list_modules_api_v1_modules_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response List Modules Api V1 Modules Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/metric-library": {
       "get": {
         "tags": [
