@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 三智能体并行重构总交接
 doc_type: navigation
 status: current
-version: 2.0
+version: 2.1
 created_at: 2026-09-12
 updated_at: 2026-09-13
 owner: FLOW
@@ -17,6 +17,8 @@ applies_to: repository
 ## 0. 当前结论
 
 U8 已冻结并可恢复；S01 Task 1–5 已形成代码提交。下一阶段不再由一个智能体串行承担全部 Task 6–10，而采用三执行者独立 worktree、主协调者串行集成。
+
+**执行更新（2026-09-13）**：用户已明确批准安全规格并下令开始执行。integration 基线 `b8a3edd` 已建立；Kimi 候选 `0841ff9` 与 GLM 候选 `07d82f2` 已推送。两者当前只进入审查队列：Kimi 分支早于 Sol Bootstrap，不得直接合并；GLM 前端在 Task 7 合同完成后通过新集成分支移植。当前由主协调者完成安全规格 V1.1 独立审查与 Sol Bootstrap。
 
 设计本交接时的仓库基线：
 

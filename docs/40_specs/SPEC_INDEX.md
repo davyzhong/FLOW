@@ -3,7 +3,7 @@ doc_id: FLOW-SPEC-INDEX-001
 title: 规格总索引
 doc_type: governance
 status: current
-version: 1.1
+version: 1.2
 created_at: 2026-09-12
 updated_at: 2026-09-13
 owner: FLOW
@@ -35,6 +35,6 @@ knowledge_release: flow-knowledge-2026-09-12.1
 | domain objects | platform | approved | `docs/architecture/flow-v1-domain-objects.md`（原位） | |
 | module boundaries v1 | platform | approved | `docs/40_specs/platform/module-boundaries-v1.md` | S01 子规格：三层两模块边界（D052–D054） |
 | financial facts contract v2 | financial-facts | approved | `docs/40_specs/financial-facts/financial-facts-contract-v2.md` | S01 子规格：Facts V2 向后兼容扩展 |
-| internal workbench rbac audit v1 | security | approved | `docs/40_specs/security/internal-workbench-rbac-audit-v1.md` | S01 子规格：deny-by-default RBAC 与追加式审计 |
+| internal workbench rbac audit v1 | security | review | `docs/40_specs/security/internal-workbench-rbac-audit-v1.md` | S01 V1.1 冻结旧 Bearer、审计阈值与发布事务 ABI；已获用户批准，等待独立规格审查 |
 
 机器 keep 路径（消费者清单 `migration/consumer-registry.tsv`）：`docs/implementation/p5/`、`docs/implementation/objective-analysis/`、`02_research/synthesis/` 两数据集 YAML。

@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-POST-U8-BOUNDARY-001
 title: U8 后战略边界、事实合同与安全门禁实施计划
 doc_type: plan
 status: active
-version: 1.1
+version: 1.2
 created_at: 2026-09-13
 updated_at: 2026-09-13
 owner: FLOW
@@ -34,6 +34,8 @@ superseded_by: null
 Task 2 只可在 U08 completed、有可恢复冻结点且工作区无范围外修改后开始。Task 3–8 还必须等待三份子规格全部 approved，并在各任务开始前用 `SPEC_INDEX.md` 和文档门禁重新确认。本计划不实现公开模块 C 级完整报告链、内部月度工作台或真实企业三周期验证，它们在门禁关闭后分别制定计划。
 
 Task 3–8 的共同 Step 0：运行 `python3 scripts/documentation/require_approved_specs.py FLOW-SPEC-MODULE-BOUNDARIES-V1 FLOW-SPEC-FINANCIAL-FACTS-V2 FLOW-SPEC-INTERNAL-RBAC-AUDIT-V1 && make docs-check`。脚本解析三个精确 doc_id 的 frontmatter、权威路径与 `SPEC_INDEX` 行，并强制三者 `status: approved`；任一不符即非零退出，不写代码。
+
+Task 6–10 的执行覆盖层：[三智能体并行重构计划](2026-09-13-flow-three-agent-parallel-restructuring.md)。本计划继续定义功能范围与退出条件；并行计划独占模型分工、文件所有权、checkpoint base、CI 对账和合并顺序。如两者在执行节奏上冲突，以并行计划为准，但不得扩大本计划的产品范围。
 
 ## 文件结构
 
