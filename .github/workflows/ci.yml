@@ -21,6 +21,8 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # M0 基线校验需要完整 git 历史回放 checkpoint
       - uses: astral-sh/setup-uv@v6
         with:
           python-version: "3.13"

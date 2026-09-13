@@ -38,7 +38,11 @@ def _run_m0_baseline(root: Path, errors: list) -> None:
     if not baseline.is_file():
         errors.append("M0 baseline.yaml 缺失（migration 基线未冻结）")
         return
-    code = inventory.check_baseline(root, baseline)
+    try:
+        code = inventory.check_baseline(root, baseline)
+    except Exception as exc:  # noqa: BLE001 — 基线校验环境异常也要给出类型化失败
+        errors.append(f"M0 基线校验异常（环境不满足，例如浅克隆缺历史）: {exc}")
+        return
     if code != 0:
         errors.append("M0 基线 --check 失败（checkpoint tree 不可重放）")
 
