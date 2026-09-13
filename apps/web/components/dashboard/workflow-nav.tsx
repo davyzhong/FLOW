@@ -26,6 +26,14 @@ const groups = [
     label: "经营分析 · 业务管理",
     items: [["chart", "经营概览", "/operations"]],
   },
+  {
+    label: "模块入口",
+    items: [
+      ["library", "公开财报分析", "/public"],
+      ["report", "企业内部分析工作台", "/internal"],
+      ["library", "专业治理底座", "/internal#governance"],
+    ],
+  },
 ] as const;
 
 function isActiveItem(pathname: string | null, target: string): boolean {
