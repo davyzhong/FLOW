@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 1.1
+version: 1.2
 created_at: 2026-09-12
 updated_at: 2026-09-13
 owner: FLOW
@@ -26,7 +26,7 @@ applies_to: repository
 
 1. **U8（进行中）**：真实存储完整旅程、HTTPS 部署拓扑、统一部署验收；备份恢复已 done。
 2. **U4（外部到料即并行）**：独立会话录入 oracle，全行 diff 与留出泛化验收。
-3. **战略边界重构门禁（U8 完成后）**：冻结 U8 版本，重构共享底座/公开模块/内部工作台边界与规格，并先发布 Financial Facts Contract V2 与安全/权限子规格。
+3. **[S01 战略边界、事实合同与安全门禁](../50_plans/work_items/S01--post-u8-boundary-contract-security.md)（U8 完成后）**：冻结 U8 版本，按[详细实施计划](../superpowers/plans/2026-09-13-flow-post-u8-boundary-gate.md)重构模块边界，发布 Financial Facts Contract V2 与安全/权限子规格；当前 blocked，未开始实施。
 4. **公开模块 C 级出口（门禁后）**：执行冻结样本、company-level holdout、可复算/可追源和独立盲评量化协议。
 5. **内部工作台与真实企业验证（C 级出口后）**：需内部数据授权；至少连续三个完整月度周期，与同输入人工基准逐周期比较。
 6. **旧 U9/O5、U10（待重新裁决）**：仅保留历史工作包身份，不按旧依赖链自动领取。

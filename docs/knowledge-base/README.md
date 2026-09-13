@@ -3,7 +3,7 @@ doc_id: FLOW-NAV-KB-README-001
 title: 知识库导航
 doc_type: navigation
 status: current
-version: 1.1
+version: 1.2
 created_at: 2026-09-12
 updated_at: 2026-09-13
 owner: FLOW
@@ -17,7 +17,7 @@ applies_to: knowledge-base
 ## 阅读顺序
 
 1. [Agent 兼容入口](00_start_here/AGENT_START_HERE.md)跳转到唯一[当前状态](../00_start_here/PROJECT_STATE.md)与[最短阅读顺序](../00_start_here/READING_ORDER.md)。
-2. [当前路线图](../50_plans/CURRENT_ROADMAP.md)是唯一执行入口；历史统一 U 计划和其他旧计划只保留任务细节与证据。
+2. [当前路线图](../50_plans/CURRENT_ROADMAP.md)是唯一执行入口；U8 后下一阶段的 [S01 详细计划](../superpowers/plans/2026-09-13-flow-post-u8-boundary-gate.md)当前仍被 U8 阻塞；历史统一 U 计划和其他旧计划只保留任务细节与证据。
 3. [战略重构设计 V1.1](../superpowers/specs/2026-09-13-flow-strategic-reset-design.md)、[固定产品原则](../20_product/PRODUCT_PRINCIPLES.md)与[决策索引 D001–D054](../10_governance/DECISION_INDEX.md)定义当前产品方向和裁决。
 4. [现行事实合同 V1](../superpowers/specs/financial-facts-contract.md)约束当前实现；内部工作台所需 Financial Facts Contract V2 是 U8 后前置规格，不得把目标字段误称为已实现。
 5. [财经分析知识地图](02_research/2026-09-11-finance-knowledge-map.md)、[Obsidian 固定截面扫描评估](02_research/synthesis/2026-09-12-obsidian-internal-kb-assessment.md)与[累计参考订正总册](02_research/synthesis/2026-09-07-reference-and-improvement-master.md)是静态素材与方法来源，不自动批准功能或成为企业事实。
