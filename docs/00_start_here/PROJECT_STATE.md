@@ -26,7 +26,7 @@ applies_to: repository
 
 1. **U8（已完成并冻结）**：[生产冻结交付记录](../60_delivery/2026-09-13-u8-production-freeze.md)；可恢复基线 `u8-final-baseline`；严格冻结标签 `flow-u8-freeze-20260913`。
 2. **U4（外部到料即并行）**：独立会话录入 oracle，全行 diff 与留出泛化验收。
-3. **[S01 战略边界、事实合同与安全门禁](../50_plans/work_items/S01--post-u8-boundary-contract-security.md)（当前 active）**：按[详细实施计划](../superpowers/plans/2026-09-13-flow-post-u8-boundary-gate.md)先编写并批准模块边界、Financial Facts Contract V2 与安全/RBAC/审计三份子规格；规格未 approved 前不进入代码任务。
+3. **[S01 战略边界、事实合同与安全门禁](../50_plans/work_items/S01--post-u8-boundary-contract-security.md)（当前 active）**：Task 1 冻结完成（main=914a473，标签 `flow-u8-freeze-20260913`，CI 16/16 绿）；Task 2 三份子规格（[模块边界 V1](../40_specs/platform/module-boundaries-v1.md)、[Facts V2](../40_specs/financial-facts/financial-facts-contract-v2.md)、[RBAC/审计 V1](../40_specs/security/internal-workbench-rbac-audit-v1.md)）已以 **review** 状态登记并配 approved-spec 门禁（`scripts/documentation/require_approved_specs.py`），**待用户批准后转 approved**；规格未 approved 前不进入代码任务。
 4. **公开模块 C 级出口（门禁后）**：执行冻结样本、company-level holdout、可复算/可追源和独立盲评量化协议。
 5. **内部工作台与真实企业验证（C 级出口后）**：需内部数据授权；至少连续三个完整月度周期，与同输入人工基准逐周期比较。
 6. **旧 U9/O5、U10（待重新裁决）**：仅保留历史工作包身份，不按旧依赖链自动领取。
