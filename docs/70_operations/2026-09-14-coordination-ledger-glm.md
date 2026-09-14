@@ -117,20 +117,21 @@ audit schema/atomicity 测试）。合并以旧基线解析 conftest/auth.py，*
   PASS；contracts-check 无漂移；
 - 远端待验：本系列推送后 main CI 全绿为 Task 6 关闭前置。
 
-## 2. 各执行方当前基线与指令
+## 2. 各执行方当前基线与指令（ff42c67 后更新）
 
-| 执行方 | 基线指令 |
+| 执行方 | 当前状态与指令 |
 |---|---|
-| **Minimax M3**（Task 2A 余段 / route-policy-v2） | 分支 `codex/s01-route-policy-v2` @ `a49a10f` 基于旧 main（含 uuid_generate_v4 时代），CI 失败含已修复项。**指令：rebase 到 `26a948f`**；2A 已井入部分勿重做，只补路由层接线 + test_security_schema / test_audit_atomicity + main.py fail-fast |
-| **Kimi K3**（Task 2B + library） | 集成线上其 library 提交（df11b44→e114ae3）已随 `26a948f` 线生效；其「dev auth binding seed」与本修复的种子脚本语义一致（legacy actor 同名 `local-dev-web`，幂等不冲突）。Task 2B 仍等 route policy 开工门禁（规格已 approved，可开工） |
-| **GLM 5.3**（本协调者） | ① 盯 main CI 全绿；② Task 6 关闭核验（verify_workflow_jobs 17 job 清单）；③ Wave 2 合并（module-boundaries → module-ui → 6A runner 复跑） |
+| **Minimax M3**（Task 2A 余段） | 其 route-policy-v2 车道已于 ff42c67 链并合 main（含 main.py fail-fast、audit schema/atomicity 测试）。并合内容存在两类缺陷，已由协调者代修（3cccae8 连接泄漏、0d6644d/2570bf8 测试修复 + prepare_intent 参数化）。**指令：复审 2570bf8 对 pipeline.py 的签名变更与 auth.py 的 yield 修复；后续工作基于 `2570bf8`** |
+| **Kimi K3**（Task 2B + library） | 2B route policy（997c1ab）已随 ff42c67 落地 main；library 线（df11b44→e114ae3）随 26a948f 生效。**指令：2B 路由接线若引用 prepare_intent，enterprise_id 必须从 Principal 取（2570bf8 签名）** |
+| **GLM 5.3**（本协调者） | ① 盯 2570bf8 起 main CI 全绿；② Task 6 关闭核验（verify_workflow_jobs 17 job 清单）；③ Wave 2 合并（module-boundaries → module-ui → 6A runner 复跑） |
 
 ## 3. 共用检出纪律警告（再次）
 
-本期实际发生：Kimi 会话在同一检出内后台 `git pull` 并向 `glm-coord` 分支直接推送
-（「propagate report-grade visual system」）。结果未受损（零文件交集 + fast-forward），
-但这正是交接记录 §6 登记过的事故模式。**重申：执行方一律独立 worktree；`glm-coord`
-分支为协调者工作分支，执行方请勿直接推送。**
+本期实际发生：① Kimi 会话在同一检出内后台 `git pull` 并向 `glm-coord` 分支直接推送；
+② 他方绕过协调者合并序列把 5 个车道分支直接合入 main（ff42c67），合并基线陈旧，
+语义回退了协调者两项未及提交的修复并带入不可运行测试。结果虽已代修，但
+**集成纪律失效两次**。重申：执行方一律独立 worktree；进 main 的合并必须经
+协调者按 runbook §7 执行（base lineage + diff 审阅 + 分步门禁）。
 
 ## 4. 任务完成清单（截至 26a948f）
 
