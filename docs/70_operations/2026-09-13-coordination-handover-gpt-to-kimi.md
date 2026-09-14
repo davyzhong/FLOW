@@ -2,16 +2,16 @@
 doc_id: FLOW-OPS-COORDINATION-HANDOVER-001
 title: 主协调者交接记录：GPT-5.6 → Kimi K3 → GLM 5.3（2026-09-13）
 doc_type: operations
-status: active
+status: superseded
 version: 1.2
 created_at: 2026-09-13
-updated_at: 2026-09-13
+updated_at: 2026-09-14
 owner: FLOW
 applies_to: s01-parallel-agent-execution
 knowledge_release: flow-knowledge-2026-09-12.1
 decision_refs: [D049, D051, D052, D053, D054]
 supersedes: []
-superseded_by: null
+superseded_by: [FLOW-OPS-COORDINATION-GLM-002]
 source_refs:
   - docs/superpowers/plans/2026-09-13-flow-three-agent-parallel-restructuring.md
   - docs/70_operations/three-agent-parallel-execution-runbook.md
