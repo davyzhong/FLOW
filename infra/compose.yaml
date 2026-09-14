@@ -9,6 +9,10 @@ services:
       FLOW_ENV: development
       FLOW_TIMEZONE: Asia/Shanghai
       AUTH_TOKEN: ${AUTH_TOKEN:-}
+      # S01 §3.2 legacy 冻结身份（AUTH_TOKEN 启用时必填）
+      FLOW_LEGACY_ACTOR_ID: ${FLOW_LEGACY_ACTOR_ID:-}
+      FLOW_LEGACY_ENTERPRISE_ID: ${FLOW_LEGACY_ENTERPRISE_ID:-}
+      FLOW_IDENTITY_BINDINGS_JSON: ${FLOW_IDENTITY_BINDINGS_JSON:-}
       # S01 §2.2：development 模式认证边界的 dev actor（配套 DB 种子见 scripts/seed_dev_principal.py）
       FLOW_DEV_ACTOR_ID: ${FLOW_DEV_ACTOR_ID:-flow-dev-bp}
       DATABASE_URL: postgresql+psycopg://flow:flow_dev_only@postgres:5432/flow

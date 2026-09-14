@@ -279,8 +279,21 @@ def resolve_principal(
     if settings is None:
         settings = _get_settings()
     current = now or datetime.now(tz=UTC)
-    # 旧 Bearer 截止（即使有 Bearer 也可能在截止后）
-    if settings.auth_token:
+    # §3.2：先识别 presented token，仅命中 legacy auth_token 时才应用截止——
+    # 新式 identity-binding token 不受 legacy cutoff 误伤。
+    presented_token: str | None = None
+    if authorization:
+        parts = authorization.split(" ", 1)
+        if len(parts) == 2 and parts[0].lower() == "bearer" and parts[1]:
+            presented_token = parts[1]
+    if (
+        presented_token is not None
+        and settings.auth_token
+        and hmac.compare_digest(
+            hashlib.sha256(presented_token.encode("utf-8")).hexdigest(),
+            hashlib.sha256(settings.auth_token.encode("utf-8")).hexdigest(),
+        )
+    ):
         cutoff = _parse_cutoff(settings.flow_legacy_bearer_cutoff)
         if current > cutoff:
             raise AuthError(
