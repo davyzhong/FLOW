@@ -57,9 +57,10 @@ def test_audit_event_no_delete_trigger(session: Session) -> None:
 def test_audit_event_insert_allowed(session: Session) -> None:
     session.execute(text(
         "INSERT INTO audit_event (event_type, correlation_id, actor_id, resource_scope, "
-        "resource_type, resource_id, decision, reason_code, correlation_id, request_id, retention_class, retain_until) "
+        "resource_type, resource_id, decision, reason_code, request_id, "
+        "retention_class, retain_until) "
         "VALUES ('security.review', 'corr-test', 'actor-test', 'public', 'test_resource', 'res-1', "
-        "'allow', 'test', 'req-1')"
+        "'allow', 'test', 'req-1', 'standard', now() + interval '365 days')"
     ))
     session.commit()
 
@@ -67,9 +68,10 @@ def test_audit_event_insert_allowed(session: Session) -> None:
 def test_audit_event_update_blocked(session: Session) -> None:
     session.execute(text(
         "INSERT INTO audit_event (event_type, correlation_id, actor_id, resource_scope, "
-        "resource_type, resource_id, decision, reason_code, correlation_id, request_id, retention_class, retain_until) "
+        "resource_type, resource_id, decision, reason_code, request_id, "
+        "retention_class, retain_until) "
         "VALUES ('security.review', 'corr-upd', 'actor', 'public', 'r', 'r1', "
-        "'allow', 'test', 'req-2')"
+        "'allow', 'test', 'req-2', 'standard', now() + interval '365 days')"
     ))
     session.commit()
     with pytest.raises(Exception):
@@ -83,9 +85,10 @@ def test_audit_event_update_blocked(session: Session) -> None:
 def test_audit_event_delete_blocked(session: Session) -> None:
     session.execute(text(
         "INSERT INTO audit_event (event_type, correlation_id, actor_id, resource_scope, "
-        "resource_type, resource_id, decision, reason_code, correlation_id, request_id, retention_class, retain_until) "
+        "resource_type, resource_id, decision, reason_code, request_id, "
+        "retention_class, retain_until) "
         "VALUES ('security.review', 'corr-del', 'actor', 'public', 'r', 'r2', "
-        "'allow', 'test', 'req-3')"
+        "'allow', 'test', 'req-3', 'standard', now() + interval '365 days')"
     ))
     session.commit()
     with pytest.raises(Exception):
