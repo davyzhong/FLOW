@@ -376,6 +376,75 @@ HTML = """<!DOCTYPE html>
   .report-block__meta { font-size: 12px; color: var(--muted); }
   .xref-foot { font-size: 11.5px; color: var(--muted); margin-top: 4px; }
   .xref-foot a { color: var(--accent); }
+
+  /* ===== 杜邦分析 ===== */
+  .dupont-formula {
+    display: flex; flex-wrap: wrap; align-items: stretch; gap: 6px;
+    margin: 14px 0; padding: 14px 12px;
+    background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+  }
+  .dupont-formula--3 { border-left: 4px solid var(--red); }
+  .dupont-formula--5 { border-left: 4px solid var(--navy); }
+  .dupont-eq {
+    display: flex; align-items: center; padding: 0 4px;
+    font-size: 13px; color: var(--muted); font-weight: 600;
+  }
+  .dupont-factor {
+    flex: 1 1 0; min-width: 110px;
+    padding: 10px 12px; border-radius: 8px;
+    border: 1px solid var(--line);
+  }
+  .dupont-factor--red { background: var(--red-soft); border-color: #e8b8b3; }
+  .dupont-factor--navy { background: #e8eef5; border-color: #b8c4d4; }
+  .dupont-factor--green { background: var(--ok-soft); border-color: #a8d4bc; }
+  .dupont-factor--orange { background: #fdf0dc; border-color: #e8c89c; }
+  .dupont-factor--amber { background: #fdf3e3; border-color: #e8d4a8; }
+  .dupont-factor__name { font-size: 12px; color: var(--ink-2, #233043); font-weight: 600; }
+  .dupont-factor__value { font-size: 22px; font-weight: 600; color: var(--navy); margin: 4px 0 2px; font-variant-numeric: tabular-nums; }
+  .dupont-factor__formula { font-size: 10.5px; color: var(--muted); }
+  .dupont-op {
+    display: flex; align-items: center; padding: 0 4px;
+    font-size: 18px; color: var(--muted); font-weight: 300;
+  }
+  .dupont-op--eq { color: var(--red); font-weight: 600; }
+  .dupont-result {
+    flex: 1.2 1 0; min-width: 120px;
+    padding: 10px 12px; border-radius: 8px;
+    background: var(--red-soft); border: 2px solid var(--red);
+  }
+  .dupont-result__name { font-size: 12px; color: var(--navy); font-weight: 600; }
+  .dupont-result__value { font-size: 26px; font-weight: 700; color: var(--red); margin: 4px 0 2px; font-variant-numeric: tabular-nums; }
+  .dupont-result__formula { font-size: 10.5px; color: var(--muted); }
+  @media (max-width: 1080px) {
+    .dupont-formula--5 .dupont-factor { min-width: 90px; }
+  }
+
+  /* 杜邦对比表 */
+  .dupont-table { font-size: 12.5px; }
+  .dupont-table th, .dupont-table td { text-align: right; }
+  .dupont-table th:first-child, .dupont-table td:first-child { text-align: left; }
+  .dupont-table small { color: var(--muted); margin-left: 4px; }
+
+  /* 杜邦二级子项列表 */
+  .dupont-sub { margin: 0; padding-left: 18px; font-size: 12.5px; line-height: 1.9; }
+  .dupont-sub li { color: var(--ink-2, #233043); }
+
+  /* 单份财报的杜邦迷你块 */
+  .dupont-mini {
+    margin: 14px 0; padding: 12px 14px;
+    background: #fafbfd; border: 1px solid var(--line); border-radius: 8px;
+  }
+  .dupont-mini h4 { margin: 0 0 8px; font-size: 13.5px; color: var(--navy); }
+  .dupont-mini__details {
+    display: grid; gap: 4px; font-size: 12px; color: var(--ink-2, #233043);
+    margin-top: 8px; padding: 8px 10px; background: #fff; border-radius: 6px;
+  }
+  .dupont-mini__details b { color: var(--navy); margin-right: 4px; }
+
+  /* 评分卡 */
+  .scorecard table { font-size: 13px; }
+  .scorecard th, .scorecard td { padding: 6px 12px; }
+  .scorecard tfoot td { background: #fafbfd; border-top: 2px solid var(--navy); }
   /* 结论条：红竖线 + 加粗判断 */
   .verdict { border-left: 4px solid var(--red); background: var(--card);
     border-radius: 0 8px 8px 0; padding: 10px 16px; margin: 14px 0;
@@ -604,9 +673,11 @@ const SECTIONS = [
     related: [{id:"accounts",label:"会计科目"},{id:"general",label:"通用指标"}] },
   { group: "真实财报（P5 反向解析）" },
   { id: "coverage", label: "指标覆盖矩阵", render: renderCoverage,
-    related: [{id:"reports",label:"财报浏览器"},{id:"facts",label:"事实库"}] },
+    related: [{id:"reports",label:"财报浏览器"},{id:"facts",label:"事实库"},{id:"dupont",label:"杜邦分析"}] },
+  { id: "dupont", label: "杜邦分析（ROE 拆解）", render: renderDupontAnalysis,
+    related: [{id:"reports",label:"财报浏览器"},{id:"coverage",label:"覆盖矩阵"}] },
   { id: "reports", label: "财报浏览器", render: renderReports,
-    related: [{id:"facts",label:"事实库"},{id:"coverage",label:"覆盖矩阵"}] },
+    related: [{id:"facts",label:"事实库"},{id:"coverage",label:"覆盖矩阵"},{id:"dupont",label:"杜邦分析"}] },
   { id: "facts", label: "事实库", render: renderFacts,
     related: [{id:"reports",label:"财报浏览器"},{id:"accounts",label:"会计科目"}] },
   { group: "其他字典" },
@@ -1077,6 +1148,322 @@ function reportVerdict(company, period) {
   if (!bits.length) return "";
   return `<div class="verdict"><b>本期速览：</b>${bits.join("；")}。数值由事实库标准科目计算，披露单位已换算为亿元。</div>`;
 }
+
+/* ===== 杜邦分析（ROE 拆解）=====
+ * 三因子：ROE = 净利率 × 资产周转率 × 权益乘数
+ * 五因子：ROE = 税后负担率 × 利息负担率 × EBIT利润率 × 资产周转率 × 权益乘数
+ * 二级拆解：每因子下 5 个子指标（毛利率、期间费用率、应收/存货/固定/营运资本周转、资产负债率、利息覆盖、DFL、负债结构）
+ * 框架借鉴公众号「奔向自由的果」2026-05-22 发布的「ROE 杜邦拆解分析报表」模板。 */
+function dupontFactors(company, period) {
+  const [fc, fp] = FACT_KEY[company] || [company, (p) => p];
+  const per = fp(period);
+  // 三因子
+  const rev = toYi(fact(fc, per, "is.revenue", "cur")) ?? toYi(fact(fc, per, "is.revenue", "end"));
+  const np = toYi(fact(fc, per, "is.attr_net_profit", "cur"))
+    ?? toYi(fact(fc, per, "is.attr_net_profit", "end"))
+    ?? toYi(fact(fc, per, "is.net_profit", "cur"))
+    ?? toYi(fact(fc, per, "is.net_profit", "end"));
+  const ta = toYi(fact(fc, per, "bs.total_assets", "end"));
+  const eq = toYi(fact(fc, per, "bs.attr_equity", "end"))
+    ?? toYi(fact(fc, per, "bs.equity", "end"));
+  if (!rev || !np || !ta || !eq || !rev) return null;
+  const netMargin = (np / rev) * 100;
+  const assetTurnover = rev / ta;     // 倍
+  const equityMultiplier = ta / eq;   // 倍
+  const roe3 = (np / eq) * 100;
+  // 五因子
+  const ebit = toYi(fact(fc, per, "is.operating_profit", "cur"))
+    ?? toYi(fact(fc, per, "is.operating_profit", "end"));
+  const ebt = toYi(fact(fc, per, "is.total_profit", "cur"))
+    ?? toYi(fact(fc, per, "is.total_profit", "end"));
+  let roe5 = null, taxBurden = null, intBurden = null, ebitMargin = null;
+  if (ebit && ebt) {
+    taxBurden = (np / ebt) * 100;
+    intBurden = (ebt / ebit) * 100;
+    ebitMargin = (ebit / rev) * 100;
+    roe5 = (taxBurden / 100) * (intBurden / 100) * (ebitMargin / 100) * assetTurnover * equityMultiplier * 100;
+  }
+  // 二级拆解
+  const gross = toYi(fact(fc, per, "is.gross_profit", "cur")) ?? toYi(fact(fc, per, "is.gross_profit", "end"));
+  const sell = toYi(fact(fc, per, "is.selling_exp", "cur")) ?? toYi(fact(fc, per, "is.selling_exp", "end"));
+  const adm = toYi(fact(fc, per, "is.admin_exp", "cur")) ?? toYi(fact(fc, per, "is.admin_exp", "end"));
+  const rnd = toYi(fact(fc, per, "is.rnd_exp", "cur")) ?? toYi(fact(fc, per, "is.rnd_exp", "end"));
+  const tl = toYi(fact(fc, per, "bs.total_liab", "end"));
+  const curA = toYi(fact(fc, per, "bs.current_assets", "end"));
+  const inv = toYi(fact(fc, per, "bs.inventory", "end"));
+  const ar = toYi(fact(fc, per, "bs.ar", "end"));
+  const fa = toYi(fact(fc, per, "bs.fixed_assets", "end"));
+  const intExp = toYi(fact(fc, per, "is.interest_exp", "cur"))
+    ?? toYi(fact(fc, per, "is.interest_exp", "end"))
+    ?? toYi(fact(fc, per, "is.fin_exp", "cur"));
+  return {
+    revenue: rev, netIncome: np, totalAssets: ta, equity: eq,
+    netMargin, assetTurnover, equityMultiplier, roe: roe3, roe3,
+    roe5, taxBurden, intBurden, ebitMargin,
+    grossMargin: (gross && rev) ? (gross / rev) * 100 : null,
+    sellingRatio: (sell && rev) ? (sell / rev) * 100 : null,
+    adminRatio: (adm && rev) ? (adm / rev) * 100 : null,
+    rndRatio: (rnd && rev) ? (rnd / rev) * 100 : null,
+    debtRatio: (tl && ta) ? (tl / ta) * 100 : null,
+    icr: (ebit && intExp) ? (ebit / intExp) : null,
+    dfl: (ebit && ebt) ? (ebit / ebt) : null,
+    arTurnover: (rev && ar) ? rev / ar : null,
+    invTurnover: (rev && inv) ? rev / inv : null,
+    faTurnover: (rev && fa) ? rev / fa : null,
+    curAssetTurnover: (rev && curA) ? rev / curA : null,
+  };
+}
+
+function fmtPct(v, digits = 1) {
+  if (v === null || v === undefined || !Number.isFinite(v)) return "—";
+  return `${v.toFixed(digits)}%`;
+}
+function fmtX(v, digits = 2) {
+  if (v === null || v === undefined || !Number.isFinite(v)) return "—";
+  return `${v.toFixed(digits)}x`;
+}
+function fmtScore(v) {
+  if (v === null || v === undefined || !Number.isFinite(v)) return "—";
+  return Math.round(v).toString();
+}
+
+// 杜邦三因子公式块（彩色色块横排）
+function dupontFormula3(d, label) {
+  if (!d) return '<p class="muted">该样本缺少计算杜邦因子所需的关键科目（营收/净利润/总资产/股东权益）</p>';
+  return `
+    <div class="dupont-formula dupont-formula--3">
+      <div class="dupont-eq">ROE${label ? ` (${label})` : ""} = </div>
+      <div class="dupont-factor dupont-factor--red">
+        <div class="dupont-factor__name">① 净利率</div>
+        <div class="dupont-factor__value">${fmtPct(d.netMargin)}</div>
+        <div class="dupont-factor__formula">净利润 / 营收</div>
+      </div>
+      <div class="dupont-op">×</div>
+      <div class="dupont-factor dupont-factor--navy">
+        <div class="dupont-factor__name">② 资产周转率</div>
+        <div class="dupont-factor__value">${fmtX(d.assetTurnover)}</div>
+        <div class="dupont-factor__formula">营收 / 总资产</div>
+      </div>
+      <div class="dupont-op">×</div>
+      <div class="dupont-factor dupont-factor--green">
+        <div class="dupont-factor__name">③ 权益乘数</div>
+        <div class="dupont-factor__value">${fmtX(d.equityMultiplier)}</div>
+        <div class="dupont-factor__formula">总资产 / 股东权益</div>
+      </div>
+      <div class="dupont-op dupont-op--eq">=</div>
+      <div class="dupont-result">
+        <div class="dupont-result__name">ROE</div>
+        <div class="dupont-result__value">${fmtPct(d.roe)}</div>
+        <div class="dupont-result__formula">净利润 / 股东权益</div>
+      </div>
+    </div>`;
+}
+
+// 杜邦五因子公式块（在三因子基础上把"净利率"再拆成"税后负担率 × 利息负担率 × EBIT利润率"）
+function dupontFormula5(d, label) {
+  if (!d || d.roe5 === null) return dupontFormula3(d, label);
+  return `
+    <div class="dupont-formula dupont-formula--5">
+      <div class="dupont-eq">ROE${label ? ` (${label})` : ""} = </div>
+      <div class="dupont-factor dupont-factor--red">
+        <div class="dupont-factor__name">税后负担率</div>
+        <div class="dupont-factor__value">${fmtPct(d.taxBurden)}</div>
+        <div class="dupont-factor__formula">净利润 / 税前利润</div>
+      </div>
+      <div class="dupont-op">×</div>
+      <div class="dupont-factor dupont-factor--orange">
+        <div class="dupont-factor__name">利息负担率</div>
+        <div class="dupont-factor__value">${fmtPct(d.intBurden)}</div>
+        <div class="dupont-factor__formula">税前利润 / EBIT</div>
+      </div>
+      <div class="dupont-op">×</div>
+      <div class="dupont-factor dupont-factor--amber">
+        <div class="dupont-factor__name">EBIT利润率</div>
+        <div class="dupont-factor__value">${fmtPct(d.ebitMargin)}</div>
+        <div class="dupont-factor__formula">EBIT / 营收</div>
+      </div>
+      <div class="dupont-op">×</div>
+      <div class="dupont-factor dupont-factor--navy">
+        <div class="dupont-factor__name">资产周转率</div>
+        <div class="dupont-factor__value">${fmtX(d.assetTurnover)}</div>
+        <div class="dupont-factor__formula">营收 / 总资产</div>
+      </div>
+      <div class="dupont-op">×</div>
+      <div class="dupont-factor dupont-factor--green">
+        <div class="dupont-factor__name">权益乘数</div>
+        <div class="dupont-factor__value">${fmtX(d.equityMultiplier)}</div>
+        <div class="dupont-factor__formula">总资产 / 股东权益</div>
+      </div>
+      <div class="dupont-op dupont-op--eq">=</div>
+      <div class="dupont-result">
+        <div class="dupont-result__name">ROE</div>
+        <div class="dupont-result__value">${fmtPct(d.roe5)}</div>
+        <div class="dupont-result__formula">净利润 / 股东权益</div>
+      </div>
+    </div>`;
+}
+
+// 财务健康评分卡（6 维度 × 100 分）
+function healthScorecard(d) {
+  if (!d) return "";
+  // 6 维度的经验阈值（参考公众号模板的口径）
+  const dims = [
+    { name: "ROE 回报水平", value: d.roe, unit: "%", target: 15, score: (d.roe || 0) * 5 + 5, status: (d.roe || 0) >= 15 ? "ok" : "warn", note: "ROE ≥15% 视为良好" },
+    { name: "净利率", value: d.netMargin, unit: "%", target: 10, score: (d.netMargin || 0) * 4, status: (d.netMargin || 0) >= 10 ? "ok" : "warn", note: "净利率 ≥10% 视为良好" },
+    { name: "资产周转效率", value: d.assetTurnover, unit: "x", target: 1.0, score: Math.min(100, (d.assetTurnover || 0) * 70), status: (d.assetTurnover || 0) >= 1.0 ? "ok" : "warn", note: "周转率 ≥1.0x 视为良好" },
+    { name: "财务杠杆安全性", value: d.equityMultiplier, unit: "x", target: 2.0, score: Math.max(0, 100 - Math.abs((d.equityMultiplier || 2) - 2.0) * 30), status: Math.abs((d.equityMultiplier || 2) - 2.0) < 0.5 ? "ok" : "warn", note: "权益乘数 1.5x–2.5x 视为稳健" },
+    { name: "利息保障倍数", value: d.icr, unit: "x", target: 5, score: d.icr ? Math.min(100, (d.icr || 0) * 15) : 0, status: (d.icr || 0) >= 5 ? "ok" : "warn", note: "ICR ≥5x 视为稳健" },
+    { name: "毛利率", value: d.grossMargin, unit: "%", target: 20, score: (d.grossMargin || 0) * 3, status: (d.grossMargin || 0) >= 20 ? "ok" : "warn", note: "毛利率 ≥20% 视为优秀" },
+  ];
+  const total = dims.reduce((s, x) => s + Math.max(0, Math.min(100, x.score)), 0) / dims.length;
+  return `
+    <div class="scorecard">
+      <table>
+        <thead><tr><th>维度</th><th>当前值</th><th>基准</th><th>评分</th><th>状态</th><th>说明</th></tr></thead>
+        <tbody>
+          ${dims.map((x) => `<tr>
+            <td>${esc(x.name)}</td>
+            <td>${x.unit === "%" ? fmtPct(x.value) : fmtX(x.value)}</td>
+            <td class="muted">${x.unit === "%" ? x.target + "%" : x.target + "x"}</td>
+            <td><b>${fmtScore(x.score)}</b> / 100</td>
+            <td>${statusBadge(x.status, x.status === "ok" ? "良好" : "待提升")}</td>
+            <td class="muted">${esc(x.note)}</td>
+          </tr>`).join("")}
+        </tbody>
+        <tfoot><tr>
+          <td colspan="3"><b>综合评分</b></td>
+          <td><b style="color:var(--red);font-size:18px">${total.toFixed(1)}</b> / 100</td>
+          <td colspan="2" class="muted">${total >= 80 ? "行业领先 ★★★★" : total >= 60 ? "行业平均 ★★★" : "行业末位 ★★"}</td>
+        </tr></tfoot>
+      </table>
+    </div>`;
+}
+
+// 杜邦分析顶层 section（跨公司对比）
+function renderDupontAnalysis() {
+  // 收集每家公司最新报告的杜邦因子
+  const latest = [];
+  for (const r of DATA.reports) {
+    const d = dupontFactors(r.company, r.period);
+    if (!d) continue;
+    latest.push({ report: r, d });
+  }
+  if (!latest.length) {
+    return `<h1>杜邦分析（ROE 拆解）</h1><p class="muted">事实库缺少计算杜邦因子所需的关键科目。</p>`;
+  }
+  // 按 ROE 降序
+  latest.sort((a, b) => (b.d.roe || 0) - (a.d.roe || 0));
+  const roes = latest.map((x) => x.d.roe).filter(Number.isFinite);
+  const avgRoe = roes.reduce((s, v) => s + v, 0) / roes.length;
+  const best = latest[0];
+  const worst = latest[latest.length - 1];
+  // 行业对标（5 家公司作为代理样本）
+  const barData = latest.map((x, i) => ({
+    label: x.report.company_name,
+    value: x.d.roe || 0,
+    display: fmtPct(x.d.roe),
+    color: ["#18794e", "#2e9b6c", "#b7791f", "#d99a2b", "#c0392b"][i % 5],
+  }));
+  // 跨公司 KPI 卡带
+  const kpi = latest[0].d;  // 用最佳公司展示
+  const kpiCards = [
+    kpiCard("ROE 冠军", fmtPct(best.d.roe), xrefReport(best.report.company, best.report.period)),
+    kpiCard("ROE 行业均值", fmtPct(avgRoe), `${latest.length} 家样本公司`),
+    kpiCard("ROE 末位", fmtPct(worst.d.roe), xrefReport(worst.report.company, worst.report.period)),
+    kpiCard("ROE 极差", fmtPct((best.d.roe || 0) - (worst.d.roe || 0)), "领先优势"),
+  ];
+  // 跨公司 5 因子对比表
+  const tableRows = latest.map((x) => {
+    const d = x.d;
+    return `<tr>
+      <td><a class="xref" href="#report-${escAttr(x.report.company + "-" + x.report.period)}">${esc(x.report.company_name)}</a> <small>${esc(x.report.period)}</small></td>
+      <td><b>${fmtPct(d.roe)}</b></td>
+      <td>${fmtPct(d.netMargin)}</td>
+      <td>${fmtX(d.assetTurnover)}</td>
+      <td>${fmtX(d.equityMultiplier)}</td>
+      <td>${fmtPct(d.grossMargin)}</td>
+      <td>${fmtPct(d.debtRatio)}</td>
+      <td>${fmtX(d.icr)}</td>
+      <td>${fmtPct(d.taxBurden)}</td>
+      <td>${fmtPct(d.ebitMargin)}</td>
+    </tr>`;
+  }).join("");
+  return `${hero("杜邦分析 · ", "ROE 五因子拆解", `借鉴「ROE 杜邦拆解分析报表」框架（公众号「奔向自由的果」2026-05-22），把 ${latest.length} 家样本公司最新报告的 ROE 拆为：净利率 × 资产周转率 × 权益乘数（更深一层：税后负担率 × 利息负担率 × EBIT利润率 × 资产周转率 × 权益乘数）。`)}
+    <div class="kpis">${kpiCards.join("")}</div>
+    <div class="verdict"><b>核心洞察：</b>本批次 ${latest.length} 份财报中，
+      ${xrefReport(best.report.company, best.report.period, best.report.company_name)}
+      以 <b>${fmtPct(best.d.roe)}</b> 的 ROE 居首，${xrefReport(worst.report.company, worst.report.period, worst.report.company_name)} 仅 ${fmtPct(worst.d.roe)} 垫底。
+      极差 <b>${fmtPct((best.d.roe || 0) - (worst.d.roe || 0))}</b>，行业均值 ${fmtPct(avgRoe)}。
+      进一步拆解：${best.report.company_name} 的 ROE 高，主要由 <b>${fmtPct(best.d.netMargin)}</b> 的净利率驱动（${best.d.netMargin > 20 ? "强盈利" : "中等盈利"}）；
+      ${worst.report.company_name} 的 ROE 低，主要是 <b>${fmtPct(worst.d.netMargin)}</b> 净利率薄弱叠加 <b>${fmtX(worst.d.assetTurnover)}</b> 周转效率不足。
+    </div>
+    <h2 class="band">📊 三因子杜邦公式（冠军样本）</h2>
+    ${dupontFormula3(best.d, best.report.company_name + " " + best.report.period)}
+    <h2 class="band">📐 五因子杜邦公式（完整版）</h2>
+    ${dupontFormula5(best.d, best.report.company_name + " " + best.report.period)}
+    <h2 class="band">📈 跨公司 ROE 对标柱状图</h2>
+    <p class="muted">本批次 5 家公司作为行业代理样本，按 ROE 降序排列；颜色从绿到红渐变（优秀→落后）。点击柱状图标签可跳到对应公司财报。</p>
+    ${barChart(barData, { title: "跨公司 ROE 对比柱状图" })}
+    <h2 class="band">🔬 跨公司杜邦因子对比表</h2>
+    <div class="scroll">
+    <table class="ml-table dupont-table">
+      <thead><tr>
+        <th>公司</th><th>ROE</th><th>净利率</th><th>资产周转率</th><th>权益乘数</th>
+        <th>毛利率</th><th>资产负债率</th><th>利息保障</th><th>税后负担率</th><th>EBIT利润率</th>
+      </tr></thead>
+      <tbody>${tableRows}</tbody>
+    </table>
+    </div>
+    <h2 class="band">🏆 财务健康评分卡（冠军样本）</h2>
+    ${healthScorecard(best.d)}
+    <h2 class="band">💡 杜邦拆解的二级子项（参考行业最佳实践）</h2>
+    <div class="viz-row">
+      <div class="viz-card">
+        <h3>① 净利率 子项</h3>
+        <ul class="dupont-sub">
+          <li>毛利率 = 毛利润 / 营收（改善空间）</li>
+          <li>期间费用率 = (销售+管理+研发) / 营收（费用管控）</li>
+          <li>EBIT利润率 = EBIT / 营收（运营效率）</li>
+          <li>税后负担率 = 净利润 / 税前利润（税务筹划）</li>
+        </ul>
+      </div>
+      <div class="viz-card">
+        <h3>② 资产周转率 子项</h3>
+        <ul class="dupont-sub">
+          <li>应收账款周转 = 营收 / 应收账款（收款效率）</li>
+          <li>存货周转 = 营收 / 存货（库存效率）</li>
+          <li>固定资产周转 = 营收 / 固定资产（资本效率）</li>
+          <li>营运资本效率 = 营收 / 流动资产（运营质量）</li>
+        </ul>
+      </div>
+      <div class="viz-card">
+        <h3>③ 权益乘数 子项</h3>
+        <ul class="dupont-sub">
+          <li>资产负债率 = 总负债 / 总资产（安全边际）</li>
+          <li>利息覆盖倍数 = EBIT / 利息费用（偿债能力）</li>
+          <li>财务杠杆系数 DFL = EBIT / (EBIT − 利息)（杠杆程度）</li>
+          <li>负债结构 = 短债 + 长期负债（期限管控）</li>
+        </ul>
+      </div>
+    </div>
+    <p class="xref-foot">每份财报的杜邦细节见下方「财报浏览器」中相应块（每份已嵌入 3 因子拆解）。</p>`;
+}
+
+// 单份财报的杜邦迷你展示
+function dupontReportMini(company, period) {
+  const d = dupontFactors(company, period);
+  if (!d) return "";
+  return `
+    <div class="dupont-mini">
+      <h4>📊 ROE 杜邦三因子拆解</h4>
+      ${dupontFormula3(d, period)}
+      <div class="dupont-mini__details">
+        <div><b>净利率拆解：</b>毛利率 ${fmtPct(d.grossMargin)} / 销售费用率 ${fmtPct(d.sellingRatio)} / 管理费用率 ${fmtPct(d.adminRatio)} / 研发费用率 ${fmtPct(d.rndRatio)}</div>
+        <div><b>周转拆解：</b>应收 ${fmtX(d.arTurnover)} / 存货 ${fmtX(d.invTurnover)} / 固定 ${fmtX(d.faTurnover)}</div>
+        <div><b>杠杆拆解：</b>资产负债率 ${fmtPct(d.debtRatio)} / 利息保障 ${fmtX(d.icr)} / DFL ${fmtX(d.dfl)}</div>
+      </div>
+    </div>`;
+}
 function renderReports() {
   // 全部财报堆叠展示：每份独立 anchor + KPI 卡带 + 表格。覆盖矩阵中的「缺 N」可点回这里。
   const blocks = DATA.reports.map((r) => {
@@ -1096,6 +1483,7 @@ function renderReports() {
       </header>
       <div class="kpis">${reportKpis(r.company, r.period)}</div>
       ${reportVerdict(r.company, r.period)}
+      ${dupontReportMini(r.company, r.period)}
       ${snapsForCompany.length > 1 ? `<div class="viz-card viz-card--inline">
         <h3>${esc(COMPANY_SHORT[r.company] || r.company)} · 各期覆盖度</h3>
         ${sparkline(snapsForCompany, { title: COMPANY_SHORT[r.company] + " 覆盖度趋势" })}
