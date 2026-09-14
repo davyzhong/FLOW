@@ -25,6 +25,7 @@ applies_to: competitive-research
 | 5 | [consulting-frameworks.md](consulting-frameworks.md) | 咨询方法论 | McKinsey / BCG / 长桥 等方法论框架（杜邦、PIMS、Valuation） |
 | 6 | [summary-and-positioning.md](summary-and-positioning.md) | 综合 | 5 份调研汇总 + FLOW 在行业里的定位 |
 | 7 | [optimization-checklist.md](optimization-checklist.md) | 改进清单 | 30+ 条改进建议，分优先级 / 成本 / 风险 |
+| 8 | [2026-09-15-ai-data-layer-mcp-supplement.md](2026-09-15-ai-data-layer-mcp-supplement.md) | 增量补充 | 受治理数据层 + MCP 通道（2026 新动向）与 S-1~S-6 增量条目 |
 
 ## 调研范围
 

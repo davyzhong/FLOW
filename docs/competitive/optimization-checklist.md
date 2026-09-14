@@ -5,6 +5,7 @@ doc_type: competitive-research
 status: current
 version: 1.0
 created_at: 2026-09-15
+updated_at: 2026-09-15
 owner: FLOW
 related: [./summary-and-positioning.md, ./open-source-ai-financial.md, ./commercial-ai-report.md, ./open-source-bi.md, ./china-financial-bi.md, ./consulting-frameworks.md]
 ---
