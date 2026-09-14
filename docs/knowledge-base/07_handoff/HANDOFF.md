@@ -12,6 +12,16 @@ applies_to: handoff
 
 # FLOW 交接文档（HANDOFF）
 
+## 0. 2026-09-14 最新续接：报告风视觉系统统一
+
+- **本会话交接**：[`2026-09-14-glm-coord-visual-handoff.md`](2026-09-14-glm-coord-visual-handoff.md)
+- GLM 协调者会话（`mvs_ce3323c6851e4dd3961e3cfe51647d70`）收口两条主线：
+  1. 把 Kimi 在 `docs/library/index.html` + 看板 Widget 的报告风视觉（hero + KPI 卡带 + 覆盖矩阵 + verdict）反哺到 apps/web 在线 `/metric-library` 和 `/statements`，顺手补 `/statements` 缺失的 `AppShell`。
+  2. 把静态资料库 11 个分散 section 整合成 1 个长滚动报告，加 2480 个互链锚点 + 10 个内联 SVG 可视化（3 柱 + 4 环 + 3 折线）。
+- 提交 `4be2c0f` / `e114ae3`，均已推送到 `origin/codex/s01-parallel-integration`。
+- 验证：vitest 64/64、tsc 干净、eslint --max-warnings 0 干净、headless Chromium 实测 index.html 与 widget.html 零 JS 错误。
+- **未做**：本会话修改了 `e2e/statements.spec.ts` 的 heading 断言，但 e2e 全套未跑（需 docker compose 基础设施）。下一会话接手后先 `git status` 判断本会话的 WIP 与其他并行会话（Kimi / Sol / route-policy / security-audit）的 13 个未暂存文件归属。
+
 ## 0. 2026-09-12 最新续接：O2/O3 已收口
 
 - O2 已由 `293308c` 提交推送，CI run `34604843637` 的 16 个 job 全绿。
