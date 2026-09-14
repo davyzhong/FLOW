@@ -1,7 +1,7 @@
 ---
 doc_id: FLOW-HANDOFF-20260914-GLM-VIS
 title: GLM 协调者 · 报告风视觉系统统一（2026-09-14）
-doc_type: handoff
+doc_type: navigation
 status: current
 version: 1.0
 created_at: 2026-09-14
