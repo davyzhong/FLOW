@@ -15,6 +15,7 @@ COPY config/intake ./config/intake
 COPY config/metrics ./config/metrics
 COPY config/statements ./config/statements
 COPY config/analysis ./config/analysis
+COPY docs/40_specs/security/route-inventory-v1.tsv ./config/security/route-inventory-v1.tsv
 RUN uv sync --frozen --no-dev
 ENV PATH="/app/.venv/bin:$PATH" \
     FLOW_CHROMIUM_PATH="/usr/bin/chromium" \

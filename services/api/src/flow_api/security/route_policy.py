@@ -24,6 +24,7 @@
 from __future__ import annotations
 
 import csv
+import os
 from collections.abc import Callable, Iterator
 from dataclasses import dataclass
 from pathlib import Path
@@ -48,8 +49,26 @@ from flow_api.security.principal import Principal
 # §5 policy 注册表（TSV 权威）
 # ---------------------------------------------------------------------------
 
-_REPO_ROOT = Path(__file__).resolve().parents[5]
-TSV_PATH = _REPO_ROOT / "docs/40_specs/security/route-inventory-v1.tsv"
+# 容器/仓库双布局：镜像内 TSV 烤在 /app/config/security/，仓库内按相对路径。
+# 禁止模块级 parents[N]——容器内层级变短会 IndexError（R1 smoke 教训）。
+_CONTAINER_TSV = Path("/app/config/security/route-inventory-v1.tsv")
+
+
+def _find_tsv() -> Path:
+    override = os.environ.get("FLOW_ROUTE_INVENTORY_TSV")
+    if override:
+        return Path(override)
+    probe = Path(__file__).resolve()
+    for candidate in probe.parents:
+        hit = candidate / "docs" / "40_specs" / "security" / "route-inventory-v1.tsv"
+        if hit.is_file():
+            return hit
+    if _CONTAINER_TSV.is_file():
+        return _CONTAINER_TSV
+    return Path("docs/40_specs/security/route-inventory-v1.tsv")
+
+
+TSV_PATH = _find_tsv()
 
 _TSV_COLUMNS = (
     "method",
