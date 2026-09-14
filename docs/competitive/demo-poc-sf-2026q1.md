@@ -5,6 +5,7 @@ doc_type: competitive-research
 status: current
 version: 1.0
 created_at: 2026-09-15
+updated_at: 2026-09-15
 owner: FLOW
 related: [./summary-and-positioning.md, ./comparison-matrix-code-level.md]
 data_source: docs/implementation/p5/statement_facts.yaml (顺丰 2026Q1 = 68 条事实)

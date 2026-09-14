@@ -45,6 +45,8 @@ DOC_TYPES: Dict[str, dict] = {
                         "required": ["snapshot_id", "sensitivity"]},
     "review": {"statuses": {"open", "partially-resolved", "resolved", "accepted-risk", "obsolete"},
                "required": ["subject_ref", "findings"]},
+    "competitive-research": {"statuses": {"draft", "current", "superseded", "archived"},
+                             "required": []},
     "delivery": {"statuses": {"draft", "verified", "superseded", "archived"},
                  "required": ["commit_refs", "evidence_refs"]},
     "verification": {"statuses": {"draft", "verified", "superseded", "archived"},

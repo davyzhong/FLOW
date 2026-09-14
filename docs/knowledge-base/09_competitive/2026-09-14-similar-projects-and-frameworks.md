@@ -1,3 +1,20 @@
+---
+doc_id: KB-COMP-SIMILAR-20260914
+title: 相似项目盘点与方法框架总结（2026-09-14）
+doc_type: knowledge-card
+status: verified
+version: "1.0"
+created_at: 2026-09-14
+updated_at: 2026-09-14
+owner: FLOW
+knowledge_release: flow-knowledge-2026-09-12.1
+source_refs: [docs/knowledge-base/09_competitive/INDEX.md]
+authority_level: C
+sensitivity: project-internal
+domain: competitive_research
+effective_from: 2026-09-14
+---
+
 # 相似项目盘点与方法框架总结｜开源与外部产品｜2026-09-14
 
 登记日期：2026-09-14。本文回答：与 FLOW 新战略目标（D052：企业内部月度财务经营分析工作台，AI 生产链 + 经分专员终审）**目标类似的开源项目与外部产品有哪些、它们的方法思路与模型框架是什么、与 FLOW 三层两模块如何比对**。

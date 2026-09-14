@@ -5,6 +5,7 @@ doc_type: competitive-research
 status: current
 version: 1.0
 created_at: 2026-09-15
+updated_at: 2026-09-15
 owner: FLOW
 related: [./summary-and-positioning.md, ./comparison-matrix-code-level.md, ./demo-poc-sf-2026q1.md]
 ---

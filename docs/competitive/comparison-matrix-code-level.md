@@ -5,6 +5,7 @@ doc_type: competitive-research
 status: current
 version: 2.0
 created_at: 2026-09-15
+updated_at: 2026-09-15
 owner: FLOW
 related: [./summary-and-positioning.md, ./optimization-checklist.md]
 ---

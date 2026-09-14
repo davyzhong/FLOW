@@ -1,3 +1,20 @@
+---
+doc_id: KB-COMP-BACKLOG-20260914
+title: 竞对比对优化清单（2026-09-14，建议清单非任务批准）
+doc_type: knowledge-card
+status: verified
+version: "1.0"
+created_at: 2026-09-14
+updated_at: 2026-09-14
+owner: FLOW
+knowledge_release: flow-knowledge-2026-09-12.1
+source_refs: [docs/knowledge-base/09_competitive/2026-09-14-similar-projects-and-frameworks.md]
+authority_level: C
+sensitivity: project-internal
+domain: competitive_research
+effective_from: 2026-09-14
+---
+
 # 竞对比对优化清单｜2026-09-14
 
 状态：建议清单（调研产物，非任务批准）。依据：[相似项目盘点与方法框架总结](2026-09-14-similar-projects-and-frameworks.md) 与 C01–C20 产品调研。每项含来源竞对、建议落点、优先级与执行约束；**任何采纳须按 D053 执行顺序裁决**（U8 收口优先，不改产品代码；战略门禁后按模块归属进入对应路线图工作包）。
