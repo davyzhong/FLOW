@@ -4,9 +4,8 @@ from __future__ import annotations
 
 import pytest
 from sqlalchemy import text
+from sqlalchemy.exc import DBAPIError
 from sqlalchemy.orm import Session
-
-from flow_api.infrastructure.db import get_engine
 
 
 @pytest.fixture
@@ -74,7 +73,7 @@ def test_audit_event_update_blocked(session: Session) -> None:
         "'allow', 'test', 'req-2', 'standard', now() + interval '365 days')"
     ))
     session.commit()
-    with pytest.raises(Exception):
+    with pytest.raises(DBAPIError):
         session.execute(text(
             "UPDATE audit_event SET decision = 'deny' "
             "WHERE correlation_id = 'corr-upd'"
@@ -91,7 +90,7 @@ def test_audit_event_delete_blocked(session: Session) -> None:
         "'allow', 'test', 'req-3', 'standard', now() + interval '365 days')"
     ))
     session.commit()
-    with pytest.raises(Exception):
+    with pytest.raises(DBAPIError):
         session.execute(text(
             "DELETE FROM audit_event WHERE correlation_id = 'corr-del'"
         ))

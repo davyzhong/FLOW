@@ -67,14 +67,55 @@ dev actor、未播种 binding，导致：
    （doc_id / generator_ref / input_hash），`metric_coverage_matrix.md` 移出豁免清单——
    生成类文档的合规性由生成器保证，不再靠哈希锁续期。
 
-### 验证
+### 二次修复（c806033，26a948f 之上）
 
-- 本地 unit 选择集 43/43；API + investigation + metrics + analysis + dashboard 144/144；
-  intake/dashboard/copilot/overrides/template 28/29（唯一失败例为本地库历史数据污染，
-  单跑通过；CI 每次全新库不受影响）；
-- `ruff check src tests`、`mypy src` 干净；`check_docs --phase m1` PASS（210 docs, 0 errors）；
-- 远端：`26a948f` 推送 main（b79bc64..26a948f fast-forward）与集成线（e114ae3..26a948f），
-  双触发 FLOW CI，等待全绿。
+26a948f 后 CI 仍有两类残留失败：
+
+1. **根目录 uv 环境无 psycopg**：seed 脚本从仓库根 `uv run` 调用必然
+   `ModuleNotFoundError` → smoke（stack-up）与 dashboard/investigation/user-closure/
+   statements 四个 e2e job 失败。改为经 `services/api` 的 uv 环境调用
+   （psycopg 在该环境），脚本与 Makefile alembic 行补本地开发库默认 DATABASE_URL。
+2. **conftest 播种不能做进程内缓存**：`tests/integration/test_migrations.py` 的
+   0025 downgrade→upgrade 往返会**删表重建 role_binding**，缓存导致后续全部
+   tests/api 401（integration job 57 例失败）。该修复落在 c1510ce（见下）。
+
+### 三次处置：ff42c67 五路并合的回落修复（c1510ce 起本系列）
+
+2026-09-14 02:09，他方（非经协调者合并序列）将 5 个车道分支直接合入 main
+（ff42c67：main.py fail-fast、route policy 2B、module boundaries、module-ui、
+audit schema/atomicity 测试）。合并以旧基线解析 conftest/auth.py，**语义回退**
+了本系列两项修复，CI 7 job 失败。已修复：
+
+1. **conftest 回退**→ c1510ce 重新落每用例补种（原修复当时未及提交）；
+2. **auth.get_session 连接泄漏**→ 3cccae8：普通返回型依赖 FastAPI 不做收尾，
+   require_bearer_auth 挂在全部 /api/v1 路由，每请求泄漏一个池连接，压满
+   QueuePool(5+10) 后全站 500——生产同险，已改 yield + finally close；
+3. **audit schema/atomicity 测试不可运行**→ 0d6644d + 本系列后续提交：
+   audit_event INSERT 列重复/缺非空列；audit_atomicity 三用例对 pipeline
+   真实合同（store 协议、execute 不上抛、finalize 收 PublicationResult）
+   全部错位，重写为可执行版本并补最小真实快照种子；
+4. **prepare_intent 企业域不可满足**→ ReportSnapshot 全链无 enterprise 列，
+   原检查恒失败（四阶段发布死锁）。改为「显式参数（路由层从 Principal 取）
+   优先、快照字段后备、皆缺 fail-closed」——参数化不降低安全语义；
+5. static-python ruff：audit_atomicity E402、security_schema F401/B017 清零。
+
+### 遗留登记
+
+- **2026-10-31 截止炸弹**：main.py 启动 fail-fast 校验 flow_legacy_bearer_cutoff
+  （默认 2026-10-31T15:59:59Z），到期后**所有**环境（含 development）启动即
+  SystemExit(2)。S01 车道须在该日前完成 identity bindings 迁移或调整默认；
+- smoke 在 ff42c67 的失败为 Docker Hub 网络抖动（auth.docker.io reset），非代码；
+- tests/api 在残留库上仍有顺序敏感用例（intake_overrides identity 系列），
+  CI 全新库不触发；已在 ledger 记录，留 K3 2B 后统一治理测试隔离。
+
+### 验证（截至本系列）
+
+- 本地：unit 选择集 43/43、metrics/analysis/data-contract 145/145、
+  security_schema+audit_atomicity 11/11、intake/dashboard/copilot/overrides/
+  template、investigation、dashboard、publishing 各文件子集全绿；
+- `ruff check src tests`、`mypy src`（184 files）干净；`check_docs --phase m1`
+  PASS；contracts-check 无漂移；
+- 远端待验：本系列推送后 main CI 全绿为 Task 6 关闭前置。
 
 ## 2. 各执行方当前基线与指令
 

@@ -108,6 +108,7 @@ class PublicationPipeline:
         correlation_id: str,
         request_id: str,
         formats: tuple[str, ...],
+        enterprise_id: UUID | None = None,
     ) -> PreparedPublication:
         report = session.get(ReportSnapshot, snapshot_id)
         if report is None:
@@ -118,9 +119,10 @@ class PublicationPipeline:
         unknown = [f for f in formats if f not in self._renderers and f != "pdf"]
         if unknown:
             raise PublicationPipelineError(f"unsupported formats: {sorted(unknown)}")
-        # 校验 enterprise_id 在 ReportSnapshot 上可读（字段依赖项目模型，此处保守取 .enterprise_id）
-        enterprise_id = getattr(report, "enterprise_id", None)
-        if enterprise_id is None:
+        # §3.1.4 enterprise 作用域：优先取调用方显式传入（路由层从 Principal 解析），
+        # 其次快照自带字段；两者皆缺 → fail-closed（业务模型企业列尚未落库）。
+        scope_enterprise_id = enterprise_id or getattr(report, "enterprise_id", None)
+        if scope_enterprise_id is None:
             raise PublicationPipelineError(
                 f"report snapshot {snapshot_id} has no enterprise_id"
             )
@@ -137,7 +139,7 @@ class PublicationPipeline:
         session.flush()
         return PreparedPublication(
             snapshot_id=snapshot_id,
-            enterprise_id=enterprise_id,
+            enterprise_id=scope_enterprise_id,
             actor_id=actor_id,
             correlation_id=correlation_id,
             request_id=request_id,
