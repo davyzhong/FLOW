@@ -3,9 +3,9 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 1.4
+version: 1.5
 created_at: 2026-09-12
-updated_at: 2026-09-13
+updated_at: 2026-09-14
 owner: FLOW
 depends_on: [FLOW-SPEC-V1-DESIGN-001]
 acceptance_refs: [roadmap-unique-invariant]
@@ -19,13 +19,13 @@ superseded_by: null
 
 > 本页只维护顺序、依赖、状态与证据链接；详细步骤在各工作包。全仓唯一可执行总计划——历史计划均已 superseded。
 
-## 顺序与状态（2026-09-13 迁移关闭后核对）
+## 顺序与状态（2026-09-14 对 `c9f4c6c` 核对；前次为 2026-09-13 迁移关闭后核对）
 
 | 顺序 | 工作包 | 状态 | 依赖 | 最近证据 |
 |---|---|---|---|---|
 | 1 | [U08 生产就绪收口](work_items/U08--production-readiness.md) | **completed** | — | U8-A～D 完成；严格 HTTPS/双格式 SHA/恢复门禁通过；冻结记录与标签 |
 | 1' | [U04 独立 oracle](work_items/U04--independent-oracle.md) | **blocked(外部到料)** — 可并行 | 独立会话人力 | HANDOFF §0：oracle 需人工录入 |
-| 2 | [S01 战略边界、事实合同与安全门禁](work_items/S01--post-u8-boundary-contract-security.md) | **active** | U08 completed | Task 1–5 完成；当前 Gate 0 安全规格 V1.1 独立审查 + Sol Bootstrap。Kimi/GLM 候选分支尚未获准合并；[范围计划](../superpowers/plans/2026-09-13-flow-post-u8-boundary-gate.md) / [并行执行计划](../superpowers/plans/2026-09-13-flow-three-agent-parallel-restructuring.md) |
+| 2 | [S01 战略边界、事实合同与安全门禁](work_items/S01--post-u8-boundary-contract-security.md) | **active** | U08 completed | Task 1–5 完成；安全规格 V1.1 已批准且独立审查闭环（`6c3c1cd`，零 P1/P2）。2026-09-14 `ff42c67` 五路并合 + 回落修复（`c1510ce`→`2570bf8`）带入路由策略 v2、模块边界与 U8 升级门禁、迁移 0026 修复、`main.py` 启动 fail-fast、两模块入口；Kimi `0841ff9` v1 被否，由 `997c1ab` v2 取代。**Task 6 维持不关闭**（F2/F3/F5 成立），恢复基线 `ba5f34c`；[协调台账](../70_operations/2026-09-14-coordination-ledger-glm.md) / [范围计划](../superpowers/plans/2026-09-13-flow-post-u8-boundary-gate.md) / [并行执行计划](../superpowers/plans/2026-09-13-flow-three-agent-parallel-restructuring.md) |
 | 3 | 公开财报模块 C 级出口 | **gated(阶段 2 后)** | 边界门禁 | company-level holdout、正式数字 100% 可复算/可追源、零严重事实错误、独立盲评；[验收 §14.1](../superpowers/specs/2026-09-13-flow-strategic-reset-design.md#141-公开模块-c-级出口协议) |
 | 4 | 企业内部月度工作台 | **gated(C 级出口 + 数据授权)** | 公开 C 级 + 授权 | 持续企业空间、月度周期、Finance BP 轻量提交、双版本报告 |
 | 5 | 四级验证 | **gated(内部工作台可用)** | 内部工作台 | 连续 3 个真实月度周期、同输入人工基准、逐周期盲评与 20% 工时门槛；[验收 §14.2](../superpowers/specs/2026-09-13-flow-strategic-reset-design.md#142-最终真实企业验证协议) |

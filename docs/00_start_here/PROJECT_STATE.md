@@ -3,16 +3,16 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 1.4
+version: 1.5
 created_at: 2026-09-12
-updated_at: 2026-09-13
+updated_at: 2026-09-14
 owner: FLOW
 applies_to: repository
 ---
 
 # FLOW 当前项目状态（唯一 current state）
 
-截至 2026-09-13：数据库迁移头 `0025_enterprise_cycle`；**U8 已完成并冻结**——U8-A～D 均已交付。S01 Task 1–5 已完成，当前正在执行 Gate 0 安全合同 V1.1 冻结与 Sol 安全 ABI Bootstrap；Task 6 尚未关闭。
+截至 2026-09-14：数据库迁移头 `0026_security_audit`（沿 `0024 → 0025 → 0026` 修订链核对）；**U8 已完成并冻结**——U8-A～D 均已交付。S01 Task 1–5 已完成；安全规格 V1.1 已获用户批准并通过独立审查（零 P1/P2）；**Task 6 维持不关闭**——协调者裁决 F2（durable audit writer 缺失、authorization 未按 action×resource 精确判定、identity JSON 未严格校验、legacy cutoff 误伤新 token）成立。当日协调者为 GLM 5.3，Task 2A 执行方为 Minimax M3（早期记录中的 "Sol" 系误记）。逐车道基线、门禁与冻结令见[协调台账](../70_operations/2026-09-14-coordination-ledger-glm.md)，本页不重复其细节。
 
 **战略方向（2026-09-13 已批准）**：D052–D054 + 经三轮独立规格审查通过的[战略重构设计 V1.1](../superpowers/specs/2026-09-13-flow-strategic-reset-design.md)生效——企业内部月度财务经营分析工作台为最终产品，公开财报为独立模块（三层两模块）；固定原则见 [PRODUCT_PRINCIPLES](../20_product/PRODUCT_PRINCIPLES.md)。U8 冻结后先完成 Financial Facts Contract V2、安全/权限子规格和模块边界门禁，旧 U9/U10 不自动续跑。
 
@@ -26,7 +26,7 @@ applies_to: repository
 
 1. **U8（已完成并冻结）**：[生产冻结交付记录](../60_delivery/2026-09-13-u8-production-freeze.md)；可恢复基线 `u8-final-baseline`；严格冻结标签 `flow-u8-freeze-20260913`。
 2. **U4（外部到料即并行）**：独立会话录入 oracle，全行 diff 与留出泛化验收。
-3. **[S01 战略边界、事实合同与安全门禁](../50_plans/work_items/S01--post-u8-boundary-contract-security.md)（当前 active）**：Task 1–5 已完成（Facts V2、兼容适配、Enterprise/AnalysisCycle 与 0025 均已进入 main）；用户已于 2026-09-13 批准安全规格 V1.1 的冻结值，当前按[三智能体执行计划](../superpowers/plans/2026-09-13-flow-three-agent-parallel-restructuring.md)完成独立规格审查与 Sol Bootstrap。Kimi `0841ff9` 和 GLM `07d82f2` 仅是候选分支，必须按 checkpoint base 复核后才能合并。
+3. **[S01 战略边界、事实合同与安全门禁](../50_plans/work_items/S01--post-u8-boundary-contract-security.md)（当前 active）**：Task 1–5 已完成（Facts V2、兼容适配、Enterprise/AnalysisCycle 与 0025 均已进入 main）；安全规格 V1.1 已获用户批准，其独立审查已于 2026-09-13 闭环（`6c3c1cd`，零 P1/P2）。2026-09-14 五路并合 `ff42c67` 使路由策略注册表 v2（`997c1ab`）、模块边界与 U8 升级门禁、迁移 0026 的 `gen_random_uuid` 修复及 `main.py` 启动 fail-fast 进入 main；`07d82f2`（两模块入口）也已在 main。**Kimi `0841ff9`（route-policy v1）不在 main**——它与已批准的 V1.1 设计冲突、实质回退 S01 方向，被 v2 取代，分支停在 `cf90df0` 作为审计证据，不得 rebase 或 force-push。Task 6 维持不关闭；当前唯一恢复基线为 `ba5f34c`（main = integration 同树）。后续按[三智能体执行计划](../superpowers/plans/2026-09-13-flow-three-agent-parallel-restructuring.md)与冻结令执行。
 4. **公开模块 C 级出口（门禁后）**：执行冻结样本、company-level holdout、可复算/可追源和独立盲评量化协议。
 5. **内部工作台与真实企业验证（C 级出口后）**：需内部数据授权；至少连续三个完整月度周期，与同输入人工基准逐周期比较。
 6. **旧 U9/O5、U10（待重新裁决）**：仅保留历史工作包身份，不按旧依赖链自动领取。
