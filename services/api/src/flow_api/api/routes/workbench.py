@@ -11,6 +11,8 @@ from sqlalchemy.orm import Session
 
 from flow_api.analysis.workbench import WorkbenchResponse, build_four_question_workbench
 from flow_api.infrastructure.db import get_session_factory
+from flow_api.security.authorization import Action
+from flow_api.security.route_policy import LOADERS, require_action
 
 router = APIRouter(prefix="/analysis", tags=["analysis"])
 
@@ -23,7 +25,19 @@ def get_workbench_session() -> Iterator[Session]:
 SessionDependency = Annotated[Session, Depends(get_workbench_session)]
 
 
-@router.get("/workbench/{report_id}", response_model=WorkbenchResponse)
+@router.get(
+    "/workbench/{report_id}",
+    response_model=WorkbenchResponse,
+    dependencies=[
+        Depends(
+            require_action(
+                Action.WORKBENCH_REPORT_READ,
+                LOADERS["load_public_statement_report"],
+                session_provider=get_workbench_session,
+            )
+        )
+    ],
+)
 def get_workbench(
     session: SessionDependency, report_id: Annotated[UUID, Path()]
 ) -> WorkbenchResponse:

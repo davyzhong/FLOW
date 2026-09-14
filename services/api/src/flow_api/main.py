@@ -11,11 +11,14 @@ from fastapi.responses import JSONResponse
 
 from flow_api.api.router import api_router
 from flow_api.api.schemas.intake import ErrorDetail
+from flow_api.infrastructure.db import get_session_factory
 from flow_api.infrastructure.logging import (
     bind_log_context,
     configure_logging,
     log_event,
 )
+from flow_api.security.audit import register_audit_writer
+from flow_api.security.audit_writer import DurableAuditWriter
 from flow_api.settings import get_settings
 
 configure_logging()
@@ -33,7 +36,9 @@ def _validate_security_startup() -> None:
     development 模式：identity bindings 留空时仅允许 flow_dev_actor_id 单点回退。
     """
     settings = get_settings()
-    # §3.2 旧 Bearer 截止
+    # §3.2 旧 Bearer 截止：仅当 legacy 凭据真实配置（AUTH_TOKEN）时到期才拒绝启动；
+    # 未配置 AUTH_TOKEN 的环境（dev principal 模式）不使用 legacy token，
+    # 到期只影响运行期 401，不阻断启动（§3.2「配置了 FLOW_AUTH_TOKEN 则启动失败」）。
     try:
         cutoff = datetime.fromisoformat(settings.flow_legacy_bearer_cutoff)
     except ValueError as error:
@@ -44,8 +49,25 @@ def _validate_security_startup() -> None:
         raise SystemExit(2) from error
     now = datetime.now(tz=cutoff.tzinfo)
     if now > cutoff:
+        if settings.auth_token:
+            print(
+                f"[security] FATAL: 旧 Bearer 截止 {cutoff.isoformat()} 已过"
+                "且 AUTH_TOKEN 仍配置（§3.2 启动 fail-fast）",
+                file=sys.stderr,
+            )
+            raise SystemExit(2)
         print(
-            f"[security] FATAL: 旧 Bearer 截止 {cutoff.isoformat()} 已过（§3.2 启动 fail-fast）",
+            f"[security] WARN: 旧 Bearer 截止 {cutoff.isoformat()} 已过"
+            "（未配置 AUTH_TOKEN，legacy 路径已不可用）",
+            file=sys.stderr,
+        )
+    # §3.2 legacy 身份冻结：AUTH_TOKEN 配置时 FLOW_LEGACY_ACTOR_ID/ENTERPRISE_ID 必填
+    if settings.auth_token and (
+        not settings.flow_legacy_actor_id or not settings.flow_legacy_enterprise_id
+    ):
+        print(
+            "[security] FATAL: AUTH_TOKEN 已配置但缺少 FLOW_LEGACY_ACTOR_ID/"
+            "FLOW_LEGACY_ENTERPRISE_ID（§3.2 冻结身份）",
             file=sys.stderr,
         )
         raise SystemExit(2)
@@ -108,6 +130,13 @@ class _SettingsLikeProxy:
 
 def create_app() -> FastAPI:
     _validate_security_startup()
+    # §6：durable AuditWriter 单点注册（审计写入失败 → 503 fail closed）
+    from flow_api.settings import get_settings
+
+    settings = get_settings()
+    register_audit_writer(
+        DurableAuditWriter(get_session_factory(), settings.flow_audit_retention_days)
+    )
     app = FastAPI(title="FLOW API", version="0.1.0")
 
     @app.middleware("http")
@@ -115,11 +144,16 @@ def create_app() -> FastAPI:
         request: Request, call_next: Callable[[Request], Awaitable[Response]]
     ) -> Response:
         request_id = str(uuid4())
+        # §9 correlation：外部传入则透传（五处一致），否则生成
+        correlation_id = request.headers.get("X-Correlation-Id") or str(uuid4())
+        request.state.request_id = request_id
+        request.state.correlation_id = correlation_id
         started = time.perf_counter()
-        bind_log_context(request_id=request_id)
+        bind_log_context(request_id=request_id, correlation_id=correlation_id)
         response = await call_next(request)
         duration_ms = round((time.perf_counter() - started) * 1000, 1)
         response.headers["X-Request-Id"] = request_id
+        response.headers["X-Correlation-Id"] = correlation_id
         log_event(
             logger,
             logging.INFO,

@@ -20,3 +20,4 @@ managed_files:
   - {path: "services/api/src/flow_api/security/models.py", owner: sol}
   # ---- 敏感路由（Task 2B，owner Kimi）----
   - {path: "services/api/src/flow_api/security/route_policy.py", owner: kimi}
+  - {path: "services/api/src/flow_api/security/audit_writer.py", owner: glm-coordinator}

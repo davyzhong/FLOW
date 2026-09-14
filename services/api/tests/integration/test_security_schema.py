@@ -18,7 +18,7 @@ def session() -> Session:
 def test_migration_head_is_0026(session: Session) -> None:
     result = session.execute(text("SELECT version_num FROM alembic_version"))
     version = result.scalar()
-    assert version == "0026_security_audit", f"迁移头不是 0026: {version}"
+    assert version == "0027_security_contract_fix", f"迁移头不是 0027: {version}"
 
 
 def test_role_binding_table_exists(session: Session) -> None:

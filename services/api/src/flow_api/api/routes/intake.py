@@ -75,6 +75,8 @@ from flow_api.intake.service import (
 )
 from flow_api.intake.source_storage import SourceStorage, SourceStorageError
 from flow_api.intake.transforms import load_transform_rules
+from flow_api.security.authorization import Action
+from flow_api.security.route_policy import LOADERS, require_action
 from flow_api.settings import get_settings
 
 router = APIRouter(prefix="/intake", tags=["intake"])
@@ -91,8 +93,7 @@ def resolve_intake_configuration_root(module_path: Path = Path(__file__)) -> Pat
     candidates = (resolved_module_path.parent, *resolved_module_path.parents)
     for candidate in candidates:
         if all(
-            (candidate / relative_path).is_file()
-            for relative_path in INTAKE_CONFIGURATION_PATHS
+            (candidate / relative_path).is_file() for relative_path in INTAKE_CONFIGURATION_PATHS
         ):
             return candidate
     raise RuntimeError(f"FLOW intake configuration files not found from {resolved_module_path}")
@@ -133,7 +134,18 @@ def _error(http_status: int, code: str, message: str, **details: Any) -> HTTPExc
     return HTTPException(status_code=http_status, detail=payload.model_dump(mode="json"))
 
 
-@router.get("/templates/{template_id}")
+@router.get(
+    "/templates/{template_id}",
+    dependencies=[
+        Depends(
+            require_action(
+                Action.INTAKE_TEMPLATE_READ,
+                LOADERS["load_public_intake_template"],
+                session_provider=get_db_session,
+            )
+        )
+    ],
+)
 def download_template(template_id: str) -> Response:
     """下载治理化的空白标准工作簿模板（确定性字节输出）。"""
     if template_id != TEMPLATE_ID:
@@ -296,7 +308,20 @@ def _version_response(session: Session, version: ImportVersion) -> ImportVersion
     )
 
 
-@router.post("/batches", response_model=BatchResponse, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/batches",
+    response_model=BatchResponse,
+    status_code=status.HTTP_201_CREATED,
+    dependencies=[
+        Depends(
+            require_action(
+                Action.INTAKE_BATCH_CREATE,
+                LOADERS["load_default_cycle_create"],
+                session_provider=get_db_session,
+            )
+        )
+    ],
+)
 def create_batch(request: BatchCreateRequest, session: SessionDependency) -> BatchResponse:
     batch = IntakeService(session).create_batch(request.name, request.description)
     return BatchResponse.model_validate(batch, from_attributes=True)
@@ -306,6 +331,15 @@ def create_batch(request: BatchCreateRequest, session: SessionDependency) -> Bat
     "/batches/{batch_id}/sources",
     response_model=SourceResponse,
     status_code=status.HTTP_201_CREATED,
+    dependencies=[
+        Depends(
+            require_action(
+                Action.INTAKE_SOURCE_UPLOAD,
+                LOADERS["load_batch_scope_owner_or_deny_legacy"],
+                session_provider=get_db_session,
+            )
+        )
+    ],
 )
 async def upload_source(
     batch_id: UUID,
@@ -349,7 +383,19 @@ async def upload_source(
     )
 
 
-@router.get("/sources/{source_file_id}/profile", response_model=WorkbookProfileResponse)
+@router.get(
+    "/sources/{source_file_id}/profile",
+    response_model=WorkbookProfileResponse,
+    dependencies=[
+        Depends(
+            require_action(
+                Action.INTAKE_SOURCE_PROFILE_READ,
+                LOADERS["load_source_batch_scope_owner_or_deny_legacy"],
+                session_provider=get_db_session,
+            )
+        )
+    ],
+)
 def get_profile(
     source_file_id: UUID, session: SessionDependency, storage: StorageDependency
 ) -> WorkbookProfileResponse:
@@ -395,6 +441,15 @@ def get_profile(
     "/sources/{source_file_id}/mapping-proposals",
     response_model=MappingResponse,
     status_code=status.HTTP_201_CREATED,
+    dependencies=[
+        Depends(
+            require_action(
+                Action.INTAKE_MAPPING_PROPOSE,
+                LOADERS["load_source_batch_scope_owner_or_deny_legacy"],
+                session_provider=get_db_session,
+            )
+        )
+    ],
 )
 def create_mapping_proposal(
     source_file_id: UUID, session: SessionDependency, storage: StorageDependency
@@ -412,7 +467,19 @@ def create_mapping_proposal(
     return _mapping_response(mapping, proposal)
 
 
-@router.post("/mappings/{mapping_version_id}/confirm", response_model=MappingResponse)
+@router.post(
+    "/mappings/{mapping_version_id}/confirm",
+    response_model=MappingResponse,
+    dependencies=[
+        Depends(
+            require_action(
+                Action.INTAKE_MAPPING_CONFIRM,
+                LOADERS["load_mapping_batch_scope_owner_or_deny_legacy"],
+                session_provider=get_db_session,
+            )
+        )
+    ],
+)
 def confirm_mapping(
     mapping_version_id: UUID,
     request: MappingConfirmationRequest,
@@ -433,6 +500,15 @@ def confirm_mapping(
     "/mappings/{mapping_version_id}/overrides",
     response_model=MappingResponse,
     status_code=status.HTTP_201_CREATED,
+    dependencies=[
+        Depends(
+            require_action(
+                Action.INTAKE_MAPPING_OVERRIDE,
+                LOADERS["load_mapping_batch_scope_owner_or_deny_legacy"],
+                session_provider=get_db_session,
+            )
+        )
+    ],
 )
 def override_mapping(
     mapping_version_id: UUID,
@@ -476,7 +552,19 @@ def override_mapping(
     return _mapping_response(new_mapping, proposal)
 
 
-@router.post("/sources/{source_file_id}/validate", response_model=ImportVersionResponse)
+@router.post(
+    "/sources/{source_file_id}/validate",
+    response_model=ImportVersionResponse,
+    dependencies=[
+        Depends(
+            require_action(
+                Action.INTAKE_SOURCE_VALIDATE,
+                LOADERS["load_source_batch_scope_or_deny_legacy"],
+                session_provider=get_db_session,
+            )
+        )
+    ],
+)
 def validate_source(
     source_file_id: UUID,
     request: ValidateImportRequest,
@@ -505,6 +593,15 @@ def validate_source(
 @router.post(
     "/issues/{quality_issue_id}/acknowledge",
     response_model=WarningAcknowledgementResponse,
+    dependencies=[
+        Depends(
+            require_action(
+                Action.INTAKE_ISSUE_ACKNOWLEDGE,
+                LOADERS["load_issue_batch_scope_owner_or_deny_legacy"],
+                session_provider=get_db_session,
+            )
+        )
+    ],
 )
 def acknowledge_warning(
     quality_issue_id: UUID,
@@ -522,7 +619,19 @@ def acknowledge_warning(
     return WarningAcknowledgementResponse.model_validate(acknowledgement, from_attributes=True)
 
 
-@router.post("/imports/{import_version_id}/publish", response_model=ImportVersionResponse)
+@router.post(
+    "/imports/{import_version_id}/publish",
+    response_model=ImportVersionResponse,
+    dependencies=[
+        Depends(
+            require_action(
+                Action.INTAKE_IMPORT_PUBLISH,
+                LOADERS["load_import_batch_scope_or_deny_legacy"],
+                session_provider=get_db_session,
+            )
+        )
+    ],
+)
 def publish_import(import_version_id: UUID, session: SessionDependency) -> ImportVersionResponse:
     try:
         version = IntakeService(session).publish_import(import_version_id)
@@ -547,7 +656,19 @@ def publish_import(import_version_id: UUID, session: SessionDependency) -> Impor
     return _version_response(session, version)
 
 
-@router.get("/batches/{batch_id}/versions", response_model=VersionHistoryResponse)
+@router.get(
+    "/batches/{batch_id}/versions",
+    response_model=VersionHistoryResponse,
+    dependencies=[
+        Depends(
+            require_action(
+                Action.INTAKE_VERSION_READ,
+                LOADERS["load_batch_scope_owner_or_deny_legacy"],
+                session_provider=get_db_session,
+            )
+        )
+    ],
+)
 def version_history(batch_id: UUID, session: SessionDependency) -> VersionHistoryResponse:
     versions = list(
         session.scalars(
@@ -564,7 +685,18 @@ def version_history(batch_id: UUID, session: SessionDependency) -> VersionHistor
     )
 
 
-@router.get("/imports/{import_version_id}/cleaning-summary")
+@router.get(
+    "/imports/{import_version_id}/cleaning-summary",
+    dependencies=[
+        Depends(
+            require_action(
+                Action.INTAKE_CLEANING_SUMMARY_READ,
+                LOADERS["load_import_batch_scope_owner_or_deny_legacy"],
+                session_provider=get_db_session,
+            )
+        )
+    ],
+)
 def cleaning_summary(
     import_version_id: UUID,
     session: SessionDependency,
@@ -657,7 +789,18 @@ def cleaning_summary(
     }
 
 
-@router.get("/imports/{import_version_id}/standardized-workbook")
+@router.get(
+    "/imports/{import_version_id}/standardized-workbook",
+    dependencies=[
+        Depends(
+            require_action(
+                Action.INTAKE_STANDARDIZED_WORKBOOK_READ,
+                LOADERS["load_import_batch_scope_owner_or_deny_legacy"],
+                session_provider=get_db_session,
+            )
+        )
+    ],
+)
 def export_standardized_workbook(
     import_version_id: UUID,
     session: SessionDependency,

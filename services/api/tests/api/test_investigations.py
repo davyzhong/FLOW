@@ -41,8 +41,8 @@ async def test_investigation_api_full_review_flow(analysis_session: Session) -> 
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as client:
         missing = await client.get(f"/api/v1/investigations/{uuid.uuid4()}")
-        assert missing.status_code == 404
-        assert missing.json()["detail"]["code"] == "investigation_not_found"
+        assert missing.status_code == 403  # §6 防存在性枚举
+        assert missing.json()["detail"]["code"] == "resource_scope_unresolved"
 
         mismatched = await client.get(
             f"/api/v1/investigations/{finding.id}",

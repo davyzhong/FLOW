@@ -25,6 +25,8 @@ from flow_api.investigation.repositories import (
     InvestigationIdentityMismatchError,
     InvestigationNotFoundError,
 )
+from flow_api.security.authorization import Action
+from flow_api.security.route_policy import LOADERS, require_action
 
 router = APIRouter(prefix="/copilot", tags=["copilot"])
 
@@ -53,6 +55,15 @@ def _error(http_status: int, code: str, message: str) -> HTTPException:
         status.HTTP_409_CONFLICT: {"model": CopilotErrorResponse},
         status.HTTP_422_UNPROCESSABLE_CONTENT: {"model": CopilotErrorResponse},
     },
+    dependencies=[
+        Depends(
+            require_action(
+                Action.COPILOT_INVESTIGATION_ASK,
+                LOADERS["load_finding_batch_scope_or_deny_legacy"],
+                session_provider=get_investigation_session,
+            )
+        )
+    ],
 )
 def ask_investigation_question(
     finding_id: UUID,
@@ -96,6 +107,15 @@ def ask_investigation_question(
         status.HTTP_404_NOT_FOUND: {"model": CopilotErrorResponse},
         status.HTTP_422_UNPROCESSABLE_CONTENT: {"model": CopilotErrorResponse},
     },
+    dependencies=[
+        Depends(
+            require_action(
+                Action.COPILOT_MAPPING_EXPLAIN,
+                LOADERS["load_body_import_batch_scope_or_deny_legacy"],
+                session_provider=get_investigation_session,
+            )
+        )
+    ],
 )
 def explain_mapping(
     request: MappingExplanationRequest,
@@ -128,6 +148,15 @@ def explain_mapping(
         status.HTTP_404_NOT_FOUND: {"model": CopilotErrorResponse},
         status.HTTP_422_UNPROCESSABLE_CONTENT: {"model": CopilotErrorResponse},
     },
+    dependencies=[
+        Depends(
+            require_action(
+                Action.COPILOT_REPORT_OUTLINE_GENERATE,
+                LOADERS["load_body_batch_scope_or_deny_legacy"],
+                session_provider=get_investigation_session,
+            )
+        )
+    ],
 )
 def draft_report_outline(
     request: ReportOutlineRequest,

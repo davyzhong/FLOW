@@ -73,8 +73,8 @@ async def test_unknown_batch_returns_typed_404(client: AsyncClient) -> None:
     from uuid import uuid4
 
     response = await client.post(f"/api/v1/orchestration/batches/{uuid4()}/build")
-    assert response.status_code == 404
-    assert response.json()["detail"]["code"] == "batch_not_found"
+    assert response.status_code == 403  # §6 防存在性枚举
+    assert response.json()["detail"]["code"] == "resource_scope_unresolved"
 
 
 async def test_unpublished_batch_returns_409(client: AsyncClient, db_session: Session) -> None:

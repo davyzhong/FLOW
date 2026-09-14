@@ -55,6 +55,10 @@ class AnalysisBatch(IdentityTimestampMixin, Base):
 
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     status: Mapped[str] = mapped_column(String(32), nullable=False, default=BatchStatus.DRAFT.value)
+    # S01 R1：批次创建者（0027 引导回填 flow-dev-bp；新批次由服务层按 Principal 落值）
+    created_by: Mapped[str] = mapped_column(
+        String(255), nullable=False, server_default="flow-dev-bp", default="flow-dev-bp"
+    )
     description: Mapped[str | None] = mapped_column(Text)
     module_kind: Mapped[str] = mapped_column(
         String(32), nullable=False, default="legacy", server_default="legacy"

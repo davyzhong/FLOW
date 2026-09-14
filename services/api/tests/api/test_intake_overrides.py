@@ -29,7 +29,7 @@ from flow_api.main import create_app
 REPOSITORY_ROOT = Path(__file__).resolve().parents[4]
 NONSTANDARD = REPOSITORY_ROOT / "fixtures/workbooks/external_logistics_nonstandard_v1.xlsx"
 WORKBOOK_MIME = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-ACTOR = "finance.bp@example.com"
+ACTOR = "flow-dev-bp"
 
 
 class FakeS3Client:
@@ -138,7 +138,7 @@ async def test_override_creates_new_confirmed_mapping_version(client: Any) -> No
     response = await client.post(
         f"/api/v1/intake/mappings/{mapping['id']}/overrides",
         json={
-            "actor": ACTOR,
+            "actor": "flow-dev-bp",
             "source_file_id": ctx["source"]["id"],
             "source_sha256": ctx["source"]["sha256"],
             "overrides": overrides,
@@ -164,7 +164,7 @@ async def test_override_rejects_unknown_target_and_source(client: Any) -> None:
     ctx = await _create_mapping_with_source(client, "override unknown")
     mapping = ctx["mapping"]
     base = {
-        "actor": ACTOR,
+        "actor": "flow-dev-bp",
         "source_file_id": ctx["source"]["id"],
         "source_sha256": ctx["source"]["sha256"],
     }
@@ -214,7 +214,7 @@ async def test_override_rejects_duplicate_source_column(client: Any) -> None:
     response = await client.post(
         f"/api/v1/intake/mappings/{mapping['id']}/overrides",
         json={
-            "actor": ACTOR,
+            "actor": "flow-dev-bp",
             "source_file_id": ctx["source"]["id"],
             "source_sha256": ctx["source"]["sha256"],
             "overrides": [
@@ -237,7 +237,7 @@ async def test_override_rejects_stale_source_hash(client: Any) -> None:
     response = await client.post(
         f"/api/v1/intake/mappings/{mapping['id']}/overrides",
         json={
-            "actor": ACTOR,
+            "actor": "flow-dev-bp",
             "source_file_id": ctx["source"]["id"],
             "source_sha256": "0" * 64,
             "overrides": _swap_overrides(mapping),
@@ -253,7 +253,7 @@ async def test_override_rejects_cross_batch_source(client: Any) -> None:
     response = await client.post(
         f"/api/v1/intake/mappings/{ctx_a['mapping']['id']}/overrides",
         json={
-            "actor": ACTOR,
+            "actor": "flow-dev-bp",
             "source_file_id": ctx_b["source"]["id"],
             "source_sha256": ctx_b["source"]["sha256"],
             "overrides": _swap_overrides(ctx_a["mapping"]),
@@ -279,7 +279,7 @@ async def test_persisted_override_can_be_confirmed_and_extracted(
     response = await client.post(
         f"/api/v1/intake/mappings/{ctx['mapping']['id']}/overrides",
         json={
-            "actor": ACTOR,
+            "actor": "flow-dev-bp",
             "source_file_id": ctx["source"]["id"],
             "source_sha256": ctx["source"]["sha256"],
             "overrides": overrides,
@@ -289,7 +289,7 @@ async def test_persisted_override_can_be_confirmed_and_extracted(
     mapping = response.json()
     if operation == "confirm":
         confirmed = await client.post(
-            f"/api/v1/intake/mappings/{mapping['id']}/confirm", json={"actor": ACTOR}
+            f"/api/v1/intake/mappings/{mapping['id']}/confirm", json={"actor": "flow-dev-bp"}
         )
         assert confirmed.status_code == 200, confirmed.text
         assert confirmed.json()["mapping_hash"] == mapping["mapping_hash"]
@@ -331,7 +331,7 @@ async def test_override_rejects_column_from_another_sheet(client: Any) -> None:
     response = await client.post(
         f"/api/v1/intake/mappings/{mapping['id']}/overrides",
         json={
-            "actor": ACTOR,
+            "actor": "flow-dev-bp",
             "source_file_id": ctx["source"]["id"],
             "source_sha256": ctx["source"]["sha256"],
             "overrides": overrides,
@@ -367,7 +367,7 @@ async def test_mapping_rejects_corrupted_persisted_identity(
     client.test_session.flush()
     if operation == "confirm":
         response = await client.post(
-            f"/api/v1/intake/mappings/{mapping.id}/confirm", json={"actor": ACTOR}
+            f"/api/v1/intake/mappings/{mapping.id}/confirm", json={"actor": "flow-dev-bp"}
         )
     else:
         response = await client.post(

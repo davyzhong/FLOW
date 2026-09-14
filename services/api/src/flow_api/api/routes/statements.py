@@ -38,6 +38,8 @@ from flow_api.infrastructure.db import get_session_factory
 from flow_api.infrastructure.models.statement import StatementCorrection, StatementSource
 from flow_api.infrastructure.object_store import ObjectStore
 from flow_api.infrastructure.s3_client import build_s3_client
+from flow_api.security.authorization import Action
+from flow_api.security.route_policy import LOADERS, require_action
 from flow_api.settings import get_settings
 from flow_api.statements.intake import StatementSourceError, StatementSourceIntake
 from flow_api.statements.projection import (
@@ -105,6 +107,15 @@ def _source_response(source: StatementSource, *, duplicate: bool) -> StatementSo
     response_model=StatementSourceResponse,
     status_code=status.HTTP_201_CREATED,
     responses={status.HTTP_422_UNPROCESSABLE_CONTENT: {"model": StatementErrorResponse}},
+    dependencies=[
+        Depends(
+            require_action(
+                Action.STATEMENT_SOURCE_UPLOAD,
+                LOADERS["load_public_statement_source_collection"],
+                session_provider=get_statement_session,
+            )
+        )
+    ],
 )
 async def upload_statement_source(
     session: SessionDependency,
@@ -131,7 +142,19 @@ async def upload_statement_source(
     return _source_response(source, duplicate=not created)
 
 
-@router.get("/sources", response_model=StatementSourceListResponse)
+@router.get(
+    "/sources",
+    response_model=StatementSourceListResponse,
+    dependencies=[
+        Depends(
+            require_action(
+                Action.STATEMENT_SOURCE_READ,
+                LOADERS["load_public_statement_source_collection"],
+                session_provider=get_statement_session,
+            )
+        )
+    ],
+)
 def list_statement_sources(session: SessionDependency) -> StatementSourceListResponse:
     sources = session.scalars(
         select(StatementSource).order_by(StatementSource.created_at.desc())
@@ -148,6 +171,15 @@ def list_statement_sources(session: SessionDependency) -> StatementSourceListRes
         status.HTTP_404_NOT_FOUND: {"model": StatementErrorResponse},
         status.HTTP_422_UNPROCESSABLE_CONTENT: {"model": StatementErrorResponse},
     },
+    dependencies=[
+        Depends(
+            require_action(
+                Action.STATEMENT_REPORT_READ,
+                LOADERS["load_public_statement_report_collection"],
+                session_provider=get_statement_session,
+            )
+        )
+    ],
 )
 def list_statement_reports(session: SessionDependency) -> StatementReportListResponse:
     listing = StatementService().list_reports(session)
@@ -166,6 +198,15 @@ def list_statement_reports(session: SessionDependency) -> StatementReportListRes
         status.HTTP_404_NOT_FOUND: {"model": StatementErrorResponse},
         status.HTTP_422_UNPROCESSABLE_CONTENT: {"model": StatementErrorResponse},
     },
+    dependencies=[
+        Depends(
+            require_action(
+                Action.STATEMENT_REPORT_READ,
+                LOADERS["load_public_statement_report"],
+                session_provider=get_statement_session,
+            )
+        )
+    ],
 )
 def get_statement_report(
     session: SessionDependency,
@@ -208,6 +249,15 @@ def get_statement_report(
         status.HTTP_404_NOT_FOUND: {"model": StatementErrorResponse},
         status.HTTP_409_CONFLICT: {"model": StatementErrorResponse},
     },
+    dependencies=[
+        Depends(
+            require_action(
+                Action.STATEMENT_PROJECTION_READ,
+                LOADERS["load_public_statement_report"],
+                session_provider=get_statement_session,
+            )
+        )
+    ],
 )
 def get_statement_projection(
     session: SessionDependency,
@@ -285,6 +335,15 @@ def _correction_response(correction: StatementCorrection) -> CorrectionResponse:
         status.HTTP_409_CONFLICT: {"model": StatementErrorResponse},
         status.HTTP_422_UNPROCESSABLE_CONTENT: {"model": StatementErrorResponse},
     },
+    dependencies=[
+        Depends(
+            require_action(
+                Action.STATEMENT_CORRECTION_CREATE,
+                LOADERS["load_public_statement_report"],
+                session_provider=get_statement_session,
+            )
+        )
+    ],
 )
 def add_statement_correction(
     session: SessionDependency,
@@ -316,6 +375,15 @@ def add_statement_correction(
     "/{report_id}/corrections",
     response_model=CorrectionListResponse,
     responses={status.HTTP_404_NOT_FOUND: {"model": StatementErrorResponse}},
+    dependencies=[
+        Depends(
+            require_action(
+                Action.STATEMENT_CORRECTION_READ,
+                LOADERS["load_public_statement_report"],
+                session_provider=get_statement_session,
+            )
+        )
+    ],
 )
 def list_statement_corrections(
     session: SessionDependency, report_id: Annotated[UUID, Path()]
@@ -324,9 +392,7 @@ def list_statement_corrections(
         corrections = ReviewService(session).list_corrections(report_id)
     except ReviewError as error:
         raise _error(status.HTTP_404_NOT_FOUND, error.code, error.message) from error
-    return CorrectionListResponse(
-        corrections=tuple(_correction_response(c) for c in corrections)
-    )
+    return CorrectionListResponse(corrections=tuple(_correction_response(c) for c in corrections))
 
 
 @router.post(
@@ -336,6 +402,15 @@ def list_statement_corrections(
         status.HTTP_404_NOT_FOUND: {"model": StatementErrorResponse},
         status.HTTP_409_CONFLICT: {"model": StatementErrorResponse},
     },
+    dependencies=[
+        Depends(
+            require_action(
+                Action.STATEMENT_REPORT_PUBLISH,
+                LOADERS["load_public_statement_report"],
+                session_provider=get_statement_session,
+            )
+        )
+    ],
 )
 def publish_statement_report(
     session: SessionDependency, report_id: Annotated[UUID, Path()]

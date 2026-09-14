@@ -29,6 +29,8 @@ from flow_api.investigation.repositories import (
 )
 from flow_api.investigation.service import InvestigationService
 from flow_api.investigation.state_machines import ReviewBlockedError
+from flow_api.security.authorization import Action
+from flow_api.security.route_policy import LOADERS, require_action
 
 router = APIRouter(prefix="/investigations", tags=["investigations"])
 
@@ -46,7 +48,19 @@ def _error(http_status: int, code: str, message: str) -> HTTPException:
     return HTTPException(status_code=http_status, detail=detail.model_dump(mode="json"))
 
 
-@router.get("", response_model=FindingListResponse)
+@router.get(
+    "",
+    response_model=FindingListResponse,
+    dependencies=[
+        Depends(
+            require_action(
+                Action.INVESTIGATION_LIST,
+                LOADERS["load_single_enterprise"],
+                session_provider=get_investigation_session,
+            )
+        )
+    ],
+)
 def list_findings(session: SessionDependency) -> FindingListResponse:
     """列出全部 Finding（含身份交接标识），供「分析与归因」入口选择调查对象。"""
     rows = session.execute(
@@ -66,9 +80,7 @@ def list_findings(session: SessionDependency) -> FindingListResponse:
                 total_score=str(finding.total_score) if finding.total_score is not None else None,
                 batch_id=str(batch_id) if batch_id else None,
                 metric_snapshot_id=str(finding.metric_snapshot_id),
-                analysis_run_id=(
-                    str(finding.analysis_run_id) if finding.analysis_run_id else None
-                ),
+                analysis_run_id=(str(finding.analysis_run_id) if finding.analysis_run_id else None),
                 created_at=(
                     finding.created_at.isoformat(timespec="seconds") if finding.created_at else None
                 ),
@@ -85,6 +97,15 @@ def list_findings(session: SessionDependency) -> FindingListResponse:
         status.HTTP_404_NOT_FOUND: {"model": InvestigationErrorResponse},
         status.HTTP_409_CONFLICT: {"model": InvestigationErrorResponse},
     },
+    dependencies=[
+        Depends(
+            require_action(
+                Action.INVESTIGATION_READ,
+                LOADERS["load_finding_batch_scope_owner_or_deny_legacy"],
+                session_provider=get_investigation_session,
+            )
+        )
+    ],
 )
 def investigation_context(
     finding_id: UUID,
@@ -125,6 +146,15 @@ def investigation_context(
         status.HTTP_404_NOT_FOUND: {"model": InvestigationErrorResponse},
         status.HTTP_409_CONFLICT: {"model": InvestigationErrorResponse},
     },
+    dependencies=[
+        Depends(
+            require_action(
+                Action.INVESTIGATION_EVIDENCE_DECIDE,
+                LOADERS["load_finding_evidence_batch_scope_or_deny_legacy"],
+                session_provider=get_investigation_session,
+            )
+        )
+    ],
 )
 def decide_evidence(
     finding_id: UUID,
@@ -149,6 +179,15 @@ def decide_evidence(
     responses={
         status.HTTP_404_NOT_FOUND: {"model": InvestigationErrorResponse},
     },
+    dependencies=[
+        Depends(
+            require_action(
+                Action.INVESTIGATION_CONCLUSION_WRITE,
+                LOADERS["load_finding_batch_scope_or_deny_legacy"],
+                session_provider=get_investigation_session,
+            )
+        )
+    ],
 )
 def save_conclusion(
     finding_id: UUID,
@@ -169,6 +208,15 @@ def save_conclusion(
         status.HTTP_404_NOT_FOUND: {"model": InvestigationErrorResponse},
         status.HTTP_409_CONFLICT: {"model": InvestigationErrorResponse},
     },
+    dependencies=[
+        Depends(
+            require_action(
+                Action.INVESTIGATION_TRANSITION,
+                LOADERS["load_finding_batch_scope_or_deny_legacy"],
+                session_provider=get_investigation_session,
+            )
+        )
+    ],
 )
 def transition_finding(
     finding_id: UUID,

@@ -27,6 +27,8 @@ from flow_api.publishing.objective_freeze import (
     ObjectiveReportSnapshot,
     freeze_objective_statement_report,
 )
+from flow_api.security.authorization import Action
+from flow_api.security.route_policy import LOADERS, require_action
 
 router = APIRouter(prefix="/statements", tags=["statements"])
 
@@ -62,6 +64,15 @@ def _freeze_or_error(session: Session, report_id: UUID) -> ObjectiveReportSnapsh
     "/{report_id}/objective-snapshot",
     response_model=None,
     responses={404: {"model": StatementErrorResponse}, 409: {"model": StatementErrorResponse}},
+    dependencies=[
+        Depends(
+            require_action(
+                Action.OBJECTIVE_SNAPSHOT_READ_AND_FREEZE,
+                LOADERS["load_public_statement_report"],
+                session_provider=get_objective_session,
+            )
+        )
+    ],
 )
 def get_objective_snapshot(session: SessionDependency, report_id: Annotated[UUID, Path()]) -> Any:
     snapshot = _freeze_or_error(session, report_id)
@@ -84,15 +95,22 @@ def get_objective_snapshot(session: SessionDependency, report_id: Annotated[UUID
         "payload_hash": snapshot.payload_hash,
         "source": source,
         "golden": golden,
-        "statements_count": {
-            name: len(rows) for name, rows in statements.items()
-        },
+        "statements_count": {name: len(rows) for name, rows in statements.items()},
     }
 
 
 @router.post(
     "/{report_id}/objective-snapshot",
     responses={404: {"model": StatementErrorResponse}, 422: {"model": StatementErrorResponse}},
+    dependencies=[
+        Depends(
+            require_action(
+                Action.OBJECTIVE_SNAPSHOT_FREEZE,
+                LOADERS["load_public_statement_report"],
+                session_provider=get_objective_session,
+            )
+        )
+    ],
 )
 def freeze_objective_snapshot(
     session: SessionDependency, report_id: Annotated[UUID, Path()]
@@ -117,6 +135,15 @@ def freeze_objective_snapshot(
     "/{report_id}/objective-snapshot/html",
     response_class=Response,
     responses={404: {"model": StatementErrorResponse}, 409: {"model": StatementErrorResponse}},
+    dependencies=[
+        Depends(
+            require_action(
+                Action.OBJECTIVE_SNAPSHOT_RENDER_AND_FREEZE,
+                LOADERS["load_public_statement_report"],
+                session_provider=get_objective_session,
+            )
+        )
+    ],
 )
 def get_objective_snapshot_html(
     session: SessionDependency, report_id: Annotated[UUID, Path()]

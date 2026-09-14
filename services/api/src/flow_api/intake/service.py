@@ -7,7 +7,7 @@ from datetime import UTC, datetime
 from typing import Any
 from uuid import UUID
 
-from sqlalchemy import func, select
+from sqlalchemy import func, select, text
 from sqlalchemy.orm import Session
 
 from flow_api.data_contract.models import WorkbookContract
@@ -81,10 +81,52 @@ class IntakeService:
         self.session = session
         self.repository = IntakeRepository(session)
 
+    def _bootstrap_cycle_id(self) -> Any:
+        """单租户引导 cycle：查无则自建 enterprise + cycle（自愈，不依赖 0027 回填）。"""
+
+        row = self.session.execute(
+            text("SELECT id FROM analysis_cycle ORDER BY created_at LIMIT 1")
+        ).scalar()
+        if row is not None:
+            return row
+        # 固定引导企业 UUID：与 dev principal binding（conftest/seed_dev_principal.py）
+        # 和 0027 回填同一常量，避免自愈后产生第二企业导致跨企业拒绝。
+        enterprise_id = self.session.execute(
+            text(
+                "INSERT INTO enterprise (id, code, name, created_at)"
+                " VALUES ('00000000-0000-0000-0000-00000000d001', 'flow-bootstrap',"
+                " 'FLOW Bootstrap Enterprise', now())"
+                " ON CONFLICT (id) DO NOTHING"
+                " RETURNING id"
+            )
+        ).scalar()
+        if enterprise_id is None:
+            enterprise_id = self.session.execute(
+                text("SELECT id FROM enterprise WHERE id = '00000000-0000-0000-0000-00000000d001'")
+            ).scalar()
+        return self.session.execute(
+            text(
+                "INSERT INTO analysis_cycle (id, enterprise_id, period_key, status, created_at)"
+                " VALUES (gen_random_uuid(), :eid, '2026-09', 'open', now())"
+                " RETURNING id"
+            ),
+            {"eid": enterprise_id},
+        ).scalar()
+
     def create_batch(self, name: str, description: str | None = None) -> AnalysisBatch:
         if not name.strip():
             raise ValueError("batch name must not be empty")
-        batch = AnalysisBatch(name=name.strip(), description=description, status="draft")
+        # S01 R1：新批次一律 internal + 引导 cycle（见 0027 迁移）。
+        # created_by 走列默认 flow-dev-bp（dev principal）；owner 精细化随内部工作台落地。
+        cycle_id = self._bootstrap_cycle_id()
+        batch = AnalysisBatch(
+            name=name.strip(),
+            description=description,
+            status="draft",
+            module_kind="internal",
+            fact_context_version=2,
+            analysis_cycle_id=cycle_id,
+        )
         self.session.add(batch)
         self.session.flush()
         return batch

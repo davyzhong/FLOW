@@ -97,7 +97,7 @@ async def ready_import(client: Any) -> dict[str, Any]:
     ).json()
     await client.post(
         f"/api/v1/intake/mappings/{mapping['id']}/confirm",
-        json={"actor": "finance.bp@example.com"},
+        json={"actor": "flow-dev-bp"},
     )
     version = (
         await client.post(
@@ -178,4 +178,4 @@ async def test_summary_missing_import_returns_404(client: Any) -> None:
     from uuid import uuid4
 
     response = await client.get(f"/api/v1/intake/imports/{uuid4()}/cleaning-summary")
-    assert response.status_code == 404
+    assert response.status_code == 403  # §6 防存在性枚举

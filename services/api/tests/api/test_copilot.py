@@ -44,7 +44,7 @@ async def test_copilot_ask_returns_validated_structured_answer(
             f"/api/v1/copilot/investigations/{finding.id}/ask",
             json={
                 "question": "这个发现的主要原因是什么？",
-                "actor": "陈晨",
+                "actor": "flow-dev-bp",
                 "batch_id": str(run.metric_snapshot.batch_id),
                 "metric_snapshot_id": str(run.metric_snapshot_id),
                 "analysis_run_id": str(run.id),
@@ -68,7 +68,7 @@ async def test_copilot_report_outline_rejects_unapproved_findings(
     async with AsyncClient(transport=transport, base_url="http://test") as client:
         response = await client.post(
             "/api/v1/copilot/report-outline",
-            json={"batch_id": str(run.metric_snapshot.batch_id), "actor": "陈晨"},
+            json={"batch_id": str(run.metric_snapshot.batch_id), "actor": "flow-dev-bp"},
         )
     assert response.status_code == 422
     assert response.json()["detail"]["code"] == "copilot_validation_failed"
@@ -101,12 +101,12 @@ async def test_successful_copilot_audit_survives_request_close(
     path, body = endpoints[use_case]
     app = create_app()
     async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
-        response = await client.post(path, json={**body, "actor": "audit-test"})
+        response = await client.post(path, json={**body, "actor": "flow-dev-bp"})
     assert response.status_code == 200, response.text
     with Session(analysis_session.bind) as independent:
         audit = independent.get(CopilotInteraction, response.json()["interaction_id"])
         assert audit is not None
-        assert audit.actor == "audit-test"
+        assert audit.actor == "flow-dev-bp"
         assert audit.outcome == "accepted"
 
 
@@ -124,7 +124,7 @@ async def test_report_outline_uses_requested_batch_when_another_is_newer(
     async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as client:
         response = await client.post(
             "/api/v1/copilot/report-outline",
-            json={"batch_id": str(first.metric_snapshot.batch_id), "actor": "audit-test"},
+            json={"batch_id": str(first.metric_snapshot.batch_id), "actor": "flow-dev-bp"},
         )
     assert response.status_code == 200, response.text
     cited = {

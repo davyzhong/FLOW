@@ -35,6 +35,8 @@ from flow_api.publishing.objective_freeze import (
     ObjectiveFreezeError,
     ObjectiveReportSnapshot,
 )
+from flow_api.security.authorization import Action
+from flow_api.security.route_policy import LOADERS, require_action
 
 router = APIRouter(prefix="/operations", tags=["operations"])
 
@@ -47,14 +49,38 @@ def get_operations_session() -> Iterator[Session]:
 SessionDependency = Annotated[Session, Depends(get_operations_session)]
 
 
-@router.get("/public-periods", response_model=PublicOperatingPeriodList)
+@router.get(
+    "/public-periods",
+    response_model=PublicOperatingPeriodList,
+    dependencies=[
+        Depends(
+            require_action(
+                Action.OPERATIONS_PUBLIC_READ,
+                LOADERS["load_public_operations_catalog"],
+                session_provider=get_operations_session,
+            )
+        )
+    ],
+)
 def get_public_operating_periods() -> PublicOperatingPeriodList:
     """列出公开经营事实的真实期间；不合成月度期间。"""
 
     return PublicOperatingPeriodList(periods=list_public_operating_periods())
 
 
-@router.get("/public/{stock_code}/{period_label}", response_model=OperationsOverview)
+@router.get(
+    "/public/{stock_code}/{period_label}",
+    response_model=OperationsOverview,
+    dependencies=[
+        Depends(
+            require_action(
+                Action.OPERATIONS_PUBLIC_READ,
+                LOADERS["load_public_operations_disclosure"],
+                session_provider=get_operations_session,
+            )
+        )
+    ],
+)
 def get_public_operating_overview(
     stock_code: Annotated[str, Path(max_length=32)],
     period_label: Annotated[str, Path(max_length=64)],
@@ -73,7 +99,19 @@ def get_public_operating_overview(
         ) from error
 
 
-@router.get("/overview/{report_id}", response_model=OperationsOverview)
+@router.get(
+    "/overview/{report_id}",
+    response_model=OperationsOverview,
+    dependencies=[
+        Depends(
+            require_action(
+                Action.OPERATIONS_OVERVIEW_READ,
+                LOADERS["load_public_statement_report"],
+                session_provider=get_operations_session,
+            )
+        )
+    ],
+)
 def get_operations_overview(
     session: SessionDependency, report_id: Annotated[UUID, Path()]
 ) -> OperationsOverview:
@@ -87,7 +125,19 @@ def get_operations_overview(
     return build_operations_overview(session, report_id=str(report.id))
 
 
-@router.get("/snapshots", response_model=OperationsSnapshotList)
+@router.get(
+    "/snapshots",
+    response_model=OperationsSnapshotList,
+    dependencies=[
+        Depends(
+            require_action(
+                Action.OPERATIONS_SNAPSHOT_READ,
+                LOADERS["load_public_operations_snapshot_collection"],
+                session_provider=get_operations_session,
+            )
+        )
+    ],
+)
 def list_operations_snapshots(session: SessionDependency) -> OperationsSnapshotList:
     rows = session.execute(
         select(ObjectiveReportSnapshot, StatementReport)
@@ -119,7 +169,19 @@ def list_operations_snapshots(session: SessionDependency) -> OperationsSnapshotL
     )
 
 
-@router.post("/overview/{report_id}/publish", response_model=PublishResponse)
+@router.post(
+    "/overview/{report_id}/publish",
+    response_model=PublishResponse,
+    dependencies=[
+        Depends(
+            require_action(
+                Action.OPERATIONS_REPORT_PUBLISH,
+                LOADERS["load_public_statement_report"],
+                session_provider=get_operations_session,
+            )
+        )
+    ],
+)
 def publish_operations_overview(
     session: SessionDependency,
     report_id: Annotated[UUID, Path()],
@@ -161,7 +223,19 @@ def publish_operations_overview(
     return PublishResponse(report_snapshot_id=str(snapshot.id), outcomes=outcomes)
 
 
-@router.get("/snapshots/{snapshot_id}/attempts", response_model=PublicationAttemptsResponse)
+@router.get(
+    "/snapshots/{snapshot_id}/attempts",
+    response_model=PublicationAttemptsResponse,
+    dependencies=[
+        Depends(
+            require_action(
+                Action.OPERATIONS_ATTEMPT_READ,
+                LOADERS["load_public_operations_snapshot"],
+                session_provider=get_operations_session,
+            )
+        )
+    ],
+)
 def operations_publication_attempts(
     session: SessionDependency, snapshot_id: Annotated[UUID, Path()]
 ) -> PublicationAttemptsResponse:
@@ -211,6 +285,15 @@ def operations_publication_attempts(
 @router.post(
     "/overview/{report_id}/freeze",
     responses={404: {"content": {}}, 422: {"content": {}}},
+    dependencies=[
+        Depends(
+            require_action(
+                Action.OPERATIONS_SNAPSHOT_FREEZE,
+                LOADERS["load_public_statement_report"],
+                session_provider=get_operations_session,
+            )
+        )
+    ],
 )
 def freeze_operations_snapshot(
     session: SessionDependency, report_id: Annotated[UUID, Path()]
@@ -242,6 +325,15 @@ def freeze_operations_snapshot(
     "/overview/{report_id}/html",
     response_class=Response,
     responses={404: {"content": {}}, 422: {"content": {}}},
+    dependencies=[
+        Depends(
+            require_action(
+                Action.OPERATIONS_RENDER_AND_FREEZE,
+                LOADERS["load_public_statement_report"],
+                session_provider=get_operations_session,
+            )
+        )
+    ],
 )
 def get_operations_overview_html(
     session: SessionDependency, report_id: Annotated[UUID, Path()]
@@ -273,6 +365,15 @@ def get_operations_overview_html(
     "/overview/{report_id}/xlsx",
     response_class=Response,
     responses={404: {"content": {}}, 422: {"content": {}}},
+    dependencies=[
+        Depends(
+            require_action(
+                Action.OPERATIONS_RENDER_AND_FREEZE,
+                LOADERS["load_public_statement_report"],
+                session_provider=get_operations_session,
+            )
+        )
+    ],
 )
 def get_operations_overview_xlsx(
     session: SessionDependency, report_id: Annotated[UUID, Path()]
@@ -307,6 +408,15 @@ def get_operations_overview_xlsx(
     "/overview/{report_id}/pptx",
     response_class=Response,
     responses={404: {"content": {}}, 422: {"content": {}}},
+    dependencies=[
+        Depends(
+            require_action(
+                Action.OPERATIONS_RENDER_AND_FREEZE,
+                LOADERS["load_public_statement_report"],
+                session_provider=get_operations_session,
+            )
+        )
+    ],
 )
 def get_operations_overview_pptx(
     session: SessionDependency, report_id: Annotated[UUID, Path()]
@@ -341,6 +451,15 @@ def get_operations_overview_pptx(
     "/overview/{report_id}/pdf",
     response_class=Response,
     responses={404: {"content": {}}, 422: {"content": {}}},
+    dependencies=[
+        Depends(
+            require_action(
+                Action.OPERATIONS_RENDER_AND_FREEZE,
+                LOADERS["load_public_statement_report"],
+                session_provider=get_operations_session,
+            )
+        )
+    ],
 )
 def get_operations_overview_pdf(
     session: SessionDependency, report_id: Annotated[UUID, Path()]

@@ -11,7 +11,7 @@ Bootstrap 阶段不实现 ORM（Task 2A 后半段 / 0026 迁移），
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Protocol
+from typing import Any, Protocol
 from uuid import UUID
 
 from flow_api.security.authorization import Action, Decision
@@ -35,18 +35,24 @@ class ModelBoundary:
 class AuditContext:
     """§6 决策审计与 §7 发布 intent 审计共用的不可变上下文。
 
-    `actor_id` / `actor_role` / `enterprise_id` 只复制自 Principal。
+    `actor_id` / `actor_role` / `enterprise_id` 只复制自 Principal；
+    认证拒绝（401）事件三者必须为 None（§6 step 2）。
     `correlation_id` 从 request.state 读取（§9），保证五处一致。
+    `resource_scope` 来自 ResourceRef（public/enterprise）；认证拒绝用 "public"。
+    `identity_field_present`：§3.3 body 身份字段存在（即使值相同）只记标记，
+    值本身不进审计。
     """
 
-    actor_id: str
-    role: Role
+    actor_id: str | None
+    role: Role | None
     enterprise_id: UUID | None
     correlation_id: str
-    action: Action
+    action: Action | None
+    resource_scope: str
     resource_type: str
     resource_id: str
     model_boundary: ModelBoundary | None
+    identity_field_present: bool = False
 
 
 class AuditWriter(Protocol):
@@ -84,3 +90,41 @@ class AuditWriter(Protocol):
         error_code: str | None,
     ) -> None:
         ...
+
+
+# ---------------------------------------------------------------------------
+# §6 全局 AuditWriter 注册点（durable 实现由应用启动时注册；默认 fail closed）
+# ---------------------------------------------------------------------------
+
+
+class AuditUnavailable(RuntimeError):
+    """audit writer 未注册或持久化失败 → 503 audit_unavailable（§6 step 5）。"""
+
+
+class _UnwiredAuditWriter:
+    """durable writer 注册前的默认：fail closed，不静默放行。"""
+
+    def write_decision(self, **kwargs: Any) -> None:
+        raise AuditUnavailable("durable AuditWriter 未注册")
+
+    def write_intent(self, **kwargs: Any) -> None:
+        raise AuditUnavailable("durable AuditWriter 未注册")
+
+    def write_outcome(self, **kwargs: Any) -> None:
+        raise AuditUnavailable("durable AuditWriter 未注册")
+
+
+_audit_writer: AuditWriter = _UnwiredAuditWriter()
+
+
+def register_audit_writer(writer: AuditWriter) -> None:
+    """应用启动时注册 durable writer（单点替换，路由不感知）。"""
+
+    global _audit_writer
+    _audit_writer = writer
+
+
+def get_audit_writer() -> AuditWriter:
+    """FastAPI Depends 注入点；测试经 dependency_overrides 替换。"""
+
+    return _audit_writer

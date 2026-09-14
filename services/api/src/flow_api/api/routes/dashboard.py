@@ -16,6 +16,8 @@ from flow_api.dashboard.models import ActiveFilters
 from flow_api.dashboard.repositories import DashboardSourceUnavailableError
 from flow_api.dashboard.service import DashboardFilterError, DashboardService
 from flow_api.infrastructure.db import get_session_factory
+from flow_api.security.authorization import Action
+from flow_api.security.route_policy import LOADERS, require_action
 
 router = APIRouter(prefix="/dashboard", tags=["dashboard"])
 
@@ -43,6 +45,15 @@ def _error(http_status: int, code: str, message: str) -> HTTPException:
         status.HTTP_404_NOT_FOUND: {"model": DashboardErrorResponse},
         status.HTTP_422_UNPROCESSABLE_CONTENT: {"model": DashboardErrorResponse},
     },
+    dependencies=[
+        Depends(
+            require_action(
+                Action.DASHBOARD_OVERVIEW_READ,
+                LOADERS["load_single_enterprise"],
+                session_provider=get_dashboard_session,
+            )
+        )
+    ],
 )
 def dashboard_overview(
     session: SessionDependency,

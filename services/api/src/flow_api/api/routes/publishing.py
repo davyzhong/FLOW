@@ -41,9 +41,12 @@ from flow_api.infrastructure.object_store import (
 from flow_api.infrastructure.s3_client import build_s3_client
 from flow_api.publishing.publication import PublicationService
 from flow_api.publishing.service import PublishingFreezeError
+from flow_api.security.authorization import Action
+from flow_api.security.route_policy import LOADERS, require_action
 from flow_api.settings import get_settings
 
 logger = logging.getLogger("flow.publishing")
+
 
 router = APIRouter(prefix="/publishing", tags=["publishing"])
 
@@ -85,6 +88,15 @@ def _service() -> PublicationService:
         status.HTTP_404_NOT_FOUND: {"model": PublishingErrorResponse},
         status.HTTP_409_CONFLICT: {"model": PublishingErrorResponse},
     },
+    dependencies=[
+        Depends(
+            require_action(
+                Action.PUBLISHING_REPORT_PUBLISH,
+                LOADERS["load_report_snapshot_batch_scope_or_deny_legacy"],
+                session_provider=get_investigation_session,
+            )
+        )
+    ],
 )
 def publish_report(
     report_snapshot_id: UUID,
@@ -132,6 +144,15 @@ def publish_report(
     responses={
         status.HTTP_404_NOT_FOUND: {"model": PublishingErrorResponse},
     },
+    dependencies=[
+        Depends(
+            require_action(
+                Action.PUBLISHING_ATTEMPT_READ,
+                LOADERS["load_report_snapshot_batch_scope_or_deny_legacy"],
+                session_provider=get_investigation_session,
+            )
+        )
+    ],
 )
 def publication_attempts(
     report_snapshot_id: UUID,
@@ -187,6 +208,15 @@ def _attempt_line(session: Session, attempt: PublicationAttempt) -> PublicationA
     response_model=ReportSnapshotCreatedResponse,
     status_code=status.HTTP_201_CREATED,
     responses={status.HTTP_409_CONFLICT: {"model": PublishingErrorResponse}},
+    dependencies=[
+        Depends(
+            require_action(
+                Action.PUBLISHING_SNAPSHOT_FREEZE,
+                LOADERS["load_body_metric_snapshot_batch_scope_or_deny_legacy"],
+                session_provider=get_investigation_session,
+            )
+        )
+    ],
 )
 def freeze_report_snapshot_route(
     request: ReportSnapshotFreezeRequest,
@@ -223,7 +253,19 @@ def freeze_report_snapshot_route(
     )
 
 
-@router.get("/freeze-candidates", response_model=FreezeCandidateListResponse)
+@router.get(
+    "/freeze-candidates",
+    response_model=FreezeCandidateListResponse,
+    dependencies=[
+        Depends(
+            require_action(
+                Action.PUBLISHING_CANDIDATE_READ,
+                LOADERS["load_single_enterprise"],
+                session_provider=get_investigation_session,
+            )
+        )
+    ],
+)
 def list_freeze_candidates(session: SessionDependency) -> FreezeCandidateListResponse:
     """已发布指标快照及已批准 Finding 数，供冻结表单选择。"""
     approved_counts = (
@@ -261,7 +303,19 @@ def list_freeze_candidates(session: SessionDependency) -> FreezeCandidateListRes
     )
 
 
-@router.get("/snapshots", response_model=ReportSnapshotListResponse)
+@router.get(
+    "/snapshots",
+    response_model=ReportSnapshotListResponse,
+    dependencies=[
+        Depends(
+            require_action(
+                Action.PUBLISHING_SNAPSHOT_READ,
+                LOADERS["load_single_enterprise"],
+                session_provider=get_investigation_session,
+            )
+        )
+    ],
+)
 def list_report_snapshots(session: SessionDependency) -> ReportSnapshotListResponse:
     reports = session.scalars(
         select(ReportSnapshot).order_by(ReportSnapshot.created_at.desc())
@@ -288,6 +342,15 @@ def list_report_snapshots(session: SessionDependency) -> ReportSnapshotListRespo
         status.HTTP_404_NOT_FOUND: {"model": PublishingErrorResponse},
         status.HTTP_409_CONFLICT: {"model": PublishingErrorResponse},
     },
+    dependencies=[
+        Depends(
+            require_action(
+                Action.PUBLISHING_ARTIFACT_DOWNLOAD,
+                LOADERS["load_attempt_parent_scope_or_deny_legacy"],
+                session_provider=get_investigation_session,
+            )
+        )
+    ],
 )
 def download_publication_attempt(attempt_id: UUID, session: SessionDependency) -> Response:
     """下载成功产物的持久化字节：服务端命名 + sha 校验 + no-store/nosniff。"""

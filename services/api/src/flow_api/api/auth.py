@@ -22,11 +22,13 @@ from collections.abc import Iterator
 from datetime import UTC, datetime
 from typing import Annotated
 
-from fastapi import Depends, Header, HTTPException, status
+from fastapi import Depends, Header, HTTPException, Request, status
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from flow_api.infrastructure.db import get_session_factory
+from flow_api.security.audit import AuditContext, AuditWriter, get_audit_writer
+from flow_api.security.authorization import Decision, ReasonCode
 from flow_api.security.models import RoleBinding
 from flow_api.security.principal import (
     LEGACY_BEARER_CUTOFF_UTC,
@@ -341,17 +343,60 @@ def resolve_principal(
 
 
 def require_bearer_auth(
+    request: Request,
     authorization: Annotated[str | None, Header()] = None,
     session: Session = Depends(get_session),
+    audit: AuditWriter = Depends(get_audit_writer),
 ) -> Principal:
-    """FastAPI dependency：解析 Authorization → Principal。
+    """FastAPI dependency：解析 Authorization → Principal（§6 审计屏障版）。
 
-    旧实现仅校验 shared secret；新实现按 §3 全量解析。
+    认证拒绝（401）必须先 durable 落审计事件（actor/role/enterprise 全 NULL，
+    resource_id=credential 摘要短指纹）再返回；审计写失败 → 503 audit_unavailable，
+    不得以原 401 放行（§6 step 2/5）。
     """
     settings = _get_settings()
+    correlation_id = getattr(request.state, "correlation_id", "")
+    request_id = getattr(request.state, "request_id", "")
+
+    def _deny(code: str, message: str) -> HTTPException:
+        # "unauthorized"（全未配置 fail-closed）映射到规格枚举 authentication_required
+        try:
+            reason = ReasonCode(code)
+        except ValueError:
+            reason = ReasonCode.AUTHENTICATION_REQUIRED
+        fingerprint = hashlib.sha256((authorization or "").encode("utf-8")).hexdigest()[:12]
+        context = AuditContext(
+            actor_id=None,
+            role=None,
+            enterprise_id=None,
+            correlation_id=correlation_id,
+            action=None,
+            resource_scope="public",
+            resource_type="authentication",
+            resource_id=fingerprint,
+            model_boundary=None,
+        )
+        try:
+            audit.write_decision(
+                audit_context=context,
+                decision=Decision(allowed=False, reason_code=reason),
+                request_id=request_id,
+            )
+        except Exception as error:  # noqa: BLE001 - 审计不 durable → fail closed
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail={
+                    "code": "audit_unavailable",
+                    "message": "认证审计未 durable，请求被拒绝（§6 fail closed）",
+                },
+            ) from error
+        return HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail={"code": code, "message": message},
+        )
+
     if not settings.auth_token and not settings.flow_identity_bindings_json:
-        # 完全未配置：保持原 dev 模式（不挂载认证）—— 与未升级前兼容
-        # 但要尝试解析 dev_actor_id（§2.2）
+        # 完全未配置：仅 development + dev_actor_id 可解析（§2.2）
         if settings.flow_env == "development" and settings.flow_dev_actor_id:
             binding = session.scalar(
                 select(RoleBinding).where(
@@ -360,26 +405,16 @@ def require_bearer_auth(
                 )
             )
             if binding is None:
-                raise HTTPException(
-                    status_code=status.HTTP_401_UNAUTHORIZED,
-                    detail={
-                        "code": "unauthorized",
-                        "message": "dev principal has no active RoleBinding",
-                    },
+                raise _deny(
+                    "unauthorized",
+                    "dev principal has no active RoleBinding",
                 )
             return _build_principal(binding)
-        # 既无 shared secret 又无 bindings，按规格需 fail-fast；这里保守返回 None 留给上层
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail={"code": "unauthorized", "message": "缺少或无效的 Bearer 凭据"},
-        )
+        raise _deny("unauthorized", "缺少或无效的 Bearer 凭据")
     try:
         return resolve_principal(session, authorization)
     except AuthError as error:
-        raise HTTPException(
-            status_code=error.http_status,
-            detail={"code": error.code, "message": str(error)},
-        ) from error
+        raise _deny(error.code, str(error)) from error
 
 
 __all__ = ["AuthError", "LEGACY_BEARER_CUTOFF_UTC", "resolve_principal", "require_bearer_auth"]

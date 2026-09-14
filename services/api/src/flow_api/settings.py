@@ -29,6 +29,10 @@ class Settings(BaseSettings):
     flow_dev_actor_id: str | None = None
     # §3.2 旧 Bearer 截止（默认规格 §3.2 2026-10-31T15:59:59Z）
     flow_legacy_bearer_cutoff: str = "2026-10-31T15:59:59+00:00"
+    # §3.2 legacy 身份冻结：AUTH_TOKEN 配置时必须同时配置，DB 须有完全匹配的
+    # active service_account RoleBinding
+    flow_legacy_actor_id: str | None = None
+    flow_legacy_enterprise_id: str | None = None
     # §8.2 audit retention days，默认 365，365 <= value <= 36500
     flow_audit_retention_days: int = 365
 

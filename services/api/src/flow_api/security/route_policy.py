@@ -27,14 +27,20 @@ import csv
 from collections.abc import Callable, Iterator
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Annotated, Any, cast
+from typing import Any, cast
 from uuid import UUID
 
 from fastapi import Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
 
 from flow_api.api.auth import require_bearer_auth
-from flow_api.security.audit import AuditContext, AuditWriter
+from flow_api.security.audit import (
+    AuditContext,
+    AuditUnavailable,
+    AuditWriter,
+    get_audit_writer,
+    register_audit_writer,
+)
 from flow_api.security.authorization import Action, Decision, ReasonCode, ResourceRef, authorize
 from flow_api.security.principal import Principal
 
@@ -68,6 +74,10 @@ _READ_ONLY_EXEMPTION_PREFIXES = (
 
 # loader -> ResourceRef.resource_type（loader 输出契约；step3 精确组合的另一半）
 LOADER_RESOURCE_TYPE: dict[str, str] = {
+    "load_blocked_entry": "route",
+    "load_public_metric_library": "metric_library",
+    "load_single_enterprise": "enterprise_scope",
+    "load_default_cycle_create": "enterprise_scope",
     "load_public_health": "health",
     "load_public_workspace_metadata": "workspace_metadata",
     "load_public_module_catalog": "module_catalog",
@@ -86,7 +96,7 @@ LOADER_RESOURCE_TYPE: dict[str, str] = {
     "load_finding_batch_scope_or_deny_legacy": "finding",
     "load_finding_batch_scope_owner_or_deny_legacy": "finding",
     "load_finding_evidence_batch_scope_or_deny_legacy": "finding",
-    "load_body_metric_snapshot_batch_scope_or_deny_legacy": "finding",
+    "load_body_metric_snapshot_batch_scope_or_deny_legacy": "metric_snapshot",
     "load_build_job_batch_scope_or_deny_legacy": "build_job",
     "load_public_statement_report": "statement_report",
     "load_public_statement_report_collection": "statement_report_collection",
@@ -220,11 +230,7 @@ class CoverageReport:
 # 已批准但尚未合并挂载的路由——登记先行，挂载随对应车道分支合并落地。
 # 移除条件：codex/s01-module-boundaries 合并进集成分支后，把对应条目从这里删掉；
 # 若届时路由仍未挂载，双向核验会重新变红（这正是设计意图）。
-PENDING_MOUNT_ROUTES: frozenset[tuple[str, str]] = frozenset(
-    {
-        ("GET", "/api/v1/modules"),  # GLM Task 4 module-boundaries 车道，公开豁免已裁决
-    }
-)
+PENDING_MOUNT_ROUTES: frozenset[tuple[str, str]] = frozenset()
 
 
 def scan_two_way(app: Any, entries: tuple[PolicyEntry, ...]) -> CoverageReport:
@@ -251,7 +257,6 @@ class ResourceScopeUnresolved(RuntimeError):
 
 
 def _enterprise_of_batch(session: Session, batch_id: UUID) -> UUID:
-    from flow_api.enterprise.models import AnalysisCycle
     from flow_api.infrastructure.models.intake import AnalysisBatch
 
     batch = session.get(AnalysisBatch, batch_id)
@@ -260,6 +265,8 @@ def _enterprise_of_batch(session: Session, batch_id: UUID) -> UUID:
     if batch.analysis_cycle_id is None:
         # legacy/public 批次：无企业链（§4.1 不得借 Principal 猜测）
         raise ResourceScopeUnresolved("analysis_batch", str(batch_id))
+    from flow_api.enterprise.models import AnalysisCycle
+
     cycle = session.get(AnalysisCycle, batch.analysis_cycle_id)
     if cycle is None:
         raise ResourceScopeUnresolved("analysis_batch", str(batch_id))
@@ -273,12 +280,16 @@ def _batch_scope_ref(
     batch_id: UUID,
     owner_actor_id: str | None = None,
 ) -> ResourceRef:
+    from flow_api.infrastructure.models.intake import AnalysisBatch
+
+    batch = session.get(AnalysisBatch, batch_id)
+    owner = owner_actor_id or (batch.created_by if batch is not None else None)
     return ResourceRef(
         scope="enterprise",
         resource_type=resource_type,
         resource_id=resource_id,
         enterprise_id=_enterprise_of_batch(session, batch_id),
-        owner_actor_id=owner_actor_id,
+        owner_actor_id=owner,
         proposed_by_actor_id=None,
     )
 
@@ -292,6 +303,47 @@ def _public_ref(resource_type: str, resource_id: str) -> ResourceRef:
         owner_actor_id=None,
         proposed_by_actor_id=None,
     )
+
+
+def _load_single_enterprise(request: Request, session: Session) -> ResourceRef:
+    """bootstrap 单租户语义：库内 analysis_cycle 企业唯一 → 该企业；多企业/无企业 → deny。"""
+
+    from sqlalchemy import text
+
+    enterprises = [
+        r[0]
+        for r in session.execute(
+            text("SELECT DISTINCT enterprise_id FROM analysis_cycle")
+        ).all()
+    ]
+    if len(enterprises) != 1 or enterprises[0] is None:
+        raise ResourceScopeUnresolved("enterprise_scope", "ambiguous_or_missing")
+    return ResourceRef(
+        scope="enterprise",
+        resource_type="enterprise_scope",
+        resource_id=str(enterprises[0]),
+        enterprise_id=enterprises[0],
+        owner_actor_id=None,
+        proposed_by_actor_id=None,
+    )
+
+
+def _load_default_cycle_create(request: Request, session: Session) -> ResourceRef:
+    """create 类动作：owner 由服务层落列（created_by），此处只锚定企业。"""
+
+    return _load_single_enterprise(request, session)
+
+
+def _load_public_metric_library(request: Request, session: Session) -> ResourceRef:
+    """全局参考字典（准则/科目/分录模板）只读：public 参考数据（§4.1）。"""
+
+    return _public_ref("metric_library", "dictionary")
+
+
+def _load_blocked_entry(request: Request, session: Session) -> ResourceRef:
+    """blocked 条目的占位 loader：require_action 在 entry 解析阶段即 deny，永不调用。"""
+
+    return _public_ref("route", f"{request.method} {request.url.path}")
 
 
 def _path_uuid(request: Request, name: str) -> UUID:
@@ -522,6 +574,10 @@ LOADERS: dict[str, ResourceLoader] = {
     "load_public_operations_snapshot_collection": lambda request, session: _public_ref(
         "operations_snapshot_collection", "collection"
     ),
+    "load_public_metric_library": _load_public_metric_library,
+    "load_blocked_entry": _load_blocked_entry,
+    "load_single_enterprise": _load_single_enterprise,
+    "load_default_cycle_create": _load_default_cycle_create,
 }
 
 
@@ -554,37 +610,6 @@ def get_readonly_session() -> Iterator[Session]:
         yield session
     finally:
         session.close()
-
-
-class AuditUnavailable(RuntimeError):
-    """audit writer 未注册或持久化失败 → 503 audit_unavailable（§6 step 5）。"""
-
-
-class _UnwiredAuditWriter:
-    """0026 durable writer 注册前的默认：fail closed，不静默放行。"""
-
-    def write_decision(self, **kwargs: Any) -> None:
-        raise AuditUnavailable("durable AuditWriter 未注册（待 0026 车道接入）")
-
-    def write_intent(self, **kwargs: Any) -> None:
-        raise AuditUnavailable("durable AuditWriter 未注册（待 0026 车道接入）")
-
-    def write_outcome(self, **kwargs: Any) -> None:
-        raise AuditUnavailable("durable AuditWriter 未注册（待 0026 车道接入）")
-
-
-_audit_writer: AuditWriter = _UnwiredAuditWriter()
-
-
-def register_audit_writer(writer: AuditWriter) -> None:
-    """0026 车道在应用启动时注册 durable writer（单点替换，路由不感知）。"""
-
-    global _audit_writer
-    _audit_writer = writer
-
-
-def get_audit_writer() -> AuditWriter:
-    return _audit_writer
 
 
 # FastAPI Depends 单符号引用点（§3 credential → Principal）。
@@ -634,7 +659,39 @@ def _http_error(http_status: int, code: str, message: str) -> HTTPException:
     )
 
 
-def require_action(action: Action, resource_loader: ResourceLoader) -> Callable[..., Any]:
+_IDENTITY_BODY_FIELDS = ("actor", "actor_id", "operator", "reviewer", "approved_by")
+
+
+def _identity_fields_present(request: Request) -> bool:
+    """§3.3：body/query 是否携带身份字段（只记存在标记，值不进审计）。"""
+
+    body = getattr(request.state, "policy_body", None)
+    if isinstance(body, dict) and any(f in body for f in _IDENTITY_BODY_FIELDS):
+        return True
+    return any(f in request.query_params for f in _IDENTITY_BODY_FIELDS)
+
+
+def _identity_conflict(request: Request, principal: Principal) -> bool:
+    """§3.3：body 身份字段与 Principal 冲突才 409；相同值仅忽略。"""
+
+    body = getattr(request.state, "policy_body", None)
+    if isinstance(body, dict):
+        for field in ("actor", "actor_id", "operator", "reviewer", "approved_by"):
+            if field in body and body[field] != principal.actor_id:
+                return True
+        if "enterprise_id" in body:
+            body_enterprise = str(body["enterprise_id"])
+            principal_enterprise = str(principal.enterprise_id)
+            if body_enterprise != principal_enterprise:
+                return True
+    return False
+
+
+def require_action(
+    action: Action,
+    resource_loader: ResourceLoader,
+    session_provider: Callable[[], Any] | None = None,
+) -> Callable[..., Any]:
     """§5 授权依赖工厂：返回 AuthorizationDependency。
 
     执行顺序（§4.2 + §6）：
@@ -646,11 +703,16 @@ def require_action(action: Action, resource_loader: ResourceLoader) -> Callable[
     6. deny → 403（reason_code 即 deny code）；allow → 返回 AuthorizationContext。
     """
 
+    session_dep = session_provider or get_readonly_session
+
+    # 注意：不使用 Annotated 字符串注解——`from __future__ import annotations`
+    # 会把闭包变量 session_dep 变成不可解析的 ForwardRef，FastAPI 会把 session
+    # 误判为 query 参数。Depends 放在默认值位置（定义时求值）。
     async def _dependency(
         request: Request,
-        principal: Annotated[Principal, Depends(PRINCIPAL_DEP)],
-        session: Annotated[Session, Depends(get_readonly_session)],
-        audit: Annotated[AuditWriter, Depends(get_audit_writer)],
+        principal: Principal = Depends(PRINCIPAL_DEP),  # noqa: B008
+        session: Session = Depends(session_dep),  # noqa: B008
+        audit: AuditWriter = Depends(get_audit_writer),  # noqa: B008
     ) -> AuthorizationContext:
         correlation_id = getattr(request.state, "correlation_id", "")
         request_id = getattr(request.state, "request_id", "")
@@ -688,15 +750,18 @@ def require_action(action: Action, resource_loader: ResourceLoader) -> Callable[
                 else:
                     decision = authorize(principal, action, resource)
 
+        identity_fields_present = _identity_fields_present(request)
         audit_context = AuditContext(
             actor_id=principal.actor_id,
             role=principal.role,
             enterprise_id=principal.enterprise_id,
             correlation_id=correlation_id,
             action=action,
+            resource_scope=resource.scope,
             resource_type=resource.resource_type,
             resource_id=resource.resource_id,
             model_boundary=None,
+            identity_field_present=identity_fields_present,
         )
         try:
             audit.write_decision(
@@ -706,7 +771,7 @@ def require_action(action: Action, resource_loader: ResourceLoader) -> Callable[
             raise _http_error(
                 status.HTTP_503_SERVICE_UNAVAILABLE,
                 ReasonCode.AUDIT_UNAVAILABLE.value,
-                "授权决策审计未 durable，请求被拒绝（fail closed）",
+                "授权决策审计未 durable，请求被拒绝（fail closed）: " + str(exc),
             ) from exc
 
         if not decision.allowed:
@@ -714,6 +779,13 @@ def require_action(action: Action, resource_loader: ResourceLoader) -> Callable[
                 status.HTTP_403_FORBIDDEN,
                 decision.reason_code.value,
                 f"授权拒绝：{decision.reason_code.value}",
+            )
+        # §3.3：body 身份字段与 Principal 冲突 → allow 审计 durable 后 409
+        if _identity_conflict(request, principal):
+            raise _http_error(
+                status.HTTP_409_CONFLICT,
+                "actor_conflict",
+                "请求体身份字段与 Principal 冲突（§3.3）",
             )
         return AuthorizationContext(
             principal=principal,

@@ -29,6 +29,8 @@ from flow_api.infrastructure.models.intake import AnalysisBatch, BuildJob
 from flow_api.metrics.repositories import MetricSourceRepository
 from flow_api.metrics.service import MetricSnapshotService
 from flow_api.metrics_store import resolve_metric_catalog
+from flow_api.security.authorization import Action
+from flow_api.security.route_policy import LOADERS, require_action
 
 router = APIRouter(prefix="/orchestration", tags=["orchestration"])
 
@@ -165,6 +167,15 @@ def _resolve_months(
         status.HTTP_409_CONFLICT: {"model": dict},
         status.HTTP_422_UNPROCESSABLE_CONTENT: {"model": dict},
     },
+    dependencies=[
+        Depends(
+            require_action(
+                Action.ORCHESTRATION_BUILD_START,
+                LOADERS["load_batch_scope_or_deny_legacy"],
+                session_provider=get_orchestration_session,
+            )
+        )
+    ],
 )
 def build_batch_analysis(
     session: SessionDependency,
@@ -190,9 +201,7 @@ def build_batch_analysis(
 
     # 回收同批次残留的 running 任务（进程崩溃后的可恢复语义）
     stale = session.scalars(
-        select(BuildJob).where(
-            BuildJob.batch_id == batch_id, BuildJob.status == "running"
-        )
+        select(BuildJob).where(BuildJob.batch_id == batch_id, BuildJob.status == "running")
     ).all()
     for job in stale:
         job.status = "failed"
@@ -265,17 +274,39 @@ def build_batch_analysis(
     )
 
 
-@router.get("/batches/{batch_id}/builds", response_model=BuildJobListResponse)
+@router.get(
+    "/batches/{batch_id}/builds",
+    response_model=BuildJobListResponse,
+    dependencies=[
+        Depends(
+            require_action(
+                Action.ORCHESTRATION_BUILD_READ,
+                LOADERS["load_batch_scope_or_deny_legacy"],
+                session_provider=get_orchestration_session,
+            )
+        )
+    ],
+)
 def list_batch_builds(session: SessionDependency, batch_id: UUID) -> BuildJobListResponse:
     jobs = session.scalars(
-        select(BuildJob)
-        .where(BuildJob.batch_id == batch_id)
-        .order_by(BuildJob.created_at.desc())
+        select(BuildJob).where(BuildJob.batch_id == batch_id).order_by(BuildJob.created_at.desc())
     ).all()
     return BuildJobListResponse(jobs=[_job_line(job) for job in jobs])
 
 
-@router.get("/builds/{job_id}", response_model=BuildJobLine)
+@router.get(
+    "/builds/{job_id}",
+    response_model=BuildJobLine,
+    dependencies=[
+        Depends(
+            require_action(
+                Action.ORCHESTRATION_BUILD_READ,
+                LOADERS["load_build_job_batch_scope_or_deny_legacy"],
+                session_provider=get_orchestration_session,
+            )
+        )
+    ],
+)
 def get_build_job(session: SessionDependency, job_id: UUID) -> BuildJobLine:
     job = session.get(BuildJob, job_id)
     if job is None:

@@ -27,7 +27,7 @@ api_router.include_router(investigations_router, dependencies=[Depends(require_b
 api_router.include_router(copilot_router, dependencies=[Depends(require_bearer_auth)])
 api_router.include_router(publishing_router, dependencies=[Depends(require_bearer_auth)])
 api_router.include_router(statements_router, dependencies=[Depends(require_bearer_auth)])
-api_router.include_router(modules_router)
+api_router.include_router(modules_router, dependencies=[Depends(require_bearer_auth)])
 api_router.include_router(metric_library_router, dependencies=[Depends(require_bearer_auth)])
 api_router.include_router(orchestration_router, dependencies=[Depends(require_bearer_auth)])
 api_router.include_router(objective_reports_router, dependencies=[Depends(require_bearer_auth)])

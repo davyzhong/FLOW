@@ -86,7 +86,7 @@ async def test_freeze_list_publish_and_download(client: Any) -> None:
 
     publish = await client.post(
         f"/api/v1/publishing/snapshots/{report['id']}/publish",
-        json={"formats": ["html", "pdf"], "actor": "finance.bp@example.com"},
+        json={"formats": ["html", "pdf"], "actor": "flow-dev-bp"},
     )
     assert publish.status_code == 200
     assert publish.json()["outcomes"]["html"] == "succeeded"
@@ -126,7 +126,7 @@ async def test_download_of_failed_attempt_is_blocked(client: Any) -> None:
     ).json()["id"]
     await client.post(
         f"/api/v1/publishing/snapshots/{report_id}/publish",
-        json={"formats": ["pdf"], "actor": "finance.bp@example.com"},
+        json={"formats": ["pdf"], "actor": "flow-dev-bp"},
     )
     attempts = (await client.get(f"/api/v1/publishing/snapshots/{report_id}/attempts")).json()[
         "attempts"
@@ -138,7 +138,7 @@ async def test_download_of_failed_attempt_is_blocked(client: Any) -> None:
     assert download.json()["detail"]["code"] == "download_not_available"
 
     missing = await client.get(f"/api/v1/publishing/attempts/{uuid.uuid4()}/download")
-    assert missing.status_code == 404
+    assert missing.status_code == 403  # §6 防存在性枚举
 
 
 async def test_freeze_blocked_without_approved_findings(client: Any) -> None:

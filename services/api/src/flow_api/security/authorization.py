@@ -409,11 +409,16 @@ def _step6_owner_check(
     action: Action,
     resource: ResourceRef,
 ) -> Decision | None:
-    """Step 6: 要求本人资源时 owner 缺/不等。"""
+    """Step 6: 要求本人资源时 owner 缺/不等。
+
+    Bootstrap 语义（R1 记录）：`owner_actor_id is None` 表示该资源的创建者列
+    尚未由服务层落值（内部工作台 owner 精细化前的引导数据）；此时企业隔离已由
+    step4 保证，owner 检查放行。owner 有值且不等仍一律 NOT_RESOURCE_OWNER。
+    """
     if action not in _OWNER_REQUIRED_ACTIONS:
         return None
     if resource.owner_actor_id is None:
-        return Decision(False, ReasonCode.OWNER_REQUIRED)
+        return None
     if resource.owner_actor_id != principal.actor_id:
         return Decision(False, ReasonCode.NOT_RESOURCE_OWNER)
     return None

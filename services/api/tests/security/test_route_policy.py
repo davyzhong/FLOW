@@ -60,7 +60,7 @@ def test_policy_loads_66_entries_sorted() -> None:
     keys = [(e.method, e.path) for e in entries]
     assert len(set(keys)) == 66, "存在重复 method/path"
     blocked = [e for e in entries if e.is_blocked]
-    assert len(blocked) == 13, f"blocked 条目数变化：{len(blocked)}"
+    assert len(blocked) == 7, f"blocked 条目数变化：{len(blocked)}"
     for e in entries:
         if e.is_write:
             assert e.action is not None, f"写入口缺 action：{e.method} {e.path}"
@@ -126,24 +126,21 @@ def test_openapi_probe_matches_tsv_two_way() -> None:
 
     app = create_app()
     mounted = {(m, p) for m, p in iter_openapi_routes(app) if p.startswith("/api/v1")}
-    assert len(mounted) == 65, f"openapi 探针挂载数变化：{len(mounted)}"
+    assert len(mounted) == 66, f"openapi 探针挂载数变化：{len(mounted)}"
     report = scan_two_way(app, load_policy())
     assert report.missing == (), f"未登记路由：{report.missing}"
     assert report.stale == (), f"失效登记：{report.stale}"
 
 
-def test_pending_mount_is_exactly_modules_route() -> None:
-    """已批准待挂载白名单只含 /api/v1/modules，且确实未挂载（防漂移）。
+def test_pending_mount_whitelist_is_empty() -> None:
+    """「登记先行」白名单必须为空：/api/v1/modules 已随 module-boundaries 挂载。
 
-    module-boundaries 合并后：若路由已挂载，本测试要求从 PENDING_MOUNT_ROUTES 移除；
-    若白名单膨胀，说明有未经裁决的「登记先行」混入。
+    白名单非空 = 存在未经裁决的登记先行路由；新路由必须先挂载后登记，
+    白名单仅用于已裁决但尚未合入的过渡窗口。
     """
-    from flow_api.main import create_app
-
-    assert frozenset({("GET", "/api/v1/modules")}) == PENDING_MOUNT_ROUTES
-    mounted = set(iter_openapi_routes(create_app()))
-    pending = PENDING_MOUNT_ROUTES & mounted
-    assert not pending, f"已挂载却仍挂起，请从 PENDING_MOUNT_ROUTES 移除：{pending}"
+    assert frozenset() == PENDING_MOUNT_ROUTES, (
+        "存在登记先行路由，须裁决后移入 TSV 或移除"
+    )
 
 
 def test_principal_dep_is_wired_to_bearer_auth() -> None:
@@ -235,19 +232,23 @@ def test_service_account_publish_denied_403_role_forbidden() -> None:
 
 
 def test_blocked_route_never_enters_handler() -> None:
-    """blocked:* 条目（intake batch create 无企业/owner 字段）无条件 403 route_blocked。"""
+    """blocked:* 条目（metric-library 治理写，全局无企业域）无条件 403 route_blocked。
+
+    R1 解锁后 intake batch create 已换真 loader；仍 blocked 的是 metric-library
+    治理写集合（数据天然全局，等待治理模式落地）。
+    """
     called: list[bool] = []
     audit = _FakeAuditWriter()
     app = _app_with_route(
         method="POST",
-        path="/api/v1/intake/batches",
-        action=Action.INTAKE_BATCH_CREATE,
-        loader_name="load_batch_scope_or_deny_legacy",
+        path="/api/v1/metric-library/import",
+        action=Action.METRIC_LIBRARY_IMPORT,
+        loader_name="load_blocked_entry",
         principal=_principal(Role.ANALYST),
         audit=audit,
         handler_called=called,
     )
-    response = TestClient(app).post("/api/v1/intake/batches", json={"name": "x"})
+    response = TestClient(app).post("/api/v1/metric-library/import", json={"actor": "flow-dev-bp"})
     assert response.status_code == 403
     assert response.json()["detail"]["code"] == "route_blocked"
     assert called == []

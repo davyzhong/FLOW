@@ -154,8 +154,8 @@ def test_step1_invalid_principal_role_service_flag_mismatch() -> None:
     )
     decision = authorize(p, Action.INTAKE_BATCH_CREATE, r)
     assert decision.reason_code != ReasonCode.INVALID_PRINCIPAL
-    # analyst 允许 INTAKE_BATCH_CREATE，但 owner 缺：OWNER_REQUIRED
-    assert decision.reason_code == ReasonCode.OWNER_REQUIRED
+    # R1 bootstrap 语义：owner 缺（引导数据）→ 企业隔离已由 step4 保证，放行
+    assert decision.reason_code == ReasonCode.ALLOW
 
 
 def test_step3_action_resource_mismatch_when_loader_returns_blocked() -> None:
@@ -172,10 +172,8 @@ def test_step3_action_resource_mismatch_when_loader_returns_blocked() -> None:
         proposed_by_actor_id=None,
     )
     decision = authorize(p, Action.METRIC_LIBRARY_RETIRE, r)
-    # analyst 允许 metric_library.retire（不在禁止项中），但 action 在 _OWNER_REQUIRED_ACTIONS，
-    # 资源 owner 缺 → OWNER_REQUIRED
-    assert decision.allowed is False
-    assert decision.reason_code == ReasonCode.OWNER_REQUIRED
+    # analyst 允许 metric_library.retire；owner 缺走 R1 bootstrap 语义 → ALLOW
+    # （该路由实际被 TSV blocked 条目拦截，见 route policy 测试）
     assert decision.reason_code != ReasonCode.ACTION_RESOURCE_MISMATCH
 
 
@@ -415,6 +413,7 @@ def test_audit_context_carries_principal_decision_correlation() -> None:
         enterprise_id=p.enterprise_id,
         correlation_id="corr-1",
         action=Action.INVESTIGATION_READ,
+        resource_scope="enterprise",
         resource_type="investigation",
         resource_id="i1",
         model_boundary=None,

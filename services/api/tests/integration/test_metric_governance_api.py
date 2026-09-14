@@ -81,6 +81,7 @@ async def test_draft_activate_events_over_http(client: AsyncClient) -> None:
         assert entry is not None
         entry_id = str(entry.id)
 
+    # S01 策略：治理写（drafts/activate/events）在治理模式落地前无条件阻断
     draft = await client.post(
         f"/api/v1/metric-library/entries/{entry_id}/drafts",
         json={
@@ -89,22 +90,19 @@ async def test_draft_activate_events_over_http(client: AsyncClient) -> None:
             "reason": "基准校准",
         },
     )
-    assert draft.status_code == 201, draft.text
-    draft_id = draft.json()["id"]
+    assert draft.status_code == 403
+    assert draft.json()["detail"]["code"] == "route_blocked"
 
     activated = await client.post(
-        f"/api/v1/metric-library/entries/{draft_id}/activate",
+        f"/api/v1/metric-library/entries/{entry_id}/activate",
         json={"operator": "钟Davy", "reason": "评审通过"},
     )
-    assert activated.status_code == 200
-    assert activated.json()["status"] == "effective"
+    assert activated.status_code == 403
 
     events = await client.get(
         "/api/v1/metric-library/events", params={"metric_code": "current_ratio"}
     )
-    assert events.status_code == 200
-    actions = [event["action"] for event in events.json()["events"]]
-    assert "draft" in actions and "activate" in actions and "retire" in actions
+    assert events.status_code == 403
 
 
 async def test_activate_illegal_ast_rejected_over_http(client: AsyncClient) -> None:
@@ -120,6 +118,7 @@ async def test_activate_illegal_ast_rejected_over_http(client: AsyncClient) -> N
         assert entry is not None
         entry_id = str(entry.id)
 
+    # S01 策略：治理写阻断（AST 校验链随治理模式一并恢复）
     draft = await client.post(
         f"/api/v1/metric-library/entries/{entry_id}/drafts",
         json={
@@ -128,10 +127,5 @@ async def test_activate_illegal_ast_rejected_over_http(client: AsyncClient) -> N
             "reason": "r",
         },
     )
-    assert draft.status_code == 201
-    blocked = await client.post(
-        f"/api/v1/metric-library/entries/{draft.json()['id']}/activate",
-        json={"operator": "a", "reason": "r"},
-    )
-    assert blocked.status_code == 409
-    assert blocked.json()["detail"]["code"] == "invalid_formula_ast"
+    assert draft.status_code == 403
+    assert draft.json()["detail"]["code"] == "route_blocked"

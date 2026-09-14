@@ -66,7 +66,10 @@ def test_0025_upgrade_downgrade_upgrade_roundtrip() -> None:
             ),
             {"id": batch_id},
         ).one()
-        assert tuple(row) == ("legacy", 1, None)
+        # R1 语义（0027）：存量 legacy 批次升级时统一转 internal + 引导 cycle
+        assert tuple(row)[0] == "internal"
+        assert tuple(row)[1] == 2
+        assert tuple(row)[2] is not None
 
         # 迁移不改历史事实值：取一条财务事实（无则跳过值对账）
         fact_row = s.execute(
@@ -85,7 +88,9 @@ def test_0025_upgrade_downgrade_upgrade_roundtrip() -> None:
             ),
             {"id": batch_id},
         ).one()
-        assert tuple(row) == ("legacy", 1, None)
+        assert tuple(row)[0] == "internal"
+        assert tuple(row)[1] == 2
+        assert tuple(row)[2] is not None
         if before_hash is not None:
             fact_row = s.execute(
                 sa.text("SELECT id, amount FROM fact_financial_actual ORDER BY id LIMIT 1")

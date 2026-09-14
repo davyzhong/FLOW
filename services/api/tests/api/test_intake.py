@@ -135,10 +135,11 @@ async def test_typed_intake_api_runs_upload_to_published_version(
 
         confirmation_response = await client.post(
             f"/api/v1/intake/mappings/{mapping['id']}/confirm",
-            json={"actor": "finance.bp@example.com"},
+            json={"actor": "flow-dev-bp"},
         )
         assert confirmation_response.status_code == 200
-        assert confirmation_response.json()["confirmed_by"] == "finance.bp@example.com"
+        # §3.3：confirmed_by 来自 Principal，body actor 不再是权威
+        assert confirmation_response.json()["confirmed_by"] == "flow-dev-bp"
 
         validation_response = await client.post(
             f"/api/v1/intake/sources/{source['id']}/validate",
@@ -153,7 +154,7 @@ async def test_typed_intake_api_runs_upload_to_published_version(
                 acknowledgement = await client.post(
                     f"/api/v1/intake/issues/{issue['id']}/acknowledge",
                     json={
-                        "actor": "finance.bp@example.com",
+                        "actor": "flow-dev-bp",
                         "reason": "已与业务负责人核对口径",
                     },
                 )
@@ -188,10 +189,19 @@ async def test_upload_and_transition_errors_are_typed(
         missing = await client.post(
             "/api/v1/intake/imports/00000000-0000-0000-0000-000000000001/publish"
         )
-        assert missing.status_code == 404
-        assert missing.json()["detail"]["code"] == "import_not_found"
+            # §6：不存在/跨企业资源统一 403（防存在性枚举），不再泄漏 404
+        assert missing.status_code == 403
+        assert missing.json()["detail"]["code"] == "resource_scope_unresolved"
 
-        batch_model = AnalysisBatch(name="Draft transition")
+        from sqlalchemy import text as _text
+
+        _cycle = session.execute(_text("SELECT id FROM analysis_cycle LIMIT 1")).scalar()
+        batch_model = AnalysisBatch(
+            name="Draft transition",
+            module_kind="internal",
+            fact_context_version=2,
+            analysis_cycle_id=_cycle,
+        )
         draft = ImportVersion(batch=batch_model, sequence=1, status="draft")
         session.add(draft)
         session.flush()

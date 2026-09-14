@@ -19,9 +19,26 @@ import pytest
 from httpx import ASGITransport, AsyncClient
 
 from flow_api.main import create_app
+from flow_api.security.audit import get_audit_writer
 from flow_api.settings import get_settings
 
+
+class _NoopAuditWriter:
+    """unit job 无 DB：审计屏障用 no-op writer（持久化语义由 security 测试覆盖）。"""
+
+    def write_decision(self, **kwargs: object) -> None:
+        return None
+
+    def write_intent(self, **kwargs: object) -> None:
+        return None
+
+    def write_outcome(self, **kwargs: object) -> None:
+        return None
+
 TEST_TOKEN = "unit-test-token-0123456789"
+# §3.2 legacy 冻结身份（与 conftest 种子的 local-dev-web binding 同值）
+LEGACY_ACTOR = "local-dev-web"
+LEGACY_ENTERPRISE = "00000000-0000-0000-0000-00000000d001"
 
 
 @pytest.fixture(autouse=True)
@@ -30,10 +47,16 @@ def restore_auth_env() -> None:
     saved = (
         os.environ.get("AUTH_TOKEN"),
         os.environ.get("FLOW_DEV_ACTOR_ID"),
+        os.environ.get("FLOW_LEGACY_ACTOR_ID"),
+        os.environ.get("FLOW_LEGACY_ENTERPRISE_ID"),
     )
     get_settings.cache_clear()
     yield
-    for name, value in zip(("AUTH_TOKEN", "FLOW_DEV_ACTOR_ID"), saved, strict=True):
+    for name, value in zip(
+        ("AUTH_TOKEN", "FLOW_DEV_ACTOR_ID", "FLOW_LEGACY_ACTOR_ID", "FLOW_LEGACY_ENTERPRISE_ID"),
+        saved,
+        strict=True,
+    ):
         if value is None:
             os.environ.pop(name, None)
         else:
@@ -48,8 +71,11 @@ def _client_without_dev_actor(token: str | None) -> Any:
         os.environ.pop("AUTH_TOKEN", None)
     else:
         os.environ["AUTH_TOKEN"] = token
+        os.environ["FLOW_LEGACY_ACTOR_ID"] = LEGACY_ACTOR
+        os.environ["FLOW_LEGACY_ENTERPRISE_ID"] = LEGACY_ENTERPRISE
     os.environ.pop("FLOW_DEV_ACTOR_ID", None)
     app = create_app()
+    app.dependency_overrides[get_audit_writer] = _NoopAuditWriter
     return AsyncClient(transport=ASGITransport(app=app), base_url="http://test")
 
 
@@ -118,9 +144,12 @@ async def test_correct_token_grants_access() -> None:
         pytest.skip("legacy Bearer 正路径需要 DB service_account binding（§3.2）")
     get_settings.cache_clear()
     os.environ["AUTH_TOKEN"] = TEST_TOKEN
+    os.environ["FLOW_LEGACY_ACTOR_ID"] = LEGACY_ACTOR
+    os.environ["FLOW_LEGACY_ENTERPRISE_ID"] = LEGACY_ENTERPRISE
     os.environ.pop("FLOW_DEV_ACTOR_ID", None)
-    # conftest._seed_dev_principal 已播种 active service_account binding
+    # conftest._seed_dev_principal 已播种与冻结身份匹配的 service_account binding
     app = create_app()
+    app.dependency_overrides[get_audit_writer] = _NoopAuditWriter
     async with AsyncClient(
         transport=ASGITransport(app=app), base_url="http://test"
     ) as http:

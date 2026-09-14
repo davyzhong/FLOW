@@ -49,6 +49,8 @@ from flow_api.metric_library_store.binding import build_execution_binding
 from flow_api.metric_library_store.governance import GovernanceError, MetricGovernance
 from flow_api.metric_library_store.impact import ImpactError, MetricImpactService
 from flow_api.metric_library_store.importer import import_all, resolve_dictionary_file
+from flow_api.security.authorization import Action
+from flow_api.security.route_policy import LOADERS, require_action
 
 router = APIRouter(prefix="/metric-library", tags=["metric-library"])
 
@@ -100,9 +102,7 @@ def _yaml_payload() -> MetricLibraryResponse:
     foundation: dict[str, Any] = yaml.safe_load((root / METRIC_LIBRARY_PATHS[1]).read_text())
     metrics = [
         MetricEntry(collection="general", **entry) for entry in dictionary["metrics_general"]
-    ] + [
-        MetricEntry(collection="logistics", **entry) for entry in dictionary["metrics_logistics"]
-    ]
+    ] + [MetricEntry(collection="logistics", **entry) for entry in dictionary["metrics_logistics"]]
     return MetricLibraryResponse(
         dictionary_id=dictionary["dictionary_id"],
         status=dictionary["status"],
@@ -136,37 +136,37 @@ def _db_payload(session: Session) -> MetricLibraryResponse | None:
             continue
         fallback_entry = m
         metrics.append(
-        MetricEntry(
-            collection=m.collection,
-            metric_code=m.metric_code,
-            name=by_code[(m.collection, m.metric_code)].name,
-            domain=m.domain,
-            definition=m.definition,
-            formula_text=m.formula_text,
-            formula=m.formula,
-            unit=m.unit,
-            time_behavior=m.time_behavior,
-            caliber=m.caliber,
-            default_caliber=m.default_caliber,
-            default_basis=m.default_basis,
-            alternative_calibers=m.alternative_calibers or [],
-            source_cas=m.source_cas or [],
-            source_ifrs=m.source_ifrs,
-            depends_on=m.depends_on or [],
-            decompositions=m.decompositions or [],
-            aliases=m.aliases or [],
-            benchmark=m.benchmark,
-            mpm=m.mpm,
-            mpm_review=by_code[(m.collection, m.metric_code)].mpm_review or m.mpm_review,
-            reconciliation=m.reconciliation,
-            migrates_from=m.migrates_from,
-            provenance=m.provenance,
-            tier=m.tier or fallback_entry.tier,
-            analysis_dimensions=m.analysis_dimensions or fallback_entry.analysis_dimensions,
-            entry_id=str(by_code[(m.collection, m.metric_code)].id),
-            status=by_code[(m.collection, m.metric_code)].status,
+            MetricEntry(
+                collection=m.collection,
+                metric_code=m.metric_code,
+                name=by_code[(m.collection, m.metric_code)].name,
+                domain=m.domain,
+                definition=m.definition,
+                formula_text=m.formula_text,
+                formula=m.formula,
+                unit=m.unit,
+                time_behavior=m.time_behavior,
+                caliber=m.caliber,
+                default_caliber=m.default_caliber,
+                default_basis=m.default_basis,
+                alternative_calibers=m.alternative_calibers or [],
+                source_cas=m.source_cas or [],
+                source_ifrs=m.source_ifrs,
+                depends_on=m.depends_on or [],
+                decompositions=m.decompositions or [],
+                aliases=m.aliases or [],
+                benchmark=m.benchmark,
+                mpm=m.mpm,
+                mpm_review=by_code[(m.collection, m.metric_code)].mpm_review or m.mpm_review,
+                reconciliation=m.reconciliation,
+                migrates_from=m.migrates_from,
+                provenance=m.provenance,
+                tier=m.tier or fallback_entry.tier,
+                analysis_dimensions=m.analysis_dimensions or fallback_entry.analysis_dimensions,
+                entry_id=str(by_code[(m.collection, m.metric_code)].id),
+                status=by_code[(m.collection, m.metric_code)].status,
+            )
         )
-    )
     mappings = session.scalars(select(StatementLineMapping)).all()
     report_items = (
         [
@@ -213,9 +213,7 @@ def _db_payload(session: Session) -> MetricLibraryResponse | None:
             ],
             superseded_notes=fallback.accounting.superseded_notes,
             standards=[
-                AccountingStandardRow(
-                    id=s.standard_id, name=s.name, issuer=s.issuer, note=s.note
-                )
+                AccountingStandardRow(id=s.standard_id, name=s.name, issuer=s.issuer, note=s.note)
                 for s in standards
             ],
             entry_templates=[
@@ -242,7 +240,19 @@ def get_metric_library_session() -> Iterator[Session]:
 SessionDependency = Annotated[Session, Depends(get_metric_library_session)]
 
 
-@router.get("", response_model=MetricLibraryResponse)
+@router.get(
+    "",
+    response_model=MetricLibraryResponse,
+    dependencies=[
+        Depends(
+            require_action(
+                Action.METRIC_LIBRARY_READ,
+                LOADERS["load_public_metric_library"],
+                session_provider=get_metric_library_session,
+            )
+        )
+    ],
+)
 def get_metric_library(session: SessionDependency) -> MetricLibraryResponse:
     """只读返回指标库（数据库优先，空库回退 v1 YAML；D047 定稿）。
 
@@ -257,9 +267,7 @@ def get_metric_library(session: SessionDependency) -> MetricLibraryResponse:
             metric.model_copy(
                 update={
                     "execution_kind": binding.kind if binding else None,
-                    "execution_detail": (
-                        (binding.executor or binding.reason) if binding else None
-                    ),
+                    "execution_detail": ((binding.executor or binding.reason) if binding else None),
                 }
             )
         )
@@ -276,10 +284,20 @@ class RetireRequest(BaseModel):
     reason: str = Field(min_length=1, max_length=512)
 
 
-@router.post("/import", response_model=dict[str, int])
-def import_metric_library(
-    request: ImportRequest, session: SessionDependency
-) -> dict[str, int]:
+@router.post(
+    "/import",
+    response_model=dict[str, int],
+    dependencies=[
+        Depends(
+            require_action(
+                Action.METRIC_LIBRARY_IMPORT,
+                LOADERS["load_blocked_entry"],
+                session_provider=get_metric_library_session,
+            )
+        )
+    ],
+)
+def import_metric_library(request: ImportRequest, session: SessionDependency) -> dict[str, int]:
     """整版幂等导入 v1 配置到数据库（受保护操作，审计留痕）。"""
     root = resolve_metric_library_root()
     summary = import_all(session, root / CONFIG_ROOT)
@@ -288,7 +306,18 @@ def import_metric_library(
     return summary
 
 
-@router.post("/retire")
+@router.post(
+    "/retire",
+    dependencies=[
+        Depends(
+            require_action(
+                Action.METRIC_LIBRARY_RETIRE,
+                LOADERS["load_blocked_entry"],
+                session_provider=get_metric_library_session,
+            )
+        )
+    ],
+)
 def retire_metric_library(request: RetireRequest, session: SessionDependency) -> dict[str, Any]:
     """版本化退役：将指定字典全部条目置 retired（不可逆操作走新版本导入恢复）。"""
     entries = session.scalars(
@@ -322,6 +351,15 @@ def _entry_action_response(entry: MetricDictionaryEntry) -> MetricEntryActionRes
     "/entries/{entry_id}/drafts",
     response_model=MetricEntryActionResponse,
     status_code=status.HTTP_201_CREATED,
+    dependencies=[
+        Depends(
+            require_action(
+                Action.METRIC_CHANGE_PROPOSE,
+                LOADERS["load_blocked_entry"],
+                session_provider=get_metric_library_session,
+            )
+        )
+    ],
 )
 def draft_metric_change(
     entry_id: UUID, request: MetricDraftRequest, session: SessionDependency
@@ -342,7 +380,19 @@ def draft_metric_change(
     return _entry_action_response(draft)
 
 
-@router.post("/entries/{entry_id}/activate", response_model=MetricEntryActionResponse)
+@router.post(
+    "/entries/{entry_id}/activate",
+    response_model=MetricEntryActionResponse,
+    dependencies=[
+        Depends(
+            require_action(
+                Action.METRIC_CHANGE_ACTIVATE,
+                LOADERS["load_blocked_entry"],
+                session_provider=get_metric_library_session,
+            )
+        )
+    ],
+)
 def activate_metric_change(
     entry_id: UUID, request: MetricActionRequest, session: SessionDependency
 ) -> MetricEntryActionResponse:
@@ -359,7 +409,19 @@ def activate_metric_change(
     return _entry_action_response(entry)
 
 
-@router.post("/entries/{entry_id}/retire", response_model=MetricEntryActionResponse)
+@router.post(
+    "/entries/{entry_id}/retire",
+    response_model=MetricEntryActionResponse,
+    dependencies=[
+        Depends(
+            require_action(
+                Action.METRIC_CHANGE_RETIRE,
+                LOADERS["load_blocked_entry"],
+                session_provider=get_metric_library_session,
+            )
+        )
+    ],
+)
 def retire_metric_change(
     entry_id: UUID, request: MetricActionRequest, session: SessionDependency
 ) -> MetricEntryActionResponse:
@@ -390,6 +452,15 @@ def _coverage_payload() -> MetricCoverageResponse | None:
     "/coverage",
     response_model=MetricCoverageResponse,
     responses={status.HTTP_404_NOT_FOUND: {"model": ErrorDetail}},
+    dependencies=[
+        Depends(
+            require_action(
+                Action.METRIC_LIBRARY_READ,
+                LOADERS["load_public_metric_coverage"],
+                session_provider=get_metric_library_session,
+            )
+        )
+    ],
 )
 def get_metric_coverage() -> MetricCoverageResponse:
     """指标库 v0 通用指标 × 五家真实财报快照的可计算覆盖（含缺口原因）。"""
@@ -404,7 +475,19 @@ def get_metric_coverage() -> MetricCoverageResponse:
     return payload
 
 
-@router.get("/events", response_model=MetricGovernanceEventListResponse)
+@router.get(
+    "/events",
+    response_model=MetricGovernanceEventListResponse,
+    dependencies=[
+        Depends(
+            require_action(
+                Action.METRIC_EVENT_READ,
+                LOADERS["load_blocked_entry"],
+                session_provider=get_metric_library_session,
+            )
+        )
+    ],
+)
 def list_metric_governance_events(
     session: SessionDependency, metric_code: str | None = None
 ) -> MetricGovernanceEventListResponse:
@@ -431,10 +514,17 @@ def list_metric_governance_events(
 @router.post(
     "/entries/{entry_id}/impact",
     response_model=MetricImpactResponse,
+    dependencies=[
+        Depends(
+            require_action(
+                Action.METRIC_IMPACT_ANALYZE,
+                LOADERS["load_blocked_entry"],
+                session_provider=get_metric_library_session,
+            )
+        )
+    ],
 )
-def analyze_metric_impact(
-    entry_id: UUID, session: SessionDependency
-) -> MetricImpactResponse:
+def analyze_metric_impact(entry_id: UUID, session: SessionDependency) -> MetricImpactResponse:
     """草稿影响分析：下游依赖 + 取数映射 + 沙盒新旧试算（只读，不写入）。"""
     try:
         report = MetricImpactService(session).analyze(entry_id)
