@@ -158,7 +158,19 @@ flowchart TB
 | 阿里巴巴 9988.HK | FY2019–FY2026 八份年报 | IFRS（US GAAP 口径披露） | 52–53 × 8 | 八年连续期间序列 |
 | 菜鸟集团（未上市） | FY2021–FY2023 招股书申报稿 | IFRS | 105 × 3 | 招股书三期连续 |
 
-重建数据库后执行 `bash scripts/seed_p5_statements.sh` 即可幂等恢复全部 14 份报告。抽取产物与验证记录见 [docs/implementation/p5](docs/implementation/p5/P5-validation-summary.md)。
+重建数据库后执行 `bash scripts/seed_p5_statements.sh` 即可幂等恢复全部 14 份报告（同时幂等补齐本地开发所需的 service_account 身份绑定，否则启用 `AUTH_TOKEN` 后 API 一律 401）。抽取产物与验证记录见 [docs/implementation/p5](docs/implementation/p5/P5-validation-summary.md)。
+
+### 指标覆盖矩阵与事实库（P5 Facts V1）
+
+14 份报告的抽取行项目经 [item_alias_map](docs/implementation/p5/item_alias_map_v1.yaml)（CAS/IFRS 行名 → 标准科目，含 `#n` 重名消歧与组合映射）归一化为 **670 条科目事实**（[statement_facts.yaml](docs/implementation/p5/statement_facts.yaml)，670 事实 / 630 条有意未映射的口径不纯行全部留痕），并由 `python3 scripts/p5_query_facts.py` 计算 **40 个通用指标 × 15 个公司期间快照**的可计算覆盖矩阵（[metric_coverage_matrix.md](docs/implementation/p5/metric_coverage_matrix.md) + 机读数据集 [p5_metric_coverage_v1.yaml](config/metrics/p5_metric_coverage_v1.yaml)）：顺丰 2026Q1 35/40、京东物流 FY2025 29/40、菜鸟 FY2022–23 26/40、阿里巴巴多数年度 22/40、腾讯单季 7/40；每个缺口格子都带首个缺失科目原因（如「缺 bs.ar(end)」），口径约定（avg=（期末+期初）/2、单季未年化、绝对额已换算亿元）随数据集下发。在线入口：`/metric-library` 页的「真实财报覆盖」tab（只读端点 `GET /api/v1/metric-library/coverage`）。
+
+### 静态资料库：离线浏览全部静态内容（零服务器 / 零数据库）
+
+所有版本化静态数据集打包为单文件离线站点 **[docs/library/index.html](docs/library/index.html)**（约 485 KB，双击即可用浏览器打开，file:// 直开、无需任何服务）：左侧菜单、右侧内容，覆盖 数据集总览、通用指标 49 项、物流行业指标 15 项、勾稽与分解关系、CAS↔IFRS 取数映射 28 项、会计科目 167 个、准则登记册与分录模板 32 套、指标覆盖矩阵、14 份财报原文表格浏览器（公司/期间切换）、670 条事实库（按公司/报表筛选）、经营指标字典。数据集更新后重新生成：
+
+```bash
+python3 scripts/build_static_library_site.py
+```
 
 ### 顺丰控股 2026Q1：四表可视化分析
 
