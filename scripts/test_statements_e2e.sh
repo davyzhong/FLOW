@@ -37,7 +37,7 @@ trap 'exit 143' TERM
   --yaml docs/implementation/p5/sf_2026q1_statements.yaml \
   --company 顺丰控股 --stock-code 002352.SZ \
   --report-kind 一季报 --period-label 2026Q1)
-uv run python scripts/seed_dev_principal.py
+(cd services/api && uv run python ../../scripts/seed_dev_principal.py)
 
 python3 scripts/run_service.py --cwd services/api -- .venv/bin/python -m uvicorn flow_api.main:app --host 127.0.0.1 --port "${api_port}" \
   >"${stmt_logs}/api.log" 2>&1 &

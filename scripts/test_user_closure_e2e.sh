@@ -71,7 +71,7 @@ web_pid=$!
 
 uv run scripts/wait_for_services.py "127.0.0.1:${api_port}" "127.0.0.1:${web_port}"
 (cd services/api && uv run python ../../scripts/seed_dashboard_demo.py --fresh-batch)
-uv run python scripts/seed_dev_principal.py
+(cd services/api && uv run python ../../scripts/seed_dev_principal.py)
 npx --yes pnpm@10.17.1 --filter @flow/web exec playwright test e2e/user-closure.spec.ts
 
 echo "== 6/6 完成 =="

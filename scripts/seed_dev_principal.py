@@ -8,6 +8,7 @@
 本脚本在两个环境补齐这两行（均幂等）：
 - pytest / e2e：conftest.py 内联同逻辑（不经本脚本，避免子进程开销）；
 - 本地/CI 真实栈：`make stack-up` 与 scripts/test_*_e2e.sh 在 alembic upgrade 后调用。
+  DATABASE_URL 未设置时默认本地开发库（与 tests/conftest.py 同默认）。
 
 库不可达或 role_binding 表未迁移时打印原因并退出 0（不阻塞调用方）。
 """
@@ -23,10 +24,11 @@ LEGACY_ACTOR_DEFAULT = "local-dev-web"
 
 
 def main() -> int:
-    raw = os.environ.get("DATABASE_URL", "")
-    if not raw:
-        print("seed_dev_principal: DATABASE_URL 未设置，跳过")
-        return 0
+    # 与 tests/conftest.py 同款默认：未显式配置时指向本地开发库。
+    os.environ.setdefault(
+        "DATABASE_URL", "postgresql+psycopg://flow:flow_dev_only@localhost:5432/flow"
+    )
+    raw = os.environ["DATABASE_URL"]
     url = raw.replace("postgresql+psycopg://", "postgresql://", 1)
     dev_actor = os.environ.get("FLOW_DEV_ACTOR_ID") or DEV_ACTOR_DEFAULT
     legacy_actor = os.environ.get("FLOW_LEGACY_ACTOR_ID") or LEGACY_ACTOR_DEFAULT
