@@ -193,3 +193,40 @@ GPT 独立审计产出（审计 worktree `s01-multi-agent-review-20260914`，冻
 3. M3 的 R1 白名单与验收标准、K3 的 v3 接线要求、GLM 的 v2 重建要求，
    分别以三份车道修正单为准；协调者按矩阵第 19 行承担全局 fixture 与 ci.yml；
 4. 本台账 §2 中「M3 rebase 到 26a948f」的指令已被 ff42c67 事实取代，以本节为准。
+
+
+## 6. R1 安全修复完成登记（2026-09-14 晚，单 Agent 接管执行）
+
+用户拍板转交单一 Agent 后，R0+R1 已按本台账 §5 冻结令执行完毕：
+
+**已完成（main bc62937，分支 CI 17/17 全绿，run 34889263972 重跑后）：**
+
+- R0：GPT 审计七件套入库（59d7950→371b5f7）；14 worktree 清理至 1；
+  12+12 个已并合分支删除；规格 §12 对齐；交付文档降级 draft；
+- R1（分支 codex/s01-security-contract-repair，四 commit 4264cb8→bc62937）：
+  1. durable AuditWriter（独立短事务、401/403/allow 三态、503 fail-closed、
+     retention marker/legal hold、启动注册）；
+  2. correlation 中间件（双 header 五处一致）；
+  3. 认证收口：401 先 durable 审计（actor NULL + 指纹）再返回；identity JSON
+     未知字段/重复 actor 拒绝；legacy 冻结身份精确匹配；
+  4. cutoff 收窄：仅命中 legacy token 才应用截止（新 token 不误伤，§3.2 修正单）；
+  5. require_action 接线全部 66 路由（共享会话 loader、§3.3 actor_conflict、
+     blocked 条目占位）；TSV 重分类：metric-library 读=public、治理写 7 条
+     维持 blocked、其余全解锁（0027 企业域引导回填）；
+  6. 容器化修复：route_policy parents[5] 越界（smoke 崩溃根因）+ TSV 烤入镜像；
+  7. 门禁：module-boundaries-e2e required job 接入 + 门禁清单测试同步；
+  8. create_batch 引导自愈（固定 d001 企业，测试清理后自恢复）。
+
+**本地验证：** 全量 pytest 721 passed（19 分钟）；ruff/mypy（185 files）/
+check_docs m1/contracts-check 全绿；stack-up 容器链路实测
+（health 200 / legacy bearer 403 按最小权限 / web-analyst 走 analyst 通量）。
+
+**遗留（按 runbook 顺序，接手者下一步）：**
+
+1. R2：route-policy-v3 完成剩余治理写的治理模式落地 + publishing/operations
+   串行四阶段接线（pipeline 死代码按 Sol 处置单删除）；
+2. R3：module-boundaries-v2（全树 AST + path-glob manifest）；
+3. R4：full-verification-v2（动态隔离/真实 CA/sentinel/双证明）；
+4. dashboard 当前 404 not-ready 属数据态（0027 批次转 internal 后需重新
+   发布快照），非安全回归；
+5. main CI run 34895136484 盯绿后本台账登记最终 checkpoint SHA。
