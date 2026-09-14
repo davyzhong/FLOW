@@ -8,6 +8,8 @@ export S3_ENDPOINT_URL="${S3_ENDPOINT_URL:-http://127.0.0.1:9000}"
 export S3_BUCKET="${S3_BUCKET:-flow}"
 export S3_ACCESS_KEY="${S3_ACCESS_KEY:-flow}"
 export S3_SECRET_KEY="${S3_SECRET_KEY:-flow_dev_only}"
+# S01 §2.2：development 模式认证边界需要显式 dev actor（与 scripts/seed_dev_principal.py 一致）
+export FLOW_DEV_ACTOR_ID="${FLOW_DEV_ACTOR_ID:-flow-dev-bp}"
 read -r api_port web_port < <(uv run python scripts/find_free_port.py 2)
 export FLOW_API_INTERNAL_URL="http://127.0.0.1:${api_port}"
 export PLAYWRIGHT_BASE_URL="http://127.0.0.1:${web_port}"
@@ -35,6 +37,7 @@ trap 'exit 143' TERM
   --yaml docs/implementation/p5/sf_2026q1_statements.yaml \
   --company 顺丰控股 --stock-code 002352.SZ \
   --report-kind 一季报 --period-label 2026Q1)
+uv run python scripts/seed_dev_principal.py
 
 python3 scripts/run_service.py --cwd services/api -- .venv/bin/python -m uvicorn flow_api.main:app --host 127.0.0.1 --port "${api_port}" \
   >"${stmt_logs}/api.log" 2>&1 &

@@ -14,7 +14,7 @@
 """
 import argparse
 import datetime
-import sys
+import hashlib
 from pathlib import Path
 
 import yaml
@@ -137,7 +137,25 @@ def main():
         return
 
     # ---- 覆盖率矩阵 + 一致性自检 ----
+    # 文档合同（generated 类型）：frontmatter 由生成器产出，本文件不在 legacy 豁免清单。
+    input_hash = hashlib.sha256(
+        FACTS.read_bytes() + METRICS_YAML.read_bytes()
+    ).hexdigest()
+    today = datetime.date.today().isoformat()
     lines = [
+        "---",
+        "doc_id: FLOW-P5-COVERAGE-MATRIX-001",
+        "title: P5 指标覆盖率矩阵：指标库 v0 通用指标 × 样本快照",
+        "doc_type: generated",
+        "status: generated",
+        "version: 1.0",
+        "created_at: 2026-09-14",
+        f"updated_at: {today}",
+        "owner: FLOW",
+        "generator_ref: scripts/p5_query_facts.py",
+        f"input_hash: {input_hash}",
+        "---",
+        "",
         "# P5 指标覆盖率矩阵：指标库 v0 通用指标 × 样本快照",
         "",
         f"- 生成：`scripts/p5_query_facts.py`，{datetime.datetime.now().isoformat(timespec='seconds')}",

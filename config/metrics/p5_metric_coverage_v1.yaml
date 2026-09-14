@@ -1,7 +1,7 @@
 dataset_id: flow.p5_metric_coverage.v1
 title: P5 真实财报指标覆盖矩阵
 generator: scripts/p5_query_facts.py
-generated_at: '2026-09-14T06:50:46'
+generated_at: '2026-09-14T08:54:05'
 facts_source: docs/implementation/p5/statement_facts.yaml
 alias_map: docs/implementation/p5/item_alias_map_v1.yaml
 caliber_notes:

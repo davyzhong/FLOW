@@ -10,6 +10,8 @@ export S3_ENDPOINT_URL="${S3_ENDPOINT_URL:-http://127.0.0.1:9000}"
 export S3_BUCKET="${S3_BUCKET:-flow}"
 export S3_ACCESS_KEY="${S3_ACCESS_KEY:-flow}"
 export S3_SECRET_KEY="${S3_SECRET_KEY:-flow_dev_only}"
+# S01 §2.2：development 模式认证边界需要显式 dev actor（与 scripts/seed_dev_principal.py 一致）
+export FLOW_DEV_ACTOR_ID="${FLOW_DEV_ACTOR_ID:-flow-dev-bp}"
 
 make infra-up
 
@@ -69,6 +71,7 @@ web_pid=$!
 
 uv run scripts/wait_for_services.py "127.0.0.1:${api_port}" "127.0.0.1:${web_port}"
 (cd services/api && uv run python ../../scripts/seed_dashboard_demo.py --fresh-batch)
+uv run python scripts/seed_dev_principal.py
 npx --yes pnpm@10.17.1 --filter @flow/web exec playwright test e2e/user-closure.spec.ts
 
 echo "== 6/6 完成 =="

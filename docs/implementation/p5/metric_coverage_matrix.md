@@ -1,6 +1,19 @@
+---
+doc_id: FLOW-P5-COVERAGE-MATRIX-001
+title: P5 指标覆盖率矩阵：指标库 v0 通用指标 × 样本快照
+doc_type: generated
+status: generated
+version: 1.0
+created_at: 2026-09-14
+updated_at: 2026-09-14
+owner: FLOW
+generator_ref: scripts/p5_query_facts.py
+input_hash: 85fb7e1f8851c67a7862909ccb6c8bf13ee873855a072c1689f6d06f4180ab9c
+---
+
 # P5 指标覆盖率矩阵：指标库 v0 通用指标 × 样本快照
 
-- 生成：`scripts/p5_query_facts.py`，2026-09-14T06:50:46
+- 生成：`scripts/p5_query_facts.py`，2026-09-14T08:54:05
 - 口径注意：avg 为（期末+期初）/2、prior 为上年同期列；单季数据未年化；腾讯一般及行政开支含研发（口径差异已标注）；绝对额指标已换算为亿元。
 
 | 指标 | 名称 | alibaba_9988 FY2019 | alibaba_9988 FY2020 | alibaba_9988 FY2021 | alibaba_9988 FY2022 | alibaba_9988 FY2023 | alibaba_9988 FY2024 | alibaba_9988 FY2025 | alibaba_9988 FY2026 | cainiao FY2021 | cainiao FY2022 | cainiao FY2023 | jd_logistics_2618 2026Q1 | jd_logistics_2618 FY2025 | sf_002352 2026Q1 | tencent_0700 2Q2026 |

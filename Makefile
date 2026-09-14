@@ -26,6 +26,8 @@ stack-up:
 	$(MAKE) infra-up
 	$(COMPOSE) up -d --build --wait --wait-timeout 120 api worker web
 	$(UV) run scripts/wait_for_services.py localhost:5432 localhost:6379 localhost:9000 localhost:8000 localhost:3000
+	cd services/api && $(UV) run alembic upgrade head
+	$(UV) run python scripts/seed_dev_principal.py
 
 stack-down: infra-down
 
