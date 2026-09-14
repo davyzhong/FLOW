@@ -2,11 +2,11 @@
 doc_id: FLOW-DELIVERY-GLM-S01-CHECKLIST-001
 title: GLM 5.3 三 Agent 并行任务交付清单（S01 Task 0 部分 + Task 2C + 阻塞登记）
 doc_type: delivery
-status: verified
-version: 1.1
+status: draft
+version: 1.2
 created_at: 2026-09-13
-updated_at: 2026-09-13
-last_reviewed_at: 2026-09-13
+updated_at: 2026-09-14
+last_reviewed_at: 2026-09-14
 owner: FLOW
 applies_to: s01-parallel-execution
 knowledge_release: flow-knowledge-2026-09-12.1
@@ -16,11 +16,18 @@ superseded_by: null
 source_refs: [docs/superpowers/plans/2026-09-13-flow-three-agent-parallel-restructuring.md]
 related_code: [scripts/ci/verify_workflow_jobs.py, apps/web/components/modules/module-landing.tsx, scripts/test_module_boundaries_e2e.sh]
 commit_refs: [b8a3edd, 07d82f2, 4a47917, 4beae65, a4051ea]
-evidence_refs: [docs/70_operations/three-agent-parallel-execution-runbook.md]
+evidence_refs: [docs/70_operations/three-agent-parallel-execution-runbook.md, docs/80_reviews/2026-09-14-s01-multi-agent-overall-review.md]
 confidentiality: project-internal
 ---
 
 # GLM 5.3 任务交付清单（供主协调者验收）
+
+> **状态降级说明（2026-09-14）**：依多代理整体复核（FLOW-REVIEW-S01-MULTI-AGENT-20260914，
+> F7「交付文档过度宣称」），本文由 `verified` 降为 `draft`：本清单覆盖的
+> module-boundaries / full-verification 交付基于旧 Gate 0 基线（b8a3edd 链），
+> 分支 CI 未含 architecture、导航 Vitest 与 module-boundaries E2E required job，
+> 不得作为 Task 4/6A 完成证明。后续以 full-verification-v2（Gate R4）产出为准；
+> 文中「已完成/验证通过」仅代表当时局部事实，不代表 S01 门禁验收。
 
 执行者：GLM 5.3（模块工程与全链验证负责人）
 工作目录：独立 worktree `/Users/qiming/workspace/FLOW-s01-module-ui`（分支 `codex/s01-module-ui`）

@@ -152,3 +152,44 @@ audit schema/atomicity 测试）。合并以旧基线解析 conftest/auth.py，*
 5. ⬜ Wave 2：module-boundaries → module-ui → 6A runner 复跑；
 6. ⬜ Wave 3：Task 9/10；
 7. ⬜ U4 oracle（等用户独立会话）、rnd_exp 核验（等原文）、U9/O5（等数据授权）、U10 证据决策。
+
+## 5. GPT 总审计回执与重定基（2026-09-14 追加）
+
+GPT 独立审计产出（审计 worktree `s01-multi-agent-review-20260914`，冻结快照
+2026-09-14 08:33 +08:00 ≈ b79bc64/9cfec8b 时代）：总报告 FLOW-REVIEW-S01-MULTI-AGENT-20260914、
+三份车道修正单、修正矩阵、恢复 runbook（R0–R4）。协调者回执如下。
+
+### 5.1 基线时差（最重要的事实修正）
+
+审计快照早于协调者修复系列。真实时序（UTC）：b79bc64 红线（09-13 23:44）→
+26a948f 认证配套（09-14 01:18）→ ff42c67 五路并合（02:09）→ c1510ce/3cccae8/
+0d6644d/2570bf8 回落修复（03:20–03:35）→ **main 2570bf8 CI 17/17 全绿
+（run 34803117958，rerun 过 analysis-invariants 的 Docker Hub 网络抖动）**
+→ integration 同 commit 全绿（run 34803120095）→ ba5f34c 台账。因此：
+
+- F1「主线无绿色基线」、矩阵 16/17 行 P0「frozen_red / not_checkpoint」**已被
+  2570bf8/ba5f34c 事实闭合**；恢复 runbook 的 R0「记录红色快照」与 R1 的
+  「恢复全绿」目标均已达成；
+- **新的唯一恢复基线（recovery base）= `ba5f34c`**（main = integration 同树）。
+  R1 安全修复分支应从该 SHA 切出，不再 BLOCKED_PENDING。
+
+### 5.2 逐条裁决（对当前 HEAD 复核后）
+
+| 审计发现 | 协调者裁决 |
+|---|---|
+| F1 主线红 / 文档门禁失败 | **已闭合**（26a948f 系列修复；legacy-exempt 改为生成器产 generated frontmatter）。审计证据链止于 run 34791653766，未覆盖 34803117958 |
+| F2 安全骨架缺口（durable audit writer 缺失、authorization 非 action×resource 精确判定、identity JSON 未严格校验、legacy cutoff 误伤新 token） | **成立，Task 6 维持不关闭**。R1 security-contract-repair 自 ba5f34c 切出，owner=M3，白名单=security/auth/settings/main、0027、共享测试 helper；协调者已另行预警 2026-10-31 cutoff 启动炸弹（本台账 §1 遗留登记） |
+| F3 route-policy 未接线真实路由 | **成立**。Kimi 自 R1 绿色 SHA 建 route-policy-v3；inventory 需先裁决 `/api/v1/metric-library/coverage` 的登记归属（P5 派生入口），协调者裁决：**作为 `metric_library.read` 正式登记**（已挂 require_bearer_auth，非匿名） |
+| F4 module-ui 提前进 main | 事实成立但**归因更正**：进 main 走的是 ff42c67 五路并合（他方操作，非协调者合并序列；协调者当日已在本台账 §3 登记违规）。处置采纳审计方案「功能保留 + 补门禁」；Library commits（df11b44→e114ae3）系 Kimi 推入集成线、协调者 FF 携带，非协调者发起的功能合并 |
+| F5 module-boundaries/Task 9 验证不足 | **成立**。module-boundaries-v2 / full-verification-v2 按 R3/R4 顺序执行，白名单与验收标准照单全收 |
+| F6 范围污染（522fe6c 标题夹带；df11b44 种子暗写身份） | **成立**。522fe6c 已成历史（此后提交标题均如实）；`seed_p5_statements.sh` 的 RoleBinding 副作用已移除（身份引导单源化到 `seed_dev_principal.py`，fixed enterprise + 显式 actor） |
+| F7 权威文档滞后 / 交付过度宣称 / 规格 §12 矛盾 | **成立，R0 名下三件已由协调者执行**：① 规格 §12 批准记录补全并与 frontmatter 对齐；② `GLM-S01-DELIVERY.md` 降为 `draft` 并加降级说明；③ 本台账作为取代性纠正记录。PROJECT_STATE / CURRENT_ROADMAP / HANDOFF 的统一重写排在 R2 后统一做，避免与进行中车道再次撞车 |
+
+### 5.3 冻结令（自本节起生效）
+
+1. 禁止向 main / integration 合并**业务代码**，直至 R1 安全修复 checkpoint 发布；
+   文档/治理/审计类提交不受限，但须标题如实、不夹带；
+2. 候选分支只读保存，不 rebase、不 force-push（GPT R0 原案采纳）；
+3. M3 的 R1 白名单与验收标准、K3 的 v3 接线要求、GLM 的 v2 重建要求，
+   分别以三份车道修正单为准；协调者按矩阵第 19 行承担全局 fixture 与 ci.yml；
+4. 本台账 §2 中「M3 rebase 到 26a948f」的指令已被 ff42c67 事实取代，以本节为准。

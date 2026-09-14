@@ -662,9 +662,10 @@ git diff --check
 8. 0025→0026 upgrade/downgrade/upgrade、RoleBinding 唯一 active、trigger；
 9. correlation 双 header/state/AuditEvent/log 一致，覆盖错误路径。
 
-本文只有重新转 `approved` 后才能作为 Task 6 门禁；ABI、枚举、allow set、截止或 retention 偏差须先修订并重新审批。
+本文即当前生效的 Task 6 门禁合同；ABI、枚举、allow set、截止或 retention 偏差须先修订并重新审批。
 
 ## 12. 批准记录
 
 - 2026-09-13：用户批准初版 V1.1 冻结值并授权执行。
-- 2026-09-13：独立审查提出 P1/P2 后进入本轮精确化；因合同字节已变化，保持 `review` 等待复审与用户重新批准。
+- 2026-09-13：独立审查提出 P1/P2 后进入本轮精确化；精确化期间曾保持 `review`。
+- 2026-09-13：精确化完成（GLM 独立复审清零 P1/P2，见 `docs/80_reviews/2026-09-13-s01-security-spec-v1.1-coordinator-review.md`），用户明确批准最终字节，本文转回 `approved` 并作为 Task 6 门禁（Gate R0 状态对齐，2026-09-14 多代理审计 F7 发现本节与 frontmatter 矛盾，由协调者修正）。

@@ -44,25 +44,8 @@ for y in 2021 2022 2023; do
   seed "cainiao_${y}fy_statements.yaml" 菜鸟集团 PVT.CAINIAO 招股书申报稿 "FY${y}"
 done
 
-# S01 §3.2：legacy Bearer（AUTH_TOKEN）需要 DB 里存在一条 active service_account
-# RoleBinding，否则全部 API 401。本地开发库幂等补一条。
-"${PY[@]}" - <<'PY'
-import os
-import psycopg
-
-url = os.environ["DATABASE_URL"].replace("postgresql+psycopg://", "postgresql://", 1)
-with psycopg.connect(url, autocommit=True) as conn:
-    conn.execute(
-        """
-        INSERT INTO role_binding (actor_id, role, enterprise_id, is_service_account, active)
-        SELECT 'local-dev-web', 'service_account', gen_random_uuid(), true, true
-        WHERE NOT EXISTS (
-            SELECT 1 FROM role_binding
-            WHERE role = 'service_account' AND is_service_account AND active
-        )
-        """
-    )
-print("role_binding: service_account 绑定已确认（幂等）")
-PY
+# 身份引导不在本脚本职责内（2026-09-14 多代理审计 F6：财报种子不得暗写安全身份）。
+# dev principal / legacy service_account 的 RoleBinding 统一由
+# scripts/seed_dev_principal.py 提供（make stack-up 与 e2e 脚本已接线）。
 
 echo "P5 财报种子完成：5 家公司 14 份报告。"
