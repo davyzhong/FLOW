@@ -1,0 +1,24 @@
+# S01 验收专用 compose 覆盖（Task 9 / 6A）：与常驻栈完全隔离的端口与命名卷。
+# 用法（由 scripts/verify_s01_upgrade_from_u8.sh 驱动）：
+#   docker compose -p s01accept -f infra/compose.yaml -f infra/compose.s01-acceptance.yaml up -d
+# 注意：project 名不同即天然隔离卷；此处仅覆写宿主端口避免与常驻栈冲突。
+# redis/minio 不映射宿主端口（仅 compose 网络内访问）。
+
+services:
+  minio:
+    ports: !override []
+  redis:
+    ports: !override []
+  postgres:
+    ports: !override
+      - "55432:5432"
+  api:
+    ports: !override
+      - "18000:8000"
+  web:
+    ports: !override
+      - "13000:3000"
+  nginx:
+    ports: !override
+      - "13443:443"
+      - "13080:80"
