@@ -3,7 +3,7 @@ doc_id: FLOW-DELIVERY-S01-TASK2B-ROUTE-POLICY-001
 title: S01 Task 2B 路由策略（route policy）交付记录
 doc_type: delivery
 status: verified
-version: 1.0
+version: 1.1
 created_at: 2026-09-14
 updated_at: 2026-09-14
 last_reviewed_at: 2026-09-14
@@ -14,8 +14,8 @@ decision_refs: []
 supersedes: []
 superseded_by: null
 source_refs: [docs/40_specs/security/internal-workbench-rbac-audit-v1.md, docs/40_specs/security/route-inventory-v1.tsv, docs/80_reviews/2026-09-13-security-spec-v11-glm-review.md]
-related_code: [services/api/src/flow_api/security/route_policy.py, services/api/tests/security/test_route_policy.py]
-commit_refs: [997c1ab]
+related_code: [services/api/src/flow_api/security/route_policy.py, services/api/tests/security/test_route_policy.py, services/api/src/flow_api/api/auth.py]
+commit_refs: [997c1ab, 25283e5, 98bf623, 67072c1]
 evidence_refs: []
 confidentiality: project-internal
 ---
@@ -24,15 +24,21 @@ confidentiality: project-internal
 
 ## 结论
 
-Task 2B（route policy）按已批准的安全规格 V1.1 重做完成：分支 `codex/s01-route-policy-v2`，提交 `997c1ab`，已推送待 GLM 5.3 复审。`tests/security` 40 项全绿，`ruff` 与 `mypy --strict` 零告警。
+Task 2B（route policy）按已批准的安全规格 V1.1 重做完成：分支 `codex/s01-route-policy-v2`，已推送待 GLM 5.3 复审。分支已合入集成分支最新头 `522fe6c`（含 Task 2A 后半段），合并后 `tests/security` 60 项全绿，`ruff` 与 `mypy --strict` 零告警，`git merge-tree` 预检与集成分支零冲突。
+
+## v1.1 合并后增补（2026-09-14 二次验证）
+
+1. **PRINCIPAL_DEP 已真实接线**：Task 2A 后半段随 `ee184fb` 合入，`flow_api.api.auth.require_bearer_auth`（resolve_principal + RoleBinding + legacy bearer 截止）就位，单符号换线已执行；新增 `test_principal_dep_is_wired_to_bearer_auth` 防回退。原 503 占位实现已移除。`get_audit_writer` 仍保持 unwired（0026 审计落库车道尚未交付注册实现，库里无 AuditWriter 实现类），行为不变。
+2. **TSV 第 66 行 `GET /api/v1/metric-library/coverage`**：该路由随 `3d4f92d6`（metric-library v1.1）进入集成分支但未登记，被双向扫描红灯捕获。实现为纯静态 YAML fixture 读（无 DB、无企业数据），参照 intake template 行登记为 `metric_library.read` + `load_public_metric_coverage` + 只读豁免注记。**这是执行侧判断，若复审认为应与 metric-dictionary 家族一致改 blocked，改一行 TSV 即可**。
+3. **跨车道发现（非本分支引入）**：纯净集成分支 `522fe6c` 上 `tests/operations` 有 8 项预存失败（test_operations_freeze 3 项、test_operations_public_api 3 项、test_operations_publication 2 项），与本分支零关系（对照组逐一核实）。已留待协调者分派。
 
 ## 交付物
 
 | 交付物 | 路径 | 说明 |
 |---|---|---|
-| 策略注册表与执行依赖 | `services/api/src/flow_api/security/route_policy.py`（约 760 行） | TSV 装载 + fail-fast 校验、28 个 resource loader、`require_action` 依赖、openapi 双向扫描 |
-| 安全测试 | `services/api/tests/security/test_route_policy.py` | 40 项：校验阻断、双向扫描、审计 durable、blocked、精确组合、跨企业拒绝 |
-| 清单补行 | `docs/40_specs/security/route-inventory-v1.tsv` | 第 65 行 `GET /api/v1/modules`（公开豁免裁决落账） |
+| 策略注册表与执行依赖 | `services/api/src/flow_api/security/route_policy.py`（约 760 行） | TSV 装载 + fail-fast 校验、30 个 resource loader、`require_action` 依赖、openapi 双向扫描 |
+| 安全测试 | `services/api/tests/security/test_route_policy.py` | 41 项：校验阻断、双向扫描、审计 durable、blocked、精确组合、跨企业拒绝、接线防漂移 |
+| 清单补行 | `docs/40_specs/security/route-inventory-v1.tsv` | 第 65 行 `GET /api/v1/modules`（公开豁免裁决落账）；第 66 行 `GET /api/v1/metric-library/coverage`（见「合并后增补」） |
 
 ## 关键机制与规格条款对应
 
@@ -46,16 +52,16 @@ Task 2B（route policy）按已批准的安全规格 V1.1 重做完成：分支 
 
 ## 依赖注入边界（单符号点）
 
-- `PRINCIPAL_DEP`：当前指向 `_principal_unwired`（503 `principal_resolution_unavailable`），等 Task 2A 后半段 `auth.resolve_principal` + RoleBinding 接线，集成时只换这一个符号。
+- `PRINCIPAL_DEP`：**已接线** `flow_api.api.auth.require_bearer_auth`（见「v1.1 合并后增补」）。
 - `get_readonly_session`：autoflush 关闭的只读会话工厂。
 - `get_audit_writer`：默认 `_UnwiredAuditWriter`（抛 `AuditUnavailable`），0026 车道经 `register_audit_writer` 注册真实实现。
 - 测试全部经 `app.dependency_overrides` 覆盖上述三点，不触碰全局状态。
 
 ## 范围检查
 
-- 本分支**未接线任何路由文件**：现有 `tests/api` 套件在 blocked 路由 + principal 未接线状态下会大面积变红，接线留到 0026 落地后的集成期（与合并顺序 2A→2B→发布接线一致）。
-- 规格 §11 验收命令中的 `test_principal_resolution.py`、`test_audit_atomicity.py` 属 Task 2A 后半段（Mavis 车道），不在本交付范围。
-- 改动文件恰为 3 个（route_policy.py、test_route_policy.py、TSV +1 行），无范围外文件。
+- 本分支**未接线任何路由文件**：现有 `tests/api` 套件在 blocked 路由状态下会大面积变红，接线留到 0026 落地后的集成期（与合并顺序 2A→2B→发布接线一致）。
+- 规格 §11 验收命令中的 `test_principal_resolution.py`、`test_audit_atomicity.py` 属 Task 2A 后半段（Mavis 车道），已随集成分支合入并在本分支上全部通过。
+- 自有改动文件恰为 3 个（route_policy.py、test_route_policy.py、TSV +2 行），无范围外文件；其余 diff 全部来自集成分支合并。
 
 ## 残余风险（需复审者知悉）
 
@@ -70,9 +76,9 @@ git fetch origin codex/s01-route-policy-v2
 git worktree add .worktrees/review-task2b codex/s01-route-policy-v2
 cd .worktrees/review-task2b/services/api
 ln -sfn /Users/qiming/workspace/FLOW/services/api/.venv .venv
-uv run pytest tests/security -q        # 期望 40 passed
+uv run pytest tests/security -q        # 期望 60 passed（含 2A 后半段 19 项）
 uv run ruff check src/flow_api/security tests/security
 uv run mypy src/flow_api/security
 ```
 
-合并前请确认：① module-boundaries 与本分支的合并顺序（影响 `PENDING_MOUNT_ROUTES` 移除时点）；② TSV owner 措辞统一（P3 ②）是否在本次合并一并处理。
+合并前请确认：① module-boundaries 与本分支的合并顺序（影响 `PENDING_MOUNT_ROUTES` 移除时点）；② TSV owner 措辞统一（P3 ②）是否在本次合并一并处理；③ 第 66 行 coverage 的登记方式（静态豁免 vs 家族一致 blocked）属执行侧判断，请复审定夺；④ 集成分支预存的 8 项 operations 失败请另行分派（与本分支无关）。

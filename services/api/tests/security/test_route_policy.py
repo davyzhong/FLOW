@@ -1,7 +1,7 @@
 """route_policy 测试（S01 Task 2B 重做）。
 
 规格：docs/40_specs/security/internal-workbench-rbac-audit-v1.md（approved）§4/§5/§6；
-权威清单 route-inventory-v1.tsv（65 条，含已批准待挂载的 modules 行）。
+权威清单 route-inventory-v1.tsv（66 条，含已批准待挂载的 modules 行）。
 
 覆盖：
 - TSV 装载与 §5 全部合并阻断项（重复/未知 Action/写豁免/blocked 无 action）；
@@ -54,11 +54,11 @@ def _principal(role: Role, enterprise: UUID = ENT_A, actor: str = "actor-1") -> 
 # --- TSV 装载与校验 ---
 
 
-def test_policy_loads_65_entries_sorted() -> None:
+def test_policy_loads_66_entries_sorted() -> None:
     entries = load_policy()
-    assert len(entries) == 65
+    assert len(entries) == 66
     keys = [(e.method, e.path) for e in entries]
-    assert len(set(keys)) == 65, "存在重复 method/path"
+    assert len(set(keys)) == 66, "存在重复 method/path"
     blocked = [e for e in entries if e.is_blocked]
     assert len(blocked) == 13, f"blocked 条目数变化：{len(blocked)}"
     for e in entries:
@@ -126,7 +126,7 @@ def test_openapi_probe_matches_tsv_two_way() -> None:
 
     app = create_app()
     mounted = {(m, p) for m, p in iter_openapi_routes(app) if p.startswith("/api/v1")}
-    assert len(mounted) == 64, f"openapi 探针挂载数变化：{len(mounted)}"
+    assert len(mounted) == 65, f"openapi 探针挂载数变化：{len(mounted)}"
     report = scan_two_way(app, load_policy())
     assert report.missing == (), f"未登记路由：{report.missing}"
     assert report.stale == (), f"失效登记：{report.stale}"
@@ -144,6 +144,17 @@ def test_pending_mount_is_exactly_modules_route() -> None:
     mounted = set(iter_openapi_routes(create_app()))
     pending = PENDING_MOUNT_ROUTES & mounted
     assert not pending, f"已挂载却仍挂起，请从 PENDING_MOUNT_ROUTES 移除：{pending}"
+
+
+def test_principal_dep_is_wired_to_bearer_auth() -> None:
+    """PRINCIPAL_DEP 单符号已接线到 Task 2A 的 require_bearer_auth（防回退）。
+
+    若该符号被退回本地占位实现，说明 principal 解析被静默拆除——fail closed
+    语义依赖真实 resolve_principal（§3/§10）。
+    """
+    from flow_api.api.auth import require_bearer_auth
+
+    assert PRINCIPAL_DEP is require_bearer_auth
 
 
 # --- require_action（mini-app + dependency_overrides） ---

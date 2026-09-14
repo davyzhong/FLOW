@@ -33,6 +33,7 @@ from uuid import UUID
 from fastapi import Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
 
+from flow_api.api.auth import require_bearer_auth
 from flow_api.security.audit import AuditContext, AuditWriter
 from flow_api.security.authorization import Action, Decision, ReasonCode, ResourceRef, authorize
 from flow_api.security.principal import Principal
@@ -70,6 +71,7 @@ LOADER_RESOURCE_TYPE: dict[str, str] = {
     "load_public_health": "health",
     "load_public_workspace_metadata": "workspace_metadata",
     "load_public_module_catalog": "module_catalog",
+    "load_public_metric_coverage": "metric_coverage",
     "load_public_intake_template": "intake_template",
     "load_batch_scope_or_deny_legacy": "analysis_batch",
     "load_batch_scope_owner_or_deny_legacy": "analysis_batch",
@@ -480,6 +482,9 @@ LOADERS: dict[str, ResourceLoader] = {
     "load_public_module_catalog": lambda request, session: _public_ref(
         "module_catalog", "catalog"
     ),
+    "load_public_metric_coverage": lambda request, session: _public_ref(
+        "metric_coverage", "static"
+    ),
     "load_public_intake_template": _public_path("intake_template", "template_id"),
     "load_batch_scope_or_deny_legacy": _load_by_batch_param("analysis_batch"),
     "load_batch_scope_owner_or_deny_legacy": _load_by_batch_param("analysis_batch"),
@@ -582,24 +587,11 @@ def get_audit_writer() -> AuditWriter:
     return _audit_writer
 
 
-async def _principal_unwired() -> Principal:
-    """Principal 解析由 2A 后半段（auth.resolve_principal + RoleBinding）提供。
-
-    集成时把 PRINCIPAL_DEP 替换为真实依赖；测试经 dependency_overrides 注入。
-    未接线时 fail closed 503（不得退回匿名或 development allow-all，§10）。
-    """
-
-    raise HTTPException(
-        status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
-        detail={
-            "code": "principal_resolution_unavailable",
-            "message": "principal resolution 未接线（待 Task 2A 后半段）",
-        },
-    )
-
-
-# FastAPI Depends 单符号引用点：集成时只改这里
-PRINCIPAL_DEP: Callable[..., Any] = _principal_unwired
+# FastAPI Depends 单符号引用点（§3 credential → Principal）。
+# Task 2A 后半段已交付 flow_api.api.auth.require_bearer_auth
+# （resolve_principal + RoleBinding + legacy bearer 截止），本符号即真实接线；
+# 测试经 dependency_overrides 注入假 Principal，不触碰全局状态。
+PRINCIPAL_DEP: Callable[..., Any] = require_bearer_auth
 
 _POLICY: tuple[PolicyEntry, ...] | None = None
 _TEMPLATE_RE: dict[str, Any] = {}
