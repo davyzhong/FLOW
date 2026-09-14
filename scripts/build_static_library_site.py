@@ -163,6 +163,25 @@ input[type=search], select { background: transparent;
 .metric dt { color: var(--kimi-color-text-tertiary, #66788f); }
 .scroll { border-color: var(--kimi-color-border, #e2e8f0); }
 .ml-coverage__metric, .ml-coverage__table tbody .ml-coverage__metric { background: transparent; }
+/* v2 报告风变量的看板映射：结构色走令牌，状态色（红/绿/黄）保留语义 */
+:root {
+  --th-bg: var(--kimi-color-surface-muted, #f1f5f9);
+  --th-ink: var(--kimi-color-text-primary, #1c2634);
+  --zebra: var(--kimi-color-surface-muted, #f6f8fb);
+  --navy: var(--kimi-color-text-primary, #16324f);
+  --navy-2: var(--kimi-color-text-secondary, #1f4e79);
+}
+.kpi, .verdict { background: transparent; border-color: var(--kimi-color-border, #e2e8f0); }
+.kpi .value { color: var(--kimi-color-text-primary, #16324f); }
+.hero h1 { color: var(--kimi-color-text-primary, #16324f); }
+h2.band { color: var(--kimi-color-text-primary, #16324f);
+  border-left-color: var(--kimi-color-text-primary, #16324f); }
+td.cov-hit { background: transparent; color: var(--kimi-color-text-primary, #16324f); }
+tbody tr:nth-child(even) td.cov-hit { background: var(--kimi-color-surface-muted, #f6f8fb); }
+.grade.b { background: var(--kimi-color-surface-muted, #e8f0f7);
+  color: var(--kimi-color-text-secondary, #1f4e79); }
+.grade.c { background: var(--kimi-color-surface-muted, #e2e8f0);
+  color: var(--kimi-color-text-tertiary, #66788f); }
 /* 看板表面：宿主给定视口，左侧导航吸顶、右侧内容滚动 */
 .on-canvas .layout { height: 100vh; min-height: 0; }
 .on-canvas main { max-height: 100vh; overflow-y: auto; }
@@ -177,8 +196,13 @@ HTML = """<!DOCTYPE html>
 <title>FLOW 静态资料库 · 指标 / 会计 / 真实财报</title>
 <style>
   :root {
-    --ink: #1c2634; --muted: #66788f; --line: #e2e8f0; --bg: #f6f8fb;
+    --ink: #1c2634; --muted: #66788f; --line: #e2e8f0; --bg: #f4f6f9;
     --card: #ffffff; --accent: #2563eb; --accent-soft: #eaf1fe; --good: #18794e;
+    /* v2 商务报告风（借鉴经营分析 PPT）：深藏青 + 中国红 + 状态三色 */
+    --navy: #16324f; --navy-2: #1f4e79; --red: #c0392b; --red-soft: #fbeae8;
+    --ok: #1a7f4b; --ok-soft: #e5f5ec; --warn: #b7791f; --warn-soft: #fdf3e3;
+    --bad: #c0392b; --bad-soft: #fbeae8;
+    --th-bg: var(--navy); --th-ink: #ffffff; --zebra: #f6f8fb;
   }
   * { box-sizing: border-box; }
   body { margin: 0; font: 14px/1.65 -apple-system, "PingFang SC", "Hiragino Sans GB",
@@ -209,7 +233,9 @@ HTML = """<!DOCTYPE html>
     border: 1px solid var(--line); font-size: 13px; }
   th, td { padding: 6px 12px; border-bottom: 1px solid var(--line); text-align: left;
     vertical-align: top; }
-  th { background: #f1f5f9; color: #475569; font-weight: 600; white-space: nowrap; }
+  th { background: var(--th-bg); color: var(--th-ink); font-weight: 500; white-space: nowrap; }
+  tbody tr:nth-child(even) td, tbody tr:nth-child(even) th[scope=row] { background: var(--zebra); }
+  td.neg { color: var(--red); }
   td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
   code { background: #eef2f7; border-radius: 4px; padding: 1px 5px; font-size: 12px; }
   .chip { display: inline-block; background: var(--accent-soft); color: var(--accent);
@@ -238,6 +264,64 @@ HTML = """<!DOCTYPE html>
     padding: 10px 16px; margin-bottom: 8px; }
   details summary { cursor: pointer; font-size: 13.5px; }
   .pill { float: right; color: var(--muted); font-size: 12px; }
+
+  /* ===== v2 商务报告风组件（借鉴经营分析 PPT） ===== */
+  /* 页眉：顶部红线 + 超大标题（黑+红强调词）+ 副标题 */
+  .hero { border-top: 4px solid var(--red); padding-top: 14px; margin-bottom: 20px; }
+  .hero .kicker { color: var(--muted); font-size: 12px; letter-spacing: .35em; margin-bottom: 6px; }
+  .hero h1 { font-size: 34px; line-height: 1.2; font-weight: 600; color: var(--navy); margin: 0 0 6px; }
+  .hero h1 em { color: var(--red); font-style: normal; }
+  .hero .lede { color: var(--muted); font-size: 14px; margin: 0; }
+  /* KPI 卡带：图标圆章 + 大数字 + 同比/较上期变动 */
+  .kpis { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px; margin: 14px 0 18px; }
+  .kpi { background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+    padding: 14px 16px 12px; display: flex; gap: 12px; align-items: flex-start; }
+  .kpi .seal { flex: none; width: 40px; height: 40px; border-radius: 50%;
+    background: var(--navy); color: #fff; display: grid; place-items: center;
+    font-size: 17px; font-weight: 500; }
+  .kpi.red .seal { background: var(--red); }
+  .kpi .name { font-size: 12.5px; color: var(--muted); }
+  .kpi .value { font-size: 25px; font-weight: 500; color: var(--navy); line-height: 1.15;
+    font-variant-numeric: tabular-nums; }
+  .kpi .value small { font-size: 13px; color: var(--muted); font-weight: 400; }
+  .kpi .foot { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .delta-up { color: var(--red); font-weight: 500; }
+  .delta-down { color: var(--ok); font-weight: 500; }
+  .delta-flat { color: var(--muted); }
+  /* 结论条：红竖线 + 加粗判断 */
+  .verdict { border-left: 4px solid var(--red); background: var(--card);
+    border-radius: 0 8px 8px 0; padding: 10px 16px; margin: 14px 0;
+    font-size: 13.5px; color: var(--ink); }
+  .verdict b { color: var(--navy); }
+  /* 覆盖率进度条（列头用） */
+  .covbar { width: 84px; height: 6px; border-radius: 999px; background: var(--line);
+    overflow: hidden; margin: 3px auto 0; }
+  .covbar i { display: block; height: 100%; border-radius: 999px; }
+  .covbar.hi i { background: var(--ok); } .covbar.mid i { background: var(--warn); }
+  .covbar.lo i { background: var(--bad); }
+  .covpct { font-size: 11.5px; font-weight: 500; }
+  .covpct.hi { color: var(--ok); } .covpct.mid { color: var(--warn); } .covpct.lo { color: var(--bad); }
+  /* 覆盖矩阵单元格热力：可计算=白底深字；缺口=浅灰底淡字 */
+  td.cov-hit { background: #fff; color: var(--navy); font-weight: 500; }
+  tbody tr:nth-child(even) td.cov-hit { background: var(--zebra); }
+  td.cov-miss2 { background: var(--red-soft); color: #b89a96; font-size: 11.5px; }
+  tbody tr:nth-child(even) td.cov-miss2 { background: #f7e9e7; }
+  /* 覆盖等级字母（借鉴评价矩阵 A+/A/B+） */
+  .grade { display: inline-block; min-width: 30px; text-align: center; font-weight: 600;
+    border-radius: 6px; padding: 1px 6px; font-size: 12px; }
+  .grade.a { color: var(--red); background: var(--red-soft); }
+  .grade.b { color: var(--navy-2); background: #e8f0f7; }
+  .grade.c { color: var(--muted); background: var(--line); }
+  /* 状态胶囊：安全/关注/预警 */
+  .status { display: inline-block; border-radius: 999px; padding: 1px 10px;
+    font-size: 12px; font-weight: 500; }
+  .status.ok { background: var(--ok-soft); color: var(--ok); }
+  .status.warn { background: var(--warn-soft); color: var(--warn); }
+  .status.bad { background: var(--bad-soft); color: var(--bad); }
+  /* 分区标题：左侧 navy 竖条 */
+  h2.band { border-left: 5px solid var(--navy); padding-left: 10px; font-size: 15.5px;
+    color: var(--navy); margin: 26px 0 10px; }
 </style>
 </head>
 <body>
@@ -259,6 +343,66 @@ const fmt = (v) => {
 };
 const COMPANY_SHORT = { alibaba_9988: "阿里巴巴", cainiao: "菜鸟",
   jd_logistics_2618: "京东物流", sf_002352: "顺丰控股", tencent_0700: "腾讯控股" };
+
+/* ===== v2 报告风 helper：事实取数 / 亿元换算 / 同比徽标 / KPI 卡 ===== */
+const FACT_MAP = new Map(DATA.facts.map((f) => [`${f.company}|${f.period}|${f.item_id}|${f.role}`, f]));
+function fact(company, period, itemId, role) {
+  return FACT_MAP.get(`${company}|${period}|${itemId}|${role}`) || null;
+}
+function toYi(f) {  // 披露单位 → 亿元
+  if (!f || f.value === null || f.value === undefined) return null;
+  const v = Number(f.value);
+  return f.unit === "千元" ? v / 1e5 : f.unit === "百万元" ? v / 100 : v / 1e8;
+}
+const yiFmt = (v) => v === null ? null : v.toLocaleString("zh-CN", { maximumFractionDigits: 1 });
+function deltaBadge(cur, prev, suffix = "%") {  // 同比/环比徽标：升红▲ 降绿▼
+  if (cur === null || prev === null || !prev) return '<span class="delta-flat">—</span>';
+  if (suffix === "pct") {  // 比率类指标：变动按百分点差，不按相对幅度
+    const d = cur - prev;
+    const cls = d > 0.005 ? "delta-up" : d < -0.005 ? "delta-down" : "delta-flat";
+    const arrow = d > 0.005 ? "▲" : d < -0.005 ? "▼" : "";
+    return `<span class="${cls}">${d > 0 ? "+" : ""}${d.toFixed(1)}pct ${arrow}</span>`;
+  }
+  const pct = ((cur - prev) / Math.abs(prev)) * 100;
+  // 基数异常（如反向解析把季度数对上年度数）时同比无意义，按财报惯例标注 n.m.
+  if (Math.abs(pct) > 500)
+    return '<span class="delta-flat" title="基数差异过大，同比不具可比性">n.m.</span>';
+  const cls = pct > 0.05 ? "delta-up" : pct < -0.05 ? "delta-down" : "delta-flat";
+  const arrow = pct > 0.05 ? "▲" : pct < -0.05 ? "▼" : "";
+  const sign = pct > 0 ? "+" : "";
+  return `<span class="${cls}">${sign}${pct.toFixed(1)}${suffix} ${arrow}</span>`;
+}
+function kpiCard(name, valueHtml, footHtml, red = false) {
+  return `<div class="kpi${red ? " red" : ""}">
+    <div class="seal">${esc(name.slice(0, 1))}</div>
+    <div><div class="name">${esc(name)}</div>
+    <div class="value">${valueHtml}</div>
+    <div class="foot">${footHtml || ""}</div></div></div>`;
+}
+function kpiMoney(company, period, name, ids, red = false) {  // ids: [候选 item_id]
+  let cur = null, prev = null, used = null;
+  for (const id of ids) {
+    cur = toYi(fact(company, period, id, "cur")) ?? toYi(fact(company, period, id, "end"));
+    prev = toYi(fact(company, period, id, "prev_yoy")) ?? toYi(fact(company, period, id, "open"));
+    if (cur !== null) { used = id; break; }
+  }
+  if (cur === null) return "";
+  return kpiCard(name, `${yiFmt(cur)}<small> 亿元</small>`,
+    `同比 ${deltaBadge(cur, prev)}`, red);
+}
+function hero(titleA, titleB, lede) {
+  return `<div class="hero">
+    <div class="kicker">数据驱动决策 ｜ 财务创造价值</div>
+    <h1>${esc(titleA)}<em>${esc(titleB)}</em></h1>
+    <p class="lede">${esc(lede)}</p></div>`;
+}
+function covGrade(ratio) {  // 行/列覆盖率 → 字母等级（借鉴评价矩阵）
+  if (ratio >= 0.85) return ["A+", "a"];
+  if (ratio >= 0.65) return ["A", "a"];
+  if (ratio >= 0.45) return ["B+", "b"];
+  if (ratio >= 0.25) return ["B", "b"];
+  return ["C", "c"];
+}
 
 const SECTIONS = [
   { group: "总览" },
@@ -302,37 +446,35 @@ function show(id) {
 
 function renderOverview() {
   const d = DATA.metric_dictionary, a = DATA.accounting, c = DATA.coverage;
-  const cards = [
-    [(d.metrics_general || []).length, "通用指标"],
-    [(d.metrics_logistics || []).length, "物流行业指标"],
-    [(d.relations || []).length, "勾稽 / 分解关系"],
-    [Object.keys(d.report_items || {}).length, "CAS↔IFRS 映射"],
-    [(a.accounts || []).length, "会计科目"],
-    [(a.entry_templates || []).length, "分录模板"],
-    [c.snapshots.length, "财报快照（5 家公司）"],
-    [DATA.facts.length, "反向解析事实"],
-    [DATA.reports.length, "反向解析财报"],
+  const totalComputable = c.snapshots.reduce((s, x) => s + x.computable, 0);
+  const totalCells = c.snapshots.reduce((s, x) => s + x.total, 0);
+  const avgCov = Math.round((totalComputable / totalCells) * 100);
+  const kpis = [
+    kpiCard("通用指标", (d.metrics_general || []).length, "指标字典 v1.1 · D047"),
+    kpiCard("物流行业指标", (d.metrics_logistics || []).length, "物流口径专属"),
+    kpiCard("会计科目", (a.accounts || []).length, `${(a.entry_templates || []).length} 套分录模板`),
+    kpiCard("反向解析财报", DATA.reports.length, "5 家公司 · 4 个市场样本", true),
+    kpiCard("标准化事实", DATA.facts.length, "科目级 · 可溯源原文"),
+    kpiCard("指标覆盖均值", avgCov + '<small>%</small>', `${c.snapshots.length} 个公司期间快照`, true),
   ];
   return `
-    <h1>FLOW 静态资料库</h1>
-    <p class="sub">生成时间 ${esc(DATA.generated_at)} · 全部数据来自仓库内版本化 YAML
-      （config/metrics/ 与 docs/implementation/p5/），本页面零服务器、零数据库、可离线。</p>
-    <div class="cards">${cards.map(([n, l]) =>
-      `<div class="card"><b>${n}</b><span>${l}</span></div>`).join("")}
-    </div>
-    <h2>数据集版本</h2>
-    <table><thead><tr><th>数据集</th><th>ID</th><th>状态</th><th>决策</th></tr></thead><tbody>
-      <tr><td>指标字典</td><td><code>${esc(d.dictionary_id)}</code></td><td>${esc(d.status)}</td><td>${esc(d.decision_ref)}</td></tr>
-      <tr><td>会计基础</td><td><code>${esc(a.dataset_id)}</code></td><td>${esc(a.status)}</td><td>${esc(a.decision_ref)}</td></tr>
-      <tr><td>经营指标</td><td><code>${esc(DATA.operations.dictionary_id)}</code></td><td>${esc(DATA.operations.status)}</td><td>${esc(DATA.operations.decision_ref)}</td></tr>
-      <tr><td>覆盖矩阵</td><td><code>${esc(c.dataset_id)}</code></td><td>生成物</td><td>${esc(c.generator)}</td></tr>
-      <tr><td>事实库</td><td><code>${esc(DATA.facts_meta.dataset_id || "flow.p5_statement_facts.v1")}</code></td><td>生成物</td><td>p5_build_fact_store.py</td></tr>
+    ${hero("FLOW 静态资料库 · ", "指标体系与真实财报", "指标字典、会计基础与 5 家真实财报反向解析成果的总览；全部数据来自仓库内版本化 YAML，零服务器、零数据库、可离线。")}
+    <div class="kpis">${kpis.join("")}</div>
+    <div class="verdict"><b>核心判断：</b>指标库与会计基础已完成版本化沉淀（D040/D047），真实财报侧已打通「抽取 → 勾稽 → 事实库 → 覆盖矩阵」全链路；当前瓶颈在 IFRS 样本的资产负债明细行披露密度，覆盖缺口均显式标注、不推测填补。</div>
+    <h2 class="band">数据集版本登记</h2>
+    <table><thead><tr><th>数据集</th><th>ID</th><th>状态</th><th>决策 / 生成器</th></tr></thead><tbody>
+      <tr><td>指标字典</td><td><code>${esc(d.dictionary_id)}</code></td><td><span class="status ok">${esc(d.status)}</span></td><td>${esc(d.decision_ref)}</td></tr>
+      <tr><td>会计基础</td><td><code>${esc(a.dataset_id)}</code></td><td><span class="status ok">${esc(a.status)}</span></td><td>${esc(a.decision_ref)}</td></tr>
+      <tr><td>经营指标</td><td><code>${esc(DATA.operations.dictionary_id)}</code></td><td><span class="status ok">${esc(DATA.operations.status)}</span></td><td>${esc(DATA.operations.decision_ref)}</td></tr>
+      <tr><td>覆盖矩阵</td><td><code>${esc(c.dataset_id)}</code></td><td><span class="status warn">生成物</span></td><td><code>${esc(c.generator)}</code></td></tr>
+      <tr><td>事实库</td><td><code>${esc(DATA.facts_meta.dataset_id || "flow.p5_statement_facts.v1")}</code></td><td><span class="status warn">生成物</span></td><td><code>p5_build_fact_store.py</code></td></tr>
     </tbody></table>
-    <h2>使用方式</h2>
+    <h2 class="band">使用方式</h2>
     <ul class="notes">
-      <li>左侧菜单切换内容区；所有列表支持页内搜索。</li>
-      <li>重新生成：<code>python3 scripts/build_static_library_site.py</code>。</li>
-      <li>在线版本（需完整服务栈）：<code>/metric-library</code> 与 <code>/statements</code>。</li>
+      <li>左侧菜单切换内容区；指标、映射、科目、事实列表均支持页内搜索。</li>
+      <li>数据集更新后重新生成：<code>python3 scripts/build_static_library_site.py</code>（同时产出看板 Widget 变体 widget.html）。</li>
+      <li>在线版本（需完整服务栈）：<code>/metric-library</code> 的「真实财报覆盖」tab 与 <code>/statements</code> 报表分析页。</li>
+      <li>生成时间：${esc(DATA.generated_at)}</li>
     </ul>`;
 }
 
@@ -446,32 +588,112 @@ function renderStandards() {
 function renderCoverage() {
   const c = DATA.coverage;
   const key = (s) => `${s.company} ${s.period}`;
-  return `<h1>真实财报指标覆盖矩阵</h1>
-    <p class="sub"><code>${esc(c.dataset_id)}</code> · ${c.metrics.length} 个通用指标 ×
-      ${c.snapshots.length} 个公司期间快照 · 由 ${esc(c.generator)} 生成</p>
+  const pctOf = (s) => s.computable / s.total;
+  const clsOf = (p) => p >= 0.65 ? "hi" : p >= 0.35 ? "mid" : "lo";
+  const best = c.snapshots.reduce((a, b) => (pctOf(b) > pctOf(a) ? b : a));
+  const totalComputable = c.snapshots.reduce((s, x) => s + x.computable, 0);
+  const totalCells = c.snapshots.reduce((s, x) => s + x.total, 0);
+  const missCells = totalCells - totalComputable;
+  const kpis = [
+    kpiCard("覆盖快照", c.snapshots.length, "5 家公司 · 15 个期间"),
+    kpiCard("通用指标", c.metrics.length, "指标库 v0 评审集"),
+    kpiCard("覆盖均值", Math.round((totalComputable / totalCells) * 100) + '<small>%</small>',
+      `${totalComputable} / ${totalCells} 格可计算`, true),
+    kpiCard("最佳快照", `${best.computable}<small>/${best.total}</small>`,
+      `${COMPANY_SHORT[best.company] || best.company} ${best.period}`),
+    kpiCard("缺口格", missCells, "逐格标注首个缺失科目", true),
+  ];
+  return `${hero("真实财报 · ", "指标覆盖矩阵", `${c.metrics.length} 个通用指标 × ${c.snapshots.length} 个公司期间快照；数值来自 P5 反向解析事实库，缺口显式标注，不推测填补。`)}
+    <div class="kpis">${kpis.join("")}</div>
     <ul class="notes">${(c.caliber_notes || []).map((n) => `<li>${esc(n)}</li>`).join("")}</ul>
     <div class="scroll"><table>
-      <thead><tr><th>指标</th>${c.snapshots.map((s) =>
-        `<th class="num">${esc(COMPANY_SHORT[s.company] || s.company)}<br>
-          <span class="muted">${esc(s.period)}</span><br>
-          <span class="chip ${s.computable === s.total ? "green" : "gray"}">${s.computable}/${s.total}</span></th>`).join("")}
-      </tr></thead>
-      <tbody>${c.metrics.map((m) => `<tr>
+      <thead><tr><th>指标</th>${c.snapshots.map((s) => {
+        const p = pctOf(s), cls = clsOf(p);
+        return `<th class="num">${esc(COMPANY_SHORT[s.company] || s.company)}
+          <span class="muted" style="font-weight:400">${esc(s.period)}</span><br>
+          <span class="covpct ${cls}">${s.computable}/${s.total} · ${Math.round(p * 100)}%</span>
+          <span class="covbar ${cls}"><i style="width:${Math.round(p * 100)}%"></i></span></th>`;
+      }).join("")}<th class="num">行覆盖<br>等级</th></tr></thead>
+      <tbody>${c.metrics.map((m) => {
+        const hits = c.snapshots.filter((s) => {
+          const cell = (m.cells || {})[key(s)];
+          return cell && cell.display !== null && cell.display !== undefined;
+        }).length;
+        const [g, gc] = covGrade(hits / c.snapshots.length);
+        return `<tr>
         <td><code>${esc(m.metric_code)}</code> ${esc(m.name)}${m.unit ? `（${esc(m.unit)}）` : ""}</td>
         ${c.snapshots.map((s) => {
           const cell = (m.cells || {})[key(s)];
           if (!cell || cell.display === null || cell.display === undefined) {
-            return `<td class="num cov-miss" title="${esc(cell?.missing || "")}">${cell?.missing ? "缺 " + esc(cell.missing) : "—"}</td>`;
+            return `<td class="num cov-miss2" title="缺口：${esc(cell?.missing || "未映射")}">${cell?.missing ? "缺 " + esc(cell.missing) : "—"}</td>`;
           }
-          return `<td class="num">${esc(cell.display)}</td>`;
+          return `<td class="num cov-hit">${esc(cell.display)}</td>`;
         }).join("")}
-      </tr>`).join("")}</tbody>
+        <td class="num"><span class="grade ${gc}" title="${hits}/${c.snapshots.length} 快照可计算">${g}</span></td>
+      </tr>`; }).join("")}</tbody>
     </table></div>
+    <div class="verdict"><b>覆盖判断：</b>顺丰 2026Q1（CAS 全表披露）可计算 35/40 居首；京东物流 FY2025 达 29/40；
+      阿里系样本受 IFRS 摘要式披露限制在 22/40 左右，缺口集中于存货、应收应付等资产负债明细行；
+      腾讯单季业绩公告口径最薄（7/40），仅适合做盈利链指标。</div>
     <p class="muted">逐格取数说明见 docs/implementation/p5/metric_coverage_matrix.md；
-      口径映射 docs/implementation/p5/item_alias_map_v1.yaml。</p>`;
+      口径映射 docs/implementation/p5/item_alias_map_v1.yaml；悬停缺口格查看首个缺失科目。</p>`;
 }
 
 let reportState = { company: null, period: null };
+// 财报文件键 → 事实库键（公司 + 期间标签映射；腾讯事实库期间为 2Q2026）
+const FACT_KEY = {
+  alibaba: ["alibaba_9988", (p) => p], cainiao: ["cainiao", (p) => p],
+  jdl: ["jd_logistics_2618", (p) => p], sf: ["sf_002352", (p) => p],
+  tencent: ["tencent_0700", (p) => (p === "2026Q2" ? "2Q2026" : p)],
+};
+function reportKpis(company, period) {
+  const [fc, fp] = FACT_KEY[company] || [company, (p) => p];
+  const per = fp(period);
+  const cards = [
+    kpiMoney(fc, per, "营业收入", ["is.revenue"], true),
+    kpiMoney(fc, per, "归母净利润", ["is.attr_net_profit", "is.net_profit"], true),
+    kpiMoney(fc, per, "经营现金流", ["cf.ocf"]),
+    kpiMoney(fc, per, "总资产", ["bs.total_assets"]),
+  ];
+  // 资产负债率（期末）：负债总额 / 资产总额
+  const ta = toYi(fact(fc, per, "bs.total_assets", "end"));
+  const tl = toYi(fact(fc, per, "bs.total_liab", "end"));
+  const ta0 = toYi(fact(fc, per, "bs.total_assets", "open"));
+  const tl0 = toYi(fact(fc, per, "bs.total_liab", "open"));
+  if (ta && tl) {
+    const cur = (tl / ta) * 100;
+    const prev = ta0 && tl0 ? (tl0 / ta0) * 100 : null;
+    cards.push(kpiCard("资产负债率", cur.toFixed(1) + "<small>%</small>",
+      `较期初 ${deltaBadge(cur, prev, "pct")}`));
+  }
+  const rev = toYi(fact(fc, per, "is.revenue", "cur"));
+  const gp = toYi(fact(fc, per, "is.gross_profit", "cur"));
+  const rev0 = toYi(fact(fc, per, "is.revenue", "prev_yoy"));
+  const gp0 = toYi(fact(fc, per, "is.gross_profit", "prev_yoy"));
+  if (rev && gp) {
+    const cur = (gp / rev) * 100;
+    const prev = rev0 && gp0 ? (gp0 / rev0) * 100 : null;
+    cards.push(kpiCard("毛利率", cur.toFixed(1) + "<small>%</small>",
+      `同比 ${deltaBadge(cur, prev, "pct")}`));
+  }
+  return cards.join("");
+}
+function reportVerdict(company, period) {
+  const [fc, fp] = FACT_KEY[company] || [company, (p) => p];
+  const per = fp(period);
+  const rev = toYi(fact(fc, per, "is.revenue", "cur"));
+  const rev0 = toYi(fact(fc, per, "is.revenue", "prev_yoy"));
+  const np = toYi(fact(fc, per, "is.attr_net_profit", "cur")) ?? toYi(fact(fc, per, "is.net_profit", "cur"));
+  const bits = [];
+  if (rev !== null && rev0) {
+    const pct = ((rev - rev0) / rev0) * 100;
+    if (Math.abs(pct) <= 500) bits.push(`营业收入 ${yiFmt(rev)} 亿元，同比 ${pct >= 0 ? "增长" : "下降"} ${Math.abs(pct).toFixed(1)}%`);
+    else bits.push(`营业收入 ${yiFmt(rev)} 亿元（同比基数异常，从略）`);
+  } else if (rev !== null) bits.push(`营业收入 ${yiFmt(rev)} 亿元`);
+  if (rev && np !== null) bits.push(`净利率 ${((np / rev) * 100).toFixed(1)}%`);
+  if (!bits.length) return "";
+  return `<div class="verdict"><b>本期速览：</b>${bits.join("；")}。数值由事实库标准科目计算，披露单位已换算为亿元。</div>`;
+}
 function renderReports() {
   const companies = [...new Map(DATA.reports.map((r) => [r.company, r.company_name]))];
   reportState.company = reportState.company || companies[0][0];
@@ -479,8 +701,7 @@ function renderReports() {
   reportState.period = periods.includes(reportState.period) ? reportState.period : periods[0];
   const report = DATA.reports.find((r) =>
     r.company === reportState.company && r.period === reportState.period);
-  return `<h1>财报浏览器（P5 反向解析）</h1>
-    <p class="sub">${DATA.reports.length} 份财报的抽取原文表格，单位以各份披露为准。</p>
+  return `${hero("财报浏览器 · ", "反向解析原文", `${DATA.reports.length} 份财报的抽取原文表格；顶部 KPI 卡带由事实库标准科目计算，同比/较期初变动自动标注。`)}
     <div class="toolbar">
       <select onchange="reportState.company=this.value;show('reports')">
         ${companies.map(([id, name]) => `<option value="${id}"
@@ -489,13 +710,19 @@ function renderReports() {
       <select onchange="reportState.period=this.value;show('reports')">
         ${periods.map((p) => `<option ${p === reportState.period ? "selected" : ""}>${esc(p)}</option>`).join("")}
       </select>
-      <span class="muted">单位：${esc(report.unit)} · 来源：${esc(report.source_pdf)}</span>
+      <span class="muted">披露单位：${esc(report.unit)} · 来源：${esc(report.source_pdf)}</span>
     </div>
-    ${report.tables.map((t) => `<h2>${esc(t.name)}（${t.rows.length} 行）</h2>
+    <div class="kpis">${reportKpis(reportState.company, reportState.period)}</div>
+    ${reportVerdict(reportState.company, reportState.period)}
+    ${report.tables.map((t) => `<h2 class="band">${esc(t.name)}（${t.rows.length} 行）</h2>
       <div class="scroll"><table>
         <thead><tr><th>项目</th>${t.columns.map((c) => `<th class="num">${esc(c)}</th>`).join("")}</tr></thead>
         <tbody>${t.rows.map((r) => `<tr><td>${esc(r.item)}</td>
-          ${t.columns.map((c) => `<td class="num">${fmt(r[c])}</td>`).join("")}</tr>`).join("")}
+          ${t.columns.map((c) => {
+            const v = r[c];
+            const neg = typeof v === "number" && v < 0;
+            return `<td class="num${neg ? " neg" : ""}">${fmt(v)}</td>`;
+          }).join("")}</tr>`).join("")}
         </tbody></table></div>`).join("")}`;
 }
 
