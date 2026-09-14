@@ -18,6 +18,7 @@ from __future__ import annotations
 import hashlib
 import hmac
 import json
+from collections.abc import Iterator
 from datetime import UTC, datetime
 from typing import Annotated
 
@@ -34,13 +35,18 @@ from flow_api.security.principal import (
 )
 
 
-def get_session() -> Session:
+def get_session() -> Iterator[Session]:
     """FastAPI dependency: 提供与请求同生命周期的 Session。
 
-    复用 `get_session_factory`；在 dependency 结束（response 之后）由 FastAPI 关闭 session。
+    复用 `get_session_factory`。必须是 yield 型依赖：FastAPI 只对 yield 依赖
+    在请求结束后执行收尾，普通返回型依赖会泄漏连接池连接
+    （require_bearer_auth 挂在每个 /api/v1 路由上，泄漏会被放大）。
     """
     session = get_session_factory()()
-    return session
+    try:
+        yield session
+    finally:
+        session.close()
 
 
 class AuthError(Exception):
