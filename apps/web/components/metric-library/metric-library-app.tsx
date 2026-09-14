@@ -2,12 +2,14 @@
 
 // 指标库（D040）：只读呈现 flow.metric_dictionary.v0-draft 与会计基础数据集。
 // 数据全部来自 GET /api/v1/metric-library（版本化 YAML 数据集），页面不修改、不计算口径。
+// 视觉走报告风：hero（红顶 + kicker + 大标题）+ KPI 卡带 + 覆盖矩阵热力图 + verdict 条。
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import {
   FlowApiError,
   metricLibraryApi,
   type MetricCoverage,
+  type MetricCoverageCell,
   type MetricCoverageSnapshot,
   type MetricGovernanceEventLine,
   type MetricLibrary,
@@ -48,6 +50,31 @@ const TIME_BEHAVIOR_LABELS: Record<string, string> = {
   point_balance: "时点余额",
   average_balance: "平均余额",
 };
+
+const COMPANY_INITIALS: Record<string, string> = {
+  alibaba_9988: "阿",
+  cainiao: "菜",
+  jd_logistics_2618: "京",
+  sf_002352: "顺",
+  tencent_0700: "腾",
+};
+
+const COVERAGE_COMPANY_NAMES: Record<string, string> = {
+  alibaba_9988: "阿里巴巴",
+  cainiao: "菜鸟",
+  jd_logistics_2618: "京东物流",
+  sf_002352: "顺丰控股",
+  tencent_0700: "腾讯控股",
+};
+
+// 覆盖等级：A+/A/B+/B/C —— 绿/黄/红三档，对应静态站 widget 的 grade 配色。
+function coverageGrade(ratio: number): { label: string; tier: "a-plus" | "a" | "b-plus" | "b" | "c" } {
+  if (ratio >= 0.9) return { label: "A+", tier: "a-plus" };
+  if (ratio >= 0.75) return { label: "A", tier: "a" };
+  if (ratio >= 0.6) return { label: "B+", tier: "b-plus" };
+  if (ratio >= 0.4) return { label: "B", tier: "b" };
+  return { label: "C", tier: "c" };
+}
 
 type LoadState =
   | { kind: "loading" }
@@ -410,14 +437,6 @@ function GovernanceSection({ metrics }: { metrics: MetricLibraryEntry[] }) {
   );
 }
 
-const COVERAGE_COMPANY_NAMES: Record<string, string> = {
-  alibaba_9988: "阿里巴巴",
-  cainiao: "菜鸟",
-  jd_logistics_2618: "京东物流",
-  sf_002352: "顺丰控股",
-  tencent_0700: "腾讯控股",
-};
-
 function coverageCellKey(snapshot: MetricCoverageSnapshot): string {
   return `${snapshot.company} ${snapshot.period}`;
 }
@@ -426,6 +445,26 @@ type CoverageLoadState =
   | { kind: "loading" }
   | { kind: "error"; message: string }
   | { kind: "loaded"; coverage: MetricCoverage };
+
+function coverageCellClass(cell: MetricCoverageCell | undefined): string {
+  if (!cell || cell.display === null || cell.display === undefined) {
+    return "ml-cov__cell ml-cov__cell--miss";
+  }
+  // 解析 display：纯数字、百分比、负数、比率/倍
+  const text = String(cell.display);
+  const numeric = Number(text.replace(/[,%]/g, ""));
+  if (Number.isFinite(numeric)) {
+    if (text.includes("%")) {
+      // 百分比（>=10 绿 / >=0 黄 / <0 红）
+      if (numeric >= 10) return "ml-cov__cell ml-cov__cell--ok";
+      if (numeric >= 0) return "ml-cov__cell ml-cov__cell--warn";
+      return "ml-cov__cell ml-cov__cell--bad";
+    }
+    if (numeric < 0) return "ml-cov__cell ml-cov__cell--bad";
+    if (text.length > 4) return "ml-cov__cell ml-cov__cell--money";
+  }
+  return "ml-cov__cell ml-cov__cell--neutral";
+}
 
 function CoverageSection() {
   const [state, setState] = useState<CoverageLoadState>({ kind: "loading" });
@@ -470,76 +509,193 @@ function CoverageSection() {
 
   const { coverage } = state;
   const snapshots = coverage.snapshots;
+  const totalCells = snapshots.reduce((sum, s) => sum + s.total, 0);
+  const totalComputable = snapshots.reduce((sum, s) => sum + s.computable, 0);
+  const overallRatio = totalCells > 0 ? totalComputable / totalCells : 0;
+  const best = [...snapshots].sort((a, b) => (b.computable / b.total) - (a.computable / a.total))[0];
+  const missCount = totalCells - totalComputable;
+  // 行级平均：用于给指标打覆盖等级
+  const rowGrades = coverage.metrics.map((metric) => {
+    const filled = snapshots.filter((s) => {
+      const c = metric.cells[coverageCellKey(s)];
+      return c && c.display !== null && c.display !== undefined;
+    }).length;
+    const ratio = snapshots.length > 0 ? filled / snapshots.length : 0;
+    return { metric, filled, ratio, grade: coverageGrade(ratio) };
+  });
+  const worstRow = [...rowGrades].sort((a, b) => a.ratio - b.ratio)[0];
 
   return (
     <section className="ml-coverage" aria-label="真实财报指标覆盖矩阵">
-      <p className="ml-muted">
-        {coverage.title}（<code>{coverage.dataset_id}</code>）：
-        40 个通用指标 × {snapshots.length} 个公司期间快照，
-        数值来自 P5 反向解析事实库（{coverage.facts_source}），
-        口径映射见 {coverage.alias_map}，由 {coverage.generator} 生成。
-      </p>
+      <header className="ml-hero ml-hero--compact">
+        <div className="ml-hero__kicker">真实财报 · 反向解析</div>
+        <h1 className="ml-hero__title">
+          指标覆盖<em>矩阵</em>
+        </h1>
+        <p className="ml-hero__lede">
+          {coverage.title}（<code>{coverage.dataset_id}</code>）：
+          通用 {coverage.metrics.length} 指标 × {snapshots.length} 个公司期间快照；
+          数值来自 P5 反向解析事实库（{coverage.facts_source}），
+          口径映射见 {coverage.alias_map}，由 {coverage.generator} 生成。
+        </p>
+      </header>
+
+      <ul className="ml-kpis" aria-label="覆盖矩阵速览">
+        <li className="ml-kpi">
+          <span className="ml-kpi__seal" aria-hidden="true">快</span>
+          <div>
+            <p className="ml-kpi__name">覆盖快照</p>
+            <p className="ml-kpi__value">
+              {snapshots.length}<small> 个</small>
+            </p>
+            <p className="ml-kpi__foot">5 家公司 · 15 个期间</p>
+          </div>
+        </li>
+        <li className="ml-kpi">
+          <span className="ml-kpi__seal" aria-hidden="true">标</span>
+          <div>
+            <p className="ml-kpi__name">通用指标</p>
+            <p className="ml-kpi__value">{coverage.metrics.length}<small> 个</small></p>
+            <p className="ml-kpi__foot">指标库 v0 评审集</p>
+          </div>
+        </li>
+        <li className="ml-kpi ml-kpi--red">
+          <span className="ml-kpi__seal" aria-hidden="true">率</span>
+          <div>
+            <p className="ml-kpi__name">覆盖均值</p>
+            <p className="ml-kpi__value">
+              {Math.round(overallRatio * 100)}<small>%</small>
+            </p>
+            <p className="ml-kpi__foot">
+              {totalComputable}<small>/</small>{totalCells} 单元格
+            </p>
+          </div>
+        </li>
+        {best ? (
+          <li className="ml-kpi">
+            <span className="ml-kpi__seal" aria-hidden="true">优</span>
+            <div>
+              <p className="ml-kpi__name">最佳快照</p>
+              <p className="ml-kpi__value">
+                {best.computable}<small>/</small>{best.total}
+              </p>
+              <p className="ml-kpi__foot">
+                {COVERAGE_COMPANY_NAMES[best.company] ?? best.company} · {best.period}
+              </p>
+            </div>
+          </li>
+        ) : null}
+        <li className="ml-kpi ml-kpi--red">
+          <span className="ml-kpi__seal" aria-hidden="true">缺</span>
+          <div>
+            <p className="ml-kpi__name">缺口格</p>
+            <p className="ml-kpi__value">{missCount}<small> 格</small></p>
+            <p className="ml-kpi__foot">逐格标注首个缺失科目</p>
+          </div>
+        </li>
+      </ul>
+
       <ul className="ml-coverage__notes">
         {coverage.caliber_notes.map((note) => (
           <li key={note}>{note}</li>
         ))}
       </ul>
+
       <div className="ml-coverage__scroll">
-        <table className="ml-table ml-coverage__table">
+        <table className="ml-cov">
           <thead>
             <tr>
-              <th className="ml-coverage__metric">指标</th>
-              {snapshots.map((snapshot) => (
-                <th key={coverageCellKey(snapshot)}>
-                  <strong>
-                    {COVERAGE_COMPANY_NAMES[snapshot.company] ?? snapshot.company}
-                  </strong>
-                  <span className="ml-coverage__period">{snapshot.period}</span>
-                  <span
-                    className={
-                      snapshot.computable === snapshot.total
-                        ? "ml-coverage__ratio ml-coverage__ratio--full"
-                        : "ml-coverage__ratio"
-                    }
-                  >
-                    {snapshot.computable}/{snapshot.total}
-                  </span>
-                </th>
-              ))}
+              <th className="ml-cov__metric" scope="col">指标</th>
+              {snapshots.map((snapshot) => {
+                const ratio = snapshot.total > 0 ? snapshot.computable / snapshot.total : 0;
+                const grade = coverageGrade(ratio);
+                return (
+                  <th key={coverageCellKey(snapshot)} scope="col" className="ml-cov__col">
+                    <span className={`ml-cov__seal ml-cov__seal--${grade.tier}`} aria-hidden="true">
+                      {COMPANY_INITIALS[snapshot.company] ?? snapshot.company.slice(0, 1).toUpperCase()}
+                    </span>
+                    <strong className="ml-cov__company">
+                      {COVERAGE_COMPANY_NAMES[snapshot.company] ?? snapshot.company}
+                    </strong>
+                    <span className="ml-cov__period">{snapshot.period}</span>
+                    <span className="ml-cov__ratio">
+                      {snapshot.computable}/{snapshot.total}
+                    </span>
+                    <span className={`ml-cov__bar ml-cov__bar--${grade.tier}`} aria-hidden="true">
+                      <span style={{ width: `${Math.round(ratio * 100)}%` }} />
+                    </span>
+                  </th>
+                );
+              })}
             </tr>
           </thead>
           <tbody>
-            {coverage.metrics.map((metric) => (
-              <tr key={metric.metric_code}>
-                <th className="ml-coverage__metric" scope="row">
-                  <code>{metric.metric_code}</code> {metric.name}
-                  {metric.unit ? `（${metric.unit}）` : ""}
-                </th>
-                {snapshots.map((snapshot) => {
-                  const key = coverageCellKey(snapshot);
-                  const cell = metric.cells[key];
-                  if (!cell || cell.display === null || cell.display === undefined) {
+            {coverage.metrics.map((metric) => {
+              return (
+                <tr key={metric.metric_code}>
+                  <th className="ml-cov__metric" scope="row">
+                    <code>{metric.metric_code}</code> {metric.name}
+                    {metric.unit ? <span className="ml-cov__unit">（{metric.unit}）</span> : null}
+                  </th>
+                  {snapshots.map((snapshot) => {
+                    const key = coverageCellKey(snapshot);
+                    const cell = metric.cells[key];
+                    if (!cell || cell.display === null || cell.display === undefined) {
+                      return (
+                        <td
+                          key={key}
+                          className={coverageCellClass(cell)}
+                          title={cell?.missing ? `缺口：${cell.missing}` : undefined}
+                        >
+                          <span className="ml-cov__miss">缺 {cell?.missing ?? "—"}</span>
+                        </td>
+                      );
+                    }
                     return (
-                      <td
-                        key={key}
-                        className="ml-coverage__missing"
-                        title={cell?.missing ? `缺口：${cell.missing}` : undefined}
-                      >
-                        {cell?.missing ? `缺 ${cell.missing}` : "—"}
+                      <td key={key} className={coverageCellClass(cell)} title={cell.missing ? `首个缺失：${cell.missing}` : undefined}>
+                        {cell.display}
                       </td>
                     );
-                  }
-                  return (
-                    <td key={key} className="ml-coverage__value">
-                      {cell.display}
-                    </td>
-                  );
-                })}
-              </tr>
-            ))}
+                  })}
+                </tr>
+              );
+            })}
+            <tr className="ml-cov__grade-row">
+              <th scope="row" className="ml-cov__metric">覆盖等级</th>
+              {snapshots.map((snapshot) => {
+                const ratio = snapshot.total > 0 ? snapshot.computable / snapshot.total : 0;
+                const grade = coverageGrade(ratio);
+                return (
+                  <td key={`grade-${coverageCellKey(snapshot)}`} className="ml-cov__grade-cell">
+                    <span className={`ml-grade ml-grade--${grade.tier}`}>{grade.label}</span>
+                  </td>
+                );
+              })}
+            </tr>
           </tbody>
         </table>
       </div>
+
+      <div className="ml-verdict" role="note">
+        <b>覆盖判断：</b>
+        {best ? (
+          <>
+            最佳 {COVERAGE_COMPANY_NAMES[best.company] ?? best.company} {best.period}
+            可计算 {best.computable}/{best.total} 居首；整体均值 {Math.round(overallRatio * 100)}%；
+            缺口 {missCount} 格已逐格标注首个缺失科目。
+            {worstRow ? (
+              <>
+                {" "}最弱指标 <code>{worstRow.metric.metric_code}</code> 仅{" "}
+                {worstRow.filled}/{snapshots.length} 可计算，
+                后续可补 {snapshots.length - worstRow.filled} 家公司期间样本。
+              </>
+            ) : null}
+          </>
+        ) : (
+          "尚无快照数据。"
+        )}
+      </div>
+
       <p className="ml-muted">
         覆盖详情与逐格取数说明见 docs/implementation/p5/metric_coverage_matrix.md；
         重新生成：python scripts/p5_query_facts.py。
@@ -604,21 +760,68 @@ export function MetricLibraryApp() {
       a.code.includes(accountQuery) ||
       a.name.toLowerCase().includes(accountQuery.toLowerCase()),
   );
+  const mpmCount = library.metrics.filter((m) => m.mpm).length;
 
   return (
     <div className="metric-library">
-      <header className="ml-header">
-        <h1>指标库</h1>
-        <p>
-          {library.dictionary_id}（{library.status} · {library.decision_ref}）：
+      <header className="ml-hero">
+        <div className="ml-hero__kicker">指标库 · 数据驱动决策 ｜ 财务创造价值</div>
+        <h1 className="ml-hero__title">
+          FLOW 指标体系与<em>真实财报</em>
+        </h1>
+        <p className="ml-hero__lede">
+          {library.dictionary_id}（{library.status} · {library.decision_ref}）——
           通用 {general.length} 指标 + 物流行业 {logistics.length} 指标，
           {library.report_items.length} 项 CAS↔IFRS 取数映射，
-          会计基础 {library.accounting.accounts.length} 科目 / {library.accounting.entry_templates.length} 分录模板。
+          会计基础 {library.accounting.accounts.length} 科目 / {library.accounting.entry_templates.length} 套分录模板。
         </p>
-        <p className="ml-header__note">
+        <p className="ml-hero__note">
           数据集为版本化 YAML（config/metrics/），口径变更以新版本进入、旧版本保留；本页只读，评审取舍在评审台完成。
         </p>
       </header>
+
+      <ul className="ml-kpis" aria-label="指标库速览">
+        <li className="ml-kpi">
+          <span className="ml-kpi__seal" aria-hidden="true">通</span>
+          <div>
+            <p className="ml-kpi__name">通用指标</p>
+            <p className="ml-kpi__value">{general.length}<small> 项</small></p>
+            <p className="ml-kpi__foot">跨行业可用</p>
+          </div>
+        </li>
+        <li className="ml-kpi ml-kpi--red">
+          <span className="ml-kpi__seal" aria-hidden="true">物</span>
+          <div>
+            <p className="ml-kpi__name">物流行业指标</p>
+            <p className="ml-kpi__value">{logistics.length}<small> 项</small></p>
+            <p className="ml-kpi__foot">物流口径专属</p>
+          </div>
+        </li>
+        <li className="ml-kpi">
+          <span className="ml-kpi__seal" aria-hidden="true">月</span>
+          <div>
+            <p className="ml-kpi__name">MPM 月度必备</p>
+            <p className="ml-kpi__value">{mpmCount}<small> 项</small></p>
+            <p className="ml-kpi__foot">经营分析必看</p>
+          </div>
+        </li>
+        <li className="ml-kpi">
+          <span className="ml-kpi__seal" aria-hidden="true">科</span>
+          <div>
+            <p className="ml-kpi__name">会计科目</p>
+            <p className="ml-kpi__value">{library.accounting.accounts.length}<small> 个</small></p>
+            <p className="ml-kpi__foot">{library.accounting.entry_templates.length} 套分录模板</p>
+          </div>
+        </li>
+        <li className="ml-kpi">
+          <span className="ml-kpi__seal" aria-hidden="true">映</span>
+          <div>
+            <p className="ml-kpi__name">CAS↔IFRS 映射</p>
+            <p className="ml-kpi__value">{library.report_items.length}<small> 项</small></p>
+            <p className="ml-kpi__foot">取数口径留痕</p>
+          </div>
+        </li>
+      </ul>
 
       {notice ? (
         <p className="ml-notice" role="status">{notice}</p>
@@ -772,6 +975,15 @@ export function MetricLibraryApp() {
           ) : null}
         </section>
       ) : null}
+
+      <div className="ml-verdict" role="note">
+        <b>核心判断：</b>
+        指标字典已完成 {general.length + logistics.length} 项通用与物流指标的版本化沉淀
+        （{library.dictionary_id}，{library.status}），
+        会计基础 {library.accounting.accounts.length} 科目 / {library.accounting.entry_templates.length} 套分录模板已就绪；
+        真实财报侧已打通「抽取 → 勾稽 → 事实库 → 覆盖矩阵」全链路（{library.report_items.length} 项 CAS↔IFRS 取数映射）。
+        评审与口径变更走「修订」按钮，留痕至治理记录页。
+      </div>
     </div>
   );
 }

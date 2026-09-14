@@ -38,7 +38,7 @@ test("报表分析在真实系统内渲染图形与表格（P5 顺丰数据）",
   await page.route("**/api/v1/statements", (route) => route.fulfill({ json: { reports: [SUMMARY] } }));
   await page.route(`**/api/v1/statements/${REPORT_ID}`, (route) => route.fulfill({ json: DETAIL }));
   await page.goto("/statements");
-  await expect(page.getByRole("heading", { name: "报表分析" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /公开财报.*图形化.*分析/ })).toBeVisible();
   await expect(page.getByText("顺丰控股").first()).toBeVisible();
   await expect(page.getByRole("img", { name: /利润形成瀑布图/ })).toBeVisible();
   await expect(page.getByRole("heading", { name: /四表原文/ })).toBeVisible();

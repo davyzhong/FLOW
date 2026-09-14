@@ -5,6 +5,26 @@
     system-ui, -apple-system, sans-serif;
   background: #f3f6fa;
   color: #13233a;
+  /* v2 报告风共用设计令牌（与 scripts/build_static_library_site.py 同源）：
+     深藏青（标题/正文重）+ 中国红（强调/缺口/下行）+ 金棕（评级/中性） */
+  --rep-ink: #13233a;
+  --rep-ink-2: #233043;
+  --rep-navy: #16324f;
+  --rep-navy-2: #1f4e79;
+  --rep-muted: #52637a;
+  --rep-line: #dfe6ef;
+  --rep-line-2: #edf1f6;
+  --rep-bg: #f3f6fa;
+  --rep-card: #ffffff;
+  --rep-red: #c0392b;
+  --rep-red-soft: #fbeae8;
+  --rep-ok: #18794e;
+  --rep-ok-soft: #e5f5ec;
+  --rep-warn: #b7791f;
+  --rep-warn-soft: #fdf3e3;
+  --rep-blue: #1769e8;
+  --rep-blue-soft: #eaf1fe;
+  --rep-zebra: #f6f8fb;
 }
 
 * {

@@ -1,10 +1,34 @@
-/* 报表分析（/statements）样式：跟随全局 CSS 惯例，BEM 风格类名。 */
+/* 报表分析（/statements）样式 · v2 报告风
+ * 与 apps/web/app/globals.css 共享设计令牌；与 scripts/build_static_library_site.py 同源。
+ * 旧类名（.statements-layout / .stmt-kpi / .stmt-page-header 等）保留以兼容既有测试。 */
 
+.statements-app {
+  display: grid;
+  gap: 18px;
+  --rep-ink: #13233a;
+  --rep-ink-2: #233043;
+  --rep-navy: #16324f;
+  --rep-navy-2: #1f4e79;
+  --rep-muted: #52637a;
+  --rep-line: #dfe6ef;
+  --rep-line-2: #edf1f6;
+  --rep-card: #ffffff;
+  --rep-red: #c0392b;
+  --rep-red-soft: #fbeae8;
+  --rep-ok: #18794e;
+  --rep-ok-soft: #e5f5ec;
+  --rep-warn: #b7791f;
+  --rep-warn-soft: #fdf3e3;
+  --rep-blue: #1769e8;
+  --rep-blue-soft: #eaf1fe;
+  --rep-zebra: #f6f8fb;
+}
+
+/* 旧 .statements-layout（保留兼容） */
 .statements-layout {
   display: flex;
   min-height: 100vh;
   background: #f4f6fb;
-  /* WorkflowNav 依赖 dashboard-app 作用域的调色板变量，这里补齐同一套。 */
   --ink: #15243b;
   --muted: #52637a;
   --line: #dfe6ef;
@@ -15,19 +39,51 @@
   --amber: #805000;
 }
 
+/* ===== Hero 页头 ===== */
+.stmt-hero {
+  border-top: 4px solid var(--rep-red);
+  padding-top: 16px;
+  margin-bottom: 4px;
+}
+.stmt-hero__kicker {
+  color: var(--rep-muted);
+  font-size: 12px;
+  letter-spacing: 0.32em;
+  margin-bottom: 8px;
+}
+.stmt-hero__title {
+  margin: 0 0 8px;
+  font-size: 30px;
+  line-height: 1.2;
+  font-weight: 600;
+  color: var(--rep-navy);
+}
+.stmt-hero__title em {
+  color: var(--rep-red);
+  font-style: normal;
+}
+.stmt-hero__lede {
+  margin: 0;
+  color: var(--rep-muted);
+  font-size: 13.5px;
+  line-height: 1.7;
+  max-width: 880px;
+}
+
 .stmt-main {
   flex: 1;
   padding: 24px 32px 64px;
   max-width: 1180px;
 }
 
+/* 旧 .stmt-page-header（保留兼容） */
 .stmt-page-header h1 {
   font-size: 22px;
   margin: 0 0 4px;
 }
 
 .stmt-page-header p {
-  color: var(--muted, #52637a);
+  color: var(--rep-muted, #52637a);
   font-size: 13px;
   margin: 0 0 18px;
   max-width: 860px;
@@ -65,39 +121,45 @@
 }
 
 .stmt-report-tabs button {
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--rep-line, #e2e8f0);
   background: #fff;
   border-radius: 10px;
   padding: 8px 14px;
   cursor: pointer;
   display: grid;
   text-align: left;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.stmt-report-tabs button:hover {
+  border-color: var(--rep-blue, #1769e8);
 }
 
 .stmt-report-tabs button span {
-  color: var(--muted, #52637a);
+  color: var(--rep-muted, #52637a);
   font-size: 12px;
 }
 
 .stmt-report-tabs button.is-active {
-  border-color: #2563eb;
-  background: #eff6ff;
+  border-color: var(--rep-blue, #1769e8);
+  background: var(--rep-blue-soft, #eaf1fe);
 }
 
 .stmt-detail__header h2 {
   font-size: 18px;
   margin: 0 0 4px;
+  color: var(--rep-navy, #16324f);
 }
 
 .stmt-meta {
-  color: var(--muted, #52637a);
+  color: var(--rep-muted, #52637a);
   font-size: 13px;
   font-weight: 400;
   margin-left: 10px;
 }
 
 .stmt-source {
-  color: var(--muted, #52637a);
+  color: var(--rep-muted, #52637a);
   font-size: 12px;
   margin: 0 0 14px;
 }
@@ -109,36 +171,68 @@
   padding: 1px 7px;
   margin-right: 8px;
   font-size: 11.5px;
+  color: var(--rep-ink, #13233a);
 }
 
+/* ===== KPI 卡带（报告风：圆形首字徽章 + 大数字） ===== */
 .stmt-kpi-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 10px;
   margin: 0 0 16px;
 }
 
 .stmt-kpi {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   background: #fff;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--rep-line, #e2e8f0);
   border-radius: 10px;
-  padding: 10px 14px;
+  padding: 12px 14px;
 }
 
+.stmt-kpi__seal {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--rep-navy, #16324f);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  display: grid;
+  place-items: center;
+}
+
+.stmt-kpi--red .stmt-kpi__seal {
+  background: var(--rep-red, #c0392b);
+}
+
+.stmt-kpi__body { min-width: 0; flex: 1; }
+
 .stmt-kpi dt {
-  color: #64748b;
+  color: var(--rep-muted, #52637a);
   font-size: 12px;
+  margin: 0;
 }
 
 .stmt-kpi dd {
   margin: 2px 0 0;
-  font-size: 18px;
-  font-weight: 650;
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--rep-navy, #16324f);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.15;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
+/* ===== 图表卡 ===== */
 .stmt-chart-card {
   background: #fff;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--rep-line, #e2e8f0);
   border-radius: 12px;
   padding: 14px 16px;
   margin-bottom: 14px;
@@ -147,7 +241,8 @@
 .stmt-chart-card h3 {
   font-size: 14px;
   margin: 0 0 8px;
-  color: #1e293b;
+  color: var(--rep-navy, #16324f);
+  font-weight: 600;
 }
 
 .stmt-chart-row {
@@ -172,17 +267,35 @@
 .stmt-xlab { font-size: 11.5px; fill: #475569; }
 .stmt-vlabel { font-size: 10.5px; fill: #334155; font-weight: 600; }
 .stmt-legend { font-size: 11px; fill: #475569; }
-.stmt-donut-total { font-size: 17px; font-weight: 700; fill: #1e293b; }
+.stmt-donut-total { font-size: 17px; font-weight: 700; fill: var(--rep-navy, #1e293b); }
 
+/* ===== Verdict 红竖线结论条 ===== */
+.stmt-verdict {
+  margin: 4px 0 16px;
+  padding: 12px 16px 12px 18px;
+  border-left: 4px solid var(--rep-red, #c0392b);
+  background: #fff;
+  border-top: 1px solid var(--rep-line, #dfe6ef);
+  border-right: 1px solid var(--rep-line, #dfe6ef);
+  border-bottom: 1px solid var(--rep-line, #dfe6ef);
+  border-radius: 0 8px 8px 0;
+  font-size: 13.5px;
+  color: var(--rep-ink, #13233a);
+  line-height: 1.7;
+}
+.stmt-verdict b { color: var(--rep-navy, #16324f); }
+
+/* ===== 四表原文表格（深藏青表头 + 斑马纹 + 负数红字） ===== */
 .stmt-tables h3 {
   font-size: 14px;
-  color: #1e293b;
+  color: var(--rep-navy, #16324f);
   margin: 18px 0 8px;
+  font-weight: 600;
 }
 
 .stmt-section {
   background: #fff;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--rep-line, #e2e8f0);
   border-radius: 12px;
   margin-bottom: 10px;
   padding: 10px 14px;
@@ -192,10 +305,11 @@
   cursor: pointer;
   font-weight: 600;
   font-size: 14px;
+  color: var(--rep-navy, #16324f);
 }
 
 .stmt-section summary small {
-  color: var(--muted, #52637a);
+  color: var(--rep-muted, #52637a);
   font-weight: 400;
   margin-left: 10px;
 }
@@ -215,20 +329,31 @@
 .stmt-table-wrap th,
 .stmt-table-wrap td {
   padding: 6px 10px;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid var(--rep-line-2, #f1f5f9);
   text-align: left;
 }
 
 .stmt-table-wrap th {
   position: sticky;
   top: 0;
-  background: #f8fafc;
+  background: var(--rep-navy, #16324f);
+  color: #fff;
+  font-weight: 500;
+}
+
+.stmt-table-wrap tbody tr:nth-child(even) td {
+  background: var(--rep-zebra, #f6f8fb);
 }
 
 .stmt-table-wrap td.is-num,
 .stmt-table-wrap th.is-num {
   text-align: right;
   font-variant-numeric: tabular-nums;
+}
+
+.stmt-table-wrap td.is-num.neg,
+.stmt-table-wrap td.neg {
+  color: var(--rep-red, #c0392b);
 }
 
 /* 事实复核面板（B05） */
