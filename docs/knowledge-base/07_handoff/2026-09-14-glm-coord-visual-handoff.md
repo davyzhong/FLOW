@@ -141,6 +141,13 @@ related: [HANDOFF.md, 2026-09-13-s01-session-handoff.md]
 - 本会话两次推送都成功（`4be2c0f` / `e114ae3`），但推送时 `git status` 仍脏——脏的都不是我引入的，是其他并行会话的 WIP。
 - 推送命令走 `git push origin glm-coord:codex/s01-parallel-integration`（指定源:目标分支），不是 `git push origin HEAD`，因为本地分支 `glm-coord` 与 `origin/codex/s01-parallel-integration` 是 tracking 关系但 `HEAD` 可能错位。
 
+### 6.9 并发分支收口（2026-09-14 上午，用户要求"所有并发分支合并到主分支"）
+- **做法**：本地 `main` 从 `aade2e2` fast-forward 22 个 commit 到 `c806033`（= `origin/codex/s01-parallel-integration` = `origin/main` 当时的 SHA），然后用 `--no-ff` 合并 5 个有独有 commit 的分支。
+- **合并结果**：5 个 merge commit 落在 main（`09333bc` / `13a03ca` / `f5d9c52` / `5e8b925` / `91bfb56`），把 4 个 codex/s01-* 分支独有的 13 个 commit 拉进来。`origin/main` 从 `c806033` 推进到 `91bfb56`。
+- **故意跳过 `codex/s01-route-policy` v1**：v1 的 `0841ff9 feat(security): enforce policy across sensitive routes` 已被 v2（`997c1ab feat(security): route policy registry, loaders and require_action per approved V1.1`）按"approved V1.1"路线取代。强行合并 v1 会在 `audit.py / authorization.py / principal.py / settings.py / test_auth_boundary.py` 五个 security 文件上与 v2 冲突，**等同于回退到被拒绝的设计**。分支仍存在（`cf90df0`），可作为审计证据，但不应合入 main。
+- **没合并的分支（已无需合并）**：`codex/s01-full-verification` 和 `codex/s01-module-boundaries` 共享同一组 commit（同一 SHA `a4051ea`），合并其一即覆盖。
+- **验证**：`make contracts-check` 干净、`tsc --noEmit` 干净、`vitest run` 64/64 通过。
+
 ---
 
 ## 7. 关键命令速查
