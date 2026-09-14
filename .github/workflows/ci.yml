@@ -283,6 +283,28 @@ jobs:
       - run: curl --fail http://localhost:3000/
       - run: docker compose -f infra/compose.yaml exec -T worker celery -A flow_api.worker:celery_app inspect ping
 
+  module-boundaries-e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.13"
+          enable-cache: true
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.17.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: npx --yes pnpm@10.17.1 install --frozen-lockfile
+      - run: npx --yes pnpm@10.17.1 --filter @flow/web exec playwright install --with-deps chromium
+      - run: bash scripts/test_module_boundaries_e2e.sh
+      - if: failure()
+        run: find apps/web/test-results -name "*.md" -exec cat {} \; 2>/dev/null || true
+
   user-closure-e2e:
     runs-on: ubuntu-latest
     timeout-minutes: 45

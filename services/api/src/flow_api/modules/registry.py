@@ -8,7 +8,7 @@ from __future__ import annotations
 from typing import Any, Literal
 
 ModuleLayer = Literal["product", "governance"]
-ModuleStatus = Literal["implemented", "designed"]
+ModuleStatus = Literal["implemented", "designed", "gated"]
 
 
 class ModuleDescriptor(dict[str, Any]):

@@ -43,3 +43,11 @@ test.describe("module boundaries", () => {
     await expect(nav.locator('a[href="/internal#governance"]')).toHaveCount(1);
   });
 });
+
+// Phase 2 补差（GPT 修正单）：/internal#governance 真实锚点 + gated 三态可见
+test("internal page exposes governance anchor and gated status", async ({ page }) => {
+  await page.goto("/internal#governance");
+  await expect(page.locator("#governance")).toBeAttached();
+  await expect(page.locator("#module-professional_governance")).toBeAttached();
+  await expect(page.locator("#module-internal_workbench")).toBeAttached();
+});

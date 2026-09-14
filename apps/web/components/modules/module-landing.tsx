@@ -11,7 +11,7 @@ export type ModuleDescriptor = {
   id: string;
   name: string;
   layer: "product" | "governance";
-  status: "implemented" | "designed";
+  status: "implemented" | "designed" | "gated";
   entry?: { href: string; label: string };
 };
 
@@ -43,6 +43,12 @@ const LAYER_LABELS: Record<ModuleDescriptor["layer"], string> = {
   governance: "治理层",
 };
 
+const STATUS_LABELS: Record<ModuleDescriptor["status"], string> = {
+  implemented: "已实现",
+  designed: "规划中",
+  gated: "受控开放",
+};
+
 export function ModuleLanding({
   title,
   subtitle,
@@ -61,11 +67,15 @@ export function ModuleLanding({
       </header>
       <ul className="module-landing__grid">
         {modules.map((m) => (
-          <li key={m.id} className={`module-landing__card module-landing__card--${m.status}`}>
+          <li
+            key={m.id}
+            id={`module-${m.id}`}
+            className={`module-landing__card module-landing__card--${m.status}`}
+          >
             <header>
               <strong>{m.name}</strong>
               <span className={`module-landing__status module-landing__status--${m.status}`}>
-                {m.status === "implemented" ? "已实现" : "规划中"}
+                {STATUS_LABELS[m.status]}
               </span>
             </header>
             <small>{LAYER_LABELS[m.layer]}</small>
@@ -75,7 +85,9 @@ export function ModuleLanding({
               </Link>
             ) : (
               <p className="module-landing__planned">
-                该模块处于设计阶段，尚未提供可操作入口。
+                {m.status === "gated"
+                  ? "该模块受控开放，需相应权限访问。"
+                  : "该模块处于设计阶段，尚未提供可操作入口。"}
               </p>
             )}
           </li>
