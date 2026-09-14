@@ -107,9 +107,15 @@ def main() -> None:
     blob = json.dumps(payload, ensure_ascii=False, default=str).replace("</", "<\\/")
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(HTML.replace("__DATA__", blob), encoding="utf-8")
+    html = HTML.replace("__DATA__", blob)
+    OUT.write_text(html, encoding="utf-8")
+    # Widget 版：同一内容与交互，追加 Kimi 设计令牌覆盖层（透明背景、看板内自适应），
+    # 供 Dashboard Widget 的 index.html 使用。
+    widget_out = OUT.parent / "widget.html"
+    widget_out.write_text(html.replace("</style>", WIDGET_OVERRIDES + "\n</style>"), encoding="utf-8")
     size_kb = OUT.stat().st_size / 1024
     print(f"written: {OUT} ({size_kb:.0f} KB)")
+    print(f"written: {widget_out} (widget variant)")
     print(
         "sections: "
         f"通用指标 {len(metric_dict.get('metrics_general') or [])} · "
@@ -118,6 +124,49 @@ def main() -> None:
         f"覆盖矩阵 {len(coverage.get('metrics') or [])}×{len(coverage.get('snapshots') or [])} · "
         f"财报 {len(reports)} 份 · 事实 {len(facts_doc['facts'])} 条"
     )
+
+
+WIDGET_OVERRIDES = """
+/* ---- Dashboard Widget 变体：Kimi 设计令牌覆盖层（追加于末尾，级联生效） ---- */
+body { background: transparent; color: var(--kimi-color-text-primary, #1c2634);
+  font-family: var(--kimi-font-sans, sans-serif); }
+nav { background: transparent; color: var(--kimi-color-text-secondary, #66788f);
+  border-right: 1px solid var(--kimi-color-border, #e2e8f0); }
+nav .brand { border-bottom-color: var(--kimi-color-border, #e2e8f0); }
+nav .brand b { color: var(--kimi-color-text-primary, #1c2634); }
+nav .brand span { color: var(--kimi-color-text-tertiary, #66788f); }
+nav a { color: var(--kimi-color-text-secondary, #66788f); }
+nav a:hover { background: var(--kimi-color-surface-muted, #f1f5f9); }
+nav a.active { background: var(--kimi-color-surface-muted, #f1f5f9);
+  color: var(--kimi-color-text-primary, #1c2634);
+  border-left-color: var(--kimi-color-text-primary, #1c2634); }
+nav .group { color: var(--kimi-color-text-quaternary, #94a3b8); }
+.card, .metric, details { background: transparent;
+  border-color: var(--kimi-color-border, #e2e8f0); }
+.card b { font-weight: 500; }
+table { background: transparent; border-color: var(--kimi-color-border, #e2e8f0); }
+th, td { border-bottom-color: var(--kimi-color-border, #e2e8f0); }
+th { background: var(--kimi-color-surface-muted, #f1f5f9);
+  color: var(--kimi-color-text-secondary, #475569); font-weight: 500; }
+code { background: var(--kimi-color-surface-muted, #eef2f7);
+  font-family: var(--kimi-font-mono, monospace); }
+.chip { background: var(--kimi-color-surface-muted, #eaf1fe);
+  color: var(--kimi-color-text-secondary, #2563eb); }
+.chip.green { background: color-mix(in srgb, var(--kimi-color-positive, #18794e) 14%, transparent);
+  color: var(--kimi-color-positive, #18794e); }
+.chip.gray { background: var(--kimi-color-surface-muted, #eef2f7);
+  color: var(--kimi-color-text-tertiary, #66788f); }
+input[type=search], select { background: transparent;
+  border-color: var(--kimi-color-border, #e2e8f0);
+  color: var(--kimi-color-text-primary, #1c2634); font: inherit; }
+.sub, .muted, .metric .caliber, ul.notes, .cov-miss { color: var(--kimi-color-text-tertiary, #8a97a8); }
+.metric dt { color: var(--kimi-color-text-tertiary, #66788f); }
+.scroll { border-color: var(--kimi-color-border, #e2e8f0); }
+.ml-coverage__metric, .ml-coverage__table tbody .ml-coverage__metric { background: transparent; }
+/* 看板表面：宿主给定视口，左侧导航吸顶、右侧内容滚动 */
+.on-canvas .layout { height: 100vh; min-height: 0; }
+.on-canvas main { max-height: 100vh; overflow-y: auto; }
+"""
 
 
 HTML = """<!DOCTYPE html>
@@ -506,6 +555,7 @@ function renderOperations() {
 }
 
 nav();
+if (window.DaimonCanvas) document.documentElement.classList.add("on-canvas");
 document.getElementById("gen").textContent = "生成于 " + DATA.generated_at.slice(0, 16).replace("T", " ");
 show(location.hash.slice(1) || "overview");
 </script>
