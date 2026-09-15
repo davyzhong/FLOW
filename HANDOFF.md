@@ -1,340 +1,206 @@
 ---
 doc_id: FLOW-HANDOFF-STRATEGY-20260912
-title: FLOW 三智能体并行重构总交接
+title: FLOW 项目尽调、优化与单 Agent 执行总交接
 doc_type: navigation
 status: current
-version: 2.1
+version: 3.0
 created_at: 2026-09-12
-updated_at: 2026-09-13
+updated_at: 2026-09-15
 owner: FLOW
 applies_to: repository
 ---
 
-# FLOW 三智能体并行重构总交接｜2026-09-13
+# FLOW 项目尽调、优化与单 Agent 执行总交接｜2026-09-15
 
-> 本页是 GPT-5.6 Sol、Kimi K3、GLM 5.3 和主协调者的统一交接入口。下面“历史战略交接”保留原有 D052–D054 背景，当前执行以本页前半部分和链接的正式计划为准。
+> 本页是下一位单一 Agent 的工作入口，整合了多 Agent 执行审计、R1 修复复核、竞品与方法论研究、工程收口计划和后续产品优化建议。它负责说明“现在在哪里、还要查什么、先改什么、怎样证明完成”；项目状态仍以 [PROJECT_STATE](docs/00_start_here/PROJECT_STATE.md) 为唯一事实源，任务顺序仍以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为唯一执行入口。
 
-## 0. 当前结论
+## 0. 执行摘要
 
-U8 已冻结并可恢复；S01 Task 1–5 已形成代码提交。下一阶段不再由一个智能体串行承担全部 Task 6–10，而采用三执行者独立 worktree、主协调者串行集成。
+### 0.1 当前可信结论
 
-**执行更新（2026-09-13）**：用户已明确批准安全规格并下令开始执行。integration 基线 `b8a3edd` 已建立；Kimi 候选 `0841ff9` 与 GLM 候选 `07d82f2` 已推送。两者当前只进入审查队列：Kimi 分支早于 Sol Bootstrap，不得直接合并；GLM 前端在 Task 7 合同完成后通过新集成分支移植。当前由主协调者完成安全规格 V1.1 独立审查与 Sol Bootstrap。
+- 当前审查基准为 `main@c93c896`；最近已确认的绿色恢复基线是 `640cfb8`，对应 FLOW CI run `34907918485`，17/17 jobs 全绿。
+- U8 已完成并建立可恢复冻结基线；S01 Task 1–5 已完成。
+- 多 Agent 并行已经终止，后续采用**单一 Agent、逐 Gate、串行执行**。历史 Sol/Kimi/GLM 名称只表示审计来源和问题域，不再表示新的并行派工。
+- R0 和 R1 已完成：持久审计、action×resource 授权、严格身份 JSON、legacy cutoff 收窄、66 条路由 `require_action` 接线、correlation 中间件及迁移 `0027_security_contract_fix` 已进入主线。
+- 当前没有发现产品战略方向跑偏。FLOW 的核心仍是“经分专员使用的财务经营分析工作台”，系统尽量自主完成数据、证据、分析和报告草稿，经分专员统一终审发布；公开财报分析是独立先行模块，不是最终产品替代品。
+- **S01 尚未完成，Task 6 不能关闭。**必须依次完成 R2、R3、R4，并在同一最终 SHA 上通过全部门禁，才能进入公开模块 C 级出口。
 
-设计本交接时的仓库基线：
+### 0.2 当前最重要的偏差与缺口
 
-- `main` / `origin/main`: `4ec50bc`；
-- U8 严格冻结：`914a473`，标签 `flow-u8-freeze-20260913`；
-- Task 5 企业周期实现：`15c57c6`，迁移目标 `0025_enterprise_cycle`；
-- `4ec50bc` 的 FLOW CI run `34755147722` 已 success；执行 Gate 0 时仍以最新 main 和最新绿色 run 为准；
-- 本页是计划，不代表 Task 6 已经开工。
-
-接手时必须重新 `git fetch` 并以最新绿色 main 为准，不得机械使用这里的旧 SHA 创建执行分支。
-
-## 1. 必读文档
-
-1. [三智能体并行编排设计](docs/superpowers/specs/2026-09-13-flow-three-agent-parallel-orchestration-design.md)——为什么这样分工、合同、所有权、失败边界；
-2. [三智能体并行实施计划](docs/superpowers/plans/2026-09-13-flow-three-agent-parallel-restructuring.md)——Task 0–7、精确文件和测试；
-3. [三智能体执行使用手册](docs/70_operations/three-agent-parallel-execution-runbook.md)——派发提示词、交付格式、合并方法；
-4. [原 S01 详细计划](docs/superpowers/plans/2026-09-13-flow-post-u8-boundary-gate.md)——Task 6–10 的功能范围；
-5. [S01 工作包](docs/50_plans/work_items/S01--post-u8-boundary-contract-security.md)与[唯一当前路线图](docs/50_plans/CURRENT_ROADMAP.md)——唯一状态真相。
-
-新计划是原 S01 计划的执行编排层，不是第二份路线图，不扩大产品范围。
-
-## 2. 三个智能体的固定职责
-
-| 智能体 | 主要工作 | 不得修改 |
+| 类型 | 当前判断 | 处理方式 |
 |---|---|---|
-| GPT-5.6 Sol | 安全 ABI、授权纯函数、身份解析、0026、审计持久化、publication/object-store 事务边界、负向安全验证 | 除串行 publishing/operations 外的业务 route、前端、路线图、HANDOFF |
-| Kimi K3 | 全挂载路由盘点、route policy、七组敏感入口接线、旧工作包/证据继承 review 备忘 | publishing/operations 两条 Sol 路由、Principal/authorize 第二实现、迁移、前端、权威状态与 backlog 修改 |
-| GLM 5.3 | 两模块前端、模块 registry/ownership/AST、API 契约生成、受控 E2E runner、Task 9 全链验证 | 安全迁移、产品状态裁决、HANDOFF |
-| 主协调者 | 规格冻结、共同基线、分支派发、diff 审查、合并、CI 门禁、交付记录、权威状态和最终关闭 | 不把未经验证的执行者总结直接当完成证据 |
+| 多 Agent 流程跑偏 | 已停止继续扩大；历史上发生过共用检出竞争、绕过合并序列、跨门禁推进、范围污染和不可归因提交 | 后续只允许单 Agent 串行，历史候选分支不得整包重放 |
+| 安全核心缺口 | R1 已修复并有 CI 证据 | 不重复返工；R2 只补治理写、发布/运行接线及死代码处置 |
+| 模块边界验证 | 仍不充分 | R3 重建全树 AST + path-glob ownership 门禁 |
+| 全链恢复验证 | 仍不充分 | R4 使用动态隔离、真实 CA、唯一 sentinel 和双证明重做 |
+| 权威文档漂移 | `PROJECT_STATE` 已更新；`CURRENT_ROADMAP`、S01 工作包、`READING_ORDER` 和根 README 仍含旧 SHA、旧迁移头或旧并行叙述 | 先登记为文档校正包，最终关闭 S01 时统一同步 |
+| 数据正确性 | 覆盖矩阵能说明“能否计算”，尚不能量化“是否算对”；已发现个别同比基数错配 | 在公开模块 C 级出口前建立数字级答案集与盲评基准 |
+| 工程卫生 | 运行日志入库、ownership owner 名称仍是 Agent 名、dashboard 存在 404 数据态 | R2/R3 中按白名单处理，不夹带产品功能 |
+| 合规/供应链/容量 | 尚无完整基线 | 分别在 R4、数据扩张和内部工作台启动前完成专项尽调 |
 
-初始分配依据：Sol 是当前环境中的可靠代理型工程模型；Kimi K3 官方资料强调 1M 上下文和长程 coding/知识工作；GLM 5.3 官方仓库强调复杂 coding 与长程工程增强。厂商描述不是验收证据，Wave 1 后按 FLOW 的 CI、越界文件、冲突和返工数据调整。
+## 1. 权威关系与阅读顺序
 
-## 3. 启动顺序
+下一位 Agent 开始工作时按以下顺序读取，禁止从历史聊天或旧三 Agent 计划直接领任务：
 
-### Gate 0：主协调者串行完成
+1. [PROJECT_STATE](docs/00_start_here/PROJECT_STATE.md)：唯一 current state；
+2. [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)：唯一可领取路线图；
+3. [S01 工作包](docs/50_plans/work_items/S01--post-u8-boundary-contract-security.md)：当前工作包边界与退出条件；
+4. [战略重构设计 V1.1](docs/superpowers/specs/2026-09-13-flow-strategic-reset-design.md)、[PRODUCT_SCOPE](docs/20_product/PRODUCT_SCOPE.md)、[PRODUCT_PRINCIPLES](docs/20_product/PRODUCT_PRINCIPLES.md)：产品目标、固定原则和冲突裁决；
+5. [单 Agent 修正接管说明](docs/70_operations/2026-09-14-s01-single-agent-repair-handoff.md)与[协调台账 §6](docs/70_operations/2026-09-14-coordination-ledger-glm.md)：R0/R1 已完成证据及 R2–R4 边界；
+6. [整合尽调总汇](docs/80_reviews/2026-09-15-integrated-due-diligence.md)、[修复后项目 Review](docs/80_reviews/2026-09-15-project-review-post-repair.md)和[整合优化方案](docs/80_reviews/2026-09-15-integrated-optimization-program.md)：审计结论与候选优化项；
+7. [竞品优化清单](docs/competitive/optimization-checklist.md)和[知识库 O-01～O-17](docs/knowledge-base/09_competitive/2026-09-14-optimization-backlog.md)：只作候选需求证据，不自动转成任务。
 
-1. 等最新 main CI 全绿；
-2. 修正当前文档漂移：PROJECT_STATE 的迁移头/Task 3、CURRENT_ROADMAP 的三规格状态、READING_ORDER 的“V2 待设计”、S01 工作包的 Task 4/5 状态；
-3. 将安全规格从 approved 降回 review，完成修订和独立审查，取得用户对最终字节的明确批准后才恢复 approved；
-4. 冻结安全 ABI、审计事务语义、旧 Bearer 截止和模块描述合同；
-5. 运行 approved-spec + docs-check；该脚本只校验状态和索引，不能替代第 3 步的用户批准；
-6. 创建并推送 `codex/s01-parallel-integration`，公布 Gate 0 `base_sha`；后续每个 checkpoint 重新公布其 CI 绿色 SHA。
+冲突裁决顺序：用户最新明确指令 → 已接受决策 D052–D054 → approved 规格 → PROJECT_STATE → CURRENT_ROADMAP / 当前工作包 → 本交接 → review / research → 历史计划和聊天记录。
 
-当前安全规格虽为 approved，但仍有必须先关闭的空白：旧 Bearer 截止日期、审计访问/保留/脱敏阈值、public/legacy 无企业身份时的授权语义。默认提案写在编排设计 §5；必须经过 `review → 独立审查 → 用户明确批准 → approved`，未完成前不得启动 Task 6。
+## 2. 已整合的尽调结论
 
-### Bootstrap：Sol 先建立可依赖 ABI
+### 2.1 已经闭环，不应重复做
 
-Sol 在 `codex/s01-security-abi` 交付 Principal/Role/Action/Resource/Decision、纯 authorize 和 audit writer Protocol。主协调者先合并并等 CI 绿，再让三条 lane 从新的共同 SHA 并行。
+- U8-A～D 与冻结恢复锚已经完成；重构后复用 U8 验收工具，不重建另一套基线。
+- R0 已完成：审计材料入库、worktree 收敛、历史候选冻结、交付过度宣称纠正。
+- R1 已完成：安全合同核心缺口修复，迁移头升至 `0027_security_contract_fix`，路由保护和审计主链已上线。
+- CI required inventory 已包含 `module-boundaries-e2e`；文档元数据门禁在 `640cfb8` 恢复。
+- 三层两模块、AI 不得自行发布、缺失不补造、确定性内核与证据链优先等原则已经正式决策，不重新讨论默认方向。
+- 竞品/方法论研究已形成较完整资产：商业与开源 AI 财分、国内外 BI、FP&A、咨询方法、AI 问数、MCP、行业基准和物流行业深挖均已入库。
 
-### Wave 1：三路并行
+### 2.2 仍需闭环的工程问题
 
-| Lane | 分支 | 交付 |
+1. R2：七类治理写入口的治理模式、publishing/operations 四阶段事务接线、pipeline 死代码处置；
+2. R3：ownership manifest 从单文件登记升级为 path-glob，按全树 source/target owner 做 AST 禁止互导检查；
+3. R4：从 U8 冻结数据恢复到 0027 的独立部署验收，禁止 `curl -k`、固定端口/卷、残留数据库或只比较“存在”；
+4. `var/metric_library_audit.jsonl` 是运行产物却被 Git 跟踪；
+5. `config/modules/ownership_v1.yaml` 使用 `sol/kimi/glm-coordinator` 作为 owner，单 Agent 时代应改成 `security/api/web/docs` 等职责域；
+6. dashboard 的 404 not-ready 是 0027 后快照未重发的数据态，不是安全回归，但影响演示；
+7. CI 只强制文档 m1，m6 的链接、兼容与读者测试未进入远端门禁。
+
+### 2.3 仍需补做的产品与数据尽调
+
+- 建立反向解析数字级准确率基准，覆盖行项目映射、同比/环比基数、单位、期间、符号和重述；
+- 建立 10× 数据量的查询、覆盖矩阵、报告渲染和对象存储容量/性能基线；
+- 建立 Python/npm 依赖漏洞、许可证和制品来源清单；
+- 内部工作台开始前完成企业数据授权、脱敏、模型数据保护、留存和信创适配边界审查；
+- U4 独立 oracle 到料后再执行，不能由参与抽取实现的同一上下文代替；
+- U9/O5 继续等待真实企业数据授权，U10 按新路线图重新裁决，不按旧依赖链自动恢复。
+
+## 3. 完整尽调计划
+
+尽调不是一次性“看代码”，而是九个有出口的审计包。每个包都必须记录审查 SHA、证据路径、发现等级、责任工作包和复核结果；尽调发现与修复提交分离。
+
+| ID | 尽调包 | 核心问题 | 方法与证据 | 交付/退出条件 |
+|---|---|---|---|---|
+| DD0 | 基线冻结与证据盘点 | 审查对象是否唯一、可恢复、与 CI 同 SHA | fetch 后记录 HEAD/origin、CI job 清单、迁移头、tag、dump/hash、工作区状态 | 一页基线记录；不存在“审查旧快照却评价新 HEAD” |
+| DD1 | 权威文档与决策链 | 状态、路线图、工作包、README 是否互相矛盾 | 对照 D052–D054、PROJECT_STATE、CURRENT_ROADMAP、S01、READING_ORDER、README、HANDOFF；跑 m1/m6 | 漂移清单逐项有 owner；无第二路线图；链接和元数据全绿 |
+| DD2 | 产品范围与用户价值 | 是否仍围绕经分专员、月度工作流、人工终审；公开/内部模块是否混线 | 用产品原则逐项映射页面、API、计划和竞品建议 | 每项能力标记 public/internal/shared/governance；范围外项不进入当前 Gate |
+| DD3 | 数据、会计与指标 | 数字是否正确、可复算、可追源、可处理重述 | 冻结答案集、company holdout、期间/单位/符号/基数测试、来源页抽核、指标版本核对 | 数字级准确率报告；正式数字 100% 有来源和复算路径；零严重事实错误 |
+| DD4 | 安全、权限与审计 | 跨企业、角色、自批、AI 发布、身份伪造、审计失败是否 fail-closed | route inventory 双向扫描；401/403/allow 持久审计；action×resource、loader、actor 冲突和故障注入 | 零 P1/P2；实际路由与清单一致；AI 无发布权 |
+| DD5 | 架构、模块与契约 | 两模块是否越权互导，API/契约/所有权是否一致 | 全树 AST、path-glob ownership、OpenAPI 重生差异、死代码与循环依赖检查 | 每个纳管路径恰好一个职责域；public/internal 禁止互导；生成契约无手改 |
+| DD6 | 运行、存储与恢复 | 干净环境能否从 U8 基线恢复并升级，真实 TLS/对象存储是否成立 | 唯一 compose project/卷/动态端口；真实 CA；dump hash、SQL marker、HTTPS marker 三方对账；U8-A/U8-D | 无 skip；hash 相等且 marker HTTPS=SQL；升级/回退和失败态证据完整 |
+| DD7 | 测试、CI 与供应链 | 门禁是否真实覆盖，依赖是否安全可追踪 | required job 与 workflow 双向比对；测试隔离/flake 检查；pip/npm 漏洞与许可证扫描；SBOM 候选 | 同一 SHA 全 jobs 绿、无隐藏 skip；P1/P2 供应链问题清零或有批准豁免 |
+| DD8 | UX、报告与竞品适配 | 是否减少人工加工，证据/配置是否可见，竞品建议是否适配本产品 | 以经分专员月度任务做走查；报告数字抽核；对照代码矩阵与竞品清单 | 人工只做必要提交、例外处理和终审；建议分为采纳/候选/拒绝并说明理由 |
+| DD9 | 综合裁决 | 能否进入下一阶段 | 汇总 P0–P3、依赖、证据和残余风险；独立规格/代码复核 | P0/P1=0；P2 有明确退出条件；更新状态与路线图后才 Go |
+
+### 尽调触发频率
+
+- 每次会话/任务开始：执行 DD0 的轻量版（状态、HEAD、CI、工作区）。
+- 每个 Gate 合并前：执行与该 Gate 对应的专项包和 DD7。
+- 每个大版本：执行 DD0–DD9 全量复核并新建带日期的 review，旧报告通过 supersedes 链保留。
+- 数据扩张前：执行 DD3 + 性能容量基线。
+- 内部工作台前：执行 DD2 + DD3 + DD4 + 合规专项。
+- 竞品矩阵季度刷新（下次 2026-12），定价/功能/融资等易变事实半年刷新（下次 2027-03）。
+
+## 4. 优化改进建议方案
+
+### A. 当前必做：S01 工程可信度收口
+
+| 顺序 | 改进 | 验收 |
 |---|---|---|
-| Sol | `codex/s01-security-audit` | 身份、审计 ORM/writer、0026、trigger、startup fail-fast、publication/object-store 调用方事务与 intent/outcome |
-| Kimi | `codex/s01-route-policy` | 全挂载 route inventory；intake、investigations、metric library、objective reports、statements、copilot、orchestration 权限接线；publishing/operations 标为 Sol 待串行接线；API/扫描测试 |
-| GLM | `codex/s01-module-ui` | `/public`、`/internal`、导航语义、Vitest/Playwright 与可供 CI 调用的受控 E2E runner |
+| A1 | R2 route-policy-v3：治理写策略化、publishing/operations 四阶段接线、pipeline 死代码删除 | 治理写按角色返回预期 403/成功；intent/outcome 审计完整；全 CI 绿 |
+| A2 | R2 卫生包：运行日志移出版本控制并加入 ignore；dashboard 重发快照；文档 m6 纳入 CI（若扩大本 Gate 则单独工作包） | 仓库无运行产物；演示数据可读；远端能拦截链接/兼容漂移 |
+| A3 | R3 module-boundaries-v2 + ownership 角色域化 | 全树 AST 无越权导入；manifest 全覆盖且恰好一次；模块 API/契约一致 |
+| A4 | R4 full-verification-v2 | U8 dump→0027→HTTPS/API/SQL/hash 双证明，全链无 skip |
+| A5 | 状态收口 | PROJECT_STATE、CURRENT_ROADMAP、S01、READING_ORDER、README、HANDOFF、CAPABILITY_MAP 同步到最终绿色 SHA |
 
-主协调者先合并 Sol，再合并 Kimi；随后从两者合并 SHA 派发 Sol 串行发布路由分支，接入 publishing/operations 的最终 route policy 和持久 intent 调用序列，完整复验后关闭 Task 6。GLM 前端分支暂存，不提前宣称 Task 8 完成。
+### B. 下一产品门：公开模块 C 级出口
 
-### Wave 2：模块边界和前端集成
+1. 执行冻结样本 + company-level holdout + 独立盲评协议；
+2. 建立数字级准确率基准，优先修复同比基数、期间列和年度/季度错配；
+3. 把溯源提升到数据点级（页码/坐标/原文定位），抽 20 条人工核对；
+4. 建立重述/更正的 `supersedes` 链与差异报告；
+5. 差异说明和 MD&A 可由 AI 起草，但数字只能来自确定性引擎并接受一致性检查；
+6. 只读 MCP 可作为受治理的数据访问通道候选，先暴露 facts、指标和溯源，不开放写入或发布。
 
-Task 6 CI 绿后，GLM 从新基线创建 `codex/s01-module-boundaries` 完成 Task 7。Kimi 只读复核 ownership/route inventory，Sol 只读复核安全副作用。主协调者先合并 Task 7 并重生契约，再从 Task 7 SHA 新建 `codex/s01-module-ui-integration`，cherry-pick 已审 UI commit 后合并 Task 8；不 rebase 已推送分支。
+### C. 数据与分析深化
 
-### Wave 3：验证与预关闭
+- 数据从 5 家/14 份逐步扩至至少 15 家/80 份，先覆盖物流、电商、SaaS；扩张前先有准确率与性能门禁。
+- 接入或自建行业基准，优先 ROE、净利率、周转率和杠杆中位数，并记录来源、期间和样本集合。
+- 指标字典 v2 增加查询编译层；勾稽规则和科目→报表行推导树成为一等可见配置。
+- 增加多期趋势、跨公司对比和受控敏感性分析；多业务线杜邦在分部数据充分时再启动。
 
-- GLM：`codex/s01-full-verification`，执行 Task 9 全链、U8/0024 恢复→0026 升级→再验证；
-- Kimi：`codex/s01-work-item-disposition-review`，只创建 Task 10 旧工作包裁决 review 备忘，不修改权威状态、CAPABILITY_MAP 或 backlog；
-- Sol：独立安全复核，P1/P2 不清零不得关闭。
+### D. AI 能力路线
 
-主协调者按 Task 9 → Task 10 review 备忘合并；由主协调者应用裁决、创建或修改 backlog，最后独占更新 PROJECT_STATE、CURRENT_ROADMAP、S01 work-item、CAPABILITY_MAP、计划视图和交付记录。
+- 问数按 v1 检索引用 → v2 多步受控计算 → v3 反事实建模递进；100 条基准问题达到约定命中率且每个回答引用事实。
+- AI 临时计算必须经过“提议表达式→程序复算→一致性校验→入报告候选”，不能直接把模型答案当正式数字。
+- 双 AI 角色可承担分析者与 CFO 复核者，但最终报告仍由经分专员人工确认发布。
+- 多模型路由、历史 Finding RAG 和本地模型属于成本/合规优化，在评测与数据保护方案存在后再实施。
 
-## 4. 派发使用说明
+### E. 内部月度工作台（双门禁后）
 
-每条工作单必须写清：任务名、`base_sha`、分支、规格、允许和禁止文件、前置接口、红灯测试、绿色测试、提交信息、交付格式和停机条件。三种模型的完整可复制提示词见[执行使用手册 §5](docs/70_operations/three-agent-parallel-execution-runbook.md#5-三个智能体的固定工作说明)。
+只有公开模块 C 级出口通过且企业数据获得授权后，才启动：月度周期状态机、Finance BP 轻量提交、缺失证据请求、双 AI 例外队列、双版本报告、Excel 共生导出、ERP 连接器抽象和持续对账。拖拽式通用 BI、BSC、K8s/Helm、国际合规认证等高成本项目保持远期候选。
 
-执行者必须返回：
+### F. 明确不做
 
-```text
-状态 / base_sha / branch / commit / push
-逐项修改文件
-红灯证据与绿色证据
-范围检查
-迁移或契约结果
-残余风险
-建议合并顺序
-```
+- 不做通用金融终端、通用 BI、海外内容库或自训练金融大模型；
+- 不用 AI 代替经分专员正式发布，不让 AI 规则自行批准；
+- 不在数据基础不足时堆叠 DCF/EVA/BSC/五力等空壳框架；
+- 不将产品绑定到单一云数据仓库语义层；
+- 不因为竞品有某功能就绕过 D053 路线图门禁。
 
-没有提交、测试结果或文件清单的工作不进入合并队列。
+## 5. 接下来可直接执行的 To-do List
 
-## 5. 文件所有权与禁止事项
+> 下面只有 T00–T07 属当前已授权的 S01 收口。T08 以后必须在路线图明确领取后才能执行；本表不构成第二份路线图。
 
-- Sol 独占 security core、auth/settings/main、ORM、0026、两条串行发布 route、`publishing/publication.py`、`operations/publication.py`、`infrastructure/object_store.py` 及其安全/事务测试；
-- Kimi 独占 route_policy、工作单逐项列出的七组业务 routes/schemas、全路由 inventory、路由扫描和 auth boundary 测试；可写 Task 10 review 备忘，不得写两条发布 route 或权威状态；
-- GLM 独占模块 facade/registry/router/ownership/AST、两入口页面、导航、模块 E2E runner、S01 独立验收 compose 和升级验证 runner；
-- 主协调者独占 `.github/workflows/ci.yml`、所有状态、计划视图、知识清单、backlog、CAPABILITY_MAP、交付记录和 integration 分支；
-- 三个执行者都不得修改 `docs/knowledge-base` 的不可变档案；
-- 不得 force-push、`reset --hard`、直接推 main、手改生成契约或为解决冲突删除用户文件。
+| ID | 优先级 | 状态 | 任务 | 依赖 | 完成证据 |
+|---|---|---|---|---|---|
+| T00 | P0 | next | fetch、HEAD/origin、工作区、迁移头、最新同 SHA CI、U8 tag/dump 可读；建立新 Gate 分支 | 无 | DD0 基线记录；不得从历史 SHA 机械开工 |
+| T01 | P0 | next | R2 规格差异核对并先写失败测试；确认治理写、publishing/operations、pipeline 的唯一范围 | T00 | 测试红灯与文件白名单记录 |
+| T02 | P0 | todo | 实现 route-policy-v3 治理写与身份去信任；inventory 校验 method/path/action/loader | T01 | 全路由双向一致；伪造、越权、自批、AI 发布均拒绝 |
+| T03 | P0 | todo | 串行完成 publishing/operations 四阶段事务和 durable intent/outcome；删除已裁决死代码 | T02 | 成功/失败/对象存储故障均有一致审计，失败态 fail-closed |
+| T04 | P1 | todo | 清理 R2 工程卫生：运行日志、dashboard 数据态；评估并单独提交 m6 CI 门禁 | T03 | 工作区干净、演示入口可用、门禁无范围夹带 |
+| T05 | P0 | todo | R2 独立规格符合性 + 代码质量复核；目标测试、全测试、required jobs 同 SHA 全绿 | T03–T04 | R2 checkpoint SHA + CI run；P1/P2=0 |
+| T06 | P0 | todo | R3 module-boundaries-v2：path-glob ownership、职责域 owner、全树 AST、真实违规 fixture、契约重生 | T05 | public/internal 零越权；每个纳管路径恰好一次；契约检查绿 |
+| T07 | P0 | todo | R4 full-verification-v2：独立环境、真实 CA、U8 dump 恢复到 0027、sentinel/hash/API/SQL 双证明、全链回归 | T06 | 无 skip；U8-A/U8-D + S01 jobs 同一最终 SHA 全绿 |
+| T08 | P0 | gated | Task 10 旧工作包逐项裁决；同步权威文档并正式关闭 S01 | T07 | PROJECT_STATE/ROADMAP/S01/README/READING_ORDER/HANDOFF/CAPABILITY_MAP 一致 |
+| T09 | P0 | gated | 公开模块 C 级出口协议与数字级准确率基准 | T08 | holdout、盲评、可复算/可追源、零严重事实错误 |
+| T10 | P1 | gated | 数据点级溯源、重述检测、AI 差异说明、只读 MCP 候选 | T09 | 各自工作包和量化验收 |
+| T11 | P1 | gated | 数据扩张与行业基准；同步做 10× 性能容量尽调 | T09 | 15 家/80 份目标按批交付；性能不低于批准阈值 |
+| T12 | P1 | gated | AI 问数 v1 与评测集；再裁决 v2/v3 | T09–T11 | 100 问基准、引用/复算/拒答证据 |
+| T13 | P1 | blocked | 内部月度工作台与连续三周期真实企业验证 | C 级出口 + 数据授权 | 三个完整周期；相对人工基准满足质量与工时门槛 |
+| T14 | external | blocked | U4 oracle、rnd_exp 原文、U9/O5 授权、U10 外部证据决策 | 用户/外部材料 | 各工作包退出条件 |
 
-发现两个 lane 需要同一文件时，两边都停止，由主协调者重新指定唯一 owner。
+## 6. 单一 Agent 工作协议
 
-## 6. 合并和验收
+1. 一个 Gate 一个 `codex/` 分支/独立 worktree；R2、R3、R4 不压成一个提交。
+2. 每个 Gate 均执行：读取批准规格 → 写红灯测试 → 最小实现 → 目标测试 → 全链测试 → 独立规格审查 → 代码质量审查 → 提交推送 → 等同 SHA CI。
+3. 不整包 cherry-pick 旧 Sol/Kimi/GLM 候选；需要时只把它们当作调查材料，按当前规格重做。
+4. 禁止用 skip/xfail/弱化断言/删除测试/关闭认证/`curl -k` 换绿色。
+5. 代码、生成契约、运行证据、文档分别如实提交，提交标题不能用 docs/chore 掩盖业务代码。
+6. 修改安全、迁移、对象存储或发布事务前，先核对批准规格；规格有歧义就暂停该点，不自行创造宽松语义。
+7. 只承认目标 commit 与 CI head SHA 完全一致且 required jobs 全 success、无 skip 的结果。
+8. 完整任务结束后提交并推送；只暂存本任务文件，不带入其他会话的未跟踪或未提交内容。
 
-固定顺序：
+## 7. 已踩过的坑与停机条件
 
-```text
-安全 ABI
-→ Sol 审计/0026/发布事务
-→ Kimi 路由接线
-→ Sol 串行接入 publishing/operations route
-→ 完整安全复验并关闭 Task 6
-→ GLM 模块 API/ownership
-→ GLM 前端
-→ Task 9 全链证据
-→ Task 10 review 备忘
-→ 主协调者状态关闭
-```
+- 多个 Agent 共用检出、后台 pull/push 会造成基线错乱；后续禁止。
+- 旧分支局部绿色不能替代当前主线同 SHA 全绿；审查报告也必须注明快照时点。
+- HTTP GET 不等于只读，冻结/发布等隐藏写必须按副作用保护。
+- 数据库有表不等于审计已闭环；必须覆盖 401、403、allow、写入失败和保留策略。
+- 对象存储、数据库和审计是跨边界事务，不能在 route 末尾补一条日志冒充原子性。
+- 静态资料库、Statements、视觉改版和 DuPont 已随主线继承，但不是 S01 完成证据，后续各建独立工作包。
+- 文档新增也会让 CI 变红；提交前必须至少跑 m1，本交接与正式关闭还要跑 m6。
+- 发现第二迁移头、跨企业可访问、AI 可发布/自批、恢复 hash 不一致、测试 skip、目标 SHA 与 CI SHA 不同，立即停止关闭流程。
 
-每次合并前检查当前 checkpoint base 和文件白名单；同一波次共享 base，后续波次使用上一 checkpoint 的 CI 绿色 SHA。每个候选合并后只运行本地目标测试与交叉测试；在 Bootstrap、Task 6 security、Wave 2、最终 Wave 3 四个检查点各推送一次 integration。由于 main 当前没有 branch protection required checks，必须用仓库内 S01 job 清单核验目标 SHA 的 FLOW CI：workflow success、清单 job 全 success 且无 skip。`.github/workflows/ci.yml` 必须纳入安全纯测试/集成测试、模块 AST/API、导航 Vitest 和 `make test-module-boundaries-e2e`。最终 main 只从上述门禁全绿的 integration 前进。
+## 8. 下一位 Agent 的第一条动作
 
-Task 9 的关键恢复序列：
+从当前最新 `origin/main` 做 T00，只读核对 `PROJECT_STATE → CURRENT_ROADMAP → S01 → 协调台账 §6` 与实际 Git/CI；确认没有新的外部提交后，创建 R2 专用分支，按 T01 开始。不要先做 AI 问数、行业扩张、内部工作台或 UI 大改。
 
-```text
-用专属 compose project 在一次性隔离库恢复 U8/0024 基线
-→ 核验关键表和 frozen payload 哈希
-→ alembic upgrade 到唯一 0026 head
-→ 核验 enterprise/cycle/security schema
-→ 直接 SQL 验证 AuditEvent UPDATE/DELETE trigger
-→ 专属 API/动态 HTTPS 读取恢复库独有载荷并与 SQL/哈希对账
-→ 旧入口与新模块全链回归
-```
-
-任何 skip、哈希不一致、第二 migration head、AI 可发布、规则可自批或跨企业可访问，均令 S01 保持 active。
-
-## 7. 卡住的问题与默认裁决
-
-1. 基线 `4ec50bc` 的 FLOW CI 已 success；接手仍必须重新查询最新 main，不能把历史 run 当成新 checkpoint 证据；
-2. 权威状态文档落后于 Git：只能由主协调者成组修正，并在原 S01 计划、CURRENT_ROADMAP、S01 work-item、计划 README 登记“原计划定义范围、新计划定义并行执行”的权威关系；
-3. 安全规格有空白：默认 Bearer 截止 `2026-10-31T23:59:59+08:00`，只映射最小 service account；审计至少在线保留 365 天且 S01 不物理删除；这些仍是待审提案，必须经独立审查和用户明确批准才能成为 approved 规格；
-4. 现有部分 GET 实际冻结/写入：按实际副作用保护，不能按 HTTP 方法猜；
-5. publication service 内部 commit 和对象存储副作用可能破坏审计原子性：固定 `prepare_intent → route commit → execute_object → finalize success/failure → route commit`；两条发布 route 与 service 统一归 Sol，并在 Sol/Kimi 主分支合并后串行接线，不能在 route 尾部补日志冒充闭环；
-6. Task 7 新 API 会改变 OpenAPI：该任务同批重生契约，Task 9 再从最终状态复验；
-7. 当前 CI 没有覆盖新增安全、架构、Vitest 和 Playwright 门禁：Task 6/8 的完成条件包含由主协调者补齐 FLOW CI job 并由 S01 清单逐项核验，不能用本地证据替代。
-
-## 8. 故障恢复
-
-- lane 失败：不合并，保留分支修复；
-- integration 合并导致失败：普通 `git revert -m 1`，不改写历史；
-- 0026 失败：只在一次性验收库 downgrade；
-- generated contract 冲突：从最终 FastAPI 重生；
-- Task 9 恢复失败：停止 Task 10 关闭；
-- main 被其他会话推进：暂停合并，fetch 后重新评估 base，不盲目 rebase 状态文档；
-- 始终保留 `u8-final-baseline`、`flow-u8-freeze-20260913` 和本地 U8 备份。
-
-## 9. 下一步
-
-接手者只执行 Gate 0，不直接领取三条 lane。Gate 0 提交和 CI 绿色后，先派发 Sol Bootstrap；Bootstrap 授权测试已接入远端 CI 且 checkpoint 核验绿色后，才同时派发 Wave 1 三个智能体。
-
----
-
-## 历史战略交接（原 2026-09-12 内容，保留供 D052–D054 追溯）
-
-# FLOW 战略重构讨论交接｜2026-09-12
-
-> **状态更新（2026-09-13）**：本交接所述沉淀任务已完成——D052–D054 决策已创建并更新索引与接替关系（D002/D010/D045/D046 superseded，D039/D049/D050 amended），canonical 产品文档与 PRODUCT_PRINCIPLES 已更新，README/导航/状态/路线图已同步，战略设计 V1.1 经三轮独立规格审查后转为 approved。以下 §4/§5 保留为历史记录，不再表示当前待办。
-
-## 1. 当前任务
-
-用户要求基于当前实现和已积累的财务/经营知识，使用苏格拉底提问法重新讨论 FLOW 的目标和计划；必要时允许大幅调整项目目标。讨论已完成目标定位、产品结构和阶段路线三部分，并逐段获得用户确认。
-
-当前只应把已确认结论沉淀到项目文档、README、决策和固定原则中。**不要开始产品代码重构**；现有 U8 必须先完整收口。
-
-## 2. 已确认的战略结论
-
-### 2.1 核心产品与用户
-
-- FLOW 的核心、不可替代价值是**财务分析工作台**。
-- 核心操作者是**财务经营分析专员（经分专员）**，不是 Finance BP。
-- Finance BP 是数据和业务背景提供者，首版使用受限的轻量提交入口：上传文件、补充资料、回答问题、查看退回原因，不进入完整分析工作台。
-- CFO 是首要阅读者；管理层和业务负责人是最终价值承接者。三者可以只消费发布成果，不要求登录 FLOW 完成复杂编制。
-- 当前产品按**单个企业内部部署**设计，服务该企业多个经分专员和 Finance BP；不是多租户 SaaS。
-- 默认部署形态是公有云企业单租户。允许使用具有企业数据保护条款、禁止训练且可审计的云模型 API。
-
-### 2.2 核心任务与成功标准
-
-- 第一报告场景是**月度综合财务经营分析报告**。
-- FLOW 从原始 Excel 和企业数据开始，覆盖识别、映射、校验、对账、分析、补证、报告、审核和发布。
-- 首版以复杂 Excel 文件包为主，未来增加 ERP、财务系统、业务系统和数据仓库连接。
-- 现实中每月通常可获得：
-  1. 财务报表或科目余额；
-  2. 当月实际与预算；
-  3. 上年同期、上月数据；
-  4. 应收、回款和现金数据。
-- 报告采用**稳定骨架 + 动态专题**；财务和经营指标都属于固定分析对象。
-- 交互式报告是权威母版，PPT/PDF/Excel 等是派生发布物。
-- 系统目标是完成典型报告 80%–90% 的工作；经分专员主要核对证据、处理少量例外并一次性批准发布。
-- 最终原型成功门槛：使用授权脱敏真实企业数据端到端生成报告；专业经分人员确认关键事实和 Finding 可用；报告质量不低于人工基准；人工工作量不超过传统流程的 20%。
-
-### 2.3 分析、证据和学习原则
-
-- 默认流程：系统完成标准扫描并推荐重点，经分专员可以接受、调整或追加调查。
-- 一条核心 Finding 必须包含：**变化事实、驱动因素、财务影响、证据、风险和建议动作**。首版不强制责任人、改善目标和截止期限。
-- 企业事实、内部知识和外部参考必须分层标注：企业数据证明事实；知识库提供方法；行业与外部资料辅助解释和比较，不能混成同一证据等级。
-- 数据能证明的事实直接进入报告；证据不足的原因保持候选假设；重要假设主动追问 Finance BP/经分专员，取得证据后再升级为正式结论。
-- 当只有人工业务说明时允许纳入，但必须标记为人工提供的业务证据。
-- 企业分析空间持续存在，按月创建独立分析周期；累积企业映射、口径、偏好和历史分析。
-- 字段映射、计算口径和报告偏好可以自动复用；历史业务解释只能进入候选假设池，必须寻找本期证据后才能成为正式结论。
-- 正式指标和标准分解由确定性引擎计算。AI 可在调查区提出临时公式和新拆解，但必须由程序复算；反复有效后才能进入正式、版本化的规则库。
-
-### 2.4 AI 报告生产链
-
-默认报告生产流程已经确认：
-
-```text
-分析型 AI
-→ 生成完整财务专业分析版
-→ CFO 角色 AI 质疑证据、判断管理重要性、压缩细节并生成管理层版
-→ 经分专员一次最终审核
-→ 正式发布
-```
-
-- CFO 角色 AI 不是第二个人工审批人。
-- 它可以调整重点、章节和表达，不能修改底层数字、把假设改成事实或提升证据等级。
-- 真实 CFO 可以阅读最终报告，但不作为系统发布的必经操作节点。
-- AI 不得绕过经分专员自行发布。
-
-### 2.5 产品结构与可见治理
-
-- 主交互采用**月度分析工作流为主、对话为辅**：收数 → 校验 → 自动分析 → 补证 → AI 复核 → 人工终审 → 发布。对话用于追加调查和修改，不取代可见工作流。
-- 系统保留并强化指标库、公式、会计科目、映射、分析方法、证据规则、报告模板和配置中心。
-- 这些专业规则必须作为外显产品功能，可以查看来源、公式、适用范围、版本和使用位置，不能藏在模型提示词或后台实现里。
-- 治理分层：平台级规则只读并随版本发布；企业级规则可配置和版本化；影响正式计算的规则需审批；个人显示偏好可直接生效；历史报告绑定当时版本，不被新配置改写。
-
-### 2.6 两个产品模块与共享底座
-
-- **企业内部分析工作台**是最终目标产品。
-- **公开财报分析模块**作为独立产品模块保留在同一仓库，拥有独立入口、规格、验收和模块 workstream/backlog 视图，不再与内部工作台混成一条用户流程；全仓仍只有一份可执行路线图。
-- 两者共享财务事实、指标、计算、证据、Finding 和报告发布底座。
-- 在内部工作台真实验证前，公开模块仍优先用于成熟共享底座。
-- 公开模块阶段出口为 C：自动完成公开材料接入、事实计算、Finding、交互式报告、人工复核、冻结和导出，报告接近可发布。
-- 公开模块可使用四级证据：财务报表/附注；完整定期报告；公司公告/业绩会/投资者材料；新闻/研报/其他网络资料。低等级材料只能作为低等级证据或线索。
-- 物流供应链继续作为第一验证样板，但不是 FLOW 的长期行业边界。
-
-### 2.7 已批准的总体顺序
-
-采用“共享底座重整后推进”路线：
-
-```text
-完成 U8
-→ 冻结一个完整、可运行、可恢复的现有版本
-→ 重构共享专业底座、公开财报模块、内部工作台的边界
-→ 公开财报模块达到 C 级出口
-→ 建设企业内部月度分析工作台
-→ 物流样板验证
-→ 专业经分评审
-→ 人工报告与工作量对照
-→ 授权脱敏真实数据最终验证
-```
-
-- U8 是当前最高优先级：完成真实存储、发布、HTTPS、部署和运行验收。
-- 新战略文档与设计可以在 U8 期间并行完成。
-- U8 完成前，不进行核心数据模型、主导航和月度工作流的大规模代码改造。
-- U8 完成后，不应机械沿旧路线进入 U9/U10；先用新版路线图重新裁决旧任务的保留、改写、合并或取消。
-
-## 3. 本会话已经完成的工作
-
-- 已完整读取 brainstorming 设计流程要求。
-- 已读取知识库入口、唯一当前状态、事实合同、D049 方向、旧统一计划、产品文档、决策索引和当前代码入口。
-- 已通过逐题讨论确认上述产品目标、角色、证据边界、AI 分工、产品结构、验证标准和总体顺序。
-- 已向用户分三部分展示设计并分别获得确认：
-  1. 新版目标定位；
-  2. 产品结构与专业底座；
-  3. 执行顺序、失败边界和验收体系。
-- 用户随后授权把全部结论写入关键文档、README、固定准则和原则。
-
-## 4. 历史记录：当时尚未完成 / 当前均已闭合
-
-- **尚未创建**正式战略重构设计文档。
-- **尚未新增**承载本轮决定的 D052+ 决策，也未更新旧决策的接替关系。
-- **尚未更新**根 README、docs README、产品定义、当前状态、阅读顺序、规格索引和当前路线图。
-- **尚未进行**独立规格审查；brainstorming 流程要求设计文档写成后最多三轮 review。
-- **尚未制定**新版详细实施计划；当前任务只应先完成文档与战略沉淀。
-- 当前工作区存在另一项 M6 文档验收任务的未提交内容，不能混入本任务：
-  - `Makefile`
-  - `docs/00_start_here/PROJECT_STATE.md`
-  - `docs/10_governance/link-allowlist.tsv`
-  - `docs/80_reviews/reader-test/`
-  - `scripts/documentation/links.py`
-  - `scripts/documentation/reader_rubric.py`
-  - `scripts/tests/test_document_links.py`
-- 当前 HEAD（写交接前）为 `2f48df4`。文档迁移已推进至 M5.2；工作区和 HEAD 仍可能被并行任务推进，接续时必须重新盘点。
-
-## 5. 历史记录：当时的下一会话建议步骤
-
-1. 先读 `AGENTS.md`、`docs/knowledge-base/README.md`、`docs/knowledge-base/00_start_here/AGENT_START_HERE.md`、`docs/00_start_here/PROJECT_STATE.md` 和本文件。
-2. 检查 `git status --short` 与最新提交，等待或避开上述 M6 在途文件；不要暂存、覆盖或回退它们。
-3. 创建正式设计：建议路径 `docs/superpowers/specs/2026-09-12-flow-strategic-reset-design.md`，状态先为 `review`，内容以本交接第 2 节为准。
-4. 新增正式决策并更新索引。建议至少拆为：
-   - D052：内部月度财务经营分析工作台成为核心产品；
-   - D053：公开财报模块、内部工作台与共享专业底座的边界和顺序；
-   - D054：分析型 AI → CFO 角色 AI → 经分专员终审，以及证据/计算/学习原则。
-5. 对被改变的 D002、D010、D039、D045、D046、D049 使用 supersedes/amends 关系，不抹掉历史正文；更新 `test_decision_integrity.py` 的连续编号和关系测试。
-6. 更新 canonical 产品文档：`PRODUCT_VISION.md`、`PRODUCT_SCOPE.md`、`USER_AND_WORKSPACES.md`、`CAPABILITY_MAP.md`、`PRODUCT_BOUNDARIES.md`、`RELEASE_SCOPE.md`，并新增 `PRODUCT_PRINCIPLES.md` 作为固定原则入口。
-7. 更新根 `README.md`、`docs/README.md`、`docs/20_product/README.md`、`docs/40_specs/SPEC_INDEX.md`、`READING_ORDER.md`、`PROJECT_STATE.md` 和 `CURRENT_ROADMAP.md`。README 只摘要和导航，不复制整份战略设计。
-8. 若修改 `docs/knowledge-base/README.md` 或其他知识库内容，运行 `python3 scripts/documentation/kb_manifest.py --write` 与 `--check`，并只纳入本任务造成的 manifest 变化。
-9. 派发独立 spec reviewer，最多三轮修订。通过后运行文档检查、决策测试、链接检查、全量脚本测试和 `git diff --check`。
-10. 只暂存本任务文件，提交并推送 `origin`。不要开始产品代码改造；下一阶段详细计划需在用户审阅正式战略规格后另行编写。
-
-## 6. 已踩过的坑与注意事项
-
-- 当前仓库存在并行文档迁移，HEAD 会在会话中前进；开始和提交前都要重新读取状态。
-- 根 `HANDOFF.md` 在 M5 迁移后曾不存在；历史完整原件已迁到 `docs/knowledge-base/07_handoff/HANDOFF.md`。该历史原件属于受保护档案，**不要修改**。
-- `docs/knowledge-base/04_decisions/DECISION_LOG.md` 已在 `8687a15` 恢复到原始字节并锁定，不能再次改成导航页；新决定只追加到 `docs/10_governance/decisions/`。
-- `test_decision_integrity.py` 当前把 D001–D051 写死；新增决定必须同步更新测试，不能只加文件和索引。
-- canonical 产品文档目前仍把 Finance BP、双轨财务/经营工作区和公开客观分析写成现行产品定义，与本轮结论冲突，必须成组更新，不能只改 README。
-- 当前 `PROJECT_STATE.md` 仍以旧提交和旧战略描述为主，而且正被 M6 在途任务修改；处理时需合并最新内容，不能覆盖并行修复。
-- “公开模块优先”不等于它是最终目标：它只是先成熟共享底座；企业内部月度分析工作台才是目标产品。
-- “CFO 角色”在新流程中是 AI 审查角色，不是新增人工审批节点。
-- “自动学习”不允许复用历史业务原因为当期事实：稳定规则可以复用，情境解释只能作为候选假设并寻找当期证据。
-- 文档检查通过不等于 U8、公开模块 C 级出口或内部工作台已经完成；能力状态必须继续用提交和验收证据表达。
+完成 R2、R3、R4 前，对外状态统一表述为：**U8 已关闭；S01 active；R1 complete；Task 6 closure-ready but not closed；下一 Gate 为 R2。**
