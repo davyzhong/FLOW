@@ -2,7 +2,6 @@ path	sha256	doc_id
 docs/2026-09-07-documentation-governance.md	dec7df19fe5ae3922251d7f4c9413c4d4e717b380b179dc46b5c68ec285d170c	-
 docs/api-reference.md	56ecacf2a18ca0dd70e8d43f7fb2eb90f51381784957631fcf54b6d3e4fffb44	-
 docs/architecture/flow-v1-domain-objects.md	64c60a27d3b9179ed85a75225d3abedfc25987fb0dd49f365dedb932217edcfa	-
-docs/architecture/flow-v1-runtime.md	32f09ffba1f25d6dc8e79469594aedfe77724e6e7b292b79ff277867a638e736	-
 docs/assets/screenshots/README.md	5300fd9608e3d85b2518ab855bd41a09732e00719a084ad41ac40096facdfbb8	-
 docs/data-contract/flow-v1.md	52515421d0d6ae1ee8cf2c57e9c8bbe56c264ff56f4c1e4e659caee95c89a2b0	-
 docs/implementation/2026-08-30-phase-1-verification.md	2c0e2fdeee088bae9db0f84a3c701cf058ee95d914f1f8d7fc4aa9809d417763	-

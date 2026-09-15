@@ -1,3 +1,19 @@
+---
+doc_id: FLOW-ARCH-RUNTIME-000
+title: 运行架构（原位，机器消费描述）
+doc_type: architecture
+status: approved
+version: 1.1
+created_at: 2026-08-30
+updated_at: 2026-09-16
+owner: FLOW
+decision_refs: [D029]
+applies_to: runtime
+knowledge_release: flow-knowledge-2026-09-12.1
+supersedes: []
+superseded_by: null
+---
+
 # FLOW 运行架构与部署边界｜2026-09-07
 
 核对基线：2026-09-07，代码 `04ba4d7`。本文记录实际运行边界；正式方向按 D049，领域约束按有效规格，功能验收不等于生产就绪。
