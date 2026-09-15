@@ -60,7 +60,9 @@ def test_policy_loads_66_entries_sorted() -> None:
     keys = [(e.method, e.path) for e in entries]
     assert len(set(keys)) == 66, "存在重复 method/path"
     blocked = [e for e in entries if e.is_blocked]
-    assert len(blocked) == 7, f"blocked 条目数变化：{len(blocked)}"
+    assert len(blocked) == 0, (
+        f"R2 后权威清单不应再有 blocked 条目（治理写已策略化）：{[e.path for e in blocked]}"
+    )
     for e in entries:
         if e.is_write:
             assert e.action is not None, f"写入口缺 action：{e.method} {e.path}"
@@ -82,8 +84,13 @@ def _write_tsv(tmp_path: Path, rows: list[list[str]]) -> Path:
     path = tmp_path / "inventory.tsv"
     header = "\t".join(
         [
-            "method", "path", "actual_side_effect", "action",
-            "resource_loader", "owner", "exemption_reason",
+            "method",
+            "path",
+            "actual_side_effect",
+            "action",
+            "resource_loader",
+            "owner",
+            "exemption_reason",
         ]
     )
     body = "\n".join("\t".join(r) for r in rows)
@@ -92,22 +99,43 @@ def _write_tsv(tmp_path: Path, rows: list[list[str]]) -> Path:
 
 
 def test_policy_validation_rejects_duplicates(tmp_path: Path) -> None:
-    row = ["GET", "/api/v1/x", "database_read:x", "statement.report.read",
-           "load_public_statement_report", "route-policy", "-"]
+    row = [
+        "GET",
+        "/api/v1/x",
+        "database_read:x",
+        "statement.report.read",
+        "load_public_statement_report",
+        "route-policy",
+        "-",
+    ]
     with pytest.raises(PolicyValidationError, match="重复"):
         load_policy(_write_tsv(tmp_path, [row, row]))
 
 
 def test_policy_validation_rejects_unknown_action(tmp_path: Path) -> None:
-    row = ["GET", "/api/v1/x", "database_read:x", "no.such.action",
-           "load_public_statement_report", "route-policy", "-"]
+    row = [
+        "GET",
+        "/api/v1/x",
+        "database_read:x",
+        "no.such.action",
+        "load_public_statement_report",
+        "route-policy",
+        "-",
+    ]
     with pytest.raises(PolicyValidationError, match="未知 Action"):
         load_policy(_write_tsv(tmp_path, [row]))
 
 
 def test_policy_validation_rejects_write_with_exemption(tmp_path: Path) -> None:
-    row = ["POST", "/api/v1/x", "database_write:x", "statement.report.publish",
-           "load_public_statement_report", "route-policy", "read_only_exempt"]
+    row = [
+        "POST",
+        "/api/v1/x",
+        "database_write:x",
+        "statement.report.publish",
+        "load_public_statement_report",
+        "route-policy",
+        "read_only_exempt",
+    ]
     with pytest.raises(PolicyValidationError, match="只读豁免"):
         load_policy(_write_tsv(tmp_path, [row]))
 
@@ -138,9 +166,7 @@ def test_pending_mount_whitelist_is_empty() -> None:
     白名单非空 = 存在未经裁决的登记先行路由；新路由必须先挂载后登记，
     白名单仅用于已裁决但尚未合入的过渡窗口。
     """
-    assert frozenset() == PENDING_MOUNT_ROUTES, (
-        "存在登记先行路由，须裁决后移入 TSV 或移除"
-    )
+    assert frozenset() == PENDING_MOUNT_ROUTES, "存在登记先行路由，须裁决后移入 TSV 或移除"
 
 
 def test_principal_dep_is_wired_to_bearer_auth() -> None:
@@ -231,12 +257,26 @@ def test_service_account_publish_denied_403_role_forbidden() -> None:
     assert audit.events and not audit.events[0][1].allowed, "deny 也必须 durable"
 
 
-def test_blocked_route_never_enters_handler() -> None:
-    """blocked:* 条目（metric-library 治理写，全局无企业域）无条件 403 route_blocked。
+def test_blocked_route_never_enters_handler(monkeypatch: pytest.MonkeyPatch) -> None:
+    """blocked:* 条目无条件 403 route_blocked（机制守护；权威清单现无 blocked 条目）。
 
-    R1 解锁后 intake batch create 已换真 loader；仍 blocked 的是 metric-library
-    治理写集合（数据天然全局，等待治理模式落地）。
+    R2 已把 metric-library 治理写策略化（blocked 清零）；本用例以合成 policy
+    保住 require_action 的 blocked 分支，防止未来再引入 blocked 条目时分支失守。
     """
+    from flow_api.security import route_policy as rp
+
+    synthetic = (
+        rp.PolicyEntry(
+            method="POST",
+            path="/api/v1/metric-library/import",
+            actual_side_effect="database_write:x",
+            action=Action.METRIC_LIBRARY_IMPORT,
+            resource_loader="blocked:metric_dictionary_has_no_enterprise_scope",
+            owner="route-policy",
+            exemption_reason=None,
+        ),
+    )
+    monkeypatch.setattr(rp, "_POLICY", synthetic)
     called: list[bool] = []
     audit = _FakeAuditWriter()
     app = _app_with_route(

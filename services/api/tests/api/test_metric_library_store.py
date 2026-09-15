@@ -79,11 +79,17 @@ async def test_metric_library_falls_back_to_yaml_when_db_empty(client: AsyncClie
     assert len(body["accounting"]["accounts"]) == 167
 
 
-async def test_import_blocked_until_governance_mode(client: AsyncClient) -> None:
-    """S01 策略：治理写（import/retire）无条件阻断；读取走 YAML 回退（§4.1）。"""
+async def test_import_lands_dictionary_and_read_serves_db(client: AsyncClient) -> None:
+    """R2 治理写策略化：analyst import 落库；读取优先 DB 版本（YAML 兜底）。"""
     response = await client.post("/api/v1/metric-library/import", json={"actor": "flow-dev-bp"})
-    assert response.status_code == 403
-    assert response.json()["detail"]["code"] == "route_blocked"
+    assert response.status_code == 200, response.text
+    assert response.json() == {
+        "metrics": 64,
+        "subjects": 167,
+        "standards": 48,
+        "templates": 32,
+        "mappings": 28,
+    }
 
     listing = await client.get("/api/v1/metric-library")
     assert listing.status_code == 200
@@ -113,11 +119,11 @@ def test_importer_direct_counts_service_layer(db_session: Session) -> None:
 async def test_retire_dictionary_hides_it_from_default_read(
     client: AsyncClient, db_session: Session
 ) -> None:
-    # S01 策略：metric-library 治理写（import/retire）在治理模式落地前无条件阻断
+    # R2 治理写策略化：import + retire 均按角色授权执行
     import_response = await client.post(
         "/api/v1/metric-library/import", json={"actor": "flow-dev-bp"}
     )
-    assert import_response.status_code == 403
+    assert import_response.status_code == 200
     response = await client.post(
         "/api/v1/metric-library/retire",
         json={
@@ -126,14 +132,14 @@ async def test_retire_dictionary_hides_it_from_default_read(
             "reason": "v2 上线",
         },
     )
-    assert response.status_code == 403
+    assert response.status_code == 200
     retired = (
         db_session.query(MetricDictionaryEntry)
         .filter(MetricDictionaryEntry.status == "retired")
         .count()
     )
-    # 治理写被阻断 → 无 retired 行；默认读取回退 YAML 仍可用
-    assert retired == 0
+    # retire 生效：全部条目 retired；默认读取在无 effective 行时回退 YAML
+    assert retired == 64
     listing = await client.get("/api/v1/metric-library")
     assert listing.status_code == 200
     assert listing.json()["dictionary_id"] == "flow.metric_dictionary.v1"
@@ -160,14 +166,9 @@ def test_statement_line_mapping_resolves_subject_codes(db_session: Session) -> N
     assert by_item["bs.cash"].subject_codes == ["1001", "1002"]
     assert by_item["is.revenue"].subject_codes == ["6001", "6051"]
     assert by_item["bs.total_assets"].subject_codes == []
-    subject_codes = {
-        s.code for s in db_session.scalars(select(AccountingSubject)).all()
-    }
+    subject_codes = {s.code for s in db_session.scalars(select(AccountingSubject)).all()}
     unresolved = [
-        m.item_id
-        for m in mappings
-        if m.subject_codes
-        and not set(m.subject_codes) <= subject_codes
+        m.item_id for m in mappings if m.subject_codes and not set(m.subject_codes) <= subject_codes
     ]
     assert not unresolved, f"映射指向科目表不存在的编码: {unresolved}"
     # 报表项目 → 指标反向索引：is.revenue 至少被收入类指标引用

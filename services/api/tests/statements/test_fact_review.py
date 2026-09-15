@@ -116,9 +116,7 @@ BALANCED_ROWS = [
 ]
 
 
-async def test_correction_audit_and_publish_flow(
-    client: AsyncClient, db_session: Session
-) -> None:
+async def test_correction_audit_and_publish_flow(client: AsyncClient, db_session: Session) -> None:
     report = _import_payload(db_session, BALANCED_ROWS)
     db_session.commit()
 
@@ -130,7 +128,6 @@ async def test_correction_audit_and_publish_flow(
             "column_key": "value_end",
             "value": "101",
             "reason": "原文 OCR 少一位，按披露原文复核修正",
-            "operator": "钟Davy",
         },
     )
     assert created.status_code == 201, created.text
@@ -158,7 +155,6 @@ async def test_correction_audit_and_publish_flow(
                 "column_key": "value_end",
                 "value": value,
                 "reason": "同组修正保持平衡",
-                "operator": "钟Davy",
             },
         )
         assert kept.status_code == 201, kept.text
@@ -176,7 +172,6 @@ async def test_correction_audit_and_publish_flow(
             "column_key": "value_end",
             "value": "101",
             "reason": "发布后尝试更正",
-            "operator": "钟Davy",
         },
     )
     assert locked.status_code == 409
@@ -187,7 +182,9 @@ async def test_correction_audit_and_publish_flow(
     # 原始行不变
     db_session.expire_all()
     item = db_session.scalar(
-        __import__("sqlalchemy").select(StatementLineItem).where(
+        __import__("sqlalchemy")
+        .select(StatementLineItem)
+        .where(
             StatementLineItem.report_id == report.id,
             StatementLineItem.item_name == "资产总计",
         )
@@ -216,7 +213,6 @@ async def test_publish_blocked_by_critical_imbalance_then_unblocked_by_correctio
             "column_key": "value_end",
             "value": "100",
             "reason": "抽取错位修正",
-            "operator": "钟Davy",
         },
     )
     assert corrected.status_code == 201
@@ -224,9 +220,7 @@ async def test_publish_blocked_by_critical_imbalance_then_unblocked_by_correctio
     assert published.status_code == 200
 
 
-async def test_correction_validation_errors(
-    client: AsyncClient, db_session: Session
-) -> None:
+async def test_correction_validation_errors(client: AsyncClient, db_session: Session) -> None:
     import uuid as uuid_module
 
     report = _import_payload(db_session, BALANCED_ROWS)
@@ -240,7 +234,6 @@ async def test_correction_validation_errors(
             "column_key": "value_end",
             "value": "1",
             "reason": "x",
-            "operator": "y",
         },
     )
     assert missing.status_code == 404
@@ -253,7 +246,6 @@ async def test_correction_validation_errors(
             "column_key": "value_end",
             "value": "1",
             "reason": "x",
-            "operator": "y",
         },
     )
     assert unknown_item.status_code == 404
@@ -267,7 +259,6 @@ async def test_correction_validation_errors(
             "column_key": "value_end",
             "value": "100",
             "reason": "x",
-            "operator": "y",
         },
     )
     assert no_change.status_code == 409
