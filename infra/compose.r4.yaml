@@ -1,0 +1,36 @@
+# R4 full-verification-v2 隔离 overlay（必须与 infra/compose.yaml 同用：
+#   docker compose -p flow-r4 -f infra/compose.yaml -f infra/compose.r4.yaml ...）
+#
+# 合同（HANDOFF R4 / DD6）：
+# - 独立 compose project（调用方用 -p 覆盖顶层 name），卷随 project 前缀隔离，
+#   绝不触碰常驻 `flow` 栈的任何卷；
+# - 不发布固定宿主端口：服务端口全部收回（!override []），仅 nginx 443 发布为
+#   动态宿主端口（`docker compose port nginx 443` 发现）；
+# - TLS：继续挂 dev-tls（验收必须 --cacert，禁止 -k）。
+services:
+  api:
+    ports: !override []
+  web:
+    ports: !override []
+    # 容器内 wget 探活不可靠（主栈 web 亦 unhealthy）；R4 中 disable，
+    # 使 --wait 以 running 为就绪（nginx 的 / 上游仍需要 web 的 DNS 可解析）。
+    healthcheck: !override
+      disable: true
+  postgres:
+    ports: !override []
+  redis:
+    ports: !override []
+  minio:
+    ports: !override []
+  minio-init:
+    ports: !override []
+  worker:
+    ports: !override []
+  nginx:
+    ports: !override
+      - "443"
+    # R4 只验 /api 链路；web 的 healthcheck 在容器内 wget 不可靠（主栈同样
+    # unhealthy），不作为 nginx 启动门槛。
+    depends_on: !override
+      api:
+        condition: service_healthy
