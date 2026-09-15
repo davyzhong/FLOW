@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from io import BytesIO
+from uuid import uuid4
 
 import pytest
 from integration.analysis_run_support import (
@@ -24,10 +25,13 @@ from sqlalchemy.orm import Session
 from flow_api.infrastructure.models.analytics import Conclusion, Evidence, Finding
 from flow_api.infrastructure.models.publishing import PublicationAttempt
 from flow_api.investigation.state_machines import apply_finding_decision
-from flow_api.publishing.publication import PublicationService
+from flow_api.publishing.objective_freeze import (
+    ObjectiveReportSnapshot,  # noqa: F401 - FK 元数据注册
+)
 from flow_api.publishing.renderers import render_html, render_pptx, render_xlsx
 from flow_api.publishing.service import (
     PublishingFreezeError,
+    build_report_view,
     freeze_report_snapshot,
 )
 
@@ -103,21 +107,105 @@ class FakeStore:
 
     def __init__(self) -> None:
         self.objects: dict[str, bytes] = {}
+        self.write_calls = 0
 
-    def put_immutable(self, content: bytes, filename: str):
-        import hashlib
+    def write_if_absent(
+        self,
+        *,
+        object_key: str,
+        content: bytes,
+        content_type: str,
+        content_sha256: str,
+    ):
+        from flow_api.publication.four_stage import StoredObjectRef
 
-        from flow_api.infrastructure.models.intake import StoredObject
-
-        sha = hashlib.sha256(content).hexdigest()
-        if sha not in self.objects:
-            self.objects[sha] = content
-        return StoredObject(
-            sha256=sha,
-            object_key=f"raw/{sha[:2]}/{sha}",
+        self.write_calls += 1
+        if object_key in self.objects and self.objects[object_key] != content:
+            raise RuntimeError("immutable conflict")
+        self.objects[object_key] = content
+        return StoredObjectRef(
+            stored_object_id=uuid4(),
+            object_key=object_key,
+            content_type=content_type,
+            content_sha256=content_sha256,
             size_bytes=len(content),
-            content_type="application/octet-stream",
         )
+
+
+class _RecordingAuditWriter:
+    """四阶段 intent/outcome 审计替身（独立事务由 DurableAuditWriter 职责覆盖）。"""
+
+    def write_decision(self, **_: object) -> None:
+        return None
+
+    def write_intent(self, *, intent_event_id, **_: object):
+        self.intents = getattr(self, "intents", [])
+        self.intents.append(intent_event_id)
+
+    def write_outcome(self, *, intent_event_id, error_code=None, **_: object):
+        self.outcomes = getattr(self, "outcomes", [])
+        self.outcomes.append((intent_event_id, error_code))
+
+
+def _four_stage_publish(session: Session, report, formats, *, store, pdf_renderer=None):
+    """R2 四阶段直调（路由层编排同款）：intent commit → execute → finalize commit。"""
+
+    from flow_api.api.routes.publishing import _enterprise_of_report_snapshot
+    from flow_api.publication.four_stage import (
+        AuditContext,
+        PublicationFormat,
+        PublicationRequest,
+        build_publication_failure,
+        canonical_source_sha256,
+        execute_object,
+        finalize_failure,
+        finalize_success,
+        prepare_intent,
+    )
+    from flow_api.publishing.renderers import render_html, render_pptx, render_xlsx
+    from flow_api.security.audit import register_audit_writer
+    from flow_api.security.authorization import Action
+    from flow_api.security.principal import Role
+
+    register_audit_writer(_RecordingAuditWriter())
+    view = build_report_view(session, report)
+    renderers = {
+        PublicationFormat.HTML: lambda prepared, plan: render_html(view),
+        PublicationFormat.XLSX: lambda prepared, plan: render_xlsx(view),
+        PublicationFormat.PPTX: lambda prepared, plan: render_pptx(view),
+    }
+    if pdf_renderer is not None:
+        renderers[PublicationFormat.PDF] = lambda prepared, plan: pdf_renderer(render_html(view))
+    audit_context = AuditContext(
+        actor_id="flow-dev-bp",
+        role=Role.ANALYST,
+        enterprise_id=_enterprise_of_report_snapshot(session, report),
+        correlation_id="test",
+        action=Action.PUBLISHING_REPORT_PUBLISH,
+        resource_scope="enterprise",
+        resource_type="report_snapshot",
+        resource_id=str(report.id),
+        model_boundary=None,
+    )
+    request = PublicationRequest(
+        publication_id=None,
+        idempotency_key=f"key-{uuid4().hex[:8]}",
+        resource_type="report_snapshot",
+        resource_id=str(report.id),
+        enterprise_id=_enterprise_of_report_snapshot(session, report),
+        source_payload_sha256=canonical_source_sha256(report.frozen_view["view"]),
+        formats=tuple(sorted((PublicationFormat(f) for f in formats), key=lambda f: f.value)),
+    )
+    prepared = prepare_intent(session, request, audit_context)
+    session.commit()
+    outcome = execute_object(prepared, renderers, store)
+    failure = build_publication_failure(outcome)
+    if failure is None:
+        finalized = finalize_success(session, prepared, outcome, audit_context)
+    else:
+        finalized = finalize_failure(session, prepared, outcome, failure, audit_context)
+    session.commit()
+    return finalized
 
 
 def test_publication_attempts_persist_and_retry(publishing_session: Session) -> None:
@@ -129,16 +217,23 @@ def test_publication_attempts_persist_and_retry(publishing_session: Session) -> 
     def boom(_html: bytes) -> bytes:
         raise RuntimeError("printer offline")
 
-    service = PublicationService(pdf_printer=boom, store=FakeStore())
-    outcomes = service.publish(publishing_session, report.id)
-    assert outcomes["pdf"] == "failed"
-    assert outcomes["pptx"] == "succeeded"
-
-    service_retry = PublicationService(
-        pdf_printer=lambda _html: b"%PDF-1.4 fake", store=FakeStore()
+    finalized = _four_stage_publish(
+        publishing_session,
+        report,
+        ("html", "pdf"),
+        store=FakeStore(),
+        pdf_renderer=boom,
     )
-    outcomes_retry = service_retry.publish(publishing_session, report.id)
-    assert outcomes_retry["pdf"] == "succeeded"
+    assert finalized.status == "failed"
+
+    finalized_retry = _four_stage_publish(
+        publishing_session,
+        report,
+        ("pdf",),
+        store=FakeStore(),
+        pdf_renderer=lambda _html: b"%PDF-1.4 fake",
+    )
+    assert finalized_retry.status == "published"
 
     attempt_formats = publishing_session.scalars(select(PublicationAttempt.format)).all()
     assert attempt_formats.count("pdf") >= 2
@@ -154,9 +249,14 @@ def test_succeeded_attempt_persists_reusable_stored_object(publishing_session: S
 
     report, _view = fresh_approved_report(publishing_session)
     payload = b"%PDF-1.4 persisted object"
-    service = PublicationService(pdf_printer=lambda _html: payload, store=FakeStore())
-    outcomes = service.publish(publishing_session, report.id, formats=("pdf",))
-    assert outcomes["pdf"] == "succeeded"
+    finalized = _four_stage_publish(
+        publishing_session,
+        report,
+        ("pdf",),
+        store=FakeStore(),
+        pdf_renderer=lambda _html: payload,
+    )
+    assert finalized.status == "published"
 
     attempt = publishing_session.scalar(
         select(PublicationAttempt).where(
@@ -171,10 +271,15 @@ def test_succeeded_attempt_persists_reusable_stored_object(publishing_session: S
     assert stored_row is not None
     assert stored_row.sha256 == hashlib.sha256(payload).hexdigest()
     assert stored_row.size_bytes == len(payload)
-    assert stored_row.object_key.startswith("raw/")
 
     # 内容寻址：同 payload 再次发布复用同一 StoredObject 行
-    service.publish(publishing_session, report.id, formats=("pdf",))
+    _four_stage_publish(
+        publishing_session,
+        report,
+        ("pdf",),
+        store=FakeStore(),
+        pdf_renderer=lambda _html: payload,
+    )
     duplicate_rows = publishing_session.scalars(
         select(StoredObject).where(StoredObject.sha256 == stored_row.sha256)
     ).all()

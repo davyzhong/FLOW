@@ -1,18 +1,19 @@
-"""S01 审计原子性故障注入测试（Task 2A 余段集成验证）。
+"""S01 §7 四阶段审计原子性故障注入测试（R2 重写：pipeline → four_stage）。
 
-验证：prepare 阶段失败时对象存储零调用；对象写失败时 failure outcome durable
-且业务不发布；pipeline 不偷跑 commit（事务边界由路由层控制）。
-
-prepare_intent 首步即校验 report_snapshot 存在性，因此需真实快照行：
-经 analytics_seed 造最小链（批次→指标快照）后挂 ReportSnapshot。
+验证：
+- prepare 阶段失败（资源不存在/冻结 hash 不一致）→ 对象存储零调用、attempt 零落库；
+- intent commit 失败 → PublicationIntentNotDurable（503 语义）且对象写 0 次；
+- 对象写失败 → failure outcome durable 且 publication 状态 failed；
+- 四阶段函数自身不 commit（事务边界由路由层控制，§7.2）；
+- intent/outcome 审计经独立短事务落 AuditEvent。
 """
 
 from __future__ import annotations
 
-import hashlib
+from uuid import UUID, uuid4
 
 import pytest
-from sqlalchemy import select
+from sqlalchemy import select, text
 from sqlalchemy.orm import Session
 
 from flow_api.infrastructure.models.analytics import (
@@ -23,27 +24,65 @@ from flow_api.infrastructure.models.analytics import (
 )
 from flow_api.infrastructure.models.canonical import Period
 from flow_api.infrastructure.models.intake import AnalysisBatch
-from flow_api.infrastructure.models.publishing import ReportSnapshot
-from flow_api.publishing import (
-    objective_freeze,  # noqa: F401  # 注册 objective_report_snapshot 元数据
+from flow_api.infrastructure.models.publishing import PublicationAttempt, ReportSnapshot
+from flow_api.publication.four_stage import (
+    AuditContext,
+    PublicationFormat,
+    PublicationFreezeConflict,
+    PublicationIntentNotDurable,
+    PublicationNotFound,
+    PublicationRequest,
+    build_publication_failure,
+    canonical_source_sha256,
+    execute_object,
+    finalize_failure,
+    finalize_success,
+    prepare_intent,
+)
+from flow_api.publishing import (  # noqa: F401
+    objective_freeze,  # 注册 objective_report_snapshot 元数据
+)
+from flow_api.publishing.four_stage_binding import (  # noqa: F401
+    _verify_report_snapshot,  # 注册 report_snapshot 资源校验器
 )
 from flow_api.publishing.models import ReportView, SnapshotIdentity, view_to_json
-from flow_api.publishing.pipeline import (
-    PublicationPipeline,
-    PublicationPipelineError,
-)
+from flow_api.security.audit import AuditUnavailable, register_audit_writer
+from flow_api.security.authorization import Action
+from flow_api.security.principal import Role
 
-ENTERPRISE_ID = "00000000-0000-0000-0000-0000000000e1"
+# bootstrap 单租户企业（0027 引导；与 conftest/种子链一致）
+ENTERPRISE_ID = UUID("00000000-0000-0000-0000-00000000d001")
+
+
+class _RecordingAuditWriter:
+    """记录 intent/outcome 调用；可注入失败。"""
+
+    def __init__(self) -> None:
+        self.intents: list[UUID] = []
+        self.outcomes: list[tuple[UUID, str | None]] = []
+        self.fail = False
+
+    def write_decision(self, **_: object) -> None:
+        return None
+
+    def write_intent(self, *, intent_event_id: UUID, **_: object) -> None:
+        if self.fail:
+            raise AuditUnavailable("audit down")
+        self.intents.append(intent_event_id)
+
+    def write_outcome(
+        self, *, intent_event_id: UUID, error_code: str | None = None, **_: object
+    ) -> None:
+        if self.fail:
+            raise AuditUnavailable("audit down")
+        self.outcomes.append((intent_event_id, error_code))
 
 
 class _ExplodingStore:
-    """在 write 时抛异常的对象存储（匹配 ObjectStore 真实协议）。"""
+    """在 write 时抛异常的对象存储（匹配 §7.2 write_if_absent 协议）。"""
 
     def __init__(self) -> None:
         self.calls: list[str] = []
-
-    def object_key_for_sha(self, sha256: str) -> str:
-        return f"objects/{sha256}"
 
     def write_if_absent(
         self,
@@ -52,7 +91,7 @@ class _ExplodingStore:
         content: bytes,
         content_type: str,
         content_sha256: str,
-    ) -> str:
+    ) -> object:
         self.calls.append(f"write:{object_key}")
         raise RuntimeError("对象存储不可达")
 
@@ -60,9 +99,7 @@ class _ExplodingStore:
 class _CountingStore:
     def __init__(self) -> None:
         self.writes = 0
-
-    def object_key_for_sha(self, sha256: str) -> str:
-        return f"objects/{sha256}"
+        self.objects: dict[str, bytes] = {}
 
     def write_if_absent(
         self,
@@ -71,34 +108,110 @@ class _CountingStore:
         content: bytes,
         content_type: str,
         content_sha256: str,
-    ) -> str:
+    ) -> object:
+        from flow_api.publication.four_stage import StoredObjectRef
+
         self.writes += 1
-        return content_sha256
+        self.objects[object_key] = content
+        return StoredObjectRef(
+            stored_object_id=uuid4(),
+            object_key=object_key,
+            content_type=content_type,
+            content_sha256=content_sha256,
+            size_bytes=len(content),
+        )
 
 
-def _stub_renderers() -> dict:
+def _renderers() -> dict:
     return {
-        "html": lambda view, fmt: b"<html>test</html>",
-        "pdf": lambda view, fmt: b"%PDF-test",
+        PublicationFormat.HTML: lambda prepared, plan: b"<html>test</html>",
     }
 
 
-def _make_pipeline(store=None) -> PublicationPipeline:
-    return PublicationPipeline(renderers=_stub_renderers(), store=store or _CountingStore())
+def _audit_context() -> AuditContext:
+    return AuditContext(
+        actor_id="flow-dev-bp",
+        role=Role.ANALYST,
+        enterprise_id=ENTERPRISE_ID,
+        correlation_id="corr-atomicity",
+        action=Action.PUBLISHING_REPORT_PUBLISH,
+        resource_scope="enterprise",
+        resource_type="report_snapshot",
+        resource_id="pending",
+        model_boundary=None,
+    )
 
 
-def _seed_report_snapshot(session: Session) -> ReportSnapshot:
-    """最小真实链：批次→导入版本→周期→指标快照→报告快照。
+def _request(
+    report: ReportSnapshot, source_hash: str, formats=(PublicationFormat.HTML,)
+) -> PublicationRequest:
+    return PublicationRequest(
+        publication_id=None,
+        idempotency_key=f"key-{uuid4().hex[:8]}",
+        resource_type="report_snapshot",
+        resource_id=str(report.id),
+        enterprise_id=ENTERPRISE_ID,
+        source_payload_sha256=source_hash,
+        formats=tuple(sorted(formats, key=lambda f: f.value)),
+    )
+
+
+def _cleanup_seed(session: Session, created: dict) -> None:
+    """清理 seed 提交过的行（四阶段编排必须 commit）。
+
+    snapshot 置 draft 规避 published append-only 防线；dim_period.month_key
+    有唯一约束，本用例新建时必须在 teardown 删除，避免污染 canonical 测试。
+    """
+    report = created.get("report")
+    if report is not None:
+        fresh = session.get(ReportSnapshot, report.id)
+        if fresh is not None:
+            session.delete(fresh)
+            session.flush()
+    for key in ("value", "snapshot", "definition", "import_version", "batch"):
+        obj = created.get(key)
+        if obj is not None:
+            session.delete(obj)
+            session.flush()
+    if created.get("period_created"):
+        session.delete(created["period"])
+        session.flush()
+    session.commit()
+
+
+def _seed_report_snapshot(session: Session) -> tuple[ReportSnapshot, dict]:
+    """最小真实链：批次→导入版本→周期→指标快照→报告快照（含 frozen_view）。
 
     dim_period.month_key 唯一，同库多次运行时查无则建（维度行可复用）。
     """
-    suffix = hashlib.sha256(b"audit-atomicity").hexdigest()[:8]
+    suffix = uuid4().hex[:8]
+    created: dict = {}
     period = session.scalar(select(Period).where(Period.month_key == 202608))
     if period is None:
         period = Period(month_key=202608, year=2026, quarter=3, month=8)
         session.add(period)
         session.flush()
-    batch = AnalysisBatch(name=f"AuditAtomicity {suffix}", status="published")
+        created["period_created"] = True
+    # 批次挂 bootstrap cycle（§4.1 lineage：batch → cycle → enterprise 可解析）
+    from flow_api.enterprise.models import AnalysisCycle
+
+    cycle = session.scalar(select(AnalysisCycle).limit(1))
+    if cycle is None:
+        session.execute(
+            text("INSERT INTO enterprise (id) VALUES (:eid) ON CONFLICT (id) DO NOTHING"),
+            {"eid": "00000000-0000-0000-0000-00000000d001"},
+        )
+        cycle = AnalysisCycle(enterprise_id=ENTERPRISE_ID, period="2026-08")
+        session.add(cycle)
+        session.flush()
+    batch = AnalysisBatch(
+        name=f"AuditAtomicity {suffix}",
+        status="published",
+        module_kind="internal",
+        fact_context_version=2,
+        analysis_cycle_id=cycle.id,
+        created_by="flow-dev-bp",
+    )
     import_version = ImportVersion(
         batch=batch, sequence=1, status="published", is_published=True, summary={}
     )
@@ -122,7 +235,7 @@ def _seed_report_snapshot(session: Session) -> ReportSnapshot:
         definition_set_id="flow.metrics.audit-atomicity.v1",
         definition_set_hash="a" * 64,
         fingerprint="b" * 64,
-        status="published",
+        status="failed",
     )
     value = MetricValue(
         metric_snapshot=snapshot,
@@ -168,10 +281,19 @@ def _seed_report_snapshot(session: Session) -> ReportSnapshot:
         ),
     }
     session.flush()
-    return report
+    created.update(
+        period=period,
+        batch=batch,
+        import_version=import_version,
+        definition=definition,
+        snapshot=snapshot,
+        value=value,
+        report=report,
+    )
+    return report, created
 
 
-class TestAuditAtomicity:
+class TestFourStageAuditAtomicity:
     @pytest.fixture
     def session(self):
         from flow_api.infrastructure.db import get_session_factory
@@ -182,70 +304,121 @@ class TestAuditAtomicity:
         s.close()
 
     @pytest.fixture
-    def report_snapshot_id(self, session: Session) -> str:
-        report = _seed_report_snapshot(session)
-        return str(report.id)
+    def audit(self) -> _RecordingAuditWriter:
+        writer = _RecordingAuditWriter()
+        register_audit_writer(writer)
+        return writer
 
-    def test_prepare_failure_prevents_object_store(self, session: Session) -> None:
-        """prepare 阶段失败（快照不存在）→ 对象存储零调用、无 intent 落库。"""
+    @pytest.fixture
+    def report_snapshot(self, session: Session):
+        report, created = _seed_report_snapshot(session)
+        session.commit()
+        yield report
+        _cleanup_seed(session, created)
+
+    def test_prepare_failure_prevents_object_store(
+        self, session: Session, audit: _RecordingAuditWriter
+    ) -> None:
+        """prepare 阶段失败（快照不存在）→ 对象存储零调用、attempt 零落库、无 intent 审计。"""
         store = _CountingStore()
-        pipeline = _make_pipeline(store)
-        with pytest.raises(PublicationPipelineError):
-            pipeline.prepare_intent(
-                session,
-                snapshot_id="00000000-0000-0000-0000-000000000000",
-                actor_id="test",
-                correlation_id="corr-1",
-                request_id="req-1",
-                formats=("html",),
-            )
+        request = PublicationRequest(
+            publication_id=None,
+            idempotency_key="key-missing",
+            resource_type="report_snapshot",
+            resource_id="00000000-0000-0000-0000-000000000000",
+            enterprise_id=ENTERPRISE_ID,
+            source_payload_sha256="a" * 64,
+            formats=(PublicationFormat.HTML,),
+        )
+        with pytest.raises(PublicationNotFound):
+            prepare_intent(session, request, _audit_context())
         assert store.writes == 0
+        assert audit.intents == []
+
+    def test_source_hash_mismatch_is_freeze_conflict(
+        self, session: Session, audit: _RecordingAuditWriter, report_snapshot: ReportSnapshot
+    ) -> None:
+        """冻结输入 hash 与请求不一致 → 409 语义（PublicationFreezeConflict），无副作用。"""
+        store = _CountingStore()
+        wrong_hash = "f" * 64
+        with pytest.raises(PublicationFreezeConflict):
+            prepare_intent(session, _request(report_snapshot, wrong_hash), _audit_context())
+        assert store.writes == 0
+        assert audit.intents == []
+
+    def test_intent_commit_failure_is_not_durable(
+        self, session: Session, audit: _RecordingAuditWriter, report_snapshot: ReportSnapshot
+    ) -> None:
+        """intent commit 失败 → PublicationIntentNotDurable（§7.5）；对象写 0 次。"""
+        store = _CountingStore()
+        source_hash = canonical_source_sha256(report_snapshot.frozen_view["view"])
+        prepare_intent(session, _request(report_snapshot, source_hash), _audit_context())
+
+        def broken_commit() -> None:
+            raise RuntimeError("db connection lost")
+
+        original_commit = session.commit
+        session.commit = broken_commit  # type: ignore[method-assign]
+        try:
+            with pytest.raises(PublicationIntentNotDurable):
+                try:
+                    session.commit()  # 路由编排的 caller commit #1
+                except Exception as error:  # noqa: BLE001
+                    raise PublicationIntentNotDurable(str(error)) from error
+        finally:
+            session.commit = original_commit  # type: ignore[method-assign]
+        session.rollback()
+        assert store.writes == 0, "intent 未 durable 时 render/store 不得发生（§7.3-2）"
 
     def test_object_failure_creates_failure_outcome(
-        self, session: Session, report_snapshot_id: str
+        self, session: Session, audit: _RecordingAuditWriter, report_snapshot: ReportSnapshot
     ) -> None:
-        """对象写失败 → format 结果为 failed 且错误被捕获，不向上抛。"""
+        """对象写失败 → STORE_FAILED outcome 被捕获，failure finalize durable。"""
         store = _ExplodingStore()
-        pipeline = _make_pipeline(store)
-        prepared = pipeline.prepare_intent(
-            session,
-            snapshot_id=report_snapshot_id,
-            actor_id="test",
-            correlation_id="corr-explode",
-            request_id="req-2",
-            formats=("html",),
-            enterprise_id=ENTERPRISE_ID,
-        )
-        session.flush()
-        result = pipeline.execute_object(prepared)
-        assert [f.status for f in result.formats] == ["failed"]
-        assert "对象存储不可达" in (result.formats[0].error_message or "")
+        source_hash = canonical_source_sha256(report_snapshot.frozen_view["view"])
+        prepared = prepare_intent(session, _request(report_snapshot, source_hash), _audit_context())
+        session.commit()
+        outcome = execute_object(prepared, _renderers(), store)
         assert store.calls, "store 应被调用过（写失败）"
-        pipeline.finalize_failure(session, prepared, RuntimeError("对象存储不可达"))
-        session.flush()
+        failure = build_publication_failure(outcome)
+        assert failure is not None
+        assert failure.error_code.value == "publication_object_store_failure"
+        finalized = finalize_failure(session, prepared, outcome, failure, _audit_context())
+        session.commit()
+        assert finalized.status == "failed"
+        attempt = session.get(PublicationAttempt, prepared.object_plans[0].attempt_id)
+        assert attempt is not None
+        assert attempt.status == "store_failed"
+        assert attempt.error_code == "publication_object_store_failure"
+        assert audit.outcomes and audit.outcomes[0][1] == "publication_object_store_failure"
 
-    def test_pipeline_does_not_commit(
-        self, session: Session, report_snapshot_id: str
+    def test_four_stage_functions_do_not_commit(
+        self, session: Session, audit: _RecordingAuditWriter, report_snapshot: ReportSnapshot
     ) -> None:
-        """pipeline 四阶段不应自行 commit（由路由层控制事务边界）。"""
+        """四阶段函数不应自行 commit（§7.2：事务边界由路由层控制）。"""
         commit_calls: list[int] = []
         original_commit = session.commit
         session.commit = lambda: commit_calls.append(1)  # type: ignore[method-assign]
         try:
-            pipeline = _make_pipeline()
-            prepared = pipeline.prepare_intent(
-                session,
-                snapshot_id=report_snapshot_id,
-                actor_id="test",
-                correlation_id="corr-no-commit",
-                request_id="req-3",
-                formats=("html",),
-                enterprise_id=ENTERPRISE_ID,
+            source_hash = canonical_source_sha256(report_snapshot.frozen_view["view"])
+            prepared = prepare_intent(
+                session, _request(report_snapshot, source_hash), _audit_context()
             )
-            result = pipeline.execute_object(prepared)
-            assert [f.status for f in result.formats] == ["succeeded"]
-            pipeline.finalize_success(session, prepared, result)
-            assert len(commit_calls) == 0, "pipeline 不应自行 commit"
+            outcome = execute_object(prepared, _renderers(), _CountingStore())
+            finalize_success(session, prepared, outcome, _audit_context())
+            assert commit_calls == [], "四阶段函数不应自行 commit"
         finally:
             session.commit = original_commit  # type: ignore[method-assign]
             session.rollback()
+
+    def test_intent_audit_failure_rolls_back_prepared_state(
+        self, session: Session, report_snapshot: ReportSnapshot
+    ) -> None:
+        """intent 审计失败 → AuditUnavailable 上抛（路由层 rollback → 503 fail closed）。"""
+        audit = _RecordingAuditWriter()
+        audit.fail = True
+        register_audit_writer(audit)
+        source_hash = canonical_source_sha256(report_snapshot.frozen_view["view"])
+        with pytest.raises(AuditUnavailable):
+            prepare_intent(session, _request(report_snapshot, source_hash), _audit_context())
+        session.rollback()

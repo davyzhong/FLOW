@@ -87,11 +87,31 @@ async def test_freeze_list_publish_and_download(client: Any) -> None:
     publish = await client.post(
         f"/api/v1/publishing/snapshots/{report['id']}/publish",
         json={"formats": ["html", "pdf"], "actor": "flow-dev-bp"},
+        headers={"Idempotency-Key": "itest-publish-001"},
     )
-    assert publish.status_code == 200
-    assert publish.json()["outcomes"]["html"] == "succeeded"
-    # 未接打印机时 pdf 必须是显式 failed（可重试），不允许假成功
-    assert publish.json()["outcomes"]["pdf"] == "failed"
+    assert publish.status_code == 200, publish.text
+    body = publish.json()
+    assert body["status"] == "failed" and body["publication_id"]
+    assert body["outcomes"]["html"] == "succeeded"
+    # 未接打印机时 pdf 必须是显式 render_failed（可重试），不允许假成功
+    assert body["outcomes"]["pdf"] == "render_failed"
+
+    # 缺 Idempotency-Key → 400（§7.1 必填）
+    missing_key = await client.post(
+        f"/api/v1/publishing/snapshots/{report['id']}/publish",
+        json={"formats": ["html"]},
+    )
+    assert missing_key.status_code == 400
+    assert missing_key.json()["detail"]["code"] == "idempotency_key_required"
+
+    # 重试：同 publication_id 携带原 key，只为失败 format 补 attempt
+    retry = await client.post(
+        f"/api/v1/publishing/snapshots/{report['id']}/publish",
+        json={"formats": ["html", "pdf"], "publication_id": body["publication_id"]},
+        headers={"Idempotency-Key": "itest-publish-001"},
+    )
+    assert retry.status_code == 200
+    assert retry.json()["publication_id"] == body["publication_id"]
 
     attempts = (await client.get(f"/api/v1/publishing/snapshots/{report['id']}/attempts")).json()[
         "attempts"
@@ -127,11 +147,12 @@ async def test_download_of_failed_attempt_is_blocked(client: Any) -> None:
     await client.post(
         f"/api/v1/publishing/snapshots/{report_id}/publish",
         json={"formats": ["pdf"], "actor": "flow-dev-bp"},
+        headers={"Idempotency-Key": "itest-failed-pdf-001"},
     )
     attempts = (await client.get(f"/api/v1/publishing/snapshots/{report_id}/attempts")).json()[
         "attempts"
     ]
-    failed_pdf = [a for a in attempts if a["status"] == "failed"][0]
+    failed_pdf = [a for a in attempts if a["status"] in ("failed", "render_failed")][0]
 
     download = await client.get(f"/api/v1/publishing/attempts/{failed_pdf['attempt_id']}/download")
     assert download.status_code == 409
