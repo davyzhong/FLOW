@@ -76,4 +76,4 @@ flowchart LR
 
 Compose 是开发栈，包含开发凭据与暴露端口；并非已加固部署。API/Web 有容器健康检查，Worker 可另用 Celery `inspect ping` 检查；`stack-up` 本身没有 Worker 业务验收。环境变量的加载方式和单用户认证见[认证配置](../operations/authentication.md)。备份恢复、网络边界、深度可观测性及真实数据试点仍需独立验收。
 
-源码入口：[Compose](../../infra/compose.yaml)、[Makefile](../../Makefile)、[API 路由](../../services/api/src/flow_api/api/routes)、[Worker](../../services/api/src/flow_api/worker.py)、[发布服务](../../services/api/src/flow_api/publishing/publication.py)。
+源码入口：[Compose](../../infra/compose.yaml)、[Makefile](../../Makefile)、[API 路由](../../services/api/src/flow_api/api/routes)、[Worker](../../services/api/src/flow_api/worker.py)、[发布服务](../../services/api/src/flow_api/publishing/（模块化拆分：four_stage_binding / objective_freeze / objective_renderers）)。
