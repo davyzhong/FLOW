@@ -8,7 +8,7 @@ created_at: 2026-09-12
 updated_at: 2026-09-15
 owner: FLOW
 generator_ref: scripts/documentation/plan_views.py
-input_hash: 6620da55aa0323094198d8819a035911da0e8a73a7df6e66eed62b376dc85213
+input_hash: 94c0dfe13acf04341de19432a1956bb673a58be5e43e5034f99c6e95698c4ae6
 applies_to: planning
 ---
 
@@ -18,3 +18,5 @@ applies_to: planning
 
 - [S01 U8 后战略边界、事实合同与安全门禁](../work_items/S01--post-u8-boundary-contract-security.md) — `completed`
 - [U08 生产就绪收口](../work_items/U08--production-readiness.md) — `completed`
+- [AI 问数 v1 与 100 问评测集（T12）](../work_items/PUBLIC--ai-qa-v1.md) — `completed`
+- [数据点级溯源、重述检测、AI 起草与只读 MCP（T10）](../work_items/PUBLIC--provenance-restatement-mcp.md) — `completed`

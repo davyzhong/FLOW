@@ -2,7 +2,7 @@
 doc_id: FLOW-WP-PUBLIC-AI-QA-V1-001
 title: AI 问数 v1 与 100 问评测集（T12）
 doc_type: work-item
-status: blocked
+status: completed
 version: 1.0
 created_at: 2026-09-15
 updated_at: 2026-09-15

@@ -8,7 +8,7 @@ created_at: 2026-09-12
 updated_at: 2026-09-15
 owner: FLOW
 generator_ref: scripts/documentation/plan_views.py
-input_hash: 6620da55aa0323094198d8819a035911da0e8a73a7df6e66eed62b376dc85213
+input_hash: 94c0dfe13acf04341de19432a1956bb673a58be5e43e5034f99c6e95698c4ae6
 applies_to: planning
 ---
 
@@ -16,4 +16,4 @@ applies_to: planning
 
 > 本页由工作包元数据确定性生成，请勿手工修改。
 
-- 暂无
+- [数据扩张、行业基准与性能容量基线（T11）](../work_items/PUBLIC--data-expansion-benchmarks.md) — `active`

@@ -274,3 +274,35 @@ check_docs m1/contracts-check 全绿；stack-up 容器链路实测
   CURRENT_ROADMAP 同步、HANDOFF v3.1。
 
 **S01 正式关闭；Task 6 关闭。**下一 Gate：公开模块 C 级出口（T09，gated）。
+
+## 8. 阶段 3 基础交付登记：T09–T12（2026-09-15，分支 codex/t09-c-exit-foundations）
+
+- **T09-L1**（`5a9e788`）：页级答案集 `config/statements/answer_set_l1.yaml`
+  ——1775/1795 值带 PDF 页锚（98.9%；strong 972 / weak 803，跨语言招股书走
+  仅数值弱锚并显式降级标注），10 行未定位显式列出不静默丢弃；
+  `accuracy_benchmark.py --level L1` 双向验证：锚失效 0、值不一致 0、
+  未入库 0；L0 保持 1454/1454。`answer_set_sources.yaml` 固定 sample→报告
+  身份映射（BABA FY2019/20、菜鸟 FY2021–23 共用 PDF，键必须含报告身份）。
+- **T10-B3/B4**（`c9dcd47`）：迁移 0029（statement_line_item.page_number/
+  page_anchor + statement_report.supersedes_id）；导入器重述时写 supersedes
+  链、按 L1 答案集认领页锚（95.5% 行项目带页锚：strong 516 / weak 471 /
+  null 47，不伪造定位）；API/前端透出页码徽标；
+  `statement_restatement_diff.py` 相邻版本 diff（验收：构造重述样本 →
+  supersedes 链一致 + 恰好一处值变更断言通过）。
+- **T10-B5/B6**（`dda978b`）：只读 MCP server（stdio JSON-RPC，stdlib 实现；
+  get_facts/get_metric/get_provenance 三工具；FLOW_MCP_TOKEN fail-closed
+  认证 + 结构化审计行）；`draft_restatement_commentary.py` 确定性重述差异
+  说明起草（数字全部来自引擎，零模型生成，人工终审前置）。
+- **T11-G2**（`8c479a1`）：`perf_baseline.py` 事务内 10× 合成放大
+  （1034→10340 行，回滚无污染）：明细查询 P95 6.23ms、检索 P95 0.97ms、
+  聚合 P95 1.11ms——10× 容量下全部远低于裁决阈值。
+- **T12**（`ffef522`）：`ask_facts.py` 确定性问数 v1（检索引用 + 显式拒答，
+  零模型调用、可复现）+ `generate_qa_eval.py` 评测集 94 问
+  （60 数值 + 34 拒答陷阱），命中率 100%、拒答零误答。
+
+**仍未关闭（外部依赖/需用户参与，不虚报）：**
+- C 级出口 PASS 本身：独立盲评与 company-level holdout 抽签需用户/第三方；
+  L1 答案集的独立 oracle 复核（U4 车道）待到料；
+- C1 数据扩张：需 10 家公司真实财报 PDF 到料（不可合成）；
+- m6 文档门禁入 CI：单行改动方案已备（红线待批）；
+- T13 内部工作台：等 C 级出口 PASS + 企业数据授权；T14 各外部项同前。

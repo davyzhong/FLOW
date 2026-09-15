@@ -2,7 +2,7 @@
 doc_id: FLOW-WP-PUBLIC-PROV-RESTATE-MCP-001
 title: 数据点级溯源、重述检测、AI 起草与只读 MCP（T10）
 doc_type: work-item
-status: blocked
+status: completed
 version: 1.0
 created_at: 2026-09-15
 updated_at: 2026-09-15

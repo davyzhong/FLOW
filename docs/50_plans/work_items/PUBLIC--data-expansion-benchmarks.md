@@ -2,7 +2,7 @@
 doc_id: FLOW-WP-PUBLIC-DATA-EXPANSION-001
 title: 数据扩张、行业基准与性能容量基线（T11）
 doc_type: work-item
-status: blocked
+status: active
 version: 1.0
 created_at: 2026-09-15
 updated_at: 2026-09-15
