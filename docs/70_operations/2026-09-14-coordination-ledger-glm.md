@@ -306,3 +306,27 @@ check_docs m1/contracts-check 全绿；stack-up 容器链路实测
 - C1 数据扩张：需 10 家公司真实财报 PDF 到料（不可合成）；
 - m6 文档门禁入 CI：单行改动方案已备（红线待批）；
 - T13 内部工作台：等 C 级出口 PASS + 企业数据授权；T14 各外部项同前。
+
+## 9. C 级出口执行批次登记（2026-09-15，分支 codex/cexit-execution，main 107df7b）
+
+- **菜鸟压力测试命中**（`44acd16` + `107df7b`）：468 条弱锚全对之外，
+  抓获 10 条**抽取错误候选**——BABA 利润表 NCI 行（-9083/-7652 等）与
+  JDL 现金流量表 2 行的值在源 PDF 文本层全文档不存在（含括号负数形态；
+  p38 上的 "9083" 实为 29,083 的子串）。按 Q4 零容忍排除出 L1 通过集，
+  人工查源清单见
+  `docs/60_delivery/2026-09-15-cainiao-stress-test-report.md`（status:
+  verified）。
+- **holdout 预注册签封**（同提交）：`HOLDOUT-PREREGISTRATION-20260915.md`
+  ——到料日由 qiming 随机指定 1 家封存，抽取完成才启封对账；到料后不得
+  修改本文件。Q8 经用户重答正式确认。
+- **AI 交叉评执行包**（同提交）：`docs/80_reviews/ai-cross-review/README.md`
+  ——评审 prompt（五类错误 + 逐条输出格式）、厂商隔离纪律（非 GLM）、
+  证据束导出命令（`accuracy_benchmark.py --export-review-bundle`，10 份
+  报告束 = 抽取值 + 源页全文，不含实现方结论；工作产物不进 git）。
+- **C1 性能门禁入 CI**（用户批准）：integration job 新增 perf gate 步骤
+  ——10× 合成规模 + `--max-p95 50`（本地 4.38/1.04/1.66ms 的 8-50 倍
+  余量，只拦数量级劣化）；`perf_baseline.py` 加阈值判定与独立 env 默认。
+  run 34984178082 首跑通过。
+- **C2 MCP 开放**：维持等 A5 合规尽调后开放（已记录）。
+- 过程修正：m6 曾被 views 漂移与证据束 frontmatter 打红（tail 管道吞
+  退出码致先行提交）——修复两个提交补齐，无遗留。
