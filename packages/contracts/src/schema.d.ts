@@ -3026,6 +3026,10 @@ export interface components {
             value_current?: string | null;
             /** Value Prior */
             value_prior?: string | null;
+            /** Page Number */
+            page_number?: number | null;
+            /** Page Anchor */
+            page_anchor?: string | null;
         };
         /** StatementPublishResponse */
         StatementPublishResponse: {

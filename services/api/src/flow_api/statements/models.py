@@ -30,6 +30,9 @@ class StatementLine(FrozenModel):
     value_begin: StrictDecimal | None = None
     value_current: StrictDecimal | None = None
     value_prior: StrictDecimal | None = None
+    # T10-B3 数据点级溯源（未命中的行保持 None，不伪造定位）
+    page_number: int | None = None
+    page_anchor: str | None = None
 
 
 class StatementSection(FrozenModel):

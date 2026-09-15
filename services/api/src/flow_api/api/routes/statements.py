@@ -237,6 +237,8 @@ def get_statement_report(
                         value_begin=exact(line.value_begin),
                         value_current=exact(line.value_current),
                         value_prior=exact(line.value_prior),
+                        page_number=getattr(line, "page_number", None),
+                        page_anchor=getattr(line, "page_anchor", None),
                     )
                     for line in section.items
                 ),

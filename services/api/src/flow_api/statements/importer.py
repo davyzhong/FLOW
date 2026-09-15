@@ -11,7 +11,9 @@ from __future__ import annotations
 import hashlib
 import json
 from decimal import Decimal, InvalidOperation
+from pathlib import Path
 from typing import Any
+from uuid import UUID
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -53,6 +55,27 @@ def _to_decimal(raw: Any, *, statement_type: str, item: str, column: str) -> Dec
         ) from error
 
 
+def load_provenance_index(
+    answer_set_path: Path,
+) -> dict[tuple[str, str, str, str], set[tuple[Decimal, int, str]]]:
+    """T09-L1 答案集 → 溯源索引：(statement, item, column) → {(value, page, anchor)}。
+
+    调用方按报告身份（stock_code/period_label/report_kind）分桶；值相等才
+    认领页锚——同名行（流动/非流动借款）靠值区分。
+    """
+    import yaml
+
+    payload = yaml.safe_load(Path(answer_set_path).read_text(encoding="utf-8"))
+    index: dict[tuple[str, str, str, str], set[tuple[Decimal, int, str]]] = {}
+    for entry in payload.get("entries", []):
+        normalized_column = COLUMN_ALIASES.get(entry["column"], entry["column"])
+        key = (entry["statement"], entry["item"], normalized_column, entry["stock_code"])
+        index.setdefault(key, set()).add(
+            (Decimal(str(entry["value"])), int(entry["page"]), str(entry.get("match_mode", "weak")))
+        )
+    return index
+
+
 def import_statement_report(
     session: Session,
     *,
@@ -63,6 +86,7 @@ def import_statement_report(
     payload: dict[str, Any],
     source_ref: str,
     source_sha256: str | None = None,
+    provenance_index: dict[tuple[str, str, str, str], set[tuple[Decimal, int, str]]] | None = None,
 ) -> StatementReport:
     """按唯一身份幂等导入一份抽取财报；返回含行项目的 ORM 对象。"""
 
@@ -89,8 +113,10 @@ def import_statement_report(
         .limit(1)
     )
     content_sha256 = _content_hash(payload)
+    superseded_id: UUID | None = None
     if report is not None and report.content_sha256 != content_sha256:
-        # 重述：旧版完整保留，新版本从既有最大版本号递增。
+        # 重述：旧版完整保留，新版本从既有最大版本号递增并显式指向旧版。
+        superseded_id = report.id
         report = None
     if report is None:
         latest_version = session.scalar(
@@ -109,6 +135,7 @@ def import_statement_report(
             report_kind=report_kind,
             period_label=period_label,
             version=(latest_version or 0) + 1,
+            supersedes_id=superseded_id,
         )
         session.add(report)
     report.unit_note = unit_note
@@ -147,6 +174,23 @@ def import_statement_report(
                 values[column] = _to_decimal(
                     raw, statement_type=statement_type, item=item_name, column=str(key)
                 )
+            page_number: int | None = None
+            page_anchor: str | None = None
+            if provenance_index is not None:
+                # B3 溯源认领：列族+值相等的答案集条目提供页锚（值不同不认领，
+                # 同名行靠值区分；无答案集或未命中则保持 NULL，不伪造定位）。
+                for column, value in values.items():
+                    candidates = provenance_index.get(
+                        (str(statement_type), item_name, column, stock_code),
+                        set(),
+                    )
+                    for entry_value, entry_page, entry_anchor in candidates:
+                        if entry_value == value:
+                            page_number = entry_page
+                            page_anchor = entry_anchor
+                            break
+                    if page_number is not None:
+                        break
             report.items.append(
                 StatementLineItem(
                     statement_type=str(statement_type),
@@ -156,6 +200,8 @@ def import_statement_report(
                     value_begin=values.get("value_begin"),
                     value_current=values.get("value_current"),
                     value_prior=values.get("value_prior"),
+                    page_number=page_number,
+                    page_anchor=page_anchor,
                 )
             )
     session.flush()

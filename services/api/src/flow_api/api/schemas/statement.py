@@ -22,6 +22,9 @@ class StatementLineResponse(FrozenResponse):
     value_begin: str | None = None
     value_current: str | None = None
     value_prior: str | None = None
+    # T10-B3 数据点级溯源：源 PDF 页码与锚定模式（未命中为 None，不伪造）
+    page_number: int | None = None
+    page_anchor: str | None = None
 
 
 class StatementSectionResponse(FrozenResponse):

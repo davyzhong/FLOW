@@ -77,6 +77,8 @@ class StatementService:
                             value_begin=i.value_begin,
                             value_current=i.value_current,
                             value_prior=i.value_prior,
+                            page_number=i.page_number,
+                            page_anchor=i.page_anchor,
                         )
                         for i in items
                         if i.statement_type == statement_type

@@ -51,6 +51,10 @@ class StatementReport(CanonicalIdentityMixin, Base):
     version: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
     status: Mapped[str] = mapped_column(String(32), nullable=False, default="draft")
     content_sha256: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    # --- T10-B4 重述 supersedes 链（0029）：本版本取代的旧版本 ---
+    supersedes_id: Mapped[UUID | None] = mapped_column(
+        PG_UUID(as_uuid=True), ForeignKey("statement_report.id", ondelete="SET NULL")
+    )
     unit_note: Mapped[str] = mapped_column(String(64), nullable=False)
     source_ref: Mapped[str] = mapped_column(String(512), nullable=False)
     source_sha256: Mapped[str | None] = mapped_column(String(64), nullable=True)
@@ -86,6 +90,9 @@ class StatementLineItem(CanonicalIdentityMixin, Base):
     value_begin: Mapped[Decimal | None] = mapped_column(Numeric(24, 4), nullable=True)
     value_current: Mapped[Decimal | None] = mapped_column(Numeric(24, 4), nullable=True)
     value_prior: Mapped[Decimal | None] = mapped_column(Numeric(24, 4), nullable=True)
+    # --- T10-B3 数据点级溯源（0029）：源 PDF 页码与锚定模式 ---
+    page_number: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    page_anchor: Mapped[str | None] = mapped_column(String(16), nullable=True)
 
     report: Mapped[StatementReport] = relationship(back_populates="items")
 

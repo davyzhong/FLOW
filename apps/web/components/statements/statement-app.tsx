@@ -94,6 +94,11 @@ function StatementTable({
                     </td>
                   );
                 })}
+                <td className="is-num">
+                  {line.page_number === null || line.page_number === undefined
+                    ? ""
+                    : `p${line.page_number}`}
+                </td>
               </tr>
             ))}
           </tbody>

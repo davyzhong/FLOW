@@ -18,7 +18,7 @@ import yaml
 
 from flow_api.infrastructure.db import get_session_factory
 from flow_api.infrastructure.models.statement import StatementLineItem, StatementReport
-from flow_api.statements.importer import import_statement_report
+from flow_api.statements.importer import import_statement_report, load_provenance_index
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 
@@ -32,6 +32,11 @@ def main() -> int:
     parser.add_argument("--period-label", required=True, help="期间标签（如 2026Q1）")
     parser.add_argument(
         "--source-sha256", default=None, help="原文 PDF SHA-256（缺省按 source_ref 计算文件哈希）"
+    )
+    parser.add_argument(
+        "--answer-set",
+        default="config/statements/answer_set_l1.yaml",
+        help="T09-L1 页级答案集（溯源页锚来源；传空字符串跳过溯源）",
     )
     args = parser.parse_args()
 
@@ -47,6 +52,14 @@ def main() -> int:
         if source_file.is_file():
             source_sha256 = hashlib.sha256(source_file.read_bytes()).hexdigest()
 
+    provenance_index = None
+    if args.answer_set:
+        answer_set_path = Path(args.answer_set)
+        if not answer_set_path.is_absolute():
+            answer_set_path = REPOSITORY_ROOT / answer_set_path
+        if answer_set_path.is_file():
+            provenance_index = load_provenance_index(answer_set_path)
+
     with get_session_factory()() as session:
         report = import_statement_report(
             session,
@@ -57,6 +70,7 @@ def main() -> int:
             payload=payload,
             source_ref=source_ref,
             source_sha256=source_sha256,
+            provenance_index=provenance_index,
         )
         session.commit()
         print(
