@@ -1,0 +1,541 @@
+{
+  "schema": "flow.qa_eval.v1",
+  "generated_from": "事实库（答案即库内真值）+ 固定拒答陷阱题",
+  "seed": 20260915,
+  "composition": {
+    "value": 60,
+    "refusal": 34
+  },
+  "cases": [
+    {
+      "type": "value",
+      "question": "京东物流 FY2025 的流動負債總額是多少",
+      "expect_value": "期末余额 44369279.0000；期初余额 39712049.0000",
+      "expect_unit": "人民币千元（每股收益为元）"
+    },
+    {
+      "type": "value",
+      "question": "京东物流 FY2025 的非流動負債總額是多少",
+      "expect_value": "期末余额 20445550.0000；期初余额 15188819.0000",
+      "expect_unit": "人民币千元（每股收益为元）"
+    },
+    {
+      "type": "value",
+      "question": "京东物流 FY2025 的受限制現金是多少",
+      "expect_value": "期末余额 459914.0000；期初余额 335996.0000",
+      "expect_unit": "人民币千元（每股收益为元）"
+    },
+    {
+      "type": "value",
+      "question": "京东物流 FY2025 的物業及設備是多少",
+      "expect_value": "期末余额 17937019.0000；期初余额 16001564.0000",
+      "expect_unit": "人民币千元（每股收益为元）"
+    },
+    {
+      "type": "value",
+      "question": "京东物流 FY2025 的租賃按金變動淨額是多少",
+      "expect_value": "本期发生额 -14668.0000；上期发生额 -25137.0000",
+      "expect_unit": "人民币千元（每股收益为元）"
+    },
+    {
+      "type": "value",
+      "question": "京东物流 FY2025 的非控制性權益是多少",
+      "expect_value": "本期发生额 243362.0000；上期发生额 889986.0000",
+      "expect_unit": "人民币千元（每股收益为元）"
+    },
+    {
+      "type": "value",
+      "question": "阿里巴巴 FY2019 的現金及現金等價物是多少",
+      "expect_value": "本期发生额 189976.0000",
+      "expect_unit": "人民币百万元（每股数据除外）"
+    },
+    {
+      "type": "value",
+      "question": "阿里巴巴 FY2019 的負債、夾層權益及權益總額是多少",
+      "expect_value": "本期发生额 965076.0000",
+      "expect_unit": "人民币百万元（每股数据除外）"
+    },
+    {
+      "type": "value",
+      "question": "阿里巴巴 FY2019 的資產總額是多少",
+      "expect_value": "本期发生额 270273.0000",
+      "expect_unit": "人民币百万元（每股数据除外）"
+    },
+    {
+      "type": "value",
+      "question": "阿里巴巴 FY2019 的應付所得稅是多少",
+      "expect_value": "本期发生额 17685.0000",
+      "expect_unit": "人民币百万元（每股数据除外）"
+    },
+    {
+      "type": "value",
+      "question": "阿里巴巴 FY2019 的一般及行政費用是多少",
+      "expect_value": "本期发生额 -24889.0000；上期发生额 -1112.0000",
+      "expect_unit": "人民币百万元（每股数据除外）"
+    },
+    {
+      "type": "value",
+      "question": "阿里巴巴 FY2019 的夾層權益是多少",
+      "expect_value": "本期发生额 6819.0000",
+      "expect_unit": "人民币百万元（每股数据除外）"
+    },
+    {
+      "type": "value",
+      "question": "阿里巴巴 FY2019 的權益總額是多少",
+      "expect_value": "本期发生额 492257.0000",
+      "expect_unit": "人民币百万元（每股数据除外）"
+    },
+    {
+      "type": "value",
+      "question": "阿里巴巴 FY2020 的流動負債總額是多少",
+      "expect_value": "期末余额 241872.0000；期初余额 207669.0000",
+      "expect_unit": "人民币百万元（每股数据除外）"
+    },
+    {
+      "type": "value",
+      "question": "阿里巴巴 FY2020 的負債、夾層權益及權益總額是多少",
+      "expect_value": "期末余额 1312985.0000；期初余额 965076.0000",
+      "expect_unit": "人民币百万元（每股数据除外）"
+    },
+    {
+      "type": "value",
+      "question": "阿里巴巴 FY2020 的法定儲備是多少",
+      "expect_value": "期末余额 6100.0000；期初余额 5068.0000",
+      "expect_unit": "人民币百万元（每股数据除外）"
+    },
+    {
+      "type": "value",
+      "question": "阿里巴巴 FY2020 的商譽是多少",
+      "expect_value": "本期发生额 -576.0000",
+      "expect_unit": "人民币百万元（每股数据除外）"
+    },
+    {
+      "type": "value",
+      "question": "阿里巴巴 FY2020 的營業成本是多少",
+      "expect_value": "本期发生额 -282367.0000；上期发生额 -206929.0000",
+      "expect_unit": "人民币百万元（每股数据除外）"
+    },
+    {
+      "type": "value",
+      "question": "阿里巴巴 FY2020 的無形資產攤銷及減值是多少",
+      "expect_value": "本期发生额 -13388.0000；上期发生额 -10727.0000",
+      "expect_unit": "人民币百万元（每股数据除外）"
+    },
+    {
+      "type": "value",
+      "question": "阿里巴巴 FY2020 的未分配利潤是多少",
+      "expect_value": "期末余额 406287.0000；期初余额 257886.0000",
+      "expect_unit": "人民币百万元（每股数据除外）"
+    },
+    {
+      "type": "value",
+      "question": "顺丰 2026Q1 的商誉是多少",
+      "expect_value": "期末余额 9367263.0000；期初余额 9545309.0000",
+      "expect_unit": "人民币千元（每股收益为元）"
+    },
+    {
+      "type": "value",
+      "question": "顺丰 2026Q1 的加：期初现金及现金等价物余额是多少",
+      "expect_value": "本期发生额 19959631.0000；上期发生额 32646055.0000",
+      "expect_unit": "人民币千元（每股收益为元）"
+    },
+    {
+      "type": "value",
+      "question": "顺丰 2026Q1 的应付债券是多少",
+      "expect_value": "期末余额 11380941.0000；期初余额 12358825.0000",
+      "expect_unit": "人民币千元（每股收益为元）"
+    },
+    {
+      "type": "value",
+      "question": "顺丰 2026Q1 的使用权资产是多少",
+      "expect_value": "期末余额 15088871.0000；期初余额 15456347.0000",
+      "expect_unit": "人民币千元（每股收益为元）"
+    },
+    {
+      "type": "value",
+      "question": "顺丰 2026Q1 的财务费用是多少",
+      "expect_value": "本期发生额 420429.0000；上期发生额 466797.0000",
+      "expect_unit": "人民币千元（每股收益为元）"
+    },
+    {
+      "type": "value",
+      "question": "顺丰 2026Q1 的流动资产合计是多少",
+      "expect_value": "期末余额 90087104.0000；期初余额 91327047.0000",
+      "expect_unit": "人民币千元（每股收益为元）"
+    },
+    {
+      "type": "value",
+      "question": "腾讯 2026Q2 的投资收益/（亏损）净额及其他是多少",
+      "expect_value": "本期发生额 11184.0000；上期发生额 2638.0000",
+      "expect_unit": "人民币百万元"
+    },
+    {
+      "type": "value",
+      "question": "腾讯 2026Q2 的经营盈利是多少",
+      "expect_value": "本期发生额 67276.0000；上期发生额 60104.0000",
+      "expect_unit": "人民币百万元"
+    },
+    {
+      "type": "value",
+      "question": "腾讯 2026Q2 的营销服务是多少",
+      "expect_value": "本期发生额 43565.0000；上期发生额 35762.0000",
+      "expect_unit": "人民币百万元"
+    },
+    {
+      "type": "value",
+      "question": "腾讯 2026Q2 的其他是多少",
+      "expect_value": "本期发生额 2520.0000；上期发生额 1838.0000",
+      "expect_unit": "人民币百万元"
+    },
+    {
+      "type": "value",
+      "question": "腾讯 2026Q2 的本公司权益持有人是多少",
+      "expect_value": "本期发生额 56022.0000；上期发生额 55628.0000",
+      "expect_unit": "人民币百万元"
+    },
+    {
+      "type": "value",
+      "question": "腾讯 2026Q2 的分占联营公司及合营公司盈利/（亏损）净额是多少",
+      "expect_value": "本期发生额 -9993.0000；上期发生额 4473.0000",
+      "expect_unit": "人民币百万元"
+    },
+    {
+      "type": "value",
+      "question": "腾讯 2026Q2 的非控制性权益是多少",
+      "expect_value": "本期发生额 1955.0000；上期发生额 416.0000",
+      "expect_unit": "人民币百万元"
+    },
+    {
+      "type": "value",
+      "question": "腾讯 2026Q2 的所得税开支是多少",
+      "expect_value": "本期发生额 -11713.0000；上期发生额 -11351.0000",
+      "expect_unit": "人民币百万元"
+    },
+    {
+      "type": "value",
+      "question": "阿里巴巴 FY2021 的融資活動所用現金流量淨額是多少",
+      "expect_value": "本期发生额 30082.0000；上期发生额 70853.0000",
+      "expect_unit": "人民币百万元（每股数据除外）"
+    },
+    {
+      "type": "value",
+      "question": "阿里巴巴 FY2021 的累計其他綜合收益（損失）是多少",
+      "expect_value": "期末余额 -19063.0000；期初余额 -643.0000",
+      "expect_unit": "人民币百万元（每股数据除外）"
+    },
+    {
+      "type": "value",
+      "question": "阿里巴巴 FY2021 的資本公積是多少",
+      "expect_value": "期末余额 394308.0000；期初余额 343707.0000",
+      "expect_unit": "人民币百万元（每股数据除外）"
+    },
+    {
+      "type": "value",
+      "question": "阿里巴巴 FY2021 的權益總額是多少",
+      "expect_value": "期末余额 937470.0000；期初余额 755401.0000",
+      "expect_unit": "人民币百万元（每股数据除外）"
+    },
+    {
+      "type": "value",
+      "question": "阿里巴巴 FY2021 的投資活動所用現金流量淨額是多少",
+      "expect_value": "本期发生额 -244194.0000；上期发生额 -108072.0000",
+      "expect_unit": "人民币百万元（每股数据除外）"
+    },
+    {
+      "type": "value",
+      "question": "阿里巴巴 FY2021 的商譽減值是多少",
+      "expect_value": "上期发生额 -576.0000",
+      "expect_unit": "人民币百万元（每股数据除外）"
+    },
+    {
+      "type": "value",
+      "question": "阿里巴巴 FY2021 的短期投資是多少",
+      "expect_value": "期末余额 152376.0000；期初余额 28478.0000",
+      "expect_unit": "人民币百万元（每股数据除外）"
+    },
+    {
+      "type": "value",
+      "question": "阿里巴巴 FY2021 的股權證券及其他投資是多少",
+      "expect_value": "期末余额 9807.0000；期初余额 4234.0000",
+      "expect_unit": "人民币百万元（每股数据除外）"
+    },
+    {
+      "type": "value",
+      "question": "阿里巴巴 FY2022 的受限制現金及應收託管資金是多少",
+      "expect_value": "期末余额 37455.0000；期初余额 35207.0000",
+      "expect_unit": "人民币百万元（每股数据除外）"
+    },
+    {
+      "type": "value",
+      "question": "阿里巴巴 FY2022 的短期投資是多少",
+      "expect_value": "期末余额 256514.0000；期初余额 152376.0000",
+      "expect_unit": "人民币百万元（每股数据除外）"
+    },
+    {
+      "type": "value",
+      "question": "阿里巴巴 FY2022 的產品開發費用是多少",
+      "expect_value": "本期发生额 -55465.0000；上期发生额 -57236.0000",
+      "expect_unit": "人民币百万元（每股数据除外）"
+    },
+    {
+      "type": "value",
+      "question": "阿里巴巴 FY2022 的流動負債總額是多少",
+      "expect_value": "期末余额 383784.0000；期初余额 377358.0000",
+      "expect_unit": "人民币百万元（每股数据除外）"
+    },
+    {
+      "type": "value",
+      "question": "阿里巴巴 FY2022 的股東權益總額是多少",
+      "expect_value": "期末余额 948479.0000；期初余额 937470.0000",
+      "expect_unit": "人民币百万元（每股数据除外）"
+    },
+    {
+      "type": "value",
+      "question": "阿里巴巴 FY2022 的營業成本是多少",
+      "expect_value": "本期发生额 -539450.0000；上期发生额 -421205.0000",
+      "expect_unit": "人民币百万元（每股数据除外）"
+    },
+    {
+      "type": "value",
+      "question": "阿里巴巴 FY2022 的非控制性權益是多少",
+      "expect_value": "本期发生额 -15170.0000；上期发生额 -7294.0000",
+      "expect_unit": "人民币百万元（每股数据除外）"
+    },
+    {
+      "type": "value",
+      "question": "阿里巴巴 FY2022 的股權證券及其他投資是多少",
+      "expect_value": "期末余额 8673.0000；期初余额 9807.0000",
+      "expect_unit": "人民币百万元（每股数据除外）"
+    },
+    {
+      "type": "value",
+      "question": "阿里巴巴 FY2023 的資本公積是多少",
+      "expect_value": "期末余额 416880.0000",
+      "expect_unit": "人民币百万元（每股数据除外）"
+    },
+    {
+      "type": "value",
+      "question": "阿里巴巴 FY2023 的應付所得稅是多少",
+      "expect_value": "期末余额 12543.0000",
+      "expect_unit": "人民币百万元（每股数据除外）"
+    },
+    {
+      "type": "value",
+      "question": "阿里巴巴 FY2023 的流動資產總額是多少",
+      "expect_value": "期末余额 697966.0000",
+      "expect_unit": "人民币百万元（每股数据除外）"
+    },
+    {
+      "type": "value",
+      "question": "阿里巴巴 FY2023 的產品開發費用是多少",
+      "expect_value": "本期发生额 -56744.0000；上期发生额 -1951.0000",
+      "expect_unit": "人民币百万元（每股数据除外）"
+    },
+    {
+      "type": "value",
+      "question": "阿里巴巴 FY2023 的投資活動所用現金流量淨額是多少",
+      "expect_value": "本期发生额 -135506.0000；上期发生额 2807.0000",
+      "expect_unit": "人民币百万元（每股数据除外）"
+    },
+    {
+      "type": "value",
+      "question": "阿里巴巴 FY2023 的預提費用、應付款項及其他負債是多少",
+      "expect_value": "期末余额 275950.0000",
+      "expect_unit": "人民币百万元（每股数据除外）"
+    },
+    {
+      "type": "value",
+      "question": "阿里巴巴 FY2023 的夾層權益是多少",
+      "expect_value": "期末余额 9858.0000",
+      "expect_unit": "人民币百万元（每股数据除外）"
+    },
+    {
+      "type": "value",
+      "question": "阿里巴巴 FY2023 的非控制性權益是多少",
+      "expect_value": "本期发生额 -7210.0000；上期发生额 -339.0000",
+      "expect_unit": "人民币百万元（每股数据除外）"
+    },
+    {
+      "type": "value",
+      "question": "阿里巴巴 FY2024 的歸屬於非控制性權益損益是多少",
+      "expect_value": "本期发生额 -8677.0000；上期发生额 -7210.0000",
+      "expect_unit": "人民币百万元（每股数据除外）"
+    },
+    {
+      "type": "value",
+      "question": "阿里巴巴 FY2024 的利息費用是多少",
+      "expect_value": "本期发生额 -7947.0000；上期发生额 -5918.0000",
+      "expect_unit": "人民币百万元（每股数据除外）"
+    },
+    {
+      "type": "refusal_item",
+      "question": "京东物流 FY2025 的量子波动利润是多少",
+      "expect_refusal": true
+    },
+    {
+      "type": "refusal_item",
+      "question": "阿里巴巴 FY2019 的量子波动利润是多少",
+      "expect_refusal": true
+    },
+    {
+      "type": "refusal_item",
+      "question": "阿里巴巴 FY2020 的量子波动利润是多少",
+      "expect_refusal": true
+    },
+    {
+      "type": "refusal_item",
+      "question": "顺丰 2026Q1 的量子波动利润是多少",
+      "expect_refusal": true
+    },
+    {
+      "type": "refusal_item",
+      "question": "腾讯 2026Q2 的量子波动利润是多少",
+      "expect_refusal": true
+    },
+    {
+      "type": "refusal_item",
+      "question": "阿里巴巴 FY2021 的量子波动利润是多少",
+      "expect_refusal": true
+    },
+    {
+      "type": "refusal_item",
+      "question": "阿里巴巴 FY2022 的量子波动利润是多少",
+      "expect_refusal": true
+    },
+    {
+      "type": "refusal_item",
+      "question": "阿里巴巴 FY2023 的量子波动利润是多少",
+      "expect_refusal": true
+    },
+    {
+      "type": "refusal_item",
+      "question": "阿里巴巴 FY2024 的量子波动利润是多少",
+      "expect_refusal": true
+    },
+    {
+      "type": "refusal_item",
+      "question": "阿里巴巴 FY2025 的量子波动利润是多少",
+      "expect_refusal": true
+    },
+    {
+      "type": "refusal_item",
+      "question": "阿里巴巴 FY2026 的量子波动利润是多少",
+      "expect_refusal": true
+    },
+    {
+      "type": "refusal_item",
+      "question": "菜鸟 FY2021 的量子波动利润是多少",
+      "expect_refusal": true
+    },
+    {
+      "type": "refusal_item",
+      "question": "菜鸟 FY2022 的量子波动利润是多少",
+      "expect_refusal": true
+    },
+    {
+      "type": "refusal_item",
+      "question": "菜鸟 FY2023 的量子波动利润是多少",
+      "expect_refusal": true
+    },
+    {
+      "type": "refusal_missing",
+      "question": "英伟达 FY2026 的营业收入是多少",
+      "expect_refusal": true
+    },
+    {
+      "type": "refusal_missing",
+      "question": "拼多多 2026Q1 的货币资金是多少",
+      "expect_refusal": true
+    },
+    {
+      "type": "refusal_missing",
+      "question": "货币资金是多少",
+      "expect_refusal": true
+    },
+    {
+      "type": "refusal_missing",
+      "question": "顺丰的营业收入是多少",
+      "expect_refusal": true
+    },
+    {
+      "type": "refusal_missing",
+      "question": "2026Q1 的净利润是多少",
+      "expect_refusal": true
+    },
+    {
+      "type": "refusal_missing",
+      "question": "比特币价格是多少",
+      "expect_refusal": true
+    },
+    {
+      "type": "refusal_missing",
+      "question": "菜鸟 FY2099 的资产总计是多少",
+      "expect_refusal": true
+    },
+    {
+      "type": "refusal_missing",
+      "question": "顺丰 2026Q1 的员工满意度是多少",
+      "expect_refusal": true
+    },
+    {
+      "type": "refusal_missing",
+      "question": "腾讯 无形资产zzz 是多少",
+      "expect_refusal": true
+    },
+    {
+      "type": "refusal_missing",
+      "question": "京东物流 FY2025 的星际收入是多少",
+      "expect_refusal": true
+    },
+    {
+      "type": "refusal_missing",
+      "question": "顺丰 2026Q1 的____是多少",
+      "expect_refusal": true
+    },
+    {
+      "type": "refusal_missing",
+      "question": "阿里 FY2020 的的面都是多少",
+      "expect_refusal": true
+    },
+    {
+      "type": "refusal_missing",
+      "question": "圆通速递 FY2026 的营业收入是多少",
+      "expect_refusal": true
+    },
+    {
+      "type": "refusal_missing",
+      "question": "申通 FY2025 的资产总计是多少",
+      "expect_refusal": true
+    },
+    {
+      "type": "refusal_missing",
+      "question": "顺丰 2026Q1 的 Quantum revenue 是多少",
+      "expect_refusal": true
+    },
+    {
+      "type": "refusal_missing",
+      "question": "腾讯 2026Q2 的 jump profit 是多少",
+      "expect_refusal": true
+    },
+    {
+      "type": "refusal_missing",
+      "question": "京东物流 FY2025 的魔法资产是多少",
+      "expect_refusal": true
+    },
+    {
+      "type": "refusal_missing",
+      "question": "菜鸟 FY2023 的暗物质负债是多少",
+      "expect_refusal": true
+    },
+    {
+      "type": "refusal_missing",
+      "question": "阿里 FY2026 的翡翠收入是多少",
+      "expect_refusal": true
+    },
+    {
+      "type": "refusal_missing",
+      "question": "顺丰 2026Q1 的上月余额是多少",
+      "expect_refusal": true
+    }
+  ]
+}
