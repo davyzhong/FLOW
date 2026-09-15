@@ -1,12 +1,14 @@
 ---
 doc_id: FLOW-WP-HOLDOUT-PREREG-20260915
 title: 新批次 holdout 抽签规则预注册（签封件）
-doc_type: work-item
-status: sealed
+doc_type: plan
+status: active
 version: 1.0
 created_at: 2026-09-15
 updated_at: 2026-09-15
 owner: FLOW
+depends_on: [FLOW-WP-PUBLIC-C-EXIT-001]
+acceptance_refs: [roadmap-unique-invariant]
 sealed_by: qiming
 sealed_at: 2026-09-15
 applies_to: public-analysis

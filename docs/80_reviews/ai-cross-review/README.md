@@ -8,7 +8,9 @@ created_at: 2026-09-15
 updated_at: 2026-09-15
 owner: FLOW
 applies_to: public-analysis
-review_scope: docs/80_reviews/ai-cross-review/bundle/
+subject_ref: main@44acd16
+findings: [ai-cross-review-pending-execution]
+review_scope: work/ai-cross-review-bundle/
 ---
 
 # AI 交叉评执行包
@@ -19,9 +21,17 @@ review_scope: docs/80_reviews/ai-cross-review/bundle/
 
 ## 证据束
 
-`bundle/` 下 10 份 markdown，每份 = 抽取值清单 + 源 PDF 逐页文本层。
-评审 AI 的任务：**在源文本里找出与抽取清单不一致的值**（行名变体、
-单位、正负号、期间错位、列读错位均算）。
+先生成（工作产物不进 git，命令确定性可再生；review_scope 指向生成目录）：
+
+```bash
+cd services/api
+uv run --with pypdf --with pyyaml python ../../scripts/accuracy_benchmark.py \
+    --export-review-bundle ../../work/ai-cross-review-bundle
+```
+
+`work/ai-cross-review-bundle/` 下 10 份 markdown，每份 = 抽取值清单 +
+源 PDF 逐页文本层。评审 AI 的任务：**在源文本里找出与抽取清单不一致的值**
+（行名变体、单位、正负号、期间错位、列读错位均算）。
 
 ## 执行步骤
 

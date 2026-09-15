@@ -2,13 +2,19 @@
 doc_id: FLOW-DELIVERY-CAINIAO-STRESS-20260915
 title: C 级出口回归压力测试报告——菜鸟子集 + 抽取错误候选抓捕
 doc_type: delivery
-status: delivered
+status: verified
 version: 1.0
 created_at: 2026-09-15
 updated_at: 2026-09-15
 owner: FLOW
 applies_to: public-analysis
 subject_ref: main@db9ac83
+commit_refs: ["5a9e788", "c9dcd47", "44acd16"]
+evidence_refs: [
+  "config/statements/answer_set_l1.yaml",
+  "scripts/accuracy_benchmark.py",
+  "scripts/build_answer_set_l1.py",
+]
 knowledge_release: flow-knowledge-2026-09-12.1
 decision_refs: [D052, D053]
 gates: [PUBLIC-C-EXIT]

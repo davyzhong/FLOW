@@ -26,3 +26,6 @@ packages/contracts/node_modules
 
 # 运行产物不进版本控制（R2 工程卫生包）
 var/
+
+# AI 交叉评证据束（工作产物，确定性可再生）
+docs/80_reviews/ai-cross-review/bundle/
