@@ -3,7 +3,16 @@ from __future__ import annotations
 from typing import Any
 from uuid import UUID
 
-from sqlalchemy import CheckConstraint, ForeignKey, Integer, String, Text, UniqueConstraint, text
+from sqlalchemy import (
+    BigInteger,
+    CheckConstraint,
+    ForeignKey,
+    Integer,
+    String,
+    Text,
+    UniqueConstraint,
+    text,
+)
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -73,24 +82,33 @@ class PublicationAttempt(IdentityTimestampMixin, Base):
     __tablename__ = "publication_attempt"
     __table_args__ = (
         UniqueConstraint(
-            "report_snapshot_id", "sequence", name="uq_publication_attempt_report_sequence"
+            "report_snapshot_id",
+            "sequence",
+            "format",
+            name="uq_publication_attempt_report_sequence_format",
         ),
         UniqueConstraint(
             "objective_report_snapshot_id",
             "sequence",
-            name="uq_publication_attempt_objective_sequence",
+            "format",
+            name="uq_publication_attempt_objective_sequence_format",
         ),
         CheckConstraint("sequence > 0", name="ck_publication_attempt_sequence_positive"),
         CheckConstraint(
             "format in ('pptx', 'xlsx', 'html', 'pdf')", name="ck_publication_attempt_format"
         ),
         CheckConstraint(
-            "status in ('queued', 'running', 'succeeded', 'failed')",
+            "status in ('queued', 'running', 'succeeded', 'failed',"
+            " 'pending', 'render_failed', 'store_failed')",
             name="ck_publication_attempt_status",
         ),
         CheckConstraint(
             "num_nonnulls(report_snapshot_id, objective_report_snapshot_id) = 1",
             name="ck_publication_attempt_single_parent",
+        ),
+        CheckConstraint(
+            "source_payload_sha256 IS NULL OR length(source_payload_sha256) = 64",
+            name="ck_publication_attempt_source_hash",
         ),
     )
 
@@ -109,6 +127,15 @@ class PublicationAttempt(IdentityTimestampMixin, Base):
         PG_UUID(as_uuid=True), ForeignKey("stored_object.id", ondelete="RESTRICT")
     )
     error_message: Mapped[str | None] = mapped_column(Text)
+    # --- S01 §7 四阶段列（0028；旧行保持 NULL） ---
+    publication_id: Mapped[UUID | None] = mapped_column(PG_UUID(as_uuid=True), index=True)
+    idempotency_key: Mapped[str | None] = mapped_column(String(128))
+    source_payload_sha256: Mapped[str | None] = mapped_column(String(64))
+    object_key: Mapped[str | None] = mapped_column(String(1024))
+    content_sha256: Mapped[str | None] = mapped_column(String(64))
+    size_bytes: Mapped[int | None] = mapped_column(BigInteger)
+    content_type: Mapped[str | None] = mapped_column(String(255))
+    error_code: Mapped[str | None] = mapped_column(String(64))
 
     report_snapshot: Mapped[ReportSnapshot | None] = relationship(
         back_populates="publication_attempts"

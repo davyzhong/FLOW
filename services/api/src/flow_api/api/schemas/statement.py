@@ -129,7 +129,8 @@ class CorrectionCreateRequest(BaseModel):
     column_key: str = Field(min_length=1)
     value: str
     reason: str = Field(min_length=1)
-    operator: str = Field(min_length=1)
+    # §3.3：operator 只来自 Principal；body 字段可省略，冲突值 → 409 actor_conflict
+    operator: str | None = Field(default=None, max_length=128)
 
 
 class CorrectionResponse(FrozenResponse):

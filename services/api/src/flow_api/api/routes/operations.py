@@ -4,10 +4,10 @@ from __future__ import annotations
 
 import logging
 from collections.abc import Iterator
-from typing import Annotated
+from typing import Annotated, Any
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, Path, Response, status
+from fastapi import APIRouter, Depends, Header, HTTPException, Path, Response, status
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -31,12 +31,33 @@ from flow_api.operations.engine import (
     build_public_operating_overview,
     list_public_operating_periods,
 )
+from flow_api.publication.four_stage import (
+    AuditContext,
+    PublicationError,
+    PublicationFormat,
+    PublicationIntentNotDurable,
+    PublicationOutcomeNotDurable,
+    PublicationRequest,
+    RendererRegistry,
+    build_publication_failure,
+    canonical_source_sha256,
+    execute_object,
+    finalize_failure,
+    finalize_success,
+    prepare_intent,
+)
+from flow_api.publication.store_adapter import ProtocolObjectStore
 from flow_api.publishing.objective_freeze import (
     ObjectiveFreezeError,
     ObjectiveReportSnapshot,
 )
+from flow_api.security.audit import AuditUnavailable
 from flow_api.security.authorization import Action
-from flow_api.security.route_policy import LOADERS, require_action
+from flow_api.security.route_policy import (
+    LOADERS,
+    AuthorizationContext,
+    require_action,
+)
 
 router = APIRouter(prefix="/operations", tags=["operations"])
 
@@ -169,32 +190,101 @@ def list_operations_snapshots(session: SessionDependency) -> OperationsSnapshotL
     )
 
 
+# ---------------------------------------------------------------------------
+# §7 四阶段：资源校验器（binding 模块注册）+ 渲染器闭包
+# ---------------------------------------------------------------------------
+
+from flow_api.operations.four_stage_binding import _verify_operations_snapshot  # noqa: E402,F401
+
+
+def _operations_renderers(payload: dict[str, Any]) -> RendererRegistry:
+    """路由层渲染闭包：html 直出，pdf 走 pinned-Chromium 打印机（§7.2 无 Session）。"""
+    from flow_api.operations.renderers import (
+        render_operations_html,
+        render_operations_pptx,
+        render_operations_xlsx,
+    )
+
+    html_bytes = render_operations_html(payload).encode("utf-8")
+    return {
+        PublicationFormat.HTML: lambda prepared, plan: html_bytes,
+        PublicationFormat.XLSX: lambda prepared, plan: render_operations_xlsx(payload),
+        PublicationFormat.PPTX: lambda prepared, plan: render_operations_pptx(payload),
+        PublicationFormat.PDF: lambda prepared, plan: _default_pdf_printer(html_bytes),
+    }
+
+
+def _default_pdf_printer(html: bytes) -> bytes:
+    import tempfile
+    from pathlib import Path
+
+    from flow_api.statements.objective_report_pdf import print_pdf
+
+    with tempfile.TemporaryDirectory() as temporary_directory:
+        output = Path(temporary_directory) / "operations.pdf"
+        print_pdf(
+            html.decode("utf-8"),
+            out_path=output,
+            footer_left="FLOW 经营分析概览",
+        )
+        return output.read_bytes()
+
+
+def _operations_audit_context(auth: AuthorizationContext, snapshot_id: str) -> AuditContext:
+    return AuditContext(
+        actor_id=auth.principal.actor_id,
+        role=auth.principal.role,
+        enterprise_id=auth.principal.enterprise_id,
+        correlation_id=auth.correlation_id,
+        action=Action.OPERATIONS_REPORT_PUBLISH,
+        resource_scope="public",
+        resource_type="operations_snapshot",
+        resource_id=snapshot_id,
+        model_boundary=None,
+    )
+
+
+def _operations_object_store() -> Any:
+    from flow_api.infrastructure.object_store import ObjectStore
+    from flow_api.infrastructure.s3_client import build_s3_client
+    from flow_api.settings import get_settings
+
+    settings = get_settings()
+    return ObjectStore(client=build_s3_client(settings), bucket=settings.s3_bucket)
+
+
+_DEP_PUBLISH_OPERATIONS = require_action(
+    Action.OPERATIONS_REPORT_PUBLISH,
+    LOADERS["load_public_statement_report"],
+    session_provider=get_operations_session,
+)
+
+
 @router.post(
     "/overview/{report_id}/publish",
     response_model=PublishResponse,
-    dependencies=[
-        Depends(
-            require_action(
-                Action.OPERATIONS_REPORT_PUBLISH,
-                LOADERS["load_public_statement_report"],
-                session_provider=get_operations_session,
-            )
-        )
-    ],
+    dependencies=[Depends(_DEP_PUBLISH_OPERATIONS)],
 )
 def publish_operations_overview(
     session: SessionDependency,
     report_id: Annotated[UUID, Path()],
     request: PublishRequest,
+    auth: Annotated[AuthorizationContext, Depends(_DEP_PUBLISH_OPERATIONS)],
+    idempotency_key: Annotated[str | None, Header(alias="Idempotency-Key")] = None,
 ) -> PublishResponse:
     from flow_api.operations.freeze import freeze_operations_overview
-    from flow_api.operations.publication import OperationsPublicationService
 
+    if not idempotency_key:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={
+                "code": "idempotency_key_required",
+                "message": "发布必须携带 1–128 字节可打印 ASCII 的 Idempotency-Key（§7.1）",
+            },
+        )
     try:
         snapshot = freeze_operations_overview(session, report_id=report_id)
-        outcomes = OperationsPublicationService().publish(
-            session, snapshot.id, formats=tuple(request.formats)
-        )
+        session.commit()
     except ObjectiveFreezeError as error:
         http_status = (
             status.HTTP_404_NOT_FOUND
@@ -212,15 +302,79 @@ def publish_operations_overview(
             status_code=http_status,
             detail={"code": error.code, "message": error.message},
         ) from error
+
+    unknown = [f for f in request.formats if f not in ("pptx", "xlsx", "html", "pdf")]
+    if unknown:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail={
+                "code": "unsupported_format",
+                "message": f"不支持的发布格式：{sorted(unknown)}",
+            },
+        )
+    formats = tuple(
+        sorted((PublicationFormat(f) for f in request.formats), key=lambda f: f.value)
+    )
+    pub_request = PublicationRequest(
+        publication_id=request.publication_id,
+        idempotency_key=idempotency_key,
+        resource_type="operations_snapshot",
+        resource_id=str(snapshot.id),
+        enterprise_id=None,
+        source_payload_sha256=canonical_source_sha256(snapshot.payload),
+        formats=formats,
+    )
+    audit_context = _operations_audit_context(auth, str(snapshot.id))
+    try:
+        prepared = prepare_intent(session, pub_request, audit_context)
+        session.commit()
+    except PublicationError:
+        session.rollback()
+        raise
+    except AuditUnavailable:
+        session.rollback()
+        raise
+    except Exception as error:  # noqa: BLE001 - intent commit 失败/不确定
+        session.rollback()
+        raise PublicationIntentNotDurable(f"intent 未持久化: {error}") from error
+    try:
+        outcome = execute_object(
+            prepared,
+            _operations_renderers(snapshot.payload),
+            ProtocolObjectStore(_operations_object_store()),
+        )
+        failure = build_publication_failure(outcome)
+        if failure is None:
+            finalized = finalize_success(session, prepared, outcome, audit_context)
+        else:
+            finalized = finalize_failure(session, prepared, outcome, failure, audit_context)
+        session.commit()
+    except AuditUnavailable:
+        session.rollback()
+        raise
+    except PublicationError:
+        session.rollback()
+        raise
+    except Exception as error:  # noqa: BLE001
+        session.rollback()
+        raise PublicationOutcomeNotDurable(
+            f"outcome 未持久化，按 publication_id {prepared.publication_id} 对账: {error}"
+        ) from error
     log_event(
         logging.getLogger("flow.operations"),
         logging.INFO,
-        "operations.published",
+        "operations.published" if finalized.status == "published" else "operations.publish_failed",
         report_id=str(report_id),
         snapshot_id=str(snapshot.id),
-        formats=[o.format for o in outcomes],
+        publication_id=str(finalized.publication_id),
+        status=finalized.status,
     )
-    return PublishResponse(report_snapshot_id=str(snapshot.id), outcomes=outcomes)
+    return PublishResponse(
+        report_snapshot_id=str(snapshot.id),
+        outcomes={oc.format.value: oc.status.value for oc in finalized.outcomes},
+        publication_id=str(finalized.publication_id),
+        status=finalized.status,
+    )
 
 
 @router.get(

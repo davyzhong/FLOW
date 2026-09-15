@@ -50,7 +50,11 @@ from flow_api.metric_library_store.governance import GovernanceError, MetricGove
 from flow_api.metric_library_store.impact import ImpactError, MetricImpactService
 from flow_api.metric_library_store.importer import import_all, resolve_dictionary_file
 from flow_api.security.authorization import Action
-from flow_api.security.route_policy import LOADERS, require_action
+from flow_api.security.route_policy import (
+    LOADERS,
+    AuthorizationContext,
+    require_action,
+)
 
 router = APIRouter(prefix="/metric-library", tags=["metric-library"])
 
@@ -275,50 +279,56 @@ def get_metric_library(session: SessionDependency) -> MetricLibraryResponse:
 
 
 class ImportRequest(BaseModel):
-    actor: str = Field(min_length=1, max_length=128)
+    actor: str | None = Field(default=None, max_length=128)
 
 
 class RetireRequest(BaseModel):
     dictionary_id: str = Field(min_length=1, max_length=64)
-    actor: str = Field(min_length=1, max_length=128)
+    actor: str | None = Field(default=None, max_length=128)
     reason: str = Field(min_length=1, max_length=512)
+
+
+_DEP_IMPORT = require_action(
+    Action.METRIC_LIBRARY_IMPORT,
+    LOADERS["load_public_metric_library"],
+    session_provider=get_metric_library_session,
+)
 
 
 @router.post(
     "/import",
     response_model=dict[str, int],
-    dependencies=[
-        Depends(
-            require_action(
-                Action.METRIC_LIBRARY_IMPORT,
-                LOADERS["load_blocked_entry"],
-                session_provider=get_metric_library_session,
-            )
-        )
-    ],
+    dependencies=[Depends(_DEP_IMPORT)],
 )
-def import_metric_library(request: ImportRequest, session: SessionDependency) -> dict[str, int]:
+def import_metric_library(
+    request: ImportRequest,
+    session: SessionDependency,
+    auth: Annotated[AuthorizationContext, Depends(_DEP_IMPORT)],
+) -> dict[str, int]:
     """整版幂等导入 v1 配置到数据库（受保护操作，审计留痕）。"""
     root = resolve_metric_library_root()
     summary = import_all(session, root / CONFIG_ROOT)
     session.commit()
-    MetricLibraryAudit(root).append("import", request.actor, summary)
+    MetricLibraryAudit(root).append("import", auth.principal.actor_id, summary)
     return summary
+
+
+_DEP_DICTIONARY_RETIRE = require_action(
+    Action.METRIC_LIBRARY_RETIRE,
+    LOADERS["load_public_metric_library"],
+    session_provider=get_metric_library_session,
+)
 
 
 @router.post(
     "/retire",
-    dependencies=[
-        Depends(
-            require_action(
-                Action.METRIC_LIBRARY_RETIRE,
-                LOADERS["load_blocked_entry"],
-                session_provider=get_metric_library_session,
-            )
-        )
-    ],
+    dependencies=[Depends(_DEP_DICTIONARY_RETIRE)],
 )
-def retire_metric_library(request: RetireRequest, session: SessionDependency) -> dict[str, Any]:
+def retire_metric_library(
+    request: RetireRequest,
+    session: SessionDependency,
+    auth: Annotated[AuthorizationContext, Depends(_DEP_DICTIONARY_RETIRE)],
+) -> dict[str, Any]:
     """版本化退役：将指定字典全部条目置 retired（不可逆操作走新版本导入恢复）。"""
     entries = session.scalars(
         select(MetricDictionaryEntry).where(
@@ -330,7 +340,7 @@ def retire_metric_library(request: RetireRequest, session: SessionDependency) ->
     session.commit()
     summary = {"dictionary_id": request.dictionary_id, "retired": len(entries)}
     MetricLibraryAudit(resolve_metric_library_root()).append(
-        "retire", request.actor, {**summary, "reason": request.reason}
+        "retire", auth.principal.actor_id, {**summary, "reason": request.reason}
     )
     return summary
 
@@ -347,28 +357,30 @@ def _entry_action_response(entry: MetricDictionaryEntry) -> MetricEntryActionRes
     )
 
 
+_DEP_PROPOSE = require_action(
+    Action.METRIC_CHANGE_PROPOSE,
+    LOADERS["load_metric_dictionary_entry"],
+    session_provider=get_metric_library_session,
+)
+
+
 @router.post(
     "/entries/{entry_id}/drafts",
     response_model=MetricEntryActionResponse,
     status_code=status.HTTP_201_CREATED,
-    dependencies=[
-        Depends(
-            require_action(
-                Action.METRIC_CHANGE_PROPOSE,
-                LOADERS["load_blocked_entry"],
-                session_provider=get_metric_library_session,
-            )
-        )
-    ],
+    dependencies=[Depends(_DEP_PROPOSE)],
 )
 def draft_metric_change(
-    entry_id: UUID, request: MetricDraftRequest, session: SessionDependency
+    entry_id: UUID,
+    request: MetricDraftRequest,
+    session: SessionDependency,
+    auth: Annotated[AuthorizationContext, Depends(_DEP_PROPOSE)],
 ) -> MetricEntryActionResponse:
     try:
         draft = MetricGovernance(session).draft_change(
             entry_id,
             changes=request.changes,
-            operator=request.operator,
+            operator=auth.principal.actor_id,
             reason=request.reason,
         )
     except GovernanceError as error:
@@ -380,25 +392,27 @@ def draft_metric_change(
     return _entry_action_response(draft)
 
 
+_DEP_ACTIVATE = require_action(
+    Action.METRIC_CHANGE_ACTIVATE,
+    LOADERS["load_metric_dictionary_entry_proposer"],
+    session_provider=get_metric_library_session,
+)
+
+
 @router.post(
     "/entries/{entry_id}/activate",
     response_model=MetricEntryActionResponse,
-    dependencies=[
-        Depends(
-            require_action(
-                Action.METRIC_CHANGE_ACTIVATE,
-                LOADERS["load_blocked_entry"],
-                session_provider=get_metric_library_session,
-            )
-        )
-    ],
+    dependencies=[Depends(_DEP_ACTIVATE)],
 )
 def activate_metric_change(
-    entry_id: UUID, request: MetricActionRequest, session: SessionDependency
+    entry_id: UUID,
+    request: MetricActionRequest,
+    session: SessionDependency,
+    auth: Annotated[AuthorizationContext, Depends(_DEP_ACTIVATE)],
 ) -> MetricEntryActionResponse:
     try:
         entry = MetricGovernance(session).activate(
-            entry_id, operator=request.operator, reason=request.reason
+            entry_id, operator=auth.principal.actor_id, reason=request.reason
         )
     except GovernanceError as error:
         raise HTTPException(
@@ -409,25 +423,27 @@ def activate_metric_change(
     return _entry_action_response(entry)
 
 
+_DEP_ENTRY_RETIRE = require_action(
+    Action.METRIC_CHANGE_RETIRE,
+    LOADERS["load_metric_dictionary_entry_proposer"],
+    session_provider=get_metric_library_session,
+)
+
+
 @router.post(
     "/entries/{entry_id}/retire",
     response_model=MetricEntryActionResponse,
-    dependencies=[
-        Depends(
-            require_action(
-                Action.METRIC_CHANGE_RETIRE,
-                LOADERS["load_blocked_entry"],
-                session_provider=get_metric_library_session,
-            )
-        )
-    ],
+    dependencies=[Depends(_DEP_ENTRY_RETIRE)],
 )
 def retire_metric_change(
-    entry_id: UUID, request: MetricActionRequest, session: SessionDependency
+    entry_id: UUID,
+    request: MetricActionRequest,
+    session: SessionDependency,
+    auth: Annotated[AuthorizationContext, Depends(_DEP_ENTRY_RETIRE)],
 ) -> MetricEntryActionResponse:
     try:
         entry = MetricGovernance(session).retire(
-            entry_id, operator=request.operator, reason=request.reason
+            entry_id, operator=auth.principal.actor_id, reason=request.reason
         )
     except GovernanceError as error:
         raise HTTPException(
@@ -482,7 +498,7 @@ def get_metric_coverage() -> MetricCoverageResponse:
         Depends(
             require_action(
                 Action.METRIC_EVENT_READ,
-                LOADERS["load_blocked_entry"],
+                LOADERS["load_metric_governance_events"],
                 session_provider=get_metric_library_session,
             )
         )
@@ -518,7 +534,7 @@ def list_metric_governance_events(
         Depends(
             require_action(
                 Action.METRIC_IMPACT_ANALYZE,
-                LOADERS["load_blocked_entry"],
+                LOADERS["load_metric_dictionary_entry"],
                 session_provider=get_metric_library_session,
             )
         )

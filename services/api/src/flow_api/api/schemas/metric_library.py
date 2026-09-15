@@ -128,12 +128,13 @@ class MetricLibraryResponse(BaseModel):
 
 class MetricDraftRequest(BaseModel):
     changes: dict[str, Any]
-    operator: str = Field(min_length=1, max_length=128)
+    # §3.3：operator 只来自 Principal；body 字段可省略，冲突值 → 409 actor_conflict
+    operator: str | None = Field(default=None, max_length=128)
     reason: str = Field(min_length=1, max_length=512)
 
 
 class MetricActionRequest(BaseModel):
-    operator: str = Field(min_length=1, max_length=128)
+    operator: str | None = Field(default=None, max_length=128)
     reason: str = Field(min_length=1, max_length=512)
 
 

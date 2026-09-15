@@ -1,18 +1,25 @@
 """Public typed schemas for the unified publishing API."""
 
+from uuid import UUID
+
 from pydantic import BaseModel, Field
 
 from flow_api.api.schemas.intake import ErrorDetail
 
 
 class PublishRequest(BaseModel):
+    """§7 发布请求：身份只来自 Principal（§3.3 body actor 冲突 → 409）。"""
+
     formats: list[str] = Field(default_factory=lambda: ["pptx", "xlsx", "html", "pdf"])
-    actor: str = Field(min_length=1)
+    actor: str | None = None
+    publication_id: UUID | None = None
 
 
 class PublishResponse(BaseModel):
     report_snapshot_id: str
     outcomes: dict[str, str]
+    publication_id: str | None = None
+    status: str | None = None
 
 
 class PublicationAttemptLine(BaseModel):

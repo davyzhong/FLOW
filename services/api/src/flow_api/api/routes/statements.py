@@ -39,7 +39,11 @@ from flow_api.infrastructure.models.statement import StatementCorrection, Statem
 from flow_api.infrastructure.object_store import ObjectStore
 from flow_api.infrastructure.s3_client import build_s3_client
 from flow_api.security.authorization import Action
-from flow_api.security.route_policy import LOADERS, require_action
+from flow_api.security.route_policy import (
+    LOADERS,
+    AuthorizationContext,
+    require_action,
+)
 from flow_api.settings import get_settings
 from flow_api.statements.intake import StatementSourceError, StatementSourceIntake
 from flow_api.statements.projection import (
@@ -326,6 +330,13 @@ def _correction_response(correction: StatementCorrection) -> CorrectionResponse:
     )
 
 
+_DEP_CORRECTION_CREATE = require_action(
+    Action.STATEMENT_CORRECTION_CREATE,
+    LOADERS["load_public_statement_report"],
+    session_provider=get_statement_session,
+)
+
+
 @router.post(
     "/{report_id}/corrections",
     response_model=CorrectionResponse,
@@ -335,20 +346,14 @@ def _correction_response(correction: StatementCorrection) -> CorrectionResponse:
         status.HTTP_409_CONFLICT: {"model": StatementErrorResponse},
         status.HTTP_422_UNPROCESSABLE_CONTENT: {"model": StatementErrorResponse},
     },
-    dependencies=[
-        Depends(
-            require_action(
-                Action.STATEMENT_CORRECTION_CREATE,
-                LOADERS["load_public_statement_report"],
-                session_provider=get_statement_session,
-            )
-        )
-    ],
+    dependencies=[Depends(_DEP_CORRECTION_CREATE)],
 )
 def add_statement_correction(
     session: SessionDependency,
     request: CorrectionCreateRequest,
     report_id: Annotated[UUID, Path()],
+    *,
+    auth: Annotated[AuthorizationContext, Depends(_DEP_CORRECTION_CREATE)],
 ) -> CorrectionResponse:
     try:
         correction = ReviewService(session).add_correction(
@@ -358,7 +363,7 @@ def add_statement_correction(
             column_key=request.column_key,
             new_value=request.value,
             reason=request.reason,
-            operator=request.operator,
+            operator=auth.principal.actor_id,
         )
     except ReviewError as error:
         http_status = (
@@ -395,6 +400,13 @@ def list_statement_corrections(
     return CorrectionListResponse(corrections=tuple(_correction_response(c) for c in corrections))
 
 
+_DEP_STATEMENT_PUBLISH = require_action(
+    Action.STATEMENT_REPORT_PUBLISH,
+    LOADERS["load_public_statement_report"],
+    session_provider=get_statement_session,
+)
+
+
 @router.post(
     "/{report_id}/publish",
     response_model=StatementPublishResponse,
@@ -402,21 +414,16 @@ def list_statement_corrections(
         status.HTTP_404_NOT_FOUND: {"model": StatementErrorResponse},
         status.HTTP_409_CONFLICT: {"model": StatementErrorResponse},
     },
-    dependencies=[
-        Depends(
-            require_action(
-                Action.STATEMENT_REPORT_PUBLISH,
-                LOADERS["load_public_statement_report"],
-                session_provider=get_statement_session,
-            )
-        )
-    ],
+    dependencies=[Depends(_DEP_STATEMENT_PUBLISH)],
 )
 def publish_statement_report(
-    session: SessionDependency, report_id: Annotated[UUID, Path()]
+    session: SessionDependency,
+    report_id: Annotated[UUID, Path()],
+    *,
+    auth: Annotated[AuthorizationContext, Depends(_DEP_STATEMENT_PUBLISH)],
 ) -> StatementPublishResponse:
     try:
-        report = ReviewService(session).publish(report_id, operator="finance.bp")
+        report = ReviewService(session).publish(report_id, operator=auth.principal.actor_id)
     except ReviewError as error:
         http_status = (
             status.HTTP_404_NOT_FOUND

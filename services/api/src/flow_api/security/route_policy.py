@@ -32,6 +32,7 @@ from typing import Any, cast
 from uuid import UUID
 
 from fastapi import Depends, HTTPException, Request, status
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from flow_api.api.auth import require_bearer_auth
@@ -95,6 +96,9 @@ _READ_ONLY_EXEMPTION_PREFIXES = (
 LOADER_RESOURCE_TYPE: dict[str, str] = {
     "load_blocked_entry": "route",
     "load_public_metric_library": "metric_library",
+    "load_metric_dictionary_entry": "metric_dictionary_entry",
+    "load_metric_dictionary_entry_proposer": "metric_dictionary_entry",
+    "load_metric_governance_events": "metric_governance_events",
     "load_single_enterprise": "enterprise_scope",
     "load_default_cycle_create": "enterprise_scope",
     "load_public_health": "health",
@@ -359,6 +363,62 @@ def _load_public_metric_library(request: Request, session: Session) -> ResourceR
     return _public_ref("metric_library", "dictionary")
 
 
+def _load_metric_dictionary_entry(request: Request, session: Session) -> ResourceRef:
+    """指标字典条目（R2 解锁治理写）：全局资源，无企业域（public scope）。"""
+
+    from flow_api.infrastructure.models.metric_library import MetricDictionaryEntry
+
+    rid = _path_uuid(request, "entry_id")
+    entry = session.get(MetricDictionaryEntry, rid)
+    if entry is None:
+        raise ResourceScopeUnresolved("metric_dictionary_entry", str(rid))
+    return _public_ref("metric_dictionary_entry", str(rid))
+
+
+def _load_metric_dictionary_entry_proposer(request: Request, session: Session) -> ResourceRef:
+    """activate/retire loader：附 proposed_by（§4.2 step7 自审批防线）。
+
+    proposed_by = 该 (dictionary, metric_code, version) 的 draft 治理事件
+    operator；版本由导入直接生成（无 draft 事件）时 proposed_by=None →
+    PROPOSER_REQUIRED deny（fail closed，不可评估即拒绝）。
+    """
+
+    from flow_api.infrastructure.models.metric_library import (
+        MetricDictionaryEntry,
+        MetricGovernanceEvent,
+    )
+
+    rid = _path_uuid(request, "entry_id")
+    entry = session.get(MetricDictionaryEntry, rid)
+    if entry is None:
+        raise ResourceScopeUnresolved("metric_dictionary_entry", str(rid))
+    proposer: str | None = session.scalar(
+        select(MetricGovernanceEvent.operator)
+        .where(
+            MetricGovernanceEvent.dictionary_id == entry.dictionary_id,
+            MetricGovernanceEvent.metric_code == entry.metric_code,
+            MetricGovernanceEvent.version == entry.version,
+            MetricGovernanceEvent.action == "draft",
+        )
+        .order_by(MetricGovernanceEvent.created_at.desc())
+        .limit(1)
+    )
+    return ResourceRef(
+        scope="public",
+        resource_type="metric_dictionary_entry",
+        resource_id=str(rid),
+        enterprise_id=None,
+        owner_actor_id=None,
+        proposed_by_actor_id=proposer,
+    )
+
+
+def _load_metric_governance_events(request: Request, session: Session) -> ResourceRef:
+    """治理事件读（R2 解锁）：全局规则治理日志，无企业域。"""
+
+    return _public_ref("metric_governance_events", "collection")
+
+
 def _load_blocked_entry(request: Request, session: Session) -> ResourceRef:
     """blocked 条目的占位 loader：require_action 在 entry 解析阶段即 deny，永不调用。"""
 
@@ -594,6 +654,9 @@ LOADERS: dict[str, ResourceLoader] = {
         "operations_snapshot_collection", "collection"
     ),
     "load_public_metric_library": _load_public_metric_library,
+    "load_metric_dictionary_entry": _load_metric_dictionary_entry,
+    "load_metric_dictionary_entry_proposer": _load_metric_dictionary_entry_proposer,
+    "load_metric_governance_events": _load_metric_governance_events,
     "load_blocked_entry": _load_blocked_entry,
     "load_single_enterprise": _load_single_enterprise,
     "load_default_cycle_create": _load_default_cycle_create,
@@ -752,6 +815,15 @@ def require_action(
                 # §5 loader 为同步签名：body 由本依赖预读进 request.state
                 # （§6 durable 前不 mutation）
                 request.state.policy_body = await request.json()
+            elif request.method in ("POST", "PUT", "PATCH"):
+                # §3.3：身份字段冲突检测需要看到 body；Starlette 缓存 _body，
+                # FastAPI 随后的 body 解析复用同一份字节，不产生双读。
+                try:
+                    body = await request.json()
+                    if isinstance(body, dict):
+                        request.state.policy_body = body
+                except Exception:  # noqa: BLE001 - 空/非 JSON body：仅按 query 检测
+                    pass
             try:
                 resource = resource_loader(request, session)
             except ResourceScopeUnresolved as unresolved:

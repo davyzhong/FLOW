@@ -114,7 +114,10 @@ class ObjectStore:
         return (content_sha256, False)
 
     def read_by_sha(self, sha256: str) -> bytes:
-        object_key = self.object_key_for_sha(sha256)
+        return self.read_by_key(self.object_key_for_sha(sha256), sha256)
+
+    def read_by_key(self, object_key: str, sha256: str) -> bytes:
+        """按显式 object_key 读取并校验 sha256（§7.4 五要素 key 的下载路径）。"""
         try:
             response = self._client.get_object(Bucket=self._bucket, Key=object_key)
         except ClientError as error:
@@ -125,7 +128,7 @@ class ObjectStore:
         content = bytes(response["Body"].read())
         if hashlib.sha256(content).hexdigest() != sha256:
             raise ImmutableObjectConflictError(
-                f"object {object_key} does not match its content-addressed key"
+                f"object {object_key} does not match its registered sha256"
             )
         return content
 

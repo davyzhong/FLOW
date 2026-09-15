@@ -3,10 +3,10 @@ from __future__ import annotations
 import hashlib
 import logging
 from functools import lru_cache
-from typing import Annotated
+from typing import Annotated, Any
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, Response, status
+from fastapi import APIRouter, Depends, Header, HTTPException, Response, status
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
@@ -39,10 +39,35 @@ from flow_api.infrastructure.object_store import (
     ObjectStore,
 )
 from flow_api.infrastructure.s3_client import build_s3_client
-from flow_api.publishing.publication import PublicationService
-from flow_api.publishing.service import PublishingFreezeError
+from flow_api.publication.four_stage import (
+    AuditContext,
+    FinalizedPublication,
+    PublicationError,
+    PublicationErrorCode,
+    PublicationFormat,
+    PublicationIntentNotDurable,
+    PublicationOutcomeNotDurable,
+    PublicationRequest,
+    RendererRegistry,
+    build_publication_failure,
+    canonical_source_sha256,
+    execute_object,
+    finalize_failure,
+    finalize_success,
+    prepare_intent,
+)
+from flow_api.publication.store_adapter import ProtocolObjectStore
+from flow_api.publishing.four_stage_binding import (  # noqa: F401
+    _enterprise_of_report_snapshot,
+)
+from flow_api.publishing.service import PublishingFreezeError, build_report_view
+from flow_api.security.audit import AuditUnavailable
 from flow_api.security.authorization import Action
-from flow_api.security.route_policy import LOADERS, require_action
+from flow_api.security.route_policy import (
+    LOADERS,
+    AuthorizationContext,
+    require_action,
+)
 from flow_api.settings import get_settings
 
 logger = logging.getLogger("flow.publishing")
@@ -72,13 +97,97 @@ def _error(http_status: int, code: str, message: str) -> HTTPException:
     return HTTPException(status_code=http_status, detail=detail.model_dump(mode="json"))
 
 
-def _service() -> PublicationService:
-    """Deterministic in-process renderers for pptx/xlsx/html.
+# ---------------------------------------------------------------------------
+# §7 四阶段：资源校验器（binding 模块注册）+ 渲染器闭包
+# ---------------------------------------------------------------------------
 
-    PDF printing requires the pinned-Chromium printer; attempts without one
-    are recorded as failed and remain retryable.
+
+def _publishing_renderers(view: Any) -> RendererRegistry:
+    """路由层构建渲染闭包（§7.2：execute_object 无 Session，数据经闭包注入）。"""
+    from flow_api.publishing.renderers import RENDERERS
+
+    return {
+        PublicationFormat.HTML: lambda prepared, plan: RENDERERS["html"](view),
+        PublicationFormat.XLSX: lambda prepared, plan: RENDERERS["xlsx"](view),
+        PublicationFormat.PPTX: lambda prepared, plan: RENDERERS["pptx"](view),
+    }
+
+
+def _audit_context(
+    auth: AuthorizationContext, resource_type: str, resource_id: str
+) -> AuditContext:
+    return AuditContext(
+        actor_id=auth.principal.actor_id,
+        role=auth.principal.role,
+        enterprise_id=auth.principal.enterprise_id,
+        correlation_id=auth.correlation_id,
+        action=auth.action,
+        resource_scope=auth.resource.scope,
+        resource_type=resource_type,
+        resource_id=resource_id,
+        model_boundary=None,
+    )
+
+
+def _publication_http_error(error: PublicationError) -> HTTPException:
+    return _error(
+        error.http_status,
+        error.error_code.value,
+        str(error)[:200],
+    )
+
+
+def _run_four_stage(
+    session: Session,
+    pub_request: PublicationRequest,
+    audit_context: AuditContext,
+    renderers: RendererRegistry,
+    object_store: Any = None,
+) -> FinalizedPublication:
+    """四阶段编排（§7.3）：两次 caller commit + 失败语义映射。
+
+    intent commit 失败 → 503 publication_intent_not_durable（0 对象写）；
+    outcome commit 失败 → 503 publication_outcome_not_durable（按 publication_id 对账）。
     """
-    return PublicationService()
+    try:
+        prepared = prepare_intent(session, pub_request, audit_context)
+        session.commit()
+    except PublicationError:
+        session.rollback()
+        raise
+    except AuditUnavailable:
+        session.rollback()
+        raise
+    except Exception as error:  # noqa: BLE001 - commit 失败/不确定
+        session.rollback()
+        raise PublicationIntentNotDurable(f"intent 未持久化: {error}") from error
+    try:
+        outcome = execute_object(prepared, renderers, object_store)
+        failure = build_publication_failure(outcome)
+        if failure is None:
+            finalized = finalize_success(session, prepared, outcome, audit_context)
+        else:
+            finalized = finalize_failure(session, prepared, outcome, failure, audit_context)
+        session.commit()
+    except AuditUnavailable:
+        session.rollback()
+        raise
+    except PublicationError:
+        session.rollback()
+        raise
+    except Exception as error:  # noqa: BLE001
+        session.rollback()
+        raise PublicationOutcomeNotDurable(
+            f"outcome 未持久化，按 publication_id {prepared.publication_id} 对账: {error}"
+        ) from error
+    return finalized
+
+
+_DEP_PUBLISH_REPORT = require_action(
+    Action.PUBLISHING_REPORT_PUBLISH,
+    LOADERS["load_report_snapshot_batch_scope_or_deny_legacy"],
+    session_provider=get_investigation_session,
+)
 
 
 @router.post(
@@ -88,53 +197,105 @@ def _service() -> PublicationService:
         status.HTTP_404_NOT_FOUND: {"model": PublishingErrorResponse},
         status.HTTP_409_CONFLICT: {"model": PublishingErrorResponse},
     },
-    dependencies=[
-        Depends(
-            require_action(
-                Action.PUBLISHING_REPORT_PUBLISH,
-                LOADERS["load_report_snapshot_batch_scope_or_deny_legacy"],
-                session_provider=get_investigation_session,
-            )
-        )
-    ],
+    dependencies=[Depends(_DEP_PUBLISH_REPORT)],
 )
 def publish_report(
     report_snapshot_id: UUID,
     request: PublishRequest,
     session: SessionDependency,
+    auth: Annotated[AuthorizationContext, Depends(_DEP_PUBLISH_REPORT)],
+    idempotency_key: Annotated[str | None, Header(alias="Idempotency-Key")] = None,
 ) -> PublishResponse:
-    service = _service()
+    if not idempotency_key:
+        raise _error(
+            status.HTTP_400_BAD_REQUEST,
+            "idempotency_key_required",
+            "发布必须携带 1–128 字节可打印 ASCII 的 Idempotency-Key（§7.1）",
+        )
+    report = session.get(ReportSnapshot, report_snapshot_id)
+    if report is None:
+        raise _error(
+            status.HTTP_404_NOT_FOUND,
+            "publishing_not_found",
+            f"report snapshot does not exist: {report_snapshot_id}",
+        )
     try:
-        outcomes = service.publish(session, report_snapshot_id, formats=tuple(request.formats))
+        view = build_report_view(session, report)
     except PublishingFreezeError as error:
-        log_event(
-            logger,
-            logging.WARNING,
-            "publication.blocked",
-            report_snapshot_id=str(report_snapshot_id),
-            code="freeze_blocked",
-        )
         raise _error(status.HTTP_409_CONFLICT, "freeze_blocked", str(error)) from error
-    except Exception as error:  # noqa: BLE001
-        log_event(
-            logger,
-            logging.ERROR,
-            "publication.failed",
-            report_snapshot_id=str(report_snapshot_id),
-            detail=str(error)[:200],
+    frozen = report.frozen_view or {}
+    view_payload = frozen.get("view") if isinstance(frozen, dict) else {}
+    if not isinstance(view_payload, dict):
+        view_payload = {}
+    unknown = [f for f in request.formats if f not in FORMAT_EXTENSIONS]
+    if unknown:
+        raise _error(
+            status.HTTP_422_UNPROCESSABLE_ENTITY,
+            "unsupported_format",
+            f"不支持的发布格式：{sorted(unknown)}",
         )
-        raise _error(status.HTTP_404_NOT_FOUND, "publishing_failed", str(error)[:200]) from error
+    formats = tuple(
+        sorted((PublicationFormat(f) for f in request.formats), key=lambda f: f.value)
+    )
+    pub_request = PublicationRequest(
+        publication_id=request.publication_id,
+        idempotency_key=idempotency_key,
+        resource_type="report_snapshot",
+        resource_id=str(report_snapshot_id),
+        enterprise_id=_enterprise_of_report_snapshot(session, report),
+        source_payload_sha256=canonical_source_sha256(view_payload),
+        formats=formats,
+    )
+    audit_context = _audit_context(auth, "report_snapshot", str(report_snapshot_id))
+    try:
+        finalized = _run_four_stage(
+            session,
+            pub_request,
+            audit_context,
+            _publishing_renderers(view),
+            ProtocolObjectStore(get_publication_object_store()),
+        )
+    except PublicationError as error:
+        code = error.error_code.value
+        if code == PublicationErrorCode.FREEZE_CONFLICT.value:
+            log_event(
+                logger,
+                logging.WARNING,
+                "publication.blocked",
+                report_snapshot_id=str(report_snapshot_id),
+                code=code,
+            )
+        else:
+            log_event(
+                logger,
+                logging.ERROR,
+                "publication.failed",
+                report_snapshot_id=str(report_snapshot_id),
+                code=code,
+                detail=str(error)[:200],
+            )
+        raise _publication_http_error(error) from error
+    except AuditUnavailable as error:
+        raise _error(
+            status.HTTP_503_SERVICE_UNAVAILABLE,
+            "audit_unavailable",
+            f"发布审计未 durable，请求被拒绝（fail closed）: {error}",
+        ) from error
     log_event(
         logger,
         logging.INFO,
-        "publication.succeeded",
+        "publication.succeeded"
+        if finalized.status == "published"
+        else "publication.finished_failed",
         report_snapshot_id=str(report_snapshot_id),
-        formats=sorted(outcomes),
-        attempts=dict(outcomes),
+        publication_id=str(finalized.publication_id),
+        status=finalized.status,
     )
     return PublishResponse(
         report_snapshot_id=str(report_snapshot_id),
-        outcomes=outcomes,
+        outcomes={oc.format.value: oc.status.value for oc in finalized.outcomes},
+        publication_id=str(finalized.publication_id),
+        status=finalized.status,
     )
 
 
@@ -383,7 +544,11 @@ def download_publication_attempt(attempt_id: UUID, session: SessionDependency) -
         )
     store = get_publication_object_store()
     try:
-        payload = store.read_by_sha(stored.sha256)
+        payload = (
+            store.read_by_key(stored.object_key, stored.sha256)
+            if stored.object_key
+            else store.read_by_sha(stored.sha256)
+        )
     except ImmutableObjectNotFoundError as error:
         log_event(
             logger,
