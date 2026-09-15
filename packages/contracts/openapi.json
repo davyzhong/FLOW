@@ -1743,6 +1743,22 @@
             }
           },
           {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Idempotency-Key"
+            }
+          },
+          {
             "name": "authorization",
             "in": "header",
             "required": false,
@@ -4051,6 +4067,22 @@
             }
           },
           {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Idempotency-Key"
+            }
+          },
+          {
             "name": "authorization",
             "in": "header",
             "required": false,
@@ -5230,8 +5262,15 @@
             "title": "Reason"
           },
           "operator": {
-            "type": "string",
-            "minLength": 1,
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Operator"
           }
         },
@@ -5241,8 +5280,7 @@
           "item_name",
           "column_key",
           "value",
-          "reason",
-          "operator"
+          "reason"
         ],
         "title": "CorrectionCreateRequest"
       },
@@ -6696,16 +6734,19 @@
       "ImportRequest": {
         "properties": {
           "actor": {
-            "type": "string",
-            "maxLength": 128,
-            "minLength": 1,
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Actor"
           }
         },
         "type": "object",
-        "required": [
-          "actor"
-        ],
         "title": "ImportRequest"
       },
       "ImportVersionResponse": {
@@ -7294,9 +7335,15 @@
       "MetricActionRequest": {
         "properties": {
           "operator": {
-            "type": "string",
-            "maxLength": 128,
-            "minLength": 1,
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Operator"
           },
           "reason": {
@@ -7308,7 +7355,6 @@
         },
         "type": "object",
         "required": [
-          "operator",
           "reason"
         ],
         "title": "MetricActionRequest"
@@ -7579,9 +7625,15 @@
             "title": "Changes"
           },
           "operator": {
-            "type": "string",
-            "maxLength": 128,
-            "minLength": 1,
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Operator"
           },
           "reason": {
@@ -7594,7 +7646,6 @@
         "type": "object",
         "required": [
           "changes",
-          "operator",
           "reason"
         ],
         "title": "MetricDraftRequest"
@@ -8991,16 +9042,32 @@
             "title": "Formats"
           },
           "actor": {
-            "type": "string",
-            "minLength": 1,
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Actor"
+          },
+          "publication_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uuid"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Publication Id"
           }
         },
         "type": "object",
-        "required": [
-          "actor"
-        ],
-        "title": "PublishRequest"
+        "title": "PublishRequest",
+        "description": "§7 发布请求：身份只来自 Principal（§3.3 body actor 冲突 → 409）。"
       },
       "PublishResponse": {
         "properties": {
@@ -9014,6 +9081,28 @@
             },
             "type": "object",
             "title": "Outcomes"
+          },
+          "publication_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Publication Id"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status"
           }
         },
         "type": "object",
@@ -9399,9 +9488,15 @@
             "title": "Dictionary Id"
           },
           "actor": {
-            "type": "string",
-            "maxLength": 128,
-            "minLength": 1,
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Actor"
           },
           "reason": {
@@ -9414,7 +9509,6 @@
         "type": "object",
         "required": [
           "dictionary_id",
-          "actor",
           "reason"
         ],
         "title": "RetireRequest"

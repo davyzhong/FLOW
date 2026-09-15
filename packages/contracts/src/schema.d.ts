@@ -1425,7 +1425,7 @@ export interface components {
             /** Reason */
             reason: string;
             /** Operator */
-            operator: string;
+            operator?: string | null;
         };
         /** CorrectionListResponse */
         CorrectionListResponse: {
@@ -1952,7 +1952,7 @@ export interface components {
         /** ImportRequest */
         ImportRequest: {
             /** Actor */
-            actor: string;
+            actor?: string | null;
         };
         /** ImportVersionResponse */
         ImportVersionResponse: {
@@ -2161,7 +2161,7 @@ export interface components {
         /** MetricActionRequest */
         MetricActionRequest: {
             /** Operator */
-            operator: string;
+            operator?: string | null;
             /** Reason */
             reason: string;
         };
@@ -2248,7 +2248,7 @@ export interface components {
                 [key: string]: unknown;
             };
             /** Operator */
-            operator: string;
+            operator?: string | null;
             /** Reason */
             reason: string;
         };
@@ -2743,12 +2743,17 @@ export interface components {
             /** Attempts */
             attempts: components["schemas"]["PublicationAttemptLine"][];
         };
-        /** PublishRequest */
+        /**
+         * PublishRequest
+         * @description §7 发布请求：身份只来自 Principal（§3.3 body actor 冲突 → 409）。
+         */
         PublishRequest: {
             /** Formats */
             formats?: string[];
             /** Actor */
-            actor: string;
+            actor?: string | null;
+            /** Publication Id */
+            publication_id?: string | null;
         };
         /** PublishResponse */
         PublishResponse: {
@@ -2758,6 +2763,10 @@ export interface components {
             outcomes: {
                 [key: string]: string;
             };
+            /** Publication Id */
+            publication_id?: string | null;
+            /** Status */
+            status?: string | null;
         };
         /** PublishingErrorResponse */
         PublishingErrorResponse: {
@@ -2886,7 +2895,7 @@ export interface components {
             /** Dictionary Id */
             dictionary_id: string;
             /** Actor */
-            actor: string;
+            actor?: string | null;
             /** Reason */
             reason: string;
         };
@@ -4346,6 +4355,7 @@ export interface operations {
         parameters: {
             query?: never;
             header?: {
+                "Idempotency-Key"?: string | null;
                 authorization?: string | null;
             };
             path: {
@@ -5735,6 +5745,7 @@ export interface operations {
         parameters: {
             query?: never;
             header?: {
+                "Idempotency-Key"?: string | null;
                 authorization?: string | null;
             };
             path: {
