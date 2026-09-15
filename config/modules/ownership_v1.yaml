@@ -1,8 +1,8 @@
-# S01 Task 7：模块 ownership manifest（v1）。
-# 规则：每个纳管文件恰好登记一次；shared_core 为内部架构 owner（composition root
-# 单独登记），不出现在产品可见模块列表；public 与 internal 禁止互相导入（AST 守护）。
-# security 文件按三 Agent 计划 Task 1/2A/2B 的固定路径预登记（Sol=security core、
-# Kimi=route policy）；合并前文件尚未存在时覆盖检查自动跳过。
+# S01 模块 ownership manifest（v1；R2 起按职责域命名）。
+# 规则：每个纳管文件恰好登记一次；owner 使用职责域（security/api/publication-
+# transaction/shared_core 等），不再使用 Agent 代号（历史代号见协调台账）；
+# shared_core 为内部架构 owner（composition root 单独登记），不出现在产品可见
+# 模块列表；public 与 internal 禁止互相导入（AST 守护）。
 
 version: v1
 managed_files:
@@ -12,12 +12,16 @@ managed_files:
   - {path: "services/api/src/flow_api/modules/internal_workbench/__init__.py", owner: internal_workbench}
   - {path: "services/api/src/flow_api/modules/registry.py", owner: shared_core}
   - {path: "services/api/src/flow_api/api/routes/modules.py", owner: shared_core}
-  # ---- 安全核心（Task 1/2A，owner Sol）----
-  - {path: "services/api/src/flow_api/security/__init__.py", owner: sol}
-  - {path: "services/api/src/flow_api/security/principal.py", owner: sol}
-  - {path: "services/api/src/flow_api/security/authorization.py", owner: sol}
-  - {path: "services/api/src/flow_api/security/audit.py", owner: sol}
-  - {path: "services/api/src/flow_api/security/models.py", owner: sol}
-  # ---- 敏感路由（Task 2B，owner Kimi）----
-  - {path: "services/api/src/flow_api/security/route_policy.py", owner: kimi}
-  - {path: "services/api/src/flow_api/security/audit_writer.py", owner: glm-coordinator}
+  # ---- 安全核心（职责域：security）----
+  - {path: "services/api/src/flow_api/security/__init__.py", owner: security}
+  - {path: "services/api/src/flow_api/security/principal.py", owner: security}
+  - {path: "services/api/src/flow_api/security/authorization.py", owner: security}
+  - {path: "services/api/src/flow_api/security/audit.py", owner: security}
+  - {path: "services/api/src/flow_api/security/models.py", owner: security}
+  - {path: "services/api/src/flow_api/security/route_policy.py", owner: security}
+  - {path: "services/api/src/flow_api/security/audit_writer.py", owner: security}
+  - {path: "services/api/src/flow_api/security/redaction.py", owner: security}
+  # ---- 发布四阶段 ABI（职责域：publication-transaction）----
+  - {path: "services/api/src/flow_api/publication/__init__.py", owner: publication-transaction}
+  - {path: "services/api/src/flow_api/publication/four_stage.py", owner: publication-transaction}
+  - {path: "services/api/src/flow_api/publication/store_adapter.py", owner: publication-transaction}
