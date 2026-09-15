@@ -15,10 +15,10 @@ def session() -> Session:
     return get_session_factory()()
 
 
-def test_migration_head_is_0028(session: Session) -> None:
+def test_migration_head_is_0029(session: Session) -> None:
     result = session.execute(text("SELECT version_num FROM alembic_version"))
     version = result.scalar()
-    assert version == "0028_publication_four_stage", f"迁移头不是 0028: {version}"
+    assert version == "0029_statement_provenance", f"迁移头不是 0029: {version}"
 
 
 def test_role_binding_table_exists(session: Session) -> None:
