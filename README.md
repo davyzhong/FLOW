@@ -3,9 +3,9 @@ doc_id: FLOW-NAV-ROOT-README-001
 title: FLOW repository README
 doc_type: navigation
 status: current
-version: 1.1
+version: 1.2
 created_at: 2026-08-29
-updated_at: 2026-09-13
+updated_at: 2026-09-16
 owner: FLOW
 applies_to: repository
 ---
@@ -28,7 +28,9 @@ applies_to: repository
 
 **版本化数据** · **确定性指标** · **证据复核** · **冻结报告**
 
-[快速开始](#-快速开始) · [界面导览](#%EF%B8%8F-界面导览) · [真实财报分析](#-真实财报图形化分析) · [系统架构](#%EF%B8%8F-系统架构) · [当前进度](#-当前进度与边界) · [文档中心](docs/README.md)
+![财报](https://img.shields.io/badge/%E7%9C%9F%E5%AE%9E%E8%B4%A2%E6%8A%A5-5%E5%AE%B6%E5%85%AC%E5%8F%B8%C2%B714%E4%BB%BD%E6%8A%A5%E5%91%8A-0ea5e9) ![指标](https://img.shields.io/badge/%E6%8C%87%E6%A0%87%E5%AE%9A%E4%B9%89-64%2B15%2B11%E6%9D%A1%E7%9B%AE-f59e0b) ![知识资产](https://img.shields.io/badge/%E9%9D%99%E6%80%81%E7%9F%A5%E8%AF%86%E8%B5%84%E4%BA%A7-31%E9%A1%B9%E9%94%81%E5%AE%9A-8b5cf6) ![测试](https://img.shields.io/badge/%E6%B2%BB%E7%90%86%E9%97%A8%E7%A6%81-6%E9%81%93%E5%85%A8%E7%BB%BF-2e8562) ![迁移](https://img.shields.io/badge/%E6%96%87%E6%A1%A3%E8%BF%81%E7%A7%BB-M0%E2%80%93M6%20%E5%B7%B2%E5%85%B3%E9%97%AD-14243a)
+
+[快速开始](#-快速开始) · [界面导览](#%EF%B8%8F-界面导览) · [真实财报分析](#-真实财报图形化分析) · [知识治理](#-静态知识治理项目自己的知识生产线) · [系统架构](#%EF%B8%8F-系统架构) · [当前进度](#-当前进度与边界) · [文档中心](docs/README.md)
 
 </div>
 
@@ -37,6 +39,40 @@ applies_to: repository
 ![FLOW Finance BP 驾驶舱：核心指标、趋势、利润桥、经营发现与毛利矩阵](docs/assets/screenshots/dashboard.png)
 
 > 截图来自 `c1a59d1` 的真实页面和确定性物流演示数据，不是客户数据或设计效果图。文档核对日期：**2026-09-08**，读取基线 `861acad`。截图保留原拍摄日期，不代表本次最新界面。当前产品方向已由 2026-09-13 战略重构（[D052–D054](docs/10_governance/DECISION_INDEX.md)）重新定义为**三层两模块**：企业内部月度财务经营分析工作台是最终目标产品，公开财报分析是先行成熟共享底座的独立模块；功能实现与生产部署验收分别记录。
+
+## 🏛️ 三层两模块：产品结构一图
+
+项目的目标结构（[D053](docs/10_governance/decisions/D053--三层两模块边界与执行顺序.md)）——**可见的专业治理底座 + 共享分析底座，支撑两个面向不同受众的模块**：
+
+```mermaid
+flowchart TB
+    subgraph L3["第三层 · 两个产品模块（用户所见）"]
+        direction LR
+        M1["🏢 企业内部月度财务经营分析工作台<br/>（最终目标产品 · 经分专员一次终审）"]
+        M2["🌐 公开财报分析模块<br/>（先行成熟 · 独立入口与验收）"]
+    end
+    subgraph L2["第二层 · 共享分析底座（一套，不复制）"]
+        direction LR
+        S1["确定性指标引擎<br/>Decimal · 口径标签 · 快照身份链"]
+        S2["证据与调查<br/>Finding · Evidence · 复核状态机"]
+        S3["冻结与发布<br/>JSONB 冻结 · 四格式 · SHA 校验"]
+    end
+    subgraph L1["第一层 · 专业治理底座（可见且受治理）"]
+        direction LR
+        G1["数据接入与标准化<br/>画像 · 映射版本 · 对账"]
+        G2["指标知识治理<br/>64 指标 · 草稿→激活→退役"]
+        G3["静态知识库<br/>flow-knowledge 发布锁"]
+    end
+    L1 --> L2 --> L3
+    classDef module fill:#eaf3ff,stroke:#2463eb,color:#14243a,stroke-width:2px
+    classDef shared fill:#ecf8f1,stroke:#2e8562,color:#14243a
+    classDef gov fill:#fff4df,stroke:#ac761f,color:#14243a
+    class M1,M2 module
+    class S1,S2,S3 shared
+    class G1,G2,G3 gov
+```
+
+> 两模块**共享同一底座与数字身份链**，区别只在数据定义与验收口径；公开模块先行成熟（14 份真实财报已验证），内部工作台待数据授权与四级验证。
 
 ## 🎯 FLOW 解决什么问题
 
@@ -124,6 +160,20 @@ flowchart TB
 调查页提供异常定义、影响金额、驱动桥、计算明细、对账与质量状态、源记录、公式和数据血缘。结论分为**已验证事实、分析判断、待确认问题、建议行动**；批准由状态机控制。
 
 ![证据优先的 Investigation 页面](docs/assets/screenshots/investigation.png)
+
+**四问工作台的回答闭环**（U7 已交付，方法论权威见知识卡 METHOD-QA-001）——每个异动都走完同一条可审计的递进链：
+
+```mermaid
+flowchart LR
+    Q1["❶ 发生了什么<br/>（冻结事实 · 客观口径）"] --> Q2["❷ 为什么<br/>（量价费拆解 · 归因到粒度）"]
+    Q2 --> Q3["❸ 会怎样<br/>（情景推演 · 显式标注假设）"]
+    Q3 --> Q4["❹ 怎么办<br/>（行动 · 责任人 · 期限）"]
+    Q4 -. 复盘后回到事实层 .-> Q1
+    classDef fact fill:#eaf3ff,stroke:#2463eb,color:#14243a
+    classDef infer fill:#fff4df,stroke:#ac761f,color:#14243a
+    class Q1 fact
+    class Q2,Q3,Q4 infer
+```
 
 批准后的证据若被拒绝，或结论被修改，Finding 会退回复核并留下事件记录；没有证据的 Finding 不能批准。已冻结报告保留签发时内容，新的报告版本重新检查当前资格。
 
@@ -217,7 +267,52 @@ python3 scripts/build_static_library_site.py
 
 ![指标勾稽关系与杜邦分解树](docs/assets/screenshots/p5/metric-library-relations.png)
 
+**指标治理生命周期**（C01–C06 已交付）——每个指标定义从登记到退役全程可追溯，目标值与预警阈值同版本管理：
+
+```mermaid
+stateDiagram-v2
+    [*] --> draft: 登记（公式+口径+目标+阈值）
+    draft --> verified: 语义与绑定验证
+    verified --> active: 激活（进入计算目录）
+    active --> retired: 退役（保留历史快照可解释）
+    draft --> retired: 直接废弃
+    note right of active
+        审计轨迹 + 影响沙箱：
+        变更前试算受影响指标
+    end note
+```
+
 评审台页面：[metric-library-v0-review.html](docs/knowledge-base/03_assets/visual_prototypes/metric-library-v0-review.html)。以上截图由 [capture_p5_report_screenshots.mjs](scripts/capture_p5_report_screenshots.mjs) 从报告页面机械截取，未做拼接或修饰；图片来源与采集方式见[截图说明](docs/assets/screenshots/README.md)。
+
+## 📚 静态知识治理：项目自己的知识生产线
+
+产品口径不依赖动态外部笔记——**全部正式知识以版本化发布锁定在仓库内**（`flow-knowledge-2026-09-12.1`，31 项资产逐项 SHA-256）：
+
+```mermaid
+flowchart LR
+    SRC["🗂️ 来源层<br/>固定截面 3035 篇<br/>12 组 · 处置登记"] --> CARD["🃏 知识卡<br/>16 张 canonical<br/>候选→核验→锁定"]
+    SRC --> HB["📖 领域手册<br/>11 册九节<br/>财务/经营/治理"]
+    CARD --> LOCK["🔒 发布锁 release-lock<br/>版本化文件 + SHA-256"]
+    HB --> LOCK
+    LOCK --> MAP["🗺️ 产品映射<br/>知识→对象→L1-L4→采用状态"]
+    MAP --> SPEC["📐 决策与规格<br/>D 系列 + SPEC_INDEX"]
+    classDef src fill:#fff4df,stroke:#ac761f,color:#14243a
+    classDef know fill:#eaf3ff,stroke:#2463eb,color:#14243a
+    classDef prod fill:#ecf8f1,stroke:#2e8562,color:#14243a
+    class SRC src
+    class CARD,HB,LOCK know
+    class MAP,SPEC prod
+```
+
+- **来源登记**：12 组来源与冻结截面声明完全对账；篇级按需登记，不伪造路径；
+- **转换门禁**：外部文章不得直接成为需求——必须经知识卡 → 产品映射 → 正式决策三道门（CI 强制校验）；
+- **离线资料库**：全部静态数据集打包为单文件站点（双击即开、零服务器）：
+
+![静态资料库：49 项通用指标、670 条事实库、14 份财报表格浏览器（离线单文件站点）](docs/assets/screenshots/library-site.png)
+
+信息架构与界面设计的可交互原型（设计期产物，见 `03_assets/visual_prototypes/`）：
+
+![信息架构原型：双轨导航与工作流分区](docs/assets/screenshots/prototype-ia.png)
 
 ## 📍 当前进度
 
@@ -523,17 +618,23 @@ FLOW/
 ├── infra/                    # Compose、容器构建文件
 ├── scripts/                  # 生成器、演示初始化与分层验收
 └── docs/
-    ├── README.md             # 全部文档导航与当前阅读路径
-    ├── architecture/         # 运行架构、领域对象与血缘
-    ├── data-contract/        # Excel 数据契约
-    ├── intake/               # 接入、清洗与发布
-    ├── metrics/              # 指标口径和快照
-    ├── operations/           # 登录、认证与部署配置
-    ├── implementation/       # 分阶段验收与修复证据（含 p5 财报反向解析）
-    ├── reviews/              # 历史代码审查及关闭状态
-    ├── superpowers/          # 正式规格、统一执行计划
-    ├── assets/screenshots/   # 当前真实页面截图与来源说明
-    └── knowledge-base/       # 项目状态、决策、交接与不可变档案
+    ├── README.md                 # 全部文档导航与当前阅读路径
+    ├── 00_start_here/            # 唯一入口：PROJECT_STATE / READING_ORDER / DOCUMENT_MAP
+    ├── 10_governance/            # 决策索引 D001–D054 + 单项决策 + 治理规则 + legacy 豁免锁
+    ├── 20_product/               # 产品定义六件套（愿景/范围/用户/能力/边界/发布）
+    ├── 30_architecture/          # 架构聚合五文档（系统/数据/领域/指标/安全部署）
+    ├── 40_specs/                 # SPEC_INDEX + 九个规格域
+    ├── 50_plans/                 # CURRENT_ROADMAP（唯一路线图）+ 稳定工作包 + 视图
+    ├── 60_delivery/              # 实施/验证/发布记录 + 生成式状态视图
+    ├── 70_operations/            # 认证与部署运行手册
+    ├── 80_reviews/               # 审查与无上下文接续测试
+    ├── 90_archive/               # 历史计划与会话归档（do_not_execute）
+    ├── architecture/             # 运行架构、领域对象与血缘（原位）
+    ├── data-contract/            # Excel 数据契约（机器消费，原位）
+    ├── knowledge-base/           # 静态知识库：10_sources 来源层 / 20_cards 知识卡 /
+    │                             #   30_handbooks 领域手册 / 50_mappings 产品映射 +
+    │                             #   不可变档案（会话/研究/原图/微信）
+    └── assets/screenshots/       # 当前真实页面截图与来源说明
 ```
 
 | 你想了解什么 | 推荐入口 |
