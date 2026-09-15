@@ -26,7 +26,11 @@ from flow_api.investigation.repositories import (
     InvestigationNotFoundError,
 )
 from flow_api.security.authorization import Action
-from flow_api.security.route_policy import LOADERS, require_action
+from flow_api.security.route_policy import (
+    LOADERS,
+    AuthorizationContext,
+    require_action,
+)
 
 router = APIRouter(prefix="/copilot", tags=["copilot"])
 
@@ -47,6 +51,25 @@ def _error(http_status: int, code: str, message: str) -> HTTPException:
     return HTTPException(status_code=http_status, detail=detail.model_dump(mode="json"))
 
 
+_DEP_COPILOT_ASK = require_action(
+    Action.COPILOT_INVESTIGATION_ASK,
+    LOADERS["load_finding_batch_scope_or_deny_legacy"],
+    session_provider=get_investigation_session,
+)
+
+_DEP_COPILOT_EXPLAIN = require_action(
+    Action.COPILOT_MAPPING_EXPLAIN,
+    LOADERS["load_body_import_batch_scope_or_deny_legacy"],
+    session_provider=get_investigation_session,
+)
+
+_DEP_COPILOT_OUTLINE = require_action(
+    Action.COPILOT_REPORT_OUTLINE_GENERATE,
+    LOADERS["load_body_batch_scope_or_deny_legacy"],
+    session_provider=get_investigation_session,
+)
+
+
 @router.post(
     "/investigations/{finding_id}/ask",
     response_model=CopilotInteractionResponse,
@@ -55,20 +78,14 @@ def _error(http_status: int, code: str, message: str) -> HTTPException:
         status.HTTP_409_CONFLICT: {"model": CopilotErrorResponse},
         status.HTTP_422_UNPROCESSABLE_CONTENT: {"model": CopilotErrorResponse},
     },
-    dependencies=[
-        Depends(
-            require_action(
-                Action.COPILOT_INVESTIGATION_ASK,
-                LOADERS["load_finding_batch_scope_or_deny_legacy"],
-                session_provider=get_investigation_session,
-            )
-        )
-    ],
+    dependencies=[Depends(_DEP_COPILOT_ASK)],
 )
 def ask_investigation_question(
     finding_id: UUID,
     request: InvestigationQuestionRequest,
     session: SessionDependency,
+    *,
+    auth: Annotated[AuthorizationContext, Depends(_DEP_COPILOT_ASK)],
 ) -> CopilotInteractionResponse:
     service = _service()
     try:
@@ -76,7 +93,7 @@ def ask_investigation_question(
             session,
             finding_id,
             question=request.question,
-            actor=request.actor,
+            actor=auth.principal.actor_id,
             batch_id=(UUID(request.batch_id) if request.batch_id else None),
             metric_snapshot_id=(
                 UUID(request.metric_snapshot_id) if request.metric_snapshot_id else None
@@ -107,26 +124,20 @@ def ask_investigation_question(
         status.HTTP_404_NOT_FOUND: {"model": CopilotErrorResponse},
         status.HTTP_422_UNPROCESSABLE_CONTENT: {"model": CopilotErrorResponse},
     },
-    dependencies=[
-        Depends(
-            require_action(
-                Action.COPILOT_MAPPING_EXPLAIN,
-                LOADERS["load_body_import_batch_scope_or_deny_legacy"],
-                session_provider=get_investigation_session,
-            )
-        )
-    ],
+    dependencies=[Depends(_DEP_COPILOT_EXPLAIN)],
 )
 def explain_mapping(
     request: MappingExplanationRequest,
     session: SessionDependency,
+    *,
+    auth: Annotated[AuthorizationContext, Depends(_DEP_COPILOT_EXPLAIN)],
 ) -> CopilotInteractionResponse:
     service = _service()
     try:
         result = service.explain_mapping(
             session,
             UUID(request.import_version_id),
-            actor=request.actor,
+            actor=auth.principal.actor_id,
         )
     except CopilotValidationError as error:
         session.commit()
@@ -148,26 +159,20 @@ def explain_mapping(
         status.HTTP_404_NOT_FOUND: {"model": CopilotErrorResponse},
         status.HTTP_422_UNPROCESSABLE_CONTENT: {"model": CopilotErrorResponse},
     },
-    dependencies=[
-        Depends(
-            require_action(
-                Action.COPILOT_REPORT_OUTLINE_GENERATE,
-                LOADERS["load_body_batch_scope_or_deny_legacy"],
-                session_provider=get_investigation_session,
-            )
-        )
-    ],
+    dependencies=[Depends(_DEP_COPILOT_OUTLINE)],
 )
 def draft_report_outline(
     request: ReportOutlineRequest,
     session: SessionDependency,
+    *,
+    auth: Annotated[AuthorizationContext, Depends(_DEP_COPILOT_OUTLINE)],
 ) -> CopilotInteractionResponse:
     service = _service()
     try:
         result = service.draft_report_outline(
             session,
             UUID(request.batch_id),
-            actor=request.actor,
+            actor=auth.principal.actor_id,
         )
     except CopilotValidationError as error:
         session.commit()

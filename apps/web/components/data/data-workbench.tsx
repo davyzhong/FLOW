@@ -21,7 +21,6 @@ const STAGES: { id: Stage; label: string }[] = [
   { id: "publish", label: "发布" },
 ];
 
-const ACTOR = "finance.bp@example.com";
 
 type WorkbenchState =
   | { phase: "prepare" }
@@ -117,10 +116,9 @@ export function DataWorkbench() {
           state.source.id,
           state.source.sha256,
           overrideEntries,
-          ACTOR,
         );
       }
-      confirmed = await intakeApi.confirmMapping(confirmed.id, ACTOR);
+      confirmed = await intakeApi.confirmMapping(confirmed.id);
       setState({ ...state, mapping: confirmed });
       const importVersion = await intakeApi.validateImport(
         state.source.id,
@@ -142,7 +140,7 @@ export function DataWorkbench() {
     setBusy(true);
     setError(null);
     try {
-      await intakeApi.acknowledgeWarning(issueId, ACTOR, reasons[issueId].trim());
+      await intakeApi.acknowledgeWarning(issueId, reasons[issueId].trim());
       const importVersion = await intakeApi.getImportVersion(state.batchId, state.importVersion.id);
       setState({ ...state, importVersion });
     } catch (cause) {

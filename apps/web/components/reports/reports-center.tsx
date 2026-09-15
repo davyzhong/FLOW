@@ -217,7 +217,7 @@ export function ReportsCenter() {
       const response = await fetch(`/api/v1/publishing/snapshots/${selected}/publish`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ formats, actor: "finance.bp@example.com" }),
+        body: JSON.stringify({ formats }),
       });
       if (!response.ok) throw new Error("产物生成失败");
       await refreshAttempts();
@@ -241,7 +241,6 @@ export function ReportsCenter() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             formats: operationsFormats,
-            actor: "finance.bp@example.com",
           }),
         },
       );

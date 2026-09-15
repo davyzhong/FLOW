@@ -316,7 +316,8 @@ class InvestigationService:
             session,
             evidence,
             request.decision,
-            reviewer=request.reviewer,
+            # §3.3：路由层已注入 Principal；`None` 到达此处即合同违约
+            reviewer=request.reviewer if request.reviewer is not None else "",
             comment=request.comment,
         )
         session.commit()
@@ -384,7 +385,8 @@ class InvestigationService:
             session,
             finding,
             request.decision,
-            reviewer=request.reviewer,
+            # §3.3：路由层已注入 Principal；`None` 到达此处即合同违约
+            reviewer=request.reviewer if request.reviewer is not None else "",
             comment=request.comment,
         )
         session.commit()

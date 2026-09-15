@@ -112,7 +112,6 @@ function MetricDraftForm({
   const [field, setField] = useState<string>("caliber");
   const [value, setValue] = useState("");
   const [reason, setReason] = useState("");
-  const [operator, setOperator] = useState("finance.bp");
   const [message, setMessage] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -123,11 +122,9 @@ function MetricDraftForm({
     try {
       const draft = await metricLibraryApi.draftChange(metric.entry_id, {
         changes: { [field]: value },
-        operator,
         reason,
       });
-      await metricLibraryApi.activateChange(draft.id, { operator, reason });
-      onChanged(`已合规修订为 v${draft.version}（草稿→验证→生效，审计留痕）`);
+      onChanged(`已提交修订草稿 v${draft.version}（待 rule_owner 审批）`);
     } catch (error) {
       setMessage(
         error instanceof FlowApiError
@@ -137,7 +134,7 @@ function MetricDraftForm({
     } finally {
       setBusy(false);
     }
-  }, [field, metric.entry_id, onChanged, operator, reason, value]);
+  }, [field, metric.entry_id, onChanged, reason, value]);
 
   return (
     <div className="ml-draft">
@@ -157,11 +154,6 @@ function MetricDraftForm({
         placeholder="理由（必填）"
         value={reason}
         onChange={(e) => setReason(e.target.value)}
-      />
-      <input
-        aria-label="操作者"
-        value={operator}
-        onChange={(e) => setOperator(e.target.value)}
       />
       <button
         type="button"
@@ -280,7 +272,6 @@ function GovernanceSection({ metrics }: { metrics: MetricLibraryEntry[] }) {
   // entry_id 是库内唯一键；metric_code 跨域可重复（如 general/logistics 各有一条 gross_margin）
   const [entryId, setEntryId] = useState(metrics[0]?.entry_id ?? "");
   const [changesText, setChangesText] = useState("{}");
-  const [operator, setOperator] = useState("");
   const [reason, setReason] = useState("");
 
   const refreshEvents = useCallback(() => {
@@ -309,8 +300,8 @@ function GovernanceSection({ metrics }: { metrics: MetricLibraryEntry[] }) {
       setActionError("该指标尚无库内条目（请先导入指标库）。");
       return;
     }
-    if (!operator.trim() || !reason.trim()) {
-      setActionError("操作者与理由均为必填（审计要求）。");
+    if (!reason.trim()) {
+      setActionError("理由为必填（审计要求）。操作者取自当前登录身份。");
       return;
     }
     let changes: Record<string, unknown> | null = null;
@@ -328,7 +319,7 @@ function GovernanceSection({ metrics }: { metrics: MetricLibraryEntry[] }) {
     }
     setBusy(true);
     try {
-      const input = { operator: operator.trim(), reason: reason.trim() };
+      const input = { reason: reason.trim() };
       if (kind === "draft") {
         await metricLibraryApi.draftChange(selected.entry_id, { ...input, changes: changes! });
         setNotice(`已创建草稿：${selected.metric_code}（待验证与激活）`);
@@ -382,10 +373,6 @@ function GovernanceSection({ metrics }: { metrics: MetricLibraryEntry[] }) {
             placeholder='{"benchmark": "国资委 2025 标准值…"}'
             aria-label="变更内容 JSON"
           />
-        </label>
-        <label>
-          操作者
-          <input value={operator} onChange={(e) => setOperator(e.target.value)} placeholder="如：finance-bp" />
         </label>
         <label>
           理由

@@ -135,7 +135,8 @@ class InvestigationContext(StrictModel):
 
 class EvidenceDecisionRequest(StrictModel):
     decision: str
-    reviewer: str = Field(min_length=1)
+    # §3.3：reviewer 只来自 Principal；body 可省略，冲突值 → 409 actor_conflict
+    reviewer: str | None = Field(default=None, max_length=128)
     comment: str | None = None
 
 
@@ -149,7 +150,8 @@ class ConclusionUpsertRequest(StrictModel):
 
 class FindingTransitionRequest(StrictModel):
     decision: str
-    reviewer: str = Field(min_length=1)
+    # §3.3：reviewer 只来自 Principal；body 可省略，冲突值 → 409 actor_conflict
+    reviewer: str | None = Field(default=None, max_length=128)
     comment: str | None = None
 
 

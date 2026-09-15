@@ -32,7 +32,6 @@ export type InvestigationQuery = {
 
 export type EvidenceDecisionInput = {
   decision: "verified" | "rejected";
-  reviewer: string;
   comment?: string | null;
 };
 
@@ -46,7 +45,6 @@ export type ConclusionInput = {
 
 export type FindingTransitionInput = {
   decision: "submitted" | "approved" | "rejected" | "returned";
-  reviewer: string;
   comment?: string | null;
 };
 
@@ -155,7 +153,6 @@ export type CopilotSectionInput = {
 
 export type CopilotQuestionInput = {
   question: string;
-  actor: string;
   batch_id?: string | null;
   metric_snapshot_id?: string | null;
   analysis_run_id?: string | null;
@@ -348,7 +345,6 @@ export type CorrectionInput = {
   column_key: string;
   value: string;
   reason: string;
-  operator: string;
 };
 
 export type MetricLibrary = components["schemas"]["MetricLibraryResponse"];export type MetricLibraryEntry = components["schemas"]["MetricEntry"];
@@ -388,8 +384,8 @@ export type MetricGovernanceEventList =
 export type MetricGovernanceEventLine =
   components["schemas"]["MetricGovernanceEventLine"];
 export type MetricEntryAction = components["schemas"]["MetricEntryActionResponse"];
-export type MetricDraftInput = { changes: Record<string, unknown>; operator: string; reason: string };
-export type MetricActionInput = { operator: string; reason: string };
+export type MetricDraftInput = { changes: Record<string, unknown>; reason: string };
+export type MetricActionInput = { reason: string };
 
 export type FindingListItem = components["schemas"]["FindingListItem"];
 export type FindingList = components["schemas"]["FindingListResponse"];
@@ -443,20 +439,16 @@ export const intakeApi = {
   proposeMapping(sourceId: string): Promise<IntakeMapping> {
     return submit<IntakeMapping>(`/api/v1/intake/sources/${sourceId}/mapping-proposals`, "POST", {});
   },
-  confirmMapping(mappingId: string, actor: string): Promise<IntakeMapping> {
-    return submit<IntakeMapping>(`/api/v1/intake/mappings/${mappingId}/confirm`, "POST", {
-      actor,
-    });
+  confirmMapping(mappingId: string): Promise<IntakeMapping> {
+    return submit<IntakeMapping>(`/api/v1/intake/mappings/${mappingId}/confirm`, "POST", {});
   },
   applyOverrides(
     mappingId: string,
     sourceFileId: string,
     sourceSha256: string,
     overrides: MappingOverrideInput[],
-    actor: string,
   ): Promise<IntakeMapping> {
     return submit<IntakeMapping>(`/api/v1/intake/mappings/${mappingId}/overrides`, "POST", {
-      actor,
       source_file_id: sourceFileId,
       source_sha256: sourceSha256,
       overrides,
@@ -473,9 +465,8 @@ export const intakeApi = {
     if (!version) throw new Error("导入版本不存在");
     return version;
   },
-  acknowledgeWarning(issueId: string, actor: string, reason: string) {
+  acknowledgeWarning(issueId: string, reason: string) {
     return submit<unknown>(`/api/v1/intake/issues/${issueId}/acknowledge`, "POST", {
-      actor,
       reason,
     });
   },

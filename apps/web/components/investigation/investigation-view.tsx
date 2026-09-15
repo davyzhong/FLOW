@@ -542,7 +542,7 @@ export function InvestigationEvidenceInspector({
                 disabled={busy}
                 onClick={() =>
                   void onDecision(
-                    { decision: "verified", reviewer: "Finance BP", comment: "确认此证据" },
+                    { decision: "verified", comment: "确认此证据" },
                     item.evidence_id,
                   )
                 }
@@ -556,7 +556,7 @@ export function InvestigationEvidenceInspector({
                 disabled={busy}
                 onClick={() =>
                   void onDecision(
-                    { decision: "rejected", reviewer: "Finance BP", comment: "否定此证据" },
+                    { decision: "rejected", comment: "否定此证据" },
                     item.evidence_id,
                   )
                 }
@@ -605,7 +605,7 @@ export function InvestigationReviewActions({
             className={action.primary ? "is-primary" : undefined}
             disabled={busy}
             onClick={() =>
-              void onTransition({ decision: action.decision, reviewer: "Finance BP" })
+              void onTransition({ decision: action.decision })
             }
           >
             {action.label}

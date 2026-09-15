@@ -30,7 +30,11 @@ from flow_api.investigation.repositories import (
 from flow_api.investigation.service import InvestigationService
 from flow_api.investigation.state_machines import ReviewBlockedError
 from flow_api.security.authorization import Action
-from flow_api.security.route_policy import LOADERS, require_action
+from flow_api.security.route_policy import (
+    LOADERS,
+    AuthorizationContext,
+    require_action,
+)
 
 router = APIRouter(prefix="/investigations", tags=["investigations"])
 
@@ -139,6 +143,13 @@ def investigation_context(
     return InvestigationContextResponse.model_validate(context.model_dump())
 
 
+_DEP_EVIDENCE_DECIDE = require_action(
+    Action.INVESTIGATION_EVIDENCE_DECIDE,
+    LOADERS["load_finding_evidence_batch_scope_or_deny_legacy"],
+    session_provider=get_investigation_session,
+)
+
+
 @router.post(
     "/{finding_id}/evidence/{evidence_id}/decision",
     response_model=EvidenceDecisionResponse,
@@ -146,22 +157,18 @@ def investigation_context(
         status.HTTP_404_NOT_FOUND: {"model": InvestigationErrorResponse},
         status.HTTP_409_CONFLICT: {"model": InvestigationErrorResponse},
     },
-    dependencies=[
-        Depends(
-            require_action(
-                Action.INVESTIGATION_EVIDENCE_DECIDE,
-                LOADERS["load_finding_evidence_batch_scope_or_deny_legacy"],
-                session_provider=get_investigation_session,
-            )
-        )
-    ],
+    dependencies=[Depends(_DEP_EVIDENCE_DECIDE)],
 )
 def decide_evidence(
     finding_id: UUID,
     evidence_id: UUID,
     request: EvidenceDecisionRequest,
     session: SessionDependency,
+    *,
+    auth: Annotated[AuthorizationContext, Depends(_DEP_EVIDENCE_DECIDE)],
 ) -> EvidenceDecisionResponse:
+    if request.reviewer is None:
+        request = request.model_copy(update={"reviewer": auth.principal.actor_id})
     try:
         acknowledgement = InvestigationService().decide_evidence(
             session, finding_id, evidence_id, request
@@ -201,6 +208,13 @@ def save_conclusion(
     return ConclusionResponse.model_validate(acknowledgement.model_dump())
 
 
+_DEP_TRANSITION = require_action(
+    Action.INVESTIGATION_TRANSITION,
+    LOADERS["load_finding_batch_scope_or_deny_legacy"],
+    session_provider=get_investigation_session,
+)
+
+
 @router.post(
     "/{finding_id}/transition",
     response_model=FindingTransitionResponse,
@@ -208,21 +222,17 @@ def save_conclusion(
         status.HTTP_404_NOT_FOUND: {"model": InvestigationErrorResponse},
         status.HTTP_409_CONFLICT: {"model": InvestigationErrorResponse},
     },
-    dependencies=[
-        Depends(
-            require_action(
-                Action.INVESTIGATION_TRANSITION,
-                LOADERS["load_finding_batch_scope_or_deny_legacy"],
-                session_provider=get_investigation_session,
-            )
-        )
-    ],
+    dependencies=[Depends(_DEP_TRANSITION)],
 )
 def transition_finding(
     finding_id: UUID,
     request: FindingTransitionRequest,
     session: SessionDependency,
+    *,
+    auth: Annotated[AuthorizationContext, Depends(_DEP_TRANSITION)],
 ) -> FindingTransitionResponse:
+    if request.reviewer is None:
+        request = request.model_copy(update={"reviewer": auth.principal.actor_id})
     try:
         acknowledgement = InvestigationService().transition_finding(session, finding_id, request)
     except ReviewBlockedError as error:

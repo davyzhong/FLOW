@@ -8,7 +8,8 @@ from flow_api.copilot.models import StructuredAnswer
 
 class InvestigationQuestionRequest(BaseModel):
     question: str = Field(min_length=1, max_length=2000)
-    actor: str = Field(min_length=1)
+    # §3.3：actor 只来自 Principal；body 可省略，冲突值 → 409 actor_conflict
+    actor: str | None = Field(default=None, max_length=128)
     batch_id: str | None = None
     metric_snapshot_id: str | None = None
     analysis_run_id: str | None = None
@@ -16,12 +17,14 @@ class InvestigationQuestionRequest(BaseModel):
 
 class MappingExplanationRequest(BaseModel):
     import_version_id: str = Field(min_length=1)
-    actor: str = Field(min_length=1)
+    # §3.3：actor 只来自 Principal；body 可省略，冲突值 → 409 actor_conflict
+    actor: str | None = Field(default=None, max_length=128)
 
 
 class ReportOutlineRequest(BaseModel):
     batch_id: str = Field(min_length=1)
-    actor: str = Field(min_length=1)
+    # §3.3：actor 只来自 Principal；body 可省略，冲突值 → 409 actor_conflict
+    actor: str | None = Field(default=None, max_length=128)
 
 
 class CopilotInteractionResponse(BaseModel):

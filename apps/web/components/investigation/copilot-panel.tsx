@@ -47,7 +47,6 @@ export function CopilotPanel({
     try {
       const response = await flowApi.askCopilot(query.finding_id, {
         question,
-        actor: "Finance BP",
         batch_id: query.batch_id ?? null,
         metric_snapshot_id: query.metric_snapshot_id ?? null,
         analysis_run_id: query.analysis_run_id ?? null,

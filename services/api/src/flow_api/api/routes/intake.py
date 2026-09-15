@@ -76,7 +76,11 @@ from flow_api.intake.service import (
 from flow_api.intake.source_storage import SourceStorage, SourceStorageError
 from flow_api.intake.transforms import load_transform_rules
 from flow_api.security.authorization import Action
-from flow_api.security.route_policy import LOADERS, require_action
+from flow_api.security.route_policy import (
+    LOADERS,
+    AuthorizationContext,
+    require_action,
+)
 from flow_api.settings import get_settings
 
 router = APIRouter(prefix="/intake", tags=["intake"])
@@ -467,24 +471,37 @@ def create_mapping_proposal(
     return _mapping_response(mapping, proposal)
 
 
+_DEP_MAPPING_CONFIRM = require_action(
+    Action.INTAKE_MAPPING_CONFIRM,
+    LOADERS["load_mapping_batch_scope_owner_or_deny_legacy"],
+    session_provider=get_db_session,
+)
+
+_DEP_MAPPING_OVERRIDE = require_action(
+    Action.INTAKE_MAPPING_OVERRIDE,
+    LOADERS["load_mapping_batch_scope_owner_or_deny_legacy"],
+    session_provider=get_db_session,
+)
+
+_DEP_ISSUE_ACK = require_action(
+    Action.INTAKE_ISSUE_ACKNOWLEDGE,
+    LOADERS["load_issue_batch_scope_owner_or_deny_legacy"],
+    session_provider=get_db_session,
+)
+
+
 @router.post(
     "/mappings/{mapping_version_id}/confirm",
     response_model=MappingResponse,
-    dependencies=[
-        Depends(
-            require_action(
-                Action.INTAKE_MAPPING_CONFIRM,
-                LOADERS["load_mapping_batch_scope_owner_or_deny_legacy"],
-                session_provider=get_db_session,
-            )
-        )
-    ],
+    dependencies=[Depends(_DEP_MAPPING_CONFIRM)],
 )
 def confirm_mapping(
     mapping_version_id: UUID,
     request: MappingConfirmationRequest,
     session: SessionDependency,
     storage: StorageDependency,
+    *,
+    auth: Annotated[AuthorizationContext, Depends(_DEP_MAPPING_CONFIRM)],
 ) -> MappingResponse:
     mapping = _mapping(session, mapping_version_id)
     source_id = mapping.mapping_spec.get("_source_file_id")
@@ -492,7 +509,7 @@ def confirm_mapping(
     if source is None:
         raise _error(status.HTTP_409_CONFLICT, "source_missing", "映射版本没有可用源文件")
     _, proposal = _persisted_proposal(mapping, source, _source_bytes(source, storage))
-    confirmed = IntakeService(session).confirm_mapping(mapping.id, actor=request.actor)
+    confirmed = IntakeService(session).confirm_mapping(mapping.id, actor=auth.principal.actor_id)
     return _mapping_response(confirmed, proposal)
 
 
@@ -500,21 +517,15 @@ def confirm_mapping(
     "/mappings/{mapping_version_id}/overrides",
     response_model=MappingResponse,
     status_code=status.HTTP_201_CREATED,
-    dependencies=[
-        Depends(
-            require_action(
-                Action.INTAKE_MAPPING_OVERRIDE,
-                LOADERS["load_mapping_batch_scope_owner_or_deny_legacy"],
-                session_provider=get_db_session,
-            )
-        )
-    ],
+    dependencies=[Depends(_DEP_MAPPING_OVERRIDE)],
 )
 def override_mapping(
     mapping_version_id: UUID,
     request: MappingOverrideRequest,
     session: SessionDependency,
     storage: StorageDependency,
+    *,
+    auth: Annotated[AuthorizationContext, Depends(_DEP_MAPPING_OVERRIDE)],
 ) -> MappingResponse:
     """应用 Finance BP 手工映射修正：产生新的 append-only MappingVersion。"""
     mapping = _mapping(session, mapping_version_id)
@@ -541,7 +552,7 @@ def override_mapping(
         new_mapping, proposal = IntakeService(session).apply_mapping_overrides(
             mapping.id,
             overrides,
-            actor=request.actor,
+            actor=auth.principal.actor_id,
             contract=contract,
             profile=profile,
             expected_source_file_id=source.id,
@@ -593,24 +604,18 @@ def validate_source(
 @router.post(
     "/issues/{quality_issue_id}/acknowledge",
     response_model=WarningAcknowledgementResponse,
-    dependencies=[
-        Depends(
-            require_action(
-                Action.INTAKE_ISSUE_ACKNOWLEDGE,
-                LOADERS["load_issue_batch_scope_owner_or_deny_legacy"],
-                session_provider=get_db_session,
-            )
-        )
-    ],
+    dependencies=[Depends(_DEP_ISSUE_ACK)],
 )
 def acknowledge_warning(
     quality_issue_id: UUID,
     request: WarningAcknowledgementRequest,
     session: SessionDependency,
+    *,
+    auth: Annotated[AuthorizationContext, Depends(_DEP_ISSUE_ACK)],
 ) -> WarningAcknowledgementResponse:
     try:
         acknowledgement = IntakeService(session).acknowledge_warning(
-            quality_issue_id, actor=request.actor, reason=request.reason
+            quality_issue_id, actor=auth.principal.actor_id, reason=request.reason
         )
     except LookupError as error:
         raise _error(status.HTTP_404_NOT_FOUND, "issue_not_found", str(error)) from error

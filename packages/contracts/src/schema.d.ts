@@ -1720,7 +1720,7 @@ export interface components {
             /** Decision */
             decision: string;
             /** Reviewer */
-            reviewer: string;
+            reviewer?: string | null;
             /** Comment */
             comment?: string | null;
         };
@@ -1891,7 +1891,7 @@ export interface components {
             /** Decision */
             decision: string;
             /** Reviewer */
-            reviewer: string;
+            reviewer?: string | null;
             /** Comment */
             comment?: string | null;
         };
@@ -2031,7 +2031,7 @@ export interface components {
             /** Question */
             question: string;
             /** Actor */
-            actor: string;
+            actor?: string | null;
             /** Batch Id */
             batch_id?: string | null;
             /** Metric Snapshot Id */
@@ -2057,14 +2057,14 @@ export interface components {
         /** MappingConfirmationRequest */
         MappingConfirmationRequest: {
             /** Actor */
-            actor: string;
+            actor?: string | null;
         };
         /** MappingExplanationRequest */
         MappingExplanationRequest: {
             /** Import Version Id */
             import_version_id: string;
             /** Actor */
-            actor: string;
+            actor?: string | null;
         };
         /** MappingOverrideItem */
         MappingOverrideItem: {
@@ -2080,7 +2080,7 @@ export interface components {
         /** MappingOverrideRequest */
         MappingOverrideRequest: {
             /** Actor */
-            actor: string;
+            actor?: string | null;
             /**
              * Source File Id
              * Format: uuid
@@ -2852,7 +2852,7 @@ export interface components {
             /** Batch Id */
             batch_id: string;
             /** Actor */
-            actor: string;
+            actor?: string | null;
         };
         /** ReportSnapshotCreatedResponse */
         ReportSnapshotCreatedResponse: {
@@ -3290,7 +3290,7 @@ export interface components {
         /** WarningAcknowledgementRequest */
         WarningAcknowledgementRequest: {
             /** Actor */
-            actor: string;
+            actor?: string | null;
             /** Reason */
             reason: string;
         };

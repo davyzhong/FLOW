@@ -96,7 +96,8 @@ class MappingResponse(BaseModel):
 
 
 class MappingConfirmationRequest(BaseModel):
-    actor: str = Field(min_length=1, max_length=255)
+    # §3.3：actor 只来自 Principal；body 可省略，冲突值 → 409 actor_conflict
+    actor: str | None = Field(default=None, max_length=255)
 
 
 class MappingOverrideItem(BaseModel):
@@ -107,7 +108,8 @@ class MappingOverrideItem(BaseModel):
 
 
 class MappingOverrideRequest(BaseModel):
-    actor: str = Field(min_length=1, max_length=255)
+    # §3.3：actor 只来自 Principal；body 可省略，冲突值 → 409 actor_conflict
+    actor: str | None = Field(default=None, max_length=255)
     source_file_id: UUID
     source_sha256: str = Field(min_length=64, max_length=64)
     overrides: list[MappingOverrideItem] = Field(min_length=1)
@@ -118,7 +120,8 @@ class ValidateImportRequest(BaseModel):
 
 
 class WarningAcknowledgementRequest(BaseModel):
-    actor: str = Field(min_length=1, max_length=255)
+    # §3.3：actor 只来自 Principal；body 可省略，冲突值 → 409 actor_conflict
+    actor: str | None = Field(default=None, max_length=255)
     reason: str = Field(min_length=1)
 
 

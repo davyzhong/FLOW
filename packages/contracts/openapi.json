@@ -6031,8 +6031,15 @@
             "title": "Decision"
           },
           "reviewer": {
-            "type": "string",
-            "minLength": 1,
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Reviewer"
           },
           "comment": {
@@ -6050,8 +6057,7 @@
         "additionalProperties": false,
         "type": "object",
         "required": [
-          "decision",
-          "reviewer"
+          "decision"
         ],
         "title": "EvidenceDecisionRequest"
       },
@@ -6571,8 +6577,15 @@
             "title": "Decision"
           },
           "reviewer": {
-            "type": "string",
-            "minLength": 1,
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Reviewer"
           },
           "comment": {
@@ -6590,8 +6603,7 @@
         "additionalProperties": false,
         "type": "object",
         "required": [
-          "decision",
-          "reviewer"
+          "decision"
         ],
         "title": "FindingTransitionRequest"
       },
@@ -6984,8 +6996,15 @@
             "title": "Question"
           },
           "actor": {
-            "type": "string",
-            "minLength": 1,
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Actor"
           },
           "batch_id": {
@@ -7024,8 +7043,7 @@
         },
         "type": "object",
         "required": [
-          "question",
-          "actor"
+          "question"
         ],
         "title": "InvestigationQuestionRequest"
       },
@@ -7061,16 +7079,19 @@
       "MappingConfirmationRequest": {
         "properties": {
           "actor": {
-            "type": "string",
-            "maxLength": 255,
-            "minLength": 1,
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 255
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Actor"
           }
         },
         "type": "object",
-        "required": [
-          "actor"
-        ],
         "title": "MappingConfirmationRequest"
       },
       "MappingExplanationRequest": {
@@ -7081,15 +7102,21 @@
             "title": "Import Version Id"
           },
           "actor": {
-            "type": "string",
-            "minLength": 1,
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Actor"
           }
         },
         "type": "object",
         "required": [
-          "import_version_id",
-          "actor"
+          "import_version_id"
         ],
         "title": "MappingExplanationRequest"
       },
@@ -7128,9 +7155,15 @@
       "MappingOverrideRequest": {
         "properties": {
           "actor": {
-            "type": "string",
-            "maxLength": 255,
-            "minLength": 1,
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 255
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Actor"
           },
           "source_file_id": {
@@ -7155,7 +7188,6 @@
         },
         "type": "object",
         "required": [
-          "actor",
           "source_file_id",
           "source_sha256",
           "overrides"
@@ -9359,15 +9391,21 @@
             "title": "Batch Id"
           },
           "actor": {
-            "type": "string",
-            "minLength": 1,
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 128
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Actor"
           }
         },
         "type": "object",
         "required": [
-          "batch_id",
-          "actor"
+          "batch_id"
         ],
         "title": "ReportOutlineRequest"
       },
@@ -10547,9 +10585,15 @@
       "WarningAcknowledgementRequest": {
         "properties": {
           "actor": {
-            "type": "string",
-            "maxLength": 255,
-            "minLength": 1,
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 255
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Actor"
           },
           "reason": {
@@ -10560,7 +10604,6 @@
         },
         "type": "object",
         "required": [
-          "actor",
           "reason"
         ],
         "title": "WarningAcknowledgementRequest"

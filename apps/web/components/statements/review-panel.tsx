@@ -31,7 +31,6 @@ export function ReviewPanel({
   const [columnKey, setColumnKey] = useState<string>("value_current");
   const [value, setValue] = useState("");
   const [reason, setReason] = useState("");
-  const [operator, setOperator] = useState("finance.bp");
   const [message, setMessage] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -61,7 +60,6 @@ export function ReviewPanel({
         column_key: columnKey,
         value,
         reason,
-        operator,
       });
       setMessage("更正已记录");
       setValue("");
@@ -77,7 +75,7 @@ export function ReviewPanel({
     } finally {
       setBusy(false);
     }
-  }, [columnKey, detail.id, itemName, onChanged, operator, reason, reload, statementType, value]);
+  }, [columnKey, detail.id, itemName, onChanged, reason, reload, statementType, value]);
 
   const publish = useCallback(async () => {
     setBusy(true);
@@ -173,11 +171,6 @@ export function ReviewPanel({
             placeholder="更正原因（必填）"
             value={reason}
             onChange={(event) => setReason(event.target.value)}
-          />
-          <input
-            aria-label="操作者"
-            value={operator}
-            onChange={(event) => setOperator(event.target.value)}
           />
           <button
             type="button"
