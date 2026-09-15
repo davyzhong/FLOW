@@ -572,7 +572,7 @@ entries:
   stock_code: 9988.HK
   period_label: FY2019
   report_kind: 年报
-  page: 42
+  page: 41
   match_mode: strong
   statement: 合并资产负债表
   item: 負債、夾層權益及權益總額
@@ -1552,7 +1552,7 @@ entries:
   stock_code: 9988.HK
   period_label: FY2020
   report_kind: 年报
-  page: 42
+  page: 41
   match_mode: strong
   statement: 合并资产负债表
   item: 負債、夾層權益及權益總額
@@ -1562,7 +1562,7 @@ entries:
   stock_code: 9988.HK
   period_label: FY2020
   report_kind: 年报
-  page: 42
+  page: 41
   match_mode: strong
   statement: 合并资产负债表
   item: 負債、夾層權益及權益總額
@@ -1923,7 +1923,7 @@ entries:
   period_label: FY2021
   report_kind: 年报
   page: 35
-  match_mode: weak
+  match_mode: strong
   statement: 合并利润表
   item: 扣除所得稅及權益法核算的投資損益前的利潤
   column: 本期发生额
@@ -1933,7 +1933,7 @@ entries:
   period_label: FY2021
   report_kind: 年报
   page: 35
-  match_mode: weak
+  match_mode: strong
   statement: 合并利润表
   item: 扣除所得稅及權益法核算的投資損益前的利潤
   column: 上期发生额
@@ -2542,7 +2542,7 @@ entries:
   stock_code: 9988.HK
   period_label: FY2021
   report_kind: 年报
-  page: 39
+  page: 38
   match_mode: strong
   statement: 合并资产负债表
   item: 負債、夾層權益及權益總額
@@ -2552,7 +2552,7 @@ entries:
   stock_code: 9988.HK
   period_label: FY2021
   report_kind: 年报
-  page: 39
+  page: 38
   match_mode: strong
   statement: 合并资产负债表
   item: 負債、夾層權益及權益總額
@@ -2913,7 +2913,7 @@ entries:
   period_label: FY2022
   report_kind: 年报
   page: 39
-  match_mode: weak
+  match_mode: strong
   statement: 合并利润表
   item: 扣除所得稅及權益法核算的投資損益前的利潤
   column: 本期发生额
@@ -2923,7 +2923,7 @@ entries:
   period_label: FY2022
   report_kind: 年报
   page: 39
-  match_mode: weak
+  match_mode: strong
   statement: 合并利润表
   item: 扣除所得稅及權益法核算的投資損益前的利潤
   column: 上期发生额
@@ -2993,7 +2993,7 @@ entries:
   period_label: FY2022
   report_kind: 年报
   page: 39
-  match_mode: weak
+  match_mode: strong
   statement: 合并利润表
   item: 歸屬於阿里巴巴集團股東的淨利潤
   column: 本期发生额
@@ -3003,7 +3003,7 @@ entries:
   period_label: FY2022
   report_kind: 年报
   page: 39
-  match_mode: weak
+  match_mode: strong
   statement: 合并利润表
   item: 歸屬於阿里巴巴集團股東的淨利潤
   column: 上期发生额
@@ -3542,7 +3542,7 @@ entries:
   stock_code: 9988.HK
   period_label: FY2022
   report_kind: 年报
-  page: 44
+  page: 43
   match_mode: strong
   statement: 合并资产负债表
   item: 負債、夾層權益及權益總額
@@ -3552,7 +3552,7 @@ entries:
   stock_code: 9988.HK
   period_label: FY2022
   report_kind: 年报
-  page: 44
+  page: 43
   match_mode: strong
   statement: 合并资产负债表
   item: 負債、夾層權益及權益總額
@@ -4282,7 +4282,7 @@ entries:
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 35
+  page: 34
   match_mode: strong
   statement: 合并资产负债表
   item: 負債、夾層權益及權益總額
@@ -5292,7 +5292,7 @@ entries:
   stock_code: 9988.HK
   period_label: FY2024
   report_kind: 年报
-  page: 35
+  page: 34
   match_mode: strong
   statement: 合并资产负债表
   item: 負債、夾層權益及權益總額
@@ -5302,7 +5302,7 @@ entries:
   stock_code: 9988.HK
   period_label: FY2024
   report_kind: 年报
-  page: 35
+  page: 34
   match_mode: strong
   statement: 合并资产负债表
   item: 負債、夾層權益及權益總額
@@ -6223,7 +6223,7 @@ entries:
   period_label: FY2025
   report_kind: 年报
   page: 34
-  match_mode: weak
+  match_mode: strong
   statement: 合并资产负债表
   item: 累計其他綜合收益（損失）
   column: 期末余额
@@ -6233,7 +6233,7 @@ entries:
   period_label: FY2025
   report_kind: 年报
   page: 34
-  match_mode: weak
+  match_mode: strong
   statement: 合并资产负债表
   item: 累計其他綜合收益（損失）
   column: 期初余额
@@ -6322,7 +6322,7 @@ entries:
   stock_code: 9988.HK
   period_label: FY2025
   report_kind: 年报
-  page: 34
+  page: 33
   match_mode: strong
   statement: 合并资产负债表
   item: 負債、夾層權益及權益總額
@@ -6332,7 +6332,7 @@ entries:
   stock_code: 9988.HK
   period_label: FY2025
   report_kind: 年报
-  page: 34
+  page: 33
   match_mode: strong
   statement: 合并资产负债表
   item: 負債、夾層權益及權益總額
@@ -7362,7 +7362,7 @@ entries:
   stock_code: 9988.HK
   period_label: FY2026
   report_kind: 年报
-  page: 34
+  page: 33
   match_mode: strong
   statement: 合并资产负债表
   item: 負債、夾層權益及權益總額
@@ -7372,7 +7372,7 @@ entries:
   stock_code: 9988.HK
   period_label: FY2026
   report_kind: 年报
-  page: 34
+  page: 33
   match_mode: strong
   statement: 合并资产负债表
   item: 負債、夾層權益及權益總額
@@ -16022,7 +16022,7 @@ entries:
   stock_code: 002352.SZ
   period_label: 2026Q1
   report_kind: 一季报
-  page: 14
+  page: 5
   match_mode: strong
   statement: 合并利润表
   item: 公允价值变动收益（损失以“－”号填列）
@@ -16032,7 +16032,7 @@ entries:
   stock_code: 002352.SZ
   period_label: 2026Q1
   report_kind: 一季报
-  page: 14
+  page: 5
   match_mode: strong
   statement: 合并利润表
   item: 公允价值变动收益（损失以“－”号填列）

@@ -84,6 +84,14 @@ jobs:
           tests/api -q
           --ignore=tests/api/test_auth_boundary.py
           --ignore=tests/api/test_workspace.py
+      # T11-G2 性能回归门禁（用户批准）：10× 合成规模下三类读路径 P95 ≤ 50ms
+      # （本地基线 6.23/0.97/1.11ms 的 8-50 倍余量，只拦数量级劣化；CI 硬件差异见
+      # docs/60_delivery/2026-09-15-cainiao-stress-test-report.md）
+      - name: perf gate (10x scale)
+        run: >-
+          cd services/api &&
+          bash ../../scripts/seed_p5_statements.sh > /dev/null &&
+          uv run python ../../scripts/perf_baseline.py --scale 10 --max-p95 50
 
   data-contract:
     runs-on: ubuntu-latest

@@ -302,11 +302,59 @@ def verify_l1(answer_set_path: Path) -> dict:
     }
 
 
+def export_review_bundle(out_dir: Path) -> None:
+    """逐报告导出「抽取值 + 源页文本」供交叉评审 AI 独立找错。
+
+    故意不包含答案集判定与 L0/L1 结果——评审必须自己找错，
+    不能对着实现方的结论打分。
+    """
+    from pypdf import PdfReader
+
+    out_dir.mkdir(parents=True, exist_ok=True)
+    expected = collect_expected()
+    by_source: dict[str, dict[tuple[str, str, str], str]] = {}
+    for (source_pdf, statement, item, column), value in expected.items():
+        values = by_source.setdefault(source_pdf, {})
+        values[(statement, item, column)] = str(value) if value is not None else "（空）"
+
+    for source_pdf, values in sorted(by_source.items()):
+        pdf_path = REPO / source_pdf
+        safe_name = source_pdf.rsplit("/", 1)[-1].replace(".pdf", "")
+        page_texts = []
+        if pdf_path.is_file():
+            reader = PdfReader(str(pdf_path))
+            for index, page in enumerate(reader.pages, start=1):
+                raw = (page.extract_text() or "").replace("\u00a0", " ")
+                page_texts.append(f"### 第 {index} 页\n\n```\n{raw}\n```")
+        rows = "\n".join(
+            f"| {statement} | {item} | {column} | {value} |"
+            for (statement, item, column), value in sorted(values.items())
+        )
+        doc = (
+            f"# 交叉评证据束：{safe_name}\n\n"
+            f"## 1. 抽取值清单（实现方声称从本 PDF 抽出）\n\n"
+            f"| 报表 | 行项目 | 列 | 值 |\n|---|---|---|---|\n{rows}\n\n"
+            f"## 2. 源 PDF 全文（逐页文本层）\n\n" + "\n\n".join(page_texts) + "\n"
+        )
+        (out_dir / f"{safe_name}.md").write_text(doc, encoding="utf-8")
+    print(f"证据束 → {out_dir}（{len(by_source)} 份报告）")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--level", choices=("L0", "L1"), default="L0")
     parser.add_argument("--json", action="store_true")
+    parser.add_argument(
+        "--export-review-bundle",
+        type=Path,
+        default=None,
+        metavar="DIR",
+        help="导出 AI 交叉评证据束（逐报告：抽取值 + 源 PDF 页文本；不含实现方判定）",
+    )
     args = parser.parse_args()
+    if args.export_review_bundle:
+        export_review_bundle(args.export_review_bundle)
+        return EXIT_OK
     if args.level == "L1":
         try:
             report = verify_l1(REPO / "config/statements/answer_set_l1.yaml")

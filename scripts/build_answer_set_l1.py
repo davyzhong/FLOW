@@ -64,6 +64,12 @@ def locate(pages: list[str], item: str, values: list[int]) -> tuple[int, str] | 
     stripped = re.sub(r"^(其中|其中:|其中：)\s*", "", item)
     item_candidates.add(_norm(stripped))
     item_candidates.add(_norm(item.replace("：", ":")))
+    # 行名后缀变体（如「歸屬於非控制性權益損益」vs PDF「…的淨損失」）：
+    # 长归一名取多档前缀候选（8/12 字）——仍要求全部数值同页
+    base = _norm(stripped)
+    for cut in (8, 12):
+        if len(base) > cut:
+            item_candidates.add(base[:cut])
     # 两遍扫描：strong（行名+数值）优先于 weak（仅数值）——摘要/比较期段常
     # 提前出现同值行，弱锚不得抢占强锚。
     weak_page: int | None = None

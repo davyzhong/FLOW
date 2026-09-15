@@ -27,6 +27,21 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO / "services/api" / "src"))
 
+# 独立脚本不经 pytest conftest，自带与 tests/conftest.py 一致的本地默认
+import os  # noqa: E402
+
+os.environ.setdefault(
+    "DATABASE_URL",
+    "postgresql+psycopg://flow:flow_dev_only@localhost:5432/flow",
+)
+os.environ.setdefault("REDIS_URL", "redis://localhost:6379/0")
+os.environ.setdefault("S3_ENDPOINT_URL", "http://localhost:9000")
+os.environ.setdefault("S3_BUCKET", "flow")
+os.environ.setdefault("S3_ACCESS_KEY", "flow")
+os.environ.setdefault("S3_SECRET_KEY", "flow_dev_only")
+os.environ.setdefault("FLOW_ENV", "development")
+os.environ.setdefault("FLOW_DEV_ACTOR_ID", "flow-dev-bp")
+
 
 def timed(conn, query_sql: str, params: dict, repeat: int = 20) -> dict:
     samples = []
@@ -45,6 +60,13 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--scale", type=int, default=10)
     parser.add_argument("--json", action="store_true")
+    parser.add_argument(
+        "--max-p95",
+        type=float,
+        default=None,
+        metavar="MS",
+        help="三条查询统一的 P95 上限（毫秒）；超限退出码 1（CI 回归门禁）",
+    )
     args = parser.parse_args()
 
     from sqlalchemy import text
@@ -118,6 +140,16 @@ def main() -> int:
             f"检索 P95 {results['item_scan']['p95_ms']}ms、"
             f"聚合 P95 {results['aggregate']['p95_ms']}ms"
         )
+    if args.max_p95 is not None:
+        breaches = {
+            name: metrics["p95_ms"]
+            for name, metrics in results.items()
+            if metrics["p95_ms"] > args.max_p95
+        }
+        if breaches:
+            print(f"P95 超限（上限 {args.max_p95}ms）：{breaches}", file=sys.stderr)
+            return 1
+        print(f"P95 门禁通过（上限 {args.max_p95}ms）")
     return 0
 
 
