@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
-"""T09 数字级准确率基准（C 级出口 B2）L0 层：入库保真基准。
+"""T09 数字级准确率基准（C 级出口 B2）：L0 入库保真 + L1 页级锚验证。
 
 两级基准合同（docs/50_plans/work_items/PUBLIC--c-level-exit-protocol.md）：
-- L0（本脚本，当前可执行）：事实库 statement_line_item 与「已验证抽取 YAML」
-  （docs/implementation/p5/*.yaml，P5 期完成来源核验）逐行逐值比对——
-  证明入库/归一化管线不丢数、不改数、不换符号；
-- L1（C 级出口执行期填 answer_set 的 source_truth 列）：与 PDF 页级 ground
-  truth 比对，度量抽取本身。L1 未到料前不得宣称准确率。
+- L0：事实库 statement_line_item ↔ 已验证抽取 YAML 逐值比对——管线不丢数、
+  不改数、不换符号；
+- L1（`--level L1`）：页级答案集（config/statements/answer_set_l1.yaml，
+  由 scripts/build_answer_set_l1.py 从源 PDF 文本层定位生成）双向验证：
+  ① 每条页锚在当前 PDF 上仍可复现（数值确实出现在该页）；
+  ② 答案集值 == 事实库值（值级一致）。
+  match_mode=weak（仅数值同页，跨语言兜底）单独计数，不与 strong 混淆。
 
 用法：
-  python3 scripts/accuracy_benchmark.py --level L0            # 全量比对
-  python3 scripts/accuracy_benchmark.py --level L0 --json     # 机器可读
-退出码：0 = 全对；1 = 存在差异；2 = 配置/环境错误。
+  python3 scripts/accuracy_benchmark.py --level L0        # 入库保真
+  python3 scripts/accuracy_benchmark.py --level L1        # 页级锚验证
+退出码：0 = 通过；1 = 存在差异；2 = 配置/环境错误。
 """
 
 from __future__ import annotations
@@ -19,6 +21,7 @@ from __future__ import annotations
 import argparse
 import glob
 import json
+import re
 import sys
 from decimal import Decimal
 from pathlib import Path
@@ -88,9 +91,7 @@ def collect_actual() -> dict:
 
     actual: dict[tuple[str, str, str, str], Decimal | None] = {}
     with get_engine().connect() as conn:
-        reports = conn.execute(
-            select(StatementReport.id, StatementReport.source_ref)
-        ).all()
+        reports = conn.execute(select(StatementReport.id, StatementReport.source_ref)).all()
         id_source = {r[0]: r[1] for r in reports}
         rows = conn.execute(
             select(
@@ -165,14 +166,167 @@ def compare(expected: dict, actual: dict) -> dict:
     }
 
 
+_PAREN_NEG = re.compile(r"\((\d+)\)")
+
+
+def _norm_for_pdf(text: str) -> str:
+    """与 build_answer_set_l1.py 的页归一逐字节一致（含括号负数与换行处理）。"""
+    cleaned = (
+        text.replace("\u00a0", "")
+        .replace(",", "")
+        .replace("，", "")
+        .replace(" ", "")
+        .replace("\n", "")
+    )
+    return _PAREN_NEG.sub(r"-\1", cleaned)
+
+
+def verify_l1(answer_set_path: Path) -> dict:
+    """L1 双向验证：页锚可复现 + 值与事实库一致。"""
+    import yaml as pyyaml
+    from sqlalchemy import select
+
+    from flow_api.infrastructure.db import get_engine
+    from flow_api.infrastructure.models.statement import (
+        StatementLineItem,
+        StatementReport,
+    )
+
+    payload = pyyaml.safe_load(answer_set_path.read_text(encoding="utf-8"))
+    entries = payload["entries"]
+
+    # 事实库值索引（值集合）：同名行（如流动/非流动借款）聚合为集合，
+    # L1 键级断言 = 答案值 ∈ 该键的值集合。
+    db_values: dict[tuple[str, str, str, str, str, str], set[str]] = {}
+    with get_engine().connect() as conn:
+        reports = conn.execute(
+            select(
+                StatementReport.id,
+                StatementReport.stock_code,
+                StatementReport.period_label,
+                StatementReport.report_kind,
+            )
+        ).all()
+        id_identity = {r[0]: (r[1], r[2], r[3]) for r in reports}
+        rows = conn.execute(
+            select(
+                StatementLineItem.report_id,
+                StatementLineItem.statement_type,
+                StatementLineItem.item_name,
+                StatementLineItem.value_end,
+                StatementLineItem.value_begin,
+                StatementLineItem.value_current,
+                StatementLineItem.value_prior,
+            )
+        ).all()
+    columns = ("value_end", "value_begin", "value_current", "value_prior")
+    for report_id, statement_type, item_name, *values in rows:
+        identity = id_identity.get(report_id)
+        if identity is None:
+            continue
+        for column, value in zip(columns, values, strict=True):
+            if value is None:
+                continue
+            db_values.setdefault((*identity, statement_type, item_name, column), set()).add(
+                str(value)
+            )
+
+    # PDF 页文本缓存（每 PDF 解析一次）
+    from pypdf import PdfReader
+
+    page_cache: dict[str, list[str]] = {}
+
+    def pages_of(source_pdf: str) -> list[str]:
+        if source_pdf not in page_cache:
+            reader = PdfReader(str(Path(answer_set_path).parents[1].parent / source_pdf))
+            page_cache[source_pdf] = [_norm_for_pdf(p.extract_text() or "") for p in reader.pages]
+        return page_cache[source_pdf]
+
+    anchor_fail: list[dict] = []
+    value_mismatch: list[dict] = []
+    missing_in_db: list[dict] = []
+    strong = 0
+    weak = 0
+    for entry in entries:
+        value_norm = _norm_for_pdf(str(abs(entry["value"])))
+        pages = pages_of(entry["source_pdf"])
+        page_index = entry["page"] - 1
+        page_text = pages[page_index] if 0 <= page_index < len(pages) else ""
+        if value_norm not in page_text:
+            anchor_fail.append(
+                {
+                    "source_pdf": entry["source_pdf"],
+                    "page": entry["page"],
+                    "item": entry["item"],
+                    "value": entry["value"],
+                }
+            )
+        if entry.get("match_mode") == "weak":
+            weak += 1
+        else:
+            strong += 1
+        normalized_column = COLUMN_ALIASES.get(entry["column"], entry["column"])
+        key = (
+            entry["stock_code"],
+            entry["period_label"],
+            entry["report_kind"],
+            entry["statement"],
+            entry["item"],
+            normalized_column,
+        )
+        db_candidates = db_values.get(key)
+        if db_candidates is None:
+            missing_in_db.append({"key": list(key)[:4], "item": entry["item"]})
+        elif Decimal(str(entry["value"])) not in {Decimal(v) for v in db_candidates}:
+            value_mismatch.append(
+                {
+                    "key": list(key)[:4],
+                    "item": entry["item"],
+                    "answer_set": entry["value"],
+                    "db": sorted(db_candidates),
+                }
+            )
+
+    total = len(entries)
+    return {
+        "level": "L1",
+        "entries": total,
+        "strong": strong,
+        "weak": weak,
+        "anchor_fail_count": len(anchor_fail),
+        "value_mismatch_count": len(value_mismatch),
+        "missing_in_db_count": len(missing_in_db),
+        "coverage_from_generator": payload["coverage"],
+        "anchor_fail": anchor_fail[:30],
+        "value_mismatch": value_mismatch[:30],
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--level", choices=("L0",), default="L0")
+    parser.add_argument("--level", choices=("L0", "L1"), default="L0")
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args()
-    if args.level != "L0":
-        print("L1 需要 PDF 页级 ground truth（C 级出口执行期提供）", file=sys.stderr)
-        return EXIT_ENV_ERROR
+    if args.level == "L1":
+        try:
+            report = verify_l1(REPO / "config/statements/answer_set_l1.yaml")
+        except Exception as error:  # noqa: BLE001
+            print(f"env error: {error}", file=sys.stderr)
+            return EXIT_ENV_ERROR
+        if args.json:
+            print(json.dumps(report, ensure_ascii=False, indent=2))
+        else:
+            print(
+                f"L1 页级锚验证：{report['entries']} 条（strong {report['strong']} / "
+                f"weak {report['weak']}），锚失效 {report['anchor_fail_count']}，"
+                f"值不一致 {report['value_mismatch_count']}，未入库 {report['missing_in_db_count']}"
+            )
+        clean = (
+            report["anchor_fail_count"] == 0
+            and report["value_mismatch_count"] == 0
+            and report["missing_in_db_count"] == 0
+        )
+        return EXIT_OK if clean else EXIT_MISMATCH
     try:
         expected = collect_expected()
         actual = collect_actual()

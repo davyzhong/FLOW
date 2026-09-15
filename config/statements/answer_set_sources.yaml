@@ -1,0 +1,19 @@
+# T09-L1 答案集的报告身份映射：sample（抽取 YAML）→ 事实库报告身份。
+# 与 scripts/seed_p5_statements.sh 的导入参数同源；BABA FY2019 与 FY2020、
+# 菜鸟 FY2021–23 共用同一 PDF（比较期列），故答案集键必须含报告身份。
+
+reports:
+  - {sample: sf_2026q1, source_pdf_suffix: "sf_002352/SF_2026_Q1_report.pdf", stock_code: "002352.SZ", period_label: "2026Q1", report_kind: 一季报}
+  - {sample: tencent_2026q2, source_pdf_suffix: "tencent_0700/Tencent_2026_Q2_results.pdf", stock_code: "0700.HK", period_label: "2026Q2", report_kind: 中期业绩公告}
+  - {sample: jdl_2025fy, source_pdf_suffix: "istics_2618/JDL_FY2025_annual_report.pdf", stock_code: "2618.HK", period_label: "FY2025", report_kind: 年报}
+  - {sample: alibaba_2019fy, source_pdf_suffix: "baba_9988/BABA_FY2020_annual_results.pdf", stock_code: "9988.HK", period_label: "FY2019", report_kind: 年报}
+  - {sample: alibaba_2020fy, source_pdf_suffix: "baba_9988/BABA_FY2020_annual_results.pdf", stock_code: "9988.HK", period_label: "FY2020", report_kind: 年报}
+  - {sample: alibaba_2021fy, source_pdf_suffix: "baba_9988/BABA_FY2021_annual_results.pdf", stock_code: "9988.HK", period_label: "FY2021", report_kind: 年报}
+  - {sample: alibaba_2022fy, source_pdf_suffix: "baba_9988/BABA_FY2022_annual_results.pdf", stock_code: "9988.HK", period_label: "FY2022", report_kind: 年报}
+  - {sample: alibaba_2023fy, source_pdf_suffix: "baba_9988/BABA_FY2024_annual_results.pdf", stock_code: "9988.HK", period_label: "FY2023", report_kind: 年报}
+  - {sample: alibaba_2024fy, source_pdf_suffix: "baba_9988/BABA_FY2024_annual_results.pdf", stock_code: "9988.HK", period_label: "FY2024", report_kind: 年报}
+  - {sample: alibaba_2025fy, source_pdf_suffix: "baba_9988/BABA_FY2025_annual_results.pdf", stock_code: "9988.HK", period_label: "FY2025", report_kind: 年报}
+  - {sample: alibaba_2026fy, source_pdf_suffix: "baba_9988/BABA_FY2026_annual_results.pdf", stock_code: "9988.HK", period_label: "FY2026", report_kind: 年报}
+  - {sample: cainiao_2021fy, source_pdf_suffix: "cainiao_private/Cainiao_application_proof_20230926.pdf", stock_code: "PVT.CAINIAO", period_label: "FY2021", report_kind: 招股书申报稿}
+  - {sample: cainiao_2022fy, source_pdf_suffix: "cainiao_private/Cainiao_application_proof_20230926.pdf", stock_code: "PVT.CAINIAO", period_label: "FY2022", report_kind: 招股书申报稿}
+  - {sample: cainiao_2023fy, source_pdf_suffix: "cainiao_private/Cainiao_application_proof_20230926.pdf", stock_code: "PVT.CAINIAO", period_label: "FY2023", report_kind: 招股书申报稿}
