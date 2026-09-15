@@ -1,27 +1,57 @@
-# S01 模块 ownership manifest（v1；R2 起按职责域命名）。
-# 规则：每个纳管文件恰好登记一次；owner 使用职责域（security/api/publication-
-# transaction/shared_core 等），不再使用 Agent 代号（历史代号见协调台账）；
-# shared_core 为内部架构 owner（composition root 单独登记），不出现在产品可见
-# 模块列表；public 与 internal 禁止互相导入（AST 守护）。
+# S01 模块 ownership manifest（R3 起支持 path-glob 全树纳管）。
+#
+# 解析顺序（R3 合同）：
+# 1. `managed_files`：显式单文件登记（最高优先级，向后兼容 v1）；
+# 2. `glob_rules`：按声明顺序 first-match；最后一条是 catch-all，
+#    保证 services/api/src/flow_api 全树无 unowned 文件。
+#
+# 规则：
+# - 每个纳管文件恰好解析到一个 owner（显式登记覆盖 glob）；
+# - owner 使用职责域（security/api/publication-transaction/...），
+#   不再使用 Agent 代号（历史代号见协调台账）；
+# - `import_rules` 声明 owner 对之间的禁止导入（AST 全树扫描）；
+# - public_analysis 与 internal_workbench 禁止互相导入；产品模块只能经
+#   `flow_api.modules.registry` 访问 shared_core（AST 守护测试另行断言）。
 
-version: v1
+version: v2
 managed_files:
-  # ---- 模块本体 ----
-  - {path: "services/api/src/flow_api/modules/shared_core/__init__.py", owner: shared_core}
-  - {path: "services/api/src/flow_api/modules/public_analysis/__init__.py", owner: public_analysis}
-  - {path: "services/api/src/flow_api/modules/internal_workbench/__init__.py", owner: internal_workbench}
   - {path: "services/api/src/flow_api/modules/registry.py", owner: shared_core}
   - {path: "services/api/src/flow_api/api/routes/modules.py", owner: shared_core}
-  # ---- 安全核心（职责域：security）----
-  - {path: "services/api/src/flow_api/security/__init__.py", owner: security}
-  - {path: "services/api/src/flow_api/security/principal.py", owner: security}
-  - {path: "services/api/src/flow_api/security/authorization.py", owner: security}
-  - {path: "services/api/src/flow_api/security/audit.py", owner: security}
-  - {path: "services/api/src/flow_api/security/models.py", owner: security}
-  - {path: "services/api/src/flow_api/security/route_policy.py", owner: security}
-  - {path: "services/api/src/flow_api/security/audit_writer.py", owner: security}
-  - {path: "services/api/src/flow_api/security/redaction.py", owner: security}
-  # ---- 发布四阶段 ABI（职责域：publication-transaction）----
-  - {path: "services/api/src/flow_api/publication/__init__.py", owner: publication-transaction}
-  - {path: "services/api/src/flow_api/publication/four_stage.py", owner: publication-transaction}
-  - {path: "services/api/src/flow_api/publication/store_adapter.py", owner: publication-transaction}
+
+glob_rules:
+  # ---- 安全核心 ----
+  - {pattern: "services/api/src/flow_api/security/**", owner: security}
+  # ---- 发布四阶段 ABI ----
+  - {pattern: "services/api/src/flow_api/publication/**", owner: publication-transaction}
+  # ---- 模块边界（产品层/架构层）----
+  - {pattern: "services/api/src/flow_api/modules/shared_core/**", owner: shared_core}
+  - {pattern: "services/api/src/flow_api/modules/public_analysis/**", owner: public_analysis}
+  - {pattern: "services/api/src/flow_api/modules/internal_workbench/**", owner: internal_workbench}
+  # ---- 平台其余包（职责域）----
+  - {pattern: "services/api/src/flow_api/api/**", owner: api}
+  - {pattern: "services/api/src/flow_api/infrastructure/**", owner: infrastructure}
+  - {pattern: "services/api/src/flow_api/enterprise/**", owner: enterprise}
+  - {pattern: "services/api/src/flow_api/investigation/**", owner: investigation}
+  - {pattern: "services/api/src/flow_api/intake/**", owner: intake}
+  - {pattern: "services/api/src/flow_api/analysis/**", owner: analysis}
+  - {pattern: "services/api/src/flow_api/copilot/**", owner: copilot}
+  - {pattern: "services/api/src/flow_api/dashboard/**", owner: dashboard}
+  - {pattern: "services/api/src/flow_api/operations/**", owner: operations}
+  - {pattern: "services/api/src/flow_api/publishing/**", owner: publishing}
+  - {pattern: "services/api/src/flow_api/statements/**", owner: statements}
+  - {pattern: "services/api/src/flow_api/workbench/**", owner: workbench}
+  - {pattern: "services/api/src/flow_api/metric_library_store/**", owner: metric-library}
+  - {pattern: "services/api/src/flow_api/financial_facts_v2/**", owner: financial-facts}
+  # ---- catch-all：未列包暂归 platform；新增一级包时应在此文件补专属域 ----
+  - {pattern: "services/api/src/flow_api/**", owner: platform}
+
+import_rules:
+  # 产品模块互相禁止
+  - {forbid_owner: public_analysis, import_owner: internal_workbench}
+  - {forbid_owner: internal_workbench, import_owner: public_analysis}
+  # 架构层不得依赖产品层
+  - {forbid_owner: shared_core, import_owner: public_analysis}
+  - {forbid_owner: shared_core, import_owner: internal_workbench}
+  # 安全核心不得依赖产品模块
+  - {forbid_owner: security, import_owner: public_analysis}
+  - {forbid_owner: security, import_owner: internal_workbench}

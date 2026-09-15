@@ -2,7 +2,7 @@
 doc_id: FLOW-OPS-R2-HYGIENE-M6CI-20260915
 title: R2 工程卫生包执行记录与 m6 文档门禁入 CI 评估
 doc_type: operations
-status: current
+status: active
 version: 1.0
 created_at: 2026-09-15
 updated_at: 2026-09-15

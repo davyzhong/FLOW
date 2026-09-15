@@ -2,7 +2,7 @@
 doc_id: FLOW-OPS-R2-DD0-BASELINE-20260915
 title: R2 Gate 开工基线记录（DD0）
 doc_type: operations
-status: current
+status: active
 version: 1.0
 created_at: 2026-09-15
 updated_at: 2026-09-15

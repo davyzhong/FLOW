@@ -10,6 +10,7 @@
 from __future__ import annotations
 
 import ast
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[4]  # services/api/tests/architecture -> 仓库根
@@ -50,9 +51,9 @@ def test_product_modules_do_not_import_each_other() -> None:
             assert tree is not None, file
             for imported in _flow_imports(tree):
                 for other in PRODUCT_MODULES - {module}:
-                    assert not imported.startswith(
-                        f"flow_api.modules.{other}"
-                    ), f"{file.name} 禁止导入产品模块 {other}（public↔internal 隔离）"
+                    assert not imported.startswith(f"flow_api.modules.{other}"), (
+                        f"{file.name} 禁止导入产品模块 {other}（public↔internal 隔离）"
+                    )
 
 
 def test_shared_core_does_not_import_product_modules() -> None:
@@ -61,9 +62,9 @@ def test_shared_core_does_not_import_product_modules() -> None:
         assert tree is not None, file
         for imported in _flow_imports(tree):
             for product in PRODUCT_MODULES:
-                assert not imported.startswith(
-                    f"flow_api.modules.{product}"
-                ), f"shared_core/{file.name} 禁止导入产品模块 {product}"
+                assert not imported.startswith(f"flow_api.modules.{product}"), (
+                    f"shared_core/{file.name} 禁止导入产品模块 {product}"
+                )
 
 
 def test_product_modules_access_shared_core_only_via_registry() -> None:
@@ -79,31 +80,17 @@ def test_product_modules_access_shared_core_only_via_registry() -> None:
 
 
 def test_ownership_manifest_covers_every_managed_file_exactly_once() -> None:
-    import yaml
+    """（R3 起由 scripts/check_module_boundaries.py + test_module_boundaries_v2 接管：
+    全树 ownership 唯一解析 + import_rules AST 扫描。）"""
+    import subprocess
 
-    manifest = yaml.safe_load(OWNERSHIP.read_text(encoding="utf-8"))
-    assert manifest is not None, "ownership_v1.yaml 缺失"
-    seen: dict[str, str] = {}
-    duplicates: list[str] = []
-    for entry in manifest.get("managed_files", []):
-        path = entry["path"]
-        if path in seen:
-            duplicates.append(path)
-        seen[path] = entry.get("owner", "")
-    assert not duplicates, f"manifest 重复登记: {duplicates}"
-
-    managed_dirs = [MODULES, ROOT / "services/api/src/flow_api/security"]
-    missing: list[str] = []
-    for base in managed_dirs:
-        if not base.is_dir():
-            continue
-        for file in base.rglob("*.py"):
-            if file.name == "__init__.py" and file.parent == base:
-                continue
-            rel = "services/api/src/flow_api/" + str(file.relative_to(base.parent))
-            if rel not in seen:
-                missing.append(rel)
-    assert not missing, f"以下纳管文件未登记 owner: {missing}"
+    proc = subprocess.run(
+        [sys.executable, str(ROOT / "scripts/check_module_boundaries.py")],
+        capture_output=True,
+        text=True,
+        timeout=120,
+    )
+    assert proc.returncode == 0, proc.stdout + proc.stderr
 
 
 def test_registry_exposes_product_modules_with_contract_fixture() -> None:
