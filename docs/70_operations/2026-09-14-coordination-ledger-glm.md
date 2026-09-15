@@ -236,3 +236,41 @@ check_docs m1/contracts-check 全绿；stack-up 容器链路实测
    竞对文档提交（`1af369d`/`042d937`/`e2b51ac`）CI 红，根因为 frontmatter 缺
    `updated_at` 与未注册 doc_type，已由 `640cfb8` 修复（m1/m6 本地全绿，
    239 文档 0 错误）。PROJECT_STATE 已同步至 v1.6。
+
+## 7. R2/R3/R4 交付与 S01 关闭登记（2026-09-15，单 Agent 串行）
+
+分支 `codex/r2-route-policy-v3`（T00 DD0 基线：`361e4f0`，run 34913878637 全绿）：
+
+- **R2/T02 治理写策略化**（`5d085b4`）：metric-library 7 条治理写解锁
+  （entry/entry_proposer/events 三类新 loader；activate/retire 经 draft
+  治理事件取 proposed_by，缺失即 PROPOSER_REQUIRED fail-closed）；
+  operator/actor 全部取自 Principal（§3.3），body 身份字段冲突 → 409；
+  statements corrections/publish 的硬编码/不可信 operator 一并收口。
+- **R2/T03 四阶段接线**（`33870c3`+`3bb31f4`）：`flow_api/publication/
+  four_stage.py` 按规格 §7.1–§7.5 精确实现；迁移 0028（publication_id/
+  idempotency_key/source_payload_sha256/object_key/内容列 + 状态枚举扩展 +
+  (parent,sequence,format) 唯一）；publishing/operations 发布路由 Idempotency-Key
+  必填、两次 caller commit、intent/outcome 503 语义；`security/redaction.py`
+  §8.3 确定性脱敏；按 Sol 处置单删除两条旁路 pipeline 与旧 publication
+  service；`ObjectStore.read_by_key` 支撑 §7.4 五要素 key 下载。
+- **T04 工程卫生**（`a16751e`）：ownership owner 职责域化；`var/` 运行产物
+  移出版本控制；m6 入 CI 评估完成（单行改动待用户批准，红线不动手）。
+- **R3/T06 module-boundaries-v2**（`fbfe7d8`）：manifest v2（managed_files +
+  glob_rules first-match + catch-all 全树唯一 owner；Agent 代号禁用）；
+  `scripts/check_module_boundaries.py` 全树 AST 扫描 + import_rules 禁止
+  owner 对互导；合成违规 fixture 证明门禁能红；旧覆盖测试委托 v2 检查器。
+- **R4/T07 full-verification-v2**（`2fa5f72`）：`infra/compose.r4.yaml` 隔离
+  overlay（独立 project/卷、固定端口全收回、nginx 443 动态端口）+
+  `scripts/r4_full_verification.sh`：U8 dump 恢复→基线合同四证（dump sha/
+  0024 头/关键表/聚合哈希）→升级 0028→不变量保持→SQL marker==HTTPS marker
+  （真实 CA `--cacert`，随机 id 非 200）→evidence（skipped=[]）→teardown
+  down -v。**本地 PASS**（evidence `work/r4/evidence.json`）。同提交固定
+  minio 镜像版本（上游 :latest 漂移为两轮 CI 红根因）。
+- **§3.3 全链收口 + T09 前置**（`4179f53`）：intake/copilot/investigations
+  的 actor/reviewer 改由 Principal 注入，前端全组件去硬编码身份（两轮 e2e
+  失败根因）；`scripts/accuracy_benchmark.py` L0 入库保真基准 1454/1454
+  全对；C 级出口协议与三个子工作包入库，路线图 v1.6 登记。
+- **T08**（本次提交）：PROJECT_STATE v1.7、S01 工作包 status=completed、
+  CURRENT_ROADMAP 同步、HANDOFF v3.1。
+
+**S01 正式关闭；Task 6 关闭。**下一 Gate：公开模块 C 级出口（T09，gated）。

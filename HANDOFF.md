@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目尽调、优化与单 Agent 执行总交接
 doc_type: navigation
 status: current
-version: 3.0
+version: 3.1
 created_at: 2026-09-12
 updated_at: 2026-09-15
 owner: FLOW
@@ -203,4 +203,4 @@ applies_to: repository
 
 从当前最新 `origin/main` 做 T00，只读核对 `PROJECT_STATE → CURRENT_ROADMAP → S01 → 协调台账 §6` 与实际 Git/CI；确认没有新的外部提交后，创建 R2 专用分支，按 T01 开始。不要先做 AI 问数、行业扩张、内部工作台或 UI 大改。
 
-完成 R2、R3、R4 前，对外状态统一表述为：**U8 已关闭；S01 active；R1 complete；Task 6 closure-ready but not closed；下一 Gate 为 R2。**
+完成 R2、R3、R4 前，对外状态统一表述为：~~U8 已关闭；S01 active；R1 complete；Task 6 closure-ready but not closed；下一 Gate 为 R2~~（已过时）。**2026-09-15 更新：R2/R3/R4 已交付，S01 正式关闭（Task 6 closed）；当前对外状态为「U8 closed；S01 completed；下一 Gate 为公开模块 C 级出口（T09，gated）」。**

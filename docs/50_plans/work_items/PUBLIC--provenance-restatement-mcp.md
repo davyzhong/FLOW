@@ -9,6 +9,8 @@ updated_at: 2026-09-15
 owner: FLOW
 applies_to: public-analysis
 roadmap_phase: 3
+depends_on: [FLOW-WP-PUBLIC-C-EXIT-001]
+acceptance_refs: [roadmap-unique-invariant]
 gates: [PUBLIC-C-EXIT]
 ---
 

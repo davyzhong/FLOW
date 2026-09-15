@@ -10,6 +10,8 @@ owner: FLOW
 applies_to: public-analysis
 roadmap_phase: 3
 decision_refs: [D054]
+depends_on: [FLOW-WP-PUBLIC-C-EXIT-001, FLOW-WP-PUBLIC-DATA-EXPANSION-001]
+acceptance_refs: [roadmap-unique-invariant]
 gates: [PUBLIC-C-EXIT, PUBLIC-DATA-EXPANSION]
 ---
 

@@ -103,11 +103,10 @@ describe("MetricLibraryApp 治理操作（C06）", () => {
     stubFetch(log);
     await openGovernanceTab();
 
-    // 必填校验：空操作者直接拒绝，不发请求
+    // §3.3：操作者取自登录身份，UI 不再发送；空理由直接拒绝，不发请求
     fireEvent.click(screen.getByRole("button", { name: "创建草稿" }));
-    expect(await screen.findByRole("alert")).toHaveTextContent("操作者与理由均为必填");
+    expect(await screen.findByRole("alert")).toHaveTextContent("理由为必填");
 
-    fireEvent.change(screen.getByLabelText("操作者"), { target: { value: "finance-bp" } });
     fireEvent.change(screen.getByLabelText("理由"), { target: { value: "更新基准值来源" } });
     fireEvent.change(screen.getByLabelText("变更内容 JSON"), {
       target: { value: '{"benchmark": "国资委 2025"}' },
@@ -120,7 +119,6 @@ describe("MetricLibraryApp 治理操作（C06）", () => {
       ).toMatchObject({
         method: "POST",
         body: {
-          operator: "finance-bp",
           reason: "更新基准值来源",
           changes: { benchmark: "国资委 2025" },
         },
@@ -128,7 +126,6 @@ describe("MetricLibraryApp 治理操作（C06）", () => {
     );
     expect(await screen.findByText(/已创建草稿：roe/)).toBeInTheDocument();
     expect(await screen.findByText("draft")).toBeInTheDocument();
-    expect(screen.getByText("finance-bp")).toBeInTheDocument();
   });
 
   it("非法 JSON 被行内拦截，不发出请求", async () => {
@@ -136,7 +133,6 @@ describe("MetricLibraryApp 治理操作（C06）", () => {
     stubFetch(log);
     await openGovernanceTab();
 
-    fireEvent.change(screen.getByLabelText("操作者"), { target: { value: "finance-bp" } });
     fireEvent.change(screen.getByLabelText("理由"), { target: { value: "x" } });
     fireEvent.change(screen.getByLabelText("变更内容 JSON"), { target: { value: "{oops" } });
     fireEvent.click(screen.getByRole("button", { name: "创建草稿" }));
@@ -150,7 +146,6 @@ describe("MetricLibraryApp 治理操作（C06）", () => {
     stubFetch(log);
     await openGovernanceTab();
 
-    fireEvent.change(screen.getByLabelText("操作者"), { target: { value: "admin" } });
     fireEvent.change(screen.getByLabelText("理由"), { target: { value: "季度评审通过" } });
     fireEvent.click(screen.getByRole("button", { name: "激活" }));
     expect(await screen.findByText(/已激活：roe/)).toBeInTheDocument();
