@@ -5,7 +5,7 @@ doc_type: operations
 status: active
 version: 1.0
 created_at: 2026-09-14
-updated_at: 2026-09-14
+updated_at: 2026-09-15
 owner: FLOW
 applies_to: s01-parallel-agent-execution
 knowledge_release: flow-knowledge-2026-09-12.1
@@ -229,4 +229,10 @@ check_docs m1/contracts-check 全绿；stack-up 容器链路实测
 3. R4：full-verification-v2（动态隔离/真实 CA/sentinel/双证明）；
 4. dashboard 当前 404 not-ready 属数据态（0027 批次转 internal 后需重新
    发布快照），非安全回归；
-5. main CI run 34895136484 盯绿后本台账登记最终 checkpoint SHA。
+5. ~~main CI run 34895136484 盯绿后本台账登记最终 checkpoint SHA。~~ **已闭环
+   （2026-09-15）**：run 34895136484（`bc62937`）与其后 34895309197（`4c02a3c`）
+   均全绿；最终 checkpoint 登记为 **`640cfb8`**（CI run 34907918485，17/17 全绿，
+   同树含 R1 代码 + 文档门禁修复 `docs(competitive)` 元数据补齐）。期间三个
+   竞对文档提交（`1af369d`/`042d937`/`e2b51ac`）CI 红，根因为 frontmatter 缺
+   `updated_at` 与未注册 doc_type，已由 `640cfb8` 修复（m1/m6 本地全绿，
+   239 文档 0 错误）。PROJECT_STATE 已同步至 v1.6。
