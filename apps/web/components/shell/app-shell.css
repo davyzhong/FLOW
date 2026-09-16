@@ -1,10 +1,10 @@
 .app-shell {
   --ink: #15243b;
-  --muted: #52637a;
-  --line: #dfe6ef;
-  --blue: #1769e8;
+  --muted: var(--rep-muted);
+  --line: var(--rep-line);
+  --blue: var(--rep-blue);
   --navy: #13223a;
-  --green: #075f45;
+  --green: var(--rep-teal);
   --red: #912f3b;
   --amber: #805000;
   display: grid;

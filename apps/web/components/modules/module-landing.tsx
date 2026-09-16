@@ -1,8 +1,11 @@
 "use client";
 
-// Task 2C：模块落地页组件（S01 设计 §5.4 模块描述合同的同字节静态 fixture）。
-// 只呈现批准的模块描述：implemented 提供进入链接；designed 一律「规划中」，
-// 不渲染任何暗示已实现能力的操作按钮。
+// 模块落地页组件（S01 设计 §5.4 模块描述合同）。只呈现批准的模块描述：
+// implemented 提供进入链接；designed 一律「规划中」，不渲染任何暗示已实现
+// 能力的操作按钮（模块边界诚实约束，module-boundaries.spec 守护）。
+//
+// F1-2 新增：`functionEntries` prop 允许落地页携带「已上线功能入口」区块
+// ——入口指向真实存在的路由，与 designed 模块卡严格分离，不违反边界诚实。
 
 import Link from "next/link";
 import "./module-landing.css";
@@ -49,14 +52,18 @@ const STATUS_LABELS: Record<ModuleDescriptor["status"], string> = {
   gated: "受控开放",
 };
 
+export type FunctionEntry = { href: string; label: string; description: string };
+
 export function ModuleLanding({
   title,
   subtitle,
   moduleIds,
+  functionEntries,
 }: {
   title: string;
   subtitle: string;
   moduleIds: string[];
+  functionEntries?: FunctionEntry[];
 }) {
   const modules = APPROVED_MODULES.filter((m) => moduleIds.includes(m.id));
   return (
@@ -65,6 +72,21 @@ export function ModuleLanding({
         <h1>{title}</h1>
         <p>{subtitle}</p>
       </header>
+      {functionEntries && functionEntries.length > 0 ? (
+        <div className="module-landing__functions" aria-label="已上线功能入口">
+          <h2>已上线功能</h2>
+          <ul>
+            {functionEntries.map((entry) => (
+              <li key={entry.href}>
+                <Link href={entry.href}>
+                  <strong>{entry.label}</strong>
+                  <small>{entry.description}</small>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
       <ul className="module-landing__grid">
         {modules.map((m) => (
           <li

@@ -13,7 +13,7 @@
 .operations-header p {
   margin: 0;
   max-width: 860px;
-  color: #52637a;
+  color: var(--rep-muted);
   font-size: 13px;
   line-height: 1.7;
 }
@@ -23,7 +23,7 @@
   padding: 2px 10px;
   border-radius: 10px;
   background: #e8eef9;
-  color: #1769e8;
+  color: var(--rep-blue);
   font-size: 12px;
   font-weight: 600;
 }
@@ -31,14 +31,14 @@
 .operations-state {
   padding: 48px 0;
   text-align: center;
-  color: #52637a;
+  color: var(--rep-muted);
 }
 
 .operations-state button {
   padding: 7px 16px;
   border: none;
   border-radius: 7px;
-  background: #1769e8;
+  background: var(--rep-blue);
   color: #fff;
   cursor: pointer;
 }

@@ -12,18 +12,18 @@
 
 .investigations-index header p {
   margin: 0;
-  color: #52637a;
+  color: var(--rep-muted);
   font-size: 13px;
   line-height: 1.7;
 }
 
 .investigations-index__error {
-  color: #b42318;
+  color: var(--flow-error);
   font-weight: 600;
 }
 
 .investigations-index__empty {
-  color: #52637a;
+  color: var(--rep-muted);
 }
 
 .investigations-index__table {
@@ -36,13 +36,13 @@
 .investigations-index__table th,
 .investigations-index__table td {
   padding: 8px 12px;
-  border: 1px solid #dfe6ef;
+  border: 1px solid var(--rep-line);
   text-align: left;
 }
 
 .investigations-index__table th {
   background: #f5f7fa;
-  color: #52637a;
+  color: var(--rep-muted);
   font-weight: 600;
 }
 
@@ -50,13 +50,13 @@
   padding: 2px 10px;
   border-radius: 10px;
   font-size: 12px;
-  background: #eef2f7;
+  background: var(--rep-line-4);
   color: #33465e;
 }
 
 .investigations-index__status--approved {
-  background: #e3f3ec;
-  color: #075f45;
+  background: var(--rep-ok-soft-2);
+  color: var(--rep-teal);
 }
 
 .investigations-index__status--in_review {

@@ -3,6 +3,8 @@
 // 经营分析轨（D045）演示页：面向经营/业务管理者。
 // 与财务分析轨共享同一已发布指标快照（数字同源），本页只做规模、结构与效率视角的
 // 只读投影，不产生新的 Finding、不进入报告资格。
+import Link from "next/link";
+
 import { useCallback, useEffect, useState } from "react";
 
 import { flowApi, type DashboardResponse } from "../../lib/api/client";
@@ -30,7 +32,7 @@ export function OperationsApp() {
       (dashboard) => {
         if (controller.signal.aborted) return;
         if (dashboard.state === "empty") {
-          setState({ kind: "empty", message: "当前没有已发布的经营数据，请先在数据层完成接入与发布。" });
+          setState({ kind: "empty", message: "当前没有已发布的经营数据。先到数据接入上传标准工作簿并完成构建发布。" });
         } else {
           setState({ kind: "loaded", dashboard });
         }
@@ -65,7 +67,16 @@ export function OperationsApp() {
           <button type="button" onClick={() => load()}>重试</button>
         </div>
       ) : null}
-      {state.kind === "empty" ? <p className="operations-state">{state.message}</p> : null}
+      {state.kind === "empty" ? (
+        <div className="operations-state operations-state--guide" role="status">
+          <p>{state.message}</p>
+          <p>
+            <Link href="/data">前往数据接入</Link>
+            <span aria-hidden="true"> · </span>
+            <Link href="/reports">前往报告发布</Link>
+          </p>
+        </div>
+      ) : null}
 
       {state.kind === "loaded" ? (
         <>

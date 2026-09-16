@@ -272,6 +272,47 @@ export type MappingOverrideInput = {
   source_header: string;
 };
 
+export type PublishingSnapshot = {
+  id: string;
+  metric_snapshot_id: string;
+  version: number;
+  title: string;
+  created_at: string | null;
+};
+
+export type PublishingAttempt = {
+  attempt_id: string;
+  sequence: number;
+  format: string;
+  status: string;
+  error_message: string | null;
+  size_bytes: number | null;
+  content_type: string | null;
+  created_at: string | null;
+  download_available: boolean;
+  stored_sha256: string | null;
+};
+
+export type FreezeCandidate = {
+  metric_snapshot_id: string;
+  batch_id: string;
+  period_label: string | null;
+  version: number;
+  approved_findings: number;
+  created_at: string | null;
+};
+
+export type OperationsSnapshot = {
+  id: string;
+  statement_report_id: string;
+  version: number;
+  company_name: string;
+  stock_code: string;
+  period_label: string;
+  payload_hash: string;
+  created_at: string | null;
+};
+
 export const statementApi = {
   listReports(signal?: AbortSignal): Promise<StatementReportList> {
     return request<StatementReportList>("/api/v1/statements", signal);
@@ -290,6 +331,34 @@ export const statementApi = {
   },
   fetchOperationsOverview(reportId: string, signal?: AbortSignal): Promise<OperationsOverview> {
     return request<OperationsOverview>(`/api/v1/operations/overview/${reportId}`, signal);
+  },
+  // --- F3-7：发布/快照/尝试（自 reports-center 裸 fetch 收编） ---
+  listPublishingSnapshots(signal?: AbortSignal): Promise<PublishingSnapshot[]> {
+    return request<{ snapshots?: PublishingSnapshot[] }>("/api/v1/publishing/snapshots", signal).then(
+      (body) => body.snapshots ?? [],
+    );
+  },
+  listFreezeCandidates(signal?: AbortSignal): Promise<FreezeCandidate[]> {
+    return request<{ candidates?: FreezeCandidate[] }>("/api/v1/publishing/freeze-candidates", signal).then(
+      (body) => body.candidates ?? [],
+    );
+  },
+  listPublishingAttempts(snapshotId: string, signal?: AbortSignal): Promise<PublishingAttempt[]> {
+    return request<{ attempts?: PublishingAttempt[] }>(
+      `/api/v1/publishing/snapshots/${snapshotId}/attempts`,
+      signal,
+    ).then((body) => body.attempts ?? []);
+  },
+  listOperationsSnapshots(signal?: AbortSignal): Promise<OperationsSnapshot[]> {
+    return request<{ snapshots?: OperationsSnapshot[] }>("/api/v1/operations/snapshots", signal).then(
+      (body) => body.snapshots ?? [],
+    );
+  },
+  listOperationsAttempts(snapshotId: string, signal?: AbortSignal): Promise<PublishingAttempt[]> {
+    return request<{ attempts?: PublishingAttempt[] }>(
+      `/api/v1/operations/snapshots/${snapshotId}/attempts`,
+      signal,
+    ).then((body) => body.attempts ?? []);
   },
   listPublicOperatingPeriods(signal?: AbortSignal): Promise<PublicOperatingPeriodList> {
     return request<PublicOperatingPeriodList>("/api/v1/operations/public-periods", signal);
