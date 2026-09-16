@@ -3,16 +3,79 @@ doc_id: FLOW-NAV-HANDOFF-001
 title: FLOW 交接文档
 doc_type: navigation
 status: current
-version: 1.0
+version: 2.0
 created_at: 2026-09-11
-updated_at: 2026-09-12
+updated_at: 2026-09-16
 owner: FLOW
 applies_to: handoff
 ---
 
 # FLOW 交接文档（HANDOFF）
 
-## 0. 2026-09-14 最新续接：报告风视觉系统统一
+## 0. 2026-09-16 最新续接：文档迁移 M0–M6 收官 + README v1.2（本页权威续接段）
+
+- **写作者**：文档迁移主会话（设计 V1.1 → 计划 V1.1 → M0–M6 全批次 → 用户确认关闭 → README 视觉增强）。
+- **当前事实入口**：本节只做交接叙事；状态以 [PROJECT_STATE](../../00_start_here/PROJECT_STATE.md) 与 [CURRENT_ROADMAP](../../50_plans/CURRENT_ROADMAP.md) 为准（冲突时以后者为准）。
+
+### 已完成（本迁移主线，约 35 个 commit 全部已推送）
+
+| 批次 | 内容 | 关键提交 |
+|---|---|---|
+| 计划 | 设计 V1.1 修订（基线对账/存储分级/单检查器/角色映射/五题测试）+ 实施计划同步 | `05f614b`、`6733520` |
+| M0 | inventory 扫描器 + 基线冻结（2740 文件 / 405 不可变锁 / 367 消费者 / path-map 2341 全处置 / 存储分级标注） | `6f3e90e`→`dd5a24b` |
+| M1 | 元数据合同 + CI + 唯一入口 + D001–D051 拆分 + 三治理文档 | `0fc3488`→`a99a5b2` |
+| M2 | 来源 12 组对账 + 16 知识卡 + 11 领域手册 + **发布 flow-knowledge-2026-09-12.1**（31 资产 SHA-256 锁） | `063b9ea`→`962b651` |
+| M3 | 产品六件套 + 冲突矩阵 + SPEC_INDEX 15 规格 + 架构五文档（机器消费者 21 测试通过） | `970b864`、`df7f6e3` |
+| M4 | CURRENT_ROADMAP 唯一路线图 + 4 工作包 + 三视图；旧计划 archived | `d9c391b` |
+| M5 | 18 历史计划归档 + 顶层收口 + 生成式 DOCUMENT_STATUS + keep 化处置修订 | `99e6091`→`2f48df4` |
+| M6 | links.py + `make docs-check` 六门禁 + CI m6 + **五题盲测 RUN-2 5/5** + 用户确认关闭（`e373e25`） | `e3640aa`→`e373e25` |
+| README | v1.2 视觉增强（三层两模块图/四问闭环/指标生命周期/知识链图 + 2 新截图 + 数字徽章；25 截图 + 10 mermaid） | `e2812c4`→`1325cf7` |
+
+另：同会话早期完成 ATLAS 库文件分级治理（冗余清除 736M / LFS 258M / 双 Release 861M / manifest 四态）与 4 个个人 skill 沉淀（github.com/davyzhong/zcode-skills）。
+
+### 卡住的问题 / 登记边界（无硬阻塞）
+
+1. **ATLAS 侧 EI 修复 T1–T3 未执行**（`ATLAS/00_治理/EI变更影响分析与改进计划_2026-08-24.md` P0 项）——当时转向存储分级，留给下一个 ATLAS 会话（约半小时机械修订）。
+2. FLOW 知识维护须**用户发起**新截面（D051）；`08_wechat_sources` immutable delta 未追加；524 个微信重复候选未处置（动前必须逐文件 SHA-256 对账）。
+3. 兼容入口删除条件（消费者清零 + 两个发布周期）未到期，全部保留。
+4. 接续测试改进项：Q3 知识库入口未列 READING_ORDER 五件（RUN-1 在案）。
+5. 最后几次 push 的远端 CI run 未逐个盯完（本地六门禁同口径全绿，风险低）。
+
+### 下一步（按优先级）
+
+1. **接手前先读**：CURRENT_ROADMAP、S01 工作包、`70_operations/2026-09-14-*` 协作台账——S01 及视觉统一（见下方 09-14 段）由并行会话推进中，且 09-14 段登记了 13 个未暂存文件归属待判，**先 `git status` 再动手**。
+2. ATLAS：执行 T1–T3。
+3. 日常变更走 `make docs-check` 六门禁后提交；新增正式文档必须合规 frontmatter（legacy-exempt 修改即失去豁免）。
+
+### 踩过的坑（新会话必读）
+
+**工程习惯：**
+- **`cmd | tail` 掩蔽退出码**——本会话三次导致「失败状态下提交」。正确姿势：`make docs-check > log 2>&1; ec=$?`，或不用管道看完整输出。
+- **shell cwd 会被 reset**（多仓库切换后回到 ATLAS）——一律绝对路径或显式 `cd` 开头。
+- zsh 变量不分词（`for f in $多行` 整串一个词）→ 用 `| while read -r`；`Path.glob` 不支持 `{a,b}`。
+
+**迁移体系（制度如此）：**
+- **不可变档案旧链接不改写**（字节冻结；M5 曾误改 DECISION_LOG 被冻结测试抓回）——断链由 `link-allowlist.tsv` 解释。
+- **legacy-exempt 哈希锁连锁**：改豁免文件即 must-comply；漂移多时一次性全扫批量处理，别挤牙膏。
+- 新建文件先 `git add` 才被校验与引用解析（清单基于 `git ls-files`）。
+- plan 终态是 `archived` 不是 `superseded`；链接改写后必须跑全库相对链接扫描（层级错误比断链隐蔽）。
+
+**并行会话协作：**
+- 动共享文件前 `stat` mtime 确认静止；对方可能重构你的工具（check_docs 被移位 + phase 机制）——**采纳新接口**；以「文件无重叠 + 独立提交」化解冲突。
+- 用户未答的门槛决策不代答（CURRENT_RELEASE 等到「继续」才切）。
+
+**外部系统（ATLAS 侧）：** GitHub Release 清洗中文文件名（label 恢复 + SHA256 notes 对账）；docx/zip 重压缩无收益；`core.hooksPath=/dev/null` 与 LFS 冲突用 `--skip-repo`。
+
+### 快速上手
+
+```bash
+cd ~/workspace/FLOW && make docs-check        # 六门禁（约 2 分钟）
+python3 scripts/documentation/knowledge_release.py --repo . --verify-current
+```
+
+---
+
+## 1. 2026-09-14 续接：报告风视觉系统统一（GLM 协调者会话）
 
 - **本会话交接**：[`2026-09-14-glm-coord-visual-handoff.md`](2026-09-14-glm-coord-visual-handoff.md)
 - GLM 协调者会话（`mvs_ce3323c6851e4dd3961e3cfe51647d70`）收口两条主线：
