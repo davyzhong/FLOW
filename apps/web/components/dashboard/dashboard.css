@@ -654,3 +654,13 @@ tbody th:first-child { text-align: left; }
 @media (prefers-reduced-motion: reduce) {
   .dashboard-state__pulse { animation: none; }
 }
+
+/* F1-3：空态引导样式（dashboard/operations 共用视觉语言） */
+.dashboard-state--guide p { margin: 0 0 8px; }
+.dashboard-state__guide a,
+.operations-state--guide a { color: #1d4ed8; font-weight: 600; text-decoration: underline; }
+.operations-state--guide {
+  border: 1px dashed #94a3b8; border-radius: 8px;
+  padding: 20px 24px; background: #f8fafc; color: #334155;
+}
+.operations-state--guide p { margin: 0 0 8px; }

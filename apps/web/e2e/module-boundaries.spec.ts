@@ -34,13 +34,16 @@ test.describe("module boundaries", () => {
     await expect(card.locator(".module-landing__status--designed")).toHaveText("规划中");
   });
 
-  test("AppShell 导航保留且含三模块入口", async ({ page }) => {
+  test("AppShell 导航保留且含模块入口（F1-1 两级信息架构）", async ({ page }) => {
     await page.goto(MODULE_ENTRY);
     const nav = page.locator('nav[aria-label="FLOW 工作流"]');
     await expect(nav).toBeVisible();
     await expect(nav.locator('a[href="/public"]')).toHaveCount(1);
     await expect(nav.locator('a[href="/internal"]')).toHaveCount(1);
-    await expect(nav.locator('a[href="/internal#governance"]')).toHaveCount(1);
+    // F1-1：模块分组标题不再是「旧路由兼容入口」
+    await expect(nav.locator(".workflow-rail__group-label", { hasText: "旧路由兼容入口" })).toHaveCount(0);
+    await expect(nav.locator(".workflow-rail__group-label", { hasText: "公开财报分析" })).toBeVisible();
+    await expect(nav.locator(".workflow-rail__group-label", { hasText: "内部经营分析" })).toBeVisible();
   });
 });
 

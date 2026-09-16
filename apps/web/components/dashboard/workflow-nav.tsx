@@ -4,34 +4,32 @@ import { usePathname } from "next/navigation";
 
 import { FlowIcon } from "./icons";
 
-// 三模块产品语义入口（S01 Task 2C）+ 旧路由兼容分组（Task 5 集成前保留可达，
-// 待模块化重组后归位）。旧入口保持在兼容分组而非散落顶层。
+// 两级信息架构（前端整体优化 F1-1）：模块 → 页面，每条入口都落到有内容的
+// 真实页面；不再有「旧路由兼容入口」这类未完成信息架构的暴露。
+// 约束（e2e 双守护）：navigation.spec 要求每个交互路由在导航中恰有 1 个
+// plain href 入口；module-boundaries.spec 要求 /internal#governance 锚点存在。
 const moduleGroups = [
   {
-    label: "模块入口",
+    label: "公开财报分析",
     items: [
-      ["library", "公开财报分析", "/public"],
-      ["report", "企业内部分析工作台", "/internal"],
-      ["library", "专业治理底座", "/internal#governance"],
+      ["library", "模块总览", "/public"],
+      ["chart", "报表分析", "/statements"],
+      ["library", "指标库", "/metric-library"],
+    ],
+  },
+  {
+    label: "内部经营分析",
+    items: [
+      ["report", "工作台总览", "/internal"],
+      ["dashboard", "经营总览", "/"],
+      ["upload", "数据接入", "/data"],
+      ["analysis", "调查归因", "/investigations"],
+      ["report", "四问工作台", "/analysis"],
+      ["report", "报告与导出", "/reports"],
+      ["chart", "经营概览", "/operations"],
     ],
   },
 ] as const;
-
-const legacyCompatGroup = {
-  label: "旧路由兼容入口",
-  items: [
-    ["upload", "数据接入", "/data"],
-    ["dashboard", "经营总览", "/"],
-    ["analysis", "分析与归因", "/investigations"],
-    ["report", "四问工作台", "/analysis"],
-    ["report", "报告与导出", "/reports"],
-    ["chart", "报表分析", "/statements"],
-    ["library", "指标库", "/metric-library"],
-    ["chart", "经营概览", "/operations"],
-  ],
-} as const;
-
-const groups = [moduleGroups[0], legacyCompatGroup] as const;
 
 function isActiveItem(pathname: string | null, target: string): boolean {
   const current = pathname ?? "";
@@ -45,7 +43,7 @@ export function WorkflowNav() {
     <aside className="workflow-rail">
       <nav aria-label="FLOW 工作流">
         <div className="workflow-rail__brand"><span>F</span><strong>FLOW</strong></div>
-        {groups.map((group) => (
+        {moduleGroups.map((group) => (
           <div className="workflow-rail__group" key={group.label}>
             <p className="workflow-rail__group-label">{group.label}</p>
             <ol>

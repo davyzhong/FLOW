@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import type { DashboardFilters, DashboardResponse } from "../../lib/api/client";
 import { dashboardStateMessage } from "./dashboard-format";
 import { DashboardHeader } from "./dashboard-header";
@@ -38,7 +40,18 @@ export function DashboardLoaded({
 }) {
   const message = dashboardStateMessage(dashboard.state);
   if (dashboard.state === "empty") {
-    return <div className="dashboard-state dashboard-state--empty">{message}</div>;
+    return (
+      <div className="dashboard-state dashboard-state--empty dashboard-state--guide" role="status">
+        <p>{message}</p>
+        <p className="dashboard-state__guide">
+          经营总览需要已发布的分析快照。先到
+          <Link href="/data">数据接入</Link>
+          上传标准工作簿并完成构建，或在
+          <Link href="/reports">报告与导出</Link>
+          发布报告快照。
+        </p>
+      </div>
+    );
   }
   return (
     <section className="dashboard-loaded" aria-label="经营驾驶舱内容">
