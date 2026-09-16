@@ -45,6 +45,7 @@
   display: flex;
   min-height: 720px;
   height: 100vh;
+  overflow-y: auto;
   flex-direction: column;
   padding: 22px 12px;
 }
@@ -125,7 +126,7 @@
 }
 
 .workflow-rail li small {
-  color: #b2c0d1;
+  color: #d6e0ec;
   font-size: 9px;
 }
 

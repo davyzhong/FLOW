@@ -24,11 +24,11 @@ export function KpiCards({ items }: { items: KpiCardDatum[] }): ReactNode {
           data-testid="statement-kpi"
           key={item.label}
         >
-          <span className="stmt-kpi__seal" aria-hidden="true">{sealChar(item.label)}</span>
-          <div className="stmt-kpi__body">
-            <dt>{item.label}</dt>
-            <dd title={item.exact ?? undefined}>{item.display}</dd>
-          </div>
+          <dt>
+            <span className="stmt-kpi__seal" aria-hidden="true">{sealChar(item.label)}</span>
+            {item.label}
+          </dt>
+          <dd title={item.exact ?? undefined}>{item.display}</dd>
         </div>
       ))}
     </dl>

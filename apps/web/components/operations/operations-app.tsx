@@ -6,6 +6,7 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { flowApi, type DashboardResponse } from "../../lib/api/client";
+import { EmptyGuide } from "../ui/empty-guide";
 import { MarginMatrix } from "../dashboard/margin-matrix";
 import { MetricGrid } from "../dashboard/metric-grid";
 import { ProductPerformanceTable } from "../dashboard/product-performance-table";

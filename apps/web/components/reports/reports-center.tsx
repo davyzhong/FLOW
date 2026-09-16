@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 
+import { EmptyGuide } from "../ui/empty-guide";
 import { FlowApiError, statementApi, type StatementReportList } from "../../lib/api/client";
 import "./reports-center.css";
 
@@ -294,7 +295,12 @@ export function ReportsCenter() {
           基于公开财报反向解析的客观分析（D041/D043）：HTML 由冻结载荷渲染，数值与披露原文一致。
         </p>
         {objectiveReports.length === 0 ? (
-          <p className="ml-muted">尚无已导入的公开财报。请先在数据接入导入或在 P5 抽取后运行种子脚本。</p>
+          <EmptyGuide
+            kind="no-data"
+            title="尚无已导入的公开财报"
+            reason="先在数据接入导入财报，或在 P5 抽取后运行种子脚本（seed_p5_statements.sh）。"
+            actions={[{ href: "/data", label: "前往数据接入" }]}
+          />
         ) : (
           <ul className="reports-center__objective-list">
             {objectiveReports.map((report) => (
@@ -320,9 +326,12 @@ export function ReportsCenter() {
           均由同一不可变快照生成，发布历史只追加不覆盖。
         </p>
         {operationsSnapshots.length === 0 ? (
-          <p className="ml-muted">
-            尚无经营报告快照。请先在“经营分析”选择完整财报并冻结概览。
-          </p>
+          <EmptyGuide
+            kind="no-data"
+            title="尚无经营报告快照"
+            reason="请先在“经营分析”页选择完整财报并冻结概览，再回到本页发布产物。"
+            actions={[{ href: "/operations", label: "前往经营分析" }]}
+          />
         ) : (
           <>
             <ul aria-label="经营报告快照列表" className="reports-center__objective-list">

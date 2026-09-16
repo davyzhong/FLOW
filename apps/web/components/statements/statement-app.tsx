@@ -12,6 +12,10 @@ import {
   type StatementReportDetail,
   type StatementReportList,
 } from "../../lib/api/client";
+import type { ColumnDef } from "@tanstack/react-table";
+import { FlowDataTable } from "../ui/flow-data-table";
+import { ProvenanceBadge } from "../ui/provenance-badge";
+import type { StatementLine as StatementLineResponse } from "../../lib/api/client";
 import { ReviewPanel } from "./review-panel";
 import { DonutChart } from "./charts/donut-chart";
 import { GroupedBarChart } from "./charts/grouped-bar-chart";
@@ -61,6 +65,50 @@ function StatementTable({
   if (!section) return null;
   const columns = columnLayout(section);
   const scale = yiScale(detail.unit_note);
+
+  // F-DataTable 迁移：列定义含溯源卡列（page_number/page_anchor 数据来自
+  // 迁移 0029，值列保持亿元换算与精确原值悬停）。
+  const columnDefs: ColumnDef<StatementLineResponse, unknown>[] = [
+    {
+      accessorKey: "item_name",
+      header: "项目",
+      meta: { label: "项目" },
+      cell: (info) => <span>{info.getValue<string>()}</span>,
+    },
+    ...columns.map(
+      (column): ColumnDef<StatementLineResponse, unknown> => ({
+        accessorKey: column.key,
+        header: column.label,
+        meta: { label: column.label },
+        cell: (info) => {
+          const exact = info.getValue<string | null>();
+          const numeric = toYi(exact, scale);
+          return (
+            <span className="block text-right tabular-nums" title={exact ?? undefined}>
+              {numeric === null ? "" : formatRaw(numeric)}
+            </span>
+          );
+        },
+      }),
+    ),
+    {
+      id: "provenance",
+      header: "页",
+      enableSorting: false,
+      meta: { label: "页" },
+      cell: (info) => {
+        const line = info.row.original;
+        return (
+          <ProvenanceBadge
+            page={line.page_number ?? null}
+            anchor={line.page_anchor ?? null}
+            sourceRef={detail.source_ref}
+          />
+        );
+      },
+    },
+  ];
+
   return (
     <details className="stmt-section" open>
       <summary>
@@ -70,39 +118,15 @@ function StatementTable({
         </small>
       </summary>
       <div className="stmt-table-wrap">
-        <table aria-label={statementType}>
-          <thead>
-            <tr>
-              <th scope="col">项目</th>
-              {columns.map((column) => (
-                <th scope="col" key={column.key} className="is-num">
-                  {column.label}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {section.items.map((line) => (
-              <tr key={`${line.sort_order}-${line.item_name}`}>
-                <td>{line.item_name}</td>
-                {columns.map((column) => {
-                  const exact = line[column.key];
-                  const numeric = toYi(exact, scale);
-                  return (
-                    <td key={column.key} className="is-num" title={exact ?? undefined}>
-                      {numeric === null ? "" : formatRaw(numeric)}
-                    </td>
-                  );
-                })}
-                <td className="is-num">
-                  {line.page_number === null || line.page_number === undefined
-                    ? ""
-                    : `p${line.page_number}`}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div role="region" aria-label={statementType}>
+          <FlowDataTable
+            columns={columnDefs}
+            data={section.items}
+            getRowId={(line) => `${line.sort_order}-${line.item_name}`}
+            dense
+            pageSize={50}
+          />
+        </div>
       </div>
     </details>
   );

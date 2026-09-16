@@ -209,7 +209,7 @@
   background: var(--rep-red, #c0392b);
 }
 
-.stmt-kpi__body { min-width: 0; flex: 1; }
+.stmt-kpi > dt, .stmt-kpi > dd { min-width: 0; flex: 1; }
 
 .stmt-kpi dt {
   color: var(--rep-muted, #52637a);
