@@ -1,5 +1,19 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
+
+// jsdom 缺少 reactflow 依赖的浏览器 API（官方测试指引）
+beforeAll(() => {
+  globalThis.ResizeObserver ??= class {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  } as unknown as typeof ResizeObserver;
+  // @ts-expect-error DOMMatrixReadOnly polyfill（reactflow d3-zoom 用）
+  globalThis.DOMMatrixReadOnly ??= class {
+    m22 = 1;
+  };
+});
+
 import { DependencyGraph } from "../../components/metric-library/dependency-graph";
 import type { MetricLibraryEntry } from "../../lib/api/client";
 
@@ -33,7 +47,7 @@ const metrics = [
 describe("DependencyGraph", () => {
   it("渲染全部节点与分层", () => {
     render(<DependencyGraph metrics={metrics} domains={{ profitability: "盈利能力" }} />);
-    expect(screen.getByRole("img", { name: /指标依赖关系有向图/ })).toBeInTheDocument();
+    expect(screen.getByRole("region", { name: /指标依赖关系有向图/ })).toBeInTheDocument();
     for (const code of ["revenue", "gross_margin", "net_margin", "eva"]) {
       expect(screen.getByLabelText(`指标${code}（${code}）`)).toBeInTheDocument();
     }

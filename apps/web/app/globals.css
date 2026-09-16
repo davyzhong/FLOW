@@ -292,3 +292,14 @@ body {
     gap: 0.25rem;
   }
 }
+
+/* 指标依赖图谱（reactflow 版）：容器与 MiniMap 基调 */
+.ml-graph__flow {
+  border: 1px solid #e3e9f0;
+  border-radius: 10px;
+  background: #fbfcfe;
+}
+.ml-graph__flow .react-flow__minimap {
+  border-radius: 8px;
+  border: 1px solid #e3e9f0;
+}
