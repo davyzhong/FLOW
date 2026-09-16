@@ -9,6 +9,9 @@ updated_at: 2026-09-16
 owner: FLOW
 depends_on:
   - FLOW-PLAN-FE-DESIGN-UPGRADE-20260915
+acceptance_refs:
+  - frontend-route-state-viewport-matrix
+  - frontend-same-sha-green
 knowledge_release: flow-knowledge-2026-09-12.1
 applies_to: web-frontend-consistency
 decision_refs:
