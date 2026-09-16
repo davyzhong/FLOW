@@ -37,7 +37,7 @@
 }
 
 .workbench__watch li {
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--rep-line-3);
   border-left-width: 4px;
   border-radius: 6px;
   padding: 8px 12px;
@@ -57,7 +57,7 @@
   margin-right: 8px;
   font-size: 12px;
   font-weight: 600;
-  color: #475569;
+  color: var(--rep-slate);
 }
 
 .workbench__questions {
@@ -67,7 +67,7 @@
 }
 
 .workbench__question {
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--rep-line-3);
   border-radius: 8px;
   padding: 12px 16px;
 }
@@ -94,5 +94,5 @@
 }
 
 .workbench__metric-code {
-  color: #475569;
+  color: var(--rep-slate);
 }

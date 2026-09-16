@@ -257,3 +257,81 @@ body {
     gap: 0.25rem;
   }
 }
+
+/* ==========================================================================
+   F2-5：六类基础样式（flow-* 全局类，供所有功能页统一引用）
+   ========================================================================== */
+
+/* 表格 */
+.flow-table { width: 100%; border-collapse: collapse; font-size: var(--flow-font-s); }
+.flow-table th, .flow-table td {
+  border: 1px solid var(--rep-line-5);
+  padding: var(--flow-space-2) 10px;
+  text-align: left;
+  vertical-align: top;
+}
+.flow-table th { background: var(--rep-zebra); color: var(--rep-muted); font-weight: 600; }
+.flow-table tbody tr:nth-child(even) { background: var(--rep-zebra); }
+.flow-table tbody tr:hover { background: var(--rep-blue-soft); }
+.flow-table.is-num td { text-align: right; font-variant-numeric: tabular-nums; }
+
+/* 按钮 */
+.flow-btn {
+  display: inline-flex; align-items: center; gap: var(--flow-space-2);
+  padding: 6px 14px; border-radius: var(--flow-radius-s);
+  border: 1px solid var(--rep-line-5); background: var(--rep-card);
+  color: var(--rep-ink); font-size: var(--flow-font-m); font-weight: 600;
+  cursor: pointer;
+}
+.flow-btn:hover:not(:disabled) { border-color: var(--rep-blue); color: var(--rep-blue); }
+.flow-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.flow-btn--primary { background: var(--rep-navy-2); border-color: var(--rep-navy-2); color: #fff; }
+.flow-btn--primary:hover:not(:disabled) { background: var(--rep-navy); color: #fff; }
+.flow-btn--danger { color: var(--rep-red); }
+.flow-btn--danger:hover:not(:disabled) { border-color: var(--rep-red); color: var(--rep-red); }
+
+/* 表单字段 */
+.flow-field { display: flex; flex-direction: column; gap: var(--flow-space-1); }
+.flow-field > label { font-size: var(--flow-font-xs); font-weight: 600; color: var(--rep-muted); }
+.flow-field input, .flow-field select, .flow-field textarea {
+  padding: 6px 10px; border: 1px solid var(--rep-line-5);
+  border-radius: var(--flow-radius-s); font-size: var(--flow-font-m);
+  color: var(--rep-ink); background: var(--rep-card);
+}
+.flow-field input:focus, .flow-field select:focus, .flow-field textarea:focus {
+  outline: 2px solid var(--rep-blue-soft); border-color: var(--rep-blue);
+}
+
+/* 错误块 */
+.flow-error {
+  padding: var(--flow-space-3) var(--flow-space-4);
+  border: 1px solid var(--rep-red-soft); border-radius: var(--flow-radius-m);
+  background: var(--flow-error-bg); color: var(--flow-error);
+  font-weight: 600; font-size: var(--flow-font-m);
+}
+
+/* 空态 */
+.flow-empty {
+  padding: var(--flow-space-6) var(--flow-space-5);
+  border: 1px dashed var(--rep-line-3); border-radius: var(--flow-radius-m);
+  background: var(--rep-card); color: var(--rep-slate);
+  text-align: center; font-size: var(--flow-font-m);
+}
+.flow-empty a { color: var(--flow-info); font-weight: 600; }
+
+/* 加载 */
+.flow-loading {
+  display: flex; align-items: center; gap: var(--flow-space-3);
+  padding: var(--flow-space-5); color: var(--rep-muted); font-size: var(--flow-font-m);
+}
+.flow-loading::before {
+  content: ""; width: 14px; height: 14px; border-radius: 50%;
+  border: 2px solid var(--rep-line-3); border-top-color: var(--rep-blue);
+  animation: flow-spin 0.8s linear infinite;
+}
+@keyframes flow-spin { to { transform: rotate(360deg); } }
+
+/* 页头（页面标题区统一） */
+.flow-page-header { display: flex; align-items: baseline; gap: var(--flow-space-3); margin: 0 0 var(--flow-space-4); }
+.flow-page-header h1 { margin: 0; font-size: 1.15rem; color: var(--rep-ink); }
+.flow-page-header p { margin: 0; font-size: var(--flow-font-s); color: var(--rep-muted); }

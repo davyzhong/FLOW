@@ -19,7 +19,7 @@
 
 .ops-overview__controls a {
   font-size: 13px;
-  color: #1769e8;
+  color: var(--rep-blue);
 }
 
 .ops-overview__context-note {
@@ -37,9 +37,9 @@
 }
 
 .ops-overview__freeze {
-  color: #075f45;
+  color: var(--rep-teal);
   font-size: 13px;
-  background: #e3f3ec;
+  background: var(--rep-ok-soft-2);
   border-radius: 6px;
   padding: 8px 12px;
 }
@@ -54,7 +54,7 @@
 }
 
 .ops-overview__watch li {
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--rep-line-3);
   border-left-width: 4px;
   border-radius: 6px;
   padding: 8px 12px;
@@ -74,7 +74,7 @@
   margin-right: 8px;
   font-size: 12px;
   font-weight: 600;
-  color: #475569;
+  color: var(--rep-slate);
 }
 
 .ops-overview__themes {
@@ -84,7 +84,7 @@
 }
 
 .ops-overview__theme {
-  border: 1px solid #dfe6ef;
+  border: 1px solid var(--rep-line);
   border-radius: 8px;
   padding: 12px 16px;
   background: #fff;
@@ -113,12 +113,12 @@
   flex-direction: column;
   gap: 2px;
   font-size: 13.5px;
-  border-bottom: 1px dashed #eef2f7;
+  border-bottom: 1px dashed var(--rep-line-4);
   padding-bottom: 6px;
 }
 
 .ops-overview__metric-name {
-  color: #52637a;
+  color: var(--rep-muted);
 }
 
 .ops-overview__metric-value strong {
@@ -144,6 +144,6 @@
   border: 1px solid #cbd5e1;
   border-radius: 6px;
   padding: 10px 14px;
-  color: #475569;
+  color: var(--rep-slate);
   font-size: 13px;
 }

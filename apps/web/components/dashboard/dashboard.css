@@ -1,14 +1,14 @@
 .dashboard-app {
   --ink: #15243b;
-  --muted: #52637a;
-  --line: #dfe6ef;
-  --blue: #1769e8;
+  --muted: var(--rep-muted);
+  --line: var(--rep-line);
+  --blue: var(--rep-blue);
   --navy: #13223a;
-  --green: #075f45;
+  --green: var(--rep-teal);
   --red: #912f3b;
   --amber: #805000;
   padding: 18px;
-  background: #eef2f7;
+  background: var(--rep-line-4);
 }
 
 .dashboard-app__header {
@@ -398,8 +398,8 @@
   stroke-linejoin: round;
 }
 
-.trend-line--revenue { stroke: #1769e8; }
-.trend-line--profit { stroke: #075f45; }
+.trend-line--revenue { stroke: var(--rep-blue); }
+.trend-line--profit { stroke: var(--rep-teal); }
 .trend-line--cash { stroke: #8a4b00; }
 
 .chart-legend {
@@ -420,8 +420,8 @@
   background: currentcolor;
 }
 
-.chart-legend .revenue { color: #1769e8; }
-.chart-legend .profit { color: #075f45; }
+.chart-legend .revenue { color: var(--rep-blue); }
+.chart-legend .profit { color: var(--rep-teal); }
 .chart-legend .cash { color: #8a4b00; }
 
 .trend-details {
@@ -658,7 +658,7 @@ tbody th:first-child { text-align: left; }
 /* F1-3：空态引导样式（dashboard/operations 共用视觉语言） */
 .dashboard-state--guide p { margin: 0 0 8px; }
 .dashboard-state__guide a,
-.operations-state--guide a { color: #1d4ed8; font-weight: 600; text-decoration: underline; }
+.operations-state--guide a { color: var(--flow-info); font-weight: 600; text-decoration: underline; }
 .operations-state--guide {
   border: 1px dashed #94a3b8; border-radius: 8px;
   padding: 20px 24px; background: #f8fafc; color: #334155;

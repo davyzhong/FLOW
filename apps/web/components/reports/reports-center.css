@@ -1,4 +1,9 @@
-.reports-center { padding: 24px; display: grid; gap: 16px; }
-.reports-center__error { color: #b42318; font-weight: 600; }
+/* F2：改用全局 flow-* 基础样式 + token；本文件仅保留布局 */
+.reports-center { padding: var(--flow-space-5); display: grid; gap: var(--flow-space-4); }
+.reports-center__error { color: var(--flow-error); font-weight: 600; }
 .reports-center table { border-collapse: collapse; }
-.reports-center th, .reports-center td { border: 1px solid #d5dae3; padding: 6px 10px; text-align: left; }
+.reports-center th, .reports-center td {
+  border: 1px solid var(--rep-line-5);
+  padding: var(--flow-space-2) 10px;
+  text-align: left;
+}
