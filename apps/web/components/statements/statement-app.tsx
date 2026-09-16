@@ -4,13 +4,13 @@
 // 图形是同一冻结抽取值的投影（D043），本组件不做任何财务数字的重算修饰。
 // 视觉走报告风：hero（红顶 + kicker + 大标题）+ KPI 卡带 + verdict 条。
 // 注意：导航由 AppShell 统一提供（page.tsx 层），本组件不再重复渲染。
-import { useCallback, useEffect, useState, type ReactNode } from "react";
+import { useCallback, useState, type ReactNode } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 import {
   FlowApiError,
   statementApi,
   type StatementReportDetail,
-  type StatementReportList,
 } from "../../lib/api/client";
 import type { ColumnDef } from "@tanstack/react-table";
 import { FlowDataTable } from "../ui/flow-data-table";
@@ -35,17 +35,6 @@ import {
   yiScale,
 } from "./statement-view";
 import "./statements.css";
-
-type ListState =
-  | { kind: "loading" }
-  | { kind: "error"; message: string }
-  | { kind: "loaded"; reports: StatementReportList["reports"] };
-
-type DetailState =
-  | { kind: "idle" }
-  | { kind: "loading" }
-  | { kind: "error"; message: string }
-  | { kind: "loaded"; detail: StatementReportDetail };
 
 function toMessage(error: unknown): string {
   if (error instanceof FlowApiError) {
@@ -249,64 +238,49 @@ function ReportDetail({
 }
 
 export function StatementApp() {
-  const [listState, setListState] = useState<ListState>({ kind: "loading" });
-  const [detailState, setDetailState] = useState<DetailState>({ kind: "idle" });
+  // F-Query 试点：列表 + 依赖详情两条查询，取代手写 loading/error/loaded 状态机。
+  // retry=false 等默认值见 lib/api/query-client.ts（503 门禁反馈不被静默重试掩盖）。
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [requestKey, setRequestKey] = useState(0);
 
-  useEffect(() => {
-    const controller = new AbortController();
-    statementApi
-      .listReports(controller.signal)
-      .then((reports) => setListState({ kind: "loaded", reports: reports.reports }))
-      .catch((error: unknown) => {
-        if (controller.signal.aborted) return;
-        setListState({ kind: "error", message: toMessage(error) });
-      });
-    return () => controller.abort();
-  }, [requestKey]);
+  const listQuery = useQuery({
+    queryKey: ["statements"],
+    queryFn: () => statementApi.listReports(),
+  });
+  const reports = listQuery.data?.reports ?? [];
 
-  const activeId =
-    listState.kind === "loaded" && listState.reports.length
-      ? (selectedId ?? listState.reports[0].id)
-      : null;
+  const activeId = reports.length ? (selectedId ?? reports[0].id) : null;
+  const detailQuery = useQuery({
+    queryKey: ["statements", activeId],
+    queryFn: () => statementApi.getReport(activeId as string),
+    enabled: activeId !== null,
+  });
 
-  useEffect(() => {
-    if (!activeId) return;
-    const controller = new AbortController();
-    statementApi
-      .getReport(activeId, controller.signal)
-      .then((detail) => setDetailState({ kind: "loaded", detail }))
-      .catch((error: unknown) => {
-        if (controller.signal.aborted) return;
-        setDetailState({ kind: "error", message: toMessage(error) });
-      });
-    return () => controller.abort();
-  }, [activeId, requestKey]);
+  const refetchAll = useCallback(() => {
+    void listQuery.refetch();
+    void detailQuery.refetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listQuery.refetch, detailQuery.refetch]);
 
   const retry = useCallback(() => {
     setSelectedId(null);
-    setDetailState({ kind: "idle" });
-    setListState({ kind: "loading" });
-    setRequestKey((key) => key + 1);
-  }, []);
+    refetchAll();
+  }, [refetchAll]);
 
   const selectReport = useCallback((reportId: string) => {
     setSelectedId(reportId);
-    setDetailState({ kind: "loading" });
   }, []);
 
   let body: ReactNode;
-  if (listState.kind === "loading") {
+  if (listQuery.isPending) {
     body = <p role="status" className="stmt-status">正在加载财报列表…</p>;
-  } else if (listState.kind === "error") {
+  } else if (listQuery.isError) {
     body = (
       <div role="alert" className="stmt-status is-error">
-        <p>{listState.message}</p>
+        <p>{toMessage(listQuery.error)}</p>
         <button type="button" onClick={retry}>重试</button>
       </div>
     );
-  } else if (listState.reports.length === 0) {
+  } else if (reports.length === 0) {
     body = (
       <div role="status" className="stmt-status">
         <p>尚无已导入的财报。请先运行 P5 抽取并执行 scripts/seed_statement_reports.py 导入。</p>
@@ -314,11 +288,11 @@ export function StatementApp() {
       </div>
     );
   } else {
-    const currentId = activeId ?? listState.reports[0].id;
+    const currentId = activeId ?? reports[0].id;
     body = (
       <>
         <nav className="stmt-report-tabs" aria-label="财报选择">
-          {listState.reports.map((report) => (
+          {reports.map((report) => (
             <button
               key={report.id}
               type="button"
@@ -333,18 +307,15 @@ export function StatementApp() {
             </button>
           ))}
         </nav>
-        {detailState.kind === "loading" ? (
+        {activeId !== null && detailQuery.isPending ? (
           <p role="status" className="stmt-status">正在加载报表数据…</p>
-        ) : detailState.kind === "error" ? (
+        ) : detailQuery.isError ? (
           <div role="alert" className="stmt-status is-error">
-            <p>{detailState.message}</p>
+            <p>{toMessage(detailQuery.error)}</p>
             <button type="button" onClick={retry}>重试</button>
           </div>
-        ) : detailState.kind === "loaded" ? (
-          <ReportDetail
-            detail={detailState.detail}
-            onChanged={() => setRequestKey((key) => key + 1)}
-          />
+        ) : detailQuery.data ? (
+          <ReportDetail detail={detailQuery.data} onChanged={refetchAll} />
         ) : null}
       </>
     );

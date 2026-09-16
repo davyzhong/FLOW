@@ -3,9 +3,9 @@ doc_id: FLOW-PLAN-FE-DESIGN-UPGRADE-20260915
 title: 前端设计升级方案 v1（基于五轮竞品调研）
 doc_type: plan
 status: active
-version: 2.0
+version: 2.1
 created_at: 2026-09-15
-updated_at: 2026-09-15
+updated_at: 2026-09-16
 owner: FLOW
 depends_on: [FLOW-WP-PUBLIC-C-EXIT-001]
 acceptance_refs: [roadmap-unique-invariant]
@@ -85,9 +85,11 @@ Recharts（评估）——全部为行业标准、长期维护、与 React 19 �
 
 ## 3. To-do（按阶段领取，须过路线图裁决）
 
-- [ ] 阶段二 F-DataTable：FlowDataTable 组件 + dashboard 资产表/statement 明细表迁移（TanStack 引入 + 5 用例）
-- [ ] 阶段二 F-Provenance：溯源卡组件 + statements 页数字接入（page_number 数据已就绪）
-- [ ] 阶段二 F-EmptyGuide：标准空态组件 + 三类空态迁移（dashboard/operations/reports）
+- [x] 阶段二 F-DataTable：FlowDataTable 组件 + statement 明细表迁移（TanStack Table v8 pin，ec6450a）
+- [x] 阶段二 F-Provenance：ProvenanceHover 数值单元格 hover 卡 + 行级页码列（6154227）
+- [x] 阶段二 F-EmptyGuide：标准空态组件 + dashboard/operations/reports 空态迁移（ec6450a）
+- [x] 阶段二 F-Charts：Recharts 试点评估完成，**结论=暂缓**（2026-09-16 实测：迁一图客户端 chunk 1324→1680KB，+356KB/+27%；现有四图为披露阅读场景定制——常显数值标签、负值红柱、aria/title 契约与 e2e/视觉快照耦合，Recharts 的浮动 tooltip/crosshair 收益与之重叠且后续图表内嵌溯源卡在手写 SVG 上实现更直接。**启用条件**：阶段三探索式分析视图（crosshair 联动、缩放刷选、多序列图例开合）立项时再引入，依赖随首个交互分析页落地）
+- [x] 阶段二 F-Query：TanStack Query v5 **采纳**并试点落地（2026-09-16：自研 useApiQuery 全仓零采用、五组件仍手写状态机；+52KB raw（1324→1376KB，vs Recharts +356KB）换来缓存/去重/依赖查询/mutation 失效。QueryClientProvider 入 layout；`createFlowQueryClient` 统一 retry=false（503 门禁反馈不被静默重试掩盖）+ refetchOnWindowFocus=false（冻结快照语义）；statement-app 列表+依赖详情已迁，其余四组件按页迁移）
 - [ ] 阶段二 F-ExportAudit：下载审计事件（后端 require_action 已覆盖授权，补审计行）
 - [ ] 阶段三 P-WorkbenchHome：首屏待办工作流
 - [ ] 阶段三 P-DrillPath/P-ReportFlow/P-GovernanceFold

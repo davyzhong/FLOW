@@ -1,7 +1,14 @@
+import type { ReactElement } from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { StatementApp } from "../../components/statements/statement-app";
+import { createFlowQueryClient } from "../../lib/api/query-client";
+
+function renderWithClient(ui: ReactElement) {
+  return render(<QueryClientProvider client={createFlowQueryClient()}>{ui}</QueryClientProvider>);
+}
 
 // 精简自顺丰 2026 一季报 P5 抽取值的 oracle 数据（单位：人民币千元）。
 const REPORT_ID = "0f1e2d3c-4b5a-6978-8a9b-0c1d2e3f4a5b";
@@ -80,7 +87,7 @@ describe("StatementApp", () => {
 
   it("空态提示需要先导入抽取数据", async () => {
     stubFetch({ "/api/v1/statements": { reports: [] } });
-    render(<StatementApp />);
+    renderWithClient(<StatementApp />);
     expect(await screen.findByText(/尚无已导入的财报/)).toBeInTheDocument();
   });
 
@@ -89,7 +96,7 @@ describe("StatementApp", () => {
       "/api/v1/statements": LIST_RESPONSE,
       [`/api/v1/statements/${REPORT_ID}`]: DETAIL_RESPONSE,
     });
-    render(<StatementApp />);
+    renderWithClient(<StatementApp />);
     expect(await screen.findByText("顺丰控股")).toBeInTheDocument();
     const kpis = await screen.findAllByTestId("statement-kpi");
     expect(kpis.length).toBeGreaterThan(3);
@@ -109,7 +116,7 @@ describe("StatementApp", () => {
       ),
     );
     vi.stubGlobal("fetch", fetchStub);
-    render(<StatementApp />);
+    renderWithClient(<StatementApp />);
     expect(await screen.findByRole("alert")).toBeInTheDocument();
     const retry = screen.getByRole("button", { name: "重试" });
     fetchStub.mockImplementation((input?: RequestInfo | URL) => {
@@ -185,7 +192,7 @@ describe("StatementApp", () => {
       "/api/v1/statements": { reports: [{ ...IFRS_DETAIL, sections: undefined }] },
       [`/api/v1/statements/${IFRS_REPORT_ID}`]: IFRS_DETAIL,
     });
-    render(<StatementApp />);
+    renderWithClient(<StatementApp />);
     expect(await screen.findByText("阿里巴巴")).toBeInTheDocument();
     const kpis = await screen.findAllByTestId("statement-kpi");
     expect(kpis.length).toBeGreaterThan(3);

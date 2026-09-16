@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
+import { Providers } from "./providers";
+
 import "@fontsource-variable/inter";
 import "@fontsource-variable/jetbrains-mono";
 import "@fontsource-variable/noto-sans-sc";
@@ -17,7 +19,8 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
     <html lang="zh-CN">
-      <body>{children}
+      <body>
+        <Providers>{children}</Providers>
         {process.env.AUTH_TOKEN && <footer style={{ padding: 16, textAlign: "center" }}>
           <form action="/api/auth/logout" method="post"><button type="submit">退出登录</button></form>
         </footer>}
