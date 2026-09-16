@@ -4,6 +4,8 @@
 // page/page_anchor 来自迁移 0029 的 statement_line_item 列；
 // 无溯源数据时渲染「—」——不伪造定位。
 
+import type { ReactNode } from "react";
+
 import { cn } from "../../lib/utils";
 
 export type ProvenanceProps = {
@@ -18,6 +20,55 @@ const ANCHOR_LABELS: Record<string, string> = {
   strong: "行名+数值同页",
   weak: "仅数值同页",
 };
+
+function anchorLabelOf(anchor: string | null): string {
+  return anchor ? ANCHOR_LABELS[anchor] ?? anchor : "未知锚定";
+}
+
+/** 数值单元格级溯源：触发器即调用方 children（数值本体），hover 展示完整卡。
+ *  无页码定位时原样渲染 children——不伪造溯源。 */
+export function ProvenanceHover({
+  page,
+  anchor,
+  sourceRef,
+  value,
+  unit,
+  children,
+  className,
+}: ProvenanceProps & {
+  /** 披露原值（未换算字符串），卡片中优先展示 */
+  value?: string | null;
+  /** 披露单位（如「人民币千元」） */
+  unit?: string | null;
+  children: ReactNode;
+}) {
+  if (page === null || page === undefined) {
+    return <span className={cn("inline-block", className)}>{children}</span>;
+  }
+  return (
+    <span className={cn("group relative inline-block w-full", className)}>
+      {children}
+      <span
+        role="tooltip"
+        className="pointer-events-none absolute bottom-full left-1/2 z-20 hidden w-64 -translate-x-1/2 rounded-md border border-line-3 bg-card p-3 text-left text-xs text-ink shadow-md group-hover:block"
+      >
+        {value ? (
+          <span className="block">
+            披露原值：<strong className="tabular-nums">{value}</strong>
+            {unit ? <span className="text-muted">（{unit}）</span> : null}
+          </span>
+        ) : null}
+        <span className={value ? "mt-1 block" : "block"}>
+          原文页码：<strong>第 {page} 页</strong>
+        </span>
+        <span className="block">锚定方式：{anchorLabelOf(anchor)}</span>
+        {sourceRef ? (
+          <span className="mt-1 block break-all text-muted">来源：{sourceRef}</span>
+        ) : null}
+      </span>
+    </span>
+  );
+}
 
 export function ProvenanceBadge({ page, anchor, sourceRef, className }: ProvenanceProps) {
   if (page === null || page === undefined) {

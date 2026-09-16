@@ -14,7 +14,7 @@ import {
 } from "../../lib/api/client";
 import type { ColumnDef } from "@tanstack/react-table";
 import { FlowDataTable } from "../ui/flow-data-table";
-import { ProvenanceBadge } from "../ui/provenance-badge";
+import { ProvenanceBadge, ProvenanceHover } from "../ui/provenance-badge";
 import type { StatementLine as StatementLineResponse } from "../../lib/api/client";
 import { ReviewPanel } from "./review-panel";
 import { DonutChart } from "./charts/donut-chart";
@@ -81,12 +81,28 @@ function StatementTable({
         header: column.label,
         meta: { label: column.label },
         cell: (info) => {
+          const line = info.row.original;
           const exact = info.getValue<string | null>();
           const numeric = toYi(exact, scale);
           return (
-            <span className="block text-right tabular-nums" title={exact ?? undefined}>
-              {numeric === null ? "" : formatRaw(numeric)}
-            </span>
+            <ProvenanceHover
+              page={line.page_number ?? null}
+              anchor={line.page_anchor ?? null}
+              sourceRef={detail.source_ref}
+              value={exact}
+              unit={detail.unit_note}
+            >
+              <span
+                className={`block text-right tabular-nums${
+                  line.page_number != null
+                    ? " underline decoration-dotted decoration-line-3 underline-offset-4"
+                    : ""
+                }`}
+                title={exact ?? undefined}
+              >
+                {numeric === null ? "" : formatRaw(numeric)}
+              </span>
+            </ProvenanceHover>
           );
         },
       }),
