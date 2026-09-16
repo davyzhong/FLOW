@@ -1,3 +1,36 @@
+@import "tailwindcss";
+
+/* Tailwind v4 CSS-first 主题：映射既有 --rep-* token（F2 体系不变，
+   Tailwind 工具类与存量 CSS 共存——前端设计升级 v2 阶段二 S-Foundation） */
+@theme inline {
+  --color-ink: var(--rep-ink);
+  --color-ink-2: var(--rep-ink-2);
+  --color-navy: var(--rep-navy);
+  --color-navy-2: var(--rep-navy-2);
+  --color-muted: var(--rep-muted);
+  --color-line: var(--rep-line);
+  --color-line-2: var(--rep-line-2);
+  --color-line-3: var(--rep-line-3);
+  --color-line-4: var(--rep-line-4);
+  --color-line-5: var(--rep-line-5);
+  --color-surface: var(--rep-bg);
+  --color-card: var(--rep-card);
+  --color-red: var(--rep-red);
+  --color-red-soft: var(--rep-red-soft);
+  --color-ok: var(--rep-ok);
+  --color-ok-soft: var(--rep-ok-soft);
+  --color-warn: var(--rep-warn);
+  --color-warn-soft: var(--rep-warn-soft);
+  --color-blue: var(--rep-blue);
+  --color-blue-soft: var(--rep-blue-soft);
+  --color-zebra: var(--rep-zebra);
+  --color-error: var(--flow-error);
+  --color-info: var(--flow-info);
+  --radius-s: var(--flow-radius-s);
+  --radius-m: var(--flow-radius-m);
+  --radius-l: var(--flow-radius-l);
+}
+
 :root {
   color-scheme: light;
   font-family:
