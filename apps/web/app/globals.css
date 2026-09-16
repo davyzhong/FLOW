@@ -293,7 +293,6 @@ body {
   }
 }
 
-<<<<<<< HEAD
 /* 指标依赖图谱（reactflow 版）：容器与 MiniMap 基调 */
 .ml-graph__flow {
   border: 1px solid #e3e9f0;
@@ -304,7 +303,6 @@ body {
   border-radius: 8px;
   border: 1px solid #e3e9f0;
 }
-=======
 /* ==========================================================================
    F2-5：六类基础样式（flow-* 全局类，供所有功能页统一引用）
    ========================================================================== */
@@ -382,4 +380,3 @@ body {
 .flow-page-header { display: flex; align-items: baseline; gap: var(--flow-space-3); margin: 0 0 var(--flow-space-4); }
 .flow-page-header h1 { margin: 0; font-size: 1.15rem; color: var(--rep-ink); }
 .flow-page-header p { margin: 0; font-size: var(--flow-font-s); color: var(--rep-muted); }
->>>>>>> codex/frontend-overhaul
