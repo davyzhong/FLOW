@@ -4,7 +4,7 @@
 // page/page_anchor 来自迁移 0029 的 statement_line_item 列；
 // 无溯源数据时渲染「—」——不伪造定位。
 
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 
 import { cn } from "../../lib/utils";
 
@@ -26,7 +26,9 @@ function anchorLabelOf(anchor: string | null): string {
 }
 
 /** 数值单元格级溯源：触发器即调用方 children（数值本体），hover 展示完整卡。
- *  无页码定位时原样渲染 children——不伪造溯源。 */
+ *  无页码定位时原样渲染 children——不伪造溯源。
+ *  键盘/触屏路径：每行的「p{page}」徽标（ProvenanceBadge）可聚焦、可点击
+ *  展开；数值单元格不加 tabIndex（避免一张表数百个停止点）。 */
 export function ProvenanceHover({
   page,
   anchor,
@@ -71,6 +73,7 @@ export function ProvenanceHover({
 }
 
 export function ProvenanceBadge({ page, anchor, sourceRef, className }: ProvenanceProps) {
+  const [open, setOpen] = useState(false);
   if (page === null || page === undefined) {
     return (
       <span
@@ -88,12 +91,17 @@ export function ProvenanceBadge({ page, anchor, sourceRef, className }: Provenan
         type="button"
         className="cursor-help rounded border border-line-4 px-1.5 py-0.5 text-xs text-muted hover:border-blue hover:text-blue"
         aria-label={`溯源：原文第 ${page} 页（${anchorLabel}）`}
+        aria-expanded={open}
+        onClick={() => setOpen((value) => !value)}
+        onBlur={() => setOpen(false)}
       >
         p{page}
       </button>
       <span
         role="tooltip"
-        className="pointer-events-none absolute bottom-full left-1/2 z-20 hidden w-64 -translate-x-1/2 rounded-md border border-line-3 bg-card p-3 text-left text-xs text-ink shadow-md group-hover:block"
+        className={`pointer-events-none absolute bottom-full left-1/2 z-20 w-64 -translate-x-1/2 rounded-md border border-line-3 bg-card p-3 text-left text-xs text-ink shadow-md ${
+          open ? "block" : "hidden"
+        } group-hover:block group-focus-within:block`}
       >
         <span className="block font-semibold">数据点溯源</span>
         <span className="mt-1 block">

@@ -26,6 +26,10 @@
   color: var(--rep-muted);
 }
 
+.investigations-index__table-wrap {
+  overflow-x: auto; /* 窄视口横向滚动在容器内，不撑破页面 */
+}
+
 .investigations-index__table {
   width: 100%;
   border-collapse: collapse;

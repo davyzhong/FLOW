@@ -1,5 +1,10 @@
 /* 数据工作台：布局 + 阶段条/拖放区/工作流分区；基础控件走全局 flow-* 类。 */
-.data-workbench { padding: var(--flow-space-5); display: grid; gap: var(--flow-space-4); }
+.data-workbench {
+  padding: var(--flow-space-5);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr); /* 网格轨道随容器收缩，原生 file input 不撑破窄视口 */
+  gap: var(--flow-space-4);
+}
 
 .data-workbench__header {
   display: flex;
@@ -46,9 +51,17 @@
   color: var(--rep-navy-2);
 }
 
+.data-workbench__dropzone input[type="file"] {
+  max-width: 100%;
+  min-width: 0;
+  width: 100%;
+}
+
 .data-workbench__dropzone label {
-  display: inline-flex;
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
   gap: var(--flow-space-2);
   color: var(--flow-info);
   font-weight: 600;

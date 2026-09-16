@@ -100,3 +100,9 @@
 }
 
 .login-card button:hover { background: var(--rep-navy); }
+
+/* 窄视口触控目标 ≥44px（FE-07） */
+@media (max-width: 780px) {
+  .login-card button { min-height: 44px; }
+  .login-card input { min-height: 44px; }
+}

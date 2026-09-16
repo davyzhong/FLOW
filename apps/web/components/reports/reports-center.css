@@ -1,5 +1,10 @@
 /* 报告中心：布局 + 分区卡片/清单/表单区；基础控件走全局 flow-* 类。 */
-.reports-center { padding: var(--flow-space-5); display: grid; gap: var(--flow-space-4); }
+.reports-center {
+  padding: var(--flow-space-5);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr); /* 窄视口轨道随容器收缩 */
+  gap: var(--flow-space-4);
+}
 
 .reports-center__header h1 { margin: 0; font-size: 20px; color: var(--rep-ink); }
 
@@ -72,10 +77,15 @@
   font-size: var(--flow-font-xs);
   font-weight: 600;
   color: var(--rep-muted);
-  width: min(420px, 100%);
+  width: 100%;
+  max-width: 420px;
+  min-width: 0;
 }
 
 .reports-center__freeze select {
+  width: 100%; /* select 固有宽度由最长 option 决定，必须显式脱钩（FE-06） */
+  min-width: 0;
+  max-width: 100%;
   padding: 8px 10px;
   border: 1px solid var(--rep-line-5);
   border-radius: var(--flow-radius-s);

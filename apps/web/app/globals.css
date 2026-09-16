@@ -409,3 +409,10 @@ body {
 .flow-page-header { display: flex; align-items: baseline; gap: var(--flow-space-3); margin: 0 0 var(--flow-space-4); }
 .flow-page-header h1 { margin: 0; font-size: 1.15rem; color: var(--rep-ink); }
 .flow-page-header p { margin: 0; font-size: var(--flow-font-s); color: var(--rep-muted); }
+
+/* 触控目标（FE-07 / 整改计划 Task 5）：窄视口下主要交互控件 ≥44px。
+   密集表格内的行级小按钮（下载/排序等）是经分专员密度设计的显式例外。 */
+@media (max-width: 780px) {
+  .flow-btn { min-height: 44px; }
+  .flow-field input, .flow-field select, .flow-field textarea { min-height: 44px; }
+}

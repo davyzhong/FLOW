@@ -26,8 +26,20 @@
   .app-shell .workflow-rail__brand strong,
   .app-shell .workflow-rail li a > span,
   .app-shell .workflow-rail__group-label,
-  .app-shell .workflow-rail__footer {
+  .app-shell .workflow-rail__status {
     display: none;
+  }
+
+  /* 退出按钮在窄屏保持可见（FE-04 收尾），仅隐藏状态文案 */
+  .app-shell .workflow-rail__footer {
+    display: flex;
+    justify-content: center;
+    padding-top: 10px;
+  }
+
+  /* 触控目标 ≥44px（FE-07） */
+  .app-shell .workflow-rail li a {
+    min-height: 44px;
   }
 
   .app-shell__main {

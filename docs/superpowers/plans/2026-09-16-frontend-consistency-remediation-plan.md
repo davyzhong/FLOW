@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-FE-CONSISTENCY-REMEDIATION-20260916
 title: FLOW 全页面前端一致性修复与升级实施计划
 doc_type: plan
 status: active
-version: 1.1
+version: 1.2
 created_at: 2026-09-16
 updated_at: 2026-09-17
 owner: FLOW
@@ -668,3 +668,36 @@ RequestTimeout），隔离复跑 0.47s 通过——负载性环境 flake，与�
 frontend-responsive.spec）、Task 4（ProvenanceBadge 键盘可达与原文跳转）、
 Task 5（44px 触控目标）、Task 6-8（metric-library/operations/investigations
 逐页迁移）、Task 9（状态×视口矩阵归档）。
+
+### 2026-09-17 P1 批次（Task 0 e2e 门禁 + Task 4 可达性 + Task 5 触控目标 + FE-06 修正）
+
+**对执行日志的重要更正**：前批「FE-06 在当前 HEAD 不复现」的结论是**假阴性**
+——当时的探针跑在无真实数据的错误态上。本批把门禁改为生产构建（`next
+build` + `next start`）后，真实数据下 /statements 在 390px 溢出至 599px、
+/reports 552px、/metric-library 501px、/investigations 644px，诊断原始判
+断正确。逐项修复：statements（stmt-sha SHA 长串 overflow-wrap）、reports
+（freeze select 脱离固有宽度）、metric-library（列表轨道收窄、dt/dd 改
+网格排布、ml-dep 去 nowrap、卡片脚注换行）、investigations（表格加
+region+overflow-x 滚动容器）、全局（网格容器 minmax(0,1fr) 收轨模式）。
+另删除 dashboard.css ≤760px 的旧版「横排 4 列 rail」规则——它与
+AppShell 的 62px 竖轨在窄屏叠用，正是 413px 溢出的来源之一。
+
+**本批落地：**
+- Task 0：e2e/frontend-consistency.spec.ts（10 业务路由 AppShell+h1、
+  /login 例外、/data /reports 样式回归探针）+ e2e/frontend-responsive.spec.ts
+  （11 路由 390px 溢出 + 44px 触控目标 + 窄屏退出按钮可见性）；挂入
+  test_module_boundaries_e2e.sh，且该脚本从 dev 改为**生产构建**——
+  Turbopack dev 的 CSS 行为与生产不一致，按「dev 全绿≠生产正常」纪律收敛。
+- Task 4：ProvenanceBadge 点击展开/收起（aria-expanded）+ group-focus-within
+  键盘可达；数值单元格不加 tabIndex（避免一张表数百停止点），键盘路径=行级
+  p{page} 徽标（组件注释已声明）。原文跳转仍待后端供稿决策（Task 9 前）。
+- Task 5（首切片）：≤780px 下 flow-btn/flow-field 控件与登录表单 ≥44px；
+  密集表格行级小按钮为密度设计的显式例外（spec 注释声明）。
+- FE-04 收尾：≤1200px 侧栏 footer 只隐状态文案、退出按钮保持可见。
+
+**验证：** 扩展后 module-boundaries 脚本 43/43（含 4 个新一致性测试 +
+11 路由溢出门禁，生产构建）；单测 76/76；dashboard 7/7（视觉基线无变化）；
+statements e2e 4/4；check_docs m6 PASS。
+
+**未完成：** Task 6-8 逐页迁移（本批的溢出修复是止血，页面级 token/组件
+迁移仍按计划推进）、Task 9 状态×视口矩阵归档、原文跳转后端供稿。

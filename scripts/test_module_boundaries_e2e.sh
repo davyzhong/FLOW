@@ -22,11 +22,16 @@ trap cleanup EXIT
 trap 'exit 130' INT
 trap 'exit 143' TERM
 
-python3 scripts/run_service.py --cwd apps/web -- node node_modules/next/dist/bin/next dev \
-  --hostname 127.0.0.1 --port "${web_port}" >"${mb_logs}/web.log" 2>&1 &
+# 一致性/响应式门禁必须跑生产构建：Turbopack dev 的 Tailwind JIT 存在
+# 间歇性丢 utilities 的差异（w-full 在 dev 缺席、build/start 健在），
+# 且「dev 全绿 ≠ 生产正常」是既定纪律。
+(cd apps/web && npx --yes pnpm@10.17.1 exec next build > "${mb_logs}/build.log" 2>&1)
+(cd apps/web && npx --yes pnpm@10.17.1 exec next start \
+  --hostname 127.0.0.1 --port "${web_port}" >"${mb_logs}/web.log" 2>&1 &)
 web_pid=$!
 
 python3 scripts/wait_for_services.py "127.0.0.1:${web_port}"
 
 npx --yes pnpm@10.17.1 --filter @flow/web exec playwright test \
-  e2e/navigation.spec.ts e2e/module-boundaries.spec.ts
+  e2e/navigation.spec.ts e2e/module-boundaries.spec.ts \
+  e2e/frontend-consistency.spec.ts e2e/frontend-responsive.spec.ts

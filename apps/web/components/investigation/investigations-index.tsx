@@ -69,6 +69,7 @@ export function InvestigationsIndex() {
       ) : null}
 
       {findings && findings.length > 0 ? (
+        <div className="investigations-index__table-wrap" role="region" aria-label="Finding 列表" tabIndex={0}>
         <table className="investigations-index__table">
           <thead>
             <tr>
@@ -101,6 +102,7 @@ export function InvestigationsIndex() {
             ))}
           </tbody>
         </table>
+        </div>
       ) : null}
     </div>
   );

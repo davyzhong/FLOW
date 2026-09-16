@@ -4,6 +4,7 @@
 
 .statements-app {
   display: grid;
+  grid-template-columns: minmax(0, 1fr); /* 窄视口轨道随容器收缩，长选项/表格不撑破 */
   gap: 18px;
   --rep-ink: var(--rep-ink);
   --rep-ink-2: var(--rep-ink-2);
@@ -166,6 +167,7 @@
 
 .stmt-source code,
 .stmt-sha {
+  overflow-wrap: anywhere; /* 64 位 SHA 串不可断行，会撑破窄视口容器 */
   background: var(--rep-line-4);
   border-radius: 6px;
   padding: 1px 7px;

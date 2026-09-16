@@ -636,7 +636,9 @@ tbody th:first-child { text-align: left; }
   .workflow-rail__brand strong,
   .workflow-rail li a > span,
   .workflow-rail__group-label,
-  .workflow-rail__footer { display: none; }
+  .workflow-rail__status { display: none; }
+  .workflow-rail__footer { display: flex; justify-content: center; padding-top: 10px; }
+  .workflow-rail li a { min-height: 44px; }
   .workflow-rail__brand { padding-inline: 4px; }
   .workflow-rail li a { display: grid; grid-template-columns: 1fr; place-items: center; padding-inline: 7px; }
   .dashboard-header { align-items: flex-start; flex-direction: column; }
@@ -650,11 +652,8 @@ tbody th:first-child { text-align: left; }
   .dashboard-app { padding: 8px; }
   .dashboard-app__header { margin: 5px 4px 10px; }
   .dashboard-loaded { display: block; border-radius: 8px; }
-  .workflow-rail nav { position: static; min-height: auto; height: auto; padding: 7px; }
-  .workflow-rail__brand,
-  .workflow-rail__footer { display: none; }
-  .workflow-rail ol { grid-template-columns: repeat(4, 1fr); }
-  .workflow-rail li a { min-height: 40px; }
+  /* .workflow-rail 的窄屏布局归 AppShell 所有（app-shell.css ≤1200 规则）；
+     此处旧的「横排 4 列 rail」规则与 62px 竖轨叠用曾把 body 撑到 413px（FE-06）。 */
   .dashboard-workspace { padding: 10px; }
   .dashboard-filters { display: grid; width: 100%; grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .dashboard-filters select { width: 100%; }
