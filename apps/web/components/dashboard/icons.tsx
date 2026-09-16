@@ -1,19 +1,30 @@
 import type { SVGProps } from "react";
+import {
+  ArrowRight,
+  BarChart3,
+  BookOpen,
+  FileText,
+  LayoutDashboard,
+  TriangleAlert,
+  TrendingUp,
+  Upload,
+  type LucideProps,
+} from "lucide-react";
+
+// v2（2026-09-16）：图标收敛到 lucide-react（项目既有图标依赖，与 shadcn 体系一致）。
+// 保持 name 字符串 API 不变，调用方零改动；如需新图标直接用 lucide 组件，不再扩此映射。
+const registry = {
+  upload: Upload,
+  dashboard: LayoutDashboard,
+  analysis: TrendingUp,
+  report: FileText,
+  chart: BarChart3,
+  library: BookOpen,
+  alert: TriangleAlert,
+  arrow: ArrowRight,
+} as const;
 
 export function FlowIcon({ name, ...props }: SVGProps<SVGSVGElement> & { name: string }) {
-  const paths: Record<string, string> = {
-    upload: "M4 17h16M12 3v10m0-10 4 4m-4-4L8 7",
-    dashboard: "M4 4h6v7H4zm10 0h6v4h-6zM4 15h6v5H4zm10-3h6v8h-6z",
-    analysis: "M4 19V9m6 10V5m6 14v-7m4 7H2",
-    report: "M6 3h9l3 3v15H6zm3 6h6m-6 4h6m-6 4h4",
-    chart: "M4 20h16M7 16v-5m5 5V7m5 9v-3",
-    library: "M4 19V5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zm0 0a2 2 0 0 0 2 2h13",
-    alert: "M12 3 2 21h20zm0 6v5m0 3v1",
-    arrow: "M5 12h14m-5-5 5 5-5 5",
-  };
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true" {...props}>
-      <path d={paths[name] ?? paths.dashboard} strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
+  const Icon = registry[name as keyof typeof registry] ?? LayoutDashboard;
+  return <Icon aria-hidden strokeWidth={1.8} {...(props as LucideProps)} />;
 }
