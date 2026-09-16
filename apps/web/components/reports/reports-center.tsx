@@ -232,7 +232,7 @@ export function ReportsCenter() {
       </header>
 
       {error ? (
-        <p role="alert" className="reports-center__error">
+        <p role="alert" className="reports-center__error flow-error">
           {error}
         </p>
       ) : null}
@@ -316,6 +316,7 @@ export function ReportsCenter() {
               ))}
               <button
                 type="button"
+                className="flow-btn flow-btn--primary"
                 disabled={busy || operationsFormats.length === 0}
                 onClick={() => void publishOperations()}
               >
@@ -323,9 +324,9 @@ export function ReportsCenter() {
               </button>
               <h3>经营报告产物历史（append-only）</h3>
               {operationsAttempts.length === 0 ? (
-                <p className="ml-muted">尚未生成正式产物。</p>
+                <p className="reports-center__muted">尚未生成正式产物。</p>
               ) : (
-                <table>
+                <table className="flow-table">
                   <thead>
                     <tr>
                       <th scope="col">#</th>
@@ -346,6 +347,7 @@ export function ReportsCenter() {
                           {attempt.download_available ? (
                             <button
                               type="button"
+                              className="flow-btn"
                               onClick={() => void download(attempt.attempt_id, attempt.format)}
                             >
                               下载
@@ -388,7 +390,7 @@ export function ReportsCenter() {
             ))}
           </select>
         </label>
-        <button type="button" disabled={busy || !metricSnapshotId} onClick={() => void freeze()}>
+        <button type="button" className="flow-btn flow-btn--primary" disabled={busy || !metricSnapshotId} onClick={() => void freeze()}>
           冻结快照
         </button>
         <p className="reports-center__hint">
@@ -436,12 +438,12 @@ export function ReportsCenter() {
               {format.toUpperCase()}
             </label>
           ))}
-          <button type="button" disabled={busy || formats.length === 0} onClick={() => void publish()}>
+          <button type="button" className="flow-btn flow-btn--primary" disabled={busy || formats.length === 0} onClick={() => void publish()}>
             生成选中格式
           </button>
 
           <h3>产物历史（append-only）</h3>
-          <table>
+          <table className="flow-table">
             <thead>
               <tr>
                 <th scope="col">#</th>
@@ -460,7 +462,7 @@ export function ReportsCenter() {
                   <td>{attempt.size_bytes ?? "-"}</td>
                   <td>
                     {attempt.download_available ? (
-                      <button type="button" onClick={() => void download(attempt.attempt_id, attempt.format)}>
+                      <button type="button" className="flow-btn" onClick={() => void download(attempt.attempt_id, attempt.format)}>
                         下载
                       </button>
                     ) : attempt.status === "failed" ? (

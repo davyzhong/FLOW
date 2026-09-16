@@ -147,3 +147,9 @@
   color: var(--rep-slate);
   font-size: 13px;
 }
+
+.ops-overview__muted {
+  margin: 0;
+  color: var(--rep-muted);
+  font-size: var(--flow-font-s);
+}

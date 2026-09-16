@@ -178,7 +178,8 @@ describe("DataWorkbench", () => {
       {},
       { timeout: 3000 },
     );
-    expect(alert.textContent).toContain("500");
+    // FE-05 统一中文文案：request()/submit() 失败均抛中文 FlowApiError
+    expect(alert.textContent).toContain("服务处理出错");
   });
 });
 async function uploadAndValidate() {
@@ -266,6 +267,6 @@ it("keeps publication blocked if acknowledged warning state cannot be refreshed"
   await uploadAndValidate();
   fireEvent.change(screen.getByLabelText("警告 issue-1 确认原因"), { target: { value: "已核实" } });
   fireEvent.click(screen.getByRole("button", { name: "确认警告 issue-1" }));
-  expect(await screen.findByRole("alert")).toHaveTextContent("状态刷新失败");
+  expect(await screen.findByRole("alert")).toHaveTextContent("服务暂时不可用");
   expect(screen.getByRole("button", { name: "发布此导入版本" })).toBeDisabled();
 });

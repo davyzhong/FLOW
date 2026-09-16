@@ -1,0 +1,102 @@
+/* 登录页：唯一无 AppShell 路由，独立但同一设计语言（--rep-* token 与侧栏同源）。 */
+.login-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: var(--rep-bg);
+  padding: 24px;
+}
+
+.login-card {
+  width: min(400px, 100%);
+  display: grid;
+  gap: var(--flow-space-3);
+  padding: 32px 28px;
+  background: var(--rep-card);
+  border: 1px solid var(--rep-line);
+  border-radius: var(--flow-radius-l);
+  box-shadow: var(--flow-shadow-card);
+}
+
+.login-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.login-brand span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: var(--rep-navy);
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.login-brand strong {
+  color: var(--rep-navy);
+  font-size: 16px;
+  letter-spacing: 0.02em;
+}
+
+.login-card h1 {
+  margin: 0;
+  font-size: 22px;
+  color: var(--rep-ink);
+}
+
+.login-hint {
+  margin: 0 0 var(--flow-space-2);
+  color: var(--rep-muted);
+  font-size: var(--flow-font-s);
+}
+
+.login-card label {
+  font-size: var(--flow-font-xs);
+  font-weight: 600;
+  color: var(--rep-muted);
+}
+
+.login-card input {
+  padding: 10px 12px;
+  border: 1px solid var(--rep-line-5);
+  border-radius: var(--flow-radius-s);
+  font-size: var(--flow-font-m);
+  color: var(--rep-ink);
+  background: var(--rep-card);
+}
+
+.login-card input:focus {
+  outline: 2px solid var(--rep-blue-soft);
+  border-color: var(--rep-blue);
+}
+
+.login-error {
+  margin: 0;
+  padding: var(--flow-space-2) var(--flow-space-3);
+  border: 1px solid var(--rep-red-soft);
+  border-radius: var(--flow-radius-s);
+  background: var(--flow-error-bg);
+  color: var(--flow-error);
+  font-size: var(--flow-font-s);
+  font-weight: 600;
+}
+
+.login-card button {
+  margin-top: var(--flow-space-2);
+  padding: 10px 16px;
+  border: none;
+  border-radius: var(--flow-radius-s);
+  background: var(--rep-navy-2);
+  color: #fff;
+  font-size: var(--flow-font-m);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.login-card button:hover { background: var(--rep-navy); }

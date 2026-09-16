@@ -4,7 +4,7 @@
   --line: var(--rep-line);
   --blue: var(--rep-blue);
   --navy: #13223a;
-  --green: var(--rep-teal);
+  --green: #075f45; /* F2 曾误改为 var(--rep-teal)（#0d9488 对白字 3.05:1 不达标），恢复 F2 前值 */
   --red: #912f3b;
   --amber: #805000;
   padding: 18px;
@@ -134,12 +134,30 @@
   display: flex;
   gap: 7px;
   align-items: center;
+  justify-content: space-between;
   margin-top: auto;
   padding: 16px 8px 0;
   border-top: 1px solid rgb(255 255 255 / 10%);
   color: #afbdd0;
   font-size: 9px;
 }
+
+.workflow-rail__status {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+}
+
+.workflow-rail__logout {
+  border: none;
+  background: none;
+  padding: 2px 4px;
+  color: #afbdd0;
+  font-size: 9px;
+  cursor: pointer;
+}
+
+.workflow-rail__logout:hover { color: #fff; text-decoration: underline; }
 
 .dashboard-workspace {
   min-width: 0;
@@ -400,7 +418,7 @@
 }
 
 .trend-line--revenue { stroke: var(--rep-blue); }
-.trend-line--profit { stroke: var(--rep-teal); }
+.trend-line--profit { stroke: #075f45; }
 .trend-line--cash { stroke: #8a4b00; }
 
 .chart-legend {
@@ -422,7 +440,7 @@
 }
 
 .chart-legend .revenue { color: var(--rep-blue); }
-.chart-legend .profit { color: var(--rep-teal); }
+.chart-legend .profit { color: #075f45; }
 .chart-legend .cash { color: #8a4b00; }
 
 .trend-details {

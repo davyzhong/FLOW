@@ -38,7 +38,7 @@ import "./statements.css";
 
 function toMessage(error: unknown): string {
   if (error instanceof FlowApiError) {
-    return `加载失败（${error.status} ${error.code}）`;
+    return `加载失败（${error.status}）：${error.message}`;
   }
   return error instanceof Error ? error.message : "未知错误";
 }

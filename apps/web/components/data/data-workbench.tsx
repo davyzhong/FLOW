@@ -177,13 +177,13 @@ export function DataWorkbench() {
             </li>
           ))}
         </ol>
-        <button type="button" onClick={() => intakeApi.downloadTemplate()}>
+        <button type="button" className="flow-btn" onClick={() => intakeApi.downloadTemplate()}>
           下载 FLOW 标准模板
         </button>
       </header>
 
       {error ? (
-        <p role="alert" className="data-workbench__error">
+        <p role="alert" className="data-workbench__error flow-error">
           {error}
         </p>
       ) : null}
@@ -223,7 +223,7 @@ export function DataWorkbench() {
 
       {state.phase === "mapping" && mapping ? (
         <div className="data-workbench__mapping">
-          <table>
+          <table className="flow-table">
             <caption>字段映射（可修改“源表头”以覆盖自动映射）</caption>
             <thead>
               <tr>
@@ -266,7 +266,7 @@ export function DataWorkbench() {
               )}
             </tbody>
           </table>
-          <button type="button" disabled={busy} onClick={() => void confirmMapping()}>
+          <button type="button" className="flow-btn flow-btn--primary" disabled={busy} onClick={() => void confirmMapping()}>
             确认映射并校验
           </button>
         </div>
@@ -303,12 +303,12 @@ export function DataWorkbench() {
                 <p>证据：{issue.evidence}</p>
                 <p>修复建议：{issue.repair_suggestion}</p>
                 {issue.severity === "warning" ? issue.acknowledged ? <p>已确认</p> : (
-                  <div>
+                  <div className="data-workbench__warning-reason">
                     <label>确认原因
                       <input aria-label={`警告 ${issue.id} 确认原因`} value={reasons[issue.id] ?? ""}
                         onChange={(event) => setReasons((prev) => ({ ...prev, [issue.id]: event.target.value }))} />
                     </label>
-                    <button type="button" aria-label={`确认警告 ${issue.id}`} disabled={busy || !reasons[issue.id]?.trim()}
+                    <button type="button" className="flow-btn" aria-label={`确认警告 ${issue.id}`} disabled={busy || !reasons[issue.id]?.trim()}
                       onClick={() => void acknowledge(issue.id)}>确认此警告</button>
                   </div>
                 ) : null}
@@ -320,21 +320,23 @@ export function DataWorkbench() {
               <li key={item.code}>{item.code}：{item.passed ? "通过" : "失败"} · 预期 {item.expected_value ?? "—"} · 实际 {item.actual_value ?? "—"}</li>
             ))}
           </ul>
-          <button type="button" disabled={busy} onClick={() => {
-            setError(null);
-            setState({ phase: "mapping", batchId: state.batchId, source: state.source, mapping: state.mapping });
-            setStage("map");
-          }}>返回修改映射</button>
-          <button type="button" disabled={busy || !canPublish} onClick={() => void publish()}>
-            发布此导入版本
-          </button>
+          <div className="data-workbench__actions">
+            <button type="button" className="flow-btn" disabled={busy} onClick={() => {
+              setError(null);
+              setState({ phase: "mapping", batchId: state.batchId, source: state.source, mapping: state.mapping });
+              setStage("map");
+            }}>返回修改映射</button>
+            <button type="button" className="flow-btn flow-btn--primary" disabled={busy || !canPublish} onClick={() => void publish()}>
+              发布此导入版本
+            </button>
+          </div>
         </div>
       ) : null}
 
       {state.phase === "published" ? (
         <div role="status" className="data-workbench__published">
           <h2>导入版本已发布</h2>
-          <button type="button" onClick={() => void intakeApi.exportStandardizedWorkbook(state.importVersion.id)}>
+          <button type="button" className="flow-btn" onClick={() => void intakeApi.exportStandardizedWorkbook(state.importVersion.id)}>
             下载标准化工作簿
           </button>
         </div>

@@ -73,13 +73,29 @@ function requestUrl(path: string): URL {
   return new URL(path, base || undefined);
 }
 
+// GET 响应非 2xx 的用户可见文案（FE-05：错误提示统一中文，不裸抛技术串）。
+const STATUS_TEXT: Record<number, string> = {
+  400: "请求参数无效",
+  401: "登录状态已失效，请重新登录",
+  403: "没有访问权限：请确认当前账号的角色或数据范围",
+  404: "资源不存在或尚未生成",
+  409: "操作与当前状态冲突",
+  500: "服务处理出错，请稍后重试",
+  502: "上游服务不可用，请稍后重试",
+  503: "服务暂时不可用，请稍后重试",
+};
+
+function statusText(status: number): string {
+  return STATUS_TEXT[status] ?? "请求失败，请稍后重试";
+}
+
 async function request<T>(path: string, signal?: AbortSignal): Promise<T> {
   const response = await fetch(requestUrl(path), {
     headers: { Accept: "application/json" },
     signal,
   });
   if (!response.ok) {
-    throw new Error(`FLOW API request failed with status ${response.status}`);
+    throw new FlowApiError(response.status, `upstream_status_${response.status}`, statusText(response.status));
   }
   return (await response.json()) as T;
 }
@@ -98,7 +114,7 @@ async function submit<T>(
   });
   if (!response.ok) {
     let code = `upstream_status_${response.status}`;
-    let message = `FLOW API request failed with status ${response.status}`;
+    let message = statusText(response.status);
     try {
       const parsed = (await response.json()) as ErrorBody;
       if (parsed.detail?.code) code = parsed.detail.code;

@@ -3,9 +3,9 @@ doc_id: FLOW-PLAN-FE-CONSISTENCY-REMEDIATION-20260916
 title: FLOW 全页面前端一致性修复与升级实施计划
 doc_type: plan
 status: active
-version: 1.0
+version: 1.1
 created_at: 2026-09-16
-updated_at: 2026-09-16
+updated_at: 2026-09-17
 owner: FLOW
 depends_on:
   - FLOW-PLAN-FE-DESIGN-UPGRADE-20260915
@@ -615,3 +615,56 @@ TanStack Query 已安装但尚未形成使用模式；Recharts 尚未引入。�
 ---
 
 Plan complete and saved to docs/superpowers/plans/2026-09-16-frontend-consistency-remediation-plan.md. Execution requires explicit user authorization and must follow the repository's current roadmap and closeout protocol.
+
+---
+
+## 10. 执行日志（滚动更新）
+
+### 2026-09-17 P0 批次（诊断吸收 + Task 1/2/3 主体 + 新发现两项）
+
+**对诊断的核对（HEAD 4c2e127，非诊断时的 ec6450a）：**
+- FE-01/FE-02/FE-03/FE-04 属实并已修复（见下）；FE-06（390px 溢出）在当前
+  HEAD 不复现——11 条路由 390×844 实测 body 宽全部 390，无横向溢出；
+- FE-12（dashboard-content 旧导航断言）已由 b4ff5e7 修复；TanStack Query
+  已由 06b893a 落地 statement-app 试点（诊断时点早于该提交）。
+
+**新发现（比诊断更深的根因）：**
+1. F2 批次（c84b006）声称落地的 token 定义从未入库：`--flow-space-1..6`、
+   `--flow-radius-s/m/l`、`--flow-font-xs/s/m`、`--flow-error/-bg`、
+   `--flow-info`、`--flow-shadow-card`、`--rep-line-3/4/5`、`--rep-slate`、
+   `--rep-teal`、`--rep-ok-soft-2` 共 17 个 token 只被消费从未定义，
+   flow-* 基础类与全部 Tailwind line-3/4/5 工具类静默失效。已在
+   globals.css `:root` 补齐（monotone 线阶 + 与既有调色板同源刻度）。
+2. F2 的「hex→var()」替换存在值漂移：dashboard `--green` 由 #075f45
+   （对白字 6.8:1）误改为 var(--rep-teal)（#0d9488，3.05:1），trend 利润线
+   与图例同病。已恢复 F2 前值；新增 `--rep-teal-strong: #0f766e` 供白字
+   按钮使用（review 发布按钮 3.74:1 → 5.3:1）。
+
+**本批落地：**
+- Task 1：退出入口从根布局 footer 移入 AppShell 侧栏（showLogout prop，
+  AUTH_TOKEN 门控）；登录页去内联样式（login.css，与主应用同一 token 源）。
+- Task 2：恢复 data-workbench.css（阶段条/拖放区/清洗/发布分区）与
+  reports-center.css（分区卡片/清单/表单区）；两页原生控件接入
+  flow-btn/flow-btn--primary/flow-table/flow-error；ml-muted 跨页借用改
+  reports-center__muted。
+- Task 3：client.ts `request()` GET 失败改抛中文 FlowApiError（STATUS_TEXT
+  映射 401/403/404/409/5xx），statement-app toMessage 统一
+  「加载失败（状态码）：中文说明」。
+- 守卫（对应 Task 0 的回归面）：tests/css-class-coverage.test.ts（tsx 内
+  BEM `__` 类必须有 CSS 定义——本批即由其抓获两个额外死类
+  investigation-head__text / ops-overview__muted，已补最小定义）；
+  tests/auth-shell.test.tsx（退出入口唯一性 + 登录页禁行内样式 +
+  根布局禁认证 UI）。
+- FE-06 视口：11 路由 390px 溢出扫描通过（scripts 内一次性探针，未入库；
+  Task 9 的 frontend-responsive.spec 待正式建）。
+
+**验证：** 单测 76/76（+4 守卫）；statements e2e 4/4（含 axe 与重试流）；
+dashboard 7/7（axe 898 违规归零，视觉基线 1440/1920 无需重录即通过）；
+navigation/module-boundaries 16/16；investigation 4/4。user-closure 全量
+本地复跑 1 失败（tests/integration/test_object_store.py MinIO
+RequestTimeout），隔离复跑 0.47s 通过——负载性环境 flake，与前端改动无关。
+
+**未完成（后续批次）：** Task 0 正式 e2e 门禁（frontend-consistency/
+frontend-responsive.spec）、Task 4（ProvenanceBadge 键盘可达与原文跳转）、
+Task 5（44px 触控目标）、Task 6-8（metric-library/operations/investigations
+逐页迁移）、Task 9（状态×视口矩阵归档）。

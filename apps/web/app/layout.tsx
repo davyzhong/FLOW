@@ -17,13 +17,12 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
+  // 根布局只承担文档骨架与全局 provider；认证 UI（退出入口）在 AppShell 侧栏，
+  // /login 是唯一无 AppShell 路由，因此不会出现全局孤立退出按钮。
   return (
     <html lang="zh-CN">
       <body>
         <Providers>{children}</Providers>
-        {process.env.AUTH_TOKEN && <footer style={{ padding: 16, textAlign: "center" }}>
-          <form action="/api/auth/logout" method="post"><button type="submit">退出登录</button></form>
-        </footer>}
       </body>
     </html>
   );

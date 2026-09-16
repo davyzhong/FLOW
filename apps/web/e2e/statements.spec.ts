@@ -62,7 +62,7 @@ test("报表列表失败可重试", async ({ page }) => {
   await page.goto("/statements");
   // 不能用裸 getByRole("alert")：Next.js dev-tools 悬浮层自带一个空 alert，
   // 会在 503 落地前抢先满足断言。只认应用自身错误态的文案。
-  await expect(page.getByText(/FLOW API request failed with status 503/)).toBeVisible();
+  await expect(page.getByText(/加载失败（503/)).toBeVisible();
   shouldSucceed = true;
   await page.getByRole("button", { name: "重试" }).click();
   await expect(page.getByText("顺丰控股").first()).toBeVisible();

@@ -118,6 +118,12 @@
   padding: 0.9rem 1rem;
 }
 
+.investigation-head__text {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
 .investigation-head h1 {
   margin: 0 0 0.3rem;
   font-size: 1.25rem;

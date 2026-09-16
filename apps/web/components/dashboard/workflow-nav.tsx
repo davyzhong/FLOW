@@ -37,7 +37,7 @@ function isActiveItem(pathname: string | null, target: string): boolean {
   return current === target || current.startsWith(`${target}/`);
 }
 
-export function WorkflowNav() {
+export function WorkflowNav({ showLogout = false }: { showLogout?: boolean }) {
   const pathname = usePathname();
   return (
     <aside className="workflow-rail">
@@ -61,7 +61,14 @@ export function WorkflowNav() {
             </ol>
           </div>
         ))}
-        <div className="workflow-rail__footer"><span className="status-dot" />已连接治理数据层</div>
+        <div className="workflow-rail__footer">
+          <span className="workflow-rail__status"><span className="status-dot" />已连接治理数据层</span>
+          {showLogout ? (
+            <form action="/api/auth/logout" method="post">
+              <button type="submit" className="workflow-rail__logout">退出登录</button>
+            </form>
+          ) : null}
+        </div>
       </nav>
     </aside>
   );

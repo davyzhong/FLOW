@@ -60,6 +60,35 @@
   --rep-blue: #1769e8;
   --rep-blue-soft: #eaf1fe;
   --rep-zebra: #f6f8fb;
+  /* 线阶（monotone：line-2 最浅 → line-5 最深，输入框/强边框用深端）。
+     F2 批次曾声称落地 token 集但定义从未入库（c84b006 只加了消费方），
+     下列 --flow-* 与 --rep-line-3..5/--rep-slate/--rep-teal/--rep-ok-soft-2
+     长期处于未定义状态——2026-09-17 一致性整改补齐。 */
+  --rep-line-3: #d3dce7;
+  --rep-line-4: #c9d4e0;
+  --rep-line-5: #bfccdc;
+  --rep-slate: #475569;
+  --rep-teal: #0d9488;
+  --rep-teal-strong: #0f766e; /* 白字按钮/正文用（#0d9488 对白字对比 3.74 不达 4.5:1） */
+  --rep-ok-soft-2: #d3ecdf;
+
+  /* 间距 / 圆角 / 字号刻度（flow-* 基础类消费） */
+  --flow-space-1: 4px;
+  --flow-space-2: 8px;
+  --flow-space-3: 12px;
+  --flow-space-4: 16px;
+  --flow-space-5: 24px;
+  --flow-space-6: 32px;
+  --flow-radius-s: 6px;
+  --flow-radius-m: 10px;
+  --flow-radius-l: 14px;
+  --flow-font-xs: 11px;
+  --flow-font-s: 12.5px;
+  --flow-font-m: 14px;
+  --flow-error: var(--rep-red);
+  --flow-error-bg: var(--rep-red-soft);
+  --flow-info: var(--rep-blue);
+  --flow-shadow-card: 0 8px 24px rgb(19 35 58 / 8%);
 }
 
 * {
