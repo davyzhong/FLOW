@@ -3,7 +3,7 @@ doc_id: FLOW-NAV-HANDOFF-001
 title: FLOW 交接文档
 doc_type: navigation
 status: current
-version: 2.0
+version: 2.1
 created_at: 2026-09-11
 updated_at: 2026-09-16
 owner: FLOW
@@ -12,7 +12,51 @@ applies_to: handoff
 
 # FLOW 交接文档（HANDOFF）
 
-## 0. 2026-09-16 最新续接：文档迁移 M0–M6 收官 + README v1.2（本页权威续接段）
+## 0. 2026-09-16（晚）最新续接：前端组件库收敛——评估 + 两项空缺落地
+
+- **写作者**：前端组件库收敛会话（评估「行业有标准库但手写了」→ 落地空缺项）。
+- **状态权威**：本节只做交接叙事；当前事实以 [PROJECT_STATE](../../00_start_here/PROJECT_STATE.md) 与 [CURRENT_ROADMAP](../../50_plans/CURRENT_ROADMAP.md) 为准。
+
+### 背景：用户在另一项目发现「重复造轮子」问题，要求排查 FLOW
+
+评估结论（35 个组件扫描）：底座选型规范（TanStack Query/Table、shadcn 三件套、lucide 已在）；真实空缺两处——**手写 SVG 图表约 630 行**（有意决策，与离线资料库零依赖站点同源）与 **UI 基础组件层薄**。
+
+### 关键发现：并行会话已系统接管大头（避免撞车）
+
+并行会话同日落地**前端 V2 提案**（`af0bfff`，2026-09-16 14:27，用户已纠正批准）：
+`docs/superpowers/plans/2026-09-15-frontend-design-upgrade-proposal.md`——
+Tailwind v4 + shadcn/ui + TanStack + **Recharts** 四阶段路线。阶段二第一批已进（`0dbc16a`：Button/DataTable/EmptyGuide/Provenance；`5770164` Tailwind preflight 修正）。
+**Recharts 图表迁移（F-Charts）与 shadcn 组件层（S-Foundation 含 Dialog/Tabs/Toast）属其主线，本会话不触碰。**
+
+### 本会话已完成（两项真实空缺，全部已推送）
+
+| Commit | 内容 | 验证 |
+|---|---|---|
+| `a5e5a81` | **dependency-graph → @xyflow/react（reactflow v12）**：260 行手写 SVG 渲染层换库，白得缩放/平移/MiniMap/拖拽/fitView；FLOW 自有逻辑原样保留（确定性分层布局、上下游闭包高亮、tier 过滤、环兜底） | vitest 72/72、tsc 干净、eslint --max-warnings 0 干净；4 个既有用例断言强度未降 |
+| `a8f3b8c` | **dashboard/icons.tsx 收敛到 lucide**：FlowIcon 保持 name API（调用方零改动），内部映射 lucide 组件 | 同上三重验证 |
+
+### 卡住的问题 / 登记项（无硬阻塞）
+
+1. reactflow 版图谱的**浏览器级走查未做**（e2e/statements 那套需 docker 基础设施；组件测试已过但视觉/交互需人眼或 Playwright 验收）——建议下次 `make dev-web` 后在 `/metric-library` graph tab 走查一遍。
+2. 给并行会话的提示：**waterfall 瀑布图在 Recharts 无原生 series**（官方 stacked-bar 技巧模拟或保留手写）——F-Charts 批次执行时注意。
+3. `@xyflow/react` 为新增依赖（+19 包）；提案 §4 的「新增依赖需用户确认」已由用户对本会话建议的「同意」覆盖。
+
+### 下一步
+
+1. **并行会话主线**：V2 提案阶段二剩余（F-DataTable 页面迁移/F-Provenance 溯源卡/F-EmptyGuide 空态迁移/F-ExportAudit）→ 阶段三页面模式；本会话两项已为其让路。
+2. 图谱走查（上条登记项 1）。
+3. 前端日常验证三连：`vitest run` + `tsc --noEmit` + `eslint --max-warnings 0`（仓库标准是零警告，非零 error）。
+
+### 本会话踩过的坑（增量）
+
+- **动手前先 `git log` 查并行工作**——本次靠它避免了与 V2 提案的正面撞车（我评估时看到的 ui/ 四组件与 package.json 依赖其实正是并行会话 15:19 刚铺的地基，勿把「正在分批盖的房子」误判为「烂尾」）。
+- reactflow 在 jsdom 需 polyfill `ResizeObserver` + `DOMMatrixReadOnly`（官方测试指引；见 `tests/components/dependency-graph.test.tsx` 顶部）。
+- eslint warnings 也要清零（`react-hooks/exhaustive-deps` 对条件初始化的 Set 会报——闭包逻辑包 `useMemo` 即解）。
+- lucide 组件 props 是 `LucideProps`（继承 SVGProps），透传时做一次类型断言避免 tsc 报错。
+
+---
+
+## 1. 2026-09-16 续接：文档迁移 M0–M6 收官 + README v1.2
 
 - **写作者**：文档迁移主会话（设计 V1.1 → 计划 V1.1 → M0–M6 全批次 → 用户确认关闭 → README 视觉增强）。
 - **当前事实入口**：本节只做交接叙事；状态以 [PROJECT_STATE](../../00_start_here/PROJECT_STATE.md) 与 [CURRENT_ROADMAP](../../50_plans/CURRENT_ROADMAP.md) 为准（冲突时以后者为准）。
@@ -75,7 +119,7 @@ python3 scripts/documentation/knowledge_release.py --repo . --verify-current
 
 ---
 
-## 1. 2026-09-14 续接：报告风视觉系统统一（GLM 协调者会话）
+## 2. 2026-09-14 续接：报告风视觉系统统一（GLM 协调者会话）
 
 - **本会话交接**：[`2026-09-14-glm-coord-visual-handoff.md`](2026-09-14-glm-coord-visual-handoff.md)
 - GLM 协调者会话（`mvs_ce3323c6851e4dd3961e3cfe51647d70`）收口两条主线：
@@ -85,7 +129,7 @@ python3 scripts/documentation/knowledge_release.py --repo . --verify-current
 - 验证：vitest 64/64、tsc 干净、eslint --max-warnings 0 干净、headless Chromium 实测 index.html 与 widget.html 零 JS 错误。
 - **未做**：本会话修改了 `e2e/statements.spec.ts` 的 heading 断言，但 e2e 全套未跑（需 docker compose 基础设施）。下一会话接手后先 `git status` 判断本会话的 WIP 与其他并行会话（Kimi / Sol / route-policy / security-audit）的 13 个未暂存文件归属。
 
-## 0. 2026-09-12 最新续接：O2/O3 已收口
+## 3. 2026-09-12 续接：O2/O3 已收口
 
 - O2 已由 `293308c` 提交推送，CI run `34604843637` 的 16 个 job 全绿。
 - O3 已完成：六主题经营快照支持 XLSX/PPTX/HTML/PDF 渲染，经营快照接入统一 `PublicationAttempt` 追加式发布登记、对象存储与报告中心下载；迁移头升至 `0024_operations_publication`。
