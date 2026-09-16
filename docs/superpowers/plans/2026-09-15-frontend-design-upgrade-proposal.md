@@ -2,8 +2,8 @@
 doc_id: FLOW-PLAN-FE-DESIGN-UPGRADE-20260915
 title: 前端设计升级方案 v1（基于五轮竞品调研）
 doc_type: plan
-status: proposed
-version: 1.0
+status: active
+version: 2.0
 created_at: 2026-09-15
 updated_at: 2026-09-15
 owner: FLOW
@@ -17,8 +17,10 @@ decision_refs: [D052, D053]
 
 # 前端设计升级方案 v1（基于五轮竞品调研）
 
-> 依据 [前端交互模式调研](../../competitive/2026-09-15-frontend-patterns-research.md)
-> 的十条结论，给出 FLOW 前端从「可用」到「专业可信」的设计升级路线。
+> v2（2026-09-15 用户纠正）：技术栈从「自研 token+纯 CSS」改为
+> **Tailwind v4 + shadcn/ui + TanStack Table/Query + Recharts**——有成熟组件
+> 库就引用，不自研。既有 `--rep-*` token 经 v4 `@theme` 指令直接映射，
+> 存量 CSS 渐进共存不做大爆炸重写。
 > 定位判断（调研依据）：FLOW 的主用户是**经分专员**（专业角色），密度应当
 > 中偏高；产品主张是「确定性 + 证据链」——前端的核心任务是把这个主张
 > **翻译成可点的交互**，而不是堆图表。
@@ -38,16 +40,20 @@ decision_refs: [D052, D053]
 ## 1. 分阶段落地路线
 
 ### 阶段一（已完成，本分支）：地基
-token 体系（globals.css 变量扩容 + 223 处硬编码收编）、六类 flow-* 基础
-样式、导航两级重组、落地页功能入口、空态引导雏形、reports-center API
-收编 + useApiQuery hook。即已完成的前端整体优化批次。
+token 体系（globals.css 变量扩容 + 223 处硬编码收编）、导航两级重组、
+落地页功能入口、空态引导雏形、reports-center API 收编。
+（v2 注：F2-5 手写的六类 flow-* 基础样式将被 shadcn/ui 组件替代——
+自研版作为迁移期兜底保留，新代码一律用 shadcn。）
 
-### 阶段二：表格与溯源（核心差异化，建议下一 Gate 主力）
+### 阶段二：组件库引入 + 表格与溯源（核心差异化，下一 Gate 主力）
 | 项 | 内容 | 调研出处 |
 |---|---|---|
-| F-DataTable | 引入 TanStack Table（headless 唯一新依赖），封装 FlowDataTable：排序/分面筛选/列可见性/dense 变体/summary footer/tabular-nums | 组件库层 |
+| S-Foundation | Tailwind v4 引入（`@theme` 映射 --rep-* token）；shadcn init + 首批组件（Button/Table/Dialog/Tabs/Form/Skeleton/Toast）；与存量 CSS 共存 | 官方 Tailwind v4 指南 |
+| F-DataTable | TanStack Table v8 + shadcn Data Table：排序/分面筛选/列可见性/dense 变体/summary footer/tabular-nums；dashboard 资产表与 statement 明细迁移 | 组件库层 |
 | F-Provenance | 溯源卡组件：数字 hover → 卡片（值/口径/单位/来源/页码），点击 → 原文页；数据源 = 已入库的 page_number/page_anchor | Stripe 模式 + B3 已有数据 |
-| F-EmptyGuide | 空态标准组件：{ kind: first-use/no-data/after-action } + 原因 + 内嵌动作 + 文档链接；表空态整表替换 | Carbon/Atlassian |
+| F-EmptyGuide | shadcn 空态模式 + Carbon 三分类（first-use/no-data/after-action）+ 内嵌动作 | Carbon/Atlassian |
+| F-Charts | 手写 SVG 图表（waterfall/donut/bar）评估迁移 Recharts（数据契约不变，渲染层换库） | shadcn charts = Recharts |
+| F-Query | useApiQuery 评估迁移 TanStack Query（缓存/重试/去重）；自研版保留为兜底 | 组件库层 |
 | F-ExportAudit | 下载/导出动作写审计事件 | Quick BI 导出控制 |
 
 ### 阶段三：页面模式升级（依赖阶段二组件）
@@ -63,12 +69,19 @@ token 体系（globals.css 变量扩容 + 223 处硬编码收编）、六类 flo
 - 中国式复杂报表电子表格（Quick BI 模式，需自由制表需求成立后）；
 - 多主题（暗色）与打印样式。
 
-## 2. 明确不采纳（防范围蔓延）
+## 2. 采纳与不采纳（v2）
 
-- Tailwind / Tremor / MUI / antd 等样式或组件框架（token+纯 CSS 已成体系）；
+**采纳**：Tailwind v4、shadcn/ui、TanStack Table、TanStack Query（评估）、
+Recharts（评估）——全部为行业标准、长期维护、与 React 19 兼容。
+
+**仍不采纳**：
 - 探索式自由 BI（Superset 路线，D052 范围外）；
-- 拖拽式仪表盘编辑器（观远模式——与确定性产品主张冲突）；
-- 深层导航/多级菜单（浅导航纪律）。
+- 拖拽式仪表盘编辑器（观远模式——与确定性产品主张冲突）;
+- 深层导航/多级菜单（浅导航纪律）；
+- MUI/antd（重主题绑定，与 shadcn 所有权模型冲突，二选一取 shadcn）。
+
+**迁移纪律**：增量共存（Tailwind 与存量 CSS 并行，新代码一律 Tailwind+shadcn）；
+每个页面迁移完即删其旧 CSS；禁止新代码再手写基础控件。
 
 ## 3. To-do（按阶段领取，须过路线图裁决）
 

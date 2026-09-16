@@ -78,12 +78,21 @@ confidentiality: project-internal
 
 来源：[Power BI Dashboard UI/UX Audit Framework](https://www.linkedin.com/pulse/power-bi-dashboard-uiux-audit-framework-ahmad-chamy-zfkuc)
 
-## 七、对 FLOW 的十条综合结论
+## 七、对 FLOW 的十条综合结论（v2，2026-09-15 用户纠正后修订）
 
-1. **不引入 Tailwind/Tremor/heavy UI 库**——token+纯 CSS 路线已启动且符合零依赖哲学；借鉴其组件 API 形状自研；
-2. **引入 TanStack Table（headless）**是唯一值得加的前端依赖：排序/筛选/虚拟化/列管理开箱即得，样式完全自控；
-3. **表格升级为 FlowDataTable**：dense 变体、summary footer（列合计）、tabular-nums、空态整表替换（Carbon 模式）；
-4. **溯源交互升级为 Stripe 式完整性**：数字 hover 卡（值/口径/来源/页码锚）→ 点击跳原文；这是把「确定性+证据链」翻译成前端语言；
+> v1 曾结论「不引入 Tailwind/Tremor」，被用户正确质疑：**有成熟组件库就引用，
+> 不自研**。v1 的论据（token+纯 CSS 已成体系）属沉没成本谬误——「风格不统一、
+> 工程差」的病根恰恰是全部手写。修订如下（v2 覆盖 v1 的第 1/3/4 条）：
+
+1. **引入 Tailwind v4 + shadcn/ui**（官方支持 React 19；v4 的 `@theme` CSS-first
+   配置与既有 `--rep-*` token 直接融合，存量 CSS 渐进共存）——自研六类基础
+   样式与手写图表迁移到行业标准组件；
+2. **引入 TanStack Table（headless）+ TanStack Query**：表格能力（排序/筛选/
+   虚拟化/列管理）与数据获取（缓存/重试/去重）均用行业标准，替换自研
+   useApiQuery 与手写表格逻辑；
+3. **表格升级为 FlowDataTable**（shadcn Data Table 模式）：dense 变体、summary
+   footer（列合计）、tabular-nums、空态整表替换（Carbon 模式）；
+4. **图表引入 Recharts**（shadcn charts 底座）：手写 SVG 瀑布/环形/柱状图迁移——保留确定性数据契约，渲染层换行业标准；
 5. **首屏工作流化**（Ramp 模式）：待审批草稿、待查异常指标、未完成构建作为默认视图的组成部分；
 6. **空态标准化**（Carbon/Atlassian）：EmptyGuide = 标题 + 为什么空 + 内嵌下一步动作 + 文档链接，区分 first-use/no-data/post-action；
 7. **浅导航纪律**：两级封顶（Q&A 已确认），页面内用锚点分区不再加层级；
