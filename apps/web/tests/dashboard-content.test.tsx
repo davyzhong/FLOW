@@ -17,9 +17,10 @@ describe("Finance BP dashboard content", () => {
     );
 
     expect(screen.getByRole("navigation", { name: "FLOW 工作流" })).toBeVisible();
+    expect(screen.getByText("内部经营分析")).toBeVisible();
     expect(screen.getByText("数据接入")).toBeVisible();
     expect(screen.getByText("经营总览")).toBeVisible();
-    expect(screen.getByText("分析与归因")).toBeVisible();
+    expect(screen.getByText("调查归因")).toBeVisible();
     expect(screen.getByText("报告与导出")).toBeVisible();
     expect(screen.getAllByTestId("metric-card")).toHaveLength(8);
     expect(screen.getByRole("img", { name: "近 12 个月经营趋势" })).toBeVisible();
