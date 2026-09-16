@@ -2,81 +2,34 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-import { FlowApiError, statementApi, type StatementReportList } from "../../lib/api/client";
+import {
+  flowApi,
+  statementApi,
+  type FreezeCandidate,
+  type OperationsSnapshot,
+  type PublishingAttempt,
+  type PublishingSnapshot,
+  type StatementReportList,
+} from "../../lib/api/client";
 import "./reports-center.css";
-
-type SnapshotLine = {
-  id: string;
-  metric_snapshot_id: string;
-  version: number;
-  title: string;
-  created_at: string | null;
-};
-
-type AttemptLine = {
-  attempt_id: string;
-  sequence: number;
-  format: string;
-  status: string;
-  error_message: string | null;
-  size_bytes: number | null;
-  content_type: string | null;
-  created_at: string | null;
-  download_available: boolean;
-  stored_sha256: string | null;
-};
-
-type FreezeCandidate = {
-  metric_snapshot_id: string;
-  batch_id: string;
-  period_label: string | null;
-  version: number;
-  approved_findings: number;
-  created_at: string | null;
-};
-
-type OperationsSnapshot = {
-  id: string;
-  statement_report_id: string;
-  version: number;
-  company_name: string;
-  stock_code: string;
-  period_label: string;
-  payload_hash: string;
-  created_at: string | null;
-};
 
 const FORMATS = ["pptx", "xlsx", "html", "pdf"] as const;
 
+type SnapshotLine = PublishingSnapshot;
+type AttemptLine = PublishingAttempt;
+
 async function fetchSnapshots(): Promise<SnapshotLine[]> {
-  const response = await fetch("/api/v1/publishing/snapshots", {
-    headers: { Accept: "application/json" },
-  });
-  if (!response.ok) throw new FlowApiError(response.status, "upstream", "加载失败");
-  return ((await response.json()) as { snapshots: SnapshotLine[] }).snapshots;
+  return statementApi.listPublishingSnapshots();
 }
-
 async function fetchFreezeCandidates(): Promise<FreezeCandidate[]> {
-  const response = await fetch("/api/v1/publishing/freeze-candidates", {
-    headers: { Accept: "application/json" },
-  });
-  if (!response.ok) return [];
-  const body = (await response.json()) as { candidates?: FreezeCandidate[] };
-  return body.candidates ?? [];
+  return statementApi.listFreezeCandidates().catch(() => []);
 }
-
 async function fetchAttempts(snapshotId: string): Promise<AttemptLine[]> {
-  const response = await fetch(`/api/v1/publishing/snapshots/${snapshotId}/attempts`);
-  if (!response.ok) return [];
-  return ((await response.json()) as { attempts: AttemptLine[] }).attempts;
+  return statementApi.listPublishingAttempts(snapshotId).catch(() => []);
 }
-
 async function fetchOperationsSnapshots(): Promise<OperationsSnapshot[]> {
-  const response = await fetch("/api/v1/operations/snapshots", {
-    headers: { Accept: "application/json" },
-  });
-  if (!response.ok) return [];
-  const rows = ((await response.json()) as { snapshots?: OperationsSnapshot[] }).snapshots ?? [];
+  const rows = await statementApi.listOperationsSnapshots().catch(() => []);
+  // 防御性过滤：缺关键字段的行不渲染（旧实现的行为，迁移时保留）
   return rows.filter(
     (row) =>
       typeof row.statement_report_id === "string" &&
@@ -84,11 +37,8 @@ async function fetchOperationsSnapshots(): Promise<OperationsSnapshot[]> {
       typeof row.payload_hash === "string",
   );
 }
-
 async function fetchOperationsAttempts(snapshotId: string): Promise<AttemptLine[]> {
-  const response = await fetch(`/api/v1/operations/snapshots/${snapshotId}/attempts`);
-  if (!response.ok) return [];
-  return ((await response.json()) as { attempts?: AttemptLine[] }).attempts ?? [];
+  return statementApi.listOperationsAttempts(snapshotId).catch(() => []);
 }
 
 export function ReportsCenter() {
@@ -109,11 +59,9 @@ export function ReportsCenter() {
 
   useEffect(() => {
     let cancelled = false;
-    fetch("/api/v1/statements", { headers: { Accept: "application/json" } })
-      .then((response) => (response.ok ? response.json() : { reports: [] }))
-      .then((body: { reports?: StatementReportList["reports"] }) =>
-        setObjectiveReports(body.reports ?? []),
-      )
+    statementApi
+      .listReports()
+      .then((body) => setObjectiveReports(body.reports ?? []))
       .catch(() => setObjectiveReports([]));
     fetchSnapshots()
       .then((rows) => {
@@ -335,7 +283,7 @@ export function ReportsCenter() {
                       checked={selectedOperations === row.id}
                       onChange={() => setSelectedOperations(row.id)}
                     />
-                    {row.company_name} · {row.period_label} · v{row.version} · 指纹 {row.payload_hash.slice(0, 12)}…
+                    {row.company_name} · {row.period_label} · v{row.version} · 指纹 {row.payload_hash?.slice(0, 12) ?? "—"}…
                   </label>
                 </li>
               ))}
@@ -424,7 +372,7 @@ export function ReportsCenter() {
                 value={candidate.metric_snapshot_id}
                 disabled={candidate.approved_findings === 0}
               >
-                {candidate.period_label ?? "未知期间"} · 批次 {candidate.batch_id.slice(0, 8)} · v
+                {candidate.period_label ?? "未知期间"} · 批次 {candidate.batch_id?.slice(0, 8) ?? "—"} · v
                 {candidate.version} · 已批准发现 {candidate.approved_findings}
                 {candidate.approved_findings === 0 ? "（不可冻结）" : ""}
               </option>
