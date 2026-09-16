@@ -63,7 +63,12 @@ class CiGateInventoryTests(unittest.TestCase):
     def test_publishing_gate_uses_the_workspace_playwright_version(self) -> None:
         script = PUBLISHING_GATE.read_text(encoding="utf-8")
 
-        self.assertIn("pnpm exec playwright pdf", script)
+        # 本机/CI 无全局 pnpm，统一走 npx 定版 pnpm 调用工作区（apps/web）内的
+        # playwright；禁止裸 npx playwright（可能拉到与工作区不同的版本）。
+        self.assertIn(
+            "npx --yes pnpm@10.17.1 --filter @flow/web exec playwright pdf",
+            script,
+        )
         self.assertNotIn("npx --yes playwright pdf", script)
 
 
