@@ -1,7 +1,9 @@
-@import "tailwindcss";
-
-/* Tailwind v4 CSS-first 主题：映射既有 --rep-* token（F2 体系不变，
-   Tailwind 工具类与存量 CSS 共存——前端设计升级 v2 阶段二 S-Foundation） */
+/* Tailwind v4（F2/S-Foundation）：不引入 preflight（CSS reset 会改变存量
+   页面视觉， 曾致 +49px 页高与 5% 像素差）——只取 theme 与 utilities 层，
+   工具类与存量 CSS 共存于同一 token 源。 */
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
 @theme inline {
   --color-ink: var(--rep-ink);
   --color-ink-2: var(--rep-ink-2);
