@@ -198,6 +198,23 @@ test.describe("responsive integrity", () => {
     });
   }
 
+  for (const width of [1024, 1440]) {
+    test.describe(`no overflow at ${width}px (data states)`, () => {
+      // Task 9 切片：三档视口矩阵。桌面宽度下同样要求真实数据态不撑破页面；
+      // 密集表格在自身容器内滚动，不允许把页面顶宽。
+      for (const route of ["/reports", "/statements", "/metric-library", "/investigations"] as const) {
+        test(`${route} at ${width}`, async ({ page }) => {
+          await page.setViewportSize({ width, height: 900 });
+          await mockRealisticData(page);
+          await page.goto(route, { waitUntil: "networkidle" });
+          await waitForStyles(page);
+          await page.waitForTimeout(500);
+          await measureOverflow(page, `${route}@${width}`);
+        });
+      }
+    });
+  }
+
   test.describe("with realistic data (route interception)", () => {
     // 数据密集页在真实数据形态下的溢出门禁：空态通过不代表数据态通过
     // （FE-06 的教训：552/599/501/644px 全部只出现在有数据的分支）。

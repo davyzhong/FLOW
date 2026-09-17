@@ -78,7 +78,7 @@ export function FlowDataTable<TData>({
   const cellPad = dense ? "py-1 px-2" : "py-1.5 px-3";
 
   return (
-    <div className={cn("w-full", className)}>
+    <div className={cn("w-full overflow-x-auto", className)}>
       <table className="w-full border-collapse text-[13px]">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (

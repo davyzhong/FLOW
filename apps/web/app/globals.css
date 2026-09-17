@@ -422,3 +422,50 @@ body {
   /* 行级动作链接（进入调查等）保证可点面积 */
   .metric-card a, .investigations-index__table a { padding: 6px 0; display: inline-block; }
 }
+
+/* PageState（阶段四）：页面状态统一外壳（加载/空/错误/403） */
+.page-state {
+  display: grid;
+  justify-items: start;
+  gap: var(--flow-space-3);
+  padding: var(--flow-space-6) var(--flow-space-5);
+  border: 1px dashed var(--rep-line-3);
+  border-radius: var(--flow-radius-m);
+  background: var(--rep-card);
+}
+
+.page-state--error, .page-state--forbidden {
+  border: 1px solid var(--rep-red-soft);
+  background: var(--flow-error-bg);
+}
+
+.page-state__title {
+  margin: 0;
+  font-size: 20px;
+  color: var(--rep-ink);
+}
+
+.page-state__heading {
+  margin: 0;
+  font-weight: 700;
+  color: var(--rep-red);
+}
+
+.page-state__message {
+  margin: 0;
+  color: var(--rep-ink-2);
+  font-size: var(--flow-font-m);
+  max-width: 72ch;
+}
+
+.page-state__detail {
+  margin: 0;
+  color: var(--rep-muted);
+  font-size: var(--flow-font-xs);
+}
+
+.page-state__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--flow-space-2);
+}

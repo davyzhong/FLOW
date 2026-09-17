@@ -3,13 +3,13 @@
 // 经营分析轨（D045）演示页：面向经营/业务管理者。
 // 与财务分析轨共享同一已发布指标快照（数字同源），本页只做规模、结构与效率视角的
 // 只读投影，不产生新的 Finding、不进入报告资格。
-import Link from "next/link";
 
 import { useCallback, useEffect, useState } from "react";
 
 import { flowApi, type DashboardResponse } from "../../lib/api/client";
 import { MarginMatrix } from "../dashboard/margin-matrix";
 import { MetricGrid } from "../dashboard/metric-grid";
+import { PageState } from "../ui/page-state";
 import { ProductPerformanceTable } from "../dashboard/product-performance-table";
 import { TrendPanel } from "../dashboard/trend-panel";
 import "./operations.css";
@@ -59,22 +59,25 @@ export function OperationsApp() {
         </p>
       </header>
 
-      {state.kind === "loading" ? <p role="status">正在读取经营数据…</p> : null}
+      {state.kind === "loading" ? (
+        <PageState status="loading" message="正在读取经营数据…" />
+      ) : null}
       {state.kind === "error" ? (
-        <div role="alert" className="operations-state">
-          <p>经营概览暂时无法加载</p>
-          <button type="button" onClick={() => load()}>重试</button>
-        </div>
+        <PageState
+          status="error"
+          message="经营概览暂时无法加载"
+          retry={() => load()}
+        />
       ) : null}
       {state.kind === "empty" ? (
-        <div className="operations-state operations-state--guide" role="status">
-          <p>{state.message}</p>
-          <p>
-            <Link href="/data">前往数据接入</Link>
-            <span aria-hidden="true"> · </span>
-            <Link href="/reports">前往报告发布</Link>
-          </p>
-        </div>
+        <PageState
+          status="empty"
+          message={state.message}
+          actions={[
+            { href: "/data", label: "前往数据接入" },
+            { href: "/reports", label: "前往报告发布" },
+          ]}
+        />
       ) : null}
 
       {state.kind === "loaded" ? (

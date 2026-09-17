@@ -3,7 +3,10 @@
 // 分析与归因入口：列出全部 Finding 并携带完整身份（D036）进入证据优先工作台。
 import { useEffect, useState } from "react";
 
+import type { ColumnDef } from "@tanstack/react-table";
+
 import { findingApi, type FindingListItem } from "../../lib/api/client";
+import { FlowDataTable } from "../ui/flow-data-table";
 import "./investigations-index.css";
 
 const STATUS_LABELS: Record<string, string> = {
@@ -29,6 +32,71 @@ function formatImpact(value: string): string {
   if (Math.abs(amount) >= 10_000) return `${(amount / 10_000).toFixed(1)} 万元`;
   return `${amount.toFixed(2)} 元`;
 }
+
+
+const columns: ColumnDef<FindingListItem, unknown>[] = [
+  {
+    accessorKey: "title",
+    header: "发现",
+    meta: { label: "发现" },
+    cell: (info) => <span>{info.getValue<string>()}</span>,
+  },
+  {
+    accessorKey: "finding_type",
+    header: "类型",
+    meta: { label: "类型" },
+    cell: (info) => <code>{info.getValue<string | null>() ?? "—"}</code>,
+  },
+  {
+    accessorKey: "impact_amount",
+    header: "影响金额",
+    meta: { label: "影响金额" },
+    cell: (info) => (
+      <span className="block text-right tabular-nums">{formatImpact(info.getValue<string>())}</span>
+    ),
+  },
+  {
+    accessorKey: "comparison_basis",
+    header: "对比口径",
+    meta: { label: "对比口径" },
+    cell: (info) => <span>{info.getValue<string | null>() ?? "—"}</span>,
+  },
+  {
+    accessorKey: "status",
+    header: "状态",
+    meta: { label: "状态" },
+    cell: (info) => {
+      const status = info.getValue<string>();
+      return (
+        <span className={`investigations-index__status investigations-index__status--${status}`}>
+          {STATUS_LABELS[status] ?? status}
+        </span>
+      );
+    },
+  },
+  {
+    accessorKey: "total_score",
+    header: "评分",
+    meta: { label: "评分" },
+    cell: (info) => {
+      const raw = info.getValue<string | number | null>();
+      return (
+        <span className="block text-right tabular-nums">
+          {raw ? Number(raw).toFixed(0) : "—"}
+        </span>
+      );
+    },
+  },
+  {
+    id: "actions",
+    header: "操作",
+    enableSorting: false,
+    meta: { label: "操作" },
+    cell: (info) => (
+      <a href={investigationHref(info.row.original)}>进入调查</a>
+    ),
+  },
+];
 
 export function InvestigationsIndex() {
   const [findings, setFindings] = useState<FindingListItem[] | null>(null);
@@ -70,38 +138,14 @@ export function InvestigationsIndex() {
 
       {findings && findings.length > 0 ? (
         <div className="investigations-index__table-wrap" role="region" aria-label="Finding 列表" tabIndex={0}>
-        <table className="investigations-index__table">
-          <thead>
-            <tr>
-              <th>发现</th>
-              <th>类型</th>
-              <th>影响金额</th>
-              <th>对比口径</th>
-              <th>状态</th>
-              <th>评分</th>
-              <th>操作</th>
-            </tr>
-          </thead>
-          <tbody>
-            {findings.map((finding) => (
-              <tr key={finding.finding_id}>
-                <td>{finding.title}</td>
-                <td><code>{finding.finding_type ?? "—"}</code></td>
-                <td>{formatImpact(finding.impact_amount)}</td>
-                <td>{finding.comparison_basis ?? "—"}</td>
-                <td>
-                  <span className={`investigations-index__status investigations-index__status--${finding.status}`}>
-                    {STATUS_LABELS[finding.status] ?? finding.status}
-                  </span>
-                </td>
-                <td>{finding.total_score ? Number(finding.total_score).toFixed(0) : "—"}</td>
-                <td>
-                  <a href={investigationHref(finding)}>进入调查</a>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+          {/* FlowDataTable 承担排序/局部滚动/密度（表格职责统一，阶段五） */}
+          <FlowDataTable
+            columns={columns}
+            data={findings}
+            getRowId={(finding) => finding.finding_id}
+            dense
+            pageSize={20}
+          />
         </div>
       ) : null}
     </div>

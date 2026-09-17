@@ -172,8 +172,9 @@ export function OperationsOverviewApp() {
       </p>
 
       <div className="ops-overview__controls">
-        <label htmlFor="operations-context">分析数据与期间</label>
-        <select
+        <div className="flow-field">
+          <label htmlFor="operations-context">分析数据与期间</label>
+          <select
           id="operations-context"
           value={selectedContext}
           onChange={(event) => setSelectedContext(event.target.value)}
@@ -203,15 +204,17 @@ export function OperationsOverviewApp() {
               ))}
             </optgroup>
           ) : null}
-        </select>
+          </select>
+        </div>
         {selectedReportId ? (
           <>
-            <button type="button" disabled={busy} onClick={freeze}>
+            <button type="button" className="flow-btn flow-btn--primary" disabled={busy} onClick={freeze}>
               冻结概览
             </button>
             {overview ? (
               <>
                 <a
+                  className="flow-btn"
                   href={statementApi.operationsOverviewHtmlUrl(selectedReportId)}
                   target="_blank"
                   rel="noreferrer"
@@ -219,16 +222,17 @@ export function OperationsOverviewApp() {
                   查看 HTML 报告
                 </a>
                 <a
+                  className="flow-btn"
                   href={statementApi.operationsOverviewPdfUrl(selectedReportId)}
                   target="_blank"
                   rel="noreferrer"
                 >
                   下载 PDF
                 </a>
-                <a href={statementApi.operationsOverviewXlsxUrl(selectedReportId)}>
+                <a className="flow-btn" href={statementApi.operationsOverviewXlsxUrl(selectedReportId)}>
                   下载 Excel
                 </a>
-                <a href={statementApi.operationsOverviewPptxUrl(selectedReportId)}>
+                <a className="flow-btn" href={statementApi.operationsOverviewPptxUrl(selectedReportId)}>
                   下载 PPT
                 </a>
               </>
@@ -245,7 +249,7 @@ export function OperationsOverviewApp() {
       ) : null}
 
       {state.status === "error" ? (
-        <p role="alert" className="ops-overview__error">
+        <p role="alert" className="ops-overview__error flow-error">
           {state.message}
         </p>
       ) : null}

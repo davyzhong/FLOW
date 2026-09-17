@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-FE-CONSISTENCY-REMEDIATION-20260916
 title: FLOW 全页面前端一致性修复与升级实施计划
 doc_type: plan
 status: active
-version: 1.3
+version: 1.4
 created_at: 2026-09-16
 updated_at: 2026-09-17
 owner: FLOW
@@ -733,3 +733,26 @@ module-boundaries-e2e 在 CI 的纯 web 栈（无 API）下暴露 /metric-librar
 **验证：** 单测 80/80（+4 溯源交互）；生产门禁 48/48（+5 数据态溢出 +
 2 触控断言）；dashboard 7/7、statements 4/4、investigation 4/4；lint
 0 error/1 登记例外；m6 PASS。
+
+### 2026-09-17 P3 批次（Task 6-8 切片：PageState/表格职责/Operations-Investigations 迁移）
+
+- **PageState 统一状态组件**（阶段四）：h1 稳定渲染（可选，页面已有无条件
+  h1 时省略）、error/forbidden 用 role=alert、403 受控展示不裸抛技术串、
+  恢复动作 = 重试（flow-btn--primary）+ 引导链接；operations-app 三分支
+  已迁移，组件测试 4 条。
+- **表格职责统一**（阶段五）：FlowDataTable 外层内建 overflow-x 滚动——
+  任何使用方不再依赖页面自带 .stmt-table-wrap 之类的容器；investigations
+  索引表从手写 table 迁入 FlowDataTable（排序/密度/局部滚动；进入调查
+  链接可访问名不变，investigation e2e 4/4 佐证）。
+- **Operations 控件迁移**（Task 8 切片）：冻结按钮 → flow-btn--primary、
+  查看/下载链接 → flow-btn、错误块接 flow-error、label+select 包进
+  flow-field（统一焦点态与 44px 触控目标）。
+- **Task 9 切片**：溢出门禁扩到 1024/1440 两档视口 × 数据密集四页
+  （路由拦截数据态）——门禁矩阵现覆盖 390/1024/1440。
+- lint 维持 0 error / 1 登记例外（TanStack v8 编译提示）。
+
+**验证：** 单测 84/84（+4 PageState）；生产门禁 56/56（+8 视口门禁）；
+investigation 4/4、dashboard 7/7、statements 4/4；m6 PASS。
+
+**未完成：** metric-library 全量迁移（761 行 ml-* CSS 的系统性收编）、
+溯源真实来源链接（后端供稿决策）、Task 9 五态×三视口全矩阵归档截图。
