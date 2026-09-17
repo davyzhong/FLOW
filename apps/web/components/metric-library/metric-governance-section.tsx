@@ -1,12 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import {
-  FlowApiError,
   metricLibraryApi,
-  type MetricCoverageCell,
-  type MetricCoverageSnapshot,
   type MetricGovernanceEventLine,
   type MetricLibraryEntry,
 } from "../../lib/api/client";

@@ -4,7 +4,6 @@ import { useCallback, useEffect, useState } from "react";
 
 import { EmptyGuide } from "../ui/empty-guide";
 import {
-  flowApi,
   statementApi,
   type FreezeCandidate,
   type OperationsSnapshot,

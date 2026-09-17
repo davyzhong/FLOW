@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { createColumnHelper, type ColumnDef } from "@tanstack/react-table";
+import { type ColumnDef } from "@tanstack/react-table";
 
 import { FlowDataTable } from "../../components/ui/flow-data-table";
 import { EmptyGuide } from "../../components/ui/empty-guide";

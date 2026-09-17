@@ -1,14 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import {
-  FlowApiError,
   metricLibraryApi,
   type MetricCoverage,
   type MetricCoverageCell,
   type MetricCoverageSnapshot,
-  type MetricLibraryEntry,
 } from "../../lib/api/client";
 
 const COMPANY_INITIALS: Record<string, string> = {

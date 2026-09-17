@@ -25,7 +25,6 @@ const SECTION_LABELS: Record<string, string> = {
 };
 
 export function CopilotPanel({
-  context,
   query,
 }: {
   context: InvestigationContext;

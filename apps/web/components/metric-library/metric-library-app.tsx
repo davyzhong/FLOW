@@ -8,10 +8,6 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   FlowApiError,
   metricLibraryApi,
-  type MetricCoverage,
-  type MetricCoverageCell,
-  type MetricCoverageSnapshot,
-  type MetricGovernanceEventLine,
   type MetricLibrary,
   type MetricLibraryEntry,
 } from "../../lib/api/client";
@@ -51,22 +47,6 @@ const TIME_BEHAVIOR_LABELS: Record<string, string> = {
   period_flow: "期间流量",
   point_balance: "时点余额",
   average_balance: "平均余额",
-};
-
-const COMPANY_INITIALS: Record<string, string> = {
-  alibaba_9988: "阿",
-  cainiao: "菜",
-  jd_logistics_2618: "京",
-  sf_002352: "顺",
-  tencent_0700: "腾",
-};
-
-const COVERAGE_COMPANY_NAMES: Record<string, string> = {
-  alibaba_9988: "阿里巴巴",
-  cainiao: "菜鸟",
-  jd_logistics_2618: "京东物流",
-  sf_002352: "顺丰控股",
-  tencent_0700: "腾讯控股",
 };
 
 export function coverageGrade(ratio: number): { label: string; tier: "a-plus" | "a" | "b-plus" | "b" | "c" } {

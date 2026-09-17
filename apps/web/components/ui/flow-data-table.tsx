@@ -6,9 +6,6 @@
 
 import * as React from "react";
 import {
-  type ColumnMeta,
-} from "@tanstack/react-table";
-import {
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,

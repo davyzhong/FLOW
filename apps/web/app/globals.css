@@ -415,4 +415,10 @@ body {
 @media (max-width: 780px) {
   .flow-btn { min-height: 44px; }
   .flow-field input, .flow-field select, .flow-field textarea { min-height: 44px; }
+  /* 表单 select 与文件选择是表单级交互件，窄屏一律 44px（FE-07：
+     operations 筛选 select 实测 215×19、data 文件选择 192×21） */
+  select { min-height: 44px; }
+  input[type="file"] { min-height: 44px; }
+  /* 行级动作链接（进入调查等）保证可点面积 */
+  .metric-card a, .investigations-index__table a { padding: 6px 0; display: inline-block; }
 }

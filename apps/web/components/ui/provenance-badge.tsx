@@ -4,7 +4,7 @@
 // page/page_anchor 来自迁移 0029 的 statement_line_item 列；
 // 无溯源数据时渲染「—」——不伪造定位。
 
-import { useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 import { cn } from "../../lib/utils";
 
@@ -74,6 +74,20 @@ export function ProvenanceHover({
 
 export function ProvenanceBadge({ page, anchor, sourceRef, className }: ProvenanceProps) {
   const [open, setOpen] = useState(false);
+  const rootRef = useRef<HTMLSpanElement | null>(null);
+
+  // 点击外部关闭（键盘 Tab 离开由 onBlur 兜底）。
+  useEffect(() => {
+    if (!open) return;
+    const onPointerDown = (event: PointerEvent) => {
+      if (rootRef.current && !rootRef.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => document.removeEventListener("pointerdown", onPointerDown);
+  }, [open]);
+
   if (page === null || page === undefined) {
     return (
       <span
@@ -86,7 +100,7 @@ export function ProvenanceBadge({ page, anchor, sourceRef, className }: Provenan
   }
   const anchorLabel = anchor ? ANCHOR_LABELS[anchor] ?? anchor : "未知锚定";
   return (
-    <span className={cn("group relative inline-block", className)}>
+    <span className={cn("group relative inline-block", className)} ref={rootRef}>
       <button
         type="button"
         className="cursor-help rounded border border-line-4 px-1.5 py-0.5 text-xs text-muted hover:border-blue hover:text-blue"
@@ -94,6 +108,9 @@ export function ProvenanceBadge({ page, anchor, sourceRef, className }: Provenan
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
         onBlur={() => setOpen(false)}
+        onKeyDown={(event) => {
+          if (event.key === "Escape") setOpen(false);
+        }}
       >
         p{page}
       </button>

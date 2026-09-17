@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-FE-CONSISTENCY-REMEDIATION-20260916
 title: FLOW 全页面前端一致性修复与升级实施计划
 doc_type: plan
 status: active
-version: 1.2
+version: 1.3
 created_at: 2026-09-16
 updated_at: 2026-09-17
 owner: FLOW
@@ -706,3 +706,30 @@ statements e2e 4/4；check_docs m6 PASS。
 module-boundaries-e2e 在 CI 的纯 web 栈（无 API）下暴露 /metric-library
 错误态缺 h1（本地因 docker API 可达走了 loaded 态假绿，即 FE-10 原文）。
 已修：loading/error 分支保留稳定「指标库」h1（ml-page-title）。43/43 复绿。
+
+### 2026-09-17 P2 批次（review 吸收：数据态门禁、触控目标、溯源交互、lint 清零）
+
+**review 核实结论**（HEAD 56be47d）：溢出四页表格、「测试未提交」「调试文件
+存在」「metric-library 错误态缺 h1」均为过时快照（P1 已修复并 CI 绿）；
+**属实并本批关闭**：lint 19 条警告、触控目标缺口（operations select
+215×19、data 文件选择 192×21）、CI 门禁不含真实数据态、溯源卡 Escape/
+外点关闭缺失。
+
+**本批落地：**
+- lint 19→1：清理全部未使用导入；保留 1 条 TanStack Table v8「incompatible
+  library」编译提示为**登记例外**（v8 pin 的既定代价，阶段三评估升级）。
+- 数据态门禁（阶段六切片）：frontend-responsive 新增「真实数据态」describe——
+  路由拦截注入 statements 明细、metric-library、investigations、publishing
+  快照固定数据，数据密集四页在 390px 的溢出门禁不再依赖环境是否有数据。
+- 触控目标（FE-07 切片）：≤780px 下全站 select 与 input[type=file] ≥44px；
+  门禁新增 operations select 与 data 文件选择的计算高度断言。
+- 溯源交互（FE-08 切片）：Escape 关闭、点击外部关闭（pointerdown 监听）、
+  组件测试 4 条（占位不伪造/aria-expanded 翻转/Escape/外点关闭）。真实来源
+  链接仍待后端供稿决策（与浮层 pointer-events 联动，Task 9 前关闭）。
+- h1 状态扫查：operations/investigations/analysis 页面头 h1 无条件渲染 ✓；
+  dashboard 非 loaded 态由 dashboard-app 页头提供 h1 ✓（组件级扫查曾误加
+  重复 h1，已撤销）。
+
+**验证：** 单测 80/80（+4 溯源交互）；生产门禁 48/48（+5 数据态溢出 +
+2 触控断言）；dashboard 7/7、statements 4/4、investigation 4/4；lint
+0 error/1 登记例外；m6 PASS。
