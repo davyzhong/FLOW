@@ -770,3 +770,11 @@
 .ml-grade--b-plus { background: var(--rep-warn-soft, var(--rep-warn-soft)); color: var(--rep-warn, var(--rep-warn)); }
 .ml-grade--b { background: #fef0d2; color: #8a5b0a; }
 .ml-grade--c { background: var(--rep-red-soft, var(--rep-red-soft)); color: var(--rep-red, var(--rep-red)); }
+
+/* 加载/错误态的稳定页面标题（FE-10） */
+.ml-page-title {
+  margin: 0 0 8px;
+  font-size: 30px;
+  line-height: 1.2;
+  font-weight: 600;
+}

@@ -701,3 +701,8 @@ statements e2e 4/4；check_docs m6 PASS。
 
 **未完成：** Task 6-8 逐页迁移（本批的溢出修复是止血，页面级 token/组件
 迁移仍按计划推进）、Task 9 状态×视口矩阵归档、原文跳转后端供稿。
+
+#### P1 补充（CI 首轮红灯修复）
+module-boundaries-e2e 在 CI 的纯 web 栈（无 API）下暴露 /metric-library
+错误态缺 h1（本地因 docker API 可达走了 loaded 态假绿，即 FE-10 原文）。
+已修：loading/error 分支保留稳定「指标库」h1（ml-page-title）。43/43 复绿。

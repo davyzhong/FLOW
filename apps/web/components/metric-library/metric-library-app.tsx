@@ -298,15 +298,24 @@ export function MetricLibraryApp() {
     load();
   }, [load]);
 
+  // 加载/错误态也保留页面 h1（FE-10：错误态缺少稳定页面标题）。
   if (state.kind === "loading") {
-    return <div className="ml-state" role="status">正在读取指标库…</div>;
+    return (
+      <div className="metric-library">
+        <h1 className="ml-page-title">指标库</h1>
+        <div className="ml-state" role="status">正在读取指标库…</div>
+      </div>
+    );
   }
   if (state.kind === "error") {
     return (
-      <div className="ml-state ml-state--error" role="alert">
-        <p>指标库暂时无法加载</p>
-        <p className="ml-state__detail">{state.message}</p>
-        <button type="button" onClick={retry}>重试</button>
+      <div className="metric-library">
+        <h1 className="ml-page-title">指标库</h1>
+        <div className="ml-state ml-state--error" role="alert">
+          <p>指标库暂时无法加载</p>
+          <p className="ml-state__detail">{state.message}</p>
+          <button type="button" onClick={retry}>重试</button>
+        </div>
       </div>
     );
   }
