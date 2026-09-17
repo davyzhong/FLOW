@@ -1,3 +1,15 @@
+---
+doc_id: FLOW-NAV-LEGACY-3174
+title: Obsidian 固定截面增量扫描（第二截面）与图片知识化层评估
+doc_type: navigation
+status: current
+version: 1.0
+created_at: 2026-09-17
+updated_at: 2026-09-17
+owner: FLOW
+applies_to: docs
+---
+
 # Obsidian 固定截面增量扫描（第二截面）与图片知识化层评估
 
 登记日期：2026-09-17；基线：`obsidian-2026-09-12T15:46+08:00`（首轮截面）→ 本截面 `obsidian-2026-09-17T16:00+08:00`。承接 [首轮评估总册](2026-09-12-obsidian-internal-kb-assessment.md)（借鉴附录 #19）与 [首轮八组扫描明细](2026-09-12-obsidian-scan/)。本册回答两个变化后的增量更新：①vault 内容大幅增长；②Davybase 管线新增**图片知识化**能力（多模态图片解读 + 无图文档摘要，附录区写入 vault 原文）。
