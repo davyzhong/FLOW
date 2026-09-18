@@ -24,7 +24,7 @@ export function DashboardError({ retry }: { retry: () => void }) {
   return (
     <div className="dashboard-state dashboard-state--error" role="alert">
       <p>经营驾驶舱暂时无法加载</p>
-      <button type="button" onClick={retry}>
+      <button type="button" className="flow-btn" onClick={retry}>
         重试
       </button>
     </div>

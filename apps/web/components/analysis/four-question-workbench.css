@@ -12,14 +12,7 @@
 }
 
 .workbench__controls {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.workbench__error {
-  color: #b91c1c;
-  font-weight: 600;
+  margin: 4px 0;
 }
 
 .workbench__identity {

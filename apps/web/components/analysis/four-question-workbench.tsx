@@ -84,7 +84,7 @@ export function FourQuestionWorkbench() {
         增长、盈利、资本、现金四问统领；指标缺失时给出解释性状态，不编造数值。
       </p>
 
-      <div className="workbench__controls">
+      <div className="workbench__controls flow-field">
         <label htmlFor="workbench-report">选择财报</label>
         <select
           id="workbench-report"
@@ -101,7 +101,7 @@ export function FourQuestionWorkbench() {
       </div>
 
       {state.status === "error" ? (
-        <p role="alert" className="workbench__error">
+        <p role="alert" className="workbench__error flow-error">
           {state.message}
         </p>
       ) : null}
