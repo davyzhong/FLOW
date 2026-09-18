@@ -781,3 +781,35 @@ next-server，5 个残留实例曾让首轮门禁跑 30 分钟不出结果）。
 **未完成：** Task 6 另一半（investigations 详情页深度迁移）、Task 7 已由
 F-Query/F-Charts 裁决覆盖、Task 8 其余页面切片、溯源真实来源链接（后端
 供稿决策）、Task 9 五态×三视口全矩阵归档截图。
+
+### 2026-09-18 P5 批次（Task 6 收尾 + Task 8 切片 + Task 9 状态门禁与归档，连续执行）
+
+- **Task 6 完成（b7b4257）**：investigations 详情页四类非加载态迁 PageState
+  （h1「经营调查」稳定；返回驾驶舱成为引导动作）；保存结论/确认证据（primary）、
+  否定证据（danger）、审阅流转、Copilot 提问共 7 处按钮迁 flow-btn 变体；
+  孤儿 investigation-state 样式块删除。**证据工作台专用色板按完成标准保留**
+  （66 色自成体系，不为统一视觉而同质化）。
+- **Task 8 切片（3089472）**：dashboard 错误态重试按钮迁 flow-btn（加载脉冲为
+  签名视觉，保留）；四问工作台错误条迁 flow-error、财报选择器包 flow-field、
+  私有色彩/结构规则裁剪；public/internal 模块落地页审计=纯链接无控件，免迁。
+- **Task 9 状态门禁（9cf8cb3）**：新增 e2e/frontend-states.spec.ts——
+  5 路由 × {加载 / 503 / 403} 结构断言（390px；任何状态 h1 不消失、
+  role=status/alert 语义、错误文案中文、PageState 页有重试）。**门禁抓到并
+  修复两个真实缺口**：① operations-overview 根本没有加载态（idle 直接渲染
+  空控件，已补 role=status）；② Next.js RouteAnnouncer 本身是 role=alert，
+  alert 断言必须收窄 main 区域（strict mode 双元素冲突）；403 文案存在两套
+  既定措辞（STATUS_TEXT「授权拒绝」与 overview 角色指引版「没有访问权限」），
+  门禁接受两套。
+- **Task 9 归档（02c11ea）**：state-matrix-archive.spec.ts（按需生成，
+  FLOW_STATE_MATRIX_ARCHIVE=1 双保险防误跑）产出数据密集四页 × 5 态 ×
+  3 视口（390/1024/1440）共 60 张全页截图 + 索引册，落
+  docs/assets/screenshots/state-matrix/；抽查属实（loaded 真数据态、
+  error 为 PageState 壳）。门禁矩阵至此为：一致性（10 路由）+ 溢出
+  （11 路由 × 3 视口 + 数据态）+ 状态（5 路由 × 3 态）+ 导航/边界。
+
+**验证：** 单测 86/86；lint 0 error/1 登记例外；生产构建门禁 69/69
+（+13 状态断言）；investigation e2e 4/4。
+
+**未完成（均待用户/外部决策）：** 溯源真实来源链接（后端供稿决策）、
+F-ExportAudit（后端工作包，未领取）、AI 问数 LLM 通道（另行裁决）。
+Task 0–9 至此全部关闭或切片交付。
