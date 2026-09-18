@@ -1,3 +1,15 @@
+---
+doc_id: FLOW-NAV-STATE-MATRIX-001
+title: 前端状态矩阵归档索引（Task 9 证据）
+doc_type: navigation
+status: current
+version: 1.0
+created_at: 2026-09-18
+updated_at: 2026-09-18
+owner: FLOW
+applies_to: docs
+---
+
 # 前端状态矩阵归档（Task 9 证据）
 
 > 由 `apps/web/e2e/state-matrix-archive.spec.ts` 按需生成
