@@ -75,7 +75,7 @@ async def test_metric_library_falls_back_to_yaml_when_db_empty(client: AsyncClie
     assert response.status_code == 200
     body: dict[str, Any] = response.json()
     assert body["dictionary_id"] == "flow.metric_dictionary.v1"
-    assert len(body["metrics"]) == 64
+    assert len(body["metrics"]) == 65
     assert len(body["accounting"]["accounts"]) == 167
 
 
@@ -84,7 +84,7 @@ async def test_import_lands_dictionary_and_read_serves_db(client: AsyncClient) -
     response = await client.post("/api/v1/metric-library/import", json={"actor": "flow-dev-bp"})
     assert response.status_code == 200, response.text
     assert response.json() == {
-        "metrics": 64,
+        "metrics": 65,
         "subjects": 167,
         "standards": 48,
         "templates": 32,
@@ -95,7 +95,7 @@ async def test_import_lands_dictionary_and_read_serves_db(client: AsyncClient) -
     assert listing.status_code == 200
     body: dict[str, Any] = listing.json()
     assert body["dictionary_id"] == "flow.metric_dictionary.v1"
-    assert len(body["metrics"]) == 64
+    assert len(body["metrics"]) == 65
     roe = next(m for m in body["metrics"] if m["metric_code"] == "roe")
     assert roe["default_caliber"].startswith("净利润 ÷ 平均净资产")
 
@@ -104,14 +104,14 @@ def test_importer_direct_counts_service_layer(db_session: Session) -> None:
     """导入器业务口径（绕过被阻断的 HTTP 治理写，直接服务层验证）。"""
     summary = import_all(db_session, CONFIG_ROOT)
     assert summary == {
-        "metrics": 64,
+        "metrics": 65,
         "subjects": 167,
         "standards": 48,
         "templates": 32,
         "mappings": 28,
     }
     rows = db_session.query(MetricDictionaryEntry).count()
-    assert rows == 64
+    assert rows == 65
     subjects = db_session.query(AccountingSubject).count()
     assert subjects == 167
 
@@ -139,7 +139,7 @@ async def test_retire_dictionary_hides_it_from_default_read(
         .count()
     )
     # retire 生效：全部条目 retired；默认读取在无 effective 行时回退 YAML
-    assert retired == 64
+    assert retired == 65
     listing = await client.get("/api/v1/metric-library")
     assert listing.status_code == 200
     assert listing.json()["dictionary_id"] == "flow.metric_dictionary.v1"
@@ -148,7 +148,7 @@ async def test_retire_dictionary_hides_it_from_default_read(
 def test_importer_direct_counts(db_session: Session) -> None:
     summary = import_all(db_session, CONFIG_ROOT)
     assert summary == {
-        "metrics": 64,
+        "metrics": 65,
         "mappings": 28,
         "subjects": 167,
         "standards": 48,
