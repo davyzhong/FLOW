@@ -1987,6 +1987,44 @@ export interface components {
             next_allowed_actions: string[];
         };
         /**
+         * IndustryOpsIndicator
+         * @description 行业经营指标参考目录条目：暂无财报取数源，仅作口径与对标参考。
+         */
+        IndustryOpsIndicator: {
+            /** Code */
+            code: string;
+            /** Name */
+            name: string;
+            /** Meaning */
+            meaning: string;
+        };
+        /**
+         * IndustryReferencePack
+         * @description 行业参考包（借鉴 #21）：财务侧基准差异 + 行业经营指标目录。
+         */
+        IndustryReferencePack: {
+            /** Industry Id */
+            industry_id: string;
+            /** Name */
+            name: string;
+            /** Note */
+            note: string;
+            /**
+             * Financial Reference
+             * @default {}
+             */
+            financial_reference: {
+                [key: string]: string;
+            };
+            /**
+             * Ops Indicators
+             * @default []
+             */
+            ops_indicators: components["schemas"]["IndustryOpsIndicator"][];
+            /** Provenance */
+            provenance: string;
+        };
+        /**
          * InvestigationContextResponse
          * @description Read-only evidence-first Investigation context.
          */
@@ -2421,6 +2459,11 @@ export interface components {
             metrics: components["schemas"]["MetricEntry"][];
             /** Relations */
             relations: components["schemas"]["MetricRelation"][];
+            /**
+             * Industry Reference Packs
+             * @default []
+             */
+            industry_reference_packs: components["schemas"]["IndustryReferencePack"][];
             accounting: components["schemas"]["AccountingFoundation"];
         };
         /** MetricRelation */

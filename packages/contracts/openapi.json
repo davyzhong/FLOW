@@ -6853,6 +6853,75 @@
         ],
         "title": "ImportVersionResponse"
       },
+      "IndustryOpsIndicator": {
+        "properties": {
+          "code": {
+            "type": "string",
+            "title": "Code"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "meaning": {
+            "type": "string",
+            "title": "Meaning"
+          }
+        },
+        "type": "object",
+        "required": [
+          "code",
+          "name",
+          "meaning"
+        ],
+        "title": "IndustryOpsIndicator",
+        "description": "行业经营指标参考目录条目：暂无财报取数源，仅作口径与对标参考。"
+      },
+      "IndustryReferencePack": {
+        "properties": {
+          "industry_id": {
+            "type": "string",
+            "title": "Industry Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "note": {
+            "type": "string",
+            "title": "Note"
+          },
+          "financial_reference": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Financial Reference",
+            "default": {}
+          },
+          "ops_indicators": {
+            "items": {
+              "$ref": "#/components/schemas/IndustryOpsIndicator"
+            },
+            "type": "array",
+            "title": "Ops Indicators",
+            "default": []
+          },
+          "provenance": {
+            "type": "string",
+            "title": "Provenance"
+          }
+        },
+        "type": "object",
+        "required": [
+          "industry_id",
+          "name",
+          "note",
+          "provenance"
+        ],
+        "title": "IndustryReferencePack",
+        "description": "行业参考包（借鉴 #21）：财务侧基准差异 + 行业经营指标目录。"
+      },
       "InvestigationContextResponse": {
         "properties": {
           "identity": {
@@ -8199,6 +8268,14 @@
             },
             "type": "array",
             "title": "Relations"
+          },
+          "industry_reference_packs": {
+            "items": {
+              "$ref": "#/components/schemas/IndustryReferencePack"
+            },
+            "type": "array",
+            "title": "Industry Reference Packs",
+            "default": []
           },
           "accounting": {
             "$ref": "#/components/schemas/AccountingFoundation"

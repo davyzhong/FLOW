@@ -19,6 +19,7 @@ from flow_api.api.schemas.metric_library import (
     AccountingAccount,
     AccountingFoundation,
     EntryLine,
+    IndustryReferencePack,
     MetricActionRequest,
     MetricCoverageResponse,
     MetricDraftRequest,
@@ -120,6 +121,9 @@ def _yaml_payload() -> MetricLibraryResponse:
         ],
         metrics=metrics,
         relations=dictionary["relations"],
+        industry_reference_packs=[
+            IndustryReferencePack(**pack) for pack in dictionary.get("industry_reference_packs", [])
+        ],
         accounting=AccountingFoundation(**foundation),
     )
 
@@ -196,6 +200,7 @@ def _db_payload(session: Session) -> MetricLibraryResponse | None:
         report_items=report_items,
         metrics=metrics,
         relations=fallback.relations,
+        industry_reference_packs=fallback.industry_reference_packs,
         accounting=AccountingFoundation(
             dataset_id="flow.accounting_foundation.v1",
             status="effective",

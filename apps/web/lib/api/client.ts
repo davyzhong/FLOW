@@ -433,6 +433,7 @@ export type CorrectionInput = {
 };
 
 export type MetricLibrary = components["schemas"]["MetricLibraryResponse"];export type MetricLibraryEntry = components["schemas"]["MetricEntry"];
+export type MetricLibraryIndustryPack = components["schemas"]["IndustryReferencePack"];
 export type MetricLibraryReportItem = components["schemas"]["ReportItem"];
 export type MetricLibraryRelation = components["schemas"]["MetricRelation"];
 export type MetricLibraryAccount = components["schemas"]["AccountingAccount"];

@@ -19,6 +19,7 @@ import "./metric-library.css";
 type Tab =
   | "general"
   | "logistics"
+  | "industry"
   | "graph"
   | "relations"
   | "mapping"
@@ -29,6 +30,7 @@ type Tab =
 const TABS: { id: Tab; label: string }[] = [
   { id: "general", label: "通用指标" },
   { id: "logistics", label: "物流行业指标" },
+  { id: "industry", label: "行业参考包" },
   { id: "graph", label: "依赖图谱" },
   { id: "relations", label: "勾稽与分解关系" },
   { id: "mapping", label: "取数映射（CAS↔IFRS）" },
@@ -320,7 +322,8 @@ export function MetricLibraryApp() {
         </h1>
         <p className="ml-hero__lede">
           {library.dictionary_id}（{library.status} · {library.decision_ref}）——
-          通用 {general.length} 指标 + 物流行业 {logistics.length} 指标，
+          通用 {general.length} 指标 + 物流行业 {logistics.length} 指标 +
+          {(library.industry_reference_packs ?? []).length} 行业参考包，
           {library.report_items.length} 项 CAS↔IFRS 取数映射，
           会计基础 {library.accounting.accounts.length} 科目 / {library.accounting.entry_templates.length} 套分录模板。
         </p>
@@ -398,6 +401,45 @@ export function MetricLibraryApp() {
       ) : null}
 
       {tab === "graph" ? <DependencyGraph metrics={library.metrics} domains={library.domains} /> : null}
+
+      {tab === "industry" ? (
+        <section className="ml-packs">
+          <p className="ml-muted ml-packs__intro">
+            行业经营指标目录暂无财报取数源（无经营事实表数据），仅作「该行业看什么」的对标参考与未来行业包 v2
+            的提升候选；财务侧基准差异挂接到既有指标的口径与参考基准。
+          </p>
+          <div className="ml-packs__grid">
+            {(library.industry_reference_packs ?? []).map((pack) => (
+              <article key={pack.industry_id} className="ml-pack">
+                <header className="ml-pack__head">
+                  <strong>{pack.name}</strong>
+                  <code>{pack.industry_id}</code>
+                </header>
+                <p className="ml-pack__note">{pack.note}</p>
+                {Object.entries(pack.financial_reference ?? {}).length > 0 ? (
+                  <dl className="ml-pack__fin">
+                    {Object.entries(pack.financial_reference).map(([code, text]) => (
+                      <div key={code}>
+                        <dt><code>{code}</code></dt>
+                        <dd>{text}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                ) : null}
+                <ul className="ml-pack__ops">
+                  {pack.ops_indicators.map((indicator) => (
+                    <li key={indicator.code}>
+                      <strong>{indicator.name}</strong> <code>{indicator.code}</code>
+                      <span>{indicator.meaning}</span>
+                    </li>
+                  ))}
+                </ul>
+                <footer className="ml-pack__src">来源：{pack.provenance}</footer>
+              </article>
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       {tab === "relations" ? (
         <section className="ml-relations">

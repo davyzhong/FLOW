@@ -63,6 +63,25 @@ class MetricRelation(BaseModel):
     provenance: str | None = None
 
 
+class IndustryOpsIndicator(BaseModel):
+    """行业经营指标参考目录条目：暂无财报取数源，仅作口径与对标参考。"""
+
+    code: str
+    name: str
+    meaning: str
+
+
+class IndustryReferencePack(BaseModel):
+    """行业参考包（借鉴 #21）：财务侧基准差异 + 行业经营指标目录。"""
+
+    industry_id: str
+    name: str
+    note: str
+    financial_reference: dict[str, str] = {}
+    ops_indicators: list[IndustryOpsIndicator] = []
+    provenance: str
+
+
 class AccountingAccount(BaseModel):
     code: str
     name: str
@@ -123,6 +142,7 @@ class MetricLibraryResponse(BaseModel):
     report_items: list[ReportItem]
     metrics: list[MetricEntry]
     relations: list[MetricRelation]
+    industry_reference_packs: list[IndustryReferencePack] = []
     accounting: AccountingFoundation
 
 

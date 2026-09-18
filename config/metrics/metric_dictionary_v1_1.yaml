@@ -1,7 +1,7 @@
 dictionary_id: flow.metric_dictionary.v1
 status: effective
-decision_ref: D047；2026-09-12 用户指令：内部指标库扩充与分层（tier + analysis_dimensions + 9 新增 +
-  口径变体，D047）
+decision_ref: 'D047；2026-09-12 用户指令：内部指标库扩充与分层（tier + analysis_dimensions + 9 新增 +
+  口径变体，D047）；2026-09-17 借鉴 #21 行业参考包扩展 v1.2（16 行业参考目录 + 流动资产率 + 基准增强）'
 created: 2026-09-05
 standards_scope:
 - CAS
@@ -201,7 +201,7 @@ metrics_general:
   source_ifrs: net cash from operating activities / current liabilities (IAS 7 / IAS
     1)
   depends_on: []
-  benchmark: 结合现金流稳定性判断。
+  benchmark: 经验参考 ≥ 1（经营现金流全额覆盖流动负债）；低于 1 须结合现金流稳定性判断。
   mpm: false
   provenance: research/08 §1、§3
   tier: core
@@ -247,7 +247,7 @@ metrics_general:
   - 所有者权益合计
   source_ifrs: total liabilities / total equity
   depends_on: []
-  benchmark: 结合行业资本结构判断。
+  benchmark: 保守参考约 100%，我国实务中约 200% 亦常见；须结合行业资本结构判断。
   mpm: false
   provenance: research/08 §1
   tier: professional
@@ -1589,6 +1589,31 @@ metrics_general:
   analysis_dimensions:
   - trend
   - structure
+- metric_code: current_asset_ratio
+  name: 流动资产率
+  domain: operation
+  definition: 流动资产占资产总额的比例，反映资产流动性与行业资产结构特征。
+  formula_text: 流动资产 ÷ 资产总计
+  formula:
+    op: div
+    args:
+    - bs.current_assets
+    - bs.total_assets
+  unit: '%'
+  time_behavior: point_balance
+  caliber: 结构比率：行业差异极大（重资产与贸易型结构不可互比），须与同行业对比，不作绝对优劣判断。
+  source_cas:
+  - 流动资产合计
+  - 资产总计
+  source_ifrs: total current assets / total assets (IAS 1)
+  depends_on: []
+  benchmark: 纺织、冶金行业常规 30%–60%；商业批发企业可达 90% 以上；动态研判须与营业利润联动——比率与利润同升为经营好转信号，比率升而利润未升提示产品销售不畅。
+  mpm: false
+  provenance: '借鉴 #21（木木自由 2025-03-21《财务指标体系》行业结构比率；vault 原文回溯）'
+  tier: professional
+  analysis_dimensions:
+  - structure
+  - benchmark
 metrics_logistics:
 - metric_code: orders
   name: 订单量
@@ -1966,36 +1991,273 @@ relations:
   note: 多指标交叉验证规则，供分析 playbook 引用，不产生数值。
   provenance: research/08 §1
 derived_from:
-- f
-- l
-- o
-- w
-- .
-- m
-- e
-- t
-- r
-- i
-- c
-- _
-- d
-- i
-- c
-- t
-- i
-- o
-- n
-- a
-- r
-- y
-- .
-- v
-- '0'
-- '-'
-- d
-- r
-- a
-- f
-- t
+- flow.metric_dictionary.v0-draft
 - config/metrics/metric_dictionary_v1.yaml (v1.0)
-revision: v1.1
+revision: v1.2
+industry_reference_packs:
+- industry_id: ecommerce
+  name: 电商
+  note: 流量变现型行业，盯紧转化与留存。
+  financial_reference:
+    gross_margin: 自营与平台型口径差异大，不作统一经验值；对比须先对齐收入口径。
+  ops_indicators:
+  - code: conversion_rate
+    name: 转化率
+    meaning: 访问者中实际下单的比例，营销成效的第一道检验。
+  - code: aov
+    name: 客单价
+    meaning: 订单总额 ÷ 订单数量，反映顾客平均消费能力。
+  - code: repeat_purchase_rate
+    name: 复购率
+    meaning: 老顾客再次购买的频率，体现平台忠诚度与口碑。
+  provenance: 'ObsidianWiki processed/微信知识库/数据熊/04_经营分析/2025-02-01 15个行业225个关键分析指标.md（借鉴
+    #21）'
+- industry_id: saas
+  name: SaaS
+  note: 订阅收入模式，财务预测与客户粘性优先。
+  financial_reference:
+    revenue_growth: 订阅模式下与 NDR/流失率联动解读，单期增速不构成充分判断。
+  ops_indicators:
+  - code: mrr
+    name: 月度持续收入（MRR）
+    meaning: 订阅模式下的月度持续收入，用于财务预测和资源规划。
+  - code: customer_retention_rate
+    name: 客户留存率
+    meaning: 老客户续订或持续使用的比例，高留存代表产品粘性强。
+  - code: churn_rate
+    name: 流失率
+    meaning: 一定周期内终止服务的客户占比，经营健康度的重要警示灯。
+  provenance: 'ObsidianWiki processed/微信知识库/数据熊/04_经营分析/2025-02-01 15个行业225个关键分析指标.md（借鉴
+    #21）'
+- industry_id: retail
+  name: 零售（含商业批发）
+  note: 实体运营型行业，死磕效率与周转。
+  financial_reference:
+    current_asset_ratio: 商业批发企业的流动资产率可达 90% 以上（轻存货周转、重流动资产结构）。
+  ops_indicators:
+  - code: same_store_sales_growth
+    name: 同店销售增长率
+    meaning: 排除新店因素后比较销售额增减，直观判断老店活力。
+  - code: foot_traffic
+    name: 客流量
+    meaning: 进店顾客数变化，反映市场推广效果与门店吸引力。
+  - code: inventory_turnover
+    name: 库存周转率
+    meaning: 销售成本对比平均库存，体现货品周转效率和资金使用状况。
+  provenance: 'ObsidianWiki processed/微信知识库/数据熊/04_经营分析/2025-02-01 15个行业225个关键分析指标.md（借鉴
+    #21）；木木自由 2025-03-21《财务指标体系》图 11 行业结构基准（借鉴 #21）'
+- industry_id: manufacturing
+  name: 制造
+  note: 生产履约型行业，严控质量与交付。
+  financial_reference:
+    current_asset_ratio: 纺织、冶金行业流动资产率常规区间 30%–60%。
+  ops_indicators:
+  - code: production_efficiency
+    name: 生产效率
+    meaning: 实际产量与理论产能对比，衡量产线资源利用。
+  - code: quality_yield
+    name: 良品率
+    meaning: 合格产品占总产量比例，凸显质量管控水平。
+  - code: on_time_delivery
+    name: 订单准时交付率
+    meaning: 按时完成交付的订单比例，直接影响客户满意度和信誉。
+  provenance: 'ObsidianWiki processed/微信知识库/数据熊/04_经营分析/2025-02-01 15个行业225个关键分析指标.md（借鉴
+    #21）；木木自由 2025-03-21《财务指标体系》图 11 行业结构基准（借鉴 #21）'
+- industry_id: finance
+  name: 金融
+  note: 专业壁垒型行业，守住风控与效能。
+  financial_reference:
+    debt_asset_ratio: 银行业高杠杆为经营常态，工业企业的 40%–60% 经验区间不适用。
+  ops_indicators:
+  - code: npl_ratio
+    name: 不良贷款率（NPL）
+    meaning: 不良贷款占整体贷款比重，信贷资产质量的核心指标。
+  - code: nim
+    name: 净息差（NIM）
+    meaning: （利息收入 − 利息支出）÷ 生息资产，银行主要盈利能力。
+  - code: car
+    name: 资本充足率（CAR）
+    meaning: 资本总额对风险资产的覆盖程度，保障金融机构稳健运营。
+  provenance: 'ObsidianWiki processed/微信知识库/数据熊/04_经营分析/2025-02-01 15个行业225个关键分析指标.md（借鉴
+    #21）'
+- industry_id: catering
+  name: 餐饮
+  note: 实体运营型行业，翻台效率与成本结构并重。
+  financial_reference:
+    gross_margin: 菜品成本率（原材料成本 ÷ 菜品售价）为行业主口径，与工业企业毛利口径不可互比。
+  ops_indicators:
+  - code: table_turnover_rate
+    name: 翻台率
+    meaning: 一定时段内同一张桌子被重复使用的次数，直接关系营收效率。
+  - code: average_check
+    name: 客单价
+    meaning: 营业额 ÷ 顾客数量，反映人均消费水平和菜品定价策略。
+  - code: food_cost_percentage
+    name: 菜品成本率
+    meaning: 原材料成本占菜品售价比例，影响毛利与定价策略。
+  provenance: 'ObsidianWiki processed/微信知识库/数据熊/04_经营分析/2025-02-01 15个行业225个关键分析指标.md（借鉴
+    #21）'
+- industry_id: hotel
+  name: 酒店
+  note: 实体运营型行业，入住率与房价双轮驱动。
+  financial_reference: {}
+  ops_indicators:
+  - code: occupancy_rate
+    name: 客房入住率
+    meaning: 已售客房数 ÷ 可售客房数，衡量客源吸引力的基础指标。
+  - code: revpar
+    name: 每可售房收入（RevPAR）
+    meaning: 综合入住率和平均房价，体现酒店整体营收能力。
+  - code: adr
+    name: 平均房价（ADR）
+    meaning: 客房收入 ÷ 已售客房数，评估定价水平和市场定位。
+  provenance: 'ObsidianWiki processed/微信知识库/数据熊/04_经营分析/2025-02-01 15个行业225个关键分析指标.md（借鉴
+    #21）'
+- industry_id: education
+  name: 教育培训
+  note: 专业壁垒型行业，交付质量决定续班与生源。
+  financial_reference: {}
+  ops_indicators:
+  - code: course_completion_rate
+    name: 完课率
+    meaning: 报名与完成学习的对比，课程设计与教学质量的晴雨表。
+  - code: renewal_rate
+    name: 续班率
+    meaning: 老学员继续报名后续课程的比例，关系培训机构的长期生源。
+  - code: teacher_satisfaction
+    name: 师资满意度
+    meaning: 基于学员评价或打分，洞察教学效果与教师水平。
+  provenance: 'ObsidianWiki processed/微信知识库/数据熊/04_经营分析/2025-02-01 15个行业225个关键分析指标.md（借鉴
+    #21）'
+- industry_id: healthcare
+  name: 医疗
+  note: 专业壁垒型行业，运转效率与诊疗质量并重。
+  financial_reference: {}
+  ops_indicators:
+  - code: bed_occupancy_rate
+    name: 床位使用率
+    meaning: 实际占用床日数 ÷（床位总数 × 天数），医院运转度的重要体现。
+  - code: alos
+    name: 平均住院日（ALOS）
+    meaning: 住院总床日 ÷ 出院人数，住院管理与诊疗效率的核心指标。
+  - code: readmission_rate
+    name: 再入院率
+    meaning: 出院后再次入院的比例，评估诊疗效果及康复质量。
+  provenance: 'ObsidianWiki processed/微信知识库/数据熊/04_经营分析/2025-02-01 15个行业225个关键分析指标.md（借鉴
+    #21）'
+- industry_id: agriculture
+  name: 农业
+  note: 生产履约型行业，单产与转化效率优先。
+  financial_reference: {}
+  ops_indicators:
+  - code: yield_per_area
+    name: 亩产量
+    meaning: 作物总产量 ÷ 种植面积，衡量种植效率和品种优劣。
+  - code: survival_rate
+    name: 成活率
+    meaning: 从播种或投放到收获过程的成活比例，反映生产环境与技术水平。
+  - code: fcr
+    name: 饲料转化率（FCR）
+    meaning: 饲料消耗与体重增量之比，越低说明饲料利用率越高。
+  provenance: 'ObsidianWiki processed/微信知识库/数据熊/04_经营分析/2025-02-01 15个行业225个关键分析指标.md（借鉴
+    #21）'
+- industry_id: logistics
+  name: 物流
+  note: 生产履约型行业，履约时效与破损控制优先；FLOW 物流专用集（metrics_logistics）已覆盖其财务侧。
+  financial_reference:
+    debt_asset_ratio: 物流央企口径约 47%–57%（中国物流集团，见 debt_asset_ratio 基准）。
+    interest_coverage: 物流央企实例 5.45–9.31 倍（见 interest_coverage 基准）。
+  ops_indicators:
+  - code: on_time_delivery_rate
+    name: 准时交付率
+    meaning: 物流履约时效的关键评估标准，影响客户信赖。
+  - code: average_delivery_time
+    name: 平均交付时间
+    meaning: 从出库到签收的平均时长，体现运作效率。
+  - code: damage_rate
+    name: 破损率
+    meaning: 运输过程中包裹或货物的损坏比例，直接影响企业形象与赔付成本。
+  provenance: 'ObsidianWiki processed/微信知识库/数据熊/04_经营分析/2025-02-01 15个行业225个关键分析指标.md（借鉴
+    #21）'
+- industry_id: real_estate
+  name: 房地产
+  note: 周期型行业，去化速度与出租水平定生死。
+  financial_reference: {}
+  ops_indicators:
+  - code: sell_through_rate
+    name: 销售去化率
+    meaning: 一定周期内销售房源的速度与数量，判断项目热度。
+  - code: average_selling_price
+    name: 平均单价
+    meaning: 成交房源总价 ÷ 总面积或套数，市场定位参考。
+  - code: lease_occupancy_rate
+    name: 出租率（租赁）
+    meaning: 已出租面积占可出租面积比重，商业地产盈利水平的写照。
+  provenance: 'ObsidianWiki processed/微信知识库/数据熊/04_经营分析/2025-02-01 15个行业225个关键分析指标.md（借鉴
+    #21）'
+- industry_id: media
+  name: 媒体
+  note: 流量变现型行业，内容质量决定用户粘性。
+  financial_reference: {}
+  ops_indicators:
+  - code: ctr
+    name: 点击率（CTR）
+    meaning: 广告点击次数 ÷ 展示次数，衡量广告素材对受众的吸引力。
+  - code: completion_rate
+    name: 完播率（视频）
+    meaning: 完整观看数占总播放数之比，体现内容质量与用户粘性。
+  - code: user_retention
+    name: 用户留存率
+    meaning: 用户持续在平台活跃的比例，媒体长期发展的基石。
+  provenance: 'ObsidianWiki processed/微信知识库/数据熊/04_经营分析/2025-02-01 15个行业225个关键分析指标.md（借鉴
+    #21）'
+- industry_id: it_services
+  name: IT 服务
+  note: 专业壁垒型行业，响应速度与系统可用性即产品。
+  financial_reference: {}
+  ops_indicators:
+  - code: mttr_respond
+    name: 平均响应时间
+    meaning: 从工单提交到开始处理的速度，影响客户满意度。
+  - code: mttr_repair
+    name: 平均修复时间
+    meaning: 从故障发生到彻底解决的平均耗时，体现技术支持能力。
+  - code: service_availability
+    name: 服务可用性
+    meaning: 正常运行时间占比，系统或网站稳定性的重要保证。
+  provenance: 'ObsidianWiki processed/微信知识库/数据熊/04_经营分析/2025-02-01 15个行业225个关键分析指标.md（借鉴
+    #21）'
+- industry_id: gaming
+  name: 游戏
+  note: 流量变现型行业，活跃与付费结构决定生命周期。
+  financial_reference: {}
+  ops_indicators:
+  - code: dau
+    name: 日活跃用户（DAU）
+    meaning: 每日登录且有有效行为的玩家数，评估游戏热度的核心指标。
+  - code: paying_user_ratio
+    name: 付费用户占比
+    meaning: 有付费行为的玩家占总玩家比例，决定营收潜力。
+  - code: retention_rate
+    name: 留存率
+    meaning: 从注册至后续多日的持续登录状况，关系游戏生命周期长短。
+  provenance: 'ObsidianWiki processed/微信知识库/数据熊/04_经营分析/2025-02-01 15个行业225个关键分析指标.md（借鉴
+    #21）'
+- industry_id: local_services
+  name: 本地生活（外卖零售）
+  note: 大厂实证：美团商家版以「统一口径」为地基，总览/营业/流量/顾客/商品/营销六板块逐层下钻；此处登记其口径定义实例。
+  financial_reference:
+    revenue: 美团口径实例——营业额 = 商品原价 + 包装费 + 配送费，与「预计收入（含所有费用的实际收入）」为两个口径，发布前须显式选定；有效订单
+      = 已接单且未取消（区别于下单口径）。
+  ops_indicators:
+  - code: shop_entry_conversion
+    name: 入店转化率
+    meaning: 入店人数 ÷ 曝光人数（流量漏斗第一层）。
+  - code: order_conversion
+    name: 下单转化率
+    meaning: 下单人数 ÷ 入店人数（流量漏斗第二层）。
+  - code: customer_lifecycle_layering
+    name: 顾客生命周期分层
+    meaning: 活跃 = 近 30 天成交；沉默 = 30–60 天；流失 = 60–90 天（顾客留存状态口径实例）。
+  provenance: 'ObsidianWiki processed/微信知识库/木木自由/01_数据分析必备/2024-07-30 大厂实操 美团数据指标体系搭建实例（附资相关材料下载）.md（借鉴
+    #21）'
