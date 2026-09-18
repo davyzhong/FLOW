@@ -8,6 +8,7 @@ import {
   type MetricCoverageCell,
   type MetricCoverageSnapshot,
 } from "../../lib/api/client";
+import { PageState } from "../ui/page-state";
 
 const COMPANY_INITIALS: Record<string, string> = {
   alibaba_9988: "阿",
@@ -91,15 +92,16 @@ function CoverageSection() {
   }, [load]);
 
   if (state.kind === "loading") {
-    return <div className="ml-state" role="status">正在读取真实财报覆盖矩阵…</div>;
+    return <PageState status="loading" message="正在读取真实财报覆盖矩阵…" />;
   }
   if (state.kind === "error") {
     return (
-      <div className="ml-state ml-state--error" role="alert">
-        <p>覆盖矩阵暂时无法加载</p>
-        <p className="ml-state__detail">{state.message}</p>
-        <button type="button" onClick={retry}>重试</button>
-      </div>
+      <PageState
+        status="error"
+        message="覆盖矩阵暂时无法加载"
+        detail={state.message}
+        retry={retry}
+      />
     );
   }
 

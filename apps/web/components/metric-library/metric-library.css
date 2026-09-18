@@ -1,29 +1,18 @@
 /* 指标库（/metric-library）样式
  * v2 报告风：深藏青（标题/正文）+ 中国红（强调/缺口/下行）+ 金棕（中性评级），
  * 借鉴 scripts/build_static_library_site.py 的同一套设计令牌。
- * 旧类名（.ml-header / .ml-table / .ml-tabs 等）保留以兼容 e2e 与既有测试。 */
+ * 颜色一律走全局 --rep-* / --flow-* token 或本文件作用域的 --ml-* 局部 token；
+ * 页面级状态走共享 PageState 组件、按钮走 flow-btn、表格走 flow-table（Task 6 深度迁移）。
+ */
 
 .metric-library {
   display: grid;
   grid-template-columns: minmax(0, 1fr); /* 窄视口轨道随容器收缩 */
   gap: 18px;
-  --rep-ink: var(--rep-ink);
-  --rep-ink-2: var(--rep-ink-2);
-  --rep-navy: var(--rep-navy);
-  --rep-navy-2: var(--rep-navy-2);
-  --rep-muted: var(--rep-muted);
-  --rep-line: var(--rep-line);
-  --rep-line-2: var(--rep-line-2);
-  --rep-card: var(--rep-card);
-  --rep-red: var(--rep-red);
-  --rep-red-soft: var(--rep-red-soft);
-  --rep-ok: var(--rep-ok);
-  --rep-ok-soft: var(--rep-ok-soft);
-  --rep-warn: var(--rep-warn);
-  --rep-warn-soft: var(--rep-warn-soft);
-  --rep-blue: var(--rep-blue);
-  --rep-blue-soft: var(--rep-blue-soft);
-  --rep-zebra: var(--rep-zebra);
+  /* 金棕警示对：#805000 深琥珀在浅琥珀底上对比 ≥4.9:1，达 AA；
+     --rep-warn (#b7791f) 对小字号软底不达标，故本页保留专用对。 */
+  --ml-warn-ink: #805000;
+  --ml-warn-bg: #fdf0dc;
 }
 
 /* ===== Hero 页头（红顶线 + kicker + 超大标题 + 副标题） ===== */
@@ -60,7 +49,7 @@
 }
 .ml-hero__note {
   margin: 8px 0 0;
-  color: #805000;
+  color: var(--ml-warn-ink);
   font-size: 12.5px;
 }
 
@@ -80,7 +69,7 @@
   padding: 14px 16px 12px;
   background: var(--rep-card);
   border: 1px solid var(--rep-line);
-  border-radius: 10px;
+  border-radius: var(--flow-radius-m);
 }
 .ml-kpi__seal {
   flex: none;
@@ -144,23 +133,6 @@
   font-size: 12px;
 }
 
-/* ===== 旧 ml-header / ml-notice（保留兼容） ===== */
-.ml-header h1 {
-  margin: 0 0 8px;
-  font-size: 22px;
-}
-
-.ml-header p {
-  margin: 0 0 6px;
-  color: var(--rep-muted, var(--rep-muted));
-  font-size: 13px;
-  line-height: 1.7;
-}
-
-.ml-header__note {
-  color: #805000;
-}
-
 .ml-notice {
   margin: 0;
   padding: 8px 12px;
@@ -178,17 +150,17 @@
 
 .ml-tabs button {
   padding: 7px 14px;
-  border: 1px solid var(--rep-line, var(--rep-line-5));
+  border: 1px solid var(--rep-line-5);
   border-radius: 7px;
-  background: #fff;
-  color: var(--rep-ink, #33465e);
+  background: var(--rep-card);
+  color: var(--rep-slate);
   font-size: 13px;
   cursor: pointer;
 }
 
 .ml-tabs button.is-active {
-  border-color: var(--rep-blue, var(--rep-blue));
-  background: var(--rep-blue, var(--rep-blue));
+  border-color: var(--rep-blue);
+  background: var(--rep-blue);
   color: #fff;
 }
 
@@ -201,8 +173,9 @@
 
 .ml-toolbar input[type="search"] {
   width: 320px;
+  max-width: 100%;
   padding: 7px 12px;
-  border: 1px solid var(--rep-line, var(--rep-line-5));
+  border: 1px solid var(--rep-line-5);
   border-radius: 7px;
   font-size: 13px;
 }
@@ -212,13 +185,13 @@
   align-items: center;
   gap: 6px;
   font-size: 13px;
-  color: var(--rep-muted, var(--rep-muted));
+  color: var(--rep-muted);
 }
 
 .ml-toolbar__count {
   margin-left: auto;
   font-size: 12px;
-  color: var(--rep-muted, var(--rep-muted));
+  color: var(--rep-muted);
 }
 
 .ml-metric-list {
@@ -229,9 +202,9 @@
 
 .ml-metric {
   padding: 14px 16px;
-  border: 1px solid var(--rep-line, var(--rep-line));
-  border-radius: 10px;
-  background: #fff;
+  border: 1px solid var(--rep-line);
+  border-radius: var(--flow-radius-m);
+  background: var(--rep-card);
 }
 
 .ml-metric__head {
@@ -243,7 +216,7 @@
 
 .ml-metric__head strong {
   font-size: 15px;
-  color: var(--rep-ink, var(--rep-ink));
+  color: var(--rep-ink);
 }
 
 .ml-metric__head code,
@@ -252,7 +225,7 @@
   padding: 1px 6px;
   border-radius: 4px;
   background: var(--rep-line-4);
-  color: var(--rep-ink, #33465e);
+  color: var(--rep-slate);
   font-size: 12px;
 }
 
@@ -263,21 +236,21 @@
 .ml-chip {
   padding: 1px 8px;
   border-radius: 10px;
-  background: var(--rep-blue-soft, #e8eef9);
-  color: var(--rep-blue, var(--rep-blue));
+  background: var(--rep-blue-soft);
+  color: var(--rep-blue);
   font-size: 12px;
 }
 
 .ml-chip--mpm {
-  background: #fdf0dc;
-  color: #805000;
+  background: var(--ml-warn-bg);
+  color: var(--ml-warn-ink);
 }
 
 .ml-metric__definition {
   overflow-wrap: anywhere;
   margin: 8px 0;
   font-size: 13px;
-  color: var(--rep-ink, #33465e);
+  color: var(--rep-slate);
 }
 
 .ml-metric__grid {
@@ -302,7 +275,7 @@
 }
 
 .ml-metric__grid dt {
-  color: var(--rep-muted, var(--rep-muted));
+  color: var(--rep-muted);
 }
 
 .ml-metric__grid dd {
@@ -312,14 +285,14 @@
 .ml-metric__caliber {
   margin: 8px 0 0;
   font-size: 12.5px;
-  color: var(--rep-muted, var(--rep-muted));
+  color: var(--rep-muted);
 }
 
 .ml-metric__decomp {
   margin: 8px 0 0;
   padding-left: 18px;
   font-size: 12.5px;
-  color: var(--rep-ink, #33465e);
+  color: var(--rep-slate);
 }
 
 .ml-metric__foot {
@@ -328,7 +301,7 @@
   gap: 8px 18px;
   margin-top: 8px;
   font-size: 11.5px;
-  color: #8a97a8;
+  color: var(--rep-muted);
 }
 
 .ml-relations {
@@ -338,9 +311,9 @@
 
 .ml-relation {
   padding: 14px 16px;
-  border: 1px solid var(--rep-line, var(--rep-line));
-  border-radius: 10px;
-  background: #fff;
+  border: 1px solid var(--rep-line);
+  border-radius: var(--flow-radius-m);
+  background: var(--rep-card);
 }
 
 .ml-relation header {
@@ -352,43 +325,18 @@
 .ml-relation__expr {
   font-family: "JetBrains Mono Variable", monospace;
   font-size: 13px;
-  color: var(--rep-ink, #13223a);
+  color: var(--rep-ink);
 }
 
 .ml-relation footer {
   font-size: 11.5px;
-  color: #8a97a8;
-}
-
-.ml-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: #fff;
-  font-size: 13.5px;
-}
-
-.ml-table th,
-.ml-table td {
-  padding: 5px 12px;
-  border: 1px solid var(--rep-line, var(--rep-line));
-  text-align: left;
-}
-
-.ml-table th {
-  background: var(--rep-navy, var(--rep-navy));
-  color: #fff;
-  font-weight: 500;
-}
-
-.ml-table tbody tr:nth-child(even) td,
-.ml-table tbody tr:nth-child(even) th[scope="row"] {
-  background: var(--rep-zebra, var(--rep-zebra));
+  color: var(--rep-muted);
 }
 
 .ml-accounting h2 {
   margin: 22px 0 10px;
   font-size: 15px;
-  color: var(--rep-navy, var(--rep-navy));
+  color: var(--rep-navy);
 }
 
 .ml-standards,
@@ -405,9 +353,9 @@
 }
 
 .ml-entry {
-  border: 1px solid var(--rep-line, var(--rep-line));
+  border: 1px solid var(--rep-line);
   border-radius: 8px;
-  background: #fff;
+  background: var(--rep-card);
   padding: 10px 14px;
 }
 
@@ -420,35 +368,15 @@
 }
 
 .ml-muted {
-  color: var(--rep-muted, var(--rep-muted));
+  color: var(--rep-muted);
   font-size: 12px;
 }
 
-.ml-state {
-  padding: 80px 0;
-  text-align: center;
-  color: var(--rep-muted, var(--rep-muted));
-}
-
-.ml-state--error button {
-  padding: 7px 16px;
-  border: none;
-  border-radius: 7px;
-  background: var(--rep-blue, var(--rep-blue));
-  color: #fff;
-  cursor: pointer;
-}
-
-.ml-state__detail {
-  font-size: 12px;
-  color: #8a97a8;
-}
-
-/* C06 治理操作表单 */
+/* C06 治理操作表单（按钮走共享 flow-btn，见组件层） */
 .ml-governance__form {
-  background: #fff;
-  border: 1px solid var(--ml-line, #dfe3ec);
-  border-radius: 10px;
+  background: var(--rep-card);
+  border: 1px solid var(--rep-line);
+  border-radius: var(--flow-radius-m);
   padding: 14px 16px;
   margin-bottom: 16px;
   display: grid;
@@ -456,36 +384,25 @@
   max-width: 560px;
 }
 .ml-governance__form h3 { margin: 0; font-size: 14px; }
-.ml-governance__form label { display: grid; gap: 4px; font-size: 12.5px; color: #3d4a63; }
+.ml-governance__form label { display: grid; gap: 4px; font-size: 12.5px; color: var(--rep-slate); }
 .ml-governance__form select,
 .ml-governance__form input,
 .ml-governance__form textarea {
   font: inherit;
   padding: 6px 9px;
-  border: 1px solid #c9d2e3;
+  border: 1px solid var(--rep-line-4);
   border-radius: 7px;
 }
 .ml-governance__actions { display: flex; gap: 8px; }
-.ml-governance__actions button {
-  border: 0;
-  border-radius: 8px;
-  padding: 7px 14px;
-  cursor: pointer;
-  background: var(--rep-blue, var(--rep-blue));
-  color: #fff;
-}
-.ml-governance__actions button:disabled { opacity: 0.55; cursor: wait; }
 .ml-governance__notice { color: var(--rep-teal); font-size: 13px; margin: 0; }
 
-/* 执行绑定徽章与修订表单（C06） */
+/* 执行绑定徽章与修订表单（C06；按钮走共享 flow-btn） */
 .ml-exec { padding: 1px 8px; border-radius: 10px; font-size: 11.5px; background: var(--rep-ok-soft-2); color: var(--rep-teal); }
-.ml-exec--narrative { background: #fdf0dc; color: #805000; }
-.ml-exec--facts { background: #e8eef9; color: var(--rep-blue); }
-.ml-revise { padding: 1px 10px; border: 1px solid var(--rep-line-5); border-radius: 6px; background: #fff; font-size: 11.5px; cursor: pointer; }
+.ml-exec--narrative { background: var(--ml-warn-bg); color: var(--ml-warn-ink); }
+.ml-exec--facts { background: var(--rep-blue-soft); color: var(--rep-blue); }
 .ml-draft { display: grid; grid-template-columns: 130px 1fr 1fr 120px auto; gap: 8px; margin-top: 10px; padding: 10px; border: 1px dashed var(--rep-line-5); border-radius: 8px; }
 .ml-draft input, .ml-draft select { padding: 6px 8px; border: 1px solid var(--rep-line-5); border-radius: 6px; font-size: 12px; }
-.ml-draft button { padding: 6px 12px; border: none; border-radius: 6px; background: var(--rep-blue); color: #fff; cursor: pointer; }
-.ml-draft__message { grid-column: 1 / -1; margin: 0; font-size: 12px; color: #33465e; }
+.ml-draft__message { grid-column: 1 / -1; margin: 0; font-size: 12px; color: var(--rep-slate); }
 .ml-governance__error { color: var(--flow-error); }
 
 /* 会计科目：三栏紧凑网格（一屏高密度浏览 167 科目） */
@@ -506,18 +423,18 @@
 }
 
 .ml-account:hover {
-  background: #f4f7fb;
+  background: var(--rep-zebra);
 }
 
 .ml-account code {
   flex: 0 0 4.5em;
   font-size: 12.5px;
-  color: var(--rep-ink, #33465e);
+  color: var(--rep-slate);
 }
 
 .ml-account strong {
   font-weight: 500;
-  color: var(--rep-ink, var(--rep-ink));
+  color: var(--rep-ink);
 }
 
 .ml-account__tags {
@@ -531,38 +448,38 @@
   padding: 0 6px;
   border-radius: 4px;
   background: var(--rep-line-4);
-  color: var(--rep-muted, var(--rep-muted));
+  color: var(--rep-muted);
   font-size: 11.5px;
 }
 
 /* 依赖图谱 */
 .ml-graph__toolbar { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 10px; }
-.ml-graph__hint { margin: 0; color: #53647b; font-size: 12px; flex: 1; min-width: 240px; }
+.ml-graph__hint { margin: 0; color: var(--rep-slate); font-size: 12px; flex: 1; min-width: 240px; }
 .ml-graph__filter select { font: inherit; }
-.ml-graph__clear { border: 1px solid #c3ccd8; background: #fff; border-radius: 6px; padding: 4px 10px; cursor: pointer; }
-.ml-graph__scroll { overflow: auto; max-height: 640px; border: 1px solid var(--rep-line-3); border-radius: 10px; background: #f8fafc; }
+.ml-graph__clear { border: 1px solid var(--rep-line-4); background: var(--rep-card); border-radius: 6px; padding: 4px 10px; cursor: pointer; }
+.ml-graph__scroll { overflow: auto; max-height: 640px; border: 1px solid var(--rep-line-3); border-radius: var(--flow-radius-m); background: var(--rep-bg); }
 .ml-graph__node { cursor: pointer; }
 .ml-graph__node:hover rect { stroke-width: 2.5; }
-.ml-graph__node-name { font-size: 13px; font-weight: 600; fill: #1c2b3a; }
-.ml-graph__node-code { font-size: 10px; fill: #5f6f84; font-family: ui-monospace, monospace; }
-.ml-graph__warning { color: #b45309; font-size: 12px; }
+.ml-graph__node-name { font-size: 13px; font-weight: 600; fill: var(--rep-ink); }
+.ml-graph__node-code { font-size: 10px; fill: var(--rep-muted); font-family: ui-monospace, monospace; }
+.ml-graph__warning { color: var(--ml-warn-ink); font-size: 12px; }
 .ml-graph__selected { color: var(--flow-info); font-size: 13px; }
-.ml-chip--tier { background: #fef3c7; color: #92400e; }
+.ml-chip--tier { background: var(--ml-warn-bg); color: var(--ml-warn-ink); }
 
 /* 旧 ml-coverage 类（保持向后兼容 + 已被 ml-cov 替代） */
 .ml-coverage__notes {
   margin: 8px 0 14px;
   padding-left: 18px;
   font-size: 12.5px;
-  color: #8a97a8;
+  color: var(--rep-muted);
   line-height: 1.8;
 }
 
 .ml-coverage__scroll {
   overflow-x: auto;
-  border: 1px solid var(--rep-line, var(--rep-line));
+  border: 1px solid var(--rep-line);
   border-radius: 8px;
-  background: #fff;
+  background: var(--rep-card);
 }
 
 .ml-coverage__table {
@@ -573,7 +490,7 @@
 .ml-coverage__table th,
 .ml-coverage__table td {
   border: none;
-  border-bottom: 1px solid var(--rep-line-2, var(--rep-line-2));
+  border-bottom: 1px solid var(--rep-line-2);
 }
 
 .ml-coverage__table thead th {
@@ -589,7 +506,7 @@
 .ml-coverage__period {
   display: block;
   font-weight: 400;
-  color: #8a97a8;
+  color: var(--rep-muted);
   font-size: 12px;
 }
 
@@ -613,19 +530,19 @@
   position: sticky;
   left: 0;
   z-index: 1;
-  background: #f5f7fa;
+  background: var(--rep-zebra);
   text-align: left;
   font-weight: 500;
   min-width: 220px;
 }
 
 .ml-coverage__table tbody .ml-coverage__metric {
-  background: #fff;
+  background: var(--rep-card);
   color: var(--rep-ink-2);
 }
 
 .ml-coverage__metric code {
-  color: #8a97a8;
+  color: var(--rep-muted);
   font-size: 12px;
 }
 
@@ -637,7 +554,7 @@
 
 .ml-coverage__missing {
   text-align: right;
-  color: #a8b3c2;
+  color: var(--rep-muted);
   font-size: 12px;
 }
 
@@ -648,10 +565,10 @@
   border-collapse: separate;
   border-spacing: 0;
   font-size: 13px;
-  background: #fff;
+  background: var(--rep-card);
 }
 .ml-cov thead th {
-  background: #fff;
+  background: var(--rep-card);
   color: var(--rep-ink);
   border-bottom: 1px solid var(--rep-line);
   padding: 8px 6px 10px;
@@ -672,11 +589,11 @@
   font-weight: 600;
   margin-bottom: 4px;
 }
-.ml-cov__seal--a-plus { background: var(--rep-ok, var(--rep-ok)); }
-.ml-cov__seal--a { background: #2e9b6c; }
-.ml-cov__seal--b-plus { background: var(--rep-warn, var(--rep-warn)); }
-.ml-cov__seal--b { background: #d99a2b; }
-.ml-cov__seal--c { background: var(--rep-red, var(--rep-red)); }
+.ml-cov__seal--a-plus { background: var(--rep-ok); }
+.ml-cov__seal--a { background: var(--rep-ok); }
+.ml-cov__seal--b-plus { background: var(--rep-warn); }
+.ml-cov__seal--b { background: var(--rep-warn); }
+.ml-cov__seal--c { background: var(--rep-red); }
 .ml-cov__company { display: block; color: var(--rep-ink); font-size: 13px; }
 .ml-cov__period { display: block; color: var(--rep-muted); font-size: 11.5px; font-weight: 400; }
 .ml-cov__ratio {
@@ -696,16 +613,16 @@
   overflow: hidden;
 }
 .ml-cov__bar span { display: block; height: 100%; }
-.ml-cov__bar--a-plus span { background: var(--rep-ok, var(--rep-ok)); }
-.ml-cov__bar--a span { background: #2e9b6c; }
-.ml-cov__bar--b-plus span { background: var(--rep-warn, var(--rep-warn)); }
-.ml-cov__bar--b span { background: #d99a2b; }
-.ml-cov__bar--c span { background: var(--rep-red, var(--rep-red)); }
+.ml-cov__bar--a-plus span { background: var(--rep-ok); }
+.ml-cov__bar--a span { background: var(--rep-ok); }
+.ml-cov__bar--b-plus span { background: var(--rep-warn); }
+.ml-cov__bar--b span { background: var(--rep-warn); }
+.ml-cov__bar--c span { background: var(--rep-red); }
 
 .ml-cov tbody td,
 .ml-cov tbody th[scope="row"] {
   padding: 7px 8px;
-  border-bottom: 1px solid var(--rep-line-2, var(--rep-line-2));
+  border-bottom: 1px solid var(--rep-line-2);
   text-align: right;
   font-variant-numeric: tabular-nums;
   color: var(--rep-ink);
@@ -715,7 +632,7 @@
   position: sticky;
   left: 0;
   z-index: 1;
-  background: #fff;
+  background: var(--rep-card);
   text-align: left !important;
   font-weight: 500;
   min-width: 240px;
@@ -733,14 +650,14 @@
 .ml-cov__unit { color: var(--rep-muted); font-weight: 400; font-size: 11.5px; margin-left: 2px; }
 .ml-cov tbody tr:nth-child(even) td,
 .ml-cov tbody tr:nth-child(even) th[scope="row"] {
-  background: var(--rep-zebra, var(--rep-zebra));
+  background: var(--rep-zebra);
 }
-.ml-cov__cell--ok { color: var(--rep-ok, var(--rep-ok)); font-weight: 600; }
-.ml-cov__cell--warn { color: var(--rep-warn, var(--rep-warn)); }
-.ml-cov__cell--bad { color: var(--rep-red, var(--rep-red)); }
+.ml-cov__cell--ok { color: var(--rep-ok); font-weight: 600; }
+.ml-cov__cell--warn { color: var(--rep-warn); }
+.ml-cov__cell--bad { color: var(--rep-red); }
 .ml-cov__cell--miss {
-  background: var(--rep-red-soft, var(--rep-red-soft)) !important;
-  color: var(--rep-red, var(--rep-red)) !important;
+  background: var(--rep-red-soft) !important;
+  color: var(--rep-red) !important;
   font-size: 11.5px;
   font-weight: 500;
 }
@@ -750,7 +667,7 @@
 
 .ml-cov__grade-row td,
 .ml-cov__grade-row th[scope="row"] {
-  background: #fafbfd !important;
+  background: var(--rep-zebra) !important;
   border-top: 1px solid var(--rep-line) !important;
   text-align: center !important;
   padding-top: 8px;
@@ -765,19 +682,11 @@
   font-weight: 600;
   letter-spacing: 0.04em;
 }
-.ml-grade--a-plus { background: var(--rep-ok-soft, var(--rep-ok-soft)); color: var(--rep-ok, var(--rep-ok)); }
-.ml-grade--a { background: #e7f3ec; color: #2e7d56; }
-.ml-grade--b-plus { background: var(--rep-warn-soft, var(--rep-warn-soft)); color: var(--rep-warn, var(--rep-warn)); }
-.ml-grade--b { background: #fef0d2; color: #8a5b0a; }
-.ml-grade--c { background: var(--rep-red-soft, var(--rep-red-soft)); color: var(--rep-red, var(--rep-red)); }
-
-/* 加载/错误态的稳定页面标题（FE-10） */
-.ml-page-title {
-  margin: 0 0 8px;
-  font-size: 30px;
-  line-height: 1.2;
-  font-weight: 600;
-}
+.ml-grade--a-plus { background: var(--rep-ok-soft); color: var(--rep-ok); }
+.ml-grade--a { background: var(--rep-ok-soft); color: var(--rep-ok); }
+.ml-grade--b-plus { background: var(--rep-warn-soft); color: var(--rep-warn); }
+.ml-grade--b { background: var(--ml-warn-bg); color: var(--ml-warn-ink); }
+.ml-grade--c { background: var(--rep-red-soft); color: var(--rep-red); }
 
 /* 行业参考包（借鉴 #21）：参考目录层，样式对齐勾稽关系区 */
 .ml-packs {
@@ -805,9 +714,9 @@
   display: grid;
   gap: 8px;
   padding: 14px 16px;
-  border: 1px solid var(--rep-line, var(--rep-line));
-  border-radius: 10px;
-  background: #fff;
+  border: 1px solid var(--rep-line);
+  border-radius: var(--flow-radius-m);
+  background: var(--rep-card);
 }
 
 .ml-pack__head {
@@ -819,7 +728,7 @@
 .ml-pack__note {
   margin: 0;
   font-size: 12.5px;
-  color: var(--rep-ink-soft, #44546a);
+  color: var(--rep-slate);
 }
 
 .ml-pack__fin {
@@ -861,11 +770,11 @@
 }
 
 .ml-pack__ops li span {
-  color: var(--rep-ink-soft, #44546a);
+  color: var(--rep-slate);
 }
 
 .ml-pack__src {
   font-size: 11.5px;
-  color: #8a97a8;
+  color: var(--rep-muted);
   overflow-wrap: anywhere;
 }

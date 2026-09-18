@@ -124,13 +124,13 @@ function GovernanceSection({ metrics }: { metrics: MetricLibraryEntry[] }) {
           <input value={reason} onChange={(e) => setReason(e.target.value)} placeholder="如：更新基准值来源" />
         </label>
         <div className="ml-governance__actions">
-          <button type="button" disabled={busy} onClick={() => void runAction("draft")}>
+          <button type="button" className="flow-btn flow-btn--primary" disabled={busy} onClick={() => void runAction("draft")}>
             创建草稿
           </button>
-          <button type="button" disabled={busy} onClick={() => void runAction("activate")}>
+          <button type="button" className="flow-btn" disabled={busy} onClick={() => void runAction("activate")}>
             激活
           </button>
-          <button type="button" disabled={busy} onClick={() => void runAction("retire")}>
+          <button type="button" className="flow-btn flow-btn--danger" disabled={busy} onClick={() => void runAction("retire")}>
             退役
           </button>
         </div>
@@ -145,7 +145,7 @@ function GovernanceSection({ metrics }: { metrics: MetricLibraryEntry[] }) {
         <p className="ml-muted">尚无治理事件。</p>
       ) : null}
       {events && events.length > 0 ? (
-        <table className="ml-table">
+        <table className="flow-table">
           <thead>
             <tr>
               <th>时间</th><th>指标</th><th>版本</th><th>动作</th><th>操作者</th><th>理由</th>
