@@ -34,4 +34,5 @@ python3 scripts/wait_for_services.py "127.0.0.1:${web_port}"
 
 npx --yes pnpm@10.17.1 --filter @flow/web exec playwright test \
   e2e/navigation.spec.ts e2e/module-boundaries.spec.ts \
-  e2e/frontend-consistency.spec.ts e2e/frontend-responsive.spec.ts
+  e2e/frontend-consistency.spec.ts e2e/frontend-responsive.spec.ts \
+  e2e/frontend-states.spec.ts

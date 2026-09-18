@@ -171,6 +171,11 @@ export function OperationsOverviewApp() {
         六主题结果层概览（L1 财报口径）；内部数据主题如实标注待授权，缺失不补造。
       </p>
 
+      {state.status === "idle" ? (
+        <p role="status" className="ops-overview__loading">
+          正在读取经营分析概览…
+        </p>
+      ) : null}
       <div className="ops-overview__controls">
         <div className="flow-field">
           <label htmlFor="operations-context">分析数据与期间</label>
