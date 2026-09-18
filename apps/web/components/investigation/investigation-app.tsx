@@ -14,6 +14,7 @@ import type {
   InvestigationContext,
   InvestigationQuery,
 } from "../../lib/api/client";
+import { PageState } from "../ui/page-state";
 import "./investigation.css";
 import { CopilotPanel } from "./copilot-panel";
 import {
@@ -138,33 +139,34 @@ export function InvestigationApp({
 
   return (
     <main className="investigation-app">
+      {/* 四类非加载态统一走 PageState 外壳：h1「经营调查」在任何状态下稳定渲染。 */}
       {request.kind === "loading" ? (
-        <section className="investigation-state" role="status">
-          <h1>经营调查</h1>
-          <p>正在加载证据与复核上下文…</p>
-        </section>
+        <PageState title="经营调查" status="loading" message="正在加载证据与复核上下文…" />
       ) : null}
       {request.kind === "error" ? (
-        <section className="investigation-state" role="alert">
-          <h1>经营调查</h1>
-          <p>{request.message ?? "调查上下文暂时无法加载"}</p>
-          <button type="button" onClick={refresh}>重试</button>
-        </section>
+        <PageState
+          title="经营调查"
+          status="error"
+          message={request.message ?? "调查上下文暂时无法加载"}
+          retry={refresh}
+        />
       ) : null}
       {request.kind === "not_found" ? (
-        <section className="investigation-state" role="alert">
-          <h1>经营调查</h1>
-          <p>未找到该经营发现，可能已被修订或不存在。</p>
-          <Link className="investigation-state__back" href="/">返回经营驾驶舱</Link>
-        </section>
+        <PageState
+          title="经营调查"
+          status="error"
+          message="未找到该经营发现，可能已被修订或不存在。"
+          actions={[{ href: "/", label: "返回经营驾驶舱" }]}
+        />
       ) : null}
       {request.kind === "identity_mismatch" ? (
-        <section className="investigation-state" role="alert">
-          <h1>经营调查</h1>
-          <p>{request.message}</p>
-          <p>请从经营驾驶舱重新进入，以确保在正确的批次、快照和分析运行上复核证据。</p>
-          <Link className="investigation-state__back" href="/">返回经营驾驶舱</Link>
-        </section>
+        <PageState
+          title="经营调查"
+          status="error"
+          message={request.message}
+          detail="请从经营驾驶舱重新进入，以确保在正确的批次、快照和分析运行上复核证据。"
+          actions={[{ href: "/", label: "返回经营驾驶舱" }]}
+        />
       ) : null}
       {request.kind === "loaded" ? (
         <InvestigationWorkspace

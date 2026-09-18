@@ -579,40 +579,6 @@
   color: #4d5f76;
 }
 
-.investigation-state {
-  max-width: 520px;
-  margin: 3rem auto;
-  background: #fff;
-  border: 1px solid #dae3ec;
-  border-radius: 10px;
-  padding: 1.4rem;
-  text-align: center;
-}
-
-.investigation-state h1 {
-  margin: 0 0 0.4rem;
-  font-size: 1.1rem;
-}
-
-.investigation-state p {
-  color: #647489;
-  font-size: 0.8rem;
-}
-
-.investigation-state button {
-  border: 1px solid #183654;
-  background: #183654;
-  color: #fff;
-  border-radius: 6px;
-  padding: 0.4rem 1rem;
-  font-size: 0.75rem;
-}
-
-.investigation-state__back {
-  color: #315f82;
-  font-size: 0.78rem;
-}
-
 .investigation-action-error {
   margin: 0;
   border: 1px solid #e5c2be;

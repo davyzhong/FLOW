@@ -485,6 +485,7 @@ export function InvestigationConclusionEditor({
       )}
       <button
         type="button"
+        className="flow-btn flow-btn--primary"
         disabled={busy || !complete}
         onClick={() => {
           setSaved(false);
@@ -539,6 +540,7 @@ export function InvestigationEvidenceInspector({
             {item.status !== "verified" ? (
               <button
                 type="button"
+                className="flow-btn flow-btn--primary"
                 disabled={busy}
                 onClick={() =>
                   void onDecision(
@@ -553,6 +555,7 @@ export function InvestigationEvidenceInspector({
             {item.status !== "rejected" ? (
               <button
                 type="button"
+                className="flow-btn flow-btn--danger"
                 disabled={busy}
                 onClick={() =>
                   void onDecision(
@@ -602,7 +605,7 @@ export function InvestigationReviewActions({
           <button
             key={action.decision}
             type="button"
-            className={action.primary ? "is-primary" : undefined}
+            className={action.primary ? "flow-btn flow-btn--primary" : "flow-btn"}
             disabled={busy}
             onClick={() =>
               void onTransition({ decision: action.decision })

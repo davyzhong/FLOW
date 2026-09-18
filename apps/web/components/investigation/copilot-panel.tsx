@@ -72,7 +72,7 @@ export function CopilotPanel({
           onChange={(event) => setQuestion(event.target.value)}
         />
       </label>
-      <button type="button" disabled={busy} onClick={() => void ask()}>
+      <button type="button" className="flow-btn flow-btn--primary" disabled={busy} onClick={() => void ask()}>
         {busy ? "分析中…" : "生成结构化解读"}
       </button>
       {error ? (
