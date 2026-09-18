@@ -18,6 +18,10 @@ from flow_api.api.schemas.intake import ErrorDetail
 from flow_api.api.schemas.metric_library import (
     AccountingAccount,
     AccountingFoundation,
+    ComputationInventoryCompany,
+    ComputationInventoryResponse,
+    ComputationProposalRequest,
+    ComputationProposalResponse,
     EntryLine,
     IndustryReferencePack,
     MetricActionRequest,
@@ -31,6 +35,7 @@ from flow_api.api.schemas.metric_library import (
     MetricLibraryResponse,
     ReportItem,
     SandboxDiffLine,
+    SemanticContextResponse,
 )
 from flow_api.api.schemas.metric_library import (
     AccountingStandard as AccountingStandardRow,
@@ -47,9 +52,16 @@ from flow_api.infrastructure.models.metric_library import (
     StatementLineMapping,
 )
 from flow_api.metric_library_store.binding import build_execution_binding
+from flow_api.metric_library_store.computation import (
+    FACTS_PATH,
+    ComputationResult,
+    computation_inventory,
+    propose_computation,
+)
 from flow_api.metric_library_store.governance import GovernanceError, MetricGovernance
 from flow_api.metric_library_store.impact import ImpactError, MetricImpactService
 from flow_api.metric_library_store.importer import import_all, resolve_dictionary_file
+from flow_api.metrics.semantic_context import build_semantic_context
 from flow_api.security.authorization import Action
 from flow_api.security.route_policy import (
     LOADERS,
@@ -281,6 +293,109 @@ def get_metric_library(session: SessionDependency) -> MetricLibraryResponse:
             )
         )
     return payload.model_copy(update={"metrics": metrics})
+
+
+@router.get(
+    "/semantic-context",
+    response_model=SemanticContextResponse,
+    dependencies=[
+        Depends(
+            require_action(
+                Action.METRIC_LIBRARY_READ,
+                LOADERS["load_public_metric_library"],
+                session_provider=get_metric_library_session,
+            )
+        )
+    ],
+)
+def get_semantic_context(
+    session: SessionDependency, codes: str | None = None
+) -> SemanticContextResponse:
+    """O-01：指标字典语义上下文（对象/维度/限定/值四元素投影）。
+
+    分析型 AI 每次计算引用必须携带 entry_id + metric_code + collection，
+    实现「AI 回答可追溯至口径」；entry_id 为空 = YAML-only 条目，如实置空。
+    """
+    payload = _db_payload(session) or _yaml_payload()
+    code_list = [code.strip() for code in codes.split(",")] if codes else None
+    return build_semantic_context(payload, code_list)
+
+
+@router.get(
+    "/computation-inventory",
+    response_model=ComputationInventoryResponse,
+    dependencies=[
+        Depends(
+            require_action(
+                Action.METRIC_LIBRARY_READ,
+                LOADERS["load_public_metric_library"],
+                session_provider=get_metric_library_session,
+            )
+        )
+    ],
+)
+def get_computation_inventory() -> ComputationInventoryResponse:
+    """O-02：复算可用事实清单（company → periods），提议前据此落地取值。"""
+    inventory = computation_inventory()
+    return ComputationInventoryResponse(
+        facts_source=str(FACTS_PATH),
+        companies=[
+            ComputationInventoryCompany(company=company, periods=periods)
+            for company, periods in inventory.items()
+        ],
+    )
+
+
+_DEP_COMPUTE = require_action(
+    Action.METRIC_LIBRARY_READ,
+    LOADERS["load_public_metric_library"],
+    session_provider=get_metric_library_session,
+)
+
+
+@router.post(
+    "/computation-proposals",
+    response_model=ComputationProposalResponse,
+    dependencies=[Depends(_DEP_COMPUTE)],
+)
+def submit_computation_proposal(
+    request: ComputationProposalRequest,
+    session: SessionDependency,
+    auth: Annotated[AuthorizationContext, Depends(_DEP_COMPUTE)],
+) -> ComputationProposalResponse:
+    """O-02「提议 → 程序复算」（D054）：AI 提名治理指标，确定性沙盒复算。
+
+    复算通过才产生 verified 可引用结果；一切缺口是结构化 refusal。
+    本端点无数据库写入，审计留痕走 JSONL（filesystem append）。
+    """
+    result: ComputationResult = propose_computation(
+        session, request.metric_code, request.company, request.period
+    )
+    MetricLibraryAudit(resolve_metric_library_root()).append(
+        "computation_proposal",
+        auth.principal.actor_id,
+        {
+            "metric_code": result.metric_code,
+            "company": result.company,
+            "period": result.period,
+            "status": result.status,
+            "refusal_code": result.refusal_code,
+        },
+    )
+    return ComputationProposalResponse(
+        status=result.status,  # type: ignore[arg-type]
+        metric_code=result.metric_code,
+        entry_id=result.entry_id,
+        dictionary_id=result.dictionary_id,
+        company=result.company,
+        period=result.period,
+        value=result.value,
+        unit=result.unit,
+        formula_text=result.formula_text,
+        referenced_items=list(result.referenced_items),
+        refusal_code=result.refusal_code,
+        refusal_message=result.refusal_message,
+    )
 
 
 class ImportRequest(BaseModel):

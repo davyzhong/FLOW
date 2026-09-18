@@ -674,6 +674,72 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/metric-library/semantic-context": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Semantic Context
+         * @description O-01：指标字典语义上下文（对象/维度/限定/值四元素投影）。
+         *
+         *     分析型 AI 每次计算引用必须携带 entry_id + metric_code + collection，
+         *     实现「AI 回答可追溯至口径」；entry_id 为空 = YAML-only 条目，如实置空。
+         */
+        get: operations["get_semantic_context_api_v1_metric_library_semantic_context_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/metric-library/computation-inventory": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Computation Inventory
+         * @description O-02：复算可用事实清单（company → periods），提议前据此落地取值。
+         */
+        get: operations["get_computation_inventory_api_v1_metric_library_computation_inventory_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/metric-library/computation-proposals": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Submit Computation Proposal
+         * @description O-02「提议 → 程序复算」（D054）：AI 提名治理指标，确定性沙盒复算。
+         *
+         *     复算通过才产生 verified 可引用结果；一切缺口是结构化 refusal。
+         *     本端点无数据库写入，审计留痕走 JSONL（filesystem append）。
+         */
+        post: operations["submit_computation_proposal_api_v1_metric_library_computation_proposals_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/metric-library/import": {
         parameters: {
             query?: never;
@@ -1329,6 +1395,68 @@ export interface components {
             nullable: boolean;
             /** Non Null Count */
             non_null_count: number;
+        };
+        /** ComputationInventoryCompany */
+        ComputationInventoryCompany: {
+            /** Company */
+            company: string;
+            /** Periods */
+            periods: string[];
+        };
+        /**
+         * ComputationInventoryResponse
+         * @description 复算可用事实清单：AI 提议前据此落地 company/period 取值。
+         */
+        ComputationInventoryResponse: {
+            /** Facts Source */
+            facts_source: string;
+            /** Companies */
+            companies: components["schemas"]["ComputationInventoryCompany"][];
+        };
+        /**
+         * ComputationProposalRequest
+         * @description O-02 计算提议：AI 只能提名治理字典中的指标，不得自带公式。
+         */
+        ComputationProposalRequest: {
+            /** Metric Code */
+            metric_code: string;
+            /** Company */
+            company: string;
+            /** Period */
+            period: string;
+        };
+        /** ComputationProposalResponse */
+        ComputationProposalResponse: {
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "verified" | "refused";
+            /** Metric Code */
+            metric_code: string;
+            /** Entry Id */
+            entry_id?: string | null;
+            /** Dictionary Id */
+            dictionary_id?: string | null;
+            /** Company */
+            company: string;
+            /** Period */
+            period: string;
+            /** Value */
+            value?: string | null;
+            /** Unit */
+            unit?: string | null;
+            /** Formula Text */
+            formula_text?: string | null;
+            /**
+             * Referenced Items
+             * @default []
+             */
+            referenced_items: string[];
+            /** Refusal Code */
+            refusal_code?: string | null;
+            /** Refusal Message */
+            refusal_message?: string | null;
         };
         /**
          * ConclusionResponse
@@ -2969,6 +3097,90 @@ export interface components {
             delta?: string | null;
             /** Error */
             error?: string | null;
+        };
+        /** SemanticContextResponse */
+        SemanticContextResponse: {
+            /** Dictionary Id */
+            dictionary_id: string;
+            /** Metric Count */
+            metric_count: number;
+            /** Metrics */
+            metrics: components["schemas"]["SemanticMetricContext"][];
+        };
+        /**
+         * SemanticMetricContext
+         * @description O-01 指标语义上下文：对象 + 维度 + 限定 + 值（引用须携带 entry_id/metric_code）。
+         */
+        SemanticMetricContext: {
+            /** Metric Code */
+            metric_code: string;
+            /** Name */
+            name: string;
+            /**
+             * Collection
+             * @enum {string}
+             */
+            collection: "general" | "logistics";
+            /** Domain */
+            domain: string;
+            /** Entry Id */
+            entry_id?: string | null;
+            /** Status */
+            status?: string | null;
+            object: components["schemas"]["SemanticObject"];
+            /**
+             * Dimensions
+             * @default []
+             */
+            dimensions: string[];
+            qualifications: components["schemas"]["SemanticQualifications"];
+            value: components["schemas"]["SemanticValue"];
+        };
+        /**
+         * SemanticObject
+         * @description 四元素之一「对象」：指标衡量的主体。
+         */
+        SemanticObject: {
+            /** Definition */
+            definition: string;
+        };
+        /**
+         * SemanticQualifications
+         * @description 四元素之三「限定」：消除口径二义性的修饰（借鉴 #21 指标四元素映射）。
+         */
+        SemanticQualifications: {
+            /** Caliber */
+            caliber?: string | null;
+            /** Default Caliber */
+            default_caliber?: string | null;
+            /** Default Basis */
+            default_basis?: string | null;
+            /**
+             * Alternative Calibers
+             * @default []
+             */
+            alternative_calibers: string[];
+            /** Benchmark */
+            benchmark?: string | null;
+        };
+        /**
+         * SemanticValue
+         * @description 四元素之四「值」：确定性计算定义与执行绑定。
+         */
+        SemanticValue: {
+            /** Formula Text */
+            formula_text: string;
+            /** Unit */
+            unit?: string | null;
+            /**
+             * Depends On
+             * @default []
+             */
+            depends_on: string[];
+            /** Execution Kind */
+            execution_kind?: ("engine" | "facts" | "narrative") | null;
+            /** Execution Detail */
+            execution_detail?: string | null;
         };
         /** SheetMappingResponse */
         SheetMappingResponse: {
@@ -5053,6 +5265,105 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MetricLibraryResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_semantic_context_api_v1_metric_library_semantic_context_get: {
+        parameters: {
+            query?: {
+                codes?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SemanticContextResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_computation_inventory_api_v1_metric_library_computation_inventory_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ComputationInventoryResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    submit_computation_proposal_api_v1_metric_library_computation_proposals_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ComputationProposalRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ComputationProposalResponse"];
                 };
             };
             /** @description Validation Error */

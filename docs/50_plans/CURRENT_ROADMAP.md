@@ -45,6 +45,7 @@ superseded_by: null
 - 知识库第二截面增量扫描完成（2026-09-17，[增量扫描册](../knowledge-base/02_research/synthesis/2026-09-17-obsidian-delta-scan.md)）：四分类真新增 203 篇（HIGH 138）+ Davybase 图片知识化附录层 915 篇（微信全库批次进行中）；借鉴附录 #20–#24 已登记并入统一计划输入。
 - 指标库行业包 v1.2 完成（2026-09-17，借鉴 #21）：16 行业参考包 + 通用指标新增流动资产率 + 基准增强（现金流量比率 ≥1、产权比率 100%/200%），经派生脚本 `finalize_metric_dictionary_v1_1.py` 再生成（幂等）零迁移落地；前端指标库新增「行业参考包」tab。O-01 四元素设计输入登记于 `docs/40_specs/metrics/README.md`。
 - 竞对五维对比矩阵完成（2026-09-17，[五维矩阵](../competitive/2026-09-17-five-dimension-matrix.md)）：整合 C01–C20/方法矩阵/前端五轮调研为功能/界面/体验/性能/交互统一视图，FLOW 现状（defd823 实测）对标 12 家代表产品；结论=主线不调整，O-01/O-02（语义暴露+复算管线）升级为 AI 问数 v2 必须项，指标库行业包（#21）为低成本候选增项。
+- O-01/O-02 地基落地（2026-09-17，AI 问数 v2 必须项第一批）：`GET /api/v1/metric-library/semantic-context`（对象/维度/限定/值四元素语义上下文，引用携带 entry_id 回链口径）+ `POST /api/v1/metric-library/computation-proposals`（提议→程序复算：AI 只能提名治理字典 effective 指标，确定性沙盒在冻结报表事实上复算，缺口=结构化 refusal 绝不编造，审计走 JSONL 无新表）+ `GET /computation-inventory`（复算事实清单）。行动者=ai_analyst/analyst（metric_library.read），零 RBAC 矩阵变更；任意 AST 提议与 LLM 通道另行裁决。
 
 ## 纪律
 

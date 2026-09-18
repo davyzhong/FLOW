@@ -83,3 +83,123 @@ async def test_metric_library_returns_full_dictionary() -> None:
     assert cas_numbers == list(range(1, 43)), "42 项具体准则必须全量登记"
     assert any(a["code"] == "1802" for a in accounting["accounts"]), "使用权资产编号正式化"
     assert accounting["known_gaps"], "已知缺口必须如实呈现"
+
+
+async def test_semantic_context_projects_four_elements() -> None:
+    """O-01：语义上下文 = 对象/维度/限定/值投影，引用身份齐备。"""
+    app = create_app()
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        response = await client.get("/api/v1/metric-library/semantic-context")
+        assert response.status_code == 200, response.text
+        filtered = await client.get(
+            "/api/v1/metric-library/semantic-context?codes=current_ratio,quick_ratio"
+        )
+    body: dict[str, Any] = response.json()
+    assert body["dictionary_id"] == "flow.metric_dictionary.v1"
+    assert body["metric_count"] == 65
+
+    current_ratio = next(
+        m for m in body["metrics"] if m["metric_code"] == "current_ratio"
+    )
+    assert current_ratio["object"]["definition"]
+    assert "benchmark" in current_ratio["dimensions"]
+    assert current_ratio["qualifications"]["benchmark"]
+    assert current_ratio["qualifications"]["caliber"]
+    assert current_ratio["value"]["formula_text"]
+    assert current_ratio["value"]["unit"] == "倍"
+    assert current_ratio["entry_id"], "DB 在效条目必须携带 entry_id 供引用回链"
+
+    assert filtered.status_code == 200
+    filtered_body = filtered.json()
+    assert filtered_body["metric_count"] == 2
+    assert {m["metric_code"] for m in filtered_body["metrics"]} == {
+        "current_ratio",
+        "quick_ratio",
+    }
+
+
+async def test_computation_proposal_verified_matches_facts() -> None:
+    """O-02：治理指标提议 → 确定性复算；数值与事实库独立核对一致。"""
+    from decimal import Decimal
+
+    from flow_api.api.routes.metric_library import resolve_metric_library_root
+    from flow_api.infrastructure.db import get_session_factory
+    from flow_api.metric_library_store.importer import import_all
+
+    root = resolve_metric_library_root()
+    with get_session_factory()() as session:
+        import_all(session, root / "config" / "metrics")
+        session.commit()
+
+    app = create_app()
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        response = await client.post(
+            "/api/v1/metric-library/computation-proposals",
+            json={
+                "metric_code": "current_ratio",
+                "company": "sf_002352",
+                "period": "2026Q1",
+            },
+        )
+    assert response.status_code == 200, response.text
+    body: dict[str, Any] = response.json()
+    assert body["status"] == "verified", body
+    assert body["refusal_code"] is None
+    assert body["entry_id"]
+    assert body["referenced_items"] == ["bs.current_assets", "bs.current_liab"]
+
+    # 独立核对：直接从事实库取期末值相除（不复用求值器路径）
+    import yaml as _yaml
+
+    facts_path = root / "docs" / "implementation" / "p5" / "statement_facts.yaml"
+    facts_doc = _yaml.safe_load(facts_path.read_text(encoding="utf-8"))
+    values = {
+        (fact["item_id"], fact["role"]): Decimal(str(fact["value"]))
+        for fact in facts_doc["facts"]
+        if fact["company"] == "sf_002352" and fact["period"] == "2026Q1"
+    }
+    expected = values[("bs.current_assets", "end")] / values[("bs.current_liab", "end")]
+    assert Decimal(body["value"]) == expected
+
+
+async def test_computation_proposal_refusals_are_structured() -> None:
+    """O-02：未知指标 / 缺事实都是结构化 refusal，绝不编造数值。"""
+    app = create_app()
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client:
+        unknown = await client.post(
+            "/api/v1/metric-library/computation-proposals",
+            json={
+                "metric_code": "no_such_metric",
+                "company": "sf_002352",
+                "period": "2026Q1",
+            },
+        )
+        missing = await client.post(
+            "/api/v1/metric-library/computation-proposals",
+            json={
+                "metric_code": "current_ratio",
+                "company": "no_such_company",
+                "period": "2026Q1",
+            },
+        )
+        inventory = await client.get("/api/v1/metric-library/computation-inventory")
+    assert unknown.status_code == 200
+    unknown_body: dict[str, Any] = unknown.json()
+    assert unknown_body["status"] == "refused"
+    assert unknown_body["refusal_code"] == "unknown_metric"
+    assert unknown_body["value"] is None
+
+    assert missing.status_code == 200
+    missing_body: dict[str, Any] = missing.json()
+    assert missing_body["status"] == "refused"
+    assert missing_body["refusal_code"] == "missing_fact"
+
+    assert inventory.status_code == 200
+    inventory_body: dict[str, Any] = inventory.json()
+    sf = next(
+        c for c in inventory_body["companies"] if c["company"] == "sf_002352"
+    )
+    assert "2026Q1" in sf["periods"]

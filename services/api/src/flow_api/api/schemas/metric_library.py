@@ -232,3 +232,85 @@ class MetricCoverageResponse(BaseModel):
     caliber_notes: list[str]
     snapshots: list[CoverageSnapshot]
     metrics: list[CoverageMetricRow]
+
+
+class SemanticObject(BaseModel):
+    """四元素之一「对象」：指标衡量的主体。"""
+
+    definition: str
+
+
+class SemanticQualifications(BaseModel):
+    """四元素之三「限定」：消除口径二义性的修饰（借鉴 #21 指标四元素映射）。"""
+
+    caliber: str | None = None
+    default_caliber: str | None = None
+    default_basis: str | None = None
+    alternative_calibers: list[str] = []
+    benchmark: str | None = None
+
+
+class SemanticValue(BaseModel):
+    """四元素之四「值」：确定性计算定义与执行绑定。"""
+
+    formula_text: str
+    unit: str | None = None
+    depends_on: list[str] = []
+    execution_kind: Literal["engine", "facts", "narrative"] | None = None
+    execution_detail: str | None = None
+
+
+class SemanticMetricContext(BaseModel):
+    """O-01 指标语义上下文：对象 + 维度 + 限定 + 值（引用须携带 entry_id/metric_code）。"""
+
+    metric_code: str
+    name: str
+    collection: Literal["general", "logistics"]
+    domain: str
+    entry_id: str | None = None
+    status: str | None = None
+    object: SemanticObject
+    dimensions: list[str] = []
+    qualifications: SemanticQualifications
+    value: SemanticValue
+
+
+class SemanticContextResponse(BaseModel):
+    dictionary_id: str
+    metric_count: int
+    metrics: list[SemanticMetricContext]
+
+
+class ComputationProposalRequest(BaseModel):
+    """O-02 计算提议：AI 只能提名治理字典中的指标，不得自带公式。"""
+
+    metric_code: str = Field(min_length=1, max_length=64)
+    company: str = Field(min_length=1, max_length=64)
+    period: str = Field(min_length=1, max_length=32)
+
+
+class ComputationProposalResponse(BaseModel):
+    status: Literal["verified", "refused"]
+    metric_code: str
+    entry_id: str | None = None
+    dictionary_id: str | None = None
+    company: str
+    period: str
+    value: str | None = None
+    unit: str | None = None
+    formula_text: str | None = None
+    referenced_items: list[str] = []
+    refusal_code: str | None = None
+    refusal_message: str | None = None
+
+
+class ComputationInventoryCompany(BaseModel):
+    company: str
+    periods: list[str]
+
+
+class ComputationInventoryResponse(BaseModel):
+    """复算可用事实清单：AI 提议前据此落地 company/period 取值。"""
+
+    facts_source: str
+    companies: list[ComputationInventoryCompany]

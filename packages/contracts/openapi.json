@@ -2805,6 +2805,182 @@
         }
       }
     },
+    "/api/v1/metric-library/semantic-context": {
+      "get": {
+        "tags": [
+          "metric-library"
+        ],
+        "summary": "Get Semantic Context",
+        "description": "O-01：指标字典语义上下文（对象/维度/限定/值四元素投影）。\n\n分析型 AI 每次计算引用必须携带 entry_id + metric_code + collection，\n实现「AI 回答可追溯至口径」；entry_id 为空 = YAML-only 条目，如实置空。",
+        "operationId": "get_semantic_context_api_v1_metric_library_semantic_context_get",
+        "parameters": [
+          {
+            "name": "codes",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Codes"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SemanticContextResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/metric-library/computation-inventory": {
+      "get": {
+        "tags": [
+          "metric-library"
+        ],
+        "summary": "Get Computation Inventory",
+        "description": "O-02：复算可用事实清单（company → periods），提议前据此落地取值。",
+        "operationId": "get_computation_inventory_api_v1_metric_library_computation_inventory_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComputationInventoryResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/metric-library/computation-proposals": {
+      "post": {
+        "tags": [
+          "metric-library"
+        ],
+        "summary": "Submit Computation Proposal",
+        "description": "O-02「提议 → 程序复算」（D054）：AI 提名治理指标，确定性沙盒复算。\n\n复算通过才产生 verified 可引用结果；一切缺口是结构化 refusal。\n本端点无数据库写入，审计留痕走 JSONL（filesystem append）。",
+        "operationId": "submit_computation_proposal_api_v1_metric_library_computation_proposals_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ComputationProposalRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComputationProposalResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/metric-library/import": {
       "post": {
         "tags": [
@@ -5054,6 +5230,196 @@
           "non_null_count"
         ],
         "title": "ColumnProfileResponse"
+      },
+      "ComputationInventoryCompany": {
+        "properties": {
+          "company": {
+            "type": "string",
+            "title": "Company"
+          },
+          "periods": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Periods"
+          }
+        },
+        "type": "object",
+        "required": [
+          "company",
+          "periods"
+        ],
+        "title": "ComputationInventoryCompany"
+      },
+      "ComputationInventoryResponse": {
+        "properties": {
+          "facts_source": {
+            "type": "string",
+            "title": "Facts Source"
+          },
+          "companies": {
+            "items": {
+              "$ref": "#/components/schemas/ComputationInventoryCompany"
+            },
+            "type": "array",
+            "title": "Companies"
+          }
+        },
+        "type": "object",
+        "required": [
+          "facts_source",
+          "companies"
+        ],
+        "title": "ComputationInventoryResponse",
+        "description": "复算可用事实清单：AI 提议前据此落地 company/period 取值。"
+      },
+      "ComputationProposalRequest": {
+        "properties": {
+          "metric_code": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Metric Code"
+          },
+          "company": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Company"
+          },
+          "period": {
+            "type": "string",
+            "maxLength": 32,
+            "minLength": 1,
+            "title": "Period"
+          }
+        },
+        "type": "object",
+        "required": [
+          "metric_code",
+          "company",
+          "period"
+        ],
+        "title": "ComputationProposalRequest",
+        "description": "O-02 计算提议：AI 只能提名治理字典中的指标，不得自带公式。"
+      },
+      "ComputationProposalResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "verified",
+              "refused"
+            ],
+            "title": "Status"
+          },
+          "metric_code": {
+            "type": "string",
+            "title": "Metric Code"
+          },
+          "entry_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Entry Id"
+          },
+          "dictionary_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dictionary Id"
+          },
+          "company": {
+            "type": "string",
+            "title": "Company"
+          },
+          "period": {
+            "type": "string",
+            "title": "Period"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          },
+          "unit": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unit"
+          },
+          "formula_text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Formula Text"
+          },
+          "referenced_items": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Referenced Items",
+            "default": []
+          },
+          "refusal_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Refusal Code"
+          },
+          "refusal_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Refusal Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "metric_code",
+          "company",
+          "period"
+        ],
+        "title": "ComputationProposalResponse"
       },
       "ConclusionResponse": {
         "properties": {
@@ -9730,6 +10096,240 @@
           "period"
         ],
         "title": "SandboxDiffLine"
+      },
+      "SemanticContextResponse": {
+        "properties": {
+          "dictionary_id": {
+            "type": "string",
+            "title": "Dictionary Id"
+          },
+          "metric_count": {
+            "type": "integer",
+            "title": "Metric Count"
+          },
+          "metrics": {
+            "items": {
+              "$ref": "#/components/schemas/SemanticMetricContext"
+            },
+            "type": "array",
+            "title": "Metrics"
+          }
+        },
+        "type": "object",
+        "required": [
+          "dictionary_id",
+          "metric_count",
+          "metrics"
+        ],
+        "title": "SemanticContextResponse"
+      },
+      "SemanticMetricContext": {
+        "properties": {
+          "metric_code": {
+            "type": "string",
+            "title": "Metric Code"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "collection": {
+            "type": "string",
+            "enum": [
+              "general",
+              "logistics"
+            ],
+            "title": "Collection"
+          },
+          "domain": {
+            "type": "string",
+            "title": "Domain"
+          },
+          "entry_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Entry Id"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status"
+          },
+          "object": {
+            "$ref": "#/components/schemas/SemanticObject"
+          },
+          "dimensions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Dimensions",
+            "default": []
+          },
+          "qualifications": {
+            "$ref": "#/components/schemas/SemanticQualifications"
+          },
+          "value": {
+            "$ref": "#/components/schemas/SemanticValue"
+          }
+        },
+        "type": "object",
+        "required": [
+          "metric_code",
+          "name",
+          "collection",
+          "domain",
+          "object",
+          "qualifications",
+          "value"
+        ],
+        "title": "SemanticMetricContext",
+        "description": "O-01 指标语义上下文：对象 + 维度 + 限定 + 值（引用须携带 entry_id/metric_code）。"
+      },
+      "SemanticObject": {
+        "properties": {
+          "definition": {
+            "type": "string",
+            "title": "Definition"
+          }
+        },
+        "type": "object",
+        "required": [
+          "definition"
+        ],
+        "title": "SemanticObject",
+        "description": "四元素之一「对象」：指标衡量的主体。"
+      },
+      "SemanticQualifications": {
+        "properties": {
+          "caliber": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Caliber"
+          },
+          "default_caliber": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Default Caliber"
+          },
+          "default_basis": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Default Basis"
+          },
+          "alternative_calibers": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Alternative Calibers",
+            "default": []
+          },
+          "benchmark": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Benchmark"
+          }
+        },
+        "type": "object",
+        "title": "SemanticQualifications",
+        "description": "四元素之三「限定」：消除口径二义性的修饰（借鉴 #21 指标四元素映射）。"
+      },
+      "SemanticValue": {
+        "properties": {
+          "formula_text": {
+            "type": "string",
+            "title": "Formula Text"
+          },
+          "unit": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unit"
+          },
+          "depends_on": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Depends On",
+            "default": []
+          },
+          "execution_kind": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "engine",
+                  "facts",
+                  "narrative"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Execution Kind"
+          },
+          "execution_detail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Execution Detail"
+          }
+        },
+        "type": "object",
+        "required": [
+          "formula_text"
+        ],
+        "title": "SemanticValue",
+        "description": "四元素之四「值」：确定性计算定义与执行绑定。"
       },
       "SheetMappingResponse": {
         "properties": {
