@@ -756,3 +756,28 @@ investigation 4/4、dashboard 7/7、statements 4/4；m6 PASS。
 
 **未完成：** metric-library 全量迁移（761 行 ml-* CSS 的系统性收编）、
 溯源真实来源链接（后端供稿决策）、Task 9 五态×三视口全矩阵归档截图。
+
+### 2026-09-18 P4 批次（Task 6 主切片：metric-library 深度迁移）
+
+- **状态外壳统一**：页面 loading/error（含覆盖矩阵区）从私有 ml-state 迁入
+  共享 PageState（title="指标库" 保持 FE-10 的稳定 h1；覆盖区无 title 复用
+  同一外壳）；ml-page-title/ml-state* 样式块删除。
+- **控件与表格收编**：私有按钮样式 → flow-btn 变体（提交修订、治理
+  创建草稿/激活/退役、修订开关，共 6 处）；私有 ml-table → 共享 flow-table
+  （取数映射、分录模板、治理事件，共 3 处）。
+- **token 系统性收编**：裸色值 63 → 7——页面级金棕警示对固化为文件作用域
+  `--ml-warn-ink/-bg`（#805000/#fdf0dc，AA 对比注释；--rep-warn 对小字号
+  软底不达标故不成全局替换）+ on-dark 白字 3 处（与 flow-btn--primary 同
+  惯例）；删除自指 var 兼容块、未定义 token 消费（--rep-ink-soft、--ml-line）、
+  无组件使用的 ml-header/ml-revise/ml-page-title 等孤儿块；871 → 780 行。
+  剩余灰阶（#33465e/#8a97a8/#53647b 等）归并到 --rep-slate/--rep-muted
+  （脚注文字对比度顺带提升）。
+
+**验证：** 单测 86/86（含行业包 tab 2 条新测试）；lint 0 error/1 登记例外；
+生产构建门禁 56/56（一致性 + 响应式 + 导航 + 边界）。教训复证：门禁前
+必须按进程名 pkill 残留 next-server（`pkill -f next start` 杀不到改名的
+next-server，5 个残留实例曾让首轮门禁跑 30 分钟不出结果）。
+
+**未完成：** Task 6 另一半（investigations 详情页深度迁移）、Task 7 已由
+F-Query/F-Charts 裁决覆盖、Task 8 其余页面切片、溯源真实来源链接（后端
+供稿决策）、Task 9 五态×三视口全矩阵归档截图。
