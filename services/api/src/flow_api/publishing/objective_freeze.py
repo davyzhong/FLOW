@@ -216,8 +216,11 @@ def freeze_objective_statement_report(
             )
         return base
 
-    normalized_rows = sorted(rows, key=lambda r: (r.statement_type, r.created_at))
-    raw_rows_sorted = sorted(raw_rows, key=lambda r: (r.statement_type, r.sort_order))
+    # 同事务批量插入的 created_at 全同（server now() 为事务时间戳），排序键必然
+    # 打平；不补 tie-break 时行序随无序查询的物理顺序漂移，payload 哈希不稳，
+    # 重冻结会误判为新版本（幂等破坏）。uuid7 主键时间有序 = 自然插入序。
+    normalized_rows = sorted(rows, key=lambda r: (r.statement_type, r.created_at, r.id))
+    raw_rows_sorted = sorted(raw_rows, key=lambda r: (r.statement_type, r.sort_order, r.id))
     payload = {
         "schema_version": SCHEMA_VERSION,
         "report_type": REPORT_TYPE,
