@@ -1,0 +1,240 @@
+{
+ "total": 58,
+ "album": "财务管理",
+ "account": "奔向自由的果",
+ "album_url": "https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzkxOTEwNTYzMA==&action=getalbum&album_id=4116916038921584655",
+ "items": [
+  {
+   "title": "【图解财务干货】从“算账”到“赚钱”：什么是真正的经营分析？",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247484340&idx=1&sn=f4c24739acd094ccb651c7f067d45ea4&chksm=c1a67a85f6d1f39364c459966211ff54f96439912baaef51ac9c60da4e23922ff2e5743e3285"
+  },
+  {
+   "title": "【图解财务干货】财务必懂的两个经营分析工具：敏感性分析VS单变量求解",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247484356&idx=1&sn=61b3376d07723f7127b8c334aed820c0&chksm=c1a67af5f6d1f3e39f7cecc9450a8b5f9e15742bedb0d1e7ce50b5659781d48f3664b42e465b"
+  },
+  {
+   "title": "【图解财务干货】财务经理必备：3层分析法让老板追着你要报告",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247484368&idx=1&sn=9af60dc3679a9cb280b1038c455edbcd&chksm=c1a67ae1f6d1f3f7372fbea939427fb73924513a3c601b09b41ce3658e18905f6c607fb9b155"
+  },
+  {
+   "title": "【图解财务】财务经理必备：用生活案例讲透三张报表",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247484380&idx=1&sn=2ed3d7310c0211a39f221a838b24e21b&chksm=c1a67aedf6d1f3fb70a9ab188048d65929a7a0562720e677f5dcf7faf42972f0c29fda781263"
+  },
+  {
+   "title": "【图解财务干货】经营分析是服务与决策的内部报告",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247484392&idx=1&sn=e262f9348f93ec74e8580a80932657df&chksm=c1a67ad9f6d1f3cf773a9d3997c123a4c7d145f4330bba3ee35107903870c802509e9005a322"
+  },
+  {
+   "title": "【图解财务】经营分析的核心：经营分析的“问题拆解术”",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247484416&idx=1&sn=af6408ce0506026e8d4496c5d46804bf&chksm=c1a67d31f6d1f4278149ce5952abda6f29bcf4a722cf5ee4e4d22a97f6773cbadf0e0df2890a"
+  },
+  {
+   "title": "【图解财务干货】成本人员如何正确划分支出和费用的界限？",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247484431&idx=1&sn=c75f0493482c1f6d4f8fbe5e001d5897&chksm=c1a67d3ef6d1f4285dd0f9676c0f9358af9d79ff032caca89ff61660be957485b030047caa8d"
+  },
+  {
+   "title": "【图解财务管理】从0到1搭建成本核算体系：成本核算的“人、制度、数据”三要素解析",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247484447&idx=1&sn=32026209a3fce27345dec89ae6ec1589&chksm=c1a67d2ef6d1f438558dafd2c2bd8e4ce90cd9c5696855ef1238170d91cb1880762f92df2ce0"
+  },
+  {
+   "title": "【财务干货图解】如何打造全面预算管理框架体系",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247484459&idx=1&sn=ce911ee5baa76fd35540659e1c9fc66e&chksm=c1a67d1af6d1f40c69077f163c368a53a883e4f87f5aac228f0b8b84b19d671e115c42c2447d"
+  },
+  {
+   "title": "【财务干货图解】经营分析不是套模板！用存货周转率讲透问题导向思维",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247484471&idx=1&sn=92885b1e0bafa418db8ed3d492adb3fd&chksm=c1a67d06f6d1f410fa329131cac797471d02c5dddeb4f0b66282586974b0892eed4bfc867e69"
+  },
+  {
+   "title": "【财务干货图解】财务岗必看！经营分析闭环思维，让报告从“纸上”到“落地”",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247484483&idx=1&sn=ea037b4457e43b00bdaa40747980f09e&chksm=c1a67d72f6d1f464685f311071662b408703ea4dc2c3a378a0c5a825b26c3c16cdb1a0a1140f"
+  },
+  {
+   "title": "【财务干货图解】从“堆数据”到“会决策”：3步搭出老板“秒懂”的经营分析体系",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247484495&idx=1&sn=7442ef2994b89ce3d9a487c50e6a9711&chksm=c1a67d7ef6d1f468e0800537322d0536d6feebeb2084a99c4ec4e4fea58283876cc5d682308b"
+  },
+  {
+   "title": "【财务干货图解】避开这些坑！『盈利能力』分析的实战避坑指南",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247484507&idx=1&sn=7c8fc349668dc20d16da981b95334861&chksm=c1a67d6af6d1f47c46313e45ce0423fbf36d06d284feb301bf4e1fae97bbfcb4006bddd04735"
+  },
+  {
+   "title": "【财务经营分析干货图解】财务视角下供应商管理：为什么“贪便宜”会让公司越赚越少？",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247484523&idx=1&sn=bbf5e7a5239115cf702a8887849fc567&chksm=c1a67d5af6d1f44c24d8509b3dff4acd840081f48a9ff104ebf01c9dc0706c231c2d30d63733"
+  },
+  {
+   "title": "【财务经营分析干货图解】老板/经理/员工分别要看什么？一套懂所有人的经营分析框架",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247484535&idx=1&sn=e361f1064ea5db1798932194948e228c&chksm=c1a67d46f6d1f45078f3964d4612ae0fbd21a57b0fd93d1a883c029423a9dc565764ffa9e9ea"
+  },
+  {
+   "title": "【财务经营分析干货图解】不同层级的经营分析怎么写？老板关心全局，总监盯着落地，主管解决具体问题",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247484547&idx=1&sn=7b2da57f3b35b6d5b56b4f3797d8a5af&chksm=c1a67db2f6d1f4a4d7c31e86ecb3ad98bbd9b6f12a587687bebe039f88ff300608456b820a44"
+  },
+  {
+   "title": "【财务经营分析干货图解】从管全局到盯关键：经营分析实战指南",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247484559&idx=1&sn=1b61df2b6453743c2db1c80d8a35ec80&chksm=c1a67dbef6d1f4a8e998959b8bab3bbc632fafaedd4d1fd56e3451c5f14fd20694a2021fc78c"
+  },
+  {
+   "title": "【财务预算管理干货图解】预算管理的核心思维及费用控制管理思路",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247484571&idx=1&sn=e8c34d2719fe07c3b14aa64d39887b33&chksm=c1a67daaf6d1f4bc28bea3734535a37702dea2b5c5b86a86b70994ad0cd13a845c2af76e1faf"
+  },
+  {
+   "title": "【财务成本管控干货图解】面试被问成本核算？这套地气的“成本核算”流程指南，手把手教你理清",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247484587&idx=1&sn=6e48cba017737e6f62df14198cce44bb&chksm=c1a67d9af6d1f48c05dbea82fbc2c318b08911e8a21a5330fc9ac7f4ac8f503ba578df14bfe9"
+  },
+  {
+   "title": "【经营分析干货图解】五力模型怎么用？手把手教你做行业分析",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247484603&idx=1&sn=334cab4195f225c30cae9b6ac85c7ee4&chksm=c1a67d8af6d1f49ce649df22fe53403500cae7e3d854288c65adf257eddb5cff283f778c4dc9"
+  },
+  {
+   "title": "【财务成本管控干货图解】财务成本管控中，倒挤法实操指南，案例+步骤全解析",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247484619&idx=1&sn=49fa8206d1ceb3948908285db807a94f&chksm=c1a67dfaf6d1f4ec51bdeda3a9914f137d1065a60d59d7b829e984c39435529e5b34ce751f80"
+  },
+  {
+   "title": "【财务成本管控干货图解】完工产品与在产品成本分配如何分配？试试约当产量法+定额比例法",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247484635&idx=1&sn=8ea4506dba232d7246ef39593d7934c3&chksm=c1a67deaf6d1f4fc9e28cc556626f34ae244b4f60ed467dfeaa7a04a8a1605cdcd55b77a61a5"
+  },
+  {
+   "title": "【财务资金管理干货图解】财务资金管理：说清楚企业生存的钱规则",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247484650&idx=1&sn=e2d43a996f68dc26c38a08284d7458d4&chksm=c1a67ddbf6d1f4cdeb25df5f1e4531963131116768c467ae71aa1704623f6b416de04206dc45"
+  },
+  {
+   "title": "【财务资金管理干货图解】避开资金紧张！全面预算中的资金规划",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247484664&idx=1&sn=ea472ac4a4cf9e15ff06e0c2f4f45a49&chksm=c1a67dc9f6d1f4dfeabfcd345e70b11086048edd7d8a12e452523f8a00d1930f04a767e48177"
+  },
+  {
+   "title": "【财务经营分析干货图解】财务人必学！因素分析法三步搞定经营分析",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247484684&idx=1&sn=b9890b54504aaae2fb5258aac80f9dcb&chksm=c1a67c3df6d1f52b74cc79ff994e05cf6f559262bdc6044e99981fa1fc9c7b13f5e63a739034"
+  },
+  {
+   "title": "【财务经营分析干货图解】本量利分析：财务人必学的经营决策计算器",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247484700&idx=1&sn=e61c78795212316954697bf3ba6f74b8&chksm=c1a67c2df6d1f53b206f0bc885df8668e8596a5181bf2f7320cdef57b9f3fea612317d6d3197"
+  },
+  {
+   "title": "【财务经营分析干货图解】从0到1做季度财报：制造业/服务业/零售业通用分析框架",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247484712&idx=1&sn=95326f1331779869f8721786a7c9d0f7&chksm=c1a67c19f6d1f50f7b69bd2543a5f319c9a6e45207b2a7f476fa35d809bda4810a5358b1039d"
+  },
+  {
+   "title": "【财务经营分析干货图解】财务分析如何抓重点？这4步闭环逻辑让你的思考更清晰",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247484724&idx=1&sn=a722858464a209294565c4100952efa6&chksm=c1a67c05f6d1f513ca843f1f846463a61ba0b0750f332cc320bb2cb22596523716c41283cc38"
+  },
+  {
+   "title": "【财务成本管控干货图解】成本核算账户设置指南",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247484737&idx=1&sn=f8f9736100909945820afa668d1fd17c&chksm=c1a67c70f6d1f5667dda2f6d650266321dc8f10169328e472926d732f65cca3267fc5f8482d0"
+  },
+  {
+   "title": "【财务成本管控干货图解】成本会计新手必看：5步教你材料费科学分配",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247484749&idx=1&sn=aef2a120bce000decf156c1c27d9b15b&chksm=c1a67c7cf6d1f56a57a4e8f1273575e8eca50105f6f679d2da956c04b452f0db3abfcc4af437"
+  },
+  {
+   "title": "【财务资金管理干货图解】资金预算的资源整合：这套预算法让你的企业钱够花、花得值",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247484761&idx=1&sn=09cb2199320af731f67e302a183ee002&chksm=c1a67c68f6d1f57e4deaa96f8f4337f308a7b05d45181a1264d0f928edc3b86d2f3532fbe442"
+  },
+  {
+   "title": "【财务经营分析干货图解】从华为学来的财报分析框架：检查-诊断-解决，一步到位",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247484773&idx=1&sn=afee8e7a7e05740621eab1609be9a990&chksm=c1a67c54f6d1f542e0acd97b193251402e33597b456e46e9ab86dd3c46bd634c3fff47d3bc3e"
+  },
+  {
+   "title": "【财务预算管理干货图解】从要钱到赚钱：如何用全面预算让公司多赚钱？",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247484805&idx=1&sn=12bafa38151fd9a397b719004cdcb1ca&chksm=c1a67cb4f6d1f5a213c01ea4e4907f084d1243bfa1bb6cf725913976231ffe9e3b18708bd8be"
+  },
+  {
+   "title": "【财务成本管控干货图解】财务成本核算难题：燃料动力费分配攻略，一看就会！",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247484824&idx=1&sn=a3b7e5a345f8c10e8901ac3ef9e09331&chksm=c1a67ca9f6d1f5bf53af48201663c268558df3a7b0a7af0d3af458dc66670c7c0f12582dca84"
+  },
+  {
+   "title": "【财务绩效管理干货图解】从MBO到BSC，财务经理必懂的绩效管理工具",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247484836&idx=1&sn=0beade0a07ba46d19b63c9bf7a0382f6&chksm=c1a67c95f6d1f5834179c0bf2f6a93159b2e04e66dd9bf771f705a006f5399649261579a45d0"
+  },
+  {
+   "title": "【财务资金管理干货图解】资金预测模型：中小企业管好钱袋子的实用指南",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247484848&idx=1&sn=ee47d1782622fcfd64c0fefcb7c9df8d&chksm=c1a67c81f6d1f59780e81ec7214c74749df981c6d722e702de1fce054b8de8ea9d5221ca9735"
+  },
+  {
+   "title": "【财务成本管控干货图解】财务岗必看！成本核算职工薪酬分配策略全解析",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247484890&idx=1&sn=c1a7a481c00c807d8013022aa9f67128&chksm=c1a67cebf6d1f5fd8dd1c565a6de688fb121c0132fde08100ec5e8929bfb50db4e3670356e93"
+  },
+  {
+   "title": "【财务成本管控干货图解】生产型企业成本难题：联/副产品分摊的3步实操法",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247484930&idx=1&sn=050aa0f31d629c19e6aad737c0d2669a&chksm=c1a67f33f6d1f625e665db7d53738352a4add3a954731354e6995e5c5e57b7098187bb5ad7be"
+  },
+  {
+   "title": "【财务成本管控干货图解】财务内控不是管得严，是帮企业不丢钱会赚钱",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247484956&idx=1&sn=ded0942def3f6d3ff357f3652d0ceb37&chksm=c1a67f2df6d1f63beeee24ad82ab5dde4bd4a28753ae97d75ab315f87a6585308f375f513b5e"
+  },
+  {
+   "title": "【财务绩效管理干货图解】财务经理必看！青岛啤酒用BSC做绩效管理的3个关键动作",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247484989&idx=1&sn=9ae0cd23ddfc0184fbd6da7a5fbbb38a&chksm=c1a67f0cf6d1f61ac3615393264b5e5066319115c797d47e370b4bbe80895f616168793dd56a"
+  },
+  {
+   "title": "【财务资金管理干货图解】集团资金预测模型：从合并抵消到内部调拨",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247485008&idx=1&sn=97e63d573710bee68dcf00e7530e222a&chksm=c1a67f61f6d1f677490afe42f39224c2683209a4cf2e5b185cdeec6b8efd7b01b6005df3e14e"
+  },
+  {
+   "title": "【财务风险管控干货图解】从未知到可控：企业经营风险的底层逻辑与解决方案",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247485074&idx=1&sn=324f2ab77d450807ffbfa60051dbdf0d&chksm=c1a67fa3f6d1f6b51231bf0945f5b2f67417ec65efede654c573f07088857f5d103326ec3918"
+  },
+  {
+   "title": "【财务报表分析干货图解】营业利润vs净利润：财务人必懂的利润真相，避免踩雷！",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247485196&idx=1&sn=f1f96bd9aca0c19c141b27e01b55f7d2&chksm=c1a67e3df6d1f72bac0514631548567d6a8a3724f45da08317ddd155e1ea3aa559aeb3079b4d"
+  },
+  {
+   "title": "【财务报表分析干货图解】财务报表分析：利润表不是面子，是企业经营的成绩单",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247485218&idx=1&sn=03723efc6e781c1068c3baec61683cff&chksm=c1a67e13f6d1f7053a7dc3a0a5c5e6afb0d0625e96a745e3224b321bec0e1dc3b266fdf735db"
+  },
+  {
+   "title": "【财务预算管理干货图解】全面预算流程闭环：上市公司是怎么从编到考的？",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247485339&idx=1&sn=320e90e3a89fb79ed0f7cd76cb86008e&chksm=c1a67eaaf6d1f7bc78870be928a65ff98961e6ef3ee5e8e80c7d9cad3528df94ae4fb878fea1"
+  },
+  {
+   "title": "【财务经营分析干货图解】如何经营分析，高效打通财务数据与业务经营的因果链路",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247485400&idx=1&sn=bf5027479284c0c2dc754fcfc118dcd9&chksm=c1a67ee9f6d1f7ff79541355c49d96b928dfa3c66d07cc5540c734b68cb46c62a28c90abd6f4"
+  },
+  {
+   "title": "【财务干货图解】财务人必藏：10个模型搞定90%分析，老板再也不说听不懂（内含EXCEL模板）",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247485508&idx=1&sn=2a9df897f380e69505c7fda4feff637c&chksm=c1a67175f6d1f8638f278a8a83e747bccd179d27866a19fcea6ab2a156ce4a68e3da276116e9"
+  },
+  {
+   "title": "全面预算是什么？为什么这么重要？",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247486442&idx=1&sn=f2b2d69b406d5084c085f7983e14f63c&chksm=c1a672dbf6d1fbcd610499a0384c012291a3f2ad04fa3fc55ab5955f9a8f9a68d1fc3313d275"
+  },
+  {
+   "title": "预算真的是我们财务去做的吗？",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247486466&idx=1&sn=31e5e505ac6a12249b7952c9f9c65483&chksm=c1a67533f6d1fc25f22c3ec01d06d81065ae6dc11ac8733c4f2b6024b9d9f20bed79f0b287ac"
+  },
+  {
+   "title": "【财务经营分析干货图解】应付账款周转天数怎么算？财务必懂的资金占用密码",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247486523&idx=1&sn=4ac151be15cf1a58880c7c4b1a9c9fea&chksm=c1a6750af6d1fc1c8ac250380e1dc564e0055ba32cb40b024569feb65eb37af3a83b8885848f"
+  },
+  {
+   "title": "如何分析一家企业的资产负债表",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247486723&idx=1&sn=dc779a655d8d67f85c351c3b4cb596b8&chksm=c1a67432f6d1fd242664f0abcaa2ef0073d1395adb48a8140c56196c44d87bfc242a87d6907c"
+  },
+  {
+   "title": "财务预算制度拆解",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247486811&idx=1&sn=4b1e21e4ceca9d452123835e2a3dbeb5&chksm=c1a6746af6d1fd7c0341ae58cdb27ba57511a3b1b92aef05174f2ce620316b22d528d93571ed"
+  },
+  {
+   "title": "一定要吃透这6个[财务健康]核心指标",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247487392&idx=1&sn=74c951c0143db5d5bcc394657346623d&chksm=c1a67691f6d1ff871ae6e0e41e11c49fa94ae85856bb820fa02f22c0f4d697edae8cbbb85415"
+  },
+  {
+   "title": "【图解】成本费用率深度解析",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247487506&idx=1&sn=5d2afba7b77eb179deb495bce9cfa8a8&chksm=c1a66923f6d1e03582a2b925c46d3cda3f09db181fc1d394b04284a164e1d1db8d849048e960"
+  },
+  {
+   "title": "财务分析的杜邦分析法+UE模型",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247487508&idx=1&sn=24f771cb1e1c76fec6f0f1da9d52126b&chksm=c1a66925f6d1e033c1699880b5059d6c95fedffa70c959d6bd4817cca0aaff461ea937982a6e"
+  },
+  {
+   "title": "财务成本分析图解-料工费的归集方法",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247487509&idx=1&sn=be632ffeb958cccfabe3843f45fb61a8&chksm=c1a66924f6d1e032213bbcd7811fa20a112bd0e2b57f243b3d5f54f90136eabf773206755b95"
+  },
+  {
+   "title": "财务总监亲授：成本控制四步法，让利润翻倍",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247487510&idx=1&sn=914cc876480c452f408838f3f16bc4a1&chksm=c1a66927f6d1e0310dfa432d8412b451f155293adfc68ef248adf8689456c0e059cabe5b6990"
+  },
+  {
+   "title": "一图说清财务利润表分析",
+   "url": "https://mp.weixin.qq.com/s?__biz=MzkxOTEwNTYzMA==&mid=2247491013&idx=1&sn=48a16d433f9f32e07e9b9337c53bb130&chksm=c1a664f4f6d1ede2da1ca34fcaf3085d8ae5cafc34f86c05421b2b74d1ae3639d3253ad01f77"
+  }
+ ]
+}
