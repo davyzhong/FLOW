@@ -3,14 +3,14 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目尽调、优化与单 Agent 执行总交接
 doc_type: navigation
 status: current
-version: 3.2
+version: 3.3
 created_at: 2026-09-12
-updated_at: 2026-09-15
+updated_at: 2026-09-19
 owner: FLOW
 applies_to: repository
 ---
 
-# FLOW 项目尽调、优化与单 Agent 执行总交接｜2026-09-15
+# FLOW 项目尽调、优化与单 Agent 执行总交接｜2026-09-19
 
 > 本页是下一位单一 Agent 的工作入口，整合了多 Agent 执行审计、R1 修复复核、竞品与方法论研究、工程收口计划和后续产品优化建议。它负责说明“现在在哪里、还要查什么、先改什么、怎样证明完成”；项目状态仍以 [PROJECT_STATE](docs/00_start_here/PROJECT_STATE.md) 为唯一事实源，任务顺序仍以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为唯一执行入口。
 
@@ -18,24 +18,26 @@ applies_to: repository
 
 ### 0.1 当前可信结论
 
-- **当前基线：`main@80b21e6`**（m6 门禁生效 + 实施证据登记）；本会话交付批次终点 `2e6cc1e`（C 级出口执行批次），此后有并行会话的 docs 提交（README 升级/链接修复，至 `1325cf7`），均在 m6 门禁守护下。
-- **S01 已正式关闭**（R2/R3/R4 + Task 6 关闭，登记于协调台账 §7）；U8 关闭不变。
-- **阶段 3 基础（T09–T12）已交付**（台账 §8）：L0 基准 1454/1454、L1 页级答案集 1775/1795（98.9%）双零验证、数据点级溯源 95.5% 带页锚、重述 supersedes 链 + diff、只读 MCP 三工具、确定性差异起草、10× 性能基线（P95 明细 4.4/检索 1.0/聚合 1.7ms）、问数 v1 + 94 问评测 100% 命中。
-- **C 级出口执行批次已交付**（台账 §9）：压力测试抓获 10 条抽取错误候选；holdout 预注册签封；AI 交叉评执行包；性能门禁入 CI（P95≤50ms）；m6 文档门禁入 CI（G6 关闭，用户批准 `fbe8296`）。
-- 多 Agent 并行已终止，采用**单一 Agent、逐 Gate、串行执行**；历史 Sol/Kimi/GLM 名称只表示审计来源，不表示新的并行派工。
-- 产品战略方向无跑偏：核心是“经分专员使用的财务经营分析工作台”，系统自主完成数据/证据/分析/草稿，经分专员统一终审发布；公开财报是独立先行模块。
-- **出口裁决参数已由用户苏格拉底问答确认**（协议 §3.7）：两层 holdout、回归层=菜鸟压力测试、全量 100% 零容忍（分母=已定位值，未定位人工补齐）、纯 AI 交叉评（无人工兜底，独立性声明如实打折）、新批次预注册随机抽签。
-- **下一里程碑 = C 级出口 Go/No-Go 裁决**；前置仅剩三件轻量人工项 + A4 外部材料（见 §8）。
+- **当前基线：`main@a461b54`**（2026-09-19 晨，全 job CI 绿）；本会话（09-17～09-19 连续执行）交付批次终点链 `5442d9c`→`0c4c45a`→`9cf8cb3`→`02c11ea`→`0af6a8a`→`a461b54`。
+- **S01 / U8 关闭不变**；阶段 3 基础（T09–T12）与 C 级出口执行批次交付不变（台账 §8/§9）。
+- **指标库 v1.2 行业参考包已交付**（借鉴 #21：16 行业 + 流动资产率 + 基准增强，`5442d9c`）；**O-01/O-02（AI 问数 v2 地基）已落地**（语义上下文端点 + 提议→复算管线，`3a0ee20`）。
+- **前端一致性整改计划 Task 0–9 全部关闭**（P3–P5 批次：metric-library/investigations 深度迁移、状态门禁 frontend-states.spec、60 图状态矩阵归档；门禁矩阵 = 一致性 10 路由 + 溢出 11×3 视口 + 状态 5×3 + 导航/边界 = 69 项，全跑生产构建）。
+- **后端既有 flake 修复并 CI 实证**：objective freeze 幂等的行序漂移（`0af6a8a`，publishing-golden 绿）。
+- **数据来源政策已由用户明确（2026-09-19）**：无私有数据来源，研发期一律网络公开来源数据——A4「等待外部财报材料」的前提作废，数据扩张改为继续走公开财报抓取管线（见 §2.2/§2.3）。
+- 多 Agent 并行已终止，单一 Agent、逐 Gate、串行执行不变；产品战略方向不变（经分专员工作台，公开财报独立先行）。
+- **下一里程碑不变 = C 级出口 Go/No-Go 裁决**；前置人工项不变（见 §2.2）。
 
 ### 0.2 当前最重要的偏差与缺口
 
 | 类型 | 当前判断 | 处理方式 |
 |---|---|---|
-| 10 条抽取错误候选 | BABA NCI 行（-9083/-7652 等 8 条）+ JDL 现金流 2 行的值在源 PDF 文本层不存在——**压力测试实锤，不是定位技术问题** | 人工翻页查源（压力测试报告 §2 清单）→ 修抽取 YAML 新版本 → 重跑基准 |
-| C 级出口 PASS | 证据链已就绪，缺独立盲评与 holdout 执行 | 用户执行 AI 交叉评（包已备）+ 到料后抽签 |
-| 数据扩张 | 10 家公司真实财报 PDF 未到料 | A4 外部材料；到料即走既有管线 |
+| 10 条抽取错误候选 | BABA NCI 8 条 + JDL 现金流 2 行，值在源 PDF 文本层不存在（压力测试实锤） | 人工翻页查源（压力测试报告 §2 清单）→ 修抽取 YAML 新版本 → 重跑基准 |
+| C 级出口 PASS | 证据链就绪，缺独立盲评与 holdout 执行 | 用户执行 AI 交叉评（包已备）+ 抽签 |
+| 数据扩张 | **政策已更新**：无私有数据线，公开网络数据是研发期唯一来源 | 走既有公开财报抓取管线（harvest/港交所）扩充，不再等待 A4 外部材料 |
+| 溯源真实来源链接 | 原卡「私有 PDF 如何经 API 供给」决策——**已被公开数据政策解开** | 按公开 URL/公开文件引用设计落地（下一个可领取项） |
+| AI 问数 LLM 通道 | 用户裁决另行 | 保持 gated；O-01/O-02 地基已就绪 |
+| F-ExportAudit | 用户明示暂不管；现有描述「补审计行」规格不足 | 搁置；领取前先补规格 |
 | 合规尽调 G4 | 未启动 | A5；阻塞 T13 与 MCP/LLM 开放 |
-| 运行产物/owner 命名 | 已清理（var/ 出库、owner 职责域化） | 已闭环 |
 
 ## 1. 权威关系与阅读顺序
 
@@ -45,55 +47,58 @@ applies_to: repository
 2. [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)：唯一可领取路线图；
 3. [S01 工作包](docs/50_plans/work_items/S01--post-u8-boundary-contract-security.md)（completed）与 [C 级出口工作包](docs/50_plans/work_items/PUBLIC--c-level-exit-protocol.md)（当前 Gate，含 §3.7 出口裁决参数）；
 4. [战略重构设计 V1.1](docs/superpowers/specs/2026-09-13-flow-strategic-reset-design.md)、[PRODUCT_SCOPE](docs/20_product/PRODUCT_SCOPE.md)、[PRODUCT_PRINCIPLES](docs/20_product/PRODUCT_PRINCIPLES.md)：产品目标、固定原则和冲突裁决；
-5. [协调台账](docs/70_operations/2026-09-14-coordination-ledger-glm.md) §6/§7/§8/§9：R0/R1、R2/R3/R4、T09–T12、C 级出口执行批次的全部完成证据；
-6. [整合尽调总汇](docs/80_reviews/2026-09-15-integrated-due-diligence.md)、[整合优化方案](docs/80_reviews/2026-09-15-integrated-optimization-program.md)：审计结论与候选优化项；
-7. [竞品优化清单](docs/competitive/optimization-checklist.md)与[知识库 O-01～O-17](docs/knowledge-base/09_competitive/2026-09-14-optimization-backlog.md)：只作候选需求证据。
+5. [协调台账](docs/70_operations/2026-09-14-coordination-ledger-glm.md) §6–§9：R0/R1、R2/R3/R4、T09–T12、C 级出口执行批次的完成证据；
+6. [前端一致性整改计划](docs/superpowers/plans/2026-09-16-frontend-consistency-remediation-plan.md) §10 执行日志：P0–P5 批次全记录（已关闭）；
+7. [竞品优化清单](docs/competitive/optimization-checklist.md)、[知识库 O-01～O-17](docs/knowledge-base/09_competitive/2026-09-14-optimization-backlog.md)、[五维矩阵](docs/competitive/2026-09-17-five-dimension-matrix.md)：候选需求证据（O-01/O-02 已落地地基）。
 
 冲突裁决顺序：用户最新明确指令 → 已接受决策 D052–D054 → approved 规格 → PROJECT_STATE → CURRENT_ROADMAP / 当前工作包 → 本交接 → review / research → 历史计划和聊天记录。
 
-## 2. 本会话（2026-09-15 执行批次）交接明细
+## 2. 本会话（2026-09-17～09-19 连续执行批次）交接明细
 
-### 2.1 已完成（全部推送 main，CI 全绿）
+### 2.1 已完成（全部推送 main，尖端 CI 全 job 绿）
 
 | 批次 | 内容 | main 锚点 |
 |---|---|---|
-| R2/T02–T04 | 治理写 7 条策略化（proposed_by fail-closed）；四阶段发布 ABI（迁移 0028，Idempotency-Key 必填，intent/outcome 503）；旁路 pipeline 删除；§3.3 身份字段全链 Principal 化（UI/测试不发 actor/reviewer/operator）；卫生包（var/ 出库、owner 职责域化） | `5d085b4`→`a16751e` |
-| R3/T06 | module-boundaries-v2：ownership v2（glob_rules + catch-all 全树唯一 owner）、`scripts/check_module_boundaries.py` 全树 AST + import_rules、违规 fixture 证明能红 | `fbfe7d8` |
-| R4/T07 | `scripts/r4_full_verification.sh`：隔离 compose + 动态端口 + 真实 CA + dump 四证 → 升级 0028 → SQL==HTTPS 双证明，本地 PASS；minio pin `RELEASE.2025-04-22T22-12-26Z`（:latest 漂移曾致多 job 红） | `2fa5f72` |
-| T08 | S01 关闭 + 权威文档同步（PROJECT_STATE v1.7、HANDOFF v3.1、台账 §7） | `6431cf2` |
-| T09 | L0 基准 1454/1454；L1 页级答案集 1775/1795（98.9%，strong 980/weak 795）双零验证；裁决参数 §3.7（苏格拉底问答） | `5a9e788`/`ffef522` |
-| T10 | 迁移 0029（溯源列 + supersedes_id）；导入器溯源认领 95.5%；`statement_restatement_diff.py`；`mcp_facts_server.py`（token fail-closed）；`draft_restatement_commentary.py` | `c9dcd47`/`dda978b` |
-| T11-G2 | `perf_baseline.py` 10× 事务内放大（回滚无污染），P95 明细 4.4/检索 1.0/聚合 1.7ms | `8c479a1` |
-| T12 | `ask_facts.py` 确定性问数 v1（拒答零误答）+ `generate_qa_eval.py` 94 问评测 100% 命中 | `ffef522` |
-| C 级出口执行 | 菜鸟压力测试（抓获 10 条抽取错误候选）；holdout 预注册签封；AI 交叉评执行包 + 证据束导出；C1 性能门禁入 CI；m6 入 CI（用户批准，G6 关闭） | `44acd16`→`2e6cc1e`/`fbe8296` |
+| 指标库行业包 v1.2 | 借鉴 #21 落地：16 行业参考包（经营指标目录=对标参考，financial_reference 只登记素材真实值）+ 通用指标新增流动资产率 + 基准增强（现金流量比率≥1、产权比率 100%/200%）；**v1_1.yaml 是派生产物——改动走 finalize 脚本再生成（已幂等化+修 derived_from 炸字符 bug）**；前端新增「行业参考包」tab | `5442d9c` |
+| O-01/O-02 地基 | `GET /metric-library/semantic-context`（四元素投影，引用携带 entry_id 回链口径）+ `POST /metric-library/computation-proposals`（治理字典提名→确定性 Decimal 沙盒复算，缺口=结构化 refusal）+ `GET /computation-inventory`；零 RBAC 矩阵变更；路由清单 66→69 | `3a0ee20`/`c93c1f1` |
+| P4 metric-library 迁移 | PageState/flow-btn/flow-table 收编；裸色 63→7（金棕对比对固化为文件作用域 token）；CSS 871→780 行 | `0c4c45a` |
+| P5-A investigations 详情 | 四类非加载态迁 PageState（h1 稳定）、7 按钮迁 flow-btn；证据工作台专用色板按完成标准保留 | `b7b4257` |
+| P5-B Task 8 切片 | dashboard 重试按钮、四问工作台 flow-error/flow-field；public/internal 落地页审计免迁 | `3089472` |
+| P5-C1 状态门禁 | frontend-states.spec：5 路由×{加载/503/403} 结构断言（h1 稳定、role 语义、中文文案、重试）；**抓到两真缺口并修复**：operations-overview 无加载态、Next RouteAnnouncer 占 role=alert（断言收窄 main） | `9cf8cb3` |
+| P5-C2 矩阵归档 | 60 图（4 数据密集页×5 态×3 视口）+ 索引册入 docs/assets/screenshots/state-matrix/；生成器按需触发（FLOW_STATE_MATRIX_ARCHIVE=1） | `02c11ea`/`a461b54` |
+| 后端 flake 修复 | objective freeze 幂等：created_at 事务时间戳致排序键打平+无序查询行序漂移→payload 哈希不稳；tie-break 补 uuid7 主键；CI publishing-golden 实证绿 | `0af6a8a` |
+| 并行会话 | 竞对五维矩阵、知识库第二截面增量扫描（#20–#24）、roadmap v1.7 | `7717102`/`4cb2535` 等 |
 
-### 2.2 卡住的问题（全部为外部/人工依赖，非技术阻塞）
+### 2.2 卡住的问题（外部/人工依赖为主）
 
-1. **10 条抽取错误候选人工查源**：BABA 利润表「歸屬於非控制性權益損益」8 条（-9083/-7652 等值在源 PDF 全文本层不存在，p38 实际为 2,534/2,872/4,067/6,529 系）+ JDL「存放受限制現金」「已付利息」2 条。清单在 `docs/60_delivery/2026-09-15-cainiao-stress-test-report.md` §2。需要人翻 PDF 确认原始数字，之后修抽取 YAML（新版本文件）并重跑基准（预期覆盖 ≥99.4%）。
-2. **AI 交叉评执行**：包与 prompt 已备（`docs/80_reviews/ai-cross-review/README.md`），证据束导出命令 `--export-review-bundle`（工作产物不进 git）。需要用户开一个非 GLM 会话逐份粘贴执行——实现方（GLM）不得自评。
-3. **A4 扩张材料**：10 家公司真实财报 PDF 未到料——不可合成，到料即走既有管线（含 holdout 抽签）。
-4. **A5 合规尽调 G4**：未启动；阻塞 T13、MCP 开放（C2 已记录悬置）、T12 LLM 通道。
-5. **U4 oracle / rnd_exp 原文 / U9·O5 / U10**：外部材料与授权，同前不变。
+1. **10 条抽取错误候选人工查源**：清单在 `docs/60_delivery/2026-09-15-cainiao-stress-test-report.md` §2；需人翻 PDF 后修抽取 YAML 并重跑基准。
+2. **AI 交叉评执行**：包已备（`docs/80_reviews/ai-cross-review/README.md`），需用户开非 GLM 会话执行——实现方不得自评。
+3. **溯源真实来源链接**：决策已被公开数据政策解开，**不再是卡点，转为下一步可领取项**（按公开 URL/文件引用设计，与溯源浮层 pointer-events 联动）。
+4. **AI 问数 LLM 通道**：gated（用户另行裁决）；O-01/O-02 地基已就绪。
+5. **F-ExportAudit**：用户明示搁置；领取前先补规格。
+6. **合规尽调 G4 / U4 oracle / rnd_exp 原文 / U9·O5 / U10**：外部材料与授权，同前不变。
+7. **infra 小项**：web 容器 healthcheck busybox wget 假阴（Node 实测健康）——compose 修复方案在册待用户批准（红线）；常驻栈已刷新至 `a461b54` 并实测 200。
 
 ### 2.3 下一步计划（下一 Agent 按序领取）
 
-1. 收到 10 条人工查源结果 → 修抽取 YAML → 重跑 `build_answer_set_l1.py` + `accuracy_benchmark.py` 双层 → 更新压力测试报告；
-2. 用户执行 AI 交叉评后 → 逐条归因（真错修管线 / 误报留档）写 `results/adjudication.md`；
-3. A4 到料 → 抽签（预注册规则）→ 批次 1 扩张（抽取 → L0/L1 → 冻结 → 重述链实战验证）；
-4. 三项齐备 → **C 级出口 Go/No-Go 裁决** → 通过后解锁 T13（需 A5）与 T12 LLM 通道；
+1. **溯源真实来源链接**（已解锁）：按公开来源设计——statement 溯源行项目回链公开财报 URL/公开文件引用 + 前端浮层跳转（与既有 ProvenanceBadge/ProvenanceHover 联动）；先补半页设计输入再动工；
+2. **公开数据扩张**（政策更新后改为可领取）：按既有 harvest 管线扩公开财报公司面 → 抽取 → L0/L1 基准 → 冻结 → 重述链实战验证（原 A4 批次流程，来源改公开渠道）；
+3. 收到 10 条人工查源结果 → 修抽取 YAML → 重跑双层基准 → 更新压力测试报告；
+4. 用户执行 AI 交叉评后逐条归因写 adjudication；三项齐备 → **C 级出口 Go/No-Go 裁决** → 解锁 T13（需 A5）与 T12 LLM 通道；
 5. 同步纪律：每步完成即更新路线图/台账/PROJECT_STATE 并同 SHA CI 全绿。
 
 ### 2.4 本会话踩过的坑（新增，接续 §7）
 
-- **批量还原“噪音”文件前必须 dry-run 验证排除正则**：R2 曾因排除正则漏配 `.py` 后缀分支，把自己的修改 checkout 回退并随提交污染分支（CI 红在 import 上才暴露）。教训已入记忆 `flow-git-revert-noise-lesson`；
-- **管道 tail 吞退出码**：`python3 check_docs | tail` 的退出码是 tail 的——门禁失败被吞、提交先行为发生。门禁命令必须独立执行或用 `set -o pipefail`；
-- **m6 文档门禁的红点谱系**：views 漂移（改路线图后必须 `plan_views.py --write`）、生成物无 frontmatter（证据束等工作产物放 `work/` 不进 git）、doc_type×status 词表（delivery 用 `verified` 非 delivered；work-item 无 sealed——签封件用 plan+active+sealed_by 自定义字段）；
-- **Quay `minio:latest` 上游漂移**：新版拒绝 bootstrap 凭据致多 job 红——已 pin `RELEASE.2025-04-22T22-12-26Z`，新增第三方镜像一律 pin；
-- **裸 Connection 的 entity select 返回列值行而非 ORM 对象**：独立脚本查询必须显式列（`statement_restatement_diff.py` 教训）；
-- **psycopg text() 双冒号 cast**：`:param::uuid` 解析失败，必须 `CAST(:param AS uuid)`（二次踩坑，老坑新形态）；
-- **§3.3 横切合同**：require_action 对 POST/PUT/PATCH 预读 body 做身份冲突检测——任何 UI/测试发 `actor/reviewer/operator` 字段都会 409；新增写路由一律从 AuthorizationContext 取身份；
-- **bash 全角括号内的 `$VAR` 会被解析成长变量名**（`（project=$PROJECT，` → unbound）；脚本内一律 `${PROJECT}`；
-- **setup-uv 缓存 Post-run 偶发报错**：重跑 failed jobs 即过，属环境性 flake，不算门禁失败。
+- **`metric_dictionary_v1_1.yaml` 是派生产物**：手改会被 `finalize_metric_dictionary_v1_1.py` 再生成清掉——改动必须编码进脚本（NEW_METRICS/BENCHMARK_UPDATES/INDUSTRY_PACKS + 幂等 DECISION_NOTES）再运行；已验证再生成零漂移且幂等；
+- **YAML 值内 ` #` 触发注释截断**：`借鉴 #21` 前的空格让标量静默截断甚至解析报错——含 # 的 provenance 一律单引号包裹（既有先例）；
+- **本地 dev DB 是 `_db_payload` 的过滤权威**：YAML 加条目后本地测试会拿旧计数（假红），须按 conftest 同款 env 跑 `import_all` 幂等重导；CI 无 DB 走 YAML fallback 不受影响；字典升级后 api 容器镜像必须重建（`make stack-up`）；
+- **指标计数多点锁定**：改条目数必须全仓 grep 计数断言（test_metric_library_api **和** test_metric_library_store 两处，后者漏改被 CI integration 抓包）——「受影响套件」直觉清单不可靠；
+- **门禁前 pkill 必须按进程名 `pkill -f next-server`**：`pkill -f "next start"` 杀不到改名后的 next-server（残留 5 个实例曾让门禁挂 30 分钟无输出）；
+- **Next.js RouteAnnouncer 本身是 role=alert**：页面级 alert 断言必须收窄 `main [role=alert]`，否则 strict mode 双元素冲突；403 文案存在两套既定措辞（STATUS_TEXT「授权拒绝」与 operations-overview「没有访问权限」），门禁接受两套；
+- **user-closure CI flake 判定标准 = 同提交本地绿**：CI 连挂三次（清洗超时）vs 本地官方脚本 4/4 全绿 14.2s——直接 `gh run rerun --failed`，不要因「连挂」误判回归去翻代码；
+- **objective freeze 的 created_at 是事务时间戳**（server now()，同批插入全同）：排序键必打平，无 ORDER BY 查询的物理序漂移会破坏「同内容同版本」幂等——凡进 payload 的行序必须补 uuid7 主键 tie-break；
+- **docs/ 下新增任何 .md（含 assets 索引册）必须带 frontmatter**，提交后重跑 check_docs m1+m6；生成的索引册要把 frontmatter 写进生成模板，否则再生成即丢；
+- **workflow 内重跑官方脚本前先看常驻栈**：docker daemon 被用户关闭会让 DB-backed 测试全数 connection error，属环境不在线而非回归。
 
 ## 3. 完整尽调计划（触发条件与频率不变）
 
@@ -105,19 +110,20 @@ applies_to: repository
 
 ## 4. 优化改进候选（非任务批准）
 
-三来源整合（竞品清单 35 条、O-01~O-17、MCP 补充 S-1~S-6）分组 A–F 与推荐排序见[整合优化方案](docs/80_reviews/2026-09-15-integrated-optimization-program.md)。任何条目进入执行须经 CURRENT_ROADMAP 按 D053 裁决。
+三来源整合（竞品清单 35 条、O-01~O-17、MCP 补充 S-1~S-6）分组 A–F 与推荐排序见[整合优化方案](docs/80_reviews/2026-09-15-integrated-optimization-program.md)。任何条目进入执行须经 CURRENT_ROADMAP 按 D053 裁决。**O-01/O-02 已落地地基（本会话）**；五维矩阵结论=主线不调整，AI 问数 v2 必须项即 O-01/O-02 全量（任意 AST 提议与 LLM 通道另行裁决）。
 
-## 5. To-do List 状态（2026-09-15 收敛）
+## 5. To-do List 状态（2026-09-19 更新）
 
 | ID | 内容 | 状态 |
 |---|---|---|
-| T00–T08 | 基线核对 → R2 → R3 → R4 → S01 关闭 | **completed**（台账 §7/§9，main 全绿） |
-| T09 | C 级出口协议 + L0/L1 基准 | **协议与基准交付**；出口 PASS 待 A1–A3 人工项 + A4 |
-| T10 | 溯源/重述/MCP/起草四子包 | **completed**（B3/B4/B5/B6 全部落地） |
-| T11 | 性能基线（G2） | **completed**；数据扩张（C1）**blocked on A4** |
-| T12 | 问数 v1 + 评测集 | **completed**（确定性 v1，100% 命中）；LLM 通道 **gated on A5** |
+| T00–T08 | 基线核对 → R2 → R3 → R4 → S01 关闭 | **completed**（台账 §7/§9） |
+| T09 | C 级出口协议 + L0/L1 基准 | **协议与基准交付**；出口 PASS 待人工三件套 |
+| T10 | 溯源/重述/MCP/起草四子包 | **completed**；真实来源链接按公开来源设计**可领取** |
+| T11 | 性能基线（G2） | **completed**；数据扩张（C1）**改道公开管线**（政策更新） |
+| T12 | 问数 v1 + 评测集 | **completed**；**O-01/O-02 地基已交付**；LLM 通道 **gated on A5/用户裁决** |
 | T13 | 内部工作台 | **blocked**：C 级出口 PASS + 数据授权 |
 | T14 | U4 oracle / rnd_exp / U9·O5 / U10 | **blocked**：外部材料与授权 |
+| FE | 前端一致性整改 Task 0–9 | **completed**（P0–P5 全批次，计划 §10 日志）；F-ExportAudit 搁置待补规格 |
 
 ## 6. 单一 Agent 工作协议
 
@@ -137,12 +143,12 @@ applies_to: repository
 - HTTP GET 不等于只读，冻结/发布等隐藏写必须按副作用保护。
 - 数据库有表不等于审计已闭环；必须覆盖 401、403、allow、写入失败和保留策略。
 - 对象存储、数据库和审计是跨边界事务，不能在 route 末尾补一条日志冒充原子性。
-- 文档新增也会让 CI 变红；**远端门禁现为 m6**（含链接/兼容/读者测试）——提交前本地跑 m6。
+- 文档新增也会让 CI 变红；**远端门禁现为 m6**——提交前本地跑 m1+m6（本会话 state-matrix README 再证：assets 下的索引册也在门禁射程内）。
 - 发现第二迁移头、跨企业可访问、AI 可发布/自批、恢复 hash 不一致、测试 skip、目标 SHA 与 CI SHA 不同，立即停止关闭流程。
-- 本会话新增坑见 §2.4（checkout 正则、tail 吞退出码、minio 漂移、§3.3 身份横切、裸连接 entity select 等）。
+- 本会话新增坑见 §2.4（派生 YAML、# 注释截断、dev DB 过滤权威、计数多点锁定、next-server pkill、RouteAnnouncer alert、user-closure flake 判定、freeze 事务时间戳等）。
 
 ## 8. 下一位 Agent 的第一条动作
 
-从当前最新 `origin/main` 做会话开始三核对（PROJECT_STATE / git log / CI 状态），确认无新外部提交后按 §2.3 顺序领取：**先接 10 条人工查源结果修抽取 YAML**（若用户已完成翻页核对），或先执行 AI 交叉评调度（若用户已运行评审会话）。不要先做 UI 大改、行业扩张决策或任何 T13 内容。
+从当前最新 `origin/main`（`a461b54` 或更新）做会话开始三核对（PROJECT_STATE / git log / CI 状态），确认无新外部提交后按 §2.3 顺序领取：**首选溯源真实来源链接（公开来源方案，已解锁）或公开数据管线扩张**；若用户已交付人工三件套产出（查源结果 / AI 交叉评结论），优先接手归因与抽取 YAML 修订。不要先做 T13 内容或任何等待 A5 的开放面。
 
-当前对外状态统一表述为：**U8 closed；S01 completed；T09–T12 基础交付完成；C 级出口 Go/No-Go 前置仅剩人工三件套 + A4 材料；T13/T14 等外部。**
+当前对外状态统一表述为：**U8 closed；S01 completed；T09–T12 基础交付完成 + O-01/O-02 地基交付；前端一致性整改 Task 0–9 关闭；C 级出口 Go/No-Go 前置仅剩人工三件套；数据扩张按公开管线推进（2026-09-19 政策）；T13/T14 等外部。**
