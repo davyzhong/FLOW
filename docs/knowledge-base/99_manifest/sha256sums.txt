@@ -484,7 +484,7 @@ deb2c31551b3e2cdc921f85b8310dc54976cee2ed0aea5583af126f0e8829b6a  ./02_research/
 a883e6891f936c052c9a6a427d27259afe5a663793e7e10123d18e6eb96e4782  ./02_research/synthesis/2026-09-12-obsidian-scan/W3-wechat-general.md
 d84f48a7e7d939d8192ef26d00c45c4676f8713d72504f5a365f89355294ce73  ./02_research/synthesis/2026-09-12-obsidian-scan/W4-wechat-1546-snapshot.md
 7a159ed3359752465050222887c005f8fd73bab1f7456c165959057a20a67f42  ./02_research/synthesis/2026-09-17-obsidian-delta-scan.md
-e4c622bf0fe251f8f3535095817e2818b568e762b004d4334cff43cd0ba73769  ./02_research/synthesis/2026-09-19-26-album-assessment.md
+ba97adb3aa9cb6acb35dfb26d888626bc8b7b31348eaacf45cac399925574575  ./02_research/synthesis/2026-09-19-26-album-assessment.md
 8f549ddb606aeb29fdc7a65f874ef948358220dc59f37c58f06657c823a6d437  ./02_research/synthesis/会计基础数据集_v0_草案.yaml
 1035c288bbbac379d2b160d55692c80027a169d356add40a30c458cde588ab42  ./02_research/synthesis/指标库初始数据集_v0_草案.yaml
 c47a514dc0fd3fd9df3f604566b41537981e6fabff7042e1b5af54a2c7c092a0  ./03_assets/IMAGE_CATALOG.md

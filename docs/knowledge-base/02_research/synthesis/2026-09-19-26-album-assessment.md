@@ -1,3 +1,15 @@
+---
+doc_id: FLOW-KB-RESEARCH-0026
+title: 「奔向自由的果」《财务管理》合集（58 篇）借鉴分析
+doc_type: navigation
+status: current
+version: 1.0
+created_at: 2026-09-19
+updated_at: 2026-09-19
+owner: FLOW
+applies_to: docs
+---
+
 # 借鉴分析｜「奔向自由的果」《财务管理》合集（58 篇）｜2026-09-19
 
 状态：分析结论（第十篇借鉴；性质为**合集级目录评估 + 三篇精读**）。原文档案：[../original/2026-09-19-26-finance-management-album](../original/2026-09-19-26-finance-management-album/)。
