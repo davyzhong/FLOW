@@ -221,7 +221,7 @@ def freeze_objective_statement_report(
     # 重冻结会误判为新版本（幂等破坏）。uuid7 主键时间有序 = 自然插入序。
     normalized_rows = sorted(rows, key=lambda r: (r.statement_type, r.created_at, r.id))
     raw_rows_sorted = sorted(raw_rows, key=lambda r: (r.statement_type, r.sort_order, r.id))
-    payload = {
+    content = {
         "schema_version": SCHEMA_VERSION,
         "report_type": REPORT_TYPE,
         "source": {
@@ -247,13 +247,23 @@ def freeze_objective_statement_report(
             else [],
             "statement_types": eligibility.statement_types,
         },
-        "frozen_at": datetime.now().astimezone().isoformat(timespec="seconds"),
     }
 
-    digest = payload_hash(payload)
     latest = _latest_snapshot(session, report_id)
-    if latest is not None and latest.payload_hash == digest:
-        return latest  # 内容相同：幂等复用，不新建版本
+    if latest is not None:
+        # frozen_at 是墙钟装饰字段，不是业务内容：两次冻结跨秒即哈希必异，
+        # 幂等比较必须剔除（与 operations/freeze.py 同一成语）。
+        latest_content = {
+            key: value for key, value in latest.payload.items() if key != "frozen_at"
+        }
+        if latest_content == content:
+            return latest  # 内容相同：幂等复用，不新建版本
+
+    payload = {
+        **content,
+        "frozen_at": datetime.now().astimezone().isoformat(timespec="seconds"),
+    }
+    digest = payload_hash(payload)
 
     snapshot = ObjectiveReportSnapshot(
         statement_report_id=report.id,

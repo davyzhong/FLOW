@@ -100,7 +100,7 @@ async def test_freeze_creates_typed_payload(db_session: Session) -> None:
     assert view["report_type"] == "objective_statement"
 
 
-def test_reimport_and_refreeze_is_idempotent(db_session: Session) -> None:
+def test_reimport_and_refreeze_is_idempotent(db_session: Session, monkeypatch: Any) -> None:
     report = _import_and_normalize(db_session)
     db_session.commit()
     first = freeze_objective_statement_report(db_session, report_id=report.id)
@@ -109,6 +109,24 @@ def test_reimport_and_refreeze_is_idempotent(db_session: Session) -> None:
     db_session.flush()
     assert second.id == first.id
     assert hash(json.dumps(second.payload, sort_keys=True)) == first_hash
+
+    # 确定性回归：把墙钟拨快 1 小时再冻结——frozen_at 是装饰字段不是业务内容，
+    # 跨时钟重冻结必须仍命中幂等复用（CI 曾因两次冻结跨秒偶发新版本）。
+    from datetime import datetime as real_datetime
+    from datetime import timedelta
+
+    import flow_api.publishing.objective_freeze as freeze_module
+
+    class ShiftedDatetime(real_datetime):
+        @classmethod
+        def now(cls, tz=None):  # type: ignore[override]
+            return real_datetime.now(tz) + timedelta(hours=1)
+
+    monkeypatch.setattr(freeze_module, "datetime", ShiftedDatetime)
+    third = freeze_objective_statement_report(db_session, report_id=report.id)
+    db_session.flush()
+    assert third.id == first.id, "跨时钟重冻结必须复用同一快照（frozen_at 非业务内容）"
+    assert third.payload["frozen_at"] == first.payload["frozen_at"]
 
 
 def test_empty_statements_rejected(db_session: Session) -> None:
