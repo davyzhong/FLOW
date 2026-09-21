@@ -3,9 +3,9 @@ doc_id: FLOW-SPEC-INDEX-001
 title: 规格总索引
 doc_type: governance
 status: current
-version: 1.2
+version: 1.3
 created_at: 2026-09-12
-updated_at: 2026-09-13
+updated_at: 2026-09-18
 owner: FLOW
 applies_to: specs
 knowledge_release: flow-knowledge-2026-09-12.1
@@ -27,6 +27,7 @@ knowledge_release: flow-knowledge-2026-09-12.1
 | operations methodology | operations | approved | `docs/superpowers/specs/2026-09-09-operations-track-methodology.md` | O 轨 + L1-L4 |
 | static knowledge architecture | platform | approved | `docs/superpowers/specs/2026-09-12-static-knowledge-and-document-architecture-design.md` | V1.1，本迁移设计 |
 | strategic reset design | product-cross | approved | `docs/superpowers/specs/2026-09-13-flow-strategic-reset-design.md` | V1.1；D052–D054、单一路线图、Facts V2/安全门禁、量化验收协议 |
+| static knowledge refresh and strategic rebaseline | product-cross | approved | `docs/superpowers/specs/2026-09-17-static-knowledge-refresh-and-strategic-rebaseline-design.md` | V1.1；第二代静态知识刷新、sealed candidate、战略裁决与原子激活合同 |
 | data contract | financial-facts | approved | `docs/data-contract/flow-v1.md`（原位，机器消费） | data-contract 域 |
 | intake spec | data-intake | approved | `docs/intake/flow-v1-intake.md`（原位） | |
 | metrics spec | metrics | approved | `docs/metrics/flow-v1-metrics.md`（原位） | |

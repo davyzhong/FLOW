@@ -2,10 +2,10 @@
 doc_id: FLOW-DESIGN-KNOWLEDGE-REFRESH-002
 title: FLOW 第二代静态知识刷新与战略重基线设计
 doc_type: design
-status: review
+status: approved
 version: 1.1
 created_at: 2026-09-17
-updated_at: 2026-09-17
+updated_at: 2026-09-18
 owner: FLOW
 decision_refs: [D051, D052, D053, D054]
 knowledge_release: flow-knowledge-2026-09-12.1
