@@ -2165,3 +2165,4 @@ d80f509de5c36c24d86bbbac07d7c35eddedc862c536f9b5d21e6a6e178d9e74  ./40_methods_a
 4666243e7af893feec890f24d28c4ea8d9271f3cc752f56f40f6f1998e267434  ./50_product_mappings/FLOW-PRODUCT-MAPPING--v1.0.md
 b4d200cc989f4642c66da1061742f842d83467caa4d92774df4d2caf4b0cb56d  ./50_product_mappings/README.md
 4131636ec380e5b5ebcc0f06e865af69be815d8d99855c67e1b7459e5377cc4a  ./README.md
+2b121a4b65e4c5a9651192941026bde0abedb4e322778a69d43dc980c9db33ad  ./02_research/synthesis/2026-09-19-finboss-assessment.md
