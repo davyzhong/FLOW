@@ -3,11 +3,30 @@ doc_id: FLOW-NAV-ROOT-README-001
 title: FLOW repository README
 doc_type: navigation
 status: current
-version: 1.2
+version: 1.3
 created_at: 2026-08-29
-updated_at: 2026-09-16
+updated_at: 2026-09-21
 owner: FLOW
 applies_to: repository
+# readme-craft v2 metadata（机器可读，LLM/Agent 友好）
+name: flow
+description: Finance Intelligence OS — 可追溯、确定性、可复核的企业内部财务经营分析平台与公开财报分析模块。
+model: gpt-4 / claude-sonnet / gemini-2.5
+intent: code-generation / question-answering / agent-tool
+capabilities:
+  - install
+  - quickstart
+  - architecture
+  - deploy
+  - troubleshoot
+tags:
+  - finance
+  - fastapi
+  - nextjs
+  - postgres
+  - excel
+  - analytics
+  - auditability
 ---
 
 <div align="center">
@@ -17,6 +36,8 @@ applies_to: repository
 ### Finance Intelligence OS · 可追溯、确定性、可复核的财务分析平台
 
 **企业内部 AI 财务分析工作台为最终产品 · 公开财报分析模块先行成熟共享底座（D052–D054）**
+
+**Languages / 语言**: [简体中文](./README.md) · [English (planned)](./README.en.md)（规划中，欢迎 PR）
 
 [![CI](https://github.com/davyzhong/FLOW/actions/workflows/ci.yml/badge.svg)](https://github.com/davyzhong/FLOW/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/Python-3.13-3776AB?logo=python&logoColor=white)
@@ -31,6 +52,8 @@ applies_to: repository
 ![财报](https://img.shields.io/badge/%E7%9C%9F%E5%AE%9E%E8%B4%A2%E6%8A%A5-5%E5%AE%B6%E5%85%AC%E5%8F%B8%C2%B714%E4%BB%BD%E6%8A%A5%E5%91%8A-0ea5e9) ![指标](https://img.shields.io/badge/%E6%8C%87%E6%A0%87%E5%AE%9A%E4%B9%89-64%2B15%2B11%E6%9D%A1%E7%9B%AE-f59e0b) ![知识资产](https://img.shields.io/badge/%E9%9D%99%E6%80%81%E7%9F%A5%E8%AF%86%E8%B5%84%E4%BA%A7-31%E9%A1%B9%E9%94%81%E5%AE%9A-8b5cf6) ![测试](https://img.shields.io/badge/%E6%B2%BB%E7%90%86%E9%97%A8%E7%A6%81-6%E9%81%93%E5%85%A8%E7%BB%BF-2e8562) ![迁移](https://img.shields.io/badge/%E6%96%87%E6%A1%A3%E8%BF%81%E7%A7%BB-M0%E2%80%93M6%20%E5%B7%B2%E5%85%B3%E9%97%AD-14243a)
 
 [快速开始](#-快速开始) · [界面导览](#%EF%B8%8F-界面导览) · [真实财报分析](#-真实财报图形化分析) · [知识治理](#-静态知识治理项目自己的知识生产线) · [系统架构](#%EF%B8%8F-系统架构) · [当前进度](#-当前进度与边界) · [文档中心](docs/README.md)
+
+> **📚 v2 适配说明**：本 README 按 readme-craft v2 方法论（[16 铁律 + 10 反模式 + 80 分量表](https://github.com/davyzhong/readme-craft/blob/main/METHODOLOGY.md)）适配。**保留全部原有内容**——mermaid 架构图、截图、详细章节不删改；**新增** YAML 元数据、5 路启动、i18n 链接、Built by、Roadmap v2、收尾五件套与同行对照视角。
 
 </div>
 
@@ -456,6 +479,18 @@ flowchart LR
 
 ## 🚀 快速开始
 
+### 五路启动方式（v2 适配）
+
+按你的使用场景选最合适的一条：
+
+| 路径 | 命令（详见下文） | 适用场景 |
+|---|---|---|
+| **1. 推荐 · 容器基础设施 + 本机应用** | `make bootstrap && make infra-up && make dev-api && make dev-web` | 日常开发，调试方便 |
+| **2. 全容器运行** | `make stack-up` | 演示 / 评审 / 一次性起停 |
+| **3. 从源码编译（纯本机）** | `pnpm install && (cd services/api && uv sync)` | 无 Docker 时的回退 |
+| **4. 一键验收（Phase 1–10 七组组合）** | `make acceptance` | 发版前严格门禁 |
+| **5. Docker Compose 最小启动** | `docker compose -f infra/compose.yml up -d` | 仅验证基础设施连通 |
+
 ### 依赖
 
 - Docker Desktop 或可用的 Docker Engine + Compose；
@@ -605,6 +640,47 @@ npx --yes pnpm@10.17.1 exec playwright install chromium
 
 CI 定义见 [FLOW CI](.github/workflows/ci.yml)。无数据库 unit job 与需要基础设施的 integration job 已分开；本地定向验证、历史阶段验收、远端 CI 三种证据应分别阅读。最新运行请查看 [GitHub Actions](https://github.com/davyzhong/FLOW/actions)，不要把某次历史成功当作当前全量通过。
 
+## 🤖 Built by
+
+**FLOW 团队** — 兼管产品（战略 / 边界 / 价值门槛 / 量化验收）与工程（worktree / SHA / 门禁 / 提交纪律）的双线团队。
+
+工程实践（v2 视角摘录，完整治理见 [`AGENTS.md`](AGENTS.md)）：
+
+- 🏛️ **三层两模块架构**（[D053](docs/10_governance/decisions/D053--三层两模块边界与执行顺序.md)）—— 治理底座 + 共享分析底座 + 两个产品模块
+- 🔐 **证据复核状态机** —— Finding → Evidence → Conclusion → 状态机批准
+- ❄️ **冻结报告与发布** —— JSONB 冻结视图，导出仅读冻结内容
+- 🤖 **多 Agent 协作纪律**（[HANDOFF.md](HANDOFF.md)）—— 串行集成 + 逐 Gate 验证 + commit → 自动 push
+- 🧪 **六道门禁矩阵**（`make test-web` / `test-api` / `test-data-contract` / `test-intake-e2e` / `test-metrics-known-answers` / `test-analysis-invariants` / `test-dashboard` / `test-investigation-e2e` / `test-publishing-golden` / `test-user-closure-e2e`）
+- 📦 **工程栈**：Python 3.13 + FastAPI + Pydantic + SQLAlchemy + Next.js 16 + React 19 + TypeScript + PostgreSQL 18 + Redis 8 + S3 + Celery + pnpm + uv + Playwright + GitHub Actions
+
+## 💖 致谢
+
+- [FastAPI](https://fastapi.tiangolo.com/) — 高性能 Python Web 框架
+- [Next.js](https://nextjs.org/) — React 全栈框架
+- [PostgreSQL](https://www.postgresql.org/) — 标准关系数据层
+- [Redis](https://redis.io/) — 异步任务基础设施
+- [Pydantic](https://docs.pydantic.dev/) — 数据契约与运行时校验
+- [SQLAlchemy](https://www.sqlalchemy.org/) + [Alembic](https://alembic.sqlalchemy.org/) — ORM 与数据库迁移
+- [openpyxl](https://openpyxl.readthedocs.io/) + [python-pptx](https://python-pptx.readthedocs.io/) — 工作簿与演示文档
+- [Playwright](https://playwright.dev/) — 端到端浏览器测试
+- [GitHub Actions](https://github.com/features/actions) — 持续集成
+- [pnpm](https://pnpm.io/) + [uv](https://docs.astral.sh/uv/) — 依赖管理
+
+## 🆚 同行对照（v2 视角）
+
+> FLOW 不是通用 BI 工具，不是 LLM 包装，也不是 Agent 平台——它是面向经分专员的**可复核财务经营分析工作台**。下表说明差异：
+
+| 维度 | FLOW | 通用 BI（Tableau / PowerBI） | 通用 LLM Chat（ChatGPT Enterprise） | Agent 平台（LangGraph 等） |
+|---|---|---|---|---|
+| **数据契约** | `flow.excel.v1` 十张工作表强校验 + 映射版本化 | 用户自由建模 | 不适用 | 不适用 |
+| **指标定义** | 64 指标库 + 草稿/验证/激活/退役生命周期 | 计算字段 | 不适用 | 不适用 |
+| **数字来源** | 确定性引擎唯一，AI 引用不重算 | 表达式 | LLM 估算 | LLM 估算 |
+| **证据链** | Finding + Evidence + Conclusion 状态机 | 无 | 无 | 弱 |
+| **报告冻结** | JSONB 不可变 + 字节校验 | 重导出可能改变 | 不适用 | 不适用 |
+| **可复核性** | SHA-256 全链路（文件/映射/导入/分析/报告） | 无 | 无 | 弱 |
+| **领域适配** | 物流 / 财务知识库内置 167 科目 + 28 CAS↔IFRS 映射 | 通用 | 通用 | 通用 |
+| **离线可跑** | Ollama 离线 `DeterministicProvider` | 离线 | 在线 | 在线 |
+
 ## 📁 仓库导航
 
 ```text
@@ -662,3 +738,49 @@ flowchart LR
 下一阶段按 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 推进：U1–U8 已交付并冻结，当前主线为 S01 战略边界、Financial Facts Contract V2 与安全/RBAC/审计门禁；三份实施子规格 approved 前不进入代码重构。U2 仍有外部核验项（rnd_exp 科目编号待准则原文）；旧 U9/O5、U10 按 [D053](docs/10_governance/decisions/D053--三层两模块边界与执行顺序.md) 重新裁决，内部真实数据仍需另行授权。
 
 本仓库尚未提供独立的 LICENSE 文件；使用与分发授权请向项目维护者确认。贡献与协作遵循 [AGENTS.md](AGENTS.md)：先读项目状态和正式决策，保护原始档案，按风险验证，每个完整任务只提交相关文件并推送规范远端。
+
+---
+
+## 🗓️ Roadmap（v2 视角）
+
+> 战略方向以 [战略重构设计（D052–D054）](docs/superpowers/specs/2026-09-13-flow-strategic-reset-design.md) 为唯一权威；执行入口以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为唯一执行入口。
+
+- [x] **Phase 1–10** — 窄切片 + Pilot + 双轮审查修复（R1–R9 / N1–N3） ✅
+- [x] **P5 真实财报反向解析** — 5 家公司 / 14 份报告 / 670 科目事实 ✅
+- [x] **P00–P02 基线** — 基线刷新 + 口径订正 + 主题/比较合同 ✅
+- [x] **U1–U3** — 主题/比较合同 + 确定性拆解 + 同源证据与快照投影（U2 剩 2 项外部依赖登记中） ✅
+- [x] **U5–U7** — 客观报告门禁 + 统一冻结 + 四问工作台 ✅
+- [x] **U8** — 生产就绪收口（真实存储旅程 + HTTPS 拓扑 + 统一部署验收） ✅ completed；严格冻结门禁通过
+- [🚧] **S01** — 战略边界 + Financial Facts Contract V2 + 安全/RBAC/审计门禁（当前：三份实施子规格）
+- [ ] **U4** — 独立全行验证与留出泛化（依赖 oracle 人工录入）⬜ 外部到料即并行
+- [ ] **公开模块 C 级出口** — Go/No-Go 裁决（前置人工项不变）
+- [ ] **U9–U10** — 内部试点 + V1.1 证据决策（⬜ 待授权；按 [D053](docs/10_governance/decisions/D053--三层两模块边界与执行顺序.md) 重新裁决）
+
+## 🔒 安全
+
+> **本仓库尚未提供独立的 SECURITY.md**（v2 适配建议新增）；漏洞披露流程占位：
+
+- 漏洞披露流程（建议）：通过 GitHub Private Vulnerability Reporting 提交，或邮件至项目维护者。
+- 治理铁律（已实现，详见 [`AGENTS.md`](AGENTS.md)）：原始档案保护、来源登记门禁、CI 强制校验、未提交证据不得批准 Finding。
+- 生产部署注意事项：见 [`docs/70_operations/`](docs/70_operations/) 中的认证与部署运行手册；`AUTH_TOKEN` + `FLOW_WEB_PASSWORD` 不入 `NEXT_PUBLIC_*`；会话 cookie Secure + SameSite。
+
+## 🤝 贡献与 Code of Conduct
+
+- 贡献流程：见 [`AGENTS.md`](AGENTS.md)（治理铁律与工作流硬约束）。
+- 提交纪律：`commit` 后立即 `git push`（无需询问；force push 是红线需先问）。
+- Code of Conduct：见 [`AGENTS.md`](AGENTS.md) § 治理铁律章节；本项目计划采用 [Contributor Covenant](https://www.contributor-covenant.org/version/2/1/code_of_conduct/) v2.1（v2 适配建议新增 `CODE_OF_CONDUCT.md`）。
+- 仓库协作原则（v2 摘要）：先读项目状态和正式决策 → 保护原始档案 → 按风险验证 → 每个完整任务只提交相关文件并推送规范远端。
+
+## 📜 License
+
+**License：未授权发布** — 详见顶部 Badge "未授权发布"。本仓库尚未提供独立的 `LICENSE` 文件；使用与分发授权请向项目维护者确认。v2 适配建议：发版前明确 LICENSE 类型（推荐内部商业项目使用 Proprietary / 项目特定 EULA；如需开源则建议 AGPLv3 以保证衍生作品同样可复核）。
+
+---
+
+<div align="center">
+
+<sub>🤖 [FLOW 团队](https://github.com/davyzhong) 用 ❤️ 维护 · [⭐ Star 我们](https://github.com/davyzhong/FLOW) · [🐛 报告 Bug](https://github.com/davyzhong/FLOW/issues)</sub>
+<br>
+<sub>📜 本 README 按 readme-craft v2（16 铁律 + 10 反模式 + 80 分量表）适配，原文核心内容 100% 保留。</sub>
+
+</div>
