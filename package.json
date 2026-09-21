@@ -13,10 +13,13 @@
     "contracts:check": "bash scripts/check_contracts.sh",
     "test": "pnpm -r test",
     "lint": "pnpm -r lint",
-    "typecheck": "pnpm -r typecheck"
+    "typecheck": "pnpm -r typecheck",
+    "screenshot": "node scripts/screenshot.js",
+    "screenshot:install": "npx playwright install chromium"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.13.0",
-    "@playwright/test": "1.62.1"
+    "@playwright/test": "1.62.1",
+    "playwright": "^1.63.0"
   }
 }
