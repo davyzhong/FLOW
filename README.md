@@ -39,7 +39,7 @@ tags:
 
 **企业内部 AI 财务分析工作台为最终产品 · 公开财报分析模块先行成熟共享底座（D052–D054）**
 
-**Languages / 语言**: [简体中文](./README.md) · [English (planned)](./README.en.md)（规划中，欢迎 PR）
+**Languages / 语言**: [简体中文](./README.md) · English（规划中，欢迎 PR）
 
 [![CI workflow 状态](https://github.com/davyzhong/FLOW/actions/workflows/ci.yml/badge.svg)](https://github.com/davyzhong/FLOW/actions/workflows/ci.yml)
 ![Python 版本](https://img.shields.io/badge/Python-3.13-3776AB?logo=python&logoColor=white)
