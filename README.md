@@ -9,8 +9,6 @@ updated_at: 2026-09-21
 owner: FLOW
 applies_to: repository
 # readme-craft v3.0.0-alpha.0 metadata（机器可读，LLM/Agent 友好）
-
-![GitHub Stars](https://img.shields.io/github/stars/davyzhong/FLOW) ![Git Tag 版本](https://img.shields.io/github/v/tag/davyzhong/FLOW)
 name: flow
 description: Finance Intelligence OS — 可追溯、确定性、可复核的企业内部财务经营分析平台与公开财报分析模块。
 model: gpt-4 / claude-sonnet / gemini-2.5
@@ -34,6 +32,8 @@ tags:
 <div align="center">
 
 # 💧 FLOW
+
+![GitHub Stars](https://img.shields.io/github/stars/davyzhong/FLOW) ![Git Tag 版本](https://img.shields.io/github/v/tag/davyzhong/FLOW)
 
 ### Finance Intelligence OS · 可追溯、确定性、可复核的财务分析平台
 
