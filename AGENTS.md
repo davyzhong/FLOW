@@ -12,6 +12,8 @@ applies_to: repository
 
 # FLOW 项目协作规则
 
+> 当前批准实施入口：[大麦物流全量演示数据发行版设计](docs/superpowers/specs/2026-09-24-damai-logistics-demo-data-design.md)；实施计划见 [演示数据计划](docs/superpowers/plans/2026-09-24-damai-logistics-demo-data-implementation-plan.md) 与 [项目基线修复计划](docs/superpowers/plans/2026-09-24-project-baseline-repair-implementation-plan.md)。
+
 本仓库是 FLOW（Finance Intelligence OS / AI 财务经营分析平台）项目的唯一正式工程仓库。
 
 ## 开始工作前
