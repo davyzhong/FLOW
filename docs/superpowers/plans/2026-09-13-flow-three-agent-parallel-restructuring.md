@@ -2,17 +2,17 @@
 doc_id: FLOW-PLAN-THREE-AGENT-PARALLEL-001
 title: FLOW 三智能体并行重构实施计划
 doc_type: plan
-status: active
+status: archived
 version: 1.0
 created_at: 2026-09-13
-updated_at: 2026-09-13
+updated_at: 2026-09-24
 owner: FLOW
 depends_on: [FLOW-PLAN-POST-U8-BOUNDARY-001, FLOW-DESIGN-THREE-AGENT-ORCH-001, FLOW-WI-S01]
 acceptance_refs: [three-agent-file-ownership-gate, s01-task6-security-gate, s01-task9-full-chain-gate]
 knowledge_release: flow-knowledge-2026-09-12.1
 applies_to: s01-task6-task10-orchestration
 supersedes: []
-superseded_by: null
+superseded_by: FLOW-HANDOFF-STRATEGY-20260912
 ---
 
 # FLOW 三智能体并行重构 Implementation Plan

@@ -3,9 +3,9 @@ doc_id: FLOW-GOV-AGENTS-001
 title: FLOW 项目协作规则
 doc_type: governance
 status: current
-version: 1.1
+version: 1.2
 created_at: 2026-09-01
-updated_at: 2026-09-12
+updated_at: 2026-09-24
 owner: FLOW
 applies_to: repository
 ---
@@ -37,6 +37,17 @@ applies_to: repository
   page.tsx 层；
 - 守护测试：`apps/web/e2e/navigation.spec.ts` 遍历全部交互路由断言导航可见
   且链接齐备；新增页面必须同步把路由加入该清单。
+
+## 计划沉淀铁律（2026-09-24 起）
+
+用户已明确要求：每次做计划都必须沉淀为文档，此为铁律。
+
+1. 任何计划在执行前必须落盘为带合法 frontmatter 的正式文档（`docs/50_plans/` 或
+   `docs/superpowers/plans/`），并通过 `python3 scripts/check_docs.py --phase m1` 门禁；
+2. 会话内的口头计划、聊天里的临时方案不构成执行依据；
+3. 计划的范围或验收口径发生变化时，必须先更新计划文档并提交推送，再修改代码；
+4. 计划文档不维护任务状态——状态真相只在 `docs/50_plans/CURRENT_ROADMAP.md`、
+   `docs/50_plans/EXECUTION_TODO.md` 与对应工作包；不形成第二份总计划状态。
 
 ## 每个完整任务的收尾协议
 
