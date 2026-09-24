@@ -64,6 +64,10 @@ _COST_SPLIT: tuple[tuple[str, Decimal], ...] = (
 _BUDGET_SCENARIO = "BUDGET_DAMAI_V1"
 
 
+def _month_of(month: str) -> int:
+    return int(month.split("-")[1])
+
+
 def _rid(prefix: str, *parts: str) -> str:
     return str(uuid5(_DAMAI_NAMESPACE, ":".join((prefix, *parts))))
 
@@ -133,6 +137,12 @@ def _dimensions() -> tuple[
             code="OTHER_DIRECT_COST", name="其他直接成本", category="direct_cost"
         ),
         ManagementAccountRecord(code="GROSS_PROFIT", name="毛利", category="operating_profit"),
+        ManagementAccountRecord(
+            code="OPERATING_EXPENSE", name="期间费用", category="operating_expense"
+        ),
+        ManagementAccountRecord(
+            code="OPERATING_PROFIT", name="经营利润", category="operating_profit"
+        ),
         ManagementAccountRecord(
             code="OPERATING_CASH_FLOW", name="经营现金流", category="cash_flow"
         ),
@@ -217,37 +227,26 @@ def _financial_actuals(
             row.warehousing_cost + row.transportation_cost + row.other_direct_cost
         )
 
-    def _split(total: Decimal, month: str) -> dict[str, Decimal]:
-        """按各组织当月收入份额分摊（尾差入末位组织，合计守恒）。"""
-
-        org_codes = tuple(code for code, _ in _FAMILY_TO_ORG.values())
-        month_total = sum(
-            (by_month_org[(month, code)]["REVENUE"] for code in org_codes), Decimal("0")
-        )
-        shares: dict[str, Decimal] = {}
-        running = Decimal("0")
-        for index, code in enumerate(org_codes):
-            if index < len(org_codes) - 1:
-                share = _d(total * by_month_org[(month, code)]["REVENUE"] / month_total)
-                running += share
-            else:
-                share = total - running
-            shares[code] = share
-        return shares
-
-    ocf_by_month = {row["month"]: _d(row["ocf"]) for row in raw["monthly_facts"]["cash_flow"]}
-    ar_by_month = {
-        row["month"]: _d(row["ar_outstanding"]) for row in raw["monthly_facts"]["ar_aging"]
-    }
-
     rows: list[FinancialActualRecord] = []
-    for (month, org_code), agg in sorted(by_month_org.items()):
+    for _month_index, (month, org_code) in enumerate(sorted(by_month_org.keys())):
+        agg = by_month_org[(month, org_code)]
+        # 期间费用率：与窄切片同口径（分析期 Q4 0.100、其余 0.080）
+        in_analysis_q4 = month in _ANALYSIS_MONTHS and _month_of(month) in (10, 11, 12)
+        expense_rate = Decimal("0.100") if in_analysis_q4 else Decimal("0.080")
+        expense = _d(agg["REVENUE"] * expense_rate)
+        values = {
+            **agg,
+            "OPERATING_EXPENSE": expense,
+            "OPERATING_PROFIT": _d(agg["GROSS_PROFIT"] - expense),
+        }
         for account_code in (
             "REVENUE",
             "WAREHOUSING_COST",
             "TRANSPORTATION_COST",
             "OTHER_DIRECT_COST",
             "GROSS_PROFIT",
+            "OPERATING_EXPENSE",
+            "OPERATING_PROFIT",
         ):
             rows.append(
                 FinancialActualRecord(
@@ -255,26 +254,10 @@ def _financial_actuals(
                     month_key=month,
                     organization_code=org_code,
                     management_account_code=account_code,
-                    amount=agg[account_code],
+                    amount=values[account_code],
                 )
             )
-        for account_code, totals in (
-            ("OPERATING_CASH_FLOW", ocf_by_month),
-            ("AR_BALANCE", ar_by_month),
-        ):
-            total = totals.get(month)
-            if total is None:
-                continue
-            for org_code_share, amount in _split(total, month).items():
-                rows.append(
-                    FinancialActualRecord(
-                        record_id=_rid("financial", month, org_code_share, account_code),
-                        month_key=month,
-                        organization_code=org_code_share,
-                        management_account_code=account_code,
-                        amount=amount,
-                    )
-                )
+
     return tuple(rows)
 
 
