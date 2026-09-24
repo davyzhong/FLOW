@@ -1,0 +1,58 @@
+{
+  "batch_code": "DAMAI_DEMO_2026_08",
+  "contract_version": "flow.excel.v1",
+  "files": {
+    "ar_collections.jsonl": {
+      "row_count": 48,
+      "sha256": "4b71fdb88e9794893d06ef8e04107c9cfe72cbb4b526a45c4f78962282689405"
+    },
+    "batch.jsonl": {
+      "row_count": 1,
+      "sha256": "e50829eace2c172a7eb8bc7a15887c970dc6c761ad27b7ddf542917bf0bde7d1"
+    },
+    "customer_segments.jsonl": {
+      "row_count": 1,
+      "sha256": "7ebdda51c648d83bab7819d14d8de90373b5900c805ba80879f9846772708dc1"
+    },
+    "customers.jsonl": {
+      "row_count": 1,
+      "sha256": "fd51aa4ed47eec500e87fa7464cf09bcb4c8d9e56bce17acb864780510838016"
+    },
+    "financial_actuals.jsonl": {
+      "row_count": 684,
+      "sha256": "b354d42ddb80deb29d2ff6dcbe061b91f0cad51c43020a190c5a290f18c743d2"
+    },
+    "logistics_products.jsonl": {
+      "row_count": 1,
+      "sha256": "510e24cc716c51ed13f91c6b8af61ba356524c482a4872a2341cd550456f719c"
+    },
+    "management_accounts.jsonl": {
+      "row_count": 7,
+      "sha256": "ef8f19a85dbb706b37e81331f87808539e690760d5a77d8deb6b69f08bbc46f8"
+    },
+    "monthly_budgets.jsonl": {
+      "row_count": 12,
+      "sha256": "57a8ef1bc5e0fc6200a2475cd80f885874c2d6d40ff103f5c26f914e37ecd4df"
+    },
+    "operating_actuals.jsonl": {
+      "row_count": 72,
+      "sha256": "c340db4145e6c7d9d07d3905cf9fb4e6a75f2e1e6f0bb9439944629f21b5001e"
+    },
+    "organizations.jsonl": {
+      "row_count": 4,
+      "sha256": "ef8008c5a9a1a9ff8ca030250fdb49c9f9fe62d42bc4fdfb90c6b3c91ada521c"
+    },
+    "periods.jsonl": {
+      "row_count": 24,
+      "sha256": "b4982495a870b4d31de96fea28591ead14d55f0a24e8d14cc7e8e33b675e472f"
+    },
+    "regions.jsonl": {
+      "row_count": 1,
+      "sha256": "2574db6170a90ec9203316963375b52c28fe0490badd985b46fc214c90af5550"
+    },
+    "scenario_versions.jsonl": {
+      "row_count": 2,
+      "sha256": "01d3a9d831c89b556bca914f905268b7cbcc7a1cf05c228b324e0509fa5ffefe"
+    }
+  }
+}

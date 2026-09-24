@@ -1,0 +1,115 @@
+entity:
+  code: damai-logistics
+  name: 大麦物流集团（synthetic 演示企业）
+  synthetic: true
+  uuid: 00000000-0000-0000-0000-00000000d001
+notes_index:
+- 附注 1：编制基础（synthetic 演示，US GAAP 简化投影）
+- 附注 2：收入按业务族分解见 canonical family_actual
+- 附注 3：应收账款账龄见 canonical ar_aging
+period:
+- 2024-09
+- 2024-10
+- 2024-11
+- 2024-12
+- 2025-01
+- 2025-02
+- 2025-03
+- 2025-04
+- 2025-05
+- 2025-06
+- 2025-07
+- 2025-08
+statements:
+  利润表:
+  - item: 营业收入
+    value_current: '94307909.6070'
+    value_prior: null
+  - item: 营业成本
+    value_current: '84877118.6460'
+    value_prior: null
+  - item: 毛利
+    value_current: '9430790.9610'
+    value_prior: null
+  - item: 销售费用
+    value_current: '3300776.8362'
+    value_prior: null
+  - item: 管理费用
+    value_current: '2357697.7402'
+    value_prior: null
+  - item: 研发费用
+    value_current: '1131694.9153'
+    value_prior: null
+  - item: 经营利润
+    value_current: '2640621.4693'
+    value_prior: null
+  - item: 财务费用
+    value_current: '377231.6384'
+    value_prior: null
+  - item: 除税前利润
+    value_current: '2263389.8309'
+    value_prior: null
+  - item: 所得税费用
+    value_current: '565847.4577'
+    value_prior: null
+  - item: 净利润
+    value_current: '1697542.3732'
+    value_prior: null
+  - item: 归属母公司所有者净利润
+    value_current: '1527788.1359'
+    value_prior: null
+  - item: 少数股东损益
+    value_current: '169754.2373'
+    value_prior: null
+  权益变动表:
+  - item: 期初权益
+    value_current: '42438559.3232'
+  - item: 本期净利润
+    value_current: '1697542.3732'
+  - item: 其他权益变动
+    value_current: '-35271158.1924'
+  - item: 期末权益
+    value_current: '8864943.5040'
+  现金流量表:
+  - item: 期初现金及现金等价物
+    value_current: '5658474.5764'
+  - item: 经营活动产生的现金流量净额
+    value_current: '8864943.5040'
+  - item: 投资活动产生的现金流量净额
+    value_current: '-5658474.5764'
+  - item: 筹资活动产生的现金流量净额
+    value_current: '0.0000'
+  - item: 期末现金及现金等价物
+    value_current: '8864943.5040'
+  资产负债表:
+  - item: 货币资金
+    value_begin: '5658474.5764'
+    value_end: '8864943.5040'
+  - item: 应收账款
+    value_begin: '29706991.5262'
+    value_end: '33007768.3624'
+  - item: 存货
+    value_begin: '5092627.1188'
+    value_end: '5658474.5764'
+  - item: 其他流动资产
+    value_begin: '4715395.4804'
+    value_end: '4715395.4804'
+  - item: 固定资产
+    value_begin: '47719802.2611'
+    value_end: '51869350.2838'
+  - item: 流动资产合计
+    value_begin: '13580338.9844'
+    value_end: '52246581.9232'
+  - item: 资产总计
+    value_begin: '19238814.5608'
+    value_end: '104115932.2070'
+  - item: 负债合计
+    value_begin: '95250988.7030'
+    value_end: '95250988.7030'
+  - item: 权益总计
+    value_begin: '42438559.3232'
+    value_end: '8864943.5040'
+  - item: 负债和权益总计
+    value_begin: '104115932.2070'
+    value_end: '104115932.2070'
+unit: 人民币千元

@@ -1,0 +1,4 @@
+{"code":"DAMAI_GROUP","level":"group","name":"大麦物流集团（synthetic）","parent_code":null}
+{"code":"BU-INTL","level":"business_unit","name":"国际与跨境物流事业部","parent_code":"DAMAI_GROUP"}
+{"code":"BU-CHINA","level":"business_unit","name":"中国物流事业部","parent_code":"DAMAI_GROUP"}
+{"code":"BU-TECH","level":"business_unit","name":"科技及其他事业部","parent_code":"DAMAI_GROUP"}
