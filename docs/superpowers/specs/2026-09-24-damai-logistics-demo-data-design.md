@@ -3,7 +3,7 @@ doc_id: FLOW-SPEC-DAMAI-DEMO-001
 title: 大麦物流全量演示数据发行版设计
 doc_type: specification
 status: approved
-version: 1.1
+version: 1.5
 created_at: 2026-09-24
 updated_at: 2026-09-24
 owner: FLOW
@@ -76,14 +76,43 @@ CI 文档门禁、状态文档过时和普通启动后无可见演示数据问�
 允许因月度季节性和舍入产生 ±1 个百分点偏差。设置至少 4 个业务单元、6 个区域、40 个匿名
 客户和 8 个物流产品；客户名称不得使用真实客户名称。
 
-### 3.3 有意植入的分析事件
+### 3.3 可导入粒度合同
+
+“全量数据”不允许只在 profile 里列出维度后，再在 canonical 层压成单个聚合成员。
+正式发行包必须满足：
+
+| 数据集 | 受治理粒度 | 最低覆盖 |
+|---|---|---:|
+| 组织 | 集团 + 业务单元 | 1 + 4 |
+| 客户/客群 | 匿名客户 + 客群 | 40 + 4 |
+| 产品/区域 | 物流产品 + 区域 | 8 + 6 |
+| 经营实际 | 月×客户×活跃产品（组织、区域由主数据映射） | 24 个月且每月覆盖全部维度 |
+| 财务实际 | 月×业务单元×管理科目 | 24 个月、4 单元、核心科目齐全 |
+| 预算 | 月×业务单元×客群×产品×原始预算行 | 分析期 12 个月、4 单元、4 客群、8 产品、7 类原始行 |
+| AR/回款 | 月×客户×5 账龄桶 | 24 个月、40 客户、5 桶，同比期不得缺失 |
+| 预测 sidecar | 月×客群×产品 | 分析期 12 个月，不写库 |
+
+预算的 7 类原始行是收入、3 类直接成本、期间费用、经营利润和经营现金流。指标引擎只消费
+`REVENUE`/`DIRECT_COST`/`OPERATING_PROFIT`/`OPERATING_CASH_FLOW`：3 类直接成本行共同投影为
+`DIRECT_COST`，毛利与毛利率由引擎派生；期间费用作为受治理明细保留并显式记录
+coverage gap，不得冒充已支持的预算指标。
+具体 canonical 编码为：收入行 `metric_code=REVENUE`；仓储/运输/其他直接成本行保留各自
+`management_account_code`，但统一 `metric_code=DIRECT_COST`；期间费用行使用
+`metric_code=OPERATING_EXPENSE`；经营利润和经营现金流分别使用同名引擎代码。
+预算内部必须逐月/组织/客群/产品满足“收入-三类直接成本-期间费用=经营利润”；
+经营现金流预算与经营利润的差额作为显式营运资本/非现金调节记入 manifest 并闭合。
+
+允许使用可解释的稀疏分配，但每个分析月必须覆盖 4 个业务单元、6 个区域、
+40 个客户和 8 个产品，不得使用 `DM-AGG` / `P-AGG` / `R-ALL` 代替明细覆盖。
+
+### 3.4 有意植入的分析事件
 
 数据必须包含可由确定性规则发现、且证据能回到源记录的事件：
 
 - 跨境旺季量增但运输单价上升，收入增长、毛利率承压；
 - 国内仓配效率改善，单位成本下降；
 - 两个大客户回款恶化，31–60/61–90/90+ 账龄上升；
-- 某区域实际收入低于预算；
+- 某业务单元实际收入低于预算（现有预算合同不含 region 维度）；
 - 经营利润与经营现金流短期背离；
 - 产品组合变化导致整体单均收入和毛利率变化。
 
@@ -122,19 +151,25 @@ CI 文档门禁、状态文档过时和普通启动后无可见演示数据问�
 
 `scripts/seed_damai_demo.py` 负责幂等装载：
 
-1. 复用固定 bootstrap enterprise UUID，将其幂等配置为“大麦物流”，并建立
-   12 个月 AnalysisCycle；整库始终只有一个 enterprise_id，以满足当前授权契约；
+1. 复用固定 bootstrap enterprise UUID，将其幂等配置为“大麦物流”，并建立/复用
+   一个分析截止月为 `2026-08` 的 AnalysisCycle；AnalysisBatch 只绑定该周期，24 个历史月份
+   由 Period/事实表表达，不伪造 12 个无批次归属的周期；整库始终只有一个 enterprise_id；
 2. 通过现有 IntakeService 导入并发布标准工作簿；
 3. 生成 12 个月指标快照和最新 AnalysisRun；
-4. 将一组 Finding 按真实状态机推进为 candidate/submitted/approved 混合状态；
+4. 运行现有 5 个 playbook，将最多 5 个系统 Finding 按真实状态机推进为
+   candidate/in_review/approved 混合状态；`submitted` 是从 candidate 进入 in_review 的 decision，
+   不是落库状态；
 5. 为 approved Finding 写入完整结论并冻结内部报告；
-6. 导入两个大麦合成财报，为每份报告保留非空源 SHA，调用
+6. 使用独立 synthetic stock code `DAMAI.SYN` 和独立归一化映射导入两个大麦合成财报，
+   为每份报告保留非空源 SHA，调用
    `normalize_report`、`ReviewService.publish` 通过质量门禁后，再冻结客观报告和经营概览；
 7. 输出机器可读 seed receipt。
 
 脚本不得直接伪造无法通过领域服务验证的发布对象。工作簿和数据库装载仅包含
 actual/budget；forecast sidecar 必须携带独立版本、生成时间和 SHA，明确标记
 `persistence: static-only` 与 `page_coverage: excluded`，防止将未实现能力冒充为已上线功能。
+大麦运营投影也使用独立 `DAMAI.SYN` 静态事实/分部序列，`/operations` 不得读取
+`9988.HK` 或任何阿里巴巴经营 fixture。
 
 ### 4.4 指标覆盖展示
 
@@ -159,6 +194,13 @@ actual/budget；forecast sidecar 必须携带独立版本、生成时间和 SHA�
 - 三大业务族收入占比在目标 ±1 个百分点；
 - 经营收入与财务 REVENUE、经营直接成本与三类财务直接成本逐全量对账通过；
 - 每月、每组织 `收入 - 直接成本 = 毛利`，`毛利 - 期间费用 = 经营利润`；
+- 预算在每个月/组织/客群/产品粒度满足“收入-三类直接成本-期间费用=经营利润”，
+  并有闭合的经营现金流调节表；预算与实际要可比，但不要求数值相等；
+- `MetricCalculator` 的 `REVENUE`/`DIRECT_COST` 在 total、organization、customer segment、
+  product、segment×product 五种受支持粒度与 manifest 一致；`OPERATING_PROFIT`/
+  `OPERATING_CASH_FLOW` 只在其现有合同支持的 total/organization 粒度对账；
+  10,752 条细分原始预算保留，但不伪造财务指标尚未支持的细分输出；
+  三类直接成本不漏算、不重算；
 - AR 五账龄桶合计、到期、逾期、回款均满足非负与定义约束；
 - AR 五个账龄桶之和等于应收余额，未到期+逾期等于应收余额，各桶、到期、
   逾期与回款非负，且回款口径与现金流口径有显式调节表；
@@ -166,6 +208,8 @@ actual/budget；forecast sidecar 必须携带独立版本、生成时间和 SHA�
 - 权益变动表满足期初权益+本期净利润+其他权益变动=期末权益，其期末权益必须等于
   资产负债表权益；现金流量表期末现金必须等于资产负债表货币资金；
 - 所有产物 deterministic，第二次构建 `git diff --exit-code fixtures/damai` 为零漂移。
+- manifest 中的主数据数量和事实覆盖必须达到 §3.3；profile 声明数量与 canonical
+  实际数量不一致时直接阻断发行。
 
 ### 5.2 页面与对象验收
 
@@ -173,11 +217,11 @@ actual/budget；forecast sidecar 必须携带独立版本、生成时间和 SHA�
 |---|---|
 | `/` | 12 个月趋势、8 个 KPI、产品表、毛利矩阵非空 |
 | `/data` | 大麦工作簿可导入，质量与对账通过 |
-| `/investigations` | 至少 6 个主题 Finding，含混合审阅状态 |
+| `/investigations` | 现有 5 个 playbook 可生成的 Finding 全部可见，含 candidate/in_review/approved 状态 |
 | `/reports` | 内部冻结快照、经营快照均可见 |
 | `/statements` | 大麦两个年度可切换，三表及扩展章节非空 |
 | `/analysis` | 大麦财报四问工作台可返回 |
-| `/operations` | 内部 dashboard 与大麦财报经营概览均有内容 |
+| `/operations` | 大麦财报经营概览及其独立运营事实有内容；内部 dashboard 由 `/` 验收 |
 | `/metric-library` | 字典可见；大麦覆盖只报告真实可算项与结构化缺口 |
 
 `/data` 的验收不以“数据库已有 seed 对象”代替：E2E 必须在页面上上传生成的

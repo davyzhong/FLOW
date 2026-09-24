@@ -1,110 +1,146 @@
 ---
 doc_id: FLOW-PLAN-DAMAI-DEMO-20260924
-title: 大麦物流全量演示数据发行版实施计划
+title: 大麦物流完整财年演示数据实施计划
 doc_type: plan
 status: active
-version: 1.1
+version: 2.3
 created_at: 2026-09-24
 updated_at: 2026-09-24
 owner: FLOW
-depends_on: [FLOW-SPEC-DAMAI-DEMO-001]
+depends_on: [FLOW-SPEC-DAMAI-DEMO-001, FLOW-REV-DAMAI-PARTIAL-20260924]
 acceptance_refs: [FLOW-SPEC-DAMAI-DEMO-001]
 applies_to: repository
 ---
 
-# Damai Logistics Demo Data Implementation Plan
+# 大麦物流完整财年演示数据实施计划
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use
+> `superpowers:test-driven-development`, `superpowers:executing-plans` and
+> `superpowers:verification-before-completion`. 每个任务先红后绿，每次 commit 后立即 push。
 
-**Goal:** 构建并装载 24 个月“大麦物流”跨域合成数据，使 FLOW 当前所有主要页面具备可验证内容。
+## 1. 目标与成功标准
 
-**Architecture:** 用独立确定性生成包产生 canonical、workbook、statement 和 manifest；复用现有 Intake、Metrics、Analysis、Investigation、Publishing 服务装载派生对象；用静态不变量、数据库 receipt 和 API 页面覆盖三层验证。全程不新增数据库迁移。
+建立 `damai-logistics-demo-v1`：一套确定性、可重建、可幂等装载的合成数据发行版。
+它包含 FY2025 同比期和 FY2026 完整分析财年，并用同一份发行包证明数据导入、
+经营分析、财务分析、指标、Finding、审核、冻结、发布和下载链可用。
 
-**Tech Stack:** Python 3.13、Pydantic、Decimal、openpyxl、SQLAlchemy、FastAPI、pytest、Make、PostgreSQL/MinIO。
+完成不以“页面有字”判定，而以下列全部成立判定：
 
----
+1. 全维度数据达到规格 §3.3，不用聚合客户/产品/区域冒充明细；
+2. 全部对账和财务恒等式通过，故意植入的 6 类异常能被系统发现；
+3. 只有一个 enterprise_id，所有数据可通过真实授权依赖访问；
+4. 导入、审核、发布都调用正式领域服务，不手改状态、不直接造最终对象；
+5. 二次 seed 零增长，三类故障注入均整体回滚；
+6. 八个主页面和 `/data` 真实上传旅程通过；
+7. 发行包零漂移、文档门禁、全量回归和同一最终 SHA 的 CI 全绿。
 
-### Task 1: 冻结大麦公司画像和生成器接口
+## 2. 当前基线与执行约束
 
-**Files:**
-- Create: `services/api/src/flow_api/fixtures/damai/__init__.py`
-- Create: `services/api/src/flow_api/fixtures/damai/profile.py`
-- Test: `services/api/tests/fixtures/test_damai_profile.py`
+- 实现基线：`codex/damai-logistics-implementation@cd9c4b4`；
+- 已通过：6 个大麦定向测试文件、36 项测试；
+- 未通过验收：见 `FLOW-REV-DAMAI-PARTIAL-20260924`；
+- 不新增 Alembic migration，不修改 `.env` 或 CI/CD，不部署生产；
+- forecast 继续为 `static-only` sidecar，不冒充已上线数据库能力；
+- 现有非大麦公开财报 fixture 不得被覆盖或改名；
+- 一个任务一个可审查 commit，提交前运行定向验证，提交后立即 push。
 
-- [ ] 先写失败测试：断言 24 个连续期间、目标规模、业务族权重合计 1、所有实体为 synthetic。
-- [ ] 运行 `cd services/api && uv run pytest tests/fixtures/test_damai_profile.py -q`，确认因模块缺失失败。
-- [ ] 实现 frozen profile models 和 `DAMAI_PROFILE_V1`，金额及权重只用 Decimal。
-- [ ] 重跑测试确认通过，并运行 Ruff/MyPy 定向检查。
-- [ ] 提交 `feat(fixtures): define damai logistics demo profile` 并立即 push。
+## 3. 阶段 A：先修正当前半成品
 
-### Task 2: 生成 24 个月 canonical 数据
-
-**Files:**
-- Create: `services/api/src/flow_api/fixtures/damai/generator.py`
-- Create: `services/api/src/flow_api/fixtures/damai/validation.py`
-- Test: `services/api/tests/fixtures/test_damai_generator.py`
-
-- [ ] 先写失败测试覆盖行数、收入区间、业务占比、季节性、经营/财务对账、预算场景、AR 风险事件和确定性。
-- [ ] 验证测试因 `build_damai_package` 缺失而失败。
-- [ ] 实现主数据与事实生成；使用稳定 UUID5、Decimal 和显式舍入；工作簿只包含 actual/budget。
-- [ ] 单独生成 `forecast/rolling_forecast.jsonl`，断言其带版本和 SHA，且 manifest 明确标记
-  `persistence: static-only` 和 `page_coverage: excluded`。
-- [ ] 实现 `validate_damai_package`，失败返回具体 invariant code。
-- [ ] 重跑定向测试、既有 `tests/data_contract tests/fixtures tests/metrics`。
-- [ ] 提交 `feat(fixtures): generate damai canonical dataset` 并立即 push。
-
-### Task 3: 生成闭合财务报告
+### Task A1：用失败测试锁定全量数据合同
 
 **Files:**
-- Create: `services/api/src/flow_api/fixtures/damai/statements.py`
-- Test: `services/api/tests/fixtures/test_damai_statements.py`
+- Modify: `services/api/tests/fixtures/test_damai_profile.py`
+- Modify: `services/api/tests/fixtures/test_damai_generator.py`
+- Modify: `services/api/tests/fixtures/test_damai_canonical.py`
+- Modify: `services/api/tests/fixtures/test_damai_statements.py`
 
-- [ ] 先写失败测试：FY2025/FY2026 两份报告、收入与 canonical 年度汇总一致、资产恒等式、毛利、净利润归属、现金桥和权益 roll-forward。
-- [ ] 验证测试因 `build_damai_statement_payloads` 缺失而失败。
-- [ ] 实现四表、权益变动表和附注索引 payload；金额单位统一为人民币千元。
-- [ ] 用现有 statement importer/normalization 投影跑兼容性测试，缺失指标保持 unavailable。
-- [ ] 断言权益变动表期末权益=资产负债表权益，现金流量表期末现金=资产负债表现金。
-- [ ] 重跑定向及 statement tests。
-- [ ] 提交 `feat(statements): add damai synthetic financial reports` 并立即 push。
+- [ ] 断言 1+4 组织、4 客群、40 客户、8 产品、6 区域均实际进入 canonical。
+- [ ] 断言每个分析月均覆盖全部客户、产品、区域和业务单元，且无 `*-AGG`/`R-ALL`。
+- [ ] 断言 AR 是 24×40×5 账龄粒度，预算覆盖收入、三类直接成本、期间费用、经营利润和经营现金流原始行。
+- [ ] 断言经营↔财务对账、实际与预算具有同期间/维度可比性（不断言数值相等）、AR↔回款↔现金流以及两个财年的四表恒等式。
+- [ ] 断言预算逐月/组织/客群/产品的收入-三成本-期间费用=经营利润，并验证经营现金流调节表闭合。
+- [ ] 先运行并保存红灯证据；不允许先改实现后补断言。
 
-### Task 4: 构建静态发行版
-
-**Files:**
-- Create: `services/api/src/flow_api/fixtures/damai/manifest.py`
-- Create: `scripts/build_damai_demo.py`
-- Create: `scripts/tests/test_build_damai_demo.py`
-- Create: `fixtures/damai/README.md`
-- Generate: `fixtures/damai/canonical/*.jsonl`
-- Generate: `fixtures/damai/workbooks/damai_logistics_full_v1.xlsx`
-- Generate: `fixtures/damai/statements/*.yaml`
-- Generate: `fixtures/damai/manifest.json`
-
-- [ ] 先写失败测试：临时目录构建两次时 SHA/文本字节一致，manifest 计数和汇总匹配，XLSX 语义指纹一致。
-- [ ] 验证测试因构建入口缺失而失败。
-- [ ] 实现 build 脚本，复用 `write_canonical_package`、`render_workbook` 和 YAML safe dump。
-- [ ] 运行构建，提交生成产物；再次构建后执行 `git diff --exit-code fixtures/damai`。
-- [ ] 运行 manifest 验证与 `git diff --check`。
-- [ ] 提交 `feat(fixtures): publish damai demo data release` 并立即 push。
-
-### Task 5: 实现幂等数据库装载器
+### Task A2：重构明细生成器与 canonical 投影
 
 **Files:**
-- Create: `services/api/src/flow_api/fixtures/damai/loader.py`
-- Create: `scripts/seed_damai_demo.py`
-- Test: `services/api/tests/fixtures/test_damai_loader.py`
+- Modify: `services/api/src/flow_api/fixtures/damai/profile.py`
+- Modify: `services/api/src/flow_api/fixtures/damai/generator.py`
+- Modify: `services/api/src/flow_api/fixtures/damai/canonical.py`
+- Modify: `services/api/src/flow_api/fixtures/damai/validation.py`
 
-- [ ] 先写数据库集成失败测试：首次 seed 产生企业/周期/导入/12 快照/分析运行/两个 StatementReport，再次 seed 不重复。
-- [ ] 先写授权契约测试：seed 后 `analysis_cycle` 仅有一个 enterprise_id，通过真实 API 依赖调用 dashboard/investigation/publishing 为 200，不触发 `enterprise_scope_missing`。
-- [ ] 验证测试因 loader 缺失而失败。
-- [ ] 复用固定 bootstrap enterprise UUID，幂等更新为大麦物流；复用 IntakeService 和现有领域服务实现事务化 seed，不得绕过质量/对账。
-- [ ] 通过状态机为证据、结论和 Finding 建立混合状态，至少一个 approved Finding 可冻结报告。
-- [ ] 每份财报保留非空 source SHA，顺序调用 `normalize_report`、`ReviewService.publish`，验证存储的 normalized rows 和 published 状态后才允许 freeze。
-- [ ] 冻结内部报告、客观财报快照和经营概览，输出 JSON receipt。
-- [ ] 注入不变量失败、第二份财报失败和 freeze 失败，分别断言事务全回滚；重复 seed 后快照、ReviewEvent、freeze version、source object 数量不增长。
-- [ ] 重跑 loader、investigation、publishing、statements 相关测试。
-- [ ] 提交 `feat(demo): seed damai cross-domain workflow` 并立即 push。
+- [ ] 为 40 客户固定客群、主区域、信用期；为 8 产品固定业务族和业务单元。
+- [ ] 以“月×客户×2 个活跃产品”产生约 1,920 条经营明细，使用 UUID5、Decimal 和显式尾差分配。
+- [ ] 生成 24 月×4 业务单元×核心科目财务实际，逐月对账经营明细。
+- [ ] 生成 12 月×4 业务单元×4 客群×8 产品×7 类原始预算行，以及 24×40×5 账龄数据。
+- [ ] 预算引擎投影只使用 `REVENUE`/`DIRECT_COST`/`OPERATING_PROFIT`/`OPERATING_CASH_FLOW`；3 类成本汇总为 `DIRECT_COST`，毛利由引擎派生，期间费用标记为未执行的明细 coverage gap。
+- [ ] 用真实 `MetricCalculator`/快照断言 `REVENUE`/`DIRECT_COST` 在 total、organization、segment、product、segment×product 五种粒度与 manifest 一致；`OPERATING_PROFIT`/`OPERATING_CASH_FLOW` 仅在合同支持的 total/organization 粒度对账；三成本不漏算/重算。
+- [ ] 保留六类故意事件，但影响必须能追溯到具体客户/产品/区域/月。
+- [ ] 运行 A1 和既有 data-contract/metrics 测试，提交 `fix(fixtures): expand damai canonical detail coverage` 并 push。
 
-### Task 6: 生成大麦指标覆盖数据集并接入展示
+### Task A3：修正财报来源和正式审核链
+
+**Files:**
+- Modify: `services/api/src/flow_api/fixtures/damai/loader.py`
+- Modify: `services/api/src/flow_api/statements/normalization.py`
+- Modify: `config/statements/item_alias_map_v1.yaml`
+- Modify: `services/api/src/flow_api/operations/engine.py`
+- Modify: `services/api/tests/fixtures/test_damai_loader.py`
+- Modify: `services/api/tests/statements/test_normalization.py`
+- Modify: `services/api/tests/operations/test_operations_engine.py`
+
+- [ ] 先写红灯：导入 payload 和 SHA 必须来自 `fixtures/damai/statements/damai_fy*.yaml`，股票代码必须是独立 `DAMAI.SYN`，不得读取或冒充阿里巴巴原始 fixture。
+- [ ] 为 `DAMAI.SYN` 建立独立 company key 与归一化映射，断言不与 `9988.HK` 的唯一身份/重述链重叠。
+- [ ] 生成并加载 `DAMAI.SYN` 独立运营事实与分部序列，断言 `/operations` 不读取 Alibaba segment/operating fixture。
+- [ ] 先写红灯：监视 `ReviewService.publish` 必须被调用，直接改 `report.status` 必须失败。
+- [ ] 执行 import → normalize → quality/review publish → freeze；检查 source SHA、normalized rows、published 和 freeze eligibility。
+- [ ] 运行 statements/review/publishing 定向测试，提交 `fix(demo): use synthetic statements and governed review` 并 push。
+
+### Task A4：重建静态发行包并消除漂移
+
+**Files:**
+- Modify: `scripts/build_damai_demo.py`
+- Modify: `services/api/tests/fixtures/test_damai_canonical.py`
+- Generate: `fixtures/damai/**`
+
+- [ ] manifest 增加规格 §3.3 的维度覆盖、财年汇总、事件可发现性和数据血缘字段。
+- [ ] 生成的 `fixtures/damai/README.md` 携带合法 frontmatter，不得破坏 M6 文档门禁。
+- [ ] 在临时目录连续构建两次，文本 SHA 与 XLSX 语义指纹一致。
+- [ ] 重建正式 `fixtures/damai/**`，运行 `--check` 和 `git diff --check`。
+- [ ] 提交生成器与全部同源产物 `feat(fixtures): rebuild complete damai fiscal-year release` 并 push。
+
+## 4. 阶段 B：贯通全部领域对象
+
+### Task B1：事务化、幂等化整体 seed
+
+**Files:**
+- Modify: `services/api/src/flow_api/fixtures/damai/loader.py`
+- Modify: `services/api/src/flow_api/intake/service.py`
+- Create: `services/api/tests/fixtures/test_damai_loader_atomicity.py`
+- Modify: `services/api/tests/fixtures/test_damai_loader_analytics.py`
+- Modify: `services/api/tests/integration/test_intake_service.py`
+
+- [ ] seed 起点复用唯一 bootstrap enterprise，建立/复用一个截止月 `2026-08` 的 AnalysisCycle，并明确将大麦 AnalysisBatch 绑定该周期；24 个历史月份由 Period/事实表表达。
+- [ ] 扩展 `IntakeService.create_batch()` 使其可选显式接收 analysis_cycle_id，保留现有调用默认语义；用兼容测试证明旧调用不变，大麦装载不依赖“全库最早周期”选择。
+- [ ] 工作簿必须经 IntakeService 的 source、mapping、validate、warning acknowledgement、publish 链。
+- [ ] 建立 12 个指标快照和 1 个 AnalysisRun，通过真实 API 依赖验证单企业授权。
+- [ ] 整个装载器只在顶层提交；注入不变量、第二份财报、freeze 三类失败，都断言零部分数据。
+- [ ] 二次 seed 后 batch/import/snapshot/run/report/normalized rows/ReviewEvent/source object 计数不增长。
+- [ ] 提交 `feat(demo): make damai seed atomic and idempotent` 并 push。
+
+### Task B2：生成调查、证据、结论和冻结报告
+
+**Files:**
+- Modify: `services/api/src/flow_api/fixtures/damai/loader.py`
+- Create: `services/api/tests/fixtures/test_damai_loader_workflow.py`
+
+- [ ] 将植入事件表达为至少 6 个可追溯分析信号；只由现有 5 个 playbook 生成最多 5 个系统 Finding，业务单元预算差异/产品组合信号作为证据或次级解释，不伪造第 6 个 playbook。
+- [ ] 落库状态覆盖 candidate/in_review/approved；通过 `submitted` decision 从 candidate 进入 in_review，只有 approved Finding 可进入正式结论。
+- [ ] 冻结内部分析报告、两年客观财报快照和经营概览，并验证发布/下载 SHA。
+- [ ] 断言所有结论都能追溯到发行包 SHA 和 canonical record_id。
+- [ ] 提交 `feat(demo): seed damai evidence and report workflow` 并 push。
+
+### Task B3：建立大麦 synthetic 指标覆盖投影
 
 **Files:**
 - Create: `config/metrics/damai_demo_metric_coverage_v1.yaml`
@@ -114,54 +150,85 @@ applies_to: repository
 - Test: `services/api/tests/api/test_metric_library.py`
 - Test: `apps/web/components/metric-library/metric-coverage-section.test.tsx`
 
-- [ ] 先写失败测试：API 默认继续返回 public，`dataset=damai` 返回独立 synthetic 数据集，非法 dataset 返回类型化 422。
-- [ ] 先写前端失败测试：可切换真实/大麦数据集，大麦视图显示“合成演示数据”而不冒充真实披露。
-- [ ] 从 statement normalized facts 生成大麦覆盖 YAML，缺失项保留结构化 missing reason。
-- [ ] 实现受控 dataset 选择器和前端切换；不改变现有默认响应语义。
-- [ ] 运行 API 与 Web 定向测试，提交 `feat(metrics): expose damai synthetic coverage dataset` 并立即 push。
+- [ ] API 默认保持 public 真实财报矩阵，`dataset=damai` 返回独立 synthetic 矩阵。
+- [ ] 前端可切换两个数据集，大麦始终显示“合成演示数据”标识。
+- [ ] 覆盖矩阵只展示真实可计算项；其余保留结构化 missing reason，不用 0 补值。
+- [ ] 提交 `feat(metrics): expose damai synthetic coverage dataset` 并 push。
 
-### Task 7: 增加 Make 入口和覆盖验证器
+## 5. 阶段 C：一键启动和系统级验收
+
+### Task C1：增加可重现命令与机器可读 receipt
 
 **Files:**
+- Create: `scripts/seed_damai_demo.py`
 - Create: `scripts/verify_damai_demo.py`
 - Create: `scripts/tests/test_verify_damai_demo.py`
 - Modify: `Makefile`
 
-- [ ] 先写失败测试：验证器能识别缺批次、缺快照、缺 Finding、缺报告和汇总不符，并返回非零。
-- [ ] 验证测试因验证器缺失而失败。
-- [ ] 实现 `damai-demo-build/seed/verify/up` 目标；`stack-up` 语义保持不变。
-- [ ] 在已启动的隔离数据库执行 seed 两次与 verify，保存 receipt 到 `work/damai-demo/`（不入 git）。
-- [ ] 运行相关 shell contract tests 与 `make damai-demo-verify`。
-- [ ] 提交 `feat(demo): add damai startup and verification commands` 并立即 push。
+- [ ] 实现 `damai-demo-build/seed/verify/up`；`stack-up` 继续保持空环境语义。
+- [ ] verify 同时对账 manifest、数据库计数、API 响应、冻结哈希和对象存储哈希。
+- [ ] receipt 至少包含 release SHA、enterprise/cycle、batch/import、snapshots/run、findings、reports/freezes/publications 和验收结果。
+- [ ] 在干净隔离 compose project 中 seed 两次并 verify；证据写入 `work/damai-demo/`（不入 git）。
+- [ ] 提交 `feat(demo): add damai startup and verification commands` 并 push。
 
-### Task 8: 页面级全链验收
+### Task C2：八页面真实 E2E
 
 **Files:**
 - Create: `apps/web/e2e/damai-demo.spec.ts`
 - Create: `scripts/test_damai_demo_e2e.sh`
 - Modify: `Makefile`
 
-- [ ] 先写 E2E：八个主要页面不处于空数据态，并验证大麦公司名、期间、KPI、Finding、财报、快照与 synthetic 指标覆盖。
-- [ ] `/data` 必须从页面上传生成 XLSX，完成映射、校验、warning 确认和发布，断言质量/对账；不得以 seed 后非空代替该旅程。
-- [ ] 在未 seed 环境运行，确认测试按预期失败。
-- [ ] 接入动态端口、owned supervisor 和 cleanup trap，调用大麦 seed 后运行生产构建 E2E。
-- [ ] 修复发现的数据装载或页面契约问题；不得弱化断言或写页面 mock。
-- [ ] 运行大麦 E2E、现有 86 个 Web 单测、lint、typecheck。
-- [ ] 提交 `test(e2e): verify damai demo across product pages` 并立即 push。
+- [ ] `/data` 从页面上传生成 XLSX，完成映射、校验、warning 确认和发布，验证质量/对账。
+- [ ] `/`、`/investigations`、`/reports`、`/statements`、`/analysis`、`/operations`、`/metric-library` 断言大麦名称、期间和关键内容非空。
+- [ ] 页面分别验证现有支持的 organization/customer segment/product/region 粒度，并通过 metric API 验证 customer 粒度；不宣称 UI 已支持不存在的四级组合下钻。
+- [ ] 走通一次 Finding 审核和一次报告下载 SHA 校验。
+- [ ] 使用动态端口、owned supervisor 和 cleanup trap；不使用 page mock 或弱化空态断言。
+- [ ] 运行大麦 E2E、既有 Web unit、lint、typecheck，提交 `test(e2e): verify damai full product journey` 并 push。
 
-### Task 9: 全量回归、文档刷新与交付
+### Task C3：完整回归、文档和最终 CI 闭环
 
 **Files:**
+- Modify: `fixtures/damai/README.md`
+- Modify: `CODE_OF_CONDUCT.md`
+- Modify: `CONTRIBUTING.md`
+- Modify: `SECURITY.md`
 - Modify: `docs/00_start_here/PROJECT_STATE.md`
+- Modify: `docs/00_start_here/READING_ORDER.md`
 - Modify: `docs/50_plans/CURRENT_ROADMAP.md`
 - Modify: `README.md`
 - Modify: `HANDOFF.md`
 - Modify: `docs/README.md`
-- Modify: `docs/80_reviews/2026-09-24-project-completion-and-damai-data-readiness-review.md`
 
-- [ ] 执行 baseline repair 计划 Task 2，用实测结果更新权威文档。
-- [ ] 运行 API unit/integration、Web unit/E2E、contracts、lint、typecheck、docs m6、fixture 零漂移和 U8 相关非破坏回归。
-- [ ] 以 `git merge-base origin/main HEAD` 为 base，核对 `git diff --name-only <base>..HEAD`，确认无迁移、`.env`、CI 配置和范围外文件，并断言 Alembic head 与基线一致。
-- [ ] 提交 `docs: close damai demo data release` 并立即 push。
-- [ ] 先保持工作包 active 并验证实现 head；随后用最终状态提交把工作包改为 completed、push，再验证该最终精确 SHA 的 required jobs。
-- [ ] 若最终 SHA 的 CI 失败，以新提交把状态恢复为 active/阻塞，修复并重新验证；不允许用旧 SHA 的绿色结果宣称完成。
+- [ ] 先执行 `FLOW-PLAN-BASELINE-REPAIR-20260924` Task 1，使 M6 全量零失败。
+- [ ] 执行 API unit/integration、contracts、metrics、statements、publishing、Web unit/E2E、lint、typecheck、docs M6、release 零漂移与 U8 非破坏回归。
+- [ ] 以 `git merge-base origin/main HEAD` 核对全部变更，断言没有 migration、`.env`、CI/CD 或范围外文件，且 Alembic head 未改变。
+- [ ] 用实测计数和命令刷新 README、PROJECT_STATE、ROADMAP、HANDOFF 与导航；不把计划值当成实测值。
+- [ ] 保持工作包 active 提交实现关闭文档并 push，验证该 head；随后另一提交改为 completed 并 push。
+- [ ] 只有最终 completed SHA 的 required jobs 全绿才宣布完成；若失败，以新提交恢复 active/阻塞并重新验证。
+
+## 6. 预期数据量级（验收下限）
+
+| 对象 | 下限/期望 |
+|---|---:|
+| 期间 | 24 月（12 分析 + 12 同比） |
+| 组织 | 5（1 集团 + 4 业务单元） |
+| 客群/客户 | 4 / 40 |
+| 产品/区域 | 8 / 6 |
+| 经营实际 | 约 1,920 条，分析期每月全维覆盖 |
+| 预算 | 10,752 条（12×4×4×8×7） |
+| AR/回款 | 4,800 条（24×40×5） |
+| 指标快照 | 12 个月，每月实际可算项非空 |
+| AnalysisCycle | 1 个，截止月 `2026-08`，大麦批次显式绑定 |
+| 分析事件 | 至少 6 个可追溯信号，现有 5 个 playbook 产生的 Finding 全部可验收 |
+| 财报 | 2 个财年、4 张表+附注索引，全部通过审核服务 |
+| 冻结对象 | 内部分析报告 ≥1，客观财报快照 ≥2，经营概览 ≥2 |
+
+## 7. 停机条件
+
+出现以下任一情况时不得继续堆叠功能，必须先修正：
+
+- 需要新增 schema/migration 或修改 CI/.env；
+- 为了让测试绿而直接改发布/审核状态；
+- 生成器、静态发行包和数据库三者不能对账；
+- 任一失败路径留下部分数据；
+- 用页面 mock、固定文字或人工直接插入最终对象替代真实链路。
