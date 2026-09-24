@@ -24,6 +24,8 @@ from sqlalchemy import select, text
 from flow_api.analysis.policy import load_analysis_policy
 from flow_api.analysis.service import AnalysisRunService
 from flow_api.data_contract.contract import load_contract
+from flow_api.fixtures.damai.generator import build_damai_package
+from flow_api.fixtures.damai.validation import validate_damai_package
 from flow_api.infrastructure.models.intake import (
     AnalysisBatch,
     ImportVersion,
@@ -64,6 +66,32 @@ _ANALYSIS_MONTH_KEYS: tuple[int, ...] = tuple(
 ) + tuple(2026 * 100 + m for m in range(1, 9))
 _BOOTSTRAP_ID = "00000000-0000-0000-0000-00000000d001"
 _DAMAI_COMPANY_NAME = "大麦物流集团（synthetic 演示企业）"
+_DAMAI_CYCLE_PERIOD_KEY = "2026-08"  # 分析周期截止月（B1：显式绑定，不依赖引导周期）
+
+
+def _damai_analysis_cycle_id(session: Any) -> str:
+    """建立/复用 bootstrap 企业下截止月 2026-08 的 AnalysisCycle（幂等）。"""
+
+    row = session.execute(
+        text(
+            "INSERT INTO analysis_cycle (id, enterprise_id, period_key, status, created_at)"
+            " VALUES (gen_random_uuid(), :eid, :period, 'open', now())"
+            " ON CONFLICT (enterprise_id, period_key) DO NOTHING"
+            " RETURNING id"
+        ),
+        {"eid": _BOOTSTRAP_ID, "period": _DAMAI_CYCLE_PERIOD_KEY},
+    ).scalar()
+    if row is not None:
+        return str(row)
+    return str(
+        session.execute(
+            text(
+                "SELECT id FROM analysis_cycle"
+                " WHERE enterprise_id = :eid AND period_key = :period"
+            ),
+            {"eid": _BOOTSTRAP_ID, "period": _DAMAI_CYCLE_PERIOD_KEY},
+        ).scalar_one()
+    )
 
 
 def _upsert_enterprise(session: Any) -> dict[str, str]:
@@ -93,7 +121,18 @@ def _sha256_of(path: Path) -> str:
 
 
 def seed_damai_demo(session: Any) -> dict[str, Any]:
-    """装载大麦演示数据：enterprise 配置 + 两份财报导入/归一化/审核发布。"""
+    """装载大麦演示数据：enterprise 配置 + 两份财报导入/归一化/审核发布。
+
+    事务语义（B1）：全程 flush-only，只在调用方顶层提交；任一步骤失败时
+    调用方 rollback 即零部分数据。入口先过数据包不变量门禁，拒写半成品。
+    """
+
+    package_validation = validate_damai_package(build_damai_package())
+    if not package_validation["valid"]:
+        raise RuntimeError(
+            "大麦数据包不变量校验失败，拒绝装载："
+            + ",".join(package_validation["invariant_codes"])
+        )
 
     enterprise = _upsert_enterprise(session)
     review = ReviewService(session)
@@ -193,11 +232,13 @@ def _seed_analytics(session: Any) -> dict[str, Any]:
         select(AnalysisBatch).where(AnalysisBatch.name == "damai-demo-v1")
     )
     if batch is None:
-        # 首次装载：标准工作簿走完整 IntakeService 导入链
+        # 首次装载：标准工作簿走完整 IntakeService 导入链；
+        # B1：批次显式绑定截止月 2026-08 的 AnalysisCycle（不依赖全库最早周期）
+        cycle_id = _damai_analysis_cycle_id(session)
         workbook = _release_workbook_path()
         stored, proposal, candidate, report = _intake_inputs(workbook)
         intake = IntakeService(session)
-        batch = intake.create_batch("damai-demo-v1")
+        batch = intake.create_batch("damai-demo-v1", analysis_cycle_id=cycle_id)
         source = intake.attach_source(batch.id, stored)
         mapping = intake.propose_mapping(source.id, proposal, actor=actor)
         confirmed = intake.confirm_mapping(mapping.id, actor=actor)

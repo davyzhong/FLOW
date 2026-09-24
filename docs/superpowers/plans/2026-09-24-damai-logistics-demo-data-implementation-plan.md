@@ -35,7 +35,7 @@ do_not_execute: true
 | A2 | 重构明细生成器与 canonical 投影（40 客户×8 产品×6 区域，无聚合成员） | done（`4950e73`） | 取代 slice-2a 的聚合方案；fixtures 58+4 全绿、ruff 净 |
 | A3 | 修正财报来源（DAMAI.SYN 独立身份）与正式审核链（禁直改 status） | done（`1052ea6`） | 报表升级为合并报表范式（勾稽门禁真实生效）；发行版同步重建 |
 | A4 | 重建静态发行包 + 消除漂移（manifest 血缘字段、README frontmatter） | done（见本次提交） | manifest 新增 lineage/dimension_coverage/fiscal_year_summary/planted_events；--check PASS |
-| B1 | 事务化整体 seed（AnalysisCycle 绑定 + 三类回滚注入 + 全对象幂等） | pending | 扩展 slice-2a 的 loader |
+| B1 | 事务化整体 seed（AnalysisCycle 绑定 + 三类回滚注入 + 全对象幂等） | done（见本次提交） | 扩展 slice-2a 的 loader；freeze 注入随 B2 冻结实现补测 |
 | B2 | 调查/证据/结论/冻结报告（candidate/in_review/approved 混合 + 冻结 SHA） | pending | = 原 slice-2b |
 | C1 | `damai-demo-build/seed/verify/up` 四命令 + 机器可读 receipt | pending | seed CLI 首次落地 |
 | C2 | 八页面真实 E2E（含 /data 页面上传旅程） | pending | 「菜单全满」的验收关 |
@@ -145,13 +145,13 @@ do_not_execute: true
 - Modify: `services/api/tests/fixtures/test_damai_loader_analytics.py`
 - Modify: `services/api/tests/integration/test_intake_service.py`
 
-- [ ] seed 起点复用唯一 bootstrap enterprise，建立/复用一个截止月 `2026-08` 的 AnalysisCycle，并明确将大麦 AnalysisBatch 绑定该周期；24 个历史月份由 Period/事实表表达。
-- [ ] 扩展 `IntakeService.create_batch()` 使其可选显式接收 analysis_cycle_id，保留现有调用默认语义；用兼容测试证明旧调用不变，大麦装载不依赖“全库最早周期”选择。
-- [ ] 工作簿必须经 IntakeService 的 source、mapping、validate、warning acknowledgement、publish 链。
-- [ ] 建立 12 个指标快照和 1 个 AnalysisRun，通过真实 API 依赖验证单企业授权。
-- [ ] 整个装载器只在顶层提交；注入不变量、第二份财报、freeze 三类失败，都断言零部分数据。
-- [ ] 二次 seed 后 batch/import/snapshot/run/report/normalized rows/ReviewEvent/source object 计数不增长。
-- [ ] 提交 `feat(demo): make damai seed atomic and idempotent` 并 push。
+- [x] seed 起点复用唯一 bootstrap enterprise，建立/复用一个截止月 `2026-08` 的 AnalysisCycle，并明确将大麦 AnalysisBatch 绑定该周期；24 个历史月份由 Period/事实表表达。
+- [x] 扩展 `IntakeService.create_batch()` 使其可选显式接收 analysis_cycle_id，保留现有调用默认语义；用兼容测试证明旧调用不变，大麦装载不依赖“全库最早周期”选择。
+- [x] 工作簿必须经 IntakeService 的 source、mapping、validate、warning acknowledgement、publish 链。
+- [x] 建立 12 个指标快照和 1 个 AnalysisRun，通过真实 API 依赖验证单企业授权。
+- [x] 整个装载器只在顶层提交；注入不变量、第二份财报、intake publish 三类失败，都断言零部分数据。（freeze 注入随 B2 冻结实现补测）
+- [x] 二次 seed 后 batch/import/snapshot/run/report/normalized rows/source object 计数不增长（ReviewEvent 表不存在，发布动作幂等跳过）。
+- [x] 提交 `feat(demo): make damai seed atomic and idempotent` 并 push。
 
 ### Task B2：生成调查、证据、结论和冻结报告
 

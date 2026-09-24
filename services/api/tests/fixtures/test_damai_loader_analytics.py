@@ -42,17 +42,17 @@ def migrated_database() -> None:
 def db_session() -> Iterator[Session]:
     engine = create_engine(get_settings().database_url)
     session = Session(engine, expire_on_commit=False)
+    clean(session)  # canonical 事实/维度 + intake 链全清（须先于 batch 删除，FK RESTRICT）
     for table in (
         MetricValue,
-        MetricSnapshot,
         AnalysisRun,
+        MetricSnapshot,
         AnalysisBatch,
         StatementNormalizedItem,
         StatementLineItem,
         StatementReport,
     ):
         session.execute(delete(table))
-    clean(session)  # canonical 事实/维度 + intake 链全清，保证从零 seed
     yield session
     session.close()
     engine.dispose()
