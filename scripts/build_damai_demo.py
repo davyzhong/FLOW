@@ -195,6 +195,113 @@ def _summaries(destination: Path) -> dict[str, str]:
     return {"operating_revenue_total": format(total_revenue, ".4f")}
 
 
+def _dimension_coverage(package: Any) -> dict[str, Any]:
+    orgs = package.organizations
+    return {
+        "organizations": {
+            "group": sum(1 for o in orgs if o.level == "group"),
+            "business_unit": sum(1 for o in orgs if o.level == "business_unit"),
+        },
+        "customer_segments": len(package.customer_segments),
+        "customers": len(package.customers),
+        "logistics_products": len(package.logistics_products),
+        "regions": len(package.regions),
+        "operating_actuals": {
+            "rows": len(package.operating_actuals),
+            "grain": "month × customer × product",
+        },
+        "financial_actuals": {
+            "rows": len(package.financial_actuals),
+            "grain": "month × business_unit × management_account",
+        },
+        "monthly_budgets": {
+            "rows": len(package.monthly_budgets),
+            "grain": "month × business_unit × customer_segment × product × account",
+        },
+        "ar_collections": {
+            "rows": len(package.ar_collections),
+            "grain": "month × customer × bucket",
+        },
+    }
+
+
+def _fiscal_year_summary(raw: dict[str, Any]) -> dict[str, Any]:
+    from decimal import Decimal
+
+    all_months = tuple(
+        sorted({row["month"] for row in raw["monthly_facts"]["operating_actual"]})
+    )
+    months_by_fy = {"FY2025": all_months[:12], "FY2026": all_months[12:]}
+    summary: dict[str, Any] = {}
+    for fy, months in months_by_fy.items():
+        revenue = Decimal("0")
+        cost = Decimal("0")
+        ocf = Decimal("0")
+        for row in raw["monthly_facts"]["operating_actual"]:
+            if row["month"] in months:
+                revenue += Decimal(str(row["revenue"]))
+                cost += Decimal(str(row["cost"]))
+        for row in raw["monthly_facts"]["cash_flow"]:
+            if row["month"] in months:
+                ocf += Decimal(str(row["ocf"]))
+        summary[fy] = {
+            "months": [months[0], months[-1]],
+            "revenue_wan": format(revenue, ".4f"),
+            "gross_margin": format((revenue - cost) / revenue, ".4f"),
+            "operating_cash_flow_wan": format(ocf, ".4f"),
+        }
+    return summary
+
+
+_EVENT_TRACES: dict[str, str] = {
+    "E1": "operating_actual：国际族 Q4（10-12 月）明细行毛利率 −1.5pp",
+    "E2": "operating_actual：国内族分析期后 6 月明细行毛利率 +0.8pp",
+    "E3": "ar_aging：DM-CUST-007/019 自 2026-03 逾期桶 ×1.35、回款 ×0.75",
+    "E4": "budget vs operating_actual：国内仓配事业部单元格预算 ×1.12，实际低于预算",
+    "E5": "cash_flow：2026-05/2026-06 OCF = 经营利润 × 0.55（利润-现金背离）",
+    "E6": "operating_actual：分析期后 6 月 index%8∈{0,2} 客户第二产品轮换",
+}
+
+
+def _planted_events(raw: dict[str, Any]) -> list[dict[str, Any]]:
+    return [
+        {
+            **event,
+            "discoverable": True,
+            "trace": _EVENT_TRACES.get(event["event_id"], ""),
+        }
+        for event in raw["planted_events"]
+    ]
+
+
+def _lineage(raw: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "generator": "scripts/build_damai_demo.py",
+        "generator_version": GENERATOR_VERSION,
+        "profile_version": raw["profile_version"],
+        "determinism": "uuid5 record_id + Decimal 全程 + fixed Random(42) 族权重扰动",
+        "units": {"canonical": "人民币万元", "statements": "人民币千元（万元 × 10）"},
+        "derived_parameters": {
+            "cost_split": {
+                "WAREHOUSING_COST": "0.30",
+                "TRANSPORTATION_COST": "0.60",
+                "OTHER_DIRECT_COST": "0.10",
+            },
+            "budget_multiplier": {"default": "1.03", "国内仓配事业部": "1.12"},
+            "budget_ocf_rate": "0.92",
+            "ar_outstanding_basis": (
+                "customer_month_revenue × credit_term_days / 120（客群信用期 30/45/60/90）"
+            ),
+            "ar_bucket_rates": {
+                "current": "0.70", "1-30": "0.12", "31-60": "0.08",
+                "61-90": "0.06", "90+": "尾差",
+            },
+            "order_unit_price_wan": "120",
+            "shipments_per_order": "2.0",
+        },
+    }
+
+
 def build_release(destination: Path) -> dict[str, Any]:
     """构建完整发行版并返回 {manifest, files: {rel: sha256}}。"""
 
@@ -249,6 +356,10 @@ def build_release(destination: Path) -> dict[str, Any]:
         },
         "row_counts": row_counts,
         "statement_row_counts": statement_counts,
+        "dimension_coverage": _dimension_coverage(package),
+        "fiscal_year_summary": _fiscal_year_summary(raw),
+        "planted_events": _planted_events(raw),
+        "lineage": _lineage(raw),
         "summaries": _summaries(destination),
         "files": {rel: files[rel] for rel in written},
     }

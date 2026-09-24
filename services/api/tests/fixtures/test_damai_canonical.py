@@ -307,3 +307,83 @@ class FullDimensionContractTests(unittest.TestCase):
             for row in cell_rows:
                 self.assertGreaterEqual(row.receivable_balance, Decimal("0"))
                 self.assertGreaterEqual(row.collected_amount, Decimal("0"))
+
+
+# ---------------------------------------------------------------------------
+# Task A4 红灯：manifest 血缘/维度覆盖/财年汇总/事件可发现性 + README frontmatter
+# ---------------------------------------------------------------------------
+
+
+class ManifestLineageTests(unittest.TestCase):
+    """manifest 必须携带规格 §3.3 的血缘与覆盖字段；README 须合法 frontmatter。"""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        import sys
+
+        if str(REPOSITORY_ROOT) not in sys.path:
+            sys.path.insert(0, str(REPOSITORY_ROOT))
+        from scripts.build_damai_demo import build_release
+
+        cls._tmpdir = tempfile.TemporaryDirectory()
+        result = build_release(Path(cls._tmpdir.name))
+        cls.manifest = result["manifest"]
+        cls.readme = (Path(cls._tmpdir.name) / "README.md").read_text(encoding="utf-8")
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        cls._tmpdir.cleanup()
+
+    def test_manifest_lineage_fields(self) -> None:
+        lineage = self.manifest["lineage"]
+        self.assertEqual(lineage["generator"], "scripts/build_damai_demo.py")
+        self.assertEqual(lineage["profile_version"], "damai-profile-v1")
+        self.assertIn("uuid5", lineage["determinism"])
+        params = lineage["derived_parameters"]
+        self.assertEqual(params["budget_ocf_rate"], "0.92")
+        self.assertEqual(
+            params["cost_split"],
+            {"WAREHOUSING_COST": "0.30", "TRANSPORTATION_COST": "0.60",
+             "OTHER_DIRECT_COST": "0.10"},
+        )
+        self.assertIn("credit_term_days", params["ar_outstanding_basis"])
+
+    def test_manifest_dimension_coverage(self) -> None:
+        cov = self.manifest["dimension_coverage"]
+        self.assertEqual(cov["organizations"], {"group": 1, "business_unit": 4})
+        self.assertEqual(cov["customer_segments"], 4)
+        self.assertEqual(cov["customers"], 40)
+        self.assertEqual(cov["logistics_products"], 8)
+        self.assertEqual(cov["regions"], 6)
+        self.assertEqual(cov["operating_actuals"]["rows"], 1920)
+        self.assertEqual(
+            cov["operating_actuals"]["grain"], "month × customer × product"
+        )
+        self.assertEqual(cov["monthly_budgets"]["rows"], 10752)
+        self.assertEqual(cov["ar_collections"]["rows"], 4800)
+        self.assertEqual(cov["ar_collections"]["grain"], "month × customer × bucket")
+
+    def test_manifest_fiscal_year_summary(self) -> None:
+        summary = self.manifest["fiscal_year_summary"]
+        self.assertEqual(set(summary), {"FY2025", "FY2026"})
+        revenue = Decimal(summary["FY2026"]["revenue_wan"])
+        self.assertTrue(
+            Decimal("10500000") <= revenue <= Decimal("11500000"),
+            f"FY2026 收入 {revenue} 万元须在 1050–1150 亿锚区间",
+        )
+        for fy in ("FY2025", "FY2026"):
+            self.assertIn("gross_margin", summary[fy])
+            self.assertIn("operating_cash_flow_wan", summary[fy])
+
+    def test_manifest_planted_events_discoverable(self) -> None:
+        events = self.manifest["planted_events"]
+        self.assertEqual(len(events), 6)
+        for event in events:
+            self.assertTrue(event["discoverable"], event["event_id"])
+            self.assertTrue(event["trace"], f"{event['event_id']} 须给出明细追溯路径")
+
+    def test_readme_carries_valid_frontmatter(self) -> None:
+        self.assertTrue(self.readme.startswith("---\n"), "README 须以 frontmatter 开头")
+        header = self.readme.split("---\n", 2)[1]
+        for field in ("doc_id:", "doc_type: generated", "status:", "owner:"):
+            self.assertIn(field, header)

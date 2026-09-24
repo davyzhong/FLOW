@@ -33,8 +33,8 @@ do_not_execute: true
 |---|---|---|---|
 | A1 | 失败测试锁定全量数据合同（明细级 1,920/10,752/4,800） | done（`ece11d2`） | 红灯证据 `work/damai-demo/a1_red_evidence.txt`（不入 git） |
 | A2 | 重构明细生成器与 canonical 投影（40 客户×8 产品×6 区域，无聚合成员） | done（`4950e73`） | 取代 slice-2a 的聚合方案；fixtures 58+4 全绿、ruff 净 |
-| A3 | 修正财报来源（DAMAI.SYN 独立身份）与正式审核链（禁直改 status） | done（见本次提交） | 报表升级为合并报表范式（勾稽门禁真实生效）；发行版同步重建 |
-| A4 | 重建静态发行包 + 消除漂移（manifest 血缘字段、README frontmatter） | pending | 在 `690ad5e` 基础上升级 |
+| A3 | 修正财报来源（DAMAI.SYN 独立身份）与正式审核链（禁直改 status） | done（`1052ea6`） | 报表升级为合并报表范式（勾稽门禁真实生效）；发行版同步重建 |
+| A4 | 重建静态发行包 + 消除漂移（manifest 血缘字段、README frontmatter） | done（见本次提交） | manifest 新增 lineage/dimension_coverage/fiscal_year_summary/planted_events；--check PASS |
 | B1 | 事务化整体 seed（AnalysisCycle 绑定 + 三类回滚注入 + 全对象幂等） | pending | 扩展 slice-2a 的 loader |
 | B2 | 调查/证据/结论/冻结报告（candidate/in_review/approved 混合 + 冻结 SHA） | pending | = 原 slice-2b |
 | C1 | `damai-demo-build/seed/verify/up` 四命令 + 机器可读 receipt | pending | seed CLI 首次落地 |
@@ -128,11 +128,11 @@ do_not_execute: true
 - Modify: `services/api/tests/fixtures/test_damai_canonical.py`
 - Generate: `fixtures/damai/**`
 
-- [ ] manifest 增加规格 §3.3 的维度覆盖、财年汇总、事件可发现性和数据血缘字段。
-- [ ] 生成的 `fixtures/damai/README.md` 携带合法 frontmatter，不得破坏 M6 文档门禁。
-- [ ] 在临时目录连续构建两次，文本 SHA 与 XLSX 语义指纹一致。
-- [ ] 重建正式 `fixtures/damai/**`，运行 `--check` 和 `git diff --check`。
-- [ ] 提交生成器与全部同源产物 `feat(fixtures): rebuild complete damai fiscal-year release` 并 push。
+- [x] manifest 增加规格 §3.3 的维度覆盖、财年汇总、事件可发现性和数据血缘字段。
+- [x] 生成的 `fixtures/damai/README.md` 携带合法 frontmatter，不得破坏 M6 文档门禁。
+- [x] 在临时目录连续构建两次，文本 SHA 与 XLSX 语义指纹一致。
+- [x] 重建正式 `fixtures/damai/**`，运行 `--check` 和 `git diff --check`。
+- [x] 提交生成器与全部同源产物 `feat(fixtures): rebuild complete damai fiscal-year release` 并 push。
 
 ## 4. 阶段 B：贯通全部领域对象
 

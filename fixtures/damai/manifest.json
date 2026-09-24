@@ -1,5 +1,31 @@
 {
   "batch_code": "DAMAI_DEMO_2026_08",
+  "dimension_coverage": {
+    "ar_collections": {
+      "grain": "month × customer × bucket",
+      "rows": 4800
+    },
+    "customer_segments": 4,
+    "customers": 40,
+    "financial_actuals": {
+      "grain": "month × business_unit × management_account",
+      "rows": 672
+    },
+    "logistics_products": 8,
+    "monthly_budgets": {
+      "grain": "month × business_unit × customer_segment × product × account",
+      "rows": 10752
+    },
+    "operating_actuals": {
+      "grain": "month × customer × product",
+      "rows": 1920
+    },
+    "organizations": {
+      "business_unit": 4,
+      "group": 1
+    },
+    "regions": 6
+  },
   "files": {
     "README.md": "5e539a5e47200a6a341914e2ecbb06a187e7a40a49f4f03e9a012bf9d2974855",
     "canonical/ar_collections.jsonl": "a197efdfb2ebe087c3e36a5eee303918d0cdf9e99c732178ec9097a1086be6bf",
@@ -22,8 +48,60 @@
     "statements/damai_fy2026.yaml": "fde7ac227c215d45331cb6a5e9c1d0c0a147baefe7bcb539447acad48cdf9da1",
     "workbooks/damai_logistics_full_v1.xlsx": "semantic:f9083671deb56c816bd4dec807607f1f68c69e9b9a12edfe875a03f3d84b1003"
   },
+  "fiscal_year_summary": {
+    "FY2025": {
+      "gross_margin": "0.1046",
+      "months": [
+        "2024-09",
+        "2025-08"
+      ],
+      "operating_cash_flow_wan": "927251.2422",
+      "revenue_wan": "9430790.9607"
+    },
+    "FY2026": {
+      "gross_margin": "0.1046",
+      "months": [
+        "2025-09",
+        "2026-08"
+      ],
+      "operating_cash_flow_wan": "1009368.3731",
+      "revenue_wan": "11128333.3337"
+    }
+  },
   "generator": "scripts/build_damai_demo.py",
   "generator_version": "damai-demo-v1",
+  "lineage": {
+    "derived_parameters": {
+      "ar_bucket_rates": {
+        "1-30": "0.12",
+        "31-60": "0.08",
+        "61-90": "0.06",
+        "90+": "尾差",
+        "current": "0.70"
+      },
+      "ar_outstanding_basis": "customer_month_revenue × credit_term_days / 120（客群信用期 30/45/60/90）",
+      "budget_multiplier": {
+        "default": "1.03",
+        "国内仓配事业部": "1.12"
+      },
+      "budget_ocf_rate": "0.92",
+      "cost_split": {
+        "OTHER_DIRECT_COST": "0.10",
+        "TRANSPORTATION_COST": "0.60",
+        "WAREHOUSING_COST": "0.30"
+      },
+      "order_unit_price_wan": "120",
+      "shipments_per_order": "2.0"
+    },
+    "determinism": "uuid5 record_id + Decimal 全程 + fixed Random(42) 族权重扰动",
+    "generator": "scripts/build_damai_demo.py",
+    "generator_version": "damai-demo-v1",
+    "profile_version": "damai-profile-v1",
+    "units": {
+      "canonical": "人民币万元",
+      "statements": "人民币千元（万元 × 10）"
+    }
+  },
   "periods": {
     "analysis": 12,
     "analysis_end": "2026-08",
@@ -31,6 +109,56 @@
     "comparison": 12,
     "total": 24
   },
+  "planted_events": [
+    {
+      "discoverable": true,
+      "event_id": "E1",
+      "kind": "peak_volume_price_pressure",
+      "note": "旺季件量上升且运输单价上行：收入增长、毛利率承压",
+      "scope": "国际与跨境物流",
+      "trace": "operating_actual：国际族 Q4（10-12 月）明细行毛利率 −1.5pp"
+    },
+    {
+      "discoverable": true,
+      "event_id": "E2",
+      "kind": "domestic_efficiency_gain",
+      "note": "仓配效率改善，单位成本下降",
+      "scope": "中国物流",
+      "trace": "operating_actual：国内族分析期后 6 月明细行毛利率 +0.8pp"
+    },
+    {
+      "discoverable": true,
+      "event_id": "E3",
+      "kind": "major_customer_ar_deterioration",
+      "note": "31–60/61–90/90+ 账龄上升，回款恶化",
+      "scope": "两个大客户",
+      "trace": "ar_aging：DM-CUST-007/019 自 2026-03 逾期桶 ×1.35、回款 ×0.75"
+    },
+    {
+      "discoverable": true,
+      "event_id": "E4",
+      "kind": "region_revenue_below_budget",
+      "note": "实际收入低于预算",
+      "scope": "单一区域",
+      "trace": "budget vs operating_actual：国内仓配事业部单元格预算 ×1.12，实际低于预算"
+    },
+    {
+      "discoverable": true,
+      "event_id": "E5",
+      "kind": "profit_cash_divergence",
+      "note": "经营利润与经营现金流短期背离",
+      "scope": "全公司",
+      "trace": "cash_flow：2026-05/2026-06 OCF = 经营利润 × 0.55（利润-现金背离）"
+    },
+    {
+      "discoverable": true,
+      "event_id": "E6",
+      "kind": "mix_shift_margin_change",
+      "note": "组合变化改变整体单均收入与毛利率",
+      "scope": "产品组合",
+      "trace": "operating_actual：分析期后 6 月 index%8∈{0,2} 客户第二产品轮换"
+    }
+  ],
   "profile_version": "damai-profile-v1",
   "row_counts": {
     "canonical/ar_collections.jsonl": 4800,
