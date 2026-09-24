@@ -1,3 +1,16 @@
+---
+doc_id: FLOW-GEN-DAMAI-FIXTURE-README-001
+title: 大麦物流演示发行版 fixtures 说明
+doc_type: generated
+status: generated
+version: 1.0
+created_at: 2026-09-24
+updated_at: 2026-09-24
+owner: FLOW
+generator_ref: scripts/build_damai_demo.py
+input_hash: deterministic-static
+---
+
 # 大麦物流演示发行版（synthetic）
 
 本目录由 `scripts/build_damai_demo.py` 确定性生成，**禁止手工修改**；重建命令：

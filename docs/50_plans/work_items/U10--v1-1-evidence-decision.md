@@ -3,9 +3,9 @@ doc_id: FLOW-WI-U10
 title: U10 V1.1 证据决策（go/hold/drop）
 doc_type: work-item
 status: blocked
-version: 1.0
+version: 1.1
 created_at: 2026-09-12
-updated_at: 2026-09-12
+updated_at: 2026-09-24
 owner: FLOW
 depends_on: [FLOW-WI-U04, FLOW-WI-U08, FLOW-WI-U09O05]
 acceptance_refs: [U10-decision-pack]
@@ -20,3 +20,5 @@ superseded_by: null
 - **范围**：基于 U4 验证证据、U8 部署验收、U9/O5 试点结果，逐项决定 V1.1 候选能力的 go/hold/drop。
 - **形式**：证据决策包（90_archive/plans/2026-09-07-v11-evidence-decision-pack.md 为底稿）→ 正式 D 系列决策。
 - **门禁**：每项决策必须引用验证证据链；无证据项默认 hold。
+- **补充证据**：大麦与第二代知识刷新结果若已完成可进入证据包，但不是硬依赖，
+  不得因其未完成阻塞已有 U4/U8/U09-O05 证据的正式裁决。

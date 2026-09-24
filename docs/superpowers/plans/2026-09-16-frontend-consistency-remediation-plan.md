@@ -2,10 +2,10 @@
 doc_id: FLOW-PLAN-FE-CONSISTENCY-REMEDIATION-20260916
 title: FLOW 全页面前端一致性修复与升级实施计划
 doc_type: plan
-status: active
-version: 1.4
+status: completed
+version: 1.5
 created_at: 2026-09-16
-updated_at: 2026-09-17
+updated_at: 2026-09-24
 owner: FLOW
 depends_on:
   - FLOW-PLAN-FE-DESIGN-UPGRADE-20260915
@@ -22,6 +22,8 @@ source_refs:
   - docs/competitive/2026-09-15-frontend-patterns-research.md
   - AGENTS.md
 subject_ref: main@ec6450aa375cd8515e509d9c50e6c298a1399b8f
+superseded_by: FLOW-PLAN-INTEGRATED-EXECUTION-20260924
+do_not_execute: true
 ---
 
 # FLOW 全页面前端一致性修复与升级实施计划

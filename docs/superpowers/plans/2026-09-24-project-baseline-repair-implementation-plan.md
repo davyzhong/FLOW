@@ -2,14 +2,16 @@
 doc_id: FLOW-PLAN-BASELINE-REPAIR-20260924
 title: 项目基线修复实施计划
 doc_type: plan
-status: active
-version: 1.1
+status: archived
+version: 1.2
 created_at: 2026-09-24
 updated_at: 2026-09-24
 owner: FLOW
 depends_on: [FLOW-SPEC-DAMAI-DEMO-001]
 acceptance_refs: [FLOW-SPEC-DAMAI-DEMO-001]
 applies_to: repository
+superseded_by: FLOW-PLAN-INTEGRATED-EXECUTION-20260924
+do_not_execute: true
 ---
 
 # Project Baseline Repair Implementation Plan

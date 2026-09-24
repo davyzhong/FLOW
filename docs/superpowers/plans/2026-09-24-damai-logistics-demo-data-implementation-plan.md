@@ -2,14 +2,16 @@
 doc_id: FLOW-PLAN-DAMAI-DEMO-20260924
 title: 大麦物流完整财年演示数据实施计划
 doc_type: plan
-status: active
-version: 2.4
+status: archived
+version: 2.5
 created_at: 2026-09-24
 updated_at: 2026-09-24
 owner: FLOW
 depends_on: [FLOW-SPEC-DAMAI-DEMO-001, FLOW-REV-DAMAI-PARTIAL-20260924]
 acceptance_refs: [FLOW-SPEC-DAMAI-DEMO-001]
 applies_to: repository
+superseded_by: FLOW-PLAN-INTEGRATED-EXECUTION-20260924
+do_not_execute: true
 ---
 
 # 大麦物流完整财年演示数据实施计划

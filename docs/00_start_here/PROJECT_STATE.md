@@ -3,9 +3,9 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 1.7
+version: 1.8
 created_at: 2026-09-12
-updated_at: 2026-09-15
+updated_at: 2026-09-24
 owner: FLOW
 applies_to: repository
 ---
@@ -18,7 +18,8 @@ applies_to: repository
 
 ## 当前执行入口
 
-- **[CURRENT_ROADMAP.md](../50_plans/CURRENT_ROADMAP.md)**（唯一执行入口）：U08 completed；S01 active；U4 等外部到料；旧 U9/O5、U10 等重新裁决
+- **[CURRENT_ROADMAP.md](../50_plans/CURRENT_ROADMAP.md)**（唯一状态入口）：U08、S01 和前端一致性整改 completed；大麦完整财年演示数据与第二代静态知识刷新 active；公开 C 级、U4、内部真实试点仍受外部门禁
+- **[FLOW 统一完整实施计划](../superpowers/plans/2026-09-24-flow-integrated-execution-plan.md)**（唯一详细执行合同）：统一承接旧 U/O、S01、多 Agent、前端、知识刷新、大麦和基线修复计划；旧计划不再领取
 - 旧统一计划与 O 系列计划已 superseded（保留任务细节与证据）
 - 文档迁移：[迁移实施计划 M0–M6](../superpowers/plans/2026-09-12-static-knowledge-and-document-migration.md) 已全部关闭（bfc1271 / e373e25，用户确认 2026-09-13）
 
@@ -30,6 +31,8 @@ applies_to: repository
 4. **公开模块 C 级出口（门禁后）**：执行冻结样本、company-level holdout、可复算/可追源和独立盲评量化协议。
 5. **内部工作台与真实企业验证（C 级出口后）**：需内部数据授权；至少连续三个完整月度周期，与同输入人工基准逐周期比较。
 6. **旧 U9/O5、U10（待重新裁决）**：仅保留历史工作包身份，不按旧依赖链自动领取。
+7. **大麦完整财年演示数据（active）**：已有部分生成与装载链；必须先完成明细化、独立合成来源、正式审核、原子幂等 seed 和八页面 E2E，不能用当前半成品解除真实数据门禁。
+8. **第二代静态知识刷新（active）**：批准规格与 preflight 已完成；K0–K6 尚待执行，用户战略裁决前不得切换 `CURRENT_RELEASE`。
 
 ## 知识基线
 

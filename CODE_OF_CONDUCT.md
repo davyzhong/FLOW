@@ -1,3 +1,15 @@
+---
+doc_id: FLOW-GOV-CODE-OF-CONDUCT-001
+title: 行为准则（Code of Conduct）
+doc_type: governance
+status: current
+version: 1.0
+created_at: 2026-09-23
+updated_at: 2026-09-23
+owner: FLOW
+applies_to: repository
+---
+
 # 行为准则（Code of Conduct）
 
 ## 我们的承诺

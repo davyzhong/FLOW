@@ -1,7 +1,7 @@
 {
   "batch_code": "DAMAI_DEMO_2026_08",
   "files": {
-    "README.md": "6cd95537ae9f24249ed4295a53600df8b416992c4c388d605141702e8ae9f174",
+    "README.md": "b52be4938b1ff17a1a9929c6f230f4f73d07bd52d1196d24f2427daf6452afee",
     "canonical/ar_collections.jsonl": "4b71fdb88e9794893d06ef8e04107c9cfe72cbb4b526a45c4f78962282689405",
     "canonical/batch.jsonl": "e50829eace2c172a7eb8bc7a15887c970dc6c761ad27b7ddf542917bf0bde7d1",
     "canonical/customer_segments.jsonl": "7ebdda51c648d83bab7819d14d8de90373b5900c805ba80879f9846772708dc1",

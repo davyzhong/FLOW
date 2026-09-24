@@ -2,17 +2,18 @@
 doc_id: FLOW-PLAN-POST-U8-BOUNDARY-001
 title: U8 后战略边界、事实合同与安全门禁实施计划
 doc_type: plan
-status: active
-version: 1.2
+status: completed
+version: 1.3
 created_at: 2026-09-13
-updated_at: 2026-09-13
+updated_at: 2026-09-24
 owner: FLOW
 depends_on: [FLOW-DESIGN-STRATEGIC-RESET-001, FLOW-WI-U08]
 acceptance_refs: [strategic-reset-stage-1, facts-contract-v2-gate, security-rbac-audit-gate]
 knowledge_release: flow-knowledge-2026-09-12.1
 applies_to: post-u8-boundary-gate
 supersedes: []
-superseded_by: null
+superseded_by: FLOW-PLAN-INTEGRATED-EXECUTION-20260924
+do_not_execute: true
 ---
 
 # U8 后战略边界、事实合同与安全门禁 Implementation Plan

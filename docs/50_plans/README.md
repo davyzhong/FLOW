@@ -3,15 +3,21 @@ doc_id: FLOW-PLAN-050
 title: 计划体系
 doc_type: navigation
 status: current
-version: 1.2
+version: 1.3
 created_at: 2026-09-12
-updated_at: 2026-09-13
+updated_at: 2026-09-24
 owner: FLOW
 applies_to: docs
 ---
 
 # 计划体系
 
-`CURRENT_ROADMAP.md` 与稳定工作包 `work_items/` 组成执行入口；`superpowers/plans/` 保存详细步骤。允许 doc_type: plan/work-item。禁止第二份总计划，详细计划不得维护任务状态。
+`CURRENT_ROADMAP.md` 与稳定工作包 `work_items/` 组成状态入口；
+[FLOW 统一完整实施计划](../superpowers/plans/2026-09-24-flow-integrated-execution-plan.md)
+保存唯一详细执行合同。允许 doc_type: plan/work-item。禁止第二份状态路线图或第二份
+active 总计划；详细计划中的复选框是验收步骤，不得覆盖工作包状态。
 
-当前主线是 [S01 战略边界、事实合同与安全门禁](work_items/S01--post-u8-boundary-contract-security.md)，U08 已完成并冻结。原[范围计划](../superpowers/plans/2026-09-13-flow-post-u8-boundary-gate.md)定义 Task 1–10 的功能范围；[三智能体并行执行计划](../superpowers/plans/2026-09-13-flow-three-agent-parallel-restructuring.md)定义 Task 6–10 的分工、checkpoint 和集成方式，不构成第二路线图。
+当前第一主线是[大麦物流完整财年演示数据](work_items/DAMAI--full-year-demo.md)，
+第二代[静态知识刷新](work_items/KNOWLEDGE--refresh-v2.md)可在独立文件范围内并行。
+S01 与前端一致性整改均已完成；旧范围计划、三智能体计划和分散前端/知识/大麦
+计划只保留历史细节，不得继续领取。

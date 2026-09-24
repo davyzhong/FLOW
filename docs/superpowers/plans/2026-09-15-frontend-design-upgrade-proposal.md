@@ -2,10 +2,10 @@
 doc_id: FLOW-PLAN-FE-DESIGN-UPGRADE-20260915
 title: 前端设计升级方案 v1（基于五轮竞品调研）
 doc_type: plan
-status: active
-version: 2.1
+status: archived
+version: 2.2
 created_at: 2026-09-15
-updated_at: 2026-09-16
+updated_at: 2026-09-24
 owner: FLOW
 depends_on: [FLOW-WP-PUBLIC-C-EXIT-001]
 acceptance_refs: [roadmap-unique-invariant]
@@ -13,6 +13,8 @@ knowledge_release: flow-knowledge-2026-09-12.1
 applies_to: web-frontend
 research_refs: [../competitive/2026-09-15-frontend-patterns-research.md]
 decision_refs: [D052, D053]
+superseded_by: FLOW-PLAN-INTEGRATED-EXECUTION-20260924
+do_not_execute: true
 ---
 
 # 前端设计升级方案 v1（基于五轮竞品调研）

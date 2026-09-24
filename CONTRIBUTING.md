@@ -1,3 +1,15 @@
+---
+doc_id: FLOW-GOV-CONTRIBUTING-001
+title: 贡献指南（CONTRIBUTING）
+doc_type: governance
+status: current
+version: 1.0
+created_at: 2026-09-23
+updated_at: 2026-09-23
+owner: FLOW
+applies_to: repository
+---
+
 # 贡献指南（CONTRIBUTING）
 
 感谢关注 FLOW。开始前请先读 README 了解项目定位。
