@@ -36,7 +36,7 @@ do_not_execute: true
 | A3 | 修正财报来源（DAMAI.SYN 独立身份）与正式审核链（禁直改 status） | done（`1052ea6`） | 报表升级为合并报表范式（勾稽门禁真实生效）；发行版同步重建 |
 | A4 | 重建静态发行包 + 消除漂移（manifest 血缘字段、README frontmatter） | done（见本次提交） | manifest 新增 lineage/dimension_coverage/fiscal_year_summary/planted_events；--check PASS |
 | B1 | 事务化整体 seed（AnalysisCycle 绑定 + 三类回滚注入 + 全对象幂等） | done（见本次提交） | 扩展 slice-2a 的 loader；freeze 注入随 B2 冻结实现补测 |
-| B2 | 调查/证据/结论/冻结报告（candidate/in_review/approved 混合 + 冻结 SHA） | pending | = 原 slice-2b |
+| B2 | 调查/证据/结论/冻结报告（candidate/in_review/approved 混合 + 冻结 SHA） | done（见本次提交） | = 原 slice-2b；实际产出 2 个 Finding（5 playbook 中 2 个过阈值），6 信号映射入 receipt；freeze 故障注入已补测 |
 | C1 | `damai-demo-build/seed/verify/up` 四命令 + 机器可读 receipt | pending | seed CLI 首次落地 |
 | C2 | 八页面真实 E2E（含 /data 页面上传旅程） | pending | 「菜单全满」的验收关 |
 | C3 | 完整回归 + 文档刷新 + 最终 CI 闭环（completed SHA 全绿才算完成） | pending | 交付关闭 |
@@ -159,11 +159,11 @@ do_not_execute: true
 - Modify: `services/api/src/flow_api/fixtures/damai/loader.py`
 - Create: `services/api/tests/fixtures/test_damai_loader_workflow.py`
 
-- [ ] 将植入事件表达为至少 6 个可追溯分析信号；只由现有 5 个 playbook 生成最多 5 个系统 Finding，业务单元预算差异/产品组合信号作为证据或次级解释，不伪造第 6 个 playbook。
-- [ ] 落库状态覆盖 candidate/in_review/approved；通过 `submitted` decision 从 candidate 进入 in_review，只有 approved Finding 可进入正式结论。
-- [ ] 冻结内部分析报告、两年客观财报快照和经营概览，并验证发布/下载 SHA。
-- [ ] 断言所有结论都能追溯到发行包 SHA 和 canonical record_id。
-- [ ] 提交 `feat(demo): seed damai evidence and report workflow` 并 push。
+- [x] 将植入事件表达为至少 6 个可追溯分析信号；只由现有 5 个 playbook 生成最多 5 个系统 Finding，业务单元预算差异/产品组合信号作为证据或次级解释，不伪造第 6 个 playbook。（实际 2 个 Finding 过阈值；E1–E6 六信号入 receipt.signals，E4 预算差异/E5 现金流收窄作结论次级解释与未决问题）
+- [x] 落库状态覆盖 candidate/in_review/approved；通过 `submitted` decision 从 candidate 进入 in_review，只有 approved Finding 可进入正式结论。（首个 Finding submitted→approved，其余停在 in_review；冻结报告只含 approved）
+- [x] 冻结内部分析报告、两年客观财报快照和经营概览，并验证发布/下载 SHA。（digest_view / payload_hash 均由载荷重算验证）
+- [x] 断言所有结论都能追溯到发行包 SHA 和 canonical record_id。（verified_facts 含 manifest sha256 + import-version 引用，测试断言）
+- [x] 提交 `feat(demo): seed damai evidence and report workflow` 并 push。
 
 ### Task B3：建立大麦 synthetic 指标覆盖投影
 

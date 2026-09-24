@@ -9,7 +9,9 @@
 3. 输出机器可读 receipt。
 
 slice-2a：工作簿导入（IntakeService 全链）→ 12 个月指标快照 → 最新 AnalysisRun。
-Finding 状态机推进与冻结 receipt 在下一切片（规格 §4.3 第 4-6 步）。
+slice-2b（B2）：Finding 状态机推进（candidate→in_review→approved）、四段式结论
+（含发行包 manifest SHA + canonical 记录集追溯）、三类冻结（内部分析报告 /
+两年客观财报快照 / 经营概览）与信号 receipt。
 """
 
 from __future__ import annotations
@@ -17,6 +19,7 @@ from __future__ import annotations
 import hashlib
 from pathlib import Path
 from typing import Any
+from uuid import UUID
 
 import yaml
 from sqlalchemy import select, text
@@ -26,6 +29,7 @@ from flow_api.analysis.service import AnalysisRunService
 from flow_api.data_contract.contract import load_contract
 from flow_api.fixtures.damai.generator import build_damai_package
 from flow_api.fixtures.damai.validation import validate_damai_package
+from flow_api.infrastructure.models.analytics import Conclusion, Finding
 from flow_api.infrastructure.models.intake import (
     AnalysisBatch,
     ImportVersion,
@@ -39,8 +43,12 @@ from flow_api.intake.quality import evaluate_quality
 from flow_api.intake.service import IntakeService
 from flow_api.intake.source_storage import StoredSource
 from flow_api.intake.transforms import load_transform_rules
+from flow_api.investigation.state_machines import apply_finding_decision
 from flow_api.metrics.catalog import load_metric_catalog
 from flow_api.metrics.service import MetricSnapshotService
+from flow_api.operations.freeze import freeze_operations_overview
+from flow_api.publishing.objective_freeze import freeze_objective_statement_report
+from flow_api.publishing.service import digest_view, freeze_report_snapshot
 from flow_api.statements.importer import import_statement_report
 from flow_api.statements.normalization import normalize_report
 from flow_api.statements.review import ReviewService
@@ -175,6 +183,7 @@ def seed_damai_demo(session: Any) -> dict[str, Any]:
     session.flush()
     receipt: dict[str, Any] = {"enterprise": enterprise, "reports": reports}
     receipt["analytics"] = _seed_analytics(session)
+    receipt["workflow"] = _seed_workflow(session, reports, receipt["analytics"])
     session.flush()
     return receipt
 
@@ -287,6 +296,258 @@ def _seed_analytics(session: Any) -> dict[str, Any]:
         "analysis_run_id": str(run.id),
         "analysis_run_status": run.status,
         "months": list(_ANALYSIS_MONTH_KEYS),
+    }
+
+
+_WORKFLOW_ACTOR = "damai-demo-seed"
+
+
+def _release_manifest_sha256() -> str:
+    """发行包 manifest.json 的 SHA（结论与 receipt 的发行包追溯锚点）。"""
+
+    relative = Path("fixtures/damai/manifest.json")
+    for root in (Path.cwd(), *Path.cwd().parents):
+        candidate = root / relative
+        if candidate.is_file():
+            return _sha256_of(candidate)
+    raise FileNotFoundError(
+        f"未找到 {relative}（先运行 scripts/build_damai_demo.py 构建发行版）"
+    )
+
+
+def _conclusion_sections(
+    finding: Finding,
+    *,
+    manifest_sha: str,
+    canonical_ref: str,
+    evidence_refs: str,
+) -> dict[str, str]:
+    """四段式结论：业务叙事 + 发行包/canonical 双追溯（不伪造数值）。"""
+
+    trace = (
+        f"数据来源：发行包 fixtures/damai（manifest sha256={manifest_sha}）；"
+        f"canonical 记录集 {canonical_ref}；证据引用：{evidence_refs}。"
+    )
+    impact = f"{finding.impact_amount}"
+    if finding.finding_type == "revenue_growth":
+        return {
+            "verified_facts": (
+                f"分析期收入同比增长，影响额 {impact} 百万元；"
+                "植入事件 E1（电商大客户放量）与 E6（分析期后 6 月客户轮换）"
+                f"为主要驱动，月度明细与客户维度交叉验证一致。{trace}"
+            ),
+            "analysis_judgment": (
+                "增长集中在电商客群与跨境包裹产品线，属于结构性放量而非价格漂移；"
+                "E6 客户轮换表明增长对新客户获取存在依赖，留存质量需持续跟踪。"
+            ),
+            "open_questions": (
+                "E3（DM-CUST-007/019 逾期桶放大 1.35×、回款 0.75×）未触发 "
+                "ar_cash_impact playbook 阈值，收入增长的现金转换质量待应收账龄切片复核；"
+                "E5（2026-05/06 经营现金流收窄至 0.55×）与收入放量的背离需专项说明。"
+            ),
+            "recommendation": (
+                "对电商客群续约账期与定价做专项复核；将 E3 逾期客户列入回款督办清单；"
+                "下周期跟踪 E5 现金流收窄是否随收入放量收敛。"
+            ),
+        }
+    if finding.finding_type == "fulfillment_cost_increase":
+        return {
+            "verified_facts": (
+                f"分析期履约成本同比增加，影响额 {impact} 百万元；"
+                "植入事件 E2（末端冷链运力扩张）为主要驱动，成本明细与分部序列"
+                f"交叉验证一致。{trace}"
+            ),
+            "analysis_judgment": (
+                "成本增加与冷链产品收入结构匹配，属于产能前置投入；"
+                "E4（国内仓配事业部预算上调 1.12×，其余 1.03×）作为预算差异次级解释："
+                "预算口径本身已上调，实际超预算幅度小于名义成本增幅。"
+            ),
+            "open_questions": (
+                "E4 预算上调的审批依据与冷链产能利用率的爬坡曲线尚未入模；"
+                "E3 逾期放大对履约资源占用的间接影响待应收切片数据补充后评估。"
+            ),
+            "recommendation": (
+                "按 E4 调整后的预算口径重算履约成本差异；对冷链产能利用率设月度门槛，"
+                "连续两月不达标即触发扩产复审。"
+            ),
+        }
+    return {
+        "verified_facts": f"Finding 影响额 {impact} 百万元，证据链齐备。{trace}",
+        "analysis_judgment": "信号由 playbook 阈值过滤产生，业务解释见证据引用。",
+        "open_questions": "待业务侧补充背景后复核。",
+        "recommendation": "纳入下周期经营例会跟踪清单。",
+    }
+
+
+def _build_signals(
+    findings: list[Finding], *, canonical_ref: str
+) -> list[dict[str, str]]:
+    """六个植入事件 → 可追溯信号：只挂到真实存在的 Finding/证据/结论。"""
+
+    by_type = {finding.finding_type: finding for finding in findings}
+    revenue = by_type.get("revenue_growth")
+    fulfillment = by_type.get("fulfillment_cost_increase")
+    any_finding = findings[0] if findings else None
+
+    def finding_ref(finding: Finding | None, suffix: str = "") -> str:
+        if finding is None:
+            return canonical_ref
+        return f"finding:{finding.id}{suffix}"
+
+    return [
+        {
+            "event_code": "E1",
+            "description": "电商大客户放量驱动收入增长",
+            "channel": "finding" if revenue is not None else "conclusion",
+            "reference": finding_ref(revenue or any_finding),
+        },
+        {
+            "event_code": "E2",
+            "description": "末端冷链运力扩张推高履约成本",
+            "channel": "finding" if fulfillment is not None else "conclusion",
+            "reference": finding_ref(fulfillment or any_finding),
+        },
+        {
+            "event_code": "E3",
+            "description": "DM-CUST-007/019 逾期桶放大 1.35×、回款 0.75×",
+            "channel": "evidence",
+            "reference": canonical_ref,
+        },
+        {
+            "event_code": "E4",
+            "description": "国内仓配事业部预算上调 1.12×（其余 1.03×）",
+            "channel": "conclusion",
+            "reference": finding_ref(
+                fulfillment or any_finding, " conclusion.analysis_judgment"
+            ),
+        },
+        {
+            "event_code": "E5",
+            "description": "2026-05/06 经营现金流收窄至 0.55×",
+            "channel": "conclusion",
+            "reference": finding_ref(
+                revenue or any_finding, " conclusion.open_questions"
+            ),
+        },
+        {
+            "event_code": "E6",
+            "description": "分析期后 6 月客户轮换（第二增长客户组）",
+            "channel": "evidence" if revenue is not None else "conclusion",
+            "reference": finding_ref(revenue or any_finding, " evidence"),
+        },
+    ]
+
+
+def _seed_workflow(
+    session: Any, reports: list[dict[str, Any]], analytics: dict[str, Any]
+) -> dict[str, Any]:
+    """Finding 状态机推进 + 四段式结论 + 三类冻结（全程 flush-only，幂等）。
+
+    幂等约定：结论只在缺失时写入；状态机按当前状态推进（candidate→submitted，
+    首个 Finding 进一步 approved）；三类冻结均为内容寻址，同内容复用版本。
+    """
+
+    run_id = UUID(analytics["analysis_run_id"])
+    canonical_ref = f"import-version:{analytics['import_version_id']}"
+    manifest_sha = _release_manifest_sha256()
+    findings = list(
+        session.scalars(
+            select(Finding)
+            .where(Finding.analysis_run_id == run_id)
+            .order_by(Finding.finding_type, Finding.id)
+        )
+    )
+    for index, finding in enumerate(findings):
+        conclusion = session.scalar(
+            select(Conclusion).where(Conclusion.finding_id == finding.id)
+        )
+        if conclusion is None:
+            evidence_refs = ",".join(
+                str(object_id)
+                for object_id in session.scalars(
+                    text("SELECT object_id FROM evidence WHERE finding_id = :fid"),
+                    {"fid": str(finding.id)},
+                )
+            )
+            conclusion = Conclusion(
+                finding=finding,
+                **_conclusion_sections(
+                    finding,
+                    manifest_sha=manifest_sha,
+                    canonical_ref=canonical_ref,
+                    evidence_refs=evidence_refs,
+                ),
+            )
+            session.add(conclusion)
+            session.flush()
+        if finding.status == "candidate":
+            apply_finding_decision(
+                session,
+                finding,
+                "submitted",
+                reviewer=_WORKFLOW_ACTOR,
+                comment="演示数据：结论齐备，提交复核",
+            )
+        if index == 0 and finding.status == "in_review":
+            apply_finding_decision(
+                session,
+                finding,
+                "approved",
+                reviewer=_WORKFLOW_ACTOR,
+                comment="演示数据：证据全部已验证且结论四段齐备，签发",
+            )
+    session.flush()
+
+    last_snapshot_id = UUID(analytics["metric_snapshot_ids"][-1])
+    report_snapshot, view = freeze_report_snapshot(
+        session, metric_snapshot_id=last_snapshot_id, analysis_run_id=run_id
+    )
+    objective_entries = []
+    overview_entries = []
+    for report in reports:
+        frozen = freeze_objective_statement_report(
+            session, report_id=UUID(report["report_id"])
+        )
+        objective_entries.append(
+            {
+                "fy": report["fy"],
+                "snapshot_id": str(frozen.id),
+                "version": int(frozen.version),
+                "payload_hash": str(frozen.payload_hash),
+            }
+        )
+        overview = freeze_operations_overview(
+            session, report_id=UUID(report["report_id"])
+        )
+        overview_entries.append(
+            {
+                "fy": report["fy"],
+                "snapshot_id": str(overview.id),
+                "version": int(overview.version),
+                "payload_hash": str(overview.payload_hash),
+            }
+        )
+    session.flush()
+    return {
+        "manifest_sha256": manifest_sha,
+        "findings": [
+            {
+                "finding_id": str(finding.id),
+                "finding_type": str(finding.finding_type),
+                "status": str(finding.status),
+            }
+            for finding in findings
+        ],
+        "signals": _build_signals(findings, canonical_ref=canonical_ref),
+        "freezes": {
+            "internal_report": {
+                "report_snapshot_id": str(report_snapshot.id),
+                "version": int(report_snapshot.version),
+                "view_sha256": digest_view(view),
+            },
+            "objective_statements": objective_entries,
+            "operations_overview": overview_entries,
+        },
     }
 
 
