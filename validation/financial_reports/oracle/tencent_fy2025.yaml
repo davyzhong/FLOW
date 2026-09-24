@@ -1,0 +1,74 @@
+# oracle 标准答案｜tencent_fy2025｜腾讯控股 FY2025 年报（经审核）
+# 录入规程：oracle-register §1（只读 PDF 原文逐行登记；不接触抽取器输出对照）。
+# 录入者：ZCode 会话（用户 2026-09-24 授权 AI 按 §1 规程转录原文，登记见 §1a）。
+# 来源：docs/knowledge-base/02_research/original/p5_samples/tencent_0700/Tencent_FY2025_annual_report.pdf
+#       （SHA-256 d19f1834...见 manifest；282 页，繁体中文，文本层可提取）
+# 单位：人民币百万元（披露原始单位，未换算）
+
+sample_id: tencent_fy2025
+company: 腾讯控股有限公司（0700.HK）
+period: 截至 2025 年 12 月 31 日止年度（经审核）
+source_pdf_pages:
+  综合收益表: 第 130 页
+  综合现金流量表: 第 139–140 页
+  Non-IFRS 年度调节表: 第 22 页（管理层讨论及分析）
+
+key_items:
+  - item: 收入
+    value: "751,766"
+    location: 综合收益表（第 130 页）
+    unit: 人民币百万元
+    source_page: "130"
+    note: 增值服务 369,281 + 营销服务 144,973 + 金融科技及企业服务 229,435 + 其他 8,077
+  - item: 年度盈利（净利润）
+    value: "229,801"
+    location: 综合收益表（第 130 页）
+    unit: 人民币百万元
+    source_page: "130"
+    note: 本公司权益持有人应占 224,842；非控制性权益 4,959
+  - item: Non-IFRS 本公司权益持有人应占盈利
+    value: "259,626"
+    location: 管理层讨论及分析年度调节表（第 22 页）
+    unit: 人民币百万元
+    source_page: "22"
+    note: 已报告 224,842 + 股份酬金 34,711 − 无形资产摊销 7,896 + 减值拨备 11,498 − CPP 3,117 + 投资公司影响 2,570 + 360 − 其他 3,342
+  - item: 经营活动所得现金流量净额
+    value: "303,052"
+    location: 综合现金流量表（第 139 页）
+    unit: 人民币百万元
+    source_page: "139"
+    note: 经营活动所得现金 347,751 − 已付所得税 44,699
+
+supplementary_lines:
+  # 综合收益表（第 130 页，人民币百万元，2025 年度）
+  - { statement: 综合收益表, item: "收入：增值服务", page: "130", value: "369,281" }
+  - { statement: 综合收益表, item: "收入：營銷服務", page: "130", value: "144,973" }
+  - { statement: 综合收益表, item: "收入：金融科技及企業服務", page: "130", value: "229,435" }
+  - { statement: 综合收益表, item: "收入：其他", page: "130", value: "8,077" }
+  - { statement: 综合收益表, item: 收入合计, page: "130", value: "751,766" }
+  - { statement: 综合收益表, item: 收入成本, page: "130", value: "(329,173)" }
+  - { statement: 综合收益表, item: 毛利, page: "130", value: "422,593" }
+  - { statement: 综合收益表, item: "銷售及市場推廣開支", page: "130", value: "(41,727)" }
+  - { statement: 综合收益表, item: "一般及行政開支", page: "130", value: "(136,127)" }
+  - { statement: 综合收益表, item: "其他收益╱（虧損）淨額", page: "130", value: "(3,177)" }
+  - { statement: 综合收益表, item: 經營盈利, page: "130", value: "241,562" }
+  - { statement: 综合收益表, item: "投資收益╱（虧損）淨額及其他", page: "130", value: "10,168" }
+  - { statement: 综合收益表, item: 利息收入, page: "130", value: "16,909" }
+  - { statement: 综合收益表, item: 財務成本, page: "130", value: "(15,130)" }
+  - { statement: 综合收益表, item: "分佔聯營公司及合營公司盈利╱（虧損）淨額", page: "130", value: "23,740" }
+  - { statement: 综合收益表, item: 除稅前盈利, page: "130", value: "277,249" }
+  - { statement: 综合收益表, item: 所得稅開支, page: "130", value: "(47,448)" }
+  - { statement: 综合收益表, item: 年度盈利, page: "130", value: "229,801" }
+  - { statement: 综合收益表, item: 本公司權益持有人應佔, page: "130", value: "224,842" }
+  - { statement: 综合收益表, item: 非控制性權益, page: "130", value: "4,959" }
+  # 综合现金流量表（第 139–140 页）
+  - { statement: 现金流量表, item: 經營活動所得現金, page: "139", value: "347,751" }
+  - { statement: 现金流量表, item: 已付所得稅, page: "139", value: "(44,699)" }
+  - { statement: 现金流量表, item: 經營活動所得現金流量淨額, page: "139", value: "303,052" }
+  - { statement: 现金流量表, item: 投資活動耗用現金流量淨額, page: "139", value: "(205,732)" }
+  - { statement: 现金流量表, item: 融資活動耗用現金流量淨額, page: "140", value: "(87,155)" }
+  - { statement: 现金流量表, item: 現金及現金等價物增加淨額, page: "140", value: "10,165" }
+  - { statement: 现金流量表, item: 年初的現金及現金等價物, page: "140", value: "132,519" }
+  - { statement: 现金流量表, item: 年末的現金及現金等價物, page: "140", value: "141,041" }
+
+mock_or_synthetic_content: 无  # 全部数值为披露原文精确转录，无 mock
