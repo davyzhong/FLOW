@@ -19,9 +19,10 @@ applies_to: repository
 ## 一、oracle 独立录入线（解锁 U4 首跑）
 
 - [x] zto_2026q1：四 key items + 25 行补充明细录入（`4acc1c3`；用户授权 AI 转录，登记 §1a）
-- [ ] tencent_fy2025：key items 录入（282 页年报；**AI 转录已获授权 2026-09-24**，待独立会话执行）
-- [ ] sf_2026h1：key items 录入（213 页半年报；**AI 转录已获授权 2026-09-24**，待独立会话执行）
-- [ ] 三样本齐后：manifest key_items 升级精确值 + 登记哈希 → **U4 首跑解锁**
+- [x] tencent_fy2025：key items 录入（282 页年报；ZCode 录入 2026-09-24，oracle/tencent_fy2025.yaml）
+- [x] sf_2026h1：四 key items + 127 行补充明细录入（213 页半年报；Kimi 夜班会话 2026-09-24，oracle/sf_2026h1.yaml SHA `16cf22eb…bf69`，8 项勾稽恒等式闭合）
+- [x] 三样本齐后：manifest key_items 升级精确值 + 登记哈希（三份 key_items_precise 段，2026-09-24）
+- [x] **U4 首跑（2026-09-24）**：三样本 199 行全部 not_comparable，系统现状对未适配版式全部显式降级（无伪造输出）；原始失败全量保留于 holdout_runs/2026-09-24/ 与 holdout-results.md
 
 ## 二、大麦物流实施线（damai-logistics-demo-v1，规格 v1.1）——用户拍板双线推进（2026-09-24）：本线与 oracle 录入线并行，本分支为活跃工作区
 
@@ -39,7 +40,8 @@ applies_to: repository
 ## 三、U 系列财务轨（主线性任务）
 
 - [x] U1–U7 全部 done
-- [ ] U4 独立全行验证：依赖一（oracle 三样本）
+- [x] U4 首跑（2026-09-24，原始失败全保留，见 holdout-results.md；修复后三样本降为回归集并须补新留出候选）
+- [ ] U4 修复线：cn_ashare_table 支持「合并及公司」合版标题 + 年报页码提示区间参数化（修复后跑回归，不计入留出泛化结论）
 - [ ] U8 收口：真实存储完整旅程、HTTPS 部署拓扑、统一部署验收（D052 后最高优先；U8-C 结构化日志已交付）
 - [ ] U5/U10：按 D053 重新裁决范围（U10 用户倾向 go，2026-09-24；依赖 U4+U8+U9 到齐后启动）
 

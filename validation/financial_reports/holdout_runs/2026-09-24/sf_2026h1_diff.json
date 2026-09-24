@@ -1,0 +1,1244 @@
+{
+  "counts": {
+    "matched": 0,
+    "mismatched": 0,
+    "not_comparable": 137
+  },
+  "total": 137,
+  "rows_extracted": 0,
+  "results": [
+    {
+      "tier": "key_item",
+      "item": "收入（营业收入）",
+      "value": "155,506,421",
+      "page": "90",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "key_item",
+      "item": "归属于上市公司股东的净利润（归属于母公司股东的净利润）",
+      "value": "5,501,905",
+      "page": "90",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "key_item",
+      "item": "经营活动产生的现金流量净额",
+      "value": "11,171,404",
+      "page": "92",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "key_item",
+      "item": "资产总计",
+      "value": "228,885,266",
+      "page": "86",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "营业收入",
+      "value": "155,506,421",
+      "page": "90",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "营业成本",
+      "value": "(134,593,933)",
+      "page": "90",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "税金及附加",
+      "value": "(425,830)",
+      "page": "90",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "销售费用",
+      "value": "(1,892,187)",
+      "page": "90",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "管理费用",
+      "value": "(9,640,824)",
+      "page": "90",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "研发费用",
+      "value": "(1,082,256)",
+      "page": "90",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "财务(费用)/收入",
+      "value": "(716,681)",
+      "page": "90",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "其中：利息费用",
+      "value": "(783,918)",
+      "page": "90",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "其中：利息收入",
+      "value": "100,132",
+      "page": "90",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "其他收益",
+      "value": "271,230",
+      "page": "90",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "投资收益/(损失)",
+      "value": "357,924",
+      "page": "90",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "其中：对联营企业和合营企业的投资收益/(损失)",
+      "value": "171,425",
+      "page": "90",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "公允价值变动收益",
+      "value": "170,328",
+      "page": "90",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "信用减值(损失)/转回",
+      "value": "(165,373)",
+      "page": "90",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "资产减值损失",
+      "value": "(32,733)",
+      "page": "90",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "资产处置损失",
+      "value": "(48,294)",
+      "page": "90",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "营业利润",
+      "value": "7,707,792",
+      "page": "90",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "营业外收入",
+      "value": "151,279",
+      "page": "90",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "营业外支出",
+      "value": "(84,176)",
+      "page": "90",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "利润总额",
+      "value": "7,774,895",
+      "page": "90",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "所得税费用",
+      "value": "(1,804,878)",
+      "page": "90",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "净利润",
+      "value": "5,970,017",
+      "page": "90",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "持续经营净利润",
+      "value": "5,970,017",
+      "page": "90",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "归属于母公司股东的净利润",
+      "value": "5,501,905",
+      "page": "90",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "少数股东损益",
+      "value": "468,112",
+      "page": "90",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "其他综合收益的税后净额",
+      "value": "(1,630,716)",
+      "page": "91",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "综合收益总额",
+      "value": "4,339,301",
+      "page": "91",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "归属于母公司股东的综合收益总额",
+      "value": "3,817,062",
+      "page": "91",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "归属于少数股东的综合收益总额",
+      "value": "522,239",
+      "page": "91",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "基本每股收益（人民币元）",
+      "value": "1.10",
+      "page": "91",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "稀释每股收益（人民币元）",
+      "value": "1.10",
+      "page": "91",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "货币资金",
+      "value": "26,349,780",
+      "page": "86",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "交易性金融资产",
+      "value": "21,017,193",
+      "page": "86",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "应收票据",
+      "value": "399,104",
+      "page": "86",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "应收账款",
+      "value": "32,323,248",
+      "page": "86",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "应收款项融资",
+      "value": "317,749",
+      "page": "86",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "预付款项",
+      "value": "3,537,152",
+      "page": "86",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "发放贷款及垫款",
+      "value": "782,716",
+      "page": "86",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "其他应收款",
+      "value": "4,169,045",
+      "page": "86",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "存货",
+      "value": "2,999,268",
+      "page": "86",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "合同资产",
+      "value": "3,077,673",
+      "page": "86",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "一年内到期的非流动资产",
+      "value": "78,008",
+      "page": "86",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "其他流动资产",
+      "value": "3,850,242",
+      "page": "86",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "流动资产合计",
+      "value": "98,901,178",
+      "page": "86",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "长期应收款",
+      "value": "145,196",
+      "page": "86",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "长期股权投资",
+      "value": "14,176,563",
+      "page": "86",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "其他权益工具投资",
+      "value": "5,652,195",
+      "page": "86",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "其他非流动金融资产",
+      "value": "957,014",
+      "page": "86",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "投资性房地产",
+      "value": "6,717,949",
+      "page": "86",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "固定资产",
+      "value": "52,605,152",
+      "page": "86",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "在建工程",
+      "value": "3,340,651",
+      "page": "86",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "使用权资产",
+      "value": "15,376,784",
+      "page": "86",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "无形资产",
+      "value": "15,012,400",
+      "page": "86",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "开发支出",
+      "value": "127,695",
+      "page": "86",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "商誉",
+      "value": "9,351,345",
+      "page": "86",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "长期待摊费用",
+      "value": "3,103,873",
+      "page": "86",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "递延所得税资产",
+      "value": "2,366,911",
+      "page": "86",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "其他非流动资产",
+      "value": "1,050,360",
+      "page": "86",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "非流动资产合计",
+      "value": "129,984,088",
+      "page": "86",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "资产总计",
+      "value": "228,885,266",
+      "page": "86",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "短期借款",
+      "value": "17,254,422",
+      "page": "87",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "吸收存款",
+      "value": "440",
+      "page": "87",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "交易性金融负债",
+      "value": "104,471",
+      "page": "87",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "应付票据",
+      "value": "2,314",
+      "page": "87",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "应付账款",
+      "value": "31,296,046",
+      "page": "87",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "预收款项",
+      "value": "39,951",
+      "page": "87",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "合同负债",
+      "value": "1,981,763",
+      "page": "87",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "应付职工薪酬",
+      "value": "4,923,446",
+      "page": "87",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "应交税费",
+      "value": "1,952,698",
+      "page": "87",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "其他应付款",
+      "value": "10,817,155",
+      "page": "87",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "一年内到期的非流动负债",
+      "value": "12,185,631",
+      "page": "87",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "其他流动负债",
+      "value": "2,688,984",
+      "page": "87",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "流动负债合计",
+      "value": "83,247,321",
+      "page": "87",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "长期借款",
+      "value": "5,102,931",
+      "page": "87",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "应付债券",
+      "value": "10,916,503",
+      "page": "87",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "租赁负债",
+      "value": "9,682,022",
+      "page": "87",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "长期应付款",
+      "value": "232,955",
+      "page": "87",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "长期应付职工薪酬",
+      "value": "74,991",
+      "page": "87",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "递延收益",
+      "value": "1,671,953",
+      "page": "87",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "递延所得税负债",
+      "value": "3,589,882",
+      "page": "87",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "预计负债",
+      "value": "98,771",
+      "page": "87",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "非流动负债合计",
+      "value": "31,370,008",
+      "page": "87",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "负债合计",
+      "value": "114,617,329",
+      "page": "87",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "股本",
+      "value": "5,265,308",
+      "page": "87",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "其他权益工具",
+      "value": "40,141",
+      "page": "87",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "资本公积",
+      "value": "48,284,853",
+      "page": "87",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "减：库存股",
+      "value": "(5,913,630)",
+      "page": "87",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "其他综合收益",
+      "value": "3,266,073",
+      "page": "87",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "一般风险准备金",
+      "value": "524,376",
+      "page": "87",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "盈余公积",
+      "value": "2,672,760",
+      "page": "87",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "未分配利润",
+      "value": "48,646,354",
+      "page": "87",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "归属于母公司股东权益合计",
+      "value": "102,786,235",
+      "page": "87",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "少数股东权益",
+      "value": "11,481,702",
+      "page": "87",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "股东权益合计",
+      "value": "114,267,937",
+      "page": "87",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "负债及股东权益总计",
+      "value": "228,885,266",
+      "page": "87",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "销售商品、提供劳务收到的现金",
+      "value": "162,357,719",
+      "page": "92",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "收到的税费返还",
+      "value": "589,990",
+      "page": "92",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "收到其他与经营活动有关的现金",
+      "value": "46,076,620",
+      "page": "92",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "经营活动现金流入小计",
+      "value": "209,024,329",
+      "page": "92",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "购买商品、接受劳务支付的现金",
+      "value": "(117,164,434)",
+      "page": "92",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "存放中央银行和同业款项增加额",
+      "value": "(107,909)",
+      "page": "92",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "吸收存款和同业款项净减少额",
+      "value": "(17)",
+      "page": "92",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "客户贷款净增加额",
+      "value": "(474,240)",
+      "page": "92",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "支付给职工以及为职工支付的现金",
+      "value": "(19,421,030)",
+      "page": "92",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "支付的各项税费",
+      "value": "(4,988,239)",
+      "page": "92",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "支付其他与经营活动有关的现金",
+      "value": "(55,697,056)",
+      "page": "92",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "经营活动现金流出小计",
+      "value": "(197,852,925)",
+      "page": "92",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "经营活动产生/(使用)的现金流量净额",
+      "value": "11,171,404",
+      "page": "92",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "收回投资所收到的现金",
+      "value": "166,232",
+      "page": "92",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "取得投资收益所收到的现金",
+      "value": "398,991",
+      "page": "92",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "处置固定资产和其他长期资产收回的现金",
+      "value": "90,947",
+      "page": "92",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "处置子公司收到的现金净额",
+      "value": "14,974",
+      "page": "92",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "收到其他与投资活动有关的现金",
+      "value": "49,989,000",
+      "page": "92",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "投资活动现金流入小计",
+      "value": "50,660,144",
+      "page": "92",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "购建固定资产和其他长期资产支付的现金",
+      "value": "(6,083,116)",
+      "page": "92",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "投资支付的现金",
+      "value": "(7,542,437)",
+      "page": "92",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "取得子公司支付的现金净额",
+      "value": "(151,958)",
+      "page": "92",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "支付其他与投资活动有关的现金",
+      "value": "(49,144,211)",
+      "page": "92",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "投资活动现金流出小计",
+      "value": "(62,921,722)",
+      "page": "92",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "投资活动(使用)/产生的现金流量净额",
+      "value": "(12,261,578)",
+      "page": "92",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "吸收投资收到的现金",
+      "value": "7,307,020",
+      "page": "93",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "取得借款及发行债券收到的现金",
+      "value": "21,509,819",
+      "page": "93",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "收到其他与筹资活动有关的现金",
+      "value": "61,593",
+      "page": "93",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "筹资活动现金流入小计",
+      "value": "28,878,432",
+      "page": "93",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "偿还借款和债券支付的现金",
+      "value": "(11,512,473)",
+      "page": "93",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "分配股利、利润或偿付利息支付的现金",
+      "value": "(2,755,780)",
+      "page": "93",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "支付其他与筹资活动有关的现金",
+      "value": "(8,428,191)",
+      "page": "93",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "筹资活动现金流出小计",
+      "value": "(22,696,444)",
+      "page": "93",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "筹资活动(使用)/产生的现金流量净额",
+      "value": "6,181,988",
+      "page": "93",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "汇率变动对现金及现金等价物的影响",
+      "value": "(33,514)",
+      "page": "93",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "现金及现金等价物净增加/(减少)额",
+      "value": "5,058,300",
+      "page": "93",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "期初现金及现金等价物余额",
+      "value": "19,959,631",
+      "page": "93",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "期末现金及现金等价物余额",
+      "value": "25,017,931",
+      "page": "93",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    }
+  ]
+}

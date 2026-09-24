@@ -83,6 +83,15 @@ holdouts:
       - { item: 收入, value: "待 D04 首跑前由独立录入人补录", location: "综合收益表", unit: 百万元 }
       - { item: 本公司权益持有人应占盈利, value: "同上", location: "综合收益表", unit: 百万元 }
       - { item: Non-IFRS 本公司权益持有人应占盈利, value: "同上", location: "Non-IFRS 调节表", unit: 百万元 }
+    key_items_precise_2026_09_24:  # 新增精确版本（oracle-register §1 第 6 条：不改写上方历史行）
+      oracle_file: validation/financial_reports/oracle/tencent_fy2025.yaml
+      oracle_sha256: 561f31c202d2365e2e6ad1e15a536f05d504d5e4f3453a52789017f855be6914
+      recorder: ZCode 会话（§1a 授权，未参与抽取器开发）
+      items:
+      - { item: 收入, value: "751,766", source_page: "130", unit: 百万元 }
+      - { item: 年度盈利（净利润）, value: "229,801", source_page: "130", unit: 百万元 }
+      - { item: Non-IFRS 本公司权益持有人应占盈利, value: "259,626", source_page: "22", unit: 百万元 }
+      - { item: 经营活动所得现金流量净额, value: "303,052", source_page: "139", unit: 百万元 }
     rule: 首跑原始失败全部保留；修复后该样本不再称留出，须补新留出候选（D04）
 
   - id: sf_2026h1
@@ -100,6 +109,15 @@ holdouts:
       - { item: 归属于上市公司股东的净利润, value: "同上", location: "合并利润表", unit: 千元 }
       - { item: 经营活动产生的现金流量净额, value: "同上", location: "合并现金流量表", unit: 千元 }
       - { item: 资产总计, value: "同上", location: "合并资产负债表", unit: 千元 }
+    key_items_precise_2026_09_25:  # 新增精确版本（oracle-register §1 第 6 条：不改写上方历史行）
+      oracle_file: validation/financial_reports/oracle/sf_2026h1.yaml
+      oracle_sha256: 16cf22eb5c0e29accc28786d712e5c19760922a9118ec96400be9aa81877bf69
+      recorder: Kimi 夜班会话（§1a 授权，未参与抽取器开发）
+      items:
+      - { item: 收入（营业收入）, value: "155,506,421", source_page: "90", unit: 千元 }
+      - { item: 归属于上市公司股东的净利润, value: "5,501,905", source_page: "90", unit: 千元 }
+      - { item: 经营活动产生的现金流量净额, value: "11,171,404", source_page: "92", unit: 千元 }
+      - { item: 资产总计, value: "228,885,266", source_page: "86", unit: 千元 }
     provenance: 巨潮资讯（经东方财富公告镜像 pdf.dfcfw.com，公告编号 AN202608280006758205）；原件 2026-09-05 已入 p5_samples 不可变档案（页数 + 首页标题 + SHA-256 校验），2026-09-07 登记冻结
     rule: 首跑原始失败全部保留；修复后该样本不再称留出，须按 oracle-register §3 补新候选
 
@@ -118,6 +136,15 @@ holdouts:
       - { item: 净利润, value: "同上", location: "简明综合利润表", unit: 百万元 }
       - { item: Adjusted（Non-GAAP）净利润, value: "同上", location: "Non-GAAP 调节表", unit: 百万元 }
       - { item: 经营活动产生的现金流量净额, value: "同上", location: "简明综合现金流量表", unit: 百万元 }
+    key_items_precise_2026_09_24:  # 新增精确版本（oracle-register §1 第 6 条：不改写上方历史行）
+      oracle_file: validation/financial_reports/oracle/zto_2026q1.yaml
+      oracle_sha256: 1050cc03c22ba7d50b4eb00fad8d8b25cc2d8ee4ea1a4d268eb63be58733b99f
+      recorder: ZCode 会话（§1a 授权，`4acc1c3`）
+      items:  # 报表原始单位为千元（摘要页为百万元表述）
+      - { item: 收入, value: "13,282,364", source_page: "10", unit: 千元 }
+      - { item: 净利润, value: "2,156,356", source_page: "10", unit: 千元 }
+      - { item: Adjusted（Non-GAAP）净利润, value: "2,377,080", source_page: "13", unit: 千元 }
+      - { item: 经营活动产生的现金流量净额, value: "2,789,045", source_page: "12", unit: 千元 }
     provenance: 港交所披露易 www1.hkexnews.hk /listedco/listconews/sehk/2026/0520/2026052000006_c.pdf；2026-09-07 下载并校验（PDF 1.4 / 15 页 / 首页标题「2026年第一季度未經審計財務業績公告」一致 / pdftotext 文本抽取正常）
     rule: 首跑原始失败全部保留；修复后该样本不再称留出，须按 oracle-register §3 补新候选
 

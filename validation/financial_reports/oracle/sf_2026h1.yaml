@@ -1,0 +1,182 @@
+# oracle 标准答案｜sf_2026h1｜顺丰控股 2026 年半年度报告（未经审计）
+# 录入规程：oracle-register §1（只读 PDF 原文逐行登记；不接触抽取器输出对照）。
+# 录入者：Kimi 夜班会话（用户 2026-09-24 授权 AI 按 §1 规程转录原文，登记见 §1a；
+#          本会话未参与 p5_extract_*.py 抽取器开发与调参）。
+# 来源：docs/knowledge-base/02_research/original/p5_samples/sf_002352/SF_2026_H1_report.pdf
+#       （SHA-256 8f7b0cd6...见 manifest；213 页，简体中文，文本层可提取）
+# 单位：人民币千元（披露原始单位，未换算）
+# 说明：该报告为「合并及公司」合版报表，本答案只录合并列（本期 2026H1）；
+#       公司列与上期列未录（与 tencent_fy2025 同口径：仅本期主列）。
+
+sample_id: sf_2026h1
+company: 顺丰控股股份有限公司（002352.SZ / 6936.HK）
+period: 截至 2026 年 6 月 30 日止六个月期间（未经审计）
+source_pdf_pages:
+  合并资产负债表: 第 86–87 页（物理页=印刷页）
+  合并及公司利润表: 第 90–91 页
+  合并及公司现金流量表: 第 92–93 页
+  主要会计数据和财务指标: 第 13 页
+
+key_items:
+  - item: 收入（营业收入）
+    value: "155,506,421"
+    location: 合并利润表（第 90 页）
+    unit: 人民币千元
+    source_page: "90"
+    note: 主要会计数据页（第 13 页）同值交叉一致；同比 +5.89%
+  - item: 归属于上市公司股东的净利润（归属于母公司股东的净利润）
+    value: "5,501,905"
+    location: 合并利润表（第 90 页）
+    unit: 人民币千元
+    source_page: "90"
+    note: 净利润 5,970,017 − 少数股东损益 468,112；第 13 页同值
+  - item: 经营活动产生的现金流量净额
+    value: "11,171,404"
+    location: 合并现金流量表（第 92 页）
+    unit: 人民币千元
+    source_page: "92"
+    note: 流入小计 209,024,329 − 流出小计 197,852,925；第 13 页同值
+  - item: 资产总计
+    value: "228,885,266"
+    location: 合并资产负债表（第 86 页）
+    unit: 人民币千元
+    source_page: "86"
+    note: 流动资产合计 98,901,178 + 非流动资产合计 129,984,088；第 13 页同值
+
+supplementary_lines:
+  # 合并利润表（第 90–91 页，人民币千元，2026 年上半年，合并列）
+  - { statement: 合并利润表, item: 营业收入, page: "90", value: "155,506,421" }
+  - { statement: 合并利润表, item: 营业成本, page: "90", value: "(134,593,933)" }
+  - { statement: 合并利润表, item: 税金及附加, page: "90", value: "(425,830)" }
+  - { statement: 合并利润表, item: 销售费用, page: "90", value: "(1,892,187)" }
+  - { statement: 合并利润表, item: 管理费用, page: "90", value: "(9,640,824)" }
+  - { statement: 合并利润表, item: 研发费用, page: "90", value: "(1,082,256)" }
+  - { statement: 合并利润表, item: "财务(费用)/收入", page: "90", value: "(716,681)" }
+  - { statement: 合并利润表, item: "其中：利息费用", page: "90", value: "(783,918)" }
+  - { statement: 合并利润表, item: "其中：利息收入", page: "90", value: "100,132" }
+  - { statement: 合并利润表, item: 其他收益, page: "90", value: "271,230" }
+  - { statement: 合并利润表, item: "投资收益/(损失)", page: "90", value: "357,924" }
+  - { statement: 合并利润表, item: "其中：对联营企业和合营企业的投资收益/(损失)", page: "90", value: "171,425" }
+  - { statement: 合并利润表, item: 公允价值变动收益, page: "90", value: "170,328" }
+  - { statement: 合并利润表, item: "信用减值(损失)/转回", page: "90", value: "(165,373)" }
+  - { statement: 合并利润表, item: 资产减值损失, page: "90", value: "(32,733)" }
+  - { statement: 合并利润表, item: 资产处置损失, page: "90", value: "(48,294)" }
+  - { statement: 合并利润表, item: 营业利润, page: "90", value: "7,707,792" }
+  - { statement: 合并利润表, item: 营业外收入, page: "90", value: "151,279" }
+  - { statement: 合并利润表, item: 营业外支出, page: "90", value: "(84,176)" }
+  - { statement: 合并利润表, item: 利润总额, page: "90", value: "7,774,895" }
+  - { statement: 合并利润表, item: 所得税费用, page: "90", value: "(1,804,878)" }
+  - { statement: 合并利润表, item: 净利润, page: "90", value: "5,970,017" }
+  - { statement: 合并利润表, item: 持续经营净利润, page: "90", value: "5,970,017" }
+  - { statement: 合并利润表, item: 归属于母公司股东的净利润, page: "90", value: "5,501,905" }
+  - { statement: 合并利润表, item: 少数股东损益, page: "90", value: "468,112" }
+  - { statement: 合并利润表, item: 其他综合收益的税后净额, page: "91", value: "(1,630,716)" }
+  - { statement: 合并利润表, item: 综合收益总额, page: "91", value: "4,339,301" }
+  - { statement: 合并利润表, item: 归属于母公司股东的综合收益总额, page: "91", value: "3,817,062" }
+  - { statement: 合并利润表, item: 归属于少数股东的综合收益总额, page: "91", value: "522,239" }
+  - { statement: 合并利润表, item: 基本每股收益（人民币元）, page: "91", value: "1.10" }
+  - { statement: 合并利润表, item: 稀释每股收益（人民币元）, page: "91", value: "1.10" }
+  # 合并资产负债表（第 86–87 页，人民币千元，2026 年 6 月 30 日）
+  - { statement: 合并资产负债表, item: 货币资金, page: "86", value: "26,349,780" }
+  - { statement: 合并资产负债表, item: 交易性金融资产, page: "86", value: "21,017,193" }
+  - { statement: 合并资产负债表, item: 应收票据, page: "86", value: "399,104" }
+  - { statement: 合并资产负债表, item: 应收账款, page: "86", value: "32,323,248" }
+  - { statement: 合并资产负债表, item: 应收款项融资, page: "86", value: "317,749" }
+  - { statement: 合并资产负债表, item: 预付款项, page: "86", value: "3,537,152" }
+  - { statement: 合并资产负债表, item: 发放贷款及垫款, page: "86", value: "782,716" }
+  - { statement: 合并资产负债表, item: 其他应收款, page: "86", value: "4,169,045" }
+  - { statement: 合并资产负债表, item: 存货, page: "86", value: "2,999,268" }
+  - { statement: 合并资产负债表, item: 合同资产, page: "86", value: "3,077,673" }
+  - { statement: 合并资产负债表, item: 一年内到期的非流动资产, page: "86", value: "78,008" }
+  - { statement: 合并资产负债表, item: 其他流动资产, page: "86", value: "3,850,242" }
+  - { statement: 合并资产负债表, item: 流动资产合计, page: "86", value: "98,901,178" }
+  - { statement: 合并资产负债表, item: 长期应收款, page: "86", value: "145,196" }
+  - { statement: 合并资产负债表, item: 长期股权投资, page: "86", value: "14,176,563" }
+  - { statement: 合并资产负债表, item: 其他权益工具投资, page: "86", value: "5,652,195" }
+  - { statement: 合并资产负债表, item: 其他非流动金融资产, page: "86", value: "957,014" }
+  - { statement: 合并资产负债表, item: 投资性房地产, page: "86", value: "6,717,949" }
+  - { statement: 合并资产负债表, item: 固定资产, page: "86", value: "52,605,152" }
+  - { statement: 合并资产负债表, item: 在建工程, page: "86", value: "3,340,651" }
+  - { statement: 合并资产负债表, item: 使用权资产, page: "86", value: "15,376,784" }
+  - { statement: 合并资产负债表, item: 无形资产, page: "86", value: "15,012,400" }
+  - { statement: 合并资产负债表, item: 开发支出, page: "86", value: "127,695" }
+  - { statement: 合并资产负债表, item: 商誉, page: "86", value: "9,351,345" }
+  - { statement: 合并资产负债表, item: 长期待摊费用, page: "86", value: "3,103,873" }
+  - { statement: 合并资产负债表, item: 递延所得税资产, page: "86", value: "2,366,911" }
+  - { statement: 合并资产负债表, item: 其他非流动资产, page: "86", value: "1,050,360" }
+  - { statement: 合并资产负债表, item: 非流动资产合计, page: "86", value: "129,984,088" }
+  - { statement: 合并资产负债表, item: 资产总计, page: "86", value: "228,885,266" }
+  - { statement: 合并资产负债表, item: 短期借款, page: "87", value: "17,254,422" }
+  - { statement: 合并资产负债表, item: 吸收存款, page: "87", value: "440" }
+  - { statement: 合并资产负债表, item: 交易性金融负债, page: "87", value: "104,471" }
+  - { statement: 合并资产负债表, item: 应付票据, page: "87", value: "2,314" }
+  - { statement: 合并资产负债表, item: 应付账款, page: "87", value: "31,296,046" }
+  - { statement: 合并资产负债表, item: 预收款项, page: "87", value: "39,951" }
+  - { statement: 合并资产负债表, item: 合同负债, page: "87", value: "1,981,763" }
+  - { statement: 合并资产负债表, item: 应付职工薪酬, page: "87", value: "4,923,446" }
+  - { statement: 合并资产负债表, item: 应交税费, page: "87", value: "1,952,698" }
+  - { statement: 合并资产负债表, item: 其他应付款, page: "87", value: "10,817,155" }
+  - { statement: 合并资产负债表, item: 一年内到期的非流动负债, page: "87", value: "12,185,631" }
+  - { statement: 合并资产负债表, item: 其他流动负债, page: "87", value: "2,688,984" }
+  - { statement: 合并资产负债表, item: 流动负债合计, page: "87", value: "83,247,321" }
+  - { statement: 合并资产负债表, item: 长期借款, page: "87", value: "5,102,931" }
+  - { statement: 合并资产负债表, item: 应付债券, page: "87", value: "10,916,503" }
+  - { statement: 合并资产负债表, item: 租赁负债, page: "87", value: "9,682,022" }
+  - { statement: 合并资产负债表, item: 长期应付款, page: "87", value: "232,955" }
+  - { statement: 合并资产负债表, item: 长期应付职工薪酬, page: "87", value: "74,991" }
+  - { statement: 合并资产负债表, item: 递延收益, page: "87", value: "1,671,953" }
+  - { statement: 合并资产负债表, item: 递延所得税负债, page: "87", value: "3,589,882" }
+  - { statement: 合并资产负债表, item: 预计负债, page: "87", value: "98,771" }
+  - { statement: 合并资产负债表, item: 非流动负债合计, page: "87", value: "31,370,008" }
+  - { statement: 合并资产负债表, item: 负债合计, page: "87", value: "114,617,329" }
+  - { statement: 合并资产负债表, item: 股本, page: "87", value: "5,265,308" }
+  - { statement: 合并资产负债表, item: 其他权益工具, page: "87", value: "40,141" }
+  - { statement: 合并资产负债表, item: 资本公积, page: "87", value: "48,284,853" }
+  - { statement: 合并资产负债表, item: "减：库存股", page: "87", value: "(5,913,630)" }
+  - { statement: 合并资产负债表, item: 其他综合收益, page: "87", value: "3,266,073" }
+  - { statement: 合并资产负债表, item: 一般风险准备金, page: "87", value: "524,376" }
+  - { statement: 合并资产负债表, item: 盈余公积, page: "87", value: "2,672,760" }
+  - { statement: 合并资产负债表, item: 未分配利润, page: "87", value: "48,646,354" }
+  - { statement: 合并资产负债表, item: 归属于母公司股东权益合计, page: "87", value: "102,786,235" }
+  - { statement: 合并资产负债表, item: 少数股东权益, page: "87", value: "11,481,702" }
+  - { statement: 合并资产负债表, item: 股东权益合计, page: "87", value: "114,267,937" }
+  - { statement: 合并资产负债表, item: 负债及股东权益总计, page: "87", value: "228,885,266" }
+  # 合并现金流量表（第 92–93 页，人民币千元，2026 年上半年，合并列）
+  - { statement: 合并现金流量表, item: 销售商品、提供劳务收到的现金, page: "92", value: "162,357,719" }
+  - { statement: 合并现金流量表, item: 收到的税费返还, page: "92", value: "589,990" }
+  - { statement: 合并现金流量表, item: 收到其他与经营活动有关的现金, page: "92", value: "46,076,620" }
+  - { statement: 合并现金流量表, item: 经营活动现金流入小计, page: "92", value: "209,024,329" }
+  - { statement: 合并现金流量表, item: 购买商品、接受劳务支付的现金, page: "92", value: "(117,164,434)" }
+  - { statement: 合并现金流量表, item: 存放中央银行和同业款项增加额, page: "92", value: "(107,909)" }
+  - { statement: 合并现金流量表, item: 吸收存款和同业款项净减少额, page: "92", value: "(17)" }
+  - { statement: 合并现金流量表, item: 客户贷款净增加额, page: "92", value: "(474,240)" }
+  - { statement: 合并现金流量表, item: 支付给职工以及为职工支付的现金, page: "92", value: "(19,421,030)" }
+  - { statement: 合并现金流量表, item: 支付的各项税费, page: "92", value: "(4,988,239)" }
+  - { statement: 合并现金流量表, item: 支付其他与经营活动有关的现金, page: "92", value: "(55,697,056)" }
+  - { statement: 合并现金流量表, item: 经营活动现金流出小计, page: "92", value: "(197,852,925)" }
+  - { statement: 合并现金流量表, item: "经营活动产生/(使用)的现金流量净额", page: "92", value: "11,171,404" }
+  - { statement: 合并现金流量表, item: 收回投资所收到的现金, page: "92", value: "166,232" }
+  - { statement: 合并现金流量表, item: 取得投资收益所收到的现金, page: "92", value: "398,991" }
+  - { statement: 合并现金流量表, item: 处置固定资产和其他长期资产收回的现金, page: "92", value: "90,947" }
+  - { statement: 合并现金流量表, item: 处置子公司收到的现金净额, page: "92", value: "14,974" }
+  - { statement: 合并现金流量表, item: 收到其他与投资活动有关的现金, page: "92", value: "49,989,000" }
+  - { statement: 合并现金流量表, item: 投资活动现金流入小计, page: "92", value: "50,660,144" }
+  - { statement: 合并现金流量表, item: 购建固定资产和其他长期资产支付的现金, page: "92", value: "(6,083,116)" }
+  - { statement: 合并现金流量表, item: 投资支付的现金, page: "92", value: "(7,542,437)" }
+  - { statement: 合并现金流量表, item: 取得子公司支付的现金净额, page: "92", value: "(151,958)" }
+  - { statement: 合并现金流量表, item: 支付其他与投资活动有关的现金, page: "92", value: "(49,144,211)" }
+  - { statement: 合并现金流量表, item: 投资活动现金流出小计, page: "92", value: "(62,921,722)" }
+  - { statement: 合并现金流量表, item: "投资活动(使用)/产生的现金流量净额", page: "92", value: "(12,261,578)" }
+  - { statement: 合并现金流量表, item: 吸收投资收到的现金, page: "93", value: "7,307,020" }
+  - { statement: 合并现金流量表, item: 取得借款及发行债券收到的现金, page: "93", value: "21,509,819" }
+  - { statement: 合并现金流量表, item: 收到其他与筹资活动有关的现金, page: "93", value: "61,593" }
+  - { statement: 合并现金流量表, item: 筹资活动现金流入小计, page: "93", value: "28,878,432" }
+  - { statement: 合并现金流量表, item: 偿还借款和债券支付的现金, page: "93", value: "(11,512,473)" }
+  - { statement: 合并现金流量表, item: 分配股利、利润或偿付利息支付的现金, page: "93", value: "(2,755,780)" }
+  - { statement: 合并现金流量表, item: 支付其他与筹资活动有关的现金, page: "93", value: "(8,428,191)" }
+  - { statement: 合并现金流量表, item: 筹资活动现金流出小计, page: "93", value: "(22,696,444)" }
+  - { statement: 合并现金流量表, item: "筹资活动(使用)/产生的现金流量净额", page: "93", value: "6,181,988" }
+  - { statement: 合并现金流量表, item: 汇率变动对现金及现金等价物的影响, page: "93", value: "(33,514)" }
+  - { statement: 合并现金流量表, item: "现金及现金等价物净增加/(减少)额", page: "93", value: "5,058,300" }
+  - { statement: 合并现金流量表, item: 期初现金及现金等价物余额, page: "93", value: "19,959,631" }
+  - { statement: 合并现金流量表, item: 期末现金及现金等价物余额, page: "93", value: "25,017,931" }

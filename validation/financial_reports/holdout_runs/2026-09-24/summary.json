@@ -1,0 +1,29 @@
+{
+  "sf_2026h1": {
+    "adapter": "cn_ashare_table",
+    "error": null,
+    "matched": 0,
+    "mismatched": 0,
+    "not_comparable": 137,
+    "total": 137,
+    "rows_extracted": 0
+  },
+  "tencent_fy2025": {
+    "adapter": null,
+    "error": "UnsupportedLayoutError: 未知财报版式，显式降级（各适配器得分：{'cn_ashare_table': 0, 'hk_traditional_text': 1, 'hk_results_announcement': 0}）",
+    "matched": 0,
+    "mismatched": 0,
+    "not_comparable": 32,
+    "total": 32,
+    "rows_extracted": 0
+  },
+  "zto_2026q1": {
+    "adapter": null,
+    "error": "StatementExtractionError: 未在提示页 106±5 内定位到「合併損益表」页首标题",
+    "matched": 0,
+    "mismatched": 0,
+    "not_comparable": 30,
+    "total": 30,
+    "rows_extracted": 0
+  }
+}

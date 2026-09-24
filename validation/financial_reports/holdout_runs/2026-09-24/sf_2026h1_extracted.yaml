@@ -1,0 +1,9 @@
+sample: sf_2026h1
+adapter_id: cn_ashare_table
+unit: 人民币千元（每股收益为元）
+page_count: 213
+source_sha256: 8f7b0cd6d0dc2d8f2d10d14e7eedd0fdf64e697fbdd675c588c087782be014f0
+statements: {}
+checks: []
+warnings:
+- 未定位到报表：合并利润表、合并现金流量表、合并资产负债表

@@ -1,0 +1,299 @@
+{
+  "counts": {
+    "matched": 0,
+    "mismatched": 0,
+    "not_comparable": 32
+  },
+  "total": 32,
+  "rows_extracted": 0,
+  "results": [
+    {
+      "tier": "key_item",
+      "item": "收入",
+      "value": "751,766",
+      "page": "130",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "key_item",
+      "item": "年度盈利（净利润）",
+      "value": "229,801",
+      "page": "130",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "key_item",
+      "item": "Non-IFRS 本公司权益持有人应占盈利",
+      "value": "259,626",
+      "page": "22",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "key_item",
+      "item": "经营活动所得现金流量净额",
+      "value": "303,052",
+      "page": "139",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "收入：增值服务",
+      "value": "369,281",
+      "page": "130",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "收入：營銷服務",
+      "value": "144,973",
+      "page": "130",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "收入：金融科技及企業服務",
+      "value": "229,435",
+      "page": "130",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "收入：其他",
+      "value": "8,077",
+      "page": "130",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "收入合计",
+      "value": "751,766",
+      "page": "130",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "收入成本",
+      "value": "(329,173)",
+      "page": "130",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "毛利",
+      "value": "422,593",
+      "page": "130",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "銷售及市場推廣開支",
+      "value": "(41,727)",
+      "page": "130",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "一般及行政開支",
+      "value": "(136,127)",
+      "page": "130",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "其他收益╱（虧損）淨額",
+      "value": "(3,177)",
+      "page": "130",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "經營盈利",
+      "value": "241,562",
+      "page": "130",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "投資收益╱（虧損）淨額及其他",
+      "value": "10,168",
+      "page": "130",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "利息收入",
+      "value": "16,909",
+      "page": "130",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "財務成本",
+      "value": "(15,130)",
+      "page": "130",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "分佔聯營公司及合營公司盈利╱（虧損）淨額",
+      "value": "23,740",
+      "page": "130",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "除稅前盈利",
+      "value": "277,249",
+      "page": "130",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "所得稅開支",
+      "value": "(47,448)",
+      "page": "130",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "年度盈利",
+      "value": "229,801",
+      "page": "130",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "本公司權益持有人應佔",
+      "value": "224,842",
+      "page": "130",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "非控制性權益",
+      "value": "4,959",
+      "page": "130",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "經營活動所得現金",
+      "value": "347,751",
+      "page": "139",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "已付所得稅",
+      "value": "(44,699)",
+      "page": "139",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "經營活動所得現金流量淨額",
+      "value": "303,052",
+      "page": "139",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "投資活動耗用現金流量淨額",
+      "value": "(205,732)",
+      "page": "139",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "融資活動耗用現金流量淨額",
+      "value": "(87,155)",
+      "page": "140",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "現金及現金等價物增加淨額",
+      "value": "10,165",
+      "page": "140",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "年初的現金及現金等價物",
+      "value": "132,519",
+      "page": "140",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "年末的現金及現金等價物",
+      "value": "141,041",
+      "page": "140",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    }
+  ]
+}

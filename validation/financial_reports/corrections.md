@@ -4,8 +4,8 @@ title: 财报抽取订正层登记
 doc_type: governance
 status: current
 version: 1.0
-created_at: 2026-09-25
-updated_at: 2026-09-25
+created_at: 2026-09-24
+updated_at: 2026-09-24
 owner: FLOW
 applies_to: repository
 ---
@@ -18,7 +18,7 @@ applies_to: repository
 > 所有修正以新增记录完成；oracle 铁律（不得以被测抽取器输出回填）在此同样适用——
 > 复核只读 PDF 披露原文。
 
-## 1. 压力测试 §2 十条"抽取错误"复核结论（2026-09-25）
+## 1. 压力测试 §2 十条"抽取错误"复核结论（2026-09-24）
 
 结论：**十条全部为误报，抽取值本身全部正确**。分两类：
 
