@@ -32,8 +32,8 @@ do_not_execute: true
 | 任务 | 内容 | 状态 | 产出/接续点 |
 |---|---|---|---|
 | A1 | 失败测试锁定全量数据合同（明细级 1,920/10,752/4,800） | done（`ece11d2`） | 红灯证据 `work/damai-demo/a1_red_evidence.txt`（不入 git） |
-| A2 | 重构明细生成器与 canonical 投影（40 客户×8 产品×6 区域，无聚合成员） | done（见本次提交） | 取代 slice-2a 的聚合方案；fixtures 58+4 全绿、ruff 净 |
-| A3 | 修正财报来源（DAMAI.SYN 独立身份）与正式审核链（禁直改 status） | pending | 取代 slice-1 的 9988.HK 复用 |
+| A2 | 重构明细生成器与 canonical 投影（40 客户×8 产品×6 区域，无聚合成员） | done（`4950e73`） | 取代 slice-2a 的聚合方案；fixtures 58+4 全绿、ruff 净 |
+| A3 | 修正财报来源（DAMAI.SYN 独立身份）与正式审核链（禁直改 status） | done（见本次提交） | 报表升级为合并报表范式（勾稽门禁真实生效）；发行版同步重建 |
 | A4 | 重建静态发行包 + 消除漂移（manifest 血缘字段、README frontmatter） | pending | 在 `690ad5e` 基础上升级 |
 | B1 | 事务化整体 seed（AnalysisCycle 绑定 + 三类回滚注入 + 全对象幂等） | pending | 扩展 slice-2a 的 loader |
 | B2 | 调查/证据/结论/冻结报告（candidate/in_review/approved 混合 + 冻结 SHA） | pending | = 原 slice-2b |
@@ -114,12 +114,12 @@ do_not_execute: true
 - Modify: `services/api/tests/statements/test_normalization.py`
 - Modify: `services/api/tests/operations/test_operations_engine.py`
 
-- [ ] 先写红灯：导入 payload 和 SHA 必须来自 `fixtures/damai/statements/damai_fy*.yaml`，股票代码必须是独立 `DAMAI.SYN`，不得读取或冒充阿里巴巴原始 fixture。
-- [ ] 为 `DAMAI.SYN` 建立独立 company key 与归一化映射，断言不与 `9988.HK` 的唯一身份/重述链重叠。
-- [ ] 生成并加载 `DAMAI.SYN` 独立运营事实与分部序列，断言 `/operations` 不读取 Alibaba segment/operating fixture。
-- [ ] 先写红灯：监视 `ReviewService.publish` 必须被调用，直接改 `report.status` 必须失败。
-- [ ] 执行 import → normalize → quality/review publish → freeze；检查 source SHA、normalized rows、published 和 freeze eligibility。
-- [ ] 运行 statements/review/publishing 定向测试，提交 `fix(demo): use synthetic statements and governed review` 并 push。
+- [x] 先写红灯：导入 payload 和 SHA 必须来自 `fixtures/damai/statements/damai_fy*.yaml`，股票代码必须是独立 `DAMAI.SYN`，不得读取或冒充阿里巴巴原始 fixture。
+- [x] 为 `DAMAI.SYN` 建立独立 company key 与归一化映射，断言不与 `9988.HK` 的唯一身份/重述链重叠。
+- [x] 生成并加载 `DAMAI.SYN` 独立运营事实与分部序列，断言 `/operations` 不读取 Alibaba segment/operating fixture。
+- [x] 先写红灯：监视 `ReviewService.publish` 必须被调用，直接改 `report.status` 必须失败。（篡改财报被 ReviewBlockedError 阻断，证明门禁有牙）
+- [x] 执行 import → normalize → quality/review publish；检查 source SHA、normalized rows、published。（freeze 归属 B2；报表范式升级为合并报表+CAS 规范行名，使勾稽门禁真实生效——对计划 Files 的扩充：statements.py 与其测试）
+- [x] 运行 statements/review/publishing 定向测试，提交 `fix(demo): use synthetic statements and governed review` 并 push。
 
 ### Task A4：重建静态发行包并消除漂移
 

@@ -1,12 +1,13 @@
-"""大麦演示数据装载器（Task 4）：enterprise 幂等配置 + 财报装载子链。
+"""大麦演示数据装载器（Task 4 / Task A3 独立身份与审核链）。
 
 装载顺序（每步过领域服务，不绕过质量/对账）：
 1. 复用固定 bootstrap enterprise UUID（授权契约单企业），幂等改名为大麦；
-2. 两份合成财报按 canonical yaml 导入（source SHA 非空）、归一化、发布；
+2. 两份合成财报（FY2025/FY2026）从发行版 `fixtures/damai/statements/damai_fy*.yaml`
+   以独立 synthetic 身份 `DAMAI.SYN` 导入（source SHA 来自发行版文件），
+   经归一化（damai_syn 专属映射段）后由 ReviewService.publish 过勾稽门禁发布
+   ——不直改 status，不读取/冒充 9988.HK 等任何真实公司 fixture；
 3. 输出机器可读 receipt。
 
-行名映射：大麦 canonical yaml 使用抽取脚本归一后的规范名，与
-alibaba_9988 映射段一致，故导入用 stock_code 9988.HK 复用该段。
 slice-2a：工作簿导入（IntakeService 全链）→ 12 个月指标快照 → 最新 AnalysisRun。
 Finding 状态机推进与冻结 receipt 在下一切片（规格 §4.3 第 4-6 步）。
 """
@@ -40,17 +41,20 @@ from flow_api.metrics.catalog import load_metric_catalog
 from flow_api.metrics.service import MetricSnapshotService
 from flow_api.statements.importer import import_statement_report
 from flow_api.statements.normalization import normalize_report
+from flow_api.statements.review import ReviewService
 
 
-def _statements_dir() -> Path:
-    """定位 docs/implementation/p5（容器/worktree 下从 cwd 向上遍历）。"""
+def _release_statements_path(fy: str) -> Path:
+    """发行版合成财报 yaml（fixtures/damai/statements/damai_fy*.yaml）。"""
 
-    relative = Path("docs/implementation/p5")
+    relative = Path(f"fixtures/damai/statements/damai_{fy.lower()}.yaml")
     for root in (Path.cwd(), *Path.cwd().parents):
         candidate = root / relative
-        if candidate.is_dir():
+        if candidate.is_file():
             return candidate
-    raise FileNotFoundError(f"未找到 {relative}（从 cwd 向上遍历失败）")
+    raise FileNotFoundError(
+        f"未找到 {relative}（先运行 scripts/build_damai_demo.py 构建发行版）"
+    )
 
 
 _DAMAI_FY: tuple[str, ...] = ("FY2025", "FY2026")
@@ -89,31 +93,29 @@ def _sha256_of(path: Path) -> str:
 
 
 def seed_damai_demo(session: Any) -> dict[str, Any]:
-    """装载大麦演示数据：enterprise 配置 + 两份财报导入/归一化/发布。"""
+    """装载大麦演示数据：enterprise 配置 + 两份财报导入/归一化/审核发布。"""
 
     enterprise = _upsert_enterprise(session)
+    review = ReviewService(session)
     reports: list[dict[str, Any]] = []
     for fy in _DAMAI_FY:
-        yaml_path = _statements_dir() / f"alibaba_{fy[2:].lower()}fy_statements.yaml"
-        if not yaml_path.exists():
-            raise FileNotFoundError(
-                f"大麦财报 canonical yaml 缺失：{yaml_path}"
-                "（先运行 scripts/p5_extract_alibaba.py）"
-            )
+        yaml_path = _release_statements_path(fy)
         source_bytes = yaml_path.read_bytes()
         report = import_statement_report(
             session,
-            company_name=_DAMAI_COMPANY_NAME,
-            stock_code="9988.HK",
+            company_name="大麦物流",
+            stock_code="DAMAI.SYN",
             report_kind="年报",
             period_label=fy,
             payload=yaml.safe_load(source_bytes.decode("utf-8")),
-            source_ref=f"synthetic/damai-logistics-demo-v1/{fy}",
+            source_ref=f"fixtures/damai/statements/damai_{fy.lower()}.yaml",
             source_sha256=_sha256_of(yaml_path),
         )
-        report.status = "published"
         session.flush()
         normalize_report(session, report)
+        if report.status != "published":
+            # 正式审核链：勾稽门禁通过才发布；已发布（二次 seed）则跳过
+            review.publish(report.id, operator="damai-demo-seed")
         normalized = session.execute(
             text(
                 "SELECT count(*) FROM statement_normalized_item"
@@ -125,6 +127,7 @@ def seed_damai_demo(session: Any) -> dict[str, Any]:
             {
                 "report_id": str(report.id),
                 "fy": fy,
+                "stock_code": report.stock_code,
                 "status": report.status,
                 "normalized_rows": int(normalized),
                 "source_sha256": report.source_sha256 or "",

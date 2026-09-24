@@ -1,1 +1,6 @@
-{"city":null,"code":"R-ALL","name":"全国（synthetic）","parent_code":null,"province":null}
+{"city":null,"code":"R-01","name":"华东区","parent_code":null,"province":null}
+{"city":null,"code":"R-02","name":"华南区","parent_code":null,"province":null}
+{"city":null,"code":"R-03","name":"华北区","parent_code":null,"province":null}
+{"city":null,"code":"R-04","name":"西南区","parent_code":null,"province":null}
+{"city":null,"code":"R-05","name":"中亚区","parent_code":null,"province":null}
+{"city":null,"code":"R-06","name":"海外区","parent_code":null,"province":null}

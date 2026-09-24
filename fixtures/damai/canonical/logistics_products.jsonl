@@ -1,1 +1,8 @@
-{"code":"P-AGG","level":"service","name":"聚合产品（synthetic）","parent_code":null}
+{"code":"P-01","level":"service","name":"跨境标准包裹","parent_code":null}
+{"code":"P-02","level":"service","name":"跨境供应链专线","parent_code":null}
+{"code":"P-03","level":"service","name":"海外仓履约","parent_code":null}
+{"code":"P-04","level":"service","name":"国内仓配一体","parent_code":null}
+{"code":"P-05","level":"service","name":"供应链干线","parent_code":null}
+{"code":"P-06","level":"service","name":"末端配送","parent_code":null}
+{"code":"P-07","level":"service","name":"冷链运输","parent_code":null}
+{"code":"P-08","level":"service","name":"物流科技平台服务","parent_code":null}

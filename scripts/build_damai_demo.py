@@ -32,6 +32,7 @@ from flow_api.fixtures.damai.canonical import (
     build_damai_canonical_package,
 )
 from flow_api.fixtures.damai.generator import build_damai_package
+from flow_api.fixtures.damai.operations import build_damai_operations_payloads
 from flow_api.fixtures.damai.statements import (
     build_damai_statement_payloads,
 )
@@ -45,6 +46,10 @@ _STATEMENT_RELS = {
     "FY2026": "statements/damai_fy2026.yaml",
 }
 _FORECAST_REL = "forecast/rolling_forecast.jsonl"
+_OPERATIONS_RELS = (
+    "operations/damai_segment_series.yaml",
+    "operations/damai_operating_metrics.yaml",
+)
 _MANIFEST_REL = "manifest.json"
 _README_REL = "README.md"
 
@@ -72,6 +77,8 @@ input_hash: deterministic-static
   actual/budget，无 forecast——预测在 sidecar，`persistence: static-only`、
   `page_coverage: excluded`，不得冒充已上线能力）；
 - `statements/damai_fy2025.yaml`、`damai_fy2026.yaml`：闭合合成财报（六大恒等锚）；
+- `operations/damai_segment_series.yaml`、`damai_operating_metrics.yaml`：
+  DAMAI.SYN 独立分部序列与运营事实（synthetic，血缘指向 manifest.json）；
 - `forecast/rolling_forecast.jsonl`：静态预测 sidecar；
 - `manifest.json`：期间、行数、核心汇总、逐文件 SHA-256、`synthetic: true`。
 
@@ -97,6 +104,7 @@ REQUIRED_FILES: tuple[str, ...] = (
     _STATEMENT_RELS["FY2025"],
     _STATEMENT_RELS["FY2026"],
     _FORECAST_REL,
+    *_OPERATIONS_RELS,
     _MANIFEST_REL,
     _README_REL,
 )
@@ -152,6 +160,19 @@ def _dump_statements(
     return counts
 
 
+def _dump_operations(destination: Path, package: dict[str, Any]) -> None:
+    payloads = build_damai_operations_payloads(package)
+    for key, rel in zip(
+        ("segment_series", "operating_metrics"), _OPERATIONS_RELS, strict=True
+    ):
+        target = destination / rel
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(
+            yaml.safe_dump(payloads[key], allow_unicode=True, sort_keys=True, width=100),
+            encoding="utf-8",
+        )
+
+
 def _dump_forecast(destination: Path, sidecar: dict[str, Any]) -> None:
     target = destination / _FORECAST_REL
     target.parent.mkdir(parents=True, exist_ok=True)
@@ -189,6 +210,7 @@ def build_release(destination: Path) -> dict[str, Any]:
 
     statement_counts = _dump_statements(destination, raw)
     _dump_forecast(destination, raw["forecast_sidecar"])
+    _dump_operations(destination, raw)
 
     (destination / _README_REL).write_text(README_TEXT, encoding="utf-8")
 

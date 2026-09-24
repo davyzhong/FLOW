@@ -3,52 +3,52 @@
   "contract_version": "flow.excel.v1",
   "files": {
     "ar_collections.jsonl": {
-      "row_count": 48,
-      "sha256": "4b71fdb88e9794893d06ef8e04107c9cfe72cbb4b526a45c4f78962282689405"
+      "row_count": 4800,
+      "sha256": "a197efdfb2ebe087c3e36a5eee303918d0cdf9e99c732178ec9097a1086be6bf"
     },
     "batch.jsonl": {
       "row_count": 1,
       "sha256": "e50829eace2c172a7eb8bc7a15887c970dc6c761ad27b7ddf542917bf0bde7d1"
     },
     "customer_segments.jsonl": {
-      "row_count": 1,
-      "sha256": "7ebdda51c648d83bab7819d14d8de90373b5900c805ba80879f9846772708dc1"
+      "row_count": 4,
+      "sha256": "1ce2dfdd36fa815be9b6b0c6062c0345286b35741e661f271342e0c49540a13b"
     },
     "customers.jsonl": {
-      "row_count": 1,
-      "sha256": "fd51aa4ed47eec500e87fa7464cf09bcb4c8d9e56bce17acb864780510838016"
+      "row_count": 40,
+      "sha256": "bb9e7ec1f4064d63a20470c2cc4455ed098fdc219f1c632cdd2c07c38614c3af"
     },
     "financial_actuals.jsonl": {
-      "row_count": 504,
-      "sha256": "0e286a037d147acdf371d814129021e3d681d026bda5f8179a224bb3d96b2014"
+      "row_count": 672,
+      "sha256": "d1ee5e6a2470de5f4ca456b0836939443f73ab4bc470146bf80db535133167c0"
     },
     "logistics_products.jsonl": {
-      "row_count": 1,
-      "sha256": "510e24cc716c51ed13f91c6b8af61ba356524c482a4872a2341cd550456f719c"
+      "row_count": 8,
+      "sha256": "57c321b81aece35c5a0e9e58277c65df2fb7d6a4a4878647b39beb98032b0abc"
     },
     "management_accounts.jsonl": {
       "row_count": 9,
       "sha256": "2802026cbf8cb9ffcc7b51c17ec98adca8bb3222981f72160dd51dd83ce5a6b1"
     },
     "monthly_budgets.jsonl": {
-      "row_count": 12,
-      "sha256": "57a8ef1bc5e0fc6200a2475cd80f885874c2d6d40ff103f5c26f914e37ecd4df"
+      "row_count": 10752,
+      "sha256": "a1154b397796838a35aed5f44e1a3a7f44c24a4f4b1f6a3fb5b7444aad9ac68d"
     },
     "operating_actuals.jsonl": {
-      "row_count": 72,
-      "sha256": "c340db4145e6c7d9d07d3905cf9fb4e6a75f2e1e6f0bb9439944629f21b5001e"
+      "row_count": 1920,
+      "sha256": "887db8732bf3603785ad939e78cf7402843c8dd0443849d08d18655383374a25"
     },
     "organizations.jsonl": {
-      "row_count": 4,
-      "sha256": "ef8008c5a9a1a9ff8ca030250fdb49c9f9fe62d42bc4fdfb90c6b3c91ada521c"
+      "row_count": 5,
+      "sha256": "c558c45e6c79cddee99b4f8bf6d63b169c5d80935d20f1db1d40f87711f83778"
     },
     "periods.jsonl": {
       "row_count": 24,
       "sha256": "b4982495a870b4d31de96fea28591ead14d55f0a24e8d14cc7e8e33b675e472f"
     },
     "regions.jsonl": {
-      "row_count": 1,
-      "sha256": "2574db6170a90ec9203316963375b52c28fe0490badd985b46fc214c90af5550"
+      "row_count": 6,
+      "sha256": "c5dc96c7542f3ce75eb5fb4147176dcfd3d88c310dc63b344397caa0437b6b06"
     },
     "scenario_versions.jsonl": {
       "row_count": 2,

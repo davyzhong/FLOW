@@ -26,6 +26,7 @@ from flow_api.analysis.workbench import management_watch
 from flow_api.operations.facts import (
     OperatingFact,
     load_cainiao_operating_facts,
+    load_damai_operating_facts,
     previous_comparable_period,
 )
 
@@ -65,10 +66,12 @@ THEME_UNAVAILABLE_REASON: dict[str, str] = {
 # 数据集不存在时 revenue_structure 回退 typed 缺失，不编造。
 SEGMENT_SERIES_BY_STOCK: dict[str, Path] = {
     "CAINIAO": Path("docs/implementation/p5/cainiao_segment_series.yaml"),
+    "DAMAI.SYN": Path("fixtures/damai/operations/damai_segment_series.yaml"),
 }
 
 OPERATING_FACTS_BY_STOCK: dict[str, Path] = {
     "CAINIAO": Path("docs/implementation/p5/cainiao_operating_metrics.yaml"),
+    "DAMAI.SYN": Path("fixtures/damai/operations/damai_operating_metrics.yaml"),
 }
 
 # formula_ref 条目的财报直接执行：标准 item_id 组合（与指标字典 definition
@@ -471,10 +474,17 @@ def load_operating_facts(stock_code: str) -> list[OperatingFact]:
     relative = OPERATING_FACTS_BY_STOCK.get(stock_code)
     if relative is None:
         return []
+    loaders = {
+        "CAINIAO": load_cainiao_operating_facts,
+        "DAMAI.SYN": load_damai_operating_facts,
+    }
+    loader = loaders.get(stock_code)
+    if loader is None:
+        return []
     for root in (Path.cwd(), *Path.cwd().parents):
         candidate = root / relative
-        if candidate.is_file() and stock_code == "CAINIAO":
-            return load_cainiao_operating_facts(candidate, repo_root=root)
+        if candidate.is_file():
+            return loader(candidate, repo_root=root)
     return []
 
 

@@ -22,6 +22,8 @@ input_hash: deterministic-static
   actual/budget，无 forecast——预测在 sidecar，`persistence: static-only`、
   `page_coverage: excluded`，不得冒充已上线能力）；
 - `statements/damai_fy2025.yaml`、`damai_fy2026.yaml`：闭合合成财报（六大恒等锚）；
+- `operations/damai_segment_series.yaml`、`damai_operating_metrics.yaml`：
+  DAMAI.SYN 独立分部序列与运营事实（synthetic，血缘指向 manifest.json）；
 - `forecast/rolling_forecast.jsonl`：静态预测 sidecar；
 - `manifest.json`：期间、行数、核心汇总、逐文件 SHA-256、`synthetic: true`。
 

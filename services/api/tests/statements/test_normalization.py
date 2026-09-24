@@ -391,3 +391,56 @@ def test_jdl_duplicate_item_names_survive_normalization_with_group_ordinal(
     borrowings = [r for r in rows if r.item_name == "借款"]
     assert len(borrowings) == 2
     assert {r.group_ordinal for r in borrowings} == {0, 1}
+
+
+# ---------------------------------------------------------------------------
+# Task A3 红灯：DAMAI.SYN 独立归一化映射（不与 9988.HK 身份重叠）
+# ---------------------------------------------------------------------------
+
+DAMAI_FY2026_YAML = REPO_ROOT / "fixtures/damai/statements/damai_fy2026.yaml"
+
+
+def test_damai_syn_company_key_registered_and_disjoint() -> None:
+    from flow_api.statements.normalization import COMPANY_KEY_BY_STOCK
+
+    assert COMPANY_KEY_BY_STOCK["DAMAI.SYN"] == "damai_syn"
+    keys = list(COMPANY_KEY_BY_STOCK.values())
+    assert len(keys) == len(set(keys)), "company key 必须全局唯一"
+    companies = load_alias_map()["companies"]
+    assert "damai_syn" in companies, "别名映射必须含 damai_syn 公司段"
+    damai_names = {
+        name
+        for section in companies["damai_syn"]["statements"].values()
+        for name in section.get("map", {})
+    }
+    alibaba_names = {
+        name
+        for section in companies["alibaba_9988"]["statements"].values()
+        for name in section.get("map", {})
+    }
+    assert damai_names.isdisjoint(alibaba_names), (
+        "damai_syn 映射行名不得与 alibaba_9988 段重叠（独立身份/重述链）"
+    )
+
+
+def test_damai_syn_report_normalizes_with_own_mapping(db_session: Session) -> None:
+    payload = yaml.safe_load(DAMAI_FY2026_YAML.read_text(encoding="utf-8"))
+    report = import_statement_report(
+        db_session,
+        company_name="大麦物流",
+        stock_code="DAMAI.SYN",
+        report_kind="年报",
+        period_label="FY2026",
+        payload=payload,
+        source_ref="synthetic/damai-logistics-demo-v1/FY2026",
+        source_sha256="0" * 64,
+    )
+    summary = normalize_report(db_session, report)
+    assert summary.resolved > 0, "damai_syn 映射必须覆盖核心行"
+    for item in ("is.revenue", "is.net_profit", "bs.total_assets", "cf.ocf"):
+        assert any(
+            row.item_id == item
+            for row in normalized_items(
+                db_session, report.id, mapping_version=summary.mapping_version
+            )
+        ), f"归一化必须产出 {item}"
