@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-DAMAI-DEMO-20260924
 title: 大麦物流全量演示数据发行版实施计划
 doc_type: plan
 status: active
-version: 1.0
+version: 1.1
 created_at: 2026-09-24
 updated_at: 2026-09-24
 owner: FLOW
@@ -44,9 +44,11 @@ applies_to: repository
 - Create: `services/api/src/flow_api/fixtures/damai/validation.py`
 - Test: `services/api/tests/fixtures/test_damai_generator.py`
 
-- [ ] 先写失败测试覆盖行数、收入区间、业务占比、季节性、经营/财务对账、预算/预测场景、AR 风险事件和确定性。
+- [ ] 先写失败测试覆盖行数、收入区间、业务占比、季节性、经营/财务对账、预算场景、AR 风险事件和确定性。
 - [ ] 验证测试因 `build_damai_package` 缺失而失败。
-- [ ] 实现主数据与事实生成；使用稳定 UUID5、Decimal 和显式舍入；预算与 forecast 放入不同 scenario。
+- [ ] 实现主数据与事实生成；使用稳定 UUID5、Decimal 和显式舍入；工作簿只包含 actual/budget。
+- [ ] 单独生成 `forecast/rolling_forecast.jsonl`，断言其带版本和 SHA，且 manifest 明确标记
+  `persistence: static-only` 和 `page_coverage: excluded`。
 - [ ] 实现 `validate_damai_package`，失败返回具体 invariant code。
 - [ ] 重跑定向测试、既有 `tests/data_contract tests/fixtures tests/metrics`。
 - [ ] 提交 `feat(fixtures): generate damai canonical dataset` 并立即 push。
@@ -57,10 +59,11 @@ applies_to: repository
 - Create: `services/api/src/flow_api/fixtures/damai/statements.py`
 - Test: `services/api/tests/fixtures/test_damai_statements.py`
 
-- [ ] 先写失败测试：FY2025/FY2026 两份报告、收入与 canonical 年度汇总一致、资产恒等式、毛利、净利润归属和现金桥闭合。
+- [ ] 先写失败测试：FY2025/FY2026 两份报告、收入与 canonical 年度汇总一致、资产恒等式、毛利、净利润归属、现金桥和权益 roll-forward。
 - [ ] 验证测试因 `build_damai_statement_payloads` 缺失而失败。
 - [ ] 实现四表、权益变动表和附注索引 payload；金额单位统一为人民币千元。
 - [ ] 用现有 statement importer/normalization 投影跑兼容性测试，缺失指标保持 unavailable。
+- [ ] 断言权益变动表期末权益=资产负债表权益，现金流量表期末现金=资产负债表现金。
 - [ ] 重跑定向及 statement tests。
 - [ ] 提交 `feat(statements): add damai synthetic financial reports` 并立即 push。
 
@@ -91,14 +94,33 @@ applies_to: repository
 - Test: `services/api/tests/fixtures/test_damai_loader.py`
 
 - [ ] 先写数据库集成失败测试：首次 seed 产生企业/周期/导入/12 快照/分析运行/两个 StatementReport，再次 seed 不重复。
+- [ ] 先写授权契约测试：seed 后 `analysis_cycle` 仅有一个 enterprise_id，通过真实 API 依赖调用 dashboard/investigation/publishing 为 200，不触发 `enterprise_scope_missing`。
 - [ ] 验证测试因 loader 缺失而失败。
-- [ ] 复用 IntakeService 和现有领域服务实现事务化 seed；不得绕过质量/对账。
+- [ ] 复用固定 bootstrap enterprise UUID，幂等更新为大麦物流；复用 IntakeService 和现有领域服务实现事务化 seed，不得绕过质量/对账。
 - [ ] 通过状态机为证据、结论和 Finding 建立混合状态，至少一个 approved Finding 可冻结报告。
+- [ ] 每份财报保留非空 source SHA，顺序调用 `normalize_report`、`ReviewService.publish`，验证存储的 normalized rows 和 published 状态后才允许 freeze。
 - [ ] 冻结内部报告、客观财报快照和经营概览，输出 JSON receipt。
+- [ ] 注入不变量失败、第二份财报失败和 freeze 失败，分别断言事务全回滚；重复 seed 后快照、ReviewEvent、freeze version、source object 数量不增长。
 - [ ] 重跑 loader、investigation、publishing、statements 相关测试。
 - [ ] 提交 `feat(demo): seed damai cross-domain workflow` 并立即 push。
 
-### Task 6: 增加 Make 入口和覆盖验证器
+### Task 6: 生成大麦指标覆盖数据集并接入展示
+
+**Files:**
+- Create: `config/metrics/damai_demo_metric_coverage_v1.yaml`
+- Modify: `services/api/src/flow_api/api/schemas/metric_library.py`
+- Modify: `services/api/src/flow_api/api/routes/metric_library.py`
+- Modify: `apps/web/components/metric-library/metric-coverage-section.tsx`
+- Test: `services/api/tests/api/test_metric_library.py`
+- Test: `apps/web/components/metric-library/metric-coverage-section.test.tsx`
+
+- [ ] 先写失败测试：API 默认继续返回 public，`dataset=damai` 返回独立 synthetic 数据集，非法 dataset 返回类型化 422。
+- [ ] 先写前端失败测试：可切换真实/大麦数据集，大麦视图显示“合成演示数据”而不冒充真实披露。
+- [ ] 从 statement normalized facts 生成大麦覆盖 YAML，缺失项保留结构化 missing reason。
+- [ ] 实现受控 dataset 选择器和前端切换；不改变现有默认响应语义。
+- [ ] 运行 API 与 Web 定向测试，提交 `feat(metrics): expose damai synthetic coverage dataset` 并立即 push。
+
+### Task 7: 增加 Make 入口和覆盖验证器
 
 **Files:**
 - Create: `scripts/verify_damai_demo.py`
@@ -112,21 +134,22 @@ applies_to: repository
 - [ ] 运行相关 shell contract tests 与 `make damai-demo-verify`。
 - [ ] 提交 `feat(demo): add damai startup and verification commands` 并立即 push。
 
-### Task 7: 页面级全链验收
+### Task 8: 页面级全链验收
 
 **Files:**
 - Create: `apps/web/e2e/damai-demo.spec.ts`
 - Create: `scripts/test_damai_demo_e2e.sh`
 - Modify: `Makefile`
 
-- [ ] 先写 E2E：八个主要页面不处于空数据态，并验证大麦公司名、期间、KPI、Finding、财报和快照。
+- [ ] 先写 E2E：八个主要页面不处于空数据态，并验证大麦公司名、期间、KPI、Finding、财报、快照与 synthetic 指标覆盖。
+- [ ] `/data` 必须从页面上传生成 XLSX，完成映射、校验、warning 确认和发布，断言质量/对账；不得以 seed 后非空代替该旅程。
 - [ ] 在未 seed 环境运行，确认测试按预期失败。
 - [ ] 接入动态端口、owned supervisor 和 cleanup trap，调用大麦 seed 后运行生产构建 E2E。
 - [ ] 修复发现的数据装载或页面契约问题；不得弱化断言或写页面 mock。
 - [ ] 运行大麦 E2E、现有 86 个 Web 单测、lint、typecheck。
 - [ ] 提交 `test(e2e): verify damai demo across product pages` 并立即 push。
 
-### Task 8: 全量回归、文档刷新与交付
+### Task 9: 全量回归、文档刷新与交付
 
 **Files:**
 - Modify: `docs/00_start_here/PROJECT_STATE.md`
@@ -138,7 +161,7 @@ applies_to: repository
 
 - [ ] 执行 baseline repair 计划 Task 2，用实测结果更新权威文档。
 - [ ] 运行 API unit/integration、Web unit/E2E、contracts、lint、typecheck、docs m6、fixture 零漂移和 U8 相关非破坏回归。
-- [ ] 核对 `git diff --name-only`，确认无迁移、`.env`、CI 配置和范围外文件。
+- [ ] 以 `git merge-base origin/main HEAD` 为 base，核对 `git diff --name-only <base>..HEAD`，确认无迁移、`.env`、CI 配置和范围外文件，并断言 Alembic head 与基线一致。
 - [ ] 提交 `docs: close damai demo data release` 并立即 push。
-- [ ] 等待同一 head SHA GitHub Actions；只有 required jobs 全成功才把工作包改为 completed。
-
+- [ ] 先保持工作包 active 并验证实现 head；随后用最终状态提交把工作包改为 completed、push，再验证该最终精确 SHA 的 required jobs。
+- [ ] 若最终 SHA 的 CI 失败，以新提交把状态恢复为 active/阻塞，修复并重新验证；不允许用旧 SHA 的绿色结果宣称完成。

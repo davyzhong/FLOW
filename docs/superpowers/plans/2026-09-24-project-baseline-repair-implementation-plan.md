@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-BASELINE-REPAIR-20260924
 title: 项目基线修复实施计划
 doc_type: plan
 status: active
-version: 1.0
+version: 1.1
 created_at: 2026-09-24
 updated_at: 2026-09-24
 owner: FLOW
@@ -32,7 +32,8 @@ applies_to: repository
 - Modify: `SECURITY.md`
 
 - [ ] 为三份文档分别写符合治理合同的唯一 `doc_id`、title、doc_type、status、version、日期和 owner。
-- [ ] 运行 `python3 scripts/check_docs.py --phase m6`，确认原有三条 missing frontmatter 消失。
+- [ ] 确认设计规格使用合法 `doc_type: specification`，不把新错误带入 M6。
+- [ ] 运行 `python3 scripts/check_docs.py --phase m6`，要求全量零失败，而不仅是原有三条 missing frontmatter 消失。
 - [ ] 运行 `git diff --check`。
 - [ ] 提交 `fix(docs): restore top-level metadata gate` 并立即 push。
 
@@ -54,4 +55,3 @@ applies_to: repository
 - [ ] HANDOFF 写入已完成、未完成、恢复/重建命令和已知限制。
 - [ ] 运行 `make docs-check`、链接检查、`git diff --check`。
 - [ ] 提交 `docs: refresh project state after damai demo release` 并立即 push。
-

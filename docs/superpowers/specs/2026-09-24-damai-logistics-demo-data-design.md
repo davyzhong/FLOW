@@ -1,9 +1,9 @@
 ---
 doc_id: FLOW-SPEC-DAMAI-DEMO-001
 title: 大麦物流全量演示数据发行版设计
-doc_type: spec
+doc_type: specification
 status: approved
-version: 1.0
+version: 1.1
 created_at: 2026-09-24
 updated_at: 2026-09-24
 owner: FLOW
@@ -29,7 +29,7 @@ CI 文档门禁、状态文档过时和普通启动后无可见演示数据问�
 
 1. 24 个月月度数据：12 个月分析期 + 12 个月上年同期；
 2. 大麦物流集团、业务单元、区域、客户、物流产品和管理科目主数据；
-3. 经营实际、财务实际、预算、滚动预测、应收账龄、回款与现金相关事实；
+3. 经营实际、财务实际、预算、应收账龄、回款与现金相关事实；
 4. 两个年度的完整合成财务报告投影，包含利润表、资产负债表、现金流量表、权益变动表和附注索引；
 5. 指标快照、AnalysisRun、Finding/Evidence/Conclusion、至少一个可冻结内部报告；
 6. 客观财报快照和经营概览快照，使报告中心与财报/经营页面有内容；
@@ -42,6 +42,8 @@ CI 文档门禁、状态文档过时和普通启动后无可见演示数据问�
 
 - 不修改数据库 schema，不新增 Alembic 迁移；
 - 不建设日级订单、真实运单轨迹或票级会计流水；
+- 不改造当前只支持 actual/budget 的工作簿数据合同；滚动预测仅作为
+  版本化 static sidecar 交付，不写入数据库、不计入当前页面覆盖验收；
 - 不声称指标库全部条目均可计算；缺少输入的指标保持 unavailable；
 - 不部署生产、不写入外部系统；
 - 不替代公开财报真实样本与未来授权企业验证。
@@ -107,6 +109,7 @@ CI 文档门禁、状态文档过时和普通启动后无可见演示数据问�
 `fixtures/damai/` 是生成产物根目录，必须含目录说明：
 
 - `canonical/*.jsonl`；
+- `forecast/rolling_forecast.jsonl`；
 - `workbooks/damai_logistics_full_v1.xlsx`；
 - `statements/damai_fy2025.yaml`、`damai_fy2026.yaml`；
 - `manifest.json`；
@@ -119,19 +122,28 @@ CI 文档门禁、状态文档过时和普通启动后无可见演示数据问�
 
 `scripts/seed_damai_demo.py` 负责幂等装载：
 
-1. 建立企业与 12 个月 AnalysisCycle；
+1. 复用固定 bootstrap enterprise UUID，将其幂等配置为“大麦物流”，并建立
+   12 个月 AnalysisCycle；整库始终只有一个 enterprise_id，以满足当前授权契约；
 2. 通过现有 IntakeService 导入并发布标准工作簿；
 3. 生成 12 个月指标快照和最新 AnalysisRun；
 4. 将一组 Finding 按真实状态机推进为 candidate/submitted/approved 混合状态；
 5. 为 approved Finding 写入完整结论并冻结内部报告；
-6. 导入两个大麦合成财报，冻结客观报告和经营概览；
+6. 导入两个大麦合成财报，为每份报告保留非空源 SHA，调用
+   `normalize_report`、`ReviewService.publish` 通过质量门禁后，再冻结客观报告和经营概览；
 7. 输出机器可读 seed receipt。
 
-脚本不得直接伪造无法通过领域服务验证的发布对象。Forecast 使用现有 `ScenarioVersion` 与
-`FactBudget` 通用 scenario 维度保存；现有指标引擎继续只读取 batch 指定预算版本，避免预算和
-预测重复聚合。
+脚本不得直接伪造无法通过领域服务验证的发布对象。工作簿和数据库装载仅包含
+actual/budget；forecast sidecar 必须携带独立版本、生成时间和 SHA，明确标记
+`persistence: static-only` 与 `page_coverage: excluded`，防止将未实现能力冒充为已上线功能。
 
-### 4.4 启动与验收
+### 4.4 指标覆盖展示
+
+保留 `p5_metric_coverage_v1.yaml` 作为公开真实财报数据集，另生成
+`damai_demo_metric_coverage_v1.yaml`。`/api/v1/metric-library/coverage` 通过受控 `dataset`
+参数读取 `public` 或 `damai`，默认值继续为 `public` 以保持向后兼容；前端提供两者
+切换，大麦数据集必须显示“合成演示数据”标识，不与真实财报混为同一证据层。
+
+### 4.5 启动与验收
 
 - `make stack-up` 保持空环境/生产语义，不自动灌演示数据；
 - `make damai-demo-up` 执行 stack-up 后装载演示发行版；
@@ -148,7 +160,11 @@ CI 文档门禁、状态文档过时和普通启动后无可见演示数据问�
 - 经营收入与财务 REVENUE、经营直接成本与三类财务直接成本逐全量对账通过；
 - 每月、每组织 `收入 - 直接成本 = 毛利`，`毛利 - 期间费用 = 经营利润`；
 - AR 五账龄桶合计、到期、逾期、回款均满足非负与定义约束；
+- AR 五个账龄桶之和等于应收余额，未到期+逾期等于应收余额，各桶、到期、
+  逾期与回款非负，且回款口径与现金流口径有显式调节表；
 - 两个年度财务报告满足资产=负债+权益、毛利、净利润归属、现金桥闭合；
+- 权益变动表满足期初权益+本期净利润+其他权益变动=期末权益，其期末权益必须等于
+  资产负债表权益；现金流量表期末现金必须等于资产负债表货币资金；
 - 所有产物 deterministic，第二次构建 `git diff --exit-code fixtures/damai` 为零漂移。
 
 ### 5.2 页面与对象验收
@@ -163,6 +179,9 @@ CI 文档门禁、状态文档过时和普通启动后无可见演示数据问�
 | `/analysis` | 大麦财报四问工作台可返回 |
 | `/operations` | 内部 dashboard 与大麦财报经营概览均有内容 |
 | `/metric-library` | 字典可见；大麦覆盖只报告真实可算项与结构化缺口 |
+
+`/data` 的验收不以“数据库已有 seed 对象”代替：E2E 必须在页面上上传生成的
+XLSX，完成映射、校验、必要的 warning 确认和发布，并断言质量与对账结果。
 
 ### 5.3 工程验收
 
@@ -179,4 +198,5 @@ CI 文档门禁、状态文档过时和普通启动后无可见演示数据问�
 - 对象存储或 Chromium 不可用时保留已冻结快照，发布物生成不得冒充成功；
 - 某指标缺少事实输入时写入 coverage gap，不以零值补齐；
 - 任一财务恒等式或跨表对账失败时 seed 终止，不留下部分提交。
-
+- 第二份财报导入失败、冻结失败或不变量校验失败时，整个 seed 事务回滚；
+  重复 seed 不得增长快照、ReviewEvent、冻结版本或源对象计数。
