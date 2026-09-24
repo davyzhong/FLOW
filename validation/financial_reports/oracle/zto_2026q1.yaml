@@ -1,0 +1,73 @@
+# oracle 标准答案｜zto_2026q1｜中通快递 2026Q1 未经审计业绩公告
+# 录入规程：oracle-register §1（只读 PDF 原文；逐行登记含页序/页码/原样数值/原始单位）。
+# 录入者：ZCode 会话（用户 2026-09-24 授权变更：AI 按 §1 规程转录原文，
+#         不接触抽取器输出对照；原独立录入人条款豁免记录见 oracle-register §1a）。
+# 来源：validation/financial_reports/original/zto_2026q1/ZTO_2026_Q1_results_announcement_c.pdf
+#       （SHA-256 1f511d5a...见 manifest；繁体中文公告，数值为原文原样）
+# 单位：人民币千元（披露原始单位，未换算）
+
+sample_id: zto_2026q1
+company: 中通快递（开曼）有限公司
+period: 2026 年第一季度（截至 3 月 31 日止三个月）
+source_pdf_pages:
+  收入总额与收入构成: 第 5 页（附表 I 正文前摘要）/ 第 10 页（未经审计合并综合收益数据概要）
+  净利润与利润表: 第 10 页
+  Non-GAAP 调节表: 第 13 页
+  现金流量概要: 第 12 页
+
+key_items:
+  - item: 收入
+    value: "13,282,364"
+    location: 简明综合收益数据概要（第 10 页）
+    unit: 人民币千元
+    source_page: "10"
+    note: 摘要页表述为人民币 13,282.4 百万元
+  - item: 净利润
+    value: "2,156,356"
+    location: 简明综合收益数据概要（第 10 页）
+    unit: 人民币千元
+    source_page: "10"
+    note: 摘要页表述为人民币 2,156.4 百万元（约 21.56 亿）
+  - item: Adjusted（Non-GAAP）净利润
+    value: "2,377,080"
+    location: 公认会计准则与非公认会计准则业绩的调节表（第 13 页）
+    unit: 人民币千元
+    source_page: "13"
+    note: 净利润 + 股权激励费用 221,119 − 出售股权投资和子公司的收益（扣除所得税）395；摘要页表述为调整后净利润增长 5.2% 至约人民币 24 亿元
+  - item: 经营活动产生的现金流量净额
+    value: "2,789,045"
+    location: 简明合并现金流数据概要（第 12 页）
+    unit: 人民币千元
+    source_page: "12"
+    note: 2025 年同期为 2,362,976 千元
+
+supplementary_lines:
+  # 逐行登记（节选，单位人民币千元；2026 年第一季度列）
+  - { statement: 收益表, item: 收入, page: "10", value: "13,282,364" }
+  - { statement: 收益表, item: 营业成本, page: "10", value: "(10,047,143)" }
+  - { statement: 收益表, item: 毛利, page: "10", value: "3,235,221" }
+  - { statement: 收益表, item: "销售、一般及行政费用", page: "10", value: "(815,664)" }
+  - { statement: 收益表, item: 其他经营利润净额, page: "10", value: "125,711" }
+  - { statement: 收益表, item: 总经营费用, page: "10", value: "(689,953)" }
+  - { statement: 收益表, item: 经营利润, page: "10", value: "2,545,268" }
+  - { statement: 收益表, item: 利息收入, page: "10", value: "165,945" }
+  - { statement: 收益表, item: 利息费用, page: "10", value: "(50,272)" }
+  - { statement: 收益表, item: 金融工具的公允价值变动收益, page: "10", value: "54,944" }
+  - { statement: 收益表, item: 出售股权投资、子公司和其他的收益, page: "10", value: "478" }
+  - { statement: 收益表, item: "外币汇兑亏损，税前", page: "10", value: "(28,834)" }
+  - { statement: 收益表, item: 扣除所得税及权益法核算的投资收入前的利润, page: "10", value: "2,687,529" }
+  - { statement: 收益表, item: 所得税费用, page: "10", value: "(552,180)" }
+  - { statement: 收益表, item: 权益法核算的投资收入, page: "10", value: "21,007" }
+  - { statement: 收益表, item: 净利润, page: "10", value: "2,156,356" }
+  - { statement: 收益表, item: 归属于非控制性权益的净利润, page: "10", value: "(38,023)" }
+  - { statement: 收益表, item: 归属于中通快递（开曼）有限公司的净利润, page: "10", value: "2,118,333" }
+  - { statement: 现金流量, item: 经营活动产生的现金净额, page: "12", value: "2,789,045" }
+  - { statement: 现金流量, item: 投资活动所用的现金净额, page: "12", value: "(7,174,549)" }
+  - { statement: 现金流量, item: "融资活动（所用）／产生的现金净额", page: "12", value: "5,831,073" }
+  - { statement: 现金流量, item: 汇率变动影响, page: "12", value: "(50,167)" }
+  - { statement: Non-GAAP 调节, item: 股权激励费用, page: "13", value: "221,119" }
+  - { statement: Non-GAAP 调节, item: 调整后净利润, page: "13", value: "2,377,080" }
+  - { statement: Non-GAAP 调节, item: 息税折摊前收益, page: "13", value: "3,720,668" }
+  - { statement: Non-GAAP 调节, item: 调整后息税折摊前收益, page: "13", value: "3,941,309" }
+
+mock_or_synthetic_content: 无  # 本样本全部数值为披露原文精确转录，无 mock
