@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-DAMAI-DEMO-20260924
 title: 大麦物流完整财年演示数据实施计划
 doc_type: plan
 status: active
-version: 2.3
+version: 2.4
 created_at: 2026-09-24
 updated_at: 2026-09-24
 owner: FLOW
@@ -17,6 +17,29 @@ applies_to: repository
 > **For agentic workers:** REQUIRED SUB-SKILL: Use
 > `superpowers:test-driven-development`, `superpowers:executing-plans` and
 > `superpowers:verification-before-completion`. 每个任务先红后绿，每次 commit 后立即 push。
+
+
+## 0. 执行进度总览（2026-09-24 晚，ZCode 会话登记）
+
+> 本节是执行状态对照（单一事实源仍为下方 §3–§5 的任务清单）；每完成一个任务，在此表与对应 checkbox 双向登记。
+
+**基线现状**：`codex/damai-logistics-implementation@fc3f6a7`。已完成 Task 1–3（画像/生成器/闭合财报）、发行版首版（`690ad5e`）、装载器 slice-1 财报子链（`b5b3354`）与分析链 slice-2a（`cd9c4b4`：工作簿 IntakeService 全链 → 12 快照 → AnalysisRun，批次幂等；fixtures 全量 45 测试绿）。
+
+**顺序裁决**：按 §3 阶段 A → §4 阶段 B → §5 阶段 C 严格串行执行。已完成的 slice-2a 定位为「贯通性验证」（证明领域服务链可走通），其聚合粒度与 9988.HK 复用被 A2/A3 的明细化与独立身份取代——先按 A 系列重构数据合同，再灌库，避免对半成品数据做页面验收。**在 A4 完成（发行包重建）之前不执行任何正式灌库。**
+
+| 任务 | 内容 | 状态 | 产出/接续点 |
+|---|---|---|---|
+| A1 | 失败测试锁定全量数据合同（明细级 1,920/10,752/4,800） | pending | 红灯证据先存 |
+| A2 | 重构明细生成器与 canonical 投影（40 客户×8 产品×6 区域，无聚合成员） | pending | 取代 slice-2a 的聚合方案 |
+| A3 | 修正财报来源（DAMAI.SYN 独立身份）与正式审核链（禁直改 status） | pending | 取代 slice-1 的 9988.HK 复用 |
+| A4 | 重建静态发行包 + 消除漂移（manifest 血缘字段、README frontmatter） | pending | 在 `690ad5e` 基础上升级 |
+| B1 | 事务化整体 seed（AnalysisCycle 绑定 + 三类回滚注入 + 全对象幂等） | pending | 扩展 slice-2a 的 loader |
+| B2 | 调查/证据/结论/冻结报告（candidate/in_review/approved 混合 + 冻结 SHA） | pending | = 原 slice-2b |
+| C1 | `damai-demo-build/seed/verify/up` 四命令 + 机器可读 receipt | pending | seed CLI 首次落地 |
+| C2 | 八页面真实 E2E（含 /data 页面上传旅程） | pending | 「菜单全满」的验收关 |
+| C3 | 完整回归 + 文档刷新 + 最终 CI 闭环（completed SHA 全绿才算完成） | pending | 交付关闭 |
+
+**明确不做**：不新增 migration、不改 CI/.env、forecast 保持 static-only、不覆盖既有非大麦 fixture（§2 约束不变）。
 
 ## 1. 目标与成功标准
 
