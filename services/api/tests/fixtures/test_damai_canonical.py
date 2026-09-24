@@ -70,7 +70,9 @@ class ConversionConservationTests(unittest.TestCase):
 
     def test_budget_conserved(self) -> None:
         raw_total = _sum_decimal(
-            row["revenue"] for row in self.raw["monthly_facts"]["budget"]
+            row["amount"]
+            for row in self.raw["monthly_facts"]["budget"]
+            if row["account"] == "REVENUE"
         )
         pkg_total = _sum_decimal(
             row.amount
@@ -81,24 +83,26 @@ class ConversionConservationTests(unittest.TestCase):
 
     def test_ar_buckets_conserved(self) -> None:
         raw = self.raw["monthly_facts"]["ar_aging"]
-        for bucket_field, bucket_code in (
-            ("b_current", "current"),
-            ("b_31_60", "31-60"),
-            ("b_61_90", "61-90"),
-            ("b_90_plus", "90+"),
-        ):
-            raw_total = _sum_decimal(row[bucket_field] for row in raw)
+        for bucket_code in ("current", "1-30", "31-60", "61-90", "90+"):
+            raw_total = _sum_decimal(
+                row["balance"] for row in raw if row["bucket"] == bucket_code
+            )
             pkg_total = _sum_decimal(
                 row.receivable_balance
                 for row in self.package.ar_collections
                 if row.aging_bucket == bucket_code
             )
             self.assertEqual(raw_total, pkg_total, bucket_code)
-        raw_collected = _sum_decimal(row["collected"] for row in raw)
-        pkg_collected = _sum_decimal(
-            row.collected_amount for row in self.package.ar_collections
-        )
-        self.assertEqual(raw_collected, pkg_collected)
+        for raw_field, pkg_field in (
+            ("due", "due_amount"),
+            ("overdue", "overdue_amount"),
+            ("collected", "collected_amount"),
+        ):
+            raw_total = _sum_decimal(row[raw_field] for row in raw)
+            pkg_total = _sum_decimal(
+                getattr(row, pkg_field) for row in self.package.ar_collections
+            )
+            self.assertEqual(raw_total, pkg_total, raw_field)
 
     def test_financial_revenue_matches_operating(self) -> None:
         op_total = _sum_decimal(row.revenue for row in self.package.operating_actuals)

@@ -1,13 +1,14 @@
-"""大麦 canonical dict → flow.excel.v1 CanonicalPackage 转换（Task 4）。
+"""大麦 canonical dict → flow.excel.v1 CanonicalPackage 转换（Task 4 / Task A2）。
 
 守恒合同（tests/fixtures/test_damai_canonical.py 固定）：
-- 收入、三路成本合计、毛利、预算、AR 四桶与回款逐项与 build_damai_package() 一致；
+- 收入、三路成本合计、毛利、预算、AR 五桶与回款逐项与 build_damai_package() 一致；
 - 期间 = comparison 2024-09~2025-08 + analysis 2025-09~2026-08（24 个月连续）；
 - 确定性：uuid5(record) 与固定比例拆分，无时钟/随机输入。
 
-粒度决策：大麦 facts 为 business-family 聚合（24 月 × 3 族），转换保持该粒度，
-客户/产品/区域使用聚合成员（DM-AGG / P-AGG / R-ALL），不伪造明细；
-合计成本按固定比例拆为仓储 0.30 / 运输 0.60 / 其他 0.10（synthetic 演示口径）。
+粒度（规格 §3.3，Task A2 起）：经营明细为 客户×产品 粒度（1,920 行），
+组织 = 1 集团 + 4 事业部（产品归属单元）；禁止 DM-AGG/P-AGG/R-ALL 聚合成员。
+合计成本按固定比例拆为仓储 0.30 / 运输 0.60 / 其他 0.10（synthetic 演示口径，
+尾差并入末路）；预算 metric_code 合同：三成本统一 DIRECT_COST。
 """
 
 from __future__ import annotations
@@ -34,6 +35,14 @@ from flow_api.data_contract.records import (
     ScenarioVersionRecord,
 )
 from flow_api.fixtures.damai.generator import build_damai_package
+from flow_api.fixtures.damai.profile import (
+    BUSINESS_UNITS,
+    CUSTOMER_ASSIGNMENTS,
+    CUSTOMER_SEGMENTS,
+    CUSTOMERS,
+    PRODUCTS,
+    REGIONS,
+)
 
 _DAMAI_NAMESPACE = UUID("da0a1a10-4c41-b9d1-3d4a-2f5e6b7c9d01")
 
@@ -45,14 +54,16 @@ _ANALYSIS_MONTHS = tuple(f"2025-{m:02d}" for m in range(9, 13)) + tuple(
 )
 
 _GROUP_CODE = "DAMAI_GROUP"
-_FAMILY_TO_ORG: dict[str, tuple[str, str]] = {
-    "international_cross_border": ("BU-INTL", "国际与跨境物流事业部"),
-    "china_logistics": ("BU-CHINA", "中国物流事业部"),
-    "tech_and_other": ("BU-TECH", "科技及其他事业部"),
+# 4 事业部组织编码（顺序与 BUSINESS_UNITS 一致）
+_UNIT_TO_ORG: dict[str, tuple[str, str]] = {
+    name: (f"BU-{index:02d}", name) for index, name in enumerate(BUSINESS_UNITS, 1)
 }
-_AGG_CUSTOMER = "DM-AGG"
-_AGG_PRODUCT = "P-AGG"
-_AGG_REGION = "R-ALL"
+_SEGMENT_TO_CODE: dict[str, str] = {
+    name: f"SEG-{index:02d}" for index, name in enumerate(CUSTOMER_SEGMENTS, 1)
+}
+_REGION_TO_CODE: dict[str, str] = {
+    name: f"R-{index:02d}" for index, name in enumerate(REGIONS, 1)
+}
 
 # 合计成本 → 三路直接成本的固定演示拆分（和恒等于合计）
 _COST_SPLIT: tuple[tuple[str, Decimal], ...] = (
@@ -60,6 +71,17 @@ _COST_SPLIT: tuple[tuple[str, Decimal], ...] = (
     ("TRANSPORTATION_COST", Decimal("0.60")),
     ("OTHER_DIRECT_COST", Decimal("0.10")),
 )
+
+# 预算管理科目 → 引擎 metric_code（规格 §3.3：三成本统一 DIRECT_COST）
+_METRIC_CODE_MAP: dict[str, str] = {
+    "REVENUE": "REVENUE",
+    "WAREHOUSING_COST": "DIRECT_COST",
+    "TRANSPORTATION_COST": "DIRECT_COST",
+    "OTHER_DIRECT_COST": "DIRECT_COST",
+    "OPERATING_EXPENSE": "OPERATING_EXPENSE",
+    "OPERATING_PROFIT": "OPERATING_PROFIT",
+    "OPERATING_CASH_FLOW": "OPERATING_CASH_FLOW",
+}
 
 _BUDGET_SCENARIO = "BUDGET_DAMAI_V1"
 
@@ -107,24 +129,31 @@ def _dimensions() -> tuple[
             OrganizationRecord(
                 code=code, name=name, level="business_unit", parent_code=_GROUP_CODE
             )
-            for code, name in _FAMILY_TO_ORG.values()
+            for code, name in _UNIT_TO_ORG.values()
         ),
     )
-    segments = (CustomerSegmentRecord(code="DM_SYNTH", name="合成演示客户"),)
-    customers = (
+    segments = tuple(
+        CustomerSegmentRecord(code=code, name=name)
+        for name, code in _SEGMENT_TO_CODE.items()
+    )
+    customers = tuple(
         CustomerRecord(
-            code=_AGG_CUSTOMER,
-            name="聚合客户（synthetic 演示口径）",
+            code=customer_id,
+            name=CUSTOMERS[index],
             industry="综合物流",
-            tier="C",
-            credit_term_days=30,
-            segment_code="DM_SYNTH",
-        ),
+            tier="A" if index < 10 else ("B" if index < 25 else "C"),
+            credit_term_days=int(assign["credit_term_days"]),
+            segment_code=_SEGMENT_TO_CODE[str(assign["segment"])],
+        )
+        for index, (customer_id, assign) in enumerate(CUSTOMER_ASSIGNMENTS.items())
     )
-    products = (
-        LogisticsProductRecord(code=_AGG_PRODUCT, name="聚合产品（synthetic）", level="service"),
+    products = tuple(
+        LogisticsProductRecord(code=f"P-{i:02d}", name=name, level="service")
+        for i, name in enumerate(PRODUCTS, 1)
     )
-    regions = (RegionRecord(code=_AGG_REGION, name="全国（synthetic）"),)
+    regions = tuple(
+        RegionRecord(code=code, name=name) for name, code in _REGION_TO_CODE.items()
+    )
     accounts = (
         ManagementAccountRecord(code="REVENUE", name="营业收入", category="revenue"),
         ManagementAccountRecord(
@@ -165,7 +194,7 @@ def _dimensions() -> tuple[
 def _operating_actuals(raw_rows: list[dict[str, Any]]) -> tuple[OperatingActualRecord, ...]:
     rows: list[OperatingActualRecord] = []
     for row in raw_rows:
-        org_code = _FAMILY_TO_ORG[row["family_id"]][0]
+        org_code = _UNIT_TO_ORG[row["business_unit"]][0]
         revenue = _d(row["revenue"])
         cost_total = _d(row["cost"])
         # 收入派生单量（确定性演示口径）：客单价 120、每单 2.0 件
@@ -184,12 +213,18 @@ def _operating_actuals(raw_rows: list[dict[str, Any]]) -> tuple[OperatingActualR
         warehousing, transportation, other = values
         rows.append(
             OperatingActualRecord(
-                record_id=_rid("operating", row["month"], org_code, row["family_id"]),
+                record_id=_rid(
+                    "operating",
+                    row["month"],
+                    org_code,
+                    row["customer_id"],
+                    row["product"],
+                ),
                 month_key=row["month"],
                 organization_code=org_code,
-                customer_code=_AGG_CUSTOMER,
-                logistics_product_code=_AGG_PRODUCT,
-                region_code=_AGG_REGION,
+                customer_code=row["customer_id"],
+                logistics_product_code=row["product"],
+                region_code=_REGION_TO_CODE[row["region"]],
                 order_count=order_count,
                 shipment_count=shipment_count,
                 revenue=revenue,
@@ -265,53 +300,46 @@ def _budgets(raw_rows: list[dict[str, Any]]) -> tuple[MonthlyBudgetRecord, ...]:
     rows: list[MonthlyBudgetRecord] = []
     for row in raw_rows:
         month = row["month"]
+        org_code = _UNIT_TO_ORG[row["business_unit"]][0]
+        segment_code = _SEGMENT_TO_CODE[row["customer_segment"]]
+        account = row["account"]
         rows.append(
             MonthlyBudgetRecord(
-                record_id=_rid("budget", month, "REVENUE"),
+                record_id=_rid("budget", month, org_code, segment_code,
+                               row["product"], account),
                 month_key=month,
-                organization_code=_GROUP_CODE,
-                customer_segment_code="DM_SYNTH",
-                logistics_product_code=_AGG_PRODUCT,
-                management_account_code="REVENUE",
+                organization_code=org_code,
+                customer_segment_code=segment_code,
+                logistics_product_code=row["product"],
+                management_account_code=account,
                 scenario_code=_BUDGET_SCENARIO,
-                metric_code="REVENUE",
-                amount=_d(row["revenue"]),
+                metric_code=_METRIC_CODE_MAP[account],
+                amount=_d(row["amount"]),
             )
         )
     return tuple(rows)
-
-
-_AR_BUCKETS: tuple[tuple[str, str, bool], ...] = (
-    ("current", "b_current", False),
-    ("31-60", "b_31_60", True),
-    ("61-90", "b_61_90", True),
-    ("90+", "b_90_plus", True),
-)
 
 
 def _ar_collections(raw_rows: list[dict[str, Any]]) -> tuple[ArCollectionRecord, ...]:
     rows: list[ArCollectionRecord] = []
     for row in raw_rows:
         month = row["month"]
-        for bucket_code, field, overdue in _AR_BUCKETS:
-            balance = _d(row[field])
-            due = balance if overdue else Decimal("0")
-            stem = month.replace("-", "") + "-" + bucket_code.replace("-", "")
-            rows.append(
-                ArCollectionRecord(
-                    record_id=_rid("ar", month, _AGG_CUSTOMER, bucket_code),
-                    month_key=month,
-                    customer_code=_AGG_CUSTOMER,
-                    invoice_number=f"INV-SYN-{stem}",
-                    aging_bucket=bucket_code,
-                    receivable_balance=balance,
-                    due_amount=due,
-                    overdue_amount=_d(row["overdue"]) if "overdue" in row else due,
-                    collected_amount=(
-                        _d(row["collected"]) if bucket_code == "current" else Decimal("0")
-                    ),
-                )
+        customer_code = row["customer_id"]
+        bucket_code = row["bucket"]
+        stem = month.replace("-", "") + "-" + customer_code + "-" + bucket_code.replace("-", "")
+        rows.append(
+            ArCollectionRecord(
+                record_id=_rid("ar", month, customer_code, bucket_code),
+                month_key=month,
+                customer_code=customer_code,
+                invoice_number=f"INV-SYN-{stem}",
+                aging_bucket=bucket_code,
+                receivable_balance=_d(row["balance"]),
+                due_amount=_d(row["due"]),
+                overdue_amount=_d(row["overdue"]),
+                collected_amount=_d(row["collected"]),
             )
+        )
     return tuple(rows)
 
 

@@ -82,6 +82,9 @@ class DamaiProfileV1:
     customers: tuple[str, ...]
     products: tuple[str, ...]
     planted_events: tuple[PlantedEvent, ...]
+    customer_segments: tuple[str, ...]
+    customer_assignments: dict[str, dict[str, object]]
+    product_assignments: dict[str, dict[str, str]]
 
 
 BUSINESS_FAMILIES: Final[tuple[BusinessFamily, ...]] = (
@@ -120,6 +123,62 @@ PRODUCTS: Final[tuple[str, ...]] = (
     "冷链运输",
     "物流科技平台服务",
 )
+
+CUSTOMER_SEGMENTS: Final[tuple[str, ...]] = (
+    "电商平台客户",
+    "品牌直客",
+    "中小企业客户",
+    "政企与项目客户",
+)
+
+# 客群信用期（天）：账期越长 AR 余额系数越高
+_SEGMENT_CREDIT_TERM_DAYS: Final[dict[str, int]] = {
+    "电商平台客户": 30,
+    "品牌直客": 45,
+    "中小企业客户": 60,
+    "政企与项目客户": 90,
+}
+
+
+def _build_customer_assignments() -> dict[str, dict[str, object]]:
+    """40 客户固定主数据归属（spec §3.3）：客群/主区域/信用期按编号确定性轮换。"""
+
+    assignments: dict[str, dict[str, object]] = {}
+    for index in range(1, 41):
+        segment = CUSTOMER_SEGMENTS[(index - 1) % len(CUSTOMER_SEGMENTS)]
+        assignments[f"DM-CUST-{index:03d}"] = {
+            "segment": segment,
+            "primary_region": REGIONS[(index - 1) % len(REGIONS)],
+            "credit_term_days": _SEGMENT_CREDIT_TERM_DAYS[segment],
+        }
+    return assignments
+
+
+CUSTOMER_ASSIGNMENTS: Final[dict[str, dict[str, object]]] = _build_customer_assignments()
+
+# 8 产品固定归属业务族与业务单元（spec §3.3 主数据映射）
+PRODUCT_ASSIGNMENTS: Final[dict[str, dict[str, str]]] = {
+    "P-01": {"family_id": "international_cross_border", "business_unit": "跨境包裹事业部"},
+    "P-02": {"family_id": "international_cross_border", "business_unit": "国际供应链事业部"},
+    "P-03": {"family_id": "international_cross_border", "business_unit": "国际供应链事业部"},
+    "P-04": {"family_id": "china_logistics", "business_unit": "国内仓配事业部"},
+    "P-05": {"family_id": "china_logistics", "business_unit": "国内仓配事业部"},
+    "P-06": {"family_id": "china_logistics", "business_unit": "末端配送与冷链事业部"},
+    "P-07": {"family_id": "china_logistics", "business_unit": "末端配送与冷链事业部"},
+    "P-08": {"family_id": "tech_and_other", "business_unit": "国内仓配事业部"},
+}
+
+# 产品毛利率偏移（叠加在业务族基线之上；E6 组合变化的数值载体）
+PRODUCT_MARGIN_OFFSET: Final[dict[str, Decimal]] = {
+    "P-01": Decimal("0"),
+    "P-02": Decimal("0.01"),
+    "P-03": Decimal("-0.005"),
+    "P-04": Decimal("0.005"),
+    "P-05": Decimal("0"),
+    "P-06": Decimal("-0.01"),
+    "P-07": Decimal("0.005"),
+    "P-08": Decimal("0.06"),
+}
 
 PLANTED_EVENTS: Final[tuple[PlantedEvent, ...]] = (
     PlantedEvent(
@@ -168,16 +227,25 @@ DAMAI_PROFILE_V1 = DamaiProfileV1(
     customers=CUSTOMERS,
     products=PRODUCTS,
     planted_events=PLANTED_EVENTS,
+    customer_segments=CUSTOMER_SEGMENTS,
+    customer_assignments=CUSTOMER_ASSIGNMENTS,
+    product_assignments=PRODUCT_ASSIGNMENTS,
 )
 
 __all__ = [
     "ANALYSIS_MONTHS",
     "BUSINESS_FAMILIES",
     "BUSINESS_UNITS",
+    "CUSTOMER_ASSIGNMENTS",
+    "CUSTOMER_SEGMENTS",
     "CUSTOMERS",
     "DAMAI_BOOTSTRAP_ENTERPRISE_ID",
     "DAMAI_PROFILE_V1",
     "PRIOR_MONTHS",
     "PRODUCTS",
+    "PRODUCT_ASSIGNMENTS",
+    "PRODUCT_MARGIN_OFFSET",
     "REGIONS",
 ]
+
+

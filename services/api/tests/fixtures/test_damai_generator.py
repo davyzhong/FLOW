@@ -100,18 +100,22 @@ def test_forecast_sidecar_is_static_only_and_hashed() -> None:
 
 def test_ar_aging_buckets_close_and_non_negative() -> None:
     pkg = build_damai_package()
-    for row in pkg["monthly_facts"]["ar_aging"]:
-        buckets = (
-            Decimal(str(row["b_current"]))
-            + Decimal(str(row["b_31_60"]))
-            + Decimal(str(row["b_61_90"]))
-            + Decimal(str(row["b_90_plus"]))
+    rows = pkg["monthly_facts"]["ar_aging"]
+    cells: dict[tuple[str, str], set[str]] = {}
+    for row in rows:
+        balance = Decimal(str(row["balance"]))
+        due = Decimal(str(row["due"]))
+        overdue = Decimal(str(row["overdue"]))
+        assert due + overdue == balance, (
+            f"{row['month']}/{row['customer_id']}/{row['bucket']} 未到期+逾期 ≠ 余额"
         )
-        outstanding = Decimal(str(row["ar_outstanding"]))
-        assert buckets == outstanding, f"{row['month']} 账龄桶之和 ≠ 应收余额"
-        assert min(
-            buckets, outstanding, Decimal(str(row["collected"]))
-        ) >= 0, "应收/回款金额不得为负"
+        assert min(balance, due, overdue, Decimal(str(row["collected"]))) >= 0, (
+            "应收/回款金额不得为负"
+        )
+        cells.setdefault((row["month"], row["customer_id"]), set()).add(row["bucket"])
+    assert len(cells) == 24 * 40
+    for key, buckets in cells.items():
+        assert buckets == {"current", "1-30", "31-60", "61-90", "90+"}, key
 
 
 def test_operating_financial_reconciliation_closes() -> None:

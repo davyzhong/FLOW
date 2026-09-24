@@ -186,6 +186,8 @@ def build_damai_statement_payloads(package: dict[str, Any]) -> dict[str, dict[st
         )
         payloads[fy] = {
             "entity": package["enterprise"],
+            "stock_code": "DAMAI.SYN",
+            "company": "大麦物流",
             "unit": "人民币千元",
             "period": months,
             "statements": {

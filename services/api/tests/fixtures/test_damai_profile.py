@@ -118,7 +118,7 @@ def test_every_customer_has_fixed_segment_region_credit_term() -> None:
     """40 客户每个都固定客群、主区域与信用期（spec §3.3 主数据映射）。"""
     assignments = DAMAI_PROFILE_V1.customer_assignments
     assert len(assignments) == 40
-    for customer_id, assign in assignments.items():
+    for _customer_id, assign in assignments.items():
         assert assign["segment"] in DAMAI_PROFILE_V1.customer_segments
         assert assign["primary_region"] in REGIONS
         assert isinstance(assign["credit_term_days"], int)
@@ -130,6 +130,6 @@ def test_every_product_has_fixed_family_and_business_unit() -> None:
     assignments = DAMAI_PROFILE_V1.product_assignments
     assert len(assignments) == 8
     family_ids = {f.family_id for f in BUSINESS_FAMILIES}
-    for product_id, assign in assignments.items():
+    for _product_id, assign in assignments.items():
         assert assign["family_id"] in family_ids
         assert assign["business_unit"] in BUSINESS_UNITS

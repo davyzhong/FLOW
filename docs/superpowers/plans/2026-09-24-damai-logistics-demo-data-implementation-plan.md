@@ -31,8 +31,8 @@ do_not_execute: true
 
 | 任务 | 内容 | 状态 | 产出/接续点 |
 |---|---|---|---|
-| A1 | 失败测试锁定全量数据合同（明细级 1,920/10,752/4,800） | pending | 红灯证据先存 |
-| A2 | 重构明细生成器与 canonical 投影（40 客户×8 产品×6 区域，无聚合成员） | pending | 取代 slice-2a 的聚合方案 |
+| A1 | 失败测试锁定全量数据合同（明细级 1,920/10,752/4,800） | done（`ece11d2`） | 红灯证据 `work/damai-demo/a1_red_evidence.txt`（不入 git） |
+| A2 | 重构明细生成器与 canonical 投影（40 客户×8 产品×6 区域，无聚合成员） | done（见本次提交） | 取代 slice-2a 的聚合方案；fixtures 58+4 全绿、ruff 净 |
 | A3 | 修正财报来源（DAMAI.SYN 独立身份）与正式审核链（禁直改 status） | pending | 取代 slice-1 的 9988.HK 复用 |
 | A4 | 重建静态发行包 + 消除漂移（manifest 血缘字段、README frontmatter） | pending | 在 `690ad5e` 基础上升级 |
 | B1 | 事务化整体 seed（AnalysisCycle 绑定 + 三类回滚注入 + 全对象幂等） | pending | 扩展 slice-2a 的 loader |
@@ -79,12 +79,12 @@ do_not_execute: true
 - Modify: `services/api/tests/fixtures/test_damai_canonical.py`
 - Modify: `services/api/tests/fixtures/test_damai_statements.py`
 
-- [ ] 断言 1+4 组织、4 客群、40 客户、8 产品、6 区域均实际进入 canonical。
-- [ ] 断言每个分析月均覆盖全部客户、产品、区域和业务单元，且无 `*-AGG`/`R-ALL`。
-- [ ] 断言 AR 是 24×40×5 账龄粒度，预算覆盖收入、三类直接成本、期间费用、经营利润和经营现金流原始行。
-- [ ] 断言经营↔财务对账、实际与预算具有同期间/维度可比性（不断言数值相等）、AR↔回款↔现金流以及两个财年的四表恒等式。
-- [ ] 断言预算逐月/组织/客群/产品的收入-三成本-期间费用=经营利润，并验证经营现金流调节表闭合。
-- [ ] 先运行并保存红灯证据；不允许先改实现后补断言。
+- [x] 断言 1+4 组织、4 客群、40 客户、8 产品、6 区域均实际进入 canonical。
+- [x] 断言每个分析月均覆盖全部客户、产品、区域和业务单元，且无 `*-AGG`/`R-ALL`。
+- [x] 断言 AR 是 24×40×5 账龄粒度，预算覆盖收入、三类直接成本、期间费用、经营利润和经营现金流原始行。
+- [x] 断言经营↔财务对账、实际与预算具有同期间/维度可比性（不断言数值相等）、AR↔回款↔现金流以及两个财年的四表恒等式。
+- [x] 断言预算逐月/组织/客群/产品的收入-三成本-期间费用=经营利润，并验证经营现金流调节表闭合。
+- [x] 先运行并保存红灯证据；不允许先改实现后补断言。（红灯证据 `work/damai-demo/a1_red_evidence.txt`）
 
 ### Task A2：重构明细生成器与 canonical 投影
 
@@ -94,14 +94,14 @@ do_not_execute: true
 - Modify: `services/api/src/flow_api/fixtures/damai/canonical.py`
 - Modify: `services/api/src/flow_api/fixtures/damai/validation.py`
 
-- [ ] 为 40 客户固定客群、主区域、信用期；为 8 产品固定业务族和业务单元。
-- [ ] 以“月×客户×2 个活跃产品”产生约 1,920 条经营明细，使用 UUID5、Decimal 和显式尾差分配。
-- [ ] 生成 24 月×4 业务单元×核心科目财务实际，逐月对账经营明细。
-- [ ] 生成 12 月×4 业务单元×4 客群×8 产品×7 类原始预算行，以及 24×40×5 账龄数据。
-- [ ] 预算引擎投影只使用 `REVENUE`/`DIRECT_COST`/`OPERATING_PROFIT`/`OPERATING_CASH_FLOW`；3 类成本汇总为 `DIRECT_COST`，毛利由引擎派生，期间费用标记为未执行的明细 coverage gap。
-- [ ] 用真实 `MetricCalculator`/快照断言 `REVENUE`/`DIRECT_COST` 在 total、organization、segment、product、segment×product 五种粒度与 manifest 一致；`OPERATING_PROFIT`/`OPERATING_CASH_FLOW` 仅在合同支持的 total/organization 粒度对账；三成本不漏算/重算。
-- [ ] 保留六类故意事件，但影响必须能追溯到具体客户/产品/区域/月。
-- [ ] 运行 A1 和既有 data-contract/metrics 测试，提交 `fix(fixtures): expand damai canonical detail coverage` 并 push。
+- [x] 为 40 客户固定客群、主区域、信用期；为 8 产品固定业务族和业务单元。
+- [x] 以“月×客户×2 个活跃产品”产生约 1,920 条经营明细，使用 UUID5、Decimal 和显式尾差分配。
+- [x] 生成 24 月×4 业务单元×核心科目财务实际，逐月对账经营明细。
+- [x] 生成 12 月×4 业务单元×4 客群×8 产品×7 类原始预算行，以及 24×40×5 账龄数据。
+- [x] 预算引擎投影只使用 `REVENUE`/`DIRECT_COST`/`OPERATING_PROFIT`/`OPERATING_CASH_FLOW`；3 类成本汇总为 `DIRECT_COST`，毛利由引擎派生，期间费用标记为未执行的明细 coverage gap。
+- [ ] 用真实 `MetricCalculator`/快照断言 `REVENUE`/`DIRECT_COST` 在 total、organization、segment、product、segment×product 五种粒度与 manifest 一致；`OPERATING_PROFIT`/`OPERATING_CASH_FLOW` 仅在合同支持的 total/organization 粒度对账；三成本不漏算/重算。（顺延至 B3 指标覆盖切片一并验收）
+- [x] 保留六类故意事件，但影响必须能追溯到具体客户/产品/区域/月。
+- [x] 运行 A1 和既有 data-contract/metrics 测试，提交 `fix(fixtures): expand damai canonical detail coverage` 并 push。
 
 ### Task A3：修正财报来源和正式审核链
 
