@@ -19,16 +19,16 @@
       "sha256": "fd51aa4ed47eec500e87fa7464cf09bcb4c8d9e56bce17acb864780510838016"
     },
     "financial_actuals.jsonl": {
-      "row_count": 684,
-      "sha256": "b354d42ddb80deb29d2ff6dcbe061b91f0cad51c43020a190c5a290f18c743d2"
+      "row_count": 504,
+      "sha256": "0e286a037d147acdf371d814129021e3d681d026bda5f8179a224bb3d96b2014"
     },
     "logistics_products.jsonl": {
       "row_count": 1,
       "sha256": "510e24cc716c51ed13f91c6b8af61ba356524c482a4872a2341cd550456f719c"
     },
     "management_accounts.jsonl": {
-      "row_count": 7,
-      "sha256": "ef8f19a85dbb706b37e81331f87808539e690760d5a77d8deb6b69f08bbc46f8"
+      "row_count": 9,
+      "sha256": "2802026cbf8cb9ffcc7b51c17ec98adca8bb3222981f72160dd51dd83ce5a6b1"
     },
     "monthly_budgets.jsonl": {
       "row_count": 12,
