@@ -1,12 +1,13 @@
 # T09-L1 页级答案集（生成物；重生成见 scripts/build_answer_set_l1.py）
 schema: flow.answer_set.l1
 generated_from: docs/implementation/p5 抽取 YAML（P5 期已人工核验）
-location_method: pypdf 文本层；match_mode=strong（行名+数值同页）/weak（仅数值同页，跨语言兜底）
+location_method: pypdf 文本层；match_mode=strong（行名+数值同页）/weak（仅数值同页，跨语言兜底）/strong-sign-flip-loss-row（亏损行正数披露，行名+绝对值同页强锚）/visual-verified（图像页无文本层，证据登记见
+  config/statements/l1_visual_verified.yaml）
 coverage:
-  values_total: 1795
-  values_located: 1775
-  ratio: 0.9889
-  unlocated_rows: 10
+  values_total: 1794
+  values_located: 1794
+  ratio: 1.0
+  unlocated_rows: 0
 entries:
 - source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2020_annual_results.pdf
   stock_code: 9988.HK
@@ -288,6 +289,16 @@ entries:
   item: 淨利潤
   column: 上期发生额
   value: 49
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2020_annual_results.pdf
+  stock_code: 9988.HK
+  period_label: FY2019
+  report_kind: 年报
+  page: 38
+  match_mode: strong-sign-flip-loss-row
+  statement: 合并利润表
+  item: 歸屬於非控制性權益損益
+  column: 本期发生额
+  value: -7652
 - source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2020_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2019
@@ -1008,6 +1019,26 @@ entries:
   item: 淨利潤
   column: 上期发生额
   value: 80234
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2020_annual_results.pdf
+  stock_code: 9988.HK
+  period_label: FY2020
+  report_kind: 年报
+  page: 38
+  match_mode: strong-sign-flip-loss-row
+  statement: 合并利润表
+  item: 歸屬於非控制性權益損益
+  column: 本期发生额
+  value: -9083
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2020_annual_results.pdf
+  stock_code: 9988.HK
+  period_label: FY2020
+  report_kind: 年报
+  page: 38
+  match_mode: strong-sign-flip-loss-row
+  statement: 合并利润表
+  item: 歸屬於非控制性權益損益
+  column: 上期发生额
+  value: -7652
 - source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2020_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2020
@@ -1998,6 +2029,26 @@ entries:
   item: 淨利潤
   column: 上期发生额
   value: 140350
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2021_annual_results.pdf
+  stock_code: 9988.HK
+  period_label: FY2021
+  report_kind: 年报
+  page: 35
+  match_mode: strong-sign-flip-loss-row
+  statement: 合并利润表
+  item: 歸屬於非控制性權益損益
+  column: 本期发生额
+  value: -7294
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2021_annual_results.pdf
+  stock_code: 9988.HK
+  period_label: FY2021
+  report_kind: 年报
+  page: 35
+  match_mode: strong-sign-flip-loss-row
+  statement: 合并利润表
+  item: 歸屬於非控制性權益損益
+  column: 上期发生额
+  value: -9083
 - source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2021_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2021
@@ -2993,6 +3044,26 @@ entries:
   period_label: FY2022
   report_kind: 年报
   page: 39
+  match_mode: strong-sign-flip-loss-row
+  statement: 合并利润表
+  item: 歸屬於非控制性權益損益
+  column: 本期发生额
+  value: -15170
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2022_annual_results.pdf
+  stock_code: 9988.HK
+  period_label: FY2022
+  report_kind: 年报
+  page: 39
+  match_mode: strong-sign-flip-loss-row
+  statement: 合并利润表
+  item: 歸屬於非控制性權益損益
+  column: 上期发生额
+  value: -7294
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2022_annual_results.pdf
+  stock_code: 9988.HK
+  period_label: FY2022
+  report_kind: 年报
+  page: 39
   match_mode: strong
   statement: 合并利润表
   item: 歸屬於阿里巴巴集團股東的淨利潤
@@ -3698,497 +3769,517 @@ entries:
   item: 期末現金及現金等價物
   column: 上期发生额
   value: 356469
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 33
+  page: 22
   match_mode: strong
   statement: 合并利润表
   item: 收入
   column: 本期发生额
   value: 868687
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 33
+  page: 22
   match_mode: strong
   statement: 合并利润表
   item: 收入
   column: 上期发生额
-  value: 30729
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+  value: 853062
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 33
+  page: 38
   match_mode: strong
   statement: 合并利润表
   item: 營業成本
   column: 本期发生额
   value: -549695
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 33
+  page: 38
   match_mode: strong
   statement: 合并利润表
   item: 營業成本
   column: 上期发生额
-  value: -20511
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+  value: -539450
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 33
+  page: 38
   match_mode: strong
   statement: 合并利润表
   item: 產品開發費用
   column: 本期发生额
   value: -56744
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 33
+  page: 38
   match_mode: strong
   statement: 合并利润表
   item: 產品開發費用
   column: 上期发生额
-  value: -1951
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+  value: -55465
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 33
+  page: 38
   match_mode: strong
   statement: 合并利润表
   item: 銷售和市場費用
   column: 本期发生额
   value: -103496
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 33
+  page: 38
   match_mode: strong
   statement: 合并利润表
   item: 銷售和市場費用
   column: 上期发生额
-  value: -3992
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+  value: -119799
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 33
+  page: 38
   match_mode: strong
   statement: 合并利润表
   item: 一般及行政費用
   column: 本期发生额
   value: -42183
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 33
+  page: 38
   match_mode: strong
   statement: 合并利润表
   item: 一般及行政費用
   column: 上期发生额
-  value: -1942
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+  value: -31922
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 33
+  page: 38
   match_mode: strong
   statement: 合并利润表
   item: 無形資產攤銷及減值
   column: 本期发生额
   value: -13504
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 33
+  page: 38
   match_mode: strong
   statement: 合并利润表
   item: 無形資產攤銷及減值
   column: 上期发生额
-  value: -288
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+  value: -11647
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 33
+  page: 38
   match_mode: strong
   statement: 合并利润表
   item: 商譽減值
   column: 本期发生额
   value: -2714
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 33
+  page: 31
   match_mode: strong
   statement: 合并利润表
   item: 其他淨收支
   column: 本期发生额
   value: 5823
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 33
+  page: 31
   match_mode: strong
   statement: 合并利润表
   item: 其他淨收支
   column: 上期发生额
-  value: 410
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+  value: 10523
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 33
-  match_mode: weak
+  page: 23
+  match_mode: strong
   statement: 合并利润表
   item: 經營利潤（虧損）
   column: 本期发生额
   value: 100351
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 33
-  match_mode: weak
+  page: 23
+  match_mode: strong
   statement: 合并利润表
   item: 經營利潤（虧損）
   column: 上期发生额
-  value: 2045
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+  value: 69638
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 33
+  page: 38
   match_mode: strong
   statement: 合并利润表
   item: 利息收入和投資淨收益
   column: 本期发生额
   value: -11071
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 33
+  page: 38
   match_mode: strong
   statement: 合并利润表
   item: 利息收入和投資淨收益
   column: 上期发生额
-  value: -790
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+  value: -15702
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 33
+  page: 38
   match_mode: strong
   statement: 合并利润表
   item: 利息費用
   column: 本期发生额
   value: -5918
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 33
+  page: 38
   match_mode: strong
   statement: 合并利润表
   item: 利息費用
   column: 上期发生额
-  value: -301
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+  value: -4909
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 33
+  page: 38
   match_mode: strong
   statement: 合并利润表
   item: 扣除所得稅及權益法核算的投資損益前的利潤
   column: 本期发生额
   value: 89185
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 33
+  page: 38
   match_mode: strong
   statement: 合并利润表
   item: 扣除所得稅及權益法核算的投資損益前的利潤
   column: 上期发生额
-  value: 1364
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+  value: 59550
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 33
+  page: 38
   match_mode: strong
   statement: 合并利润表
   item: 所得稅費用
   column: 本期发生额
   value: -15549
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 33
+  page: 38
   match_mode: strong
   statement: 合并利润表
   item: 所得稅費用
   column: 上期发生额
-  value: -793
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+  value: -26815
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 33
+  page: 32
   match_mode: strong
   statement: 合并利润表
   item: 權益法核算的投資損益
   column: 本期发生额
   value: -8063
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 33
+  page: 32
   match_mode: strong
   statement: 合并利润表
   item: 權益法核算的投資損益
   column: 上期发生额
-  value: -444
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+  value: 14344
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 33
+  page: 22
   match_mode: strong
   statement: 合并利润表
   item: 淨利潤
   column: 本期发生额
   value: 65573
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 33
+  page: 22
   match_mode: strong
   statement: 合并利润表
   item: 淨利潤
   column: 上期发生额
-  value: 127
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+  value: 47079
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 33
+  page: 38
+  match_mode: strong-sign-flip-loss-row
+  statement: 合并利润表
+  item: 歸屬於非控制性權益損益
+  column: 本期发生额
+  value: -7210
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
+  stock_code: 9988.HK
+  period_label: FY2023
+  report_kind: 年报
+  page: 38
+  match_mode: strong-sign-flip-loss-row
+  statement: 合并利润表
+  item: 歸屬於非控制性權益損益
+  column: 上期发生额
+  value: -15170
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
+  stock_code: 9988.HK
+  period_label: FY2023
+  report_kind: 年报
+  page: 38
   match_mode: strong
   statement: 合并利润表
   item: 歸屬於阿里巴巴集團股東的淨利潤
   column: 本期发生额
   value: 72783
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 33
+  page: 38
   match_mode: strong
   statement: 合并利润表
   item: 歸屬於阿里巴巴集團股東的淨利潤
   column: 上期发生额
-  value: 466
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+  value: 62249
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 34
+  page: 39
   match_mode: strong
   statement: 合并资产负债表
   item: 現金及現金等價物
   column: 期末余额
   value: 193086
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 34
+  page: 39
   match_mode: strong
   statement: 合并资产负债表
   item: 短期投資
   column: 期末余额
   value: 326492
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 34
+  page: 39
   match_mode: strong
   statement: 合并资产负债表
   item: 受限制現金及應收託管資金
   column: 期末余额
   value: 36424
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 34
+  page: 39
   match_mode: strong
   statement: 合并资产负债表
   item: 股權證券及其他投資
   column: 期末余额
   value: 4892
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 34
+  page: 39
   match_mode: strong
   statement: 合并资产负债表
   item: 權益法核算的投資
   column: 期末余额
   value: 207380
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 34
+  page: 39
   match_mode: strong
   statement: 合并资产负债表
   item: 物業及設備（淨值）
   column: 期末余额
   value: 176031
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 34
+  page: 39
   match_mode: strong
   statement: 合并资产负债表
   item: 無形資產（淨值）
   column: 期末余额
   value: 46913
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 34
+  page: 39
   match_mode: strong
   statement: 合并资产负债表
   item: 商譽
   column: 期末余额
   value: 268091
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 34
+  page: 39
   match_mode: strong
   statement: 合并资产负债表
   item: 流動資產總額
   column: 期末余额
   value: 697966
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 34
+  page: 39
   match_mode: strong
   statement: 合并资产负债表
   item: 資產總額
   column: 期末余额
   value: 1753044
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 34
+  page: 39
   match_mode: strong
   statement: 合并资产负债表
   item: 短期銀行借款
   column: 期末余额
   value: 7466
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 34
+  page: 39
   match_mode: strong
   statement: 合并资产负债表
   item: 應付所得稅
   column: 期末余额
   value: 12543
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 34
+  page: 39
   match_mode: strong
   statement: 合并资产负债表
   item: 預提費用、應付款項及其他負債
   column: 期末余额
   value: 275950
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 34
+  page: 39
   match_mode: strong
   statement: 合并资产负债表
   item: 商家保證金
   column: 期末余额
   value: 13297
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 34
-  match_mode: strong
+  page: 39
+  match_mode: weak
   statement: 合并资产负债表
   item: 遞延收入和客戶預付款
   column: 期末余额
   value: 71295
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 34
+  page: 39
   match_mode: strong
   statement: 合并资产负债表
   item: 流動負債總額
   column: 期末余额
   value: 385351
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 35
+  page: 40
   match_mode: strong
   statement: 合并资产负债表
   item: 負債總額
   column: 期末余额
   value: 630123
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 35
+  page: 40
   match_mode: strong
   statement: 合并资产负债表
   item: 夾層權益
   column: 期末余额
   value: 9858
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
@@ -4198,236 +4289,236 @@ entries:
   item: 普通股
   column: 期末余额
   value: 1
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 35
+  page: 40
   match_mode: strong
   statement: 合并资产负债表
   item: 資本公積
   column: 期末余额
   value: 416880
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 35
+  page: 40
   match_mode: strong
   statement: 合并资产负债表
   item: 庫存股（按成本計）
   column: 期末余额
   value: -28763
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 35
+  page: 40
   match_mode: strong
   statement: 合并资产负债表
   item: 法定儲備
   column: 期末余额
   value: 12977
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 35
+  page: 40
   match_mode: weak
   statement: 合并资产负债表
   item: 累計其他綜合收益（損失）
   column: 期末余额
   value: -10417
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 35
+  page: 40
   match_mode: strong
   statement: 合并资产负债表
   item: 未分配利潤
   column: 期末余额
   value: 599028
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 35
+  page: 40
   match_mode: strong
   statement: 合并资产负债表
   item: 股東權益總額
   column: 期末余额
   value: 989657
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 35
+  page: 40
   match_mode: strong
   statement: 合并资产负债表
   item: 非控制性權益
   column: 期末余额
   value: 123406
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 35
+  page: 40
   match_mode: strong
   statement: 合并资产负债表
   item: 權益總額
   column: 期末余额
   value: 1113063
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 34
+  page: 39
   match_mode: strong
   statement: 合并资产负债表
   item: 負債、夾層權益及權益總額
   column: 期末余额
   value: 1753044
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 36
+  page: 33
   match_mode: strong
   statement: 合并现金流量表
   item: 經營活動產生的現金流量淨額
   column: 本期发生额
   value: 199752
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 36
+  page: 33
   match_mode: strong
   statement: 合并现金流量表
   item: 經營活動產生的現金流量淨額
   column: 上期发生额
-  value: 3233
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+  value: 142759
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 36
+  page: 41
   match_mode: weak
   statement: 合并现金流量表
   item: 投資活動所用現金流量淨額
   column: 本期发生额
   value: -135506
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 36
+  page: 41
   match_mode: weak
   statement: 合并现金流量表
   item: 投資活動所用現金流量淨額
   column: 上期发生额
-  value: 2807
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+  value: -198592
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 36
+  page: 41
   match_mode: weak
   statement: 合并现金流量表
   item: 融資活動所用現金流量淨額
   column: 本期发生额
   value: -65619
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 36
+  page: 41
   match_mode: weak
   statement: 合并现金流量表
   item: 融資活動所用現金流量淨額
   column: 上期发生额
-  value: -7481
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+  value: -64449
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 36
+  page: 41
   match_mode: weak
   statement: 合并现金流量表
   item: 匯率變動對現金的影響
   column: 本期发生额
   value: 3530
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 36
+  page: 41
   match_mode: weak
   statement: 合并现金流量表
   item: 匯率變動對現金的影響
   column: 上期发生额
-  value: 263
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+  value: -8834
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 36
+  page: 41
   match_mode: weak
   statement: 合并现金流量表
   item: 現金淨（減少）增加
   column: 本期发生额
   value: 2157
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 36
+  page: 41
   match_mode: weak
   statement: 合并现金流量表
   item: 現金淨（減少）增加
   column: 上期发生额
-  value: -1178
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+  value: -129116
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 36
+  page: 41
   match_mode: strong
   statement: 合并现金流量表
   item: 期初現金及現金等價物
   column: 本期发生额
   value: 227353
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 36
+  page: 41
   match_mode: strong
   statement: 合并现金流量表
   item: 期初現金及現金等價物
   column: 上期发生额
-  value: 40847
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+  value: 356469
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 36
+  page: 41
   match_mode: strong
   statement: 合并现金流量表
   item: 期末現金及現金等價物
   column: 本期发生额
   value: 229510
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2023
   report_kind: 年报
-  page: 36
+  page: 41
   match_mode: strong
   statement: 合并现金流量表
   item: 期末現金及現金等價物
   column: 上期发生额
-  value: 39669
+  value: 227353
 - source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2024
@@ -4728,6 +4819,26 @@ entries:
   item: 淨利潤
   column: 上期发生额
   value: 65573
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+  stock_code: 9988.HK
+  period_label: FY2024
+  report_kind: 年报
+  page: 33
+  match_mode: strong-sign-flip-loss-row
+  statement: 合并利润表
+  item: 歸屬於非控制性權益損益
+  column: 本期发生额
+  value: -8677
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+  stock_code: 9988.HK
+  period_label: FY2024
+  report_kind: 年报
+  page: 33
+  match_mode: strong-sign-flip-loss-row
+  statement: 合并利润表
+  item: 歸屬於非控制性權益損益
+  column: 上期发生额
+  value: -7210
 - source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2024
@@ -5758,6 +5869,26 @@ entries:
   item: 淨利潤
   column: 上期发生额
   value: 71332
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2025_annual_results.pdf
+  stock_code: 9988.HK
+  period_label: FY2025
+  report_kind: 年报
+  page: 31
+  match_mode: strong-sign-flip-loss-row
+  statement: 合并利润表
+  item: 歸屬於非控制性權益損益
+  column: 本期发生额
+  value: -4133
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2025_annual_results.pdf
+  stock_code: 9988.HK
+  period_label: FY2025
+  report_kind: 年报
+  page: 31
+  match_mode: strong-sign-flip-loss-row
+  statement: 合并利润表
+  item: 歸屬於非控制性權益損益
+  column: 上期发生额
+  value: -8677
 - source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2025_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2025
@@ -6798,6 +6929,26 @@ entries:
   item: 淨利潤
   column: 上期发生额
   value: 125976
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2026_annual_results.pdf
+  stock_code: 9988.HK
+  period_label: FY2026
+  report_kind: 年报
+  page: 31
+  match_mode: strong-sign-flip-loss-row
+  statement: 合并利润表
+  item: 歸屬於非控制性權益損益
+  column: 本期发生额
+  value: -1465
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2026_annual_results.pdf
+  stock_code: 9988.HK
+  period_label: FY2026
+  report_kind: 年报
+  page: 31
+  match_mode: strong-sign-flip-loss-row
+  statement: 合并利润表
+  item: 歸屬於非控制性權益損益
+  column: 上期发生额
+  value: -4133
 - source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2026_annual_results.pdf
   stock_code: 9988.HK
   period_label: FY2026
@@ -13913,6 +14064,38 @@ entries:
   period_label: FY2025
   report_kind: 年报
   page: 112
+  match_mode: visual-verified
+  printed_page: '111'
+  evidence_image: validation/financial_reports/evidence/jdl_fy2025_cf_p111.png
+  evidence_sha256: ef407097ad636138280a65c9ae07dc84cb3d78855d63ce389ffa709fb1d1c319
+  verified_by: Kimi 夜班会话（2026-09-24 用户授权 AI 直修）
+  verified_at: '2026-09-24'
+  basis: 投资活动「存放受限制現金」行目视值 (273,786)/(226,522) 人民币千元，括号负数，与抽取 YAML -273786/-226522 一致
+  statement: 合并现金流量表
+  item: 存放受限制現金
+  column: 本期发生额
+  value: -273786
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/jd_logistics_2618/JDL_FY2025_annual_report.pdf
+  stock_code: 2618.HK
+  period_label: FY2025
+  report_kind: 年报
+  page: 112
+  match_mode: visual-verified
+  printed_page: '111'
+  evidence_image: validation/financial_reports/evidence/jdl_fy2025_cf_p111.png
+  evidence_sha256: ef407097ad636138280a65c9ae07dc84cb3d78855d63ce389ffa709fb1d1c319
+  verified_by: Kimi 夜班会话（2026-09-24 用户授权 AI 直修）
+  verified_at: '2026-09-24'
+  basis: 投资活动「存放受限制現金」行目视值 (273,786)/(226,522) 人民币千元，括号负数，与抽取 YAML -273786/-226522 一致
+  statement: 合并现金流量表
+  item: 存放受限制現金
+  column: 上期发生额
+  value: -226522
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/jd_logistics_2618/JDL_FY2025_annual_report.pdf
+  stock_code: 2618.HK
+  period_label: FY2025
+  report_kind: 年报
+  page: 112
   match_mode: weak
   statement: 合并现金流量表
   item: 提取受限制現金
@@ -14288,6 +14471,38 @@ entries:
   item: 租賃付款的本金部分
   column: 上期发生额
   value: -7200155
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/jd_logistics_2618/JDL_FY2025_annual_report.pdf
+  stock_code: 2618.HK
+  period_label: FY2025
+  report_kind: 年报
+  page: 113
+  match_mode: visual-verified
+  printed_page: '112'
+  evidence_image: validation/financial_reports/evidence/jdl_fy2025_cf_p112.png
+  evidence_sha256: 25cd145f3f72e6814b88e24378decd4394e1983f1217a5c9a416c110620feddb
+  verified_by: Kimi 夜班会话（2026-09-24 用户授权 AI 直修）
+  verified_at: '2026-09-24'
+  basis: 融资活动「已付利息」行目视值 (826,677)/(1,005,764) 人民币千元，括号负数，与抽取 YAML -826677/-1005764 一致
+  statement: 合并现金流量表
+  item: 已付利息
+  column: 本期发生额
+  value: -826677
+- source_pdf: docs/knowledge-base/02_research/original/p5_samples/jd_logistics_2618/JDL_FY2025_annual_report.pdf
+  stock_code: 2618.HK
+  period_label: FY2025
+  report_kind: 年报
+  page: 113
+  match_mode: visual-verified
+  printed_page: '112'
+  evidence_image: validation/financial_reports/evidence/jdl_fy2025_cf_p112.png
+  evidence_sha256: 25cd145f3f72e6814b88e24378decd4394e1983f1217a5c9a416c110620feddb
+  verified_by: Kimi 夜班会话（2026-09-24 用户授权 AI 直修）
+  verified_at: '2026-09-24'
+  basis: 融资活动「已付利息」行目视值 (826,677)/(1,005,764) 人民币千元，括号负数，与抽取 YAML -826677/-1005764 一致
+  statement: 合并现金流量表
+  item: 已付利息
+  column: 上期发生额
+  value: -1005764
 - source_pdf: docs/knowledge-base/02_research/original/p5_samples/jd_logistics_2618/JDL_FY2025_annual_report.pdf
   stock_code: 2618.HK
   period_label: FY2025
@@ -17758,64 +17973,4 @@ entries:
   item: 非控制性权益
   column: 上期发生额
   value: 416
-unlocated:
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2020_annual_results.pdf
-  statement: 合并利润表
-  item: 歸屬於非控制性權益損益
-  columns:
-  - 上期发生额
-  - 本期发生额
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2020_annual_results.pdf
-  statement: 合并利润表
-  item: 歸屬於非控制性權益損益
-  columns:
-  - 上期发生额
-  - 本期发生额
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2021_annual_results.pdf
-  statement: 合并利润表
-  item: 歸屬於非控制性權益損益
-  columns:
-  - 上期发生额
-  - 本期发生额
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2022_annual_results.pdf
-  statement: 合并利润表
-  item: 歸屬於非控制性權益損益
-  columns:
-  - 上期发生额
-  - 本期发生额
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
-  statement: 合并利润表
-  item: 歸屬於非控制性權益損益
-  columns:
-  - 上期发生额
-  - 本期发生额
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
-  statement: 合并利润表
-  item: 歸屬於非控制性權益損益
-  columns:
-  - 上期发生额
-  - 本期发生额
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2025_annual_results.pdf
-  statement: 合并利润表
-  item: 歸屬於非控制性權益損益
-  columns:
-  - 上期发生额
-  - 本期发生额
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2026_annual_results.pdf
-  statement: 合并利润表
-  item: 歸屬於非控制性權益損益
-  columns:
-  - 上期发生额
-  - 本期发生额
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/jd_logistics_2618/JDL_FY2025_annual_report.pdf
-  statement: 合并现金流量表
-  item: 存放受限制現金
-  columns:
-  - 上期发生额
-  - 本期发生额
-- source_pdf: docs/knowledge-base/02_research/original/p5_samples/jd_logistics_2618/JDL_FY2025_annual_report.pdf
-  statement: 合并现金流量表
-  item: 已付利息
-  columns:
-  - 上期发生额
-  - 本期发生额
+unlocated: []

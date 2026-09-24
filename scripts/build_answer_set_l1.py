@@ -58,6 +58,10 @@ def locate(pages: list[str], item: str, values: list[int]) -> tuple[int, str] | 
 
     strong：行名（含变体）与全部数值同页；weak：仅全部数值同页（跨语言
     报表兜底，如菜鸟英文招股书——数值对出现已是较强信号，仍显式降级标注）。
+    strong-sign-flip-loss-row：亏损类行在部分披露中以正数印出亏损额
+    （如「歸屬於非控制性權益的淨損失 9,083」），抽取层按会计符号记为负数；
+    仅当行名变体与全部数值绝对值同页时才允许翻转，且只产生强锚——
+    弱锚（无行名）一律不得翻转，避免无关数字子串误锚。
     """
     value_norms = [_norm(str(v)) for v in values]
     item_candidates = {_norm(item)}
@@ -84,7 +88,60 @@ def locate(pages: list[str], item: str, values: list[int]) -> tuple[int, str] | 
             weak_page = index + 1
     if weak_page is not None:
         return weak_page, "weak"
+    # 第三遍：亏损行正数披露的符号翻转（仅强锚，仅当存在负数抽取值）
+    if any(v < 0 for v in values):
+        abs_norms = [_norm(str(abs(v))) for v in values]
+        for index, text in enumerate(pages):
+            if not text:
+                continue
+            if not all(v in text for v in abs_norms):
+                continue
+            if any(c and c in text for c in item_candidates):
+                return index + 1, "strong-sign-flip-loss-row"
     return None
+
+
+def load_visual_overrides(repo: Path) -> dict[tuple[str, str, str], dict]:
+    """加载图像页目视核验登记（无文本层 PDF 的显式锚点证据）。
+
+    文件：config/statements/l1_visual_verified.yaml；键为
+    (source_pdf, statement, item)。每条必须携带完整证据字段，
+    缺字段即抛错（fail-closed），不允许静默生成无证据锚点。
+    文件不存在时返回空表（多数仓库状态无需覆盖）。
+    """
+    import hashlib
+
+    import yaml
+
+    path = repo / "config/statements/l1_visual_verified.yaml"
+    if not path.is_file():
+        return {}
+    raw = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    overrides: dict[tuple[str, str, str], dict] = {}
+    required = (
+        "statement",
+        "item",
+        "page_seq",
+        "printed_page",
+        "evidence_image",
+        "evidence_sha256",
+        "verified_by",
+        "verified_at",
+        "basis",
+    )
+    for row in raw.get("overrides", []):
+        missing = [f for f in required if f not in row]
+        if missing:
+            raise ValueError(f"visual override 缺字段 {missing}: {row!r}")
+        evidence_path = repo / row["evidence_image"]
+        if not evidence_path.is_file():
+            raise ValueError(f"visual override 证据图缺失: {row['evidence_image']}")
+        digest = hashlib.sha256(evidence_path.read_bytes()).hexdigest()
+        if digest != row["evidence_sha256"]:
+            raise ValueError(f"visual override 证据图 SHA 不一致: {row['evidence_image']}")
+        key = (row["source_pdf"], row["statement"], row["item"])
+        overrides[key] = row
+    return overrides
 
 
 def build(out: Path, repo: Path = REPO) -> dict:
@@ -99,6 +156,7 @@ def build(out: Path, repo: Path = REPO) -> dict:
         (repo / "config/statements/answer_set_sources.yaml").read_text(encoding="utf-8")
     )["reports"]
     sample_to_ref = {m["sample"]: m for m in mapping_rows}
+    visual_overrides = load_visual_overrides(repo)
 
     for source in sorted(glob.glob(str(repo / SOURCES_GLOB))):
         payload = yaml.safe_load(Path(source).read_text(encoding="utf-8"))
@@ -127,7 +185,10 @@ def build(out: Path, repo: Path = REPO) -> dict:
                     continue
                 total_values += len(present)
                 located = locate(pages, item, list(present.values()))
+                override = None
                 if located is None:
+                    override = visual_overrides.get((source_pdf, statement, item))
+                if located is None and override is None:
                     unlocated.append(
                         {
                             "source_pdf": source_pdf,
@@ -137,7 +198,21 @@ def build(out: Path, repo: Path = REPO) -> dict:
                         }
                     )
                     continue
-                page, match_mode = located
+                if located is not None:
+                    page, match_mode = located
+                    evidence = {}
+                else:
+                    # 图像页目视核验锚点：页码与证据全部来自登记文件，
+                    # 构建器已逐条验证证据图存在且 SHA 一致（fail-closed）。
+                    page, match_mode = override["page_seq"], "visual-verified"
+                    evidence = {
+                        "printed_page": override["printed_page"],
+                        "evidence_image": override["evidence_image"],
+                        "evidence_sha256": override["evidence_sha256"],
+                        "verified_by": override["verified_by"],
+                        "verified_at": override["verified_at"],
+                        "basis": override["basis"],
+                    }
                 located_values += len(present)
                 for column, value in present.items():
                     entries.append(
@@ -148,6 +223,7 @@ def build(out: Path, repo: Path = REPO) -> dict:
                             "report_kind": ref["report_kind"],
                             "page": page,
                             "match_mode": match_mode,
+                            **evidence,
                             "statement": statement,
                             "item": item,
                             "column": column,
@@ -161,6 +237,9 @@ def build(out: Path, repo: Path = REPO) -> dict:
         "location_method": (
             "pypdf 文本层；match_mode=strong（行名+数值同页）"
             "/weak（仅数值同页，跨语言兜底）"
+            "/strong-sign-flip-loss-row（亏损行正数披露，行名+绝对值同页强锚）"
+            "/visual-verified（图像页无文本层，证据登记见 "
+            "config/statements/l1_visual_verified.yaml）"
         ),
         "coverage": {
             "values_total": total_values,

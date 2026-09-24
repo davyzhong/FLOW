@@ -1,0 +1,29 @@
+# L1 图像页目视核验登记（无文本层 PDF 的显式锚点证据）
+#
+# 用途：JDL_FY2025_annual_report.pdf 的财务主表页为图像层（pypdf 全文 0 命中），
+# 文本定位不可用。以下条目由 AI 会话渲染页面图像后逐行目视核验（2026-09-24 用户授权
+# 的 10 条抽取错误直修决策，决策日志见 EXECUTION_TODO §五-b 第 4 条），
+# 证据图与 SHA 在构建期和基准期双重 fail-closed 校验。
+# 登记纪律：page_seq 为 PDF 物理页序，printed_page 为报告印刷页码；
+# 证据图渲染自原始 PDF（pypdfium2 scale=2.0），不得改动原始 PDF。
+overrides:
+  - source_pdf: docs/knowledge-base/02_research/original/p5_samples/jd_logistics_2618/JDL_FY2025_annual_report.pdf
+    statement: 合并现金流量表
+    item: 存放受限制現金
+    page_seq: 112
+    printed_page: "111"
+    evidence_image: validation/financial_reports/evidence/jdl_fy2025_cf_p111.png
+    evidence_sha256: ef407097ad636138280a65c9ae07dc84cb3d78855d63ce389ffa709fb1d1c319
+    verified_by: Kimi 夜班会话（2026-09-24 用户授权 AI 直修）
+    verified_at: "2026-09-24"
+    basis: 投资活动「存放受限制現金」行目视值 (273,786)/(226,522) 人民币千元，括号负数，与抽取 YAML -273786/-226522 一致
+  - source_pdf: docs/knowledge-base/02_research/original/p5_samples/jd_logistics_2618/JDL_FY2025_annual_report.pdf
+    statement: 合并现金流量表
+    item: 已付利息
+    page_seq: 113
+    printed_page: "112"
+    evidence_image: validation/financial_reports/evidence/jdl_fy2025_cf_p112.png
+    evidence_sha256: 25cd145f3f72e6814b88e24378decd4394e1983f1217a5c9a416c110620feddb
+    verified_by: Kimi 夜班会话（2026-09-24 用户授权 AI 直修）
+    verified_at: "2026-09-24"
+    basis: 融资活动「已付利息」行目视值 (826,677)/(1,005,764) 人民币千元，括号负数，与抽取 YAML -826677/-1005764 一致

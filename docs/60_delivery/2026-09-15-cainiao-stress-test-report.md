@@ -53,6 +53,18 @@ pre_registered_rules: docs/50_plans/work_items/PUBLIC--c-level-exit-protocol.md 
 3. 修正后重跑 `build_answer_set_l1.py` + `accuracy_benchmark.py`，
    覆盖率应 ≥ 99.4%（1785/1795）且双零维持。
 
+**处置状态更新（2026-09-25，P1 关闭）**：10 条全部复核完毕，**均为误报，
+抽取值正确**，非抽取错误——
+- 1–8（BABA NCI）：港交所公告将亏损行印为正数，YAML 按会计符号记负值，
+  行名+绝对值同页成立。已通过新定位模式 `strong-sign-flip-loss-row` 重新入库；
+- 9–10（JDL 现金流量表）：主表页为图像层无文本，已渲染 PNG 目视核对无误，
+  通过新模式 `visual-verified`（证据 SHA fail-closed）重新入库。
+- 复核顺带抓获两处真错误（本测试未捕获）：alibaba_2023fy 上期列 23 项
+  整列误抓、alibaba_2019fy NCI 上期 -406 误抓，均已修正（详见
+  validation/financial_reports/corrections.md §2）。
+- 重跑结果：1794/1794 覆盖率 100%（2019fy NCI 上期改 null 故总数 -1），
+  锚失效 0 / 值不一致 0 / 未入库 0。C 级出口此前置项已关闭。
+
 ## 3. 结论
 
 - 回归压力测试**通过并产出实质战果**：菜鸟弱锚场景 468 条全对；

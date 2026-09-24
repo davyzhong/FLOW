@@ -92,7 +92,7 @@ class StatementLineItem(CanonicalIdentityMixin, Base):
     value_prior: Mapped[Decimal | None] = mapped_column(Numeric(24, 4), nullable=True)
     # --- T10-B3 数据点级溯源（0029）：源 PDF 页码与锚定模式 ---
     page_number: Mapped[int | None] = mapped_column(Integer, nullable=True)
-    page_anchor: Mapped[str | None] = mapped_column(String(16), nullable=True)
+    page_anchor: Mapped[str | None] = mapped_column(String(32), nullable=True)
 
     report: Mapped[StatementReport] = relationship(back_populates="items")
 

@@ -59,6 +59,7 @@
 | `alibaba_9988/BABA_FY2020_annual_results.pdf`（50 页，FY2019+FY2020 年度业绩公告） | 2020-05-22 | www1.hkexnews.hk `/listedco/listconews/sehk/2020/0522/2020052201322_c.pdf` | 82065040738c2262 |
 | `alibaba_9988/BABA_FY2021_annual_results.pdf`（47 页，FY2020+FY2021） | 2021-05-13 | 同上 `/2021/0513/2021051301160_c.pdf` | b954d5fd1f1a8313 |
 | `alibaba_9988/BABA_FY2022_annual_results.pdf`（49 页，FY2021+FY2022） | 2022-05-26 | 同上 `/2022/0526/2022052601315_c.pdf` | 658a32021b2cbd03 |
+| `alibaba_9988/BABA_FY2023_annual_results.pdf`（45 页，FY2022+FY2023） | 2023-05-18 | 新浪财经镜像港交所披露易公告（编号 10741640-0，`file.finance.sina.com.cn/hkdata98/hk/hk_realtime_announcement/news/20230518/10741640-0.PDF`；2026-09-24 为修正 2023fy 抽取错误补档） | 28256e2d4fcebbd9 |
 | `alibaba_9988/BABA_FY2024_annual_results.pdf`（40 页，FY2023+FY2024） | 2024-05-14 | 同上 `/2024/0514/2024051400814_c.pdf` | d9233c97c931eae6 |
 | `alibaba_9988/BABA_FY2025_annual_results.pdf`（47 页，FY2024+FY2025） | 2025-05-15 | 同上 `/2025/0515/2025051500870_c.pdf` | 1620286e40fb7ed9 |
 | `alibaba_9988/BABA_FY2026_annual_results.pdf`（48 页，FY2025+FY2026） | 2026-05-13 | 同上 `/2026/0513/2026051300654_c.pdf` | e264c45dbc7e6fd0 |

@@ -247,23 +247,55 @@ def verify_l1(answer_set_path: Path) -> dict:
     missing_in_db: list[dict] = []
     strong = 0
     weak = 0
+    sign_flip = 0
+    visual_verified = 0
     for entry in entries:
-        value_norm = _norm_for_pdf(str(abs(entry["value"])))
-        pages = pages_of(entry["source_pdf"])
-        page_index = entry["page"] - 1
-        page_text = pages[page_index] if 0 <= page_index < len(pages) else ""
-        if value_norm not in page_text:
-            anchor_fail.append(
-                {
-                    "source_pdf": entry["source_pdf"],
-                    "page": entry["page"],
-                    "item": entry["item"],
-                    "value": entry["value"],
-                }
+        match_mode = entry.get("match_mode")
+        if match_mode == "visual-verified":
+            # 图像页无文本层：不做文本锚复验，但复核证据图 SHA（纵深防御，
+            # 构建期已 fail-closed 验过一次）；证据缺失/不一致计入锚失效。
+            import hashlib
+
+            evidence_path = (
+                Path(answer_set_path).parents[1].parent / entry.get("evidence_image", "")
             )
-        if entry.get("match_mode") == "weak":
-            weak += 1
+            digest = (
+                hashlib.sha256(evidence_path.read_bytes()).hexdigest()
+                if evidence_path.is_file()
+                else None
+            )
+            if digest != entry.get("evidence_sha256"):
+                anchor_fail.append(
+                    {
+                        "source_pdf": entry["source_pdf"],
+                        "page": entry["page"],
+                        "item": entry["item"],
+                        "value": entry["value"],
+                        "reason": "visual-verified 证据图缺失或 SHA 不一致",
+                    }
+                )
+            visual_verified += 1
         else:
+            # 锚复验按绝对值进行：亏损行允许正数披露（sign-flip 强锚），
+            # 其余模式符号已被构建期括号负数归一覆盖。
+            value_norm = _norm_for_pdf(str(abs(entry["value"])))
+            pages = pages_of(entry["source_pdf"])
+            page_index = entry["page"] - 1
+            page_text = pages[page_index] if 0 <= page_index < len(pages) else ""
+            if value_norm not in page_text:
+                anchor_fail.append(
+                    {
+                        "source_pdf": entry["source_pdf"],
+                        "page": entry["page"],
+                        "item": entry["item"],
+                        "value": entry["value"],
+                    }
+                )
+        if match_mode == "weak":
+            weak += 1
+        elif match_mode == "strong-sign-flip-loss-row":
+            sign_flip += 1
+        elif match_mode != "visual-verified":
             strong += 1
         normalized_column = COLUMN_ALIASES.get(entry["column"], entry["column"])
         key = (
@@ -293,6 +325,8 @@ def verify_l1(answer_set_path: Path) -> dict:
         "entries": total,
         "strong": strong,
         "weak": weak,
+        "sign_flip": sign_flip,
+        "visual_verified": visual_verified,
         "anchor_fail_count": len(anchor_fail),
         "value_mismatch_count": len(value_mismatch),
         "missing_in_db_count": len(missing_in_db),
@@ -366,7 +400,8 @@ def main() -> int:
         else:
             print(
                 f"L1 页级锚验证：{report['entries']} 条（strong {report['strong']} / "
-                f"weak {report['weak']}），锚失效 {report['anchor_fail_count']}，"
+                f"weak {report['weak']} / sign-flip {report['sign_flip']} / "
+                f"visual {report['visual_verified']}），锚失效 {report['anchor_fail_count']}，"
                 f"值不一致 {report['value_mismatch_count']}，未入库 {report['missing_in_db_count']}"
             )
         clean = (
