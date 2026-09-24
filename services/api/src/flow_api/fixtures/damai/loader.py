@@ -237,6 +237,18 @@ def _seed_analytics(session: Any) -> dict[str, Any]:
     """工作簿导入 → 12 个月指标快照 → 最新 AnalysisRun（全部走领域服务）。"""
 
     actor = "damai-demo-seed"
+    workbook = _release_workbook_path()
+    # 对象存储真实上传（content-addressed，幂等）：seed 链不绕过 §7 存储层。
+    # 每次 seed 都确保对象存在（修复历史半成品库也适用）；若后续步骤失败回滚，
+    # MinIO 里可能残留孤儿字节——内容寻址下无害，下次 seed 直接复用。
+    from flow_api.infrastructure.object_store import ObjectStore
+    from flow_api.infrastructure.s3_client import build_s3_client
+    from flow_api.settings import get_settings
+
+    settings = get_settings()
+    uploaded = ObjectStore(
+        client=build_s3_client(settings), bucket=settings.s3_bucket
+    ).put_immutable(workbook.read_bytes(), workbook.name)
     batch = session.scalar(
         select(AnalysisBatch).where(AnalysisBatch.name == "damai-demo-v1")
     )
@@ -244,8 +256,8 @@ def _seed_analytics(session: Any) -> dict[str, Any]:
         # 首次装载：标准工作簿走完整 IntakeService 导入链；
         # B1：批次显式绑定截止月 2026-08 的 AnalysisCycle（不依赖全库最早周期）
         cycle_id = _damai_analysis_cycle_id(session)
-        workbook = _release_workbook_path()
         stored, proposal, candidate, report = _intake_inputs(workbook)
+        assert uploaded.sha256 == stored.sha256, "上传指纹与本地摘要不一致"
         intake = IntakeService(session)
         batch = intake.create_batch("damai-demo-v1", analysis_cycle_id=cycle_id)
         source = intake.attach_source(batch.id, stored)

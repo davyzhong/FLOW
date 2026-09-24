@@ -95,6 +95,36 @@ test-statements-e2e: infra-up
 docs-check:
 	python3 scripts/check_docs.py --phase m6
 
+# ---------------------------------------------------------------------------
+# 大麦 synthetic 演示（Task C1）：stack-up 保持空环境语义，大麦走独立命令
+# ---------------------------------------------------------------------------
+.PHONY: damai-demo-build damai-demo-seed damai-demo-verify damai-demo-up
+
+DAMAI_WORK := $(shell pwd)/work/damai-demo
+
+damai-demo-build:
+	PYTHONPATH=services/api/src python3 scripts/build_damai_demo.py --output fixtures/damai --check
+	python3 scripts/build_damai_metric_coverage.py
+
+damai-demo-seed:
+	mkdir -p $(DAMAI_WORK)
+	cd services/api && $(UV) run python ../../scripts/seed_damai_demo.py --output $(DAMAI_WORK)/seed_receipt.json
+
+damai-demo-verify:
+	mkdir -p $(DAMAI_WORK)
+	cd services/api && $(UV) run python ../../scripts/verify_damai_demo.py \
+		--api-url $${DAMAI_API_URL:-http://localhost:8000} --check-storage \
+		--output $(DAMAI_WORK)/verify_receipt.json
+
+damai-demo-up:
+	$(MAKE) infra-up
+	$(COMPOSE) up -d --build --wait --wait-timeout 120 api worker web
+	$(UV) run scripts/wait_for_services.py localhost:5432 localhost:6379 localhost:9000 localhost:8000 localhost:3000
+	cd services/api && DATABASE_URL="$${DATABASE_URL:-postgresql+psycopg://flow:flow_dev_only@localhost:5432/flow}" $(UV) run alembic upgrade head
+	cd services/api && $(UV) run python ../../scripts/seed_dev_principal.py
+	$(MAKE) damai-demo-seed
+	$(MAKE) damai-demo-verify
+
 plan-views:
 	python3 scripts/documentation/plan_views.py --write
 	python3 scripts/documentation/plan_views.py --check

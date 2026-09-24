@@ -38,7 +38,7 @@ do_not_execute: true
 | B1 | 事务化整体 seed（AnalysisCycle 绑定 + 三类回滚注入 + 全对象幂等） | done（见本次提交） | 扩展 slice-2a 的 loader；freeze 注入随 B2 冻结实现补测 |
 | B2 | 调查/证据/结论/冻结报告（candidate/in_review/approved 混合 + 冻结 SHA） | done（见本次提交） | = 原 slice-2b；实际产出 2 个 Finding（5 playbook 中 2 个过阈值），6 信号映射入 receipt；freeze 故障注入已补测 |
 | B3 | 指标覆盖投影（damai 数据集 + 前端切换 + synthetic 标识） | done（见本次提交） | damai_demo_metric_coverage_v1.yaml + dataset 参数 + 前端 tab/合成标识；A2 五粒度对账一并验收 |
-| C1 | `damai-demo-build/seed/verify/up` 四命令 + 机器可读 receipt | pending | seed CLI 首次落地 |
+| C1 | `damai-demo-build/seed/verify/up` 四命令 + 机器可读 receipt | done（见本次提交） | 隔离 compose project（15432/16379/19000）双 seed 幂等 + verify 17/17，证据 work/damai-demo/ |
 | C2 | 八页面真实 E2E（含 /data 页面上传旅程） | pending | 「菜单全满」的验收关 |
 | C3 | 完整回归 + 文档刷新 + 最终 CI 闭环（completed SHA 全绿才算完成） | pending | 交付关闭 |
 
@@ -191,11 +191,11 @@ do_not_execute: true
 - Create: `scripts/tests/test_verify_damai_demo.py`
 - Modify: `Makefile`
 
-- [ ] 实现 `damai-demo-build/seed/verify/up`；`stack-up` 继续保持空环境语义。
-- [ ] verify 同时对账 manifest、数据库计数、API 响应、冻结哈希和对象存储哈希。
-- [ ] receipt 至少包含 release SHA、enterprise/cycle、batch/import、snapshots/run、findings、reports/freezes/publications 和验收结果。
-- [ ] 在干净隔离 compose project 中 seed 两次并 verify；证据写入 `work/damai-demo/`（不入 git）。
-- [ ] 提交 `feat(demo): add damai startup and verification commands` 并 push。
+- [x] 实现 `damai-demo-build/seed/verify/up`；`stack-up` 继续保持空环境语义。
+- [x] verify 同时对账 manifest、数据库计数、API 响应、冻结哈希和对象存储哈希。（manifest 含 xlsx 语义指纹；对象存储读回按语义指纹比对；API 对账双数据集 coverage）
+- [x] receipt 至少包含 release SHA、enterprise/cycle、batch/import、snapshots/run、findings、reports/freezes/publications 和验收结果。（seed receipt schema damai-demo-seed-receipt/v1 全覆盖；verify receipt 含 17 项验收结果）
+- [x] 在干净隔离 compose project 中 seed 两次并 verify；证据写入 `work/damai-demo/`（不入 git）。（damai-demo-iso project，双 seed 幂等、verify 17/17；修复发现：seed 链补齐对象存储真实上传）
+- [x] 提交 `feat(demo): add damai startup and verification commands` 并 push。
 
 ### Task C2：八页面真实 E2E
 
