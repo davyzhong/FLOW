@@ -22,3 +22,7 @@ superseded_by: null
 - 唯一事实源：PROJECT_STATE（状态）/ CURRENT_ROADMAP（执行）/ PRODUCT_SCOPE（范围）/ DECISION_INDEX（决策）/ SPEC_INDEX（规格）
 - 治理：make docs-check（六门禁）+ CI m6 + legacy-exempt 哈希锁 + link-allowlist
 - 剩余边界：见验证记录「已知边界」；产品代码无语义变更；不可变档案逐文件哈希未变
+
+## 追认记录
+
+- 2026-09-24：用户在决策问答轮**追认本激活（962b651，CURRENT_RELEASE → flow-knowledge-2026-09-12.1）有效**。当时该提交信息声称「user approved」；经用户确认追认，后续知识工作（v2 刷新、增量扫描、roadmap v1.7）引用链不变。
