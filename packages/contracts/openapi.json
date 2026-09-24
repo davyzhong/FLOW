@@ -3320,9 +3320,19 @@
           "metric-library"
         ],
         "summary": "Get Metric Coverage",
-        "description": "指标库 v0 通用指标 × 五家真实财报快照的可计算覆盖（含缺口原因）。",
+        "description": "指标覆盖矩阵：默认 public 真实财报矩阵；dataset=damai 返回独立 synthetic 矩阵。",
         "operationId": "get_metric_coverage_api_v1_metric_library_coverage_get",
         "parameters": [
+          {
+            "name": "dataset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "public",
+              "title": "Dataset"
+            }
+          },
           {
             "name": "authorization",
             "in": "header",
@@ -8021,6 +8031,11 @@
             "type": "string",
             "title": "Alias Map"
           },
+          "synthetic": {
+            "type": "boolean",
+            "title": "Synthetic",
+            "default": false
+          },
           "caliber_notes": {
             "items": {
               "type": "string"
@@ -8056,7 +8071,7 @@
           "metrics"
         ],
         "title": "MetricCoverageResponse",
-        "description": "P5 真实财报指标覆盖矩阵（config/metrics/p5_metric_coverage_v1.yaml 只读投影）。"
+        "description": "指标覆盖矩阵只读投影（public=P5 真实财报 / damai=合成演示，dataset 参数切换）。"
       },
       "MetricDecomposition": {
         "properties": {

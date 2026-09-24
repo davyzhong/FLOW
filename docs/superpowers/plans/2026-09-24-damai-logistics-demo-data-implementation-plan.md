@@ -37,6 +37,7 @@ do_not_execute: true
 | A4 | 重建静态发行包 + 消除漂移（manifest 血缘字段、README frontmatter） | done（见本次提交） | manifest 新增 lineage/dimension_coverage/fiscal_year_summary/planted_events；--check PASS |
 | B1 | 事务化整体 seed（AnalysisCycle 绑定 + 三类回滚注入 + 全对象幂等） | done（见本次提交） | 扩展 slice-2a 的 loader；freeze 注入随 B2 冻结实现补测 |
 | B2 | 调查/证据/结论/冻结报告（candidate/in_review/approved 混合 + 冻结 SHA） | done（见本次提交） | = 原 slice-2b；实际产出 2 个 Finding（5 playbook 中 2 个过阈值），6 信号映射入 receipt；freeze 故障注入已补测 |
+| B3 | 指标覆盖投影（damai 数据集 + 前端切换 + synthetic 标识） | done（见本次提交） | damai_demo_metric_coverage_v1.yaml + dataset 参数 + 前端 tab/合成标识；A2 五粒度对账一并验收 |
 | C1 | `damai-demo-build/seed/verify/up` 四命令 + 机器可读 receipt | pending | seed CLI 首次落地 |
 | C2 | 八页面真实 E2E（含 /data 页面上传旅程） | pending | 「菜单全满」的验收关 |
 | C3 | 完整回归 + 文档刷新 + 最终 CI 闭环（completed SHA 全绿才算完成） | pending | 交付关闭 |
@@ -99,7 +100,7 @@ do_not_execute: true
 - [x] 生成 24 月×4 业务单元×核心科目财务实际，逐月对账经营明细。
 - [x] 生成 12 月×4 业务单元×4 客群×8 产品×7 类原始预算行，以及 24×40×5 账龄数据。
 - [x] 预算引擎投影只使用 `REVENUE`/`DIRECT_COST`/`OPERATING_PROFIT`/`OPERATING_CASH_FLOW`；3 类成本汇总为 `DIRECT_COST`，毛利由引擎派生，期间费用标记为未执行的明细 coverage gap。
-- [ ] 用真实 `MetricCalculator`/快照断言 `REVENUE`/`DIRECT_COST` 在 total、organization、segment、product、segment×product 五种粒度与 manifest 一致；`OPERATING_PROFIT`/`OPERATING_CASH_FLOW` 仅在合同支持的 total/organization 粒度对账；三成本不漏算/重算。（顺延至 B3 指标覆盖切片一并验收）
+- [x] 用真实 `MetricCalculator`/快照断言 `REVENUE`/`DIRECT_COST` 在 total、organization、segment、product、segment×product 五种粒度与 manifest 一致；`OPERATING_PROFIT`/`OPERATING_CASH_FLOW` 仅在合同支持的 total/organization 粒度对账；三成本不漏算/重算。（已在 B3 验收：tests/fixtures/test_damai_metric_grain.py 五粒度对账全绿；OCF actual 因工作簿合同仅 7 科目如实缺席，budget 侧对账）
 - [x] 保留六类故意事件，但影响必须能追溯到具体客户/产品/区域/月。
 - [x] 运行 A1 和既有 data-contract/metrics 测试，提交 `fix(fixtures): expand damai canonical detail coverage` 并 push。
 
@@ -175,10 +176,10 @@ do_not_execute: true
 - Test: `services/api/tests/api/test_metric_library.py`
 - Test: `apps/web/components/metric-library/metric-coverage-section.test.tsx`
 
-- [ ] API 默认保持 public 真实财报矩阵，`dataset=damai` 返回独立 synthetic 矩阵。
-- [ ] 前端可切换两个数据集，大麦始终显示“合成演示数据”标识。
-- [ ] 覆盖矩阵只展示真实可计算项；其余保留结构化 missing reason，不用 0 补值。
-- [ ] 提交 `feat(metrics): expose damai synthetic coverage dataset` 并 push。
+- [x] API 默认保持 public 真实财报矩阵，`dataset=damai` 返回独立 synthetic 矩阵。（未知 dataset → 400 coverage_dataset_unknown）
+- [x] 前端可切换两个数据集，大麦始终显示“合成演示数据”标识。（tab 切换 + synthetic badge，组件测试锁定）
+- [x] 覆盖矩阵只展示真实可计算项；其余保留结构化 missing reason，不用 0 补值。（FY2025 22/40、FY2026 25/40，缺口即 bs./is./cf./mpm. 取数原因；引擎毛利率与 manifest 两路径自检一致）
+- [x] 提交 `feat(metrics): expose damai synthetic coverage dataset` 并 push。
 
 ## 5. 阶段 C：一键启动和系统级验收
 

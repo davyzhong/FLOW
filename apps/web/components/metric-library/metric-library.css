@@ -778,3 +778,36 @@
   color: var(--rep-muted);
   overflow-wrap: anywhere;
 }
+
+.ml-coverage__tabs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.ml-coverage__tab {
+  border: 1px solid var(--rep-line);
+  background: var(--rep-card);
+  color: var(--rep-slate);
+  border-radius: 999px;
+  padding: 4px 14px;
+  font-size: 12.5px;
+  cursor: pointer;
+}
+
+.ml-coverage__tab--active {
+  background: var(--rep-ok-soft);
+  color: var(--rep-ok);
+  border-color: var(--rep-ok);
+  font-weight: 600;
+}
+
+.ml-coverage__synthetic-badge {
+  border: 1px dashed var(--rep-warn, #b45309);
+  color: var(--rep-warn, #b45309);
+  border-radius: 999px;
+  padding: 3px 12px;
+  font-size: 12px;
+  font-weight: 600;
+}

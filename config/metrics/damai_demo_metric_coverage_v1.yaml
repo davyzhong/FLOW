@@ -1,0 +1,425 @@
+dataset_id: flow.damai_demo_metric_coverage.v1
+title: 大麦物流 synthetic 演示指标覆盖矩阵
+generator: scripts/build_damai_metric_coverage.py
+generated_at: '2026-09-24T18:38:14+00:00'
+facts_source: fixtures/damai/statements/（发行版合成财报）
+alias_map: config/statements/item_alias_map_v1.yaml#damai_syn
+synthetic: true
+caliber_notes:
+- 本矩阵为 synthetic 演示数据，非任何真实公司财报
+- avg 为（期末+期初）/2、prior 为上年同期列；FY2025 的 prior 列为发行版自带比较期
+- 事实仅含三张主表的已映射行；权益变动表等衍生表不重复取数
+- 绝对额指标已按百万元换算为亿元展示
+- 缺口即真实缺口：缺少的事实输入原样标注，不以 0 补值
+snapshots:
+- company: damai_syn
+  period: FY2025
+  unit: 百万元
+  computable: 22
+  total: 40
+- company: damai_syn
+  period: FY2026
+  unit: 百万元
+  computable: 25
+  total: 40
+metrics:
+- metric_code: current_ratio
+  name: 流动比率
+  unit: 倍
+  cells:
+    damai_syn FY2025:
+      display: '0.79'
+      missing: null
+    damai_syn FY2026:
+      display: '0.81'
+      missing: null
+- metric_code: quick_ratio
+  name: 速动比率
+  unit: 倍
+  cells:
+    damai_syn FY2025:
+      display: '0.70'
+      missing: null
+    damai_syn FY2026:
+      display: '0.73'
+      missing: null
+- metric_code: cash_ratio
+  name: 现金比率
+  unit: 倍
+  cells:
+    damai_syn FY2025:
+      display: '0.14'
+      missing: null
+    damai_syn FY2026:
+      display: '0.16'
+      missing: null
+- metric_code: ocf_current_liab_ratio
+  name: 现金流量比率
+  unit: 倍
+  cells:
+    damai_syn FY2025:
+      display: '0.14'
+      missing: null
+    damai_syn FY2026:
+      display: '0.13'
+      missing: null
+- metric_code: debt_asset_ratio
+  name: 资产负债率
+  unit: '%'
+  cells:
+    damai_syn FY2025:
+      display: 91.1%
+      missing: null
+    damai_syn FY2026:
+      display: 89.9%
+      missing: null
+- metric_code: debt_equity_ratio
+  name: 产权比率
+  unit: 倍
+  cells:
+    damai_syn FY2025:
+      display: '10.27'
+      missing: null
+    damai_syn FY2026:
+      display: '8.86'
+      missing: null
+- metric_code: interest_coverage
+  name: 利息保障倍数
+  unit: 倍
+  cells:
+    damai_syn FY2025:
+      display: null
+      missing: is.interest_exp(cur)
+    damai_syn FY2026:
+      display: null
+      missing: is.interest_exp(cur)
+- metric_code: ebitda_interest_coverage
+  name: EBITDA 利息倍数
+  unit: 倍
+  cells:
+    damai_syn FY2025:
+      display: null
+      missing: is.interest_exp(cur)
+    damai_syn FY2026:
+      display: null
+      missing: is.interest_exp(cur)
+- metric_code: total_debt_capitalization
+  name: 全部债务资本化比率
+  unit: '%'
+  cells:
+    damai_syn FY2025:
+      display: null
+      missing: bs.short_debt(end)
+    damai_syn FY2026:
+      display: null
+      missing: bs.short_debt(end)
+- metric_code: long_debt_capitalization
+  name: 长期债务资本化比率
+  unit: '%'
+  cells:
+    damai_syn FY2025:
+      display: null
+      missing: bs.long_debt(end)
+    damai_syn FY2026:
+      display: null
+      missing: bs.long_debt(end)
+- metric_code: ar_turnover
+  name: 应收账款周转率
+  unit: 次
+  cells:
+    damai_syn FY2025:
+      display: '2.86'
+      missing: null
+    damai_syn FY2026:
+      display: '3.09'
+      missing: null
+- metric_code: dso_days
+  name: 应收账款周转天数
+  unit: 天
+  cells:
+    damai_syn FY2025:
+      display: '126'
+      missing: null
+    damai_syn FY2026:
+      display: '116'
+      missing: null
+- metric_code: inventory_turnover
+  name: 存货周转率
+  unit: 次
+  cells:
+    damai_syn FY2025:
+      display: '14.92'
+      missing: null
+    damai_syn FY2026:
+      display: '16.16'
+      missing: null
+- metric_code: dio_days
+  name: 存货周转天数
+  unit: 天
+  cells:
+    damai_syn FY2025:
+      display: '24'
+      missing: null
+    damai_syn FY2026:
+      display: '22'
+      missing: null
+- metric_code: ap_turnover
+  name: 应付账款周转率
+  unit: 次
+  cells:
+    damai_syn FY2025:
+      display: null
+      missing: bs.ap(end)
+    damai_syn FY2026:
+      display: null
+      missing: bs.ap(end)
+- metric_code: dpo_days
+  name: 应付账款周转天数
+  unit: 天
+  cells:
+    damai_syn FY2025:
+      display: null
+      missing: bs.ap(end)
+    damai_syn FY2026:
+      display: null
+      missing: bs.ap(end)
+- metric_code: current_asset_turnover
+  name: 流动资产周转率
+  unit: 次
+  cells:
+    damai_syn FY2025:
+      display: '1.85'
+      missing: null
+    damai_syn FY2026:
+      display: '1.91'
+      missing: null
+- metric_code: fixed_asset_turnover
+  name: 固定资产周转率
+  unit: 次
+  cells:
+    damai_syn FY2025:
+      display: '1.82'
+      missing: null
+    damai_syn FY2026:
+      display: '1.97'
+      missing: null
+- metric_code: total_asset_turnover
+  name: 总资产周转率
+  unit: 次
+  cells:
+    damai_syn FY2025:
+      display: '0.92'
+      missing: null
+    damai_syn FY2026:
+      display: '0.97'
+      missing: null
+- metric_code: gross_margin
+  name: 毛利率
+  unit: '%'
+  cells:
+    damai_syn FY2025:
+      display: 10.5%
+      missing: null
+    damai_syn FY2026:
+      display: 10.5%
+      missing: null
+- metric_code: operating_margin
+  name: 营业利润率
+  unit: '%'
+  cells:
+    damai_syn FY2025:
+      display: 2.9%
+      missing: null
+    damai_syn FY2026:
+      display: 2.9%
+      missing: null
+- metric_code: net_margin
+  name: 净利率
+  unit: '%'
+  cells:
+    damai_syn FY2025:
+      display: 2.1%
+      missing: null
+    damai_syn FY2026:
+      display: 2.1%
+      missing: null
+- metric_code: roe
+  name: 净资产收益率
+  unit: '%'
+  cells:
+    damai_syn FY2025:
+      display: 7.8%
+      missing: null
+    damai_syn FY2026:
+      display: 21.8%
+      missing: null
+- metric_code: total_assets_return
+  name: 总资产报酬率
+  unit: '%'
+  cells:
+    damai_syn FY2025:
+      display: null
+      missing: is.interest_exp(cur)
+    damai_syn FY2026:
+      display: null
+      missing: is.interest_exp(cur)
+- metric_code: roce
+  name: 总资本收益率
+  unit: '%'
+  cells:
+    damai_syn FY2025:
+      display: null
+      missing: is.interest_exp(cur)
+    damai_syn FY2026:
+      display: null
+      missing: is.interest_exp(cur)
+- metric_code: cost_expense_profit_ratio
+  name: 成本费用利润率
+  unit: '%'
+  cells:
+    damai_syn FY2025:
+      display: 3.0%
+      missing: null
+    damai_syn FY2026:
+      display: 3.0%
+      missing: null
+- metric_code: equity_multiplier
+  name: 权益乘数
+  unit: 倍
+  cells:
+    damai_syn FY2025:
+      display: '3.97'
+      missing: null
+    damai_syn FY2026:
+      display: '10.45'
+      missing: null
+- metric_code: ebitda
+  name: EBITDA
+  unit: 元
+  cells:
+    damai_syn FY2025:
+      display: null
+      missing: is.interest_exp(cur)
+    damai_syn FY2026:
+      display: null
+      missing: is.interest_exp(cur)
+- metric_code: adjusted_ebitda
+  name: 调整后 EBITDA
+  unit: 元
+  cells:
+    damai_syn FY2025:
+      display: null
+      missing: is.interest_exp(cur)
+    damai_syn FY2026:
+      display: null
+      missing: is.interest_exp(cur)
+- metric_code: ebitda_margin
+  name: EBITDA 利润率
+  unit: '%'
+  cells:
+    damai_syn FY2025:
+      display: null
+      missing: is.interest_exp(cur)
+    damai_syn FY2026:
+      display: null
+      missing: is.interest_exp(cur)
+- metric_code: revenue_growth
+  name: 营业收入增长率
+  unit: '%'
+  cells:
+    damai_syn FY2025:
+      display: null
+      missing: is.revenue(prev_yoy)
+    damai_syn FY2026:
+      display: 18.0%
+      missing: null
+- metric_code: net_profit_growth
+  name: 净利润增长率
+  unit: '%'
+  cells:
+    damai_syn FY2025:
+      display: null
+      missing: is.net_profit(prev_yoy)
+    damai_syn FY2026:
+      display: 18.1%
+      missing: null
+- metric_code: operating_profit_growth
+  name: 营业利润增长率
+  unit: '%'
+  cells:
+    damai_syn FY2025:
+      display: null
+      missing: is.operating_profit(prev_yoy)
+    damai_syn FY2026:
+      display: 18.1%
+      missing: null
+- metric_code: total_asset_growth
+  name: 总资产增长率
+  unit: '%'
+  cells:
+    damai_syn FY2025:
+      display: 3.6%
+      missing: null
+    damai_syn FY2026:
+      display: 19.7%
+      missing: null
+- metric_code: equity_growth
+  name: 净资产增长率
+  unit: '%'
+  cells:
+    damai_syn FY2025:
+      display: -78.2%
+      missing: null
+    damai_syn FY2026:
+      display: 36.8%
+      missing: null
+- metric_code: cash_revenue_ratio
+  name: 现金收入比
+  unit: '%'
+  cells:
+    damai_syn FY2025:
+      display: null
+      missing: cf.cash_from_sales(cur)
+    damai_syn FY2026:
+      display: null
+      missing: cf.cash_from_sales(cur)
+- metric_code: ocf_net_profit_ratio
+  name: 盈利现金比率
+  unit: 倍
+  cells:
+    damai_syn FY2025:
+      display: '4.58'
+      missing: null
+    damai_syn FY2026:
+      display: '4.23'
+      missing: null
+- metric_code: free_cash_flow
+  name: 自由现金流
+  unit: 元
+  cells:
+    damai_syn FY2025:
+      display: null
+      missing: cf.capex(cur)
+    damai_syn FY2026:
+      display: null
+      missing: cf.capex(cur)
+- metric_code: cash_short_debt_ratio
+  name: 现金短期债务比
+  unit: 倍
+  cells:
+    damai_syn FY2025:
+      display: null
+      missing: bs.short_debt(end)
+    damai_syn FY2026:
+      display: null
+      missing: bs.short_debt(end)
+- metric_code: debt_ebitda
+  name: 全部债务 / EBITDA
+  unit: 倍
+  cells:
+    damai_syn FY2025:
+      display: null
+      missing: bs.short_debt(end)
+    damai_syn FY2026:
+      display: null
+      missing: bs.short_debt(end)

@@ -221,7 +221,7 @@ class CoverageMetricRow(BaseModel):
 
 
 class MetricCoverageResponse(BaseModel):
-    """P5 真实财报指标覆盖矩阵（config/metrics/p5_metric_coverage_v1.yaml 只读投影）。"""
+    """指标覆盖矩阵只读投影（public=P5 真实财报 / damai=合成演示，dataset 参数切换）。"""
 
     dataset_id: str
     title: str
@@ -229,6 +229,7 @@ class MetricCoverageResponse(BaseModel):
     generated_at: str
     facts_source: str
     alias_map: str
+    synthetic: bool = False
     caliber_notes: list[str]
     snapshots: list[CoverageSnapshot]
     metrics: list[CoverageMetricRow]

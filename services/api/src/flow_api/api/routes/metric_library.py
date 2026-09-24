@@ -574,11 +574,20 @@ def retire_metric_change(
     return _entry_action_response(entry)
 
 
+COVERAGE_DATASET_FILES: dict[str, str] = {
+    "public": "p5_metric_coverage_v1.yaml",
+    "damai": "damai_demo_metric_coverage_v1.yaml",
+}
+
+
 @lru_cache
-def _coverage_payload() -> MetricCoverageResponse | None:
-    """P5 真实财报指标覆盖矩阵：生成期由 p5_query_facts.py 计算并落盘，API 只读投影。"""
+def _coverage_payload(dataset: str = "public") -> MetricCoverageResponse | None:
+    """覆盖矩阵只读投影：生成期落盘 yaml，API 不重复计算（按数据集缓存）。"""
+    filename = COVERAGE_DATASET_FILES.get(dataset)
+    if filename is None:
+        return None
     root = resolve_metric_library_root()
-    path = root / CONFIG_ROOT / "p5_metric_coverage_v1.yaml"
+    path = root / CONFIG_ROOT / filename
     if not path.is_file():
         return None
     return MetricCoverageResponse(**yaml.safe_load(path.read_text(encoding="utf-8")))
@@ -598,9 +607,17 @@ def _coverage_payload() -> MetricCoverageResponse | None:
         )
     ],
 )
-def get_metric_coverage() -> MetricCoverageResponse:
-    """指标库 v0 通用指标 × 五家真实财报快照的可计算覆盖（含缺口原因）。"""
-    payload = _coverage_payload()
+def get_metric_coverage(dataset: str = "public") -> MetricCoverageResponse:
+    """指标覆盖矩阵：默认 public 真实财报矩阵；dataset=damai 返回独立 synthetic 矩阵。"""
+    if dataset not in COVERAGE_DATASET_FILES:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=ErrorDetail(
+                code="coverage_dataset_unknown",
+                message=f"未知覆盖数据集：{dataset}（可选：{', '.join(COVERAGE_DATASET_FILES)}）",
+            ).model_dump(mode="json"),
+        )
+    payload = _coverage_payload(dataset)
     if payload is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

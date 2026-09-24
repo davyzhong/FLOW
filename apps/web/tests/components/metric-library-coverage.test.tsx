@@ -50,6 +50,41 @@ const COVERAGE = {
   ],
 };
 
+const DAMAI_COVERAGE = {
+  dataset_id: "flow.damai_demo_metric_coverage.v1",
+  title: "大麦物流 synthetic 演示指标覆盖矩阵",
+  generator: "scripts/build_damai_metric_coverage.py",
+  generated_at: "2026-09-25T00:00:00",
+  facts_source: "fixtures/damai/statements/（发行版合成财报）",
+  alias_map: "config/statements/item_alias_map_v1.yaml#damai_syn",
+  synthetic: true,
+  caliber_notes: ["本矩阵为 synthetic 演示数据，非任何真实公司财报"],
+  snapshots: [
+    { company: "damai_syn", period: "FY2025", unit: "百万元", computable: 22, total: 40 },
+    { company: "damai_syn", period: "FY2026", unit: "百万元", computable: 25, total: 40 },
+  ],
+  metrics: [
+    {
+      metric_code: "gross_margin",
+      name: "毛利率",
+      unit: "%",
+      cells: {
+        "damai_syn FY2025": { display: "10.5%", missing: null },
+        "damai_syn FY2026": { display: "10.5%", missing: null },
+      },
+    },
+    {
+      metric_code: "dso",
+      name: "应收账款周转天数",
+      unit: "天",
+      cells: {
+        "damai_syn FY2025": { display: null, missing: "bs.ar(open)" },
+        "damai_syn FY2026": { display: "45", missing: null },
+      },
+    },
+  ],
+};
+
 function stubFetch(log: string[]) {
   return vi.stubGlobal(
     "fetch",
@@ -63,6 +98,9 @@ function stubFetch(log: string[]) {
             headers: { "content-type": "application/json" },
           }),
         );
+      if (url.includes("/api/v1/metric-library/coverage?dataset=damai")) {
+        return respond(DAMAI_COVERAGE);
+      }
       if (url.endsWith("/api/v1/metric-library/coverage")) return respond(COVERAGE);
       if (url.endsWith("/api/v1/metric-library")) return respond(LIBRARY);
       return respond({ detail: { code: "not_found", message: "?" } }, 404);
@@ -91,6 +129,39 @@ describe("MetricLibraryApp 真实财报覆盖矩阵（P5）", () => {
     expect(screen.getByText("22/40")).toBeInTheDocument();
     expect(screen.getByText(/flow\.p5_metric_coverage\.v1/)).toBeInTheDocument();
     expect(log.some((url) => url.endsWith("/api/v1/metric-library/coverage"))).toBe(true);
+  });
+
+  it("切换到大麦演示数据集后请求 dataset=damai 并显示合成标识", async () => {
+    const log: string[] = [];
+    stubFetch(log);
+
+    render(<MetricLibraryApp />);
+    fireEvent.click(await screen.findByRole("button", { name: "真实财报覆盖" }));
+    expect(await screen.findByText(/flow\.p5_metric_coverage\.v1/)).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("tab", { name: "大麦演示" }));
+
+    expect(await screen.findByText(/flow\.damai_demo_metric_coverage\.v1/)).toBeInTheDocument();
+    expect(screen.getByText("合成演示数据")).toBeInTheDocument();
+    expect(screen.getAllByText("大麦物流").length).toBeGreaterThan(0);
+    expect(screen.getByText("25/40")).toBeInTheDocument();
+    expect(screen.getByText("缺 bs.ar(open)")).toBeInTheDocument();
+    expect(log.some((url) => url.includes("dataset=damai"))).toBe(true);
+    expect(screen.queryByText("阿里巴巴")).not.toBeInTheDocument();
+  });
+
+  it("切回真实财报后合成标识消失", async () => {
+    const log: string[] = [];
+    stubFetch(log);
+
+    render(<MetricLibraryApp />);
+    fireEvent.click(await screen.findByRole("button", { name: "真实财报覆盖" }));
+    fireEvent.click(await screen.findByRole("tab", { name: "大麦演示" }));
+    expect(await screen.findByText("合成演示数据")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("tab", { name: "真实财报" }));
+    expect(await screen.findByText(/flow\.p5_metric_coverage\.v1/)).toBeInTheDocument();
+    expect(screen.queryByText("合成演示数据")).not.toBeInTheDocument();
   });
 
   it("覆盖接口失败时给出错误与重试", async () => {

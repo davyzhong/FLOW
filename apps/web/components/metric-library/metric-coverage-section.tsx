@@ -13,6 +13,7 @@ import { PageState } from "../ui/page-state";
 const COMPANY_INITIALS: Record<string, string> = {
   alibaba_9988: "阿",
   cainiao: "菜",
+  damai_syn: "麦",
   jd_logistics_2618: "京",
   sf_002352: "顺",
   tencent_0700: "腾",
@@ -21,10 +22,18 @@ const COMPANY_INITIALS: Record<string, string> = {
 const COVERAGE_COMPANY_NAMES: Record<string, string> = {
   alibaba_9988: "阿里巴巴",
   cainiao: "菜鸟",
+  damai_syn: "大麦物流",
   jd_logistics_2618: "京东物流",
   sf_002352: "顺丰控股",
   tencent_0700: "腾讯控股",
 };
+
+type CoverageDataset = "public" | "damai";
+
+const DATASET_TABS: { key: CoverageDataset; label: string }[] = [
+  { key: "public", label: "真实财报" },
+  { key: "damai", label: "大麦演示" },
+];
 
 function coverageGrade(ratio: number): { label: string; tier: "a-plus" | "a" | "b-plus" | "b" | "c" } {
   if (ratio >= 0.9) return { label: "A+", tier: "a-plus" };
@@ -65,10 +74,11 @@ function coverageCellClass(cell: MetricCoverageCell | undefined): string {
 
 function CoverageSection() {
   const [state, setState] = useState<CoverageLoadState>({ kind: "loading" });
+  const [dataset, setDataset] = useState<CoverageDataset>("public");
 
-  const load = useCallback(() => {
+  const load = useCallback((target: CoverageDataset) => {
     const controller = new AbortController();
-    metricLibraryApi.getCoverage(controller.signal).then(
+    metricLibraryApi.getCoverage(controller.signal, target).then(
       (coverage) => setState({ kind: "loaded", coverage }),
       (error: unknown) => {
         if (controller.signal.aborted) return;
@@ -82,14 +92,22 @@ function CoverageSection() {
   }, []);
 
   useEffect(() => {
-    const controller = load();
+    const controller = load(dataset);
     return () => controller.abort();
-  }, [load]);
+  }, [load, dataset]);
 
   const retry = useCallback(() => {
     setState({ kind: "loading" });
-    load();
-  }, [load]);
+    load(dataset);
+  }, [load, dataset]);
+
+  const switchDataset = useCallback((target: CoverageDataset) => {
+    setDataset((current) => {
+      if (current === target) return current;
+      setState({ kind: "loading" });
+      return target;
+    });
+  }, []);
 
   if (state.kind === "loading") {
     return <PageState status="loading" message="正在读取真实财报覆盖矩阵…" />;
@@ -112,6 +130,8 @@ function CoverageSection() {
   const overallRatio = totalCells > 0 ? totalComputable / totalCells : 0;
   const best = [...snapshots].sort((a, b) => (b.computable / b.total) - (a.computable / a.total))[0];
   const missCount = totalCells - totalComputable;
+  const companyCount = new Set(snapshots.map((s) => s.company)).size;
+  const isSynthetic = coverage.synthetic === true;
   // 行级平均：用于给指标打覆盖等级
   const rowGrades = coverage.metrics.map((metric) => {
     const filled = snapshots.filter((s) => {
@@ -124,16 +144,41 @@ function CoverageSection() {
   const worstRow = [...rowGrades].sort((a, b) => a.ratio - b.ratio)[0];
 
   return (
-    <section className="ml-coverage" aria-label="真实财报指标覆盖矩阵">
+    <section className="ml-coverage" aria-label="指标覆盖矩阵">
       <header className="ml-hero ml-hero--compact">
-        <div className="ml-hero__kicker">真实财报 · 反向解析</div>
+        <div className="ml-hero__kicker">
+          {isSynthetic ? "synthetic 演示 · 大麦物流" : "真实财报 · 反向解析"}
+        </div>
         <h1 className="ml-hero__title">
           指标覆盖<em>矩阵</em>
         </h1>
+        <div className="ml-coverage__tabs" role="tablist" aria-label="覆盖数据集切换">
+          {DATASET_TABS.map((tab) => (
+            <button
+              key={tab.key}
+              type="button"
+              role="tab"
+              aria-selected={dataset === tab.key}
+              className={
+                dataset === tab.key
+                  ? "ml-coverage__tab ml-coverage__tab--active"
+                  : "ml-coverage__tab"
+              }
+              onClick={() => switchDataset(tab.key)}
+            >
+              {tab.label}
+            </button>
+          ))}
+          {isSynthetic ? (
+            <span className="ml-coverage__synthetic-badge" role="note">
+              合成演示数据
+            </span>
+          ) : null}
+        </div>
         <p className="ml-hero__lede">
           {coverage.title}（<code>{coverage.dataset_id}</code>）：
           通用 {coverage.metrics.length} 指标 × {snapshots.length} 个公司期间快照；
-          数值来自 P5 反向解析事实库（{coverage.facts_source}），
+          数值来自 {coverage.facts_source}，
           口径映射见 {coverage.alias_map}，由 {coverage.generator} 生成。
         </p>
       </header>
@@ -146,7 +191,7 @@ function CoverageSection() {
             <p className="ml-kpi__value">
               {snapshots.length}<small> 个</small>
             </p>
-            <p className="ml-kpi__foot">5 家公司 · 15 个期间</p>
+            <p className="ml-kpi__foot">{companyCount} 家公司 · {snapshots.length} 个期间</p>
           </div>
         </li>
         <li className="ml-kpi">
@@ -295,8 +340,9 @@ function CoverageSection() {
       </div>
 
       <p className="ml-muted">
-        覆盖详情与逐格取数说明见 docs/implementation/p5/metric_coverage_matrix.md；
-        重新生成：python scripts/p5_query_facts.py。
+        {isSynthetic
+          ? "本矩阵为 synthetic 演示数据：重新生成 python scripts/build_damai_metric_coverage.py；真实财报矩阵请切换到「真实财报」。"
+          : "覆盖详情与逐格取数说明见 docs/implementation/p5/metric_coverage_matrix.md；重新生成：python scripts/p5_query_facts.py。"}
       </p>
     </section>
   );
