@@ -1,3 +1,15 @@
+---
+doc_id: FLOW-GOV-ORACLE-REGISTER-001
+title: 标准答案（Oracle）登记与留出冻结协议
+doc_type: governance
+status: current
+version: 1.1
+created_at: 2026-09-07
+updated_at: 2026-09-24
+owner: FLOW
+applies_to: repository
+---
+
 # 标准答案（Oracle）登记与留出冻结协议
 
 > 依据：P00（校准工程基线与独立验收准备）、C10（有文件≠独立留出）、

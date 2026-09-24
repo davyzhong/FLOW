@@ -1,3 +1,15 @@
+---
+doc_id: FLOW-PLAN-EXECUTION-TODO
+title: 执行待办清单（唯一活跃 TODO）
+doc_type: navigation
+status: current
+version: 1.0
+created_at: 2026-09-24
+updated_at: 2026-09-24
+owner: FLOW
+applies_to: repository
+---
+
 # 执行待办清单（唯一活跃 TODO）
 
 - doc_id: FLOW-PLAN-EXECUTION-TODO

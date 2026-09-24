@@ -1,3 +1,15 @@
+---
+doc_id: FLOW-GOV-SECURITY-001
+title: 安全策略（SECURITY）
+doc_type: governance
+status: current
+version: 1.0
+created_at: 2026-09-23
+updated_at: 2026-09-23
+owner: FLOW
+applies_to: repository
+---
+
 # 安全策略（SECURITY）
 
 **请不要通过公开 Issue 报告安全漏洞。**

@@ -2,11 +2,14 @@
 doc_id: FLOW-REV-DAMAI-DATA-20260924
 title: FLOW 项目完成度与大麦物流全量演示数据就绪度审查
 doc_type: review
-status: current
+status: open
 version: 1.0
 created_at: 2026-09-24
 updated_at: 2026-09-24
+last_reviewed_at: 2026-09-24
 owner: FLOW
+subject_ref: main@63f99b2
+findings: [strategic-completion-50-60, no-one-click-demo-loader, internal-workbench-25-35, c-level-exit-missing-holdout-eval, four-level-validation-not-started]
 applies_to: repository
 ---
 
