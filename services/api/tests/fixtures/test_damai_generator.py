@@ -138,3 +138,68 @@ def test_validate_damai_package_passes_on_generated_package() -> None:
     result = validate_damai_package(pkg)
     assert result["valid"] is True
     assert result["invariant_codes"] == []
+
+
+# ---------------------------------------------------------------------------
+# Task A1 红灯：生成器必须产出明细级事实（规格 §3.3）
+# ---------------------------------------------------------------------------
+
+
+def test_operating_actual_is_customer_product_detail_not_aggregate() -> None:
+    pkg = build_damai_package()
+    rows = pkg["monthly_facts"]["operating_actual"]
+    assert len(rows) == 1920, f"经营明细必须 1920 条，实际 {len(rows)}"
+    for row in rows:
+        assert row["customer_id"] != "AGGREGATE"
+        assert row["product"] != "AGGREGATE"
+        assert row["customer_id"].startswith("DM-CUST-")
+        assert row["product"].startswith("P-")
+
+
+def test_budget_covers_seven_raw_lines_per_cell() -> None:
+    pkg = build_damai_package()
+    rows = pkg["monthly_facts"]["budget"]
+    assert len(rows) == 10752, f"预算必须 10752 条，实际 {len(rows)}"
+    cell_lines: dict[tuple, set] = {}
+    for row in rows:
+        key = (row["month"], row["business_unit"], row["customer_segment"], row["product"])
+        cell_lines.setdefault(key, set()).add(row["account"])
+    assert len(cell_lines) == 12 * 4 * 4 * 8
+    required = {
+        "REVENUE", "WAREHOUSING_COST", "TRANSPORTATION_COST", "OTHER_DIRECT_COST",
+        "OPERATING_EXPENSE", "OPERATING_PROFIT", "OPERATING_CASH_FLOW",
+    }
+    for key, lines in cell_lines.items():
+        assert lines == required, f"{key} 预算行不齐: {required - lines}"
+
+
+def test_ar_aging_is_per_customer_five_buckets_24_months() -> None:
+    pkg = build_damai_package()
+    rows = pkg["monthly_facts"]["ar_aging"]
+    assert len(rows) == 4800, f"AR 必须 4800 条，实际 {len(rows)}"
+    months = {r["month"] for r in rows}
+    assert len(months) == 24, "同比期 AR 不得缺失"
+    cells: dict[tuple, set] = {}
+    for row in rows:
+        cells.setdefault((row["month"], row["customer_id"]), set()).add(row["bucket"])
+    assert len(cells) == 24 * 40
+    for key, buckets in cells.items():
+        assert buckets == {"current", "1-30", "31-60", "61-90", "90+"}, key
+
+
+def test_planted_events_traceable_to_detail_records() -> None:
+    """六类植入事件的影响必须能追溯到具体客户/产品/区域/月。"""
+    pkg = build_damai_package()
+    rows = pkg["monthly_facts"]["operating_actual"]
+    # E3：两个大客户（DM-CUST-007 / DM-CUST-019）后期账龄恶化——
+    # 明细级 AR 必须能把恶化定位到具体客户
+    ar = pkg["monthly_facts"]["ar_aging"]
+    late = [r for r in ar if r["month"] >= "2026-03" and r["bucket"] in ("31-60", "61-90", "90+")
+            and r["customer_id"] in ("DM-CUST-007", "DM-CUST-019")]
+    assert late, "E3 恶化必须体现在明细 AR 行上"
+    # E4：某业务单元实际收入低于预算——明细级可比（同月同单元）
+    #（数值由 A2 确定性参数保证；此处仅断言明细粒度存在可比键）
+    budget_keys = {(r["month"], r["business_unit"]) for r in pkg["monthly_facts"]["budget"]}
+    actual_units = {r["business_unit"] for r in rows if r["month"] >= "2025-09"}
+    assert len(actual_units) == 4
+    assert budget_keys, "预算必须带业务单元键以支持 E4 单元级对比"

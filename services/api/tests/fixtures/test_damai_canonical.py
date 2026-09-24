@@ -162,3 +162,144 @@ class ReleaseBuildTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+# ---------------------------------------------------------------------------
+# Task A1 红灯：全量数据合同（规格 §3.3 / 计划 §6 验收下限）
+# 明细级 1,920 经营 / 10,752 预算 / 4,800 AR；禁止 *-AGG / R-ALL 冒充明细。
+# ---------------------------------------------------------------------------
+
+AGG_CODES = {"DM-AGG", "P-AGG", "R-ALL"}
+BUDGET_RAW_LINE_ACCOUNTS = (
+    "REVENUE",
+    "WAREHOUSING_COST",
+    "TRANSPORTATION_COST",
+    "OTHER_DIRECT_COST",
+    "OPERATING_EXPENSE",
+    "OPERATING_PROFIT",
+    "OPERATING_CASH_FLOW",
+)
+AR_FIVE_BUCKETS = ("current", "1-30", "31-60", "61-90", "90+")
+
+
+class FullDimensionContractTests(unittest.TestCase):
+    """规格 §3.3 可导入粒度合同：明细真实进入 canonical。"""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.package = build_damai_canonical_package()
+
+    def test_organizations_are_one_group_plus_four_units(self) -> None:
+        orgs = self.package.organizations
+        groups = [o for o in orgs if o.level == "group"]
+        units = [o for o in orgs if o.level == "business_unit"]
+        self.assertEqual(len(groups), 1)
+        self.assertEqual(len(units), 4, f"业务单元必须 4 个，实际 {len(units)}")
+        for unit in units:
+            self.assertEqual(unit.parent_code, groups[0].code)
+
+    def test_dimensions_reach_canonical_without_aggregate_members(self) -> None:
+        self.assertEqual(len(self.package.customer_segments), 4)
+        self.assertEqual(len(self.package.customers), 40)
+        self.assertEqual(len(self.package.logistics_products), 8)
+        self.assertEqual(len(self.package.regions), 6)
+        for customer in self.package.customers:
+            self.assertNotIn(customer.code, AGG_CODES)
+            self.assertIn(customer.segment_code, {s.code for s in self.package.customer_segments})
+
+    def test_operating_actuals_detail_grain_1920(self) -> None:
+        rows = self.package.operating_actuals
+        self.assertEqual(len(rows), 1920, f"经营明细必须 24×40×2=1920 条，实际 {len(rows)}")
+        for row in rows:
+            self.assertNotIn(row.customer_code, AGG_CODES)
+            self.assertNotIn(row.logistics_product_code, AGG_CODES)
+            self.assertNotIn(row.region_code, AGG_CODES)
+
+    def test_every_analysis_month_covers_all_dimensions(self) -> None:
+        rows = [r for r in self.package.operating_actuals if r.month_key >= "2025-09"]
+        by_month: dict[str, list] = {}
+        for row in rows:
+            by_month.setdefault(row.month_key, []).append(row)
+        self.assertEqual(len(by_month), 12)
+        for month, month_rows in sorted(by_month.items()):
+            self.assertEqual(len({r.customer_code for r in month_rows}), 40, month)
+            self.assertEqual(len({r.logistics_product_code for r in month_rows}), 8, month)
+            self.assertEqual(len({r.region_code for r in month_rows}), 6, month)
+            self.assertEqual(len({r.organization_code for r in month_rows}), 4, month)
+
+    def test_financial_actuals_24_months_4_units_core_accounts(self) -> None:
+        rows = self.package.financial_actuals
+        core = {
+            "REVENUE", "WAREHOUSING_COST", "TRANSPORTATION_COST",
+            "OTHER_DIRECT_COST", "GROSS_PROFIT", "OPERATING_EXPENSE",
+            "OPERATING_PROFIT",
+        }
+        cells = {(r.month_key, r.organization_code) for r in rows}
+        self.assertEqual(len(cells), 24 * 4, f"财务实际须覆盖 24 月×4 单元，实际 {len(cells)}")
+        by_cell: dict[tuple, set] = {}
+        for row in rows:
+            by_cell.setdefault((row.month_key, row.organization_code), set()).add(
+                row.management_account_code
+            )
+        for cell, accounts in by_cell.items():
+            self.assertTrue(core <= accounts, f"{cell} 缺核心科目 {core - accounts}")
+
+    def test_budget_10752_raw_lines_with_cell_identity(self) -> None:
+        rows = self.package.monthly_budgets
+        self.assertEqual(len(rows), 10752, f"预算必须 12×4×4×8×7=10752 条，实际 {len(rows)}")
+        cells: dict[tuple, dict[str, Decimal]] = {}
+        for row in rows:
+            key = (row.month_key, row.organization_code,
+                   row.customer_segment_code, row.logistics_product_code)
+            cells.setdefault(key, {})[row.management_account_code] = row.amount
+        self.assertEqual(len(cells), 12 * 4 * 4 * 8)
+        for key, lines in cells.items():
+            self.assertEqual(set(lines), set(BUDGET_RAW_LINE_ACCOUNTS), key)
+            identity = (
+                lines["REVENUE"]
+                - lines["WAREHOUSING_COST"]
+                - lines["TRANSPORTATION_COST"]
+                - lines["OTHER_DIRECT_COST"]
+                - lines["OPERATING_EXPENSE"]
+            )
+            self.assertEqual(identity, lines["OPERATING_PROFIT"],
+                             f"{key} 预算恒等式不闭合")
+            self.assertIn("OPERATING_CASH_FLOW", lines)
+
+    def test_budget_metric_codes_follow_engine_contract(self) -> None:
+        """规格 §3.3：3 类成本统一 DIRECT_COST；期间费用 OPERATING_EXPENSE。"""
+        mapping = {}
+        for row in self.package.monthly_budgets:
+            mapping.setdefault(row.management_account_code, set()).add(row.metric_code)
+        for account in ("WAREHOUSING_COST", "TRANSPORTATION_COST", "OTHER_DIRECT_COST"):
+            self.assertEqual(mapping.get(account), {"DIRECT_COST"}, account)
+        self.assertEqual(mapping.get("REVENUE"), {"REVENUE"})
+        self.assertEqual(mapping.get("OPERATING_EXPENSE"), {"OPERATING_EXPENSE"})
+        self.assertEqual(mapping.get("OPERATING_PROFIT"), {"OPERATING_PROFIT"})
+        self.assertEqual(mapping.get("OPERATING_CASH_FLOW"), {"OPERATING_CASH_FLOW"})
+
+    def test_ar_4800_rows_five_buckets_per_customer_month(self) -> None:
+        rows = self.package.ar_collections
+        self.assertEqual(len(rows), 4800, f"AR 必须 24×40×5=4800 条，实际 {len(rows)}")
+        cells: dict[tuple, list] = {}
+        for row in rows:
+            self.assertNotIn(row.customer_code, AGG_CODES)
+            cells.setdefault((row.month_key, row.customer_code), []).append(row)
+        self.assertEqual(len(cells), 24 * 40)
+        for key, cell_rows in cells.items():
+            buckets = sorted(r.aging_bucket for r in cell_rows)
+            self.assertEqual(buckets, sorted(AR_FIVE_BUCKETS), key)
+
+    def test_ar_bucket_sum_equals_outstanding_and_non_negative(self) -> None:
+        cells: dict[tuple, list] = {}
+        for row in self.package.ar_collections:
+            cells.setdefault((row.month_key, row.customer_code), []).append(row)
+        for key, cell_rows in cells.items():
+            total = sum((r.receivable_balance for r in cell_rows), Decimal("0"))
+            due = sum((r.due_amount for r in cell_rows), Decimal("0"))
+            overdue = sum((r.overdue_amount for r in cell_rows), Decimal("0"))
+            # 未到期 + 逾期 = 应收余额（规格 §5.1 定义约束）
+            self.assertEqual(due + overdue, total, key)
+            for row in cell_rows:
+                self.assertGreaterEqual(row.receivable_balance, Decimal("0"))
+                self.assertGreaterEqual(row.collected_amount, Decimal("0"))

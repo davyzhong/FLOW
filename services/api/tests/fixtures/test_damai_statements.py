@@ -115,3 +115,20 @@ def test_equity_roll_forward_matches_balance_sheet() -> None:
         assert closing == Decimal(bs["权益总计"]["value_end"]), (
             "权益变动表期末权益必须等于资产负债表权益"
         )
+
+
+# ---------------------------------------------------------------------------
+# Task A1 红灯：财报独立身份（规格 §4.3 / 计划 Task A3 前置合同）
+# ---------------------------------------------------------------------------
+
+
+def test_statement_payloads_carry_damai_syn_identity() -> None:
+    """财报 payload 必须携带独立 synthetic 身份 DAMAI.SYN，
+    不得复用或冒充 9988.HK（阿里巴巴）fixture 身份。"""
+    package = build_damai_package()
+    payloads = build_damai_statement_payloads(package)
+    for fy, payload in payloads.items():
+        assert payload.get("stock_code") == "DAMAI.SYN", (
+            f"{fy} 必须携带 DAMAI.SYN 独立身份"
+        )
+        assert payload.get("company") == "大麦物流", f"{fy} 公司名必须为大麦物流"

@@ -99,3 +99,37 @@ def test_six_planted_analysis_events_present() -> None:
         "mix_shift_margin_change",
     } <= kinds
     assert len(DAMAI_PROFILE_V1.planted_events) >= 6
+
+
+# ---------------------------------------------------------------------------
+# Task A1 红灯：全量数据合同——主数据归属与明细维度声明
+# （规格 §3.3；先于实现写断言，禁止先改实现后补断言）
+# ---------------------------------------------------------------------------
+
+
+def test_four_customer_segments_declared() -> None:
+    """客群必须达到 4 个（当前仅 canonical 层单个 DM_SYNTH 聚合客群）。"""
+    segments = DAMAI_PROFILE_V1.customer_segments
+    assert len(segments) == 4, f"客群必须为 4 个，实际 {len(segments)}"
+    assert len(set(segments)) == 4
+
+
+def test_every_customer_has_fixed_segment_region_credit_term() -> None:
+    """40 客户每个都固定客群、主区域与信用期（spec §3.3 主数据映射）。"""
+    assignments = DAMAI_PROFILE_V1.customer_assignments
+    assert len(assignments) == 40
+    for customer_id, assign in assignments.items():
+        assert assign["segment"] in DAMAI_PROFILE_V1.customer_segments
+        assert assign["primary_region"] in REGIONS
+        assert isinstance(assign["credit_term_days"], int)
+        assert 0 < assign["credit_term_days"] <= 120
+
+
+def test_every_product_has_fixed_family_and_business_unit() -> None:
+    """8 产品每个都固定业务族与业务单元。"""
+    assignments = DAMAI_PROFILE_V1.product_assignments
+    assert len(assignments) == 8
+    family_ids = {f.family_id for f in BUSINESS_FAMILIES}
+    for product_id, assign in assignments.items():
+        assert assign["family_id"] in family_ids
+        assert assign["business_unit"] in BUSINESS_UNITS
