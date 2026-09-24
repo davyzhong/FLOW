@@ -438,7 +438,7 @@ relative_path	size_bytes	modified_time	mime_type
 02_research/original/images/06_8.png	668503	2026-09-04T21:09:02+08:00	image/png
 02_research/original/images/06_9.png	585182	2026-09-04T21:09:02+08:00	image/png
 02_research/original/images/12_1.jpg	76090	2026-09-06T23:25:55+08:00	image/jpeg
-02_research/original/p5_samples/README.md	6697	2026-09-24T22:42:43+08:00	text/markdown
+02_research/original/p5_samples/README.md	7663	2026-09-24T23:19:43+08:00	text/markdown
 02_research/original/p5_samples/alibaba_9988/BABA_FY2020_annual_results.pdf	1879894	2026-09-09T23:35:14+08:00	application/pdf
 02_research/original/p5_samples/alibaba_9988/BABA_FY2021_annual_results.pdf	1830576	2026-09-09T23:35:14+08:00	application/pdf
 02_research/original/p5_samples/alibaba_9988/BABA_FY2022_annual_results.pdf	2015919	2026-09-09T23:35:14+08:00	application/pdf
@@ -458,6 +458,7 @@ relative_path	size_bytes	modified_time	mime_type
 02_research/original/p5_samples/tencent_0700/Tencent_2026_Q2_results.pdf	537315	2026-09-05T23:11:54+08:00	application/pdf
 02_research/original/p5_samples/tencent_0700/Tencent_FY2025_annual_report.pdf	4428270	2026-09-05T23:12:19+08:00	application/pdf
 02_research/original/p5_samples/yto_600233/YTO_2026_Q1_report.pdf	188156	2026-09-06T18:14:31+08:00	application/pdf
+02_research/original/p5_samples/zto_2057/ZTO_2026_H1_interim_report.pdf	516151	2026-09-24T23:18:00+08:00	application/pdf
 02_research/synthesis/2026-08-29-Finance_Intelligence_OS_系统研究结论.md	19272	2026-08-28T14:51:02+08:00	text/markdown
 02_research/synthesis/2026-09-05-会计与财务指标知识库_设计草案.md	8553	2026-09-07T08:49:09+08:00	text/markdown
 02_research/synthesis/2026-09-05-指标库初始目录_v0_草案.md	14720	2026-09-05T22:03:47+08:00	text/markdown
