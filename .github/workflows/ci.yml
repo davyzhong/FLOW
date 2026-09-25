@@ -95,7 +95,7 @@ jobs:
 
   data-contract:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 40  # 大麦 fixture 套件（多次真实 seed）使本门禁翻倍，20 分钟预算已撞线
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
@@ -107,7 +107,7 @@ jobs:
 
   intake-e2e:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 40  # 同上：含 tests/fixtures 大麦套件，实测 20 分钟不足
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
