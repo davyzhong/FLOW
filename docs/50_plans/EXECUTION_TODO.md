@@ -73,10 +73,9 @@ U1–U7 全部 ✅ · U2 全关 ✅ · U5 ✅ · O1–O4 ✅ · 战略沉淀 D05
 
 权威执行规格：[FLOW 项目执行收敛与验收计划](2026-09-25-project-execution-convergence-plan.md)。以下状态为综合 review 基线；开始每项前先核对远端最新 SHA 与同 SHA CI。
 
-1. [ ] **审计分支 CI 修复/复验**：最新审计 SHA 核查 MinIO 错误；比较大麦实施分支 `307300b` 修复。若仍适用，以普通提交带入等效修复（禁止 rebase/强推），全量重跑 CI 并记录 SHA/run。
-   - G1 进行中：在 `codex/flow-execution-convergence` 隔离 worktree 中将 MinIO 与 client 镜像切至大麦分支已验证的 `bitnamilegacy` 版本/路径；`docker compose config --quiet` PASS，两个镜像均成功 pull，MinIO binary 报告 2025-04-22 release 且 MC client 可执行。最新 SHA 的完整 CI 尚待本步骤提交推送后确认；宿主机已有常驻栈占用标准端口，未在本机启动另一套依赖服务。
-2. [ ] **常驻开发栈演示数据（独立可选项）**：只读检查栈、现存数据、备份/恢复与 seed 覆盖风险；明确目标为开发/演示栈后再运行 seed/up + verify，八页面可见、重复 seed 零增长。若授权、备份或隔离条件不满足，登记为阻塞后可继续第 3 项；若会覆盖既有数据，暂停该写操作并请用户裁决。
-3. [ ] **分支集成与状态统一**：审查两条工作线提交图、迁移/安全冲突和未提交文件归属；对账 review 提到的 U Gate 21 项 backlog 与当前战略/工作包，未经正式范围和验收确认不得启动；在选定集成分支完成适用全量验证后，统一 `PROJECT_STATE.md`、`CURRENT_ROADMAP.md`、本 TODO、工作包与 HANDOFF。只把集成后证据标为项目当前状态。
+1. [x] **审计线 CI 修复/复验**：审计线 MinIO 与 client 镜像切至已验证的 `bitnamilegacy` 版本/路径；`docker compose config --quiet`、两个镜像拉取、MinIO binary 和 MC client 检查均通过。提交 `96010a2c32233d1e19ec139c00de9651ac577a9c` 对应 CI run `36129442008` 全部 17 个 job success。该执行链已按用户要求于 2026-09-25 快进合入本地 `main`；推送及关单文档验证随本次主线更新完成。
+2. [ ] **先完成剩余执行提交的主线集成与状态统一（G3）**：用户要求不再新建执行分支，后续任务直接在 `main` 逐步执行。当前只把审计/G1 执行链快进到本地 main；大麦实施分支 `codex/damai-logistics-implementation` 尚未集成。先审查两线提交图、迁移/安全/前端重叠及范围，保护未提交文件；普通 merge 到 main 后验证最终树并统一 `PROJECT_STATE.md`、`CURRENT_ROADMAP.md`、本 TODO、工作包与 HANDOFF。不得 rebase/强推；集成后 CI 通过才可将 G3 关单。
+3. [ ] **常驻开发栈演示数据（独立可选项）**：只读检查栈、现存数据、备份/恢复与 seed 覆盖风险；明确目标为开发/演示栈后再运行 seed/up + verify，八页面可见、重复 seed 零增长。若授权、备份或隔离条件不满足，登记为阻塞后可继续其余工作；若会覆盖既有数据，暂停该写操作并请用户裁决。
 4. [ ] **U4 修复与新留出**：支持“合并及公司”版式标题、参数化页码区间；原三样本回归；另建独立盲留出，不复用回归集充当泛化证明。
 5. [ ] **C-level 出口**：先对账 corrections/10 条候选修正的文件、提交和基准凭证；然后由用户发起非实现方 AI 交叉评与独立 holdout 抽签；材料齐后正式 Go/No-Go。`1794/1794` 只表示覆盖，不等于 C-level 通过。
 6. [ ] **P3 数据与溯源接入**：完成 ZTO 文本层与数据链路接入、勾稽和来源页锚测试；评审并实现真实来源链接；复核阿里分部序列在集成分支的来源与系统可见性。
@@ -87,4 +86,4 @@ U1–U7 全部 ✅ · U2 全关 ✅ · U5 ✅ · O1–O4 ✅ · 战略沉淀 D05
 
 - [x] 基线核对完成（2026-09-25）：审计分支 `aee9f5a`；CI run `36124751353` 的 `data-contract`、`metrics-known-answers`、`copilot-evals`、`intake-e2e`、`integration`、`analysis-invariants`、`dashboard`、`smoke`、`publishing-golden`、`user-closure-e2e`、`investigation-e2e` 均在 MinIO 镜像拉取时 `unauthorized`，属于基础设施失败，不能算测试通过；大麦 `f62cf8e` 两个相关 CI run `36101860056`/`36105604310` 成功。`main` 为 `63f99b2`，尚未集成两工作线。
 - [x] 未提交工作保护：`HANDOFF.md` 修改及 `services/api/tests/security/test_route_policy_registry.py` 未跟踪文件作者无法确定，按用户/并行 Agent 工作隔离保留，不纳入本次提交。
-- [x] G1 起执行分支：`codex/flow-execution-convergence`，由 G0 记录提交派生；main 集成仍须等 G3 完成并按常规集成流程处理。
+- [x] G1 执行链原从 `codex/flow-execution-convergence` 派生；2026-09-25 按用户新指令已快进至本地 `main`（`96010a2`）。后续不创建新执行分支；尚存的大麦实施分支作为既有来源，按 G3 审查后集成。
