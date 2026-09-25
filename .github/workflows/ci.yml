@@ -93,9 +93,10 @@ jobs:
           bash ../../scripts/seed_p5_statements.sh > /dev/null &&
           uv run python ../../scripts/perf_baseline.py --scale 10 --max-p95 50
 
+  # 大麦 fixture 套件（多次真实 seed）使本门禁翻倍，20 分钟预算已撞线
   data-contract:
     runs-on: ubuntu-latest
-    timeout-minutes: 40  # 大麦 fixture 套件（多次真实 seed）使本门禁翻倍，20 分钟预算已撞线
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
@@ -105,9 +106,10 @@ jobs:
       - run: cd services/api && uv sync --all-groups --frozen
       - run: make test-data-contract
 
+  # 同上：含 tests/fixtures 大麦套件，实测 20 分钟不足
   intake-e2e:
     runs-on: ubuntu-latest
-    timeout-minutes: 40  # 同上：含 tests/fixtures 大麦套件，实测 20 分钟不足
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
