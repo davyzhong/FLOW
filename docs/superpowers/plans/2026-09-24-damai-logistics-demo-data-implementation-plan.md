@@ -40,7 +40,7 @@ do_not_execute: true
 | B3 | 指标覆盖投影（damai 数据集 + 前端切换 + synthetic 标识） | done（见本次提交） | damai_demo_metric_coverage_v1.yaml + dataset 参数 + 前端 tab/合成标识；A2 五粒度对账一并验收 |
 | C1 | `damai-demo-build/seed/verify/up` 四命令 + 机器可读 receipt | done（见本次提交） | 隔离 compose project（15432/16379/19000）双 seed 幂等 + verify 17/17，证据 work/damai-demo/ |
 | C2 | 八页面真实 E2E（含 /data 页面上传旅程） | done | 「菜单全满」的验收关 |
-| C3 | 完整回归 + 文档刷新 + 最终 CI 闭环（completed SHA 全绿才算完成） | pending | 交付关闭 |
+| C3 | 完整回归 + 文档刷新 + 最终 CI 闭环（completed SHA 全绿才算完成） | in_progress（回归全绿 + 文档刷新完成，待 CI） | 修复 `082b0eb`（冻结视图总量粒度确定性）+ `f867842`（清库顺序/代理）；17 门禁绿 |
 
 **明确不做**：不新增 migration、不改 CI/.env、forecast 保持 static-only、不覆盖既有非大麦 fixture（§2 约束不变）。
 
@@ -225,10 +225,10 @@ do_not_execute: true
 - Modify: `HANDOFF.md`
 - Modify: `docs/README.md`
 
-- [ ] 先执行 `FLOW-PLAN-BASELINE-REPAIR-20260924` Task 1，使 M6 全量零失败。
-- [ ] 执行 API unit/integration、contracts、metrics、statements、publishing、Web unit/E2E、lint、typecheck、docs M6、release 零漂移与 U8 非破坏回归。
-- [ ] 以 `git merge-base origin/main HEAD` 核对全部变更，断言没有 migration、`.env`、CI/CD 或范围外文件，且 Alembic head 未改变。
-- [ ] 用实测计数和命令刷新 README、PROJECT_STATE、ROADMAP、HANDOFF 与导航；不把计划值当成实测值。
+- [x] 先执行 `FLOW-PLAN-BASELINE-REPAIR-20260924` Task 1，使 M6 全量零失败。（实测 278 docs, 0 errors）
+- [x] 执行 API unit/integration、contracts、metrics、statements、publishing、Web unit/E2E、lint、typecheck、docs M6、release 零漂移与 U8 非破坏回归。（17 门禁全绿；回归抓出并已修复两个真实缺陷：冻结视图粒度漂移 `082b0eb`、集成测试清库/代理 `f867842`）
+- [x] 以 `git merge-base origin/main HEAD` 核对全部变更，断言没有 migration、`.env`、CI/CD 或范围外文件，且 Alembic head 未改变。（merge-base `63f99b2`，101 文件 +27328/-95，无越界，head 保持 0029）
+- [x] 用实测计数和命令刷新 README、PROJECT_STATE、ROADMAP、HANDOFF 与导航；不把计划值当成实测值。（verify 19/19、E2E 9/9、manifest 实测计数）
 - [ ] 保持工作包 active 提交实现关闭文档并 push，验证该 head；随后另一提交改为 completed 并 push。
 - [ ] 只有最终 completed SHA 的 required jobs 全绿才宣布完成；若失败，以新提交恢复 active/阻塞并重新验证。
 

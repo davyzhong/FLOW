@@ -349,7 +349,7 @@ flowchart LR
 | U5–U7 | 客观报告门禁、统一冻结、四问工作台 | ✅ 已交付 |
 | **U8** | 生产就绪收口（真实存储旅程、HTTPS 拓扑、统一部署验收） | ✅ completed；严格冻结门禁通过 |
 | **S01** | 战略边界、Financial Facts V2、安全/RBAC/审计门禁 | ✅ completed |
-| **D 轨** | 大麦物流完整财年演示数据、正式工作流与八页面 E2E | 🚧 active |
+| **D 轨** | 大麦物流完整财年演示数据、正式工作流与八页面 E2E | 🚧 active（实现已交付：verify 19/19、E2E 9/9，待 CI 关闭） |
 | **K 轨** | 第二代静态知识刷新、sealed candidate 与战略重基线 | 🚧 active（用户裁决前不切换 release） |
 | U9–U10 | 内部试点、V1.1 证据决策 | ⬜ 待授权，且 U8 后按 [D053](docs/10_governance/decisions/D053--三层两模块边界与执行顺序.md) 重新裁决 |
 
@@ -467,6 +467,8 @@ flowchart LR
 
 仓库提供两份**带演示数据**的工作簿：[标准示例](fixtures/workbooks/flow_standard_v1.xlsx)、[非标准示例](fixtures/workbooks/external_logistics_nonstandard_v1.xlsx)。面向填写的治理模板可从数据工作台下载；不要把演示数据误当作空模板或真实业务账。
 
+另有大麦物流两年 synthetic 发行包（[`fixtures/damai/`](fixtures/damai/README.md)，SHA 锁定可零漂移重建）：24 个月（FY2025–FY2026）、1920 条经营实际、10752 条月度预算、4800 条应收账龄、672 条财务实际，4 客群 / 40 客户 / 8 物流产品 / 6 区域 / 5 组织；以独立合成身份 `DAMAI.SYN` 入库，不冒充任何真实公司。
+
 ### 两套指标目录，一个确定性内核
 
 | 目录 | 规模 | 配置 |
@@ -521,6 +523,11 @@ make infra-up
 
 # 可选：导入 P5 反向解析的真实财报（5 家公司 14 份报告，幂等）
 bash scripts/seed_p5_statements.sh
+
+# 可选：大麦物流两年 synthetic 演示数据（一键：构建发行包 → 迁移 → seed → verify）
+make damai-demo-up
+# 分步：make damai-demo-build / damai-demo-seed / damai-demo-verify
+# 端到端验收（隔离栈 + Playwright 八页面）：make test-damai-demo-e2e
 
 make dev-api
 ```
