@@ -198,8 +198,21 @@ def _build_live_report_view(
             )
         )
     }
+    # 报告头指标只取「截止期 × 总量粒度」的确定性行：快照内同时存放五粒度
+    # 明细值，不过滤会让同名指标多行竞争，末行覆盖且物理序漂移导致同一快照
+    # 二次冻结出不同内容（幂等破坏）。
     values = session.scalars(
-        select(MetricValue).where(MetricValue.metric_snapshot_id == snapshot.id)
+        select(MetricValue)
+        .where(
+            MetricValue.metric_snapshot_id == snapshot.id,
+            MetricValue.period_id == snapshot.as_of_period_id,
+            MetricValue.organization_id.is_(None),
+            MetricValue.customer_id.is_(None),
+            MetricValue.customer_segment_id.is_(None),
+            MetricValue.logistics_product_id.is_(None),
+            MetricValue.region_id.is_(None),
+        )
+        .order_by(MetricValue.id)
     ).all()
 
     current: dict[str, str] = {}
