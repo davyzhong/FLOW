@@ -40,6 +40,8 @@ async function forward(request: NextRequest, context: RouteContext): Promise<Res
   const upstream = new URL(`/api/v1/${path.join("/")}`, apiInternalUrl);
   upstream.search = request.nextUrl.search;
   const contentType = request.headers.get("content-type") ?? "application/json";
+  // §7.1：发布类端点要求 Idempotency-Key，代理必须透传，否则 UI 发布永远 400
+  const idempotencyKey = request.headers.get("idempotency-key");
   const isRead = request.method === "GET" || request.method === "HEAD";
   try {
     // multipart（文件上传）必须整体转发：request.text() 会破坏二进制边界
@@ -54,6 +56,7 @@ async function forward(request: NextRequest, context: RouteContext): Promise<Res
         Accept: "application/json",
         ...(authorization ? { Authorization: authorization } : {}),
         ...(isRead || body instanceof FormData ? {} : { "Content-Type": contentType }),
+        ...(idempotencyKey ? { "Idempotency-Key": idempotencyKey } : {}),
       },
       body,
       cache: "no-store",

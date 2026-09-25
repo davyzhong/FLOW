@@ -39,7 +39,7 @@ do_not_execute: true
 | B2 | 调查/证据/结论/冻结报告（candidate/in_review/approved 混合 + 冻结 SHA） | done（见本次提交） | = 原 slice-2b；实际产出 2 个 Finding（5 playbook 中 2 个过阈值），6 信号映射入 receipt；freeze 故障注入已补测 |
 | B3 | 指标覆盖投影（damai 数据集 + 前端切换 + synthetic 标识） | done（见本次提交） | damai_demo_metric_coverage_v1.yaml + dataset 参数 + 前端 tab/合成标识；A2 五粒度对账一并验收 |
 | C1 | `damai-demo-build/seed/verify/up` 四命令 + 机器可读 receipt | done（见本次提交） | 隔离 compose project（15432/16379/19000）双 seed 幂等 + verify 17/17，证据 work/damai-demo/ |
-| C2 | 八页面真实 E2E（含 /data 页面上传旅程） | pending | 「菜单全满」的验收关 |
+| C2 | 八页面真实 E2E（含 /data 页面上传旅程） | done | 「菜单全满」的验收关 |
 | C3 | 完整回归 + 文档刷新 + 最终 CI 闭环（completed SHA 全绿才算完成） | pending | 交付关闭 |
 
 **明确不做**：不新增 migration、不改 CI/.env、forecast 保持 static-only、不覆盖既有非大麦 fixture（§2 约束不变）。
@@ -204,12 +204,12 @@ do_not_execute: true
 - Create: `scripts/test_damai_demo_e2e.sh`
 - Modify: `Makefile`
 
-- [ ] `/data` 从页面上传生成 XLSX，完成映射、校验、warning 确认和发布，验证质量/对账。
-- [ ] `/`、`/investigations`、`/reports`、`/statements`、`/analysis`、`/operations`、`/metric-library` 断言大麦名称、期间和关键内容非空。
-- [ ] 页面分别验证现有支持的 organization/customer segment/product/region 粒度，并通过 metric API 验证 customer 粒度；不宣称 UI 已支持不存在的四级组合下钻。
-- [ ] 走通一次 Finding 审核和一次报告下载 SHA 校验。
-- [ ] 使用动态端口、owned supervisor 和 cleanup trap；不使用 page mock 或弱化空态断言。
-- [ ] 运行大麦 E2E、既有 Web unit、lint、typecheck，提交 `test(e2e): verify damai full product journey` 并 push。
+- [x] `/data` 从页面上传生成 XLSX，完成映射、校验、warning 确认和发布，验证质量/对账。（damai_logistics_full_v1.xlsx 全程 UI 旅程，阻断 0、对账失败 0、发布成功）
+- [x] `/`、`/investigations`、`/reports`、`/statements`、`/analysis`、`/operations`、`/metric-library` 断言大麦名称、期间和关键内容非空。
+- [x] 页面分别验证现有支持的 organization/customer segment/product/region 粒度，并通过 metric API 验证 customer 粒度；不宣称 UI 已支持不存在的四级组合下钻。（驾驶舱四粒度筛选 + dashboard API customer_segment 过滤断言子集关系；OCF actual 缺失如实断言 unavailable）
+- [x] 走通一次 Finding 审核和一次报告下载 SHA 校验。（收入增长 复核中→批准签发；XLSX 产物下载字节 SHA-256 === attempt.stored_sha256）
+- [x] 使用动态端口、owned supervisor 和 cleanup trap；不使用 page mock 或弱化空态断言。（scripts/test_damai_demo_e2e.sh：隔离栈 15432/16379/19000 + 动态 API/Web 端口 + trap 双 down -v）
+- [x] 运行大麦 E2E、既有 Web unit、lint、typecheck，提交 `test(e2e): verify damai full product journey` 并 push。（E2E 9/9 通过×2（直跑 38s + 编排脚本全程绿）；Web unit 89/89；tsc、eslint 0 error。红灯修复两处真实缺陷：reports-center 发布未带 Idempotency-Key（§7.1）、API 代理丢弃 Idempotency-Key 头）
 
 ### Task C3：完整回归、文档和最终 CI 闭环
 

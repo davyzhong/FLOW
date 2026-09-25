@@ -164,7 +164,11 @@ export function ReportsCenter() {
     try {
       const response = await fetch(`/api/v1/publishing/snapshots/${selected}/publish`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          // §7.1：发布必须携带幂等键；每次点击生成新键，重试由用户显式触发
+          "Idempotency-Key": crypto.randomUUID(),
+        },
         body: JSON.stringify({ formats }),
       });
       if (!response.ok) throw new Error("产物生成失败");
@@ -186,7 +190,11 @@ export function ReportsCenter() {
         `/api/v1/operations/overview/${snapshot.statement_report_id}/publish`,
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            // §7.1：发布必须携带幂等键；每次点击生成新键，重试由用户显式触发
+            "Idempotency-Key": crypto.randomUUID(),
+          },
           body: JSON.stringify({
             formats: operationsFormats,
           }),

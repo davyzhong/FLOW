@@ -98,7 +98,7 @@ docs-check:
 # ---------------------------------------------------------------------------
 # 大麦 synthetic 演示（Task C1）：stack-up 保持空环境语义，大麦走独立命令
 # ---------------------------------------------------------------------------
-.PHONY: damai-demo-build damai-demo-seed damai-demo-verify damai-demo-up
+.PHONY: damai-demo-build damai-demo-seed damai-demo-verify damai-demo-up test-damai-demo-e2e
 
 DAMAI_WORK := $(shell pwd)/work/damai-demo
 
@@ -124,6 +124,10 @@ damai-demo-up:
 	cd services/api && $(UV) run python ../../scripts/seed_dev_principal.py
 	$(MAKE) damai-demo-seed
 	$(MAKE) damai-demo-verify
+
+# Task C2：八页面真实 E2E 门禁（独立隔离栈，脚本内自清理）
+test-damai-demo-e2e:
+	bash scripts/test_damai_demo_e2e.sh
 
 plan-views:
 	python3 scripts/documentation/plan_views.py --write

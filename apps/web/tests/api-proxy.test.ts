@@ -35,3 +35,34 @@ it("preserves download metadata and exact bytes through the proxy", async () => 
   expect(result.headers.get("set-cookie")).toBeNull();
   expect(new Uint8Array(await result.arrayBuffer())).toEqual(bytes);
 });
+
+it("forwards Idempotency-Key to the upstream API (§7.1 发布合同)", async () => {
+  const { NextRequest } = await import("next/server");
+  const { POST } = await import("../app/api/v1/[...path]/route");
+  const seen: { key: string | null } = { key: null };
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = (async (_input: unknown, init?: RequestInit) => {
+    seen.key = new Headers(init?.headers).get("Idempotency-Key");
+    return new Response(JSON.stringify({ status: "published" }), {
+      status: 200,
+      headers: { "content-type": "application/json" },
+    });
+  }) as typeof fetch;
+  try {
+    const request = new NextRequest(
+      "http://localhost/api/v1/publishing/snapshots/abc/publish",
+      {
+        method: "POST",
+        headers: { "content-type": "application/json", "idempotency-key": "e2e-test-key" },
+        body: JSON.stringify({ formats: ["xlsx"] }),
+      },
+    );
+    const response = await POST(request, {
+      params: Promise.resolve({ path: ["publishing", "snapshots", "abc", "publish"] }),
+    });
+    expect(response.status).toBe(200);
+    expect(seen.key).toBe("e2e-test-key");
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
