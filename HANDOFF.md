@@ -14,7 +14,7 @@ applies_to: repository
 
 > 本页是下一位单一 Agent 的工作入口，整合了多 Agent 执行审计、R1 修复复核、竞品与方法论研究、工程收口计划和后续产品优化建议。它负责说明“现在在哪里、还要查什么、先改什么、怎样证明完成”；项目状态仍以 [PROJECT_STATE](docs/00_start_here/PROJECT_STATE.md) 为唯一事实源，任务顺序仍以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为唯一执行入口。
 
-> **当前状态覆盖（2026-09-25 主线核验）**：下文原始交接内容保留其编写时的历史语境，不再作为当前分支状态依据。当前 main 为 `370fd1f`；大麦实施线已由 `e22d193` 普通合并，CI run `36137591750` 17/17 success；审计/G1 修复 `96010a2` 的 CI run `36129442008` 17/17 success。主线及当前开发库迁移头均为 `0030_page_anchor_vocabulary`。大麦数据已装载常驻开发库（G2 完成，verify 19/19）；U4 三份 oracle 首跑 199 行全部 `not_comparable`，解析器修复和独立新留出未完成；公开 C 级仍需非实现方盲评、holdout 与 Go/No-Go。用户要求之后所有执行步骤直接在 `main` 串行推进，不再创建执行分支。当前唯一活跃顺序见 [EXECUTION_TODO](docs/50_plans/EXECUTION_TODO.md)。
+> **当前状态覆盖（2026-09-25 主线核验）**：下文历史交接保留其编写时语境。审计读取的远端 main 基线为 `58c5a5d`，当时 CI run `36148365089` 仍在运行；大麦实施线已由 `e22d193` 普通合并（CI run `36137591750` 17/17 success），审计/G1 修复 `96010a2` 的 CI run `36129442008` 17/17 success。主线及当前开发库迁移头均为 `0030_page_anchor_vocabulary`。大麦数据已装载常驻开发库（G2 完成，verify 19/19，备份 gzip 完整性通过）。U4 三份 oracle 首跑199行全部 `not_comparable`，解析器修复和真正独立新留出未完成。公开C级独立交叉评已完成：1,530格中42个确认异常、109个存疑、200格因JDL乱码无法完整核验；原PDF归因、订正和真实holdout冻结/录入/盲测仍待完成。用户要求之后全部在 `main` 串行推进；当前唯一活跃顺序见 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)。
 
 ## 0. 执行摘要
 
@@ -35,7 +35,7 @@ applies_to: repository
 | 类型 | 当前判断 | 处理方式 |
 |---|---|---|
 | 10 条抽取错误候选 | BABA NCI 8 条 + JDL 现金流 2 行，值在源 PDF 文本层不存在（压力测试实锤） | 人工翻页查源（压力测试报告 §2 清单）→ 修抽取 YAML 新版本 → 重跑基准 |
-| C 级出口 PASS | 证据链就绪，缺独立盲评与 holdout 执行 | 用户执行 AI 交叉评（包已备）+ 抽签 |
+| C 级出口 PASS | 独立交叉评已完成但发现42个确认异常、109个存疑，JDL尚有200格不可完整核验；抽签有候选但未形成冻结oracle | 原PDF归因/订正 → 可读源文本 → 新留出冻结/独立录入 → 盲测与基准复跑 → Go/No-Go |
 | 数据扩张 | **政策已更新**：无私有数据线，公开网络数据是研发期唯一来源 | 走既有公开财报抓取管线（harvest/港交所）扩充，不再等待 A4 外部材料 |
 | 溯源真实来源链接 | 原卡「私有 PDF 如何经 API 供给」决策——**已被公开数据政策解开** | 按公开 URL/公开文件引用设计落地（下一个可领取项） |
 | AI 问数 LLM 通道 | 用户裁决另行 | 保持 gated；O-01/O-02 地基已就绪 |
@@ -109,7 +109,7 @@ applies_to: repository
 - **数据实测**：24 个月（FY2025–FY2026）、1920 经营实际 / 10752 预算 / 4800 AR / 672 财务实际、4 客群 / 40 客户 / 8 产品 / 6 区域 / 5 组织；指标覆盖 FY2025 22/40、FY2026 25/40（来源 `fixtures/damai/manifest.json` 与覆盖包）。
 - **红灯抓出并修复的真实缺陷**：reports-center 两个发布 fetch 缺 `Idempotency-Key`（§7.1 合同）+ Next 代理丢弃该头——已修并补单测。
 - **一键恢复**：`make damai-demo-up`（构建发行包 → 迁移 → seed → verify）；分步 `damai-demo-build/seed/verify`。
-- **已知限制**：dashboard 总量域 OCF actual 不存在是合同真相（state=degraded 为预期）；合成数据不解除公开 C 级与真实企业门禁；该次隔离 worktree 测试记录不代表常驻开发库已灌入大麦数据，须完成 G2 只读盘点后再安全装载。
+- **已知限制**：dashboard 总量域 OCF actual 不存在是合同真相（state=degraded 为预期）；合成数据不解除公开 C 级与真实企业门禁；常驻开发库装载已另行完成并记录于 CURRENT_ROADMAP G2；G2 过程中出现的共享库测试误连与补种事故详见 To-do 历史记录，避免无隔离地运行会清理数据的测试。
 - **新坑**：macOS Docker 无 host 网络，建 MinIO 桶须 `--network container:flow-minio-1`；`compose up -d --wait` 会误判一次性 init 容器 exit(0) 为失败；`down -v` 偶发只删网络须跑两次；**回归驱动运行期间严禁并行手动跑同库测试**（并发污染曾致 report_snapshot 计数假漂移，安静环境复跑全绿证伪）；测试 conftest 默认指向共享 `flow` 库（迁移头 0030），本 worktree 跑测试必须显式导出划痕库 env。
 - **C3 回归抓出并已修复的四个真实缺陷**（CI 全绿于 `d701c1d`，run 36098674773）：①发布服务冻结视图无粒度过滤导致二次 seed 冻结内容漂移（`082b0eb`，修复=按 snapshot.as_of_period + 五维度 IS NULL + ORDER BY id）；②集成测试清库顺序缺分析链模型致 RESTRICT FK 卡死、对象存储测试裸 boto3 被系统代理挂死（`f867842`）；③quay.io/minio 组织私有化 + Docker Hub minio 下架，compose 镜像全部不可拉，换 `bitnamilegacy/minio` 并补全路径 entrypoint/healthcheck（`307300b`）；④data-contract/intake-e2e 撞 20 分钟 `timeout-minutes`，提到 40，且注释必须独立行（`077d35c`+`d701c1d`，test_ci_gate_inventory 用行尾锚正则）。
 
@@ -160,8 +160,8 @@ applies_to: repository
 - 发现第二迁移头、跨企业可访问、AI 可发布/自批、恢复 hash 不一致、测试 skip、目标 SHA 与 CI SHA 不同，立即停止关闭流程。
 - 本会话新增坑见 §2.4（派生 YAML、# 注释截断、dev DB 过滤权威、计数多点锁定、next-server pkill、RouteAnnouncer alert、user-closure flake 判定、freeze 事务时间戳等）。
 
-## 8. 下一位 Agent 的第一条动作
+## 8. 下一位 Agent 的第一条动作（历史指引，当前以 CURRENT_ROADMAP 为准）
 
-从当前最新 `origin/main`（`a461b54` 或更新）做会话开始三核对（PROJECT_STATE / git log / CI 状态），确认无新外部提交后按 §2.3 顺序领取：**首选溯源真实来源链接（公开来源方案，已解锁）或公开数据管线扩张**；若用户已交付人工三件套产出（查源结果 / AI 交叉评结论），优先接手归因与抽取 YAML 修订。不要先做 T13 内容或任何等待 A5 的开放面。
+旧版建议以 `a461b54` 为基线；当前接续必须按 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 对远端状态、CI 与执行队列重新核对，不沿用该旧顺序。
 
-当前对外状态统一表述：**U8 closed；S01 completed；前端一致性 Task 0–9 关闭；大麦两年 synthetic 实施已集成 main（`e22d193`，CI run `36137591750` 17/17）；G2 常驻开发库可见性仍待核验；U4 需解析器适配与独立新留出；C 级出口待非实现方盲评、holdout 与 Go/No-Go；知识 release、P3 数据接入及后续内部真实周期验证按 CURRENT_ROADMAP/EXECUTION_TODO 顺序处理。**
+当前对外状态统一表述：**U8 closed；S01 completed；前端一致性 Task 0–9 关闭；大麦两年 synthetic 实施已集成 main（`e22d193`，CI run `36137591750` 17/17）且G2常驻库装载通过；U4需解析器适配与真正独立新留出；C级交叉评已发现42个确认异常、109个存疑和200格不可完整核验，仍须原件归因/订正、留出冻结与独立验证；知识 release、P3、UX收口及后续内部真实周期验证按 CURRENT_ROADMAP 顺序处理。**

@@ -3,9 +3,9 @@ doc_id: FLOW-GOV-AGENTS-001
 title: FLOW 项目协作规则
 doc_type: governance
 status: current
-version: 1.2
+version: 1.3
 created_at: 2026-09-01
-updated_at: 2026-09-24
+updated_at: 2026-09-25
 owner: FLOW
 applies_to: repository
 ---
@@ -63,8 +63,9 @@ applies_to: repository
    `docs/superpowers/plans/`），并通过 `python3 scripts/check_docs.py --phase m1` 门禁；
 2. 会话内的口头计划、聊天里的临时方案不构成执行依据；
 3. 计划的范围或验收口径发生变化时，必须先更新计划文档并提交推送，再修改代码；
-4. 计划文档不维护任务状态——状态真相只在 `docs/50_plans/CURRENT_ROADMAP.md`、
-   `docs/50_plans/EXECUTION_TODO.md` 与对应工作包；不形成第二份总计划状态。
+4. 计划文档不维护第二份状态真相：唯一状态与执行队列只在
+   `docs/50_plans/CURRENT_ROADMAP.md`；工作包提供具体范围与验收。已归档的
+   `EXECUTION_TODO.md` 和总计划仅保留历史证据，不作为当前任务依据。
 
 ## 每个完整任务的收尾协议
 

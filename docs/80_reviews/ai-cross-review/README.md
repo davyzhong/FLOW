@@ -29,13 +29,13 @@ uv run --with pypdf --with pyyaml python ../../scripts/accuracy_benchmark.py \
     --export-review-bundle ../../work/ai-cross-review-bundle
 ```
 
-`work/ai-cross-review-bundle/` 下 10 份 markdown，每份 = 抽取值清单 +
+`work/ai-cross-review-bundle/` 下 11 份 markdown，每份 = 抽取值清单 +
 源 PDF 逐页文本层。评审 AI 的任务：**在源文本里找出与抽取清单不一致的值**
 （行名变体、单位、正负号、期间错位、列读错位均算）。
 
 ## 执行步骤
 
-1. 打开一个**非 GLM** 的 AI 会话（上下文 ≥200K）；
+1. 打开一个**未参与实现且未接触基准/订正材料**的 AI 会话（上下文 ≥200K）；
 2. 逐份粘贴 `bundle/*.md`（单份超上下文时按「抽取清单 + 分段源文本」拆分）；
 3. 使用下方评审 prompt；
 4. 将 AI 输出原样存为 `results/<模型名>-<日期>.md`；
@@ -74,3 +74,10 @@ E. 单位/口径存疑：抽取值与源文本量纲明显不一致。
 - 评审模型与实现模型（GLM）不同厂商；
 - 结果原样归档，实现方的逐条归因写入 `results/adjudication.md` 并注明
   「接受/误报」理由——误报不得静默删除。
+
+## 当前状态（2026-09-25）
+
+独立审查结果见 [11 份材料交叉评](results/gpt-6-astra-2026-09-25.md)：1,530 个单元格中
+42 个确认异常、109 个口径/列义存疑、200 个因 JDL 文本乱码无法完整核验。该结果仍
+待实现方逐项对照原始 PDF 归因；不得据此直接改写原始档案或宣称 C 级通过。新的
+留出候选已抽签，实际报告冻结、SHA 登记、独立 oracle 和验证仍未完成。

@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-截至 2026-09-25，当前主分支为 `main@370fd1f`，数据库迁移头为 `0030_page_anchor_vocabulary`（主线迁移链和当前开发库均已核实）；`e22d193` 将大麦实施线以普通合并集成，CI run `36137591750` 17/17 success；审计/G1 修复 `96010a2` 的 CI run `36129442008` 亦 17/17 success。大麦完整财年 synthetic 数据已在隔离验收栈通过 verify 19/19、八页面 E2E 9/9、重复 seed 零增长及发行包零漂移；**常驻开发库已装载大麦数据（G2 完成，2026-09-25）**：用户裁决演示系统数据全部入库，入库前已备份，集成后 main 代码上 verify 19/19 通过、页面可见。U4 的三份 oracle 已到齐但首跑 199 行均 `not_comparable`，需先修解析版式并补独立留出。公开 C 级覆盖答案集 `1794/1794` 的数字来自订正台账，不等于 C 级出口通过；非实现方盲评与 holdout 抽签仍待外部完成。用户已明确后续执行直接在 `main` 顺序完成，不再新建执行分支。
+截至本轮审计，远端 main 基线为 `58c5a5d`（其 CI run `36148365089` 当时仍在运行），数据库迁移头为 `0030_page_anchor_vocabulary`（主线迁移链和当前开发库均已核实）；`e22d193` 将大麦实施线以普通合并集成，CI run `36137591750` 17/17 success；审计/G1 修复 `96010a2` 的 CI run `36129442008` 亦 17/17 success。大麦完整财年 synthetic 数据已在隔离验收栈通过 verify 19/19、八页面 E2E 9/9、重复 seed 零增长及发行包零漂移；**常驻开发库已装载大麦数据（G2 完成，2026-09-25）**：入库前备份文件存在且 gzip 完整性检查通过，集成后 main 代码上 verify 19/19 通过、页面可见。U4 的三份 oracle 已到齐但首跑 199 行均 `not_comparable`，需先修解析版式并补真正独立留出。公开 C 级独立交叉评已完成：1,530 格中42个确认异常、109个存疑、200格因JDL文本乱码无法完整核验；原PDF逐项归因与必要订正仍待完成。holdout 抽签只选出候选，实际原件冻结、独立oracle与盲测尚未完成。用户已明确后续执行直接在 `main` 顺序完成，不再新建执行分支。
 
 历史状态快照：下文部分 S01/R0–R4 描述记录了各自交付时的上下文；若与当前迁移号、分支集成或门禁状态冲突，以本段、CURRENT_ROADMAP 和 EXECUTION_TODO 为准。
 
@@ -20,8 +20,8 @@ applies_to: repository
 
 ## 当前执行入口
 
-- **[CURRENT_ROADMAP.md](../50_plans/CURRENT_ROADMAP.md)**（唯一主线：状态真相 + 执行队列）：U08、S01、前端一致性整改与大麦完整财年演示数据 completed（含常驻库装载 G2）；U4 修复、C 级出口、P3、知识刷新收尾见路线图执行队列；内部真实试点仍受外部门禁
-- 旧统一计划、O 系列计划、EXECUTION_TODO 与 2026-09-24/25 三份总计划均已 superseded/archived（保留任务细节与证据，不再作为执行依据）
+- **[CURRENT_ROADMAP.md](../50_plans/CURRENT_ROADMAP.md)**（唯一主线：状态真相 + 执行队列）：U08、S01、前端一致性整改与大麦完整财年演示数据 completed（含常驻库装载 G2）；C级交叉评已完成但归因、订正和新留出未完成；其余执行顺序见路线图。
+- 旧统一计划、O 系列计划、EXECUTION_TODO 与 2026-09-24/25 三份总计划均已 superseded/archived（保留历史细节与证据，不再作为执行依据）
 - 文档迁移：[迁移实施计划 M0–M6](../superpowers/plans/2026-09-12-static-knowledge-and-document-migration.md) 已全部关闭（bfc1271 / e373e25，用户确认 2026-09-13）
 
 ## 进行中 / 阻塞 / 待授权
