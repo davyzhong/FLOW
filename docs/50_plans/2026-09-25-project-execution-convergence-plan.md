@@ -45,6 +45,8 @@ superseded_by: null
 - 综合 review 与 `EXECUTION_TODO.md` 对 10 条抽取候选修正的表述有冲突：TODO 记载已作为误报关闭且 L1 为 1794/1794；review 称未见完成提交。执行时须核对 corrections 文件、提交、基准产物和同 SHA CI，再裁定；本计划不预设重开或关闭。
 - 审查时本地工作区存在未提交的 `HANDOFF.md` 修改与未跟踪的 `services/api/tests/security/test_route_policy_registry.py`。它们必须先确认归属和意图，不得覆盖、重置或顺手纳入无关提交。
 
+G0 启动核验（2026-09-25）：当前审计分支基线为 `aee9f5ad6707d80318e4d15c169f991e44b56009`，远端一致；该 SHA 的 CI run `36124751353` 仍因 MinIO 镜像拉取 `unauthorized` 而失败（多个依赖 `infra-up` 的 job 未进入实际测试）。`origin/main` 为 `63f99b2`，大麦实施分支 `codex/damai-logistics-implementation` 为 `f62cf8e` 且其验收 CI 绿。现有未提交 `HANDOFF.md` 与未跟踪安全测试作者无法从 Git 证明；按用户文件保护原则视为用户/并行工作成果并留在原工作区，不带入执行分支。G1 起的工作分支定为 `codex/flow-execution-convergence`，从 G0 完成提交派生。
+
 若执行时实际 SHA、CI、分支或工作区与以上基线不同，以最新可验证状态为准，并先把差异记录到现有交接/执行台账；不得照抄上述快照作为现状。
 
 ### 1.2 项目目标与不可突破原则

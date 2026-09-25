@@ -81,3 +81,9 @@ U1–U7 全部 ✅ · U2 全关 ✅ · U5 ✅ · O1–O4 ✅ · 战略沉淀 D05
 6. [ ] **P3 数据与溯源接入**：完成 ZTO 文本层与数据链路接入、勾稽和来源页锚测试；评审并实现真实来源链接；复核阿里分部序列在集成分支的来源与系统可见性。
 7. [ ] **知识 release 收尾**：核对 M2 用户追认、`CURRENT_RELEASE`、sealed candidate/激活记录、Task 10 三仓库证据和独立复验；指针/证据不一致时先查证，不直接改 release。
 8. [ ] **后续内部工作台与真实周期验证（gated）**：仅在 C-level Go 与内部数据授权满足后开始 U9/T13；按连续三个真实月度周期、同输入人工基准、盲评与工时门槛验收。U10 依预置决策包启动，不由模拟数据单独解锁。
+
+### G0 开工基线记录
+
+- [x] 基线核对完成（2026-09-25）：审计分支 `aee9f5a`；CI run `36124751353` 的 `data-contract`、`metrics-known-answers`、`copilot-evals`、`intake-e2e`、`integration`、`analysis-invariants`、`dashboard`、`smoke`、`publishing-golden`、`user-closure-e2e`、`investigation-e2e` 均在 MinIO 镜像拉取时 `unauthorized`，属于基础设施失败，不能算测试通过；大麦 `f62cf8e` 两个相关 CI run `36101860056`/`36105604310` 成功。`main` 为 `63f99b2`，尚未集成两工作线。
+- [x] 未提交工作保护：`HANDOFF.md` 修改及 `services/api/tests/security/test_route_policy_registry.py` 未跟踪文件作者无法确定，按用户/并行 Agent 工作隔离保留，不纳入本次提交。
+- [x] G1 起执行分支：`codex/flow-execution-convergence`，由 G0 记录提交派生；main 集成仍须等 G3 完成并按常规集成流程处理。
