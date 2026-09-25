@@ -1,21 +1,21 @@
 ---
 doc_id: FLOW-PLAN-EXECUTION-TODO
-title: 执行待办清单（唯一活跃 TODO）
+title: 执行待办清单（已归档，并入 CURRENT_ROADMAP）
 doc_type: navigation
-status: current
-version: 1.1
+status: archived
+version: 1.2
 created_at: 2026-09-24
 updated_at: 2026-09-25
 owner: FLOW
 applies_to: repository
+superseded_by: FLOW-PLAN-CURRENT
 ---
 
-# 执行待办清单（唯一活跃 TODO）
+# 执行待办清单（已归档，2026-09-25）
 
-- doc_id: FLOW-PLAN-EXECUTION-TODO
-- 更新：2026-09-25（主线整合与状态统一）；维护规则：每完成一项打勾并注明提交哈希/验收证据；新增任务追加到对应分区；本文件由各会话共同维护（写入前先 pull）。
+> **归档说明**：2026-09-25 用户裁决（2A）要求只保留一条主线。本页全部活跃事项已并入 [CURRENT_ROADMAP](CURRENT_ROADMAP.md) 的「执行队列」一节；本文件不再维护、不再作为状态或任务依据，内容保留为历史记录。决策日志（§五-b）等原始记录不删除。
 - 当前整改顺序与验收见[项目执行收敛与验收计划](2026-09-25-project-execution-convergence-plan.md)；本文件为唯一活跃 To-do 状态表。用户已要求后续执行工作直接在 `main` 顺序完成，不新建执行分支。
-- 依据：D052–D054 战略、[综合执行 Review](../80_reviews/2026-09-25-comprehensive-execution-review.md)、[oracle-register](../validation/financial_reports/oracle-register.md)。
+- 依据：D052–D054 战略、[综合执行 Review](../80_reviews/2026-09-25-comprehensive-execution-review.md)、[oracle-register](../../validation/financial_reports/oracle-register.md)。
 
 ## 一、oracle 独立录入线（解锁 U4 首跑）
 

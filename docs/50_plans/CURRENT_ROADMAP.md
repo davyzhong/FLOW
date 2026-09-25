@@ -15,22 +15,19 @@ supersedes: [FLOW-PLAN-UNIFIED-000, FLOW-PLAN-OPS-000]
 superseded_by: null
 ---
 
-# 当前路线图（唯一执行入口）
+# 当前路线图（唯一主线）
 
-> 本页只维护顺序、依赖、状态与证据链接；详细步骤在各工作包。全仓唯一可执行总计划——历史计划均已 superseded。
+> **本页是全仓唯一主线**：既维护状态真相，也维护执行队列。2026-09-25 用户裁决（2A）后不再存在第二份「唯一」文档：EXECUTION_TODO、整合总计划、统一完整实施计划与执行收敛计划均已归档为历史/参考，状态与任务只以本页和工作包为准。详细验收步骤在各工作包与参考规格。
 
-唯一详细执行合同为 [FLOW 统一完整实施计划](../superpowers/plans/2026-09-24-flow-integrated-execution-plan.md)。
-本页决定“现在是什么状态”，详细计划决定“如何实施”；两者不得建立第二套状态。
-
-## 顺序与状态（2026-09-25 对 main `e22d193` 核对；当前 main 含 README 自动截图提交 `370fd1f`）
+## 顺序与状态（2026-09-25 对 main `6dac3b2` 核对；集成后 main 含审计线 v1.1 合并 `7a230af7`）
 
 | 顺序 | 工作包 | 状态 | 依赖 | 最近证据 |
 |---|---|---|---|---|
 | 1 | [U08 生产就绪收口](work_items/U08--production-readiness.md) | **completed** | — | U8-A～D 完成；严格 HTTPS/双格式 SHA/恢复门禁通过；冻结记录与标签 |
 | 1' | [U04 独立 oracle](work_items/U04--independent-oracle.md) | **blocked(解析器适配 + 新留出)** — 可并行 | oracle 已到齐 | 2026-09-24 首跑 199 行均 `not_comparable`；先支持「合并及公司」标题与页码区间提示，再回归并另取独立留出 |
 | 2 | [S01 战略边界、事实合同与安全门禁](work_items/S01--post-u8-boundary-contract-security.md) | **completed** | U08 completed | Task 1–5 完成；安全规格 V1.1 已批准且独立审查闭环（`6c3c1cd`，零 P1/P2）。2026-09-14 `ff42c67` 五路并合 + 回落修复（`c1510ce`→`2570bf8`）带入路由策略 v2、模块边界与 U8 升级门禁、迁移 0026 修复、`main.py` 启动 fail-fast、两模块入口；Kimi `0841ff9` v1 被否，由 `997c1ab` v2 取代。**Task 6 已关闭**（R2/R3/R4 交付，台账 §7），阶段 3 转入 C 级出口；[协调台账](../70_operations/2026-09-14-coordination-ledger-glm.md) / [范围计划](../superpowers/plans/2026-09-13-flow-post-u8-boundary-gate.md) / [并行执行计划](../superpowers/plans/2026-09-13-flow-three-agent-parallel-restructuring.md) |
-| 2a | [大麦物流完整财年演示数据](work_items/DAMAI--full-year-demo.md) | **completed** | 已批准规格；不依赖公开 C 级 | D1–D3 已集成 main `e22d193`，CI run `36137591750` 17/17 success；隔离栈 verify 19/19、八页面 E2E 9/9、重复 seed 零增长、发行包零漂移。常驻开发库可见性独立跟踪于 EXECUTION_TODO G2；合成数据不解除公开 C 级门禁 |
-| 2b | [大麦数据后的剩余体验收口](work_items/UX--post-damai-experience-closeout.md) | **blocked** | G2 常驻栈核验 + 精确 UX 验收规格 | D3 已完成；先确认常驻栈数据可见，再列明页面/文件、状态矩阵、自动化与视觉证据；前端 Task 0–9 不重做 |
+| 2a | [大麦物流完整财年演示数据](work_items/DAMAI--full-year-demo.md) | **completed** | 已批准规格；不依赖公开 C 级 | D1–D3 已集成 main `e22d193`，CI run `36137591750` 17/17 success；隔离栈 verify 19/19、八页面 E2E 9/9、重复 seed 零增长、发行包零漂移。**常驻开发库已装载（G2 完成 2026-09-25）**：用户裁决演示数据全部入库，集成后 main 上 verify 19/19、页面可见；合成数据不解除公开 C 级门禁 |
+| 2b | [大麦数据后的剩余体验收口](work_items/UX--post-damai-experience-closeout.md) | **blocked** | G2 常驻栈核验 ✓ + 精确 UX 验收规格 | G2 已完成；下一步列明页面/文件、状态矩阵、自动化与视觉证据；前端 Task 0–9 不重做 |
 | K | [第二代静态知识刷新与战略重基线](work_items/KNOWLEDGE--refresh-v2.md) | **active** | 批准规格；跨三仓库 | Task 0/preflight 已完成；K0–K6 待执行。可与 D 轨在不重叠文件上并行；战略激活与 D3 文档关闭必须串行；用户裁决前 `CURRENT_RELEASE` 不变 |
 | 3 | [公开财报模块 C 级出口](work_items/PUBLIC--c-level-exit-protocol.md) | **blocked(独立复核与裁决)** | S01 关闭 ✓ | 订正台账记录 L1 答案集覆盖 1794/1794（100%），此为覆盖口径且本轮未在本环境重跑基准，不等同 C 级通过；余项=非实现方独立盲评、holdout 抽签与 Go/No-Go |
 | 3a | [溯源/重述/只读 MCP](work_items/PUBLIC--provenance-restatement-mcp.md) | **completed** | — | B3 溯源 95.5% 行项目带页锚（迁移 0029 + 导入/API/前端）；B4 supersedes 链 + 差异脚本；B5 只读 MCP 三工具（token fail-closed）；B6 确定性差异说明起草 |
@@ -42,6 +39,18 @@ superseded_by: null
 | R1 | [U09+O05 授权内部试点](work_items/U09-O05--authorized-internal-pilot.md) | **blocked** | 公开 C 级 + 数据授权 | 历史工作包经统一计划重新纳入 I 轨；E2 数据扩张不是硬前置 |
 | R2' | [U10 V1.1 证据决策](work_items/U10--v1-1-evidence-decision.md) | **blocked** | U4 + U8 + U09/O05 | D/K 完成证据可补充，但不是硬依赖；无证据项默认 hold |
 | D1 | [DOC-M5/M6 文档迁移](../superpowers/plans/2026-09-12-static-knowledge-and-document-migration.md) | **done**（bfc1271 / e373e25） | — | M0–M6 全部关闭 |
+
+## 执行队列（唯一主线；2026-09-25 用户四项裁决后重整）
+
+> 已完成：G1 审计线 CI 修复（`96010a2`）→ 大麦线合并（`e22d193`）→ 审计线合并（`7a230af7`）→ G2 常驻开发库装载（verify 19/19）→ 状态统一（`6dac3b2`）。三条工作分支已全部并入 main，无独有提交。以下按依赖顺序：
+
+1. **U4 版式修复与新留出**（上表 1'）：`cn_ashare_table` 支持「合并及公司」合版标题 + 年报页码提示区间参数化；原三样本转为回归集；另建独立盲留出（抽签方式已由用户裁决 4A：AI 可复现随机抽签并归档，见下方 Q2 抽签记录）。
+2. **C-level 出口**（上表 3）：先对账 corrections/10 条候选修正的文件、提交和基准凭证；非实现方 AI 交叉评（用户裁决 3A：准备证据包与开场指令，由用户发起独立会话）与 holdout 抽签（裁决 4A）完成后正式 Go/No-Go。`1794/1794` 只表示覆盖，不等于 C 级通过。
+3. **P3 数据与溯源接入**（上表 3b）：ZTO 文本层修复与数据链路接入、勾稽和来源页锚测试；真实来源链接方案评审后实现；复核阿里分部序列在 main 的来源与系统可见性。
+4. **知识 release 收尾**（上表 K）：核对 M2 用户追认、`CURRENT_RELEASE`、sealed candidate/激活记录、Task 10 三仓库证据和独立复验；指针/证据不一致时先查证，不直接改 release。
+5. **内部工作台与真实周期验证**（上表 4/5，gated）：仅在 C-level Go 与内部数据授权满足后启动；U10 依预置决策包启动，不由模拟数据单独解锁。
+
+裁决记录（2026-09-25 晚，用户四项裁决）：①分支整合归本主线串行执行（GPT 停止后由接手会话完成）；②四份「唯一」文档合并为本页唯一主线（2A）；③AI 交叉评由助手准备证据包与开场指令、用户发起非实现方会话（3A）；④holdout 由 AI 可复现随机抽签并归档（4A）。
 
 战略方向（2026-09-13，D052–D054）：企业内部月度财务经营分析工作台为最终产品，公开财报模块独立并先行成熟共享底座；顺序为 U8 → 边界重构 → 公开模块 C 级出口 → 内部工作台 → 四级验证。详见[战略重构设计](../superpowers/specs/2026-09-13-flow-strategic-reset-design.md)。
 
@@ -60,6 +69,6 @@ superseded_by: null
 ## 纪律
 
 - 任务领取/勾选/提交只用本页与工作包；模块可以维护不可领取的 workstream/backlog 视图，但不得形成第二份状态真相；每完成一阶段提交推送、CI 绿才算 done；
-- 详细步骤只从 `FLOW-PLAN-INTEGRATED-EXECUTION-20260924` 领取；旧详细计划均为历史证据，不按其空复选框恢复任务；
+- 详细验收步骤在工作包与归档参考规格（原统一实施计划、执行收敛计划等，均已 archived）；旧详细计划均为历史证据，不按其空复选框恢复任务；
 - 工作包文件**不随状态移动**，状态由本页与 views/ 表达；
 - M/P 系列、Phase/WS 历史计划只读（见 [TERMS_AND_NAMESPACES](../10_governance/TERMS_AND_NAMESPACES.md)）。

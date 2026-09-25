@@ -2,10 +2,10 @@
 doc_id: FLOW-PLAN-INTEGRATED-MASTER-20260924
 title: FLOW 整合总计划（多计划合一视图）
 doc_type: plan
-status: active
+status: archived
 version: 1.0
 created_at: 2026-09-24
-updated_at: 2026-09-24
+updated_at: 2026-09-25
 owner: FLOW
 depends_on: [FLOW-PLAN-CURRENT]
 acceptance_refs: [roadmap-unique-invariant]
@@ -13,10 +13,13 @@ knowledge_release: flow-knowledge-2026-09-12.1
 decision_refs: [D052, D053, D054]
 applies_to: planning
 supersedes: []
-superseded_by: null
+superseded_by: FLOW-PLAN-CURRENT
 ---
 
 # FLOW 整合总计划（多计划合一视图）｜2026-09-24
+
+> **归档说明（2026-09-25，用户裁决 2A）**：全仓只保留一条主线——[CURRENT_ROADMAP](CURRENT_ROADMAP.md)（状态真相 + 执行队列）。本文不再作为执行依据或「唯一」文档，内容保留为历史与验收细节参考；任务状态以路线图为准。
+
 
 > **定位（必须先读）**：本页是把仓库现存全部计划文档整合后的**内容与顺序视图**，
 > 供用户与接手 Agent 一页看清"总共要做什么、谁先谁后、谁在等谁"。

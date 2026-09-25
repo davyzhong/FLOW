@@ -20,9 +20,8 @@ applies_to: repository
 
 ## 当前执行入口
 
-- **[CURRENT_ROADMAP.md](../50_plans/CURRENT_ROADMAP.md)**（唯一状态入口）：U08、S01、前端一致性整改与大麦完整财年演示数据 completed；G2 常驻栈可见性、U4 修复与知识刷新待办状态见路线图；公开 C 级、内部真实试点仍受外部门禁
-- **[FLOW 统一完整实施计划](../superpowers/plans/2026-09-24-flow-integrated-execution-plan.md)**（唯一详细执行合同）：统一承接旧 U/O、S01、多 Agent、前端、知识刷新、大麦和基线修复计划；旧计划不再领取
-- 旧统一计划与 O 系列计划已 superseded（保留任务细节与证据）
+- **[CURRENT_ROADMAP.md](../50_plans/CURRENT_ROADMAP.md)**（唯一主线：状态真相 + 执行队列）：U08、S01、前端一致性整改与大麦完整财年演示数据 completed（含常驻库装载 G2）；U4 修复、C 级出口、P3、知识刷新收尾见路线图执行队列；内部真实试点仍受外部门禁
+- 旧统一计划、O 系列计划、EXECUTION_TODO 与 2026-09-24/25 三份总计划均已 superseded/archived（保留任务细节与证据，不再作为执行依据）
 - 文档迁移：[迁移实施计划 M0–M6](../superpowers/plans/2026-09-12-static-knowledge-and-document-migration.md) 已全部关闭（bfc1271 / e373e25，用户确认 2026-09-13）
 
 ## 进行中 / 阻塞 / 待授权

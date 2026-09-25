@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 项目协作规则
 
-> 当前状态入口：[CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)；唯一详细执行合同：[FLOW 统一完整实施计划](docs/superpowers/plans/2026-09-24-flow-integrated-execution-plan.md)。
+> 当前唯一主线入口：[CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)（状态真相 + 执行队列）。
 
 本仓库是 FLOW（Finance Intelligence OS / AI 财务经营分析平台）项目的唯一正式工程仓库。
 
@@ -29,9 +29,10 @@ applies_to: repository
    当前仓库的版本化文档；对话内容只能作为摘要，不能成为唯一载体。
 2. 计划新增或发生范围、顺序、依赖、验收变化时，必须先更新落盘文档和索引，
    完成校验、commit 并立即 push，之后才能继续实施。
-3. `docs/50_plans/CURRENT_ROADMAP.md` 是唯一状态真相；
-   `docs/superpowers/plans/2026-09-24-flow-integrated-execution-plan.md` 是唯一详细
-   执行合同。不得再建立与二者竞争的 active 总计划。
+3. `docs/50_plans/CURRENT_ROADMAP.md` 是唯一主线（状态真相 + 执行队列）；
+   详细验收步骤在 `work_items/` 与已归档的参考规格。2026-09-25 用户裁决（2A）：
+   不再设第二份「唯一」文档（原 EXECUTION_TODO、整合总计划、统一完整实施计划、
+   执行收敛计划均已归档，内容保留为历史与验收细节参考）。
 4. 新的局部计划默认并入统一详细计划；确需独立文件时，必须声明依赖、验收、
    `supersedes/superseded_by` 和是否可执行，并在统一计划与本文件建立索引。
 5. 被接替的计划不删除，改为 `completed`、`cancelled` 或 `archived`，并标记

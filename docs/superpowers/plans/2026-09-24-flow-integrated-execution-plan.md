@@ -2,20 +2,23 @@
 doc_id: FLOW-PLAN-INTEGRATED-EXECUTION-20260924
 title: FLOW 统一完整实施计划
 doc_type: plan
-status: active
+status: archived
 version: 1.0
 created_at: 2026-09-24
-updated_at: 2026-09-24
+updated_at: 2026-09-25
 owner: FLOW
 depends_on: [FLOW-PLAN-CURRENT, FLOW-SPEC-DAMAI-DEMO-001, FLOW-DESIGN-KNOWLEDGE-REFRESH-002]
 acceptance_refs: [roadmap-unique-invariant, damai-full-year-release, knowledge-release-gate, public-c-exit, internal-three-cycle-validation]
 knowledge_release: flow-knowledge-2026-09-12.1
 applies_to: repository-detailed-execution
 supersedes: [FLOW-PLAN-POST-U8-BOUNDARY-001, FLOW-PLAN-THREE-AGENT-PARALLEL-001, FLOW-PLAN-FE-DESIGN-UPGRADE-20260915, FLOW-PLAN-FE-CONSISTENCY-REMEDIATION-20260916, FLOW-PLAN-KNOWLEDGE-REFRESH-002, FLOW-PLAN-DAMAI-DEMO-20260924, FLOW-PLAN-BASELINE-REPAIR-20260924]
-superseded_by: null
+superseded_by: FLOW-PLAN-CURRENT
 ---
 
 # FLOW 统一完整实施计划
+
+> **归档说明（2026-09-25，用户裁决 2A）**：全仓只保留一条主线——[CURRENT_ROADMAP](../../50_plans/CURRENT_ROADMAP.md)（状态真相 + 执行队列）。本文不再作为执行依据或「唯一」文档，内容保留为历史与验收细节参考；任务状态以路线图为准。
+
 
 > **执行者要求：** 实施本计划时使用 `executing-plans`；代码任务使用
 > `test-driven-development`，完成声明前使用 `verification-before-completion`。
