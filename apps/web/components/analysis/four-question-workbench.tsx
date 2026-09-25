@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import {
@@ -8,6 +9,7 @@ import {
   type StatementReportList,
   type WorkbenchResponse,
 } from "../../lib/api/client";
+import { metricFocusHref, statementReportHref } from "../../lib/deep-links";
 import "./four-question-workbench.css";
 
 const DIRECTION_LABEL: Record<string, string> = {
@@ -110,8 +112,10 @@ export function FourQuestionWorkbench() {
       {workbench ? (
         <>
           <p className="workbench__identity">
-            {workbench.report.company_name} · {workbench.report.period_label} ·{" "}
-            {workbench.report.unit_note}
+            <Link href={statementReportHref(workbench.report.report_id)} title="在报表分析中查看该财报">
+              {workbench.report.company_name} · {workbench.report.period_label} ·{" "}
+              {workbench.report.unit_note}
+            </Link>
           </p>
 
           <h2>管理关注（≤3 条，提示复核）</h2>
@@ -142,7 +146,13 @@ export function FourQuestionWorkbench() {
                 <ul>
                   {question.metrics.map((metric) => (
                     <li key={metric.metric_code}>
-                      <span className="workbench__metric-code">{metric.metric_code}</span>
+                      <Link
+                        className="workbench__metric-code"
+                        href={metricFocusHref(metric.metric_code)}
+                        title="在指标库中查看口径定义"
+                      >
+                        {metric.metric_code}
+                      </Link>
                       {metric.available ? (
                         <strong>{metric.value}</strong>
                       ) : (

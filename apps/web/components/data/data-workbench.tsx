@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useMemo, useState } from "react";
 
 import { FlowApiError, intakeApi } from "../../lib/api/client";
@@ -46,12 +47,21 @@ function isFlowApiError(error: unknown): error is FlowApiError {
   return error instanceof FlowApiError;
 }
 
-export function DataWorkbench() {
+export function DataWorkbench({
+  initialBatchId = null,
+}: {
+  /** ?batch={batch_id} 深链：无批次列表端点，仅会话内已有该批次时恢复；否则显式提示 */
+  initialBatchId?: string | null;
+}) {
   const [stage, setStage] = useState<Stage>("prepare");
   const [state, setState] = useState<WorkbenchState>({ phase: "prepare" });
   const [error, setError] = useState<string | null>(null);
   const [dragActive, setDragActive] = useState(false);
   const [overrides, setOverrides] = useState<Record<string, string>>({});
+  // 会话内最近批次（上传成功后登记；发布态的 WorkbenchState 不再携带 batchId）
+  const [sessionBatchId, setSessionBatchId] = useState<string | null>(null);
+  // 深链 miss：URL 指定的批次不在当前会话中 → 显式提示，不静默忽略
+  const batchMiss = initialBatchId !== null && sessionBatchId !== initialBatchId;
 
   const [reasons, setReasons] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
@@ -72,6 +82,7 @@ export function DataWorkbench() {
         const batch = await intakeApi.createBatch(file.name.replace(/\.[^.]+$/, ""));
         const source = await intakeApi.uploadSource(batch.id, file);
         const mapping = await intakeApi.proposeMapping(source.id);
+        setSessionBatchId(batch.id);
         setState({ phase: "mapping", batchId: batch.id, source, mapping });
         setStage("map");
       } catch (cause) {
@@ -185,6 +196,13 @@ export function DataWorkbench() {
       {error ? (
         <p role="alert" className="data-workbench__error flow-error">
           {error}
+        </p>
+      ) : null}
+
+      {batchMiss ? (
+        <p role="status" className="data-workbench__batch-note">
+          URL 指定的批次 {initialBatchId} 不在当前会话中：数据工作台尚无批次历史列表，
+          无法恢复该批次的上下文。请重新上传工作簿，或从驾驶舱/调查页重新进入。
         </p>
       ) : null}
 
@@ -339,6 +357,11 @@ export function DataWorkbench() {
           <button type="button" className="flow-btn" onClick={() => void intakeApi.exportStandardizedWorkbook(state.importVersion.id)}>
             下载标准化工作簿
           </button>
+          <p className="data-workbench__next">
+            下一步：
+            <Link className="flow-btn" href="/operations">前往经营分析</Link>{" "}
+            <Link className="flow-btn" href="/">前往经营驾驶舱</Link>
+          </p>
         </div>
       ) : null}
     </section>

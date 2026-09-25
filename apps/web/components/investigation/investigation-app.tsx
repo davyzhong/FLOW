@@ -14,6 +14,7 @@ import type {
   InvestigationContext,
   InvestigationQuery,
 } from "../../lib/api/client";
+import { dataBatchHref, reportsSnapshotHref } from "../../lib/deep-links";
 import { PageState } from "../ui/page-state";
 import "./investigation.css";
 import { CopilotPanel } from "./copilot-panel";
@@ -203,6 +204,9 @@ function InvestigationWorkspace({
   onTransition: (input: FindingTransitionInput) => Promise<void>;
   onConclusionSave: (input: ConclusionInput) => Promise<void>;
 }) {
+  const batchId = query.batch_id ?? context.identity.batch_id;
+  const snapshotId = query.metric_snapshot_id ?? context.identity.metric_snapshot_id;
+  const runId = query.analysis_run_id ?? context.identity.analysis_run_id;
   return (
     <>
       <header className="investigation-topbar">
@@ -257,15 +261,22 @@ function InvestigationWorkspace({
         </div>
         <div>
           <dt>数据批次 ID</dt>
-          <dd>{query.batch_id ?? context.identity.batch_id}</dd>
+          <dd>
+            {/* 批次一 深链：批次→数据工作台（会话外显式提示）、快照→报告中心、运行→四问工作台（无详情页） */}
+            {batchId ? <Link href={dataBatchHref(batchId)} title="在数据工作台查看该批次">{batchId}</Link> : "—"}
+          </dd>
         </div>
         <div>
           <dt>指标快照 ID</dt>
-          <dd>{query.metric_snapshot_id ?? context.identity.metric_snapshot_id}</dd>
+          <dd>
+            {snapshotId ? <Link href={reportsSnapshotHref(snapshotId)} title="在报告中心查看该指标快照">{snapshotId}</Link> : "—"}
+          </dd>
         </div>
         <div>
           <dt>分析运行 ID</dt>
-          <dd>{query.analysis_run_id ?? context.identity.analysis_run_id}</dd>
+          <dd>
+            {runId ? <Link href="/analysis" title="分析运行暂无详情页，前往四问工作台">{runId}</Link> : "—"}
+          </dd>
         </div>
       </dl>
     </>

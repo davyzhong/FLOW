@@ -270,3 +270,32 @@ it("keeps publication blocked if acknowledged warning state cannot be refreshed"
   expect(await screen.findByRole("alert")).toHaveTextContent("服务暂时不可用");
   expect(screen.getByRole("button", { name: "发布此导入版本" })).toBeDisabled();
 });
+
+// 批次一 §2.1/§2.2：/data?batch= 仅在会话内有该批次时恢复，否则显式提示；发布完成态引导链接。
+describe("DataWorkbench 深链", () => {
+  it("?batch= 不在当前会话时显式提示（无批次列表端点，不静默忽略）", () => {
+    vi.stubGlobal("fetch", mockFetchForHappyPath());
+    render(<DataWorkbench initialBatchId="batch-not-in-session" />);
+    expect(screen.getByText(/不在当前会话/)).toBeInTheDocument();
+    expect(screen.getByText(/batch-not-in-session/)).toBeInTheDocument();
+  });
+
+  it("会话内批次与 ?batch= 一致时不提示", async () => {
+    vi.stubGlobal("fetch", mockFetchForHappyPath());
+    render(<DataWorkbench initialBatchId="batch-1" />);
+    fireEvent.change(screen.getByLabelText("选择文件"), { target: { files: [makeXlsxFile()] } });
+    expect(await screen.findByRole("table", {}, { timeout: 3000 })).toBeInTheDocument();
+    expect(screen.queryByText(/不在当前会话/)).not.toBeInTheDocument();
+  });
+
+  it("发布完成态给出前往经营分析与驾驶舱的引导链接", async () => {
+    vi.stubGlobal("fetch", mockFetchForHappyPath());
+    render(<DataWorkbench />);
+    fireEvent.change(screen.getByLabelText("选择文件"), { target: { files: [makeXlsxFile()] } });
+    fireEvent.click(await screen.findByRole("button", { name: "确认映射并校验" }));
+    fireEvent.click(await screen.findByRole("button", { name: "发布此导入版本" }));
+    expect(await screen.findByText("导入版本已发布")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "前往经营分析" })).toHaveAttribute("href", "/operations");
+    expect(screen.getByRole("link", { name: "前往经营驾驶舱" })).toHaveAttribute("href", "/");
+  });
+});

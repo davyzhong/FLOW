@@ -1,4 +1,7 @@
+import Link from "next/link";
+
 import type { DashboardResponse } from "../../lib/api/client";
+import { metricFocusHref } from "../../lib/deep-links";
 
 type Card = DashboardResponse["metric_cards"][number];
 
@@ -13,15 +16,21 @@ export function MetricGrid({ cards }: { cards: DashboardResponse["metric_cards"]
       <div className="metric-grid">
         {cards.map((card) => (
           <article className="metric-card" data-testid="metric-card" key={card.metric_code}>
-            <div className="metric-card__top"><span>{card.category}</span><small>{card.unit}</small></div>
-            <h4>{card.title}</h4>
-            <div className="metric-card__value">{card.primary.display_value}</div>
-            <div className="metric-card__comparisons">
-              <Comparison label="预算" value={card.budget} />
-              <Comparison label="同比" value={card.yoy} />
-              <Comparison label="YTD" value={card.ytd_budget} />
-            </div>
-            {card.companion ? <div className="metric-card__companion">伴随指标 {card.companion.display_value}</div> : null}
+            <Link
+              className="metric-card__link"
+              href={metricFocusHref(card.metric_code)}
+              aria-label={`${card.title}：在指标库中查看口径`}
+            >
+              <div className="metric-card__top"><span>{card.category}</span><small>{card.unit}</small></div>
+              <h4>{card.title}</h4>
+              <div className="metric-card__value">{card.primary.display_value}</div>
+              <div className="metric-card__comparisons">
+                <Comparison label="预算" value={card.budget} />
+                <Comparison label="同比" value={card.yoy} />
+                <Comparison label="YTD" value={card.ytd_budget} />
+              </div>
+              {card.companion ? <div className="metric-card__companion">伴随指标 {card.companion.display_value}</div> : null}
+            </Link>
           </article>
         ))}
       </div>

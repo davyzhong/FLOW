@@ -10,6 +10,7 @@ import {
   type Correction,
   type StatementReportDetail,
 } from "../../lib/api/client";
+import { statementRowId } from "../../lib/deep-links";
 
 const COLUMN_OPTIONS = [
   ["value_end", "期末余额"],
@@ -108,7 +109,10 @@ export function ReviewPanel({
         <ul className="stmt-review__list">
           {corrections.map((correction) => (
             <li key={correction.id}>
-              <code>{correction.statement_type}</code>「{correction.item_name}」
+              {/* 页内锚点：定位到四表原文中对应行（行 id 见 StatementTable 的 getRowDomId） */}
+              <a href={`#${statementRowId(correction.statement_type, correction.item_name)}`}>
+                <code>{correction.statement_type}</code>「{correction.item_name}」
+              </a>{" "}
               {COLUMN_OPTIONS.find(([key]) => key === correction.column_key)?.[1]}：
               {correction.old_value ?? "空"} → {correction.new_value ?? "空"}
               <small>（{correction.operator}：{correction.reason}）</small>

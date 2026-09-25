@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 
 import {
@@ -7,6 +8,7 @@ import {
   type MetricGovernanceEventLine,
   type MetricLibraryEntry,
 } from "../../lib/api/client";
+import { metricFocusHref } from "../../lib/deep-links";
 
 function GovernanceSection({ metrics }: { metrics: MetricLibraryEntry[] }) {
   const [events, setEvents] = useState<MetricGovernanceEventLine[] | null>(null);
@@ -18,6 +20,8 @@ function GovernanceSection({ metrics }: { metrics: MetricLibraryEntry[] }) {
   const [entryId, setEntryId] = useState(metrics[0]?.entry_id ?? "");
   const [changesText, setChangesText] = useState("{}");
   const [reason, setReason] = useState("");
+  // 事件表 metric_code 链接到卡片锚点；不在当前库内的编码保持纯文本（诚实约束）
+  const knownCodes = new Set(metrics.map((m) => m.metric_code));
 
   const refreshEvents = useCallback(() => {
     const controller = new AbortController();
@@ -155,7 +159,13 @@ function GovernanceSection({ metrics }: { metrics: MetricLibraryEntry[] }) {
             {events.map((event) => (
               <tr key={event.id}>
                 <td>{event.created_at?.slice(0, 19).replace("T", " ") ?? "—"}</td>
-                <td><code>{event.metric_code}</code></td>
+                <td>
+                  {knownCodes.has(event.metric_code) ? (
+                    <Link href={metricFocusHref(event.metric_code)}><code>{event.metric_code}</code></Link>
+                  ) : (
+                    <code>{event.metric_code}</code>
+                  )}
+                </td>
                 <td>v{event.version}</td>
                 <td>{event.action}</td>
                 <td>{event.operator}</td>

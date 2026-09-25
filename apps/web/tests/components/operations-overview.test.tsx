@@ -192,3 +192,73 @@ describe("OperationsOverviewApp", () => {
     expect(screen.queryByRole("link", { name: "下载 PDF" })).toBeNull();
   });
 });
+
+// 批次一 §2.1/§2.3：/operations?report= 选中参数、指标行链接指标库、冻结快照链接报告中心。
+describe("OperationsOverviewApp 深链", () => {
+  function stubTwoReports() {
+    const fetchMock = vi.fn(async (input: RequestInfo | URL) => {
+      const url = String(input);
+      if (url.endsWith("/statements")) {
+        return jsonResponse({
+          reports: [
+            REPORTS.reports[0],
+            { ...REPORTS.reports[0], id: "report-2", company_name: "圆通速递" },
+          ],
+        });
+      }
+      if (url.endsWith("/operations/public-periods")) return jsonResponse({ periods: [] });
+      if (url.includes("/operations/overview/")) return jsonResponse(OVERVIEW);
+      return jsonResponse({ detail: "not found" }, 404);
+    });
+    vi.stubGlobal("fetch", fetchMock);
+    return fetchMock;
+  }
+
+  it("?report= 命中时初始选中对应财报", async () => {
+    const fetchMock = stubTwoReports();
+    render(<OperationsOverviewApp initialReportId="report-2" />);
+    const selector = await screen.findByLabelText("分析数据与期间");
+    await waitFor(() => expect(selector).toHaveValue("report:report-2"));
+    await waitFor(() =>
+      expect(
+        fetchMock.mock.calls.some(([input]) =>
+          String(input).includes("/operations/overview/report-2"),
+        ),
+      ).toBe(true),
+    );
+  });
+
+  it("?report= 不存在时显式提示并回退到第一份财报", async () => {
+    stubTwoReports();
+    render(<OperationsOverviewApp initialReportId="missing-report" />);
+    expect(await screen.findByText(/未找到财报/)).toBeInTheDocument();
+    const selector = screen.getByLabelText("分析数据与期间");
+    await waitFor(() => expect(selector).toHaveValue("report:report-1"));
+  });
+
+  it("主题指标行链接到指标库 entry 深链，冻结快照链接到报告中心", async () => {
+    const fetchMock = vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
+      const url = String(input);
+      if (init?.method === "POST") {
+        return jsonResponse({
+          snapshot_id: "snap-ops-9",
+          version: 2,
+          report_type: "operations_overview",
+          payload_hash: "h".repeat(64),
+        });
+      }
+      if (url.endsWith("/statements")) return jsonResponse(REPORTS);
+      if (url.endsWith("/operations/public-periods")) return jsonResponse({ periods: [] });
+      if (url.includes("/operations/overview/")) return jsonResponse(OVERVIEW);
+      return jsonResponse({ detail: "not found" }, 404);
+    });
+    vi.stubGlobal("fetch", fetchMock);
+    render(<OperationsOverviewApp />);
+    const metricLink = await screen.findByRole("link", { name: /杜邦三分解/ });
+    expect(metricLink).toHaveAttribute("href", "/metric-library?entry=dupont_three_factor");
+
+    fireEvent.click(screen.getByRole("button", { name: "冻结概览" }));
+    const snapshotLink = await screen.findByRole("link", { name: /snap-ops-9/ });
+    expect(snapshotLink).toHaveAttribute("href", "/reports?snapshot=snap-ops-9");
+  });
+});

@@ -811,3 +811,30 @@
   font-size: 12px;
   font-weight: 600;
 }
+
+/* 批次一 深链定位：?focus/?entry 命中的卡片高亮，miss 提示条，依赖 chip 链接态 */
+.ml-metric--focused {
+  border-color: var(--rep-blue);
+  box-shadow: 0 0 0 2px var(--rep-blue-soft);
+}
+
+.ml-notice--miss {
+  background: var(--ml-warn-bg);
+  color: var(--ml-warn-ink);
+}
+
+a.ml-dep {
+  text-decoration: none;
+}
+
+a.ml-dep:hover {
+  background: var(--rep-blue-soft);
+  color: var(--rep-blue);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.ml-graph__selected a {
+  color: var(--rep-blue);
+  font-weight: 600;
+}

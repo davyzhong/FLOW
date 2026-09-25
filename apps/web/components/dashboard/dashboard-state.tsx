@@ -20,10 +20,11 @@ export function DashboardLoading() {
   );
 }
 
-export function DashboardError({ retry }: { retry: () => void }) {
+export function DashboardError({ retry, hint = null }: { retry: () => void; hint?: string | null }) {
   return (
     <div className="dashboard-state dashboard-state--error" role="alert">
       <p>经营驾驶舱暂时无法加载</p>
+      {hint ? <p className="dashboard-state__hint">{hint}</p> : null}
       <button type="button" className="flow-btn" onClick={retry}>
         重试
       </button>

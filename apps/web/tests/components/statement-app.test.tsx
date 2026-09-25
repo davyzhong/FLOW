@@ -207,3 +207,67 @@ describe("StatementApp", () => {
     expect(screen.getAllByTitle("1023670.0000").length).toBeGreaterThan(0);
   });
 });
+
+// 批次一 §2.1/§2.2：/statements?report={report_id} 初始选中 + 更正记录页内锚点。
+describe("StatementApp 深链", () => {
+  const SECOND_ID = "2b3c4d5e-6f70-8192-a3b4-c5d6e7f8091a";
+  const SECOND_SUMMARY = {
+    ...LIST_RESPONSE.reports[0],
+    id: SECOND_ID,
+    company_name: "圆通速递",
+    period_label: "2026Q1",
+  };
+  const SECOND_DETAIL = { ...DETAIL_RESPONSE, id: SECOND_ID, company_name: "圆通速递" };
+
+  it("?report= 命中时初始选中对应财报而非默认第一条", async () => {
+    stubFetch({
+      "/api/v1/statements": { reports: [LIST_RESPONSE.reports[0], SECOND_SUMMARY] },
+      [`/api/v1/statements/${SECOND_ID}`]: SECOND_DETAIL,
+    });
+    renderWithClient(<StatementApp initialReportId={SECOND_ID} />);
+    expect(await screen.findByText("圆通速递")).toBeInTheDocument();
+    const tabs = screen.getByRole("navigation", { name: "财报选择" });
+    const second = screen.getByRole("button", { name: /圆通速递/ });
+    expect(second).toHaveAttribute("aria-pressed", "true");
+    expect(tabs).toBeInTheDocument();
+  });
+
+  it("?report= 不存在时显式提示并回退到第一份财报", async () => {
+    stubFetch({
+      "/api/v1/statements": LIST_RESPONSE,
+      [`/api/v1/statements/${REPORT_ID}`]: DETAIL_RESPONSE,
+    });
+    renderWithClient(<StatementApp initialReportId="missing-report-id" />);
+    expect(await screen.findByText(/未找到财报/)).toBeInTheDocument();
+    expect(await screen.findByText("顺丰控股")).toBeInTheDocument();
+  });
+
+  it("四表行带 DOM 锚点 id，更正记录条目链接到对应行", async () => {
+    stubFetch({
+      "/api/v1/statements": LIST_RESPONSE,
+      [`/api/v1/statements/${REPORT_ID}`]: DETAIL_RESPONSE,
+      [`/api/v1/statements/${REPORT_ID}/corrections`]: {
+        corrections: [
+          {
+            id: "corr-1",
+            statement_type: "合并利润表",
+            item_name: "一、营业总收入",
+            column_key: "value_current",
+            old_value: "1.0000",
+            new_value: "74142121.0000",
+            operator: "finance.bp",
+            reason: "补录披露值",
+            created_at: "2026-09-06T09:00:00+00:00",
+          },
+        ],
+      },
+    });
+    renderWithClient(<StatementApp />);
+    // 更正记录链接随 ReportDetail 渲染出现，找到它即说明四表已挂载
+    const anchor = await screen.findByRole("link", { name: /合并利润表.*一、营业总收入/ });
+    expect(anchor).toHaveAttribute("href", "#stmt-row-合并利润表-一、营业总收入");
+    expect(
+      document.getElementById("stmt-row-合并利润表-一、营业总收入"),
+    ).not.toBeNull();
+  });
+});

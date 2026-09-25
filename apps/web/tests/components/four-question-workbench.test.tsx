@@ -26,7 +26,7 @@ const REPORTS = {
 const WORKBENCH = {
   workbench_id: "flow.analysis.objective_topics.v1",
   report: {
-    id: "report-1",
+    report_id: "report-1",
     company_name: "顺丰控股",
     period_label: "2026Q1",
     unit_note: "人民币万元",
@@ -84,4 +84,22 @@ describe("FourQuestionWorkbench", () => {
     expect(screen.getByText("暂不可算（缺披露事实）")).toBeTruthy();
   });
 
+});
+
+// 批次一 §2.3：analysis 身份行 → /statements?report=；指标行 → /metric-library?focus=。
+describe("FourQuestionWorkbench 深链", () => {
+  it("身份行链接到对应财报，指标编码链接到指标库", async () => {
+    vi.stubGlobal("fetch", mockFetch());
+    render(<FourQuestionWorkbench />);
+    await waitFor(() => expect(screen.getByText("四问指标")).toBeTruthy());
+    const identityLink = screen.getByRole("link", { name: /顺丰控股 · 2026Q1/ });
+    expect(identityLink).toHaveAttribute("href", "/statements?report=report-1");
+    const metricLink = screen.getByRole("link", { name: "revenue" });
+    expect(metricLink).toHaveAttribute("href", "/metric-library?focus=revenue");
+    // 暂不可算指标同样给出定义链接
+    expect(screen.getByRole("link", { name: "revenue_growth" })).toHaveAttribute(
+      "href",
+      "/metric-library?focus=revenue_growth",
+    );
+  });
 });

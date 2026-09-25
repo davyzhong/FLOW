@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 
 import { ReportsCenter } from "../../components/reports/reports-center";
 
@@ -128,4 +128,93 @@ it.each(["pptx", "xlsx", "html", "pdf"])("downloads %s with its extension when u
   fireEvent.click(await screen.findByRole("button", { name: "下载" }));
   await vi.waitFor(() => expect(filename).toMatch(new RegExp(`\\.${format}$`)));
   click.mockRestore();
+});
+
+// 批次一 §2.1/§2.2/§2.3：/reports?snapshot= 与 ?focus= 接收、互链链接。
+describe("ReportsCenter 深链", () => {
+  function stubFullCenter() {
+    const fetchMock = vi.fn(async (input: RequestInfo | URL) => {
+      const url = String(input);
+      if (url.endsWith("/statements")) {
+        return jsonResponse({
+          reports: [
+            {
+              id: "report-1",
+              company_name: "顺丰控股",
+              stock_code: "002352.SZ",
+              report_kind: "一季报",
+              period_label: "2026Q1",
+              unit_note: "人民币千元",
+              source_ref: "p5_samples/sf.pdf",
+              source_sha256: null,
+              statement_types: [],
+              line_item_count: 3,
+              created_at: "2026-09-06T08:00:00+00:00",
+            },
+          ],
+        });
+      }
+      if (url.endsWith("/publishing/snapshots")) {
+        return jsonResponse({
+          snapshots: [
+            SNAPSHOT,
+            { ...SNAPSHOT, id: "snap-2", metric_snapshot_id: "ms-2", title: "2026-07 经营月报", version: 2 },
+          ],
+        });
+      }
+      if (url.endsWith("/publishing/freeze-candidates")) {
+        return jsonResponse({
+          candidates: [
+            {
+              metric_snapshot_id: "ms-candidate-1",
+              batch_id: "batch-1",
+              period_label: "2026-08",
+              version: 3,
+              approved_findings: 2,
+              created_at: "2026-09-03T09:00:00+08:00",
+            },
+          ],
+        });
+      }
+      if (url.endsWith("/operations/snapshots")) return jsonResponse({ snapshots: [OPERATIONS_SNAPSHOT] });
+      if (url.includes("/attempts")) return jsonResponse({ attempts: [] });
+      return jsonResponse({ detail: { code: "not_found", message: "unknown" } }, 404);
+    });
+    vi.stubGlobal("fetch", fetchMock as unknown as typeof fetch);
+  }
+
+  it("?snapshot= 初始选中对应报告快照（按 id 或 metric_snapshot_id 匹配）", async () => {
+    stubFullCenter();
+    render(<ReportsCenter initialSnapshot="snap-2" />);
+    const radio = await screen.findByRole("radio", { name: /2026-07 经营月报/ });
+    expect(radio).toBeChecked();
+    expect(screen.queryByText(/未找到快照/)).not.toBeInTheDocument();
+  });
+
+  it("?focus= 初始选中冻结候选的指标快照", async () => {
+    stubFullCenter();
+    render(<ReportsCenter initialFocus="ms-candidate-1" />);
+    const select = await screen.findByRole("combobox");
+    await waitFor(() => expect(select).toHaveValue("ms-candidate-1"));
+    expect(screen.queryByText(/未找到指标快照/)).not.toBeInTheDocument();
+  });
+
+  it("快照参数不存在时显式提示，不静默忽略", async () => {
+    stubFullCenter();
+    render(<ReportsCenter initialSnapshot="missing-snapshot" />);
+    expect(await screen.findByText(/未找到快照「missing-snapshot」/)).toBeInTheDocument();
+  });
+
+  it("客观财报条目追加「查看分析」、经营快照行链回经营分析、冻结提示链回 Investigation", async () => {
+    stubFullCenter();
+    render(<ReportsCenter />);
+    const analyze = await screen.findByRole("link", { name: "查看分析" });
+    expect(analyze).toHaveAttribute("href", "/statements?report=report-1");
+    const backToOps = await screen.findByRole("link", { name: "在经营分析中查看" });
+    expect(backToOps).toHaveAttribute("href", "/operations?report=statement-1");
+    expect(screen.getByRole("link", { name: "Investigation 流程" })).toHaveAttribute(
+      "href",
+      "/investigations",
+    );
+  });
 });

@@ -39,7 +39,7 @@ const columns: ColumnDef<FindingListItem, unknown>[] = [
     accessorKey: "title",
     header: "发现",
     meta: { label: "发现" },
-    cell: (info) => <span>{info.getValue<string>()}</span>,
+    cell: (info) => <a href={investigationHref(info.row.original)}>{info.getValue<string>()}</a>,
   },
   {
     accessorKey: "finding_type",
@@ -80,10 +80,14 @@ const columns: ColumnDef<FindingListItem, unknown>[] = [
     meta: { label: "评分" },
     cell: (info) => {
       const raw = info.getValue<string | number | null>();
-      return (
-        <span className="block text-right tabular-nums">
-          {raw ? Number(raw).toFixed(0) : "—"}
-        </span>
+      const text = raw ? Number(raw).toFixed(0) : "—";
+      // 评分来自分析运行；运行详情页不存在（批次三），先链接到四问工作台
+      return info.row.original.analysis_run_id && raw ? (
+        <a href="/analysis" title="前往四问工作台查看分析" className="block text-right tabular-nums">
+          {text}
+        </a>
+      ) : (
+        <span className="block text-right tabular-nums">{text}</span>
       );
     },
   },
@@ -138,11 +142,12 @@ export function InvestigationsIndex() {
 
       {findings && findings.length > 0 ? (
         <div className="investigations-index__table-wrap" role="region" aria-label="Finding 列表" tabIndex={0}>
-          {/* FlowDataTable 承担排序/局部滚动/密度（表格职责统一，阶段五） */}
+          {/* FlowDataTable 承担排序/局部滚动/密度（表格职责统一，阶段五）；rowHref 整行跳转（批次一） */}
           <FlowDataTable
             columns={columns}
             data={findings}
             getRowId={(finding) => finding.finding_id}
+            rowHref={(finding) => investigationHref(finding)}
             dense
             pageSize={20}
           />

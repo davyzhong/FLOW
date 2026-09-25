@@ -89,3 +89,21 @@
 .workbench__metric-code {
   color: var(--rep-slate);
 }
+
+/* 批次一 深链：身份行 → /statements?report=；指标编码 → /metric-library?focus= */
+.workbench__identity a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.workbench__identity a:hover {
+  color: var(--flow-info);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+a.workbench__metric-code:hover {
+  color: var(--flow-info);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

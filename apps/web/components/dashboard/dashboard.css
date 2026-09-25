@@ -675,6 +675,8 @@ tbody th:first-child { text-align: left; }
 
 /* F1-3：空态引导样式（dashboard/operations 共用视觉语言） */
 .dashboard-state--guide p { margin: 0 0 8px; }
+/* 深链参数错误提示（批次一：URL 筛选参数非法时的次级说明） */
+.dashboard-state__hint { margin: 4px 0 0; color: var(--muted); font-size: 12px; }
 .dashboard-state__guide a,
 .operations-state--guide a { color: var(--flow-info); font-weight: 600; text-decoration: underline; }
 .operations-state--guide {
@@ -682,3 +684,89 @@ tbody th:first-child { text-align: left; }
   padding: 20px 24px; background: #f8fafc; color: #334155;
 }
 .operations-state--guide p { margin: 0 0 8px; }
+
+/* 批次一 超链接化：内容区深链样式（下钻到指标库 / 报告中心 / 数据页 / 驾驶舱筛选） */
+.metric-card__link {
+  display: block;
+  margin: -11px;
+  padding: 11px;
+  color: inherit;
+  text-decoration: none;
+  border-radius: 2px;
+}
+
+.metric-card__link:hover h4 {
+  color: var(--blue);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.metric-card__link:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: -2px;
+}
+
+.findings-panel h4 a.finding-title-link {
+  display: inline;
+  color: var(--ink);
+  font-size: inherit;
+  font-weight: inherit;
+  white-space: normal;
+}
+
+.findings-panel h4 a.finding-title-link:hover {
+  color: var(--blue);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.data-status-bar a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.data-status-bar a:hover {
+  color: var(--blue);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.bridge-bars a.bridge-bar {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.bridge-bars a.bridge-bar:hover span {
+  color: var(--blue);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.trend-details th a,
+.product-panel th a,
+.matrix-panel th a {
+  color: inherit;
+  text-decoration: none;
+  font-weight: inherit;
+}
+
+.trend-details th a:hover,
+.product-panel th a:hover,
+.matrix-panel th a:hover {
+  color: var(--blue);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.matrix-panel td a {
+  display: grid;
+  gap: 1px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.matrix-panel td a:hover strong {
+  color: var(--blue);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

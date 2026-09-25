@@ -1,4 +1,7 @@
+import Link from "next/link";
+
 import type { DashboardResponse } from "../../lib/api/client";
+import { reportsFocusHref } from "../../lib/deep-links";
 
 type Point = DashboardResponse["trends"]["points"][number];
 type SeriesKey = "revenue" | "operating_profit" | "operating_cash_flow";
@@ -25,7 +28,7 @@ export function TrendPanel({ trends }: { trends: DashboardResponse["trends"] }) 
       <div className="chart-legend"><span className="revenue">营业收入</span><span className="profit">经营利润</span><span className="cash">经营现金流</span></div>
       <details className="trend-details"><summary>查看趋势数据</summary>
         <table aria-label="趋势数据明细"><thead><tr><th>月份</th><th>收入</th><th>经营利润</th><th>现金流</th><th>毛利率</th></tr></thead>
-          <tbody>{points.map((point) => <tr key={point.month}><th>{point.month}</th><td>{point.revenue.display_value}</td><td>{point.operating_profit.display_value}</td><td>{point.operating_cash_flow.display_value}</td><td>{point.gross_margin.display_value}</td></tr>)}</tbody>
+          <tbody>{points.map((point) => <tr key={point.month}><th><Link href={reportsFocusHref(point.metric_snapshot_id)} title="在报告中心查看该月指标快照">{point.month}</Link></th><td>{point.revenue.display_value}</td><td>{point.operating_profit.display_value}</td><td>{point.operating_cash_flow.display_value}</td><td>{point.gross_margin.display_value}</td></tr>)}</tbody>
         </table>
       </details>
     </section>

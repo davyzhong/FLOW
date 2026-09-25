@@ -12,6 +12,7 @@ import {
   statementApi,
   type StatementReportDetail,
 } from "../../lib/api/client";
+import { statementRowId } from "../../lib/deep-links";
 import type { ColumnDef } from "@tanstack/react-table";
 import { FlowDataTable } from "../ui/flow-data-table";
 import { ProvenanceBadge, ProvenanceHover } from "../ui/provenance-badge";
@@ -128,6 +129,8 @@ function StatementTable({
             columns={columnDefs}
             data={section.items}
             getRowId={(line) => `${line.sort_order}-${line.item_name}`}
+            // 行 DOM id：复核更正记录以 #stmt-row-… 页内锚点定位到对应行
+            getRowDomId={(line) => statementRowId(statementType, line.item_name)}
             dense
             pageSize={50}
           />
@@ -237,10 +240,15 @@ function ReportDetail({
   );
 }
 
-export function StatementApp() {
+export function StatementApp({
+  initialReportId = null,
+}: {
+  /** ?report={report_id} 深链：命中时初始选中对应财报；不存在时显式提示并回退默认第一条 */
+  initialReportId?: string | null;
+}) {
   // F-Query 试点：列表 + 依赖详情两条查询，取代手写 loading/error/loaded 状态机。
   // retry=false 等默认值见 lib/api/query-client.ts（503 门禁反馈不被静默重试掩盖）。
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(initialReportId);
 
   const listQuery = useQuery({
     queryKey: ["statements"],
@@ -248,7 +256,15 @@ export function StatementApp() {
   });
   const reports = listQuery.data?.reports ?? [];
 
-  const activeId = reports.length ? (selectedId ?? reports[0].id) : null;
+  // 仅接受仍存在于列表中的选中值；深链失效 id 回退默认第一条并显式提示
+  const validSelectedId =
+    selectedId && reports.some((report) => report.id === selectedId) ? selectedId : null;
+  const activeId = reports.length ? (validSelectedId ?? reports[0].id) : null;
+  const requestedMissing =
+    initialReportId !== null &&
+    reports.length > 0 &&
+    selectedId === initialReportId &&
+    !reports.some((report) => report.id === initialReportId);
   const detailQuery = useQuery({
     queryKey: ["statements", activeId],
     queryFn: () => statementApi.getReport(activeId as string),
@@ -291,6 +307,11 @@ export function StatementApp() {
     const currentId = activeId ?? reports[0].id;
     body = (
       <>
+        {requestedMissing ? (
+          <p role="status" className="stmt-status">
+            未找到财报「{initialReportId}」（report 参数不存在或已下线），已显示列表第一份财报。
+          </p>
+        ) : null}
         <nav className="stmt-report-tabs" aria-label="财报选择">
           {reports.map((report) => (
             <button

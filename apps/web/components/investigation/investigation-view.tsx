@@ -308,16 +308,28 @@ export function InvestigationCheckRow({ context }: { context: InvestigationConte
       <div className={`investigation-check ${failedReconciliations.length === 0 ? "is-good" : "is-warn"}`}>
         <strong>{failedReconciliations.length === 0 ? "✓ 对账全部通过" : "! 存在未通过对账"}</strong>
         <span>
-          {failedReconciliations.length === 0
-            ? `${context.reconciliations.length} 项对账校验通过`
-            : failedReconciliations.map((item) => item.reconciliation_code).join("、")}
+          {failedReconciliations.length === 0 ? (
+            `${context.reconciliations.length} 项对账校验通过`
+          ) : (
+            <a className="investigation-check__link" href="#investigation-evidence">
+              {failedReconciliations.map((item) => item.reconciliation_code).join("、")}（查看证据）
+            </a>
+          )}
         </span>
       </div>
       <div className={`investigation-check ${blockingIssues.length === 0 ? "is-good" : "is-warn"}`}>
         <strong>{blockingIssues.length === 0 ? "✓ 无阻断质量问题" : "! 存在阻断质量问题"}</strong>
         <span>
-          警告 {warnings.length} 项
-          {warnings.length > 0 ? "（已在导入时确认）" : ""}
+          {blockingIssues.length === 0 ? (
+            <>
+              警告 {warnings.length} 项
+              {warnings.length > 0 ? "（已在导入时确认）" : ""}
+            </>
+          ) : (
+            <a className="investigation-check__link" href="#investigation-evidence">
+              阻断 {blockingIssues.length} 项 · 警告 {warnings.length} 项（查看证据）
+            </a>
+          )}
         </span>
       </div>
       <div
@@ -329,11 +341,15 @@ export function InvestigationCheckRow({ context }: { context: InvestigationConte
           {context.eligibility_blockers.length === 0 ? "✓ 具备报告资格" : "! 尚不可进入正式报告"}
         </strong>
         <span>
-          {context.eligibility_blockers.length === 0
-            ? "全部证据已核验，结论已完成"
-            : context.eligibility_blockers
+          {context.eligibility_blockers.length === 0 ? (
+            "全部证据已核验，结论已完成"
+          ) : (
+            <a className="investigation-check__link" href="#investigation-conclusion">
+              {context.eligibility_blockers
                 .map((blocker) => BLOCKER_LABELS[blocker] ?? blocker)
-                .join("；")}
+                .join("；")}（前往结论区）
+            </a>
+          )}
         </span>
       </div>
     </section>
@@ -346,7 +362,7 @@ export function InvestigationSourceRecordsTable({
   records: InvestigationContext["source_records"];
 }) {
   return (
-    <section className="investigation-panel" aria-label="关键源记录">
+    <section className="investigation-panel" aria-label="关键源记录" id="investigation-sources">
       <div className="investigation-panel__head">
         <h2>贡献最大的源记录</h2>
         <small>{records.length} 条 · 点击来源查看原始单元格</small>
@@ -422,7 +438,7 @@ export function InvestigationConclusionEditor({
   );
 
   return (
-    <section className="investigation-panel investigation-conclusion" aria-label="结构化结论">
+    <section className="investigation-panel investigation-conclusion" aria-label="结构化结论" id="investigation-conclusion">
       <div className="investigation-panel__head">
         <h2>Finance BP 结论</h2>
         <small>已验证事实 / 分析判断 / 待确认事项 / 建议 · 事实与假设必须分开</small>
@@ -514,7 +530,7 @@ export function InvestigationEvidenceInspector({
   onDecision: (input: EvidenceDecisionInput, evidenceId: string) => Promise<void>;
 }) {
   return (
-    <section className="investigation-inspect-card" aria-label="证据复核">
+    <section className="investigation-inspect-card" aria-label="证据复核" id="investigation-evidence">
       <h2>证据复核</h2>
       {context.evidence.map((item) => (
         <article key={item.evidence_id} className="investigation-evidence">

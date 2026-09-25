@@ -103,3 +103,24 @@
   gap: var(--flow-space-3);
 }
 .data-workbench__published h2 { margin: 0; font-size: 16px; color: var(--rep-ok); }
+
+/* 批次一 深链：?batch= 未命中会话的显式提示 + 发布完成态引导链接 */
+.data-workbench__batch-note {
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: var(--flow-radius-m);
+  background: var(--ml-warn-bg, #fdf0dc);
+  color: var(--ml-warn-ink, #805000);
+  font-size: var(--flow-font-s);
+}
+
+.data-workbench__next {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--flow-space-2);
+  margin: 0;
+  width: 100%;
+  color: var(--rep-ink-2);
+  font-size: var(--flow-font-s);
+}

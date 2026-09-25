@@ -33,6 +33,10 @@ export type FlowDataTableProps<TData> = {
   data: TData[];
   /** 行唯一键（默认用索引） */
   getRowId?: (row: TData, index: number) => string;
+  /** 行 DOM id：页内锚点定位（如 statements 更正记录 → 表格行），默认不设 */
+  getRowDomId?: (row: TData) => string;
+  /** 整行跳转 href（可选；仅在调用方显式传入时启用，单元格内链接/按钮优先响应） */
+  rowHref?: (row: TData) => string | null | undefined;
   /** Carbon 空态模式：无数据时整表替换为空态节点 */
   emptyState?: React.ReactNode;
   /** 列合计 footer：columnId → 汇总节点（仅对该列渲染 footer 单元格） */
@@ -47,6 +51,8 @@ export function FlowDataTable<TData>({
   columns,
   data,
   getRowId,
+  getRowDomId,
+  rowHref,
   emptyState,
   summary,
   dense = false,
@@ -113,15 +119,41 @@ export function FlowDataTable<TData>({
           ))}
         </thead>
         <tbody>
-          {table.getRowModel().rows.map((row) => (
-            <tr key={row.id} className="odd:bg-zebra/60 hover:bg-blue-soft/40">
-              {row.getVisibleCells().map((cell) => (
-                <td key={cell.id} className={cn("border border-line-5 px-3 align-top", cellPad)}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
-          ))}
+          {table.getRowModel().rows.map((row) => {
+            const href = rowHref?.(row.original) ?? undefined;
+            const navigate = (event: React.MouseEvent | React.KeyboardEvent) => {
+              if (!href) return;
+              // 单元格内的链接/按钮/输入控件优先响应，整行跳转只兜底空白区域
+              if ((event.target as HTMLElement).closest("a,button,input,select,textarea")) return;
+              window.location.assign(href);
+            };
+            return (
+              <tr
+                key={row.id}
+                id={getRowDomId?.(row.original)}
+                data-href={href}
+                tabIndex={href ? 0 : undefined}
+                className={cn("odd:bg-zebra/60 hover:bg-blue-soft/40", href && "cursor-pointer")}
+                onClick={href ? navigate : undefined}
+                onKeyDown={
+                  href
+                    ? (event) => {
+                        if (event.key === "Enter" || event.key === " ") {
+                          event.preventDefault();
+                          navigate(event);
+                        }
+                      }
+                    : undefined
+                }
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <td key={cell.id} className={cn("border border-line-5 px-3 align-top", cellPad)}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                ))}
+              </tr>
+            );
+          })}
         </tbody>
         {summaryRow ? (
           <tfoot>

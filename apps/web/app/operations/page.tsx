@@ -3,10 +3,20 @@ import { OperationsOverviewApp } from "../../components/operations/operations-ov
 
 export const metadata = { title: "经营概览 | FLOW" };
 
-export default function OperationsPage() {
+function first(value: string | string[] | undefined): string | null {
+  if (Array.isArray(value)) return value[0] ?? null;
+  return value ?? null;
+}
+
+export default async function OperationsPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const query = await searchParams;
   return (
     <AppShell>
-      <OperationsOverviewApp />
+      <OperationsOverviewApp initialReportId={first(query.report)} />
     </AppShell>
   );
 }

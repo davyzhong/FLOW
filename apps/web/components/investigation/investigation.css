@@ -678,3 +678,25 @@
   border-top: 1px solid #edf1f5;
   padding-top: 0.3rem;
 }
+
+/* 批次一 深链：检查行页内锚点 + 身份条链接 */
+.investigation-check__link {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.investigation-check__link:hover {
+  color: var(--blue, #1d4ed8);
+}
+
+.investigation-identity-note a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.investigation-identity-note a:hover {
+  color: var(--blue, #1d4ed8);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

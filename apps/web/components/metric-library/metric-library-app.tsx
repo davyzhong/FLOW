@@ -3,6 +3,9 @@
 // 指标库（D040）：只读呈现 flow.metric_dictionary.v0-draft 与会计基础数据集。
 // 数据全部来自 GET /api/v1/metric-library（版本化 YAML 数据集），页面不修改、不计算口径。
 // 视觉走报告风：hero（红顶 + kicker + 大标题）+ KPI 卡带 + 覆盖矩阵热力图 + verdict 条。
+// 深链接收端（2026-09-26 批次一）：?focus={metric_code} / ?entry={entry_id}
+// → 切到对应分区、卡片加 id 锚点并高亮；对象不存在时显式提示而非静默忽略。
+import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import {
@@ -11,6 +14,7 @@ import {
   type MetricLibrary,
   type MetricLibraryEntry,
 } from "../../lib/api/client";
+import { metricAnchorId, metricFocusHref } from "../../lib/deep-links";
 import { PageState } from "../ui/page-state";
 import { CoverageSection } from "./metric-coverage-section";
 import { GovernanceSection } from "./metric-governance-section";
@@ -152,10 +156,25 @@ function MetricDraftForm({
   );
 }
 
-function MetricCard({ metric, domains, onChanged }: { metric: MetricLibraryEntry; domains: Record<string, string>; onChanged?: (message: string) => void }) {
+function MetricCard({
+  metric,
+  domains,
+  onChanged,
+  knownCodes,
+  focused = false,
+}: {
+  metric: MetricLibraryEntry;
+  domains: Record<string, string>;
+  onChanged?: (message: string) => void;
+  knownCodes?: ReadonlySet<string>;
+  focused?: boolean;
+}) {
   const [drafting, setDrafting] = useState(false);
   return (
-    <article className="ml-metric">
+    <article
+      className={focused ? "ml-metric ml-metric--focused" : "ml-metric"}
+      id={metricAnchorId(metric)}
+    >
       <header className="ml-metric__head">
         <strong>{metric.name}</strong>
         <code>{metric.metric_code}</code>
@@ -172,7 +191,14 @@ function MetricCard({ metric, domains, onChanged }: { metric: MetricLibraryEntry
         <div><dt>CAS 取数</dt><dd>{metric.source_cas?.length ? metric.source_cas.join("、") : "—"}</dd></div>
         <div><dt>IFRS 对照</dt><dd>{metric.source_ifrs ?? "—"}</dd></div>
         {metric.depends_on.length > 0 ? (
-          <div><dt>依赖指标</dt><dd>{metric.depends_on.map((d) => <code key={d} className="ml-dep">{d}</code>)}</dd></div>
+          <div><dt>依赖指标</dt><dd>{metric.depends_on.map((d) =>
+            // 诚实约束：依赖编码不在库内时保持纯文本，不渲染假链接
+            knownCodes?.has(d) ? (
+              <Link key={d} className="ml-dep" href={metricFocusHref(d)}>{d}</Link>
+            ) : (
+              <code key={d} className="ml-dep">{d}</code>
+            ),
+          )}</dd></div>
         ) : null}
         {metric.benchmark ? <div><dt>参考基准</dt><dd>{metric.benchmark}</dd></div> : null}
         {metric.analysis_dimensions && metric.analysis_dimensions.length > 0 ? (
@@ -216,7 +242,19 @@ function MetricCard({ metric, domains, onChanged }: { metric: MetricLibraryEntry
   );
 }
 
-function MetricList({ metrics, domains, onChanged }: { metrics: MetricLibraryEntry[]; domains: Record<string, string>; onChanged?: (message: string) => void }) {
+function MetricList({
+  metrics,
+  domains,
+  onChanged,
+  knownCodes,
+  focusedAnchor = null,
+}: {
+  metrics: MetricLibraryEntry[];
+  domains: Record<string, string>;
+  onChanged?: (message: string) => void;
+  knownCodes?: ReadonlySet<string>;
+  focusedAnchor?: string | null;
+}) {
   const [query, setQuery] = useState("");
   const [mpmOnly, setMpmOnly] = useState(false);
   const visible = useMemo(
@@ -241,18 +279,36 @@ function MetricList({ metrics, domains, onChanged }: { metrics: MetricLibraryEnt
       </div>
       <div className="ml-metric-list">
         {visible.map((metric) => (
-          <MetricCard key={metric.metric_code} metric={metric} domains={domains} onChanged={onChanged} />
+          <MetricCard
+            key={metric.metric_code}
+            metric={metric}
+            domains={domains}
+            onChanged={onChanged}
+            knownCodes={knownCodes}
+            focused={focusedAnchor === metricAnchorId(metric)}
+          />
         ))}
       </div>
     </section>
   );
 }
 
-export function MetricLibraryApp() {
+/** 标签页切换后的下一帧再回调（滚动定位），避免目标卡片尚未挂载。 */
+export function MetricLibraryApp({
+  focus = null,
+  entry = null,
+}: {
+  /** ?focus={metric_code}：按编码定位（跨 collection 重复时取第一条，可用 entry 消歧） */
+  focus?: string | null;
+  /** ?entry={entry_id}：按库内条目 id 精确定位 */
+  entry?: string | null;
+}) {
   const [state, setState] = useState<LoadState>({ kind: "loading" });
   const [notice, setNotice] = useState<string | null>(null);
   const [tab, setTab] = useState<Tab>("general");
   const [accountQuery, setAccountQuery] = useState("");
+  // 深链定位全程在渲染期纯派生（ lint set-state-in-effect ）；用户手动点分区即视为放弃定位。
+  const [focusDismissed, setFocusDismissed] = useState(false);
 
   const load = useCallback(() => {
     const controller = new AbortController();
@@ -281,6 +337,33 @@ export function MetricLibraryApp() {
     setState({ kind: "loading" });
     load();
   }, [load]);
+
+  // 深链解析（纯派生）：entry 优先于 focus；对象不存在时显式提示（不静默忽略）。
+  const requested = entry ?? focus;
+  const focusedMetric =
+    state.kind === "loaded" && requested
+      ? (state.library.metrics.find((m) =>
+          entry ? m.entry_id === entry : m.metric_code === focus,
+        ) ?? null)
+      : null;
+  const focusMiss = state.kind === "loaded" && requested && !focusedMetric ? requested : null;
+  const focusedAnchor = focusedMetric && !focusDismissed ? metricAnchorId(focusedMetric) : null;
+  const activeTab: Tab =
+    focusedAnchor && focusedMetric
+      ? focusedMetric.collection === "logistics"
+        ? "logistics"
+        : "general"
+      : tab;
+
+  useEffect(() => {
+    if (!focusedAnchor) return;
+    document.getElementById(focusedAnchor)?.scrollIntoView?.({ block: "center" });
+  }, [focusedAnchor]);
+
+  const selectTab = useCallback((next: Tab) => {
+    setTab(next);
+    setFocusDismissed(true);
+  }, []);
 
   // 加载/错误态也保留页面 h1（FE-10：错误态缺少稳定页面标题）——统一走 PageState 外壳。
   if (state.kind === "loading") {
@@ -314,6 +397,8 @@ export function MetricLibraryApp() {
       a.name.toLowerCase().includes(accountQuery.toLowerCase()),
   );
   const mpmCount = library.metrics.filter((m) => m.mpm).length;
+  // 库内已知编码集合：依赖 chip / 治理事件 / 分录模板只在编码存在时渲染链接（诚实约束）。
+  const knownCodes = new Set(library.metrics.map((m) => m.metric_code));
 
   return (
     <div className="metric-library">
@@ -381,30 +466,40 @@ export function MetricLibraryApp() {
         <p className="ml-notice" role="status">{notice}</p>
       ) : null}
 
+      {focusMiss ? (
+        <p className="ml-notice ml-notice--miss" role="status">
+          未找到指标「{focusMiss}」的卡片（{entry ? "entry" : "focus"} 参数），已显示完整指标列表。
+        </p>
+      ) : null}
+
       <nav className="ml-tabs" aria-label="指标库分区">
         {TABS.map((t) => (
           <button
             key={t.id}
             type="button"
-            className={tab === t.id ? "is-active" : undefined}
-            aria-current={tab === t.id ? "page" : undefined}
-            onClick={() => setTab(t.id)}
+            className={activeTab === t.id ? "is-active" : undefined}
+            aria-current={activeTab === t.id ? "page" : undefined}
+            onClick={() => selectTab(t.id)}
           >
             {t.label}
           </button>
         ))}
       </nav>
 
-      {tab === "general" ? <MetricList metrics={general} domains={library.domains} onChanged={revised} /> : null}
-      {tab === "logistics" ? <MetricList metrics={logistics} domains={library.domains} onChanged={revised} /> : null}
-      {tab === "coverage" ? <CoverageSection /> : null}
-      {tab === "governance" && state.kind === "loaded" ? (
+      {activeTab === "general" ? (
+        <MetricList metrics={general} domains={library.domains} onChanged={revised} knownCodes={knownCodes} focusedAnchor={focusedAnchor} />
+      ) : null}
+      {activeTab === "logistics" ? (
+        <MetricList metrics={logistics} domains={library.domains} onChanged={revised} knownCodes={knownCodes} focusedAnchor={focusedAnchor} />
+      ) : null}
+      {activeTab === "coverage" ? <CoverageSection /> : null}
+      {activeTab === "governance" && state.kind === "loaded" ? (
         <GovernanceSection metrics={state.library.metrics} />
       ) : null}
 
-      {tab === "graph" ? <DependencyGraph metrics={library.metrics} domains={library.domains} /> : null}
+      {activeTab === "graph" ? <DependencyGraph metrics={library.metrics} domains={library.domains} /> : null}
 
-      {tab === "industry" ? (
+      {activeTab === "industry" ? (
         <section className="ml-packs">
           <p className="ml-muted ml-packs__intro">
             行业经营指标目录暂无财报取数源（无经营事实表数据），仅作「该行业看什么」的对标参考与未来行业包 v2
@@ -443,7 +538,7 @@ export function MetricLibraryApp() {
         </section>
       ) : null}
 
-      {tab === "relations" ? (
+      {activeTab === "relations" ? (
         <section className="ml-relations">
           {library.relations.map((relation) => (
             <article key={relation.relation} className="ml-relation">
@@ -459,7 +554,7 @@ export function MetricLibraryApp() {
         </section>
       ) : null}
 
-      {tab === "mapping" ? (
+      {activeTab === "mapping" ? (
         <section>
           <table className="flow-table">
             <thead>
@@ -478,7 +573,7 @@ export function MetricLibraryApp() {
         </section>
       ) : null}
 
-      {tab === "accounting" ? (
+      {activeTab === "accounting" ? (
         <section className="ml-accounting">
           <div className="ml-toolbar">
             <input
@@ -539,7 +634,19 @@ export function MetricLibraryApp() {
                 </table>
                 <p className="ml-muted">
                   {template.standard_ref ? `依据：${template.standard_ref}　` : ""}
-                  关联指标：{template.related_metrics.join("、") || "—"}
+                  关联指标：
+                  {template.related_metrics.length === 0
+                    ? "—"
+                    : template.related_metrics.map((code, index) => (
+                        <span key={code}>
+                          {index > 0 ? "、" : ""}
+                          {knownCodes.has(code) ? (
+                            <Link href={metricFocusHref(code)}><code>{code}</code></Link>
+                          ) : (
+                            <code>{code}</code>
+                          )}
+                        </span>
+                      ))}
                 </p>
               </details>
             ))}

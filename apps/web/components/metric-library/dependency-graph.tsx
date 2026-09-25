@@ -6,6 +6,7 @@
 // 为 FLOW 自有业务逻辑，保持原样（确定性分层、环兜底、快照可测）。
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import {
   Background,
   Controls,
@@ -18,6 +19,7 @@ import {
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import type { MetricLibraryEntry } from "../../lib/api/client";
+import { metricFocusHref } from "../../lib/deep-links";
 
 const NODE_W = 168;
 const NODE_H = 46;
@@ -314,6 +316,8 @@ export function DependencyGraph({
         <p className="ml-graph__selected" role="status">
           已选中 <strong>{metrics.find((m) => m.metric_code === selected)?.name}</strong>
           （上游依赖 {upstream.size} 个、下游引用 {downstream.size} 个，蓝色高亮为直接关联链路）
+          {" · "}
+          <Link href={metricFocusHref(selected)}>查看指标卡片</Link>
         </p>
       ) : null}
     </section>

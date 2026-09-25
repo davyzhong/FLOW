@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 
 import { EmptyGuide } from "../ui/empty-guide";
@@ -11,6 +12,7 @@ import {
   type PublishingSnapshot,
   type StatementReportList,
 } from "../../lib/api/client";
+import { operationsReportHref, statementReportHref } from "../../lib/deep-links";
 import "./reports-center.css";
 
 const FORMATS = ["pptx", "xlsx", "html", "pdf"] as const;
@@ -41,15 +43,25 @@ async function fetchOperationsAttempts(snapshotId: string): Promise<AttemptLine[
   return statementApi.listOperationsAttempts(snapshotId).catch(() => []);
 }
 
-export function ReportsCenter() {
+export function ReportsCenter({
+  initialSnapshot = null,
+  initialFocus = null,
+}: {
+  /** ?snapshot={id}：匹配报告快照 id / metric_snapshot_id / 经营报告快照 id */
+  initialSnapshot?: string | null;
+  /** ?focus={metric_snapshot_id}：定位冻结候选或对应报告快照 */
+  initialFocus?: string | null;
+}) {
   const [snapshots, setSnapshots] = useState<SnapshotLine[]>([]);
   const [objectiveReports, setObjectiveReports] = useState<StatementReportList["reports"]>([]);
   const [selected, setSelected] = useState<string | null>(null);
   const [metricSnapshotId, setMetricSnapshotId] = useState("");
   const [candidates, setCandidates] = useState<FreezeCandidate[]>([]);
+  const [candidatesLoaded, setCandidatesLoaded] = useState(false);
   const [formats, setFormats] = useState<string[]>(["html"]);
   const [attempts, setAttempts] = useState<AttemptLine[]>([]);
   const [operationsSnapshots, setOperationsSnapshots] = useState<OperationsSnapshot[]>([]);
+  const [operationsLoaded, setOperationsLoaded] = useState(false);
   const [selectedOperations, setSelectedOperations] = useState<string | null>(null);
   const [operationsFormats, setOperationsFormats] = useState<string[]>(["pptx", "xlsx"]);
   const [operationsAttempts, setOperationsAttempts] = useState<AttemptLine[]>([]);
@@ -67,7 +79,16 @@ export function ReportsCenter() {
       .then((rows) => {
         if (cancelled) return;
         setSnapshots(rows);
-        if (rows[0]) setSelected(rows[0].id);
+        // 深链优先：?snapshot= 命中（id 或 metric_snapshot_id）→ ?focus= 命中 → 默认第一条
+        const bySnapshot =
+          initialSnapshot &&
+          rows.find((row) => row.id === initialSnapshot || row.metric_snapshot_id === initialSnapshot);
+        const byFocus =
+          !bySnapshot &&
+          initialFocus &&
+          rows.find((row) => row.metric_snapshot_id === initialFocus);
+        const target = bySnapshot || byFocus || rows[0];
+        if (target) setSelected(target.id);
       })
       .catch((cause: unknown) => {
         if (!cancelled) setError(cause instanceof Error ? cause.message : "加载失败");
@@ -77,26 +98,54 @@ export function ReportsCenter() {
       });
     fetchFreezeCandidates()
       .then((rows) => {
-        if (!cancelled) setCandidates(rows);
+        if (cancelled) return;
+        setCandidates(rows);
+        if (initialFocus && rows.some((row) => row.metric_snapshot_id === initialFocus)) {
+          setMetricSnapshotId(initialFocus);
+        }
       })
       .catch(() => {
         if (!cancelled) setCandidates([]);
+      })
+      .finally(() => {
+        if (!cancelled) setCandidatesLoaded(true);
       });
     fetchOperationsSnapshots()
       .then((rows) => {
         if (cancelled) return;
         setOperationsSnapshots(rows);
-        if (rows[0]) setSelectedOperations(rows[0].id);
+        const byId = initialSnapshot && rows.find((row) => row.id === initialSnapshot);
+        if (byId) setSelectedOperations(byId.id);
+        else if (rows[0]) setSelectedOperations(rows[0].id);
       })
       .catch(() => {
         if (!cancelled) setOperationsSnapshots([]);
+      })
+      .finally(() => {
+        if (!cancelled) setOperationsLoaded(true);
       });
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [initialSnapshot, initialFocus]);
 
   const snapshot = snapshots.find((row) => row.id === selected) ?? null;
+
+  // 深链 miss 显式提示（快照/候选/经营快照三类列表都加载完成后判定，不静默忽略）
+  const snapshotMiss =
+    initialSnapshot && !loading && operationsLoaded &&
+    !snapshots.some(
+      (row) => row.id === initialSnapshot || row.metric_snapshot_id === initialSnapshot,
+    ) &&
+    !operationsSnapshots.some((row) => row.id === initialSnapshot)
+      ? initialSnapshot
+      : null;
+  const focusMiss =
+    initialFocus && !loading && candidatesLoaded &&
+    !candidates.some((row) => row.metric_snapshot_id === initialFocus) &&
+    !snapshots.some((row) => row.metric_snapshot_id === initialFocus)
+      ? initialFocus
+      : null;
 
   useEffect(() => {
     if (!selected) return;
@@ -244,6 +293,17 @@ export function ReportsCenter() {
         </p>
       ) : null}
 
+      {snapshotMiss ? (
+        <p role="status" className="reports-center__hint">
+          未找到快照「{snapshotMiss}」（snapshot 参数不存在或已下线），已显示最新快照。
+        </p>
+      ) : null}
+      {focusMiss ? (
+        <p role="status" className="reports-center__hint">
+          未找到指标快照「{focusMiss}」（focus 参数无对应冻结候选或报告快照）。
+        </p>
+      ) : null}
+
       <div className="reports-center__objective">
         <h2>客观财报分析报告（四表一注）</h2>
         <p className="reports-center__objective-note">
@@ -268,6 +328,8 @@ export function ReportsCenter() {
                   {report.company_name} · {report.period_label} {report.report_kind}
                   （行项目 {report.line_item_count}）
                 </a>
+                {" · "}
+                <Link href={statementReportHref(report.id)}>查看分析</Link>
               </li>
             ))}
           </ul>
@@ -301,6 +363,8 @@ export function ReportsCenter() {
                     />
                     {row.company_name} · {row.period_label} · v{row.version} · 指纹 {row.payload_hash?.slice(0, 12) ?? "—"}…
                   </label>
+                  {" · "}
+                  <Link href={operationsReportHref(row.statement_report_id)}>在经营分析中查看</Link>
                 </li>
               ))}
             </ul>
@@ -401,7 +465,8 @@ export function ReportsCenter() {
           冻结快照
         </button>
         <p className="reports-center__hint">
-          冻结要求指标快照已发布且至少一个 finding 已批准；未批准时请先回到 Investigation 流程。
+          冻结要求指标快照已发布且至少一个 finding 已批准；未批准时请先回到{" "}
+          <Link href="/investigations">Investigation 流程</Link>。
         </p>
       </div>
 

@@ -159,3 +159,14 @@
   color: var(--rep-muted, #52637a);
   font-size: 13px;
 }
+
+/* 批次一 深链：指标名链接到指标库 entry 锚点 */
+a.ops-overview__metric-name {
+  text-decoration: none;
+}
+
+a.ops-overview__metric-name:hover {
+  color: var(--rep-blue, #1d4ed8);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

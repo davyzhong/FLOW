@@ -242,6 +242,8 @@ test.describe("responsive integrity", () => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/data");
     const button = page.getByRole("button", { name: "下载 FLOW 标准模板" });
+    // 深链接收端页面为 async server component（流式到达），先等真实控件可见再量
+    await expect(button).toBeVisible();
     const height = await button.evaluate((el) => getComputedStyle(el).height);
     expect(parseFloat(height)).toBeGreaterThanOrEqual(44);
   });
@@ -249,12 +251,15 @@ test.describe("responsive integrity", () => {
   test("form selects and the file input meet 44px at narrow viewport", async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/operations");
-    const select = page.locator("select").first();
+    const select = page.getByLabel("分析数据与期间");
+    // 同上：等待流式内容 reveal 完成，避免量到 loading 回退的隐藏树
+    await expect(select).toBeVisible();
     const selectHeight = await select.evaluate((el) => getComputedStyle(el).height);
     expect(parseFloat(selectHeight)).toBeGreaterThanOrEqual(44);
 
     await page.goto("/data");
-    const file = page.locator("input[type=file]");
+    const file = page.getByLabel("选择文件");
+    await expect(file).toBeVisible();
     const fileHeight = await file.evaluate((el) => getComputedStyle(el).height);
     expect(parseFloat(fileHeight)).toBeGreaterThanOrEqual(44);
   });

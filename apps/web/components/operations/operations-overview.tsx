@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 
 import {
@@ -9,6 +10,7 @@ import {
   type PublicOperatingPeriodList,
   type StatementReportList,
 } from "../../lib/api/client";
+import { metricEntryHref, reportsSnapshotHref } from "../../lib/deep-links";
 import "./operations-overview.css";
 
 const DIRECTION_LABEL: Record<string, string> = {
@@ -53,12 +55,18 @@ function parseAnalysisContext(value: string): AnalysisContext | null {
   return null;
 }
 
-export function OperationsOverviewApp() {
+export function OperationsOverviewApp({
+  initialReportId = null,
+}: {
+  /** ?report={statement_report_id} 深链：命中时初始选中；不存在时显式提示并回退默认 */
+  initialReportId?: string | null;
+}) {
   const [reports, setReports] = useState<StatementReportList["reports"]>([]);
   const [publicPeriods, setPublicPeriods] = useState<
     PublicOperatingPeriodList["periods"]
   >([]);
   const [selectedContext, setSelectedContext] = useState<string>("");
+  const [reportMiss, setReportMiss] = useState<string | null>(null);
   const [overview, setOverview] = useState<OperationsOverview | null>(null);
   const [freezeInfo, setFreezeInfo] = useState<FreezeInfo | null>(null);
   const [state, setState] = useState<LoadState>({ status: "idle" });
@@ -77,6 +85,14 @@ export function OperationsOverviewApp() {
         publicResult.status === "fulfilled" ? publicResult.value.periods : [];
       setReports(nextReports);
       setPublicPeriods(nextPublicPeriods);
+      // 深链优先：?report= 命中则选中对应财报；未命中显式提示并回退默认上下文
+      if (initialReportId) {
+        if (nextReports.some((report) => report.id === initialReportId)) {
+          setSelectedContext(`report:${initialReportId}`);
+          return;
+        }
+        setReportMiss(initialReportId);
+      }
       if (nextReports.length > 0) {
         setSelectedContext((current) => current || `report:${nextReports[0].id}`);
       } else if (nextPublicPeriods.length > 0) {
@@ -98,7 +114,7 @@ export function OperationsOverviewApp() {
       cancelled = true;
       controller.abort();
     };
-  }, []);
+  }, [initialReportId]);
 
   useEffect(() => {
     const context = parseAnalysisContext(selectedContext);
@@ -182,7 +198,10 @@ export function OperationsOverviewApp() {
           <select
           id="operations-context"
           value={selectedContext}
-          onChange={(event) => setSelectedContext(event.target.value)}
+          onChange={(event) => {
+            setSelectedContext(event.target.value);
+            setReportMiss(null);
+          }}
         >
           {reports.length === 0 && publicPeriods.length === 0 ? (
             <option value="">（暂无可用分析数据）</option>
@@ -253,6 +272,12 @@ export function OperationsOverviewApp() {
         </p>
       ) : null}
 
+      {reportMiss ? (
+        <p role="status" className="ops-overview__context-note">
+          未找到财报「{reportMiss}」（report 参数不存在或已下线），已显示第一份可用分析数据。
+        </p>
+      ) : null}
+
       {state.status === "error" ? (
         <p role="alert" className="ops-overview__error flow-error">
           {state.message}
@@ -261,8 +286,11 @@ export function OperationsOverviewApp() {
 
       {freezeInfo ? (
         <p role="status" className="ops-overview__freeze">
-          已冻结：版本 {freezeInfo.version} · 快照 {freezeInfo.snapshot_id} · 指纹{" "}
-          {freezeInfo.payload_hash.slice(0, 16)}…
+          已冻结：版本 {freezeInfo.version} · 快照{" "}
+          <Link href={reportsSnapshotHref(freezeInfo.snapshot_id)} title="在报告中心查看该快照">
+            {freezeInfo.snapshot_id}
+          </Link>{" "}
+          · 指纹 {freezeInfo.payload_hash.slice(0, 16)}…
         </p>
       ) : null}
 
@@ -306,7 +334,13 @@ export function OperationsOverviewApp() {
                   <ul>
                     {theme.metrics.map((metric) => (
                       <li key={metric.entry_id}>
-                        <span className="ops-overview__metric-name">{metric.name}</span>
+                        <Link
+                          className="ops-overview__metric-name"
+                          href={metricEntryHref(metric.entry_id)}
+                          title="在指标库中查看口径定义"
+                        >
+                          {metric.name}
+                        </Link>
                         {metric.status === "computed" ? (
                           <span className="ops-overview__metric-value">
                             <strong>{metric.value}</strong>
