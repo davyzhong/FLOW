@@ -26,7 +26,7 @@ applies_to: repository
 - **数据来源政策已由用户明确（2026-09-19）**：无私有数据来源，研发期一律网络公开来源数据——A4「等待外部财报材料」的前提作废，数据扩张改为继续走公开财报抓取管线（见 §2.2/§2.3）。
 - 多 Agent 并行已终止，单一 Agent、逐 Gate、串行执行不变；产品战略方向不变（经分专员工作台，公开财报独立先行）。
 - **下一里程碑不变 = C 级出口 Go/No-Go 裁决**；前置人工项不变（见 §2.2）。
-- **大麦物流两年 synthetic 演示数据全链已交付并关闭（2026-09-24～25 批次，分支 `codex/damai-logistics-implementation`）**：计划 v2.4 串行 A1–A4 → B1–B3 → C1–C3 全部完成，提交链 `ece11d2`→`4950e73`→`1052ea6`→`5c2c4d4`→`0bb27d8`→`c1c5a20`→`ff3b828`→`1d3f757`→`8b61bec`→`3e20628`→`082b0eb`→`f867842`→`307300b`→`077d35c`→`d701c1d`（+completed 状态翻转收尾提交）；实测 verify 19/19、八页面 E2E 9/9、二次 seed 全表零增长、发行包零漂移；C3 全量回归 17 门禁绿，CI 全绿于 `d701c1d`（run 36098674773）。详见 §2.5。
+- **大麦物流两年 synthetic 演示数据全链已交付并关闭（2026-09-24～25 批次，分支 `codex/damai-logistics-implementation`）**：计划 v2.4 串行 A1–A4 → B1–B3 → C1–C3 全部完成，提交链 `ece11d2`→`4950e73`→`1052ea6`→`5c2c4d4`→`0bb27d8`→`c1c5a20`→`ff3b828`→`1d3f757`→`8b61bec`→`3e20628`→`082b0eb`→`f867842`→`307300b`→`077d35c`→`d701c1d`→`75fb2f1`（completed 状态翻转）；实测 verify 19/19、八页面 E2E 9/9、二次 seed 全表零增长、发行包零漂移；C3 全量回归 17 门禁绿。CI 验收：active 收尾 head `d701c1d` 全绿（run 36098674773）；最终 completed SHA `75fb2f1` 17 jobs 全绿（run 36101860056；metrics-known-answers 首跑因 Docker Hub 拉取被 connection reset 瞬断失败，`--failed` 重跑即绿，纯网络 flake）。详见 §2.5。
 
 ### 0.2 当前最重要的偏差与缺口
 
@@ -162,4 +162,4 @@ applies_to: repository
 
 从当前最新 `origin/main`（`a461b54` 或更新）做会话开始三核对（PROJECT_STATE / git log / CI 状态），确认无新外部提交后按 §2.3 顺序领取：**首选溯源真实来源链接（公开来源方案，已解锁）或公开数据管线扩张**；若用户已交付人工三件套产出（查源结果 / AI 交叉评结论），优先接手归因与抽取 YAML 修订。不要先做 T13 内容或任何等待 A5 的开放面。
 
-当前对外状态统一表述为：**U8 closed；S01 completed；T09–T12 基础交付完成 + O-01/O-02 地基交付；前端一致性整改 Task 0–9 关闭；大麦两年 synthetic 演示数据全链交付并 completed（分支 `codex/damai-logistics-implementation`，CI 全绿于 `d701c1d`，待合入 main）；C 级出口 Go/No-Go 前置仅剩人工三件套；数据扩张按公开管线推进（2026-09-19 政策）；T13/T14 等外部。**
+当前对外状态统一表述为：**U8 closed；S01 completed；T09–T12 基础交付完成 + O-01/O-02 地基交付；前端一致性整改 Task 0–9 关闭；大麦两年 synthetic 演示数据全链交付并 completed（分支 `codex/damai-logistics-implementation`，最终 SHA `75fb2f1` CI 17 jobs 全绿，run 36101860056，待合入 main）；C 级出口 Go/No-Go 前置仅剩人工三件套；数据扩张按公开管线推进（2026-09-19 政策）；T13/T14 等外部。**

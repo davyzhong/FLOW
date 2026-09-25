@@ -40,7 +40,7 @@ do_not_execute: true
 | B3 | 指标覆盖投影（damai 数据集 + 前端切换 + synthetic 标识） | done（见本次提交） | damai_demo_metric_coverage_v1.yaml + dataset 参数 + 前端 tab/合成标识；A2 五粒度对账一并验收 |
 | C1 | `damai-demo-build/seed/verify/up` 四命令 + 机器可读 receipt | done（见本次提交） | 隔离 compose project（15432/16379/19000）双 seed 幂等 + verify 17/17，证据 work/damai-demo/ |
 | C2 | 八页面真实 E2E（含 /data 页面上传旅程） | done | 「菜单全满」的验收关 |
-| C3 | 完整回归 + 文档刷新 + 最终 CI 闭环（completed SHA 全绿才算完成） | done（active 提交 `d701c1d` CI 全绿：run 36098674773，17 jobs；completed 翻转为收尾提交） | 修复 `082b0eb`（冻结视图总量粒度确定性）+ `f867842`（清库顺序/代理）+ `307300b`（MinIO 镜像不可达换 bitnamilegacy）+ `077d35c`/`d701c1d`（CI 超时 40 分钟）；17 门禁绿 |
+| C3 | 完整回归 + 文档刷新 + 最终 CI 闭环（completed SHA 全绿才算完成） | done（active 收尾 `d701c1d` 全绿 run 36098674773；completed SHA `75fb2f1` 全绿 run 36101860056，metrics-known-answers 首跑 Docker Hub 瞬断 `--failed` 重跑即绿） | 修复 `082b0eb`（冻结视图总量粒度确定性）+ `f867842`（清库顺序/代理）+ `307300b`（MinIO 镜像不可达换 bitnamilegacy）+ `077d35c`/`d701c1d`（CI 超时 40 分钟）；17 门禁绿 |
 
 **明确不做**：不新增 migration、不改 CI/.env、forecast 保持 static-only、不覆盖既有非大麦 fixture（§2 约束不变）。
 
@@ -230,7 +230,7 @@ do_not_execute: true
 - [x] 以 `git merge-base origin/main HEAD` 核对全部变更，断言没有 migration、`.env`、CI/CD 或范围外文件，且 Alembic head 未改变。（merge-base `63f99b2`，101 文件 +27328/-95，无越界，head 保持 0029）
 - [x] 用实测计数和命令刷新 README、PROJECT_STATE、ROADMAP、HANDOFF 与导航；不把计划值当成实测值。（verify 19/19、E2E 9/9、manifest 实测计数）
 - [x] 保持工作包 active 提交实现关闭文档并 push，验证该 head；随后另一提交改为 completed 并 push。（active 收尾 head `d701c1d` 的 CI run 36098674773 全绿；completed 翻转为随后的文档状态提交）
-- [x] 只有最终 completed SHA 的 required jobs 全绿才宣布完成；若失败，以新提交恢复 active/阻塞并重新验证。（验收以 completed 提交 SHA 的 CI run 为准；若红则翻回 active 修复后重新走本流程）
+- [x] 只有最终 completed SHA 的 required jobs 全绿才宣布完成；若失败，以新提交恢复 active/阻塞并重新验证。（completed SHA `75fb2f1` 的 run 36101860056 全部 17 jobs success：首跑 metrics-known-answers 因 Docker Hub connection reset 瞬断，`gh run rerun --failed` 后全绿）
 
 ## 6. 预期数据量级（验收下限）
 
