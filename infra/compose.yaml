@@ -89,7 +89,11 @@ services:
       retries: 20
 
   minio:
-    image: quay.io/minio/minio:RELEASE.2025-04-22T22-12-26Z
+    # quay.io/minio is no longer anonymously pullable; use the compatible
+    # Docker Hub legacy image already verified by the Damai implementation CI.
+    image: bitnamilegacy/minio:2025.4.22
+    user: "0:0"
+    entrypoint: ["/opt/bitnami/minio/bin/minio"]
     command: server /data --console-address ":9001"
     environment:
       MINIO_ROOT_USER: flow
@@ -98,7 +102,7 @@ services:
       - "9000:9000"
       - "9001:9001"
     healthcheck:
-      test: ["CMD", "mc", "ready", "local"]
+      test: ["CMD", "/opt/bitnami/minio-client/bin/mc", "ready", "local"]
       interval: 2s
       timeout: 3s
       retries: 20
@@ -106,7 +110,8 @@ services:
       - flow-minio:/data
 
   minio-init:
-    image: quay.io/minio/mc:latest
+    image: bitnamilegacy/minio-client:latest
+    user: "0:0"
     depends_on:
       minio:
         condition: service_healthy

@@ -74,6 +74,7 @@ U1–U7 全部 ✅ · U2 全关 ✅ · U5 ✅ · O1–O4 ✅ · 战略沉淀 D05
 权威执行规格：[FLOW 项目执行收敛与验收计划](2026-09-25-project-execution-convergence-plan.md)。以下状态为综合 review 基线；开始每项前先核对远端最新 SHA 与同 SHA CI。
 
 1. [ ] **审计分支 CI 修复/复验**：最新审计 SHA 核查 MinIO 错误；比较大麦实施分支 `307300b` 修复。若仍适用，以普通提交带入等效修复（禁止 rebase/强推），全量重跑 CI 并记录 SHA/run。
+   - G1 进行中：在 `codex/flow-execution-convergence` 隔离 worktree 中将 MinIO 与 client 镜像切至大麦分支已验证的 `bitnamilegacy` 版本/路径；`docker compose config --quiet` PASS，两个镜像均成功 pull，MinIO binary 报告 2025-04-22 release 且 MC client 可执行。最新 SHA 的完整 CI 尚待本步骤提交推送后确认；宿主机已有常驻栈占用标准端口，未在本机启动另一套依赖服务。
 2. [ ] **常驻开发栈演示数据（独立可选项）**：只读检查栈、现存数据、备份/恢复与 seed 覆盖风险；明确目标为开发/演示栈后再运行 seed/up + verify，八页面可见、重复 seed 零增长。若授权、备份或隔离条件不满足，登记为阻塞后可继续第 3 项；若会覆盖既有数据，暂停该写操作并请用户裁决。
 3. [ ] **分支集成与状态统一**：审查两条工作线提交图、迁移/安全冲突和未提交文件归属；对账 review 提到的 U Gate 21 项 backlog 与当前战略/工作包，未经正式范围和验收确认不得启动；在选定集成分支完成适用全量验证后，统一 `PROJECT_STATE.md`、`CURRENT_ROADMAP.md`、本 TODO、工作包与 HANDOFF。只把集成后证据标为项目当前状态。
 4. [ ] **U4 修复与新留出**：支持“合并及公司”版式标题、参数化页码区间；原三样本回归；另建独立盲留出，不复用回归集充当泛化证明。
