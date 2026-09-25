@@ -8,6 +8,18 @@ from sqlalchemy import delete
 from sqlalchemy.orm import Session
 
 from flow_api.infrastructure.db import get_engine
+from flow_api.infrastructure.models.analytics import (
+    AnalysisResult,
+    AnalysisRun,
+    Conclusion,
+    DriverContribution,
+    Evidence,
+    Finding,
+    FindingScoreComponent,
+    MetricSnapshot,
+    MetricValue,
+    ReviewEvent,
+)
 from flow_api.infrastructure.models.canonical import (
     Customer,
     CustomerSegment,
@@ -29,9 +41,33 @@ from flow_api.infrastructure.models.intake import (
     SourceRecord,
     StoredObject,
 )
+from flow_api.infrastructure.models.publishing import (
+    PublicationAttempt,
+    ReportSnapshot,
+    ReportSnapshotItem,
+)
+from flow_api.publishing.objective_freeze import ObjectiveReportSnapshot
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[4]
 STANDARD_WORKBOOK = REPOSITORY_ROOT / "fixtures/workbooks/flow_standard_v1.xlsx"
+# 分析/工作流链先行（FK RESTRICT：metric_snapshot/analysis_run 引用 import_version，
+# 不先清会阻塞下方 intake 链删除——大麦 fixture 套件跑完后残留即触发）。
+ANALYTICS_MODELS_IN_DELETE_ORDER = (
+    PublicationAttempt,
+    ReportSnapshotItem,
+    ReportSnapshot,
+    ObjectiveReportSnapshot,
+    ReviewEvent,
+    Evidence,
+    Conclusion,
+    DriverContribution,
+    FindingScoreComponent,
+    Finding,
+    AnalysisResult,
+    MetricValue,
+    AnalysisRun,
+    MetricSnapshot,
+)
 MODELS_IN_DELETE_ORDER = (
     FactArCollection,
     FactBudget,
@@ -54,7 +90,7 @@ MODELS_IN_DELETE_ORDER = (
 
 
 def _clean(session: Session) -> None:
-    for model in MODELS_IN_DELETE_ORDER:
+    for model in ANALYTICS_MODELS_IN_DELETE_ORDER + MODELS_IN_DELETE_ORDER:
         session.execute(delete(model))
     session.commit()
 

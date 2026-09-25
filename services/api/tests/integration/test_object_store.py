@@ -1,19 +1,15 @@
 from uuid import uuid4
 
-import boto3
-
 from flow_api.infrastructure.object_store import ObjectStore
+from flow_api.infrastructure.s3_client import build_s3_client
 from flow_api.settings import get_settings
 
 
 def test_identical_bytes_reuse_content_addressed_object() -> None:
     settings = get_settings()
-    client = boto3.client(
-        "s3",
-        endpoint_url=settings.s3_endpoint_url,
-        aws_access_key_id=settings.s3_access_key.get_secret_value(),
-        aws_secret_access_key=settings.s3_secret_key.get_secret_value(),
-    )
+    # 统一走项目客户端工厂：裸 boto3.client 会拾取 macOS 系统代理，
+    # 代理未运行时 PUT 被送入死代理挂起直至超时（本仓库已踩过）。
+    client = build_s3_client(settings)
     store = ObjectStore(client=client, bucket=settings.s3_bucket)
     content = f"FLOW-{uuid4()}".encode()
 
