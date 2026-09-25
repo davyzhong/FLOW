@@ -1,0 +1,100 @@
+---
+doc_id: FLOW-PLAN-DEEP-LINK-20260926
+title: 全站超链接化（深链下钻）实施计划
+doc_type: plan
+status: active
+version: 1.0
+created_at: 2026-09-26
+updated_at: 2026-09-26
+owner: FLOW
+depends_on: [FLOW-PLAN-CURRENT, FLOW-REVIEW-LINKABILITY-20260926]
+acceptance_refs: [ui-deep-link-batch1, ui-deep-link-batch2, ui-deep-link-batch3]
+knowledge_release: flow-knowledge-2026-09-12.1
+decision_refs: [D052, D053]
+applies_to: web-frontend
+executable: true
+supersedes: []
+superseded_by: null
+---
+
+# 全站超链接化（深链下钻）实施计划｜2026-09-26
+
+> 依据：用户 2026-09-26 确认[全站可链接性审计](../80_reviews/2026-09-26-ui-linkability-audit.md)
+> 及其三批实施建议，要求把界面中所有可打通的内容全部改成可互相链接。
+> 唯一状态与执行队列在 [CURRENT_ROADMAP](CURRENT_ROADMAP.md)；本文是实施规格。
+
+## 1. 目标与原则
+
+- 让任何有实体身份的界面元素（指标、Finding、快照、批次、维度值、报告、溯源页锚）
+  都可以点击跳转到其权威页面/定位，URL 可分享、可复现。
+- 只链接到**已存在的真实对象**；目标对象不存在时不渲染链接（诚实约束，同模块边界原则）。
+- 不改动 `workflow-nav.tsx` 的导航 href 形态（navigation.spec.ts 精确选择器守卫）。
+- 不做假深链：页面接收参数后必须真正定位到对应实体，定位失败显式提示而非静默忽略。
+
+## 2. 批次一：接收端 + 纯前端链接（S + 5 页参数接收）
+
+### 2.1 五个页面加 searchParams 接收（复制调查页模式）
+
+| 页面 | 新增参数 | 定位行为 |
+|---|---|---|
+| `/metric-library` | `?focus={metric_code}` 或 `?entry={entry_id}` | 滚动定位并高亮对应指标卡片；卡片加 `id` 锚点 |
+| `/statements` | `?report={report_id}` | 初始选中对应财报 tab（替代默认第一条） |
+| `/reports` | `?snapshot={snapshot_id}` / `?focus={metric_snapshot_id}` | 初始选中对应快照/冻结候选 |
+| `/data` | `?batch={batch_id}` | 恢复对应批次上下文（无批次列表端点，仅定位已有会话内对象；批次不存在时显式提示） |
+| `/` 驾驶舱 | 读 `region_id`/`customer_segment_id`/`logistics_product_id`/`organization_id` | initialFilters 从 searchParams 初始化；**先修 `dashboard-app.tsx:53-56` 的 replaceState 覆盖问题**（有参初始化时不抹掉外来深链） |
+
+### 2.2 纯前端链接（S 级，9 项）
+
+1. 驾驶舱 findings-panel：Finding 标题/整行包 `<a href={investigation_path}>`；
+2. investigations-index：Finding 标题单元格包同一 href；
+3. investigation-view 检查行（对账失败/质量问题/阻断项）→ 页内锚点到证据/结论区（目标区加 id）；
+4. statements review-panel 更正记录条目 → 页内锚点定位对应表格行（行加 id）；
+5. metric-library 依赖指标 chip → 同页卡片锚点（依赖 2.1 的卡片 id）；
+6. metric-governance-section 事件表 metric_code / 分录模板关联指标 → 卡片锚点；
+7. data-workbench 发布完成态追加「前往经营分析/驾驶舱」引导链接；
+8. reports-center 冻结候选区「回到 Investigation 流程」文案 → `/investigations` 链接；
+9. FlowDataTable 评估加可选 `rowHref`（仅 investigations 列表启用），不动默认行为。
+
+### 2.3 批次一随之解锁的 M 级跳转
+
+指标卡→指标库、趋势点/快照号→报告中心、bridge driver→指标库、产品行/矩阵单元格/维度头→
+驾驶舱筛选、状态条批次→数据页、analysis 身份行→statements、analysis/operations 指标行→指标库、
+operations 冻结快照→报告中心、investigation 身份条四 ID→各自页面、reports↔statements/operations
+互链、investigations 评分→analysis、图谱节点→指标卡片。
+
+## 3. 批次二：轻后端补充
+
+1. 指标库 `GET /metric-library/entries/{entry_id}` 详情端点（或列表按 entry 过滤）+ 前端
+   `/metric-library?entry=` 定位消费；
+2. MetricSnapshot / AnalysisRun 只读详情端点（供 `/reports?snapshot=`、investigation 身份条跳转）；
+3. Copilot citations 点击定位到对应证据/源记录（页内定位）；
+4. 覆盖矩阵列头（公司/期间）→ `/statements?report=`（载荷补 report_id 映射）。
+
+## 4. 批次三：原文与源记录查看（重活）
+
+1. 原始文件服务端点：按 `source_sha256`/`source_ref` 提供原始 PDF/工作簿的授权读取
+   （只读、登记访问审计；不涉及生产发布）；
+2. statements 溯源徽标/悬停卡「第 N 页」→ 原文 PDF 对应页（B3 闭环）；
+3. 调查页源记录「来源」列（现为伪链接）→ 源单元格查看器；
+4. 客观报告冻结 payload 保留 `page_number/page_anchor`，冻结 HTML 生成器内嵌回链；
+5. ManagementWatchItem 补 finding_id/metric_code 关联字段，管理关注条目可下钻；
+6. `GET /batches` 批次列表端点 + 数据工作台批次历史。
+
+## 5. 验收
+
+每批次收口标准：
+
+1. `make lint && make typecheck && make test-web` 全绿；
+2. `navigation.spec.ts` 既有 10 路由断言不破；
+3. **新增深链 e2e**：每批至少覆盖——带参打开目标页能定位实体（断言高亮/选中态）、
+   参数非法/对象不存在时显式提示、驾驶舱深链不被 replaceState 抹掉；
+4. 大麦常驻栈回归：`make damai-demo-verify` 19/19 不破（页面结构变化不得破坏验证器）；
+5. 文档门禁 `python3 scripts/check_docs.py --phase m1` 与 links check 通过；
+6. 同 SHA CI 绿后更新 ROADMAP/工作包状态并推送。
+
+## 6. 边界与不做
+
+- 不改导航壳 href、不动模块边界诚实约束（designed 模块不加假入口）；
+- 不改冻结报告历史内容；冻结 HTML 回链只作用于新冻结产物；
+- 文件服务端点只做只读授权访问，不做在线编辑/下载权限放开；
+- 不做搜索、不做全局图谱导航（超出本次范围）。
