@@ -3,9 +3,9 @@ doc_id: FLOW-REV-COMPREHENSIVE-20260925
 title: 全计划执行综合 Review（ZCode 审计 × 独立 Review 合并）
 doc_type: review
 status: open
-version: 1.0
+version: 1.1
 created_at: 2026-09-25
-updated_at: 2026-09-25
+updated_at: 2026-09-25（19:40 刷新）
 last_reviewed_at: 2026-09-25
 owner: FLOW
 subject_ref: FLOW-PLAN-EXECUTION-CONVERGENCE-20260925
@@ -85,3 +85,29 @@ knowledge_release: flow-knowledge-2026-09-12.1
 | 登记纪律 | 「105 checkbox 0 勾选」 | 未提及 | 维持 ZCode 发现：Gate 层登记仍缺失，HANDOFF/v2.4 §0 为部分弥补 |
 | C 级出口 | 「三件套缺 2 件等用户」 | 「L1 1794/1794 ≠ 验证通过」 | 一致，合并表述：覆盖率≠交叉审阅；三件套 1/3 |
 | HANDOFF 更新 | 「未纳入 9-24 决策」 | 「待补」 | 已过时：`f62cf8e` 已更新 HANDOFF（含 §2.5 证据），维持「9-24 双线决策叙述已并入」的核实结论 |
+
+## 6. v1.1 刷新（2026-09-25 19:40，并入 GPT 过夜执行与收敛计划）
+
+### 6.1 新事实（本刷新前逐项核实）
+
+1. **GPT 过夜计划 P0–P5 已执行完毕**（`3e8c7a2` 计划 → P1–P5 提交）：
+   - **P1 十条抽取候选复核关闭：全部为误报**（8 条 BABA NCI 符号印刷差异 + 2 条 JDL 图像页无文本），另发现并修复 2 个真错误（alibaba_2023fy 上期列 23 项误抓改录、2019fy NCI 上期改 null）；新增 strong-sign-flip-loss-row 与 visual-verified 两种定位模式；订正层 `validation/financial_reports/corrections.md` 已登记；**L1 答案集升至 1794/1794 = 100%**（三零：锚失效/值不一致/未入库）。合并 review v1.0 的「10 条候选修正未见完成提交」就此更新为**已完成且结论为误报**。
+   - P2 oracle 三样本齐套 + U4 首跑（199 行 not_comparable，与 v1.0 一致）；P3 数据扩张；P5 迁移链 0030 回归收尾。
+2. **GPT 新增《项目执行收敛与验收计划》**（`FLOW-PLAN-EXECUTION-CONVERGENCE-20260925` v1.1，`3e11d26`）：G0–G8 Gate 结构，明确「模拟数据验证与真实/公开数据质量验证分开记账、不相互替代」，1.3 明确本计划不授权灌库/生产部署/schema 变更；基线引用本 review v1.0 并声明「执行时重新查证，不照抄快照」。
+3. **G1 已完成**（`codex/flow-execution-convergence` 分支 `96010a2`）：shared compose 换可拉取 MinIO 镜像，**该分支 CI success**。audit 分支自身 CI 仍红（未 rebase 该修复）。
+4. **HANDOFF 已由后续会话更新**大麦交付全证据（v1.0 曾列为缺口，就此关闭）。
+
+### 6.2 v1.0 结论修正
+
+| v1.0 表述 | v1.1 修正 |
+|---|---|
+| 「10 条候选修正未见完成提交」 | **已完成**：全为误报关闭 + 2 个真错误顺带修复；L1 100% |
+| 「L1 覆盖率 1794/1794 ≠ 验证通过（覆盖率≠交叉审阅）」 | 维持：L1 基准 100% 是覆盖率指标；**C 级出口仍缺 AI 交叉评与 holdout 抽签** |
+| 「minio 基座修复为合并阻断项」 | 修复已存在（convergence 分支），但 audit 分支未并入，**其 CI 仍红**——收敛 G3 才能统一 |
+| 「常驻栈 0 行」 | 维持：收敛计划 G2 专门处理，且明确「不授权当前会话灌库」，须按 G2 条件（权限/隔离/可恢复性）执行 |
+
+### 6.3 当前进度（截至本刷新）
+
+- **已完成**：L1 大麦线全链关单（CI 绿）｜L2 oracle 三样本+U4 首跑｜L3-1 十条候选关闭（误报+2 真修）｜L4 阿里分部+zto 归档+溯源设计输入｜K M2 激活生效｜G0/G1（收敛计划的基线盘点与 CI 基座修复）。
+- **进行中/待做（收敛计划队列）**：G2 常驻栈灌库（独立可选）→ **G3 两线收敛+状态统一+同 SHA 集成回归（当前关键路径）** → G4 U4 版式修复+新留出 → G5 C-level 评审与 holdout 裁决（需用户）→ G6 溯源接入 → G7 知识收尾 → G8 内部工作台（需授权）。
+- **战略 Gate 位置**：C 级出口 Go/No-Go 仍阻塞于 G4+G5；内部工作台（最终产品）在 G8，依赖 G5 Go + U9 授权。
