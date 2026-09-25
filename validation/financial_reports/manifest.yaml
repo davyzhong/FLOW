@@ -148,6 +148,53 @@ holdouts:
     provenance: 港交所披露易 www1.hkexnews.hk /listedco/listconews/sehk/2026/0520/2026052000006_c.pdf；2026-09-07 下载并校验（PDF 1.4 / 15 页 / 首页标题「2026年第一季度未經審計財務業績公告」一致 / pdftotext 文本抽取正常）
     rule: 首跑原始失败全部保留；修复后该样本不再称留出，须按 oracle-register §3 补新候选
 
+  - id: xiaomi_2026h1
+    kind: new_company（holdout-lottery-2026-09-25 首选中签；小米未参与任何抽取适配）
+    company: 小米集团（1810.HK）
+    standard: IFRS（港交所中期报告，未经审计）
+    report: 2026 年中期报告（127 页）
+    format: 中文版文本层乱码（嵌入字体映射损坏）；英文版文本层正常——oracle 以英文版录入
+    source_file: validation/financial_reports/original/xiaomi_2026h1/
+    sha256: 43f7cd0cf82609ef48ded356af616d9b14c6e41a7088865ad9c8c11588da1ada  # 中文版 XIAOMI_2026_interim_report_c.pdf
+    sha256_english: e27b604854c08d2ca3eefffebabef647ae2a8dde92d4e08d5580746ab4dbfdce  # 英文版 XIAOMI_2026_interim_report_e.pdf
+    unit: 人民币千元
+    key_items_precise_2026_09_26:
+      oracle_file: validation/financial_reports/oracle/xiaomi_2026h1.yaml
+      oracle_sha256: facdd5e711bb7a86a8a88ddf1e6dc9053f4d0f64
+      recorder: ZCode 会话（§1a 授权，未参与抽取器开发）
+      items:  # 录入来源：英文版第 59/61-62/65 页（数值与中文版同一报表）
+      - { item: 收入（六个月）, value: "208,063,227", source_page: "59(EN)", unit: 千元 }
+      - { item: 毛利（六个月）, value: "43,419,038", source_page: "59(EN)", unit: 千元 }
+      - { item: 期内利润（六个月）, value: "14,197,953", source_page: "59(EN)", unit: 千元 }
+      - { item: 期内利润归属股东（六个月）, value: "14,185,525", source_page: "59(EN)", unit: 千元 }
+      - { item: 经营活动产生的净现金（六个月）, value: "2,050,234", source_page: "65(EN)", unit: 千元 }
+      - { item: 资产总计, value: "516,040,794", source_page: "61-62(EN)", unit: 千元 }
+      - { item: 权益总计, value: "269,819,402", source_page: "62(EN)", unit: 千元 }
+    provenance: 港交所披露易 2026/0923/2026092300297_c.pdf（中文）+ 2026092300296.pdf（英文）；2026-09-26 下载（抽签记录 holdout-lottery-2026-09-25 首选），SHA 双版本冻结
+    rule: 首跑原始失败全部保留；修复后降级回归集并按 oracle-register §3 补新候选
+
+  - id: alibaba_fy2027q1
+    kind: new_period（holdout-lottery-2026-09-25 首选中签；阿里适配器止于 FY2026，FY2027Q1 版式未适配）
+    company: 阿里巴巴集团（9988.HK / NYSE: BABA）
+    standard: US GAAP + 非公认会计准则调节
+    report: 截至 2026 年 6 月 30 日止季度业绩公告（26 页，未经审计）
+    format: 文本 PDF（简体中文，文本层正常）
+    source_file: validation/financial_reports/original/alibaba_fy2027q1/BABA_FY2027Q1_results_c.pdf
+    sha256: aa80e6d70869d9b0a4681915c63a1f0386a22bc0a54734c4ef6a5e5a430c9393
+    unit: 人民币百万元
+    key_items_precise_2026_09_26:
+      oracle_file: validation/financial_reports/oracle/alibaba_fy2027q1.yaml
+      oracle_sha256: 6a3120f72806938581e2dad8d28105f4a633f299
+      recorder: ZCode 会话（§1a 授权，未参与抽取器开发）
+      items:
+      - { item: 收入, value: "268,953", source_page: "6", unit: 百万元 }
+      - { item: 净利润, value: "10,444", source_page: "6", unit: 百万元 }
+      - { item: 归属普通股股东净利润, value: "10,537", source_page: "6", unit: 百万元 }
+      - { item: 非公认会计准则净利润, value: "20,715", source_page: "6", unit: 百万元 }
+      - { item: 经营活动产生的现金流量净额, value: "22,945", source_page: "22", unit: 百万元 }
+    provenance: 港交所披露易 2026/0820/2026082000746_c.pdf；2026-09-26 下载（抽签首选），SHA 冻结
+    rule: 首跑原始失败全部保留；修复后降级回归集并按 oracle-register §3 补新候选
+
 regression:
   - id: yto_2026q1
     demoted_from_holdout: 2026-09-07（C10 处置：已参与 A 股抽取适配，见 oracle-register §5 污染史）

@@ -1,0 +1,61 @@
+# oracle 标准答案｜alibaba_fy2027q1｜阿里巴巴截至 2026 年 6 月 30 日止季度业绩（holdout 首选中签·新期间）
+# 录入规程：oracle-register §1（只读 PDF 原文；不接触抽取器实现与输出）。
+# 录入者：ZCode 会话（用户 §1a 授权；未参与抽取器开发）。
+# 来源：validation/financial_reports/original/alibaba_fy2027q1/BABA_FY2027Q1_results_c.pdf
+#       （SHA aa80e6d7…；26 页，简体中文，文本层正常）
+# 单位：人民币百万元（披露原始单位）
+
+sample_id: alibaba_fy2027q1
+company: 阿里巴巴集团控股有限公司（9988.HK / NYSE: BABA）
+period: 截至 2026 年 6 月 30 日止三个月（FY2027 Q1，未经审计）
+source_pdf_pages:
+  季度财务业绩概要: 第 6 页
+  简明合并现金流量表: 第 22 页
+
+key_items:
+  - item: 收入
+    value: "268,953"
+    location: 6 月份季度财务业绩概要（第 6 页）
+    unit: 人民币百万元
+    source_page: "6"
+    note: 2025 同期 247,652，同比 +9%
+  - item: 净利润
+    value: "10,444"
+    location: 财务业绩概要
+    unit: 人民币百万元
+    source_page: "6"
+    note: 同期 42,382，同比 -75%
+  - item: 归属普通股股东净利润
+    value: "10,537"
+    location: 财务业绩概要
+    unit: 人民币百万元
+    source_page: "6"
+    note: 非控制性权益净亏损使归属高于净利润
+  - item: 非公认会计准则净利润
+    value: "20,715"
+    location: 财务业绩概要（Non-GAAP）
+    unit: 人民币百万元
+    source_page: "6"
+    note: 同期 33,510，同比 -38%；调节明细见公告「非公认会计准则财务指标」节
+  - item: 经营活动产生的现金流量净额
+    value: "22,945"
+    location: 简明合并现金流量表（第 22 页）
+    unit: 人民币百万元
+    source_page: "22"
+    note: 同期 20,672
+
+supplementary_lines:
+  # 概要页（第 6 页，2026 / 2025 列，百万元）
+  - { statement: 概要, item: 收入, page: "6", value: "268,953 / 247,652" }
+  - { statement: 概要, item: 经营利润, page: "6", value: "15,161 / 34,988" }
+  - { statement: 概要, item: 經調整 EBITDA, page: "6", value: "39,143 / 45,735" }
+  - { statement: 概要, item: 經調整 EBITA, page: "6", value: "27,329 / 38,844" }
+  - { statement: 概要, item: 淨利潤, page: "6", value: "10,444 / 42,382" }
+  - { statement: 概要, item: 歸屬於普通股股東的淨利潤, page: "6", value: "10,537 / 43,116" }
+  - { statement: 概要, item: 非公認會計準則淨利潤, page: "6", value: "20,715 / 33,510" }
+  # 现金流量表（第 22 页，百万元）
+  - { statement: 现金流量表, item: 經營活動產生的現金流量淨額, page: "22", value: "22,945 / 20,672" }
+  - { statement: 现金流量表, item: "投資活動產生（所用）的現金流量淨額", page: "22", value: "(18,964) / 18,328" }
+  - { statement: 现金流量表, item: "融資活動（所用）產生的現金流量淨額", page: "22", value: "9,469 / (2,731)" }
+
+mock_or_synthetic_content: 无  # 全部数值为披露原文精确转录
