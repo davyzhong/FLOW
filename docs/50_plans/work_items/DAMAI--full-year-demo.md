@@ -2,10 +2,10 @@
 doc_id: FLOW-WI-DAMAI-FULL-YEAR-001
 title: 大麦物流完整财年演示数据与全产品验收
 doc_type: work-item
-status: active
-version: 1.0
+status: completed
+version: 1.1
 created_at: 2026-09-24
-updated_at: 2026-09-24
+updated_at: 2026-09-25
 owner: FLOW
 depends_on: [FLOW-SPEC-DAMAI-DEMO-001]
 acceptance_refs: [FLOW-PLAN-INTEGRATED-EXECUTION-20260924, FLOW-SPEC-DAMAI-DEMO-001]

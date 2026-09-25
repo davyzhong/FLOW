@@ -18,7 +18,7 @@ applies_to: repository
 
 ## 当前执行入口
 
-- **[CURRENT_ROADMAP.md](../50_plans/CURRENT_ROADMAP.md)**（唯一状态入口）：U08、S01 和前端一致性整改 completed；大麦完整财年演示数据与第二代静态知识刷新 active；公开 C 级、U4、内部真实试点仍受外部门禁
+- **[CURRENT_ROADMAP.md](../50_plans/CURRENT_ROADMAP.md)**（唯一状态入口）：U08、S01、前端一致性整改与大麦完整财年演示数据 completed；第二代静态知识刷新 active；公开 C 级、U4、内部真实试点仍受外部门禁
 - **[FLOW 统一完整实施计划](../superpowers/plans/2026-09-24-flow-integrated-execution-plan.md)**（唯一详细执行合同）：统一承接旧 U/O、S01、多 Agent、前端、知识刷新、大麦和基线修复计划；旧计划不再领取
 - 旧统一计划与 O 系列计划已 superseded（保留任务细节与证据）
 - 文档迁移：[迁移实施计划 M0–M6](../superpowers/plans/2026-09-12-static-knowledge-and-document-migration.md) 已全部关闭（bfc1271 / e373e25，用户确认 2026-09-13）
@@ -31,7 +31,7 @@ applies_to: repository
 4. **公开模块 C 级出口（门禁后）**：执行冻结样本、company-level holdout、可复算/可追源和独立盲评量化协议。
 5. **内部工作台与真实企业验证（C 级出口后）**：需内部数据授权；至少连续三个完整月度周期，与同输入人工基准逐周期比较。
 6. **旧 U9/O5、U10（待重新裁决）**：仅保留历史工作包身份，不按旧依赖链自动领取。
-7. **大麦完整财年演示数据（active，实现已交付待 CI 关闭）**：两年（24 个月）synthetic 全链已落地——`DAMAI.SYN` 独立合成身份、双财年闭合财报（FY2025/FY2026）经正式审核链发布、原子幂等 seed（二次 seed 全表零增长）、发行包零漂移重建（manifest SHA 锁定）、Finding/证据/四段结论/冻结报告齐备、指标覆盖包（FY2025 22/40、FY2026 25/40）与五粒度驾驶舱切换上线。实测：发行包 1920 经营实际 / 10752 预算 / 4800 AR / 672 财务实际，4 客群 / 40 客户 / 8 产品 / 6 区域 / 5 组织；一键启动 `make damai-demo-up` + verify 19/19 通过；八页面 E2E 9/9 通过（`make test-damai-demo-e2e`）。合成数据只用于产品全链验证，不解除公开 C 级或真实企业门禁。
+7. **大麦完整财年演示数据（completed）**：两年（24 个月）synthetic 全链已落地——`DAMAI.SYN` 独立合成身份、双财年闭合财报（FY2025/FY2026）经正式审核链发布、原子幂等 seed（二次 seed 全表零增长）、发行包零漂移重建（manifest SHA 锁定）、Finding/证据/四段结论/冻结报告齐备、指标覆盖包（FY2025 22/40、FY2026 25/40）与五粒度驾驶舱切换上线。实测：发行包 1920 经营实际 / 10752 预算 / 4800 AR / 672 财务实际，4 客群 / 40 客户 / 8 产品 / 6 区域 / 5 组织；一键启动 `make damai-demo-up` + verify 19/19 通过；八页面 E2E 9/9 通过（`make test-damai-demo-e2e`）；C3 全量回归 17 门禁绿，CI 全绿于 `d701c1d`（run 36098674773）。合成数据只用于产品全链验证，不解除公开 C 级或真实企业门禁。
 8. **第二代静态知识刷新（active）**：批准规格与 preflight 已完成；K0–K6 尚待执行，用户战略裁决前不得切换 `CURRENT_RELEASE`。
 
 ## 知识基线

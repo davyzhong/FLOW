@@ -337,7 +337,7 @@ flowchart LR
 
 ## 📍 当前进度
 
-状态以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为唯一权威，详细步骤统一见 [FLOW 统一完整实施计划](docs/superpowers/plans/2026-09-24-flow-integrated-execution-plan.md)；旧 U/O、S01、多 Agent、前端、知识刷新和大麦分散计划只保留历史细节。战略方向见 [战略重构设计](docs/superpowers/specs/2026-09-13-flow-strategic-reset-design.md)（D052–D054）：U8、S01 和前端一致性整改已关闭；当前推进大麦完整财年数据与第二代静态知识刷新，公开 C 级和真实企业验证仍受外部门禁。
+状态以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为唯一权威，详细步骤统一见 [FLOW 统一完整实施计划](docs/superpowers/plans/2026-09-24-flow-integrated-execution-plan.md)；旧 U/O、S01、多 Agent、前端、知识刷新和大麦分散计划只保留历史细节。战略方向见 [战略重构设计](docs/superpowers/specs/2026-09-13-flow-strategic-reset-design.md)（D052–D054）：U8、S01、前端一致性整改与大麦完整财年演示数据已关闭；当前推进第二代静态知识刷新，公开 C 级和真实企业验证仍受外部门禁。
 
 | 阶段 | 任务 | 状态 |
 | --- | --- | --- |
@@ -349,7 +349,7 @@ flowchart LR
 | U5–U7 | 客观报告门禁、统一冻结、四问工作台 | ✅ 已交付 |
 | **U8** | 生产就绪收口（真实存储旅程、HTTPS 拓扑、统一部署验收） | ✅ completed；严格冻结门禁通过 |
 | **S01** | 战略边界、Financial Facts V2、安全/RBAC/审计门禁 | ✅ completed |
-| **D 轨** | 大麦物流完整财年演示数据、正式工作流与八页面 E2E | 🚧 active（实现已交付：verify 19/19、E2E 9/9，待 CI 关闭） |
+| **D 轨** | 大麦物流完整财年演示数据、正式工作流与八页面 E2E | ✅ completed（verify 19/19、E2E 9/9、17 门禁绿；CI 全绿于 `d701c1d`） |
 | **K 轨** | 第二代静态知识刷新、sealed candidate 与战略重基线 | 🚧 active（用户裁决前不切换 release） |
 | U9–U10 | 内部试点、V1.1 证据决策 | ⬜ 待授权，且 U8 后按 [D053](docs/10_governance/decisions/D053--三层两模块边界与执行顺序.md) 重新裁决 |
 
