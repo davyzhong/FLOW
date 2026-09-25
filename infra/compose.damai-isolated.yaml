@@ -31,7 +31,11 @@ services:
       retries: 20
 
   minio:
-    image: quay.io/minio/minio:RELEASE.2025-04-22T22-12-26Z
+    # quay.io/minio 已私有化、Docker Hub minio org 已删除；改用 bitnamilegacy
+    # 同版本镜像（详见 infra/compose.yaml 注释），root + 官方 entrypoint 保持 /data 语义。
+    image: bitnamilegacy/minio:2025.4.22
+    user: "0:0"
+    entrypoint: ["/opt/bitnami/minio/bin/minio"]
     command: server /data --console-address ":9001"
     environment:
       MINIO_ROOT_USER: flow
@@ -40,7 +44,7 @@ services:
       - "19000:9000"
       - "19001:9001"
     healthcheck:
-      test: ["CMD", "mc", "ready", "local"]
+      test: ["CMD", "/opt/bitnami/minio-client/bin/mc", "ready", "local"]
       interval: 2s
       timeout: 3s
       retries: 20
@@ -48,7 +52,8 @@ services:
       - damai-iso-minio:/data
 
   minio-init:
-    image: quay.io/minio/mc:latest
+    image: bitnamilegacy/minio-client:latest
+    user: "0:0"
     depends_on:
       minio:
         condition: service_healthy
