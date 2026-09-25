@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 1.9
+version: 2.0
 created_at: 2026-09-12
 updated_at: 2026-09-25
 owner: FLOW
@@ -22,17 +22,17 @@ superseded_by: null
 唯一详细执行合同为 [FLOW 统一完整实施计划](../superpowers/plans/2026-09-24-flow-integrated-execution-plan.md)。
 本页决定“现在是什么状态”，详细计划决定“如何实施”；两者不得建立第二套状态。
 
-## 顺序与状态（2026-09-24 对 `7e252cb` 核对；前次为 2026-09-17 v1.7）
+## 顺序与状态（2026-09-25 对 main `e22d193` 核对；当前 main 含 README 自动截图提交 `370fd1f`）
 
 | 顺序 | 工作包 | 状态 | 依赖 | 最近证据 |
 |---|---|---|---|---|
 | 1 | [U08 生产就绪收口](work_items/U08--production-readiness.md) | **completed** | — | U8-A～D 完成；严格 HTTPS/双格式 SHA/恢复门禁通过；冻结记录与标签 |
-| 1' | [U04 独立 oracle](work_items/U04--independent-oracle.md) | **blocked(外部到料)** — 可并行 | 独立会话人力 | HANDOFF §0：oracle 需人工录入 |
+| 1' | [U04 独立 oracle](work_items/U04--independent-oracle.md) | **blocked(解析器适配 + 新留出)** — 可并行 | oracle 已到齐 | 2026-09-24 首跑 199 行均 `not_comparable`；先支持「合并及公司」标题与页码区间提示，再回归并另取独立留出 |
 | 2 | [S01 战略边界、事实合同与安全门禁](work_items/S01--post-u8-boundary-contract-security.md) | **completed** | U08 completed | Task 1–5 完成；安全规格 V1.1 已批准且独立审查闭环（`6c3c1cd`，零 P1/P2）。2026-09-14 `ff42c67` 五路并合 + 回落修复（`c1510ce`→`2570bf8`）带入路由策略 v2、模块边界与 U8 升级门禁、迁移 0026 修复、`main.py` 启动 fail-fast、两模块入口；Kimi `0841ff9` v1 被否，由 `997c1ab` v2 取代。**Task 6 已关闭**（R2/R3/R4 交付，台账 §7），阶段 3 转入 C 级出口；[协调台账](../70_operations/2026-09-14-coordination-ledger-glm.md) / [范围计划](../superpowers/plans/2026-09-13-flow-post-u8-boundary-gate.md) / [并行执行计划](../superpowers/plans/2026-09-13-flow-three-agent-parallel-restructuring.md) |
-| 2a | [大麦物流完整财年演示数据](work_items/DAMAI--full-year-demo.md) | **completed** | 已批准规格；不依赖公开 C 级 | D1–D3 全交付（A1–A4/B1–B3/C1–C3）：`DAMAI.SYN` 独立身份、正式审核链、原子幂等 seed、发行包零漂移、verify 19/19、八页面 E2E 9/9（`make damai-demo-up` / `make test-damai-demo-e2e`）；C3 全量回归 17 门禁绿，CI 全绿于 `d701c1d`（run 36098674773）。合成数据只用于产品全链验证，不解除公开 C 级或真实企业门禁 |
-| 2b | [大麦数据后的剩余体验收口](work_items/UX--post-damai-experience-closeout.md) | **blocked** | 大麦 D3 completed（已达成，可领取） | 只承接导出审计、真实来源跳转、经分专员工作流首页、固定下钻、报告渐进披露和治理折叠；既有前端一致性 Task 0–9 不重做 |
+| 2a | [大麦物流完整财年演示数据](work_items/DAMAI--full-year-demo.md) | **completed** | 已批准规格；不依赖公开 C 级 | D1–D3 已集成 main `e22d193`，CI run `36137591750` 17/17 success；隔离栈 verify 19/19、八页面 E2E 9/9、重复 seed 零增长、发行包零漂移。常驻开发库可见性独立跟踪于 EXECUTION_TODO G2；合成数据不解除公开 C 级门禁 |
+| 2b | [大麦数据后的剩余体验收口](work_items/UX--post-damai-experience-closeout.md) | **blocked** | G2 常驻栈核验 + 精确 UX 验收规格 | D3 已完成；先确认常驻栈数据可见，再列明页面/文件、状态矩阵、自动化与视觉证据；前端 Task 0–9 不重做 |
 | K | [第二代静态知识刷新与战略重基线](work_items/KNOWLEDGE--refresh-v2.md) | **active** | 批准规格；跨三仓库 | Task 0/preflight 已完成；K0–K6 待执行。可与 D 轨在不重叠文件上并行；战略激活与 D3 文档关闭必须串行；用户裁决前 `CURRENT_RELEASE` 不变 |
-| 3 | [公开财报模块 C 级出口](work_items/PUBLIC--c-level-exit-protocol.md) | **blocked(用户裁决)** | S01 关闭 ✓ | **T09 已交付**：L0 1454/1454 + L1 页级答案集 98.9%（1775/1795，strong 972/weak 803）且锚失效/值不一致双 0（`accuracy_benchmark.py --level L1`）；余项=独立盲评与 holdout 抽签（需用户/第三方） |
+| 3 | [公开财报模块 C 级出口](work_items/PUBLIC--c-level-exit-protocol.md) | **blocked(独立复核与裁决)** | S01 关闭 ✓ | 订正台账记录 L1 答案集覆盖 1794/1794（100%），此为覆盖口径且本轮未在本环境重跑基准，不等同 C 级通过；余项=非实现方独立盲评、holdout 抽签与 Go/No-Go |
 | 3a | [溯源/重述/只读 MCP](work_items/PUBLIC--provenance-restatement-mcp.md) | **completed** | — | B3 溯源 95.5% 行项目带页锚（迁移 0029 + 导入/API/前端）；B4 supersedes 链 + 差异脚本；B5 只读 MCP 三工具（token fail-closed）；B6 确定性差异说明起草 |
 | 3b | [数据扩张、行业基准与 10× 性能基线](work_items/PUBLIC--data-expansion-benchmarks.md) | **active** | 性能基线 ✓；扩张待外部财报 | G2 完成：10×（1034→10340 行）P95 明细 6.2ms/检索 0.97ms/聚合 1.11ms（`perf_baseline.py`）；C1 扩张需真实财报到料 |
 | 3c | [AI 问数 v1 与评测集](work_items/PUBLIC--ai-qa-v1.md) | **completed(v1)** | — | 确定性检索引用 QA + 94 问评测集（60 数值 + 34 拒答）命中率 100%、拒答零误答（`ask_facts.py` / `generate_qa_eval.py`）；LLM 通道与 v2/v3 另行裁决 |

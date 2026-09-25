@@ -13,8 +13,8 @@ applies_to: repository
 # 执行待办清单（唯一活跃 TODO）
 
 - doc_id: FLOW-PLAN-EXECUTION-TODO
-- 更新：2026-09-25（综合执行 review 对账）；维护规则：每完成一项打勾并注明提交哈希/验收证据；新增任务追加到对应分区；本文件由各会话共同维护（写入前先 pull）。
-- 当前整改顺序与验收见[项目执行收敛与验收计划](2026-09-25-project-execution-convergence-plan.md)；本文件为唯一活跃 To-do 状态表。不同分支的完成状态未集成前，必须注明分支/SHA，不得把分支完成写成 main 已完成。
+- 更新：2026-09-25（主线整合与状态统一）；维护规则：每完成一项打勾并注明提交哈希/验收证据；新增任务追加到对应分区；本文件由各会话共同维护（写入前先 pull）。
+- 当前整改顺序与验收见[项目执行收敛与验收计划](2026-09-25-project-execution-convergence-plan.md)；本文件为唯一活跃 To-do 状态表。用户已要求后续执行工作直接在 `main` 顺序完成，不新建执行分支。
 - 依据：D052–D054 战略、[综合执行 Review](../80_reviews/2026-09-25-comprehensive-execution-review.md)、[oracle-register](../validation/financial_reports/oracle-register.md)。
 
 ## 一、oracle 独立录入线（解锁 U4 首跑）
@@ -27,9 +27,9 @@ applies_to: repository
 
 ## 二、大麦物流实施线（damai-logistics-demo-v1）与常驻栈可见性
 
-- [x] L1 演示数据实施包完成并关单：completed SHA `75fb2f1` CI run `36101860056` 全绿；文档收尾 SHA `f62cf8e` CI run `36105604310` 全绿；verify 19/19、八页面 E2E 9/9、二次 seed 零增长、发行包零漂移。证据见实施分支 `HANDOFF.md` §2.5 与 `DAMAI--full-year-demo.md`。
+- [x] L1 演示数据实施包已集成 main：合并提交 `e22d193`，同 SHA CI run `36137591750` 17/17 success；verify 19/19、八页面 E2E 9/9、二次 seed 零增长、发行包零漂移。最新 main `370fd1f` 仅含自动更新的 README 截图。
 - [ ] 常驻开发栈数据可见性：先只读确认环境、行数、备份/恢复、seed 覆盖语义；在确认不覆盖用户数据且目标为开发栈后运行正式 seed/up + verify；八页面验收并留证。隔离栈的 E2E 不可代替此项。
-- [ ] 两条工作线纳入单一集成分支：比较大麦实施分支与审计分支差异，保留普通合并历史；迁移/schema 冲突先停并按红线授权。最终集成 SHA 全量 CI 绿后，再同步主状态文档。
+- [x] 两条工作线已纳入 main：审计/G1 `96010a2` CI run `36129442008` 17/17 success；大麦通过普通合并 `e22d193` 集成，CI run `36137591750` 17/17 success；schema 冲突核对无大麦迁移，main migration 0030 保留。
 
 ## 三、U 系列财务轨（主线性任务）
 
@@ -55,7 +55,7 @@ applies_to: repository
 
 ## 五-b、决策日志（2026-09-24 问答轮，AskUserQuestion 两轮共 8 项）
 
-1. 主线优先：**双线推进**——大麦线（本分支）与 oracle 录入线（独立会话）并行。
+1. 原决策记录：**双线推进**——大麦线与 oracle 录入线并行；后续用户已明确改为单主线串行、只在 `main` 执行，不再新开执行分支。
 2. oracle AI 转录授权：**腾讯 fy2025 + 顺丰 2026h1 两份一次性授权**（与 zto 同模式，须独立会话执行）。
 3. M2 原子激活（962b651，CURRENT_RELEASE 切换）：用户**追认有效**；后续知识工作（v2 刷新/增量扫描/roadmap v1.7）引用链无需变动。
 4. 压力测试 10 条抽取错误候选：**按 AI 判断直接修正**（用户明示选择；执行时逐条在订正层登记原值/新值/依据，保留审计痕迹）。
@@ -73,17 +73,18 @@ U1–U7 全部 ✅ · U2 全关 ✅ · U5 ✅ · O1–O4 ✅ · 战略沉淀 D05
 
 权威执行规格：[FLOW 项目执行收敛与验收计划](2026-09-25-project-execution-convergence-plan.md)。以下状态为综合 review 基线；开始每项前先核对远端最新 SHA 与同 SHA CI。
 
-1. [x] **审计线 CI 修复/复验**：审计线 MinIO 与 client 镜像切至已验证的 `bitnamilegacy` 版本/路径；`docker compose config --quiet`、两个镜像拉取、MinIO binary 和 MC client 检查均通过。提交 `96010a2c32233d1e19ec139c00de9651ac577a9c` 对应 CI run `36129442008` 全部 17 个 job success。该执行链已按用户要求于 2026-09-25 快进合入本地 `main`；推送及关单文档验证随本次主线更新完成。
-2. [ ] **先完成剩余执行提交的主线集成与状态统一（G3，进行中）**：用户要求不再新建执行分支，后续任务直接在 `main` 逐步执行。审计/G1 执行链已快进至 main `96010a2`；当前 `main@0b2eaf5` 与既有大麦实施线 `f62cf8e` 的合并已在本地完成冲突裁决、尚未提交。合并预演的 5 个冲突位于计划导航、审查元数据、两个历史计划状态及 `infra/compose.yaml`；迁移历史核对为 main 有 `0030_page_anchor_vocabulary`、大麦线无新增迁移。本地 M1、Compose 配置、Python lint/mypy、Web lint/typecheck、迁移往返与 93 项定向测试通过；组合树最终 CI 尚待合并提交推送后验证。合入后仍需统一 `PROJECT_STATE.md`、`CURRENT_ROADMAP.md`、本 TODO、工作包与 HANDOFF。不得 rebase/强推；全量同 SHA CI 绿后才可关单。
-3. [ ] **常驻开发栈演示数据（独立可选项）**：只读检查栈、现存数据、备份/恢复与 seed 覆盖风险；明确目标为开发/演示栈后再运行 seed/up + verify，八页面可见、重复 seed 零增长。若授权、备份或隔离条件不满足，登记为阻塞后可继续其余工作；若会覆盖既有数据，暂停该写操作并请用户裁决。
-4. [ ] **U4 修复与新留出**：支持“合并及公司”版式标题、参数化页码区间；原三样本回归；另建独立盲留出，不复用回归集充当泛化证明。
-5. [ ] **C-level 出口**：先对账 corrections/10 条候选修正的文件、提交和基准凭证；然后由用户发起非实现方 AI 交叉评与独立 holdout 抽签；材料齐后正式 Go/No-Go。`1794/1794` 只表示覆盖，不等于 C-level 通过。
-6. [ ] **P3 数据与溯源接入**：完成 ZTO 文本层与数据链路接入、勾稽和来源页锚测试；评审并实现真实来源链接；复核阿里分部序列在集成分支的来源与系统可见性。
-7. [ ] **知识 release 收尾**：核对 M2 用户追认、`CURRENT_RELEASE`、sealed candidate/激活记录、Task 10 三仓库证据和独立复验；指针/证据不一致时先查证，不直接改 release。
-8. [ ] **后续内部工作台与真实周期验证（gated）**：仅在 C-level Go 与内部数据授权满足后开始 U9/T13；按连续三个真实月度周期、同输入人工基准、盲评与工时门槛验收。U10 依预置决策包启动，不由模拟数据单独解锁。
+1. [x] **审计线 CI 修复/复验**：MinIO/client 镜像修复已集成 main `96010a2`，CI run `36129442008` 17/17 success。
+2. [x] **大麦实施提交主线集成**：普通合并 `e22d193`，CI run `36137591750` 17/17 success。
+3. [ ] **主状态文档统一（G3b，进行中）**：同步 `PROJECT_STATE.md`、`CURRENT_ROADMAP.md`、本 TODO、工作包与 HANDOFF 的 migration、CI、集成状态及外部阻塞；跑文档门禁并推送。
+4. [x] **常驻开发栈演示数据（G2，2026-09-25 完成）**：用户明确裁决本系统为演示系统、大麦数据全部入库；入库前 pg_dump 备份（`work/backups/flow-pre-damai-seed-20260925-203648.sql.gz`）；首次 seed 后 API/Web 启动、页面有数；随后发现共享库 `statement_report`/`objective_report_snapshot` 被并行会话的本地测试默认连接清空（conftest 指向共享 `flow` 库的旧坑），利用 seed 幂等语义重跑补回缺口；最终在集成后 main 代码上 `make damai-demo-verify` **19/19 通过**（含 damai 覆盖率双数据集端点），对象存储读回 SHA 一致。
+5. [ ] **U4 修复与新留出**：支持“合并及公司”版式标题、参数化页码区间；原三样本回归；另建独立盲留出，不复用回归集充当泛化证明。
+6. [ ] **C-level 出口**：先对账 corrections/10 条候选修正的文件、提交和基准凭证；然后由用户发起非实现方 AI 交叉评与独立 holdout 抽签；材料齐后正式 Go/No-Go。`1794/1794` 只表示覆盖，不等于 C-level 通过。
+7. [ ] **P3 数据与溯源接入**：完成 ZTO 文本层与数据链路接入、勾稽和来源页锚测试；评审并实现真实来源链接；复核阿里分部序列在集成分支的来源与系统可见性。
+8. [ ] **知识 release 收尾**：核对 M2 用户追认、`CURRENT_RELEASE`、sealed candidate/激活记录、Task 10 三仓库证据和独立复验；指针/证据不一致时先查证，不直接改 release。
+9. [ ] **后续内部工作台与真实周期验证（gated）**：仅在 C-level Go 与内部数据授权满足后开始 U9/T13；按连续三个真实月度周期、同输入人工基准、盲评与工时门槛验收。U10 依预置决策包启动，不由模拟数据单独解锁。
 
 ### G0 开工基线记录
 
-- [x] 基线核对完成（2026-09-25）：审计分支 `aee9f5a`；CI run `36124751353` 的 `data-contract`、`metrics-known-answers`、`copilot-evals`、`intake-e2e`、`integration`、`analysis-invariants`、`dashboard`、`smoke`、`publishing-golden`、`user-closure-e2e`、`investigation-e2e` 均在 MinIO 镜像拉取时 `unauthorized`，属于基础设施失败，不能算测试通过；大麦 `f62cf8e` 两个相关 CI run `36101860056`/`36105604310` 成功。`main` 为 `63f99b2`，尚未集成两工作线。
+- [x] 基线核对完成（历史快照，2026-09-25）：当时审计分支 `aee9f5a` CI 在 MinIO 镜像拉取时失败，大麦 `f62cf8e` 相关 CI 成功；当时 main 为 `63f99b2`。最终修复与集成证据见上方 G1/G3a。
 - [x] 未提交工作保护：`HANDOFF.md` 修改及 `services/api/tests/security/test_route_policy_registry.py` 未跟踪文件作者无法确定，按用户/并行 Agent 工作隔离保留，不纳入本次提交。
-- [x] G1 执行链原从 `codex/flow-execution-convergence` 派生；2026-09-25 按用户新指令已快进至本地 `main`（`96010a2`）。后续不创建新执行分支；尚存的大麦实施分支作为既有来源，按 G3 审查后集成。
+- [x] G1 执行链原从 `codex/flow-execution-convergence` 派生，已集成 main `96010a2`；大麦线经普通合并 `e22d193` 集成。后续不创建新执行分支。

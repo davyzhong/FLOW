@@ -3,9 +3,9 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: blocked
-version: 1.0
+version: 1.1
 created_at: 2026-09-24
-updated_at: 2026-09-24
+updated_at: 2026-09-25
 owner: FLOW
 depends_on: [FLOW-WI-DAMAI-FULL-YEAR-001]
 acceptance_refs: [FLOW-PLAN-INTEGRATED-EXECUTION-20260924, frontend-route-state-viewport-matrix]
@@ -21,8 +21,9 @@ applies_to: web-frontend
 
 ## 当前阻塞
 
-大麦 D3 尚未完成。现有前端一致性 Task 0–9 已关闭，不得以本工作包名义重做
-设计系统或页面全量迁移。
+D3 已完成并集成 main。体验收口仍暂缓：先完成 G2 常驻开发栈的数据可见性安全
+核验，再为本工作包列明精确页面/文件、状态矩阵、自动化用例及视觉证据；不得以本
+工作包名义重做已关闭的前端一致性 Task 0–9，也不得把隔离栈通过等同于常驻栈验收。
 
 ## 退出条件
 

@@ -14,11 +14,13 @@ applies_to: repository
 
 > 本页是下一位单一 Agent 的工作入口，整合了多 Agent 执行审计、R1 修复复核、竞品与方法论研究、工程收口计划和后续产品优化建议。它负责说明“现在在哪里、还要查什么、先改什么、怎样证明完成”；项目状态仍以 [PROJECT_STATE](docs/00_start_here/PROJECT_STATE.md) 为唯一事实源，任务顺序仍以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为唯一执行入口。
 
+> **当前状态覆盖（2026-09-25 主线核验）**：下文原始交接内容保留其编写时的历史语境，不再作为当前分支状态依据。当前 main 为 `370fd1f`；大麦实施线已由 `e22d193` 普通合并，CI run `36137591750` 17/17 success；审计/G1 修复 `96010a2` 的 CI run `36129442008` 17/17 success。主线及当前开发库迁移头均为 `0030_page_anchor_vocabulary`。大麦数据已装载常驻开发库（G2 完成，verify 19/19）；U4 三份 oracle 首跑 199 行全部 `not_comparable`，解析器修复和独立新留出未完成；公开 C 级仍需非实现方盲评、holdout 与 Go/No-Go。用户要求之后所有执行步骤直接在 `main` 串行推进，不再创建执行分支。当前唯一活跃顺序见 [EXECUTION_TODO](docs/50_plans/EXECUTION_TODO.md)。
+
 ## 0. 执行摘要
 
 ### 0.1 当前可信结论
 
-- **当前基线：`main@a461b54`**（2026-09-19 晨，全 job CI 绿）；本会话（09-17～09-19 连续执行）交付批次终点链 `5442d9c`→`0c4c45a`→`9cf8cb3`→`02c11ea`→`0af6a8a`→`a461b54`。
+- **历史基线：`main@a461b54`**（2026-09-19 晨，全 job CI 绿）；当前集成主线以本页顶部覆盖状态为准。
 - **S01 / U8 关闭不变**；阶段 3 基础（T09–T12）与 C 级出口执行批次交付不变（台账 §8/§9）。
 - **指标库 v1.2 行业参考包已交付**（借鉴 #21：16 行业 + 流动资产率 + 基准增强，`5442d9c`）；**O-01/O-02（AI 问数 v2 地基）已落地**（语义上下文端点 + 提议→复算管线，`3a0ee20`）。
 - **前端一致性整改计划 Task 0–9 全部关闭**（P3–P5 批次：metric-library/investigations 深度迁移、状态门禁 frontend-states.spec、60 图状态矩阵归档；门禁矩阵 = 一致性 10 路由 + 溢出 11×3 视口 + 状态 5×3 + 导航/边界 = 69 项，全跑生产构建）。
@@ -26,7 +28,7 @@ applies_to: repository
 - **数据来源政策已由用户明确（2026-09-19）**：无私有数据来源，研发期一律网络公开来源数据——A4「等待外部财报材料」的前提作废，数据扩张改为继续走公开财报抓取管线（见 §2.2/§2.3）。
 - 多 Agent 并行已终止，单一 Agent、逐 Gate、串行执行不变；产品战略方向不变（经分专员工作台，公开财报独立先行）。
 - **下一里程碑不变 = C 级出口 Go/No-Go 裁决**；前置人工项不变（见 §2.2）。
-- **大麦物流两年 synthetic 演示数据全链已交付并关闭（2026-09-24～25 批次，分支 `codex/damai-logistics-implementation`）**：计划 v2.4 串行 A1–A4 → B1–B3 → C1–C3 全部完成，提交链 `ece11d2`→`4950e73`→`1052ea6`→`5c2c4d4`→`0bb27d8`→`c1c5a20`→`ff3b828`→`1d3f757`→`8b61bec`→`3e20628`→`082b0eb`→`f867842`→`307300b`→`077d35c`→`d701c1d`→`75fb2f1`（completed 状态翻转）；实测 verify 19/19、八页面 E2E 9/9、二次 seed 全表零增长、发行包零漂移；C3 全量回归 17 门禁绿。CI 验收：active 收尾 head `d701c1d` 全绿（run 36098674773）；最终 completed SHA `75fb2f1` 17 jobs 全绿（run 36101860056；metrics-known-answers 首跑因 Docker Hub 拉取被 connection reset 瞬断失败，`--failed` 重跑即绿，纯网络 flake）。详见 §2.5。
+- **大麦物流两年 synthetic 演示数据全链已交付并集成 main**：实施细节和原始分支证据见 §2.5；当前主线集成验收以顶部 `e22d193` 与 run `36137591750` 为准。
 
 ### 0.2 当前最重要的偏差与缺口
 
@@ -103,11 +105,11 @@ applies_to: repository
 
 ### 2.5 大麦批次交接（2026-09-24～09-25，分支 `codex/damai-logistics-implementation`）
 
-- **完成证据**：verify 19/19（`make damai-demo-verify`）；八页面真实 E2E 9/9（`make test-damai-demo-e2e`，隔离栈 + Playwright，38s）；数据合同 8/8（含二次 seed 计数零增长）；U8 非破坏升级验证全链 PASS（dump SHA 核对 + 恢复 11 财报 + 升级 0029 + HTTPS 三方对账，证据 `work/s01-verification`）；M6 文档门禁绿（278 docs, 0 errors）。
+- **完成证据**：verify 19/19（`make damai-demo-verify`）；八页面真实 E2E 9/9（`make test-damai-demo-e2e`，隔离栈 + Playwright，38s）；数据合同 8/8（含二次 seed 计数零增长）；U8 非破坏升级验证全链 PASS（dump SHA 核对 + 恢复 11 财报 + HTTPS 三方对账，证据 `work/s01-verification`）；M6 文档门禁绿（278 docs, 0 errors）。原 worktree 升级路径到 0029 是历史测试记录；当前 main/开发库迁移头均为 0030。
 - **数据实测**：24 个月（FY2025–FY2026）、1920 经营实际 / 10752 预算 / 4800 AR / 672 财务实际、4 客群 / 40 客户 / 8 产品 / 6 区域 / 5 组织；指标覆盖 FY2025 22/40、FY2026 25/40（来源 `fixtures/damai/manifest.json` 与覆盖包）。
 - **红灯抓出并修复的真实缺陷**：reports-center 两个发布 fetch 缺 `Idempotency-Key`（§7.1 合同）+ Next 代理丢弃该头——已修并补单测。
 - **一键恢复**：`make damai-demo-up`（构建发行包 → 迁移 → seed → verify）；分步 `damai-demo-build/seed/verify`。
-- **已知限制**：dashboard 总量域 OCF actual 不存在是合同真相（state=degraded 为预期）；合成数据不解除公开 C 级与真实企业门禁；迁移头 0029（worktree 链），主工作区共享库在 0030，严禁混用。
+- **已知限制**：dashboard 总量域 OCF actual 不存在是合同真相（state=degraded 为预期）；合成数据不解除公开 C 级与真实企业门禁；该次隔离 worktree 测试记录不代表常驻开发库已灌入大麦数据，须完成 G2 只读盘点后再安全装载。
 - **新坑**：macOS Docker 无 host 网络，建 MinIO 桶须 `--network container:flow-minio-1`；`compose up -d --wait` 会误判一次性 init 容器 exit(0) 为失败；`down -v` 偶发只删网络须跑两次；**回归驱动运行期间严禁并行手动跑同库测试**（并发污染曾致 report_snapshot 计数假漂移，安静环境复跑全绿证伪）；测试 conftest 默认指向共享 `flow` 库（迁移头 0030），本 worktree 跑测试必须显式导出划痕库 env。
 - **C3 回归抓出并已修复的四个真实缺陷**（CI 全绿于 `d701c1d`，run 36098674773）：①发布服务冻结视图无粒度过滤导致二次 seed 冻结内容漂移（`082b0eb`，修复=按 snapshot.as_of_period + 五维度 IS NULL + ORDER BY id）；②集成测试清库顺序缺分析链模型致 RESTRICT FK 卡死、对象存储测试裸 boto3 被系统代理挂死（`f867842`）；③quay.io/minio 组织私有化 + Docker Hub minio 下架，compose 镜像全部不可拉，换 `bitnamilegacy/minio` 并补全路径 entrypoint/healthcheck（`307300b`）；④data-contract/intake-e2e 撞 20 分钟 `timeout-minutes`，提到 40，且注释必须独立行（`077d35c`+`d701c1d`，test_ci_gate_inventory 用行尾锚正则）。
 
@@ -162,4 +164,4 @@ applies_to: repository
 
 从当前最新 `origin/main`（`a461b54` 或更新）做会话开始三核对（PROJECT_STATE / git log / CI 状态），确认无新外部提交后按 §2.3 顺序领取：**首选溯源真实来源链接（公开来源方案，已解锁）或公开数据管线扩张**；若用户已交付人工三件套产出（查源结果 / AI 交叉评结论），优先接手归因与抽取 YAML 修订。不要先做 T13 内容或任何等待 A5 的开放面。
 
-当前对外状态统一表述为：**U8 closed；S01 completed；T09–T12 基础交付完成 + O-01/O-02 地基交付；前端一致性整改 Task 0–9 关闭；大麦两年 synthetic 演示数据全链交付并 completed（分支 `codex/damai-logistics-implementation`，最终 SHA `75fb2f1` CI 17 jobs 全绿，run 36101860056，待合入 main）；C 级出口 Go/No-Go 前置仅剩人工三件套；数据扩张按公开管线推进（2026-09-19 政策）；T13/T14 等外部。**
+当前对外状态统一表述：**U8 closed；S01 completed；前端一致性 Task 0–9 关闭；大麦两年 synthetic 实施已集成 main（`e22d193`，CI run `36137591750` 17/17）；G2 常驻开发库可见性仍待核验；U4 需解析器适配与独立新留出；C 级出口待非实现方盲评、holdout 与 Go/No-Go；知识 release、P3 数据接入及后续内部真实周期验证按 CURRENT_ROADMAP/EXECUTION_TODO 顺序处理。**
