@@ -142,7 +142,7 @@ def _dimensions() -> tuple[
             name=CUSTOMERS[index],
             industry="综合物流",
             tier="A" if index < 10 else ("B" if index < 25 else "C"),
-            credit_term_days=int(assign["credit_term_days"]),
+            credit_term_days=int(str(assign["credit_term_days"])),
             segment_code=_SEGMENT_TO_CODE[str(assign["segment"])],
         )
         for index, (customer_id, assign) in enumerate(CUSTOMER_ASSIGNMENTS.items())

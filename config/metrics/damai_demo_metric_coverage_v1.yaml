@@ -1,7 +1,7 @@
 dataset_id: flow.damai_demo_metric_coverage.v1
 title: 大麦物流 synthetic 演示指标覆盖矩阵
 generator: scripts/build_damai_metric_coverage.py
-generated_at: '2026-09-24T18:38:14+00:00'
+generated_at: '2026-09-25T00:16:12+00:00'
 facts_source: fixtures/damai/statements/（发行版合成财报）
 alias_map: config/statements/item_alias_map_v1.yaml#damai_syn
 synthetic: true

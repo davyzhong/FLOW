@@ -325,7 +325,7 @@ def build_damai_package() -> dict[str, Any]:
     for month in all_months:
         for ci in range(1, 41):
             customer_id = f"DM-CUST-{ci:03d}"
-            credit_days = int(CUSTOMER_ASSIGNMENTS[customer_id]["credit_term_days"])
+            credit_days = int(str(CUSTOMER_ASSIGNMENTS[customer_id]["credit_term_days"]))
             base = customer_month_revenue[(month, customer_id)]
             outstanding = _d(base * Decimal(credit_days) / Decimal("120"))
             e3 = customer_id in _E3_CUSTOMERS and month >= _E3_START_MONTH

@@ -77,7 +77,7 @@ def validate_damai_package(package: dict[str, Any]) -> dict[str, Any]:
         codes.append("ar_row_count_not_4800")
 
     # 预算单元格恒等式：收入 − 三成本 − 费用 = 经营利润（逐格精确闭合）
-    budget_cells: dict[tuple, dict[str, Decimal]] = {}
+    budget_cells: dict[tuple[Any, Any, Any, Any], dict[str, Decimal]] = {}
     for row in facts["budget"]:
         key = (
             row["month"],

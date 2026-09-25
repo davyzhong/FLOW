@@ -234,7 +234,7 @@ def build_damai_statement_payloads(package: dict[str, Any]) -> dict[str, dict[st
         _annual_facts(package, months_by_fy["FY2025"])["revenue"] * _CASH_RATE
     )
     opening_equity: Decimal | None = None
-    prior_rows: dict[str, dict[str, dict[str, Any]]] = {}
+    prior_rows: dict[str, dict[str, Any]] = {}
     for fy, months in months_by_fy.items():
         f = _annual_facts(package, months)
         income_rows = _income_statement(f)
