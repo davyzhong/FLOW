@@ -1,17 +1,20 @@
-# FLOW 全计划执行综合 Review（合并版）
-
 ---
 doc_id: FLOW-REV-COMPREHENSIVE-20260925
 title: 全计划执行综合 Review（ZCode 审计 × 独立 Review 合并）
 doc_type: review
-status: current
+status: open
 version: 1.0
 created_at: 2026-09-25
 updated_at: 2026-09-25
+last_reviewed_at: 2026-09-25
 owner: FLOW
+subject_ref: FLOW-PLAN-EXECUTION-CONVERGENCE-20260925
+findings: [l1-demo-closed, resident-db-empty, audit-branch-ci-unverified, u4-not-comparable, c-level-exit-gated, p3-ingestion-pending, knowledge-release-reconcile, project-state-drift]
 applies_to: repository
 knowledge_release: flow-knowledge-2026-09-12.1
 ---
+
+# FLOW 全计划执行综合 Review（合并版）
 
 > 本报告合并两份独立审计：ZCode 会话审计（2026-09-24 晚，基于提交链/CI/数据库实况）与独立 Review（2026-09-25，基于 `bdc57a9`/`f62cf8e` 双分支）。合并前对全部关键断言做了二次核实（CI run 号、工作包状态、数据库行数、E2E 证据均逐一验证）。两份报告的结论分歧处已在正文标注裁决与依据。
 
