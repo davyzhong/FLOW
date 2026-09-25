@@ -184,3 +184,41 @@ def test_correction_creates_new_published_version_and_preserves_old_rows(
         )
         == ()
     )
+
+
+def test_create_batch_accepts_explicit_analysis_cycle_and_keeps_legacy_default(
+    intake_session: Session,
+) -> None:
+    """B1 兼容合同：旧调用（无 cycle 参数）语义不变——仍绑定引导 cycle；
+    显式 analysis_cycle_id 时绑定指定周期（大麦装载不依赖全库最早周期）。"""
+
+    from sqlalchemy import text
+
+    service = IntakeService(intake_session)
+    legacy = service.create_batch("legacy default binding")
+    bootstrap_cycle = intake_session.execute(
+        text("SELECT id FROM analysis_cycle ORDER BY created_at LIMIT 1")
+    ).scalar_one()
+    assert legacy.analysis_cycle_id == bootstrap_cycle
+
+    cycle_id = intake_session.execute(
+        text(
+            "INSERT INTO analysis_cycle (id, enterprise_id, period_key, status, created_at)"
+            " VALUES ('00000000-0000-0000-0000-00000000c201',"
+            " '00000000-0000-0000-0000-00000000d001', '2026-08', 'open', now())"
+            " ON CONFLICT (enterprise_id, period_key) DO NOTHING"
+            " RETURNING id"
+        )
+    ).scalar()
+    if cycle_id is None:
+        cycle_id = intake_session.execute(
+            text(
+                "SELECT id FROM analysis_cycle"
+                " WHERE enterprise_id = '00000000-0000-0000-0000-00000000d001'"
+                " AND period_key = '2026-08'"
+            )
+        ).scalar_one()
+    explicit = service.create_batch(
+        "explicit cycle binding", analysis_cycle_id=cycle_id
+    )
+    assert str(explicit.analysis_cycle_id) == str(cycle_id)

@@ -219,3 +219,45 @@ companies:
           经营活动所得现金净额: cf.ocf
           投资活动所用现金净额: cf.icf
           筹资活动所用现金净额: cf.fin_cf
+  damai_syn:
+    statements:
+      合并利润表:
+        roles: {本期发生额: cur, 上期发生额: prev_yoy}
+        map:
+          营业收入: is.revenue
+          营业成本: {item: is.cogs, abs: true}
+          毛利: is.gross_profit
+          销售费用: {item: is.selling_exp, abs: true}
+          管理费用: {item: is.admin_exp, abs: true}
+          研发费用: {item: is.rnd_exp, abs: true}
+          财务费用: {item: is.fin_exp, abs: true}
+          三、营业利润（亏损以“－”号填列）: is.operating_profit
+          四、利润总额（亏损总额以“－”号填列）: is.total_profit
+          减：所得税费用: {item: is.income_tax, abs: true}
+          五、净利润（净亏损以“－”号填列）: is.net_profit
+          1.归属于母公司所有者的净利润: is.attr_net_profit
+      合并资产负债表:
+        roles: {期末余额: end, 期初余额: open}
+        map:
+          货币资金: bs.cash
+          应收账款: bs.ar
+          存货: bs.inventory
+          固定资产: bs.fixed_assets
+          流动资产合计: bs.current_assets
+          资产总计: bs.total_assets
+          流动负债合计: bs.current_liab
+          非流动负债合计: bs.noncurrent_liab
+          负债合计: bs.total_liab
+          所有者权益合计: bs.equity
+          归属于母公司所有者权益合计: bs.attr_equity
+      合并现金流量表:
+        roles: {本期发生额: cur, 上期发生额: prev_yoy}
+        map:
+          经营活动产生的现金流量净额: cf.ocf
+          投资活动产生的现金流量净额: cf.icf
+          筹资活动产生的现金流量净额: cf.fin_cf
+      合并所有者权益变动表:
+        roles: {本期发生额: cur, 上期发生额: prev_yoy}
+        map:
+          本期净利润: is.net_profit
+          期末权益: bs.equity

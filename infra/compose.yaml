@@ -90,7 +90,7 @@ services:
 
   minio:
     # quay.io/minio is no longer anonymously pullable; use the compatible
-    # Docker Hub legacy image already verified by the Damai implementation CI.
+    # bitnamilegacy 2025-04-22 image already verified by the Damai implementation CI.
     image: bitnamilegacy/minio:2025.4.22
     user: "0:0"
     entrypoint: ["/opt/bitnami/minio/bin/minio"]

@@ -2,17 +2,18 @@
 doc_id: FLOW-PLAN-KNOWLEDGE-REFRESH-002
 title: FLOW 第二代静态知识刷新与战略重基线实施计划
 doc_type: plan
-status: active
-version: 1.1
+status: archived
+version: 1.2
 created_at: 2026-09-18
-updated_at: 2026-09-18
+updated_at: 2026-09-24
 owner: FLOW
 decision_refs: [D051, D052, D053, D054]
 knowledge_release: flow-knowledge-2026-09-12.1
 depends_on: [FLOW-DESIGN-KNOWLEDGE-REFRESH-002]
 acceptance_refs: [FLOW-DESIGN-KNOWLEDGE-REFRESH-002]
 supersedes: []
-superseded_by: null
+superseded_by: FLOW-PLAN-INTEGRATED-EXECUTION-20260924
+do_not_execute: true
 ---
 
 # FLOW 第二代静态知识刷新与战略重基线 Implementation Plan

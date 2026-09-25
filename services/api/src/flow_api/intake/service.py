@@ -113,12 +113,23 @@ class IntakeService:
             {"eid": enterprise_id},
         ).scalar()
 
-    def create_batch(self, name: str, description: str | None = None) -> AnalysisBatch:
+    def create_batch(
+        self,
+        name: str,
+        description: str | None = None,
+        *,
+        analysis_cycle_id: Any | None = None,
+    ) -> AnalysisBatch:
         if not name.strip():
             raise ValueError("batch name must not be empty")
         # S01 R1：新批次一律 internal + 引导 cycle（见 0027 迁移）。
         # created_by 走列默认 flow-dev-bp（dev principal）；owner 精细化随内部工作台落地。
-        cycle_id = self._bootstrap_cycle_id()
+        # B1：调用方可显式指定 analysis_cycle_id（如大麦演示绑定截止月 2026-08），
+        # 缺省保持原语义——绑定引导 cycle，不依赖参数的既有调用不受影响。
+        cycle_id = (
+            analysis_cycle_id if analysis_cycle_id is not None
+            else self._bootstrap_cycle_id()
+        )
         batch = AnalysisBatch(
             name=name.strip(),
             description=description,

@@ -9,6 +9,7 @@ updated_at: 2026-09-12
 owner: FLOW
 depends_on: [FLOW-DOC-ARCH-001]
 acceptance_refs: [M0-baseline, M1-entrypoints, M2-knowledge-release, M3-specs, M4-roadmap, M5-archive, M6-verification]
+do_not_execute: true
 ---
 
 # FLOW Documentation and Static Knowledge Migration Implementation Plan

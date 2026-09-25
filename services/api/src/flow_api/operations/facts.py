@@ -236,10 +236,103 @@ def load_cainiao_operating_facts(
     return facts
 
 
+def load_damai_operating_facts(
+    path: Path, *, repo_root: Path
+) -> list[OperatingFact]:
+    """把大麦 synthetic 运营披露转换为统一事实（血缘指向发行版 manifest）。"""
+
+    payload = yaml.safe_load(path.read_text(encoding="utf-8"))
+    source_ref = str(payload["source_ref"])
+    source_path = repo_root / source_ref
+    if not source_path.is_file():
+        raise ValueError(f"大麦运营事实血缘文件缺失: {source_ref}")
+    source_sha256 = hashlib.sha256(source_path.read_bytes()).hexdigest()
+    facts: list[OperatingFact] = []
+
+    def _damai_fact(
+        *,
+        metric_code: str,
+        metric_name: str,
+        period_label: str,
+        value: Decimal | str | int | float,
+        unit: str,
+        caliber_note: str,
+    ) -> OperatingFact:
+        numeric_value: Decimal | None
+        text_value: str | None
+        if isinstance(value, str):
+            numeric_value, text_value = None, value
+        else:
+            numeric_value, text_value = Decimal(str(value)), None
+        return OperatingFact(
+            company_name="大麦物流",
+            stock_code="DAMAI.SYN",
+            metric_code=metric_code,
+            metric_name=metric_name,
+            period_label=period_label,
+            period_type=period_type(period_label),
+            numeric_value=numeric_value,
+            text_value=text_value,
+            unit=unit,
+            assurance="management_disclosure",
+            is_stub=False,
+            caliber_note=caliber_note,
+            source_ref=source_ref,
+            source_sha256=source_sha256,
+            source_page="",
+        )
+
+    metric_specs = (
+        (
+            "international_parcels",
+            "国际物流包裹量",
+            "百万件",
+            "synthetic：由 canonical 国际族收入按客单价推导",
+        ),
+        (
+            "china_orders_fulfilled",
+            "中国物流履约单量",
+            "百万单",
+            "synthetic：由 canonical 国内族收入按客单价推导",
+        ),
+    )
+    for code, name, unit, note in metric_specs:
+        for label, value in payload["operating_volume"][code].items():
+            facts.append(
+                _damai_fact(
+                    metric_code=code,
+                    metric_name=name,
+                    period_label=str(label),
+                    value=value,
+                    unit=unit,
+                    caliber_note=note,
+                )
+            )
+
+    share_names = {
+        "international_logistics": "国际物流收入占比",
+        "china_logistics": "中国物流收入占比",
+        "technology_and_other_services": "技术及其他服务收入占比",
+    }
+    for code, value in payload["business_line_revenue_share"].items():
+        facts.append(
+            _damai_fact(
+                metric_code=f"business_line_share.{code}",
+                metric_name=share_names[code],
+                period_label="FY2026",
+                value=value,
+                unit="比率",
+                caliber_note="synthetic：管理层业务线口径，非分部报告",
+            )
+        )
+    return facts
+
+
 __all__ = [
     "OperatingFact",
     "facts_for_period",
     "load_cainiao_operating_facts",
+    "load_damai_operating_facts",
     "period_type",
     "previous_comparable_period",
 ]

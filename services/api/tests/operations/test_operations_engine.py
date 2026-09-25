@@ -344,3 +344,54 @@ def test_alibaba_revenue_structure_theme(db_session: Session) -> None:
     # 阿里报告不注入菜鸟分部系列：公司键隔离
     assert revenue_structure.status == "not_applicable"
     assert revenue_structure.reason == "segment_disclosure_missing"
+
+
+# ---------------------------------------------------------------------------
+# Task A3 红灯：DAMAI.SYN 独立运营事实与分部序列（不读 Alibaba fixture）
+# ---------------------------------------------------------------------------
+
+DAMAI_FY2026_YAML = REPO_ROOT / "fixtures/damai/statements/damai_fy2026.yaml"
+
+
+def test_damai_syn_uses_independent_operations_datasets() -> None:
+    from flow_api.operations.engine import (
+        OPERATING_FACTS_BY_STOCK,
+        SEGMENT_SERIES_BY_STOCK,
+        load_operating_facts,
+        load_segment_series,
+    )
+
+    assert "DAMAI.SYN" in SEGMENT_SERIES_BY_STOCK
+    assert "DAMAI.SYN" in OPERATING_FACTS_BY_STOCK
+    for path in (
+        SEGMENT_SERIES_BY_STOCK["DAMAI.SYN"],
+        OPERATING_FACTS_BY_STOCK["DAMAI.SYN"],
+    ):
+        assert "alibaba" not in str(path).lower()
+        assert "9988" not in str(path)
+    facts = load_operating_facts("DAMAI.SYN")
+    assert facts, "DAMAI.SYN 必须有独立运营事实"
+    assert all(fact.stock_code == "DAMAI.SYN" for fact in facts)
+    series = load_segment_series("DAMAI.SYN")
+    assert series is not None and "FY2026" in series["series"]
+
+
+def test_damai_overview_revenue_structure_from_own_segment_series(
+    db_session: Session,
+) -> None:
+    payload = yaml.safe_load(DAMAI_FY2026_YAML.read_text(encoding="utf-8"))
+    report = import_statement_report(
+        db_session,
+        company_name="大麦物流",
+        stock_code="DAMAI.SYN",
+        report_kind="年报",
+        period_label="FY2026",
+        payload=payload,
+        source_ref="synthetic/damai-logistics-demo-v1/FY2026",
+        source_sha256="0" * 64,
+    )
+    normalize_report(db_session, report)
+    overview = build_operations_overview(db_session, report_id=str(report.id))
+    theme = next(t for t in overview.themes if t.theme_id == "revenue_structure")
+    assert theme.status == "available", "DAMAI.SYN 分部序列必须支撑收入结构主题"
+    assert any(m.entry_id == "segment_revenue_yoy" for m in theme.metrics)

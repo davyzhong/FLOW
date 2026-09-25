@@ -840,7 +840,7 @@ export interface paths {
         };
         /**
          * Get Metric Coverage
-         * @description 指标库 v0 通用指标 × 五家真实财报快照的可计算覆盖（含缺口原因）。
+         * @description 指标覆盖矩阵：默认 public 真实财报矩阵；dataset=damai 返回独立 synthetic 矩阵。
          */
         get: operations["get_metric_coverage_api_v1_metric_library_coverage_get"];
         put?: never;
@@ -2376,7 +2376,7 @@ export interface components {
         };
         /**
          * MetricCoverageResponse
-         * @description P5 真实财报指标覆盖矩阵（config/metrics/p5_metric_coverage_v1.yaml 只读投影）。
+         * @description 指标覆盖矩阵只读投影（public=P5 真实财报 / damai=合成演示，dataset 参数切换）。
          */
         MetricCoverageResponse: {
             /** Dataset Id */
@@ -2391,6 +2391,11 @@ export interface components {
             facts_source: string;
             /** Alias Map */
             alias_map: string;
+            /**
+             * Synthetic
+             * @default false
+             */
+            synthetic: boolean;
             /** Caliber Notes */
             caliber_notes: string[];
             /** Snapshots */
@@ -5564,7 +5569,9 @@ export interface operations {
     };
     get_metric_coverage_api_v1_metric_library_coverage_get: {
         parameters: {
-            query?: never;
+            query?: {
+                dataset?: string;
+            };
             header?: {
                 authorization?: string | null;
             };

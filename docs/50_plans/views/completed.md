@@ -5,10 +5,10 @@ doc_type: generated
 status: generated
 version: 1.0
 created_at: 2026-09-12
-updated_at: 2026-09-15
+updated_at: 2026-09-25
 owner: FLOW
 generator_ref: scripts/documentation/plan_views.py
-input_hash: 94c0dfe13acf04341de19432a1956bb673a58be5e43e5034f99c6e95698c4ae6
+input_hash: e3698328bba11d27c1f68b8433c4b9a905c870bbe98a0d436f3014bb4e2f5159
 applies_to: planning
 ---
 
@@ -16,6 +16,7 @@ applies_to: planning
 
 > 本页由工作包元数据确定性生成，请勿手工修改。
 
+- [大麦物流完整财年演示数据与全产品验收](../work_items/DAMAI--full-year-demo.md) — `completed`
 - [S01 U8 后战略边界、事实合同与安全门禁](../work_items/S01--post-u8-boundary-contract-security.md) — `completed`
 - [U08 生产就绪收口](../work_items/U08--production-readiness.md) — `completed`
 - [AI 问数 v1 与 100 问评测集（T12）](../work_items/PUBLIC--ai-qa-v1.md) — `completed`

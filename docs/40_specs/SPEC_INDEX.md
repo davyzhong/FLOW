@@ -28,6 +28,7 @@ knowledge_release: flow-knowledge-2026-09-12.1
 | static knowledge architecture | platform | approved | `docs/superpowers/specs/2026-09-12-static-knowledge-and-document-architecture-design.md` | V1.1，本迁移设计 |
 | strategic reset design | product-cross | approved | `docs/superpowers/specs/2026-09-13-flow-strategic-reset-design.md` | V1.1；D052–D054、单一路线图、Facts V2/安全门禁、量化验收协议 |
 | static knowledge refresh and strategic rebaseline | product-cross | approved | `docs/superpowers/specs/2026-09-17-static-knowledge-refresh-and-strategic-rebaseline-design.md` | V1.1；第二代静态知识刷新、sealed candidate、战略裁决与原子激活合同 |
+| damai logistics demo data release | product-cross | approved | `docs/superpowers/specs/2026-09-24-damai-logistics-demo-data-design.md` | 24 个月跨域 synthetic 演示数据、一键装载、页面覆盖与无 schema 变更约束 |
 | data contract | financial-facts | approved | `docs/data-contract/flow-v1.md`（原位，机器消费） | data-contract 域 |
 | intake spec | data-intake | approved | `docs/intake/flow-v1-intake.md`（原位） | |
 | metrics spec | metrics | approved | `docs/metrics/flow-v1-metrics.md`（原位） | |

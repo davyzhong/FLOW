@@ -74,7 +74,7 @@ U1–U7 全部 ✅ · U2 全关 ✅ · U5 ✅ · O1–O4 ✅ · 战略沉淀 D05
 权威执行规格：[FLOW 项目执行收敛与验收计划](2026-09-25-project-execution-convergence-plan.md)。以下状态为综合 review 基线；开始每项前先核对远端最新 SHA 与同 SHA CI。
 
 1. [x] **审计线 CI 修复/复验**：审计线 MinIO 与 client 镜像切至已验证的 `bitnamilegacy` 版本/路径；`docker compose config --quiet`、两个镜像拉取、MinIO binary 和 MC client 检查均通过。提交 `96010a2c32233d1e19ec139c00de9651ac577a9c` 对应 CI run `36129442008` 全部 17 个 job success。该执行链已按用户要求于 2026-09-25 快进合入本地 `main`；推送及关单文档验证随本次主线更新完成。
-2. [ ] **先完成剩余执行提交的主线集成与状态统一（G3）**：用户要求不再新建执行分支，后续任务直接在 `main` 逐步执行。当前只把审计/G1 执行链快进到本地 main；大麦实施分支 `codex/damai-logistics-implementation` 尚未集成。先审查两线提交图、迁移/安全/前端重叠及范围，保护未提交文件；普通 merge 到 main 后验证最终树并统一 `PROJECT_STATE.md`、`CURRENT_ROADMAP.md`、本 TODO、工作包与 HANDOFF。不得 rebase/强推；集成后 CI 通过才可将 G3 关单。
+2. [ ] **先完成剩余执行提交的主线集成与状态统一（G3，进行中）**：用户要求不再新建执行分支，后续任务直接在 `main` 逐步执行。审计/G1 执行链已快进至 main `96010a2`；当前 `main@0b2eaf5` 与既有大麦实施线 `f62cf8e` 的合并已在本地完成冲突裁决、尚未提交。合并预演的 5 个冲突位于计划导航、审查元数据、两个历史计划状态及 `infra/compose.yaml`；迁移历史核对为 main 有 `0030_page_anchor_vocabulary`、大麦线无新增迁移。本地 M1、Compose 配置、Python lint/mypy、Web lint/typecheck、迁移往返与 93 项定向测试通过；组合树最终 CI 尚待合并提交推送后验证。合入后仍需统一 `PROJECT_STATE.md`、`CURRENT_ROADMAP.md`、本 TODO、工作包与 HANDOFF。不得 rebase/强推；全量同 SHA CI 绿后才可关单。
 3. [ ] **常驻开发栈演示数据（独立可选项）**：只读检查栈、现存数据、备份/恢复与 seed 覆盖风险；明确目标为开发/演示栈后再运行 seed/up + verify，八页面可见、重复 seed 零增长。若授权、备份或隔离条件不满足，登记为阻塞后可继续其余工作；若会覆盖既有数据，暂停该写操作并请用户裁决。
 4. [ ] **U4 修复与新留出**：支持“合并及公司”版式标题、参数化页码区间；原三样本回归；另建独立盲留出，不复用回归集充当泛化证明。
 5. [ ] **C-level 出口**：先对账 corrections/10 条候选修正的文件、提交和基准凭证；然后由用户发起非实现方 AI 交叉评与独立 holdout 抽签；材料齐后正式 Go/No-Go。`1794/1794` 只表示覆盖，不等于 C-level 通过。

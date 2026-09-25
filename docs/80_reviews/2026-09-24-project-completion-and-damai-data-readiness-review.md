@@ -9,8 +9,20 @@ updated_at: 2026-09-24
 last_reviewed_at: 2026-09-24
 owner: FLOW
 subject_ref: main@63f99b2
-findings: [strategic-completion-50-60, no-one-click-demo-loader, internal-workbench-25-35, c-level-exit-missing-holdout-eval, four-level-validation-not-started]
+findings: [strategic-completion-50-60, no-one-click-demo-loader, internal-workbench-25-35, c-level-exit-missing-holdout-eval, four-level-validation-not-started, strategic-completion-partial, public-exit-pending, internal-workbench-incomplete, ci-doc-metadata-failing, current-state-stale, demo-data-not-loaded, demo-data-scope-insufficient]
 applies_to: repository
+knowledge_release: flow-knowledge-2026-09-12.1
+decision_refs: [D052, D053, D054]
+supersedes: []
+superseded_by: null
+source_refs:
+  - docs/00_start_here/PROJECT_STATE.md
+  - docs/50_plans/CURRENT_ROADMAP.md
+  - docs/20_product/PRODUCT_SCOPE.md
+  - docs/20_product/PRODUCT_PRINCIPLES.md
+evidence_refs:
+  - "https://github.com/davyzhong/FLOW/actions/runs/35864060350"
+confidentiality: project-internal
 ---
 
 # FLOW 项目完成度与“大麦物流”全量演示数据就绪度审查
@@ -172,4 +184,3 @@ FLOW 不是“功能尚未开发”，而是“共享底座和公开财报模块
 - [阿里巴巴 FY2025 年报（HKEX）](https://www.hkexnews.hk/listedco/listconews/sehk/2025/0515/2025051500869.pdf)；
 - [菜鸟招股申请版本（HKEX）](https://www1.hkexnews.hk/listedco/listconews/sehk/2023/1222/sehk23120700201.pdf)；
 - [京东物流 FY2025 年度业绩公告（HKEX）](https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0305/2026030500918.pdf)。
-

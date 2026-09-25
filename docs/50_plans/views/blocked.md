@@ -5,10 +5,10 @@ doc_type: generated
 status: generated
 version: 1.0
 created_at: 2026-09-12
-updated_at: 2026-09-15
+updated_at: 2026-09-25
 owner: FLOW
 generator_ref: scripts/documentation/plan_views.py
-input_hash: 94c0dfe13acf04341de19432a1956bb673a58be5e43e5034f99c6e95698c4ae6
+input_hash: e3698328bba11d27c1f68b8433c4b9a905c870bbe98a0d436f3014bb4e2f5159
 applies_to: planning
 ---
 
@@ -19,4 +19,5 @@ applies_to: planning
 - [U04 独立 oracle 录入与全行验证](../work_items/U04--independent-oracle.md) — `blocked`
 - [U09+O05 授权内部经营分析试点](../work_items/U09-O05--authorized-internal-pilot.md) — `blocked`
 - [U10 V1.1 证据决策（go/hold/drop）](../work_items/U10--v1-1-evidence-decision.md) — `blocked`
+- [大麦数据后的剩余体验收口](../work_items/UX--post-damai-experience-closeout.md) — `blocked`
 - [公开财报模块 C 级出口协议与数字级准确率基准（T09）](../work_items/PUBLIC--c-level-exit-protocol.md) — `blocked`

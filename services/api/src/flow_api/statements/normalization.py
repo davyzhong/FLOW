@@ -33,6 +33,7 @@ COMPANY_KEY_BY_STOCK: dict[str, str] = {
     "600233": "yto_600233",
     "9988.HK": "alibaba_9988",
     "CAINIAO": "cainiao_private",
+    "DAMAI.SYN": "damai_syn",
 }
 
 ALIAS_MAP_PATH = Path("config/statements/item_alias_map_v1.yaml")

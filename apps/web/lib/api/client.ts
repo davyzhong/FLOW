@@ -447,8 +447,9 @@ export const metricLibraryApi = {
   get(signal?: AbortSignal): Promise<MetricLibrary> {
     return request<MetricLibrary>("/api/v1/metric-library", signal);
   },
-  getCoverage(signal?: AbortSignal): Promise<MetricCoverage> {
-    return request<MetricCoverage>("/api/v1/metric-library/coverage", signal);
+  getCoverage(signal?: AbortSignal, dataset: "public" | "damai" = "public"): Promise<MetricCoverage> {
+    const query = dataset === "public" ? "" : `?dataset=${encodeURIComponent(dataset)}`;
+    return request<MetricCoverage>(`/api/v1/metric-library/coverage${query}`, signal);
   },
   listEvents(metricCode?: string, signal?: AbortSignal): Promise<MetricGovernanceEventList> {
     const query = metricCode ? `?metric_code=${encodeURIComponent(metricCode)}` : "";
