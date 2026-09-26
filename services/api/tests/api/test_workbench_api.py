@@ -35,6 +35,21 @@ REPO_ROOT = Path(__file__).resolve().parents[4]
 SF_YAML = REPO_ROOT / "docs/implementation/p5/sf_2026q1_statements.yaml"
 
 
+def test_management_watch_response_accepts_metric_deep_link() -> None:
+    """管理关注必须保留生成器提供的指标代码，供前端下钻且不得触发500。"""
+    from flow_api.analysis.workbench import ManagementWatchItem
+
+    item = ManagementWatchItem.model_validate(
+        {
+            "code": "leverage_rising",
+            "metric_code": "debt_asset_ratio",
+            "message": "资产负债率较上期上升至 0.9100",
+            "direction": "warning",
+        }
+    )
+    assert item.metric_code == "debt_asset_ratio"
+
+
 @pytest.fixture(scope="module", autouse=True)
 def migrated_database() -> None:
     command.upgrade(Config("alembic.ini"), "head")

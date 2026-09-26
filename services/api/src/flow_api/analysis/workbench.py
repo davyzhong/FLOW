@@ -161,6 +161,7 @@ class ManagementWatchItem(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     code: str
+    metric_code: str
     message: str
     direction: Literal["negative", "warning"]
 

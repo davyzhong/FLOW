@@ -7498,6 +7498,10 @@
             "type": "string",
             "title": "Code"
           },
+          "metric_code": {
+            "type": "string",
+            "title": "Metric Code"
+          },
           "message": {
             "type": "string",
             "title": "Message"
@@ -7515,6 +7519,7 @@
         "type": "object",
         "required": [
           "code",
+          "metric_code",
           "message",
           "direction"
         ],

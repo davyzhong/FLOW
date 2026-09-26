@@ -2212,6 +2212,8 @@ export interface components {
         ManagementWatchItem: {
             /** Code */
             code: string;
+            /** Metric Code */
+            metric_code: string;
             /** Message */
             message: string;
             /**
