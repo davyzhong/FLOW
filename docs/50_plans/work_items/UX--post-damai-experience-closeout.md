@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 2.0
+version: 2.1
 created_at: 2026-09-24
 updated_at: 2026-09-26
 owner: FLOW
@@ -97,6 +97,12 @@ Acceptance: 40项指标逐项有“适用且可计算 / 适用但缺源事实 / 
 
 **最终隔离页面验收（2026-09-26）**：验收脚本改为临时 web 工作副本后，`bash scripts/test_damai_demo_e2e.sh` 全程通过：verify 19/19、八页面/旅程 E2E 9/9。Dashboard API 的 OCF KPI 为 `available` 且值非空；12个月趋势 `complete`、覆盖12/12，所有月度 OCF 值均 `available` 且非空。临时副本和隔离 Compose 卷已自动清理，常驻库未写入，真实工作区 TS 配置未被验收脚本改动。本轮关闭“现金流源事实遗漏/快照缺失”这一类缺口；毛利矩阵实际与比较值缺项仍需独立定位，当前整体 Gate 1 与工作包不得因此关闭。
 
+#### 毛利矩阵缺格根因（2026-09-26，只读核查；实现待验收）
+
+静态 canonical 经营实际在全量期间只含10种客群×产品组合；2026-08 的实际毛利快照也只有10个组合，而同比毛利只有8个组合。缺少的组合在源实际中没有对应经营事实，不能以零补齐或伪造毛利。数据库中的预算毛利覆盖32格，但预算差异只覆盖10格。最新本机只读 API 返回32格、实际可用10格、同比可用8格，并把比较标签整体标为“不可用”。这次 API 读数来自热运行栈，未绑定干净提交 SHA，作为归因线索而非发布验收证据。
+
+服务逻辑当前要求某种比较值覆盖全部32格，才选择预算/同比；两者均不满足时退回同比，因此丢弃了覆盖更高的预算比较。计划中的修复是：按同一矩阵实际可比格数选择单一比较口径，优先覆盖数更多者、同数时预算优先；保持没有已发布值的格为显式 unavailable，矩阵整体仍 degraded，不做零填充。格级 `metric_grain_not_published` / `comparison_not_published` 仍表达“快照无该值”，不应在缺少源明细证据时擅自改标为“无业务活动”或“不适用”。通过后以隔离 seed、API 集成测试和 UI E2E 验证；常驻库保持只读。
+
 Files:
 - Inspect/modify if root-caused: `services/api/src/flow_api/fixtures/damai/canonical.py`, `services/api/src/flow_api/fixtures/damai/generator.py`, `services/api/src/flow_api/dashboard/fixture.py`, `services/api/src/flow_api/dashboard/repositories.py`, `services/api/src/flow_api/dashboard/service.py`, `scripts/seed_damai_demo.py`, `scripts/test_damai_demo_e2e.sh`, `apps/web/e2e/damai-demo.spec.ts` and the owning metric snapshot service
 - Tests: `services/api/tests/fixtures/test_damai_canonical.py`, `services/api/tests/fixtures/test_damai_metric_grain.py`, `services/api/tests/dashboard/` and dashboard API integration tests
@@ -131,4 +137,4 @@ Run: `python3 scripts/check_docs.py --phase m1` and the repository link check
 
 ## 工作状态
 
-用户已于 2026-09-26 批准实施。Gate 1初始诊断快照固定于基线 `3ff95115` + overlay `1ede2648…`；FY2025工作台500根因已修复并推送（`48f8363`），缺口已分为Gate2源事实与Gate3快照发布两类。Gate2静态事实生成达到 FY2025 37/40、FY2026 40/40，相关修复已推送至 `c7955f1`。Gate3首项 OCF canonical 源事实于`4932504`推送，静态实际768条且合计守恒；隔离 seed/verify 19/19、八页面/旅程 E2E 9/9。临时 web 副本验收确认 OCF KPI available、趋势 complete 12/12且所有 OCF 月值 available。常驻库未写入。仍待：毛利矩阵缺项调查、Gate1干净SHA完整复测、其余 Gate3–5；不得对常驻数据库写入。
+用户已于 2026-09-26 批准实施。Gate 1初始诊断快照固定于基线 `3ff95115` + overlay `1ede2648…`；FY2025工作台500根因已修复并推送（`48f8363`），缺口已分为Gate2源事实与Gate3快照发布两类。Gate2静态事实生成达到 FY2025 37/40、FY2026 40/40，相关修复已推送至 `c7955f1`。Gate3首项 OCF canonical 源事实于`4932504`推送，静态实际768条且合计守恒；隔离 seed/verify 19/19、八页面/旅程 E2E 9/9。临时 web 副本验收确认 OCF KPI available、趋势 complete 12/12且所有 OCF 月值 available。毛利矩阵根因已定位：源实际仅覆盖10个客群×产品格、同比覆盖8格；服务端全格比较门槛丢弃可用的部分预算比较。修复计划为按比较覆盖数选预算或同比，保持缺值、不补零，API/UI 用隔离数据复验。常驻库未写入。仍待：该矩阵修复与验证、Gate1干净SHA完整复测、其余 Gate3–5；不得对常驻数据库写入。

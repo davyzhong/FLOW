@@ -3,12 +3,12 @@ doc_id: FLOW-VERIFY-DAMAI-VISIBILITY-GATE1-001
 title: 大麦数据可见性 Gate 1 API 诊断证据 v1.5
 doc_type: verification
 status: draft
-version: "1.5"
+version: "1.6"
 created_at: 2026-09-26
 updated_at: 2026-09-26
 owner: FLOW
-commit_refs: "[3ff95115, 6591e148, 4932504c, 9cd43e20, 905cf544, e2417ffa]"
-evidence_refs: "[read-only-local-api-probe, stable-overlay-fingerprint, sha256-response-matrix, damai-ocf-canonical-fixture, damai-isolated-seed-verify, damai-e2e-8-of-9, damai-e2e-9-of-9-ocf-trends-complete]"
+commit_refs: "[3ff95115, 6591e148, 4932504c, 9cd43e20, 905cf544, e2417ffa, af375ba3]"
+evidence_refs: "[read-only-local-api-probe, stable-overlay-fingerprint, sha256-response-matrix, damai-ocf-canonical-fixture, damai-isolated-seed-verify, damai-e2e-8-of-9, damai-e2e-9-of-9-ocf-trends-complete, margin-matrix-read-only-grain-audit]"
 knowledge_release: flow-knowledge-2026-09-12.1
 applies_to: web-frontend
 supersedes: []
@@ -72,6 +72,12 @@ superseded_by: null
 ## Gate 1 状态
 
 诊断范围的初始 API 读数与哈希已固定。发现上述契约缺陷后，补充回归测试先红（Pydantic 拒绝 `metric_code`），再将 `metric_code` 加入严格响应模型；工作包 API 测试 7/7、ruff、mypy 均通过，本机热重载服务对 FY2025 同一报告 GET 返回200，响应中保留 `metric_code=debt_asset_ratio`。该修复验证发生在带其他会话未提交变更的工作树中，未计入初始 overlay 哈希；待代码归属整理并提交后仍须以干净 SHA 复测。
+
+## 毛利矩阵只读归因补充（2026-09-26）
+
+对 canonical 文件、当前 snapshot 与只读 dashboard GET 的交叉核对显示：canonical 全期只有10种实际客群×产品组合；2026-08 `gross_margin/actual_month` 有10格、`prior_year_month` 与 `yoy_variance_month` 各8格。预算原值覆盖32格，但预算差异仅10格。热运行本机 API 返回矩阵32格、实际10格、同比8格，比较标签为“不可用”。这次读数反映当时本机运行库/代码，不绑定干净 Git SHA，因此用于定位而非验收。
+
+归因：22个未发布实际毛利格不是快照聚合遗漏的已存在源事实；canonical 中没有相应实际组合，必须保持缺失，禁止补零。服务端比较选择逻辑要求预算或同比覆盖全部32格；两者均不满足时固定退回同比，从而丢弃较多的预算比较格。计划以单一比较口径最大化已发布格数，覆盖相同时优先预算；其余格继续显式 unavailable，矩阵状态为 degraded。实现与验证状态以工作包后续提交为准。
 
 完整 Gate 1 仍需完成其余缺口逐项归因和干净提交 SHA 的全目标路由复测。本记录支持已确认的故障定位与修复证据，不支持整体页面覆盖验收完成声明。
 
