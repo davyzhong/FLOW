@@ -3,9 +3,9 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 2.0
+version: 2.1
 created_at: 2026-09-12
-updated_at: 2026-09-25
+updated_at: 2026-09-26
 owner: FLOW
 depends_on: [FLOW-SPEC-V1-DESIGN-001]
 acceptance_refs: [roadmap-unique-invariant]
@@ -19,11 +19,10 @@ superseded_by: null
 
 > **本页是全仓唯一主线**：既维护状态真相，也维护执行队列。2026-09-25 用户裁决（2A）后不再存在第二份「唯一」文档：EXECUTION_TODO、整合总计划、统一完整实施计划与执行收敛计划均已归档为历史/参考，状态与任务只以本页和工作包为准。详细验收步骤在各工作包与参考规格。
 
-> **安全前置**：当前 `services/api/tests/conftest.py` 将未显式设置的 `DATABASE_URL`
-> 指向常驻 `flow` 库；已发生测试误清共享数据。修好并验证测试库隔离/误连 fail-fast 前，
-> 禁止在本地运行会清理或迁移数据库的测试命令；不得把补种当成根因修复。
+> **测试库安全状态**：共享库误清根因已修复并于 `b60c51b` 验证：测试默认使用
+> `flow_test`，常驻 `flow` 零污染。仍须保留该保护，不得将本地破坏性测试指向常驻库。
 
-## 顺序与状态（2026-09-25 对 main `58c5a5d` 核对；最新 CI 尚在运行）
+## 顺序与状态（2026-09-26 对 main `face8279` 核对；该 SHA 的 CI 状态须单独核验）
 
 | 顺序 | 工作包 | 状态 | 依赖 | 最近证据 |
 |---|---|---|---|---|
@@ -31,7 +30,7 @@ superseded_by: null
 | 1' | [U04 独立 oracle](work_items/U04--independent-oracle.md) | **blocked(解析器适配 + 新留出)** — 可并行 | oracle 已到齐 | 2026-09-24 首跑 199 行均 `not_comparable`；先支持「合并及公司」标题与页码区间提示，再回归并另取独立留出 |
 | 2 | [S01 战略边界、事实合同与安全门禁](work_items/S01--post-u8-boundary-contract-security.md) | **completed** | U08 completed | Task 1–5 完成；安全规格 V1.1 已批准且独立审查闭环（`6c3c1cd`，零 P1/P2）。2026-09-14 `ff42c67` 五路并合 + 回落修复（`c1510ce`→`2570bf8`）带入路由策略 v2、模块边界与 U8 升级门禁、迁移 0026 修复、`main.py` 启动 fail-fast、两模块入口；Kimi `0841ff9` v1 被否，由 `997c1ab` v2 取代。**Task 6 已关闭**（R2/R3/R4 交付，台账 §7），阶段 3 转入 C 级出口；[协调台账](../70_operations/2026-09-14-coordination-ledger-glm.md) / [范围计划](../superpowers/plans/2026-09-13-flow-post-u8-boundary-gate.md) / [并行执行计划](../superpowers/plans/2026-09-13-flow-three-agent-parallel-restructuring.md) |
 | 2a | [大麦物流完整财年演示数据](work_items/DAMAI--full-year-demo.md) | **completed** | 已批准规格；不依赖公开 C 级 | D1–D3 已集成 main `e22d193`，CI run `36137591750` 17/17 success；隔离栈 verify 19/19、八页面 E2E 9/9、重复 seed 零增长、发行包零漂移。**常驻开发库已装载（G2 完成 2026-09-25）**：用户裁决演示数据全部入库，集成后 main 上 verify 19/19、页面可见；合成数据不解除公开 C 级门禁 |
-| 2b | [大麦数据后的剩余体验收口](work_items/UX--post-damai-experience-closeout.md) | **blocked** | G2 常驻栈核验 ✓ + 精确 UX 验收规格 | G2 已完成；下一步列明页面/文件、状态矩阵、自动化与视觉证据；前端 Task 0–9 不重做 |
+| 2b | [大麦数据后的剩余体验收口](work_items/UX--post-damai-experience-closeout.md) | **proposed（待用户批准实施）** | G2 ✓；数据覆盖实施规格已提出 | 本地只读 API 仍显示驾驶舱 `degraded`、大麦指标覆盖 FY2025 22/40、FY2026 25/40；先做 Gate 1 页面/API/事实缺口归因，再按工作包 Gate 2–5 修复；不重做前端 Task 0–9 |
 | K | [第二代静态知识刷新与战略重基线](work_items/KNOWLEDGE--refresh-v2.md) | **active** | 批准规格；跨三仓库 | Task 0/preflight 已完成；K0–K6 待执行。可与 D 轨在不重叠文件上并行；战略激活与 D3 文档关闭必须串行；用户裁决前 `CURRENT_RELEASE` 不变 |
 | 3 | [公开财报模块 C 级出口](work_items/PUBLIC--c-level-exit-protocol.md) | **blocked(归因、补证与裁决)** | S01 关闭 ✓ | 独立交叉评已完成（[结果](../80_reviews/ai-cross-review/results/gpt-6-astra-2026-09-25.md)）：1,530 格中42异常、109存疑、200因JDL乱码无法完整核验；待原PDF逐项归因/订正。1794/1794仅为登记覆盖口径，不等于通过 |
 | 3a | [溯源/重述/只读 MCP](work_items/PUBLIC--provenance-restatement-mcp.md) | **completed** | — | B3 溯源 95.5% 行项目带页锚（迁移 0029 + 导入/API/前端）；B4 supersedes 链 + 差异脚本；B5 只读 MCP 三工具（token fail-closed）；B6 确定性差异说明起草 |
@@ -53,7 +52,7 @@ superseded_by: null
 2. **U4 解析器修复与真正的新留出**（上表1'）：新留出双样本已冻结并完成独立 oracle 录入（`926af825`：小米 2026H1 + 阿里 FY2027Q1，抽签记录见 [holdout-lottery-2026-09-25](../../validation/financial_reports/holdout-lottery-2026-09-25.md)）。剩余：`cn_ashare_table` 支持「合并及公司」标题与页码区间参数化；旧三样本回归；新留出首跑前禁止适配/调参。
 3. **重新跑质量基准并完成 C 级 Go/No-Go**：依赖必要修订、U4新留出首跑和盲测；重跑L1并归档机器结果。交叉评与抽签均不单独构成通过，`1794/1794` 只表示已登记覆盖口径。
 4. **全站超链接化（深链下钻）**（**active**，用户 2026-09-26 确认）：按[实施计划](2026-09-26-ui-deep-link-implementation-plan.md)三批推进——批次一=五页参数接收+9 项纯前端链接；批次二=轻后端（entry/快照/运行详情端点等）；批次三=原文/源记录查看器与冻结回链。审计清单见 [可链接性审计](../80_reviews/2026-09-26-ui-linkability-audit.md)。**批次一已完成**（2026-09-26）：六页接收端（`/metric-library`、`/statements`、`/reports`、`/data`、`/`、`/operations?report=`）+ 9 项 S 级链接 + 15 项 M 级下钻，驾驶舱 replaceState 不再抹外来深链；新增 `apps/web/e2e/deep-links.spec.ts`（8 断言）与 Vitest 覆盖（126/126 绿）。
-5. **大麦数据后的剩余 UX 收口**（上表2b）：G2现已完成；补齐精确页面/文件、五态矩阵、自动化与视觉验收规格，再执行导出审计、真实来源跳转、经分专员首页、固定下钻、报告渐进披露与治理折叠；不得重做前端Task 0–9。
+5. **大麦数据可见性与剩余 UX 收口**（上表2b）：工作包已提出 Gate 1–5 规格但尚未获准实施。先按页面/API/事实/快照链路归因缺口，再补适用指标事实、重建月度快照和验证页面下钻；另完成导出审计、真实来源跳转、经分专员首页、报告渐进披露与治理折叠；不得重做前端 Task 0–9。数据生成和 seed 只在隔离环境验证，不对常驻库执行未批准写入。
 6. **P3 数据与溯源接入**（上表3b）：修复/替换ZTO文本层，完成抽取、勾稽、页锚及API/UI链路测试；评审并实现真实来源链接；复核阿里分部序列在main的来源和可见性。
 7. **知识 release 收尾**（上表K）：完成K0–K6，核对M2用户追认、`CURRENT_RELEASE`、sealed candidate/激活记录、Task 10三仓库证据和独立复验；用户裁决前不切指针。
 8. **外部阻塞项**：取得《应用指南汇编2024》原文后核验rnd_exp；公开数据扩张C1等待真实财报。不得用合成样本替代。
