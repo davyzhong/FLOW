@@ -104,6 +104,6 @@ operations 冻结快照→报告中心、investigation 身份条四 ID→各自�
 - **批次一：完成**。六页参数接收、9 项纯前端链接及 M 级下钻已实现；驾驶舱保留外来深链筛选。相关浏览器验收见 `apps/web/e2e/deep-links.spec.ts`。
 - **批次二：实现完成，本地验收通过**。增加指标条目详情、MetricSnapshot/AnalysisRun 只读详情与授权血缘校验；Copilot 引用定位；公开覆盖矩阵列头按公司/期间解析财报 `report_id`，无映射时不生成链接。对应端点/前端/API 测试已纳入当前变更。
 - 批次一、二的本地验证：API/安全相关 pytest **51/51**，Web Vitest **133/133**，TypeScript typecheck 通过、ESLint 0 errors（有一条既有 React Compiler warning），深链 Playwright **15/15**，OpenAPI/TypeScript 合同生成及 `check_docs --phase m1`、`--phase m6` 通过。
-- 提交 `7976691` 上重新执行隔离大麦完整旅程：全新 Compose 数据库迁移、seed、存储读回，verify **19/19**，浏览器旅程 **9/9**。该证据覆盖 Damai 主旅程，不代替其他每条路由的 API/页面覆盖矩阵。
+- 提交 `7976691` 上重新执行隔离大麦完整旅程：全新 Compose 数据库迁移、seed、存储读回，verify **19/19**，浏览器旅程 **9/9**。随后补强 `/data` 的同一旅程断言：先确认 seed 批次出现在“最近的数据批次”中，点击批次名后 URL 带 `?batch=` 且表格行标记为当前批次，再进行上传；修改后隔离全旅程仍 **9/9**。该证据覆盖 Damai 主旅程，不代替其他每条路由的 API/页面覆盖矩阵。
 - GitHub Actions run `36224649915`（代码基线 `29877d1`）dashboard、static-web、contracts、static-python、unit、investigation-e2e、module-boundaries-e2e 等已通过；`integration`、`data-contract`、`intake-e2e` 当时仍运行中。它不是本批次代码 SHA 的 CI 证据；本批次提交后的 CI 结果需另行核验。
 - **批次三：未开始**。原文/源单元格查看、冻结报告回链、ManagementWatchItem 关联和批次列表端点仍按 §4 保持待办。不得将批次一、二完成误报为全站深链计划完成。

@@ -278,6 +278,17 @@ test("data workbench completes damai workbook upload journey", async ({ page }) 
   await page.goto("/data");
   await expect(page.getByRole("heading", { name: "数据工作台" })).toBeVisible();
 
+  // Seed 后不只验证上传：先确认已有批次能从页面发现，并通过链接恢复身份上下文。
+  const history = page.getByRole("region", { name: "最近的数据批次" });
+  await expect(history.getByRole("row")).toHaveCount(2, { timeout: 15_000 });
+  const seededBatchRow = history.getByRole("row").nth(1);
+  await expect(seededBatchRow).toContainText("damai-demo-v1");
+  const seededBatchLink = seededBatchRow.getByRole("link");
+  await expect(seededBatchLink).toHaveAttribute("href", /\/data\?batch=/);
+  await seededBatchLink.click();
+  await expect(page).toHaveURL(/\/data\?batch=/);
+  await expect(history.getByRole("row").nth(1)).toHaveAttribute("data-current", "true");
+
   const fixture = path.resolve(
     __dirname,
     "../../../fixtures/damai/workbooks/damai_logistics_full_v1.xlsx",
