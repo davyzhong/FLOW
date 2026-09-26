@@ -93,8 +93,21 @@ export function OperationsApp() {
           </section>
 
           <div className="operations-detail-grid">
-            <ProductPerformanceTable table={state.dashboard.product_table} />
-            <MarginMatrix matrix={state.dashboard.margin_matrix} />
+            <ProductPerformanceTable
+              table={state.dashboard.product_table}
+              catalogProductCount={state.dashboard.filter_options.dimensions.find(
+                (item) => item.dimension === "logistics_product",
+              )?.options.length ?? state.dashboard.product_table.rows.length}
+            />
+            <MarginMatrix
+              matrix={state.dashboard.margin_matrix}
+              catalogProductCount={state.dashboard.filter_options.dimensions.find(
+                (item) => item.dimension === "logistics_product",
+              )?.options.length ?? state.dashboard.margin_matrix.columns.length}
+              catalogSegmentCount={state.dashboard.filter_options.dimensions.find(
+                (item) => item.dimension === "customer_segment",
+              )?.options.length ?? state.dashboard.margin_matrix.rows.length}
+            />
           </div>
         </>
       ) : null}

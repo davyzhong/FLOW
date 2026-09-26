@@ -5,7 +5,10 @@ from pathlib import Path
 
 from sqlalchemy.orm import Session
 
+from flow_api.dashboard.models import ActiveFilters
+from flow_api.dashboard.repositories import DashboardSourceRepository
 from flow_api.dashboard.service import DashboardService
+from flow_api.infrastructure.models.canonical import CustomerSegment, LogisticsProduct
 
 from .analysis_run_support import (
     REPOSITORY_ROOT,
@@ -94,3 +97,52 @@ def test_dimension_views_do_not_allocate_organization_budget_or_profit(
         "operating_profit" in field
         for field in views.product_table.rows[0].model_fields_set
     )
+
+
+def test_dimension_views_exclude_catalog_dimensions_without_current_snapshot_facts(
+    analysis_session: Session,
+) -> None:
+    publish_analysis_run(analysis_session)
+    analysis_session.add_all(
+        [
+            LogisticsProduct(code="NO_FACT_PRODUCT", name="无本批次事实产品"),
+            CustomerSegment(code="NO_FACT_SEGMENT", name="无本批次事实客群"),
+        ]
+    )
+    analysis_session.commit()
+
+    overview = DashboardService().get_overview(
+        analysis_session,
+        filters=ActiveFilters(period_view="month", is_total_scope=True),
+    )
+
+    product_dimension = next(
+        item for item in overview.filter_options.dimensions
+        if item.dimension == "logistics_product"
+    )
+    segment_dimension = next(
+        item for item in overview.filter_options.dimensions
+        if item.dimension == "customer_segment"
+    )
+    assert any(item.code == "NO_FACT_PRODUCT" for item in product_dimension.options)
+    assert any(item.code == "NO_FACT_SEGMENT" for item in segment_dimension.options)
+    assert len(overview.product_table.rows) == 8
+    assert all(row.revenue.status == "available" for row in overview.product_table.rows)
+    assert [row.code for row in overview.margin_matrix.rows] == [
+        "KEY_ACCOUNT",
+        "DOMESTIC",
+    ]
+    assert len(overview.margin_matrix.columns) == 8
+    assert len(overview.margin_matrix.cells) == 16
+
+
+def test_empty_product_fact_scope_is_degraded_not_vacuously_complete(
+    analysis_session: Session,
+) -> None:
+    publish_analysis_run(analysis_session)
+    bundle = DashboardSourceRepository().get_latest(analysis_session)
+
+    table = DashboardService()._product_table(bundle, ())
+
+    assert table.status == "degraded"
+    assert table.comparison_label == "不可用"

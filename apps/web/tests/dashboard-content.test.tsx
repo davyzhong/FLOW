@@ -44,6 +44,78 @@ describe("Finance BP dashboard content", () => {
     expect(within(trendTable).getAllByRole("row")).toHaveLength(13);
     const productTable = screen.getByRole("table", { name: "产品经营表现" });
     expect(within(productTable).getAllByRole("row")).toHaveLength(9);
-    expect(screen.getByText("同比口径")).toBeVisible();
+    expect(screen.getByText(/毛利实际覆盖 16\/16 格（客群 2\/2，产品 8\/8）/)).toBeVisible();
+  });
+
+  it("shows snapshot coverage when the master catalog contains unused dimensions", () => {
+    const response: DashboardResponse = {
+      ...dashboard,
+      filter_options: {
+        ...dashboard.filter_options,
+        dimensions: dashboard.filter_options.dimensions.map((dimension) => {
+          if (dimension.dimension === "logistics_product") {
+            return {
+              ...dimension,
+              options: [
+                ...dimension.options,
+                { id: "unused-product", code: "P-99", name: "未纳入该快照的产品" },
+              ],
+            };
+          }
+          if (dimension.dimension === "customer_segment") {
+            return {
+              ...dimension,
+              options: [
+                ...dimension.options,
+                { id: "unused-segment", code: "SEG-99", name: "未纳入该快照的客群" },
+              ],
+            };
+          }
+          return dimension;
+        }),
+      },
+    };
+
+    render(
+      <AppShell>
+        <DashboardLoaded dashboard={response} />
+      </AppShell>,
+    );
+
+    expect(screen.getByText("有经营事实 8/9 个产品 · 比较：同比")).toBeVisible();
+    expect(
+      screen.getByText("比较：同比 · 毛利实际覆盖 16/27 格（客群 2/3，产品 8/9）"),
+    ).toBeVisible();
+  });
+
+  it("explains empty dimension panels instead of rendering blank tables", () => {
+    const response: DashboardResponse = {
+      ...dashboard,
+      product_table: {
+        ...dashboard.product_table,
+        status: "degraded",
+        comparison_label: "不可用",
+        rows: [],
+        degradation_message: "当前已发布快照未提供产品经营事实",
+      },
+      margin_matrix: {
+        ...dashboard.margin_matrix,
+        status: "degraded",
+        comparison_label: "不可用",
+        rows: [],
+        columns: [],
+        cells: [],
+        degradation_message: "当前已发布快照未提供客户群×产品毛利事实",
+      },
+    };
+
+    render(
+      <AppShell>
+        <DashboardLoaded dashboard={response} />
+      </AppShell>,
+    );
+
+    expect(screen.getByText("当前已发布快照未提供产品经营事实")).toBeVisible();
+    expect(screen.getByText("当前已发布快照未提供客户群×产品毛利事实")).toBeVisible();
   });
 });

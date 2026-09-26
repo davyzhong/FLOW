@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from datetime import UTC, datetime
 from decimal import Decimal
 from typing import Literal
+from uuid import UUID
 
 from sqlalchemy.orm import Session
 
@@ -229,10 +230,26 @@ class DashboardService:
         trends = self.get_trends(session)
         bridge = self._profit_bridge(bundle)
         findings = self._finding_items(bundle)
-        products = options.dimensions[2].options
-        segments = options.dimensions[1].options
+        product_fact_ids, margin_product_fact_ids, margin_segment_fact_ids = (
+            self._dimension_fact_ids(bundle)
+        )
+        products = tuple(
+            product
+            for product in options.dimensions[2].options
+            if product.id in product_fact_ids
+        )
+        margin_products = tuple(
+            product
+            for product in options.dimensions[2].options
+            if product.id in margin_product_fact_ids
+        )
+        segments = tuple(
+            segment
+            for segment in options.dimensions[1].options
+            if segment.id in margin_segment_fact_ids
+        )
         product_table = self._product_table(bundle, products)
-        margin_matrix = self._margin_matrix(bundle, segments, products)
+        margin_matrix = self._margin_matrix(bundle, segments, margin_products)
         highlights = tuple(
             Highlight(
                 finding_id=item.finding_id,
@@ -384,18 +401,74 @@ class DashboardService:
     def get_dimension_views(self, session: Session) -> DashboardDimensionViews:
         bundle = self.repository.get_latest(session)
         options = self._filter_options(bundle)
-        products = options.dimensions[2].options
-        segments = options.dimensions[1].options
+        product_fact_ids, margin_product_fact_ids, margin_segment_fact_ids = (
+            self._dimension_fact_ids(bundle)
+        )
+        products = tuple(
+            product
+            for product in options.dimensions[2].options
+            if product.id in product_fact_ids
+        )
+        margin_products = tuple(
+            product
+            for product in options.dimensions[2].options
+            if product.id in margin_product_fact_ids
+        )
+        segments = tuple(
+            segment
+            for segment in options.dimensions[1].options
+            if segment.id in margin_segment_fact_ids
+        )
         return DashboardDimensionViews(
             product_table=self._product_table(bundle, products),
-            margin_matrix=self._margin_matrix(bundle, segments, products),
+            margin_matrix=self._margin_matrix(bundle, segments, margin_products),
         )
+
+    @staticmethod
+    def _dimension_fact_ids(
+        bundle: DashboardSourceBundle,
+    ) -> tuple[frozenset[UUID], frozenset[UUID], frozenset[UUID]]:
+        products: set[UUID] = set()
+        margin_products: set[UUID] = set()
+        margin_segments: set[UUID] = set()
+        for item in bundle.metric_values:
+            value = item.value
+            if value.comparison_type != "actual_month":
+                continue
+            if (
+                value.organization_id is None
+                and value.customer_id is None
+                and value.customer_segment_id is None
+                and value.region_id is None
+                and value.logistics_product_id is not None
+            ):
+                if item.definition.metric_code in {"revenue", "orders", "gross_margin"}:
+                    products.add(value.logistics_product_id)
+                if item.definition.metric_code == "gross_margin":
+                    margin_products.add(value.logistics_product_id)
+            if (
+                item.definition.metric_code == "gross_margin"
+                and value.organization_id is None
+                and value.customer_id is None
+                and value.logistics_product_id is None
+                and value.region_id is None
+                and value.customer_segment_id is not None
+            ):
+                margin_segments.add(value.customer_segment_id)
+        return frozenset(products), frozenset(margin_products), frozenset(margin_segments)
 
     def _product_table(
         self,
         bundle: DashboardSourceBundle,
         products: tuple[DimensionOption, ...],
     ) -> ProductPerformance:
+        if not products:
+            return ProductPerformance(
+                status="degraded",
+                comparison_label="不可用",
+                rows=(),
+                degradation_message="当前已发布快照未提供产品经营事实",
+            )
         filters_by_product = {
             product.id: ActiveFilters(
                 period_view="month",
@@ -526,6 +599,15 @@ class DashboardService:
         segments: tuple[DimensionOption, ...],
         products: tuple[DimensionOption, ...],
     ) -> MarginMatrix:
+        if not segments or not products:
+            return MarginMatrix(
+                status="degraded",
+                comparison_label="不可用",
+                rows=segments,
+                columns=products,
+                cells=(),
+                degradation_message="当前已发布快照未提供客户群×产品毛利事实",
+            )
         filters_by_cell = {
             (segment.id, product.id): ActiveFilters(
                 period_view="month",

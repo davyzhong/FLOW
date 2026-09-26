@@ -40,6 +40,9 @@ export function DashboardLoaded({
   onFiltersChange?: (filters: DashboardFilters) => void;
 }) {
   const message = dashboardStateMessage(dashboard.state);
+  const catalogCount = (dimension: "customer_segment" | "logistics_product") =>
+    dashboard.filter_options.dimensions.find((item) => item.dimension === dimension)
+      ?.options.length ?? 0;
   if (dashboard.state === "empty") {
     return (
       <div className="dashboard-state dashboard-state--empty dashboard-state--guide" role="status">
@@ -69,8 +72,15 @@ export function DashboardLoaded({
           <FindingsPanel findings={dashboard.findings} />
         </div>
         <div className="dashboard-detail-grid">
-          <ProductPerformanceTable table={dashboard.product_table} />
-          <MarginMatrix matrix={dashboard.margin_matrix} />
+          <ProductPerformanceTable
+            table={dashboard.product_table}
+            catalogProductCount={catalogCount("logistics_product")}
+          />
+          <MarginMatrix
+            matrix={dashboard.margin_matrix}
+            catalogProductCount={catalogCount("logistics_product")}
+            catalogSegmentCount={catalogCount("customer_segment")}
+          />
         </div>
       </div>
     </section>
