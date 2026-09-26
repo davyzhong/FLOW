@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.15
+version: 5.16
 created_at: 2026-09-12
 updated_at: 2026-09-27
 owner: FLOW
@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-截至 2026-09-27：唯一队列共11项，已完成1项、实际执行中1项、排队8项、外部材料受限1项。ORG-LEDGER 已由 `2c7d6eb4` 推送到 `main`，同 SHA CI run `36270782272` 的17/17 jobs success；隔离初始化及全量验收通过，未触碰常驻数据库。当前唯一执行项为 UX 可见性与全站验收关闭；Dashboard值级对账覆盖8张KPI主值/三类比较、12个月×4趋势、32格毛利矩阵、产品表逐产品值。筛选矩阵159项（149个有效200、10个合同禁止组合按422+正确错误码拒绝、意外0），浏览器筛选交互/URL/API/KPI一致；隔离verify19/19、浏览器9/9、Web142/142。当前代码待提交；run `36276782059` 已有与本轮无关的 `test_impact_report_traverses_downstream_and_sandbox` 失败，详见路线图/交接并核查新SHA是否复现。其它页面映射/下钻、剩余路由状态/视口和同SHA CI仍未完成；UX不得关闭。完整11项顺序、逐步操作/验收/故障处理和唯一下一步见[当前路线图](../50_plans/CURRENT_ROADMAP.md#唯一完整-to-do-与执行队列严格串行)与[夜间接手手册](../../HANDOFF.md#04-夜间接手执行手册2026-09-27-当前权威)；此处不复制第二份待办。
+截至 2026-09-27：唯一队列共11项，已完成1项、实际执行中1项、排队8项、外部材料受限1项。ORG-LEDGER 已由 `2c7d6eb4` 推送到 `main`，同 SHA CI run `36270782272` 的17/17 jobs success；隔离初始化及全量验收通过，未触碰常驻数据库。当前唯一执行项为 UX 可见性与全站验收关闭；Dashboard值级对账覆盖8张KPI主值/三类比较、12个月×4趋势、32格毛利矩阵、产品表逐产品值。筛选矩阵159项（149个合同有效请求预期200、10个不支持组合预期422且错误码正确、意外0），浏览器筛选交互/URL/API/KPI一致；隔离verify19/19、浏览器9/9、Web142/142。上述筛选复验已提交 `main@99991566`；run `36279509026` 需核验终态。旧run `36276782059` 有 `test_impact_report_traverses_downstream_and_sandbox` 单例失败（`SandboxDiff.current_value=None`），须隔离复现归因。其它页面映射/下钻、剩余路由状态/视口和同SHA CI仍未完成；UX不得关闭。完整11项顺序、逐步操作/验收/故障处理和唯一下一步见[当前路线图](../50_plans/CURRENT_ROADMAP.md#唯一完整-to-do-与执行队列严格串行)与[夜间接手手册](../../HANDOFF.md#04-夜间接手执行手册2026-09-27-当前权威)；此处不复制第二份待办。
 
 2026-09-26 更新：大麦常驻库曾在备份后幂等恢复并通过 verify 19/19 两次；随后根 checkout 的旧 `make test-dashboard` 误向常驻 `flow` 附加测试批次 `01a0dcdd-8245-7c17-99aa-fce91a8a7a57`（1 import、12 snapshots、1 run、50,400 metric values），可能成为 API `latest`。只读检查确认未删除/覆盖原大麦批次；未获授权，不回滚、不删除。此前备份 `work/backups/flow-pre-demo-rehydrate-20260926.dump`（SHA-256 `b374a16e…9782d`）早于该新增批次，不能作为当前恢复点。`649a2aba` 已推送并通过 CI run `36232029817`：维度表只展示当前快照事实并显示覆盖分母，完整筛选目录保留；Web 136/136、typecheck、隔离 verify19/19、E2E9/9通过。状态/证据文档提交 `7229cd0d` 与 `4c55f10e` 的 CI 也通过。常驻库页面状态需获批处置后重新只读核验；其他全站矩阵仍未完成。
 2026-09-26 补充：API 路由审查发现客观报表快照与经营报告渲染的若干 GET 可能新增冻结快照；这些路由已明确排除在只读探测之外，纳入单独 API 语义评审，不以请求验证其状态。其余 Gate 1 只读矩阵与页面状态验收继续推进。

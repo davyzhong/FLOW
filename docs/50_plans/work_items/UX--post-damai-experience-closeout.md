@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 5.3
+version: 5.4
 created_at: 2026-09-24
 updated_at: 2026-09-27
 owner: FLOW
@@ -60,6 +60,8 @@ applies_to: web-frontend
 - 浏览器实际操作 YTD 与组织/客户群/产品/区域四个 selector，逐项断言控件值、URL query、对应 API `active_filters` 和8张 KPI 卡显示值/比较状态一致。隔离旅程：seed发行 manifest SHA `6303595f01a3a4fb10bf90bf7320701107bb24aeedaad3e6ef9723bcd3e3bb3a`、verify19/19、矩阵159项（149 expected200 + 10 expected422，零意外）、浏览器9/9；隔离栈清理完毕。
 - 首次将所有维度对的笛卡尔积都强制期望200，暴露324个合同性422并产生隔离PostgreSQL约6GB读取流量；根据 API 支持合同修正为“合法客户群×产品全值组合 + 其它维度对代表性错误码验证”。本次全矩阵约1.2分钟通过；此全量 pairwise 用于 UX Gate，不应无必要放进常规快速 smoke。
 - 验证：`make lint && make typecheck && make test-web`（Web142/142；lint零错误、一条既有TanStack Table warning）、矩阵pytest3/3、plan views、文档M1、链接、contracts均通过；E2E目标 ESLint/typecheck通过。此代码须提交后的同 SHA required CI。
+- 延伸值级验收（`main@99991566`）：隔离矩阵现为159条（149条合同有效请求预期200、10条不支持组合预期422且错误码正确、意外0）；完整覆盖单维选项×month/ytd、客户群×产品支持组合及五种不支持维度对。脚本 pytest3/3；seed verify19/19；浏览器9/9；Web142/142；lint/typecheck通过。后续不得把不受支持组合记为缺陷。
+- 同 SHA CI：run `36279509026`（head `9999156690fdb42edc76488f271ae877abe73406`）截至本记录仍运行中，不宣称通过。更早 run `36276782059` 的影响分析集成测试单例失败，根因为 sandbox 当前值为空；必须在隔离测试库重现并归因，不得删断言或改预期。
 - CI追查：旧 SHA `cc2211e5` run `36276782059` 最终失败于 `tests/integration/test_metric_impact.py::test_impact_report_traverses_downstream_and_sandbox`（88项中1失败，`SandboxDiff.current_value=None`，原测试预期非空）；与本次筛选改动无直接关系，但需观察新 SHA 是否复现，不能忽略。
 - 本工作包仍 active：其它页面 API→源事实→UI 映射、深链逐点检查、其余交互路由全状态/全视口矩阵与 Gate5全链尚未关闭。
 
