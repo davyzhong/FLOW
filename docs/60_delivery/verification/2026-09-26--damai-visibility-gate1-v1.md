@@ -1,14 +1,14 @@
 ---
 doc_id: FLOW-VERIFY-DAMAI-VISIBILITY-GATE1-001
-title: 大麦数据可见性 Gate 1 API 诊断证据 v1.4
+title: 大麦数据可见性 Gate 1 API 诊断证据 v1.5
 doc_type: verification
 status: draft
-version: "1.4"
+version: "1.5"
 created_at: 2026-09-26
 updated_at: 2026-09-26
 owner: FLOW
-commit_refs: "[3ff95115, 6591e148, 4932504c, 9cd43e20]"
-evidence_refs: "[read-only-local-api-probe, stable-overlay-fingerprint, sha256-response-matrix, damai-ocf-canonical-fixture, damai-isolated-seed-verify, damai-e2e-8-of-9]"
+commit_refs: "[3ff95115, 6591e148, 4932504c, 9cd43e20, 905cf544, e2417ffa]"
+evidence_refs: "[read-only-local-api-probe, stable-overlay-fingerprint, sha256-response-matrix, damai-ocf-canonical-fixture, damai-isolated-seed-verify, damai-e2e-8-of-9, damai-e2e-9-of-9-ocf-trends-complete]"
 knowledge_release: flow-knowledge-2026-09-12.1
 applies_to: web-frontend
 supersedes: []
@@ -107,3 +107,5 @@ superseded_by: null
 隔离旅程已将新工作簿导入独立 `damai-demo-iso` PostgreSQL；seed 创建12个快照，`verify_damai_demo.py --check-storage` 返回19/19通过，存储工作簿读回1,327,348字节且 SHA 与单元格语义一致。随后9项浏览器 E2E 全部在页面导航阶段连接失败：日志显示验收 Next 实例启动时报 `Another next dev server is already running`，原因是此前已有同目录开发服务占用共享 `apps/web/.next/dev/lock`，因此验收实例退出。脚本已清理本次隔离 Compose 容器和卷；既有 PID 78698 未触碰。该结果不代表页面断言失败，也未证明新 OCF 在 UI 上可见；下一步先给验收进程配置专用 `distDir` 再重跑。
 
 后续用独立 `distDir` 重跑后，seed/verify 仍19/19，浏览器8/9通过。唯一失败是 `apps/web/e2e/damai-demo.spec.ts` 的 customer-grain dashboard API 用例仍断言 OCF KPI `unavailable`，实际响应为 `available`；其余八项页面/API流程通过。该响应证明新源事实已被快照采纳。自定义 `distDir` 会令 Next 自动改写工作区 `tsconfig.json` 与 `next-env.d.ts`，临时目录删除后留下失效引用，因此不能直接在项目目录使用这一方式。修复验收应在 `work/damai-demo/` 下创建本轮专用 web 源副本（复用既有 node_modules 链接）并在那里运行 Next，清理仅作用于该副本；同时把 E2E 断言改为 OCF `available` 且 primary value 非空。毛利矩阵 grain/comparison 和完整页面覆盖仍未验收。
+
+最终隔离 E2E 采用临时 web 源副本后通过：`scripts/test_damai_demo_e2e.sh` seed/verify 19/19，浏览器 E2E 9/9。扩展后的 dashboard API 断言确认 OCF KPI `available` 且值非空；趋势状态 `complete`，覆盖12/12，所有12个月的 OCF 趋势值均 `available` 且非空。其余八项 UI/API 与上传发布旅程通过。临时副本及 `damai-demo-iso` Compose 卷已清理；常驻 `flow` 未写入，用户现有开发服务未终止，真实 `apps/web/tsconfig.json` 未被临时副本改动。该结果关闭 OCF source/snapshot 缺口，不关闭整项工作包：毛利矩阵22/32实际值与24/32比较值缺失仍待定位，Gate1其余页面的干净 SHA 全矩阵复验也未完成。
