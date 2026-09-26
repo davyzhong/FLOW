@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import path from "node:path";
 
 import { expect, test } from "@playwright/test";
+import type { DashboardResponse } from "../lib/api/client";
 
 // 大麦 synthetic 演示全旅程 E2E（Task C2）：
 // 真实隔离栈（compose.damai-isolated）+ 真实 seed + 真实浏览器，无 page mock。
@@ -52,31 +53,12 @@ test("dashboard renders damai overview with four grain filters", async ({ page }
 
 test("dashboard API serves customer-grain overview", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByTestId("metric-card").first()).toBeVisible({ timeout: 30_000 });
+  const cards = page.getByTestId("metric-card");
+  await expect(cards.first()).toBeVisible({ timeout: 30_000 });
 
   const overview = await page.request.get("/api/v1/dashboard/overview");
   expect(overview.ok()).toBeTruthy();
-  const body = (await overview.json()) as {
-    state: string;
-    context: { batch_id: string };
-    metric_cards: { metric_code: string; primary: { status: string; exact_value: string | null } }[];
-    trends: {
-      status: string;
-      coverage_count: number;
-      points: { operating_cash_flow: { status: string; exact_value: string | null } }[];
-    };
-    margin_matrix: {
-      status: string;
-      comparison_label: string;
-      cells: {
-        actual_margin: { status: string; exact_value: string | null };
-        comparison: { status: string; exact_value: string | null };
-      }[];
-    };
-    filter_options: {
-      dimensions: { dimension: string; options: { id: string; name: string }[] }[];
-    };
-  };
+  const body = (await overview.json()) as DashboardResponse;
   // OCF actual 已进入财务事实与指标快照，应返回真实可用值。
   expect(["ready", "degraded"]).toContain(body.state);
   const ocfCard = body.metric_cards.find((card) => card.metric_code === "operating_cash_flow");
@@ -90,6 +72,21 @@ test("dashboard API serves customer-grain overview", async ({ page }) => {
     expect(point.operating_cash_flow.exact_value).not.toBeNull();
   }
 
+  // 展开趋势明细，将12个月×4列页面值逐项对齐到同一 API 响应。
+  const trendDetails = page.locator(".trend-details");
+  await trendDetails.locator("summary").click();
+  const trendRows = trendDetails.locator("tbody tr");
+  await expect(trendRows).toHaveCount(body.trends.points.length);
+  for (const [index, point] of body.trends.points.entries()) {
+    const cells = trendRows.nth(index).locator("th, td");
+    await expect(cells).toHaveCount(5);
+    await expect(cells.nth(0)).toHaveText(point.month);
+    await expect(cells.nth(1)).toHaveText(point.revenue.display_value);
+    await expect(cells.nth(2)).toHaveText(point.operating_profit.display_value);
+    await expect(cells.nth(3)).toHaveText(point.operating_cash_flow.display_value);
+    await expect(cells.nth(4)).toHaveText(point.gross_margin.display_value);
+  }
+
   // 源事实只覆盖10种客群×产品组合；不补零，并优先展示覆盖更高的预算比较。
   expect(body.margin_matrix.cells).toHaveLength(32);
   expect(body.margin_matrix.status).toBe("degraded");
@@ -99,6 +96,48 @@ test("dashboard API serves customer-grain overview", async ({ page }) => {
   for (const cell of body.margin_matrix.cells) {
     if (cell.actual_margin.status !== "available") {
       expect(cell.actual_margin.exact_value).toBeNull();
+    }
+  }
+
+  // API→UI 逐卡对账：不仅确认数据存在，还保证页面没有漏卡、错值或状态漂移。
+  await expect(cards).toHaveCount(body.metric_cards.length);
+  for (const metric of body.metric_cards) {
+    const uiCard = cards.filter({ hasText: metric.title });
+    await expect(uiCard).toHaveCount(1);
+    await expect(uiCard.locator(".metric-card__value")).toHaveText(metric.primary.display_value);
+    const expectedComparisons = [metric.budget, metric.yoy, metric.ytd_budget];
+    const uiComparisons = uiCard.locator(".metric-comparison");
+    await expect(uiComparisons).toHaveCount(expectedComparisons.length);
+    for (const [index, expected] of expectedComparisons.entries()) {
+      const actual = uiComparisons.nth(index);
+      await expect(actual).toHaveAttribute("data-status", expected.status);
+      await expect(actual.locator(".metric-comparison__value")).toContainText(expected.display_value);
+    }
+  }
+
+  // 矩阵全部行列和格值都与同一响应对账。不可用的实际值必须仍显示破折号，不能补成0。
+  const matrixUi = page.getByRole("table", { name: "客户群与产品毛利矩阵" });
+  await expect(matrixUi).toBeVisible();
+  const matrixRows = matrixUi.locator("tbody tr");
+  await expect(matrixRows).toHaveCount(body.margin_matrix.rows.length);
+  for (const [rowIndex, row] of body.margin_matrix.rows.entries()) {
+    const uiRow = matrixRows.nth(rowIndex);
+    await expect(uiRow.locator("th").first()).toHaveText(row.name);
+    const uiCells = uiRow.locator("td");
+    await expect(uiCells).toHaveCount(body.margin_matrix.columns.length);
+    for (const [columnIndex, column] of body.margin_matrix.columns.entries()) {
+      const expected = body.margin_matrix.cells.find(
+        (cell) =>
+          cell.customer_segment_id === row.id &&
+          cell.logistics_product_id === column.id,
+      );
+      const uiCell = uiCells.nth(columnIndex);
+      await expect(uiCell.locator("strong")).toHaveText(
+        expected?.actual_margin.display_value ?? "—",
+      );
+      await expect(uiCell.locator("small")).toHaveText(
+        expected?.comparison.display_value ?? "—",
+      );
     }
   }
 
