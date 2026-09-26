@@ -104,7 +104,9 @@ data/enterprise/damai-logistics/v1/
 3. 为组织数据补齐持久化模型和受约束服务；仅创建组织用户、岗位、部门、角色映射
    所必需的 schema。**已由用户于 2026-09-27 批准本工作包“最小组织 schema 提案”所列三表、约束与停用保留策略。**
 4. 为企业边界登记所有被重置的业务表及 lineage；按依赖顺序执行事务性删除/重建，
-   保留系统配置、共享对象和追加审计；确认失败回滚无部分写入。
+   保留系统配置、共享对象和追加审计；在级联删除 Finding 前，将其不可变 review_event
+   原字段转存为既有 audit_event 的追加式 `finding.review_history.archived` 记录，并沿用
+   系统审计保留期；确认失败回滚无部分写入。
 5. 生成可审阅 SQL 和单一入口命令；支持 `full` 与 `business` 两个稳定动作，不提供
    互动式人员/口径选择。
 6. 在隔离 PostgreSQL + 对象存储栈做首次初始化、重复初始化、仅业务重置、坏包拒绝、
@@ -149,7 +151,9 @@ data/enterprise/damai-logistics/v1/
 个人字段只用于合成演示：姓名、`example.invalid` 邮箱、保留号段电话、岗位和部门，
 以及不含政府身份证号码、登录口令、token 或密钥的 `identity_metadata`。模拟账号没有
 认证凭据，凭据仍须由系统认证配置单独提供。角色撤销保留为 RoleBinding 的追加式撤销，
-组织/岗位/成员从新发行包消失时改为 inactive；审计事件与发布历史不删除。
+组织/岗位/成员从新发行包消失时改为 inactive；审计事件与发布历史不删除。重置会级联清除工作流 Finding；其不可变 `review_event`
+记录先转存到现有 `audit_event.redacted_metadata`（保留原事件 ID、序号、审核人、决策、
+评论与发生时间），沿用系统 `FLOW_AUDIT_RETENTION_DAYS`，不新增数据库表。
 
 这个最小 schema 不实现共享账号跨企业 membership、动态授权策略或通用多租户 SaaS。
 包内 actor ID 带企业命名空间，避免触发现有全局 actor 唯一约束；数据库服务隔离仍
