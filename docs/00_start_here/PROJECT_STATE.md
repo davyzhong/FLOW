@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.5
+version: 5.6
 created_at: 2026-09-12
 updated_at: 2026-09-26
 owner: FLOW
@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-截至 2026-09-26：主线 `ad76fd4c` 及其前置代码 SHA `cef0c362` 的 CI 均成功。当前工程执行队列共10项：已完成0、进行中1、排队5、阻塞4；唯一进行中的事项是大麦数据可见性与全站 UX Gate 1/Gate 5 收口。完整逐项范围、状态、依赖、阻塞解除条件及唯一下一步只见[当前路线图执行队列](../50_plans/CURRENT_ROADMAP.md#唯一完整-to-do-与执行队列严格串行)，本状态页不复制第二份待办。每次进度播报按该队列完整报告，禁止并行切换。
+截至 2026-09-27：最新已验证代码/文档基线仍为 `ad76fd4c`（前置代码 SHA `cef0c362` CI success）；本次规则与状态修正尚待本提交门禁。统一执行队列10项：已完成0、实际执行中0、队首待启动/排队9、外部材料主动恢复/结案1；当前没有后台执行进程，队首 UX 验收待启动。路线图中的 active/blocked 工作包标记可能表达工作包生命周期或验收门槛，不等于实时进程或停工指令。完整队列、证据和唯一下一步见[当前路线图执行队列](../50_plans/CURRENT_ROADMAP.md#唯一完整-to-do-与执行队列严格串行)，本状态页不复制第二份待办。
 
 2026-09-26 更新：大麦常驻库曾在备份后幂等恢复并通过 verify 19/19 两次；随后根 checkout 的旧 `make test-dashboard` 误向常驻 `flow` 附加测试批次 `01a0dcdd-8245-7c17-99aa-fce91a8a7a57`（1 import、12 snapshots、1 run、50,400 metric values），可能成为 API `latest`。只读检查确认未删除/覆盖原大麦批次；未获授权，不回滚、不删除。此前备份 `work/backups/flow-pre-demo-rehydrate-20260926.dump`（SHA-256 `b374a16e…9782d`）早于该新增批次，不能作为当前恢复点。`649a2aba` 已推送并通过 CI run `36232029817`：维度表只展示当前快照事实并显示覆盖分母，完整筛选目录保留；Web 136/136、typecheck、隔离 verify19/19、E2E9/9通过。状态/证据文档提交 `7229cd0d` 与 `4c55f10e` 的 CI 也通过。常驻库页面状态需获批处置后重新只读核验；其他全站矩阵仍未完成。
 2026-09-26 补充：API 路由审查发现客观报表快照与经营报告渲染的若干 GET 可能新增冻结快照；这些路由已明确排除在只读探测之外，纳入单独 API 语义评审，不以请求验证其状态。其余 Gate 1 只读矩阵与页面状态验收继续推进。
