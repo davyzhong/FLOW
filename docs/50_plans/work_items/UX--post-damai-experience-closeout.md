@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 3.3
+version: 3.4
 created_at: 2026-09-24
 updated_at: 2026-09-26
 owner: FLOW
@@ -28,6 +28,7 @@ applies_to: web-frontend
 - 预测 sidecar 当前标记 `static-only` 且排除页面覆盖；本工作包不得把它计为已接入功能。
 - Dashboard KPI 比较值若 API 状态为 `unavailable` 且原因码为 `*_not_published`，现显示“未发布”标签，并保留接口说明作为 title/accessible label；避免将破折号误解为零值。经营分析的比率/倍数/天数单位显示已按指标合同修正；其他页面的金额/数量格式仍需统一复核。
 - 经营分析对真实大麦财报的复核发现：流动比率和资产负债率被误报 `not_applicable`，因为财报期末余额在归一化事实的 `end` 角色，而兜底只读 `cur`。现以同期间 `cur → end` 读取点余额；不得跨期回退。前端按指标合同格式化百分比、倍数和天数，保留原始精确值为悬停说明；未明确单位的经营事实保持原披露精度。
+- 公式链复核再发现 DSO 已有 `ar_turnover` 可用，但依赖的指标 code 未被注入下游公式求值，因此误标 `fact_missing`。字典执行器现按声明顺序把已计算指标结果提供给依赖项；大麦 FY2026 DSO 按字典 360 天口径计算为 116.3881 天。
 
 ## 实施路线（本文件是规格；实施须按用户已批准的工作状态执行）
 
@@ -203,7 +204,7 @@ GitHub Actions run `36222136591`（SHA `430020f`）与 `36222489952`（SHA `59b3
 ### 经营分析真实财报缺值与格式修正（2026-09-26）
 
 - 根因：大麦年报的 `bs.current_assets`、`bs.current_liab`、`bs.total_liab`、`bs.total_assets` 是点余额；生成管线可能将其映射为 `cur` 或 `end`。O2 `FACT_DIRECT_CALCS` 仅查询 `cur`，导致已有事实的流动比率、资产负债率错误显示为公式引用未计算。现对点余额同期间允许 `cur → end`，不使用其他期间事实、不改 D01/D02 口径。
-- 本机常驻 API GET `/api/v1/operations/overview/01a0dc95-fb0a-7cd8-ab36-5b1a1c95d0ea`（大麦 FY2026）返回 200，原始响应体 10,247 bytes，SHA-256 `4fc46607f45fa3927a7362d265728a1080674269ec6e62678eec08fecd2a04fd`；运营效率指标现为流动比率 `0.8119`、资产负债率 `0.8986`、存货周转率 `16.1552`、应收周转率 `3.0931`、应付周转率 `3.9172`、流动资产周转率 `1.9099` 可算。应收周转天数仍为 `fact_missing`，不补造。
+- 本机常驻 API GET `/api/v1/operations/overview/01a0dc95-fb0a-7cd8-ab36-5b1a1c95d0ea`（大麦 FY2026）返回 200，最新原始响应体 10,237 bytes，SHA-256 `225a9edbf04ffc0278c378b66f0229a8367b4786479ff0431dbff1a846ed5018`；七项运营效率指标现均可算：流动比率 `0.8119`、资产负债率 `0.8986`、存货周转率 `16.1552`、应收周转率 `3.0931`、应付周转率 `3.9172`、DSO `116.3881` 天、流动资产周转率 `1.9099`。
 - 页面按指标 code 展示单位：毛利率/净利率/资产负债率/同比及杜邦结果转为百分比；流动比率与利润现金含量标“倍”；周转次数与天数带单位。百分比/倍数/天数保留两位小数，`title` 提供原始 API 精确值。来源未声明单位的经营披露值保持原样，避免错误四舍五入或假设单位。
-- 先添加前端回归断言验证红灯，再实现；运营分析组件 5/5、Web 全套 134/134、typecheck 通过，lint 0 errors（保留既有 TanStack Table React Compiler warning）。API 经营引擎 15/15、ruff、mypy 通过。实际常驻 API GET 已验证上述余额指标从 `not_applicable` 恢复为 `computed`；本次未写数据库。
+- TDD：公式依赖新增测试先红，接通派生指标映射后绿；API 经营引擎 15/15、ruff、mypy通过。前端运营分析组件5/5、Web全套134/134、typecheck通过，lint 0 errors（保留既有 TanStack Table React Compiler warning）。实际常驻 API GET 验证资产负债表余额与 DSO 均恢复为 `computed`；本次未写数据库。
 - 未关闭 Gate 1 全路由干净 SHA 矩阵、其他页面全状态/下钻，也未把应收周转天数或内部渠道面板计为已完成。需在本提交 SHA 上继续整体验收与 CI。

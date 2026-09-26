@@ -140,6 +140,8 @@ def test_efficiency_theme_evaluates_dictionary_turnover_formulas(
             assert metric.value is not None and metric.basis
         else:
             assert metric.reason, f"{metric.entry_id} 不可算必须给 typed 原因"
+    assert codes["ar_turnover"].status == "computed"
+    assert codes["dso_days"].status == "computed", "DSO 应消费已计算的应收账款周转率"
 
 
 def test_balance_sheet_direct_ratios_use_period_end_facts(db_session: Session) -> None:

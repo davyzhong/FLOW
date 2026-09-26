@@ -375,7 +375,9 @@ def _first_role_fact(
 
 
 def _eval_formula(
-    formula: Any, facts: dict[tuple[str, str], Decimal]
+    formula: Any,
+    facts: dict[tuple[str, str], Decimal],
+    derived_metrics: dict[str, Decimal] | None = None,
 ) -> Decimal | None:
     """指标字典公式递归求值（div/add/sub/mul/sum/avg/prior/identity）。
 
@@ -388,6 +390,8 @@ def _eval_formula(
     if isinstance(formula, (int, float)):
         return Decimal(str(formula))
     if isinstance(formula, str):
+        if derived_metrics is not None and formula in derived_metrics:
+            return derived_metrics[formula]
         for role in ("cur", "end", "prior", "begin"):
             value = facts.get((formula, role))
             if value is not None:
@@ -411,7 +415,7 @@ def _eval_formula(
         return (end + begin) / Decimal("2")
     if op == "trailing12":
         return None
-    values = [_eval_formula(arg, facts) for arg in args]
+    values = [_eval_formula(arg, facts, derived_metrics) for arg in args]
     if any(value is None for value in values):
         return None
     decimals = [value for value in values if value is not None]
@@ -714,6 +718,7 @@ def build_operations_overview(session: Any, *, report_id: str | UUID) -> Operati
         dictionary_codes = DICTIONARY_METRICS.get(theme_id, ())
         if dictionary_codes:
             formulas = _load_metric_formulas()
+            derived_metrics: dict[str, Decimal] = {}
             for code in dictionary_codes:
                 if code in {m.entry_id for m in metrics}:
                     continue
@@ -731,8 +736,10 @@ def build_operations_overview(session: Any, *, report_id: str | UUID) -> Operati
                     continue
                 formula_dict, name = formula
                 dictionary_value: Decimal | None = _eval_formula(
-                    formula_dict, role_facts
+                    formula_dict, role_facts, derived_metrics
                 )
+                if dictionary_value is not None:
+                    derived_metrics[code] = dictionary_value
                 metrics.append(
                     OperationsMetricItem(
                         entry_id=code,
