@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 3.4
+version: 3.5
 created_at: 2026-09-24
 updated_at: 2026-09-26
 owner: FLOW
@@ -29,6 +29,7 @@ applies_to: web-frontend
 - Dashboard KPI 比较值若 API 状态为 `unavailable` 且原因码为 `*_not_published`，现显示“未发布”标签，并保留接口说明作为 title/accessible label；避免将破折号误解为零值。经营分析的比率/倍数/天数单位显示已按指标合同修正；其他页面的金额/数量格式仍需统一复核。
 - 经营分析对真实大麦财报的复核发现：流动比率和资产负债率被误报 `not_applicable`，因为财报期末余额在归一化事实的 `end` 角色，而兜底只读 `cur`。现以同期间 `cur → end` 读取点余额；不得跨期回退。前端按指标合同格式化百分比、倍数和天数，保留原始精确值为悬停说明；未明确单位的经营事实保持原披露精度。
 - 公式链复核再发现 DSO 已有 `ar_turnover` 可用，但依赖的指标 code 未被注入下游公式求值，因此误标 `fact_missing`。字典执行器现按声明顺序把已计算指标结果提供给依赖项；大麦 FY2026 DSO 按字典 360 天口径计算为 116.3881 天。
+- 经营主题空态原先把所有 `not_applicable` 都标成“待内部数据”，会把“公开报告未披露分部数据”误导成“等内部授权”。现按原因码区分公开披露缺项、内部数据授权、期间分部披露缺失与缺少完整财报；未知原因仍保留原因码并显示通用不可用说明。
 
 ## 实施路线（本文件是规格；实施须按用户已批准的工作状态执行）
 
@@ -207,4 +208,5 @@ GitHub Actions run `36222136591`（SHA `430020f`）与 `36222489952`（SHA `59b3
 - 本机常驻 API GET `/api/v1/operations/overview/01a0dc95-fb0a-7cd8-ab36-5b1a1c95d0ea`（大麦 FY2026）返回 200，最新原始响应体 10,237 bytes，SHA-256 `225a9edbf04ffc0278c378b66f0229a8367b4786479ff0431dbff1a846ed5018`；七项运营效率指标现均可算：流动比率 `0.8119`、资产负债率 `0.8986`、存货周转率 `16.1552`、应收周转率 `3.0931`、应付周转率 `3.9172`、DSO `116.3881` 天、流动资产周转率 `1.9099`。
 - 页面按指标 code 展示单位：毛利率/净利率/资产负债率/同比及杜邦结果转为百分比；流动比率与利润现金含量标“倍”；周转次数与天数带单位。百分比/倍数/天数保留两位小数，`title` 提供原始 API 精确值。来源未声明单位的经营披露值保持原样，避免错误四舍五入或假设单位。
 - TDD：公式依赖新增测试先红，接通派生指标映射后绿；API 经营引擎 15/15、ruff、mypy通过。前端运营分析组件5/5、Web全套134/134、typecheck通过，lint 0 errors（保留既有 TanStack Table React Compiler warning）。实际常驻 API GET 验证资产负债表余额与 DSO 均恢复为 `computed`；本次未写数据库。
+- 页面缺口文案新增 `segment_disclosure_missing` 与 `internal_data_required` 区分断言；先红后绿。Web全套仍134/134，typecheck通过、lint 0 errors（既有warning不变）。
 - 未关闭 Gate 1 全路由干净 SHA 矩阵、其他页面全状态/下钻，也未把应收周转天数或内部渠道面板计为已完成。需在本提交 SHA 上继续整体验收与 CI。

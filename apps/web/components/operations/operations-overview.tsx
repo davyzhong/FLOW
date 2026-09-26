@@ -24,10 +24,20 @@ const ASSURANCE_LABEL: Record<string, string> = {
   management_disclosure: "管理层披露",
 };
 
-const THEME_NOTE: Record<string, string> = {
-  revenue_structure: "分部/产品线披露接入后启用（缺失不补造）",
-  users_channels: "内部运营数据授权后启用",
-};
+function themeUnavailableMessage(reason: string | null | undefined): string {
+  switch (reason) {
+    case "internal_data_required":
+      return `待内部数据（${reason}）——当前周期尚未提供用户与渠道事实；完成授权和接入后启用。`;
+    case "segment_disclosure_missing":
+      return `公开报告未披露分部数据（${reason}）；收入结构暂不可计算，不从总体收入推算。`;
+    case "segment_period_not_available":
+      return `当前公司/期间没有可用的分部披露（${reason}）；不跨期间借用数据。`;
+    case "statement_report_required":
+      return `该主题需要完整财务报表（${reason}）；当前公开披露范围不含完整报表。`;
+    default:
+      return `当前主题不可用（原因码：${reason ?? "unspecified"}）；缺失不补造。`;
+  }
+}
 
 const PERCENT_METRICS = new Set([
   "gross_margin",
@@ -386,11 +396,7 @@ export function OperationsOverviewApp({
                 <h3 id={`ops-theme-${theme.theme_id}`}>{theme.name}</h3>
                 {theme.status === "not_applicable" ? (
                   <p className="ops-overview__muted">
-                    待内部数据（{theme.reason}）——披露缺失与内部数据缺口如实标注，
-                    不推测填补。
-                    {THEME_NOTE[theme.theme_id]
-                      ? ` ${THEME_NOTE[theme.theme_id]}。`
-                      : null}
+                    {themeUnavailableMessage(theme.reason)}
                   </p>
                 ) : (
                   <ul>

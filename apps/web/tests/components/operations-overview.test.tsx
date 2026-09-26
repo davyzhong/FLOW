@@ -99,6 +99,14 @@ const OVERVIEW = {
       ],
     },
     {
+      theme_id: "revenue_structure",
+      name: "收入结构",
+      availability: "financial_report",
+      status: "not_applicable",
+      reason: "segment_disclosure_missing",
+      metrics: [],
+    },
+    {
       theme_id: "users_channels",
       name: "用户与渠道",
       availability: "internal_process",
@@ -154,6 +162,8 @@ describe("OperationsOverviewApp", () => {
     expect(screen.getByText(/aaaaaaaaaaaaaaaa…/)).toBeTruthy();
     // 诚实 N/A
     expect(screen.getByText(/待内部数据（internal_data_required）/)).toBeTruthy();
+    expect(screen.getByText(/公开报告未披露分部数据/)).toBeTruthy();
+    expect(screen.queryByText(/待内部数据（segment_disclosure_missing）/)).toBeNull();
     // 管理关注 ≤3 带方向；带 metric_code 时可下钻指标库（深链批次三-5）
     const watchLink = screen.getByRole("link", { name: /查看指标/ });
     expect(watchLink.getAttribute("href")).toBe(
