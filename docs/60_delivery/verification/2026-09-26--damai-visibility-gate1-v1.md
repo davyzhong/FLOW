@@ -1,14 +1,14 @@
 ---
 doc_id: FLOW-VERIFY-DAMAI-VISIBILITY-GATE1-001
-title: 大麦数据可见性 Gate 1 API 诊断证据 v1.3
+title: 大麦数据可见性 Gate 1 API 诊断证据 v1.4
 doc_type: verification
 status: draft
-version: "1.3"
+version: "1.4"
 created_at: 2026-09-26
 updated_at: 2026-09-26
 owner: FLOW
-commit_refs: "[3ff95115, 6591e148, 4932504c]"
-evidence_refs: "[read-only-local-api-probe, stable-overlay-fingerprint, sha256-response-matrix, damai-ocf-canonical-fixture, damai-isolated-seed-verify]"
+commit_refs: "[3ff95115, 6591e148, 4932504c, 9cd43e20]"
+evidence_refs: "[read-only-local-api-probe, stable-overlay-fingerprint, sha256-response-matrix, damai-ocf-canonical-fixture, damai-isolated-seed-verify, damai-e2e-8-of-9]"
 knowledge_release: flow-knowledge-2026-09-12.1
 applies_to: web-frontend
 supersedes: []
@@ -105,3 +105,5 @@ superseded_by: null
 边界：常驻 `flow` 数据库没有被写入，现有 API/UI 仍不能据此视为已显示新 OCF。此修复须在隔离 Compose 装载后重新探测 dashboard OCF 趋势与 KPI；毛利矩阵粒度/比较缺口仍未修复。首次诊断 API 矩阵仍来自早期 dirty overlay，完整 Gate 1 干净 SHA 复测未完成。
 
 隔离旅程已将新工作簿导入独立 `damai-demo-iso` PostgreSQL；seed 创建12个快照，`verify_damai_demo.py --check-storage` 返回19/19通过，存储工作簿读回1,327,348字节且 SHA 与单元格语义一致。随后9项浏览器 E2E 全部在页面导航阶段连接失败：日志显示验收 Next 实例启动时报 `Another next dev server is already running`，原因是此前已有同目录开发服务占用共享 `apps/web/.next/dev/lock`，因此验收实例退出。脚本已清理本次隔离 Compose 容器和卷；既有 PID 78698 未触碰。该结果不代表页面断言失败，也未证明新 OCF 在 UI 上可见；下一步先给验收进程配置专用 `distDir` 再重跑。
+
+后续用独立 `distDir` 重跑后，seed/verify 仍19/19，浏览器8/9通过。唯一失败是 `apps/web/e2e/damai-demo.spec.ts` 的 customer-grain dashboard API 用例仍断言 OCF KPI `unavailable`，实际响应为 `available`；其余八项页面/API流程通过。该响应证明新源事实已被快照采纳。自定义 `distDir` 会令 Next 自动改写工作区 `tsconfig.json` 与 `next-env.d.ts`，临时目录删除后留下失效引用，因此不能直接在项目目录使用这一方式。修复验收应在 `work/damai-demo/` 下创建本轮专用 web 源副本（复用既有 node_modules 链接）并在那里运行 Next，清理仅作用于该副本；同时把 E2E 断言改为 OCF `available` 且 primary value 非空。毛利矩阵 grain/comparison 和完整页面覆盖仍未验收。

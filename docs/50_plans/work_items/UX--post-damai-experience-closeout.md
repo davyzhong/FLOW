@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 1.8
+version: 1.9
 created_at: 2026-09-24
 updated_at: 2026-09-26
 owner: FLOW
@@ -93,8 +93,10 @@ Acceptance: 40项指标逐项有“适用且可计算 / 适用但缺源事实 / 
 
 首个根因修复已在 canonical 生成链路完成并推送（`4932504`）：从既有 synthetic `cash_flow[].ocf` 推导并写入 24 个月×4 组织的 OCF actual，按同月组织收入占比分摊并保证公司总额守恒（尾差归末组织）；canonical 合同测试、指标粒度对账测试与发行 manifest 已更新。全量 canonical 测试25项、OCF/财务快照粒度对账3项、发行包确定性 `--check` 均通过。隔离 Compose seed、对象存储校验与 verify 19/19通过；浏览器 E2E 9/9 未通过，原因是验收 Next 实例和已有开发服务器共用 `apps/web/.next`，第二实例报“Another next dev server is already running”，随后页面连接被拒。禁止终止未知/已有开发服务器；重跑前应由验收脚本给 Next 配置本次运行独有的 `distDir`，清理时只删除该专属目录。隔离导入后的 API/UI OCF 趋势仍待复验；常驻 `flow` 库只读，不得重灌。毛利矩阵 grain/comparison 缺失仍需独立追查。
 
+**后续复验更正（2026-09-26）**：给 Next 指定独立 `distDir` 后，浏览器 8/9 通过，唯一失败是旧 E2E 仍断言 OCF KPI `unavailable`，实际 API 返回 `available`。这证明快照链路已能提供 OCF KPI；页面/API 中其余8项均通过。Next 会将自定义目录写入工作区的 `tsconfig.json` 与 `next-env.d.ts`，因此专属目录虽能避开锁，但不能直接在真实工作目录使用。下一轮先更新断言为 `available` 且值非空，再将 web 源复制至 `work/damai-demo/` 下的唯一临时目录、复用 node_modules 链接后运行 Next，避免改写工作区配置；脚本只清理本次创建的副本。
+
 Files:
-- Inspect/modify if root-caused: `services/api/src/flow_api/fixtures/damai/canonical.py`, `services/api/src/flow_api/fixtures/damai/generator.py`, `services/api/src/flow_api/dashboard/fixture.py`, `services/api/src/flow_api/dashboard/repositories.py`, `services/api/src/flow_api/dashboard/service.py`, `scripts/seed_damai_demo.py`, `scripts/test_damai_demo_e2e.sh`, `apps/web/next.config.ts` and the owning metric snapshot service
+- Inspect/modify if root-caused: `services/api/src/flow_api/fixtures/damai/canonical.py`, `services/api/src/flow_api/fixtures/damai/generator.py`, `services/api/src/flow_api/dashboard/fixture.py`, `services/api/src/flow_api/dashboard/repositories.py`, `services/api/src/flow_api/dashboard/service.py`, `scripts/seed_damai_demo.py`, `scripts/test_damai_demo_e2e.sh`, `apps/web/e2e/damai-demo.spec.ts` and the owning metric snapshot service
 - Tests: `services/api/tests/fixtures/test_damai_canonical.py`, `services/api/tests/fixtures/test_damai_metric_grain.py`, `services/api/tests/dashboard/` and dashboard API integration tests
 
 Acceptance: 形成逐条 `degraded` reason 对照表，明确每条当前原因须消除还是合理保留及其证据；对 Gate 2 的40项指标逐项把“覆盖矩阵→API 返回值/缺失→驾驶舱或报表展示”对账。所有声明应完整的面板无非预期 `degraded`；24个月时间序列可核对；过滤前后总额、预算差异和明细 drill-through 可复算。若降级是有意且合理，必须明确展示面板级原因，而非静默缺项。
@@ -127,4 +129,4 @@ Run: `python3 scripts/check_docs.py --phase m1` and the repository link check
 
 ## 工作状态
 
-用户已于 2026-09-26 批准实施。Gate 1初始诊断快照固定于基线 `3ff95115` + overlay `1ede2648…`；FY2025工作台500根因已修复并推送（`48f8363`），缺口已分为Gate2源事实与Gate3快照发布两类。Gate2静态事实生成达到 FY2025 37/40、FY2026 40/40，相关修复已推送至 `c7955f1`；新财报行尚未在 UI 验收。Gate3首项 OCF canonical 源事实已于`4932504`推送：768条财务实际、合计守恒；canonical 25项、粒度对账3项、隔离 seed/verify 19/19通过。首轮浏览器E2E因共享Next `.next`锁而9项均连接失败，未触碰既有服务；已将唯一目录隔离作为重跑前置。隔离 API/UI OCF复验、毛利矩阵缺失调查、Gate1干净SHA复测及Gate3–5余项仍待执行；不得对常驻数据库写入。
+用户已于 2026-09-26 批准实施。Gate 1初始诊断快照固定于基线 `3ff95115` + overlay `1ede2648…`；FY2025工作台500根因已修复并推送（`48f8363`），缺口已分为Gate2源事实与Gate3快照发布两类。Gate2静态事实生成达到 FY2025 37/40、FY2026 40/40，相关修复已推送至 `c7955f1`；新财报行尚未在 UI 验收。Gate3首项 OCF canonical 源事实已于`4932504`推送：768条财务实际、合计守恒；canonical 25项、粒度对账3项、隔离 seed/verify 19/19通过。第二轮 E2E 8/9通过：OCF KPI 已显示 `available`，但一条浏览器 API 断言仍期待旧的 unavailable。独立 `distDir` 能避开运行锁，却使 Next 改写 tracked TS 配置，故改为临时 web 工作目录隔离后再执行；既有服务不终止。修订断言并跑完整E2E后再判定页面验收；毛利矩阵缺失调查、Gate1干净SHA复测及Gate3–5余项仍待执行；不得对常驻数据库写入。
