@@ -74,3 +74,12 @@ superseded_by: null
 诊断范围的初始 API 读数与哈希已固定。发现上述契约缺陷后，补充回归测试先红（Pydantic 拒绝 `metric_code`），再将 `metric_code` 加入严格响应模型；工作包 API 测试 7/7、ruff、mypy 均通过，本机热重载服务对 FY2025 同一报告 GET 返回200，响应中保留 `metric_code=debt_asset_ratio`。该修复验证发生在带其他会话未提交变更的工作树中，未计入初始 overlay 哈希；待代码归属整理并提交后仍须以干净 SHA 复测。
 
 完整 Gate 1 仍需完成其余缺口逐项归因和干净提交 SHA 的全目标路由复测。本记录支持已确认的故障定位与修复证据，不支持整体页面覆盖验收完成声明。
+
+## 后续只读补充（同日；未冻结新响应哈希）
+
+修复工作台契约后继续探测驾驶舱与指标库。此补充依赖当时本机热重载服务，未重新生成稳定 overlay 指纹，因此只作为分类线索，不能取代最终干净 SHA 复测：
+
+- 驾驶舱12/12经营现金流趋势均返回 `trend_metric_not_published`；现金流 KPI 主值返回 `metric_grain_not_published`；4/8预算与4/8 YTD预算比较均返回 `comparison_not_published`。
+- 毛利矩阵32格中，22格实际值为 `metric_grain_not_published`，24格比较值为 `comparison_not_published`。API 顶层批次、导入、质量、对账、指标快照、分析运行和新鲜度都标记为已发布/通过/新鲜，说明“流水线成功”不代表每个指标粒度与比较值已发布。
+- 指标覆盖响应列出的缺失字段组：`is.interest_exp(cur)` 7个指标、`bs.short_debt(end)` 3个、`bs.long_debt(end)` 1个、`bs.ap(end)` 2个、三个 `prev_yoy` 同比基期字段3个、`cf.cash_from_sales(cur)` 1个、`cf.capex(cur)` 1个；合计18项指标。`missing` 是标准化事实层的缺失声明，尚不能单独判定原始披露、映射缺失或不适用。
+- 责任初分：现金流趋势/指标粒度/比较缺失进入 Gate 3（发布快照和聚合）；18项标准化事实字段进入 Gate 2（对照合成原报表与指标公式逐项裁决适用性和事实来源）；不得直接以零填补或将财务费用等近似科目替代。

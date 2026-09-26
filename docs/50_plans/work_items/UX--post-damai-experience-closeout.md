@@ -46,17 +46,21 @@ API 由本 worktree 的 `uvicorn --reload` 提供服务。最新整轮只读探�
 
 | 页面 | 读取链路（观察到的 GET） | 初步观测 | 归因 / 待办 |
 |---|---|---|---|
-| `/` 经营总览 | `/api/v1/dashboard/overview?period_view=month\|ytd`（全公司、无维度筛选；截至2026-08） | 8 KPI卡；12个月趋势点、每点4指标；8产品、4客群、32格毛利矩阵。经营现金流趋势12/12不可用；KPI主值1/8不可用、预算4/8及YTD预算4/8不可用；矩阵实际22/32、比较24/32不可用；整体 `degraded`。 | 快照/指标粒度或比较值未发布；需追到生成、发布、聚合层。 |
+| `/` 经营总览 | `/api/v1/dashboard/overview?period_view=month\|ytd`（全公司、无维度筛选；截至2026-08） | 8 KPI卡；12个月趋势点、每点4指标；8产品、4客群、32格毛利矩阵。经营现金流趋势12/12不可用，码 `trend_metric_not_published`；经营现金流KPI主值1/8不可用、码 `metric_grain_not_published`；预算4/8及YTD预算4/8不可用、码 `comparison_not_published`；矩阵实际22/32为 `metric_grain_not_published`、比较24/32为 `comparison_not_published`；整体 `degraded`。顶层质量、对账、快照/分析发布与新鲜度状态均显示通过/已发布/新鲜。 | 主要是快照/指标粒度和比较值未发布，不是可以用补零处理的数值缺失；需追到快照构建、发布和聚合层。 |
 | `/statements` 财报分析 | `/api/v1/statements` → `/api/v1/statements/{report_id}` | FY2025、FY2026各1份；每份40行：资产负债表15、利润表13、现金流量表8、权益变动表4。 | 年报期间已存在；月度财务报表是否属于范围须按产品合同裁决，不擅自扩成另一个口径。 |
 | `/analysis` 四问工作台 | `/api/v1/statements` → `/api/v1/analysis/workbench/{report_id}` | FY2025 初始返回500；确定性提示 `leverage_rising` 带 `metric_code`，原响应模型却 `extra=forbid` 且未声明该字段。补齐响应契约后，本地热重载 API 返回200并带指标代码。FY2026原为200。 | 根因已确认并修复（`ManagementWatchItem.metric_code` 缺失）；回归测试已覆盖。待变更提交后在干净 SHA 复测；其余页面缺口仍需逐项归因。 |
 | `/operations` 经营分析 | `/api/v1/operations/public-periods`、`/api/v1/operations/public/{stock_code}/{period}`、`/api/v1/operations/overview/{report_id}` | 7个期间（菜鸟5、大麦2）；概览端点返回6个主题。 | 逐主题核验内容、缺值与下钻。 |
-| `/metric-library` 指标库 | `/api/v1/metric-library`、`/api/v1/metric-library/coverage?dataset=damai` | 65个定义、40项覆盖矩阵；FY2025可计算22项、FY2026可计算25项。缺项集中于利息费用、短/长期借款、应付账款、销售收现及资本开支等源字段。 | 定义数不等于数据覆盖；Gate 2逐项裁决适用性并只补适用缺口。 |
+| `/metric-library` 指标库 | `/api/v1/metric-library`、`/api/v1/metric-library/coverage?dataset=damai` | 65个定义、40项覆盖矩阵；FY2025可计算22项、FY2026可计算25项。未满足项的接口缺失字段为：利息费用 `is.interest_exp(cur)`（7项指标）、短债 `bs.short_debt(end)`（3项）、长债 `bs.long_debt(end)`（1项）、应付账款 `bs.ap(end)`（2项）、同比基期 `is.revenue/net_profit/operating_profit(prev_yoy)`（3项）、销售收现 `cf.cash_from_sales(cur)`（1项）、资本开支 `cf.capex(cur)`（1项）。 | 接口的 `missing` 只证明归一化事实缺失，不足以判断原件未披露、导入映射漏项或该指标对大麦不适用；Gate 2须逐项回看原始合成报表及公式合同后分类，不能将财务费用直接冒充利息费用。 |
 | `/reports` 发布中心 | `/api/v1/publishing/snapshots`、`/api/v1/publishing/freeze-candidates`、`/api/v1/operations/snapshots` | 1个发布快照、12个冻结候选、2个经营快照。 | 核对候选/发布状态、期间与数据集。 |
 | `/data` 数据工作台 | 当前界面为会话内上传/映射/校验；没有页面初始态批次 GET | 已 seed 的批次在此页不可通过历史列表浏览；仅有已知 batch ID 后查询版本的 API 路径，没有通用批次列表入口。 | “数据在库但无浏览入口”，纳入 Gate 4，不应误判为源数据不存在。 |
 | `/investigations` 与详情 | `/api/v1/investigations`、`/api/v1/investigations/{finding_id}` | Finding 列表2条。 | 核对每条发现的事实、证据与财报关联。 |
 | `/public`、`/internal` | 模块导航落地页 | 页面本身不展示业务数据。 | 不计作数据页；其链接目标页纳入本表；登录页排除。 |
 
 **Gate 1 诊断盘点已完成；实现/发布验收仍未关闭**：只读 API 矩阵、请求口径和初始响应哈希已冻结。FY2025 工作台 500 根因已确认并在本地工作树修复：确定性 `leverage_rising` 提示携带 `metric_code`，严格响应模型漏字段导致校验失败；新增回归测试由红转绿，本地 API 重测返回200。其余缺口仍须逐项归类并指定后续 Gate；当前工作树含其他会话改动，待拥有者整理提交后，再以干净 SHA 重跑完整矩阵作为代码验收基线。不得覆盖、暂存或提交其他会话的变更。
+
+#### 补充缺口码读数（2026-09-26，只读，未冻结响应哈希）
+
+本轮继续从当前热重载服务 GET 读取到精确缺口码：驾驶舱12个月现金流趋势全部为 `trend_metric_not_published`；8张卡中现金流KPI主值为 `metric_grain_not_published`，4张预算及4张YTD预算比较为 `comparison_not_published`；毛利矩阵32格中22格实际值为 `metric_grain_not_published`，24格比较值为 `comparison_not_published`。该证据把责任收敛到 Gate 3 的指标快照粒度/趋势发布/比较快照生成，不可误归为“数据库无业务数据”。指标库覆盖接口列出的18个缺失规范事实字段，已分组记录在上表；是否属于源事实缺失、导入映射或不适用仍由 Gate 2裁定。此补充读数未绑定新的工作树内容哈希，须在稳定提交版本重新冻结。
 
 ### Gate 2：形成正确且够用的合成财务事实
 
