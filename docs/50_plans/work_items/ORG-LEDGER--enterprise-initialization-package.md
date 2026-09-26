@@ -130,3 +130,29 @@ data/enterprise/damai-logistics/v1/
 数据库 schema 尚不存在；根据项目 AGENTS 规则，只有在写出具体迁移 DDL、表关系、
 约束和数据保留方式后，才单独请求批准数据库 schema 变更。取得批准前不执行迁移，
 也不在共享开发库执行任何清理/初始化。
+
+### 最小组织 schema 提案（待用户批准）
+
+如获批准，新增一次 Alembic migration 与三个企业域表，不修改既有 `enterprise`、
+`role_binding`、认证配置或 Action/RBAC 矩阵：
+
+| 表 | 核心列 | 企业隔离约束 |
+|---|---|---|
+| `enterprise_org_unit` | `id UUID PK`、`enterprise_id UUID FK enterprise RESTRICT`、`code`、`name`、`unit_type`、`parent_id NULL`、`status`、`attributes JSONB`、`created_at` | `(enterprise_id, code)` 唯一；`(id, enterprise_id)` 唯一；parent 采用 `(parent_id, enterprise_id)` 复合自引用 FK；仅允许 `department / business_unit / team` 类型；状态为 `active / inactive` |
+| `enterprise_position` | `id UUID PK`、`enterprise_id`、`org_unit_id`、`code`、`title`、`job_family`、`level`、`status`、`created_at` | `(enterprise_id, code)` 唯一；`(org_unit_id, enterprise_id)` 复合 FK，禁止岗位跨企业引用部门 |
+| `enterprise_member` | `id UUID PK`、`enterprise_id`、`actor_id`、`employee_code`、`display_name`、`email`、`phone`、`org_unit_id`、`position_id`、`supervisor_actor_id NULL`、`identity_metadata JSONB`、`identity_kind`、`status`、`created_at` | `(enterprise_id, actor_id)` 与 `(enterprise_id, employee_code)` 唯一；组织/岗位/上级均用带 `enterprise_id` 的复合 FK；`identity_kind` 为 `human / ai / service`；完整 seed 中所有成员 `synthetic=true` |
+
+`enterprise_member.actor_id` 必须与现有 `role_binding.actor_id` 完全相同；组织导入以系统
+已有的 `RoleBinding` 保存当前有效单角色，不创建平行角色表。项目 RBAC 的 Role/Action
+集合由代码与安全规格管理，数据包里的权限映射仅作期望值校验，不授予规格之外的
+权限。现有 RBAC 一名 actor 只能有一个 active RoleBinding，所以 v1 每名模拟成员绑定
+一个角色；多角色叠加需另行修订 Principal/授权合同，不在本次 schema 内偷偷实现。
+
+个人字段只用于合成演示：姓名、`example.invalid` 邮箱、保留号段电话、岗位和部门，
+以及不含政府身份证号码、登录口令、token 或密钥的 `identity_metadata`。模拟账号没有
+认证凭据，凭据仍须由系统认证配置单独提供。角色撤销保留为 RoleBinding 的追加式撤销，
+组织/岗位/成员从新发行包消失时改为 inactive；审计事件与发布历史不删除。
+
+这个最小 schema 不实现共享账号跨企业 membership、动态授权策略或通用多租户 SaaS。
+包内 actor ID 带企业命名空间，避免触发现有全局 actor 唯一约束；数据库服务隔离仍
+按现行企业 scope policy。未来 SaaS 登录身份与企业 membership 若需共享，再独立设计。
