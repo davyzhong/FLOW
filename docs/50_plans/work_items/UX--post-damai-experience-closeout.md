@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 3.7
+version: 3.8
 created_at: 2026-09-24
 updated_at: 2026-09-26
 owner: FLOW
@@ -31,6 +31,7 @@ applies_to: web-frontend
 - 公式链复核再发现 DSO 已有 `ar_turnover` 可用，但依赖的指标 code 未被注入下游公式求值，因此误标 `fact_missing`。字典执行器现按声明顺序把已计算指标结果提供给依赖项；大麦 FY2026 DSO 按字典 360 天口径计算为 116.3881 天。
 - 经营主题空态原先把所有 `not_applicable` 都标成“待内部数据”，会把“公开报告未披露分部数据”误导成“等内部授权”。现按原因码区分公开披露缺项、内部数据授权、期间分部披露缺失与缺少完整财报；未知原因仍保留原因码并显示通用不可用说明。
 - Gate 1 扩展 GET-only 路由矩阵已在本机常驻 API 读取：40次请求、36个不同路由/参数组合，全部 HTTP 200。覆盖两份财报详情/投影/更正/四问/经营概览，7个公开经营期间，指标字典和两套覆盖矩阵，批次清单，2条Finding详情，客观快照、冻结候选及发布/经营快照和尝试列表。报告中心正式产物尝试为空列表（HTTP 200）；当前页面“尚未生成正式产物”与持久化状态一致，不应以常驻库模拟发布历史。
+- 维度数据可见性修复已在 `649a2aba` 推送：完整产品/客群主数据仍供筛选使用；当前驾驶舱产品表与毛利矩阵仅展示当前发布快照确有事实的维度，并明确显示事实覆盖数/总目录数；完全无事实时呈现降级空态，不把空目录误报为完整或用零补齐。这是局部页面修复，不是全站 Gate 1 关闭证据。
 
 ## 实施路线（本文件是规格；实施须按用户已批准的工作状态执行）
 
@@ -155,6 +156,12 @@ Run: `python3 scripts/check_docs.py --phase m1` and the repository link check
 复核发现 `scripts/test_dashboard.sh` 在 pytest 前直接执行 Alembic upgrade 与 `seed_dashboard_demo.py --fresh-batch`；`tests/conftest.py` 的 `flow_test` 自动切换只保护 pytest 进程，不能保护此前的迁移/seed 子进程。已修复为默认且强制数据库名 `flow_test`、主机仅允许 `localhost`/`127.0.0.1`，缺库时只创建固定的 `flow_test`；指向 `flow` 或非本机地址时迁移前拒绝。Next 在本轮临时 web 副本运行，Playwright 从仓库根加载权威配置/fixtures，避免共用 `.next` 锁且不改真实工作区配置。
 
 安全验收：显式把 URL 指向 `flow` 时脚本退出码2并输出拒绝信息；`make test-dashboard` 在 `flow_test` 执行迁移/seed，摘要含12个月/8卡，Playwright 7/7通过。该脚本不再对常驻 `flow` 写入。安全性修复后 Gate 5 dashboard 验收通过；仍须同 SHA CI、页面覆盖矩阵与 Gate 1干净提交证据收尾。
+
+### 快照事实范围与意外测试批次记录（2026-09-26）
+
+- `649a2aba` 令产品表和毛利矩阵按当前快照中的真实事实筛选维度，完整目录仍用于筛选器，覆盖文案显示分子/分母。空事实范围为 `degraded` 并显示明确原因。API 集成测试、Web 全套136/136、typecheck、lint（0 errors，1既有warning）、ruff、mypy通过；隔离大麦旅程 verify 19/19、浏览器 E2E 9/9通过。
+- **常驻库写入偏差（未回滚）**：误在根 checkout（旧分支 `codex/damai-logistics-data-audit`，HEAD `4111f6a2`）运行 `make test-dashboard`。该 checkout 的脚本默认指向常驻 `flow`，因此增加已发布测试批次 `01a0dcdd-8245-7c17-99aa-fce91a8a7a57`（2026-09-26 08:38:19 UTC）：1 import、12 metric snapshots、1 analysis run、50,400 metric values。只读检查确认没有删除或覆盖既有记录；该批次改变 latest 选择，当前 API/UI 可能读到测试批次而非原大麦批次。原大麦批次 `01a0dc96-029b-7931-b2b5-4885a3f82132` 仍存在。已冻结常驻库进一步写入；未删除、未恢复数据库、未切换最新批次。任何回滚或切换均待用户明确授权及新备份，后续代理不得自行处理。
+- 维度修复验证只使用 `flow_test`/隔离 Compose；常驻库没有在该修复验证中再写入。
 
 #### CI 环境变量回归（2026-09-26，待修复）
 
