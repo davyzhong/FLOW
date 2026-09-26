@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 3.8
+version: 3.9
 created_at: 2026-09-24
 updated_at: 2026-09-26
 owner: FLOW
@@ -162,6 +162,7 @@ Run: `python3 scripts/check_docs.py --phase m1` and the repository link check
 - `649a2aba` 令产品表和毛利矩阵按当前快照中的真实事实筛选维度，完整目录仍用于筛选器，覆盖文案显示分子/分母。空事实范围为 `degraded` 并显示明确原因。API 集成测试、Web 全套136/136、typecheck、lint（0 errors，1既有warning）、ruff、mypy通过；隔离大麦旅程 verify 19/19、浏览器 E2E 9/9通过。
 - **常驻库写入偏差（未回滚）**：误在根 checkout（旧分支 `codex/damai-logistics-data-audit`，HEAD `4111f6a2`）运行 `make test-dashboard`。该 checkout 的脚本默认指向常驻 `flow`，因此增加已发布测试批次 `01a0dcdd-8245-7c17-99aa-fce91a8a7a57`（2026-09-26 08:38:19 UTC）：1 import、12 metric snapshots、1 analysis run、50,400 metric values。只读检查确认没有删除或覆盖既有记录；该批次改变 latest 选择，当前 API/UI 可能读到测试批次而非原大麦批次。原大麦批次 `01a0dc96-029b-7931-b2b5-4885a3f82132` 仍存在。已冻结常驻库进一步写入；未删除、未恢复数据库、未切换最新批次。任何回滚或切换均待用户明确授权及新备份，后续代理不得自行处理。
 - 维度修复验证只使用 `flow_test`/隔离 Compose；常驻库没有在该修复验证中再写入。
+- 当前 clean SHA `649a2aba` 的 GitHub Actions run `36232029817` success；其后状态同步提交 `7229cd0d` / run `36232204424` 与证据更新提交 `4c55f10e` / run `36232336053` 也 success。旧 runs `36229942486`–`36230243382` 的 dashboard 视觉高度失败发生在 `31a60217` 修复前；`31a60217` run `36230615921` 的 dashboard、integration、intake-e2e、data-contract 及其余 jobs 最终全绿。CI 当前无已知未通过项；Gate 1 页面/视口/错误/403/深链矩阵仍未关闭。
 
 #### CI 环境变量回归（2026-09-26，待修复）
 
