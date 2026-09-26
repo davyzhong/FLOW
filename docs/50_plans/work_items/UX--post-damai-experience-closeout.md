@@ -3,9 +3,9 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 4.6
+version: 4.7
 created_at: 2026-09-24
-updated_at: 2026-09-26
+updated_at: 2026-09-27
 owner: FLOW
 depends_on: [FLOW-WI-DAMAI-FULL-YEAR-001]
 acceptance_refs: [FLOW-PLAN-INTEGRATED-EXECUTION-20260924, frontend-route-state-viewport-matrix]
@@ -32,6 +32,14 @@ applies_to: web-frontend
 - 经营主题空态原先把所有 `not_applicable` 都标成“待内部数据”，会把“公开报告未披露分部数据”误导成“等内部授权”。现按原因码区分公开披露缺项、内部数据授权、期间分部披露缺失与缺少完整财报；未知原因仍保留原因码并显示通用不可用说明。
 - Gate 1 扩展 GET-only 路由矩阵已在本机常驻 API 读取：40次请求、36个不同路由/参数组合，全部 HTTP 200。覆盖两份财报详情/投影/更正/四问/经营概览，7个公开经营期间，指标字典和两套覆盖矩阵，批次清单，2条Finding详情，客观快照、冻结候选及发布/经营快照和尝试列表。报告中心正式产物尝试为空列表（HTTP 200）；当前页面“尚未生成正式产物”与持久化状态一致，不应以常驻库模拟发布历史。
 - 维度数据可见性修复已在 `649a2aba` 推送：完整产品/客群主数据仍供筛选使用；当前驾驶舱产品表与毛利矩阵仅展示当前发布快照确有事实的维度，并明确显示事实覆盖数/总目录数；完全无事实时呈现降级空态，不把空目录误报为完整或用零补齐。这是局部页面修复，不是全站 Gate 1 关闭证据。
+
+### 视觉归档复验（2026-09-27，UX Gate 进度证据；非关闭）
+
+- 共享 Next 开发进程的 `/statements` 请求挂起并出现 `EPIPE`，不属于本轮创建；未终止或改动该进程。改用 `work/damai-demo/web-matrix.E6MJjO/` 下的隔离前端副本及独立端口 54683 完成截图验收，复验后仅停止本轮创建的服务。
+- 四个数据密集页面 `/statements`、`/reports`、`/metric-library`、`/investigations` 的五态（loaded/empty/loading/error/forbidden）×三视口（390/1024/1440）共 60 张图已刷新；归档生成器第61项写索引。Playwright 两轮均 61/61；第二轮额外断言每个状态下无未捕获页面异常。
+- 首轮运行在旧指标库 fixture 中暴露 `MetricCard` 收到过时字段（`code` 而非 `metric_code`、缺 `domain` 等）导致浏览器运行时 TypeError。已将归档夹具修至当前 `flow.metric_dictionary.v1` UI 契约，并加入 pageerror 断言；第二轮归档无 pageerror。这个问题是测试夹具陈旧，并不表示生产 API 的指标数据缺陷。
+- 当前矩阵仍有明确范围差距：归档截图只覆盖四个数据密集页；其余七个交互路由仅有既有移动端溢出测试/局部状态合同，尚无五态×三视口全量视觉证据。截图中的单个财报/单指标 mock 是稳定的展示夹具，不是大麦数据库实况，也不能据此断言实际大麦数据的页面完整性。
+- 此复验只补充视觉归档与测试真实性，不覆盖 Gate 1 的逐项 API→发布对象→源事实映射，也未覆盖所有目标指标/趋势/矩阵下钻；工作包仍保持 active。
 
 ## 实施路线（本文件是规格；实施须按用户已批准的工作状态执行）
 

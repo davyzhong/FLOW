@@ -20,7 +20,7 @@ applies_to: repository
 
 ### 接手基线、当前状态与操作纪律
 
-- 本轮从 GitHub `main` 快进同步到 `0aa2e880` 开始，在 `/Users/qiming/workspace/FLOW/.worktrees/execution-convergence` 的唯一 `main` 工作树串行执行。ORG-LEDGER 提交 `2c7d6eb4e9dead835a005687cdff8ac5ab19631f` 已推送，FLOW CI run `36270782272` 17/17 success。当前状态文档更新待推送；历史 `c08a2f6a` / `fc6e63a7` 仅作旧快照解释。未触碰根工作树的既有脏 `AGENTS.md` 和 `apps/web/next-env.d.ts`。
+- 本轮从 GitHub `main` 快进同步到 `0aa2e880` 开始，在 `/Users/qiming/workspace/FLOW/.worktrees/execution-convergence` 的唯一 `main` 工作树串行执行。ORG-LEDGER 提交 `2c7d6eb4e9dead835a005687cdff8ac5ab19631f` 已推送，FLOW CI run `36270782272` 17/17 success。UX 已刷新四个数据密集页五态×三视口归档（60张截图；Playwright 两轮61/61，第二轮含无未捕获 pageerror 断言）。全站 API→事实对账、剩余路由/状态/视口/下钻与 Gate 5 仍未完成，队列计数不变。历史 `c08a2f6a` / `fc6e63a7` 仅作旧快照解释。未触碰根工作树的既有脏 `AGENTS.md` 和 `apps/web/next-env.d.ts`。
 - **当前路线图计数（唯一队列11项）**：已完成 1（ORG-LEDGER）、实际执行中 1（UX 全站验收）、排队 8、外部材料受限 1。第1项因提交 SHA 同 CI 全绿而关闭，第2项已成为唯一执行项；不并行开启其他工作包。
 - 只在 `main` 上做，禁止新建并行任务分支；不得同时开始下一项。用户已授权常规项目实施与验证，不再为日常测试、分析、文档或常规实现请求再次批准。既有全局安全红线仍有效：真实数据迁移/schema、删除/覆盖/恢复常驻库、密钥/CI 配置、公开部署等按 `AGENTS.md` 处理；尤其常驻 `flow` 中的测试批次偏差 `01a0dcdd-8245-7c17-99aa-fce91a8a7a57` 不得自行删除、回滚或切 latest。
 - **状态口径**：`进行中`=此刻确实有命令、审查或实现正在执行；`队首待启动`=当前第一项但未开工；`排队`=严格等待前项完成；`外部材料受限`=先按本手册执行主动恢复和替代方案，不是停工态。工作包 frontmatter 的 `active/blocked` 表示工作包生命周期或验收门槛，不覆盖路线图执行状态。

@@ -3,9 +3,9 @@ doc_id: FLOW-NAV-STATE-MATRIX-001
 title: 前端状态矩阵归档索引（Task 9 证据）
 doc_type: navigation
 status: current
-version: 1.0
+version: 1.1
 created_at: 2026-09-18
-updated_at: 2026-09-18
+updated_at: 2026-09-27
 owner: FLOW
 applies_to: docs
 ---
@@ -24,5 +24,5 @@ applies_to: docs
 | `/metric-library` | [metric-library/](metric-library/) |
 | `/investigations` | [investigations/](investigations/) |
 
-生成时间：2026-09-18T15:27:56.778Z
+生成时间：2026-09-26T21:52:04.107Z
 
