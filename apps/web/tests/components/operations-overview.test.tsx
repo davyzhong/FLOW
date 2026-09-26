@@ -100,6 +100,7 @@ const OVERVIEW = {
   management_watch: [
     {
       code: "cash_content_below_one",
+      metric_code: "ocf_net_profit_ratio",
       message: "净利润现金含量 0.6000，经营现金流低于净利润",
       direction: "negative",
     },
@@ -140,8 +141,11 @@ describe("OperationsOverviewApp", () => {
     expect(screen.getByText(/aaaaaaaaaaaaaaaa…/)).toBeTruthy();
     // 诚实 N/A
     expect(screen.getByText(/待内部数据（internal_data_required）/)).toBeTruthy();
-    // 管理关注 ≤3 带方向
-    expect(screen.getByText(/净利润现金含量 0.6000/)).toBeTruthy();
+    // 管理关注 ≤3 带方向；带 metric_code 时可下钻指标库（深链批次三-5）
+    const watchLink = screen.getByRole("link", { name: /查看指标/ });
+    expect(watchLink.getAttribute("href")).toBe(
+      "/metric-library?focus=ocf_net_profit_ratio",
+    );
     // 范围说明（#9 客观部分）
     expect(screen.getByText(/不在客观报告范围/)).toBeTruthy();
     expect(screen.getByRole("link", { name: "下载 Excel" })).toBeTruthy();

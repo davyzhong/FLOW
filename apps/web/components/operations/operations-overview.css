@@ -170,3 +170,12 @@ a.ops-overview__metric-name:hover {
   text-decoration: underline;
   text-underline-offset: 2px;
 }
+
+.ops-overview__watch-link {
+  color: #1769e8;
+  text-decoration: none;
+}
+
+.ops-overview__watch-link:hover {
+  text-decoration: underline;
+}

@@ -395,3 +395,28 @@ def test_damai_overview_revenue_structure_from_own_segment_series(
     theme = next(t for t in overview.themes if t.theme_id == "revenue_structure")
     assert theme.status == "available", "DAMAI.SYN 分部序列必须支撑收入结构主题"
     assert any(m.entry_id == "segment_revenue_yoy" for m in theme.metrics)
+
+
+# ---- 深链批次三-5：ManagementWatchItem 携带 metric_code（条目可下钻指标库） ----
+
+
+def test_management_watch_items_carry_metric_code_for_deep_link(db_session: Session) -> None:
+    """每个管理关注条目带可选 metric_code：前端据此链到 /metric-library?focus=。
+    信号源指标必须真实对应（AR 联看→ar_turnover 域，净现比→ocf_net_profit_ratio，
+    收入下降→revenue_growth，杠杆上升→debt_asset_ratio）。"""
+    report = _import_alibaba(db_session, fy=2026)
+    overview = build_operations_overview(db_session, report_id=str(report.id))
+    assert overview.management_watch, "阿里 FY2026 应有信号"
+    valid_codes = {
+        "ar_outpacing_revenue": "ar_turnover",
+        "cash_content_below_one": "ocf_net_profit_ratio",
+        "revenue_decline": "revenue_growth",
+        "leverage_rising": "debt_asset_ratio",
+    }
+    for item in overview.management_watch:
+        assert "metric_code" in item, "条目必须携带 metric_code 键"
+        expected = valid_codes.get(item["code"])
+        if expected:
+            assert item["metric_code"] == expected, (
+                f"{item['code']} 的源指标应为 {expected}，实际 {item['metric_code']}"
+            )

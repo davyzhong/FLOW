@@ -108,6 +108,7 @@ def management_watch(facts: dict[str, Decimal]) -> list[dict[str, str]]:
         watches.append(
             {
                 "code": "ar_outpacing_revenue",
+                "metric_code": "ar_turnover",
                 "message": (
                     f"应收账款增速 {ar_growth} 高于营业收入增速 {revenue_growth}，"
                     "建议核对回款与账龄（联动提示，不构成原因判断）"
@@ -120,6 +121,7 @@ def management_watch(facts: dict[str, Decimal]) -> list[dict[str, str]]:
         watches.append(
             {
                 "code": "cash_content_below_one",
+                "metric_code": "ocf_net_profit_ratio",
                 "message": f"净利润现金含量 {cash_ratio}，经营现金流低于净利润",
                 "direction": "negative",
             }
@@ -128,6 +130,7 @@ def management_watch(facts: dict[str, Decimal]) -> list[dict[str, str]]:
         watches.append(
             {
                 "code": "revenue_decline",
+                "metric_code": "revenue_growth",
                 "message": f"营业收入同比 {revenue_growth}，同比下降",
                 "direction": "negative",
             }
@@ -144,6 +147,7 @@ def management_watch(facts: dict[str, Decimal]) -> list[dict[str, str]]:
         watches.append(
             {
                 "code": "leverage_rising",
+                "metric_code": "debt_asset_ratio",
                 "message": f"资产负债率较上期上升至 {leverage_current}",
                 "direction": "warning",
             }

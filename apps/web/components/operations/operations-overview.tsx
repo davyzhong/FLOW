@@ -305,7 +305,16 @@ export function OperationsOverviewApp({
                     <span className="ops-overview__tag">
                       {DIRECTION_LABEL[item.direction] ?? item.direction}
                     </span>
-                    {item.message}
+                    {item.metric_code ? (
+                      <a
+                        href={`/metric-library?focus=${encodeURIComponent(item.metric_code)}`}
+                        className="ops-overview__watch-link"
+                      >
+                        {item.message}（查看指标 →）
+                      </a>
+                    ) : (
+                      item.message
+                    )}
                   </li>
                 ))}
               </ul>
