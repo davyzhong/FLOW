@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 3.0
+version: 3.1
 created_at: 2026-09-24
 updated_at: 2026-09-26
 owner: FLOW
@@ -20,7 +20,7 @@ applies_to: web-frontend
 
 ## 当前证据与判断（2026-09-26）
 
-- 常驻开发库 G2 于2026-09-25已完成并 verify 19/19；本轮不连接或写入常驻 `flow`，不声称当前行数已复核。测试验收数据库隔离于 `b60c51b` 修复。
+- 常驻开发库原 G2 于2026-09-25曾完成；2026-09-26按本工作包受控恢复步骤重新核验：先备份，再幂等 seed，之后 verify 19/19 两次均通过。备份为 `work/backups/flow-pre-demo-rehydrate-20260926.dump`（SHA-256 `b374a16ec72f3a918194b1b5b4c80a0df259fa4c56c920c1f1a6e9bd8ee9782d`，约228 KB）；收据位于忽略目录 `work/damai-demo/`，均不入 Git。
 - 大麦 fixture 有24个月、1,920条经营实际、10,752条预算、4,800条应收回款、768条财务实际（含每月×4组织的 OCF）；40个客户、8个产品、6个区域、4个事业部。
 - FY2025/FY2026发行财报静态工件现各51行项目；只读 API 与常驻数据库数据须按指定环境/SHA实测，不从静态工件推断常驻库当前结果。
 - 大麦40项指标静态覆盖为 FY2025 37/40、FY2026 40/40；FY2025三项同比缺少FY2024比较期，不应补零或误标为企业不适用。
@@ -180,8 +180,12 @@ GitHub Actions run `36222136591`（SHA `430020f`）与 `36222489952`（SHA `59b3
 
 批次二提交 `7976691` 推送后，在该代码版本上另跑隔离的大麦全旅程：新 Compose 卷完成迁移与 seed，verify 19/19、浏览器 E2E 9/9。之后为 `/data` 与 `/metric-library` 补充真实数据展示断言：seed 批次必须出现在最近批次表，点击批次名后 `?batch=` 生效且该行标记为当前上下文；指标覆盖矩阵必须显示 FY2025 37/40、FY2026 40/40。两轮新增断言后的隔离全旅程均9/9。证明大麦主演示页面有真实批次与覆盖值展示，并未被深链改动破坏；不代表 Gate 1逐路由覆盖矩阵完成。`7976691` 的 CI run `36225466153` 当时仍在运行，需以最终状态为准。
 
-### 常驻开发库大麦数据恢复（2026-09-26，只读诊断后增加的受控恢复步骤）
+### 常驻开发库大麦数据恢复（2026-09-26，已执行并复验）
 
-当前本机 API `127.0.0.1:8000` 的只读探测（代码工作区 `main@0dcd911`）与隔离验收数据状态不一致：health 200；dashboard 返回404 `dashboard_not_ready`；statement reports 2；公开经营期间7；大麦覆盖 FY2025 37/40、FY2026 40/40；operations snapshots 2；publishing snapshots 0、freeze candidates 0、findings 0、intake batches 0。判断：静态财报/覆盖数据仍在，日常栈缺少内部经营批次及其分析工作流对象，不能只靠前端下钻修复。
+恢复前只读探测发现：health 200；dashboard 返回404 `dashboard_not_ready`；statement reports 2；公开经营期间7；大麦覆盖 FY2025 37/40、FY2026 40/40；operations snapshots 2；publishing snapshots、freeze candidates、findings、intake batches 均为0。判断：静态财报/覆盖数据仍在，日常栈缺少内部经营批次及其分析工作流对象，不能只靠前端下钻修复。
 
-为恢复先前已批准的 G2 大麦演示状态，执行范围限定为：先对本机 `flow` 做完整 pg_dump；随后运行已审查的 `scripts/seed_damai_demo.py` 幂等 seed（不清表、不删数据、不跑迁移）；立刻以 `verify_damai_demo.py` 19项校验和只读 API 页级检查确认结果，并再次 seed 后对关键表/端点计数确认无增长。备份与验收收据放 `work/backups/`、`work/damai-demo/`（不入 Git）。若目标连接并非当前本机 Compose 的 `flow`、备份失败或任何前置数据与脚本幂等假设不符，立即停止写操作。此为既有演示数据 G2 的恢复，不关闭本工作包任何 Gate；常驻库之外仍只使用隔离栈运行写型 E2E。
+执行结果：先完整备份本机 `flow`，再运行已审查的 `scripts/seed_damai_demo.py` 幂等 seed；未清表、未删除数据、未运行迁移。首轮验收暴露 verifier 把历史财报版本误计入 `statement_report=2` 总行数的问题。已将检查改为只核验大麦 FY2025/FY2026 最新已发布身份，并添加两项 SQLite 回归测试（历史版本不增计数；最新版本未发布则不通过）。随后重复 seed 与验收，关键表计数未增长。最终 `verify_damai_demo.py --api-url http://127.0.0.1:8000 --check-storage` 为19/19；对象存储工作簿读回1,327,348字节且SHA/语义一致。复验 API：dashboard 200、8张KPI卡、趋势12/12、2条 findings，状态 `degraded`；财报2份（FY2025/FY2026），发布快照1、冻结候选12。矩阵仍 `degraded`，缺失值维持 unavailable，不以填零掩盖。
+
+当前浏览器 `127.0.0.1:3000` 的额外 UI smoke 未通过：该既有 Next 开发服务器对必要 JavaScript chunks 返回403并出现 HMR websocket 握手失败，页面停留在加载态；因此不能把 API/数据库恢复等同于用户浏览器已可见。为避免打断用户服务，本轮未停止或重启该服务。隔离临时副本的全旅程 E2E 仍为9/9通过。该本地开发服务器运行态问题单独登记，不改变数据验收结果；后续由用户决定何时安全重启/重建该开发进程。
+
+此恢复只关闭“常驻开发库数据缺失”这一项，不关闭本工作包任何 Gate；常驻库之外仍只使用隔离栈运行写型 E2E。

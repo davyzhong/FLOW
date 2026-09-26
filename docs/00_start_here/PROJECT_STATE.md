@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 3.7
+version: 3.8
 created_at: 2026-09-12
 updated_at: 2026-09-26
 owner: FLOW
@@ -12,9 +12,9 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-09-26 更新：CI dashboard 数据库 URL 冲突已修复；隔离大麦旅程 verify19/19、浏览器E2E9/9；深链批次一、二 API/安全51/51、Web单测133/133、深链E2E15/15、typecheck/合同/M6通过，提交 `7976691` 及后续验收提交均已推送，CI状态见路线图。对当前常驻开发 API 的只读核验发现：dashboard 404 `dashboard_not_ready`、internal batch 0、findings 0、publishing snapshots 0、freeze candidates 0；但财报2、公开经营期间7、大麦覆盖FY2025 37/40与FY2026 40/40、经营快照2仍在。故 G2 既往验收不代表当前开发库仍有数据；已将受控恢复（先全量备份、幂等seed、不清库/不迁移、seed后验证）列为下一步，尚未执行写入。Gate 1全路由覆盖矩阵仍未完成、深链批次三未开始。此前关于两次 CI 失败的描述记录的是历史状态。
+2026-09-26 更新：常驻开发库受控恢复已完成：先备份 `work/backups/flow-pre-demo-rehydrate-20260926.dump`（SHA-256 `b374a16e…9782d`），再幂等 seed，未清库/删数据/迁移；最终验收19/19两次通过，重复 seed 零增长。API现为 dashboard 200（8卡、趋势12/12、2条findings，状态 degraded）、财报2份、发布快照1、冻结候选12；对象存储读回及SHA通过。大麦 FY2025/FY2026指标覆盖37/40、40/40，毛利矩阵保留合理缺值。常驻数据已恢复但现有浏览器开发服务器因JS chunks 403/HMR失败无法完成hydration，不能声称当前3000端口页面已可用；未擅自重启。验收器已修正历史财报版本计数并加回归测试。Gate 1全路由覆盖矩阵、深链批次三及其他页面缺口仍未完成。此前“常驻库未复核/恢复待执行”是历史记录，以本次更新为准。
 
-截至 2026-09-26，远端 `main` 最新已推送提交为 `59b328dc`。批次历史功能在干净 SHA `59b328dc` 的隔离 Damai 全旅程复验通过（seed/verify 19/19、浏览器9/9）；但 GitHub Actions runs `36222136591`（`430020f`）和 `36222489952`（`59b328dc`）的 dashboard job 均因 CI 注入 `DATABASE_URL=/flow` 与 `flow_test` 安全守卫冲突而失败，其他 jobs 仍运行中。U8、S01、前端一致性 Task 0–9、大麦完整财年数据包均已完成；常驻库大麦装载 G2 曾于 2026-09-25 按计划完成并 verify 19/19，但本轮未连接或写入常驻 `flow`，当前行数/页面数据量未复核。测试库隔离于 `b60c51b` 修复；小米 2026H1 与阿里 FY2027Q1 holdout 已冻结并录入独立 oracle（`926af825`）。公开 C 级交叉评42项已确认异常为抽取错误；109项口径疑点待裁决，京东物流200格英文原件待重核，抽取修订和新留出盲测未完成。大麦静态数据合同有24个月经营明细（1,920实际、10,752预算、4,800应收回款、768财务实际，含合计守恒 OCF）；发行财报每份51行，静态覆盖 FY2025 37/40、FY2026 40/40。隔离验收中 OCF KPI可用、趋势12/12；毛利矩阵实际/预算比较各10/32格，缺格保持 unavailable、不补零。`make test-dashboard` 已限制为本机 `flow_test`，本地拒绝写常驻 `flow` 的守卫有效；CI现需修正通用 URL 注入与安全测试配置冲突。Gate 1首轮仍绑定 `main@3ff95115` + overlay `1ede2648…`，完整 Gate 1全路由复测及 Gate 3–5其余页面呈现/下钻仍待完成。当前批次历史入口不等于其他经营/财务页面缺数均已解决。主线只在 `main` 串行推进。
+截至本次文档同步，远端 `main` 上批次历史 clean-SHA 隔离验收通过（seed/verify19/19、浏览器9/9）。dashboard CI URL冲突已修复，相关历史失败不再代表当前状态；最新代码提交及CI结果见路线图。本轮常驻开发库按工作包安全步骤重新恢复并verify 19/19两次，不能用此前数据库未复核的旧描述覆盖该事实。测试库隔离于 `b60c51b` 修复；holdout与公开C级的待办保持不变。大麦静态数据合同有24个月经营明细（1,920实际、10,752预算、4,800应收回款、768财务实际，含合计守恒OCF）；发行财报每份51行，静态覆盖FY2025 37/40、FY2026 40/40。常驻API现有8卡、12/12趋势及2条findings，但整体degraded且矩阵有合理缺格。3000端口既有开发服务器 chunks 403导致页面未hydration，尚未修复；Gate 1全路由复测、批次三和其他页面呈现/下钻仍待完成。主线只在`main`串行推进。
 
 上段中的“两次 dashboard CI 失败”及“CI现需修正”仅记录本次修复前状态；以本页顶部更新为准：dashboard job 已通过，完整 workflow 尚在运行。
 
@@ -36,7 +36,7 @@ applies_to: repository
 4. **公开模块 C 级出口（门禁后）**：执行冻结样本、company-level holdout、可复算/可追源和独立盲评量化协议。
 5. **内部工作台与真实企业验证（C 级出口后）**：需内部数据授权；至少连续三个完整月度周期，与同输入人工基准逐周期比较。
 6. **旧 U9/O5、U10（待重新裁决）**：仅保留历史工作包身份，不按旧依赖链自动领取。
-7. **大麦完整财年演示数据（底座 completed；页面覆盖部分完成）**：24个月 synthetic 全链已落地，静态财务实际768条，含守恒分摊的 OCF；G2常驻库装载于2026-09-25曾验收19/19，本轮未对常驻库执行读写核对或数据操作。隔离栈 verify 19/19、浏览器八页面/旅程 E2E 9/9；OCF KPI可用、趋势12/12。财报每份51行，指标覆盖 FY2025 37/40、FY2026 40/40。毛利矩阵实际与预算比较各10/32格可用，缺格保持 unavailable、不补零，整体 degraded。FY2025四问API 500已修复。Gate 4 `/data` 批次历史列表本轮实现并在本地通过API/UI/合同与文档门禁，CI待验；此项仅提供批次历史索引，不等于其余经营/财务页面已全部补齐。证据见[Gate 1/Gate 2记录](../60_delivery/verification/2026-09-26--damai-visibility-gate1-v1.md)和[剩余体验收口工作包](../50_plans/work_items/UX--post-damai-experience-closeout.md)。合成数据不解除公开 C 级或真实企业门禁。
+7. **大麦完整财年演示数据（底座 completed；页面覆盖部分完成）**：24个月synthetic全链已落地；2026-09-26常驻开发库受控恢复，备份SHA见剩余体验收口工作包，seed幂等、verify19/19两次通过。当前API dashboard 200、8卡、趋势12/12、2条findings，状态仍degraded；财报2份、发布快照1、冻结候选12，财报覆盖FY2025 37/40、FY2026 40/40。毛利矩阵实际/预算比较各10/32格可用，缺格保持unavailable、不补零。浏览器开发服务器3000端口必要chunks 403、HMR失败，页面仍未hydration，本轮未擅自重启。隔离栈 verify19/19、浏览器E2E9/9；FY2025四问API500已修复。Gate 1全路由响应矩阵、Gate3/4其他页面呈现/下钻及深链批次三未完成。证据见[Gate 1/Gate 2记录](../60_delivery/verification/2026-09-26--damai-visibility-gate1-v1.md)和[剩余体验收口工作包](../50_plans/work_items/UX--post-damai-experience-closeout.md)。合成数据不解除公开C级或真实企业门禁。
 8. **第二代静态知识刷新（active）**：批准规格与 preflight 已完成；K0–K6 尚待执行，用户战略裁决前不得切换 `CURRENT_RELEASE`。
 
 ## 知识基线

@@ -119,7 +119,6 @@ def check_db_counts(database_url: str) -> list[Check]:
     from sqlalchemy import create_engine, text
 
     expectations = {
-        "statement_report": ("=", 2),
         "analysis_batch": ("=", 1),
         "metric_snapshot": ("=", 12),
         "analysis_run": ("=", 1),
@@ -133,6 +132,14 @@ def check_db_counts(database_url: str) -> list[Check]:
     try:
         with engine.connect() as conn:
             checks = []
+            damai_reports = count_latest_published_damai_reports(conn)
+            checks.append(
+                _check(
+                    "db_counts.statement_report",
+                    damai_reports == 2,
+                    f"大麦最新已发布财报身份实际 {damai_reports}（期望 = 2）",
+                )
+            )
             for table, (op, expected) in expectations.items():
                 actual = conn.execute(text(f"SELECT count(*) FROM {table}")).scalar_one()
                 passed = actual == expected if op == "=" else actual >= expected
@@ -162,8 +169,36 @@ def check_db_counts(database_url: str) -> list[Check]:
         engine.dispose()
 
 
+def count_latest_published_damai_reports(connection: Any) -> int:
+    """计大麦FY2025/FY2026最新版本，不把保留的重述/历史版本当作额外报表。"""
+
+    from sqlalchemy import text
+
+    return int(
+        connection.execute(
+            text(
+                "WITH latest AS ("
+                " SELECT stock_code, period_label, report_kind, MAX(version) AS max_version"
+                " FROM statement_report"
+                " WHERE stock_code = 'DAMAI.SYN' AND report_kind = '年报'"
+                "   AND period_label IN ('FY2025', 'FY2026')"
+                " GROUP BY stock_code, period_label, report_kind"
+                ")"
+                " SELECT count(*) FROM statement_report r"
+                " JOIN latest l ON r.stock_code = l.stock_code"
+                "  AND r.period_label = l.period_label AND r.report_kind = l.report_kind"
+                "  AND r.version = l.max_version"
+                " WHERE r.status = 'published'"
+            )
+        ).scalar_one()
+    )
+
+
 def check_freeze_hashes(database_url: str) -> list[Check]:
     """冻结 SHA 重算：客观快照/经营概览 payload_hash；内部报告 digest_view。"""
+
+    from sqlalchemy import create_engine, select
+    from sqlalchemy.orm import Session
 
     from flow_api.infrastructure.models.publishing import ReportSnapshot
     from flow_api.publishing.objective_freeze import (
@@ -171,9 +206,6 @@ def check_freeze_hashes(database_url: str) -> list[Check]:
         payload_hash,
     )
     from flow_api.publishing.service import build_report_view, digest_view
-    from sqlalchemy import create_engine, select
-    from sqlalchemy.orm import Session
-
     engine = create_engine(database_url)
     checks: list[Check] = []
     try:
@@ -254,11 +286,11 @@ def check_object_storage(database_url: str) -> list[Check]:
 
     import tempfile
 
+    from sqlalchemy import create_engine, text
+
     from flow_api.infrastructure.object_store import ObjectStore
     from flow_api.infrastructure.s3_client import build_s3_client
     from flow_api.settings import get_settings
-    from sqlalchemy import create_engine, text
-
     workbook = ROOT / "fixtures/damai/workbooks/damai_logistics_full_v1.xlsx"
     engine = create_engine(database_url)
     checks: list[Check] = []

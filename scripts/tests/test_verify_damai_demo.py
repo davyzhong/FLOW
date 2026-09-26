@@ -11,10 +11,12 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from sqlalchemy import create_engine, text
+
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-import verify_damai_demo
+import verify_damai_demo  # noqa: E402
 
 
 class ReleaseManifestCheckTest(unittest.TestCase):
@@ -65,6 +67,47 @@ class SummarizeTest(unittest.TestCase):
         verdict = verify_damai_demo.summarize([{"name": "a", "passed": True, "detail": ""}])
         self.assertTrue(verdict["ok"])
         self.assertEqual(verdict["failed"], [])
+
+
+class LatestDamaiReportCountTest(unittest.TestCase):
+    def test_historical_versions_do_not_inflate_current_report_count(self) -> None:
+        engine = create_engine("sqlite://")
+        try:
+            with engine.begin() as connection:
+                connection.execute(text(
+                    "CREATE TABLE statement_report (stock_code TEXT, report_kind TEXT, "
+                    "period_label TEXT, version INTEGER, status TEXT)"
+                ))
+                connection.execute(text(
+                    "INSERT INTO statement_report VALUES "
+                    "('DAMAI.SYN','年报','FY2025',1,'published'), "
+                    "('DAMAI.SYN','年报','FY2025',2,'published'), "
+                    "('DAMAI.SYN','年报','FY2026',1,'published'), "
+                    "('OTHER','年报','FY2025',1,'published')"
+                ))
+                count = verify_damai_demo.count_latest_published_damai_reports(connection)
+            self.assertEqual(count, 2)
+        finally:
+            engine.dispose()
+
+    def test_latest_unpublished_version_is_not_counted_as_published(self) -> None:
+        engine = create_engine("sqlite://")
+        try:
+            with engine.begin() as connection:
+                connection.execute(text(
+                    "CREATE TABLE statement_report (stock_code TEXT, report_kind TEXT, "
+                    "period_label TEXT, version INTEGER, status TEXT)"
+                ))
+                connection.execute(text(
+                    "INSERT INTO statement_report VALUES "
+                    "('DAMAI.SYN','年报','FY2025',1,'published'), "
+                    "('DAMAI.SYN','年报','FY2025',2,'draft'), "
+                    "('DAMAI.SYN','年报','FY2026',1,'published')"
+                ))
+                count = verify_damai_demo.count_latest_published_damai_reports(connection)
+            self.assertEqual(count, 1)
+        finally:
+            engine.dispose()
 
 
 if __name__ == "__main__":
