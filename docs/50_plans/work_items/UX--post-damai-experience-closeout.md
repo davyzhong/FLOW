@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 2.4
+version: 2.5
 created_at: 2026-09-24
 updated_at: 2026-09-26
 owner: FLOW
@@ -134,7 +134,9 @@ Run: `python3 scripts/check_docs.py --phase m1` and the repository link check
 
 #### Gate 5 数据库安全前置修正（2026-09-26）
 
-复核发现 `scripts/test_dashboard.sh` 在 pytest 前直接执行 Alembic upgrade 与 `seed_dashboard_demo.py --fresh-batch`；`tests/conftest.py` 的 `flow_test` 自动切换只保护 pytest 进程，不能保护此前的迁移/seed 子进程。因此在此脚本改为默认并校验数据库名为 `flow_test` 前，禁止运行 `make test-dashboard`。验收脚本修复属于 Gate 5 的安全前置，不允许以“本地开发库”为理由豁免；通过后才运行 dashboard 浏览器旅程，常驻 `flow` 继续只读。
+复核发现 `scripts/test_dashboard.sh` 在 pytest 前直接执行 Alembic upgrade 与 `seed_dashboard_demo.py --fresh-batch`；`tests/conftest.py` 的 `flow_test` 自动切换只保护 pytest 进程，不能保护此前的迁移/seed 子进程。已修复为默认且强制数据库名 `flow_test`、主机仅允许 `localhost`/`127.0.0.1`，缺库时只创建固定的 `flow_test`；指向 `flow` 或非本机地址时迁移前拒绝。Next 在本轮临时 web 副本运行，Playwright 从仓库根加载权威配置/fixtures，避免共用 `.next` 锁且不改真实工作区配置。
+
+安全验收：显式把 URL 指向 `flow` 时脚本退出码2并输出拒绝信息；`make test-dashboard` 在 `flow_test` 执行迁移/seed，摘要含12个月/8卡，Playwright 7/7通过。该脚本不再对常驻 `flow` 写入。安全性修复后 Gate 5 dashboard 验收通过；仍须同 SHA CI、页面覆盖矩阵与 Gate 1干净提交证据收尾。
 
 ## 不做 / 保护边界
 
