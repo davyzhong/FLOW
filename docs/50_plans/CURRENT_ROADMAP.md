@@ -17,7 +17,7 @@ superseded_by: null
 
 # 当前路线图（唯一主线）
 
-> 2026-09-26 更新：Gate 5 dashboard CI 通用 `/flow` URL 冲突已在测试脚本修复，脚本回归2/2、本机 dashboard E2E 7/7通过；`29877d1` 的 GitHub run `36224649915` dashboard job 成功，整条 workflow 当时尚有 integration/data-contract/intake-e2e 长测运行。全站深链批次二本地验证已通过，代码提交后的 CI 待核验。详见大麦体验收口工作包与深链计划。
+> 2026-09-26 更新：Gate 5 dashboard CI 通用 `/flow` URL 冲突已在测试脚本修复，脚本回归2/2、本机 dashboard E2E 7/7通过；`29877d1` 的 GitHub run `36224649915` dashboard job 成功，整条 workflow 当时尚有 integration/data-contract/intake-e2e 长测运行。深链批次一、二已在本地通过验收并推送为 `7976691`；该 SHA 隔离 Damai 全旅程 verify19/19、E2E9/9，CI run `36225466153` 尚待最终结果。详见大麦体验收口工作包与深链计划。
 
 > **本页是全仓唯一主线**：既维护状态真相，也维护执行队列。2026-09-25 用户裁决（2A）后不再存在第二份「唯一」文档：EXECUTION_TODO、整合总计划、统一完整实施计划与执行收敛计划均已归档为历史/参考，状态与任务只以本页和工作包为准。详细验收步骤在各工作包与参考规格。
 
@@ -53,7 +53,7 @@ superseded_by: null
 1. **C 级交叉评归因与原件复核**（上表3，进行中）：42 个确认异常已全部归因为真实抽取错误（`4111f6a`：19 项空白/破折号误借邻年值、22 项京东物流权益变动表误分类、1 项阿里 FY2023 前期商誉减值漏抽）；剩余：109 个口径疑点待裁决、JDL 200 格重核（英文版已冻结 `b161fff`，输入条件具备）、抽取器修订（实现方职责）。只在归因后修订新版本订正记录，保留原值与证据。
 2. **U4 解析器修复与真正的新留出**（上表1'）：新留出双样本已冻结并完成独立 oracle 录入（`926af825`：小米 2026H1 + 阿里 FY2027Q1，抽签记录见 [holdout-lottery-2026-09-25](../../validation/financial_reports/holdout-lottery-2026-09-25.md)）。剩余：`cn_ashare_table` 支持「合并及公司」标题与页码区间参数化；旧三样本回归；新留出首跑前禁止适配/调参。
 3. **重新跑质量基准并完成 C 级 Go/No-Go**：依赖必要修订、U4新留出首跑和盲测；重跑L1并归档机器结果。交叉评与抽签均不单独构成通过，`1794/1794` 只表示已登记覆盖口径。
-4. **全站超链接化（深链下钻）**（**active**，用户 2026-09-26 确认）：按[实施计划](2026-09-26-ui-deep-link-implementation-plan.md)三批推进。**批次一、二已完成本地验收**：六页接收端 + S/M 级下钻；新增指标条目、MetricSnapshot、AnalysisRun 只读详情 API 和授权血缘约束；Copilot 引用定位；公开覆盖矩阵报告链接映射。相关 API/安全测试51/51、Web单测133/133、深链 Playwright15/15、typecheck、合同生成、文档门禁通过。基线 `29877d1` 的 CI 在此前观察时仍有三项长测运行，且不是当前深链变更 SHA；须以本批次提交后的 CI 确认。**批次三尚未开始**（原文/源记录查看器、冻结产物回链、ManagementWatchItem 关联等），计划不可关闭。详见[实施计划](2026-09-26-ui-deep-link-implementation-plan.md)和[可链接性审计](../80_reviews/2026-09-26-ui-linkability-audit.md)。
+4. **全站超链接化（深链下钻）**（**active**，用户 2026-09-26 确认）：按[实施计划](2026-09-26-ui-deep-link-implementation-plan.md)三批推进。**批次一、二已完成本地验收并推送 `7976691`**：六页接收端 + S/M 级下钻；新增指标条目、MetricSnapshot、AnalysisRun 只读详情 API 和授权血缘约束；Copilot 引用定位；公开覆盖矩阵报告链接映射。API/安全51/51、Web单测133/133、深链 Playwright15/15、typecheck、合同生成、文档M1/M6门禁通过；该 SHA 隔离 Damai 全旅程 verify19/19、E2E9/9。GitHub CI run `36225466153` 尚待最终核验。**批次三尚未开始**（原文/源记录查看器、冻结产物回链、ManagementWatchItem 关联等），计划不可关闭；Gate 1全路由数据/页面覆盖矩阵仍待完成。详见[实施计划](2026-09-26-ui-deep-link-implementation-plan.md)和[可链接性审计](../80_reviews/2026-09-26-ui-linkability-audit.md)。
 5. **大麦数据可见性与剩余 UX 收口**（上表2b，用户已批准）：Gate 1初始矩阵绑定`main@3ff95115` + dirty overlay，不是干净提交版。FY2025工作台契约故障已修复；Gate 2覆盖FY2025 37/40、FY2026 40/40；OCF与矩阵选择均在隔离栈验收。批次历史列表在 clean SHA `59b328dc` 的 Damai 全旅程通过（verify19/19、E2E9/9），但不等于全路由 Gate1矩阵完成。CI通用`/flow` URL冲突已在`test_dashboard.sh`修复；`85e907a` 的 run `36223558441` dashboard job成功，完整workflow其余长测仍运行。其余Gate3/4页面/缺口呈现与下钻、Gate5全链回归仍待完成；不对常驻库执行未批准写入。
 6. **P3 数据与溯源接入**（上表3b）：修复/替换ZTO文本层，完成抽取、勾稽、页锚及API/UI链路测试；评审并实现真实来源链接；复核阿里分部序列在main的来源和可见性。
 7. **知识 release 收尾**（上表K）：完成K0–K6，核对M2用户追认、`CURRENT_RELEASE`、sealed candidate/激活记录、Task 10三仓库证据和独立复验；用户裁决前不切指针。
