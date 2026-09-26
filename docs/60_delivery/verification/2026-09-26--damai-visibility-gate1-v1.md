@@ -3,12 +3,12 @@ doc_id: FLOW-VERIFY-DAMAI-VISIBILITY-GATE1-001
 title: 大麦数据可见性 Gate 1 API 诊断证据 v1.5
 doc_type: verification
 status: draft
-version: "1.7"
+version: "1.8"
 created_at: 2026-09-26
 updated_at: 2026-09-26
 owner: FLOW
-commit_refs: "[3ff95115, 6591e148, 4932504c, 9cd43e20, 905cf544, e2417ffa, af375ba3, 101bcf23]"
-evidence_refs: "[read-only-local-api-probe, stable-overlay-fingerprint, sha256-response-matrix, damai-ocf-canonical-fixture, damai-isolated-seed-verify, damai-e2e-8-of-9, damai-e2e-9-of-9-ocf-trends-complete, margin-matrix-read-only-grain-audit, margin-comparison-selection-isolated-e2e-9-of-9]"
+commit_refs: "[3ff95115, 6591e148, 4932504c, 9cd43e20, 905cf544, e2417ffa, af375ba3, 101bcf23, 5510bad3]"
+evidence_refs: "[read-only-local-api-probe, stable-overlay-fingerprint, sha256-response-matrix, damai-ocf-canonical-fixture, damai-isolated-seed-verify, damai-e2e-8-of-9, damai-e2e-9-of-9-ocf-trends-complete, margin-matrix-read-only-grain-audit, margin-comparison-selection-isolated-e2e-9-of-9, github-ci-stale-damai-coverage-assertion]"
 knowledge_release: flow-knowledge-2026-09-12.1
 applies_to: web-frontend
 supersedes: []
@@ -80,6 +80,8 @@ superseded_by: null
 归因：22个未发布实际毛利格不是快照聚合遗漏的已存在源事实；canonical 中没有相应实际组合，必须保持缺失，禁止补零。服务端比较选择逻辑要求预算或同比覆盖全部32格；两者均不满足时固定退回同比，从而丢弃较多的预算比较格。
 
 修复与隔离验收（2026-09-26）：新增比较选择单元测试，按可用格数选单一比较类型，预算与同比覆盖数相等时预算优先；两个比较均无格时保持“不可用”。在真实隔离大麦全旅程中，新增 API E2E 断言通过：矩阵32格、实际可用10格、预算比较可用10格、标签“预算”、22格实际 `exact_value=null`；矩阵整体保持 `degraded`。完整 `bash scripts/test_damai_demo_e2e.sh`：verify 19/19、E2E 9/9；dashboard相关pytest 13 passed，ruff/mypy与前端 typecheck通过。该测试运行来自含并行会话未提交改动的工作树，不能代替本修复提交后的 CI 和干净 SHA 全目标复测；常驻数据库未写入。
+
+CI 补充（run `36217337338`，SHA `5510bad3`）：18 个作业中仅 integration 失败，257 passed / 1 failed；唯一失败是 `test_coverage_endpoint_damai_dataset_is_synthetic_and_honest` 仍要求两个期间都必须小于40项可计算，与已批准、已生成的FY2025 37/40及FY2026 40/40发行矩阵冲突。测试已改为校验精确期间覆盖数并保持缺口结构断言；按 `services/api` 工作目录本地定向用例1/1通过。修正提交的 CI 尚待运行；不把 `5510bad3` 标作CI通过。
 
 完整 Gate 1 仍需完成其余缺口逐项归因和干净提交 SHA 的全目标路由复测。本记录支持已确认的故障定位与修复证据，不支持整体页面覆盖验收完成声明。
 

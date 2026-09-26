@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 2.2
+version: 2.3
 created_at: 2026-09-24
 updated_at: 2026-09-26
 owner: FLOW
@@ -104,6 +104,8 @@ Acceptance: 40项指标逐项有“适用且可计算 / 适用但缺源事实 / 
 服务逻辑曾要求某种比较值覆盖全部32格，才选择预算/同比；两者均不满足时退回同比，因此丢弃了覆盖更高的预算比较。修复后按同一矩阵实际可比格数选择单一比较口径，优先覆盖数更多者、同数时预算优先；没有已发布值的格保持显式 unavailable，矩阵整体仍 degraded，不做零填充。格级 `metric_grain_not_published` / `comparison_not_published` 继续表达“快照无该值”，不擅自改标为“无业务活动”或“不适用”。
 
 修复验收（2026-09-26）：`bash scripts/test_damai_demo_e2e.sh` 隔离旅程通过，verify 19/19、E2E 9/9；新增驾驶舱 API 断言实测32格、实际10格、预算比较10格、比较标签“预算”，并确认无实际值的格 `exact_value=null`。Dashboard 测试13项、前端 typecheck、ruff、mypy均通过。该轮运行来自含其他会话未提交文件的共享工作树，但改动文件已明确隔离；因此它是功能验收证据，不替代提交后的 CI 与干净 SHA Gate 1复测。常驻库保持只读。
+
+CI 纠偏（2026-09-26）：`5510bad3` 的 GitHub Actions integration 因历史测试断言失败（将 FY2025、FY2026 都要求 `computable < total`）而失败；静态发行矩阵与 Gate 2 合同明确为 FY2025 37/40、FY2026 40/40。将断言改为精确校验这两个期间覆盖数，未放宽缺口真实性检查（仍要求至少一个缺失格且每格 display/missing 互斥）。本地同文件另有未提交的映射测试，按 CI 工作目录（`services/api`）运行后，该修正用例通过 1/1；仅暂存独立断言 hunk，保留其余并行改动不提交。修正提交后的 CI 尚待结果。
 
 Files:
 - Inspect/modify if root-caused: `services/api/src/flow_api/fixtures/damai/canonical.py`, `services/api/src/flow_api/fixtures/damai/generator.py`, `services/api/src/flow_api/dashboard/fixture.py`, `services/api/src/flow_api/dashboard/repositories.py`, `services/api/src/flow_api/dashboard/service.py`, `scripts/seed_damai_demo.py`, `scripts/test_damai_demo_e2e.sh`, `apps/web/e2e/damai-demo.spec.ts` and the owning metric snapshot service

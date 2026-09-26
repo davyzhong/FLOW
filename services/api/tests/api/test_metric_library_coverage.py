@@ -68,8 +68,10 @@ def test_coverage_endpoint_damai_dataset_is_synthetic_and_honest() -> None:
                     "缺口必须是结构化取数原因，不是文案"
                 )
     assert missing_cells > 0, "覆盖矩阵必须如实暴露缺口（不得全绿冒充）"
-    for snapshot in body["snapshots"]:
-        assert 0 < snapshot["computable"] < snapshot["total"]
+    computable_by_period = {
+        snapshot["period"]: snapshot["computable"] for snapshot in body["snapshots"]
+    }
+    assert computable_by_period == {"FY2025": 37, "FY2026": 40}
 
 
 def test_coverage_endpoint_rejects_unknown_dataset() -> None:
