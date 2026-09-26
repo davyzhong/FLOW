@@ -1,11 +1,11 @@
 {
   "contract_version": "flow.enterprise-package.v1",
-  "enterprise_code": "DAMAI_LOGISTICS",
+  "enterprise_code": "damai-logistics",
   "enterprise_name": "大麦物流集团",
   "files": {
     "README.md": {
-      "bytes": 3398,
-      "sha256": "8c99bc7f4ad270d7b9acc22e17484851f63392f0887f547a9ad781a61e235c27"
+      "bytes": 4712,
+      "sha256": "9994671921f69d57ec1195271ba6ae8a32f85e6442305c55f1c4f58e161e6909"
     },
     "business/canonical/ar_collections.jsonl": {
       "bytes": 1393682,
@@ -41,6 +41,10 @@
       "bytes": 1140,
       "rows": 9,
       "sha256": "2802026cbf8cb9ffcc7b51c17ec98adca8bb3222981f72160dd51dd83ce5a6b1"
+    },
+    "business/canonical/manifest.json": {
+      "bytes": 1950,
+      "sha256": "ac5f0bf828c98c69c10400d105bcea29c22cef90fcf1ae089dbd1a22586c9c07"
     },
     "business/canonical/monthly_budgets.jsonl": {
       "bytes": 3177413,
@@ -97,6 +101,10 @@
       "bytes": 1327348,
       "sha256": "a066cb5ea20ef854730fa6e3174a8f82191f6207c4a10d1d48edc8e8e236ebc8"
     },
+    "initialize.sh": {
+      "bytes": 327,
+      "sha256": "817dbe176a55fe3c1f21eb170e851cb683160179423350396112b0c2dacb1c3b"
+    },
     "organization/departments.jsonl": {
       "bytes": 1099,
       "rows": 8,
@@ -121,6 +129,22 @@
       "bytes": 2617,
       "rows": 8,
       "sha256": "5bb1048719bcda40b1f6f85996d845d171071408f8050867fc524af286707c4d"
+    },
+    "sql/00_preflight.sql": {
+      "bytes": 737,
+      "sha256": "01fe69605689e7c095d45509ae9983c5c36f0685090ab1d355b0aab6ebb71ba8"
+    },
+    "sql/10_organization.sql": {
+      "bytes": 24390,
+      "sha256": "ffe1a81feac79bcb02d23b055009e1ed58564ae7a6a57fdfaed774ee5808bd1e"
+    },
+    "sql/20_business_reset.sql": {
+      "bytes": 3887,
+      "sha256": "8e79251d43d150328dd6f2760ad69942a7e2af5d29503e44e36ff79671909e9b"
+    },
+    "sql/90_verify.sql": {
+      "bytes": 732,
+      "sha256": "4bb4d202d4950128bddf720079cfdb2099145d551a78d68306e602179ed33f1d"
     }
   },
   "modules": {

@@ -3,7 +3,7 @@ doc_id: FLOW-WI-ORG-LEDGER-001
 title: 企业组织建制与经营账套初始化包
 doc_type: work-item
 status: active
-version: 1.1
+version: 1.2
 created_at: 2026-09-27
 updated_at: 2026-09-27
 owner: FLOW
@@ -158,3 +158,30 @@ data/enterprise/damai-logistics/v1/
 这个最小 schema 不实现共享账号跨企业 membership、动态授权策略或通用多租户 SaaS。
 包内 actor ID 带企业命名空间，避免触发现有全局 actor 唯一约束；数据库服务隔离仍
 按现行企业 scope policy。未来 SaaS 登录身份与企业 membership 若需共享，再独立设计。
+
+## 2026-09-27 执行记录（单一主线）
+
+本地隔离验收已通过，最终工作包关闭仍以本次提交的同 SHA CI success 为准；不得据此
+声称已在常驻开发库初始化。隔离 PostgreSQL/MinIO 使用独立 Compose project，端口
+15432/16379/19000，目标数据库 `flow_test`，与常驻 `flow`/MinIO 分离。
+
+- 数据包构建两次结果一致：31 个发行文件；manifest SHA-256
+  `cbc7cccf924092ae7ca5f68eb8a797473cf6efcf31f4e91fbe22aa6f7758e513`；组织含8单元、
+  8岗位、8身份、142条当前 RBAC allow 快照。校验拒绝路径覆盖越界路径、未登记文件、
+  凭据字段、contract 版本及 JSONL/生成 SQL 漂移。
+- `tests/enterprise` 与旧 loader 回归：11 passed。隔离 `full` 首次、重复 `full` 和
+  `business` 三次均对账为财务实际768、预算10752、经营实际1920、应收回款4800、快照12、
+  有效成员8；重复 reset 归档3条 review history。注入 seed 失败的回滚测试通过；非目标
+  企业批次与无关批次保留；full 同步角色绑定，business 不写组织模块。
+- 旧大麦旅程：`scripts/test_damai_demo_e2e.sh` 的隔离运行 verify 19/19、只读 API
+  43/43、Playwright 9/9；对象 SHA/语义回读通过。测试栈使用独立 Compose project；
+  未访问常驻库/对象存储。
+- 完整 API 852 passed；Web 142 passed；脚本测试107 passed；contracts-check、API ruff、
+  API mypy（203 files）、Web lint（0 errors、1既有 React Compiler warning）、Web
+  typecheck、文档 M1（297 docs/0 errors）、plan views、links 和 `git diff --check` 通过。
+- 测试回归修正：迁移 head 断言更新到0031；企业周期测试 teardown 按新增三表的 RESTRICT
+  外键顺序清理；语义上下文 API 测试先显式导入指标目录，保证空白隔离数据库可复验。
+  `make damai-demo-build` 改用锁定的 uv 环境，修复系统 Python 缺 PyYAML 的可移植性失败。
+
+**当前状态：**代码/隔离验收与文档门禁已通过；需完成提交推送和同 SHA CI。CI 绿后才能将
+本工作包标记 completed 并启动路线图第2项 UX 全站验收。

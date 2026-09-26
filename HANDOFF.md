@@ -3,14 +3,14 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目尽调、优化与单 Agent 执行总交接
 doc_type: navigation
 status: current
-version: 4.7
+version: 4.8
 created_at: 2026-09-12
 updated_at: 2026-09-27
 owner: FLOW
 applies_to: repository
 ---
 
-# FLOW 项目尽调、优化与单 Agent 执行总交接｜2026-09-27
+# FLOW 项目尽调、优化与单 Agent 执行总交接｜2026-09-27 更新
 
 > 本页是下一位单一 Agent 的工作入口，整合了多 Agent 执行审计、R1 修复复核、竞品与方法论研究、工程收口计划和后续产品优化建议。它负责说明“现在在哪里、还要查什么、先改什么、怎样证明完成”；项目状态仍以 [PROJECT_STATE](docs/00_start_here/PROJECT_STATE.md) 为唯一事实源，任务顺序仍以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为唯一执行入口。
 
@@ -20,14 +20,14 @@ applies_to: repository
 
 ### 接手基线、当前状态与操作纪律
 
-- 本次最新状态快照基于已推送主线 `c08a2f6a`（`c17fbebe` 为前一状态同步）。`gh run list --commit c08a2f6a` 未发现 CI run。实际应用/数据包代码基线为 `fc6e63a7`：包含 `9729dbc4` ORG-LEDGER 工作包、`880f1b76` 三表 schema 提案、`e1a4d264` 大麦企业包基础，以及 `fc6e63a7` 对具体 schema 的批准记录和 README 元数据修正。接手时必须重新核对最新 main 和同 SHA CI，不得沿用旧 SHA 的绿灯。下一位 Agent 开始前执行 `git pull --ff-only` 并核对当前 dirty changes，不要为了“clean”丢弃代码草案。
-- 文档门禁现状：在当前基线 `fc6e63a7` 上，本次本地重跑 `python3 scripts/check_docs.py --phase m1` 为 PASS（297 docs、89 legacy-exempt、0 errors）；`plan_views.py --check`、链接检查和 `git diff --check` 均 PASS。`python3 scripts/build_enterprise_data_package.py verify` 同样 PASS（25 个登记文件）。这些是当前本地结果，不代表未来交接提交的 CI；仍需在交接提交后核同 SHA CI。
-- 路线图队列：11 项；本次最新盘点为已完成 0、实际执行中 0、队首待续 1、排队 9、外部材料受限 1。唯一队首为 ORG-LEDGER；最近 `uv run pytest -q tests/enterprise tests/fixtures/test_damai_loader.py` 进程已结束，但退出码/日志未从发起终端回收，不能视为通过。队列顺序和每次状态变化只更新 `CURRENT_ROADMAP.md`；每完成一项，补验收证据、更新工作包/`PROJECT_STATE.md`，提交并立即推送后才进入下一项。
+- 本轮从 GitHub `main` 快进同步到 `0aa2e880` 开始，在 `/Users/qiming/workspace/FLOW/.worktrees/execution-convergence` 的唯一 `main` 工作树执行；本轮更改尚未提交，最终 SHA/CI 尚无。历史 `c08a2f6a` / `fc6e63a7` 只用于解释先前交接，不是本轮代码基线。已核对无其他 Agent 进程继续改写本工作树；早先“Review FLOW project code”线程已按用户要求停止。
+- **当前路线图计数（唯一队列11项）**：已完成 0、实际执行中 1（ORG-LEDGER，本地验收通过、待提交推送/同 SHA CI）、排队 9、外部材料受限 1。工作包只有 CI 同 SHA success 后才从队首关单，随即进入第2项 UX 全站验收；不并行开启第二项。
 - 只在 `main` 上做，禁止新建并行任务分支；不得同时开始下一项。用户已授权常规项目实施与验证，不再为日常测试、分析、文档或常规实现请求再次批准。既有全局安全红线仍有效：真实数据迁移/schema、删除/覆盖/恢复常驻库、密钥/CI 配置、公开部署等按 `AGENTS.md` 处理；尤其常驻 `flow` 中的测试批次偏差 `01a0dcdd-8245-7c17-99aa-fce91a8a7a57` 不得自行删除、回滚或切 latest。
 - **状态口径**：`进行中`=此刻确实有命令、审查或实现正在执行；`队首待启动`=当前第一项但未开工；`排队`=严格等待前项完成；`外部材料受限`=先按本手册执行主动恢复和替代方案，不是停工态。工作包 frontmatter 的 `active/blocked` 表示工作包生命周期或验收门槛，不覆盖路线图执行状态。
 - **ORG-LEDGER 的最新事实与安全边界**：工作包由 `9729dbc4`、具体三表 schema 提案由 `880f1b76` 推送；用户批准该准确方案由 `fc6e63a7` 记录。批准仅覆盖工作包列出的三表与对应迁移，不覆盖额外 schema、认证/RBAC 改造，也不授权在共享/常驻 DB 清理/初始化。可执行已批准迁移，但只在隔离数据库验证；不要对常驻库迁移或写入。
-- **发行包基础和当前未提交实现草案**：`e1a4d264` 已将 `data/enterprise/damai-logistics/v1/` 下27个包文件及 `scripts/build_enterprise_data_package.py` 一并推送到 main（该提交新增28个文件）；不要重复生成或重建同名目录。较早只读运行 `python3 scripts/build_enterprise_data_package.py verify` 得到 exit 0：manifest 登记的25个文件 SHA/JSONL 行数通过，样例为8个组织单元、8个岗位、8个身份、142条权限映射。此自检**不等于工作包验收**：仍需验证 build 幂等、manifest 覆盖、恶意/缺项拒绝、合成/凭据字段安全、RBAC 映射、业务引用及 full/business 初始化。当前 dirty worktree 包括发行 `manifest.json`、build 脚本、`data/.../initialize.sh` 与 `data/.../sql/`、`scripts/initialize_enterprise_package.py`、`fixtures/damai/loader.py`/`reset.py`/`initialize.py`、模型注册修改，以及目录模型、企业服务、0031 迁移和 `tests/enterprise/` 草案；均不得覆盖、重置或擅自暂存。最近 `uv run pytest -q tests/enterprise tests/fixtures/test_damai_loader.py` 进程已结束但未回收到结果；接手者先检查原终端日志，无法恢复则在审阅全部代码和隔离 DB target 后重跑并保存退出码/日志，再对照获批 DDL 继续。
+- **ORG-LEDGER 当前已完成的本地验收（尚未由提交 CI 确认）**：`build_enterprise_data_package.py build` 连续两次输出31个发行文件，manifest SHA 固定为 `cbc7cccf924092ae7ca5f68eb8a797473cf6efcf31f4e91fbe22aa6f7758e513`；组织8/8/8、权限快照142条。`tests/enterprise` + `tests/fixtures/test_damai_loader.py` 为11 passed。隔离 CLI 的首次 `full`、重复 `full`、`business` 三路径均为财务实际768、预算10752、经营实际1920、应收回款4800、快照12、有效成员8；重复重置归档3条 review history，事务失败回滚/非目标企业保护测试通过。旧大麦隔离脚本 verify19/19、GET43/43、Playwright9/9通过。清洁隔离库完整 API 852 passed（37:25）、Web142 passed、脚本107 passed、contracts-check、API ruff/mypy、Web lint/typecheck、M1（297 docs/0 errors）、links、plan views通过。Web lint仅有一条既有 React Compiler warning。`make damai-demo-build` 原先用系统 Python 缺 PyYAML；已改为锁定的 uv 项目环境，标准目标通过，FY2025 37/40、FY2026 40/40。所有数据库命令仅写独立 Compose 项目，常驻 `flow` 与共享 MinIO未触碰；测试栈现已停止但卷保留。全量 API 初次在已加载测试数据的隔离卷出现迁移/清理错误，修正测试库清理顺序、旧 migration head 断言及一个缺少目录导入 fixture 后，干净新卷最终852全绿；失败证据和修复已写入 ORG 工作包与本手册当前快照。
 - **遇到失败的统一处理**：保留原始日志和失败产物 → 定位根因并判别代码/数据/环境/外部输入 → 先运行最小重现 → 做最小修复或有记录的替代验证 → 重跑原失败项及相邻回归。禁止删断言、改预期值迎合实现、重写原始 oracle、用 synthetic 结果冒充真实验收。若原验收客观上不可完成，交付可复现的调查、替代结果、未满足项与重启条件；不能声称原验收通过。
+- **当前唯一下一动作**：最后复核本工作树差异与文档门禁，提交 ORG-LEDGER 及必要状态文档到 `main` 并立即 push；随后查询该提交的 GitHub CI。CI success 后更新队列计数（1 completed/第2项 in progress）并直接开始 UX 全站验收，不再拆分分支或另开计划。CI 若失败，按失败 job 复现/修复，重跑对应门禁并以新的普通提交继续。
 - **每项汇报格式**：完整 11 项队列和计数；当前项与细分步骤；本轮完成证据（SHA、命令、结果）；实际问题/替代路径；下一项何时解锁和唯一下一动作。不要写“等待用户验证/批准”作为常规动作；只有触及明文安全红线的 schema 执行边界才须记录为精确批准门。
 
 ### 唯一串行 To-do 的逐项操作卡

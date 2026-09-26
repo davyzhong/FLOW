@@ -29,6 +29,11 @@ from flow_api.enterprise.models import (
 )
 from flow_api.financial_facts_v2.models import ContractV2Violation
 from flow_api.infrastructure.db import get_engine
+from flow_api.infrastructure.models.enterprise_directory import (
+    EnterpriseMember,
+    EnterpriseOrgUnit,
+    EnterprisePosition,
+)
 from flow_api.infrastructure.models.intake import AnalysisBatch
 
 
@@ -42,7 +47,14 @@ def session() -> Session:
     with Session(get_engine(), expire_on_commit=False) as database_session:
         yield database_session
         database_session.rollback()
-        for model in (AnalysisBatch, AnalysisCycle, Enterprise):
+        for model in (
+            AnalysisBatch,
+            EnterpriseMember,
+            EnterprisePosition,
+            EnterpriseOrgUnit,
+            AnalysisCycle,
+            Enterprise,
+        ):
             database_session.execute(delete(model))
         database_session.commit()
 
