@@ -60,14 +60,27 @@ test("dashboard API serves customer-grain overview", async ({ page }) => {
     state: string;
     context: { batch_id: string };
     metric_cards: { metric_code: string; primary: { status: string; exact_value: string | null } }[];
+    trends: {
+      status: string;
+      coverage_count: number;
+      points: { operating_cash_flow: { status: string; exact_value: string | null } }[];
+    };
     filter_options: {
       dimensions: { dimension: string; options: { id: string; name: string }[] }[];
     };
   };
-  // OCF actual 不存在是合同真相（工作簿财务实际无该科目），总量域因此如实 degraded
+  // OCF actual 已进入财务事实与指标快照，应返回真实可用值。
   expect(["ready", "degraded"]).toContain(body.state);
   const ocfCard = body.metric_cards.find((card) => card.metric_code === "operating_cash_flow");
-  expect(ocfCard?.primary.status).toBe("unavailable");
+  expect(ocfCard?.primary.status).toBe("available");
+  expect(ocfCard?.primary.exact_value).not.toBeNull();
+  expect(body.trends.status).toBe("complete");
+  expect(body.trends.coverage_count).toBe(12);
+  expect(body.trends.points).toHaveLength(12);
+  for (const point of body.trends.points) {
+    expect(point.operating_cash_flow.status).toBe("available");
+    expect(point.operating_cash_flow.exact_value).not.toBeNull();
+  }
 
   const dims = Object.fromEntries(
     body.filter_options.dimensions.map((d) => [d.dimension, d.options]),

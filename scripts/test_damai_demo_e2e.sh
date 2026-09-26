@@ -28,6 +28,7 @@ logs_dir="$(mktemp -d)"
 api_pid=""
 web_pid=""
 stack_up=0
+web_app_dir=""
 
 cleanup() {
   status=$?
@@ -42,6 +43,9 @@ cleanup() {
     "${COMPOSE[@]}" down -v >/dev/null 2>&1 || true
     "${COMPOSE[@]}" down -v >/dev/null 2>&1 || true
   fi
+  case "${web_app_dir}" in
+    "${ROOT}"/work/damai-demo/web-app.*) rm -rf "${web_app_dir}" ;;
+  esac
   rm -rf "${logs_dir}"
 }
 trap cleanup EXIT
@@ -61,11 +65,24 @@ mkdir -p work/damai-demo
   --output "${ROOT}/work/damai-demo/e2e_seed_receipt.json")
 (cd services/api && uv run python ../../scripts/seed_dev_principal.py)
 
+# 在本轮临时副本启动 Next：并行开发服务可继续使用 apps/web/.next，Next 自动更新的
+# next-env.d.ts/tsconfig.json 也只落在临时副本内，不污染共享工作区。
+web_app_dir="$(mktemp -d "${ROOT}/work/damai-demo/web-app.XXXXXX")"
+rsync -a \
+  --exclude='node_modules/' \
+  --exclude='.next/' \
+  --exclude='.next-damai-e2e.*/' \
+  --exclude='test-results/' \
+  --exclude='playwright-report/' \
+  --exclude='*.tsbuildinfo' \
+  "${ROOT}/apps/web/" "${web_app_dir}/"
+ln -s "${ROOT}/apps/web/node_modules" "${web_app_dir}/node_modules"
+
 python3 scripts/run_service.py --cwd services/api -- .venv/bin/python -m uvicorn flow_api.main:app --host 127.0.0.1 --port "${api_port}" \
   >"${logs_dir}/api.log" 2>&1 &
 api_pid=$!
 
-python3 scripts/run_service.py --cwd apps/web -- node node_modules/next/dist/bin/next dev --hostname 127.0.0.1 --port "${web_port}" \
+python3 scripts/run_service.py --cwd "${web_app_dir}" -- node node_modules/next/dist/bin/next dev --hostname 127.0.0.1 --port "${web_port}" \
   >"${logs_dir}/web.log" 2>&1 &
 web_pid=$!
 
