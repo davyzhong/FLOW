@@ -1,9 +1,9 @@
 ---
 doc_id: FLOW-VERIFY-DAMAI-VISIBILITY-GATE1-001
-title: 大麦数据可见性 Gate 1 API 诊断证据 v1
+title: 大麦数据可见性 Gate 1 API 诊断证据 v1.1
 doc_type: verification
 status: draft
-version: "1.0"
+version: "1.1"
 created_at: 2026-09-26
 updated_at: 2026-09-26
 owner: FLOW
@@ -83,3 +83,15 @@ superseded_by: null
 - 毛利矩阵32格中，22格实际值为 `metric_grain_not_published`，24格比较值为 `comparison_not_published`。API 顶层批次、导入、质量、对账、指标快照、分析运行和新鲜度都标记为已发布/通过/新鲜，说明“流水线成功”不代表每个指标粒度与比较值已发布。
 - 指标覆盖响应列出的缺失字段组：`is.interest_exp(cur)` 7个指标、`bs.short_debt(end)` 3个、`bs.long_debt(end)` 1个、`bs.ap(end)` 2个、三个 `prev_yoy` 同比基期字段3个、`cf.cash_from_sales(cur)` 1个、`cf.capex(cur)` 1个；合计18项指标。`missing` 是标准化事实层的缺失声明，尚不能单独判定原始披露、映射缺失或不适用。
 - 责任初分：现金流趋势/指标粒度/比较缺失进入 Gate 3（发布快照和聚合）；18项标准化事实字段进入 Gate 2（对照合成原报表与指标公式逐项裁决适用性和事实来源）；不得直接以零填补或将财务费用等近似科目替代。
+
+## Gate 2 静态事实补齐证据（2026-09-26）
+
+确定性财报生成器在既有24个月 synthetic 数据上新增7个规范事实：`is.interest_exp`、`bs.short_debt`、`bs.ap`、`bs.long_debt`、`cf.cash_from_sales`、`cf.capex`、`is.dep_amort`。不改变既有报表总额，生成财报从40行增至51行（IS14、BS20、CF13、权益4）。合成比例作为生成器常量及发行包附注公开。
+
+| 工件 | SHA-256 |
+|---|---|
+| `fixtures/damai/statements/damai_fy2025.yaml` | `f5c3ddd4fac97dc59f18c31f11d9a74021fa5a0590f9c2ec7b93a9e8d2804322` |
+| `fixtures/damai/statements/damai_fy2026.yaml` | `7ed1280aeaf18f0758f257c1059c11e37f5883683b160a6f6f6c9c3945083785` |
+| `config/metrics/damai_demo_metric_coverage_v1.yaml` | `e256bc20ccf1283465ffe6e4d997de6209a335ad4ba874208ff8d85d8678f0fb` |
+
+指标覆盖生成结果 FY2025 37/40、FY2026 40/40；FY2025未计算的三项为收入增长、净利润增长、营业利润增长，因输入包无 FY2024 比较期而标记该期间无适用比较值；FY2026三个同比值可计算。生成器重复执行后覆盖工件 SHA 不变。财报 fixture、loader、归一化测试24项通过，ruff/mypy与发行包 `--check` 通过。当前证据只证明静态工件与隔离 `flow_test` 的导入/规范化，不代表常驻 `flow` 已重载新报表；该验证仍由后续隔离发布旅程完成。

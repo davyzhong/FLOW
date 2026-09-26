@@ -231,6 +231,7 @@ companies:
           管理费用: {item: is.admin_exp, abs: true}
           研发费用: {item: is.rnd_exp, abs: true}
           财务费用: {item: is.fin_exp, abs: true}
+          其中：利息费用: {item: is.interest_exp, abs: true}
           三、营业利润（亏损以“－”号填列）: is.operating_profit
           四、利润总额（亏损总额以“－”号填列）: is.total_profit
           减：所得税费用: {item: is.income_tax, abs: true}
@@ -241,6 +242,9 @@ companies:
         map:
           货币资金: bs.cash
           应收账款: bs.ar
+          应付账款: bs.ap
+          短期借款: bs.short_debt
+          长期借款: bs.long_debt
           存货: bs.inventory
           固定资产: bs.fixed_assets
           流动资产合计: bs.current_assets
@@ -253,9 +257,12 @@ companies:
       合并现金流量表:
         roles: {本期发生额: cur, 上期发生额: prev_yoy}
         map:
+          销售商品、提供劳务收到的现金: cf.cash_from_sales
           经营活动产生的现金流量净额: cf.ocf
           投资活动产生的现金流量净额: cf.icf
           筹资活动产生的现金流量净额: cf.fin_cf
+          购建固定资产、无形资产和其他长期资产支付的现金: cf.capex
+          折旧与摊销: is.dep_amort
       合并所有者权益变动表:
         roles: {本期发生额: cur, 上期发生额: prev_yoy}
         map:

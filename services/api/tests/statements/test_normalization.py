@@ -437,7 +437,19 @@ def test_damai_syn_report_normalizes_with_own_mapping(db_session: Session) -> No
     )
     summary = normalize_report(db_session, report)
     assert summary.resolved > 0, "damai_syn 映射必须覆盖核心行"
-    for item in ("is.revenue", "is.net_profit", "bs.total_assets", "cf.ocf"):
+    for item in (
+        "is.revenue",
+        "is.net_profit",
+        "is.interest_exp",
+        "bs.total_assets",
+        "bs.ap",
+        "bs.short_debt",
+        "bs.long_debt",
+        "cf.ocf",
+        "cf.cash_from_sales",
+        "cf.capex",
+        "is.dep_amort",
+    ):
         assert any(
             row.item_id == item
             for row in normalized_items(

@@ -42,6 +42,41 @@ def test_two_annual_reports_generated() -> None:
         assert payload["unit"] == "人民币千元"
 
 
+def test_metric_source_lines_are_explicit_and_reconcile() -> None:
+    """覆盖指标所需的子项须进入合成报表，但不得改变已闭合总额。"""
+    payloads = build_damai_statement_payloads(build_damai_package())
+    for payload in payloads.values():
+        statements = payload["statements"]
+        income = {row["item"]: row for row in statements["合并利润表"]}
+        balance = {row["item"]: row for row in statements["合并资产负债表"]}
+        cashflow = {row["item"]: row for row in statements["合并现金流量表"]}
+
+        finance_cost = Decimal(income["财务费用"]["本期发生额"])
+        interest = Decimal(income["其中：利息费用"]["本期发生额"])
+        assert Decimal("0") < interest < finance_cost
+
+        current_liabilities = Decimal(balance["流动负债合计"]["期末余额"])
+        assert sum(
+            Decimal(balance[item]["期末余额"])
+            for item in ("短期借款", "应付账款", "其他流动负债")
+        ) == current_liabilities
+        noncurrent_liabilities = Decimal(balance["非流动负债合计"]["期末余额"])
+        assert sum(
+            Decimal(balance[item]["期末余额"])
+            for item in ("长期借款", "其他非流动负债")
+        ) == noncurrent_liabilities
+
+        assert Decimal(cashflow["销售商品、提供劳务收到的现金"]["本期发生额"]) == Decimal(
+            cashflow["经营活动现金流入小计"]["本期发生额"]
+        )
+        assert Decimal(cashflow["折旧与摊销"]["本期发生额"]) > 0
+        capex = Decimal(
+            cashflow["购建固定资产、无形资产和其他长期资产支付的现金"]["本期发生额"]
+        )
+        assert capex == Decimal(cashflow["投资活动现金流出小计"]["本期发生额"])
+        assert Decimal(cashflow["投资活动产生的现金流量净额"]["本期发生额"]) == -capex
+
+
 def test_revenue_matches_canonical_annual_total() -> None:
     package = build_damai_package()
     payloads = build_damai_statement_payloads(package)

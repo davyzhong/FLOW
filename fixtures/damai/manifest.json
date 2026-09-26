@@ -44,8 +44,8 @@
     "forecast/rolling_forecast.jsonl": "46714251f408a84f56e45fd6fb4905308118475ef19e840a70ad00c86a237adc",
     "operations/damai_operating_metrics.yaml": "0f8aee2d9f7e19b89c65eae11a9fcf39487cf97a29fb47686b73d38821292d2e",
     "operations/damai_segment_series.yaml": "7158d3fc06b3ff1cce88a7b8178b2e7411c7946ec8958d9e5b6de0c130a7d446",
-    "statements/damai_fy2025.yaml": "17132dbaa9cadb024cb5c42b4b7f2d19f91a01b82daa5105b3d35006a45697b1",
-    "statements/damai_fy2026.yaml": "fde7ac227c215d45331cb6a5e9c1d0c0a147baefe7bcb539447acad48cdf9da1",
+    "statements/damai_fy2025.yaml": "f5c3ddd4fac97dc59f18c31f11d9a74021fa5a0590f9c2ec7b93a9e8d2804322",
+    "statements/damai_fy2026.yaml": "7ed1280aeaf18f0758f257c1059c11e37f5883683b160a6f6f6c9c3945083785",
     "workbooks/damai_logistics_full_v1.xlsx": "semantic:f9083671deb56c816bd4dec807607f1f68c69e9b9a12edfe875a03f3d84b1003"
   },
   "fiscal_year_summary": {

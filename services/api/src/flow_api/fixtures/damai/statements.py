@@ -38,6 +38,11 @@ _INVEST_RATE = Decimal("0.06")  # 投资活动净流出（占收入）
 _OPENING_EQUITY_RATE = Decimal("0.45")  # 期初净资产（首份报告参数）
 _CF_OUTFLOW_RATE = Decimal("0.80")  # 经营现金流出小计（占收入，流入=流出+净额）
 _CURRENT_LIAB_SHARE = Decimal("0.70")  # 流动负债占负债合计比
+_INTEREST_SHARE_OF_FINANCE_COST = Decimal("0.65")  # 显式利息费用（财务费用子项）
+_SHORT_DEBT_SHARE = Decimal("0.25")  # 短期借款占流动负债
+_AP_SHARE = Decimal("0.35")  # 应付账款占流动负债
+_LONG_DEBT_SHARE = Decimal("0.65")  # 长期借款占非流动负债
+_DEPRECIATION_RATE_ON_FIXED_ASSETS = Decimal("0.10")  # synthetic 固定资产年度折旧率
 
 # 报表类型标准名（与 A 股勾稽门禁的覆盖判定一致）
 ST_IS = "合并利润表"
@@ -77,6 +82,7 @@ def _income_statement(f: dict[str, Decimal]) -> list[dict[str, Any]]:
     admin = _d(revenue * _EXPENSE_RATES["管理费用"])
     rnd = _d(revenue * _EXPENSE_RATES["研发费用"])
     fin_exp = _d(revenue * _FIN_EXP_RATE)
+    interest_exp = _d(fin_exp * _INTEREST_SHARE_OF_FINANCE_COST)
     operating = gross - selling - admin - rnd - fin_exp
     pretax = operating  # 无营业外收支：利润总额 = 营业利润
     tax = _d(abs(pretax) * _TAX_RATE)
@@ -90,6 +96,8 @@ def _income_statement(f: dict[str, Decimal]) -> list[dict[str, Any]]:
         ("管理费用", admin),
         ("研发费用", rnd),
         ("财务费用", fin_exp),
+        # 财务费用总额的披露子项，不再次计入利润小计。
+        ("其中：利息费用", interest_exp),
         ("三、营业利润（亏损以“－”号填列）", operating),
         ("四、利润总额（亏损总额以“－”号填列）", pretax),
         ("减：所得税费用", tax),
@@ -112,14 +120,24 @@ def _cash_flow_statement(
     outflow = _d(f["revenue"] * _CF_OUTFLOW_RATE)
     inflow = outflow + ocf
     investing = _d(-(f["revenue"] * _INVEST_RATE))
+    capex = abs(investing)
+    depreciation = _d(
+        f["revenue"] * _FIXED_ASSET_RATE * _DEPRECIATION_RATE_ON_FIXED_ASSETS
+    )
     financing = Decimal("0")  # 扩张由经营积累覆盖
     net_increase = ocf + investing + financing
     closing = opening_cash + net_increase
     amounts: list[tuple[str, Decimal]] = [
+        ("销售商品、提供劳务收到的现金", _d(inflow)),
         ("经营活动现金流入小计", _d(inflow)),
         ("经营活动现金流出小计", _d(outflow)),
         ("经营活动产生的现金流量净额", _d(ocf)),
+        ("投资活动现金流入小计", Decimal("0")),
+        ("投资活动现金流出小计", _d(capex)),
+        ("购建固定资产、无形资产和其他长期资产支付的现金", _d(capex)),
         ("投资活动产生的现金流量净额", _d(investing)),
+        # 现金流量表补充资料：不参与现金净额小计。
+        ("折旧与摊销", depreciation),
         ("筹资活动产生的现金流量净额", _d(financing)),
         ("五、现金及现金等价物净增加额", _d(net_increase)),
         ("加：期初现金及现金等价物余额", _d(opening_cash)),
@@ -164,6 +182,11 @@ def _balance_sheet_rows(
     liabilities = total_assets - equity_total
     current_liab = _d(liabilities * _CURRENT_LIAB_SHARE)
     noncurrent_liab = liabilities - current_liab
+    short_debt = _d(current_liab * _SHORT_DEBT_SHARE)
+    accounts_payable = _d(current_liab * _AP_SHARE)
+    other_current_liab = current_liab - short_debt - accounts_payable
+    long_debt = _d(noncurrent_liab * _LONG_DEBT_SHARE)
+    other_noncurrent_liab = noncurrent_liab - long_debt
     attr_equity = _d(equity_total * _ATTR_SHARE)
     minority_equity = equity_total - attr_equity
     rows: list[tuple[str, Decimal]] = [
@@ -176,7 +199,12 @@ def _balance_sheet_rows(
         ("非流动资产合计", noncurrent_assets),
         ("资产总计", total_assets),
         ("流动负债合计", current_liab),
+        ("短期借款", short_debt),
+        ("应付账款", accounts_payable),
+        ("其他流动负债", other_current_liab),
         ("非流动负债合计", noncurrent_liab),
+        ("长期借款", long_debt),
+        ("其他非流动负债", other_noncurrent_liab),
         ("负债合计", liabilities),
         ("归属于母公司所有者权益合计", attr_equity),
         ("少数股东权益", minority_equity),
@@ -285,6 +313,11 @@ def build_damai_statement_payloads(package: dict[str, Any]) -> dict[str, dict[st
                 "附注 1：编制基础（synthetic 演示，CAS 合并报表简化投影）",
                 "附注 2：收入按业务族分解见 canonical family_actual",
                 "附注 3：应收账款账龄见 canonical ar_aging",
+                (
+                    "附注 4：利息费用为财务费用65%的 synthetic 子项；债务和应付账款为负债小计内的"
+                    " synthetic 拆分；销售收现及资本开支用于展示现金流明细且不改变净额小计；"
+                    "折旧按固定资产账面基础的年率10%估算并仅作补充披露"
+                ),
             ],
         }
         prior_rows = {

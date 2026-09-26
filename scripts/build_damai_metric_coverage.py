@@ -15,7 +15,6 @@
 
 from __future__ import annotations
 
-import datetime
 import json
 import sys
 from decimal import Decimal
@@ -38,6 +37,8 @@ DATASET_OUT = ROOT / "config/metrics/damai_demo_metric_coverage_v1.yaml"
 SOURCE_STATEMENTS = ("合并利润表", "合并资产负债表", "合并现金流量表")
 COMPANY = "damai_syn"
 UNIT = "百万元"  # 发行版财报原始单位为元，事实库统一换算为百万元
+# 发布工件时间戳与内容绑定；数据合同更新并重新审核时再前移，重复构建不漂移。
+DATASET_GENERATED_AT = "2026-09-26T03:11:24+00:00"
 
 
 def _mapped_item(entry: object) -> tuple[str, bool] | None:
@@ -133,13 +134,13 @@ def main() -> None:
         "dataset_id": "flow.damai_demo_metric_coverage.v1",
         "title": "大麦物流 synthetic 演示指标覆盖矩阵",
         "generator": "scripts/build_damai_metric_coverage.py",
-        "generated_at": datetime.datetime.now(tz=datetime.UTC).isoformat(timespec="seconds"),
+        "generated_at": DATASET_GENERATED_AT,
         "facts_source": "fixtures/damai/statements/（发行版合成财报）",
         "alias_map": "config/statements/item_alias_map_v1.yaml#damai_syn",
         "synthetic": True,
         "caliber_notes": [
             "本矩阵为 synthetic 演示数据，非任何真实公司财报",
-            "avg 为（期末+期初）/2、prior 为上年同期列；FY2025 的 prior 列为发行版自带比较期",
+            "avg 为（期末+期初）/2、prior 为上年同期列；发行版无 FY2024，FY2025 同比指标无比较期、FY2026 使用 FY2025 比较列",
             "事实仅含三张主表的已映射行；权益变动表等衍生表不重复取数",
             "绝对额指标已按百万元换算为亿元展示",
             "缺口即真实缺口：缺少的事实输入原样标注，不以 0 补值",
