@@ -51,6 +51,7 @@ const WORKBENCH = {
   management_watch: [
     {
       code: "cash_content_below_one",
+      metric_code: "cash_content_ratio",
       message: "净利润现金含量 0.6000，经营现金流低于净利润",
       direction: "negative",
     },
@@ -101,6 +102,9 @@ describe("FourQuestionWorkbench 深链", () => {
       "href",
       "/metric-library?focus=revenue_growth",
     );
+    expect(
+      screen.getByRole("link", { name: /净利润现金含量 0.6000.*查看指标/ }),
+    ).toHaveAttribute("href", "/metric-library?focus=cash_content_ratio");
   });
 });
 

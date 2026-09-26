@@ -25,6 +25,7 @@ from __future__ import annotations
 
 import csv
 import os
+import re
 from collections.abc import Callable, Iterator
 from dataclasses import dataclass
 from pathlib import Path
@@ -125,6 +126,7 @@ LOADER_RESOURCE_TYPE: dict[str, str] = {
     "load_analysis_run_batch_scope_or_deny_legacy": "analysis_run",
     "load_build_job_batch_scope_or_deny_legacy": "build_job",
     "load_public_statement_report": "statement_report",
+    "load_public_statement_source": "statement_source",
     "load_public_statement_report_collection": "statement_report_collection",
     "load_public_statement_source_collection": "statement_source_collection",
     "load_report_snapshot_batch_scope_or_deny_legacy": "report_snapshot",
@@ -633,6 +635,21 @@ def _public_path(resource_type: str, param: str) -> ResourceLoader:
     return load
 
 
+def _load_public_statement_source(request: Request, session: Session) -> ResourceRef:
+    """原文读取只能映射到登记过的摘要，不能以任意路径访问对象存储。"""
+    from flow_api.infrastructure.models.statement import StatementSource
+
+    sha256 = str(request.path_params.get("source_sha256", ""))
+    if not re.fullmatch(r"[0-9a-f]{64}", sha256):
+        raise ResourceScopeUnresolved("statement_source", sha256 or "invalid")
+    source = session.scalar(
+        select(StatementSource).where(StatementSource.sha256 == sha256)
+    )
+    if source is None or source.status != "registered":
+        raise ResourceScopeUnresolved("statement_source", sha256)
+    return _public_ref("statement_source", sha256)
+
+
 LOADERS: dict[str, ResourceLoader] = {
     "load_public_health": lambda request, session: _public_ref("health", "live"),
     "load_public_workspace_metadata": lambda request, session: _public_ref(
@@ -665,6 +682,7 @@ LOADERS: dict[str, ResourceLoader] = {
     "load_report_snapshot_batch_scope_or_deny_legacy": _load_report_snapshot,
     "load_attempt_parent_scope_or_deny_legacy": _load_attempt,
     "load_public_statement_report": _public_path("statement_report", "report_id"),
+    "load_public_statement_source": _load_public_statement_source,
     "load_public_statement_report_collection": lambda request, session: _public_ref(
         "statement_report_collection", "collection"
     ),

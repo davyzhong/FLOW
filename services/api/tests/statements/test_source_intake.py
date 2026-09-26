@@ -20,7 +20,11 @@ from httpx import ASGITransport, AsyncClient
 from sqlalchemy import create_engine, delete, func, select
 from sqlalchemy.orm import Session
 
-from flow_api.api.routes.statements import get_statement_session, get_statement_source_intake
+from flow_api.api.routes.statements import (
+    get_statement_session,
+    get_statement_source_intake,
+    get_statement_source_store,
+)
 from flow_api.infrastructure.models.statement import StatementSource
 from flow_api.main import create_app
 from flow_api.settings import get_settings
@@ -85,6 +89,11 @@ class FakeObjectStore:
             sha256=sha, object_key=key, size_bytes=len(content), content_type="application/pdf"
         )
 
+    def read_by_key(self, object_key: str, sha256: str) -> bytes:
+        content = self.objects[object_key]
+        assert hashlib.sha256(content).hexdigest() == sha256
+        return content
+
 
 @pytest.fixture(scope="module", autouse=True)
 def migrated_database() -> None:
@@ -106,8 +115,10 @@ def db_session() -> Iterator[Session]:
 async def client(db_session: Session) -> Iterator[AsyncClient]:
     app = create_app()
     app.dependency_overrides[get_statement_session] = lambda: db_session
+    store = FakeObjectStore()
+    app.dependency_overrides[get_statement_source_store] = lambda: store
     app.dependency_overrides[get_statement_source_intake] = lambda: StatementSourceIntake(
-        FakeObjectStore(), max_bytes=80 * 1024 * 1024  # type: ignore[arg-type]
+        store, max_bytes=80 * 1024 * 1024  # type: ignore[arg-type]
     )
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as async_client:
@@ -203,3 +214,27 @@ async def test_upload_rejects_scanned_pdf(client: AsyncClient) -> None:
     )
     assert response.status_code == 422
     assert response.json()["detail"]["code"] == "scanned_pdf_unsupported"
+
+
+async def test_registered_statement_source_is_readable_as_pdf(client: AsyncClient) -> None:
+    uploaded = await client.post(
+        "/api/v1/statements/sources",
+        files={"workbook": ("report.pdf", SAMPLE_PDF, "application/pdf")},
+    )
+    assert uploaded.status_code == 201, uploaded.text
+    sha256 = uploaded.json()["sha256"]
+
+    response = await client.get(f"/api/v1/statements/sources/{sha256}/content")
+
+    assert response.status_code == 200, response.text
+    assert response.content == SAMPLE_PDF
+    assert response.headers["content-type"] == "application/pdf"
+    assert response.headers["content-disposition"].startswith("inline;")
+    assert response.headers["cache-control"] == "no-store"
+
+
+async def test_statement_source_content_requires_registered_sha(client: AsyncClient) -> None:
+    response = await client.get(f"/api/v1/statements/sources/{'f' * 64}/content")
+
+    assert response.status_code == 403
+    assert response.json()["detail"]["code"] == "resource_scope_unresolved"

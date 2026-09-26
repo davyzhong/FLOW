@@ -28,6 +28,7 @@ from flow_api.infrastructure.models.statement import (
     StatementLineItem,
     StatementNormalizedItem,
     StatementReport,
+    StatementSource,
 )
 
 SCHEMA_VERSION = "objective.v1"
@@ -221,6 +222,16 @@ def freeze_objective_statement_report(
     # 重冻结会误判为新版本（幂等破坏）。uuid7 主键时间有序 = 自然插入序。
     normalized_rows = sorted(rows, key=lambda r: (r.statement_type, r.created_at, r.id))
     raw_rows_sorted = sorted(raw_rows, key=lambda r: (r.statement_type, r.sort_order, r.id))
+    registered_source = (
+        session.scalar(
+            select(StatementSource.id).where(
+                StatementSource.sha256 == report.source_sha256,
+                StatementSource.status == "registered",
+            )
+        )
+        if report.source_sha256
+        else None
+    )
     content = {
         "schema_version": SCHEMA_VERSION,
         "report_type": REPORT_TYPE,
@@ -233,6 +244,7 @@ def freeze_objective_statement_report(
             "unit_note": report.unit_note,
             "source_ref": report.source_ref,
             "source_sha256": report.source_sha256,
+            "source_available": registered_source is not None,
         },
         "statements": _statements_payload(normalized_rows),
         "statements_raw": _statements_payload(raw_rows_sorted),
@@ -285,6 +297,16 @@ def _statements_payload(rows: list[Any]) -> dict[str, list[dict[str, Any]]]:
         for column in ("value_end", "value_begin", "value_current", "value_prior"):
             value = getattr(row, column, None)
             entry[column] = None if value is None else str(value)
+        page_number = getattr(row, "page_number", None)
+        page_anchor = getattr(row, "page_anchor", None)
+        trace = getattr(row, "trace", None)
+        if page_number is None and isinstance(trace, dict):
+            page_number = trace.get("page_number")
+            page_anchor = trace.get("page_anchor")
+        if isinstance(page_number, int) and page_number > 0:
+            entry["page_number"] = page_number
+            if isinstance(page_anchor, str) and page_anchor:
+                entry["page_anchor"] = page_anchor
         statements.setdefault(row.statement_type, []).append(entry)
     return statements
 

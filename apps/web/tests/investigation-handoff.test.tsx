@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import { InvestigationApp } from "../components/investigation/investigation-app";
@@ -181,12 +181,46 @@ describe("Investigation handoff", () => {
       "存在待确认证据",
     );
     const records = screen.getByRole("region", { name: "关键源记录" });
-    expect(records).toHaveTextContent("业务明细!R1950");
+    expect(records).toHaveTextContent("业务明细!R1950C*");
     expect(records).toHaveTextContent("2026-07");
     expect(screen.getByRole("region", { name: "证据复核" })).toHaveTextContent("待确认");
     await waitFor(() => {
       expect(screen.getByRole("button", { name: "提交复核" })).toBeEnabled();
     });
     expect(screen.queryByRole("button", { name: "批准签发" })).toBeNull();
+  });
+
+  it("opens a source-cell viewer for the selected lineage fact", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(
+        new Response(
+          JSON.stringify({
+            fact_id: "f1",
+            source_file_name: "2026年7月供应链经营分析.xlsx",
+            sheet_name: "业务明细",
+            source_row: 1950,
+            source_column: "G",
+            canonical_field: "revenue",
+            raw_value: { value: "3820000" },
+            transformed_value: { value: "3820000.0000", scale: 1 },
+          }),
+          { status: 200, headers: { "content-type": "application/json" } },
+        ),
+      ),
+    );
+    render(<InvestigationApp query={query} loadInvestigation={vi.fn().mockResolvedValue(context)} />);
+
+    fireEvent.click(await screen.findByRole("button", { name: /业务明细!R1950C\*/ }));
+
+    await waitFor(() => expect(fetch).toHaveBeenCalled());
+    expect(
+      await screen.findByText("2026年7月供应链经营分析.xlsx · 业务明细!G1950"),
+    ).toBeVisible();
+    expect(screen.getByRole("dialog")).toHaveTextContent('"3820000"');
+    expect(String(vi.mocked(fetch).mock.calls[0][0])).toContain(
+      `/api/v1/investigations/${identity.findingId}/source-records/f1`,
+    );
+    vi.unstubAllGlobals();
   });
 });

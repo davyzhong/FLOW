@@ -13,6 +13,8 @@ export type ProvenanceProps = {
   anchor: string | null;
   /** 原文相对路径（如 docs/knowledge-base/.../xxx.pdf），用于卡片展示 */
   sourceRef?: string | null;
+  sourceSha256?: string | null;
+  sourceAvailable?: boolean;
   className?: string;
 };
 
@@ -72,7 +74,14 @@ export function ProvenanceHover({
   );
 }
 
-export function ProvenanceBadge({ page, anchor, sourceRef, className }: ProvenanceProps) {
+export function ProvenanceBadge({
+  page,
+  anchor,
+  sourceRef,
+  sourceSha256,
+  sourceAvailable = false,
+  className,
+}: ProvenanceProps) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLSpanElement | null>(null);
 
@@ -99,24 +108,41 @@ export function ProvenanceBadge({ page, anchor, sourceRef, className }: Provenan
     );
   }
   const anchorLabel = anchor ? ANCHOR_LABELS[anchor] ?? anchor : "未知锚定";
+  const sourceHref =
+    sourceAvailable && sourceSha256 && /^[0-9a-f]{64}$/.test(sourceSha256)
+      ? `/api/v1/statements/sources/${sourceSha256}/content#page=${page}`
+      : null;
   return (
     <span className={cn("group relative inline-block", className)} ref={rootRef}>
-      <button
-        type="button"
-        className="cursor-help rounded border border-line-4 px-1.5 py-0.5 text-xs text-muted hover:border-blue hover:text-blue"
-        aria-label={`溯源：原文第 ${page} 页（${anchorLabel}）`}
-        aria-expanded={open}
-        onClick={() => setOpen((value) => !value)}
-        onBlur={() => setOpen(false)}
-        onKeyDown={(event) => {
-          if (event.key === "Escape") setOpen(false);
-        }}
-      >
-        p{page}
-      </button>
+      {sourceHref ? (
+        <a
+          className="rounded border border-line-4 px-1.5 py-0.5 text-xs text-muted hover:border-blue hover:text-blue"
+          aria-label={`打开原文 PDF 第 ${page} 页（${anchorLabel}）`}
+          href={sourceHref}
+          target="_blank"
+          rel="noreferrer"
+          title="打开已登记的原文 PDF"
+        >
+          p{page} ↗
+        </a>
+      ) : (
+        <button
+          type="button"
+          className="cursor-help rounded border border-line-4 px-1.5 py-0.5 text-xs text-muted hover:border-blue hover:text-blue"
+          aria-label={`溯源：原文第 ${page} 页（${anchorLabel}）`}
+          aria-expanded={open}
+          onClick={() => setOpen((value) => !value)}
+          onBlur={() => setOpen(false)}
+          onKeyDown={(event) => {
+            if (event.key === "Escape") setOpen(false);
+          }}
+        >
+          p{page}
+        </button>
+      )}
       <span
         role="tooltip"
-        className={`pointer-events-none absolute bottom-full left-1/2 z-20 w-64 -translate-x-1/2 rounded-md border border-line-3 bg-card p-3 text-left text-xs text-ink shadow-md ${
+        className={`pointer-events-auto absolute bottom-full left-1/2 z-20 w-64 -translate-x-1/2 rounded-md border border-line-3 bg-card p-3 text-left text-xs text-ink shadow-md ${
           open ? "block" : "hidden"
         } group-hover:block group-focus-within:block`}
       >
@@ -127,6 +153,11 @@ export function ProvenanceBadge({ page, anchor, sourceRef, className }: Provenan
         <span className="block">锚定方式：{anchorLabel}</span>
         {sourceRef ? (
           <span className="mt-1 block break-all text-muted">来源：{sourceRef}</span>
+        ) : null}
+        {sourceHref ? (
+          <a className="mt-2 inline-block text-blue underline" href={sourceHref} target="_blank" rel="noreferrer">
+            打开原文 PDF 第 {page} 页
+          </a>
         ) : null}
       </span>
     </span>

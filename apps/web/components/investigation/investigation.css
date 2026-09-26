@@ -293,11 +293,52 @@
 }
 
 .investigation-source-link {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
   color: #315f82;
   font-family: "JetBrains Mono Variable", ui-monospace, monospace;
   font-size: 0.68rem;
   text-decoration: underline;
   text-underline-offset: 2px;
+}
+
+.investigation-source-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgb(15 23 42 / 45%);
+}
+
+.investigation-source-dialog {
+  width: min(42rem, 100%);
+  max-height: min(80vh, 50rem);
+  overflow: auto;
+  border: 1px solid #d7e0ea;
+  border-radius: 0.75rem;
+  background: #fff;
+  padding: 1.25rem;
+  box-shadow: 0 1.5rem 4rem rgb(15 23 42 / 24%);
+}
+
+.investigation-source-dialog header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.investigation-source-dialog pre {
+  overflow-x: auto;
+  border-radius: 0.4rem;
+  background: #f4f7fb;
+  padding: 0.75rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 .investigation-bridge {

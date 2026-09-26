@@ -43,6 +43,7 @@ class StatementReportSummaryResponse(FrozenResponse):
     unit_note: str
     source_ref: str
     source_sha256: str | None = None
+    source_available: bool = False
     statement_types: tuple[str, ...]
     line_item_count: int
     created_at: datetime

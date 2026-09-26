@@ -222,7 +222,10 @@ function InvestigationWorkspace({
           <InvestigationDriverTable drivers={context.drivers} result={context.result} />
           <InvestigationDriverBridge drivers={context.drivers} result={context.result} />
           <InvestigationCheckRow context={context} />
-          <InvestigationSourceRecordsTable records={context.source_records} />
+          <InvestigationSourceRecordsTable
+            records={context.source_records}
+            findingId={context.identity.finding_id}
+          />
           <InvestigationConclusionEditor
             conclusion={context.conclusion}
             blocked={context.eligibility_blockers.length > 0}

@@ -133,4 +133,4 @@ plan-views:
 	python3 scripts/documentation/plan_views.py --write
 	python3 scripts/documentation/plan_views.py --check
 	python3 scripts/documentation/links.py --check
-	python3 -m unittest discover -s scripts/tests -p 'test_*.py'
+	$(UV) run --project services/api python -m unittest discover -s scripts/tests -p 'test_*.py'

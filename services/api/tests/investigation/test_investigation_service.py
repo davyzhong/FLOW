@@ -3,6 +3,7 @@ from __future__ import annotations
 import uuid
 
 import pytest
+from fastapi import HTTPException
 from integration.analysis_run_support import (
     _intake_session_fixture as _intake_session_fixture,  # noqa: F401
 )
@@ -16,6 +17,7 @@ from integration.analysis_run_support import publish_analysis_run
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from flow_api.api.routes.investigations import investigation_source_cell
 from flow_api.infrastructure.models.analytics import Evidence, Finding
 from flow_api.investigation.models import (
     ConclusionUpsertRequest,
@@ -78,6 +80,34 @@ def test_context_rejects_identity_mismatch(analysis_session: Session) -> None:
             metric_snapshot_id=finding.metric_snapshot_id,
             analysis_run_id=uuid.uuid4(),
         )
+
+
+def test_source_cell_lookup_is_bound_to_the_finding_import_lineage(
+    analysis_session: Session,
+) -> None:
+    publish_analysis_run(analysis_session)
+    finding = top_finding(analysis_session)
+    context = InvestigationService().get_context(analysis_session, finding.id)
+    record = context.source_records[0]
+
+    cell = investigation_source_cell(
+        finding_id=finding.id,
+        fact_id=uuid.UUID(record.fact_id),
+        session=analysis_session,
+    )
+    assert cell.sheet_name == record.sheet_name
+    assert cell.source_row == record.source_row
+    assert cell.source_file_name == record.source_file_name
+    assert cell.raw_value
+    assert cell.transformed_value
+
+    with pytest.raises(HTTPException) as error:
+        investigation_source_cell(
+            finding_id=finding.id,
+            fact_id=uuid.uuid4(),
+            session=analysis_session,
+        )
+    assert getattr(error.value, "status_code", None) == 404
 
 
 def test_review_cycle_blocks_and_allows_approval(analysis_session: Session) -> None:

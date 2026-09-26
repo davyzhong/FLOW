@@ -1,6 +1,6 @@
 """Public typed request and response schemas for Investigation."""
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from flow_api.api.schemas.intake import ErrorDetail
 from flow_api.investigation.models import (
@@ -14,6 +14,19 @@ from flow_api.investigation.models import (
 
 class InvestigationContextResponse(InvestigationContext):
     """Read-only evidence-first Investigation context."""
+
+
+class InvestigationSourceCellResponse(BaseModel):
+    model_config = ConfigDict(frozen=True, extra="forbid")
+
+    fact_id: str
+    source_file_name: str
+    sheet_name: str
+    source_row: int
+    source_column: str
+    canonical_field: str
+    raw_value: dict[str, object]
+    transformed_value: dict[str, object]
 
 
 class EvidenceDecisionResponse(MutationAcknowledgement):
@@ -42,6 +55,7 @@ __all__ = [
     "FindingTransitionRequest",
     "FindingTransitionResponse",
     "InvestigationContextResponse",
+    "InvestigationSourceCellResponse",
     "InvestigationErrorResponse",
     "MutationAcknowledgement",
 ]

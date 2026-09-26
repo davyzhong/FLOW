@@ -1278,6 +1278,86 @@
         }
       }
     },
+    "/api/v1/investigations/{finding_id}/source-records/{fact_id}": {
+      "get": {
+        "tags": [
+          "investigations"
+        ],
+        "summary": "Investigation Source Cell",
+        "description": "在 Finding 的不可变导入血缘范围内读取源 Excel 单元格快照。",
+        "operationId": "investigation_source_cell_api_v1_investigations__finding_id__source_records__fact_id__get",
+        "parameters": [
+          {
+            "name": "finding_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Finding Id"
+            }
+          },
+          {
+            "name": "fact_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Fact Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvestigationSourceCellResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvestigationErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/investigations/{finding_id}/evidence/{evidence_id}/decision": {
       "post": {
         "tags": [
@@ -2424,6 +2504,84 @@
                 }
               }
             }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/statements/sources/{source_sha256}/content": {
+      "get": {
+        "tags": [
+          "statements"
+        ],
+        "summary": "Read Statement Source Content",
+        "description": "读取已登记的公开财报 PDF；仅按登记表解析对象键，且授权决策已 durable audit。",
+        "operationId": "read_statement_source_content_api_v1_statements_sources__source_sha256__content_get",
+        "parameters": [
+          {
+            "name": "source_sha256",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$",
+              "title": "Source Sha256"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatementErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatementErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
           },
           "422": {
             "description": "Validation Error",
@@ -7933,6 +8091,57 @@
         ],
         "title": "InvestigationQuestionRequest"
       },
+      "InvestigationSourceCellResponse": {
+        "properties": {
+          "fact_id": {
+            "type": "string",
+            "title": "Fact Id"
+          },
+          "source_file_name": {
+            "type": "string",
+            "title": "Source File Name"
+          },
+          "sheet_name": {
+            "type": "string",
+            "title": "Sheet Name"
+          },
+          "source_row": {
+            "type": "integer",
+            "title": "Source Row"
+          },
+          "source_column": {
+            "type": "string",
+            "title": "Source Column"
+          },
+          "canonical_field": {
+            "type": "string",
+            "title": "Canonical Field"
+          },
+          "raw_value": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Raw Value"
+          },
+          "transformed_value": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Transformed Value"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "fact_id",
+          "source_file_name",
+          "sheet_name",
+          "source_row",
+          "source_column",
+          "canonical_field",
+          "raw_value",
+          "transformed_value"
+        ],
+        "title": "InvestigationSourceCellResponse"
+      },
       "ManagementWatchItem": {
         "properties": {
           "code": {
@@ -11267,6 +11476,11 @@
             ],
             "title": "Source Sha256"
           },
+          "source_available": {
+            "type": "boolean",
+            "title": "Source Available",
+            "default": false
+          },
           "statement_types": {
             "items": {
               "type": "string"
@@ -11376,6 +11590,11 @@
               }
             ],
             "title": "Source Sha256"
+          },
+          "source_available": {
+            "type": "boolean",
+            "title": "Source Available",
+            "default": false
           },
           "statement_types": {
             "items": {

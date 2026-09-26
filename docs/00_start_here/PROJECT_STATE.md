@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.2
+version: 5.3
 created_at: 2026-09-12
 updated_at: 2026-09-26
 owner: FLOW
@@ -19,6 +19,8 @@ applies_to: repository
 2026-09-26 更新：状态验收再补 `/data` 批次历史 loading/403、`/analysis` 工作台 loading/error/403；批次列表 403 明示权限缺失但保留上传入口，pending 状态可访问。生产 E2E 74/74、Web 138/138、typecheck通过、lint0 errors/1既有warning。全站空态/部分降级态与数据密集页390/1024/1440完整状态视口组合仍待补验，新 SHA CI待完成。
 2026-09-26 更新：处理无数据空态：`/analysis` 报告列表成功但为空时结束 loading 并显示数据接入引导；`/operations` 两个数据源均成功但均为空时显示准确空态及数据/公开分析入口，不再误报“加载财报列表失败”。测试：生产 E2E76/76、Web139/139、typecheck、lint通过（仅既有warning）。CI仍待新 SHA；未覆盖全部状态/页面/视口组合。
 2026-09-26 更新：`main@3c15073f` 隔离完整大麦旅程通过：迁移/seed、verify 19/19、43/43安全 GET、浏览器9/9（含报告发布/下载SHA核验与数据导入）；专属 `damai-demo-iso` 栈已清理，常驻库未触碰。CI run `36243330055` 尚queued。Gate1其他页面状态-视口矩阵/深链未关闭。
+
+2026-09-26 更新：全站深链批次三在主线工作树本地实现：只读公开财报 PDF 读取限定已登记 SHA 并校验对象内容，原文访问由 statement.source.read 授权并 durable audit；有登记原件的页码徽标才指向 PDF 页；调查源单元格沿 Finding/ImportVersion/Batch/SourceRecord 血缘读取；冻结新 objective payload 保留页锚并在原件可用时给 HTML 生成回链；管理关注已有 metric_code 增加指标库链接。没有可证实的 finding_id 关系，不虚构关联。批次历史端点本已存在。Web 142/142、相关 API 30/30、全量 API 845 passed、生产 E2E 91/91，Clean Damai verify 19/19、可见性 API 43/43、浏览器 9/9、脚本测试 101/101、文档门禁通过；同 SHA CI 待推送后核验。全站 UX 工作包仍 active，Gate 1全路由页面/状态/视口矩阵未完成。
 
 截至本次文档同步，批次历史 clean-SHA 隔离验收通过（seed/verify19/19、浏览器9/9）；dashboard CI URL冲突已修复，最新SHA/CI见路线图。常驻开发库安全恢复与验证19/19两次完成。大麦发行财报各51行、FY2025覆盖37/40、FY2026 40/40；常驻API有8卡、12/12趋势及2条findings，状态degraded且矩阵保留合理缺格；3000端口 hydration 与KPI缺失原因展示已修复。经营分析点余额读取与派生指标依赖缺陷已修复（FY2026七项运营效率指标均可算，其中流动比率0.8119、资产负债率0.8986、DSO 116.3881天），比率单位和公开披露缺项/内部授权原因按语义显示。40次GET、36个不同路由/参数组合全部HTTP200；正式报告产物历史为空与API持久化一致。其他页面金额/数量格式、Gate1完整视口/错误态复测、批次三与其余页面下钻仍待完成。主线只在`main`串行推进。
 

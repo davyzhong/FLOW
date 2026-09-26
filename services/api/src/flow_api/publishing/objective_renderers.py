@@ -7,6 +7,7 @@
 from __future__ import annotations
 
 import io
+import re
 from typing import Any, cast
 
 from openpyxl import Workbook
@@ -64,12 +65,29 @@ def render_html_from_payload(payload: dict[str, Any]) -> str:
     """
 
     blocks = []
+    source = payload.get("source", {})
+    source_sha256 = str(source.get("source_sha256", ""))
+    source_href_prefix = (
+        f"/api/v1/statements/sources/{source_sha256}/content"
+        if source.get("source_available") is True
+        and re.fullmatch(r"[0-9a-f]{64}", source_sha256)
+        else None
+    )
     for statement_type, rows in _statements(payload).items():
-        row_html = "".join(
-            f"<tr><td>{row['item']}</td><td class='num'>{row.get('value_current') or ''}</td>"
-            f"<td class='num'>{row.get('value_prior') or ''}</td></tr>"
-            for row in rows
-        )
+        rendered_rows: list[str] = []
+        for row in rows:
+            page_number = row.get("page_number")
+            source_link = (
+                f" <a href='{source_href_prefix}#page={page_number}'>原文 p{page_number} ↗</a>"
+                if source_href_prefix and isinstance(page_number, int) and page_number > 0
+                else ""
+            )
+            rendered_rows.append(
+                f"<tr><td>{row['item']}{source_link}</td>"
+                f"<td class='num'>{row.get('value_current') or ''}</td>"
+                f"<td class='num'>{row.get('value_prior') or ''}</td></tr>"
+            )
+        row_html = "".join(rendered_rows)
         blocks.append(
             f"<h3>{statement_type}</h3><table>"
             "<tr><th>项目</th><th>本期/期末</th><th>上期/期初（比较基准）</th></tr>"
@@ -85,7 +103,6 @@ def render_html_from_payload(payload: dict[str, Any]) -> str:
     src_block = "".join(
         f"<div>{line}</div>" for line in _source_lines(payload)
     )
-    source = payload.get("source", {})
     sha256 = str(source.get("source_sha256", ""))
     # 叙事结构（借鉴 #9 客观部分）：现状判断 → 勾稽与质量核对 → 口径与溯源。
     # 原因推断与行动章不在客观报告范围（U5 主观证据门禁），显式标注。

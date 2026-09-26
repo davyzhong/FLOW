@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { flowApi } from "../../lib/api/client";
 
 import type {
   ConclusionInput,
   EvidenceDecisionInput,
   FindingTransitionInput,
   InvestigationContext,
+  InvestigationSourceCell,
 } from "../../lib/api/client";
 
 const DRIVER_LABELS: Record<string, string> = {
@@ -358,9 +360,31 @@ export function InvestigationCheckRow({ context }: { context: InvestigationConte
 
 export function InvestigationSourceRecordsTable({
   records,
+  findingId,
 }: {
   records: InvestigationContext["source_records"];
+  findingId: string;
 }) {
+  const [selectedFactId, setSelectedFactId] = useState<string | null>(null);
+  const [sourceCellResult, setSourceCellResult] = useState<
+    | { factId: string; status: "error" }
+    | { factId: string; status: "ready"; data: InvestigationSourceCell }
+    | null
+  >(null);
+  useEffect(() => {
+    if (!selectedFactId) return;
+    const controller = new AbortController();
+    flowApi
+      .getInvestigationSourceCell(findingId, selectedFactId, controller.signal)
+      .then((data) => setSourceCellResult({ factId: selectedFactId, status: "ready", data }))
+      .catch(() => setSourceCellResult({ factId: selectedFactId, status: "error" }));
+    return () => controller.abort();
+  }, [findingId, selectedFactId]);
+  const sourceCellState = selectedFactId
+    ? sourceCellResult?.factId === selectedFactId
+      ? sourceCellResult
+      : { status: "loading" as const }
+    : { status: "idle" as const };
   return (
     <section className="investigation-panel" aria-label="关键源记录" id="investigation-sources">
       <div className="investigation-panel__head">
@@ -396,9 +420,14 @@ export function InvestigationSourceRecordsTable({
                       .join(" · ")}
                   </td>
                   <td>
-                    <span className="investigation-source-link" title={record.source_file_name}>
-                      {record.sheet_name}!R{record.source_row}
-                    </span>
+                    <button
+                      type="button"
+                      className="investigation-source-link"
+                      title={`${record.source_file_name} · 打开原始单元格`}
+                      onClick={() => setSelectedFactId(record.fact_id)}
+                    >
+                      {record.sheet_name}!R{record.source_row}C{record.source_column}
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -408,6 +437,38 @@ export function InvestigationSourceRecordsTable({
       ) : (
         <p className="investigation-empty">暂无可追溯的源记录。</p>
       )}
+      {selectedFactId ? (
+        <div className="investigation-source-dialog-backdrop" role="presentation">
+          <section
+            className="investigation-source-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="investigation-source-dialog-title"
+          >
+            <header>
+              <h3 id="investigation-source-dialog-title">原始单元格</h3>
+              <button type="button" onClick={() => setSelectedFactId(null)} aria-label="关闭来源查看器">
+                关闭
+              </button>
+            </header>
+            {sourceCellState.status === "loading" ? <p role="status">正在读取已授权的来源单元格…</p> : null}
+            {sourceCellState.status === "error" ? <p role="alert">来源单元格读取失败；可能已不属于当前调查范围。</p> : null}
+            {sourceCellState.status === "ready" ? (
+              <>
+                <p>
+                  {sourceCellState.data.source_file_name} · {sourceCellState.data.sheet_name}!
+                  {sourceCellState.data.source_column}{sourceCellState.data.source_row}
+                </p>
+                <p>标准字段：{sourceCellState.data.canonical_field}</p>
+                <h4>原始值</h4>
+                <pre>{JSON.stringify(sourceCellState.data.raw_value, null, 2)}</pre>
+                <h4>转换后值</h4>
+                <pre>{JSON.stringify(sourceCellState.data.transformed_value, null, 2)}</pre>
+              </>
+            ) : null}
+          </section>
+        </div>
+      ) : null}
     </section>
   );
 }

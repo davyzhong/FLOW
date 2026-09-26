@@ -225,7 +225,12 @@ export function FourQuestionWorkbench({
                   <span className="workbench__watch-direction">
                     {DIRECTION_LABEL[item.direction] ?? item.direction}
                   </span>
-                  {item.message}
+                  <Link
+                    href={metricFocusHref(item.metric_code)}
+                    title="在指标库中查看此管理关注指标口径"
+                  >
+                    {item.message}（查看指标 →）
+                  </Link>
                 </li>
               ))}
             </ul>

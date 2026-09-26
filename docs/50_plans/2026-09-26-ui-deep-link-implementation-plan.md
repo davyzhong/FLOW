@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-DEEP-LINK-20260926
 title: 全站超链接化（深链下钻）实施计划
 doc_type: plan
 status: active
-version: 1.1
+version: 1.2
 created_at: 2026-09-26
 updated_at: 2026-09-26
 owner: FLOW
@@ -106,4 +106,6 @@ operations 冻结快照→报告中心、investigation 身份条四 ID→各自�
 - 批次一、二的本地验证：API/安全相关 pytest **51/51**，Web Vitest **133/133**，TypeScript typecheck 通过、ESLint 0 errors（有一条既有 React Compiler warning），深链 Playwright **15/15**，OpenAPI/TypeScript 合同生成及 `check_docs --phase m1`、`--phase m6` 通过。
 - 提交 `7976691` 上重新执行隔离大麦完整旅程：全新 Compose 数据库迁移、seed、存储读回，verify **19/19**，浏览器旅程 **9/9**。随后补强 `/data` 与 `/metric-library` 的真实展示断言：seed 批次出现在“最近的数据批次”中，点击后 `?batch=` 生效且行标记为当前批次；演示覆盖矩阵逐年显示 FY2025 **37/40**、FY2026 **40/40**，不是仅显示空壳或年份。两组新增断言后的隔离全旅程仍 **9/9**。该证据覆盖 Damai 主旅程，不代替其他每条路由的 API/页面覆盖矩阵。
 - GitHub Actions run `36224649915`（代码基线 `29877d1`）dashboard、static-web、contracts、static-python、unit、investigation-e2e、module-boundaries-e2e 等已通过；`integration`、`data-contract`、`intake-e2e` 当时仍运行中。它不是本批次代码 SHA 的 CI 证据；本批次提交后的 CI 结果需另行核验。
-- **批次三：未开始**。原文/源单元格查看、冻结报告回链、ManagementWatchItem 关联和批次列表端点仍按 §4 保持待办。不得将批次一、二完成误报为全站深链计划完成。
+- **批次三：实现完成，本地验收中**。新增已登记公开财报 PDF 只读端点，严格按 `StatementSource.sha256` 解析对象键、读取时复验内容 SHA；沿用 `statement.source.read` RBAC durable decision audit，未登记 SHA fail closed。报表响应提供 `source_available`，页码徽标仅对真实已登记原件可点击并打开 PDF `#page=N`。源单元格查看器沿 Finding → ImportVersion → batch → fact → SourceRecord → SourceFile 逐层绑定，跨批次/未绑定 fact 返回 404；原始值与转换值只读展示。冻结新 objective payload 保留页码/锚点并记录 source 登记状态，HTML 新产物仅在原件可用时生成 PDF 页回链；既有冻结内容不重写。管理关注已有 `metric_code`，补上指标库深链；**不补造 `finding_id`**：当前四问工作台由 `StatementReport` 驱动，没有可证实的 Finding 关联，需在未来出现正式血缘映射后再开放。`GET /batches` 与批次历史原已交付，本轮确认后沿用，不重复实现。
+- 本轮验证：原文 API / Investigation / objective freeze-render 相关 pytest 30/30，Web Vitest 142/142，`make lint` 0 errors（1 条既有 TanStack warning），mypy、TypeScript 与 contracts-check 通过；生产构建完整 E2E **91/91**（含深链 15 项）。独立 Clean Damai 验收通过：verify 19/19、可见性 API 43/43、浏览器旅程 9/9、对象读回 SHA/语义一致；文档 M1、链接门禁、脚本测试101/101、`git diff --check` 通过。全量 API suite **845 passed**（3 条告警，无失败）；本提交 SHA CI 尚待推送后核验。本状态不得解释为全站深链或 UX 工作包关闭。
+- 批次一、二、三全部具备本地实现证据后，仍以 §5 的全站路由/状态/视口覆盖及同 SHA CI、工作包 Gate 1 证据为最终关闭条件；不得将本轮局部来源闭环误报为全站深链计划及大麦 UX 工作包完成。

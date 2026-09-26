@@ -329,6 +329,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/investigations/{finding_id}/source-records/{fact_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Investigation Source Cell
+         * @description 在 Finding 的不可变导入血缘范围内读取源 Excel 单元格快照。
+         */
+        get: operations["investigation_source_cell_api_v1_investigations__finding_id__source_records__fact_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/investigations/{finding_id}/evidence/{evidence_id}/decision": {
         parameters: {
             query?: never;
@@ -581,6 +601,26 @@ export interface paths {
          * @description 登记公开财报原始文件：内容寻址不可变存储 + 幂等（同 sha256 返回既有登记）。
          */
         post: operations["upload_statement_source_api_v1_statements_sources_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/statements/sources/{source_sha256}/content": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Read Statement Source Content
+         * @description 读取已登记的公开财报 PDF；仅按登记表解析对象键，且授权决策已 durable audit。
+         */
+        get: operations["read_statement_source_content_api_v1_statements_sources__source_sha256__content_get"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -2338,6 +2378,29 @@ export interface components {
             /** Analysis Run Id */
             analysis_run_id?: string | null;
         };
+        /** InvestigationSourceCellResponse */
+        InvestigationSourceCellResponse: {
+            /** Fact Id */
+            fact_id: string;
+            /** Source File Name */
+            source_file_name: string;
+            /** Sheet Name */
+            sheet_name: string;
+            /** Source Row */
+            source_row: number;
+            /** Source Column */
+            source_column: string;
+            /** Canonical Field */
+            canonical_field: string;
+            /** Raw Value */
+            raw_value: {
+                [key: string]: unknown;
+            };
+            /** Transformed Value */
+            transformed_value: {
+                [key: string]: unknown;
+            };
+        };
         /**
          * ManagementWatchItem
          * @description 管理关注条目：确定性信号，带值带向，不解释原因。
@@ -3497,6 +3560,11 @@ export interface components {
             source_ref: string;
             /** Source Sha256 */
             source_sha256?: string | null;
+            /**
+             * Source Available
+             * @default false
+             */
+            source_available: boolean;
             /** Statement Types */
             statement_types: string[];
             /** Line Item Count */
@@ -3545,6 +3613,11 @@ export interface components {
             source_ref: string;
             /** Source Sha256 */
             source_sha256?: string | null;
+            /**
+             * Source Available
+             * @default false
+             */
+            source_available: boolean;
             /** Statement Types */
             statement_types: string[];
             /** Line Item Count */
@@ -4511,6 +4584,49 @@ export interface operations {
             };
         };
     };
+    investigation_source_cell_api_v1_investigations__finding_id__source_records__fact_id__get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                finding_id: string;
+                fact_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InvestigationSourceCellResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["InvestigationErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     decide_evidence_api_v1_investigations__finding_id__evidence__evidence_id__decision_post: {
         parameters: {
             query?: never;
@@ -5212,6 +5328,57 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["StatementErrorResponse"];
+                };
+            };
+        };
+    };
+    read_statement_source_content_api_v1_statements_sources__source_sha256__content_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                source_sha256: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StatementErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StatementErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };

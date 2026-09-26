@@ -60,11 +60,17 @@ const REPORT_A = {
   unit_note: "人民币千元",
   source_ref: "p5_samples/sf.pdf",
   source_sha256: "a".repeat(64),
+  source_available: false,
   statement_types: ["合并利润表"],
   line_item_count: 1,
   created_at: "2026-09-06T08:00:00+00:00",
 };
-const REPORT_B = { ...REPORT_A, id: "2b3c4d5e-6f70-8192-a3b4-c5d6e7f8091a", company_name: "圆通速递" };
+const REPORT_B = {
+  ...REPORT_A,
+  id: "2b3c4d5e-6f70-8192-a3b4-c5d6e7f8091a",
+  company_name: "圆通速递",
+  source_available: true,
+};
 
 const SNAPSHOT_1 = {
   id: "snap-1",
@@ -117,7 +123,7 @@ test.describe("深链接收端（批次一）", () => {
             {
               statement_type: "合并利润表",
               items: [
-                { item_name: "一、营业总收入", sort_order: 0, value_end: null, value_begin: null, value_current: "74142121.0000", value_prior: null },
+                { item_name: "一、营业总收入", sort_order: 0, value_end: null, value_begin: null, value_current: "74142121.0000", value_prior: null, page_number: 7, page_anchor: "strong" },
               ],
             },
           ],
@@ -130,6 +136,10 @@ test.describe("深链接收端（批次一）", () => {
     await page.goto(`/statements?report=${REPORT_B.id}`);
     await expect(page.getByRole("button", { name: /圆通速递/ })).toHaveAttribute("aria-pressed", "true");
     await expect(page.getByText("741.42 亿元").first()).toBeVisible();
+    await expect(page.getByRole("link", { name: "打开原文 PDF 第 7 页（行名+数值同页）" })).toHaveAttribute(
+      "href",
+      `/api/v1/statements/sources/${"a".repeat(64)}/content#page=7`,
+    );
   });
 
   test("报表分析：?report= 不存在时显式提示并回退默认", async ({ page }) => {

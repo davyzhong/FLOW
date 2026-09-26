@@ -20,12 +20,16 @@ from flow_api.api.schemas.investigation import (
     FindingTransitionResponse,
     InvestigationContextResponse,
     InvestigationErrorResponse,
+    InvestigationSourceCellResponse,
 )
 from flow_api.infrastructure.db import get_session_factory
 from flow_api.infrastructure.models.analytics import Finding, MetricSnapshot
+from flow_api.infrastructure.models.canonical import FactArCollection, FactOperatingActual
+from flow_api.infrastructure.models.intake import SourceFile, SourceRecord
 from flow_api.investigation.repositories import (
     InvestigationIdentityMismatchError,
     InvestigationNotFoundError,
+    InvestigationRepository,
 )
 from flow_api.investigation.service import InvestigationService
 from flow_api.investigation.state_machines import ReviewBlockedError
@@ -141,6 +145,76 @@ def investigation_context(
             str(error),
         ) from error
     return InvestigationContextResponse.model_validate(context.model_dump())
+
+
+@router.get(
+    "/{finding_id}/source-records/{fact_id}",
+    response_model=InvestigationSourceCellResponse,
+    responses={status.HTTP_404_NOT_FOUND: {"model": InvestigationErrorResponse}},
+    dependencies=[
+        Depends(
+            require_action(
+                Action.INVESTIGATION_READ,
+                LOADERS["load_finding_batch_scope_owner_or_deny_legacy"],
+                session_provider=get_investigation_session,
+            )
+        )
+    ],
+)
+def investigation_source_cell(
+    finding_id: UUID,
+    fact_id: UUID,
+    session: SessionDependency,
+) -> InvestigationSourceCellResponse:
+    """在 Finding 的不可变导入血缘范围内读取源 Excel 单元格快照。"""
+    try:
+        binding = InvestigationRepository().load_binding(
+            session,
+            finding_id,
+            batch_id=None,
+            metric_snapshot_id=None,
+            analysis_run_id=None,
+        )
+    except InvestigationNotFoundError as error:
+        raise _error(status.HTTP_404_NOT_FOUND, "investigation_not_found", str(error)) from error
+
+    fact: FactOperatingActual | FactArCollection | None = session.scalar(
+        select(FactOperatingActual).where(
+            FactOperatingActual.id == fact_id,
+            FactOperatingActual.import_version_id == binding.import_version.id,
+        )
+    )
+    if fact is None:
+        fact = session.scalar(
+            select(FactArCollection).where(
+                FactArCollection.id == fact_id,
+                FactArCollection.import_version_id == binding.import_version.id,
+            )
+        )
+    source_record = session.get(SourceRecord, fact.source_record_id) if fact else None
+    source_file = session.get(SourceFile, source_record.source_file_id) if source_record else None
+    if (
+        fact is None
+        or source_record is None
+        or source_record.import_version_id != binding.import_version.id
+        or source_file is None
+        or source_file.batch_id != binding.snapshot.batch_id
+    ):
+        raise _error(
+            status.HTTP_404_NOT_FOUND,
+            "source_record_not_found",
+            "该来源单元格不属于当前调查的导入批次",
+        )
+    return InvestigationSourceCellResponse(
+        fact_id=str(fact.id),
+        source_file_name=source_file.original_filename,
+        sheet_name=source_record.sheet_name,
+        source_row=source_record.source_row,
+        source_column=source_record.source_column,
+        canonical_field=source_record.canonical_field,
+        raw_value=source_record.raw_value,
+        transformed_value=source_record.transformed_value,
+    )
 
 
 _DEP_EVIDENCE_DECIDE = require_action(

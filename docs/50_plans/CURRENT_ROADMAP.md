@@ -53,7 +53,7 @@ superseded_by: null
 1. **C 级交叉评归因与原件复核**（上表3，进行中）：42 个确认异常已全部归因为真实抽取错误（`4111f6a`：19 项空白/破折号误借邻年值、22 项京东物流权益变动表误分类、1 项阿里 FY2023 前期商誉减值漏抽）；剩余：109 个口径疑点待裁决、JDL 200 格重核（英文版已冻结 `b161fff`，输入条件具备）、抽取器修订（实现方职责）。只在归因后修订新版本订正记录，保留原值与证据。
 2. **U4 解析器修复与真正的新留出**（上表1'）：新留出双样本已冻结并完成独立 oracle 录入（`926af825`：小米 2026H1 + 阿里 FY2027Q1，抽签记录见 [holdout-lottery-2026-09-25](../../validation/financial_reports/holdout-lottery-2026-09-25.md)）。剩余：`cn_ashare_table` 支持「合并及公司」标题与页码区间参数化；旧三样本回归；新留出首跑前禁止适配/调参。
 3. **重新跑质量基准并完成 C 级 Go/No-Go**：依赖必要修订、U4新留出首跑和盲测；重跑L1并归档机器结果。交叉评与抽签均不单独构成通过，`1794/1794` 只表示已登记覆盖口径。
-4. **全站超链接化（深链下钻）**（**active**，用户 2026-09-26 确认）：按[实施计划](2026-09-26-ui-deep-link-implementation-plan.md)三批推进。**批次一、二已完成本地验收并推送 `7976691`**：六页接收端 + S/M 级下钻；新增指标条目、MetricSnapshot、AnalysisRun 只读详情 API 和授权血缘约束；Copilot 引用定位；公开覆盖矩阵报告链接映射。API/安全51/51、Web单测133/133、深链 Playwright15/15、typecheck、合同生成、文档M1/M6门禁通过；该 SHA 隔离 Damai 全旅程 verify19/19、E2E9/9。GitHub CI run `36225466153` 尚待最终核验。**批次三尚未开始**（原文/源记录查看器、冻结产物回链、ManagementWatchItem 关联等），计划不可关闭；Gate 1全路由数据/页面覆盖矩阵仍待完成。详见[实施计划](2026-09-26-ui-deep-link-implementation-plan.md)和[可链接性审计](../80_reviews/2026-09-26-ui-linkability-audit.md)。
+4. **全站超链接化（深链下钻）**（**active**，用户 2026-09-26 确认）：按[实施计划](2026-09-26-ui-deep-link-implementation-plan.md)三批推进。**批次一、二**已本地验收并已推送 `7976691`。**批次三本地实现完成**：登记 PDF 原文读取与 SHA 复验/授权审计、statement 页锚 PDF 链接、按 Finding 批次血缘读取真实源单元格、冻结 objective payload/新 HTML 页锚回链、管理关注 `metric_code` 指标库链接；批次历史 GET 已由既有实现满足。没有添加无法证实的 `finding_id` 关系。新 E2E runner 含深链测试后生产构建 **91/91**；Web 142/142、来源/API/冻结相关 pytest 30/30、lint/typecheck/contracts-check 通过。全量 API suite、Clean Damai verify、文档门禁及新 SHA CI 尚待最终确认。**本地批次三通过不等于全站计划关闭**：全路由状态/视口覆盖和 Gate 1 剩余证据仍在 UX 工作包中。详见[实施计划](2026-09-26-ui-deep-link-implementation-plan.md)和[可链接性审计](../80_reviews/2026-09-26-ui-linkability-audit.md)。
 5. **大麦数据可见性与剩余 UX 收口**（上表2b，用户已批准）：Gate1初始矩阵绑定`main@3ff95115`+dirty overlay，非干净提交验收。FY2025工作台契约、Gate2覆盖FY2025 37/40与FY2026 40/40、OCF及矩阵比较策略已完成；深链批次一、二已交付，隔离全旅程verify19/19、E2E9/9。常驻开发库2026-09-26已备份后幂等恢复（无清库/迁移），verify19/19两次；Next开发origin修复后常驻只读页面6/6通过，另确认批次、Finding、财报和经营快照显示。正式报告产物历史为空。仍需Gate1全路由响应矩阵、Gate3/4其余页面缺口与下钻、深链批次三、Gate5最新提交SHA总CI复验。详细状态见工作包。
 6. **P3 数据与溯源接入**（上表3b）：修复/替换ZTO文本层，完成抽取、勾稽、页锚及API/UI链路测试；评审并实现真实来源链接；复核阿里分部序列在main的来源和可见性。
 7. **知识 release 收尾**（上表K）：完成K0–K6，核对M2用户追认、`CURRENT_RELEASE`、sealed candidate/激活记录、Task 10三仓库证据和独立复验；用户裁决前不切指针。
@@ -77,6 +77,8 @@ superseded_by: null
 - O-01/O-02 地基落地（2026-09-17，AI 问数 v2 必须项第一批）：`GET /api/v1/metric-library/semantic-context`（对象/维度/限定/值四元素语义上下文，引用携带 entry_id 回链口径）+ `POST /api/v1/metric-library/computation-proposals`（提议→程序复算：AI 只能提名治理字典 effective 指标，确定性沙盒在冻结报表事实上复算，缺口=结构化 refusal 绝不编造，审计走 JSONL 无新表）+ `GET /computation-inventory`（复算事实清单）。行动者=ai_analyst/analyst（metric_library.read），零 RBAC 矩阵变更；任意 AST 提议与 LLM 通道另行裁决。
 
 ## 纪律
+
+2026-09-26 深链批次三验收更新（覆盖本页第 4 项旧待办措辞）：批次三本地实现及验收完成，Clean Damai verify 19/19、可见性 API 43/43、浏览器 9/9、全量 API 845 passed、生产 E2E 91/91、Web 142/142、脚本测试 101/101；M1/link 门禁通过。提交后同 SHA CI 与全站页面状态/视口矩阵仍未完成，故第 4、5 项保持 active，不能宣布 UX 工作包关闭。细节见[深链实施计划](2026-09-26-ui-deep-link-implementation-plan.md)。
 
 - 任务领取/勾选/提交只用本页与工作包；模块可以维护不可领取的 workstream/backlog 视图，但不得形成第二份状态真相；每完成一阶段提交推送、CI 绿才算 done；
 - 详细验收步骤在工作包与归档参考规格（原统一实施计划、执行收敛计划等，均已 archived）；旧详细计划均为历史证据，不按其空复选框恢复任务；

@@ -60,6 +60,35 @@ def test_pdf_footer_template_is_a_string() -> None:
     assert "pageNumber" in footer
 
 
+def test_objective_html_deep_links_only_when_source_is_registered() -> None:
+    from flow_api.publishing.objective_renderers import render_html_from_payload
+
+    payload = {
+        "source": {
+            "company_name": "测试公司",
+            "stock_code": "000001.SZ",
+            "period_label": "FY2025",
+            "report_kind": "年报",
+            "unit_note": "人民币元",
+            "source_ref": "registered.pdf",
+            "source_sha256": "a" * 64,
+            "source_available": True,
+        },
+        "statements": {
+            "资产负债表": [
+                {"item": "现金", "value_current": "12", "value_prior": "10", "page_number": 9}
+            ]
+        },
+        "statements_raw": {},
+    }
+    html = render_html_from_payload(payload)
+    assert f"/api/v1/statements/sources/{'a' * 64}/content#page=9" in html
+
+    payload["source"]["source_available"] = False
+    unavailable_html = render_html_from_payload(payload)
+    assert "/api/v1/statements/sources/" not in unavailable_html
+
+
 @pytest.fixture(scope="module", autouse=True)
 def migrated_database() -> None:
     command.upgrade(Config("alembic.ini"), "head")

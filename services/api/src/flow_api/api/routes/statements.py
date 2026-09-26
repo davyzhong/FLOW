@@ -9,7 +9,7 @@ from collections.abc import Iterator
 from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, File, HTTPException, Path, UploadFile, status
+from fastapi import APIRouter, Depends, File, HTTPException, Path, Response, UploadFile, status
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -36,7 +36,11 @@ from flow_api.api.schemas.statement import (
 )
 from flow_api.infrastructure.db import get_session_factory
 from flow_api.infrastructure.models.statement import StatementCorrection, StatementSource
-from flow_api.infrastructure.object_store import ObjectStore
+from flow_api.infrastructure.object_store import (
+    ImmutableObjectConflictError,
+    ImmutableObjectNotFoundError,
+    ObjectStore,
+)
 from flow_api.infrastructure.s3_client import build_s3_client
 from flow_api.security.authorization import Action
 from flow_api.security.route_policy import (
@@ -77,6 +81,16 @@ def get_statement_source_intake() -> StatementSourceIntake:
 
 
 IntakeDependency = Annotated[StatementSourceIntake, Depends(get_statement_source_intake)]
+
+
+def get_statement_source_store() -> ObjectStore:
+    settings = get_settings()
+    return ObjectStore(client=build_s3_client(settings), bucket=settings.s3_bucket)
+
+
+StatementSourceStoreDependency = Annotated[
+    ObjectStore, Depends(get_statement_source_store)
+]
 
 
 def _error(http_status: int, code: str, message: str) -> HTTPException:
@@ -169,6 +183,61 @@ def list_statement_sources(session: SessionDependency) -> StatementSourceListRes
 
 
 @router.get(
+    "/sources/{source_sha256}/content",
+    responses={
+        status.HTTP_404_NOT_FOUND: {"model": StatementErrorResponse},
+        status.HTTP_409_CONFLICT: {"model": StatementErrorResponse},
+    },
+    dependencies=[
+        Depends(
+            require_action(
+                Action.STATEMENT_SOURCE_READ,
+                LOADERS["load_public_statement_source"],
+                session_provider=get_statement_session,
+            )
+        )
+    ],
+)
+def read_statement_source_content(
+    session: SessionDependency,
+    store: StatementSourceStoreDependency,
+    source_sha256: Annotated[str, Path(pattern=r"^[0-9a-f]{64}$")],
+) -> Response:
+    """读取已登记的公开财报 PDF；仅按登记表解析对象键，且授权决策已 durable audit。"""
+    source = session.scalar(
+        select(StatementSource).where(StatementSource.sha256 == source_sha256)
+    )
+    if source is None:
+        # 防御性二次校验；通常未登记对象已在授权 loader 阶段 fail closed。
+        raise _error(status.HTTP_404_NOT_FOUND, "statement_source_not_found", "来源文件不存在")
+    try:
+        content = store.read_by_key(source.object_key, source.sha256)
+    except ImmutableObjectNotFoundError as error:
+        raise _error(
+            status.HTTP_404_NOT_FOUND, "statement_source_object_missing", "来源文件对象缺失"
+        ) from error
+    except ImmutableObjectConflictError as error:
+        raise _error(
+            status.HTTP_409_CONFLICT,
+            "statement_source_integrity_conflict",
+            "来源文件完整性校验失败",
+        ) from error
+
+    from urllib.parse import quote
+
+    filename = quote(source.original_filename, safe="")
+    return Response(
+        content=content,
+        media_type="application/pdf",
+        headers={
+            "content-disposition": f"inline; filename*=UTF-8''{filename}",
+            "cache-control": "no-store",
+            "x-content-type-options": "nosniff",
+        },
+    )
+
+
+@router.get(
     "",
     response_model=StatementReportListResponse,
     responses={
@@ -187,9 +256,13 @@ def list_statement_sources(session: SessionDependency) -> StatementSourceListRes
 )
 def list_statement_reports(session: SessionDependency) -> StatementReportListResponse:
     listing = StatementService().list_reports(session)
+    registered_shas = set(session.scalars(select(StatementSource.sha256)).all())
     return StatementReportListResponse(
         reports=tuple(
-            StatementReportSummaryResponse.model_validate(summary.model_dump())
+            StatementReportSummaryResponse(
+                **summary.model_dump(),
+                source_available=summary.source_sha256 in registered_shas,
+            )
             for summary in listing.reports
         )
     )
@@ -224,8 +297,17 @@ def get_statement_report(
             error.code,
             "指定的财报报告不存在",
         ) from error
+    source_available = False
+    if detail.source_sha256:
+        source_available = session.scalar(
+            select(StatementSource.id).where(
+                StatementSource.sha256 == detail.source_sha256,
+                StatementSource.status == "registered",
+            )
+        ) is not None
     return StatementReportDetailResponse(
         **detail.model_dump(exclude={"sections"}),
+        source_available=source_available,
         sections=tuple(
             StatementSectionResponse(
                 statement_type=section.statement_type,

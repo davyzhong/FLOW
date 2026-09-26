@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 4.5
+version: 4.6
 created_at: 2026-09-24
 updated_at: 2026-09-26
 owner: FLOW
@@ -224,7 +224,7 @@ GitHub Actions run `36222136591`（SHA `430020f`）与 `36222489952`（SHA `59b3
 
 ### Gate 4 全站深链批次一、二进展（2026-09-26）
 
-全站深链独立计划见[实施计划](../2026-09-26-ui-deep-link-implementation-plan.md)。批次一、二的代码与本地验收已完成：API/安全用例51/51、Web单测133/133、深链E2E15/15，typecheck、合同生成与文档门禁通过。当前 CI run `36224649915` 的 dashboard 与静态/合同/单测/E2E等已完成作业均成功，但 integration、data-contract、intake-e2e 当时仍运行；此 run 基于 `29877d1`，不能替代当前深链提交 SHA 的 CI 结果。批次三（原文/源记录查看、冻结产物回链、ManagementWatchItem 关联）未开始。Gate 1全路由响应矩阵与本工作包其他页面可见性仍未关闭；因此本工作包继续 active。
+全站深链独立计划见[实施计划](../2026-09-26-ui-deep-link-implementation-plan.md)。批次一、二已完成。批次三最新本地实现覆盖：登记公开 PDF 原文服务及 SHA 校验/访问决策审计、财报页码跳原文、按 Finding 批次血缘查看真实源单元格、冻结 objective 新 payload 保留页码/锚点及生成 HTML 回链、管理关注按已有 metric_code 跳指标定义。ManagementWatchItem 没有可证实的 finding_id 关联，因此不造字段或伪链；GET /batches 与批次历史原已实现。当前 Web/E2E/API、本工作包剩余 Gate 1 路由响应矩阵和同一 SHA CI 状态以路线图及深链计划最新更新为准。本工作包仍 active。
 
 批次二提交 `7976691` 推送后，在该代码版本上另跑隔离的大麦全旅程：新 Compose 卷完成迁移与 seed，verify 19/19、浏览器 E2E 9/9。之后为 `/data` 与 `/metric-library` 补充真实数据展示断言：seed 批次必须出现在最近批次表，点击批次名后 `?batch=` 生效且该行标记为当前上下文；指标覆盖矩阵必须显示 FY2025 37/40、FY2026 40/40。两轮新增断言后的隔离全旅程均9/9。证明大麦主演示页面有真实批次与覆盖值展示，并未被深链改动破坏；不代表 Gate 1逐路由覆盖矩阵完成。`7976691` 的 CI run `36225466153` 当时仍在运行，需以最终状态为准。
 

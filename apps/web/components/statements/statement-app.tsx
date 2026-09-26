@@ -109,6 +109,8 @@ function StatementTable({
             page={line.page_number ?? null}
             anchor={line.page_anchor ?? null}
             sourceRef={detail.source_ref}
+            sourceSha256={detail.source_sha256}
+            sourceAvailable={detail.source_available}
           />
         );
       },

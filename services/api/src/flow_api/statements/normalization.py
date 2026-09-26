@@ -181,6 +181,11 @@ def normalize_report(
                 # 组合映射在合成行生成，原始行本身不再单独映射
                 continue
             item_id, values, trace = _mapped_values(line, target)
+            trace_payload: dict[str, Any] = {**trace}
+            if line.page_number is not None:
+                trace_payload.update(
+                    {"page_number": line.page_number, "page_anchor": line.page_anchor}
+                )
             if item_id is not None:
                 resolved += 1
             else:
@@ -198,7 +203,7 @@ def normalize_report(
                     value_begin=values["value_begin"],
                     value_current=values["value_current"],
                     value_prior=values["value_prior"],
-                    trace=trace,
+                    trace=trace_payload,
                 )
             )
 

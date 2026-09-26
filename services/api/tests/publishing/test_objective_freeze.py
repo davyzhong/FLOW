@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import json
 from collections.abc import Iterator
+from decimal import Decimal
 from pathlib import Path
 from typing import Any
 
@@ -71,6 +72,11 @@ def _import_and_normalize(session: Session) -> Any:
         payload=payload,
         source_ref="p5_samples/sf_002352/SF_2026_Q1_report.pdf",
         source_sha256="a" * 64,
+        provenance_index={
+            ("合并利润表", "一、营业总收入", "value_current", "002352.SZ"): {
+                (Decimal("74142121"), 5, "strong")
+            }
+        },
     )
     session.flush()
     normalize_report(session, report)
@@ -95,6 +101,11 @@ async def test_freeze_creates_typed_payload(db_session: Session) -> None:
     assert view["source"]["unit_note"] == "人民币千元（每股收益为元）"
     # 行项目进载荷（原值不换算）
     assert any(row["item"] == "货币资金" for row in view["statements"]["合并资产负债表"])
+    source_link_row = next(
+        row for row in view["statements"]["合并利润表"] if row["item"] == "一、营业总收入"
+    )
+    assert source_link_row["page_number"] == 5
+    assert source_link_row["page_anchor"] == "strong"
     # 不可变兜底：UPDATE objective_report_snapshot 必须被 CHECK 触发器/规则拒绝。
     # （当前实现为整版重冻结幂等：内容相同复用行；此处仅断言 payload 非空且可读。）
     assert view["report_type"] == "objective_statement"

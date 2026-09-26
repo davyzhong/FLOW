@@ -46,4 +46,33 @@ describe("ProvenanceBadge", () => {
     fireEvent.pointerDown(screen.getByRole("button", { name: "外部按钮" }));
     expect(badge).toHaveAttribute("aria-expanded", "false");
   });
+
+  it("links to a registered source PDF at the exact source page", () => {
+    render(
+      <ProvenanceBadge
+        page={17}
+        anchor="strong"
+        sourceSha256={"a".repeat(64)}
+        sourceAvailable
+      />,
+    );
+    expect(screen.getAllByRole("link", { name: /打开原文 PDF 第 17 页/ })[0]).toHaveAttribute(
+      "href",
+      `/api/v1/statements/sources/${"a".repeat(64)}/content#page=17`,
+    );
+    expect(screen.queryByRole("button")).not.toBeInTheDocument();
+  });
+
+  it("does not offer a raw PDF link when the source is not registered", () => {
+    render(
+      <ProvenanceBadge
+        page={17}
+        anchor="strong"
+        sourceSha256={"a".repeat(64)}
+        sourceAvailable={false}
+      />,
+    );
+    expect(screen.queryByRole("link")).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /溯源：原文第 17 页/ })).toBeInTheDocument();
+  });
 });

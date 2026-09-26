@@ -6,6 +6,7 @@ export type DashboardFilters = NonNullable<
   operations["dashboard_overview_api_v1_dashboard_overview_get"]["parameters"]["query"]
 >;
 export type InvestigationContext = components["schemas"]["InvestigationContextResponse"];
+export type InvestigationSourceCell = components["schemas"]["InvestigationSourceCellResponse"];
 export type InvestigationAcknowledgement =
   | components["schemas"]["EvidenceDecisionResponse"]
   | components["schemas"]["ConclusionResponse"]
@@ -199,6 +200,16 @@ export const flowApi = {
     const suffix = parameters.toString();
     return request<InvestigationContext>(
       `/api/v1/investigations/${query.finding_id}${suffix ? `?${suffix}` : ""}`,
+      signal,
+    );
+  },
+  getInvestigationSourceCell(
+    findingId: string,
+    factId: string,
+    signal?: AbortSignal,
+  ): Promise<InvestigationSourceCell> {
+    return request<InvestigationSourceCell>(
+      `/api/v1/investigations/${encodeURIComponent(findingId)}/source-records/${encodeURIComponent(factId)}`,
       signal,
     );
   },
