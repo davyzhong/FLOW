@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import path from "node:path";
 
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 import type { DashboardResponse } from "../lib/api/client";
 
 // 大麦 synthetic 演示全旅程 E2E（Task C2）：
@@ -21,6 +21,24 @@ const DAMAI_ORG = "国际供应链事业部";
 const DAMAI_SEGMENT = "电商平台客户";
 const DAMAI_PRODUCT = "跨境标准包裹";
 const DAMAI_REGION = "华东区";
+
+async function expectDashboardCardsMatch(page: Page, response: DashboardResponse) {
+  const cards = page.getByTestId("metric-card");
+  await expect(cards).toHaveCount(response.metric_cards.length);
+  for (const metric of response.metric_cards) {
+    const uiCard = cards.filter({ hasText: metric.title });
+    await expect(uiCard).toHaveCount(1);
+    await expect(uiCard.locator(".metric-card__value")).toHaveText(metric.primary.display_value);
+    const expectedComparisons = [metric.budget, metric.yoy, metric.ytd_budget];
+    const uiComparisons = uiCard.locator(".metric-comparison");
+    await expect(uiComparisons).toHaveCount(expectedComparisons.length);
+    for (const [index, expected] of expectedComparisons.entries()) {
+      const actual = uiComparisons.nth(index);
+      await expect(actual).toHaveAttribute("data-status", expected.status);
+      await expect(actual.locator(".metric-comparison__value")).toContainText(expected.display_value);
+    }
+  }
+}
 
 test("dashboard renders damai overview with four grain filters", async ({ page }) => {
   await page.goto("/");
@@ -45,10 +63,35 @@ test("dashboard renders damai overview with four grain filters", async ({ page }
     page.getByRole("combobox", { name: "区域" }).locator("option", { hasText: DAMAI_REGION }),
   ).toHaveCount(1);
 
-  // 选中客户群粒度后驾驶舱按筛选重载
-  await page.getByRole("combobox", { name: "客户群" }).selectOption({ label: DAMAI_SEGMENT });
-  await expect(page).toHaveURL(/customer_segment_id=/);
-  await expect(cards.first()).toBeVisible({ timeout: 30_000 });
+  // 真实操作本月/YTD和四类筛选器，逐次检查控件状态及URL；最后对账组合参数 API/UI。
+  const period = page.getByRole("combobox", { name: "期间" });
+  await period.selectOption("ytd");
+  await expect(period).toHaveValue("ytd");
+  await expect(page).toHaveURL(/period_view=ytd/);
+  const dimensionParams = [
+    ["组织", "organization_id"],
+    ["客户群", "customer_segment_id"],
+    ["物流产品", "logistics_product_id"],
+    ["区域", "region_id"],
+  ] as const;
+  for (const [label, param] of dimensionParams) {
+    const control = page.getByRole("combobox", { name: label });
+    const firstOption = control.locator("option").nth(1);
+    const value = await firstOption.getAttribute("value");
+    expect(value, `${label}至少有一个实际选项`).toBeTruthy();
+    await control.selectOption(value!);
+    await expect(control).toHaveValue(value!);
+    await expect(page).toHaveURL(new RegExp(`${param}=`));
+    const query = new URL(page.url()).searchParams.toString();
+    const filteredResponse = await page.request.get(`/api/v1/dashboard/overview?${query}`);
+    expect(filteredResponse.ok()).toBeTruthy();
+    const filtered = (await filteredResponse.json()) as DashboardResponse;
+    expect(filtered.active_filters[param]).toBe(value);
+    expect(filtered.active_filters.period_view).toBe("ytd");
+    await expectDashboardCardsMatch(page, filtered);
+    await control.selectOption("");
+    await expect(control).toHaveValue("");
+  }
 });
 
 test("dashboard API serves customer-grain overview", async ({ page }) => {
@@ -100,20 +143,7 @@ test("dashboard API serves customer-grain overview", async ({ page }) => {
   }
 
   // API→UI 逐卡对账：不仅确认数据存在，还保证页面没有漏卡、错值或状态漂移。
-  await expect(cards).toHaveCount(body.metric_cards.length);
-  for (const metric of body.metric_cards) {
-    const uiCard = cards.filter({ hasText: metric.title });
-    await expect(uiCard).toHaveCount(1);
-    await expect(uiCard.locator(".metric-card__value")).toHaveText(metric.primary.display_value);
-    const expectedComparisons = [metric.budget, metric.yoy, metric.ytd_budget];
-    const uiComparisons = uiCard.locator(".metric-comparison");
-    await expect(uiComparisons).toHaveCount(expectedComparisons.length);
-    for (const [index, expected] of expectedComparisons.entries()) {
-      const actual = uiComparisons.nth(index);
-      await expect(actual).toHaveAttribute("data-status", expected.status);
-      await expect(actual.locator(".metric-comparison__value")).toContainText(expected.display_value);
-    }
-  }
+  await expectDashboardCardsMatch(page, body);
 
   // 矩阵全部行列和格值都与同一响应对账。不可用的实际值必须仍显示破折号，不能补成0。
   const matrixUi = page.getByRole("table", { name: "客户群与产品毛利矩阵" });

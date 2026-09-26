@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 5.2
+version: 5.3
 created_at: 2026-09-24
 updated_at: 2026-09-27
 owner: FLOW
@@ -52,6 +52,16 @@ applies_to: web-frontend
 - 本轮 `make test-damai-demo-e2e` 在隔离 Compose 项目中验证迁移头 `0031_enterprise_directory`、seed发行 manifest SHA `6303595f01a3a4fb10bf90bf7320701107bb24aeedaad3e6ef9723bcd3e3bb3a`、verify 19/19、只读 GET 85/85 HTTP200、真实浏览器 9/9；隔离 Compose 卷与服务由脚本清理，未触碰常驻 `flow` 数据库。
 - 验证：Web Vitest 142/142；矩阵 builder pytest3/3；本次修改后的 `pnpm exec tsc --noEmit`、目标 E2E ESLint 通过；前一检查点截图归档61/61与响应式E2E27/27通过。当前筛选 API 探测覆盖全部单维选项×两个期间，但尚未穷举多维交叉组合，UI筛选器也仅有代表性 E2E；此代码仍须提交后的同 SHA required CI。
 - 尚未关闭：多维筛选交叉组合、全部 UI 筛选交互、其他所有数据页面的逐项 API→源事实→UI 映射、所有显示数据的深链逐点检查、其余交互路由的全状态/全视口矩阵及 Gate 5 干净 SHA 全链。以上 Dashboard 逐项对账只关闭部分本页面值一致性子缺口，不得把 UX Gate 或工作包标 completed。
+
+### 筛选能力矩阵与 UI 交互复验（2026-09-27，当前状态覆盖前文旧筛选状态；非关闭）
+
+- Dashboard 筛选合同以 API `filter_options.supported_combinations` 为准：支持全局、任一单维、客户群×物流产品；其它维度对返回 422 `unsupported_filter_combination`。
+- 只读矩阵覆盖 159 项：149 项预期 HTTP200（基础路由、四类维度全部值×month/ytd、客户群×物流产品全值组合×month/ytd），另有10项代表性不支持组合（五种不支持维度对×两种期间）按指定错误码拒绝；意外状态/错误码为0。清单 SHA `4f9e45c1c668d725cc28f6eb17dd0add223bb48e0205e15fee52f7534866ba63`，含运行期快照ID，只作本轮证据。矩阵 builder pytest3/3。
+- 浏览器实际操作 YTD 与组织/客户群/产品/区域四个 selector，逐项断言控件值、URL query、对应 API `active_filters` 和8张 KPI 卡显示值/比较状态一致。隔离旅程：seed发行 manifest SHA `6303595f01a3a4fb10bf90bf7320701107bb24aeedaad3e6ef9723bcd3e3bb3a`、verify19/19、矩阵159项（149 expected200 + 10 expected422，零意外）、浏览器9/9；隔离栈清理完毕。
+- 首次将所有维度对的笛卡尔积都强制期望200，暴露324个合同性422并产生隔离PostgreSQL约6GB读取流量；根据 API 支持合同修正为“合法客户群×产品全值组合 + 其它维度对代表性错误码验证”。本次全矩阵约1.2分钟通过；此全量 pairwise 用于 UX Gate，不应无必要放进常规快速 smoke。
+- 验证：`make lint && make typecheck && make test-web`（Web142/142；lint零错误、一条既有TanStack Table warning）、矩阵pytest3/3、plan views、文档M1、链接、contracts均通过；E2E目标 ESLint/typecheck通过。此代码须提交后的同 SHA required CI。
+- CI追查：旧 SHA `cc2211e5` run `36276782059` 最终失败于 `tests/integration/test_metric_impact.py::test_impact_report_traverses_downstream_and_sandbox`（88项中1失败，`SandboxDiff.current_value=None`，原测试预期非空）；与本次筛选改动无直接关系，但需观察新 SHA 是否复现，不能忽略。
+- 本工作包仍 active：其它页面 API→源事实→UI 映射、深链逐点检查、其余交互路由全状态/全视口矩阵与 Gate5全链尚未关闭。
 
 ### 真实大麦 API→页面交叉对账（2026-09-27，Gate 1 部分闭环）
 

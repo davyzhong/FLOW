@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目尽调、优化与单 Agent 执行总交接
 doc_type: navigation
 status: current
-version: 5.2
+version: 5.3
 created_at: 2026-09-12
 updated_at: 2026-09-27
 owner: FLOW
@@ -20,7 +20,8 @@ applies_to: repository
 
 ### 接手基线、当前状态与操作纪律
 
-- **最新状态覆盖旧快照（2026-09-27）**：上文第一条的“第二子步尚未提交”、以及第一检查点 CI `queued` 均已过时：第二检查点已提交推送 `3fb0b431ee6eb71f06676c9183912a7c04b574c6`，CI run `36277880493` queued；第一检查点 `43ab4078` / run `36277435789` 仍 in progress。当前 UX 唯一子步骤为多维交叉筛选：pairwise 全值 API 矩阵和真实浏览器 selector 行为；不另开顶层待办。其余历史描述以本覆盖项与路线图当前状态为准。
+- **最新状态覆盖旧快照（2026-09-27）**：Dashboard值对账、产品表现表、85个单维×期间请求和筛选 UI 单选验收均已通过。API能力合同表明只有客户群×物流产品这组双维筛选有效，其余双维组合应以422拒绝；真实隔离矩阵159项=149预期200+10预期422且错误码一致、0意外，浏览器9/9、seed verify19/19通过。对应实现/文档尚待本检查点提交。当前唯一子步骤改为按路由检查其它页面 API→事实→UI的值级映射与下钻；不另开顶层待办。具体证据和顺序以本覆盖项与路线图最新状态为准。
+- 本检查点门禁全绿：make lint/typecheck/test-web（142/142）、矩阵 pytest3/3、plan views、M1、links、contracts；E2E隔离旅程verify19/19、矩阵159项（149×200、10×422合同拒绝、0意外）、浏览器9/9。实现+证据将由下一提交推送。旧run `36276486753`/`36276188222` 已success；`36276782059` failure根因为 `test_impact_report_traverses_downstream_and_sandbox` (`SandboxDiff.current_value=None`, 88项中1失败)。当前 `43ab4078`/run `36277435789`、`3fb0b431`/run `36277880493`、`74d2003d`/run `36278275436` 仍in progress，必须追踪，不可口头视为绿。
 - 本轮从 GitHub `main` 快进同步到 `0aa2e880` 开始，在 `/Users/qiming/workspace/FLOW/.worktrees/execution-convergence` 的唯一 `main` 工作树串行执行。ORG-LEDGER 提交 `2c7d6eb4e9dead835a005687cdff8ac5ab19631f` 已推送，FLOW CI run `36270782272` 17/17 success。UX 第一检查点 `43ab4078` 已推送，run `36277435789` queued；该提交包含 Dashboard 8 KPI主值/三类比较、12个月×4列趋势明细、32格毛利矩阵的 API→UI 值级 E2E。第二子步骤正在本地改进：新增产品表现表逐行逐列值比对；GET矩阵针对四类维度的全部可选值同时探测 month/ytd，扩展到85条均HTTP200。第二子步隔离旅程 seed发行SHA `6303595f01a3a4fb10bf90bf7320701107bb24aeedaad3e6ef9723bcd3e3bb3a`、verify19/19、GET85/85、浏览器9/9；Web142/142、矩阵单测3/3、修改后的typecheck/目标ESLint通过。第二步代码和同步后的计划/状态/长交接文档尚未提交。四个数据密集页五态×三视口归档61/61、响应式E2E27/27（含pageerror）已通过。可见性清单会包含运行期快照ID，manifest SHA每轮变化，不作为稳定发行SHA。GitHub 旧run `36274530948` success；`36276188222`、`36276486753`仍有长测运行；`36276782059`显示`metrics-known-answers`失败且日志尚不可取，其余部分集成/契约/导入E2E还在跑，必须等终态并读取失败日志，不能宣称已绿。Gate 1仍未闭环：Dashboard多维组合/UI全部筛选、其它路由源事实/UI映射、全部下钻、剩余状态/视口及Gate5同SHA CI。报告中心loaded fixture只是UI契约夹具。历史`c08a2f6a`/`fc6e63a7`仅作旧快照解释。未触碰根工作树既有脏`AGENTS.md`和`apps/web/next-env.d.ts`。
 - **当前路线图计数（唯一队列11项）**：已完成 1（ORG-LEDGER）、实际执行中 1（UX 全站验收）、排队 8、外部材料受限 1。第1项因提交 SHA 同 CI 全绿而关闭，第2项已成为唯一执行项；不并行开启其他工作包。
 - 只在 `main` 上做，禁止新建并行任务分支；不得同时开始下一项。用户已授权常规项目实施与验证，不再为日常测试、分析、文档或常规实现请求再次批准。既有全局安全红线仍有效：真实数据迁移/schema、删除/覆盖/恢复常驻库、密钥/CI 配置、公开部署等按 `AGENTS.md` 处理；尤其常驻 `flow` 中的测试批次偏差 `01a0dcdd-8245-7c17-99aa-fce91a8a7a57` 不得自行删除、回滚或切 latest。
@@ -28,7 +29,7 @@ applies_to: repository
 - **ORG-LEDGER 的最新事实与安全边界**：工作包由 `9729dbc4`、具体三表 schema 提案由 `880f1b76` 推送；用户批准该准确方案由 `fc6e63a7` 记录。批准仅覆盖工作包列出的三表与对应迁移，不覆盖额外 schema、认证/RBAC 改造，也不授权在共享/常驻 DB 清理/初始化。可执行已批准迁移，但只在隔离数据库验证；不要对常驻库迁移或写入。
 - **ORG-LEDGER 最终验收**：发行包两次构建一致，31文件、manifest SHA `cbc7cccf924092ae7ca5f68eb8a797473cf6efcf31f4e91fbe22aa6f7758e513`；组织8/8/8、权限快照142条。11项企业/loader测试通过；隔离 CLI 首次full、重复full、business reset对账均正确（财务实际768、预算10752、经营实际1920、应收回款4800、快照12、成员8），事务回滚、租户隔离、审计追加保留通过。旧大麦 verify19/19、只读GET43/43、Playwright9/9；全量 API852、Web142、脚本107；合同、文档、lint、typecheck通过。提交 `2c7d6eb4`，CI run `36270782272` 17/17 success。仅获批三表迁移在隔离栈验证，常驻 `flow`/MinIO未触碰。
 - **遇到失败的统一处理**：保留原始日志和失败产物 → 定位根因并判别代码/数据/环境/外部输入 → 先运行最小重现 → 做最小修复或有记录的替代验证 → 重跑原失败项及相邻回归。禁止删断言、改预期值迎合实现、重写原始 oracle、用 synthetic 结果冒充真实验收。若原验收客观上不可完成，交付可复现的调查、替代结果、未满足项与重启条件；不能声称原验收通过。
-- **当前唯一下一动作**：将多维交叉筛选作为下一子步执行：构造四类维度两两组合的全值 pairwise GET 矩阵（month/ytd），并在浏览器通过所有 selector 改变筛选，核对 URL/API/页面卡片一致；同步观察 `36277435789`、`36277880493` 与此前 `36276188222`、`36276486753`、`36276782059`，终态后读取任何失败作业并定位根因。之后按路由覆盖表推进其它页面映射、下钻、状态和视口；只读检查排除调用即freeze/写快照的接口，安全验证只在隔离数据库。全部 Gate1/Gate5验收达标并同SHA CI绿后，才解锁队列第3项。
+- **当前唯一下一动作**：先完成本检查点的文档校验、提交并推送（目标 SHA CI随后记录）；继续追踪 `36277435789`、`36277880493`、`36278275436`，同时将已完成的旧失败 run `36276782059` 定位为 `test_impact_report_traverses_downstream_and_sandbox` 的 `SandboxDiff.current_value=None`，按最小重现处理并确认新 SHA 是否复现。之后继续 UX：从 `/statements`、`/analysis`、`/operations`、`/metric-library`、`/reports`、`/data`、`/investigations` 的已有覆盖表逐一补齐 API→源事实→UI 值级对账和可见下钻，再补其余交互页状态/视口；GET安全矩阵永远排除 freeze 写入路由，只在隔离数据库验收。全部 Gate1/Gate5验收达标且同SHA CI绿后，才解锁队列第3项。
 - **每项汇报格式**：完整 11 项队列和计数；当前项与细分步骤；本轮完成证据（SHA、命令、结果）；实际问题/替代路径；下一项何时解锁和唯一下一动作。不要写“等待用户验证/批准”作为常规动作；只有触及明文安全红线的 schema 执行边界才须记录为精确批准门。
 
 ### 唯一串行 To-do 的逐项操作卡

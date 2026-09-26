@@ -4,12 +4,14 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+from itertools import combinations
 import json
 import sys
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 from urllib.error import HTTPError, URLError
+from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
 
@@ -18,6 +20,8 @@ class VisibilityTarget:
     alias: str
     path: str
     context: str = ""
+    expected_status: int = 200
+    expected_error_code: str | None = None
 
 
 def _records(payload: dict[str, Any], *keys: str) -> list[dict[str, Any]]:
@@ -69,12 +73,15 @@ def build_visibility_targets(
     dashboard = discovery.get("dashboard", {})
     filter_options = dashboard.get("filter_options", {})
     dimensions = _records(filter_options, "dimensions")
+    dimension_options: dict[str, tuple[str, list[str]]] = {}
     for row in dimensions:
         dimension = row.get("dimension")
         param = dimension_params.get(str(dimension))
         options = _records(row, "options")
         if not param:
             continue
+        option_ids = [str(option["id"]) for option in options if option.get("id")]
+        dimension_options[str(dimension)] = (param, option_ids)
         for option in options:
             if not option.get("id"):
                 continue
@@ -89,6 +96,48 @@ def build_visibility_targets(
                 f"/api/v1/dashboard/overview?period_view=ytd&{param}={option_id}",
                 f"dataset=damai;period_view=ytd;{param}={option_id}",
             )
+
+    advertised_combinations = {
+        tuple(sorted(str(item) for item in combination))
+        for combination in filter_options.get("supported_combinations", [])
+        if isinstance(combination, list)
+    }
+    # Verify every supported two-dimension value pair; for unsupported dimension sets,
+    # probe one representative per period and assert the API's typed 422 rejection.
+    for (left_dimension, (left_param, left_ids)), (
+        right_dimension,
+        (right_param, right_ids),
+    ) in combinations(sorted(dimension_options.items()), 2):
+        pair = tuple(sorted((left_dimension, right_dimension)))
+        supported = pair in advertised_combinations
+        value_pairs = (
+            [(left_id, right_id) for left_id in left_ids for right_id in right_ids]
+            if supported
+            else list(zip(left_ids[:1], right_ids[:1], strict=True))
+        )
+        for left_id, right_id in value_pairs:
+            for period_view in ("month", "ytd"):
+                query = urlencode(
+                    {
+                        "period_view": period_view,
+                        left_param: left_id,
+                        right_param: right_id,
+                    }
+                )
+                add(
+                    f"dashboard-pair-{left_dimension}-{left_id}-{right_dimension}-{right_id}-{period_view}",
+                    f"/api/v1/dashboard/overview?{query}",
+                    f"dataset=damai;period_view={period_view};{left_param}={left_id};{right_param}={right_id}",
+                )
+                if not supported:
+                    target = targets[-1]
+                    targets[-1] = VisibilityTarget(
+                        alias=target.alias,
+                        path=target.path,
+                        context=target.context,
+                        expected_status=422,
+                        expected_error_code="unsupported_filter_combination",
+                    )
 
     report_rows = _records(seed, "reports") + _records(
         discovery.get("statements", {}), "reports"
@@ -205,18 +254,30 @@ def run_matrix(api_url: str, seed_path: Path, output_path: Path) -> dict[str, An
         except RuntimeError as error:
             status, body = 0, str(error).encode("utf-8")
             failures.append(f"{target.alias}: {error}")
+        error_code: str | None = None
+        if target.expected_error_code and status == target.expected_status:
+            try:
+                error_code = str(json.loads(body)["detail"]["code"])
+            except (KeyError, TypeError, ValueError, json.JSONDecodeError):
+                error_code = None
         record = {
             **asdict(target),
             "method": "GET",
             "status": status,
-            "expected_status": 200,
             "response_bytes": len(body),
             "response_sha256": hashlib.sha256(body).hexdigest(),
+            "error_code": error_code,
         }
         records.append(record)
         seen.add(target.path)
-        if status != 200:
-            failures.append(f"{target.alias}: expected 200, got {status}")
+        if status != target.expected_status:
+            failures.append(
+                f"{target.alias}: expected {target.expected_status}, got {status}"
+            )
+        elif target.expected_error_code and error_code != target.expected_error_code:
+            failures.append(
+                f"{target.alias}: expected error {target.expected_error_code}, got {error_code}"
+            )
         try:
             return json.loads(body)
         except json.JSONDecodeError:
@@ -257,6 +318,12 @@ def run_matrix(api_url: str, seed_path: Path, output_path: Path) -> dict[str, An
         "ok": not failures,
         "route_count": len(records),
         "http_200": sum(record["status"] == 200 for record in records),
+        "expected_rejections": sum(
+            record["status"] == record["expected_status"]
+            and record["expected_error_code"] is not None
+            and record["error_code"] == record["expected_error_code"]
+            for record in records
+        ),
         "failures": failures,
         "sha256_manifest": hashlib.sha256(
             "\n".join(record["response_sha256"] for record in records).encode("ascii")
