@@ -170,7 +170,7 @@ CI 补充（run `36217337338`，SHA `5510bad3`）：18 个作业中仅 integrati
 - 根因在真实大麦 FY2026 常驻 API 响应中复现：流动比率和资产负债率为 `not_applicable`，但对应资产负债表期末事实存在。O2 公式兜底只查 `cur`，忽略映射为 `end` 的同期间点余额。
 - 修复后，同期间点余额按 `cur → end` 读取。常驻只读 GET `/api/v1/operations/overview/01a0dc95-fb0a-7cd8-ab36-5b1a1c95d0ea` 返回 200，响应体 10,247 bytes，SHA-256 `4fc46607f45fa3927a7362d265728a1080674269ec6e62678eec08fecd2a04fd`；流动比率 `0.8119`、资产负债率 `0.8986`，原先错误状态已变为 `computed`。应收周转天数仍 `fact_missing`。
 - 前端依指标代码展示百分比、倍数、次数、天数，悬停可查看精确 API 原值。单位未声明的经营披露值保持原样，避免改变其精度或臆测单位。
-- 验证：运营分析组件 5/5、Web 全套 134/134、typecheck通过；lint 0 errors、1条既有 TanStack Table React Compiler warning。API 经营引擎15/15、ruff、mypy通过。此次仅执行 GET，没有写常驻库。
+- 验证：运营分析组件 5/5、Web 全套 134/134、typecheck通过；lint 0 errors、1条既有 TanStack Table React Compiler warning。API 经营引擎15/15、ruff、mypy通过。提交 `8ea20d6` 后执行 `make test-damai-demo-e2e`：新隔离 Compose 环境迁移/seed，verify19/19，浏览器E2E9/9通过；本次仅常驻API执行 GET，没有写常驻库。GitHub Actions run `36229234185` 对 `8ea20d6` 的已完成 job 均成功，integration/data-contract 长测仍运行，workflow尚未总绿。
 - 该响应来自提交前热重载工作树，不是 clean-SHA 发布验收；不关闭 Gate 1全路由矩阵、其他页面金额/数量格式审计、Gate3/4其余下钻或 Gate5。
 
 ## Gate 4 批次历史列表子项（提交 `430020f`，2026-09-26）
