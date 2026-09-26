@@ -1,14 +1,14 @@
 ---
 doc_id: FLOW-VERIFY-DAMAI-VISIBILITY-GATE1-001
-title: 大麦数据可见性与 Gate 4 批次历史验收证据 v2.5
+title: 大麦数据可见性与 Gate 4 批次历史验收证据 v2.6
 doc_type: verification
 status: draft
-version: "2.5"
+version: "2.6"
 created_at: 2026-09-26
 updated_at: 2026-09-26
 owner: FLOW
-commit_refs: "[3ff95115, 6591e148, 4932504c, 9cd43e20, 905cf544, e2417ffa, af375ba3, 101bcf23, 5510bad3, 430020f, 59b328dc, 85e907a, 7258763, 71a2dd8, 695ea18, 8ea20d6]"
-evidence_refs: "[read-only-local-api-probe, stable-overlay-fingerprint, sha256-response-matrix, damai-ocf-canonical-fixture, damai-isolated-seed-verify, damai-e2e-8-of-9, damai-e2e-9-of-9-ocf-trends-complete, margin-matrix-read-only-grain-audit, margin-comparison-selection-isolated-e2e-9-of-9, github-ci-stale-damai-coverage-assertion, secure-batch-history-api-ui-and-isolated-e2e-9-of-9, clean-sha-59b328dc-damai-e2e-9-of-9, github-dashboard-flow-test-database-url-conflict, dashboard-ci-url-isolation-unit-2-of-2, dashboard-playwright-7-of-7, github-run-36223558441-dashboard-success, persistent-demo-rehydrate-verify-19-of-19-twice, verifier-latest-published-report-regression-tests, allowed-dev-origin-live-readonly-ui-6-of-6, isolated-damai-e2e-9-of-9, persistent-page-api-response-hashes, unavailable-comparison-visible-status-red-green, web-vitest-134-of-134, live-dashboard-playwright-after-change-no-console-errors, operations-balance-sheet-cur-end-role-regression, operations-metric-unit-formatting, damai-fy2026-operations-response-sha256-4fc46607]"
+commit_refs: "[3ff95115, 6591e148, 4932504c, 9cd43e20, 905cf544, e2417ffa, af375ba3, 101bcf23, 5510bad3, 430020f, 59b328dc, 85e907a, 7258763, 71a2dd8, 695ea18, 8ea20d6, f135c93, 82cce21]"
+evidence_refs: "[read-only-local-api-probe, stable-overlay-fingerprint, sha256-response-matrix, damai-ocf-canonical-fixture, damai-isolated-seed-verify, damai-e2e-8-of-9, damai-e2e-9-of-9-ocf-trends-complete, margin-matrix-read-only-grain-audit, margin-comparison-selection-isolated-e2e-9-of-9, github-ci-stale-damai-coverage-assertion, secure-batch-history-api-ui-and-isolated-e2e-9-of-9, clean-sha-59b328dc-damai-e2e-9-of-9, github-dashboard-flow-test-database-url-conflict, dashboard-ci-url-isolation-unit-2-of-2, dashboard-playwright-7-of-7, github-run-36223558441-dashboard-success, persistent-demo-rehydrate-verify-19-of-19-twice, verifier-latest-published-report-regression-tests, allowed-dev-origin-live-readonly-ui-6-of-6, isolated-damai-e2e-9-of-9, persistent-page-api-response-hashes, unavailable-comparison-visible-status-red-green, web-vitest-134-of-134, live-dashboard-playwright-after-change-no-console-errors, operations-balance-sheet-cur-end-role-regression, operations-derived-formula-dependencies, operations-metric-unit-formatting, damai-fy2026-operations-response-sha256-225a9edb]"
 knowledge_release: flow-knowledge-2026-09-12.1
 applies_to: web-frontend
 supersedes: []
@@ -168,9 +168,9 @@ CI 补充（run `36217337338`，SHA `5510bad3`）：18 个作业中仅 integrati
 ## 经营分析点余额事实与指标展示格式修复（2026-09-26）
 
 - 根因在真实大麦 FY2026 常驻 API 响应中复现：流动比率和资产负债率为 `not_applicable`，但对应资产负债表期末事实存在。O2 公式兜底只查 `cur`，忽略映射为 `end` 的同期间点余额。
-- 修复后，同期间点余额按 `cur → end` 读取。常驻只读 GET `/api/v1/operations/overview/01a0dc95-fb0a-7cd8-ab36-5b1a1c95d0ea` 返回 200，响应体 10,247 bytes，SHA-256 `4fc46607f45fa3927a7362d265728a1080674269ec6e62678eec08fecd2a04fd`；流动比率 `0.8119`、资产负债率 `0.8986`，原先错误状态已变为 `computed`。应收周转天数仍 `fact_missing`。
+- 同期间点余额按 `cur → end` 读取；指标字典执行器也会将前序已计算结果传给下游依赖项。修正后常驻只读 GET `/api/v1/operations/overview/01a0dc95-fb0a-7cd8-ab36-5b1a1c95d0ea` 返回 200，当前工作树响应体 10,237 bytes、SHA-256 `225a9edbf04ffc0278c378b66f0229a8367b4786479ff0431dbff1a846ed5018`；FY2026流动比率 `0.8119`、资产负债率 `0.8986`、DSO `116.3881` 天，运营效率七项全部 `computed`。
 - 前端依指标代码展示百分比、倍数、次数、天数，悬停可查看精确 API 原值。单位未声明的经营披露值保持原样，避免改变其精度或臆测单位。
-- 验证：运营分析组件 5/5、Web 全套 134/134、typecheck通过；lint 0 errors、1条既有 TanStack Table React Compiler warning。API 经营引擎15/15、ruff、mypy通过。提交 `8ea20d6` 后执行 `make test-damai-demo-e2e`：新隔离 Compose 环境迁移/seed，verify19/19，浏览器E2E9/9通过；本次仅常驻API执行 GET，没有写常驻库。GitHub Actions run `36229234185` 对 `8ea20d6` 的已完成 job 均成功，integration/data-contract 长测仍运行，workflow尚未总绿。
+- 验证：API经营引擎15/15、ruff、mypy通过；运营分析组件5/5、Web全套134/134、typecheck通过；lint 0 errors、1条既有TanStack Table React Compiler warning。提交`82cce21`后重新运行隔离旅程：全新Compose迁移与seed、verify19/19、浏览器E2E9/9通过，含经营分析路由。常驻API仅GET。`8ea20d6`对应GitHub run `36229234185`已完成job成功，integration/data-contract仍在运行；`82cce21`工作流排队，最终CI结果待更新。
 - 该响应来自提交前热重载工作树，不是 clean-SHA 发布验收；不关闭 Gate 1全路由矩阵、其他页面金额/数量格式审计、Gate3/4其余下钻或 Gate5。
 
 ## Gate 4 批次历史列表子项（提交 `430020f`，2026-09-26）
