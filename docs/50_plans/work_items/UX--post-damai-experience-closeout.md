@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 3.9
+version: 4.0
 created_at: 2026-09-24
 updated_at: 2026-09-26
 owner: FLOW
@@ -45,6 +45,8 @@ Files:
 - Evidence: add a versioned coverage table to this work item or its linked verification record; do not create another status ledger.
 
 Acceptance: Gate 1 覆盖表必须逐项记录精确路由、请求参数/筛选、公司/组织、期间、数据集/批次、环境标识和 Git SHA；同一环境与 SHA 下冻结脱敏后的 GET 响应摘要或内容哈希。每个目标页有真实 GET 响应证据；缺口均有分类与 owner；已发布但未展示、或页面声称完整但 API 缺值的情况不得留作“无数据”笼统结论。
+
+只读验收的安全边界：不得仅凭 HTTP 方法判定路由无副作用。代码审查已发现以下 GET 会调用 freeze 并可能新增客观快照：`GET /api/v1/statements/{report_id}/objective-snapshot`、`GET /api/v1/statements/{report_id}/objective-snapshot/html`、`GET /api/v1/operations/overview/{report_id}/{html|xlsx|pptx|pdf}`。这些端点必须从 GET-only 探测矩阵排除；保留为单独的 API 语义/发布行为评审项。在明确完成只读保证或获得显式状态变更授权前，不得用浏览器、curl、探测器或 CI 对它们做“只读”请求。
 
 ### Gate 1 诊断盘点（2026-09-26，只读；代码验收仍未关闭）
 
@@ -162,6 +164,10 @@ Run: `python3 scripts/check_docs.py --phase m1` and the repository link check
 - `649a2aba` 令产品表和毛利矩阵按当前快照中的真实事实筛选维度，完整目录仍用于筛选器，覆盖文案显示分子/分母。空事实范围为 `degraded` 并显示明确原因。API 集成测试、Web 全套136/136、typecheck、lint（0 errors，1既有warning）、ruff、mypy通过；隔离大麦旅程 verify 19/19、浏览器 E2E 9/9通过。
 - **常驻库写入偏差（未回滚）**：误在根 checkout（旧分支 `codex/damai-logistics-data-audit`，HEAD `4111f6a2`）运行 `make test-dashboard`。该 checkout 的脚本默认指向常驻 `flow`，因此增加已发布测试批次 `01a0dcdd-8245-7c17-99aa-fce91a8a7a57`（2026-09-26 08:38:19 UTC）：1 import、12 metric snapshots、1 analysis run、50,400 metric values。只读检查确认没有删除或覆盖既有记录；该批次改变 latest 选择，当前 API/UI 可能读到测试批次而非原大麦批次。原大麦批次 `01a0dc96-029b-7931-b2b5-4885a3f82132` 仍存在。已冻结常驻库进一步写入；未删除、未恢复数据库、未切换最新批次。任何回滚或切换均待用户明确授权及新备份，后续代理不得自行处理。
 - 维度修复验证只使用 `flow_test`/隔离 Compose；常驻库没有在该修复验证中再写入。
+
+### Gate 1 只读端点副作用分类（2026-09-26）
+
+路由实现审查确认客观快照与经营报告渲染类 GET 会直接调用 `freeze_objective_statement_report()` / `freeze_operations_overview()`；冻结函数在当前内容无可复用快照时 `session.add()` 新版本并 `flush()`。因此即使路由 method 为 GET，也不是安全的只读探测目标。上述具体路径已列入 Gate 1 排除清单，其他 endpoint 必须先审查调用链和提交行为，再加入矩阵。后续修正 GET/POST 语义属于独立 API 行为变更，当前仅记录，不在本次只读覆盖批次中擅自修改。
 - 当前 clean SHA `649a2aba` 的 GitHub Actions run `36232029817` success；其后状态同步提交 `7229cd0d` / run `36232204424` 与证据更新提交 `4c55f10e` / run `36232336053` 也 success。旧 runs `36229942486`–`36230243382` 的 dashboard 视觉高度失败发生在 `31a60217` 修复前；`31a60217` run `36230615921` 的 dashboard、integration、intake-e2e、data-contract 及其余 jobs 最终全绿。CI 当前无已知未通过项；Gate 1 页面/视口/错误/403/深链矩阵仍未关闭。
 
 #### CI 环境变量回归（2026-09-26，待修复）

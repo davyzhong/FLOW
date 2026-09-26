@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 4.6
+version: 4.7
 created_at: 2026-09-12
 updated_at: 2026-09-26
 owner: FLOW
@@ -13,6 +13,7 @@ applies_to: repository
 # FLOW 当前项目状态（唯一 current state）
 
 2026-09-26 更新：大麦常驻库曾在备份后幂等恢复并通过 verify 19/19 两次；随后根 checkout 的旧 `make test-dashboard` 误向常驻 `flow` 附加测试批次 `01a0dcdd-8245-7c17-99aa-fce91a8a7a57`（1 import、12 snapshots、1 run、50,400 metric values），可能成为 API `latest`。只读检查确认未删除/覆盖原大麦批次；未获授权，不回滚、不删除。此前备份 `work/backups/flow-pre-demo-rehydrate-20260926.dump`（SHA-256 `b374a16e…9782d`）早于该新增批次，不能作为当前恢复点。`649a2aba` 已推送并通过 CI run `36232029817`：维度表只展示当前快照事实并显示覆盖分母，完整筛选目录保留；Web 136/136、typecheck、隔离 verify19/19、E2E9/9通过。状态/证据文档提交 `7229cd0d` 与 `4c55f10e` 的 CI 也通过。常驻库页面状态需获批处置后重新只读核验；其他全站矩阵仍未完成。
+2026-09-26 补充：API 路由审查发现客观报表快照与经营报告渲染的若干 GET 可能新增冻结快照；这些路由已明确排除在只读探测之外，纳入单独 API 语义评审，不以请求验证其状态。其余 Gate 1 只读矩阵与页面状态验收继续推进。
 
 截至本次文档同步，批次历史 clean-SHA 隔离验收通过（seed/verify19/19、浏览器9/9）；dashboard CI URL冲突已修复，最新SHA/CI见路线图。常驻开发库安全恢复与验证19/19两次完成。大麦发行财报各51行、FY2025覆盖37/40、FY2026 40/40；常驻API有8卡、12/12趋势及2条findings，状态degraded且矩阵保留合理缺格；3000端口 hydration 与KPI缺失原因展示已修复。经营分析点余额读取与派生指标依赖缺陷已修复（FY2026七项运营效率指标均可算，其中流动比率0.8119、资产负债率0.8986、DSO 116.3881天），比率单位和公开披露缺项/内部授权原因按语义显示。40次GET、36个不同路由/参数组合全部HTTP200；正式报告产物历史为空与API持久化一致。其他页面金额/数量格式、Gate1完整视口/错误态复测、批次三与其余页面下钻仍待完成。主线只在`main`串行推进。
 
