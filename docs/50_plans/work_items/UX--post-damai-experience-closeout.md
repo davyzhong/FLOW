@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 2.5
+version: 2.6
 created_at: 2026-09-24
 updated_at: 2026-09-26
 owner: FLOW
@@ -117,11 +117,13 @@ Acceptance: 形成逐条 `degraded` reason 对照表，明确每条当前原因�
 
 让页面直接显示当前选择期间、数据批次/新鲜度、口径、可计算覆盖与明确缺口；建立从 KPI/趋势/矩阵到筛选明细或财报原行的真实链接。覆盖 390/1024/1440 视口、加载/空/错误/403/部分降级状态。和全站深链实施计划协同，不重复实现已完成的批次一。
 
+Gate 1 已证实 `/data` 初始状态没有历史批次 GET，已发布批次不在页面可发现。补齐只读 `GET /api/v1/intake/batches` 与页面历史列表：仅返回当前企业中由当前 Principal 创建的 `internal` 批次；新批次写入当前 actor 的 `created_by`；历史默认最多50条、按创建时间倒序，并提供版本数/最新版本状态。不得列出他人或跨企业批次；旧 `legacy/public` 无可靠所有权的批次不列入此端点。无 schema 迁移，复用既有 `INTAKE_VERSION_READ` action 和 enterprise scope policy。
+
 Files:
 - Modify only after Gate 1 proves the gap: relevant files under `apps/web/components/dashboard/`, `apps/web/components/statements/`, `apps/web/components/metric-library/`, and `apps/web/e2e/`
 - Reuse: `apps/web/lib/deep-links.ts` and `2026-09-26-ui-deep-link-implementation-plan.md`
 
-Acceptance: Gate 1 覆盖表中的每条目标路由都必须逐页通过，不得抽样漏页；对每项覆盖指标/缺失原因同时断言 API 返回与 UI 呈现（正向值和缺失/不适用状态）；页面显示值与 API/源事实一致；点击维度和指标可到达对应记录；状态与响应式 E2E 通过。
+Acceptance: Gate 1 覆盖表中的每条目标路由都必须逐页通过，不得抽样漏页；对每项覆盖指标/缺失原因同时断言 API 返回与 UI 呈现（正向值和缺失/不适用状态）；页面显示值与 API/源事实一致；点击维度和指标可到达对应记录；数据工作台能看到当前 actor 在当前企业下的历史内部批次与版本；换 actor/企业时不得暴露他人批次；状态与响应式 E2E 通过。
 
 ### Gate 5：全链回归并关闭
 
