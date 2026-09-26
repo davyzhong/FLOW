@@ -4,7 +4,14 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "${ROOT}"
 
-export DATABASE_URL="${DATABASE_URL:-postgresql+psycopg://flow:flow_dev_only@127.0.0.1:5432/flow_test}"
+dashboard_test_database_url="postgresql+psycopg://flow:flow_dev_only@127.0.0.1:5432/flow_test"
+if [[ "${CI:-}" == "true" ]]; then
+  # CI's generic DATABASE_URL targets the shared compose service database (/flow).
+  # Dashboard acceptance writes only to its isolated test database.
+  export DATABASE_URL="${FLOW_DASHBOARD_TEST_DATABASE_URL:-${dashboard_test_database_url}}"
+else
+  export DATABASE_URL="${DATABASE_URL:-${dashboard_test_database_url}}"
+fi
 export REDIS_URL="${REDIS_URL:-redis://127.0.0.1:6379/0}"
 export S3_ENDPOINT_URL="${S3_ENDPOINT_URL:-http://127.0.0.1:9000}"
 export S3_BUCKET="${S3_BUCKET:-flow}"
@@ -20,6 +27,13 @@ if [[ "${dashboard_db_host}" != "127.0.0.1" && "${dashboard_db_host}" != "localh
   || [[ "${dashboard_db_name}" != "flow_test" ]]; then
   echo "Refusing dashboard acceptance writes: expected local flow_test, got host=${dashboard_db_host} database=${dashboard_db_name}" >&2
   exit 2
+fi
+
+# Safety-test probe: validate URL selection and guard behavior without starting
+# migrations, seeds, services, or any database writes.
+if [[ "${FLOW_DASHBOARD_DATABASE_URL_CHECK:-0}" == "1" ]]; then
+  printf '%s\n' "${DATABASE_URL}"
+  exit 0
 fi
 
 (cd services/api && uv run python - <<'PY'

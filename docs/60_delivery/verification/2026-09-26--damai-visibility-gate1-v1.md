@@ -1,9 +1,9 @@
 ---
 doc_id: FLOW-VERIFY-DAMAI-VISIBILITY-GATE1-001
-title: 大麦数据可见性与 Gate 4 批次历史验收证据 v2.0
+title: 大麦数据可见性与 Gate 4 批次历史验收证据 v2.1
 doc_type: verification
 status: draft
-version: "2.0"
+version: "2.1"
 created_at: 2026-09-26
 updated_at: 2026-09-26
 owner: FLOW
@@ -16,6 +16,13 @@ superseded_by: null
 ---
 
 # 大麦数据可见性 Gate 1 API 诊断证据 v1
+
+## Gate 5 CI 数据库 URL 隔离修复补记（2026-09-26）
+
+- `scripts/test_dashboard.sh` 在 `CI=true` 时优先使用专用 `FLOW_DASHBOARD_TEST_DATABASE_URL`，默认固定到 localhost `flow_test`，不再继承通用 compose `/flow`；本地危险 URL 仍 fail-closed。
+- 新增安全回归测试 2/2：CI 注入 `/flow` 被解析到 `/flow_test`；本地显式 `/flow` 在任何写操作前退出2。
+- `bash scripts/test_dashboard.sh` 本机验收通过：迁移/seed 目标为 `flow_test`，摘要12个月/8卡，Playwright 7/7。常驻 `flow` 未访问或写入。
+- 本轮已有其他 worktree 管理的同名 Compose 服务，因此未运行可能重配置基础设施的 `make infra-up`；直接复用健康服务。GitHub 同 SHA CI 尚待提交后复验。旧 CI 失败记录保留为历史根因证据。
 
 ## 证据边界
 

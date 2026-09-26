@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 2.8
+version: 2.9
 created_at: 2026-09-24
 updated_at: 2026-09-26
 owner: FLOW
@@ -166,4 +166,10 @@ GitHub Actions run `36222136591`（SHA `430020f`）与 `36222489952`（SHA `59b3
 
 ## 工作状态
 
+### Gate 5 CI URL 修复更新（2026-09-26）
+
+旧 CI dashboard job 因通用 `DATABASE_URL=/flow` 与数据库安全守卫冲突。现已修复 `scripts/test_dashboard.sh`：CI 优先读取 `FLOW_DASHBOARD_TEST_DATABASE_URL`，否则固定使用 localhost `flow_test`；不继承通用 compose URL。本地显式危险 URL 仍 fail-closed。脚本回归 2/2、本机完整 dashboard 验收（迁移/seed 仅针对 `flow_test`，12个月/8卡，Playwright 7/7）通过。未改 CI workflow，未写常驻 `flow`。本次提交后的 GitHub CI 待复验；此前根因段落保留为历史记录，以本更新为当前状态。
+
 用户已于2026-09-26批准实施。Gate 1初始诊断绑定 `3ff95115` + dirty overlay；FY2025工作台契约修复、Gate2静态覆盖37/40与40/40、Gate3 OCF以及毛利矩阵比较选择均已完成并推送。OCF隔离验收19/19、E2E9/9；毛利矩阵实际/预算各10/32格可用，缺值不补零。Gate4批次历史接口/页面已在 `430020f` 推送；API+策略18项、组件16项通过，clean SHA `59b328dc` 隔离 Damai seed/verify19/19、E2E9/9。常驻库本轮未访问/写入。当前新发现：两个 GitHub run 的 dashboard job 都因 CI 注入的 `DATABASE_URL=/flow` 与 `flow_test` 安全守卫冲突而失败，待按本 Gate5记录修正测试脚本。完整 Gate1 API响应矩阵、Gate3/4其余缺口/页面与Gate5全链仍未关闭。
+
+本段 CI 冲突描述是修复前快照；以本工作包“Gate 5 CI URL 修复更新”为准：脚本修复及本地验收已完成，最新 main SHA 的 CI 待复验。
