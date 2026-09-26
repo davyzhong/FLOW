@@ -1,9 +1,9 @@
 ---
 doc_id: FLOW-VERIFY-DAMAI-VISIBILITY-GATE1-001
-title: 大麦数据可见性与 Gate 4 批次历史验收证据 v3.6
+title: 大麦数据可见性与 Gate 4 批次历史验收证据 v3.7
 doc_type: verification
 status: draft
-version: "3.6"
+version: "3.7"
 created_at: 2026-09-26
 updated_at: 2026-09-26
 owner: FLOW
@@ -53,6 +53,12 @@ CI 后续结果：主代码 `649a2aba` 的 run `36232029817` 全部 jobs success
 - `/analysis`：成功的空财报列表结束加载并显示前往数据接入的 EmptyGuide。
 - `/operations`：只有财报和公开期间均成功但都为空才呈现 EmptyGuide；任一列表请求失败仍展示错误态。空态含前往数据接入与公开经营分析的链接。
 - 生产构建E2E76/76，Web Vitest139/139，typecheck通过，lint0 errors/1既有warning。全路由的空/部分降级×视口穷举未完成，本记录不视为 Gate 1关闭证据。
+
+## Clean SHA 隔离全旅程（`3c15073f`）
+
+- `make test-damai-demo-e2e`：数据库迁移、seed后verifier19/19；对象存储SHA和单元格语义匹配；安全 GET 矩阵43/43 HTTP200，manifest SHA-256 `9af6762e888de208f2f0e2d50dd1f057d84a420fe08e7de4b0e69527cc81cccf`；真实浏览器旅程9/9。
+- 写型报告发布、审批和导入仅在隔离 Compose `damai-demo-iso` 执行；脚本退出清理专属卷。常驻数据库未写入。
+- GitHub run `36243330055` 尚queued；本证据说明本地隔离验收通过，不代表 CI 或全站视口/状态/深链关闭。
 
 ## Gate 5 CI 数据库 URL 隔离修复补记（2026-09-26）
 

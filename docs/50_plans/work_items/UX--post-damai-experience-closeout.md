@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 4.4
+version: 4.5
 created_at: 2026-09-24
 updated_at: 2026-09-26
 owner: FLOW
@@ -191,6 +191,10 @@ Run: `python3 scripts/check_docs.py --phase m1` and the repository link check
 - `/analysis`：财报列表请求成功但返回空数组时将状态从 idle 转为 ready，显示“尚无可分析的财报”及前往数据接入入口；不把有效空结果无限显示成加载中。
 - `/operations`：仅当财报与公开经营期间两个端点都成功返回空集合，显示“暂无可用经营分析数据”、原因和 `/data`、`/public` 两个入口；真实请求失败仍保持错误提示，不伪装为“无数据”。
 - TDD 测试先红后绿；生产 E2E76/76、Web Vitest139/139、typecheck通过，lint0 errors/1既有warning。其余页面空/部分降级的逐页状态和三档视口组合仍需覆盖。
+
+### Clean SHA 隔离全旅程验收（`3c15073f`，2026-09-26）
+
+`make test-damai-demo-e2e` 使用专属 `damai-demo-iso` Compose 项目，无页面 mock：迁移与 seed 后 verifier19/19、对象存储读回/sha/语义匹配；只读路由矩阵43/43 HTTP200（本次 manifest SHA-256 `9af6762e888de208f2f0e2d50dd1f057d84a420fe08e7de4b0e69527cc81cccf`）；浏览器旅程9/9（驾驶舱筛选、经营/财报/四问/指标库/Finding审批、报告发布和下载 SHA、数据工作台导入）。写操作仅在隔离数据库与对象存储；脚本退出已清理专属卷，常驻 `flow` 未触碰。GitHub run `36243330055` 仍 queued；其他页面状态-视口全矩阵及深链未关闭。
 - 当前 clean SHA `649a2aba` 的 GitHub Actions run `36232029817` success；其后状态同步提交 `7229cd0d` / run `36232204424` 与证据更新提交 `4c55f10e` / run `36232336053` 也 success。旧 runs `36229942486`–`36230243382` 的 dashboard 视觉高度失败发生在 `31a60217` 修复前；`31a60217` run `36230615921` 的 dashboard、integration、intake-e2e、data-contract 及其余 jobs 最终全绿。CI 当前无已知未通过项；Gate 1 页面/视口/错误/403/深链矩阵仍未关闭。
 
 #### CI 环境变量回归（2026-09-26，待修复）
