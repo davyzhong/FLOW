@@ -1,14 +1,14 @@
 ---
 doc_id: FLOW-VERIFY-DAMAI-VISIBILITY-GATE1-001
-title: 大麦数据可见性与 Gate 4 批次历史验收证据 v1.9
+title: 大麦数据可见性与 Gate 4 批次历史验收证据 v2.0
 doc_type: verification
 status: draft
-version: "1.9"
+version: "2.0"
 created_at: 2026-09-26
 updated_at: 2026-09-26
 owner: FLOW
-commit_refs: "[3ff95115, 6591e148, 4932504c, 9cd43e20, 905cf544, e2417ffa, af375ba3, 101bcf23, 5510bad3, 430020f]"
-evidence_refs: "[read-only-local-api-probe, stable-overlay-fingerprint, sha256-response-matrix, damai-ocf-canonical-fixture, damai-isolated-seed-verify, damai-e2e-8-of-9, damai-e2e-9-of-9-ocf-trends-complete, margin-matrix-read-only-grain-audit, margin-comparison-selection-isolated-e2e-9-of-9, github-ci-stale-damai-coverage-assertion, secure-batch-history-api-ui-and-isolated-e2e-9-of-9]"
+commit_refs: "[3ff95115, 6591e148, 4932504c, 9cd43e20, 905cf544, e2417ffa, af375ba3, 101bcf23, 5510bad3, 430020f, 59b328dc]"
+evidence_refs: "[read-only-local-api-probe, stable-overlay-fingerprint, sha256-response-matrix, damai-ocf-canonical-fixture, damai-isolated-seed-verify, damai-e2e-8-of-9, damai-e2e-9-of-9-ocf-trends-complete, margin-matrix-read-only-grain-audit, margin-comparison-selection-isolated-e2e-9-of-9, github-ci-stale-damai-coverage-assertion, secure-batch-history-api-ui-and-isolated-e2e-9-of-9, clean-sha-59b328dc-damai-e2e-9-of-9, github-dashboard-flow-test-url-conflict]"
 knowledge_release: flow-knowledge-2026-09-12.1
 applies_to: web-frontend
 supersedes: []
@@ -125,6 +125,7 @@ CI 补充（run `36217337338`，SHA `5510bad3`）：18 个作业中仅 integrati
 - 新批次创建由认证 Principal 提供 `created_by`；无数据库迁移，不列出无可靠所有权的 legacy/public 批次。
 - `/data` 初始页显示最近批次、批次状态、版本数、最新版本状态与创建时间；已有深链在当前账号历史中识别，不可见批次显示权限/归属提示。该列表仅为历史索引，不承诺恢复编辑会话。
 - API 测试验证当前账号批次可见、另一 actor 的同企业批次不可见。隔离 Damai 全旅程在新 UI 下复跑：seed/verify 19/19、浏览器 E2E 9/9；`damai-demo-iso` 容器/卷清理完成，常驻 `flow` 未访问或写入。
-- 本地验证：API+路由策略18 passed；data-workbench Vitest 16 passed；eslint、typecheck、ruff、mypy、OpenAPI 合同检查和 M1 文档门禁通过。GitHub Actions run `36222136591`（SHA `430020f`）仍在运行，本子项保持“CI待验”，不能据本地结果宣称 CI 全绿。
+- 本地验证：API+路由策略18 passed；data-workbench Vitest 16 passed；eslint、typecheck、ruff、mypy、OpenAPI 合同检查和 M1 文档门禁通过。clean SHA `59b328dc` 的隔离 Damai 全旅程 seed/verify 19/19、浏览器E2E9/9通过。
+- GitHub Actions run `36222136591`（`430020f`）和 `36222489952`（`59b328dc`）的 dashboard job 均失败于同一原因：CI 注入 `DATABASE_URL` 指向本地 compose 库 `flow`，安全脚本拒绝并退出2。其余 CI jobs 尚在运行；该结果不表示批次历史 API/UI 失败，但 Gate5 CI 总体验收未通过，须按工作包记录修正变量隔离。
 
 边界：这只补批次历史入口，未修复其他财务/经营页面的缺数或缺口展示；Gate 1 干净 SHA 全路由矩阵、Gate 3–5 其余页面与全链验收仍未关闭。

@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 2.7
+version: 2.8
 created_at: 2026-09-24
 updated_at: 2026-09-26
 owner: FLOW
@@ -20,11 +20,11 @@ applies_to: web-frontend
 
 ## 当前证据与判断（2026-09-26）
 
-- 常驻开发库 G2 已完成，测试库隔离也已修复（`b60c51b`）；它们不再是本工作包的阻塞。
-- 大麦 fixture 有 24 个月、1,920 条经营实际、10,752 条预算、4,800 条应收回款、768 条财务实际（含每月×4组织的 OCF）；40 个客户、8 个产品、6 个区域、4 个事业部。常驻库当前仍是旧版672条，需隔离验收通过后再安排装载。
-- 当前只读 API 返回 2 份已发布财报（FY2025/FY2026），每份 40 个行项目，覆盖资产负债表、利润表、现金流量表、所有者权益变动表。
-- 大麦 40 项指标覆盖矩阵为 FY2025 22/40、FY2026 25/40；需逐项分类，不可默认所有指标都适用于该企业。
-- 驾驶舱 API 有 8 张 KPI 卡、12 个月趋势点（每点含4项趋势指标）、8 个产品、4 个客户群、2 条发现，但整体为 `degraded`：经营现金流趋势12/12不可用，毛利矩阵缺部分指标或比较值。
+- 常驻开发库 G2 于2026-09-25已完成并 verify 19/19；本轮不连接或写入常驻 `flow`，不声称当前行数已复核。测试验收数据库隔离于 `b60c51b` 修复。
+- 大麦 fixture 有24个月、1,920条经营实际、10,752条预算、4,800条应收回款、768条财务实际（含每月×4组织的 OCF）；40个客户、8个产品、6个区域、4个事业部。
+- FY2025/FY2026发行财报静态工件现各51行项目；只读 API 与常驻数据库数据须按指定环境/SHA实测，不从静态工件推断常驻库当前结果。
+- 大麦40项指标静态覆盖为 FY2025 37/40、FY2026 40/40；FY2025三项同比缺少FY2024比较期，不应补零或误标为企业不适用。
+- 隔离验收中驾驶舱有8张KPI卡、12个月趋势、8个产品、4个客户群、2条发现；OCF KPI可用且趋势12/12完整。毛利矩阵32格中实际与预算比较各10格可用、空格保持 unavailable，整体仍为 `degraded`。
 - 预测 sidecar 当前标记 `static-only` 且排除页面覆盖；本工作包不得把它计为已接入功能。
 
 ## 实施路线（本文件是规格；实施须按用户已批准的工作状态执行）
@@ -125,11 +125,13 @@ Gate 1 已证实 `/data` 初始状态没有历史批次 GET，已发布批次不
 - `GET /api/v1/intake/batches` 复用 `INTAKE_VERSION_READ` 与 `load_single_enterprise`；查询同时约束 `module_kind=internal`、Principal actor 和企业 ID，按创建时间倒序，最多50条，版本数与最新版本状态由只读子查询投影。
 - `/data` 初始页展示批次名称、批次状态、版本数、最新版本状态、创建时间；支持 `?batch=` 历史批次识别及越权/不可见提示。此视图是历史索引，不承诺恢复编辑会话或修改已发布版本。
 - 验收：`tests/api/test_intake.py` + `tests/security/test_route_policy.py` 18 passed；`apps/web` `data-workbench.test.tsx` 16 passed、typecheck/eslint 通过；API ruff/mypy 通过；`scripts/check_contracts.sh` 与 `python3 scripts/check_docs.py --phase m1` 通过。`scripts/test_damai_demo_e2e.sh` 隔离复跑 seed/verify 19/19、浏览器 E2E 9/9。常驻 `flow` 未写入；API 测试使用隔离 `flow_test`。
-- 新增路由后授权清单与 OpenAPI/TS 契约已同步；提交 `430020f` 已推送，GitHub Actions run `36222136591` 仍在运行，本子项在同 SHA CI 成功前保持“本地与隔离 E2E 验收完成、CI待验”。
+- 新增路由后授权清单与 OpenAPI/TS 契约已同步；提交 `430020f` 已推送。提交 `430020f` 与文档提交 `59b328dc` 的 GitHub Actions 均出现 dashboard job 环境变量冲突（见 Gate 5 回归记录）；批次历史代码本身本地和干净 SHA Damai E2E 已通过，但 Gate5 CI仍未通过。
+- 干净 SHA 复验：临时 detached worktree `59b328dc` 上独立安装依赖并运行 `scripts/test_damai_demo_e2e.sh`，seed/verify 19/19、浏览器 E2E 9/9通过；隔离容器/卷和临时 worktree 均已清理。这只证明该 clean SHA 的 Damai 全旅程通过，不等于 Gate 1全路由响应矩阵完成。
 
 Files:
 - Modify only after Gate 1 proves the gap: relevant files under `apps/web/components/dashboard/`, `apps/web/components/statements/`, `apps/web/components/metric-library/`, `apps/web/components/data/`, `apps/web/lib/api/`, `apps/web/e2e/`, and corresponding tests.
 - For the approved batch-history subitem only: `services/api/src/flow_api/api/routes/intake.py`, `services/api/src/flow_api/api/schemas/intake.py`, `services/api/src/flow_api/intake/service.py`, `services/api/tests/api/test_intake.py`, `services/api/tests/security/test_route_policy.py`, `docs/40_specs/security/route-inventory-v1.tsv`, and generated OpenAPI/TypeScript contracts. No migrations or changes to persistent demo data.
+- For the approved Gate 5 CI database-isolation regression only: `scripts/test_dashboard.sh` and focused `scripts/tests/` coverage. Do not modify `.github/workflows/` or persistent demo data.
 - Reuse: `apps/web/lib/deep-links.ts` and `2026-09-26-ui-deep-link-implementation-plan.md`
 
 Acceptance: Gate 1 覆盖表中的每条目标路由都必须逐页通过，不得抽样漏页；对每项覆盖指标/缺失原因同时断言 API 返回与 UI 呈现（正向值和缺失/不适用状态）；页面显示值与 API/源事实一致；点击维度和指标可到达对应记录；数据工作台能看到当前 actor 在当前企业下的历史内部批次与版本；换 actor/企业时不得暴露他人批次；状态与响应式 E2E 通过。
@@ -149,6 +151,12 @@ Run: `python3 scripts/check_docs.py --phase m1` and the repository link check
 
 安全验收：显式把 URL 指向 `flow` 时脚本退出码2并输出拒绝信息；`make test-dashboard` 在 `flow_test` 执行迁移/seed，摘要含12个月/8卡，Playwright 7/7通过。该脚本不再对常驻 `flow` 写入。安全性修复后 Gate 5 dashboard 验收通过；仍须同 SHA CI、页面覆盖矩阵与 Gate 1干净提交证据收尾。
 
+#### CI 环境变量回归（2026-09-26，待修复）
+
+GitHub Actions run `36222136591`（SHA `430020f`）与 `36222489952`（SHA `59b328dc`）的 dashboard job 均在 `make test-dashboard` 入口失败：CI 通用环境把 `DATABASE_URL` 指向 compose 服务库 `/flow`，脚本按 fail-closed 规则拒绝并退出2。拒绝行为正确，但测试作业没有将通用栈 URL 隔离到测试库。下一步只修 `scripts/test_dashboard.sh` 的 CI 测试库选择：CI 优先专用 dashboard 测试 URL，否则强制本机 `flow_test`；本地显式危险 URL 仍须拒绝。不得改 CI workflow，不连接或写常驻库。
+
+验收：新增脚本级回归覆盖 CI 环境注入 `/flow` 与本地显式危险 URL；`make test-dashboard` 本机 7/7；随后最新 main SHA 的 GitHub dashboard job 成功。
+
 ## 不做 / 保护边界
 
 - 不重做已关闭的前端一致性 Task 0–9，也不把深链批次一重复记为未完成。
@@ -158,4 +166,4 @@ Run: `python3 scripts/check_docs.py --phase m1` and the repository link check
 
 ## 工作状态
 
-用户已于 2026-09-26 批准实施。Gate 1初始诊断快照固定于基线 `3ff95115` + overlay `1ede2648…`；FY2025工作台500根因已修复并推送（`48f8363`），缺口已分为Gate2源事实与Gate3快照发布两类。Gate2静态事实生成达到 FY2025 37/40、FY2026 40/40，相关修复已推送至 `c7955f1`。Gate3首项 OCF canonical 源事实于`4932504`推送，静态实际768条且合计守恒；隔离 seed/verify 19/19、八页面/旅程 E2E 9/9。临时 web 副本验收确认 OCF KPI available、趋势 complete 12/12且所有 OCF 月值 available。毛利矩阵根因已定位：源实际仅覆盖10个客群×产品格、同比覆盖8格；服务端全格比较门槛丢弃可用的部分预算比较。修复计划为按比较覆盖数选预算或同比，保持缺值、不补零，API/UI 用隔离数据复验。常驻库未写入。仍待：该矩阵修复与验证、Gate1干净SHA完整复测、其余 Gate3–5；不得对常驻数据库写入。
+用户已于2026-09-26批准实施。Gate 1初始诊断绑定 `3ff95115` + dirty overlay；FY2025工作台契约修复、Gate2静态覆盖37/40与40/40、Gate3 OCF以及毛利矩阵比较选择均已完成并推送。OCF隔离验收19/19、E2E9/9；毛利矩阵实际/预算各10/32格可用，缺值不补零。Gate4批次历史接口/页面已在 `430020f` 推送；API+策略18项、组件16项通过，clean SHA `59b328dc` 隔离 Damai seed/verify19/19、E2E9/9。常驻库本轮未访问/写入。当前新发现：两个 GitHub run 的 dashboard job 都因 CI 注入的 `DATABASE_URL=/flow` 与 `flow_test` 安全守卫冲突而失败，待按本 Gate5记录修正测试脚本。完整 Gate1 API响应矩阵、Gate3/4其余缺口/页面与Gate5全链仍未关闭。
