@@ -1,14 +1,14 @@
 ---
 doc_id: FLOW-VERIFY-DAMAI-VISIBILITY-GATE1-001
-title: 大麦数据可见性与 Gate 4 批次历史验收证据 v2.3
+title: 大麦数据可见性与 Gate 4 批次历史验收证据 v2.4
 doc_type: verification
 status: draft
-version: "2.3"
+version: "2.4"
 created_at: 2026-09-26
 updated_at: 2026-09-26
 owner: FLOW
-commit_refs: "[3ff95115, 6591e148, 4932504c, 9cd43e20, 905cf544, e2417ffa, af375ba3, 101bcf23, 5510bad3, 430020f, 59b328dc, 85e907a, 7258763, 71a2dd8]"
-evidence_refs: "[read-only-local-api-probe, stable-overlay-fingerprint, sha256-response-matrix, damai-ocf-canonical-fixture, damai-isolated-seed-verify, damai-e2e-8-of-9, damai-e2e-9-of-9-ocf-trends-complete, margin-matrix-read-only-grain-audit, margin-comparison-selection-isolated-e2e-9-of-9, github-ci-stale-damai-coverage-assertion, secure-batch-history-api-ui-and-isolated-e2e-9-of-9, clean-sha-59b328dc-damai-e2e-9-of-9, github-dashboard-flow-test-url-conflict, dashboard-ci-url-isolation-unit-2-of-2, dashboard-playwright-7-of-7, github-run-36223558441-dashboard-success, persistent-demo-rehydrate-verify-19-of-19-twice, verifier-latest-published-report-regression-tests, allowed-dev-origin-live-readonly-ui-6-of-6, isolated-damai-e2e-9-of-9, persistent-page-api-response-hashes]"
+commit_refs: "[3ff95115, 6591e148, 4932504c, 9cd43e20, 905cf544, e2417ffa, af375ba3, 101bcf23, 5510bad3, 430020f, 59b328dc, 85e907a, 7258763, 71a2dd8, 695ea18]"
+evidence_refs: "[read-only-local-api-probe, stable-overlay-fingerprint, sha256-response-matrix, damai-ocf-canonical-fixture, damai-isolated-seed-verify, damai-e2e-8-of-9, damai-e2e-9-of-9-ocf-trends-complete, margin-matrix-read-only-grain-audit, margin-comparison-selection-isolated-e2e-9-of-9, github-ci-stale-damai-coverage-assertion, secure-batch-history-api-ui-and-isolated-e2e-9-of-9, clean-sha-59b328dc-damai-e2e-9-of-9, github-dashboard-flow-test-database-url-conflict, dashboard-ci-url-isolation-unit-2-of-2, dashboard-playwright-7-of-7, github-run-36223558441-dashboard-success, persistent-demo-rehydrate-verify-19-of-19-twice, verifier-latest-published-report-regression-tests, allowed-dev-origin-live-readonly-ui-6-of-6, isolated-damai-e2e-9-of-9, persistent-page-api-response-hashes, unavailable-comparison-visible-status-red-green, web-vitest-134-of-134, live-dashboard-playwright-after-change-no-console-errors]"
 knowledge_release: flow-knowledge-2026-09-12.1
 applies_to: web-frontend
 supersedes: []
@@ -124,6 +124,12 @@ CI 补充（run `36217337338`，SHA `5510bad3`）：18 个作业中仅 integrati
 - 常驻真实数据 GET-only UI smoke：六项Playwright断言通过（Dashboard及筛选/API、经营分析、财报、四问、指标库），另外只读导航确认数据工作台1个批次、调查页2条Finding、报告页财报与经营快照；没有运行常驻数据库的审批、发布、上传或生成产物动作。
 - 独立 compose 全旅程：verify 19/19、浏览器 E2E 9/9；该旅程中的写操作仅作用于隔离 PostgreSQL/MinIO。
 - 本次只确认上述真实 API 链路及可见内容。全目标页面的筛选组合、期间、数据集、权限边界、下钻目标、错误/空/部分降级状态和所有页面的 SHA 矩阵仍未完成，Gate 1不得关闭。
+
+## KPI 未发布比较值状态呈现（2026-09-26）
+
+常驻 Dashboard 的 orders、revenue_per_order、ar_balance预算/YTD比较有 `status=unavailable`、`unavailable_code=comparison_not_published`、`unavailable_message=当前口径未发布该比较值`；此前界面只渲染 `—`。已在 KPI 比较行保留破折号，并额外显示“未发布”，将原因放入 title 与可访问名称；其他不可用码以“不可用”分类，真实零值保持数字呈现。
+
+验证记录：针对性 Vitest 先红后绿，dashboard deep-link组件测试10/10；全 Web Vitest 134/134，typecheck通过，eslint无错误（1项既有 React Compiler warning）。常驻桌面 UI 在1440×1000首屏可见8卡，6个未发布比较项均带状态文本/原因；页面无 JS error，点击“履约订单量”卡后 URL 到达 `/metric-library?focus=orders`。截图 `/tmp/flow-ui-qa.8ciXBg/dashboard-after.png`，不入 Git。该截图亦显示比率仍以0.x小数呈现、金额/数量有过多小数位，列为后续单位化数值格式审计；这不是本修复的范围。
 
 ## 后续只读补充（同日；未冻结新响应哈希）
 

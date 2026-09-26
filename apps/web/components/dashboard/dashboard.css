@@ -371,6 +371,13 @@
   font-weight: 500;
 }
 
+.metric-comparison__status {
+  color: #7a5a20;
+  font-size: 7px;
+  font-style: normal;
+  font-weight: 600;
+}
+
 .metric-card__companion {
   margin-top: 7px;
   border-top: 1px dashed #e3e8ef;

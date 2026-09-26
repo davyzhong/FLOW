@@ -6,7 +6,22 @@ import { metricFocusHref } from "../../lib/deep-links";
 type Card = DashboardResponse["metric_cards"][number];
 
 function Comparison({ label, value }: { label: string; value: Card["yoy"] }) {
-  return <span className={`metric-comparison is-${value.semantic_direction}`}><small>{label}</small>{value.display_value}</span>;
+  const unavailable = value.status === "unavailable";
+  const reason = unavailable ? value.unavailable_message ?? "当前不可用" : null;
+  const statusLabel = value.unavailable_code?.includes("not_published") ? "未发布" : "不可用";
+
+  return (
+    <span
+      className={`metric-comparison is-${value.semantic_direction}`}
+      data-status={value.status}
+      aria-label={unavailable ? `${label}：${reason}` : `${label}：${value.display_value}`}
+      title={reason ?? undefined}
+    >
+      <small>{label}</small>
+      <span>{value.display_value}</span>
+      {unavailable ? <em className="metric-comparison__status">{statusLabel}</em> : null}
+    </span>
+  );
 }
 
 export function MetricGrid({ cards }: { cards: DashboardResponse["metric_cards"] }) {

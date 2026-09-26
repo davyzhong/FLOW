@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 3.1
+version: 3.2
 created_at: 2026-09-24
 updated_at: 2026-09-26
 owner: FLOW
@@ -26,6 +26,7 @@ applies_to: web-frontend
 - 大麦40项指标静态覆盖为 FY2025 37/40、FY2026 40/40；FY2025三项同比缺少FY2024比较期，不应补零或误标为企业不适用。
 - 隔离验收中驾驶舱有8张KPI卡、12个月趋势、8个产品、4个客户群、2条发现；OCF KPI可用且趋势12/12完整。毛利矩阵32格中实际与预算比较各10格可用、空格保持 unavailable，整体仍为 `degraded`。
 - 预测 sidecar 当前标记 `static-only` 且排除页面覆盖；本工作包不得把它计为已接入功能。
+- Dashboard KPI 比较值若 API 状态为 `unavailable` 且原因码为 `*_not_published`，现显示“未发布”标签，并保留接口说明作为 title/accessible label；避免将破折号误解为零值。比率/金额/数量的单位化数值格式仍需后续统一复核。
 
 ## 实施路线（本文件是规格；实施须按用户已批准的工作状态执行）
 
@@ -186,6 +187,14 @@ GitHub Actions run `36222136591`（SHA `430020f`）与 `36222489952`（SHA `59b3
 
 执行结果：先完整备份本机 `flow`，再运行已审查的 `scripts/seed_damai_demo.py` 幂等 seed；未清表、未删除数据、未运行迁移。首轮验收暴露 verifier 把历史财报版本误计入 `statement_report=2` 总行数的问题。已将检查改为只核验大麦 FY2025/FY2026 最新已发布身份，并添加两项 SQLite 回归测试（历史版本不增计数；最新版本未发布则不通过）。随后重复 seed 与验收，关键表计数未增长。最终 `verify_damai_demo.py --api-url http://127.0.0.1:8000 --check-storage` 为19/19；对象存储工作簿读回1,327,348字节且SHA/语义一致。复验 API：dashboard 200、8张KPI卡、趋势12/12、2条 findings，状态 `degraded`；财报2份（FY2025/FY2026），发布快照1、冻结候选12。矩阵仍 `degraded`，缺失值维持 unavailable，不以填零掩盖。
 
-浏览器 `127.0.0.1:3000` 的最初只读 smoke 失败：页面标题可见，但 KPI 卡和财报选项不渲染。Next 日志确认 `allowedDevOrigins` 默认未包含 `127.0.0.1`，内部 JS chunks/HMR 被拦截。已在 `apps/web/next.config.ts` 加入该 loopback host。代码变更触发 Next 自身自动重载（本轮未手工停止/启动用户服务）；随后常驻 3000 端口的只读 Playwright 六项通过（Dashboard筛选/API、经营分析、财报、四问、指标库）；另以仅允许 GET/HEAD 的浏览器检查确认 `/data` 显示 `damai-demo-v1`、`/investigations` 显示2条Finding、`/reports` 显示两份年报及经营快照。无页面级 JavaScript 异常。隔离副本完整大麦旅程也通过9/9。现有页面已能显示数据，但正式报告产物历史仍为空，且本组检查不代替Gate 1全路由矩阵和逐页缺口/下钻验收。
+浏览器 `127.0.0.1:3000` 的最初只读 smoke 失败：页面标题可见，但 KPI 卡和财报选项不渲染。Next 日志确认 `allowedDevOrigins` 默认未包含 `127.0.0.1`，内部 JS chunks/HMR 被拦截；Next.js 文档将此配置定义为允许开发资源的额外 host。已在 `apps/web/next.config.ts` 加入该 loopback host。代码变更触发 Next 自身自动重载（本轮未手工停止/启动用户服务）；随后常驻 3000 端口的只读 Playwright 六项通过（Dashboard筛选/API、经营分析、财报、四问、指标库）；另以仅允许 GET/HEAD 的浏览器检查确认 `/data` 显示 `damai-demo-v1`、`/investigations` 显示2条Finding、`/reports` 显示两份年报及经营快照。无页面级 JavaScript 异常。隔离副本完整大麦旅程也通过9/9。现有页面已能显示数据，但正式报告产物历史仍为空，且本组检查不代替Gate 1全路由矩阵和逐页缺口/下钻验收。配置参考：[Next.js `allowedDevOrigins`](https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins)。
 
 此恢复只关闭“常驻开发库数据缺失”这一项，不关闭本工作包任何 Gate；常驻库之外仍只使用隔离栈运行写型 E2E。
+
+### Dashboard 缺失状态可见化（2026-09-26）
+
+全页只读复验发现接口已提供 `status=unavailable` 与 `unavailable_message`，但核心 KPI 比较单元格只渲染 `display_value=—`，用户无法区分未发布与零值。按 TDD 添加组件回归测试，先确认旧实现失败，再在 `MetricGrid` 对 `*_not_published` 显示“未发布”标记；保留破折号表示没有数值，并把接口原因暴露为 `title` 与 `aria-label`。已发布的真实零值仍只显示零，不添加未发布标签。
+
+验证：`apps/web/tests/components/dashboard-deep-links.test.tsx` 10/10、全 Web Vitest 134/134、`pnpm typecheck` 通过、`pnpm lint` 0 errors（保留既有 `flow-data-table.tsx` React Compiler warning）。在常驻 `127.0.0.1:3000`、1440×1000 桌面视口完成 GET-only 浏览器检查：8张卡可见、6个比较项标记未发布、title 为“当前口径未发布该比较值”、无页面级 JS 错误；点击第一张指标卡进入 `/metric-library?focus=orders`。截图在 `/tmp/flow-ui-qa.8ciXBg/dashboard-after.png`（临时证据，不入库）。
+
+遗留：当前比率仍以小数显示（如 `0.108707`），金额/数量精度未做单位化格式审计；这属于下一个显示格式验收项，不把它混入本次状态标签修复。

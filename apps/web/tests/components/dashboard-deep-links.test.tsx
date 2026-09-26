@@ -51,6 +51,36 @@ describe("驾驶舱深链", () => {
     expect(link).toHaveAttribute("href", `/metric-library?focus=${code}`);
   });
 
+  it("明确显示未发布的比较值及其原因，不与零值混淆", async () => {
+    const response: DashboardResponse = {
+      ...ready,
+      metric_cards: ready.metric_cards.map((card, index) =>
+        index === 0
+          ? {
+              ...card,
+              budget: {
+                ...card.budget,
+                status: "unavailable",
+                exact_value: null,
+                display_value: "—",
+                unavailable_code: "comparison_not_published",
+                unavailable_message: "当前口径未发布该比较值",
+              },
+            }
+          : card,
+      ),
+    };
+    const loadDashboard = vi.fn().mockResolvedValue(response);
+    render(<DashboardApp loadDashboard={loadDashboard} />);
+    expect(await screen.findByText("已发布经营数据")).toBeVisible();
+
+    const card = screen.getAllByTestId("metric-card")[0];
+    const budget = within(card).getByLabelText("预算：当前口径未发布该比较值");
+    expect(budget).toHaveAttribute("data-status", "unavailable");
+    expect(budget).toHaveTextContent("未发布");
+    expect(budget).toHaveAttribute("title", "当前口径未发布该比较值");
+  });
+
   it("finding 标题包链接到调查页（与「进入调查」同 href）", async () => {
     renderLoaded();
     expect(await screen.findByText("已发布经营数据")).toBeVisible();
