@@ -186,6 +186,6 @@ GitHub Actions run `36222136591`（SHA `430020f`）与 `36222489952`（SHA `59b3
 
 执行结果：先完整备份本机 `flow`，再运行已审查的 `scripts/seed_damai_demo.py` 幂等 seed；未清表、未删除数据、未运行迁移。首轮验收暴露 verifier 把历史财报版本误计入 `statement_report=2` 总行数的问题。已将检查改为只核验大麦 FY2025/FY2026 最新已发布身份，并添加两项 SQLite 回归测试（历史版本不增计数；最新版本未发布则不通过）。随后重复 seed 与验收，关键表计数未增长。最终 `verify_damai_demo.py --api-url http://127.0.0.1:8000 --check-storage` 为19/19；对象存储工作簿读回1,327,348字节且SHA/语义一致。复验 API：dashboard 200、8张KPI卡、趋势12/12、2条 findings，状态 `degraded`；财报2份（FY2025/FY2026），发布快照1、冻结候选12。矩阵仍 `degraded`，缺失值维持 unavailable，不以填零掩盖。
 
-当前浏览器 `127.0.0.1:3000` 的额外 UI smoke 未通过：该既有 Next 开发服务器对必要 JavaScript chunks 返回403并出现 HMR websocket 握手失败，页面停留在加载态；因此不能把 API/数据库恢复等同于用户浏览器已可见。为避免打断用户服务，本轮未停止或重启该服务。隔离临时副本的全旅程 E2E 仍为9/9通过。该本地开发服务器运行态问题单独登记，不改变数据验收结果；后续由用户决定何时安全重启/重建该开发进程。
+浏览器 `127.0.0.1:3000` 的最初只读 smoke 失败：页面标题可见，但 KPI 卡和财报选项不渲染。Next 日志确认 `allowedDevOrigins` 默认未包含 `127.0.0.1`，内部 JS chunks/HMR 被拦截。已在 `apps/web/next.config.ts` 加入该 loopback host。代码变更触发 Next 自身自动重载（本轮未手工停止/启动用户服务）；随后常驻 3000 端口的只读 Playwright 六项通过（Dashboard筛选/API、经营分析、财报、四问、指标库）；另以仅允许 GET/HEAD 的浏览器检查确认 `/data` 显示 `damai-demo-v1`、`/investigations` 显示2条Finding、`/reports` 显示两份年报及经营快照。无页面级 JavaScript 异常。隔离副本完整大麦旅程也通过9/9。现有页面已能显示数据，但正式报告产物历史仍为空，且本组检查不代替Gate 1全路由矩阵和逐页缺口/下钻验收。
 
 此恢复只关闭“常驻开发库数据缺失”这一项，不关闭本工作包任何 Gate；常驻库之外仍只使用隔离栈运行写型 E2E。

@@ -12,9 +12,9 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-09-26 更新：常驻开发库受控恢复已完成：先备份 `work/backups/flow-pre-demo-rehydrate-20260926.dump`（SHA-256 `b374a16e…9782d`），再幂等 seed，未清库/删数据/迁移；最终验收19/19两次通过，重复 seed 零增长。API现为 dashboard 200（8卡、趋势12/12、2条findings，状态 degraded）、财报2份、发布快照1、冻结候选12；对象存储读回及SHA通过。大麦 FY2025/FY2026指标覆盖37/40、40/40，毛利矩阵保留合理缺值。常驻数据已恢复但现有浏览器开发服务器因JS chunks 403/HMR失败无法完成hydration，不能声称当前3000端口页面已可用；未擅自重启。验收器已修正历史财报版本计数并加回归测试。Gate 1全路由覆盖矩阵、深链批次三及其他页面缺口仍未完成。此前“常驻库未复核/恢复待执行”是历史记录，以本次更新为准。
+2026-09-26 更新：常驻开发库受控恢复已完成：先备份 `work/backups/flow-pre-demo-rehydrate-20260926.dump`（SHA-256 `b374a16e…9782d`），再幂等 seed，未清库/删数据/迁移；最终验收19/19两次通过，重复 seed 零增长。API现为 dashboard 200（8卡、趋势12/12、2条findings，状态 degraded）、财报2份、发布快照1、冻结候选12；对象存储读回及SHA通过。大麦 FY2025/FY2026指标覆盖37/40、40/40，毛利矩阵保留合理缺值。Next开发origin已修复并由配置变更触发自动重载；常驻3000端口只读页面复验6/6，另确认`/data`批次、`/investigations`两条Finding、`/reports`财报和经营快照可见。正式报告产物历史仍为空；其余页面/下钻仍需全路由矩阵逐项验收。验收器已修正历史财报版本计数并加回归测试。此前“hydration未完成”是修复前记录，以本次更新为准。
 
-截至本次文档同步，远端 `main` 上批次历史 clean-SHA 隔离验收通过（seed/verify19/19、浏览器9/9）。dashboard CI URL冲突已修复，相关历史失败不再代表当前状态；最新代码提交及CI结果见路线图。本轮常驻开发库按工作包安全步骤重新恢复并verify 19/19两次，不能用此前数据库未复核的旧描述覆盖该事实。测试库隔离于 `b60c51b` 修复；holdout与公开C级的待办保持不变。大麦静态数据合同有24个月经营明细（1,920实际、10,752预算、4,800应收回款、768财务实际，含合计守恒OCF）；发行财报每份51行，静态覆盖FY2025 37/40、FY2026 40/40。常驻API现有8卡、12/12趋势及2条findings，但整体degraded且矩阵有合理缺格。3000端口既有开发服务器 chunks 403导致页面未hydration，尚未修复；Gate 1全路由复测、批次三和其他页面呈现/下钻仍待完成。主线只在`main`串行推进。
+截至本次文档同步，远端 `main` 上批次历史 clean-SHA 隔离验收通过（seed/verify19/19、浏览器9/9）。dashboard CI URL冲突已修复，相关历史失败不再代表当前状态；最新代码提交及CI结果见路线图。本轮常驻开发库按工作包安全步骤重新恢复并verify 19/19两次；测试库隔离于 `b60c51b` 修复，holdout与公开C级待办保持不变。大麦静态数据合同有24个月经营明细（1,920实际、10,752预算、4,800应收回款、768财务实际，含合计守恒OCF）；发行财报每份51行，静态覆盖FY2025 37/40、FY2026 40/40。常驻API现有8卡、12/12趋势及2条findings，状态degraded且矩阵有合理缺格；3000端口修复allowedDevOrigins后常驻只读页面6/6通过，数据批次/调查/报告页面也显示记录，但正式报告产物历史为空。Gate 1全路由复测、批次三和其余页面呈现/下钻仍待完成。主线只在`main`串行推进。
 
 上段中的“两次 dashboard CI 失败”及“CI现需修正”仅记录本次修复前状态；以本页顶部更新为准：dashboard job 已通过，完整 workflow 尚在运行。
 
@@ -36,7 +36,7 @@ applies_to: repository
 4. **公开模块 C 级出口（门禁后）**：执行冻结样本、company-level holdout、可复算/可追源和独立盲评量化协议。
 5. **内部工作台与真实企业验证（C 级出口后）**：需内部数据授权；至少连续三个完整月度周期，与同输入人工基准逐周期比较。
 6. **旧 U9/O5、U10（待重新裁决）**：仅保留历史工作包身份，不按旧依赖链自动领取。
-7. **大麦完整财年演示数据（底座 completed；页面覆盖部分完成）**：24个月synthetic全链已落地；2026-09-26常驻开发库受控恢复，备份SHA见剩余体验收口工作包，seed幂等、verify19/19两次通过。当前API dashboard 200、8卡、趋势12/12、2条findings，状态仍degraded；财报2份、发布快照1、冻结候选12，财报覆盖FY2025 37/40、FY2026 40/40。毛利矩阵实际/预算比较各10/32格可用，缺格保持unavailable、不补零。浏览器开发服务器3000端口必要chunks 403、HMR失败，页面仍未hydration，本轮未擅自重启。隔离栈 verify19/19、浏览器E2E9/9；FY2025四问API500已修复。Gate 1全路由响应矩阵、Gate3/4其他页面呈现/下钻及深链批次三未完成。证据见[Gate 1/Gate 2记录](../60_delivery/verification/2026-09-26--damai-visibility-gate1-v1.md)和[剩余体验收口工作包](../50_plans/work_items/UX--post-damai-experience-closeout.md)。合成数据不解除公开C级或真实企业门禁。
+7. **大麦完整财年演示数据（底座 completed；页面覆盖部分完成）**：24个月synthetic全链已落地；2026-09-26常驻开发库受控恢复，备份SHA见剩余体验收口工作包，seed幂等、verify19/19两次通过。当前API dashboard 200、8卡、趋势12/12、2条findings，状态仍degraded；财报2份、发布快照1、冻结候选12，财报覆盖FY2025 37/40、FY2026 40/40。毛利矩阵实际/预算比较各10/32格可用，缺格保持unavailable、不补零。allowedDevOrigins修复后常驻只读页面6/6通过；`/data`显示批次、`/investigations`显示2条finding、`/reports`显示财报及快照，但正式报告产物历史为空。隔离栈verify19/19、浏览器E2E9/9；FY2025四问API500已修复。Gate 1全路由响应矩阵、Gate3/4其他页面呈现/下钻及深链批次三未完成。证据见[Gate 1/Gate 2记录](../60_delivery/verification/2026-09-26--damai-visibility-gate1-v1.md)和[剩余体验收口工作包](../50_plans/work_items/UX--post-damai-experience-closeout.md)。合成数据不解除公开C级或真实企业门禁。
 8. **第二代静态知识刷新（active）**：批准规格与 preflight 已完成；K0–K6 尚待执行，用户战略裁决前不得切换 `CURRENT_RELEASE`。
 
 ## 知识基线

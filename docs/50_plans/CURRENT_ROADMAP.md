@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 3.9
+version: 4.0
 created_at: 2026-09-12
 updated_at: 2026-09-26
 owner: FLOW
@@ -17,7 +17,7 @@ superseded_by: null
 
 # 当前路线图（唯一主线）
 
-> 2026-09-26 更新：常驻开发库受控恢复已完成，备份后幂等seed且不清库/不迁移，verify 19/19两次通过；恢复后 dashboard API 200、8卡、趋势12/12、2条findings，仍degraded；财报2份、发布快照1、冻结候选12，静态覆盖37/40与40/40。此前只读探测显示的数据缺失已由恢复闭环。现有3000端口Next开发服务器chunks 403/HMR失败导致浏览器未hydration，未擅自重启。验收器历史版本计数修复及回归测试待提交。隔离Damai全旅程 verify19/19、E2E9/9；Gate1全路由矩阵、其他页面缺口与深链批次三仍未关闭。CI按最新SHA核验。
+> 2026-09-26 更新：常驻开发库受控恢复已完成，备份后幂等seed、不清库/不迁移，verify19/19两次通过；dashboard API 200、8卡、趋势12/12、2条findings，仍degraded；财报2份、发布快照1、冻结候选12，静态覆盖37/40与40/40。Next开发origin配置修复后常驻3000端口只读页面6/6通过，批次/调查/财报/经营快照均可见；正式报告产物历史仍为空。验收器历史版本计数修复并有回归测试。隔离Damai全旅程verify19/19、E2E9/9；Gate1全路由矩阵、其他页面缺口与深链批次三仍未关闭。CI按最新SHA核验。
 
 > **本页是全仓唯一主线**：既维护状态真相，也维护执行队列。2026-09-25 用户裁决（2A）后不再存在第二份「唯一」文档：EXECUTION_TODO、整合总计划、统一完整实施计划与执行收敛计划均已归档为历史/参考，状态与任务只以本页和工作包为准。详细验收步骤在各工作包与参考规格。
 
@@ -32,7 +32,7 @@ superseded_by: null
 | 1' | [U04 独立 oracle](work_items/U04--independent-oracle.md) | **blocked(解析器适配 + 新留出)** — 可并行 | oracle 已到齐 | 2026-09-24 首跑 199 行均 `not_comparable`；先支持「合并及公司」标题与页码区间提示，再回归并另取独立留出 |
 | 2 | [S01 战略边界、事实合同与安全门禁](work_items/S01--post-u8-boundary-contract-security.md) | **completed** | U08 completed | Task 1–5 完成；安全规格 V1.1 已批准且独立审查闭环（`6c3c1cd`，零 P1/P2）。2026-09-14 `ff42c67` 五路并合 + 回落修复（`c1510ce`→`2570bf8`）带入路由策略 v2、模块边界与 U8 升级门禁、迁移 0026 修复、`main.py` 启动 fail-fast、两模块入口；Kimi `0841ff9` v1 被否，由 `997c1ab` v2 取代。**Task 6 已关闭**（R2/R3/R4 交付，台账 §7），阶段 3 转入 C 级出口；[协调台账](../70_operations/2026-09-14-coordination-ledger-glm.md) / [范围计划](../superpowers/plans/2026-09-13-flow-post-u8-boundary-gate.md) / [并行执行计划](../superpowers/plans/2026-09-13-flow-three-agent-parallel-restructuring.md) |
 | 2a | [大麦物流完整财年演示数据](work_items/DAMAI--full-year-demo.md) | **completed** | 已批准规格；不依赖公开 C 级 | D1–D3 已集成 main `e22d193`，CI run `36137591750` 17/17 success；隔离栈 verify 19/19、八页面 E2E 9/9、重复 seed 零增长、发行包零漂移。**常驻开发库已装载（G2 完成 2026-09-25）**：用户裁决演示数据全部入库，集成后 main 上 verify 19/19、页面可见；合成数据不解除公开 C 级门禁 |
-| 2b | [大麦数据后的剩余体验收口](work_items/UX--post-damai-experience-closeout.md) | **active（Gate 1全路由干净SHA复验待完成；Gate 2静态事实完成；Gate 3部分完成；Gate 4批次历史clean-SHA E2E通过；Gate 5 CI待本轮提交SHA复验）** | G2 ✓；用户于 2026-09-26 批准实施 | OCF/矩阵修复隔离E2E9/9、verify19/19；矩阵实际/预算各10/32，缺格不补零。批次历史 clean-SHA `59b328dc` verify19/19、E2E9/9。常驻库于2026-09-26备份后幂等恢复，最终verify19/19两次，dashboard API 200（8卡、趋势12/12、2 findings，degraded）、财报2、发布快照1、冻结候选12；重复seed零增长。验收器已改为按大麦最新已发布财报版本计数，回归测试新增2项。浏览器3000端口既有Next服务器chunks403/HMR失败，未重启；其余页面缺口、全量Gate1与深链批次三待处理。见[工作包](work_items/UX--post-damai-experience-closeout.md)。 |
+| 2b | [大麦数据后的剩余体验收口](work_items/UX--post-damai-experience-closeout.md) | **active（Gate 1全路由干净SHA复验待完成；Gate 2静态事实完成；Gate 3部分完成；Gate 4批次历史clean-SHA E2E通过；Gate 5待本轮提交SHA CI）** | G2 ✓；用户于 2026-09-26 批准实施 | OCF/矩阵修复隔离E2E9/9、verify19/19；矩阵实际/预算各10/32，缺格不补零。常驻库备份后幂等恢复，verify19/19两次，重复seed零增长。dashboard API 200（8卡、趋势12/12、2 findings，degraded）；常驻3000端口只读页面6/6，另确认数据批次、调查Finding、财报及经营快照页面可见。正式报告产物历史为空。验收器最新版本财报计数修复、有2项回归测试。隔离全旅程verify19/19、E2E9/9。其余页面缺口、全量Gate1与深链批次三待处理。见[工作包](work_items/UX--post-damai-experience-closeout.md)。 |
 | K | [第二代静态知识刷新与战略重基线](work_items/KNOWLEDGE--refresh-v2.md) | **active** | 批准规格；跨三仓库 | Task 0/preflight 已完成；K0–K6 待执行。可与 D 轨在不重叠文件上并行；战略激活与 D3 文档关闭必须串行；用户裁决前 `CURRENT_RELEASE` 不变 |
 | 3 | [公开财报模块 C 级出口](work_items/PUBLIC--c-level-exit-protocol.md) | **blocked(归因、补证与裁决)** | S01 关闭 ✓ | 独立交叉评已完成（[结果](../80_reviews/ai-cross-review/results/gpt-6-astra-2026-09-25.md)）：1,530 格中42异常、109存疑、200因JDL乱码无法完整核验；待原PDF逐项归因/订正。1794/1794仅为登记覆盖口径，不等于通过 |
 | 3a | [溯源/重述/只读 MCP](work_items/PUBLIC--provenance-restatement-mcp.md) | **completed** | — | B3 溯源 95.5% 行项目带页锚（迁移 0029 + 导入/API/前端）；B4 supersedes 链 + 差异脚本；B5 只读 MCP 三工具（token fail-closed）；B6 确定性差异说明起草 |
@@ -54,7 +54,7 @@ superseded_by: null
 2. **U4 解析器修复与真正的新留出**（上表1'）：新留出双样本已冻结并完成独立 oracle 录入（`926af825`：小米 2026H1 + 阿里 FY2027Q1，抽签记录见 [holdout-lottery-2026-09-25](../../validation/financial_reports/holdout-lottery-2026-09-25.md)）。剩余：`cn_ashare_table` 支持「合并及公司」标题与页码区间参数化；旧三样本回归；新留出首跑前禁止适配/调参。
 3. **重新跑质量基准并完成 C 级 Go/No-Go**：依赖必要修订、U4新留出首跑和盲测；重跑L1并归档机器结果。交叉评与抽签均不单独构成通过，`1794/1794` 只表示已登记覆盖口径。
 4. **全站超链接化（深链下钻）**（**active**，用户 2026-09-26 确认）：按[实施计划](2026-09-26-ui-deep-link-implementation-plan.md)三批推进。**批次一、二已完成本地验收并推送 `7976691`**：六页接收端 + S/M 级下钻；新增指标条目、MetricSnapshot、AnalysisRun 只读详情 API 和授权血缘约束；Copilot 引用定位；公开覆盖矩阵报告链接映射。API/安全51/51、Web单测133/133、深链 Playwright15/15、typecheck、合同生成、文档M1/M6门禁通过；该 SHA 隔离 Damai 全旅程 verify19/19、E2E9/9。GitHub CI run `36225466153` 尚待最终核验。**批次三尚未开始**（原文/源记录查看器、冻结产物回链、ManagementWatchItem 关联等），计划不可关闭；Gate 1全路由数据/页面覆盖矩阵仍待完成。详见[实施计划](2026-09-26-ui-deep-link-implementation-plan.md)和[可链接性审计](../80_reviews/2026-09-26-ui-linkability-audit.md)。
-5. **大麦数据可见性与剩余 UX 收口**（上表2b，用户已批准）：Gate1初始矩阵绑定`main@3ff95115`+dirty overlay，非干净提交验收。FY2025工作台契约、Gate2覆盖FY2025 37/40与FY2026 40/40、OCF及矩阵比较策略已完成；深链批次一、二已交付，隔离全旅程verify19/19、E2E9/9。常驻开发库2026-09-26已完成备份保护的幂等恢复（无清库/迁移），恢复后verify19/19两次，API数据恢复；页面仍受3000端口Next开发服务器chunks403/HMR失败影响，未擅自重启。验收器修正按最新已发布财报版本计数。仍需完成Gate1全路由响应矩阵、Gate3/4其他页面缺口与下钻、深链批次三、Gate5本轮提交SHA总CI复验。详细状态见工作包。
+5. **大麦数据可见性与剩余 UX 收口**（上表2b，用户已批准）：Gate1初始矩阵绑定`main@3ff95115`+dirty overlay，非干净提交验收。FY2025工作台契约、Gate2覆盖FY2025 37/40与FY2026 40/40、OCF及矩阵比较策略已完成；深链批次一、二已交付，隔离全旅程verify19/19、E2E9/9。常驻开发库2026-09-26已备份后幂等恢复（无清库/迁移），verify19/19两次；Next开发origin修复后常驻只读页面6/6通过，另确认批次、Finding、财报和经营快照显示。正式报告产物历史为空。仍需Gate1全路由响应矩阵、Gate3/4其余页面缺口与下钻、深链批次三、Gate5最新提交SHA总CI复验。详细状态见工作包。
 6. **P3 数据与溯源接入**（上表3b）：修复/替换ZTO文本层，完成抽取、勾稽、页锚及API/UI链路测试；评审并实现真实来源链接；复核阿里分部序列在main的来源和可见性。
 7. **知识 release 收尾**（上表K）：完成K0–K6，核对M2用户追认、`CURRENT_RELEASE`、sealed candidate/激活记录、Task 10三仓库证据和独立复验；用户裁决前不切指针。
 8. **外部阻塞项**：取得《应用指南汇编2024》原文后核验rnd_exp；公开数据扩张C1等待真实财报。不得用合成样本替代。
