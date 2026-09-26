@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 4.0
+version: 4.1
 created_at: 2026-09-24
 updated_at: 2026-09-26
 owner: FLOW
@@ -168,6 +168,10 @@ Run: `python3 scripts/check_docs.py --phase m1` and the repository link check
 ### Gate 1 只读端点副作用分类（2026-09-26）
 
 路由实现审查确认客观快照与经营报告渲染类 GET 会直接调用 `freeze_objective_statement_report()` / `freeze_operations_overview()`；冻结函数在当前内容无可复用快照时 `session.add()` 新版本并 `flush()`。因此即使路由 method 为 GET，也不是安全的只读探测目标。上述具体路径已列入 Gate 1 排除清单，其他 endpoint 必须先审查调用链和提交行为，再加入矩阵。后续修正 GET/POST 语义属于独立 API 行为变更，当前仅记录，不在本次只读覆盖批次中擅自修改。
+
+只读矩阵工具已提交为 `0dde935f`：`scripts/damai_visibility_matrix.py` 仅记录方法、路由、状态码、响应字节数、上下文和响应 SHA，不保存正文；失败也会保留矩阵证据。它在隔离全旅程 seed/verify 后、任何页面变更流程前运行，禁止调用上述 freeze/render GET。
+
+干净提交复验（`main@0dde935f`，2026-09-26）：43个不同 GET 请求全部 HTTP 200，无失败；包含 Dashboard 月/YTD、组织/客群/产品/区域各一个维度筛选，两份财报 detail/projection/corrections/workbench/operations，全部7个公开经营期间，指标字典/语义/可计算清单/两个覆盖集，Finding详情，当前企业批次版本与清洗摘要，报告/经营快照发布attempt列表。响应只写 SHA/大小，不存内容；清单摘要 SHA-256 `ab226cd301e0387026b48cdad97eb8eec00f921faf841d320bec296f1523c228bd`。同轮 seed verifier19/19、浏览器E2E9/9。该 SHA 的 GitHub CI run `36241816630`仍在运行。此项关闭“早期矩阵非干净提交且不可复跑”的缺口，不关闭 Gate 1全页面/响应式/加载错误403/深链验收。
 - 当前 clean SHA `649a2aba` 的 GitHub Actions run `36232029817` success；其后状态同步提交 `7229cd0d` / run `36232204424` 与证据更新提交 `4c55f10e` / run `36232336053` 也 success。旧 runs `36229942486`–`36230243382` 的 dashboard 视觉高度失败发生在 `31a60217` 修复前；`31a60217` run `36230615921` 的 dashboard、integration、intake-e2e、data-contract 及其余 jobs 最终全绿。CI 当前无已知未通过项；Gate 1 页面/视口/错误/403/深链矩阵仍未关闭。
 
 #### CI 环境变量回归（2026-09-26，待修复）

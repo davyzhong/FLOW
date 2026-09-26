@@ -1,14 +1,14 @@
 ---
 doc_id: FLOW-VERIFY-DAMAI-VISIBILITY-GATE1-001
-title: 大麦数据可见性与 Gate 4 批次历史验收证据 v3.2
+title: 大麦数据可见性与 Gate 4 批次历史验收证据 v3.3
 doc_type: verification
 status: draft
-version: "3.2"
+version: "3.3"
 created_at: 2026-09-26
 updated_at: 2026-09-26
 owner: FLOW
-commit_refs: "[3ff95115, 6591e148, 4932504c, 9cd43e20, 905cf544, e2417ffa, af375ba3, 101bcf23, 5510bad3, 430020f, 59b328dc, 85e907a, 7258763, 71a2dd8, 695ea18, 8ea20d6, f135c93, 82cce21, ffcc873e, ca0826f5, 3159af8a, 31a60217, 649a2aba, 7229cd0d, 4c55f10e]"
-evidence_refs: "[read-only-local-api-probe, stable-overlay-fingerprint, sha256-response-matrix, damai-ocf-canonical-fixture, damai-isolated-seed-verify, damai-e2e-8-of-9, damai-e2e-9-of-9-ocf-trends-complete, margin-matrix-read-only-grain-audit, margin-comparison-selection-isolated-e2e-9-of-9, github-ci-stale-damai-coverage-assertion, secure-batch-history-api-ui-and-isolated-e2e-9-of-9, clean-sha-59b328dc-damai-e2e-9-of-9, github-dashboard-flow-test-database-url-conflict, dashboard-ci-url-isolation-unit-2-of-2, dashboard-playwright-7-of-7, github-run-36223558441-dashboard-success, persistent-demo-rehydrate-verify-19-of-19-twice, verifier-latest-published-report-regression-tests, allowed-dev-origin-live-readonly-ui-6-of-6, isolated-damai-e2e-9-of-9, persistent-page-api-response-hashes, unavailable-comparison-visible-status-red-green, web-vitest-134-of-134, live-dashboard-playwright-after-change-no-console-errors, operations-balance-sheet-cur-end-role-regression, operations-derived-formula-dependencies, operations-metric-unit-formatting, damai-fy2026-operations-response-sha256-225a9edb, operations-reason-coded-empty-states, read-only-get-matrix-40-calls-36-combinations-all-200, report-history-empty-state-backed-by-empty-attempts, github-run-36228302327-dashboard-visual-height-regression, inline-kpi-status-layout-fix, isolated-damai-e2e-9-of-9-after-31a60217, web-vitest-134-of-134-after-31a60217, github-dashboard-job-success-36230615921, dashboard-dimension-fact-scoping-red-green, dashboard-coverage-denominators-and-empty-state, isolated-damai-verify-19-of-19-e2e-9-of-9-after-649a2aba, github-run-36232029817-all-jobs-success, github-run-36232204424-all-jobs-success, github-run-36232336053-all-jobs-success, persistent-flow-test-dashboard-batch-incident-unreverted, code-audit-objective-snapshot-get-mutates-on-miss, code-audit-operations-render-get-freezes-snapshot]"
+commit_refs: "[3ff95115, 6591e148, 4932504c, 9cd43e20, 905cf544, e2417ffa, af375ba3, 101bcf23, 5510bad3, 430020f, 59b328dc, 85e907a, 7258763, 71a2dd8, 695ea18, 8ea20d6, f135c93, 82cce21, ffcc873e, ca0826f5, 3159af8a, 31a60217, 649a2aba, 7229cd0d, 4c55f10e, dfe6e4ed, 933f857a, 0dde935f]"
+evidence_refs: "[read-only-local-api-probe, stable-overlay-fingerprint, sha256-response-matrix, damai-ocf-canonical-fixture, damai-isolated-seed-verify, damai-e2e-8-of-9, damai-e2e-9-of-9-ocf-trends-complete, margin-matrix-read-only-grain-audit, margin-comparison-selection-isolated-e2e-9-of-9, github-ci-stale-damai-coverage-assertion, secure-batch-history-api-ui-and-isolated-e2e-9-of-9, clean-sha-59b328dc-damai-e2e-9-of-9, github-dashboard-flow-test-database-url-conflict, dashboard-ci-url-isolation-unit-2-of-2, dashboard-playwright-7-of-7, github-run-36223558441-dashboard-success, persistent-demo-rehydrate-verify-19-of-19-twice, verifier-latest-published-report-regression-tests, allowed-dev-origin-live-readonly-ui-6-of-6, isolated-damai-e2e-9-of-9, persistent-page-api-response-hashes, unavailable-comparison-visible-status-red-green, web-vitest-134-of-134, live-dashboard-playwright-after-change-no-console-errors, operations-balance-sheet-cur-end-role-regression, operations-derived-formula-dependencies, operations-metric-unit-formatting, damai-fy2026-operations-response-sha256-225a9edb, operations-reason-coded-empty-states, read-only-get-matrix-40-calls-36-combinations-all-200, report-history-empty-state-backed-by-empty-attempts, github-run-36228302327-dashboard-visual-height-regression, inline-kpi-status-layout-fix, isolated-damai-e2e-9-of-9-after-31a60217, web-vitest-134-of-134-after-31a60217, github-dashboard-job-success-36230615921, dashboard-dimension-fact-scoping-red-green, dashboard-coverage-denominators-and-empty-state, isolated-damai-verify-19-of-19-e2e-9-of-9-after-649a2aba, github-run-36232029817-all-jobs-success, github-run-36232204424-all-jobs-success, github-run-36232336053-all-jobs-success, persistent-flow-test-dashboard-batch-incident-unreverted, code-audit-objective-snapshot-get-mutates-on-miss, code-audit-operations-render-get-freezes-snapshot, clean-sha-0dde935f-damai-safe-get-matrix-43-of-43, matrix-response-hash-only-no-payload, isolated-damai-verify-19-of-19-e2e-9-of-9-after-matrix]"
 knowledge_release: flow-knowledge-2026-09-12.1
 applies_to: web-frontend
 supersedes: []
@@ -28,6 +28,13 @@ CI 后续结果：主代码 `649a2aba` 的 run `36232029817` 全部 jobs success
 ## 只读矩阵排除项：GET 调用冻结副作用
 
 静态代码审查确认 `GET /api/v1/statements/{report_id}/objective-snapshot` 及 `/objective-snapshot/html` 调用 `freeze_objective_statement_report()`；`GET /api/v1/operations/overview/{report_id}/html|xlsx|pptx|pdf` 调用 `freeze_operations_overview()`。冻结函数在内容变化/无现有快照时会 `session.add()` 新快照并 `flush()`。以上路径不能作为 GET-only 数据探测目标，已从下一轮矩阵中排除；只有明确纯读取的路由可以纳入。是否将这些 endpoint 改为 POST 或拆分读取与冻结，作为后续 API 语义审查项，不在本轮未经评审地更改。
+
+## Clean SHA GET 矩阵（`0dde935f`）
+
+- 工具：`scripts/damai_visibility_matrix.py`，通过 `scripts/test_damai_demo_e2e.sh` 在隔离 `damai-demo-iso` seed/verify 后自动运行，任何页面状态变更/发布动作之前执行。
+- 结果：43条不同 GET 请求/参数组合全部 HTTP 200；无 POST/PUT/PATCH/DELETE。覆盖 discovery、month/YTD dashboard、4个维度筛选各一项、两份大麦财报详情/主题投影/更正/四问/经营概览、所有7个公开经营期间、指标字典/语义/计算清单/public与Damai覆盖矩阵、Finding详情、内部批次版本与清洗摘要、报告快照与经营快照尝试清单。可能写入冻结快照的 GET 未调用。
+- 每行只存 route alias/path、company/period/dataset/batch scope、status、响应字节数与 SHA-256，不保存响应正文。manifest SHA-256：`ab226cd301e0387026b48cdad97eb8eec00f921faf841d320bec296f1523c228bd`；本次逐路由输出留在 ignored `work/damai-demo/e2e_visibility_matrix.jsonl`，可由工具重跑生成。
+- 同轮大麦 seed verifier 19/19、浏览器 E2E 9/9通过。代码 SHA `0dde935f` 的 CI run `36241816630` 仍运行；待其成功后此矩阵方可记为 CI 验收。该证据只关闭 clean-SHA API 矩阵缺口，不关闭全站响应式、加载/空/403/错误态与全下钻验收。
 
 ## Gate 5 CI 数据库 URL 隔离修复补记（2026-09-26）
 
