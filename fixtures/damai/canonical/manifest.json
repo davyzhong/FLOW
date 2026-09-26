@@ -19,8 +19,8 @@
       "sha256": "bb9e7ec1f4064d63a20470c2cc4455ed098fdc219f1c632cdd2c07c38614c3af"
     },
     "financial_actuals.jsonl": {
-      "row_count": 672,
-      "sha256": "d1ee5e6a2470de5f4ca456b0836939443f73ab4bc470146bf80db535133167c0"
+      "row_count": 768,
+      "sha256": "3fda66a863aa7013a782a2a79500253a99082c367b3190b7956ffbfcf55816cd"
     },
     "logistics_products.jsonl": {
       "row_count": 8,

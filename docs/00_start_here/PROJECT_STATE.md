@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 2.4
+version: 2.5
 created_at: 2026-09-12
 updated_at: 2026-09-26
 owner: FLOW
@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-截至 2026-09-26，远端 `main` 当前基线为 `30417334`，迁移头为 `0030_page_anchor_vocabulary`；该 SHA 的 CI 需按同一 SHA 单独核验。U8、S01、前端一致性 Task 0–9、大麦数据包和常驻库 G2 已完成；测试库隔离已于 `b60c51b` 修复，新的小米 2026H1 与阿里 FY2027Q1 holdout 已冻结并录入独立 oracle（`926af825`）。公开 C 级交叉评的42项确认异常已在 `4111f6a` 判定为真实抽取错误；109项口径疑点待裁决，京东物流200格英文原件已于 `b161fff` 冻结、待重核，抽取修订和新留出盲测未完成。大麦数据合同有24个月经营明细（1,920实际、10,752预算、4,800应收回款、672财务实际）。新静态财报发行工件已扩为每份51行；静态指标覆盖生成结果 FY2025 37/40、FY2026 40/40，其中 FY2025 三项同比指标无FY2024比较期。常驻开发库中的已发布年报尚未重载，报表 API 此前仍返回每份40行；不得把静态工件覆盖率说成已加载页面事实。驾驶舱8张KPI卡，12个月趋势点（每点4指标），其中OCF趋势12/12为 `trend_metric_not_published`、KPI预算比较4/8为 `comparison_not_published`、毛利矩阵实际22/32为 `metric_grain_not_published`且比较24/32未发布，整体 `degraded`；FY2025四问工作台500已定位为响应模型漏声明 `metric_code`，修复提交 `48f8363` 后本机返回200。Gate 1诊断首轮来自 `main@3ff95115` + overlay `1ede2648…`，不是干净代码验收；全目标干净SHA复测和 Gate 3 快照补齐仍待完成。主线只在 `main` 串行推进。
+截至 2026-09-26，远端 `main` 已提交基线为 `6591e148`，迁移头为 `0030_page_anchor_vocabulary`；近期提交的 CI 仍需按具体 SHA 核验。U8、S01、前端一致性 Task 0–9、大麦数据包和常驻库 G2 已完成；测试库隔离已于 `b60c51b` 修复，新的小米 2026H1 与阿里 FY2027Q1 holdout 已冻结并录入独立 oracle（`926af825`）。公开 C 级交叉评的42项确认异常已在 `4111f6a` 判定为真实抽取错误；109项口径疑点待裁决，京东物流200格英文原件已于 `b161fff` 冻结、待重核，抽取修订和新留出盲测未完成。大麦静态数据合同现有24个月经营明细（1,920实际、10,752预算、4,800应收回款、768财务实际，含合计守恒的 OCF）；常驻开发库仍为旧版672条财务实际，禁止据静态生成结果声称已加载。新静态财报发行工件每份51行；静态指标覆盖生成结果 FY2025 37/40、FY2026 40/40，其中 FY2025 三项同比指标无FY2024比较期。常驻开发库年报尚未重载，报表 API 此前仍返回每份40行。驾驶舱8张KPI卡、12个月趋势点（每点4指标）此前有OCF趋势12/12为 `trend_metric_not_published`、KPI预算比较4/8为 `comparison_not_published`、毛利矩阵实际22/32为 `metric_grain_not_published`且比较24/32未发布，整体 `degraded`；静态 canonical OCF源事实已补并通过本地快照粒度测试，尚未隔离装载验证页面缺口是否消除。FY2025四问工作台500已由`48f8363`修复。Gate 1诊断首轮来自 `main@3ff95115` + overlay `1ede2648…`，不是干净代码验收；全目标干净SHA复测、隔离装载和毛利矩阵根因复查仍待完成。主线只在 `main` 串行推进。
 
 历史状态快照：下文部分 S01/R0–R4 描述记录了各自交付时的上下文；若与当前状态、分支集成或门禁冲突，以本段和 [CURRENT_ROADMAP](../50_plans/CURRENT_ROADMAP.md) 为准。
 
@@ -32,7 +32,7 @@ applies_to: repository
 4. **公开模块 C 级出口（门禁后）**：执行冻结样本、company-level holdout、可复算/可追源和独立盲评量化协议。
 5. **内部工作台与真实企业验证（C 级出口后）**：需内部数据授权；至少连续三个完整月度周期，与同输入人工基准逐周期比较。
 6. **旧 U9/O5、U10（待重新裁决）**：仅保留历史工作包身份，不按旧依赖链自动领取。
-7. **大麦完整财年演示数据（底座 completed；页面覆盖未完成）**：24个月 synthetic 全链已落地，隔离栈既有发行版验收 verify 19/19、八页面 E2E 9/9、重复 seed 零增长、发行包零漂移；常驻开发库 G2 已装载旧版财报。此次静态财报工件增补后每份51行，指标覆盖生成结果 FY2025 37/40、FY2026 40/40；尚未在隔离发布旅程验证重载后的报表 API/UI。驾驶舱仍为 `degraded`，12个月OCF趋势、预算/毛利矩阵比较快照缺项；FY2025四问API 500 已由 `48f8363` 修复。诊断和生成证据见[Gate 1/Gate 2记录](../60_delivery/verification/2026-09-26--damai-visibility-gate1-v1.md)；详见[剩余体验收口工作包](../50_plans/work_items/UX--post-damai-experience-closeout.md)。合成数据不解除公开 C 级或真实企业门禁。
+7. **大麦完整财年演示数据（底座 completed；页面覆盖未完成）**：24个月 synthetic 全链已落地，隔离栈既有发行版验收 verify 19/19、八页面 E2E 9/9、重复 seed 零增长、发行包零漂移；常驻开发库 G2 已装载旧版财报。静态财务实际现为768条，含从已有月度合成现金流守恒分摊的 OCF；canonical 25项、快照粒度对账3项、发行包确定性检查通过。常驻开发库仍是672条旧版实际，不得重灌；需在隔离发布旅程验证年报重载与新快照。财报每份51行，指标覆盖生成结果 FY2025 37/40、FY2026 40/40。毛利矩阵 grain/comparison 缺项尚未归因；FY2025四问API 500 已由`48f8363`修复。诊断和生成证据见[Gate 1/Gate 2记录](../60_delivery/verification/2026-09-26--damai-visibility-gate1-v1.md)；详见[剩余体验收口工作包](../50_plans/work_items/UX--post-damai-experience-closeout.md)。合成数据不解除公开 C 级或真实企业门禁。
 8. **第二代静态知识刷新（active）**：批准规格与 preflight 已完成；K0–K6 尚待执行，用户战略裁决前不得切换 `CURRENT_RELEASE`。
 
 ## 知识基线

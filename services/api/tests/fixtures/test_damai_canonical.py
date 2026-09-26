@@ -236,7 +236,7 @@ class FullDimensionContractTests(unittest.TestCase):
         core = {
             "REVENUE", "WAREHOUSING_COST", "TRANSPORTATION_COST",
             "OTHER_DIRECT_COST", "GROSS_PROFIT", "OPERATING_EXPENSE",
-            "OPERATING_PROFIT",
+            "OPERATING_PROFIT", "OPERATING_CASH_FLOW",
         }
         cells = {(r.month_key, r.organization_code) for r in rows}
         self.assertEqual(len(cells), 24 * 4, f"财务实际须覆盖 24 月×4 单元，实际 {len(cells)}")
@@ -247,6 +247,21 @@ class FullDimensionContractTests(unittest.TestCase):
             )
         for cell, accounts in by_cell.items():
             self.assertTrue(core <= accounts, f"{cell} 缺核心科目 {core - accounts}")
+
+    def test_financial_ocf_is_monthly_cash_flow_conserved(self) -> None:
+        raw = build_damai_package()
+        actual_by_month: dict[str, Decimal] = {}
+        for row in self.package.financial_actuals:
+            if row.management_account_code == "OPERATING_CASH_FLOW":
+                actual_by_month[row.month_key] = (
+                    actual_by_month.get(row.month_key, Decimal("0")) + row.amount
+                )
+
+        expected_by_month = {
+            row["month"]: Decimal(row["ocf"])
+            for row in raw["monthly_facts"]["cash_flow"]
+        }
+        self.assertEqual(actual_by_month, expected_by_month)
 
     def test_budget_10752_raw_lines_with_cell_identity(self) -> None:
         rows = self.package.monthly_budgets

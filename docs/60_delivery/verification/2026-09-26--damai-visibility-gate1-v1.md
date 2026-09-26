@@ -1,14 +1,14 @@
 ---
 doc_id: FLOW-VERIFY-DAMAI-VISIBILITY-GATE1-001
-title: 大麦数据可见性 Gate 1 API 诊断证据 v1.1
+title: 大麦数据可见性 Gate 1 API 诊断证据 v1.2
 doc_type: verification
 status: draft
-version: "1.1"
+version: "1.2"
 created_at: 2026-09-26
 updated_at: 2026-09-26
 owner: FLOW
-commit_refs: "[3ff95115]"
-evidence_refs: "[read-only-local-api-probe, stable-overlay-fingerprint, sha256-response-matrix]"
+commit_refs: "[3ff95115, 6591e148]"
+evidence_refs: "[read-only-local-api-probe, stable-overlay-fingerprint, sha256-response-matrix, damai-ocf-canonical-fixture]"
 knowledge_release: flow-knowledge-2026-09-12.1
 applies_to: web-frontend
 supersedes: []
@@ -95,3 +95,11 @@ superseded_by: null
 | `config/metrics/damai_demo_metric_coverage_v1.yaml` | `e256bc20ccf1283465ffe6e4d997de6209a335ad4ba874208ff8d85d8678f0fb` |
 
 指标覆盖生成结果 FY2025 37/40、FY2026 40/40；FY2025未计算的三项为收入增长、净利润增长、营业利润增长，因输入包无 FY2024 比较期而标记该期间无适用比较值；FY2026三个同比值可计算。生成器重复执行后覆盖工件 SHA 不变。财报 fixture、loader、归一化测试24项通过，ruff/mypy与发行包 `--check` 通过。当前证据只证明静态工件与隔离 `flow_test` 的导入/规范化，不代表常驻 `flow` 已重载新报表；该验证仍由后续隔离发布旅程完成。
+
+## Gate 3 月度 OCF 实际事实补齐（2026-09-26）
+
+根因：原生成器已产出24个月 `cash_flow[].ocf`（含 E5 现金利润背离），但 canonical 财务实际转换只写入7个科目，丢弃了 OCF；指标快照依据源科目精确匹配，因此看板 OCF 实际不可用不是快照计算器漏算。修复在 canonical 转换中按月组织收入占比分摊 OCF，尾差归最后组织，保持每月集团 OCF 总额与生成器 cash flow 值完全一致。静态 `financial_actuals.jsonl` 由672行增至768行，manifest 和工作簿已重建。
+
+验证：`tests/fixtures/test_damai_canonical.py` 25/25；`tests/fixtures/test_damai_metric_grain.py` 3/3（覆盖 actual OCF 的 total/org 两粒度与 canonical 对账）；大麦 loader + 财报 normalization 16/16；ruff、mypy、发行包 `--check`、文档 M1 与链接检查通过。源记录 SHA-256：`fixtures/damai/canonical/financial_actuals.jsonl` = `3fda66a863aa7013a782a2a79500253a99082c367b3190b7956ffbfcf55816cd`。
+
+边界：常驻 `flow` 数据库没有被写入，现有 API/UI 仍不能据此视为已显示新 OCF。此修复须在隔离 Compose 装载后重新探测 dashboard OCF 趋势与 KPI；毛利矩阵粒度/比较缺口仍未修复。首次诊断 API 矩阵仍来自早期 dirty overlay，完整 Gate 1 干净 SHA 复测未完成。

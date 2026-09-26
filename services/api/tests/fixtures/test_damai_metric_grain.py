@@ -140,6 +140,13 @@ def _expected_financial() -> dict[str, dict[tuple[str | None, ...], Decimal]]:
     return _aggregate_financial(rows, "management_account_code", "OPERATING_PROFIT")
 
 
+def _expected_financial_ocf() -> dict[tuple[str | None, ...], Decimal]:
+    """canonical financial_actuals 的 OCF actual 聚合：total/organization。"""
+
+    rows = [row for row in _load_jsonl("financial_actuals.jsonl") if row["month_key"] == MONTH_KEY]
+    return _aggregate_financial(rows, "management_account_code", "OPERATING_CASH_FLOW")
+
+
 def _expected_budget_ocf() -> dict[tuple[str | None, ...], Decimal]:
     """canonical monthly_budgets 的 OPERATING_CASH_FLOW 预算聚合（total/org）。"""
 
@@ -234,9 +241,7 @@ def test_direct_cost_is_full_three_cost_sum(seeded: Session) -> None:
 def test_financial_metrics_match_canonical_at_supported_grains(
     seeded: Session,
 ) -> None:
-    """operating_profit actual 与 canonical 对账；operating_cash_flow actual
-    不在工作簿合同（7 科目）内，必须如实缺席——只断言 budget 侧与 canonical 预算对账。
-    """
+    """operating_profit 和 operating_cash_flow actual 与 canonical 对账。"""
 
     actual = _actual_grains(seeded)
     expected_profit = _expected_financial()
@@ -252,11 +257,15 @@ def test_financial_metrics_match_canonical_at_supported_grains(
             f"operating_profit 粒度 {key} 不一致：快照 {actual_value} vs canonical {expected_value}"
         )
 
-    # OCF actual：数据合同（工作簿财务实际 7 科目）不含 OPERATING_CASH_FLOW，
-    # 快照不得造出 actual 值——缺席本身即合同真相
-    assert "operating_cash_flow" not in actual, (
-        "operating_cash_flow 不应有 actual 值（合同未交付 OCF 实际事实）"
-    )
+    ocf_actual = actual.get("operating_cash_flow", {})
+    assert ocf_actual, "operating_cash_flow 实际快照缺失"
+    for key, expected_value in _expected_financial_ocf().items():
+        actual_value = ocf_actual.get(key)
+        assert actual_value is not None, f"operating_cash_flow 实际缺粒度 {key}"
+        assert abs(actual_value - expected_value) <= TOLERANCE, (
+            f"operating_cash_flow 粒度 {key} 不一致："
+            f"快照 {actual_value} vs canonical {expected_value}"
+        )
 
     budget = _actual_grains(seeded, comparison_type="budget_month")
     ocf_budget = budget.get("operating_cash_flow", {})

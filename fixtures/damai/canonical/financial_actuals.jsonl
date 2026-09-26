@@ -5,6 +5,7 @@
 {"amount":"22878.4008","management_account_code":"GROSS_PROFIT","month_key":"2024-09","organization_code":"BU-01","record_id":"b4d330f1-39f7-5c76-998d-bc7ea72818e3"}
 {"amount":"17825.9792","management_account_code":"OPERATING_EXPENSE","month_key":"2024-09","organization_code":"BU-01","record_id":"3cdbadae-2b46-50f9-8b30-c53a912bf5ce"}
 {"amount":"5052.4216","management_account_code":"OPERATING_PROFIT","month_key":"2024-09","organization_code":"BU-01","record_id":"62b07a1c-d508-51ea-8946-6183ebaa93e8"}
+{"amount":"21905.9328","management_account_code":"OPERATING_CASH_FLOW","month_key":"2024-09","organization_code":"BU-01","record_id":"17641946-f520-56cb-8556-8ffc63962655"}
 {"amount":"171005.0332","management_account_code":"REVENUE","month_key":"2024-09","organization_code":"BU-02","record_id":"3d52eff7-53ec-5fe7-af2c-c0a26727673d"}
 {"amount":"46171.3590","management_account_code":"WAREHOUSING_COST","month_key":"2024-09","organization_code":"BU-02","record_id":"10eceaed-7a40-5d06-9c2c-01398b96f28b"}
 {"amount":"92342.7180","management_account_code":"TRANSPORTATION_COST","month_key":"2024-09","organization_code":"BU-02","record_id":"30cb5b9c-0bf2-56b8-b272-aad645d952b4"}
@@ -12,6 +13,7 @@
 {"amount":"17100.5033","management_account_code":"GROSS_PROFIT","month_key":"2024-09","organization_code":"BU-02","record_id":"7869f22a-da34-5885-844d-ea70a3c165f7"}
 {"amount":"13680.4027","management_account_code":"OPERATING_EXPENSE","month_key":"2024-09","organization_code":"BU-02","record_id":"2f91b90b-6b53-5e59-a064-c4f961a0d273"}
 {"amount":"3420.1006","management_account_code":"OPERATING_PROFIT","month_key":"2024-09","organization_code":"BU-02","record_id":"e51fb67e-6e7a-5a3b-b50f-b39541f1759f"}
+{"amount":"16811.5298","management_account_code":"OPERATING_CASH_FLOW","month_key":"2024-09","organization_code":"BU-02","record_id":"7d2ab866-375d-5c39-bab7-c689c1866f5b"}
 {"amount":"287158.5360","management_account_code":"REVENUE","month_key":"2024-09","organization_code":"BU-03","record_id":"b9ad4716-b716-51af-a360-419cfbb8873f"}
 {"amount":"76380.6707","management_account_code":"WAREHOUSING_COST","month_key":"2024-09","organization_code":"BU-03","record_id":"f5f86117-59a4-5254-bfa5-5c80bc5d94f7"}
 {"amount":"152761.3408","management_account_code":"TRANSPORTATION_COST","month_key":"2024-09","organization_code":"BU-03","record_id":"cd889e08-cbd4-5dc7-980e-7b56bf8eebd2"}
@@ -19,6 +21,7 @@
 {"amount":"32556.3008","management_account_code":"GROSS_PROFIT","month_key":"2024-09","organization_code":"BU-03","record_id":"6ecf6b36-e83f-5f6d-b1df-7d15c5a7e385"}
 {"amount":"22972.6829","management_account_code":"OPERATING_EXPENSE","month_key":"2024-09","organization_code":"BU-03","record_id":"ccc5314e-5f73-56bc-b72e-3d0d46b9aef9"}
 {"amount":"9583.6179","management_account_code":"OPERATING_PROFIT","month_key":"2024-09","organization_code":"BU-03","record_id":"a552dbc3-a8e5-5b00-a252-c4151ace4475"}
+{"amount":"28230.5976","management_account_code":"OPERATING_CASH_FLOW","month_key":"2024-09","organization_code":"BU-03","record_id":"01854871-c00e-5101-813d-9c935ad26c8e"}
 {"amount":"134689.6566","management_account_code":"REVENUE","month_key":"2024-09","organization_code":"BU-04","record_id":"343835b9-d7d1-59de-b56a-13c6fe40b032"}
 {"amount":"36575.0903","management_account_code":"WAREHOUSING_COST","month_key":"2024-09","organization_code":"BU-04","record_id":"322c3f92-85d2-5ae1-9b7d-444f271c48c3"}
 {"amount":"73150.1806","management_account_code":"TRANSPORTATION_COST","month_key":"2024-09","organization_code":"BU-04","record_id":"5b3130e5-9d50-57e0-979e-0916c06493e2"}
@@ -26,6 +29,7 @@
 {"amount":"12772.6887","management_account_code":"GROSS_PROFIT","month_key":"2024-09","organization_code":"BU-04","record_id":"9d31e01a-69dd-566b-974d-7fc3ab69f9ce"}
 {"amount":"10775.1725","management_account_code":"OPERATING_EXPENSE","month_key":"2024-09","organization_code":"BU-04","record_id":"9f59f29f-7e4f-59a0-98e3-473de4549ffa"}
 {"amount":"1997.5162","management_account_code":"OPERATING_PROFIT","month_key":"2024-09","organization_code":"BU-04","record_id":"fcb621b0-6920-5831-acb5-0bbec53dcb0c"}
+{"amount":"13241.3598","management_account_code":"OPERATING_CASH_FLOW","month_key":"2024-09","organization_code":"BU-04","record_id":"16ea26fa-b18e-587f-af2c-7032f7b9f3eb"}
 {"amount":"221406.6600","management_account_code":"REVENUE","month_key":"2024-10","organization_code":"BU-01","record_id":"d7e4495f-99e8-5cb5-9cc8-fdc5e48e4a6c"}
 {"amount":"59602.1580","management_account_code":"WAREHOUSING_COST","month_key":"2024-10","organization_code":"BU-01","record_id":"9eeb8f5b-2b51-5175-9f96-e4c6f7861dde"}
 {"amount":"119204.3157","management_account_code":"TRANSPORTATION_COST","month_key":"2024-10","organization_code":"BU-01","record_id":"b802e4c0-0c9a-5c09-9eea-b5fefe83465e"}
@@ -33,6 +37,7 @@
 {"amount":"22732.8004","management_account_code":"GROSS_PROFIT","month_key":"2024-10","organization_code":"BU-01","record_id":"d49ac406-1396-5abd-bc03-80dadcb4fb5f"}
 {"amount":"17712.5328","management_account_code":"OPERATING_EXPENSE","month_key":"2024-10","organization_code":"BU-01","record_id":"dc89c598-9c3e-594d-86bb-7a52daf45439"}
 {"amount":"5020.2676","management_account_code":"OPERATING_PROFIT","month_key":"2024-10","organization_code":"BU-01","record_id":"17b91c98-85e3-5ac8-887a-3ef658fdb38d"}
+{"amount":"21773.3156","management_account_code":"OPERATING_CASH_FLOW","month_key":"2024-10","organization_code":"BU-01","record_id":"5965879c-dccd-5489-9a7e-f928cf033f73"}
 {"amount":"169916.7391","management_account_code":"REVENUE","month_key":"2024-10","organization_code":"BU-02","record_id":"76010bdc-5d29-529a-a6ba-876b8d9cdabf"}
 {"amount":"45877.5195","management_account_code":"WAREHOUSING_COST","month_key":"2024-10","organization_code":"BU-02","record_id":"8542b467-95c3-5040-9653-cb53db25d018"}
 {"amount":"91755.0391","management_account_code":"TRANSPORTATION_COST","month_key":"2024-10","organization_code":"BU-02","record_id":"b99f2f72-da96-598b-bb49-90aa1fefa4e7"}
@@ -40,6 +45,7 @@
 {"amount":"16991.6739","management_account_code":"GROSS_PROFIT","month_key":"2024-10","organization_code":"BU-02","record_id":"0b7b3190-dba0-528f-9298-287e2556e494"}
 {"amount":"13593.3391","management_account_code":"OPERATING_EXPENSE","month_key":"2024-10","organization_code":"BU-02","record_id":"1f74c45d-fde7-5cd4-86a3-53a8f8910a6b"}
 {"amount":"3398.3348","management_account_code":"OPERATING_PROFIT","month_key":"2024-10","organization_code":"BU-02","record_id":"dcec77aa-a6ca-53a3-ab2a-3765a48802d2"}
+{"amount":"16709.7538","management_account_code":"OPERATING_CASH_FLOW","month_key":"2024-10","organization_code":"BU-02","record_id":"d5d70964-428c-5561-b7bb-ea5f352b0a89"}
 {"amount":"304398.6190","management_account_code":"REVENUE","month_key":"2024-10","organization_code":"BU-03","record_id":"9a96cf48-1b1d-5b4f-b8ed-4138ceff0d93"}
 {"amount":"80980.7875","management_account_code":"WAREHOUSING_COST","month_key":"2024-10","organization_code":"BU-03","record_id":"21b52327-f9e5-58de-b518-d6cc055995a7"}
 {"amount":"161961.5747","management_account_code":"TRANSPORTATION_COST","month_key":"2024-10","organization_code":"BU-03","record_id":"5c230ece-4516-5d3f-b113-e1e53156c1ec"}
@@ -47,6 +53,7 @@
 {"amount":"34462.6611","management_account_code":"GROSS_PROFIT","month_key":"2024-10","organization_code":"BU-03","record_id":"7b2907f5-fc72-5852-8929-8fad726f5f26"}
 {"amount":"24351.8895","management_account_code":"OPERATING_EXPENSE","month_key":"2024-10","organization_code":"BU-03","record_id":"b25cd7db-b5cb-578b-b35d-8a63bd0e0f38"}
 {"amount":"10110.7716","management_account_code":"OPERATING_PROFIT","month_key":"2024-10","organization_code":"BU-03","record_id":"b1497a2d-e562-58ad-844c-1b52e1f8957f"}
+{"amount":"29934.8140","management_account_code":"OPERATING_CASH_FLOW","month_key":"2024-10","organization_code":"BU-03","record_id":"e121a619-6b0a-5c36-8556-1d3974560973"}
 {"amount":"143261.0327","management_account_code":"REVENUE","month_key":"2024-10","organization_code":"BU-04","record_id":"fd10cd35-65f8-5f1a-94bb-2a9ff4c2ebd4"}
 {"amount":"38902.6550","management_account_code":"WAREHOUSING_COST","month_key":"2024-10","organization_code":"BU-04","record_id":"bd01a8d3-1673-5b33-811d-48a4ae1a6a75"}
 {"amount":"77805.3097","management_account_code":"TRANSPORTATION_COST","month_key":"2024-10","organization_code":"BU-04","record_id":"f74c80f2-4cad-5c3f-9872-d4a6650a3278"}
@@ -54,6 +61,7 @@
 {"amount":"13585.5165","management_account_code":"GROSS_PROFIT","month_key":"2024-10","organization_code":"BU-04","record_id":"1fe1b700-2daa-5c18-911d-d7446e842c7a"}
 {"amount":"11460.8826","management_account_code":"OPERATING_EXPENSE","month_key":"2024-10","organization_code":"BU-04","record_id":"573f2e1a-54e0-555a-a1f6-3181cb70defc"}
 {"amount":"2124.6339","management_account_code":"OPERATING_PROFIT","month_key":"2024-10","organization_code":"BU-04","record_id":"b42721a0-53c8-5028-a768-19e7e7fd4153"}
+{"amount":"14088.4094","management_account_code":"OPERATING_CASH_FLOW","month_key":"2024-10","organization_code":"BU-04","record_id":"e3e1987e-2c31-58ca-8295-5fe240758ff7"}
 {"amount":"238968.4717","management_account_code":"REVENUE","month_key":"2024-11","organization_code":"BU-01","record_id":"84196a05-5070-5e94-81ab-884f0e3f729a"}
 {"amount":"64329.7572","management_account_code":"WAREHOUSING_COST","month_key":"2024-11","organization_code":"BU-01","record_id":"c3aaab50-4606-5892-a700-dc7d71df1643"}
 {"amount":"128659.5136","management_account_code":"TRANSPORTATION_COST","month_key":"2024-11","organization_code":"BU-01","record_id":"0280c7c8-3d86-522b-8805-2292d820241f"}
@@ -61,6 +69,7 @@
 {"amount":"24535.9489","management_account_code":"GROSS_PROFIT","month_key":"2024-11","organization_code":"BU-01","record_id":"b192ee9d-267b-5df4-9cbf-6f5aae9669b1"}
 {"amount":"19117.4777","management_account_code":"OPERATING_EXPENSE","month_key":"2024-11","organization_code":"BU-01","record_id":"5f0a1b42-7a76-575b-bda7-996d49eca5ef"}
 {"amount":"5418.4712","management_account_code":"OPERATING_PROFIT","month_key":"2024-11","organization_code":"BU-01","record_id":"8cd293f9-49b9-5bb3-93ec-1c7664f160c7"}
+{"amount":"23493.3420","management_account_code":"OPERATING_CASH_FLOW","month_key":"2024-11","organization_code":"BU-01","record_id":"94b65f4d-0eae-5e13-a2dc-6265dcb8d2c9"}
 {"amount":"183394.4090","management_account_code":"REVENUE","month_key":"2024-11","organization_code":"BU-02","record_id":"fbaecfdb-6ccb-563e-b5ed-c50f0e1f0511"}
 {"amount":"49516.4904","management_account_code":"WAREHOUSING_COST","month_key":"2024-11","organization_code":"BU-02","record_id":"9a201351-f570-5530-a3a3-33b350fd2453"}
 {"amount":"99032.9808","management_account_code":"TRANSPORTATION_COST","month_key":"2024-11","organization_code":"BU-02","record_id":"e8dbbb31-d3d8-5543-8c05-057a6392668a"}
@@ -68,6 +77,7 @@
 {"amount":"18339.4409","management_account_code":"GROSS_PROFIT","month_key":"2024-11","organization_code":"BU-02","record_id":"1d9628a2-f3da-5d21-9a9f-7030fad6e43f"}
 {"amount":"14671.5527","management_account_code":"OPERATING_EXPENSE","month_key":"2024-11","organization_code":"BU-02","record_id":"b2c14c17-6472-587b-ab8b-1052173592e1"}
 {"amount":"3667.8882","management_account_code":"OPERATING_PROFIT","month_key":"2024-11","organization_code":"BU-02","record_id":"032853ea-06d2-5f8e-bced-49f6fd4ea8ca"}
+{"amount":"18029.7741","management_account_code":"OPERATING_CASH_FLOW","month_key":"2024-11","organization_code":"BU-02","record_id":"803fbba1-9b31-5f70-aa98-89c2b45e2724"}
 {"amount":"304841.5806","management_account_code":"REVENUE","month_key":"2024-11","organization_code":"BU-03","record_id":"5b53dd12-8dba-515c-b707-f395ead7615a"}
 {"amount":"81080.2167","management_account_code":"WAREHOUSING_COST","month_key":"2024-11","organization_code":"BU-03","record_id":"681c81fe-4f72-5bc8-a87a-364ef7ee19db"}
 {"amount":"162160.4332","management_account_code":"TRANSPORTATION_COST","month_key":"2024-11","organization_code":"BU-03","record_id":"072d2fe0-95c9-52d8-b07d-289dd78b8cac"}
@@ -75,6 +85,7 @@
 {"amount":"34574.1919","management_account_code":"GROSS_PROFIT","month_key":"2024-11","organization_code":"BU-03","record_id":"94973b54-24c8-5a85-8a1a-a4b1574253e4"}
 {"amount":"24387.3264","management_account_code":"OPERATING_EXPENSE","month_key":"2024-11","organization_code":"BU-03","record_id":"9c937507-7e01-55a3-812a-f62f22101828"}
 {"amount":"10186.8655","management_account_code":"OPERATING_PROFIT","month_key":"2024-11","organization_code":"BU-03","record_id":"7335c983-e4c8-5d28-a588-b236b025716b"}
+{"amount":"29969.4242","management_account_code":"OPERATING_CASH_FLOW","month_key":"2024-11","organization_code":"BU-03","record_id":"3506e994-2047-56d3-97c3-4694ccad56b7"}
 {"amount":"142852.0359","management_account_code":"REVENUE","month_key":"2024-11","organization_code":"BU-04","record_id":"9a94409c-3b41-53c0-ac30-ee9057fb2009"}
 {"amount":"38791.5913","management_account_code":"WAREHOUSING_COST","month_key":"2024-11","organization_code":"BU-04","record_id":"9f2d68f7-154f-53d2-93fc-070d04626f26"}
 {"amount":"77583.1826","management_account_code":"TRANSPORTATION_COST","month_key":"2024-11","organization_code":"BU-04","record_id":"cf2e06bd-be45-5e2d-ba0f-81dce009c733"}
@@ -82,6 +93,7 @@
 {"amount":"13546.7313","management_account_code":"GROSS_PROFIT","month_key":"2024-11","organization_code":"BU-04","record_id":"21c32dff-526b-5934-9076-46cf75ae908d"}
 {"amount":"11428.1629","management_account_code":"OPERATING_EXPENSE","month_key":"2024-11","organization_code":"BU-04","record_id":"744fdbe2-d216-5e36-84e6-0f73e5addaec"}
 {"amount":"2118.5684","management_account_code":"OPERATING_PROFIT","month_key":"2024-11","organization_code":"BU-04","record_id":"1832e052-6ac3-5c36-a6a6-76a6096ffbc6"}
+{"amount":"14043.9939","management_account_code":"OPERATING_CASH_FLOW","month_key":"2024-11","organization_code":"BU-04","record_id":"b92f4b30-1edd-599f-af62-15f5306a61ae"}
 {"amount":"227515.6296","management_account_code":"REVENUE","month_key":"2024-12","organization_code":"BU-01","record_id":"58f88343-ea8b-5989-b953-d5b97c95c483"}
 {"amount":"61246.6782","management_account_code":"WAREHOUSING_COST","month_key":"2024-12","organization_code":"BU-01","record_id":"5c6baa6e-e22e-5743-a4da-2323537e16b1"}
 {"amount":"122493.3567","management_account_code":"TRANSPORTATION_COST","month_key":"2024-12","organization_code":"BU-01","record_id":"10d33b61-3038-5b0b-8ef6-8054642813f7"}
@@ -89,6 +101,7 @@
 {"amount":"23360.0350","management_account_code":"GROSS_PROFIT","month_key":"2024-12","organization_code":"BU-01","record_id":"438ff923-2a49-5118-a7c1-72c26792ff39"}
 {"amount":"18201.2504","management_account_code":"OPERATING_EXPENSE","month_key":"2024-12","organization_code":"BU-01","record_id":"fbe32c86-97cf-5cbd-bdd9-e6aea1264289"}
 {"amount":"5158.7846","management_account_code":"OPERATING_PROFIT","month_key":"2024-12","organization_code":"BU-01","record_id":"03e79161-ec8c-5ffb-af1f-87012b6c76a7"}
+{"amount":"22384.1357","management_account_code":"OPERATING_CASH_FLOW","month_key":"2024-12","organization_code":"BU-01","record_id":"15437a44-be2a-58de-bd27-5066965dbfc5"}
 {"amount":"174605.0181","management_account_code":"REVENUE","month_key":"2024-12","organization_code":"BU-02","record_id":"852edb4f-97c8-5300-bf19-7c208ff94095"}
 {"amount":"47143.3550","management_account_code":"WAREHOUSING_COST","month_key":"2024-12","organization_code":"BU-02","record_id":"8ac66121-8a28-5e88-97fd-3bc15cb041bc"}
 {"amount":"94286.7099","management_account_code":"TRANSPORTATION_COST","month_key":"2024-12","organization_code":"BU-02","record_id":"f410d1df-58f5-580c-bb22-66ba9587338c"}
@@ -96,6 +109,7 @@
 {"amount":"17460.5017","management_account_code":"GROSS_PROFIT","month_key":"2024-12","organization_code":"BU-02","record_id":"cc71ac70-7e81-57d9-ade7-fe79bb373a99"}
 {"amount":"13968.4014","management_account_code":"OPERATING_EXPENSE","month_key":"2024-12","organization_code":"BU-02","record_id":"01e9e0ac-09cb-59e5-9ff7-60d65c5c1d66"}
 {"amount":"3492.1003","management_account_code":"OPERATING_PROFIT","month_key":"2024-12","organization_code":"BU-02","record_id":"8d6895d6-79ad-5e0e-8a36-1b1d797197d9"}
+{"amount":"17178.5227","management_account_code":"OPERATING_CASH_FLOW","month_key":"2024-12","organization_code":"BU-02","record_id":"f215ddc9-5620-5a16-8061-04fb0a8d07c7"}
 {"amount":"307991.1045","management_account_code":"REVENUE","month_key":"2024-12","organization_code":"BU-03","record_id":"2dee45f9-2390-520a-a150-8dd42bef67f1"}
 {"amount":"81920.2993","management_account_code":"WAREHOUSING_COST","month_key":"2024-12","organization_code":"BU-03","record_id":"cceff3b4-9ea6-5896-99d1-f992e18e4aae"}
 {"amount":"163840.5988","management_account_code":"TRANSPORTATION_COST","month_key":"2024-12","organization_code":"BU-03","record_id":"b627096e-0652-5241-aae6-ab043fbcdad8"}
@@ -103,6 +117,7 @@
 {"amount":"34923.4402","management_account_code":"GROSS_PROFIT","month_key":"2024-12","organization_code":"BU-03","record_id":"f3a4ced1-4aaf-5023-957f-d4c89ccbe6e8"}
 {"amount":"24639.2884","management_account_code":"OPERATING_EXPENSE","month_key":"2024-12","organization_code":"BU-03","record_id":"2e5d4fe1-a623-52c0-8884-072c86f9e02c"}
 {"amount":"10284.1518","management_account_code":"OPERATING_PROFIT","month_key":"2024-12","organization_code":"BU-03","record_id":"9c85b7b4-4b5f-57af-9f55-12616932bbdd"}
+{"amount":"30301.7190","management_account_code":"OPERATING_CASH_FLOW","month_key":"2024-12","organization_code":"BU-03","record_id":"a698bd79-8a58-565a-9563-3302feaa11ce"}
 {"amount":"144408.0218","management_account_code":"REVENUE","month_key":"2024-12","organization_code":"BU-04","record_id":"8ca07ae8-1b32-5819-8050-2d66b3ab4d4c"}
 {"amount":"39214.1208","management_account_code":"WAREHOUSING_COST","month_key":"2024-12","organization_code":"BU-04","record_id":"1555a316-6556-5fd0-918d-46c37b685c7b"}
 {"amount":"78428.2414","management_account_code":"TRANSPORTATION_COST","month_key":"2024-12","organization_code":"BU-04","record_id":"d5f683a8-8361-5c54-b694-09ad1ab9c48a"}
@@ -110,6 +125,7 @@
 {"amount":"13694.2862","management_account_code":"GROSS_PROFIT","month_key":"2024-12","organization_code":"BU-04","record_id":"77c2c17a-9cfe-5e4c-ba43-2bf56d7f92d5"}
 {"amount":"11552.6417","management_account_code":"OPERATING_EXPENSE","month_key":"2024-12","organization_code":"BU-04","record_id":"9a43757f-5b07-5cb1-a82d-aebff15d692e"}
 {"amount":"2141.6445","management_account_code":"OPERATING_PROFIT","month_key":"2024-12","organization_code":"BU-04","record_id":"521696f3-6dbc-5105-91b1-71247b92bedb"}
+{"amount":"14207.5899","management_account_code":"OPERATING_CASH_FLOW","month_key":"2024-12","organization_code":"BU-04","record_id":"e7004701-a2cc-5800-a948-c6ff065d7890"}
 {"amount":"196468.5930","management_account_code":"REVENUE","month_key":"2025-01","organization_code":"BU-01","record_id":"1d97c910-3a4c-52d8-931e-8aa0226e2c99"}
 {"amount":"52888.8883","management_account_code":"WAREHOUSING_COST","month_key":"2025-01","organization_code":"BU-01","record_id":"04893afb-0f51-5b75-a895-944da9700922"}
 {"amount":"105777.7765","management_account_code":"TRANSPORTATION_COST","month_key":"2025-01","organization_code":"BU-01","record_id":"16cc5b46-98c1-5437-a417-7c8be8f752a0"}
@@ -117,6 +133,7 @@
 {"amount":"20172.2987","management_account_code":"GROSS_PROFIT","month_key":"2025-01","organization_code":"BU-01","record_id":"2b4bab48-102c-506a-90ac-5916bc8cd844"}
 {"amount":"15717.4874","management_account_code":"OPERATING_EXPENSE","month_key":"2025-01","organization_code":"BU-01","record_id":"40704554-d89b-56cc-b070-8bbcaa38bbfd"}
 {"amount":"4454.8113","management_account_code":"OPERATING_PROFIT","month_key":"2025-01","organization_code":"BU-01","record_id":"c78002ad-fe66-5732-bcea-c4b7da964af3"}
+{"amount":"19335.8982","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-01","organization_code":"BU-01","record_id":"e38c02d2-6ccf-5775-90b5-5813d6c9ca8f"}
 {"amount":"150778.2225","management_account_code":"REVENUE","month_key":"2025-01","organization_code":"BU-02","record_id":"e46cc4ff-6c1d-58a5-b461-b247d64e7110"}
 {"amount":"40710.1200","management_account_code":"WAREHOUSING_COST","month_key":"2025-01","organization_code":"BU-02","record_id":"b522fdaf-9e3c-5c1a-abca-9b7ca69adfe3"}
 {"amount":"81420.2402","management_account_code":"TRANSPORTATION_COST","month_key":"2025-01","organization_code":"BU-02","record_id":"7e47ab17-ca79-51a6-a8a6-b2e1f2aa2fbd"}
@@ -124,6 +141,7 @@
 {"amount":"15077.8223","management_account_code":"GROSS_PROFIT","month_key":"2025-01","organization_code":"BU-02","record_id":"c2ef985a-cae5-57ba-bf6f-f044a99a5d0d"}
 {"amount":"12062.2578","management_account_code":"OPERATING_EXPENSE","month_key":"2025-01","organization_code":"BU-02","record_id":"7e2129ec-f0a1-5955-8073-e67e5f366e9e"}
 {"amount":"3015.5645","management_account_code":"OPERATING_PROFIT","month_key":"2025-01","organization_code":"BU-02","record_id":"fcc4282a-efc6-5673-a922-1abdbebd52b8"}
+{"amount":"14839.1777","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-01","organization_code":"BU-02","record_id":"ad8fb895-9ca5-5148-9d0e-65933a767f02"}
 {"amount":"266171.2012","management_account_code":"REVENUE","month_key":"2025-01","organization_code":"BU-03","record_id":"9a7bfd4c-5fcf-5acd-b522-b39a8e773380"}
 {"amount":"70790.2624","management_account_code":"WAREHOUSING_COST","month_key":"2025-01","organization_code":"BU-03","record_id":"c08dfbc9-d78f-58c4-85e2-73216b1381d0"}
 {"amount":"141580.5245","management_account_code":"TRANSPORTATION_COST","month_key":"2025-01","organization_code":"BU-03","record_id":"07b32bb4-1dee-526f-8a24-f6428d418137"}
@@ -131,6 +149,7 @@
 {"amount":"30203.6600","management_account_code":"GROSS_PROFIT","month_key":"2025-01","organization_code":"BU-03","record_id":"131a8cce-6fca-5b8c-b5b4-4745c3c3177a"}
 {"amount":"21293.6961","management_account_code":"OPERATING_EXPENSE","month_key":"2025-01","organization_code":"BU-03","record_id":"56087ef1-0688-506f-9e62-5ef40ed5d2ae"}
 {"amount":"8909.9639","management_account_code":"OPERATING_PROFIT","month_key":"2025-01","organization_code":"BU-03","record_id":"7d08db5f-cb96-55da-9cd8-77bc18e4de93"}
+{"amount":"26195.8371","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-01","organization_code":"BU-03","record_id":"975ca201-4fb0-5f38-bd2f-7e77817aefa2"}
 {"amount":"124576.3336","management_account_code":"REVENUE","month_key":"2025-01","organization_code":"BU-04","record_id":"4990c816-07e5-5c27-95b1-bbd2ec030f54"}
 {"amount":"33828.8090","management_account_code":"WAREHOUSING_COST","month_key":"2025-01","organization_code":"BU-04","record_id":"dd0bfe73-31dc-5093-a5ef-3616ad44b204"}
 {"amount":"67657.6179","management_account_code":"TRANSPORTATION_COST","month_key":"2025-01","organization_code":"BU-04","record_id":"7fa12209-5034-564f-b65a-686bbba48f99"}
@@ -138,6 +157,7 @@
 {"amount":"11813.6371","management_account_code":"GROSS_PROFIT","month_key":"2025-01","organization_code":"BU-04","record_id":"724a17a8-2d26-5b0b-b69c-6fbb21d3d2d0"}
 {"amount":"9966.1067","management_account_code":"OPERATING_EXPENSE","month_key":"2025-01","organization_code":"BU-04","record_id":"128317fd-2fd4-59f8-be57-5ff352614271"}
 {"amount":"1847.5304","management_account_code":"OPERATING_PROFIT","month_key":"2025-01","organization_code":"BU-04","record_id":"39e799b0-f8e6-5fe1-8425-00444007dd3b"}
+{"amount":"12260.4600","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-01","organization_code":"BU-04","record_id":"15d6d5f4-a195-5179-b8c2-f444cb1205fe"}
 {"amount":"172351.7642","management_account_code":"REVENUE","month_key":"2025-02","organization_code":"BU-01","record_id":"5dd239b0-334f-5e58-b897-f1e25c941e75"}
 {"amount":"46396.6943","management_account_code":"WAREHOUSING_COST","month_key":"2025-02","organization_code":"BU-01","record_id":"3b011bf8-5b17-5a65-828f-ccb056f793ba"}
 {"amount":"92793.3882","management_account_code":"TRANSPORTATION_COST","month_key":"2025-02","organization_code":"BU-01","record_id":"d53f975d-8392-551c-ab44-650971cd5683"}
@@ -145,6 +165,7 @@
 {"amount":"17696.1172","management_account_code":"GROSS_PROFIT","month_key":"2025-02","organization_code":"BU-01","record_id":"cae995a8-d79a-580b-ac6f-87fa1e38e9c4"}
 {"amount":"13788.1411","management_account_code":"OPERATING_EXPENSE","month_key":"2025-02","organization_code":"BU-01","record_id":"7f5b54bb-8258-543a-9adb-e5a91b29682b"}
 {"amount":"3907.9761","management_account_code":"OPERATING_PROFIT","month_key":"2025-02","organization_code":"BU-01","record_id":"f3002738-1680-5eeb-b6d1-effb6a742b76"}
+{"amount":"16952.1782","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-02","organization_code":"BU-01","record_id":"285759d0-2965-56f9-908c-045619727e7d"}
 {"amount":"132269.9585","management_account_code":"REVENUE","month_key":"2025-02","organization_code":"BU-02","record_id":"1627658a-309c-576c-8bcd-b746ae6b8af8"}
 {"amount":"35712.8887","management_account_code":"WAREHOUSING_COST","month_key":"2025-02","organization_code":"BU-02","record_id":"e4ca4bd7-1c25-5afd-aa16-970f85ba2589"}
 {"amount":"71425.7777","management_account_code":"TRANSPORTATION_COST","month_key":"2025-02","organization_code":"BU-02","record_id":"42142acc-93f7-5046-a077-426ae210650a"}
@@ -152,6 +173,7 @@
 {"amount":"13226.9958","management_account_code":"GROSS_PROFIT","month_key":"2025-02","organization_code":"BU-02","record_id":"47873aec-83e1-5bd3-8146-d3a744db338b"}
 {"amount":"10581.5967","management_account_code":"OPERATING_EXPENSE","month_key":"2025-02","organization_code":"BU-02","record_id":"654f7a40-be05-57f4-9e8d-85bbe2715bda"}
 {"amount":"2645.3991","management_account_code":"OPERATING_PROFIT","month_key":"2025-02","organization_code":"BU-02","record_id":"2875303a-c5dc-51c1-8274-e71d8d27ce27"}
+{"amount":"13009.8111","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-02","organization_code":"BU-02","record_id":"82735d25-cdfb-547c-9b4b-3e58c58e4a98"}
 {"amount":"226349.8271","management_account_code":"REVENUE","month_key":"2025-02","organization_code":"BU-03","record_id":"fa25f9d3-7e6a-5bda-b922-3d19fc401b8f"}
 {"amount":"60202.3089","management_account_code":"WAREHOUSING_COST","month_key":"2025-02","organization_code":"BU-03","record_id":"257219c0-faed-5a86-a3e7-59d31d35db69"}
 {"amount":"120404.6179","management_account_code":"TRANSPORTATION_COST","month_key":"2025-02","organization_code":"BU-03","record_id":"e73fd1c3-04eb-5725-bc63-fcf982000579"}
@@ -159,6 +181,7 @@
 {"amount":"25675.4639","management_account_code":"GROSS_PROFIT","month_key":"2025-02","organization_code":"BU-03","record_id":"86d22772-8ea0-5f78-974b-d18708b50df1"}
 {"amount":"18107.9862","management_account_code":"OPERATING_EXPENSE","month_key":"2025-02","organization_code":"BU-03","record_id":"fcd2a096-4b68-5227-a861-2a6aba35837b"}
 {"amount":"7567.4777","management_account_code":"OPERATING_PROFIT","month_key":"2025-02","organization_code":"BU-03","record_id":"71dfcf57-ff85-5fa5-b364-562ab92bd79d"}
+{"amount":"22263.3207","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-02","organization_code":"BU-03","record_id":"394485ce-fd5b-5092-b352-cc543ea213ff"}
 {"amount":"106034.0998","management_account_code":"REVENUE","month_key":"2025-02","organization_code":"BU-04","record_id":"faa848fb-4f86-5f4b-95ce-07405fd37e87"}
 {"amount":"28793.6495","management_account_code":"WAREHOUSING_COST","month_key":"2025-02","organization_code":"BU-04","record_id":"71d6e068-7974-5238-93a3-c54195d0fbcd"}
 {"amount":"57587.2992","management_account_code":"TRANSPORTATION_COST","month_key":"2025-02","organization_code":"BU-04","record_id":"f06b323e-00a8-561c-8ede-ade4f3a9a535"}
@@ -166,6 +189,7 @@
 {"amount":"10055.2678","management_account_code":"GROSS_PROFIT","month_key":"2025-02","organization_code":"BU-04","record_id":"b1d22d8d-6c70-5f72-a570-2e3b38b4626a"}
 {"amount":"8482.7280","management_account_code":"OPERATING_EXPENSE","month_key":"2025-02","organization_code":"BU-04","record_id":"981885c1-2182-5940-b446-87f61f205628"}
 {"amount":"1572.5398","management_account_code":"OPERATING_PROFIT","month_key":"2025-02","organization_code":"BU-04","record_id":"0b53a90f-4969-5f34-802b-5db755896459"}
+{"amount":"10429.3040","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-02","organization_code":"BU-04","record_id":"71303c3c-e525-5664-a42c-cdf7263de554"}
 {"amount":"208732.4626","management_account_code":"REVENUE","month_key":"2025-03","organization_code":"BU-01","record_id":"ae68381f-d580-5c69-9d5e-47df8e374cf1"}
 {"amount":"56190.2936","management_account_code":"WAREHOUSING_COST","month_key":"2025-03","organization_code":"BU-01","record_id":"1c404f07-1876-52d0-bddb-f64f595fa90f"}
 {"amount":"112380.5873","management_account_code":"TRANSPORTATION_COST","month_key":"2025-03","organization_code":"BU-01","record_id":"8e003619-31b2-5e07-8db3-af84d924703b"}
@@ -173,6 +197,7 @@
 {"amount":"21431.4840","management_account_code":"GROSS_PROFIT","month_key":"2025-03","organization_code":"BU-01","record_id":"4a281c06-995d-5868-b77b-16e3491755da"}
 {"amount":"16698.5970","management_account_code":"OPERATING_EXPENSE","month_key":"2025-03","organization_code":"BU-01","record_id":"d9f3fb2d-870b-56a3-b701-0559f4d146e6"}
 {"amount":"4732.8870","management_account_code":"OPERATING_PROFIT","month_key":"2025-03","organization_code":"BU-01","record_id":"0e590586-823e-5c66-808a-297eefabfa78"}
+{"amount":"20540.2944","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-03","organization_code":"BU-01","record_id":"dd50c0dd-a3a5-55e9-976b-420bd86fad32"}
 {"amount":"160190.0294","management_account_code":"REVENUE","month_key":"2025-03","organization_code":"BU-02","record_id":"4f3ecb7c-843c-545d-82b6-e450b0e31190"}
 {"amount":"43251.3080","management_account_code":"WAREHOUSING_COST","month_key":"2025-03","organization_code":"BU-02","record_id":"1ce5eb1b-2424-5b79-8cca-b71a2de3590a"}
 {"amount":"86502.6158","management_account_code":"TRANSPORTATION_COST","month_key":"2025-03","organization_code":"BU-02","record_id":"3392b3e2-310b-5b1b-83b2-104490c4ecf1"}
@@ -180,6 +205,7 @@
 {"amount":"16019.0030","management_account_code":"GROSS_PROFIT","month_key":"2025-03","organization_code":"BU-02","record_id":"b0fa1cf8-6ff6-58f1-a163-31b38cfef2f4"}
 {"amount":"12815.2024","management_account_code":"OPERATING_EXPENSE","month_key":"2025-03","organization_code":"BU-02","record_id":"1f978f85-7dac-5ecc-bffb-aaa17ce2bcea"}
 {"amount":"3203.8006","management_account_code":"OPERATING_PROFIT","month_key":"2025-03","organization_code":"BU-02","record_id":"fff140b4-1462-5e09-b53c-8a091740d617"}
+{"amount":"15763.4818","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-03","organization_code":"BU-02","record_id":"08e25750-65d7-5fc7-ba54-4375434a23f2"}
 {"amount":"267611.8939","management_account_code":"REVENUE","month_key":"2025-03","organization_code":"BU-03","record_id":"3b4f6a03-d8a8-52f7-85a2-75be24286cea"}
 {"amount":"71158.9448","management_account_code":"WAREHOUSING_COST","month_key":"2025-03","organization_code":"BU-03","record_id":"bc14424a-a6a6-53b0-b91c-7b78d0885c1b"}
 {"amount":"142317.8895","management_account_code":"TRANSPORTATION_COST","month_key":"2025-03","organization_code":"BU-03","record_id":"06b11cd4-afbd-5e3a-9f02-f07555bd1872"}
@@ -187,6 +213,7 @@
 {"amount":"30415.4112","management_account_code":"GROSS_PROFIT","month_key":"2025-03","organization_code":"BU-03","record_id":"a0e86d2d-43dd-5db4-b887-747a87fb9b92"}
 {"amount":"21408.9515","management_account_code":"OPERATING_EXPENSE","month_key":"2025-03","organization_code":"BU-03","record_id":"a8807248-5c6f-5463-8e02-e70acb0eef51"}
 {"amount":"9006.4597","management_account_code":"OPERATING_PROFIT","month_key":"2025-03","organization_code":"BU-03","record_id":"c0b2d192-96e0-512b-8155-1125eb50ff62"}
+{"amount":"26334.3182","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-03","organization_code":"BU-03","record_id":"e8e01e5d-d47b-5554-bd5d-97ed51c3bd26"}
 {"amount":"124765.0492","management_account_code":"REVENUE","month_key":"2025-03","organization_code":"BU-04","record_id":"a711e9a4-6c0f-5d76-acc5-60eb802a23de"}
 {"amount":"33880.0550","management_account_code":"WAREHOUSING_COST","month_key":"2025-03","organization_code":"BU-04","record_id":"d55553e4-7f94-55ec-b999-f3627611d685"}
 {"amount":"67760.1097","management_account_code":"TRANSPORTATION_COST","month_key":"2025-03","organization_code":"BU-04","record_id":"eaee1fef-3168-52bb-a14c-6250046e1cef"}
@@ -194,6 +221,7 @@
 {"amount":"11831.5327","management_account_code":"GROSS_PROFIT","month_key":"2025-03","organization_code":"BU-04","record_id":"e81f5fc6-ec70-5451-b1da-22fba6b4e2df"}
 {"amount":"9981.2039","management_account_code":"OPERATING_EXPENSE","month_key":"2025-03","organization_code":"BU-04","record_id":"f0ba4caa-1b1c-54fa-91a5-de03652196b5"}
 {"amount":"1850.3288","management_account_code":"OPERATING_PROFIT","month_key":"2025-03","organization_code":"BU-04","record_id":"56bb0b52-032d-5bba-a38c-225c85aa01ef"}
+{"amount":"12277.4906","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-03","organization_code":"BU-04","record_id":"a90da1a5-e950-5925-9887-c80003d6c099"}
 {"amount":"210836.4409","management_account_code":"REVENUE","month_key":"2025-04","organization_code":"BU-01","record_id":"e4e7707b-1107-55f7-9b1b-3df53fcea7ec"}
 {"amount":"56756.6795","management_account_code":"WAREHOUSING_COST","month_key":"2025-04","organization_code":"BU-01","record_id":"3d758d09-f4aa-5281-8e6f-8e61f8c65d85"}
 {"amount":"113513.3592","management_account_code":"TRANSPORTATION_COST","month_key":"2025-04","organization_code":"BU-01","record_id":"9b54b9e8-d917-538d-8956-51b516e94570"}
@@ -201,6 +229,7 @@
 {"amount":"21647.5090","management_account_code":"GROSS_PROFIT","month_key":"2025-04","organization_code":"BU-01","record_id":"2cfea3b3-e047-5281-8727-bf3f177c0f6a"}
 {"amount":"16866.9153","management_account_code":"OPERATING_EXPENSE","month_key":"2025-04","organization_code":"BU-01","record_id":"86306ad6-23d6-5b01-92de-3b6993089609"}
 {"amount":"4780.5937","management_account_code":"OPERATING_PROFIT","month_key":"2025-04","organization_code":"BU-01","record_id":"dd0d7e8c-55fe-5833-ab95-7e4a6e55eb6d"}
+{"amount":"20713.4672","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-04","organization_code":"BU-01","record_id":"87e0c874-cfac-5b73-8195-a8dc0715629b"}
 {"amount":"161804.7102","management_account_code":"REVENUE","month_key":"2025-04","organization_code":"BU-02","record_id":"6956eeca-fb78-59ef-a71b-7c1eeb1dd68b"}
 {"amount":"43687.2716","management_account_code":"WAREHOUSING_COST","month_key":"2025-04","organization_code":"BU-02","record_id":"3365df9f-2664-581e-92d0-1a06f3d2024e"}
 {"amount":"87374.5435","management_account_code":"TRANSPORTATION_COST","month_key":"2025-04","organization_code":"BU-02","record_id":"8e9ba49b-32e2-544e-afc7-a51ea4281311"}
@@ -208,6 +237,7 @@
 {"amount":"16180.4710","management_account_code":"GROSS_PROFIT","month_key":"2025-04","organization_code":"BU-02","record_id":"b03be75d-990b-5c9a-a612-a26c5934b4a7"}
 {"amount":"12944.3768","management_account_code":"OPERATING_EXPENSE","month_key":"2025-04","organization_code":"BU-02","record_id":"59a1d1e6-aca1-5c3d-8296-e07d73c14698"}
 {"amount":"3236.0942","management_account_code":"OPERATING_PROFIT","month_key":"2025-04","organization_code":"BU-02","record_id":"7639f4d5-23fd-5c83-b652-766144dfc1e3"}
+{"amount":"15896.3817","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-04","organization_code":"BU-02","record_id":"9cc64ff6-fcf1-5afa-befe-c3ba3eaf5a36"}
 {"amount":"274722.9452","management_account_code":"REVENUE","month_key":"2025-04","organization_code":"BU-03","record_id":"46e84e0c-337d-56f5-ace8-c4607cda0a78"}
 {"amount":"73091.3027","management_account_code":"WAREHOUSING_COST","month_key":"2025-04","organization_code":"BU-03","record_id":"71b48ee0-4ff7-57fd-bd21-5193af767928"}
 {"amount":"146182.6046","management_account_code":"TRANSPORTATION_COST","month_key":"2025-04","organization_code":"BU-03","record_id":"802f36ac-d06a-5681-a5b6-c600058086f6"}
@@ -215,6 +245,7 @@
 {"amount":"31085.2705","management_account_code":"GROSS_PROFIT","month_key":"2025-04","organization_code":"BU-03","record_id":"543c92ff-2038-5e36-8214-3132e4056f5c"}
 {"amount":"21977.8356","management_account_code":"OPERATING_EXPENSE","month_key":"2025-04","organization_code":"BU-03","record_id":"6fe16194-7ef3-567b-9736-e39c1d1911f9"}
 {"amount":"9107.4349","management_account_code":"OPERATING_PROFIT","month_key":"2025-04","organization_code":"BU-03","record_id":"c0c66f31-da98-58e0-ba9b-7b5e73751ef5"}
+{"amount":"26989.9486","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-04","organization_code":"BU-03","record_id":"f9aae32f-4767-5609-ab3c-db1cc7dd4176"}
 {"amount":"129472.0619","management_account_code":"REVENUE","month_key":"2025-04","organization_code":"BU-04","record_id":"aeea4eb9-6092-59e3-813a-ae91a255469e"}
 {"amount":"35158.2481","management_account_code":"WAREHOUSING_COST","month_key":"2025-04","organization_code":"BU-04","record_id":"c11cd48e-1f29-5e5a-a638-57cf35217bba"}
 {"amount":"70316.4964","management_account_code":"TRANSPORTATION_COST","month_key":"2025-04","organization_code":"BU-04","record_id":"5d5a865e-2bcc-5b51-90f5-c59518497122"}
@@ -222,6 +253,7 @@
 {"amount":"12277.9012","management_account_code":"GROSS_PROFIT","month_key":"2025-04","organization_code":"BU-04","record_id":"df17c887-4676-5c70-92d5-612a77e1904f"}
 {"amount":"10357.7650","management_account_code":"OPERATING_EXPENSE","month_key":"2025-04","organization_code":"BU-04","record_id":"d5f26ed3-9df2-5ffb-9ecb-1312011ab6b3"}
 {"amount":"1920.1362","management_account_code":"OPERATING_PROFIT","month_key":"2025-04","organization_code":"BU-04","record_id":"2f763757-6c62-5f5a-b19b-bc22963ef1d8"}
+{"amount":"12719.8851","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-04","organization_code":"BU-04","record_id":"157403d7-ae2a-5947-98c4-91eab5960dfa"}
 {"amount":"216833.1655","management_account_code":"REVENUE","month_key":"2025-05","organization_code":"BU-01","record_id":"50af147a-12c8-5ecf-b92f-f1c078bc07f4"}
 {"amount":"58370.9840","management_account_code":"WAREHOUSING_COST","month_key":"2025-05","organization_code":"BU-01","record_id":"7b23b3b7-0257-550d-b7de-153b665795d4"}
 {"amount":"116741.9677","management_account_code":"TRANSPORTATION_COST","month_key":"2025-05","organization_code":"BU-01","record_id":"899b966b-e2b6-5cd1-9b30-f109de664247"}
@@ -229,6 +261,7 @@
 {"amount":"22263.2192","management_account_code":"GROSS_PROFIT","month_key":"2025-05","organization_code":"BU-01","record_id":"2eae992c-4cf6-5d32-b93c-00e12f862e79"}
 {"amount":"17346.6532","management_account_code":"OPERATING_EXPENSE","month_key":"2025-05","organization_code":"BU-01","record_id":"d67aac9e-394b-5fc2-a798-62cdfeb5a4ef"}
 {"amount":"4916.5660","management_account_code":"OPERATING_PROFIT","month_key":"2025-05","organization_code":"BU-01","record_id":"3b70550a-bcb5-553f-bda7-34d3451be0b8"}
+{"amount":"21295.5192","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-05","organization_code":"BU-01","record_id":"5d15fd27-dd2c-586e-90d2-d58eec5796ed"}
 {"amount":"166406.8480","management_account_code":"REVENUE","month_key":"2025-05","organization_code":"BU-02","record_id":"b4837665-7900-5669-9cef-c43be7ba872a"}
 {"amount":"44929.8490","management_account_code":"WAREHOUSING_COST","month_key":"2025-05","organization_code":"BU-02","record_id":"481a09b2-8a1d-5050-8c39-2bd581038a74"}
 {"amount":"89859.6980","management_account_code":"TRANSPORTATION_COST","month_key":"2025-05","organization_code":"BU-02","record_id":"c2c06141-db8e-5d33-8a28-71253670db0a"}
@@ -236,6 +269,7 @@
 {"amount":"16640.6846","management_account_code":"GROSS_PROFIT","month_key":"2025-05","organization_code":"BU-02","record_id":"298b614f-1e05-5383-91aa-8d38a5c38610"}
 {"amount":"13312.5478","management_account_code":"OPERATING_EXPENSE","month_key":"2025-05","organization_code":"BU-02","record_id":"e7e33198-3428-5855-8323-4fda3d80caab"}
 {"amount":"3328.1368","management_account_code":"OPERATING_PROFIT","month_key":"2025-05","organization_code":"BU-02","record_id":"54b498cb-9aad-5fdf-87cc-3dcf38e80048"}
+{"amount":"16343.0729","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-05","organization_code":"BU-02","record_id":"ac626b86-64e7-5be3-a853-2ad5384a6872"}
 {"amount":"278021.8822","management_account_code":"REVENUE","month_key":"2025-05","organization_code":"BU-03","record_id":"e5a235a2-faab-514d-95c7-fd0b0fe55a92"}
 {"amount":"73971.5105","management_account_code":"WAREHOUSING_COST","month_key":"2025-05","organization_code":"BU-03","record_id":"1452dfd4-0a13-580c-ab5d-5fa4fdc56336"}
 {"amount":"147943.0212","management_account_code":"TRANSPORTATION_COST","month_key":"2025-05","organization_code":"BU-03","record_id":"4f3dcbf6-c575-57af-ac68-eda0f7c4335f"}
@@ -243,6 +277,7 @@
 {"amount":"31450.1804","management_account_code":"GROSS_PROFIT","month_key":"2025-05","organization_code":"BU-03","record_id":"df54483f-4733-5ab6-8b04-51d19fa8940b"}
 {"amount":"22241.7506","management_account_code":"OPERATING_EXPENSE","month_key":"2025-05","organization_code":"BU-03","record_id":"6b76639b-a229-5ff6-83b6-6fb595c3db7a"}
 {"amount":"9208.4298","management_account_code":"OPERATING_PROFIT","month_key":"2025-05","organization_code":"BU-03","record_id":"f4d12470-2a71-561d-9dcb-fe46d1611905"}
+{"amount":"27304.9574","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-05","organization_code":"BU-03","record_id":"5d6dc50c-3df1-57e2-a6ef-1dd80f556a44"}
 {"amount":"131110.9858","management_account_code":"REVENUE","month_key":"2025-05","organization_code":"BU-04","record_id":"9c1d60b3-b802-5efd-9d9b-6c2f290fbc05"}
 {"amount":"35603.2993","management_account_code":"WAREHOUSING_COST","month_key":"2025-05","organization_code":"BU-04","record_id":"775ea083-e62b-5341-8576-795f4adafd09"}
 {"amount":"71206.5985","management_account_code":"TRANSPORTATION_COST","month_key":"2025-05","organization_code":"BU-04","record_id":"19243bb1-10d2-50bc-8d1d-e4f7660f7272"}
@@ -250,6 +285,7 @@
 {"amount":"12433.3215","management_account_code":"GROSS_PROFIT","month_key":"2025-05","organization_code":"BU-04","record_id":"a9b11a85-b8e6-5fb7-896f-f8624f382e4c"}
 {"amount":"10488.8789","management_account_code":"OPERATING_EXPENSE","month_key":"2025-05","organization_code":"BU-04","record_id":"91216550-7283-5958-9c58-15143e70582d"}
 {"amount":"1944.4426","management_account_code":"OPERATING_PROFIT","month_key":"2025-05","organization_code":"BU-04","record_id":"f6a6787f-57eb-5303-ac75-b0ab92737310"}
+{"amount":"12876.6119","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-05","organization_code":"BU-04","record_id":"98734033-dd64-5938-97fd-56270403430c"}
 {"amount":"203586.9682","management_account_code":"REVENUE","month_key":"2025-06","organization_code":"BU-01","record_id":"78a22c16-dd7b-588d-bae2-4dd7812eb469"}
 {"amount":"54805.1387","management_account_code":"WAREHOUSING_COST","month_key":"2025-06","organization_code":"BU-01","record_id":"63b1f1b7-585d-5f10-825f-b8ea2e3d37fd"}
 {"amount":"109610.2768","management_account_code":"TRANSPORTATION_COST","month_key":"2025-06","organization_code":"BU-01","record_id":"14534511-54a3-5e94-832d-b41393f5d71e"}
@@ -257,6 +293,7 @@
 {"amount":"20903.1734","management_account_code":"GROSS_PROFIT","month_key":"2025-06","organization_code":"BU-01","record_id":"7ea904b6-cc1a-567c-b280-000685527acf"}
 {"amount":"16286.9575","management_account_code":"OPERATING_EXPENSE","month_key":"2025-06","organization_code":"BU-01","record_id":"a27ab632-c678-5bb2-bdd5-77c7d11ff2c7"}
 {"amount":"4616.2159","management_account_code":"OPERATING_PROFIT","month_key":"2025-06","organization_code":"BU-01","record_id":"0d089805-2a5e-53fc-8094-6b8eab172988"}
+{"amount":"20017.3913","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-06","organization_code":"BU-01","record_id":"cd911e6e-60e6-5e4b-bc24-a7796c6994ec"}
 {"amount":"156241.1620","management_account_code":"REVENUE","month_key":"2025-06","organization_code":"BU-02","record_id":"a9b40b75-ccba-586e-b30a-dce959089f96"}
 {"amount":"42185.1138","management_account_code":"WAREHOUSING_COST","month_key":"2025-06","organization_code":"BU-02","record_id":"370aabb2-10eb-5035-ab9d-6e160d714040"}
 {"amount":"84370.2275","management_account_code":"TRANSPORTATION_COST","month_key":"2025-06","organization_code":"BU-02","record_id":"15856573-ce8e-58d6-af5f-8b998f2f1a7a"}
@@ -264,6 +301,7 @@
 {"amount":"15624.1162","management_account_code":"GROSS_PROFIT","month_key":"2025-06","organization_code":"BU-02","record_id":"646caba9-6d46-5da8-9d2c-38b6635d8ade"}
 {"amount":"12499.2930","management_account_code":"OPERATING_EXPENSE","month_key":"2025-06","organization_code":"BU-02","record_id":"14f8c9f2-8a06-5da4-ab06-5fc56f7b6620"}
 {"amount":"3124.8232","management_account_code":"OPERATING_PROFIT","month_key":"2025-06","organization_code":"BU-02","record_id":"4a2989d3-472a-57f7-acb4-293782727431"}
+{"amount":"15362.1840","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-06","organization_code":"BU-02","record_id":"7c3fd6ae-286d-5568-98d2-b4cfb5a3bcd7"}
 {"amount":"283380.6672","management_account_code":"REVENUE","month_key":"2025-06","organization_code":"BU-03","record_id":"06fb430d-a2d6-5344-ab64-6ea740491fd9"}
 {"amount":"75396.9678","management_account_code":"WAREHOUSING_COST","month_key":"2025-06","organization_code":"BU-03","record_id":"daf5fc6e-9a3a-55e8-a773-5a0c43a4a378"}
 {"amount":"150793.9357","management_account_code":"TRANSPORTATION_COST","month_key":"2025-06","organization_code":"BU-03","record_id":"6810a5d8-0626-5f17-b18e-5c4a6949f397"}
@@ -271,6 +309,7 @@
 {"amount":"32057.4412","management_account_code":"GROSS_PROFIT","month_key":"2025-06","organization_code":"BU-03","record_id":"67d8037b-0c59-5675-bcd1-5e178fbf682e"}
 {"amount":"22670.4534","management_account_code":"OPERATING_EXPENSE","month_key":"2025-06","organization_code":"BU-03","record_id":"a622c48e-8d81-5df8-8ecb-990c0c5f30de"}
 {"amount":"9386.9878","management_account_code":"OPERATING_PROFIT","month_key":"2025-06","organization_code":"BU-03","record_id":"557ab488-d787-5bd8-8484-e09fab3bce4d"}
+{"amount":"27862.9902","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-06","organization_code":"BU-03","record_id":"1afcea24-03c9-5dd2-bcdb-e581791e1273"}
 {"amount":"133627.3608","management_account_code":"REVENUE","month_key":"2025-06","organization_code":"BU-04","record_id":"066d8863-4f67-5d58-aa89-898245f630d5"}
 {"amount":"36286.6231","management_account_code":"WAREHOUSING_COST","month_key":"2025-06","organization_code":"BU-04","record_id":"d46f1613-e563-5304-8014-5b6a94e4ed74"}
 {"amount":"72573.2463","management_account_code":"TRANSPORTATION_COST","month_key":"2025-06","organization_code":"BU-04","record_id":"4dea8127-3ed1-57b4-ab40-9b690ff97686"}
@@ -278,6 +317,7 @@
 {"amount":"12671.9506","management_account_code":"GROSS_PROFIT","month_key":"2025-06","organization_code":"BU-04","record_id":"a8fd2095-ab76-5336-ac96-db4c470ba7c0"}
 {"amount":"10690.1889","management_account_code":"OPERATING_EXPENSE","month_key":"2025-06","organization_code":"BU-04","record_id":"33856bff-865b-5e3b-a25f-e0b8469b7dcd"}
 {"amount":"1981.7617","management_account_code":"OPERATING_PROFIT","month_key":"2025-06","organization_code":"BU-04","record_id":"73f8f497-f787-5530-8e5c-b5feca61ad84"}
+{"amount":"13138.7150","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-06","organization_code":"BU-04","record_id":"2a61ea54-fea4-5040-9d10-e2c35c363a2c"}
 {"amount":"208988.9185","management_account_code":"REVENUE","month_key":"2025-07","organization_code":"BU-01","record_id":"fb0984d7-f4d0-5be5-8604-a43ff4e8e60b"}
 {"amount":"56259.3307","management_account_code":"WAREHOUSING_COST","month_key":"2025-07","organization_code":"BU-01","record_id":"0930e3b7-67e3-5d36-8ed8-bf2535137210"}
 {"amount":"112518.6615","management_account_code":"TRANSPORTATION_COST","month_key":"2025-07","organization_code":"BU-01","record_id":"493815cc-44b5-508f-acd2-c4b51d39b9e7"}
@@ -285,6 +325,7 @@
 {"amount":"21457.8157","management_account_code":"GROSS_PROFIT","month_key":"2025-07","organization_code":"BU-01","record_id":"0b6039c2-3cc1-568c-b99a-6cb871f12363"}
 {"amount":"16719.1135","management_account_code":"OPERATING_EXPENSE","month_key":"2025-07","organization_code":"BU-01","record_id":"f991f885-cf51-539a-8b02-fe53ca930f90"}
 {"amount":"4738.7022","management_account_code":"OPERATING_PROFIT","month_key":"2025-07","organization_code":"BU-01","record_id":"be70df38-c3ae-5d73-a3ab-39b4d97ac5c6"}
+{"amount":"20536.5519","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-07","organization_code":"BU-01","record_id":"693c2c74-d6f7-50b1-b43c-8e762ef00e12"}
 {"amount":"160386.8444","management_account_code":"REVENUE","month_key":"2025-07","organization_code":"BU-02","record_id":"9e54f722-3b4c-5735-b10f-cb0665c7a4f2"}
 {"amount":"43304.4480","management_account_code":"WAREHOUSING_COST","month_key":"2025-07","organization_code":"BU-02","record_id":"908f1f6d-eb7e-5502-9f69-6a28762b31d9"}
 {"amount":"86608.8960","management_account_code":"TRANSPORTATION_COST","month_key":"2025-07","organization_code":"BU-02","record_id":"b1e0c03c-97c0-5bf0-9dc8-acbcf59f8dc9"}
@@ -292,6 +333,7 @@
 {"amount":"16038.6844","management_account_code":"GROSS_PROFIT","month_key":"2025-07","organization_code":"BU-02","record_id":"321708f6-9ba7-541e-a874-018688aa9962"}
 {"amount":"12830.9476","management_account_code":"OPERATING_EXPENSE","month_key":"2025-07","organization_code":"BU-02","record_id":"a2a5e173-92c4-57e4-96b6-af001cdacb0e"}
 {"amount":"3207.7368","management_account_code":"OPERATING_PROFIT","month_key":"2025-07","organization_code":"BU-02","record_id":"ad30c0d8-a983-562a-98ec-af97ebd08f5a"}
+{"amount":"15760.6096","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-07","organization_code":"BU-02","record_id":"1db5f714-48a6-5f08-a677-5a91f161d862"}
 {"amount":"276938.2457","management_account_code":"REVENUE","month_key":"2025-07","organization_code":"BU-03","record_id":"d8897d67-306c-5ace-ab46-63b0101c241d"}
 {"amount":"73680.8738","management_account_code":"WAREHOUSING_COST","month_key":"2025-07","organization_code":"BU-03","record_id":"f7e492e2-0593-57fd-95da-9c10576237af"}
 {"amount":"147361.7475","management_account_code":"TRANSPORTATION_COST","month_key":"2025-07","organization_code":"BU-03","record_id":"e8877785-1919-52d0-abd1-5b1df2a8e672"}
@@ -299,6 +341,7 @@
 {"amount":"31335.3329","management_account_code":"GROSS_PROFIT","month_key":"2025-07","organization_code":"BU-03","record_id":"83374b25-6d93-5562-8f60-65d031777183"}
 {"amount":"22155.0597","management_account_code":"OPERATING_EXPENSE","month_key":"2025-07","organization_code":"BU-03","record_id":"249f10e7-a7b0-51a8-a33d-3c464d001dbd"}
 {"amount":"9180.2732","management_account_code":"OPERATING_PROFIT","month_key":"2025-07","organization_code":"BU-03","record_id":"763858d8-21ee-5759-a6b4-6db4ff327dbe"}
+{"amount":"27213.6757","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-07","organization_code":"BU-03","record_id":"607d40cf-4556-5dd9-895c-24e793c0c766"}
 {"amount":"130522.1496","management_account_code":"REVENUE","month_key":"2025-07","organization_code":"BU-04","record_id":"e9f464ac-0fae-5bc2-8fa9-2a4a89acf2d9"}
 {"amount":"35443.4004","management_account_code":"WAREHOUSING_COST","month_key":"2025-07","organization_code":"BU-04","record_id":"cdfa4716-16b4-5b06-ac40-69e1abe89fb0"}
 {"amount":"70886.8007","management_account_code":"TRANSPORTATION_COST","month_key":"2025-07","organization_code":"BU-04","record_id":"5dc05603-5040-59e9-b4a1-252b41a6a8a1"}
@@ -306,6 +349,7 @@
 {"amount":"12377.4818","management_account_code":"GROSS_PROFIT","month_key":"2025-07","organization_code":"BU-04","record_id":"3f6464bb-de9c-594a-bea4-6299a0cf98b4"}
 {"amount":"10441.7720","management_account_code":"OPERATING_EXPENSE","month_key":"2025-07","organization_code":"BU-04","record_id":"da630325-9f38-5cd4-8b60-ce494a0ed83b"}
 {"amount":"1935.7098","management_account_code":"OPERATING_PROFIT","month_key":"2025-07","organization_code":"BU-04","record_id":"9f035a1c-bda3-577e-aac5-e43c587d08a0"}
+{"amount":"12825.9187","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-07","organization_code":"BU-04","record_id":"66f1330e-e235-5b6c-8af0-8379a9903a48"}
 {"amount":"216308.7433","management_account_code":"REVENUE","month_key":"2025-08","organization_code":"BU-01","record_id":"ada1efe0-2498-51b1-8b73-81249ad6a32d"}
 {"amount":"58229.8107","management_account_code":"WAREHOUSING_COST","month_key":"2025-08","organization_code":"BU-01","record_id":"448a97f1-2b8b-5e79-896e-ba1f5e326fa9"}
 {"amount":"116459.6212","management_account_code":"TRANSPORTATION_COST","month_key":"2025-08","organization_code":"BU-01","record_id":"6bc5538e-cd78-5d76-89fc-0c59ccbf0220"}
@@ -313,6 +357,7 @@
 {"amount":"22209.3745","management_account_code":"GROSS_PROFIT","month_key":"2025-08","organization_code":"BU-01","record_id":"15f4be2f-78e8-5eed-8c63-433de4832c2d"}
 {"amount":"17304.6995","management_account_code":"OPERATING_EXPENSE","month_key":"2025-08","organization_code":"BU-01","record_id":"80c8ec07-0509-5fcb-b4ad-8705cdf967e8"}
 {"amount":"4904.6750","management_account_code":"OPERATING_PROFIT","month_key":"2025-08","organization_code":"BU-01","record_id":"d644df4d-2523-5341-a680-d9a1e213fc8f"}
+{"amount":"21262.4182","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-08","organization_code":"BU-01","record_id":"9077f6a1-b28d-53e6-9559-7cda66352b5d"}
 {"amount":"166004.3843","management_account_code":"REVENUE","month_key":"2025-08","organization_code":"BU-02","record_id":"15beec50-2bb2-52ce-b683-fb17d60eb92a"}
 {"amount":"44821.1836","management_account_code":"WAREHOUSING_COST","month_key":"2025-08","organization_code":"BU-02","record_id":"a1c5b688-307c-5386-ab72-1a77a5337792"}
 {"amount":"89642.3676","management_account_code":"TRANSPORTATION_COST","month_key":"2025-08","organization_code":"BU-02","record_id":"6fc93dd2-0f50-581e-bd56-b1d9a0ef1cda"}
@@ -320,6 +365,7 @@
 {"amount":"16600.4384","management_account_code":"GROSS_PROFIT","month_key":"2025-08","organization_code":"BU-02","record_id":"f296b7b8-40ce-5b6c-960f-90c14ff6a54f"}
 {"amount":"13280.3507","management_account_code":"OPERATING_EXPENSE","month_key":"2025-08","organization_code":"BU-02","record_id":"97e114a1-ba61-5860-ad9d-44ae03e65b1a"}
 {"amount":"3320.0877","management_account_code":"OPERATING_PROFIT","month_key":"2025-08","organization_code":"BU-02","record_id":"66ba5c7f-53b9-5e6b-a21f-20842a376109"}
+{"amount":"16317.6698","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-08","organization_code":"BU-02","record_id":"b2d94648-36bc-50b7-b69e-9800e5ba8fc4"}
 {"amount":"279055.1417","management_account_code":"REVENUE","month_key":"2025-08","organization_code":"BU-03","record_id":"ab542ade-d718-55be-9f42-1cf83e0cf2e2"}
 {"amount":"74228.7200","management_account_code":"WAREHOUSING_COST","month_key":"2025-08","organization_code":"BU-03","record_id":"52fe653b-aa83-5db0-83c0-34654f6f8ada"}
 {"amount":"148457.4394","management_account_code":"TRANSPORTATION_COST","month_key":"2025-08","organization_code":"BU-03","record_id":"743ec2d8-fcc8-5921-a4a2-e5b3283df8c8"}
@@ -327,6 +373,7 @@
 {"amount":"31626.0760","management_account_code":"GROSS_PROFIT","month_key":"2025-08","organization_code":"BU-03","record_id":"7c0c67d5-465d-53e1-a3e4-1aa5df30769b"}
 {"amount":"22324.4113","management_account_code":"OPERATING_EXPENSE","month_key":"2025-08","organization_code":"BU-03","record_id":"c69ade0f-63ed-5093-bea6-bb7a6e389169"}
 {"amount":"9301.6647","management_account_code":"OPERATING_PROFIT","month_key":"2025-08","organization_code":"BU-03","record_id":"7f5c48f9-08d8-5b1f-80a6-7c4d767729d3"}
+{"amount":"27430.1770","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-08","organization_code":"BU-03","record_id":"d410c9ee-97da-5aac-a89c-ffa5e1c32232"}
 {"amount":"131004.6121","management_account_code":"REVENUE","month_key":"2025-08","organization_code":"BU-04","record_id":"846258a9-4ede-5839-ac3f-6e454585310a"}
 {"amount":"35574.4134","management_account_code":"WAREHOUSING_COST","month_key":"2025-08","organization_code":"BU-04","record_id":"8427ff7a-f20b-51f8-a9bc-cfdcc056b038"}
 {"amount":"71148.8267","management_account_code":"TRANSPORTATION_COST","month_key":"2025-08","organization_code":"BU-04","record_id":"8b82148e-b26b-543d-952a-847165c7da64"}
@@ -334,6 +381,7 @@
 {"amount":"12423.2340","management_account_code":"GROSS_PROFIT","month_key":"2025-08","organization_code":"BU-04","record_id":"10a5a169-c291-53e5-a7ed-5617d7806a7b"}
 {"amount":"10480.3690","management_account_code":"OPERATING_EXPENSE","month_key":"2025-08","organization_code":"BU-04","record_id":"763fd062-2407-52e0-958a-482f16d88406"}
 {"amount":"1942.8650","management_account_code":"OPERATING_PROFIT","month_key":"2025-08","organization_code":"BU-04","record_id":"a12f8334-821b-51c9-ab56-16c0446e7967"}
+{"amount":"12877.3105","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-08","organization_code":"BU-04","record_id":"44722cb3-fdb9-51d5-b9db-cfe92824ffcf"}
 {"amount":"259583.7743","management_account_code":"REVENUE","month_key":"2025-09","organization_code":"BU-01","record_id":"bf2ed357-a21f-53cc-a7d6-df7b3e0980db"}
 {"amount":"69879.3485","management_account_code":"WAREHOUSING_COST","month_key":"2025-09","organization_code":"BU-01","record_id":"5e50ee19-e792-5be3-92dd-41363cfbf9c0"}
 {"amount":"139758.6968","management_account_code":"TRANSPORTATION_COST","month_key":"2025-09","organization_code":"BU-01","record_id":"03c046bd-b79e-57cc-b406-9626e2604539"}
@@ -341,6 +389,7 @@
 {"amount":"26652.6129","management_account_code":"GROSS_PROFIT","month_key":"2025-09","organization_code":"BU-01","record_id":"a39e179e-d9f4-5908-ac40-38eb84a66d04"}
 {"amount":"20766.7019","management_account_code":"OPERATING_EXPENSE","month_key":"2025-09","organization_code":"BU-01","record_id":"84d41184-e2bc-59f3-9e06-d051a2a13daa"}
 {"amount":"5885.9110","management_account_code":"OPERATING_PROFIT","month_key":"2025-09","organization_code":"BU-01","record_id":"86ca99dc-7d00-54ca-b308-4f5d9fe35d81"}
+{"amount":"25527.8569","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-09","organization_code":"BU-01","record_id":"0a51faa9-45e5-5dab-8161-bec4aa49dbcb"}
 {"amount":"199215.4545","management_account_code":"REVENUE","month_key":"2025-09","organization_code":"BU-02","record_id":"41e5a779-df9e-527d-8c82-c0892f368ef0"}
 {"amount":"53788.1727","management_account_code":"WAREHOUSING_COST","month_key":"2025-09","organization_code":"BU-02","record_id":"93a0df51-7432-5aef-85e7-74c8ca228991"}
 {"amount":"107576.3456","management_account_code":"TRANSPORTATION_COST","month_key":"2025-09","organization_code":"BU-02","record_id":"71739493-4f59-57dd-bbc3-0fadecacd417"}
@@ -348,6 +397,7 @@
 {"amount":"19921.5454","management_account_code":"GROSS_PROFIT","month_key":"2025-09","organization_code":"BU-02","record_id":"5aa02b1d-4e2d-55f4-b7ed-29a55006f553"}
 {"amount":"15937.2364","management_account_code":"OPERATING_EXPENSE","month_key":"2025-09","organization_code":"BU-02","record_id":"d9a2a27d-98ed-5514-9a52-a3464e2b67f8"}
 {"amount":"3984.3090","management_account_code":"OPERATING_PROFIT","month_key":"2025-09","organization_code":"BU-02","record_id":"4073c742-eb56-555e-93e9-89d8a1cd17ee"}
+{"amount":"19591.1459","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-09","organization_code":"BU-02","record_id":"bc678ad2-b25d-5a9e-a436-b8ae997d5c16"}
 {"amount":"342858.2270","management_account_code":"REVENUE","month_key":"2025-09","organization_code":"BU-03","record_id":"2dfb9357-3b48-5788-810b-604a4f7fbc44"}
 {"amount":"91196.9251","management_account_code":"WAREHOUSING_COST","month_key":"2025-09","organization_code":"BU-03","record_id":"d8a22a6e-dced-51db-a0f6-cb5c511b8037"}
 {"amount":"182393.8502","management_account_code":"TRANSPORTATION_COST","month_key":"2025-09","organization_code":"BU-03","record_id":"56372cdf-4215-53e8-adb5-5ed6ac0d270c"}
@@ -355,6 +405,7 @@
 {"amount":"38868.4768","management_account_code":"GROSS_PROFIT","month_key":"2025-09","organization_code":"BU-03","record_id":"7f45e9a9-f94e-518e-97e5-66771cd82955"}
 {"amount":"27428.6582","management_account_code":"OPERATING_EXPENSE","month_key":"2025-09","organization_code":"BU-03","record_id":"8f15beea-2cc7-5eee-b6e6-5d3def0510ab"}
 {"amount":"11439.8186","management_account_code":"OPERATING_PROFIT","month_key":"2025-09","organization_code":"BU-03","record_id":"eb10c109-dc15-5db9-b7d8-dd21233e569c"}
+{"amount":"33717.1912","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-09","organization_code":"BU-03","record_id":"0e2f8e24-e76f-5382-8998-54c3c5ae04f8"}
 {"amount":"160842.5442","management_account_code":"REVENUE","month_key":"2025-09","organization_code":"BU-04","record_id":"346a05a9-82b5-582d-8c0f-9dd88c66ae4f"}
 {"amount":"43676.9292","management_account_code":"WAREHOUSING_COST","month_key":"2025-09","organization_code":"BU-04","record_id":"ef43c3d2-99ff-5daf-8cef-fe3b16202adf"}
 {"amount":"87353.8582","management_account_code":"TRANSPORTATION_COST","month_key":"2025-09","organization_code":"BU-04","record_id":"00683699-3d33-5704-bbae-1dc41bd713a3"}
@@ -362,6 +413,7 @@
 {"amount":"15252.7803","management_account_code":"GROSS_PROFIT","month_key":"2025-09","organization_code":"BU-04","record_id":"bf7068a0-e5e0-5eb3-b528-ebbff79df6c9"}
 {"amount":"12867.4035","management_account_code":"OPERATING_EXPENSE","month_key":"2025-09","organization_code":"BU-04","record_id":"c615d561-6d23-5d35-9eca-2cbb4a1f5252"}
 {"amount":"2385.3768","management_account_code":"OPERATING_PROFIT","month_key":"2025-09","organization_code":"BU-04","record_id":"e7fc6fe3-a8c4-5229-a4b6-00303b2b8c5f"}
+{"amount":"15817.4965","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-09","organization_code":"BU-04","record_id":"80381a78-76ff-5d5c-8c75-1f5d5c71fc7b"}
 {"amount":"265110.3762","management_account_code":"REVENUE","month_key":"2025-10","organization_code":"BU-01","record_id":"09f7dd41-7cae-56c6-a161-441783e0e9b5"}
 {"amount":"72560.0933","management_account_code":"WAREHOUSING_COST","month_key":"2025-10","organization_code":"BU-01","record_id":"0541e2f9-9f6e-578e-8af9-5f46744727a2"}
 {"amount":"145120.1869","management_account_code":"TRANSPORTATION_COST","month_key":"2025-10","organization_code":"BU-01","record_id":"9a3c1f63-ad90-5069-a058-c97004663ea9"}
@@ -369,6 +421,7 @@
 {"amount":"23243.3981","management_account_code":"GROSS_PROFIT","month_key":"2025-10","organization_code":"BU-01","record_id":"bd18758d-169a-5ca7-8504-95deac3dfddd"}
 {"amount":"26511.0376","management_account_code":"OPERATING_EXPENSE","month_key":"2025-10","organization_code":"BU-01","record_id":"496b7cbf-37ab-549c-a3f4-4d7233fe1efe"}
 {"amount":"-3267.6395","management_account_code":"OPERATING_PROFIT","month_key":"2025-10","organization_code":"BU-01","record_id":"8e563c90-fe25-5c11-89f9-b14998ab1c05"}
+{"amount":"24261.9740","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-10","organization_code":"BU-01","record_id":"d94eea0d-9913-5658-a90a-fc6e9c47de73"}
 {"amount":"203456.8000","management_account_code":"REVENUE","month_key":"2025-10","organization_code":"BU-02","record_id":"dca759d1-d57c-5ae6-9b36-593af0759ff1"}
 {"amount":"55848.8917","management_account_code":"WAREHOUSING_COST","month_key":"2025-10","organization_code":"BU-02","record_id":"859a003f-d241-5abb-8828-cd6488422792"}
 {"amount":"111697.7833","management_account_code":"TRANSPORTATION_COST","month_key":"2025-10","organization_code":"BU-02","record_id":"6588a16e-b25a-5132-89ad-1ef5067fe303"}
@@ -376,6 +429,7 @@
 {"amount":"17293.8280","management_account_code":"GROSS_PROFIT","month_key":"2025-10","organization_code":"BU-02","record_id":"b609147c-1673-5039-af9c-575a32400bf9"}
 {"amount":"20345.6800","management_account_code":"OPERATING_EXPENSE","month_key":"2025-10","organization_code":"BU-02","record_id":"cde05999-4051-557d-a91c-2830972055ca"}
 {"amount":"-3051.8520","management_account_code":"OPERATING_PROFIT","month_key":"2025-10","organization_code":"BU-02","record_id":"4f4a5818-9a60-59e4-80aa-1278aadd9bd3"}
+{"amount":"18619.6545","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-10","organization_code":"BU-02","record_id":"eab8e030-2af0-58e8-ab5d-7e38f54e4c6e"}
 {"amount":"353838.3266","management_account_code":"REVENUE","month_key":"2025-10","organization_code":"BU-03","record_id":"69c687df-f2a8-5790-b75f-6c8c0c0e481c"}
 {"amount":"94165.2671","management_account_code":"WAREHOUSING_COST","month_key":"2025-10","organization_code":"BU-03","record_id":"efe02670-ce8b-531c-857c-a64feafd8827"}
 {"amount":"188330.5338","management_account_code":"TRANSPORTATION_COST","month_key":"2025-10","organization_code":"BU-03","record_id":"bb3a6be9-339d-52e6-b703-7fd7415ed678"}
@@ -383,6 +437,7 @@
 {"amount":"39954.1029","management_account_code":"GROSS_PROFIT","month_key":"2025-10","organization_code":"BU-03","record_id":"3f15b2e9-c5e2-582b-8c12-2bf6446962a5"}
 {"amount":"35383.8327","management_account_code":"OPERATING_EXPENSE","month_key":"2025-10","organization_code":"BU-03","record_id":"d6ca848d-62dd-5ccb-bcb2-773a85011e0e"}
 {"amount":"4570.2702","management_account_code":"OPERATING_PROFIT","month_key":"2025-10","organization_code":"BU-03","record_id":"b05e8c36-4710-5b8a-bf24-f7706a930689"}
+{"amount":"32382.0456","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-10","organization_code":"BU-03","record_id":"82588139-43b3-5e8c-bdf0-d8a17c1d198b"}
 {"amount":"167594.4972","management_account_code":"REVENUE","month_key":"2025-10","organization_code":"BU-04","record_id":"2c7b48b7-9a95-5f0e-89a4-5767ce2820c2"}
 {"amount":"45510.4281","management_account_code":"WAREHOUSING_COST","month_key":"2025-10","organization_code":"BU-04","record_id":"749c61ba-0398-5d71-ac67-6120fd839301"}
 {"amount":"91020.8556","management_account_code":"TRANSPORTATION_COST","month_key":"2025-10","organization_code":"BU-04","record_id":"b0fadc96-6015-5825-809e-12f286a66bf2"}
@@ -390,6 +445,7 @@
 {"amount":"15893.0711","management_account_code":"GROSS_PROFIT","month_key":"2025-10","organization_code":"BU-04","record_id":"ab8f8b77-c70a-56e3-9221-c6644af9d362"}
 {"amount":"16759.4497","management_account_code":"OPERATING_EXPENSE","month_key":"2025-10","organization_code":"BU-04","record_id":"1bdc711c-2a3d-58a5-85ba-53bad2bb2837"}
 {"amount":"-866.3786","management_account_code":"OPERATING_PROFIT","month_key":"2025-10","organization_code":"BU-04","record_id":"009732a6-2403-5d7b-b9c8-2bef5fea8db9"}
+{"amount":"15337.6620","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-10","organization_code":"BU-04","record_id":"87e021b4-1add-5562-a781-fee4ae293b53"}
 {"amount":"275018.2489","management_account_code":"REVENUE","month_key":"2025-11","organization_code":"BU-01","record_id":"2b3d18c4-88af-55fc-862b-013493da1ebd"}
 {"amount":"75271.8551","management_account_code":"WAREHOUSING_COST","month_key":"2025-11","organization_code":"BU-01","record_id":"907ef11c-2983-52ea-add0-dc691f598032"}
 {"amount":"150543.7103","management_account_code":"TRANSPORTATION_COST","month_key":"2025-11","organization_code":"BU-01","record_id":"9e81180e-36f8-5fa5-8fa9-48afcbacea8e"}
@@ -397,6 +453,7 @@
 {"amount":"24112.0651","management_account_code":"GROSS_PROFIT","month_key":"2025-11","organization_code":"BU-01","record_id":"dfca30dc-1583-5ace-8294-c9e470d5be7b"}
 {"amount":"27501.8249","management_account_code":"OPERATING_EXPENSE","month_key":"2025-11","organization_code":"BU-01","record_id":"3f9009d4-e8f5-57d0-8893-31e2703d2bc7"}
 {"amount":"-3389.7598","management_account_code":"OPERATING_PROFIT","month_key":"2025-11","organization_code":"BU-01","record_id":"f02e41d1-3fae-5349-b0be-7c65dab687ee"}
+{"amount":"25190.9774","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-11","organization_code":"BU-01","record_id":"542ced7c-a2ba-5cc8-96cd-c0e79411e801"}
 {"amount":"211060.5166","management_account_code":"REVENUE","month_key":"2025-11","organization_code":"BU-02","record_id":"8f6b2aa3-4b46-52a3-b0fc-ac056ca9ac72"}
 {"amount":"57936.1117","management_account_code":"WAREHOUSING_COST","month_key":"2025-11","organization_code":"BU-02","record_id":"fc3d31c0-3707-535d-856f-9378891c14f5"}
 {"amount":"115872.2238","management_account_code":"TRANSPORTATION_COST","month_key":"2025-11","organization_code":"BU-02","record_id":"bbbf4276-31f1-5e48-b009-56aa24f45307"}
@@ -404,6 +461,7 @@
 {"amount":"17940.1438","management_account_code":"GROSS_PROFIT","month_key":"2025-11","organization_code":"BU-02","record_id":"ba8f95c5-b64e-56b5-b007-58ec29493eb7"}
 {"amount":"21106.0517","management_account_code":"OPERATING_EXPENSE","month_key":"2025-11","organization_code":"BU-02","record_id":"0da87156-228a-5a66-9ec2-e6fd4768880d"}
 {"amount":"-3165.9079","management_account_code":"OPERATING_PROFIT","month_key":"2025-11","organization_code":"BU-02","record_id":"32927b52-3e8a-5c71-8b58-2f7c827b520c"}
+{"amount":"19332.6106","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-11","organization_code":"BU-02","record_id":"07d37b59-f80b-5751-927c-655b3d3979d3"}
 {"amount":"367393.7968","management_account_code":"REVENUE","month_key":"2025-11","organization_code":"BU-03","record_id":"0314d053-7339-50c2-bd07-1e8b95a7b89f"}
 {"amount":"97748.2370","management_account_code":"WAREHOUSING_COST","month_key":"2025-11","organization_code":"BU-03","record_id":"65fd5bcf-b510-5aba-9797-4aa784fcef48"}
 {"amount":"195496.4748","management_account_code":"TRANSPORTATION_COST","month_key":"2025-11","organization_code":"BU-03","record_id":"e6c20561-45ec-5346-a8d5-11dedd9e9a54"}
@@ -411,6 +469,7 @@
 {"amount":"41566.3393","management_account_code":"GROSS_PROFIT","month_key":"2025-11","organization_code":"BU-03","record_id":"ba82a61f-2ab0-5820-9818-d1ec61857b3b"}
 {"amount":"36739.3797","management_account_code":"OPERATING_EXPENSE","month_key":"2025-11","organization_code":"BU-03","record_id":"dd79c7d4-a87b-5892-893b-ebdd5f9b898c"}
 {"amount":"4826.9596","management_account_code":"OPERATING_PROFIT","month_key":"2025-11","organization_code":"BU-03","record_id":"4588e6dd-e7bd-5c9e-bff1-d93665e7d09f"}
+{"amount":"33652.3444","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-11","organization_code":"BU-03","record_id":"7e18df61-799a-51d6-b6e9-ceef24bf0fdb"}
 {"amount":"173194.1043","management_account_code":"REVENUE","month_key":"2025-11","organization_code":"BU-04","record_id":"e4e0e6ab-55af-5441-b1c5-b4f10c9b87b1"}
 {"amount":"47031.0060","management_account_code":"WAREHOUSING_COST","month_key":"2025-11","organization_code":"BU-04","record_id":"55797ac2-b55a-58a2-84f2-56cfe172838a"}
 {"amount":"94062.0115","management_account_code":"TRANSPORTATION_COST","month_key":"2025-11","organization_code":"BU-04","record_id":"1365b362-b56f-52b1-ac81-232fc6706d5c"}
@@ -418,6 +477,7 @@
 {"amount":"16424.0850","management_account_code":"GROSS_PROFIT","month_key":"2025-11","organization_code":"BU-04","record_id":"a11a066a-4134-57b1-a2bb-82cbbf8fdad6"}
 {"amount":"17319.4104","management_account_code":"OPERATING_EXPENSE","month_key":"2025-11","organization_code":"BU-04","record_id":"a6f85b81-13ee-540b-8a5a-65289b2ce4ec"}
 {"amount":"-895.3254","management_account_code":"OPERATING_PROFIT","month_key":"2025-11","organization_code":"BU-04","record_id":"344e4f51-b8a8-514a-bf06-de5ba7b9b4e0"}
+{"amount":"15864.1428","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-11","organization_code":"BU-04","record_id":"6d569109-0097-50f2-9ab3-69639e1e93a7"}
 {"amount":"271378.7828","management_account_code":"REVENUE","month_key":"2025-12","organization_code":"BU-01","record_id":"650997e0-9760-5bd0-a216-f2700b79e60e"}
 {"amount":"74275.7415","management_account_code":"WAREHOUSING_COST","month_key":"2025-12","organization_code":"BU-01","record_id":"2b30f668-9ff4-5d18-b7d1-f3db5d57b923"}
 {"amount":"148551.4838","management_account_code":"TRANSPORTATION_COST","month_key":"2025-12","organization_code":"BU-01","record_id":"952ce547-448b-594a-a1f3-c6cce17b10b1"}
@@ -425,6 +485,7 @@
 {"amount":"23792.9769","management_account_code":"GROSS_PROFIT","month_key":"2025-12","organization_code":"BU-01","record_id":"846c943c-784e-596e-be08-ec1fc3ca6900"}
 {"amount":"27137.8783","management_account_code":"OPERATING_EXPENSE","month_key":"2025-12","organization_code":"BU-01","record_id":"84b5507f-f0e4-5474-a56f-41e7b5331ee5"}
 {"amount":"-3344.9014","management_account_code":"OPERATING_PROFIT","month_key":"2025-12","organization_code":"BU-01","record_id":"8371428d-216f-597c-a2d2-69163ce774b1"}
+{"amount":"24866.0452","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-12","organization_code":"BU-01","record_id":"ce31a511-df73-5eb9-8106-90c173dcf744"}
 {"amount":"208267.4379","management_account_code":"REVENUE","month_key":"2025-12","organization_code":"BU-02","record_id":"5cd7e5ba-f21a-58de-8509-1780bf9d58a0"}
 {"amount":"57169.4116","management_account_code":"WAREHOUSING_COST","month_key":"2025-12","organization_code":"BU-02","record_id":"3e6baadd-bb6e-57d9-85f0-da5832240e3f"}
 {"amount":"114338.8235","management_account_code":"TRANSPORTATION_COST","month_key":"2025-12","organization_code":"BU-02","record_id":"0f32aa78-680b-59f8-af31-ae23bc4a03ed"}
@@ -432,6 +493,7 @@
 {"amount":"17702.7322","management_account_code":"GROSS_PROFIT","month_key":"2025-12","organization_code":"BU-02","record_id":"5e8f69a7-ad56-567b-b606-85bc9194b3d1"}
 {"amount":"20826.7438","management_account_code":"OPERATING_EXPENSE","month_key":"2025-12","organization_code":"BU-02","record_id":"90c8ce95-824f-5815-8d6b-a31c4f86e63f"}
 {"amount":"-3124.0116","management_account_code":"OPERATING_PROFIT","month_key":"2025-12","organization_code":"BU-02","record_id":"1acb49f6-58e6-5521-8514-95b927717ca4"}
+{"amount":"19083.2440","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-12","organization_code":"BU-02","record_id":"7e740b92-f3be-548a-a7c2-0113598b8014"}
 {"amount":"359791.8464","management_account_code":"REVENUE","month_key":"2025-12","organization_code":"BU-03","record_id":"87599d07-2638-5e09-b86c-a4f19a0187cd"}
 {"amount":"95704.3456","management_account_code":"WAREHOUSING_COST","month_key":"2025-12","organization_code":"BU-03","record_id":"0d0957ed-8875-5609-a0f7-603231839b37"}
 {"amount":"191408.6912","management_account_code":"TRANSPORTATION_COST","month_key":"2025-12","organization_code":"BU-03","record_id":"17bca466-1bbf-5fba-b29a-1b872602cdaa"}
@@ -439,6 +501,7 @@
 {"amount":"40777.3610","management_account_code":"GROSS_PROFIT","month_key":"2025-12","organization_code":"BU-03","record_id":"a82254e5-c026-5456-954d-072186efb9c9"}
 {"amount":"35979.1846","management_account_code":"OPERATING_EXPENSE","month_key":"2025-12","organization_code":"BU-03","record_id":"8c83ce57-313a-512c-8622-ecbd6c9862cd"}
 {"amount":"4798.1764","management_account_code":"OPERATING_PROFIT","month_key":"2025-12","organization_code":"BU-03","record_id":"cbe0a53c-2839-5a6a-80c2-41827bd39bd5"}
+{"amount":"32967.2063","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-12","organization_code":"BU-03","record_id":"288d19fe-12eb-5fc2-943a-006067aa6611"}
 {"amount":"168895.2662","management_account_code":"REVENUE","month_key":"2025-12","organization_code":"BU-04","record_id":"350fc8aa-8fc9-5b5f-a1a4-db3f1dcd2c86"}
 {"amount":"45863.6527","management_account_code":"WAREHOUSING_COST","month_key":"2025-12","organization_code":"BU-04","record_id":"99a2c3db-ed73-5196-8d5a-6def72ee4b11"}
 {"amount":"91727.3054","management_account_code":"TRANSPORTATION_COST","month_key":"2025-12","organization_code":"BU-04","record_id":"7e8434d0-8e2e-5d8b-8c18-8bc47fa0a123"}
@@ -446,6 +509,7 @@
 {"amount":"16016.4240","management_account_code":"GROSS_PROFIT","month_key":"2025-12","organization_code":"BU-04","record_id":"62dd6d55-d0c0-51aa-a95a-10505b0898dd"}
 {"amount":"16889.5266","management_account_code":"OPERATING_EXPENSE","month_key":"2025-12","organization_code":"BU-04","record_id":"fc1023af-8eeb-570a-9bb1-55749757d734"}
 {"amount":"-873.1026","management_account_code":"OPERATING_PROFIT","month_key":"2025-12","organization_code":"BU-04","record_id":"e35008d2-2acc-58e7-b9fa-fbb51de08d6e"}
+{"amount":"15475.6290","management_account_code":"OPERATING_CASH_FLOW","month_key":"2025-12","organization_code":"BU-04","record_id":"43ae99c4-29c4-56cc-b572-93391b66d21c"}
 {"amount":"235536.0781","management_account_code":"REVENUE","month_key":"2026-01","organization_code":"BU-01","record_id":"ad094869-8609-5250-8a80-d3f98838fca9"}
 {"amount":"63405.7645","management_account_code":"WAREHOUSING_COST","month_key":"2026-01","organization_code":"BU-01","record_id":"eda101a1-7ed5-568e-93ff-7289e8e4c128"}
 {"amount":"126811.5291","management_account_code":"TRANSPORTATION_COST","month_key":"2026-01","organization_code":"BU-01","record_id":"8f4af23e-64de-579b-b9ae-864c00b9b899"}
@@ -453,6 +517,7 @@
 {"amount":"24183.5299","management_account_code":"GROSS_PROFIT","month_key":"2026-01","organization_code":"BU-01","record_id":"0d1b60c5-b9c2-5032-8aa4-c9baefee56f7"}
 {"amount":"18842.8862","management_account_code":"OPERATING_EXPENSE","month_key":"2026-01","organization_code":"BU-01","record_id":"bbcfa93d-e3ae-55d4-8c9d-6a977c15d3c4"}
 {"amount":"5340.6437","management_account_code":"OPERATING_PROFIT","month_key":"2026-01","organization_code":"BU-01","record_id":"db3468b3-1953-5c53-a657-5a5e70c71778"}
+{"amount":"23150.7053","management_account_code":"OPERATING_CASH_FLOW","month_key":"2026-01","organization_code":"BU-01","record_id":"7c0614c0-5995-5fcc-9c68-b4206e0c190a"}
 {"amount":"180760.2457","management_account_code":"REVENUE","month_key":"2026-01","organization_code":"BU-02","record_id":"7d96beb6-6da8-538c-ac51-f85440fa97ac"}
 {"amount":"48805.2663","management_account_code":"WAREHOUSING_COST","month_key":"2026-01","organization_code":"BU-02","record_id":"ab00a19a-1599-55b4-b0cc-b6bf6eb1226b"}
 {"amount":"97610.5328","management_account_code":"TRANSPORTATION_COST","month_key":"2026-01","organization_code":"BU-02","record_id":"63d4e1de-9ff0-52f3-80e0-cf60dd9f1b94"}
@@ -460,6 +525,7 @@
 {"amount":"18076.0245","management_account_code":"GROSS_PROFIT","month_key":"2026-01","organization_code":"BU-02","record_id":"84a07206-0409-5d81-b196-109f7cac8549"}
 {"amount":"14460.8197","management_account_code":"OPERATING_EXPENSE","month_key":"2026-01","organization_code":"BU-02","record_id":"c4ac6221-d4c7-566a-8d6e-8acc4c33de19"}
 {"amount":"3615.2048","management_account_code":"OPERATING_PROFIT","month_key":"2026-01","organization_code":"BU-02","record_id":"3eda16ec-6383-5c17-8845-314a5c8b9e8d"}
+{"amount":"17766.8203","management_account_code":"OPERATING_CASH_FLOW","month_key":"2026-01","organization_code":"BU-02","record_id":"b3153c6f-0943-57ab-8270-8b36dc404863"}
 {"amount":"309143.3785","management_account_code":"REVENUE","month_key":"2026-01","organization_code":"BU-03","record_id":"788527cc-4eb7-5724-9b5a-aafc1c105182"}
 {"amount":"82240.0653","management_account_code":"WAREHOUSING_COST","month_key":"2026-01","organization_code":"BU-03","record_id":"96d9e7a6-43de-5585-a995-3e01beb9f5db"}
 {"amount":"164480.1304","management_account_code":"TRANSPORTATION_COST","month_key":"2026-01","organization_code":"BU-03","record_id":"fc9e4f52-47a1-59d6-9b36-2680d2b65159"}
@@ -467,6 +533,7 @@
 {"amount":"35009.8279","management_account_code":"GROSS_PROFIT","month_key":"2026-01","organization_code":"BU-03","record_id":"89c242d1-5711-5307-8908-f1236aae5f12"}
 {"amount":"24731.4703","management_account_code":"OPERATING_EXPENSE","month_key":"2026-01","organization_code":"BU-03","record_id":"b9f7c280-4a36-518f-8312-414e4f91d8a9"}
 {"amount":"10278.3576","management_account_code":"OPERATING_PROFIT","month_key":"2026-01","organization_code":"BU-03","record_id":"73c2d9e9-d5c9-5715-b9eb-2855373b176e"}
+{"amount":"30385.5244","management_account_code":"OPERATING_CASH_FLOW","month_key":"2026-01","organization_code":"BU-03","record_id":"bc96c1bb-5947-543d-8692-3e2fcc2fa551"}
 {"amount":"145393.6311","management_account_code":"REVENUE","month_key":"2026-01","organization_code":"BU-04","record_id":"1378ce85-3e9c-5af7-9b12-cffe70f6f6e6"}
 {"amount":"39481.7638","management_account_code":"WAREHOUSING_COST","month_key":"2026-01","organization_code":"BU-04","record_id":"494e24b5-137a-5277-aeaa-dfbf6cffb209"}
 {"amount":"78963.5275","management_account_code":"TRANSPORTATION_COST","month_key":"2026-01","organization_code":"BU-04","record_id":"91ea7033-1e3a-5e00-b1db-83053365e0ac"}
@@ -474,6 +541,7 @@
 {"amount":"13787.7520","management_account_code":"GROSS_PROFIT","month_key":"2026-01","organization_code":"BU-04","record_id":"3eac0853-0b80-583e-bf94-198fce16dc2d"}
 {"amount":"11631.4905","management_account_code":"OPERATING_EXPENSE","month_key":"2026-01","organization_code":"BU-04","record_id":"ae4619f2-147f-5789-ab7d-1beaa0aab84b"}
 {"amount":"2156.2615","management_account_code":"OPERATING_PROFIT","month_key":"2026-01","organization_code":"BU-04","record_id":"16332cae-9b8b-541b-8acc-59870c5d02dc"}
+{"amount":"14290.6562","management_account_code":"OPERATING_CASH_FLOW","month_key":"2026-01","organization_code":"BU-04","record_id":"a1485b74-8139-57b8-a196-df6ebe7667e6"}
 {"amount":"200689.4291","management_account_code":"REVENUE","month_key":"2026-02","organization_code":"BU-01","record_id":"1e1ef558-e472-5fba-92ed-e1c4ec14ea20"}
 {"amount":"54025.1275","management_account_code":"WAREHOUSING_COST","month_key":"2026-02","organization_code":"BU-01","record_id":"cd80ab31-361c-52c8-b7cc-2696ea95f5f0"}
 {"amount":"108050.2554","management_account_code":"TRANSPORTATION_COST","month_key":"2026-02","organization_code":"BU-01","record_id":"0e3ca31c-acb1-5bb0-919d-8fe81ff53848"}
@@ -481,6 +549,7 @@
 {"amount":"20605.6704","management_account_code":"GROSS_PROFIT","month_key":"2026-02","organization_code":"BU-01","record_id":"3a545ef0-b465-5279-a18e-3255f53ec269"}
 {"amount":"16055.1543","management_account_code":"OPERATING_EXPENSE","month_key":"2026-02","organization_code":"BU-01","record_id":"a217bee3-dc02-5565-a10b-16e4f6dae3be"}
 {"amount":"4550.5161","management_account_code":"OPERATING_PROFIT","month_key":"2026-02","organization_code":"BU-01","record_id":"cb06f556-106f-55bb-95cf-f0fcb74872b0"}
+{"amount":"19758.0980","management_account_code":"OPERATING_CASH_FLOW","month_key":"2026-02","organization_code":"BU-01","record_id":"feecb14d-bd49-5087-a946-eb95544517a4"}
 {"amount":"154017.4688","management_account_code":"REVENUE","month_key":"2026-02","organization_code":"BU-02","record_id":"14a54c0e-9220-5e01-aa25-3e2cf34ae26e"}
 {"amount":"41584.7164","management_account_code":"WAREHOUSING_COST","month_key":"2026-02","organization_code":"BU-02","record_id":"313c6c56-209c-5103-b083-228149220d23"}
 {"amount":"83169.4332","management_account_code":"TRANSPORTATION_COST","month_key":"2026-02","organization_code":"BU-02","record_id":"b7b64e64-451c-59c9-9bb5-e15e51ba18cf"}
@@ -488,6 +557,7 @@
 {"amount":"15401.7470","management_account_code":"GROSS_PROFIT","month_key":"2026-02","organization_code":"BU-02","record_id":"94ed999f-d48e-59f4-9855-0a2cf9ce1961"}
 {"amount":"12321.3975","management_account_code":"OPERATING_EXPENSE","month_key":"2026-02","organization_code":"BU-02","record_id":"baecd2b6-40d0-5916-8a04-ce72470753c3"}
 {"amount":"3080.3495","management_account_code":"OPERATING_PROFIT","month_key":"2026-02","organization_code":"BU-02","record_id":"5ef86a29-4c78-545a-8610-b42ccd3b00a6"}
+{"amount":"15163.1915","management_account_code":"OPERATING_CASH_FLOW","month_key":"2026-02","organization_code":"BU-02","record_id":"e15f88f0-4965-5151-bbaa-6d71cfed6aff"}
 {"amount":"270604.9770","management_account_code":"REVENUE","month_key":"2026-02","organization_code":"BU-03","record_id":"fcae3879-db6d-5be2-9a38-453c44d80f0a"}
 {"amount":"71960.6110","management_account_code":"WAREHOUSING_COST","month_key":"2026-02","organization_code":"BU-03","record_id":"cf592342-cd56-5886-ac3a-7bbd7d5d9c22"}
 {"amount":"143921.2219","management_account_code":"TRANSPORTATION_COST","month_key":"2026-02","organization_code":"BU-03","record_id":"ca0f099f-30cf-5d0b-9061-d451e238d16b"}
@@ -495,6 +565,7 @@
 {"amount":"30736.2735","management_account_code":"GROSS_PROFIT","month_key":"2026-02","organization_code":"BU-03","record_id":"4638f4dd-050d-52ef-aafb-4628494ac71a"}
 {"amount":"21648.3982","management_account_code":"OPERATING_EXPENSE","month_key":"2026-02","organization_code":"BU-03","record_id":"f5dc27d7-212f-562c-bd7d-eb03600e2a16"}
 {"amount":"9087.8753","management_account_code":"OPERATING_PROFIT","month_key":"2026-02","organization_code":"BU-03","record_id":"129d44b4-6e7e-5572-a811-cf715bc28dc8"}
+{"amount":"26641.3616","management_account_code":"OPERATING_CASH_FLOW","month_key":"2026-02","organization_code":"BU-03","record_id":"940bf8db-1785-5189-8070-3b07aef8d4f2"}
 {"amount":"126354.7918","management_account_code":"REVENUE","month_key":"2026-02","organization_code":"BU-04","record_id":"4a2b26ec-4c6d-5247-900e-97b7d0afdc49"}
 {"amount":"34311.7511","management_account_code":"WAREHOUSING_COST","month_key":"2026-02","organization_code":"BU-04","record_id":"bdec428d-8db3-549b-98a7-d73955b20b69"}
 {"amount":"68623.5017","management_account_code":"TRANSPORTATION_COST","month_key":"2026-02","organization_code":"BU-04","record_id":"6c108794-f9f2-5f8c-af9e-9fa3b6de529b"}
@@ -502,6 +573,7 @@
 {"amount":"11982.2891","management_account_code":"GROSS_PROFIT","month_key":"2026-02","organization_code":"BU-04","record_id":"8ade8876-a4ca-527f-a076-6db3a75d7a57"}
 {"amount":"10108.3833","management_account_code":"OPERATING_EXPENSE","month_key":"2026-02","organization_code":"BU-04","record_id":"9135b718-ae8f-5f39-a22f-78c3b4c7163c"}
 {"amount":"1873.9058","management_account_code":"OPERATING_PROFIT","month_key":"2026-02","organization_code":"BU-04","record_id":"25d5983f-4131-541d-a270-bea7d61168a7"}
+{"amount":"12439.7701","management_account_code":"OPERATING_CASH_FLOW","month_key":"2026-02","organization_code":"BU-04","record_id":"19273cad-0f84-5852-a9d0-7151b087f23e"}
 {"amount":"206848.2891","management_account_code":"REVENUE","month_key":"2026-03","organization_code":"BU-01","record_id":"d85b8146-66e9-5e7d-8536-407fe5382e9c"}
 {"amount":"55859.0468","management_account_code":"WAREHOUSING_COST","month_key":"2026-03","organization_code":"BU-01","record_id":"3ae875b7-94d2-55a3-869d-a478000087ba"}
 {"amount":"111718.0938","management_account_code":"TRANSPORTATION_COST","month_key":"2026-03","organization_code":"BU-01","record_id":"41f0df70-a59c-55dc-a351-a574ad154c7d"}
@@ -509,6 +581,7 @@
 {"amount":"20651.4662","management_account_code":"GROSS_PROFIT","month_key":"2026-03","organization_code":"BU-01","record_id":"e56cde07-4dda-5fca-8938-36388fdbdff0"}
 {"amount":"16547.8631","management_account_code":"OPERATING_EXPENSE","month_key":"2026-03","organization_code":"BU-01","record_id":"9fd4ebb1-5373-5c63-8395-6ba1244c87ea"}
 {"amount":"4103.6031","management_account_code":"OPERATING_PROFIT","month_key":"2026-03","organization_code":"BU-01","record_id":"2994e041-bdce-5063-88b8-479fee24628a"}
+{"amount":"21092.5146","management_account_code":"OPERATING_CASH_FLOW","month_key":"2026-03","organization_code":"BU-01","record_id":"76438077-c5ea-5c91-be09-a0b42eedb2fd"}
 {"amount":"220193.3400","management_account_code":"REVENUE","month_key":"2026-03","organization_code":"BU-02","record_id":"8f9245f2-c260-5ac8-a4a2-65eddfb60242"}
 {"amount":"59452.2017","management_account_code":"WAREHOUSING_COST","month_key":"2026-03","organization_code":"BU-02","record_id":"9f15c874-7110-503f-84d8-543f3d680eb1"}
 {"amount":"118904.4035","management_account_code":"TRANSPORTATION_COST","month_key":"2026-03","organization_code":"BU-02","record_id":"4d275749-dcb7-52d3-b6a6-7a0e59c7812d"}
@@ -516,6 +589,7 @@
 {"amount":"22019.3340","management_account_code":"GROSS_PROFIT","month_key":"2026-03","organization_code":"BU-02","record_id":"596b64cb-0113-55f1-a782-3cf5ffb5cced"}
 {"amount":"17615.4672","management_account_code":"OPERATING_EXPENSE","month_key":"2026-03","organization_code":"BU-02","record_id":"f4c7375b-6f38-5aa0-979c-98e610545fa3"}
 {"amount":"4403.8668","management_account_code":"OPERATING_PROFIT","month_key":"2026-03","organization_code":"BU-02","record_id":"42948719-0dd3-534a-a2d8-d73c864fe345"}
+{"amount":"22453.3219","management_account_code":"OPERATING_CASH_FLOW","month_key":"2026-03","organization_code":"BU-02","record_id":"f4aff614-68fb-50af-8c15-c0bd93058da8"}
 {"amount":"383991.1690","management_account_code":"REVENUE","month_key":"2026-03","organization_code":"BU-03","record_id":"1408b1a8-3585-57b9-b135-047eb59cdbca"}
 {"amount":"101531.6762","management_account_code":"WAREHOUSING_COST","month_key":"2026-03","organization_code":"BU-03","record_id":"2c974465-6b38-5322-8ce2-a96582058f48"}
 {"amount":"203063.3520","management_account_code":"TRANSPORTATION_COST","month_key":"2026-03","organization_code":"BU-03","record_id":"6cf81d39-4c00-5630-a255-ba43613581c6"}
@@ -523,6 +597,7 @@
 {"amount":"45552.2492","management_account_code":"GROSS_PROFIT","month_key":"2026-03","organization_code":"BU-03","record_id":"43769a17-9535-5c10-9f18-7d98d3b64b23"}
 {"amount":"30719.2935","management_account_code":"OPERATING_EXPENSE","month_key":"2026-03","organization_code":"BU-03","record_id":"709ff250-7171-5f59-9a64-e19f2bf63be9"}
 {"amount":"14832.9557","management_account_code":"OPERATING_PROFIT","month_key":"2026-03","organization_code":"BU-03","record_id":"8e8dda6a-97b6-50cb-8f94-90263d16fb75"}
+{"amount":"39155.9406","management_account_code":"OPERATING_CASH_FLOW","month_key":"2026-03","organization_code":"BU-03","record_id":"a16a6a42-7908-5e7e-9ae1-5d2d7ed5e3d6"}
 {"amount":"87300.5354","management_account_code":"REVENUE","month_key":"2026-03","organization_code":"BU-04","record_id":"06ac8c08-5a60-579a-a13b-ade2b8f370bc"}
 {"amount":"23421.7898","management_account_code":"WAREHOUSING_COST","month_key":"2026-03","organization_code":"BU-04","record_id":"e6d211bb-8c10-5cf8-acb4-ff0d9aded054"}
 {"amount":"46843.5796","management_account_code":"TRANSPORTATION_COST","month_key":"2026-03","organization_code":"BU-04","record_id":"014f6125-d7e0-5acc-9266-b4a13e3be479"}
@@ -530,6 +605,7 @@
 {"amount":"9227.9025","management_account_code":"GROSS_PROFIT","month_key":"2026-03","organization_code":"BU-04","record_id":"1baedd3b-2a6d-5537-a13f-e9d41eb014e7"}
 {"amount":"6984.0428","management_account_code":"OPERATING_EXPENSE","month_key":"2026-03","organization_code":"BU-04","record_id":"0cd72ede-d608-5acd-9672-25b7dbced00d"}
 {"amount":"2243.8597","management_account_code":"OPERATING_PROFIT","month_key":"2026-03","organization_code":"BU-04","record_id":"91fccf01-a75b-5073-abce-5ee738c86d0a"}
+{"amount":"8902.1177","management_account_code":"OPERATING_CASH_FLOW","month_key":"2026-03","organization_code":"BU-04","record_id":"9821fb12-7352-53cf-a851-27fba7cd41c2"}
 {"amount":"214055.7343","management_account_code":"REVENUE","month_key":"2026-04","organization_code":"BU-01","record_id":"2b4cf737-e760-56be-9fd2-6d717a01d404"}
 {"amount":"57805.4059","management_account_code":"WAREHOUSING_COST","month_key":"2026-04","organization_code":"BU-01","record_id":"3f9e9b73-4142-5f49-a2a1-e9be8b693bd6"}
 {"amount":"115610.8115","management_account_code":"TRANSPORTATION_COST","month_key":"2026-04","organization_code":"BU-01","record_id":"67e73679-f051-5aa8-865e-a319b31e0214"}
@@ -537,6 +613,7 @@
 {"amount":"21371.0485","management_account_code":"GROSS_PROFIT","month_key":"2026-04","organization_code":"BU-01","record_id":"ee22b467-03ee-58b3-bfec-82413a77d3a9"}
 {"amount":"17124.4587","management_account_code":"OPERATING_EXPENSE","month_key":"2026-04","organization_code":"BU-01","record_id":"44f5918b-132a-51a1-9fa5-83aeb9d742a7"}
 {"amount":"4246.5898","management_account_code":"OPERATING_PROFIT","month_key":"2026-04","organization_code":"BU-01","record_id":"494fb93f-37c9-5d1d-a4f5-6c4d2603f326"}
+{"amount":"21827.1862","management_account_code":"OPERATING_CASH_FLOW","month_key":"2026-04","organization_code":"BU-01","record_id":"83b05456-c707-5dd1-9443-0cbf01ff9fa5"}
 {"amount":"227865.7816","management_account_code":"REVENUE","month_key":"2026-04","organization_code":"BU-02","record_id":"dc098f14-569c-5d18-b2cc-6a281a7cb90c"}
 {"amount":"61523.7610","management_account_code":"WAREHOUSING_COST","month_key":"2026-04","organization_code":"BU-02","record_id":"6e8c1b9c-9042-507c-a741-45c2cf85c079"}
 {"amount":"123047.5223","management_account_code":"TRANSPORTATION_COST","month_key":"2026-04","organization_code":"BU-02","record_id":"17c25ee8-c2a6-5d6c-a5f8-1944a429cb0d"}
@@ -544,6 +621,7 @@
 {"amount":"22786.5781","management_account_code":"GROSS_PROFIT","month_key":"2026-04","organization_code":"BU-02","record_id":"94b219fd-025a-5495-988b-78929b84df22"}
 {"amount":"18229.2625","management_account_code":"OPERATING_EXPENSE","month_key":"2026-04","organization_code":"BU-02","record_id":"f6dc4bff-1148-581d-b67d-0d0103327258"}
 {"amount":"4557.3156","management_account_code":"OPERATING_PROFIT","month_key":"2026-04","organization_code":"BU-02","record_id":"8d5204a2-ab16-58f4-b2c2-ab9945bda77d"}
+{"amount":"23235.3917","management_account_code":"OPERATING_CASH_FLOW","month_key":"2026-04","organization_code":"BU-02","record_id":"25c6d7ca-6c87-5486-9c68-6f0160448fa2"}
 {"amount":"387225.1589","management_account_code":"REVENUE","month_key":"2026-04","organization_code":"BU-03","record_id":"ebbd9b79-0071-544c-a876-2468d8ecbd7a"}
 {"amount":"102358.6220","management_account_code":"WAREHOUSING_COST","month_key":"2026-04","organization_code":"BU-03","record_id":"9a599821-4f83-5ccb-a82c-d9f24734c1e2"}
 {"amount":"204717.2438","management_account_code":"TRANSPORTATION_COST","month_key":"2026-04","organization_code":"BU-03","record_id":"da34a8ee-ca88-5b16-a07f-33eb60fd1d2a"}
@@ -551,6 +629,7 @@
 {"amount":"46029.7524","management_account_code":"GROSS_PROFIT","month_key":"2026-04","organization_code":"BU-03","record_id":"bf2e3e36-da72-5730-b97f-09c193a9489a"}
 {"amount":"30978.0127","management_account_code":"OPERATING_EXPENSE","month_key":"2026-04","organization_code":"BU-03","record_id":"4dd8e25f-4789-5557-b633-6aa9e3a9102b"}
 {"amount":"15051.7397","management_account_code":"OPERATING_PROFIT","month_key":"2026-04","organization_code":"BU-03","record_id":"88940bf1-69b8-5577-ba6c-198a36cb78ee"}
+{"amount":"39485.2101","management_account_code":"OPERATING_CASH_FLOW","month_key":"2026-04","organization_code":"BU-03","record_id":"f46874ac-cd73-501b-a304-af958abc62e1"}
 {"amount":"87519.9919","management_account_code":"REVENUE","month_key":"2026-04","organization_code":"BU-04","record_id":"54f31075-a4f9-5bb6-bf96-b9cd294cd3c1"}
 {"amount":"23480.6678","management_account_code":"WAREHOUSING_COST","month_key":"2026-04","organization_code":"BU-04","record_id":"f46460b3-2c36-5649-8d88-fb7025079cd1"}
 {"amount":"46961.3352","management_account_code":"TRANSPORTATION_COST","month_key":"2026-04","organization_code":"BU-04","record_id":"ecbbead2-0029-563d-acbf-349382898cff"}
@@ -558,6 +637,7 @@
 {"amount":"9251.0998","management_account_code":"GROSS_PROFIT","month_key":"2026-04","organization_code":"BU-04","record_id":"b14548fa-5440-5e37-8dce-887a59d33d1f"}
 {"amount":"7001.5994","management_account_code":"OPERATING_EXPENSE","month_key":"2026-04","organization_code":"BU-04","record_id":"a51ec2df-5eac-5d22-8c2d-c65c9d72f948"}
 {"amount":"2249.5004","management_account_code":"OPERATING_PROFIT","month_key":"2026-04","organization_code":"BU-04","record_id":"918733a4-0044-5a71-8ec4-0eb1445a6d5a"}
+{"amount":"8924.3821","management_account_code":"OPERATING_CASH_FLOW","month_key":"2026-04","organization_code":"BU-04","record_id":"ffafc9fa-038c-5311-9d28-685c4ddd0d34"}
 {"amount":"217063.5043","management_account_code":"REVENUE","month_key":"2026-05","organization_code":"BU-01","record_id":"9c505f33-f8bd-54a4-b778-9f8aebdc1a01"}
 {"amount":"58617.6492","management_account_code":"WAREHOUSING_COST","month_key":"2026-05","organization_code":"BU-01","record_id":"100d1794-1aa2-5065-8f9c-c7737a39a448"}
 {"amount":"117235.2986","management_account_code":"TRANSPORTATION_COST","month_key":"2026-05","organization_code":"BU-01","record_id":"78e276f5-0ec9-5f3e-8ed6-afccc970abc7"}
@@ -565,6 +645,7 @@
 {"amount":"21671.3401","management_account_code":"GROSS_PROFIT","month_key":"2026-05","organization_code":"BU-01","record_id":"60e69b89-63e2-5880-9a98-8a7ff63617c1"}
 {"amount":"17365.0803","management_account_code":"OPERATING_EXPENSE","month_key":"2026-05","organization_code":"BU-01","record_id":"9875c4c1-7a8e-5422-b922-5e11e9d2fe14"}
 {"amount":"4306.2598","management_account_code":"OPERATING_PROFIT","month_key":"2026-05","organization_code":"BU-01","record_id":"68e1a575-df40-57fc-84a3-f6e736112d7b"}
+{"amount":"12173.2199","management_account_code":"OPERATING_CASH_FLOW","month_key":"2026-05","organization_code":"BU-01","record_id":"750e68f7-566e-5588-b015-b73d7fccf636"}
 {"amount":"231067.6013","management_account_code":"REVENUE","month_key":"2026-05","organization_code":"BU-02","record_id":"5339edd3-a8ae-58a7-a903-877681050666"}
 {"amount":"62388.2523","management_account_code":"WAREHOUSING_COST","month_key":"2026-05","organization_code":"BU-02","record_id":"b7c6e47b-e800-5aab-9926-c99a06c3d434"}
 {"amount":"124776.5047","management_account_code":"TRANSPORTATION_COST","month_key":"2026-05","organization_code":"BU-02","record_id":"78578ce3-a459-526c-9f50-fe516fa4e3b5"}
@@ -572,6 +653,7 @@
 {"amount":"23106.7602","management_account_code":"GROSS_PROFIT","month_key":"2026-05","organization_code":"BU-02","record_id":"2f49507f-0157-52a6-8403-2c5b6c1f9eed"}
 {"amount":"18485.4081","management_account_code":"OPERATING_EXPENSE","month_key":"2026-05","organization_code":"BU-02","record_id":"dfb0346b-a180-5764-80b8-14dc98ca83e3"}
 {"amount":"4621.3521","management_account_code":"OPERATING_PROFIT","month_key":"2026-05","organization_code":"BU-02","record_id":"09605f0d-7d23-5da6-b55b-d1911dd3f3e8"}
+{"amount":"12958.5889","management_account_code":"OPERATING_CASH_FLOW","month_key":"2026-05","organization_code":"BU-02","record_id":"0cb58758-015a-5423-bc0d-2a2f8392b1a7"}
 {"amount":"396915.3021","management_account_code":"REVENUE","month_key":"2026-05","organization_code":"BU-03","record_id":"8ec34109-7e31-58eb-9d81-a7748a786624"}
 {"amount":"104933.3927","management_account_code":"WAREHOUSING_COST","month_key":"2026-05","organization_code":"BU-03","record_id":"328fa419-ed71-53b5-bd00-e19cf0a43e2b"}
 {"amount":"209866.7859","management_account_code":"TRANSPORTATION_COST","month_key":"2026-05","organization_code":"BU-03","record_id":"40422fd8-21ea-5d47-bccc-b8d8b1e0c5c5"}
@@ -579,6 +661,7 @@
 {"amount":"47137.3259","management_account_code":"GROSS_PROFIT","month_key":"2026-05","organization_code":"BU-03","record_id":"8235f1df-23c9-51b4-9b6a-3e2d5945cf24"}
 {"amount":"31753.2242","management_account_code":"OPERATING_EXPENSE","month_key":"2026-05","organization_code":"BU-03","record_id":"8bc431b7-7885-5884-b2e0-49e540d09c6b"}
 {"amount":"15384.1017","management_account_code":"OPERATING_PROFIT","month_key":"2026-05","organization_code":"BU-03","record_id":"41f19ed0-62ba-53d9-a902-ca7640c23da8"}
+{"amount":"22259.5561","management_account_code":"OPERATING_CASH_FLOW","month_key":"2026-05","organization_code":"BU-03","record_id":"cd95b5a9-9508-5813-9022-9886f6756be6"}
 {"amount":"89953.5924","management_account_code":"REVENUE","month_key":"2026-05","organization_code":"BU-04","record_id":"35a85768-818e-5933-9e6e-92cded86bd4c"}
 {"amount":"24133.5763","management_account_code":"WAREHOUSING_COST","month_key":"2026-05","organization_code":"BU-04","record_id":"ab7e1db3-86ee-5c18-ac71-8a261eafbdf4"}
 {"amount":"48267.1530","management_account_code":"TRANSPORTATION_COST","month_key":"2026-05","organization_code":"BU-04","record_id":"b369980f-4370-5857-a144-ad3184f67cf1"}
@@ -586,6 +669,7 @@
 {"amount":"9508.3378","management_account_code":"GROSS_PROFIT","month_key":"2026-05","organization_code":"BU-04","record_id":"d0cc8b3e-00b7-5029-8819-9605c6721931"}
 {"amount":"7196.2874","management_account_code":"OPERATING_EXPENSE","month_key":"2026-05","organization_code":"BU-04","record_id":"da886587-5080-5b23-b50c-bf0218f0387a"}
 {"amount":"2312.0504","management_account_code":"OPERATING_PROFIT","month_key":"2026-05","organization_code":"BU-04","record_id":"dcab65ee-d653-5acc-b76b-bacde84311af"}
+{"amount":"5044.7211","management_account_code":"OPERATING_CASH_FLOW","month_key":"2026-05","organization_code":"BU-04","record_id":"e69c3b59-6178-5dff-a306-d74e12e0b243"}
 {"amount":"209479.4488","management_account_code":"REVENUE","month_key":"2026-06","organization_code":"BU-01","record_id":"29842477-289e-5f51-831d-a245310001a9"}
 {"amount":"56569.5872","management_account_code":"WAREHOUSING_COST","month_key":"2026-06","organization_code":"BU-01","record_id":"bb4f23f0-1edc-5296-bce7-bfcac1c050e3"}
 {"amount":"113139.1744","management_account_code":"TRANSPORTATION_COST","month_key":"2026-06","organization_code":"BU-01","record_id":"ae345ad3-0d14-5c21-ac0f-a8f73063d5a1"}
@@ -593,6 +677,7 @@
 {"amount":"20914.1579","management_account_code":"GROSS_PROFIT","month_key":"2026-06","organization_code":"BU-01","record_id":"dfc70120-d996-59cc-8f94-7f069f0a704b"}
 {"amount":"16758.3559","management_account_code":"OPERATING_EXPENSE","month_key":"2026-06","organization_code":"BU-01","record_id":"7e15bf08-7965-51b2-aa9c-0588ddbb82de"}
 {"amount":"4155.8020","management_account_code":"OPERATING_PROFIT","month_key":"2026-06","organization_code":"BU-01","record_id":"c2d851bc-a7e8-5d21-ad59-6cf152a1a287"}
+{"amount":"11761.5356","management_account_code":"OPERATING_CASH_FLOW","month_key":"2026-06","organization_code":"BU-01","record_id":"3dfa251e-d5ed-575f-b8da-b0140efd29bd"}
 {"amount":"222994.2519","management_account_code":"REVENUE","month_key":"2026-06","organization_code":"BU-02","record_id":"71e965b3-206a-54cc-8004-3a26774a77b1"}
 {"amount":"60208.4480","management_account_code":"WAREHOUSING_COST","month_key":"2026-06","organization_code":"BU-02","record_id":"f1f682ee-cfbb-57a3-a5a5-6e7e740d65f9"}
 {"amount":"120416.8959","management_account_code":"TRANSPORTATION_COST","month_key":"2026-06","organization_code":"BU-02","record_id":"80161b86-9529-558f-899e-c7ab20782d14"}
@@ -600,6 +685,7 @@
 {"amount":"22299.4254","management_account_code":"GROSS_PROFIT","month_key":"2026-06","organization_code":"BU-02","record_id":"5ad4727e-271e-5aae-901d-8ca4e8388c10"}
 {"amount":"17839.5402","management_account_code":"OPERATING_EXPENSE","month_key":"2026-06","organization_code":"BU-02","record_id":"e7aeb2a8-42db-50f7-b93d-30615ed5c502"}
 {"amount":"4459.8852","management_account_code":"OPERATING_PROFIT","month_key":"2026-06","organization_code":"BU-02","record_id":"f9d78602-a737-5ac4-8dd5-c022e9a2e198"}
+{"amount":"12520.3444","management_account_code":"OPERATING_CASH_FLOW","month_key":"2026-06","organization_code":"BU-02","record_id":"42c3af14-5ca5-5c3b-9c32-2000005f0759"}
 {"amount":"394744.7884","management_account_code":"REVENUE","month_key":"2026-06","organization_code":"BU-03","record_id":"92ed9948-6955-5ea5-acaa-7b4443bd7f72"}
 {"amount":"104358.8321","management_account_code":"WAREHOUSING_COST","month_key":"2026-06","organization_code":"BU-03","record_id":"59a8fe5d-a5d8-5f58-bdaf-7407399377d2"}
 {"amount":"208717.6633","management_account_code":"TRANSPORTATION_COST","month_key":"2026-06","organization_code":"BU-03","record_id":"6d5f6cb8-3907-5967-981a-4077a4ba9c97"}
@@ -607,6 +693,7 @@
 {"amount":"46882.0155","management_account_code":"GROSS_PROFIT","month_key":"2026-06","organization_code":"BU-03","record_id":"3e148e78-b12d-542f-aa5a-945adabc444f"}
 {"amount":"31579.5831","management_account_code":"OPERATING_EXPENSE","month_key":"2026-06","organization_code":"BU-03","record_id":"d5f01444-f857-5c8f-ae82-109b87ec963e"}
 {"amount":"15302.4324","management_account_code":"OPERATING_PROFIT","month_key":"2026-06","organization_code":"BU-03","record_id":"a4c3dc7c-9446-5aec-a369-bdb99a0b0823"}
+{"amount":"22163.5340","management_account_code":"OPERATING_CASH_FLOW","month_key":"2026-06","organization_code":"BU-03","record_id":"728f2769-ff3b-5519-9047-db6c727ebd96"}
 {"amount":"89448.1776","management_account_code":"REVENUE","month_key":"2026-06","organization_code":"BU-04","record_id":"f13e5198-5793-534f-a01c-7ad623a1c3a7"}
 {"amount":"23997.9790","management_account_code":"WAREHOUSING_COST","month_key":"2026-06","organization_code":"BU-04","record_id":"eca18635-65c0-5cc5-868f-5bc2c7028985"}
 {"amount":"47995.9578","management_account_code":"TRANSPORTATION_COST","month_key":"2026-06","organization_code":"BU-04","record_id":"e931f1fd-970c-5603-b30d-eff77f6d8182"}
@@ -614,6 +701,7 @@
 {"amount":"9454.9142","management_account_code":"GROSS_PROFIT","month_key":"2026-06","organization_code":"BU-04","record_id":"09a532d9-7bf3-5200-8c6e-4b44f18efc3d"}
 {"amount":"7155.8542","management_account_code":"OPERATING_EXPENSE","month_key":"2026-06","organization_code":"BU-04","record_id":"ef886f07-e08a-5463-b64a-37ff624e5a03"}
 {"amount":"2299.0600","management_account_code":"OPERATING_PROFIT","month_key":"2026-06","organization_code":"BU-04","record_id":"802a35a5-5853-5cf7-9884-d9e3b33068c8"}
+{"amount":"5022.2012","management_account_code":"OPERATING_CASH_FLOW","month_key":"2026-06","organization_code":"BU-04","record_id":"9cf5bb35-f88c-53cd-b28f-13b1fce85904"}
 {"amount":"211563.6784","management_account_code":"REVENUE","month_key":"2026-07","organization_code":"BU-01","record_id":"534d7eb2-1b49-581c-9b67-21406090517b"}
 {"amount":"57132.4302","management_account_code":"WAREHOUSING_COST","month_key":"2026-07","organization_code":"BU-01","record_id":"d1890abd-4d31-5fd6-b5c7-8fb42b689a15"}
 {"amount":"114264.8600","management_account_code":"TRANSPORTATION_COST","month_key":"2026-07","organization_code":"BU-01","record_id":"ce9ce560-e481-59b1-a04e-936eb1144d28"}
@@ -621,6 +709,7 @@
 {"amount":"21122.2448","management_account_code":"GROSS_PROFIT","month_key":"2026-07","organization_code":"BU-01","record_id":"987babcd-471c-5895-b4de-e392407053fb"}
 {"amount":"16925.0943","management_account_code":"OPERATING_EXPENSE","month_key":"2026-07","organization_code":"BU-01","record_id":"78f81c09-5e39-5f09-9001-621dc05af520"}
 {"amount":"4197.1505","management_account_code":"OPERATING_PROFIT","month_key":"2026-07","organization_code":"BU-01","record_id":"be216b51-426a-5e0f-bdb0-64d73fa3918f"}
+{"amount":"21593.8593","management_account_code":"OPERATING_CASH_FLOW","month_key":"2026-07","organization_code":"BU-01","record_id":"b38433c2-b1a4-59ea-9c52-b3b8338cc688"}
 {"amount":"225212.9483","management_account_code":"REVENUE","month_key":"2026-07","organization_code":"BU-02","record_id":"2657ca2c-af7e-5722-b2cb-d633426fac13"}
 {"amount":"60807.4960","management_account_code":"WAREHOUSING_COST","month_key":"2026-07","organization_code":"BU-02","record_id":"4edaa793-4800-5125-ac5f-7f179c38ff10"}
 {"amount":"121614.9922","management_account_code":"TRANSPORTATION_COST","month_key":"2026-07","organization_code":"BU-02","record_id":"46345cf3-fb2a-599d-87c2-c10fd5aaa5ae"}
@@ -628,6 +717,7 @@
 {"amount":"22521.2948","management_account_code":"GROSS_PROFIT","month_key":"2026-07","organization_code":"BU-02","record_id":"add6a2e1-4fe1-546c-b096-f4a73abb662f"}
 {"amount":"18017.0359","management_account_code":"OPERATING_EXPENSE","month_key":"2026-07","organization_code":"BU-02","record_id":"0e444b14-1160-50cf-bfef-480d1d4b3e47"}
 {"amount":"4504.2589","management_account_code":"OPERATING_PROFIT","month_key":"2026-07","organization_code":"BU-02","record_id":"16ab4d9b-9006-51e6-a55a-8debfbc96a4c"}
+{"amount":"22987.0116","management_account_code":"OPERATING_CASH_FLOW","month_key":"2026-07","organization_code":"BU-02","record_id":"6cd2b63a-1967-5180-b65b-5a76120f9f85"}
 {"amount":"391467.3583","management_account_code":"REVENUE","month_key":"2026-07","organization_code":"BU-03","record_id":"e9b39339-5c5c-5d67-b48a-4da0d2c9104e"}
 {"amount":"103476.9358","management_account_code":"WAREHOUSING_COST","month_key":"2026-07","organization_code":"BU-03","record_id":"ba9f19fb-f6b3-55df-b6c5-f97445034f22"}
 {"amount":"206953.8715","management_account_code":"TRANSPORTATION_COST","month_key":"2026-07","organization_code":"BU-03","record_id":"a0a0be63-b6b8-5cd5-9771-2c01055d0c53"}
@@ -635,6 +725,7 @@
 {"amount":"46544.2389","management_account_code":"GROSS_PROFIT","month_key":"2026-07","organization_code":"BU-03","record_id":"d476a439-f3d3-5b03-bbb4-2a06e44b669a"}
 {"amount":"31317.3887","management_account_code":"OPERATING_EXPENSE","month_key":"2026-07","organization_code":"BU-03","record_id":"08388e81-6199-57df-a446-3ee6694307ce"}
 {"amount":"15226.8502","management_account_code":"OPERATING_PROFIT","month_key":"2026-07","organization_code":"BU-03","record_id":"7e483b7a-4d7f-58a8-899f-19b54e0aa79c"}
+{"amount":"39956.2492","management_account_code":"OPERATING_CASH_FLOW","month_key":"2026-07","organization_code":"BU-03","record_id":"ce577311-7dd0-5511-9f39-cef84f59ed5e"}
 {"amount":"88422.6817","management_account_code":"REVENUE","month_key":"2026-07","organization_code":"BU-04","record_id":"589593b9-7c9d-57c4-8c04-0ae6608d90e7"}
 {"amount":"23722.8496","management_account_code":"WAREHOUSING_COST","month_key":"2026-07","organization_code":"BU-04","record_id":"11c43c07-6210-5624-ac34-267526bf9a0f"}
 {"amount":"47445.6993","management_account_code":"TRANSPORTATION_COST","month_key":"2026-07","organization_code":"BU-04","record_id":"568c8dfd-c62b-59ef-813c-9860d2a4d44f"}
@@ -642,6 +733,7 @@
 {"amount":"9346.5163","management_account_code":"GROSS_PROFIT","month_key":"2026-07","organization_code":"BU-04","record_id":"cb762bc3-3334-5b95-8287-038b516df76a"}
 {"amount":"7073.8145","management_account_code":"OPERATING_EXPENSE","month_key":"2026-07","organization_code":"BU-04","record_id":"23950996-d299-5f05-a0d7-c417a1985d9e"}
 {"amount":"2272.7018","management_account_code":"OPERATING_PROFIT","month_key":"2026-07","organization_code":"BU-04","record_id":"a5acd063-4600-5cc8-82ac-4ac3057bd38e"}
+{"amount":"9025.1170","management_account_code":"OPERATING_CASH_FLOW","month_key":"2026-07","organization_code":"BU-04","record_id":"b0d2d84a-6366-5610-94b5-e083388a8201"}
 {"amount":"214448.4763","management_account_code":"REVENUE","month_key":"2026-08","organization_code":"BU-01","record_id":"ae924791-0d16-5bb4-a569-c3b7871401bb"}
 {"amount":"57911.4652","management_account_code":"WAREHOUSING_COST","month_key":"2026-08","organization_code":"BU-01","record_id":"9aebee4d-4d6e-5675-88df-1c0ae6303acd"}
 {"amount":"115822.9303","management_account_code":"TRANSPORTATION_COST","month_key":"2026-08","organization_code":"BU-01","record_id":"1781cb61-b4a0-508c-b4ea-40948f0b85da"}
@@ -649,6 +741,7 @@
 {"amount":"21410.2591","management_account_code":"GROSS_PROFIT","month_key":"2026-08","organization_code":"BU-01","record_id":"edecb074-fa2b-532f-94f2-b16c639519fb"}
 {"amount":"17155.8781","management_account_code":"OPERATING_EXPENSE","month_key":"2026-08","organization_code":"BU-01","record_id":"8599cd90-69d4-5342-8e4f-807657be9a4e"}
 {"amount":"4254.3810","management_account_code":"OPERATING_PROFIT","month_key":"2026-08","organization_code":"BU-01","record_id":"85dfe320-8efb-53aa-b22e-f0d9804b6751"}
+{"amount":"21913.4270","management_account_code":"OPERATING_CASH_FLOW","month_key":"2026-08","organization_code":"BU-01","record_id":"e265251b-d623-5084-9591-fe1d76fe73d6"}
 {"amount":"228283.8619","management_account_code":"REVENUE","month_key":"2026-08","organization_code":"BU-02","record_id":"c2b45c6d-f914-53fa-8548-0693eccb7703"}
 {"amount":"61636.6428","management_account_code":"WAREHOUSING_COST","month_key":"2026-08","organization_code":"BU-02","record_id":"9e25b5bd-0ed4-5164-9210-48935d116404"}
 {"amount":"123273.2854","management_account_code":"TRANSPORTATION_COST","month_key":"2026-08","organization_code":"BU-02","record_id":"94fbd172-3486-58f3-a3bf-a0312b1a0c83"}
@@ -656,6 +749,7 @@
 {"amount":"22828.3862","management_account_code":"GROSS_PROFIT","month_key":"2026-08","organization_code":"BU-02","record_id":"9ad54d7a-34e4-54e0-b631-a9bd5e779181"}
 {"amount":"18262.7090","management_account_code":"OPERATING_EXPENSE","month_key":"2026-08","organization_code":"BU-02","record_id":"e239a5c7-4f0f-59a5-96dd-9c3b270f1f74"}
 {"amount":"4565.6772","management_account_code":"OPERATING_PROFIT","month_key":"2026-08","organization_code":"BU-02","record_id":"69ad3fb5-bc8d-5bc2-b1c5-9a3b45ac7601"}
+{"amount":"23327.1965","management_account_code":"OPERATING_CASH_FLOW","month_key":"2026-08","organization_code":"BU-02","record_id":"5811694a-48d2-52c2-9d3e-aa9acea39fab"}
 {"amount":"401862.8689","management_account_code":"REVENUE","month_key":"2026-08","organization_code":"BU-03","record_id":"de814da7-64fb-54cc-a5f2-320c4b7c6074"}
 {"amount":"106204.8116","management_account_code":"WAREHOUSING_COST","month_key":"2026-08","organization_code":"BU-03","record_id":"626a5446-54cb-5dbb-acfa-044fb4ac70e5"}
 {"amount":"212409.6227","management_account_code":"TRANSPORTATION_COST","month_key":"2026-08","organization_code":"BU-03","record_id":"5c0b6e8e-ef93-54b2-a458-dd8634419fd2"}
@@ -663,6 +757,7 @@
 {"amount":"47846.8302","management_account_code":"GROSS_PROFIT","month_key":"2026-08","organization_code":"BU-03","record_id":"96438ffa-c04b-5ae3-9572-998828ba08b4"}
 {"amount":"32149.0295","management_account_code":"OPERATING_EXPENSE","month_key":"2026-08","organization_code":"BU-03","record_id":"5d3dd424-e892-546a-8f58-2b40983d683b"}
 {"amount":"15697.8007","management_account_code":"OPERATING_PROFIT","month_key":"2026-08","organization_code":"BU-03","record_id":"018dfe8a-9a7d-5c93-af2e-65051c03b40f"}
+{"amount":"41064.3750","management_account_code":"OPERATING_CASH_FLOW","month_key":"2026-08","organization_code":"BU-03","record_id":"f10b53c7-b653-592b-842b-1946c6ccb846"}
 {"amount":"90404.7929","management_account_code":"REVENUE","month_key":"2026-08","organization_code":"BU-04","record_id":"1c7df71b-9823-586c-a25e-0a0d72cf62c3"}
 {"amount":"24254.6285","management_account_code":"WAREHOUSING_COST","month_key":"2026-08","organization_code":"BU-04","record_id":"f77406c8-5e1f-572e-99f5-012101c2c9e3"}
 {"amount":"48509.2572","management_account_code":"TRANSPORTATION_COST","month_key":"2026-08","organization_code":"BU-04","record_id":"be655232-8a97-58bb-b33d-4d86d422d8e8"}
@@ -670,3 +765,4 @@
 {"amount":"9556.0311","management_account_code":"GROSS_PROFIT","month_key":"2026-08","organization_code":"BU-04","record_id":"c328f997-dc68-5776-a854-f71973aff767"}
 {"amount":"7232.3834","management_account_code":"OPERATING_EXPENSE","month_key":"2026-08","organization_code":"BU-04","record_id":"5990b353-c82d-5322-85ea-fd7456def727"}
 {"amount":"2323.6477","management_account_code":"OPERATING_PROFIT","month_key":"2026-08","organization_code":"BU-04","record_id":"e871628c-a13b-563c-b3cb-240ae9a39571"}
+{"amount":"9238.0177","management_account_code":"OPERATING_CASH_FLOW","month_key":"2026-08","organization_code":"BU-04","record_id":"209098e3-17e8-566a-aaee-d4fdfe92d735"}

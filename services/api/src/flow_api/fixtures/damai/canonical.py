@@ -263,6 +263,15 @@ def _financial_actuals(
         )
 
     rows: list[FinancialActualRecord] = []
+    cash_flow_by_month = {
+        row["month"]: Decimal(row["ocf"])
+        for row in raw["monthly_facts"]["cash_flow"]
+    }
+    ocf_allocated_by_month: dict[str, Decimal] = {}
+    organizations_by_month: dict[str, list[str]] = {}
+    for month, org_code in by_month_org:
+        organizations_by_month.setdefault(month, []).append(org_code)
+
     for _month_index, (month, org_code) in enumerate(sorted(by_month_org.keys())):
         agg = by_month_org[(month, org_code)]
         # 期间费用率：与窄切片同口径（分析期 Q4 0.100、其余 0.080）
@@ -274,6 +283,22 @@ def _financial_actuals(
             "OPERATING_EXPENSE": expense,
             "OPERATING_PROFIT": _d(agg["GROSS_PROFIT"] - expense),
         }
+        month_organizations = sorted(organizations_by_month[month])
+        position = month_organizations.index(org_code)
+        if position == len(month_organizations) - 1:
+            ocf = cash_flow_by_month[month] - ocf_allocated_by_month.get(
+                month, Decimal("0")
+            )
+        else:
+            monthly_revenue = sum(
+                (by_month_org[(month, code)]["REVENUE"] for code in month_organizations),
+                Decimal("0"),
+            )
+            ocf = _d(cash_flow_by_month[month] * agg["REVENUE"] / monthly_revenue)
+            ocf_allocated_by_month[month] = (
+                ocf_allocated_by_month.get(month, Decimal("0")) + ocf
+            )
+        values["OPERATING_CASH_FLOW"] = ocf
         for account_code in (
             "REVENUE",
             "WAREHOUSING_COST",
@@ -282,6 +307,7 @@ def _financial_actuals(
             "GROSS_PROFIT",
             "OPERATING_EXPENSE",
             "OPERATING_PROFIT",
+            "OPERATING_CASH_FLOW",
         ):
             rows.append(
                 FinancialActualRecord(

@@ -9,7 +9,7 @@
     "customers": 40,
     "financial_actuals": {
       "grain": "month × business_unit × management_account",
-      "rows": 672
+      "rows": 768
     },
     "logistics_products": 8,
     "monthly_budgets": {
@@ -32,7 +32,7 @@
     "canonical/batch.jsonl": "e50829eace2c172a7eb8bc7a15887c970dc6c761ad27b7ddf542917bf0bde7d1",
     "canonical/customer_segments.jsonl": "1ce2dfdd36fa815be9b6b0c6062c0345286b35741e661f271342e0c49540a13b",
     "canonical/customers.jsonl": "bb9e7ec1f4064d63a20470c2cc4455ed098fdc219f1c632cdd2c07c38614c3af",
-    "canonical/financial_actuals.jsonl": "d1ee5e6a2470de5f4ca456b0836939443f73ab4bc470146bf80db535133167c0",
+    "canonical/financial_actuals.jsonl": "3fda66a863aa7013a782a2a79500253a99082c367b3190b7956ffbfcf55816cd",
     "canonical/logistics_products.jsonl": "57c321b81aece35c5a0e9e58277c65df2fb7d6a4a4878647b39beb98032b0abc",
     "canonical/management_accounts.jsonl": "2802026cbf8cb9ffcc7b51c17ec98adca8bb3222981f72160dd51dd83ce5a6b1",
     "canonical/monthly_budgets.jsonl": "a1154b397796838a35aed5f44e1a3a7f44c24a4f4b1f6a3fb5b7444aad9ac68d",
@@ -46,7 +46,7 @@
     "operations/damai_segment_series.yaml": "7158d3fc06b3ff1cce88a7b8178b2e7411c7946ec8958d9e5b6de0c130a7d446",
     "statements/damai_fy2025.yaml": "f5c3ddd4fac97dc59f18c31f11d9a74021fa5a0590f9c2ec7b93a9e8d2804322",
     "statements/damai_fy2026.yaml": "7ed1280aeaf18f0758f257c1059c11e37f5883683b160a6f6f6c9c3945083785",
-    "workbooks/damai_logistics_full_v1.xlsx": "semantic:f9083671deb56c816bd4dec807607f1f68c69e9b9a12edfe875a03f3d84b1003"
+    "workbooks/damai_logistics_full_v1.xlsx": "semantic:34a6537c444348cf1819e919ad47f94c58c3a4b98513cc539a9e1a61d69e6be3"
   },
   "fiscal_year_summary": {
     "FY2025": {
@@ -165,7 +165,7 @@
     "canonical/batch.jsonl": 1,
     "canonical/customer_segments.jsonl": 4,
     "canonical/customers.jsonl": 40,
-    "canonical/financial_actuals.jsonl": 672,
+    "canonical/financial_actuals.jsonl": 768,
     "canonical/logistics_products.jsonl": 8,
     "canonical/management_accounts.jsonl": 9,
     "canonical/monthly_budgets.jsonl": 10752,

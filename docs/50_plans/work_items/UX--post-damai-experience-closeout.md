@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 1.6
+version: 1.7
 created_at: 2026-09-24
 updated_at: 2026-09-26
 owner: FLOW
@@ -21,7 +21,7 @@ applies_to: web-frontend
 ## 当前证据与判断（2026-09-26）
 
 - 常驻开发库 G2 已完成，测试库隔离也已修复（`b60c51b`）；它们不再是本工作包的阻塞。
-- 大麦 fixture 有 24 个月、1,920 条经营实际、10,752 条预算、4,800 条应收回款、672 条财务实际；40 个客户、8 个产品、6 个区域、4 个事业部。
+- 大麦 fixture 有 24 个月、1,920 条经营实际、10,752 条预算、4,800 条应收回款、768 条财务实际（含每月×4组织的 OCF）；40 个客户、8 个产品、6 个区域、4 个事业部。常驻库当前仍是旧版672条，需隔离验收通过后再安排装载。
 - 当前只读 API 返回 2 份已发布财报（FY2025/FY2026），每份 40 个行项目，覆盖资产负债表、利润表、现金流量表、所有者权益变动表。
 - 大麦 40 项指标覆盖矩阵为 FY2025 22/40、FY2026 25/40；需逐项分类，不可默认所有指标都适用于该企业。
 - 驾驶舱 API 有 8 张 KPI 卡、12 个月趋势点（每点含4项趋势指标）、8 个产品、4 个客户群、2 条发现，但整体为 `degraded`：经营现金流趋势12/12不可用，毛利矩阵缺部分指标或比较值。
@@ -91,7 +91,7 @@ Acceptance: 40项指标逐项有“适用且可计算 / 适用但缺源事实 / 
 
 常驻数据库只读核验发现：`damai-demo-v1` 已导入的 `fact_financial_actual` 每月每组织只有 7 个科目（REVENUE、三类直接成本、GROSS_PROFIT、OPERATING_EXPENSE、OPERATING_PROFIT），没有 `OPERATING_CASH_FLOW` 实际；预算事实中有 OCF。虽然 `ManagementAccount` 已定义 OCF，且 `build_damai_package()` 已生成带 E5 利润-现金背离的月度 `cash_flow[].ocf`，但 `fixtures/damai/canonical.py::_financial_actuals()` 没有消费这组现金流值，因此 canonical `financial_actuals.jsonl` 与已导入实际均漏掉 OCF。现有指标快照逻辑按源科目精确匹配，故 OCF actual 缺席是上游事实未传递，不是快照发布器漏算。禁止直接修改计算器或给缺值补零。
 
-Gate 3 首个修复应从既有 synthetic `cash_flow[].ocf` 推导并写入 24 个月×4 组织的 OCF actual，按同月组织收入占比分摊并保证公司总额守恒（尾差归末组织）；然后更新 canonical 合同测试、指标粒度对账测试与发行 manifest。重载验证只能在隔离 Compose 验收栈执行；常驻 `flow` 库只读，不得在本任务中重灌。修复完成后再判断 OCF 趋势是否消失；毛利矩阵 grain/comparison 缺失仍需独立追查，不得假设此修复一并解决。
+首个根因修复已在 canonical 生成链路完成：从既有 synthetic `cash_flow[].ocf` 推导并写入 24 个月×4 组织的 OCF actual，按同月组织收入占比分摊并保证公司总额守恒（尾差归末组织）；canonical 合同测试、指标粒度对账测试与发行 manifest 已更新。全量 canonical 测试25项、OCF/财务快照粒度对账3项、发行包确定性 `--check` 均通过。待重载验证只能在隔离 Compose 验收栈执行；常驻 `flow` 库只读，不得在本任务中重灌。隔离导入后再判断 OCF 趋势缺失是否消除；毛利矩阵 grain/comparison 缺失仍需独立追查，不得假设此修复一并解决。
 
 Files:
 - Inspect/modify if root-caused: `services/api/src/flow_api/fixtures/damai/canonical.py`, `services/api/src/flow_api/fixtures/damai/generator.py`, `services/api/src/flow_api/dashboard/fixture.py`, `services/api/src/flow_api/dashboard/repositories.py`, `services/api/src/flow_api/dashboard/service.py`, `scripts/seed_damai_demo.py` and the owning metric snapshot service
@@ -127,4 +127,4 @@ Run: `python3 scripts/check_docs.py --phase m1` and the repository link check
 
 ## 工作状态
 
-用户已于 2026-09-26 批准实施。Gate 1初始诊断快照固定于基线 `3ff95115` + overlay `1ede2648…`；FY2025工作台500根因已修复并推送（`48f8363`），缺口已分为Gate2源事实与Gate3快照发布两类。Gate2静态事实生成达到 FY2025 37/40、FY2026 40/40，相关修复已推送至 `c7955f1`；新财报行仍未在隔离发布旅程核验。Gate3根因已收敛到 canonical 生成器未把已有月度 OCF sidecar 传递到财务实际事实，计划按本节先补源事实并在隔离栈验收；毛利矩阵缺失另行调查。Gate1干净SHA复测及 Gate3–5仍待执行；不得对常驻数据库写入。
+用户已于 2026-09-26 批准实施。Gate 1初始诊断快照固定于基线 `3ff95115` + overlay `1ede2648…`；FY2025工作台500根因已修复并推送（`48f8363`），缺口已分为Gate2源事实与Gate3快照发布两类。Gate2静态事实生成达到 FY2025 37/40、FY2026 40/40，相关修复已推送至 `c7955f1`；新财报行仍未在隔离发布旅程核验。Gate3首项已在静态 canonical 层补齐 OCF actual：768条财务实际、合计守恒；canonical 25项、粒度对账3项、发行包检查通过。代码提交与隔离 Compose 装载验收待完成；毛利矩阵缺失仍需另查。Gate1干净SHA复测及 Gate3–5仍待执行；不得对常驻数据库写入。
