@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目尽调、优化与单 Agent 执行总交接
 doc_type: navigation
 status: current
-version: 4.8
+version: 4.9
 created_at: 2026-09-12
 updated_at: 2026-09-27
 owner: FLOW
@@ -20,21 +20,21 @@ applies_to: repository
 
 ### 接手基线、当前状态与操作纪律
 
-- 本轮从 GitHub `main` 快进同步到 `0aa2e880` 开始，在 `/Users/qiming/workspace/FLOW/.worktrees/execution-convergence` 的唯一 `main` 工作树执行；本轮更改尚未提交，最终 SHA/CI 尚无。历史 `c08a2f6a` / `fc6e63a7` 只用于解释先前交接，不是本轮代码基线。已核对无其他 Agent 进程继续改写本工作树；早先“Review FLOW project code”线程已按用户要求停止。
-- **当前路线图计数（唯一队列11项）**：已完成 0、实际执行中 1（ORG-LEDGER，本地验收通过、待提交推送/同 SHA CI）、排队 9、外部材料受限 1。工作包只有 CI 同 SHA success 后才从队首关单，随即进入第2项 UX 全站验收；不并行开启第二项。
+- 本轮从 GitHub `main` 快进同步到 `0aa2e880` 开始，在 `/Users/qiming/workspace/FLOW/.worktrees/execution-convergence` 的唯一 `main` 工作树串行执行。ORG-LEDGER 提交 `2c7d6eb4e9dead835a005687cdff8ac5ab19631f` 已推送，FLOW CI run `36270782272` 17/17 success。当前状态文档更新待推送；历史 `c08a2f6a` / `fc6e63a7` 仅作旧快照解释。未触碰根工作树的既有脏 `AGENTS.md` 和 `apps/web/next-env.d.ts`。
+- **当前路线图计数（唯一队列11项）**：已完成 1（ORG-LEDGER）、实际执行中 1（UX 全站验收）、排队 8、外部材料受限 1。第1项因提交 SHA 同 CI 全绿而关闭，第2项已成为唯一执行项；不并行开启其他工作包。
 - 只在 `main` 上做，禁止新建并行任务分支；不得同时开始下一项。用户已授权常规项目实施与验证，不再为日常测试、分析、文档或常规实现请求再次批准。既有全局安全红线仍有效：真实数据迁移/schema、删除/覆盖/恢复常驻库、密钥/CI 配置、公开部署等按 `AGENTS.md` 处理；尤其常驻 `flow` 中的测试批次偏差 `01a0dcdd-8245-7c17-99aa-fce91a8a7a57` 不得自行删除、回滚或切 latest。
 - **状态口径**：`进行中`=此刻确实有命令、审查或实现正在执行；`队首待启动`=当前第一项但未开工；`排队`=严格等待前项完成；`外部材料受限`=先按本手册执行主动恢复和替代方案，不是停工态。工作包 frontmatter 的 `active/blocked` 表示工作包生命周期或验收门槛，不覆盖路线图执行状态。
 - **ORG-LEDGER 的最新事实与安全边界**：工作包由 `9729dbc4`、具体三表 schema 提案由 `880f1b76` 推送；用户批准该准确方案由 `fc6e63a7` 记录。批准仅覆盖工作包列出的三表与对应迁移，不覆盖额外 schema、认证/RBAC 改造，也不授权在共享/常驻 DB 清理/初始化。可执行已批准迁移，但只在隔离数据库验证；不要对常驻库迁移或写入。
-- **ORG-LEDGER 当前已完成的本地验收（尚未由提交 CI 确认）**：`build_enterprise_data_package.py build` 连续两次输出31个发行文件，manifest SHA 固定为 `cbc7cccf924092ae7ca5f68eb8a797473cf6efcf31f4e91fbe22aa6f7758e513`；组织8/8/8、权限快照142条。`tests/enterprise` + `tests/fixtures/test_damai_loader.py` 为11 passed。隔离 CLI 的首次 `full`、重复 `full`、`business` 三路径均为财务实际768、预算10752、经营实际1920、应收回款4800、快照12、有效成员8；重复重置归档3条 review history，事务失败回滚/非目标企业保护测试通过。旧大麦隔离脚本 verify19/19、GET43/43、Playwright9/9通过。清洁隔离库完整 API 852 passed（37:25）、Web142 passed、脚本107 passed、contracts-check、API ruff/mypy、Web lint/typecheck、M1（297 docs/0 errors）、links、plan views通过。Web lint仅有一条既有 React Compiler warning。`make damai-demo-build` 原先用系统 Python 缺 PyYAML；已改为锁定的 uv 项目环境，标准目标通过，FY2025 37/40、FY2026 40/40。所有数据库命令仅写独立 Compose 项目，常驻 `flow` 与共享 MinIO未触碰；测试栈现已停止但卷保留。全量 API 初次在已加载测试数据的隔离卷出现迁移/清理错误，修正测试库清理顺序、旧 migration head 断言及一个缺少目录导入 fixture 后，干净新卷最终852全绿；失败证据和修复已写入 ORG 工作包与本手册当前快照。
+- **ORG-LEDGER 最终验收**：发行包两次构建一致，31文件、manifest SHA `cbc7cccf924092ae7ca5f68eb8a797473cf6efcf31f4e91fbe22aa6f7758e513`；组织8/8/8、权限快照142条。11项企业/loader测试通过；隔离 CLI 首次full、重复full、business reset对账均正确（财务实际768、预算10752、经营实际1920、应收回款4800、快照12、成员8），事务回滚、租户隔离、审计追加保留通过。旧大麦 verify19/19、只读GET43/43、Playwright9/9；全量 API852、Web142、脚本107；合同、文档、lint、typecheck通过。提交 `2c7d6eb4`，CI run `36270782272` 17/17 success。仅获批三表迁移在隔离栈验证，常驻 `flow`/MinIO未触碰。
 - **遇到失败的统一处理**：保留原始日志和失败产物 → 定位根因并判别代码/数据/环境/外部输入 → 先运行最小重现 → 做最小修复或有记录的替代验证 → 重跑原失败项及相邻回归。禁止删断言、改预期值迎合实现、重写原始 oracle、用 synthetic 结果冒充真实验收。若原验收客观上不可完成，交付可复现的调查、替代结果、未满足项与重启条件；不能声称原验收通过。
-- **当前唯一下一动作**：最后复核本工作树差异与文档门禁，提交 ORG-LEDGER 及必要状态文档到 `main` 并立即 push；随后查询该提交的 GitHub CI。CI success 后更新队列计数（1 completed/第2项 in progress）并直接开始 UX 全站验收，不再拆分分支或另开计划。CI 若失败，按失败 job 复现/修复，重跑对应门禁并以新的普通提交继续。
+- **当前唯一下一动作**：提交推送本轮状态文档后，立即继续 UX 工作包：先建立路由/API/页面状态/视口覆盖矩阵并核对已有43条只读GET覆盖，只补缺口，避免重复批次一至三。只读检查排除调用即freeze/写入快照的接口；安全验证在隔离数据库运行。完成 UX Gate 后更新同一状态入口、提交推送并核同 SHA CI，只有CI绿后再启动队列第3项。
 - **每项汇报格式**：完整 11 项队列和计数；当前项与细分步骤；本轮完成证据（SHA、命令、结果）；实际问题/替代路径；下一项何时解锁和唯一下一动作。不要写“等待用户验证/批准”作为常规动作；只有触及明文安全红线的 schema 执行边界才须记录为精确批准门。
 
 ### 唯一串行 To-do 的逐项操作卡
 
 每张卡的“完成后”是唯一可进入下一项的条件。若发现路线图与证据不一致，先核对主线提交/原始证据，更新路线图并通过文档门禁，再按更正后的顺序工作。
 
-#### 1. 企业组织建制与经营账套初始化包（唯一队首）
+#### 1. 企业组织建制与经营账套初始化包（已完成：`2c7d6eb4` / CI `36270782272` success）
 
 **入口材料：** `docs/50_plans/work_items/ORG-LEDGER--enterprise-initialization-package.md`、`docs/50_plans/work_items/DAMAI--full-year-demo.md`、`docs/50_plans/CURRENT_ROADMAP.md`、`docs/20_product/` 中 enterprise/RBAC/导入发布相关规则，以及 `services/api/src/flow_api/fixtures/damai/loader.py`、`scripts/seed_damai_demo.py` 和 `fixtures/damai/`。
 

@@ -2,8 +2,8 @@
 doc_id: FLOW-WI-ORG-LEDGER-001
 title: 企业组织建制与经营账套初始化包
 doc_type: work-item
-status: active
-version: 1.2
+status: completed
+version: 1.3
 created_at: 2026-09-27
 updated_at: 2026-09-27
 owner: FLOW
@@ -183,5 +183,6 @@ data/enterprise/damai-logistics/v1/
   外键顺序清理；语义上下文 API 测试先显式导入指标目录，保证空白隔离数据库可复验。
   `make damai-demo-build` 改用锁定的 uv 环境，修复系统 Python 缺 PyYAML 的可移植性失败。
 
-**当前状态：**代码/隔离验收与文档门禁已通过；需完成提交推送和同 SHA CI。CI 绿后才能将
-本工作包标记 completed 并启动路线图第2项 UX 全站验收。
+**最终状态：**提交 `2c7d6eb4e9dead835a005687cdff8ac5ab19631f` 已推送到 `origin/main`；
+GitHub Actions FLOW CI run [`36270782272`](https://github.com/davyzhong/FLOW/actions/runs/36270782272)
+全部17/17 jobs success。工作包验收正式关闭，唯一串行队列已解锁第2项 UX 全站验收。
