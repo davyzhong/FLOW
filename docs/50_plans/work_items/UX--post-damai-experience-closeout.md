@@ -179,3 +179,9 @@ GitHub Actions run `36222136591`（SHA `430020f`）与 `36222489952`（SHA `59b3
 全站深链独立计划见[实施计划](../2026-09-26-ui-deep-link-implementation-plan.md)。批次一、二的代码与本地验收已完成：API/安全用例51/51、Web单测133/133、深链E2E15/15，typecheck、合同生成与文档门禁通过。当前 CI run `36224649915` 的 dashboard 与静态/合同/单测/E2E等已完成作业均成功，但 integration、data-contract、intake-e2e 当时仍运行；此 run 基于 `29877d1`，不能替代当前深链提交 SHA 的 CI 结果。批次三（原文/源记录查看、冻结产物回链、ManagementWatchItem 关联）未开始。Gate 1全路由响应矩阵与本工作包其他页面可见性仍未关闭；因此本工作包继续 active。
 
 批次二提交 `7976691` 推送后，在该代码版本上另跑隔离的大麦全旅程：新 Compose 卷完成迁移与 seed，verify 19/19、浏览器 E2E 9/9。之后为 `/data` 与 `/metric-library` 补充真实数据展示断言：seed 批次必须出现在最近批次表，点击批次名后 `?batch=` 生效且该行标记为当前上下文；指标覆盖矩阵必须显示 FY2025 37/40、FY2026 40/40。两轮新增断言后的隔离全旅程均9/9。证明大麦主演示页面有真实批次与覆盖值展示，并未被深链改动破坏；不代表 Gate 1逐路由覆盖矩阵完成。`7976691` 的 CI run `36225466153` 当时仍在运行，需以最终状态为准。
+
+### 常驻开发库大麦数据恢复（2026-09-26，只读诊断后增加的受控恢复步骤）
+
+当前本机 API `127.0.0.1:8000` 的只读探测（代码工作区 `main@0dcd911`）与隔离验收数据状态不一致：health 200；dashboard 返回404 `dashboard_not_ready`；statement reports 2；公开经营期间7；大麦覆盖 FY2025 37/40、FY2026 40/40；operations snapshots 2；publishing snapshots 0、freeze candidates 0、findings 0、intake batches 0。判断：静态财报/覆盖数据仍在，日常栈缺少内部经营批次及其分析工作流对象，不能只靠前端下钻修复。
+
+为恢复先前已批准的 G2 大麦演示状态，执行范围限定为：先对本机 `flow` 做完整 pg_dump；随后运行已审查的 `scripts/seed_damai_demo.py` 幂等 seed（不清表、不删数据、不跑迁移）；立刻以 `verify_damai_demo.py` 19项校验和只读 API 页级检查确认结果，并再次 seed 后对关键表/端点计数确认无增长。备份与验收收据放 `work/backups/`、`work/damai-demo/`（不入 Git）。若目标连接并非当前本机 Compose 的 `flow`、备份失败或任何前置数据与脚本幂等假设不符，立即停止写操作。此为既有演示数据 G2 的恢复，不关闭本工作包任何 Gate；常驻库之外仍只使用隔离栈运行写型 E2E。
