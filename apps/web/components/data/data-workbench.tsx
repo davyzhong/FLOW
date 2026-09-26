@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { FlowApiError, intakeApi } from "../../lib/api/client";
 import type {
   IntakeImport,
+  IntakeBatchHistoryItem,
   IntakeMapping,
   IntakeSource,
   MappingOverrideInput,
@@ -60,8 +61,29 @@ export function DataWorkbench({
   const [overrides, setOverrides] = useState<Record<string, string>>({});
   // 会话内最近批次（上传成功后登记；发布态的 WorkbenchState 不再携带 batchId）
   const [sessionBatchId, setSessionBatchId] = useState<string | null>(null);
-  // 深链 miss：URL 指定的批次不在当前会话中 → 显式提示，不静默忽略
-  const batchMiss = initialBatchId !== null && sessionBatchId !== initialBatchId;
+  const [batchHistory, setBatchHistory] = useState<IntakeBatchHistoryItem[]>([]);
+  const [historyLoaded, setHistoryLoaded] = useState(false);
+  const [historyError, setHistoryError] = useState<string | null>(null);
+  const batchMiss = initialBatchId !== null && historyLoaded
+    && !batchHistory.some((item) => item.id === initialBatchId)
+    && sessionBatchId !== initialBatchId;
+
+  const refreshBatchHistory = useCallback(async () => {
+    try {
+      const result = await intakeApi.listBatches();
+      setBatchHistory(result.items);
+      setHistoryError(null);
+    } catch {
+      setHistoryError("批次历史暂时无法加载；你仍可继续上传新数据。");
+    } finally {
+      setHistoryLoaded(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => void refreshBatchHistory(), 0);
+    return () => window.clearTimeout(timer);
+  }, [refreshBatchHistory]);
 
   const [reasons, setReasons] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
@@ -80,6 +102,7 @@ export function DataWorkbench({
       setState({ phase: "uploading", filename: file.name });
       try {
         const batch = await intakeApi.createBatch(file.name.replace(/\.[^.]+$/, ""));
+        void refreshBatchHistory();
         const source = await intakeApi.uploadSource(batch.id, file);
         const mapping = await intakeApi.proposeMapping(source.id);
         setSessionBatchId(batch.id);
@@ -93,7 +116,7 @@ export function DataWorkbench({
         setState({ phase: "prepare" });
       }
     },
-    [],
+    [refreshBatchHistory],
   );
 
   const overrideEntries = useMemo<MappingOverrideInput[]>(() => {
@@ -201,9 +224,46 @@ export function DataWorkbench({
 
       {batchMiss ? (
         <p role="status" className="data-workbench__batch-note">
-          URL 指定的批次 {initialBatchId} 不在当前会话中：数据工作台尚无批次历史列表，
-          无法恢复该批次的上下文。请重新上传工作簿，或从驾驶舱/调查页重新进入。
+          当前账号下没有可查看的批次 {initialBatchId}。它可能属于其他创建者、其他企业，
+          或是尚未迁入新权限模型的历史批次。
         </p>
+      ) : null}
+
+      {stage === "prepare" ? (
+        <section className="data-workbench__history" aria-label="最近的数据批次">
+          <div className="data-workbench__history-heading">
+            <div>
+              <h2>最近的数据批次</h2>
+              <p>仅显示当前企业中由当前账号创建的内部批次，最多 50 条。</p>
+            </div>
+            <button type="button" className="flow-btn" onClick={() => void refreshBatchHistory()}>
+              刷新
+            </button>
+          </div>
+          {historyError ? <p role="status">{historyError}</p> : null}
+          {historyLoaded && !historyError && batchHistory.length === 0 ? (
+            <p role="status">暂无可见批次。上传并发布工作簿后，批次会显示在这里。</p>
+          ) : null}
+          {batchHistory.length > 0 ? (
+            <div className="flow-table-wrap">
+              <table className="flow-table">
+                <caption>按创建时间倒序排列的内部数据批次</caption>
+                <thead><tr><th scope="col">批次</th><th scope="col">状态</th><th scope="col">版本</th><th scope="col">最新版本</th><th scope="col">创建时间</th></tr></thead>
+                <tbody>
+                  {batchHistory.map((item) => (
+                    <tr key={item.id} data-current={initialBatchId === item.id ? "true" : undefined}>
+                      <th scope="row"><Link href={`/data?batch=${encodeURIComponent(item.id)}`}>{item.name}</Link></th>
+                      <td>{item.status}</td>
+                      <td>{item.version_count}</td>
+                      <td>{item.latest_version_sequence === null ? "—" : `v${item.latest_version_sequence} · ${item.latest_version_status}`}</td>
+                      <td>{new Date(item.created_at).toLocaleString("zh-CN", { timeZone: "Asia/Shanghai" })}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : null}
+        </section>
       ) : null}
 
       {stage === "prepare" ? (

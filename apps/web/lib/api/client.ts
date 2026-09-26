@@ -246,6 +246,14 @@ export const flowApi = {
 };
 
 export type IntakeBatch = { id: string; name: string; status: string };
+export type IntakeBatchHistoryItem = IntakeBatch & {
+  description: string | null;
+  created_by: string;
+  created_at: string;
+  version_count: number;
+  latest_version_sequence: number | null;
+  latest_version_status: string | null;
+};
 export type IntakeSource = { id: string; sha256: string; size_bytes: number };
 export type IntakeMapping = {
   id: string;
@@ -514,6 +522,9 @@ async function uploadFile<T>(path: string, file: File): Promise<T> {
 }
 
 export const intakeApi = {
+  listBatches(): Promise<{ items: IntakeBatchHistoryItem[]; limit: number }> {
+    return request<{ items: IntakeBatchHistoryItem[]; limit: number }>("/api/v1/intake/batches");
+  },
   createBatch(name: string): Promise<IntakeBatch> {
     return submit<IntakeBatch>("/api/v1/intake/batches", "POST", { name });
   },

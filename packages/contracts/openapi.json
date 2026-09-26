@@ -193,6 +193,54 @@
             }
           }
         }
+      },
+      "get": {
+        "tags": [
+          "intake"
+        ],
+        "summary": "List Batches",
+        "description": "列出当前企业、当前 Principal 创建的最近 50 个内部批次。",
+        "operationId": "list_batches_api_v1_intake_batches_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatchHistoryResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/v1/intake/batches/{batch_id}/sources": {
@@ -5001,6 +5049,117 @@
           "name"
         ],
         "title": "BatchCreateRequest"
+      },
+      "BatchHistoryItem": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "draft",
+              "validating",
+              "blocked",
+              "ready",
+              "published"
+            ],
+            "title": "Status"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "created_by": {
+            "type": "string",
+            "title": "Created By"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "version_count": {
+            "type": "integer",
+            "title": "Version Count"
+          },
+          "latest_version_sequence": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latest Version Sequence"
+          },
+          "latest_version_status": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "draft",
+                  "validating",
+                  "blocked",
+                  "ready",
+                  "published"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Latest Version Status"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "status",
+          "description",
+          "created_by",
+          "created_at",
+          "version_count",
+          "latest_version_sequence",
+          "latest_version_status"
+        ],
+        "title": "BatchHistoryItem"
+      },
+      "BatchHistoryResponse": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/BatchHistoryItem"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "limit": {
+            "type": "integer",
+            "title": "Limit"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "limit"
+        ],
+        "title": "BatchHistoryResponse"
       },
       "BatchResponse": {
         "properties": {

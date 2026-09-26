@@ -14,6 +14,8 @@ from sqlalchemy.orm import Session
 
 from flow_api.api.schemas.intake import (
     BatchCreateRequest,
+    BatchHistoryItem,
+    BatchHistoryResponse,
     BatchResponse,
     ColumnProfileResponse,
     ErrorDetail,
@@ -45,9 +47,11 @@ from flow_api.data_contract.template import (
     stable_zip_bytes,
 )
 from flow_api.data_contract.workbook import render_workbook
+from flow_api.enterprise.models import AnalysisCycle
 from flow_api.infrastructure.db import get_session_factory
 from flow_api.infrastructure.logging import log_event
 from flow_api.infrastructure.models.intake import (
+    AnalysisBatch,
     ImportVersion,
     MappingVersion,
     QualityIssue,
@@ -316,19 +320,95 @@ def _version_response(session: Session, version: ImportVersion) -> ImportVersion
     "/batches",
     response_model=BatchResponse,
     status_code=status.HTTP_201_CREATED,
-    dependencies=[
+)
+def create_batch(
+    request: BatchCreateRequest,
+    session: SessionDependency,
+    auth_context: Annotated[
+        AuthorizationContext,
         Depends(
             require_action(
                 Action.INTAKE_BATCH_CREATE,
                 LOADERS["load_default_cycle_create"],
                 session_provider=get_db_session,
             )
-        )
+        ),
     ],
-)
-def create_batch(request: BatchCreateRequest, session: SessionDependency) -> BatchResponse:
-    batch = IntakeService(session).create_batch(request.name, request.description)
+) -> BatchResponse:
+    batch = IntakeService(session).create_batch(
+        request.name, request.description, created_by=auth_context.principal.actor_id
+    )
     return BatchResponse.model_validate(batch, from_attributes=True)
+
+
+@router.get(
+    "/batches",
+    response_model=BatchHistoryResponse,
+)
+def list_batches(
+    session: SessionDependency,
+    auth_context: Annotated[
+        AuthorizationContext,
+        Depends(
+            require_action(
+                Action.INTAKE_VERSION_READ,
+                LOADERS["load_single_enterprise"],
+                session_provider=get_db_session,
+            )
+        ),
+    ],
+) -> BatchHistoryResponse:
+    """列出当前企业、当前 Principal 创建的最近 50 个内部批次。"""
+    version_count = (
+        select(func.count(ImportVersion.id))
+        .where(ImportVersion.batch_id == AnalysisBatch.id)
+        .correlate(AnalysisBatch)
+        .scalar_subquery()
+    )
+    latest_sequence = (
+        select(ImportVersion.sequence)
+        .where(ImportVersion.batch_id == AnalysisBatch.id)
+        .order_by(ImportVersion.sequence.desc())
+        .limit(1)
+        .correlate(AnalysisBatch)
+        .scalar_subquery()
+    )
+    latest_status = (
+        select(ImportVersion.status)
+        .where(ImportVersion.batch_id == AnalysisBatch.id)
+        .order_by(ImportVersion.sequence.desc())
+        .limit(1)
+        .correlate(AnalysisBatch)
+        .scalar_subquery()
+    )
+    rows = session.execute(
+        select(AnalysisBatch, version_count, latest_sequence, latest_status)
+        .join(AnalysisCycle, AnalysisCycle.id == AnalysisBatch.analysis_cycle_id)
+        .where(
+            AnalysisBatch.module_kind == "internal",
+            AnalysisBatch.created_by == auth_context.principal.actor_id,
+            AnalysisCycle.enterprise_id == auth_context.principal.enterprise_id,
+        )
+        .order_by(AnalysisBatch.created_at.desc(), AnalysisBatch.id.desc())
+        .limit(50)
+    ).all()
+    return BatchHistoryResponse(
+        items=[
+            BatchHistoryItem(
+                id=batch.id,
+                name=batch.name,
+                status=batch.status,
+                description=batch.description,
+                created_by=batch.created_by,
+                created_at=batch.created_at,
+                version_count=count,
+                latest_version_sequence=sequence,
+                latest_version_status=latest,
+            )
+            for batch, count, sequence, latest in rows
+        ],
+        limit=50,
+    )
 
 
 @router.post(

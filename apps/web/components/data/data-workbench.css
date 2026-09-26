@@ -17,6 +17,18 @@
 
 .data-workbench__error { margin: 0; }
 
+.data-workbench__history {
+  display: grid;
+  gap: var(--flow-space-3);
+  padding: var(--flow-space-4);
+  border: 1px solid var(--flow-border, #d8dee8);
+  border-radius: var(--flow-radius-m);
+  background: var(--flow-surface, #fff);
+}
+.data-workbench__history h2 { margin: 0; font-size: 16px; color: var(--rep-ink); }
+.data-workbench__history p { margin: 4px 0 0; color: var(--rep-muted); font-size: var(--flow-font-s); }
+.data-workbench__history-heading { display: flex; justify-content: space-between; align-items: center; gap: var(--flow-space-3); }
+
 .data-workbench__stages {
   display: flex;
   flex-wrap: wrap;

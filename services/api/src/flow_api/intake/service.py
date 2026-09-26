@@ -119,6 +119,7 @@ class IntakeService:
         description: str | None = None,
         *,
         analysis_cycle_id: Any | None = None,
+        created_by: str = "flow-dev-bp",
     ) -> AnalysisBatch:
         if not name.strip():
             raise ValueError("batch name must not be empty")
@@ -137,6 +138,7 @@ class IntakeService:
             module_kind="internal",
             fact_context_version=2,
             analysis_cycle_id=cycle_id,
+            created_by=created_by,
         )
         self.session.add(batch)
         self.session.flush()

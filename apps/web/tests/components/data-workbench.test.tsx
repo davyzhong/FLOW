@@ -77,6 +77,9 @@ function mockFetchForHappyPath(options: { warnings?: boolean; blocked?: boolean;
   return vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
     const url = String(input);
     const method = init?.method ?? "GET";
+    if (url.endsWith("/api/v1/intake/batches") && method === "GET") {
+      return jsonResponse({ items: [], limit: 50 });
+    }
     if (url.endsWith("/api/v1/intake/batches") && method === "POST") {
       return jsonResponse(BATCH, 201);
     }
@@ -182,6 +185,30 @@ describe("DataWorkbench", () => {
     expect(alert.textContent).toContain("服务处理出错");
   });
 });
+
+it("shows the authenticated batch history with version and latest status", async () => {
+  vi.stubGlobal("fetch", vi.fn(async (input: RequestInfo | URL) => {
+    if (String(input).endsWith("/api/v1/intake/batches")) {
+      return jsonResponse({
+        limit: 50,
+        items: [{
+          ...BATCH,
+          description: null,
+          created_by: "finance.bp@example.com",
+          created_at: "2026-09-25T08:00:00Z",
+          version_count: 2,
+          latest_version_sequence: 2,
+          latest_version_status: "published",
+        }],
+      });
+    }
+    return jsonResponse({ detail: { message: "unknown" } }, 404);
+  }) as unknown as typeof fetch);
+  render(<DataWorkbench />);
+  expect(await screen.findByRole("heading", { name: "最近的数据批次" })).toBeInTheDocument();
+  expect(await screen.findByRole("link", { name: "8月报告" })).toHaveAttribute("href", "/data?batch=batch-1");
+  expect(screen.getByText("v2 · published")).toBeInTheDocument();
+});
 async function uploadAndValidate() {
   fireEvent.change(screen.getByLabelText("选择文件"), { target: { files: [makeXlsxFile()] } });
   fireEvent.click(await screen.findByRole("button", { name: "确认映射并校验" }));
@@ -273,10 +300,10 @@ it("keeps publication blocked if acknowledged warning state cannot be refreshed"
 
 // 批次一 §2.1/§2.2：/data?batch= 仅在会话内有该批次时恢复，否则显式提示；发布完成态引导链接。
 describe("DataWorkbench 深链", () => {
-  it("?batch= 不在当前会话时显式提示（无批次列表端点，不静默忽略）", () => {
+  it("?batch= 不在当前账号历史中时显式提示，不静默忽略", async () => {
     vi.stubGlobal("fetch", mockFetchForHappyPath());
     render(<DataWorkbench initialBatchId="batch-not-in-session" />);
-    expect(screen.getByText(/不在当前会话/)).toBeInTheDocument();
+    expect(await screen.findByText(/当前账号下没有可查看的批次/)).toBeInTheDocument();
     expect(screen.getByText(/batch-not-in-session/)).toBeInTheDocument();
   });
 

@@ -96,7 +96,7 @@ def api_context() -> tuple[Any, Session]:
 async def test_typed_intake_api_runs_upload_to_published_version(
     api_context: tuple[Any, Session],
 ) -> None:
-    app, _ = api_context
+    app, session = api_context
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as client:
         batch_response = await client.post(
@@ -106,6 +106,29 @@ async def test_typed_intake_api_runs_upload_to_published_version(
         assert batch_response.status_code == 201
         batch = batch_response.json()
         assert batch["status"] == "draft"
+
+        owned = session.get(AnalysisBatch, batch["id"])
+        assert owned is not None
+        session.add(
+            AnalysisBatch(
+                name="Another analyst's private batch",
+                status="draft",
+                created_by="another-analyst",
+                module_kind="internal",
+                fact_context_version=2,
+                analysis_cycle_id=owned.analysis_cycle_id,
+            )
+        )
+        session.flush()
+
+        batch_list_response = await client.get("/api/v1/intake/batches")
+        assert batch_list_response.status_code == 200
+        batch_list = batch_list_response.json()["items"]
+        assert len(batch_list) == 1
+        assert any(item["id"] == batch["id"] for item in batch_list)
+        listed_batch = next(item for item in batch_list if item["id"] == batch["id"])
+        assert listed_batch["created_by"] == "flow-dev-bp"
+        assert listed_batch["version_count"] == 0
 
         upload_response = await client.post(
             f"/api/v1/intake/batches/{batch['id']}/sources",

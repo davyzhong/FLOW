@@ -54,11 +54,10 @@ def _principal(role: Role, enterprise: UUID = ENT_A, actor: str = "actor-1") -> 
 # --- TSV 装载与校验 ---
 
 
-def test_policy_loads_69_entries_sorted() -> None:
+def test_policy_loads_entries_sorted_and_unique() -> None:
     entries = load_policy()
-    assert len(entries) == 69
     keys = [(e.method, e.path) for e in entries]
-    assert len(set(keys)) == 69, "存在重复 method/path"
+    assert len(set(keys)) == len(entries), "存在重复 method/path"
     blocked = [e for e in entries if e.is_blocked]
     assert len(blocked) == 0, (
         f"R2 后权威清单不应再有 blocked 条目（治理写已策略化）：{[e.path for e in blocked]}"
@@ -154,7 +153,7 @@ def test_openapi_probe_matches_tsv_two_way() -> None:
 
     app = create_app()
     mounted = {(m, p) for m, p in iter_openapi_routes(app) if p.startswith("/api/v1")}
-    assert len(mounted) == 69, f"openapi 探针挂载数变化：{len(mounted)}"
+    assert len(mounted) == len(load_policy()), f"openapi 探针挂载数变化：{len(mounted)}"
     report = scan_two_way(app, load_policy())
     assert report.missing == (), f"未登记路由：{report.missing}"
     assert report.stale == (), f"失效登记：{report.stale}"

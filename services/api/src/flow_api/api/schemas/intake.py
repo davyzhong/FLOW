@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import datetime
 from typing import Any, Literal
 from uuid import UUID
 
@@ -25,6 +26,23 @@ class BatchResponse(BaseModel):
     name: str
     status: IntakeStatus
     description: str | None
+
+
+class BatchHistoryItem(BaseModel):
+    id: UUID
+    name: str
+    status: IntakeStatus
+    description: str | None
+    created_by: str
+    created_at: datetime
+    version_count: int
+    latest_version_sequence: int | None
+    latest_version_status: IntakeStatus | None
+
+
+class BatchHistoryResponse(BaseModel):
+    items: list[BatchHistoryItem]
+    limit: int
 
 
 class SourceResponse(BaseModel):

@@ -4,6 +4,7 @@ GET	/api/v1/workspace	static_workspace_metadata_read	workspace.metadata.read	loa
 GET	/api/v1/modules	static_module_catalog_read	workspace.metadata.read	load_public_module_catalog	module-boundaries	read_only_static_module_catalog_fixture_no_business_data
 GET	/api/v1/intake/templates/{template_id}	static_template_file_read	intake.template.read	load_public_intake_template	route-policy	read_only_governed_empty_template
 POST	/api/v1/intake/batches	database_write:internal_batch_with_bootstrap_cycle	intake.batch.create	load_default_cycle_create	route-policy	-
+GET	/api/v1/intake/batches	database_read:owned_internal_batch_history	intake.version.read	load_single_enterprise	route-policy	-
 POST	/api/v1/intake/batches/{batch_id}/sources	object_store_write_and_database_write:source_registration	intake.source.upload	load_batch_scope_owner_or_deny_legacy	route-policy	-
 GET	/api/v1/intake/sources/{source_file_id}/profile	object_store_read_and_in_process_workbook_profile	intake.source.profile.read	load_source_batch_scope_owner_or_deny_legacy	route-policy	-
 POST	/api/v1/intake/sources/{source_file_id}/mapping-proposals	object_store_read_and_database_write:mapping_proposal	intake.mapping.propose	load_source_batch_scope_owner_or_deny_legacy	route-policy	-

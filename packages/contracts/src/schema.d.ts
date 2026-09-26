@@ -65,7 +65,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /**
+         * List Batches
+         * @description 列出当前企业、当前 Principal 创建的最近 50 个内部批次。
+         */
+        get: operations["list_batches_api_v1_intake_batches_get"];
         put?: never;
         /** Create Batch */
         post: operations["create_batch_api_v1_intake_batches_post"];
@@ -1312,6 +1316,43 @@ export interface components {
             name: string;
             /** Description */
             description?: string | null;
+        };
+        /** BatchHistoryItem */
+        BatchHistoryItem: {
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Name */
+            name: string;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "draft" | "validating" | "blocked" | "ready" | "published";
+            /** Description */
+            description: string | null;
+            /** Created By */
+            created_by: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Version Count */
+            version_count: number;
+            /** Latest Version Sequence */
+            latest_version_sequence: number | null;
+            /** Latest Version Status */
+            latest_version_status: ("draft" | "validating" | "blocked" | "ready" | "published") | null;
+        };
+        /** BatchHistoryResponse */
+        BatchHistoryResponse: {
+            /** Items */
+            items: components["schemas"]["BatchHistoryItem"][];
+            /** Limit */
+            limit: number;
         };
         /** BatchResponse */
         BatchResponse: {
@@ -3751,6 +3792,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_batches_api_v1_intake_batches_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BatchHistoryResponse"];
                 };
             };
             /** @description Validation Error */
