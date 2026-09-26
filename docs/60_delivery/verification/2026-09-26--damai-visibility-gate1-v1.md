@@ -1,14 +1,14 @@
 ---
 doc_id: FLOW-VERIFY-DAMAI-VISIBILITY-GATE1-001
-title: 大麦数据可见性 Gate 1 API 诊断证据 v1.5
+title: 大麦数据可见性与 Gate 4 批次历史验收证据 v1.9
 doc_type: verification
 status: draft
-version: "1.8"
+version: "1.9"
 created_at: 2026-09-26
 updated_at: 2026-09-26
 owner: FLOW
-commit_refs: "[3ff95115, 6591e148, 4932504c, 9cd43e20, 905cf544, e2417ffa, af375ba3, 101bcf23, 5510bad3]"
-evidence_refs: "[read-only-local-api-probe, stable-overlay-fingerprint, sha256-response-matrix, damai-ocf-canonical-fixture, damai-isolated-seed-verify, damai-e2e-8-of-9, damai-e2e-9-of-9-ocf-trends-complete, margin-matrix-read-only-grain-audit, margin-comparison-selection-isolated-e2e-9-of-9, github-ci-stale-damai-coverage-assertion]"
+commit_refs: "[3ff95115, 6591e148, 4932504c, 9cd43e20, 905cf544, e2417ffa, af375ba3, 101bcf23, 5510bad3, 430020f]"
+evidence_refs: "[read-only-local-api-probe, stable-overlay-fingerprint, sha256-response-matrix, damai-ocf-canonical-fixture, damai-isolated-seed-verify, damai-e2e-8-of-9, damai-e2e-9-of-9-ocf-trends-complete, margin-matrix-read-only-grain-audit, margin-comparison-selection-isolated-e2e-9-of-9, github-ci-stale-damai-coverage-assertion, secure-batch-history-api-ui-and-isolated-e2e-9-of-9]"
 knowledge_release: flow-knowledge-2026-09-12.1
 applies_to: web-frontend
 supersedes: []
@@ -119,3 +119,12 @@ CI 补充（run `36217337338`，SHA `5510bad3`）：18 个作业中仅 integrati
 后续用独立 `distDir` 重跑后，seed/verify 仍19/19，浏览器8/9通过。唯一失败是 `apps/web/e2e/damai-demo.spec.ts` 的 customer-grain dashboard API 用例仍断言 OCF KPI `unavailable`，实际响应为 `available`；其余八项页面/API流程通过。该响应证明新源事实已被快照采纳。自定义 `distDir` 会令 Next 自动改写工作区 `tsconfig.json` 与 `next-env.d.ts`，临时目录删除后留下失效引用，因此不能直接在项目目录使用这一方式。修复验收应在 `work/damai-demo/` 下创建本轮专用 web 源副本（复用既有 node_modules 链接）并在那里运行 Next，清理仅作用于该副本；同时把 E2E 断言改为 OCF `available` 且 primary value 非空。毛利矩阵 grain/comparison 和完整页面覆盖仍未验收。
 
 最终隔离 E2E 采用临时 web 源副本后通过：`scripts/test_damai_demo_e2e.sh` seed/verify 19/19，浏览器 E2E 9/9。扩展后的 dashboard API 断言确认 OCF KPI `available` 且值非空；趋势状态 `complete`，覆盖12/12，所有12个月的 OCF 趋势值均 `available` 且非空。其余八项 UI/API 与上传发布旅程通过。临时副本及 `damai-demo-iso` Compose 卷已清理；常驻 `flow` 未写入，用户现有开发服务未终止，真实 `apps/web/tsconfig.json` 未被临时副本改动。该结果关闭 OCF source/snapshot 缺口，不关闭整项工作包：毛利矩阵22/32实际值与24/32比较值缺失仍待定位，Gate1其余页面的干净 SHA 全矩阵复验也未完成。
+## Gate 4 批次历史列表子项（提交 `430020f`，2026-09-26）
+
+- 新增只读 `GET /api/v1/intake/batches`：复用 Principal 的 `INTAKE_VERSION_READ` 授权与当前企业 scope，仅查询当前 actor 创建的 `internal` 批次；按创建时间倒序最多50条，返回版本数与最新版本序号/状态。
+- 新批次创建由认证 Principal 提供 `created_by`；无数据库迁移，不列出无可靠所有权的 legacy/public 批次。
+- `/data` 初始页显示最近批次、批次状态、版本数、最新版本状态与创建时间；已有深链在当前账号历史中识别，不可见批次显示权限/归属提示。该列表仅为历史索引，不承诺恢复编辑会话。
+- API 测试验证当前账号批次可见、另一 actor 的同企业批次不可见。隔离 Damai 全旅程在新 UI 下复跑：seed/verify 19/19、浏览器 E2E 9/9；`damai-demo-iso` 容器/卷清理完成，常驻 `flow` 未访问或写入。
+- 本地验证：API+路由策略18 passed；data-workbench Vitest 16 passed；eslint、typecheck、ruff、mypy、OpenAPI 合同检查和 M1 文档门禁通过。GitHub Actions run `36222136591`（SHA `430020f`）仍在运行，本子项保持“CI待验”，不能据本地结果宣称 CI 全绿。
+
+边界：这只补批次历史入口，未修复其他财务/经营页面的缺数或缺口展示；Gate 1 干净 SHA 全路由矩阵、Gate 3–5 其余页面与全链验收仍未关闭。

@@ -124,8 +124,8 @@ Gate 1 已证实 `/data` 初始状态没有历史批次 GET，已发布批次不
 - 新批次由已授权的 Principal 写入 `created_by`；现有旧默认值保留给低层 fixture/历史兼容，不作为新 API 创建者来源。
 - `GET /api/v1/intake/batches` 复用 `INTAKE_VERSION_READ` 与 `load_single_enterprise`；查询同时约束 `module_kind=internal`、Principal actor 和企业 ID，按创建时间倒序，最多50条，版本数与最新版本状态由只读子查询投影。
 - `/data` 初始页展示批次名称、批次状态、版本数、最新版本状态、创建时间；支持 `?batch=` 历史批次识别及越权/不可见提示。此视图是历史索引，不承诺恢复编辑会话或修改已发布版本。
-- 验收：`tests/api/test_intake.py` + `tests/security/test_route_policy.py` 18 passed；`apps/web` `data-workbench.test.tsx` 16 passed、typecheck 通过；API ruff/mypy 通过；`scripts/check_contracts.sh` 与 `python3 scripts/check_docs.py --phase m1` 通过。常驻 `flow` 未写入；测试使用隔离 `flow_test`。
-- 新增路由后授权清单与 OpenAPI/TS 契约已同步；GitHub Actions 对基线提交仍在运行，本子项在同 SHA CI 成功前保持“本地验收完成、CI待验”。
+- 验收：`tests/api/test_intake.py` + `tests/security/test_route_policy.py` 18 passed；`apps/web` `data-workbench.test.tsx` 16 passed、typecheck/eslint 通过；API ruff/mypy 通过；`scripts/check_contracts.sh` 与 `python3 scripts/check_docs.py --phase m1` 通过。`scripts/test_damai_demo_e2e.sh` 隔离复跑 seed/verify 19/19、浏览器 E2E 9/9。常驻 `flow` 未写入；API 测试使用隔离 `flow_test`。
+- 新增路由后授权清单与 OpenAPI/TS 契约已同步；提交 `430020f` 已推送，GitHub Actions run `36222136591` 仍在运行，本子项在同 SHA CI 成功前保持“本地与隔离 E2E 验收完成、CI待验”。
 
 Files:
 - Modify only after Gate 1 proves the gap: relevant files under `apps/web/components/dashboard/`, `apps/web/components/statements/`, `apps/web/components/metric-library/`, `apps/web/components/data/`, `apps/web/lib/api/`, `apps/web/e2e/`, and corresponding tests.
