@@ -1,3 +1,15 @@
+---
+doc_id: FLOW-DATA-DAMAI-PACKAGE-README-001
+title: 大麦物流企业数据包说明
+doc_type: navigation
+status: current
+version: 1.1
+created_at: 2026-09-27
+updated_at: 2026-09-27
+owner: FLOW
+applies_to: repository
+---
+
 # 大麦物流企业数据包 v1
 
 本目录是大麦物流的可移植合成数据包，分为组织建制和经营业务两部分。所有人员、组织身份均为虚构演示数据，不包含可登录凭据。它旨在成为后续转换其他企业数据时遵循的目录与数据格式样板。

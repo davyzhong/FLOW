@@ -3,7 +3,7 @@ doc_id: FLOW-WI-ORG-LEDGER-001
 title: 企业组织建制与经营账套初始化包
 doc_type: work-item
 status: active
-version: 1.0
+version: 1.1
 created_at: 2026-09-27
 updated_at: 2026-09-27
 owner: FLOW
@@ -102,8 +102,7 @@ data/enterprise/damai-logistics/v1/
 2. 实现纯文件 preflight/校验器：拒绝非 synthetic 标记、重复 code、缺少依赖、
    跨企业引用、错误版本、缺文件、SHA/行数不符与非法组织引用。
 3. 为组织数据补齐持久化模型和受约束服务；仅创建组织用户、岗位、部门、角色映射
-   所必需的 schema。**此步之前必须取得用户对具体迁移表与数据生命周期的明确批准**；
-   未批准时只完成不落库的数据包与校验器。
+   所必需的 schema。**已由用户于 2026-09-27 批准本工作包“最小组织 schema 提案”所列三表、约束与停用保留策略。**
 4. 为企业边界登记所有被重置的业务表及 lineage；按依赖顺序执行事务性删除/重建，
    保留系统配置、共享对象和追加审计；确认失败回滚无部分写入。
 5. 生成可审阅 SQL 和单一入口命令；支持 `full` 与 `business` 两个稳定动作，不提供
@@ -126,14 +125,13 @@ data/enterprise/damai-logistics/v1/
 
 ## 权限与顺序门禁
 
-本工作包已获准创建合成企业数据包、SQL 文件和初始化入口。已知的组织目录/岗位/人员
-数据库 schema 尚不存在；根据项目 AGENTS 规则，只有在写出具体迁移 DDL、表关系、
-约束和数据保留方式后，才单独请求批准数据库 schema 变更。取得批准前不执行迁移，
-也不在共享开发库执行任何清理/初始化。
+本工作包获准创建合成企业数据包、SQL 文件和初始化入口。用户已于 2026-09-27 明确批准
+下方三表 schema 提案及对应 Alembic 迁移。本批准仅覆盖该组织目录 schema；任何新增表、
+改动现有认证/RBAC/schema、或在共享/常驻数据库执行初始化与清理，均不在本次批准范围。
 
-### 最小组织 schema 提案（待用户批准）
+### 最小组织 schema 提案（用户已批准，2026-09-27）
 
-如获批准，新增一次 Alembic migration 与三个企业域表，不修改既有 `enterprise`、
+新增一次 Alembic migration 与三个企业域表，不修改既有 `enterprise`、
 `role_binding`、认证配置或 Action/RBAC 矩阵：
 
 | 表 | 核心列 | 企业隔离约束 |
