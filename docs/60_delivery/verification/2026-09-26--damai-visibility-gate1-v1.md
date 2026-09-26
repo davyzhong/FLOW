@@ -1,9 +1,9 @@
 ---
 doc_id: FLOW-VERIFY-DAMAI-VISIBILITY-GATE1-001
-title: 大麦数据可见性与 Gate 4 批次历史验收证据 v3.5
+title: 大麦数据可见性与 Gate 4 批次历史验收证据 v3.6
 doc_type: verification
 status: draft
-version: "3.5"
+version: "3.6"
 created_at: 2026-09-26
 updated_at: 2026-09-26
 owner: FLOW
@@ -47,6 +47,12 @@ CI 后续结果：主代码 `649a2aba` 的 run `36232029817` 全部 jobs success
 - 数据工作台批次历史请求挂起时显示 `role=status`；403 显示“无权读取当前企业的批次历史”，服务错误保留暂时不可用文案；两种情形仍保留上传控件。
 - 四问分析工作台请求挂起时显示可访问的 `role=status`；route-level E2E 已验证 `/analysis` 503/403 与 pending，`/data` 批次历史 pending/403。
 - 生产构建页面门禁74/74、Web Vitest138/138、typecheck通过、lint0 errors/1既有warning。未覆盖全路由空/部分降级、多视口数据状态穷举；不能据此关闭 Gate 1。
+
+## 无数据空态补记
+
+- `/analysis`：成功的空财报列表结束加载并显示前往数据接入的 EmptyGuide。
+- `/operations`：只有财报和公开期间均成功但都为空才呈现 EmptyGuide；任一列表请求失败仍展示错误态。空态含前往数据接入与公开经营分析的链接。
+- 生产构建E2E76/76，Web Vitest139/139，typecheck通过，lint0 errors/1既有warning。全路由的空/部分降级×视口穷举未完成，本记录不视为 Gate 1关闭证据。
 
 ## Gate 5 CI 数据库 URL 隔离修复补记（2026-09-26）
 

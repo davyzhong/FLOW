@@ -161,3 +161,24 @@ test("analysis workbench announces a pending report response", async ({ page }) 
   await expect(page.getByRole("heading", { name: "四问分析工作台" })).toBeVisible();
   await expect(page.getByRole("status")).toContainText("加载中");
 });
+
+test("analysis workbench explains an empty report list and finishes loading", async ({ page }) => {
+  await page.route("**/api/v1/statements", (route) => route.fulfill({ json: { reports: [] } }));
+  await page.goto("/analysis", { waitUntil: "domcontentloaded" });
+  await waitForStyles(page);
+  await expect(page.getByRole("heading", { name: "四问分析工作台" })).toBeVisible();
+  await expect(page.getByRole("status")).toContainText("尚无可分析的财报");
+  await expect(page.getByRole("link", { name: "前往数据接入" })).toHaveAttribute("href", "/data");
+});
+
+test("operations page explains when no usable periods are available", async ({ page }) => {
+  await page.route("**/api/v1/statements", (route) => route.fulfill({ json: { reports: [] } }));
+  await page.route("**/api/v1/operations/public-periods", (route) =>
+    route.fulfill({ json: { periods: [] } }),
+  );
+  await page.goto("/operations", { waitUntil: "domcontentloaded" });
+  await waitForStyles(page);
+  await expect(page.getByRole("status")).toContainText("暂无可用经营分析数据");
+  await expect(page.getByRole("link", { name: "前往数据接入" })).toHaveAttribute("href", "/data");
+  await expect(page.getByRole("link", { name: "查看公开经营分析" })).toHaveAttribute("href", "/public");
+});

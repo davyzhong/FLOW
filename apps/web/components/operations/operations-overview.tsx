@@ -10,6 +10,7 @@ import {
   type PublicOperatingPeriodList,
   type StatementReportList,
 } from "../../lib/api/client";
+import { EmptyGuide } from "../ui/empty-guide";
 import { metricEntryHref, reportsSnapshotHref } from "../../lib/deep-links";
 import "./operations-overview.css";
 
@@ -167,10 +168,12 @@ export function OperationsOverviewApp({
         const error =
           reportResult.status === "rejected" ? reportResult.reason : publicResult.status === "rejected" ? publicResult.reason : null;
         if (cancelled) return;
-        setState({
-          status: "error",
-          message: error instanceof FlowApiError ? error.message : "加载财报列表失败",
-        });
+        setState(error
+          ? {
+              status: "error",
+              message: error instanceof FlowApiError ? error.message : "加载分析数据失败",
+            }
+          : { status: "ready" });
       }
     });
     return () => {
@@ -345,6 +348,18 @@ export function OperationsOverviewApp({
         <p role="alert" className="ops-overview__error flow-error">
           {state.message}
         </p>
+      ) : null}
+
+      {state.status === "ready" && reports.length === 0 && publicPeriods.length === 0 ? (
+        <EmptyGuide
+          kind="no-data"
+          title="暂无可用经营分析数据"
+          reason="导入完整财报或等待公开经营披露数据接入后，才能生成当前期间的经营分析。"
+          actions={[
+            { href: "/data", label: "前往数据接入" },
+            { href: "/public", label: "查看公开经营分析" },
+          ]}
+        />
       ) : null}
 
       {freezeInfo ? (

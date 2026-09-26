@@ -11,6 +11,7 @@ import {
   type StatementReportList,
   type WorkbenchResponse,
 } from "../../lib/api/client";
+import { EmptyGuide } from "../ui/empty-guide";
 import { metricFocusHref, reportsSnapshotHref, statementReportHref } from "../../lib/deep-links";
 import "./four-question-workbench.css";
 
@@ -74,6 +75,8 @@ export function FourQuestionWorkbench({
         setReports(list.reports);
         if (list.reports.length > 0) {
           setSelectedReportId((current) => current || list.reports[0].id);
+        } else {
+          setState({ status: "ready" });
         }
       })
       .catch((error: unknown) => {
@@ -194,6 +197,14 @@ export function FourQuestionWorkbench({
         </p>
       ) : null}
       {pending ? <p role="status" aria-live="polite">加载中…</p> : null}
+      {state.status === "ready" && reports.length === 0 ? (
+        <EmptyGuide
+          kind="no-data"
+          title="尚无可分析的财报"
+          reason="先导入并发布一份财报，四问分析工作台才有可计算的期间与指标。"
+          actions={[{ href: "/data", label: "前往数据接入" }]}
+        />
+      ) : null}
 
       {workbench ? (
         <>

@@ -127,6 +127,21 @@ const OVERVIEW = {
 };
 
 describe("OperationsOverviewApp", () => {
+  it("explains when no financial reports or public periods are available", async () => {
+    vi.stubGlobal("fetch", vi.fn(async (input: RequestInfo | URL) => {
+      const url = String(input);
+      if (url.endsWith("/statements")) return jsonResponse({ reports: [] });
+      if (url.endsWith("/operations/public-periods")) return jsonResponse({ periods: [] });
+      return jsonResponse({ detail: "not found" }, 404);
+    }));
+    render(<OperationsOverviewApp />);
+
+    expect(await screen.findByText("暂无可用经营分析数据")).toBeTruthy();
+    expect(screen.getByText(/导入完整财报或等待公开经营披露数据接入/)).toBeTruthy();
+    expect(screen.getByRole("link", { name: "前往数据接入" })).toHaveAttribute("href", "/data");
+    expect(screen.getByRole("link", { name: "查看公开经营分析" })).toHaveAttribute("href", "/public");
+  });
+
   it("renders six-theme facts, management watch, honest N/A, and freezes", async () => {
     const freezeSpy = vi.fn(async (input: RequestInfo | URL) => {
       expect(String(input)).toContain("/operations/overview/report-1/freeze");

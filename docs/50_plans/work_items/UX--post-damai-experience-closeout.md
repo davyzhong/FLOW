@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 4.3
+version: 4.4
 created_at: 2026-09-24
 updated_at: 2026-09-26
 owner: FLOW
@@ -185,6 +185,12 @@ Run: `python3 scripts/check_docs.py --phase m1` and the repository link check
 - `/analysis` 工作台请求挂起时的“加载中…”加 `role=status`；已有 error/403 按 `role=alert` 显示。
 - 新增 E2E 覆盖数据工作台 loading/403、四问工作台 loading；analysis 加入 error/403矩阵。`bash scripts/test_module_boundaries_e2e.sh` 生产 E2E74/74、Web Vitest138/138、lint0 errors（1既有warning）、typecheck通过。
 - 未关闭：所有路由/全部五态的穷举、空/部分降级端到端矩阵，数据密集态跨390/1024/1440覆盖、实际企业角色鉴权、全深链逐项验收。新提交 CI 待完成。
+
+### 空数据态可理解性补齐（2026-09-26）
+
+- `/analysis`：财报列表请求成功但返回空数组时将状态从 idle 转为 ready，显示“尚无可分析的财报”及前往数据接入入口；不把有效空结果无限显示成加载中。
+- `/operations`：仅当财报与公开经营期间两个端点都成功返回空集合，显示“暂无可用经营分析数据”、原因和 `/data`、`/public` 两个入口；真实请求失败仍保持错误提示，不伪装为“无数据”。
+- TDD 测试先红后绿；生产 E2E76/76、Web Vitest139/139、typecheck通过，lint0 errors/1既有warning。其余页面空/部分降级的逐页状态和三档视口组合仍需覆盖。
 - 当前 clean SHA `649a2aba` 的 GitHub Actions run `36232029817` success；其后状态同步提交 `7229cd0d` / run `36232204424` 与证据更新提交 `4c55f10e` / run `36232336053` 也 success。旧 runs `36229942486`–`36230243382` 的 dashboard 视觉高度失败发生在 `31a60217` 修复前；`31a60217` run `36230615921` 的 dashboard、integration、intake-e2e、data-contract 及其余 jobs 最终全绿。CI 当前无已知未通过项；Gate 1 页面/视口/错误/403/深链矩阵仍未关闭。
 
 #### CI 环境变量回归（2026-09-26，待修复）
