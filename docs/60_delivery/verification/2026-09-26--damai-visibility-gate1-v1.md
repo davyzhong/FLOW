@@ -1,14 +1,14 @@
 ---
 doc_id: FLOW-VERIFY-DAMAI-VISIBILITY-GATE1-001
-title: 大麦数据可见性 Gate 1 API 诊断证据 v1.2
+title: 大麦数据可见性 Gate 1 API 诊断证据 v1.3
 doc_type: verification
 status: draft
-version: "1.2"
+version: "1.3"
 created_at: 2026-09-26
 updated_at: 2026-09-26
 owner: FLOW
-commit_refs: "[3ff95115, 6591e148]"
-evidence_refs: "[read-only-local-api-probe, stable-overlay-fingerprint, sha256-response-matrix, damai-ocf-canonical-fixture]"
+commit_refs: "[3ff95115, 6591e148, 4932504c]"
+evidence_refs: "[read-only-local-api-probe, stable-overlay-fingerprint, sha256-response-matrix, damai-ocf-canonical-fixture, damai-isolated-seed-verify]"
 knowledge_release: flow-knowledge-2026-09-12.1
 applies_to: web-frontend
 supersedes: []
@@ -103,3 +103,5 @@ superseded_by: null
 验证：`tests/fixtures/test_damai_canonical.py` 25/25；`tests/fixtures/test_damai_metric_grain.py` 3/3（覆盖 actual OCF 的 total/org 两粒度与 canonical 对账）；大麦 loader + 财报 normalization 16/16；ruff、mypy、发行包 `--check`、文档 M1 与链接检查通过。源记录 SHA-256：`fixtures/damai/canonical/financial_actuals.jsonl` = `3fda66a863aa7013a782a2a79500253a99082c367b3190b7956ffbfcf55816cd`。
 
 边界：常驻 `flow` 数据库没有被写入，现有 API/UI 仍不能据此视为已显示新 OCF。此修复须在隔离 Compose 装载后重新探测 dashboard OCF 趋势与 KPI；毛利矩阵粒度/比较缺口仍未修复。首次诊断 API 矩阵仍来自早期 dirty overlay，完整 Gate 1 干净 SHA 复测未完成。
+
+隔离旅程已将新工作簿导入独立 `damai-demo-iso` PostgreSQL；seed 创建12个快照，`verify_damai_demo.py --check-storage` 返回19/19通过，存储工作簿读回1,327,348字节且 SHA 与单元格语义一致。随后9项浏览器 E2E 全部在页面导航阶段连接失败：日志显示验收 Next 实例启动时报 `Another next dev server is already running`，原因是此前已有同目录开发服务占用共享 `apps/web/.next/dev/lock`，因此验收实例退出。脚本已清理本次隔离 Compose 容器和卷；既有 PID 78698 未触碰。该结果不代表页面断言失败，也未证明新 OCF 在 UI 上可见；下一步先给验收进程配置专用 `distDir` 再重跑。
