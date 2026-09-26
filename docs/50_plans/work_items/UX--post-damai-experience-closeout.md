@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 3.5
+version: 3.6
 created_at: 2026-09-24
 updated_at: 2026-09-26
 owner: FLOW
@@ -30,6 +30,7 @@ applies_to: web-frontend
 - 经营分析对真实大麦财报的复核发现：流动比率和资产负债率被误报 `not_applicable`，因为财报期末余额在归一化事实的 `end` 角色，而兜底只读 `cur`。现以同期间 `cur → end` 读取点余额；不得跨期回退。前端按指标合同格式化百分比、倍数和天数，保留原始精确值为悬停说明；未明确单位的经营事实保持原披露精度。
 - 公式链复核再发现 DSO 已有 `ar_turnover` 可用，但依赖的指标 code 未被注入下游公式求值，因此误标 `fact_missing`。字典执行器现按声明顺序把已计算指标结果提供给依赖项；大麦 FY2026 DSO 按字典 360 天口径计算为 116.3881 天。
 - 经营主题空态原先把所有 `not_applicable` 都标成“待内部数据”，会把“公开报告未披露分部数据”误导成“等内部授权”。现按原因码区分公开披露缺项、内部数据授权、期间分部披露缺失与缺少完整财报；未知原因仍保留原因码并显示通用不可用说明。
+- Gate 1 扩展 GET-only 路由矩阵已在本机常驻 API 读取：40次请求、36个不同路由/参数组合，全部 HTTP 200。覆盖两份财报详情/投影/更正/四问/经营概览，7个公开经营期间，指标字典和两套覆盖矩阵，批次清单，2条Finding详情，客观快照、冻结候选及发布/经营快照和尝试列表。报告中心正式产物尝试为空列表（HTTP 200）；当前页面“尚未生成正式产物”与持久化状态一致，不应以常驻库模拟发布历史。
 
 ## 实施路线（本文件是规格；实施须按用户已批准的工作状态执行）
 
@@ -53,7 +54,7 @@ API 由本 worktree 的 `uvicorn --reload` 提供服务。最新整轮只读探�
 | `/` 经营总览 | `/api/v1/dashboard/overview?period_view=month\|ytd`（全公司、无维度筛选；截至2026-08） | 8 KPI卡；12个月趋势点、每点4指标；8产品、4客群、32格毛利矩阵。经营现金流趋势12/12不可用，码 `trend_metric_not_published`；经营现金流KPI主值1/8不可用、码 `metric_grain_not_published`；预算4/8及YTD预算4/8不可用、码 `comparison_not_published`；矩阵实际22/32为 `metric_grain_not_published`、比较24/32为 `comparison_not_published`；整体 `degraded`。顶层质量、对账、快照/分析发布与新鲜度状态均显示通过/已发布/新鲜。 | 主要是快照/指标粒度和比较值未发布，不是可以用补零处理的数值缺失；需追到快照构建、发布和聚合层。 |
 | `/statements` 财报分析 | `/api/v1/statements` → `/api/v1/statements/{report_id}` | FY2025、FY2026各1份；每份40行：资产负债表15、利润表13、现金流量表8、权益变动表4。 | 年报期间已存在；月度财务报表是否属于范围须按产品合同裁决，不擅自扩成另一个口径。 |
 | `/analysis` 四问工作台 | `/api/v1/statements` → `/api/v1/analysis/workbench/{report_id}` | FY2025 初始返回500；确定性提示 `leverage_rising` 带 `metric_code`，原响应模型却 `extra=forbid` 且未声明该字段。补齐响应契约后，本地热重载 API 返回200并带指标代码。FY2026原为200。 | 根因已确认并修复（`ManagementWatchItem.metric_code` 缺失）；回归测试已覆盖。待变更提交后在干净 SHA 复测；其余页面缺口仍需逐项归因。 |
-| `/operations` 经营分析 | `/api/v1/operations/public-periods`、`/api/v1/operations/public/{stock_code}/{period}`、`/api/v1/operations/overview/{report_id}` | 7个期间（菜鸟5、大麦2）；概览端点返回6个主题。 | 逐主题核验内容、缺值与下钻。 |
+| `/operations` 经营分析 | `/api/v1/operations/public-periods`、`/api/v1/operations/public/{stock_code}/{period}`、`/api/v1/operations/overview/{report_id}` | 公开期间清单7项（菜鸟5、大麦2）+两份大麦完整财报，共9个可选分析上下文；全部上下文均读取200，六主题结构可见。大麦FY2026七项运营效率指标现全部可算。 | 主题原因码现分别说明披露缺项/内部授权/期间缺失；周转格式已修复。完整视口/403/加载/错误态与全站所有下钻仍待验。 |
 | `/metric-library` 指标库 | `/api/v1/metric-library`、`/api/v1/metric-library/coverage?dataset=damai` | 65个定义、40项覆盖矩阵；FY2025可计算22项、FY2026可计算25项。未满足项的接口缺失字段为：利息费用 `is.interest_exp(cur)`（7项指标）、短债 `bs.short_debt(end)`（3项）、长债 `bs.long_debt(end)`（1项）、应付账款 `bs.ap(end)`（2项）、同比基期 `is.revenue/net_profit/operating_profit(prev_yoy)`（3项）、销售收现 `cf.cash_from_sales(cur)`（1项）、资本开支 `cf.capex(cur)`（1项）。 | 接口的 `missing` 只证明归一化事实缺失，不足以判断原件未披露、导入映射漏项或该指标对大麦不适用；Gate 2须逐项回看原始合成报表及公式合同后分类，不能将财务费用直接冒充利息费用。 |
 | `/reports` 发布中心 | `/api/v1/publishing/snapshots`、`/api/v1/publishing/freeze-candidates`、`/api/v1/operations/snapshots` | 1个发布快照、12个冻结候选、2个经营快照。 | 核对候选/发布状态、期间与数据集。 |
 | `/data` 数据工作台 | 当前界面为会话内上传/映射/校验；没有页面初始态批次 GET | 已 seed 的批次在此页不可通过历史列表浏览；仅有已知 batch ID 后查询版本的 API 路径，没有通用批次列表入口。 | “数据在库但无浏览入口”，纳入 Gate 4，不应误判为源数据不存在。 |

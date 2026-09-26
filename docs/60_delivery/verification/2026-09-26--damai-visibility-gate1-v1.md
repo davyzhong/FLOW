@@ -1,14 +1,14 @@
 ---
 doc_id: FLOW-VERIFY-DAMAI-VISIBILITY-GATE1-001
-title: 大麦数据可见性与 Gate 4 批次历史验收证据 v2.7
+title: 大麦数据可见性与 Gate 4 批次历史验收证据 v2.8
 doc_type: verification
 status: draft
-version: "2.7"
+version: "2.8"
 created_at: 2026-09-26
 updated_at: 2026-09-26
 owner: FLOW
-commit_refs: "[3ff95115, 6591e148, 4932504c, 9cd43e20, 905cf544, e2417ffa, af375ba3, 101bcf23, 5510bad3, 430020f, 59b328dc, 85e907a, 7258763, 71a2dd8, 695ea18, 8ea20d6, f135c93, 82cce21, ffcc873e]"
-evidence_refs: "[read-only-local-api-probe, stable-overlay-fingerprint, sha256-response-matrix, damai-ocf-canonical-fixture, damai-isolated-seed-verify, damai-e2e-8-of-9, damai-e2e-9-of-9-ocf-trends-complete, margin-matrix-read-only-grain-audit, margin-comparison-selection-isolated-e2e-9-of-9, github-ci-stale-damai-coverage-assertion, secure-batch-history-api-ui-and-isolated-e2e-9-of-9, clean-sha-59b328dc-damai-e2e-9-of-9, github-dashboard-flow-test-database-url-conflict, dashboard-ci-url-isolation-unit-2-of-2, dashboard-playwright-7-of-7, github-run-36223558441-dashboard-success, persistent-demo-rehydrate-verify-19-of-19-twice, verifier-latest-published-report-regression-tests, allowed-dev-origin-live-readonly-ui-6-of-6, isolated-damai-e2e-9-of-9, persistent-page-api-response-hashes, unavailable-comparison-visible-status-red-green, web-vitest-134-of-134, live-dashboard-playwright-after-change-no-console-errors, operations-balance-sheet-cur-end-role-regression, operations-derived-formula-dependencies, operations-metric-unit-formatting, damai-fy2026-operations-response-sha256-225a9edb, operations-reason-coded-empty-states]"
+commit_refs: "[3ff95115, 6591e148, 4932504c, 9cd43e20, 905cf544, e2417ffa, af375ba3, 101bcf23, 5510bad3, 430020f, 59b328dc, 85e907a, 7258763, 71a2dd8, 695ea18, 8ea20d6, f135c93, 82cce21, ffcc873e, ca0826f5]"
+evidence_refs: "[read-only-local-api-probe, stable-overlay-fingerprint, sha256-response-matrix, damai-ocf-canonical-fixture, damai-isolated-seed-verify, damai-e2e-8-of-9, damai-e2e-9-of-9-ocf-trends-complete, margin-matrix-read-only-grain-audit, margin-comparison-selection-isolated-e2e-9-of-9, github-ci-stale-damai-coverage-assertion, secure-batch-history-api-ui-and-isolated-e2e-9-of-9, clean-sha-59b328dc-damai-e2e-9-of-9, github-dashboard-flow-test-database-url-conflict, dashboard-ci-url-isolation-unit-2-of-2, dashboard-playwright-7-of-7, github-run-36223558441-dashboard-success, persistent-demo-rehydrate-verify-19-of-19-twice, verifier-latest-published-report-regression-tests, allowed-dev-origin-live-readonly-ui-6-of-6, isolated-damai-e2e-9-of-9, persistent-page-api-response-hashes, unavailable-comparison-visible-status-red-green, web-vitest-134-of-134, live-dashboard-playwright-after-change-no-console-errors, operations-balance-sheet-cur-end-role-regression, operations-derived-formula-dependencies, operations-metric-unit-formatting, damai-fy2026-operations-response-sha256-225a9edb, operations-reason-coded-empty-states, read-only-get-matrix-40-calls-36-combinations-all-200, report-history-empty-state-backed-by-empty-attempts]"
 knowledge_release: flow-knowledge-2026-09-12.1
 applies_to: web-frontend
 supersedes: []
@@ -178,6 +178,14 @@ CI 补充（run `36217337338`，SHA `5510bad3`）：18 个作业中仅 integrati
 - `not_applicable` 主题不再统一显示“待内部数据”。`segment_disclosure_missing` 解释为公开报告未披露分部、且不从总体收入推算；`internal_data_required` 才显示内部数据授权；分部期间不可用和缺完整财报也各自说明，未知原因保留原因码。
 - TDD 先确认新回归断言在旧文案上失败，再实现 reason-specific 文案。运营概览组件5/5、Web Vitest 134/134、typecheck通过，lint 0 errors、1条既有warning。
 - GitHub Actions：`8ea20d6` 的 workflow 长测仍在运行；`82cce21` 与 `ffcc873e` 的 workflow 排队，当前没有可报告的最终 CI 总结。
+
+## 扩展 GET-only 页面/API 矩阵（2026-09-26）
+
+- 范围：本机常驻 API `127.0.0.1:8000`，HEAD `ca0826f5`（仅 `apps/web/next-env.d.ts` 有自动生成的工作树差异；该文件未暂存/提交）。执行40次HTTP GET，36个不同路由/参数组合，全部200；无POST/PUT/PATCH/DELETE，无常驻数据库写入。
+- 覆盖：健康与驾驶舱；财报列表、2份财报明细/投影/更正、四问工作台、经营概览；7个公开经营期间；指标字典、public/Damai覆盖矩阵；批次列表；Finding清单与2条详情；2个客观快照、冻结候选、报告快照及其尝试；4个经营快照及尝试。
+- 当前响应的代表性SHA-256：Dashboard `19b6b9e52bc0acbe56506a2836ca0f542240e31ee1406048162b315b22c58f9b`（请求`period_view=month`）；财报FY2025明细 `b7c07b07574af170413c553c1568772dfb762f073ce3d86a0761ada6d7a5ce71`；FY2026经营概览 `225a9edbf04ffc0278c378b66f0229a8367b4786479ff0431dbff1a846ed5018`；大麦覆盖矩阵 `45b9d3cb410828ea38e9acd49695d3b1f16709cb80b61c546e2437d3a173f507`；批次清单 `cb5d303eb2ff2a691431fa97183490a2c9ea6ebc743eb905f60002bc0d6b346d`；Finding清单 `d6d460b177de5de06f0853003990f9451d209bd649315238dd7b79555ec629f4`。
+- 报告中心：1个正式报告快照存在，其 attempts 端点200并返回空数组；4个经营快照的 attempts 均200且为空。结论是“正式产物尚未生成”，不是读取错误。隔离 E2E 已证明独立测试栈可完成经营产物发布、下载和SHA匹配；不把隔离运行结果伪装成常驻环境历史记录。
+- 边界：API GET 矩阵只完成 Gate 1 数据链路一部分；不覆盖视口响应、每页加载/空/错误/403状态、键盘可访问性和所有交互下钻，也不是干净工作区SHA验收，故 Gate 1仍active。
 
 ## Gate 4 批次历史列表子项（提交 `430020f`，2026-09-26）
 
