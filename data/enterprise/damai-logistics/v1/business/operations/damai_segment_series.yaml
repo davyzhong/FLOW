@@ -1,0 +1,14 @@
+company: 大麦物流（synthetic 演示企业）
+note: synthetic 演示数据：全集团管理层口径序列，由 canonical 月度事实推导；不代表任何真实企业。
+sample: damai_segment_series
+series:
+  FY2025:
+    adjusted_ebita: 10014.3134
+    segment_revenue: 94307.9096
+  FY2026:
+    adjusted_ebita: 11819.3093
+    segment_revenue: 111283.3333
+sources:
+  FY2025: fixtures/damai/manifest.json
+  FY2026: fixtures/damai/manifest.json
+unit: 人民币百万元
