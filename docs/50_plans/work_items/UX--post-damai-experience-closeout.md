@@ -182,6 +182,8 @@ GitHub Actions run `36222136591`（SHA `430020f`）与 `36222489952`（SHA `59b3
 
 旧 CI dashboard job 因通用 `DATABASE_URL=/flow` 与数据库安全守卫冲突。现已修复 `scripts/test_dashboard.sh`：CI 优先读取 `FLOW_DASHBOARD_TEST_DATABASE_URL`，否则固定使用 localhost `flow_test`；不继承通用 compose URL。本地显式危险 URL 仍 fail-closed。脚本回归 2/2、本机完整 dashboard 验收（迁移/seed 仅针对 `flow_test`，12个月/8卡，Playwright 7/7）通过。未改 CI workflow，未写常驻 `flow`。提交 `85e907a` 的 GitHub Actions run `36223558441` dashboard job 成功；同一 workflow 其余三个长测仍运行，最终总结果未出。此前根因段落保留为历史记录，以本更新为当前状态。
 
+后续 CI 状态更新：`31a60217` 对应 run `36230615921` 的 dashboard job 已成功（含视觉截图），其余 integration、intake-e2e、data-contract 当时仍运行；完整 workflow 尚未结束。当前维度修复 `649a2aba` 与本工作包/证据文档提交 `7229cd0d` 的 workflow 分别为 run `36232029817`、`36232204424`，均排队中，不能提前标记全 CI 通过。
+
 用户已于2026-09-26批准实施。Gate 1初始诊断绑定 `3ff95115` + dirty overlay；FY2025工作台契约修复、Gate2静态覆盖37/40与40/40、Gate3 OCF以及毛利矩阵比较选择均已完成并推送。OCF隔离验收19/19、E2E9/9；毛利矩阵实际/预算各10/32格可用，缺值不补零。Gate4批次历史接口/页面已在 `430020f` 推送；API+策略18项、组件16项通过，clean SHA `59b328dc` 隔离 Damai seed/verify19/19、E2E9/9。常驻库本轮未访问/写入。当前新发现：两个 GitHub run 的 dashboard job 都因 CI 注入的 `DATABASE_URL=/flow` 与 `flow_test` 安全守卫冲突而失败，待按本 Gate5记录修正测试脚本。完整 Gate1 API响应矩阵、Gate3/4其余缺口/页面与Gate5全链仍未关闭。
 
 本段 CI 冲突描述是修复前快照；以本工作包“Gate 5 CI URL 修复更新”为准：脚本与 dashboard CI 验收已完成，完整 workflow 尚未结束。
@@ -221,4 +223,4 @@ GitHub Actions run `36222136591`（SHA `430020f`）与 `36222489952`（SHA `59b3
 
 ### KPI 状态标签视觉回归修复（2026-09-26）
 
-`85a2275` 的 CI 视觉截图因 KPI 状态标记额外形成 CSS Grid 第三行，两个桌面截图页面高度均增加20px。`31a60217` 已将标记收进既有数值行，并新增结构断言。Dashboard 深链10/10、Web Vitest134/134、typecheck、lint（0 errors/1既有warning）通过；隔离大麦旅程 verify19/19、E2E9/9通过。修复 SHA 的 GitHub workflow `36230615921` 排队中，视觉基线的 CI 结果未出；本机 dashboard 验收因 seed 摘要为 degraded 而提前退出，未执行截图。故不更新视觉基线，也不宣称视觉回归已通过；待 CI dashboard job 结果后继续 Gate 1干净 SHA 视口矩阵。
+`85a2275` 的 CI 视觉截图因 KPI 状态标记额外形成 CSS Grid 第三行，两个桌面截图页面高度均增加20px。`31a60217` 已将标记收进既有数值行，并新增结构断言。Dashboard 深链10/10、Web Vitest134/134、typecheck、lint（0 errors/1既有warning）通过；隔离大麦旅程 verify19/19、E2E9/9通过。run `36230615921` 的 dashboard job 后续已成功，故该视觉修复通过该 job；该 run 的其他长测当时仍在进行。本机 dashboard 验收因 seed 摘要为 degraded 而提前退出，未执行截图；这条本地命令仍不作为视觉验证证据。Gate 1全站视口矩阵仍未完成。
