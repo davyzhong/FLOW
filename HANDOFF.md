@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目尽调、优化与单 Agent 执行总交接
 doc_type: navigation
 status: current
-version: 4.3
+version: 4.5
 created_at: 2026-09-12
 updated_at: 2026-09-27
 owner: FLOW
@@ -22,11 +22,11 @@ applies_to: repository
 
 - 本次状态同步开始时已推送主线为 `b98844ad`（包含交接规则和上一版状态快照）；`gh run list --commit b98844ad` 未发现 CI run。实际应用/数据包代码基线为 `fc6e63a7`：包含 `9729dbc4` ORG-LEDGER 工作包、`880f1b76` 三表 schema 提案、`e1a4d264` 大麦企业包基础，以及 `fc6e63a7` 对具体 schema 的批准记录和 README 元数据修正。接手时必须重新核对最新 main 和同 SHA CI，不得沿用旧 SHA 的绿灯。下一位 Agent 开始前执行 `git pull --ff-only` 并核对当前 dirty changes，不要为了“clean”丢弃代码草案。
 - 文档门禁现状：在当前基线 `fc6e63a7` 上，本次本地重跑 `python3 scripts/check_docs.py --phase m1` 为 PASS（297 docs、89 legacy-exempt、0 errors）；`plan_views.py --check`、链接检查和 `git diff --check` 均 PASS。`python3 scripts/build_enterprise_data_package.py verify` 同样 PASS（25 个登记文件）。这些是当前本地结果，不代表未来交接提交的 CI；仍需在交接提交后核同 SHA CI。
-- 路线图队列：11 项；本次最新盘点为已完成 0、实际执行中 0、队首待续 1、排队 9、外部材料受限 1。唯一队首为 ORG-LEDGER；先前观察到的 `uv run pytest -q tests/fixtures/test_damai_loader.py` 进程已结束，但其退出码/日志未从发起终端回收。队列顺序和每次状态变化只更新 `CURRENT_ROADMAP.md`；每完成一项，补验收证据、更新工作包/`PROJECT_STATE.md`，提交并立即推送后才进入下一项。
+- 路线图队列：11 项；本次最新盘点为已完成 0、实际执行中 0、队首待续 1、排队 9、外部材料受限 1。唯一队首为 ORG-LEDGER；最近 `uv run pytest -q tests/enterprise tests/fixtures/test_damai_loader.py` 进程已结束，但退出码/日志未从发起终端回收，不能视为通过。队列顺序和每次状态变化只更新 `CURRENT_ROADMAP.md`；每完成一项，补验收证据、更新工作包/`PROJECT_STATE.md`，提交并立即推送后才进入下一项。
 - 只在 `main` 上做，禁止新建并行任务分支；不得同时开始下一项。用户已授权常规项目实施与验证，不再为日常测试、分析、文档或常规实现请求再次批准。既有全局安全红线仍有效：真实数据迁移/schema、删除/覆盖/恢复常驻库、密钥/CI 配置、公开部署等按 `AGENTS.md` 处理；尤其常驻 `flow` 中的测试批次偏差 `01a0dcdd-8245-7c17-99aa-fce91a8a7a57` 不得自行删除、回滚或切 latest。
 - **状态口径**：`进行中`=此刻确实有命令、审查或实现正在执行；`队首待启动`=当前第一项但未开工；`排队`=严格等待前项完成；`外部材料受限`=先按本手册执行主动恢复和替代方案，不是停工态。工作包 frontmatter 的 `active/blocked` 表示工作包生命周期或验收门槛，不覆盖路线图执行状态。
 - **ORG-LEDGER 的最新事实与安全边界**：工作包由 `9729dbc4`、具体三表 schema 提案由 `880f1b76` 推送；用户批准该准确方案由 `fc6e63a7` 记录。批准仅覆盖工作包列出的三表与对应迁移，不覆盖额外 schema、认证/RBAC 改造，也不授权在共享/常驻 DB 清理/初始化。可执行已批准迁移，但只在隔离数据库验证；不要对常驻库迁移或写入。
-- **发行包基础和当前未提交实现草案**：`e1a4d264` 已将 `data/enterprise/damai-logistics/v1/` 下27个包文件及 `scripts/build_enterprise_data_package.py` 一并推送到 main（该提交新增28个文件）；不要重复生成或重建同名目录。`fc6e63a7` 后只读运行 `python3 scripts/build_enterprise_data_package.py verify` 得到 exit 0：manifest 登记的25个文件 SHA/JSONL 行数通过，样例为8个组织单元、8个岗位、8个身份、142条权限映射。此自检**不等于工作包验收**：仍需验证 build 幂等、manifest 覆盖、恶意/缺项拒绝、合成/凭据字段安全、RBAC 映射、业务引用及 full/business 初始化。当前 dirty worktree 已出现 `models/__init__.py` 修改、`infrastructure/models/enterprise_directory.py`、`flow_api/enterprise/directory.py`、迁移 `0031_enterprise_directory.py`、`tests/enterprise/test_org_directory_models.py` 与 `test_directory_sync.py`，以及 `fixtures/damai/loader.py` 修改；不得覆盖、重置、擅自暂存或断言已通过。先前 `uv run pytest -q tests/fixtures/test_damai_loader.py` 进程现已结束，但结果未回收；接手者先从原终端回收，否则在审阅代码后重跑，再对照获批 DDL 继续。
+- **发行包基础和当前未提交实现草案**：`e1a4d264` 已将 `data/enterprise/damai-logistics/v1/` 下27个包文件及 `scripts/build_enterprise_data_package.py` 一并推送到 main（该提交新增28个文件）；不要重复生成或重建同名目录。`fc6e63a7` 后只读运行 `python3 scripts/build_enterprise_data_package.py verify` 得到 exit 0：manifest 登记的25个文件 SHA/JSONL 行数通过，样例为8个组织单元、8个岗位、8个身份、142条权限映射。此自检**不等于工作包验收**：仍需验证 build 幂等、manifest 覆盖、恶意/缺项拒绝、合成/凭据字段安全、RBAC 映射、业务引用及 full/business 初始化。当前 dirty worktree 还包括 manifest/build 脚本、`fixtures/damai/loader.py`、`fixtures/damai/reset.py`、`fixtures/damai/initialize.py`、`models/__init__.py` 修改，以及 `infrastructure/models/enterprise_directory.py`、`flow_api/enterprise/directory.py`、迁移 `0031_enterprise_directory.py` 和 `tests/enterprise/` 草案；不得覆盖、重置、擅自暂存或断言已通过。最近 `uv run pytest -q tests/enterprise tests/fixtures/test_damai_loader.py` 进程已结束但未回收到其结果；接手者先检查原终端结果，无法恢复则在审阅代码与 DB target 后重跑，保存完整命令/退出码/日志，再对照获批 DDL 继续。
 - **遇到失败的统一处理**：保留原始日志和失败产物 → 定位根因并判别代码/数据/环境/外部输入 → 先运行最小重现 → 做最小修复或有记录的替代验证 → 重跑原失败项及相邻回归。禁止删断言、改预期值迎合实现、重写原始 oracle、用 synthetic 结果冒充真实验收。若原验收客观上不可完成，交付可复现的调查、替代结果、未满足项与重启条件；不能声称原验收通过。
 - **每项汇报格式**：完整 11 项队列和计数；当前项与细分步骤；本轮完成证据（SHA、命令、结果）；实际问题/替代路径；下一项何时解锁和唯一下一动作。不要写“等待用户验证/批准”作为常规动作；只有触及明文安全红线的 schema 执行边界才须记录为精确批准门。
 
@@ -218,7 +218,7 @@ applies_to: repository
 5. 进入下一项：只有当前卡达到“原验收通过”或“外部受限但替代结案已完成、且明确记录原验收未满足”之一，才能更新计数并启动下一项。不能因为一项复杂或耗时而跳过，也不能把一个 item 拆成并行 Agent。
 6. 续接播报：向用户提供 11 项完整队列、项数/计数、当前唯一 item 的子步骤进度、已完成证据、限制与已尝试恢复法，以及唯一的下一动作；没有运行中的进程时必须说“未启动/已暂停”，不得写 active 冒充进行中。
 
-**下一位 Agent 接手后的唯一下一步：** 拉取 `main` 并核对分支/HEAD/CI；检查原终端能否回收 `tests/fixtures/test_damai_loader.py` 的退出码，否则在审阅工作区差异后重跑该测试。接着逐一审阅保护当前未提交的 loader 修改、组织模型、企业服务、0031 迁移和两份测试，与 `fc6e63a7` 批准的三表方案比对。随后按单项顺序补齐合同/负向测试与隔离迁移验证。schema 已获批准，但只可在隔离栈执行迁移和初始化；不得先做 UX、C 级、知识刷新或其他队列项。
+**下一位 Agent 接手后的唯一下一步：** 拉取 `main` 并核对分支/HEAD/CI；检查发起终端是否保留 `uv run pytest -q tests/enterprise tests/fixtures/test_damai_loader.py` 的完整结果；若无法恢复，先审阅保护当前未提交的发行包 manifest/build、loader/reset/initialize、组织模型/服务、0031 迁移和 tests，再确认隔离数据库并重跑。随后对照 `fc6e63a7` 批准的三表方案补齐合同/负向测试与隔离迁移验证。不得先做 UX、C 级、知识刷新或其他队列项。
 
 > **当前状态覆盖（2026-09-26 深夜·ZCode 夜班会话收尾）**：本交接基于 `main@e78f0616`（本会话最后提交为 `b161fff`，其后并发会话叠加 UI 可链接性审计）。本会话四项交付已全部入主线：**①归因裁决 `4111f6a`**（42 异常全判真实抽取错误+证据忠实性 100%）；**②新留出双样本 `926af82`**（小米 2026H1 + 阿里 FY2027Q1 冻结+oracle 录入完成——注意：v3.6 所记“候选 PDF 未冻结”已过时）；**③测试库隔离根因修复 `b60c51b`**（conftest 默认切 `flow_test`，实证常驻库零污染——v3.6 所记“最高安全前置”已完成）；**④JDL 英文版冻结 `b161fff`**（210 页文本层可读，200 格重核输入条件已具备）。C 级出口仍未通过；抽取器修订（实现方职责）与新留出首跑是剩余关键路径。
 

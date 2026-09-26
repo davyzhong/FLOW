@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.7
+version: 5.9
 created_at: 2026-09-12
 updated_at: 2026-09-27
 owner: FLOW
@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-截至 2026-09-27：当前 `main` 基线为 `b98844ad`；该交接文档提交尚未查到对应 GitHub Actions run，不能宣称 CI 绿。唯一执行队列共11项：已完成0、实际执行中0、队首待续1、排队9、外部材料受限1。队首为 ORG-LEDGER 企业组织与经营账套初始化包；基础发行包已由 `e1a4d264` 提交，三表 schema 具体批准由 `fc6e63a7` 记录。当前工作区存在未提交的组织模型、服务、`0031_enterprise_directory.py` 迁移、两份测试及 Damai loader 修改；先前 `uv run pytest -q tests/fixtures/test_damai_loader.py` 进程已结束，但结果未从原终端回收。当前没有可确认运行中的测试/迁移进程。迁移只限已批准三表，持久化初始化/破坏性验收仅限隔离栈，不触碰常驻库。完整11项顺序、逐步操作/验收/故障处理和唯一下一步见[当前路线图](../50_plans/CURRENT_ROADMAP.md#唯一完整-to-do-与执行队列严格串行)与[夜间接手手册](../../HANDOFF.md#04-夜间接手执行手册2026-09-27当前权威)；此处不复制第二份待办。
+截至 2026-09-27：本次状态盘点基于 `main@c17fbebe`；该 SHA 的 CI 尚未发现 run，不能宣称 CI 绿。唯一执行队列共11项：已完成0、实际执行中0、队首待续1、排队9、外部材料受限1。当前唯一队首为 ORG-LEDGER 企业组织与经营账套初始化包；基础发行包由 `e1a4d264` 提交，三表 schema 具体批准由 `fc6e63a7` 记录。工作区存在未提交的 manifest/build 更新、组织模型/服务、`0031_enterprise_directory.py` 迁移、reset/initialize service、测试及 Damai loader 修改；最近 `uv run pytest -q tests/enterprise tests/fixtures/test_damai_loader.py` 已结束，但结果未从发起终端回收，当前没有可确认的测试/迁移进程。迁移只限已批准三表，持久化初始化/破坏性验收仅限隔离栈，不触碰常驻库。完整11项顺序、逐步操作/验收/故障处理和唯一下一步见[当前路线图](../50_plans/CURRENT_ROADMAP.md#唯一完整-to-do-与执行队列严格串行)与[夜间接手手册](../../HANDOFF.md#04-夜间接手执行手册2026-09-27当前权威)；此处不复制第二份待办。
 
 2026-09-26 更新：大麦常驻库曾在备份后幂等恢复并通过 verify 19/19 两次；随后根 checkout 的旧 `make test-dashboard` 误向常驻 `flow` 附加测试批次 `01a0dcdd-8245-7c17-99aa-fce91a8a7a57`（1 import、12 snapshots、1 run、50,400 metric values），可能成为 API `latest`。只读检查确认未删除/覆盖原大麦批次；未获授权，不回滚、不删除。此前备份 `work/backups/flow-pre-demo-rehydrate-20260926.dump`（SHA-256 `b374a16e…9782d`）早于该新增批次，不能作为当前恢复点。`649a2aba` 已推送并通过 CI run `36232029817`：维度表只展示当前快照事实并显示覆盖分母，完整筛选目录保留；Web 136/136、typecheck、隔离 verify19/19、E2E9/9通过。状态/证据文档提交 `7229cd0d` 与 `4c55f10e` 的 CI 也通过。常驻库页面状态需获批处置后重新只读核验；其他全站矩阵仍未完成。
 2026-09-26 补充：API 路由审查发现客观报表快照与经营报告渲染的若干 GET 可能新增冻结快照；这些路由已明确排除在只读探测之外，纳入单独 API 语义评审，不以请求验证其状态。其余 Gate 1 只读矩阵与页面状态验收继续推进。

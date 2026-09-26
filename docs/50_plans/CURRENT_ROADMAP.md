@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 5.10
+version: 5.12
 created_at: 2026-09-12
 updated_at: 2026-09-27
 owner: FLOW
@@ -33,7 +33,7 @@ superseded_by: null
 | 2 | [S01 战略边界、事实合同与安全门禁](work_items/S01--post-u8-boundary-contract-security.md) | **completed** | U08 completed | Task 1–5 完成；安全规格 V1.1 已批准且独立审查闭环（`6c3c1cd`，零 P1/P2）。2026-09-14 `ff42c67` 五路并合 + 回落修复（`c1510ce`→`2570bf8`）带入路由策略 v2、模块边界与 U8 升级门禁、迁移 0026 修复、`main.py` 启动 fail-fast、两模块入口；Kimi `0841ff9` v1 被否，由 `997c1ab` v2 取代。**Task 6 已关闭**（R2/R3/R4 交付，台账 §7），阶段 3 转入 C 级出口；[协调台账](../70_operations/2026-09-14-coordination-ledger-glm.md) / [范围计划](../superpowers/plans/2026-09-13-flow-post-u8-boundary-gate.md) / [并行执行计划](../superpowers/plans/2026-09-13-flow-three-agent-parallel-restructuring.md) |
 | 2a | [大麦物流完整财年演示数据](work_items/DAMAI--full-year-demo.md) | **completed** | 已批准规格；不依赖公开 C 级 | D1–D3 已集成 main `e22d193`，CI run `36137591750` 17/17 success；隔离栈 verify 19/19、八页面 E2E 9/9、重复 seed 零增长、发行包零漂移。**常驻开发库已装载（G2 完成 2026-09-25）**：用户裁决演示数据全部入库，集成后 main 上 verify 19/19、页面可见；合成数据不解除公开 C 级门禁 |
 | 2b | [大麦数据后的剩余体验收口](work_items/UX--post-damai-experience-closeout.md) | **active（排队；非当前队首）** | G2 ✓；用户已批准 | 深链批次一至三已完成；基线 `ad76fd4c` CI success。剩余为全路由响应/API与页面状态、视口、下钻矩阵及 Gate 5 同 SHA 复验；当前排在 ORG-LEDGER 后；常驻库偏差未获授权不得处置。 |
-| 2c | [企业组织建制与经营账套初始化包](work_items/ORG-LEDGER--enterprise-initialization-package.md) | **active（队首待续；实现草案未提交）** | 大麦发行包 completed；遵守安全规格 | 基础包及脚本由 `e1a4d264` 推送；三表 schema 的具体批准由 `fc6e63a7` 记录。自检已对25个登记文件通过；尚无独立合同/安全验收、初始化入口与隔离旅程。工作区存在目录模型、企业服务、`0031_enterprise_directory.py`、两份 tests 草案及 Damai loader 修改；`uv run pytest -q tests/fixtures/test_damai_loader.py` 进程已结束，但退出码/日志未能从当前终端取得。当前无运行进程；批准范围不含其他 schema/RBAC 改动或常驻库初始化/清理。 |
+| 2c | [企业组织建制与经营账套初始化包](work_items/ORG-LEDGER--enterprise-initialization-package.md) | **active（队首待续；隔离测试结果待复核）** | 大麦发行包 completed；遵守安全规格 | 基础包及脚本由 `e1a4d264` 推送；三表 schema 的具体批准由 `fc6e63a7` 记录。自检已对25个登记文件通过；尚无完整安全验收、初始化入口与隔离旅程。工作区存在 manifest/build 更新、`reset.py`、目录模型、企业服务、`0031_enterprise_directory.py`、tests 和 Damai loader 修改；`uv run pytest -q tests/enterprise tests/fixtures/test_damai_loader.py` 进程已结束，但退出码/日志未从当前终端取得，需重新核验。当前无运行进程；批准范围不含其他 schema/RBAC 改动或常驻库初始化/清理。 |
 | K | [第二代静态知识刷新与战略重基线](work_items/KNOWLEDGE--refresh-v2.md) | **active（队列排队，不并行启动）** | 按唯一队列轮到时启动；规格/preflight 已完成 | K0–K6 未执行；`CURRENT_RELEASE` 仍为 `flow-knowledge-2026-09-12.1`，用户战略裁决前不得切换。 |
 | 3 | [公开财报模块 C 级出口](work_items/PUBLIC--c-level-exit-protocol.md) | **blocked(归因、补证与裁决)** | S01 关闭 ✓ | 独立交叉评已完成（[结果](../80_reviews/ai-cross-review/results/gpt-6-astra-2026-09-25.md)）：1,530 格中42异常、109存疑、200因JDL乱码无法完整核验；待原PDF逐项归因/订正。1794/1794仅为登记覆盖口径，不等于通过 |
 | 3a | [溯源/重述/只读 MCP](work_items/PUBLIC--provenance-restatement-mcp.md) | **completed** | — | B3 溯源 95.5% 行项目带页锚（迁移 0029 + 导入/API/前端）；B4 supersedes 链 + 差异脚本；B5 只读 MCP 三工具（token fail-closed）；B6 确定性差异说明起草 |
@@ -48,9 +48,9 @@ superseded_by: null
 
 ## 唯一完整 To-do 与执行队列（严格串行）
 
-截至 2026-09-27：**11 项，已完成 0 项，实际执行中 0 项，队首待续 1 项，排队 9 项，外部材料受限 1 项**。企业初始化包是唯一队首；发行包基础已推送，三表 schema 具体批准已由 `fc6e63a7` 记录；组织模型、迁移、服务、两份测试及 Damai loader 修改仍在未提交工作区。`uv run pytest -q tests/fixtures/test_damai_loader.py` 进程已结束，但结果未从发起终端回收。下一步核实或重跑该测试、审查所有未提交差异，再按顺序补全隔离迁移/服务/初始化旅程。严格限于批准的三表，不改 RBAC、不写常驻库。其余按本唯一队列顺序执行；状态表、工作包和历史文档不是第二份待办。
+截至 2026-09-27：**11 项，已完成 0 项，实际执行中 0 项，队首待续 1 项，排队 9 项，外部材料受限 1 项**。企业初始化包是唯一队首；发行包基础已推送，三表 schema 具体批准已由 `fc6e63a7` 记录；manifest/build 更新、reset service、组织模型/服务、迁移、测试及 Damai loader 修改仍在未提交工作区。最近 `uv run pytest -q tests/enterprise tests/fixtures/test_damai_loader.py` 进程已结束，但结果未从发起终端回收，不能据此判 PASS/FAIL。下一步审阅所有未提交差异并重跑该测试取得可保存的完整结果，再完成获批迁移与 full/business 隔离初始化旅程。严格限于批准的三表，不改 RBAC、不写常驻库。其余按本唯一队列顺序执行；状态表、工作包和历史文档不是第二份待办。
 
-1. **[队首待续] 企业组织建制与经营账套初始化包**（工作包见状态表2c）：基础包/自检脚本已推送（`e1a4d264`），三表 schema 具体批准已记录（`fc6e63a7`），模型/迁移/服务/两份测试及 Damai loader 修改存在于未提交工作区。先回收或重跑 loader 回归测试结果，再逐一审查/验证差异；继续补合同/安全测试、跑迁移测试、实现 SQL/初始化入口和隔离栈全链。只可改获批三表；破坏性/持久化验收只在隔离栈，不碰常驻库。
+1. **[队首待续] 企业组织建制与经营账套初始化包**（工作包见状态表2c）：基础包/自检脚本已推送（`e1a4d264`），三表 schema 具体批准已记录（`fc6e63a7`）；manifest/build 更新、reset service、模型/迁移/服务/测试和 Damai loader 修改存在于未提交工作区。此前隔离 API/loader 测试结束但无可复核输出；先审查差异并重跑取得完整结果，再完成获批迁移、边界和 full/business 初始化旅程。只可改获批三表；破坏性/持久化验收仅在隔离栈，不碰常驻库。
 2. **[排队] UX 可见性与全站验收关闭**（工作包见状态表2b）：完成剩余路由/API/页面数据一致性、五态×390/1024/1440 视口矩阵、缺口与下钻验收，运行 Gate 5 干净 SHA 全链和 CI。深链批次一至三已完成（批次三见 `cef0c362`）；不可写入或清理常驻 `flow`。意外测试批次未经用户授权维持原状。
 3. **[排队] 公开财报 C 级归因、原件复核与抽取修订**（工作包见状态表3）：处理已确认42项异常后的109项口径疑点、JDL 200 格原件复核、抽取器修订；保留原始值及证据，任何结论可追溯。
 4. **[排队] U04 解析器适配与独立留出验证**（工作包见状态表1'）：这本身是可执行的工程任务，不再误标为阻塞。支持「合并及公司」标题与页码区间参数化；旧三样本回归；对已冻结的小米2026H1、阿里FY2027Q1独立首跑，首跑前不得调参。若遇到输入缺项，主动检查已冻结材料并完成可复现的替代核验记录。
