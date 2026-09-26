@@ -177,7 +177,7 @@ test.describe("responsive integrity", () => {
       return {
         body: document.body.scrollWidth,
         viewport: document.documentElement.clientWidth,
-        wide: wide.slice(0, 6),
+        wide: wide.slice(0, 20),
       };
     });
     if (overflow.body > overflow.viewport) {

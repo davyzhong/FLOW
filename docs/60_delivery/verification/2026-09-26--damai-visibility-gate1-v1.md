@@ -1,9 +1,9 @@
 ---
 doc_id: FLOW-VERIFY-DAMAI-VISIBILITY-GATE1-001
-title: 大麦数据可见性与 Gate 4 批次历史验收证据 v3.3
+title: 大麦数据可见性与 Gate 4 批次历史验收证据 v3.4
 doc_type: verification
 status: draft
-version: "3.3"
+version: "3.4"
 created_at: 2026-09-26
 updated_at: 2026-09-26
 owner: FLOW
@@ -35,6 +35,12 @@ CI 后续结果：主代码 `649a2aba` 的 run `36232029817` 全部 jobs success
 - 结果：43条不同 GET 请求/参数组合全部 HTTP 200；无 POST/PUT/PATCH/DELETE。覆盖 discovery、month/YTD dashboard、4个维度筛选各一项、两份大麦财报详情/主题投影/更正/四问/经营概览、所有7个公开经营期间、指标字典/语义/计算清单/public与Damai覆盖矩阵、Finding详情、内部批次版本与清洗摘要、报告快照与经营快照尝试清单。可能写入冻结快照的 GET 未调用。
 - 每行只存 route alias/path、company/period/dataset/batch scope、status、响应字节数与 SHA-256，不保存响应正文。manifest SHA-256：`ab226cd301e0387026b48cdad97eb8eec00f921faf841d320bec296f1523c228bd`；本次逐路由输出留在 ignored `work/damai-demo/e2e_visibility_matrix.jsonl`，可由工具重跑生成。
 - 同轮大麦 seed verifier 19/19、浏览器 E2E 9/9通过。代码 SHA `0dde935f` 的 CI run `36241816630` 仍运行；待其成功后此矩阵方可记为 CI 验收。该证据只关闭 clean-SHA API 矩阵缺口，不关闭全站响应式、加载/空/403/错误态与全下钻验收。
+
+## 390px页面溢出回归修复
+
+- 生产构建 E2E 首轮发现 `/data` 历史批次区域撑至546px、`/operations` 期间选择框撑至511px；已修复历史表局部滚动和标题换行、窄屏下拉选择器宽度，并允许经营主题网格收缩。
+- `bash scripts/test_module_boundaries_e2e.sh` 69/69通过；Web Vitest136/136、typecheck通过；`make lint` 0 errors、保留既有 TanStack Table warning。仅覆盖门禁声明的390px主路由与数据密集页1024/1440数据态，并非完整五态截图/所有下钻验收。
+- 修复代码同 SHA CI 尚待完成；没有对常驻库执行写入、迁移、发布或清理。
 
 ## Gate 5 CI 数据库 URL 隔离修复补记（2026-09-26）
 

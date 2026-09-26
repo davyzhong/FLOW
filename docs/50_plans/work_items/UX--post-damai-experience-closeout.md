@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 4.1
+version: 4.2
 created_at: 2026-09-24
 updated_at: 2026-09-26
 owner: FLOW
@@ -172,6 +172,12 @@ Run: `python3 scripts/check_docs.py --phase m1` and the repository link check
 只读矩阵工具已提交为 `0dde935f`：`scripts/damai_visibility_matrix.py` 仅记录方法、路由、状态码、响应字节数、上下文和响应 SHA，不保存正文；失败也会保留矩阵证据。它在隔离全旅程 seed/verify 后、任何页面变更流程前运行，禁止调用上述 freeze/render GET。
 
 干净提交复验（`main@0dde935f`，2026-09-26）：43个不同 GET 请求全部 HTTP 200，无失败；包含 Dashboard 月/YTD、组织/客群/产品/区域各一个维度筛选，两份财报 detail/projection/corrections/workbench/operations，全部7个公开经营期间，指标字典/语义/可计算清单/两个覆盖集，Finding详情，当前企业批次版本与清洗摘要，报告/经营快照发布attempt列表。响应只写 SHA/大小，不存内容；清单摘要 SHA-256 `ab226cd301e0387026b48cdad97eb8eec00f921faf841d320bec296f1523c228bd`。同轮 seed verifier19/19、浏览器E2E9/9。该 SHA 的 GitHub CI run `36241816630`仍在运行。此项关闭“早期矩阵非干净提交且不可复跑”的缺口，不关闭 Gate 1全页面/响应式/加载错误403/深链验收。
+
+### 390px生产构建响应式缺陷修复（2026-09-26）
+
+首次执行生产构建 E2E 门禁时发现 `/data` 批次历史标题/表格导致页面溢出至546px，`/operations` 期间下拉框的长 option 将页面撑至511px。数据页历史区补 `min-width: 0`、标题在窄屏换行，表格限制在自身可横向滚动容器；经营页窄屏选择框固定在容器宽度内，主题网格最小轨道允许缩小。响应式失败诊断保留前20个越界元素，方便定位。
+
+复验：`bash scripts/test_module_boundaries_e2e.sh` 生产构建下69/69通过（含全部导航/页面一致性、11路由390px、4数据页1024/1440、加载/错误/403）；Web Vitest 136/136、`make lint`（0 errors，1既有 TanStack warning）、`make typecheck`通过。全站五态截图归档、所有数据视口、全部深链目标与真实无权限角色链路仍未覆盖。
 - 当前 clean SHA `649a2aba` 的 GitHub Actions run `36232029817` success；其后状态同步提交 `7229cd0d` / run `36232204424` 与证据更新提交 `4c55f10e` / run `36232336053` 也 success。旧 runs `36229942486`–`36230243382` 的 dashboard 视觉高度失败发生在 `31a60217` 修复前；`31a60217` run `36230615921` 的 dashboard、integration、intake-e2e、data-contract 及其余 jobs 最终全绿。CI 当前无已知未通过项；Gate 1 页面/视口/错误/403/深链矩阵仍未关闭。
 
 #### CI 环境变量回归（2026-09-26，待修复）

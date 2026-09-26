@@ -2,6 +2,8 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  min-width: 0;
+  width: 100%;
   max-width: 1180px;
 }
 
@@ -15,6 +17,18 @@
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
+}
+
+@media (max-width: 560px) {
+  .ops-overview__controls .flow-field {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .ops-overview__controls select {
+    width: 100%;
+    max-width: 100%;
+  }
 }
 
 .ops-overview__controls a {
@@ -79,7 +93,7 @@
 
 .ops-overview__themes {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
   gap: 12px;
 }
 
