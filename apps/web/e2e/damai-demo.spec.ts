@@ -197,6 +197,10 @@ test("metric library switches to damai synthetic coverage", async ({ page }) => 
   await expect(page.getByText("synthetic 演示 · 大麦物流")).toBeVisible({ timeout: 15_000 });
   const matrix = page.locator("section[aria-label='指标覆盖矩阵']");
   await expect(matrix).toContainText("FY2026");
+  // 直接核对年度覆盖值真正展示，而非只有年份标签/空壳矩阵。
+  await expect(matrix).toContainText("FY2025");
+  await expect(matrix).toContainText("37/40");
+  await expect(matrix).toContainText("40/40");
 });
 
 test("approves the in-review revenue growth finding", async ({ page }) => {
