@@ -3,16 +3,16 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.6
+version: 5.7
 created_at: 2026-09-12
-updated_at: 2026-09-26
+updated_at: 2026-09-27
 owner: FLOW
 applies_to: repository
 ---
 
 # FLOW 当前项目状态（唯一 current state）
 
-截至 2026-09-27：最新已验证代码/文档基线仍为 `ad76fd4c`（前置代码 SHA `cef0c362` CI success）；本次规则与状态修正尚待本提交门禁。统一执行队列10项：已完成0、实际执行中0、队首待启动/排队9、外部材料主动恢复/结案1；当前没有后台执行进程，队首 UX 验收待启动。路线图中的 active/blocked 工作包标记可能表达工作包生命周期或验收门槛，不等于实时进程或停工指令。完整队列、证据和唯一下一步见[当前路线图执行队列](../50_plans/CURRENT_ROADMAP.md#唯一完整-to-do-与执行队列严格串行)，本状态页不复制第二份待办。
+截至 2026-09-27：当前 `main` 基线为 `b98844ad`；该交接文档提交尚未查到对应 GitHub Actions run，不能宣称 CI 绿。唯一执行队列共11项：已完成0、实际执行中0、队首待续1、排队9、外部材料受限1。队首为 ORG-LEDGER 企业组织与经营账套初始化包；基础发行包已由 `e1a4d264` 提交，三表 schema 具体批准由 `fc6e63a7` 记录。当前工作区存在未提交的组织模型、服务、`0031_enterprise_directory.py` 迁移、两份测试及 Damai loader 修改；先前 `uv run pytest -q tests/fixtures/test_damai_loader.py` 进程已结束，但结果未从原终端回收。当前没有可确认运行中的测试/迁移进程。迁移只限已批准三表，持久化初始化/破坏性验收仅限隔离栈，不触碰常驻库。完整11项顺序、逐步操作/验收/故障处理和唯一下一步见[当前路线图](../50_plans/CURRENT_ROADMAP.md#唯一完整-to-do-与执行队列严格串行)与[夜间接手手册](../../HANDOFF.md#04-夜间接手执行手册2026-09-27当前权威)；此处不复制第二份待办。
 
 2026-09-26 更新：大麦常驻库曾在备份后幂等恢复并通过 verify 19/19 两次；随后根 checkout 的旧 `make test-dashboard` 误向常驻 `flow` 附加测试批次 `01a0dcdd-8245-7c17-99aa-fce91a8a7a57`（1 import、12 snapshots、1 run、50,400 metric values），可能成为 API `latest`。只读检查确认未删除/覆盖原大麦批次；未获授权，不回滚、不删除。此前备份 `work/backups/flow-pre-demo-rehydrate-20260926.dump`（SHA-256 `b374a16e…9782d`）早于该新增批次，不能作为当前恢复点。`649a2aba` 已推送并通过 CI run `36232029817`：维度表只展示当前快照事实并显示覆盖分母，完整筛选目录保留；Web 136/136、typecheck、隔离 verify19/19、E2E9/9通过。状态/证据文档提交 `7229cd0d` 与 `4c55f10e` 的 CI 也通过。常驻库页面状态需获批处置后重新只读核验；其他全站矩阵仍未完成。
 2026-09-26 补充：API 路由审查发现客观报表快照与经营报告渲染的若干 GET 可能新增冻结快照；这些路由已明确排除在只读探测之外，纳入单独 API 语义评审，不以请求验证其状态。其余 Gate 1 只读矩阵与页面状态验收继续推进。
@@ -38,7 +38,9 @@ applies_to: repository
 - 旧统一计划、O 系列计划、EXECUTION_TODO 与 2026-09-24/25 三份总计划均已 superseded/archived（保留历史细节与证据，不再作为执行依据）
 - 文档迁移：[迁移实施计划 M0–M6](../superpowers/plans/2026-09-12-static-knowledge-and-document-migration.md) 已全部关闭（bfc1271 / e373e25，用户确认 2026-09-13）
 
-## 进行中 / 阻塞 / 待授权
+## 历史工作流与阶段快照（非当前 To-do）
+
+> 下方条目保留各阶段形成时的上下文，部分状态已过时，不代表当前执行/阻塞/授权情况，也不是可领取任务。当前唯一状态以本页开头为准；唯一队列及下一步只看 [CURRENT_ROADMAP](../50_plans/CURRENT_ROADMAP.md)。
 
 1. **U8（已完成并冻结）**：[生产冻结交付记录](../60_delivery/2026-09-13-u8-production-freeze.md)；可恢复基线 `u8-final-baseline`；严格冻结标签 `flow-u8-freeze-20260913`。
 2. **U4（blocked）**：旧样本首跑 199 行均不可比较；小米 2026H1 与阿里 FY2027Q1 新 holdout 已冻结并录入独立 oracle，先修版式适配并回归旧样本，再按盲测纪律运行新留出。

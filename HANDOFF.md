@@ -20,7 +20,7 @@ applies_to: repository
 
 ### 接手基线、当前状态与操作纪律
 
-- 当前已推送主线基线：`fc6e63a7`（包含 `9729dbc4` ORG-LEDGER 工作包、`880f1b76` 三表 schema 提案、`e1a4d264` 大麦企业包基础，以及 `fc6e63a7` 对具体 schema 的批准记录和 README 元数据修正）。`gh run list --commit fc6e63a7` 本次未发现 CI run；接手时必须重新核对同 SHA CI，不得沿用旧 SHA 的绿灯。下一位 Agent 开始前执行 `git pull --ff-only` 并核对当前 dirty changes，不要为了“clean”丢弃代码草案。
+- 本次状态同步开始时已推送主线为 `b98844ad`（包含交接规则和上一版状态快照）；`gh run list --commit b98844ad` 未发现 CI run。实际应用/数据包代码基线为 `fc6e63a7`：包含 `9729dbc4` ORG-LEDGER 工作包、`880f1b76` 三表 schema 提案、`e1a4d264` 大麦企业包基础，以及 `fc6e63a7` 对具体 schema 的批准记录和 README 元数据修正。接手时必须重新核对最新 main 和同 SHA CI，不得沿用旧 SHA 的绿灯。下一位 Agent 开始前执行 `git pull --ff-only` 并核对当前 dirty changes，不要为了“clean”丢弃代码草案。
 - 文档门禁现状：在当前基线 `fc6e63a7` 上，本次本地重跑 `python3 scripts/check_docs.py --phase m1` 为 PASS（297 docs、89 legacy-exempt、0 errors）；`plan_views.py --check`、链接检查和 `git diff --check` 均 PASS。`python3 scripts/build_enterprise_data_package.py verify` 同样 PASS（25 个登记文件）。这些是当前本地结果，不代表未来交接提交的 CI；仍需在交接提交后核同 SHA CI。
 - 路线图队列：11 项；本次最新盘点为已完成 0、实际执行中 0、队首待续 1、排队 9、外部材料受限 1。唯一队首为 ORG-LEDGER；先前观察到的 `uv run pytest -q tests/fixtures/test_damai_loader.py` 进程已结束，但其退出码/日志未从发起终端回收。队列顺序和每次状态变化只更新 `CURRENT_ROADMAP.md`；每完成一项，补验收证据、更新工作包/`PROJECT_STATE.md`，提交并立即推送后才进入下一项。
 - 只在 `main` 上做，禁止新建并行任务分支；不得同时开始下一项。用户已授权常规项目实施与验证，不再为日常测试、分析、文档或常规实现请求再次批准。既有全局安全红线仍有效：真实数据迁移/schema、删除/覆盖/恢复常驻库、密钥/CI 配置、公开部署等按 `AGENTS.md` 处理；尤其常驻 `flow` 中的测试批次偏差 `01a0dcdd-8245-7c17-99aa-fce91a8a7a57` 不得自行删除、回滚或切 latest。
