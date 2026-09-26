@@ -93,4 +93,9 @@ uv run scripts/wait_for_services.py "127.0.0.1:${api_port}" "127.0.0.1:${web_por
   --api-url "http://127.0.0.1:${api_port}" --check-storage \
   --output "${ROOT}/work/damai-demo/e2e_verify_receipt.json")
 
+uv run python scripts/damai_visibility_matrix.py \
+  --api-url "http://127.0.0.1:${api_port}" \
+  --seed-receipt "${ROOT}/work/damai-demo/e2e_seed_receipt.json" \
+  --output "${ROOT}/work/damai-demo/e2e_visibility_matrix.jsonl"
+
 npx --yes playwright test e2e/damai-demo.spec.ts
