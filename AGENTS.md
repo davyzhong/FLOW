@@ -3,9 +3,9 @@ doc_id: FLOW-GOV-AGENTS-001
 title: FLOW 项目协作规则
 doc_type: governance
 status: current
-version: 1.3
+version: 1.4
 created_at: 2026-09-01
-updated_at: 2026-09-25
+updated_at: 2026-09-26
 owner: FLOW
 applies_to: repository
 ---
@@ -37,6 +37,17 @@ applies_to: repository
    `supersedes/superseded_by` 和是否可执行，并在统一计划与本文件建立索引。
 5. 被接替的计划不删除，改为 `completed`、`cancelled` 或 `archived`，并标记
    `do_not_execute: true`；历史复选框不得作为当前进度依据。
+6. **唯一 To-do 与串行执行铁律（2026-09-26）**：全项目只允许一份完整、带序号的
+   执行队列，放在 `docs/50_plans/CURRENT_ROADMAP.md`。工作包、规格、状态表和历史
+   计划可以说明范围/证据/状态，但不得各自产生可独立领取的 To-do 清单；移除或并入
+   队列任何“并行任务/非阻塞动作”列表。任何时刻只执行队首一个任务，完成并更新状态、
+   提交推送后才进入下一项；若队首被外部依赖阻塞，停止领取后续任务，明确列出阻塞与
+   解除条件，不擅自切到别的轨道。用户另行明确授权并行时，才可例外执行。
+7. **进度播报铁律（2026-09-26）**：每次项目进度/状态播报和阶段交付必须完整呈现同一份
+   To-do 队列、总项数与已完成/进行中/排队/阻塞数量，标明当前唯一执行项、已完成证据、
+   阻塞/待用户动作，以及下一步的单一动作。不得只报局部成果或仅说“继续”；队列发生
+   变化须先更新本文件索引指向的 `CURRENT_ROADMAP.md`，通过文档门禁并提交推送，再按
+   新清单执行。
 
 ## 原始档案保护
 

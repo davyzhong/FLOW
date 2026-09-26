@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.4
+version: 5.5
 created_at: 2026-09-12
 updated_at: 2026-09-26
 owner: FLOW
@@ -11,6 +11,8 @@ applies_to: repository
 ---
 
 # FLOW 当前项目状态（唯一 current state）
+
+截至 2026-09-26：主线 `ad76fd4c` 及其前置代码 SHA `cef0c362` 的 CI 均成功。当前工程执行队列共10项：已完成0、进行中1、排队5、阻塞4；唯一进行中的事项是大麦数据可见性与全站 UX Gate 1/Gate 5 收口。完整逐项范围、状态、依赖、阻塞解除条件及唯一下一步只见[当前路线图执行队列](../50_plans/CURRENT_ROADMAP.md#唯一完整-to-do-与执行队列严格串行)，本状态页不复制第二份待办。每次进度播报按该队列完整报告，禁止并行切换。
 
 2026-09-26 更新：大麦常驻库曾在备份后幂等恢复并通过 verify 19/19 两次；随后根 checkout 的旧 `make test-dashboard` 误向常驻 `flow` 附加测试批次 `01a0dcdd-8245-7c17-99aa-fce91a8a7a57`（1 import、12 snapshots、1 run、50,400 metric values），可能成为 API `latest`。只读检查确认未删除/覆盖原大麦批次；未获授权，不回滚、不删除。此前备份 `work/backups/flow-pre-demo-rehydrate-20260926.dump`（SHA-256 `b374a16e…9782d`）早于该新增批次，不能作为当前恢复点。`649a2aba` 已推送并通过 CI run `36232029817`：维度表只展示当前快照事实并显示覆盖分母，完整筛选目录保留；Web 136/136、typecheck、隔离 verify19/19、E2E9/9通过。状态/证据文档提交 `7229cd0d` 与 `4c55f10e` 的 CI 也通过。常驻库页面状态需获批处置后重新只读核验；其他全站矩阵仍未完成。
 2026-09-26 补充：API 路由审查发现客观报表快照与经营报告渲染的若干 GET 可能新增冻结快照；这些路由已明确排除在只读探测之外，纳入单独 API 语义评审，不以请求验证其状态。其余 Gate 1 只读矩阵与页面状态验收继续推进。
@@ -32,7 +34,7 @@ applies_to: repository
 
 ## 当前执行入口
 
-- **[CURRENT_ROADMAP.md](../50_plans/CURRENT_ROADMAP.md)**（唯一主线：状态真相 + 执行队列）：U08、S01、前端一致性整改与大麦完整财年演示数据 completed（含常驻库装载 G2）；全站深链批次一、二本地完成、批次三待办；C级交叉评已完成但归因、订正和新留出未完成；其余执行顺序见路线图。
+- **[CURRENT_ROADMAP.md](../50_plans/CURRENT_ROADMAP.md)**（唯一主线：状态真相 + 单一串行 To-do）：U08、S01、前端一致性整改与大麦完整财年演示数据已完成；深链批次一至三已完成；全站 UX Gate 1/Gate 5 尚未关闭。全部后续任务及状态只按该路线图执行。
 - 旧统一计划、O 系列计划、EXECUTION_TODO 与 2026-09-24/25 三份总计划均已 superseded/archived（保留历史细节与证据，不再作为执行依据）
 - 文档迁移：[迁移实施计划 M0–M6](../superpowers/plans/2026-09-12-static-knowledge-and-document-migration.md) 已全部关闭（bfc1271 / e373e25，用户确认 2026-09-13）
 
