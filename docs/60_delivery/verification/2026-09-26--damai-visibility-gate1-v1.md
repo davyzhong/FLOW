@@ -1,14 +1,14 @@
 ---
 doc_id: FLOW-VERIFY-DAMAI-VISIBILITY-GATE1-001
-title: 大麦数据可见性与 Gate 4 批次历史验收证据 v2.8
+title: 大麦数据可见性与 Gate 4 批次历史验收证据 v2.9
 doc_type: verification
 status: draft
-version: "2.8"
+version: "2.9"
 created_at: 2026-09-26
 updated_at: 2026-09-26
 owner: FLOW
-commit_refs: "[3ff95115, 6591e148, 4932504c, 9cd43e20, 905cf544, e2417ffa, af375ba3, 101bcf23, 5510bad3, 430020f, 59b328dc, 85e907a, 7258763, 71a2dd8, 695ea18, 8ea20d6, f135c93, 82cce21, ffcc873e, ca0826f5]"
-evidence_refs: "[read-only-local-api-probe, stable-overlay-fingerprint, sha256-response-matrix, damai-ocf-canonical-fixture, damai-isolated-seed-verify, damai-e2e-8-of-9, damai-e2e-9-of-9-ocf-trends-complete, margin-matrix-read-only-grain-audit, margin-comparison-selection-isolated-e2e-9-of-9, github-ci-stale-damai-coverage-assertion, secure-batch-history-api-ui-and-isolated-e2e-9-of-9, clean-sha-59b328dc-damai-e2e-9-of-9, github-dashboard-flow-test-database-url-conflict, dashboard-ci-url-isolation-unit-2-of-2, dashboard-playwright-7-of-7, github-run-36223558441-dashboard-success, persistent-demo-rehydrate-verify-19-of-19-twice, verifier-latest-published-report-regression-tests, allowed-dev-origin-live-readonly-ui-6-of-6, isolated-damai-e2e-9-of-9, persistent-page-api-response-hashes, unavailable-comparison-visible-status-red-green, web-vitest-134-of-134, live-dashboard-playwright-after-change-no-console-errors, operations-balance-sheet-cur-end-role-regression, operations-derived-formula-dependencies, operations-metric-unit-formatting, damai-fy2026-operations-response-sha256-225a9edb, operations-reason-coded-empty-states, read-only-get-matrix-40-calls-36-combinations-all-200, report-history-empty-state-backed-by-empty-attempts]"
+commit_refs: "[3ff95115, 6591e148, 4932504c, 9cd43e20, 905cf544, e2417ffa, af375ba3, 101bcf23, 5510bad3, 430020f, 59b328dc, 85e907a, 7258763, 71a2dd8, 695ea18, 8ea20d6, f135c93, 82cce21, ffcc873e, ca0826f5, 3159af8a, 31a60217]"
+evidence_refs: "[read-only-local-api-probe, stable-overlay-fingerprint, sha256-response-matrix, damai-ocf-canonical-fixture, damai-isolated-seed-verify, damai-e2e-8-of-9, damai-e2e-9-of-9-ocf-trends-complete, margin-matrix-read-only-grain-audit, margin-comparison-selection-isolated-e2e-9-of-9, github-ci-stale-damai-coverage-assertion, secure-batch-history-api-ui-and-isolated-e2e-9-of-9, clean-sha-59b328dc-damai-e2e-9-of-9, github-dashboard-flow-test-database-url-conflict, dashboard-ci-url-isolation-unit-2-of-2, dashboard-playwright-7-of-7, github-run-36223558441-dashboard-success, persistent-demo-rehydrate-verify-19-of-19-twice, verifier-latest-published-report-regression-tests, allowed-dev-origin-live-readonly-ui-6-of-6, isolated-damai-e2e-9-of-9, persistent-page-api-response-hashes, unavailable-comparison-visible-status-red-green, web-vitest-134-of-134, live-dashboard-playwright-after-change-no-console-errors, operations-balance-sheet-cur-end-role-regression, operations-derived-formula-dependencies, operations-metric-unit-formatting, damai-fy2026-operations-response-sha256-225a9edb, operations-reason-coded-empty-states, read-only-get-matrix-40-calls-36-combinations-all-200, report-history-empty-state-backed-by-empty-attempts, github-run-36228302327-dashboard-visual-height-regression, inline-kpi-status-layout-fix, isolated-damai-e2e-9-of-9-after-31a60217, web-vitest-134-of-134-after-31a60217, dashboard-visual-ci-pending-36230615921]"
 knowledge_release: flow-knowledge-2026-09-12.1
 applies_to: web-frontend
 supersedes: []
@@ -186,6 +186,14 @@ CI 补充（run `36217337338`，SHA `5510bad3`）：18 个作业中仅 integrati
 - 当前响应的代表性SHA-256：Dashboard `19b6b9e52bc0acbe56506a2836ca0f542240e31ee1406048162b315b22c58f9b`（请求`period_view=month`）；财报FY2025明细 `b7c07b07574af170413c553c1568772dfb762f073ce3d86a0761ada6d7a5ce71`；FY2026经营概览 `225a9edbf04ffc0278c378b66f0229a8367b4786479ff0431dbff1a846ed5018`；大麦覆盖矩阵 `45b9d3cb410828ea38e9acd49695d3b1f16709cb80b61c546e2437d3a173f507`；批次清单 `cb5d303eb2ff2a691431fa97183490a2c9ea6ebc743eb905f60002bc0d6b346d`；Finding清单 `d6d460b177de5de06f0853003990f9451d209bd649315238dd7b79555ec629f4`。
 - 报告中心：1个正式报告快照存在，其 attempts 端点200并返回空数组；4个经营快照的 attempts 均200且为空。结论是“正式产物尚未生成”，不是读取错误。隔离 E2E 已证明独立测试栈可完成经营产物发布、下载和SHA匹配；不把隔离运行结果伪装成常驻环境历史记录。
 - 边界：API GET 矩阵只完成 Gate 1 数据链路一部分；不覆盖视口响应、每页加载/空/错误/403状态、键盘可访问性和所有交互下钻，也不是干净工作区SHA验收，故 Gate 1仍active。
+
+## KPI 未发布状态标签的视觉回归修复（2026-09-26）
+
+- `85a2275` 的 CI run `36228302327` 除两个视觉截图外其余检查通过；1440与1920宽度的 full-page 截图都比基线高20px。对照变更确认原因是“未发布”标记作为第三个 CSS Grid 子项，扩大 KPI 比较区和整页高度。
+- 提交 `31a60217` 将状态标记与数值放在同一行，继续保留标签、`title`、`aria-label` 与 `data-status`；组件回归断言验证其位于原数值行。Dashboard 深链测试10/10、全 Web Vitest 134/134、typecheck通过、lint 0 errors（既有1 warning），`git diff --check`通过。
+- `make test-damai-demo-e2e` 在该提交代码上通过：隔离栈 seed/verify 19/19，浏览器9/9。常驻大麦数据未写入。
+- `31a60217` 对应 CI run `36230615921` 当前排队；因此视觉截图是否恢复仍待该 run 的 dashboard job 最终结果。一次本机 `make test-dashboard` 使用隔离 `flow_test`，但准备摘要报告 `state=degraded` 后非零退出，未执行截图；该失败不是常驻 `flow` 写入，也不能当作视觉验证通过。
+- Gate 1完整路由/视口/错误/403/交互矩阵仍未关闭。
 
 ## Gate 4 批次历史列表子项（提交 `430020f`，2026-09-26）
 

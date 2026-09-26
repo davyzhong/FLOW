@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 4.3
+version: 4.4
 created_at: 2026-09-12
 updated_at: 2026-09-26
 owner: FLOW
@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-09-26 更新：常驻开发库受控恢复已完成：先备份 `work/backups/flow-pre-demo-rehydrate-20260926.dump`（SHA-256 `b374a16e…9782d`），再幂等 seed，未清库/删数据/迁移；最终验收19/19两次通过，重复seed零增长。API为dashboard 200（8卡、趋势12/12、2条findings，状态degraded）、财报2份、发布快照1、冻结候选12；对象存储读回及SHA通过。大麦FY2025/FY2026覆盖37/40、40/40，毛利矩阵保留合理缺值。Next开发origin修复后常驻3000端口页面可正常hydration，六项Playwright只读断言通过；批次/Finding/财报/经营快照记录可见。KPI未发布比较值增加显式“未发布”状态，不与零值混淆（全Web Vitest 134/134、typecheck通过）。正式报告产物历史仍为空；比率/金额格式审计、其余页面/下钻全矩阵仍需完成。验收器已修正历史财报版本计数并加回归测试。此前“hydration未完成”是修复前记录，以本次更新为准。
+2026-09-26 更新：常驻开发库受控恢复已完成：先备份 `work/backups/flow-pre-demo-rehydrate-20260926.dump`（SHA-256 `b374a16e…9782d`），再幂等 seed，未清库/删数据/迁移；验收19/19两次通过，重复seed零增长。API为dashboard 200（8卡、趋势12/12、2条findings，状态degraded）、财报2份、发布快照1、冻结候选12；大麦覆盖FY2025 37/40、FY2026 40/40，合理缺值保留。KPI未发布比较值有显式状态；首次视觉CI发现该标记扩展了比较区第三行、整页高20px，已由`31a60217`收回到原数值行，全Web Vitest134/134、typecheck通过，隔离大麦E2E9/9。该修复SHA的CI仍排队，视觉复验未结束。经营比率与DSO也已恢复计算和单位化；正式报告产物历史仍为空；其他页面金额格式、完整视口/错误态/403与下钻矩阵仍需完成。常驻API只读，测试写入限制于`flow_test`或隔离Compose。
 
 截至本次文档同步，批次历史 clean-SHA 隔离验收通过（seed/verify19/19、浏览器9/9）；dashboard CI URL冲突已修复，最新SHA/CI见路线图。常驻开发库安全恢复与验证19/19两次完成。大麦发行财报各51行、FY2025覆盖37/40、FY2026 40/40；常驻API有8卡、12/12趋势及2条findings，状态degraded且矩阵保留合理缺格；3000端口 hydration 与KPI缺失原因展示已修复。经营分析点余额读取与派生指标依赖缺陷已修复（FY2026七项运营效率指标均可算，其中流动比率0.8119、资产负债率0.8986、DSO 116.3881天），比率单位和公开披露缺项/内部授权原因按语义显示。40次GET、36个不同路由/参数组合全部HTTP200；正式报告产物历史为空与API持久化一致。其他页面金额/数量格式、Gate1完整视口/错误态复测、批次三与其余页面下钻仍待完成。主线只在`main`串行推进。
 

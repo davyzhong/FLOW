@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 3.6
+version: 3.7
 created_at: 2026-09-24
 updated_at: 2026-09-26
 owner: FLOW
@@ -211,3 +211,7 @@ GitHub Actions run `36222136591`（SHA `430020f`）与 `36222489952`（SHA `59b3
 - TDD：公式依赖新增测试先红，接通派生指标映射后绿；API 经营引擎 15/15、ruff、mypy通过。前端运营分析组件5/5、Web全套134/134、typecheck通过，lint 0 errors（保留既有 TanStack Table React Compiler warning）。实际常驻 API GET 验证资产负债表余额与 DSO 均恢复为 `computed`；本次未写数据库。
 - 页面缺口文案新增 `segment_disclosure_missing` 与 `internal_data_required` 区分断言；先红后绿。Web全套仍134/134，typecheck通过、lint 0 errors（既有warning不变）。
 - 未关闭 Gate 1 全路由干净 SHA 矩阵、其他页面全状态/下钻，也未把应收周转天数或内部渠道面板计为已完成。需在本提交 SHA 上继续整体验收与 CI。
+
+### KPI 状态标签视觉回归修复（2026-09-26）
+
+`85a2275` 的 CI 视觉截图因 KPI 状态标记额外形成 CSS Grid 第三行，两个桌面截图页面高度均增加20px。`31a60217` 已将标记收进既有数值行，并新增结构断言。Dashboard 深链10/10、Web Vitest134/134、typecheck、lint（0 errors/1既有warning）通过；隔离大麦旅程 verify19/19、E2E9/9通过。修复 SHA 的 GitHub workflow `36230615921` 排队中，视觉基线的 CI 结果未出；本机 dashboard 验收因 seed 摘要为 degraded 而提前退出，未执行截图。故不更新视觉基线，也不宣称视觉回归已通过；待 CI dashboard job 结果后继续 Gate 1干净 SHA 视口矩阵。
