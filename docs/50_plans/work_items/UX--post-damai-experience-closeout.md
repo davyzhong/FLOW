@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 2.3
+version: 2.4
 created_at: 2026-09-24
 updated_at: 2026-09-26
 owner: FLOW
@@ -126,11 +126,15 @@ Acceptance: Gate 1 覆盖表中的每条目标路由都必须逐页通过，不�
 ### Gate 5：全链回归并关闭
 
 Run: `make damai-demo-build`
-Run: `make test-dashboard && make test-damai-demo-e2e`
+Run: safe isolated dashboard acceptance (must use `flow_test`, never persistent `flow`) and `make test-damai-demo-e2e`
 Run: `make lint && make typecheck && make test-web`
 Run: `python3 scripts/check_docs.py --phase m1` and the repository link check
 
 验收上述命令、覆盖报告与同 SHA CI 全绿后，更新本工作包、`CURRENT_ROADMAP.md` 和 `PROJECT_STATE.md`。演示 seed/verify 只能在 `test-damai-demo-e2e` 的隔离 Compose 环境中执行；任一 DB 测试必须使用隔离后的 `flow_test`，不得对常驻 `flow` 执行写入或清理。
+
+#### Gate 5 数据库安全前置修正（2026-09-26）
+
+复核发现 `scripts/test_dashboard.sh` 在 pytest 前直接执行 Alembic upgrade 与 `seed_dashboard_demo.py --fresh-batch`；`tests/conftest.py` 的 `flow_test` 自动切换只保护 pytest 进程，不能保护此前的迁移/seed 子进程。因此在此脚本改为默认并校验数据库名为 `flow_test` 前，禁止运行 `make test-dashboard`。验收脚本修复属于 Gate 5 的安全前置，不允许以“本地开发库”为理由豁免；通过后才运行 dashboard 浏览器旅程，常驻 `flow` 继续只读。
 
 ## 不做 / 保护边界
 
