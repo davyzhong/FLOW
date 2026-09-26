@@ -64,14 +64,16 @@ API 由本 worktree 的 `uvicorn --reload` 提供服务。最新整轮只读探�
 
 ### Gate 2：形成正确且够用的合成财务事实
 
-先把 40 个指标按“适用且可计算 / 适用但源事实缺失 / 不适用 / 有意不展示”裁决。仅为适用且缺失的指标补齐源事实；所有金额继续由确定性生成器产出，遵守借贷与报表勾稽、单位/币种和 24 个月期间合同。不得手工编辑生成文件、以零代缺值或人为塞入不可能的业务科目。
+先把 40 个指标按“适用且可计算 / 适用但源事实缺失 / 不适用 / 有意不展示”裁决。当前 API 读数显示 FY2025/FY2026 分别22/40、25/40可计算。18项 `missing` 分成：15项待验证可补的合成财报事实（显式利息费用、短债、长债、应付账款、销售收现、资本开支）以及 FY2025 的3项同比基期（该数据包未含 FY2024，候选结论为该年度不适用；FY2026 应使用已存在的 FY2025 比较列）。必须先以指标公式、别名映射和报表行合同交叉验证，再据此定类；目标候选覆盖为 FY2025 37/40、FY2026 40/40，只有逐项验收通过才能采用该目标。所有金额继续由确定性生成器产出，遵守借贷与报表勾稽、单位/币种和 24 个月期间合同。不得手工编辑生成文件、以零代缺值或人为塞入不可能的业务科目。
+
+合成财报的计划事实表达：利息费用作为财务费用的明确子项披露，不重复计入利润表费用小计；短期借款、应付账款拆入流动负债合计；长期借款拆入非流动负债合计；销售收现、资本开支写入现金流明细且保持现金流入/流出小计、OCF/ICF、现金桥原值闭合。数额必须由现有确定性参数/年度事实推导并明确 synthetic 假设，不能覆盖既有总额。
 
 Files:
-- Modify as evidence requires: `scripts/build_damai_demo.py`, `scripts/build_damai_metric_coverage.py`
+- Modify as evidence requires: `services/api/src/flow_api/fixtures/damai/statements.py`, `config/statements/item_alias_map_v1.yaml`, `scripts/build_damai_metric_coverage.py`, `scripts/build_damai_demo.py`
 - Regenerate only through generator: `fixtures/damai/canonical/`, `fixtures/damai/statements/`, `fixtures/damai/manifest.json`
 - Tests: existing `scripts/tests/` and API fixture/metric tests; add focused regression tests for every newly computable metric and accounting invariant.
 
-Acceptance: 40项指标逐项有“适用且可计算 / 适用但缺源事实 / 不适用 / 有意不展示”结论；对适用指标在 FY2025/FY2026 有确定性结果或有可核验缺失原因。逐项将覆盖矩阵数值和缺失原因与 API 响应对账；核心报表恒等式和预算/实际勾稽通过；重复构建零漂移。
+Acceptance: 40项指标逐项有“适用且可计算 / 适用但缺源事实 / 不适用 / 有意不展示”结论；FY2025 的三项同比指标须单独按无 FY2024 比较期验收，FY2026 的同指标须由 FY2025 比较列算出。其余适用项在 FY2025/FY2026 有确定性结果或可核验缺失原因；对新增财报行验证映射来源唯一、别名无歧义。逐项将覆盖矩阵数值和缺失原因与 API 响应对账；BS、IS、CF核心报表恒等式、子项到小计勾稽和预算/实际勾稽通过；重复构建零漂移。
 
 ### Gate 3：修快照发布与分析聚合
 
