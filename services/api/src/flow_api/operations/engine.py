@@ -77,12 +77,13 @@ OPERATING_FACTS_BY_STOCK: dict[str, Path] = {
 # formula_ref 条目的财报直接执行：标准 item_id 组合（与指标字典 definition
 # 同一口径，仅取数角色为财报归一化事实）。D01 引擎对 formula_ref 有意不算
 # （归 D02 统一快照）；O2 在快照未建时按同一口径直算，避免主题空转。
-FACT_DIRECT_CALCS: dict[str, tuple[str, str, str]] = {
-    # code: (numerator_item, denominator_item, label)
-    "gross_margin": ("is.gross_profit", "is.revenue", "毛利率"),
-    "net_margin": ("is.net_profit", "is.revenue", "净利率"),
-    "current_ratio": ("bs.current_assets", "bs.current_liab", "流动比率"),
-    "debt_asset_ratio": ("bs.total_liab", "bs.total_assets", "资产负债率"),
+FACT_DIRECT_CALCS: dict[str, tuple[str, str, str, tuple[str, ...]]] = {
+    # code: (numerator_item, denominator_item, label, allowed_fact_roles)
+    "gross_margin": ("is.gross_profit", "is.revenue", "毛利率", ("cur",)),
+    "net_margin": ("is.net_profit", "is.revenue", "净利率", ("cur",)),
+    # 点余额报表可能映射到 cur 或 end；二者均表示所选报告期末，不跨期回退。
+    "current_ratio": ("bs.current_assets", "bs.current_liab", "流动比率", ("cur", "end")),
+    "debt_asset_ratio": ("bs.total_liab", "bs.total_assets", "资产负债率", ("cur", "end")),
 }
 
 _THEME_NAMES = {
@@ -361,6 +362,16 @@ def _facts_with_roles(rows: list[Any]) -> dict[tuple[str, str], Decimal]:
             if value is not None:
                 facts.setdefault((row.item_id, role), value)
     return facts
+
+
+def _first_role_fact(
+    facts: dict[tuple[str, str], Decimal], item_id: str, roles: tuple[str, ...]
+) -> Decimal | None:
+    for role in roles:
+        value = facts.get((item_id, role))
+        if value is not None:
+            return value
+    return None
 
 
 def _eval_formula(
@@ -666,11 +677,11 @@ def build_operations_overview(session: Any, *, report_id: str | UUID) -> Operati
                 and entry.entry_id in FACT_DIRECT_CALCS
                 and role_facts is not None
             ):
-                numerator_item, denominator_item, label = FACT_DIRECT_CALCS[
+                numerator_item, denominator_item, label, fact_roles = FACT_DIRECT_CALCS[
                     entry.entry_id
                 ]
-                numerator = role_facts.get((numerator_item, "cur"))
-                denominator = role_facts.get((denominator_item, "cur"))
+                numerator = _first_role_fact(role_facts, numerator_item, fact_roles)
+                denominator = _first_role_fact(role_facts, denominator_item, fact_roles)
                 if (
                     numerator is not None
                     and denominator is not None

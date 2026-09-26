@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 3.2
+version: 3.3
 created_at: 2026-09-24
 updated_at: 2026-09-26
 owner: FLOW
@@ -26,7 +26,8 @@ applies_to: web-frontend
 - 大麦40项指标静态覆盖为 FY2025 37/40、FY2026 40/40；FY2025三项同比缺少FY2024比较期，不应补零或误标为企业不适用。
 - 隔离验收中驾驶舱有8张KPI卡、12个月趋势、8个产品、4个客户群、2条发现；OCF KPI可用且趋势12/12完整。毛利矩阵32格中实际与预算比较各10格可用、空格保持 unavailable，整体仍为 `degraded`。
 - 预测 sidecar 当前标记 `static-only` 且排除页面覆盖；本工作包不得把它计为已接入功能。
-- Dashboard KPI 比较值若 API 状态为 `unavailable` 且原因码为 `*_not_published`，现显示“未发布”标签，并保留接口说明作为 title/accessible label；避免将破折号误解为零值。比率/金额/数量的单位化数值格式仍需后续统一复核。
+- Dashboard KPI 比较值若 API 状态为 `unavailable` 且原因码为 `*_not_published`，现显示“未发布”标签，并保留接口说明作为 title/accessible label；避免将破折号误解为零值。经营分析的比率/倍数/天数单位显示已按指标合同修正；其他页面的金额/数量格式仍需统一复核。
+- 经营分析对真实大麦财报的复核发现：流动比率和资产负债率被误报 `not_applicable`，因为财报期末余额在归一化事实的 `end` 角色，而兜底只读 `cur`。现以同期间 `cur → end` 读取点余额；不得跨期回退。前端按指标合同格式化百分比、倍数和天数，保留原始精确值为悬停说明；未明确单位的经营事实保持原披露精度。
 
 ## 实施路线（本文件是规格；实施须按用户已批准的工作状态执行）
 
@@ -198,3 +199,11 @@ GitHub Actions run `36222136591`（SHA `430020f`）与 `36222489952`（SHA `59b3
 验证：`apps/web/tests/components/dashboard-deep-links.test.tsx` 10/10、全 Web Vitest 134/134、`pnpm typecheck` 通过、`pnpm lint` 0 errors（保留既有 `flow-data-table.tsx` React Compiler warning）。在常驻 `127.0.0.1:3000`、1440×1000 桌面视口完成 GET-only 浏览器检查：8张卡可见、6个比较项标记未发布、title 为“当前口径未发布该比较值”、无页面级 JS 错误；点击第一张指标卡进入 `/metric-library?focus=orders`。截图在 `/tmp/flow-ui-qa.8ciXBg/dashboard-after.png`（临时证据，不入库）。
 
 遗留：当前比率仍以小数显示（如 `0.108707`），金额/数量精度未做单位化格式审计；这属于下一个显示格式验收项，不把它混入本次状态标签修复。
+
+### 经营分析真实财报缺值与格式修正（2026-09-26）
+
+- 根因：大麦年报的 `bs.current_assets`、`bs.current_liab`、`bs.total_liab`、`bs.total_assets` 是点余额；生成管线可能将其映射为 `cur` 或 `end`。O2 `FACT_DIRECT_CALCS` 仅查询 `cur`，导致已有事实的流动比率、资产负债率错误显示为公式引用未计算。现对点余额同期间允许 `cur → end`，不使用其他期间事实、不改 D01/D02 口径。
+- 本机常驻 API GET `/api/v1/operations/overview/01a0dc95-fb0a-7cd8-ab36-5b1a1c95d0ea`（大麦 FY2026）返回 200，原始响应体 10,247 bytes，SHA-256 `4fc46607f45fa3927a7362d265728a1080674269ec6e62678eec08fecd2a04fd`；运营效率指标现为流动比率 `0.8119`、资产负债率 `0.8986`、存货周转率 `16.1552`、应收周转率 `3.0931`、应付周转率 `3.9172`、流动资产周转率 `1.9099` 可算。应收周转天数仍为 `fact_missing`，不补造。
+- 页面按指标 code 展示单位：毛利率/净利率/资产负债率/同比及杜邦结果转为百分比；流动比率与利润现金含量标“倍”；周转次数与天数带单位。百分比/倍数/天数保留两位小数，`title` 提供原始 API 精确值。来源未声明单位的经营披露值保持原样，避免错误四舍五入或假设单位。
+- 先添加前端回归断言验证红灯，再实现；运营分析组件 5/5、Web 全套 134/134、typecheck 通过，lint 0 errors（保留既有 TanStack Table React Compiler warning）。API 经营引擎 15/15、ruff、mypy 通过。实际常驻 API GET 已验证上述余额指标从 `not_applicable` 恢复为 `computed`；本次未写数据库。
+- 未关闭 Gate 1 全路由干净 SHA 矩阵、其他页面全状态/下钻，也未把应收周转天数或内部渠道面板计为已完成。需在本提交 SHA 上继续整体验收与 CI。

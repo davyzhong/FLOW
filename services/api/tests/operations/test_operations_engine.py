@@ -133,13 +133,32 @@ def test_efficiency_theme_evaluates_dictionary_turnover_formulas(
     assert {"current_ratio", "debt_asset_ratio", "inventory_turnover", "dso_days"} <= set(codes)
     for metric in efficiency.metrics:
         if metric.entry_id in {"current_ratio", "debt_asset_ratio"}:
-            assert metric.source == "d01_entry", "已有 D01 条目复用，不重复求值"
+            assert metric.source in {"d01_entry", "fact_direct"}, "复用 D01 条目或既有同口径兜底"
         else:
             assert metric.source == "metric_dictionary"
         if metric.status == "computed":
             assert metric.value is not None and metric.basis
         else:
             assert metric.reason, f"{metric.entry_id} 不可算必须给 typed 原因"
+
+
+def test_balance_sheet_direct_ratios_use_period_end_facts(db_session: Session) -> None:
+    report = _seed(db_session)
+    rows = db_session.query(StatementNormalizedItem).filter(
+        StatementNormalizedItem.report_id == report.id,
+        StatementNormalizedItem.item_id.in_(
+            ["bs.current_assets", "bs.current_liab", "bs.total_liab", "bs.total_assets"]
+        ),
+    )
+    for row in rows:
+        row.value_current = None
+    db_session.flush()
+
+    overview = build_operations_overview(db_session, report_id=str(report.id))
+    efficiency = {t.theme_id: t for t in overview.themes}["operational_efficiency"]
+    ratios = {metric.entry_id: metric for metric in efficiency.metrics}
+    assert ratios["current_ratio"].status == "computed"
+    assert ratios["debt_asset_ratio"].status == "computed"
 
 
 def test_tencent_sample_generalizes(db_session: Session) -> None:

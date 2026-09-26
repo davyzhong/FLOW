@@ -29,6 +29,59 @@ const THEME_NOTE: Record<string, string> = {
   users_channels: "内部运营数据授权后启用",
 };
 
+const PERCENT_METRICS = new Set([
+  "gross_margin",
+  "net_margin",
+  "debt_asset_ratio",
+  "revenue_growth",
+  "net_profit_growth",
+  "operating_profit_growth",
+  "revenue_yoy",
+  "net_profit_yoy",
+  "segment_revenue_yoy",
+  "adjusted_net_profit_margin",
+  "adjusted_ebitda_margin",
+  "business_line_share.china_logistics",
+  "business_line_share.international_logistics",
+  "business_line_share.technology_and_other_services",
+  "dupont_three_factor",
+]);
+
+const MULTIPLE_METRICS = new Set([
+  "current_ratio",
+  "ocf_to_net_profit",
+  "inventory_turnover",
+  "ar_turnover",
+  "ap_turnover",
+  "current_asset_turnover",
+]);
+
+const PRESERVE_DISCLOSURE_PRECISION = new Set([
+  "international_parcels",
+  "china_orders_fulfilled",
+  "adjusted_net_profit",
+  "adjusted_ebitda",
+]);
+
+function formatMetricValue(entryId: string, rawValue: string): string {
+  // 经营事实可能带有百万件/百万元等单位，但当前 typed payload 未向前端提供 unit；
+  // 未注册单位的原始披露值保持原样，避免四舍五入改变披露精度或造成单位误读。
+  if (PRESERVE_DISCLOSURE_PRECISION.has(entryId)) return rawValue;
+  const value = Number(rawValue);
+  if (!Number.isFinite(value)) return rawValue;
+  const isRatio = PERCENT_METRICS.has(entryId) || MULTIPLE_METRICS.has(entryId) || entryId === "dso_days";
+  const formatted = new Intl.NumberFormat("zh-CN", {
+    minimumFractionDigits: isRatio ? 2 : 0,
+    maximumFractionDigits: 2,
+  }).format(PERCENT_METRICS.has(entryId) ? value * 100 : value);
+  if (PERCENT_METRICS.has(entryId)) return `${formatted}%`;
+  if (MULTIPLE_METRICS.has(entryId)) {
+    return `${formatted}${entryId === "current_ratio" || entryId === "ocf_to_net_profit" ? " 倍" : " 次"}`;
+  }
+  if (entryId === "dso_days") return `${formatted} 天`;
+  return formatted;
+}
+
 type LoadState =
   | { status: "idle" }
   | { status: "ready" }
@@ -352,7 +405,9 @@ export function OperationsOverviewApp({
                         </Link>
                         {metric.status === "computed" ? (
                           <span className="ops-overview__metric-value">
-                            <strong>{metric.value}</strong>
+                            <strong title={`精确值：${metric.value}`}>
+                              {formatMetricValue(metric.entry_id, metric.value ?? "")}
+                            </strong>
                             {metric.basis ? (
                               <small> 基准：{metric.basis}</small>
                             ) : null}

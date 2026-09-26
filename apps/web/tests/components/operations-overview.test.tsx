@@ -71,10 +71,20 @@ const OVERVIEW = {
           source: "fact_direct",
         },
         {
+          entry_id: "current_ratio",
+          name: "流动比率",
+          status: "computed",
+          value: "1.2345",
+          basis: "本期归一化事实",
+          caliber_note: "流动资产 ÷ 流动负债",
+          reason: null,
+          source: "fact_direct",
+        },
+        {
           entry_id: "international_parcels",
           name: "国际物流包裹量",
           status: "computed",
-          value: "439",
+          value: "439.1234",
           basis: "Q1FY2023 347 百万件",
           caliber_note: "Selected Operating Data；期间累计值",
           reason: null,
@@ -134,7 +144,10 @@ describe("OperationsOverviewApp", () => {
       expect(screen.getByText("六主题概览")).toBeTruthy();
     });
     // 事实卡片：值 + 基准 + 口径（借鉴 #1/#2）
-    expect(screen.getByText("0.1600")).toBeTruthy();
+    expect(screen.getByText("16.00%", { selector: "strong" })).toBeTruthy();
+    expect(screen.getByText("32.00%", { selector: "strong" })).toBeTruthy();
+    expect(screen.getByText("1.23 倍", { selector: "strong" })).toBeTruthy();
+    expect(screen.getByText("439.1234", { selector: "strong" })).toBeTruthy();
     expect(screen.getByText(/口径：净利润总额口径/)).toBeTruthy();
     expect(screen.getByText(/Q1FY2024 · 未经审计/)).toBeTruthy();
     expect(screen.getByText(/docs\/source.pdf · 第 22 页/)).toBeTruthy();
