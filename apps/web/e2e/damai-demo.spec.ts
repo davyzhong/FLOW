@@ -141,6 +141,29 @@ test("dashboard API serves customer-grain overview", async ({ page }) => {
     }
   }
 
+  // 产品经营表现表的八列数据同样必须逐产品对应 API，避免只校验标题/行数。
+  const productsTable = page.getByRole("table", { name: "产品经营表现" });
+  await expect(productsTable).toBeVisible();
+  const productRows = productsTable.locator("tbody tr");
+  await expect(productRows).toHaveCount(body.product_table.rows.length);
+  for (const [rowIndex, product] of body.product_table.rows.entries()) {
+    const cells = productRows.nth(rowIndex).locator("th, td");
+    await expect(cells).toHaveCount(8);
+    await expect(cells.nth(0).locator("span")).toHaveText(product.name);
+    const expectedValues = [
+      product.revenue.display_value,
+      product.revenue_comparison.display_value,
+      product.orders.display_value,
+      product.orders_comparison.display_value,
+      product.gross_margin.display_value,
+      product.gross_margin_comparison.display_value,
+      product.fulfillment_cost_rate.display_value,
+    ];
+    for (const [index, expected] of expectedValues.entries()) {
+      await expect(cells.nth(index + 1)).toHaveText(expected);
+    }
+  }
+
   const dims = Object.fromEntries(
     body.filter_options.dimensions.map((d) => [d.dimension, d.options]),
   );

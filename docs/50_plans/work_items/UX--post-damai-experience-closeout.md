@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 5.1
+version: 5.2
 created_at: 2026-09-24
 updated_at: 2026-09-27
 owner: FLOW
@@ -47,9 +47,11 @@ applies_to: web-frontend
 - 在真实大麦 Playwright 旅程中增加 API→页面值级断言：8张 KPI 卡的数量、唯一标题、主值，以及预算/同比/YTD预算三类比较的状态和值，必须逐项等于 `/api/v1/dashboard/overview` 响应。
 - 展开 Dashboard 趋势明细，将同响应的12个月、每月收入/经营利润/经营现金流/毛利率共48个显示值和月份逐项核对；OCF 仍额外要求12/12可用且 exact value 非空。
 - 将毛利矩阵与同响应做32格完整对账：行列名称/数量正确；每格 actual/comparison 显示值与 API 一致；无事实的格必须显示破折号而非0。
-- 本轮 `make test-damai-demo-e2e` 在隔离 Compose 项目中连续复跑两次，均迁移到 `0031_enterprise_directory`、seed发行 manifest SHA `6303595f01a3a4fb10bf90bf7320701107bb24aeedaad3e6ef9723bcd3e3bb3a`、verify 19/19、只读GET43/43 HTTP200、真实浏览器9/9；第二轮可见性清单 manifest SHA `5c97ce2e064c2b4cbaa3c42323eda6ba06ccb0809d561119f20edac60db979f5`。可见性清单会包含运行期快照/ID，manifest SHA 每轮变化；它仅证明本次完整性，不应作为稳定发行包 SHA。隔离 Compose 卷与服务由脚本清理；未触碰常驻 `flow` 数据库。
-- 验证：Web Vitest 142/142；本次修改后的 `pnpm exec tsc --noEmit`、目标 E2E ESLint 通过；截图归档 61/61 与响应式 E2E 27/27 已在前一检查点通过。此代码仍须提交后的同 SHA required CI。
-- 尚未关闭：其他所有数据页面的逐项 API→源事实→UI 映射、Dashboard 全部筛选/期间参数组合、所有显示数据的深链逐点检查、其余交互路由的全状态/全视口矩阵及 Gate 5 干净 SHA 全链。以上 Dashboard 逐项对账只关闭本页面的值一致性子缺口，不得把 UX Gate 或工作包标 completed。
+- 产品经营表现表也逐产品核对名称、收入、收入同比、订单量、订单同比、毛利率、毛利率同比和履约成本率七项显示值，与同一 API 响应一致。
+- 只读探测矩阵现对四类维度的每个选项分别请求 `month` 与 `ytd` 视图，不再仅取每类首个选项；矩阵 builder 单测3/3通过。隔离旅程已扩展至85条 GET，85/85 HTTP200；可见性清单 manifest SHA `fad8696a8f00d5d53f0ac1ac4c5e371378f266e7502648b1c5d813b57a69d35e`。清单含运行期快照/ID，manifest SHA 每轮变化，仅证明本次完整性，不是稳定发行包 SHA。
+- 本轮 `make test-damai-demo-e2e` 在隔离 Compose 项目中验证迁移头 `0031_enterprise_directory`、seed发行 manifest SHA `6303595f01a3a4fb10bf90bf7320701107bb24aeedaad3e6ef9723bcd3e3bb3a`、verify 19/19、只读 GET 85/85 HTTP200、真实浏览器 9/9；隔离 Compose 卷与服务由脚本清理，未触碰常驻 `flow` 数据库。
+- 验证：Web Vitest 142/142；矩阵 builder pytest3/3；本次修改后的 `pnpm exec tsc --noEmit`、目标 E2E ESLint 通过；前一检查点截图归档61/61与响应式E2E27/27通过。当前筛选 API 探测覆盖全部单维选项×两个期间，但尚未穷举多维交叉组合，UI筛选器也仅有代表性 E2E；此代码仍须提交后的同 SHA required CI。
+- 尚未关闭：多维筛选交叉组合、全部 UI 筛选交互、其他所有数据页面的逐项 API→源事实→UI 映射、所有显示数据的深链逐点检查、其余交互路由的全状态/全视口矩阵及 Gate 5 干净 SHA 全链。以上 Dashboard 逐项对账只关闭部分本页面值一致性子缺口，不得把 UX Gate 或工作包标 completed。
 
 ### 真实大麦 API→页面交叉对账（2026-09-27，Gate 1 部分闭环）
 

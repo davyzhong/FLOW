@@ -31,7 +31,7 @@ def test_visibility_targets_cover_read_routes_and_exclude_freeze_gets() -> None:
         "dashboard": {
             "filter_options": {
                 "dimensions": [
-                    {"dimension": "region", "options": [{"id": "region-1"}]}
+                    {"dimension": "region", "options": [{"id": "region-1"}, {"id": "region-2"}]}
                 ]
             }
         },
@@ -78,6 +78,9 @@ def test_visibility_targets_cover_read_routes_and_exclude_freeze_gets() -> None:
     assert "/api/v1/statements/report-1/projection" in paths
     assert "/api/v1/operations/public/CAINIAO/FY2023" in paths
     assert "/api/v1/dashboard/overview?region_id=region-1" in paths
+    assert "/api/v1/dashboard/overview?period_view=ytd&region_id=region-1" in paths
+    assert "/api/v1/dashboard/overview?region_id=region-2" in paths
+    assert "/api/v1/dashboard/overview?period_view=ytd&region_id=region-2" in paths
     assert "/api/v1/intake/batches/batch-1/versions" in paths
     assert "/api/v1/intake/imports/import-1/cleaning-summary" in paths
     assert "/api/v1/publishing/snapshots/report-snapshot-1/attempts" in paths

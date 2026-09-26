@@ -73,12 +73,21 @@ def build_visibility_targets(
         dimension = row.get("dimension")
         param = dimension_params.get(str(dimension))
         options = _records(row, "options")
-        if param and options and options[0].get("id"):
-            option_id = str(options[0]["id"])
+        if not param:
+            continue
+        for option in options:
+            if not option.get("id"):
+                continue
+            option_id = str(option["id"])
             add(
-                f"dashboard-filter-{dimension}",
+                f"dashboard-filter-{dimension}-{option_id}",
                 f"/api/v1/dashboard/overview?{param}={option_id}",
-                f"dataset=damai;{param}={option_id}",
+                f"dataset=damai;period_view=month;{param}={option_id}",
+            )
+            add(
+                f"dashboard-ytd-filter-{dimension}-{option_id}",
+                f"/api/v1/dashboard/overview?period_view=ytd&{param}={option_id}",
+                f"dataset=damai;period_view=ytd;{param}={option_id}",
             )
 
     report_rows = _records(seed, "reports") + _records(
