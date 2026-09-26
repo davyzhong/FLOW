@@ -3,16 +3,222 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目尽调、优化与单 Agent 执行总交接
 doc_type: navigation
 status: current
-version: 3.7
+version: 4.2
 created_at: 2026-09-12
-updated_at: 2026-09-26
+updated_at: 2026-09-27
 owner: FLOW
 applies_to: repository
 ---
 
-# FLOW 项目尽调、优化与单 Agent 执行总交接｜2026-09-26
+# FLOW 项目尽调、优化与单 Agent 执行总交接｜2026-09-27
 
 > 本页是下一位单一 Agent 的工作入口，整合了多 Agent 执行审计、R1 修复复核、竞品与方法论研究、工程收口计划和后续产品优化建议。它负责说明“现在在哪里、还要查什么、先改什么、怎样证明完成”；项目状态仍以 [PROJECT_STATE](docs/00_start_here/PROJECT_STATE.md) 为唯一事实源，任务顺序仍以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为唯一执行入口。
+
+## 0.4 夜间接手执行手册（2026-09-27，当前权威）
+
+> **本节覆盖本文其余旧会话交接快照。** 旧章节保留历史证据，不可据其旧顺序领取任务。下一位 Agent 开始前先从 GitHub 同步 `main`，再读 `AGENTS.md`、`docs/00_start_here/PROJECT_STATE.md`、`docs/50_plans/CURRENT_ROADMAP.md` 和相应工作包。唯一任务顺序是路线图中的 11 项队列；本节只是对同一队列逐项提供执行手册，不构成第二条队列。
+
+### 接手基线、当前状态与操作纪律
+
+- 当前已推送主线基线：`fc6e63a7`（包含 `9729dbc4` ORG-LEDGER 工作包、`880f1b76` 三表 schema 提案、`e1a4d264` 大麦企业包基础，以及 `fc6e63a7` 对具体 schema 的批准记录和 README 元数据修正）。`gh run list --commit fc6e63a7` 本次未发现 CI run；接手时必须重新核对同 SHA CI，不得沿用旧 SHA 的绿灯。下一位 Agent 开始前执行 `git pull --ff-only` 并核对当前 dirty changes，不要为了“clean”丢弃代码草案。
+- 文档门禁现状：在当前基线 `fc6e63a7` 上，本次本地重跑 `python3 scripts/check_docs.py --phase m1` 为 PASS（297 docs、89 legacy-exempt、0 errors）；`plan_views.py --check`、链接检查和 `git diff --check` 均 PASS。`python3 scripts/build_enterprise_data_package.py verify` 同样 PASS（25 个登记文件）。这些是当前本地结果，不代表未来交接提交的 CI；仍需在交接提交后核同 SHA CI。
+- 路线图队列：11 项；本次盘点时已完成 0、实际执行中 0、队首待启动 1、排队 9、外部材料受限 1。唯一队首是 ORG-LEDGER；当前没有可确认仍在运行的工程进程，但工作区出现完整度尚待审查的发行包草案。队列顺序和每次状态变化只更新 `CURRENT_ROADMAP.md`；每完成一项，补验收证据、更新工作包/`PROJECT_STATE.md`，提交并立即推送后才进入下一项。
+- 只在 `main` 上做，禁止新建并行任务分支；不得同时开始下一项。用户已授权常规项目实施与验证，不再为日常测试、分析、文档或常规实现请求再次批准。既有全局安全红线仍有效：真实数据迁移/schema、删除/覆盖/恢复常驻库、密钥/CI 配置、公开部署等按 `AGENTS.md` 处理；尤其常驻 `flow` 中的测试批次偏差 `01a0dcdd-8245-7c17-99aa-fce91a8a7a57` 不得自行删除、回滚或切 latest。
+- **状态口径**：`进行中`=此刻确实有命令、审查或实现正在执行；`队首待启动`=当前第一项但未开工；`排队`=严格等待前项完成；`外部材料受限`=先按本手册执行主动恢复和替代方案，不是停工态。工作包 frontmatter 的 `active/blocked` 表示工作包生命周期或验收门槛，不覆盖路线图执行状态。
+- **ORG-LEDGER 的最新事实与安全边界**：工作包由 `9729dbc4`、具体三表 schema 提案由 `880f1b76` 推送；用户批准该准确方案由 `fc6e63a7` 记录。批准仅覆盖工作包列出的三表与对应迁移，不覆盖额外 schema、认证/RBAC 改造，也不授权在共享/常驻 DB 清理/初始化。可执行已批准迁移，但只在隔离数据库验证；不要对常驻库迁移或写入。
+- **发行包基础和当前未提交代码草案**：`e1a4d264` 已将 `data/enterprise/damai-logistics/v1/` 下27个包文件及 `scripts/build_enterprise_data_package.py` 一并推送到 main（该提交新增28个文件）；不要重复生成或重建同名目录。`fc6e63a7` 后只读运行 `python3 scripts/build_enterprise_data_package.py verify` 得到 exit 0：manifest 登记的25个文件 SHA/JSONL 行数通过，样例为8个组织单元、8个岗位、8个身份、142条权限映射。此自检**不等于工作包验收**：仍需验证 build 幂等、manifest 覆盖、恶意/缺项拒绝、合成/凭据字段安全、RBAC 映射、业务引用及 full/business 初始化。当前 dirty worktree 已出现 `models/__init__.py` 修改、`infrastructure/models/enterprise_directory.py`、`flow_api/enterprise/directory.py`、迁移 `0031_enterprise_directory.py` 和 `tests/enterprise/` 草案；不得覆盖、重置、擅自暂存或断言已通过。先读 diff/测试、对照获批 DDL，再继续并由同一任务所有者明确收口。
+- **遇到失败的统一处理**：保留原始日志和失败产物 → 定位根因并判别代码/数据/环境/外部输入 → 先运行最小重现 → 做最小修复或有记录的替代验证 → 重跑原失败项及相邻回归。禁止删断言、改预期值迎合实现、重写原始 oracle、用 synthetic 结果冒充真实验收。若原验收客观上不可完成，交付可复现的调查、替代结果、未满足项与重启条件；不能声称原验收通过。
+- **每项汇报格式**：完整 11 项队列和计数；当前项与细分步骤；本轮完成证据（SHA、命令、结果）；实际问题/替代路径；下一项何时解锁和唯一下一动作。不要写“等待用户验证/批准”作为常规动作；只有触及明文安全红线的 schema 执行边界才须记录为精确批准门。
+
+### 唯一串行 To-do 的逐项操作卡
+
+每张卡的“完成后”是唯一可进入下一项的条件。若发现路线图与证据不一致，先核对主线提交/原始证据，更新路线图并通过文档门禁，再按更正后的顺序工作。
+
+#### 1. 企业组织建制与经营账套初始化包（唯一队首）
+
+**入口材料：** `docs/50_plans/work_items/ORG-LEDGER--enterprise-initialization-package.md`、`docs/50_plans/work_items/DAMAI--full-year-demo.md`、`docs/50_plans/CURRENT_ROADMAP.md`、`docs/20_product/` 中 enterprise/RBAC/导入发布相关规则，以及 `services/api/src/flow_api/fixtures/damai/loader.py`、`scripts/seed_damai_demo.py` 和 `fixtures/damai/`。
+
+**授权边界：** 用户已批准发行包行为：完整初始化同步组织并重建业务、业务重置保留组织、仅作用于 manifest 指定企业；包格式/SQL/初始化入口均可实施。具体三表 schema 和对应 Alembic 迁移的批准已记录在 `fc6e63a7`，可以实现并在隔离数据库验证；不得扩展为其他表、认证/RBAC 变化，禁止对常驻开发库迁移、清理或初始化。
+
+**操作步骤：**
+
+1. 开始先拉取 `main`、核实分支/HEAD/远端与同 SHA CI；逐项读取上述工作包/规则，检查当前数据库迁移头、企业/RoleBinding 模型、对象存储引用方式和 seed 实际副作用。基于 `e1a4d264` 只读审查现有发行包与校验器，核对 manifest 登记25文件为何不含 README/manifest、对现有完整发行目录的覆盖、来源 SHA、字段/引用/重复项与脚本写入面，再建立本任务内部子步骤状态表，只在 HANDOFF/路线图的当前任务栏报告，不新建第二条队列。
+2. 盘点 `fixtures/damai/` 的 canonical JSONL、报表、预算、运营侧车、来源文件和 manifest；记录文件数、行数、SHA、来源与可复用路径。目标发行目录按工作包 `data/enterprise/damai-logistics/v1/` 设计；复用现有 canonical 真相，不能复制出两份可手工编辑的数据。
+3. 固定 manifest 合同：企业稳定 code、包/模块版本、synthetic 标记、全局依赖版本、组织/业务稳定键、引用关系、每个文件 SHA/行数、校验规则及允许的数据清理范围。先写 manifest/schema 测试，再实现纯文件 validator。测试应覆盖缺文件/错 SHA/错行数/版本不匹配/非 synthetic/重复 code/断裂引用/跨企业引用/未知角色/含 credential 或敏感个人字段等拒绝路径。
+4. 组织数据只使用明确虚构人员、`example.invalid` 邮箱、保留号段电话、无凭据 actor ID；组织、岗位、成员 ID 带企业命名空间。权限文件仅表达期望映射，必须限制在现有 Role/Action 合同内；不可借 seed 绕过 Principal/RBAC，也不可制造可登录密码、token 或真实身份信息。
+5. schema 已获批准：对照工作包提案审查当前 migration/model/test 草案是否严格实现三表与约束，先跑纯模型/迁移单测与负向测试；若代码超出批准范围则收窄回批准 DDL，不可自行加表/改 RBAC。数据库验证只在隔离 PostgreSQL 栈执行。
+6. 列出逐表 business reset ownership/lineage 清单，证明只删除 manifest 企业记录。不得 `TRUNCATE`、`DROP SCHEMA`、全库 delete；保留审计事件、全局字典、共享对象及被其他企业引用的对象。`full` 与 `business` 两种动作都须事务化，完整失败能回滚到无部分写入状态。
+7. 创建/检查初始化入口：preflight 校验数据库版本与企业存在，组织同步遵循停用而非删除历史主体，业务 seed 复用领域服务完成 Intake→Review→Snapshot→Analysis→Freeze。SQL 和服务 seed 必须由同一 manifest 导出或校验，避免双重真相；不添加交互式人员/口径选择，也不偷偷自动备份。
+8. 仅在隔离 PostgreSQL + MinIO 栈做首次 full、重复 full、business-only 重置、坏包拒绝、注入中途失败回滚、目标企业隔离、组织保留/同步、对象共享保护、审计追加保留。确认 seed 幂等、失败无半写、非目标企业与全局配置不变。
+9. 回归原有大麦交付：`make damai-demo-build`、verify 19/19、业务页面 E2E 9/9（按仓库现行命令和版本复核），再跑 API/Web/合同/文档门禁及同 SHA CI。修复 README 的 M1 `doc_type` 问题并确认 frontmatter 门禁通过。保存栈配置、数据库隔离证明、对象清单、行数与 SHA、完整命令/退出码；常驻 `flow` 前后只读核对且不得被测试改动。
+10. 更新发行包 README、ORG 工作包、`PROJECT_STATE.md`、本 HANDOFF 当前快照及路线图证据；只有原验收全部满足才标 completed。提交前检查 `git diff --check`、`python3 scripts/check_docs.py --phase m1`、链接/契约/相关测试；只暂存本项文件，按 conventional commit，随后立即 `git push origin main` 并查询该 SHA CI。
+
+**验收：** 单一命令可 full 初始化和 business-only 重置；数据包可移植、可复验、版本/哈希/来源齐备；组织同步/保留符合语义；所有企业边界、审计、共享对象、失败回滚及幂等性测试通过；旧大麦 verify 19/19、E2E 9/9 不回退；文档门禁和同 SHA CI 全绿。迁移与任何破坏性验证仅在隔离栈进行。
+
+**遇到问题：** manifest 与现有 fixture 不一致时以现行 canonical 资产为起点，先解释差异并保留原文件，不手改派生产物；删除范围不能证明企业归属时拒绝删除，补 ownership/lineage 或用安全重建策略；共享对象引用不清时保留对象；seed 如会写常驻库则停用该路径并构建隔离栈；测试环境失败先检查 `flow_test`、compose project 名和 MinIO bucket 初始化，不清空常驻数据；schema 方案如出现额外表/RBAC 改动，先补具体方案和批准，不在实现中扩范围。
+
+**完成后：** 才进入第 2 项 UX 可见性与全站验收关闭。
+
+#### 2. UX 可见性与全站验收关闭
+
+**入口材料：** `docs/50_plans/work_items/UX--post-damai-experience-closeout.md`、`docs/50_plans/2026-09-26-ui-deep-link-implementation-plan.md`、`docs/60_delivery/verification/2026-09-26--damai-visibility-gate1-v1.md`、`docs/80_reviews/2026-09-26-ui-linkability-audit.md`。深链批次一至三已完成；批次三代码锚点 `cef0c362`，全量 API 845、生产 E2E 93/93、Web 142/142、脚本 101/101；隔离大麦 verify 19/19、只读 GET 43/43、浏览器 9/9。不要重复做已完成批次。
+
+**操作步骤：**
+
+1. 在当前干净 `main` 上建立 Gate 1 覆盖总表：每条路由列出方法与参数、公司/期间/批次、API 端点、来源事实、环境、SHA、响应/内容摘要、UI状态、视口和归因。先核对已有 43 条只读 GET 清单；只补未覆盖路由，不重新探测已有项。
+2. 对每个数据页逐条比对 API 与真实页面：当前已发布值、未发布、无源事实、不适用、权限不足、错误、加载中、部分降级。缺值按源事实/映射/计算/快照/筛选/前端消费/设计排除归因，严禁简单写“无数据”。
+3. 在 390/1024/1440 宽度验页面与状态；保存可复验的 E2E/截图摘要（按项目既有截图矩阵约定存放），补测试前先做 TDD。优先关掉有事实支持且影响页面呈现的缺口，禁止为了“填满”而补零或伪造数值。
+4. 对所有目标 KPI、趋势、矩阵、报告和 Finding 检查真实下钻目标。深链批次已交付的入口只回归验证，不重做。检查 actor/enterprise 隔离和数据工作台批次可见性。
+5. **只读安全：** 以下 GET 会 freeze/写入快照，不能当作只读探测调用：`/api/v1/statements/{report_id}/objective-snapshot`、`/api/v1/statements/{report_id}/objective-snapshot/html`、`/api/v1/operations/overview/{report_id}/{html|xlsx|pptx|pdf}`。欲验证其行为，先代码审查副作用，再只在隔离数据库/对象存储测试，不能对常驻 `flow` 或用户环境探测。
+6. 完成 Gate 5：依次运行 `make damai-demo-build`、安全隔离的 dashboard 测试（确认脚本目标为 `flow_test`）、`make test-damai-demo-e2e`、`make lint && make typecheck && make test-web`、`python3 scripts/check_docs.py --phase m1`、`python3 scripts/documentation/links.py --check`、`scripts/check_contracts.sh`；涉及 API 全量变更时再运行 `cd services/api && uv run pytest -q`。最后核对最新提交 SHA 的 GitHub required jobs 全绿。
+
+**验收：** 覆盖表无遗漏；每项显示值与 API/源事实一致；缺口有类型、原因和证据；状态/视口/下钻 E2E 通过；隔离 verify 19/19、浏览器 9/9；门禁与同 SHA CI 绿；常驻数据库未被测试写入。符合后更新 UX 工作包、路线图和 PROJECT_STATE，提交推送。
+
+**遇到问题：** API 200 不代表页面正确；页面有卡片也不代表数据链通过。副作用不明时用静态调用链审查，不能 curl“试试看”。E2E 若因 Next `.next` 锁或临时配置冲突，使用工作包记录的临时 web 副本方案，不杀未知进程、不改真实工作区配置。常驻库批次问题只做只读核对，禁止擅自清理。
+
+**完成后：** 进入第 3 项 C 级归因与修订。
+
+#### 3. 公开财报 C 级归因、原件复核与抽取修订
+
+**入口材料：** `docs/50_plans/work_items/PUBLIC--c-level-exit-protocol.md`、`docs/80_reviews/ai-cross-review/results/adjudication.md`、交叉评结果 `docs/80_reviews/ai-cross-review/results/gpt-6-astra-2026-09-25.md`、执行说明 `docs/80_reviews/ai-cross-review/README.md`。已确认 42 个真抽取异常并分类；另有 109 个字段口径疑点；JDL 200 格原不可核对的文本层问题已有英文版原件可读，SHA 见 adjudication §4。三类状态不得合并成一个“错误数”。
+
+**操作步骤：**
+
+1. 先对账最新抽取 YAML、订正表、提交和 L1 报告，确认 42 项裁决是否已进入版本化新 YAML；保留旧值，不覆盖原始财报和历史答案集。
+2. 按 `adjudication.md` 模式一修空列借邻值：源列为破折号必须输出 null；为模式二修正 JDL 权益变动表页区间/表识别；为模式三补 BABA FY2023 prior。每种模式先添加失败测试，再最小修复。
+3. 复核 109 项字段合同：确认 current/end/begin 语义、阿里现金流行名、流动/非流动限定、JDL 利润与综合收益归属。每项保留“原值/新值/口径理由/原页证据/复核者”；无法明确判定就标记未决，不静默归成数值错误。
+4. 用可读 JDL FY2025 英文版对原 200 格逐格重核，英文版只作为同版式双语源文本，不替换/删除中文原件。复核时检查页码、行列和单位；pypdf 与答案包同族，注意不要把 pdfplumber 乱序误判为源错误。
+5. 修订只产生新版本答案/抽取资产和 supersedes 链；更新差异分类和基准。执行 `python3 scripts/accuracy_benchmark.py --level L0` 和 `--level L1`，并运行受影响抽取/导入/解析测试。
+
+**验收：** 42 项有逐项修订/保留理由；109 项有字段口径结论或明确未决；JDL 200 格全部核验或逐格保留不可读证据；原文值、抽取值、页码、单位和变化关系可追溯；L0/L1 结果与 SHA 归档。不能因 L0 通过宣称 L1 或 C 级通过。
+
+**遇到问题：** 英文版数值列/页码若与中文疑似不一致，交叉检查原文版式和下载 SHA，暂停该格结论；PDF 文本层缺字时采用受审视觉/OCR证据并登记，不猜值。实现修订导致其他报告变化时跑全相关抽取集，不只跑单个样例。
+
+**完成后：** 进入第 4 项 U04 parser 与冻结留出验证。
+
+#### 4. U04 解析器适配与独立留出验证
+
+**入口材料：** U04 工作包、`validation/financial_reports/oracle-register.md`、`validation/financial_reports/holdout-lottery-2026-09-25.md`、原始首跑 `validation/financial_reports/holdout_runs/2026-09-24/`、`docs/implementation/objective-analysis/holdout-results.md`。当前已冻结并录入 oracle 的留出是 `validation/financial_reports/oracle/xiaomi_2026h1.yaml` 与 `alibaba_fy2027q1.yaml`；原件在 `validation/financial_reports/original/` 对应目录。原 3 样本全部 199 行 not_comparable，是旧版式不可比，不是精度通过。
+
+**操作步骤：**
+
+1. 阅读当前 `cn_ashare_table` 适配器、页码配置、旧首跑产物、oracle-register 和抽签记录；确认候选原件 SHA 与 oracle 文件 SHA/来源匹配，先冻结原有首跑结果。
+2. 注意 `scripts/holdout_u4_run.py` 当前 SAMPLES 默认仍是旧的 SF/Tencent/ZTO。**不可不加检查就把它当作新留出 runner。**先添加显式 sample 参数/配置及单测，能把旧样本跑作回归、将小米/阿里按冻结 oracle 跑作留出；输出目录用全新 run ID，绝不覆盖 `2026-09-24`。
+3. 对 “合并及公司” 合并标题和年报页码提示范围写失败测试；解析器最小改造后跑旧 3 样本回归。新留出原件首跑前不看抽取输出调参，不修改 oracle 期望值。
+4. 冻结新留出首次输出、source SHA、parser commit、命令与环境；逐行计 matched/mismatched/not_comparable，区别行名未匹配、页码范围、单位和真实数值错误。
+5. 对差异逐项回原 PDF；独立性受损的样本立即转回归集并注明污染史，不可继续称为 holdout。
+
+**验收：** 旧样本作为回归集有可比率/差异清单；小米和阿里按冻结名单、原件 SHA、未调参规则首跑；逐行差异和归因可复现；更新 oracle-register、holdout-results、U04 工作包和路线图。通过率门槛以 U04/C 级正式协议为准，不自设放宽线。
+
+**遇到问题：** 如果解析器仍不能比较，保留 not_comparable 和最小复现，定位版式适配；不得将 not_comparable 算作 match。若新样本文件或 oracle 真缺失，先查 Git tracked 路径、manifest 和备份再认定缺失；无法恢复时执行外部材料调查/未验证结案，不伪造答案。
+
+**完成后：** 进入第 5 项，重建 L0/L1 与 C 级 Go/No-Go 证据包。
+
+#### 5. C 级质量基准与 Go/No-Go
+
+**入口材料：** C 级出口工作包、更新后的抽取/答案集、U04 结果、发布与溯源测试证据。
+
+**操作步骤：**
+
+1. 检查 `config/statements/answer_set_l1.yaml` 是否由当前事实/来源版本确定性生成；需要重建时先保存旧版本和 supersedes 链，再运行 `python3 scripts/build_answer_set_l1.py`，不得静默覆盖历史答案集。
+2. 运行 `python3 scripts/accuracy_benchmark.py --level L0` 与 `--level L1`；若需 DB，使用隔离 `flow_test` 或专属验收栈。记录完整输出、分母、strong/weak anchors、unlocated 和 mismatch 分组。
+3. 按 C 级工作包逐项核验 L0、L1 ≥300 数值点/覆盖报告全集、公司级 holdout、页锚可复现、重述 supersedes 链、盲评无严重事实错误和拒答/降级行为。
+4. 对每项未过门槛的证据开在当前第4项内继续修，不另开平行队列；按现有责任执行原件复核或代码修复，随后重跑相关与全量基准。
+5. 形成机器可读结果和书面 Go/No-Go：只有所有硬门槛通过才写 Go；证据不足写 Hold/未通过并列精确缺口，不将覆盖 1794/1794 等同准确率。
+
+**验收：** 同一最终 SHA 上所有规定门槛和 required CI 通过；答案集和来源可复算；Go/No-Go 引用每条证据 SHA/路径。随后更新状态并提交推送。
+
+**遇到问题：** 发现旧文档与机器结果不同，以新鲜可复验机器输出为准并保留旧记录；若 DB 不可用先确认 Docker/服务并检查脚本是否会写常驻库，禁止为让测试通过而接常驻 `flow`。
+
+**完成后：** 进入第 6 项 P3 数据扩张和来源接入。
+
+#### 6. P3 真实数据、来源与行业扩张
+
+**入口材料：** `docs/50_plans/work_items/PUBLIC--data-expansion-benchmarks.md`、公开来源政策、既有财报抓取/抽取/导入管线、`docs/80_reviews/ai-cross-review/results/adjudication.md`。
+
+**操作步骤：**
+
+1. 核实公开来源政策和下载授权，对每份报告记录公司、市场、报告期、报告类型、官方 URL、下载时间、SHA-256、页数和文本层可读性。
+2. 逐批加入物流→电商→SaaS公开财报；任何批次先验 PDF 文本层，乱码时查官方英文版或可靠 OCR，并把原 PDF不可变保存。
+3. 运行抽取、L0、每公司至少20点 L1 抽核、勾稽检查、页锚和 source/supersedes 关系；导入或发布仅在隔离栈完成。
+4. 行业基准逐条记录来源、时期、样本和计算方法；缺少可靠来源就标 unavailable，不编行业数字。
+5. 运行性能脚本并形成 P95 报告及复跑脚本；阈值以既有决策/批准规格为准，不擅自固化建议阈值。
+
+**验收：** 每个批次原件和派生产物 SHA 齐全，L0 全绿、L1 样本及勾稽有记录、报告身份/重述链不冲突，性能结果可重放；同 SHA CI 绿。
+
+**遇到问题：** 下载失败查官方页面/API并保存 HTTP/时间证据；替代文本层必须能证明与原件同版本。行业基准或真实原件缺失时完成来源检索报告和“未纳入”结案，不能伪造，也不停止本队列该项其他可做的来源/工具工作。
+
+**完成后：** 进入第 7 项第二代静态知识 refresh。
+
+#### 7. 第二代静态知识 release 与战略重基线
+
+**入口材料：** `docs/50_plans/work_items/KNOWLEDGE--refresh-v2.md`、规格 `docs/superpowers/specs/2026-09-17-static-knowledge-refresh-and-strategic-rebaseline-design.md`、实施细节 `docs/superpowers/plans/2026-09-18-static-knowledge-refresh-and-strategic-rebaseline-implementation-plan.md`（该实施计划已 archived，不维护状态；只取 K0–K6 方法/命令）、Davybase 与 ObsidianWiki 仓库。正式 release 仍是 `flow-knowledge-2026-09-12.1`。
+
+**操作步骤：**
+
+1. **K0**：同步 Davybase/ObsidianWiki 最新 canonical remotes；记录各仓 HEAD、tree、dirty、批次/分母与依赖版本；验收旧图片批次 manifest，逐样抽查，确认输入/成功/过滤/失败互斥对账。不得覆盖原文或原批次证据。
+2. **K1**：对非微信核心知识目录（企业管理、财务会计、跨境物流等）先 allowlist dry-run，检查 coverage 与敏感边界；抽查路径解析，运行 apply/有限 retry；逐项终态必须闭合。只用生成的 pathspec 暂存对应 Obsidian 文件，不 `git add -A`。
+3. **K2**：严格执行 Obsidian Git 冻结流程：14:30锁定、15:00候选、15:30复验；要求两个时间点 commit/tree 相同、工作区 clean、canonical remote 可取。只有 accepted manifest 才可作为后续输入；失败则写 rejected 记录，下一可用日重试，禁止伪造时间或自动提交不明修改。
+4. **K3**：只用 K2 accepted manifest 重建来源 registry/baseline/diff；按稳定 ID 做新增/修改/删除/改名差异；敏感/排除数据仅留聚合统计。相同输入重建两次结果 SHA 应一致。
+5. **K4**：按冻结 scope 做全量路由和高价值精读，明确 coverage 分母与互斥终态；对 HIGH 回读，记录失败集中与误分类复核；生成影响 FLOW 的新素材、领域手册与采用映射，不把 L2 发布知识直接当产品既定规则。
+6. **K5**：构建 candidate、来源/coverage/reader 问题包，独立读者复核；满足 sealed lock、哈希和 reader 门槛后 seal。candidate 未 sealed 不开始正式战略影响结论；始终保持 `CURRENT_RELEASE` 不变。
+7. **战略裁决/S0–S1**：对目标、角色、报告工作流、模块可见性、规则可见性、真实数据验证等逐条形成证据、影响、替代方案和风险；正式决策由用户作出。无需每步问用户；仅这一规格明确保留的战略裁决点不可由 Agent 冒签。若接手时没有相应正式裁决，不得激活 release 或把候选写成已采用；先完成所有不依赖裁决的审计/影响材料，列明唯一待裁决问题和选项，状态保留“sealed candidate、未激活”。由于该裁决是用户主体不可代理，不能伪造“外部材料不可得”来绕过；须把当前项原验收未满足、候选未激活及可恢复的下一步写入路线图与交接，再停在该项，不得擅自推进后续队列或替用户裁决。
+8. **K6/V**：按规格在一个原子变更集合里激活 release、更新产品当前文档和唯一路线图；先在干净独立 checkout 对精确 SHA 复验，过门禁后推送、等 CI。失败用新的普通 revert/recovery commit 恢复整套一致状态，不改写历史、不只回滚指针。
+
+**验收：** 三仓库身份/hash/coverage/失败列表可重放；15:00 snapshot accepted；source baseline 四维差异对账；coverage/reader gate 全 PASS；战略决策记录已存在；release lock/manifest hash 一致；activation 同 SHA 独立复验与 CI 通过。每个代码/知识原子任务在所属仓库单独提交推送，然后才进入下一 K 步。
+
+**遇到问题：** 当前命令或脚本不存在时，先检索实际 CLI 和测试，再按 archived plan 的规格补工具与红绿测试，不照抄未实现命令。锁冲突不抢锁；Obsidian 有未归属改动不覆盖；敏感路径不得传到 FLOW 或外部模型；15:00 不稳定时明确 rejected 并顺延，不降低冻结标准。
+
+**完成后：** 进入第 8 项 `rnd_exp` 来源核验。
+
+#### 8. `rnd_exp` 官方依据核验（外部材料受限项，主动恢复后结案）
+
+**入口：** 路线图记录的《应用指南汇编 2024》核验和暂记 `4301`。先 `rg -n "rnd_exp|应用指南汇编" .` 搜仓库，再查知识库来源登记、公开官方发布渠道和可验证归档；记录查询关键词、站点、访问日期、版本、URL 和 SHA。
+
+**步骤与验收：** 找到原件时冻结原件和 SHA，逐项核对原文定义、期间、符号、公式与 `rnd_exp` 来源，更新指标口径登记与测试；找不到时完成有来源的检索过程、可替代权威来源比较、为什么不足以等同原文、哪些字段保持 unverified、影响到的指标/报告和重启条件。后者只能结案为“官方依据未核实”，不能写成核验通过。
+
+**遇到问题/下一步：** 链接失效先查官方站点检索/网页存档/公告附件；不同版本不一致则逐版登记不自行挑有利值。完成“已核实”或“原件不可得的证据化结案”后才推进第 9 项。
+
+#### 9. U09/O05 内部试点
+
+**入口材料：** `docs/50_plans/work_items/U09-O05--authorized-internal-pilot.md`、`docs/20_product/` 的主数据/经营分析规则、战略设计与已批准的内部数据治理规格。用户已授权本项目实施，不再等待泛化的“数据授权批准”；但只允许使用当前确实可合法访问的数据，不能虚构真实企业事实。
+
+**操作步骤：** 先按工作包合同核验企业/组织/科目/客户/产品/期间主数据身份、输入版本、来源、内部事件簿、收入/成本/利润守恒；再走月度批次导入、规则/指标匹配、分析计算、证据组织、AI 结论与经分专员审核发布的完整技术流程。若无真实企业输入，使用大麦 synthetic 仅做流程/接口回归，并把真实试点证据状态单独标未验证。
+
+**验收：** 一报一会闭环、主数据与版本追溯、多维盈利守恒、六主题经营分析与异常证据可追溯；角色边界符合已定原则；synthetic/真实结果分开标记，不把年度公开数据摊月，不伪造 L2/L3。
+
+**遇到问题/下一步：** 缺真实输入就完成脱敏 schema、字段映射、导入/拒绝和技术 E2E；形成精确的真实数据缺口与可接入格式说明。完成技术闭环及诚实的证据状态后进入第 10 项，不以“等批准”停工。
+
+#### 10. U10 V1.1 证据决策
+
+**入口材料：** `docs/50_plans/work_items/U10--v1-1-evidence-decision.md` 及其底稿 `docs/90_archive/plans/2026-09-07-v11-evidence-decision-pack.md`。U08 已完成；使用现有 U04、C 级、U09/O05、知识/大麦证据，不能把仍缺的证据补写成完成。
+
+**操作步骤：** 将每项 V1.1 候选能力列为 go/hold/drop；每项记录主张、证据及 SHA、来源、适用范围、风险、反证、缺失证据、替代验证。对没有证据的项按规则 hold；如果已有证据足以裁决其他项，不因少数 hold 项停止整包裁决。形成正式决策记录并关联唯一路线图。
+
+**验收：** 决策包覆盖全部候选；每项 go 有充分证据，hold 有可执行解锁条件，drop 有理由；决策不超出现有用户战略边界；文档门禁和同 SHA CI 通过。
+
+**遇到问题/下一步：** 指标矛盾则回到原始 run/报告 SHA 核实；只对受影响候选改状态，不推断整项全局通过。提交推送后推进第 11 项。
+
+#### 11. 内部月度工作台与四级真实周期验收
+
+**入口材料：** 路线图状态表中的内部月度工作台/四级验证、战略设计 §14.2、U09/O05 工作包、已 sealed/正式采用的知识与指标规则。该项是最终真实经营验证，不由大麦 synthetic 或公开年报代替。
+
+**操作步骤：** 在既有企业工作台中冻结真实月度输入和来源版本；逐月由 BP 提供数据、系统生成指标/归因/证据/分析结论、经分专员审核发布。每周期保留系统输出、同输入人工基准、盲评记录和实际工时；连续完成三个真实月度周期，不在周期中途改基准或删除失败记录。
+
+**验收：** 三个周期均有完整源数据/版本和报告；人工对照同输入；逐周期盲评满足规格；工时降低达到 20% 门槛；无严重事实错误；能复算报告结论。最终结论只在真实数据证据齐备后给出。
+
+**遇到问题与最终结案：** 若本机/企业没有真实月度数据，先完成 synthetic 技术验证、环境复现和数据接入说明，再形成“真实四级验证未完成”的正式结案，标出所缺的三个月数据及可重启条件；绝不宣称达到真实企业验收。因为它是队列末项，报告为战略验收尚未完成，而不是无限等待或虚假关单。
+
+### 每个队列项的固定关单与交接协议
+
+1. 开始前：`git pull --ff-only`；确认 `main`、clean worktree、HEAD 与 origin 一致；核对当前只允许队首任务执行。阅读本卡对应工作包和规格。
+2. 执行中：先记录当前任务的细分步骤数及逐步状态；实现按 TDD，数据任务留原件 SHA 和命令；小步完成但不同时开后续任务。
+3. 验收时：按上方对应门槛逐条跑，保存完整命令、退出码、摘要、环境和 SHA。测试失败不等用户帮忙诊断，先复现并修复；如果遇外部缺项，执行该卡替代闭环协议。
+4. 文档与提交：更新对应工作包、`CURRENT_ROADMAP.md`、`PROJECT_STATE.md` 和本 HANDOFF 中必要的当前快照；仅暂存本项文件；`git diff --check`、`python3 scripts/check_docs.py --phase m1`、相关 links/contract/tests 通过后 conventional commit 并立即 `git push origin main`。推送失败按 AGENTS 立即报告确切原因和修复方法。
+5. 进入下一项：只有当前卡达到“原验收通过”或“外部受限但替代结案已完成、且明确记录原验收未满足”之一，才能更新计数并启动下一项。不能因为一项复杂或耗时而跳过，也不能把一个 item 拆成并行 Agent。
+6. 续接播报：向用户提供 11 项完整队列、项数/计数、当前唯一 item 的子步骤进度、已完成证据、限制与已尝试恢复法，以及唯一的下一动作；没有运行中的进程时必须说“未启动/已暂停”，不得写 active 冒充进行中。
+
+**下一位 Agent 接手后的唯一下一步：** 拉取 `main` 并核对分支/HEAD/CI，先审阅保护当前未提交的组织模型、企业服务、0031 迁移和测试草案，与 `fc6e63a7` 批准的三表方案逐条比对，再运行并补齐合同/负向测试。schema 已获批准，但只可在隔离栈执行迁移和初始化；不得先做 UX、C 级、知识刷新或其他队列项。
 
 > **当前状态覆盖（2026-09-26 深夜·ZCode 夜班会话收尾）**：本交接基于 `main@e78f0616`（本会话最后提交为 `b161fff`，其后并发会话叠加 UI 可链接性审计）。本会话四项交付已全部入主线：**①归因裁决 `4111f6a`**（42 异常全判真实抽取错误+证据忠实性 100%）；**②新留出双样本 `926af82`**（小米 2026H1 + 阿里 FY2027Q1 冻结+oracle 录入完成——注意：v3.6 所记“候选 PDF 未冻结”已过时）；**③测试库隔离根因修复 `b60c51b`**（conftest 默认切 `flow_test`，实证常驻库零污染——v3.6 所记“最高安全前置”已完成）；**④JDL 英文版冻结 `b161fff`**（210 页文本层可读，200 格重核输入条件已具备）。C 级出口仍未通过；抽取器修订（实现方职责）与新留出首跑是剩余关键路径。
 

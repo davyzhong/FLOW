@@ -3,16 +3,16 @@ doc_id: FLOW-GOV-AGENTS-001
 title: FLOW 项目协作规则
 doc_type: governance
 status: current
-version: 1.4
+version: 1.5
 created_at: 2026-09-01
-updated_at: 2026-09-26
+updated_at: 2026-09-27
 owner: FLOW
 applies_to: repository
 ---
 
 # FLOW 项目协作规则
 
-> 当前唯一主线入口：[CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)（状态真相 + 执行队列）。
+> 当前唯一主线入口：[CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)（状态真相 + 执行队列）；详细接手操作卡：[HANDOFF.md](HANDOFF.md)（与路线图同序，不另设待办）。
 
 本仓库是 FLOW（Finance Intelligence OS / AI 财务经营分析平台）项目的唯一正式工程仓库。
 
