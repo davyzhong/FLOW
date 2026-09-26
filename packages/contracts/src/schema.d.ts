@@ -380,6 +380,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/analytics/metric-snapshots/{snapshot_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Metric Snapshot
+         * @description 指标快照只读身份（loader 已保证存在性与企业域，handler 只做投影）。
+         */
+        get: operations["get_metric_snapshot_api_v1_analytics_metric_snapshots__snapshot_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/analytics/analysis-runs/{run_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Analysis Run
+         * @description 分析运行只读身份（loader 已保证存在性与企业域，handler 只做投影）。
+         */
+        get: operations["get_analysis_run_api_v1_analytics_analysis_runs__run_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/copilot/investigations/{finding_id}/ask": {
         parameters: {
             query?: never;
@@ -678,6 +718,29 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/metric-library/entries/{entry_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Metric Entry
+         * @description 单条目只读详情（批次二 §3.1）：与列表载荷同源的 DB 在效条目投影。
+         *
+         *     entry_id 仅存在于 DB 在效条目（YAML-only 回退条目无 entry_id）；
+         *     未命中返回 404 metric_entry_not_found（public 参考资源，诚实 404）。
+         */
+        get: operations["get_metric_entry_api_v1_metric_library_entries__entry_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/metric-library/semantic-context": {
         parameters: {
             query?: never;
@@ -845,6 +908,9 @@ export interface paths {
         /**
          * Get Metric Coverage
          * @description 指标覆盖矩阵：默认 public 真实财报矩阵；dataset=damai 返回独立 synthetic 矩阵。
+         *
+         *     批次二 §3.4：列头快照补 report_id 映射（公司+期间 → statement_report），
+         *     供前端链接 /statements?report=；无法映射时 report_id 为 null（不渲染链接）。
          */
         get: operations["get_metric_coverage_api_v1_metric_library_coverage_get"];
         put?: never;
@@ -1310,6 +1376,30 @@ export interface components {
             /** Degradation Message */
             degradation_message: string | null;
         };
+        /**
+         * AnalysisRunDetailResponse
+         * @description 分析运行身份：策略集/引擎/指纹/状态/所属快照。
+         */
+        AnalysisRunDetailResponse: {
+            /** Id */
+            id: string;
+            /** Metric Snapshot Id */
+            metric_snapshot_id: string;
+            /** Import Version Id */
+            import_version_id: string;
+            /** Policy Id */
+            policy_id: string;
+            /** Policy Set Hash */
+            policy_set_hash: string;
+            /** Engine Version */
+            engine_version: string;
+            /** Fingerprint */
+            fingerprint: string;
+            /** Status */
+            status: string;
+            /** Created At */
+            created_at?: string | null;
+        };
         /** BatchCreateRequest */
         BatchCreateRequest: {
             /** Name */
@@ -1668,6 +1758,8 @@ export interface components {
             computable: number;
             /** Total */
             total: number;
+            /** Report Id */
+            report_id?: string | null;
         };
         /** DashboardContext */
         DashboardContext: {
@@ -2654,6 +2746,36 @@ export interface components {
             note: string;
             /** Provenance */
             provenance?: string | null;
+        };
+        /**
+         * MetricSnapshotDetailResponse
+         * @description 指标快照身份：版本/引擎/定义集/指纹/状态/批次链/期间。
+         */
+        MetricSnapshotDetailResponse: {
+            /** Id */
+            id: string;
+            /** Batch Id */
+            batch_id: string;
+            /** Import Version Id */
+            import_version_id: string;
+            /** As Of Period Id */
+            as_of_period_id: string;
+            /** As Of Month Key */
+            as_of_month_key?: number | null;
+            /** Version */
+            version: number;
+            /** Engine Version */
+            engine_version: string;
+            /** Definition Set Id */
+            definition_set_id: string;
+            /** Definition Set Hash */
+            definition_set_hash: string;
+            /** Fingerprint */
+            fingerprint: string;
+            /** Status */
+            status: string;
+            /** Created At */
+            created_at?: string | null;
         };
         /**
          * OperationsMetricItem
@@ -4546,6 +4668,90 @@ export interface operations {
             };
         };
     };
+    get_metric_snapshot_api_v1_analytics_metric_snapshots__snapshot_id__get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                snapshot_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MetricSnapshotDetailResponse"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorDetail"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_analysis_run_api_v1_analytics_analysis_runs__run_id__get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                run_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AnalysisRunDetailResponse"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorDetail"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     ask_investigation_question_api_v1_copilot_investigations__finding_id__ask_post: {
         parameters: {
             query?: never;
@@ -5344,6 +5550,48 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MetricLibraryResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_metric_entry_api_v1_metric_library_entries__entry_id__get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                entry_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MetricEntry"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorDetail"];
                 };
             };
             /** @description Validation Error */

@@ -91,6 +91,8 @@ class Action(StrEnum):
     OPERATIONS_ATTEMPT_READ = "operations.attempt.read"
     OPERATIONS_SNAPSHOT_FREEZE = "operations.snapshot.freeze"
     OPERATIONS_RENDER_AND_FREEZE = "operations.render_and_freeze"
+    METRIC_SNAPSHOT_READ = "metric_snapshot.read"
+    ANALYSIS_RUN_READ = "analysis_run.read"
 
 
 # ---------------------------------------------------------------------------
@@ -178,6 +180,8 @@ _FINANCE_BP_ALLOW: Final[frozenset[Action]] = frozenset(
         Action.INTAKE_CLEANING_SUMMARY_READ,
         Action.INTAKE_STANDARDIZED_WORKBOOK_READ,
         Action.INVESTIGATION_READ,
+        Action.METRIC_SNAPSHOT_READ,
+        Action.ANALYSIS_RUN_READ,
         Action.STATEMENT_SOURCE_READ,
         Action.STATEMENT_REPORT_READ,
         Action.STATEMENT_PROJECTION_READ,
@@ -197,6 +201,8 @@ _RULE_OWNER_ALLOW: Final[frozenset[Action]] = frozenset(
         Action.WORKSPACE_METADATA_READ,
         Action.INTAKE_TEMPLATE_READ,
         Action.INVESTIGATION_READ,
+        Action.METRIC_SNAPSHOT_READ,
+        Action.ANALYSIS_RUN_READ,
         Action.METRIC_LIBRARY_READ,
         Action.METRIC_CHANGE_PROPOSE,
         Action.METRIC_CHANGE_ACTIVATE,
@@ -222,6 +228,8 @@ _AI_ANALYST_ALLOW: Final[frozenset[Action]] = frozenset(
         Action.WORKSPACE_METADATA_READ,
         Action.INTAKE_SOURCE_PROFILE_READ,
         Action.INVESTIGATION_READ,
+        Action.METRIC_SNAPSHOT_READ,
+        Action.ANALYSIS_RUN_READ,
         Action.COPILOT_INVESTIGATION_ASK,
         Action.COPILOT_MAPPING_EXPLAIN,
         Action.METRIC_LIBRARY_READ,
@@ -241,6 +249,8 @@ _AI_CFO_ALLOW: Final[frozenset[Action]] = frozenset(
         Action.SYSTEM_HEALTH_READ,
         Action.WORKSPACE_METADATA_READ,
         Action.INVESTIGATION_READ,
+        Action.METRIC_SNAPSHOT_READ,
+        Action.ANALYSIS_RUN_READ,
         Action.COPILOT_INVESTIGATION_ASK,
         Action.COPILOT_REPORT_OUTLINE_GENERATE,
         Action.STATEMENT_REPORT_READ,
@@ -287,6 +297,8 @@ _OWNER_REQUIRED_ACTIONS: Final[frozenset[Action]] = frozenset(
         Action.INTAKE_CLEANING_SUMMARY_READ,
         Action.INTAKE_STANDARDIZED_WORKBOOK_READ,
         Action.INVESTIGATION_READ,
+        Action.METRIC_SNAPSHOT_READ,
+        Action.ANALYSIS_RUN_READ,
         Action.INVESTIGATION_EVIDENCE_DECIDE,
         Action.INVESTIGATION_CONCLUSION_WRITE,
         Action.INVESTIGATION_TRANSITION,

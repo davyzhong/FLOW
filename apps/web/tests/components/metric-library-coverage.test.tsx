@@ -188,4 +188,42 @@ describe("MetricLibraryApp 真实财报覆盖矩阵（P5）", () => {
     expect(alert).toHaveTextContent("覆盖矩阵暂时无法加载");
     expect(screen.getByRole("button", { name: "重试" })).toBeInTheDocument();
   });
+
+  // 批次二 §3.4：列头公司/期间映射到 statement_report 时链接 /statements?report=；
+  // 无映射（含 synthetic）保持纯文本，不渲染假链接。
+  it("列头携带 report_id 时链接到对应财报，无 report_id 时不渲染链接", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn<(input?: RequestInfo | URL) => Promise<Response>>((input?: RequestInfo | URL) => {
+        const url = String(input ?? "");
+        const respond = (body: unknown, status = 200) =>
+          Promise.resolve(
+            new Response(JSON.stringify(body), {
+              status,
+              headers: { "content-type": "application/json" },
+            }),
+          );
+        if (url.endsWith("/api/v1/metric-library/coverage")) {
+          return respond({
+            ...COVERAGE,
+            snapshots: [
+              { ...COVERAGE.snapshots[0], report_id: "report-alibaba-fy2026" },
+              COVERAGE.snapshots[1], // sf_002352：无 report_id
+            ],
+          });
+        }
+        if (url.endsWith("/api/v1/metric-library")) return respond(LIBRARY);
+        return respond({ detail: { code: "not_found", message: "?" } }, 404);
+      }),
+    );
+
+    render(<MetricLibraryApp />);
+    fireEvent.click(await screen.findByRole("button", { name: "真实财报覆盖" }));
+
+    const reportLink = await screen.findByRole("link", { name: /阿里巴巴/ });
+    expect(reportLink).toHaveAttribute("href", "/statements?report=report-alibaba-fy2026");
+    // 顺丰列头无 report_id：保持纯文本，不渲染链接（诚实约束）
+    expect(screen.queryByRole("link", { name: /顺丰控股/ })).not.toBeInTheDocument();
+    expect(screen.getAllByText("顺丰控股").length).toBeGreaterThan(0);
+  });
 });

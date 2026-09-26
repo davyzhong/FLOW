@@ -107,3 +107,44 @@ a.workbench__metric-code:hover {
   text-decoration: underline;
   text-underline-offset: 2px;
 }
+
+/* 批次二 §3.2：分析运行身份卡（?run_id= 深链定位） */
+.workbench__run {
+  margin: 12px 0;
+  padding: 12px 14px;
+  border: 1px solid var(--rep-line-5);
+  border-radius: var(--flow-radius-s);
+  background: var(--rep-card);
+}
+
+.workbench__run h2 {
+  margin: 0 0 8px;
+  font-size: var(--flow-font-l);
+}
+
+.workbench__run dl {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 6px 16px;
+  margin: 0;
+}
+
+.workbench__run dt {
+  font-size: var(--flow-font-xs);
+  color: var(--rep-muted);
+}
+
+.workbench__run dd {
+  margin: 0;
+  font-size: var(--flow-font-s);
+  word-break: break-all;
+}
+
+.workbench__hint {
+  padding: 8px 10px;
+  border: 1px solid var(--rep-line-5);
+  border-radius: var(--flow-radius-s);
+  font-size: var(--flow-font-m);
+  color: var(--rep-muted);
+  background: var(--rep-card);
+}

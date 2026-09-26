@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends
 
 from flow_api.api.auth import require_bearer_auth
+from flow_api.api.routes.analytics import router as analytics_router
 from flow_api.api.routes.copilot import router as copilot_router
 from flow_api.api.routes.dashboard import router as dashboard_router
 from flow_api.api.routes.health import router as health_router
@@ -24,6 +25,7 @@ api_router.include_router(workspace_router, dependencies=[Depends(require_bearer
 api_router.include_router(intake_router, dependencies=[Depends(require_bearer_auth)])
 api_router.include_router(dashboard_router, dependencies=[Depends(require_bearer_auth)])
 api_router.include_router(investigations_router, dependencies=[Depends(require_bearer_auth)])
+api_router.include_router(analytics_router, dependencies=[Depends(require_bearer_auth)])
 api_router.include_router(copilot_router, dependencies=[Depends(require_bearer_auth)])
 api_router.include_router(publishing_router, dependencies=[Depends(require_bearer_auth)])
 api_router.include_router(statements_router, dependencies=[Depends(require_bearer_auth)])

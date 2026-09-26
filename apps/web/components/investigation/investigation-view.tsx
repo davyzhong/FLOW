@@ -227,7 +227,7 @@ export function InvestigationDriverTable({
             </thead>
             <tbody>
               {drivers.map((driver) => (
-                <tr key={driver.driver_code}>
+                <tr key={driver.driver_code} id={`driver-${driver.driver_code}`}>
                   <th scope="row">{driverLabel(driver.driver_code)}</th>
                   <td>{driver.calculation_method ?? "—"}</td>
                   <td className={driverDirection(driver.contribution_amount)}>
@@ -533,7 +533,11 @@ export function InvestigationEvidenceInspector({
     <section className="investigation-inspect-card" aria-label="证据复核" id="investigation-evidence">
       <h2>证据复核</h2>
       {context.evidence.map((item) => (
-        <article key={item.evidence_id} className="investigation-evidence">
+        <article
+          key={item.evidence_id}
+          className="investigation-evidence"
+          id={`evidence-${item.evidence_id}`}
+        >
           <p className="investigation-evidence__type">
             {item.evidence_type}
             <span className={`investigation-evidence__status is-${item.status}`}>

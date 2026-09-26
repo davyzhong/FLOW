@@ -205,6 +205,53 @@ describe("ReportsCenter 深链", () => {
     expect(await screen.findByText(/未找到快照「missing-snapshot」/)).toBeInTheDocument();
   });
 
+  // 批次二 §3.2：?snapshot= 未命中快照列表 → 回退指标快照详情端点
+  it("?snapshot= 命中未冻结的指标快照时渲染身份卡而非未找到提示", async () => {
+    const detail = {
+      id: "ms-unfrozen",
+      batch_id: "batch-9",
+      import_version_id: "iv-9",
+      as_of_period_id: "period-9",
+      as_of_month_key: 202608,
+      version: 3,
+      engine_version: "flow-metrics/1",
+      definition_set_id: "flow.metricdefs.v1",
+      definition_set_hash: "a".repeat(64),
+      fingerprint: "b".repeat(64),
+      status: "published",
+      created_at: "2026-09-03T09:00:00+08:00",
+    };
+    const fetchMock = vi.fn(async (input: RequestInfo | URL) => {
+      const url = String(input);
+      if (url.endsWith("/statements")) return jsonResponse({ reports: [] });
+      if (url.endsWith("/publishing/snapshots")) return jsonResponse({ snapshots: [SNAPSHOT] });
+      if (url.endsWith("/publishing/freeze-candidates")) return jsonResponse({ candidates: [] });
+      if (url.endsWith("/operations/snapshots")) return jsonResponse({ snapshots: [] });
+      if (url.includes("/attempts")) return jsonResponse({ attempts: [] });
+      if (url.endsWith("/analytics/metric-snapshots/ms-unfrozen")) return jsonResponse(detail);
+      return jsonResponse({ detail: { code: "not_found", message: "unknown" } }, 404);
+    });
+    vi.stubGlobal("fetch", fetchMock as unknown as typeof fetch);
+
+    render(<ReportsCenter initialSnapshot="ms-unfrozen" />);
+    const card = await screen.findByTestId("metric-snapshot-detail");
+    expect(card).toHaveTextContent("ms-unfrozen");
+    expect(card).toHaveTextContent("v3 · published");
+    expect(card).toHaveTextContent("flow-metrics/1");
+    expect(card).toHaveTextContent("2026-08");
+    expect(card).toHaveTextContent("尚未冻结为报告快照");
+    expect(screen.queryByText(/未找到快照「ms-unfrozen」/)).not.toBeInTheDocument();
+    const batchLink = screen.getByRole("link", { name: "batch-9" });
+    expect(batchLink).toHaveAttribute("href", "/data?batch=batch-9");
+  });
+
+  it("?snapshot= 在详情端点也不存在时回退为未找到提示", async () => {
+    stubFullCenter(); // analytics 端点走默认 404 分支
+    render(<ReportsCenter initialSnapshot="ghost-snapshot" />);
+    expect(await screen.findByText(/未找到快照「ghost-snapshot」/)).toBeInTheDocument();
+    expect(screen.queryByTestId("metric-snapshot-detail")).not.toBeInTheDocument();
+  });
+
   it("客观财报条目追加「查看分析」、经营快照行链回经营分析、冻结提示链回 Investigation", async () => {
     stubFullCenter();
     render(<ReportsCenter />);

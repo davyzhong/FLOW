@@ -14,7 +14,7 @@ import type {
   InvestigationContext,
   InvestigationQuery,
 } from "../../lib/api/client";
-import { dataBatchHref, reportsSnapshotHref } from "../../lib/deep-links";
+import { analysisRunHref, dataBatchHref, reportsSnapshotHref } from "../../lib/deep-links";
 import { PageState } from "../ui/page-state";
 import "./investigation.css";
 import { CopilotPanel } from "./copilot-panel";
@@ -275,7 +275,8 @@ function InvestigationWorkspace({
         <div>
           <dt>分析运行 ID</dt>
           <dd>
-            {runId ? <Link href="/analysis" title="分析运行暂无详情页，前往四问工作台">{runId}</Link> : "—"}
+            {/* 批次二 §3.2：运行→四问工作台 ?run_id= 定位（只读详情端点投影身份） */}
+            {runId ? <Link href={analysisRunHref(runId)} title="在四问工作台定位该分析运行">{runId}</Link> : "—"}
           </dd>
         </div>
       </dl>

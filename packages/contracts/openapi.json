@@ -1545,6 +1545,146 @@
         }
       }
     },
+    "/api/v1/analytics/metric-snapshots/{snapshot_id}": {
+      "get": {
+        "tags": [
+          "analytics"
+        ],
+        "summary": "Get Metric Snapshot",
+        "description": "指标快照只读身份（loader 已保证存在性与企业域，handler 只做投影）。",
+        "operationId": "get_metric_snapshot_api_v1_analytics_metric_snapshots__snapshot_id__get",
+        "parameters": [
+          {
+            "name": "snapshot_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Snapshot Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MetricSnapshotDetailResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/analytics/analysis-runs/{run_id}": {
+      "get": {
+        "tags": [
+          "analytics"
+        ],
+        "summary": "Get Analysis Run",
+        "description": "分析运行只读身份（loader 已保证存在性与企业域，handler 只做投影）。",
+        "operationId": "get_analysis_run_api_v1_analytics_analysis_runs__run_id__get",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Run Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalysisRunDetailResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/copilot/investigations/{finding_id}/ask": {
       "post": {
         "tags": [
@@ -2853,6 +2993,76 @@
         }
       }
     },
+    "/api/v1/metric-library/entries/{entry_id}": {
+      "get": {
+        "tags": [
+          "metric-library"
+        ],
+        "summary": "Get Metric Entry",
+        "description": "单条目只读详情（批次二 §3.1）：与列表载荷同源的 DB 在效条目投影。\n\nentry_id 仅存在于 DB 在效条目（YAML-only 回退条目无 entry_id）；\n未命中返回 404 metric_entry_not_found（public 参考资源，诚实 404）。",
+        "operationId": "get_metric_entry_api_v1_metric_library_entries__entry_id__get",
+        "parameters": [
+          {
+            "name": "entry_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Entry Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MetricEntry"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/metric-library/semantic-context": {
       "get": {
         "tags": [
@@ -3368,7 +3578,7 @@
           "metric-library"
         ],
         "summary": "Get Metric Coverage",
-        "description": "指标覆盖矩阵：默认 public 真实财报矩阵；dataset=damai 返回独立 synthetic 矩阵。",
+        "description": "指标覆盖矩阵：默认 public 真实财报矩阵；dataset=damai 返回独立 synthetic 矩阵。\n\n批次二 §3.4：列头快照补 report_id 映射（公司+期间 → statement_report），\n供前端链接 /statements?report=；无法映射时 report_id 为 null（不渲染链接）。",
         "operationId": "get_metric_coverage_api_v1_metric_library_coverage_get",
         "parameters": [
           {
@@ -5024,6 +5234,67 @@
         ],
         "title": "AnalysisResultContext"
       },
+      "AnalysisRunDetailResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "metric_snapshot_id": {
+            "type": "string",
+            "title": "Metric Snapshot Id"
+          },
+          "import_version_id": {
+            "type": "string",
+            "title": "Import Version Id"
+          },
+          "policy_id": {
+            "type": "string",
+            "title": "Policy Id"
+          },
+          "policy_set_hash": {
+            "type": "string",
+            "title": "Policy Set Hash"
+          },
+          "engine_version": {
+            "type": "string",
+            "title": "Engine Version"
+          },
+          "fingerprint": {
+            "type": "string",
+            "title": "Fingerprint"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "created_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "metric_snapshot_id",
+          "import_version_id",
+          "policy_id",
+          "policy_set_hash",
+          "engine_version",
+          "fingerprint",
+          "status"
+        ],
+        "title": "AnalysisRunDetailResponse",
+        "description": "分析运行身份：策略集/引擎/指纹/状态/所属快照。"
+      },
       "BatchCreateRequest": {
         "properties": {
           "name": {
@@ -5991,6 +6262,17 @@
           "total": {
             "type": "integer",
             "title": "Total"
+          },
+          "report_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Report Id"
           }
         },
         "type": "object",
@@ -8879,6 +9161,88 @@
           "note"
         ],
         "title": "MetricRelation"
+      },
+      "MetricSnapshotDetailResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "batch_id": {
+            "type": "string",
+            "title": "Batch Id"
+          },
+          "import_version_id": {
+            "type": "string",
+            "title": "Import Version Id"
+          },
+          "as_of_period_id": {
+            "type": "string",
+            "title": "As Of Period Id"
+          },
+          "as_of_month_key": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "As Of Month Key"
+          },
+          "version": {
+            "type": "integer",
+            "title": "Version"
+          },
+          "engine_version": {
+            "type": "string",
+            "title": "Engine Version"
+          },
+          "definition_set_id": {
+            "type": "string",
+            "title": "Definition Set Id"
+          },
+          "definition_set_hash": {
+            "type": "string",
+            "title": "Definition Set Hash"
+          },
+          "fingerprint": {
+            "type": "string",
+            "title": "Fingerprint"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "created_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created At"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "batch_id",
+          "import_version_id",
+          "as_of_period_id",
+          "version",
+          "engine_version",
+          "definition_set_id",
+          "definition_set_hash",
+          "fingerprint",
+          "status"
+        ],
+        "title": "MetricSnapshotDetailResponse",
+        "description": "指标快照身份：版本/引擎/定义集/指纹/状态/批次链/期间。"
       },
       "OperationsMetricItem": {
         "properties": {

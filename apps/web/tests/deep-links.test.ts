@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  analysisRunHref,
   dashboardFilterHref,
   dataBatchHref,
   metricAnchorId,
@@ -22,6 +23,8 @@ describe("deep-link href builders", () => {
     expect(reportsFocusHref("ms-1")).toBe("/reports?focus=ms-1");
     expect(dataBatchHref("b-1")).toBe("/data?batch=b-1");
     expect(operationsReportHref("r-1")).toBe("/operations?report=r-1");
+    // 批次二 §3.2：分析运行定位 href
+    expect(analysisRunHref("run-1")).toBe("/analysis?run_id=run-1");
   });
 
   it("encodes reserved characters in parameter values", () => {

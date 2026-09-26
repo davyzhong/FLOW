@@ -455,6 +455,13 @@ export const metricLibraryApi = {
   get(signal?: AbortSignal): Promise<MetricLibrary> {
     return request<MetricLibrary>("/api/v1/metric-library", signal);
   },
+  // 批次二 §3.1：单条目详情（entry_id 仅存在于 DB 在效条目，未命中 404）
+  getEntry(entryId: string, signal?: AbortSignal): Promise<MetricLibraryEntry> {
+    return request<MetricLibraryEntry>(
+      `/api/v1/metric-library/entries/${encodeURIComponent(entryId)}`,
+      signal,
+    );
+  },
   getCoverage(signal?: AbortSignal, dataset: "public" | "damai" = "public"): Promise<MetricCoverage> {
     const query = dataset === "public" ? "" : `?dataset=${encodeURIComponent(dataset)}`;
     return request<MetricCoverage>(`/api/v1/metric-library/coverage${query}`, signal);
@@ -481,6 +488,25 @@ export type MetricGovernanceEventLine =
 export type MetricEntryAction = components["schemas"]["MetricEntryActionResponse"];
 export type MetricDraftInput = { changes: Record<string, unknown>; reason: string };
 export type MetricActionInput = { reason: string };
+
+// 批次二 §3.2：MetricSnapshot / AnalysisRun 只读详情（深链回退定位消费）
+export type MetricSnapshotDetail = components["schemas"]["MetricSnapshotDetailResponse"];
+export type AnalysisRunDetail = components["schemas"]["AnalysisRunDetailResponse"];
+
+export const analyticsApi = {
+  getMetricSnapshot(snapshotId: string, signal?: AbortSignal): Promise<MetricSnapshotDetail> {
+    return request<MetricSnapshotDetail>(
+      `/api/v1/analytics/metric-snapshots/${encodeURIComponent(snapshotId)}`,
+      signal,
+    );
+  },
+  getAnalysisRun(runId: string, signal?: AbortSignal): Promise<AnalysisRunDetail> {
+    return request<AnalysisRunDetail>(
+      `/api/v1/analytics/analysis-runs/${encodeURIComponent(runId)}`,
+      signal,
+    );
+  },
+};
 
 export type FindingListItem = components["schemas"]["FindingListItem"];
 export type FindingList = components["schemas"]["FindingListResponse"];

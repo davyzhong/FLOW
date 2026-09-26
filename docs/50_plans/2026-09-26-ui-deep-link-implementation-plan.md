@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-DEEP-LINK-20260926
 title: 全站超链接化（深链下钻）实施计划
 doc_type: plan
 status: active
-version: 1.0
+version: 1.1
 created_at: 2026-09-26
 updated_at: 2026-09-26
 owner: FLOW
@@ -98,3 +98,11 @@ operations 冻结快照→报告中心、investigation 身份条四 ID→各自�
 - 不改冻结报告历史内容；冻结 HTML 回链只作用于新冻结产物；
 - 文件服务端点只做只读授权访问，不做在线编辑/下载权限放开；
 - 不做搜索、不做全局图谱导航（超出本次范围）。
+
+## 7. 执行状态（2026-09-26）
+
+- **批次一：完成**。六页参数接收、9 项纯前端链接及 M 级下钻已实现；驾驶舱保留外来深链筛选。相关浏览器验收见 `apps/web/e2e/deep-links.spec.ts`。
+- **批次二：实现完成，本地验收通过**。增加指标条目详情、MetricSnapshot/AnalysisRun 只读详情与授权血缘校验；Copilot 引用定位；公开覆盖矩阵列头按公司/期间解析财报 `report_id`，无映射时不生成链接。对应端点/前端/API 测试已纳入当前变更。
+- 批次一、二的本地验证：API/安全相关 pytest **51/51**，Web Vitest **133/133**，TypeScript typecheck 通过、ESLint 0 errors（有一条既有 React Compiler warning），深链 Playwright **15/15**，OpenAPI/TypeScript 合同生成及 `check_docs --phase m1` 通过。
+- GitHub Actions run `36224649915`（代码基线 `29877d1`）dashboard、static-web、contracts、static-python、unit、investigation-e2e、module-boundaries-e2e 等已通过；`integration`、`data-contract`、`intake-e2e` 当时仍运行中。它不是本批次代码 SHA 的 CI 证据；本批次提交后的 CI 结果需另行核验。
+- **批次三：未开始**。原文/源单元格查看、冻结报告回链、ManagementWatchItem 关联和批次列表端点仍按 §4 保持待办。不得将批次一、二完成误报为全站深链计划完成。

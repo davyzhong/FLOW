@@ -5,14 +5,16 @@ import { useCallback, useEffect, useState } from "react";
 
 import { EmptyGuide } from "../ui/empty-guide";
 import {
+  analyticsApi,
   statementApi,
   type FreezeCandidate,
+  type MetricSnapshotDetail,
   type OperationsSnapshot,
   type PublishingAttempt,
   type PublishingSnapshot,
   type StatementReportList,
 } from "../../lib/api/client";
-import { operationsReportHref, statementReportHref } from "../../lib/deep-links";
+import { dataBatchHref, operationsReportHref, statementReportHref } from "../../lib/deep-links";
 import "./reports-center.css";
 
 const FORMATS = ["pptx", "xlsx", "html", "pdf"] as const;
@@ -68,6 +70,14 @@ export function ReportsCenter({
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // 批次二 §3.2：?snapshot= 未命中任何快照列表时，回退查询指标快照详情端点
+  // （对象存在但未冻结为报告快照 ≠ 不存在；两类情况分别如实呈现）。
+  // 结果按请求 id  keyed 存储，loading 态在渲染期纯派生（lint set-state-in-effect）。
+  const [snapshotDetailResult, setSnapshotDetailResult] = useState<
+    | { id: string; kind: "found"; detail: MetricSnapshotDetail }
+    | { id: string; kind: "missing" }
+    | null
+  >(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -146,6 +156,31 @@ export function ReportsCenter({
     !snapshots.some((row) => row.metric_snapshot_id === initialFocus)
       ? initialFocus
       : null;
+
+  // 深链回退：?snapshot= 未命中列表 → 查询指标快照详情端点（批次二 §3.2）
+  useEffect(() => {
+    if (!snapshotMiss) return;
+    let cancelled = false;
+    analyticsApi.getMetricSnapshot(snapshotMiss).then(
+      (detail) => {
+        if (!cancelled) setSnapshotDetailResult({ id: snapshotMiss, kind: "found", detail });
+      },
+      () => {
+        if (!cancelled) setSnapshotDetailResult({ id: snapshotMiss, kind: "missing" });
+      },
+    );
+    return () => {
+      cancelled = true;
+    };
+  }, [snapshotMiss]);
+
+  // 渲染期纯派生：结果与当前请求 id 对齐；未返回即 loading
+  const snapshotDetail =
+    snapshotMiss === null
+      ? null
+      : snapshotDetailResult && snapshotDetailResult.id === snapshotMiss
+        ? snapshotDetailResult
+        : ({ kind: "loading" } as const);
 
   useEffect(() => {
     if (!selected) return;
@@ -293,7 +328,57 @@ export function ReportsCenter({
         </p>
       ) : null}
 
-      {snapshotMiss ? (
+      {snapshotDetail?.kind === "found" ? (
+        <div
+          className="reports-center__snapshot-detail"
+          role="status"
+          data-testid="metric-snapshot-detail"
+        >
+          <h2>指标快照身份（尚未冻结为报告快照）</h2>
+          <dl>
+            <div>
+              <dt>快照 ID</dt>
+              <dd>{snapshotDetail.detail.id}</dd>
+            </div>
+            <div>
+              <dt>版本 · 状态</dt>
+              <dd>
+                v{snapshotDetail.detail.version} · {snapshotDetail.detail.status}
+              </dd>
+            </div>
+            <div>
+              <dt>引擎</dt>
+              <dd>{snapshotDetail.detail.engine_version}</dd>
+            </div>
+            <div>
+              <dt>期间</dt>
+              <dd>
+                {snapshotDetail.detail.as_of_month_key
+                  ? String(snapshotDetail.detail.as_of_month_key).replace(/(\d{4})(\d{2})/, "$1-$2")
+                  : "—"}
+              </dd>
+            </div>
+            <div>
+              <dt>指纹</dt>
+              <dd title={snapshotDetail.detail.fingerprint}>
+                {snapshotDetail.detail.fingerprint.slice(0, 12)}…
+              </dd>
+            </div>
+            <div>
+              <dt>数据批次</dt>
+              <dd>
+                <Link href={dataBatchHref(snapshotDetail.detail.batch_id)} title="在数据工作台查看该批次">
+                  {snapshotDetail.detail.batch_id}
+                </Link>
+              </dd>
+            </div>
+          </dl>
+          <p className="reports-center__hint">
+            该指标快照已发布但尚未冻结为报告快照；如需产物，请在下方「冻结新报告快照」选择它。
+          </p>
+        </div>
+      ) : null}
+      {snapshotDetail?.kind === "missing" ? (
         <p role="status" className="reports-center__hint">
           未找到快照「{snapshotMiss}」（snapshot 参数不存在或已下线），已显示最新快照。
         </p>

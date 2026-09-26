@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 
 import {
@@ -8,6 +9,7 @@ import {
   type MetricCoverageCell,
   type MetricCoverageSnapshot,
 } from "../../lib/api/client";
+import { statementReportHref } from "../../lib/deep-links";
 import { PageState } from "../ui/page-state";
 
 const COMPANY_INITIALS: Record<string, string> = {
@@ -257,10 +259,27 @@ function CoverageSection() {
                     <span className={`ml-cov__seal ml-cov__seal--${grade.tier}`} aria-hidden="true">
                       {COMPANY_INITIALS[snapshot.company] ?? snapshot.company.slice(0, 1).toUpperCase()}
                     </span>
-                    <strong className="ml-cov__company">
-                      {COVERAGE_COMPANY_NAMES[snapshot.company] ?? snapshot.company}
-                    </strong>
-                    <span className="ml-cov__period">{snapshot.period}</span>
+                    {/* 批次二 §3.4：列头映射到 statement_report 时链接 /statements?report=；
+                        无映射（含 synthetic）保持纯文本，不渲染假链接 */}
+                    {snapshot.report_id ? (
+                      <Link
+                        className="ml-cov__report-link"
+                        href={statementReportHref(snapshot.report_id)}
+                        title="在报表分析中查看该财报"
+                      >
+                        <strong className="ml-cov__company">
+                          {COVERAGE_COMPANY_NAMES[snapshot.company] ?? snapshot.company}
+                        </strong>
+                        <span className="ml-cov__period">{snapshot.period}</span>
+                      </Link>
+                    ) : (
+                      <>
+                        <strong className="ml-cov__company">
+                          {COVERAGE_COMPANY_NAMES[snapshot.company] ?? snapshot.company}
+                        </strong>
+                        <span className="ml-cov__period">{snapshot.period}</span>
+                      </>
+                    )}
                     <span className="ml-cov__ratio">
                       {snapshot.computable}/{snapshot.total}
                     </span>

@@ -35,6 +35,11 @@ export function operationsReportHref(reportId: string): string {
   return `/operations?report=${encodeURIComponent(reportId)}`;
 }
 
+/** 分析运行定位（批次二 §3.2）：/analysis 接收 run_id，经 GET /analytics/analysis-runs/{id} 投影身份。 */
+export function analysisRunHref(runId: string): string {
+  return `/analysis?run_id=${encodeURIComponent(runId)}`;
+}
+
 export type DashboardDimensionFilter = {
   region_id?: string;
   customer_segment_id?: string;

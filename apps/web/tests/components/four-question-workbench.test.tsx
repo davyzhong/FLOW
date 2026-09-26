@@ -103,3 +103,54 @@ describe("FourQuestionWorkbench 深链", () => {
     );
   });
 });
+
+// 批次二 §3.2：/analysis?run_id= 接收端 —— 经 GET /analytics/analysis-runs/{id} 投影运行身份。
+const RUN_DETAIL = {
+  id: "run-1",
+  metric_snapshot_id: "ms-1",
+  import_version_id: "iv-1",
+  policy_id: "flow.analysis.logistics.v1",
+  policy_set_hash: "a".repeat(64),
+  engine_version: "flow-analysis/1",
+  fingerprint: "b".repeat(64),
+  status: "published",
+  created_at: "2026-09-03T09:00:00+08:00",
+};
+
+function mockFetchWithRun(runStatus: number): ReturnType<typeof vi.fn> {
+  return vi.fn(async (input: RequestInfo | URL) => {
+    const url = String(input);
+    if (url.endsWith("/statements")) return jsonResponse(REPORTS);
+    if (url.includes("/analysis/workbench/")) return jsonResponse(WORKBENCH);
+    if (url.endsWith("/analytics/analysis-runs/run-1")) {
+      return runStatus === 200
+        ? jsonResponse(RUN_DETAIL)
+        : jsonResponse({ detail: { code: "resource_scope_unresolved", message: "deny" } }, runStatus);
+    }
+    return jsonResponse({ detail: "not found" }, 404);
+  });
+}
+
+describe("FourQuestionWorkbench run_id 深链（批次二）", () => {
+  it("?run_id= 命中时渲染分析运行身份卡，快照链接到报告中心", async () => {
+    vi.stubGlobal("fetch", mockFetchWithRun(200));
+    render(<FourQuestionWorkbench initialRunId="run-1" />);
+    const card = await screen.findByTestId("analysis-run-detail");
+    expect(card).toHaveTextContent("run-1");
+    expect(card).toHaveTextContent("published");
+    expect(card).toHaveTextContent("flow.analysis.logistics.v1");
+    expect(card).toHaveTextContent("flow-analysis/1");
+    const snapshotLink = screen.getByRole("link", { name: "ms-1" });
+    expect(snapshotLink).toHaveAttribute("href", "/reports?snapshot=ms-1");
+    // 工作台本体不受影响
+    await waitFor(() => expect(screen.getByText("四问指标")).toBeTruthy());
+  });
+
+  it("?run_id= 不存在时显式提示，不静默忽略", async () => {
+    vi.stubGlobal("fetch", mockFetchWithRun(403));
+    render(<FourQuestionWorkbench initialRunId="run-1" />);
+    expect(await screen.findByText(/未找到分析运行「run-1」/)).toBeTruthy();
+    expect(screen.queryByTestId("analysis-run-detail")).toBeNull();
+    await waitFor(() => expect(screen.getByText("四问指标")).toBeTruthy());
+  });
+});

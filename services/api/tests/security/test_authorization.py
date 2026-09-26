@@ -83,8 +83,9 @@ def test_role_enum_is_complete_and_str_serializable() -> None:
 
 
 def test_action_enum_count_matches_spec() -> None:
-    # 规格 §2.1 Action 列出 58 项（实现若有差异即拒绝合并）
-    assert len(list(Action)) == 58
+    # 规格 §2.1 Action 58 项 + 2026-09-26 批次二新增 2 项只读详情
+    # （metric_snapshot.read / analysis_run.read，超链接化 §3.2）
+    assert len(list(Action)) == 60
 
 
 def test_principal_invariant_service_flag_consistency() -> None:

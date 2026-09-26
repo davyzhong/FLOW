@@ -1,9 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 
 import { flowApi } from "../../lib/api/client";
 import type { InvestigationContext } from "../../lib/api/client";
+import { dataBatchHref, metricFocusHref, reportsSnapshotHref } from "../../lib/deep-links";
 
 type CopilotAnswer = {
   interaction_id: string;
@@ -24,7 +26,74 @@ const SECTION_LABELS: Record<string, string> = {
   questions: "待确认问题",
 };
 
+/** 批次二 §3.3：citation → 可点击定位。
+ *
+ * 引用格式由 copilot/validator.py 冻结：batch/snapshot/metric/finding/evidence/driver。
+ * evidence/driver 仅当对象在本页渲染时才给页内锚点（诚实约束）；跨页深链的目标页
+ * 均已在批次一实现「未命中显式提示」，不做静默假链。无法识别的格式保持纯文本。
+ */
+function Citation({
+  citation,
+  context,
+}: {
+  citation: string;
+  context: InvestigationContext;
+}) {
+  const [kind, ...rest] = citation.split(":");
+  const value = rest.join(":");
+  if (!value) return <code>{citation}</code>;
+  if (kind === "evidence") {
+    return context.evidence.some((item) => item.evidence_id === value) ? (
+      <a className="investigation-copilot-citation" href={`#evidence-${value}`} title="定位到证据复核区">
+        <code>{citation}</code>
+      </a>
+    ) : (
+      <code>{citation}</code>
+    );
+  }
+  if (kind === "driver") {
+    const code = value.split(":").pop() ?? "";
+    return context.drivers.some((driver) => driver.driver_code === code) ? (
+      <a className="investigation-copilot-citation" href={`#driver-${code}`} title="定位到驱动计算明细">
+        <code>{citation}</code>
+      </a>
+    ) : (
+      <code>{citation}</code>
+    );
+  }
+  if (kind === "batch") {
+    return (
+      <Link className="investigation-copilot-citation" href={dataBatchHref(value)} title="在数据工作台查看该批次">
+        <code>{citation}</code>
+      </Link>
+    );
+  }
+  if (kind === "snapshot") {
+    return (
+      <Link className="investigation-copilot-citation" href={reportsSnapshotHref(value)} title="在报告中心查看该指标快照">
+        <code>{citation}</code>
+      </Link>
+    );
+  }
+  if (kind === "metric") {
+    return (
+      <Link className="investigation-copilot-citation" href={metricFocusHref(value)} title="在指标库中查看口径定义">
+        <code>{citation}</code>
+      </Link>
+    );
+  }
+  if (kind === "finding") {
+    return (
+      <Link className="investigation-copilot-citation" href={`/investigations/${encodeURIComponent(value)}`} title="打开该 Finding 调查页">
+        <code>{citation}</code>
+      </Link>
+    );
+  }
+  return <code>{citation}</code>;
+}
+
 export function CopilotPanel({
+  context,
   query,
 }: {
   context: InvestigationContext;
@@ -99,7 +168,7 @@ export function CopilotPanel({
                     {section.citations.length > 0 ? (
                       <span className="investigation-copilot-citations">
                         {section.citations.map((citation) => (
-                          <code key={citation}>{citation}</code>
+                          <Citation key={citation} citation={citation} context={context} />
                         ))}
                       </span>
                     ) : null}

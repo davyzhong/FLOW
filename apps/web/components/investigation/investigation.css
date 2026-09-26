@@ -700,3 +700,24 @@
   text-decoration: underline;
   text-underline-offset: 2px;
 }
+
+/* 批次二 §3.3：citation 点击定位 —— 页内锚点高亮 + 引用链接化 */
+.investigation-evidence:target {
+  border-color: #315f82;
+  box-shadow: 0 0 0 2px rgba(49, 95, 130, 0.18);
+}
+
+.investigation-table-scroll tr:target th,
+.investigation-table-scroll tr:target td {
+  background: rgba(49, 95, 130, 0.1);
+}
+
+a.investigation-copilot-citation {
+  text-decoration: none;
+}
+
+a.investigation-copilot-citation:hover code {
+  background: #dde9f3;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

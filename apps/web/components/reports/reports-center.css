@@ -105,3 +105,34 @@
   color: var(--rep-muted);
   font-size: var(--flow-font-s);
 }
+
+/* 批次二 §3.2：指标快照身份卡（?snapshot= 深链回退，未冻结为报告快照时呈现） */
+.reports-center__snapshot-detail {
+  padding: 12px 14px;
+  border: 1px solid var(--rep-line-5);
+  border-radius: var(--flow-radius-s);
+  background: var(--rep-card);
+}
+
+.reports-center__snapshot-detail h2 {
+  margin: 0 0 8px;
+  font-size: var(--flow-font-l);
+}
+
+.reports-center__snapshot-detail dl {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 6px 16px;
+  margin: 0 0 8px;
+}
+
+.reports-center__snapshot-detail dt {
+  font-size: var(--flow-font-xs);
+  color: var(--rep-muted);
+}
+
+.reports-center__snapshot-detail dd {
+  margin: 0;
+  font-size: var(--flow-font-s);
+  word-break: break-all;
+}

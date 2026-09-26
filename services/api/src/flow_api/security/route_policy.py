@@ -98,6 +98,7 @@ LOADER_RESOURCE_TYPE: dict[str, str] = {
     "load_public_metric_library": "metric_library",
     "load_metric_dictionary_entry": "metric_dictionary_entry",
     "load_metric_dictionary_entry_proposer": "metric_dictionary_entry",
+    "load_public_metric_dictionary_entry": "metric_dictionary_entry",
     "load_metric_governance_events": "metric_governance_events",
     "load_single_enterprise": "enterprise_scope",
     "load_default_cycle_create": "enterprise_scope",
@@ -120,6 +121,8 @@ LOADER_RESOURCE_TYPE: dict[str, str] = {
     "load_finding_batch_scope_owner_or_deny_legacy": "finding",
     "load_finding_evidence_batch_scope_or_deny_legacy": "finding",
     "load_body_metric_snapshot_batch_scope_or_deny_legacy": "metric_snapshot",
+    "load_metric_snapshot_batch_scope_or_deny_legacy": "metric_snapshot",
+    "load_analysis_run_batch_scope_or_deny_legacy": "analysis_run",
     "load_build_job_batch_scope_or_deny_legacy": "build_job",
     "load_public_statement_report": "statement_report",
     "load_public_statement_report_collection": "statement_report_collection",
@@ -541,6 +544,31 @@ def _load_report_snapshot(request: Request, session: Session) -> ResourceRef:
     return _batch_scope_ref(session, "report_snapshot", str(rid), snapshot.batch_id)
 
 
+def _load_metric_snapshot(request: Request, session: Session) -> ResourceRef:
+    # lineage：metric_snapshot → batch → cycle → enterprise（批次二只读详情）
+    from flow_api.infrastructure.models.analytics import MetricSnapshot
+
+    rid = _path_uuid(request, "snapshot_id")
+    snapshot = session.get(MetricSnapshot, rid)
+    if snapshot is None or snapshot.batch_id is None:
+        raise ResourceScopeUnresolved("metric_snapshot", str(rid))
+    return _batch_scope_ref(session, "metric_snapshot", str(rid), snapshot.batch_id)
+
+
+def _load_analysis_run(request: Request, session: Session) -> ResourceRef:
+    # lineage：analysis_run → metric_snapshot → batch → cycle → enterprise（批次二只读详情）
+    from flow_api.infrastructure.models.analytics import AnalysisRun, MetricSnapshot
+
+    rid = _path_uuid(request, "run_id")
+    run = session.get(AnalysisRun, rid)
+    if run is None:
+        raise ResourceScopeUnresolved("analysis_run", str(rid))
+    snapshot = session.get(MetricSnapshot, run.metric_snapshot_id)
+    if snapshot is None or snapshot.batch_id is None:
+        raise ResourceScopeUnresolved("analysis_run", str(rid))
+    return _batch_scope_ref(session, "analysis_run", str(rid), snapshot.batch_id)
+
+
 def _load_attempt(request: Request, session: Session) -> ResourceRef:
     # lineage 二选一（CHECK num_nonnulls=1）：
     #   report_snapshot → metric_snapshot → batch（enterprise）
@@ -632,6 +660,8 @@ LOADERS: dict[str, ResourceLoader] = {
     "load_body_batch_scope_or_deny_legacy": _load_body_batch,
     "load_body_import_batch_scope_or_deny_legacy": _load_body_import,
     "load_body_metric_snapshot_batch_scope_or_deny_legacy": _load_body_metric_snapshot,
+    "load_metric_snapshot_batch_scope_or_deny_legacy": _load_metric_snapshot,
+    "load_analysis_run_batch_scope_or_deny_legacy": _load_analysis_run,
     "load_report_snapshot_batch_scope_or_deny_legacy": _load_report_snapshot,
     "load_attempt_parent_scope_or_deny_legacy": _load_attempt,
     "load_public_statement_report": _public_path("statement_report", "report_id"),
@@ -656,6 +686,7 @@ LOADERS: dict[str, ResourceLoader] = {
     "load_public_metric_library": _load_public_metric_library,
     "load_metric_dictionary_entry": _load_metric_dictionary_entry,
     "load_metric_dictionary_entry_proposer": _load_metric_dictionary_entry_proposer,
+    "load_public_metric_dictionary_entry": _public_path("metric_dictionary_entry", "entry_id"),
     "load_metric_governance_events": _load_metric_governance_events,
     "load_blocked_entry": _load_blocked_entry,
     "load_single_enterprise": _load_single_enterprise,

@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
 
 import { findingApi, type FindingListItem } from "../../lib/api/client";
+import { analysisRunHref } from "../../lib/deep-links";
 import { FlowDataTable } from "../ui/flow-data-table";
 import "./investigations-index.css";
 
@@ -81,9 +82,10 @@ const columns: ColumnDef<FindingListItem, unknown>[] = [
     cell: (info) => {
       const raw = info.getValue<string | number | null>();
       const text = raw ? Number(raw).toFixed(0) : "—";
-      // 评分来自分析运行；运行详情页不存在（批次三），先链接到四问工作台
-      return info.row.original.analysis_run_id && raw ? (
-        <a href="/analysis" title="前往四问工作台查看分析" className="block text-right tabular-nums">
+      // 批次二 §3.2：评分 → /analysis?run_id= 定位分析运行身份（只读详情端点投影）
+      const runId = info.row.original.analysis_run_id;
+      return runId && raw ? (
+        <a href={analysisRunHref(runId)} title="在四问工作台定位该分析运行" className="block text-right tabular-nums">
           {text}
         </a>
       ) : (

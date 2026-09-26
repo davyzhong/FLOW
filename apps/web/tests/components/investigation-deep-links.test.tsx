@@ -103,14 +103,15 @@ function renderInvestigation() {
 }
 
 describe("investigation 身份条深链", () => {
-  it("批次 / 快照 / 运行 ID 分别链接到数据页、报告中心与分析页", async () => {
+  it("批次 / 快照 / 运行 ID 分别链接到数据页、报告中心与分析页 run_id 定位", async () => {
     renderInvestigation();
     const receipt = await screen.findByRole("region", { name: "不可变分析上下文" });
     const links = within(receipt).getAllByRole("link");
     const hrefs = links.map((link) => link.getAttribute("href"));
     expect(hrefs).toContain(`/data?batch=${identity.batchId}`);
     expect(hrefs).toContain(`/reports?snapshot=${identity.snapshotId}`);
-    expect(hrefs).toContain("/analysis");
+    // 批次二 §3.2：运行 ID → /analysis?run_id= 定位（只读详情端点投影身份）
+    expect(hrefs).toContain(`/analysis?run_id=${identity.runId}`);
     // Finding ID 是当前页自身，不渲染链接
     expect(within(receipt).queryByRole("link", { name: identity.findingId })).toBeNull();
   });
@@ -159,7 +160,7 @@ describe("investigations 列表链接化", () => {
     );
   }
 
-  it("标题单元格包调查链接、评分链接到 /analysis、整行带 rowHref", async () => {
+  it("标题单元格包调查链接、评分链接到 /analysis?run_id=、整行带 rowHref", async () => {
     stubList();
     render(<InvestigationsIndex />);
     const titleLink = await screen.findByRole("link", { name: "履约成本增速超过收入增速" });
@@ -167,7 +168,8 @@ describe("investigations 列表链接化", () => {
     expect(titleLink).toHaveAttribute("href", expected);
 
     const scoreLink = screen.getByRole("link", { name: "87" });
-    expect(scoreLink).toHaveAttribute("href", "/analysis");
+    // 批次二 §3.2：评分 → /analysis?run_id= 定位分析运行身份
+    expect(scoreLink).toHaveAttribute("href", `/analysis?run_id=${identity.runId}`);
 
     const row = titleLink.closest("tr");
     expect(row).toHaveAttribute("data-href", expected);

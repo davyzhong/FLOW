@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 from collections.abc import Iterator
 from datetime import datetime
 from functools import lru_cache
@@ -22,6 +23,7 @@ from flow_api.api.schemas.metric_library import (
     ComputationInventoryResponse,
     ComputationProposalRequest,
     ComputationProposalResponse,
+    CoverageSnapshot,
     EntryLine,
     IndustryReferencePack,
     MetricActionRequest,
@@ -51,6 +53,7 @@ from flow_api.infrastructure.models.metric_library import (
     MetricDictionaryEntry,
     StatementLineMapping,
 )
+from flow_api.infrastructure.models.statement import StatementReport
 from flow_api.metric_library_store.binding import build_execution_binding
 from flow_api.metric_library_store.computation import (
     FACTS_PATH,
@@ -261,6 +264,17 @@ def get_metric_library_session() -> Iterator[Session]:
 SessionDependency = Annotated[Session, Depends(get_metric_library_session)]
 
 
+def _bind_execution(metric: MetricEntry, bindings: dict[str, Any]) -> MetricEntry:
+    """执行绑定投影（C02：engine/facts/narrative 与执行器或缺失原因）——列表与详情同源。"""
+    binding = bindings.get(metric.metric_code)
+    return metric.model_copy(
+        update={
+            "execution_kind": binding.kind if binding else None,
+            "execution_detail": ((binding.executor or binding.reason) if binding else None),
+        }
+    )
+
+
 @router.get(
     "",
     response_model=MetricLibraryResponse,
@@ -281,18 +295,43 @@ def get_metric_library(session: SessionDependency) -> MetricLibraryResponse:
     """
     payload = _db_payload(session) or _yaml_payload()
     bindings = {b.metric_code: b for b in build_execution_binding()}
-    metrics = []
-    for metric in payload.metrics:
-        binding = bindings.get(metric.metric_code)
-        metrics.append(
-            metric.model_copy(
-                update={
-                    "execution_kind": binding.kind if binding else None,
-                    "execution_detail": ((binding.executor or binding.reason) if binding else None),
-                }
+    return payload.model_copy(
+        update={"metrics": [_bind_execution(m, bindings) for m in payload.metrics]}
+    )
+
+
+@router.get(
+    "/entries/{entry_id}",
+    response_model=MetricEntry,
+    responses={status.HTTP_404_NOT_FOUND: {"model": ErrorDetail}},
+    dependencies=[
+        Depends(
+            require_action(
+                Action.METRIC_LIBRARY_READ,
+                LOADERS["load_public_metric_dictionary_entry"],
+                session_provider=get_metric_library_session,
             )
         )
-    return payload.model_copy(update={"metrics": metrics})
+    ],
+)
+def get_metric_entry(entry_id: UUID, session: SessionDependency) -> MetricEntry:
+    """单条目只读详情（批次二 §3.1）：与列表载荷同源的 DB 在效条目投影。
+
+    entry_id 仅存在于 DB 在效条目（YAML-only 回退条目无 entry_id）；
+    未命中返回 404 metric_entry_not_found（public 参考资源，诚实 404）。
+    """
+    payload = _db_payload(session)
+    if payload is not None:
+        bindings = {b.metric_code: b for b in build_execution_binding()}
+        for metric in payload.metrics:
+            if metric.entry_id == str(entry_id):
+                return _bind_execution(metric, bindings)
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail=ErrorDetail(
+            code="metric_entry_not_found", message=f"指标条目不存在：{entry_id}"
+        ).model_dump(mode="json"),
+    )
 
 
 @router.get(
@@ -579,6 +618,51 @@ COVERAGE_DATASET_FILES: dict[str, str] = {
     "damai": "damai_demo_metric_coverage_v1.yaml",
 }
 
+# 覆盖矩阵公司 slug → 财报 stock_code（批次二 §3.4 列头 report_id 映射）。
+# synthetic（damai_syn）等无对应真实财报的 slug 故意缺省：不映射、不渲染链接（诚实约束）。
+COVERAGE_COMPANY_STOCK_CODES: dict[str, str] = {
+    "alibaba_9988": "9988.HK",
+    "cainiao": "PVT.CAINIAO",
+    "jd_logistics_2618": "2618.HK",
+    "sf_002352": "002352.SZ",
+    "tencent_0700": "0700.HK",
+}
+
+
+def _coverage_period_candidates(period: str) -> tuple[str, ...]:
+    """期间标签候选：原样 + 「2Q2026」→「2026Q2」风格归一（同一披露期间两种写法）。"""
+    match = re.fullmatch(r"([1-4])Q(\d{4})", period)
+    if match:
+        return (period, f"{match.group(2)}Q{match.group(1)}")
+    return (period,)
+
+
+def _resolve_coverage_report_ids(
+    session: Session, snapshots: list[CoverageSnapshot]
+) -> dict[tuple[str, str], str]:
+    """（company, period）→ statement_report.id：同身份多版本（重述）取最高版本。"""
+    rows = session.execute(
+        select(
+            StatementReport.id,
+            StatementReport.stock_code,
+            StatementReport.period_label,
+        ).order_by(StatementReport.version.desc())
+    ).all()
+    by_identity: dict[tuple[str, str], str] = {}
+    for report_id, stock_code, period_label in rows:
+        by_identity.setdefault((stock_code, period_label), str(report_id))
+    resolved: dict[tuple[str, str], str] = {}
+    for snapshot in snapshots:
+        stock_code = COVERAGE_COMPANY_STOCK_CODES.get(snapshot.company)
+        if stock_code is None:
+            continue
+        for period in _coverage_period_candidates(snapshot.period):
+            report_id = by_identity.get((stock_code, period))
+            if report_id is not None:
+                resolved[(snapshot.company, snapshot.period)] = report_id
+                break
+    return resolved
+
 
 @lru_cache
 def _coverage_payload(dataset: str = "public") -> MetricCoverageResponse | None:
@@ -607,8 +691,14 @@ def _coverage_payload(dataset: str = "public") -> MetricCoverageResponse | None:
         )
     ],
 )
-def get_metric_coverage(dataset: str = "public") -> MetricCoverageResponse:
-    """指标覆盖矩阵：默认 public 真实财报矩阵；dataset=damai 返回独立 synthetic 矩阵。"""
+def get_metric_coverage(
+    session: SessionDependency, dataset: str = "public"
+) -> MetricCoverageResponse:
+    """指标覆盖矩阵：默认 public 真实财报矩阵；dataset=damai 返回独立 synthetic 矩阵。
+
+    批次二 §3.4：列头快照补 report_id 映射（公司+期间 → statement_report），
+    供前端链接 /statements?report=；无法映射时 report_id 为 null（不渲染链接）。
+    """
     if dataset not in COVERAGE_DATASET_FILES:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -625,7 +715,17 @@ def get_metric_coverage(dataset: str = "public") -> MetricCoverageResponse:
                 code="coverage_dataset_missing", message="覆盖矩阵数据集未生成"
             ).model_dump(mode="json"),
         )
-    return payload
+    report_ids = _resolve_coverage_report_ids(session, payload.snapshots)
+    return payload.model_copy(
+        update={
+            "snapshots": [
+                snapshot.model_copy(
+                    update={"report_id": report_ids.get((snapshot.company, snapshot.period))}
+                )
+                for snapshot in payload.snapshots
+            ]
+        }
+    )
 
 
 @router.get(

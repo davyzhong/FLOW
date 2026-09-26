@@ -173,3 +173,7 @@ GitHub Actions run `36222136591`（SHA `430020f`）与 `36222489952`（SHA `59b3
 用户已于2026-09-26批准实施。Gate 1初始诊断绑定 `3ff95115` + dirty overlay；FY2025工作台契约修复、Gate2静态覆盖37/40与40/40、Gate3 OCF以及毛利矩阵比较选择均已完成并推送。OCF隔离验收19/19、E2E9/9；毛利矩阵实际/预算各10/32格可用，缺值不补零。Gate4批次历史接口/页面已在 `430020f` 推送；API+策略18项、组件16项通过，clean SHA `59b328dc` 隔离 Damai seed/verify19/19、E2E9/9。常驻库本轮未访问/写入。当前新发现：两个 GitHub run 的 dashboard job 都因 CI 注入的 `DATABASE_URL=/flow` 与 `flow_test` 安全守卫冲突而失败，待按本 Gate5记录修正测试脚本。完整 Gate1 API响应矩阵、Gate3/4其余缺口/页面与Gate5全链仍未关闭。
 
 本段 CI 冲突描述是修复前快照；以本工作包“Gate 5 CI URL 修复更新”为准：脚本与 dashboard CI 验收已完成，完整 workflow 尚未结束。
+
+### Gate 4 全站深链批次一、二进展（2026-09-26）
+
+全站深链独立计划见[实施计划](../2026-09-26-ui-deep-link-implementation-plan.md)。批次一、二的代码与本地验收已完成：API/安全用例51/51、Web单测133/133、深链E2E15/15，typecheck、合同生成与文档门禁通过。当前 CI run `36224649915` 的 dashboard 与静态/合同/单测/E2E等已完成作业均成功，但 integration、data-contract、intake-e2e 当时仍运行；此 run 基于 `29877d1`，不能替代当前深链提交 SHA 的 CI 结果。批次三（原文/源记录查看、冻结产物回链、ManagementWatchItem 关联）未开始。Gate 1全路由响应矩阵与本工作包其他页面可见性仍未关闭；因此本工作包继续 active。

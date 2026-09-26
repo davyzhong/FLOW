@@ -211,6 +211,9 @@ class CoverageSnapshot(BaseModel):
     unit: str
     computable: int
     total: int
+    # 批次二 §3.4：公司+期间映射到 statement_report 时给出 report_id（列头链接
+    # /statements?report=）；无对应财报（含 synthetic 数据集）为 None，不渲染链接。
+    report_id: str | None = None
 
 
 class CoverageMetricRow(BaseModel):

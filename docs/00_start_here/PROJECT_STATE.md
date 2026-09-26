@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-09-26 更新：CI dashboard 数据库 URL 冲突已在 `scripts/test_dashboard.sh` 修复；脚本级安全回归 2/2、本机 dashboard Playwright 7/7通过，均将数据写入限制在 `flow_test`。提交 `85e907a` 的 GitHub Actions run `36223558441` 中 dashboard job 已成功；全量 CI 仍在执行 intake/integration/data-contract 三个长测，尚未得出总结果。常驻 `flow` 本轮未写入。此前关于两次 CI 失败的描述记录的是历史状态。
+2026-09-26 更新：CI dashboard 数据库 URL 冲突已在 `scripts/test_dashboard.sh` 修复；脚本级安全回归 2/2、本机 dashboard Playwright 7/7通过，均将数据写入限制在 `flow_test`。`29877d1` 的 GitHub Actions run `36224649915` dashboard job 成功；此前观察时 integration/data-contract/intake-e2e 三个长测仍在执行。常驻 `flow` 本轮未写入。全站深链批次一、二的实现与本地验收已完成：API/安全51/51、Web单测133/133、深链E2E15/15、typecheck/合同/文档门禁通过；其代码提交后的 CI 尚待核验，批次三未开始。此前关于两次 CI 失败的描述记录的是历史状态。
 
 截至 2026-09-26，远端 `main` 最新已推送提交为 `59b328dc`。批次历史功能在干净 SHA `59b328dc` 的隔离 Damai 全旅程复验通过（seed/verify 19/19、浏览器9/9）；但 GitHub Actions runs `36222136591`（`430020f`）和 `36222489952`（`59b328dc`）的 dashboard job 均因 CI 注入 `DATABASE_URL=/flow` 与 `flow_test` 安全守卫冲突而失败，其他 jobs 仍运行中。U8、S01、前端一致性 Task 0–9、大麦完整财年数据包均已完成；常驻库大麦装载 G2 曾于 2026-09-25 按计划完成并 verify 19/19，但本轮未连接或写入常驻 `flow`，当前行数/页面数据量未复核。测试库隔离于 `b60c51b` 修复；小米 2026H1 与阿里 FY2027Q1 holdout 已冻结并录入独立 oracle（`926af825`）。公开 C 级交叉评42项已确认异常为抽取错误；109项口径疑点待裁决，京东物流200格英文原件待重核，抽取修订和新留出盲测未完成。大麦静态数据合同有24个月经营明细（1,920实际、10,752预算、4,800应收回款、768财务实际，含合计守恒 OCF）；发行财报每份51行，静态覆盖 FY2025 37/40、FY2026 40/40。隔离验收中 OCF KPI可用、趋势12/12；毛利矩阵实际/预算比较各10/32格，缺格保持 unavailable、不补零。`make test-dashboard` 已限制为本机 `flow_test`，本地拒绝写常驻 `flow` 的守卫有效；CI现需修正通用 URL 注入与安全测试配置冲突。Gate 1首轮仍绑定 `main@3ff95115` + overlay `1ede2648…`，完整 Gate 1全路由复测及 Gate 3–5其余页面呈现/下钻仍待完成。当前批次历史入口不等于其他经营/财务页面缺数均已解决。主线只在 `main` 串行推进。
 
@@ -24,7 +24,7 @@ applies_to: repository
 
 ## 当前执行入口
 
-- **[CURRENT_ROADMAP.md](../50_plans/CURRENT_ROADMAP.md)**（唯一主线：状态真相 + 执行队列）：U08、S01、前端一致性整改与大麦完整财年演示数据 completed（含常驻库装载 G2）；C级交叉评已完成但归因、订正和新留出未完成；其余执行顺序见路线图。
+- **[CURRENT_ROADMAP.md](../50_plans/CURRENT_ROADMAP.md)**（唯一主线：状态真相 + 执行队列）：U08、S01、前端一致性整改与大麦完整财年演示数据 completed（含常驻库装载 G2）；全站深链批次一、二本地完成、批次三待办；C级交叉评已完成但归因、订正和新留出未完成；其余执行顺序见路线图。
 - 旧统一计划、O 系列计划、EXECUTION_TODO 与 2026-09-24/25 三份总计划均已 superseded/archived（保留历史细节与证据，不再作为执行依据）
 - 文档迁移：[迁移实施计划 M0–M6](../superpowers/plans/2026-09-12-static-knowledge-and-document-migration.md) 已全部关闭（bfc1271 / e373e25，用户确认 2026-09-13）
 

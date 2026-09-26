@@ -838,3 +838,16 @@ a.ml-dep:hover {
   color: var(--rep-blue);
   font-weight: 600;
 }
+
+/* 批次二 §3.4：覆盖矩阵列头公司/期间 → /statements?report= 链接 */
+.ml-cov__report-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.ml-cov__report-link:hover .ml-cov__company {
+  color: var(--flow-info);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
