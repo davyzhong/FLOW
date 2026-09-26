@@ -18,8 +18,10 @@ function Comparison({ label, value }: { label: string; value: Card["yoy"] }) {
       title={reason ?? undefined}
     >
       <small>{label}</small>
-      <span>{value.display_value}</span>
-      {unavailable ? <em className="metric-comparison__status">{statusLabel}</em> : null}
+      <span className="metric-comparison__value">
+        {value.display_value}
+        {unavailable ? <em className="metric-comparison__status">{statusLabel}</em> : null}
+      </span>
     </span>
   );
 }

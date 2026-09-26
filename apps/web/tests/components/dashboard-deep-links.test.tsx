@@ -79,6 +79,7 @@ describe("驾驶舱深链", () => {
     expect(budget).toHaveAttribute("data-status", "unavailable");
     expect(budget).toHaveTextContent("未发布");
     expect(budget).toHaveAttribute("title", "当前口径未发布该比较值");
+    expect(within(budget).getByText("未发布").parentElement).toHaveClass("metric-comparison__value");
   });
 
   it("finding 标题包链接到调查页（与「进入调查」同 href）", async () => {

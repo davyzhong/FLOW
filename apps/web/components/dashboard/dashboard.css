@@ -371,6 +371,13 @@
   font-weight: 500;
 }
 
+.metric-comparison__value {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 3px;
+  white-space: nowrap;
+}
+
 .metric-comparison__status {
   color: #7a5a20;
   font-size: 7px;
