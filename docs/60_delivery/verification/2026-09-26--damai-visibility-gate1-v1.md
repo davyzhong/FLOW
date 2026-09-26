@@ -1,14 +1,14 @@
 ---
 doc_id: FLOW-VERIFY-DAMAI-VISIBILITY-GATE1-001
-title: 大麦数据可见性与 Gate 4 批次历史验收证据 v2.2
+title: 大麦数据可见性与 Gate 4 批次历史验收证据 v2.3
 doc_type: verification
 status: draft
-version: "2.2"
+version: "2.3"
 created_at: 2026-09-26
 updated_at: 2026-09-26
 owner: FLOW
-commit_refs: "[3ff95115, 6591e148, 4932504c, 9cd43e20, 905cf544, e2417ffa, af375ba3, 101bcf23, 5510bad3, 430020f, 59b328dc, 85e907a]"
-evidence_refs: "[read-only-local-api-probe, stable-overlay-fingerprint, sha256-response-matrix, damai-ocf-canonical-fixture, damai-isolated-seed-verify, damai-e2e-8-of-9, damai-e2e-9-of-9-ocf-trends-complete, margin-matrix-read-only-grain-audit, margin-comparison-selection-isolated-e2e-9-of-9, github-ci-stale-damai-coverage-assertion, secure-batch-history-api-ui-and-isolated-e2e-9-of-9, clean-sha-59b328dc-damai-e2e-9-of-9, github-dashboard-flow-test-url-conflict, dashboard-ci-url-isolation-unit-2-of-2, dashboard-playwright-7-of-7, github-run-36223558441-dashboard-success]"
+commit_refs: "[3ff95115, 6591e148, 4932504c, 9cd43e20, 905cf544, e2417ffa, af375ba3, 101bcf23, 5510bad3, 430020f, 59b328dc, 85e907a, 7258763, 71a2dd8]"
+evidence_refs: "[read-only-local-api-probe, stable-overlay-fingerprint, sha256-response-matrix, damai-ocf-canonical-fixture, damai-isolated-seed-verify, damai-e2e-8-of-9, damai-e2e-9-of-9-ocf-trends-complete, margin-matrix-read-only-grain-audit, margin-comparison-selection-isolated-e2e-9-of-9, github-ci-stale-damai-coverage-assertion, secure-batch-history-api-ui-and-isolated-e2e-9-of-9, clean-sha-59b328dc-damai-e2e-9-of-9, github-dashboard-flow-test-url-conflict, dashboard-ci-url-isolation-unit-2-of-2, dashboard-playwright-7-of-7, github-run-36223558441-dashboard-success, persistent-demo-rehydrate-verify-19-of-19-twice, verifier-latest-published-report-regression-tests, allowed-dev-origin-live-readonly-ui-6-of-6, isolated-damai-e2e-9-of-9, persistent-page-api-response-hashes]"
 knowledge_release: flow-knowledge-2026-09-12.1
 applies_to: web-frontend
 supersedes: []
@@ -91,6 +91,39 @@ superseded_by: null
 CI 补充（run `36217337338`，SHA `5510bad3`）：18 个作业中仅 integration 失败，257 passed / 1 failed；唯一失败是 `test_coverage_endpoint_damai_dataset_is_synthetic_and_honest` 仍要求两个期间都必须小于40项可计算，与已批准、已生成的FY2025 37/40及FY2026 40/40发行矩阵冲突。测试已改为校验精确期间覆盖数并保持缺口结构断言；按 `services/api` 工作目录本地定向用例1/1通过。修正提交的 CI 尚待运行；不把 `5510bad3` 标作CI通过。
 
 完整 Gate 1 仍需完成其余缺口逐项归因和干净提交 SHA 的全目标路由复测。本记录支持已确认的故障定位与修复证据，不支持整体页面覆盖验收完成声明。
+
+## 常驻演示恢复与前端可见性复验（2026-09-26；代码基线 `71a2dd8`）
+
+先对本机 `flow` 做全量备份（`work/backups/flow-pre-demo-rehydrate-20260926.dump`，SHA-256 `b374a16ec72f3a918194b1b5b4c80a0df259fa4c56c920c1f1a6e9bd8ee9782d`），再执行既有大麦幂等 seed，未清库、未删除数据、未跑迁移。修正验收器只计 FY2025/FY2026 各自最新已发布财报身份后，常驻库 verify 19/19 两次通过；seed 二次执行无增长，MinIO 工作簿读回1,327,348字节，SHA及语义校验一致。详细过程、行数和首轮误报归因见[剩余体验收口工作包](../../50_plans/work_items/UX--post-damai-experience-closeout.md)。
+
+首轮本机 UI smoke 发现 Next.js 默认只接受启动主机 `localhost`，Playwright 通过 `127.0.0.1` 时内部 JS chunk/HMR 被拒绝，导致 HTML 标题出现但 React 页面停留在加载态。依照 Next.js 官方 `allowedDevOrigins` 配置，在 `apps/web/next.config.ts` 加入 `127.0.0.1`。配置改动触发 Next 开发服务自动重载（未手工终止或重启），随后本机真实常驻栈只读 Playwright 六项通过；隔离全旅程也重新通过9/9。
+
+这次 UI 与 API 摘要读取限制为 GET/HEAD，无数据库写入。环境为本机 `127.0.0.1:3000` / API `127.0.0.1:8000`，企业“大麦物流集团（synthetic 演示企业）”，内部批次 `damai-demo-v1`，期间包括驾驶舱截至2026-08、FY2025报表/快照以及 FY2025/FY2026报表清单。页面观察到：Dashboard 8张卡和12/12趋势；`/data` 可见已发布批次；`/investigations` 显示2条 Finding；`/statements` 与 `/reports` 显示FY2025/FY2026年报及经营快照；正式发布产物历史仍为空。整体质量状态仍为 `degraded`，毛利实际/预算各10/32格，缺格继续显式保留，不补零。此结果说明数据已进入常驻栈且这些页面已经可见，不代表全部交互/下钻或所有 API 完成 Gate 1 验收。
+
+| 页面 | 实际读取 API | HTTP | 字节 | 原始响应 SHA-256 |
+|---|---|---:|---:|---|
+| `/` Dashboard | `/api/v1/dashboard/overview` | 200 | 52,683 | `56e7b476bd645d64f3b223d8a2bd314a967c071ff39c5d76dd2fb96d065ff4d2` |
+| `/operations` 经营分析 | `/api/v1/statements` | 200 | 1,085 | `de6d7b2e6247cfed88691dbbd828f49486ec28b3d99ef3df96307cc96824bf7f` |
+| `/operations` 经营分析 | `/api/v1/operations/public-periods` | 200 | 1,174 | `fc65144184034ac650aa7a1b0b0f7e1da7e98a951c9433450da179b9a2addbe1` |
+| `/operations` FY2025 概览 | `/api/v1/operations/overview/01a0dc95-faa2-7ac2-9ee6-228e952efc6d` | 200 | 8,549 | `85f0e767b4e6946d20ba828bbc0ace2c3d1629bdbd2c26ecb2c6be653b829507` |
+| `/statements` 财报分析 | `/api/v1/statements` | 200 | 1,085 | `de6d7b2e6247cfed88691dbbd828f49486ec28b3d99ef3df96307cc96824bf7f` |
+| `/statements` FY2025 详情 | `/api/v1/statements/01a0dc95-faa2-7ac2-9ee6-228e952efc6d` | 200 | 10,192 | `b7c07b07574af170413c553c1568772dfb762f073ce3d86a0761ada6d7a5ce71` |
+| `/statements` FY2025 更正列表 | `/api/v1/statements/01a0dc95-faa2-7ac2-9ee6-228e952efc6d/corrections` | 200 | 18 | `edbab8150448f994c77e44e7d00785810deee53e112493db63912f1fe69b5bc6` |
+| `/analysis` 四问 | `/api/v1/analysis/workbench/01a0dc95-faa2-7ac2-9ee6-228e952efc6d` | 200 | 2,294 | `35822cad87667980eee1f0944723c736477430d513be6e1813b9ae50b1626725` |
+| `/metric-library` 指标定义 | `/api/v1/metric-library` | 200 | 154,543 | `97fd39938070a91d422eb4c381ee5d05c7bf8610d11bffcc9caed05335c21c64` |
+| `/metric-library` 通用覆盖 | `/api/v1/metric-library/coverage` | 200 | 42,881 | `98fae3433f3d99b18ae9a646c73b8e69fd1f9db5882e7b7337e1a84fc3db17af` |
+| `/metric-library` 大麦覆盖 | `/api/v1/metric-library/coverage?dataset=damai` | 200 | 8,739 | `45b9d3cb410828ea38e9acd49695d3b1f16709cb80b61c546e2437d3a173f507` |
+| `/data` 批次历史 | `/api/v1/intake/batches` | 200 | 283 | `cb5d303eb2ff2a691431fa97183490a2c9ea6ebc743eb905f60002bc0d6b346d` |
+| `/investigations` Finding 清单 | `/api/v1/investigations` | 200 | 884 | `d6d460b177de5de06f0853003990f9451d209bd649315238dd7b79555ec629f4` |
+| `/reports` 发布快照 | `/api/v1/publishing/snapshots` | 200 | 222 | `4169fe2ad6ef1c40d907cf07e3627e87eb61e67097ff36bdcf66cdfd313ff0cd` |
+| `/reports` 冻结候选 | `/api/v1/publishing/freeze-candidates` | 200 | 2,563 | `e02ae7e5608e654d57d4db65f93f1fcba3d1358cf5be890246a5237f6f001fe1` |
+| `/reports` 经营快照 | `/api/v1/operations/snapshots` | 200 | 1,299 | `0f1125629c8b03e1f2b48883ddf88327e78676d206b410d0a193196768b602b3` |
+
+### 可见性复验边界
+
+- 常驻真实数据 GET-only UI smoke：六项Playwright断言通过（Dashboard及筛选/API、经营分析、财报、四问、指标库），另外只读导航确认数据工作台1个批次、调查页2条Finding、报告页财报与经营快照；没有运行常驻数据库的审批、发布、上传或生成产物动作。
+- 独立 compose 全旅程：verify 19/19、浏览器 E2E 9/9；该旅程中的写操作仅作用于隔离 PostgreSQL/MinIO。
+- 本次只确认上述真实 API 链路及可见内容。全目标页面的筛选组合、期间、数据集、权限边界、下钻目标、错误/空/部分降级状态和所有页面的 SHA 矩阵仍未完成，Gate 1不得关闭。
 
 ## 后续只读补充（同日；未冻结新响应哈希）
 
