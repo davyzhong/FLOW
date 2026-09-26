@@ -1,14 +1,14 @@
 ---
 doc_id: FLOW-VERIFY-DAMAI-VISIBILITY-GATE1-001
-title: 大麦数据可见性与 Gate 4 批次历史验收证据 v2.1
+title: 大麦数据可见性与 Gate 4 批次历史验收证据 v2.2
 doc_type: verification
 status: draft
-version: "2.1"
+version: "2.2"
 created_at: 2026-09-26
 updated_at: 2026-09-26
 owner: FLOW
-commit_refs: "[3ff95115, 6591e148, 4932504c, 9cd43e20, 905cf544, e2417ffa, af375ba3, 101bcf23, 5510bad3, 430020f, 59b328dc]"
-evidence_refs: "[read-only-local-api-probe, stable-overlay-fingerprint, sha256-response-matrix, damai-ocf-canonical-fixture, damai-isolated-seed-verify, damai-e2e-8-of-9, damai-e2e-9-of-9-ocf-trends-complete, margin-matrix-read-only-grain-audit, margin-comparison-selection-isolated-e2e-9-of-9, github-ci-stale-damai-coverage-assertion, secure-batch-history-api-ui-and-isolated-e2e-9-of-9, clean-sha-59b328dc-damai-e2e-9-of-9, github-dashboard-flow-test-url-conflict]"
+commit_refs: "[3ff95115, 6591e148, 4932504c, 9cd43e20, 905cf544, e2417ffa, af375ba3, 101bcf23, 5510bad3, 430020f, 59b328dc, 85e907a]"
+evidence_refs: "[read-only-local-api-probe, stable-overlay-fingerprint, sha256-response-matrix, damai-ocf-canonical-fixture, damai-isolated-seed-verify, damai-e2e-8-of-9, damai-e2e-9-of-9-ocf-trends-complete, margin-matrix-read-only-grain-audit, margin-comparison-selection-isolated-e2e-9-of-9, github-ci-stale-damai-coverage-assertion, secure-batch-history-api-ui-and-isolated-e2e-9-of-9, clean-sha-59b328dc-damai-e2e-9-of-9, github-dashboard-flow-test-url-conflict, dashboard-ci-url-isolation-unit-2-of-2, dashboard-playwright-7-of-7, github-run-36223558441-dashboard-success]"
 knowledge_release: flow-knowledge-2026-09-12.1
 applies_to: web-frontend
 supersedes: []
@@ -22,7 +22,7 @@ superseded_by: null
 - `scripts/test_dashboard.sh` 在 `CI=true` 时优先使用专用 `FLOW_DASHBOARD_TEST_DATABASE_URL`，默认固定到 localhost `flow_test`，不再继承通用 compose `/flow`；本地危险 URL 仍 fail-closed。
 - 新增安全回归测试 2/2：CI 注入 `/flow` 被解析到 `/flow_test`；本地显式 `/flow` 在任何写操作前退出2。
 - `bash scripts/test_dashboard.sh` 本机验收通过：迁移/seed 目标为 `flow_test`，摘要12个月/8卡，Playwright 7/7。常驻 `flow` 未访问或写入。
-- 本轮已有其他 worktree 管理的同名 Compose 服务，因此未运行可能重配置基础设施的 `make infra-up`；直接复用健康服务。GitHub 同 SHA CI 尚待提交后复验。旧 CI 失败记录保留为历史根因证据。
+- 本轮已有其他 worktree 管理的同名 Compose 服务，因此未运行可能重配置基础设施的 `make infra-up`；直接复用健康服务。提交 `85e907a` 的 GitHub Actions run `36223558441` dashboard job 成功；workflow 的 intake/integration/data-contract 长测仍在运行，尚无总结果。旧 CI 失败记录保留为历史根因证据。
 
 ## 证据边界
 

@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 3.7
+version: 3.8
 created_at: 2026-09-12
 updated_at: 2026-09-26
 owner: FLOW
@@ -17,7 +17,7 @@ superseded_by: null
 
 # 当前路线图（唯一主线）
 
-> 2026-09-26 更新：Gate 5 dashboard CI 通用 `/flow` URL 冲突已在测试脚本修复，脚本回归 2/2、本机 dashboard E2E 7/7通过；同 SHA GitHub CI 待复验。详见大麦体验收口工作包。
+> 2026-09-26 更新：Gate 5 dashboard CI 通用 `/flow` URL 冲突已在测试脚本修复，脚本回归2/2、本机 dashboard E2E 7/7通过；提交 `85e907a` 的 GitHub run `36223558441` dashboard job 已成功，全 workflow 的三个长测仍在运行。详见大麦体验收口工作包。
 
 > **本页是全仓唯一主线**：既维护状态真相，也维护执行队列。2026-09-25 用户裁决（2A）后不再存在第二份「唯一」文档：EXECUTION_TODO、整合总计划、统一完整实施计划与执行收敛计划均已归档为历史/参考，状态与任务只以本页和工作包为准。详细验收步骤在各工作包与参考规格。
 
@@ -54,7 +54,7 @@ superseded_by: null
 2. **U4 解析器修复与真正的新留出**（上表1'）：新留出双样本已冻结并完成独立 oracle 录入（`926af825`：小米 2026H1 + 阿里 FY2027Q1，抽签记录见 [holdout-lottery-2026-09-25](../../validation/financial_reports/holdout-lottery-2026-09-25.md)）。剩余：`cn_ashare_table` 支持「合并及公司」标题与页码区间参数化；旧三样本回归；新留出首跑前禁止适配/调参。
 3. **重新跑质量基准并完成 C 级 Go/No-Go**：依赖必要修订、U4新留出首跑和盲测；重跑L1并归档机器结果。交叉评与抽签均不单独构成通过，`1794/1794` 只表示已登记覆盖口径。
 4. **全站超链接化（深链下钻）**（**active**，用户 2026-09-26 确认）：按[实施计划](2026-09-26-ui-deep-link-implementation-plan.md)三批推进——批次一=五页参数接收+9 项纯前端链接；批次二=轻后端（entry/快照/运行详情端点等）；批次三=原文/源记录查看器与冻结回链。审计清单见 [可链接性审计](../80_reviews/2026-09-26-ui-linkability-audit.md)。**批次一已完成**（2026-09-26）：六页接收端（`/metric-library`、`/statements`、`/reports`、`/data`、`/`、`/operations?report=`）+ 9 项 S 级链接 + 15 项 M 级下钻，驾驶舱 replaceState 不再抹外来深链；新增 `apps/web/e2e/deep-links.spec.ts`（8 断言）与 Vitest 覆盖（126/126 绿）。
-5. **大麦数据可见性与剩余 UX 收口**（上表2b，用户已批准）：Gate 1初始矩阵绑定`main@3ff95115` + dirty overlay，不是干净提交版。FY2025工作台契约故障已修复；Gate 2覆盖FY2025 37/40、FY2026 40/40；OCF与矩阵选择均在隔离栈验收。批次历史列表在 clean SHA `59b328dc` 的 Damai 全旅程通过（verify19/19、E2E9/9），但不等于全路由 Gate1矩阵完成。当前 GitHub dashboard job因 CI 注入 `/flow` 与测试库 `flow_test` 守卫冲突失败；先修 `scripts/test_dashboard.sh` 的 CI 测试库选择（保持本地危险 URL fail-closed，不改 workflow），再要求同 SHA CI通过。其余 Gate3/4页面/缺口呈现与下钻、Gate5全链回归仍待完成；不对常驻库执行未批准写入。
+5. **大麦数据可见性与剩余 UX 收口**（上表2b，用户已批准）：Gate 1初始矩阵绑定`main@3ff95115` + dirty overlay，不是干净提交版。FY2025工作台契约故障已修复；Gate 2覆盖FY2025 37/40、FY2026 40/40；OCF与矩阵选择均在隔离栈验收。批次历史列表在 clean SHA `59b328dc` 的 Damai 全旅程通过（verify19/19、E2E9/9），但不等于全路由 Gate1矩阵完成。CI通用`/flow` URL冲突已在`test_dashboard.sh`修复；`85e907a` 的 run `36223558441` dashboard job成功，完整workflow其余长测仍运行。其余Gate3/4页面/缺口呈现与下钻、Gate5全链回归仍待完成；不对常驻库执行未批准写入。
 6. **P3 数据与溯源接入**（上表3b）：修复/替换ZTO文本层，完成抽取、勾稽、页锚及API/UI链路测试；评审并实现真实来源链接；复核阿里分部序列在main的来源和可见性。
 7. **知识 release 收尾**（上表K）：完成K0–K6，核对M2用户追认、`CURRENT_RELEASE`、sealed candidate/激活记录、Task 10三仓库证据和独立复验；用户裁决前不切指针。
 8. **外部阻塞项**：取得《应用指南汇编2024》原文后核验rnd_exp；公开数据扩张C1等待真实财报。不得用合成样本替代。
