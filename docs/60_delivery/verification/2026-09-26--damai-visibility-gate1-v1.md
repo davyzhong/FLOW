@@ -3,12 +3,12 @@ doc_id: FLOW-VERIFY-DAMAI-VISIBILITY-GATE1-001
 title: 大麦数据可见性 Gate 1 API 诊断证据 v1.5
 doc_type: verification
 status: draft
-version: "1.6"
+version: "1.7"
 created_at: 2026-09-26
 updated_at: 2026-09-26
 owner: FLOW
-commit_refs: "[3ff95115, 6591e148, 4932504c, 9cd43e20, 905cf544, e2417ffa, af375ba3]"
-evidence_refs: "[read-only-local-api-probe, stable-overlay-fingerprint, sha256-response-matrix, damai-ocf-canonical-fixture, damai-isolated-seed-verify, damai-e2e-8-of-9, damai-e2e-9-of-9-ocf-trends-complete, margin-matrix-read-only-grain-audit]"
+commit_refs: "[3ff95115, 6591e148, 4932504c, 9cd43e20, 905cf544, e2417ffa, af375ba3, 101bcf23]"
+evidence_refs: "[read-only-local-api-probe, stable-overlay-fingerprint, sha256-response-matrix, damai-ocf-canonical-fixture, damai-isolated-seed-verify, damai-e2e-8-of-9, damai-e2e-9-of-9-ocf-trends-complete, margin-matrix-read-only-grain-audit, margin-comparison-selection-isolated-e2e-9-of-9]"
 knowledge_release: flow-knowledge-2026-09-12.1
 applies_to: web-frontend
 supersedes: []
@@ -77,7 +77,9 @@ superseded_by: null
 
 对 canonical 文件、当前 snapshot 与只读 dashboard GET 的交叉核对显示：canonical 全期只有10种实际客群×产品组合；2026-08 `gross_margin/actual_month` 有10格、`prior_year_month` 与 `yoy_variance_month` 各8格。预算原值覆盖32格，但预算差异仅10格。热运行本机 API 返回矩阵32格、实际10格、同比8格，比较标签为“不可用”。这次读数反映当时本机运行库/代码，不绑定干净 Git SHA，因此用于定位而非验收。
 
-归因：22个未发布实际毛利格不是快照聚合遗漏的已存在源事实；canonical 中没有相应实际组合，必须保持缺失，禁止补零。服务端比较选择逻辑要求预算或同比覆盖全部32格；两者均不满足时固定退回同比，从而丢弃较多的预算比较格。计划以单一比较口径最大化已发布格数，覆盖相同时优先预算；其余格继续显式 unavailable，矩阵状态为 degraded。实现与验证状态以工作包后续提交为准。
+归因：22个未发布实际毛利格不是快照聚合遗漏的已存在源事实；canonical 中没有相应实际组合，必须保持缺失，禁止补零。服务端比较选择逻辑要求预算或同比覆盖全部32格；两者均不满足时固定退回同比，从而丢弃较多的预算比较格。
+
+修复与隔离验收（2026-09-26）：新增比较选择单元测试，按可用格数选单一比较类型，预算与同比覆盖数相等时预算优先；两个比较均无格时保持“不可用”。在真实隔离大麦全旅程中，新增 API E2E 断言通过：矩阵32格、实际可用10格、预算比较可用10格、标签“预算”、22格实际 `exact_value=null`；矩阵整体保持 `degraded`。完整 `bash scripts/test_damai_demo_e2e.sh`：verify 19/19、E2E 9/9；dashboard相关pytest 13 passed，ruff/mypy与前端 typecheck通过。该测试运行来自含并行会话未提交改动的工作树，不能代替本修复提交后的 CI 和干净 SHA 全目标复测；常驻数据库未写入。
 
 完整 Gate 1 仍需完成其余缺口逐项归因和干净提交 SHA 的全目标路由复测。本记录支持已确认的故障定位与修复证据，不支持整体页面覆盖验收完成声明。
 

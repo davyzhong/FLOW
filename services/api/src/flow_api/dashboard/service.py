@@ -85,6 +85,21 @@ CARD_DEFINITIONS = (
     ("operating_cash_flow", "经营现金流", "现金", "CNY", False),
 )
 RATIO_METRICS = frozenset({"gross_margin", "fulfillment_cost_rate"})
+
+
+def _select_margin_comparison_type(
+    *, budget_count: int, yoy_count: int
+) -> tuple[
+    Literal["budget_variance_month", "yoy_variance_month"],
+    Literal["预算", "同比", "不可用"],
+]:
+    if budget_count == 0 and yoy_count == 0:
+        return "yoy_variance_month", "不可用"
+    if budget_count >= yoy_count:
+        return "budget_variance_month", "预算"
+    return "yoy_variance_month", "同比"
+
+
 SUPPORTED_DIMENSION_COMBINATIONS: tuple[tuple[DimensionName, ...], ...] = (
     (),
     ("organization",),
@@ -522,23 +537,17 @@ class DashboardService:
             for product in products
         }
 
-        def comparison_available(comparison_type: str) -> bool:
-            return all(
+        def comparison_count(comparison_type: str) -> int:
+            return sum(
                 self._find_value(bundle, "gross_margin", comparison_type, filters)
                 is not None
                 for filters in filters_by_cell.values()
             )
 
-        comparison_label: Literal["预算", "同比", "不可用"]
-        if comparison_available("budget_variance_month"):
-            comparison_label = "预算"
-            comparison_type = "budget_variance_month"
-        elif comparison_available("yoy_variance_month"):
-            comparison_label = "同比"
-            comparison_type = "yoy_variance_month"
-        else:
-            comparison_label = "不可用"
-            comparison_type = "yoy_variance_month"
+        comparison_type, comparison_label = _select_margin_comparison_type(
+            budget_count=comparison_count("budget_variance_month"),
+            yoy_count=comparison_count("yoy_variance_month"),
+        )
         cells = tuple(
             MatrixCell(
                 customer_segment_id=segment.id,

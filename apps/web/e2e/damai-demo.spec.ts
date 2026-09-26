@@ -65,6 +65,14 @@ test("dashboard API serves customer-grain overview", async ({ page }) => {
       coverage_count: number;
       points: { operating_cash_flow: { status: string; exact_value: string | null } }[];
     };
+    margin_matrix: {
+      status: string;
+      comparison_label: string;
+      cells: {
+        actual_margin: { status: string; exact_value: string | null };
+        comparison: { status: string; exact_value: string | null };
+      }[];
+    };
     filter_options: {
       dimensions: { dimension: string; options: { id: string; name: string }[] }[];
     };
@@ -80,6 +88,18 @@ test("dashboard API serves customer-grain overview", async ({ page }) => {
   for (const point of body.trends.points) {
     expect(point.operating_cash_flow.status).toBe("available");
     expect(point.operating_cash_flow.exact_value).not.toBeNull();
+  }
+
+  // 源事实只覆盖10种客群×产品组合；不补零，并优先展示覆盖更高的预算比较。
+  expect(body.margin_matrix.cells).toHaveLength(32);
+  expect(body.margin_matrix.status).toBe("degraded");
+  expect(body.margin_matrix.comparison_label).toBe("预算");
+  expect(body.margin_matrix.cells.filter((cell) => cell.actual_margin.status === "available")).toHaveLength(10);
+  expect(body.margin_matrix.cells.filter((cell) => cell.comparison.status === "available")).toHaveLength(10);
+  for (const cell of body.margin_matrix.cells) {
+    if (cell.actual_margin.status !== "available") {
+      expect(cell.actual_margin.exact_value).toBeNull();
+    }
   }
 
   const dims = Object.fromEntries(
