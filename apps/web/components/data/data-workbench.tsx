@@ -69,12 +69,18 @@ export function DataWorkbench({
     && sessionBatchId !== initialBatchId;
 
   const refreshBatchHistory = useCallback(async () => {
+    setHistoryLoaded(false);
+    setHistoryError(null);
     try {
       const result = await intakeApi.listBatches();
       setBatchHistory(result.items);
       setHistoryError(null);
-    } catch {
-      setHistoryError("批次历史暂时无法加载；你仍可继续上传新数据。");
+    } catch (cause) {
+      setHistoryError(
+        isFlowApiError(cause) && cause.status === 403
+          ? "无权读取当前企业的批次历史；你仍可继续上传新数据。"
+          : "批次历史暂时无法加载；你仍可继续上传新数据。",
+      );
     } finally {
       setHistoryLoaded(true);
     }
@@ -240,6 +246,9 @@ export function DataWorkbench({
               刷新
             </button>
           </div>
+          {!historyLoaded && !historyError ? (
+            <p role="status">正在读取历史批次…</p>
+          ) : null}
           {historyError ? <p role="status">{historyError}</p> : null}
           {historyLoaded && !historyError && batchHistory.length === 0 ? (
             <p role="status">暂无可见批次。上传并发布工作簿后，批次会显示在这里。</p>

@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 5.1
+version: 5.2
 created_at: 2026-09-12
 updated_at: 2026-09-26
 owner: FLOW
@@ -17,7 +17,7 @@ superseded_by: null
 
 # 当前路线图（唯一主线）
 
-> 2026-09-26 更新：提交 `0dde935f` 的隔离 GET 矩阵43/43 HTTP200、verify19/19、E2E9/9；之后生产构建发现的 `/data`、`/operations` 390px溢出已修复，导航/一致性/响应式/状态E2E69/69、Web136/136、typecheck通过，lint0 errors/1既有warning。新修复CI待验。矩阵不调用可能执行freeze的GET。常驻 `flow` 测试批次偏差仍待授权处置；Gate1全状态/全下钻验收仍未关闭。
+> 2026-09-26 更新：隔离 API 矩阵43/43 HTTP200、verify19/19、E2E9/9。生产构建下修复 `/data`、`/operations` 390px溢出；补数据历史/loading/403及分析工作台 loading/error/403 状态；一致性/响应式/状态E2E74/74、Web138/138、typecheck通过，lint0 errors/1既有warning。CI待新 SHA 验收。全站空态/部分降级、多视口数据态/下钻仍未关闭；常驻 `flow` 测试批次偏差待授权处置。
 
 > **本页是全仓唯一主线**：既维护状态真相，也维护执行队列。2026-09-25 用户裁决（2A）后不再存在第二份「唯一」文档：EXECUTION_TODO、整合总计划、统一完整实施计划与执行收敛计划均已归档为历史/参考，状态与任务只以本页和工作包为准。详细验收步骤在各工作包与参考规格。
 

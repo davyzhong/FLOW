@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 4.2
+version: 4.3
 created_at: 2026-09-24
 updated_at: 2026-09-26
 owner: FLOW
@@ -178,6 +178,13 @@ Run: `python3 scripts/check_docs.py --phase m1` and the repository link check
 首次执行生产构建 E2E 门禁时发现 `/data` 批次历史标题/表格导致页面溢出至546px，`/operations` 期间下拉框的长 option 将页面撑至511px。数据页历史区补 `min-width: 0`、标题在窄屏换行，表格限制在自身可横向滚动容器；经营页窄屏选择框固定在容器宽度内，主题网格最小轨道允许缩小。响应式失败诊断保留前20个越界元素，方便定位。
 
 复验：`bash scripts/test_module_boundaries_e2e.sh` 生产构建下69/69通过（含全部导航/页面一致性、11路由390px、4数据页1024/1440、加载/错误/403）；Web Vitest 136/136、`make lint`（0 errors，1既有 TanStack warning）、`make typecheck`通过。全站五态截图归档、所有数据视口、全部深链目标与真实无权限角色链路仍未覆盖。
+
+### 工作台状态可见性补齐（2026-09-26）
+
+- `/data` 批次历史首次读取/刷新期间明确呈现 status；403 与暂时性服务错误分开说明。历史读取不可用不阻断上传工作台，但权限缺失不再伪装为临时错误。
+- `/analysis` 工作台请求挂起时的“加载中…”加 `role=status`；已有 error/403 按 `role=alert` 显示。
+- 新增 E2E 覆盖数据工作台 loading/403、四问工作台 loading；analysis 加入 error/403矩阵。`bash scripts/test_module_boundaries_e2e.sh` 生产 E2E74/74、Web Vitest138/138、lint0 errors（1既有warning）、typecheck通过。
+- 未关闭：所有路由/全部五态的穷举、空/部分降级端到端矩阵，数据密集态跨390/1024/1440覆盖、实际企业角色鉴权、全深链逐项验收。新提交 CI 待完成。
 - 当前 clean SHA `649a2aba` 的 GitHub Actions run `36232029817` success；其后状态同步提交 `7229cd0d` / run `36232204424` 与证据更新提交 `4c55f10e` / run `36232336053` 也 success。旧 runs `36229942486`–`36230243382` 的 dashboard 视觉高度失败发生在 `31a60217` 修复前；`31a60217` run `36230615921` 的 dashboard、integration、intake-e2e、data-contract 及其余 jobs 最终全绿。CI 当前无已知未通过项；Gate 1 页面/视口/错误/403/深链矩阵仍未关闭。
 
 #### CI 环境变量回归（2026-09-26，待修复）

@@ -139,6 +139,19 @@ describe("DataWorkbench", () => {
     expect(screen.getByRole("button", { name: "下载 FLOW 标准模板" })).toBeInTheDocument();
   });
 
+  it("announces that batch history is loading", async () => {
+    vi.stubGlobal("fetch", vi.fn(() => new Promise<Response>(() => undefined)));
+    render(<DataWorkbench />);
+    expect(await screen.findByRole("status")).toHaveTextContent("正在读取历史批次");
+  });
+
+  it("explains forbidden batch history separately from transient errors", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => jsonResponse({ detail: { code: "role_forbidden", message: "forbidden" } }, 403)));
+    render(<DataWorkbench />);
+    expect(await screen.findByText(/无权读取当前企业的批次历史/)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "下载 FLOW 标准模板" })).toBeInTheDocument();
+  });
+
   it("walks upload → mapping → cleaning → publish from a chosen file", async () => {
     render(<DataWorkbench />);
     const input = screen.getByLabelText("选择文件");

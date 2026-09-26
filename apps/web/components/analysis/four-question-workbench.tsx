@@ -193,7 +193,7 @@ export function FourQuestionWorkbench({
           {state.message}
         </p>
       ) : null}
-      {pending ? <p aria-live="polite">加载中…</p> : null}
+      {pending ? <p role="status" aria-live="polite">加载中…</p> : null}
 
       {workbench ? (
         <>

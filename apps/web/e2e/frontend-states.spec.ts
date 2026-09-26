@@ -22,6 +22,7 @@ const ALERT_ROUTES = [
   "/statements",
   "/reports",
   "/investigations",
+  "/analysis",
 ] as const;
 
 async function waitForStyles(page: import("@playwright/test").Page) {
@@ -100,4 +101,63 @@ test.describe("state matrix: forbidden", () => {
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
     });
   }
+});
+
+test.describe("state matrix: data workbench history", () => {
+  test("announces the loading history without hiding the upload workbench", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.route("**/api/v1/intake/batches", async () => {
+      await new Promise(() => undefined);
+    });
+    await page.goto("/data", { waitUntil: "domcontentloaded" });
+    await waitForStyles(page);
+    await expect(page.getByRole("heading", { name: "数据工作台" })).toBeVisible();
+    await expect(page.getByRole("status")).toContainText("正在读取历史批次");
+    await expect(page.getByLabel("选择文件")).toBeVisible();
+  });
+
+  test("explains 403 history access while leaving permitted upload actions visible", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.route("**/api/v1/intake/batches", (route) =>
+      route.fulfill({
+        status: 403,
+        contentType: "application/json",
+        body: JSON.stringify({ detail: { code: "role_forbidden", message: "forbidden" } }),
+      }),
+    );
+    await page.goto("/data", { waitUntil: "domcontentloaded" });
+    await waitForStyles(page);
+    await expect(page.getByRole("status")).toContainText("无权读取当前企业的批次历史");
+    await expect(page.getByLabel("选择文件")).toBeVisible();
+  });
+});
+
+test("analysis workbench announces a pending report response", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.route("**/api/v1/statements", (route) =>
+    route.fulfill({
+      json: {
+        reports: [{
+          id: "report-1",
+          company_name: "测试公司",
+          period_label: "FY2025",
+          unit_note: "CNY",
+          stock_code: "TEST",
+          report_kind: "annual",
+          statement_types: [],
+          line_item_count: 0,
+          created_at: "2026-01-01T00:00:00Z",
+          source_ref: "test.pdf",
+          source_sha256: "a".repeat(64),
+        }],
+      },
+    }),
+  );
+  await page.route("**/api/v1/analysis/workbench/report-1", async () => {
+    await new Promise(() => undefined);
+  });
+  await page.goto("/analysis", { waitUntil: "domcontentloaded" });
+  await waitForStyles(page);
+  await expect(page.getByRole("heading", { name: "四问分析工作台" })).toBeVisible();
+  await expect(page.getByRole("status")).toContainText("加载中");
 });
