@@ -2,8 +2,8 @@
 doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
-status: proposed
-version: 1.2
+status: active
+version: 1.3
 created_at: 2026-09-24
 updated_at: 2026-09-26
 owner: FLOW
@@ -89,4 +89,4 @@ Run: `python3 scripts/check_docs.py --phase m1` and the repository link check
 
 ## 工作状态
 
-规格已提出，尚未获准实施。用户批准后，按 Gate 1→5 串行推进；每个 Gate 独立验证、更新主线状态并提交推送。
+用户已于 2026-09-26 批准实施。当前启动 Gate 1（逐页数据链路和缺口归因）；Gate 1 证据表完成并审查后再进入 Gate 2。各 Gate 独立验证、更新主线状态并提交推送。
