@@ -15,6 +15,7 @@ applies_to: docs
 > 由 `apps/web/e2e/state-matrix-archive.spec.ts` 按需生成
 （`FLOW_STATE_MATRIX_ARCHIVE=1 pnpm exec playwright test e2e/state-matrix-archive.spec.ts`）。
 覆盖数据密集四页 × {正常 / 空 / 加载 / 错误 / 403} × {390 / 1024 / 1440}；
+截图中的 loaded/empty 数据来自固定 UI 契约夹具，不是常驻库或大麦完整数据覆盖证明。
 结构合同由 `frontend-states.spec.ts` 与 `frontend-responsive.spec.ts` 门禁自动化，本目录为人审证据。
 
 | 页面 | 截图目录 |
@@ -24,5 +25,5 @@ applies_to: docs
 | `/metric-library` | [metric-library/](metric-library/) |
 | `/investigations` | [investigations/](investigations/) |
 
-生成时间：2026-09-26T21:52:04.107Z
+生成时间：2026-09-26T22:21:15.687Z
 

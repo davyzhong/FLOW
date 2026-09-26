@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 4.7
+version: 4.8
 created_at: 2026-09-24
 updated_at: 2026-09-27
 owner: FLOW
@@ -37,7 +37,9 @@ applies_to: web-frontend
 
 - 共享 Next 开发进程的 `/statements` 请求挂起并出现 `EPIPE`，不属于本轮创建；未终止或改动该进程。改用 `work/damai-demo/web-matrix.E6MJjO/` 下的隔离前端副本及独立端口 54683 完成截图验收，复验后仅停止本轮创建的服务。
 - 四个数据密集页面 `/statements`、`/reports`、`/metric-library`、`/investigations` 的五态（loaded/empty/loading/error/forbidden）×三视口（390/1024/1440）共 60 张图已刷新；归档生成器第61项写索引。Playwright 两轮均 61/61；第二轮额外断言每个状态下无未捕获页面异常。
-- 首轮运行在旧指标库 fixture 中暴露 `MetricCard` 收到过时字段（`code` 而非 `metric_code`、缺 `domain` 等）导致浏览器运行时 TypeError。已将归档夹具修至当前 `flow.metric_dictionary.v1` UI 契约，并加入 pageerror 断言；第二轮归档无 pageerror。这个问题是测试夹具陈旧，并不表示生产 API 的指标数据缺陷。
+- 首轮运行在旧指标库 fixture 中暴露 `MetricCard` 收到过时字段（`code` 而非 `metric_code`、缺 `domain` 等）导致浏览器运行时 TypeError。已将归档夹具修至当前 `flow.metric_dictionary.v1` UI 契约，并加入 pageerror 断言；归档复验无 pageerror。这个问题是测试夹具陈旧，并不表示生产 API 的指标数据缺陷。
+- 代表性截图人审又发现报告中心 loaded fixture 未覆盖冻结候选、经营快照及对应尝试列表；首版因此把空占位错误地混入 loaded 图。已补齐这些端点的静态响应、将测试用的正式产物历史明确保持空列表，并重新生成归档；截图索引同步注明 loaded/empty 使用契约夹具，不能作为常驻库/大麦完整覆盖证明。
+- 响应式 E2E 的 `frontend-responsive.spec.ts` 另有一份相同的旧指标字段 fixture；现已按当前 `MetricEntry` 契约修正，并对四个 fixture 数据页检查 `pageerror`。独立隔离 Next 副本 Playwright 27/27（11路由390px无横向溢出；四个数据页1024/1440及数据态通过，无未捕获页面异常）。
 - 当前矩阵仍有明确范围差距：归档截图只覆盖四个数据密集页；其余七个交互路由仅有既有移动端溢出测试/局部状态合同，尚无五态×三视口全量视觉证据。截图中的单个财报/单指标 mock 是稳定的展示夹具，不是大麦数据库实况，也不能据此断言实际大麦数据的页面完整性。
 - 此复验只补充视觉归档与测试真实性，不覆盖 Gate 1 的逐项 API→发布对象→源事实映射，也未覆盖所有目标指标/趋势/矩阵下钻；工作包仍保持 active。
 
