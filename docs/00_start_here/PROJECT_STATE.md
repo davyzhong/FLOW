@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.25
+version: 5.26
 created_at: 2026-09-12
 updated_at: 2026-09-27
 owner: FLOW
@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-09-27 最新状态更正：`/reports` 页面子项已关闭。提交 `e869f259991830df2ac9e69929aa712f9677bf0c` 的 CI run `36306908435` 最终 17/17 success；首次 `user-closure-e2e` cleaning-summary GET 返回403，同 SHA 重跑该失败 job 后通过，根因未复现且未知。当前唯一页面步骤为 `/data`，后续 `/investigations`；UX Gate1/Gate5仍未完成。
+2026-09-27 最新状态更正：`/reports` 与 `/data` 页面子项已关闭。`/data` 提交 `3660389e038083dfc92f6812c28e6ad7e2a2cfdb` 对应 CI run `36310017180` attempt2 17/17 success；attempt1 的 smoke `make stack-up` 失败，attempt2 同 SHA 通过，根因未知。隔离栈 `damai-demo-iso` seed verify19/19、GET矩阵159项（149预期200、10预期422、意外0）、Playwright12/12；`make typecheck`通过、`make lint`零错误且有1条既有warning。当前唯一页面步骤为 `/investigations`，其后补全全路由状态/视口/深链和Gate5；UX Gate1/Gate5仍未完成。常驻 `flow` Compose 容器标签来源混杂（MinIO在当前worktree，Postgres/Redis在旧worktree），本轮未停止、重建、迁移或写入；不得将其作为单一工作树安全启动。
 
 2026-09-27 偏差登记：接手会话在本地复现 user-closure E2E 失败时，`scripts/test_user_closure_e2e.sh` 的历史默认 `DATABASE_URL` 将 `alembic upgrade head` 与 `seed_dashboard_demo.py --fresh-batch` 指向了常驻 `flow` 库，在常驻库新增种子批次 `01a0e22c-…`（"FLOW Finance BP dashboard demo"，2026-09-27 17:23:04 +08，与既有偏差批次 `01a0dcdd-8245-7c17-99aa-fce91a8a7a57` 同类；上传旅程测试失败，未产生 intake 写入）。按既有纪律未清理/回滚/切 latest，待用户授权处置。根因已修复（`2117d837`）：脚本对非 CI 环境改为 fail-closed 拦截常驻库连接（`FLOW_USER_CLOSURE_ALLOW_RESIDENT_DB=1` 显式逃逸），并修复该测试的水合竞态（等历史区出现再上传、映射阶段等确认按钮）；隔离库 `flow_user_closure` 复跑 4/4 passed。
 

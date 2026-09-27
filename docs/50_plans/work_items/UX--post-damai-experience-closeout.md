@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 5.13
+version: 5.14
 created_at: 2026-09-24
 updated_at: 2026-09-27
 owner: FLOW
@@ -14,7 +14,7 @@ applies_to: web-frontend
 
 # 大麦数据后的剩余体验收口
 
-> 2026-09-27 最新状态：`/reports` 值级子项已关闭。代码提交 `e869f259991830df2ac9e69929aa712f9677bf0c` 的 CI run `36306908435` 最终 17/17 success；首次 `user-closure-e2e` cleaning-summary GET 403 在同 SHA 失败 job 重跑后未复现，根因未知。当前唯一页面步骤为 `/data`；UX Gate1/Gate5仍未关闭。
+> 2026-09-27 最新状态：`/reports`、`/data` 值级子项已关闭。`/data` 代码 `3660389e` / CI `36310017180` attempt2 17/17 success；隔离 verify19/19、GET矩阵159项零意外、Playwright12/12，typecheck通过，lint零错误/1既有warning。当前唯一页面步骤为 `/investigations`；UX Gate1/Gate5仍未关闭。
 
 ## 指标库 `/metric-library` API→配置→UI 值级验收（2026-09-27；已关闭）
 
@@ -38,6 +38,14 @@ applies_to: web-frontend
 - TDD 两次红灯均为测试自身缺陷，非产品缺陷：①Playwright `toBeDisabled` 辅助器对 `<option>` 误报 enabled（失败日志中 DOM 明确含 disabled 属性），改为直接断言属性合同；②`getByRole` name 默认子串匹配，「报告快照列表」同时命中「经营报告快照列表」，加 `exact: true` 修正。未发现本页 API/UI 值不一致。
 - 隔离验证：`bash scripts/test_damai_demo_e2e.sh` 专属 Compose 栈，seed verify 19/19（ok=true、failed=[]）；Playwright 10/10（新增本测试后 9→10，第三次运行全绿）；`make typecheck` 通过；`make lint` 0 error（1 条既有 TanStack Table warning）。未连接/写入常驻 `flow`。
 - **交付状态：**提交 `e869f259991830df2ac9e69929aa712f9677bf0c` 的 CI run `36306908435` 最终17/17 success；首次 `user-closure-e2e` 的 cleaning-summary GET 403 在同 SHA 重跑后通过，根因未知且未更改权限策略。报告中心页面子项关闭，唯一下一页为 `/data`。UX Gate 1/Gate 5仍未关闭。
+
+## 数据工作台 `/data` 批次历史 API→UI 值级验收（2026-09-27；已关闭）
+
+- 范围：只读对账数据工作台“最近的数据批次”表与当前 actor/企业可见的 `GET /api/v1/intake/batches`；逐行核验批次名称、状态、版本数、最新版本序号/状态、上海时区本地化创建时间和批次深链。测试放在会追加批次的上传旅程之前，不触发写操作。
+- 测试来源：主线提交 `3660389e038083dfc92f6812c28e6ad7e2a2cfdb`；该提交同时带有后续 `/investigations` 测试，但本轮按串行计划仅关闭 `/data`，`/investigations` 仍为下一子项。
+- 隔离验证环境：专属 Compose project `damai-demo-iso`、全新数据库/对象存储卷和大麦 synthetic release；seed verify19/19；只读可见矩阵159项（149预期200、10预期422、意外0；矩阵清单 SHA-256 `0416fe20234486cb1ca101cfbf6e650428b5df4750313c7cd5746eb8e8667786`）；完整 Playwright12/12；`make typecheck`通过；`make lint`零错误、1条既有 TanStack Table warning。验收后专属容器/卷已由脚本清理；常驻 `flow` 数据库未连接/写入。
+- 同 SHA CI：GitHub run `36310017180` attempt2 17/17 success。attempt1 的 `smoke/make stack-up` 失败；同 SHA 重跑中 stack-up、API/Web health 与 worker ping 全通过，根因未取得，未改产品代码。
+- **交付状态：**`/data` 页面子项关闭；唯一下一页为 `/investigations`。UX Gate1/Gate5仍未关闭。
 
 ## 目标
 
