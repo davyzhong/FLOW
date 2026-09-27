@@ -233,6 +233,54 @@ describe("OperationsOverviewApp", () => {
     expect(screen.queryByRole("button", { name: "冻结概览" })).toBeNull();
     expect(screen.queryByRole("link", { name: "下载 PDF" })).toBeNull();
   });
+
+  it("clears the previous report while the newly selected period is loading", async () => {
+    let resolveSecondOverview!: (response: Response) => void;
+    const secondOverview = new Promise<Response>((resolve) => {
+      resolveSecondOverview = resolve;
+    });
+    const twoReports = {
+      reports: [
+        ...REPORTS.reports,
+        { ...REPORTS.reports[0], id: "report-2", period_label: "2026Q2" },
+      ],
+    };
+    const secondBody = {
+      ...OVERVIEW,
+      report_id: "report-2",
+      themes: OVERVIEW.themes.map((theme) => ({
+        ...theme,
+        metrics: theme.metrics.map((metric) =>
+          metric.entry_id === "dupont_three_factor"
+            ? { ...metric, value: "0.2200" }
+            : metric,
+        ),
+      })),
+    };
+    vi.stubGlobal("fetch", vi.fn((input: RequestInfo | URL) => {
+      const url = String(input);
+      if (url.endsWith("/statements")) return Promise.resolve(jsonResponse(twoReports));
+      if (url.endsWith("/operations/public-periods")) {
+        return Promise.resolve(jsonResponse({ periods: [] }));
+      }
+      if (url.includes("/operations/overview/report-2")) return secondOverview;
+      if (url.includes("/operations/overview/report-1")) {
+        return Promise.resolve(jsonResponse(OVERVIEW));
+      }
+      return Promise.resolve(jsonResponse({ detail: "not found" }, 404));
+    }));
+    render(<OperationsOverviewApp />);
+
+    expect(await screen.findByText("16.00%", { selector: "strong" })).toBeTruthy();
+    fireEvent.change(screen.getByLabelText("分析数据与期间"), {
+      target: { value: "report:report-2" },
+    });
+
+    expect(await screen.findByRole("status")).toHaveTextContent("正在读取经营分析概览");
+    expect(screen.queryByText("16.00%", { selector: "strong" })).toBeNull();
+    resolveSecondOverview(jsonResponse(secondBody));
+    expect(await screen.findByText("22.00%", { selector: "strong" })).toBeTruthy();
+  });
 });
 
 // 批次一 §2.1/§2.3：/operations?report= 选中参数、指标行链接指标库、冻结快照链接报告中心。

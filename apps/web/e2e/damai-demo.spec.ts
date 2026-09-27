@@ -4,6 +4,8 @@ import path from "node:path";
 import { expect, test, type Page } from "@playwright/test";
 import type {
   DashboardResponse,
+  OperationsOverview,
+  PublicOperatingPeriodList,
   StatementReportDetail,
   StatementReportList,
   WorkbenchResponse,
@@ -51,6 +53,113 @@ function formatStatementValue(value: string, unitNote: string): string {
     .toFixed(2)
     .replace(/\.00$/, "")
     .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+const OPERATIONS_PERCENT_METRICS = new Set([
+  "gross_margin",
+  "net_margin",
+  "debt_asset_ratio",
+  "revenue_growth",
+  "net_profit_growth",
+  "operating_profit_growth",
+  "revenue_yoy",
+  "net_profit_yoy",
+  "segment_revenue_yoy",
+  "adjusted_net_profit_margin",
+  "adjusted_ebitda_margin",
+  "business_line_share.china_logistics",
+  "business_line_share.international_logistics",
+  "business_line_share.technology_and_other_services",
+  "dupont_three_factor",
+]);
+
+const OPERATIONS_MULTIPLE_METRICS = new Set([
+  "current_ratio",
+  "ocf_to_net_profit",
+  "inventory_turnover",
+  "ar_turnover",
+  "ap_turnover",
+  "current_asset_turnover",
+]);
+
+const OPERATIONS_EXACT_PRECISION_METRICS = new Set([
+  "international_parcels",
+  "china_orders_fulfilled",
+  "adjusted_net_profit",
+  "adjusted_ebitda",
+]);
+
+function formatOperationsMetric(entryId: string, value: string): string {
+  if (OPERATIONS_EXACT_PRECISION_METRICS.has(entryId)) return value;
+  const numericValue = Number(value);
+  if (!Number.isFinite(numericValue)) return value;
+  const isRatio =
+    OPERATIONS_PERCENT_METRICS.has(entryId) ||
+    OPERATIONS_MULTIPLE_METRICS.has(entryId) ||
+    entryId === "dso_days";
+  const formatted = new Intl.NumberFormat("zh-CN", {
+    minimumFractionDigits: isRatio ? 2 : 0,
+    maximumFractionDigits: 2,
+  }).format(OPERATIONS_PERCENT_METRICS.has(entryId) ? numericValue * 100 : numericValue);
+  if (OPERATIONS_PERCENT_METRICS.has(entryId)) return `${formatted}%`;
+  if (OPERATIONS_MULTIPLE_METRICS.has(entryId)) {
+    return `${formatted}${entryId === "current_ratio" || entryId === "ocf_to_net_profit" ? " 倍" : " 次"}`;
+  }
+  if (entryId === "dso_days") return `${formatted} 天`;
+  return formatted;
+}
+
+async function expectOperationsOverviewMatchesApi(
+  page: Page,
+  overview: OperationsOverview,
+) {
+  await expect(page.getByRole("heading", { name: "六主题概览" })).toBeVisible();
+  await expect(page.locator(".ops-overview__theme")).toHaveCount(overview.themes.length);
+  for (const theme of overview.themes) {
+    const section = page.locator(`[aria-labelledby="ops-theme-${theme.theme_id}"]`);
+    await expect(section.locator("h3")).toHaveText(theme.name);
+    await expect(section).toHaveAttribute("data-status", theme.status);
+    if (theme.status === "not_applicable") {
+      expect(theme.reason).toBeTruthy();
+      await expect(section).toContainText(theme.reason!);
+      continue;
+    }
+
+    for (const metric of theme.metrics) {
+      const metricLink = section.getByRole("link", { name: metric.name, exact: true });
+      await expect(metricLink).toHaveAttribute(
+        "href",
+        `/metric-library?entry=${encodeURIComponent(metric.entry_id)}`,
+      );
+      const row = metricLink.locator("xpath=..");
+      if (metric.status === "computed") {
+        expect(metric.value).not.toBeNull();
+        const exactValue = row.locator(`strong[title="精确值：${metric.value}"]`);
+        await expect(exactValue).toHaveText(formatOperationsMetric(metric.entry_id, metric.value!));
+        if (metric.source === "operating_fact") {
+          await expect(row).toContainText(metric.period_label);
+          await expect(row).toContainText(metric.source_ref);
+          if (metric.source_page) await expect(row).toContainText(`第 ${metric.source_page} 页`);
+          if (metric.source_sha256) await expect(row).toContainText(`${metric.source_sha256.slice(0, 16)}…`);
+        }
+      } else {
+        expect(metric.reason).toBeTruthy();
+        await expect(row).toContainText(`暂不可算（${metric.reason}）`);
+      }
+    }
+  }
+
+  expect(overview.management_watch.length).toBeLessThanOrEqual(3);
+  for (const watch of overview.management_watch) {
+    const row = page.locator(".ops-overview__watch li").filter({ hasText: watch.message });
+    await expect(row).toHaveAttribute("data-direction", watch.direction);
+    if (watch.metric_code) {
+      await expect(row.getByRole("link")).toHaveAttribute(
+        "href",
+        `/metric-library?focus=${encodeURIComponent(watch.metric_code)}`,
+      );
+    }
+  }
 }
 
 test("dashboard renders damai overview with four grain filters", async ({ page }) => {
@@ -243,20 +352,71 @@ test("dashboard API serves customer-grain overview", async ({ page }) => {
 });
 
 test("operations overview renders damai six-theme analysis", async ({ page }) => {
+  test.setTimeout(120_000);
+  const initialOverviewResponse = page.waitForResponse((response) => {
+    const path = new URL(response.url()).pathname;
+    return /^\/api\/v1\/operations\/(overview\/[^/]+|public\/[^/]+\/[^/]+)$/.test(path);
+  });
   await page.goto("/operations");
+  const initialResponse = await initialOverviewResponse;
+  expect(initialResponse.ok()).toBeTruthy();
+  const initialOverview = (await initialResponse.json()) as OperationsOverview;
+  const initialPath = new URL(initialResponse.url()).pathname;
   // next dev 冷编译路由需要时间，首个断言放宽
   await expect(page.getByRole("heading", { name: "经营分析概览" })).toBeVisible({ timeout: 60_000 });
   const select = page.locator("#operations-context");
-  // FY2026 同时有「完整财报」与「公开经营披露」两个选项，选完整财报口径
-  const fy2026 = select.locator("option", { hasText: "大麦物流 · FY2026 · 完整财报" });
-  await expect(fy2026).toHaveCount(1, { timeout: 15_000 });
-  await expect(fy2026).toContainText("大麦物流");
-  const value = await fy2026.getAttribute("value");
-  expect(value).toBeTruthy();
-  await select.selectOption(value!);
-  // 六主题概览载入大麦财报事实（缺失主题如实标注，不补造）
-  await expect(page.getByRole("heading", { name: "六主题概览" })).toBeVisible({ timeout: 30_000 });
-  expect(await page.locator("[aria-labelledby^='ops-theme-']").count()).toBe(6);
+  const reportsResponse = await page.request.get("/api/v1/statements");
+  expect(reportsResponse.ok()).toBeTruthy();
+  const reportList = (await reportsResponse.json()) as StatementReportList;
+  const damaiReports = reportList.reports.filter((report) => report.stock_code === "DAMAI.SYN");
+  expect(damaiReports.map((report) => report.period_label).sort()).toEqual(["FY2025", "FY2026"]);
+
+  const periodsResponse = await page.request.get("/api/v1/operations/public-periods");
+  expect(periodsResponse.ok()).toBeTruthy();
+  const publicPeriodList = (await periodsResponse.json()) as PublicOperatingPeriodList;
+  expect(publicPeriodList.periods).toHaveLength(7);
+  const contexts = [
+    ...damaiReports.map((report) => ({
+      selectorValue: `report:${report.id}`,
+      endpoint: `/api/v1/operations/overview/${report.id}`,
+      label: `${report.company_name} ${report.period_label}`,
+    })),
+    ...publicPeriodList.periods.map((period) => ({
+      selectorValue: `public:${period.stock_code}:${period.period_label}`,
+      endpoint: `/api/v1/operations/public/${period.stock_code}/${period.period_label}`,
+      label: `${period.company_name} ${period.period_label}`,
+    })),
+  ];
+  expect(contexts).toHaveLength(9);
+  await expect(select.locator("option")).toHaveCount(9, { timeout: 15_000 });
+
+  for (const context of contexts) {
+    const response = await page.request.get(context.endpoint);
+    expect(response.ok(), `${context.label} API 返回成功`).toBeTruthy();
+    const overview = (await response.json()) as OperationsOverview;
+    expect(overview.themes, `${context.label} 恰有六主题`).toHaveLength(6);
+
+    let renderedOverview: OperationsOverview;
+    if (initialPath === context.endpoint) {
+      // 保留初始请求对应的 UI 状态；重复选择当前值会触发 change 并清空视图，
+      // 但 React 不会因 selectedContext 未变化而重新发起加载。
+      renderedOverview = initialOverview;
+    } else {
+      const rendered = page.waitForResponse(
+        (candidate) =>
+          new URL(candidate.url()).pathname === context.endpoint &&
+          candidate.request().method() === "GET",
+      );
+      await select.selectOption(context.selectorValue);
+      const renderedResponse = await rendered;
+      expect(renderedResponse.ok(), `${context.label} 页面请求返回成功`).toBeTruthy();
+      renderedOverview = (await renderedResponse.json()) as OperationsOverview;
+    }
+    expect(renderedOverview).toEqual(overview);
+
+    await expect(page.locator(".ops-overview__theme")).toHaveCount(overview.themes.length);
+    await expectOperationsOverviewMatchesApi(page, overview);
+  }
 });
 
 test("statements page lists damai synthetic reports", async ({ page }) => {
