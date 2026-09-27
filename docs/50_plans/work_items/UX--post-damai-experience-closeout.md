@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 5.22
+version: 5.23
 created_at: 2026-09-24
 updated_at: 2026-09-28
 owner: FLOW
@@ -14,7 +14,14 @@ applies_to: web-frontend
 
 # 大麦数据后的剩余体验收口
 
-> 2026-09-28 最新进度：利润桥修复`87be90041c477d53f0cabc6718d504d190481103`/CI `36330119396`及状态同步`079a1b8cf6abfd62955fd659788f409d4f4968b9`/CI `36332650401`均准确SHA17/17成功。隔离大麦verify19/19、GET矩阵159项零意外、Playwright14/14；生产E2E94/94、Web143/143、typecheck通过、lint零错误（仅既有warning）。当前下一步：补指标依赖图真实节点→指标卡片的浏览器E2E；然后完成其余安全下钻、状态×视口矩阵及Gate5。工作包仍active。
+> 2026-09-28 最新进度：利润桥`87be90041c477d53f0cabc6718d504d190481103`/CI `36330119396`、状态同步`079a1b8cf6abfd62955fd659788f409d4f4968b9`/CI `36332650401`、图谱真实深链测试`2fc1d955da0705e0e529046ab065855651c7a5cf`/CI `36338361782`均准确SHA17/17成功。最新隔离大麦verify19/19、GET矩阵159项零意外、Playwright14/14；Web143/143、typecheck/ruff通过、lint零错误（仅既有warning）。当前下一步：验收Operations管理关注真实点击→同一指标卡片的浏览器深链；然后完成其余安全下钻、状态×视口矩阵及Gate5。工作包仍active。
+
+## 指标依赖图真实深链验收（2026-09-28；已关闭）
+
+- 在隔离大麦真实浏览器旅程中，选取指标字典内首个有依赖的实际指标节点并点击；核对图谱选择状态、`?focus={metric_code}`目标链接；点击后断言URL focus、页面高亮卡片的名称与指标编码均与节点一致。
+- 首轮发现测试筛选条件错误：真实依赖指标没有 `entry_id`，卡片用指标编码 fallback 锚定。更正测试按页面实际身份（名称+编码）断言，未改产品行为，也未放宽目标身份校验。
+- 验证：隔离 `bash scripts/test_damai_demo_e2e.sh` verify19/19、GET矩阵159项（149预期200、10预期422、意外0）、浏览器14/14；`make typecheck`、`make lint`（0错误、1条既有TanStack warning）、`make test-web` 143/143、API mypy/ruff通过。代码提交`2fc1d955da0705e0e529046ab065855651c7a5cf`对应GitHub run `36338361782`准确SHA 17/17 success。测试只使用`damai-demo-iso`独立卷，验收完成自动清理；常驻库未连接或写入。
+- **交付状态：**图谱深链子项关闭。下一子项为Operations管理关注指标深链真实点击；UX Gate1/Gate5仍未关闭。
 
 > 历史阶段快照：八个业务页值级子项已关闭；Dashboard与Analysis/Investigation深链已由对应阶段SHA和CI关闭。当前状态以首条更正和路线图为准。逐路由覆盖与剩余目标映射见[版本化验收证据](../../60_delivery/verification/2026-09-26--damai-visibility-gate1-v1.md)。
 
