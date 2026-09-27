@@ -1041,6 +1041,32 @@ test("metric library switches to damai synthetic coverage", async ({ page }) => 
   );
   await expectMetricCardsMatchApi(page, library, "general");
 
+  // 依赖图谱的真实节点选择必须能钻到同一指标卡片，而不只是显示静态 href。
+  const graphTargets = library.metrics.filter((metric) => metric.depends_on.length > 0);
+  expect(graphTargets.length, "指标库应至少有一个带依赖的指标").toBeGreaterThan(0);
+  const graphTarget = graphTargets[0];
+  await nav.getByRole("button", { name: "依赖图谱" }).click();
+  const graph = page.getByRole("region", { name: "指标依赖关系有向图（可缩放平移）" });
+  await expect(graph).toBeVisible();
+  await graph.getByRole("button", {
+    name: `${graphTarget.name}（${graphTarget.metric_code}）`,
+    exact: true,
+  }).click();
+  await expect(page.getByRole("status")).toContainText(graphTarget.name);
+  const graphCardLink = page.getByRole("link", { name: "查看指标卡片" });
+  await expect(graphCardLink).toHaveAttribute(
+    "href",
+    `/metric-library?focus=${encodeURIComponent(graphTarget.metric_code)}`,
+  );
+  await graphCardLink.click();
+  await expect(page).toHaveURL(
+    `/metric-library?focus=${encodeURIComponent(graphTarget.metric_code)}`,
+  );
+  const focusedGraphTarget = page.locator(".ml-metric--focused");
+  await expect(focusedGraphTarget).toHaveClass(/ml-metric--focused/);
+  await expect(focusedGraphTarget.locator(".ml-metric__head")).toContainText(graphTarget.name);
+  await expect(focusedGraphTarget.locator(".ml-metric__head")).toContainText(graphTarget.metric_code);
+
   await nav.getByRole("button", { name: "物流行业指标" }).click();
   await expectMetricCardsMatchApi(page, library, "logistics");
 
