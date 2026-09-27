@@ -752,6 +752,12 @@ test("operations overview renders damai six-theme analysis", async ({ page }) =>
   expect(contexts).toHaveLength(9);
   await expect(select.locator("option")).toHaveCount(9, { timeout: 15_000 });
 
+  let watchTarget: {
+    selectorValue: string;
+    endpoint: string;
+    message: string;
+    metric_code: string;
+  } | null = null;
   for (const context of contexts) {
     const response = await page.request.get(context.endpoint);
     expect(response.ok(), `${context.label} API 返回成功`).toBeTruthy();
@@ -778,7 +784,55 @@ test("operations overview renders damai six-theme analysis", async ({ page }) =>
 
     await expect(page.locator(".ops-overview__theme")).toHaveCount(overview.themes.length);
     await expectOperationsOverviewMatchesApi(page, overview);
+
+    if (!watchTarget) {
+      const linkedWatch = overview.management_watch.find((item) => item.metric_code);
+      if (linkedWatch?.metric_code) {
+        watchTarget = {
+          selectorValue: context.selectorValue,
+          endpoint: context.endpoint,
+          message: linkedWatch.message,
+          metric_code: linkedWatch.metric_code,
+        };
+      }
+    }
   }
+
+  expect(watchTarget, "至少一个演示经营上下文应含有可追溯的管理关注指标").not.toBeNull();
+  if (!watchTarget) return;
+  if ((await select.inputValue()) !== watchTarget.selectorValue) {
+    const rendered = page.waitForResponse(
+      (response) =>
+        new URL(response.url()).pathname === watchTarget!.endpoint &&
+        response.request().method() === "GET",
+    );
+    await select.selectOption(watchTarget.selectorValue);
+    const response = await rendered;
+    expect(response.ok()).toBeTruthy();
+  }
+  const metricLibraryResponse = await page.request.get("/api/v1/metric-library");
+  expect(metricLibraryResponse.ok()).toBeTruthy();
+  const metricLibrary = (await metricLibraryResponse.json()) as MetricLibrary;
+  const expectedMetric = metricLibrary.metrics.find(
+    (metric) => metric.metric_code === watchTarget!.metric_code,
+  );
+  expect(expectedMetric, `管理关注指标 ${watchTarget.metric_code} 存在于指标库`).toBeDefined();
+  const watchRow = page
+    .getByRole("list", { name: "管理关注" })
+    .locator("li")
+    .filter({ hasText: watchTarget.message });
+  const watchLink = watchRow.getByRole("link");
+  await expect(watchLink).toHaveAttribute(
+    "href",
+    `/metric-library?focus=${encodeURIComponent(watchTarget.metric_code)}`,
+  );
+  await watchLink.click();
+  await expect(page).toHaveURL(
+    `/metric-library?focus=${encodeURIComponent(watchTarget.metric_code)}`,
+  );
+  const focusedWatchMetric = page.locator(".ml-metric--focused");
+  await expect(focusedWatchMetric.locator(".ml-metric__head")).toContainText(expectedMetric!.name);
+  await expect(focusedWatchMetric.locator(".ml-metric__head")).toContainText(watchTarget.metric_code);
 });
 
 test("statements page lists damai synthetic reports", async ({ page }) => {
