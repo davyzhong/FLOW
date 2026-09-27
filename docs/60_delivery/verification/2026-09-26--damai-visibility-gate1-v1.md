@@ -1,9 +1,9 @@
 ---
 doc_id: FLOW-VERIFY-DAMAI-VISIBILITY-GATE1-001
-title: 大麦数据可见性与 Gate 4 批次历史验收证据 v4.0
+title: 大麦数据可见性与 Gate 4 批次历史验收证据 v4.1
 doc_type: verification
 status: draft
-version: "4.0"
+version: "4.1"
 created_at: 2026-09-26
 updated_at: 2026-09-27
 owner: FLOW
@@ -303,27 +303,34 @@ CI 补充（run `36217337338`，SHA `5510bad3`）：18 个作业中仅 integrati
 | 链接源 → 目标 | 验证方式 | 结果 |
 |---|---|---|
 | Dashboard 指标卡 → `/metric-library?focus={metric_code}` | 点击卡片；目标 API 返回对应 metric；断言 URL、目标卡与高亮 | 生产 E2E 通过 |
+| Dashboard 毛利矩阵客群行/产品列/单元格 → Dashboard 筛选 | 实际点击客群行与双维单元格；对账 URL 参数和两个筛选控件 | 隔离大麦 E2E 通过；此前发现并修复客户端筛选未随URL导航重置 |
+| Dashboard 趋势月份、快照号 → `/reports?snapshot={metric_snapshot_id}` | 实际点击月度链接；命中同一冻结快照或未冻结快照身份卡 | 隔离大麦 E2E 通过；此前修复错误使用`focus`导致静默落默认报告 |
 | 真实财报覆盖矩阵列头 → `/statements?report={report_id}` | 点击列头；断言 URL 和被选中的同一公司/期间 tab | 深链 E2E 通过 |
 | 报告中心客观报告 → `/statements?report={report_id}` | 点击报告中心「查看分析」；按报表 ID 断言选中报告 | 隔离大麦 E2E 通过 |
 | 报告中心经营快照 → `/operations?report={statement_report_id}` | 点击“在经营分析中查看”；断言 URL 和分析上下文控件选中对应报告 ID | 隔离大麦 E2E 通过 |
+| 四问指标 → `/metric-library?focus={metric_code}` | 实际点击指标编码；断言 URL 与目标指标卡高亮身份相同 | 隔离大麦 E2E 13/13通过 |
+| 四问财报身份 → `/statements?report={report_id}` | 实际点击财报身份；断言URL与被选中FY2026财报一致 | 隔离大麦 E2E 13/13通过 |
+| Finding 详情运行ID → `/analysis?run_id={analysis_run_id}` → 报告中心快照 | 实际逐段点击；断言分析运行 ID、快照 ID、报告中心落点与 Finding 身份完全一致 | 隔离大麦 E2E 13/13通过 |
 | Investigation Finding → Finding 详情 | 既有 dashboard 与隔离旅程实际点击、详情 URL、审批闭环 | 已有隔离 E2E 通过 |
 | 数据工作台批次 → `?batch={batch_id}` | 既有最近批次列表点击、URL 和当前批次上下文 | 已有隔离 E2E 通过 |
 | Copilot evidence citation → 页内证据锚点 | 点击引用并断言 `#evidence-{id}` 与证据卡存在 | 深链 E2E 通过 |
 
-代码阶段本地验收：`bash scripts/test_module_boundaries_e2e.sh` **94/94**（生产 build/start；导航、深链、状态、响应式）；`make test-damai-demo-e2e` 隔离 seed verifier **19/19**、GET 路由矩阵 **159 项（149×200、10×预期422、零意外）**、浏览器旅程 **12/12**；`make lint && make typecheck && make test-web` 通过，Web Vitest **143/143**，lint 仅有既有 TanStack Table warning。isolated Compose 结束后 `docker compose ... ps -a` 为空。以上是本地代码验收；新增点击测试所在代码需经本次提交的同 SHA CI 才可宣称 CI 验收。
+Dashboard修复阶段已本地验证：生产 E2E **94/94**，隔离 seed verifier **19/19**、GET路由矩阵 **159项（149×200、10×预期422、零意外）**、浏览器 **12/12**、Web **143/143**、lint/typecheck通过；提交`e03a1755`对应CI run`36319686868`同SHA 17/17成功。
+
+Analysis/Investigation身份深链阶段本地验证：`make test-damai-demo-e2e` fresh isolated Compose，seed verifier **19/19**，只读矩阵**159项（149×200、10×预期422、零意外）**，Playwright **13/13**；生产E2E **94/94**；`make test-web` **143/143**，`make lint`零错误（仅既有TanStack Table warning）、`make typecheck`通过。隔离 Compose 清理后 `ps -a` 为空，常驻`flow`未操作。本阶段新增点击代码提交及同SHA CI待验收。
 
 ### 仍未逐项点击到真实目标的链接/边界
 
 以下已识别为“有链接但尚未证明点击后目标身份和展示”，继续纳入本 Gate1，不按 `href` 存在视为完成：
 
-- Dashboard 趋势月份/快照号 → `/reports?focus|snapshot=`，毛利矩阵行/列/单元格 → Dashboard 筛选，利润桥驱动 → 指标库；
+- Dashboard 状态栏批次/快照链接、利润桥驱动 → 数据工作台/报告中心/指标库；
 - Dashboard 快照状态链接、Analysis 报表身份/指标行/运行快照身份、Operations 指标条目 → 各自报告/数据/指标目标；
-- Investigation 身份条的 batch、metric snapshot、analysis run，以及评分至四问工作台；依赖图节点、治理事件、指标依赖项的卡片定位；
+- Investigation 身份条的批次/指标快照实点和评分至四问工作台；依赖图节点、治理事件、指标依赖项的卡片定位；
 - Statements 更正记录页内定位和已登记 PDF 页锚；Reports 冻结候选回到 Investigation。
 
 其中 objective 报告 HTML、经营报告 HTML/XLSX/PPTX/PDF 是显式产物生成入口或可能触发冻结的 GET，不能作为普通“安全只读链接”纳入探测；按工作包既有隔离发布旅程单独验证。未建立真实 Finding 血缘的 ManagementWatchItem 不增加虚构 Finding 链接。每项只有在实际目标页身份参数、DOM 落点和目标事实/缺失状态均对账后方可标完成。
 
-下一执行动作：对照上述剩余清单先复核现有测试，分组补齐安全的真实点击与目标断言；随后完成全交互路由适用状态×390/1024/1440视口矩阵，再按 Gate 5 在同一最终 SHA 复跑全链并核验 GitHub CI。Gate1/Gate5 尚未关闭。
+下一执行动作：对照上述剩余清单复核现有测试，继续补齐指标依赖/治理图谱、财报更正/PDF页锚与报告冻结候选等安全真实点击；随后完成全交互路由适用状态×390/1024/1440视口矩阵，再按 Gate 5 在同一最终 SHA 复跑全链并核验 GitHub CI。Gate1/Gate5 尚未关闭。
 
 ### Dashboard 下钻实证及两项缺陷修正（2026-09-27）
 

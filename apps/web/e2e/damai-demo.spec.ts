@@ -804,6 +804,24 @@ test("four-question workbench loads damai report", async ({ page }) => {
     "大麦 FY2026 财报披露了四问十项指标所需事实，十项都应可计算",
   ).toHaveLength(10);
 
+  // 实际点击四问中的指标链接，确认目标指标库定位身份，不只检查 href。
+  const firstMetricCode = allWorkbenchMetrics[0].metric_code;
+  const metricLink = page.locator(".workbench__metric-code", { hasText: firstMetricCode }).first();
+  await expect(metricLink).toBeVisible();
+  await metricLink.click();
+  await expect(page).toHaveURL(`/metric-library?focus=${encodeURIComponent(firstMetricCode)}`);
+  await expect(page.locator(".ml-metric--focused code")).toHaveText(firstMetricCode);
+  await page.goto("/analysis");
+  await expect(page.locator("#workbench-report")).toBeVisible();
+  await page.locator("#workbench-report").selectOption(value!);
+  await expect(page.locator(".workbench__identity a")).toBeVisible();
+  await page.locator(".workbench__identity a").click();
+  await expect(page).toHaveURL(`/statements?report=${encodeURIComponent(value!)}`);
+  await expect(page.locator(".stmt-report-tabs [aria-pressed='true']")).toContainText("FY2026");
+  await page.goto("/analysis");
+  await page.locator("#workbench-report").selectOption(value!);
+  await expect(page.locator(".workbench__identity")).toContainText("FY2026");
+
   // 两个平均余额指标按字典口径，以财报原文的期初/期末余额和本期流量独立复算。
   const statementLine = (statementType: string, itemName: string) => {
     const section = statement.sections.find((candidate) => candidate.statement_type === statementType);
@@ -1083,6 +1101,64 @@ test("investigations index mirrors findings api values", async ({ page }) => {
       ).toHaveCount(1);
     }
     await expect(row).toHaveAttribute("data-href", buildHref(finding));
+  }
+});
+
+test("investigation identity links resolve to the same analysis and report snapshots", async ({ page }) => {
+  const response = await page.request.get("/api/v1/investigations");
+  expect(response.ok()).toBeTruthy();
+  const { findings } = (await response.json()) as { findings: FindingListItem[] };
+  const finding = findings.find(
+    (item) => item.batch_id && item.metric_snapshot_id && item.analysis_run_id && item.total_score,
+  );
+  expect(finding, "演示 Finding 应包含完整的批次/快照/分析运行身份").toBeDefined();
+  const selected = finding!;
+  const params = new URLSearchParams({
+    batch_id: selected.batch_id!,
+    metric_snapshot_id: selected.metric_snapshot_id!,
+    analysis_run_id: selected.analysis_run_id!,
+  });
+
+  await page.goto("/investigations");
+  const row = page.getByRole("region", { name: "Finding 列表" })
+    .locator("tbody tr")
+    .filter({ hasText: selected.title });
+  await expect(row).toHaveCount(1);
+  await row.getByRole("link", { name: "进入调查" }).click();
+  await expect(page).toHaveURL(`/investigations/${selected.finding_id}?${params.toString()}`);
+
+  const identity = page.getByTestId("investigation-identity");
+  await expect(identity).toContainText(selected.finding_id);
+  await expect(identity.locator("dd").nth(1)).toContainText(selected.batch_id!);
+  await expect(identity.locator("dd").nth(2)).toContainText(selected.metric_snapshot_id!);
+  await expect(identity.locator("dd").nth(3)).toContainText(selected.analysis_run_id!);
+
+  const runLink = identity.getByRole("link", { name: selected.analysis_run_id! });
+  await expect(runLink).toHaveAttribute("href", `/analysis?run_id=${encodeURIComponent(selected.analysis_run_id!)}`);
+  await runLink.click();
+  await expect(page).toHaveURL(`/analysis?run_id=${encodeURIComponent(selected.analysis_run_id!)}`);
+  const runDetail = page.getByTestId("analysis-run-detail");
+  await expect(runDetail).toContainText(selected.analysis_run_id!);
+  const snapshotLink = runDetail.getByRole("link", { name: selected.metric_snapshot_id! });
+  await expect(snapshotLink).toHaveAttribute(
+    "href",
+    `/reports?snapshot=${encodeURIComponent(selected.metric_snapshot_id!)}`,
+  );
+  await snapshotLink.click();
+  await expect(page).toHaveURL(`/reports?snapshot=${encodeURIComponent(selected.metric_snapshot_id!)}`);
+
+  const publishedSnapshotsResponse = await page.request.get("/api/v1/publishing/snapshots");
+  expect(publishedSnapshotsResponse.ok()).toBeTruthy();
+  const { snapshots } = (await publishedSnapshotsResponse.json()) as {
+    snapshots: PublishingSnapshot[];
+  };
+  const matchingSnapshot = snapshots.find(
+    (snapshot) => snapshot.metric_snapshot_id === selected.metric_snapshot_id,
+  );
+  if (matchingSnapshot) {
+    await expect(page.getByRole("radio", { name: new RegExp(matchingSnapshot.title) })).toBeChecked();
+  } else {
+    await expect(page.getByTestId("metric-snapshot-detail")).toContainText(selected.metric_snapshot_id!);
   }
 });
 
