@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 5.26
+version: 5.27
 created_at: 2026-09-12
 updated_at: 2026-09-27
 owner: FLOW
@@ -17,7 +17,9 @@ superseded_by: null
 
 # 当前路线图（唯一主线）
 
-> 2026-09-27 主线状态：ORG-LEDGER `2c7d6eb4` 同 SHA CI run `36270782272` 17/17 success。UX Dashboard逐值+筛选、`/statements`、`/analysis`、`/operations`、`/metric-library`子项均已完成且同SHA CI success；`/operations`最终`8bd71798`/run`36293915314`17/17；`/metric-library`代码提交`71ea2dc9`同SHA CI run`36299600894`17/17 success，子项关闭。旧run `36276782059` 的影响分析单例失败在隔离CI等价267项批次及前后单跑中未复现，根因未知。61张状态视口归档、响应式27/27已有证据。当前唯一执行子步骤为`/reports`逐值审计：只读值级E2E已交付并隔离复跑全绿（Playwright 10/10、verify19/19、typecheck/lint通过），代码提交后核验同SHA CI即关页，随后`/data`、`/investigations`，再补全深链/状态视口/Gate5。唯一队列计数：完成1、执行中1、排队8、外部材料受限1。常驻`flow`测试批次偏差未经授权不得处置。
+> 2026-09-27 状态更正：`/reports` 已正式关闭。提交 `e869f259991830df2ac9e69929aa712f9677bf0c` 对应 CI run `36306908435` 最终 17/17 success；首次 E2E 的 cleaning-summary GET 403 在同 SHA 失败 job 重跑后未复现，根因未知。当前唯一页面步骤为 `/data`，之后才是 `/investigations`。
+
+> 2026-09-27 主线状态：ORG-LEDGER `2c7d6eb4` 同 SHA CI run `36270782272` 17/17 success。UX Dashboard逐值+筛选、`/statements`、`/analysis`、`/operations`、`/metric-library`、`/reports`子项均已完成且同SHA CI success；`/reports`提交`e869f259`的CI run`36306908435`最终17/17（首次失败job同SHA重跑通过，403根因未知）；`/operations`最终`8bd71798`/run`36293915314`17/17；`/metric-library`提交`71ea2dc9`/run`36299600894`17/17。旧run `36276782059` 的影响分析单例失败在隔离CI等价267项批次及前后单跑中未复现，根因未知。61张状态视口归档、响应式27/27已有证据。当前唯一执行子步骤为`/data`逐值审计，随后`/investigations`，再补全深链/状态视口/Gate5。唯一队列计数：完成1、执行中1、排队8、外部材料受限1。常驻`flow`测试批次偏差未经授权不得处置。
 
 > **本页是全仓唯一主线**：既维护状态真相，也维护执行队列。2026-09-25 用户裁决（2A）后不再存在第二份「唯一」文档：EXECUTION_TODO、整合总计划、统一完整实施计划与执行收敛计划均已归档为历史/参考，状态与任务只以本页和工作包为准。详细验收步骤在各工作包与参考规格。
 
@@ -32,7 +34,7 @@ superseded_by: null
 | 1' | [U04 独立 oracle](work_items/U04--independent-oracle.md) | **blocked（验证出口未满足；工作按唯一队列执行）** | 解析器适配 + 新留出 | 首跑199行均 `not_comparable`；到队列第3项时实施适配、旧样本回归及独立留出，不把验收门槛误作停工理由 |
 | 2 | [S01 战略边界、事实合同与安全门禁](work_items/S01--post-u8-boundary-contract-security.md) | **completed** | U08 completed | Task 1–5 完成；安全规格 V1.1 已批准且独立审查闭环（`6c3c1cd`，零 P1/P2）。2026-09-14 `ff42c67` 五路并合 + 回落修复（`c1510ce`→`2570bf8`）带入路由策略 v2、模块边界与 U8 升级门禁、迁移 0026 修复、`main.py` 启动 fail-fast、两模块入口；Kimi `0841ff9` v1 被否，由 `997c1ab` v2 取代。**Task 6 已关闭**（R2/R3/R4 交付，台账 §7），阶段 3 转入 C 级出口；[协调台账](../70_operations/2026-09-14-coordination-ledger-glm.md) / [范围计划](../superpowers/plans/2026-09-13-flow-post-u8-boundary-gate.md) / [并行执行计划](../superpowers/plans/2026-09-13-flow-three-agent-parallel-restructuring.md) |
 | 2a | [大麦物流完整财年演示数据](work_items/DAMAI--full-year-demo.md) | **completed** | 已批准规格；不依赖公开 C 级 | D1–D3 已集成 main `e22d193`，CI run `36137591750` 17/17 success；隔离栈 verify 19/19、八页面 E2E 9/9、重复 seed 零增长、发行包零漂移。**常驻开发库已装载（G2 完成 2026-09-25）**：用户裁决演示数据全部入库，集成后 main 上 verify 19/19、页面可见；合成数据不解除公开 C 级门禁 |
-| 2b | [大麦数据后的剩余体验收口](work_items/UX--post-damai-experience-closeout.md) | **active（唯一执行项）** | G2 ✓；用户已批准；ORG-LEDGER CI ✓ | 深链批次一至三、Dashboard、`/statements`、`/analysis`局部审计已完成并各自同SHA CI绿（最新 `bc8fa678` / `36288403912`）；剩余全路由响应/API与页面状态、视口、下钻矩阵及 Gate 5 同 SHA 复验；唯一下一项 `/operations`；常驻库偏差未获授权不得处置。 |
+| 2b | [大麦数据后的剩余体验收口](work_items/UX--post-damai-experience-closeout.md) | **active（唯一执行项）** | G2 ✓；用户已批准；ORG-LEDGER CI ✓ | 深链批次一至三、Dashboard、`/statements`、`/analysis`、`/operations`、`/metric-library`、`/reports`局部审计已完成且同SHA CI绿；剩余全路由响应/API与页面状态、视口、下钻矩阵及 Gate 5 同 SHA 复验；当前唯一页`/data`，之后`/investigations`；常驻库偏差未获授权不得处置。 |
 | 2c | [企业组织建制与经营账套初始化包](work_items/ORG-LEDGER--enterprise-initialization-package.md) | **completed** | 大麦发行包 completed；批准三表 schema | `2c7d6eb4`；CI run `36270782272` 的17/17 jobs success。隔离 `full` 首次/重复与 `business` 对账通过；11 个企业/loader 测试、全量 API 852、Web142、脚本107、大麦 verify19/19、API43/43、Playwright9/9、合同/文档/lint/typecheck 均通过。31文件 manifest 稳定 SHA `cbc7cccf…e513`。 |
 | K | [第二代静态知识刷新与战略重基线](work_items/KNOWLEDGE--refresh-v2.md) | **active（队列排队，不并行启动）** | 按唯一队列轮到时启动；规格/preflight 已完成 | K0–K6 未执行；`CURRENT_RELEASE` 仍为 `flow-knowledge-2026-09-12.1`，用户战略裁决前不得切换。 |
 | 3 | [公开财报模块 C 级出口](work_items/PUBLIC--c-level-exit-protocol.md) | **blocked(归因、补证与裁决)** | S01 关闭 ✓ | 独立交叉评已完成（[结果](../80_reviews/ai-cross-review/results/gpt-6-astra-2026-09-25.md)）：1,530 格中42异常、109存疑、200因JDL乱码无法完整核验；待原PDF逐项归因/订正。1794/1794仅为登记覆盖口径，不等于通过 |
@@ -48,7 +50,7 @@ superseded_by: null
 
 ## 唯一完整 To-do 与执行队列（严格串行）
 
-截至 2026-09-27：**11 项，已完成 1 项，实际执行中 1 项，排队 8 项，外部材料受限 1 项**。当前唯一执行项第2项 UX 全站验收。Dashboard、`/statements`、`/analysis`、`/operations`、`/metric-library`页面子项均已完成并有同SHA CI证据（`/metric-library`代码提交`71ea2dc9`/CI run`36299600894` 17/17 success）。`/reports`只读值级E2E已交付并隔离复跑全绿（Playwright 10/10、verify19/19），待同SHA CI后关页；唯一下一页`/data`。UX Gate1/Gate5仍未结束，常驻`flow`不写入/清理。
+截至 2026-09-27：**11 项，已完成 1 项，实际执行中 1 项，排队 8 项，外部材料受限 1 项**。当前唯一执行项第2项 UX 全站验收。Dashboard、`/statements`、`/analysis`、`/operations`、`/metric-library`、`/reports`页面子项均已完成并有同SHA CI证据；`/reports`提交`e869f259`的CI run`36306908435`最终17/17 success（首次失败的 E2E job 同 SHA 重跑通过，403根因未知）。当前唯一下一页`/data`。UX Gate1/Gate5仍未结束，常驻`flow`不写入/清理。
 
 1. **[完成] 企业组织建制与经营账套初始化包**（工作包见状态表2c）：提交 `2c7d6eb4`，CI run `36270782272` 的17/17 jobs success。31文件发行包稳定 manifest SHA `cbc7cccf…e513`；隔离 `full` 首次/重复、`business` 重置及回滚/租户隔离通过；全量 API852、Web142、脚本107、verify19/19、只读 GET43/43、Playwright9/9，合同/文档/lint/typecheck均通过。仅三表迁移在隔离栈验证，未触碰常驻库。
 2. **[进行中] UX 可见性与全站验收关闭**（工作包见状态表2b）：深链批次一至三已完成。Dashboard核对8 KPI、12月×4趋势、32格矩阵和产品表；筛选矩阵159项且意外0。`/statements`逐报告/披露行；`/analysis`十指标按原文复算/API/UI对账，`bc8fa678`同SHA CI绿。`/operations`九个上下文核对六主题/来源/链接并修复切换旧值；最终`8bd71798`/CI`36293915314`全绿。`/metric-library`全页对账API版本化指标库和两覆盖数据集：通用/物流所有指标卡字段、行业包/关系/CAS↔IFRS映射/会计科目/准则/分录模板/治理事件；矩阵逐快照逐指标核对显示值、空缺/原因、汇总、来源和报告深链；隔离verify19/19、矩阵159条零意外、Web143/143、生产构建UX测试93/93、typecheck通过、lint零错误（1既有warning），未发现产品数据呈现偏差；代码提交`71ea2dc9`同SHA CI run`36299600894` 17/17 success，子项关闭。当前唯一页面子步骤为`/reports`逐值审计：只读值级E2E已交付（客观财报列表/经营快照/冻结候选含禁用态/发布快照/attempts表逐行逐格对账API；TDD两次红灯均为测试自身缺陷并已修正，未发现API/UI不一致），隔离Playwright 10/10、verify19/19、typecheck/lint通过，待同SHA CI后关页；之后`/data`、`/investigations`，补全深链/状态视口/Gate5。已有四页五态×三视口归档61/61与响应式27/27为部分既有证据，不等同工作包关闭。不写常驻`flow`，不重做已完成深链批次。

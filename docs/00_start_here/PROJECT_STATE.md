@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.24
+version: 5.25
 created_at: 2026-09-12
 updated_at: 2026-09-27
 owner: FLOW
@@ -11,6 +11,10 @@ applies_to: repository
 ---
 
 # FLOW 当前项目状态（唯一 current state）
+
+2026-09-27 最新状态更正：`/reports` 页面子项已关闭。提交 `e869f259991830df2ac9e69929aa712f9677bf0c` 的 CI run `36306908435` 最终 17/17 success；首次 `user-closure-e2e` cleaning-summary GET 返回403，同 SHA 重跑该失败 job 后通过，根因未复现且未知。当前唯一页面步骤为 `/data`，后续 `/investigations`；UX Gate1/Gate5仍未完成。
+
+2026-09-27 偏差登记：接手会话在本地复现 user-closure E2E 失败时，`scripts/test_user_closure_e2e.sh` 的历史默认 `DATABASE_URL` 将 `alembic upgrade head` 与 `seed_dashboard_demo.py --fresh-batch` 指向了常驻 `flow` 库，在常驻库新增种子批次 `01a0e22c-…`（"FLOW Finance BP dashboard demo"，2026-09-27 17:23:04 +08，与既有偏差批次 `01a0dcdd-8245-7c17-99aa-fce91a8a7a57` 同类；上传旅程测试失败，未产生 intake 写入）。按既有纪律未清理/回滚/切 latest，待用户授权处置。根因已修复（`2117d837`）：脚本对非 CI 环境改为 fail-closed 拦截常驻库连接（`FLOW_USER_CLOSURE_ALLOW_RESIDENT_DB=1` 显式逃逸），并修复该测试的水合竞态（等历史区出现再上传、映射阶段等确认按钮）；隔离库 `flow_user_closure` 复跑 4/4 passed。
 
 截至 2026-09-27：唯一队列共11项，已完成1项、实际执行中1项、排队8项、外部材料受限1项。ORG-LEDGER `2c7d6eb4` 同SHA CI17/17 success。UX Dashboard、`/statements`、`/analysis`、`/operations`、`/metric-library`页面子项均已完成且相应同SHA CI成功；`/metric-library`全页API/配置/UI值级审计通过（隔离verify19/19、GET矩阵159项零意外、浏览器E2E、Web143/143、生产构建UX套件93/93、typecheck/lint通过），代码提交`71ea2dc9`同SHA CI run`36299600894` 17/17 success，子项关闭。唯一执行子步骤转入`/reports`逐值审计：只读值级E2E已交付并隔离复跑全绿（Playwright 10/10、verify19/19、typecheck/lint通过），代码提交后核验同SHA CI即关页；随后`/data`、`/investigations`。UX全站Gate1/Gate5仍未完成。旧影响分析单例失败在隔离批次267 passed及前后单跑未复现，根因未知。其余页面、全路由状态/视口和Gate5未完，UX不得关闭。完整11项顺序、操作/验收/问题处理见[当前路线图](../50_plans/CURRENT_ROADMAP.md#唯一完整-to-do-与执行队列严格串行)与[夜间接手手册](../../HANDOFF.md#04-夜间接手执行手册2026-09-27-当前权威)。
 

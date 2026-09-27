@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 5.12
+version: 5.13
 created_at: 2026-09-24
 updated_at: 2026-09-27
 owner: FLOW
@@ -13,6 +13,8 @@ applies_to: web-frontend
 ---
 
 # 大麦数据后的剩余体验收口
+
+> 2026-09-27 最新状态：`/reports` 值级子项已关闭。代码提交 `e869f259991830df2ac9e69929aa712f9677bf0c` 的 CI run `36306908435` 最终 17/17 success；首次 `user-closure-e2e` cleaning-summary GET 403 在同 SHA 失败 job 重跑后未复现，根因未知。当前唯一页面步骤为 `/data`；UX Gate1/Gate5仍未关闭。
 
 ## 指标库 `/metric-library` API→配置→UI 值级验收（2026-09-27；已关闭）
 
@@ -30,12 +32,12 @@ applies_to: web-frontend
 - 验收脚本问题：首次复跑在初始上下文重复调用 `selectOption`，导致 `change` 清除 UI 但同值状态不会触发下一次 effect。按真实因果修正 E2E，不降低断言，之后全套隔离旅程9/9通过。
 - **交付状态：**代码提交`0f8d92cf`；提交推送期间合并远端 README 自动截图提交`27babc32`，最终`main@8bd71798`。该确切SHA GitHub CI run `36293915314` 的17/17作业全绿；M1/链接/plan views均通过。`/operations`页面子项关闭；唯一下一页为`/metric-library`。整个 UX 工作包 Gate 1/Gate 5仍未关闭。
 
-## 报告中心 `/reports` API→源事实→UI 值级验收（2026-09-27；代码验收完成，待同 SHA CI）
+## 报告中心 `/reports` API→源事实→UI 值级验收（2026-09-27；已关闭）
 
 - 范围：新增只读值级 E2E（不改产品实现），将报告中心四个列表与产物历史逐行逐格与安全 GET API 对账：客观财报分析报告列表对账 `/api/v1/statements`（公司/期间/报告类型/行项目数、objective-snapshot HTML 链接与查看分析深链）；经营报告快照列表对账 `/api/v1/operations/snapshots`（公司/期间/版本/指纹前缀、经营分析深链）；冻结候选下拉对账 `/api/v1/publishing/freeze-candidates`（期间/批次前缀/版本/已批准发现数，含 0 批准不可冻结禁用态）；报告快照列表对账 `/api/v1/publishing/snapshots`（版本/标题/日期），并核对其产物历史 append-only 表格与 attempts API 的行数/序号/格式/状态/大小/下载可用性逐格一致。该测试置于既有发布/上传两个变更旅程之前，全程只读。
 - TDD 两次红灯均为测试自身缺陷，非产品缺陷：①Playwright `toBeDisabled` 辅助器对 `<option>` 误报 enabled（失败日志中 DOM 明确含 disabled 属性），改为直接断言属性合同；②`getByRole` name 默认子串匹配，「报告快照列表」同时命中「经营报告快照列表」，加 `exact: true` 修正。未发现本页 API/UI 值不一致。
 - 隔离验证：`bash scripts/test_damai_demo_e2e.sh` 专属 Compose 栈，seed verify 19/19（ok=true、failed=[]）；Playwright 10/10（新增本测试后 9→10，第三次运行全绿）；`make typecheck` 通过；`make lint` 0 error（1 条既有 TanStack Table warning）。未连接/写入常驻 `flow`。
-- **交付状态：**代码提交后核验该 SHA required CI；绿后本页子项关闭，唯一下一页为 `/data`。UX Gate 1/Gate 5仍未关闭。
+- **交付状态：**提交 `e869f259991830df2ac9e69929aa712f9677bf0c` 的 CI run `36306908435` 最终17/17 success；首次 `user-closure-e2e` 的 cleaning-summary GET 403 在同 SHA 重跑后通过，根因未知且未更改权限策略。报告中心页面子项关闭，唯一下一页为 `/data`。UX Gate 1/Gate 5仍未关闭。
 
 ## 目标
 
