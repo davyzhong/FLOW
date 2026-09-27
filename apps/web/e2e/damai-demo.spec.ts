@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 import path from "node:path";
 
 import { expect, test, type Page } from "@playwright/test";
-import type { DashboardResponse } from "../lib/api/client";
+import type { DashboardResponse, StatementReportDetail, StatementReportList } from "../lib/api/client";
 
 // 大麦 synthetic 演示全旅程 E2E（Task C2）：
 // 真实隔离栈（compose.damai-isolated）+ 真实 seed + 真实浏览器，无 page mock。
@@ -38,6 +38,14 @@ async function expectDashboardCardsMatch(page: Page, response: DashboardResponse
       await expect(actual.locator(".metric-comparison__value")).toContainText(expected.display_value);
     }
   }
+}
+
+function formatStatementValue(value: string, unitNote: string): string {
+  const scale = unitNote.includes("千元") ? 1e5 : unitNote.includes("百万") ? 1e2 : 1;
+  return (Number(value) / scale)
+    .toFixed(2)
+    .replace(/\.00$/, "")
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 test("dashboard renders damai overview with four grain filters", async ({ page }) => {
@@ -247,6 +255,7 @@ test("operations overview renders damai six-theme analysis", async ({ page }) =>
 });
 
 test("statements page lists damai synthetic reports", async ({ page }) => {
+  test.setTimeout(90_000);
   await page.goto("/statements");
   await expect(
     page.getByRole("heading", { name: /公开财报.*分析/ }),
@@ -255,8 +264,46 @@ test("statements page lists damai synthetic reports", async ({ page }) => {
   const fy2026 = tabs.getByRole("button", { name: /FY2026/ });
   await expect(fy2026).toBeVisible({ timeout: 15_000 });
   await expect(fy2026).toContainText("大麦物流");
+
+  const listResponse = await page.request.get("/api/v1/statements");
+  expect(listResponse.ok()).toBeTruthy();
+  const reportList = (await listResponse.json()) as StatementReportList;
+  const summary = reportList.reports.find(
+    (report) => report.company_name === "大麦物流" && report.period_label === "FY2026",
+  );
+  expect(summary, "FY2026 报表必须来自真实隔离 API 列表").toBeDefined();
+
+  const detailResponse = await page.request.get(`/api/v1/statements/${summary!.id}`);
+  expect(detailResponse.ok()).toBeTruthy();
+  const detail = (await detailResponse.json()) as StatementReportDetail;
+  expect(detail.company_name).toBe(summary!.company_name);
+  expect(detail.period_label).toBe(summary!.period_label);
+  expect(detail.stock_code).toBe("DAMAI.SYN");
+  expect(detail.source_ref).toContain("fixtures/damai/statements/");
+
   await fy2026.click();
-  await expect(page.getByText(/DAMAI\.SYN/).first()).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByText("大麦物流", { exact: true }).first()).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByText(/DAMAI\.SYN/).first()).toBeVisible();
+  await expect(page.locator(".stmt-section")).toHaveCount(detail.sections.length);
+
+  // 逐个 section、披露行、非空数值列对账：精确原值保存在 tooltip，页面值仅做合同单位缩放。
+  for (const [sectionIndex, section] of detail.sections.entries()) {
+    const uiSection = page.locator(".stmt-section").nth(sectionIndex);
+    await expect(uiSection.locator("summary")).toContainText(section.statement_type);
+    const uiRows = uiSection.locator("tbody tr");
+    await expect(uiRows).toHaveCount(section.items.length);
+    for (const [itemIndex, item] of section.items.entries()) {
+      const uiRow = uiRows.nth(itemIndex);
+      await expect(uiRow.locator("td").first()).toHaveText(item.item_name);
+      for (const key of ["value_end", "value_begin", "value_current", "value_prior"] as const) {
+        const exactValue = item[key];
+        if (exactValue == null) continue;
+        const uiCell = uiRow.locator(`[title="${exactValue}"]`);
+        await expect(uiCell, `${section.statement_type}/${item.item_name}/${key}`).not.toHaveCount(0);
+        await expect(uiCell.first()).toHaveText(formatStatementValue(exactValue, detail.unit_note));
+      }
+    }
+  }
 });
 
 test("four-question workbench loads damai report", async ({ page }) => {
