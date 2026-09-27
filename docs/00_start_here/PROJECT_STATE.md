@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.19
+version: 5.20
 created_at: 2026-09-12
 updated_at: 2026-09-27
 owner: FLOW
@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-截至 2026-09-27：唯一队列共11项，已完成1项、实际执行中1项、排队8项、外部材料受限1项。ORG-LEDGER `2c7d6eb4` 同SHA CI17/17 success。UX唯一执行项：Dashboard值级对账/筛选矩阵和`/statements`逐值核对已有同SHA成功CI；`/analysis`四问十指标按大麦FY2026原文独立复算，十项全可用并与API/UI一致，纠正DSO由错误`0.3500`为正确`116.3898`天，并补齐其余四项指标实现和具体不可用原因显示。该隔离旅程verify19/19、矩阵159项（149预期200、10预期422、意外0）、E2E9/9；工作台API11/11、Web142/142、typecheck/lint/ruff/mypy通过。`/analysis`最新代码SHA与状态文档SHA的同SHA CI待终态；旧影响分析单例失败在隔离批次267 passed及前后单跑未复现，根因未知。下一步CI绿后审计`/operations`；其它页面、深链、全路由状态/视口和Gate5未完，UX不得关闭。完整11项顺序、操作/验收/问题处理见[当前路线图](../50_plans/CURRENT_ROADMAP.md#唯一完整-to-do-与执行队列严格串行)与[夜间接手手册](../../HANDOFF.md#04-夜间接手执行手册2026-09-27-当前权威)。
+截至 2026-09-27：唯一队列共11项，已完成1项、实际执行中1项、排队8项、外部材料受限1项。ORG-LEDGER `2c7d6eb4` 同SHA CI17/17 success。UX唯一执行项：Dashboard值级对账/筛选矩阵、`/statements`逐值核对及`/analysis`四问十指标审计的同SHA CI均成功。`/analysis`按大麦FY2026原文独立复算，十项全可用并与API/UI一致，纠正DSO由错误`0.3500`为正确`116.3898`天，并补齐净利润增长、ROE、流动比率、自由现金流和具体不可用原因。隔离旅程verify19/19、矩阵159项（149预期200、10预期422、意外0）、E2E9/9；工作台API11/11、Web142/142、typecheck/lint/ruff/mypy通过；提交`bc8fa678`同SHA CI run `36288403912` 17/17 success。旧影响分析单例失败在隔离批次267 passed及前后单跑未复现，根因未知。下一步审计`/operations`；其它页面、深链、全路由状态/视口和Gate5未完，UX不得关闭。完整11项顺序、操作/验收/问题处理见[当前路线图](../50_plans/CURRENT_ROADMAP.md#唯一完整-to-do-与执行队列严格串行)与[夜间接手手册](../../HANDOFF.md#04-夜间接手执行手册2026-09-27-当前权威)。
 
 2026-09-26 更新：大麦常驻库曾在备份后幂等恢复并通过 verify 19/19 两次；随后根 checkout 的旧 `make test-dashboard` 误向常驻 `flow` 附加测试批次 `01a0dcdd-8245-7c17-99aa-fce91a8a7a57`（1 import、12 snapshots、1 run、50,400 metric values），可能成为 API `latest`。只读检查确认未删除/覆盖原大麦批次；未获授权，不回滚、不删除。此前备份 `work/backups/flow-pre-demo-rehydrate-20260926.dump`（SHA-256 `b374a16e…9782d`）早于该新增批次，不能作为当前恢复点。`649a2aba` 已推送并通过 CI run `36232029817`：维度表只展示当前快照事实并显示覆盖分母，完整筛选目录保留；Web 136/136、typecheck、隔离 verify19/19、E2E9/9通过。状态/证据文档提交 `7229cd0d` 与 `4c55f10e` 的 CI 也通过。常驻库页面状态需获批处置后重新只读核验；其他全站矩阵仍未完成。
 2026-09-26 补充：API 路由审查发现客观报表快照与经营报告渲染的若干 GET 可能新增冻结快照；这些路由已明确排除在只读探测之外，纳入单独 API 语义评审，不以请求验证其状态。其余 Gate 1 只读矩阵与页面状态验收继续推进。

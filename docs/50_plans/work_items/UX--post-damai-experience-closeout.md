@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 5.7
+version: 5.8
 created_at: 2026-09-24
 updated_at: 2026-09-27
 owner: FLOW
@@ -26,7 +26,7 @@ applies_to: web-frontend
 - 核心十指标中的净利润增长、ROE、流动比率和自由现金流虽在主题合同及标准科目事实中定义，工作台计算器却未实现。现按指标字典补齐；盈利现金比率在净利润≤0 时拒绝输出失真倍数。平均余额缺期初值或分母不满足口径时保持 unavailable，不补零、不拿期末值冒充平均数。
 - unavailable 状态传递主题合同中的具体不可用条件并在 UI 解释，不再将所有情况误标成“缺披露事实”；十个主题条件去除机器错误码，保留人可读语义。
 - 验证：隔离 `make test-damai-demo-e2e` verify19/19、GET矩阵159项（149预期200、10预期422且零意外）、真实浏览器9/9；工作台 API 测试11/11、Web Vitest142/142、typecheck、目标 ESLint、ruff、mypy通过。财报详情不修改；常驻 `flow` 未触碰。
-- 本页值级子项仍须同 SHA CI 全绿才能收口；后续唯一页面步骤为 `/operations`。本结果不代表工作包/Gate 1 已完成。
+- 同 SHA 验收：提交 `bc8fa678` 的 GitHub CI run `36288403912`，17/17 作业全部 success。`/analysis` 值级子项已收口；后续唯一页面步骤为 `/operations`。本结果不代表工作包/Gate 1 已完成。
 
 ## 当前证据与判断（2026-09-26）
 

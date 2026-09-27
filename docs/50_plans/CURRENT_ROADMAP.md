@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 5.21
+version: 5.22
 created_at: 2026-09-12
 updated_at: 2026-09-27
 owner: FLOW
@@ -17,7 +17,7 @@ superseded_by: null
 
 # 当前路线图（唯一主线）
 
-> 2026-09-27 主线状态：ORG-LEDGER `2c7d6eb4` 同 SHA CI run `36270782272` 17/17 success。UX Dashboard逐值+筛选合同/交互、`/statements` 逐值核对已完成且各自同 SHA CI success。`/analysis` 四问十指标实现按指标字典纠正并补齐：DSO修复前0.3500、独立复算116.3898天；FY2026十指标现全部可算并逐项与报告原文独立复算值及UI对账。隔离verify19/19、GET矩阵159项（149预期200、10预期422、零意外）、E2E9/9；工作台API11/11、Web142/142、类型/静态检查通过。`/analysis` 新 SHA 与状态文档提交后的 CI 尚待终态。旧run `36276782059` 的影响分析单例失败在隔离CI等价267项批次及前后单跑中未复现，根因未知，不视为已修复。截图归档61/61、响应式27/27通过。下一子步 `/operations` API→事实→UI值级审计；其余路由/深链/状态视口/Gate5未结束。唯一队列计数不变：完成1、执行中1、排队8、外部材料受限1。常驻`flow`测试批次偏差未经用户授权不得处置。
+> 2026-09-27 主线状态：ORG-LEDGER `2c7d6eb4` 同 SHA CI run `36270782272` 17/17 success。UX Dashboard逐值+筛选合同/交互、`/statements` 逐值核对已完成且各自同 SHA CI success。`/analysis` 四问十指标按指标字典纠正并补齐：DSO修复前0.3500、独立复算116.3898天；FY2026十指标均可算并逐项与报告原文独立复算值及UI对账，隔离verify19/19、GET矩阵159项（149预期200、10预期422、零意外）、E2E9/9；工作台API11/11、Web142/142、类型/静态检查通过。提交 `bc8fa678` 同 SHA CI run `36288403912` 17/17 success，`/analysis` 子项关闭。旧run `36276782059` 的影响分析单例失败在隔离CI等价267项批次及前后单跑中未复现，根因未知，不视为已修复。截图归档61/61、响应式27/27通过。唯一下一子步 `/operations` API→事实→UI值级审计；其余路由/深链/状态视口/Gate5未结束。唯一队列计数不变：完成1、执行中1、排队8、外部材料受限1。常驻`flow`测试批次偏差未经用户授权不得处置。
 
 > **本页是全仓唯一主线**：既维护状态真相，也维护执行队列。2026-09-25 用户裁决（2A）后不再存在第二份「唯一」文档：EXECUTION_TODO、整合总计划、统一完整实施计划与执行收敛计划均已归档为历史/参考，状态与任务只以本页和工作包为准。详细验收步骤在各工作包与参考规格。
 
@@ -32,7 +32,7 @@ superseded_by: null
 | 1' | [U04 独立 oracle](work_items/U04--independent-oracle.md) | **blocked（验证出口未满足；工作按唯一队列执行）** | 解析器适配 + 新留出 | 首跑199行均 `not_comparable`；到队列第3项时实施适配、旧样本回归及独立留出，不把验收门槛误作停工理由 |
 | 2 | [S01 战略边界、事实合同与安全门禁](work_items/S01--post-u8-boundary-contract-security.md) | **completed** | U08 completed | Task 1–5 完成；安全规格 V1.1 已批准且独立审查闭环（`6c3c1cd`，零 P1/P2）。2026-09-14 `ff42c67` 五路并合 + 回落修复（`c1510ce`→`2570bf8`）带入路由策略 v2、模块边界与 U8 升级门禁、迁移 0026 修复、`main.py` 启动 fail-fast、两模块入口；Kimi `0841ff9` v1 被否，由 `997c1ab` v2 取代。**Task 6 已关闭**（R2/R3/R4 交付，台账 §7），阶段 3 转入 C 级出口；[协调台账](../70_operations/2026-09-14-coordination-ledger-glm.md) / [范围计划](../superpowers/plans/2026-09-13-flow-post-u8-boundary-gate.md) / [并行执行计划](../superpowers/plans/2026-09-13-flow-three-agent-parallel-restructuring.md) |
 | 2a | [大麦物流完整财年演示数据](work_items/DAMAI--full-year-demo.md) | **completed** | 已批准规格；不依赖公开 C 级 | D1–D3 已集成 main `e22d193`，CI run `36137591750` 17/17 success；隔离栈 verify 19/19、八页面 E2E 9/9、重复 seed 零增长、发行包零漂移。**常驻开发库已装载（G2 完成 2026-09-25）**：用户裁决演示数据全部入库，集成后 main 上 verify 19/19、页面可见；合成数据不解除公开 C 级门禁 |
-| 2b | [大麦数据后的剩余体验收口](work_items/UX--post-damai-experience-closeout.md) | **active（唯一执行项）** | G2 ✓；用户已批准；ORG-LEDGER CI ✓ | 深链批次一至三已完成；基线 `ad76fd4c` CI success。剩余为全路由响应/API与页面状态、视口、下钻矩阵及 Gate 5 同 SHA 复验；本次队列刚解锁，严格串行执行；常驻库偏差未获授权不得处置。 |
+| 2b | [大麦数据后的剩余体验收口](work_items/UX--post-damai-experience-closeout.md) | **active（唯一执行项）** | G2 ✓；用户已批准；ORG-LEDGER CI ✓ | 深链批次一至三、Dashboard、`/statements`、`/analysis`局部审计已完成并各自同SHA CI绿（最新 `bc8fa678` / `36288403912`）；剩余全路由响应/API与页面状态、视口、下钻矩阵及 Gate 5 同 SHA 复验；唯一下一项 `/operations`；常驻库偏差未获授权不得处置。 |
 | 2c | [企业组织建制与经营账套初始化包](work_items/ORG-LEDGER--enterprise-initialization-package.md) | **completed** | 大麦发行包 completed；批准三表 schema | `2c7d6eb4`；CI run `36270782272` 的17/17 jobs success。隔离 `full` 首次/重复与 `business` 对账通过；11 个企业/loader 测试、全量 API 852、Web142、脚本107、大麦 verify19/19、API43/43、Playwright9/9、合同/文档/lint/typecheck 均通过。31文件 manifest 稳定 SHA `cbc7cccf…e513`。 |
 | K | [第二代静态知识刷新与战略重基线](work_items/KNOWLEDGE--refresh-v2.md) | **active（队列排队，不并行启动）** | 按唯一队列轮到时启动；规格/preflight 已完成 | K0–K6 未执行；`CURRENT_RELEASE` 仍为 `flow-knowledge-2026-09-12.1`，用户战略裁决前不得切换。 |
 | 3 | [公开财报模块 C 级出口](work_items/PUBLIC--c-level-exit-protocol.md) | **blocked(归因、补证与裁决)** | S01 关闭 ✓ | 独立交叉评已完成（[结果](../80_reviews/ai-cross-review/results/gpt-6-astra-2026-09-25.md)）：1,530 格中42异常、109存疑、200因JDL乱码无法完整核验；待原PDF逐项归因/订正。1794/1794仅为登记覆盖口径，不等于通过 |
@@ -48,10 +48,10 @@ superseded_by: null
 
 ## 唯一完整 To-do 与执行队列（严格串行）
 
-截至 2026-09-27：**11 项，已完成 1 项，实际执行中 1 项，排队 8 项，外部材料受限 1 项**。当前唯一执行项第2项 UX 全站验收。Dashboard和`/statements`值级复核已有同SHA成功CI；`/analysis`十指标按披露原文独立复算、页面/API对账通过，代码及文档已推送后其CI待终态。旧CI影响分析单例隔离批次267 passed且前后单跑未复现，根因未知。唯一下一步核对最新`/analysis`提交CI；通过后进入`/operations`逐值审计。不写入/清理常驻`flow`。状态表、工作包和 HANDOFF 操作卡不是第二条队列。
+截至 2026-09-27：**11 项，已完成 1 项，实际执行中 1 项，排队 8 项，外部材料受限 1 项**。当前唯一执行项第2项 UX 全站验收。Dashboard、`/statements`、`/analysis`值级复核的同SHA CI均成功；`/analysis`提交 `bc8fa678` / CI run `36288403912` 17/17 success，十指标按披露原文独立复算且页面/API对账完成。旧CI影响分析单例隔离批次267 passed且前后单跑未复现，根因未知。唯一下一步启动`/operations`逐值审计。不写入/清理常驻`flow`。状态表、工作包和 HANDOFF 操作卡不是第二条队列。
 
 1. **[完成] 企业组织建制与经营账套初始化包**（工作包见状态表2c）：提交 `2c7d6eb4`，CI run `36270782272` 的17/17 jobs success。31文件发行包稳定 manifest SHA `cbc7cccf…e513`；隔离 `full` 首次/重复、`business` 重置及回滚/租户隔离通过；全量 API852、Web142、脚本107、verify19/19、只读 GET43/43、Playwright9/9，合同/文档/lint/typecheck均通过。仅三表迁移在隔离栈验证，未触碰常驻库。
-2. **[进行中] UX 可见性与全站验收关闭**（工作包见状态表2b）：深链批次一至三已完成。Dashboard逐项核对8 KPI主值/三类比较、12月×4趋势、32格矩阵、产品表每产品值；筛选矩阵159项（149有效200、10合同禁止组合422、意外0），selector操作核对URL/API/KPI。`/statements`逐报告、section、披露行、非空列对账。`/analysis`四问十指标现按财报原文公式独立复算并对齐 API/UI，十项全可用；纠正 DSO 天数错误并补齐其余四项计算及不可用原因。隔离verify19/19、浏览器9/9、Web142/142；四个数据密集页五态×390/1024/1440归档61/61，响应式E2E27/27。均是Gate1局部证据，不可关闭工作包。唯一下一步核对最新CI后进入`/operations`，再依交叉表审计剩余页面，完成深链/全状态视口与Gate5同SHA全链；不写常驻`flow`，不重做已完成深链批次。
+2. **[进行中] UX 可见性与全站验收关闭**（工作包见状态表2b）：深链批次一至三已完成。Dashboard逐项核对8 KPI主值/三类比较、12月×4趋势、32格矩阵、产品表每产品值；筛选矩阵159项（149有效200、10合同禁止组合422、意外0），selector操作核对URL/API/KPI。`/statements`逐报告、section、披露行、非空列对账。`/analysis`四问十指标现按财报原文公式独立复算并对齐 API/UI，十项全可用；纠正 DSO 天数错误并补齐其余四项计算及不可用原因；提交 `bc8fa678` 同 SHA CI run `36288403912` 17/17 success，子项关闭。隔离verify19/19、浏览器9/9、Web142/142；四个数据密集页五态×390/1024/1440归档61/61，响应式E2E27/27。均是Gate1局部证据，不可关闭工作包。唯一下一步进入`/operations` API→源事实→UI逐值审计，再依交叉表审计剩余页面，完成深链/全状态视口与Gate5同SHA全链；不写常驻`flow`，不重做已完成深链批次。
 3. **[排队] 公开财报 C 级归因、原件复核与抽取修订**（工作包见状态表3）：处理已确认42项异常后的109项口径疑点、JDL 200 格原件复核、抽取器修订；保留原始值及证据，任何结论可追溯。
 4. **[排队] U04 解析器适配与独立留出验证**（工作包见状态表1'）：这本身是可执行的工程任务，不再误标为阻塞。支持「合并及公司」标题与页码区间参数化；旧三样本回归；对已冻结的小米2026H1、阿里FY2027Q1独立首跑，首跑前不得调参。若遇到输入缺项，主动检查已冻结材料并完成可复现的替代核验记录。
 5. **[排队] C 级质量基准与 Go/No-Go**：依赖第3、4项；重跑 L1 并归档机器结果。`1794/1794` 仅表示登记覆盖，不代表准确性通过。
