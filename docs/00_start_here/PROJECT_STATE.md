@@ -3,16 +3,16 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.32
+version: 5.33
 created_at: 2026-09-12
-updated_at: 2026-09-27
+updated_at: 2026-09-28
 owner: FLOW
 applies_to: repository
 ---
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-09-27 最新更正（优先于下方历史快照）：文档提交`40b598dd`的GitHub Actions run `36325666803`已在准确SHA `40b598dd396c862a400d52bfc3de6b7f2c8c00d9`上Success，17/17 jobs均结束；API受限时以公开Actions页面核验标题SHA、总体Success及17个`data-concluded=true`为证。随后新一组下钻审计发现并修复利润桥驱动深链错把分析driver_code当metric_code的问题：量→`orders`、结构→`revenue`、价→`revenue_per_order`、直接成本分项→`direct_cost`；无独立指标定义的期间费用不再显示失效链接。`bash scripts/test_damai_demo_e2e.sh` fresh `damai-demo-iso`验收seed19/19、只读矩阵159项（149×200、10×422、零意外）、Playwright14/14；`bash scripts/test_module_boundaries_e2e.sh`94/94；`make test-web`143/143、typecheck通过、lint零错误/一条既有TanStack warning。当前唯一下一步是同步本阶段代码及状态/证据、完成门禁和提交推送并核对同SHA CI，再继续剩余安全真实下钻→全交互路由状态×390/1024/1440视口→Gate5。常驻`flow`禁止重启、重建、迁移、写入。
+2026-09-28 最新更正（优先于下方历史快照）：利润桥目标映射修复提交`87be90041c477d53f0cabc6718d504d190481103`由GitHub Actions run `36330119396`同SHA **17/17 jobs success**。`bash scripts/test_damai_demo_e2e.sh` fresh `damai-demo-iso`验收seed19/19、只读矩阵159项（149×200、10×422、零意外）、Playwright14/14；`bash scripts/test_module_boundaries_e2e.sh`94/94；`make test-web`143/143、typecheck通过、lint零错误/一条既有TanStack warning。实点修复driver_code到真实指标的映射；期间费用缺少独立指标时显示为非链接。当前唯一下一步继续Operations/Investigation、指标依赖与治理图谱等安全真实下钻，再做全交互路由状态×390/1024/1440视口及Gate5。常驻`flow`禁止重启、重建、迁移、写入。
 
 历史接续快照：UX八个业务页值级子项及159项安全GET基线已完成；Dashboard下钻`e03a1755`与Analysis/Investigation身份下钻`d19a7ff7`均已同SHA CI 17/17关闭。后续进度以本页首段和 CURRENT_ROADMAP 为准。UX仍active；常驻`flow` Compose标签来源混杂，禁止重启、重建、迁移或写入。
 

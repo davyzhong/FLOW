@@ -3,9 +3,9 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目尽调、优化与单 Agent 执行总交接
 doc_type: navigation
 status: current
-version: 5.21
+version: 5.22
 created_at: 2026-09-12
-updated_at: 2026-09-27
+updated_at: 2026-09-28
 owner: FLOW
 applies_to: repository
 ---
@@ -18,7 +18,7 @@ applies_to: repository
 
 > **本节覆盖本文其余旧会话交接快照。** 旧章节保留历史证据，不可据其旧顺序领取任务。下一位 Agent 开始前先从 GitHub 同步 `main`，再读 `AGENTS.md`、`docs/00_start_here/PROJECT_STATE.md`、`docs/50_plans/CURRENT_ROADMAP.md` 和相应工作包。唯一任务顺序是路线图中的 11 项队列；本节只是对同一队列逐项提供执行手册，不构成第二条队列。
 
-**最新进度更正（2026-09-27，优先于下方旧接续点）：** `40b598dd`状态文档提交准确SHA CI run `36325666803`总体Success、17/17 jobs已结束。随后本轮新增利润桥映射修复：隔离 seed verify19/19、只读矩阵159项零意外、Playwright14/14；生产E2E94/94、Web143/143、typecheck通过、lint零错误/一条既有warning。Dashboard状态栏批次/快照链接身份通过；利润桥driver映射到现有指标卡，无独立口径的期间费用不再显示伪链接。当前代码及文档修订待门禁、提交和同SHA CI。下一步：完成当前提交/CI，再按唯一队列继续剩余安全真实下钻→全交互路由状态×390/1024/1440→Gate5。常驻`flow`不重启、重建、迁移或写入。
+**最新进度更正（2026-09-28，优先于下方旧接续点）：** 利润桥修复提交`87be90041c477d53f0cabc6718d504d190481103`对应GitHub CI run`36330119396`同SHA17/17 jobs success。隔离seed verify19/19、只读矩阵159项零意外、Playwright14/14；生产E2E94/94、Web143/143、typecheck通过、lint零错误/一条既有warning。状态栏批次/快照身份通过；利润桥驱动映射到现有指标卡，无独立口径的期间费用不再显示伪链接。当前唯一下一步：同步CI状态文档并提交，再按路线图续做剩余安全真实下钻→全交互路由状态×390/1024/1440→Gate5。常驻`flow`不重启、重建、迁移或写入。
 
 **此前接续点（已由上方最新进度覆盖）：** 已完成Dashboard、Analysis/Investigation身份深链阶段。当前工作树与未提交项以 `git status` 为准；具体证据见路线图和UX Gate1记录。不得触碰常驻`flow`（Compose标签来源混杂）。
 

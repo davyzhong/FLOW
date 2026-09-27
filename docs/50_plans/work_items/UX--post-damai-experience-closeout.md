@@ -3,9 +3,9 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 5.20
+version: 5.21
 created_at: 2026-09-24
-updated_at: 2026-09-27
+updated_at: 2026-09-28
 owner: FLOW
 depends_on: [FLOW-WI-DAMAI-FULL-YEAR-001]
 acceptance_refs: [FLOW-PLAN-INTEGRATED-EXECUTION-20260924, frontend-route-state-viewport-matrix]
@@ -14,7 +14,7 @@ applies_to: web-frontend
 
 # 大麦数据后的剩余体验收口
 
-> 2026-09-27 最新进度：`40b598dd`文档提交准确SHA CI run`36325666803`总体Success、17/17 jobs结束。最新UX下钻阶段修复利润桥driver_code与指标库metric_code错配，并验证状态栏批次、快照和利润桥点击身份；fresh隔离大麦verify19/19、GET矩阵159项零意外、Playwright14/14，生产E2E94/94、Web143/143、typecheck及lint通过。代码和状态文档待提交/同SHA CI。下一步为文档门禁提交，再续做Operations/Investigation/指标治理图谱、Statements页内/PDF锚及Reports候选链接，然后状态×视口矩阵、Gate5。工作包仍active。
+> 2026-09-28 最新进度：利润桥修复提交`87be90041c477d53f0cabc6718d504d190481103`的CI run`36330119396`同SHA17/17成功。隔离大麦verify19/19、GET矩阵159项零意外、Playwright14/14，生产E2E94/94、Web143/143、typecheck通过、lint仅既有warning。当前下一步同步状态证据并提交文档，再续做剩余安全下钻、状态×视口矩阵及Gate5。工作包仍active。
 
 > 历史阶段快照：八个业务页值级子项已关闭；Dashboard与Analysis/Investigation深链已由对应阶段SHA和CI关闭。当前状态以首条更正和路线图为准。逐路由覆盖与剩余目标映射见[版本化验收证据](../../60_delivery/verification/2026-09-26--damai-visibility-gate1-v1.md)。
 
