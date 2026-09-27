@@ -486,6 +486,69 @@ test("dashboard renders damai overview with four grain filters", async ({ page }
   await expect(page.getByRole("combobox", { name: "物流产品" })).toHaveValue(cellProductId!);
 });
 
+test("dashboard status and profit bridge links preserve target identity", async ({ page }) => {
+  const overviewResponse = await page.request.get("/api/v1/dashboard/overview");
+  expect(overviewResponse.ok()).toBeTruthy();
+  const overview = (await overviewResponse.json()) as DashboardResponse;
+
+  await page.goto("/");
+  const statusBar = page.getByRole("status", { name: "数据治理状态" });
+  const batchLink = statusBar.getByRole("link", { name: /数据批次/ });
+  await expect(batchLink).toHaveAttribute("href", `/data?batch=${encodeURIComponent(overview.context.batch_id)}`);
+  await batchLink.click();
+  await expect(page).toHaveURL(`/data?batch=${encodeURIComponent(overview.context.batch_id)}`);
+  const batchRow = page.getByRole("region", { name: "最近的数据批次" })
+    .locator("tbody tr")
+    .filter({ has: page.locator(`a[href="/data?batch=${overview.context.batch_id}"]`) });
+  await expect(batchRow).toHaveCount(1);
+
+  await page.goto("/");
+  const snapshotLink = page.getByRole("status", { name: "数据治理状态" })
+    .getByRole("link", { name: /快照/ });
+  await expect(snapshotLink).toHaveAttribute(
+    "href",
+    `/reports?snapshot=${encodeURIComponent(overview.context.metric_snapshot_id)}`,
+  );
+  await snapshotLink.click();
+  await expect(page).toHaveURL(`/reports?snapshot=${encodeURIComponent(overview.context.metric_snapshot_id)}`);
+  const publishingSnapshotsResponse = await page.request.get("/api/v1/publishing/snapshots");
+  expect(publishingSnapshotsResponse.ok()).toBeTruthy();
+  const { snapshots: publishingSnapshots } = (await publishingSnapshotsResponse.json()) as {
+    snapshots: PublishingSnapshot[];
+  };
+  const matchedSnapshot = publishingSnapshots.find(
+    (item) => item.metric_snapshot_id === overview.context.metric_snapshot_id,
+  );
+  if (matchedSnapshot) {
+    const selectedSnapshot = page
+      .getByRole("list", { name: "报告快照列表" })
+      .locator("li")
+      .filter({ has: page.locator('input[name="report-snapshot"]:checked') });
+    await expect(selectedSnapshot).toContainText(`v${matchedSnapshot.version} · ${matchedSnapshot.title}`);
+  } else {
+    await expect(page.getByTestId("metric-snapshot-detail")).toContainText(
+      overview.context.metric_snapshot_id,
+    );
+  }
+
+  await page.goto("/");
+  const bridge = page.getByRole("region", { name: "经营利润变动桥" });
+  const driverLink = bridge.locator('[data-driver-code="revenue_volume"]');
+  const driverHref = await driverLink.getAttribute("href");
+  expect(driverHref).toMatch(/^\/metric-library\?focus=/);
+  const driverCode = new URL(driverHref!, "http://flow.local").searchParams.get("focus");
+  expect(driverCode).toBe("orders");
+  await driverLink.click();
+  await expect(page).toHaveURL(`/metric-library?focus=${encodeURIComponent(driverCode!)}`);
+  await expect(page.locator(".ml-metric--focused code")).toHaveText(driverCode!);
+
+  await page.goto("/");
+  const expenseDriver = page.getByRole("region", { name: "经营利润变动桥" })
+    .locator('[data-driver-code="operating_expense"]');
+  await expect(expenseDriver).not.toHaveAttribute("href", /.+/);
+  await expect(expenseDriver).toHaveAttribute("title", "指标库暂无该驱动的独立口径定义");
+});
+
 test("dashboard API serves customer-grain overview", async ({ page }) => {
   await page.goto("/");
   const cards = page.getByTestId("metric-card");

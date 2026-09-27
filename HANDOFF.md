@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目尽调、优化与单 Agent 执行总交接
 doc_type: navigation
 status: current
-version: 5.20
+version: 5.21
 created_at: 2026-09-12
 updated_at: 2026-09-27
 owner: FLOW
@@ -18,9 +18,9 @@ applies_to: repository
 
 > **本节覆盖本文其余旧会话交接快照。** 旧章节保留历史证据，不可据其旧顺序领取任务。下一位 Agent 开始前先从 GitHub 同步 `main`，再读 `AGENTS.md`、`docs/00_start_here/PROJECT_STATE.md`、`docs/50_plans/CURRENT_ROADMAP.md` 和相应工作包。唯一任务顺序是路线图中的 11 项队列；本节只是对同一队列逐项提供执行手册，不构成第二条队列。
 
-**进度更正（2026-09-27，优先于下方旧接续点）：** Dashboard下钻提交`e03a1755`/CI `36319686868`及Analysis/Investigation身份下钻提交`d19a7ff7`/CI `36323192584`均同SHA 17/17通过。`d19a7ff7`隔离旅程13/13、verify19/19、159项GET零意外，生产E2E94/94、Web143/143、lint/typecheck通过。代码已推送；本轮只剩这些文档状态同步尚未提交。同步并提交后，唯一主线下一步是剩余安全真实下钻→状态×视口矩阵→Gate5。
+**最新进度更正（2026-09-27，优先于下方旧接续点）：** `40b598dd`状态文档提交准确SHA CI run `36325666803`总体Success、17/17 jobs已结束。随后本轮新增利润桥映射修复：隔离 seed verify19/19、只读矩阵159项零意外、Playwright14/14；生产E2E94/94、Web143/143、typecheck通过、lint零错误/一条既有warning。Dashboard状态栏批次/快照链接身份通过；利润桥driver映射到现有指标卡，无独立口径的期间费用不再显示伪链接。当前代码及文档修订待门禁、提交和同SHA CI。下一步：完成当前提交/CI，再按唯一队列继续剩余安全真实下钻→全交互路由状态×390/1024/1440→Gate5。常驻`flow`不重启、重建、迁移或写入。
 
-**最新接续点（2026-09-27）：** 唯一工作树 `.worktrees/execution-convergence` 的 `main` 与远端一致。Dashboard真实下钻修复 `e03a1755` 的GitHub CI run `36319686868` 已同SHA 17/17 success。新一轮Analysis/Investigation身份点击已本地验证：四问指标跳转指标库并定位同一指标卡、财报身份跳转并选中FY2026对应财报、Finding详情的运行ID跳转到相同分析运行，该运行指标快照再跳转报告中心并核对目标快照。隔离 `damai-demo-iso`：verify19/19、159项只读GET（149×200、10×预期422、零意外）、Playwright13/13；生产E2E94/94、Web143/143、lint/typecheck通过，仅既有TanStack warning；隔离Compose已清理，常驻`flow`未操作。当前唯一未提交改动为`apps/web/e2e/damai-demo.spec.ts`及待同步状态/证据文档。下一步完成M1/链接/plan views/diff检查，提交推送并核对同SHA CI；之后继续剩余真实下钻→状态×390/1024/1440视口矩阵→Gate5同SHA全链验收。不得触碰常驻`flow`（Compose标签来源混杂）。
+**此前接续点（已由上方最新进度覆盖）：** 已完成Dashboard、Analysis/Investigation身份深链阶段。当前工作树与未提交项以 `git status` 为准；具体证据见路线图和UX Gate1记录。不得触碰常驻`flow`（Compose标签来源混杂）。
 
 ### 接手基线、当前状态与操作纪律
 

@@ -3,7 +3,7 @@ doc_id: FLOW-VERIFY-DAMAI-VISIBILITY-GATE1-001
 title: 大麦数据可见性与 Gate 4 批次历史验收证据 v4.2
 doc_type: verification
 status: draft
-version: "4.2"
+version: "4.3"
 created_at: 2026-09-26
 updated_at: 2026-09-27
 owner: FLOW
@@ -317,20 +317,26 @@ CI 补充（run `36217337338`，SHA `5510bad3`）：18 个作业中仅 integrati
 
 Dashboard修复阶段已本地验证：生产 E2E **94/94**，隔离 seed verifier **19/19**、GET路由矩阵 **159项（149×200、10×预期422、零意外）**、浏览器 **12/12**、Web **143/143**、lint/typecheck通过；提交`e03a1755`对应CI run`36319686868`同SHA 17/17成功。
 
-Analysis/Investigation身份深链阶段本地验证：`make test-damai-demo-e2e` fresh isolated Compose，seed verifier **19/19**，只读矩阵**159项（149×200、10×预期422、零意外）**，Playwright **13/13**；生产E2E **94/94**；`make test-web` **143/143**，`make lint`零错误（仅既有TanStack Table warning）、`make typecheck`通过。隔离 Compose 清理后 `ps -a` 为空，常驻`flow`未操作。本阶段新增点击代码提交及同SHA CI待验收。
+Analysis/Investigation身份深链阶段本地验证：`make test-damai-demo-e2e` fresh isolated Compose，seed verifier **19/19**，只读矩阵**159项（149×200、10×预期422、零意外）**，Playwright **13/13**；生产E2E **94/94**；`make test-web` **143/143**，`make lint`零错误（仅既有TanStack Table warning）、`make typecheck`通过。隔离Compose清理后 `ps -a` 为空，常驻`flow`未操作。该阶段提交`d19a7ff7`与同SHA CI `36323192584`已成功。
+
+### Dashboard 状态与利润桥真实下钻（2026-09-27）
+
+- 状态栏批次链接实点到 `/data?batch={batch_id}`，并在近期批次表核对同一批次；快照链接实点到 `/reports?snapshot={metric_snapshot_id}`，以只读发布快照API识别对应指标快照，并断言UI选中相同报告快照或显示同ID未冻结详情。
+- 实点发现利润桥将桥接 `driver_code`（如 `revenue_volume`）直接用作指标库 `metric_code`，导致页面虽能打开却无法定位目标卡。现映射为：`revenue_volume→orders`、`revenue_mix→revenue`、`revenue_price→revenue_per_order`、三个直接成本分项→`direct_cost`。`operating_expense`暂无独立指标口径，改为不可点击文本并解释原因，不制造失效深链。
+- 全隔离大麦旅程：`bash scripts/test_damai_demo_e2e.sh` seed verify **19/19**、只读GET矩阵**159项（149×200、10×预期422、零意外）**、Playwright **14/14**；`bash scripts/test_module_boundaries_e2e.sh` **94/94**；`make test-web` **143/143**、typecheck通过、lint零错误/一条既有TanStack warning。隔离Compose已清理，常驻`flow`未操作。
+- 上阶段文档提交 `40b598dd396c862a400d52bfc3de6b7f2c8c00d9`对应 Actions run `36325666803`准确SHA总体Success、17/17 jobs结束；GitHub API受限时通过公开Actions页面核验。本阶段代码及CI待验收。
 
 ### 仍未逐项点击到真实目标的链接/边界
 
 以下已识别为“有链接但尚未证明点击后目标身份和展示”，继续纳入本 Gate1，不按 `href` 存在视为完成：
 
-- Dashboard 状态栏批次/快照链接、利润桥驱动 → 数据工作台/报告中心/指标库；
-- Dashboard 快照状态链接、Analysis 报表身份/指标行/运行快照身份、Operations 指标条目 → 各自报告/数据/指标目标；
+- Analysis 报表身份/指标行/运行快照身份、Operations 指标条目 → 各自报告/数据/指标目标；
 - Investigation 身份条的批次/指标快照实点和评分至四问工作台；依赖图节点、治理事件、指标依赖项的卡片定位；
 - Statements 更正记录页内定位和已登记 PDF 页锚；Reports 冻结候选回到 Investigation。
 
 其中 objective 报告 HTML、经营报告 HTML/XLSX/PPTX/PDF 是显式产物生成入口或可能触发冻结的 GET，不能作为普通“安全只读链接”纳入探测；按工作包既有隔离发布旅程单独验证。未建立真实 Finding 血缘的 ManagementWatchItem 不增加虚构 Finding 链接。每项只有在实际目标页身份参数、DOM 落点和目标事实/缺失状态均对账后方可标完成。
 
-下一执行动作：对照上述剩余清单复核现有测试，继续补齐指标依赖/治理图谱、财报更正/PDF页锚与报告冻结候选等安全真实点击；随后完成全交互路由适用状态×390/1024/1440视口矩阵，再按 Gate 5 在同一最终 SHA 复跑全链并核验 GitHub CI。Gate1/Gate5 尚未关闭。
+下一执行动作：对照上述剩余清单复核现有测试，继续补齐Operations/Investigation链接、指标依赖/治理图谱、财报更正/PDF页锚与报告冻结候选等安全真实点击；随后完成全交互路由适用状态×390/1024/1440视口矩阵，再按 Gate 5 在同一最终 SHA 复跑全链并核验 GitHub CI。Gate1/Gate5尚未关闭。
 
 ### Dashboard 下钻实证及两项缺陷修正（2026-09-27）
 
