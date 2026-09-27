@@ -1276,6 +1276,23 @@ test("investigation identity links resolve to the same analysis and report snaps
   await expect(identity.locator("dd").nth(2)).toContainText(selected.metric_snapshot_id!);
   await expect(identity.locator("dd").nth(3)).toContainText(selected.analysis_run_id!);
 
+  const batchLink = identity.getByRole("link", { name: selected.batch_id! });
+  await expect(batchLink).toHaveAttribute(
+    "href",
+    `/data?batch=${encodeURIComponent(selected.batch_id!)}`,
+  );
+  await batchLink.click();
+  await expect(page).toHaveURL(`/data?batch=${encodeURIComponent(selected.batch_id!)}`);
+  const selectedBatchRow = page.locator('tr[data-current="true"]');
+  await expect(selectedBatchRow).toHaveCount(1);
+  await expect(selectedBatchRow.getByRole("link")).toHaveAttribute(
+    "href",
+    `/data?batch=${encodeURIComponent(selected.batch_id!)}`,
+  );
+
+  // 继续验证 run/snapshot 链时回到同一个完整 Finding 身份，避免中途丢失上下文。
+  await page.goto(`/investigations/${selected.finding_id}?${params.toString()}`);
+  await expect(page.getByTestId("investigation-identity")).toContainText(selected.batch_id!);
   const runLink = identity.getByRole("link", { name: selected.analysis_run_id! });
   await expect(runLink).toHaveAttribute("href", `/analysis?run_id=${encodeURIComponent(selected.analysis_run_id!)}`);
   await runLink.click();
