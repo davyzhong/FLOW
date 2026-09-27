@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 5.23
+version: 5.24
 created_at: 2026-09-24
 updated_at: 2026-09-28
 owner: FLOW
@@ -14,7 +14,13 @@ applies_to: web-frontend
 
 # 大麦数据后的剩余体验收口
 
-> 2026-09-28 最新进度：利润桥`87be90041c477d53f0cabc6718d504d190481103`/CI `36330119396`、状态同步`079a1b8cf6abfd62955fd659788f409d4f4968b9`/CI `36332650401`、图谱真实深链测试`2fc1d955da0705e0e529046ab065855651c7a5cf`/CI `36338361782`均准确SHA17/17成功。最新隔离大麦verify19/19、GET矩阵159项零意外、Playwright14/14；Web143/143、typecheck/ruff通过、lint零错误（仅既有warning）。当前下一步：验收Operations管理关注真实点击→同一指标卡片的浏览器深链；然后完成其余安全下钻、状态×视口矩阵及Gate5。工作包仍active。
+> 2026-09-28 最新进度：利润桥`87be90041c477d53f0cabc6718d504d190481103`/CI `36330119396`、状态同步`079a1b8cf6abfd62955fd659788f409d4f4968b9`/CI `36332650401`、图谱深链`2fc1d955da0705e0e529046ab065855651c7a5cf`/CI `36338361782`、Operations关注深链`4d6cf4a5c0bd35a55fd6e6c94b5f785ba2f1bca2`/CI `36343826986`均准确SHA17/17成功。最新隔离大麦verify19/19、GET矩阵159项零意外、Playwright14/14；Web143/143、typecheck通过、lint零错误（仅既有warning）。当前下一步：验收Investigation批次身份真实点击→数据工作台同一批次选中；然后完成其余安全下钻、状态×视口矩阵及Gate5。工作包仍active。
+
+## Operations 管理关注指标深链验收（2026-09-28；已关闭）
+
+- 在9个真实演示经营上下文中寻找带指标编码的管理关注项，核验该编码存在于同一指标库 API；点击提示后校验 `/metric-library?focus={metric_code}`，并确认最终高亮卡片的名称和编码都与源提示对应指标相同。
+- 验证：隔离 `bash scripts/test_damai_demo_e2e.sh` verify19/19、只读GET矩阵159项（149预期200、10预期422、意外0）、浏览器14/14；`make typecheck`通过、API mypy/ruff通过、Web Vitest143/143通过、lint零错误（1条既有TanStack warning）。代码提交`4d6cf4a5c0bd35a55fd6e6c94b5f785ba2f1bca2`对应GitHub run `36343826986`准确SHA17/17 success。测试只用隔离`damai-demo-iso`卷，常驻库未写入。
+- **交付状态：**Operations管理关注真实指标深链子项关闭。下一子项为Investigation详情中的批次身份点击→数据工作台同一批次选中；UX Gate1/Gate5仍未关闭。
 
 ## 指标依赖图真实深链验收（2026-09-28；已关闭）
 
