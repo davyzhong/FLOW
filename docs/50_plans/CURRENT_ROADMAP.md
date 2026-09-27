@@ -17,6 +17,8 @@ superseded_by: null
 
 # 当前路线图（唯一主线）
 
+> 2026-09-27 更正（优先于下方上一进度快照）：Dashboard下钻阶段`e03a1755`/CI `36319686868`及Analysis/Investigation身份下钻阶段`d19a7ff7`/CI `36323192584`均同SHA 17/17成功。后者隔离实点四问指标→指标库、财报身份→对应财报、Finding→分析运行→同一指标快照报告；隔离verify19/19、矩阵159项零意外、浏览器13/13，生产E2E94/94、Web143/143、lint/typecheck通过。当前唯一执行项继续剩余真实安全下钻→状态×视口→Gate5；UX Gate1/Gate5仍未关闭。
+
 > 2026-09-27 最新进度（优先于下方历史快照）：八个业务页值级子项已完成。Dashboard真实下钻修复已由 `e03a1755` / CI run `36319686868` 同SHA 17/17 success。新一轮隔离验收扩展Analysis/Investigation链接身份：四问指标→指标库、财报身份→对应财报、Finding→同一分析运行→指标快照报告；verify19/19、GET矩阵159项（149×200、10×预期422、零意外）、浏览器13/13；生产E2E94/94、Web143/143、lint/typecheck通过。代码测试尚未提交/同SHA CI。覆盖与剩余链接见[Gate 1覆盖证据](../60_delivery/verification/2026-09-26--damai-visibility-gate1-v1.md)。唯一执行项仍是 UX：先同步文档、门禁、提交推送和同SHA CI，再逐项补剩余安全下钻→状态×390/1024/1440视口矩阵→Gate5最终全链同SHA验收。常驻`flow` Compose来源标签混杂，不得重启、重建或写入。更早页面子项进度只作历史，不代表当前执行位置。
 
 > 历史快照：`/data` 与 `/investigations` 子项在 `3660389e` 收尾；当前唯一执行位置以上方最新进度及“执行队列”为准。
@@ -53,6 +55,8 @@ superseded_by: null
 | D1 | [DOC-M5/M6 文档迁移](../superpowers/plans/2026-09-12-static-knowledge-and-document-migration.md) | **done**（bfc1271 / e373e25） | — | M0–M6 全部关闭 |
 
 ## 唯一完整 To-do 与执行队列（严格串行）
+
+2026-09-27 更正：第2项仍是唯一 active；`e03a1755`与`d19a7ff7`两阶段代码均已推送且各自同SHA CI 17/17成功。当前无待验收代码提交，近期新增的Analysis/Investigation真实身份点击已经通过隔离旅程13/13。下面紧邻的旧进度复述仅作历史记录，下一动作以本文开头更正和本段为准。
 
 截至 2026-09-27：**11项，已完成1项，实际执行中1项，排队8项，外部材料受限1项**。当前唯一执行项第2项UX全站验收。Dashboard下钻修复 `e03a1755` / CI run `36319686868` 同SHA 17/17成功。本轮Analysis/Investigation真实身份点击回归本地生产E2E94/94、隔离旅程13/13、Web143/143、lint/typecheck通过；尚未提交/同SHA CI。当前唯一动作：完成文档门禁和提交推送、核验同SHA CI，然后继续真实安全下钻→状态×视口→Gate5。UX Gate1/Gate5仍未结束；常驻`flow`不写入/清理，且常驻Compose来源混杂，禁止重启或重建。
 

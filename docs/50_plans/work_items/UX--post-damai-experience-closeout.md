@@ -14,6 +14,8 @@ applies_to: web-frontend
 
 # 大麦数据后的剩余体验收口
 
+> 2026-09-27 进度更正（优先于下方旧状态）：Analysis/Investigation身份下钻提交`d19a7ff7`及GitHub CI run `36323192584`同SHA 17/17成功；指标、报表、分析运行与指标快照身份已在隔离旅程真实点击核对。当前继续剩余真实下钻，UX工作包仍active。
+
 > 2026-09-27 最新状态：八个业务页值级子项已关闭。Dashboard矩阵筛选同步及趋势快照落点两项已由`e03a1755`/CI run `36319686868`同SHA17/17关闭。本阶段新增Analysis/Investigation真实身份点击回归：四问指标→同一指标卡、财报身份→同一FY2026财报、Finding身份→同一分析运行→相同指标快照报告中心；隔离大麦verify19/19、GET矩阵159项（149预期200、10预期422、零意外）、浏览器13/13，生产E2E94/94，Web143/143，lint/typecheck通过。当前改动尚未提交/同SHA CI。逐路由覆盖与剩余目标映射见[版本化验收证据](../../60_delivery/verification/2026-09-26--damai-visibility-gate1-v1.md)。提交并验证同SHA CI后，继续其他真实下钻；随后完成适用的全交互路由状态×视口矩阵，最后执行Gate5。常驻`flow` Compose来源标签混杂，禁止重启/重建/写入；UX工作包仍active。
 
 ## 指标库 `/metric-library` API→配置→UI 值级验收（2026-09-27；已关闭）

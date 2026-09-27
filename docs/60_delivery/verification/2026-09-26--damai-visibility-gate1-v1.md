@@ -1,9 +1,9 @@
 ---
 doc_id: FLOW-VERIFY-DAMAI-VISIBILITY-GATE1-001
-title: 大麦数据可见性与 Gate 4 批次历史验收证据 v4.1
+title: 大麦数据可见性与 Gate 4 批次历史验收证据 v4.2
 doc_type: verification
 status: draft
-version: "4.1"
+version: "4.2"
 created_at: 2026-09-26
 updated_at: 2026-09-27
 owner: FLOW
@@ -342,3 +342,11 @@ Analysis/Investigation身份深链阶段本地验证：`make test-damai-demo-e2e
 修改范围：`apps/web/app/page.tsx`、Dashboard 趋势和状态栏链接、隔离 E2E、Dashboard 深链组件单测。验证：`make test-damai-demo-e2e` 全新 `damai-demo-iso` 验收 seed verifier **19/19**、只读 GET矩阵 **159项（149×200、10×预期422、零意外）**、Playwright **12/12**；矩阵行/双维单元格与趋势快照均实际点击并验证落点。`bash scripts/test_module_boundaries_e2e.sh` 生产 E2E **94/94**；`make lint && make typecheck && make test-web` 通过，Web **143/143**，仅保留既有 TanStack Table warning。隔离 Compose 已清理，常驻 `flow` 未操作。上述代码仍需提交后核验同 SHA CI。
 
 范围外的 Analysis/Investigation/指标图谱等身份链接仍按上节未完成清单逐项验收；本轮修复只关闭已实测的 Dashboard 筛选和趋势快照两类，不关闭 Gate1、状态×视口矩阵或 Gate5。
+
+### Analysis / Investigation 身份下钻实证（2026-09-27）
+
+- Analysis：真实点击四问指标编码后，断言 `/metric-library?focus={metric_code}` 与高亮指标卡一致；点击工作台财报身份后，断言 `/statements?report={report_id}` 并检查 FY2026 对应财报处于选中状态。
+- Investigation：由 Finding 列表进入详情，核对详情中的 batch、metric snapshot、analysis run 身份；点击 run ID 到 `/analysis?run_id=`，核对分析运行详情 ID，再点其指标快照并在 `/reports?snapshot=` 验证冻结快照或未冻结快照身份卡。
+- 本地验收：`make test-damai-demo-e2e` 在 fresh `damai-demo-iso` 上 seed verify **19/19**、只读 GET 矩阵 **159项（149预期200、10预期422、零意外）**、Playwright **13/13**；生产 E2E **94/94**；Web Vitest **143/143**，lint零错误（1条既有TanStack warning）、typecheck通过。隔离Compose已清理，未连接常驻`flow`。
+- 同SHA远端验收：提交 `d19a7ff7b0a5d1f0e2c8f72789570e4143ec6e8a`，GitHub Actions run `36323192584`，最终 **success，17/17 jobs**。状态页面在 GitHub API 限额期间通过公开 Actions 页面复核，限额恢复后 `gh run view` 亦确认 `headSha` 与提交一致。
+- **边界：**以上关闭这些实测链接源，不代表全部深链完成；Gate1全路由点击覆盖、状态×视口矩阵和Gate5仍未关闭。
