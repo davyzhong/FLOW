@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 5.14
+version: 5.15
 created_at: 2026-09-24
 updated_at: 2026-09-27
 owner: FLOW
@@ -14,7 +14,7 @@ applies_to: web-frontend
 
 # 大麦数据后的剩余体验收口
 
-> 2026-09-27 最新状态：`/reports`、`/data` 值级子项已关闭。`/data` 代码 `3660389e` / CI `36310017180` attempt2 17/17 success；隔离 verify19/19、GET矩阵159项零意外、Playwright12/12，typecheck通过，lint零错误/1既有warning。当前唯一页面步骤为 `/investigations`；UX Gate1/Gate5仍未关闭。
+> 2026-09-27 最新状态：`/reports`、`/data`、`/investigations`值级子项已关闭。最终代码 `3660389e` / CI `36310017180` attempt2 17/17 success；隔离verify19/19、GET矩阵159项零意外、Playwright12/12。当前唯一下一步为补齐Gate1全路由覆盖表、未覆盖下钻与全路由状态/视口矩阵，再执行Gate5；UX工作包仍 active。
 
 ## 指标库 `/metric-library` API→配置→UI 值级验收（2026-09-27；已关闭）
 
@@ -46,6 +46,13 @@ applies_to: web-frontend
 - 隔离验证环境：专属 Compose project `damai-demo-iso`、全新数据库/对象存储卷和大麦 synthetic release；seed verify19/19；只读可见矩阵159项（149预期200、10预期422、意外0；矩阵清单 SHA-256 `0416fe20234486cb1ca101cfbf6e650428b5df4750313c7cd5746eb8e8667786`）；完整 Playwright12/12；`make typecheck`通过；`make lint`零错误、1条既有 TanStack Table warning。验收后专属容器/卷已由脚本清理；常驻 `flow` 数据库未连接/写入。
 - 同 SHA CI：GitHub run `36310017180` attempt2 17/17 success。attempt1 的 `smoke/make stack-up` 失败；同 SHA 重跑中 stack-up、API/Web health 与 worker ping 全通过，根因未取得，未改产品代码。
 - **交付状态：**`/data` 页面子项关闭；唯一下一页为 `/investigations`。UX Gate1/Gate5仍未关闭。
+
+## 调查归因 `/investigations` Finding 列表 API→UI 值级验收（2026-09-27；已关闭）
+
+- 范围：主线提交 `3660389e038083dfc92f6812c28e6ad7e2a2cfdb` 中新增只读 E2E；对 `GET /api/v1/investigations` 的所有 Finding 逐行核对页面行数、类型、影响金额格式、比较口径、状态标签、评分及 `/analysis?run_id=` 链接；整行 `data-href` 根据 `finding_id`、`batch_id`、`metric_snapshot_id`、`analysis_run_id` 建立并与当前页面合同核对。按标题匹配行，不依赖 TanStack 表格排序。测试位于既有审核签发变更旅程之前。
+- 值格式和状态标签与页面显示合同一致，未发现 API→UI错配。既有隔离旅程还会点击“进入调查”、定位收入增长 Finding 并完成审核签发；这些状态变更仅发生在隔离库。
+- 环境/证据：`damai-demo-iso` 新鲜 Compose project/数据库/对象存储；`bash scripts/test_damai_demo_e2e.sh` seed verify19/19、只读矩阵159项（149预期200、10预期422、意外0）、Playwright12/12；`make typecheck`通过；`make lint`零错误/1条既有 warning。CI run `36310017180` attempt2 同 SHA `3660389e` 17/17 success，其中 `investigation-e2e` job success。attempt1 smoke `make stack-up`失败、attempt2通过；根因未知且未改产品实现。常驻 `flow` 数据库未连接或写入。
+- **交付状态：**`/investigations`值级页面子项关闭。UX Gate1仍须补全所有路由/源事实证据、未覆盖真实下钻和全状态×视口矩阵；随后执行Gate5同 SHA全链验收，工作包不得提前关闭。
 
 ## 目标
 

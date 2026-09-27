@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.26
+version: 5.27
 created_at: 2026-09-12
 updated_at: 2026-09-27
 owner: FLOW
@@ -11,6 +11,8 @@ applies_to: repository
 ---
 
 # FLOW 当前项目状态（唯一 current state）
+
+2026-09-27 最新状态：UX工作包内 `/reports`、`/data`、`/investigations`页级值审计全部完成；最后代码SHA `3660389e` 对应CI run `36310017180` attempt2 17/17 success。隔离旅程verify19/19、GET矩阵159项零意外、Playwright12/12；typecheck通过，lint零错误/1既有warning。UX工作包仍 active：当前唯一执行子步骤是补齐Gate1全路由 API→事实→UI覆盖表、未覆盖下钻与状态/视口矩阵，再做Gate5。常驻`flow` Compose 容器来源标签混杂，未做也不得自行做重启/重建。
 
 2026-09-27 最新状态更正：`/reports` 与 `/data` 页面子项已关闭。`/data` 提交 `3660389e038083dfc92f6812c28e6ad7e2a2cfdb` 对应 CI run `36310017180` attempt2 17/17 success；attempt1 的 smoke `make stack-up` 失败，attempt2 同 SHA 通过，根因未知。隔离栈 `damai-demo-iso` seed verify19/19、GET矩阵159项（149预期200、10预期422、意外0）、Playwright12/12；`make typecheck`通过、`make lint`零错误且有1条既有warning。当前唯一页面步骤为 `/investigations`，其后补全全路由状态/视口/深链和Gate5；UX Gate1/Gate5仍未完成。常驻 `flow` Compose 容器标签来源混杂（MinIO在当前worktree，Postgres/Redis在旧worktree），本轮未停止、重建、迁移或写入；不得将其作为单一工作树安全启动。
 

@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目尽调、优化与单 Agent 执行总交接
 doc_type: navigation
 status: current
-version: 5.15
+version: 5.16
 created_at: 2026-09-12
 updated_at: 2026-09-27
 owner: FLOW
@@ -24,6 +24,7 @@ applies_to: repository
 - 2026-09-27 `/reports` 子项正式关闭：提交 `e869f259991830df2ac9e69929aa712f9677bf0c` 的 GitHub CI run `36306908435` 最终 17/17 success（首次 `user-closure-e2e` 的 cleaning-summary GET 返回403；同 SHA 仅重跑失败 job 后通过，根因未复现、未知，未调整权限策略）。隔离值级 E2E 10/10、verify19/19、typecheck/lint通过。隔离诊断未能复现403；其测试上传在临时副本 Next 环境卡于浏览器文件选择阶段，未作为产品缺陷证据。当前工作区另有未提交 `damai-demo.spec.ts`（含 `/data`、`/investigations` 测试）和生成文件 `next-env.d.ts`，来源/归属待核对；不得覆盖或混入本次文档提交。
 - 2026-09-27 `/data` 与 `/investigations` 的只读逐值 E2E 已由后续提交 `3660389e038083dfc92f6812c28e6ad7e2a2cfdb` 纳入主线（作者确认归属）。本轮在该 SHA 的隔离大麦全旅程 `bash scripts/test_damai_demo_e2e.sh` 通过：seed verify19/19；GET矩阵159项（149预期200、10预期422、意外0，清单SHA-256 `0416fe20234486cb1ca101cfbf6e650428b5df4750313c7cd5746eb8e8667786`）；Playwright12/12；`make typecheck`通过；`make lint`零错误、1条既有warning。CI run `36310017180` attempt 2 对同 SHA 的17/17作业全绿；attempt 1 唯一失败为 `smoke/make stack-up`，同 SHA 重跑通过，未取得根因，不改产品代码。按串行队列，`/data` 子项已关闭，下一子项为 `/investigations`。工作树剩余 `apps/web/next-env.d.ts` 的 Next 生成差异来源未定，保留且不暂存。
 - 2026-09-27 环境风险只读发现：本机常驻 Compose project `flow` 的 MinIO 容器标签指向 `.worktrees/execution-convergence/infra`，Postgres/Redis 标签指向旧 `.codex/worktrees/damai-logistics-implementation/FLOW/infra`，共享 project 名和端口但来源混杂。本轮未停止、重建或写入这些容器/数据库；所有隔离验收只用 `damai-demo-iso`。需在允许的常驻栈维护窗口另行核清所有权后再处理，当前不得把它当作单一工作树的可安全重启环境。
+- 2026-09-27 `/investigations` 值级页审计关闭：`3660389e` 的新增只读 E2E 逐项比对 `GET /api/v1/investigations` 与列表 DOM 的行数、Finding 类型、格式化影响金额、比较口径、状态、评分及 `/analysis?run_id=` 与调查身份深链。测试按 Finding 标题定位以规避 TanStack 表格排序差异；整行 `data-href` 与批次/指标快照/分析运行查询身份比对。未发现页面值错配；既有隔离旅程继续验证“进入调查”及审核签发。`3660389e` 同一隔离大麦旅程 Playwright12/12通过，CI run `36310017180` attempt2 17/17 success（专属 investigation-e2e job也成功）。页面子项已关闭，但 Gate1完整路由证据、所有状态/视口矩阵、所有目标下钻及Gate5仍未完成。
 - 2026-09-27 接手会话两项治理动作：①根工作树遗留的 `AGENTS.md` 语言铁律（v1.4，用户 2026-09-26 要求全部交互/文档一律中文）此前只在 `codex/damai-logistics-data-audit` 工作树未提交，已迁入 main 合并为 v1.6（提交 `bf48319e`）；②codex 两个大麦分支全部提交经 `git cherry` 核验均已有 patch 等价物在 main，无需合并，分支保留。GitHub 曾一度 SSL 中断（本机网络正常、github.com 不可达、无代理配置），恢复后推送成功；推送失败须立即向用户报告原因，不得静默搁置。
 - 同轮质量：Web143/143、全隔离 Playwright9/9、verify19/19、矩阵159无意外；生产构建 UI 一致性/响应式/状态/导航/深链 E2E93/93；`make typecheck`通过；`make lint`零错误、1条既有 TanStack Table warning。TDD 中两次红灯均证明测试预期应按页面真实合同修正（摘要 KPI 布局与 MPM 文案前缀），没有通过删断言或改产品实现来迎合；修正后全套通过。
 - 2026-09-27 `/operations` 子项正式关闭：代码提交 `0f8d92cf` 经远端 README 自动截图提交合并后的 `main@8bd71798` CI run `36293915314`，17/17作业成功。修复切换分析上下文时旧报表值残留：新上下文选择事件立即清除旧概览、冻结信息并进入 loading，避免新报表下仍展示旧值；组件回归7/7通过。
@@ -31,14 +32,14 @@ applies_to: repository
 - `/operations` 同轮回归：Web143/143、经营 API38/38、`make lint` 0 error（保留既有 TanStack Table warning）、`make typecheck` 通过；M1、文档链接、plan views门禁通过。提交 `0f8d92cf` 推送时发现远端先到 README 截图自动提交 `27babc32`，已普通合并为 `8bd71798` 并保留双方历史。该SHA的 CI run `36293915314` 17/17 success。
 
 - Dashboard筛选检查点 `99991566`/CI `36279509026` success，文档 `d836a6ca`/CI `36279766191` success；`/statements` 逐值 E2E `78722e73` 与前置状态文档CI `36282388214`、`36281158908` 均已 success。`/analysis` 十指标按 FY2026 披露原文独立复算、API/UI逐值对齐通过；发现并修正DSO错误值（旧`0.3500`，正确`116.3898`天），补齐净利润增长、ROE、流动比率、自由现金流计算，并让不可用态显示合同具体原因。隔离verify19/19、GET矩阵159项（149预期200、10预期422、零意外）、浏览器9/9；工作台API11/11、Web142/142，类型与静态检查通过。提交 `bc8fa678` 已推送；同SHA GitHub CI run `36288403912` 的17/17作业全部 success，`/analysis` 子项可关闭。旧CI影响分析单例未复现：隔离目标单跑两次、模块3/3、CI集成等价批次267 passed/3 warnings、批后单跑通过；根因未知。
-- 本轮在 `/Users/qiming/workspace/FLOW/.worktrees/execution-convergence` 的唯一 `main` 工作树串行执行；所有队列项均按主线逐步提交。ORG-LEDGER `2c7d6eb4` / CI `36270782272` 17/17 success。UX 的 Dashboard、`/statements`、`/analysis`、`/operations`、`/metric-library`、`/reports`、`/data`子项均有同SHA CI证据；Gate 1仍未闭环：`/investigations`逐值审计、完整状态/视口/深链覆盖和Gate 5同SHA全链验收。
+- 本轮在 `/Users/qiming/workspace/FLOW/.worktrees/execution-convergence` 的唯一 `main` 工作树串行执行；所有队列项均按主线逐步提交。ORG-LEDGER `2c7d6eb4` / CI `36270782272` 17/17 success。UX 的 Dashboard、`/statements`、`/analysis`、`/operations`、`/metric-library`、`/reports`、`/data`、`/investigations`页面子项均已值级审计；Gate 1仍未闭环：完整路由覆盖表、所有状态/视口/下钻覆盖和Gate 5同SHA全链验收。
 - **当前路线图计数（唯一队列11项）**：已完成 1（ORG-LEDGER）、实际执行中 1（UX 全站验收）、排队 8、外部材料受限 1。第1项因提交 SHA 同 CI 全绿而关闭，第2项已成为唯一执行项；不并行开启其他工作包。
 - 只在 `main` 上做，禁止新建并行任务分支；不得同时开始下一项。用户已授权常规项目实施与验证，不再为日常测试、分析、文档或常规实现请求再次批准。既有全局安全红线仍有效：真实数据迁移/schema、删除/覆盖/恢复常驻库、密钥/CI 配置、公开部署等按 `AGENTS.md` 处理；尤其常驻 `flow` 中的测试批次偏差 `01a0dcdd-8245-7c17-99aa-fce91a8a7a57` 不得自行删除、回滚或切 latest。
 - **状态口径**：`进行中`=此刻确实有命令、审查或实现正在执行；`队首待启动`=当前第一项但未开工；`排队`=严格等待前项完成；`外部材料受限`=先按本手册执行主动恢复和替代方案，不是停工态。工作包 frontmatter 的 `active/blocked` 表示工作包生命周期或验收门槛，不覆盖路线图执行状态。
 - **ORG-LEDGER 的最新事实与安全边界**：工作包由 `9729dbc4`、具体三表 schema 提案由 `880f1b76` 推送；用户批准该准确方案由 `fc6e63a7` 记录。批准仅覆盖工作包列出的三表与对应迁移，不覆盖额外 schema、认证/RBAC 改造，也不授权在共享/常驻 DB 清理/初始化。可执行已批准迁移，但只在隔离数据库验证；不要对常驻库迁移或写入。
 - **ORG-LEDGER 最终验收**：发行包两次构建一致，31文件、manifest SHA `cbc7cccf924092ae7ca5f68eb8a797473cf6efcf31f4e91fbe22aa6f7758e513`；组织8/8/8、权限快照142条。11项企业/loader测试通过；隔离 CLI 首次full、重复full、business reset对账均正确（财务实际768、预算10752、经营实际1920、应收回款4800、快照12、成员8），事务回滚、租户隔离、审计追加保留通过。旧大麦 verify19/19、只读GET43/43、Playwright9/9；全量 API852、Web142、脚本107；合同、文档、lint、typecheck通过。提交 `2c7d6eb4`，CI run `36270782272` 17/17 success。仅获批三表迁移在隔离栈验证，常驻 `flow`/MinIO未触碰。
 - **遇到失败的统一处理**：保留原始日志和失败产物 → 定位根因并判别代码/数据/环境/外部输入 → 先运行最小重现 → 做最小修复或有记录的替代验证 → 重跑原失败项及相邻回归。禁止删断言、改预期值迎合实现、重写原始 oracle、用 synthetic 结果冒充真实验收。若原验收客观上不可完成，交付可复现的调查、替代结果、未满足项与重启条件；不能声称原验收通过。
-- **当前唯一下一动作**：依串行队列开始 `/investigations`：审阅已提交值级E2E的字段/格式/深链合同，确认 API→UI→Finding 来源值一致；只在 `damai-demo-iso` 复验，不提前做状态视口/Gate5。验收后同步本 work item、PROJECT_STATE、CURRENT_ROADMAP 与 HANDOFF，门禁、提交推送并核验准确SHA CI。报告中心初次CI403根因未知；若复现，抓 authorization audit reason、principal、企业/批次归属，只在隔离库复现，不削弱权限。CI smoke attempt1 `make stack-up`失败、attempt2同SHA通过，根因未知；若再现，保留完整 job log 并对照镜像拉取/compose健康日志，不改常驻栈。常驻Compose `flow`容器标签混合来源，当前禁止重启/重建。Gate1/Gate5全验收和同SHA CI绿前不得进入队列第3项。
+- **当前唯一下一动作**：依 UX 工作包 Gate 1，整理并逐条核验完整页面→API→已发布对象→源事实覆盖表，将 `/investigations` 加入本 SHA 的证据矩阵；随后按同一顺序补齐每个尚缺的路由值/缺失原因/真实下钻，再推进全部页面状态×视口矩阵和 Gate5全链验收。当前矩阵指出四个数据密集页五态×三视口已有61张归档，但其余目标交互路由的完整状态/视口证据仍不够；每次只处理覆盖表中下一条缺口。常驻Compose `flow`标签来源混杂，绝不重启/重建；验收只用隔离栈。Gate 1/Gate 5全验收和准确 SHA CI绿前不得进入队列第3项。
 - **每项汇报格式**：完整 11 项队列和计数；当前项与细分步骤；本轮完成证据（SHA、命令、结果）；实际问题/替代路径；下一项何时解锁和唯一下一动作。不要写“等待用户验证/批准”作为常规动作；只有触及明文安全红线的 schema 执行边界才须记录为精确批准门。
 
 ### 唯一串行 To-do 的逐项操作卡
