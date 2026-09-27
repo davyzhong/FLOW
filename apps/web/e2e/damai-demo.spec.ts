@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import { readFileSync } from "node:fs";
 import path from "node:path";
 
 import { expect, test, type Page } from "@playwright/test";
@@ -750,7 +751,11 @@ test("operations overview renders damai six-theme analysis", async ({ page }) =>
     })),
   ];
   expect(contexts).toHaveLength(9);
-  await expect(select.locator("option")).toHaveCount(9, { timeout: 15_000 });
+  // 下拉菜单还包含其他已导入财报；本测试逐项遍历 Damai 与公开经营期，不把总数写死。
+  await expect(select.locator("option")).toHaveCount(
+    reportList.reports.length + publicPeriodList.periods.length,
+    { timeout: 15_000 },
+  );
 
   let watchTarget: {
     selectorValue: string;
@@ -885,6 +890,70 @@ test("statements page lists damai synthetic reports", async ({ page }) => {
       }
     }
   }
+});
+
+test("public statement page anchor opens the matching original PDF", async ({ page }) => {
+  const pdfPath = path.resolve(
+    process.cwd(),
+    "docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2020_annual_results.pdf",
+  );
+  const pdfBytes = readFileSync(pdfPath);
+  const pdfSha256 = createHash("sha256").update(pdfBytes).digest("hex");
+  const listResponse = await page.request.get("/api/v1/statements");
+  expect(listResponse.ok()).toBeTruthy();
+  const reportList = (await listResponse.json()) as StatementReportList;
+  const report = reportList.reports.find(
+    (item) => item.stock_code === "9988.HK" && item.period_label === "FY2020",
+  );
+  expect(report, "隔离验收应装载与冻结原件对应的阿里巴巴 FY2020 财报").toBeDefined();
+  expect(report!.source_sha256).toBe(pdfSha256);
+
+  const uploadResponse = await page.request.post("/api/v1/statements/sources", {
+    multipart: {
+      workbook: {
+        name: "BABA_FY2020_annual_results.pdf",
+        mimeType: "application/pdf",
+        buffer: pdfBytes,
+      },
+    },
+  });
+  expect(uploadResponse.status()).toBe(201);
+  const uploadedSource = (await uploadResponse.json()) as { sha256: string };
+  expect(uploadedSource.sha256).toBe(pdfSha256);
+
+  const detailResponse = await page.request.get(`/api/v1/statements/${report!.id}`);
+  expect(detailResponse.ok()).toBeTruthy();
+  const detail = (await detailResponse.json()) as StatementReportDetail;
+  expect(detail.source_available).toBe(true);
+  expect(detail.source_sha256).toBe(pdfSha256);
+  const revenue = detail.sections
+    .find((section) => section.statement_type === "合并利润表")
+    ?.items.find((item) => item.item_name === "收入");
+  expect(revenue?.value_current).toBe("509711.0000");
+  expect(revenue?.page_number).toBe(23);
+  expect(revenue?.page_anchor).toBe("strong");
+
+  await page.goto(`/statements?report=${encodeURIComponent(report!.id)}`);
+  const activeTab = page
+    .getByRole("navigation", { name: "财报选择" })
+    .getByRole("button", { name: /阿里巴巴.*FY2020/ });
+  await expect(activeTab).toHaveAttribute("aria-pressed", "true");
+  const revenueRow = page.locator('[id="stmt-row-合并利润表-收入"]');
+  const sourceLink = revenueRow.getByRole("link", {
+    name: "打开原文 PDF 第 23 页（行名+数值同页）",
+  });
+  const contentPath = `/api/v1/statements/sources/${pdfSha256}/content`;
+  await expect(sourceLink).toHaveAttribute("href", `${contentPath}#page=23`);
+
+  const pdfResponse = await page.request.get(contentPath);
+  expect(pdfResponse.status()).toBe(200);
+  expect(pdfResponse.headers()["content-type"]).toContain("application/pdf");
+  expect(createHash("sha256").update(await pdfResponse.body()).digest("hex")).toBe(pdfSha256);
+
+  const downloadPromise = page.waitForEvent("download");
+  const [download] = await Promise.all([downloadPromise, sourceLink.click()]);
+  expect(download.url()).toContain(`${contentPath}#page=23`);
+  expect(download.suggestedFilename()).toBe("BABA_FY2020_annual_results.pdf");
 });
 
 test("four-question workbench loads damai report", async ({ page }) => {

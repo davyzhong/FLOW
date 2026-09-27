@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目尽调、优化与单 Agent 执行总交接
 doc_type: navigation
 status: current
-version: 5.26
+version: 5.27
 created_at: 2026-09-12
 updated_at: 2026-09-28
 owner: FLOW
@@ -18,7 +18,7 @@ applies_to: repository
 
 > **本节覆盖本文其余旧会话交接快照。** 旧章节保留历史证据，不可据其旧顺序领取任务。下一位 Agent 开始前先从 GitHub 同步 `main`，再读 `AGENTS.md`、`docs/00_start_here/PROJECT_STATE.md`、`docs/50_plans/CURRENT_ROADMAP.md` 和相应工作包。唯一任务顺序是路线图中的 11 项队列；本节只是对同一队列逐项提供执行手册，不构成第二条队列。
 
-**最新进度更正（2026-09-28，优先于下方旧接续点）：** 利润桥`87be90041c477d53f0cabc6718d504d190481103`/CI `36330119396`、状态同步`079a1b8cf6abfd62955fd659788f409d4f4968b9`/CI `36332650401`、依赖图`2fc1d955da0705e0e529046ab065855651c7a5cf`/CI `36338361782`、Operations管理关注`4d6cf4a5c0bd35a55fd6e6c94b5f785ba2f1bca2`/CI `36343826986`、Investigation批次身份`1256aae9613b215243b486e87b5bd645b51fac77`/CI `36348942178`均准确SHA17/17 success。最新隔离seed verify19/19、只读矩阵159项零意外、Playwright14/14、Web143/143、typecheck通过、lint零错误/一条既有warning。已验证图节点、经营关注、调查批次均可到达同身份目标。当前唯一下一步：验收财报页原文PDF链接和页内锚点；再完成其余安全真实下钻→全交互路由状态×390/1024/1440→Gate5。常驻`flow`不重启、重建、迁移或写入。
+**最新进度更正（2026-09-28，优先于下方旧接续点）：** 利润桥`87be90041c477d53f0cabc6718d504d190481103`/CI `36330119396`、状态同步`079a1b8cf6abfd62955fd659788f409d4f4968b9`/CI `36332650401`、依赖图`2fc1d955da0705e0e529046ab065855651c7a5cf`/CI `36338361782`、Operations管理关注`4d6cf4a5c0bd35a55fd6e6c94b5f785ba2f1bca2`/CI `36343826986`、Investigation批次身份`1256aae9613b215243b486e87b5bd645b51fac77`/CI `36348942178`均准确SHA17/17 success。Statements真实原件页锚链路已本地隔离验收：阿里FY2020财报深链选中正确，收入509711对应第23页strong锚；正式上传登记、API读取PDF SHA均与原件`82065040738c226229951aa1b31f05fc05657ad61a432a8ad2cfa67825391de4`一致，点击链接下载URL含`#page=23`。隔离seed verify19/19、只读矩阵159项零意外、Playwright15/15；Web143/143、typecheck/mypy/ruff、文档M1/链接/计划视图/脚本107通过，lint零错误/1条既有warning。当前本轮代码+状态文档尚待提交与准确SHA CI。唯一下一步：Reports及其他安全读取真实下钻，再完成全交互路由状态×390/1024/1440→Gate5。常驻`flow`不重启、重建、迁移或写入。
 
 **此前接续点（已由上方最新进度覆盖）：** 已完成Dashboard、Analysis/Investigation身份深链阶段。当前工作树与未提交项以 `git status` 为准；具体证据见路线图和UX Gate1记录。不得触碰常驻`flow`（Compose标签来源混杂）。
 
@@ -43,7 +43,7 @@ applies_to: repository
 - **ORG-LEDGER 的最新事实与安全边界**：工作包由 `9729dbc4`、具体三表 schema 提案由 `880f1b76` 推送；用户批准该准确方案由 `fc6e63a7` 记录。批准仅覆盖工作包列出的三表与对应迁移，不覆盖额外 schema、认证/RBAC 改造，也不授权在共享/常驻 DB 清理/初始化。可执行已批准迁移，但只在隔离数据库验证；不要对常驻库迁移或写入。
 - **ORG-LEDGER 最终验收**：发行包两次构建一致，31文件、manifest SHA `cbc7cccf924092ae7ca5f68eb8a797473cf6efcf31f4e91fbe22aa6f7758e513`；组织8/8/8、权限快照142条。11项企业/loader测试通过；隔离 CLI 首次full、重复full、business reset对账均正确（财务实际768、预算10752、经营实际1920、应收回款4800、快照12、成员8），事务回滚、租户隔离、审计追加保留通过。旧大麦 verify19/19、只读GET43/43、Playwright9/9；全量 API852、Web142、脚本107；合同、文档、lint、typecheck通过。提交 `2c7d6eb4`，CI run `36270782272` 17/17 success。仅获批三表迁移在隔离栈验证，常驻 `flow`/MinIO未触碰。
 - **遇到失败的统一处理**：保留原始日志和失败产物 → 定位根因并判别代码/数据/环境/外部输入 → 先运行最小重现 → 做最小修复或有记录的替代验证 → 重跑原失败项及相邻回归。禁止删断言、改预期值迎合实现、重写原始 oracle、用 synthetic 结果冒充真实验收。若原验收客观上不可完成，交付可复现的调查、替代结果、未满足项与重启条件；不能声称原验收通过。
-- **当前唯一下一动作**：验收财报页原文PDF链接及行项目页内锚点；之后依Gate1覆盖证据逐个盘点页面实际链接与目标API/对象身份，先查已有E2E，再只对缺少断言的安全读取下钻补测试；可能freeze的GET继续排除，变更旅程只在隔离环境。完成下钻后按全交互路由补状态×视口证据，随后Gate5全链同SHA验收。每阶段先同步状态文档、门禁、commit、立即push。常驻Compose `flow`标签来源混杂，绝不重启/重建/写入；Gate1/Gate5全验收和准确SHA CI绿前不得进入队列第3项。
+- **当前唯一下一动作**：先核对本轮代码/文档差异并通过文档门禁，提交推送Statements PDF页锚验收，再等待该准确SHA CI全绿。之后依Gate1覆盖证据逐个盘点Reports及其余页面链接与目标API/对象身份，先查已有E2E，再只对缺少断言的安全读取下钻补测试；可能freeze的GET继续排除，变更旅程只在隔离环境。完成下钻后按全交互路由补状态×视口证据，随后Gate5全链同SHA验收。每阶段先同步状态文档、门禁、commit、立即push。常驻Compose `flow`标签来源混杂，绝不重启/重建/写入；Gate1/Gate5全验收和准确SHA CI绿前不得进入队列第3项。
 - **每项汇报格式**：完整 11 项队列和计数；当前项与细分步骤；本轮完成证据（SHA、命令、结果）；实际问题/替代路径；下一项何时解锁和唯一下一动作。不要写“等待用户验证/批准”作为常规动作；只有触及明文安全红线的 schema 执行边界才须记录为精确批准门。
 
 ### 唯一串行 To-do 的逐项操作卡
