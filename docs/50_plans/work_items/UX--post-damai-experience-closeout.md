@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 5.9
+version: 5.10
 created_at: 2026-09-24
 updated_at: 2026-09-27
 owner: FLOW
@@ -14,13 +14,13 @@ applies_to: web-frontend
 
 # 大麦数据后的剩余体验收口
 
-## 经营分析概览 `/operations` API→源事实→UI 值级验收（2026-09-27；待提交级门禁）
+## 经营分析概览 `/operations` API→源事实→UI 值级验收（2026-09-27；已关闭）
 
 - 范围：大麦FY2025/FY2026完整财报和公开经营披露的7个公司/期间，共9个上下文。页面E2E逐项比较安全 GET API 返回与浏览器请求、六主题状态、指标精确值及显示值、来源期间/页码/哈希、不可用原因、指标库口径链接、管理关注方向/内容和焦点链接。
 - 发现并修复页面状态缺陷：用户切换报表/期间时旧 `overview` 会留在新上下文下，且请求失败时仍可能展示旧数。现在在上下文 change 事件立即清空 overview/freezeInfo 并切至 loading；组件测试覆盖延迟响应期间旧值消失、新值展示。组件回归7/7。
 - 隔离验证：`bash scripts/test_damai_demo_e2e.sh` 使用独立 Compose project/卷；verify19/19；只读可见性矩阵159条（149预期200、10个不支持组合预期422、意外0）；Playwright9/9，其中本项遍历9上下文。Web Vitest143/143；经营 API pytest38/38；`make lint` 零错误（1条既有 TanStack Table warning）；`make typecheck`通过。常驻`flow`数据库未连接或写入。
 - 验收脚本问题：首次复跑在初始上下文重复调用 `selectOption`，导致 `change` 清除 UI 但同值状态不会触发下一次 effect。按真实因果修正 E2E，不降低断言，之后全套隔离旅程9/9通过。
-- **当前交付状态：**代码已完成；本工作树待 M1、链接、路线图视图等文档门禁，随后提交推送并检查该确切 SHA 的 required CI。CI全绿后才关闭此页面子项。之后唯一页面步骤为 `/metric-library`；工作包 Gate 1/Gate 5仍未关闭。
+- **交付状态：**代码提交`0f8d92cf`；提交推送期间合并远端 README 自动截图提交`27babc32`，最终`main@8bd71798`。该确切SHA GitHub CI run `36293915314` 的17/17作业全绿；M1/链接/plan views均通过。`/operations`页面子项关闭；唯一下一页为`/metric-library`。整个 UX 工作包 Gate 1/Gate 5仍未关闭。
 
 ## 目标
 
