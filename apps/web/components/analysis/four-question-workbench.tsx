@@ -258,7 +258,9 @@ export function FourQuestionWorkbench({
                       {metric.available ? (
                         <strong>{metric.value}</strong>
                       ) : (
-                        <span className="workbench__muted">暂不可算（缺披露事实）</span>
+                        <span className="workbench__muted">
+                          暂不可算（{metric.unavailable_reason ?? "未提供不可用原因"}）
+                        </span>
                       )}
                     </li>
                   ))}

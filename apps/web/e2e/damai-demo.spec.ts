@@ -2,7 +2,12 @@ import { createHash } from "node:crypto";
 import path from "node:path";
 
 import { expect, test, type Page } from "@playwright/test";
-import type { DashboardResponse, StatementReportDetail, StatementReportList } from "../lib/api/client";
+import type {
+  DashboardResponse,
+  StatementReportDetail,
+  StatementReportList,
+  WorkbenchResponse,
+} from "../lib/api/client";
 
 // 大麦 synthetic 演示全旅程 E2E（Task C2）：
 // 真实隔离栈（compose.damai-isolated）+ 真实 seed + 真实浏览器，无 page mock。
@@ -322,7 +327,157 @@ test("four-question workbench loads damai report", async ({ page }) => {
     timeout: 15_000,
   });
   await expect(page.getByRole("heading", { name: "四问指标" })).toBeVisible();
-  expect(await page.locator(".workbench__question").count()).toBe(4);
+  const response = await page.request.get(`/api/v1/analysis/workbench/${value}`);
+  expect(response.ok()).toBeTruthy();
+  const body = (await response.json()) as WorkbenchResponse;
+  const statementResponse = await page.request.get(`/api/v1/statements/${value}`);
+  expect(statementResponse.ok()).toBeTruthy();
+  const statement = (await statementResponse.json()) as StatementReportDetail;
+
+  // 报告身份、四问及指标必须逐项来自本次真实大麦工作台 API，而不只是空壳渲染。
+  expect(body.report.report_id).toBe(value);
+  expect(body.report.company_name).toBe("大麦物流");
+  expect(body.questions).toHaveLength(4);
+  const allWorkbenchMetrics = body.questions.flatMap((question) => question.metrics);
+  expect(allWorkbenchMetrics).toHaveLength(10);
+  expect(
+    allWorkbenchMetrics.filter((metric) => metric.available),
+    "大麦 FY2026 财报披露了四问十项指标所需事实，十项都应可计算",
+  ).toHaveLength(10);
+
+  // 两个平均余额指标按字典口径，以财报原文的期初/期末余额和本期流量独立复算。
+  const statementLine = (statementType: string, itemName: string) => {
+    const section = statement.sections.find((candidate) => candidate.statement_type === statementType);
+    expect(section, `${statementType} 存在`).toBeDefined();
+    const line = section?.items.find((candidate) => candidate.item_name === itemName);
+    expect(line, `${statementType}/${itemName} 原文行存在`).toBeDefined();
+    return line!;
+  };
+  const requiredValue = (value: string | null | undefined, label: string) => {
+    expect(value, `${label} 在大麦 FY2026 披露中存在`).not.toBeNull();
+    return Number(value);
+  };
+  const revenueLine = statementLine("合并利润表", "营业收入");
+  const netProfitLine = statementLine(
+    "合并利润表",
+    "五、净利润（净亏损以“－”号填列）",
+  );
+  const revenue = requiredValue(revenueLine.value_current, "营业收入");
+  const revenuePrior = requiredValue(revenueLine.value_prior, "上期营业收入");
+  const netProfit = requiredValue(netProfitLine.value_current, "净利润");
+  const netProfitPrior = requiredValue(netProfitLine.value_prior, "上期净利润");
+  const grossProfit = requiredValue(statementLine("合并利润表", "毛利").value_current, "毛利");
+  const receivables = statementLine("合并资产负债表", "应收账款");
+  const totalAssets = statementLine("合并资产负债表", "资产总计");
+  const equity = statementLine("合并资产负债表", "所有者权益合计");
+  const currentAssets = statementLine("合并资产负债表", "流动资产合计");
+  const currentLiabilities = statementLine("合并资产负债表", "流动负债合计");
+  const totalLiabilities = statementLine("合并资产负债表", "负债合计");
+  const ocf = requiredValue(
+    statementLine("合并现金流量表", "经营活动产生的现金流量净额").value_current,
+    "经营活动现金流量净额",
+  );
+  const capex = requiredValue(
+    statementLine(
+      "合并现金流量表",
+      "购建固定资产、无形资产和其他长期资产支付的现金",
+    ).value_current,
+    "资本开支",
+  );
+  const expectedDso = (
+    (360 *
+      ((requiredValue(receivables.value_end, "期末应收账款") +
+        requiredValue(receivables.value_begin, "期初应收账款")) /
+        2)) /
+    revenue
+  ).toFixed(4);
+  const findMetric = (metricCode: string) =>
+    body.questions.flatMap((question) => question.metrics).find((metric) => metric.metric_code === metricCode);
+  expect(findMetric("dso_days")?.value, "DSO 要用 360 / 应收账款周转率（平均应收余额）").toBe(
+    expectedDso,
+  );
+  const expectedByMetric: Record<string, string> = {
+    revenue_growth: ((revenue - revenuePrior) / Math.abs(revenuePrior)).toFixed(4),
+    net_profit_growth: ((netProfit - netProfitPrior) / Math.abs(netProfitPrior)).toFixed(4),
+    gross_margin: (grossProfit / revenue).toFixed(4),
+    net_margin: (netProfit / revenue).toFixed(4),
+    roe: (
+      netProfit /
+      ((requiredValue(equity.value_end, "期末所有者权益") +
+        requiredValue(equity.value_begin, "期初所有者权益")) /
+        2)
+    ).toFixed(4),
+    debt_asset_ratio: (
+      requiredValue(totalLiabilities.value_end, "期末负债合计") /
+      requiredValue(totalAssets.value_end, "期末资产总计")
+    ).toFixed(4),
+    current_ratio: (
+      requiredValue(currentAssets.value_end, "期末流动资产") /
+      requiredValue(currentLiabilities.value_end, "期末流动负债")
+    ).toFixed(4),
+    dso_days: expectedDso,
+    ocf_net_profit_ratio: (ocf / netProfit).toFixed(4),
+    free_cash_flow: (ocf - capex).toFixed(4),
+  };
+  for (const [metricCode, expected] of Object.entries(expectedByMetric)) {
+    expect(findMetric(metricCode)?.value, `${metricCode} 与报表披露及指标字典复算值一致`).toBe(
+      expected,
+    );
+  }
+  await expect(page.locator(".workbench__identity a")).toHaveAttribute(
+    "href",
+    `/statements?report=${encodeURIComponent(body.report.report_id)}`,
+  );
+  await expect(page.locator(".workbench__identity")).toContainText(body.report.period_label);
+  await expect(page.locator(".workbench__identity")).toContainText(body.report.unit_note);
+
+  const questionSections = page.locator(".workbench__question");
+  await expect(questionSections).toHaveCount(body.questions.length);
+  for (const [questionIndex, question] of body.questions.entries()) {
+    const section = questionSections.nth(questionIndex);
+    await expect(section.locator("h3")).toHaveText(question.name);
+    const metricRows = section.locator("li");
+    await expect(metricRows).toHaveCount(question.metrics.length);
+    for (const [metricIndex, metric] of question.metrics.entries()) {
+      const row = metricRows.nth(metricIndex);
+      const codeLink = row.locator("a.workbench__metric-code");
+      await expect(codeLink).toHaveText(metric.metric_code);
+      await expect(codeLink).toHaveAttribute(
+        "href",
+        `/metric-library?focus=${encodeURIComponent(metric.metric_code)}`,
+      );
+      if (metric.available) {
+        expect(metric.value, `${question.key}/${metric.metric_code} API可用值`).not.toBeNull();
+        await expect(row.locator("strong")).toHaveText(metric.value!);
+        await expect(row.locator(".workbench__muted")).toHaveCount(0);
+      } else {
+        expect(metric.value, `${question.key}/${metric.metric_code} 不可用时不得携带数值`).toBeNull();
+        expect(metric.unavailable_reason, `${question.key}/${metric.metric_code} 应解释不可用原因`).toBeTruthy();
+        await expect(row.locator("strong")).toHaveCount(0);
+        await expect(row.locator(".workbench__muted")).toHaveText(
+          `暂不可算（${metric.unavailable_reason}）`,
+        );
+      }
+    }
+  }
+
+  // 管理关注不超过三条，提示方向、内容和指标定义深链须与同一 API 响应一致。
+  expect(body.management_watch.length).toBeLessThanOrEqual(3);
+  if (body.management_watch.length === 0) {
+    await expect(page.getByText("本期无确定性提示信号。")).toBeVisible();
+  } else {
+    const watchRows = page.getByRole("list", { name: "管理关注" }).locator("li");
+    await expect(watchRows).toHaveCount(body.management_watch.length);
+    for (const [watchIndex, watch] of body.management_watch.entries()) {
+      const row = watchRows.nth(watchIndex);
+      await expect(row).toHaveAttribute("data-direction", watch.direction);
+      await expect(row.locator("a")).toContainText(watch.message);
+      await expect(row.locator("a")).toHaveAttribute(
+        "href",
+        `/metric-library?focus=${encodeURIComponent(watch.metric_code)}`,
+      );
+    }
+  }
 });
 
 test("metric library switches to damai synthetic coverage", async ({ page }) => {

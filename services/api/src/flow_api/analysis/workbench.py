@@ -67,14 +67,20 @@ def _metric_value(
 _METRIC_CALCS = {
     "revenue": lambda f: _metric_value(f, "is.revenue", None),
     "revenue_growth": lambda f: _growth(f, "is.revenue"),
+    "net_profit_growth": lambda f: _growth(f, "is.net_profit"),
     "gross_margin": lambda f: _ratio_pct(f, "is.gross_profit", "is.revenue"),
     "net_margin": lambda f: _ratio_pct(f, "is.net_profit", "is.revenue"),
+    "roe": lambda f: _roe(f),
     "operating_margin": lambda f: _ratio_pct(f, "is.operating_profit", "is.revenue"),
-    "dso_days": lambda f: _metric_value(f, "bs.ar", "is.revenue"),
-    "total_asset_turnover": lambda f: _metric_value(f, "is.revenue", "bs.total_assets"),
+    "dso_days": lambda f: _dso_days(f),
+    "total_asset_turnover": lambda f: _ratio_to_average_balance(
+        f, "is.revenue", "bs.total_assets"
+    ),
     "debt_asset_ratio": lambda f: _ratio_pct(f, "bs.total_liab", "bs.total_assets"),
+    "current_ratio": lambda f: _current_ratio(f),
     "ocf": lambda f: _metric_value(f, "cf.ocf", None),
-    "ocf_net_profit_ratio": lambda f: _ratio_pct(f, "cf.ocf", "is.net_profit"),
+    "ocf_net_profit_ratio": lambda f: _ocf_net_profit_ratio(f),
+    "free_cash_flow": lambda f: _free_cash_flow(f),
 }
 
 
@@ -92,6 +98,75 @@ def _ratio_pct(facts: dict[str, Decimal], num_id: str, den_id: str) -> Decimal |
     if num is None or den is None or den == Decimal("0"):
         return None
     return (num / den).quantize(Decimal("0.0001"))
+
+
+def _average_balance(facts: dict[str, Decimal], item_id: str) -> Decimal | None:
+    """平均余额指标必须同时有本期与期初值；缺期初时不以期末余额冒充平均数。"""
+
+    current = facts.get(item_id)
+    prior = facts.get(f"{item_id}__prev")
+    if current is None or prior is None:
+        return None
+    return (current + prior) / Decimal("2")
+
+
+def _ratio_to_average_balance(
+    facts: dict[str, Decimal], flow_id: str, balance_id: str
+) -> Decimal | None:
+    flow = facts.get(flow_id)
+    balance = _average_balance(facts, balance_id)
+    if flow is None or balance is None or balance == Decimal("0"):
+        return None
+    return (flow / balance).quantize(Decimal("0.0001"))
+
+
+def _dso_days(facts: dict[str, Decimal]) -> Decimal | None:
+    """360 天口径：360 ÷（营业收入 ÷ 平均应收账款）。"""
+
+    revenue = facts.get("is.revenue")
+    average_receivables = _average_balance(facts, "bs.ar")
+    if revenue is None or revenue <= Decimal("0") or average_receivables is None:
+        return None
+    return (
+        Decimal("360") * average_receivables / revenue
+    ).quantize(Decimal("0.0001"))
+
+
+def _roe(facts: dict[str, Decimal]) -> Decimal | None:
+    net_profit = facts.get("is.net_profit")
+    average_equity = _average_balance(facts, "bs.equity")
+    if net_profit is None or average_equity is None or average_equity <= Decimal("0"):
+        return None
+    return (net_profit / average_equity).quantize(Decimal("0.0001"))
+
+
+def _current_ratio(facts: dict[str, Decimal]) -> Decimal | None:
+    current_assets = facts.get("bs.current_assets")
+    current_liabilities = facts.get("bs.current_liab")
+    if (
+        current_assets is None
+        or current_liabilities is None
+        or current_assets < Decimal("0")
+        or current_liabilities <= Decimal("0")
+    ):
+        return None
+    return (current_assets / current_liabilities).quantize(Decimal("0.0001"))
+
+
+def _ocf_net_profit_ratio(facts: dict[str, Decimal]) -> Decimal | None:
+    ocf = facts.get("cf.ocf")
+    net_profit = facts.get("is.net_profit")
+    if ocf is None or net_profit is None or net_profit <= Decimal("0"):
+        return None
+    return (ocf / net_profit).quantize(Decimal("0.0001"))
+
+
+def _free_cash_flow(facts: dict[str, Decimal]) -> Decimal | None:
+    ocf = facts.get("cf.ocf")
+    capex = facts.get("cf.capex")
+    if ocf is None or capex is None:
+        return None
+    return (ocf - capex).quantize(Decimal("0.0001"))
 
 
 def management_watch(facts: dict[str, Decimal]) -> list[dict[str, str]]:
@@ -239,8 +314,10 @@ def build_four_question_workbench(
             }
             if value is not None:
                 item["value"] = str(value)
-            if not entry.get("unavailable_when"):
-                item["unavailable_reason"] = entry.get("metric_code")
+            else:
+                item["unavailable_reason"] = (
+                    entry.get("unavailable_when") or "依赖事实缺失或计算前提不满足"
+                )
             metric_items.append(item)
         questions.append(
             {

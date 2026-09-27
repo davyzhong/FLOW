@@ -37,7 +37,11 @@ const WORKBENCH = {
       name: "增长",
       metrics: [
         { metric_code: "revenue", available: true, value: "500.0000" },
-        { metric_code: "revenue_growth", available: false },
+        {
+          metric_code: "revenue_growth",
+          available: false,
+          unavailable_reason: "上年同期收入缺失或基数为零",
+        },
       ],
     },
     {
@@ -82,7 +86,9 @@ describe("FourQuestionWorkbench", () => {
     expect(screen.getByText("管理关注（≤3 条，提示复核）")).toBeTruthy();
     expect(screen.getByText(/净利润现金含量 0.6000/)).toBeTruthy();
     // 不可用指标诚实降级
-    expect(screen.getByText("暂不可算（缺披露事实）")).toBeTruthy();
+    expect(
+      screen.getByText("暂不可算（上年同期收入缺失或基数为零）"),
+    ).toBeTruthy();
   });
 
 });
