@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 5.26
+version: 5.27
 created_at: 2026-09-24
 updated_at: 2026-09-28
 owner: FLOW
@@ -14,15 +14,22 @@ applies_to: web-frontend
 
 # 大麦数据后的剩余体验收口
 
-> 2026-09-28 最新进度：利润桥`87be90041c477d53f0cabc6718d504d190481103`/CI `36330119396`、状态同步`079a1b8cf6abfd62955fd659788f409d4f4968b9`/CI `36332650401`、图谱`2fc1d955da0705e0e529046ab065855651c7a5cf`/CI `36338361782`、Operations关注`4d6cf4a5c0bd35a55fd6e6c94b5f785ba2f1bca2`/CI `36343826986`、Investigation批次身份`1256aae9613b215243b486e87b5bd645b51fac77`/CI `36348942178`均准确SHA17/17成功。新Statements原件页锚验收本地通过：真实阿里FY2020报告收入509711对应PDF第23页strong锚，原件和源登记/读取SHA一致，实际下载URL带`#page=23`；隔离verify19/19、只读矩阵159零意外、Playwright15/15；Web143/143、typecheck/mypy/ruff和文档门禁/脚本107通过，lint零错误/1条既有warning。代码和状态文档待提交与同SHA CI。下一步：Reports及其他安全读取下钻，再做状态×视口矩阵及Gate5。工作包仍active。
+> 2026-09-28 最新进度：Dashboard利润桥`87be9004`/CI `36330119396`、图谱`2fc1d955`/CI `36338361782`、Operations关注`4d6cf4a5`/CI `36343826986`、Investigation批次身份`1256aae9`/CI `36348942178`、Statements原件页锚`abbcc8cbf5231e74d5223aab9d071e4e6e863fd4`/CI `36354951874`均准确SHA 17/17成功。Statements隔离真实阿里FY2020原件验收：收入509711对应PDF第23页strong锚；报告、上传登记和读取内容SHA一致，点击实际下载URL保留`#page=23`；verify19/19、只读矩阵159零意外、Playwright15/15；Web143/143、typecheck/mypy/ruff、文档/链接/计划门禁及脚本107通过，lint零错误/1条既有warning。Reports财报→Statements、经营快照→Operations的安全深链已在既有真实E2E中点击、验证到达页与身份；冻结/渲染GET会写快照，明确不当作安全只读深链。**当前唯一下一步：盘点并补足全交互路由适用状态×390/1024/1440矩阵，随后Gate5同SHA全链验收。**工作包仍active，Gate1/Gate5未关闭。
 
-## Statements 真实原件页锚下钻（2026-09-28；本地验收通过，CI待提交）
+## Reports 安全读取深链核对（2026-09-28；基于已交付E2E复核）
+
+- `reports center mirrors api rows and values without mutation` 真实隔离旅程已点击财报列表“查看分析”链接，核对 URL `?report={id}` 与 Statements 选中公司/期间一致；并点击经营快照链接，核对 Operations 选择器定位相同 `statement_report_id`。
+- 该测试还逐行核对报告、经营快照、发布快照与对应 API 元数据。正式产物下载的存储 SHA 另由独立隔离测试校验。
+- 客观报告 HTML 预览端点会调用 `_freeze_or_error` 并可能新增冻结快照；虽为 GET，按实际调用链判定为有写副作用，排除于安全只读深链点击，不以 HTTP 方法推断安全性。
+- **阶段状态：**Reports 范围内安全真实深链已有有效测试，不重复实现；Statements原件锚代码已由`abbcc8cb`/CI `36354951874` 17/17关闭。继续全交互路由适用状态×视口矩阵盘点与补验。
+
+## Statements 真实原件页锚下钻（2026-09-28；已由准确SHA CI关闭）
 
 - 在隔离脚本中额外导入一份原件与 P5 抽取 YAML 一致的阿里FY2020年报；原文件位于 `docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2020_annual_results.pdf`，脚本只向 `damai-demo-iso` 隔离数据库写入财报，不改动原件或常驻库。
 - Playwright通过正式 `/api/v1/statements/sources` 上传接口登记原PDF；核对报告`source_sha256`、上传登记SHA、读取回来的PDF SHA三者相同。财报深链`?report={id}`必须选中阿里FY2020；收入509711与答案集第23页`strong`页锚一致；行项目链接点击后下载URL保留`#page=23`且原件文件名正确。
 - 隔离验收：`bash scripts/test_damai_demo_e2e.sh`，大麦verify19/19、只读路由矩阵159项（149预期200、10预期422、意外0）、Playwright15/15。另`make typecheck`、`make lint`（零错误，1既有TanStack警告）、`make test-web`（143/143）、API mypy/ruff、M1、链接/计划视图门禁、脚本测试107/107通过。
 - 验收期间发现经营上下文E2E将selector总数固定为9；真实加入FY2020后为10，已改成按API报告数+公开期间数校验，不限制真实页面列表。PDF在Playwright无头浏览器表现为下载事件而非popup，断言改为验证下载URL和文件名；产品仍返回`application/pdf`和`content-disposition: inline`。
-- **阶段状态：**PDF与页锚链路本地真实验收通过；本次代码和状态记录需同一提交，提交后的准确SHA CI完成后关闭本子项。UX Gate1/Gate5仍未关闭。下一项为Reports及其他安全读取深链。
+- **阶段状态：**PDF与页锚链路真实隔离验收和准确SHA CI均通过；`abbcc8cb`对应run `36354951874` 17/17 success。UX Gate1/Gate5仍未关闭。下一项为全交互路由适用状态×390/1024/1440矩阵盘点与补验。
 
 ## Investigation 批次身份真实下钻（2026-09-28；已关闭）
 

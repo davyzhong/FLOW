@@ -3,14 +3,14 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目尽调、优化与单 Agent 执行总交接
 doc_type: navigation
 status: current
-version: 5.27
+version: 5.28
 created_at: 2026-09-12
 updated_at: 2026-09-28
 owner: FLOW
 applies_to: repository
 ---
 
-# FLOW 项目尽调、优化与单 Agent 执行总交接｜2026-09-27 更新
+# FLOW 项目尽调、优化与单 Agent 执行总交接｜2026-09-28 更新
 
 > 本页是下一位单一 Agent 的工作入口，整合了多 Agent 执行审计、R1 修复复核、竞品与方法论研究、工程收口计划和后续产品优化建议。它负责说明“现在在哪里、还要查什么、先改什么、怎样证明完成”；项目状态仍以 [PROJECT_STATE](docs/00_start_here/PROJECT_STATE.md) 为唯一事实源，任务顺序仍以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为唯一执行入口。
 
@@ -18,7 +18,7 @@ applies_to: repository
 
 > **本节覆盖本文其余旧会话交接快照。** 旧章节保留历史证据，不可据其旧顺序领取任务。下一位 Agent 开始前先从 GitHub 同步 `main`，再读 `AGENTS.md`、`docs/00_start_here/PROJECT_STATE.md`、`docs/50_plans/CURRENT_ROADMAP.md` 和相应工作包。唯一任务顺序是路线图中的 11 项队列；本节只是对同一队列逐项提供执行手册，不构成第二条队列。
 
-**最新进度更正（2026-09-28，优先于下方旧接续点）：** 利润桥`87be90041c477d53f0cabc6718d504d190481103`/CI `36330119396`、状态同步`079a1b8cf6abfd62955fd659788f409d4f4968b9`/CI `36332650401`、依赖图`2fc1d955da0705e0e529046ab065855651c7a5cf`/CI `36338361782`、Operations管理关注`4d6cf4a5c0bd35a55fd6e6c94b5f785ba2f1bca2`/CI `36343826986`、Investigation批次身份`1256aae9613b215243b486e87b5bd645b51fac77`/CI `36348942178`均准确SHA17/17 success。Statements真实原件页锚链路已本地隔离验收：阿里FY2020财报深链选中正确，收入509711对应第23页strong锚；正式上传登记、API读取PDF SHA均与原件`82065040738c226229951aa1b31f05fc05657ad61a432a8ad2cfa67825391de4`一致，点击链接下载URL含`#page=23`。隔离seed verify19/19、只读矩阵159项零意外、Playwright15/15；Web143/143、typecheck/mypy/ruff、文档M1/链接/计划视图/脚本107通过，lint零错误/1条既有warning。当前本轮代码+状态文档尚待提交与准确SHA CI。唯一下一步：Reports及其他安全读取真实下钻，再完成全交互路由状态×390/1024/1440→Gate5。常驻`flow`不重启、重建、迁移或写入。
+**最新进度更正（2026-09-28，优先于下方旧接续点）：** 利润桥`87be9004`/CI `36330119396`、依赖图`2fc1d955`/CI `36338361782`、Operations管理关注`4d6cf4a5`/CI `36343826986`、Investigation批次身份`1256aae9`/CI `36348942178`、Statements真实原件页锚`abbcc8cbf5231e74d5223aab9d071e4e6e863fd4`/CI `36354951874`均准确SHA 17/17 success。Statements隔离seed verify19/19、只读矩阵159项零意外、Playwright15/15；阿里FY2020原件SHA、正式上传登记和API读取SHA一致，收入509711对应PDF第23页strong锚，实际下载URL含`#page=23`。Web143/143、typecheck/mypy/ruff、文档M1/链接/计划视图/脚本107通过，lint零错误/1条既有warning。Reports财报→Statements、经营快照→Operations深链已有真实点击验收；会冻结/渲染快照的GET排除安全只读点击。当前唯一下一步：盘点并补齐全交互路由适用状态×390/1024/1440矩阵，之后Gate5同SHA全链验收。常驻`flow`不重启、重建、迁移或写入。
 
 **此前接续点（已由上方最新进度覆盖）：** 已完成Dashboard、Analysis/Investigation身份深链阶段。当前工作树与未提交项以 `git status` 为准；具体证据见路线图和UX Gate1记录。不得触碰常驻`flow`（Compose标签来源混杂）。
 

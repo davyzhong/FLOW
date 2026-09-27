@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 5.40
+version: 5.41
 created_at: 2026-09-12
 updated_at: 2026-09-28
 owner: FLOW
@@ -17,7 +17,7 @@ superseded_by: null
 
 # 当前路线图（唯一主线）
 
-> 2026-09-28 最新更正：利润桥`87be90041c477d53f0cabc6718d504d190481103`/CI `36330119396`、状态同步`079a1b8cf6abfd62955fd659788f409d4f4968b9`/CI `36332650401`、图谱`2fc1d955da0705e0e529046ab065855651c7a5cf`/CI `36338361782`、Operations关注`4d6cf4a5c0bd35a55fd6e6c94b5f785ba2f1bca2`/CI `36343826986`、Investigation批次身份`1256aae9613b215243b486e87b5bd645b51fac77`/CI `36348942178`均准确SHA 17/17成功。新增财报原件页锚阶段本地验证：隔离大麦verify19/19、只读GET矩阵159项零意外、Playwright15/15；真实阿里FY2020 PDF SHA`82065040738c226229951aa1b31f05fc05657ad61a432a8ad2cfa67825391de4`、收入509711页锚第23页strong、登记后内容SHA一致且点击下载URL携带`#page=23`。Web143/143、typecheck、mypy/ruff通过、lint零错误（仅既有warning）；此阶段代码与状态文档待同一提交及准确SHA CI。下一步核验Reports及其他安全读取深链→全交互路由状态×390/1024/1440→Gate5。UX Gate1/Gate5仍未关闭；常驻`flow`不重启/重建/写入。
+> 2026-09-28 最新更正：利润桥`87be90041c477d53f0cabc6718d504d190481103`/CI `36330119396`、状态同步`079a1b8cf6abfd62955fd659788f409d4f4968b9`/CI `36332650401`、图谱`2fc1d955da0705e0e529046ab065855651c7a5cf`/CI `36338361782`、Operations关注`4d6cf4a5c0bd35a55fd6e6c94b5f785ba2f1bca2`/CI `36343826986`、Investigation批次身份`1256aae9613b215243b486e87b5bd645b51fac77`/CI `36348942178`、Statements真实原件页锚`abbcc8cbf5231e74d5223aab9d071e4e6e863fd4`/CI `36354951874`均准确SHA 17/17成功。Statements隔离大麦verify19/19、只读GET矩阵159项零意外、Playwright15/15；阿里FY2020 PDF SHA`82065040738c226229951aa1b31f05fc05657ad61a432a8ad2cfa67825391de4`、收入509711页锚第23页strong、登记/读取内容SHA一致且下载URL保留`#page=23`。Web143/143、typecheck、mypy/ruff通过、lint零错误（仅既有warning）。Reports真实财报→Statements与经营快照→Operations深链已有点击验收；冻结/渲染类GET经调用链会写快照，不作为安全只读深链点击。下一步：盘点并补足剩余全交互路由适用状态×390/1024/1440证据→Gate5同SHA全链验收。UX Gate1/Gate5仍未关闭；常驻`flow`不重启/重建/写入。
 
 > 2026-09-27 最新进度（优先于下方历史快照）：八个业务页值级子项已完成。Dashboard真实下钻修复已由 `e03a1755` / CI run `36319686868` 同SHA 17/17 success。新一轮隔离验收扩展Analysis/Investigation链接身份：四问指标→指标库、财报身份→对应财报、Finding→同一分析运行→指标快照报告；verify19/19、GET矩阵159项（149×200、10×预期422、零意外）、浏览器13/13；生产E2E94/94、Web143/143、lint/typecheck通过。代码测试尚未提交/同SHA CI。覆盖与剩余链接见[Gate 1覆盖证据](../60_delivery/verification/2026-09-26--damai-visibility-gate1-v1.md)。唯一执行项仍是 UX：先同步文档、门禁、提交推送和同SHA CI，再逐项补剩余安全下钻→状态×390/1024/1440视口矩阵→Gate5最终全链同SHA验收。常驻`flow` Compose来源标签混杂，不得重启、重建或写入。更早页面子项进度只作历史，不代表当前执行位置。
 
@@ -56,12 +56,12 @@ superseded_by: null
 
 ## 唯一完整 To-do 与执行队列（严格串行）
 
-2026-09-28 更正：第2项仍是唯一active。利润桥、文档同步、图谱、Operations、Investigation阶段准确SHA CI均17/17成功；Statements真实原件阶段已本地全绿（隔离15/15），本轮代码/文档提交对应CI待启动。UX后续顺序：Reports及其他安全读取目标真实深链→全交互路由状态×390/1024/1440矩阵→Gate5同SHA全链验收。详细证据以工作包及Gate1覆盖记录为准。
+2026-09-28 更正：第2项仍是唯一active。Statements真实原件页锚提交`abbcc8cb`对应CI `36354951874`准确SHA 17/17成功；Reports中财报/经营报告两个只读深链已由真实E2E点击并验证，冻结/渲染类GET明确排除。UX后续顺序：全交互路由适用状态×390/1024/1440矩阵盘点与补验→Gate5同SHA全链验收。详细证据以工作包及Gate1覆盖记录为准。
 
-截至 2026-09-28：**11项，已完成1项，实际执行中1项，排队8项（其中1项受外部材料限制）**。当前唯一执行项第2项UX全站验收。Dashboard、图谱、Operations、Investigation身份深链已有准确SHA CI全绿；Statements真实PDF页锚本地隔离验证15/15、verify19/19、159项只读矩阵零意外、Web143/143/typecheck/mypy/ruff全绿，文档/脚本门禁通过，lint零错误/一既有warning。其代码与证据文档提交及准确SHA CI待完成。之后继续Reports等安全读取深链→状态×视口→Gate5。常驻`flow`不写入/清理/重启/重建。
+截至 2026-09-28：**11项，已完成1项，实际执行中1项，排队8项（其中1项受外部材料限制）**。当前唯一执行项第2项UX全站验收。Statements真实PDF页锚已按准确SHA `abbcc8cb`/CI `36354951874` 17/17关闭本阶段；隔离验证Playwright15/15、verify19/19、159项只读矩阵零意外，Web143/143、typecheck/mypy/ruff、文档/脚本门禁通过，lint零错误/一既有warning。Reports安全只读跨页深链已有真实点击E2E，快照冻结/渲染类GET因有写副作用而排除。接下来唯一执行步骤是盘点并补足全交互路由适用状态×390/1024/1440覆盖，再Gate5。常驻`flow`不写入/清理/重启/重建。
 
 1. **[完成] 企业组织建制与经营账套初始化包**（工作包见状态表2c）：提交 `2c7d6eb4`，CI run `36270782272` 的17/17 jobs success。31文件发行包稳定 manifest SHA `cbc7cccf…e513`；隔离 `full` 首次/重复、`business` 重置及回滚/租户隔离通过；全量 API852、Web142、脚本107、verify19/19、只读 GET43/43、Playwright9/9，合同/文档/lint/typecheck均通过。仅三表迁移在隔离栈验证，未触碰常驻库。
-2. **[进行中] UX 可见性与全站验收关闭**（工作包见状态表2b）：八个业务页值级子项、159项安全GET基线和已通过深链均保留为证据。Dashboard、指标依赖图、Operations管理关注、Investigation批次身份深链均已由隔离真实浏览器验证且准确SHA CI17/17成功。Statements原件页锚阶段已用阿里FY2020公开报告：正式登记原PDF、报告深链选中、收入509711页码23 strong、读取PDF SHA与原件一致、点击下载URL保留`#page=23`；隔离Playwright15/15、verify19/19、GET矩阵159零意外、本地Web143/143/typecheck/mypy/ruff与文档门禁通过，lint零错误/一既有warning。当前代码+状态记录待commit/push及准确SHA CI。之后顺序：Reports及其他安全读取深链→所有交互路由适用状态×390/1024/1440矩阵→Gate5最终同SHA全链验收。常驻`flow`不写入/清理/重启/重建；不以8页完成或159项GET单独宣布Gate1完成。
+2. **[进行中] UX 可见性与全站验收关闭**（工作包见状态表2b）：八个业务页值级子项、159项安全GET基线和已通过深链均保留为证据。Dashboard、指标依赖图、Operations管理关注、Investigation批次身份深链均已由隔离真实浏览器验证且准确SHA CI17/17成功。Statements原件页锚使用阿里FY2020公开报告：正式登记原PDF、报告深链选中、收入509711页码23 strong、登记/读取PDF SHA与原件一致、点击下载URL保留`#page=23`；提交`abbcc8cb`准确SHA CI run `36354951874` 17/17 success，隔离Playwright15/15、verify19/19、GET矩阵159零意外，Web143/143/typecheck/mypy/ruff与文档/脚本门禁通过，lint零错误/一既有warning。Reports财报→Statements、经营快照→Operations已有真实点击深链测试。冻结/渲染类GET有写快照副作用，排除在安全读取点击范围外。下一步：全交互路由适用状态×390/1024/1440矩阵盘点与补验→Gate5最终同SHA全链验收。常驻`flow`不写入/清理/重启/重建；不以8页完成或159项GET单独宣布Gate1完成。
 
 3. **[排队] 公开财报 C 级归因、原件复核与抽取修订**（工作包见状态表3）：处理已确认42项异常后的109项口径疑点、JDL 200 格原件复核、抽取器修订；保留原始值及证据，任何结论可追溯。
 4. **[排队] U04 解析器适配与独立留出验证**（工作包见状态表1'）：这本身是可执行的工程任务，不再误标为阻塞。支持「合并及公司」标题与页码区间参数化；旧三样本回归；对已冻结的小米2026H1、阿里FY2027Q1独立首跑，首跑前不得调参。若遇到输入缺项，主动检查已冻结材料并完成可复现的替代核验记录。
