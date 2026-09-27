@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 5.10
+version: 5.11
 created_at: 2026-09-24
 updated_at: 2026-09-27
 owner: FLOW
@@ -13,6 +13,14 @@ applies_to: web-frontend
 ---
 
 # 大麦数据后的剩余体验收口
+
+## 指标库 `/metric-library` API→配置→UI 值级验收（2026-09-27；代码验收完成，待同 SHA CI）
+
+- 范围：逐项读取浏览器实际请求与页面 DOM，并与 `/api/v1/metric-library` 版本化字典及覆盖接口对账。通用/物流指标卡核验字段包括名称、公式/单位、时间行为、CAS/IFRS、口径/基准/勾稽、来源、执行类型、依赖、维度/分解、迁移、entry ID/修订入口和 MPM 信息；另逐条核验行业参考包、关系、CAS↔IFRS 映射、会计科目、准则、分录模板与治理事件。
+- 公开与大麦覆盖接口分别和对应页面核对元数据/来源说明、汇总 KPI、快照标题及报告深链，并遍历 API 返回的每个快照×指标单元格核验页面显示值、缺失原因及 title。端点所用配置来自 `config/metrics/p5_metric_coverage_v1.yaml` 与 `config/metrics/damai_demo_metric_coverage_v1.yaml`；本轮是接口/页面展示一致性验收，不声称独立重算或裁定每项公开财务事实。
+- 隔离大麦旅程：`bash scripts/test_damai_demo_e2e.sh`，verify19/19；只读矩阵159项（149预期200、10预期422、意外0）；Playwright9/9。Web Vitest143/143；生产构建导航/状态/响应式/深链 E2E93/93；`make typecheck`通过；`make lint`零错误、一条既有 TanStack Table warning。测试只使用专属隔离 Compose 卷，没有连接或写入常驻数据库；未修改指标源配置或产品实现。
+- TDD 中两次红灯均来自测试断言未贴合真实页面合同：汇总 KPI foot 布局和 MPM 文案前缀；按已渲染 DOM 修正预期后，全套断言通过，没有删减覆盖或放宽断言。未发现本页 API/UI 值不一致。
+- **交付状态：**本轮只扩充 `apps/web/e2e/damai-demo.spec.ts` 并同步状态文档；文档 M1/链接/plan views、提交推送和该准确 SHA 的 required CI 尚待执行。本页在准确 SHA CI 全绿前不标记关闭；绿后唯一下一页为 `/reports`。UX Gate 1/Gate 5仍未关闭。
 
 ## 经营分析概览 `/operations` API→源事实→UI 值级验收（2026-09-27；已关闭）
 

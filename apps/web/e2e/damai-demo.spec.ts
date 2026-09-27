@@ -4,6 +4,9 @@ import path from "node:path";
 import { expect, test, type Page } from "@playwright/test";
 import type {
   DashboardResponse,
+  MetricCoverage,
+  MetricGovernanceEventList,
+  MetricLibrary,
   OperationsOverview,
   PublicOperatingPeriodList,
   StatementReportDetail,
@@ -28,6 +31,234 @@ const DAMAI_ORG = "国际供应链事业部";
 const DAMAI_SEGMENT = "电商平台客户";
 const DAMAI_PRODUCT = "跨境标准包裹";
 const DAMAI_REGION = "华东区";
+
+const COVERAGE_COMPANY_NAMES: Record<string, string> = {
+  alibaba_9988: "阿里巴巴",
+  cainiao: "菜鸟",
+  damai_syn: "大麦物流",
+  jd_logistics_2618: "京东物流",
+  sf_002352: "顺丰控股",
+  tencent_0700: "腾讯控股",
+};
+
+async function expectMetricCoverageMatchesApi(page: Page, coverage: MetricCoverage) {
+  const matrix = page.locator("section[aria-label='指标覆盖矩阵']");
+  const synthetic = coverage.synthetic === true;
+  await expect(matrix.getByRole("heading", { name: "指标覆盖矩阵" })).toBeVisible();
+  await expect(matrix).toContainText(synthetic ? "synthetic 演示 · 大麦物流" : "真实财报 · 反向解析");
+  await expect(matrix).toContainText(coverage.title);
+  await expect(matrix).toContainText(coverage.dataset_id);
+  await expect(matrix).toContainText(coverage.facts_source);
+  await expect(matrix).toContainText(coverage.alias_map);
+  await expect(matrix).toContainText(coverage.generator);
+  await expect(matrix.locator(".ml-coverage__notes li")).toHaveText(coverage.caliber_notes);
+
+  const table = matrix.locator("table.ml-cov");
+  const headers = table.locator("thead tr th");
+  await expect(headers).toHaveCount(coverage.snapshots.length + 1);
+  const totalCells = coverage.snapshots.reduce((sum, snapshot) => sum + snapshot.total, 0);
+  const computableCells = coverage.snapshots.reduce((sum, snapshot) => sum + snapshot.computable, 0);
+  const companyCount = new Set(coverage.snapshots.map((snapshot) => snapshot.company)).size;
+  const kpiCards = matrix.getByRole("list", { name: "覆盖矩阵速览" }).locator(".ml-kpi");
+  const kpis = kpiCards.locator(".ml-kpi__value");
+  await expect(kpis.nth(0)).toContainText(String(coverage.snapshots.length));
+  await expect(kpiCards.nth(0).locator(".ml-kpi__foot")).toContainText(`${companyCount} 家公司`);
+  await expect(kpis.nth(1)).toContainText(String(coverage.metrics.length));
+  await expect(kpis.nth(2)).toContainText(String(Math.round((computableCells / totalCells) * 100)));
+  await expect(kpiCards.nth(2).locator(".ml-kpi__foot")).toContainText(`${computableCells}/${totalCells}`);
+  const best = [...coverage.snapshots].sort(
+    (left, right) => right.computable / right.total - left.computable / left.total,
+  )[0];
+  if (best) {
+    await expect(kpis.nth(3)).toContainText(`${best.computable}/${best.total}`);
+    await expect(kpiCards.nth(3).locator(".ml-kpi__foot")).toContainText(best.period);
+    await expect(kpiCards.nth(3).locator(".ml-kpi__foot")).toContainText(
+      COVERAGE_COMPANY_NAMES[best.company] ?? best.company,
+    );
+  }
+  await expect(kpis.nth(4)).toContainText(String(totalCells - computableCells));
+
+  for (const [snapshotIndex, snapshot] of coverage.snapshots.entries()) {
+    const header = headers.nth(snapshotIndex + 1);
+    const companyName = COVERAGE_COMPANY_NAMES[snapshot.company] ?? snapshot.company;
+    await expect(header).toContainText(companyName);
+    await expect(header).toContainText(snapshot.period);
+    await expect(header).toContainText(`${snapshot.computable}/${snapshot.total}`);
+    if (snapshot.report_id) {
+      await expect(header.getByRole("link")).toHaveAttribute(
+        "href",
+        `/statements?report=${encodeURIComponent(snapshot.report_id)}`,
+      );
+    } else {
+      await expect(header.getByRole("link")).toHaveCount(0);
+    }
+  }
+
+  const rows = table.locator("tbody tr");
+  await expect(rows).toHaveCount(coverage.metrics.length + 1);
+  for (const [metricIndex, metric] of coverage.metrics.entries()) {
+    const row = rows.nth(metricIndex);
+    await expect(row.locator("th[scope='row']")).toContainText(metric.metric_code);
+    await expect(row.locator("th[scope='row']")).toContainText(metric.name);
+    if (metric.unit) await expect(row.locator("th[scope='row']")).toContainText(metric.unit);
+    for (const [snapshotIndex, snapshot] of coverage.snapshots.entries()) {
+      const cell = metric.cells[`${snapshot.company} ${snapshot.period}`];
+      const rendered = row.locator("td").nth(snapshotIndex);
+      if (!cell || cell.display === null || cell.display === undefined) {
+        await expect(rendered).toContainText(`缺 ${cell?.missing ?? "—"}`);
+        if (cell?.missing) await expect(rendered).toHaveAttribute("title", `缺口：${cell.missing}`);
+      } else {
+        await expect(rendered).toHaveText(cell.display);
+      }
+    }
+  }
+}
+
+const METRIC_TIME_BEHAVIOR_LABELS: Record<string, string> = {
+  period_flow: "期间流量",
+  point_balance: "时点余额",
+  average_balance: "平均余额",
+};
+
+async function expectMetricCardsMatchApi(
+  page: Page,
+  library: MetricLibrary,
+  collection: "general" | "logistics",
+) {
+  const metrics = library.metrics.filter((metric) => metric.collection === collection);
+  const cards = page.locator(".ml-metric");
+  await expect(cards).toHaveCount(metrics.length);
+  for (const [index, metric] of metrics.entries()) {
+    const card = cards.nth(index);
+    await expect(card.locator(".ml-metric__head strong")).toHaveText(metric.name);
+    await expect(card.locator(".ml-metric__head code")).toHaveText(metric.metric_code);
+    await expect(card.locator(".ml-metric__head")).toContainText(
+      library.domains[metric.domain] ?? metric.domain,
+    );
+    await expect(card.locator(".ml-metric__head")).toContainText(
+      metric.tier === "core" ? "常用" : "专业",
+    );
+    if (metric.mpm) await expect(card.locator(".ml-chip--mpm")).toHaveText("MPM");
+    await expect(card.locator(".ml-metric__definition")).toHaveText(metric.definition);
+    const detailRows = card.locator(".ml-metric__grid > div");
+    await expect(detailRows.nth(0)).toContainText("公式");
+    await expect(detailRows.nth(0)).toContainText(`${metric.formula_text}${metric.unit ? `（${metric.unit}）` : ""}`);
+    await expect(detailRows.nth(1)).toContainText(
+      metric.time_behavior ? METRIC_TIME_BEHAVIOR_LABELS[metric.time_behavior] ?? metric.time_behavior : "—",
+    );
+    await expect(detailRows.nth(2)).toContainText(metric.source_cas.length ? metric.source_cas.join("、") : "—");
+    await expect(detailRows.nth(3)).toContainText(metric.source_ifrs ?? "—");
+    for (const value of [
+      metric.caliber,
+      metric.benchmark,
+      metric.provenance,
+      metric.execution_detail,
+      ...metric.depends_on,
+      ...(metric.analysis_dimensions ?? []),
+      ...(metric.decompositions ?? []).map((item) => `${item.name}：${item.formula_text}`),
+    ]) {
+      if (value) await expect(card).toContainText(value);
+    }
+    if (metric.mpm && metric.reconciliation) {
+      await expect(card).toContainText(`MPM 调节要求：${metric.reconciliation}`);
+    }
+    if (metric.execution_kind) await expect(card.locator(".ml-metric__foot")).toContainText(metric.execution_kind === "engine" ? "引擎执行" : metric.execution_kind === "facts" ? "事实 AST 执行" : "叙述定义");
+    if (metric.migrates_from) await expect(card.locator(".ml-metric__foot")).toContainText(`迁移自 ${metric.migrates_from}`);
+    if (metric.entry_id) {
+      await expect(card.locator(".ml-metric__foot").getByRole("button", { name: "修订" })).toBeVisible();
+    }
+  }
+}
+
+async function expectSupportingSectionsMatchApi(
+  page: Page,
+  library: MetricLibrary,
+  section: "industry" | "relations" | "mapping" | "accounting",
+) {
+  if (section === "industry") {
+  const packs = page.locator(".ml-pack");
+  await expect(packs).toHaveCount(library.industry_reference_packs.length);
+  for (const [index, pack] of library.industry_reference_packs.entries()) {
+    const card = packs.nth(index);
+    await expect(card).toContainText(pack.name);
+    await expect(card).toContainText(pack.industry_id);
+    await expect(card).toContainText(pack.note);
+    await expect(card).toContainText(pack.provenance);
+    for (const [code, text] of Object.entries(pack.financial_reference)) {
+      await expect(card).toContainText(code);
+      await expect(card).toContainText(text);
+    }
+    for (const indicator of pack.ops_indicators) {
+      await expect(card).toContainText(indicator.code);
+      await expect(card).toContainText(indicator.name);
+      await expect(card).toContainText(indicator.meaning);
+    }
+  }
+  }
+
+  if (section === "relations") {
+  const relations = page.locator(".ml-relation");
+  await expect(relations).toHaveCount(library.relations.length);
+  for (const [index, relation] of library.relations.entries()) {
+    const card = relations.nth(index);
+    await expect(card).toContainText(relation.name);
+    await expect(card).toContainText(relation.relation);
+    await expect(card.locator(".ml-relation__expr")).toHaveText(relation.expression);
+    await expect(card).toContainText(relation.note);
+    if (relation.provenance) await expect(card).toContainText(relation.provenance);
+  }
+  }
+
+  if (section === "mapping") {
+  const mappings = page.locator("table.flow-table tbody tr");
+  await expect(mappings).toHaveCount(library.report_items.length);
+  for (const [index, item] of library.report_items.entries()) {
+    const cells = mappings.nth(index).locator("td");
+    await expect(cells).toHaveText([item.item_id, item.cas, item.ifrs]);
+  }
+  }
+
+  if (section === "accounting") {
+  const accounts = library.accounting.accounts;
+  const renderedAccounts = page.locator(".ml-account");
+  await expect(renderedAccounts).toHaveCount(accounts.length);
+  for (const [index, account] of accounts.entries()) {
+    const row = renderedAccounts.nth(index);
+    await expect(row.locator("code")).toHaveText(account.code);
+    await expect(row.locator("strong")).toHaveText(account.name);
+    await expect(row.locator(".ml-account__tags")).toContainText(account.category);
+    await expect(row.locator(".ml-account__tags")).toContainText(account.balance_side);
+    if (account.status !== "current") await expect(row.locator(".ml-account__tags")).toContainText(account.status);
+  }
+
+  const standards = page.locator(".ml-standards li");
+  await expect(standards).toHaveCount(library.accounting.standards.length);
+  for (const [index, standard] of library.accounting.standards.entries()) {
+    const row = standards.nth(index);
+    await expect(row).toContainText(standard.id);
+    await expect(row).toContainText(standard.name);
+    if (standard.issuer) await expect(row).toContainText(standard.issuer);
+    if (standard.note) await expect(row).toContainText(standard.note);
+  }
+
+  const templates = page.locator("details.ml-entry");
+  await expect(templates).toHaveCount(library.accounting.entry_templates.length);
+  for (const [index, template] of library.accounting.entry_templates.entries()) {
+    const disclosure = templates.nth(index);
+    await disclosure.locator("summary").click();
+    await expect(disclosure).toContainText(template.scenario);
+    await expect(disclosure).toContainText(template.template_id);
+    if (template.business_context) await expect(disclosure).toContainText(template.business_context);
+    const lines = disclosure.locator("table tbody tr");
+    await expect(lines).toHaveCount(template.lines.length);
+    for (const [lineIndex, line] of template.lines.entries()) {
+      await expect(lines.nth(lineIndex).locator("td")).toHaveText([line.direction, line.account, line.amount_rule]);
+    }
+    if (template.standard_ref) await expect(disclosure).toContainText(template.standard_ref);
+    for (const code of template.related_metrics) await expect(disclosure).toContainText(code);
+  }
+  }
+}
 
 async function expectDashboardCardsMatch(page: Page, response: DashboardResponse) {
   const cards = page.getByTestId("metric-card");
@@ -641,14 +872,91 @@ test("four-question workbench loads damai report", async ({ page }) => {
 });
 
 test("metric library switches to damai synthetic coverage", async ({ page }) => {
+  const libraryRenderedResponse = page.waitForResponse(
+    (response) => new URL(response.url()).pathname === "/api/v1/metric-library",
+  );
   await page.goto("/metric-library");
+  const libraryResponse = await libraryRenderedResponse;
+  expect(libraryResponse.ok()).toBeTruthy();
+  const library = (await libraryResponse.json()) as MetricLibrary;
+  const libraryApiResponse = await page.request.get("/api/v1/metric-library");
+  expect(libraryApiResponse.ok()).toBeTruthy();
+  expect(await libraryApiResponse.json()).toEqual(library);
   // 覆盖矩阵在「真实财报覆盖」分区之下；next dev 冷编译路由需要时间，首个断言放宽
   const nav = page.locator("nav[aria-label='指标库分区']");
   await expect(nav.getByRole("button", { name: "真实财报覆盖" })).toBeVisible({ timeout: 60_000 });
+  await expect(page.locator(".ml-hero__lede")).toContainText(library.dictionary_id);
+  await expect(page.locator(".ml-hero__lede")).toContainText(`${library.report_items.length} 项 CAS↔IFRS 取数映射`);
+  await expect(page.locator(".ml-kpis").locator(".ml-kpi__value").nth(0)).toContainText(
+    String(library.metrics.filter((metric) => metric.collection === "general").length),
+  );
+  await expectMetricCardsMatchApi(page, library, "general");
+
+  await nav.getByRole("button", { name: "物流行业指标" }).click();
+  await expectMetricCardsMatchApi(page, library, "logistics");
+
+  await nav.getByRole("button", { name: "行业参考包" }).click();
+  await expectSupportingSectionsMatchApi(page, library, "industry");
+  await nav.getByRole("button", { name: "勾稽与分解关系" }).click();
+  await expectSupportingSectionsMatchApi(page, library, "relations");
+  await nav.getByRole("button", { name: "取数映射（CAS↔IFRS）" }).click();
+  await expectSupportingSectionsMatchApi(page, library, "mapping");
+  await nav.getByRole("button", { name: "会计基础数据" }).click();
+  await expectSupportingSectionsMatchApi(page, library, "accounting");
+
+  // 切离并回到治理页，便于明确捕获页面发起的只读事件请求。
+  await nav.getByRole("button", { name: "通用指标" }).click();
+  const eventsReload = page.waitForResponse(
+    (response) => new URL(response.url()).pathname === "/api/v1/metric-library/events",
+  );
+  await nav.getByRole("button", { name: "治理记录" }).click();
+  const eventsResponse = await eventsReload;
+  expect(eventsResponse.ok()).toBeTruthy();
+  const events = (await eventsResponse.json()) as MetricGovernanceEventList;
+  const eventsApiResponse = await page.request.get("/api/v1/metric-library/events");
+  expect(eventsApiResponse.ok()).toBeTruthy();
+  expect(await eventsApiResponse.json()).toEqual(events);
+  const eventRows = page.locator("section[aria-label='指标治理记录'] table tbody tr");
+  if (events.events.length === 0) {
+    await expect(page.getByText("尚无治理事件。")).toBeVisible();
+  } else {
+    await expect(eventRows).toHaveCount(events.events.length);
+    for (const [index, event] of events.events.entries()) {
+      const row = eventRows.nth(index);
+      await expect(row).toContainText(event.metric_code);
+      await expect(row).toContainText(`v${event.version}`);
+      await expect(row).toContainText(event.action);
+      await expect(row).toContainText(event.operator);
+      await expect(row).toContainText(event.reason);
+    }
+  }
+
+  const publicRenderedResponse = page.waitForResponse(
+    (response) => new URL(response.url()).pathname === "/api/v1/metric-library/coverage",
+  );
   await nav.getByRole("button", { name: "真实财报覆盖" }).click();
+  const publicResponse = await publicRenderedResponse;
+  expect(publicResponse.ok()).toBeTruthy();
+  const publicCoverage = (await publicResponse.json()) as MetricCoverage;
+  const publicApiResponse = await page.request.get("/api/v1/metric-library/coverage");
+  expect(publicApiResponse.ok()).toBeTruthy();
+  expect(await publicApiResponse.json()).toEqual(publicCoverage);
+  await expectMetricCoverageMatchesApi(page, publicCoverage);
+
   await expect(page.getByRole("tab", { name: "真实财报" })).toBeVisible({ timeout: 15_000 });
+  const damaiRenderedResponse = page.waitForResponse((response) => {
+    const url = new URL(response.url());
+    return url.pathname === "/api/v1/metric-library/coverage" && url.searchParams.get("dataset") === "damai";
+  });
   await page.getByRole("tab", { name: "大麦演示" }).click();
+  const damaiResponse = await damaiRenderedResponse;
+  expect(damaiResponse.ok()).toBeTruthy();
+  const damaiCoverage = (await damaiResponse.json()) as MetricCoverage;
+  const damaiApiResponse = await page.request.get("/api/v1/metric-library/coverage?dataset=damai");
+  expect(damaiApiResponse.ok()).toBeTruthy();
+  expect(await damaiApiResponse.json()).toEqual(damaiCoverage);
   await expect(page.getByText("synthetic 演示 · 大麦物流")).toBeVisible({ timeout: 15_000 });
+  await expectMetricCoverageMatchesApi(page, damaiCoverage);
   const matrix = page.locator("section[aria-label='指标覆盖矩阵']");
   await expect(matrix).toContainText("FY2026");
   // 直接核对年度覆盖值真正展示，而非只有年份标签/空壳矩阵。

@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目尽调、优化与单 Agent 执行总交接
 doc_type: navigation
 status: current
-version: 5.10
+version: 5.11
 created_at: 2026-09-12
 updated_at: 2026-09-27
 owner: FLOW
@@ -20,19 +20,21 @@ applies_to: repository
 
 ### 接手基线、当前状态与操作纪律
 
+- 2026-09-27 `/metric-library` 页级 API→版本化配置→UI逐值审计已完成，待本轮文档门禁、提交推送及同SHA CI后关页面子项。隔离大麦全旅程 verify19/19、只读矩阵159条（149预期200、10预期422、意外0）、Playwright9/9。指标库 E2E 将 `/api/v1/metric-library` 的通用/物流全部指标卡字段和每个分区（行业参考包、勾稽关系、CAS↔IFRS映射、会计基础/分录模板、治理事件）逐项和实际 UI 对账；对真实财报与大麦 synthetic 覆盖矩阵比较每个快照、40项指标单元格、缺失项/原因、汇总KPI、来源说明与财报深链。页面未发现API/UI不一致。
+- 同轮质量：Web143/143、全隔离 Playwright9/9、verify19/19、矩阵159无意外；生产构建 UI 一致性/响应式/状态/导航/深链 E2E93/93；`make typecheck`通过；`make lint`零错误、1条既有 TanStack Table warning。TDD 中两次红灯均证明测试预期应按页面真实合同修正（摘要 KPI 布局与 MPM 文案前缀），没有通过删断言或改产品实现来迎合；修正后全套通过。
 - 2026-09-27 `/operations` 子项正式关闭：代码提交 `0f8d92cf` 经远端 README 自动截图提交合并后的 `main@8bd71798` CI run `36293915314`，17/17作业成功。修复切换分析上下文时旧报表值残留：新上下文选择事件立即清除旧概览、冻结信息并进入 loading，避免新报表下仍展示旧值；组件回归7/7通过。
 - `/operations` 隔离旅程：`bash scripts/test_damai_demo_e2e.sh` 全程使用专属 Compose 栈，seed 后 verify19/19；安全 GET 可见矩阵159条（149预期200、10个合同禁止组合预期422、意外0）；Playwright9/9。增强的 E2E 将大麦FY2025/FY2026及公开经营7期间共9上下文逐一比对 API 与 DOM 中六主题状态、每个指标精确值/显示值、披露来源、页码/来源哈希、不可用原因、指标定义深链及管理关注。首次复跑暴露测试误重复选择当前上下文造成页面清空；已修正 E2E 等待逻辑，未降低值级断言，复跑9/9通过。
 - `/operations` 同轮回归：Web143/143、经营 API38/38、`make lint` 0 error（保留既有 TanStack Table warning）、`make typecheck` 通过；M1、文档链接、plan views门禁通过。提交 `0f8d92cf` 推送时发现远端先到 README 截图自动提交 `27babc32`，已普通合并为 `8bd71798` 并保留双方历史。该SHA的 CI run `36293915314` 17/17 success。
 
 - Dashboard筛选检查点 `99991566`/CI `36279509026` success，文档 `d836a6ca`/CI `36279766191` success；`/statements` 逐值 E2E `78722e73` 与前置状态文档CI `36282388214`、`36281158908` 均已 success。`/analysis` 十指标按 FY2026 披露原文独立复算、API/UI逐值对齐通过；发现并修正DSO错误值（旧`0.3500`，正确`116.3898`天），补齐净利润增长、ROE、流动比率、自由现金流计算，并让不可用态显示合同具体原因。隔离verify19/19、GET矩阵159项（149预期200、10预期422、零意外）、浏览器9/9；工作台API11/11、Web142/142，类型与静态检查通过。提交 `bc8fa678` 已推送；同SHA GitHub CI run `36288403912` 的17/17作业全部 success，`/analysis` 子项可关闭。旧CI影响分析单例未复现：隔离目标单跑两次、模块3/3、CI集成等价批次267 passed/3 warnings、批后单跑通过；根因未知。
-- 本轮在 `/Users/qiming/workspace/FLOW/.worktrees/execution-convergence` 的唯一 `main` 工作树串行执行；所有队列项均按主线逐步提交。ORG-LEDGER `2c7d6eb4` / CI `36270782272` 17/17 success。UX 的 Dashboard、`/statements` 与 `/analysis` 局部审计均已有提交级验收；`/analysis` 最新提交 `bc8fa678` / CI `36288403912` 17/17 success。Dashboard筛选/经营产品表现、四个数据密集页五态×三视口归档61/61、响应式E2E27/27（含pageerror）均已记录。旧CI影响分析单例运行 `36276782059` 曾失败，但CI等价隔离批次267 passed/3 warnings、模块重跑3/3、目标单跑前后均通过，根因未能复现，不能宣称根因已修复；后续重现时抓完整日志并仅在隔离库复现。Gate 1仍未闭环：`/operations`及剩余页面源事实/UI逐值映射、完整状态/视口/深链覆盖和Gate 5同SHA全链验收。未触碰根工作树既有脏`AGENTS.md`和`apps/web/next-env.d.ts`。
+- 本轮在 `/Users/qiming/workspace/FLOW/.worktrees/execution-convergence` 的唯一 `main` 工作树串行执行；所有队列项均按主线逐步提交。ORG-LEDGER `2c7d6eb4` / CI `36270782272` 17/17 success。UX 的 Dashboard、`/statements`、`/analysis`、`/operations`局部审计均已提交并同 SHA CI绿；`/metric-library`当前完成值级验收待本轮提交级闭环。四个数据密集页五态×三视口归档61/61、响应式E2E27/27（含pageerror）已有记录。旧CI影响分析单例运行 `36276782059` 曾失败，但隔离批次267 passed/3 warnings、前后单跑均未复现；根因未知。Gate 1仍未闭环：`/reports`、`/data`、`/investigations`逐值审计、完整状态/视口/深链覆盖和Gate 5同SHA全链验收。未触碰根工作树既有脏`AGENTS.md`和`apps/web/next-env.d.ts`。
 - **当前路线图计数（唯一队列11项）**：已完成 1（ORG-LEDGER）、实际执行中 1（UX 全站验收）、排队 8、外部材料受限 1。第1项因提交 SHA 同 CI 全绿而关闭，第2项已成为唯一执行项；不并行开启其他工作包。
 - 只在 `main` 上做，禁止新建并行任务分支；不得同时开始下一项。用户已授权常规项目实施与验证，不再为日常测试、分析、文档或常规实现请求再次批准。既有全局安全红线仍有效：真实数据迁移/schema、删除/覆盖/恢复常驻库、密钥/CI 配置、公开部署等按 `AGENTS.md` 处理；尤其常驻 `flow` 中的测试批次偏差 `01a0dcdd-8245-7c17-99aa-fce91a8a7a57` 不得自行删除、回滚或切 latest。
 - **状态口径**：`进行中`=此刻确实有命令、审查或实现正在执行；`队首待启动`=当前第一项但未开工；`排队`=严格等待前项完成；`外部材料受限`=先按本手册执行主动恢复和替代方案，不是停工态。工作包 frontmatter 的 `active/blocked` 表示工作包生命周期或验收门槛，不覆盖路线图执行状态。
 - **ORG-LEDGER 的最新事实与安全边界**：工作包由 `9729dbc4`、具体三表 schema 提案由 `880f1b76` 推送；用户批准该准确方案由 `fc6e63a7` 记录。批准仅覆盖工作包列出的三表与对应迁移，不覆盖额外 schema、认证/RBAC 改造，也不授权在共享/常驻 DB 清理/初始化。可执行已批准迁移，但只在隔离数据库验证；不要对常驻库迁移或写入。
 - **ORG-LEDGER 最终验收**：发行包两次构建一致，31文件、manifest SHA `cbc7cccf924092ae7ca5f68eb8a797473cf6efcf31f4e91fbe22aa6f7758e513`；组织8/8/8、权限快照142条。11项企业/loader测试通过；隔离 CLI 首次full、重复full、business reset对账均正确（财务实际768、预算10752、经营实际1920、应收回款4800、快照12、成员8），事务回滚、租户隔离、审计追加保留通过。旧大麦 verify19/19、只读GET43/43、Playwright9/9；全量 API852、Web142、脚本107；合同、文档、lint、typecheck通过。提交 `2c7d6eb4`，CI run `36270782272` 17/17 success。仅获批三表迁移在隔离栈验证，常驻 `flow`/MinIO未触碰。
 - **遇到失败的统一处理**：保留原始日志和失败产物 → 定位根因并判别代码/数据/环境/外部输入 → 先运行最小重现 → 做最小修复或有记录的替代验证 → 重跑原失败项及相邻回归。禁止删断言、改预期值迎合实现、重写原始 oracle、用 synthetic 结果冒充真实验收。若原验收客观上不可完成，交付可复现的调查、替代结果、未满足项与重启条件；不能声称原验收通过。
-- **当前唯一下一动作**：将 `/operations` 关单证据同步到路线图、PROJECT_STATE、UX工作包和本手册；M1/链接/plan views通过后提交推送。随后进入 `/metric-library` API→源事实→UI逐值审计，再严格按唯一队列 `/reports`、`/data`、`/investigations`，完成剩余深链/状态视口和 Gate 5。每个页面步骤均先测试、隔离验证、文档同步、提交推送，并核验准确 SHA 的 required CI。GET安全矩阵排除 freeze 写入路由。旧 `36276782059` 失败在隔离集成批次267项及前后单跑均未复现，根因未知；若重现，抓完整日志/测试顺序，只在隔离库复现，不删断言。Gate 1/Gate 5全验收和同SHA CI绿前不得进入队列第3项。
+- **当前唯一下一动作**：将 `/metric-library` 本轮审计写入路线图、PROJECT_STATE、UX工作包和本手册，运行文档M1/链接/plan views门禁，检查差异后提交并立即推送；记录准确SHA并等 required CI全绿。之后唯一下一页为 `/reports` API→事实→UI值级审计，再按队列完成`/data`、`/investigations`，补齐剩余深链/状态视口和 Gate 5。每个页面步骤均先测试、隔离验证、文档同步、提交推送，并核验准确 SHA CI。GET安全矩阵排除 freeze 写入路由。旧 `36276782059` 失败在隔离集成批次267项及前后单跑均未复现，根因未知；若重现，抓完整日志/测试顺序，只在隔离库复现，不删断言。Gate 1/Gate 5全验收和同SHA CI绿前不得进入队列第3项。
 - **每项汇报格式**：完整 11 项队列和计数；当前项与细分步骤；本轮完成证据（SHA、命令、结果）；实际问题/替代路径；下一项何时解锁和唯一下一动作。不要写“等待用户验证/批准”作为常规动作；只有触及明文安全红线的 schema 执行边界才须记录为精确批准门。
 
 ### 唯一串行 To-do 的逐项操作卡
