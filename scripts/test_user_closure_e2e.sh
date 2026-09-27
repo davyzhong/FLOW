@@ -13,6 +13,21 @@ export S3_SECRET_KEY="${S3_SECRET_KEY:-flow_dev_only}"
 # S01 §2.2：development 模式认证边界需要显式 dev actor（与 scripts/seed_dev_principal.py 一致）
 export FLOW_DEV_ACTOR_ID="${FLOW_DEV_ACTOR_ID:-flow-dev-bp}"
 
+# 本地护栏（2026-09-27 事故教训）：本脚本会 alembic upgrade + seed 写库，
+# 默认 DATABASE_URL 历史上指向常驻 flow 库，曾把种子批次写进开发库。
+# 非 CI 环境禁止指向常驻库，除非显式声明 FLOW_USER_CLOSURE_ALLOW_RESIDENT_DB=1；
+# CI（job 级容器库同名同端口）不受影响。
+if [[ "${GITHUB_ACTIONS:-}" != "true" \
+  && "${FLOW_USER_CLOSURE_ALLOW_RESIDENT_DB:-0}" != "1" \
+  && "${DATABASE_URL}" == *"127.0.0.1:5432/flow" ]]; then
+  echo "错误：DATABASE_URL 指向常驻 flow 开发库（127.0.0.1:5432/flow）。" >&2
+  echo "本脚本会执行 alembic 迁移与种子写入，禁止连常驻库。" >&2
+  echo "请改为隔离库，例如：" >&2
+  echo "  export DATABASE_URL=postgresql+psycopg://flow:flow_dev_only@127.0.0.1:5432/flow_user_closure" >&2
+  echo "或显式声明 FLOW_USER_CLOSURE_ALLOW_RESIDENT_DB=1 承担后果后继续。" >&2
+  exit 2
+fi
+
 make infra-up
 
 read -r api_port web_port < <(uv run python scripts/find_free_port.py 2)
