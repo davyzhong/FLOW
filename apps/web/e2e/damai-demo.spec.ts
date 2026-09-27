@@ -4,11 +4,15 @@ import path from "node:path";
 import { expect, test, type Page } from "@playwright/test";
 import type {
   DashboardResponse,
+  FreezeCandidate,
   MetricCoverage,
   MetricGovernanceEventList,
   MetricLibrary,
   OperationsOverview,
+  OperationsSnapshot,
   PublicOperatingPeriodList,
+  PublishingAttempt,
+  PublishingSnapshot,
   StatementReportDetail,
   StatementReportList,
   WorkbenchResponse,
@@ -977,6 +981,115 @@ test("approves the in-review revenue growth finding", async ({ page }) => {
   await expect(page).toHaveURL(/\/investigations\/[0-9a-f-]+/);
   await page.getByRole("button", { name: "批准签发" }).click();
   await expect(page.getByText("已签发").first()).toBeVisible({ timeout: 15_000 });
+});
+
+test("reports center mirrors api rows and values without mutation", async ({ page }) => {
+  await page.goto("/reports");
+  await expect(page.getByRole("heading", { name: "报告中心" })).toBeVisible();
+
+  // 客观财报分析报告（四表一注）：逐行对账 /api/v1/statements 的公司/期间/报告类型/行项目数与两条链接。
+  const reportsResp = await page.request.get("/api/v1/statements");
+  expect(reportsResp.ok()).toBeTruthy();
+  const reportList = (await reportsResp.json()) as StatementReportList;
+  expect(reportList.reports.length).toBeGreaterThan(0);
+  const objectiveSection = page.locator("div.reports-center__objective").first();
+  const objectiveRows = objectiveSection.locator("ul.reports-center__objective-list > li");
+  await expect(objectiveRows).toHaveCount(reportList.reports.length);
+  for (const [index, report] of reportList.reports.entries()) {
+    const row = objectiveRows.nth(index);
+    await expect(row).toContainText(
+      `${report.company_name} · ${report.period_label} ${report.report_kind}（行项目 ${report.line_item_count}）`,
+    );
+    await expect(
+      row.locator(`a[href="/api/v1/statements/${report.id}/objective-snapshot/html"]`),
+    ).toHaveCount(1);
+    await expect(row.getByRole("link", { name: "查看分析" })).toHaveAttribute(
+      "href",
+      `/statements?report=${encodeURIComponent(report.id)}`,
+    );
+  }
+
+  // 经营分析报告（六主题）：逐行对账 /api/v1/operations/snapshots 的公司/期间/版本/指纹与深链。
+  const opsResp = await page.request.get("/api/v1/operations/snapshots");
+  expect(opsResp.ok()).toBeTruthy();
+  const { snapshots: opsSnapshots } = (await opsResp.json()) as {
+    snapshots: OperationsSnapshot[];
+  };
+  const opsRendered = opsSnapshots.filter(
+    (row) => row.statement_report_id && row.company_name && row.payload_hash,
+  );
+  expect(opsRendered.length).toBeGreaterThan(0);
+  const opsList = page.getByRole("list", { name: "经营报告快照列表" });
+  await expect(opsList.locator("> li")).toHaveCount(opsRendered.length);
+  for (const [index, snapshot] of opsRendered.entries()) {
+    const row = opsList.locator("> li").nth(index);
+    await expect(row).toContainText(
+      `${snapshot.company_name} · ${snapshot.period_label} · v${snapshot.version} · 指纹 ${snapshot.payload_hash.slice(0, 12)}…`,
+    );
+    await expect(row.getByRole("link", { name: "在经营分析中查看" })).toHaveAttribute(
+      "href",
+      `/operations?report=${encodeURIComponent(snapshot.statement_report_id)}`,
+    );
+  }
+
+  // 冻结候选：下拉选项逐项对账 /api/v1/publishing/freeze-candidates，含不可冻结禁用态。
+  const candidatesResp = await page.request.get("/api/v1/publishing/freeze-candidates");
+  expect(candidatesResp.ok()).toBeTruthy();
+  const { candidates } = (await candidatesResp.json()) as { candidates: FreezeCandidate[] };
+  expect(candidates.length).toBeGreaterThan(0);
+  const freezeSelect = page.locator("div.reports-center__freeze select");
+  await expect(freezeSelect.locator("option")).toHaveCount(candidates.length + 1);
+  for (const [index, candidate] of candidates.entries()) {
+    const option = freezeSelect.locator("option").nth(index + 1);
+    await expect(option).toHaveText(
+      `${candidate.period_label ?? "未知期间"} · 批次 ${candidate.batch_id.slice(0, 8)} · v${candidate.version} · 已批准发现 ${candidate.approved_findings}${candidate.approved_findings === 0 ? "（不可冻结）" : ""}`,
+    );
+    if (candidate.approved_findings === 0) {
+      // 注：Playwright toBeDisabled 辅助器对 <option> 元素误报 enabled（DOM 中 disabled
+      // 属性确实存在），故直接断言属性合同本身。
+      await expect(option).toHaveAttribute("disabled");
+    }
+  }
+
+  // 报告快照：逐行对账 /api/v1/publishing/snapshots 的版本/标题/日期。
+  const snapshotsResp = await page.request.get("/api/v1/publishing/snapshots");
+  expect(snapshotsResp.ok()).toBeTruthy();
+  const { snapshots } = (await snapshotsResp.json()) as { snapshots: PublishingSnapshot[] };
+  expect(snapshots.length).toBeGreaterThan(0);
+  // 注：getByRole name 默认子串匹配，须 exact 才不会同时命中「经营报告快照列表」。
+  const snapshotRows = page
+    .getByRole("list", { name: "报告快照列表", exact: true })
+    .locator("> li");
+  await expect(snapshotRows).toHaveCount(snapshots.length);
+  for (const [index, snapshot] of snapshots.entries()) {
+    await expect(snapshotRows.nth(index)).toContainText(
+      `v${snapshot.version} · ${snapshot.title} · ${(snapshot.created_at ?? "").slice(0, 10)}`,
+    );
+  }
+
+  // 默认选中第一条报告快照：产物历史（append-only）表格与 attempts API 逐行逐格一致。
+  const attemptsResp = await page.request.get(
+    `/api/v1/publishing/snapshots/${snapshots[0].id}/attempts`,
+  );
+  expect(attemptsResp.ok()).toBeTruthy();
+  const { attempts } = (await attemptsResp.json()) as { attempts: PublishingAttempt[] };
+  const publishSection = page
+    .locator("div.reports-center__publish")
+    .filter({ has: page.getByRole("heading", { name: "生成产物" }) });
+  const historyTable = publishSection.locator("table.flow-table");
+  await expect(historyTable).toBeVisible();
+  const attemptRows = historyTable.locator("tbody tr");
+  await expect(attemptRows).toHaveCount(attempts.length);
+  for (const [index, attempt] of attempts.entries()) {
+    const row = attemptRows.nth(index);
+    await expect(row).toContainText(String(attempt.sequence));
+    await expect(row).toContainText(attempt.format);
+    await expect(row).toContainText(attempt.status);
+    await expect(row).toContainText(attempt.size_bytes === null ? "-" : String(attempt.size_bytes));
+    if (attempt.download_available) {
+      await expect(row.getByRole("button", { name: "下载" })).toHaveCount(1);
+    }
+  }
 });
 
 test("report center publishes operations artifact and download matches stored sha256", async ({

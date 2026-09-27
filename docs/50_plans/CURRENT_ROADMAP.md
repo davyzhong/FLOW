@@ -17,7 +17,7 @@ superseded_by: null
 
 # 当前路线图（唯一主线）
 
-> 2026-09-27 主线状态：ORG-LEDGER `2c7d6eb4` 同 SHA CI run `36270782272` 17/17 success。UX Dashboard逐值+筛选、`/statements`、`/analysis`、`/operations`、`/metric-library`子项均已完成且同SHA CI success；`/operations`最终`8bd71798`/run`36293915314`17/17；`/metric-library`代码提交`71ea2dc9`同SHA CI run`36299600894`17/17 success，子项关闭。旧run `36276782059` 的影响分析单例失败在隔离CI等价267项批次及前后单跑中未复现，根因未知。61张状态视口归档、响应式27/27已有证据。当前唯一执行子步骤为`/reports`逐值审计（值级E2E编写与隔离复跑进行中），随后`/data`、`/investigations`，再补全深链/状态视口/Gate5。唯一队列计数：完成1、执行中1、排队8、外部材料受限1。常驻`flow`测试批次偏差未经授权不得处置。
+> 2026-09-27 主线状态：ORG-LEDGER `2c7d6eb4` 同 SHA CI run `36270782272` 17/17 success。UX Dashboard逐值+筛选、`/statements`、`/analysis`、`/operations`、`/metric-library`子项均已完成且同SHA CI success；`/operations`最终`8bd71798`/run`36293915314`17/17；`/metric-library`代码提交`71ea2dc9`同SHA CI run`36299600894`17/17 success，子项关闭。旧run `36276782059` 的影响分析单例失败在隔离CI等价267项批次及前后单跑中未复现，根因未知。61张状态视口归档、响应式27/27已有证据。当前唯一执行子步骤为`/reports`逐值审计：只读值级E2E已交付并隔离复跑全绿（Playwright 10/10、verify19/19、typecheck/lint通过），代码提交后核验同SHA CI即关页，随后`/data`、`/investigations`，再补全深链/状态视口/Gate5。唯一队列计数：完成1、执行中1、排队8、外部材料受限1。常驻`flow`测试批次偏差未经授权不得处置。
 
 > **本页是全仓唯一主线**：既维护状态真相，也维护执行队列。2026-09-25 用户裁决（2A）后不再存在第二份「唯一」文档：EXECUTION_TODO、整合总计划、统一完整实施计划与执行收敛计划均已归档为历史/参考，状态与任务只以本页和工作包为准。详细验收步骤在各工作包与参考规格。
 
@@ -48,10 +48,10 @@ superseded_by: null
 
 ## 唯一完整 To-do 与执行队列（严格串行）
 
-截至 2026-09-27：**11 项，已完成 1 项，实际执行中 1 项，排队 8 项，外部材料受限 1 项**。当前唯一执行项第2项 UX 全站验收。Dashboard、`/statements`、`/analysis`、`/operations`、`/metric-library`页面子项均已完成并有同SHA CI证据（`/metric-library`代码提交`71ea2dc9`/CI run`36299600894` 17/17 success）。唯一下一步为`/reports`逐值审计（值级E2E编写与隔离复跑进行中）。UX Gate1/Gate5仍未结束，常驻`flow`不写入/清理。
+截至 2026-09-27：**11 项，已完成 1 项，实际执行中 1 项，排队 8 项，外部材料受限 1 项**。当前唯一执行项第2项 UX 全站验收。Dashboard、`/statements`、`/analysis`、`/operations`、`/metric-library`页面子项均已完成并有同SHA CI证据（`/metric-library`代码提交`71ea2dc9`/CI run`36299600894` 17/17 success）。`/reports`只读值级E2E已交付并隔离复跑全绿（Playwright 10/10、verify19/19），待同SHA CI后关页；唯一下一页`/data`。UX Gate1/Gate5仍未结束，常驻`flow`不写入/清理。
 
 1. **[完成] 企业组织建制与经营账套初始化包**（工作包见状态表2c）：提交 `2c7d6eb4`，CI run `36270782272` 的17/17 jobs success。31文件发行包稳定 manifest SHA `cbc7cccf…e513`；隔离 `full` 首次/重复、`business` 重置及回滚/租户隔离通过；全量 API852、Web142、脚本107、verify19/19、只读 GET43/43、Playwright9/9，合同/文档/lint/typecheck均通过。仅三表迁移在隔离栈验证，未触碰常驻库。
-2. **[进行中] UX 可见性与全站验收关闭**（工作包见状态表2b）：深链批次一至三已完成。Dashboard核对8 KPI、12月×4趋势、32格矩阵和产品表；筛选矩阵159项且意外0。`/statements`逐报告/披露行；`/analysis`十指标按原文复算/API/UI对账，`bc8fa678`同SHA CI绿。`/operations`九个上下文核对六主题/来源/链接并修复切换旧值；最终`8bd71798`/CI`36293915314`全绿。`/metric-library`全页对账API版本化指标库和两覆盖数据集：通用/物流所有指标卡字段、行业包/关系/CAS↔IFRS映射/会计科目/准则/分录模板/治理事件；矩阵逐快照逐指标核对显示值、空缺/原因、汇总、来源和报告深链；隔离verify19/19、矩阵159条零意外、Web143/143、生产构建UX测试93/93、typecheck通过、lint零错误（1既有warning），未发现产品数据呈现偏差；代码提交`71ea2dc9`同SHA CI run`36299600894` 17/17 success，子项关闭。当前唯一页面子步骤为`/reports`逐值审计（值级E2E编写与隔离复跑进行中），之后`/data`、`/investigations`，补全深链/状态视口/Gate5。已有四页五态×三视口归档61/61与响应式27/27为部分既有证据，不等同工作包关闭。不写常驻`flow`，不重做已完成深链批次。
+2. **[进行中] UX 可见性与全站验收关闭**（工作包见状态表2b）：深链批次一至三已完成。Dashboard核对8 KPI、12月×4趋势、32格矩阵和产品表；筛选矩阵159项且意外0。`/statements`逐报告/披露行；`/analysis`十指标按原文复算/API/UI对账，`bc8fa678`同SHA CI绿。`/operations`九个上下文核对六主题/来源/链接并修复切换旧值；最终`8bd71798`/CI`36293915314`全绿。`/metric-library`全页对账API版本化指标库和两覆盖数据集：通用/物流所有指标卡字段、行业包/关系/CAS↔IFRS映射/会计科目/准则/分录模板/治理事件；矩阵逐快照逐指标核对显示值、空缺/原因、汇总、来源和报告深链；隔离verify19/19、矩阵159条零意外、Web143/143、生产构建UX测试93/93、typecheck通过、lint零错误（1既有warning），未发现产品数据呈现偏差；代码提交`71ea2dc9`同SHA CI run`36299600894` 17/17 success，子项关闭。当前唯一页面子步骤为`/reports`逐值审计：只读值级E2E已交付（客观财报列表/经营快照/冻结候选含禁用态/发布快照/attempts表逐行逐格对账API；TDD两次红灯均为测试自身缺陷并已修正，未发现API/UI不一致），隔离Playwright 10/10、verify19/19、typecheck/lint通过，待同SHA CI后关页；之后`/data`、`/investigations`，补全深链/状态视口/Gate5。已有四页五态×三视口归档61/61与响应式27/27为部分既有证据，不等同工作包关闭。不写常驻`flow`，不重做已完成深链批次。
 3. **[排队] 公开财报 C 级归因、原件复核与抽取修订**（工作包见状态表3）：处理已确认42项异常后的109项口径疑点、JDL 200 格原件复核、抽取器修订；保留原始值及证据，任何结论可追溯。
 4. **[排队] U04 解析器适配与独立留出验证**（工作包见状态表1'）：这本身是可执行的工程任务，不再误标为阻塞。支持「合并及公司」标题与页码区间参数化；旧三样本回归；对已冻结的小米2026H1、阿里FY2027Q1独立首跑，首跑前不得调参。若遇到输入缺项，主动检查已冻结材料并完成可复现的替代核验记录。
 5. **[排队] C 级质量基准与 Go/No-Go**：依赖第3、4项；重跑 L1 并归档机器结果。`1794/1794` 仅表示登记覆盖，不代表准确性通过。
