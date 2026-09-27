@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目尽调、优化与单 Agent 执行总交接
 doc_type: navigation
 status: current
-version: 5.16
+version: 5.17
 created_at: 2026-09-12
 updated_at: 2026-09-27
 owner: FLOW
@@ -18,11 +18,13 @@ applies_to: repository
 
 > **本节覆盖本文其余旧会话交接快照。** 旧章节保留历史证据，不可据其旧顺序领取任务。下一位 Agent 开始前先从 GitHub 同步 `main`，再读 `AGENTS.md`、`docs/00_start_here/PROJECT_STATE.md`、`docs/50_plans/CURRENT_ROADMAP.md` 和相应工作包。唯一任务顺序是路线图中的 11 项队列；本节只是对同一队列逐项提供执行手册，不构成第二条队列。
 
+**最新接续点（2026-09-27）：** 当前唯一工作树 `main` 已同步 GitHub，起始 HEAD `937e46d890515aa4afd818690de9e817be89ce99`，当时工作区干净。本轮 Gate1 总表阶段已完成并写入[版本化验收证据](docs/60_delivery/verification/2026-09-26--damai-visibility-gate1-v1.md)：八个业务页值级审计完成；代码基线 `3660389e038083dfc92f6812c28e6ad7e2a2cfdb`，CI `36310017180` attempt2 17/17 success；隔离 verify19/19、Playwright12/12、159项 GET 为149预期200+10预期422、零状态不匹配。JSONL 文件当前 SHA-256 `708ae42b2d083a8ae4ac9a67bc0e324760a6eefc7d3c474cbf8cf7caf07fb876`（忽略文件，可由脚本重建）；seed manifest SHA `6303595f01a3a4fb10bf90bf7320701107bb24aeedaad3e6ef9723bcd3e3bb3a`。数据仅来自隔离 `damai-demo-iso`；常驻 `flow` 不得操作。下一动作是盘点并逐项验证覆盖表以外的真实下钻，然后状态×视口矩阵，最后 Gate5；每阶段文档同步、门禁、commit、立即 push 后再进入下一阶段。
+
 ### 接手基线、当前状态与操作纪律
 
 - 2026-09-27 `/metric-library` 子项正式关闭：页级 API→版本化配置→UI逐值审计完成，代码提交 `71ea2dc9` 同 SHA CI run `36299600894` 17/17作业 success。隔离大麦全旅程 verify19/19、只读矩阵159条（149预期200、10预期422、意外0）。指标库 E2E 将 `/api/v1/metric-library` 的通用/物流全部指标卡字段和每个分区（行业参考包、勾稽关系、CAS↔IFRS映射、会计基础/分录模板、治理事件）逐项和实际 UI 对账；对真实财报与大麦 synthetic 覆盖矩阵比较每个快照、40项指标单元格、缺失项/原因、汇总KPI、来源说明与财报深链。页面未发现API/UI不一致。
-- 2026-09-27 `/reports` 子项正式关闭：提交 `e869f259991830df2ac9e69929aa712f9677bf0c` 的 GitHub CI run `36306908435` 最终 17/17 success（首次 `user-closure-e2e` 的 cleaning-summary GET 返回403；同 SHA 仅重跑失败 job 后通过，根因未复现、未知，未调整权限策略）。隔离值级 E2E 10/10、verify19/19、typecheck/lint通过。隔离诊断未能复现403；其测试上传在临时副本 Next 环境卡于浏览器文件选择阶段，未作为产品缺陷证据。当前工作区另有未提交 `damai-demo.spec.ts`（含 `/data`、`/investigations` 测试）和生成文件 `next-env.d.ts`，来源/归属待核对；不得覆盖或混入本次文档提交。
-- 2026-09-27 `/data` 与 `/investigations` 的只读逐值 E2E 已由后续提交 `3660389e038083dfc92f6812c28e6ad7e2a2cfdb` 纳入主线（作者确认归属）。本轮在该 SHA 的隔离大麦全旅程 `bash scripts/test_damai_demo_e2e.sh` 通过：seed verify19/19；GET矩阵159项（149预期200、10预期422、意外0，清单SHA-256 `0416fe20234486cb1ca101cfbf6e650428b5df4750313c7cd5746eb8e8667786`）；Playwright12/12；`make typecheck`通过；`make lint`零错误、1条既有warning。CI run `36310017180` attempt 2 对同 SHA 的17/17作业全绿；attempt 1 唯一失败为 `smoke/make stack-up`，同 SHA 重跑通过，未取得根因，不改产品代码。按串行队列，`/data` 子项已关闭，下一子项为 `/investigations`。工作树剩余 `apps/web/next-env.d.ts` 的 Next 生成差异来源未定，保留且不暂存。
+- 2026-09-27 `/reports` 子项正式关闭：提交 `e869f259991830df2ac9e69929aa712f9677bf0c` 的 GitHub CI run `36306908435` 最终17/17 success（首次 `user-closure-e2e` 的 cleaning-summary GET 403；同 SHA 重跑通过，根因未知且未调整权限策略）。隔离值级 E2E10/10、verify19/19、typecheck/lint通过。此条保留阶段结论；工作区状态以后续“最新接续点”为准。
+- 2026-09-27 `/data` 与 `/investigations` 的只读逐值 E2E 由 `3660389e038083dfc92f6812c28e6ad7e2a2cfdb` 纳入主线。隔离验收 verify19/19、矩阵159项（149预期200、10预期422、零状态不匹配）、Playwright12/12、typecheck通过、lint零错误/1既有warning；CI run `36310017180` attempt2 17/17 success。attempt1 smoke `make stack-up`失败、同SHA attempt2通过，根因未知。两个页面子项均已关闭，后续只按本节最新接续点执行。
 - 2026-09-27 环境风险只读发现：本机常驻 Compose project `flow` 的 MinIO 容器标签指向 `.worktrees/execution-convergence/infra`，Postgres/Redis 标签指向旧 `.codex/worktrees/damai-logistics-implementation/FLOW/infra`，共享 project 名和端口但来源混杂。本轮未停止、重建或写入这些容器/数据库；所有隔离验收只用 `damai-demo-iso`。需在允许的常驻栈维护窗口另行核清所有权后再处理，当前不得把它当作单一工作树的可安全重启环境。
 - 2026-09-27 `/investigations` 值级页审计关闭：`3660389e` 的新增只读 E2E 逐项比对 `GET /api/v1/investigations` 与列表 DOM 的行数、Finding 类型、格式化影响金额、比较口径、状态、评分及 `/analysis?run_id=` 与调查身份深链。测试按 Finding 标题定位以规避 TanStack 表格排序差异；整行 `data-href` 与批次/指标快照/分析运行查询身份比对。未发现页面值错配；既有隔离旅程继续验证“进入调查”及审核签发。`3660389e` 同一隔离大麦旅程 Playwright12/12通过，CI run `36310017180` attempt2 17/17 success（专属 investigation-e2e job也成功）。页面子项已关闭，但 Gate1完整路由证据、所有状态/视口矩阵、所有目标下钻及Gate5仍未完成。
 - 2026-09-27 接手会话两项治理动作：①根工作树遗留的 `AGENTS.md` 语言铁律（v1.4，用户 2026-09-26 要求全部交互/文档一律中文）此前只在 `codex/damai-logistics-data-audit` 工作树未提交，已迁入 main 合并为 v1.6（提交 `bf48319e`）；②codex 两个大麦分支全部提交经 `git cherry` 核验均已有 patch 等价物在 main，无需合并，分支保留。GitHub 曾一度 SSL 中断（本机网络正常、github.com 不可达、无代理配置），恢复后推送成功；推送失败须立即向用户报告原因，不得静默搁置。
@@ -39,7 +41,7 @@ applies_to: repository
 - **ORG-LEDGER 的最新事实与安全边界**：工作包由 `9729dbc4`、具体三表 schema 提案由 `880f1b76` 推送；用户批准该准确方案由 `fc6e63a7` 记录。批准仅覆盖工作包列出的三表与对应迁移，不覆盖额外 schema、认证/RBAC 改造，也不授权在共享/常驻 DB 清理/初始化。可执行已批准迁移，但只在隔离数据库验证；不要对常驻库迁移或写入。
 - **ORG-LEDGER 最终验收**：发行包两次构建一致，31文件、manifest SHA `cbc7cccf924092ae7ca5f68eb8a797473cf6efcf31f4e91fbe22aa6f7758e513`；组织8/8/8、权限快照142条。11项企业/loader测试通过；隔离 CLI 首次full、重复full、business reset对账均正确（财务实际768、预算10752、经营实际1920、应收回款4800、快照12、成员8），事务回滚、租户隔离、审计追加保留通过。旧大麦 verify19/19、只读GET43/43、Playwright9/9；全量 API852、Web142、脚本107；合同、文档、lint、typecheck通过。提交 `2c7d6eb4`，CI run `36270782272` 17/17 success。仅获批三表迁移在隔离栈验证，常驻 `flow`/MinIO未触碰。
 - **遇到失败的统一处理**：保留原始日志和失败产物 → 定位根因并判别代码/数据/环境/外部输入 → 先运行最小重现 → 做最小修复或有记录的替代验证 → 重跑原失败项及相邻回归。禁止删断言、改预期值迎合实现、重写原始 oracle、用 synthetic 结果冒充真实验收。若原验收客观上不可完成，交付可复现的调查、替代结果、未满足项与重启条件；不能声称原验收通过。
-- **当前唯一下一动作**：依 UX 工作包 Gate 1，整理并逐条核验完整页面→API→已发布对象→源事实覆盖表，将 `/investigations` 加入本 SHA 的证据矩阵；随后按同一顺序补齐每个尚缺的路由值/缺失原因/真实下钻，再推进全部页面状态×视口矩阵和 Gate5全链验收。当前矩阵指出四个数据密集页五态×三视口已有61张归档，但其余目标交互路由的完整状态/视口证据仍不够；每次只处理覆盖表中下一条缺口。常驻Compose `flow`标签来源混杂，绝不重启/重建；验收只用隔离栈。Gate 1/Gate 5全验收和准确 SHA CI绿前不得进入队列第3项。
+- **当前唯一下一动作**：依 Gate1 覆盖证据逐个盘点页面实际链接与目标 API/对象的身份参数，先查已有 E2E 覆盖，再只对缺少断言的安全读取下钻补测试；可能 freeze 的 GET 继续排除，变更旅程只在隔离环境。完成下钻后按全交互路由补状态×视口证据，随后 Gate5全链同 SHA 验收。每阶段先同步状态文档、门禁、commit、立即 push。常驻Compose `flow`标签来源混杂，绝不重启/重建/写入；Gate1/Gate5全验收和准确 SHA CI绿前不得进入队列第3项。
 - **每项汇报格式**：完整 11 项队列和计数；当前项与细分步骤；本轮完成证据（SHA、命令、结果）；实际问题/替代路径；下一项何时解锁和唯一下一动作。不要写“等待用户验证/批准”作为常规动作；只有触及明文安全红线的 schema 执行边界才须记录为精确批准门。
 
 ### 唯一串行 To-do 的逐项操作卡

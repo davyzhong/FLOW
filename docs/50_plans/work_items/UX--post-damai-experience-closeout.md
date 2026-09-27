@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 5.15
+version: 5.16
 created_at: 2026-09-24
 updated_at: 2026-09-27
 owner: FLOW
@@ -14,7 +14,7 @@ applies_to: web-frontend
 
 # 大麦数据后的剩余体验收口
 
-> 2026-09-27 最新状态：`/reports`、`/data`、`/investigations`值级子项已关闭。最终代码 `3660389e` / CI `36310017180` attempt2 17/17 success；隔离verify19/19、GET矩阵159项零意外、Playwright12/12。当前唯一下一步为补齐Gate1全路由覆盖表、未覆盖下钻与全路由状态/视口矩阵，再执行Gate5；UX工作包仍 active。
+> 2026-09-27 最新状态：八个业务页值级子项已关闭；代码 `3660389e038083dfc92f6812c28e6ad7e2a2cfdb` / CI `36310017180` attempt2 17/17 success；隔离 verify19/19、159项 GET（149预期200、10预期422、状态不匹配0）、Playwright12/12。Gate1全路由覆盖与页面—API—事实链映射已沉淀于[版本化验收证据](../../60_delivery/verification/2026-09-26--damai-visibility-gate1-v1.md)。当前唯一下一步：核实覆盖表外的真实下钻目标；随后完成适用的全交互路由状态×视口矩阵，最后执行Gate5。同 SHA CI attempt1 smoke `make stack-up` 失败、attempt2通过，根因未知。常驻`flow` Compose来源标签混杂，禁止重启/重建/写入；UX工作包仍 active。
 
 ## 指标库 `/metric-library` API→配置→UI 值级验收（2026-09-27；已关闭）
 
