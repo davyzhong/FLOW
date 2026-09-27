@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 5.4
+version: 5.5
 created_at: 2026-09-24
 updated_at: 2026-09-27
 owner: FLOW
@@ -62,6 +62,7 @@ applies_to: web-frontend
 - 验证：`make lint && make typecheck && make test-web`（Web142/142；lint零错误、一条既有TanStack Table warning）、矩阵pytest3/3、plan views、文档M1、链接、contracts均通过；E2E目标 ESLint/typecheck通过。此代码须提交后的同 SHA required CI。
 - 延伸值级验收（`main@99991566`）：隔离矩阵现为159条（149条合同有效请求预期200、10条不支持组合预期422且错误码正确、意外0）；完整覆盖单维选项×month/ytd、客户群×产品支持组合及五种不支持维度对。脚本 pytest3/3；seed verify19/19；浏览器9/9；Web142/142；lint/typecheck通过。后续不得把不受支持组合记为缺陷。
 - 同 SHA CI：run `36279509026`（head `9999156690fdb42edc76488f271ae877abe73406`）截至本记录仍运行中，不宣称通过。更早 run `36276782059` 的影响分析集成测试单例失败，根因为 sandbox 当前值为空；必须在隔离测试库重现并归因，不得删断言或改预期。
+- 隔离复验（2026-09-27）：使用本轮专属 Compose 项目 `flow-ci-repro`（PostgreSQL 55432、Redis 16380、MinIO 19010；独立卷），空库迁移至 `0031_enterprise_directory`；目标单测首次通过、模块3/3通过；CI同范围集成批次命令 `pytest tests/integration tests/investigation tests/copilot tests/api -q --ignore=tests/api/test_auth_boundary.py --ignore=tests/api/test_workspace.py` 结果 **267 passed, 3 warnings**；批次结束后目标单测再次通过。旧失败截至此证据仍不可复现，根因未知；不改实现、不降低断言，须结合当前 SHA CI 终态继续观察。
 - CI追查：旧 SHA `cc2211e5` run `36276782059` 最终失败于 `tests/integration/test_metric_impact.py::test_impact_report_traverses_downstream_and_sandbox`（88项中1失败，`SandboxDiff.current_value=None`，原测试预期非空）；与本次筛选改动无直接关系，但需观察新 SHA 是否复现，不能忽略。
 - 本工作包仍 active：其它页面 API→源事实→UI 映射、深链逐点检查、其余交互路由全状态/全视口矩阵与 Gate5全链尚未关闭。
 
