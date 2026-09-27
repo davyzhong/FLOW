@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 5.17
+version: 5.18
 created_at: 2026-09-24
 updated_at: 2026-09-27
 owner: FLOW
@@ -14,7 +14,7 @@ applies_to: web-frontend
 
 # 大麦数据后的剩余体验收口
 
-> 2026-09-27 最新状态：八个业务页值级子项已关闭；值级/API链基线 `3660389e` / CI `36310017180` attempt2 17/17 success。Gate1真实下钻回归本地新增：Dashboard 指标卡→指标库，覆盖矩阵→财报，报告中心→财报分析/经营分析都实际点击并验证目标身份；生产E2E94/94、隔离大麦 verify19/19 + GET矩阵159项零意外 + 浏览器12/12、Web143/143、lint/typecheck通过。当前新增测试尚未提交/同SHA CI。逐路由覆盖与剩余目标映射见[版本化验收证据](../../60_delivery/verification/2026-09-26--damai-visibility-gate1-v1.md)。唯一下一步：继续核实并逐项验证其他真实下钻；随后完成适用的全交互路由状态×视口矩阵，最后执行Gate5。常驻`flow` Compose来源标签混杂，禁止重启/重建/写入；UX工作包仍 active。
+> 2026-09-27 最新状态：八个业务页值级子项已关闭；值级/API链基线 `3660389e` / CI `36310017180` attempt2 17/17 success。Gate1真实下钻点击发现并修复两项缺陷：Dashboard客群矩阵链接更新URL但选择控件未同步；趋势图快照链接误用查询参数，未冻结快照会静默落到默认报告。已新增矩阵客群/产品+客群组合与趋势快照身份断言；指标卡→指标库、覆盖矩阵→财报、报告中心→财报/经营分析点击断言继续通过。生产E2E94/94、隔离大麦verify19/19 + GET矩阵159项零意外 + 浏览器12/12、Web143/143、lint/typecheck通过。当前改动尚未提交/同SHA CI。逐路由覆盖与剩余目标映射见[版本化验收证据](../../60_delivery/verification/2026-09-26--damai-visibility-gate1-v1.md)。提交并验证同SHA CI后，唯一下一步为继续其他真实下钻；随后完成适用的全交互路由状态×视口矩阵，最后执行Gate5。常驻`flow` Compose来源标签混杂，禁止重启/重建/写入；UX工作包仍 active。
 
 ## 指标库 `/metric-library` API→配置→UI 值级验收（2026-09-27；已关闭）
 

@@ -89,21 +89,21 @@ describe("驾驶舱深链", () => {
     expect(titleLink).toHaveAttribute("href", firstFinding.investigation_path);
   });
 
-  it("状态条批次链接 /data?batch=，快照链接 /reports?focus=", async () => {
+  it("状态条批次链接 /data?batch=，快照链接 /reports?snapshot=", async () => {
     renderLoaded();
     expect(await screen.findByText("已发布经营数据")).toBeVisible();
     const bar = screen.getByRole("status", { name: "数据治理状态" });
     const links = within(bar).getAllByRole("link");
     const hrefs = links.map((link) => link.getAttribute("href"));
     expect(hrefs).toContain(`/data?batch=${ready.context.batch_id}`);
-    expect(hrefs).toContain(`/reports?focus=${ready.context.metric_snapshot_id}`);
+    expect(hrefs).toContain(`/reports?snapshot=${ready.context.metric_snapshot_id}`);
   });
 
-  it("趋势明细月份链接 /reports?focus={metric_snapshot_id}", async () => {
+  it("趋势明细月份链接 /reports?snapshot={metric_snapshot_id}", async () => {
     renderLoaded();
     expect(await screen.findByText("已发布经营数据")).toBeVisible();
     const link = screen.getByRole("link", { name: firstPoint.month });
-    expect(link).toHaveAttribute("href", `/reports?focus=${firstPoint.metric_snapshot_id}`);
+    expect(link).toHaveAttribute("href", `/reports?snapshot=${firstPoint.metric_snapshot_id}`);
   });
 
   it("利润桥 driver 链接到指标库 focus 深链", async () => {

@@ -451,6 +451,39 @@ test("dashboard renders damai overview with four grain filters", async ({ page }
     await control.selectOption("");
     await expect(control).toHaveValue("");
   }
+
+  // 矩阵客群标题真实下钻：点击后 URL 与筛选控件必须指向同一客群。
+  const matrix = page.getByRole("table", { name: "客户群与产品毛利矩阵" });
+  const firstSegmentLink = matrix.locator("tbody tr").first().locator("th a");
+  await expect(firstSegmentLink).toBeVisible();
+  const segmentHref = await firstSegmentLink.getAttribute("href");
+  const segmentId = new URL(segmentHref!, "http://flow.local").searchParams.get("customer_segment_id");
+  expect(segmentId).toBeTruthy();
+  await firstSegmentLink.click();
+  await expect(page).toHaveURL(new RegExp(`customer_segment_id=${segmentId}`));
+  await expect(page.getByRole("combobox", { name: "客户群" })).toHaveValue(segmentId!);
+
+  // 毛利矩阵交叉单元格必须同时携带行客群和列产品，不能降成单一维度链接。
+  await page.goto("/");
+  await expect(page.getByRole("table", { name: "客户群与产品毛利矩阵" })).toBeVisible();
+  const firstCellLink = page
+    .getByRole("table", { name: "客户群与产品毛利矩阵" })
+    .locator("tbody tr")
+    .first()
+    .locator("td a")
+    .first();
+  await expect(firstCellLink).toBeVisible();
+  const cellHref = await firstCellLink.getAttribute("href");
+  const cellFilters = new URL(cellHref!, "http://flow.local").searchParams;
+  const cellSegmentId = cellFilters.get("customer_segment_id");
+  const cellProductId = cellFilters.get("logistics_product_id");
+  expect(cellSegmentId).toBeTruthy();
+  expect(cellProductId).toBeTruthy();
+  await firstCellLink.click();
+  await expect(page).toHaveURL(new RegExp(`customer_segment_id=${cellSegmentId}`));
+  await expect(page).toHaveURL(new RegExp(`logistics_product_id=${cellProductId}`));
+  await expect(page.getByRole("combobox", { name: "客户群" })).toHaveValue(cellSegmentId!);
+  await expect(page.getByRole("combobox", { name: "物流产品" })).toHaveValue(cellProductId!);
 });
 
 test("dashboard API serves customer-grain overview", async ({ page }) => {
@@ -586,6 +619,35 @@ test("dashboard API serves customer-grain overview", async ({ page }) => {
   const segmentValue = Number(segmentRevenue?.primary.exact_value);
   expect(segmentValue).toBeGreaterThan(0);
   expect(segmentValue).toBeLessThan(totalValue);
+
+  // 趋势月份的快照深链必须命中报告中心中同一 metric_snapshot_id，而非只保留 href。
+  const snapshotsResponse = await page.request.get("/api/v1/publishing/snapshots");
+  expect(snapshotsResponse.ok()).toBeTruthy();
+  const { snapshots } = (await snapshotsResponse.json()) as { snapshots: PublishingSnapshot[] };
+  const firstTrendPoint = body.trends.points[0];
+  const matchingSnapshot = snapshots.find(
+    (snapshot) => snapshot.metric_snapshot_id === firstTrendPoint.metric_snapshot_id,
+  );
+
+  await page.goto("/");
+  await expect(page.getByTestId("metric-card").first()).toBeVisible({ timeout: 30_000 });
+  await trendDetails.locator("summary").click();
+  const trendLink = trendDetails.locator("tbody tr").first().locator("th a");
+  await expect(trendLink).toHaveAttribute(
+    "href",
+    `/reports?snapshot=${encodeURIComponent(firstTrendPoint.metric_snapshot_id)}`,
+  );
+  await trendLink.click();
+  await expect(page).toHaveURL(
+    `/reports?snapshot=${encodeURIComponent(firstTrendPoint.metric_snapshot_id)}`,
+  );
+  if (matchingSnapshot) {
+    await expect(page.getByRole("radio", { name: new RegExp(matchingSnapshot.title) })).toBeChecked();
+  } else {
+    await expect(page.getByTestId("metric-snapshot-detail")).toContainText(
+      firstTrendPoint.metric_snapshot_id,
+    );
+  }
 });
 
 test("operations overview renders damai six-theme analysis", async ({ page }) => {

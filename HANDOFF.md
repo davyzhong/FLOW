@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目尽调、优化与单 Agent 执行总交接
 doc_type: navigation
 status: current
-version: 5.18
+version: 5.19
 created_at: 2026-09-12
 updated_at: 2026-09-27
 owner: FLOW
@@ -18,7 +18,7 @@ applies_to: repository
 
 > **本节覆盖本文其余旧会话交接快照。** 旧章节保留历史证据，不可据其旧顺序领取任务。下一位 Agent 开始前先从 GitHub 同步 `main`，再读 `AGENTS.md`、`docs/00_start_here/PROJECT_STATE.md`、`docs/50_plans/CURRENT_ROADMAP.md` 和相应工作包。唯一任务顺序是路线图中的 11 项队列；本节只是对同一队列逐项提供执行手册，不构成第二条队列。
 
-**最新接续点（2026-09-27）：** 唯一工作树为 `.worktrees/execution-convergence` 的 `main`；已同步 GitHub。文档提交 `c7e744438e3a7c8989488a8b264d44890590aa7a`（短 SHA `c7e74443`）CI run `36313566734` 同 SHA success。其后本地添加真实下钻点击回归：Dashboard 指标卡→指标库、指标覆盖矩阵→财报、报告中心→财报/经营分析，实际断言目标页身份；`bash scripts/test_module_boundaries_e2e.sh` 94/94，`make test-damai-demo-e2e` 隔离 seed verifier19/19、159项 GET 为149预期200+10预期422且零意外、浏览器12/12；`make lint && make typecheck && make test-web` 通过，Web143/143。隔离 Compose 已清理。新增代码和状态文档尚未提交、尚无同 SHA CI，需先过文档门禁/链接/差异检查，再提交并立即 push，然后核对该 SHA CI。真实下钻已完成和未完成的链接源清单见[版本化验收证据](docs/60_delivery/verification/2026-09-26--damai-visibility-gate1-v1.md)。后续顺序仍是：完成剩余安全真实下钻→全交互路由状态×390/1024/1440视口矩阵→Gate5同 SHA 全链验收；不得触碰常驻`flow`（Compose 标签来源混杂）。
+**最新接续点（2026-09-27）：** 唯一工作树为 `.worktrees/execution-convergence` 的 `main`；已同步 GitHub。主线文档提交 `c7e744438e3a7c8989488a8b264d44890590aa7a`（短 SHA `c7e74443`）CI run `36313566734` 同 SHA success。随后真实下钻点击审计发现并修复两处产品缺陷：客群矩阵URL变化未同步Dashboard筛选控件；趋势图指向未冻结指标快照时误落默认报告。新增身份落点测试；生产E2E94/94、隔离seed verify19/19、GET矩阵159项（149预期200、10预期422、零意外）、浏览器12/12；Web143/143、lint/typecheck通过。隔离Compose已清理，常驻`flow`未操作。代码与本轮文档尚未提交/无同SHA CI；先完成M1/链接/plan views/差异检查，提交并立即push，再确认确切SHA CI绿。证据与未完成链接源清单见[版本化验收证据](docs/60_delivery/verification/2026-09-26--damai-visibility-gate1-v1.md)。后续顺序：剩余安全真实下钻→全交互路由状态×390/1024/1440矩阵→Gate5同SHA全链验收；不得触碰常驻`flow`（Compose标签来源混杂）。
 
 ### 接手基线、当前状态与操作纪律
 
