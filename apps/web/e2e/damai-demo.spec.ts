@@ -4,7 +4,9 @@ import path from "node:path";
 import { expect, test, type Page } from "@playwright/test";
 import type {
   DashboardResponse,
+  FindingListItem,
   FreezeCandidate,
+  IntakeBatchHistoryItem,
   MetricCoverage,
   MetricGovernanceEventList,
   MetricLibrary,
@@ -969,6 +971,59 @@ test("metric library switches to damai synthetic coverage", async ({ page }) => 
   await expect(matrix).toContainText("40/40");
 });
 
+test("investigations index mirrors findings api values", async ({ page }) => {
+  await page.goto("/investigations");
+  await expect(page.getByRole("heading", { name: "分析与归因" })).toBeVisible();
+
+  // 只读值级对账：Finding 列表逐行对账 GET /api/v1/investigations（放在批准旅程之前）。
+  const resp = await page.request.get("/api/v1/investigations");
+  expect(resp.ok()).toBeTruthy();
+  const { findings } = (await resp.json()) as { findings: FindingListItem[] };
+  expect(findings.length).toBeGreaterThan(0);
+
+  const rows = page.getByRole("region", { name: "Finding 列表" }).locator("tbody tr");
+  await expect(rows).toHaveCount(findings.length);
+
+  const STATUS_LABELS: Record<string, string> = {
+    candidate: "候选",
+    in_review: "复核中",
+    approved: "已批准",
+    rejected: "已拒绝",
+  };
+  const formatImpact = (value: string): string => {
+    const amount = Number(value);
+    if (!Number.isFinite(amount)) return value;
+    if (Math.abs(amount) >= 100_000_000) return `${(amount / 100_000_000).toFixed(2)} 亿元`;
+    if (Math.abs(amount) >= 10_000) return `${(amount / 10_000).toFixed(1)} 万元`;
+    return `${amount.toFixed(2)} 元`;
+  };
+  const buildHref = (finding: FindingListItem): string => {
+    const params = new URLSearchParams();
+    if (finding.batch_id) params.set("batch_id", finding.batch_id);
+    if (finding.metric_snapshot_id) params.set("metric_snapshot_id", finding.metric_snapshot_id);
+    if (finding.analysis_run_id) params.set("analysis_run_id", finding.analysis_run_id);
+    const query = params.toString();
+    return `/investigations/${finding.finding_id}${query ? `?${query}` : ""}`;
+  };
+
+  // TanStack 默认排序不保证 API 顺序：按标题定位行后逐格对账。
+  for (const finding of findings) {
+    const row = rows.filter({ hasText: finding.title });
+    await expect(row).toHaveCount(1);
+    await expect(row).toContainText(finding.finding_type ?? "—");
+    await expect(row).toContainText(formatImpact(finding.impact_amount));
+    await expect(row).toContainText(finding.comparison_basis ?? "—");
+    await expect(row).toContainText(STATUS_LABELS[finding.status] ?? finding.status);
+    if (finding.total_score && finding.analysis_run_id) {
+      await expect(row).toContainText(Number(finding.total_score).toFixed(0));
+      await expect(
+        row.locator(`a[href="/analysis?run_id=${encodeURIComponent(finding.analysis_run_id)}"]`),
+      ).toHaveCount(1);
+    }
+    await expect(row).toHaveAttribute("data-href", buildHref(finding));
+  }
+});
+
 test("approves the in-review revenue growth finding", async ({ page }) => {
   await page.goto("/investigations");
   await expect(page.getByRole("heading", { name: "分析与归因" })).toBeVisible();
@@ -1149,6 +1204,41 @@ test("report center publishes operations artifact and download matches stored sh
   expect(buffer.length).toBeGreaterThan(0);
   const sha = createHash("sha256").update(buffer).digest("hex");
   expect(sha).toBe(attempt.stored_sha256);
+});
+
+// 上传旅程放最后：会在隔离库追加一个新批次/导入版本，不影响上述内容断言。
+test("data workbench history mirrors intake batches api", async ({ page }) => {
+  await page.goto("/data");
+  await expect(page.getByRole("heading", { name: "数据工作台" })).toBeVisible();
+
+  // 只读值级对账：历史批次表逐行逐格对账 GET /api/v1/intake/batches（同 actor/企业可见范围）。
+  const resp = await page.request.get("/api/v1/intake/batches");
+  expect(resp.ok()).toBeTruthy();
+  const { items } = (await resp.json()) as { items: IntakeBatchHistoryItem[] };
+  expect(items.length).toBeGreaterThan(0);
+
+  const history = page.getByRole("region", { name: "最近的数据批次" });
+  await expect(history).toBeVisible({ timeout: 15_000 });
+  const rows = history.locator("tbody tr");
+  await expect(rows).toHaveCount(items.length);
+  for (const [index, item] of items.entries()) {
+    const row = rows.nth(index);
+    await expect(row).toContainText(item.name);
+    await expect(row).toContainText(item.status);
+    await expect(row).toContainText(String(item.version_count));
+    await expect(row).toContainText(
+      item.latest_version_sequence === null
+        ? "—"
+        : `v${item.latest_version_sequence} · ${item.latest_version_status}`,
+    );
+    await expect(row).toContainText(
+      new Date(item.created_at).toLocaleString("zh-CN", { timeZone: "Asia/Shanghai" }),
+    );
+    await expect(row.getByRole("link", { name: item.name })).toHaveAttribute(
+      "href",
+      `/data?batch=${encodeURIComponent(item.id)}`,
+    );
+  }
 });
 
 // 上传旅程放最后：会在隔离库追加一个新批次/导入版本，不影响上述内容断言。
