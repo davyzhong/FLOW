@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.28
+version: 5.29
 created_at: 2026-09-12
 updated_at: 2026-09-27
 owner: FLOW
@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-09-27 最新状态：UX Dashboard、`/statements`、`/analysis`、`/operations`、`/metric-library`、`/reports`、`/data`、`/investigations`八个业务页的值级子项均已完成；代码 SHA `3660389e038083dfc92f6812c28e6ad7e2a2cfdb` 对应 CI run `36310017180` attempt2 17/17 success。隔离旅程 verify19/19、159项安全 GET（149预期200、10预期422、状态不匹配0）、Playwright12/12；`make typecheck`通过，`make lint`零错误/1条既有warning。页面—API—事实链交叉表已沉淀于[Gate 1覆盖证据](../60_delivery/verification/2026-09-26--damai-visibility-gate1-v1.md)。UX仍 active；唯一下一步是盘点并逐项验证覆盖表之外的真实下钻，再完成适用的全路由状态×视口矩阵和Gate5。常驻`flow` Compose标签来源混杂，本轮未操作；禁止重启、重建、迁移或写入。
+2026-09-27 最新状态：UX八个业务页值级子项及 159 项安全 GET 基线均已完成；基线 `3660389e` 的 CI run `36310017180` attempt2 17/17 success。最近主线文档提交 `c7e74443` 的 CI run `36313566734` 同 SHA success。当前串行步骤为真实下钻目标点击审计：新增 Dashboard 指标卡→指标库、指标覆盖矩阵→指定财报、报告中心→财报/经营分析的真实点击与身份落点断言；生产 E2E 94/94、隔离大麦旅程 seed verifier19/19、159项 GET（149预期200、10预期422、零意外）、Playwright12/12、Web Vitest143/143、lint/typecheck均通过。结果和尚未覆盖的链接源清单见[Gate 1覆盖证据](../60_delivery/verification/2026-09-26--damai-visibility-gate1-v1.md)。本轮代码测试尚未提交和同SHA CI验收，UX仍 active；完成剩余安全下钻后继续状态×视口矩阵，再 Gate5。常驻`flow` Compose标签来源混杂，本轮未操作；禁止重启、重建、迁移或写入。
 
 2026-09-27 偏差登记：接手会话在本地复现 user-closure E2E 失败时，`scripts/test_user_closure_e2e.sh` 的历史默认 `DATABASE_URL` 将 `alembic upgrade head` 与 `seed_dashboard_demo.py --fresh-batch` 指向了常驻 `flow` 库，在常驻库新增种子批次 `01a0e22c-…`（"FLOW Finance BP dashboard demo"，2026-09-27 17:23:04 +08，与既有偏差批次 `01a0dcdd-8245-7c17-99aa-fce91a8a7a57` 同类；上传旅程测试失败，未产生 intake 写入）。按既有纪律未清理/回滚/切 latest，待用户授权处置。根因已修复（`2117d837`）：脚本对非 CI 环境改为 fail-closed 拦截常驻库连接（`FLOW_USER_CLOSURE_ALLOW_RESIDENT_DB=1` 显式逃逸），并修复该测试的水合竞态（等历史区出现再上传、映射阶段等确认按钮）；隔离库 `flow_user_closure` 复跑 4/4 passed。
 

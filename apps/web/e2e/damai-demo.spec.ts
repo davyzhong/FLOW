@@ -1145,6 +1145,35 @@ test("reports center mirrors api rows and values without mutation", async ({ pag
       await expect(row.getByRole("button", { name: "下载" })).toHaveCount(1);
     }
   }
+
+  // 真实跨页回归：报告中心财报项必须把同一 report_id 带到财报分析并选中该项。
+  const objectiveTarget = reportList.reports[0];
+  await objectiveRows
+    .locator(`a[href="/statements?report=${encodeURIComponent(objectiveTarget.id)}"]`)
+    .click();
+  await expect(page).toHaveURL(`/statements?report=${encodeURIComponent(objectiveTarget.id)}`);
+  const selectedStatementTab = page.locator("nav[aria-label='财报选择'] button[aria-pressed='true']");
+  await expect(selectedStatementTab).toContainText(objectiveTarget.company_name);
+  await expect(selectedStatementTab).toContainText(objectiveTarget.period_label);
+  await expect(selectedStatementTab).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
+
+  // 经营报告快照链接同样必须把 statement_report_id 带到经营分析并定位对应报告。
+  await page.goto("/reports");
+  const firstOperationsSnapshot = opsRendered[0];
+  const operationsLink = page.locator(
+    `a[href="/operations?report=${encodeURIComponent(firstOperationsSnapshot.statement_report_id!)}"]`,
+  );
+  await operationsLink.click();
+  await expect(page).toHaveURL(
+    `/operations?report=${encodeURIComponent(firstOperationsSnapshot.statement_report_id!)}`,
+  );
+  await expect(page.getByRole("heading", { name: /经营分析/ })).toBeVisible();
+  await expect(page.getByLabel("分析数据与期间")).toHaveValue(
+    `report:${firstOperationsSnapshot.statement_report_id}`,
+  );
 });
 
 test("report center publishes operations artifact and download matches stored sha256", async ({

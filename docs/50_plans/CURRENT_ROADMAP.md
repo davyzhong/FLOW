@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 5.30
+version: 5.31
 created_at: 2026-09-12
 updated_at: 2026-09-27
 owner: FLOW
@@ -17,7 +17,7 @@ superseded_by: null
 
 # 当前路线图（唯一主线）
 
-> 2026-09-27 最新进度（优先于下方历史快照）：八个业务页值级子项已完成。代码 `3660389e038083dfc92f6812c28e6ad7e2a2cfdb` / CI run `36310017180` attempt2 为17/17 success；隔离 verify19/19、Playwright12/12。159项 GET 矩阵为149项预期200、10项预期422、状态不匹配0；当前 JSONL SHA-256 `708ae42b2d083a8ae4ac9a67bc0e324760a6eefc7d3c474cbf8cf7caf07fb876`。Gate1页面—API—事实交叉表已记录在[覆盖证据](../60_delivery/verification/2026-09-26--damai-visibility-gate1-v1.md)。唯一执行项仍是 UX：下一步盘点表外的真实下钻目标并逐项验收，然后状态×视口覆盖，最后 Gate5 全链同 SHA 验收。常驻`flow` Compose来源标签混杂，不得重启、重建或写入。更早页面子项进度只作历史，不代表当前执行位置。
+> 2026-09-27 最新进度（优先于下方历史快照）：八个业务页值级子项已完成。基线 `3660389e` / CI run `36310017180` attempt2 为17/17 success；文档阶段提交 `c7e74443` / CI run `36313566734` 同 SHA success。最近本地真实下钻扩展验收：生产 E2E94/94，隔离大麦 verify19/19、GET矩阵159项（149×200、10×预期422、零意外）、浏览器12/12，Web143/143、lint/typecheck通过；增加了 Dashboard 指标卡→指标库、覆盖矩阵→财报、报告中心→财报/经营分析真实点击断言。完整已测/未测链接源清单见[覆盖证据](../60_delivery/verification/2026-09-26--damai-visibility-gate1-v1.md)。代码测试当前未提交/未取得同SHA CI。唯一执行项仍是 UX：逐项补足剩余安全下钻→状态×390/1024/1440视口矩阵→Gate5最终全链同SHA验收。常驻`flow` Compose来源标签混杂，不得重启、重建或写入。更早页面子项进度只作历史，不代表当前执行位置。
 
 > 历史快照：`/data` 与 `/investigations` 子项在 `3660389e` 收尾；当前唯一执行位置以上方最新进度及“执行队列”为准。
 
@@ -38,7 +38,7 @@ superseded_by: null
 | 1' | [U04 独立 oracle](work_items/U04--independent-oracle.md) | **blocked（验证出口未满足；工作按唯一队列执行）** | 解析器适配 + 新留出 | 首跑199行均 `not_comparable`；到队列第3项时实施适配、旧样本回归及独立留出，不把验收门槛误作停工理由 |
 | 2 | [S01 战略边界、事实合同与安全门禁](work_items/S01--post-u8-boundary-contract-security.md) | **completed** | U08 completed | Task 1–5 完成；安全规格 V1.1 已批准且独立审查闭环（`6c3c1cd`，零 P1/P2）。2026-09-14 `ff42c67` 五路并合 + 回落修复（`c1510ce`→`2570bf8`）带入路由策略 v2、模块边界与 U8 升级门禁、迁移 0026 修复、`main.py` 启动 fail-fast、两模块入口；Kimi `0841ff9` v1 被否，由 `997c1ab` v2 取代。**Task 6 已关闭**（R2/R3/R4 交付，台账 §7），阶段 3 转入 C 级出口；[协调台账](../70_operations/2026-09-14-coordination-ledger-glm.md) / [范围计划](../superpowers/plans/2026-09-13-flow-post-u8-boundary-gate.md) / [并行执行计划](../superpowers/plans/2026-09-13-flow-three-agent-parallel-restructuring.md) |
 | 2a | [大麦物流完整财年演示数据](work_items/DAMAI--full-year-demo.md) | **completed** | 已批准规格；不依赖公开 C 级 | D1–D3 已集成 main `e22d193`，CI run `36137591750` 17/17 success；隔离栈 verify 19/19、八页面 E2E 9/9、重复 seed 零增长、发行包零漂移。**常驻开发库已装载（G2 完成 2026-09-25）**：用户裁决演示数据全部入库，集成后 main 上 verify 19/19、页面可见；合成数据不解除公开 C 级门禁 |
-| 2b | [大麦数据后的剩余体验收口](work_items/UX--post-damai-experience-closeout.md) | **active（唯一执行项）** | G2 ✓；用户已批准；ORG-LEDGER CI ✓ | 八个业务页值级审计、159项 GET 矩阵及页面—API—事实链交叉表已完成；剩余为覆盖表外的真实下钻、适用的全路由状态×视口矩阵及 Gate 5 同 SHA 复验；常驻库偏差未经授权不得处置。 |
+| 2b | [大麦数据后的剩余体验收口](work_items/UX--post-damai-experience-closeout.md) | **active（唯一执行项）** | G2 ✓；用户已批准；ORG-LEDGER CI ✓ | 新增三类真实跨页点击（Dashboard→指标库、覆盖矩阵→财报、报告中心→财报/经营分析）；生产E2E94/94、隔离大麦E2E12/12、verify19/19、GET矩阵零意外、Web143/143；新增代码尚待提交和同SHA CI。后续仍有未逐项点击的真实目标、全路由状态×视口矩阵与Gate5。常驻库偏差未经授权不得处置。 |
 | 2c | [企业组织建制与经营账套初始化包](work_items/ORG-LEDGER--enterprise-initialization-package.md) | **completed** | 大麦发行包 completed；批准三表 schema | `2c7d6eb4`；CI run `36270782272` 的17/17 jobs success。隔离 `full` 首次/重复与 `business` 对账通过；11 个企业/loader 测试、全量 API 852、Web142、脚本107、大麦 verify19/19、API43/43、Playwright9/9、合同/文档/lint/typecheck 均通过。31文件 manifest 稳定 SHA `cbc7cccf…e513`。 |
 | K | [第二代静态知识刷新与战略重基线](work_items/KNOWLEDGE--refresh-v2.md) | **active（队列排队，不并行启动）** | 按唯一队列轮到时启动；规格/preflight 已完成 | K0–K6 未执行；`CURRENT_RELEASE` 仍为 `flow-knowledge-2026-09-12.1`，用户战略裁决前不得切换。 |
 | 3 | [公开财报模块 C 级出口](work_items/PUBLIC--c-level-exit-protocol.md) | **blocked(归因、补证与裁决)** | S01 关闭 ✓ | 独立交叉评已完成（[结果](../80_reviews/ai-cross-review/results/gpt-6-astra-2026-09-25.md)）：1,530 格中42异常、109存疑、200因JDL乱码无法完整核验；待原PDF逐项归因/订正。1794/1794仅为登记覆盖口径，不等于通过 |
@@ -54,11 +54,11 @@ superseded_by: null
 
 ## 唯一完整 To-do 与执行队列（严格串行）
 
-截至 2026-09-27：**11 项，已完成 1 项，实际执行中 1 项，排队 8 项，外部材料受限 1 项**。当前唯一执行项第2项 UX 全站验收。Dashboard、`/statements`、`/analysis`、`/operations`、`/metric-library`、`/reports`、`/data`、`/investigations`页面子项均已完成并有同 SHA CI证据（最终代码SHA `3660389e` / run `36310017180` attempt2 17/17）。当前唯一动作是补齐Gate1完整覆盖表及尚缺验收，再完成状态/视口与Gate5。UX Gate1/Gate5仍未结束；常驻`flow`不写入/清理，且常驻Compose来源混杂，禁止重启或重建。
+截至 2026-09-27：**11 项，已完成 1 项，实际执行中 1 项，排队 8 项，外部材料受限 1 项**。当前唯一执行项第2项 UX 全站验收。八个业务页值级审计、159项安全GET基线完成；基线 `3660389e` / run `36310017180` attempt2 17/17，文档提交 `c7e74443` / run `36313566734` success。新增真实点击回归本地生产E2E94/94、隔离大麦旅程12/12、Web143/143及静态检查通过，但改动尚未提交/同SHA CI。当前唯一动作是继续逐项覆盖剩余真实下钻；然后适用的全交互路由状态×视口矩阵，最后Gate5。UX Gate1/Gate5仍未结束；常驻`flow`不写入/清理，且常驻Compose来源混杂，禁止重启或重建。
 
 1. **[完成] 企业组织建制与经营账套初始化包**（工作包见状态表2c）：提交 `2c7d6eb4`，CI run `36270782272` 的17/17 jobs success。31文件发行包稳定 manifest SHA `cbc7cccf…e513`；隔离 `full` 首次/重复、`business` 重置及回滚/租户隔离通过；全量 API852、Web142、脚本107、verify19/19、只读 GET43/43、Playwright9/9，合同/文档/lint/typecheck均通过。仅三表迁移在隔离栈验证，未触碰常驻库。
-2. **[进行中] UX 可见性与全站验收关闭**（工作包见状态表2b）：八个业务页值级子项已完成。最新代码基线 `3660389e` / CI run `36310017180` attempt2 17/17 success；隔离 verify19/19、Playwright12/12；安全 GET 矩阵159项（149预期200、10预期422、状态不匹配0），逐路由页面—API—事实链映射见[Gate 1覆盖证据](../60_delivery/verification/2026-09-26--damai-visibility-gate1-v1.md)。当前唯一剩余顺序：盘点并逐个验证覆盖表外的真实下钻 → 完成适用的全交互路由状态×390/1024/1440视口矩阵 → Gate5同SHA全链验收。常驻 `flow` 不写入/清理或重启；不以 8 个页面子项或159项 GET 单独宣布 Gate1 完成。
-> 2026-09-27 第2项最新子步骤：八个业务页值级审计均已完成；全路由覆盖表及页面—API—事实链映射已更新至[Gate 1覆盖证据](../60_delivery/verification/2026-09-26--damai-visibility-gate1-v1.md)。下一步逐页枚举覆盖表外的真实下钻并验证目标与身份参数；再完成适用的全交互路由状态×视口覆盖；最后 Gate5。矩阵159项零意外和8页完成都不单独构成 UX Gate1/Gate5关闭条件。
+2. **[进行中] UX 可见性与全站验收关闭**（工作包见状态表2b）：八个业务页值级子项和159项安全GET基线已完成；此前基线 `3660389e` / run `36310017180` attempt2 17/17，文档提交 `c7e74443` / run `36313566734` 同SHA success。新增真实点击回归覆盖 Dashboard 指标→指标库、覆盖矩阵→财报、报告中心→财报/经营分析；生产E2E94/94、隔离 verify19/19、E2E12/12、Web143/143、lint/typecheck通过。当前测试代码尚未提交/CI验收。唯一剩余顺序：盘点并逐个验证其余真实下钻 → 完成适用的全交互路由状态×390/1024/1440视口矩阵 → Gate5同SHA全链验收。常驻 `flow` 不写入/清理或重启；不以 8 个页面子项或159项 GET 单独宣布 Gate1 完成。
+> 2026-09-27 第2项最新子步骤：点击回归已新增并本地通过；尚未覆盖目标与阶段验收详见[Gate 1覆盖证据](../60_delivery/verification/2026-09-26--damai-visibility-gate1-v1.md)。下一步继续补真实安全下钻与DOM落点；之后状态×视口，最后Gate5。矩阵159项零意外和8页完成都不单独构成UX Gate1/Gate5关闭条件。
 
 3. **[排队] 公开财报 C 级归因、原件复核与抽取修订**（工作包见状态表3）：处理已确认42项异常后的109项口径疑点、JDL 200 格原件复核、抽取器修订；保留原始值及证据，任何结论可追溯。
 4. **[排队] U04 解析器适配与独立留出验证**（工作包见状态表1'）：这本身是可执行的工程任务，不再误标为阻塞。支持「合并及公司」标题与页码区间参数化；旧三样本回归；对已冻结的小米2026H1、阿里FY2027Q1独立首跑，首跑前不得调参。若遇到输入缺项，主动检查已冻结材料并完成可复现的替代核验记录。

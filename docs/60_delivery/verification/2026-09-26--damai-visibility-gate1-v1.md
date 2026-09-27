@@ -1,14 +1,14 @@
 ---
 doc_id: FLOW-VERIFY-DAMAI-VISIBILITY-GATE1-001
-title: 大麦数据可见性与 Gate 4 批次历史验收证据 v3.8
+title: 大麦数据可见性与 Gate 4 批次历史验收证据 v3.9
 doc_type: verification
 status: draft
-version: "3.8"
+version: "3.9"
 created_at: 2026-09-26
 updated_at: 2026-09-27
 owner: FLOW
-commit_refs: "[3ff95115, 6591e148, 4932504c, 9cd43e20, 905cf544, e2417ffa, af375ba3, 101bcf23, 5510bad3, 430020f, 59b328dc, 85e907a, 7258763, 71a2dd8, 695ea18, 8ea20d6, f135c93, 82cce21, ffcc873e, ca0826f5, 3159af8a, 31a60217, 649a2aba, 7229cd0d, 4c55f10e, dfe6e4ed, 933f857a, 0dde935f, 3660389e, 937e46d8]"
-evidence_refs: "[read-only-local-api-probe, stable-overlay-fingerprint, sha256-response-matrix, damai-ocf-canonical-fixture, damai-isolated-seed-verify, damai-e2e-8-of-9, damai-e2e-9-of-9-ocf-trends-complete, margin-matrix-read-only-grain-audit, margin-comparison-selection-isolated-e2e-9-of-9, github-ci-stale-damai-coverage-assertion, secure-batch-history-api-ui-and-isolated-e2e-9-of-9, clean-sha-59b328dc-damai-e2e-9-of-9, github-dashboard-flow-test-database-url-conflict, dashboard-ci-url-isolation-unit-2-of-2, dashboard-playwright-7-of-7, github-run-36223558441-dashboard-success, persistent-demo-rehydrate-verify-19-of-19-twice, verifier-latest-published-report-regression-tests, allowed-dev-origin-live-readonly-ui-6-of-6, isolated-damai-e2e-9-of-9, persistent-page-api-response-hashes, unavailable-comparison-visible-status-red-green, web-vitest-134-of-134, live-dashboard-playwright-after-change-no-console-errors, operations-balance-sheet-cur-end-role-regression, operations-derived-formula-dependencies, operations-metric-unit-formatting, damai-fy2026-operations-response-sha256-225a9edb, operations-reason-coded-empty-states, read-only-get-matrix-40-calls-36-combinations-all-200, report-history-empty-state-backed-by-empty-attempts, github-run-36228302327-dashboard-visual-height-regression, inline-kpi-status-layout-fix, isolated-damai-e2e-9-of-9-after-31a60217, web-vitest-134-of-134-after-31a60217, github-dashboard-job-success-36230615921, dashboard-dimension-fact-scoping-red-green, dashboard-coverage-denominators-and-empty-state, isolated-damai-verify-19-of-19-e2e-9-of-9-after-649a2aba, github-run-36232029817-all-jobs-success, github-run-36232204424-all-jobs-success, github-run-36232336053-all-jobs-success, persistent-flow-test-dashboard-batch-incident-unreverted, code-audit-objective-snapshot-get-mutates-on-miss, code-audit-operations-render-get-freezes-snapshot, clean-sha-0dde935f-damai-safe-get-matrix-43-of-43, matrix-response-hash-only-no-payload, isolated-damai-verify-19-of-19-e2e-9-of-9-after-matrix, damai-full-route-matrix-159-zero-unexpected, damai-demo-e2e-12-of-12, github-ci-36310017180-attempt2-success, route-to-page-source-lineage-crosswalk]"
+commit_refs: "[3ff95115, 6591e148, 4932504c, 9cd43e20, 905cf544, e2417ffa, af375ba3, 101bcf23, 5510bad3, 430020f, 59b328dc, 85e907a, 7258763, 71a2dd8, 695ea18, 8ea20d6, f135c93, 82cce21, ffcc873e, ca0826f5, 3159af8a, 31a60217, 649a2aba, 7229cd0d, 4c55f10e, dfe6e4ed, 933f857a, 0dde935f, 3660389e, 937e46d8, c7e74443]"
+evidence_refs: "[read-only-local-api-probe, stable-overlay-fingerprint, sha256-response-matrix, damai-ocf-canonical-fixture, damai-isolated-seed-verify, damai-e2e-8-of-9, damai-e2e-9-of-9-ocf-trends-complete, margin-matrix-read-only-grain-audit, margin-comparison-selection-isolated-e2e-9-of-9, github-ci-stale-damai-coverage-assertion, secure-batch-history-api-ui-and-isolated-e2e-9-of-9, clean-sha-59b328dc-damai-e2e-9-of-9, github-dashboard-flow-test-database-url-conflict, dashboard-ci-url-isolation-unit-2-of-2, dashboard-playwright-7-of-7, github-run-36223558441-dashboard-success, persistent-demo-rehydrate-verify-19-of-19-twice, verifier-latest-published-report-regression-tests, allowed-dev-origin-live-readonly-ui-6-of-6, isolated-damai-e2e-9-of-9, persistent-page-api-response-hashes, unavailable-comparison-visible-status-red-green, web-vitest-134-of-134, live-dashboard-playwright-after-change-no-console-errors, operations-balance-sheet-cur-end-role-regression, operations-derived-formula-dependencies, operations-metric-unit-formatting, damai-fy2026-operations-response-sha256-225a9edb, operations-reason-coded-empty-states, read-only-get-matrix-40-calls-36-combinations-all-200, report-history-empty-state-backed-by-empty-attempts, github-run-36228302327-dashboard-visual-height-regression, inline-kpi-status-layout-fix, isolated-damai-e2e-9-of-9-after-31a60217, web-vitest-134-of-134-after-31a60217, github-dashboard-job-success-36230615921, dashboard-dimension-fact-scoping-red-green, dashboard-coverage-denominators-and-empty-state, isolated-damai-verify-19-of-19-e2e-9-of-9-after-649a2aba, github-run-36232029817-all-jobs-success, github-run-36232204424-all-jobs-success, github-run-36232336053-all-jobs-success, persistent-flow-test-dashboard-batch-incident-unreverted, code-audit-objective-snapshot-get-mutates-on-miss, code-audit-operations-render-get-freezes-snapshot, clean-sha-0dde935f-damai-safe-get-matrix-43-of-43, matrix-response-hash-only-no-payload, isolated-damai-verify-19-of-19-e2e-9-of-9-after-matrix, damai-full-route-matrix-159-zero-unexpected, damai-demo-e2e-12-of-12, github-ci-36310017180-attempt2-success, route-to-page-source-lineage-crosswalk, github-ci-36313566734-success, dashboard-kpi-metric-deep-link-click, coverage-report-deep-link-click, reports-objective-report-deep-link-click, reports-operations-snapshot-deep-link-click, damai-isolated-e2e-12-of-12-after-link-clicks, production-e2e-94-of-94, web-vitest-143-of-143]"
 knowledge_release: flow-knowledge-2026-09-12.1
 applies_to: web-frontend
 supersedes: []
@@ -293,3 +293,34 @@ CI 补充（run `36217337338`，SHA `5510bad3`）：18 个作业中仅 integrati
 - GitHub Actions run `36222136591`（`430020f`）和 `36222489952`（`59b328dc`）的 dashboard job 均失败于同一原因：CI 注入 `DATABASE_URL` 指向本地 compose 库 `flow`，安全脚本拒绝并退出2。其余 CI jobs 尚在运行；该结果不表示批次历史 API/UI 失败，但 Gate5 CI 总体验收未通过，须按工作包记录修正变量隔离。
 
 边界：这只补批次历史入口，未修复其他财务/经营页面的缺数或缺口展示；Gate 1 干净 SHA 全路由矩阵、Gate 3–5 其余页面与全链验收仍未关闭。
+
+## Gate 1 实际下钻目标审计（2026-09-27）
+
+### 已完成的链接源—目标复验
+
+现有深链计划覆盖的实体链接不少只校验了 `href`、或直接打开目标 URL，不能据此认定用户点击后的完整旅程已通过。本轮继续检查组件里真实生成的 `<Link>/<a>`，并在生产构建 runner 与隔离大麦旅程增加真实点击断言：
+
+| 链接源 → 目标 | 验证方式 | 结果 |
+|---|---|---|
+| Dashboard 指标卡 → `/metric-library?focus={metric_code}` | 点击卡片；目标 API 返回对应 metric；断言 URL、目标卡与高亮 | 生产 E2E 通过 |
+| 真实财报覆盖矩阵列头 → `/statements?report={report_id}` | 点击列头；断言 URL 和被选中的同一公司/期间 tab | 深链 E2E 通过 |
+| 报告中心客观报告 → `/statements?report={report_id}` | 点击报告中心「查看分析」；按报表 ID 断言选中报告 | 隔离大麦 E2E 通过 |
+| 报告中心经营快照 → `/operations?report={statement_report_id}` | 点击“在经营分析中查看”；断言 URL 和分析上下文控件选中对应报告 ID | 隔离大麦 E2E 通过 |
+| Investigation Finding → Finding 详情 | 既有 dashboard 与隔离旅程实际点击、详情 URL、审批闭环 | 已有隔离 E2E 通过 |
+| 数据工作台批次 → `?batch={batch_id}` | 既有最近批次列表点击、URL 和当前批次上下文 | 已有隔离 E2E 通过 |
+| Copilot evidence citation → 页内证据锚点 | 点击引用并断言 `#evidence-{id}` 与证据卡存在 | 深链 E2E 通过 |
+
+代码阶段本地验收：`bash scripts/test_module_boundaries_e2e.sh` **94/94**（生产 build/start；导航、深链、状态、响应式）；`make test-damai-demo-e2e` 隔离 seed verifier **19/19**、GET 路由矩阵 **159 项（149×200、10×预期422、零意外）**、浏览器旅程 **12/12**；`make lint && make typecheck && make test-web` 通过，Web Vitest **143/143**，lint 仅有既有 TanStack Table warning。isolated Compose 结束后 `docker compose ... ps -a` 为空。以上是本地代码验收；新增点击测试所在代码需经本次提交的同 SHA CI 才可宣称 CI 验收。
+
+### 仍未逐项点击到真实目标的链接/边界
+
+以下已识别为“有链接但尚未证明点击后目标身份和展示”，继续纳入本 Gate1，不按 `href` 存在视为完成：
+
+- Dashboard 趋势月份/快照号 → `/reports?focus|snapshot=`，毛利矩阵行/列/单元格 → Dashboard 筛选，利润桥驱动 → 指标库；
+- Dashboard 快照状态链接、Analysis 报表身份/指标行/运行快照身份、Operations 指标条目 → 各自报告/数据/指标目标；
+- Investigation 身份条的 batch、metric snapshot、analysis run，以及评分至四问工作台；依赖图节点、治理事件、指标依赖项的卡片定位；
+- Statements 更正记录页内定位和已登记 PDF 页锚；Reports 冻结候选回到 Investigation。
+
+其中 objective 报告 HTML、经营报告 HTML/XLSX/PPTX/PDF 是显式产物生成入口或可能触发冻结的 GET，不能作为普通“安全只读链接”纳入探测；按工作包既有隔离发布旅程单独验证。未建立真实 Finding 血缘的 ManagementWatchItem 不增加虚构 Finding 链接。每项只有在实际目标页身份参数、DOM 落点和目标事实/缺失状态均对账后方可标完成。
+
+下一执行动作：对照上述剩余清单先复核现有测试，分组补齐安全的真实点击与目标断言；随后完成全交互路由适用状态×390/1024/1440视口矩阵，再按 Gate 5 在同一最终 SHA 复跑全链并核验 GitHub CI。Gate1/Gate5 尚未关闭。
