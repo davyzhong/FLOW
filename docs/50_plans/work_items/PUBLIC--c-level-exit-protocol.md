@@ -3,7 +3,7 @@ doc_id: FLOW-WP-PUBLIC-C-EXIT-001
 title: 公开财报模块 C 级出口协议与数字级准确率基准（T09）
 doc_type: work-item
 status: active
-version: 1.3
+version: 1.4
 created_at: 2026-09-15
 updated_at: 2026-09-28
 owner: FLOW
@@ -29,7 +29,7 @@ gates: [R2, R3, R4, S01-closure]
 3. 汇总为根因分类与确定的抽取修复范围。只有明确属于实现缺陷的项目进入修复；修复先写失败测试，再实现，再运行定向与基准回归。
 4. 更新 L0/L1 基准与逐项证据；不宣称 C 级通过，直到本工作包 §3 全部条件满足。
 
-第1步只读基线复核已完成，详见[来源基线与 JDL 复核准备](../../80_reviews/2026-09-28-c-level-source-baseline-reconciliation.md)。JDL页区间修复已完成本地实现：回归测试确认资产负债表最大印刷页为109，不再混入权益变动表；新抽取文件`validation/financial_reports/corrections/jdl_2025fy_statements_v2.yaml`为26/47/34行、24/24勾稽，旧P5 YAML未覆盖；新答案集`config/statements/answer_set_l1_v2.yaml`为1,775/1,775页锚定位，旧答案集未覆盖。聚焦抽取/勾稽测试18项、答案集/source映射测试7项通过。随后在独立Compose测试栈（迁移至0031，加载14份报告）验证L0 1508/1508一致、L1 1775锚零失配；财报目录76项、脚本目录110项测试通过，M1/链接检查通过。验证基于`main@2690c040`加本轮工作区改动，仍须以提交SHA复验CI。页锚覆盖不代表准确率或C级通过。当前改动闭环后，下一子步为生成规范化逐格处置台账并复核原200格，同时继续42异常与109口径疑点逐项归因。
+第1步只读基线复核已完成，详见[来源基线与 JDL 复核准备](../../80_reviews/2026-09-28-c-level-source-baseline-reconciliation.md)。JDL页区间修复已集成：提交`5c84c81fdd3c0908891d16f8dcfe05e1d2e64b6c`的准确SHA CI run `36382657675`为17/17 success。回归确认资产负债表最大印刷页为109，不再混入权益变动表；新抽取文件`validation/financial_reports/corrections/jdl_2025fy_statements_v2.yaml`为26/47/34行、24/24勾稽，旧P5 YAML未覆盖；新答案集`config/statements/answer_set_l1_v2.yaml`为1,775/1,775页锚定位，旧答案集未覆盖。独立Compose测试栈迁移至0031并加载14份报告后，L0 1508/1508一致、L1 1775锚零失配；财报目录76项、脚本目录110项测试通过，M1/链接检查通过。常驻`flow`未用于本次数据库测试。页锚覆盖不代表准确率或C级通过。下一子步为生成规范化逐格处置台账并复核原200格，同时继续42异常与109口径疑点逐项归因。
 
 ## 1. 两级基准合同（B2）
 

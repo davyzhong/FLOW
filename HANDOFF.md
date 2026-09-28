@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目尽调、优化与单 Agent 执行总交接
 doc_type: navigation
 status: current
-version: 5.34
+version: 5.35
 created_at: 2026-09-12
 updated_at: 2026-09-28
 owner: FLOW
@@ -18,7 +18,7 @@ applies_to: repository
 
 > **本节覆盖本文其余旧会话交接快照。** 旧章节保留历史证据，不可据其旧顺序领取任务。下一位 Agent 开始前先从 GitHub 同步 `main`，再读 `AGENTS.md`、`docs/00_start_here/PROJECT_STATE.md`、`docs/50_plans/CURRENT_ROADMAP.md` 和相应工作包。唯一任务顺序是路线图中的 11 项队列；本节只是对同一队列逐项提供执行手册，不构成第二条队列。
 
-**最新进度更正（2026-09-28，优先于下方旧接续点）：** UX Gate1/Gate5已关闭。提交`0144bad4be1a869a5a4073c516d78b4bf333cbee`同SHA CI run `36371507389` 17/17 success；隔离Dashboard7/7，大麦旅程verify19/19、只读矩阵159项零意外、Playwright15/15，生产E2E157/157、Web143/143、API mypy203文件、typecheck/lint、文档M1/链接门禁通过。常驻`flow`未触碰。当前唯一任务为公开财报C级逐项归因、原件复核与抽取修订。只读基线审计提交`f1ab428343e809364c2fd519497c56b4ac7c53bf`对应CI run `36375305428`准确SHA 17/17 success。JDL页界限修订已本地完成：资产负债表剔除权益变动表误纳页，版本化抽取v2共107行、24/24勾稽；新L1答案集1,775/1,775页锚可定位。隔离Compose栈迁移至0031并装载14份报告后，L0 1508/1508一致；L1 1775锚零失配（strong 981 / weak 775 / sign-flip 15 / visual 4）。财报目录76项、脚本目录110项测试及M1/链接检查通过；验证代码状态为`main@2690c040`加本轮改动。隔离卷已清理，常驻栈未用于测试。改动尚未提交，准确SHA CI待执行；页锚可定位不等于准确率，C级仍未通过。**当前唯一下一步**：完成最终差异审查和文档门禁，提交并立即推送，核对准确SHA CI；随后建立42异常/109疑点/JDL原200格逐项处置台账。旧版HANDOFF中的其他“当前下一步”均为历史快照，以本段与CURRENT_ROADMAP为准。
+**最新进度更正（2026-09-28，优先于下方旧接续点）：** UX Gate1/Gate5已关闭。提交`0144bad4be1a869a5a4073c516d78b4bf333cbee`同SHA CI run `36371507389` 17/17 success；隔离Dashboard7/7，大麦旅程verify19/19、只读矩阵159项零意外、Playwright15/15，生产E2E157/157、Web143/143、API mypy203文件、typecheck/lint、文档M1/链接门禁通过。常驻`flow`未触碰。当前唯一任务为公开财报C级逐项归因、原件复核与抽取修订。只读基线审计提交`f1ab428343e809364c2fd519497c56b4ac7c53bf`对应CI run `36375305428`准确SHA 17/17 success。JDL页界限修订已完成：提交`5c84c81fdd3c0908891d16f8dcfe05e1d2e64b6c`同SHA CI run `36382657675` 17/17成功；版本化抽取v2共107行、24/24勾稽，L1答案集1,775/1,775页锚可定位。独立Compose栈迁移至0031并装载14份报告后，L0 1508/1508一致；L1 1775锚零失配（strong 981 / weak 775 / sign-flip 15 / visual 4）。财报目录76项、脚本目录110项测试及M1/链接检查通过；隔离卷已清理，常驻栈未用于测试。页锚可定位不等于准确率，C级仍未通过。**当前唯一下一步**：将准确SHA CI结果同步到权威路线图/状态/交接并提交推送，验证该状态提交；随后建立42异常/109疑点/JDL原200格逐项处置台账。旧版HANDOFF中的其他“当前下一步”均为历史快照，以本段与CURRENT_ROADMAP为准。
 
 **此前接续点（已由上方最新进度覆盖）：** 已完成Dashboard、Analysis/Investigation身份深链阶段。当前工作树与未提交项以 `git status` 为准；具体证据见路线图和UX Gate1记录。不得触碰常驻`flow`（Compose标签来源混杂）。
 

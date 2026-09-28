@@ -3,7 +3,7 @@ doc_id: FLOW-REVIEW-C-LEVEL-BASELINE-20260928
 title: 公开财报 C 级来源基线与 JDL 复核准备
 doc_type: review
 status: partially-resolved
-version: 1.1
+version: 1.2
 created_at: 2026-09-28
 updated_at: 2026-09-28
 owner: FLOW
@@ -35,9 +35,9 @@ review_refs: [FLOW-REVIEW-AI-CROSS-RESULT-20260925, FLOW-REVIEW-ADJUDICATION-202
 
 ### 2026-09-28 修复状态
 
-已按测试先行修正`end_page=110`的页界限错误：资产负债表不再纳入物理第110页（印刷页109）的权益变动表。新版本抽取资产位于`validation/financial_reports/corrections/jdl_2025fy_statements_v2.yaml`，来源SHA与中文原件一致，三张表分别为26/47/34行，勾稽24/24；旧P5 YAML保持原样。JDL抽取/勾稽回归18项通过。新L1答案集位于`config/statements/answer_set_l1_v2.yaml`，1,775/1,775锚可定位；该值表示定位覆盖，不代表L1数值准确率。新建隔离Compose栈迁移至0031并导入14份报告后，L0 1508/1508一致；L1页锚1775条（strong 981 / weak 775 / sign-flip 15 / visual 4），锚失效0、值不一致0、未入库0。财报目录76项与脚本目录110项测试、M1及链接检查通过。该测试代码状态为`main@2690c040`加未提交改动，不是最终提交SHA；常驻`flow`未用于测试，隔离卷已清理。
+已按测试先行修正`end_page=110`的页界限错误：资产负债表不再纳入物理第110页（印刷页109）的权益变动表。新版本抽取资产位于`validation/financial_reports/corrections/jdl_2025fy_statements_v2.yaml`，来源SHA与中文原件一致，三张表分别为26/47/34行，勾稽24/24；旧P5 YAML保持原样。JDL抽取/勾稽回归18项通过。新L1答案集位于`config/statements/answer_set_l1_v2.yaml`，1,775/1,775锚可定位；该值表示定位覆盖，不代表L1数值准确率。新建隔离Compose栈迁移至0031并导入14份报告后，L0 1508/1508一致；L1页锚1775条（strong 981 / weak 775 / sign-flip 15 / visual 4），锚失效0、值不一致0、未入库0。财报目录76项与脚本目录110项测试、M1及链接检查通过。提交`5c84c81fdd3c0908891d16f8dcfe05e1d2e64b6c`的准确SHA CI run `36382657675` 17/17成功；常驻`flow`未用于测试，隔离卷已清理。
 
-来源映射目录后缀及FY2023阿里来源错配已修正，并增加逐项路径存在性测试；答案集构建、基准与seed入口改为使用版本化JDL修订输入，旧答案集保留。修订仍待提交及准确SHA CI；不得据此宣称C级通过。剩余200格、42异常与109口径疑点仍须规范化逐格审计。
+来源映射目录后缀及FY2023阿里来源错配已修正，并增加逐项路径存在性测试；答案集构建、基准与seed入口改为使用版本化JDL修订输入，旧答案集保留。代码与准确SHA CI已闭环，但不得据此宣称C级通过。剩余200格、42异常与109口径疑点仍须规范化逐格审计。
 
 JDL 抽取器在 `services/api/src/flow_api/statements/extraction.py` 将资产负债表抽取结束页设为 `end_page=110`。区间按零起始页号、右端不包含解释时，PDF物理第110页（印刷页109）“Consolidated Statement of Changes in Equity”被并入资产负债表。
 
