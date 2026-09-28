@@ -47,7 +47,12 @@ seed tencent_2026q2_statements.yaml  腾讯控股   0700.HK     中期业绩公�
 seed_file validation/financial_reports/corrections/jdl_2025fy_statements_v3.yaml \
   京东物流 2618.HK 年报 FY2025
 for y in 2019 2020 2021 2022 2023 2024 2025 2026; do
-  seed "alibaba_${y}fy_statements.yaml" 阿里巴巴 9988.HK 年报 "FY${y}"
+  if [ "$y" = "2023" ]; then
+    seed_file validation/financial_reports/corrections/alibaba_2023fy_statements_v2.yaml \
+      阿里巴巴 9988.HK 年报 "FY${y}"
+  else
+    seed "alibaba_${y}fy_statements.yaml" 阿里巴巴 9988.HK 年报 "FY${y}"
+  fi
 done
 for y in 2021 2022 2023; do
   seed "cainiao_${y}fy_statements.yaml" 菜鸟集团 PVT.CAINIAO 招股书申报稿 "FY${y}"

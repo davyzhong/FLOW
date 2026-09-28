@@ -4,7 +4,7 @@
 两级基准合同（docs/50_plans/work_items/PUBLIC--c-level-exit-protocol.md）：
 - L0：事实库 statement_line_item ↔ 已验证抽取 YAML 逐值比对——管线不丢数、
   不改数、不换符号；
-- L1（`--level L1`）：页级答案集（config/statements/answer_set_l1_v3.yaml，
+- L1（`--level L1`）：页级答案集（config/statements/answer_set_l1_v4.yaml，
   由 scripts/build_answer_set_l1.py 从源 PDF 文本层定位生成）双向验证：
   ① 每条页锚在当前 PDF 上仍可复现（数值确实出现在该页）；
   ② 答案集值 == 事实库值（值级一致）。
@@ -64,10 +64,15 @@ def collect_expected() -> dict:
     sources = [
         source
         for source in sorted(glob.glob(str(REPO / "docs/implementation/p5" / "*_statements.yaml")))
-        if Path(source).name != "jdl_2025fy_statements.yaml"
+        if Path(source).name
+        not in {"jdl_2025fy_statements.yaml", "alibaba_2023fy_statements.yaml"}
     ]
-    sources.append(
-        str(REPO / "validation/financial_reports/corrections/jdl_2025fy_statements_v3.yaml")
+    sources.extend(
+        str(REPO / path)
+        for path in (
+            "validation/financial_reports/corrections/jdl_2025fy_statements_v3.yaml",
+            "validation/financial_reports/corrections/alibaba_2023fy_statements_v2.yaml",
+        )
     )
     if not sources:
         raise RuntimeError("未找到抽取 YAML（docs/implementation/p5/*_statements.yaml）")
@@ -399,7 +404,7 @@ def main() -> int:
         return EXIT_OK
     if args.level == "L1":
         try:
-            report = verify_l1(REPO / "config/statements/answer_set_l1_v3.yaml")
+            report = verify_l1(REPO / "config/statements/answer_set_l1_v4.yaml")
         except Exception as error:  # noqa: BLE001
             print(f"env error: {error}", file=sys.stderr)
             return EXIT_ENV_ERROR

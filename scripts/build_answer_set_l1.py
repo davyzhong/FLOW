@@ -19,9 +19,10 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
 SOURCES_GLOB = "docs/implementation/p5/*_statements.yaml"
-OUT_DEFAULT = REPO / "config/statements/answer_set_l1_v3.yaml"
-SUPERSEDED_ANSWER_SET = "config/statements/answer_set_l1_v2.yaml"
+OUT_DEFAULT = REPO / "config/statements/answer_set_l1_v4.yaml"
+SUPERSEDED_ANSWER_SET = "config/statements/answer_set_l1_v3.yaml"
 CORRECTED_JDL = "validation/financial_reports/corrections/jdl_2025fy_statements_v3.yaml"
+CORRECTED_ALIBABA = "validation/financial_reports/corrections/alibaba_2023fy_statements_v2.yaml"
 
 
 def _norm(text: str) -> str:
@@ -158,20 +159,28 @@ def load_visual_overrides(repo: Path) -> dict[tuple[str, str, str], dict]:
 
 
 def source_paths(repo: Path = REPO) -> list[Path]:
-    """历史抽取档案保留，版本化 JDL 修订版作为唯一活动输入。"""
+    """历史抽取档案保留；版本化 JDL、阿里 FY2023 修订版作为活动输入。"""
     paths = [
         Path(path)
         for path in sorted(glob.glob(str(repo / SOURCES_GLOB)))
-        if Path(path).name != "jdl_2025fy_statements.yaml"
+        if Path(path).name
+        not in {"jdl_2025fy_statements.yaml", "alibaba_2023fy_statements.yaml"}
     ]
-    corrected_jdl = repo / CORRECTED_JDL
-    if not corrected_jdl.is_file():
-        raise FileNotFoundError(f"缺少版本化 JDL 修订输入：{corrected_jdl}")
-    paths.append(corrected_jdl)
+    for relative in (CORRECTED_JDL, CORRECTED_ALIBABA):
+        corrected = repo / relative
+        if not corrected.is_file():
+            raise FileNotFoundError(f"缺少版本化财报修订输入：{corrected}")
+        paths.append(corrected)
     return paths
 
 
-def build(out: Path, repo: Path = REPO) -> dict:
+def build(
+    out: Path,
+    repo: Path = REPO,
+    *,
+    version: int = 4,
+    supersedes: str = SUPERSEDED_ANSWER_SET,
+) -> dict:
     import yaml
 
     entries: list[dict] = []
@@ -265,8 +274,8 @@ def build(out: Path, repo: Path = REPO) -> dict:
 
     payload = {
         "schema": "flow.answer_set.l1",
-        "version": 3,
-        "supersedes": SUPERSEDED_ANSWER_SET,
+        "version": version,
+        "supersedes": supersedes,
         "generated_from": (
             "docs/implementation/p5 抽取 YAML + "
             "validation/financial_reports/corrections 版本化修订"

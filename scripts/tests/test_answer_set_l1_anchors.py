@@ -111,6 +111,70 @@ class VersionedExtractionSourceTest(unittest.TestCase):
             sources,
         )
 
+    def test_historical_alibaba_fy2023_yaml_is_replaced_by_versioned_correction(self) -> None:
+        sources = builder.source_paths()
+        self.assertNotIn(
+            REPO / "docs/implementation/p5/alibaba_2023fy_statements.yaml", sources
+        )
+        self.assertIn(
+            REPO
+            / "validation/financial_reports/corrections/alibaba_2023fy_statements_v2.yaml",
+            sources,
+        )
+
+    def test_alibaba_fy2023_correction_preserves_source_and_period_identity(self) -> None:
+        import yaml
+
+        path = (
+            REPO
+            / "validation/financial_reports/corrections/alibaba_2023fy_statements_v2.yaml"
+        )
+        payload = yaml.safe_load(path.read_text(encoding="utf-8"))
+        self.assertEqual(payload["correction_version"], 2)
+        self.assertEqual(
+            payload["supersedes"],
+            "docs/implementation/p5/alibaba_2023fy_statements.yaml",
+        )
+        self.assertEqual(
+            payload["source_sha256"],
+            "28256e2d4fcebbd94fd2d1c46d51c75af2f93fbe492b31b764a44da0813fa9a7",
+        )
+        row = next(
+            row
+            for row in payload["statements"]["合并利润表"]
+            if row["item"] == "商譽減值"
+        )
+        self.assertEqual(row["上期发生额"], -25141)
+        self.assertEqual(row["page"], 38)
+
+    def test_alibaba_fy2023_comparatives_match_fy2022_current_values(self) -> None:
+        import yaml
+
+        current_path = (
+            REPO
+            / "validation/financial_reports/corrections/alibaba_2023fy_statements_v2.yaml"
+        )
+        prior_path = REPO / "docs/implementation/p5/alibaba_2022fy_statements.yaml"
+        current = yaml.safe_load(current_path.read_text(encoding="utf-8"))["statements"]
+        prior = yaml.safe_load(prior_path.read_text(encoding="utf-8"))["statements"]
+        prior_values = {
+            (statement, row["item"]): row.get("本期发生额")
+            for statement, rows in prior.items()
+            for row in rows
+        }
+        comparisons = [
+            (statement, row["item"], row["上期发生额"], prior_values[(statement, row["item"])])
+            for statement, rows in current.items()
+            for row in rows
+            if row.get("上期发生额") is not None
+            and prior_values.get((statement, row["item"])) is not None
+        ]
+
+        self.assertEqual(len(comparisons), 24)
+        self.assertTrue(
+            all(current_value == prior_value for _, _, current_value, prior_value in comparisons)
+        )
+
     def test_jdl_correction_has_source_identity_and_supersedes_link(self) -> None:
         import yaml
 
@@ -167,6 +231,41 @@ class VersionedExtractionSourceTest(unittest.TestCase):
                 for row in jdl_entries
             )
         )
+
+    def test_l1_v4_contains_corrected_alibaba_comparative_value(self) -> None:
+        import yaml
+
+        answer_set = yaml.safe_load(
+            (REPO / "config/statements/answer_set_l1_v4.yaml").read_text(
+                encoding="utf-8"
+            )
+        )
+        entry = [
+            row
+            for row in answer_set["entries"]
+            if row["source_pdf"].endswith("BABA_FY2023_annual_results.pdf")
+            and row["item"] == "商譽減值"
+            and row["column"] == "上期发生额"
+        ]
+        self.assertEqual(answer_set["version"], 4)
+        self.assertEqual(
+            answer_set["supersedes"], "config/statements/answer_set_l1_v3.yaml"
+        )
+        self.assertEqual(len(entry), 1)
+        self.assertEqual((entry[0]["value"], entry[0]["page"], entry[0]["match_mode"]), (-25141, 38, "strong"))
+        self.assertEqual(answer_set["coverage"]["values_total"], 1776)
+
+    def test_l0_expected_uses_corrected_alibaba_comparative_value(self) -> None:
+        from scripts.accuracy_benchmark import collect_expected
+
+        expected = collect_expected()
+        key = (
+            "docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf",
+            "合并利润表",
+            "商譽減值",
+            "value_prior",
+        )
+        self.assertEqual(expected[key], -25141)
 
     def test_source_mapping_suffix_matches_each_extraction_source(self) -> None:
         import yaml
