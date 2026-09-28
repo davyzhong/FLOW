@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目尽调、优化与单 Agent 执行总交接
 doc_type: navigation
 status: current
-version: 5.42
+version: 5.43
 created_at: 2026-09-12
 updated_at: 2026-09-28
 owner: FLOW
@@ -14,11 +14,16 @@ applies_to: repository
 
 ## 当前唯一接续点（2026-09-28，覆盖下方旧进度）
 
-当前唯一任务：按`docs/50_plans/CURRENT_ROADMAP.md`第3项继续公开财报C级出口，严格在`main`串行推进。109候选重建提交`8cc968594aa1f087622f6155e8d3651a5d65c0bf`对应CI run `36397631508`准确SHA 17/17；JDL逐格来源复核提交`fdc96d63146e0ed8cb12e75a50f488dd3015398f`对应CI run `36404144739`准确SHA 17/17；状态同步提交`0c933d5c497af92d8d41d9aa6e9c844ea67ded31`对应CI run `36408822932` attempt1 dashboard因Docker镜像拉取502失败，attempt2同SHA 17/17 success；更早首版台账`cbe11d6c405e0b9a23353d63b264fc57e8a360c9`/run `36391911442`也为17/17。
+当前唯一任务：按`docs/50_plans/CURRENT_ROADMAP.md`第3项继续公开财报C级出口，严格在`main`串行推进。基线状态提交`167a82b429a7e2f2980f94ee5b234d515d4712d2`的准确SHA CI run `36412951091`已17/17 success；前序JDL来源复核`fdc96d63146e0ed8cb12e75a50f488dd3015398f`/run `36404144739`亦17/17 success。
 
-JDL原200格逐格核验现已完成：冻结英文版与中文原件SHA固定；179个数值、5个破折号空值均匹配报表行和期间列。另16格定位到物理页107/印刷页106的独立合并综合收益表，当前提取归类/父项身份尚待裁决，不能算通过。详见`validation/financial_reports/review-inputs/jdl_readable_twin_crosswalk_v1.csv`、更新后的`validation/financial_reports/review-ledgers/jdl-222-cell-reconciliation-v1.csv`和审计报告。下一步先查16格的分类/身份合同与重复行处理，必要时写红灯测试后修复；再按队列处理42异常和109疑点。C级仍未通过。常驻`flow`数据库/服务未触碰。
+**唯一完整 To-do 与进度**：
+1. 16格分类/身份合同：已查明PDF物理页106为合并损益表、物理页107为独立合并综合收益表；持久化键已含`statement_type`及`group_ordinal`，不需要schema迁移。抽取器分表、综合收益三项勾稽、归一化身份测试和台账改造已在本地实现；测试先红后绿。追加发现冻结L1答案集v2仍标旧报表类型，且部分弱锚跑到摘要页，因此先保留v2，必须新建JDL抽取v3与L1答案集v3，页提示并同步L1默认输入。此范围补充正在单独更新计划并先行提交/验收；代码暂不提交。
+2. 同SHA CI绿后，完成v3答案集、抽取/持久化身份与逐格台账全量回归，更新审计证据；提交推送后等准确SHA CI全绿。
+3. 修复剩余42项：按已确认顺序处理菜鸟19格空列串借、BABA FY2023比较期1格；JDL 22格既有修复仅回归不重复。
+4. 逐项裁决109疑点；当前可重建111唯一候选，摘要差2（BABA FY2020股权投资期初9,927、期末4,234）保留显式未决，按原始评审口径核验，不为凑数删除。
+5. 重跑冻结样本 L0/L1（仅隔离环境）；完成准确率零容忍、公司级holdout、独立AI盲评、重述链与溯源验收。任一硬条件未满足就维持C级未通过，并留下可复现结案。
 
-验证现状：全量脚本测试116项、生成器定向测试6项通过；交叉表物理复核200/200页码/文本行逐字一致，PDF SHA匹配；文档M1 PASS（299份、0错误）、链接检查PASS（0错误）。Ruff相较基线无新增诊断。来源复核与状态同步均已推送并按准确SHA CI验收通过（状态提交经attempt2重跑）。下一步是审查16格分类/身份合同、检查报表抽取身份与持久化主键是否区分同名行；完成后记录审查发现、按需TDD修复，然后处理42异常与109候选。工作目录为`.worktrees/execution-convergence`的`main`；若切换工作树/目录，先核验仓库和分支。不要把历史段落内的旧“下一步”当成当前队列。
+本地验证已过：Statements 79/79、脚本116/116；API Ruff及mypy 203文件通过、脚本Ruff通过；JDL交叉表原文页/行200/200已核。最新待办只有“计划扩展文档先行commit/push并验同SHA CI”。主工作树是`.worktrees/execution-convergence`的`main`；根目录另有被保留的未提交AGENTS与`next-env.d.ts`，禁止触碰。所有数据库测试在`flow_test`隔离库；常驻`flow`及共享服务未触碰。外部Docker镜像502前两次均在同SHA重跑后恢复，不是代码失败。不要把历史段落内旧“下一步”当作当前队列。
 
 ## 首轮执行快照（已由上方当前唯一接续点覆盖）
 

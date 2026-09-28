@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.47
+version: 5.48
 created_at: 2026-09-12
 updated_at: 2026-09-28
 owner: FLOW
@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-09-28 最新状态：唯一执行项仍为公开财报 C 级出口，C级尚未通过。JDL 200格逐格来源核验提交`fdc96d63146e0ed8cb12e75a50f488dd3015398f`对应 CI run `36404144739`准确SHA 17/17 success。验收状态文档提交`0c933d5c497af92d8d41d9aa6e9c844ea67ded31`对应 run `36408822932` attempt1 因隔离CI拉镜像502失败，attempt2同SHA 17/17 success。核验结果：179数值、5空值行证据匹配；16格定位到独立综合收益表，但抽取分类/父项语义未决，故不计通过。交叉表`validation/financial_reports/review-inputs/jdl_readable_twin_crosswalk_v1.csv`及主台账已记录原文、物理/印刷页、期间列和来源SHA。109候选仍为111格、较摘要多2，保留未决且不阻塞。下一步审查16格身份/分类合同，随后按唯一队列修复42异常并裁决109疑点。常驻`flow`数据库/服务未触碰。
+2026-09-28 最新状态：唯一执行项为公开财报 C 级出口，尚未通过。JDL 200格来源复核准确SHA CI run `36404144739`为17/17 success；状态提交`167a82b429a7e2f2980f94ee5b234d515d4712d2`准确SHA run `36412951091`最终17/17 success。复核确认16格来自独立综合收益表，抽取器误分到利润表；持久化唯一键已能按statement_type区分同名项目，无需数据库schema变更。测试先行实现已在本地拆分报表类型并增加三项综合收益勾稽，但发现冻结答案集v2仍用旧分类/弱锚，故本轮先更新计划：保留v2，新增修订抽取v3与答案集v3并明确页级提示，再跑基准。计划补充文档正在提交，当前实现暂不提交。后续按序处理剩余42异常（菜鸟19、BABA1）及109候选；109为111格、较摘要多2仍显式未决。常驻`flow`数据库/服务未触碰。
 
 2026-09-28 较早状态记录（已由本页首段覆盖）：逐格台账首版及109候选重建状态见下方历史更新；勿据此将JDL 200格视为未核验或将其摘要计数当作当前进展。
 

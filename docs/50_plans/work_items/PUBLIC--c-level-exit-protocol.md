@@ -3,7 +3,7 @@ doc_id: FLOW-WP-PUBLIC-C-EXIT-001
 title: 公开财报模块 C 级出口协议与数字级准确率基准（T09）
 doc_type: work-item
 status: active
-version: 2.0
+version: 2.1
 created_at: 2026-09-15
 updated_at: 2026-09-28
 owner: FLOW
@@ -31,7 +31,9 @@ gates: [R2, R3, R4, S01-closure]
 
 第1步只读基线复核已完成，详见[来源基线与 JDL 复核准备](../../80_reviews/2026-09-28-c-level-source-baseline-reconciliation.md)。JDL页区间修复已集成：提交`5c84c81fdd3c0908891d16f8dcfe05e1d2e64b6c`的准确SHA CI run `36382657675`为17/17 success。回归确认资产负债表最大印刷页为109，不再混入权益变动表；新抽取文件`validation/financial_reports/corrections/jdl_2025fy_statements_v2.yaml`为26/47/34行、24/24勾稽，旧P5 YAML未覆盖；新答案集`config/statements/answer_set_l1_v2.yaml`为1,775/1,775页锚定位，旧答案集未覆盖。独立Compose测试栈迁移至0031并加载14份报告后，L0 1508/1508一致、L1 1775锚零失配；财报目录76项、脚本目录110项测试通过，M1/链接检查通过。常驻`flow`未用于本次数据库测试。页锚覆盖不代表准确率或C级通过。
 
-逐格台账和109候选重建已提交于前序切片。JDL 200格逐格来源映射已由提交`fdc96d63146e0ed8cb12e75a50f488dd3015398f`完成，准确SHA CI run `36404144739`为17/17 success：179数值、5空值与原文行/期间列相符；16格定位到印刷页106综合收益表，与当前“合并利润表”归类存在表级/父项语义未决，特别是所有者/NCI重复行不可按扁平键裁定。交叉表见`validation/financial_reports/review-inputs/jdl_readable_twin_crosswalk_v1.csv`，审计说明见[逐格台账审计](../../80_reviews/2026-09-28-c-level-cell-ledger.md)。状态同步提交`0c933d5c`的CI attempt1因Docker pull 502失败、attempt2同SHA 17/17通过，证明其为外部镜像瞬断。109材料数量差2继续显式未决，不作为停止条件。**当前唯一子步：审查16格边界与抽取/持久化身份合同，必要时测试先行修复；随后转42异常修复和109口径逐格裁决。** C级未通过。
+逐格台账和109候选重建已提交于前序切片。JDL 200格逐格来源映射已由提交`fdc96d63146e0ed8cb12e75a50f488dd3015398f`完成，准确SHA CI run `36404144739`为17/17 success。原200格均已完成行、列和值/空值来源核验；其中16格来自物理第107页/印刷第106页独立综合收益表，先前抽取器误归入合并利润表。只读核对确认持久化唯一键已含`statement_type`，无需schema迁移，但L1 v2也沿用了错误分类且存在弱锚落到摘要页的问题。答案集按冻结纪律不得原地改写：本子步须保留`answer_set_l1_v2.yaml`，将JDL修订版升为独立v3、为重复行提供来源页提示、重建新的L1 v3答案集，并同步基准默认输入。相关修正已由红灯测试发现，尚未提交。
+
+**当前唯一子步：完成16格表分类、行身份与L1答案集版本合同**：新增独立`合并综合收益表`输出和三项勾稽；生成修订版JDL抽取v3及L1答案集v3（v2不变）；验证原始行导入及归一化保留statement identity；更新交叉表/逐格台账；定向、全量及基准验证后提交推送并核验同SHA CI。该子步完成后，按顺序修复42项中剩余菜鸟19格与BABA FY2023 1格，再逐项裁决109候选（含FY2020摘要差2的两格）；最后重跑冻结样本L0/L1并核对外部盲评、holdout、重述链及溯源条件。C级未通过。常驻`flow`数据库/服务禁止写入。
 
 ## 1. 两级基准合同（B2）
 
