@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目尽调、优化与单 Agent 执行总交接
 doc_type: navigation
 status: current
-version: 5.45
+version: 5.46
 created_at: 2026-09-12
 updated_at: 2026-09-28
 owner: FLOW
@@ -14,19 +14,18 @@ applies_to: repository
 
 ## 当前唯一接续点（2026-09-28，覆盖下方旧进度）
 
-当前唯一任务：按`docs/50_plans/CURRENT_ROADMAP.md`第3项继续公开财报C级出口，严格在`main`串行推进。基线状态提交`167a82b429a7e2f2980f94ee5b234d515d4712d2`的准确SHA CI run `36412951091`已17/17 success；JDL来源复核`fdc96d63146e0ed8cb12e75a50f488dd3015398f`/run `36404144739`及JDL v3实现`db646f45c43141468a2b4ee10a9114f0f141f066`/run `36427598983`均同SHA 17/17 success。
+当前唯一任务：按`docs/50_plans/CURRENT_ROADMAP.md`第3项继续公开财报C级出口，严格在`main`串行推进。JDL v3/L1 v3准确SHA CI run `36427598983` 17/17 success。菜鸟19条异常主张已依据招股书物理页466/474/475及年度YAML逐格审定为有效当期/比较期值；原`confirmed-42-exceptions-v1.csv`保留，审定版`confirmed-42-adjudicated-v2.csv`补齐报告年、来源期间和来源列。逐格台账测试7/7、Ruff、M1（299文档、0错误）通过；状态与交接同步待提交推送并核对同SHA CI。
 
 **唯一完整 To-do 与进度**：
 1. JDL v3/L1 v3实现与验收：已完成并推送，`db646f45c43141468a2b4ee10a9114f0f141f066`同SHA CI 17/17；隔离库L0 1514/1514、L1 1775/1775，错误/缺失0。
-2. 菜鸟19格空列串借：当前唯一下一项；逐格回核原件和对应期间列，不能跨报告或列借值；未披露留空；测试先红再修，新增版本、更新台账、跑基准、文档门禁后提交推送并核对同SHA CI。
+2. 菜鸟19条异常主张审定：已完成原件逐格核实并生成`confirmed-42-adjudicated-v2.csv`；19条均为FY2021当前值或FY2022有效比较值，不修改抽取数据；本轮状态/台账提交与同SHA CI待完成。
 3. BABA FY2023比较期1格：待做；原件核值后新增修订版本，不覆盖旧YAML。
-4. BABA FY2023比较期1格：待做；回到原件确认后新增修订，不覆盖旧YAML。
-5. 逐项裁决109疑点：待做。当前111唯一候选，摘要差2（BABA FY2020股权投资期初9,927、期末4,234）保持未决；按原始底稿/原件复核，不为凑数删格。
-6. 冻结样本收尾：待做。隔离环境复跑L0/L1，外部 oracle/AI盲评、company holdout、重述链和溯源验收；硬条件不满足就明确结论C级未通过。
+4. 逐项裁决109疑点：待做。当前111唯一候选，摘要差2（BABA FY2020股权投资期初9,927、期末4,234）保持未决；按原始底稿/原件复核，不为凑数删格。
+5. 冻结样本收尾：待做。隔离环境复跑L0/L1，外部 oracle/AI盲评、company holdout、重述链和溯源验收；硬条件不满足就明确结论C级未通过。
 
-当前下一动作：先提交推送本状态/交接同步并核验准确SHA CI；完成后立即进入菜鸟19格。主工作树是`.worktrees/execution-convergence`的`main`；根目录另有被保留的未提交AGENTS与`next-env.d.ts`，禁止触碰。所有数据库测试均在`flow_test`隔离库；常驻`flow`只读未写。外部Docker镜像502曾通过同SHA重跑恢复，不是本地代码失败。不要把历史段落内旧“下一步”当作当前队列。
+当前下一动作：提交推送本次菜鸟异常审定台账、生成器测试、状态/路线图/审计/交接同步，并确认准确SHA CI；之后转入BABA FY2023比较期1格原件复核。主工作树是`.worktrees/execution-convergence`的`main`；根目录另有被保留的未提交AGENTS与`next-env.d.ts`，禁止触碰。所有数据库测试均在`flow_test`隔离库；常驻`flow`只读未写。外部Docker镜像502曾通过同SHA重跑恢复，不是本地代码失败。不要把历史段落内旧“下一步”当作当前队列。
 
-## 首轮执行快照（已由上方当前唯一接续点覆盖）
+## 首轮执行快照（已由上方当前唯一接续点覆盖；仅作历史）
 
 当前唯一任务仍是 `CURRENT_ROADMAP` 第3项公开财报 C 级出口。台账首版见 `docs/80_reviews/2026-09-28-c-level-cell-ledger.md`：42异常42行；JDL 222格中22格错归属已由v2排除、200格仍未核验；109疑点组计数121，扣唯一明示重叠后120，与摘要109差11。新增生成器 `scripts/build_public_c_level_ledgers.py`、4项回归及三个CSV。定向测试与文档M1均通过；链接检查、提交推送及准确SHA CI仍待做。C级未通过。下一步先追溯109疑点逐格成员/去重键并解释差额，再复核JDL原200格。保持 `main` 串行执行，常驻 `flow` 数据库/服务不触碰。
 

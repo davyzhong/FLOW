@@ -87,6 +87,18 @@ class PublicCLevelLedgerTests(unittest.TestCase):
         self.assertEqual(sum(row["company"] == "京东物流" for row in rows), 22)
         self.assertEqual(sum(row["company"] == "阿里巴巴" for row in rows), 1)
 
+    def test_cainiao_findings_resolve_report_and_comparative_period(self) -> None:
+        rows = [row for row in confirmed_42() if row["company"] == "菜鸟集团"]
+        self.assertTrue(
+            all(row["status"] == "source_value_verified_not_an_error" for row in rows)
+        )
+        self.assertTrue(all(row["source_expected_value"] == row["extracted_value"] for row in rows))
+        self.assertTrue(all(row["report_year"] in {"FY2021", "FY2022"} for row in rows))
+        self.assertTrue(all(row["source_period_year"] == "FY2021" for row in rows if row["source_column"] == "上期发生额"))
+        by_id = {row["finding_id"]: row for row in rows}
+        self.assertEqual((by_id["C42-CN-01"]["report_year"], by_id["C42-CN-01"]["source_column"]), ("FY2021", "本期发生额"))
+        self.assertEqual((by_id["C42-CN-02"]["report_year"], by_id["C42-CN-02"]["source_column"]), ("FY2022", "上期发生额"))
+
     def test_suspected_groups_disclose_arithmetic_conflict(self) -> None:
         rows = suspicion_groups()
         self.assertEqual(len(rows), 5)
@@ -125,7 +137,7 @@ class PublicCLevelLedgerTests(unittest.TestCase):
         ledger_dir = root / "validation/financial_reports/review-ledgers"
         for filename, expected in (
             ("jdl-222-cell-reconciliation-v1.csv", jdl_ledger()),
-            ("confirmed-42-exceptions-v1.csv", confirmed_42()),
+            ("confirmed-42-adjudicated-v2.csv", confirmed_42()),
             ("suspected-109-group-reconciliation-v1.csv", suspicion_groups()),
             ("suspected-109-cell-candidates-v1.csv", suspicion_candidates()),
         ):

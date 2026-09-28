@@ -92,7 +92,7 @@ JDL_COMPREHENSIVE_ITEMS = {
     "預期信用損失變動淨額",
 }
 
-CAINIAO_ERRORS = [
+CAINIAO_REPORTED_FINDINGS = [
     ("股东注资", "current", 275000, "2021=275000；2022=—；2023=—", "474-475"),
     ("股东注资", "prior", 275000, "2021=275000；2022=—；2023=—", "474-475"),
     (
@@ -185,6 +185,42 @@ CAINIAO_ERRORS = [
     ),
     ("定期存款", "prior", 8491570, "2021=8491570；2022=—；2023=6103798", "466"),
 ]
+
+# 原异常清单没有报告年度；结合招股书的年度列与比较列，为每条主张补齐精确身份。
+# FY2022 上期发生额以及资产负债表比较数均对应 FY2021，不是应清空的空列。
+CAINIAO_REPORT_PERIODS = [
+    ("FY2021", "FY2021"),
+    ("FY2022", "FY2021"),
+    ("FY2021", "FY2021"),
+    ("FY2022", "FY2021"),
+    ("FY2021", "FY2021"),
+    ("FY2022", "FY2021"),
+    ("FY2021", "FY2021"),
+    ("FY2022", "FY2021"),
+    ("FY2022", "FY2022"),
+    ("FY2022", "FY2022"),
+    ("FY2022", "FY2022"),
+    ("FY2022", "FY2022"),
+    ("FY2022", "FY2022"),
+    ("FY2022", "FY2021"),
+    ("FY2022", "FY2021"),
+    ("FY2022", "FY2021"),
+    ("FY2022", "FY2021"),
+    ("FY2022", "FY2021"),
+    ("FY2022", "FY2021"),
+]
+CAINIAO_ITEM_ALIASES = {
+    "ABS发行受限现金解除": "ABS 发行受限现金解除",
+    "ABS偿还": "ABS 偿还",
+    "合并有限合伙现金注入": "合并有限合伙伙伴现金注入",
+    "已付ABS利息": "已付 ABS 利息",
+    "出售附属公司投资所得净额": "出售附属公司投资所得现金流入净额",
+}
+CAINIAO_FINANCING_ITEMS = {
+    "股东注资", "ABS发行受限现金解除", "ABS偿还", "已付ABS利息",
+    "卖出期权负债结算付款", "附属公司清算资产分配", "合并有限合伙现金注入",
+    "非全资附属公司增资所得", "部分出售非全资附属公司权益所得",
+}
 
 
 def sha256(path: Path) -> str:
@@ -464,24 +500,45 @@ def jdl_ledger() -> list[dict[str, str]]:
 
 def confirmed_42() -> list[dict[str, str]]:
     rows: list[dict[str, str]] = []
-    for index, (item, field, extracted, source_values, page) in enumerate(
-        CAINIAO_ERRORS, start=1
+    for index, ((item, field, extracted, source_values, page), (report_year, period_year)) in enumerate(
+        zip(CAINIAO_REPORTED_FINDINGS, CAINIAO_REPORT_PERIODS, strict=True), start=1
     ):
+        source_column = (
+            "本期发生额" if field == "current" else "上期发生额"
+        )
+        source_page = (
+            "466" if page == "466" else "475" if item in CAINIAO_FINANCING_ITEMS else "474"
+        )
+        yaml_path = ROOT / f"docs/implementation/p5/cainiao_{report_year[2:]}fy_statements.yaml"
+        yaml_cells = read_yaml_cells(yaml_path)
+        yaml_item = CAINIAO_ITEM_ALIASES.get(item, item)
+        yaml_column = "本期发生额" if field == "current" else "上期发生额"
+        source_key = ("合并资产负债表" if page == "466" else "合并现金流量表", yaml_item, yaml_column)
+        yaml_value = yaml_cells.get(source_key)
+        if yaml_value != extracted:
+            raise ValueError(
+                f"C42-CN-{index:02d}与FY{period_year[2:]} YAML不一致："
+                f"{source_key}={yaml_value!r}，台账={extracted!r}"
+            )
         rows.append(
             {
                 "finding_id": f"C42-CN-{index:02d}",
                 "company": "菜鸟集团",
-                "report": "招股书FY2021-FY2023",
+                "report": f"招股书FY{report_year[2:]}年度报表",
+                "report_year": report_year,
+                "source_period_year": period_year,
                 "statement": "合并资产负债表" if page == "466" else "合并现金流量表",
                 "item": item,
                 "column": field,
+                "source_column": source_column,
                 "extracted_value": str(extracted),
-                "source_expected_value": "NULL（原文破折号）",
-                "source_page": page,
+                "source_expected_value": str(extracted),
+                "source_page": source_page,
                 "source_pdf": CAINIAO_PDF,
                 "source_pdf_sha256": CAINIAO_PDF_SHA,
-                "decision": "已确认真实抽取错误：跨列借值；空列必须为空值，不是零",
-                "implementation_status": "待补列对齐修复；本轮仅建立归因台账",
+                "status": "source_value_verified_not_an_error",
+                "decision": f"对照原件物理第{source_page}页及FY{period_year[2:]} YAML：数值与来源列一致；原异常因缺少报告年度/比较期身份而误报",
+                "implementation_status": "已裁定无需改动抽取数据；仅更正异常归因台账",
             }
         )
 
@@ -531,7 +588,13 @@ def confirmed_42() -> list[dict[str, str]]:
     )
     if len(rows) != 42:
         raise ValueError(f"已确认异常应为42格，实际{len(rows)}格")
-    return rows
+    fields = [
+        "finding_id", "company", "report", "report_year", "source_period_year",
+        "statement", "item", "column", "source_column", "extracted_value",
+        "source_expected_value", "source_page", "source_pdf", "source_pdf_sha256",
+        "status", "decision", "implementation_status",
+    ]
+    return [{field: row.get(field, "") for field in fields} for row in rows]
 
 
 def suspicion_groups() -> list[dict[str, str]]:
@@ -683,7 +746,7 @@ def main() -> int:
     group_rows = suspicion_groups()
     candidate_rows = suspicion_candidates()
     write_csv(LEDGER_DIR / "jdl-222-cell-reconciliation-v1.csv", jdl_rows)
-    write_csv(LEDGER_DIR / "confirmed-42-exceptions-v1.csv", confirmed_rows)
+    write_csv(LEDGER_DIR / "confirmed-42-adjudicated-v2.csv", confirmed_rows)
     write_csv(LEDGER_DIR / "suspected-109-group-reconciliation-v1.csv", group_rows)
     write_csv(LEDGER_DIR / "suspected-109-cell-candidates-v1.csv", candidate_rows)
     statuses = {row["status"] for row in jdl_rows}
