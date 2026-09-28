@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目尽调、优化与单 Agent 执行总交接
 doc_type: navigation
 status: current
-version: 5.32
+version: 5.33
 created_at: 2026-09-12
 updated_at: 2026-09-28
 owner: FLOW
@@ -18,7 +18,7 @@ applies_to: repository
 
 > **本节覆盖本文其余旧会话交接快照。** 旧章节保留历史证据，不可据其旧顺序领取任务。下一位 Agent 开始前先从 GitHub 同步 `main`，再读 `AGENTS.md`、`docs/00_start_here/PROJECT_STATE.md`、`docs/50_plans/CURRENT_ROADMAP.md` 和相应工作包。唯一任务顺序是路线图中的 11 项队列；本节只是对同一队列逐项提供执行手册，不构成第二条队列。
 
-**最新进度更正（2026-09-28，优先于下方旧接续点）：** UX Gate1/Gate5已关闭。提交`0144bad4be1a869a5a4073c516d78b4bf333cbee`同SHA CI run `36371507389` 17/17 success；隔离Dashboard7/7，大麦旅程verify19/19、只读矩阵159项零意外、Playwright15/15，生产E2E157/157、Web143/143、API mypy203文件、typecheck/lint、文档M1/链接门禁通过。常驻`flow`未触碰。当前唯一任务为公开财报C级逐项归因、原件复核与抽取修订，见 CURRENT_ROADMAP 第3项和 C 级工作包当前执行记录。
+**最新进度更正（2026-09-28，优先于下方旧接续点）：** UX Gate1/Gate5已关闭。提交`0144bad4be1a869a5a4073c516d78b4bf333cbee`同SHA CI run `36371507389` 17/17 success；隔离Dashboard7/7，大麦旅程verify19/19、只读矩阵159项零意外、Playwright15/15，生产E2E157/157、Web143/143、API mypy203文件、typecheck/lint、文档M1/链接门禁通过。常驻`flow`未触碰。当前唯一任务为公开财报C级逐项归因、原件复核与抽取修订。只读基线审计已提交至[基线报告](docs/80_reviews/2026-09-28-c-level-source-baseline-reconciliation.md)，准确SHA `f1ab428343e809364c2fd519497c56b4ac7c53bf` 的CI run `36375305428` 17/17 success。发现JDL页界限误纳权益变动表、来源映射多处路径不一致；下一步先写失败回归测试，修复代码并将修订结果作为新版本，不覆盖历史 YAML/原件。详见路线图第3项与C级工作包。
 
 **此前接续点（已由上方最新进度覆盖）：** 已完成Dashboard、Analysis/Investigation身份深链阶段。当前工作树与未提交项以 `git status` 为准；具体证据见路线图和UX Gate1记录。不得触碰常驻`flow`（Compose标签来源混杂）。
 

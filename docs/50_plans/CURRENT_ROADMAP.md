@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 5.45
+version: 5.46
 created_at: 2026-09-12
 updated_at: 2026-09-28
 owner: FLOW
@@ -43,7 +43,7 @@ superseded_by: null
 | 2b | [大麦数据后的剩余体验收口](work_items/UX--post-damai-experience-closeout.md) | **completed** | G2 ✓；用户已批准；ORG-LEDGER CI ✓ | Gate1/Gate5关闭：隔离 Dashboard 7/7；大麦验收 verify19/19、GET矩阵159项零意外、Playwright15/15；生产E2E157/157、Web143/143、mypy203文件、typecheck/lint、M1/链接检查通过；提交`0144bad4`同SHA CI run `36371507389` 17/17 success。常驻库未触碰。 |
 | 2c | [企业组织建制与经营账套初始化包](work_items/ORG-LEDGER--enterprise-initialization-package.md) | **completed** | 大麦发行包 completed；批准三表 schema | `2c7d6eb4`；CI run `36270782272` 的17/17 jobs success。隔离 `full` 首次/重复与 `business` 对账通过；11 个企业/loader 测试、全量 API 852、Web142、脚本107、大麦 verify19/19、API43/43、Playwright9/9、合同/文档/lint/typecheck 均通过。31文件 manifest 稳定 SHA `cbc7cccf…e513`。 |
 | K | [第二代静态知识刷新与战略重基线](work_items/KNOWLEDGE--refresh-v2.md) | **active（队列排队，不并行启动）** | 按唯一队列轮到时启动；规格/preflight 已完成 | K0–K6 未执行；`CURRENT_RELEASE` 仍为 `flow-knowledge-2026-09-12.1`，用户战略裁决前不得切换。 |
-| 3 | [公开财报模块 C 级出口](work_items/PUBLIC--c-level-exit-protocol.md) | **active（唯一执行项）** | S01 关闭 ✓ | 独立交叉评已完成（[结果](../80_reviews/ai-cross-review/results/gpt-6-astra-2026-09-25.md)）：1,530格中42异常、109存疑、200因JDL乱码无法完整核验；按工作包先做逐项原件归因和证据对账，再修抽取器。1794/1794仅为登记覆盖口径，不等于通过 |
+| 3 | [公开财报模块 C 级出口](work_items/PUBLIC--c-level-exit-protocol.md) | **active（唯一执行项）** | S01 关闭 ✓ | 只读基线审计已完成（[审计记录](../80_reviews/2026-09-28-c-level-source-baseline-reconciliation.md)）：找到JDL英文可读原件、发现资产负债表误纳权益变动页的页界限缺陷（58行→47行模拟、核心勾稽值不变），并记录评审bundle与L1来源映射差异。下一步TDD修边界后逐格复核200格 |
 | 3a | [溯源/重述/只读 MCP](work_items/PUBLIC--provenance-restatement-mcp.md) | **completed** | — | B3 溯源 95.5% 行项目带页锚（迁移 0029 + 导入/API/前端）；B4 supersedes 链 + 差异脚本；B5 只读 MCP 三工具（token fail-closed）；B6 确定性差异说明起草 |
 | 3b | [数据扩张、行业基准与 10× 性能基线](work_items/PUBLIC--data-expansion-benchmarks.md) | **active（队列排队，不并行启动）** | 性能基线 ✓；扩张待外部财报 | G2 完成：10×（1034→10340 行）P95 明细 6.2ms/检索 0.97ms/聚合 1.11ms（`perf_baseline.py`）；C1 扩张需真实财报到料 |
 | 3c | [AI 问数 v1 与评测集](work_items/PUBLIC--ai-qa-v1.md) | **completed(v1)** | — | 确定性检索引用 QA + 94 问评测集（60 数值 + 34 拒答）命中率 100%、拒答零误答（`ask_facts.py` / `generate_qa_eval.py`）；LLM 通道与 v2/v3 另行裁决 |
@@ -56,7 +56,7 @@ superseded_by: null
 
 ## 唯一完整 To-do 与执行队列（严格串行）
 
-2026-09-28 执行进度：UX Gate1/Gate5 已在`0144bad4`完成并由准确 SHA 的 CI run `36371507389` 17/17验证通过。隔离旅程和门禁明细见工作包 §Gate 5 与下方最新记录。
+2026-09-28 执行进度：UX Gate1/Gate5 已在`0144bad4`完成并由准确 SHA 的 CI run `36371507389` 17/17验证通过。当前 C 级第1步只读来源基线审计已交付，见工作包和审计记录；下一子步写回归测试修复JDL页界限。基线同步提交`f1ab4283`的准确SHA CI run `36375305428` 17/17 success。
 
 截至 2026-09-28：**11项，已完成2项，唯一执行中1项，排队7项（其中1项需按规定主动结案外部材料不可得风险）**。当前唯一执行项第3项公开财报 C 级归因、原件复核与抽取修订。UX 准确 SHA `0144bad4be1a869a5a4073c516d78b4bf333cbee` 的 CI run `36371507389` 17/17通过；本地隔离与全链门禁通过。常驻`flow`不写入/清理/重启/重建。
 
