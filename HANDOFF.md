@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目尽调、优化与单 Agent 执行总交接
 doc_type: navigation
 status: current
-version: 5.41
+version: 5.42
 created_at: 2026-09-12
 updated_at: 2026-09-28
 owner: FLOW
@@ -14,11 +14,11 @@ applies_to: repository
 
 ## 当前唯一接续点（2026-09-28，覆盖下方旧进度）
 
-当前唯一任务：按`docs/50_plans/CURRENT_ROADMAP.md`第3项继续公开财报C级出口，严格在`main`串行推进。109候选重建提交`8cc968594aa1f087622f6155e8d3651a5d65c0bf`对应CI run `36397631508`准确SHA 17/17；本轮JDL逐格来源复核提交`fdc96d63146e0ed8cb12e75a50f488dd3015398f`对应CI run `36404144739`准确SHA 17/17；更早首版台账`cbe11d6c405e0b9a23353d63b264fc57e8a360c9`/run `36391911442`也为17/17。
+当前唯一任务：按`docs/50_plans/CURRENT_ROADMAP.md`第3项继续公开财报C级出口，严格在`main`串行推进。109候选重建提交`8cc968594aa1f087622f6155e8d3651a5d65c0bf`对应CI run `36397631508`准确SHA 17/17；JDL逐格来源复核提交`fdc96d63146e0ed8cb12e75a50f488dd3015398f`对应CI run `36404144739`准确SHA 17/17；状态同步提交`0c933d5c497af92d8d41d9aa6e9c844ea67ded31`对应CI run `36408822932` attempt1 dashboard因Docker镜像拉取502失败，attempt2同SHA 17/17 success；更早首版台账`cbe11d6c405e0b9a23353d63b264fc57e8a360c9`/run `36391911442`也为17/17。
 
 JDL原200格逐格核验现已完成：冻结英文版与中文原件SHA固定；179个数值、5个破折号空值均匹配报表行和期间列。另16格定位到物理页107/印刷页106的独立合并综合收益表，当前提取归类/父项身份尚待裁决，不能算通过。详见`validation/financial_reports/review-inputs/jdl_readable_twin_crosswalk_v1.csv`、更新后的`validation/financial_reports/review-ledgers/jdl-222-cell-reconciliation-v1.csv`和审计报告。下一步先查16格的分类/身份合同与重复行处理，必要时写红灯测试后修复；再按队列处理42异常和109疑点。C级仍未通过。常驻`flow`数据库/服务未触碰。
 
-验证现状：全量脚本测试116项、生成器定向测试6项通过；交叉表物理复核200/200页码/文本行逐字一致，PDF SHA匹配；文档M1 PASS（299份、0错误）、链接检查PASS（0错误）。Ruff相较基线无新增诊断。来源复核已推送且CI 17/17；最新待办为同步该CI凭证的文档状态切片，完成差异/M1/链接检查后提交并立即推送、核验其准确SHA CI，之后才开始16格分类/身份合同审查。工作目录为`.worktrees/execution-convergence`的`main`；若切换工作树/目录，先核验仓库和分支。不要把历史段落内的旧“下一步”当成当前队列。
+验证现状：全量脚本测试116项、生成器定向测试6项通过；交叉表物理复核200/200页码/文本行逐字一致，PDF SHA匹配；文档M1 PASS（299份、0错误）、链接检查PASS（0错误）。Ruff相较基线无新增诊断。来源复核与状态同步均已推送并按准确SHA CI验收通过（状态提交经attempt2重跑）。下一步是审查16格分类/身份合同、检查报表抽取身份与持久化主键是否区分同名行；完成后记录审查发现、按需TDD修复，然后处理42异常与109候选。工作目录为`.worktrees/execution-convergence`的`main`；若切换工作树/目录，先核验仓库和分支。不要把历史段落内的旧“下一步”当成当前队列。
 
 ## 首轮执行快照（已由上方当前唯一接续点覆盖）
 
