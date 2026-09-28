@@ -4,7 +4,7 @@
 两级基准合同（docs/50_plans/work_items/PUBLIC--c-level-exit-protocol.md）：
 - L0：事实库 statement_line_item ↔ 已验证抽取 YAML 逐值比对——管线不丢数、
   不改数、不换符号；
-- L1（`--level L1`）：页级答案集（config/statements/answer_set_l1_v4.yaml，
+- L1（`--level L1`）：页级答案集（config/statements/answer_set_l1_v5.yaml，
   由 scripts/build_answer_set_l1.py 从源 PDF 文本层定位生成）双向验证：
   ① 每条页锚在当前 PDF 上仍可复现（数值确实出现在该页）；
   ② 答案集值 == 事实库值（值级一致）。
@@ -29,6 +29,9 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[1]
 
 sys.path.insert(0, str(REPO / "services/api" / "src"))
+sys.path.insert(0, str(REPO / "scripts"))
+
+from public_statement_row_identity import apply_public_row_identity_corrections
 
 EXIT_OK = 0
 EXIT_MISMATCH = 1
@@ -77,13 +80,15 @@ def collect_expected() -> dict:
     if not sources:
         raise RuntimeError("未找到抽取 YAML（docs/implementation/p5/*_statements.yaml）")
     for source in sources:
-        payload = load_yaml(Path(source))
+        payload = apply_public_row_identity_corrections(
+            load_yaml(Path(source)), repository_root=REPO
+        )
         source_pdf = payload["source_pdf"]
         for statement, rows in payload["statements"].items():
             for row in rows:
                 item = row["item"]
                 for column, value in row.items():
-                    if column in {"item", "page"}:
+                    if column in {"item", "page", "source_text_label"}:
                         continue
                     normalized = COLUMN_ALIASES.get(column, column)
                     key = (source_pdf, statement, item, normalized)
@@ -404,7 +409,7 @@ def main() -> int:
         return EXIT_OK
     if args.level == "L1":
         try:
-            report = verify_l1(REPO / "config/statements/answer_set_l1_v4.yaml")
+            report = verify_l1(REPO / "config/statements/answer_set_l1_v5.yaml")
         except Exception as error:  # noqa: BLE001
             print(f"env error: {error}", file=sys.stderr)
             return EXIT_ENV_ERROR

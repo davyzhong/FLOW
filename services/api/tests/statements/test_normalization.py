@@ -105,6 +105,28 @@ def test_reimport_is_idempotent_and_restatement_versions(db_session: Session) ->
     assert sorted(versions) == [1, 2]
 
 
+def test_source_text_label_is_metadata_not_a_numeric_value_column(db_session: Session) -> None:
+    payload = yaml.safe_load(SF_YAML.read_text())
+    row = next(
+        item
+        for item in payload["statements"]["合并资产负债表"]
+        if item.get("期末余额") is not None and item.get("期初余额") is not None
+    )
+    row["source_text_label"] = "原件披露行名"
+
+    report = import_statement_report(
+        db_session,
+        **IMPORT_KWARGS,
+        payload=payload,
+        source_ref="p5_samples/sf_002352/SF_2026_Q1_report.pdf",
+        source_sha256="c" * 64,
+    )
+
+    imported = next(item for item in report.items if item.item_name == row["item"])
+    assert imported.value_end == Decimal(str(row["期末余额"]))
+    assert imported.value_begin == Decimal(str(row["期初余额"]))
+
+
 def test_normalize_resolves_sums_traces_and_preserves_original(db_session: Session) -> None:
     report = _import_sf(db_session)
     alias_map = load_alias_map(REPO_ROOT / "config/statements/item_alias_map_v0.yaml")

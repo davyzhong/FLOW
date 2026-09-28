@@ -17,10 +17,13 @@ import re
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from public_statement_row_identity import apply_public_row_identity_corrections
+
 REPO = Path(__file__).resolve().parents[1]
 SOURCES_GLOB = "docs/implementation/p5/*_statements.yaml"
-OUT_DEFAULT = REPO / "config/statements/answer_set_l1_v4.yaml"
-SUPERSEDED_ANSWER_SET = "config/statements/answer_set_l1_v3.yaml"
+OUT_DEFAULT = REPO / "config/statements/answer_set_l1_v5.yaml"
+SUPERSEDED_ANSWER_SET = "config/statements/answer_set_l1_v4.yaml"
 CORRECTED_JDL = "validation/financial_reports/corrections/jdl_2025fy_statements_v3.yaml"
 CORRECTED_ALIBABA = "validation/financial_reports/corrections/alibaba_2023fy_statements_v2.yaml"
 
@@ -57,7 +60,12 @@ def extract_pages(pdf_path: Path) -> list[str]:
 
 
 def locate(
-    pages: list[str], item: str, values: list[int], *, page_hint: int | None = None
+    pages: list[str],
+    item: str,
+    values: list[int],
+    *,
+    page_hint: int | None = None,
+    source_label: str | None = None,
 ) -> tuple[int, str] | None:
     """定位页码 + 匹配模式。
 
@@ -75,6 +83,11 @@ def locate(
     page_indexes = [page_hint - 1] if page_hint is not None else range(len(pages))
     value_norms = [_norm(str(v)) for v in values]
     item_candidates = {_norm(item)}
+    if source_label:
+        item_candidates.add(_norm(source_label))
+    for separator in ("：", ":"):
+        if separator in item:
+            item_candidates.add(_norm(item.split(separator, 1)[1]))
     stripped = re.sub(r"^(其中|其中:|其中：)\s*", "", item)
     item_candidates.add(_norm(stripped))
     item_candidates.add(_norm(item.replace("：", ":")))
@@ -178,7 +191,7 @@ def build(
     out: Path,
     repo: Path = REPO,
     *,
-    version: int = 4,
+    version: int = 5,
     supersedes: str = SUPERSEDED_ANSWER_SET,
 ) -> dict:
     import yaml
@@ -196,6 +209,7 @@ def build(
 
     for source in source_paths(repo):
         payload = yaml.safe_load(source.read_text(encoding="utf-8"))
+        payload = apply_public_row_identity_corrections(payload, repository_root=repo)
         source_pdf = payload["source_pdf"]
         sample = payload["sample"]
         ref = sample_to_ref.get(sample)
@@ -218,13 +232,18 @@ def build(
                 present = {
                     column: value
                     for column, value in row.items()
-                    if column not in {"item", "page"} and value is not None
+                    if column not in {"item", "page", "source_text_label"} and value is not None
                 }
                 if not present:
                     continue
                 total_values += len(present)
+                source_label = row.get("source_text_label")
                 located = locate(
-                    pages, item, list(present.values()), page_hint=row.get("page")
+                    pages,
+                    item,
+                    list(present.values()),
+                    page_hint=row.get("page"),
+                    source_label=source_label,
                 )
                 override = None
                 if located is None:
@@ -256,8 +275,7 @@ def build(
                     }
                 located_values += len(present)
                 for column, value in present.items():
-                    entries.append(
-                        {
+                    entry = {
                             "source_pdf": source_pdf,
                             "stock_code": ref["stock_code"],
                             "period_label": ref["period_label"],
@@ -270,7 +288,9 @@ def build(
                             "column": column,
                             "value": value if isinstance(value, int) else float(value),
                         }
-                    )
+                    if source_label:
+                        entry["page_anchor"] = source_label
+                    entries.append(entry)
 
     payload = {
         "schema": "flow.answer_set.l1",

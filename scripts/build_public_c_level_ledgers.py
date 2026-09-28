@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import csv
 import hashlib
+import json
 import re
 from pathlib import Path
 
@@ -886,6 +887,103 @@ def suspicion_group_adjudications_v2() -> list[dict[str, str]]:
     ]
 
 
+def public_row_identity_map_v1() -> list[dict[str, str]]:
+    """从已裁决的现金流/资产负债表候选导出版本化行身份覆盖表。"""
+    raw_candidates = suspicion_candidates()
+    grouped: dict[tuple[str, str, str], list[dict[str, str]]] = {}
+    active_groups = {
+        "S109-ALI-CASH-SCOPE",
+        "S109-ALI-EQUITY-CURRENT",
+        "S109-CAINIAO-NONCURRENT",
+    }
+    for candidate in raw_candidates:
+        groups = set(candidate["candidate_groups"].split(";"))
+        if not groups.intersection(active_groups):
+            continue
+        if (
+            candidate["column"] == "value_current"
+            and "S109-BABA-FY2020-CURRENT" in groups
+        ):
+            # 该格是旧交叉评束复制出来的别名，不对应抽取 YAML 的真实列。
+            continue
+        key = (candidate["report"], candidate["statement"], candidate["item"])
+        grouped.setdefault(key, []).append(candidate)
+
+    value_columns = {
+        "value_end": "期末余额",
+        "value_begin": "期初余额",
+        "value_current": "本期发生额",
+        "value_prior": "上期发生额",
+    }
+    cash_labels = {
+        "匯率變動對現金的影響": "匯率變動對現金及現金等價物、受限制現金及應收託管資金的影響",
+        "期初現金及現金等價物": "期初現金及現金等價物、受限制現金及應收託管資金",
+        "期末現金及現金等價物": "期末現金及現金等價物、受限制現金及應收託管資金",
+        "現金淨（減少）增加": "現金及現金等價物、受限制現金及應收託管資金的增加（減少）",
+    }
+    rows: list[dict[str, str]] = []
+    for (report, statement, item), cells in sorted(grouped.items()):
+        groups = set().union(
+            *(set(candidate["candidate_groups"].split(";")) for candidate in cells)
+        )
+        source = S109_REPORT_SOURCES[report]
+        values: dict[str, str] = {}
+        for candidate in cells:
+            source_column = value_columns[candidate["column"]]
+            if source_column in values:
+                raise ValueError(f"行身份覆盖出现重复列：{report}/{statement}/{item}/{source_column}")
+            values[source_column] = candidate["candidate_value"]
+
+        if "S109-ALI-CASH-SCOPE" in groups:
+            corrected_item = cash_labels[item]
+            source_text_label = corrected_item
+            page = source["cash_page"]
+            disposition = "现金流合并范围标签补全"
+        elif "S109-ALI-EQUITY-CURRENT" in groups:
+            source_label = "證券投資" if report == "BABA_FY2020_annual_results" else item
+            corrected_item = "流动资产：" + source_label
+            source_text_label = source_label
+            page = source["bs_pages"]
+            disposition = "资产负债表流动资产范围限定"
+        else:
+            is_asset = item == "按公允价值计量的金融资产"
+            corrected_item = ("非流动资产：" if is_asset else "非流动负债：") + item
+            source_text_label = {
+                "按公允价值计量的金融资产": "Financial assets at fair value through profit or loss",
+                "借款": "Borrowings",
+                "租赁负债": "Lease liabilities",
+                "指定按公允价值计量的金融负债": "Financial liabilities designated at fair value through profit or loss",
+                "其他金融负债": "Other financial liabilities",
+            }[item]
+            page = "466" if is_asset else "467"
+            disposition = "资产负债表非流动项目范围限定"
+
+        rows.append(
+            {
+                "sample": (
+                    "cainiao_2023fy"
+                    if report == "Cainiao_application_proof_20230926"
+                    else f"alibaba_{report.split('_FY', 1)[1].split('_', 1)[0]}fy"
+                ),
+                "report": report,
+                "source_pdf": source["pdf"],
+                "source_pdf_sha256": source["sha256"],
+                "statement": statement,
+                "source_item": item,
+                "source_text_label": source_text_label,
+                "source_values_json": json.dumps(values, ensure_ascii=False, sort_keys=True),
+                "corrected_item": corrected_item,
+                "source_page_physical": page,
+                "candidate_cells": str(len(cells)),
+                "candidate_groups": ";".join(sorted(groups.intersection(active_groups))),
+                "disposition": disposition,
+            }
+        )
+    if len(rows) != 40 or sum(int(row["candidate_cells"]) for row in rows) != 79:
+        raise ValueError("行身份覆盖表应由79个真实来源单元格归并为40条源行覆盖")
+    return rows
+
+
 def write_csv(path: Path, rows: list[dict[str, str]]) -> None:
     if not rows:
         raise ValueError(f"拒绝写空台账：{path}")
@@ -923,12 +1021,17 @@ def main() -> int:
     candidate_rows = suspicion_candidates()
     candidate_adjudications = suspicion_adjudications_v2()
     group_adjudications = suspicion_group_adjudications_v2()
+    row_identity_rows = public_row_identity_map_v1()
     write_csv(LEDGER_DIR / "jdl-222-cell-reconciliation-v1.csv", jdl_rows)
     write_csv(LEDGER_DIR / "confirmed-42-adjudicated-v2.csv", confirmed_rows)
     write_csv(LEDGER_DIR / "suspected-109-group-reconciliation-v1.csv", group_rows)
     write_csv(LEDGER_DIR / "suspected-109-cell-candidates-v1.csv", candidate_rows)
     write_csv(LEDGER_DIR / "suspected-109-cell-adjudications-v2.csv", candidate_adjudications)
     write_csv(LEDGER_DIR / "suspected-109-group-adjudication-v2.csv", group_adjudications)
+    write_csv(
+        ROOT / "validation/financial_reports/corrections/public-row-identity-map-v1.csv",
+        row_identity_rows,
+    )
     statuses = {row["status"] for row in jdl_rows}
     status_counts = {
         status: sum(row["status"] == status for row in jdl_rows) for status in statuses

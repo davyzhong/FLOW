@@ -25,6 +25,11 @@ def _haystack(text: str) -> str:
 
 
 class SignFlipLocateTest(unittest.TestCase):
+    def test_scoped_row_name_anchors_to_the_disclosed_base_label(self) -> None:
+        pages = [_haystack("流动资产 證券投資 9,927 4,234")]
+        located = builder.locate(pages, "流动资产：證券投資", [9927, 4234])
+        self.assertEqual(located, (1, "strong"))
+
     def test_loss_row_positive_presentation_locates_with_explicit_mode(self) -> None:
         pages = [
             _haystack("某些无关页面 9,083"),

@@ -3,7 +3,7 @@ doc_id: FLOW-WP-PUBLIC-C-EXIT-001
 title: 公开财报模块 C 级出口协议与数字级准确率基准（T09）
 doc_type: work-item
 status: active
-version: 2.6
+version: 2.7
 created_at: 2026-09-15
 updated_at: 2026-09-29
 owner: FLOW
@@ -33,7 +33,9 @@ gates: [R2, R3, R4, S01-closure]
 
 逐格台账和109候选重建已提交于前序切片。JDL 200格逐格来源映射已由提交`fdc96d63146e0ed8cb12e75a50f488dd3015398f`完成，准确SHA CI run `36404144739`为17/17 success。原200格均已完成行、列和值/空值来源核验；其中16格来自物理第107页/印刷第106页独立综合收益表，先前抽取器误归入合并利润表。持久化唯一键已含`statement_type`，无需schema迁移。因冻结L1 v2沿用错误分类且存在弱锚落到摘要页的问题，本轮保留v2，完成JDL抽取v3、页提示、fail-closed锚定位与L1 v3；独立库实测全量基准均零差异。v3实施提交`db646f45c43141468a2b4ee10a9114f0f141f066`准确SHA CI run `36427598983`已17/17通过。
 
-**109疑点逐项裁决已完成；当前唯一子步：实现行范围/身份的版本化修正并跑全链基准**。逐格v2裁决见`validation/financial_reports/review-ledgers/suspected-109-cell-adjudications-v2.csv`，组裁决见`.../suspected-109-group-adjudication-v2.csv`。候选台账共111唯一格，其中109格归入可重建主集、两格BABA FY2020流动证券投资期初9,927/期末4,234因原评审分母无底稿仍单列未决；主集没有数值错误，发现的是56格阿里现金流行名范围缩写、14格阿里流动资产投资缺限定、10格菜鸟非流动资产/负债缺限定、28格BABA FY2020评审bundle生成`value_current`并复制`value_begin`、4格JDL旧评审身份误标（已由JDL v3更正）。分组摘要BABA FY2020报告36但可定位28（差8）、阿里股权组报告15但可定位14（差1），冻结输入未包含可恢复原始选格清单，已明确登记不可重建，不伪称分母闭合。裁决生成器与回归已覆盖原件SHA、页码、数量分层及确定性再生成。
+**109疑点逐项裁决已完成；行范围/身份的版本化修订与全链基准亦已完成。当前唯一子步：冻结样本与证据清单，随后完成 oracle/盲评/holdout 核验和 C 级 Go/No-Go。**逐格v2裁决见`validation/financial_reports/review-ledgers/suspected-109-cell-adjudications-v2.csv`，组裁决见`.../suspected-109-group-adjudication-v2.csv`。候选台账共111唯一格，其中109格归入可重建主集、两格BABA FY2020流动证券投资期初9,927/期末4,234因原评审分母无底稿仍单列未决；主集没有数值错误，发现的是56格阿里现金流行名范围缩写、14格阿里流动资产投资缺限定、10格菜鸟非流动资产/负债缺限定、28格BABA FY2020评审bundle生成`value_current`并复制`value_begin`、4格JDL旧评审身份误标（已由JDL v3更正）。分组摘要BABA FY2020报告36但可定位28（差8）、阿里股权组报告15但可定位14（差1），冻结输入未包含可恢复原始选格清单，已明确登记不可重建，不伪称分母闭合。裁决生成器与回归已覆盖原件SHA、页码、数量分层及确定性再生成。
+
+行身份/范围修订验收已于2026-09-29完成：版本化映射40条源行覆盖79个真实单元格；源PDF SHA、报告身份、原始值均逐项 fail-closed 校验。seed、L0期望值和L1生成均接入同一覆盖层；L1 v5为1776/1776。新建隔离 Compose 项目`flowcverify`，迁移至0031并装载14份报告：L0 1532/1532，L1锚/值/数据库匹配1776/1776，P5派生事实670条内容SHA不变。API财报测试80/80、脚本测试138/138、M1与链接检查通过。完整证据见[`2026-09-29 行身份范围验收`](../../60_delivery/verification/2026-09-29--public-row-identity-v1.md)。原始PDF、历史P5基础YAML和常驻库均未改动；旧`flow_test`仅做只读诊断并发现旧装载差异，未清理或重刷。该验收不等于 C 级出口通过。
 
 BABA FY2023比较期及其派生资产一致性已完成：订正`validation/financial_reports/corrections/alibaba_2023fy_statements_v2.yaml`，活动答案集L1 v4 supersedes v3；P5派生事实键670稳定，14项值变更均为阿里FY2023比较期。隔离`flow_test` L0 1514/1514、L1 1776/1776；提交`7735f273168d70e03a4b8ec43e83abd78546446e`准确SHA CI run `36463457793` success。菜鸟19条均为有效FY2021当前值或FY2022比较期值，不是抽取错误；原始招股书 SHA `3e2c367958eacf3bb50c165204a1093383381f5cdb9d8af506636b880b54b13c`及年度 YAML已逐项核验。
 
