@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.41
+version: 5.42
 created_at: 2026-09-12
 updated_at: 2026-09-28
 owner: FLOW
@@ -11,6 +11,10 @@ applies_to: repository
 ---
 
 # FLOW 当前项目状态（唯一 current state）
+
+2026-09-28 当前唯一执行项补记：公开财报 C 级逐格台账首版已建立（[审计报告](../80_reviews/2026-09-28-c-level-cell-ledger.md)）。42异常42行；JDL 222格含22格已确认错归属、200格仍未核验；109疑点五组计数121，扣已明示重叠后120，较摘要多11。定向回归4项与文档M1通过，链接、提交推送、同SHA CI待完成；C级未通过。下一步追溯109疑点成员/去重并解释差额，再核对JDL原200格。常驻库不用于测试或写入。
+
+本次更新后复验：脚本测试114/114通过（其中本项新增4项），Ruff通过，文档M1通过（299份文档，0错误），全库链接检查0错误，暂存差异检查通过。提交推送及该提交准确SHA的CI仍待完成。
 
 2026-09-28 最新更正（优先于下方历史快照）：UX Gate1/Gate5已完成。提交`0144bad4be1a869a5a4073c516d78b4bf333cbee`对应CI run `36371507389`准确SHA 17/17 success；隔离Dashboard7/7，大麦旅程verify19/19、GET矩阵159项零意外、Playwright15/15，生产E2E157/157、Web143/143、mypy203文件、typecheck/lint、文档M1和链接门禁通过。常驻`flow`未触碰。唯一执行项为公开财报C级收口：只读基线复核提交`f1ab428343e809364c2fd519497c56b4ac7c53bf`对应CI run `36375305428`准确SHA 17/17 success；JDL页界限修复提交`5c84c81fdd3c0908891d16f8dcfe05e1d2e64b6c`对应CI run `36382657675`准确SHA17/17 success。新抽取v2为107行、24/24勾稽，L1 v2有1775/1775页锚；隔离0031栈装载14份报告后L0 1508/1508、L1 1775锚零失配；财报模块76项、脚本110项测试及M1/链接门禁通过。常驻栈未用于测试或修改。下一子步建立逐格对账台账并复核42异常、109口径疑点及JDL原200格。全局队列见 CURRENT_ROADMAP 第3项。
 

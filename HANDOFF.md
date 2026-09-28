@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目尽调、优化与单 Agent 执行总交接
 doc_type: navigation
 status: current
-version: 5.35
+version: 5.36
 created_at: 2026-09-12
 updated_at: 2026-09-28
 owner: FLOW
@@ -11,6 +11,12 @@ applies_to: repository
 ---
 
 # FLOW 项目尽调、优化与单 Agent 执行总交接｜2026-09-28 更新
+
+## 最新接续点（2026-09-28，本次执行）
+
+当前唯一任务仍是 `CURRENT_ROADMAP` 第3项公开财报 C 级出口。台账首版见 `docs/80_reviews/2026-09-28-c-level-cell-ledger.md`：42异常42行；JDL 222格中22格错归属已由v2排除、200格仍未核验；109疑点组计数121，扣唯一明示重叠后120，与摘要109差11。新增生成器 `scripts/build_public_c_level_ledgers.py`、4项回归及三个CSV。定向测试与文档M1均通过；链接检查、提交推送及准确SHA CI仍待做。C级未通过。下一步先追溯109疑点逐格成员/去重键并解释差额，再复核JDL原200格。保持 `main` 串行执行，常驻 `flow` 数据库/服务不触碰。
+
+**验证更新**：脚本测试114/114、Ruff、M1（299份文档、0错误）、全库链接检查（0错误）与 `git diff --cached --check` 均通过。提交与同SHA CI仍待完成。
 
 > 本页是下一位单一 Agent 的工作入口，整合了多 Agent 执行审计、R1 修复复核、竞品与方法论研究、工程收口计划和后续产品优化建议。它负责说明“现在在哪里、还要查什么、先改什么、怎样证明完成”；项目状态仍以 [PROJECT_STATE](docs/00_start_here/PROJECT_STATE.md) 为唯一事实源，任务顺序仍以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为唯一执行入口。
 

@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 5.48
+version: 5.49
 created_at: 2026-09-12
 updated_at: 2026-09-28
 owner: FLOW
@@ -34,6 +34,8 @@ superseded_by: null
 
 ## 项目状态盘点（仅说明各工作包状态；可执行事项只认下面唯一的“执行队列”）
 
+2026-09-28 当前状态补记（优先于本表第3行中较早的下一步描述）：42异常/JDL 222格/109疑点台账首版已建，计数矛盾见[审计报告](../80_reviews/2026-09-28-c-level-cell-ledger.md)。当前下一步为追溯109疑点的准确成员和去重键并解释11格差额，然后逐格核验JDL原200格；C级仍未通过。
+
 | 顺序 | 工作包 | 状态 | 依赖 | 最近证据 |
 |---|---|---|---|---|
 | 1 | [U08 生产就绪收口](work_items/U08--production-readiness.md) | **completed** | — | U8-A～D 完成；严格 HTTPS/双格式 SHA/恢复门禁通过；冻结记录与标签 |
@@ -55,6 +57,8 @@ superseded_by: null
 | D1 | [DOC-M5/M6 文档迁移](../superpowers/plans/2026-09-12-static-knowledge-and-document-migration.md) | **done**（bfc1271 / e373e25） | — | M0–M6 全部关闭 |
 
 ## 唯一完整 To-do 与执行队列（严格串行）
+
+本轮增量：逐格台账首版已建立（[审计报告](../80_reviews/2026-09-28-c-level-cell-ledger.md)）。42异常42行；JDL 222格中22已确认并由v2排除、200仍未核验；109疑点五组原始计数121，扣唯一明示重叠后120，较摘要109多11。当前第3项仍未关闭，下一子步追溯疑点成员/去重并解释差额，再复核JDL原200格。脚本测试114/114、Ruff、M1（299文档）及链接检查0错误通过；提交推送和同SHA CI尚待完成。
 
 2026-09-28 执行进度：UX Gate1/Gate5 已在`0144bad4`完成并由准确 SHA 的 CI run `36371507389` 17/17验证通过。C级只读来源基线审计提交`f1ab4283`对应CI run `36375305428` 17/17 success。JDL页界限修复提交`5c84c81fdd3c0908891d16f8dcfe05e1d2e64b6c`对应CI run `36382657675`准确SHA 17/17 success。隔离Compose栈迁移0031并装载14份报告，L0 1508/1508，L1 1775锚零失配；财报测试76项、脚本测试110项、M1、链接、定向ruff及shell语法通过。唯一下一子步为建立42异常/109口径疑点/JDL原200格的规范化逐格台账并逐项复核原件。常驻`flow`不写入/清理/重启/重建。
 
