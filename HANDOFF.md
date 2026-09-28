@@ -14,7 +14,7 @@ applies_to: repository
 
 ## 当前唯一接续点（2026-09-29，覆盖下方旧进度）
 
-当前唯一任务：按`docs/50_plans/CURRENT_ROADMAP.md`第3项继续公开财报C级出口，严格在`main`串行推进。此前 JDL v3/L1 v3、菜鸟19条审定、BABA FY2023比较期修订、109格语义裁决均已完成。最新行身份/范围修订映射覆盖40条源行、79个真实单元格；L1 v5 1776/1776。全新隔离 Compose 项目`flowcverify`迁移至0031并加载5家公司14份报告，L0 1532/1532、L1锚/值/数据库匹配1776/1776全绿；P5事实670条内容SHA稳定。财报 API 测试80/80、脚本138/138、M1 299文档零错误、链接零错误。证据见`docs/60_delivery/verification/2026-09-29--public-row-identity-v1.md`。旧`flow_test`只读检查发现旧装载差异，未修改；常驻`flow`从未连接/写入。
+当前唯一任务：按`docs/50_plans/CURRENT_ROADMAP.md`第3项继续公开财报C级出口，严格在`main`串行推进。此前 JDL v3/L1 v3、菜鸟19条审定、BABA FY2023比较期修订、109格语义裁决均已完成。最新行身份/范围修订提交`eb2b7f3cbadec0c36eb4b36473c6321d69aa4fff`准确SHA CI run `36478301484` 17/17 success；映射覆盖40条源行、79个真实单元格；L1 v5 1776/1776。全新隔离 Compose 项目`flowcverify`迁移至0031并加载5家公司14份报告，L0 1532/1532、L1锚/值/数据库匹配1776/1776全绿；P5事实670条内容SHA稳定。财报 API 测试80/80、脚本138/138、M1 299文档零错误、链接零错误。证据见`docs/60_delivery/verification/2026-09-29--public-row-identity-v1.md`。旧`flow_test`只读检查发现旧装载差异，未修改；常驻`flow`从未连接/写入。
 
 **唯一完整 To-do 与进度**：
 1. JDL v3/L1 v3实现与验收：完成，`db646f45`/CI `36427598983` 17/17；隔离库 L0 1514/1514、当时L1 1775/1775。

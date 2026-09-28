@@ -7,8 +7,8 @@ version: "1.0"
 created_at: 2026-09-29
 updated_at: 2026-09-29
 owner: FLOW
-commit_refs: "[af6c0672]"
-evidence_refs: "[row-identity-map-40-rows-79-values, l1-v5-1776-of-1776, isolated-l0-1532-of-1532, isolated-l1-db-match-zero, p5-facts-670-content-sha-stable, statement-api-tests-80-of-80, scripts-tests-138-of-138, docs-m1-299-zero-errors, links-zero-errors]"
+commit_refs: "[af6c0672, eb2b7f3c]"
+evidence_refs: "[row-identity-map-40-rows-79-values, l1-v5-1776-of-1776, isolated-l0-1532-of-1532, isolated-l1-db-match-zero, p5-facts-670-content-sha-stable, statement-api-tests-80-of-80, scripts-tests-138-of-138, docs-m1-299-zero-errors, links-zero-errors, github-ci-36478301484-eb2b7f3c-17-of-17-success]"
 applies_to: public-analysis
 supersedes: []
 superseded_by: null
@@ -24,7 +24,7 @@ superseded_by: null
 
 | 项目 | 值 |
 |---|---|
-| 代码基线 | `af6c0672f42ad36cc9e0ea6b7ecf539b8d1c0e1a`（本次实现尚待提交） |
+| 实现提交 | `eb2b7f3cbadec0c36eb4b36473c6321d69aa4fff` |
 | 数据库 | 新建隔离 Compose project `flowcverify`，宿主端口 55432，数据库 `flow`；未连接常驻项目数据库 `flow`，也未写旧 `flow_test` |
 | Schema | 使用既有迁移至 `0031_enterprise_directory`；没有新增迁移或修改 schema |
 | 报告数据 | `seed_p5_statements.sh` 加载 5 家公司、14 份报告 |
@@ -43,4 +43,4 @@ superseded_by: null
 | 脚本测试 | 138/138 |
 | 文档与格式 | Ruff（排除既有未执行 shebang 的 EXE001）通过；M1 299 份文档、0 错误；链接 0 错误；diff check 通过 |
 
-GitHub CI 必须在本交付提交后按准确 SHA 再确认；此前 `af6c0672` 的 CI run `36468667953` 与 `36472291231` 均已 success，但不能替代本提交 CI。C 级出口仍未通过：独立 oracle、盲评、holdout 和最终 Go/No-Go 尚未验收。
+GitHub Actions run `36478301484` 对应准确实现 SHA `eb2b7f3cbadec0c36eb4b36473c6321d69aa4fff`，17/17 jobs success。C 级出口仍未通过：独立 oracle、盲评、holdout 和最终 Go/No-Go 尚未验收。
