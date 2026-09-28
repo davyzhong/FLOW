@@ -3,7 +3,7 @@ doc_id: FLOW-WP-PUBLIC-C-EXIT-001
 title: 公开财报模块 C 级出口协议与数字级准确率基准（T09）
 doc_type: work-item
 status: active
-version: 1.5
+version: 1.7
 created_at: 2026-09-15
 updated_at: 2026-09-28
 owner: FLOW
@@ -31,7 +31,7 @@ gates: [R2, R3, R4, S01-closure]
 
 第1步只读基线复核已完成，详见[来源基线与 JDL 复核准备](../../80_reviews/2026-09-28-c-level-source-baseline-reconciliation.md)。JDL页区间修复已集成：提交`5c84c81fdd3c0908891d16f8dcfe05e1d2e64b6c`的准确SHA CI run `36382657675`为17/17 success。回归确认资产负债表最大印刷页为109，不再混入权益变动表；新抽取文件`validation/financial_reports/corrections/jdl_2025fy_statements_v2.yaml`为26/47/34行、24/24勾稽，旧P5 YAML未覆盖；新答案集`config/statements/answer_set_l1_v2.yaml`为1,775/1,775页锚定位，旧答案集未覆盖。独立Compose测试栈迁移至0031并加载14份报告后，L0 1508/1508一致、L1 1775锚零失配；财报目录76项、脚本目录110项测试通过，M1/链接检查通过。常驻`flow`未用于本次数据库测试。页锚覆盖不代表准确率或C级通过。下一子步为生成规范化逐格处置台账并复核原200格，同时继续42异常与109口径疑点逐项归因。
 
-逐格台账首版现已建立，见[逐格台账首版审计](../../80_reviews/2026-09-28-c-level-cell-ledger.md)：42异常42行、JDL 222格（22已确认并由v2排除、200仍unknown）、109疑点分组5行。疑点分组计数为121，扣唯一明示重叠后120，与摘要109差11格；精确成员和JDL 200格原件坐标仍未完成，故第1步继续进行。页锚覆盖不代表准确率或C级通过。
+逐格台账首版现已建立，见[逐格台账审计](../../80_reviews/2026-09-28-c-level-cell-ledger.md)：42异常42行、JDL 222格（22已确认并由v2排除、200仍unknown）。109疑点的底层bundle已重建112条组成员、去重111格，较摘要109多2；候选均未裁定。JDL 200格原件逐格坐标仍未完成，故第1步继续进行。页锚覆盖不代表准确率或C级通过。
 
 ## 1. 两级基准合同（B2）
 

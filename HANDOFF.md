@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目尽调、优化与单 Agent 执行总交接
 doc_type: navigation
 status: current
-version: 5.36
+version: 5.38
 created_at: 2026-09-12
 updated_at: 2026-09-28
 owner: FLOW
@@ -17,6 +17,8 @@ applies_to: repository
 当前唯一任务仍是 `CURRENT_ROADMAP` 第3项公开财报 C 级出口。台账首版见 `docs/80_reviews/2026-09-28-c-level-cell-ledger.md`：42异常42行；JDL 222格中22格错归属已由v2排除、200格仍未核验；109疑点组计数121，扣唯一明示重叠后120，与摘要109差11。新增生成器 `scripts/build_public_c_level_ledgers.py`、4项回归及三个CSV。定向测试与文档M1均通过；链接检查、提交推送及准确SHA CI仍待做。C级未通过。下一步先追溯109疑点逐格成员/去重键并解释差额，再复核JDL原200格。保持 `main` 串行执行，常驻 `flow` 数据库/服务不触碰。
 
 **验证更新**：脚本测试114/114、Ruff、M1（299份文档、0错误）、全库链接检查（0错误）与 `git diff --cached --check` 均通过。提交与同SHA CI仍待完成。
+
+**接续状态更新**：首版台账已提交 `cbe11d6c405e0b9a23353d63b264fc57e8a360c9` 并推送；准确SHA CI run `36391911442` 17/17 success。随后冻结疑点候选输入并形成111格唯一候选台账（112组成员、一个明示重复）；报告总表109与其差2。差额定位为BABA FY2020「股权证券及其他投资」期初9,927/期末4,234候选，原件物理41/印刷39可证流动证券投资与非流动同名行并存；但原评审没解释是否纳入分母，故保留未决，不为凑数删格。脚本全量115项、Ruff通过；需做M1/链接、提交推送、核对该SHA CI。绿后下一项为JDL英文版原200格逐格复核；常驻flow库不触碰。
 
 > 本页是下一位单一 Agent 的工作入口，整合了多 Agent 执行审计、R1 修复复核、竞品与方法论研究、工程收口计划和后续产品优化建议。它负责说明“现在在哪里、还要查什么、先改什么、怎样证明完成”；项目状态仍以 [PROJECT_STATE](docs/00_start_here/PROJECT_STATE.md) 为唯一事实源，任务顺序仍以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为唯一执行入口。
 

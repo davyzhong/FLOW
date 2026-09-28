@@ -12,6 +12,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 SNAPSHOT = ROOT / "validation/financial_reports/review-inputs/jdl_review_values_v1.csv"
+SUSPECTED_SNAPSHOT = ROOT / "validation/financial_reports/review-inputs/suspected_109_candidate_cells_v1.csv"
 LEDGER_DIR = ROOT / "validation/financial_reports/review-ledgers"
 OLD_JDL = ROOT / "docs/implementation/p5/jdl_2025fy_statements.yaml"
 NEW_JDL = ROOT / "validation/financial_reports/corrections/jdl_2025fy_statements_v2.yaml"
@@ -22,6 +23,27 @@ CAINIAO_PDF = "docs/knowledge-base/02_research/original/p5_samples/cainiao_priva
 CAINIAO_PDF_SHA = "3e2c367958eacf3bb50c165204a1093383381f5cdb9d8af506636b880b54b13c"
 BABA_PDF = "docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf"
 BABA_PDF_SHA = "28256e2d4fcebbd94fd2d1c46d51c75af2f93fbe492b31b764a44da0813fa9a7"
+
+SUSPICION_GROUPS = {
+    "S109-BABA-FY2020-CURRENT": ("BABA FY2020资产负债表current列语义", "阿里巴巴", {"BABA_FY2020_annual_results.md"}),
+    "S109-ALI-CASH-SCOPE": ("阿里现金流行名范围", "阿里巴巴", {f"BABA_FY{year}_annual_results.md" for year in range(2020, 2027)}),
+    "S109-ALI-EQUITY-CURRENT": ("阿里股权证券及其他投资流动限定", "阿里巴巴", {f"BABA_FY{year}_annual_results.md" for year in range(2020, 2027)}),
+    "S109-CAINIAO-NONCURRENT": ("菜鸟非流动科目限定", "菜鸟集团", {"Cainiao_application_proof_20230926.md"}),
+    "S109-JDL-ATTRIBUTION": ("JDL利润与综合收益归属范围", "京东物流", {"JDL_FY2025_annual_report.md"}),
+}
+ALI_CASH_ITEMS = {
+    "匯率變動對現金的影響",
+    "期初現金及現金等價物",
+    "期末現金及現金等價物",
+    "現金淨（減少）增加",
+}
+CAINIAO_NONCURRENT_ITEMS = {
+    "借款",
+    "租赁负债",
+    "指定按公允价值计量的金融负债",
+    "其他金融负债",
+    "按公允价值计量的金融资产",
+}
 
 JDL_COLUMNS = {
     "value_begin": "期初余额",
@@ -93,6 +115,60 @@ def snapshot_bundle(source: Path) -> int:
                 "value": value,
             })
     return len(extracted)
+
+
+def snapshot_suspicion_sources(source_dir: Path) -> int:
+    """冻结 109 口径疑点底层评审表中可按描述枚举的候选格。"""
+    rows: list[dict[str, str]] = []
+    for bundle in sorted(source_dir.glob("*.md")):
+        filename = bundle.name
+        group_ids = [group_id for group_id, (_, _, names) in SUSPICION_GROUPS.items() if filename in names]
+        if not group_ids:
+            continue
+        bundle_sha = sha256(bundle)
+        report = filename.removesuffix(".md")
+        company = next(SUSPICION_GROUPS[group_id][1] for group_id in group_ids)
+        for line in bundle.read_text(encoding="utf-8").splitlines():
+            match = re.match(r"^\|\s*([^|]+)\|\s*([^|]+)\|\s*([^|]+)\|\s*([^|]+)\|\s*$", line)
+            if not match:
+                continue
+            statement, item, column, value = (part.strip() for part in match.groups())
+            matched_groups = []
+            for group_id in group_ids:
+                selected = {
+                    "S109-BABA-FY2020-CURRENT": statement == "合并资产负债表" and column == "value_current",
+                    "S109-ALI-CASH-SCOPE": statement == "合并现金流量表" and item in ALI_CASH_ITEMS and column in {"value_current", "value_prior"},
+                    "S109-ALI-EQUITY-CURRENT": statement == "合并资产负债表" and item == "股權證券及其他投資" and column in {"value_begin", "value_current", "value_end"},
+                    "S109-CAINIAO-NONCURRENT": statement == "合并资产负债表" and item in CAINIAO_NONCURRENT_ITEMS and column in {"value_current", "value_prior"},
+                    "S109-JDL-ATTRIBUTION": statement == "合并利润表" and item in {"本公司所有者", "非控制性權益"} and column in {"value_current", "value_prior"},
+                }.get(group_id, False)
+                if selected:
+                    matched_groups.append(group_id)
+            for group_id in matched_groups:
+                rows.append({
+                    "group_id": group_id,
+                    "company": company,
+                    "report": report,
+                    "statement": statement,
+                    "item": item,
+                    "column": column,
+                    "candidate_value": "" if value in {"（空）", "(空)", "—", "–", "-"} else value,
+                    "source_bundle": f"work/ai-cross-review-bundle/{filename}",
+                    "source_bundle_sha256": bundle_sha,
+                })
+    expected = {
+        "S109-BABA-FY2020-CURRENT": 28,
+        "S109-ALI-CASH-SCOPE": 56,
+        "S109-ALI-EQUITY-CURRENT": 14,
+        "S109-CAINIAO-NONCURRENT": 10,
+        "S109-JDL-ATTRIBUTION": 4,
+    }
+    actual = {group_id: sum(row["group_id"] == group_id for row in rows) for group_id in expected}
+    if actual != expected:
+        raise ValueError(f"疑点候选分组数量不符：期望{expected}，实际{actual}")
+    SUSPECTED_SNAPSHOT.parent.mkdir(parents=True, exist_ok=True)
+    write_csv(SUSPECTED_SNAPSHOT, rows)
+    return len(rows)
 
 
 def read_yaml_cells(path: Path) -> dict[tuple[str, str, str], object]:
@@ -235,23 +311,78 @@ def suspicion_groups() -> list[dict[str, str]]:
         ("S109-CAINIAO-NONCURRENT", "菜鸟非流动科目限定缺失", 10, "五类同名流动/非流动项目需回原页判定"),
         ("S109-JDL-ATTRIBUTION", "JDL利润与综合收益归属范围不明", 4, "包含在JDL 200个不可完整核验格内，不重复计总数"),
     ]
+    reconstructed_counts = {
+        "S109-BABA-FY2020-CURRENT": 28,
+        "S109-ALI-CASH-SCOPE": 56,
+        "S109-ALI-EQUITY-CURRENT": 14,
+        "S109-CAINIAO-NONCURRENT": 10,
+        "S109-JDL-ATTRIBUTION": 4,
+    }
     raw_total = sum(group[2] for group in groups)
-    known_overlap = 1
-    unique_by_reported_overlap = raw_total - known_overlap
-    delta = unique_by_reported_overlap - 109
+    reconstructed_total = sum(reconstructed_counts.values())
+    unique_cells = 111
+    delta = unique_cells - 109
     return [
         {
             "group_id": group_id,
             "issue_group": title,
             "reported_cell_count": str(count),
-            "exact_cell_membership": "待基于原评审证据逐项重建；源报告仅给组计数/描述",
+            "reconstructed_candidate_count": str(reconstructed_counts[group_id]),
+            "reported_minus_reconstructed": str(count - reconstructed_counts[group_id]),
+            "exact_cell_membership": f"见suspected-109-cell-candidates-v1.csv；该组可枚举{reconstructed_counts[group_id]}格，候选集仍待逐格裁决",
             "source_ref": "docs/80_reviews/ai-cross-review/results/adjudication.md §三",
             "overlap_note": _,
-            "arithmetic_reconciliation": f"组计数合计{raw_total}；扣除已明示1格重叠后{unique_by_reported_overlap}；与汇总109相差{delta}格",
-            "status": "unresolved_count_or_membership_mismatch",
+            "arithmetic_reconciliation": f"裁决组计数合计{raw_total}；底层bundle可枚举{reconstructed_total}条；扣重复1格后唯一111；与总表109差{delta}格",
+            "status": "candidate_members_reconstructed_two_cell_gap_open",
         }
         for group_id, title, count, _ in groups
     ]
+
+
+def suspicion_candidates() -> list[dict[str, str]]:
+    if not SUSPECTED_SNAPSHOT.is_file():
+        raise FileNotFoundError(f"缺少疑点候选快照：{SUSPECTED_SNAPSHOT}")
+    grouped: dict[tuple[str, str, str, str, str, str], dict[str, str]] = {}
+    with SUSPECTED_SNAPSHOT.open(encoding="utf-8", newline="") as stream:
+        for source in csv.DictReader(stream):
+            key = (
+                source["company"], source["report"], source["statement"],
+                source["item"], source["column"], source["candidate_value"],
+            )
+            if key not in grouped:
+                grouped[key] = {
+                    "company": source["company"],
+                    "report": source["report"],
+                    "statement": source["statement"],
+                    "item": source["item"],
+                    "column": source["column"],
+                    "candidate_value": source["candidate_value"],
+                    "candidate_groups": source["group_id"],
+                    "source_bundles": source["source_bundle"],
+                    "source_bundle_sha256s": source["source_bundle_sha256"],
+                    "status": "candidate_not_adjudicated",
+                }
+            else:
+                entry = grouped[key]
+                if source["group_id"] not in entry["candidate_groups"].split(";"):
+                    entry["candidate_groups"] += ";" + source["group_id"]
+                if source["source_bundle"] not in entry["source_bundles"].split(";"):
+                    entry["source_bundles"] += ";" + source["source_bundle"]
+                    entry["source_bundle_sha256s"] += ";" + source["source_bundle_sha256"]
+    rows = []
+    for index, row in enumerate(grouped.values(), start=1):
+        row["candidate_id"] = f"S109-CAND-{index:03d}"
+        row["status"] = (
+            "excess_two_vs_FY2020_material_count_unresolved"
+            if row["report"] == "BABA_FY2020_annual_results"
+            and row["item"] == "股權證券及其他投資"
+            and row["column"] in {"value_begin", "value_end"}
+            else "candidate_not_adjudicated"
+        )
+        rows.append(row)
+    if len(rows) != 111:
+        raise ValueError(f"应重建111个唯一疑点候选格，实际{len(rows)}格")
+    return rows
 
 
 def write_csv(path: Path, rows: list[dict[str, str]]) -> None:
@@ -267,20 +398,26 @@ def write_csv(path: Path, rows: list[dict[str, str]]) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--snapshot-source", type=Path, help="从本地忽略目录评审bundle冻结JDL 222格输入")
+    parser.add_argument("--snapshot-suspicion-sources", type=Path, help="从本地忽略目录评审bundle冻结109疑点候选单元格输入")
     args = parser.parse_args()
     if args.snapshot_source:
         count = snapshot_bundle(args.snapshot_source)
         print(f"JDL输入快照已冻结：{count}格 -> {SNAPSHOT.relative_to(ROOT)}")
+    if args.snapshot_suspicion_sources:
+        count = snapshot_suspicion_sources(args.snapshot_suspicion_sources)
+        print(f"109疑点候选输入快照已冻结：{count}条分组候选 -> {SUSPECTED_SNAPSHOT.relative_to(ROOT)}")
     if not SNAPSHOT.is_file():
         raise FileNotFoundError(f"缺少JDL评审输入快照：{SNAPSHOT}")
     jdl_rows = jdl_ledger()
     confirmed_rows = confirmed_42()
     group_rows = suspicion_groups()
+    candidate_rows = suspicion_candidates()
     write_csv(LEDGER_DIR / "jdl-222-cell-reconciliation-v1.csv", jdl_rows)
     write_csv(LEDGER_DIR / "confirmed-42-exceptions-v1.csv", confirmed_rows)
     write_csv(LEDGER_DIR / "suspected-109-group-reconciliation-v1.csv", group_rows)
+    write_csv(LEDGER_DIR / "suspected-109-cell-candidates-v1.csv", candidate_rows)
     print(f"JDL格数={len(jdl_rows)}；JDL错误归属=22；JDL未核验=200")
-    print(f"已确认异常={len(confirmed_rows)}；存疑组={len(group_rows)}；存疑汇总差额=11")
+    print(f"已确认异常={len(confirmed_rows)}；存疑组={len(group_rows)}；唯一候选格={len(candidate_rows)}；较109摘要多2")
     return 0
 
 
