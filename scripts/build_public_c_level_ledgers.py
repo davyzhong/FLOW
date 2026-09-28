@@ -710,6 +710,182 @@ def suspicion_candidates() -> list[dict[str, str]]:
     return rows
 
 
+S109_REPORT_SOURCES = {
+    f"BABA_FY{year}_annual_results": {
+        "pdf": f"docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY{year}_annual_results.pdf",
+        "sha256": sha,
+        "bs_pages": pages,
+        "cash_page": cash_page,
+    }
+    for year, sha, pages, cash_page in (
+        (2020, "82065040738c226229951aa1b31f05fc05657ad61a432a8ad2cfa67825391de4", "41-42", "43"),
+        (2021, "b954d5fd1f1a8313eb35eeea3ae4a01c163e897403d44baa0a4db231728f903d", "38-39", "40"),
+        (2022, "658a32021b2cbd03f808726d5a574ffc3841505f1aaf2cf69af9ed2b82415ab5", "43-44", "45"),
+        (2023, "28256e2d4fcebbd94fd2d1c46d51c75af2f93fbe492b31b764a44da0813fa9a7", "39-40", "41"),
+        (2024, "d9233c97c931eae6816bd3dc6b813f787b6b33bbe8e14648db7d32668de02b14", "34-35", "36"),
+        (2025, "1620286e40fb7ed9d17f6de2608aea8922eeaf2c446542d0ae2639563cfc2986", "33-34", "35"),
+        (2026, "e264c45dbc7e6fd039cc4a948557a4e55f7df9a1889b134cbc3fdf1a9a265b9e", "33-34", "35"),
+    )
+}
+S109_REPORT_SOURCES.update(
+    {
+        "Cainiao_application_proof_20230926": {
+            "pdf": CAINIAO_PDF,
+            "sha256": CAINIAO_PDF_SHA,
+            "bs_pages": "466-467",
+            "cash_page": "",
+        },
+        "JDL_FY2025_annual_report": {
+            "pdf": JDL_PDF,
+            "sha256": "809957cc3f42a77227963ef327cc74e08abf4666d91f0866b0aa6e3d50b85c5c",
+            "bs_pages": "107",
+            "cash_page": "",
+        },
+    }
+)
+
+
+def suspicion_adjudications_v2() -> list[dict[str, str]]:
+    """逐候选记录原件身份、语义裁决和摘要分母状态；不改写候选v1。"""
+    rows = []
+    for candidate in suspicion_candidates():
+        source = S109_REPORT_SOURCES[candidate["report"]]
+        groups = set(candidate["candidate_groups"].split(";"))
+        is_cash = "S109-ALI-CASH-SCOPE" in groups
+        is_equity = "S109-ALI-EQUITY-CURRENT" in groups
+        is_baba_current = "S109-BABA-FY2020-CURRENT" in groups
+        is_cainiao = "S109-CAINIAO-NONCURRENT" in groups
+        is_jdl = "S109-JDL-ATTRIBUTION" in groups
+        is_two_cell_overage = candidate["status"] == "excess_two_vs_FY2020_material_count_unresolved"
+
+        if is_cash:
+            page_physical = source["cash_page"]
+            page_printed = str(int(page_physical) - 1)
+            corrected_identity = {
+                "匯率變動對現金的影響": "匯率變動對現金及現金等價物、受限制現金及應收託管資金的影響",
+                "期初現金及現金等價物": "期初現金及現金等價物、受限制現金及應收託管資金",
+                "期末現金及現金等價物": "期末現金及現金等價物、受限制現金及應收託管資金",
+                "現金淨（減少）增加": "現金及現金等價物、受限制現金及應收託管資金的增加（減少）",
+            }[candidate["item"]]
+            disposition = "source_value_verified_scope_label_incomplete"
+            rationale = "原件现金流量表数值与候选一致；源行包含现金及现金等价物、受限制现金与应收托管资金，旧候选行名省略后两项。应修行名映射，不改数值。"
+        elif is_cainiao:
+            page_physical = source["bs_pages"]
+            page_printed = "I-7/I-8"
+            corrected_identity = (
+                "非流动资产：" if candidate["item"] == "按公允价值计量的金融资产" else "非流动负债："
+            ) + candidate["item"]
+            disposition = "source_value_verified_noncurrent_scope_missing"
+            rationale = "招股书合并资产负债表将该原行列于非流动资产/非流动负债区；候选数值对应FY2023/FY2022列，原行名需带报表分组限定以免与流动同名行混淆。"
+        elif is_jdl:
+            page_physical = "107"
+            page_printed = "106"
+            corrected_identity = "合并综合收益表／" + candidate["item"]
+            disposition = "source_value_verified_statement_identity_fixed_in_jdl_v3"
+            rationale = "原件物理页107（印刷页106）为合并综合收益表，候选四值均属于综合收益归属；旧评审束误标为合并利润表，JDL v3已按报表身份拆分，不是数值差异。"
+        elif is_baba_current:
+            page_physical = source["bs_pages"]
+            page_printed = "40-41"
+            corrected_identity = "FY2019比较列（期初）／" + (
+                "流动资产：" if is_equity else ""
+            ) + candidate["item"]
+            disposition = "review_bundle_current_alias_duplicates_begin"
+            rationale = "BABA FY2020原件资产负债表仅列FY2019与FY2020两期；评审束额外生成的value_current在28行中与value_begin相同、映射FY2019比较值。P5正式抽取YAML仅存期初/期末，无value_current字段；属评审束字段别名问题，不是产品数值抽取错误。" + (
+                "本候选同时属于股权投资限定组，原件该值在流动资产证券投资行，须连同期初身份明确。"
+                if is_equity else ""
+            )
+        elif is_equity:
+            page_physical = source["bs_pages"]
+            page_printed = "-".join(
+                str(int(page) - 1) for page in page_physical.split("-")
+            )
+            corrected_identity = "流动资产：" + candidate["item"]
+            disposition = (
+                "source_value_verified_but_summary_denominator_unresolved"
+                if is_two_cell_overage
+                else "source_value_verified_current_asset_scope_missing"
+            )
+            rationale = "原件流动资产区同名项目值与候选一致；须显式保留“流动”限定，避免与非流动证券/股权投资行混淆。" + (
+                "此格不在逐材料109摘要的FY2020计数内，但候选台账可证实其为真实期初/期末行值；缺原始评审筛选底稿，故只保留为分母未决，不计入已裁决109。"
+                if is_two_cell_overage
+                else "数值有效，问题是行身份限定不充分，不是数值错抽。"
+            )
+        else:
+            raise ValueError(f"无法裁决候选：{candidate['candidate_id']}")
+
+        rows.append(
+            {
+                "candidate_id": candidate["candidate_id"],
+                "company": candidate["company"],
+                "report": candidate["report"],
+                "statement": candidate["statement"],
+                "item": candidate["item"],
+                "column": candidate["column"],
+                "candidate_value": candidate["candidate_value"],
+                "candidate_groups": candidate["candidate_groups"],
+                "source_pdf": source["pdf"],
+                "source_pdf_sha256": source["sha256"],
+                "source_page_physical": page_physical,
+                "source_page_printed": page_printed,
+                "adjudicated_identity": corrected_identity,
+                "disposition": disposition,
+                "reported_109_denominator": "unresolved_two_cell_overage" if is_two_cell_overage else "included_reconstructed_109",
+                "rationale": rationale,
+                "review_bundle": candidate["source_bundles"],
+                "review_bundle_sha256": candidate["source_bundle_sha256s"],
+            }
+        )
+    if len(rows) != 111 or sum(row["reported_109_denominator"] == "included_reconstructed_109" for row in rows) != 109:
+        raise ValueError("S109 v2应记录111个候选，其中109个归入重建109主集、2个单列分母未决")
+    return rows
+
+
+def suspicion_group_adjudications_v2() -> list[dict[str, str]]:
+    """记录组级原摘要差额，避免逐格裁决掩盖上游计数不可复现。"""
+    return [
+        {
+            "group_id": "S109-BABA-FY2020-CURRENT",
+            "reported_count": "36",
+            "reconstructed_members": "28",
+            "adjudicated_result": "28个已定位字段均为评审束生成的current别名，复制begin/FY2019比较值；正式FY2020 YAML不存在current列。",
+            "unexplained_count_gap": "8",
+            "status": "source_summary_membership_not_reconstructable",
+        },
+        {
+            "group_id": "S109-ALI-CASH-SCOPE",
+            "reported_count": "56",
+            "reconstructed_members": "56",
+            "adjudicated_result": "56格均为源现金流行名范围缩写，原件包括现金、受限制现金及应收托管资金。",
+            "unexplained_count_gap": "0",
+            "status": "all_reconstructed_cells_adjudicated",
+        },
+        {
+            "group_id": "S109-ALI-EQUITY-CURRENT",
+            "reported_count": "15",
+            "reconstructed_members": "14",
+            "adjudicated_result": "14格均映射流动资产同名项目；其中两格FY2020期初/期末真实存在但摘要分母未说明。",
+            "unexplained_count_gap": "1",
+            "status": "source_summary_membership_not_reconstructable",
+        },
+        {
+            "group_id": "S109-CAINIAO-NONCURRENT",
+            "reported_count": "10",
+            "reconstructed_members": "10",
+            "adjudicated_result": "10格源行均位于非流动资产/负债区，数值有效，须补充分组限定。",
+            "unexplained_count_gap": "0",
+            "status": "all_reconstructed_cells_adjudicated",
+        },
+        {
+            "group_id": "S109-JDL-ATTRIBUTION",
+            "reported_count": "4",
+            "reconstructed_members": "4",
+            "adjudicated_result": "4格属于合并综合收益表；JDL v3已修复原评审束的表身份误标。",
+            "unexplained_count_gap": "0",
+            "status": "resolved_by_jdl_v3",
+        },
+    ]
+
+
 def write_csv(path: Path, rows: list[dict[str, str]]) -> None:
     if not rows:
         raise ValueError(f"拒绝写空台账：{path}")
@@ -745,10 +921,14 @@ def main() -> int:
     confirmed_rows = confirmed_42()
     group_rows = suspicion_groups()
     candidate_rows = suspicion_candidates()
+    candidate_adjudications = suspicion_adjudications_v2()
+    group_adjudications = suspicion_group_adjudications_v2()
     write_csv(LEDGER_DIR / "jdl-222-cell-reconciliation-v1.csv", jdl_rows)
     write_csv(LEDGER_DIR / "confirmed-42-adjudicated-v2.csv", confirmed_rows)
     write_csv(LEDGER_DIR / "suspected-109-group-reconciliation-v1.csv", group_rows)
     write_csv(LEDGER_DIR / "suspected-109-cell-candidates-v1.csv", candidate_rows)
+    write_csv(LEDGER_DIR / "suspected-109-cell-adjudications-v2.csv", candidate_adjudications)
+    write_csv(LEDGER_DIR / "suspected-109-group-adjudication-v2.csv", group_adjudications)
     statuses = {row["status"] for row in jdl_rows}
     status_counts = {
         status: sum(row["status"] == status for row in jdl_rows) for status in statuses
@@ -761,7 +941,8 @@ def main() -> int:
         f"表级归属待裁决={status_counts.get('source_line_verified_statement_boundary_unresolved', 0)}"
     )
     print(
-        f"已确认异常={len(confirmed_rows)}；存疑组={len(group_rows)}；唯一候选格={len(candidate_rows)}；较109摘要多2"
+        f"已确认异常={len(confirmed_rows)}；存疑组={len(group_rows)}；唯一候选格={len(candidate_rows)}；"
+        f"S109 v2已逐项裁决={len(candidate_adjudications)}（109主集已归因，2格摘要分母未决）"
     )
     return 0
 

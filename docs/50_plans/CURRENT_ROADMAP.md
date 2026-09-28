@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 5.59
+version: 5.60
 created_at: 2026-09-12
 updated_at: 2026-09-29
 owner: FLOW
@@ -17,7 +17,7 @@ superseded_by: null
 
 # 当前路线图（唯一主线）
 
-> 2026-09-29 最新执行进展：BABA FY2023比较期订正及派生事实对账已完成，提交`7735f273168d70e03a4b8ec43e83abd78546446e`准确SHA CI run `36463457793` success。隔离`flow_test` L0 1514/1514、L1 1776/1776，锚失效/值不一致/数据库缺失均0；P5事实键670不变、14个值变化均限于阿里FY2023比较期。JDL无映射由旧18条移除（7条旧综合收益错误分类、11条权益变动表越界）及当前9条正确报表类型新增组成，不是一对一替换；生成器未知报表类型保留防丢行测试已通过。C级未通过。当前唯一子步为裁决109疑点：唯一候选111格，摘要差2的BABA FY2020期初9,927/期末4,234有原件证据但缺原评审分母依据，保持显式未决；不为凑数删除。常驻`flow`数据库/服务未触碰。
+> 2026-09-29 最新执行进展：BABA FY2023比较期订正及派生事实对账已完成，提交`7735f273168d70e03a4b8ec43e83abd78546446e`准确SHA CI run `36463457793` success。隔离`flow_test` L0 1514/1514、L1 1776/1776，锚失效/值不一致/数据库缺失均0；P5事实键670不变、14个值变化均限于阿里FY2023比较期。JDL无映射由旧18条移除（7条旧综合收益错误分类、11条权益变动表越界）及当前9条正确报表类型新增组成，不是一对一替换；生成器未知报表类型保留防丢行测试已通过。C级未通过。109疑点逐格裁决已形成111格v2台账：109格归入主集，2格真实流动证券投资候选仍为原摘要分母未决；未发现主集数值错误，确认的是字段语义/报告身份问题。五组报告摘要中BABA FY2020 +8、阿里股权组 +1 无法从冻结逐格底稿复原，已单独记录为摘要成员不可重建。当前唯一子步转为把源行范围/身份写入版本化映射并接入种子、L1及派生事实核验，再重跑全量L0/L1。常驻`flow`数据库/服务未触碰。
 
 > 2026-09-28 最新更正：UX Gate1/Gate5 已关闭。Gate5 在提交`0144bad4be1a869a5a4073c516d78b4bf333cbee`完成：隔离大麦验收 verify 19/19、GET 矩阵159项零意外、Playwright 15/15；Dashboard 隔离验收 7/7；生产 E2E 157/157、Web 143/143、API mypy 203文件、typecheck/lint、文档 M1 与链接门禁通过；准确 SHA 的 CI run `36371507389` 17/17 success。常驻`flow`未触碰。唯一执行项转为公开财报 C 级归因、原件复核与抽取修订。
 
@@ -47,7 +47,7 @@ superseded_by: null
 | 2b | [大麦数据后的剩余体验收口](work_items/UX--post-damai-experience-closeout.md) | **completed** | G2 ✓；用户已批准；ORG-LEDGER CI ✓ | Gate1/Gate5关闭：隔离 Dashboard 7/7；大麦验收 verify19/19、GET矩阵159项零意外、Playwright15/15；生产E2E157/157、Web143/143、mypy203文件、typecheck/lint、M1/链接检查通过；提交`0144bad4`同SHA CI run `36371507389` 17/17 success。常驻库未触碰。 |
 | 2c | [企业组织建制与经营账套初始化包](work_items/ORG-LEDGER--enterprise-initialization-package.md) | **completed** | 大麦发行包 completed；批准三表 schema | `2c7d6eb4`；CI run `36270782272` 的17/17 jobs success。隔离 `full` 首次/重复与 `business` 对账通过；11 个企业/loader 测试、全量 API 852、Web142、脚本107、大麦 verify19/19、API43/43、Playwright9/9、合同/文档/lint/typecheck 均通过。31文件 manifest 稳定 SHA `cbc7cccf…e513`。 |
 | K | [第二代静态知识刷新与战略重基线](work_items/KNOWLEDGE--refresh-v2.md) | **active（队列排队，不并行启动）** | 按唯一队列轮到时启动；规格/preflight 已完成 | K0–K6 未执行；`CURRENT_RELEASE` 仍为 `flow-knowledge-2026-09-12.1`，用户战略裁决前不得切换。 |
-| 3 | [公开财报模块 C 级出口](work_items/PUBLIC--c-level-exit-protocol.md) | **active（唯一执行项）** | S01 关闭 ✓ | BABA FY2023比较期/P5一致性已由`7735f273`与准确SHA CI `36463457793`关闭；隔离L0 1514/1514、L1 1776/1776。当前唯一子步：逐项裁决109疑点；台账111格，2格BABA FY2020候选分母待证但原件值真实，明确保留未决。之后依序冻结样本/独立盲评/holdout与C级Go-No-Go。 |
+| 3 | [公开财报模块 C 级出口](work_items/PUBLIC--c-level-exit-protocol.md) | **active（唯一执行项）** | S01 关闭 ✓ | BABA FY2023比较期/P5一致性已由`7735f273`与准确SHA CI `36463457793`关闭；隔离L0 1514/1514、L1 1776/1776。109疑点语义裁决v2已完成（111格：109主集+2格摘要分母未决），当前唯一子步：将行范围/身份修正写入版本化映射并接入全链核验；C级仍未通过。 |
 | 3a | [溯源/重述/只读 MCP](work_items/PUBLIC--provenance-restatement-mcp.md) | **completed** | — | B3 溯源 95.5% 行项目带页锚（迁移 0029 + 导入/API/前端）；B4 supersedes 链 + 差异脚本；B5 只读 MCP 三工具（token fail-closed）；B6 确定性差异说明起草 |
 | 3b | [数据扩张、行业基准与 10× 性能基线](work_items/PUBLIC--data-expansion-benchmarks.md) | **active（队列排队，不并行启动）** | 性能基线 ✓；扩张待外部财报 | G2 完成：10×（1034→10340 行）P95 明细 6.2ms/检索 0.97ms/聚合 1.11ms（`perf_baseline.py`）；C1 扩张需真实财报到料 |
 | 3c | [AI 问数 v1 与评测集](work_items/PUBLIC--ai-qa-v1.md) | **completed(v1)** | — | 确定性检索引用 QA + 94 问评测集（60 数值 + 34 拒答）命中率 100%、拒答零误答（`ask_facts.py` / `generate_qa_eval.py`）；LLM 通道与 v2/v3 另行裁决 |
@@ -64,7 +64,7 @@ superseded_by: null
 
 2026-09-28 执行进度：UX Gate1/Gate5 已在`0144bad4`完成并由准确 SHA 的 CI run `36371507389` 17/17验证通过。C级只读来源基线审计提交`f1ab4283`对应CI run `36375305428` 17/17 success。JDL页界限修复提交`5c84c81fdd3c0908891d16f8dcfe05e1d2e64b6c`对应CI run `36382657675`准确SHA 17/17 success。隔离Compose栈迁移0031并装载14份报告，L0 1508/1508，L1 1775锚零失配；财报测试76项、脚本测试110项、M1、链接、定向ruff及shell语法通过。唯一下一子步为建立42异常/109口径疑点/JDL原200格的规范化逐格台账并逐项复核原件。常驻`flow`不写入/清理/重启/重建。
 
-2026-09-29 最新更正（覆盖上方历史“BABA待做”状态）：BABA FY2023比较期及P5派生事实更新已由`7735f273`完成，准确SHA CI run `36463457793` success；L0 1514/1514、L1 1776/1776，facts键670稳定。下一唯一子步为109候选逐项裁决；111格中2格的评审分母仍未证实，保留未决。其余C级出口条件仍未完成。
+2026-09-29 最新更正：BABA FY2023比较期及P5派生事实更新已由`7735f273`完成，准确SHA CI run `36463457793` success；L0 1514/1514、L1 1776/1776，facts键670稳定。109候选逐项裁决v2已完成，账表为111格（109主集、2格摘要分母未决）；组级原摘要的+8/+1差额不可从冻结逐格输入重建，已保留为限制。下一唯一子步是版本化源行身份/范围修正及其导入、L1、派生事实链路验证。其余C级出口条件仍未完成。
 
 截至 2026-09-28：**11项，已完成2项，唯一执行中1项，排队8项（其中1项需主动恢复/结案外部材料风险）**。当前唯一执行项第3项公开财报 C 级归因、原件复核与抽取修订。UX 准确 SHA `0144bad4be1a869a5a4073c516d78b4bf333cbee` 的 CI run `36371507389` 17/17通过；本地隔离与全链门禁通过。常驻`flow`不写入/清理/重启/重建。
 

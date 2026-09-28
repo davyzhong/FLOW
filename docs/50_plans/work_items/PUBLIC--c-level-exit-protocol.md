@@ -3,7 +3,7 @@ doc_id: FLOW-WP-PUBLIC-C-EXIT-001
 title: 公开财报模块 C 级出口协议与数字级准确率基准（T09）
 doc_type: work-item
 status: active
-version: 2.5
+version: 2.6
 created_at: 2026-09-15
 updated_at: 2026-09-29
 owner: FLOW
@@ -33,11 +33,15 @@ gates: [R2, R3, R4, S01-closure]
 
 逐格台账和109候选重建已提交于前序切片。JDL 200格逐格来源映射已由提交`fdc96d63146e0ed8cb12e75a50f488dd3015398f`完成，准确SHA CI run `36404144739`为17/17 success。原200格均已完成行、列和值/空值来源核验；其中16格来自物理第107页/印刷第106页独立综合收益表，先前抽取器误归入合并利润表。持久化唯一键已含`statement_type`，无需schema迁移。因冻结L1 v2沿用错误分类且存在弱锚落到摘要页的问题，本轮保留v2，完成JDL抽取v3、页提示、fail-closed锚定位与L1 v3；独立库实测全量基准均零差异。v3实施提交`db646f45c43141468a2b4ee10a9114f0f141f066`准确SHA CI run `36427598983`已17/17通过。
 
-**BABA FY2023比较期及其派生资产一致性已完成；当前唯一子步：逐项裁决109疑点候选**。BABA订正落在`validation/financial_reports/corrections/alibaba_2023fy_statements_v2.yaml`，活动答案集L1 v4 supersedes v3；P5派生事实键670稳定，14项值变更均为阿里FY2023比较期，JDL旧18条待映射记录移除与当前9条正确报表类型记录新增已分类说明。隔离`flow_test` L0 1514/1514、L1 1776/1776，锚失效/值不一致/数据库缺失均0；实现提交`7735f273168d70e03a4b8ec43e83abd78546446e`准确SHA CI run `36463457793` success。菜鸟19条异常主张已全部审定：原始招股书 SHA `3e2c367958eacf3bb50c165204a1093383381f5cdb9d8af506636b880b54b13c`物理第474/475页（现金流量表）、第466页（资产负债表）及FY2021/FY2022年度 YAML 一致；FY2022上期列对应FY2021，因此19条均为有效数值/比较值，不是抽取错误。原`confirmed-42-exceptions-v1.csv`保持不变，审定结果另存`confirmed-42-adjudicated-v2.csv`，生成器逐项校验报告年度 YAML。
+**109疑点逐项裁决已完成；当前唯一子步：实现行范围/身份的版本化修正并跑全链基准**。逐格v2裁决见`validation/financial_reports/review-ledgers/suspected-109-cell-adjudications-v2.csv`，组裁决见`.../suspected-109-group-adjudication-v2.csv`。候选台账共111唯一格，其中109格归入可重建主集、两格BABA FY2020流动证券投资期初9,927/期末4,234因原评审分母无底稿仍单列未决；主集没有数值错误，发现的是56格阿里现金流行名范围缩写、14格阿里流动资产投资缺限定、10格菜鸟非流动资产/负债缺限定、28格BABA FY2020评审bundle生成`value_current`并复制`value_begin`、4格JDL旧评审身份误标（已由JDL v3更正）。分组摘要BABA FY2020报告36但可定位28（差8）、阿里股权组报告15但可定位14（差1），冻结输入未包含可恢复原始选格清单，已明确登记不可重建，不伪称分母闭合。裁决生成器与回归已覆盖原件SHA、页码、数量分层及确定性再生成。
+
+BABA FY2023比较期及其派生资产一致性已完成：订正`validation/financial_reports/corrections/alibaba_2023fy_statements_v2.yaml`，活动答案集L1 v4 supersedes v3；P5派生事实键670稳定，14项值变更均为阿里FY2023比较期。隔离`flow_test` L0 1514/1514、L1 1776/1776；提交`7735f273168d70e03a4b8ec43e83abd78546446e`准确SHA CI run `36463457793` success。菜鸟19条均为有效FY2021当前值或FY2022比较期值，不是抽取错误；原始招股书 SHA `3e2c367958eacf3bb50c165204a1093383381f5cdb9d8af506636b880b54b13c`及年度 YAML已逐项核验。
+
+下一子步只修正经裁决确认的字段身份，不擅自改数值，也不修改原始PDF/基础抽取历史：先盘点`validation/financial_reports/corrections/`现有覆盖层、抽取器行身份模型、种子与L1/P5消费路径；采用现有版本化修订机制或其兼容扩展，为阿里现金流范围、阿里流动资产投资限定、菜鸟非流动项目限定补充规范身份。BABA的28个`value_current`属于评审bundle别名错误，不应生成产品数据修订；JDL四格已在v3解决。改动前先补测试，再实现；之后隔离库复跑L0/L1及P5事实键/变化核对。禁止schema迁移与常驻数据库写入。
 
 BABA FY2023修订按原件物理第38页/印刷第37页确认商誉减值上期发生额为FY2022的`-25,141`（人民币百万元）；在`validation/financial_reports/corrections/alibaba_2023fy_statements_v2.yaml`新增修订，不覆盖旧抽取档案。同步更新活动答案集为L1 v4（supersedes v3），让L0、L1和P5种子/事实生成器都读取版本化订正。重建`docs/implementation/p5/statement_facts.yaml`若发现历史差异，必须逐项核对其对应活动YAML/既有订正；仅将可追溯差异纳入，不得夹带无法解释的变动，并在交付记录列明差异分类和计数。新增报表类型不得因别名表未配置而静默消失：应在正确报表类型下保留为显式“无映射”记录，已移动/重分类的旧记录需注明替代关系。隔离`flow_test`上复跑L0/L1并按报告身份核验新增比较值，禁止写入常驻`flow`。
 
-109候选台账`validation/financial_reports/review-ledgers/suspected-109-cell-candidates-v1.csv`含112条分组成员、去重为111格。比评审摘要109多出的两格为BABA FY2020股权投资期初9,927、期末4,234；原件确认它们是“流动证券投资”真实行值，但尚无原评审分母/筛选底稿证明是否应纳入109。故逐项裁决其余候选时保留这两格为“候选身份成立、摘要分母未证”，不擅自删格或强行并入已裁决数。
+109候选台账`validation/financial_reports/review-ledgers/suspected-109-cell-candidates-v1.csv`含112条分组成员、去重为111格；逐格裁决v2已对111格给出可追溯语义结论，另将两格BABA FY2020流动证券投资期初9,927、期末4,234标注为摘要分母未决。不得把这两格删掉或将分组摘要的+8/+1差异当作已解释。
 
 之前已完成：派生事实重建核对14项阿里比较值随FY2023订正更新；JDL差异不是18→9一对一替换，旧快照18条待映射记录中7条为旧利润表综合收益项目、11条为页界修订排除的权益变动表项目；当前9条为正确归属“合并综合收益表”的显式待映射项目。未知报表类型防丢行测试、统一验收、L0/L1均已通过。下一顺序：109候选逐项裁决并生成版本化v2台账→冻结样本/独立盲评/holdout与C级Go-No-Go。C级未通过，常驻`flow`数据库/服务禁止写入。
 

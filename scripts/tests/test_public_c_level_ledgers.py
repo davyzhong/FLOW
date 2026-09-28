@@ -10,7 +10,10 @@ from pathlib import Path
 from scripts.build_public_c_level_ledgers import (
     confirmed_42,
     jdl_ledger,
+    sha256,
+    suspicion_adjudications_v2,
     suspicion_candidates,
+    suspicion_group_adjudications_v2,
     suspicion_groups,
 )
 
@@ -132,6 +135,57 @@ class PublicCLevelLedgerTests(unittest.TestCase):
         })
         self.assertEqual(sum(row["status"] == "candidate_not_adjudicated" for row in rows), 109)
 
+    def test_suspected_109_adjudications_are_complete_and_keep_denominator_gap(self) -> None:
+        rows = suspicion_adjudications_v2()
+        self.assertEqual(len(rows), 111)
+        self.assertEqual(len({row["candidate_id"] for row in rows}), 111)
+        self.assertEqual(
+            sum(row["reported_109_denominator"] == "included_reconstructed_109" for row in rows),
+            109,
+        )
+        unresolved = [
+            row for row in rows
+            if row["reported_109_denominator"] == "unresolved_two_cell_overage"
+        ]
+        self.assertEqual(
+            {(row["item"], row["column"], row["candidate_value"]) for row in unresolved},
+            {
+                ("股權證券及其他投資", "value_begin", "9927"),
+                ("股權證券及其他投資", "value_end", "4234"),
+            },
+        )
+        self.assertTrue(all(row["source_pdf_sha256"] for row in rows))
+        root = Path(__file__).resolve().parents[2]
+        source_identity = {row["source_pdf"]: row["source_pdf_sha256"] for row in rows}
+        self.assertTrue(
+            all(
+                sha256(root / source_pdf) == expected_sha
+                for source_pdf, expected_sha in source_identity.items()
+            )
+        )
+        self.assertEqual(
+            sum(row["disposition"] == "source_value_verified_scope_label_incomplete" for row in rows),
+            56,
+        )
+        self.assertEqual(
+            sum(row["disposition"] == "source_value_verified_noncurrent_scope_missing" for row in rows),
+            10,
+        )
+        self.assertEqual(
+            sum(row["disposition"] == "source_value_verified_statement_identity_fixed_in_jdl_v3" for row in rows),
+            4,
+        )
+        jdl = [row for row in rows if row["report"] == "JDL_FY2025_annual_report"]
+        self.assertTrue(all(row["source_page_physical"] == "107" for row in jdl))
+        self.assertTrue(all(row["source_page_printed"] == "106" for row in jdl))
+
+    def test_suspected_109_group_summary_retains_unexplained_count_gaps(self) -> None:
+        rows = suspicion_group_adjudications_v2()
+        self.assertEqual(len(rows), 5)
+        by_group = {row["group_id"]: row for row in rows}
+        self.assertEqual(by_group["S109-BABA-FY2020-CURRENT"]["unexplained_count_gap"], "8")
+        self.assertEqual(by_group["S109-ALI-EQUITY-CURRENT"]["unexplained_count_gap"], "1")
+
     def test_checked_in_ledgers_match_generator(self) -> None:
         root = Path(__file__).resolve().parents[2]
         ledger_dir = root / "validation/financial_reports/review-ledgers"
@@ -140,6 +194,8 @@ class PublicCLevelLedgerTests(unittest.TestCase):
             ("confirmed-42-adjudicated-v2.csv", confirmed_42()),
             ("suspected-109-group-reconciliation-v1.csv", suspicion_groups()),
             ("suspected-109-cell-candidates-v1.csv", suspicion_candidates()),
+            ("suspected-109-cell-adjudications-v2.csv", suspicion_adjudications_v2()),
+            ("suspected-109-group-adjudication-v2.csv", suspicion_group_adjudications_v2()),
         ):
             with (ledger_dir / filename).open(encoding="utf-8", newline="") as stream:
                 self.assertEqual(list(csv.DictReader(stream)), expected, filename)

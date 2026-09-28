@@ -3,19 +3,21 @@ doc_id: FLOW-REVIEW-C-LEVEL-CELL-LEDGER-20260928
 title: 公开财报 C 级逐格台账与来源复核
 doc_type: review
 status: partially-resolved
-version: 1.7
+version: 1.8
 created_at: 2026-09-28
-updated_at: 2026-09-28
+updated_at: 2026-09-29
 owner: FLOW
 applies_to: public-analysis
 subject_ref: main@db646f45
-findings: [adjudicated-42-exceptions-v2, jdl-222-cell-ledger, jdl-readable-source-crosswalk, suspected-109-candidate-membership-reconstructed]
+findings: [adjudicated-42-exceptions-v2, jdl-222-cell-ledger, jdl-readable-source-crosswalk, suspected-109-candidate-membership-reconstructed, suspected-109-semantic-adjudications-v2]
 review_refs: [FLOW-REVIEW-ADJUDICATION-20260926, FLOW-REVIEW-C-LEVEL-BASELINE-20260928]
 ---
 
 # 公开财报 C 级逐格台账首版与数量差异审计
 
 ## 结论
+
+2026-09-29 最新裁决：111个唯一候选现均有逐格语义裁决，详见`validation/financial_reports/review-ledgers/suspected-109-cell-adjudications-v2.csv`和`validation/financial_reports/review-ledgers/suspected-109-group-adjudication-v2.csv`。109格组成可重建主集；两格BABA FY2020流动证券投资期初9,927、期末4,234是真实原件行值，但缺原评审筛选底稿，仍为109摘要分母未决。主集没有数值错误；问题是源行范围/报表身份限定以及一个评审bundle别名错误。组摘要BABA FY2020报告36/重建28（差8）和阿里股权报告15/重建14（差1）无法从已冻结逐格输入复原，明确结案为摘要成员不可重建，不伪称109组统计完全复现。当前C级仍未通过；下一步是对现金流范围、流动/非流动身份实施版本化行映射修正并跑种子/L1/P5隔离验证。
 
 本报告建立了 42 条历史异常主张的初版和审定版、JDL 交叉评表 222 格、以及 109 疑点的五个分组记录。经逐格回到菜鸟招股书原件审定，初版将19个有效年度/比较期数值误标成空列错误；审定版补齐报告年度、来源期间与具体列，原版保留作审计历史。报告仍**不是 C 级通过结论**。
 

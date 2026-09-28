@@ -1,0 +1,6 @@
+group_id,reported_count,reconstructed_members,adjudicated_result,unexplained_count_gap,status
+S109-BABA-FY2020-CURRENT,36,28,28个已定位字段均为评审束生成的current别名，复制begin/FY2019比较值；正式FY2020 YAML不存在current列。,8,source_summary_membership_not_reconstructable
+S109-ALI-CASH-SCOPE,56,56,56格均为源现金流行名范围缩写，原件包括现金、受限制现金及应收托管资金。,0,all_reconstructed_cells_adjudicated
+S109-ALI-EQUITY-CURRENT,15,14,14格均映射流动资产同名项目；其中两格FY2020期初/期末真实存在但摘要分母未说明。,1,source_summary_membership_not_reconstructable
+S109-CAINIAO-NONCURRENT,10,10,10格源行均位于非流动资产/负债区，数值有效，须补充分组限定。,0,all_reconstructed_cells_adjudicated
+S109-JDL-ATTRIBUTION,4,4,4格属于合并综合收益表；JDL v3已修复原评审束的表身份误标。,0,resolved_by_jdl_v3
