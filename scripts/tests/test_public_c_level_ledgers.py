@@ -20,15 +20,13 @@ class PublicCLevelLedgerTests(unittest.TestCase):
         rows = jdl_ledger()
         self.assertEqual(len(rows), 222)
         self.assertEqual(sum(row["status"] == "confirmed_wrong_statement_attribution" for row in rows), 22)
-        self.assertEqual(sum(row["status"] == "source_line_value_verified" for row in rows), 179)
+        self.assertEqual(sum(row["status"] == "source_line_value_verified" for row in rows), 195)
         self.assertEqual(sum(row["status"] == "source_line_blank_verified" for row in rows), 5)
-        self.assertEqual(
-            sum(
-                row["status"] == "source_line_verified_statement_boundary_unresolved"
-                for row in rows
-            ),
-            16,
+        self.assertFalse(
+            any(row["status"] == "source_line_verified_statement_boundary_unresolved" for row in rows)
         )
+        reclassified = [row for row in rows if row.get("corrected_statement") == "合并综合收益表"]
+        self.assertEqual(len(reclassified), 16)
         self.assertFalse(any(row["status"] == "unknown_source_readability" for row in rows))
         self.assertTrue(all(row["source_pdf_sha256"] == "809957cc3f42a77227963ef327cc74e08abf4666d91f0866b0aa6e3d50b85c5c" for row in rows))
         self.assertTrue(all(row["readable_twin_pdf_sha256"] == "32a99c3a4341a32db84073eeb93c9679969b0ad8216514707cdf9d2dd1825009" for row in rows))
@@ -67,16 +65,17 @@ class PublicCLevelLedgerTests(unittest.TestCase):
         self.assertEqual(len({row["ledger_id"] for row in rows}), 200)
         self.assertTrue(all(row["source_pdf_sha256"] == original_sha for row in rows))
         self.assertTrue(all(row["readable_twin_pdf_sha256"] == twin_sha for row in rows))
-        unresolved = [
+        resolved = [
             row
             for row in rows
-            if row["status"] == "source_line_verified_statement_boundary_unresolved"
+            if row["status"] == "source_line_value_verified"
+            and row["source_page_physical"] == "107"
         ]
-        self.assertEqual(len(unresolved), 16)
+        self.assertEqual(len(resolved), 16)
         self.assertTrue(
             all(
-                row["source_page_physical"] == "107" and row["source_page_printed"] == "106"
-                for row in unresolved
+                row["source_page_printed"] == "106"
+                for row in resolved
             )
         )
 

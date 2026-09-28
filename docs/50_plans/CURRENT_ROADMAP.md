@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 5.55
+version: 5.56
 created_at: 2026-09-12
 updated_at: 2026-09-28
 owner: FLOW
@@ -17,7 +17,7 @@ superseded_by: null
 
 # 当前路线图（唯一主线）
 
-> 2026-09-28 最新执行进展：JDL逐格来源核验提交`fdc96d63146e0ed8cb12e75a50f488dd3015398f`对应 CI run `36404144739`准确SHA 17/17 success；状态同步提交`0c933d5c497af92d8d41d9aa6e9c844ea67ded31`的run `36408822932`及`167a82b429a7e2f2980f94ee5b234d515d4712d2`的run `36412951091`均在同SHA重跑/最终17/17 success，首次dashboard失败由Docker镜像拉取502触发。JDL 200格来源核验已完成（195数值、5空值匹配），其中16格确属物理第107页/印刷第106页独立综合收益表。当前已用测试先行拆分利润表/综合收益表、保留同名行身份并增加综合收益勾稽；审查发现冻结L1 v2仍沿用旧分类且部分弱锚落在摘要页，故先保留v2并增补正式计划：生成JDL抽取v3、L1答案集v3与页提示，再验证基准身份。当前本地实现未提交；下一步先提交并推送此范围/验收补充文档，等准确SHA CI全绿后完成L1 v3。之后按顺序修复剩余42异常（菜鸟19、BABA 1）及裁决109候选（摘要差2保持显式未决）。C级未通过，常驻`flow`数据库/服务未触碰。工作包与逐格审计文档已在本路线图中登记。
+> 2026-09-28 最新执行进展：JDL逐格来源核验提交`fdc96d63146e0ed8cb12e75a50f488dd3015398f`对应 CI run `36404144739`准确SHA 17/17 success；计划扩展提交`446689a06cc4151e7d397635265f91c004fe5127`对应CI run `36420186290`同SHA 17/17 success。JDL 200格来源核验完成（195数值、5空值匹配），其中16格确属独立综合收益表。本地实现已拆分利润表/综合收益表、保留同名行身份并增加三项勾稽；新增JDL v3/L1 v3与物理页提示，冻结v2不变。隔离测试库装载14份报告：L0 1514/1514；L1 1775/1775、锚失效/值不一致/缺库均0；脚本119/119、财报测试79/79、API Ruff及mypy 203文件通过。当前代码与状态更新尚未提交，待M1/链接/差异检查后提交推送并核对精确SHA CI。完成此唯一子步后，依序修复菜鸟19格空列串借、BABA FY2023比较期1格，再裁决109候选（111格、摘要差2显式保留）；最后独立盲评/holdout和C级Go/No-Go。C级未通过；常驻`flow`数据库/服务未触碰。
 
 > 2026-09-28 最新更正：UX Gate1/Gate5 已关闭。Gate5 在提交`0144bad4be1a869a5a4073c516d78b4bf333cbee`完成：隔离大麦验收 verify 19/19、GET 矩阵159项零意外、Playwright 15/15；Dashboard 隔离验收 7/7；生产 E2E 157/157、Web 143/143、API mypy 203文件、typecheck/lint、文档 M1 与链接门禁通过；准确 SHA 的 CI run `36371507389` 17/17 success。常驻`flow`未触碰。唯一执行项转为公开财报 C 级归因、原件复核与抽取修订。
 
@@ -47,7 +47,7 @@ superseded_by: null
 | 2b | [大麦数据后的剩余体验收口](work_items/UX--post-damai-experience-closeout.md) | **completed** | G2 ✓；用户已批准；ORG-LEDGER CI ✓ | Gate1/Gate5关闭：隔离 Dashboard 7/7；大麦验收 verify19/19、GET矩阵159项零意外、Playwright15/15；生产E2E157/157、Web143/143、mypy203文件、typecheck/lint、M1/链接检查通过；提交`0144bad4`同SHA CI run `36371507389` 17/17 success。常驻库未触碰。 |
 | 2c | [企业组织建制与经营账套初始化包](work_items/ORG-LEDGER--enterprise-initialization-package.md) | **completed** | 大麦发行包 completed；批准三表 schema | `2c7d6eb4`；CI run `36270782272` 的17/17 jobs success。隔离 `full` 首次/重复与 `business` 对账通过；11 个企业/loader 测试、全量 API 852、Web142、脚本107、大麦 verify19/19、API43/43、Playwright9/9、合同/文档/lint/typecheck 均通过。31文件 manifest 稳定 SHA `cbc7cccf…e513`。 |
 | K | [第二代静态知识刷新与战略重基线](work_items/KNOWLEDGE--refresh-v2.md) | **active（队列排队，不并行启动）** | 按唯一队列轮到时启动；规格/preflight 已完成 | K0–K6 未执行；`CURRENT_RELEASE` 仍为 `flow-knowledge-2026-09-12.1`，用户战略裁决前不得切换。 |
-| 3 | [公开财报模块 C 级出口](work_items/PUBLIC--c-level-exit-protocol.md) | **active（唯一执行项）** | S01 关闭 ✓ | 只读基线审计已完成（[审计记录](../80_reviews/2026-09-28-c-level-source-baseline-reconciliation.md)）。JDL页界限按TDD修复并在`5c84c81f`集成；准确SHA CI run `36382657675` 17/17成功。新抽取v2为107行（26/47/34），24/24勾稽；新L1 v2有1,775/1,775页锚。隔离0031栈、14份报告上L0 1508/1508、L1 1775锚零失配。JDL原200格现已逐格匹配来源：179值、5空值；16格综合收益表分类/父项语义未决。来源核验提交`fdc96d63`同SHA run `36404144739` 17/17 success。当前下一子步只处理16格身份合同，再按序处理42异常和109疑点 |
+| 3 | [公开财报模块 C 级出口](work_items/PUBLIC--c-level-exit-protocol.md) | **active（唯一执行项）** | S01 关闭 ✓ | 最新唯一子步：JDL v3/L1 v3 本地实现和隔离基准已全绿（L0 1514/1514；L1 1775/1775、零锚失效/值不一致/缺库；脚本119、财报79、Ruff/mypy通过），代码/状态提交与精确SHA CI待做。JDL 16格表分类已拆分，同名行身份保留，v2冻结。之后单线：菜鸟19格→BABA FY2023 1格→109候选裁决（111格中2格显式未决）→冻结样本/独立盲评/holdout与C级Go-No-Go。 |
 | 3a | [溯源/重述/只读 MCP](work_items/PUBLIC--provenance-restatement-mcp.md) | **completed** | — | B3 溯源 95.5% 行项目带页锚（迁移 0029 + 导入/API/前端）；B4 supersedes 链 + 差异脚本；B5 只读 MCP 三工具（token fail-closed）；B6 确定性差异说明起草 |
 | 3b | [数据扩张、行业基准与 10× 性能基线](work_items/PUBLIC--data-expansion-benchmarks.md) | **active（队列排队，不并行启动）** | 性能基线 ✓；扩张待外部财报 | G2 完成：10×（1034→10340 行）P95 明细 6.2ms/检索 0.97ms/聚合 1.11ms（`perf_baseline.py`）；C1 扩张需真实财报到料 |
 | 3c | [AI 问数 v1 与评测集](work_items/PUBLIC--ai-qa-v1.md) | **completed(v1)** | — | 确定性检索引用 QA + 94 问评测集（60 数值 + 34 拒答）命中率 100%、拒答零误答（`ask_facts.py` / `generate_qa_eval.py`）；LLM 通道与 v2/v3 另行裁决 |

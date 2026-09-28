@@ -306,6 +306,7 @@ class AShareTableExtractor:
 
 _HK_PAGES = {
     "合并利润表": (106, "合併損益表"),
+    "合并综合收益表": (107, "合併綜合收益表"),
     "合并资产负债表": (108, "合併財務狀況表"),
     "合并现金流量表": (112, "合併現金流量表"),
 }
@@ -465,12 +466,44 @@ class HkTraditionalExtractor:
                    (_find(bs, "現金及現金等價物") or {}).get(
                        "期末余额" if col == "本期发生额" else "期初余额"),
                    g("年末現金及現金等價物"))
+        comprehensive = st.get("合并综合收益表", [])
+        if comprehensive:
+            for col in ("本期发生额", "上期发生额"):
+                def ci_g(name: str, col: str = col) -> Any:
+                    return (_find(comprehensive, name) or {}).get(col)
+
+                _check(
+                    diffs,
+                    f"年度其他综合收益逐项加总 [{col}]",
+                    ci_g("年度其他綜合（虧損）╱收益"),
+                    (ci_g("以公允價值計量且其變動計入其他綜合收益的權益工具的公允價值變動") or 0)
+                    + (ci_g("功能貨幣換算至列報貨幣產生的匯兌差額") or 0)
+                    + (ci_g("境外業務換算產生之匯兌差額") or 0)
+                    + (ci_g("預期信用損失變動淨額") or 0),
+                )
+                _check(
+                    diffs,
+                    f"年度綜合收益=年度利潤+其他綜合收益 [{col}]",
+                    ci_g("年度綜合收益總額"),
+                    (ci_g("年度利潤") or 0)
+                    + (ci_g("年度其他綜合（虧損）╱收益") or 0),
+                )
+                _check(
+                    diffs,
+                    f"年度綜合收益=本公司所有者+非控制性權益 [{col}]",
+                    ci_g("年度綜合收益總額"),
+                    (ci_g("本公司所有者") or 0)
+                    + (ci_g("非控制性權益") or 0),
+                )
         return diffs
 
     def extract(self, content: bytes) -> ExtractionResult:
         pages = _page_texts(content)
         statements = {
-            "合并利润表": self._extract_statement(pages, *_HK_PAGES["合并利润表"], end_page=107),
+            "合并利润表": self._extract_statement(pages, *_HK_PAGES["合并利润表"], end_page=106),
+            "合并综合收益表": self._extract_statement(
+                pages, *_HK_PAGES["合并综合收益表"], end_page=107
+            ),
             "合并资产负债表": self._to_balance_columns(
                 self._extract_statement(pages, *_HK_PAGES["合并资产负债表"], end_page=109)
             ),

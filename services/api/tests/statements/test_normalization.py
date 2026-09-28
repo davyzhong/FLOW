@@ -393,6 +393,48 @@ def test_jdl_duplicate_item_names_survive_normalization_with_group_ordinal(
     assert {r.group_ordinal for r in borrowings} == {0, 1}
 
 
+def test_jdl_comprehensive_income_rows_keep_statement_identity_after_normalization(
+    db_session: Session,
+) -> None:
+    """相邻两张表中的年度利润及归属行须以报表类型区分，而非混并。"""
+    import yaml as yaml_lib
+
+    correction = (
+        REPO_ROOT / "validation/financial_reports/corrections/jdl_2025fy_statements_v3.yaml"
+    )
+    payload = yaml_lib.safe_load(correction.read_text())
+    report = import_statement_report(
+        db_session,
+        company_name="京东物流",
+        stock_code="02618.HK",
+        report_kind="年报",
+        period_label="FY2025",
+        payload=payload,
+        source_ref="p5_samples/jdl_02618/JDL_FY2025_report.pdf",
+        source_sha256="k" * 64,
+    )
+    normalize_report(db_session, report)
+
+    rows = list(
+        db_session.scalars(
+            select(StatementNormalizedItem).where(
+                StatementNormalizedItem.report_id == report.id
+            )
+        )
+    )
+    for item_name in ("年度利潤", "本公司所有者", "非控制性權益"):
+        matches = [
+            row for row in rows
+            if row.item_name == item_name
+            and row.statement_type in {"合并利润表", "合并综合收益表"}
+        ]
+        assert {row.statement_type for row in matches} == {
+            "合并利润表", "合并综合收益表"
+        }
+        assert len(matches) == 2
+        assert {row.group_ordinal for row in matches} == {0}
+
+
 # ---------------------------------------------------------------------------
 # Task A3 红灯：DAMAI.SYN 独立归一化映射（不与 9988.HK 身份重叠）
 # ---------------------------------------------------------------------------

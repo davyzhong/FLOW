@@ -140,7 +140,7 @@ def build_cainiao(alias):
 
 def build_jdl_full(alias):
     return build_from_yaml("jd_logistics_2618", "FY2025",
-                           "validation/financial_reports/corrections/jdl_2025fy_statements_v2.yaml",
+                           "validation/financial_reports/corrections/jdl_2025fy_statements_v3.yaml",
                            SOURCES["jd_logistics_2618_full"], "千元", alias,
                            spec_key="jd_logistics_2618_full")
 

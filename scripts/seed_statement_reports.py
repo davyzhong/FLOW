@@ -15,9 +15,7 @@ import hashlib
 from pathlib import Path
 
 import yaml
-
 from flow_api.infrastructure.db import get_session_factory
-from flow_api.infrastructure.models.statement import StatementLineItem, StatementReport
 from flow_api.statements.importer import import_statement_report, load_provenance_index
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
@@ -35,7 +33,7 @@ def main() -> int:
     )
     parser.add_argument(
         "--answer-set",
-        default="config/statements/answer_set_l1_v2.yaml",
+        default="config/statements/answer_set_l1_v3.yaml",
         help="T09-L1 页级答案集（溯源页锚来源；传空字符串跳过溯源）",
     )
     args = parser.parse_args()

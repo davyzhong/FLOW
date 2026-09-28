@@ -51,7 +51,7 @@ CASES = {
     "jdl": {
         "pdf": SAMPLES / "jd_logistics_2618/JDL_FY2025_annual_report.pdf",
         "yaml": REPO_ROOT
-        / "validation/financial_reports/corrections/jdl_2025fy_statements_v2.yaml",
+        / "validation/financial_reports/corrections/jdl_2025fy_statements_v3.yaml",
         "adapter": "hk_traditional_text",
     },
     "tencent": {
@@ -87,7 +87,10 @@ def test_extraction_matches_committed_yaml(case: str) -> None:
     expected_payload = yaml.safe_load(spec["yaml"].read_text())
     expected = expected_payload["statements"]
     if case == "jdl":
-        assert expected_payload["supersedes"] == "docs/implementation/p5/jdl_2025fy_statements.yaml"
+        assert expected_payload["correction_version"] == 3
+        assert expected_payload["supersedes"] == (
+            "validation/financial_reports/corrections/jdl_2025fy_statements_v2.yaml"
+        )
         assert expected_payload["source_sha256"] == result.source_sha256
     assert set(result.statements) == set(expected)
     for statement_type, expected_items in expected.items():
@@ -119,6 +122,32 @@ def test_jdl_balance_sheet_excludes_equity_changes_continuation_page() -> None:
     assert by_name["資產總額"]["期初余额"] == 117867788
     assert by_name["權益總額"]["期末余额"] == 59784729
     assert by_name["負債總額"]["期末余额"] == 64814829
+
+
+def test_jdl_comprehensive_income_page_is_a_distinct_statement() -> None:
+    """第107页综合收益表不得并入利润表，重复归属行须在各表内分别保留。"""
+    content = CASES["jdl"]["pdf"].read_bytes()
+    result = extract_statements(content, adapter_id="hk_traditional_text")
+
+    income = result.statements["合并利润表"]
+    comprehensive = result.statements["合并综合收益表"]
+    assert max(row["page"] for row in income) == 106
+    assert min(row["page"] for row in comprehensive) == 107
+    assert max(row["page"] for row in comprehensive) == 107
+
+    income_profit = [row for row in income if row["item"] == "年度利潤"]
+    comprehensive_profit = [row for row in comprehensive if row["item"] == "年度利潤"]
+    assert len(income_profit) == len(comprehensive_profit) == 1
+    assert income_profit[0]["本期发生额"] == comprehensive_profit[0]["本期发生额"] == 6890045
+
+    for name in ("本公司所有者", "非控制性權益"):
+        assert len([row for row in income if row["item"] == name]) == 1
+        assert len([row for row in comprehensive if row["item"] == name]) == 1
+
+    check_labels = {check.label for check in result.checks}
+    assert "年度綜合收益=年度利潤+其他綜合收益 [本期发生额]" in check_labels
+    assert "年度綜合收益=本公司所有者+非控制性權益 [上期发生额]" in check_labels
+    assert all(check.status == "一致" for check in result.checks)
 
 
 def test_yto_holdout_company_extracts_with_ashare_adapter() -> None:

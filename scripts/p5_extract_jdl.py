@@ -22,7 +22,7 @@ PDF_PATH = (
 )
 OUT_PATH = (
     REPOSITORY_ROOT
-    / "validation/financial_reports/corrections/jdl_2025fy_statements_v2.yaml"
+    / "validation/financial_reports/corrections/jdl_2025fy_statements_v3.yaml"
 )
 
 
@@ -42,11 +42,11 @@ def main() -> int:
     )
     output_path.parent.mkdir(parents=True, exist_ok=True)
     result = extract_statements(PDF_PATH.read_bytes(), adapter_id="hk_traditional_text")
-    statements = _strip_page(result.statements)
+    statements = result.statements
     out = {
         "schema": "flow.statement.extraction-correction.v1",
-        "correction_version": 2,
-        "supersedes": "docs/implementation/p5/jdl_2025fy_statements.yaml",
+        "correction_version": 3,
+        "supersedes": "validation/financial_reports/corrections/jdl_2025fy_statements_v2.yaml",
         "sample": "jdl_2025fy",
         "source_pdf": str(PDF_PATH.relative_to(REPOSITORY_ROOT)),
         "source_sha256": result.source_sha256,

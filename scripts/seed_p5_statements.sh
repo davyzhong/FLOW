@@ -44,7 +44,7 @@ seed_file() {
 
 seed sf_2026q1_statements.yaml       顺丰控股   002352.SZ   一季报       2026Q1
 seed tencent_2026q2_statements.yaml  腾讯控股   0700.HK     中期业绩公告 2026Q2
-seed_file validation/financial_reports/corrections/jdl_2025fy_statements_v2.yaml \
+seed_file validation/financial_reports/corrections/jdl_2025fy_statements_v3.yaml \
   京东物流 2618.HK 年报 FY2025
 for y in 2019 2020 2021 2022 2023 2024 2025 2026; do
   seed "alibaba_${y}fy_statements.yaml" 阿里巴巴 9988.HK 年报 "FY${y}"
