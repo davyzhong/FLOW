@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目尽调、优化与单 Agent 执行总交接
 doc_type: navigation
 status: current
-version: 5.50
+version: 5.51
 created_at: 2026-09-12
 updated_at: 2026-09-29
 owner: FLOW
@@ -11,6 +11,16 @@ applies_to: repository
 ---
 
 # FLOW 项目尽调、优化与单 Agent 执行总交接｜2026-09-29 更新
+
+## 最新续接记录（2026-09-29：U04 旧样本解析回归）
+
+**唯一 To-do（11项）**：1 ORG-LEDGER 完成；2 UX 收口完成；3 C级样本/证据审计 No-Go 结案（不代表出口通过）；4 U04 解析器适配与未调参留出首跑 **当前执行**；5 C级基准与最终 Go/No-Go 排队；6 P3真实数据扩张排队；7 K静态知识刷新与战略重基线排队；8 rnd_exp官方依据核验排队；9 U09/O05试点排队；10 U10证据决策排队；11内部月度工作台与真实周期验收排队。总计11项：已完成3、执行中1、排队7、外部条件受限0。
+
+U04 现状：顺丰文本型“合并及公司”报表、腾讯动态财报表格定位、中通公告重复字形解析与逐行比较器均已修复；旧回归产物 `validation/financial_reports/holdout_runs/2026-09-29-adapter-v4/` 显示顺丰137/137、腾讯32/32、中通30/30，合计199/199匹配、0错配、0不可比较。`tests/statements` 83项、`scripts/tests` 155项、Ruff、mypy 203文件、plan-view、链接检查、文档M1均通过。较早 adapter-v2/v3 与日期目录保留作开发轨迹，不得覆盖或当作新留出结果。
+
+**安全顺序**：代码状态仍未提交，尚未因准确 SHA CI 变绿而冻结；运行器默认只跑已降级的旧三样本，小米/阿里必须显式 `--samples xiaomi_2026h1 alibaba_fy2027q1`。在代码提交推送且该准确 SHA CI 全绿前，禁止首次运行或查看小米/阿里抽取结果。之后以唯一新 run ID 首跑一次，记录 PDF/oracle/parser SHA、完整 diff 和 `manual_intervention_count: 0`；首跑后不调参，差异只归因或按协议降级。旧199行是回归结果，不是盲留出通过。常驻`flow`及旧`flow_test`不连接、不写入。
+
+**下一单一动作**：核对 staged 范围与工作区差异，完成路线图/工作包/PROJECT_STATE/HANDOFF同步，提交后立即推送；等待同一提交 SHA CI 全绿，再执行小米/阿里首次留出。
 
 ## 当前唯一接续点（2026-09-29，覆盖下方旧进度）
 

@@ -164,6 +164,57 @@ def test_yto_holdout_company_extracts_with_ashare_adapter() -> None:
     assert not failed, f"圆通勾稽不一致：{[(c.label) for c in failed]}"
 
 
+def test_sf_2026h1_combined_company_report_extracts_merged_columns() -> None:
+    """合并及公司报表按首两列抽合并口径，不得误取公司列。"""
+    pdf = SAMPLES / "sf_002352/SF_2026_H1_report.pdf"
+    result = extract_statements(pdf.read_bytes(), adapter_id="cn_ashare_table")
+
+    assert result.statements["合并资产负债表"]
+    balance = {row["item"]: row for row in result.statements["合并资产负债表"]}
+    assert balance["资产总计"]["期末余额"] == 228885266
+    assert balance["负债及股东权益总计"]["期末余额"] == 228885266
+    income = {row["item"]: row for row in result.statements["合并利润表"]}
+    assert income["营业收入"]["本期发生额"] == 155506421
+    assert income["营业收入"]["上期发生额"] == 146858174
+    assert income["营业成本"]["本期发生额"] == -134593933
+    assert income["归属于母公司股东的净利润"]["本期发生额"] == 5501905
+    assert income["少数股东损益"]["本期发生额"] == 468112
+    assert income["其中：对联营企业和合营企业的投资收益/(损失)"]["本期发生额"] == 171425
+    assert income["基本每股收益(人民币元)"]["本期发生额"] == 1.10
+    cashflow = {row["item"]: row for row in result.statements["合并现金流量表"]}
+    assert cashflow["经营活动产生/(使用)的现金流量净额"]["本期发生额"] == 11171404
+    assert cashflow["处置固定资产和其他长期资产收回的现金"]["本期发生额"] == 90947
+    assert cashflow["分配股利、利润或偿付利息支付的现金"]["本期发生额"] == -2755780
+
+
+def test_tencent_fy2025_annual_report_uses_dynamic_statement_titles() -> None:
+    pdf = SAMPLES / "tencent_0700/Tencent_FY2025_annual_report.pdf"
+    result = extract_statements(pdf.read_bytes())
+
+    assert result.adapter_id == "hk_traditional_text"
+    income = {row["item"]: row for row in result.statements["合并利润表"]}
+    assert income["收入成本"]["本期发生额"] == -329173
+    assert income["毛利"]["本期发生额"] == 422593
+    cashflow = {row["item"]: row for row in result.statements["合并现金流量表"]}
+    assert cashflow["經營活動所得現金流量淨額"]["本期发生额"] == 303052
+
+
+def test_zto_duplicated_text_layer_uses_reliable_text_extractor() -> None:
+    pdf = REPO_ROOT / (
+        "validation/financial_reports/original/zto_2026q1/ZTO_2026_Q1_results_announcement_c.pdf"
+    )
+    result = extract_statements(pdf.read_bytes())
+
+    assert result.adapter_id == "hk_results_announcement"
+    income = {row["item"]: row for row in result.statements["合并利润表"]}
+    assert income["收入"]["本期发生额"] == 13282364
+    assert income["淨利潤"]["本期发生额"] == 2156356
+    cashflow = {row["item"]: row for row in result.statements["合并现金流量表"]}
+    assert cashflow["經營活動產生的現金淨額"]["本期发生额"] == 2789045
+    non_gaap = {row["item"]: row for row in result.statements["Non-GAAP 调节"]}
+    assert non_gaap["調整後淨利潤"]["本期发生额"] == 2377080
+
+
 def test_hk_parse_line_note_number_and_paren_negative() -> None:
     # 附注号识别：剥完金额后最前的 1-3 位无逗号数字是附注号而非金额
     parsed = _hk_parse_line("物業及設備 12 1,234,567 1,111,111")

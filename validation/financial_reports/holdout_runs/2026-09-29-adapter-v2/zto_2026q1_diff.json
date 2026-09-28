@@ -1,0 +1,281 @@
+{
+  "counts": {
+    "matched": 0,
+    "mismatched": 0,
+    "not_comparable": 30
+  },
+  "total": 30,
+  "rows_extracted": 0,
+  "results": [
+    {
+      "tier": "key_item",
+      "item": "收入",
+      "value": "13,282,364",
+      "page": "10",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "key_item",
+      "item": "净利润",
+      "value": "2,156,356",
+      "page": "10",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "key_item",
+      "item": "Adjusted（Non-GAAP）净利润",
+      "value": "2,377,080",
+      "page": "13",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "key_item",
+      "item": "经营活动产生的现金流量净额",
+      "value": "2,789,045",
+      "page": "12",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "收入",
+      "value": "13,282,364",
+      "page": "10",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "营业成本",
+      "value": "(10,047,143)",
+      "page": "10",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "毛利",
+      "value": "3,235,221",
+      "page": "10",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "销售、一般及行政费用",
+      "value": "(815,664)",
+      "page": "10",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "其他经营利润净额",
+      "value": "125,711",
+      "page": "10",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "总经营费用",
+      "value": "(689,953)",
+      "page": "10",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "经营利润",
+      "value": "2,545,268",
+      "page": "10",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "利息收入",
+      "value": "165,945",
+      "page": "10",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "利息费用",
+      "value": "(50,272)",
+      "page": "10",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "金融工具的公允价值变动收益",
+      "value": "54,944",
+      "page": "10",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "出售股权投资、子公司和其他的收益",
+      "value": "478",
+      "page": "10",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "外币汇兑亏损，税前",
+      "value": "(28,834)",
+      "page": "10",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "扣除所得税及权益法核算的投资收入前的利润",
+      "value": "2,687,529",
+      "page": "10",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "所得税费用",
+      "value": "(552,180)",
+      "page": "10",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "权益法核算的投资收入",
+      "value": "21,007",
+      "page": "10",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "净利润",
+      "value": "2,156,356",
+      "page": "10",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "归属于非控制性权益的净利润",
+      "value": "(38,023)",
+      "page": "10",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "归属于中通快递（开曼）有限公司的净利润",
+      "value": "2,118,333",
+      "page": "10",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "经营活动产生的现金净额",
+      "value": "2,789,045",
+      "page": "12",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "投资活动所用的现金净额",
+      "value": "(7,174,549)",
+      "page": "12",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "融资活动（所用）／产生的现金净额",
+      "value": "5,831,073",
+      "page": "12",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "汇率变动影响",
+      "value": "(50,167)",
+      "page": "12",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "股权激励费用",
+      "value": "221,119",
+      "page": "13",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "调整后净利润",
+      "value": "2,377,080",
+      "page": "13",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "息税折摊前收益",
+      "value": "3,720,668",
+      "page": "13",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "调整后息税折摊前收益",
+      "value": "3,941,309",
+      "page": "13",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    }
+  ]
+}

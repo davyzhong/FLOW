@@ -19,6 +19,7 @@ from functools import partial
 from typing import Any, Protocol
 
 import pdfplumber
+from pypdf import PdfReader
 
 MIN_ADAPTER_SCORE = 2
 
@@ -117,6 +118,16 @@ def _page_texts(content: bytes) -> list[str]:
         return [(page.extract_text() or "") for page in pdf.pages]
 
 
+def _collapse_duplicate_glyphs(text: str) -> str:
+    """折叠该公告标题中的双映射字形；不应用于数值行，以免压缩合法重复数字。"""
+    return re.sub(r"(.)\1", r"\1", text)
+
+
+def _pypdf_page_texts(content: bytes) -> list[str]:
+    reader = PdfReader(io.BytesIO(content))
+    return [page.extract_text() or "" for page in reader.pages]
+
+
 def _find(items: list[dict[str, Any]], name: str) -> dict[str, Any] | None:
     for item in items:
         if item["item"] == name:
@@ -145,6 +156,32 @@ _A_SECTIONS = {
     "合并利润表": ("本期发生额", "上期发生额"),
     "合并现金流量表": ("本期发生额", "上期发生额"),
 }
+_A_TEXT_SECTION_TITLES = (
+    ("合并资产负债表", re.compile(r"合并资产负债表(?:[（(]续[）)])?$")),
+    ("合并利润表", re.compile(r"合并(?:及公司)?利润表(?:[（(]续[）)])?$")),
+    ("合并现金流量表", re.compile(r"合并(?:及公司)?现金流量表(?:[（(]续[）)])?$")),
+)
+_A_TEXT_VALUE = re.compile(
+    r"(?<!\S)(?:\(\s*-?[\d,]+(?:\.\d+)?\s*\)|-?[\d,]+(?:\.\d+)?|[—－–-])(?!\S)"
+)
+
+
+def _parse_text_value(token: str) -> Any:
+    token = token.strip()
+    if token in ("—", "－", "–", "-"):
+        return None
+    negative = token.startswith("(") and token.endswith(")")
+    digits = token.strip("() ").replace(",", "")
+    number = float(digits) if "." in digits else int(digits)
+    return -number if negative else number
+
+
+def _clean_text_row_label(label: str) -> str:
+    label = _norm_item(label)
+    label = re.sub(r"^[一二三四五六七八九十]+、", "", label)
+    label = re.sub(r"^(?:加|减)[:：]", "", label)
+    label = re.sub(r"[一二三四五六七八九十]+\(\d+\)(?:\([a-z]\))?", "", label)
+    return label
 
 
 class AShareTableExtractor:
@@ -207,6 +244,60 @@ class AShareTableExtractor:
                     for row in body:
                         if row and row[0] and _norm_item(row[0]) and _looks_like_data_row(row):
                             sections[current].append((row, page_no))
+        if not any(rows for rows in sections.values()):
+            return self._extract_text_rows(content)
+        return sections
+
+    def _extract_text_rows(self, content: bytes) -> dict[str, list[tuple[Any, int]]]:
+        """读取文本型「合并及公司」报表，取合并口径列并跳过公司单体页。"""
+        sections: dict[str, list[tuple[Any, int]]] = {}
+        with pdfplumber.open(io.BytesIO(content)) as pdf:
+            for page_no, page in enumerate(pdf.pages, start=1):
+                current: str | None = None
+                pending_label = ""
+                lines = page.extract_text_lines()
+                for line_no, line in enumerate(lines):
+                    raw_text = re.sub(r"(?:\s+(?:不适用|N/A))+$", "", line["text"].strip())
+                    if line_no < 6:
+                        title_text = _norm_item(raw_text)
+                        title = next(
+                            (
+                                name
+                                for name, pattern in _A_TEXT_SECTION_TITLES
+                                if pattern.search(title_text)
+                            ),
+                            None,
+                        )
+                        if title:
+                            current = title
+                            sections.setdefault(title, [])
+                        elif re.search(
+                            r"公司(?:资产负债表|利润表|现金流量表)(?:[（(]续[）)])?$",
+                            title_text,
+                        ):
+                            current = None
+                    if current is None:
+                        continue
+
+                    matches = list(_A_TEXT_VALUE.finditer(raw_text))
+                    if len(matches) < 2:
+                        continuation = _norm_item(raw_text)
+                        if continuation.endswith("的"):
+                            pending_label += continuation
+                        else:
+                            pending_label = ""
+                        continue
+                    # 只接收连续位于行尾的数值列，避免把附注号误判为金额。
+                    tail = matches[-4:]
+                    if not raw_text[tail[-1].end() :].strip():
+                        label = _clean_text_row_label(pending_label + raw_text[: tail[0].start()])
+                        pending_label = ""
+                        if not label:
+                            continue
+                        values = [_parse_text_value(match.group()) for match in tail]
+                        # 「合并及公司」表先列合并本期/上期，再列公司本期/上期。
+                        row = [label, *values[:2]]
+                        sections[current].append((row, page_no))
         return sections
 
     def _to_statements(
@@ -234,53 +325,84 @@ class AShareTableExtractor:
             bs = st["合并资产负债表"]
             for col in ("期末余额", "期初余额"):
                 g = partial(_g, bs, col)
-                _check(diffs, f"资产总计=流动资产合计+非流动资产合计 [{col}]",
-                       g("资产总计"),
-                       (_dec(g("流动资产合计")) or 0) + (_dec(g("非流动资产合计")) or 0))
-                _check(diffs, f"负债合计=流动负债合计+非流动负债合计 [{col}]",
-                       g("负债合计"),
-                       (_dec(g("流动负债合计")) or 0) + (_dec(g("非流动负债合计")) or 0))
-                _check(diffs, f"资产总计=负债合计+所有者权益合计 [{col}]",
-                       g("资产总计"),
-                       (_dec(g("负债合计")) or 0)
-                       + (_dec(g("所有者权益合计", "股东权益合计")) or 0))
-                _check(diffs, f"负债和所有者权益总计=资产总计 [{col}]",
-                       g("负债和所有者权益总计", "负债和股东权益总计"), g("资产总计"))
-                _check(diffs, f"所有者权益合计=归母+少数股东 [{col}]",
-                       g("所有者权益合计", "股东权益合计"),
-                       (_dec(g("归属于母公司所有者权益合计", "归属于母公司股东权益合计")) or 0)
-                       + (_dec(g("少数股东权益")) or 0))
+                _check(
+                    diffs,
+                    f"资产总计=流动资产合计+非流动资产合计 [{col}]",
+                    g("资产总计"),
+                    (_dec(g("流动资产合计")) or 0) + (_dec(g("非流动资产合计")) or 0),
+                )
+                _check(
+                    diffs,
+                    f"负债合计=流动负债合计+非流动负债合计 [{col}]",
+                    g("负债合计"),
+                    (_dec(g("流动负债合计")) or 0) + (_dec(g("非流动负债合计")) or 0),
+                )
+                _check(
+                    diffs,
+                    f"资产总计=负债合计+所有者权益合计 [{col}]",
+                    g("资产总计"),
+                    (_dec(g("负债合计")) or 0) + (_dec(g("所有者权益合计", "股东权益合计")) or 0),
+                )
+                _check(
+                    diffs,
+                    f"负债和所有者权益总计=资产总计 [{col}]",
+                    g("负债和所有者权益总计", "负债和股东权益总计"),
+                    g("资产总计"),
+                )
+                _check(
+                    diffs,
+                    f"所有者权益合计=归母+少数股东 [{col}]",
+                    g("所有者权益合计", "股东权益合计"),
+                    (_dec(g("归属于母公司所有者权益合计", "归属于母公司股东权益合计")) or 0)
+                    + (_dec(g("少数股东权益")) or 0),
+                )
         if "合并利润表" not in st:
             return diffs
         is_ = st["合并利润表"]
         for col in ("本期发生额", "上期发生额"):
             g = partial(_g, is_, col)
-            _check(diffs, f"净利润=归母+少数股东损益 [{col}]",
-                   g("五、净利润（净亏损以“－”号填列）"),
-                   (_dec(g("1.归属于母公司所有者的净利润", "1.归属于母公司股东的净利润")) or 0)
-                   + (_dec(g("2.少数股东损益")) or 0))
-            _check(diffs, f"利润总额=营业利润+营业外收入-营业外支出 [{col}]",
-                   g("四、利润总额（亏损总额以“－”号填列）"),
-                   (_dec(g("三、营业利润（亏损以“－”号填列）")) or 0)
-                   + (_dec(g("加：营业外收入")) or 0) - (_dec(g("减：营业外支出")) or 0))
+            _check(
+                diffs,
+                f"净利润=归母+少数股东损益 [{col}]",
+                g("五、净利润（净亏损以“－”号填列）"),
+                (_dec(g("1.归属于母公司所有者的净利润", "1.归属于母公司股东的净利润")) or 0)
+                + (_dec(g("2.少数股东损益")) or 0),
+            )
+            _check(
+                diffs,
+                f"利润总额=营业利润+营业外收入-营业外支出 [{col}]",
+                g("四、利润总额（亏损总额以“－”号填列）"),
+                (_dec(g("三、营业利润（亏损以“－”号填列）")) or 0)
+                + (_dec(g("加：营业外收入")) or 0)
+                - (_dec(g("减：营业外支出")) or 0),
+            )
         if "合并现金流量表" not in st:
             return diffs
         cf = st["合并现金流量表"]
         for col in ("本期发生额", "上期发生额"):
             g = partial(_g, cf, col)
-            _check(diffs, f"经营净额=流入小计-流出小计 [{col}]",
-                   g("经营活动产生的现金流量净额"),
-                   (_dec(g("经营活动现金流入小计")) or 0) - (_dec(g("经营活动现金流出小计")) or 0))
-            _check(diffs, f"现金净增加额=经营+投资+筹资+汇率影响 [{col}]",
-                   g("五、现金及现金等价物净增加额"),
-                   (_dec(g("经营活动产生的现金流量净额")) or 0)
-                   + (_dec(g("投资活动产生的现金流量净额")) or 0)
-                   + (_dec(g("筹资活动产生的现金流量净额")) or 0)
-                   + (_dec(g("四、汇率变动对现金及现金等价物的影响")) or 0))
-            _check(diffs, f"期末现金=期初+净增加额 [{col}]",
-                   g("六、期末现金及现金等价物余额"),
-                   (_dec(g("加：期初现金及现金等价物余额")) or 0)
-                   + (_dec(g("五、现金及现金等价物净增加额")) or 0))
+            _check(
+                diffs,
+                f"经营净额=流入小计-流出小计 [{col}]",
+                g("经营活动产生的现金流量净额"),
+                (_dec(g("经营活动现金流入小计")) or 0) - (_dec(g("经营活动现金流出小计")) or 0),
+            )
+            _check(
+                diffs,
+                f"现金净增加额=经营+投资+筹资+汇率影响 [{col}]",
+                g("五、现金及现金等价物净增加额"),
+                (_dec(g("经营活动产生的现金流量净额")) or 0)
+                + (_dec(g("投资活动产生的现金流量净额")) or 0)
+                + (_dec(g("筹资活动产生的现金流量净额")) or 0)
+                + (_dec(g("四、汇率变动对现金及现金等价物的影响")) or 0),
+            )
+            _check(
+                diffs,
+                f"期末现金=期初+净增加额 [{col}]",
+                g("六、期末现金及现金等价物余额"),
+                (_dec(g("加：期初现金及现金等价物余额")) or 0)
+                + (_dec(g("五、现金及现金等价物净增加额")) or 0),
+            )
         return diffs
 
     def extract(self, content: bytes) -> ExtractionResult:
@@ -311,6 +433,18 @@ _HK_PAGES = {
     "合并现金流量表": (112, "合併現金流量表"),
 }
 _HK_NUM = r"\(?-?[\d][\d,]*\)?"
+_HK_TENCENT_TITLES = {
+    "合并利润表": "綜合收益表",
+    "合并综合收益表": "綜合全面收益表",
+    "合并资产负债表": "綜合財務狀況表",
+    "合并现金流量表": "綜合現金流量表",
+}
+_HK_OTHER_STATEMENT_TITLES = {
+    "綜合權益變動表": "equity",
+    "合併權益變動表": "equity",
+    "綜合財務報表附註": "notes",
+    "合併財務報表附註": "notes",
+}
 
 
 class StatementExtractionError(ValueError):
@@ -365,17 +499,108 @@ def _hk_parse_line(line: str) -> tuple[str, Any, Any] | None:
     return name, current, prior
 
 
+def _clean_hk_label(name: str) -> str:
+    return re.sub(r"\d+(?:\([a-z]\))?$", "", _norm_item(name))
+
+
 class HkTraditionalExtractor:
     adapter_id = "hk_traditional_text"
 
     def supports(self, pages: list[str]) -> int:
         score = 0
         joined = "\n".join(pages)
-        if re.search(r"合併(損益表|財務狀況表|現金流量表)", joined):
+        if re.search(
+            r"(?:合併(?:損益表|財務狀況表|現金流量表)|綜合(?:收益表|財務狀況表|現金流量表))",
+            joined,
+        ):
             score += 2
         if re.search(r"(股份代號|Stock Code)", "\n".join(pages[:5])):
             score += 1
         return score
+
+    @staticmethod
+    def _tencent_statement_kind(page_text: str) -> str | None:
+        title = _norm_item((page_text.split("\n") or [""])[0])
+        for statement, alias in _HK_TENCENT_TITLES.items():
+            if title == alias:
+                return statement
+        for alias, kind in _HK_OTHER_STATEMENT_TITLES.items():
+            if title == alias:
+                return kind
+        return None
+
+    def _extract_tencent_report(self, content: bytes, pages: list[str]) -> ExtractionResult:
+        located = [(index, self._tencent_statement_kind(page)) for index, page in enumerate(pages)]
+        statements: dict[str, list[dict[str, Any]]] = {}
+        ordered = [(index, kind) for index, kind in located if kind is not None]
+        for statement in _HK_TENCENT_TITLES:
+            start = next((index for index, kind in ordered if kind == statement), None)
+            if start is None:
+                continue
+            end = len(pages)
+            for index, kind in ordered:
+                if index > start and kind != statement:
+                    end = index
+                    break
+            items: list[dict[str, Any]] = []
+            for page_index in range(start, end):
+                if (
+                    page_index > start
+                    and self._tencent_statement_kind(pages[page_index]) != statement
+                ):
+                    break
+                for line in pages[page_index].split("\n"):
+                    if "年度報告" in line or "人民幣元" in line:
+                        continue
+                    parsed = _hk_parse_line(line)
+                    if (
+                        parsed is None
+                        and statement == "合并利润表"
+                        and re.fullmatch(r"\s*\d+\s+[\d,]+\s+[\d,]+\s*", line)
+                        and any(item["item"] == "其他" for item in items)
+                    ):
+                        parsed = _hk_parse_line("收入合計 " + line)
+                    if parsed:
+                        name, current, prior = parsed
+                        name = _clean_hk_label(name)
+                        items.append(
+                            {
+                                "item": name,
+                                "本期发生额": current,
+                                "上期发生额": prior,
+                                "page": page_index + 1,
+                            }
+                        )
+            statements[statement] = (
+                self._to_balance_columns(items) if statement == "合并资产负债表" else items
+            )
+
+        # 财务概要页有五年序列，首跑 oracle 只登记报告年度；取该序列最后一列。
+        for page_index, page in enumerate(pages[:5]):
+            lines = page.split("\n")
+            for line_index, line in enumerate(lines[:-1]):
+                if "非國際財務報告準則本公司權益" not in line:
+                    continue
+                parsed = _hk_parse_line(line + " " + lines[line_index + 1])
+                if parsed:
+                    name, _previous_year, report_year = parsed
+                    statements.setdefault("Non-GAAP 调节", []).append(
+                        {
+                            "item": _clean_hk_label(name),
+                            "本期发生额": report_year,
+                            "page": page_index + 1,
+                        }
+                    )
+
+        return ExtractionResult(
+            adapter_id=self.adapter_id,
+            unit_note="人民币百万元",
+            statements=statements,
+            checks=(),
+            warnings=(),
+            page_count=len(pages),
+            source_sha256=hashlib.sha256(content).hexdigest(),
+        )
 
     def _locate_start(self, pages: list[str], hint: int, anchor: str) -> int:
         for pno in range(max(0, hint - 6), min(len(pages), hint + 5)):
@@ -424,51 +649,106 @@ class HkTraditionalExtractor:
         bs = st.get("合并资产负债表", [])
         cf = st.get("合并现金流量表", [])
         for col in ("本期发生额", "上期发生额"):
+
             def g(n: str, col: str = col) -> Any:
                 return (_find(is_, n) or {}).get(col)
-            _check(diffs, f"毛利=收入-營業成本 [{col}]", g("毛利"),
-                   (g("收入") or 0) + (g("營業成本") or 0))
-            _check(diffs, f"除稅前利潤逐項加總 [{col}]", g("除稅前利潤"),
-                   (g("毛利") or 0) + (g("銷售及市場推廣開支") or 0) + (g("研發開支") or 0)
-                   + (g("一般及行政開支") or 0) + (g("其他收入、收益╱（虧損）淨額") or 0)
-                   + (g("出售產業園的收益") or 0) + (g("財務收入") or 0) + (g("財務成本") or 0)
-                   + (g("金融資產減值損失（包括減值損失轉回）") or 0)
-                   + (g("應佔聯營企業及合營企業損益") or 0))
-            _check(diffs, f"年度利潤=除稅前+所得稅 [{col}]", g("年度利潤"),
-                   (g("除稅前利潤") or 0) + (g("所得稅開支") or 0))
-            _check(diffs, f"年度利潤=本公司所有者+非控制性權益 [{col}]", g("年度利潤"),
-                   (g("本公司所有者") or 0) + (g("非控制性權益") or 0))
+
+            _check(
+                diffs,
+                f"毛利=收入-營業成本 [{col}]",
+                g("毛利"),
+                (g("收入") or 0) + (g("營業成本") or 0),
+            )
+            _check(
+                diffs,
+                f"除稅前利潤逐項加總 [{col}]",
+                g("除稅前利潤"),
+                (g("毛利") or 0)
+                + (g("銷售及市場推廣開支") or 0)
+                + (g("研發開支") or 0)
+                + (g("一般及行政開支") or 0)
+                + (g("其他收入、收益╱（虧損）淨額") or 0)
+                + (g("出售產業園的收益") or 0)
+                + (g("財務收入") or 0)
+                + (g("財務成本") or 0)
+                + (g("金融資產減值損失（包括減值損失轉回）") or 0)
+                + (g("應佔聯營企業及合營企業損益") or 0),
+            )
+            _check(
+                diffs,
+                f"年度利潤=除稅前+所得稅 [{col}]",
+                g("年度利潤"),
+                (g("除稅前利潤") or 0) + (g("所得稅開支") or 0),
+            )
+            _check(
+                diffs,
+                f"年度利潤=本公司所有者+非控制性權益 [{col}]",
+                g("年度利潤"),
+                (g("本公司所有者") or 0) + (g("非控制性權益") or 0),
+            )
         for col in ("期末余额", "期初余额"):
+
             def g(n: str, col: str = col) -> Any:
                 return (_find(bs, n) or {}).get(col)
-            _check(diffs, f"資產總額=非流動+流動 [{col}]", g("資產總額"),
-                   (g("非流動資產總額") or 0) + (g("流動資產總額") or 0))
-            _check(diffs, f"負債總額=非流動+流動 [{col}]", g("負債總額"),
-                   (g("非流動負債總額") or 0) + (g("流動負債總額") or 0))
-            _check(diffs, f"權益總額=歸母+非控制性 [{col}]", g("權益總額"),
-                   (g("歸屬於本公司所有者的權益") or 0) + (g("非控制性權益") or 0))
-            _check(diffs, f"權益及負債總額=權益+負債=資產 [{col}]", g("權益及負債總額"),
-                   (g("權益總額") or 0) + (g("負債總額") or 0))
-            _check(diffs, f"資產總額=權益及負債總額 [{col}]", g("資產總額"),
-                   g("權益及負債總額"))
+
+            _check(
+                diffs,
+                f"資產總額=非流動+流動 [{col}]",
+                g("資產總額"),
+                (g("非流動資產總額") or 0) + (g("流動資產總額") or 0),
+            )
+            _check(
+                diffs,
+                f"負債總額=非流動+流動 [{col}]",
+                g("負債總額"),
+                (g("非流動負債總額") or 0) + (g("流動負債總額") or 0),
+            )
+            _check(
+                diffs,
+                f"權益總額=歸母+非控制性 [{col}]",
+                g("權益總額"),
+                (g("歸屬於本公司所有者的權益") or 0) + (g("非控制性權益") or 0),
+            )
+            _check(
+                diffs,
+                f"權益及負債總額=權益+負債=資產 [{col}]",
+                g("權益及負債總額"),
+                (g("權益總額") or 0) + (g("負債總額") or 0),
+            )
+            _check(diffs, f"資產總額=權益及負債總額 [{col}]", g("資產總額"), g("權益及負債總額"))
         for col in ("本期发生额", "上期发生额"):
+
             def g(n: str, col: str = col) -> Any:
                 return (_find(cf, n) or {}).get(col)
-            _check(diffs, f"現金淨變動=經營+投資+融資 [{col}]",
-                   g("現金及現金等價物（減少）╱增加淨額"),
-                   (g("經營活動所得現金淨額") or 0) + (g("投資活動所用現金淨額") or 0)
-                   + (g("融資活動所用現金淨額") or 0))
-            _check(diffs, f"年末現金=年初+淨變動+外匯 [{col}]", g("年末現金及現金等價物"),
-                   (g("年初現金及現金等價物") or 0)
-                   + (g("現金及現金等價物（減少）╱增加淨額") or 0)
-                   + (g("外匯匯率變動對現金及現金等價物的影響") or 0))
-            _check(diffs, f"財狀表現金=現金流量表年末 [{col}]",
-                   (_find(bs, "現金及現金等價物") or {}).get(
-                       "期末余额" if col == "本期发生额" else "期初余额"),
-                   g("年末現金及現金等價物"))
+
+            _check(
+                diffs,
+                f"現金淨變動=經營+投資+融資 [{col}]",
+                g("現金及現金等價物（減少）╱增加淨額"),
+                (g("經營活動所得現金淨額") or 0)
+                + (g("投資活動所用現金淨額") or 0)
+                + (g("融資活動所用現金淨額") or 0),
+            )
+            _check(
+                diffs,
+                f"年末現金=年初+淨變動+外匯 [{col}]",
+                g("年末現金及現金等價物"),
+                (g("年初現金及現金等價物") or 0)
+                + (g("現金及現金等價物（減少）╱增加淨額") or 0)
+                + (g("外匯匯率變動對現金及現金等價物的影響") or 0),
+            )
+            _check(
+                diffs,
+                f"財狀表現金=現金流量表年末 [{col}]",
+                (_find(bs, "現金及現金等價物") or {}).get(
+                    "期末余额" if col == "本期发生额" else "期初余额"
+                ),
+                g("年末現金及現金等價物"),
+            )
         comprehensive = st.get("合并综合收益表", [])
         if comprehensive:
             for col in ("本期发生额", "上期发生额"):
+
                 def ci_g(name: str, col: str = col) -> Any:
                     return (_find(comprehensive, name) or {}).get(col)
 
@@ -485,20 +765,20 @@ class HkTraditionalExtractor:
                     diffs,
                     f"年度綜合收益=年度利潤+其他綜合收益 [{col}]",
                     ci_g("年度綜合收益總額"),
-                    (ci_g("年度利潤") or 0)
-                    + (ci_g("年度其他綜合（虧損）╱收益") or 0),
+                    (ci_g("年度利潤") or 0) + (ci_g("年度其他綜合（虧損）╱收益") or 0),
                 )
                 _check(
                     diffs,
                     f"年度綜合收益=本公司所有者+非控制性權益 [{col}]",
                     ci_g("年度綜合收益總額"),
-                    (ci_g("本公司所有者") or 0)
-                    + (ci_g("非控制性權益") or 0),
+                    (ci_g("本公司所有者") or 0) + (ci_g("非控制性權益") or 0),
                 )
         return diffs
 
     def extract(self, content: bytes) -> ExtractionResult:
         pages = _page_texts(content)
+        if any(self._tencent_statement_kind(page) in _HK_TENCENT_TITLES for page in pages):
+            return self._extract_tencent_report(content, pages)
         statements = {
             "合并利润表": self._extract_statement(pages, *_HK_PAGES["合并利润表"], end_page=106),
             "合并综合收益表": self._extract_statement(
@@ -528,11 +808,26 @@ class HkTraditionalExtractor:
 
 _TENCENT_PARENUM = r"\([-\d,]+\)|-?[\d,]+(?:\.\d+)?"
 _TENCENT_LABELS = [
-    "收入", "增值服务", "营销服务", "金融科技及企业服务", "其他", "收入成本", "毛利",
-    "销售及市场推广开支", "一般及行政开支", "其他收益/（亏损）净额", "经营盈利",
-    "投资收益/（亏损）净额及其他", "利息收入", "财务成本",
-    "分占联营公司及合营公司盈利/（亏损）净额", "除税前盈利", "所得税开支", "期内盈利",
-    "本公司权益持有人", "非控制性权益",
+    "收入",
+    "增值服务",
+    "营销服务",
+    "金融科技及企业服务",
+    "其他",
+    "收入成本",
+    "毛利",
+    "销售及市场推广开支",
+    "一般及行政开支",
+    "其他收益/（亏损）净额",
+    "经营盈利",
+    "投资收益/（亏损）净额及其他",
+    "利息收入",
+    "财务成本",
+    "分占联营公司及合营公司盈利/（亏损）净额",
+    "除税前盈利",
+    "所得税开支",
+    "期内盈利",
+    "本公司权益持有人",
+    "非控制性权益",
 ]
 
 
@@ -552,6 +847,11 @@ class ResultsAnnouncementExtractor:
     def supports(self, pages: list[str]) -> int:
         joined = "\n".join(pages)
         score = 0
+        title_probe = _collapse_duplicate_glyphs(joined)
+        if "未經審計合併綜合收益數據概要" in title_probe:
+            score += 3
+        if "公認會計準則與非公認會計準則業績的調節表" in title_probe:
+            score += 1
         if "简明综合收益表" in joined:
             score += 2
         if "非国际财务报告准则" in joined or "Non-IFRS" in joined:
@@ -560,9 +860,9 @@ class ResultsAnnouncementExtractor:
 
     def extract(self, content: bytes) -> ExtractionResult:
         pages = _page_texts(content)
-        is_page = next(
-            (i for i, text in enumerate(pages) if "简明综合收益表" in text), None
-        )
+        if "未經審計合併綜合收益數據概要" in _collapse_duplicate_glyphs("\n".join(pages)):
+            return self._extract_zto_announcement(content)
+        is_page = next((i for i, text in enumerate(pages) if "简明综合收益表" in text), None)
         if is_page is None:
             raise StatementExtractionError("anchor_missing", "未定位到简明综合收益表页")
 
@@ -582,8 +882,12 @@ class ResultsAnnouncementExtractor:
         seg_sum = sum(stmt[s][0] for s in ["增值服务", "营销服务", "金融科技及企业服务", "其他"])
         _check(checks, "收入分部加总=营业收入", seg_sum, stmt["收入"][0])
         _check(checks, "毛利=收入+收入成本", stmt["收入"][0] + stmt["收入成本"][0], stmt["毛利"][0])
-        _check(checks, "期内盈利=归母+非控制",
-               stmt["本公司权益持有人"][0] + stmt["非控制性权益"][0], stmt["期内盈利"][0])
+        _check(
+            checks,
+            "期内盈利=归母+非控制",
+            stmt["本公司权益持有人"][0] + stmt["非控制性权益"][0],
+            stmt["期内盈利"][0],
+        )
 
         rec_candidates = [
             ln.strip()
@@ -621,6 +925,62 @@ class ResultsAnnouncementExtractor:
             statements={"合并利润表": items},
             checks=tuple(checks),
             warnings=("业绩公告为简表：无资产负债全表/现金流量表/权益变动表（披露范围如此）",),
+            page_count=len(pages),
+            source_sha256=hashlib.sha256(content).hexdigest(),
+        )
+
+    def _extract_zto_announcement(self, content: bytes) -> ExtractionResult:
+        pages = _pypdf_page_texts(content)
+        title_kinds = {
+            "未經審計合併綜合收益數據概要": "合并利润表",
+            "未經審計合併現金流數據概要": "合并现金流量表",
+            "公認會計準則與非公認會計準則業績的調節表": "Non-GAAP 调节",
+        }
+        statements: dict[str, list[dict[str, Any]]] = {}
+        number = re.compile(r"(?<!\S)(?:\(\s*-?[\d,]+(?:\.\d+)?\s*\)|-?[\d,]+(?:\.\d+)?)(?!\S)")
+        for page_no, page in enumerate(pages, start=1):
+            lines = page.splitlines()
+            section: str | None = None
+            start_line = 0
+            for line_no, line in enumerate(lines):
+                normalized_title = _norm_item(_collapse_duplicate_glyphs(line))
+                found = next(
+                    (kind for title, kind in title_kinds.items() if title in normalized_title),
+                    None,
+                )
+                if found:
+                    section = found
+                    start_line = line_no + 1
+                    statements.setdefault(section, [])
+                    break
+            if section is None:
+                continue
+
+            pending_label = ""
+            for line in lines[start_line:]:
+                matches = list(number.finditer(line))
+                if len(matches) < 3:
+                    candidate = _norm_item(re.sub(r"\(\d+\)$", "", line.strip()))
+                    if candidate.endswith(("費用", "费用")):
+                        pending_label = candidate
+                    continue
+                tail = matches[-3:]
+                if line[tail[-1].end() :].strip():
+                    continue
+                label = _norm_item(pending_label + line[: tail[0].start()])
+                pending_label = ""
+                if not label:
+                    continue
+                # 公告的人民币金额在美元列之前；忽略美元列，仅记录当期人民币数。
+                current = _parse_signed(tail[1].group())
+                statements[section].append({"item": label, "本期发生额": current, "page": page_no})
+
+        return ExtractionResult(
+            adapter_id=self.adapter_id,
+            unit_note="人民币千元（公告列示人民币、美元，本次取2026年人民币列）",
+            statements=statements,
+            checks=(),
+            warnings=("公告为摘要，不包含完整资产负债表及完整附注",),
             page_count=len(pages),
             source_sha256=hashlib.sha256(content).hexdigest(),
         )
