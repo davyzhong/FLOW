@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.36
+version: 5.37
 created_at: 2026-09-12
 updated_at: 2026-09-28
 owner: FLOW
@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-09-28 最新更正（优先于下方历史快照）：四个动态页面状态×390/1024/1440矩阵新增63项；正式生产构建全站E2E157/157、Web143/143、lint/typecheck本地通过（lint有一条既有TanStack warning）。本轮提交和准确SHA CI待核验，UX Gate1/Gate5仍未关闭。唯一执行步骤是提交矩阵并核验同SHA CI，随后运行Gate5完整隔离验收。常驻`flow`不重启、重建、迁移或写入。
+2026-09-28 最新更正（优先于下方历史快照）：动态页面状态×390/1024/1440矩阵提交`66f0ffb0d0a9dc9fa98f4665515d83458e11883e`对应CI run `36368814722`准确SHA 17/17 success；正式生产E2E157/157、Web143/143、lint/typecheck本地通过，UX Gate1/Gate5仍未关闭。唯一执行步骤进入Gate5完整隔离验收。常驻`flow`不重启、重建、迁移或写入。
 
 2026-09-28 最新更正（优先于下方历史快照）：利润桥目标映射修复提交`87be90041c477d53f0cabc6718d504d190481103`由GitHub Actions run `36330119396`同SHA **17/17 jobs success**。`bash scripts/test_damai_demo_e2e.sh` fresh `damai-demo-iso`验收seed19/19、只读矩阵159项（149×200、10×422、零意外）、Playwright14/14；`bash scripts/test_module_boundaries_e2e.sh`94/94；`make test-web`143/143、typecheck通过、lint零错误/一条既有TanStack warning。实点修复driver_code到真实指标的映射；期间费用缺少独立指标时显示为非链接。当前唯一下一步继续Operations/Investigation、指标依赖与治理图谱等安全真实下钻，再做全交互路由状态×390/1024/1440视口及Gate5。常驻`flow`禁止重启、重建、迁移、写入。
 

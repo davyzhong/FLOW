@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 5.29
+version: 5.30
 created_at: 2026-09-24
 updated_at: 2026-09-28
 owner: FLOW
@@ -14,7 +14,7 @@ applies_to: web-frontend
 
 # 大麦数据后的剩余体验收口
 
-> 2026-09-28 最新进度：Dashboard利润桥`87be9004`/CI `36330119396`、图谱`2fc1d955`/CI `36338361782`、Operations关注`4d6cf4a5`/CI `36343826986`、Investigation批次身份`1256aae9`/CI `36348942178`、Statements原件页锚`abbcc8cb`/CI `36354951874`、状态同步`0f67893c`/CI `36357438056`均准确SHA 17/17成功。阿里FY2020页锚、Reports安全深链已经验收，写快照的GET排除只读点击。四个动态页面状态×视口矩阵新增63项，本地生产E2E 157/157、Web143/143、lint/typecheck通过；对应提交与同SHA CI仍待完成。下一步完成矩阵证据提交/CI，再按Gate5同SHA全链验收；矩阵补齐不等于Gate1或工作包关闭。
+> 2026-09-28 最新进度：Dashboard利润桥`87be9004`/CI `36330119396`、图谱`2fc1d955`/CI `36338361782`、Operations关注`4d6cf4a5`/CI `36343826986`、Investigation批次身份`1256aae9`/CI `36348942178`、Statements原件页锚`abbcc8cb`/CI `36354951874`、状态同步`0f67893c`/CI `36357438056`均准确SHA 17/17成功。四个动态页面矩阵新增63项，本地生产E2E157/157、Web143/143、lint/typecheck通过；提交`66f0ffb0d0a9dc9fa98f4665515d83458e11883e`对应CI run `36368814722`准确SHA 17/17成功。下一步进入Gate5同SHA全链验收；矩阵补齐不等于Gate1或工作包关闭。
 
 ## 状态 × 视口覆盖盘点与下一步（2026-09-28）
 
@@ -42,7 +42,7 @@ applies_to: web-frontend
 - `apps/web/e2e/frontend-states.spec.ts`新增63项：Dashboard 6态×3视口（18项），数据工作台、经营分析、四问分析各5态×3视口（45项）；视口为390/1024/1440。
 - 状态由浏览器API拦截夹具构造，不连接数据库；逐项核验页面语义状态、标题/核心内容、无横向溢出和无未捕获`pageerror`。Dashboard错误断言限定于`main [role=alert]`，排除Next RouteAnnouncer。
 - 本地复验：新增矩阵63/63；正式生产构建全站E2E 157/157；`make test-web` 143/143；`make lint`和`make typecheck`通过（lint仅既有TanStack Table warning）。
-- 准确SHA GitHub CI尚待核验，故不据此关闭Gate1/Gate5；提交后核对同SHA全绿，再进入Gate5全链验收。
+- 提交`66f0ffb0d0a9dc9fa98f4665515d83458e11883e`对应GitHub CI run `36368814722`准确SHA 17/17 success；矩阵步骤关闭。Gate1/Gate5仍未关闭，下一步按本工作包Gate5验收表执行完整隔离旅程和全链门禁。
 
 不得为构造状态使用常驻`flow`数据库或真实写API。任何 GET 的安全性必须按调用链审核；冻结/渲染类GET仍排除在只读矩阵外。
 
