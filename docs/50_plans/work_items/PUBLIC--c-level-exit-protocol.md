@@ -3,9 +3,9 @@ doc_id: FLOW-WP-PUBLIC-C-EXIT-001
 title: 公开财报模块 C 级出口协议与数字级准确率基准（T09）
 doc_type: work-item
 status: active
-version: 2.3
+version: 2.4
 created_at: 2026-09-15
-updated_at: 2026-09-28
+updated_at: 2026-09-29
 owner: FLOW
 applies_to: public-analysis
 roadmap_phase: 3
@@ -33,7 +33,11 @@ gates: [R2, R3, R4, S01-closure]
 
 逐格台账和109候选重建已提交于前序切片。JDL 200格逐格来源映射已由提交`fdc96d63146e0ed8cb12e75a50f488dd3015398f`完成，准确SHA CI run `36404144739`为17/17 success。原200格均已完成行、列和值/空值来源核验；其中16格来自物理第107页/印刷第106页独立综合收益表，先前抽取器误归入合并利润表。持久化唯一键已含`statement_type`，无需schema迁移。因冻结L1 v2沿用错误分类且存在弱锚落到摘要页的问题，本轮保留v2，完成JDL抽取v3、页提示、fail-closed锚定位与L1 v3；独立库实测全量基准均零差异。v3实施提交`db646f45c43141468a2b4ee10a9114f0f141f066`准确SHA CI run `36427598983`已17/17通过。
 
-**当前唯一子步：BABA FY2023比较期1格**。菜鸟19条异常主张已全部审定：原始招股书 SHA `3e2c367958eacf3bb50c165204a1093383381f5cdb9d8af506636b880b54b13c`物理第474/475页（现金流量表）、第466页（资产负债表）及FY2021/FY2022年度 YAML 一致；FY2022上期列对应FY2021，因此19条均为有效数值/比较值，不是抽取错误。原`confirmed-42-exceptions-v1.csv`保持不变，审定结果另存`confirmed-42-adjudicated-v2.csv`，并由生成器逐项校验报告年度 YAML。回归测试7/7、定向 Ruff、M1（299文档、0错误）通过；本轮状态/审计/交接同步及提交、准确SHA CI仍待完成。下一顺序：本段文档同步提交并同SHA CI绿→BABA FY2023比较期1格原件复核与新增修订→裁决109候选（111候选、摘要差2保持显式未决）→冻结样本/独立盲评/holdout与C级Go-No-Go。不得覆盖原抽取档案；C级未通过，常驻`flow`数据库/服务禁止写入。
+**当前唯一子步：BABA FY2023比较期1格及其派生资产一致性**。菜鸟19条异常主张已全部审定：原始招股书 SHA `3e2c367958eacf3bb50c165204a1093383381f5cdb9d8af506636b880b54b13c`物理第474/475页（现金流量表）、第466页（资产负债表）及FY2021/FY2022年度 YAML 一致；FY2022上期列对应FY2021，因此19条均为有效数值/比较值，不是抽取错误。原`confirmed-42-exceptions-v1.csv`保持不变，审定结果另存`confirmed-42-adjudicated-v2.csv`，生成器逐项校验报告年度 YAML。
+
+BABA FY2023修订按原件物理第38页/印刷第37页确认商誉减值上期发生额为FY2022的`-25,141`（人民币百万元）；在`validation/financial_reports/corrections/alibaba_2023fy_statements_v2.yaml`新增修订，不覆盖旧抽取档案。同步更新活动答案集为L1 v4（supersedes v3），让L0、L1和P5种子/事实生成器都读取版本化订正。重建`docs/implementation/p5/statement_facts.yaml`若发现历史差异，必须逐项核对其对应活动YAML/既有订正；仅将可追溯差异纳入，不得夹带无法解释的变动，并在交付记录列明差异分类和计数。隔离`flow_test`上复跑L0/L1并按报告身份核验新增比较值，禁止写入常驻`flow`。
+
+菜鸟回归测试7/7、定向 Ruff、M1（299文档、0错误）已通过；BABA当前有源件、L1 v4与隔离库预验结果，最终全量验证/文档收口/提交及准确SHA CI仍待完成。之后顺序：本步同SHA CI绿→裁决109候选（111候选、摘要差2保持显式未决）→冻结样本/独立盲评/holdout与C级Go-No-Go。C级未通过，常驻`flow`数据库/服务禁止写入。
 
 ## 1. 两级基准合同（B2）
 
