@@ -6,7 +6,7 @@
 # 单位：人民币百万元（披露原始单位）
 
 sample_id: alibaba_fy2027q1
-company: 阿里巴巴集团控股有限公司（9988.HK / NYSE: BABA）
+company: "阿里巴巴集团控股有限公司（9988.HK / NYSE: BABA）"
 period: 截至 2026 年 6 月 30 日止三个月（FY2027 Q1，未经审计）
 source_pdf_pages:
   季度财务业绩概要: 第 6 页

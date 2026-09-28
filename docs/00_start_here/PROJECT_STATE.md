@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.54
+version: 5.55
 created_at: 2026-09-12
 updated_at: 2026-09-29
 owner: FLOW
@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-09-29 当前状态（优先于下方较早快照）：公开财报 C 级仍是唯一执行项且尚未通过。源行身份/范围版本化映射覆盖40条源行、79个真实单元格，L1 v5 1776/1776；实现提交`eb2b7f3cbadec0c36eb4b36473c6321d69aa4fff`准确SHA CI run `36478301484` 17/17 success。新建隔离Compose项目`flowcverify`（迁移0031并装载5家公司14份报告）实测L0 1532/1532、L1 1776/1776，锚失效、值不一致、未入库均0；P5事实670条内容SHA不变。脚本138/138、财报API 80/80、M1（299文档/0错误）、链接0错误通过。详见[行身份范围修订验收](../60_delivery/verification/2026-09-29--public-row-identity-v1.md)。旧`flow_test`观察到旧装载差异，未修改；常驻`flow`未触碰。下一唯一子步：冻结14份样本及答案集/代码SHA，再核验独立oracle、盲评、holdout并作有证据的C级Go/No-Go。
+2026-09-29 当前状态（优先于下方较早快照）：14份公开财报样本及 PDF/活动 YAML/报告身份/答案集/行身份映射/实现 SHA 已冻结；L0 1532 项、L1 1776/1776 页锚可重建。行身份实现准确 SHA CI `36478301484` 17/17 success。冻结与 oracle 盘点的定向测试6/6通过；登记清单、5份 oracle YAML 均可解析，当前5份哈希与文件一致，其中小米/阿里 FY2027Q1 两条旧声明已原样保留到 `oracle_sha256_previous_claim` 并以当前实测 SHA 订正。C 级本轮证据审计结论为 No-Go（0/14完整逐行独立 oracle；旧首跑199/199不可比较；两个新 holdout 无首跑 artifact；现有交叉评不是成品盲评），不是数据准确率判负，更不是 C 级通过。详见[冻结与 oracle 审计](../60_delivery/verification/2026-09-29--public-sample-freeze-oracle-audit-v1.md)和[机器可读冻结清单](../../validation/financial_reports/c-level-freeze-2026-09-29-v1.yaml)。当前唯一执行项已转为路线图第4项 U04：先修复/回归旧版式，再对两份冻结新 holdout 未调参首跑。常驻`flow`、旧`flow_test`均未改写。
 
 2026-09-29 最新状态：唯一执行项为公开财报 C 级出口，尚未通过。JDL v3/L1 v3 `db646f45`（CI run `36427598983` 17/17）、菜鸟19条审定 `279d5e46`（run `36441076686` 17/17）、BABA FY2023 比较期与 P5 派生事实修订 `7735f273168d70e03a4b8ec43e83abd78546446e`（准确 SHA CI run `36463457793` success）均已完成。隔离`flow_test`装载14份报告，L0 1514/1514、L1 1776/1776，锚失效/值不一致/缺库均0；P5事实键670保持不变，14个值变更均为阿里FY2023比较期，JDL无映射明细经分类为旧18条移除（7条旧综合收益错误归类、11条权益变动表页界外项目）与当前9条“合并综合收益表”新增，并非一一替换。109疑点已完成逐格语义裁决：111格台账中109格归入可重建主集、2格真实流动证券投资候选单列为原摘要分母未决；主集未发现数值错误，问题属于现金流合并范围标签、流动/非流动限定、BABA FY2020评审bundle重复current别名及JDL表身份误标。原摘要组计数仍有BABA FY2020 +8、阿里股权组 +1 无法从冻结逐格底稿复原，已明确登记，不将不可复现摘要伪装成准确计数。版本化裁决见`validation/financial_reports/review-ledgers/suspected-109-cell-adjudications-v2.csv`及组表。当前唯一子步转为把已证实的源行范围/身份修正写入版本化映射并接入种子、L1和派生事实核验；之后重跑全量L0/L1、冻结样本、独立盲评/holdout与C级Go-No-Go。常驻`flow`数据库/服务未触碰。
 
