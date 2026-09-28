@@ -3,7 +3,7 @@ doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
 status: active
-version: 5.28
+version: 5.29
 created_at: 2026-09-24
 updated_at: 2026-09-28
 owner: FLOW
@@ -14,7 +14,7 @@ applies_to: web-frontend
 
 # 大麦数据后的剩余体验收口
 
-> 2026-09-28 最新进度：Dashboard利润桥`87be9004`/CI `36330119396`、图谱`2fc1d955`/CI `36338361782`、Operations关注`4d6cf4a5`/CI `36343826986`、Investigation批次身份`1256aae9`/CI `36348942178`、Statements原件页锚`abbcc8cb`/CI `36354951874`、状态同步`0f67893c`/CI `36357438056`均准确SHA 17/17成功。阿里FY2020页锚、Reports安全深链已经验收，写快照的GET排除只读点击。路由状态视口盘点结果与补验计划见下表；当前唯一下一步是补足四个非归档动态页面的适用矩阵，然后Gate5同SHA全链验收。工作包仍active，Gate1/Gate5未关闭。
+> 2026-09-28 最新进度：Dashboard利润桥`87be9004`/CI `36330119396`、图谱`2fc1d955`/CI `36338361782`、Operations关注`4d6cf4a5`/CI `36343826986`、Investigation批次身份`1256aae9`/CI `36348942178`、Statements原件页锚`abbcc8cb`/CI `36354951874`、状态同步`0f67893c`/CI `36357438056`均准确SHA 17/17成功。阿里FY2020页锚、Reports安全深链已经验收，写快照的GET排除只读点击。四个动态页面状态×视口矩阵新增63项，本地生产E2E 157/157、Web143/143、lint/typecheck通过；对应提交与同SHA CI仍待完成。下一步完成矩阵证据提交/CI，再按Gate5同SHA全链验收；矩阵补齐不等于Gate1或工作包关闭。
 
 ## 状态 × 视口覆盖盘点与下一步（2026-09-28）
 
@@ -36,6 +36,13 @@ applies_to: web-frontend
 2. **结构状态扩到三档视口**：对 Dashboard、数据工作台、经营分析、四问工作台每一个适用状态运行390/1024/1440px；核验页面标题、状态角色/中文说明、核心操作可达、无横向溢出和无未捕获pageerror。loaded 使用固定契约fixtures并在证据中明确为UI测试数据，不作真实数据证明。
 3. **保留并引用既有归档**：四个数据密集页现有五态×三视口60张图为已有证据；复查代码/索引与被归档数量一致即可，除非本轮发现视觉缺陷，不重复覆盖这些PNG。
 4. **全站完成检查**：11个交互路由均需有状态适用性结论；所有数据密集页面适用状态×视口均有自动化结构断言/视觉证据；模块入口与登录的排除理由清楚；随后按Gate5同SHA运行 build、安全隔离大麦旅程、lint/typecheck/Web tests、文档/链接门禁，并核对同一提交CI。
+
+### 动态页面状态×视口矩阵（2026-09-28；本地完成，CI待验证）
+
+- `apps/web/e2e/frontend-states.spec.ts`新增63项：Dashboard 6态×3视口（18项），数据工作台、经营分析、四问分析各5态×3视口（45项）；视口为390/1024/1440。
+- 状态由浏览器API拦截夹具构造，不连接数据库；逐项核验页面语义状态、标题/核心内容、无横向溢出和无未捕获`pageerror`。Dashboard错误断言限定于`main [role=alert]`，排除Next RouteAnnouncer。
+- 本地复验：新增矩阵63/63；正式生产构建全站E2E 157/157；`make test-web` 143/143；`make lint`和`make typecheck`通过（lint仅既有TanStack Table warning）。
+- 准确SHA GitHub CI尚待核验，故不据此关闭Gate1/Gate5；提交后核对同SHA全绿，再进入Gate5全链验收。
 
 不得为构造状态使用常驻`flow`数据库或真实写API。任何 GET 的安全性必须按调用链审核；冻结/渲染类GET仍排除在只读矩阵外。
 
