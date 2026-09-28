@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目尽调、优化与单 Agent 执行总交接
 doc_type: navigation
 status: current
-version: 5.28
+version: 5.29
 created_at: 2026-09-12
 updated_at: 2026-09-28
 owner: FLOW
@@ -18,7 +18,7 @@ applies_to: repository
 
 > **本节覆盖本文其余旧会话交接快照。** 旧章节保留历史证据，不可据其旧顺序领取任务。下一位 Agent 开始前先从 GitHub 同步 `main`，再读 `AGENTS.md`、`docs/00_start_here/PROJECT_STATE.md`、`docs/50_plans/CURRENT_ROADMAP.md` 和相应工作包。唯一任务顺序是路线图中的 11 项队列；本节只是对同一队列逐项提供执行手册，不构成第二条队列。
 
-**最新进度更正（2026-09-28，优先于下方旧接续点）：** 利润桥`87be9004`/CI `36330119396`、依赖图`2fc1d955`/CI `36338361782`、Operations管理关注`4d6cf4a5`/CI `36343826986`、Investigation批次身份`1256aae9`/CI `36348942178`、Statements真实原件页锚`abbcc8cbf5231e74d5223aab9d071e4e6e863fd4`/CI `36354951874`均准确SHA 17/17 success。Statements隔离seed verify19/19、只读矩阵159项零意外、Playwright15/15；阿里FY2020原件SHA、正式上传登记和API读取SHA一致，收入509711对应PDF第23页strong锚，实际下载URL含`#page=23`。Web143/143、typecheck/mypy/ruff、文档M1/链接/计划视图/脚本107通过，lint零错误/1条既有warning。Reports财报→Statements、经营快照→Operations深链已有真实点击验收；会冻结/渲染快照的GET排除安全只读点击。当前唯一下一步：盘点并补齐全交互路由适用状态×390/1024/1440矩阵，之后Gate5同SHA全链验收。常驻`flow`不重启、重建、迁移或写入。
+**最新进度更正（2026-09-28，优先于下方旧接续点）：** Statements真实原件页锚`abbcc8cb`/CI `36354951874`与状态同步`0f67893c`/CI `36357438056`均准确SHA 17/17 success；隔离seed verify19/19、只读矩阵159项零意外、Playwright15/15。阿里FY2020原件SHA、正式上传登记和API读取SHA一致，收入509711对应PDF第23页strong锚，实际下载URL含`#page=23`。Web143/143、typecheck/mypy/ruff、文档M1/链接/计划视图/脚本107通过，lint零错误/1条既有warning。Reports财报→Statements、经营快照→Operations深链有真实点击验收；冻结/渲染GET会写快照，排除安全只读点击。唯一当前队列项仍是UX：已盘点四个数据密集页五态×三视口60张图和11路由390px加载溢出门禁；缺口为Dashboard、数据工作台、经营分析、四问工作台状态×390/1024/1440。静态模块入口不适用数据状态，登录走独立认证表单验收。下一步按工作包矩阵扩充确定性状态fixtures和三档视口结构断言；之后执行Gate5同SHA全链。常驻`flow`不重启、重建、迁移或写入。
 
 **此前接续点（已由上方最新进度覆盖）：** 已完成Dashboard、Analysis/Investigation身份深链阶段。当前工作树与未提交项以 `git status` 为准；具体证据见路线图和UX Gate1记录。不得触碰常驻`flow`（Compose标签来源混杂）。
 

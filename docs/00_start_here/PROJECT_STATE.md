@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.34
+version: 5.35
 created_at: 2026-09-12
 updated_at: 2026-09-28
 owner: FLOW
@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-09-28 最新更正（优先于下方历史快照）：Statements真实原件页锚提交`abbcc8cbf5231e74d5223aab9d071e4e6e863fd4`对应GitHub Actions run `36354951874`，准确SHA 17/17 jobs success。隔离大麦verify19/19、只读GET矩阵159项（149预期200、10预期422、意外0）、Playwright15/15；阿里FY2020原件SHA与正式登记/读取内容一致，收入509711锚定PDF第23页strong，点击下载URL保留`#page=23`。Web143/143、typecheck/mypy/ruff、文档M1/链接/计划视图/脚本107通过；lint零错误、一条既有TanStack warning。Reports财报→Statements和经营快照→Operations深链已有真实点击验收；objective HTML preview GET会创建/冻结快照，按副作用分类排除于只读点击。11项主队列仍1完成、1执行中、8排队（其中1项外部材料限制）；唯一执行项UX，接下来全交互路由适用状态×390/1024/1440矩阵，再Gate5同SHA全链验收。常驻`flow`不重启、重建、迁移或写入。
+2026-09-28 最新更正（优先于下方历史快照）：Statements真实原件页锚提交`abbcc8cb`/CI `36354951874`和状态文档提交`0f67893c`/CI `36357438056`均准确SHA 17/17 jobs success。隔离大麦verify19/19、只读GET矩阵159项（149预期200、10预期422、意外0）、Playwright15/15；阿里FY2020原件SHA与正式登记/读取内容一致，收入509711锚定PDF第23页strong，点击下载URL保留`#page=23`。Web143/143、typecheck/mypy/ruff、文档M1/链接/计划视图/脚本107通过；lint零错误、一条既有TanStack warning。Reports财报→Statements和经营快照→Operations深链已有真实点击验收；objective HTML preview GET会创建/冻结快照，按副作用分类排除于只读点击。11项主队列仍1完成、1执行中、8排队（其中1项外部材料限制）；唯一执行项UX。覆盖盘点确认：11个路由390px已加载溢出门禁；四个数据密集页五态×三视口截图已覆盖；下一步补 Dashboard、数据工作台、经营分析、四问分析四个动态页适用状态×390/1024/1440，再Gate5同SHA全链验收。静态模块页不适用数据状态，登录独立验收。常驻`flow`不重启、重建、迁移或写入。
 
 2026-09-28 最新更正（优先于下方历史快照）：利润桥目标映射修复提交`87be90041c477d53f0cabc6718d504d190481103`由GitHub Actions run `36330119396`同SHA **17/17 jobs success**。`bash scripts/test_damai_demo_e2e.sh` fresh `damai-demo-iso`验收seed19/19、只读矩阵159项（149×200、10×422、零意外）、Playwright14/14；`bash scripts/test_module_boundaries_e2e.sh`94/94；`make test-web`143/143、typecheck通过、lint零错误/一条既有TanStack warning。实点修复driver_code到真实指标的映射；期间费用缺少独立指标时显示为非链接。当前唯一下一步继续Operations/Investigation、指标依赖与治理图谱等安全真实下钻，再做全交互路由状态×390/1024/1440视口及Gate5。常驻`flow`禁止重启、重建、迁移、写入。
 
