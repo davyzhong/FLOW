@@ -3,12 +3,12 @@ doc_id: FLOW-REVIEW-C-LEVEL-CELL-LEDGER-20260928
 title: 公开财报 C 级逐格台账与来源复核
 doc_type: review
 status: partially-resolved
-version: 1.3
+version: 1.4
 created_at: 2026-09-28
 updated_at: 2026-09-28
 owner: FLOW
 applies_to: public-analysis
-subject_ref: main@8cc96859
+subject_ref: main@fdc96d63
 findings: [confirmed-42-exceptions-ledger, jdl-222-cell-ledger, jdl-readable-source-crosswalk, suspected-109-candidate-membership-reconstructed]
 review_refs: [FLOW-REVIEW-ADJUDICATION-20260926, FLOW-REVIEW-C-LEVEL-BASELINE-20260928]
 ---
@@ -19,7 +19,7 @@ review_refs: [FLOW-REVIEW-ADJUDICATION-20260926, FLOW-REVIEW-C-LEVEL-BASELINE-20
 
 本版建立了三个版本化审计资产：42 格已确认异常、JDL 交叉评表 222 格、以及 109 疑点的五个分组记录。它们是后续逐格原件核查的工作底稿，**不是 C 级通过结论**。
 
-2026-09-28 更新：JDL 原 200 格已逐格匹配冻结英文版的报表行、期间列和值/空值。184 格（179 数值、5 源表破折号）来源行匹配；16 格定位到印刷页106的独立「合并综合收益表」，但当前抽取 schema/评审归属将它们放在「合并利润表」，故列为表级/父项语义未决、不计通过。尤其“本公司所有者/非控制性权益”同名行分别在利润表与综合收益表出现，不能仅凭扁平的 `(statement,item,column)` 键判定归属。22 格权益变动表误入资产负债表仍为已确认错误且已由 v2 排除；本轮完成的是剩余 200 格的来源行复核，不表示 222 格全通过。
+2026-09-28 更新：JDL 来源逐格复核提交`fdc96d63146e0ed8cb12e75a50f488dd3015398f`对应准确 SHA CI run `36404144739` 17/17 success。原 200 格已逐格匹配冻结英文版的报表行、期间列和值/空值。184 格（179 数值、5 源表破折号）来源行匹配；16 格定位到印刷页106的独立「合并综合收益表」，但当前抽取 schema/评审归属将它们放在「合并利润表」，故列为表级/父项语义未决、不计通过。尤其“本公司所有者/非控制性权益”同名行分别在利润表与综合收益表出现，不能仅凭扁平的 `(statement,item,column)` 键判定归属。22 格权益变动表误入资产负债表仍为已确认错误且已由 v2 排除；本轮完成的是剩余 200 格的来源行复核，不表示 222 格全通过。
 
 逐行解析底层冻结评审表后，可枚举候选组为：BABA FY2020 资产负债表 current 列28格；阿里七份报告现金流56格；阿里股权投资14格；菜鸟非流动限定10格；JDL归属疑点4格。共112条组成员记录。FY2020「股权证券及其他投资」`value_current=9,927`同时属于BABA current与阿里股权投资两组；按公司/报告/报表/行/列/候选值去重后为111格。交叉评逐材料统计是 BABA FY2020 36、FY2021 10、FY2022 10、FY2023 9、FY2024 10、FY2025 10、FY2026 10、Cainiao 10、JDL 4，合计109。候选清单除 BABA FY2020 外均与逐材料计数相等；FY2020 被枚举为38，超出的两格正是「股权证券及其他投资」`value_begin=9,927`与`value_end=4,234`。它们被单独标记`excess_two_vs_FY2020_material_count_unresolved`，而非擅自删掉。原 PDF（SHA-256 `82065040738c226229951aa1b31f05fc05657ad61a432a8ad2cfa67825391de4`）物理第41页/印刷页39显示流动资产下“证券投资”2019/2020人民币值为9,927/4,234，另有非流动资产的“证券投资”行；这支持必须保留流动限定，也确认`value_current=9,927`不能替代2020比较值，但不能单独证明两格是否纳入109分母。若排除两格则计数正好109，现有裁决文字仍未证明应排除它们，需按原件与原始评审口径裁定。原裁决按问题组相加为121，不能直接当作去重单元格总数。
 
