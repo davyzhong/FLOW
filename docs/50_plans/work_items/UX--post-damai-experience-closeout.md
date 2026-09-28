@@ -2,8 +2,8 @@
 doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
-status: active
-version: 5.30
+status: completed
+version: 5.31
 created_at: 2026-09-24
 updated_at: 2026-09-28
 owner: FLOW
@@ -14,7 +14,15 @@ applies_to: web-frontend
 
 # 大麦数据后的剩余体验收口
 
-> 2026-09-28 最新进度：Dashboard利润桥`87be9004`/CI `36330119396`、图谱`2fc1d955`/CI `36338361782`、Operations关注`4d6cf4a5`/CI `36343826986`、Investigation批次身份`1256aae9`/CI `36348942178`、Statements原件页锚`abbcc8cb`/CI `36354951874`、状态同步`0f67893c`/CI `36357438056`均准确SHA 17/17成功。四个动态页面矩阵新增63项，本地生产E2E157/157、Web143/143、lint/typecheck通过；提交`66f0ffb0d0a9dc9fa98f4665515d83458e11883e`对应CI run `36368814722`准确SHA 17/17成功。下一步进入Gate5同SHA全链验收；矩阵补齐不等于Gate1或工作包关闭。
+> **最终关闭（2026-09-28）**：Gate1 与 Gate5 均通过，工作包完成。UX Gate5 精确提交`0144bad4be1a869a5a4073c516d78b4bf333cbee`对应CI run `36371507389`准确SHA 17/17 success；独立 Dashboard 隔离验收7/7，大麦隔离验收 verify19/19、GET矩阵159项零意外、Playwright15/15；生产E2E157/157、Web143/143、API mypy203文件、typecheck/lint、M1元数据门禁及链接检查通过。隔离栈清理后容器/卷/网络均不存在；常驻`flow`未触碰。以下历史段落中的“尚未关闭”均为形成当时的历史状态，以上述关闭记录为准。
+
+### Gate1/Gate5 最终关闭记录（2026-09-28）
+
+- Gate1：页面逐值、来源与安全下钻、适用状态×视口矩阵及各页面既有证据已按覆盖矩阵闭合；生产浏览器 E2E 157/157，Web 143/143。
+- Gate5：在独立 Compose 项目完成 Dashboard 7/7 与大麦端到端旅程；verify 19/19、只读矩阵159项（159项均符合预期）、Playwright 15/15。Release check FY2025 37/40、FY2026 40/40覆盖工件生成。
+- 质量门禁：API mypy 203文件通过，Web typecheck/lint 通过（1条既有 TanStack warning）、文档 M1 297份合规且0错误、链接检查0错误。
+- 提交 `0144bad4be1a869a5a4073c516d78b4bf333cbee` 的 GitHub Actions run `36371507389` 同 SHA 17/17 success；任务测试产生的隔离容器、卷、网络均已清理，常驻`flow`未访问或改动。
+- UX 工作包关闭。后续唯一执行项转至 [公开财报模块 C 级出口](PUBLIC--c-level-exit-protocol.md)。
 
 ## 状态 × 视口覆盖盘点与下一步（2026-09-28）
 

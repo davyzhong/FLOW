@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 5.44
+version: 5.45
 created_at: 2026-09-12
 updated_at: 2026-09-28
 owner: FLOW
@@ -17,7 +17,7 @@ superseded_by: null
 
 # 当前路线图（唯一主线）
 
-> 2026-09-28 最新更正：状态×视口矩阵提交`66f0ffb0d0a9dc9fa98f4665515d83458e11883e`对应CI run `36368814722`准确SHA 17/17 success。当前唯一执行位置进入UX Gate5同SHA隔离完整旅程与门禁；Gate1/Gate5未关闭，常驻`flow`不重启/重建/写入。
+> 2026-09-28 最新更正：UX Gate1/Gate5 已关闭。Gate5 在提交`0144bad4be1a869a5a4073c516d78b4bf333cbee`完成：隔离大麦验收 verify 19/19、GET 矩阵159项零意外、Playwright 15/15；Dashboard 隔离验收 7/7；生产 E2E 157/157、Web 143/143、API mypy 203文件、typecheck/lint、文档 M1 与链接门禁通过；准确 SHA 的 CI run `36371507389` 17/17 success。常驻`flow`未触碰。唯一执行项转为公开财报 C 级归因、原件复核与抽取修订。
 
 > 2026-09-27 最新进度（优先于下方历史快照）：八个业务页值级子项已完成。Dashboard真实下钻修复已由 `e03a1755` / CI run `36319686868` 同SHA 17/17 success。新一轮隔离验收扩展Analysis/Investigation链接身份：四问指标→指标库、财报身份→对应财报、Finding→同一分析运行→指标快照报告；verify19/19、GET矩阵159项（149×200、10×预期422、零意外）、浏览器13/13；生产E2E94/94、Web143/143、lint/typecheck通过。代码测试尚未提交/同SHA CI。覆盖与剩余链接见[Gate 1覆盖证据](../60_delivery/verification/2026-09-26--damai-visibility-gate1-v1.md)。唯一执行项仍是 UX：先同步文档、门禁、提交推送和同SHA CI，再逐项补剩余安全下钻→状态×390/1024/1440视口矩阵→Gate5最终全链同SHA验收。常驻`flow` Compose来源标签混杂，不得重启、重建或写入。更早页面子项进度只作历史，不代表当前执行位置。
 
@@ -40,10 +40,10 @@ superseded_by: null
 | 1' | [U04 独立 oracle](work_items/U04--independent-oracle.md) | **blocked（验证出口未满足；工作按唯一队列执行）** | 解析器适配 + 新留出 | 首跑199行均 `not_comparable`；到队列第3项时实施适配、旧样本回归及独立留出，不把验收门槛误作停工理由 |
 | 2 | [S01 战略边界、事实合同与安全门禁](work_items/S01--post-u8-boundary-contract-security.md) | **completed** | U08 completed | Task 1–5 完成；安全规格 V1.1 已批准且独立审查闭环（`6c3c1cd`，零 P1/P2）。2026-09-14 `ff42c67` 五路并合 + 回落修复（`c1510ce`→`2570bf8`）带入路由策略 v2、模块边界与 U8 升级门禁、迁移 0026 修复、`main.py` 启动 fail-fast、两模块入口；Kimi `0841ff9` v1 被否，由 `997c1ab` v2 取代。**Task 6 已关闭**（R2/R3/R4 交付，台账 §7），阶段 3 转入 C 级出口；[协调台账](../70_operations/2026-09-14-coordination-ledger-glm.md) / [范围计划](../superpowers/plans/2026-09-13-flow-post-u8-boundary-gate.md) / [并行执行计划](../superpowers/plans/2026-09-13-flow-three-agent-parallel-restructuring.md) |
 | 2a | [大麦物流完整财年演示数据](work_items/DAMAI--full-year-demo.md) | **completed** | 已批准规格；不依赖公开 C 级 | D1–D3 已集成 main `e22d193`，CI run `36137591750` 17/17 success；隔离栈 verify 19/19、八页面 E2E 9/9、重复 seed 零增长、发行包零漂移。**常驻开发库已装载（G2 完成 2026-09-25）**：用户裁决演示数据全部入库，集成后 main 上 verify 19/19、页面可见；合成数据不解除公开 C 级门禁 |
-| 2b | [大麦数据后的剩余体验收口](work_items/UX--post-damai-experience-closeout.md) | **active（唯一执行项）** | G2 ✓；用户已批准；ORG-LEDGER CI ✓ | 新增Statements真实原件页锚验收：隔离大麦verify19/19、只读矩阵159无意外、Playwright15/15；阿里FY2020 PDF原件SHA对齐、收入行第23页strong锚、正式上传/读取内容SHA与点击下载锚一致。typecheck、mypy、ruff、Web143/143、文档门禁/脚本测试通过，lint零错误/一既有warning；当前代码+证据文档待提交及准确SHA CI。之后继续Reports等安全读取下钻、状态×视口矩阵、Gate5。常驻库偏差未经授权不得处置。 |
+| 2b | [大麦数据后的剩余体验收口](work_items/UX--post-damai-experience-closeout.md) | **completed** | G2 ✓；用户已批准；ORG-LEDGER CI ✓ | Gate1/Gate5关闭：隔离 Dashboard 7/7；大麦验收 verify19/19、GET矩阵159项零意外、Playwright15/15；生产E2E157/157、Web143/143、mypy203文件、typecheck/lint、M1/链接检查通过；提交`0144bad4`同SHA CI run `36371507389` 17/17 success。常驻库未触碰。 |
 | 2c | [企业组织建制与经营账套初始化包](work_items/ORG-LEDGER--enterprise-initialization-package.md) | **completed** | 大麦发行包 completed；批准三表 schema | `2c7d6eb4`；CI run `36270782272` 的17/17 jobs success。隔离 `full` 首次/重复与 `business` 对账通过；11 个企业/loader 测试、全量 API 852、Web142、脚本107、大麦 verify19/19、API43/43、Playwright9/9、合同/文档/lint/typecheck 均通过。31文件 manifest 稳定 SHA `cbc7cccf…e513`。 |
 | K | [第二代静态知识刷新与战略重基线](work_items/KNOWLEDGE--refresh-v2.md) | **active（队列排队，不并行启动）** | 按唯一队列轮到时启动；规格/preflight 已完成 | K0–K6 未执行；`CURRENT_RELEASE` 仍为 `flow-knowledge-2026-09-12.1`，用户战略裁决前不得切换。 |
-| 3 | [公开财报模块 C 级出口](work_items/PUBLIC--c-level-exit-protocol.md) | **blocked(归因、补证与裁决)** | S01 关闭 ✓ | 独立交叉评已完成（[结果](../80_reviews/ai-cross-review/results/gpt-6-astra-2026-09-25.md)）：1,530 格中42异常、109存疑、200因JDL乱码无法完整核验；待原PDF逐项归因/订正。1794/1794仅为登记覆盖口径，不等于通过 |
+| 3 | [公开财报模块 C 级出口](work_items/PUBLIC--c-level-exit-protocol.md) | **active（唯一执行项）** | S01 关闭 ✓ | 独立交叉评已完成（[结果](../80_reviews/ai-cross-review/results/gpt-6-astra-2026-09-25.md)）：1,530格中42异常、109存疑、200因JDL乱码无法完整核验；按工作包先做逐项原件归因和证据对账，再修抽取器。1794/1794仅为登记覆盖口径，不等于通过 |
 | 3a | [溯源/重述/只读 MCP](work_items/PUBLIC--provenance-restatement-mcp.md) | **completed** | — | B3 溯源 95.5% 行项目带页锚（迁移 0029 + 导入/API/前端）；B4 supersedes 链 + 差异脚本；B5 只读 MCP 三工具（token fail-closed）；B6 确定性差异说明起草 |
 | 3b | [数据扩张、行业基准与 10× 性能基线](work_items/PUBLIC--data-expansion-benchmarks.md) | **active（队列排队，不并行启动）** | 性能基线 ✓；扩张待外部财报 | G2 完成：10×（1034→10340 行）P95 明细 6.2ms/检索 0.97ms/聚合 1.11ms（`perf_baseline.py`）；C1 扩张需真实财报到料 |
 | 3c | [AI 问数 v1 与评测集](work_items/PUBLIC--ai-qa-v1.md) | **completed(v1)** | — | 确定性检索引用 QA + 94 问评测集（60 数值 + 34 拒答）命中率 100%、拒答零误答（`ask_facts.py` / `generate_qa_eval.py`）；LLM 通道与 v2/v3 另行裁决 |
@@ -56,16 +56,14 @@ superseded_by: null
 
 ## 唯一完整 To-do 与执行队列（严格串行）
 
-2026-09-28 执行进度：四个动态页面状态×390/1024/1440矩阵新增63项；提交`66f0ffb0d0a9dc9fa98f4665515d83458e11883e`的CI run `36368814722` 17/17 success。矩阵步骤关闭；唯一下一步为Gate5隔离完整旅程与全链验收。Gate1/Gate5仍未关闭。
+2026-09-28 执行进度：UX Gate1/Gate5 已在`0144bad4`完成并由准确 SHA 的 CI run `36371507389` 17/17验证通过。隔离旅程和门禁明细见工作包 §Gate 5 与下方最新记录。
 
-2026-09-28 更正：第2项仍是唯一active。四个动态页面状态×390/1024/1440矩阵已新增63项，`66f0ffb0`准确SHA CI 17/17通过。下一步Gate5同SHA完整隔离旅程与门禁。细目见UX工作包覆盖矩阵。
-
-截至 2026-09-28：**11项，已完成1项，实际执行中1项，排队8项（其中1项受外部材料限制）**。当前唯一执行项第2项UX全站验收。矩阵提交`66f0ffb0d0a9dc9fa98f4665515d83458e11883e`准确SHA CI run `36368814722` 17/17通过；本地生产E2E157/157、Web143/143、typecheck、lint和文档门禁通过（lint一条既有warning）。下一步为Gate5完整隔离旅程和全链门禁。Gate1/Gate5仍未关闭，常驻`flow`不写入/清理/重启/重建。
+截至 2026-09-28：**11项，已完成2项，唯一执行中1项，排队7项（其中1项需按规定主动结案外部材料不可得风险）**。当前唯一执行项第3项公开财报 C 级归因、原件复核与抽取修订。UX 准确 SHA `0144bad4be1a869a5a4073c516d78b4bf333cbee` 的 CI run `36371507389` 17/17通过；本地隔离与全链门禁通过。常驻`flow`不写入/清理/重启/重建。
 
 1. **[完成] 企业组织建制与经营账套初始化包**（工作包见状态表2c）：提交 `2c7d6eb4`，CI run `36270782272` 的17/17 jobs success。31文件发行包稳定 manifest SHA `cbc7cccf…e513`；隔离 `full` 首次/重复、`business` 重置及回滚/租户隔离通过；全量 API852、Web142、脚本107、verify19/19、只读 GET43/43、Playwright9/9，合同/文档/lint/typecheck均通过。仅三表迁移在隔离栈验证，未触碰常驻库。
-2. **[进行中] UX 可见性与全站验收关闭**（工作包见状态表2b）：既有页面值级、安全GET和深链证据保留。四个动态页面状态×390/1024/1440矩阵新增63项；提交`66f0ffb0d0a9dc9fa98f4665515d83458e11883e`准确SHA CI run `36368814722` 17/17 success。唯一下一步是Gate5最终同SHA全链验收。Gate1/Gate5未关闭；常驻`flow`不写入/清理/重启/重建。
+2. **[完成] UX 可见性与全站验收关闭**（工作包见状态表2b）：Gate1/Gate5证据与准确SHA CI已收口，见上方最新状态和工作包最终关闭记录。
 
-3. **[排队] 公开财报 C 级归因、原件复核与抽取修订**（工作包见状态表3）：处理已确认42项异常后的109项口径疑点、JDL 200 格原件复核、抽取器修订；保留原始值及证据，任何结论可追溯。
+3. **[进行中] 公开财报 C 级归因、原件复核与抽取修订**（工作包见状态表3）：先对42项异常、109项疑点及JDL 200格逐项建立来源/页码/坐标/正确口径/处置状态台账；优先复核原件，必要时用同版本可读原件交叉核对，绝不改写原始档案；归因完成后再按测试先行方式修抽取逻辑并回归。验收见工作包 §3 与 §3.7。
 4. **[排队] U04 解析器适配与独立留出验证**（工作包见状态表1'）：这本身是可执行的工程任务，不再误标为阻塞。支持「合并及公司」标题与页码区间参数化；旧三样本回归；对已冻结的小米2026H1、阿里FY2027Q1独立首跑，首跑前不得调参。若遇到输入缺项，主动检查已冻结材料并完成可复现的替代核验记录。
 5. **[排队] C 级质量基准与 Go/No-Go**：依赖第3、4项；重跑 L1 并归档机器结果。`1794/1794` 仅表示登记覆盖，不代表准确性通过。
 6. **[排队] P3 真实数据、来源与行业扩张**（工作包见状态表3b）：修复/替换 ZTO 乱码文本层并完成抽取、勾稽、页锚、API/UI验证；复核阿里分部序列；C1 只接纳真实财报原件。

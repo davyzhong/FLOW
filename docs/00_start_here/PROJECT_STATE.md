@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.37
+version: 5.38
 created_at: 2026-09-12
 updated_at: 2026-09-28
 owner: FLOW
@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-09-28 最新更正（优先于下方历史快照）：动态页面状态×390/1024/1440矩阵提交`66f0ffb0d0a9dc9fa98f4665515d83458e11883e`对应CI run `36368814722`准确SHA 17/17 success；正式生产E2E157/157、Web143/143、lint/typecheck本地通过，UX Gate1/Gate5仍未关闭。唯一执行步骤进入Gate5完整隔离验收。常驻`flow`不重启、重建、迁移或写入。
+2026-09-28 最新更正（优先于下方历史快照）：UX Gate1/Gate5已完成。提交`0144bad4be1a869a5a4073c516d78b4bf333cbee`对应CI run `36371507389`准确SHA 17/17 success；隔离Dashboard7/7，大麦旅程verify19/19、GET矩阵159项零意外、Playwright15/15，生产E2E157/157、Web143/143、mypy203文件、typecheck/lint、文档M1和链接门禁通过。常驻`flow`未触碰。唯一执行项转为公开财报C级归因、原件复核与抽取修订，详见 CURRENT_ROADMAP 第3项及C级工作包。
 
 2026-09-28 最新更正（优先于下方历史快照）：利润桥目标映射修复提交`87be90041c477d53f0cabc6718d504d190481103`由GitHub Actions run `36330119396`同SHA **17/17 jobs success**。`bash scripts/test_damai_demo_e2e.sh` fresh `damai-demo-iso`验收seed19/19、只读矩阵159项（149×200、10×422、零意外）、Playwright14/14；`bash scripts/test_module_boundaries_e2e.sh`94/94；`make test-web`143/143、typecheck通过、lint零错误/一条既有TanStack warning。实点修复driver_code到真实指标的映射；期间费用缺少独立指标时显示为非链接。当前唯一下一步继续Operations/Investigation、指标依赖与治理图谱等安全真实下钻，再做全交互路由状态×390/1024/1440视口及Gate5。常驻`flow`禁止重启、重建、迁移、写入。
 
@@ -42,7 +42,7 @@ applies_to: repository
 
 ## 当前执行入口
 
-- **[CURRENT_ROADMAP.md](../50_plans/CURRENT_ROADMAP.md)**（唯一主线：状态真相 + 单一串行 To-do）：U08、S01、前端一致性整改与大麦完整财年演示数据已完成；深链批次一至三已完成；全站 UX Gate 1/Gate 5 尚未关闭。全部后续任务及状态只按该路线图执行。
+- **[CURRENT_ROADMAP.md](../50_plans/CURRENT_ROADMAP.md)**（唯一主线：状态真相 + 单一串行 To-do）：U08、S01、前端一致性整改、大麦完整财年演示数据及 UX Gate 1/Gate 5 已完成；当前唯一执行项是公开财报 C 级归因/原件复核/抽取修订。全部后续任务及状态只按该路线图执行。
 - 旧统一计划、O 系列计划、EXECUTION_TODO 与 2026-09-24/25 三份总计划均已 superseded/archived（保留历史细节与证据，不再作为执行依据）
 - 文档迁移：[迁移实施计划 M0–M6](../superpowers/plans/2026-09-12-static-knowledge-and-document-migration.md) 已全部关闭（bfc1271 / e373e25，用户确认 2026-09-13）
 
