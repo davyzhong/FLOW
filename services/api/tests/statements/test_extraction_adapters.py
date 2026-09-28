@@ -25,6 +25,23 @@ REPO_ROOT = Path(__file__).resolve().parents[4]
 SAMPLES = REPO_ROOT / "docs/knowledge-base/02_research/original/p5_samples"
 EXPECTED = REPO_ROOT / "docs/implementation/p5"
 
+# Historical JDL YAML is retained unchanged as an audit input. These rows came
+# from the equity-changes continuation page, which was mistakenly included in
+# the balance-sheet page range; the regression below pins their exclusion.
+JDL_EQUITY_PAGE_FALSE_BALANCE_ROWS = {
+    "截至2025年1月1日",
+    "年度利潤",
+    "年度其他綜合（虧損）╱收益",
+    "年度綜合（虧損）╱收益總額",
+    "行使購股權及歸屬限制性股份單位",
+    "收購子公司的部分權益25、29",
+    "收購受共同控制子公司",
+    "股份支付（稅務影響盈餘）",
+    "向子公司非控制性權益支付的股息",
+    "出售一家受共同控制子公司",
+    "截至2025年12月31日",
+}
+
 CASES = {
     "sf": {
         "pdf": SAMPLES / "sf_002352/SF_2026_Q1_report.pdf",
@@ -33,7 +50,8 @@ CASES = {
     },
     "jdl": {
         "pdf": SAMPLES / "jd_logistics_2618/JDL_FY2025_annual_report.pdf",
-        "yaml": EXPECTED / "jdl_2025fy_statements.yaml",
+        "yaml": REPO_ROOT
+        / "validation/financial_reports/corrections/jdl_2025fy_statements_v2.yaml",
         "adapter": "hk_traditional_text",
     },
     "tencent": {
@@ -66,7 +84,11 @@ def test_extraction_matches_committed_yaml(case: str) -> None:
     assert result.adapter_id == spec["adapter"], "自动适配器选择错误"
     assert result.source_sha256 is not None and len(result.source_sha256) == 64
 
-    expected = yaml.safe_load(spec["yaml"].read_text())["statements"]
+    expected_payload = yaml.safe_load(spec["yaml"].read_text())
+    expected = expected_payload["statements"]
+    if case == "jdl":
+        assert expected_payload["supersedes"] == "docs/implementation/p5/jdl_2025fy_statements.yaml"
+        assert expected_payload["source_sha256"] == result.source_sha256
     assert set(result.statements) == set(expected)
     for statement_type, expected_items in expected.items():
         assert _norm_items(result.statements[statement_type]) == _norm_items(expected_items), (
@@ -81,6 +103,22 @@ def test_explicit_adapter_selection() -> None:
     content = CASES["sf"]["pdf"].read_bytes()
     result = extract_statements(content, adapter_id="cn_ashare_table")
     assert result.adapter_id == "cn_ashare_table"
+
+
+def test_jdl_balance_sheet_excludes_equity_changes_continuation_page() -> None:
+    """资产负债表页界限不得把后续权益变动表当成期初/期末余额。"""
+    content = CASES["jdl"]["pdf"].read_bytes()
+    result = extract_statements(content, adapter_id="hk_traditional_text")
+    balance = result.statements["合并资产负债表"]
+    names = {row["item"] for row in balance}
+
+    assert max(row["page"] for row in balance) == 109
+    assert not names.intersection(JDL_EQUITY_PAGE_FALSE_BALANCE_ROWS)
+    by_name = {row["item"]: row for row in balance}
+    assert by_name["資產總額"]["期末余额"] == 124599558
+    assert by_name["資產總額"]["期初余额"] == 117867788
+    assert by_name["權益總額"]["期末余额"] == 59784729
+    assert by_name["負債總額"]["期末余额"] == 64814829
 
 
 def test_yto_holdout_company_extracts_with_ashare_adapter() -> None:

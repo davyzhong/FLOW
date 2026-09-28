@@ -472,7 +472,7 @@ class HkTraditionalExtractor:
         statements = {
             "合并利润表": self._extract_statement(pages, *_HK_PAGES["合并利润表"], end_page=107),
             "合并资产负债表": self._to_balance_columns(
-                self._extract_statement(pages, *_HK_PAGES["合并资产负债表"], end_page=110)
+                self._extract_statement(pages, *_HK_PAGES["合并资产负债表"], end_page=109)
             ),
             "合并现金流量表": self._extract_statement(
                 pages, *_HK_PAGES["合并现金流量表"], end_page=114

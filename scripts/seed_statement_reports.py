@@ -35,7 +35,7 @@ def main() -> int:
     )
     parser.add_argument(
         "--answer-set",
-        default="config/statements/answer_set_l1.yaml",
+        default="config/statements/answer_set_l1_v2.yaml",
         help="T09-L1 页级答案集（溯源页锚来源；传空字符串跳过溯源）",
     )
     args = parser.parse_args()

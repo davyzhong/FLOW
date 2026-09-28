@@ -7,11 +7,11 @@
 """
 from __future__ import annotations
 
+import argparse
 import sys
 from pathlib import Path
 
 import yaml
-
 from flow_api.statements.extraction import extract_statements
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
@@ -20,7 +20,10 @@ PDF_PATH = (
     / "docs/knowledge-base/02_research/original/p5_samples/jd_logistics_2618/"
     / "JDL_FY2025_annual_report.pdf"
 )
-OUT_PATH = REPOSITORY_ROOT / "docs/implementation/p5/jdl_2025fy_statements.yaml"
+OUT_PATH = (
+    REPOSITORY_ROOT
+    / "validation/financial_reports/corrections/jdl_2025fy_statements_v2.yaml"
+)
 
 
 def _strip_page(statements: dict) -> dict:
@@ -31,18 +34,34 @@ def _strip_page(statements: dict) -> dict:
 
 
 def main() -> int:
-    OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output", type=Path, default=OUT_PATH, help="版本化抽取输出路径")
+    args = parser.parse_args()
+    output_path = (
+        args.output if args.output.is_absolute() else REPOSITORY_ROOT / args.output
+    )
+    output_path.parent.mkdir(parents=True, exist_ok=True)
     result = extract_statements(PDF_PATH.read_bytes(), adapter_id="hk_traditional_text")
     statements = _strip_page(result.statements)
     out = {
+        "schema": "flow.statement.extraction-correction.v1",
+        "correction_version": 2,
+        "supersedes": "docs/implementation/p5/jdl_2025fy_statements.yaml",
         "sample": "jdl_2025fy",
         "source_pdf": str(PDF_PATH.relative_to(REPOSITORY_ROOT)),
+        "source_sha256": result.source_sha256,
+        "extractor": result.adapter_id,
         "unit": result.unit_note,
         "statements": statements,
     }
-    OUT_PATH.write_text(yaml.safe_dump(out, allow_unicode=True, sort_keys=False), encoding="utf-8")
+    output_path.write_text(
+        yaml.safe_dump(out, allow_unicode=True, sort_keys=False), encoding="utf-8"
+    )
     counts = {k: len(v) for k, v in statements.items()}
-    print(f"extracted -> {OUT_PATH.name}  rows={counts}  adapter={result.adapter_id}")
+    print(
+        f"extracted -> {output_path.relative_to(REPOSITORY_ROOT)}  "
+        f"rows={counts}  adapter={result.adapter_id}"
+    )
 
     ok = sum(1 for c in result.checks if c.status == "一致")
     print(f"reconciliation: {ok}/{len(result.checks)} 一致")

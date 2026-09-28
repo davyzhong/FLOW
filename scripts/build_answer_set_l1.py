@@ -19,7 +19,9 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
 SOURCES_GLOB = "docs/implementation/p5/*_statements.yaml"
-OUT_DEFAULT = REPO / "config/statements/answer_set_l1.yaml"
+OUT_DEFAULT = REPO / "config/statements/answer_set_l1_v2.yaml"
+SUPERSEDED_ANSWER_SET = "config/statements/answer_set_l1.yaml"
+CORRECTED_JDL = "validation/financial_reports/corrections/jdl_2025fy_statements_v2.yaml"
 
 
 def _norm(text: str) -> str:
@@ -144,6 +146,20 @@ def load_visual_overrides(repo: Path) -> dict[tuple[str, str, str], dict]:
     return overrides
 
 
+def source_paths(repo: Path = REPO) -> list[Path]:
+    """历史抽取档案保留，版本化 JDL 修订版作为唯一活动输入。"""
+    paths = [
+        Path(path)
+        for path in sorted(glob.glob(str(repo / SOURCES_GLOB)))
+        if Path(path).name != "jdl_2025fy_statements.yaml"
+    ]
+    corrected_jdl = repo / CORRECTED_JDL
+    if not corrected_jdl.is_file():
+        raise FileNotFoundError(f"缺少版本化 JDL 修订输入：{corrected_jdl}")
+    paths.append(corrected_jdl)
+    return paths
+
+
 def build(out: Path, repo: Path = REPO) -> dict:
     import yaml
 
@@ -158,8 +174,8 @@ def build(out: Path, repo: Path = REPO) -> dict:
     sample_to_ref = {m["sample"]: m for m in mapping_rows}
     visual_overrides = load_visual_overrides(repo)
 
-    for source in sorted(glob.glob(str(repo / SOURCES_GLOB))):
-        payload = yaml.safe_load(Path(source).read_text(encoding="utf-8"))
+    for source in source_paths(repo):
+        payload = yaml.safe_load(source.read_text(encoding="utf-8"))
         source_pdf = payload["source_pdf"]
         sample = payload["sample"]
         ref = sample_to_ref.get(sample)
@@ -233,7 +249,12 @@ def build(out: Path, repo: Path = REPO) -> dict:
 
     payload = {
         "schema": "flow.answer_set.l1",
-        "generated_from": "docs/implementation/p5 抽取 YAML（P5 期已人工核验）",
+        "version": 2,
+        "supersedes": SUPERSEDED_ANSWER_SET,
+        "generated_from": (
+            "docs/implementation/p5 抽取 YAML + "
+            "validation/financial_reports/corrections 版本化修订"
+        ),
         "location_method": (
             "pypdf 文本层；match_mode=strong（行名+数值同页）"
             "/weak（仅数值同页，跨语言兜底）"

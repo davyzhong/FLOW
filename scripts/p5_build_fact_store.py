@@ -58,7 +58,14 @@ def _find_row(items, name):
 
 def build_from_yaml(company, period, yaml_name, source, unit, alias, spec_key=None):
     """通用构建：按别名表把一份抽取 YAML 映射为标准事实；缺行/缺列即跳过，不编造。"""
-    st = yaml.safe_load((ROOT / f"docs/implementation/p5/{yaml_name}").read_text(encoding="utf-8"))["statements"]
+    yaml_path = Path(yaml_name)
+    if not yaml_path.is_absolute():
+        yaml_path = (
+            ROOT / yaml_name
+            if yaml_name.startswith("validation/")
+            else ROOT / "docs/implementation/p5" / yaml_path
+        )
+    st = yaml.safe_load(yaml_path.read_text(encoding="utf-8"))["statements"]
     facts, unmapped = [], []
     spec = alias["companies"][spec_key or company]["statements"]
     emitted = set()  # (stmt, item_id, role)：同角色多列回退时先取优先列，不重复入库
@@ -132,7 +139,8 @@ def build_cainiao(alias):
 
 
 def build_jdl_full(alias):
-    return build_from_yaml("jd_logistics_2618", "FY2025", "jdl_2025fy_statements.yaml",
+    return build_from_yaml("jd_logistics_2618", "FY2025",
+                           "validation/financial_reports/corrections/jdl_2025fy_statements_v2.yaml",
                            SOURCES["jd_logistics_2618_full"], "千元", alias,
                            spec_key="jd_logistics_2618_full")
 

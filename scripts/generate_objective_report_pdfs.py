@@ -44,7 +44,7 @@ P5_REPORTS = [
         "period_label": "2026Q2",
     },
     {
-        "yaml": "docs/implementation/p5/jdl_2025fy_statements.yaml",
+        "yaml": "validation/financial_reports/corrections/jdl_2025fy_statements_v2.yaml",
         "company": "京东物流",
         "stock_code": "2618.HK",
         "report_kind": "年报",

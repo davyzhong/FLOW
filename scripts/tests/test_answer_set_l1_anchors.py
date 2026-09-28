@@ -71,5 +71,40 @@ class VisualVerifiedOverrideTest(unittest.TestCase):
                 self.assertIn(field, ov, f"{key} 缺字段 {field}")
 
 
+class VersionedExtractionSourceTest(unittest.TestCase):
+    def test_historical_jdl_yaml_is_not_an_active_accuracy_input(self) -> None:
+        sources = builder.source_paths()
+        self.assertNotIn(REPO / "docs/implementation/p5/jdl_2025fy_statements.yaml", sources)
+        self.assertIn(
+            REPO / "validation/financial_reports/corrections/jdl_2025fy_statements_v2.yaml",
+            sources,
+        )
+
+    def test_jdl_correction_has_source_identity_and_supersedes_link(self) -> None:
+        import yaml
+
+        path = REPO / "validation/financial_reports/corrections/jdl_2025fy_statements_v2.yaml"
+        payload = yaml.safe_load(path.read_text(encoding="utf-8"))
+        self.assertEqual(payload["correction_version"], 2)
+        self.assertEqual(payload["supersedes"], "docs/implementation/p5/jdl_2025fy_statements.yaml")
+        self.assertEqual(len(payload["source_sha256"]), 64)
+
+    def test_source_mapping_suffix_matches_each_extraction_source(self) -> None:
+        import yaml
+
+        mapping = yaml.safe_load(
+            (REPO / "config/statements/answer_set_sources.yaml").read_text(encoding="utf-8")
+        )
+        root = REPO / "docs/knowledge-base/02_research/original/p5_samples"
+        for row in mapping["reports"]:
+            extraction = yaml.safe_load(
+                (REPO / f"docs/implementation/p5/{row['sample']}_statements.yaml")
+                .read_text(encoding="utf-8")
+            )
+            expected = extraction["source_pdf"].split("p5_samples/", 1)[1]
+            self.assertEqual(row["source_pdf_suffix"], expected, row["sample"])
+            self.assertTrue((root / row["source_pdf_suffix"]).is_file(), row["sample"])
+
+
 if __name__ == "__main__":
     unittest.main()

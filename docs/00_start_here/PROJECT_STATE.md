@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.39
+version: 5.40
 created_at: 2026-09-12
 updated_at: 2026-09-28
 owner: FLOW
@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-09-28 最新更正（优先于下方历史快照）：UX Gate1/Gate5已完成。提交`0144bad4be1a869a5a4073c516d78b4bf333cbee`对应CI run `36371507389`准确SHA 17/17 success；隔离Dashboard7/7，大麦旅程verify19/19、GET矩阵159项零意外、Playwright15/15，生产E2E157/157、Web143/143、mypy203文件、typecheck/lint、文档M1和链接门禁通过。常驻`flow`未触碰。唯一执行项为公开财报C级收口：已完成只读基线复核，定位JDL资产负债表页界限缺陷及证据清单差异；提交`f1ab428343e809364c2fd519497c56b4ac7c53bf`对应CI run `36375305428`准确SHA 17/17 success。下一子步先写JDL回归测试，再修抽取边界；全局队列见 CURRENT_ROADMAP 第3项。
+2026-09-28 最新更正（优先于下方历史快照）：UX Gate1/Gate5已完成。提交`0144bad4be1a869a5a4073c516d78b4bf333cbee`对应CI run `36371507389`准确SHA 17/17 success；隔离Dashboard7/7，大麦旅程verify19/19、GET矩阵159项零意外、Playwright15/15，生产E2E157/157、Web143/143、mypy203文件、typecheck/lint、文档M1和链接门禁通过。常驻`flow`未触碰。唯一执行项为公开财报C级收口：只读基线复核已提交，`f1ab428343e809364c2fd519497c56b4ac7c53bf`对应CI run `36375305428`准确SHA 17/17 success。之后定位并修复JDL资产负债表误纳权益变动表页的边界缺陷，新增修订抽取v2（107行，24/24勾稽）及L1答案集v2（1,775/1,775页锚定位）；聚焦回归18项、答案集/source映射7项通过。基于`main@2690c040`与本轮工作区改动，在新建隔离Compose栈（0031迁移，14份公开报告）验证L0 1508/1508、L1 1775锚零失配；财报模块76项、脚本110项测试及M1/链接门禁通过。改动尚未提交，准确SHA CI待跑；常驻栈未用于测试且未修改。提交闭环后建立逐格对账台账并复核原200格。全局队列见 CURRENT_ROADMAP 第3项。
 
 2026-09-28 最新更正（优先于下方历史快照）：利润桥目标映射修复提交`87be90041c477d53f0cabc6718d504d190481103`由GitHub Actions run `36330119396`同SHA **17/17 jobs success**。`bash scripts/test_damai_demo_e2e.sh` fresh `damai-demo-iso`验收seed19/19、只读矩阵159项（149×200、10×422、零意外）、Playwright14/14；`bash scripts/test_module_boundaries_e2e.sh`94/94；`make test-web`143/143、typecheck通过、lint零错误/一条既有TanStack warning。实点修复driver_code到真实指标的映射；期间费用缺少独立指标时显示为非链接。当前唯一下一步继续Operations/Investigation、指标依赖与治理图谱等安全真实下钻，再做全交互路由状态×390/1024/1440视口及Gate5。常驻`flow`禁止重启、重建、迁移、写入。
 
