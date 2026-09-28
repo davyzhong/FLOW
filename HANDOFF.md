@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目尽调、优化与单 Agent 执行总交接
 doc_type: navigation
 status: current
-version: 5.38
+version: 5.39
 created_at: 2026-09-12
 updated_at: 2026-09-28
 owner: FLOW
@@ -12,7 +12,15 @@ applies_to: repository
 
 # FLOW 项目尽调、优化与单 Agent 执行总交接｜2026-09-28 更新
 
-## 最新接续点（2026-09-28，本次执行）
+## 当前唯一接续点（2026-09-28，覆盖下方旧进度）
+
+当前唯一任务：按`docs/50_plans/CURRENT_ROADMAP.md`第3项继续公开财报C级出口，严格在`main`串行推进。最新提交`8cc968594aa1f087622f6155e8d3651a5d65c0bf`对应 GitHub CI run `36397631508`，准确SHA 17/17 jobs success。该提交已重建109候选逐格底表，差额2格保留未决；之前首版台账提交`cbe11d6c405e0b9a23353d63b264fc57e8a360c9`/run `36391911442`亦为17/17。
+
+JDL原200格逐格核验现已完成：冻结英文版与中文原件SHA固定；179个数值、5个破折号空值均匹配报表行和期间列。另16格定位到物理页107/印刷页106的独立合并综合收益表，当前提取归类/父项身份尚待裁决，不能算通过。详见`validation/financial_reports/review-inputs/jdl_readable_twin_crosswalk_v1.csv`、更新后的`validation/financial_reports/review-ledgers/jdl-222-cell-reconciliation-v1.csv`和审计报告。下一步先查16格的分类/身份合同与重复行处理，必要时写红灯测试后修复；再按队列处理42异常和109疑点。C级仍未通过。常驻`flow`数据库/服务未触碰。
+
+验证现状：全量脚本测试116项通过；生成器定向测试6项通过；交叉表物理复核200/200页码/文本行逐字一致，来源PDF SHA匹配；文档M1 PASS（299份、0错误）、链接检查PASS（0错误）、`git diff --check`待最终暂存后执行。定向Ruff与基线对比无新增诊断（生成器34→33，测试文件8→8；这些文件的历史长行诊断未扩大）。随后暂存本切片、差异检查、提交并立即推送，核验准确SHA CI后才进入下一子步。工作目录为`.worktrees/execution-convergence`的`main`；若切换工作树/目录，先核验仓库和分支。不要把历史段落内的旧“下一步”当成当前队列。
+
+## 首轮执行快照（已由上方当前唯一接续点覆盖）
 
 当前唯一任务仍是 `CURRENT_ROADMAP` 第3项公开财报 C 级出口。台账首版见 `docs/80_reviews/2026-09-28-c-level-cell-ledger.md`：42异常42行；JDL 222格中22格错归属已由v2排除、200格仍未核验；109疑点组计数121，扣唯一明示重叠后120，与摘要109差11。新增生成器 `scripts/build_public_c_level_ledgers.py`、4项回归及三个CSV。定向测试与文档M1均通过；链接检查、提交推送及准确SHA CI仍待做。C级未通过。下一步先追溯109疑点逐格成员/去重键并解释差额，再复核JDL原200格。保持 `main` 串行执行，常驻 `flow` 数据库/服务不触碰。
 

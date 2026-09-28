@@ -13,6 +13,9 @@ import yaml
 ROOT = Path(__file__).resolve().parents[1]
 SNAPSHOT = ROOT / "validation/financial_reports/review-inputs/jdl_review_values_v1.csv"
 SUSPECTED_SNAPSHOT = ROOT / "validation/financial_reports/review-inputs/suspected_109_candidate_cells_v1.csv"
+JDL_CROSSWALK = (
+    ROOT / "validation/financial_reports/review-inputs/jdl_readable_twin_crosswalk_v1.csv"
+)
 LEDGER_DIR = ROOT / "validation/financial_reports/review-ledgers"
 OLD_JDL = ROOT / "docs/implementation/p5/jdl_2025fy_statements.yaml"
 NEW_JDL = ROOT / "validation/financial_reports/corrections/jdl_2025fy_statements_v2.yaml"
@@ -198,6 +201,11 @@ def jdl_ledger() -> list[dict[str, str]]:
         ("合并利润表", "非控制性權益", "value_current"),
         ("合并利润表", "非控制性權益", "value_prior"),
     }
+    with JDL_CROSSWALK.open(encoding="utf-8", newline="") as stream:
+        crosswalk_rows = list(csv.DictReader(stream))
+    crosswalk = {row["ledger_id"]: row for row in crosswalk_rows}
+    if len(crosswalk_rows) != 200 or len(crosswalk) != 200:
+        raise ValueError("JDL可读版逐格交叉表必须恰好覆盖200个唯一待核单元格")
     rows: list[dict[str, str]] = []
     with SNAPSHOT.open(encoding="utf-8", newline="") as stream:
         for index, source in enumerate(csv.DictReader(stream), start=1):
@@ -218,8 +226,41 @@ def jdl_ledger() -> list[dict[str, str]]:
             note = ""
             if (source["statement"], source["item"], source["column"]) in unresolved_notes:
                 note = "与净利润归属/综合收益归属口径无法仅凭交叉评行名消歧"
+            ledger_id = f"JDL-{index:03d}"
+            evidence = crosswalk.get(ledger_id) if status == "unknown_source_readability" else None
+            if status == "unknown_source_readability" and evidence is None:
+                raise ValueError(f"JDL逐格交叉表缺少{ledger_id}")
+            if evidence is not None:
+                if (
+                    evidence["source_pdf_sha256"] != JDL_PDF_SHA
+                    or evidence["readable_twin_pdf_sha256"] != JDL_EN_SHA
+                ):
+                    raise ValueError(f"{ledger_id}交叉表源文件SHA不符")
+                if evidence["status"] not in {
+                    "source_line_value_verified",
+                    "source_line_blank_verified",
+                    "source_line_verified_statement_boundary_unresolved",
+                }:
+                    raise ValueError(f"{ledger_id}交叉表状态非法：{evidence['status']}")
+                status = evidence["status"]
+                decision = evidence["decision"]
+                if evidence["status"] == "source_line_verified_statement_boundary_unresolved":
+                    note = evidence["decision"]
+                source_page_physical = evidence["source_page_physical"]
+                source_page_printed = evidence["source_page_printed"]
+                source_coordinate = (
+                    evidence["source_coordinate"]
+                    + "；英文原文："
+                    + evidence["source_line_evidence"]
+                )
+            else:
+                source_page_physical = "110"
+                source_page_printed = "109"
+                source_coordinate = "权益变动表对应行；已由原始PDF定位"
+            corrected_value = new_cells.get(key)
+            corrected_value_text = "" if corrected_value is None else str(corrected_value)
             rows.append({
-                "ledger_id": f"JDL-{index:03d}",
+                "ledger_id": ledger_id,
                 "company": "京东物流",
                 "report": "FY2025年报",
                 "statement": source["statement"],
@@ -227,10 +268,10 @@ def jdl_ledger() -> list[dict[str, str]]:
                 "column": source["column"],
                 "review_bundle_value": "" if numeric is None else str(numeric),
                 "pre_correction_extraction_value": old_value,
-                "corrected_extraction_value": "",
-                "source_page_physical": "110" if status == "confirmed_wrong_statement_attribution" else "未定位",
-                "source_page_printed": "109" if status == "confirmed_wrong_statement_attribution" else "未定位",
-                "source_coordinate": "",
+                "corrected_extraction_value": corrected_value_text,
+                "source_page_physical": source_page_physical,
+                "source_page_printed": source_page_printed,
+                "source_coordinate": source_coordinate,
                 "source_pdf": source["source_pdf"],
                 "source_pdf_sha256": source["source_pdf_sha256"],
                 "readable_twin_pdf_sha256": JDL_EN_SHA,
@@ -416,7 +457,18 @@ def main() -> int:
     write_csv(LEDGER_DIR / "confirmed-42-exceptions-v1.csv", confirmed_rows)
     write_csv(LEDGER_DIR / "suspected-109-group-reconciliation-v1.csv", group_rows)
     write_csv(LEDGER_DIR / "suspected-109-cell-candidates-v1.csv", candidate_rows)
-    print(f"JDL格数={len(jdl_rows)}；JDL错误归属=22；JDL未核验=200")
+    statuses = {row["status"] for row in jdl_rows}
+    status_counts = {
+        status: sum(row["status"] == status for row in jdl_rows)
+        for status in statuses
+    }
+    print(
+        f"JDL格数={len(jdl_rows)}；"
+        f"JDL已确认错误归属={status_counts.get('confirmed_wrong_statement_attribution', 0)}；"
+        f"源行已核验={status_counts.get('source_line_value_verified', 0)}；"
+        f"源空值已核验={status_counts.get('source_line_blank_verified', 0)}；"
+        f"表级归属待裁决={status_counts.get('source_line_verified_statement_boundary_unresolved', 0)}"
+    )
     print(f"已确认异常={len(confirmed_rows)}；存疑组={len(group_rows)}；唯一候选格={len(candidate_rows)}；较109摘要多2")
     return 0
 
