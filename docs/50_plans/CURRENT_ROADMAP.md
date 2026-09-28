@@ -17,9 +17,9 @@ superseded_by: null
 
 # 当前路线图（唯一主线）
 
-> **2026-09-29 U04 进度更新**：旧样本回归解析器与对比器修复已完成，本地 API statements 83项、脚本 unittest 155项、Ruff、mypy 203文件、plan-view、链接门禁均通过，文档 M1 通过；顺丰137/137、腾讯32/32、中通30/30，合计199/199匹配、0错配、0不可比较，产物为 `validation/financial_reports/holdout_runs/2026-09-29-adapter-v4/`。这是旧回归，不是新留出泛化通过。提交`07819d56`准确SHA CI run `36491622539` 的 smoke 暴露生产镜像缺少`pypdf`（原列dev依赖）；已在本地将其移到生产依赖并更新`uv.lock`，独立Compose `flowu04smoke`中API/Web健康、迁移0031和dev主体seed通过，尚待修复提交的准确SHA CI。CI全绿前不读取小米/阿里新抽取结果；运行器默认只选旧回归，新样本必须显式选择。常驻`flow`、`flow_test`未连接/未写入。
+> **2026-09-29 U04 进度更新**：旧样本回归解析器与对比器修复已完成，本地 API statements 83项、脚本 unittest 155项、Ruff、mypy 203文件、plan-view、链接门禁均通过，文档 M1 通过；顺丰137/137、腾讯32/32、中通30/30，合计199/199匹配、0错配、0不可比较，产物为 `validation/financial_reports/holdout_runs/2026-09-29-adapter-v4/`。这是旧回归，不是新留出泛化通过。提交`1b313cb`准确SHA CI 中，smoke/data-contract/integration 等功能性 job 通过；`module-boundaries-e2e`测试通过，但 uv post-cleanup 因该 job 未创建 cache 目录而失败。修正 `.github/workflows/ci.yml` 需用户批准；批准前不绕过该失败、不读小米/阿里首跑结果。运行器默认只选旧回归，新样本必须显式选择。常驻`flow`、`flow_test`未连接/未写入。
 
-> 2026-09-29 最新执行进展：行身份/范围修订提交`eb2b7f3cbadec0c36eb4b36473c6321d69aa4fff`准确SHA CI run `36478301484` 17/17 success；全新隔离`flowcverify`实测 L0 1532/1532、L1 1776/1776，P5 facts 670 条内容 SHA 稳定。14份报告的样本冻结与 oracle/holdout 盘点已形成确定性清单 [`c-level-freeze-2026-09-29-v1.yaml`](../../validation/financial_reports/c-level-freeze-2026-09-29-v1.yaml) 及审计 [`公开财报 C 级样本冻结与独立验证审计`](../60_delivery/verification/2026-09-29--public-sample-freeze-oracle-audit-v1.md)。冻结测试6/6通过；报告登记和全部5份 oracle YAML 可解析，当前哈希一致。审计结论：C级 **No-Go（证据不足，不代表准确率失败）**——14份被测报告完整独立 oracle 为0/14；旧三份留出首跑199行全部不可比较；小米与阿里 FY2027Q1 新留出未发现首跑结果；既有抽取交叉评并非渲染报告盲评。原两条错误 oracle 哈希已保留历史声明并订正当前实测SHA。当前唯一队首转为第4项 U04：先修复并回归旧三样本版式解析，再对冻结小米/阿里候选做未调参首跑，严禁提前查看后调参。常驻`flow`数据库/服务未触碰。
+> 2026-09-29 最新执行进展：行身份/范围修订提交`eb2b7f3cbadec0c36eb4b36473c6321d69aa4fff`准确SHA CI run `36478301484` 17/17 success；全新隔离`flowcverify`实测 L0 1532/1532、L1 1776/1776，P5 facts 670 条内容 SHA 稳定。14份报告的样本冻结与 oracle/holdout 盘点已形成确定性清单 [`c-level-freeze-2026-09-29-v1.yaml`](../../validation/financial_reports/c-level-freeze-2026-09-29-v1.yaml) 及审计 [`公开财报 C 级样本冻结与独立验证审计`](../60_delivery/verification/2026-09-29--public-sample-freeze-oracle-audit-v1.md)。冻结测试6/6通过；报告登记和全部5份 oracle YAML 可解析，当前哈希一致。审计结论：C级 **No-Go（证据不足，不代表准确率失败）**——14份被测报告完整独立 oracle 为0/14；旧三份留出首跑199行全部不可比较；小米与阿里 FY2027Q1 新留出未发现首跑结果；既有抽取交叉评并非渲染报告盲评。原两条错误 oracle 哈希已保留历史声明并订正当前实测SHA。U04 解析与生产依赖修复提交`1b313cb`的准确SHA CI 中，除 `module-boundaries-e2e` 的 uv cache post-cleanup 外其余 job 全绿，Playwright 本身通过；这一 CI 收尾修正触及配置红线，等待用户批准后再重跑。常驻`flow`数据库/服务未触碰。
 
 > 2026-09-28 最新更正：UX Gate1/Gate5 已关闭。Gate5 在提交`0144bad4be1a869a5a4073c516d78b4bf333cbee`完成：隔离大麦验收 verify 19/19、GET 矩阵159项零意外、Playwright 15/15；Dashboard 隔离验收 7/7；生产 E2E 157/157、Web 143/143、API mypy 203文件、typecheck/lint、文档 M1 与链接门禁通过；准确 SHA 的 CI run `36371507389` 17/17 success。常驻`flow`未触碰。唯一执行项转为公开财报 C 级归因、原件复核与抽取修订。
 
@@ -43,7 +43,7 @@ superseded_by: null
 | 顺序 | 工作包 | 状态 | 依赖 | 最近证据 |
 |---|---|---|---|---|
 | 1 | [U08 生产就绪收口](work_items/U08--production-readiness.md) | **completed** | — | U8-A～D 完成；严格 HTTPS/双格式 SHA/恢复门禁通过；冻结记录与标签 |
-| 1' | [U04 独立 oracle](work_items/U04--independent-oracle.md) | **active（唯一队首执行）** | 样本冻结已完成 | 旧三样本回归199/199完成，准确SHA CI待绿；之后首次未调参运行小米2026H1、阿里FY2027Q1。完整独立 oracle 与报告盲评仍是 C 级证据门槛 |
+| 1' | [U04 独立 oracle](work_items/U04--independent-oracle.md) | **active（唯一队首执行）** | 样本冻结已完成 | 旧三样本回归199/199完成；准确SHA CI 仅余 module-boundaries-e2e 的 uv cache cleanup 失败（测试通过），修正需用户批准；之后首次未调参运行小米2026H1、阿里FY2027Q1。完整独立 oracle 与报告盲评仍是 C 级证据门槛 |
 | 2 | [S01 战略边界、事实合同与安全门禁](work_items/S01--post-u8-boundary-contract-security.md) | **completed** | U08 completed | Task 1–5 完成；安全规格 V1.1 已批准且独立审查闭环（`6c3c1cd`，零 P1/P2）。2026-09-14 `ff42c67` 五路并合 + 回落修复（`c1510ce`→`2570bf8`）带入路由策略 v2、模块边界与 U8 升级门禁、迁移 0026 修复、`main.py` 启动 fail-fast、两模块入口；Kimi `0841ff9` v1 被否，由 `997c1ab` v2 取代。**Task 6 已关闭**（R2/R3/R4 交付，台账 §7），阶段 3 转入 C 级出口；[协调台账](../70_operations/2026-09-14-coordination-ledger-glm.md) / [范围计划](../superpowers/plans/2026-09-13-flow-post-u8-boundary-gate.md) / [并行执行计划](../superpowers/plans/2026-09-13-flow-three-agent-parallel-restructuring.md) |
 | 2a | [大麦物流完整财年演示数据](work_items/DAMAI--full-year-demo.md) | **completed** | 已批准规格；不依赖公开 C 级 | D1–D3 已集成 main `e22d193`，CI run `36137591750` 17/17 success；隔离栈 verify 19/19、八页面 E2E 9/9、重复 seed 零增长、发行包零漂移。**常驻开发库已装载（G2 完成 2026-09-25）**：用户裁决演示数据全部入库，集成后 main 上 verify 19/19、页面可见；合成数据不解除公开 C 级门禁 |
 | 2b | [大麦数据后的剩余体验收口](work_items/UX--post-damai-experience-closeout.md) | **completed** | G2 ✓；用户已批准；ORG-LEDGER CI ✓ | Gate1/Gate5关闭：隔离 Dashboard 7/7；大麦验收 verify19/19、GET矩阵159项零意外、Playwright15/15；生产E2E157/157、Web143/143、mypy203文件、typecheck/lint、M1/链接检查通过；提交`0144bad4`同SHA CI run `36371507389` 17/17 success。常驻库未触碰。 |
@@ -68,7 +68,7 @@ superseded_by: null
 
 2026-09-29 最新更正：109格语义裁决和其后行身份/范围修订及全链验证已完成。新的 L1 v5 覆盖1776/1776；独立 `flowcverify` 全新隔离栈装载14份报告后 L0 1532/1532、L1 1776/1776，P5事实670条内容SHA不变。C级仍未通过。下一唯一子步为冻结样本/证据清单并核验尚未闭合的独立 oracle、盲评和 holdout；交付后作 Go/No-Go。常驻库未写入。
 
-截至 2026-09-29：**11项，已完成3项，唯一执行中1项，排队7项**。第3项的样本与证据审计已按现有材料作 No-Go 结案；产品 C 级出口本身仍未通过。第4项 U04 的旧三样本版式回归已实现199/199；初始解析器提交触发 smoke 缺`pypdf`，本地隔离复现后已修依赖。当前唯一动作是提交并推送运行依赖修复及进度文档、等待准确SHA CI全绿，之后首次运行小米与阿里未调参留出。常驻`flow`不写入/清理/重启/重建。
+截至 2026-09-29：**11项，已完成3项，唯一执行中1项，排队7项**。第3项的样本与证据审计已按现有材料作 No-Go 结案；产品 C 级出口本身仍未通过。第4项 U04 的旧三样本版式回归已实现199/199，生产依赖修复已推送。准确SHA CI 的功能性 job 全绿，但模块边界 E2E 作业的 uv cache post-cleanup 失败（Playwright 测试成功）；由于修复会改 CI 配置，需先取得用户批准。批准前不读取小米/阿里抽取结果、不标记 CI 通过。常驻`flow`不写入/清理/重启/重建。
 
 1. **[完成] 企业组织建制与经营账套初始化包**（工作包见状态表2c）：提交 `2c7d6eb4`，CI run `36270782272` 的17/17 jobs success。31文件发行包稳定 manifest SHA `cbc7cccf…e513`；隔离 `full` 首次/重复、`business` 重置及回滚/租户隔离通过；全量 API852、Web142、脚本107、verify19/19、只读 GET43/43、Playwright9/9，合同/文档/lint/typecheck均通过。仅三表迁移在隔离栈验证，未触碰常驻库。
 2. **[完成] UX 可见性与全站验收关闭**（工作包见状态表2b）：Gate1/Gate5证据与准确SHA CI已收口，见上方最新状态和工作包最终关闭记录。

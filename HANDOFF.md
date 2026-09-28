@@ -16,11 +16,11 @@ applies_to: repository
 
 **唯一 To-do（11项）**：1 ORG-LEDGER 完成；2 UX 收口完成；3 C级样本/证据审计 No-Go 结案（不代表出口通过）；4 U04 解析器适配与未调参留出首跑 **当前执行**；5 C级基准与最终 Go/No-Go 排队；6 P3真实数据扩张排队；7 K静态知识刷新与战略重基线排队；8 rnd_exp官方依据核验排队；9 U09/O05试点排队；10 U10证据决策排队；11内部月度工作台与真实周期验收排队。总计11项：已完成3、执行中1、排队7、外部条件受限0。
 
-U04 现状：顺丰文本型“合并及公司”报表、腾讯动态财报表格定位、中通公告重复字形解析与逐行比较器均已修复；旧回归产物 `validation/financial_reports/holdout_runs/2026-09-29-adapter-v4/` 显示顺丰137/137、腾讯32/32、中通30/30，合计199/199匹配、0错配、0不可比较。`tests/statements` 83项、`scripts/tests` 155项、Ruff、mypy 203文件、plan-view、链接检查、文档M1均通过。准确SHA CI `07819d56`/run `36491622539` 的 smoke 揭示生产镜像缺`pypdf`，根因是此前仅列在dev依赖。已将`pypdf`移入运行依赖并更新`uv.lock`；独立 Compose `flowu04smoke`中 API/Web health 200、迁移0031与dev主体seed成功。这个依赖修复尚未提交及经准确SHA CI验证。较早 adapter-v2/v3 与日期目录保留作开发轨迹，不得覆盖或当作新留出结果。
+U04 现状：顺丰文本型“合并及公司”报表、腾讯动态财报表格定位、中通公告重复字形解析与逐行比较器均已修复；旧回归产物 `validation/financial_reports/holdout_runs/2026-09-29-adapter-v4/` 显示顺丰137/137、腾讯32/32、中通30/30，合计199/199匹配、0错配、0不可比较。`tests/statements` 83项、`scripts/tests` 155项、Ruff、mypy 203文件、plan-view、链接检查、文档M1均通过。准确SHA CI `07819d56`/run `36491622539` 的 smoke 揭示生产镜像缺`pypdf`，根因是此前仅列在dev依赖。已将`pypdf`移入运行依赖并更新`uv.lock`；独立 Compose `flowu04smoke`中 API/Web health 200、迁移0031与dev主体seed成功。修复提交`1b313cb`推送后，准确SHA CI run `36494934044` 的 smoke、data-contract、integration等全部通过；唯一失败为 `module-boundaries-e2e` 的 uv post-cleanup 找不到未创建的 cache 目录，Playwright 测试步骤自身成功。修复须改 `.github/workflows/ci.yml`，触及全局 CI/CD 配置红线，等待用户批准。较早 adapter-v2/v3 与日期目录保留作开发轨迹，不得覆盖或当作新留出结果。
 
-**安全顺序**：代码状态仍未提交，尚未因准确 SHA CI 变绿而冻结；运行器默认只跑已降级的旧三样本，小米/阿里必须显式 `--samples xiaomi_2026h1 alibaba_fy2027q1`。在代码提交推送且该准确 SHA CI 全绿前，禁止首次运行或查看小米/阿里抽取结果。之后以唯一新 run ID 首跑一次，记录 PDF/oracle/parser SHA、完整 diff 和 `manual_intervention_count: 0`；首跑后不调参，差异只归因或按协议降级。旧199行是回归结果，不是盲留出通过。常驻`flow`及旧`flow_test`不连接、不写入。
+**安全顺序**：代码修复已提交推送，但准确 SHA CI 仍有 module-boundaries job 的 post-cleanup 失败；用户批准并完成最小 CI 缓存修正、准确SHA CI全绿前，禁止首次运行或查看小米/阿里抽取结果。运行器默认只跑已降级的旧三样本，小米/阿里必须显式 `--samples xiaomi_2026h1 alibaba_fy2027q1`。解锁后以唯一新 run ID 首跑一次，记录 PDF/oracle/parser SHA、完整 diff 和 `manual_intervention_count: 0`；首跑后不调参，差异只归因或按协议降级。旧199行是回归结果，不是盲留出通过。常驻`flow`及旧`flow_test`不连接、不写入。
 
-**下一单一动作**：核对依赖修复与状态文档差异，完成必要本地依赖/测试/门禁，提交后立即推送；等待同一提交 SHA CI 全绿，再执行小米/阿里首次留出。隔离验证的临时 Compose override `infra/compose.u04-smoke.yaml` 与 `flowu04smoke` 资源在验证记录完成后清理，不纳入版本控制；禁止执行默认项目 `down` 或任何常驻数据清理。
+**下一单一动作**：等待用户批准最小 CI workflow 变更（在 module-boundaries job 关闭 uv 缓存），更新计划/状态后实施并推送；准确 SHA CI 全绿后执行小米/阿里未调参首跑。隔离验证的临时 Compose override `infra/compose.u04-smoke.yaml` 与 `flowu04smoke` 资源已按项目名精确清理，不纳入版本控制；禁止执行默认项目 `down` 或任何常驻数据清理。
 
 ## 当前唯一接续点（2026-09-29，覆盖下方旧进度）
 
