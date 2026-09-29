@@ -3,7 +3,7 @@ doc_id: FLOW-DESIGN-CFO-COCKPIT-20260929
 title: 财务总监驾驶舱——详细设计与原型（设计输入，不开发）
 doc_type: design
 status: draft
-version: 0.5
+version: 0.4
 created_at: 2026-09-29
 updated_at: 2026-09-29
 owner: FLOW
@@ -148,6 +148,20 @@ D001（产品不是单一驾驶舱）不变：驾驶舱是分析工作台的**�
 >   —— v1.0 的逐字节同内容变体，仅将 ECharts 5.5.0 内联（1.1MB），**下载 raw 后断网双击
 >   也能完整渲染**；已用 Playwright 屏蔽全部外网请求验证（canvas 正常出图、0 JS 错误）。
 >   在线看图表或 jsdelivr 可达时用 v1.0（134KB），离线/弱网环境用本版。
+> - **v2.0（当前合并版，v0.3 × v1.0 互相参考后的最优形态）**：
+>   [prototypes/2026-09-29-cfo-cockpit-prototype-v2.html](prototypes/2026-09-29-cfo-cockpit-prototype-v2.html)
+>   —— 以 v1.0 的 51 图为基座，吸收两版各自实践后的合并增量：
+>   ① **ECharts 内联**，单文件 1.15MB 完全离线可打开（v1.0 为 CDN 版，jsdelivr 国内不稳定）；
+>   ② **工具条三模式做实**（v1.0 为占位实现）：红灯聚焦=非红灯卡降饱和灰度 + 红灯卡
+>   redpulse 高亮环（CSS 驱动，普通卡 grayscale(.92) 已验证）；经分会模式=隐藏侧栏 +
+>   精简顶栏 + zoom 1.16 演示态 + 图表 resize；导出管理层版=真 `window.print()` +
+>   `@media print` 样式（A4 横向、只打印当前页、隐藏导航/工具条）；
+>   ③ **全 KPI 卡自动穿透**（v1.0 仅手写绑定总览 7 张，全原型共 78 张卡）：运行时扫描
+>   全部 `.kpi` 卡生成确定性模拟档案（口径注 → 规则版本 → 快照/依赖/SHA → 关联
+>   Finding → 12 期趋势 → 口径版本历史），手写 7 条高保真绑定优先；
+>   ④ 逐页截图存档：`prototypes/v2-01-overview.jpg` ~ `v2-10-data.jpg`。
+>   2026-09-29 自验：离线（屏蔽外网）50 canvas 全渲染、0 JS 错误；三模式与
+>   抽屉（手写 + 跨模块自动绑定）逐项通过。v1.0/v1.0-offline 保留为历史版本。
 
 ### 5.1 集团总览（`/cockpit/overview`）
 
@@ -324,6 +338,9 @@ manifest、校验规则、发布冻结）。因此**不新建独立导入页面*
 | `AlertList` | 新 | 预警清单：等级 + 溯源链接（→ Finding 详情） |
 | `ActionTable` | 新 | 管理层关注/应对措施：事项 + 负责人◇ + 期限◇ + 建议状态脚注（「AI 建议，未执行」——事实与建议分离） |
 | `ConclusionBar` | 新 | 底部结论条：文本来自 Findings/模板句（引用条目 id），点击展开证据链与口径；**禁止人写裸文本进库** |
+| `CockpitToolbar` | 新（v2.0 做实） | 顶部工具条三模式：**红灯聚焦**（非红灯卡 grayscale(.92)+opacity .42，红灯卡/红色标签 redpulse 高亮环，供经营例会逐项过灯）；**经分会模式**（隐藏侧栏、精简顶栏、zoom 1.16 演示态、图表自适应 resize）；**导出管理层版**（`window.print()` + `@media print` A4 横向、仅当前页、隐藏导航与工具条） |
+| `DigDrawer` 指标穿透抽屉 | 新（v2.0 全卡覆盖） | 右侧 430px 滑出：计算口径（字典公式+规则版本）→ 数据来源（快照批次/依赖字段/源文件/SHA-256）→ 关联结论（Finding 编号+等级）→ 12 期历史趋势 → 口径版本历史；**全原型 78 张 KPI 卡运行时自动绑定**（确定性模拟档案），高保真手写绑定优先 |
+| 离线交付形态 | 新（v2.0） | 原型单文件内联 ECharts 5.5.0（Apache-2.0），无 CDN 依赖，下载 raw 后断网可开；正式系统实现不采用内联（走构建管线） |
 | 图表技术 | 沿用 | 零依赖手写 SVG（沿用 statements/trend-panel 惯例）；Recharts 是否引入按前端组件库决策（TanStack Query 已采纳、Recharts 暂缓）另行裁决 |
 
 ## 7. 五态、可访问性与门禁
