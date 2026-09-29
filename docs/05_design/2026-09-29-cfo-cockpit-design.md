@@ -3,7 +3,7 @@ doc_id: FLOW-DESIGN-CFO-COCKPIT-20260929
 title: 财务总监驾驶舱——详细设计与原型（设计输入，不开发）
 doc_type: design
 status: draft
-version: 0.3
+version: 0.4
 created_at: 2026-09-29
 updated_at: 2026-09-29
 owner: FLOW
@@ -323,3 +323,112 @@ manifest、校验规则、发布冻结）。驾驶舱页脚放「数据管线状
 | Q2 | 与现有 dashboard 快照页的关系 | **演进替换**：现有页升级为十大模块中的「集团总览」，同一路由下重设计，不产生新旧两套驾驶舱 |
 | Q3 | 首要读者 | **双模式分阶段**：批次 A 做财务总监速览视图（一屏+下钻），汇报模式（大屏/演示态）放批次 B |
 | Q4 | 公开期 KPI 卡第二基准 | **1+3 组合**：每卡同时呈现同比 + 环比 + 行业参考包基准（基准值与同比环比都要）；预算基准内部期追加为第四注记 |
+
+## 10. 安全前置待修订清单（2026-09-29 用户裁决：只写设计，不写代码）
+
+> 用户裁决：驾驶舱实现必须先完成安全规格修订，但本轮**只出"待修订清单"设计附录**，
+> 不起草安全规格 V1.1.1、不改代码、不触发修订流程。本节是提交给安全规格修订轮次的输入材料。
+
+### 10.1 适用的既有安全规格
+
+驾驶舱的任何 route 必须在已批准的
+[`FLOW-SPEC-INTERNAL-RBAC-AUDIT-V1`](../40_specs/security/internal-workbench-rbac-audit-v1.md)（approved）
+框架内落地。该规格 §5 规定：router 与 `route-inventory-v1.tsv` 非双向一致即阻断；
+`blocked:*` 接线 allow 即阻断。§11 给出 9 类最低验收断言。新增能力必须先修订规格并重新批准
+（原文状态纪律：任何 ABI/枚举/allow set/截止/retention 偏差必须先修订本文并重新批准）。
+
+### 10.2 待新增 Action（3 个）
+
+现有 `Action` 枚举共 58 项（规格 §2.1）。驾驶舱需新增 3 项，全部走 §4.3「unknown action 默认拒绝」的反面——即**必须显式登记**，否则全部请求被拒：
+
+| 拟新增 Action | 拟允许角色 | 用途 | 备注 |
+|---|---|---|---|
+| `cockpit.action_item.create` | `finance_bp` | 经分专员在 BP 工作台创建行动项 | 需 `metric.change.*` 之外的独立 Action；不可由 AI 角色持有（规格 §4.3） |
+| `cockpit.action_item.acknowledge` | `finance_bp`（CFO 身份以 service_account 或独立 CFO 角色映射，待裁决） | CFO 在只读驾驶舱上"确认"行动项 | **只写 AuditEvent，不改业务状态**；安全上属读+审计，不是写业务数据 |
+| `cockpit.action_item.close` | `finance_bp` / `rule_owner` | 闭环行动项 | 需 owner 校验（规格 §4.2 step6：本人资源）+ 状态机校验 |
+
+**裁决待定**：`acknowledge` 该给 CFO 独立角色还是复用 `service_account`？现有 6 个角色
+（`finance_bp` / `analyst` / `rule_owner` / `ai_analyst` / `ai_cfo` / `service_account`）中
+**没有 CFO 角色**。这是一个规格级缺口，需在修订时决定：
+
+- 选项 1：新增第 7 个角色 `cfo`（影响 §4.3 完整 allow set 矩阵、规格 §2.1 Role 枚举）；
+- 选项 2：CFO 身份映射为 `service_account` + 专门的 `is_service_account=true`（语义偏弱，CFO 不是机器账号）；
+- 选项 3：驾驶舱的"确认"动作不做独立 Action，由 `cockpit.action_item.*` 全归 `finance_bp`，CFO 侧不写审计（**丢失可审计性，不推荐**）。
+
+**建议选项 1**（新增 `cfo` 角色），但必须等用户裁决。
+
+### 10.3 现有 Action 的复用映射
+
+驾驶舱只读面的多数能力复用现有 Action，无需新增：
+
+| 驾驶舱行为 | 复用 Action | 允许角色 | 依据 |
+|---|---|---|---|
+| 打开驾驶舱总览 | `dashboard.overview.read` | 全部 | 已有（Q2 演进替换现有 dashboard 页） |
+| 查看 KPI 卡数值 | `dashboard.overview.read` | 全部 | 已有 |
+| 穿透到报表/快照 | `statement.report.read` / `metric_library.read` | 全部 | 已有 |
+| 穿透到指标定义 | `metric_library.read` | 全部 | 已有 |
+| 查看 Finding 详情/证据链 | `investigation.read` | 全部 | 已有 |
+| 查看行动项列表 | `workbench.report.read` | 全部 | 已有 |
+| 查看建议清单 | `workbench.report.read` | 全部 | 已有 |
+| 查看风险预警 | `investigation.list` | 全部 | 已有 |
+| **创建行动项** | `cockpit.action_item.create`（新增） | `finance_bp` | 待修订 |
+| **确认行动项** | `cockpit.action_item.acknowledge`（新增） | CFO（角色待裁决） | 待修订 |
+| **关闭行动项** | `cockpit.action_item.close`（新增） | `finance_bp` / `rule_owner` | 待修订 |
+| 查看数据管线状态（§5.10） | `workspace.metadata.read` | 全部 | 已有 |
+
+**约束**（写入修订要求）：
+
+- `cockpit.action_item.*` **必须**排除 `ai_analyst` / `ai_cfo` / `service_account`（规格 §4.3：AI 无写业务数据权）；
+- `cockpit.action_item.create` / `close` 触发 §4.2 step6 owner 校验：非本人创建的行动项不可关闭；
+- 驾驶舱**不得**新增任何绕过 §6 审计屏障的 endpoint——所有写操作必须先写 decision audit intent。
+
+### 10.4 待新增表：ActionItem
+
+驾驶舱需要一张新表承载行动项闭环（共享底座当前没有等价物）。**设计约束**（不写 DDL，实现轮次再定）：
+
+| 字段 | 类型 | 约束/说明 | 安全关注 |
+|---|---|---|---|
+| `id` | UUID | 主键，UUID7 时序 | — |
+| `analysis_cycle_id` | UUID | 所属分析周期（企业内部分析工作台的月度周期） | 跨企业指派须拒绝（规格 §4.2 step4） |
+| `finding_id` | UUID | 关联 Finding（可空：会上直接创建） | 非空时须同企业 |
+| `metric_id` | str | 关联指标（可空） | 须存在于指标字典 |
+| `title` | str | 行动项标题 | — |
+| `rationale` | text | 依据说明 | **禁止写入未证实的因果断言**（D054：驱动不可证实时标 unknown） |
+| `owner_actor_id` | str | 责任人 | **必须存在于 RoleBinding 且 enterprise 一致**；跨企业指派 401/403（规格 §3.1.5） |
+| `due_date` | date | 截止日 | — |
+| `acceptance_criteria` | text | 验收标准 | — |
+| `status` | enum | `open` / `in_progress` / `blocked` / `done` / `overdue` | 状态机在 service 层校验 |
+| `escalation_level` | int | 升级层级（连续 2 期未完成自动升） | — |
+| `closed_at` | timestamptz | 闭环时间 | — |
+| `created_at` / `created_by` | timestamptz / str | 创建审计 | 须与 AuditEvent 对应 |
+| `updated_at` | timestamptz | 最后变更 | **禁止静默覆盖**（D054：历史修订用追加版本与审阅事件） |
+
+**安全约束**：
+
+- `ActionItem` 的每次 create/close/acknowledge 都必须写 `AuditEvent`（规格 §8.1 不可变 + trigger 拒 UPDATE/DELETE）；
+- `owner_actor_id` 跨企业校验在 create 与 close 两处都要做（防止 A 企业的人被指派 B 企业的行动项）；
+- `acknowledge` **只写 AuditEvent**，不 UPDATE `ActionItem` 的 `status`（CFO 只读层不产生业务写入）。
+
+### 10.5 route-inventory 待登记条目
+
+新增 route（实施轮次登记到 `route-inventory-v1.tsv`，本轮只列待登记清单）：
+
+| 拟新增 route | method | action | 拟 owner | 备注 |
+|---|---|---|---|---|
+| `/cockpit/action-items` | GET | `workbench.report.read` | route-policy | 行动项列表（跨模块聚合） |
+| `/cockpit/action-items` | POST | `cockpit.action_item.create` | route-policy | 创建行动项 |
+| `/cockpit/action-items/{id}` | GET | `workbench.report.read` | route-policy | 行动项详情 |
+| `/cockpit/action-items/{id}/acknowledge` | POST | `cockpit.action_item.acknowledge` | route-policy | **隐藏写 GET 的对偶**：POST 但语义是审计写，须登记 owner |
+| `/cockpit/action-items/{id}/close` | POST | `cockpit.action_item.close` | route-policy | 闭环行动项 |
+| `/cockpit/findings/{id}` | GET | `investigation.read` | route-policy | Finding 详情穿透 |
+
+**门禁检查**（规格 §5）：实施完成后必须用 `app.openapi()` 展开实际挂载路由，与 inventory 做**双向零差集**核验；`blocked:*` 标记的域（预算/合并抵销）接线 allow 即阻断。
+
+### 10.6 提给安全规格修订轮次的问题清单
+
+1. **是否新增 `cfo` 角色**（§2.1 Role 枚举 + §4.3 allow set 矩阵 + §2.2 development principal 逻辑都要连带修订）？——建议新增，见 §10.2 讨论；
+2. `cockpit.action_item.acknowledge` 的安全语义归类：它是"写审计但不改业务数据"，应归为只读 Action（附审计副作用）还是独立写 Action？两者在 §4.3 allow set 的处理不同；
+3. 驾驶舱的**筛选联动**是否需要单独的 Action（如 `cockpit.filter.apply`）？还是沿用 `dashboard.overview.read`？（设计倾向沿用，避免 Action 爆炸）；
+4. 公开期主体是单一公司（阿里/菜鸟），是否存在"跨企业越权"场景？还是该风险只在内部期多主体时出现，故 `owner_actor_id` 跨企业校验在公开期暂不触发？
+
+以上四问**不阻塞**设计文档评审，但**阻塞**实现轮次的 Step 0（`require_approved_specs.py` 门禁）。
