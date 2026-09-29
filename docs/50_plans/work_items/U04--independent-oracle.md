@@ -3,7 +3,7 @@ doc_id: FLOW-WI-U04
 title: U04 独立 oracle 录入与全行验证
 doc_type: work-item
 status: active
-version: 1.3
+version: 1.4
 created_at: 2026-09-12
 updated_at: 2026-09-29
 owner: FLOW
@@ -18,7 +18,7 @@ superseded_by: null
 # U04 独立 oracle
 
 - **范围**：由未参与抽取器开发的独立会话录入 oracle；全行 diff 与留出泛化验收。
-- **当前执行步骤（2026-09-29）**：已按 TDD 修复顺丰“合并及公司”文本型报表、腾讯动态定位财务报表、以及中通公告重复字形文本层解析；修复 holdout comparator 的列值提取与报表范围消歧；运行器默认只跑已降级旧三样本，新留出须显式 `--samples` 指定。旧回归 run `2026-09-29-adapter-v4` 为顺丰137/137、腾讯32/32、中通30/30，共199/199匹配、0错配、0不可比较；这只是历史样本回归，不是新的盲留出通过。首个提交 `07819d56` 的本地解析/脚本门禁通过但 GitHub smoke 因生产镜像缺少 `pypdf` 失败；根因是该包误列在 dev 组，现已移至运行依赖并更新 `uv.lock`。修复提交 `1b313cb` 的准确 SHA CI 中，smoke、data-contract、integration 及其余功能性 job 均通过；`module-boundaries-e2e` 的 Playwright 脚本通过，但 `astral-sh/setup-uv@v6` 的 post-cleanup 因本 job 未创建 uv cache 目录而失败（无缓存目录错误）。按全局红线，修改 `.github/workflows/ci.yml` 属 CI 配置变更，需用户批准后才能关闭此清理故障并重跑准确 SHA CI。**目前未读取/检查小米与阿里抽取结果；CI 全绿前不做两样本首次未调参运行。**
+- **当前执行步骤（2026-09-29 晚更新）**：适配器修复、pypdf 运行依赖与 CI 收尾修正均已完成——用户批准两处最小 CI 变更（intake-e2e 超时 40→45、module-boundaries-e2e 关闭未使用的 uv 缓存）后提交 `229069ca` 准确 SHA CI run `36511316012` 17/17 success。**小米/阿里未调参首跑已完成（run ID `2026-09-29-holdout-first-run`）并双双失败**：小米 0/25（UnsupportedLayoutError，三适配器得分 0/1/1，英文版文件身份正确，真实版式泛化失败）；阿里 0/15（hk_traditional_text 硬编码京东物流年报页锚 106±5 对 26 页简体季度公告必然失效）。40 行 oracle 全部 not_comparable，0 行值比对，无伪造输出/静默错值，原始产物全量保留。归因与协议处置见 [holdout-results.md §4](../../../docs/implementation/objective-analysis/holdout-results.md)。**按 oracle-register §4.5：使用该两样本开发适配器即自动降为回归集，并按 §3 启用备选（yunda_2026h1/jdl_2026h1）补新留出**；这是下一执行 fork。
 - **独立 oracle 审计**：冻结的14份 C 级报告目前没有完整逐行独立 oracle（0/14）。5份已登记 oracle 对应另外的 holdout，均属部分行转录。不得将 L1 v5、实现方复核或既有 AI 交叉评冒充完整独立 oracle。
 - **首跑历史与降级纪律**：2026-09-24 三份旧候选共199行均 `not_comparable`，不是准确率通过或数值失败；解析修复后可作为回归。小米与阿里新留出在首次机器运行前不得用于版式适配、参数选择或人工纠错。发现样本已被实现用于调参时，按 `oracle-register.md` 降级并启用已冻结备选，不重新抽签。
 - **验收**：全行 diff 通过率报告 + 留出集泛化结论；差异逐项归因（口径/抽取/数据三类）。当前旧三样本回归产物见 `validation/financial_reports/holdout_runs/2026-09-29-adapter-v4/`；生产依赖 smoke 已在隔离 Compose 实测修复；修复提交的功能性 CI 通过，但 CI workflow 收尾清理仍需获批修正；新的小米/阿里结果仍待准确 SHA CI 全绿后首次运行。

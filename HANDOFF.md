@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目尽调、优化与单 Agent 执行总交接
 doc_type: navigation
 status: current
-version: 5.51
+version: 5.17
 created_at: 2026-09-12
 updated_at: 2026-09-29
 owner: FLOW
@@ -55,6 +55,8 @@ U04 现状：顺丰文本型“合并及公司”报表、腾讯动态财报表�
 **最新进度更正（2026-09-28，优先于下方旧接续点）：** UX Gate1/Gate5已关闭。提交`0144bad4be1a869a5a4073c516d78b4bf333cbee`同SHA CI run `36371507389` 17/17 success；隔离Dashboard7/7，大麦旅程verify19/19、只读矩阵159项零意外、Playwright15/15，生产E2E157/157、Web143/143、API mypy203文件、typecheck/lint、文档M1/链接门禁通过。常驻`flow`未触碰。当前唯一任务为公开财报C级逐项归因、原件复核与抽取修订。只读基线审计提交`f1ab428343e809364c2fd519497c56b4ac7c53bf`对应CI run `36375305428`准确SHA 17/17 success。JDL页界限修订已完成：提交`5c84c81fdd3c0908891d16f8dcfe05e1d2e64b6c`同SHA CI run `36382657675` 17/17成功；版本化抽取v2共107行、24/24勾稽，L1答案集1,775/1,775页锚可定位。独立Compose栈迁移至0031并装载14份报告后，L0 1508/1508一致；L1 1775锚零失配（strong 981 / weak 775 / sign-flip 15 / visual 4）。财报目录76项、脚本目录110项测试及M1/链接检查通过；隔离卷已清理，常驻栈未用于测试。页锚可定位不等于准确率，C级仍未通过。**当前唯一下一步**：将准确SHA CI结果同步到权威路线图/状态/交接并提交推送，验证该状态提交；随后建立42异常/109疑点/JDL原200格逐项处置台账。旧版HANDOFF中的其他“当前下一步”均为历史快照，以本段与CURRENT_ROADMAP为准。
 
 **此前接续点（已由上方最新进度覆盖）：** 已完成Dashboard、Analysis/Investigation身份深链阶段。当前工作树与未提交项以 `git status` 为准；具体证据见路线图和UX Gate1记录。不得触碰常驻`flow`（Compose标签来源混杂）。
+
+> **2026-09-29 深夜覆盖（接手会话）**：用户三项授权（偏差批次清理、CI 变更、车道全权）后：①`229069ca` 两处最小 CI 修正（intake-e2e 40→45、module-boundaries 关闭未用 uv 缓存）准确 SHA CI run `36511316012` 17/17 success；②小米/阿里未调参首跑 `2026-09-29-holdout-first-run` 双双失败（版式泛化、零伪造输出，登记 holdout-results.md §4），下一 fork=按 §4.5 开发适配器并降级样本、启用备选 yunda/jdl，或带入第5项裁决；③常驻库两偏差批次已授权清理（备份 SHA `fc06fb58…0737`），大麦数据无损。
 
 ### 接手基线、当前状态与操作纪律
 

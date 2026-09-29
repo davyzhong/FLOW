@@ -1,0 +1,161 @@
+{
+  "counts": {
+    "matched": 0,
+    "mismatched": 0,
+    "not_comparable": 15
+  },
+  "total": 15,
+  "rows_extracted": 0,
+  "results": [
+    {
+      "tier": "key_item",
+      "item": "收入",
+      "value": "268,953",
+      "page": "6",
+      "statement": "6 月份季度财务业绩概要（第 6 页）",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "key_item",
+      "item": "净利润",
+      "value": "10,444",
+      "page": "6",
+      "statement": "财务业绩概要",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "key_item",
+      "item": "归属普通股股东净利润",
+      "value": "10,537",
+      "page": "6",
+      "statement": "财务业绩概要",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "key_item",
+      "item": "非公认会计准则净利润",
+      "value": "20,715",
+      "page": "6",
+      "statement": "财务业绩概要（Non-GAAP）",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "key_item",
+      "item": "经营活动产生的现金流量净额",
+      "value": "22,945",
+      "page": "22",
+      "statement": "简明合并现金流量表（第 22 页）",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "收入",
+      "value": "268,953 / 247,652",
+      "page": "6",
+      "statement": "概要",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "经营利润",
+      "value": "15,161 / 34,988",
+      "page": "6",
+      "statement": "概要",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "經調整 EBITDA",
+      "value": "39,143 / 45,735",
+      "page": "6",
+      "statement": "概要",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "經調整 EBITA",
+      "value": "27,329 / 38,844",
+      "page": "6",
+      "statement": "概要",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "淨利潤",
+      "value": "10,444 / 42,382",
+      "page": "6",
+      "statement": "概要",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "歸屬於普通股股東的淨利潤",
+      "value": "10,537 / 43,116",
+      "page": "6",
+      "statement": "概要",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "非公認會計準則淨利潤",
+      "value": "20,715 / 33,510",
+      "page": "6",
+      "statement": "概要",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "經營活動產生的現金流量淨額",
+      "value": "22,945 / 20,672",
+      "page": "22",
+      "statement": "现金流量表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "投資活動產生（所用）的現金流量淨額",
+      "value": "(18,964) / 18,328",
+      "page": "22",
+      "statement": "现金流量表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "融資活動（所用）產生的現金流量淨額",
+      "value": "9,469 / (2,731)",
+      "page": "22",
+      "statement": "现金流量表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    }
+  ]
+}

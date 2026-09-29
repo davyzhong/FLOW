@@ -50,3 +50,27 @@ evidence_refs: [
 
 按 manifest rule：修复后该样本不再称留出，须按 oracle-register §3 补新候选；
 修复过程若接触样本原文进行调参，须在 §5 污染史登记并降级为回归集。
+
+## 4. 新留出首跑（2026-09-29，系统现状，零适配）
+
+前置：U04 旧三样本适配器回归 199/199（run `2026-09-29-adapter-v4`）；准确 SHA CI
+run `36511316012` 17/17 success（提交 `229069ca`，解析器代码与 `1b313cb` 相同、仅
+CI 配置差异）。运行 ID `2026-09-29-holdout-first-run`，按 oracle-register §4 全量
+保留原始输出，未调参。
+
+| 样本 | 适配器 | 抽取行数 | matched | mismatched | not_comparable | 结论 |
+|---|---|---|---|---|---|---|
+| xiaomi_2026h1 | 无（显式降级） | 0 | 0 | 0 | 25 / 25 | **首跑失败（原始保留）**：UnsupportedLayoutError，各适配器得分 cn_ashare_table=0 / hk_traditional_text=1 / hk_results_announcement=1。harness 已按登记指向英文版 `XIAOMI_2026_interim_report_e.pdf`（与 oracle 同源），失败为真实版式泛化失败：小米中期报告版式无适配器 |
+| alibaba_fy2027q1 | hk_traditional_text（页锚命中后失败） | 0 | 0 | 0 | 15 / 15 | **首跑失败（原始保留）**：StatementExtractionError「未在提示页 106±5 内定位到『合併損益表』页首标题」——106/107/108/112 为 `hk_traditional_text` 硬编码的京东物流年报页锚，对 26 页简体季度公告必然失效；阿里季度公告版式无适配器 |
+
+两样本合计 40 行 oracle 全部 not_comparable，0 行进入值比对。**归因**：均为版式
+泛化失败（解析器为按公司/页码硬编码适配器架构），非输入缺项、非文件身份错误、
+非静默错值；两样本降级路径均显式抛错，无伪造输出，行为符合设计预期。
+
+原始证据：`validation/financial_reports/holdout_runs/2026-09-29-holdout-first-run/`
+（`*_extracted.yaml` + `*_diff.json` + `summary.json`）。oracle 哈希：xiaomi
+`104f1eeb…31d36`、alibaba `1b6fb5e2…0ace9`（manifest 登记值）。人工介入计数：0
+（两样本均未用于适配或调参；首跑后仅做只读取证）。
+
+按 oracle-register §4.5：若使用该两样本开发适配器，则自动降为回归集，并按 §3
+启用备选候选（yunda_2026h1 / jdl_2026h1）补新留出；届时在 §5 污染史登记。
