@@ -47,7 +47,8 @@ class PublicFinancialSampleFreezeTests(unittest.TestCase):
         audit = manifest["independent_validation"]
 
         self.assertEqual(audit["full_row_oracles_for_frozen_reports"], 0)
-        self.assertEqual(audit["registered_holdout_oracles"], 5)
+        # 2026-09-29：小米/阿里降级回归后，备选 yunda/jdl 递补，登记 oracle 数 5→7
+        self.assertEqual(audit["registered_holdout_oracles"], 7)
         self.assertEqual(audit["legacy_first_run"]["total"], 199)
         self.assertEqual(audit["legacy_first_run"]["rows_extracted"], 0)
         self.assertEqual(audit["legacy_first_run"]["not_comparable"], 199)

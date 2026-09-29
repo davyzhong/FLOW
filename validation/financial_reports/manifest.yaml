@@ -161,7 +161,7 @@ holdouts:
     key_items_precise_2026_09_26:
       oracle_file: validation/financial_reports/oracle/xiaomi_2026h1.yaml
       oracle_sha256_previous_claim: facdd5e711bb7a86a8a88ddf1e6dc9053f4d0f64
-      oracle_sha256: 104f1eebdae0b5f7579408b1830b5a8537447bc559f2edad26aa43fec9931d36
+      oracle_sha256: 27d71e4630dabfe9c2895b502463debe46b124120496dbb7e6a93e721b4dfd57
       recorder: ZCode 会话（§1a 授权，未参与抽取器开发）
       items:  # 录入来源：英文版第 59/61-62/65 页（数值与中文版同一报表）
       - { item: 收入（六个月）, value: "208,063,227", source_page: "59(EN)", unit: 千元 }
@@ -187,7 +187,7 @@ holdouts:
     key_items_precise_2026_09_26:
       oracle_file: validation/financial_reports/oracle/alibaba_fy2027q1.yaml
       oracle_sha256_previous_claim: 6a3120f72806938581e2dad8d28105f4a633f299
-      oracle_sha256: 1b6fb5e2cef2804fcd53a037b5c65c64ee012368a924be4f6d5417139800ace9
+      oracle_sha256: a37f572a8b47382ccb73c88a3f56b76282bfaa0103167f9036a697811373bef1
       recorder: ZCode 会话（§1a 授权，未参与抽取器开发）
       items:
       - { item: 收入, value: "268,953", source_page: "6", unit: 百万元 }
@@ -212,7 +212,7 @@ holdouts:
     unit: 人民币元
     key_items_precise_2026_09_29:
       oracle_file: validation/financial_reports/oracle/yunda_2026h1.yaml
-      oracle_sha256: 登记于 oracle-register §3（录入后由门禁校验）
+      oracle_sha256: eaf29b1c7326a147a7c87045dbe3217b6d4701ddcd9602f9646a93170dcab7d6
       recorder: ZCode 接手会话（§1a 授权；录入先于适配器开发）
       items:
       - { item: 营业收入, value: "26,438,607,589.72", source_page: "7", unit: 元 }
@@ -236,7 +236,7 @@ holdouts:
     unit: 人民币千元
     key_items_precise_2026_09_29:
       oracle_file: validation/financial_reports/oracle/jdl_2026h1.yaml
-      oracle_sha256: 登记于 oracle-register §3（录入后由门禁校验）
+      oracle_sha256: 402ea16ed5e2c31c0d8d5affb0edecf7f14d60b9e0637221cb5b19c256bf527f
       recorder: ZCode 接手会话（§1a 授权；录入先于适配器开发）
       items:  # 录入来源：英文版第 5/39/41/44 页（与中文版同一报表）
       - { item: Revenue, value: "124,683,247", source_page: "5(EN)", unit: 千元 }

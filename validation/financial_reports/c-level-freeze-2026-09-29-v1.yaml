@@ -32,7 +32,7 @@ inputs:
     sha256: 76410a8886940e2e11b26485ef3d2a276439fc0c1f5a7dd75df6cf47c49a4753
   financial_report_registry:
     path: validation/financial_reports/manifest.yaml
-    sha256: d26e4c556dbc9fbc11f7fd4bcb037f7dce864c01150715621e3fe14b0b3ac17c
+    sha256: 3eca6b08bebc935a9b889af4e2258f09547dbb1f98488bf5b2dfc0da1ad24ef6
     yaml_parse_status: valid
 report_count: 14
 coverage:
@@ -226,7 +226,7 @@ independent_validation:
   - jdl_2025fy
   - sf_2026q1
   - tencent_2026q2
-  registered_holdout_oracles: 5
+  registered_holdout_oracles: 7
   holdout_oracles:
   - sample: tencent_fy2025
     oracle_file: validation/financial_reports/oracle/tencent_fy2025.yaml
@@ -257,21 +257,39 @@ independent_validation:
     full_report_oracle: false
   - sample: xiaomi_2026h1
     oracle_file: validation/financial_reports/oracle/xiaomi_2026h1.yaml
-    claimed_sha256: 104f1eebdae0b5f7579408b1830b5a8537447bc559f2edad26aa43fec9931d36
+    claimed_sha256: 27d71e4630dabfe9c2895b502463debe46b124120496dbb7e6a93e721b4dfd57
     previous_claim_sha256: facdd5e711bb7a86a8a88ddf1e6dc9053f4d0f64
-    actual_sha256: 104f1eebdae0b5f7579408b1830b5a8537447bc559f2edad26aa43fec9931d36
+    actual_sha256: 27d71e4630dabfe9c2895b502463debe46b124120496dbb7e6a93e721b4dfd57
     claim_matches: true
     key_items: 7
     supplementary_lines: 18
     full_report_oracle: false
   - sample: alibaba_fy2027q1
     oracle_file: validation/financial_reports/oracle/alibaba_fy2027q1.yaml
-    claimed_sha256: 1b6fb5e2cef2804fcd53a037b5c65c64ee012368a924be4f6d5417139800ace9
+    claimed_sha256: a37f572a8b47382ccb73c88a3f56b76282bfaa0103167f9036a697811373bef1
     previous_claim_sha256: 6a3120f72806938581e2dad8d28105f4a633f299
-    actual_sha256: 1b6fb5e2cef2804fcd53a037b5c65c64ee012368a924be4f6d5417139800ace9
+    actual_sha256: a37f572a8b47382ccb73c88a3f56b76282bfaa0103167f9036a697811373bef1
     claim_matches: true
     key_items: 5
     supplementary_lines: 10
+    full_report_oracle: false
+  - sample: yunda_2026h1
+    oracle_file: validation/financial_reports/oracle/yunda_2026h1.yaml
+    claimed_sha256: eaf29b1c7326a147a7c87045dbe3217b6d4701ddcd9602f9646a93170dcab7d6
+    previous_claim_sha256: null
+    actual_sha256: eaf29b1c7326a147a7c87045dbe3217b6d4701ddcd9602f9646a93170dcab7d6
+    claim_matches: true
+    key_items: 6
+    supplementary_lines: 14
+    full_report_oracle: false
+  - sample: jdl_2026h1
+    oracle_file: validation/financial_reports/oracle/jdl_2026h1.yaml
+    claimed_sha256: 402ea16ed5e2c31c0d8d5affb0edecf7f14d60b9e0637221cb5b19c256bf527f
+    previous_claim_sha256: null
+    actual_sha256: 402ea16ed5e2c31c0d8d5affb0edecf7f14d60b9e0637221cb5b19c256bf527f
+    claim_matches: true
+    key_items: 6
+    supplementary_lines: 19
     full_report_oracle: false
   oracle_claim_mismatches: []
   historical_oracle_claim_mismatches:
@@ -285,7 +303,9 @@ independent_validation:
     matched: 0
     mismatched: 0
     not_comparable: 199
-  drawn_new_holdout_run_artifacts_found: []
+  drawn_new_holdout_run_artifacts_found:
+  - validation/financial_reports/holdout_runs/2026-09-29-holdout-first-run/alibaba_fy2027q1_diff.json
+  - validation/financial_reports/holdout_runs/2026-09-29-holdout-first-run/xiaomi_2026h1_diff.json
   cross_review:
     artifact: docs/80_reviews/ai-cross-review/results/gpt-6-astra-2026-09-25.md
     artifact_sha256: d5461a0d87d767f697bed62b3d818c051d3ac0f3de0a5928fd04b34f7115e00a
