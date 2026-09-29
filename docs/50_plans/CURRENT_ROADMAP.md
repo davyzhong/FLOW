@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 5.34
+version: 5.35
 created_at: 2026-09-12
 updated_at: 2026-09-29
 owner: FLOW
@@ -16,6 +16,8 @@ superseded_by: null
 ---
 
 # 当前路线图（唯一主线）
+
+> **2026-09-29 深夜·路线纠偏（用户裁决）**：用户确认 C 级 No-Go 解锁路径优先于数据扩张——ZTO 接入封存（`wip/zto-integration-20260929`），队首改为**修复后盲评复评**（C 级条件 5）；L0 挂 CI 方案待批；oracle 分批与泛化收敛随后。第 6 项 P3 暂停。
 
 > **2026-09-29 U04 进度更新**：旧样本回归解析器与对比器修复已完成，本地 API statements 83项、脚本 unittest 155项、Ruff、mypy 203文件、plan-view、链接门禁均通过，文档 M1 通过；顺丰137/137、腾讯32/32、中通30/30，合计199/199匹配、0错配、0不可比较，产物为 `validation/financial_reports/holdout_runs/2026-09-29-adapter-v4/`。这是旧回归，不是新留出泛化通过。提交`1b313cb`准确SHA CI 中，smoke/data-contract/integration 等功能性 job 通过；`module-boundaries-e2e`测试通过，但 uv post-cleanup 因该 job 未创建 cache 目录而失败。用户批准两处最小 CI 变更（intake-e2e 超时 40→45、module-boundaries-e2e 关闭未使用的 uv 缓存）后提交 `229069ca` 准确 SHA CI run `36511316012` 17/17 success。**小米/阿里未调参首跑（run ID `2026-09-29-holdout-first-run`）双双失败**：小米 0/25、阿里 0/15，全部 not_comparable、零伪造输出，归因均为版式泛化失败（无对应适配器），登记于 [holdout-results.md §4](../implementation/objective-analysis/holdout-results.md)。按 oracle-register §4.5，用样本开发适配器即降级为回归集并启用备选 yunda/jdl 补新留出——此为下一 fork。运行器默认只选旧回归，新样本必须显式选择。常驻`flow`、`flow_test`未连接/未写入。
 
@@ -75,8 +77,8 @@ superseded_by: null
 
 3. **[完成—证据审计 No-Go] 公开财报 C 级样本/证据盘点与当前门禁裁定**：冻结14份 PDF/YAML、报告身份映射、行身份修订表、L1 v5、实现 SHA；哈希确定性重建测试6/6。审计证实14份报告没有完整独立 oracle；5份既有 holdout oracle 均为部分转录，两个新留出尚无首跑结果；旧首跑199行全部不可比较；现有交叉评不是成品盲评。故本阶段 C 级判为 No-Go（证据不足），详见[冻结与 oracle 审计](../60_delivery/verification/2026-09-29--public-sample-freeze-oracle-audit-v1.md)。这不是 C 级通过，剩余证据工作继续由第4、5项承接。
 4. **[进行中] U04 解析器适配与独立留出验证**（工作包见状态表1'）：顺丰文本型“合并及公司”、腾讯财报表格动态定位、中通公告重复字形解析，以及 comparator 列名/报表范围已修复；旧三样本回归199/199，见 adapter-v4。初始 smoke 缺包原因已定位为`pypdf`仅列dev组，现已移至生产依赖；独立 Compose 验证API/Web健康、迁移和dev主体seed成功。CI 收尾修正（`229069ca`，含 intake-e2e 超时 40→45 与 module-boundaries uv 缓存关闭，均经用户批准）已全绿：run `36511316012` 17/17 success。**首跑已执行**（run ID `2026-09-29-holdout-first-run`，输入/代码/oracle SHA 与完整机器 diff 已保存，人工介入 0）：小米 0/25、阿里 0/15，全部 not_comparable，零伪造输出；归因均为版式泛化失败（无对应适配器），见 holdout-results.md §4。**U4 已按范围关单（2026-09-29 深夜）**：①旧回归 adapter-v5 199/199 零退化；②小米/阿里适配器开发完成并按 §4.5 降级回归集（适配后回归 24/25、15/15+勾稽一致）；③备选 yunda/jdl 先冻结+oracle 后首跑：yunda 0/20（A 股适配器缺口）、jdl 0/25（显式降级），失败原始保留、身份保持留出；④泛化缺口登记为第5项裁决输入。关单提交链 `4f997020`+`a28b638d`（static-python 修复），准确 SHA CI run `36525496607` 17/17 success，**U4 正式关闭**。细节见 holdout-results.md §5 与 U04 工作包。不能由实现方代替独立录入/盲评。
-5. **[完成·No-Go 裁决] C 级质量基准与 Go/No-Go**：当前 HEAD `3b2d130f` 隔离栈 `flowcgo` 重跑 L0 1532/1532、L1 1776/1776 零差异并归档；§3 六条件对账裁决 **No-Go**（条件 1/2/4/5 未满足：L0 未进 CI、完整 oracle 0/14、泛化层留出失败、盲评复评未做；条件 3/6 达成）。裁决文档与四步解锁路径见 [2026-09-29 C 级基准重跑与 Go/No-Go](../60_delivery/verification/2026-09-29--c-level-benchmark-rerun-gonogo-v1.md)。后续解锁动作并入第 6 项数据/来源轨道与用户裁决。
-6. **[排队] P3 真实数据、来源与行业扩张**（工作包见状态表3b）：修复/替换 ZTO 乱码文本层并完成抽取、勾稽、页锚、API/UI验证；复核阿里分部序列；C1 只接纳真实财报原件。
+5. **[完成·No-Go 裁决] C 级质量基准与 Go/No-Go**：当前 HEAD `3b2d130f` 隔离栈 `flowcgo` 重跑 L0 1532/1532、L1 1776/1776 零差异并归档；§3 六条件对账裁决 **No-Go**（条件 1/2/4/5 未满足：L0 未进 CI、完整 oracle 0/14、泛化层留出失败、盲评复评未做；条件 3/6 达成）。裁决文档与四步解锁路径见 [2026-09-29 C 级基准重跑与 Go/No-Go](../60_delivery/verification/2026-09-29--c-level-benchmark-rerun-gonogo-v1.md)。**用户路线纠偏裁决（2026-09-29）**：解锁路径重排为——①盲评复评（队首，条件 5）；②L0 挂 CI（条件 1，方案待批）；③oracle 分批/泛化收敛（条件 2/4）；④数据扩张（原第 6 项）暂停。
+6. **[暂停·用户裁决 2026-09-29] P3 真实数据、来源与行业扩张**：ZTO 接入已完成大半（产品 YAML 57 行与 oracle 逐值一致、L1 答案集 v6 1823/1823 全锚定、隔离栈 L0/L1 实测零差异），按用户路线纠偏裁决**封存**于分支 `wip/zto-integration-20260929`（`2ce0700e`），未完成 API/UI 链路与文档同步。恢复条件：C 级解锁四步完成后或用户重新指令。阿里分部序列复核与 C1 扩张随本项一并暂停。
 7. **[排队] 第二代静态知识 release 与战略重基线**（工作包见状态表K）：按已批准 K0–K6 完成 Davybase 图片批次验收、非微信图片覆盖、稳定15:00 Obsidian Git 截面、来源基线与知识资产、sealed candidate、战略影响评估、用户正式裁决、原子激活和独立复验。完成用户裁决前 `CURRENT_RELEASE` 不变。
 8. **[外部材料受限；必须完成主动恢复/结案] `rnd_exp` 官方依据核验**：先搜索官方发布渠道、项目归档及可验证副本并记录来源；若穷尽后仍无原文，交付可复现的“原文不可得/当前值未核实”报告、影响范围及后续重启条件，不得宣称官方核验通过；完成该结案后继续队列。
 9. **[排队—依赖验收门槛，不等用户授权] U09/O05 内部试点**（工作包见状态表R1）：公开 C 级达到 Go 且真实企业数据可用时完成真实试点；队列轮到时先完成系统/合成数据技术验证并整理授权范围。真实数据不可得则如实结案为“真实试点未验证”，不得把合成数据冒充真实证据，也不得以等待授权为由停摆。
