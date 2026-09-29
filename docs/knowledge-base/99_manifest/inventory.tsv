@@ -2171,7 +2171,6 @@ relative_path	size_bytes	modified_time	mime_type
 50_product_mappings/FLOW-PRODUCT-MAPPING--v1.0.md	2614	2026-09-12T22:35:29+08:00	text/markdown
 50_product_mappings/README.md	488	2026-09-12T22:23:27+08:00	text/markdown
 README.md	4822	2026-09-13T08:33:31+08:00	text/markdown
-05_design/2026-09-29-cfo-cockpit-design.md	27284	2026-09-29T12:39:50+08:00	text/markdown
 05_design/prototypes/2026-09-29-cfo-cockpit-prototype.html	88912	2026-09-29T12:39:07+08:00	text/html
 docs/05_design/prototypes/2026-09-29-cfo-cockpit-prototype-v1.html	133844	2026-09-29T13:26:49+08:00	text/html
 docs/05_design/prototypes/01-overview.webp	205376	2026-09-29T13:26:49+08:00	image/webp
@@ -2186,7 +2185,7 @@ docs/05_design/prototypes/09-consol.webp	177910	2026-09-29T13:26:49+08:00	image/
 docs/05_design/prototypes/10-data.webp	230486	2026-09-29T13:26:49+08:00	image/webp
 05_design/prototypes/2026-09-29-cfo-cockpit-prototype-v1-offline.html	1163054	2026-09-29T13:28:10+08:00	text/html
 05_design/2026-09-29-cfo-cockpit-design.md	40713	2026-09-29T14:07:26+08:00	text/markdown
-05_design/prototypes/2026-09-29-cfo-cockpit-prototype-v1-offline.html	1163054	2026-09-29T13:24:07+08:00	text/html
+05_design/2026-09-29-cfo-cockpit-design.md	40713	2026-09-29T14:26:18+08:00	text/markdown
 05_design/prototypes/2026-09-29-cfo-cockpit-prototype-v2.html	1166140	2026-09-29T14:00:21+08:00	text/html
 05_design/prototypes/v2-01-overview.jpg	207312	2026-09-29T14:05:13+08:00	image/jpeg
 05_design/prototypes/v2-02-profit.jpg	186662	2026-09-29T14:05:14+08:00	image/jpeg
