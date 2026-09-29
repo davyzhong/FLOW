@@ -3,7 +3,7 @@ doc_id: FLOW-WI-COCKPIT-CFO-001
 title: CFO 财务总监驾驶舱产品化
 doc_type: work-item
 status: active
-version: 1.0
+version: 1.1
 created_at: 2026-09-30
 updated_at: 2026-09-30
 owner: FLOW
@@ -45,10 +45,28 @@ confidentiality: project-internal
 
 | 批次 | 范围 | 状态 | 门禁摘要 |
 |---|---|---|---|
-| **A** | 框架 + 集团总览页（真实数据链路） | **next** | typecheck/lint/vitest + navigation.spec + 五态 + 生产构建 + 同 SHA CI 17/17 |
+| **A** | 框架 + 集团总览页（真实数据链路） | **completed** | ✅ 同 SHA CI `36601612612` 17/17 success（commit `b7dc4983`） |
 | B | 安全规格 V1.1.1 + ActionItem + 行动项闭环 | blocked（待 §6 Q2 裁决） | approved-spec 门禁 + 安全规格 §11 九类断言 + route-inventory 双向零差集 |
-| C | 其余 8 模块（利润/盈利/资产负债/营运/费用/现金/风险/合并/数据中心） | pending | 每批同 A 门禁 |
+| C | 其余 8 模块（利润/盈利/资产负债/营运/费用/现金/风险/合并/数据中心） | **next** | 每批同 A 门禁；开工前须裁决实施计划 §6 Q1 图表选型 |
 | D | 经分会计期增强（结论条自动生成、Findings 跨页联动、问数入口） | pending | 设计文档 §8 批次 D |
+
+### 批次 A 交付清单（2026-09-30 完成，commit `ae56e96f` + `b7dc4983`）
+
+| 项 | 位置 | 状态 |
+|---|---|---|
+| 聚合 endpoint | `services/api/src/flow_api/api/routes/cockpit.py` · `GET /api/v1/cockpit/overview` | ✅ 复用已批准的 `Action.DASHBOARD_OVERVIEW_READ`，未引入新 Action |
+| 投影服务 | `services/api/src/flow_api/cockpit/service.py` | ✅ 从 `/dashboard/overview` 同一批冻结事实投影，零重复查询、零重算 |
+| 前端组件 | `apps/web/components/cockpit/`（kpi-card / drill-drawer / trend-panel / filter-bar / conclusion-bar） | ✅ 三基准 + 口径注 + 穿透 + 五态 |
+| 页面路由 | `apps/web/app/cockpit/page.tsx`（包 AppShell） | ✅ `workflow-nav` + `navigation.spec.ts` 已登记 |
+| 契约 | `packages/contracts/openapi.json` + `schema.d.ts` | ✅ `/api/v1/cockpit/overview` 已生成 |
+| 测试 | API 24 + domain 11；Web 11 驾驶舱用例（vitest 154/154） | ✅ |
+| 门禁 | mypy 207 · typecheck · lint 0 errors · build · contracts-check · docs m1 | ✅ |
+| **同 SHA CI** | run `36601612612`（commit `b7dc4983`） | ✅ **17/17 success** |
+
+**批次 A 期间修复的两个真实回归**（本地全绿但 CI 抓出）：
+
+1. **CSS 全局污染**（7 job 连锁失败）：`cockpit.css` 原在 `app/layout.tsx` 全局引入，裸类名（`.kpi`/`.trend`/`.concl`/`.cmp`/`.drill`）参与全局层叠，破坏既有 dashboard 视觉基线与 axe 无障碍判定。修复：改为组件级引入（`cockpit-overview-app.tsx` 内 import），只作用于 `/cockpit`。
+2. **ruff 导入序**（`static-python` 失败）：`api/router.py` 中 `cockpit_router` 位置违反 isort 字母序。已归位。
 
 批次 A 开工前必须先裁决实施计划 §6 的 **Q1（图表技术选型）**。
 
