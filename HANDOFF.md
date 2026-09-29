@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目尽调、优化与单 Agent 执行总交接
 doc_type: navigation
 status: current
-version: 5.17
+version: 5.18
 created_at: 2026-09-12
 updated_at: 2026-09-29
 owner: FLOW
@@ -56,7 +56,7 @@ U04 现状：顺丰文本型“合并及公司”报表、腾讯动态财报表�
 
 **此前接续点（已由上方最新进度覆盖）：** 已完成Dashboard、Analysis/Investigation身份深链阶段。当前工作树与未提交项以 `git status` 为准；具体证据见路线图和UX Gate1记录。不得触碰常驻`flow`（Compose标签来源混杂）。
 
-> **2026-09-29 深夜覆盖（接手会话）**：用户三项授权（偏差批次清理、CI 变更、车道全权）后：①`229069ca` 两处最小 CI 修正（intake-e2e 40→45、module-boundaries 关闭未用 uv 缓存）准确 SHA CI run `36511316012` 17/17 success；②小米/阿里未调参首跑 `2026-09-29-holdout-first-run` 双双失败（版式泛化、零伪造输出，登记 holdout-results.md §4），下一 fork=按 §4.5 开发适配器并降级样本、启用备选 yunda/jdl，或带入第5项裁决；③常驻库两偏差批次已授权清理（备份 SHA `fc06fb58…0737`），大麦数据无损。
+> **2026-09-29 深夜覆盖（接手会话）**：用户三项授权（偏差批次清理、CI 变更、车道全权）后：①`229069ca` 两处最小 CI 修正准确 SHA CI 17/17；②小米/阿里首跑失败已登记并按 §4.5 开发适配器降级回归集（适配后回归 24/25、15/15；旧样本 adapter-v5 199/199 零退化）；③备选 yunda/jdl 冻结+oracle+首跑如实失败（保持留出）；④常驻库两偏差批次已授权清理（备份 SHA `fc06fb58…0737`，大麦无损）。**U4 已按范围关单，唯一队首=第5项 C 级质量基准与 Go/No-Go**（泛化缺口已登记为裁决输入）。
 
 ### 接手基线、当前状态与操作纪律
 

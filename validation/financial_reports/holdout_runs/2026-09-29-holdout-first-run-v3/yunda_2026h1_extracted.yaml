@@ -1,0 +1,1307 @@
+sample: yunda_2026h1
+adapter_id: cn_ashare_table
+unit: 人民币千元（每股收益为元）
+page_count: 200
+source_sha256: fc2981a2d954b45d55799c549de0ad44bcf8c3cf34e77bfbb8b63ca0a2caee12
+statements:
+  合并资产负债表:
+  - item: 一年内到期的其他非流动资产
+    期末余额: null
+    期初余额: null
+    page: 103
+  - item: 一年内到期的长期应收款
+    期末余额: null
+    期初余额: null
+    page: 103
+  - item: 减：减值准备
+    期末余额: null
+    期初余额: null
+    page: 103
+  - item: 增值税借方余额重分类
+    期末余额: null
+    期初余额: null
+    page: 104
+  - item: 待摊费用
+    期末余额: null
+    期初余额: null
+    page: 104
+  - item: 预缴企业所得税
+    期末余额: null
+    期初余额: null
+    page: 104
+  - item: 本期确认的股
+    期末余额: null
+    期初余额: null
+    page: 105
+  - item: 利收入
+    期末余额: null
+    期初余额: null
+    page: 105
+  - item: 其他综合收益
+    期末余额: null
+    期初余额: null
+    page: 107
+  - item: 转入留存收益
+    期末余额: null
+    期初余额: null
+    page: 107
+  - item: 的金额
+    期末余额: null
+    期初余额: null
+    page: 107
+  - item: 其他综合收益
+    期末余额: null
+    期初余额: null
+    page: 107
+  - item: 转入留存收益
+    期末余额: null
+    期初余额: null
+    page: 107
+  - item: 的原因
+    期末余额: null
+    期初余额: null
+    page: 107
+  - item: 确认的股利收
+    期末余额: null
+    期初余额: null
+    page: 107
+  - item: 入
+    期末余额: null
+    期初余额: null
+    page: 107
+  - item: 减：未实现融资收益
+    期末余额: 2179359.21
+    期初余额: null
+    page: 108
+  - item: 应收款
+    期末余额: null
+    期初余额: null
+    page: 109
+  - item: 长期应收款坏账准备
+    期末余额: null
+    期初余额: null
+    page: 110
+  - item: 蜂网投资有限公司
+    期末余额: null
+    期初余额: null
+    page: 111
+  - item: 绿脉商业发展（苏州）有限公司
+    期末余额: null
+    期初余额: null
+    page: 111
+  - item: 中达通智慧物流（上海）有限公司
+    期末余额: null
+    期初余额: null
+    page: 111
+  - item: 中云达（上海）科技有限公司
+    期末余额: null
+    期初余额: null
+    page: 111
+  - item: 浙江赫森能源有限公司
+    期末余额: null
+    期初余额: null
+    page: 111
+  - item: 新疆众鲜网络科技有限公司
+    期末余额: null
+    期初余额: null
+    page: 111
+  - item: 追
+    期末余额: null
+    期初余额: null
+    page: 111
+  - item: 加
+    期末余额: null
+    期初余额: null
+    page: 111
+  - item: 投
+    期末余额: null
+    期初余额: null
+    page: 111
+  - item: 资
+    期末余额: null
+    期初余额: null
+    page: 111
+  - item: 减
+    期末余额: null
+    期初余额: null
+    page: 111
+  - item: 少
+    期末余额: null
+    期初余额: null
+    page: 111
+  - item: 投
+    期末余额: null
+    期初余额: null
+    page: 111
+  - item: 资
+    期末余额: null
+    期初余额: null
+    page: 111
+  - item: 其他
+    期末余额: null
+    期初余额: null
+    page: 111
+  - item: 综合
+    期末余额: null
+    期初余额: null
+    page: 111
+  - item: 收益
+    期末余额: null
+    期初余额: null
+    page: 111
+  - item: 调整
+    期末余额: null
+    期初余额: null
+    page: 111
+  - item: 宣告发
+    期末余额: null
+    期初余额: null
+    page: 111
+  - item: 放现金
+    期末余额: null
+    期初余额: null
+    page: 111
+  - item: 股利或
+    期末余额: null
+    期初余额: null
+    page: 111
+  - item: 利润
+    期末余额: null
+    期初余额: null
+    page: 111
+  - item: 减值准
+    期末余额: null
+    期初余额: null
+    page: 111
+  - item: 备期末
+    期末余额: null
+    期初余额: null
+    page: 111
+  - item: 余额
+    期末余额: null
+    期初余额: null
+    page: 111
+  - item: 期初余额（账
+    期末余额: null
+    期初余额: null
+    page: 111
+  - item: 面价值）
+    期末余额: null
+    期初余额: null
+    page: 111
+  - item: 减值准备期初余
+    期末余额: null
+    期初余额: null
+    page: 111
+  - item: 额
+    期末余额: null
+    期初余额: null
+    page: 111
+  - item: 权益法下确
+    期末余额: null
+    期初余额: null
+    page: 111
+  - item: 认的投资损
+    期末余额: null
+    期初余额: null
+    page: 111
+  - item: 益
+    期末余额: null
+    期初余额: null
+    page: 111
+  - item: 期末余额（账
+    期末余额: null
+    期初余额: null
+    page: 111
+  - item: 面价值）
+    期末余额: null
+    期初余额: null
+    page: 111
+  - item: （4）在建工程转入
+    期末余额: null
+    期初余额: null
+    page: 113
+  - item: （5）施工投入
+    期末余额: null
+    期初余额: null
+    page: 113
+  - item: （3）转固定资产\无形资产
+    期末余额: null
+    期初余额: null
+    page: 113
+  - item: （3）转固定资产/无形资产
+    期末余额: null
+    期初余额: null
+    page: 113
+  - item: （4）投资性房地产转回
+    期末余额: null
+    期初余额: null
+    page: 115
+  - item: （2）投资性房地产转回
+    期末余额: null
+    期初余额: null
+    page: 115
+  - item: 运输设备
+    期末余额: null
+    期初余额: null
+    page: 117
+  - item: 机器设备
+    期末余额: null
+    期初余额: null
+    page: 117
+  - item: 电子设备
+    期末余额: null
+    期初余额: null
+    page: 117
+  - item: 合计
+    期末余额: null
+    期初余额: null
+    page: 117
+  - item: 关键参数的确
+    期末余额: null
+    期初余额: null
+    page: 117
+  - item: 定依据
+    期末余额: null
+    期初余额: null
+    page: 117
+  - item: 固定资产清理
+    期末余额: null
+    期初余额: null
+    page: 118
+  - item: 场地建设工程
+    期末余额: null
+    期初余额: null
+    page: 118
+  - item: 其他工程
+    期末余额: null
+    期初余额: null
+    page: 118
+  - item: 其中：本
+    期末余额: null
+    期初余额: null
+    page: 119
+  - item: 期利息资
+    期末余额: null
+    期初余额: null
+    page: 119
+  - item: 本化金额
+    期末余额: null
+    期初余额: null
+    page: 119
+  - item: 本期转入固定
+    期末余额: null
+    期初余额: null
+    page: 119
+  - item: 资产金额
+    期末余额: null
+    期初余额: null
+    page: 119
+  - item: 本期其他
+    期末余额: null
+    期初余额: null
+    page: 119
+  - item: 减少金额
+    期末余额: null
+    期初余额: null
+    page: 119
+  - item: 工程进
+    期末余额: null
+    期初余额: null
+    page: 119
+  - item: 度
+    期末余额: null
+    期初余额: null
+    page: 119
+  - item: 利息资本化
+    期末余额: null
+    期初余额: null
+    page: 119
+  - item: 累计金额
+    期末余额: null
+    期初余额: null
+    page: 119
+  - item: 资金来
+    期末余额: null
+    期初余额: null
+    page: 119
+  - item: 源
+    期末余额: null
+    期初余额: null
+    page: 119
+  - item: 运输分拣设备组件
+    期末余额: null
+    期初余额: null
+    page: 120
+  - item: （4）投资性房地产转回
+    期末余额: null
+    期初余额: null
+    page: 121
+  - item: （2）投资性房地产转回
+    期末余额: null
+    期初余额: null
+    page: 121
+  - item: 租入房屋及场地装修费
+    期末余额: null
+    期初余额: null
+    page: 122
+  - item: 其他
+    期末余额: null
+    期初余额: null
+    page: 122
+  - item: 预提费用
+    期末余额: null
+    期初余额: null
+    page: 123
+  - item: 政府补助递延收益
+    期末余额: null
+    期初余额: null
+    page: 123
+  - item: 租赁负债税会差异
+    期末余额: null
+    期初余额: null
+    page: 123
+  - item: 无形资产摊销
+    期末余额: null
+    期初余额: null
+    page: 123
+  - item: 其他权益工具投资公允价值变动
+    期末余额: null
+    期初余额: null
+    page: 123
+  - item: 采用权益法确认的投资收益等
+    期末余额: null
+    期初余额: null
+    page: 123
+  - item: 预计负债（未决诉讼）
+    期末余额: null
+    期初余额: null
+    page: 123
+  - item: 股权激励
+    期末余额: null
+    期初余额: null
+    page: 123
+  - item: 使用权资产税会差异
+    期末余额: null
+    期初余额: null
+    page: 123
+  - item: 交易性金融资产公允价值变动
+    期末余额: null
+    期初余额: null
+    page: 123
+  - item: '2026'
+    期末余额: null
+    期初余额: null
+    page: 124
+  - item: '2027'
+    期末余额: null
+    期初余额: null
+    page: 124
+  - item: '2028'
+    期末余额: null
+    期初余额: null
+    page: 124
+  - item: '2029'
+    期末余额: null
+    期初余额: null
+    page: 124
+  - item: '2030'
+    期末余额: null
+    期初余额: null
+    page: 124
+  - item: 大额存单
+    期末余额: null
+    期初余额: null
+    page: 124
+  - item: 预付设备款
+    期末余额: null
+    期初余额: null
+    page: 124
+  - item: 预付工程款
+    期末余额: null
+    期初余额: null
+    page: 124
+  - item: 应付运费
+    期末余额: null
+    期初余额: null
+    page: 125
+  - item: 应付工程款
+    期末余额: null
+    期初余额: null
+    page: 126
+  - item: 应付设备款
+    期末余额: null
+    期初余额: null
+    page: 126
+  - item: 装卸操作扫描费
+    期末余额: null
+    期初余额: null
+    page: 126
+  - item: 快递中转派件费
+    期末余额: null
+    期初余额: null
+    page: 126
+  - item: 应付材料款
+    期末余额: null
+    期初余额: null
+    page: 126
+  - item: 其他
+    期末余额: null
+    期初余额: null
+    page: 126
+  - item: 押金及保证金
+    期末余额: null
+    期初余额: null
+    page: 126
+  - item: 代收代付货款
+    期末余额: null
+    期初余额: null
+    page: 126
+  - item: 应退还政府补助
+    期末余额: null
+    期初余额: null
+    page: 126
+  - item: 其他
+    期末余额: null
+    期初余额: null
+    page: 126
+  - item: 租赁款
+    期末余额: null
+    期初余额: null
+    page: 126
+  - item: 预收快递服务费
+    期末余额: null
+    期初余额: null
+    page: 127
+  - item: 6、劳务派遣人员薪酬
+    期末余额: null
+    期初余额: null
+    page: 127
+  - item: 房产税
+    期末余额: null
+    期初余额: null
+    page: 128
+  - item: 土地使用税
+    期末余额: null
+    期初余额: null
+    page: 128
+  - item: 印花税
+    期末余额: null
+    期初余额: null
+    page: 128
+  - item: 教育费附加及地方教育附加
+    期末余额: null
+    期初余额: null
+    page: 128
+  - item: 其他税种
+    期末余额: null
+    期初余额: null
+    page: 128
+  - item: 待转销项税额
+    期末余额: null
+    期初余额: null
+    page: 128
+  - item: 减：一年内到期的长期借款
+    期末余额: null
+    期初余额: null
+    page: 129
+  - item: 人民币中期票据
+    期末余额: null
+    期初余额: null
+    page: 129
+  - item: 公司债
+    期末余额: null
+    期初余额: null
+    page: 129
+  - item: 可转换公司债券
+    期末余额: null
+    期初余额: null
+    page: 129
+  - item: 减：一年内到期的应付债券
+    期末余额: null
+    期初余额: null
+    page: 129
+  - item: 租赁付款额
+    期末余额: null
+    期初余额: null
+    page: 132
+  - item: 减：未确认融资费用
+    期末余额: null
+    期初余额: null
+    page: 132
+  - item: 减：一年内到期的租赁负债
+    期末余额: null
+    期初余额: null
+    page: 132
+  - item: 设备款
+    期末余额: null
+    期初余额: null
+    page: 132
+  - item: 合计
+    期末余额: null
+    期初余额: null
+    page: 132
+  - item: 韵达转债
+    期末余额: null
+    期初余额: null
+    page: 134
+  - item: 库存股
+    期末余额: null
+    期初余额: null
+    page: 135
+  - item: 本期所得税前发
+    期末余额: null
+    期初余额: null
+    page: 136
+  - item: 生额
+    期末余额: null
+    期初余额: null
+    page: 136
+  - item: 税后归属于母公
+    期末余额: null
+    期初余额: null
+    page: 136
+  - item: 司
+    期末余额: null
+    期初余额: null
+    page: 136
+  - item: 税后归属于少数
+    期末余额: null
+    期初余额: null
+    page: 136
+  - item: 股东
+    期末余额: null
+    期初余额: null
+    page: 136
+  - item: 加：本期其他综合收益转留存收益
+    期末余额: null
+    期初余额: null
+    page: 137
+  - item: 短期借款
+    期末余额: null
+    期初余额: null
+    page: 144
+  - item: 长期借款
+    期末余额: null
+    期初余额: null
+    page: 144
+  - item: 应付债券
+    期末余额: null
+    期初余额: null
+    page: 144
+  - item: 租赁负债
+    期末余额: null
+    期初余额: null
+    page: 144
+  - item: 长期应付款
+    期末余额: null
+    期初余额: null
+    page: 144
+  - item: 信用减值准备
+    期末余额: null
+    期初余额: null
+    page: 144
+  - item: 新增使用权资产
+    期末余额: null
+    期初余额: null
+    page: 145
+  - item: 应计利息
+    期末余额: null
+    期初余额: null
+    page: 146
+  - item: 加元
+    期末余额: null
+    期初余额: null
+    page: 146
+  - item: 日元
+    期末余额: null
+    期初余额: null
+    page: 146
+  - item: 新加坡币
+    期末余额: null
+    期初余额: null
+    page: 146
+  - item: 英镑
+    期末余额: null
+    期初余额: null
+    page: 146
+  - item: 本期计入当期损益的采用简化处理的短期租赁费用
+    期末余额: 15273845.59
+    期初余额: null
+    page: 147
+  - item: 本期计入当期损益的采用简化处理的低价值资产租赁费用（短期租赁除外）
+    期末余额: 9088214.6
+    期初余额: null
+    page: 147
+  - item: 租赁负债的利息费用
+    期末余额: 5731255.34
+    期初余额: null
+    page: 147
+  - item: 与租赁相关的总现金流出
+    期末余额: 118936544.17
+    期初余额: null
+    page: 147
+  - item: 租赁收入
+    期末余额: null
+    期初余额: null
+    page: 147
+  - item: 职工薪酬
+    期末余额: null
+    期初余额: null
+    page: 148
+  - item: 技术外包服务费
+    期末余额: null
+    期初余额: null
+    page: 148
+  - item: 折旧及摊销
+    期末余额: null
+    期初余额: null
+    page: 148
+  - item: 其他
+    期末余额: null
+    期初余额: null
+    page: 148
+  - item: 公司
+    期末余额: null
+    期初余额: null
+    page: 151
+  - item: 限公司
+    期末余额: null
+    期初余额: null
+    page: 152
+  - item: 公司
+    期末余额: null
+    期初余额: null
+    page: 154
+  - item: 公司
+    期末余额: null
+    期初余额: null
+    page: 157
+  - item: 本期新增补助
+    期末余额: null
+    期初余额: null
+    page: 181
+  - item: 金额
+    期末余额: null
+    期初余额: null
+    page: 181
+  - item: 本期转入其
+    期末余额: null
+    期初余额: null
+    page: 181
+  - item: 他收益金额
+    期末余额: null
+    期初余额: null
+    page: 181
+  - item: 本期其他
+    期末余额: null
+    期初余额: null
+    page: 181
+  - item: 变动
+    期末余额: null
+    期初余额: null
+    page: 181
+  - item: 与资产/收
+    期末余额: null
+    期初余额: null
+    page: 181
+  - item: 益相关
+    期末余额: null
+    期初余额: null
+    page: 181
+  - item: 其他收益
+    期末余额: null
+    期初余额: null
+    page: 181
+  - item: 营业外收入
+    期末余额: 5000.0
+    期初余额: null
+    page: 182
+  - item: 合计
+    期末余额: 49454610.98
+    期初余额: 53741357.04
+    page: 182
+  - item: 短期借款
+    期末余额: 1733542799.86
+    期初余额: null
+    page: 183
+  - item: 应付票据
+    期末余额: 115330000.0
+    期初余额: null
+    page: 183
+  - item: 应付账款
+    期末余额: 3014747925.77
+    期初余额: null
+    page: 183
+  - item: 其他应付款
+    期末余额: 1003646517.96
+    期初余额: null
+    page: 183
+  - item: 租赁负债（含一年内到期的租赁负债）
+    期末余额: 150628763.74
+    期初余额: 103842948.43
+    page: 183
+  - item: 长期借款（含一年内到期的长期借款）
+    期末余额: 12052367.63
+    期初余额: 5000309.18
+    page: 183
+  - item: 长期应付款（含一年内
+    期末余额: 77030384.2
+    期初余额: 2257273.58
+    page: 183
+  - item: 到期的长期应付款）
+    期末余额: null
+    期初余额: null
+    page: 184
+  - item: 应付债券（含一年内到期的应付债券）
+    期末余额: 566786760.64
+    期初余额: 2600000000.0
+    page: 184
+  - item: 合计
+    期末余额: 6673765519.8
+    期初余额: 2711100531.19
+    page: 184
+  - item: 货币资金
+    期末余额: 69769949.28
+    期初余额: 475196147.57
+    page: 184
+  - item: 货币资金
+    期末余额: 7142.17
+    期初余额: 34173.14
+    page: 184
+  - item: （1）银行金融机构短期理财产品
+    期末余额: null
+    期初余额: null
+    page: 185
+  - item: （2）非银行金融机构短期理财产品
+    期末余额: null
+    期初余额: null
+    page: 185
+  - item: 陈立英
+    期末余额: 30.0
+    期初余额: 30.0
+    page: 186
+  - item: 聂腾云
+    期末余额: 70.0
+    期初余额: 70.0
+    page: 186
+  - item: 合计
+    期末余额: 100.0
+    期初余额: 100.0
+    page: 186
+  - item: 简化处理的短期租赁和低价
+    期末余额: null
+    期初余额: null
+    page: 188
+  - item: 值资产租赁的租金费用（如
+    期末余额: null
+    期初余额: null
+    page: 188
+  - item: 适用）
+    期末余额: null
+    期初余额: null
+    page: 188
+  - item: 承担的租赁负
+    期末余额: null
+    期初余额: null
+    page: 188
+  - item: 债利息支出
+    期末余额: null
+    期初余额: null
+    page: 188
+  - item: 增加的使用权
+    期末余额: null
+    期初余额: null
+    page: 188
+  - item: 资产
+    期末余额: null
+    期初余额: null
+    page: 188
+  - item: 租
+    期末余额: null
+    期初余额: null
+    page: 188
+  - item: 赁
+    期末余额: null
+    期初余额: null
+    page: 188
+  - item: 资
+    期末余额: null
+    期初余额: null
+    page: 188
+  - item: 产
+    期末余额: null
+    期初余额: null
+    page: 188
+  - item: 种
+    期末余额: null
+    期初余额: null
+    page: 188
+  - item: 类
+    期末余额: null
+    期初余额: null
+    page: 188
+  - item: 出租方名
+    期末余额: null
+    期初余额: null
+    page: 188
+  - item: 称
+    期末余额: null
+    期初余额: null
+    page: 188
+  - item: 本期
+    期末余额: null
+    期初余额: null
+    page: 188
+  - item: 发生
+    期末余额: null
+    期初余额: null
+    page: 188
+  - item: 额
+    期末余额: null
+    期初余额: null
+    page: 188
+  - item: 上期
+    期末余额: null
+    期初余额: null
+    page: 188
+  - item: 发生
+    期末余额: null
+    期初余额: null
+    page: 188
+  - item: 额
+    期末余额: null
+    期初余额: null
+    page: 188
+  - item: 本期
+    期末余额: null
+    期初余额: null
+    page: 188
+  - item: 发生
+    期末余额: null
+    期初余额: null
+    page: 188
+  - item: 额
+    期末余额: null
+    期初余额: null
+    page: 188
+  - item: 上期
+    期末余额: null
+    期初余额: null
+    page: 188
+  - item: 发生
+    期末余额: null
+    期初余额: null
+    page: 188
+  - item: 额
+    期末余额: null
+    期初余额: null
+    page: 188
+  - item: 公司
+    期末余额: null
+    期初余额: null
+    page: 189
+  - item: 关键管理人员报酬/万元
+    期末余额: null
+    期初余额: null
+    page: 189
+  - item: 关键管理人员人数/人
+    期末余额: null
+    期初余额: null
+    page: 189
+  - item: 管理人员、核心业务（技术）人员-限制性股票
+    期末余额: null
+    期初余额: null
+    page: 191
+  - item: 管理人员、核心业务（技术）人员-股票期权
+    期末余额: null
+    期初余额: null
+    page: 191
+  - item: 账面价
+    期末余额: null
+    期初余额: null
+    page: 193
+  - item: 值
+    期末余额: null
+    期初余额: null
+    page: 193
+  - item: 账面价
+    期末余额: null
+    期初余额: null
+    page: 193
+  - item: 值
+    期末余额: null
+    期初余额: null
+    page: 193
+  - item: 往来款资金占用费
+    期末余额: null
+    期初余额: null
+    page: 193
+  - item: 上海韵达货运有限公司
+    期末余额: null
+    期初余额: null
+    page: 194
+  - item: 关联方往来款
+    期末余额: null
+    期初余额: null
+    page: 194
+  - item: 其他往来款
+    期末余额: null
+    期初余额: null
+    page: 194
+  - item: 1.组合4（应收合并范围内的关联方款项）
+    期末余额: null
+    期初余额: null
+    page: 195
+  - item: 1.组合4（应收合并范围内的关联方款项）
+    期末余额: null
+    期初余额: null
+    page: 196
+  - item: 未来12个月预期信用
+    期末余额: null
+    期初余额: null
+    page: 196
+  - item: 损失
+    期末余额: null
+    期初余额: null
+    page: 196
+  - item: 其他应收款坏账准备
+    期末余额: null
+    期初余额: null
+    page: 196
+  - item: 上海韵达货运有限公司
+    期末余额: 21687000000.0
+    期初余额: null
+    page: 197
+  - item: 宁波梅山保税港区福杉投资有限公司
+    期末余额: 155000000.0
+    期初余额: null
+    page: 197
+  - item: 上海韵毅实业有限公司
+    期末余额: 50000000.0
+    期初余额: null
+    page: 197
+  - item: 期初余额（账面价
+    期末余额: null
+    期初余额: null
+    page: 197
+  - item: 值）
+    期末余额: null
+    期初余额: null
+    page: 197
+  - item: 期末余额（账面价
+    期末余额: null
+    期初余额: null
+    page: 197
+  - item: 值）
+    期末余额: null
+    期初余额: null
+    page: 197
+  - item: 上海韵达国际货运代理有限公司
+    期末余额: null
+    期初余额: null
+    page: 198
+  - item: 上海韵达供应链管理有限公司
+    期末余额: null
+    期初余额: null
+    page: 198
+  - item: 上海韵达高新技术有限公司
+    期末余额: null
+    期初余额: null
+    page: 198
+  - item: 上海蜂硕智能科技有限公司
+    期末余额: null
+    期初余额: null
+    page: 198
+  - item: 宁波梅山保税港区伟仕投资有限公司
+    期末余额: null
+    期初余额: null
+    page: 198
+  - item: 杭州韵达电子商务有限公司
+    期末余额: null
+    期初余额: null
+    page: 198
+  合并现金流量表:
+  - item: 其他税费
+    本期发生额: null
+    上期发生额: null
+    page: 138
+  - item: 水利建设基金
+    本期发生额: null
+    上期发生额: null
+    page: 138
+  - item: 职工薪酬
+    本期发生额: null
+    上期发生额: null
+    page: 138
+  - item: 信息化费用
+    本期发生额: null
+    上期发生额: null
+    page: 138
+  - item: 折旧及摊销
+    本期发生额: null
+    上期发生额: null
+    page: 138
+  - item: 房租及物业管理费
+    本期发生额: null
+    上期发生额: null
+    page: 138
+  - item: 股权激励
+    本期发生额: null
+    上期发生额: null
+    page: 138
+  - item: 办公费
+    本期发生额: null
+    上期发生额: null
+    page: 138
+  - item: 物料消耗
+    本期发生额: null
+    上期发生额: null
+    page: 138
+  - item: 咨询费
+    本期发生额: null
+    上期发生额: null
+    page: 138
+  - item: 税费
+    本期发生额: null
+    上期发生额: null
+    page: 138
+  - item: 差旅费
+    本期发生额: null
+    上期发生额: null
+    page: 138
+  - item: 其他
+    本期发生额: null
+    上期发生额: null
+    page: 138
+  - item: 职工薪酬
+    本期发生额: null
+    上期发生额: null
+    page: 139
+  - item: 办公费
+    本期发生额: null
+    上期发生额: null
+    page: 139
+  - item: 差旅费
+    本期发生额: null
+    上期发生额: null
+    page: 139
+  - item: 房租及物业管理费
+    本期发生额: null
+    上期发生额: null
+    page: 139
+  - item: 广告宣传费
+    本期发生额: null
+    上期发生额: null
+    page: 139
+  - item: 其他
+    本期发生额: null
+    上期发生额: null
+    page: 139
+  - item: 职工薪酬
+    本期发生额: null
+    上期发生额: null
+    page: 139
+  - item: 折旧及摊销
+    本期发生额: null
+    上期发生额: null
+    page: 139
+  - item: 技术外包服务费
+    本期发生额: null
+    上期发生额: null
+    page: 139
+  - item: 其他
+    本期发生额: null
+    上期发生额: null
+    page: 139
+  - item: 利息费用
+    本期发生额: null
+    上期发生额: null
+    page: 139
+  - item: 减：利息收入
+    本期发生额: null
+    上期发生额: null
+    page: 139
+  - item: 汇兑损益
+    本期发生额: null
+    上期发生额: null
+    page: 139
+  - item: 手续费及其他
+    本期发生额: null
+    上期发生额: null
+    page: 139
+  - item: 一、计入其他收益的政府补助
+    本期发生额: null
+    上期发生额: null
+    page: 139
+  - item: 其中：与递延收益相关的政府补助（与资产相关）
+    本期发生额: null
+    上期发生额: null
+    page: 139
+  - item: 直接计入当期损益的政府补助（与收
+    本期发生额: null
+    上期发生额: null
+    page: 139
+  - item: 益相关）
+    本期发生额: null
+    上期发生额: null
+    page: 140
+  - item: 二、其他与日常活动相关且计入其他收益的项目
+    本期发生额: 1584432.31
+    上期发生额: 1751759.04
+    page: 140
+  - item: 其中：进项税加计抵减
+    本期发生额: -7166.64
+    上期发生额: 11595.01
+    page: 140
+  - item: 个税扣缴税款手续费
+    本期发生额: 1485583.26
+    上期发生额: 1431871.22
+    page: 140
+  - item: 重点人群退税减免税
+    本期发生额: 106015.69
+    上期发生额: 308292.81
+    page: 140
+  - item: 合计
+    本期发生额: 51034361.64
+    上期发生额: 55493116.08
+    page: 140
+  - item: 交易性金融资产
+    本期发生额: null
+    上期发生额: null
+    page: 140
+  - item: 其中：银行金融机构短期理财产品
+    本期发生额: null
+    上期发生额: null
+    page: 140
+  - item: 非银行金融机构短期理财产品
+    本期发生额: null
+    上期发生额: null
+    page: 140
+  - item: 回购应付债券投资收益
+    本期发生额: null
+    上期发生额: null
+    page: 140
+  - item: 理财产品投资收益
+    本期发生额: null
+    上期发生额: null
+    page: 140
+  - item: 应收利息
+    本期发生额: null
+    上期发生额: null
+    page: 140
+  - item: 一年内到期的非流动资产减值损失
+    本期发生额: null
+    上期发生额: null
+    page: 141
+  - item: 处置划分为持有待售的固定资产、在建工程、生产性生物资产及无形资产的处置利得或损失
+    本期发生额: null
+    上期发生额: null
+    page: 141
+  - item: 处置未划分为持有待售的固定资产、在建工程、生产性生物资产及无形资产的处置利得或损失
+    本期发生额: null
+    上期发生额: null
+    page: 141
+  - item: 合计
+    本期发生额: null
+    上期发生额: null
+    page: 141
+  - item: 违约金赔偿金收入
+    本期发生额: null
+    上期发生额: null
+    page: 141
+  - item: 非流动资产毁损处置利得
+    本期发生额: null
+    上期发生额: null
+    page: 141
+  - item: 无需支付的应付款项
+    本期发生额: null
+    上期发生额: null
+    page: 141
+  - item: 其他
+    本期发生额: null
+    上期发生额: null
+    page: 141
+  - item: 赔偿支出
+    本期发生额: null
+    上期发生额: null
+    page: 142
+  - item: 非流动资产处置损失
+    本期发生额: null
+    上期发生额: null
+    page: 142
+  - item: 其他
+    本期发生额: null
+    上期发生额: null
+    page: 142
+  - item: 税率变动对期初递延所得税余额的影响
+    本期发生额: null
+    上期发生额: null
+    page: 142
+  - item: 研发费用加计扣除
+    本期发生额: null
+    上期发生额: null
+    page: 142
+  - item: 收到政府补助
+    本期发生额: null
+    上期发生额: null
+    page: 143
+  - item: 收到备用金、押金保证金和往来款
+    本期发生额: null
+    上期发生额: null
+    page: 143
+  - item: 收到活期存款利息
+    本期发生额: null
+    上期发生额: null
+    page: 143
+  - item: 收到其他营业外收入
+    本期发生额: null
+    上期发生额: null
+    page: 143
+  - item: 经营费用付现支出
+    本期发生额: null
+    上期发生额: null
+    page: 143
+  - item: 支付受限货币资金、押金保证金及往来款
+    本期发生额: null
+    上期发生额: null
+    page: 143
+  - item: 支付营业外支出
+    本期发生额: null
+    上期发生额: null
+    page: 143
+  - item: 收回理财投资产品的本金
+    本期发生额: null
+    上期发生额: null
+    page: 143
+  - item: 大额存单的利息
+    本期发生额: null
+    上期发生额: null
+    page: 143
+  - item: 支付理财投资产品的本金
+    本期发生额: null
+    上期发生额: null
+    page: 143
+  - item: 大额存单的利息
+    本期发生额: null
+    上期发生额: null
+    page: 143
+  - item: 支付租赁款项
+    本期发生额: null
+    上期发生额: null
+    page: 144
+  - item: 支付分期付款设备款
+    本期发生额: null
+    上期发生额: null
+    page: 144
+  - item: 支付债券发行费用
+    本期发生额: null
+    上期发生额: null
+    page: 144
+  - item: 支付股份回购款
+    本期发生额: null
+    上期发生额: null
+    page: 144
+checks: []
+warnings:
+- 未定位到报表：合并利润表

@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.27
+version: 5.28
 created_at: 2026-09-12
 updated_at: 2026-09-29
 owner: FLOW
@@ -13,6 +13,8 @@ applies_to: repository
 # FLOW 当前项目状态（唯一 current state）
 
 2026-09-29 当前状态（优先于下方较早快照）：14份公开财报样本及 PDF/活动 YAML/报告身份/答案集/行身份映射/实现 SHA 已冻结；L0 1532 项、L1 1776/1776 页锚可重建。行身份实现准确 SHA CI `36478301484` 17/17 success。冻结与 oracle 盘点的定向测试6/6通过；登记清单、5份 oracle YAML 均可解析，当前5份哈希与文件一致，其中小米/阿里 FY2027Q1 两条旧声明已原样保留到 `oracle_sha256_previous_claim` 并以当前实测 SHA 订正。C 级本轮证据审计结论为 No-Go（0/14完整逐行独立 oracle；旧首跑199/199不可比较；两个新 holdout 无首跑 artifact；现有交叉评不是成品盲评），不是数据准确率判负，更不是 C 级通过。详见[冻结与 oracle 审计](../60_delivery/verification/2026-09-29--public-sample-freeze-oracle-audit-v1.md)和[机器可读冻结清单](../../validation/financial_reports/c-level-freeze-2026-09-29-v1.yaml)。
+
+2026-09-29 深夜（接手会话·U4 关单）：①小米/阿里适配器（hk_interim_english/hk_quarterly_highlights）开发完成，两样本按 §4.5 降级回归集；适配后回归小米 24/25、阿里 15/15（+各 2 勾稽一致），旧三样本 adapter-v5 回归 199/199 零退化；测试 19/19、ruff/mypy 通过。②备选 yunda/jdl 首跑如实失败（yunda 0/20 A股适配器缺口、jdl 0/25 显式降级），身份保持留出。③oracle v2 修订（值零变更）登记。④泛化缺口作为第5项 C 级 Go/No-Go 裁决输入；唯一队首=第5项。
 
 2026-09-29 晚（接手会话）：用户批准两处最小 CI 变更（intake-e2e 超时 40→45、module-boundaries-e2e 关闭未使用的 uv 缓存），提交 `229069ca` 准确 SHA CI run `36511316012` 17/17 success。**小米/阿里未调参首跑已执行**（run ID `2026-09-29-holdout-first-run`，人工介入 0，原始产物全量保留）：小米 0/25（UnsupportedLayoutError，得分 0/1/1，英文版身份正确，真实版式泛化失败）、阿里 0/15（hk_traditional_text 硬编码京东物流年报页锚对 26 页简体公告必然失效）；40 行 oracle 全部 not_comparable、零伪造输出。归因与协议处置（§4.5 降级/备选路径）登记于 holdout-results.md §4。另：常驻 flow 库两个测试偏差批次（`01a0dcdd`、`01a0e22c`）已获用户授权清理——备份 `work/backups/flow-pre-deviation-cleanup-20260929.dump`（SHA-256 `fc06fb58…0737`）后事务删除（24 快照、100,800 指标值、11,088 事实行、2 运行、8 findings、2 导入版本、1 孤儿对象含 MinIO 键），大麦 `damai-demo-v1` 批次完整性核验无损、零孤儿行。
 

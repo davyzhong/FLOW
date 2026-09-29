@@ -56,6 +56,13 @@ SAMPLES = {
     "alibaba_fy2027q1": (
         "validation/financial_reports/original/alibaba_fy2027q1/BABA_FY2027Q1_results_c.pdf"
     ),
+    # 2026-09-29 备选候选启用（holdout-lottery-2026-09-25 §3 顺位；oracle 已录，见 manifest）
+    "yunda_2026h1": (
+        "validation/financial_reports/original/yunda_2026h1/YUNDA_2026_interim_report_c.pdf"
+    ),
+    "jdl_2026h1": (
+        "validation/financial_reports/original/jdl_2026h1/JDL_2026_interim_report_e.pdf"
+    ),
 }
 LEGACY_REGRESSION_SAMPLES = ("sf_2026h1", "tencent_fy2025", "zto_2026q1")
 

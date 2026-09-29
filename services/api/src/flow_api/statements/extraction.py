@@ -987,6 +987,428 @@ class ResultsAnnouncementExtractor:
 
 
 # ---------------------------------------------------------------------------
+# 港股英文中期报告适配器（小米版式：INTERIM CONDENSED CONSOLIDATED 三表、
+# 损益表 3M/6M 双组四列、括号负数、注释号夹在行名与数值之间）
+# ---------------------------------------------------------------------------
+
+_XIAOMI_INCOME_TITLE = "INTERIM CONDENSED CONSOLIDATED INCOME STATEMENTS"
+_XIAOMI_BALANCE_TITLE = "INTERIM CONDENSED CONSOLIDATED BALANCE SHEET"
+_XIAOMI_CASHFLOW_TITLE = "INTERIM CONDENSED CONSOLIDATED STATEMENT OF CASH FLOWS"
+_XIAOMI_TITLE_PREFIX = "INTERIM CONDENSED CONSOLIDATED"
+_NUM_TOKEN = re.compile(r"\(?-?[\d][\d,]*(?:\.\d+)?\)?")
+_XIAOMI_NOTE_REF = re.compile(r"\d{1,2},")
+
+
+def _num_matches(line: str) -> list[re.Match[str]]:
+    return list(_NUM_TOKEN.finditer(line))
+
+
+def _is_note_ref(token: str) -> bool:
+    return bool(re.fullmatch(r"\d{1,2}", token.strip(","))) and len(token) <= 3
+
+
+def _signed_hk(token: str) -> Any:
+    if token.startswith("(") and token.endswith(")"):
+        digits = token[1:-1].replace(",", "")
+        number = float(digits) if "." in digits else int(digits)
+        return -number
+    digits = token.replace(",", "")
+    return float(digits) if "." in digits else int(digits)
+
+
+_XIAOMI_PENDING_DROP = (
+    "RMB’000",
+    "RMB'000",
+    "Unaudited",
+    "Audited",
+    "Note",
+    "Three months",
+    "Six months",
+    "As of",
+    "For the",
+    "Expressed",
+    "Cash flows from",
+    "Assets",
+    "Liabilities",
+    "Equity",
+)
+
+
+def _xiami_pending_keep(line: str) -> bool:
+    """表头/单位行会打断跨行行名：遇到即清空 pending；其余无数字行视为续行。"""
+    return not any(marker in line for marker in _XIAOMI_PENDING_DROP)
+
+
+def _xiami_amounts(line: str, need: int) -> tuple[str, list[str]] | None:
+    """取行尾 need 个数值列；行名与数值之间的注释号必须全为小整数，否则视为续行。
+
+    返回 (行名头部, 数值 token 列表)；表头/单位行返回 None 由调用方跳过。
+    """
+    matches = _num_matches(line)
+    if len(matches) < need:
+        return None
+    amounts = [m.group() for m in matches[-need:]]
+    refs = [m.group() for m in matches[:-need]]
+    if any(not _is_note_ref(token) for token in refs):
+        return None
+    # 注释号属于报表结构而非行名：有注释号时行名止于首个 token 之前
+    head = line[: matches[0].start()] if refs else line[: matches[-need].start()]
+    if not head.strip():
+        return None
+    head_norm = re.sub(r"\s+", "", head)
+    if head_norm.startswith("Note") or "RMB’000" in head or "RMB'000" in head:
+        return None
+    if all(re.fullmatch(r"(2025|2026)", token) for token in amounts):
+        return None
+    return head, amounts
+
+
+class XiaomiInterimExtractor:
+    """小米集团英文中期报告：损益表取「六个月」列组，资产负债表取期末列。"""
+
+    adapter_id = "hk_interim_english"
+
+    def supports(self, pages: list[str]) -> int:
+        joined = "\n".join(pages)
+        score = 0
+        if _XIAOMI_INCOME_TITLE in joined:
+            score += 3
+        if _XIAOMI_BALANCE_TITLE in joined:
+            score += 2
+        if _XIAOMI_CASHFLOW_TITLE in joined:
+            score += 1
+        return score
+
+    def extract(self, content: bytes) -> ExtractionResult:
+        pages = _page_texts(content)
+        statements: dict[str, list[dict[str, Any]]] = {}
+        checks: list[ExtractionCheck] = []
+
+        income = self._parse_income(pages)
+        balance = self._parse_balance(pages)
+        cashflow = self._parse_cashflow(pages)
+        if income is None or balance is None or cashflow is None:
+            missing = [
+                name
+                for name, found in (
+                    ("综合损益表", income),
+                    ("综合资产负债表", balance),
+                    ("综合现金流量表", cashflow),
+                )
+                if found is None
+            ]
+            raise StatementExtractionError(
+                "anchor_missing", f"未定位到报表起始页：{'、'.join(missing)}"
+            )
+        statements["综合损益表"] = income
+        statements["综合资产负债表"] = balance
+        statements["综合现金流量表"] = cashflow
+
+        attributable = _g(income, "本期发生额", "Profit attributable to owners of the Company")
+        nci = _g(income, "本期发生额", "Non-controlling interests")
+        profit = _g(income, "本期发生额", "Profit for the period")
+        if attributable is not None and nci is not None and profit is not None:
+            _check(checks, "归属+非控制=期内利润", attributable + nci, profit)
+        liabilities = _g(balance, "期末余额", "Total liabilities")
+        equity = _g(balance, "期末余额", "Total equity")
+        total = _g(balance, "期末余额", "Total equity and liabilities")
+        if liabilities is not None and equity is not None and total is not None:
+            _check(checks, "负债+权益=权益及负债总计", liabilities + equity, total)
+        generated = _g(cashflow, "本期发生额", "Cash generated from operations")
+        tax_paid = _g(cashflow, "本期发生额", "Income tax paid")
+        net_operating = _g(cashflow, "本期发生额", "Net cash generated from operating activities")
+        if generated is not None and tax_paid is not None and net_operating is not None:
+            _check(checks, "经营现金=运营产生-已付所得税", generated + tax_paid, net_operating)
+
+        return ExtractionResult(
+            adapter_id=self.adapter_id,
+            unit_note="人民币千元（英文版中期报告；损益表取六个月列组，资产负债表取期末列）",
+            statements=statements,
+            checks=tuple(checks),
+            warnings=("中期报告为简明报表（condensed），不含完整年报附注",),
+            page_count=len(pages),
+            source_sha256=hashlib.sha256(content).hexdigest(),
+        )
+
+    # -- 损益表：Note + 3M(2026|2025) + 6M(2026|2025) 四列，取 6M 两列 ------------
+
+    def _parse_income(self, pages: list[str]) -> list[dict[str, Any]] | None:
+        start = self._statement_start(pages, _XIAOMI_INCOME_TITLE, signature="(Expressed in")
+        if start is None:
+            return None
+        end = self._statement_end(pages, start, _XIAOMI_INCOME_TITLE)
+        items: list[dict[str, Any]] = []
+        pending = ""
+        done = False
+        for page in pages[start:end]:
+            if done:
+                break
+            for raw in page.split("\n"):
+                line = raw.strip()
+                if line.startswith("The above"):
+                    done = True  # 报表页尾声明行 = 本表结束
+                    break
+                if not line or "INTERIM REPORT" in line:
+                    continue
+                parsed = _xiami_amounts(line, 4)
+                if parsed is None:
+                    if _xiami_pending_keep(line) and not _num_matches(line):
+                        pending = f"{pending} {line}".strip()
+                    else:
+                        pending = ""
+                    continue
+                head, amounts = parsed
+                label = self._compose_label(pending, head)
+                pending = ""
+                if label:
+                    items.append(
+                        {
+                            "item": label,
+                            "本期发生额": _signed_hk(amounts[2]),
+                            "上期发生额": _signed_hk(amounts[3]),
+                            "page": start + 1,
+                        }
+                    )
+        return items or None
+
+    # -- 资产负债表：Note + 期末(2026-06-30) + 上年末(2025-12-31) 两列 -----------
+
+    def _parse_balance(self, pages: list[str]) -> list[dict[str, Any]] | None:
+        start = self._statement_start(pages, _XIAOMI_BALANCE_TITLE, signature="(Expressed in")
+        if start is None:
+            return None
+        end = self._statement_end(pages, start, _XIAOMI_BALANCE_TITLE)
+        items: list[dict[str, Any]] = []
+        pending = ""
+        done = False
+        for page in pages[start:end]:
+            if done:
+                break
+            for raw in page.split("\n"):
+                line = raw.strip()
+                if line.startswith("The above"):
+                    done = True  # 报表页尾声明行 = 本表结束（其后为附注/其他表）
+                    break
+                if not line or "INTERIM REPORT" in line:
+                    continue
+                parsed = _xiami_amounts(line, 2)
+                if parsed is None:
+                    if _xiami_pending_keep(line) and not _num_matches(line):
+                        pending = f"{pending} {line}".strip()
+                    else:
+                        pending = ""
+                    continue
+                head, amounts = parsed
+                label = self._compose_label(pending, head)
+                pending = ""
+                if label:
+                    items.append(
+                        {
+                            "item": label,
+                            "期末余额": _signed_hk(amounts[0]),
+                            "上年年末": _signed_hk(amounts[1]),
+                            "page": start + 1,
+                        }
+                    )
+        return items or None
+
+    # -- 现金流量表：Note + 本期(6M 2026) + 上期(6M 2025) 两列 -------------------
+
+    def _parse_cashflow(self, pages: list[str]) -> list[dict[str, Any]] | None:
+        start = self._statement_start(pages, _XIAOMI_CASHFLOW_TITLE, signature="(Expressed in")
+        if start is None:
+            return None
+        end = self._statement_end(pages, start, _XIAOMI_CASHFLOW_TITLE)
+        items: list[dict[str, Any]] = []
+        pending = ""
+        done = False
+        for page in pages[start:end]:
+            if done:
+                break
+            for raw in page.split("\n"):
+                line = raw.strip()
+                if line.startswith("The above"):
+                    done = True  # 报表页尾声明行 = 本表结束
+                    break
+                if not line or "INTERIM REPORT" in line:
+                    continue
+                parsed = _xiami_amounts(line, 2)
+                if parsed is None:
+                    if _xiami_pending_keep(line) and not _num_matches(line):
+                        pending = f"{pending} {line}".strip()
+                    else:
+                        pending = ""
+                    continue
+                head, amounts = parsed
+                label = self._compose_label(pending, head)
+                pending = ""
+                if label:
+                    items.append(
+                        {
+                            "item": label,
+                            "本期发生额": _signed_hk(amounts[0]),
+                            "上期发生额": _signed_hk(amounts[1]),
+                            "page": start + 1,
+                        }
+                    )
+        return items or None
+
+    @staticmethod
+    def _statement_start(pages: list[str], title: str, *, signature: str) -> int | None:
+        # 目录页同样包含报表标题，须要求数据签名（报表页头部带 "(Expressed in"）区分；
+        # 标题可能被渲染器折行，匹配前折叠空白。
+        title_key = re.sub(r"\s+", "", title)
+        return next(
+            (
+                i
+                for i, text in enumerate(pages)
+                if title_key in re.sub(r"\s+", "", text) and signature in text
+            ),
+            None,
+        )
+
+    @staticmethod
+    def _statement_end(pages: list[str], start: int, own_title: str) -> int:
+        own_key = re.sub(r"\s+", "", own_title)
+        prefix_key = re.sub(r"\s+", "", _XIAOMI_TITLE_PREFIX)
+        for index in range(start + 1, len(pages)):
+            collapsed = re.sub(r"\s+", "", pages[index])
+            if prefix_key in collapsed and own_key not in collapsed:
+                return index
+        return len(pages)
+
+    @staticmethod
+    def _compose_label(pending: str, head: str) -> str:
+        label = f"{pending} {head}".strip()
+        if label == "Attributable to: — Owners of the Company":
+            return "Profit attributable to owners of the Company"
+        if label == "Attributable to: — Non-controlling interests":
+            return "Non-controlling interests"
+        return re.sub(r"\s+", " ", label).strip()
+
+
+# ---------------------------------------------------------------------------
+# 阿里巴巴季度业绩公告适配器（繁体「月份季度財務業績概要」+「未經審計簡明合併
+# 現金流量表」；列序 上期|本期|美元；页脚脚注标记随行名去除）
+# ---------------------------------------------------------------------------
+
+_ALIBABA_FOOTNOTE = re.compile(r"\(\d{1,2}\)")  # 脚注号仅 1-2 位；3 位以上是括号金额，不可吞
+_ALIBABA_PCT = re.compile(r"\(?-?[\d,]+(?:\.\d+)?\)?%")
+_ALIBABA_PENDING_DROP = "%同比變動"
+
+
+class AlibabaQuarterlyExtractor:
+    adapter_id = "hk_quarterly_highlights"
+
+    def supports(self, pages: list[str]) -> int:
+        joined = "\n".join(pages)
+        score = 0
+        if "阿里巴巴" in joined:
+            score += 1
+        if "月份季度財務業績概要" in joined:
+            score += 2
+        if "未經審計簡明合併現金流量表" in joined:
+            score += 2
+        return score
+
+    def extract(self, content: bytes) -> ExtractionResult:
+        pages = _page_texts(content)
+        summary = self._parse_three_column(
+            pages,
+            "月份季度財務業績概要",
+            signature="經調整EBITDA",
+        )
+        cashflow = self._parse_three_column(
+            pages,
+            "未經審計簡明合併現金流量表",
+            signature="經營活動產生的現金流量淨額",
+        )
+        if summary is None or cashflow is None:
+            missing = [n for n, f in (("概要", summary), ("现金流量表", cashflow)) if f is None]
+            raise StatementExtractionError("anchor_missing", f"未定位到{'、'.join(missing)}起始页")
+        statements = {"概要": summary, "合并现金流量表": cashflow}
+
+        checks: list[ExtractionCheck] = []
+        flow_labels = (
+            "經營活動產生的現金流量淨額",
+            "投資活動產生（所用）的現金流量淨額",
+            "融資活動（所用）產生的現金流量淨額",
+            "匯率變動對現金及現金等價物、受限制現金及應收託管資金的影響",
+        )
+        increase = _g(cashflow, "本期发生额", "現金及現金等價物、受限制現金及應收託管資金的增加")
+        flows_current = [_g(cashflow, "本期发生额", label) for label in flow_labels]
+        if increase is not None and all(v is not None for v in flows_current):
+            _check(checks, "四项现金流净额加总=现金增加", sum(flows_current), increase)
+        increase_prior = _g(
+            cashflow, "上期发生额", "現金及現金等價物、受限制現金及應收託管資金的增加"
+        )
+        flows_prior = [_g(cashflow, "上期发生额", label) for label in flow_labels]
+        if increase_prior is not None and all(v is not None for v in flows_prior):
+            _check(checks, "四项现金流净额加总=现金增加（上期）", sum(flows_prior), increase_prior)
+
+        return ExtractionResult(
+            adapter_id=self.adapter_id,
+            unit_note="人民币百万元（季度业绩公告概要与简明合并现金流量表；美元列未取）",
+            statements=statements,
+            checks=tuple(checks),
+            warnings=("季度公告仅含概要与简明现金流量表：无资产负债表/完整损益表（披露范围如此）",),
+            page_count=len(pages),
+            source_sha256=hashlib.sha256(content).hexdigest(),
+        )
+
+    def _parse_three_column(
+        self, pages: list[str], anchor: str, *, signature: str
+    ) -> list[dict[str, Any]] | None:
+        # 目录页同样含锚标题，须要求数据签名（概要含 EBITDA 行、现金流量表含经营净额行）。
+        start = next(
+            (i for i, text in enumerate(pages) if anchor in text and signature in text),
+            None,
+        )
+        if start is None:
+            return None
+        # 该公告格式中概要与现金流量表均为单页表，只解析锚页本身
+        end = start + 1
+        items: list[dict[str, Any]] = []
+        pending = ""
+        for page in pages[start:end]:
+            for raw in page.split("\n"):
+                line = raw.strip()
+                if not line or line.startswith("("):
+                    pending = ""
+                    continue
+                if (
+                    _ALIBABA_PENDING_DROP in line
+                    or "美元" in line
+                    or "人民幣" in line
+                    or "以百萬計" in line
+                ):
+                    # 表头/单位行：清空跨行行名，防止前缀污染
+                    pending = ""
+                    continue
+                cleaned = _ALIBABA_FOOTNOTE.sub("", line)
+                cleaned = _ALIBABA_PCT.sub("", cleaned)
+                tokens = _num_matches(cleaned)
+                if len(tokens) != 3:
+                    # 无数字且非表头的行 = 跨行行名续段（如「…應」/「收托管資金的影響」）
+                    pending = f"{pending} {line}".strip() if not _num_matches(line) else ""
+                    continue
+                head = cleaned[: tokens[0].start()]
+                label = _norm_item(f"{pending} {head}".strip())
+                pending = ""
+                if not label:
+                    continue
+                items.append(
+                    {
+                        "item": label,
+                        "上期发生额": _parse_signed(tokens[0].group()),
+                        "本期发生额": _parse_signed(tokens[1].group()),
+                        "page": start + 1,
+                    }
+                )
+        return items or None
+
+
+# ---------------------------------------------------------------------------
 # 统一入口
 # ---------------------------------------------------------------------------
 
@@ -996,6 +1418,8 @@ _EXTRACTORS: dict[str, StatementExtractor] = {
         AShareTableExtractor(),
         HkTraditionalExtractor(),
         ResultsAnnouncementExtractor(),
+        XiaomiInterimExtractor(),
+        AlibabaQuarterlyExtractor(),
     )
 }
 
@@ -1024,6 +1448,7 @@ def extract_statements(content: bytes, *, adapter_id: str | None = None) -> Extr
 
 __all__ = [
     "AShareTableExtractor",
+    "AlibabaQuarterlyExtractor",
     "ExtractionCheck",
     "ExtractionResult",
     "HkTraditionalExtractor",
@@ -1032,6 +1457,7 @@ __all__ = [
     "StatementExtractionError",
     "StatementExtractor",
     "UnsupportedLayoutError",
+    "XiaomiInterimExtractor",
     "extract_statements",
 ]
 

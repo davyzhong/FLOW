@@ -172,6 +172,7 @@ holdouts:
       - { item: 资产总计, value: "516,040,794", source_page: "61-62(EN)", unit: 千元 }
       - { item: 权益总计, value: "269,819,402", source_page: "62(EN)", unit: 千元 }
     provenance: 港交所披露易 2026/0923/2026092300297_c.pdf（中文）+ 2026092300296.pdf（英文）；2026-09-26 下载（抽签记录 holdout-lottery-2026-09-25 首选），SHA 双版本冻结
+    demoted_from_holdout: 2026-09-29（首跑失败后用于开发 hk_interim_english 适配器，§4.5 降级；oracle v2 修订见 oracle 文件头）
     rule: 首跑原始失败全部保留；修复后降级回归集并按 oracle-register §3 补新候选
 
   - id: alibaba_fy2027q1
@@ -195,6 +196,7 @@ holdouts:
       - { item: 非公认会计准则净利润, value: "20,715", source_page: "6", unit: 百万元 }
       - { item: 经营活动产生的现金流量净额, value: "22,945", source_page: "22", unit: 百万元 }
     provenance: 港交所披露易 2026/0820/2026082000746_c.pdf；2026-09-26 下载（抽签首选），SHA 冻结
+    demoted_from_holdout: 2026-09-29（首跑失败后用于开发 hk_quarterly_highlights 适配器，§4.5 降级；oracle v2 修订见 oracle 文件头）
     rule: 首跑原始失败全部保留；修复后降级回归集并按 oracle-register §3 补新候选
 
   # ---- 备选候选启用（2026-09-29）：小米/阿里首跑失败后按 oracle-register §4.5 拟降级，

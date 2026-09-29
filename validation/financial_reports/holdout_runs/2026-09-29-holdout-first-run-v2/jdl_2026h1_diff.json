@@ -1,0 +1,261 @@
+{
+  "counts": {
+    "matched": 0,
+    "mismatched": 0,
+    "not_comparable": 25
+  },
+  "total": 25,
+  "rows_extracted": 0,
+  "results": [
+    {
+      "tier": "key_item",
+      "item": "Revenue（收入）",
+      "value": "124,683,247",
+      "page": "5",
+      "statement": "FINANCIAL HIGHLIGHTS（第 5 页）；与简明合并利润表一致（第 39 页）",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "key_item",
+      "item": "Profit for the period（期内利润）",
+      "value": "3,270,846",
+      "page": "39",
+      "statement": "财务摘要（第 5 页）；简明合并利润表（第 39 页）",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "key_item",
+      "item": "Profit attributable to Owners of the Company（归属公司权益持有人期内利润）",
+      "value": "3,292,301",
+      "page": "39",
+      "statement": "简明合并利润表（第 39 页）",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "key_item",
+      "item": "Non-IFRS profit for the period（非国际财务报告准则期内利润）",
+      "value": "3,696,160",
+      "page": "5",
+      "statement": "FINANCIAL HIGHLIGHTS（第 5 页）",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "key_item",
+      "item": "Net cash generated from operating activities（经营活动现金净流入）",
+      "value": "6,379,053",
+      "page": "44",
+      "statement": "简明合并现金流量表（第 44 页）",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "key_item",
+      "item": "Total assets（总资产）",
+      "value": "119,748,521",
+      "page": "41",
+      "statement": "简明合并财务状况表（第 41 页）",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "Revenue",
+      "value": "124,683,247 / 98,531,786",
+      "page": "39",
+      "statement": "利润表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "Cost of revenue",
+      "value": "(113,616,785) / (89,665,491)",
+      "page": "39",
+      "statement": "利润表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "Gross profit",
+      "value": "11,066,462 / 8,866,295",
+      "page": "39",
+      "statement": "利润表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "Selling and marketing expenses",
+      "value": "(3,357,487) / (2,993,025)",
+      "page": "39",
+      "statement": "利润表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "Research and development expenses",
+      "value": "(2,348,400) / (1,898,294)",
+      "page": "39",
+      "statement": "利润表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "General and administrative expenses",
+      "value": "(2,177,341) / (1,805,170)",
+      "page": "39",
+      "statement": "利润表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "Finance income",
+      "value": "295,470 / 685,625",
+      "page": "39",
+      "statement": "利润表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "Finance costs",
+      "value": "(499,801) / (435,651)",
+      "page": "39",
+      "statement": "利润表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "Profit before income tax",
+      "value": "3,702,275 / 3,298,755",
+      "page": "39",
+      "statement": "利润表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "Income tax expense",
+      "value": "(431,429) / (339,598)",
+      "page": "39",
+      "statement": "利润表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "Profit attributable to Owners of the Company",
+      "value": "3,292,301 / 2,579,653",
+      "page": "39",
+      "statement": "利润表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "Non-controlling interests",
+      "value": "(21,455) / 379,504",
+      "page": "39",
+      "statement": "利润表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "Earnings per share — Basic（元）",
+      "value": "0.52 / 0.41",
+      "page": "39",
+      "statement": "利润表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "Total assets",
+      "value": "119,748,521 / 124,599,558(2025-12-31)",
+      "page": "41",
+      "statement": "财务状况表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "Total equity",
+      "value": "57,937,052 / 59,784,729(2025-12-31)",
+      "page": "42",
+      "statement": "财务状况表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "Cash generated from operations",
+      "value": "6,603,592 / 6,582,855",
+      "page": "44",
+      "statement": "现金流量表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "Net cash generated from operating activities",
+      "value": "6,379,053 / 6,568,722",
+      "page": "44",
+      "statement": "现金流量表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "Net cash generated from/(used in) investing activities",
+      "value": "931,643 / (7,324,796)",
+      "page": "44",
+      "statement": "现金流量表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "Net cash used in financing activities",
+      "value": "(9,208,022) / (7,759,491)",
+      "page": "45",
+      "statement": "现金流量表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    }
+  ]
+}

@@ -262,3 +262,90 @@ def test_tencent_paren_negative_without_leading_space_keeps_sign() -> None:
     assert len(found) == 3
     assert _parse_signed(found[0]) == -9993
     assert _parse_signed(found[1]) == 4473
+
+
+# ---------------------------------------------------------------------------
+# U4 新留出适配器（2026-09-29）：小米英文中期报告 + 阿里巴巴季度业绩公告
+# 样本为 validation/financial_reports/original/ 下的冻结原件；oracle 值作为断言锚点。
+# 注意：两样本已按 oracle-register §4.5 因适配开发降级为回归集，本测试属回归性质。
+# ---------------------------------------------------------------------------
+
+XIAOMI_PDF = (
+    REPO_ROOT
+    / "validation/financial_reports/original/xiaomi_2026h1/XIAOMI_2026_interim_report_e.pdf"
+)
+ALIBABA_PDF = (
+    REPO_ROOT / "validation/financial_reports/original/alibaba_fy2027q1/BABA_FY2027Q1_results_c.pdf"
+)
+
+
+def test_xiaomi_interim_adapter_selects_and_extracts_oracle_anchors() -> None:
+    result = extract_statements(XIAOMI_PDF.read_bytes())
+    assert result.adapter_id == "hk_interim_english"
+    assert set(result.statements) == {"综合损益表", "综合资产负债表", "综合现金流量表"}
+
+    income = {item["item"]: item for item in result.statements["综合损益表"]}
+    assert income["Revenue"]["本期发生额"] == 208_063_227
+    assert income["Revenue"]["上期发生额"] == 227_249_428
+    assert income["Gross profit"]["本期发生额"] == 43_419_038
+    assert income["Profit for the period"]["本期发生额"] == 14_197_953
+    assert income["Profit attributable to owners of the Company"]["本期发生额"] == 14_185_525
+
+    balance = {item["item"]: item for item in result.statements["综合资产负债表"]}
+    assert balance["Total equity and liabilities"]["期末余额"] == 516_040_794
+    assert balance["Total equity"]["期末余额"] == 269_819_402
+
+    cashflow = {item["item"]: item for item in result.statements["综合现金流量表"]}
+    assert cashflow["Net cash generated from operating activities"]["本期发生额"] == 2_050_234
+
+    failed = [c for c in result.checks if c.status != "一致"]
+    assert not failed, f"勾稽失败：{[(c.label, c.left, c.right) for c in failed]}"
+
+
+def test_xiaomi_interim_term_bank_deposits_duplicate_is_explicit() -> None:
+    # 资产负债表上下两段各有一行 Term bank deposits（值不同）：
+    # comparator 设计为多候选不猜 → not_comparable，此处锁定该行为不被悄悄合并。
+    result = extract_statements(XIAOMI_PDF.read_bytes())
+    deposits = [
+        item for item in result.statements["综合资产负债表"] if item["item"] == "Term bank deposits"
+    ]
+    assert len(deposits) == 2
+    assert len({item["期末余额"] for item in deposits}) == 2
+
+
+def test_alibaba_quarterly_adapter_selects_and_extracts_oracle_anchors() -> None:
+    result = extract_statements(ALIBABA_PDF.read_bytes())
+    assert result.adapter_id == "hk_quarterly_highlights"
+    assert set(result.statements) == {"概要", "合并现金流量表"}
+
+    summary = {item["item"]: item for item in result.statements["概要"]}
+    assert summary["收入"]["本期发生额"] == 268_953
+    assert summary["收入"]["上期发生额"] == 247_652
+    assert summary["淨利潤"]["本期发生额"] == 10_444
+    assert summary["歸屬於普通股股東的淨利潤"]["本期发生额"] == 10_537
+    assert summary["非公認會計準則淨利潤"]["本期发生额"] == 20_715
+    assert summary["經調整EBITDA"]["本期发生额"] == 39_143
+
+    cashflow = {item["item"]: item for item in result.statements["合并现金流量表"]}
+    assert cashflow["經營活動產生的現金流量淨額"]["本期发生额"] == 22_945
+    assert cashflow["投資活動產生（所用）的現金流量淨額"]["本期发生额"] == -18_964
+    assert (
+        cashflow["匯率變動對現金及現金等價物、受限制現金及應收託管資金的影響"]["本期发生额"]
+        == -1_519
+    )
+
+    failed = [c for c in result.checks if c.status != "一致"]
+    assert not failed, f"勾稽失败：{[(c.label, c.left, c.right) for c in failed]}"
+
+
+def test_new_adapters_do_not_hijack_other_samples() -> None:
+    # 小米适配器不得误吞京东物流英文中报（留出样本），阿里适配器不得误吞其他公告
+    jdl_interim = (
+        REPO_ROOT / "validation/financial_reports/original/jdl_2026h1/JDL_2026_interim_report_e.pdf"
+    )
+    # 京东物流英文中报版式未适配：必须显式降级（UnsupportedLayoutError），不得误吞
+    with pytest.raises(UnsupportedLayoutError):
+        extract_statements(jdl_interim.read_bytes())
+
+    content = CASES["tencent"]["pdf"].read_bytes()
+    assert extract_statements(content).adapter_id == "hk_results_announcement"

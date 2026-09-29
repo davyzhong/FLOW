@@ -6,6 +6,8 @@
 #       中文版 JDL_2026_interim_report_c.pdf（SHA 2c58cef9…6822）文本层乱码（京东系嵌入字体
 #       映射损坏，家族规律与 FY2025 年报一致），数值以英文版录入（两版同版式双语排版）。
 # 单位：人民币千元（披露原始单位）
+#
+# 修订 2026-09-29：key_items 补 statement 字段（comparator 定位元数据，值零变更）。
 
 sample_id: jdl_2026h1
 company: "京东物流股份有限公司（2618.HK）"
@@ -18,36 +20,42 @@ source_pdf_pages:
 
 key_items:
   - item: Revenue（收入）
+    statement: 损益表
     value: "124,683,247"
     location: FINANCIAL HIGHLIGHTS（第 5 页）；与简明合并利润表一致（第 39 页）
     unit: 人民币千元
     source_page: "5"
     note: 2025 同期 98,531,786，+26.5%
   - item: Profit for the period（期内利润）
+    statement: 损益表
     value: "3,270,846"
     location: 财务摘要（第 5 页）；简明合并利润表（第 39 页）
     unit: 人民币千元
     source_page: "39"
     note: 2025 同期 2,959,157，+10.5%
   - item: Profit attributable to Owners of the Company（归属公司权益持有人期内利润）
+    statement: 损益表
     value: "3,292,301"
     location: 简明合并利润表（第 39 页）
     unit: 人民币千元
     source_page: "39"
     note: 2025 同期 2,579,653；非控制性权益 (21,455)
   - item: Non-IFRS profit for the period（非国际财务报告准则期内利润）
+    statement: 概要
     value: "3,696,160"
     location: FINANCIAL HIGHLIGHTS（第 5 页）
     unit: 人民币千元
     source_page: "5"
     note: 2025 同期 3,339,048，+10.7%
   - item: Net cash generated from operating activities（经营活动现金净流入）
+    statement: 现金流量表
     value: "6,379,053"
     location: 简明合并现金流量表（第 44 页）
     unit: 人民币千元
     source_page: "44"
     note: 2025 同期 6,568,722
   - item: Total assets（总资产）
+    statement: 财务状况表
     value: "119,748,521"
     location: 简明合并财务状况表（第 41 页）
     unit: 人民币千元

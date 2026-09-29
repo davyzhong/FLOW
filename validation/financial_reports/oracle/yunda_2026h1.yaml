@@ -15,36 +15,42 @@ source_pdf_pages:
 
 key_items:
   - item: 营业收入
+    statement: 合并利润表
     value: "26,438,607,589.72"
     location: 四、主要会计数据和财务指标（第 7 页）；与合并利润表一、营业总收入一致（第 53 页）
     unit: 人民币元
     source_page: "7"
     note: 上年同期 24,832,923,076.39，+6.47%
   - item: 归属于上市公司股东的净利润
+    statement: 合并利润表
     value: "998,426,432.09"
     location: 主要会计数据（第 7 页）；与合并利润表归属于母公司股东的净利润一致（第 55 页）
     unit: 人民币元
     source_page: "7"
     note: 上年同期 528,777,492.06，+88.82%
   - item: 净利润
+    statement: 合并利润表
     value: "1,002,350,643.41"
     location: 合并利润表 五、净利润（第 54 页）
     unit: 人民币元
     source_page: "54"
     note: 上年同期 534,991,299.71；含少数股东损益 3,924,211.32
   - item: 经营活动产生的现金流量净额
+    statement: 合并现金流量表
     value: "1,627,385,817.88"
     location: 主要会计数据（第 7 页）；合并现金流量表（第 58 页）
     unit: 人民币元
     source_page: "7"
     note: 上年同期 1,012,551,193.23，+60.72%
   - item: 总资产
+    statement: 合并资产负债表
     value: "37,104,583,445.79"
     location: 主要会计数据和财务指标（第 7 页）
     unit: 人民币元
     source_page: "7"
     note: 上年度末 37,213,402,860.84，-0.29%
   - item: 归属于上市公司股东的净资产
+    statement: 合并资产负债表
     value: "21,473,657,797.96"
     location: 主要会计数据和财务指标（第 7 页）
     unit: 人民币元

@@ -1,0 +1,20 @@
+{
+  "yunda_2026h1": {
+    "adapter": "cn_ashare_table",
+    "error": null,
+    "matched": 0,
+    "mismatched": 0,
+    "not_comparable": 20,
+    "total": 20,
+    "rows_extracted": 324
+  },
+  "jdl_2026h1": {
+    "adapter": null,
+    "error": "UnsupportedLayoutError: 未知财报版式，显式降级（各适配器得分：{'cn_ashare_table': 0, 'hk_traditional_text': 1, 'hk_results_announcement': 1, 'hk_interim_english': 0, 'hk_quarterly_highlights': 0}）",
+    "matched": 0,
+    "mismatched": 0,
+    "not_comparable": 25,
+    "total": 25,
+    "rows_extracted": 0
+  }
+}
