@@ -2170,7 +2170,7 @@ d80f509de5c36c24d86bbbac07d7c35eddedc862c536f9b5d21e6a6e178d9e74  ./40_methods_a
 4666243e7af893feec890f24d28c4ea8d9271f3cc752f56f40f6f1998e267434  ./50_product_mappings/FLOW-PRODUCT-MAPPING--v1.0.md
 b4d200cc989f4642c66da1061742f842d83467caa4d92774df4d2caf4b0cb56d  ./50_product_mappings/README.md
 4131636ec380e5b5ebcc0f06e865af69be815d8d99855c67e1b7459e5377cc4a  ./README.md
-./docs/05_design/2026-09-29-cfo-cockpit-design.md  ec9dbd3aa2331879ad5f7ea408a58c4e7193cb41cb85236913d5f4f0430a7ba3
+./docs/05_design/2026-09-29-cfo-cockpit-design.md  9241b718b1e4830eb6a2bf99ab3065cd91ea3641a5ea81dc73b88e84684ddd0f
 ./05_design/prototypes/2026-09-29-cfo-cockpit-prototype.html  e2ae92237ce8d842d1edc8a48be486bcd8c5d7e25fe75485a73ca0702f58951f
 ./docs/05_design/prototypes/2026-09-29-cfo-cockpit-prototype-v1.html  913604db278e367785991be8983c60ae9da1234c8e48e0c7494142c9cccea479
 ./docs/05_design/prototypes/01-overview.webp  36e95046401729499932c722c51531a3e7046b0c0642abbd0b6b2c48291e46db
