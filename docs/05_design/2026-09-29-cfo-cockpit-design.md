@@ -144,6 +144,10 @@ D001（产品不是单一驾驶舱）不变：驾驶舱是分析工作台的**�
 > ③ 杜邦分析树改为 HTML/CSS 树形实现（v0.3 该容器为空）；④ 新增指标穿透抽屉
 > （口径 → 来源 → Finding → 历史趋势 → 版本历史）；⑤ 新增顶部工具条（本期红灯聚焦 /
 > 经分会模式 / 导出管理层版）。
+> - **v1.0-offline（离线自包含版）**：[prototypes/2026-09-29-cfo-cockpit-prototype-v1-offline.html](prototypes/2026-09-29-cfo-cockpit-prototype-v1-offline.html)
+>   —— v1.0 的逐字节同内容变体，仅将 ECharts 5.5.0 内联（1.1MB），**下载 raw 后断网双击
+>   也能完整渲染**；已用 Playwright 屏蔽全部外网请求验证（canvas 正常出图、0 JS 错误）。
+>   在线看图表或 jsdelivr 可达时用 v1.0（134KB），离线/弱网环境用本版。
 
 ### 5.1 集团总览（`/cockpit/overview`）
 
