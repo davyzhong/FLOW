@@ -2,8 +2,8 @@ from fastapi import APIRouter, Depends
 
 from flow_api.api.auth import require_bearer_auth
 from flow_api.api.routes.analytics import router as analytics_router
-from flow_api.api.routes.copilot import router as copilot_router
 from flow_api.api.routes.cockpit import router as cockpit_router
+from flow_api.api.routes.copilot import router as copilot_router
 from flow_api.api.routes.dashboard import router as dashboard_router
 from flow_api.api.routes.health import router as health_router
 from flow_api.api.routes.intake import router as intake_router
