@@ -3,9 +3,9 @@ doc_id: FLOW-DESIGN-CFO-COCKPIT-20260929
 title: 财务总监驾驶舱——详细设计与原型（设计输入，不开发）
 doc_type: design
 status: draft
-version: 0.4
+version: 0.6
 created_at: 2026-09-29
-updated_at: 2026-09-29
+updated_at: 2026-09-30
 owner: FLOW
 applies_to: web-frontend
 decision_refs: [D001, D052, D053]
@@ -160,6 +160,16 @@ D001（产品不是单一驾驶舱）不变：驾驶舱是分析工作台的**�
 >   全部 `.kpi` 卡生成确定性模拟档案（口径注 → 规则版本 → 快照/依赖/SHA → 关联
 >   Finding → 12 期趋势 → 口径版本历史），手写 7 条高保真绑定优先；
 >   ④ 逐页截图存档：`prototypes/v2-01-overview.jpg` ~ `v2-10-data.jpg`。
+
+> **2026-09-30 用户裁决：产品化实施**。本文档定位为**设计输入**（`doc_type: design`，
+> `applies_to: web-frontend`）；v2.0 原型的落地由
+> [实施方案 2026-09-30-cfo-cockpit-implementation-plan.md](../superpowers/plans/2026-09-30-cfo-cockpit-implementation-plan.md)
+> 与[工作包 COCKPIT--cfo-dashboard-implementation.md](../50_plans/work_items/COCKPIT--cfo-dashboard-implementation.md)
+> 承担。三项裁决：① 交付为**真实 Next.js 产品页面**（`apps/web/cockpit/*`），非静态原型；
+> ② **抢在 U04 盲评复评之前当队首**（U04 转暂停，恢复条件 = 批次 A 完成）；③ 第一版
+> **用大麦物流演示数据**跑通真实链路。**驾驶舱用演示数据不解除 C 级门禁。**
+> 实施前置：批次 A 开工前须裁决实施方案 §6 的 **Q1 图表技术选型**；批次 B 开工前须先完成
+> §10 安全规格 V1.1.1 修订与重新批准（门禁硬要求）。
 >   2026-09-29 自验：离线（屏蔽外网）50 canvas 全渲染、0 JS 错误；三模式与
 >   抽屉（手写 + 跨模块自动绑定）逐项通过。v1.0/v1.0-offline 保留为历史版本。
 
