@@ -2184,3 +2184,14 @@ b4d200cc989f4642c66da1061742f842d83467caa4d92774df4d2caf4b0cb56d  ./50_product_m
 ./docs/05_design/prototypes/09-consol.webp  6bb47c70e1dc00f4ece4e967425756e9351da76a8dc6d62189937d7cf51be3de
 ./docs/05_design/prototypes/10-data.webp  06508a8799a7c232f3e3f9fc48be36bc3ff3d070def9d0cf9280ac5343d0af64
 ./05_design/prototypes/2026-09-29-cfo-cockpit-prototype-v1-offline.html  b0a4bcf4a601c2f83b764cdc4f9dd389fba71233bd4c01962a07761b56450670
+./05_design/prototypes/2026-09-29-cfo-cockpit-prototype-v2.html  488a572e5c0359dcb2be8b58f30d3d5110775e8d2096152c3768ac4ec16b9b1d
+./05_design/prototypes/v2-01-overview.jpg  16fae3a38186929dbe0481e17df8955ddf17185a20bd7e3403ccbc5d34289f19
+./05_design/prototypes/v2-02-profit.jpg  535d5ad7a903b6080c043f1e49995aced35c5cb9b267124032984fdd61440293
+./05_design/prototypes/v2-03-profitability.jpg  addbe9bd113c877c5f8545a1d443322f96aeda7d69ca4c4fb9f8edd3c6ffb65a
+./05_design/prototypes/v2-04-expense.jpg  6fb57ebc24ba0d143e713b5ba4e319889ceb92e9a8682bd507f640fc5f48f6f9
+./05_design/prototypes/v2-05-balance.jpg  3de074ab7251ba178f17823c470b675e75351e757c4e3b79c00ac2f7f1f545fe
+./05_design/prototypes/v2-06-wc.jpg  f1f46ad195d91fc8c77a9a2ddd357debc3aa985cd0ef25ed19b29bd9a69ca502
+./05_design/prototypes/v2-07-cash.jpg  13788eca763a86a25007d248c1c8a1ed73a607fa3992b9cb08ad1220bf78ce6d
+./05_design/prototypes/v2-08-risk.jpg  471e399e75a58dd2b38ec7f470d1c1edc185c271cc4bdaff455856b1b8063898
+./05_design/prototypes/v2-09-consol.jpg  4c4b3ecd3fa1240274c7ad84304ef1ce0f8ef645de0b6dc0b387cade5a70944b
+./05_design/prototypes/v2-10-data.jpg  d5eb2635605b7fcdc5fc2694b6fc80d9d0933a39913cd60b4b958b7df041efea
