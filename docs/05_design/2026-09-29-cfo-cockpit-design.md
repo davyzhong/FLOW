@@ -3,7 +3,7 @@ doc_id: FLOW-DESIGN-CFO-COCKPIT-20260929
 title: 财务总监驾驶舱——详细设计与原型（设计输入，不开发）
 doc_type: design
 status: draft
-version: 0.2
+version: 0.3
 created_at: 2026-09-29
 updated_at: 2026-09-29
 owner: FLOW
@@ -129,6 +129,10 @@ D001（产品不是单一驾驶舱）不变：驾驶舱是分析工作台的**�
   （模态五态：该数据域无来源时显式 unavailable，不是空数组）。
 
 ## 5. 页面原型（线框）
+
+> **高保真原型已交付**：[prototypes/2026-09-29-cfo-cockpit-prototype.html](prototypes/2026-09-29-cfo-cockpit-prototype.html)
+> （单文件、ECharts CDN、全模拟数据；十大模块 + 30 余图表/组件，与本文线框逐一对应，
+> 2026-09-29 经逐页截图自验通过。线下双击打开或任意静态服务器托管即可查看。）
 
 ### 5.1 集团总览（`/cockpit/overview`）
 

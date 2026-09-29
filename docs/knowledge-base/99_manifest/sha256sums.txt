@@ -2171,3 +2171,4 @@ d80f509de5c36c24d86bbbac07d7c35eddedc862c536f9b5d21e6a6e178d9e74  ./40_methods_a
 b4d200cc989f4642c66da1061742f842d83467caa4d92774df4d2caf4b0cb56d  ./50_product_mappings/README.md
 4131636ec380e5b5ebcc0f06e865af69be815d8d99855c67e1b7459e5377cc4a  ./README.md
 ./docs/05_design/2026-09-29-cfo-cockpit-design.md  ec9dbd3aa2331879ad5f7ea408a58c4e7193cb41cb85236913d5f4f0430a7ba3
+./05_design/prototypes/2026-09-29-cfo-cockpit-prototype.html  e2ae92237ce8d842d1edc8a48be486bcd8c5d7e25fe75485a73ca0702f58951f

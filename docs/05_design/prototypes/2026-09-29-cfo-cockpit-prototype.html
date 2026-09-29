@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>财务总监驾驶舱 · FLOW 高保真原型（模拟数据）</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+<style>
+:root{
+  --bg:#eef2f7; --card:#ffffff; --ink:#0f172a; --muted:#64748b; --line:#e2e8f0;
+  --blue:#2563eb; --blue-2:#1d4ed8; --nav-1:#0b1f3a; --nav-2:#143a66;
+  --up:#16a34a; --down:#dc2626; --warn:#d97706; --gold:#b45309;
+  --chip:#eff6ff; --shadow:0 1px 3px rgba(15,23,42,.08),0 4px 14px rgba(15,23,42,.05);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  background:var(--bg);color:var(--ink);font-size:14px;display:flex}
+a{color:var(--blue);text-decoration:none}
+/* ── 侧栏 ─────────────────────────── */
+aside{width:200px;flex:none;background:linear-gradient(180deg,var(--nav-1),var(--nav-2));
+  color:#dbeafe;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow:auto}
+.brand{padding:16px 14px;font-weight:700;font-size:15px;color:#fff;border-bottom:1px solid rgba(255,255,255,.12);letter-spacing:.5px}
+.brand small{display:block;font-weight:400;font-size:11px;color:#93c5fd;margin-top:3px}
+nav{flex:1;padding:8px 0}
+nav button{display:flex;align-items:center;gap:9px;width:100%;padding:11px 16px;border:0;background:none;
+  color:#c7d7ee;font-size:13.5px;cursor:pointer;text-align:left;border-left:3px solid transparent}
+nav button .ic{width:18px;text-align:center;font-size:15px}
+nav button:hover{background:rgba(255,255,255,.07);color:#fff}
+nav button.on{background:rgba(37,99,235,.35);color:#fff;border-left-color:#60a5fa;font-weight:600}
+.side-foot{padding:12px 14px;font-size:11px;color:#7da2d0;border-top:1px solid rgba(255,255,255,.12)}
+/* ── 主区 ─────────────────────────── */
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.topbar{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--line);padding:10px 22px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.topbar .sel{display:flex;align-items:center;gap:5px;font-size:12.5px;color:var(--muted)}
+.topbar select{padding:5px 8px;border:1px solid var(--line);border-radius:7px;background:#fff;font-size:12.5px;color:var(--ink)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:7px;overflow:hidden}
+.seg button{border:0;background:#fff;padding:5px 12px;font-size:12.5px;cursor:pointer;color:var(--muted)}
+.seg button.on{background:var(--blue);color:#fff}
+.topbar .upd{margin-left:auto;font-size:12px;color:var(--muted)}
+.badge-proto{background:#fef3c7;color:#92400e;border:1px solid #fcd34d;border-radius:7px;padding:4px 9px;font-size:11.5px;font-weight:600}
+.pages{padding:18px 22px 40px;max-width:1360px;width:100%;margin:0 auto}
+.page{display:none}
+.page.on{display:block;animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+h1.pt{font-size:20px;margin:2px 0 14px;font-weight:700}
+h3.ct{font-size:13.5px;color:#334155;margin-bottom:8px;font-weight:600}
+/* ── KPI 卡 ───────────────────────── */
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:14px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 15px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.kpi::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--blue);opacity:.75}
+.kpi.warn::before{background:var(--warn)} .kpi.bad::before{background:var(--down)} .kpi.good::before{background:var(--up)}
+.kpi-h{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted)}
+.kpi-h .ico{width:26px;height:26px;border-radius:8px;background:var(--chip);display:inline-flex;align-items:center;justify-content:center;font-size:14px}
+.kpi-v{font-size:24px;font-weight:750;margin:7px 0 2px;letter-spacing:.3px;font-variant-numeric:tabular-nums}
+.kpi-v small{font-size:12px;font-weight:400;color:var(--muted);margin-left:4px}
+.kpi-b{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.tag{font-size:11px;padding:2.5px 7px;border-radius:6px;font-weight:600;white-space:nowrap}
+.tag.up{background:#dcfce7;color:#15803d}.tag.down{background:#fee2e2;color:#b91c1c}
+.tag.pos{background:#eff6ff;color:#1d4ed8}.tag.warn{background:#fef3c7;color:#92400e}
+.tag.mut{background:#f1f5f9;color:#475569;font-weight:500}
+.kpi-n{font-size:10.5px;color:#94a3b8;margin-top:7px}
+/* ── 图表卡 ───────────────────────── */
+.grid{display:grid;gap:12px;margin-bottom:14px}
+.kpis.k3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g21{grid-template-columns:2fr 1fr}
+.g12{grid-template-columns:1fr 2fr}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow);min-width:0}
+.card>.ct{display:flex;align-items:center;justify-content:space-between}
+.card>.ct .sub{font-size:11px;color:#94a3b8;font-weight:400}
+.chart{width:100%;height:280px}
+.chart.sm{height:225px}
+/* ── 表格 ─────────────────────────── */
+table.t{width:100%;border-collapse:collapse;font-size:12.5px}
+table.t th{color:var(--muted);font-weight:600;text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+table.t td{padding:7.5px 8px;border-bottom:1px solid #f1f5f9;font-variant-numeric:tabular-nums}
+table.t tr:last-child td{border-bottom:0}
+table.t td.num{text-align:right}
+table.t th.num{text-align:right}
+.lv{display:inline-block;width:34px;text-align:center;border-radius:6px;font-size:11px;font-weight:700;padding:2px 0}
+.lv.h{background:#fee2e2;color:#b91c1c}.lv.m{background:#fef3c7;color:#92400e}.lv.l{background:#dcfce7;color:#15803d}
+.st{font-weight:700}.st.over{color:var(--down)}.st.save{color:var(--up)}
+/* ── 结论条 ───────────────────────── */
+.concl{display:flex;align-items:center;gap:12px;background:linear-gradient(90deg,#1d4ed8,#3b82f6);
+  color:#fff;border-radius:12px;padding:13px 18px;margin-top:4px;box-shadow:var(--shadow)}
+.concl .ci{width:34px;height:34px;border-radius:9px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:17px;flex:none}
+.concl b{font-size:14.5px}
+.concl a{color:#bfdbfe;font-size:11.5px;margin-left:auto;flex:none;border-bottom:1px dotted #93c5fd}
+/* ── 组织树 / 杜邦树 / 流程 ────────── */
+.tree,.dupont{font-size:12px}
+.node{background:var(--chip);border:1px solid #bfdbfe;color:#1e3a8a;border-radius:8px;padding:6px 10px;display:inline-block;font-weight:600}
+.node.root{background:var(--blue);color:#fff;border-color:var(--blue)}
+.node small{display:block;font-weight:400;font-size:10.5px;opacity:.85}
+.org-row{display:flex;gap:10px;justify-content:space-between;align-items:center;margin-top:26px;position:relative}
+.org-row::before{content:"";position:absolute;top:-14px;left:8%;right:8%;border-top:1.5px solid #cbd5e1}
+.org-col{flex:1;text-align:center;position:relative}
+.org-col::before{content:"";position:absolute;top:-14px;left:50%;height:14px;border-left:1.5px solid #cbd5e1}
+.dup-grid{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:8px;align-items:start;margin-top:10px}
+.dup-x{align-self:center;color:var(--muted);font-size:16px;font-weight:700;padding-top:14px}
+.dup-col{text-align:center}
+.dup-col .children{display:flex;gap:8px;justify-content:center;margin-top:10px}
+.flow-line{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.flow-step{background:var(--chip);border:1px solid #bfdbfe;border-radius:8px;padding:8px 12px;font-size:12px;font-weight:600;color:#1e3a8a}
+.flow-step small{display:block;font-weight:400;color:var(--muted);font-size:10.5px;margin-top:2px}
+.flow-ar{color:#94a3b8;font-size:14px}
+/* ── CCC 公式卡 ───────────────────── */
+.ccc{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;padding:16px 6px}
+.ccc .b{background:#eff6ff;border:1.5px solid #bfdbfe;border-radius:12px;padding:12px 18px;text-align:center;min-width:96px}
+.ccc .b .n{font-size:22px;font-weight:800;color:#1d4ed8}
+.ccc .b .l{font-size:11px;color:var(--muted);margin-top:2px}
+.ccc .op{font-size:20px;font-weight:700;color:#475569}
+.ccc .b.res{background:#dcfce7;border-color:#86efac}
+.ccc .b.res .n{color:#15803d}
+/* 内部期占位 */
+.holdout{border:1.5px dashed #fca5a5;background:#fff7f7;border-radius:10px;padding:10px 12px;font-size:12px;color:#b91c1c;display:flex;gap:8px;align-items:center}
+.holdout .t{font-weight:700;flex:none}
+.mut{color:var(--muted)} .small{font-size:11.5px}
+.pill{display:inline-block;background:#f1f5f9;color:#475569;border-radius:6px;padding:2px 8px;font-size:11px;margin-left:6px}
+@media (max-width:1100px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.g2,.g3,.g21,.g12{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<aside>
+  <div class="brand">🧭 财务总监驾驶舱<small>FLOW · 高保真原型 v0.2 · 模拟数据</small></div>
+  <nav id="nav"></nav>
+  <div class="side-foot">设计依据：docs/05_design/<br>2026-09-29-cfo-cockpit-design.md</div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <span class="badge-proto">原型 · 所有数据均为模拟</span>
+    <span class="sel">主体 <select><option>XX 演示集团</option><option>公开期：阿里巴巴</option><option>公开期：菜鸟集团</option></select></span>
+    <span class="sel">期间 <select><option>2026年7月</option><option>2026年6月</option><option>2026年Q2</option></select></span>
+    <span class="sel">口径 <select><option>集团合并口径</option><option>管理汇总口径</option><option>单体口径</option></select></span>
+    <span class="sel">币种 <select><option>人民币</option><option>美元</option></select></span>
+    <span class="seg"><button class="on">累计</button><button>当月</button></span>
+    <span class="upd">数据更新：2026-08-01 08:30 · 冻结批次 <a href="#">#b42f</a></span>
+  </div>
+
+  <div class="pages">
+
+  <!-- ═══════════ P1 集团总览 ═══════════ -->
+  <section class="page on" id="p-overview">
+    <h1 class="pt">集团财务总览</h1>
+    <div class="kpis">
+      <div class="kpi"><div class="kpi-h"><span class="ico">📊</span>营业收入</div><div class="kpi-v">126,895<small>万元</small></div>
+        <div class="kpi-b"><span class="tag up">同比 +12.6%</span><span class="tag up">环比 +8.5%</span><span class="tag pos">行业 P62</span></div>
+        <div class="kpi-n">口径：合并口径 · 1–7月累计 · 未经审计</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">💰</span>毛利</div><div class="kpi-v">38,458<small>万元</small></div>
+        <div class="kpi-b"><span class="tag up">同比 +15.2%</span><span class="tag up">环比 +9.1%</span><span class="tag pos">行业 P58</span></div>
+        <div class="kpi-n">口径：营业收入 − 营业成本</div></div>
+      <div class="kpi good"><div class="kpi-h"><span class="ico">％</span>毛利率</div><div class="kpi-v">30.3<small>%</small></div>
+        <div class="kpi-b"><span class="tag up">同比 +2.1pp</span><span class="tag up">环比 +0.4pp</span><span class="tag pos">行业 P66</span></div>
+        <div class="kpi-n">口径：毛利 / 营业收入</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">📈</span>营业利润</div><div class="kpi-v">16,879<small>万元</small></div>
+        <div class="kpi-b"><span class="tag up">同比 +14.3%</span><span class="tag up">环比 +7.2%</span><span class="tag mut">较预算 −4.8%</span></div>
+        <div class="kpi-n">预算基准属内部期功能，此处为占位</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">💵</span>净利润</div><div class="kpi-v">9,674<small>万元</small></div>
+        <div class="kpi-b"><span class="tag up">同比 +13.1%</span><span class="tag down">环比 −0.9%</span><span class="tag pos">行业 P55</span></div>
+        <div class="kpi-n">口径：归母净利润</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">🥧</span>净利率</div><div class="kpi-v">7.6<small>%</small></div>
+        <div class="kpi-b"><span class="tag up">同比 +0.3pp</span><span class="tag down">环比 −0.7pp</span><span class="tag pos">行业 P52</span></div>
+        <div class="kpi-n">口径：净利润 / 营业收入</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">🏧</span>经营现金流净额</div><div class="kpi-v">13,266<small>万元</small></div>
+        <div class="kpi-b"><span class="tag up">同比 +18.7%</span><span class="tag up">环比 +6.4%</span><span class="tag pos">行业 P61</span></div>
+        <div class="kpi-n">净现比 1.37 · 收现比 87.1%</div></div>
+      <div class="kpi warn"><div class="kpi-h"><span class="ico">🎯</span>预算完成率</div><div class="kpi-v">96.1<small>%</small></div>
+        <div class="kpi-b"><span class="tag up">同比 +1.5pp</span><span class="tag down">较预算 −3.9pp</span><span class="tag warn">内部期占位</span></div>
+        <div class="kpi-n">预算数据属 L2 内部层，公开期不可得</div></div>
+    </div>
+    <div class="grid g21">
+      <div class="card"><div class="ct"><h3 class="ct">收入、利润与现金流趋势（1–7月累计）</h3><span class="sub">柱=收入 · 线=净利润 / 经营现金流 · 双轴</span></div><div class="chart" id="c-ov-trend"></div></div>
+      <div class="card"><div class="ct"><h3 class="ct">经营单元矩阵</h3><span class="sub">X=收入达成 · Y=净利率</span></div><div class="chart" id="c-ov-matrix"></div></div>
+    </div>
+    <div class="grid g3">
+      <div class="card"><h3 class="ct">集团结构（20 主体 · 纳入合并 6 家）</h3>
+        <div class="tree">
+          <div style="text-align:center"><span class="node root">XX 集团总部<small>管理口径汇总</small></span></div>
+          <div class="org-row">
+            <div class="org-col"><span class="node">制造A<small>子公司 ×12 · 60%</small></span></div>
+            <div class="org-col"><span class="node">制造B<small>事业部 ×6 · 30%</small></span></div>
+            <div class="org-col"><span class="node">贸易C<small>收入占比 21%</small></span></div>
+            <div class="org-col"><span class="node">服务D<small>收入占比 16%</small></span></div>
+            <div class="org-col"><span class="node">海外E<small>参股 ×2 · 10%</small></span></div>
+          </div>
+        </div>
+        <p class="small mut" style="margin-top:12px">公开期降级说明：组织树与多单元维度在公开财报场景以「主体 + 分部」视角呈现。</p>
+      </div>
+      <div class="card"><div class="ct"><h3 class="ct">风险预警</h3><span class="sub">→ Findings 溯源</span></div>
+        <table class="t">
+          <thead><tr><th>预警事项</th><th>等级</th><th>溯源</th></tr></thead>
+          <tbody>
+            <tr><td>应收账款周转天数偏高<small style="display:block;color:var(--muted)">逾期 90 天以上占比 18.5%</small></td><td><span class="lv m">中</span></td><td><a href="#">F-2026-041</a></td></tr>
+            <tr><td>存货周转天数偏高<small style="display:block;color:var(--muted)">周转 62.4 天 · 行业中位 51 天</small></td><td><span class="lv m">中</span></td><td><a href="#">F-2026-042</a></td></tr>
+            <tr><td>净利润率偏低<small style="display:block;color:var(--muted)">净利率 5.8% · 低于行业 P40</small></td><td><span class="lv h">高</span></td><td><a href="#">F-2026-043</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card"><div class="ct"><h3 class="ct">管理层关注</h3><span class="sub">内部期接入行动闭环</span></div>
+        <table class="t">
+          <thead><tr><th>关键事项</th><th>负责人</th><th>目标时间</th></tr></thead>
+          <tbody>
+            <tr><td>① 提升应收账款回收效率、降低坏账</td><td>财务总监</td><td>2026-08-31</td></tr>
+            <tr><td>② 优化存货结构、提升存货周转效率</td><td>供应链总监</td><td>2026-09-30</td></tr>
+            <tr><td>③ 控制费用增长、提升预算完成率</td><td>运营总监</td><td>2026-09-15</td></tr>
+          </tbody>
+        </table>
+        <p class="small mut" style="margin-top:8px">脚注：行动项为管理建议，不代表已执行（事实与建议分离）。</p>
+      </div>
+    </div>
+    <div class="concl"><span class="ci">📈</span><b>经营结论：收入同比增长 12.6%，环比提速 8.5%，毛利率 30.3% 高于行业 P66 分位；预算完成率 96.1% 略欠，缺口主要来自费用与毛利率。</b><a href="#">查看证据链与口径 →</a></div>
+  </section>
+
+  <!-- ═══════════ P2 利润增长 ═══════════ -->
+  <section class="page" id="p-profit">
+    <h1 class="pt">利润与增长分析</h1>
+    <div class="kpis">
+      <div class="kpi"><div class="kpi-h"><span class="ico">📊</span>营业收入</div><div class="kpi-v">126,895<small>万元</small></div><div class="kpi-b"><span class="tag up">同比 +12.6%</span><span class="tag up">环比 +8.5%</span></div><div class="kpi-n">口径：合并 · 累计</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">💰</span>毛利</div><div class="kpi-v">38,458<small>万元</small></div><div class="kpi-b"><span class="tag up">同比 +15.2%</span><span class="tag up">环比 +9.1%</span></div><div class="kpi-n">—</div></div>
+      <div class="kpi good"><div class="kpi-h"><span class="ico">％</span>毛利率</div><div class="kpi-v">30.3<small>%</small></div><div class="kpi-b"><span class="tag up">同比 +0.9pp</span><span class="tag pos">行业 P66</span></div><div class="kpi-n">—</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">🧮</span>EBITDA</div><div class="kpi-v">19,192<small>万元</small></div><div class="kpi-b"><span class="tag up">同比 +11.8%</span><span class="tag up">环比 +5.2%</span></div><div class="kpi-n">口径：营业利润 + 折旧摊销</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">💵</span>营业利润</div><div class="kpi-v">16,879<small>万元</small></div><div class="kpi-b"><span class="tag up">同比 +14.3%</span><span class="tag up">环比 +7.2%</span></div><div class="kpi-n">—</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">🏦</span>净利润</div><div class="kpi-v">9,674<small>万元</small></div><div class="kpi-b"><span class="tag up">同比 +13.1%</span><span class="tag down">环比 −0.9%</span></div><div class="kpi-n">—</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">🥧</span>净利率</div><div class="kpi-v">7.6<small>%</small></div><div class="kpi-b"><span class="tag up">同比 +0.3pp</span><span class="tag down">环比 −0.7pp</span></div><div class="kpi-n">—</div></div>
+      <div class="kpi warn"><div class="kpi-h"><span class="ico">🎯</span>净利润预算完成率</div><div class="kpi-v">92.1<small>%</small></div><div class="kpi-b"><span class="tag warn">内部期占位</span><span class="tag mut">预算 −7.9pp</span></div><div class="kpi-n">预算数据属 L2 内部层</div></div>
+    </div>
+    <div class="grid g2">
+      <div class="card"><div class="ct"><h3 class="ct">收入、利润与毛利率趋势</h3><span class="sub">三序列 · 双轴</span></div><div class="chart" id="c-pf-trend"></div></div>
+      <div class="card"><div class="ct"><h3 class="ct">净利润差异分解（同比桥）</h3><span class="sub">守恒：分项之和 = 净变动</span></div><div class="chart" id="c-pf-bridge"></div>
+        <p class="small mut" style="margin-top:6px">✅ 核对块：+2,850（收入贡献）−1,410（毛利率）−610（费用）+13（其他）= +843 ≈ 净利润同比变动（显式残差 0）。预算差异桥为内部期功能。</p></div>
+    </div>
+    <div class="grid g3">
+      <div class="card"><div class="ct"><h3 class="ct">收入结构</h3><span class="sub">按产品/业务线</span></div><div class="chart sm" id="c-pf-mix"></div></div>
+      <div class="card" style="grid-column:span 1"><div class="ct"><h3 class="ct">增长贡献 TOP5</h3><span class="sub">收入增量占比</span></div>
+        <table class="t">
+          <thead><tr><th>项目</th><th class="num">增量(万元)</th><th class="num">占比</th></tr></thead>
+          <tbody>
+            <tr><td>核心产品销量增长</td><td class="num">12,430</td><td class="num">45.2%</td></tr>
+            <tr><td>核心产品放量增长</td><td class="num">7,320</td><td class="num">26.6%</td></tr>
+            <tr><td>客户拓展增长</td><td class="num">4,280</td><td class="num">15.6%</td></tr>
+            <tr><td>价格提升贡献</td><td class="num">2,180</td><td class="num">7.9%</td></tr>
+            <tr><td>新产品贡献</td><td class="num">920</td><td class="num">3.3%</td></tr>
+            <tr><td><b>合计</b></td><td class="num"><b>27,150</b></td><td class="num"><b>98.6%</b></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card"><h3 class="ct">管理建议</h3>
+        <table class="t"><tbody>
+          <tr><td>① 优化产品结构，提高高毛利产品占比，改善毛利率水平。</td></tr>
+          <tr><td>② 加强费用管控，重点关注销售费用与管理费用的效率。</td></tr>
+          <tr><td>③ 深化成本管理，推进降本增效，提升利润空间。</td></tr>
+          <tr><td>④ 持续聚焦核心客户，扩大市场份额，稳定收入增长。</td></tr>
+        </tbody></table>
+        <p class="small mut" style="margin-top:8px">脚注：以上为 AI 生成建议，未执行（事实与建议分离）。</p>
+      </div>
+    </div>
+    <div class="concl"><span class="ci">📈</span><b>经营结论：收入同比 +12.6% 增长稳健，但净利润预算完成率 92.1%；利润缺口主要来自毛利率（−1,410）与费用（−610），需在产品结构与费用效率两端发力。</b><a href="#">查看证据链与口径 →</a></div>
+  </section>
+
+  <!-- ═══════════ P3 盈利能力 ═══════════ -->
+  <section class="page" id="p-profitability">
+    <h1 class="pt">盈利能力分析</h1>
+    <div class="kpis k3">
+      <div class="kpi good"><div class="kpi-h"><span class="ico">％</span>毛利率</div><div class="kpi-v">30.3<small>%</small></div><div class="kpi-b"><span class="tag up">同比 +0.9pp</span><span class="tag pos">行业 P66</span></div><div class="kpi-n">毛利 / 营业收入</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">📊</span>营业利润率</div><div class="kpi-v">13.3<small>%</small></div><div class="kpi-b"><span class="tag up">同比 +0.5pp</span><span class="tag pos">行业 P58</span></div><div class="kpi-n">营业利润 / 营业收入</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">🥧</span>净利率</div><div class="kpi-v">7.6<small>%</small></div><div class="kpi-b"><span class="tag up">同比 +0.3pp</span><span class="tag pos">行业 P52</span></div><div class="kpi-n">净利润 / 营业收入</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">🏛️</span>年化 ROA</div><div class="kpi-v">5.4<small>%</small></div><div class="kpi-b"><span class="tag up">同比 +0.2pp</span><span class="tag mut">行业 P47</span></div><div class="kpi-n">年化规则：本期 ×12/月数</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">👥</span>年化 ROE</div><div class="kpi-v">12.6<small>%</small></div><div class="kpi-b"><span class="tag up">同比 +0.6pp</span><span class="tag pos">行业 P60</span></div><div class="kpi-n">平均权益口径 · 未年化差额见口径表</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">🧮</span>EBITDA 率</div><div class="kpi-v">15.1<small>%</small></div><div class="kpi-b"><span class="tag up">同比 +0.4pp</span><span class="tag pos">行业 P57</span></div><div class="kpi-n">EBITDA / 营业收入</div></div>
+    </div>
+    <div class="grid g2">
+      <div class="card"><div class="ct"><h3 class="ct">盈利能力趋势（1–7月）</h3><span class="sub">三线 · %</span></div><div class="chart" id="c-pb-trend"></div></div>
+      <div class="card"><div class="ct"><h3 class="ct">杜邦分析</h3><span class="sub">年化 ROE 分解 · 口径表随图</span></div>
+        <div class="dupont" style="padding-top:6px">
+          <div style="text-align:center"><span class="node root">年化 ROE 12.6%<small>归属净利润(年化) / 平均所有者权益</small></span></div>
+          <div class="dup-grid">
+            <div class="dup-col"><span class="node">净利率 7.6%</span><div class="children"><span class="node" style="background:#f8fafc;color:#334155;border-color:#e2e8f0">净利润<small>9,674 万</small></span><span class="node" style="background:#f8fafc;color:#334155;border-color:#e2e8f0">营业收入<small>126,895 万</small></span></div></div>
+            <div class="dup-x">×</div>
+            <div class="dup-col"><span class="node">总资产周转率 0.71 次</span><div class="children"><span class="node" style="background:#f8fafc;color:#334155;border-color:#e2e8f0">营业收入<small>126,895 万</small></span><span class="node" style="background:#f8fafc;color:#334155;border-color:#e2e8f0">平均总资产<small>357,000 万</small></span></div></div>
+            <div class="dup-x">×</div>
+            <div class="dup-col"><span class="node">权益乘数 2.33</span><div class="children"><span class="node" style="background:#f8fafc;color:#334155;border-color:#e2e8f0">平均总资产<small>357,000 万</small></span><span class="node" style="background:#f8fafc;color:#334155;border-color:#e2e8f0">平均权益<small>153,200 万</small></span></div></div>
+          </div>
+        </div>
+        <p class="small mut" style="margin-top:10px">口径附表：ROE 为所选期间收益率按 12/7 年化；资产与权益采用期初/期末平均；与 U2 口径登记一致。</p>
+      </div>
+    </div>
+    <div class="grid g3">
+      <div class="card"><div class="ct"><h3 class="ct">经营单元盈利排名</h3><span class="sub">净利率 %</span></div><div class="chart sm" id="c-pb-rank"></div></div>
+      <div class="card"><div class="ct"><h3 class="ct">本集团 vs 行业基准</h3><span class="sub">雷达 · 16 行业参考包</span></div><div class="chart sm" id="c-pb-radar"></div></div>
+      <div class="card"><div class="ct"><h3 class="ct">盈利质量</h3><span class="sub">六指标 · 趋势评价</span></div>
+        <table class="t">
+          <thead><tr><th>指标</th><th class="num">本期</th><th class="num">同比变化</th><th>评价</th></tr></thead>
+          <tbody>
+            <tr><td>净利率</td><td class="num">7.6%</td><td class="num">+0.3pp</td><td><span class="tag up">提升</span></td></tr>
+            <tr><td>现金毛利率</td><td class="num">9.2%</td><td class="num">+0.4pp</td><td><span class="tag up">提升</span></td></tr>
+            <tr><td>税后经营净利率</td><td class="num">7.1%</td><td class="num">+0.2pp</td><td><span class="tag up">提升</span></td></tr>
+            <tr><td>资产回报率(ROA)</td><td class="num">5.4%</td><td class="num">+0.2pp</td><td><span class="tag up">提升</span></td></tr>
+            <tr><td>权益回报率(ROE)</td><td class="num">12.6%</td><td class="num">+0.6pp</td><td><span class="tag up">提升</span></td></tr>
+            <tr><td>净现比</td><td class="num">1.37</td><td class="num">+0.15</td><td><span class="tag up">提升</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:14px"><div class="ct"><h3 class="ct">提升抓手</h3><span class="sub">分析判断 · 预期影响为模型估算</span></div>
+      <table class="t">
+        <thead><tr><th style="width:40px">序</th><th>抓手</th><th>重点措施</th><th class="num">预期影响</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>提升净利率</td><td>优化产品结构，控制成本费用</td><td class="num"><span class="tag up">+0.5pp</span></td></tr>
+          <tr><td>2</td><td>提升周转率</td><td>加快存货周转，强化应收管理</td><td class="num"><span class="tag up">+0.3pp</span></td></tr>
+          <tr><td>3</td><td>优化资本结构</td><td>降低负债成本，合理利用杠杆</td><td class="num"><span class="tag up">+0.2pp</span></td></tr>
+          <tr><td>4</td><td>提高现金转化</td><td>强化回款管理，减少坏账占用</td><td class="num"><span class="tag up">+0.2pp</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="concl"><span class="ci">📈</span><b>经营结论：年化 ROE 12.6%（同比 +0.6pp），盈利改善主要来自净利率提升；海外E 与贸易C 仍是重点改善单元，六项盈利质量指标全部正向。</b><a href="#">查看证据链与口径 →</a></div>
+  </section>
+
+  <!-- ═══════════ P4 费用分析 ═══════════ -->
+  <section class="page" id="p-expense">
+    <h1 class="pt">费用分析</h1>
+    <div class="kpis">
+      <div class="kpi"><div class="kpi-h"><span class="ico">🛍️</span>销售费用</div><div class="kpi-v">7,205<small>万元</small></div><div class="kpi-b"><span class="tag up">同比 +6.2%</span><span class="tag down">超支 3.2%</span></div><div class="kpi-n">预算执行 103.2%（内部期占位）</div></div>
+      <div class="kpi warn"><div class="kpi-h"><span class="ico">👔</span>管理费用</div><div class="kpi-v">5,786<small>万元</small></div><div class="kpi-b"><span class="tag down">同比 +9.8%</span><span class="tag down">超支 8.6%</span></div><div class="kpi-n">主要超支源 · 需压降非刚性支出</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">🔬</span>研发费用</div><div class="kpi-v">4,353<small>万元</small></div><div class="kpi-b"><span class="tag up">同比 +5.1%</span><span class="tag up">节约 3.6%</span></div><div class="kpi-n">预算执行 96.4%</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">🏦</span>财务费用</div><div class="kpi-v">1,258<small>万元</small></div><div class="kpi-b"><span class="tag up">同比 +2.3%</span><span class="tag down">超支 1.8%</span></div><div class="kpi-n">预算执行 101.8%</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">📋</span>期间费用</div><div class="kpi-v">18,602<small>万元</small></div><div class="kpi-b"><span class="tag up">同比 +8.4%</span><span class="tag up">环比 +3.1%</span></div><div class="kpi-n">销售+管理+研发+财务</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">％</span>期间费用率</div><div class="kpi-v">14.7<small>%</small></div><div class="kpi-b"><span class="tag down">同比 −0.6pp</span><span class="tag pos">行业 P44</span></div><div class="kpi-n">期间费用 / 营业收入</div></div>
+      <div class="kpi bad"><div class="kpi-h"><span class="ico">⚠️</span>预算超支</div><div class="kpi-v">932<small>万元</small></div><div class="kpi-b"><span class="tag warn">内部期占位</span></div><div class="kpi-n">超支口径：实际 − 预算</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">📈</span>费用同比</div><div class="kpi-v">+8.4<small>%</small></div><div class="kpi-b"><span class="tag mut">收入同比 +12.6%</span><span class="tag up">费用率改善</span></div><div class="kpi-n">费用增速低于收入增速</div></div>
+    </div>
+    <div class="grid g2">
+      <div class="card"><div class="ct"><h3 class="ct">期间费用趋势</h3><span class="sub">堆叠柱 + 费用率线</span></div><div class="chart" id="c-ex-stack"></div></div>
+      <div class="card"><div class="ct"><h3 class="ct">费用增长 vs 收入增长矩阵</h3><span class="sub">四象限：合理投入 / 重点管控 / 效率改善 / 低效收缩</span></div><div class="chart" id="c-ex-matrix"></div></div>
+    </div>
+    <div class="grid g3">
+      <div class="card"><div class="ct"><h3 class="ct">费用预算执行</h3><span class="sub">内部期占位数据</span></div>
+        <table class="t"><thead><tr><th>费用类别</th><th class="num">预算执行率</th><th>状态</th></tr></thead>
+        <tbody>
+          <tr><td>销售费用</td><td class="num">103.2%</td><td><span class="st over">超支</span></td></tr>
+          <tr><td>管理费用</td><td class="num">108.6%</td><td><span class="st over">超支</span></td></tr>
+          <tr><td>研发费用</td><td class="num">96.4%</td><td><span class="st save">节约</span></td></tr>
+          <tr><td>财务费用</td><td class="num">101.8%</td><td><span class="st over">超支</span></td></tr>
+        </tbody></table>
+      </div>
+      <div class="card"><div class="ct"><h3 class="ct">超支原因</h3><span class="sub">→ Findings 归因</span></div>
+        <table class="t"><thead><tr><th>类别</th><th>原因（摘要）</th></tr></thead>
+        <tbody>
+          <tr><td>销售费用</td><td>市场推广活动增加，广告宣发费用超预算</td></tr>
+          <tr><td>管理费用</td><td>咨询服务费、差旅费及会议费超预算</td></tr>
+          <tr><td>研发费用</td><td>人员效率提升，研发外包费用低于预算</td></tr>
+          <tr><td>财务费用</td><td>汇兑损失增加，利息费用超预算</td></tr>
+        </tbody></table>
+      </div>
+      <div class="card"><div class="ct"><h3 class="ct">降费措施</h3><span class="sub">AI 建议 · 未执行</span></div>
+        <table class="t"><thead><tr><th>类别</th><th>措施</th></tr></thead>
+        <tbody>
+          <tr><td>销售费用</td><td>优化推广渠道，压低低投产比投放</td></tr>
+          <tr><td>管理费用</td><td>严控差旅及会议费，减少咨询外包</td></tr>
+          <tr><td>研发费用</td><td>保持研发投入，持续优化资源配置</td></tr>
+          <tr><td>财务费用</td><td>加强汇率管理，优化融资结构</td></tr>
+        </tbody></table>
+      </div>
+    </div>
+    <div class="concl"><span class="ci">📉</span><b>经营结论：期间费用率 14.7%（同比 −0.6pp，费用增速低于收入增速）；管理费用是主要超支源（+8.6%），需压降非刚性支出。</b><a href="#">查看证据链与口径 →</a></div>
+  </section>
+
+  <!-- ═══════════ P5 资产负债 ═══════════ -->
+  <section class="page" id="p-balance">
+    <h1 class="pt">资产负债与资本结构</h1>
+    <div class="kpis">
+      <div class="kpi"><div class="kpi-h"><span class="ico">🏛️</span>总资产</div><div class="kpi-v">368,025<small>万元</small></div><div class="kpi-b"><span class="tag up">同比 +9.2%</span><span class="tag up">环比 +2.1%</span></div><div class="kpi-n">期末余额</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">🧾</span>总负债</div><div class="kpi-v">210,368<small>万元</small></div><div class="kpi-b"><span class="tag up">同比 +7.8%</span><span class="tag up">环比 +1.4%</span></div><div class="kpi-n">期末余额</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">👤</span>所有者权益</div><div class="kpi-v">157,657<small>万元</small></div><div class="kpi-b"><span class="tag up">同比 +11.2%</span><span class="tag up">环比 +3.2%</span></div><div class="kpi-n">含少数股东权益</div></div>
+      <div class="kpi warn"><div class="kpi-h"><span class="ico">％</span>资产负债率</div><div class="kpi-v">57.2<small>%</small></div><div class="kpi-b"><span class="tag down">同比 −0.7pp</span><span class="tag pos">行业 P48</span></div><div class="kpi-n">管控线 60%（示例阈值）</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">💰</span>货币资金</div><div class="kpi-v">28,636<small>万元</small></div><div class="kpi-b"><span class="tag up">同比 +17.2%</span><span class="tag up">环比 +1.9%</span></div><div class="kpi-n">含现金等价物</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">📄</span>应收账款</div><div class="kpi-v">12,685<small>万元</small></div><div class="kpi-b"><span class="tag down">同比 +14.6%</span><span class="tag warn">快于收入</span></div><div class="kpi-n">DSO 48.6 天</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">📦</span>存货</div><div class="kpi-v">9,875<small>万元</small></div><div class="kpi-b"><span class="tag up">同比 +6.1%</span><span class="tag mut">DIO 62.3 天</span></div><div class="kpi-n">—</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">🏦</span>有息负债</div><div class="kpi-v">85,600<small>万元</small></div><div class="kpi-b"><span class="tag up">同比 +4.2%</span><span class="tag mut">占总负债 40.7%</span></div><div class="kpi-n">短期借款+长债+应付债券</div></div>
+    </div>
+    <div class="grid g2">
+      <div class="card"><div class="ct"><h3 class="ct">资产结构（树图）</h3><span class="sub">流动 42.5% / 非流动 57.5%</span></div><div class="chart" id="c-bs-tree"></div></div>
+      <div class="card"><div class="ct"><h3 class="ct">负债与权益结构</h3><span class="sub">占总资产比例</span></div>
+        <div style="padding-top:10px">
+          <div style="display:flex;height:46px;border-radius:10px;overflow:hidden;font-size:12px;color:#fff;text-align:center;font-weight:600">
+            <div style="width:34.2%;background:#2563eb;line-height:46px">流动负债 34.2%</div>
+            <div style="width:23%;background:#60a5fa;line-height:46px">非流动负债 23.0%</div>
+            <div style="width:42.8%;background:#16a34a;line-height:46px">所有者权益 42.8%</div>
+          </div>
+          <table class="t" style="margin-top:14px">
+            <thead><tr><th>等式核对</th><th class="num">金额（万元）</th></tr></thead>
+            <tbody>
+              <tr><td>总负债</td><td class="num">210,368</td></tr>
+              <tr><td>＋ 所有者权益</td><td class="num">157,657</td></tr>
+              <tr><td><b>＝ 总资产（✅ 勾稽通过）</b></td><td class="num"><b>368,025</b></td></tr>
+            </tbody>
+          </table>
+          <div class="chart" id="c-bs-cap" style="height:210px;margin-top:6px"></div>
+        </div>
+      </div>
+    </div>
+    <div class="grid g3">
+      <div class="card"><div class="ct"><h3 class="ct">资本结构趋势</h3><span class="sub">负债率 / 有息负债率</span></div><div class="chart sm" id="c-bs-trend"></div></div>
+      <div class="card"><div class="ct"><h3 class="ct">债务期限结构</h3><span class="sub">有息负债 85,600 万</span></div><div class="chart sm" id="c-bs-debt"></div></div>
+      <div class="card"><div class="ct"><h3 class="ct">资产质量关注</h3><span class="sub">C06 示例阈值</span></div>
+        <table class="t">
+          <thead><tr><th>关注项</th><th class="num">推标值</th><th class="num">较期初</th><th>等级</th></tr></thead>
+          <tbody>
+            <tr><td>应收账款周转天数</td><td class="num">38.6 天</td><td class="num">+3.2 天</td><td><span class="lv m">中</span></td></tr>
+            <tr><td>存货周转天数</td><td class="num">62.4 天</td><td class="num">+4.8 天</td><td><span class="lv m">中</span></td></tr>
+            <tr><td>固定资产周转率</td><td class="num">0.95 次</td><td class="num">−0.05 次</td><td><span class="lv l">低</span></td></tr>
+            <tr><td>现金量倍比</td><td class="num">1.27</td><td class="num">−0.12</td><td><span class="lv l">低</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="concl"><span class="ci">🏛️</span><b>经营结论：资产负债率 57.2%，低于 60% 管控线且同比下降 0.7pp；非流动资产占 57.5%，需关注资产周转效率与短期偿债安排。</b><a href="#">查看证据链与口径 →</a></div>
+  </section>
+
+  <!-- ═══════════ P6 营运资金 ═══════════ -->
+  <section class="page" id="p-wc">
+    <h1 class="pt">营运资金分析</h1>
+    <div class="kpis">
+      <div class="kpi"><div class="kpi-h"><span class="ico">📄</span>应收账款</div><div class="kpi-v">12,685<small>万元</small></div><div class="kpi-b"><span class="tag down">同比 +14.6%</span><span class="tag warn">快于收入</span></div><div class="kpi-n">账龄 1 年内占 78.4%</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">📦</span>存货</div><div class="kpi-v">9,875<small>万元</small></div><div class="kpi-b"><span class="tag up">同比 +6.1%</span><span class="tag up">环比 +1.2%</span></div><div class="kpi-n">—</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">🧾</span>应付账款</div><div class="kpi-v">8,214<small>万元</small></div><div class="kpi-b"><span class="tag up">同比 +9.4%</span><span class="tag mut">DPO 39.8 天</span></div><div class="kpi-n">—</div></div>
+      <div class="kpi warn"><div class="kpi-h"><span class="ico">🔄</span>营运资金占用</div><div class="kpi-v">14,346<small>万元</small></div><div class="kpi-b"><span class="tag down">同比 +12.8%</span><span class="tag warn">占用上升</span></div><div class="kpi-n">应收 + 存货 − 应付</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">⏱️</span>DSO</div><div class="kpi-v">48.6<small>天</small></div><div class="kpi-b"><span class="tag down">同比 +2.1 天</span><span class="tag pos">行业 P42</span></div><div class="kpi-n">应收 / 营业收入 × 期间天数字段化</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">📦</span>DIO</div><div class="kpi-v">62.3<small>天</small></div><div class="kpi-b"><span class="tag down">同比 +4.8 天</span><span class="tag warn">慢于行业中位 51 天</span></div><div class="kpi-n">存货 / 营业成本 × 期间天数</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">🧾</span>DPO</div><div class="kpi-v">39.8<small>天</small></div><div class="kpi-b"><span class="tag up">同比 +1.6 天</span><span class="tag pos">行业 P58</span></div><div class="kpi-n">应付 / 营业成本 × 期间天数</div></div>
+      <div class="kpi good"><div class="kpi-h"><span class="ico">🔁</span>CCC 现金转换周期</div><div class="kpi-v">71.1<small>天</small></div><div class="kpi-b"><span class="tag up">同比 −3.8 天（改善）</span><span class="tag pos">行业 P55</span></div><div class="kpi-n">CCC = DSO + DIO − DPO</div></div>
+    </div>
+    <div class="grid g2">
+      <div class="card"><div class="ct"><h3 class="ct">应收、存货与应付趋势</h3><span class="sub">三线 · 1–7月期末值</span></div><div class="chart" id="c-wc-trend"></div></div>
+      <div class="card"><div class="ct"><h3 class="ct">现金转换周期构成</h3><span class="sub">月度 CCC 趋势</span></div>
+        <div class="ccc">
+          <div class="b"><div class="n">48.6</div><div class="l">DSO（天）</div></div><span class="op">＋</span>
+          <div class="b"><div class="n">62.3</div><div class="l">DIO（天）</div></div><span class="op">－</span>
+          <div class="b"><div class="n">39.8</div><div class="l">DPO（天）</div></div><span class="op">＝</span>
+          <div class="b res"><div class="n">71.1</div><div class="l">CCC（天）</div></div>
+        </div>
+        <div class="chart" id="c-wc-ccc" style="height:190px"></div>
+      </div>
+    </div>
+    <div class="grid g3">
+      <div class="card"><div class="ct"><h3 class="ct">应收账款账龄</h3><span class="sub">模拟明细层 · 公开期降级</span></div><div class="chart sm" id="c-wc-aging"></div></div>
+      <div class="card"><div class="ct"><h3 class="ct">经营单元效率排名</h3><span class="sub">CCC（天）· 越短越好</span></div><div class="chart sm" id="c-wc-rank"></div></div>
+      <div class="card"><div class="ct"><h3 class="ct">重点改善动作</h3><span class="sub">AI 建议 · 未执行</span></div>
+        <table class="t"><tbody>
+          <tr><td>① 加强重点客户信用管理，缩短应收账款回收周期。</td></tr>
+          <tr><td>② 优化库存结构，提升周转效率，降低存货占用。</td></tr>
+          <tr><td>③ 与供应商协商付款账期，合理延长应付账款周期。</td></tr>
+          <tr><td>④ 针对海外E单元，制定专项改善计划并跟踪落地效果。</td></tr>
+        </tbody></table>
+      </div>
+    </div>
+    <div class="concl"><span class="ci">🔄</span><b>经营结论：CCC 71.1 天，同比缩短 3.8 天；应收与存货合计占用 22,560 万元且增速快于收入，海外E（89.6 天）是重点改善单元。</b><a href="#">查看证据链与口径 →</a></div>
+  </section>
+
+  <!-- ═══════════ P7 现金流 ═══════════ -->
+  <section class="page" id="p-cash">
+    <h1 class="pt">现金流与资金分析</h1>
+    <div class="kpis">
+      <div class="kpi"><div class="kpi-h"><span class="ico">⬇️</span>经营现金流入</div><div class="kpi-v">110,500<small>万元</small></div><div class="kpi-b"><span class="tag up">同比 +15.8%</span><span class="tag mut">较预算 −3.2%</span></div><div class="kpi-n">销售收现 + 其他</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">⬆️</span>经营现金流出</div><div class="kpi-v">97,234<small>万元</small></div><div class="kpi-b"><span class="tag up">同比 +11.3%</span><span class="tag mut">较预算 −4.1%</span></div><div class="kpi-n">—</div></div>
+      <div class="kpi good"><div class="kpi-h"><span class="ico">💵</span>经营现金流净额</div><div class="kpi-v">13,266<small>万元</small></div><div class="kpi-b"><span class="tag up">同比 +18.7%</span><span class="tag up">环比 +6.4%</span></div><div class="kpi-n">净现比 1.37</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">🏗️</span>投资现金流净额</div><div class="kpi-v" style="color:var(--down)">−9,674<small>万元</small></div><div class="kpi-b"><span class="tag down">同比 −9.5%</span><span class="tag mut">扩产投入</span></div><div class="kpi-n">购建固定资产为主</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">🏦</span>筹资现金流净额</div><div class="kpi-v">5,830<small>万元</small></div><div class="kpi-b"><span class="tag up">同比 +22.4%</span><span class="tag mut">新增借款</span></div><div class="kpi-n">—</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">🧮</span>现金净增加额</div><div class="kpi-v">9,422<small>万元</small></div><div class="kpi-b"><span class="tag up">同比 +16.5%</span><span class="tag pos">勾稽通过</span></div><div class="kpi-n">经营+投资+筹资</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">💰</span>期末现金余额</div><div class="kpi-v">28,636<small>万元</small></div><div class="kpi-b"><span class="tag up">同比 +17.2%</span><span class="tag up">环比 +1.9%</span></div><div class="kpi-n">期初 19,214 + 净增加 9,422</div></div>
+      <div class="kpi good"><div class="kpi-h"><span class="ico">％</span>净现比</div><div class="kpi-v">1.37</div><div class="kpi-b"><span class="tag up">同比 +0.15</span><span class="tag pos">收现比 87.1%</span></div><div class="kpi-n">经营净额 / 净利润</div></div>
+    </div>
+    <div class="grid g2">
+      <div class="card"><div class="ct"><h3 class="ct">现金流趋势（月度净额）</h3><span class="sub">经营 / 投资 / 筹资 三系列</span></div><div class="chart" id="c-cf-trend"></div></div>
+      <div class="card"><div class="ct"><h3 class="ct">现金余额变动桥</h3><span class="sub">期初 → 期末 · 守恒核对</span></div><div class="chart" id="c-cf-bridge"></div>
+        <p class="small mut" style="margin-top:6px">✅ 核对块：19,214 + 13,266 − 9,674 + 5,830 = 28,636（与期末现金余额一致，残差 0）。</p></div>
+    </div>
+    <div class="grid g21">
+      <div class="card"><div class="ct"><h3 class="ct">13 周滚动现金预测</h3><span class="sub">内部期功能 · 图示为占位模拟</span></div><div class="chart" id="c-cf-forecast" style="height:240px"></div></div>
+      <div class="card"><div class="ct"><h3 class="ct">现金质量</h3><span class="sub">净现比 / 收现比</span></div>
+        <div class="ccc" style="padding-top:8px">
+          <div class="b"><div class="n">1.37</div><div class="l">净现比 · 同比 +0.15</div></div>
+          <div class="b"><div class="n">87.1%</div><div class="l">收现比 · 同比 +2.9pp</div></div>
+        </div>
+        <div class="holdout" style="margin-top:12px"><span class="t">内部期占位</span><span>资金安排表（付款计划/到期分布）属 L2 内部层，公开期不渲染。</span></div>
+      </div>
+    </div>
+    <div class="concl"><span class="ci">💵</span><b>经营结论：经营现金流净额 13,266 万元（同比 +18.7%），净现比 1.37 现金含量健康；投资支出 9,674 万元用于扩产，资金安排总体可控。</b><a href="#">查看证据链与口径 →</a></div>
+  </section>
+
+  <!-- ═══════════ P8 财务风险 ═══════════ -->
+  <section class="page" id="p-risk">
+    <h1 class="pt">偿债能力与财务风险</h1>
+    <div class="kpis">
+      <div class="kpi warn"><div class="kpi-h"><span class="ico">％</span>资产负债率</div><div class="kpi-v">57.2<small>%</small></div><div class="kpi-b"><span class="tag up">同比 −0.7pp</span><span class="tag pos">控制线 60%</span></div><div class="kpi-n">示例阈值 · scope-labeled</div></div>
+      <div class="kpi good"><div class="kpi-h"><span class="ico">💧</span>流动比率</div><div class="kpi-v">1.68</div><div class="kpi-b"><span class="tag up">同比 +0.12</span><span class="tag pos">控制线 1.50</span></div><div class="kpi-n">流动资产 / 流动负债</div></div>
+      <div class="kpi good"><div class="kpi-h"><span class="ico">⚡</span>速动比率</div><div class="kpi-v">1.24</div><div class="kpi-b"><span class="tag up">同比 +0.09</span><span class="tag pos">控制线 1.00</span></div><div class="kpi-n">(流动−存货) / 流动负债</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">💵</span>现金比率</div><div class="kpi-v">0.86</div><div class="kpi-b"><span class="tag up">同比 +0.07</span><span class="tag mut">行业 P53</span></div><div class="kpi-n">货币资金 / 流动负债</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">🏦</span>有息负债</div><div class="kpi-v">85,600<small>万元</small></div><div class="kpi-b"><span class="tag up">同比 +4.2%</span><span class="tag mut">1 年内 36.5%</span></div><div class="kpi-n">—</div></div>
+      <div class="kpi good"><div class="kpi-h"><span class="ico">🛡️</span>利息保障倍数</div><div class="kpi-v">6.8<small>倍</small></div><div class="kpi-b"><span class="tag up">同比 +0.4</span><span class="tag pos">控制线 5.0</span></div><div class="kpi-n">EBIT / 利息费用</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">🧮</span>净负债 / EBITDA</div><div class="kpi-v">2.97<small>倍</small></div><div class="kpi-b"><span class="tag down">同比 −0.21</span><span class="tag pos">控制线 3.00</span></div><div class="kpi-n">(有息负债−现金) / EBITDA</div></div>
+      <div class="kpi good"><div class="kpi-h"><span class="ico">✅</span>风险状态</div><div class="kpi-v" style="color:var(--up);font-size:20px;line-height:1.2;margin-top:10px">总体可控</div><div class="kpi-b"><span class="tag up">8 项指标 6 绿 2 黄</span></div><div class="kpi-n">综合判定规则见口径注</div></div>
+    </div>
+    <div class="grid g21">
+      <div class="card"><div class="ct"><h3 class="ct">偿债能力仪表盘</h3><span class="sub">5 指标 · 各带控制线</span></div><div class="chart" id="c-rk-gauges" style="height:260px"></div></div>
+      <div class="card"><div class="ct"><h3 class="ct">债务到期分布</h3><span class="sub">有息负债 85,600 万</span></div><div class="chart" id="c-rk-maturity" style="height:260px"></div></div>
+    </div>
+    <div class="grid g3">
+      <div class="card"><div class="ct"><h3 class="ct">经营单元风险矩阵</h3><span class="sub">X=杠杆水平 · Y=现金流量</span></div><div class="chart sm" id="c-rk-matrix"></div></div>
+      <div class="card"><div class="ct"><h3 class="ct">风险预警</h3><span class="sub">→ Findings 溯源</span></div>
+        <table class="t"><thead><tr><th>预警事项</th><th>等级</th><th>溯源</th></tr></thead>
+        <tbody>
+          <tr><td>海外汇率敞口</td><td><span class="lv m">中</span></td><td><a href="#">F-2026-051</a></td></tr>
+          <tr><td>贸易C 应收拖欠</td><td><span class="lv m">中</span></td><td><a href="#">F-2026-041</a></td></tr>
+          <tr><td>集团债务集中度</td><td><span class="lv m">中</span></td><td><a href="#">F-2026-052</a></td></tr>
+        </tbody></table>
+      </div>
+      <div class="card"><div class="ct"><h3 class="ct">应对措施</h3><span class="sub">AI 建议 · 内部期接行动闭环</span></div>
+        <table class="t"><tbody>
+          <tr><td>① 优化债务结构，延长债务久期，降低短期偿债压力。</td></tr>
+          <tr><td>② 加强汇率风险对冲管理，动态跟踪敞口变化。</td></tr>
+          <tr><td>③ 强化应收账款管理，加快回款，提升现金流覆盖。</td></tr>
+        </tbody></table>
+      </div>
+    </div>
+    <div class="concl"><span class="ci">🛡️</span><b>风险结论：核心偿债指标均在控制线内，整体风险可控；需重点关注海外E汇率敞口及一年内到期债务（31,200 万元，占有息负债 36.5%）。</b><a href="#">查看证据链与口径 →</a></div>
+  </section>
+
+  <!-- ═══════════ P9 集团合并 / 主体对比 ═══════════ -->
+  <section class="page" id="p-consol">
+    <h1 class="pt">集团合并与主体对比 <span class="pill">公开期：主体对比视角</span></h1>
+    <div class="kpis">
+      <div class="kpi"><div class="kpi-h"><span class="ico">📊</span>管理汇总收入</div><div class="kpi-v">139,295<small>万元</small></div><div class="kpi-b"><span class="tag up">同比 +11.9%</span><span class="tag mut">内部期口径</span></div><div class="kpi-n">5 单元简单加总</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">🔁</span>内部收入抵销</div><div class="kpi-v" style="color:var(--down)">−12,400<small>万元</small></div><div class="kpi-b"><span class="tag warn">内部期占位</span></div><div class="kpi-n">关联交易抵销</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">🧮</span>合并营业收入</div><div class="kpi-v">126,895<small>万元</small></div><div class="kpi-b"><span class="tag up">同比 +12.6%</span><span class="tag pos">勾稽通过</span></div><div class="kpi-n">139,295 − 12,400</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">％</span>收入抵销率</div><div class="kpi-v">8.9<small>%</small></div><div class="kpi-b"><span class="tag warn">内部期占位</span></div><div class="kpi-n">抵销 / 管理汇总</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">💵</span>管理汇总利润</div><div class="kpi-v">10,524<small>万元</small></div><div class="kpi-b"><span class="tag up">同比 +12.4%</span><span class="tag mut">内部期口径</span></div><div class="kpi-n">—</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">⚙️</span>抵销及调整</div><div class="kpi-v" style="color:var(--down)">−850<small>万元</small></div><div class="kpi-b"><span class="tag warn">内部期占位</span></div><div class="kpi-n">未实现利润等</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">🏦</span>合并净利润</div><div class="kpi-v">9,674<small>万元</small></div><div class="kpi-b"><span class="tag up">同比 +13.1%</span><span class="tag pos">勾稽通过</span></div><div class="kpi-n">10,524 − 850</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">🏢</span>纳入合并主体</div><div class="kpi-v">6<small>家</small></div><div class="kpi-b"><span class="tag mut">集团共 20 主体</span><span class="tag pos">合并范围 100%</span></div><div class="kpi-n">—</div></div>
+    </div>
+    <div class="grid g21">
+      <div class="card"><div class="ct"><h3 class="ct">公开期：多主体横向对比</h3><span class="sub">阿里 / 菜鸟 / 顺丰 / 腾讯 / JDL / 圆通 · 现有 statements 数据可直接支撑</span></div><div class="chart" id="c-co-compare" style="height:300px"></div></div>
+      <div class="card"><div class="ct"><h3 class="ct">主体画像对比</h3><span class="sub">雷达 · 五维</span></div><div class="chart" id="c-co-radar" style="height:300px"></div></div>
+    </div>
+    <div class="grid g3">
+      <div class="card"><div class="ct"><h3 class="ct">子公司经营对比</h3><span class="sub">内部期占位数据</span></div>
+        <table class="t">
+          <thead><tr><th>单元</th><th class="num">营业收入(万)</th><th class="num">净利润(万)</th><th class="num">净利率</th></tr></thead>
+          <tbody>
+            <tr><td>制造A</td><td class="num">38,600</td><td class="num">3,890</td><td class="num">10.1%</td></tr>
+            <tr><td>制造B</td><td class="num">31,400</td><td class="num">2,320</td><td class="num">7.4%</td></tr>
+            <tr><td>贸易C</td><td class="num">27,100</td><td class="num">1,080</td><td class="num">4.0%</td></tr>
+            <tr><td>服务D</td><td class="num">19,700</td><td class="num">1,620</td><td class="num">8.2%</td></tr>
+            <tr><td>海外E</td><td class="num">22,495</td><td class="num">1,614</td><td class="num">7.2%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card"><div class="ct"><h3 class="ct">合并抵销桥</h3><span class="sub">内部期功能</span></div>
+        <div class="ccc" style="padding-top:22px">
+          <div class="b"><div class="n" style="font-size:16px">139,295</div><div class="l">管理汇总收入</div></div><span class="op">−</span>
+          <div class="b"><div class="n" style="font-size:16px;color:var(--down)">12,400</div><div class="l">内部收入抵销</div></div><span class="op">＝</span>
+          <div class="b res"><div class="n" style="font-size:16px">126,895</div><div class="l">合并营业收入</div></div>
+        </div>
+        <div class="holdout" style="margin-top:14px"><span class="t">内部期占位</span><span>抵销分录（12 笔）与内部交易匹配（99.4%）明细属 L2 内部层。</span></div>
+      </div>
+      <div class="card"><div class="ct"><h3 class="ct">公司重点关注</h3><span class="sub">AI 建议 · 未执行</span></div>
+        <table class="t"><tbody>
+          <tr><td>① 贸易C 利润率偏低，需提升盈利能力。</td></tr>
+          <tr><td>② 海外E 需关注汇率波动带来的影响。</td></tr>
+          <tr><td>③ 加强内部交易管控，持续提升匹配率。</td></tr>
+        </tbody></table>
+      </div>
+    </div>
+    <div class="concl"><span class="ci">🏢</span><b>合并结论：内部收入抵销 12,400 万元、利润调整 850 万元；公开期以多主体横向对比呈现，贸易C 利润率偏低、海外E 需关注汇率风险。</b><a href="#">查看证据链与口径 →</a></div>
+  </section>
+
+  <!-- ═══════════ P10 数据管线 ═══════════ -->
+  <section class="page" id="p-data">
+    <h1 class="pt">数据管线状态 <span class="pill">设计：复用 FLOW 导入/冻结/校验体系，不新建</span></h1>
+    <div class="kpis">
+      <div class="kpi"><div class="kpi-h"><span class="ico">📥</span>已导入报告</div><div class="kpi-v">11<small>份</small></div><div class="kpi-b"><span class="tag pos">来源：公开披露渠道</span></div><div class="kpi-n">年报/中报/季报</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">🧾</span>有效数据行</div><div class="kpi-v">3,842<small>行</small></div><div class="kpi-b"><span class="tag pos">SHA-256 全量溯源</span></div><div class="kpi-n">四表行项目</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">🔗</span>字段映射率</div><div class="kpi-v">98.6<small>%</small></div><div class="kpi-b"><span class="tag warn">52 项待人工确认</span></div><div class="kpi-n">行名变体归一</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">📏</span>勾稽校验规则</div><div class="kpi-v">24<small>项</small></div><div class="kpi-b"><span class="tag up">24 项通过</span><span class="tag pos">0 阻断</span></div><div class="kpi-n">资产=负债+权益 等</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">🏢</span>分析主体</div><div class="kpi-v">6<small>家</small></div><div class="kpi-b"><span class="tag mut">阿里/菜鸟/顺丰/腾讯/JDL/圆通</span></div><div class="kpi-n">公开期默认：菜鸟</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">🧊</span>冻结快照</div><div class="kpi-v">37<small>个</small></div><div class="kpi-b"><span class="tag pos">幂等复用验证通过</span></div><div class="kpi-n">最新批次 #b42f</div></div>
+      <div class="kpi"><div class="kpi-h"><span class="ico">🔎</span>AI 交叉评</div><div class="kpi-v">42<small>项</small></div><div class="kpi-b"><span class="tag warn">109 项存疑待核</span></div><div class="kpi-n">P1 归因核验进行中</div></div>
+      <div class="kpi good"><div class="kpi-h"><span class="ico">⚠️</span>阻断性错误</div><div class="kpi-v">0<small>项</small></div><div class="kpi-b"><span class="tag up">管线健康</span></div><div class="kpi-n">最近校验 2026-08-01 08:30</div></div>
+    </div>
+    <div class="card" style="margin-bottom:14px"><h3 class="ct">数据管线（FLOW 真实链路）</h3>
+      <div class="flow-line">
+        <div class="flow-step">公开披露抓取<small>港交所/巨潮 PDF</small></div><span class="flow-ar">→</span>
+        <div class="flow-step">抽取与校验<small>行项目 × 页锚 × SHA</small></div><span class="flow-ar">→</span>
+        <div class="flow-step">指标计算<small>治理化字典 v1.2</small></div><span class="flow-ar">→</span>
+        <div class="flow-step">归一化发布<small>独立全行验证</small></div><span class="flow-ar">→</span>
+        <div class="flow-step">冻结快照<small>幂等 · 可复算</small></div><span class="flow-ar">→</span>
+        <div class="flow-step">驾驶舱渲染<small>本原型（模拟）</small></div>
+      </div>
+      <p class="small mut" style="margin-top:12px">原型的「数据导入/字段映射/合并规则/数据校验/刷新日志」在 FLOW 中由既有管线承担：导入走统一通道，快照冻结与校验结果在此页只读呈现。</p>
+    </div>
+    <div class="grid g2">
+      <div class="card"><div class="ct"><h3 class="ct">数据校验结果</h3><span class="sub">最近一次发布冻结</span></div>
+        <table class="t">
+          <thead><tr><th>校验项</th><th>结果</th></tr></thead>
+          <tbody>
+            <tr><td>资产 = 负债 + 权益</td><td><span class="tag up">通过</span></td></tr>
+            <tr><td>现金流量表勾稽（期初+净增加=期末）</td><td><span class="tag up">通过</span></td></tr>
+            <tr><td>利润表结转勾稽</td><td><span class="tag up">通过</span></td></tr>
+            <tr><td>内部往来核对</td><td><span class="tag up">通过</span></td></tr>
+            <tr><td>指标快照身份链（同源校验）</td><td><span class="tag up">通过</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card"><div class="ct"><h3 class="ct">最近刷新记录</h3><span class="sub">操作人/时间为模拟</span></div>
+        <table class="t">
+          <thead><tr><th>时间</th><th>刷新内容</th><th>操作人</th></tr></thead>
+          <tbody>
+            <tr><td>2026-08-01 08:30</td><td>数据导入</td><td>财务管理员</td></tr>
+            <tr><td>2026-08-01 08:25</td><td>字段映射更新</td><td>财务管理员</td></tr>
+            <tr><td>2026-08-01 08:20</td><td>数据校验</td><td>财务管理员</td></tr>
+            <tr><td>2026-08-01 08:15</td><td>合并数据刷新</td><td>财务管理员</td></tr>
+            <tr><td>2026-07-31 22:10</td><td>冻结快照 #b42f</td><td>系统（定时）</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="concl"><span class="ci">🧊</span><b>数据结论：11 份报告、3,842 行数据已完成导入；24 项勾稽校验全部通过，0 阻断性错误；冻结批次 #b42f 可复算、可溯源。</b><a href="#">查看管线审计日志 →</a></div>
+  </section>
+
+  </div><!-- /pages -->
+</div><!-- /main -->
+
+<script>
+if (typeof echarts === 'undefined') {
+  document.body.insertAdjacentHTML('afterbegin',
+    '<div style="background:#fee2e2;color:#b91c1c;padding:10px 16px;font-weight:600">图表库（ECharts CDN）加载失败——请联网后刷新，或查看 docs/05_design/ 下的设计文档与截图。</div>');
+}
+</script>
+<script>
+(function(){
+var charts=[];
+var C={blue:'#2563eb',ltblue:'#60a5fa',green:'#16a34a',orange:'#f59e0b',red:'#dc2626',
+       teal:'#0d9488',purple:'#7c3aed',gray:'#94a3b8',ink:'#0f172a',mut:'#64748b'};
+var AXIS={axisLine:{lineStyle:{color:'#cbd5e1'}},axisLabel:{color:C.mut,fontSize:10.5},
+          splitLine:{lineStyle:{color:'#eef2f7'}}};
+var TIP={trigger:'axis',textStyle:{fontSize:11}};
+var MON=['1月','2月','3月','4月','5月','6月','7月'];
+function mk(id,opt){var el=document.getElementById(id);if(!el||!window.echarts)return;
+  var c=echarts.init(el,null,{renderer:'canvas'});c.setOption(opt);charts.push(c);}
+function lg(data){return {data:data,textStyle:{color:C.mut,fontSize:10.5}}}
+
+/* P1 总览 */
+function ovTrend(){mk('c-ov-trend',{
+ tooltip:TIP,legend:lg(['营业收入(累计)','净利润(累计)','经营现金流(累计)']),
+ grid:{l:48,r:48,t:34,b:24},
+ xAxis:Object.assign({type:'category',data:MON},AXIS),
+ yAxis:[Object.assign({type:'value',name:'万元'},AXIS),Object.assign({type:'value',name:'万元'},AXIS,{splitLine:{show:false}})],
+ series:[
+  {name:'营业收入(累计)',type:'bar',data:[14600,27800,43900,62000,79600,101200,126895],itemStyle:{color:C.blue},barWidth:'42%'},
+  {name:'净利润(累计)',type:'line',yAxisIndex:1,data:[1350,2480,3880,5580,7410,9820,9674],itemStyle:{color:C.ink},lineStyle:{width:2.5},symbolSize:5},
+  {name:'经营现金流(累计)',type:'line',yAxisIndex:1,data:[780,1920,3120,4850,6890,10420,13266],itemStyle:{color:C.green},lineStyle:{width:2.5,type:'dashed'},symbolSize:5}]});}
+function ovMatrix(){mk('c-ov-matrix',{
+ tooltip:{formatter:function(p){return p.data[2]+'<br>收入达成 '+p.data[0]+'% · 净利率 '+p.data[1]+'%'}},
+ grid:{l:38,r:16,t:16,b:26},
+ xAxis:Object.assign({type:'value',min:60,max:140,name:'收入达成率%',nameTextStyle:{color:C.mut,fontSize:10}},AXIS),
+ yAxis:Object.assign({type:'value',min:0,max:12,name:'净利率%',nameTextStyle:{color:C.mut,fontSize:10}},AXIS),
+ series:[{type:'scatter',symbolSize:16,data:[[96,10.9,'制造A'],[92,8.2,'制造B'],[108,4.5,'贸易C'],[104,8.7,'服务D'],[101,3.8,'海外E']],
+  itemStyle:{color:C.blue},label:{show:true,formatter:function(p){return p.data[2]},position:'right',fontSize:10,color:C.ink},
+  markLine:{silent:true,symbol:'none',lineStyle:{type:'dashed',color:C.gray},
+   data:[{xAxis:100},{yAxis:7,label:{formatter:'净利率均值',position:'insideEndTop',fontSize:9,color:C.gray}}]}}]})};
+function ovMatrixEnd(){}
+
+/* P2 利润增长 */
+function pfTrend(){mk('c-pf-trend',{
+ tooltip:TIP,legend:lg(['营业收入(累计)','净利润(累计)','毛利率']),
+ grid:{l:44,r:44,t:34,b:24},
+ xAxis:Object.assign({type:'category',data:MON},AXIS),
+ yAxis:[Object.assign({type:'value',name:'万元'},AXIS),Object.assign({type:'value',name:'%',max:40},AXIS,{splitLine:{show:false}})],
+ series:[
+  {name:'营业收入(累计)',type:'bar',data:[14600,27800,43900,62000,79600,101200,126895],itemStyle:{color:C.blue},barWidth:'42%'},
+  {name:'净利润(累计)',type:'line',yAxisIndex:1,data:[1350,2480,3880,5580,7410,9820,9674],itemStyle:{color:C.ink},lineStyle:{width:2.5}},
+  {name:'毛利率',type:'line',yAxisIndex:1,data:[26.8,27.2,28.1,28.7,29.3,29.8,30.3],itemStyle:{color:C.orange},lineStyle:{width:2.5,type:'dashed'}}]});}
+function pfBridge(){var base=[0,8831,10271,9661,9661,0],delta=[8831,2850,1410,610,13,9674];
+ var dec=[false,false,true,true,false,false];
+ mk('c-pf-bridge',{
+ tooltip:{trigger:'axis',formatter:function(ps){var p=ps[1];var v=dec[p.dataIndex]?'-'+delta[p.dataIndex]:'+'+delta[p.dataIndex];return p.name+'<br>'+v+' 万元'}},
+ grid:{l:50,r:16,t:16,b:56},
+ xAxis:Object.assign({type:'category',data:['上期净利润','收入贡献','毛利率影响','费用影响','其他','本期净利润'],axisLabel:{color:C.mut,fontSize:10,interval:0,rotate:24}},AXIS),
+ yAxis:Object.assign({type:'value',name:'万元'},AXIS),
+ series:[
+  {type:'bar',stack:'w',itemStyle:{color:'transparent'},data:base,barWidth:'46%'},
+  {type:'bar',stack:'w',barWidth:'46%',data:delta.map(function(v,i){return {value:v,itemStyle:{color:i===0||i===5?(i===0?'#93c5fd':C.blue):(dec[i]?C.red:C.green)}}}),
+   label:{show:true,position:'top',fontSize:9.5,color:C.ink,formatter:function(p){var v=delta[p.dataIndex];return (p.dataIndex===0||p.dataIndex===5)?v.toLocaleString():(dec[p.dataIndex]?'−'+v:'+'+v)}}}]});}
+function pfMix(){mk('c-pf-mix',{
+ tooltip:{trigger:'item',formatter:'{b}: {c}% ({d}%)'},legend:{bottom:0,textStyle:{color:C.mut,fontSize:10.5}},
+ series:[{type:'pie',radius:['42%','66%'],center:['50%','44%'],
+  data:[{value:56.1,name:'核心产品',itemStyle:{color:C.blue}},{value:25.7,name:'成长产品',itemStyle:{color:C.ltblue}},
+        {value:13.8,name:'服务收入',itemStyle:{color:C.teal}},{value:4.4,name:'其他',itemStyle:{color:C.gray}}],
+  label:{show:true,position:'inside',color:'#fff',fontSize:10,formatter:'{d}%'}}]});}
+
+/* P3 盈利能力 */
+function pbTrend(){mk('c-pb-trend',{
+ tooltip:TIP,legend:lg(['毛利率','营业利润率','净利率']),grid:{l:34,r:16,t:34,b:24},
+ xAxis:Object.assign({type:'category',data:MON},AXIS),
+ yAxis:Object.assign({type:'value',name:'%',max:35},AXIS),
+ series:[
+  {name:'毛利率',type:'line',data:[26.8,27.2,28.1,28.7,29.3,29.8,30.3],itemStyle:{color:C.blue},lineStyle:{width:2.5},symbolSize:5,label:{show:true,fontSize:9,color:C.mut}},
+  {name:'营业利润率',type:'line',data:[11.5,11.8,12.2,12.6,12.8,13.1,13.3],itemStyle:{color:C.teal},lineStyle:{width:2.5},symbolSize:5},
+  {name:'净利率',type:'line',data:[6.3,6.5,6.8,7.0,7.2,7.4,7.6],itemStyle:{color:C.orange},lineStyle:{width:2.5,type:'dashed'},symbolSize:5,label:{show:true,fontSize:9,color:C.mut,position:'bottom'}}]});}
+function pbRank(){mk('c-pb-rank',{
+ tooltip:{},grid:{l:52,r:36,t:10,b:24},
+ xAxis:Object.assign({type:'value',name:'净利率%'},AXIS),
+ yAxis:Object.assign({type:'category',data:['海外E','贸易C','服务D','制造B','制造A']},AXIS),
+ series:[{type:'bar',barWidth:16,data:[3.8,4.5,8.7,8.2,10.9],
+  itemStyle:{color:function(p){return p.dataIndex===4?C.blue:C.ltblue}},
+  label:{show:true,position:'right',fontSize:10,color:C.ink}}]});}
+function pbRadar(){mk('c-pb-radar',{
+ tooltip:{},legend:lg(['本集团','行业中位']),
+ radar:{indicator:[{name:'毛利率',max:35},{name:'营业利润率',max:15},{name:'净利率',max:9},{name:'ROA',max:7},{name:'ROE',max:14},{name:'EBITDA率',max:18}],
+  radius:'62%',axisName:{color:C.mut,fontSize:10},splitLine:{lineStyle:{color:'#e2e8f0'}},splitArea:{show:false}},
+ series:[{type:'radar',data:[
+  {value:[30.3,13.3,7.6,5.4,12.6,15.1],name:'本集团',itemStyle:{color:C.blue},areaStyle:{color:'rgba(37,99,235,.18)'},lineStyle:{width:2}},
+  {value:[27.1,11.2,6.8,4.9,11.4,13.8],name:'行业中位',itemStyle:{color:C.gray},lineStyle:{width:1.5,type:'dashed'}}]}]});}
+
+/* P4 费用 */
+function exStack(){mk('c-ex-stack',{
+ tooltip:TIP,legend:lg(['销售费用','管理费用','研发费用','财务费用','期间费用率']),
+ grid:{l:44,r:44,t:34,b:24},
+ xAxis:Object.assign({type:'category',data:MON},AXIS),
+ yAxis:[Object.assign({type:'value',name:'万元'},AXIS),Object.assign({type:'value',name:'%',max:25},AXIS,{splitLine:{show:false}})],
+ series:[
+  {name:'销售费用',type:'bar',stack:'e',data:[980,1010,1042,1075,1010,1043,1045],itemStyle:{color:C.blue},barWidth:'44%'},
+  {name:'管理费用',type:'bar',stack:'e',data:[812,820,826,830,822,833,843],itemStyle:{color:C.ltblue}},
+  {name:'研发费用',type:'bar',stack:'e',data:[622,618,620,624,621,623,625],itemStyle:{color:C.teal}},
+  {name:'财务费用',type:'bar',stack:'e',data:[180,178,180,179,181,180,180],itemStyle:{color:C.gray}},
+  {name:'期间费用率',type:'line',yAxisIndex:1,data:[18.9,17.8,16.9,16.1,15.4,15.0,14.7],itemStyle:{color:C.orange},lineStyle:{width:2.5},symbolSize:5,label:{show:true,fontSize:9,color:C.orange,position:'top'}}]});}
+function exMatrix(){mk('c-ex-matrix',{
+ tooltip:{formatter:function(p){return p.data[2]+'<br>收入增长 '+p.data[0]+'% · 费用增长 '+p.data[1]+'%'}},
+ grid:{l:38,r:20,t:20,b:30},
+ xAxis:Object.assign({type:'value',min:5,max:20,name:'收入增长率%',nameTextStyle:{color:C.mut,fontSize:10}},AXIS),
+ yAxis:Object.assign({type:'value',min:0,max:14,name:'费用增长率%',nameTextStyle:{color:C.mut,fontSize:10}},AXIS),
+ series:[{type:'scatter',symbolSize:18,data:[[14.2,7.1,'制造A'],[11.8,8.9,'制造B'],[15.6,10.2,'贸易C'],[9.8,12.4,'服务D'],[13.1,9.6,'海外E']],
+  itemStyle:{color:C.orange},
+  label:{show:true,formatter:function(p){return p.data[2]},position:'top',fontSize:10,color:C.ink},
+  markLine:{silent:true,symbol:'none',lineStyle:{type:'dashed',color:C.orange},data:[{yAxis:12.6,label:{formatter:'费用增速 = 收入增速',position:'insideEndTop',fontSize:9,color:C.orange}}]}}]});}
+
+/* P5 资产负债 */
+function bsTree(){var B1=['#2563eb','#3b82f6','#60a5fa','#93c5fd'],B2=['#15803d','#16a34a','#22c55e','#4ade80'];
+ mk('c-bs-tree',{
+ tooltip:{formatter:'{b}: {c} 万元'},
+ series:[{type:'treemap',roam:false,nodeClick:false,breadcrumb:{show:false},
+  itemStyle:{borderColor:'#fff',borderWidth:2,gapWidth:3},
+  label:{fontSize:9.5,overflow:'truncate'},
+  levels:[
+   {},
+   {colorSaturation:[.25,.55]}],
+  data:[
+   {name:'流动资产 156,420 万 · 42.5%',value:156420,itemStyle:{color:'#1d4ed8'},
+    children:[{name:'货币资金 28,636',value:28636,itemStyle:{color:B1[0]}},{name:'应收账款 12,685',value:12685,itemStyle:{color:B1[1]}},{name:'存货 9,875',value:9875,itemStyle:{color:B1[2]}},{name:'其他流动 105,224',value:105224,itemStyle:{color:B1[3]}}]},
+   {name:'非流动资产 211,605 万 · 57.5%',value:211605,itemStyle:{color:'#15803d'},
+    children:[{name:'固定资产 132,450',value:132450,itemStyle:{color:B2[0]}},{name:'在建工程 31,250',value:31250,itemStyle:{color:B2[1]}},{name:'无形资产 20,680',value:20680,itemStyle:{color:B2[2]}},{name:'其他非流动 27,225',value:27225,itemStyle:{color:B2[3]}}]}]}]});}
+function bsCap(){mk('c-bs-cap',{
+ tooltip:{},grid:{l:88,r:56,t:8,b:22},
+ xAxis:Object.assign({type:'value'},AXIS),
+ yAxis:Object.assign({type:'category',data:['其中:有息负债','非流动负债','流动负债']},AXIS),
+ series:[{type:'bar',barWidth:16,data:[{value:85600,itemStyle:{color:C.purple}},{value:84568,itemStyle:{color:C.ltblue}},{value:125800,itemStyle:{color:C.blue}}],
+  label:{show:true,position:'right',fontSize:10,color:C.ink,formatter:function(p){return p.value.toLocaleString()+' 万'}}}]});}
+function bsTrend(){mk('c-bs-trend',{
+ tooltip:TIP,legend:lg(['资产负债率','有息负债率']),grid:{l:34,r:16,t:30,b:24},
+ xAxis:Object.assign({type:'category',data:MON},AXIS),
+ yAxis:Object.assign({type:'value',name:'%',min:15,max:60},AXIS),
+ series:[
+  {name:'资产负债率',type:'line',data:[52.1,52.8,53.5,54.0,55.3,56.1,57.2],itemStyle:{color:C.blue},lineStyle:{width:2.5},symbolSize:5,label:{show:true,fontSize:9,color:C.mut}},
+  {name:'有息负债率',type:'line',data:[20.5,20.7,21.0,21.5,21.8,22.6,23.3],itemStyle:{color:C.purple},lineStyle:{width:2.5,type:'dashed'},symbolSize:5},
+ ],});}
+function bsDebt(){mk('c-bs-debt',{
+ tooltip:{trigger:'item',formatter:'{b}: {c} 万 ({d}%)'},legend:{bottom:0,textStyle:{color:C.mut,fontSize:10.5}},
+ series:[{type:'pie',radius:['44%','68%'],center:['50%','42%'],
+  data:[{value:31200,name:'1年内 36.5%',itemStyle:{color:C.blue}},{value:29400,name:'1–3年 34.4%',itemStyle:{color:C.ltblue}},{value:25000,name:'3年以上 29.1%',itemStyle:{color:C.teal}}],
+  label:{fontSize:10.5,formatter:'{b}'}}]});}
+
+/* P6 营运资金 */
+function wcTrend(){mk('c-wc-trend',{
+ tooltip:TIP,legend:lg(['应收账款','存货','应付账款']),grid:{l:44,r:20,t:34,b:24},
+ xAxis:Object.assign({type:'category',data:MON},AXIS),
+ yAxis:Object.assign({type:'value',name:'万元'},AXIS),
+ series:[
+  {name:'应收账款',type:'line',data:[8450,8870,9360,9910,10650,11720,12685],itemStyle:{color:C.blue},lineStyle:{width:2.5},symbolSize:5,label:{show:true,fontSize:9,color:C.mut}},
+  {name:'存货',type:'line',data:[6120,6780,7450,7860,8310,9210,9875],itemStyle:{color:C.green},lineStyle:{width:2.5},symbolSize:5},
+  {name:'应付账款',type:'line',data:[5120,5340,5680,5990,6380,7210,8214],itemStyle:{color:C.orange},lineStyle:{width:2.5,type:'dashed'},symbolSize:5,label:{show:true,fontSize:9,color:C.mut,position:'bottom'}}]});}
+function wcCcc(){mk('c-wc-ccc',{
+ tooltip:TIP,grid:{l:34,r:16,t:18,b:24},
+ xAxis:Object.assign({type:'category',data:MON},AXIS),
+ yAxis:Object.assign({type:'value',name:'天',min:60,max:80},AXIS),
+ series:[{type:'line',data:[78.4,76.2,75.1,74.3,73.0,72.5,71.1],itemStyle:{color:C.green},lineStyle:{width:3},areaStyle:{color:'rgba(22,163,74,.10)'},
+  symbolSize:6,label:{show:true,fontSize:9.5,color:C.ink}}]});}
+function wcAging(){mk('c-wc-aging',{
+ tooltip:{},grid:{l:64,r:44,t:8,b:22},
+ xAxis:Object.assign({type:'value',name:'%',max:100},AXIS),
+ yAxis:Object.assign({type:'category',data:['3年以上','2–3年','1–2年','1年以内']},AXIS),
+ series:[{type:'bar',barWidth:14,data:[{value:2.9,itemStyle:{color:C.red}},{value:5.1,itemStyle:{color:C.orange}},{value:13.6,itemStyle:{color:C.ltblue}},{value:78.4,itemStyle:{color:C.blue}}],
+  label:{show:true,position:'right',fontSize:10,color:C.ink,formatter:'{c}%'}}]});}
+function wcRank(){mk('c-wc-rank',{
+ tooltip:{},grid:{l:52,r:52,t:8,b:22},
+ xAxis:Object.assign({type:'value',name:'CCC 天',max:95},AXIS),
+ yAxis:Object.assign({type:'category',data:['海外E','贸易C','制造B','服务D','制造A']},AXIS),
+ series:[{type:'bar',barWidth:14,data:[{value:89.6,itemStyle:{color:C.red}},{value:76.0,itemStyle:{color:C.orange}},{value:68.5,itemStyle:{color:C.orange}},{value:63.2,itemStyle:{color:C.ltblue}},{value:52.8,itemStyle:{color:C.blue}}],
+  label:{show:true,position:'right',fontSize:10,color:C.ink,formatter:'{c} 天'}}]});}
+
+/* P7 现金流 */
+function cfTrend(){mk('c-cf-trend',{
+ tooltip:TIP,legend:lg(['经营净额','投资净额','筹资净额']),grid:{l:46,r:16,t:34,b:24},
+ xAxis:Object.assign({type:'category',data:MON},AXIS),
+ yAxis:Object.assign({type:'value',name:'万元'},AXIS),
+ series:[
+  {name:'经营净额',type:'bar',data:[1620,1740,1855,1960,2010,2081,2000],itemStyle:{color:C.blue},barWidth:'26%'},
+  {name:'投资净额',type:'bar',data:[-1180,-1240,-1350,-1420,-1500,-1520,-1464],itemStyle:{color:C.orange},barWidth:'26%'},
+  {name:'筹资净额',type:'bar',data:[830,780,850,860,840,860,810],itemStyle:{color:C.teal},barWidth:'26%'}]});}
+function cfBridge(){var base=[0,0,19214,22806,22806,0],delta=[19214,13266,9674,9674,5830,28636];
+ var kinds=['total','up','down','down','up','total'];
+ mk('c-cf-bridge',{
+ tooltip:{trigger:'axis',formatter:function(ps){var i=ps[1].dataIndex;var sign=kinds[i]==='down'?'−':'+';return ps[1].name+'<br>'+(kinds[i]==='total'?'':sign+delta[i].toLocaleString()+' 万')+(kinds[i]==='total'?'：'+delta[i].toLocaleString()+' 万':'')}},
+ grid:{l:54,r:16,t:16,b:52},
+ xAxis:Object.assign({type:'category',data:['期初现金','经营活动','投资活动','筹资活动','期末现金'],axisLabel:{color:C.mut,fontSize:10.5,interval:0}},AXIS),
+ yAxis:Object.assign({type:'value',name:'万元',max:36000},AXIS),
+ series:[
+  {type:'bar',stack:'w',itemStyle:{color:'transparent'},data:base,barWidth:'44%'},
+  {type:'bar',stack:'w',barWidth:'44%',data:delta.map(function(v,i){return {value:v,itemStyle:{color:kinds[i]==='total'?C.blue:(kinds[i]==='up'?C.green:C.red)}}}),
+   label:{show:true,position:'top',fontSize:10,color:C.ink,formatter:function(p){var i=p.dataIndex;if(kinds[i]==='total')return delta[i].toLocaleString();return (kinds[i]==='down'?'−':'+')+delta[i].toLocaleString()}}}]});}
+function cfForecast(){mk('c-cf-forecast',{
+ tooltip:TIP,grid:{l:52,r:20,t:20,b:26},
+ xAxis:Object.assign({type:'category',data:['W1','W2','W3','W4','W5','W6','W7','W8','W9','W10','W11','W12','W13']},AXIS),
+ yAxis:Object.assign({type:'value',name:'万元',min:18000},AXIS),
+ series:[{type:'line',name:'预测现金余额',data:[28636,29310,29105,28840,27815,26693,25842,24800,25310,26278,27039,27856,28435],
+  itemStyle:{color:C.blue},lineStyle:{width:2.5},symbolSize:5,areaStyle:{color:'rgba(37,99,235,.08)'},
+  markLine:{silent:true,symbol:'none',data:[{yAxis:20000,label:{formatter:'安全线 20,000',position:'insideStartTop',fontSize:10,color:C.red},lineStyle:{type:'dashed',color:C.red}}],
+   label:{fontSize:9}},
+  markPoint:{data:[{type:'min',name:'最低',itemStyle:{color:C.red},label:{fontSize:10,formatter:'最低 24,800'}}]}}]});}
+
+/* P8 风险 */
+function rkGauges(){var defs=[
+ {t:'资产负债率',v:57.2,max:100,line:60,unit:'%'},{t:'流动比率',v:1.68,max:3,line:1.5,unit:''},
+ {t:'速动比率',v:1.24,max:2.5,line:1.0,unit:''},{t:'利息保障',v:6.8,max:12,line:5.0,unit:'倍'},
+ {t:'净负债/EBITDA',v:2.97,max:6,line:3.0,unit:'倍'}];
+ var series=defs.map(function(d,i){
+  var good=d.t==='净负债/EBITDA'||d.t==='资产负债率'?d.v<=d.line:d.v>=d.line;
+  return {type:'gauge',center:[(i*20+10)+'%','58%'],radius:'72%',startAngle:200,endAngle:-20,min:0,max:d.max,
+   axisLine:{lineStyle:{width:10,color:[[d.line/d.max,'#e2e8f0'],[1,good?'#dcfce7':'#fee2e2']]}},
+   pointer:{length:'58%',width:4,itemStyle:{color:good?C.green:C.orange}},
+   axisTick:{show:false},splitLine:{show:false},
+   axisLabel:{distance:-2,fontSize:8,color:C.gray,formatter:function(v){return (v%(d.max/4)===0)?v:''}},
+   title:{offsetCenter:[0,'62%'],fontSize:10.5,color:C.mut},
+   detail:{offsetCenter:[0,'92%'],fontSize:14,fontWeight:700,color:C.ink,formatter:function(v){return (typeof v==='object'?v.value:v)+d.unit}},
+   data:[{value:d.v,name:d.t}]};});
+ mk('c-rk-gauges',{series:series});}
+function rkMaturity(){mk('c-rk-maturity',{
+ tooltip:{},grid:{l:72,r:60,t:10,b:24},
+ xAxis:Object.assign({type:'value'},AXIS),
+ yAxis:Object.assign({type:'category',data:['3年以上','1–3年','1年内']},AXIS),
+ series:[{type:'bar',barWidth:16,data:[{value:25000,itemStyle:{color:C.teal}},{value:29400,itemStyle:{color:C.ltblue}},{value:31200,itemStyle:{color:C.blue}}],
+  label:{show:true,position:'right',fontSize:10,color:C.ink,formatter:function(p){return p.value.toLocaleString()+' 万'}}}]});}
+function rkMatrix(){mk('c-rk-matrix',{
+ tooltip:{formatter:function(p){return p.data[2]+'<br>资产负债率 '+p.data[0]+'% · 经营净额/亿 '+p.data[1]}},
+ grid:{l:40,r:20,t:20,b:30},
+ xAxis:Object.assign({type:'value',min:40,max:75,name:'杠杆水平（资产负债率%）',nameTextStyle:{color:C.mut,fontSize:10}},AXIS),
+ yAxis:Object.assign({type:'value',min:0,max:4,name:'现金流量（亿）',nameTextStyle:{color:C.mut,fontSize:10}},AXIS),
+ series:[{type:'scatter',symbolSize:18,data:[[52,3.2,'制造A'],[61,2.1,'制造B'],[63,1.2,'贸易C'],[48,2.8,'服务D'],[70,0.6,'海外E']],
+  itemStyle:{color:C.purple},
+  label:{show:true,formatter:function(p){return p.data[2]},position:'top',fontSize:10,color:C.ink},
+  markLine:{silent:true,symbol:'none',lineStyle:{type:'dashed',color:C.gray},data:[{yAxis:1.5,label:{formatter:'现金流量关注线 1.5亿',position:'insideEndTop',fontSize:9,color:C.gray}}]}}]});}
+
+/* P9 主体对比 */
+function coCompare(){mk('c-co-compare',{
+ tooltip:TIP,legend:lg(['营业收入(亿)','净利润(亿)','净利率%']),
+ grid:{l:48,r:48,t:34,b:44},
+ xAxis:Object.assign({type:'category',data:['阿里巴巴','腾讯','顺丰','JDL','菜鸟','圆通'],axisLabel:{interval:0}},AXIS),
+ yAxis:[Object.assign({type:'value',name:'亿'},AXIS),Object.assign({type:'value',name:'%'},AXIS,{splitLine:{show:false}})],
+ series:[
+  {name:'营业收入(亿)',type:'bar',data:[2470,1850,725,445,286,168],itemStyle:{color:C.blue},barWidth:'34%'},
+  {name:'净利润(亿)',type:'bar',data:[330,510,24,-6,9,12],itemStyle:{color:C.teal},barWidth:'34%'},
+  {name:'净利率%',type:'line',yAxisIndex:1,data:[13.4,27.6,3.3,-1.3,3.1,7.1],itemStyle:{color:C.orange},lineStyle:{width:2.5},symbolSize:6,label:{show:true,fontSize:9,color:C.orange,position:'top'}}]});}
+function coRadar(){mk('c-co-radar',{
+ tooltip:{},legend:lg(['菜鸟','顺丰']),
+ radar:{indicator:[{name:'成长性',max:100},{name:'盈利能力',max:100},{name:'现金含量',max:100},{name:'周转效率',max:100},{name:'偿债安全',max:100}],
+  radius:'64%',axisName:{color:C.mut,fontSize:10},splitLine:{lineStyle:{color:'#e2e8f0'}},splitArea:{show:false}},
+ series:[{type:'radar',data:[
+  {value:[82,64,88,70,76],name:'菜鸟',itemStyle:{color:C.blue},areaStyle:{color:'rgba(37,99,235,.18)'},lineStyle:{width:2}},
+  {value:[58,72,90,66,70],name:'顺丰',itemStyle:{color:C.teal},lineStyle:{width:1.5,type:'dashed'},areaStyle:{color:'rgba(13,148,136,.08)'}}]}]});}
+
+var INIT={
+ 'p-overview':[ovTrend,ovMatrix],
+ 'p-profit':[pfTrend,pfBridge,pfMix],
+ 'p-profitability':[pbTrend,pbRank,pbRadar],
+ 'p-expense':[exStack,exMatrix],
+ 'p-balance':[bsTree,bsCap,bsTrend,bsDebt],
+ 'p-wc':[wcTrend,wcCcc,wcAging,wcRank],
+ 'p-cash':[cfTrend,cfBridge,cfForecast],
+ 'p-risk':[rkGauges,rkMaturity,rkMatrix],
+ 'p-consol':[coCompare,coRadar],
+ 'p-data':[]
+};
+var NAV=[['p-overview','🏠','集团总览'],['p-profit','📈','利润增长'],['p-profitability','💹','盈利能力'],
+ ['p-expense','💰','费用分析'],['p-balance','🏛️','资产负债'],['p-wc','🔄','营运资金'],
+ ['p-cash','💵','现金流'],['p-risk','🛡️','财务风险'],['p-consol','🏢','集团合并'],['p-data','🧊','数据中心']];
+var navEl=document.getElementById('nav'),done={};
+NAV.forEach(function(it,i){
+ var b=document.createElement('button');
+ b.innerHTML='<span class="ic">'+it[1]+'</span>'+it[2];
+ b.onclick=function(){show(it[0],b)};
+ navEl.appendChild(b);
+ if(i===0)show(it[0],b);
+});
+function show(id,btn){
+ document.querySelectorAll('.page').forEach(function(p){p.classList.remove('on')});
+ document.querySelectorAll('nav button').forEach(function(b){b.classList.remove('on')});
+ document.getElementById(id).classList.add('on');
+ btn.classList.add('on');
+ if(!done[id]){done[id]=true;(INIT[id]||[]).forEach(function(f){try{f()}catch(e){console.error(e)}})}
+ charts.forEach(function(c){c.resize()});
+}
+var rt;window.addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(function(){charts.forEach(function(c){c.resize()})},150)});
+})();
+</script>
+</body>
+</html>
