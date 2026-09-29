@@ -197,6 +197,55 @@ holdouts:
     provenance: 港交所披露易 2026/0820/2026082000746_c.pdf；2026-09-26 下载（抽签首选），SHA 冻结
     rule: 首跑原始失败全部保留；修复后降级回归集并按 oracle-register §3 补新候选
 
+  # ---- 备选候选启用（2026-09-29）：小米/阿里首跑失败后按 oracle-register §4.5 拟降级，
+  # 按 holdout-lottery-2026-09-25 §3 顺位启用备选；下载冻结+oracle 录入先于任何适配器开发（§1a）。
+  - id: yunda_2026h1
+    kind: new_company（holdout-lottery-2026-09-25 新公司备选；韵达未参与任何抽取适配）
+    company: 韵达控股集团股份有限公司（002120.SZ）
+    standard: CAS（A 股半年度报告）
+    report: 2026 年半年度报告（200 页）
+    format: 文本 PDF（简体中文，文本层正常）
+    source_file: validation/financial_reports/original/yunda_2026h1/YUNDA_2026_interim_report_c.pdf
+    sha256: fc2981a2d954b45d55799c549de0ad44bcf8c3cf34e77bfbb8b63ca0a2caee12
+    unit: 人民币元
+    key_items_precise_2026_09_29:
+      oracle_file: validation/financial_reports/oracle/yunda_2026h1.yaml
+      oracle_sha256: 登记于 oracle-register §3（录入后由门禁校验）
+      recorder: ZCode 接手会话（§1a 授权；录入先于适配器开发）
+      items:
+      - { item: 营业收入, value: "26,438,607,589.72", source_page: "7", unit: 元 }
+      - { item: 归属于上市公司股东的净利润, value: "998,426,432.09", source_page: "7", unit: 元 }
+      - { item: 净利润, value: "1,002,350,643.41", source_page: "54", unit: 元 }
+      - { item: 经营活动产生的现金流量净额, value: "1,627,385,817.88", source_page: "7", unit: 元 }
+      - { item: 总资产, value: "37,104,583,445.79", source_page: "7", unit: 元 }
+      - { item: 归属于上市公司股东的净资产, value: "21,473,657,797.96", source_page: "7", unit: 元 }
+    provenance: 巨潮资讯 static.cninfo.com.cn finalpage/2026-08-26/1225504941.PDF；2026-09-29 下载（抽签备选顺位），SHA 冻结
+    rule: 首跑原始失败全部保留；修复后该样本不再称留出，须按 oracle-register §3 补新候选
+
+  - id: jdl_2026h1
+    kind: new_period（holdout-lottery-2026-09-25 新期间备选；京东物流中期报告版式未适配）
+    company: 京东物流股份有限公司（2618.HK）
+    standard: IFRS（港交所中期报告，未经审计）
+    report: 2026 年中期报告（78 页）
+    format: 中文版文本层乱码（京东系嵌入字体映射损坏，家族规律同 FY2025 年报）；英文版文本层正常——oracle 以英文版录入
+    source_file: validation/financial_reports/original/jdl_2026h1/
+    sha256: 2c58cef9f3d981c14d9a8236660c64f03d8748893224b3d190688141327a6822  # 中文版 JDL_2026_interim_report_c.pdf
+    sha256_english: 736c18a5259869db73c626e69216a4627180897384a1b7d01e70ebafa7005ba9  # 英文版 JDL_2026_interim_report_e.pdf
+    unit: 人民币千元
+    key_items_precise_2026_09_29:
+      oracle_file: validation/financial_reports/oracle/jdl_2026h1.yaml
+      oracle_sha256: 登记于 oracle-register §3（录入后由门禁校验）
+      recorder: ZCode 接手会话（§1a 授权；录入先于适配器开发）
+      items:  # 录入来源：英文版第 5/39/41/44 页（与中文版同一报表）
+      - { item: Revenue, value: "124,683,247", source_page: "5(EN)", unit: 千元 }
+      - { item: Profit for the period, value: "3,270,846", source_page: "39(EN)", unit: 千元 }
+      - { item: Profit attributable to Owners of the Company, value: "3,292,301", source_page: "39(EN)", unit: 千元 }
+      - { item: Non-IFRS profit for the period, value: "3,696,160", source_page: "5(EN)", unit: 千元 }
+      - { item: Net cash generated from operating activities, value: "6,379,053", source_page: "44(EN)", unit: 千元 }
+      - { item: Total assets, value: "119,748,521", source_page: "41(EN)", unit: 千元 }
+    provenance: 港交所披露易 2026/0904/2026090400611_c.pdf（中文）+ 2026090400610.pdf（英文）；2026-09-29 下载（抽签备选顺位），SHA 双版本冻结
+    rule: 首跑原始失败全部保留；修复后该样本不再称留出，须按 oracle-register §3 补新候选
+
 regression:
   - id: yto_2026q1
     demoted_from_holdout: 2026-09-07（C10 处置：已参与 A 股抽取适配，见 oracle-register §5 污染史）
