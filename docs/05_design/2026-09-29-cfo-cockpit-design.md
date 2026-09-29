@@ -2,7 +2,7 @@
 doc_id: FLOW-DESIGN-CFO-COCKPIT-20260929
 title: 财务总监驾驶舱——详细设计与原型（设计输入，不开发）
 doc_type: design
-status: draft
+status: approved
 version: 0.6
 created_at: 2026-09-29
 updated_at: 2026-09-30
