@@ -1,0 +1,317 @@
+schema: flow.public_financial_sample_freeze.v1
+freeze_id: flow-public-c-level-2026-09-29-v1
+frozen_date: '2026-09-29'
+purpose: 公开财报 C 级出口的样本与实现输入身份冻结；不代表独立oracle、盲评或holdout验收通过。
+implementation_sha: eb2b7f3cbadec0c36eb4b36473c6321d69aa4fff
+implementation:
+  commit_sha: eb2b7f3cbadec0c36eb4b36473c6321d69aa4fff
+  ci_run_id: '36478301484'
+  ci_result: success:17/17
+inputs:
+  freeze_generator:
+    path: scripts/build_public_financial_sample_freeze.py
+    sha256: 50f8be4db97625fb037ebdbaaffabfd9b9c01f29693afb8db4906d8464755aa1
+  l1_generator:
+    path: scripts/build_answer_set_l1.py
+    sha256: 54c38a07e79e9c7d6e57918df4381add77b1ded92a16d5671555537546e6a7cf
+  row_identity_adapter:
+    path: scripts/public_statement_row_identity.py
+    sha256: 30af547460ba8332b9ccc9b7640345433b6f6cbb92df2ded962aeff441f35910
+  l0_l1_benchmark:
+    path: scripts/accuracy_benchmark.py
+    sha256: 6f8d6cc5c313cf5c09ee04a3e6deff215ba84cff8d772d27897ac1e92bbd5542
+  source_identity_map:
+    path: config/statements/answer_set_sources.yaml
+    sha256: 760eecf6d4beb485307ea6e451b860b8d2d7ad39fdd53ba2908d96da6e5f6ec1
+  answer_set_l1:
+    path: config/statements/answer_set_l1_v5.yaml
+    sha256: 788f2d004fd8b9c9f9a9b6006df3f9f2b419d3458465aa414319fae2b3b49c23
+    version: 5
+  row_identity_corrections:
+    path: validation/financial_reports/corrections/public-row-identity-map-v1.csv
+    sha256: 76410a8886940e2e11b26485ef3d2a276439fc0c1f5a7dd75df6cf47c49a4753
+  financial_report_registry:
+    path: validation/financial_reports/manifest.yaml
+    sha256: 3eca6b08bebc935a9b889af4e2258f09547dbb1f98488bf5b2dfc0da1ad24ef6
+    yaml_parse_status: valid
+report_count: 14
+coverage:
+  l0_values: 1532
+  l1_values: 1776
+  l1_located: 1776
+  l1_unlocated: 0
+reports:
+- sample: sf_2026q1
+  stock_code: 002352.SZ
+  period_label: 2026Q1
+  report_kind: 一季报
+  source_pdf: docs/knowledge-base/02_research/original/p5_samples/sf_002352/SF_2026_Q1_report.pdf
+  source_pdf_sha256: 72a07309388abcdce1aad7f33307c1693446a04cd435fbb2e656ba582f8ef5e2
+  active_yaml: docs/implementation/p5/sf_2026q1_statements.yaml
+  active_yaml_sha256: 8231086c3ca975daaca2122bf136f69e349b066a6a845271620e53f3ba664e67
+  source_values: 292
+  l1_values: 292
+  l1_located: 292
+  l1_unlocated: 0
+- sample: tencent_2026q2
+  stock_code: 0700.HK
+  period_label: 2026Q2
+  report_kind: 中期业绩公告
+  source_pdf: docs/knowledge-base/02_research/original/p5_samples/tencent_0700/Tencent_2026_Q2_results.pdf
+  source_pdf_sha256: 12abdc9a5bed5c66bee51381da4940ca36912a7f37294f47c515981711f28b6f
+  active_yaml: docs/implementation/p5/tencent_2026q2_statements.yaml
+  active_yaml_sha256: 62d5606692112e0510a1c16254276b03fa4a05bb6f91614e0421cbbb95ac29f2
+  source_values: 40
+  l1_values: 40
+  l1_located: 40
+  l1_unlocated: 0
+- sample: jdl_2025fy
+  stock_code: 2618.HK
+  period_label: FY2025
+  report_kind: 年报
+  source_pdf: docs/knowledge-base/02_research/original/p5_samples/jd_logistics_2618/JDL_FY2025_annual_report.pdf
+  source_pdf_sha256: 809957cc3f42a77227963ef327cc74e08abf4666d91f0866b0aa6e3d50b85c5c
+  active_yaml: validation/financial_reports/corrections/jdl_2025fy_statements_v3.yaml
+  active_yaml_sha256: c3b4483ebd709cfb41c5754411c73f5bbee1cb82378a438af66805f96dfb313a
+  source_values: 209
+  l1_values: 209
+  l1_located: 209
+  l1_unlocated: 0
+- sample: alibaba_2019fy
+  stock_code: 9988.HK
+  period_label: FY2019
+  report_kind: 年报
+  source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2020_annual_results.pdf
+  source_pdf_sha256: 82065040738c226229951aa1b31f05fc05657ad61a432a8ad2cfa67825391de4
+  active_yaml: docs/implementation/p5/alibaba_2019fy_statements.yaml
+  active_yaml_sha256: 4d011b5115c9774496b0be809d3ab612302de9fde05597d2a61ec8a360b1433d
+  source_values: 72
+  l1_values: 72
+  l1_located: 72
+  l1_unlocated: 0
+- sample: alibaba_2020fy
+  stock_code: 9988.HK
+  period_label: FY2020
+  report_kind: 年报
+  source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2020_annual_results.pdf
+  source_pdf_sha256: 82065040738c226229951aa1b31f05fc05657ad61a432a8ad2cfa67825391de4
+  active_yaml: docs/implementation/p5/alibaba_2020fy_statements.yaml
+  active_yaml_sha256: 457a02b2aedfacae91fcc6833ff7d08149181797f3a35f80c377123949d3f231
+  source_values: 101
+  l1_values: 101
+  l1_located: 101
+  l1_unlocated: 0
+- sample: alibaba_2021fy
+  stock_code: 9988.HK
+  period_label: FY2021
+  report_kind: 年报
+  source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2021_annual_results.pdf
+  source_pdf_sha256: b954d5fd1f1a8313eb35eeea3ae4a01c163e897403d44baa0a4db231728f903d
+  active_yaml: docs/implementation/p5/alibaba_2021fy_statements.yaml
+  active_yaml_sha256: 2a4d3f4727ec2213371eb36681a7fe31bc0f581e6c4605636a0d869442d8de9f
+  source_values: 101
+  l1_values: 101
+  l1_located: 101
+  l1_unlocated: 0
+- sample: alibaba_2022fy
+  stock_code: 9988.HK
+  period_label: FY2022
+  report_kind: 年报
+  source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2022_annual_results.pdf
+  source_pdf_sha256: 658a32021b2cbd03f808726d5a574ffc3841505f1aaf2cf69af9ed2b82415ab5
+  active_yaml: docs/implementation/p5/alibaba_2022fy_statements.yaml
+  active_yaml_sha256: 2ab55a2d24afa14b9aa14d8d9fb80c3a35b7e5bf6564ac48e02cb5c1e00e8c8b
+  source_values: 102
+  l1_values: 102
+  l1_located: 102
+  l1_unlocated: 0
+- sample: alibaba_2023fy
+  stock_code: 9988.HK
+  period_label: FY2023
+  report_kind: 年报
+  source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf
+  source_pdf_sha256: 28256e2d4fcebbd94fd2d1c46d51c75af2f93fbe492b31b764a44da0813fa9a7
+  active_yaml: validation/financial_reports/corrections/alibaba_2023fy_statements_v2.yaml
+  active_yaml_sha256: e22a4ecaa8d385c16b4fbae561614d9414c4bd3a9b1828010d514bcf4334cbf8
+  source_values: 76
+  l1_values: 76
+  l1_located: 76
+  l1_unlocated: 0
+- sample: alibaba_2024fy
+  stock_code: 9988.HK
+  period_label: FY2024
+  report_kind: 年报
+  source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2024_annual_results.pdf
+  source_pdf_sha256: d9233c97c931eae6816bd3dc6b813f787b6b33bbe8e14648db7d32668de02b14
+  active_yaml: docs/implementation/p5/alibaba_2024fy_statements.yaml
+  active_yaml_sha256: a89d272177a30ae900fc4134f3300f6ca0978676089f0ebc171f59056098155b
+  source_values: 104
+  l1_values: 104
+  l1_located: 104
+  l1_unlocated: 0
+- sample: alibaba_2025fy
+  stock_code: 9988.HK
+  period_label: FY2025
+  report_kind: 年报
+  source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2025_annual_results.pdf
+  source_pdf_sha256: 1620286e40fb7ed9d17f6de2608aea8922eeaf2c446542d0ae2639563cfc2986
+  active_yaml: docs/implementation/p5/alibaba_2025fy_statements.yaml
+  active_yaml_sha256: 24187ef19e67d63246d9efc3a867b6a26bd583ea60a2a57edcbf66f9598b23b4
+  source_values: 105
+  l1_values: 105
+  l1_located: 105
+  l1_unlocated: 0
+- sample: alibaba_2026fy
+  stock_code: 9988.HK
+  period_label: FY2026
+  report_kind: 年报
+  source_pdf: docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2026_annual_results.pdf
+  source_pdf_sha256: e264c45dbc7e6fd039cc4a948557a4e55f7df9a1889b134cbc3fdf1a9a265b9e
+  active_yaml: docs/implementation/p5/alibaba_2026fy_statements.yaml
+  active_yaml_sha256: 5627f7aa28db97265ae02b176f7b7aa9798757c4080498e9f17f4709edf53f8f
+  source_values: 106
+  l1_values: 106
+  l1_located: 106
+  l1_unlocated: 0
+- sample: cainiao_2021fy
+  stock_code: PVT.CAINIAO
+  period_label: FY2021
+  report_kind: 招股书申报稿
+  source_pdf: docs/knowledge-base/02_research/original/p5_samples/cainiao_private/Cainiao_application_proof_20230926.pdf
+  source_pdf_sha256: 3e2c367958eacf3bb50c165204a1093383381f5cdb9d8af506636b880b54b13c
+  active_yaml: docs/implementation/p5/cainiao_2021fy_statements.yaml
+  active_yaml_sha256: eeb31a228b542251e1f082d9dead09786bef0a72fd887f316d7a507bee082b8d
+  source_values: 96
+  l1_values: 96
+  l1_located: 96
+  l1_unlocated: 0
+- sample: cainiao_2022fy
+  stock_code: PVT.CAINIAO
+  period_label: FY2022
+  report_kind: 招股书申报稿
+  source_pdf: docs/knowledge-base/02_research/original/p5_samples/cainiao_private/Cainiao_application_proof_20230926.pdf
+  source_pdf_sha256: 3e2c367958eacf3bb50c165204a1093383381f5cdb9d8af506636b880b54b13c
+  active_yaml: docs/implementation/p5/cainiao_2022fy_statements.yaml
+  active_yaml_sha256: df97e87095840fc02cba8a77e38a4f202a32367fe18c904c1c9154db9efcd713
+  source_values: 186
+  l1_values: 186
+  l1_located: 186
+  l1_unlocated: 0
+- sample: cainiao_2023fy
+  stock_code: PVT.CAINIAO
+  period_label: FY2023
+  report_kind: 招股书申报稿
+  source_pdf: docs/knowledge-base/02_research/original/p5_samples/cainiao_private/Cainiao_application_proof_20230926.pdf
+  source_pdf_sha256: 3e2c367958eacf3bb50c165204a1093383381f5cdb9d8af506636b880b54b13c
+  active_yaml: docs/implementation/p5/cainiao_2023fy_statements.yaml
+  active_yaml_sha256: 5434cff3726efff487fbd2f10417e13c29533d77ad800a48a5e00fdfac74022f
+  source_values: 186
+  l1_values: 186
+  l1_located: 186
+  l1_unlocated: 0
+independent_validation:
+  full_row_oracles_for_frozen_reports: 0
+  frozen_samples_without_full_row_oracle:
+  - alibaba_2019fy
+  - alibaba_2020fy
+  - alibaba_2021fy
+  - alibaba_2022fy
+  - alibaba_2023fy
+  - alibaba_2024fy
+  - alibaba_2025fy
+  - alibaba_2026fy
+  - cainiao_2021fy
+  - cainiao_2022fy
+  - cainiao_2023fy
+  - jdl_2025fy
+  - sf_2026q1
+  - tencent_2026q2
+  registered_holdout_oracles: 7
+  holdout_oracles:
+  - sample: tencent_fy2025
+    oracle_file: validation/financial_reports/oracle/tencent_fy2025.yaml
+    claimed_sha256: 561f31c202d2365e2e6ad1e15a536f05d504d5e4f3453a52789017f855be6914
+    previous_claim_sha256: null
+    actual_sha256: 561f31c202d2365e2e6ad1e15a536f05d504d5e4f3453a52789017f855be6914
+    claim_matches: true
+    key_items: 4
+    supplementary_lines: 28
+    full_report_oracle: false
+  - sample: sf_2026h1
+    oracle_file: validation/financial_reports/oracle/sf_2026h1.yaml
+    claimed_sha256: 16cf22eb5c0e29accc28786d712e5c19760922a9118ec96400be9aa81877bf69
+    previous_claim_sha256: null
+    actual_sha256: 16cf22eb5c0e29accc28786d712e5c19760922a9118ec96400be9aa81877bf69
+    claim_matches: true
+    key_items: 4
+    supplementary_lines: 133
+    full_report_oracle: false
+  - sample: zto_2026q1
+    oracle_file: validation/financial_reports/oracle/zto_2026q1.yaml
+    claimed_sha256: 1050cc03c22ba7d50b4eb00fad8d8b25cc2d8ee4ea1a4d268eb63be58733b99f
+    previous_claim_sha256: null
+    actual_sha256: 1050cc03c22ba7d50b4eb00fad8d8b25cc2d8ee4ea1a4d268eb63be58733b99f
+    claim_matches: true
+    key_items: 4
+    supplementary_lines: 26
+    full_report_oracle: false
+  - sample: xiaomi_2026h1
+    oracle_file: validation/financial_reports/oracle/xiaomi_2026h1.yaml
+    claimed_sha256: 27d71e4630dabfe9c2895b502463debe46b124120496dbb7e6a93e721b4dfd57
+    previous_claim_sha256: facdd5e711bb7a86a8a88ddf1e6dc9053f4d0f64
+    actual_sha256: 27d71e4630dabfe9c2895b502463debe46b124120496dbb7e6a93e721b4dfd57
+    claim_matches: true
+    key_items: 7
+    supplementary_lines: 18
+    full_report_oracle: false
+  - sample: alibaba_fy2027q1
+    oracle_file: validation/financial_reports/oracle/alibaba_fy2027q1.yaml
+    claimed_sha256: a37f572a8b47382ccb73c88a3f56b76282bfaa0103167f9036a697811373bef1
+    previous_claim_sha256: 6a3120f72806938581e2dad8d28105f4a633f299
+    actual_sha256: a37f572a8b47382ccb73c88a3f56b76282bfaa0103167f9036a697811373bef1
+    claim_matches: true
+    key_items: 5
+    supplementary_lines: 10
+    full_report_oracle: false
+  - sample: yunda_2026h1
+    oracle_file: validation/financial_reports/oracle/yunda_2026h1.yaml
+    claimed_sha256: eaf29b1c7326a147a7c87045dbe3217b6d4701ddcd9602f9646a93170dcab7d6
+    previous_claim_sha256: null
+    actual_sha256: eaf29b1c7326a147a7c87045dbe3217b6d4701ddcd9602f9646a93170dcab7d6
+    claim_matches: true
+    key_items: 6
+    supplementary_lines: 14
+    full_report_oracle: false
+  - sample: jdl_2026h1
+    oracle_file: validation/financial_reports/oracle/jdl_2026h1.yaml
+    claimed_sha256: 402ea16ed5e2c31c0d8d5affb0edecf7f14d60b9e0637221cb5b19c256bf527f
+    previous_claim_sha256: null
+    actual_sha256: 402ea16ed5e2c31c0d8d5affb0edecf7f14d60b9e0637221cb5b19c256bf527f
+    claim_matches: true
+    key_items: 6
+    supplementary_lines: 19
+    full_report_oracle: false
+  oracle_claim_mismatches: []
+  historical_oracle_claim_mismatches:
+  - alibaba_fy2027q1
+  - xiaomi_2026h1
+  legacy_first_run:
+    artifact: validation/financial_reports/holdout_runs/2026-09-24/summary.json
+    artifact_sha256: 029eb9dbc56677d2cd8b05c50d37ac3317b23163d4f28b1b3f4524c2008cc036
+    total: 199
+    rows_extracted: 0
+    matched: 0
+    mismatched: 0
+    not_comparable: 199
+  drawn_new_holdout_run_artifacts_found:
+  - validation/financial_reports/holdout_runs/2026-09-29-holdout-first-run/alibaba_fy2027q1_diff.json
+  - validation/financial_reports/holdout_runs/2026-09-29-holdout-first-run/xiaomi_2026h1_diff.json
+  cross_review:
+    artifact: docs/80_reviews/ai-cross-review/results/gpt-6-astra-2026-09-25.md
+    artifact_sha256: d5461a0d87d767f697bed62b3d818c051d3ac0f3de0a5928fd04b34f7115e00a
+    adjudication: docs/80_reviews/ai-cross-review/results/adjudication.md
+    adjudication_sha256: 3204d6278a95db557734eb3f8bfac6914eb5f9d1bdad525b3240c8f6b5e9da3f
+    is_numeric_full_row_oracle: false
+    is_rendered_report_blind_review: false
+  c_level_passed: false
+c_level_passed: false

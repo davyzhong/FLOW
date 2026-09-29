@@ -17,9 +17,15 @@ import re
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from public_statement_row_identity import apply_public_row_identity_corrections
+
 REPO = Path(__file__).resolve().parents[1]
 SOURCES_GLOB = "docs/implementation/p5/*_statements.yaml"
-OUT_DEFAULT = REPO / "config/statements/answer_set_l1.yaml"
+OUT_DEFAULT = REPO / "config/statements/answer_set_l1_v5.yaml"
+SUPERSEDED_ANSWER_SET = "config/statements/answer_set_l1_v4.yaml"
+CORRECTED_JDL = "validation/financial_reports/corrections/jdl_2025fy_statements_v3.yaml"
+CORRECTED_ALIBABA = "validation/financial_reports/corrections/alibaba_2023fy_statements_v2.yaml"
 
 
 def _norm(text: str) -> str:
@@ -53,7 +59,14 @@ def extract_pages(pdf_path: Path) -> list[str]:
     return [_page_haystack(page.extract_text() or "") for page in reader.pages]
 
 
-def locate(pages: list[str], item: str, values: list[int]) -> tuple[int, str] | None:
+def locate(
+    pages: list[str],
+    item: str,
+    values: list[int],
+    *,
+    page_hint: int | None = None,
+    source_label: str | None = None,
+) -> tuple[int, str] | None:
     """定位页码 + 匹配模式。
 
     strong：行名（含变体）与全部数值同页；weak：仅全部数值同页（跨语言
@@ -63,8 +76,18 @@ def locate(pages: list[str], item: str, values: list[int]) -> tuple[int, str] | 
     仅当行名变体与全部数值绝对值同页时才允许翻转，且只产生强锚——
     弱锚（无行名）一律不得翻转，避免无关数字子串误锚。
     """
+    if page_hint is not None and (
+        type(page_hint) is not int or not 1 <= page_hint <= len(pages)
+    ):
+        return None
+    page_indexes = [page_hint - 1] if page_hint is not None else range(len(pages))
     value_norms = [_norm(str(v)) for v in values]
     item_candidates = {_norm(item)}
+    if source_label:
+        item_candidates.add(_norm(source_label))
+    for separator in ("：", ":"):
+        if separator in item:
+            item_candidates.add(_norm(item.split(separator, 1)[1]))
     stripped = re.sub(r"^(其中|其中:|其中：)\s*", "", item)
     item_candidates.add(_norm(stripped))
     item_candidates.add(_norm(item.replace("：", ":")))
@@ -77,7 +100,8 @@ def locate(pages: list[str], item: str, values: list[int]) -> tuple[int, str] | 
     # 两遍扫描：strong（行名+数值）优先于 weak（仅数值）——摘要/比较期段常
     # 提前出现同值行，弱锚不得抢占强锚。
     weak_page: int | None = None
-    for index, text in enumerate(pages):
+    for index in page_indexes:
+        text = pages[index]
         if not text:
             continue
         if not all(v in text for v in value_norms):
@@ -91,7 +115,8 @@ def locate(pages: list[str], item: str, values: list[int]) -> tuple[int, str] | 
     # 第三遍：亏损行正数披露的符号翻转（仅强锚，仅当存在负数抽取值）
     if any(v < 0 for v in values):
         abs_norms = [_norm(str(abs(v))) for v in values]
-        for index, text in enumerate(pages):
+        for index in page_indexes:
+            text = pages[index]
             if not text:
                 continue
             if not all(v in text for v in abs_norms):
@@ -138,13 +163,37 @@ def load_visual_overrides(repo: Path) -> dict[tuple[str, str, str], dict]:
             raise ValueError(f"visual override 证据图缺失: {row['evidence_image']}")
         digest = hashlib.sha256(evidence_path.read_bytes()).hexdigest()
         if digest != row["evidence_sha256"]:
-            raise ValueError(f"visual override 证据图 SHA 不一致: {row['evidence_image']}")
+            raise ValueError(
+                f"visual override 证据图 SHA 不一致: {row['evidence_image']}"
+            )
         key = (row["source_pdf"], row["statement"], row["item"])
         overrides[key] = row
     return overrides
 
 
-def build(out: Path, repo: Path = REPO) -> dict:
+def source_paths(repo: Path = REPO) -> list[Path]:
+    """历史抽取档案保留；版本化 JDL、阿里 FY2023 修订版作为活动输入。"""
+    paths = [
+        Path(path)
+        for path in sorted(glob.glob(str(repo / SOURCES_GLOB)))
+        if Path(path).name
+        not in {"jdl_2025fy_statements.yaml", "alibaba_2023fy_statements.yaml"}
+    ]
+    for relative in (CORRECTED_JDL, CORRECTED_ALIBABA):
+        corrected = repo / relative
+        if not corrected.is_file():
+            raise FileNotFoundError(f"缺少版本化财报修订输入：{corrected}")
+        paths.append(corrected)
+    return paths
+
+
+def build(
+    out: Path,
+    repo: Path = REPO,
+    *,
+    version: int = 5,
+    supersedes: str = SUPERSEDED_ANSWER_SET,
+) -> dict:
     import yaml
 
     entries: list[dict] = []
@@ -158,14 +207,18 @@ def build(out: Path, repo: Path = REPO) -> dict:
     sample_to_ref = {m["sample"]: m for m in mapping_rows}
     visual_overrides = load_visual_overrides(repo)
 
-    for source in sorted(glob.glob(str(repo / SOURCES_GLOB))):
-        payload = yaml.safe_load(Path(source).read_text(encoding="utf-8"))
+    for source in source_paths(repo):
+        payload = yaml.safe_load(source.read_text(encoding="utf-8"))
+        payload = apply_public_row_identity_corrections(payload, repository_root=repo)
         source_pdf = payload["source_pdf"]
         sample = payload["sample"]
         ref = sample_to_ref.get(sample)
         if ref is None:
             unlocated.append(
-                {"source_pdf": source_pdf, "error": f"answer_set_sources.yaml 缺 sample {sample}"}
+                {
+                    "source_pdf": source_pdf,
+                    "error": f"answer_set_sources.yaml 缺 sample {sample}",
+                }
             )
             continue
         pdf_path = repo / source_pdf
@@ -179,12 +232,19 @@ def build(out: Path, repo: Path = REPO) -> dict:
                 present = {
                     column: value
                     for column, value in row.items()
-                    if column != "item" and value is not None
+                    if column not in {"item", "page", "source_text_label"} and value is not None
                 }
                 if not present:
                     continue
                 total_values += len(present)
-                located = locate(pages, item, list(present.values()))
+                source_label = row.get("source_text_label")
+                located = locate(
+                    pages,
+                    item,
+                    list(present.values()),
+                    page_hint=row.get("page"),
+                    source_label=source_label,
+                )
                 override = None
                 if located is None:
                     override = visual_overrides.get((source_pdf, statement, item))
@@ -215,8 +275,7 @@ def build(out: Path, repo: Path = REPO) -> dict:
                     }
                 located_values += len(present)
                 for column, value in present.items():
-                    entries.append(
-                        {
+                    entry = {
                             "source_pdf": source_pdf,
                             "stock_code": ref["stock_code"],
                             "period_label": ref["period_label"],
@@ -229,11 +288,18 @@ def build(out: Path, repo: Path = REPO) -> dict:
                             "column": column,
                             "value": value if isinstance(value, int) else float(value),
                         }
-                    )
+                    if source_label:
+                        entry["page_anchor"] = source_label
+                    entries.append(entry)
 
     payload = {
         "schema": "flow.answer_set.l1",
-        "generated_from": "docs/implementation/p5 抽取 YAML（P5 期已人工核验）",
+        "version": version,
+        "supersedes": supersedes,
+        "generated_from": (
+            "docs/implementation/p5 抽取 YAML + "
+            "validation/financial_reports/corrections 版本化修订"
+        ),
         "location_method": (
             "pypdf 文本层；match_mode=strong（行名+数值同页）"
             "/weak（仅数值同页，跨语言兜底）"

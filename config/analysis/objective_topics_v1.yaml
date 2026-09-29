@@ -32,19 +32,19 @@ questions:
 essential_metrics:
   - metric_code: revenue_growth
     question: growth
-    unavailable_when: 上年同期收入缺失（not_computable，原因 missing_operand）
+    unavailable_when: 上年同期收入缺失或基数为零
   - metric_code: net_profit_growth
     question: growth
-    unavailable_when: 上年同期净利润缺失或基数为零（not_computable）
+    unavailable_when: 上年同期净利润缺失或基数为零
   - metric_code: gross_margin
     question: profit
-    unavailable_when: 营业成本缺失（not_computable，原因 missing_operand）
+    unavailable_when: 营业成本（或毛利）缺失
   - metric_code: net_margin
     question: profit
     unavailable_when: 收入或净利润缺失
   - metric_code: roe
     question: profit
-    unavailable_when: 权益缺失或为零/为负（negative_denominator，需人工解读）
+    unavailable_when: 期初或期末权益缺失，或平均权益为零/负数；需人工解读
   - metric_code: debt_asset_ratio
     question: capital
     unavailable_when: 负债或资产缺失（横向偿债提示）
@@ -54,10 +54,10 @@ essential_metrics:
   - metric_code: dso_days
     question: capital
     alternative: ar_turnover
-    unavailable_when: 应收或收入缺失；单季未年化提示
+    unavailable_when: 应收或收入缺失；单季需提示未年化
   - metric_code: ocf_net_profit_ratio
     question: cash
-    unavailable_when: 净利润为负或为零（降级为绝对额展示，不显示正常倍数）
+    unavailable_when: 净利润为负或为零；降级为绝对额展示，不显示正常倍数
   - metric_code: free_cash_flow
     question: cash
     unavailable_when: 经营现金流或资本开支缺失；管理口径候选（MPM candidate）标注保留

@@ -103,8 +103,8 @@ docs-check:
 DAMAI_WORK := $(shell pwd)/work/damai-demo
 
 damai-demo-build:
-	PYTHONPATH=services/api/src python3 scripts/build_damai_demo.py --output fixtures/damai --check
-	python3 scripts/build_damai_metric_coverage.py
+	$(UV) run --project services/api python scripts/build_damai_demo.py --output fixtures/damai --check
+	$(UV) run --project services/api python scripts/build_damai_metric_coverage.py
 
 damai-demo-seed:
 	mkdir -p $(DAMAI_WORK)

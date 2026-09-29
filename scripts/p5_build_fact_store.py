@@ -58,7 +58,14 @@ def _find_row(items, name):
 
 def build_from_yaml(company, period, yaml_name, source, unit, alias, spec_key=None):
     """通用构建：按别名表把一份抽取 YAML 映射为标准事实；缺行/缺列即跳过，不编造。"""
-    st = yaml.safe_load((ROOT / f"docs/implementation/p5/{yaml_name}").read_text(encoding="utf-8"))["statements"]
+    yaml_path = Path(yaml_name)
+    if not yaml_path.is_absolute():
+        yaml_path = (
+            ROOT / yaml_name
+            if yaml_name.startswith("validation/")
+            else ROOT / "docs/implementation/p5" / yaml_path
+        )
+    st = yaml.safe_load(yaml_path.read_text(encoding="utf-8"))["statements"]
     facts, unmapped = [], []
     spec = alias["companies"][spec_key or company]["statements"]
     emitted = set()  # (stmt, item_id, role)：同角色多列回退时先取优先列，不重复入库
@@ -107,6 +114,29 @@ def build_from_yaml(company, period, yaml_name, source, unit, alias, spec_key=No
             if nm not in mapped_names and not nm.endswith("：") and any(it.get(c) not in (None, 0) for c in s["roles"]):
                 unmapped.append({"company": company, "statement": stmt_name, "item": nm,
                                  "reason": "无映射（v1 别名表未覆盖，待评审是否入库）"})
+    configured_statements = set(spec)
+    value_columns = {"本期发生额", "上期发生额", "期末余额", "期初余额"}
+    for stmt_name, items in st.items():
+        if stmt_name in configured_statements:
+            continue
+        for item in items:
+            name = item.get("item")
+            if not name or name.endswith("："):
+                continue
+            has_value = any(
+                isinstance(item.get(column), (int, float))
+                and not isinstance(item.get(column), bool)
+                for column in value_columns
+            )
+            if has_value:
+                unmapped.append(
+                    {
+                        "company": company,
+                        "statement": stmt_name,
+                        "item": name,
+                        "reason": "无映射（报表类型未配置，待评审是否入库）",
+                    }
+                )
     return facts, unmapped
 
 
@@ -114,7 +144,12 @@ def build_alibaba(alias):
     facts, unmapped = [], []
     for yy in range(2019, 2027):
         src = SOURCES["alibaba_9988"].format(yy=yy)
-        f, u = build_from_yaml("alibaba_9988", f"FY{yy}", f"alibaba_{yy}fy_statements.yaml",
+        yaml_name = (
+            "validation/financial_reports/corrections/alibaba_2023fy_statements_v2.yaml"
+            if yy == 2023
+            else f"alibaba_{yy}fy_statements.yaml"
+        )
+        f, u = build_from_yaml("alibaba_9988", f"FY{yy}", yaml_name,
                                src, "百万元", alias)
         facts += f
         unmapped += u
@@ -132,7 +167,8 @@ def build_cainiao(alias):
 
 
 def build_jdl_full(alias):
-    return build_from_yaml("jd_logistics_2618", "FY2025", "jdl_2025fy_statements.yaml",
+    return build_from_yaml("jd_logistics_2618", "FY2025",
+                           "validation/financial_reports/corrections/jdl_2025fy_statements_v3.yaml",
                            SOURCES["jd_logistics_2618_full"], "千元", alias,
                            spec_key="jd_logistics_2618_full")
 

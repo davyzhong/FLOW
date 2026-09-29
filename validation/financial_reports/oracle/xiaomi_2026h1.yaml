@@ -6,78 +6,97 @@
 #   英文版 XIAOMI_2026_interim_report_e.pdf（SHA e27b6048…，文本层正常，本录入来源；
 #   中英版为同一报表的双语呈现，数值一致）
 # 单位：人民币千元（披露原始单位）
+#
+# 修订 2026-09-29（格式与标签保真，数值零变更）：
+#   ①补充行值改为「本期（6M 2026）单列」格式（原「本期 / 上期」双列，对齐 zto 先例；
+#     上期值移入注释保留）；②key_items/supplementary 行名改为 PDF 英文版行原样标签
+#     （comparator 按行名精确/别名匹配，原中文转写名无法与英文版抽取行匹配）；
+#   ③「资产总计」在原文中无 Total assets 行标签，其值 516,040,794 与
+#     Total equity and liabilities 行同值，行名按原文登记；
+#   ④归属股东利润行原文为「Attributable to: — Owners of the Company」两行结构，
+#     行名按 IFRS 惯例组合登记为 Profit attributable to owners of the Company。
+#   修订前 SHA-256：104f1eebdae0b5f7579408b1830b5a8537447bc559f2edad26aa43fec9931d36
+#   （亦为 manifest oracle_sha256_previous_claim 登记值）
 
 sample_id: xiaomi_2026h1
 company: 小米集团（1810.HK）
 period: 截至 2026 年 6 月 30 日止六个月（未经审计中期）
 source_pdf_pages:
   综合损益表: 英文版第 59 页（INTERIM CONDENSED CONSOLIDATED INCOME STATEMENTS）
-  资产负债表: 英文版第 61–62 页
+  资产负债表: 英文版第 61—62 页
   现金流量表: 英文版第 65 页起
 
 key_items:
-  - item: 收入（六个月 2026）
+  - item: Revenue
     value: "208,063,227"
+    statement: 损益表
     location: 综合损益表 Six months ended June 30, 2026 列
     unit: 人民币千元
     source_page: "59(EN)"
     note: 同期 2025 为 227,249,428；Q2 单季（3M 2026）为 108,921,609
-  - item: 毛利（六个月 2026）
+  - item: Gross profit
     value: "43,419,038"
+    statement: 损益表
     location: 综合损益表
     unit: 人民币千元
     source_page: "59(EN)"
     note: 毛利率约 20.9%（2025 同期 51,506,868）
-  - item: 期内利润（六个月 2026）
+  - item: Profit for the period
     value: "14,197,953"
+    statement: 损益表
     location: 综合损益表 Profit for the period
     unit: 人民币千元
     source_page: "59(EN)"
-  - item: 期内利润归属股东（六个月 2026）
+  - item: Profit attributable to owners of the Company
     value: "14,185,525"
-    location: 综合损益表 Attributable to Owners of the Company
+    statement: 损益表
+    location: 综合损益表 Attributable to — Owners of the Company
     unit: 人民币千元
     source_page: "59(EN)"
     note: 非控制性权益 12,428；归属+非控股=14,197,953 闭合
-  - item: 经营活动产生的净现金（六个月 2026）
+  - item: Net cash generated from operating activities
     value: "2,050,234"
+    statement: 现金流量表
     location: 现金流量表 Net cash generated from operating activities
     unit: 人民币千元
     source_page: "65(EN)"
     note: 2025 同期 28,054,740——同比大幅回落，构成利润-现金背离信号
-  - item: 资产总计（2026-06-30）
+  - item: Total equity and liabilities
     value: "516,040,794"
-    location: 资产负债表 Total assets
+    statement: 资产负债表
+    location: 资产负债表 Total equity and liabilities（=资产总计，原文无 Total assets 行）
     unit: 人民币千元
-    source_page: "61-62(EN)"
-  - item: 权益总计（2026-06-30）
+    source_page: "62(EN)"
+    note: 上年度末 508,095,967
+  - item: Total equity
     value: "269,819,402"
+    statement: 资产负债表
     location: 资产负债表 Total equity
     unit: 人民币千元
     source_page: "62(EN)"
     note: 负债合计 246,221,392；负债+权益=516,040,794 闭合
 
 supplementary_lines:
-  # 综合损益表（英文版第 59 页，6M 2026 / 6M 2025，千元）
-  - { statement: 损益表, item: Revenue, page: "59(EN)", value: "208,063,227 / 227,249,428" }
-  - { statement: 损益表, item: Cost of sales, page: "59(EN)", value: "(164,644,189) / (175,742,560)" }
-  - { statement: 损益表, item: Gross profit, page: "59(EN)", value: "43,419,038 / 51,506,868" }
-  - { statement: 损益表, item: Research and development expenses, page: "59(EN)", value: "(18,185,665) / (14,475,085)" }
-  - { statement: 损益表, item: Selling and marketing expenses, page: "59(EN)", value: "(16,924,978) / (14,977,788)" }
-  - { statement: 损益表, item: Administrative expenses, page: "59(EN)", value: "(3,112,071) / (3,157,238)" }
-  - { statement: 损益表, item: Operating profit, page: "59(EN)", value: "16,182,813 / 26,562,126" }
-  - { statement: 损益表, item: Profit before income tax, page: "59(EN)", value: "17,294,038 / 27,570,751" }
-  - { statement: 损益表, item: Income tax expenses, page: "59(EN)", value: "(3,096,085) / (4,804,842)" }
-  - { statement: 损益表, item: Profit for the period, page: "59(EN)", value: "14,197,953 / 22,765,909" }
-  # 资产负债表（第 61-62 页，期末 2026-06-30 / 期初，千元）
-  - { statement: 资产负债表, item: Cash and cash equivalents, page: "61(EN)", value: "37,252,369 / 26,914,377" }
-  - { statement: 资产负债表, item: Term bank deposits, page: "61(EN)", value: "65,710,773 / 92,045,627" }
-  - { statement: 资产负债表, item: Total assets, page: "61-62(EN)", value: "516,040,794 / 508,095,967" }
-  - { statement: 资产负债表, item: Total liabilities, page: "62(EN)", value: "246,221,392 / 241,772,698" }
-  - { statement: 资产负债表, item: Total equity, page: "62(EN)", value: "269,819,402 / 266,323,269" }
-  # 现金流量表（第 65 页，6M 2026 / 6M 2025，千元）
-  - { statement: 现金流量表, item: Cash generated from operations, page: "65(EN)", value: "8,660,216 / 32,008,513" }
-  - { statement: 现金流量表, item: Income tax paid, page: "65(EN)", value: "(6,609,982) / (3,953,773)" }
-  - { statement: 现金流量表, item: "Net cash generated from operating activities", page: "65(EN)", value: "2,050,234 / 28,054,740" }
+  # 综合损益表（英文版第 59 页；值=6M 2026 列；括号=负数；上期 6M 2025 见原双列记录）
+  - { statement: 损益表, item: Revenue, page: "59(EN)", value: "208,063,227" }              # 上期 227,249,428
+  - { statement: 损益表, item: Cost of sales, page: "59(EN)", value: "(164,644,189)" }      # 上期 (175,742,560)
+  - { statement: 损益表, item: Gross profit, page: "59(EN)", value: "43,419,038" }          # 上期 51,506,868
+  - { statement: 损益表, item: Research and development expenses, page: "59(EN)", value: "(18,185,665)" }  # 上期 (14,475,085)
+  - { statement: 损益表, item: Selling and marketing expenses, page: "59(EN)", value: "(16,924,978)" }     # 上期 (14,977,788)
+  - { statement: 损益表, item: Administrative expenses, page: "59(EN)", value: "(3,112,071)" }             # 上期 (3,157,238)
+  - { statement: 损益表, item: Operating profit, page: "59(EN)", value: "16,182,813" }      # 上期 26,562,126
+  - { statement: 损益表, item: Profit before income tax, page: "59(EN)", value: "17,294,038" }             # 上期 27,570,751
+  - { statement: 损益表, item: Income tax expenses, page: "59(EN)", value: "(3,096,085)" }  # 上期 (4,804,842)
+  - { statement: 损益表, item: Profit for the period, page: "59(EN)", value: "14,197,953" } # 上期 22,765,909
+  # 资产负债表（第 61—62 页；值=2026-06-30 期末）
+  - { statement: 资产负债表, item: Cash and cash equivalents, page: "61(EN)", value: "37,252,369" }        # 期初 26,914,377
+  - { statement: 资产负债表, item: Term bank deposits, page: "61(EN)", value: "65,710,773" }               # 期初 92,045,627
+  - { statement: 资产负债表, item: Total liabilities, page: "62(EN)", value: "246,221,392" }               # 期初 241,772,698
+  - { statement: 资产负债表, item: Total equity, page: "62(EN)", value: "269,819,402" }                    # 期初 266,323,269
+  - { statement: 资产负债表, item: Total equity and liabilities, page: "62(EN)", value: "516,040,794" }    # 期初 508,095,967
+  # 现金流量表（第 65 页；值=6M 2026）
+  - { statement: 现金流量表, item: Cash generated from operations, page: "65(EN)", value: "8,660,216" }     # 上期 32,008,513
+  - { statement: 现金流量表, item: Income tax paid, page: "65(EN)", value: "(6,609,982)" }                  # 上期 (3,953,773)
+  - { statement: 现金流量表, item: Net cash generated from operating activities, page: "65(EN)", value: "2,050,234" }  # 上期 28,054,740
 
 mock_or_synthetic_content: 无  # 全部数值为英文版披露原文精确转录

@@ -19,9 +19,12 @@ export default async function HomePage({
     const value = first(query[key]);
     if (value) initialFilters[key] = value;
   }
+  const initialFilterKey = DASHBOARD_FILTER_KEYS.map(
+    (key) => `${key}=${initialFilters[key] ?? ""}`,
+  ).join("&");
   return (
     <AppShell>
-      <DashboardApp initialFilters={initialFilters} />
+      <DashboardApp key={initialFilterKey} initialFilters={initialFilters} />
     </AppShell>
   );
 }

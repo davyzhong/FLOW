@@ -87,6 +87,15 @@ async def test_metric_library_returns_full_dictionary() -> None:
 
 async def test_semantic_context_projects_four_elements() -> None:
     """O-01：语义上下文 = 对象/维度/限定/值投影，引用身份齐备。"""
+    from flow_api.api.routes.metric_library import resolve_metric_library_root
+    from flow_api.infrastructure.db import get_session_factory
+    from flow_api.metric_library_store.importer import import_all
+
+    root = resolve_metric_library_root()
+    with get_session_factory()() as session:
+        import_all(session, root / "config" / "metrics")
+        session.commit()
+
     app = create_app()
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as client:

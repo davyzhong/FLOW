@@ -2,10 +2,10 @@
 doc_id: FLOW-WI-UX-POST-DAMAI-001
 title: 大麦数据后的剩余体验收口
 doc_type: work-item
-status: active
-version: 4.6
+status: completed
+version: 5.31
 created_at: 2026-09-24
-updated_at: 2026-09-26
+updated_at: 2026-09-28
 owner: FLOW
 depends_on: [FLOW-WI-DAMAI-FULL-YEAR-001]
 acceptance_refs: [FLOW-PLAN-INTEGRATED-EXECUTION-20260924, frontend-route-state-viewport-matrix]
@@ -14,9 +14,133 @@ applies_to: web-frontend
 
 # 大麦数据后的剩余体验收口
 
+> **最终关闭（2026-09-28）**：Gate1 与 Gate5 均通过，工作包完成。UX Gate5 精确提交`0144bad4be1a869a5a4073c516d78b4bf333cbee`对应CI run `36371507389`准确SHA 17/17 success；独立 Dashboard 隔离验收7/7，大麦隔离验收 verify19/19、GET矩阵159项零意外、Playwright15/15；生产E2E157/157、Web143/143、API mypy203文件、typecheck/lint、M1元数据门禁及链接检查通过。隔离栈清理后容器/卷/网络均不存在；常驻`flow`未触碰。以下历史段落中的“尚未关闭”均为形成当时的历史状态，以上述关闭记录为准。
+
+### Gate1/Gate5 最终关闭记录（2026-09-28）
+
+- Gate1：页面逐值、来源与安全下钻、适用状态×视口矩阵及各页面既有证据已按覆盖矩阵闭合；生产浏览器 E2E 157/157，Web 143/143。
+- Gate5：在独立 Compose 项目完成 Dashboard 7/7 与大麦端到端旅程；verify 19/19、只读矩阵159项（159项均符合预期）、Playwright 15/15。Release check FY2025 37/40、FY2026 40/40覆盖工件生成。
+- 质量门禁：API mypy 203文件通过，Web typecheck/lint 通过（1条既有 TanStack warning）、文档 M1 297份合规且0错误、链接检查0错误。
+- 提交 `0144bad4be1a869a5a4073c516d78b4bf333cbee` 的 GitHub Actions run `36371507389` 同 SHA 17/17 success；任务测试产生的隔离容器、卷、网络均已清理，常驻`flow`未访问或改动。
+- UX 工作包关闭。后续唯一执行项转至 [公开财报模块 C 级出口](PUBLIC--c-level-exit-protocol.md)。
+
+## 状态 × 视口覆盖盘点与下一步（2026-09-28）
+
+### 现有证据与缺口
+
+| 路由/页面类型 | 390px | 1024px | 1440px | 当前判定 |
+|---|---|---|---|---|
+| `/reports`、`/statements`、`/metric-library`、`/investigations` | 已加载溢出门禁；五态归档 | 五态归档 | 五态归档 | 五态×三视口60张固定UI夹具截图已存在；无需重复生成。错误/403 结构合同另由状态spec检查 |
+| `/` Dashboard | 已加载溢出门禁；stale/degraded/error+retry结构测试 | 状态组合缺 | 状态组合缺 | 需为加载、正常、部分降级/陈旧、错误补三视口确定性状态与溢出/pageerror断言；空态仅在产品定义适用时纳入，不虚构无数据行为 |
+| `/data` 数据工作台 | 已加载溢出门禁；历史子区loading/403合同 | 状态×视口缺 | 状态×视口缺 | 需覆盖可用历史/空历史/历史加载/历史读取错误/403，同时确认上传表单在历史失败时仍可用；三个视口均校验 |
+| `/operations` 经营分析 | 已加载溢出门禁；loading/empty/error/403结构合同 | 状态×视口缺 | 状态×视口缺 | 需以API fixtures覆盖可用、无数据、加载、错误、403，三视口校验状态文案、控件可达及无溢出 |
+| `/analysis` 四问工作台 | 已加载溢出门禁；loading/empty/error/403结构合同 | 状态×视口缺 | 状态×视口缺 | 需以报告列表/工作台API fixtures覆盖可用、无报告空态、加载、错误、403，三视口校验 |
+| `/public`、`/internal` 模块说明入口 | 已加载溢出门禁 | 无动态数据状态，不适用 | 无动态数据状态，不适用 | 不是数据页面；不注入空/错误/403伪造态。现有导航一致性和生产构建E2E负责功能合同 |
+| `/login` 登录 | 已有溢出与主要按钮≥44px门禁 | 独立认证表单，不纳入数据状态矩阵 | 独立认证表单，不纳入数据状态矩阵 | 认证校验属于登录交互测试，不映射成数据页loading/empty/403 |
+
+### 实施顺序与验收口径
+
+1. **先完善确定性状态夹具**：只通过浏览器 API route interception 构造加载/正常/空/部分降级/错误/403；Dashboard 的状态按其明确合同实现；`/data` 将批次历史子资源状态与始终可见的上传工作台分别核验。页面不支持的状态写明“不适用”，不得仅为填矩阵改产品语义。
+2. **结构状态扩到三档视口**：对 Dashboard、数据工作台、经营分析、四问工作台每一个适用状态运行390/1024/1440px；核验页面标题、状态角色/中文说明、核心操作可达、无横向溢出和无未捕获pageerror。loaded 使用固定契约fixtures并在证据中明确为UI测试数据，不作真实数据证明。
+3. **保留并引用既有归档**：四个数据密集页现有五态×三视口60张图为已有证据；复查代码/索引与被归档数量一致即可，除非本轮发现视觉缺陷，不重复覆盖这些PNG。
+4. **全站完成检查**：11个交互路由均需有状态适用性结论；所有数据密集页面适用状态×视口均有自动化结构断言/视觉证据；模块入口与登录的排除理由清楚；随后按Gate5同SHA运行 build、安全隔离大麦旅程、lint/typecheck/Web tests、文档/链接门禁，并核对同一提交CI。
+
+### 动态页面状态×视口矩阵（2026-09-28；本地完成，CI待验证）
+
+- `apps/web/e2e/frontend-states.spec.ts`新增63项：Dashboard 6态×3视口（18项），数据工作台、经营分析、四问分析各5态×3视口（45项）；视口为390/1024/1440。
+- 状态由浏览器API拦截夹具构造，不连接数据库；逐项核验页面语义状态、标题/核心内容、无横向溢出和无未捕获`pageerror`。Dashboard错误断言限定于`main [role=alert]`，排除Next RouteAnnouncer。
+- 本地复验：新增矩阵63/63；正式生产构建全站E2E 157/157；`make test-web` 143/143；`make lint`和`make typecheck`通过（lint仅既有TanStack Table warning）。
+- 提交`66f0ffb0d0a9dc9fa98f4665515d83458e11883e`对应GitHub CI run `36368814722`准确SHA 17/17 success；矩阵步骤关闭。Gate1/Gate5仍未关闭，下一步按本工作包Gate5验收表执行完整隔离旅程和全链门禁。
+
+不得为构造状态使用常驻`flow`数据库或真实写API。任何 GET 的安全性必须按调用链审核；冻结/渲染类GET仍排除在只读矩阵外。
+
+## Reports 安全读取深链核对（2026-09-28；基于已交付E2E复核）
+
+- `reports center mirrors api rows and values without mutation` 真实隔离旅程已点击财报列表“查看分析”链接，核对 URL `?report={id}` 与 Statements 选中公司/期间一致；并点击经营快照链接，核对 Operations 选择器定位相同 `statement_report_id`。
+- 该测试还逐行核对报告、经营快照、发布快照与对应 API 元数据。正式产物下载的存储 SHA 另由独立隔离测试校验。
+- 客观报告 HTML 预览端点会调用 `_freeze_or_error` 并可能新增冻结快照；虽为 GET，按实际调用链判定为有写副作用，排除于安全只读深链点击，不以 HTTP 方法推断安全性。
+- **阶段状态：**Reports 范围内安全真实深链已有有效测试，不重复实现；Statements原件锚代码已由`abbcc8cb`/CI `36354951874` 17/17关闭。继续全交互路由适用状态×视口矩阵盘点与补验。
+
+## Statements 真实原件页锚下钻（2026-09-28；已由准确SHA CI关闭）
+
+- 在隔离脚本中额外导入一份原件与 P5 抽取 YAML 一致的阿里FY2020年报；原文件位于 `docs/knowledge-base/02_research/original/p5_samples/alibaba_9988/BABA_FY2020_annual_results.pdf`，脚本只向 `damai-demo-iso` 隔离数据库写入财报，不改动原件或常驻库。
+- Playwright通过正式 `/api/v1/statements/sources` 上传接口登记原PDF；核对报告`source_sha256`、上传登记SHA、读取回来的PDF SHA三者相同。财报深链`?report={id}`必须选中阿里FY2020；收入509711与答案集第23页`strong`页锚一致；行项目链接点击后下载URL保留`#page=23`且原件文件名正确。
+- 隔离验收：`bash scripts/test_damai_demo_e2e.sh`，大麦verify19/19、只读路由矩阵159项（149预期200、10预期422、意外0）、Playwright15/15。另`make typecheck`、`make lint`（零错误，1既有TanStack警告）、`make test-web`（143/143）、API mypy/ruff、M1、链接/计划视图门禁、脚本测试107/107通过。
+- 验收期间发现经营上下文E2E将selector总数固定为9；真实加入FY2020后为10，已改成按API报告数+公开期间数校验，不限制真实页面列表。PDF在Playwright无头浏览器表现为下载事件而非popup，断言改为验证下载URL和文件名；产品仍返回`application/pdf`和`content-disposition: inline`。
+- **阶段状态：**PDF与页锚链路真实隔离验收和准确SHA CI均通过；`abbcc8cb`对应run `36354951874` 17/17 success。UX Gate1/Gate5仍未关闭。下一项为全交互路由适用状态×390/1024/1440矩阵盘点与补验。
+
+## Investigation 批次身份真实下钻（2026-09-28；已关闭）
+
+- 在真实隔离 Finding 中点击批次身份，断言URL携带同一 `batch_id` 到 `/data?batch=...`，并核对数据工作台将对应历史批次行标为当前；再返回相同 Finding 身份，继续验证分析运行→报告快照链接。
+- 验证：隔离 `bash scripts/test_damai_demo_e2e.sh` verify19/19、只读GET矩阵159项（149预期200、10预期422、意外0）、浏览器14/14；`make typecheck`、API mypy/ruff、Web Vitest143/143通过；lint零错误（1条既有warning）。代码提交`1256aae9613b215243b486e87b5bd645b51fac77`对应GitHub run `36348942178`准确SHA17/17 success。常驻库未连接或写入。
+- **交付状态：**Investigation批次身份真实点击子项关闭。下一子项为财报页原文PDF链接与页内锚点验收；UX Gate1/Gate5仍未关闭。
+
+## Operations 管理关注指标深链验收（2026-09-28；已关闭）
+
+- 在9个真实演示经营上下文中寻找带指标编码的管理关注项，核验该编码存在于同一指标库 API；点击提示后校验 `/metric-library?focus={metric_code}`，并确认最终高亮卡片的名称和编码都与源提示对应指标相同。
+- 验证：隔离 `bash scripts/test_damai_demo_e2e.sh` verify19/19、只读GET矩阵159项（149预期200、10预期422、意外0）、浏览器14/14；`make typecheck`通过、API mypy/ruff通过、Web Vitest143/143通过、lint零错误（1条既有TanStack warning）。代码提交`4d6cf4a5c0bd35a55fd6e6c94b5f785ba2f1bca2`对应GitHub run `36343826986`准确SHA17/17 success。测试只用隔离`damai-demo-iso`卷，常驻库未写入。
+- **交付状态：**Operations管理关注真实指标深链子项关闭。下一子项为Investigation详情中的批次身份点击→数据工作台同一批次选中；UX Gate1/Gate5仍未关闭。
+
+## 指标依赖图真实深链验收（2026-09-28；已关闭）
+
+- 在隔离大麦真实浏览器旅程中，选取指标字典内首个有依赖的实际指标节点并点击；核对图谱选择状态、`?focus={metric_code}`目标链接；点击后断言URL focus、页面高亮卡片的名称与指标编码均与节点一致。
+- 首轮发现测试筛选条件错误：真实依赖指标没有 `entry_id`，卡片用指标编码 fallback 锚定。更正测试按页面实际身份（名称+编码）断言，未改产品行为，也未放宽目标身份校验。
+- 验证：隔离 `bash scripts/test_damai_demo_e2e.sh` verify19/19、GET矩阵159项（149预期200、10预期422、意外0）、浏览器14/14；`make typecheck`、`make lint`（0错误、1条既有TanStack warning）、`make test-web` 143/143、API mypy/ruff通过。代码提交`2fc1d955da0705e0e529046ab065855651c7a5cf`对应GitHub run `36338361782`准确SHA 17/17 success。测试只使用`damai-demo-iso`独立卷，验收完成自动清理；常驻库未连接或写入。
+- **交付状态：**图谱深链子项关闭。下一子项为Operations管理关注指标深链真实点击；UX Gate1/Gate5仍未关闭。
+
+> 历史阶段快照：八个业务页值级子项已关闭；Dashboard与Analysis/Investigation深链已由对应阶段SHA和CI关闭。当前状态以首条更正和路线图为准。逐路由覆盖与剩余目标映射见[版本化验收证据](../../60_delivery/verification/2026-09-26--damai-visibility-gate1-v1.md)。
+
+## 指标库 `/metric-library` API→配置→UI 值级验收（2026-09-27；已关闭）
+
+- 范围：逐项读取浏览器实际请求与页面 DOM，并与 `/api/v1/metric-library` 版本化字典及覆盖接口对账。通用/物流指标卡核验字段包括名称、公式/单位、时间行为、CAS/IFRS、口径/基准/勾稽、来源、执行类型、依赖、维度/分解、迁移、entry ID/修订入口和 MPM 信息；另逐条核验行业参考包、关系、CAS↔IFRS 映射、会计科目、准则、分录模板与治理事件。
+- 公开与大麦覆盖接口分别和对应页面核对元数据/来源说明、汇总 KPI、快照标题及报告深链，并遍历 API 返回的每个快照×指标单元格核验页面显示值、缺失原因及 title。端点所用配置来自 `config/metrics/p5_metric_coverage_v1.yaml` 与 `config/metrics/damai_demo_metric_coverage_v1.yaml`；本轮是接口/页面展示一致性验收，不声称独立重算或裁定每项公开财务事实。
+- 隔离大麦旅程：`bash scripts/test_damai_demo_e2e.sh`，verify19/19；只读矩阵159项（149预期200、10预期422、意外0）；Playwright9/9。Web Vitest143/143；生产构建导航/状态/响应式/深链 E2E93/93；`make typecheck`通过；`make lint`零错误、一条既有 TanStack Table warning。测试只使用专属隔离 Compose 卷，没有连接或写入常驻数据库；未修改指标源配置或产品实现。
+- TDD 中两次红灯均来自测试断言未贴合真实页面合同：汇总 KPI foot 布局和 MPM 文案前缀；按已渲染 DOM 修正预期后，全套断言通过，没有删减覆盖或放宽断言。未发现本页 API/UI 值不一致。
+- **交付状态：**本轮只扩充 `apps/web/e2e/damai-demo.spec.ts` 并同步状态文档；代码提交`71ea2dc9`同SHA CI run `36299600894` 17/17 success，M1/链接/plan views均通过，`/metric-library`页面子项关闭。唯一下一页为`/reports`（值级E2E编写与隔离复跑进行中）。UX Gate 1/Gate 5仍未关闭。
+
+## 经营分析概览 `/operations` API→源事实→UI 值级验收（2026-09-27；已关闭）
+
+- 范围：大麦FY2025/FY2026完整财报和公开经营披露的7个公司/期间，共9个上下文。页面E2E逐项比较安全 GET API 返回与浏览器请求、六主题状态、指标精确值及显示值、来源期间/页码/哈希、不可用原因、指标库口径链接、管理关注方向/内容和焦点链接。
+- 发现并修复页面状态缺陷：用户切换报表/期间时旧 `overview` 会留在新上下文下，且请求失败时仍可能展示旧数。现在在上下文 change 事件立即清空 overview/freezeInfo 并切至 loading；组件测试覆盖延迟响应期间旧值消失、新值展示。组件回归7/7。
+- 隔离验证：`bash scripts/test_damai_demo_e2e.sh` 使用独立 Compose project/卷；verify19/19；只读可见性矩阵159条（149预期200、10个不支持组合预期422、意外0）；Playwright9/9，其中本项遍历9上下文。Web Vitest143/143；经营 API pytest38/38；`make lint` 零错误（1条既有 TanStack Table warning）；`make typecheck`通过。常驻`flow`数据库未连接或写入。
+- 验收脚本问题：首次复跑在初始上下文重复调用 `selectOption`，导致 `change` 清除 UI 但同值状态不会触发下一次 effect。按真实因果修正 E2E，不降低断言，之后全套隔离旅程9/9通过。
+- **交付状态：**代码提交`0f8d92cf`；提交推送期间合并远端 README 自动截图提交`27babc32`，最终`main@8bd71798`。该确切SHA GitHub CI run `36293915314` 的17/17作业全绿；M1/链接/plan views均通过。`/operations`页面子项关闭；唯一下一页为`/metric-library`。整个 UX 工作包 Gate 1/Gate 5仍未关闭。
+
+## 报告中心 `/reports` API→源事实→UI 值级验收（2026-09-27；已关闭）
+
+- 范围：新增只读值级 E2E（不改产品实现），将报告中心四个列表与产物历史逐行逐格与安全 GET API 对账：客观财报分析报告列表对账 `/api/v1/statements`（公司/期间/报告类型/行项目数、objective-snapshot HTML 链接与查看分析深链）；经营报告快照列表对账 `/api/v1/operations/snapshots`（公司/期间/版本/指纹前缀、经营分析深链）；冻结候选下拉对账 `/api/v1/publishing/freeze-candidates`（期间/批次前缀/版本/已批准发现数，含 0 批准不可冻结禁用态）；报告快照列表对账 `/api/v1/publishing/snapshots`（版本/标题/日期），并核对其产物历史 append-only 表格与 attempts API 的行数/序号/格式/状态/大小/下载可用性逐格一致。该测试置于既有发布/上传两个变更旅程之前，全程只读。
+- TDD 两次红灯均为测试自身缺陷，非产品缺陷：①Playwright `toBeDisabled` 辅助器对 `<option>` 误报 enabled（失败日志中 DOM 明确含 disabled 属性），改为直接断言属性合同；②`getByRole` name 默认子串匹配，「报告快照列表」同时命中「经营报告快照列表」，加 `exact: true` 修正。未发现本页 API/UI 值不一致。
+- 隔离验证：`bash scripts/test_damai_demo_e2e.sh` 专属 Compose 栈，seed verify 19/19（ok=true、failed=[]）；Playwright 10/10（新增本测试后 9→10，第三次运行全绿）；`make typecheck` 通过；`make lint` 0 error（1 条既有 TanStack Table warning）。未连接/写入常驻 `flow`。
+- **交付状态：**提交 `e869f259991830df2ac9e69929aa712f9677bf0c` 的 CI run `36306908435` 最终17/17 success；首次 `user-closure-e2e` 的 cleaning-summary GET 403 在同 SHA 重跑后通过，根因未知且未更改权限策略。报告中心页面子项关闭，唯一下一页为 `/data`。UX Gate 1/Gate 5仍未关闭。
+
+## 数据工作台 `/data` 批次历史 API→UI 值级验收（2026-09-27；已关闭）
+
+- 范围：只读对账数据工作台“最近的数据批次”表与当前 actor/企业可见的 `GET /api/v1/intake/batches`；逐行核验批次名称、状态、版本数、最新版本序号/状态、上海时区本地化创建时间和批次深链。测试放在会追加批次的上传旅程之前，不触发写操作。
+- 测试来源：主线提交 `3660389e038083dfc92f6812c28e6ad7e2a2cfdb`；该提交同时带有后续 `/investigations` 测试，但本轮按串行计划仅关闭 `/data`，`/investigations` 仍为下一子项。
+- 隔离验证环境：专属 Compose project `damai-demo-iso`、全新数据库/对象存储卷和大麦 synthetic release；seed verify19/19；只读可见矩阵159项（149预期200、10预期422、意外0；矩阵清单 SHA-256 `0416fe20234486cb1ca101cfbf6e650428b5df4750313c7cd5746eb8e8667786`）；完整 Playwright12/12；`make typecheck`通过；`make lint`零错误、1条既有 TanStack Table warning。验收后专属容器/卷已由脚本清理；常驻 `flow` 数据库未连接/写入。
+- 同 SHA CI：GitHub run `36310017180` attempt2 17/17 success。attempt1 的 `smoke/make stack-up` 失败；同 SHA 重跑中 stack-up、API/Web health 与 worker ping 全通过，根因未取得，未改产品代码。
+- **交付状态：**`/data` 页面子项关闭；唯一下一页为 `/investigations`。UX Gate1/Gate5仍未关闭。
+
+## 调查归因 `/investigations` Finding 列表 API→UI 值级验收（2026-09-27；已关闭）
+
+- 范围：主线提交 `3660389e038083dfc92f6812c28e6ad7e2a2cfdb` 中新增只读 E2E；对 `GET /api/v1/investigations` 的所有 Finding 逐行核对页面行数、类型、影响金额格式、比较口径、状态标签、评分及 `/analysis?run_id=` 链接；整行 `data-href` 根据 `finding_id`、`batch_id`、`metric_snapshot_id`、`analysis_run_id` 建立并与当前页面合同核对。按标题匹配行，不依赖 TanStack 表格排序。测试位于既有审核签发变更旅程之前。
+- 值格式和状态标签与页面显示合同一致，未发现 API→UI错配。既有隔离旅程还会点击“进入调查”、定位收入增长 Finding 并完成审核签发；这些状态变更仅发生在隔离库。
+- 环境/证据：`damai-demo-iso` 新鲜 Compose project/数据库/对象存储；`bash scripts/test_damai_demo_e2e.sh` seed verify19/19、只读矩阵159项（149预期200、10预期422、意外0）、Playwright12/12；`make typecheck`通过；`make lint`零错误/1条既有 warning。CI run `36310017180` attempt2 同 SHA `3660389e` 17/17 success，其中 `investigation-e2e` job success。attempt1 smoke `make stack-up`失败、attempt2通过；根因未知且未改产品实现。常驻 `flow` 数据库未连接或写入。
+- **交付状态：**`/investigations`值级页面子项关闭。UX Gate1仍须补全所有路由/源事实证据、未覆盖真实下钻和全状态×视口矩阵；随后执行Gate5同 SHA全链验收，工作包不得提前关闭。
+
 ## 目标
 
 让已装载的大麦合成数据在经分专员的核心页面中形成完整、可解释、可下钻的分析体验；明确区分“没有事实”“指标不适用”“快照未发布”“页面未展示”，不以空值补零，也不把静态 sidecar 说成已上线能力。
+
+### 四问分析工作台值级审计（2026-09-27；局部页面交付，Gate 1 未关闭）
+
+- `/analysis` E2E 不再只断言四个问题标题：真实隔离大麦 FY2026 报告逐项比对 API 身份、四问/十指标顺序、每项可用值、管理关注数量/方向/文案，以及财报和指标定义深链。
+- 对工作台 API 的十个核心指标值，以同一财报详情端点披露的原始行独立复算并逐项对账：收入增长、净利润增长、毛利率、净利率、ROE、资产负债率、流动比率、DSO、盈利现金比率和自由现金流。大麦 FY2026 十项均可计算且与页面/API 一致。
+- 根因发现：既有 DSO 把“期末应收 ÷ 年收入”直接当作天数。页面原显示 `0.3500`，按字典 360 天、平均应收余额和年度收入独立复算为 `116.3898` 天。现修正为 `360 × 平均应收 ÷ 年收入`；缺期初余额、收入非正时不出值。
+- 核心十指标中的净利润增长、ROE、流动比率和自由现金流虽在主题合同及标准科目事实中定义，工作台计算器却未实现。现按指标字典补齐；盈利现金比率在净利润≤0 时拒绝输出失真倍数。平均余额缺期初值或分母不满足口径时保持 unavailable，不补零、不拿期末值冒充平均数。
+- unavailable 状态传递主题合同中的具体不可用条件并在 UI 解释，不再将所有情况误标成“缺披露事实”；十个主题条件去除机器错误码，保留人可读语义。
+- 验证：隔离 `make test-damai-demo-e2e` verify19/19、GET矩阵159项（149预期200、10预期422且零意外）、真实浏览器9/9；工作台 API 测试11/11、Web Vitest142/142、typecheck、目标 ESLint、ruff、mypy通过。财报详情不修改；常驻 `flow` 未触碰。
+- 同 SHA 验收：提交 `bc8fa678` 的 GitHub CI run `36288403912`，17/17 作业全部 success。`/analysis` 值级子项已收口；后续唯一页面步骤为 `/operations`。本结果不代表工作包/Gate 1 已完成。
 
 ## 当前证据与判断（2026-09-26）
 
@@ -32,6 +156,61 @@ applies_to: web-frontend
 - 经营主题空态原先把所有 `not_applicable` 都标成“待内部数据”，会把“公开报告未披露分部数据”误导成“等内部授权”。现按原因码区分公开披露缺项、内部数据授权、期间分部披露缺失与缺少完整财报；未知原因仍保留原因码并显示通用不可用说明。
 - Gate 1 扩展 GET-only 路由矩阵已在本机常驻 API 读取：40次请求、36个不同路由/参数组合，全部 HTTP 200。覆盖两份财报详情/投影/更正/四问/经营概览，7个公开经营期间，指标字典和两套覆盖矩阵，批次清单，2条Finding详情，客观快照、冻结候选及发布/经营快照和尝试列表。报告中心正式产物尝试为空列表（HTTP 200）；当前页面“尚未生成正式产物”与持久化状态一致，不应以常驻库模拟发布历史。
 - 维度数据可见性修复已在 `649a2aba` 推送：完整产品/客群主数据仍供筛选使用；当前驾驶舱产品表与毛利矩阵仅展示当前发布快照确有事实的维度，并明确显示事实覆盖数/总目录数；完全无事实时呈现降级空态，不把空目录误报为完整或用零补齐。这是局部页面修复，不是全站 Gate 1 关闭证据。
+
+### 视觉归档复验（2026-09-27，UX Gate 进度证据；非关闭）
+
+- 共享 Next 开发进程的 `/statements` 请求挂起并出现 `EPIPE`，不属于本轮创建；未终止或改动该进程。改用 `work/damai-demo/web-matrix.E6MJjO/` 下的隔离前端副本及独立端口 54683 完成截图验收，复验后仅停止本轮创建的服务。
+- 四个数据密集页面 `/statements`、`/reports`、`/metric-library`、`/investigations` 的五态（loaded/empty/loading/error/forbidden）×三视口（390/1024/1440）共 60 张图已刷新；归档生成器第61项写索引。Playwright 两轮均 61/61；第二轮额外断言每个状态下无未捕获页面异常。
+- 首轮运行在旧指标库 fixture 中暴露 `MetricCard` 收到过时字段（`code` 而非 `metric_code`、缺 `domain` 等）导致浏览器运行时 TypeError。已将归档夹具修至当前 `flow.metric_dictionary.v1` UI 契约，并加入 pageerror 断言；归档复验无 pageerror。这个问题是测试夹具陈旧，并不表示生产 API 的指标数据缺陷。
+- 代表性截图人审又发现报告中心 loaded fixture 未覆盖冻结候选、经营快照及对应尝试列表；首版因此把空占位错误地混入 loaded 图。已补齐这些端点的静态响应、将测试用的正式产物历史明确保持空列表，并重新生成归档；截图索引同步注明 loaded/empty 使用契约夹具，不能作为常驻库/大麦完整覆盖证明。
+- 响应式 E2E 的 `frontend-responsive.spec.ts` 另有一份相同的旧指标字段 fixture；现已按当前 `MetricEntry` 契约修正，并对四个 fixture 数据页检查 `pageerror`。独立隔离 Next 副本 Playwright 27/27（11路由390px无横向溢出；四个数据页1024/1440及数据态通过，无未捕获页面异常）。
+- 当前已推送基线 `33a99df1` 上重新执行真实大麦隔离旅程：迁移至 `0031_enterprise_directory`；发行 manifest SHA `6303595f01a3a4fb10bf90bf7320701107bb24aeedaad3e6ef9723bcd3e3bb3a`；seed 后 verify 19/19；隔离安全 GET 矩阵 43/43 全部 200，矩阵 manifest SHA `7065dfcbd7c7f12029bf901266cc1342cbd2d50a448b0ce34c8f22295b5e7231`；真实浏览器旅程 9/9，含报告产物下载 SHA 对账与数据工作台上传旅程。脚本完成后 `damai-demo-iso` Compose 服务无残留；本次不触碰常驻 `flow` 数据库。
+
+### Dashboard API→UI 逐项对账加固（2026-09-27，UX Gate 进度证据；非关闭）
+
+- 在真实大麦 Playwright 旅程中增加 API→页面值级断言：8张 KPI 卡的数量、唯一标题、主值，以及预算/同比/YTD预算三类比较的状态和值，必须逐项等于 `/api/v1/dashboard/overview` 响应。
+- 展开 Dashboard 趋势明细，将同响应的12个月、每月收入/经营利润/经营现金流/毛利率共48个显示值和月份逐项核对；OCF 仍额外要求12/12可用且 exact value 非空。
+- 将毛利矩阵与同响应做32格完整对账：行列名称/数量正确；每格 actual/comparison 显示值与 API 一致；无事实的格必须显示破折号而非0。
+- 产品经营表现表也逐产品核对名称、收入、收入同比、订单量、订单同比、毛利率、毛利率同比和履约成本率七项显示值，与同一 API 响应一致。
+- 只读探测矩阵现对四类维度的每个选项分别请求 `month` 与 `ytd` 视图，不再仅取每类首个选项；矩阵 builder 单测3/3通过。隔离旅程已扩展至85条 GET，85/85 HTTP200；可见性清单 manifest SHA `fad8696a8f00d5d53f0ac1ac4c5e371378f266e7502648b1c5d813b57a69d35e`。清单含运行期快照/ID，manifest SHA 每轮变化，仅证明本次完整性，不是稳定发行包 SHA。
+- 本轮 `make test-damai-demo-e2e` 在隔离 Compose 项目中验证迁移头 `0031_enterprise_directory`、seed发行 manifest SHA `6303595f01a3a4fb10bf90bf7320701107bb24aeedaad3e6ef9723bcd3e3bb3a`、verify 19/19、只读 GET 85/85 HTTP200、真实浏览器 9/9；隔离 Compose 卷与服务由脚本清理，未触碰常驻 `flow` 数据库。
+- 验证：Web Vitest 142/142；矩阵 builder pytest3/3；本次修改后的 `pnpm exec tsc --noEmit`、目标 E2E ESLint 通过；前一检查点截图归档61/61与响应式E2E27/27通过。当前筛选 API 探测覆盖全部单维选项×两个期间，但尚未穷举多维交叉组合，UI筛选器也仅有代表性 E2E；此代码仍须提交后的同 SHA required CI。
+- 尚未关闭：其它数据页面的逐项 API→源事实→UI 映射、所有显示数据的深链逐点检查、其余交互路由的全状态/全视口矩阵及 Gate 5 干净 SHA 全链。Dashboard筛选合同与交互已完成本地/隔离验收，Dashboard与财报详情的值级核验已有交付；均不代表 UX Gate 或工作包可标 completed。
+
+### 筛选能力矩阵与 UI 交互复验（2026-09-27，当前状态覆盖前文旧筛选状态；非关闭）
+
+- Dashboard 筛选合同以 API `filter_options.supported_combinations` 为准：支持全局、任一单维、客户群×物流产品；其它维度对返回 422 `unsupported_filter_combination`。
+- 只读矩阵覆盖 159 项：149 项预期 HTTP200（基础路由、四类维度全部值×month/ytd、客户群×物流产品全值组合×month/ytd），另有10项代表性不支持组合（五种不支持维度对×两种期间）按指定错误码拒绝；意外状态/错误码为0。清单 SHA `4f9e45c1c668d725cc28f6eb17dd0add223bb48e0205e15fee52f7534866ba63`，含运行期快照ID，只作本轮证据。矩阵 builder pytest3/3。
+- 浏览器实际操作 YTD 与组织/客户群/产品/区域四个 selector，逐项断言控件值、URL query、对应 API `active_filters` 和8张 KPI 卡显示值/比较状态一致。隔离旅程：seed发行 manifest SHA `6303595f01a3a4fb10bf90bf7320701107bb24aeedaad3e6ef9723bcd3e3bb3a`、verify19/19、矩阵159项（149 expected200 + 10 expected422，零意外）、浏览器9/9；隔离栈清理完毕。
+- 首次将所有维度对的笛卡尔积都强制期望200，暴露324个合同性422并产生隔离PostgreSQL约6GB读取流量；根据 API 支持合同修正为“合法客户群×产品全值组合 + 其它维度对代表性错误码验证”。本次全矩阵约1.2分钟通过；此全量 pairwise 用于 UX Gate，不应无必要放进常规快速 smoke。
+- 验证：`make lint && make typecheck && make test-web`（Web142/142；lint零错误、一条既有TanStack Table warning）、矩阵pytest3/3、plan views、文档M1、链接、contracts均通过；E2E目标 ESLint/typecheck通过。此代码须提交后的同 SHA required CI。
+- 延伸值级验收（`main@99991566`）：隔离矩阵现为159条（149条合同有效请求预期200、10条不支持组合预期422且错误码正确、意外0）；完整覆盖单维选项×month/ytd、客户群×产品支持组合及五种不支持维度对。脚本 pytest3/3；seed verify19/19；浏览器9/9；Web142/142；lint/typecheck通过。后续不得把不受支持组合记为缺陷。
+- 同 SHA CI：run `36279509026`（head `9999156690fdb42edc76488f271ae877abe73406`）及文档跟进 run `36279766191` 均已 success；最新 `104da533` 与 `78722e73` CI 待终态。
+- 隔离复验（2026-09-27）：使用本轮专属 Compose 项目 `flow-ci-repro`（PostgreSQL 55432、Redis 16380、MinIO 19010；独立卷），空库迁移至 `0031_enterprise_directory`；目标单测首次通过、模块3/3通过；CI同范围集成批次命令 `pytest tests/integration tests/investigation tests/copilot tests/api -q --ignore=tests/api/test_auth_boundary.py --ignore=tests/api/test_workspace.py` 结果 **267 passed, 3 warnings**；批次结束后目标单测再次通过。旧失败截至此证据仍不可复现，根因未知；不改实现、不降低断言，须结合当前 SHA CI 终态继续观察。
+- 财报详情值级验收（`main@78722e73`）：依据真实隔离 `/api/v1/statements` 列表选 FY2026 并读取详情 API；逐 section、逐原文行、逐非空余额/发生额/上期列核对页面行数、顺序与显示。页面值按 `unit_note` 缩放，tooltip 保留的原始精确值逐项比对；FY2026 `stock_code=DAMAI.SYN`、来源路径在 `fixtures/damai/statements/`。`make test-damai-demo-e2e`：verify19/19、GET矩阵159项（149×200、10×422合同拒绝、0意外）、浏览器9/9；`pnpm exec tsc --noEmit` 与目标 ESLint 通过。测试先后暴露并修正两处测试假设错误（stock_code/source_ref混淆、包含文本命中同名行），依真实 API schema 和行序更正后全绿；未发现生产数据映射缺陷。该提交同 SHA CI `36282388214` 尚待终态。
+- 历史 CI 异常：旧 SHA `cc2211e5` run `36276782059` 曾有 `tests/integration/test_metric_impact.py::test_impact_report_traverses_downstream_and_sandbox` 单例失败（88项中1失败，`SandboxDiff.current_value=None`，原测试预期非空）。本轮隔离复验目标单测两次、模块3/3、CI范围集成批次267项及批后单测均通过；截至 `99991566`、`d836a6ca` required CI success，尚无复现，根因仍未知，保留历史观察，不称为代码修复。
+- 本工作包仍 active：其它页面 API→源事实→UI 映射、深链逐点检查、其余交互路由全状态/全视口矩阵与 Gate5全链尚未关闭。
+
+### 真实大麦 API→页面交叉对账（2026-09-27，Gate 1 部分闭环）
+
+本表只记录在 `33a99df1` 同源代码上完成的隔离旅程和已有已提交验证；页面五态截图夹具不被当作业务数据证据。
+
+| 路由/页面 | API / 发行事实 | 浏览器可见证明 | 当前缺项的正确归因 |
+|---|---|---|---|
+| `/` 驾驶舱 | `/api/v1/dashboard/overview` 及组织/客群/产品/区域四类筛选；8张 KPI、12月趋势、32格矩阵 | 真实 E2E 校验四粒度筛选均来自大麦维度；OCF KPI 与12/12趋势有值；毛利矩阵有10格实际、10格预算比较 | 其余22格没有实际源组合，保持 `null` 并将矩阵标为 degraded；不得补零。客群粒度部分利润/OCF不适用，是指标粒度限制，不是请求失败 |
+| `/statements` 财报分析 | `/api/v1/statements` + FY2025/FY2026详情；大麦合成企业年度报告各一份 | `78722e73`隔离E2E逐报告、section、原文行及所有非空披露值核对API→页面缩放值与原值tooltip；9/9旅程通过 | 当前无月度公司财报，产品合同按年度报告验证；不应把物流月度事实伪装成月度法定财报。此页值映射通过，深链及跨视口状态仍列于整体Gate |
+| `/analysis` 四问工作台 | `/api/v1/analysis/workbench/{report_id}`；两个财报期间各有可分析上下文 | 浏览器选中 FY2026，展示四个分析问题；此前 FY2025 `metric_code` 响应模型500已修复且列入只读矩阵 | 已确认的契约错误已修复；Gate 5 仍需干净 SHA 回归。四问输出是系统生成判断，发布仍需经分专员审核 |
+| `/operations` 经营分析 | 两份内部年报概览、7个公开披露期间，共9个分析上下文；六主题面板 | E2E 选取 FY2026完整财报，确认六主题可见；既有 API 对账显示七项运营效率指标可计算 | 来源未披露的分部值/内部数据缺项按原因码显示 unavailable，不推定为零或“等授权” |
+| `/metric-library` 指标库 | 指标字典65项；大麦年度覆盖矩阵40项 | E2E 明确看到 synthetic 大麦矩阵、FY2025 37/40 与 FY2026 40/40 | FY2025 少3项是缺少FY2024比较期，不等于大麦公司不适用；指标定义存在不等于底层事实齐全 |
+| `/reports` 报告中心 | 发布快照、冻结候选、经营快照及 attempts 安全 GET | E2E 在隔离栈选择大麦经营快照、生成产物并按下载 SHA 对账；UI 合同截图中的无产物状态仅是 mock，不代替此旅程 | 某一运行若 attempts 为空，表示该环境没有已生成产物，不是下载按钮故障；禁止在验证时对常驻库触发发布/冻结 |
+| `/data` 数据工作台 | `GET /api/v1/intake/batches` 只读列当前 actor/企业可见历史；隔离旅程上传工作簿 | 历史可见性有 API/E2E 覆盖；完整上传→映射→校验→发布旅程在隔离库通过 | 页面历史受当前 actor/企业权限过滤；不得因其他 actor 的批次不可见就判作批次不存在 |
+| `/investigations` 调查归因 | Findings 列表及详情 GET，种子有两条分析发现 | E2E 打开收入增长 Finding，批准签发后可见已签发状态（只发生于隔离栈） | Finding 必须追溯批次、快照与证据；无已登记 finding 关联不得虚构深链 |
+| `/public`、`/internal` 模块入口 | 静态模块导航落地页 | 导航链路属于页面一致性测试 | 页面本身无报表是设计排除；公开数据入口实际在 `/operations` 分析上下文中，不计成缺失数据页 |
+| `/login` | 认证入口 | 现有路由清单单独测试 | 登录页是 shell/数据态规范的显式例外，不参与经营数据覆盖统计 |
+
+**本表结论：** 可复验的大麦页面旅程覆盖已建立。Dashboard值及筛选合同/交互、财报详情所有已显示披露值已逐项对账；Gate 1 仍缺其它页面逐值交叉核对、所有目标页可见下钻的逐点验收、其余路由状态/视口完整矩阵，以及 Gate 5 同 SHA 全链。不得把 159 条 API 请求全数符合合同或 9 条旅程 E2E 单独等同于全站 UX 通过。
+- 当前矩阵仍有明确范围差距：归档截图只覆盖四个数据密集页；其余七个交互路由仅有既有移动端溢出测试/局部状态合同，尚无五态×三视口全量视觉证据。截图中的单个财报/单指标 mock 是稳定的展示夹具，不是大麦数据库实况，也不能据此断言实际大麦数据的页面完整性。
+- 此复验只补充视觉归档与测试真实性，不覆盖 Gate 1 的逐项 API→发布对象→源事实映射，也未覆盖所有目标指标/趋势/矩阵下钻；工作包仍保持 active。
 
 ## 实施路线（本文件是规格；实施须按用户已批准的工作状态执行）
 

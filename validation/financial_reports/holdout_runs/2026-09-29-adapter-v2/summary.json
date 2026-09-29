@@ -1,0 +1,29 @@
+{
+  "sf_2026h1": {
+    "adapter": "cn_ashare_table",
+    "error": null,
+    "matched": 137,
+    "mismatched": 0,
+    "not_comparable": 0,
+    "total": 137,
+    "rows_extracted": 146
+  },
+  "tencent_fy2025": {
+    "adapter": "hk_traditional_text",
+    "error": null,
+    "matched": 21,
+    "mismatched": 0,
+    "not_comparable": 11,
+    "total": 32,
+    "rows_extracted": 132
+  },
+  "zto_2026q1": {
+    "adapter": null,
+    "error": "StatementExtractionError: 未在提示页 106±5 内定位到「合併損益表」页首标题",
+    "matched": 0,
+    "mismatched": 0,
+    "not_comparable": 30,
+    "total": 30,
+    "rows_extracted": 0
+  }
+}

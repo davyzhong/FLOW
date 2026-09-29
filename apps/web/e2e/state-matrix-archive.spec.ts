@@ -47,34 +47,50 @@ const STATEMENTS_DETAIL = {
 };
 
 const METRIC_LIBRARY = {
-  dictionary_id: "flow.metrics.dictionary.v1.1",
-  status: "active",
+  dictionary_id: "flow.metric_dictionary.v1",
+  status: "effective",
   decision_ref: "D0xx",
+  created: "2026-09-27",
+  standards_scope: ["CAS", "IFRS"],
+  domains: { solvency: "偿债能力" },
   metrics: [
     {
-      code: "liquidity.current_ratio",
+      metric_code: "liquidity.current_ratio",
       name: "流动比率",
+      domain: "solvency",
+      tier: "core",
       collection: "general",
       definition: "流动资产对流动负债的保障程度，衡量短期偿债能力。",
       formula_text: "流动资产 ÷ 流动负债（倍）",
-      time_behavior: "point_in_time",
+      time_behavior: "point_balance",
+      unit: "倍",
       depends_on: ["cas.current_assets_total", "cas.current_liabilities_total"],
       provenance: "教科书标准口径",
-      mpm: null,
+      source_cas: ["流动资产合计", "流动负债合计"],
+      source_ifrs: "current assets / current liabilities",
+      mpm: false,
       entry_id: "e1",
-      migrates_from: null,
-      execution_kind: "deterministic",
-      execution_detail: null,
+      status: "effective",
+      execution_kind: "facts",
+      decompositions: [],
+      alternative_calibers: [],
     },
   ],
   report_items: [
     { cas_item: "流动资产合计", ifrs_item: "Current assets", direction: "same" },
   ],
+  relations: [],
   accounting: {
+    dataset_id: "flow.accounting_foundation.v1",
+    status: "effective",
+    known_gaps: [],
+    categories: [],
     accounts: [
       { code: "1001", name: "库存现金" },
       { code: "1002", name: "银行存款" },
     ],
+    superseded_notes: [],
+    standards: [],
     entry_templates: [{ name: "收入确认模板", lines: 2 }],
   },
 };
@@ -104,9 +120,63 @@ const PUBLISHING_SNAPSHOTS = {
   ],
 };
 
+const FREEZE_CANDIDATES = {
+  candidates: [
+    {
+      metric_snapshot_id: "ms-1",
+      batch_id: "damai-demo-v1",
+      period_label: "2026-08",
+      version: 3,
+      approved_findings: 1,
+      created_at: "2026-09-06T08:00:00+00:00",
+    },
+  ],
+};
+
+const OPERATIONS_SNAPSHOTS = {
+  snapshots: [
+    {
+      id: "os-1",
+      statement_report_id: REPORT_ID,
+      version: 1,
+      company_name: "大麦物流（合成演示）",
+      stock_code: "DAMAI.SYN",
+      period_label: "FY2026",
+      payload_hash: "b".repeat(64),
+      created_at: "2026-09-06T08:00:00+00:00",
+    },
+  ],
+};
+
 const DATA_ROUTES = [
-  { slug: "statements", route: "/statements", loaded: { statements: { reports: [STATEMENTS_SUMMARY] }, detail: STATEMENTS_DETAIL }, empty: { statements: { reports: [] } } },
-  { slug: "reports", route: "/reports", loaded: { publishing: PUBLISHING_SNAPSHOTS }, empty: { publishing: { snapshots: [] } } },
+  {
+    slug: "statements",
+    route: "/statements",
+    loaded: {
+      statements: { reports: [STATEMENTS_SUMMARY] },
+      detail: STATEMENTS_DETAIL,
+      corrections: { corrections: [] },
+    },
+    empty: { statements: { reports: [] } },
+  },
+  {
+    slug: "reports",
+    route: "/reports",
+    loaded: {
+      statements: { reports: [STATEMENTS_SUMMARY] },
+      publishing: PUBLISHING_SNAPSHOTS,
+      candidates: FREEZE_CANDIDATES,
+      operations: OPERATIONS_SNAPSHOTS,
+      publishingAttempts: { attempts: [] },
+      operationsAttempts: { attempts: [] },
+    },
+    empty: {
+      statements: { reports: [] },
+      publishing: { snapshots: [] },
+      candidates: { candidates: [] },
+      operations: { snapshots: [] },
+    },
+  },
   { slug: "metric-library", route: "/metric-library", loaded: { library: METRIC_LIBRARY }, empty: { library: { ...METRIC_LIBRARY, metrics: [] } } },
   { slug: "investigations", route: "/investigations", loaded: { investigations: FINDINGS }, empty: { investigations: { findings: [] } } },
 ] as const;
@@ -120,8 +190,33 @@ function applyFixtures(page: import("@playwright/test").Page, fixtures: Json) {
   if (fixtures.detail) {
     void page.route(`**/api/v1/statements/${REPORT_ID}`, (r) => r.fulfill({ json: fixtures.detail }));
   }
+  if (fixtures.corrections) {
+    void page.route(`**/api/v1/statements/${REPORT_ID}/corrections`, (r) =>
+      r.fulfill({ json: fixtures.corrections }),
+    );
+  }
   if (fixtures.publishing) {
     void page.route("**/api/v1/publishing/snapshots", (r) => r.fulfill({ json: fixtures.publishing }));
+  }
+  if (fixtures.candidates) {
+    void page.route("**/api/v1/publishing/freeze-candidates", (r) =>
+      r.fulfill({ json: fixtures.candidates }),
+    );
+  }
+  if (fixtures.operations) {
+    void page.route("**/api/v1/operations/snapshots", (r) =>
+      r.fulfill({ json: fixtures.operations }),
+    );
+  }
+  if (fixtures.publishingAttempts) {
+    void page.route("**/api/v1/publishing/snapshots/ps-1/attempts", (r) =>
+      r.fulfill({ json: fixtures.publishingAttempts }),
+    );
+  }
+  if (fixtures.operationsAttempts) {
+    void page.route("**/api/v1/operations/snapshots/os-1/attempts", (r) =>
+      r.fulfill({ json: fixtures.operationsAttempts }),
+    );
   }
   if (fixtures.library) {
     void page.route("**/api/v1/metric-library", (r) => r.fulfill({ json: fixtures.library }));
@@ -132,6 +227,7 @@ function applyFixtures(page: import("@playwright/test").Page, fixtures: Json) {
 }
 
 const API_GLOB = "**/api/v1/**";
+const PAGE_ERRORS = new WeakMap<object, string[]>();
 
 async function shoot(
   page: import("@playwright/test").Page,
@@ -141,6 +237,11 @@ async function shoot(
 ) {
   const dir = path.join(OUT_DIR, slug);
   fs.mkdirSync(dir, { recursive: true });
+  await page.waitForFunction(
+    () => getComputedStyle(document.documentElement).getPropertyValue("--flow-radius-s").trim() !== "",
+    undefined,
+    { timeout: 30_000 },
+  );
   await page.waitForTimeout(350);
   await page.screenshot({
     path: path.join(dir, `${state}-${viewport}.png`),
@@ -150,6 +251,15 @@ async function shoot(
 
 test.describe("state matrix archive", () => {
   test.describe.configure({ mode: "serial" });
+  test.beforeEach(async ({ page }) => {
+    const pageErrors: string[] = [];
+    page.on("pageerror", (error) => pageErrors.push(error.message));
+    PAGE_ERRORS.set(test.info(), pageErrors);
+  });
+  test.afterEach(async () => {
+    const pageErrors = PAGE_ERRORS.get(test.info());
+    expect(pageErrors ?? []).toEqual([]);
+  });
   // 双保险：门禁脚本均为显式 spec 清单不会带上本文件；再加环境变量开关防手滑。
   test.skip(!process.env.FLOW_STATE_MATRIX_ARCHIVE, "archive runs on demand only (FLOW_STATE_MATRIX_ARCHIVE=1)");
 
@@ -158,14 +268,16 @@ test.describe("state matrix archive", () => {
       test(`${entry.route} loaded @${vp.label}`, async ({ page }) => {
         await page.setViewportSize({ width: vp.w, height: vp.h });
         applyFixtures(page, entry.loaded as Json);
-        await page.goto(entry.route, { waitUntil: "networkidle" });
+        // Dev-server HMR keeps the network busy; the fixture-backed UI is ready once
+        // styles load and the short screenshot stabilization delay has elapsed.
+        await page.goto(entry.route, { waitUntil: "domcontentloaded" });
         await shoot(page, entry.slug, "loaded", vp.label);
       });
 
       test(`${entry.route} empty @${vp.label}`, async ({ page }) => {
         await page.setViewportSize({ width: vp.w, height: vp.h });
         applyFixtures(page, entry.empty as Json);
-        await page.goto(entry.route, { waitUntil: "networkidle" });
+        await page.goto(entry.route, { waitUntil: "domcontentloaded" });
         await shoot(page, entry.slug, "empty", vp.label);
       });
 
@@ -215,9 +327,9 @@ test.describe("state matrix archive", () => {
       "title: 前端状态矩阵归档索引（Task 9 证据）",
       "doc_type: navigation",
       "status: current",
-      "version: 1.0",
+      "version: 1.1",
       "created_at: 2026-09-18",
-      "updated_at: 2026-09-18",
+      "updated_at: 2026-09-27",
       "owner: FLOW",
       "applies_to: docs",
       "---",
@@ -227,6 +339,7 @@ test.describe("state matrix archive", () => {
       "> 由 `apps/web/e2e/state-matrix-archive.spec.ts` 按需生成",
       "（`FLOW_STATE_MATRIX_ARCHIVE=1 pnpm exec playwright test e2e/state-matrix-archive.spec.ts`）。",
       "覆盖数据密集四页 × {正常 / 空 / 加载 / 错误 / 403} × {390 / 1024 / 1440}；",
+      "截图中的 loaded/empty 数据来自固定 UI 契约夹具，不是常驻库或大麦完整数据覆盖证明。",
       "结构合同由 `frontend-states.spec.ts` 与 `frontend-responsive.spec.ts` 门禁自动化，本目录为人审证据。",
       "",
       "| 页面 | 截图目录 |",

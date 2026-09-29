@@ -1,0 +1,9 @@
+{"category":"revenue","code":"REVENUE","financial_account_code":null,"name":"营业收入","parent_code":null}
+{"category":"direct_cost","code":"WAREHOUSING_COST","financial_account_code":null,"name":"仓储直接成本","parent_code":null}
+{"category":"direct_cost","code":"TRANSPORTATION_COST","financial_account_code":null,"name":"运输直接成本","parent_code":null}
+{"category":"direct_cost","code":"OTHER_DIRECT_COST","financial_account_code":null,"name":"其他直接成本","parent_code":null}
+{"category":"operating_profit","code":"GROSS_PROFIT","financial_account_code":null,"name":"毛利","parent_code":null}
+{"category":"operating_expense","code":"OPERATING_EXPENSE","financial_account_code":null,"name":"期间费用","parent_code":null}
+{"category":"operating_profit","code":"OPERATING_PROFIT","financial_account_code":null,"name":"经营利润","parent_code":null}
+{"category":"cash_flow","code":"OPERATING_CASH_FLOW","financial_account_code":null,"name":"经营现金流","parent_code":null}
+{"category":"working_capital","code":"AR_BALANCE","financial_account_code":null,"name":"应收账款余额","parent_code":null}

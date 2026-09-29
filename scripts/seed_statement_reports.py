@@ -15,10 +15,9 @@ import hashlib
 from pathlib import Path
 
 import yaml
-
 from flow_api.infrastructure.db import get_session_factory
-from flow_api.infrastructure.models.statement import StatementLineItem, StatementReport
 from flow_api.statements.importer import import_statement_report, load_provenance_index
+from public_statement_row_identity import apply_public_row_identity_corrections
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 
@@ -35,7 +34,7 @@ def main() -> int:
     )
     parser.add_argument(
         "--answer-set",
-        default="config/statements/answer_set_l1.yaml",
+        default="config/statements/answer_set_l1_v5.yaml",
         help="T09-L1 页级答案集（溯源页锚来源；传空字符串跳过溯源）",
     )
     args = parser.parse_args()
@@ -44,6 +43,7 @@ def main() -> int:
     if not yaml_path.is_absolute():
         yaml_path = REPOSITORY_ROOT / yaml_path
     payload = yaml.safe_load(yaml_path.read_text(encoding="utf-8"))
+    payload = apply_public_row_identity_corrections(payload, repository_root=REPOSITORY_ROOT)
     source_ref = str(payload.get("source_pdf") or yaml_path.name)
 
     source_sha256 = args.source_sha256

@@ -1,10 +1,10 @@
 meta:
   generator: scripts/p5_build_fact_store.py
-  generated_at: '2026-09-14T06:49:55'
+  generated_at: '2026-09-29T00:52:01'
   version: v1
   alias_map: docs/implementation/p5/item_alias_map_v1.yaml
   fact_count: 670
-  unmapped_count: 630
+  unmapped_count: 621
   note: 事实 = (公司, 期间, 标准报表项目 item_id, 角色, 值)；角色：end/open（期末/期初）、cur/prev_yoy/prev_qoq（本期/上年同期/上季度）。
 facts:
 - company: sf_002352
@@ -2757,7 +2757,7 @@ facts:
   statement: 合并利润表
   item_id: is.revenue
   role: prev_yoy
-  value: 30729
+  value: 853062
   unit: 百万元
   source: p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf（阿里巴巴投资者关系）
   mapping: 收入
@@ -2775,7 +2775,7 @@ facts:
   statement: 合并利润表
   item_id: is.cogs
   role: prev_yoy
-  value: 20511
+  value: 539450
   unit: 百万元
   source: p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf（阿里巴巴投资者关系）
   mapping: 營業成本
@@ -2793,7 +2793,7 @@ facts:
   statement: 合并利润表
   item_id: is.rnd_exp
   role: prev_yoy
-  value: 1951
+  value: 55465
   unit: 百万元
   source: p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf（阿里巴巴投资者关系）
   mapping: 產品開發費用
@@ -2811,7 +2811,7 @@ facts:
   statement: 合并利润表
   item_id: is.selling_exp
   role: prev_yoy
-  value: 3992
+  value: 119799
   unit: 百万元
   source: p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf（阿里巴巴投资者关系）
   mapping: 銷售和市場費用
@@ -2829,7 +2829,7 @@ facts:
   statement: 合并利润表
   item_id: is.admin_exp
   role: prev_yoy
-  value: 1942
+  value: 31922
   unit: 百万元
   source: p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf（阿里巴巴投资者关系）
   mapping: 一般及行政費用
@@ -2847,7 +2847,7 @@ facts:
   statement: 合并利润表
   item_id: is.operating_profit
   role: prev_yoy
-  value: 2045
+  value: 69638
   unit: 百万元
   source: p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf（阿里巴巴投资者关系）
   mapping: 經營利潤（虧損）
@@ -2865,7 +2865,7 @@ facts:
   statement: 合并利润表
   item_id: is.interest_exp
   role: prev_yoy
-  value: 301
+  value: 4909
   unit: 百万元
   source: p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf（阿里巴巴投资者关系）
   mapping: 利息費用
@@ -2883,7 +2883,7 @@ facts:
   statement: 合并利润表
   item_id: is.total_profit
   role: prev_yoy
-  value: 920
+  value: 73894
   unit: 百万元
   source: p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf（阿里巴巴投资者关系）
   mapping: sum(扣除所得稅及權益法核算的投資損益前的利潤+權益法核算的投資損益)
@@ -2901,7 +2901,7 @@ facts:
   statement: 合并利润表
   item_id: is.income_tax
   role: prev_yoy
-  value: 793
+  value: 26815
   unit: 百万元
   source: p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf（阿里巴巴投资者关系）
   mapping: 所得稅費用
@@ -2919,7 +2919,7 @@ facts:
   statement: 合并利润表
   item_id: is.net_profit
   role: prev_yoy
-  value: 127
+  value: 47079
   unit: 百万元
   source: p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf（阿里巴巴投资者关系）
   mapping: 淨利潤
@@ -2937,7 +2937,7 @@ facts:
   statement: 合并利润表
   item_id: is.attr_net_profit
   role: prev_yoy
-  value: 466
+  value: 62249
   unit: 百万元
   source: p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf（阿里巴巴投资者关系）
   mapping: 歸屬於阿里巴巴集團股東的淨利潤
@@ -2955,7 +2955,7 @@ facts:
   statement: 合并现金流量表
   item_id: cf.ocf
   role: prev_yoy
-  value: 3233
+  value: 142759
   unit: 百万元
   source: p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf（阿里巴巴投资者关系）
   mapping: 經營活動產生的現金流量淨額
@@ -2973,7 +2973,7 @@ facts:
   statement: 合并现金流量表
   item_id: cf.icf
   role: prev_yoy
-  value: 2807
+  value: -198592
   unit: 百万元
   source: p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf（阿里巴巴投资者关系）
   mapping: 投資活動所用現金流量淨額
@@ -2991,7 +2991,7 @@ facts:
   statement: 合并现金流量表
   item_id: cf.fin_cf
   role: prev_yoy
-  value: -7481
+  value: -64449
   unit: 百万元
   source: p5_samples/alibaba_9988/BABA_FY2023_annual_results.pdf（阿里巴巴投资者关系）
   mapping: 融資活動所用現金流量淨額
@@ -8347,50 +8347,6 @@ unmapped:
   item: 權益及負債總額
   reason: 无映射（v1 别名表未覆盖，待评审是否入库）
 - company: jd_logistics_2618
-  statement: 合并资产负债表
-  item: 截至2025年1月1日
-  reason: 无映射（v1 别名表未覆盖，待评审是否入库）
-- company: jd_logistics_2618
-  statement: 合并资产负债表
-  item: 年度利潤
-  reason: 无映射（v1 别名表未覆盖，待评审是否入库）
-- company: jd_logistics_2618
-  statement: 合并资产负债表
-  item: 年度其他綜合（虧損）╱收益
-  reason: 无映射（v1 别名表未覆盖，待评审是否入库）
-- company: jd_logistics_2618
-  statement: 合并资产负债表
-  item: 年度綜合（虧損）╱收益總額
-  reason: 无映射（v1 别名表未覆盖，待评审是否入库）
-- company: jd_logistics_2618
-  statement: 合并资产负债表
-  item: 行使購股權及歸屬限制性股份單位
-  reason: 无映射（v1 别名表未覆盖，待评审是否入库）
-- company: jd_logistics_2618
-  statement: 合并资产负债表
-  item: 收購子公司的部分權益25、29
-  reason: 无映射（v1 别名表未覆盖，待评审是否入库）
-- company: jd_logistics_2618
-  statement: 合并资产负债表
-  item: 收購受共同控制子公司
-  reason: 无映射（v1 别名表未覆盖，待评审是否入库）
-- company: jd_logistics_2618
-  statement: 合并资产负债表
-  item: 股份支付（稅務影響盈餘）
-  reason: 无映射（v1 别名表未覆盖，待评审是否入库）
-- company: jd_logistics_2618
-  statement: 合并资产负债表
-  item: 向子公司非控制性權益支付的股息
-  reason: 无映射（v1 别名表未覆盖，待评审是否入库）
-- company: jd_logistics_2618
-  statement: 合并资产负债表
-  item: 出售一家受共同控制子公司
-  reason: 无映射（v1 别名表未覆盖，待评审是否入库）
-- company: jd_logistics_2618
-  statement: 合并资产负债表
-  item: 截至2025年12月31日
-  reason: 无映射（v1 别名表未覆盖，待评审是否入库）
-- company: jd_logistics_2618
   statement: 合并利润表
   item: 其他收入、收益╱（虧損）淨額
   reason: 无映射（v1 别名表未覆盖，待评审是否入库）
@@ -8405,34 +8361,6 @@ unmapped:
 - company: jd_logistics_2618
   statement: 合并利润表
   item: 應佔聯營企業及合營企業損益
-  reason: 无映射（v1 别名表未覆盖，待评审是否入库）
-- company: jd_logistics_2618
-  statement: 合并利润表
-  item: 非控制性權益
-  reason: 无映射（v1 别名表未覆盖，待评审是否入库）
-- company: jd_logistics_2618
-  statement: 合并利润表
-  item: 以公允價值計量且其變動計入其他綜合收益的權益工具的公允價值變動
-  reason: 无映射（v1 别名表未覆盖，待评审是否入库）
-- company: jd_logistics_2618
-  statement: 合并利润表
-  item: 功能貨幣換算至列報貨幣產生的匯兌差額
-  reason: 无映射（v1 别名表未覆盖，待评审是否入库）
-- company: jd_logistics_2618
-  statement: 合并利润表
-  item: 境外業務換算產生之匯兌差額
-  reason: 无映射（v1 别名表未覆盖，待评审是否入库）
-- company: jd_logistics_2618
-  statement: 合并利润表
-  item: 預期信用損失變動淨額
-  reason: 无映射（v1 别名表未覆盖，待评审是否入库）
-- company: jd_logistics_2618
-  statement: 合并利润表
-  item: 年度其他綜合（虧損）╱收益
-  reason: 无映射（v1 别名表未覆盖，待评审是否入库）
-- company: jd_logistics_2618
-  statement: 合并利润表
-  item: 年度綜合收益總額
   reason: 无映射（v1 别名表未覆盖，待评审是否入库）
 - company: jd_logistics_2618
   statement: 合并利润表
@@ -8558,3 +8486,39 @@ unmapped:
   statement: 合并现金流量表
   item: 年末現金及現金等價物
   reason: 无映射（v1 别名表未覆盖，待评审是否入库）
+- company: jd_logistics_2618
+  statement: 合并综合收益表
+  item: 年度利潤
+  reason: 无映射（报表类型未配置，待评审是否入库）
+- company: jd_logistics_2618
+  statement: 合并综合收益表
+  item: 以公允價值計量且其變動計入其他綜合收益的權益工具的公允價值變動
+  reason: 无映射（报表类型未配置，待评审是否入库）
+- company: jd_logistics_2618
+  statement: 合并综合收益表
+  item: 功能貨幣換算至列報貨幣產生的匯兌差額
+  reason: 无映射（报表类型未配置，待评审是否入库）
+- company: jd_logistics_2618
+  statement: 合并综合收益表
+  item: 境外業務換算產生之匯兌差額
+  reason: 无映射（报表类型未配置，待评审是否入库）
+- company: jd_logistics_2618
+  statement: 合并综合收益表
+  item: 預期信用損失變動淨額
+  reason: 无映射（报表类型未配置，待评审是否入库）
+- company: jd_logistics_2618
+  statement: 合并综合收益表
+  item: 年度其他綜合（虧損）╱收益
+  reason: 无映射（报表类型未配置，待评审是否入库）
+- company: jd_logistics_2618
+  statement: 合并综合收益表
+  item: 年度綜合收益總額
+  reason: 无映射（报表类型未配置，待评审是否入库）
+- company: jd_logistics_2618
+  statement: 合并综合收益表
+  item: 本公司所有者
+  reason: 无映射（报表类型未配置，待评审是否入库）
+- company: jd_logistics_2618
+  statement: 合并综合收益表
+  item: 非控制性權益
+  reason: 无映射（报表类型未配置，待评审是否入库）

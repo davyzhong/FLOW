@@ -105,6 +105,28 @@ def test_reimport_is_idempotent_and_restatement_versions(db_session: Session) ->
     assert sorted(versions) == [1, 2]
 
 
+def test_source_text_label_is_metadata_not_a_numeric_value_column(db_session: Session) -> None:
+    payload = yaml.safe_load(SF_YAML.read_text())
+    row = next(
+        item
+        for item in payload["statements"]["合并资产负债表"]
+        if item.get("期末余额") is not None and item.get("期初余额") is not None
+    )
+    row["source_text_label"] = "原件披露行名"
+
+    report = import_statement_report(
+        db_session,
+        **IMPORT_KWARGS,
+        payload=payload,
+        source_ref="p5_samples/sf_002352/SF_2026_Q1_report.pdf",
+        source_sha256="c" * 64,
+    )
+
+    imported = next(item for item in report.items if item.item_name == row["item"])
+    assert imported.value_end == Decimal(str(row["期末余额"]))
+    assert imported.value_begin == Decimal(str(row["期初余额"]))
+
+
 def test_normalize_resolves_sums_traces_and_preserves_original(db_session: Session) -> None:
     report = _import_sf(db_session)
     alias_map = load_alias_map(REPO_ROOT / "config/statements/item_alias_map_v0.yaml")
@@ -391,6 +413,48 @@ def test_jdl_duplicate_item_names_survive_normalization_with_group_ordinal(
     borrowings = [r for r in rows if r.item_name == "借款"]
     assert len(borrowings) == 2
     assert {r.group_ordinal for r in borrowings} == {0, 1}
+
+
+def test_jdl_comprehensive_income_rows_keep_statement_identity_after_normalization(
+    db_session: Session,
+) -> None:
+    """相邻两张表中的年度利润及归属行须以报表类型区分，而非混并。"""
+    import yaml as yaml_lib
+
+    correction = (
+        REPO_ROOT / "validation/financial_reports/corrections/jdl_2025fy_statements_v3.yaml"
+    )
+    payload = yaml_lib.safe_load(correction.read_text())
+    report = import_statement_report(
+        db_session,
+        company_name="京东物流",
+        stock_code="02618.HK",
+        report_kind="年报",
+        period_label="FY2025",
+        payload=payload,
+        source_ref="p5_samples/jdl_02618/JDL_FY2025_report.pdf",
+        source_sha256="k" * 64,
+    )
+    normalize_report(db_session, report)
+
+    rows = list(
+        db_session.scalars(
+            select(StatementNormalizedItem).where(
+                StatementNormalizedItem.report_id == report.id
+            )
+        )
+    )
+    for item_name in ("年度利潤", "本公司所有者", "非控制性權益"):
+        matches = [
+            row for row in rows
+            if row.item_name == item_name
+            and row.statement_type in {"合并利润表", "合并综合收益表"}
+        ]
+        assert {row.statement_type for row in matches} == {
+            "合并利润表", "合并综合收益表"
+        }
+        assert len(matches) == 2
+        assert {row.group_ordinal for row in matches} == {0}
 
 
 # ---------------------------------------------------------------------------

@@ -98,4 +98,10 @@ uv run python scripts/damai_visibility_matrix.py \
   --seed-receipt "${ROOT}/work/damai-demo/e2e_seed_receipt.json" \
   --output "${ROOT}/work/damai-demo/e2e_visibility_matrix.jsonl"
 
+# 财报页溯源 E2E：导入与仓库原始 PDF 同 SHA 的公开财报及页级答案集；
+# 浏览器测试再经正式上传 API 登记 PDF。以上写入仅作用于 damai-demo-iso 隔离库/对象存储。
+(cd services/api && uv run python ../../scripts/seed_statement_reports.py \
+  --yaml ../../docs/implementation/p5/alibaba_2020fy_statements.yaml \
+  --company 阿里巴巴 --stock-code 9988.HK --report-kind 年报 --period-label FY2020)
+
 npx --yes playwright test e2e/damai-demo.spec.ts

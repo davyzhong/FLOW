@@ -1,0 +1,211 @@
+{
+  "counts": {
+    "matched": 0,
+    "mismatched": 0,
+    "not_comparable": 20
+  },
+  "total": 20,
+  "rows_extracted": 324,
+  "results": [
+    {
+      "tier": "key_item",
+      "item": "营业收入",
+      "value": "26,438,607,589.72",
+      "page": "7",
+      "statement": "合并利润表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "key_item",
+      "item": "归属于上市公司股东的净利润",
+      "value": "998,426,432.09",
+      "page": "7",
+      "statement": "合并利润表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "key_item",
+      "item": "净利润",
+      "value": "1,002,350,643.41",
+      "page": "54",
+      "statement": "合并利润表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "key_item",
+      "item": "经营活动产生的现金流量净额",
+      "value": "1,627,385,817.88",
+      "page": "7",
+      "statement": "合并现金流量表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "key_item",
+      "item": "总资产",
+      "value": "37,104,583,445.79",
+      "page": "7",
+      "statement": "合并资产负债表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "key_item",
+      "item": "归属于上市公司股东的净资产",
+      "value": "21,473,657,797.96",
+      "page": "7",
+      "statement": "合并资产负债表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "一、营业总收入",
+      "value": "26,438,607,589.72 / 24,832,923,076.39",
+      "page": "53",
+      "statement": "合并利润表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "其中：营业收入",
+      "value": "26,438,607,589.72 / 24,832,923,076.39",
+      "page": "53",
+      "statement": "合并利润表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "二、营业总成本",
+      "value": "25,193,696,864.74 / 24,212,132,492.45",
+      "page": "53",
+      "statement": "合并利润表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "其中：营业成本",
+      "value": "24,230,759,552.53 / 23,149,805,025.43",
+      "page": "53",
+      "statement": "合并利润表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "三、营业利润",
+      "value": "1,339,041,633.91 / 736,058,293.97",
+      "page": "54",
+      "statement": "合并利润表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "四、利润总额",
+      "value": "1,313,270,182.07 / 714,404,892.61",
+      "page": "54",
+      "statement": "合并利润表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "减：所得税费用",
+      "value": "310,919,538.66 / 179,413,592.90",
+      "page": "54",
+      "statement": "合并利润表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "五、净利润",
+      "value": "1,002,350,643.41 / 534,991,299.71",
+      "page": "54",
+      "statement": "合并利润表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "归属于母公司股东的净利润",
+      "value": "998,426,432.09 / 528,777,492.06",
+      "page": "55",
+      "statement": "合并利润表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "少数股东损益",
+      "value": "3,924,211.32 / 6,213,807.65",
+      "page": "55",
+      "statement": "合并利润表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "基本每股收益（元/股）",
+      "value": "0.3454 / 0.1829",
+      "page": "7",
+      "statement": "合并利润表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "经营活动产生的现金流量净额",
+      "value": "1,627,385,817.88 / 1,012,551,193.23",
+      "page": "58",
+      "statement": "合并现金流量表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "投资活动产生的现金流量净额",
+      "value": "-542,351,914.22 / -174,879,551.86",
+      "page": "59",
+      "statement": "合并现金流量表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    },
+    {
+      "tier": "supplementary",
+      "item": "筹资活动产生的现金流量净额",
+      "value": "-1,299,719,626.97 / -694,829,295.21",
+      "page": "59",
+      "statement": "合并现金流量表",
+      "class": "not_comparable",
+      "extracted_value": null,
+      "detail": "抽取输出中无对应行"
+    }
+  ]
+}

@@ -4,7 +4,7 @@
 两级基准合同（docs/50_plans/work_items/PUBLIC--c-level-exit-protocol.md）：
 - L0：事实库 statement_line_item ↔ 已验证抽取 YAML 逐值比对——管线不丢数、
   不改数、不换符号；
-- L1（`--level L1`）：页级答案集（config/statements/answer_set_l1.yaml，
+- L1（`--level L1`）：页级答案集（config/statements/answer_set_l1_v5.yaml，
   由 scripts/build_answer_set_l1.py 从源 PDF 文本层定位生成）双向验证：
   ① 每条页锚在当前 PDF 上仍可复现（数值确实出现在该页）；
   ② 答案集值 == 事实库值（值级一致）。
@@ -29,6 +29,9 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[1]
 
 sys.path.insert(0, str(REPO / "services/api" / "src"))
+sys.path.insert(0, str(REPO / "scripts"))
+
+from public_statement_row_identity import apply_public_row_identity_corrections
 
 EXIT_OK = 0
 EXIT_MISMATCH = 1
@@ -61,17 +64,31 @@ def collect_expected() -> dict:
     差异影响。
     """
     expected: dict[tuple[str, str, str, str], Decimal | None] = {}
-    sources = sorted(glob.glob(str(REPO / "docs/implementation/p5" / "*_statements.yaml")))
+    sources = [
+        source
+        for source in sorted(glob.glob(str(REPO / "docs/implementation/p5" / "*_statements.yaml")))
+        if Path(source).name
+        not in {"jdl_2025fy_statements.yaml", "alibaba_2023fy_statements.yaml"}
+    ]
+    sources.extend(
+        str(REPO / path)
+        for path in (
+            "validation/financial_reports/corrections/jdl_2025fy_statements_v3.yaml",
+            "validation/financial_reports/corrections/alibaba_2023fy_statements_v2.yaml",
+        )
+    )
     if not sources:
         raise RuntimeError("未找到抽取 YAML（docs/implementation/p5/*_statements.yaml）")
     for source in sources:
-        payload = load_yaml(Path(source))
+        payload = apply_public_row_identity_corrections(
+            load_yaml(Path(source)), repository_root=REPO
+        )
         source_pdf = payload["source_pdf"]
         for statement, rows in payload["statements"].items():
             for row in rows:
                 item = row["item"]
                 for column, value in row.items():
-                    if column == "item":
+                    if column in {"item", "page", "source_text_label"}:
                         continue
                     normalized = COLUMN_ALIASES.get(column, column)
                     key = (source_pdf, statement, item, normalized)
@@ -84,10 +101,12 @@ def collect_expected() -> dict:
 
 def collect_actual() -> dict:
     """实际值：事实库 statement_line_item 按 (sample, statement, item, column)。"""
-    from sqlalchemy import select
-
     from flow_api.infrastructure.db import get_engine
-    from flow_api.infrastructure.models.statement import StatementLineItem, StatementReport
+    from flow_api.infrastructure.models.statement import (
+        StatementLineItem,
+        StatementReport,
+    )
+    from sqlalchemy import select
 
     actual: dict[tuple[str, str, str, str], Decimal | None] = {}
     with get_engine().connect() as conn:
@@ -184,13 +203,12 @@ def _norm_for_pdf(text: str) -> str:
 def verify_l1(answer_set_path: Path) -> dict:
     """L1 双向验证：页锚可复现 + 值与事实库一致。"""
     import yaml as pyyaml
-    from sqlalchemy import select
-
     from flow_api.infrastructure.db import get_engine
     from flow_api.infrastructure.models.statement import (
         StatementLineItem,
         StatementReport,
     )
+    from sqlalchemy import select
 
     payload = pyyaml.safe_load(answer_set_path.read_text(encoding="utf-8"))
     entries = payload["entries"]
@@ -391,7 +409,7 @@ def main() -> int:
         return EXIT_OK
     if args.level == "L1":
         try:
-            report = verify_l1(REPO / "config/statements/answer_set_l1.yaml")
+            report = verify_l1(REPO / "config/statements/answer_set_l1_v5.yaml")
         except Exception as error:  # noqa: BLE001
             print(f"env error: {error}", file=sys.stderr)
             return EXIT_ENV_ERROR

@@ -30,7 +30,7 @@ COLUMN_ALIASES: dict[str, str] = {
     "上期金额": "value_prior",
 }
 
-RESERVED_KEYS = {"item"}
+RESERVED_KEYS = {"item", "page", "source_text_label"}
 
 
 class StatementImportError(Exception):

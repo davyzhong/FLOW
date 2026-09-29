@@ -27,6 +27,8 @@ from sqlalchemy import select, text
 from flow_api.analysis.policy import load_analysis_policy
 from flow_api.analysis.service import AnalysisRunService
 from flow_api.data_contract.contract import load_contract
+from flow_api.enterprise.directory import sync_enterprise_directory
+from flow_api.enterprise.models import Enterprise
 from flow_api.fixtures.damai.generator import build_damai_package
 from flow_api.fixtures.damai.validation import validate_damai_package
 from flow_api.infrastructure.models.analytics import Conclusion, Finding
@@ -128,7 +130,9 @@ def _sha256_of(path: Path) -> str:
     return digest.hexdigest()
 
 
-def seed_damai_demo(session: Any) -> dict[str, Any]:
+def seed_damai_demo(
+    session: Any, *, sync_organization: bool = True, upsert_enterprise: bool = True
+) -> dict[str, Any]:
     """装载大麦演示数据：enterprise 配置 + 两份财报导入/归一化/审核发布。
 
     事务语义（B1）：全程 flush-only，只在调用方顶层提交；任一步骤失败时
@@ -142,7 +146,19 @@ def seed_damai_demo(session: Any) -> dict[str, Any]:
             + ",".join(package_validation["invariant_codes"])
         )
 
-    enterprise = _upsert_enterprise(session)
+    if upsert_enterprise:
+        enterprise = _upsert_enterprise(session)
+    else:
+        existing = session.scalar(select(Enterprise).where(Enterprise.code == "damai-logistics"))
+        if existing is None:
+            raise RuntimeError("系统必须先创建 damai-logistics 企业空间")
+        enterprise = {"id": str(existing.id), "code": existing.code, "name": existing.name}
+    organization_receipt = None
+    if sync_organization:
+        organization_dir = _repository_root() / "data/enterprise/damai-logistics/v1/organization"
+        organization_receipt = sync_enterprise_directory(
+            session, UUID(enterprise["id"]), organization_dir
+        )
     review = ReviewService(session)
     reports: list[dict[str, Any]] = []
     for fy in _DAMAI_FY:
@@ -182,6 +198,8 @@ def seed_damai_demo(session: Any) -> dict[str, Any]:
         )
     session.flush()
     receipt: dict[str, Any] = {"enterprise": enterprise, "reports": reports}
+    if organization_receipt is not None:
+        receipt["organization"] = organization_receipt
     receipt["analytics"] = _seed_analytics(session)
     receipt["workflow"] = _seed_workflow(session, reports, receipt["analytics"])
     session.flush()
@@ -249,13 +267,16 @@ def _seed_analytics(session: Any) -> dict[str, Any]:
     uploaded = ObjectStore(
         client=build_s3_client(settings), bucket=settings.s3_bucket
     ).put_immutable(workbook.read_bytes(), workbook.name)
+    cycle_id = _damai_analysis_cycle_id(session)
     batch = session.scalar(
-        select(AnalysisBatch).where(AnalysisBatch.name == "damai-demo-v1")
+        select(AnalysisBatch).where(
+            AnalysisBatch.name == "damai-demo-v1",
+            AnalysisBatch.analysis_cycle_id == UUID(cycle_id),
+        )
     )
     if batch is None:
         # 首次装载：标准工作簿走完整 IntakeService 导入链；
         # B1：批次显式绑定截止月 2026-08 的 AnalysisCycle（不依赖全库最早周期）
-        cycle_id = _damai_analysis_cycle_id(session)
         stored, proposal, candidate, report = _intake_inputs(workbook)
         assert uploaded.sha256 == stored.sha256, "上传指纹与本地摘要不一致"
         intake = IntakeService(session)

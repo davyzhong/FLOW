@@ -1,0 +1,89 @@
+# oracle 标准答案｜jdl_2026h1｜京东物流 2026 中期报告（holdout-lottery-2026-09-25 备选·新期间）
+# 录入规程：oracle-register §1（只读 PDF 原文；不接触抽取器实现与输出）。
+# 录入者：ZCode 接手会话（用户 §1a 授权；本会话此前未参与抽取器开发，适配器开发在本录入之后）。
+# 来源：validation/financial_reports/original/jdl_2026h1/JDL_2026_interim_report_e.pdf
+#       （SHA 736c18a5…ba9；78 页，英文版，文本层正常）
+#       中文版 JDL_2026_interim_report_c.pdf（SHA 2c58cef9…6822）文本层乱码（京东系嵌入字体
+#       映射损坏，家族规律与 FY2025 年报一致），数值以英文版录入（两版同版式双语排版）。
+# 单位：人民币千元（披露原始单位）
+#
+# 修订 2026-09-29：key_items 补 statement 字段（comparator 定位元数据，值零变更）。
+
+sample_id: jdl_2026h1
+company: "京东物流股份有限公司（2618.HK）"
+period: 截至 2026 年 6 月 30 日止六个月（未经审计）
+source_pdf_pages:
+  FINANCIAL_HIGHLIGHTS: 第 5 页
+  简明合并利润表: 第 39 页
+  简明合并财务状况表: 第 41—42 页
+  简明合并现金流量表: 第 44—45 页
+
+key_items:
+  - item: Revenue（收入）
+    statement: 损益表
+    value: "124,683,247"
+    location: FINANCIAL HIGHLIGHTS（第 5 页）；与简明合并利润表一致（第 39 页）
+    unit: 人民币千元
+    source_page: "5"
+    note: 2025 同期 98,531,786，+26.5%
+  - item: Profit for the period（期内利润）
+    statement: 损益表
+    value: "3,270,846"
+    location: 财务摘要（第 5 页）；简明合并利润表（第 39 页）
+    unit: 人民币千元
+    source_page: "39"
+    note: 2025 同期 2,959,157，+10.5%
+  - item: Profit attributable to Owners of the Company（归属公司权益持有人期内利润）
+    statement: 损益表
+    value: "3,292,301"
+    location: 简明合并利润表（第 39 页）
+    unit: 人民币千元
+    source_page: "39"
+    note: 2025 同期 2,579,653；非控制性权益 (21,455)
+  - item: Non-IFRS profit for the period（非国际财务报告准则期内利润）
+    statement: 概要
+    value: "3,696,160"
+    location: FINANCIAL HIGHLIGHTS（第 5 页）
+    unit: 人民币千元
+    source_page: "5"
+    note: 2025 同期 3,339,048，+10.7%
+  - item: Net cash generated from operating activities（经营活动现金净流入）
+    statement: 现金流量表
+    value: "6,379,053"
+    location: 简明合并现金流量表（第 44 页）
+    unit: 人民币千元
+    source_page: "44"
+    note: 2025 同期 6,568,722
+  - item: Total assets（总资产）
+    statement: 财务状况表
+    value: "119,748,521"
+    location: 简明合并财务状况表（第 41 页）
+    unit: 人民币千元
+    source_page: "41"
+    note: 2025 年 12 月 31 日 124,599,558
+
+supplementary_lines:
+  # 简明合并利润表（第 39 页，2026 / 2025，千元）
+  - { statement: 利润表, item: Revenue, page: "39", value: "124,683,247 / 98,531,786" }
+  - { statement: 利润表, item: Cost of revenue, page: "39", value: "(113,616,785) / (89,665,491)" }
+  - { statement: 利润表, item: Gross profit, page: "39", value: "11,066,462 / 8,866,295" }
+  - { statement: 利润表, item: Selling and marketing expenses, page: "39", value: "(3,357,487) / (2,993,025)" }
+  - { statement: 利润表, item: Research and development expenses, page: "39", value: "(2,348,400) / (1,898,294)" }
+  - { statement: 利润表, item: General and administrative expenses, page: "39", value: "(2,177,341) / (1,805,170)" }
+  - { statement: 利润表, item: Finance income, page: "39", value: "295,470 / 685,625" }
+  - { statement: 利润表, item: Finance costs, page: "39", value: "(499,801) / (435,651)" }
+  - { statement: 利润表, item: Profit before income tax, page: "39", value: "3,702,275 / 3,298,755" }
+  - { statement: 利润表, item: Income tax expense, page: "39", value: "(431,429) / (339,598)" }
+  - { statement: 利润表, item: Profit attributable to Owners of the Company, page: "39", value: "3,292,301 / 2,579,653" }
+  - { statement: 利润表, item: Non-controlling interests, page: "39", value: "(21,455) / 379,504" }
+  - { statement: 利润表, item: "Earnings per share — Basic（元）", page: "39", value: "0.52 / 0.41" }
+  # 财务状况表（第 41 页，千元）
+  - { statement: 财务状况表, item: Total assets, page: "41", value: "119,748,521 / 124,599,558(2025-12-31)" }
+  - { statement: 财务状况表, item: Total equity, page: "42", value: "57,937,052 / 59,784,729(2025-12-31)" }
+  # 现金流量表（第 44—45 页，千元）
+  - { statement: 现金流量表, item: Cash generated from operations, page: "44", value: "6,603,592 / 6,582,855" }
+  - { statement: 现金流量表, item: Net cash generated from operating activities, page: "44", value: "6,379,053 / 6,568,722" }
+  - { statement: 现金流量表, item: Net cash generated from/(used in) investing activities, page: "44", value: "931,643 / (7,324,796)" }
+  - { statement: 现金流量表, item: Net cash used in financing activities, page: "45", value: "(9,208,022) / (7,759,491)" }
+
+mock_or_synthetic_content: 无  # 全部数值为披露原文精确转录

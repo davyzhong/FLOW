@@ -1,0 +1,4 @@
+sample: tencent_fy2025
+error: 'UnsupportedLayoutError: 未知财报版式，显式降级（各适配器得分：{''cn_ashare_table'': 0, ''hk_traditional_text'':
+  1, ''hk_results_announcement'': 0}）'
+statements: {}

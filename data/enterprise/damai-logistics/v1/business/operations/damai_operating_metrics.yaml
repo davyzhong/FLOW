@@ -1,0 +1,20 @@
+business_line_revenue_share:
+  china_logistics: 0.4603
+  international_logistics: 0.4756
+  technology_and_other_services: 0.064
+network_snapshot:
+  as_of: '2026-08-31'
+  note: synthetic 演示快照：业务单元 4 个、区域网络 6 个、产品线 8 条
+operating_volume:
+  china_orders_fulfilled:
+    FY2025: 0.0721
+    FY2026: 0.0854
+  international_parcels:
+    FY2025: 0.075
+    FY2026: 0.0882
+  unit: 百万件
+periods:
+- FY2025
+- FY2026
+sample: damai_operating_metrics
+source_ref: fixtures/damai/manifest.json

@@ -37,8 +37,16 @@ test("uploads the standard workbook through the workbench happy path", async ({ 
     __dirname,
     "../../../fixtures/workbooks/flow_standard_v1.xlsx",
   );
+  // 历史批次区仅在客户端水合并完成身份拉取后渲染（dev 模式水合较慢），
+  // 以它的出现作为水合证据，避免 change 事件早于 React 挂载而丢失。
+  await expect(page.getByRole("region", { name: "最近的数据批次" })).toBeVisible({
+    timeout: 30_000,
+  });
   await page.getByLabel("选择文件").setInputFiles(fixture);
-  await expect(page.getByRole("table")).toBeVisible({ timeout: 15000 });
-  await page.getByRole("button", { name: "确认映射并校验" }).click();
+  // 映射阶段以确认按钮出现为准（getByRole("table") 会误匹配历史批次表），
+  // 上传/建批/映射提议是三次串行请求，给足超时。
+  const confirmButton = page.getByRole("button", { name: "确认映射并校验" });
+  await expect(confirmButton).toBeVisible({ timeout: 60_000 });
+  await confirmButton.click();
   await expect(page.getByText(/清洗与校验结果/)).toBeVisible({ timeout: 30000 });
 });

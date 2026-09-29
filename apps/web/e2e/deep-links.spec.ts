@@ -95,6 +95,36 @@ test.describe("深链接收端（批次一）", () => {
     await expect(cardLink).toHaveAttribute("href", /^\/metric-library\?focus=/);
   });
 
+  test("驾驶舱指标卡：点击后在指标库定位同一指标", async ({ page }) => {
+    let requestedMetricCode = "";
+    await page.route("**/api/v1/dashboard/**", (route) =>
+      route.fulfill({ json: dashboardOracle() }),
+    );
+    await page.route("**/api/v1/metric-library", (route) => {
+      return route.fulfill({
+        json: {
+          ...LIBRARY,
+          metrics: [{ ...METRIC, metric_code: requestedMetricCode, name: "深链目标", entry_id: "entry-from-dashboard" }],
+        },
+      });
+    });
+    await page.goto("/");
+    await expect(page.getByTestId("metric-card").first()).toBeVisible();
+    const href = await page.getByTestId("metric-card").first().getByRole("link").getAttribute("href");
+    expect(href).toMatch(/^\/metric-library\?focus=/);
+    const metricCode = new URL(href!, "http://flow.local").searchParams.get("focus");
+    expect(metricCode).toBeTruthy();
+    requestedMetricCode = metricCode!;
+
+    await page.getByTestId("metric-card").first().getByRole("link").click();
+
+    await expect(page).toHaveURL(new RegExp(`/metric-library\\?focus=${metricCode}`));
+    const target = page.locator("article#metric-entry-entry-from-dashboard");
+    await expect(target).toBeVisible();
+    await expect(target).toHaveClass(/ml-metric--focused/);
+    await expect(target).toContainText("深链目标");
+  });
+
   test("指标库：?focus= 命中物流指标时切换分区并高亮卡片锚点", async ({ page }) => {
     await page.route("**/api/v1/metric-library", (route) => route.fulfill({ json: LIBRARY }));
     await page.goto("/metric-library?focus=on_time_rate");
@@ -344,8 +374,17 @@ test.describe("深链接收端（批次二）", () => {
               },
             },
           ],
-        },
-      }),
+          },
+        }),
+    );
+    await page.route("**/api/v1/statements", (route) =>
+      route.fulfill({ json: { reports: [REPORT_A] } }),
+    );
+    await page.route(`**/api/v1/statements/${REPORT_A.id}`, (route) =>
+      route.fulfill({ json: { ...REPORT_A, sections: [] } }),
+    );
+    await page.route(`**/api/v1/statements/${REPORT_A.id}/corrections`, (route) =>
+      route.fulfill({ json: { corrections: [] } }),
     );
     await page.goto("/metric-library");
     await page.getByRole("button", { name: "真实财报覆盖" }).click();
@@ -353,6 +392,9 @@ test.describe("深链接收端（批次二）", () => {
     await expect(reportLink).toHaveAttribute("href", `/statements?report=${REPORT_A.id}`);
     // 无 report_id 的列头保持纯文本
     await expect(page.getByRole("link", { name: /阿里巴巴/ })).toHaveCount(0);
+    await reportLink.click();
+    await expect(page).toHaveURL(`/statements?report=${REPORT_A.id}`);
+    await expect(page.getByRole("button", { name: /顺丰控股/ })).toHaveAttribute("aria-pressed", "true");
   });
 
   test("Copilot citations：evidence 引用点击页内定位到证据区（§3.3）", async ({ page }) => {

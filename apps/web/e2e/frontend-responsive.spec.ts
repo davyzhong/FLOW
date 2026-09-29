@@ -22,6 +22,8 @@ const ROUTES = [
   "/login",
 ] as const;
 
+const PAGE_ERRORS = new WeakMap<object, string[]>();
+
 // ---------------------------------------------------------------------------
 // 真实数据态的固定测试数据（路由拦截，形状对齐 typed schema 的 UI 读取面）
 // ---------------------------------------------------------------------------
@@ -57,50 +59,78 @@ const STATEMENTS_DETAIL = {
 };
 
 const METRIC_LIBRARY = {
-  dictionary_id: "flow.metrics.dictionary.v1.1",
-  status: "active",
+  dictionary_id: "flow.metric_dictionary.v1",
+  status: "effective",
   decision_ref: "D0xx",
+  created: "2026-09-27",
+  standards_scope: ["CAS", "IFRS"],
+  domains: { solvency: "偿债能力" },
   metrics: [
     {
-      code: "liquidity.current_ratio",
+      metric_code: "liquidity.current_ratio",
       name: "流动比率",
+      domain: "solvency",
+      tier: "core",
+      status: "effective",
       collection: "general",
       definition: "流动资产对流动负债的保障程度，衡量短期偿债能力。",
       formula_text: "流动资产 ÷ 流动负债（倍）",
-      time_behavior: "point_in_time",
+      formula: { op: "div", args: ["bs.current_assets", "bs.current_liabilities"] },
+      time_behavior: "point_balance",
+      unit: "倍",
       depends_on: ["cas.current_assets_total", "cas.current_liabilities_total"],
       provenance: "教科书标准口径",
-      mpm: null,
+      source_cas: ["流动资产合计", "流动负债合计"],
+      source_ifrs: "current assets / current liabilities",
+      mpm: false,
+      aliases: [],
+      alternative_calibers: [],
+      decompositions: [],
+      analysis_dimensions: [],
       entry_id: "e1",
-      migrates_from: null,
-      execution_kind: "deterministic",
-      execution_detail: null,
+      execution_kind: "facts",
     },
     {
-      code: "logistics.unit_cost",
-      name: "单票成本",
+      metric_code: "logistics.unit_cost",
+      name: "单票履约成本",
+      domain: "unit_economics",
+      tier: "professional",
+      status: "effective",
       collection: "logistics",
-      definition: "剔除存货后的更严格短期偿债口径的对照占位。",
-      formula_text: "（流动资产 − 存货）÷ 流动负债（倍）",
-      time_behavior: "point_in_time",
+      definition: "单位履约订单对应的平均履约成本。",
+      formula_text: "履约成本 ÷ 完成订单量",
+      formula: { op: "div", args: ["fulfillment_cost", "fulfilled_orders"] },
+      time_behavior: "period_flow",
+      unit: "元/单",
       depends_on: [],
-      provenance: null,
-      mpm: { benchmark: "trend" },
+      provenance: "大麦演示指标定义",
+      source_cas: [],
+      source_ifrs: null,
+      mpm: false,
+      aliases: [],
+      alternative_calibers: [],
+      decompositions: [],
+      analysis_dimensions: ["物流产品", "组织"],
       entry_id: "e2",
-      migrates_from: null,
-      execution_kind: "deterministic",
-      execution_detail: null,
+      execution_kind: "facts",
     },
   ],
   report_items: [
     { cas_item: "流动资产合计", ifrs_item: "Current assets", direction: "same" },
     { cas_item: "流动负债合计", ifrs_item: "Current liabilities", direction: "same" },
   ],
+  relations: [],
   accounting: {
+    dataset_id: "flow.accounting_foundation.v1",
+    status: "effective",
+    known_gaps: [],
+    categories: [],
     accounts: [
       { code: "1001", name: "库存现金" },
       { code: "1002", name: "银行存款" },
     ],
+    superseded_notes: [],
+    standards: [],
     entry_templates: [{ name: "收入确认模板", lines: 2 }],
   },
 };
@@ -142,6 +172,9 @@ const PUBLISHING_SNAPSHOTS = {
 /** 注入数据态；未列出的 API 保持透传（CI 无 API 时这些请求失败，
  *  但被测页面只依赖此处注入的端点）。 */
 async function mockRealisticData(page: import("@playwright/test").Page) {
+  const pageErrors: string[] = [];
+  page.on("pageerror", (error) => pageErrors.push(error.message));
+  PAGE_ERRORS.set(page, pageErrors);
   await page.route("**/api/v1/statements", (route) =>
     route.fulfill({ json: { reports: [STATEMENTS_SUMMARY] } }));
   await page.route(`**/api/v1/statements/${REPORT_ID}`, (route) =>
@@ -152,6 +185,10 @@ async function mockRealisticData(page: import("@playwright/test").Page) {
     route.fulfill({ json: FINDINGS }));
   await page.route("**/api/v1/publishing/snapshots", (route) =>
     route.fulfill({ json: PUBLISHING_SNAPSHOTS }));
+}
+
+async function expectNoPageErrors(page: import("@playwright/test").Page) {
+  expect(PAGE_ERRORS.get(page) ?? []).toEqual([]);
 }
 
 test.describe("responsive integrity", () => {
@@ -208,8 +245,9 @@ test.describe("responsive integrity", () => {
           await mockRealisticData(page);
           await page.goto(route, { waitUntil: "networkidle" });
           await waitForStyles(page);
-          await page.waitForTimeout(500);
-          await measureOverflow(page, `${route}@${width}`);
+        await page.waitForTimeout(500);
+        await measureOverflow(page, `${route}@${width}`);
+          await expectNoPageErrors(page);
         });
       }
     });
@@ -226,6 +264,7 @@ test.describe("responsive integrity", () => {
         await waitForStyles(page);
         await page.waitForTimeout(500);
         await measureOverflow(page, `${route} (data)`);
+        await expectNoPageErrors(page);
       });
     }
   });

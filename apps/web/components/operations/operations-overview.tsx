@@ -265,6 +265,9 @@ export function OperationsOverviewApp({
           id="operations-context"
           value={selectedContext}
           onChange={(event) => {
+            setOverview(null);
+            setFreezeInfo(null);
+            setState({ status: "idle" });
             setSelectedContext(event.target.value);
             setReportMiss(null);
           }}

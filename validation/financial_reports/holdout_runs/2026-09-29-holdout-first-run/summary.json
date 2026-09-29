@@ -1,0 +1,20 @@
+{
+  "xiaomi_2026h1": {
+    "adapter": null,
+    "error": "UnsupportedLayoutError: 未知财报版式，显式降级（各适配器得分：{'cn_ashare_table': 0, 'hk_traditional_text': 1, 'hk_results_announcement': 1}）",
+    "matched": 0,
+    "mismatched": 0,
+    "not_comparable": 25,
+    "total": 25,
+    "rows_extracted": 0
+  },
+  "alibaba_fy2027q1": {
+    "adapter": null,
+    "error": "StatementExtractionError: 未在提示页 106±5 内定位到「合併損益表」页首标题",
+    "matched": 0,
+    "mismatched": 0,
+    "not_comparable": 15,
+    "total": 15,
+    "rows_extracted": 0
+  }
+}

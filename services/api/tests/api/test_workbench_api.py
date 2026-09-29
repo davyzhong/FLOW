@@ -50,6 +50,100 @@ def test_management_watch_response_accepts_metric_deep_link() -> None:
     assert item.metric_code == "debt_asset_ratio"
 
 
+def test_average_balance_metrics_follow_dictionary_calibers() -> None:
+    from decimal import Decimal
+
+    from flow_api.analysis.workbench import (
+        _dso_days,
+        _ratio_to_average_balance,
+    )
+
+    facts = {
+        "is.revenue": Decimal("280"),
+        "bs.ar": Decimal("160"),
+        "bs.ar__prev": Decimal("120"),
+        "bs.total_assets": Decimal("1000"),
+        "bs.total_assets__prev": Decimal("800"),
+    }
+    # DSO = 360 / (收入 / 平均应收账款)；总资产周转率以平均资产为分母。
+    assert _dso_days(facts) == Decimal("180.0000")
+    assert _ratio_to_average_balance(facts, "is.revenue", "bs.total_assets") == Decimal(
+        "0.3111"
+    )
+
+
+def test_average_balance_metrics_are_unavailable_without_opening_balance() -> None:
+    from decimal import Decimal
+
+    from flow_api.analysis.workbench import (
+        _METRIC_CALCS,
+        _dso_days,
+        _ratio_to_average_balance,
+    )
+
+    facts = {"is.revenue": Decimal("280"), "bs.ar": Decimal("160")}
+    assert _dso_days(facts) is None
+    assert _ratio_to_average_balance(facts, "is.revenue", "bs.ar") is None
+    assert _METRIC_CALCS["roe"](
+        {"is.net_profit": Decimal("50"), "bs.equity": Decimal("100")}
+    ) is None
+    assert _METRIC_CALCS["current_ratio"](
+        {"bs.current_assets": Decimal("100"), "bs.current_liab": Decimal("0")}
+    ) is None
+    assert _METRIC_CALCS["free_cash_flow"]({"cf.ocf": Decimal("60")}) is None
+
+
+def test_all_available_essential_workbench_calculations_use_statement_facts() -> None:
+    from decimal import Decimal
+
+    from flow_api.analysis.workbench import _METRIC_CALCS
+
+    facts = {
+        "is.revenue": Decimal("280"),
+        "is.revenue__prev": Decimal("250"),
+        "is.net_profit": Decimal("50"),
+        "is.net_profit__prev": Decimal("40"),
+        "is.gross_profit": Decimal("120"),
+        "bs.equity": Decimal("100"),
+        "bs.equity__prev": Decimal("80"),
+        "bs.current_assets": Decimal("100"),
+        "bs.current_liab": Decimal("50"),
+        "bs.ar": Decimal("160"),
+        "bs.ar__prev": Decimal("120"),
+        "bs.total_liab": Decimal("50"),
+        "bs.total_assets": Decimal("100"),
+        "bs.total_assets__prev": Decimal("80"),
+        "cf.ocf": Decimal("60"),
+        "cf.capex": Decimal("30"),
+    }
+
+    assert _METRIC_CALCS["revenue_growth"](facts) == Decimal("0.1200")
+    assert _METRIC_CALCS["net_profit_growth"](facts) == Decimal("0.2500")
+    assert _METRIC_CALCS["gross_margin"](facts) == Decimal("0.4286")
+    assert _METRIC_CALCS["net_margin"](facts) == Decimal("0.1786")
+    assert _METRIC_CALCS["roe"](facts) == Decimal("0.5556")
+    assert _METRIC_CALCS["debt_asset_ratio"](facts) == Decimal("0.5000")
+    assert _METRIC_CALCS["current_ratio"](facts) == Decimal("2.0000")
+    assert _METRIC_CALCS["dso_days"](facts) == Decimal("180.0000")
+    assert _METRIC_CALCS["ocf_net_profit_ratio"](facts) == Decimal("1.2000")
+    assert _METRIC_CALCS["free_cash_flow"](facts) == Decimal("30.0000")
+
+
+def test_unavailable_workbench_calculation_reasons_distinguish_no_formula() -> None:
+    from decimal import Decimal
+
+    from flow_api.analysis.workbench import _METRIC_CALCS
+
+    no_opening_equity = {
+        "is.net_profit": Decimal("50"),
+        "bs.equity": Decimal("100"),
+    }
+    assert _METRIC_CALCS["roe"](no_opening_equity) is None
+    assert _METRIC_CALCS["ocf_net_profit_ratio"](
+        {"cf.ocf": Decimal("5"), "is.net_profit": Decimal("-2")}
+    ) is None
+
+
 @pytest.fixture(scope="module", autouse=True)
 def migrated_database() -> None:
     command.upgrade(Config("alembic.ini"), "head")
@@ -103,6 +197,15 @@ async def test_workbench_returns_four_questions(
     body = response.json()
     assert [q["key"] for q in body["questions"]] == ["growth", "profit", "capital", "cash"]
     assert body["report"]["company_name"] == "顺丰控股"
+    metrics = [metric for question in body["questions"] for metric in question["metrics"]]
+    assert len(metrics) == 10
+    for metric in metrics:
+        if metric["available"]:
+            assert metric["value"] is not None
+            assert metric["unavailable_reason"] is None
+        else:
+            assert metric["value"] is None
+            assert metric["unavailable_reason"]
     # 事实核对：capital 域的资产负债率可算（归一化事实齐备）
     capital = next(q for q in body["questions"] if q["key"] == "capital")
     debt = next(m for m in capital["metrics"] if m["metric_code"] == "debt_asset_ratio")

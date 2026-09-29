@@ -34,11 +34,25 @@ seed() {
     --report-kind "$4" --period-label "$5"
 }
 
+seed_file() {
+  # $1 YAML 路径（仓库相对或绝对） $2 公司 $3 股票代码 $4 报告类型 $5 期间
+  "${PY[@]}" scripts/seed_statement_reports.py \
+    --yaml "$1" \
+    --company "$2" --stock-code "$3" \
+    --report-kind "$4" --period-label "$5"
+}
+
 seed sf_2026q1_statements.yaml       顺丰控股   002352.SZ   一季报       2026Q1
 seed tencent_2026q2_statements.yaml  腾讯控股   0700.HK     中期业绩公告 2026Q2
-seed jdl_2025fy_statements.yaml      京东物流   2618.HK     年报         FY2025
+seed_file validation/financial_reports/corrections/jdl_2025fy_statements_v3.yaml \
+  京东物流 2618.HK 年报 FY2025
 for y in 2019 2020 2021 2022 2023 2024 2025 2026; do
-  seed "alibaba_${y}fy_statements.yaml" 阿里巴巴 9988.HK 年报 "FY${y}"
+  if [ "$y" = "2023" ]; then
+    seed_file validation/financial_reports/corrections/alibaba_2023fy_statements_v2.yaml \
+      阿里巴巴 9988.HK 年报 "FY${y}"
+  else
+    seed "alibaba_${y}fy_statements.yaml" 阿里巴巴 9988.HK 年报 "FY${y}"
+  fi
 done
 for y in 2021 2022 2023; do
   seed "cainiao_${y}fy_statements.yaml" 菜鸟集团 PVT.CAINIAO 招股书申报稿 "FY${y}"

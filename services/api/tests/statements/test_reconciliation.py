@@ -78,6 +78,34 @@ def test_critical_imbalance_blocks_publish() -> None:
     assert quality.blockers == ("资产总计=负债合计+所有者权益合计 [期末余额]",)
 
 
+def test_comprehensive_income_imbalance_blocks_publish() -> None:
+    fake = ExtractionResult(
+        adapter_id="hk_traditional_text",
+        unit_note="人民币千元",
+        statements={
+            "合并资产负债表": [],
+            "合并利润表": [],
+            "合并综合收益表": [],
+            "合并现金流量表": [],
+        },
+        checks=(
+            ExtractionCheck(
+                "年度綜合收益=年度利潤+其他綜合收益 [本期发生额]",
+                90,
+                100,
+                "不一致",
+            ),
+        ),
+        warnings=(),
+        page_count=1,
+        source_sha256="b" * 64,
+    )
+
+    quality = evaluate_report_quality(fake, report_kind="年报")
+
+    assert "年度綜合收益=年度利潤+其他綜合收益 [本期发生额]" in quality.blockers
+
+
 def test_unknown_report_kind_rejected() -> None:
     result = extract_statements(_load("sf_002352/SF_2026_Q1_report.pdf"))
     with pytest.raises(ValueError, match="未知报告种类"):

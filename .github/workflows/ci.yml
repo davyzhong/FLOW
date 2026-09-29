@@ -107,9 +107,10 @@ jobs:
       - run: make test-data-contract
 
   # 同上：含 tests/fixtures 大麦套件，实测 20 分钟不足
+  # 2026-09-29 用户批准：实测 32→37→40+ 分钟贴近 40 分钟上限（曾两次超时取消整 run），放宽至 45 对齐 integration
   intake-e2e:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
@@ -301,7 +302,9 @@ jobs:
       - uses: astral-sh/setup-uv@v6
         with:
           python-version: "3.13"
-          enable-cache: true
+          # 2026-09-29 用户批准：本 job 只跑 pnpm/playwright、从不执行 uv 命令，
+          # 开缓存会让 setup-uv 的 post-run 保存步骤因缓存目录不存在而必失败。
+          enable-cache: false
       - uses: pnpm/action-setup@v4
         with:
           version: 10.17.1

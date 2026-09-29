@@ -1,0 +1,8 @@
+{"code":"DAMAI_GROUP","name":"大麦物流集团","unit_type":"group","parent_code":null,"status":"active","synthetic":true}
+{"code":"BU-01","name":"国际供应链事业部","unit_type":"business_unit","parent_code":"DAMAI_GROUP","status":"active","synthetic":true}
+{"code":"BU-02","name":"跨境包裹事业部","unit_type":"business_unit","parent_code":"DAMAI_GROUP","status":"active","synthetic":true}
+{"code":"BU-03","name":"国内仓配事业部","unit_type":"business_unit","parent_code":"DAMAI_GROUP","status":"active","synthetic":true}
+{"code":"BU-04","name":"末端配送与冷链事业部","unit_type":"business_unit","parent_code":"DAMAI_GROUP","status":"active","synthetic":true}
+{"code":"FINANCE","name":"财务管理中心","unit_type":"department","parent_code":"DAMAI_GROUP","status":"active","synthetic":true}
+{"code":"DATA","name":"经营分析中心","unit_type":"department","parent_code":"DAMAI_GROUP","status":"active","synthetic":true}
+{"code":"IT","name":"数字化与系统运营部","unit_type":"department","parent_code":"DAMAI_GROUP","status":"active","synthetic":true}
