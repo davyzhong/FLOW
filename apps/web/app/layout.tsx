@@ -8,6 +8,7 @@ import "@fontsource-variable/jetbrains-mono";
 import "@fontsource-variable/noto-sans-sc";
 import "./globals.css";
 import "../components/dashboard/dashboard.css";
+import "../components/cockpit/cockpit.css";
 
 export const dynamic = "force-dynamic";
 

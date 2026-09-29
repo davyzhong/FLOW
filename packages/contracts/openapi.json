@@ -1086,6 +1086,148 @@
         }
       }
     },
+    "/api/v1/cockpit/overview": {
+      "get": {
+        "tags": [
+          "cockpit"
+        ],
+        "summary": "Cockpit Overview",
+        "description": "集团总览：KPI 三基准 + 趋势 + 经营结论条（一次聚合，不 N+1）。",
+        "operationId": "cockpit_overview_api_v1_cockpit_overview_get",
+        "parameters": [
+          {
+            "name": "period_view",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "month",
+                "ytd"
+              ],
+              "type": "string",
+              "default": "ytd",
+              "title": "Period View"
+            }
+          },
+          {
+            "name": "organization_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Organization Id"
+            }
+          },
+          {
+            "name": "customer_segment_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Customer Segment Id"
+            }
+          },
+          {
+            "name": "logistics_product_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Logistics Product Id"
+            }
+          },
+          {
+            "name": "region_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Region Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CockpitOverviewResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        }
+      }
+    },
     "/api/v1/investigations": {
       "get": {
         "tags": [
@@ -5783,6 +5925,305 @@
           "jobs"
         ],
         "title": "BuildJobListResponse"
+      },
+      "CockpitComparisons": {
+        "properties": {
+          "yoy": {
+            "$ref": "#/components/schemas/DashboardValue"
+          },
+          "mom": {
+            "$ref": "#/components/schemas/DashboardValue"
+          },
+          "percentile": {
+            "$ref": "#/components/schemas/DashboardValue"
+          }
+        },
+        "type": "object",
+        "required": [
+          "yoy",
+          "mom",
+          "percentile"
+        ],
+        "title": "CockpitComparisons"
+      },
+      "CockpitConclusion": {
+        "properties": {
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "findings": {
+            "items": {
+              "$ref": "#/components/schemas/CockpitConclusionFinding"
+            },
+            "type": "array",
+            "title": "Findings"
+          },
+          "tone": {
+            "type": "string",
+            "title": "Tone",
+            "default": "neutral"
+          }
+        },
+        "type": "object",
+        "required": [
+          "text"
+        ],
+        "title": "CockpitConclusion"
+      },
+      "CockpitConclusionFinding": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "investigation_path": {
+            "type": "string",
+            "title": "Investigation Path"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "investigation_path"
+        ],
+        "title": "CockpitConclusionFinding"
+      },
+      "CockpitKpiCard": {
+        "properties": {
+          "metric_code": {
+            "type": "string",
+            "title": "Metric Code"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "category": {
+            "type": "string",
+            "title": "Category"
+          },
+          "unit": {
+            "type": "string",
+            "title": "Unit"
+          },
+          "primary": {
+            "$ref": "#/components/schemas/DashboardValue"
+          },
+          "comparisons": {
+            "$ref": "#/components/schemas/CockpitComparisons"
+          },
+          "polarity": {
+            "type": "string",
+            "title": "Polarity",
+            "description": "positive/negative/neutral：决定比较值着色方向"
+          },
+          "control_status": {
+            "type": "string",
+            "title": "Control Status",
+            "description": "ok/near/breach/not_ready"
+          },
+          "control_line": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DashboardValue"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "caliber_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Caliber Note"
+          },
+          "source_label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Label"
+          },
+          "snapshot_id": {
+            "type": "string",
+            "title": "Snapshot Id",
+            "description": "可追溯铁律：必填"
+          }
+        },
+        "type": "object",
+        "required": [
+          "metric_code",
+          "title",
+          "category",
+          "unit",
+          "primary",
+          "comparisons",
+          "polarity",
+          "control_status",
+          "snapshot_id"
+        ],
+        "title": "CockpitKpiCard"
+      },
+      "CockpitOverviewResponse": {
+        "properties": {
+          "state": {
+            "type": "string",
+            "title": "State"
+          },
+          "context": {
+            "$ref": "#/components/schemas/DashboardContext"
+          },
+          "data_status": {
+            "$ref": "#/components/schemas/DataStatus"
+          },
+          "kpi_cards": {
+            "items": {
+              "$ref": "#/components/schemas/CockpitKpiCard"
+            },
+            "type": "array",
+            "title": "Kpi Cards"
+          },
+          "trends": {
+            "items": {
+              "$ref": "#/components/schemas/CockpitTrend"
+            },
+            "type": "array",
+            "title": "Trends"
+          },
+          "conclusion": {
+            "$ref": "#/components/schemas/CockpitConclusion"
+          },
+          "source_notice": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Notice"
+          }
+        },
+        "type": "object",
+        "required": [
+          "state",
+          "context",
+          "data_status",
+          "conclusion"
+        ],
+        "title": "CockpitOverviewResponse"
+      },
+      "CockpitTrend": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "unit": {
+            "type": "string",
+            "title": "Unit"
+          },
+          "series": {
+            "items": {
+              "$ref": "#/components/schemas/CockpitTrendSeries"
+            },
+            "type": "array",
+            "title": "Series"
+          },
+          "degradation_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Degradation Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "unit"
+        ],
+        "title": "CockpitTrend"
+      },
+      "CockpitTrendPoint": {
+        "properties": {
+          "period": {
+            "type": "string",
+            "title": "Period"
+          },
+          "value": {
+            "type": "number",
+            "title": "Value"
+          },
+          "display_value": {
+            "type": "string",
+            "title": "Display Value"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "ready"
+          }
+        },
+        "type": "object",
+        "required": [
+          "period",
+          "value",
+          "display_value"
+        ],
+        "title": "CockpitTrendPoint"
+      },
+      "CockpitTrendSeries": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "unit": {
+            "type": "string",
+            "title": "Unit"
+          },
+          "points": {
+            "items": {
+              "$ref": "#/components/schemas/CockpitTrendPoint"
+            },
+            "type": "array",
+            "title": "Points"
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "title",
+          "unit",
+          "points"
+        ],
+        "title": "CockpitTrendSeries"
       },
       "ColumnProfileResponse": {
         "properties": {

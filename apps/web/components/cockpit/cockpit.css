@@ -1,0 +1,551 @@
+/* S01 CFO 驾驶舱（批次 A）
+ * 设计依据：docs/05_design/2026-09-29-cfo-cockpit-design.md §5 四段式 + §6 组件规格
+ * 视觉规范：原型 v2.0（深蓝侧栏 + 白底 + 12 栅格 + 圆角 8-12px）
+ * 状态语义：红=突破管控线 / 黄=接近 / 绿=正常 / 灰=未就绪；颜色不作为唯一信息载体
+ */
+
+.cockpit {
+  --cp-blue: #2563eb;
+  --cp-green: #16a34a;
+  --cp-red: #dc2626;
+  --cp-warn: #d97706;
+  --cp-gray: #b0b0b0;
+  --cp-line: #e2e8f0;
+  --cp-ink: #0f172a;
+  --cp-mut: #64748b;
+  --cp-bg: #f5f7fa;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 18px 22px 40px;
+  max-width: 1360px;
+  margin: 0 auto;
+  color: var(--cp-ink);
+}
+
+/* ── 五态 ─────────────────────────── */
+.cockpit--state {
+  align-items: center;
+  justify-content: center;
+  min-height: 320px;
+  gap: 12px;
+  color: var(--cp-mut);
+}
+.cockpit--error {
+  color: var(--cp-red);
+}
+.cockpit--error button {
+  border: 1px solid var(--cp-red);
+  background: #fff;
+  color: var(--cp-red);
+  border-radius: 8px;
+  padding: 6px 16px;
+  cursor: pointer;
+  font-size: 13px;
+}
+.cockpit__hint {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+/* ── 演示数据源标注（不解除 C 级门禁） ── */
+.cockpit__notice {
+  background: #fef3c7;
+  border: 1px solid #fcd34d;
+  color: #92400e;
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-size: 12.5px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.cockpit__head h1 {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 4px;
+}
+.cockpit__meta {
+  margin: 0;
+  font-size: 12px;
+  color: var(--cp-mut);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── 段标题 ─────────────────────────── */
+.section-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.section-heading > div {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.section-heading span {
+  font-size: 11px;
+  color: var(--cp-mut);
+  font-weight: 700;
+}
+.section-heading h3 {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+}
+.section-heading small {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+/* ── KPI 卡 ─────────────────────────── */
+.kpi-section {
+  display: flex;
+  flex-direction: column;
+}
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+@media (max-width: 1100px) {
+  .kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.kpi {
+  position: relative;
+  background: #fff;
+  border: 1px solid var(--cp-line);
+  border-radius: 12px;
+  padding: 0;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+.kpi::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--cp-blue);
+}
+.kpi.is-breach::before {
+  background: var(--cp-red);
+}
+.kpi.is-near::before {
+  background: var(--cp-warn);
+}
+.kpi.is-notready::before {
+  background: var(--cp-gray);
+}
+.kpi__open {
+  display: block;
+  width: 100%;
+  border: 0;
+  background: none;
+  text-align: left;
+  padding: 13px 15px;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+.kpi__open:hover {
+  background: #f8fafc;
+}
+.kpi__open:focus-visible {
+  outline: 2px solid var(--cp-blue);
+  outline-offset: -2px;
+}
+.kpi__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--cp-mut);
+}
+.kpi__line {
+  font-size: 10.5px;
+  color: #94a3b8;
+  white-space: nowrap;
+}
+.kpi h4 {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--cp-mut);
+  margin: 5px 0 0;
+}
+.kpi__value {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 6px 0 4px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.2px;
+}
+.kpi__value small {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--cp-mut);
+  margin-left: 4px;
+}
+.kpi__cmps {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+.cmp {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  padding: 2.5px 7px;
+  border-radius: 6px;
+  font-weight: 600;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.cmp small {
+  font-weight: 400;
+  opacity: 0.75;
+}
+.cmp.is-good {
+  background: #dcfce7;
+  color: #15803d;
+}
+.cmp.is-bad {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+.cmp.is-neutral {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+.cmp[data-status="unavailable"] {
+  background: #f1f5f9;
+  color: #64748b;
+}
+.cmp__status {
+  font-style: normal;
+  font-size: 10px;
+  margin-left: 3px;
+  opacity: 0.8;
+}
+.kpi__caliber {
+  font-size: 10.5px;
+  color: #94a3b8;
+  margin-top: 7px;
+  line-height: 1.5;
+}
+.kpi__source {
+  font-size: 10.5px;
+  color: #b45309;
+  margin-top: 3px;
+}
+.kpi__peek {
+  position: absolute;
+  right: 10px;
+  bottom: 8px;
+  font-size: 10px;
+  color: var(--cp-blue);
+}
+.kpi.is-untraceable {
+  opacity: 0.85;
+  background: #fef2f2;
+  border-color: #fecaca;
+  padding: 13px 15px;
+}
+.kpi.is-untraceable .kpi__value {
+  font-size: 15px;
+  color: var(--cp-red);
+}
+
+/* ── 趋势 ─────────────────────────── */
+.trend-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  gap: 12px;
+}
+.trend {
+  background: #fff;
+  border: 1px solid var(--cp-line);
+  border-radius: 12px;
+  padding: 14px 16px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+  min-width: 0;
+}
+.trend header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+.trend h4 {
+  font-size: 13.5px;
+  font-weight: 600;
+  margin: 0;
+  color: #334155;
+}
+.trend header small {
+  font-size: 11px;
+  color: #94a3b8;
+}
+.trend svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.trend.is-unavailable .trend__msg {
+  font-size: 12.5px;
+  color: var(--cp-mut);
+  margin: 18px 0;
+  text-align: center;
+}
+
+/* ── 经营结论条 ─────────────────────────── */
+.concl {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(90deg, #1d4ed8, #3b82f6);
+  color: #fff;
+  border-radius: 12px;
+  padding: 13px 18px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+.concl.is-attention {
+  background: linear-gradient(90deg, #b45309, #f59e0b);
+}
+.concl.is-risk {
+  background: linear-gradient(90deg, #b91c1c, #ef4444);
+}
+.concl__icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  flex: none;
+}
+.concl__text {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.6;
+}
+.concl__refs {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.concl__ref {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #fff;
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.concl__ref:hover {
+  background: rgba(255, 255, 255, 0.32);
+}
+
+/* ── 穿透抽屉 ─────────────────────────── */
+.drill__mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.42);
+  z-index: 900;
+}
+.drill {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 430px;
+  max-width: 92vw;
+  height: 100vh;
+  background: #fff;
+  box-shadow: -8px 0 30px rgba(15, 23, 42, 0.16);
+  z-index: 901;
+  display: flex;
+  flex-direction: column;
+}
+.drill__head {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--cp-line);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.drill__head h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 3px;
+}
+.drill__value {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--cp-blue);
+  font-variant-numeric: tabular-nums;
+}
+.drill__value small {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--cp-mut);
+  margin-left: 4px;
+}
+.drill__close {
+  border: 0;
+  background: #f1f5f9;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  color: var(--cp-mut);
+  flex: none;
+}
+.drill__close:hover {
+  background: #e2e8f0;
+}
+.drill__body {
+  flex: 1;
+  overflow: auto;
+  padding: 16px 20px 30px;
+}
+.drill__body h4 {
+  font-size: 12.5px;
+  color: #334155;
+  margin: 16px 0 8px;
+  font-weight: 700;
+}
+.drill__body h4:first-child {
+  margin-top: 0;
+}
+.drill__row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 12.5px;
+  padding: 6px 0;
+  border-bottom: 1px dashed var(--cp-line);
+}
+.drill__row span:first-child {
+  color: var(--cp-mut);
+  flex: none;
+}
+.drill__row span:last-child {
+  text-align: right;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  word-break: break-all;
+}
+.drill__note {
+  font-size: 12.5px;
+  line-height: 1.75;
+  color: #475569;
+  margin: 0 0 6px;
+}
+.drill__note--muted {
+  color: #94a3b8;
+  font-size: 11.5px;
+}
+.drill__link {
+  display: inline-block;
+  margin-top: 5px;
+  color: var(--cp-blue);
+  font-size: 12px;
+  text-decoration: none;
+}
+.drill__link:hover {
+  text-decoration: underline;
+}
+
+@media print {
+  .drill,
+  .drill__mask,
+  .kpi__peek {
+    display: none !important;
+  }
+  .cockpit {
+    max-width: none;
+  }
+}
+
+/* ── 全局筛选条 ─────────────────────────── */
+.cp-filters {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  background: #fff;
+  border: 1px solid var(--cp-line);
+  border-radius: 10px;
+  padding: 9px 14px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+}
+.cp-filters__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12.5px;
+  color: var(--cp-mut);
+}
+.cp-filters__item select,
+.cp-filters__item input {
+  border: 1px solid var(--cp-line);
+  border-radius: 7px;
+  padding: 4px 8px;
+  font-size: 12.5px;
+  color: var(--cp-ink);
+  background: #fff;
+  min-width: 92px;
+}
+.cp-filters__item input:focus-visible,
+.cp-filters__item select:focus-visible {
+  outline: 2px solid var(--cp-blue);
+  outline-offset: 0;
+}
+.cp-filters__hint {
+  margin: 0 0 0 auto;
+  font-size: 11px;
+  color: #94a3b8;
+}
+@media (max-width: 900px) {
+  .cp-filters__hint {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
+/* ── 补齐 BEM 孤儿类（css-class-coverage 守护） ─────────────────── */
+.cmp__value {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+.cockpit--empty {
+  color: var(--cp-mut);
+}
+.cockpit__trends {
+  display: flex;
+  flex-direction: column;
+}
+.kpi__cat {
+  font-size: 12px;
+  color: var(--cp-mut);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

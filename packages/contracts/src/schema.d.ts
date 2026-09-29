@@ -292,6 +292,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/cockpit/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Cockpit Overview
+         * @description 集团总览：KPI 三基准 + 趋势 + 经营结论条（一次聚合，不 N+1）。
+         */
+        get: operations["cockpit_overview_api_v1_cockpit_overview_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/investigations": {
         parameters: {
             query?: never;
@@ -1551,6 +1571,116 @@ export interface components {
         BuildJobListResponse: {
             /** Jobs */
             jobs: components["schemas"]["BuildJobLine"][];
+        };
+        /** CockpitComparisons */
+        CockpitComparisons: {
+            yoy: components["schemas"]["DashboardValue"];
+            mom: components["schemas"]["DashboardValue"];
+            percentile: components["schemas"]["DashboardValue"];
+        };
+        /** CockpitConclusion */
+        CockpitConclusion: {
+            /** Text */
+            text: string;
+            /** Findings */
+            findings?: components["schemas"]["CockpitConclusionFinding"][];
+            /**
+             * Tone
+             * @default neutral
+             */
+            tone: string;
+        };
+        /** CockpitConclusionFinding */
+        CockpitConclusionFinding: {
+            /** Id */
+            id: string;
+            /** Title */
+            title: string;
+            /** Investigation Path */
+            investigation_path: string;
+        };
+        /** CockpitKpiCard */
+        CockpitKpiCard: {
+            /** Metric Code */
+            metric_code: string;
+            /** Title */
+            title: string;
+            /** Category */
+            category: string;
+            /** Unit */
+            unit: string;
+            primary: components["schemas"]["DashboardValue"];
+            comparisons: components["schemas"]["CockpitComparisons"];
+            /**
+             * Polarity
+             * @description positive/negative/neutral：决定比较值着色方向
+             */
+            polarity: string;
+            /**
+             * Control Status
+             * @description ok/near/breach/not_ready
+             */
+            control_status: string;
+            control_line?: components["schemas"]["DashboardValue"] | null;
+            /** Caliber Note */
+            caliber_note?: string | null;
+            /** Source Label */
+            source_label?: string | null;
+            /**
+             * Snapshot Id
+             * @description 可追溯铁律：必填
+             */
+            snapshot_id: string;
+        };
+        /** CockpitOverviewResponse */
+        CockpitOverviewResponse: {
+            /** State */
+            state: string;
+            context: components["schemas"]["DashboardContext"];
+            data_status: components["schemas"]["DataStatus"];
+            /** Kpi Cards */
+            kpi_cards?: components["schemas"]["CockpitKpiCard"][];
+            /** Trends */
+            trends?: components["schemas"]["CockpitTrend"][];
+            conclusion: components["schemas"]["CockpitConclusion"];
+            /** Source Notice */
+            source_notice?: string | null;
+        };
+        /** CockpitTrend */
+        CockpitTrend: {
+            /** Status */
+            status: string;
+            /** Unit */
+            unit: string;
+            /** Series */
+            series?: components["schemas"]["CockpitTrendSeries"][];
+            /** Degradation Message */
+            degradation_message?: string | null;
+        };
+        /** CockpitTrendPoint */
+        CockpitTrendPoint: {
+            /** Period */
+            period: string;
+            /** Value */
+            value: number;
+            /** Display Value */
+            display_value: string;
+            /**
+             * Status
+             * @default ready
+             */
+            status: string;
+        };
+        /** CockpitTrendSeries */
+        CockpitTrendSeries: {
+            /** Key */
+            key: string;
+            /** Title */
+            title: string;
+            /** Unit */
+            unit: string;
+            /** Points */
+            points: components["schemas"]["CockpitTrendPoint"][];
         };
         /** ColumnProfileResponse */
         ColumnProfileResponse: {
@@ -4493,6 +4623,52 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["DashboardErrorResponse"];
+                };
+            };
+        };
+    };
+    cockpit_overview_api_v1_cockpit_overview_get: {
+        parameters: {
+            query?: {
+                period_view?: "month" | "ytd";
+                organization_id?: string | null;
+                customer_segment_id?: string | null;
+                logistics_product_id?: string | null;
+                region_id?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CockpitOverviewResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorDetail"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorDetail"];
                 };
             };
         };
