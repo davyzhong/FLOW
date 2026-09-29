@@ -10,23 +10,23 @@ implementation:
 inputs:
   freeze_generator:
     path: scripts/build_public_financial_sample_freeze.py
-    sha256: 50f8be4db97625fb037ebdbaaffabfd9b9c01f29693afb8db4906d8464755aa1
+    sha256: 459d8be151e0ba096df2e43f0f5f099818b9b1fa55b211781f4693f7ce537e72
   l1_generator:
     path: scripts/build_answer_set_l1.py
-    sha256: 54c38a07e79e9c7d6e57918df4381add77b1ded92a16d5671555537546e6a7cf
+    sha256: ea37336c6289ab2b3fe32ddc3a0ad30a9dc97771e4f36f6acbd16af92b097566
   row_identity_adapter:
     path: scripts/public_statement_row_identity.py
     sha256: 30af547460ba8332b9ccc9b7640345433b6f6cbb92df2ded962aeff441f35910
   l0_l1_benchmark:
     path: scripts/accuracy_benchmark.py
-    sha256: 6f8d6cc5c313cf5c09ee04a3e6deff215ba84cff8d772d27897ac1e92bbd5542
+    sha256: 8962c94b31a5e7e21473663c1c6990c3e205fe2c86dae876780c3943b321d123
   source_identity_map:
     path: config/statements/answer_set_sources.yaml
-    sha256: 760eecf6d4beb485307ea6e451b860b8d2d7ad39fdd53ba2908d96da6e5f6ec1
+    sha256: d347b14aad567f64c89304a0153bed9ca701d0ef26979edcd4d0aa4a6ebe3837
   answer_set_l1:
-    path: config/statements/answer_set_l1_v5.yaml
-    sha256: 788f2d004fd8b9c9f9a9b6006df3f9f2b419d3458465aa414319fae2b3b49c23
-    version: 5
+    path: config/statements/answer_set_l1_v6.yaml
+    sha256: ab6c197e894075041764c2d5db7afa1edd5a53e981fc86be9cb0c9cd77453473
+    version: 6
   row_identity_corrections:
     path: validation/financial_reports/corrections/public-row-identity-map-v1.csv
     sha256: 76410a8886940e2e11b26485ef3d2a276439fc0c1f5a7dd75df6cf47c49a4753
@@ -34,11 +34,11 @@ inputs:
     path: validation/financial_reports/manifest.yaml
     sha256: 3eca6b08bebc935a9b889af4e2258f09547dbb1f98488bf5b2dfc0da1ad24ef6
     yaml_parse_status: valid
-report_count: 14
+report_count: 15
 coverage:
-  l0_values: 1532
-  l1_values: 1776
-  l1_located: 1776
+  l0_values: 1579
+  l1_values: 1823
+  l1_located: 1823
   l1_unlocated: 0
 reports:
 - sample: sf_2026q1
@@ -64,6 +64,18 @@ reports:
   source_values: 40
   l1_values: 40
   l1_located: 40
+  l1_unlocated: 0
+- sample: zto_2026q1
+  stock_code: ZTO.US
+  period_label: 2026Q1
+  report_kind: 季度业绩公告
+  source_pdf: validation/financial_reports/original/zto_2026q1/ZTO_2026_Q1_results_announcement_c.pdf
+  source_pdf_sha256: 1f511d5a48dab761aaa6d3f918d63b69fce59569f2f311c693ab45e08f3277bc
+  active_yaml: docs/implementation/p5/zto_2026q1_statements.yaml
+  active_yaml_sha256: 05797ebdc42d057c2ad74776d5b79c92607580375db494864e603665b0037c06
+  source_values: 47
+  l1_values: 47
+  l1_located: 47
   l1_unlocated: 0
 - sample: jdl_2025fy
   stock_code: 2618.HK

@@ -92,8 +92,8 @@ class PublicRowIdentityCorrectionTests(unittest.TestCase):
         with TemporaryDirectory() as temporary:
             payload = build_l1_answer_set(
                 Path(temporary) / "answer-set.yaml",
-                version=5,
-                supersedes="config/statements/answer_set_l1_v4.yaml",
+                version=6,
+                supersedes="config/statements/answer_set_l1_v5.yaml",
             )
         entries = payload["entries"]
         cash_matches = [
@@ -116,12 +116,12 @@ class PublicRowIdentityCorrectionTests(unittest.TestCase):
         cainiao = cainiao_matches[0]
         self.assertEqual(
             (payload["version"], payload["supersedes"]),
-            (5, "config/statements/answer_set_l1_v4.yaml"),
+            (6, "config/statements/answer_set_l1_v5.yaml"),
         )
         self.assertEqual((cash["match_mode"], cash["page"]), ("strong", 43))
         self.assertEqual((cainiao["match_mode"], cainiao["page"]), ("strong", 466))
-        self.assertEqual(payload["coverage"]["values_total"], 1776)
-        self.assertEqual(payload["coverage"]["values_located"], 1776)
+        self.assertEqual(payload["coverage"]["values_total"], 1823)
+        self.assertEqual(payload["coverage"]["values_located"], 1823)
 
     def test_identity_map_is_derived_from_adjudicated_candidates(self) -> None:
         self.assertTrue(hasattr(ledger_builder, "public_row_identity_map_v1"))

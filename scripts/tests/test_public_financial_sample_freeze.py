@@ -63,11 +63,11 @@ class PublicFinancialSampleFreezeTests(unittest.TestCase):
         manifest = build_manifest(ROOT, implementation_sha=IMPLEMENTATION_SHA)
 
         self.assertEqual(manifest["implementation_sha"], IMPLEMENTATION_SHA)
-        self.assertEqual(manifest["report_count"], 14)
-        self.assertEqual(len(manifest["reports"]), 14)
-        self.assertEqual(manifest["coverage"]["l0_values"], 1532)
-        self.assertEqual(manifest["coverage"]["l1_values"], 1776)
-        self.assertEqual(manifest["coverage"]["l1_located"], 1776)
+        self.assertEqual(manifest["report_count"], 15)
+        self.assertEqual(len(manifest["reports"]), 15)
+        self.assertEqual(manifest["coverage"]["l0_values"], 1579)
+        self.assertEqual(manifest["coverage"]["l1_values"], 1823)
+        self.assertEqual(manifest["coverage"]["l1_located"], 1823)
         self.assertEqual(manifest["coverage"]["l1_unlocated"], 0)
 
         baba_periods = [
