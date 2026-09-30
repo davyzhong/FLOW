@@ -4,9 +4,24 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, model_validator
 
-MetricAggregation = Literal["sum", "closing_balance", "ratio"]
+# S01 财务指标目录 F1（work_item FINMETRIC--financial-metric-catalog）：
+# - aggregation 增 average：ROE/ROA/周转率必须用期初期末平均口径（设计文档 §6.3 修正项），
+#   用期末值会在增发/减资当年产生系统性误判。
+# - unit 增 percent/multiple/percentage_point：财务标准单位；缺这三个值时财务指标无法表达。
+MetricAggregation = Literal["sum", "closing_balance", "ratio", "average"]
 MetricTimeBehavior = Literal["flow", "balance"]
-MetricUnit = Literal["order", "unit", "CNY", "CNY/order", "ratio", "day"]
+MetricUnit = Literal[
+    "order",
+    "unit",
+    "CNY",
+    "CNY/order",
+    "ratio",
+    "day",
+    # S01 F1 新增：财务标准单位
+    "percent",           # 百分比（毛利率/净利率/资产负债率），小数口径，*100 展示
+    "multiple",          # 倍数（流动比率/利息保障倍数/权益乘数）
+    "percentage_point",  # 百分点（pp），用于同比变动量
+]
 DimensionName = Literal[
     "organization",
     "customer",
@@ -31,6 +46,10 @@ class MetricSpec(BaseModel):
     output_scale: int
     allowed_dimension_sets: tuple[tuple[DimensionName, ...], ...]
     budget_dimension_sets: tuple[tuple[DimensionName, ...], ...] = ()
+    # S01 F1：可复算铁律（设计文档 §2.2）。声明该指标参与的恒等式，
+    # 形如 ("roe_identity", ("net_margin", "asset_turnover", "equity_multiplier"))；
+    # 声明后由 tests/metrics 逐条断言，避免财务指标悄悄失去勾稽关系。
+    conservation_law: str | None = None
 
     @model_validator(mode="after")
     def validate_definition(self) -> MetricSpec:

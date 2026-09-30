@@ -76,9 +76,11 @@ def test_catalog_fingerprint_is_deterministic() -> None:
     second = module.load_metric_catalog(CATALOG_PATH)
 
     assert module.metric_catalog_hash(first) == module.metric_catalog_hash(second)
+    # S01 F1：MetricSpec 新增 conservation_law 字段 → 目录指纹按设计变更
+    # （指纹的职责就是检测 schema/目录变更，见 FINMETRIC--financial-metric-catalog F1）
     assert (
         module.metric_catalog_hash(first)
-        == "4214ae85339eb7495defb69f1d59fdddec5e3183d5d4ba64c966be9f53270b38"
+        == "db2814bf873b90d85a47bef8b980e9dfef1a21b861950fc46911364886026294"
     )
     assert hashlib.sha256(CATALOG_PATH.read_bytes()).hexdigest() == (
         "705ee41b938d8496b870cb60f662bf14629299ed77351343792bbc07f5a22916"
