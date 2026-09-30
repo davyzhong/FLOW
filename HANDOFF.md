@@ -3,16 +3,92 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目尽调、优化与单 Agent 执行总交接
 doc_type: navigation
 status: current
-version: 5.19
+version: 5.20
 created_at: 2026-09-12
-updated_at: 2026-09-29
+updated_at: 2026-09-30
 owner: FLOW
 applies_to: repository
 ---
 
-# FLOW 项目尽调、优化与单 Agent 执行总交接｜2026-09-29 更新
+# FLOW 项目尽调、优化与单 Agent 执行总交接｜2026-09-30 更新
 
-## 最新续接记录（2026-09-29：U04 旧样本解析回归）
+## 最新续接记录（2026-09-30：CFO 驾驶舱抢队首 + 指标引擎 F1）
+
+**本节是当前唯一接续点，覆盖下方全部历史。** 驾驶舱线于 2026-09-30 00:14 抢在 U04 之前成为队首（用户裁决），U04 转「暂停·驾驶舱让位」，恢复条件 = 驾驶舱批次 A 完成（**批次 A 已于 01:00 完成并 17/17 CI 绿**）。
+
+### 当前任务
+
+按 `docs/50_plans/work_items/COCKPIT--cfo-dashboard-implementation.md` 与 `FINMETRIC--financial-metric-catalog.md` 推进驾驶舱产品化。**执行位置：`codex/damai-logistics-data-audit` 分支**（HEAD `45703016`），尚未合入 main。
+
+### 已完成（含证据）
+
+| # | 内容 | commit | 验证 |
+|---|---|---|---|
+| 1 | 实施方案文档 | `a80b551f` | docs m1 PASS |
+| 2 | 驾驶舱抢队首插入 CURRENT_ROADMAP v5.36（U04 转暂停） | `a80b551f` | 门禁 PASS |
+| 3 | 设计文档 v0.6 转 approved（用户批准） | `9832a710` | 门禁 PASS（解阻 depends_on） |
+| 4 | **批次 A**：聚合 endpoint + `/cockpit` 页面 + 组件 | `ae56e96f` | vitest 154/154 · pytest 24/24 |
+| 5 | CI 修复：CSS 作用域收敛 + ruff 导入序 | `b7dc4983` | **CI run `36601612612` 17/17 success** |
+| 6 | 批次 A 门禁达成记录 | `76f75bc7` | — |
+| 7 | **批次 C-1**：ECharts 6.1.0 + 10 类图表构建器 + 15 单测 | `d563b8dc` | vitest 169/169 · build ✅ |
+| 8 | 财务指标目录工作包 + CURRENT_ROADMAP 0a 行 | `0f5dde8c` | docs m1 PASS |
+| 9 | **F1**：指标引擎类型扩展（单位/聚合/公式注册表/守恒声明） | `45703016` | tests/metrics 69/69 · mypy 19 files |
+
+### 卡住的问题
+
+**F1 的 CI 尚未出结论**（run `36655793563`，核对时 11/17，`integration` / `metrics-known-answers` / `intake-e2e` / `data-contract` / `analysis-invariants` / `publishing-golden` 仍在跑或待判）。这批 job 都依赖 Postgres/MinIO，`Post` cleanup 步骤会让状态滞后 10–20 分钟——**上一轮曾把这种滞后误判为失败**。核对方式：
+
+```bash
+cd /Users/qiming/workspace/FLOW
+gh run view 36655793563 --json conclusion,jobs | python3 -c "
+import sys,json
+d=json.load(sys.stdin); print(d['status'], d.get('conclusion'))
+print([j['name'] for j in d['jobs'] if j['conclusion']!='success'])
+print(sum(1 for j in d['jobs'] if j['conclusion']=='success'),'/',len(d['jobs']))"
+```
+
+真实失败取证（`--log-failed` 在 run 未完成时不可用）：
+
+```bash
+gh api repos/davyzhong/FLOW/actions/jobs/<jobId>/logs --allow-escape-sequences \
+  | sed 's/\x1b\[[0-9;]*[a-zA-Z]//g' | grep -E "^E |FAILED|assert"
+```
+
+### 下一步计划（严格串行）
+
+1. **核验 F1 CI** → 绿则把 FINMETRIC 工作包 F1 标 completed；红则读日志修复（参考下方踩坑记录）。
+2. **F2**：写 `config/metrics/financial_metrics_v1.yaml`（盈利能力 + 偿债 + 营运，约 16 个指标）+ 每个指标的守恒/勾稽测试。**开工前先核实大麦演示数据是否具备所需科目**（尤其利息费用，见工作包 Q3），不能映射的显式 `unavailable`，不补零。
+3. **F3**：同目录补费用 + 现金流（约 12 个）。
+4. **F4**：驾驶舱投影接入，逐步解锁环比/行业分位（当前永久 unavailable）+ 契约更新 + CI。
+5. **批次 C-2~C-5**：8 个模块页逐个交付，每批走批次 A 同级门禁。
+6. **批次 B**：安全规格 V1.1.1（用户已批准**新增 `cfo` 角色** + 3 个 `cockpit.action_item.*` Action）→ 独立审查 → 用户批准 → 实现 → route-inventory 登记。
+
+### 本轮踩过的坑（重要）
+
+1. **重复劳动**：11:38 接到「参考微信链接做驾驶舱设计」时**没有先查仓库**，独立做了一份 D055 + 两份规格文档；仓库里已有 v0.2/v0.3 设计 + 55KB 高保真原型（另一会话产出），且我的 D055「驾驶舱作为独立产品线」与已裁决的「驾驶舱 = 工作台高管呈现层，不是独立产品」**直接冲突**。已撤销（`mavis-trash`）、删除冲突改动（`git checkout`）、只保留增量价值。**教训：接到设计/实现任务先 `git log --all` + `git status` 查已有产出。**
+
+2. **CSS 全局污染**（CI 抓出，本地全绿）：`cockpit.css` 原在 `app/layout.tsx` 全局 import，裸类名（`.kpi`/`.trend`/`.concl`/`.cmp`/`.drill`）参与全局层叠，破坏既有 dashboard 视觉基线（`toHaveScreenshot`）与 axe 判定，**连锁 7 个 job 失败**。修复：改为组件级 import（`cockpit-overview-app.tsx` 内）。**教训：新增全局 CSS 必须用组件级 import，或类名全加模块前缀。**
+
+3. **CI 状态滞后误判**：把 `Post` cleanup 未完成的 job 当成失败，凭空怀疑 contracts 污染。**教训：先看 `status` 再看 `conclusion`；`in_progress` 的 job 不算失败。**
+
+4. **本地 DB 悬挂事务**：`flow_test` 库有 `idle in transaction` 残留连接（pid 28964）锁住 `source_record`，autovacuum 被阻塞，本地测试静默卡住 5+ 分钟。查法：`docker exec flow-postgres-1 psql -U flow -d flow_test -c "SELECT pid,state FROM pg_stat_activity WHERE datname='flow_test' AND state!='idle'"`。**教训：本地测试无输出超过 2 分钟先查 DB 锁，不要等。**
+
+5. **ECharts 类型极严**：`formatter` 回调签名与 series 联合类型导致 10 个构建器全部报错。解法：统一按 `ChartOption`（宽松侧）收口，而非逐条 `as unknown as`。另注意 `{...AXIS, axisLabel}` 的展开顺序——`axisLabel` 写在 `...AXIS` 之后才不被覆盖。
+
+6. **公式注册表写坏两次**：`def _roe_du pont`（非法标识符）导致文件无法导入；正则替换 `Literal[...]` 产生双逗号 `,,`。**教训：批量文本改代码后必须立即 `ruff check` + 导入验证，别攒到最后。**
+
+### 与下方历史的关系
+
+下方 0.4 夜间接手执行手册、0.3 交接、首轮快照等均为**历史记录**，其中关于 U04 / C 级 / ZTO 的进度仍然有效（U04 现为暂停状态）。驾驶舱线的全部权威信息在本节 + `COCKPIT--cfo-dashboard-implementation.md` + `FINMETRIC--financial-metric-catalog.md` + `docs/superpowers/plans/2026-09-30-cfo-cockpit-implementation-plan.md`。
+
+### 下一位 Agent 的第一条动作
+
+```bash
+cd /Users/qiming/workspace/FLOW
+git checkout codex/damai-logistics-data-audit 2>/dev/null || git switch codex/damai-logistics-data-audit
+gh run view 36655793563 --json conclusion,jobs   # 先确认 F1 CI 结论
+```
+
 
 **唯一 To-do（11项）**：1 ORG-LEDGER 完成；2 UX 收口完成；3 C级样本/证据审计 No-Go 结案（不代表出口通过）；4 U04 解析器适配与未调参留出首跑 **当前执行**；5 C级基准与最终 Go/No-Go 排队；6 P3真实数据扩张排队；7 K静态知识刷新与战略重基线排队；8 rnd_exp官方依据核验排队；9 U09/O05试点排队；10 U10证据决策排队；11内部月度工作台与真实周期验收排队。总计11项：已完成3、执行中1、排队7、外部条件受限0。
 
