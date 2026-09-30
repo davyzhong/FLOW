@@ -142,7 +142,7 @@ describe("CockpitOverviewApp", () => {
   it("点击 KPI 卡打开穿透抽屉并显示快照 ID", async () => {
     const load = vi.fn().mockResolvedValue(overview());
     render(<CockpitOverviewApp load={load} />);
-    const card = await screen.findByTestId("cockpit-kpi");
+    await screen.findByTestId("cockpit-kpi");
     fireEvent.click(screen.getByRole("button", { name: /营业收入/ }));
     const drawer = await screen.findByTestId("cockpit-drill");
     expect(drawer.textContent).toContain("ms-12345678-rest");
