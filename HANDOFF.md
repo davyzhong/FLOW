@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目尽调、优化与单 Agent 执行总交接
 doc_type: navigation
 status: current
-version: 5.23
+version: 5.24
 created_at: 2026-09-12
 updated_at: 2026-10-11
 owner: FLOW
@@ -20,7 +20,7 @@ applies_to: repository
 
 **F1 已完成**：旧 v1 指纹 `4214ae85…70b38` 保持稳定；API 时钟依赖注入、集成测试固定时间、专用冻结时钟 E2E 启动器解决了验收日期漂移。提交 `11129263` 的准确 SHA CI run `38147756845` 为 17/17 success；Ruff、mypy、shell 语法、文档 M1 通过。本地数据库集成测试因本机 5432 无 PostgreSQL 未运行；CI integration 与 dashboard 两项通过。
 
-**当前唯一子步骤：FINMETRIC F2**。先只读检查 `config/metrics/`、大麦发行版科目和已发布指标快照，确认利润/资产负债/现金流映射是否包含利息费用、平均资产/权益所需历史期。随后只实现可被现有科目与事实支持的盈利、偿债、营运指标；任何源数据缺失必须标为 unavailable 并解释原因，不补零。按指标规格增加可复算公式和勾稽断言，通过后先更新路线图并提交推送，再进入 F3。
+**当前唯一子步骤：FINMETRIC F2 来源对齐与覆盖验证**。只读盘点证实 `config/metrics/metric_dictionary_v1_1.yaml` 已有 50 条通用指标定义，含计划中的 interest coverage、EBITDA、ROE、CCC、DIO/DSO/DPO 等；大麦已有 40 项覆盖矩阵（FY2025 37/40、FY2026 40/40），但 `scripts/build_damai_metric_coverage.py` 仍从旧研究草案读取定义。大麦发行版/别名映射具备利息费用行，但注释明确它是财务费用 65% 的 synthetic 子项，不是独立总账证据。F2 应先更新计划并提交推送，再把覆盖生成器改为读取有效 v1.1 字典、复用既有 statement alias/公式 AST evaluator，补充公式勾稽和映射完整性检查；不得复制定义。数据缺失时标为 unavailable；synthetic 来源在产物中保留标注。完成准确覆盖与测试后再进入 F3。
 
 完成 F1 CI 后依次执行 FINMETRIC F2（先核对大麦科目，尤其利息费用；缺失标 unavailable，不补零）→ F3 → F4，再完成安全批次 B、模块 C-2～C-5 和 D。CFO 工作包完成后恢复 U04 盲评复评；C 级仍为 No-Go。常驻开发库不做清理、重置或迁移；数据库测试必须依赖隔离测试库。
 

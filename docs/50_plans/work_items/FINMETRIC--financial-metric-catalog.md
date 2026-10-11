@@ -3,7 +3,7 @@ doc_id: FLOW-WI-FINMETRIC-001
 title: 财务指标目录（驾驶舱前置）
 doc_type: work-item
 status: active
-version: 1.1
+version: 1.2
 created_at: 2026-09-30
 updated_at: 2026-10-11
 owner: FLOW
@@ -48,6 +48,26 @@ confidentiality: project-internal
 
 ## 范围
 
+### F2 来源裁决（2026-10-11）
+
+只读盘点发现本项目已有 `config/metrics/metric_dictionary_v1_1.yaml`，含 50 条
+`metrics_general` 指标定义；包括利息保障倍数、EBITDA/EBITDA 利润率、ROE、资产周转、
+DSO/DIO/DPO、CCC、流动/速动/现金比率等。本包不得再复制一份平行指标定义或公式。
+
+已有大麦覆盖生成器 `scripts/build_damai_metric_coverage.py` 与产物
+`config/metrics/damai_demo_metric_coverage_v1.yaml`，但生成器读取旧研究草案
+`docs/knowledge-base/02_research/synthesis/指标库初始数据集_v0_草案.yaml`，而非当前有效
+字典。其当前报告为 FY2025 37/40、FY2026 40/40。F2 的执行范围修订为：以 v1.1 作为公式、
+口径和定义事实源；修正覆盖生成器及必要测试，使大麦覆盖矩阵从有效字典生成；复用
+`config/statements/item_alias_map_v1.yaml#damai_syn`、现有 Decimal 公式 AST 引擎和映射
+校验；验证重点指标的勾稽恒等式，并对缺失输入保留 typed unavailable，不复制字典内容。
+
+大麦演示财报包含利息费用行，且 FY2025/FY2026 有期初/期末资产、权益、应收、存货和应付
+余额；但发行版注释声明利息费用是财务费用的 65% 合成子项，折旧按固定资产年率 10% 估算。
+因此相关比率可以用于产品功能验证，但产物和来源链必须标记 synthetic，不得表述为独立
+总账/真实企业财务证据。大麦事实输入是合并财报行项目，并非逐科目试算平衡表；与会计
+科目的连接通过规范 statement item 映射表达，汇总行不强行伪映射到单个总账科目。
+
 ### 1. 指标引擎类型扩展（前置）
 
 | 改动 | 内容 | 理由 |
@@ -89,7 +109,7 @@ confidentiality: project-internal
 | 批次 | 范围 | 门禁 |
 |---|---|---|
 | **F1** | 指标引擎类型扩展（单位/聚合/公式注册表/守恒断言）+ 回归 | mypy · ruff · 既有 metrics 测试零回归 · 新增引擎单测 |
-| **F2** | 财务指标目录 YAML（盈利能力 + 偿债 + 营运，约 16 个）+ 计算测试 | 每个指标有守恒/勾稽测试；与 `accounting_foundation_v1` 科目映射完整 |
+| **F2** | 复用有效指标字典，更新大麦覆盖生成器与覆盖/勾稽测试（盈利能力 + 偿债 + 营运） | 生成源为 v1.1；重点指标勾稽通过；标准 statement item 映射覆盖明确；缺失不补零；synthetic 来源可追溯 |
 | **F3** | 财务指标目录 YAML（费用 + 现金流，约 12 个）+ 计算测试 | 同上 |
 | **F4** | 驾驶舱投影接入（环比/行业分位逐步解锁）+ 契约更新 | cockpit 测试全绿 · contracts-check · 同 SHA CI 17/17 |
 
