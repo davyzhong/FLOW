@@ -232,6 +232,9 @@ class MetricCoverageResponse(BaseModel):
     generated_at: str
     facts_source: str
     alias_map: str
+    metrics_source: str | None = None
+    dictionary_id: str | None = None
+    metrics_source_sha256: str | None = None
     synthetic: bool = False
     caliber_notes: list[str]
     snapshots: list[CoverageSnapshot]

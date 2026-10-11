@@ -54,14 +54,17 @@ const DAMAI_COVERAGE = {
   dataset_id: "flow.damai_demo_metric_coverage.v1",
   title: "大麦物流 synthetic 演示指标覆盖矩阵",
   generator: "scripts/build_damai_metric_coverage.py",
-  generated_at: "2026-09-25T00:00:00",
+  generated_at: "2026-10-11T00:00:00+00:00",
   facts_source: "fixtures/damai/statements/（发行版合成财报）",
   alias_map: "config/statements/item_alias_map_v1.yaml#damai_syn",
+  metrics_source: "config/metrics/metric_dictionary_v1_1.yaml",
+  dictionary_id: "flow.metric_dictionary.v1",
+  metrics_source_sha256: "a".repeat(64),
   synthetic: true,
   caliber_notes: ["本矩阵为 synthetic 演示数据，非任何真实公司财报"],
   snapshots: [
-    { company: "damai_syn", period: "FY2025", unit: "百万元", computable: 22, total: 40 },
-    { company: "damai_syn", period: "FY2026", unit: "百万元", computable: 25, total: 40 },
+    { company: "damai_syn", period: "FY2025", unit: "百万元", computable: 42, total: 50 },
+    { company: "damai_syn", period: "FY2026", unit: "百万元", computable: 45, total: 50 },
   ],
   metrics: [
     {
@@ -144,7 +147,9 @@ describe("MetricLibraryApp 真实财报覆盖矩阵（P5）", () => {
     expect(await screen.findByText(/flow\.damai_demo_metric_coverage\.v1/)).toBeInTheDocument();
     expect(screen.getByText("合成演示数据")).toBeInTheDocument();
     expect(screen.getAllByText("大麦物流").length).toBeGreaterThan(0);
-    expect(screen.getByText("25/40")).toBeInTheDocument();
+    expect(screen.getByText("45/50")).toBeInTheDocument();
+    expect(screen.getByText(/config\/metrics\/metric_dictionary_v1_1\.yaml/)).toBeInTheDocument();
+    expect(screen.getAllByText("flow.metric_dictionary.v1").length).toBeGreaterThan(0);
     expect(screen.getByText("缺 bs.ar(open)")).toBeInTheDocument();
     expect(log.some((url) => url.includes("dataset=damai"))).toBe(true);
     expect(screen.queryByText("阿里巴巴")).not.toBeInTheDocument();

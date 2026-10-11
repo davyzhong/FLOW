@@ -1,9 +1,12 @@
 dataset_id: flow.damai_demo_metric_coverage.v1
 title: 大麦物流 synthetic 演示指标覆盖矩阵
 generator: scripts/build_damai_metric_coverage.py
-generated_at: '2026-09-26T03:11:24+00:00'
+generated_at: '2026-10-11T00:00:00+00:00'
 facts_source: fixtures/damai/statements/（发行版合成财报）
 alias_map: config/statements/item_alias_map_v1.yaml#damai_syn
+metrics_source: config/metrics/metric_dictionary_v1_1.yaml
+dictionary_id: flow.metric_dictionary.v1
+metrics_source_sha256: 380881bbffe99aa08b5ad1756a2e659058619bd77ab60592c83e60d497f5875a
 synthetic: true
 caliber_notes:
 - 本矩阵为 synthetic 演示数据，非任何真实公司财报
@@ -15,13 +18,13 @@ snapshots:
 - company: damai_syn
   period: FY2025
   unit: 百万元
-  computable: 37
-  total: 40
+  computable: 42
+  total: 50
 - company: damai_syn
   period: FY2026
   unit: 百万元
-  computable: 40
-  total: 40
+  computable: 45
+  total: 50
 metrics:
 - metric_code: current_ratio
   name: 流动比率
@@ -422,4 +425,104 @@ metrics:
       missing: null
     damai_syn FY2026:
       display: '4.33'
+      missing: null
+- metric_code: ccc_days
+  name: 现金周转周期
+  unit: 天
+  cells:
+    damai_syn FY2025:
+      display: '70'
+      missing: null
+    damai_syn FY2026:
+      display: '47'
+      missing: null
+- metric_code: ocf_interest_coverage
+  name: 现金流利息覆盖
+  unit: 倍
+  cells:
+    damai_syn FY2025:
+      display: '37.82'
+      missing: null
+    damai_syn FY2026:
+      display: '34.89'
+      missing: null
+- metric_code: ocf_total_debt_ratio
+  name: 现金流总债务比
+  unit: 倍
+  cells:
+    damai_syn FY2025:
+      display: '0.26'
+      missing: null
+    damai_syn FY2026:
+      display: '0.24'
+      missing: null
+- metric_code: roic
+  name: 投入资本回报率
+  unit: '%'
+  cells:
+    damai_syn FY2025:
+      display: null
+      missing: nopat
+    damai_syn FY2026:
+      display: null
+      missing: nopat
+- metric_code: eva
+  name: 经济增加值
+  unit: 元
+  cells:
+    damai_syn FY2025:
+      display: null
+      missing: nopat
+    damai_syn FY2026:
+      display: null
+      missing: nopat
+- metric_code: sgr
+  name: 可持续增长率
+  unit: '%'
+  cells:
+    damai_syn FY2025:
+      display: null
+      missing: identity_1
+    damai_syn FY2026:
+      display: null
+      missing: identity_1
+- metric_code: period_expense_ratio
+  name: 期间费用率
+  unit: '%'
+  cells:
+    damai_syn FY2025:
+      display: 7.6%
+      missing: null
+    damai_syn FY2026:
+      display: 7.6%
+      missing: null
+- metric_code: volume_growth
+  name: 销量增长率
+  unit: '%'
+  cells:
+    damai_syn FY2025:
+      display: null
+      missing: volume_current
+    damai_syn FY2026:
+      display: null
+      missing: volume_current
+- metric_code: price_change_rate
+  name: 单价变动率
+  unit: '%'
+  cells:
+    damai_syn FY2025:
+      display: null
+      missing: price_current
+    damai_syn FY2026:
+      display: null
+      missing: price_current
+- metric_code: current_asset_ratio
+  name: 流动资产率
+  unit: '%'
+  cells:
+    damai_syn FY2025:
+      display: 50.4%
+      missing: null
+    damai_syn FY2026:
+      display: 51.1%
       missing: null

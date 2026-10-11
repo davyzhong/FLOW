@@ -17,7 +17,7 @@ superseded_by: null
 
 # 当前路线图（唯一主线）
 
-> **2026-10-11 接续状态**：最新执行位置为 `codex/damai-logistics-data-audit`。F1 已完成：指标目录 v1 指纹兼容与验收时钟修复，准确 SHA CI run `38147756845` 对应 `11129263110d296f33c48b6cb94237a6fcedfd13`，17/17 全绿。F2 只读盘点发现有效字典 `metric_dictionary_v1_1.yaml` 已有 50 条通用定义，覆盖大多数拟做指标；大麦现有 40 项覆盖矩阵由脚本从旧研究草案生成（FY2025 37/40、FY2026 40/40），会造成定义版本漂移。唯一子步骤调整为：复用 v1.1 作为指标定义/公式真相，修正覆盖生成器的数据来源与映射验证，不另建重复指标定义；大麦利息费用存在但由财务费用 65% 合成，结果必须保留合成来源说明。图表选型已采用 ECharts 6.1.0；U04 暂停至驾驶舱产品化整体完成；公开财报 C 级维持 No-Go。
+> **2026-10-11 接续状态**：最新执行位置为 `codex/damai-logistics-data-audit`。F1 已完成：指标目录 v1 指纹兼容与验收时钟修复，准确 SHA CI run `38147756845` 对应 `11129263110d296f33c48b6cb94237a6fcedfd13`，17/17 全绿。F2 实现与本地无数据库验证已完成，待提交后按准确 SHA 验证 CI：覆盖生成器复用 `metric_dictionary_v1_1.yaml` 的 50 条正式通用定义；大麦 FY2025 为 42/50、FY2026 为 45/50，保留 synthetic 标签、字典 ID 与源文件 SHA-256；公式勾稽、覆盖 API 契约、前端来源展示均已补齐。当前缺少完整 CI 结果，不能标记 F2 完成或启动 F3。图表选型已采用 ECharts 6.1.0；U04 暂停至驾驶舱产品化整体完成；公开财报 C 级维持 No-Go。
 
 > **2026-09-30 深夜·驾驶舱抢队首（用户裁决）**：用户裁决三项——① 交付形式为**真实产品页面**（Next.js 组件化 + 真实 API + `apps/web/cockpit/*` 路由，不做静态原型）；② 驾驶舱**抢在 U04 盲评复评之前当队首**，U04 转「暂停（驾驶舱让位）」；③ 第一版**用大麦物流演示数据**跑通真实链路，不等 U04 / C 级。**C 级出口状态不变（仍 No-Go），驾驶舱用演示数据不构成公开财报能力证明。** 详见下表队首行与[实施方案](../superpowers/plans/2026-09-30-cfo-cockpit-implementation-plan.md)。
 
@@ -50,8 +50,8 @@ superseded_by: null
 
 | 顺序 | 工作包 | 状态 | 依赖 | 最近证据 |
 |---|---|---|---|---|
-| **0** | **[CFO 财务总监驾驶舱产品化（含财务指标前置）](work_items/COCKPIT--cfo-dashboard-implementation.md)** | **active（唯一队首）** | 大麦演示数据 ✓ + ORG-LEDGER ✓ + S01 ✓ | 批次 A 完成；C-1 图表库实现待同 SHA CI 复绿；FINMETRIC F1 代码/本地验证完成，CI 哈希回归待修；随后严格按 F2→F3→F4、B、C-2～C-5、D 顺序完成。U04 暂停至本工作包整体完成；**不解除 C 级门禁**。[实施方案](../superpowers/plans/2026-09-30-cfo-cockpit-implementation-plan.md) |
-| 0a | [财务指标目录（驾驶舱前置）](work_items/FINMETRIC--financial-metric-catalog.md) | **active（队首的硬前置子流）** | 指标引擎 + 会计科目基础 ✓ | F1 类型扩展已实现：单位/聚合/公式注册表/勾稽字段；本地测试 69/69、mypy 19 文件通过。准确 SHA CI 暴露 v1 目录指纹被默认 null 字段改变的问题，修复后进入 F2（盈利/偿债/营运）、F3（费用/现金流）、F4（驾驶舱投影）。[工作包](work_items/FINMETRIC--financial-metric-catalog.md) |
+| **0** | **[CFO 财务总监驾驶舱产品化（含财务指标前置）](work_items/COCKPIT--cfo-dashboard-implementation.md)** | **active（唯一队首）** | 大麦演示数据 ✓ + ORG-LEDGER ✓ + S01 ✓ | 批次 A、C-1、FINMETRIC F1 完成；F2 实现与本地验证完成，待该提交准确 SHA CI；通过后严格按 F3→F4→B→C-2～C-5→D 顺序完成。U04 暂停至本工作包整体完成；**不解除 C 级门禁**。[实施方案](../superpowers/plans/2026-09-30-cfo-cockpit-implementation-plan.md) |
+| 0a | [财务指标目录（驾驶舱前置）](work_items/FINMETRIC--financial-metric-catalog.md) | **active（队首的硬前置子流）** | 指标引擎 + 会计科目基础 ✓ | F1 已由准确 SHA CI 关闭；F2 生成正式字典全量覆盖矩阵（FY2025 42/50、FY2026 45/50），补来源哈希、公式勾稽和 UI/API 元数据，本地验证完成，准确 SHA CI 待验证；F3/F4 尚未启动。[工作包](work_items/FINMETRIC--financial-metric-catalog.md) |
 | 1 | [U08 生产就绪收口](work_items/U08--production-readiness.md) | **completed** | — | U8-A～D 完成；严格 HTTPS/双格式 SHA/恢复门禁通过；冻结记录与标签 |
 | 1' | [U04 独立 oracle](work_items/U04--independent-oracle.md) | **active（队列暂停·驾驶舱让位）** — 恢复条件 = CFO 驾驶舱产品化完成 | 样本冻结已完成 | 驾驶舱批次 A 完成后，用户要求继续完整驾驶舱实现；因此盲评复评暂停至本工作包整体验收，不是取消。完整独立 oracle 与报告盲评仍是 C 级证据门槛 |
 | 2 | [S01 战略边界、事实合同与安全门禁](work_items/S01--post-u8-boundary-contract-security.md) | **completed** | U08 completed | Task 1–5 完成；安全规格 V1.1 已批准且独立审查闭环（`6c3c1cd`，零 P1/P2）。2026-09-14 `ff42c67` 五路并合 + 回落修复（`c1510ce`→`2570bf8`）带入路由策略 v2、模块边界与 U8 升级门禁、迁移 0026 修复、`main.py` 启动 fail-fast、两模块入口；Kimi `0841ff9` v1 被否，由 `997c1ab` v2 取代。**Task 6 已关闭**（R2/R3/R4 交付，台账 §7），阶段 3 转入 C 级出口；[协调台账](../70_operations/2026-09-14-coordination-ledger-glm.md) / [范围计划](../superpowers/plans/2026-09-13-flow-post-u8-boundary-gate.md) / [并行执行计划](../superpowers/plans/2026-09-13-flow-three-agent-parallel-restructuring.md) |
@@ -74,7 +74,7 @@ superseded_by: null
 
 **当前唯一队列（12 项）**：已完成 4 项；实际执行中 1 项；排队 4 项；暂停 2 项；外部材料受限 1 项。驾驶舱与指标目录合并为一个队首，指标 F1–F4 是其顺序子步骤，不构成可并行领取的第二队列。当前唯一子步骤：F2 科目覆盖核验与盈利/偿债/营运指标实现。
 
-0. **[实际执行中] CFO 财务总监驾驶舱产品化（含 FINMETRIC 前置）**：批次 A 完成；C-1 图表组件库实现完成；F1 指标引擎与 v1 目录指纹兼容完成，准确 SHA CI run `38147756845` / SHA `11129263110d296f33c48b6cb94237a6fcedfd13` 17/17 success。F2 已确认 `metric_dictionary_v1_1.yaml` 是包含 50 条通用指标定义的现有事实源，而大麦 40 项覆盖矩阵脚本仍引用旧研究草案。当前唯一子步骤：更新 F2 验收依据，使覆盖矩阵复用有效字典并验证 statement item 映射、勾稽和 synthetic 数据标注；修正前不新增重复定义。随后严格按 F3→F4→B→C-2～C-5→D 推进。详细验收见对应工作包。
+0. **[实际执行中] CFO 财务总监驾驶舱产品化（含 FINMETRIC 前置）**：批次 A、C-1 与 F1 已完成。F2 代码完成，使用正式字典生成 50 项覆盖矩阵（FY2025 42/50、FY2026 45/50），加入来源指纹、映射/公式勾稽检查及前端来源展示；本地 fixture pytest 2/2、Web vitest 169/169、Web typecheck、contracts-check、Ruff 与 `git diff --check` 通过。当前唯一动作：同步状态文档、通过 M1 门禁，提交并立即推送，再核验该准确 SHA 的完整 CI；不得提前进入 F3。之后严格按 F3→F4→B→C-2～C-5→D 推进。详细验收见对应工作包。
 
 以下 1–11 是驾驶舱队首调整前的原队列事项：1、2、3、5 已完成；4 U04 与 6 P3 暂停；7、9、10、11 排队；8 外部材料受限。旧验证记录仍是历史证据，不代表当前执行位置。
 

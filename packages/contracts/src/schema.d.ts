@@ -2719,6 +2719,12 @@ export interface components {
             facts_source: string;
             /** Alias Map */
             alias_map: string;
+            /** Metrics Source */
+            metrics_source?: string | null;
+            /** Dictionary Id */
+            dictionary_id?: string | null;
+            /** Metrics Source Sha256 */
+            metrics_source_sha256?: string | null;
             /**
              * Synthetic
              * @default false

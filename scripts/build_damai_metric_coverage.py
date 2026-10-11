@@ -15,6 +15,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import sys
 from decimal import Decimal
@@ -29,7 +30,7 @@ from p5_query_facts import Engine, Missing, fmt_value
 
 STATEMENTS_DIR = ROOT / "fixtures/damai/statements"
 ALIAS_MAP = ROOT / "config/statements/item_alias_map_v1.yaml"
-METRICS_YAML = ROOT / "docs/knowledge-base/02_research/synthesis/指标库初始数据集_v0_草案.yaml"
+METRICS_YAML = ROOT / "config/metrics/metric_dictionary_v1_1.yaml"
 MANIFEST = ROOT / "fixtures/damai/manifest.json"
 DATASET_OUT = ROOT / "config/metrics/damai_demo_metric_coverage_v1.yaml"
 
@@ -38,7 +39,7 @@ SOURCE_STATEMENTS = ("合并利润表", "合并资产负债表", "合并现金�
 COMPANY = "damai_syn"
 UNIT = "百万元"  # 发行版财报原始单位为元，事实库统一换算为百万元
 # 发布工件时间戳与内容绑定；数据合同更新并重新审核时再前移，重复构建不漂移。
-DATASET_GENERATED_AT = "2026-09-26T03:11:24+00:00"
+DATASET_GENERATED_AT = "2026-10-11T00:00:00+00:00"
 
 
 def _mapped_item(entry: object) -> tuple[str, bool] | None:
@@ -137,6 +138,9 @@ def main() -> None:
         "generated_at": DATASET_GENERATED_AT,
         "facts_source": "fixtures/damai/statements/（发行版合成财报）",
         "alias_map": "config/statements/item_alias_map_v1.yaml#damai_syn",
+        "metrics_source": str(METRICS_YAML.relative_to(ROOT)),
+        "dictionary_id": metrics_doc["dictionary_id"],
+        "metrics_source_sha256": hashlib.sha256(METRICS_YAML.read_bytes()).hexdigest(),
         "synthetic": True,
         "caliber_notes": [
             "本矩阵为 synthetic 演示数据，非任何真实公司财报",
@@ -161,7 +165,9 @@ def main() -> None:
         yaml.safe_dump(dataset, allow_unicode=True, sort_keys=False), encoding="utf-8"
     )
     for company, period in snapshots:
-        print(f"  {company} {period}: {computable[(company, period)]}/{total_metrics} 指标可计算")
+        print(
+            f"  {company} {period}: {computable[(company, period)]}/{total_metrics} 指标可计算"
+        )
     print(f"written -> {DATASET_OUT}")
 
 

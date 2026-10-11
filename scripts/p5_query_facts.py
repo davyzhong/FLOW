@@ -74,7 +74,7 @@ class Engine:
             return vals[0] / vals[1]
         if op == "sub":
             return vals[0] - vals[1]
-        if op == "add":
+        if op in ("add", "sum"):
             return sum(vals)
         if op == "mul":
             r = 1

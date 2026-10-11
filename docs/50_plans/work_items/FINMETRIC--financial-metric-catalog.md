@@ -3,7 +3,7 @@ doc_id: FLOW-WI-FINMETRIC-001
 title: 财务指标目录（驾驶舱前置）
 doc_type: work-item
 status: active
-version: 1.2
+version: 1.3
 created_at: 2026-09-30
 updated_at: 2026-10-11
 owner: FLOW
@@ -114,6 +114,10 @@ DSO/DIO/DPO、CCC、流动/速动/现金比率等。本包不得再复制一份�
 | **F4** | 驾驶舱投影接入（环比/行业分位逐步解锁）+ 契约更新 | cockpit 测试全绿 · contracts-check · 同 SHA CI 17/17 |
 
 每批门禁与驾驶舱批次 A 同级（mypy / lint / vitest / pytest / build / contracts / docs / CI）。
+
+### F2 实施记录（2026-10-11）
+
+覆盖生成器现读取有效指标字典 v1.1 的 50 条通用定义，产物记录字典 ID、来源路径及 SHA-256；FY2025 覆盖 42/50、FY2026 覆盖 45/50。保留 synthetic 来源说明，并补充 CCC、杜邦 ROE、期间费用率公式勾稽测试。API schema/OpenAPI/TS contract 与指标库页面同步展示定义来源。fixture pytest 2/2、Web vitest 169/169、typecheck、contracts-check、定向 Ruff 通过；准确 SHA CI 尚待提交后核验，因此 F2 尚未关闭。
 
 ### F1 完成记录（2026-10-11）
 

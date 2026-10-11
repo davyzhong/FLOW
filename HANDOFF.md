@@ -20,7 +20,7 @@ applies_to: repository
 
 **F1 已完成**：旧 v1 指纹 `4214ae85…70b38` 保持稳定；API 时钟依赖注入、集成测试固定时间、专用冻结时钟 E2E 启动器解决了验收日期漂移。提交 `11129263` 的准确 SHA CI run `38147756845` 为 17/17 success；Ruff、mypy、shell 语法、文档 M1 通过。本地数据库集成测试因本机 5432 无 PostgreSQL 未运行；CI integration 与 dashboard 两项通过。
 
-**当前唯一子步骤：FINMETRIC F2 来源对齐与覆盖验证**。只读盘点证实 `config/metrics/metric_dictionary_v1_1.yaml` 已有 50 条通用指标定义，含计划中的 interest coverage、EBITDA、ROE、CCC、DIO/DSO/DPO 等；大麦已有 40 项覆盖矩阵（FY2025 37/40、FY2026 40/40），但 `scripts/build_damai_metric_coverage.py` 仍从旧研究草案读取定义。大麦发行版/别名映射具备利息费用行，但注释明确它是财务费用 65% 的 synthetic 子项，不是独立总账证据。F2 应先更新计划并提交推送，再把覆盖生成器改为读取有效 v1.1 字典、复用既有 statement alias/公式 AST evaluator，补充公式勾稽和映射完整性检查；不得复制定义。数据缺失时标为 unavailable；synthetic 来源在产物中保留标注。完成准确覆盖与测试后再进入 F3。
+**当前唯一子步骤：FINMETRIC F2 准确 SHA CI 验证**。实现已复用 `config/metrics/metric_dictionary_v1_1.yaml` 的 50 条通用指标作为定义真相，覆盖生成器输出 FY2025 42/50、FY2026 45/50，产物包含字典 ID 与 SHA-256，保留 synthetic 标识；现有 statement alias 与 AST evaluator 继续复用，补充了 CCC、杜邦 ROE、期间费用率公式测试。API contract 和前端也展示来源。已通过 fixture pytest 2/2、Web vitest 169/169、typecheck、contracts-check、定向 Ruff 与 diff 检查。下一单一动作：同步文档视图并跑 M1，检查差异后提交并立即推送，然后查看该准确 SHA 的 CI；数据库类测试只在隔离环境执行。CI 全绿后再把 F2 关闭并进入 F3。
 
 完成 F1 CI 后依次执行 FINMETRIC F2（先核对大麦科目，尤其利息费用；缺失标 unavailable，不补零）→ F3 → F4，再完成安全批次 B、模块 C-2～C-5 和 D。CFO 工作包完成后恢复 U04 盲评复评；C 级仍为 No-Go。常驻开发库不做清理、重置或迁移；数据库测试必须依赖隔离测试库。
 

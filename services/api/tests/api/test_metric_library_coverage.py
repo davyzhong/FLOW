@@ -68,7 +68,10 @@ def test_coverage_endpoint_damai_dataset_is_synthetic_and_honest() -> None:
     assert body["synthetic"] is True, "大麦矩阵必须带 synthetic 标识"
     assert {s["company"] for s in body["snapshots"]} == {"damai_syn"}
     assert {s["period"] for s in body["snapshots"]} == {"FY2025", "FY2026"}
-    assert len(body["metrics"]) == 40
+    assert len(body["metrics"]) == 50
+    assert body["dictionary_id"] == "flow.metric_dictionary.v1"
+    assert body["metrics_source"] == "config/metrics/metric_dictionary_v1_1.yaml"
+    assert len(body["metrics_source_sha256"]) == 64
 
     snapshot_keys = {f"{s['company']} {s['period']}" for s in body["snapshots"]}
     missing_cells = 0
@@ -85,7 +88,7 @@ def test_coverage_endpoint_damai_dataset_is_synthetic_and_honest() -> None:
     computable_by_period = {
         snapshot["period"]: snapshot["computable"] for snapshot in body["snapshots"]
     }
-    assert computable_by_period == {"FY2025": 37, "FY2026": 40}
+    assert computable_by_period == {"FY2025": 42, "FY2026": 45}
 
 
 def test_coverage_endpoint_rejects_unknown_dataset() -> None:

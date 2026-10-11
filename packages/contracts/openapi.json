@@ -9127,6 +9127,39 @@
             "type": "string",
             "title": "Alias Map"
           },
+          "metrics_source": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Metrics Source"
+          },
+          "dictionary_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dictionary Id"
+          },
+          "metrics_source_sha256": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Metrics Source Sha256"
+          },
           "synthetic": {
             "type": "boolean",
             "title": "Synthetic",
