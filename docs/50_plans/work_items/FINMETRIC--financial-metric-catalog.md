@@ -3,7 +3,7 @@ doc_id: FLOW-WI-FINMETRIC-001
 title: 财务指标目录（驾驶舱前置）
 doc_type: work-item
 status: active
-version: 1.0
+version: 1.1
 created_at: 2026-09-30
 updated_at: 2026-10-11
 owner: FLOW
@@ -94,6 +94,10 @@ confidentiality: project-internal
 | **F4** | 驾驶舱投影接入（环比/行业分位逐步解锁）+ 契约更新 | cockpit 测试全绿 · contracts-check · 同 SHA CI 17/17 |
 
 每批门禁与驾驶舱批次 A 同级（mypy / lint / vitest / pytest / build / contracts / docs / CI）。
+
+### F1 完成记录（2026-10-11）
+
+指标类型扩展、公式注册表和可选勾稽字段已实现；未显式声明的 `conservation_law` 不进入既有目录指纹，显式值参与新目录哈希。增加回归测试，指标测试 70/70、mypy 19 文件通过。因固定演示月份与真实时钟的差异导致第一次 CI 14/17；经时钟依赖注入与专用 E2E 冻结时钟修复后，提交 `11129263` 准确 SHA `11129263110d296f33c48b6cb94237a6fcedfd13` 的 CI run `38147756845` 17/17 success。故 F1 标记完成，队首进入 F2。
 
 ## 未决问题
 

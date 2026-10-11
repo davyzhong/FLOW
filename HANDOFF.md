@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目尽调、优化与单 Agent 执行总交接
 doc_type: navigation
 status: current
-version: 5.22
+version: 5.23
 created_at: 2026-09-12
 updated_at: 2026-10-11
 owner: FLOW
@@ -14,11 +14,13 @@ applies_to: repository
 
 ## 最新续接记录（2026-10-11：恢复 CFO 驾驶舱实施）
 
-本节覆盖下方 2026-09-30 及更早的历史接续说明。唯一完整队列、总数与状态以 [`CURRENT_ROADMAP.md`](docs/50_plans/CURRENT_ROADMAP.md) 为准：**12 项，已完成 4、实际执行中 1、排队 4、暂停 2、外部材料受限 1**。当前唯一任务为 CFO 驾驶舱产品化，FINMETRIC F1–F4 是其顺序前置子步骤；不并行执行其他任务。执行分支 `codex/damai-logistics-data-audit`，HEAD `d6afe463`，与远端同步，当前工作区存在时钟稳定性修复待验收。
+本节覆盖下方 2026-09-30 及更早的历史接续说明。唯一完整队列、总数与状态以 [`CURRENT_ROADMAP.md`](docs/50_plans/CURRENT_ROADMAP.md) 为准：**12 项，已完成 4、实际执行中 1、排队 4、暂停 2、外部材料受限 1**。当前唯一任务为 CFO 驾驶舱产品化，FINMETRIC F1–F4 是其顺序子步骤；不并行执行其他任务。执行分支 `codex/damai-logistics-data-audit`，HEAD `11129263`，与远端同步。
 
 已完成证据：驾驶舱批次 A（`ae56e96f`/`b7dc4983`，准确 SHA CI `36601612612` 17/17）；ECharts 6.1.0 + 10 类图表构建器（`d563b8dc`，本地 vitest 169/169、build 通过）；指标引擎 F1（`45703016`，本地 metrics 测试 69/69、mypy 19 文件）。
 
-**当前唯一子步骤**：消除 CI 验收因固定演示数据日期过旧而产生的时钟依赖。`d6afe463` 已保持旧 v1 指纹 `4214ae85…70b38`，CI run `38144670788` 上 `metrics-known-answers`、`analysis-invariants` 已通过；integration/dashboard/investigation-e2e 失败都因固定截至 2026-08 的数据被真实日期判为 stale。工作区修复增加 dashboard now 依赖、固定生命周期测试时间，并让 dashboard/investigation E2E 使用专用冻结时钟启动器；Ruff 与 mypy 通过，本地 DB 集成测试未能运行（本机 5432 无 PostgreSQL，未连接或写入数据库）。下一步执行文档 M1、脚本/差异校验，提交推送并核对该提交 SHA 的完整 CI。
+**F1 已完成**：旧 v1 指纹 `4214ae85…70b38` 保持稳定；API 时钟依赖注入、集成测试固定时间、专用冻结时钟 E2E 启动器解决了验收日期漂移。提交 `11129263` 的准确 SHA CI run `38147756845` 为 17/17 success；Ruff、mypy、shell 语法、文档 M1 通过。本地数据库集成测试因本机 5432 无 PostgreSQL 未运行；CI integration 与 dashboard 两项通过。
+
+**当前唯一子步骤：FINMETRIC F2**。先只读检查 `config/metrics/`、大麦发行版科目和已发布指标快照，确认利润/资产负债/现金流映射是否包含利息费用、平均资产/权益所需历史期。随后只实现可被现有科目与事实支持的盈利、偿债、营运指标；任何源数据缺失必须标为 unavailable 并解释原因，不补零。按指标规格增加可复算公式和勾稽断言，通过后先更新路线图并提交推送，再进入 F3。
 
 完成 F1 CI 后依次执行 FINMETRIC F2（先核对大麦科目，尤其利息费用；缺失标 unavailable，不补零）→ F3 → F4，再完成安全批次 B、模块 C-2～C-5 和 D。CFO 工作包完成后恢复 U04 盲评复评；C 级仍为 No-Go。常驻开发库不做清理、重置或迁移；数据库测试必须依赖隔离测试库。
 
