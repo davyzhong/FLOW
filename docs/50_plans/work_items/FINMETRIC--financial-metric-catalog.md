@@ -5,7 +5,7 @@ doc_type: work-item
 status: active
 version: 1.0
 created_at: 2026-09-30
-updated_at: 2026-09-30
+updated_at: 2026-10-11
 owner: FLOW
 depends_on: [FLOW-WI-COCKPIT-CFO-001]
 acceptance_refs: [FLOW-PLAN-COCKPIT-IMPL-20260930]

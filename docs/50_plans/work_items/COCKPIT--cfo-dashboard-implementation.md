@@ -3,7 +3,7 @@ doc_id: FLOW-WI-COCKPIT-CFO-001
 title: CFO 财务总监驾驶舱产品化
 doc_type: work-item
 status: active
-version: 1.1
+version: 1.2
 created_at: 2026-09-30
 updated_at: 2026-10-11
 owner: FLOW
@@ -68,7 +68,7 @@ confidentiality: project-internal
 1. **CSS 全局污染**（7 job 连锁失败）：`cockpit.css` 原在 `app/layout.tsx` 全局引入，裸类名（`.kpi`/`.trend`/`.concl`/`.cmp`/`.drill`）参与全局层叠，破坏既有 dashboard 视觉基线与 axe 无障碍判定。修复：改为组件级引入（`cockpit-overview-app.tsx` 内 import），只作用于 `/cockpit`。
 2. **ruff 导入序**（`static-python` 失败）：`api/router.py` 中 `cockpit_router` 位置违反 isort 字母序。已归位。
 
-图表技术选型已记录于实施方案 §6 Q1：ECharts 6.1.0 + 10 类可复用构建器；复杂语义关系图保留 HTML/CSS。指标引擎 F1 的目录哈希兼容问题修复并通过准确 SHA CI 后，才启动财务指标目录 F2。
+图表技术选型已记录于实施方案 §6 Q1：ECharts 6.1.0 + 10 类可复用构建器；复杂语义关系图保留 HTML/CSS。F1 指标目录哈希兼容由 `d6afe463` 修复；其准确 SHA CI 余下三个失败已定位为固定演示数据日期与真实时钟错位。API 现提供可覆盖时钟依赖，数据库生命周期测试固定时间，dashboard/investigation E2E 使用只服务于验收的冻结时钟启动器。静态检查已通过；待数据库服务可用时的本地集成验证及修复提交后的准确 SHA CI。CI 全绿前不启动 F2。
 
 ## 范围边界（不做什么）
 

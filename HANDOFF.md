@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目尽调、优化与单 Agent 执行总交接
 doc_type: navigation
 status: current
-version: 5.21
+version: 5.22
 created_at: 2026-09-12
 updated_at: 2026-10-11
 owner: FLOW
@@ -14,11 +14,11 @@ applies_to: repository
 
 ## 最新续接记录（2026-10-11：恢复 CFO 驾驶舱实施）
 
-本节覆盖下方 2026-09-30 及更早的历史接续说明。唯一完整队列、总数与状态以 [`CURRENT_ROADMAP.md`](docs/50_plans/CURRENT_ROADMAP.md) 为准：**12 项，已完成 4、实际执行中 1、排队 4、暂停 2、外部材料受限 1**。当前唯一任务为 CFO 驾驶舱产品化，FINMETRIC F1–F4 是其顺序前置子步骤；不并行执行其他任务。执行分支 `codex/damai-logistics-data-audit`，HEAD `339a88b0`，远端分支同步，工作区干净。
+本节覆盖下方 2026-09-30 及更早的历史接续说明。唯一完整队列、总数与状态以 [`CURRENT_ROADMAP.md`](docs/50_plans/CURRENT_ROADMAP.md) 为准：**12 项，已完成 4、实际执行中 1、排队 4、暂停 2、外部材料受限 1**。当前唯一任务为 CFO 驾驶舱产品化，FINMETRIC F1–F4 是其顺序前置子步骤；不并行执行其他任务。执行分支 `codex/damai-logistics-data-audit`，HEAD `d6afe463`，与远端同步，当前工作区存在时钟稳定性修复待验收。
 
 已完成证据：驾驶舱批次 A（`ae56e96f`/`b7dc4983`，准确 SHA CI `36601612612` 17/17）；ECharts 6.1.0 + 10 类图表构建器（`d563b8dc`，本地 vitest 169/169、build 通过）；指标引擎 F1（`45703016`，本地 metrics 测试 69/69、mypy 19 文件）。
 
-**当前唯一子步骤**：修复 F1 引入的 `MetricSpec.conservation_law=None` 使既有物流指标目录 v1 指纹变化的问题。CI 准确 SHA `45703016` 的 `integration`、`metrics-known-answers`、`analysis-invariants` 失败；日志显示目录哈希由既有 `4214ae85…70b38` 变为 `db2814bf…626294`，并导致 dashboard context 指纹断言失败。不得更新旧 v1 基线去迎合此变化；应保持未显式声明勾稽关系的既有目录身份不变，让显式声明的值参与哈希，并增加回归测试。修复后跑定向单测、指标测试和准确 SHA CI。
+**当前唯一子步骤**：消除 CI 验收因固定演示数据日期过旧而产生的时钟依赖。`d6afe463` 已保持旧 v1 指纹 `4214ae85…70b38`，CI run `38144670788` 上 `metrics-known-answers`、`analysis-invariants` 已通过；integration/dashboard/investigation-e2e 失败都因固定截至 2026-08 的数据被真实日期判为 stale。工作区修复增加 dashboard now 依赖、固定生命周期测试时间，并让 dashboard/investigation E2E 使用专用冻结时钟启动器；Ruff 与 mypy 通过，本地 DB 集成测试未能运行（本机 5432 无 PostgreSQL，未连接或写入数据库）。下一步执行文档 M1、脚本/差异校验，提交推送并核对该提交 SHA 的完整 CI。
 
 完成 F1 CI 后依次执行 FINMETRIC F2（先核对大麦科目，尤其利息费用；缺失标 unavailable，不补零）→ F3 → F4，再完成安全批次 B、模块 C-2～C-5 和 D。CFO 工作包完成后恢复 U04 盲评复评；C 级仍为 No-Go。常驻开发库不做清理、重置或迁移；数据库测试必须依赖隔离测试库。
 

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Iterator
+from datetime import UTC, datetime
 from typing import Annotated, Literal
 from uuid import UUID
 
@@ -25,6 +26,10 @@ router = APIRouter(prefix="/dashboard", tags=["dashboard"])
 def get_dashboard_session() -> Iterator[Session]:
     with get_session_factory()() as session:
         yield session
+
+
+def get_dashboard_now() -> datetime:
+    return datetime.now(UTC)
 
 
 SessionDependency = Annotated[Session, Depends(get_dashboard_session)]
@@ -57,6 +62,7 @@ def _error(http_status: int, code: str, message: str) -> HTTPException:
 )
 def dashboard_overview(
     session: SessionDependency,
+    now: Annotated[datetime, Depends(get_dashboard_now)],
     period_view: Annotated[Literal["month", "ytd"], Query()] = "month",
     organization_id: Annotated[UUID | None, Query()] = None,
     customer_segment_id: Annotated[UUID | None, Query()] = None,
@@ -80,7 +86,7 @@ def dashboard_overview(
         ),
     )
     try:
-        overview = DashboardService().get_overview(session, filters=filters)
+        overview = DashboardService().get_overview(session, filters=filters, now=now)
     except DashboardSourceUnavailableError as error:
         raise _error(
             status.HTTP_404_NOT_FOUND,
@@ -96,4 +102,4 @@ def dashboard_overview(
     return DashboardOverviewResponse.model_validate(overview.model_dump())
 
 
-__all__ = ["get_dashboard_session", "router"]
+__all__ = ["get_dashboard_now", "get_dashboard_session", "router"]
