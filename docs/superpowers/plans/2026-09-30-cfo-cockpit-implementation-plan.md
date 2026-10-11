@@ -3,9 +3,9 @@ doc_id: FLOW-PLAN-COCKPIT-IMPL-20260930
 title: CFO 财务总监驾驶舱产品化实施方案（抢队首）
 doc_type: plan
 status: active
-version: 1.0
+version: 1.1
 created_at: 2026-09-30
-updated_at: 2026-09-30
+updated_at: 2026-10-11
 owner: FLOW
 applies_to: web-frontend
 depends_on: [FLOW-DESIGN-CFO-COCKPIT-20260929, FLOW-SPEC-INTERNAL-RBAC-AUDIT-V1]
@@ -111,16 +111,15 @@ apps/web/components/cockpit/
 └── action-panel.tsx            # 管理层关注/行动项（B 批次后可用）
 ```
 
-### 2.1 图表技术选型（需在批次 A 开工前定）
+### 2.1 图表技术选型（已采用，见 §6 Q1）
 
 | 方案 | 优点 | 代价 | 建议 |
 |---|---|---|---|
-| **手写 SVG**（沿用 statements/trend-panel 惯例） | 零新依赖、完全可控、无 bundle 膨胀 | 51 图表工作量大 | 复杂图表（仪表盘/热力/杜邦）推荐 |
-| **ECharts** | 原型已验证、图表类型全 | +1MB 依赖、设计文档 §6 记载「Recharts 暂缓，零依赖手写 SVG 惯例」 | 简单图表（柱线/环形/雷达）可用 |
+| **手写 SVG**（沿用 statements/trend-panel 惯例） | 零新依赖、完全可控、无 bundle 膨胀 | 51 图表工作量大 | 只保留适合语义化布局的公式关系图 |
+| **ECharts 6.1.0** | 原型已验证、图表类型全；社区成熟；支持按需构建与可复用图表构建器 | 增加前端依赖与 bundle 体积，需核对许可、体积和安全边界 | **已选**：常规及复杂统计图表使用 ECharts，按需封装；公式/杜邦解释关系图保留 HTML/CSS |
 | **Recharts** | React 原生、组合式 | 设计文档明确「暂缓」 | 暂不引入 |
 
-**建议**：混合方案——简单图表用**手写 SVG**（复用现有 `trend-panel` 模式），复杂图表按需评估。
-**这是待定项，需在批次 A 开工前由用户裁决**（见 §6 未决问题 Q1）。
+**当前采用**：ECharts 6.1.0 作为统计图表底座，`echarts-for-react` 仅负责 React 生命周期集成，项目维护薄构建器统一选项与数据形状；无需 ECharts 的语义关系图继续用 HTML/CSS。批次 C-1 已实现 10 类构建器并有单测，准确 SHA CI 复绿前不计为阶段验收完成。该选择依据原型验证、组件复用收益及项目成熟第三方实现优先原则。
 
 ## 3. API 侧设计
 
@@ -222,9 +221,9 @@ GET /api/v1/cockpit/profitability?...
 
 | # | 问题 | 阻塞 | 建议 |
 |---|---|---|---|
-| Q1 | 图表技术选型：手写 SVG / ECharts / Recharts | 批次 A1 | 混合方案（简单手写、复杂评估 ECharts） |
+| Q1 | 图表技术选型：手写 SVG / ECharts / Recharts | 批次 C-1 | **已采用 ECharts 6.1.0**：原型已经用 ECharts 验证 51 图表；业务页采用 Apache ECharts、React 集成薄适配器和可复用构建器，减少重复自研。批次 C-1 实现已提交，等待哈希兼容修复后的准确 SHA CI 全绿。复杂的杜邦/公式关系图继续用语义化 HTML/CSS。 |
 | Q2 | 安全规格 §10.6 的 4 个问题：是否新增 `cfo` 角色、`acknowledge` 语义归类、筛选是否需独立 Action、公开期跨企业风险 | 批次 B1 | 新增 `cfo` 角色；筛选沿用 `dashboard.overview.read` |
-| Q3 | 批次 A/B 完成后是否立即恢复 U04 盲评复评 | 路线 | 建议 A 完成即恢复（驾驶舱与 C 级并行） |
+| Q3 | 驾驶舱完成后是否立即恢复 U04 盲评复评 | 路线 | 用户要求完整驾驶舱继续优先；U04 暂停至驾驶舱工作包整体完成，随后恢复 |
 | Q4 | 总览页「演进替换」现有 dashboard 快照页的切换策略（原地替换 / 双路由并存期） | 批次 A6 | 原地替换，同一路由重设计（设计文档 §9-Q2 已裁决） |
 
 ## 7. 路线影响登记

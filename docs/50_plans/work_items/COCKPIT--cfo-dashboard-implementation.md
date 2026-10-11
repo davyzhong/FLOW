@@ -5,7 +5,7 @@ doc_type: work-item
 status: active
 version: 1.1
 created_at: 2026-09-30
-updated_at: 2026-09-30
+updated_at: 2026-10-11
 owner: FLOW
 depends_on: [FLOW-WI-DAMAI-FULL-YEAR-001, FLOW-WI-ORG-LEDGER-001, FLOW-WI-S01-POST-U8-001]
 acceptance_refs: [FLOW-PLAN-COCKPIT-IMPL-20260930]
@@ -47,7 +47,7 @@ confidentiality: project-internal
 |---|---|---|---|
 | **A** | 框架 + 集团总览页（真实数据链路） | **completed** | ✅ 同 SHA CI `36601612612` 17/17 success（commit `b7dc4983`） |
 | B | 安全规格 V1.1.1 + ActionItem + 行动项闭环 | blocked（待 §6 Q2 裁决） | approved-spec 门禁 + 安全规格 §11 九类断言 + route-inventory 双向零差集 |
-| C | 其余 8 模块（利润/盈利/资产负债/营运/费用/现金/风险/合并/数据中心） | **next** | 每批同 A 门禁；开工前须裁决实施计划 §6 Q1 图表选型 |
+| C | 其余 8 模块（利润/盈利/资产负债/营运/费用/现金/风险/合并/数据中心） | **next** | C-1 图表组件库已实现 ECharts 6.1.0 与 10 类构建器；准确 SHA CI 有 F1 带来的指标指纹回归，修复并全绿后依次推进 F2–F4、C-2～C-5 |
 | D | 经分会计期增强（结论条自动生成、Findings 跨页联动、问数入口） | pending | 设计文档 §8 批次 D |
 
 ### 批次 A 交付清单（2026-09-30 完成，commit `ae56e96f` + `b7dc4983`）
@@ -68,7 +68,7 @@ confidentiality: project-internal
 1. **CSS 全局污染**（7 job 连锁失败）：`cockpit.css` 原在 `app/layout.tsx` 全局引入，裸类名（`.kpi`/`.trend`/`.concl`/`.cmp`/`.drill`）参与全局层叠，破坏既有 dashboard 视觉基线与 axe 无障碍判定。修复：改为组件级引入（`cockpit-overview-app.tsx` 内 import），只作用于 `/cockpit`。
 2. **ruff 导入序**（`static-python` 失败）：`api/router.py` 中 `cockpit_router` 位置违反 isort 字母序。已归位。
 
-批次 A 开工前必须先裁决实施计划 §6 的 **Q1（图表技术选型）**。
+图表技术选型已记录于实施方案 §6 Q1：ECharts 6.1.0 + 10 类可复用构建器；复杂语义关系图保留 HTML/CSS。指标引擎 F1 的目录哈希兼容问题修复并通过准确 SHA CI 后，才启动财务指标目录 F2。
 
 ## 范围边界（不做什么）
 
@@ -96,7 +96,7 @@ confidentiality: project-internal
 
 ## 路线影响
 
-- U04 盲评复评：`active（队首）` → `active（暂停，驾驶舱让位）`，恢复条件 = 批次 A 完成；
+- U04 盲评复评：`active（队首）` → `active（暂停，驾驶舱让位）`，恢复条件 = CFO 驾驶舱产品化工作包完成；
 - ZTO 2026Q1：维持封存（用户 2026-09-29 裁决）；
 - C 级出口：仍 No-Go，状态不变。
 
