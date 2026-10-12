@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.30
+version: 5.31
 created_at: 2026-09-12
 updated_at: 2026-10-12
 owner: FLOW
@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-10-12 当前状态：CFO 驾驶舱仍为唯一队首；FINMETRIC F1/F2 均已关闭。F1 准确 SHA CI `11129263110d296f33c48b6cb94237a6fcedfd13`（run `38147756845`，17/17）；F2 使用正式 `metric_dictionary_v1_1.yaml`（50 条通用指标），覆盖矩阵 FY2025 42/50、FY2026 45/50，并记录字典 ID 与 SHA-256，准确 SHA CI `0d4b554f33bd1c9cdab3242b25d26eb2209a632c`（run `38188010174`，17/17）。来源基线与计划更新提交 `df0f2e6782e60d65edc955918a892c34868a9c51` 的准确 SHA CI run `38188972800` 亦为 17/17。用户要求大麦全部经营 Mock 基于阿里/菜鸟公开原始披露，65% 利息拆分、10% 折旧估算等不得作为事实；需完成来源血缘重整、51 图表及全系统功能验收，交互全链路可点击可追溯，并优先复用成熟组件。当前唯一子步骤为逐字段核对公开原件并登记来源与哈希，划分披露事实、可复算派生值、生成演示明细和测试夹具，再移除或隔离无来源假设。尚未修改数据代码。当前完整队列为 12 项：已完成 4、实际执行中 1、排队 4、暂停 2、外部材料受限 1；唯一队列及后续工作以 [CURRENT_ROADMAP](../50_plans/CURRENT_ROADMAP.md) 为准。
+2026-10-12 当前状态：CFO 驾驶舱仍为唯一队首；FINMETRIC F1/F2 均已关闭。F1 准确 SHA CI `11129263110d296f33c48b6cb94237a6fcedfd13`（run `38147756845`，17/17）；F2 使用正式 `metric_dictionary_v1_1.yaml`（50 条通用指标），覆盖矩阵 FY2025 42/50、FY2026 45/50，并记录字典 ID 与 SHA-256，准确 SHA CI `0d4b554f33bd1c9cdab3242b25d26eb2209a632c`（run `38188010174`，17/17）。来源基线与计划更新提交 `df0f2e6782e60d65edc955918a892c34868a9c51` 的准确 SHA CI run `38188972800` 亦为 17/17。用户要求大麦全部经营 Mock 基于阿里/菜鸟公开原始披露，65% 利息拆分、10% 折旧估算等不得作为事实；需完成来源血缘重整、51 图表及全系统功能验收，交互全链路可点击可追溯，并优先复用成熟组件。首轮来源审计已完成，见[审计记录](../60_delivery/verification/2026-10-12--damai-source-baseline-audit-v1.md)：仓库已有菜鸟 FY2021–FY2023 三表、FY2019–FY2025 分部序列和运营指标数据资产，应复用而非重复录入；当前大麦生成器绕开这些来源重造了财务与运营值，件量公式存在数量级和字段语义错位。当前唯一子步骤为建立机器可读来源登记，补齐复用事实的报告/URL/SHA/页表/期间/单位定位，并设计公开事实、派生值、演示生成明细与隔离测试夹具的适配边界。尚未修改数据代码。当前完整队列为 12 项：已完成 4、实际执行中 1、排队 4、暂停 2、外部材料受限 1；唯一队列及后续工作以 [CURRENT_ROADMAP](../50_plans/CURRENT_ROADMAP.md) 为准。
 
 2026-09-29 当前状态（优先于下方较早快照）：14份公开财报样本及 PDF/活动 YAML/报告身份/答案集/行身份映射/实现 SHA 已冻结；L0 1532 项、L1 1776/1776 页锚可重建。行身份实现准确 SHA CI `36478301484` 17/17 success。冻结与 oracle 盘点的定向测试6/6通过；登记清单、5份 oracle YAML 均可解析，当前5份哈希与文件一致，其中小米/阿里 FY2027Q1 两条旧声明已原样保留到 `oracle_sha256_previous_claim` 并以当前实测 SHA 订正。C 级本轮证据审计结论为 No-Go（0/14完整逐行独立 oracle；旧首跑199/199不可比较；两个新 holdout 无首跑 artifact；现有交叉评不是成品盲评），不是数据准确率判负，更不是 C 级通过。详见[冻结与 oracle 审计](../60_delivery/verification/2026-09-29--public-sample-freeze-oracle-audit-v1.md)和[机器可读冻结清单](../../validation/financial_reports/c-level-freeze-2026-09-29-v1.yaml)。
 

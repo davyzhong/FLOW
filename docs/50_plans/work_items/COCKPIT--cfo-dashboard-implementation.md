@@ -3,7 +3,7 @@ doc_id: FLOW-WI-COCKPIT-CFO-001
 title: CFO 财务总监驾驶舱产品化
 doc_type: work-item
 status: active
-version: 1.4
+version: 1.5
 created_at: 2026-09-30
 updated_at: 2026-10-12
 owner: FLOW
@@ -94,7 +94,7 @@ confidentiality: project-internal
 
 ### 2026-10-12 接续状态
 
-F1 准确 SHA CI run `38147756845`（提交 `11129263110d296f33c48b6cb94237a6fcedfd13`）17/17 success；F2 字典对齐及公式勾稽修正准确 SHA CI run `38188010174`（提交 `0d4b554f33bd1c9cdab3242b25d26eb2209a632c`）17/17 success。来源基线计划提交 `df0f2e6782e60d65edc955918a892c34868a9c51` 的准确 SHA CI run `38188972800` 17/17 success。唯一当前子步骤是来源事实登记与 Mock 数据血缘重整；结束条件及数据分型以本工作包“用户补充验收基线”和 `DAMAI--full-year-demo.md` 为准。未通过来源门禁前不启动 F3 或后续模块。
+F1 准确 SHA CI run `38147756845`（提交 `11129263110d296f33c48b6cb94237a6fcedfd13`）17/17 success；F2 字典对齐及公式勾稽修正准确 SHA CI run `38188010174`（提交 `0d4b554f33bd1c9cdab3242b25d26eb2209a632c`）17/17 success。来源基线计划提交 `df0f2e6782e60d65edc955918a892c34868a9c51` 的准确 SHA CI run `38188972800` 17/17 success。首轮数据来源和语义审计见[验证记录](../../60_delivery/verification/2026-10-12--damai-source-baseline-audit-v1.md)：已存在的菜鸟 P5 三表抽取、运营事实和分部序列可复用；当前大麦模拟生成器未使用它们，且有件量数量级/语义问题。当前唯一子步骤为建立机器可读来源登记和适配设计，逐项补足原件页表/期间/原值单位/哈希，再将这些事实用于大麦演示包，明确隔离生成明细及不可用指标。未通过来源门禁前不启动 F3 或后续模块。
 
 ## 范围边界（不做什么）
 

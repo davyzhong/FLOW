@@ -3,7 +3,7 @@ doc_id: FLOW-WI-DAMAI-FULL-YEAR-001
 title: 大麦物流完整财年演示数据与全产品验收
 doc_type: work-item
 status: active
-version: 1.2
+version: 1.3
 created_at: 2026-09-24
 updated_at: 2026-10-12
 owner: FLOW
@@ -26,6 +26,10 @@ applies_to: repository
 交付须区分并记录 `disclosed_fact`、`derived_fact`、`generated_demo_detail` 和隔离 `test_fixture`：每条公开事实包括报告、URL、期间、页表、原值/单位/币种和 SHA；派生值记录公式、输入和舍入；用于页面钻取的生成明细须能与来源聚合对账且明确为 Mock；组织/用户/权限信息仅作为测试夹具。无公开来源且无法复算的财务/经营值改为 unavailable。重点审查已标注的利息费用 65% 拆分、固定资产折旧 10% 估算、债务/应付拆分、销售收现及资本开支，不得继续作为实际事实。
 
 验收还需覆盖原型 51 张图表的完整数据映射、CFO 十模块与所有系统关键功能，证明指标、图形、表格和来源之间可点击、可跳转、可下钻/上算/追溯；测试限定在隔离环境。上述均纳入 CURRENT_ROADMAP CFO 唯一队首顺序，按 CFO 工作包“用户补充验收基线”执行。
+
+### 2026-10-12 来源基线首轮审计
+
+审计记录见[大麦物流来源事实与 Mock 基线审计](../../60_delivery/verification/2026-10-12--damai-source-baseline-audit-v1.md)。仓库已存在菜鸟 FY2021–FY2023 完整报表行、FY2019–FY2025 菜鸟分部序列、FY2021–FY2023 运营指标及对应抽取器/CAINIAO 加载器；当前 `DAMAI.SYN` 生成器未复用这些资产，另造了合成财报与件量。当前期间还与阿里/菜鸟财年错位，件量数量级和国内指标命名均有问题。下一步复用现有 P5 来源事实，补逐值 SHA/页表/期间定位与可重建映射，再将未公开粒度作为明示演示生成明细；未来源且不可复算的事实改为 unavailable。原始档案不改写。
 
 ## 完成状态
 

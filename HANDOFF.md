@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目尽调、优化与单 Agent 执行总交接
 doc_type: navigation
 status: current
-version: 5.25
+version: 5.26
 created_at: 2026-09-12
 updated_at: 2026-10-12
 owner: FLOW
@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 项目尽调、优化与单 Agent 执行总交接｜2026-09-30 更新
 
-## 最新续接记录（2026-10-12：F2 完成，进入来源事实与 Mock 血缘重整）
+## 最新续接记录（2026-10-12：完成来源基线审计，登记并复用 P5 菜鸟事实）
 
 本节覆盖下方 2026-09-30 及更早的历史接续说明。唯一完整队列、总数与状态以 [`CURRENT_ROADMAP.md`](docs/50_plans/CURRENT_ROADMAP.md) 为准：**12 项，已完成 4、实际执行中 1、排队 4、暂停 2、外部材料受限 1**。当前唯一任务为 CFO 驾驶舱产品化，FINMETRIC F1–F4 是其顺序子步骤；不并行执行其他任务。执行分支 `codex/damai-logistics-data-audit`，HEAD `11129263`，与远端同步。
 
@@ -20,7 +20,7 @@ applies_to: repository
 
 **F1 已完成**：旧 v1 指纹 `4214ae85…70b38` 保持稳定；API 时钟依赖注入、集成测试固定时间、专用冻结时钟 E2E 启动器解决了验收日期漂移。提交 `11129263` 的准确 SHA CI run `38147756845` 为 17/17 success；Ruff、mypy、shell 语法、文档 M1 通过。本地数据库集成测试因本机 5432 无 PostgreSQL 未运行；CI integration 与 dashboard 两项通过。
 
-**当前唯一子步骤：来源事实登记与 Mock 数据血缘重整**。F2 已使用有效 v1.1 字典 50 项；大麦 FY2025 42/50、FY2026 45/50；覆盖 fixture 2/2，Web 169/169，typecheck、contracts-check、Ruff、mypy 207 文件及文档 M1 通过。修正提交 `0d4b554f33bd1c9cdab3242b25d26eb2209a632c` 的准确 SHA CI run `38188010174` 为 17/17 success；来源基线计划提交 `df0f2e6782e60d65edc955918a892c34868a9c51` 的准确 SHA CI run `38188972800` 为 17/17 success。下一步逐字段登记阿里/菜鸟官方原件、期间、页表、原值/单位与源哈希，区分披露事实、可复算派生值、生成演示明细和隔离测试夹具；检查利息、折旧、债务/应付拆分和现金流无来源假设，替换、隔离或标 unavailable。此阶段完成前不进入 F3，也不改写来源原件。后续还须把原型 51 图表、所有指标、跳转/下钻/上算/追溯与完整系统功能验证纳入既有单一队首。
+**当前唯一子步骤：机器可读来源登记与 Mock 数据适配**。F2 准确 SHA CI run `38188010174` 为 17/17 success；来源基线计划提交 `df0f2e6782e60d65edc955918a892c34868a9c51` 的准确 SHA CI run `38188972800` 为 17/17 success。来源基线首轮审计已归档在 `docs/60_delivery/verification/2026-10-12--damai-source-baseline-audit-v1.md`。审计确认现有 P5 菜鸟 FY2021–FY2023 三表、FY2019–FY2025 分部序列、运营事实和 CAINIAO 加载器可复用；当前大麦生成器绕开了这些源数据，并存在件量数量级/语义错位。下一步建立来源事实机器登记，逐项补充报告/URL/SHA、期间、页表、原值单位与定位，引用现有事实资产而不复制事实源；界定公开事实、可复算派生值、下钻演示明细与测试夹具，再调整生成器。无来源的利息、折旧、负债拆分和现金流细项须从事实层移除、隔离或标 unavailable。此步骤完成前不进 F3；后续仍须验收 51 图表、所有指标/全系统交互链路和成熟组件复用。原始报告未修改，常驻数据库未触碰。
 
 完成 F1 CI 后依次执行 FINMETRIC F2（先核对大麦科目，尤其利息费用；缺失标 unavailable，不补零）→ F3 → F4，再完成安全批次 B、模块 C-2～C-5 和 D。CFO 工作包完成后恢复 U04 盲评复评；C 级仍为 No-Go。常驻开发库不做清理、重置或迁移；数据库测试必须依赖隔离测试库。
 
