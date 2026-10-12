@@ -117,7 +117,7 @@ DSO/DIO/DPO、CCC、流动/速动/现金比率等。本包不得再复制一份�
 
 ### F2 实施记录（2026-10-11）
 
-覆盖生成器现读取有效指标字典 v1.1 的 50 条通用定义，产物记录字典 ID、来源路径及 SHA-256；FY2025 覆盖 42/50、FY2026 覆盖 45/50。保留 synthetic 来源说明，并补充 CCC、杜邦 ROE、期间费用率公式勾稽测试。API schema/OpenAPI/TS contract 与指标库页面同步展示定义来源。fixture pytest 2/2、Web vitest 169/169、typecheck、contracts-check、定向 Ruff 通过；准确 SHA CI 尚待提交后核验，因此 F2 尚未关闭。
+覆盖生成器现读取有效指标字典 v1.1 的 50 条通用定义，产物记录字典 ID、来源路径及 SHA-256；FY2025 覆盖 42/50、FY2026 覆盖 45/50。保留 synthetic 来源说明，并补充 CCC、杜邦 ROE、期间费用率公式勾稽测试。API schema/OpenAPI/TS contract 与指标库页面同步展示定义来源。提交 `385fedf7` 的准确 SHA CI run `38151001948` 为 16/17；integration 仅因 missing 断言不接受 `nopat` 公式输入标识符而失败，相关测试集 270 passed。现正修正断言；F2 尚未关闭。
 
 ### F1 完成记录（2026-10-11）
 

@@ -11,6 +11,7 @@
 
 from __future__ import annotations
 
+import re
 from collections.abc import Iterator
 
 import pytest
@@ -81,9 +82,10 @@ def test_coverage_endpoint_damai_dataset_is_synthetic_and_honest() -> None:
             assert (cell["display"] is None) != (cell["missing"] is None)
             if cell["missing"] is not None:
                 missing_cells += 1
-                assert cell["missing"].startswith(("bs.", "is.", "cf.", "mpm.")), (
-                    "缺口必须是结构化取数原因，不是文案"
-                )
+                assert re.fullmatch(
+                    r"(?:bs|is|cf|mpm)\.[a-z0-9_]+(?:\([^()]+\))?|[a-z][a-z0-9_]*",
+                    cell["missing"],
+                ), "缺口必须是标准科目 ID 或公式输入标识符"
     assert missing_cells > 0, "覆盖矩阵必须如实暴露缺口（不得全绿冒充）"
     computable_by_period = {
         snapshot["period"]: snapshot["computable"] for snapshot in body["snapshots"]

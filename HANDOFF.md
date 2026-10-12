@@ -20,7 +20,7 @@ applies_to: repository
 
 **F1 已完成**：旧 v1 指纹 `4214ae85…70b38` 保持稳定；API 时钟依赖注入、集成测试固定时间、专用冻结时钟 E2E 启动器解决了验收日期漂移。提交 `11129263` 的准确 SHA CI run `38147756845` 为 17/17 success；Ruff、mypy、shell 语法、文档 M1 通过。本地数据库集成测试因本机 5432 无 PostgreSQL 未运行；CI integration 与 dashboard 两项通过。
 
-**当前唯一子步骤：FINMETRIC F2 准确 SHA CI 验证**。实现已复用 `config/metrics/metric_dictionary_v1_1.yaml` 的 50 条通用指标作为定义真相，覆盖生成器输出 FY2025 42/50、FY2026 45/50，产物包含字典 ID 与 SHA-256，保留 synthetic 标识；现有 statement alias 与 AST evaluator 继续复用，补充了 CCC、杜邦 ROE、期间费用率公式测试。API contract 和前端也展示来源。已通过 fixture pytest 2/2、Web vitest 169/169、typecheck、contracts-check、定向 Ruff 与 diff 检查。下一单一动作：同步文档视图并跑 M1，检查差异后提交并立即推送，然后查看该准确 SHA 的 CI；数据库类测试只在隔离环境执行。CI 全绿后再把 F2 关闭并进入 F3。
+**当前唯一子步骤：修正 F2 integration 回归并复验**。实现已复用 `config/metrics/metric_dictionary_v1_1.yaml` 的 50 条通用指标作为定义真相，覆盖生成器输出 FY2025 42/50、FY2026 45/50，产物包含字典 ID 与 SHA-256，保留 synthetic 标识；公式勾稽、API contract 和前端来源展示已补齐。提交 `385fedf7d82b1503c579f9a7a16b81c6346492ae` 的 CI run `38151001948` 为 16/17；唯一失败是 API 测试将 missing 输入限制为科目 ID，日志证实出现字典公式里的 `nopat` 标识符，因此正在放宽断言为结构化科目 ID 或公式输入标识符。首轮本地 fixture 2/2、Web vitest 169/169、typecheck、contracts-check、定向 Ruff、mypy 207 文件及文档 M1 已通过。修复后须重跑适用测试、更新文档与视图、M1、提交并立即推送，再核验新准确 SHA 的 CI；数据库类测试只在隔离环境执行。全绿后才关闭 F2、进入 F3。
 
 完成 F1 CI 后依次执行 FINMETRIC F2（先核对大麦科目，尤其利息费用；缺失标 unavailable，不补零）→ F3 → F4，再完成安全批次 B、模块 C-2～C-5 和 D。CFO 工作包完成后恢复 U04 盲评复评；C 级仍为 No-Go。常驻开发库不做清理、重置或迁移；数据库测试必须依赖隔离测试库。
 

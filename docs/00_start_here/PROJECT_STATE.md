@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-10-11 当前状态：CFO 驾驶舱仍为唯一队首；FINMETRIC F1 已由准确 SHA CI `11129263110d296f33c48b6cb94237a6fcedfd13`（run `38147756845`，17/17）关闭。F2 正在执行：大麦覆盖生成器已切换到正式 `metric_dictionary_v1_1.yaml`（50 条通用指标），生成矩阵 FY2025 42/50、FY2026 45/50，并写入字典 ID 与源文件 SHA-256；保留 synthetic 标注。公式勾稽测试和前端覆盖来源展示已补齐，完整验证与该提交 CI 尚未完成。当前完整队列为 12 项：已完成 4、实际执行中 1、排队 4、暂停 2、外部材料受限 1；唯一队列及后续工作以 [CURRENT_ROADMAP](../50_plans/CURRENT_ROADMAP.md) 为准。
+2026-10-12 当前状态：CFO 驾驶舱仍为唯一队首；FINMETRIC F1 已由准确 SHA CI `11129263110d296f33c48b6cb94237a6fcedfd13`（run `38147756845`，17/17）关闭。F2 大麦覆盖生成器已切换到正式 `metric_dictionary_v1_1.yaml`（50 条通用指标），矩阵 FY2025 42/50、FY2026 45/50，记录字典 ID 与 SHA-256 并保留 synthetic 标记。实现提交 `385fedf7d82b1503c579f9a7a16b81c6346492ae` 的准确 SHA CI run `38151001948` 为 16/17；唯一失败是 API 测试断言未接受 `nopat` 公式输入符号，CI 日志显示 270 个相关测试通过。该断言正在修正，F2 尚未关闭。当前完整队列为 12 项：已完成 4、实际执行中 1、排队 4、暂停 2、外部材料受限 1；唯一队列及后续工作以 [CURRENT_ROADMAP](../50_plans/CURRENT_ROADMAP.md) 为准。
 
 2026-09-29 当前状态（优先于下方较早快照）：14份公开财报样本及 PDF/活动 YAML/报告身份/答案集/行身份映射/实现 SHA 已冻结；L0 1532 项、L1 1776/1776 页锚可重建。行身份实现准确 SHA CI `36478301484` 17/17 success。冻结与 oracle 盘点的定向测试6/6通过；登记清单、5份 oracle YAML 均可解析，当前5份哈希与文件一致，其中小米/阿里 FY2027Q1 两条旧声明已原样保留到 `oracle_sha256_previous_claim` 并以当前实测 SHA 订正。C 级本轮证据审计结论为 No-Go（0/14完整逐行独立 oracle；旧首跑199/199不可比较；两个新 holdout 无首跑 artifact；现有交叉评不是成品盲评），不是数据准确率判负，更不是 C 级通过。详见[冻结与 oracle 审计](../60_delivery/verification/2026-09-29--public-sample-freeze-oracle-audit-v1.md)和[机器可读冻结清单](../../validation/financial_reports/c-level-freeze-2026-09-29-v1.yaml)。
 
