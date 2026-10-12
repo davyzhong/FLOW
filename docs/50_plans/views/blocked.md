@@ -5,10 +5,10 @@ doc_type: generated
 status: generated
 version: 1.0
 created_at: 2026-09-12
-updated_at: 2026-10-11
+updated_at: 2026-10-12
 owner: FLOW
 generator_ref: scripts/documentation/plan_views.py
-input_hash: e28b50b0ef1198191fc3d789138e6906691f5423e0f38ea87cf7e4d528da938c
+input_hash: 361a4e7f5d3b6a4697651a5a22d691deeb09a39eb76eace311e33d91fee3dc4f
 applies_to: planning
 ---
 

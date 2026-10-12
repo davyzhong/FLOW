@@ -3,9 +3,9 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 5.37
+version: 5.38
 created_at: 2026-09-12
-updated_at: 2026-10-11
+updated_at: 2026-10-12
 owner: FLOW
 depends_on: [FLOW-SPEC-V1-DESIGN-001]
 acceptance_refs: [roadmap-unique-invariant]
@@ -17,7 +17,7 @@ superseded_by: null
 
 # 当前路线图（唯一主线）
 
-> **2026-10-12 接续状态**：最新执行位置为 `codex/damai-logistics-data-audit`。F1 已完成：指标目录 v1 指纹兼容与验收时钟修复，准确 SHA CI run `38147756845` 对应 `11129263110d296f33c48b6cb94237a6fcedfd13`，17/17 全绿。F2 实现已推送，准确 SHA `385fedf7d82b1503c579f9a7a16b81c6346492ae` 的 CI run `38151001948` 为 16/17：唯一 integration 失败是覆盖 API 测试把缺口限定为科目 ID，未覆盖字典中 `nopat` 这种公式输入标识符；生产矩阵如实保留该依赖缺失。正在修正断言以接受结构化科目 ID 或公式输入标识符，F2 未关闭，F3 未启动。图表选型已采用 ECharts 6.1.0；U04 暂停至驾驶舱产品化整体完成；公开财报 C 级维持 No-Go。
+> **2026-10-12 接续状态**：最新执行位置为 `codex/damai-logistics-data-audit`。F1 已完成：指标目录 v1 指纹兼容与验收时钟修复，准确 SHA CI run `38147756845` 对应 `11129263110d296f33c48b6cb94237a6fcedfd13`，17/17 全绿。F2 字典对齐实现及测试断言修正已推送，准确 SHA `0d4b554f33bd1c9cdab3242b25d26eb2209a632c` 的 CI run `38188010174` 正在执行（上次检查 12/17 通过，5 个 job 运行中，无失败）。用户于 2026-10-12 重申验收基线：全部经营数据须基于阿里/菜鸟原始公开披露，财务事实不许用无来源假设填充；大麦须被明确标为基于公开数据构建的演示主体；组织用户等非公开实体数据仅作为隔离测试夹具；全部 CFO 指标/图表/交互和全系统功能须验证，成熟组件优先。现有大麦发行包含 65% 利息拆分、10% 折旧估算等人工假设，不能作为最终事实数据源。F2 CI 完成后，先执行驾驶舱队首内的来源事实登记与 Mock 数据血缘重整，再继续 F3 等步骤；不得把模拟明细表述为真实企业披露。图表选型已采用 ECharts 6.1.0；U04 暂停至驾驶舱产品化整体完成；公开财报 C 级维持 No-Go。
 
 > **2026-09-30 深夜·驾驶舱抢队首（用户裁决）**：用户裁决三项——① 交付形式为**真实产品页面**（Next.js 组件化 + 真实 API + `apps/web/cockpit/*` 路由，不做静态原型）；② 驾驶舱**抢在 U04 盲评复评之前当队首**，U04 转「暂停（驾驶舱让位）」；③ 第一版**用大麦物流演示数据**跑通真实链路，不等 U04 / C 级。**C 级出口状态不变（仍 No-Go），驾驶舱用演示数据不构成公开财报能力证明。** 详见下表队首行与[实施方案](../superpowers/plans/2026-09-30-cfo-cockpit-implementation-plan.md)。
 
@@ -50,12 +50,12 @@ superseded_by: null
 
 | 顺序 | 工作包 | 状态 | 依赖 | 最近证据 |
 |---|---|---|---|---|
-| **0** | **[CFO 财务总监驾驶舱产品化（含财务指标前置）](work_items/COCKPIT--cfo-dashboard-implementation.md)** | **active（唯一队首）** | 大麦演示数据 ✓ + ORG-LEDGER ✓ + S01 ✓ | 批次 A、C-1、FINMETRIC F1 完成；F2 实现与本地验证完成，待该提交准确 SHA CI；通过后严格按 F3→F4→B→C-2～C-5→D 顺序完成。U04 暂停至本工作包整体完成；**不解除 C 级门禁**。[实施方案](../superpowers/plans/2026-09-30-cfo-cockpit-implementation-plan.md) |
+| **0** | **[CFO 财务总监驾驶舱产品化（含财务指标前置）](work_items/COCKPIT--cfo-dashboard-implementation.md)** | **active（唯一队首）** | 大麦基础演示包 ✓（公开来源重整未完成）+ ORG-LEDGER ✓ + S01 ✓ | 批次 A、C-1、FINMETRIC F1 完成；F2 准确 SHA CI 运行中。之后先完成用户 2026-10-12 重申的数据来源登记、现有假设清理/降级与 Mock 血缘验收，再按 F3→F4→B→C-2～C-5→D 串行推进；全量 51 图表和各指标/链路须纳入最终验收。U04 暂停至本工作包整体完成；**不解除 C 级门禁**。[实施方案](../superpowers/plans/2026-09-30-cfo-cockpit-implementation-plan.md) |
 | 0a | [财务指标目录（驾驶舱前置）](work_items/FINMETRIC--financial-metric-catalog.md) | **active（队首的硬前置子流）** | 指标引擎 + 会计科目基础 ✓ | F1 已由准确 SHA CI 关闭；F2 生成正式字典全量覆盖矩阵（FY2025 42/50、FY2026 45/50），补来源哈希、公式勾稽和 UI/API 元数据，本地验证完成，准确 SHA CI 待验证；F3/F4 尚未启动。[工作包](work_items/FINMETRIC--financial-metric-catalog.md) |
 | 1 | [U08 生产就绪收口](work_items/U08--production-readiness.md) | **completed** | — | U8-A～D 完成；严格 HTTPS/双格式 SHA/恢复门禁通过；冻结记录与标签 |
 | 1' | [U04 独立 oracle](work_items/U04--independent-oracle.md) | **active（队列暂停·驾驶舱让位）** — 恢复条件 = CFO 驾驶舱产品化完成 | 样本冻结已完成 | 驾驶舱批次 A 完成后，用户要求继续完整驾驶舱实现；因此盲评复评暂停至本工作包整体验收，不是取消。完整独立 oracle 与报告盲评仍是 C 级证据门槛 |
 | 2 | [S01 战略边界、事实合同与安全门禁](work_items/S01--post-u8-boundary-contract-security.md) | **completed** | U08 completed | Task 1–5 完成；安全规格 V1.1 已批准且独立审查闭环（`6c3c1cd`，零 P1/P2）。2026-09-14 `ff42c67` 五路并合 + 回落修复（`c1510ce`→`2570bf8`）带入路由策略 v2、模块边界与 U8 升级门禁、迁移 0026 修复、`main.py` 启动 fail-fast、两模块入口；Kimi `0841ff9` v1 被否，由 `997c1ab` v2 取代。**Task 6 已关闭**（R2/R3/R4 交付，台账 §7），阶段 3 转入 C 级出口；[协调台账](../70_operations/2026-09-14-coordination-ledger-glm.md) / [范围计划](../superpowers/plans/2026-09-13-flow-post-u8-boundary-gate.md) / [并行执行计划](../superpowers/plans/2026-09-13-flow-three-agent-parallel-restructuring.md) |
-| 2a | [大麦物流完整财年演示数据](work_items/DAMAI--full-year-demo.md) | **completed** | 已批准规格；不依赖公开 C 级 | D1–D3 已集成 main `e22d193`，CI run `36137591750` 17/17 success；隔离栈 verify 19/19、八页面 E2E 9/9、重复 seed 零增长、发行包零漂移。**常驻开发库已装载（G2 完成 2026-09-25）**：用户裁决演示数据全部入库，集成后 main 上 verify 19/19、页面可见；合成数据不解除公开 C 级门禁 |
+| 2a | [大麦物流完整财年演示数据](work_items/DAMAI--full-year-demo.md) | **active（按用户新标准重开；CFO 队首子包，不另列任务）** | 已批准规格；不依赖公开 C 级 | D1–D3 旧版已集成 main `e22d193`，CI run `36137591750` 17/17；原隔离栈验收证据保留。用户 2026-10-12 新增来源事实要求后，旧包仅作为基础夹具完成；需在 CFO 唯一队首中重建来源登记、转换血缘及假设值处置，不与 CFO 并行执行 |
 | 2b | [大麦数据后的剩余体验收口](work_items/UX--post-damai-experience-closeout.md) | **completed** | G2 ✓；用户已批准；ORG-LEDGER CI ✓ | Gate1/Gate5关闭：隔离 Dashboard 7/7；大麦验收 verify19/19、GET矩阵159项零意外、Playwright15/15；生产E2E157/157、Web143/143、mypy203文件、typecheck/lint、M1/链接检查通过；提交`0144bad4`同SHA CI run `36371507389` 17/17 success。常驻库未触碰。 |
 | 2c | [企业组织建制与经营账套初始化包](work_items/ORG-LEDGER--enterprise-initialization-package.md) | **completed** | 大麦发行包 completed；批准三表 schema | `2c7d6eb4`；CI run `36270782272` 的17/17 jobs success。隔离 `full` 首次/重复与 `business` 对账通过；11 个企业/loader 测试、全量 API 852、Web142、脚本107、大麦 verify19/19、API43/43、Playwright9/9、合同/文档/lint/typecheck 均通过。31文件 manifest 稳定 SHA `cbc7cccf…e513`。 |
 | K | [第二代静态知识刷新与战略重基线](work_items/KNOWLEDGE--refresh-v2.md) | **active（队列排队，不并行启动）** | 按唯一队列轮到时启动；规格/preflight 已完成 | K0–K6 未执行；`CURRENT_RELEASE` 仍为 `flow-knowledge-2026-09-12.1`，用户战略裁决前不得切换。 |
@@ -74,7 +74,7 @@ superseded_by: null
 
 **当前唯一队列（12 项）**：已完成 4 项；实际执行中 1 项；排队 4 项；暂停 2 项；外部材料受限 1 项。驾驶舱与指标目录合并为一个队首，指标 F1–F4 是其顺序子步骤，不构成可并行领取的第二队列。当前唯一子步骤：F2 科目覆盖核验与盈利/偿债/营运指标实现。
 
-0. **[实际执行中] CFO 财务总监驾驶舱产品化（含 FINMETRIC 前置）**：批次 A、C-1 与 F1 已完成。F2 代码完成，使用正式字典生成 50 项覆盖矩阵（FY2025 42/50、FY2026 45/50），加入来源指纹、映射/公式勾稽检查及前端来源展示；本地 fixture pytest 2/2、Web vitest 169/169、Web typecheck、contracts-check、定向 Ruff、mypy 207 文件及文档 M1 通过。提交 `385fedf7` 的准确 SHA CI run `38151001948` 为 16/17；integration 唯一失败是 missing 值断言未接受 `nopat` 这类公式输入符号，生产行为符合“保留未满足输入”的要求。当前唯一动作：修正断言、重新验证、更新状态后提交并立即推送，再核验新准确 SHA CI；不得提前进入 F3。之后严格按 F3→F4→B→C-2～C-5→D 推进。详细验收见对应工作包。
+0. **[实际执行中] CFO 财务总监驾驶舱产品化（含 FINMETRIC 前置）**：批次 A、C-1 与 F1 已完成；F2 字典对齐与公式勾稽本地验证完成，修正 missing 输入断言后的准确 SHA CI run `38188010174` 正在运行。当前唯一下一动作：等待并核验该 run；成功后执行数据来源重整子步骤：逐字段建立官方来源/页表/单位/期间/源 SHA 与转换血缘；将精确披露事实、可复算派生值、仅供交互测试的模拟明细分型；利息、折旧、债务/应付拆分、现金流等无来源假设值应替换为来源值、从聚合事实可复算的派生值，或显式 unavailable；模拟组织与人员信息只服务隔离测试。随后执行覆盖用户原型 51 图表、十模块指标、筛选/跨页钻取/公式上算/源头追溯/权限与五态的完整验收，所有使用到的成熟组件与既有能力先盘点复用，确实不适配才自建。上述子步骤通过正式计划门禁并推送后，才继续 F3→F4→B→C-2～C-5→D。详细验收见对应工作包。
 
 以下 1–11 是驾驶舱队首调整前的原队列事项：1、2、3、5 已完成；4 U04 与 6 P3 暂停；7、9、10、11 排队；8 外部材料受限。旧验证记录仍是历史证据，不代表当前执行位置。
 

@@ -2,10 +2,10 @@
 doc_id: FLOW-WI-DAMAI-FULL-YEAR-001
 title: 大麦物流完整财年演示数据与全产品验收
 doc_type: work-item
-status: completed
-version: 1.1
+status: active
+version: 1.2
 created_at: 2026-09-24
-updated_at: 2026-09-25
+updated_at: 2026-10-12
 owner: FLOW
 depends_on: [FLOW-SPEC-DAMAI-DEMO-001]
 acceptance_refs: [FLOW-PLAN-INTEGRATED-EXECUTION-20260924, FLOW-SPEC-DAMAI-DEMO-001]
@@ -18,6 +18,14 @@ applies_to: repository
 
 按统一计划 D1–D3，把当前聚合半成品修正为 FY2025+FY2026 全量、确定性、可
 重建、可幂等装载的合成发行版，并用真实服务链和八页面 E2E 验证系统。
+
+## 用户补充要求与重开范围（2026-10-12）
+
+原 D1–D3 版本已完成，但用户现要求大麦物流的全部经营 Mock 必须基于阿里巴巴/菜鸟公开原始数据，不能把无来源假设当作经营事实；并以该数据集验证系统功能和 CFO 驾驶舱。因此本包在唯一队首 CFO 驾驶舱工作中重开数据来源验收，不另设并行队列。原完成记录保留为历史，不再代表新数据基线已完成。
+
+交付须区分并记录 `disclosed_fact`、`derived_fact`、`generated_demo_detail` 和隔离 `test_fixture`：每条公开事实包括报告、URL、期间、页表、原值/单位/币种和 SHA；派生值记录公式、输入和舍入；用于页面钻取的生成明细须能与来源聚合对账且明确为 Mock；组织/用户/权限信息仅作为测试夹具。无公开来源且无法复算的财务/经营值改为 unavailable。重点审查已标注的利息费用 65% 拆分、固定资产折旧 10% 估算、债务/应付拆分、销售收现及资本开支，不得继续作为实际事实。
+
+验收还需覆盖原型 51 张图表的完整数据映射、CFO 十模块与所有系统关键功能，证明指标、图形、表格和来源之间可点击、可跳转、可下钻/上算/追溯；测试限定在隔离环境。上述均纳入 CURRENT_ROADMAP CFO 唯一队首顺序，按 CFO 工作包“用户补充验收基线”执行。
 
 ## 完成状态
 

@@ -5,10 +5,10 @@ doc_type: generated
 status: generated
 version: 1.0
 created_at: 2026-09-12
-updated_at: 2026-10-11
+updated_at: 2026-10-12
 owner: FLOW
 generator_ref: scripts/documentation/plan_views.py
-input_hash: e28b50b0ef1198191fc3d789138e6906691f5423e0f38ea87cf7e4d528da938c
+input_hash: 361a4e7f5d3b6a4697651a5a22d691deeb09a39eb76eace311e33d91fee3dc4f
 applies_to: planning
 ---
 
@@ -17,6 +17,7 @@ applies_to: planning
 > 本页由工作包元数据确定性生成，请勿手工修改。
 
 - [CFO 财务总监驾驶舱产品化](../work_items/COCKPIT--cfo-dashboard-implementation.md) — `active`
+- [大麦物流完整财年演示数据与全产品验收](../work_items/DAMAI--full-year-demo.md) — `active`
 - [财务指标目录（驾驶舱前置）](../work_items/FINMETRIC--financial-metric-catalog.md) — `active`
 - [第二代静态知识刷新与战略重基线](../work_items/KNOWLEDGE--refresh-v2.md) — `active`
 - [U04 独立 oracle 录入与全行验证](../work_items/U04--independent-oracle.md) — `active`

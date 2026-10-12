@@ -3,9 +3,9 @@ doc_id: FLOW-PLAN-COCKPIT-IMPL-20260930
 title: CFO 财务总监驾驶舱产品化实施方案（抢队首）
 doc_type: plan
 status: active
-version: 1.1
+version: 1.2
 created_at: 2026-09-30
-updated_at: 2026-10-11
+updated_at: 2026-10-12
 owner: FLOW
 applies_to: web-frontend
 depends_on: [FLOW-DESIGN-CFO-COCKPIT-20260929, FLOW-SPEC-INTERNAL-RBAC-AUDIT-V1]
@@ -29,6 +29,16 @@ confidentiality: project-internal
 > 3. **数据源**：第一版**先用大麦物流演示数据跑通真实链路**（不等待 U04 / C 级通过）。
 >
 > 本方案是执行依据，不是讨论稿。任何批次开工前须先核对本文件的验收门禁。
+
+## 2026-10-12 用户补充的强制验收基线
+
+大麦财务/经营 Mock 必须依据阿里巴巴/菜鸟原始公开数据；驾驶舱与全系统验证必须用该数据包跑通；CFO/BP 十模块、原型 51 图表、所有指标/交互均须可用、可跳转、可追溯；成熟第三方组件和项目已有实现优先。此补充将先于本方案原有 F3 及模块批次执行，且不建立第二条独立 To-do。
+
+数据进入验收样本需带类型及血缘：`disclosed_fact`（官方原文值+报告期间/页表/单位/文件 SHA）、`derived_fact`（只由来源事实确定性计算、记录公式/输入/舍入）、`generated_demo_detail`（为测试下钻结构而拆分公开聚合数的确定性 Mock，显式标记且只能核对回其来源聚合）或 `test_fixture`（隔离测试用户/组织/角色等）。未经来源支持的财务/经营假设不得作为披露事实或驾驶舱经营结论；无法获得或复算的数值显示 `unavailable`。测试夹具不得混入经营事实层。
+
+**新增硬门禁（F2 之后、F3/后续模块数据接入之前）**：①登记可用的阿里/菜鸟原始材料并逐字段核对当前发行包，特别排查利息 65% 拆分、折旧 10% 估算、债务/应付拆分、销售收现与资本开支；②完成 source fact → 转换 → 派生指标/模拟明细 → 页面值的可重放血缘及 hash manifest；③重建/隔离所有无来源假设数据，抽样和总量能对账，不能对账的记录 unavailable；④完成原型 51 图表到页面/指标/来源的覆盖映射；⑤逐图核对现有 ECharts 构建器、指标库、表格/筛选/路由/钻取/状态组件，记录复用或自建理由；⑥用发行包验证全系统现有路由和核心功能，驾驶舱所有数据元素可深链、下钻、上算和查看来源，权限与加载/错误/空/无权限状态均通过门禁。门禁结果写回唯一 CURRENT_ROADMAP 和工作包，未通过不得宣称数据基线或驾驶舱整体完成。
+
+官方来源入口：[阿里巴巴官方财务报告](https://www.alibabagroup.com/en-US/ir-financial-reports-financial-results)、[FY2024 年报菜鸟业务说明](https://static.alibabagroup.com/reports/fy2024/ar/ebook/EN/34/index.html)、[菜鸟官方介绍](https://www.alibabagroup.com/en-US/document-1747836787297878016)。公开披露的年度/聚合数不能被误述为逐月、逐订单或企业内账事实。
 
 ## 0. 为什么可以抢在 U04 之前
 
