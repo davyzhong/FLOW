@@ -3,7 +3,7 @@ doc_id: FLOW-WI-COCKPIT-CFO-001
 title: CFO 财务总监驾驶舱产品化
 doc_type: work-item
 status: active
-version: 1.3
+version: 1.4
 created_at: 2026-09-30
 updated_at: 2026-10-12
 owner: FLOW
@@ -69,7 +69,7 @@ confidentiality: project-internal
 |---|---|---|---|
 | **A** | 框架 + 集团总览页（真实数据链路） | **completed** | ✅ 同 SHA CI `36601612612` 17/17 success（commit `b7dc4983`） |
 | B | 安全规格 V1.1.1 + ActionItem + 行动项闭环 | blocked（待 §6 Q2 裁决） | approved-spec 门禁 + 安全规格 §11 九类断言 + route-inventory 双向零差集 |
-| C | 其余 8 模块（利润/盈利/资产负债/营运/费用/现金/风险/合并/数据中心） | **next** | C-1 图表组件库已实现 ECharts 6.1.0 与 10 类构建器；准确 SHA CI 有 F1 带来的指标指纹回归，修复并全绿后依次推进 F2–F4、C-2～C-5 |
+| C | 其余 8 模块（利润/盈利/资产负债/营运/费用/现金/风险/合并/数据中心） | **next** | C-1 图表组件库已实现 ECharts 6.1.0 与 10 类构建器；F1/F2 已由同 SHA CI 关闭。先完成 2026-10-12 来源事实与 Mock 血缘门禁，再依次推进 F3–F4、C-2～C-5 |
 | D | 经分会计期增强（结论条自动生成、Findings 跨页联动、问数入口） | pending | 设计文档 §8 批次 D |
 
 ### 批次 A 交付清单（2026-09-30 完成，commit `ae56e96f` + `b7dc4983`）
@@ -91,6 +91,10 @@ confidentiality: project-internal
 2. **ruff 导入序**（`static-python` 失败）：`api/router.py` 中 `cockpit_router` 位置违反 isort 字母序。已归位。
 
 图表技术选型已记录于实施方案 §6 Q1：ECharts 6.1.0 + 10 类可复用构建器；复杂语义关系图保留 HTML/CSS。F1 指标目录哈希兼容由 `d6afe463` 修复；其准确 SHA CI 余下三个失败已定位为固定演示数据日期与真实时钟错位。API 现提供可覆盖时钟依赖，数据库生命周期测试固定时间，dashboard/investigation E2E 使用只服务于验收的冻结时钟启动器。静态检查已通过；待数据库服务可用时的本地集成验证及修复提交后的准确 SHA CI。CI 全绿前不启动 F2。
+
+### 2026-10-12 接续状态
+
+F1 准确 SHA CI run `38147756845`（提交 `11129263110d296f33c48b6cb94237a6fcedfd13`）17/17 success；F2 字典对齐及公式勾稽修正准确 SHA CI run `38188010174`（提交 `0d4b554f33bd1c9cdab3242b25d26eb2209a632c`）17/17 success。来源基线计划提交 `df0f2e6782e60d65edc955918a892c34868a9c51` 的准确 SHA CI run `38188972800` 17/17 success。唯一当前子步骤是来源事实登记与 Mock 数据血缘重整；结束条件及数据分型以本工作包“用户补充验收基线”和 `DAMAI--full-year-demo.md` 为准。未通过来源门禁前不启动 F3 或后续模块。
 
 ## 范围边界（不做什么）
 
