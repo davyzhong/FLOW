@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""大麦 synthetic 演示指标覆盖矩阵生成器（Task B3）。
+"""大麦演示指标覆盖矩阵生成器（Task B3；2026-10-13 起基于披露财报）。
 
 与 P5 公开真实财报矩阵同一引擎（复用 scripts/p5_query_facts.py 的 AST 求值），
-事实来源换成发行版合成财报 fixtures/damai/statements/damai_fy*.yaml，
+事实来源为发行版披露财报（菜鸟申请稿 IFRS）fixtures/damai/statements/damai_fy*.yaml，
 口径映射用 config/statements/item_alias_map_v1.yaml 的 damai_syn 段。
 
 缺数不编造：指标公式首个缺失输入原样写入 missing；不用 0 补值。
@@ -37,9 +37,9 @@ DATASET_OUT = ROOT / "config/metrics/damai_demo_metric_coverage_v1.yaml"
 # 只用三张主表：所有者权益变动表是衍生表，项目与主表重复，不重复取数
 SOURCE_STATEMENTS = ("合并利润表", "合并资产负债表", "合并现金流量表")
 COMPANY = "damai_syn"
-UNIT = "百万元"  # 发行版财报原始单位为元，事实库统一换算为百万元
+UNIT = "百万元"  # 发行版财报单位为人民币千元，事实库统一换算为百万元（÷1000）
 # 发布工件时间戳与内容绑定；数据合同更新并重新审核时再前移，重复构建不漂移。
-DATASET_GENERATED_AT = "2026-10-11T00:00:00+00:00"
+DATASET_GENERATED_AT = "2026-10-13T00:00:00+00:00"
 
 
 def _mapped_item(entry: object) -> tuple[str, bool] | None:
@@ -58,7 +58,7 @@ def build_damai_facts() -> list[dict[str, object]]:
     alias_doc = yaml.safe_load(ALIAS_MAP.read_text(encoding="utf-8"))
     section = alias_doc["companies"][COMPANY]["statements"]
     facts: list[dict[str, object]] = []
-    for fy in ("FY2025", "FY2026"):
+    for fy in ("FY2022", "FY2023"):
         doc = yaml.safe_load(
             (STATEMENTS_DIR / f"damai_{fy.lower()}.yaml").read_text(encoding="utf-8")
         )
@@ -75,7 +75,7 @@ def build_damai_facts() -> list[dict[str, object]]:
                     raw = row.get(column)
                     if raw is None:
                         continue
-                    value = Decimal(str(raw)) / Decimal(1000000)
+                    value = Decimal(str(raw)) / Decimal(1000)  # 千元 → 百万元
                     if take_abs:
                         value = abs(value)
                     facts.append(
@@ -133,18 +133,21 @@ def main() -> None:
 
     dataset = {
         "dataset_id": "flow.damai_demo_metric_coverage.v1",
-        "title": "大麦物流 synthetic 演示指标覆盖矩阵",
+        "title": "大麦物流演示指标覆盖矩阵（披露财报口径）",
         "generator": "scripts/build_damai_metric_coverage.py",
         "generated_at": DATASET_GENERATED_AT,
-        "facts_source": "fixtures/damai/statements/（发行版合成财报）",
+        "facts_source": "fixtures/damai/statements/（发行版披露财报，菜鸟申请稿 IFRS）",
         "alias_map": "config/statements/item_alias_map_v1.yaml#damai_syn",
         "metrics_source": str(METRICS_YAML.relative_to(ROOT)),
         "dictionary_id": metrics_doc["dictionary_id"],
         "metrics_source_sha256": hashlib.sha256(METRICS_YAML.read_bytes()).hexdigest(),
         "synthetic": True,
         "caliber_notes": [
-            "本矩阵为 synthetic 演示数据，非任何真实公司财报",
-            "avg 为（期末+期初）/2、prior 为上年同期列；发行版无 FY2024，FY2025 同比指标无比较期、FY2026 使用 FY2025 比较列",
+            (
+                "演示主体大麦物流（synthetic）引用菜鸟申请稿披露财报：报表行为披露事实，"
+                "大麦不是菜鸟，本矩阵不代表任何真实主体的经营结果"
+            ),
+            "avg 为（期末+期初）/2、prior 为上年同期列；FY2022 使用 FY2021 上期列（申请稿可比期间）、FY2023 使用 FY2022 比较列",
             "事实仅含三张主表的已映射行；权益变动表等衍生表不重复取数",
             "绝对额指标已按百万元换算为亿元展示",
             "缺口即真实缺口：缺少的事实输入原样标注，不以 0 补值",

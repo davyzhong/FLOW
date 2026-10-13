@@ -371,8 +371,8 @@ def test_alibaba_revenue_structure_theme(db_session: Session) -> None:
 # DAMAI.SYN 运营披露层（2026-10-13 来源重整）：分部序列/件量为菜鸟披露事实
 # ---------------------------------------------------------------------------
 
-DAMAI_FY2025_YAML = REPO_ROOT / "fixtures/damai/statements/damai_fy2025.yaml"
-DAMAI_FY2026_YAML = REPO_ROOT / "fixtures/damai/statements/damai_fy2026.yaml"
+DAMAI_FY2022_YAML = REPO_ROOT / "fixtures/damai/statements/damai_fy2022.yaml"
+DAMAI_FY2023_YAML = REPO_ROOT / "fixtures/damai/statements/damai_fy2023.yaml"
 
 
 def test_damai_syn_operations_datasets_are_disclosed_facts() -> None:
@@ -416,51 +416,43 @@ def test_damai_overview_segment_theme_uses_disclosed_series(
 ) -> None:
     from decimal import Decimal
 
-    payload = yaml.safe_load(DAMAI_FY2025_YAML.read_text(encoding="utf-8"))
+    payload = yaml.safe_load(DAMAI_FY2023_YAML.read_text(encoding="utf-8"))
     report = import_statement_report(
         db_session,
         company_name="大麦物流",
         stock_code="DAMAI.SYN",
         report_kind="年报",
-        period_label="FY2025",
+        period_label="FY2023",
         payload=payload,
-        source_ref="synthetic/damai-logistics-demo-v1/FY2025",
+        source_ref="synthetic/damai-logistics-demo-v1/FY2023",
         source_sha256="0" * 64,
     )
     normalize_report(db_session, report)
     overview = build_operations_overview(db_session, report_id=str(report.id))
     theme = next(t for t in overview.themes if t.theme_id == "revenue_structure")
-    assert theme.status == "available", "FY2025 有菜鸟分部披露，主题必须可用"
+    assert theme.status == "available", "FY2023 有菜鸟分部披露，主题必须可用"
     by_id = {m.entry_id: m for m in theme.metrics}
     yoy = by_id["segment_revenue_yoy"]
-    expected = ((Decimal(101272) - Decimal(99020)) / Decimal(99020)).quantize(
+    expected = ((Decimal(77512) - Decimal(46107)) / Decimal(46107)).quantize(
         Decimal("0.0001")
     )
     assert yoy.value == str(expected), "同比必须由披露值复算"
     assert "菜鸟披露" in yoy.caliber_note, "口径注必须标明披露来源"
-    assert by_id["segment_adjusted_ebita"].value == "302"
+    assert by_id["segment_adjusted_ebita"].value == "-391"
 
 
-def test_damai_fy2026_segment_theme_honestly_unavailable(
+def test_damai_segment_theme_period_keys_align_with_demo_timeline(
     db_session: Session,
 ) -> None:
-    payload = yaml.safe_load(DAMAI_FY2026_YAML.read_text(encoding="utf-8"))
-    report = import_statement_report(
-        db_session,
-        company_name="大麦物流",
-        stock_code="DAMAI.SYN",
-        report_kind="年报",
-        period_label="FY2026",
-        payload=payload,
-        source_ref="synthetic/damai-logistics-demo-v1/FY2026",
-        source_sha256="0" * 64,
+    """时间线迁移后演示报告期间与分部披露期间同键（FY2022/FY2023）。"""
+
+    from flow_api.operations.engine import load_segment_series
+
+    series = load_segment_series("DAMAI.SYN")
+    assert series is not None
+    assert set(series["series"]) >= {"FY2022", "FY2023"}, (
+        "演示报告期间 FY2022/FY2023 必须能在分部序列中取到披露值"
     )
-    normalize_report(db_session, report)
-    overview = build_operations_overview(db_session, report_id=str(report.id))
-    theme = next(t for t in overview.themes if t.theme_id == "revenue_structure")
-    assert theme.status == "not_applicable", "FY2026 无单独分部披露，主题必须如实缺省"
-    assert theme.reason == "segment_period_not_available"
-    assert theme.metrics == []
 
 
 # ---- 深链批次三-5：ManagementWatchItem 携带 metric_code（条目可下钻指标库） ----

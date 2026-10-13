@@ -9,7 +9,7 @@ from scripts.damai_visibility_matrix import VisibilityTarget, build_visibility_t
 def test_visibility_targets_cover_read_routes_and_exclude_freeze_gets() -> None:
     seed = {
         "reports": [
-            {"report_id": "report-1", "stock_code": "DAMAI.SYN", "fy": "FY2026"}
+            {"report_id": "report-1", "stock_code": "DAMAI.SYN", "fy": "FY2023"}
         ],
         "analytics": {
             "batch_id": "batch-1",

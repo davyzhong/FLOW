@@ -37,7 +37,9 @@ def validate_damai_package(package: dict[str, Any]) -> dict[str, Any]:
     if op_totals != fin_totals:
         codes.append("operating_financial_mismatch")
 
-    # 分析期收入锚区间（1050–1150 亿 = 10,500,000–11,500,000 万元）
+    # 分析期收入锚：必须精确等于来源登记的 FY2023 披露收入（±0.0001 万元）
+    from flow_api.fixtures.damai.generator import _disclosed_anchors
+
     analysis_months = {
         row["month"] for row in package["monthly_facts"]["budget"]
     }
@@ -49,7 +51,8 @@ def validate_damai_package(package: dict[str, Any]) -> dict[str, Any]:
         ),
         Decimal("0"),
     )
-    if not Decimal("10500000") <= analysis_total <= Decimal("11500000"):
+    disclosed_analysis_revenue = _disclosed_anchors()["FY2023"]["revenue"]
+    if abs(analysis_total - disclosed_analysis_revenue) > Decimal("0.0001"):
         codes.append("revenue_out_of_anchor_range")
 
     # 业务族占比 ±1pp（分析期）

@@ -11,7 +11,7 @@ import sys
 from pathlib import Path, PurePosixPath
 
 ROOT = Path(__file__).resolve().parents[1]
-PACKAGE = ROOT / "data/enterprise/damai-logistics/v1"
+PACKAGE = ROOT / "data/enterprise/damai-logistics/v2"
 SOURCE = ROOT / "fixtures/damai"
 
 
@@ -357,7 +357,7 @@ def build() -> dict:
         files[key] = entry
     manifest = {
         "package_id": "damai-logistics",
-        "package_version": "1.0.0",
+        "package_version": "2.0.0",
         "enterprise_code": "damai-logistics",
         "enterprise_name": "大麦物流集团",
         "synthetic": True,

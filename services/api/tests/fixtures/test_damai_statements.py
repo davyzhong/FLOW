@@ -1,169 +1,137 @@
-"""Task 3：大麦合成财务报告生成契约测试（规格 §5.1 恒等清单）。
+"""大麦披露财报契约测试（2026-10-13 时间线迁移后）。
 
-- FY2025（对比期）/ FY2026（分析期）两份完整报告；
-- 收入与 canonical 年度汇总一致；资产 = 负债 + 权益；
-- 现金桥闭合且 CF 期末现金 = BS 货币资金；
-- 权益 roll-forward 期末权益 = BS 权益；净利润归属拆分合计 = 净利润；
-- 金额单位统一人民币千元（canonical 万元 × 10）。
+- FY2022（比较期）/ FY2023（分析期）两份披露报告（菜鸟申请稿 IFRS 逐行原值）；
+- 关键行值与来源登记披露锚一致（防抽取/重排漂移）；
+- 上期列与上年文件本期列跨文件一致；
+- IFRS 恒等式：毛利、经营亏损、年度亏损归属、资产=权益及负债、现金桥；
+- 合成专用行（利息 65% 拆分、折旧 10% 估算、权益变动表）必须已移除；
+- 身份：DAMAI.SYN / 大麦物流，provenance 如实披露菜鸟申请稿来源。
 """
 
 from __future__ import annotations
 
 from decimal import Decimal
 
-from flow_api.fixtures.damai.generator import build_damai_package
+import pytest
+
 from flow_api.fixtures.damai.statements import build_damai_statement_payloads
 
-_UNIT = Decimal("10")  # canonical 万元 -> 报告千元
+# 申请稿披露锚（与来源登记一致；人民币千元）
+_ANCHORS = {
+    "FY2023": {"revenue": Decimal("77799675"), "assets": Decimal("71850931")},
+    "FY2022": {"revenue": Decimal("66866916"), "assets": Decimal("58881087")},
+}
 
 
-def _annual_revenue_thousands(package: dict, months: tuple[str, ...]) -> Decimal:
-    return sum(
-        (
-            Decimal(str(row["revenue"])) * _UNIT
-            for row in package["monthly_facts"]["operating_actual"]
-            if row["month"] in months
-        ),
-        Decimal("0"),
-    )
+@pytest.fixture(scope="module")
+def payloads() -> dict:
+    return build_damai_statement_payloads()
 
 
-def test_two_annual_reports_generated() -> None:
-    package = build_damai_package()
-    payloads = build_damai_statement_payloads(package)
-    assert set(payloads) == {"FY2025", "FY2026"}
+def test_two_annual_reports_generated(payloads: dict) -> None:
+    assert set(payloads) == {"FY2022", "FY2023"}
     for payload in payloads.values():
-        assert set(payload["statements"]) >= {
+        assert set(payload["statements"]) == {
             "合并利润表",
             "合并资产负债表",
             "合并现金流量表",
-            "合并所有者权益变动表",
-        }
+        }, "只含披露三表；合成权益变动表已移除"
         assert payload["unit"] == "人民币千元"
+        assert payload["data_layer"] == "disclosed_fact"
+        assert "provenance" in payload and "registry" in payload["provenance"]
 
 
-def test_metric_source_lines_are_explicit_and_reconcile() -> None:
-    """覆盖指标所需的子项须进入合成报表，但不得改变已闭合总额。"""
-    payloads = build_damai_statement_payloads(build_damai_package())
-    for payload in payloads.values():
-        statements = payload["statements"]
-        income = {row["item"]: row for row in statements["合并利润表"]}
-        balance = {row["item"]: row for row in statements["合并资产负债表"]}
-        cashflow = {row["item"]: row for row in statements["合并现金流量表"]}
-
-        finance_cost = Decimal(income["财务费用"]["本期发生额"])
-        interest = Decimal(income["其中：利息费用"]["本期发生额"])
-        assert Decimal("0") < interest < finance_cost
-
-        current_liabilities = Decimal(balance["流动负债合计"]["期末余额"])
-        assert sum(
-            Decimal(balance[item]["期末余额"])
-            for item in ("短期借款", "应付账款", "其他流动负债")
-        ) == current_liabilities
-        noncurrent_liabilities = Decimal(balance["非流动负债合计"]["期末余额"])
-        assert sum(
-            Decimal(balance[item]["期末余额"])
-            for item in ("长期借款", "其他非流动负债")
-        ) == noncurrent_liabilities
-
-        assert Decimal(cashflow["销售商品、提供劳务收到的现金"]["本期发生额"]) == Decimal(
-            cashflow["经营活动现金流入小计"]["本期发生额"]
-        )
-        assert Decimal(cashflow["折旧与摊销"]["本期发生额"]) > 0
-        capex = Decimal(
-            cashflow["购建固定资产、无形资产和其他长期资产支付的现金"]["本期发生额"]
-        )
-        assert capex == Decimal(cashflow["投资活动现金流出小计"]["本期发生额"])
-        assert Decimal(cashflow["投资活动产生的现金流量净额"]["本期发生额"]) == -capex
-
-
-def test_revenue_matches_canonical_annual_total() -> None:
-    package = build_damai_package()
-    payloads = build_damai_statement_payloads(package)
-    all_months = tuple(
-        sorted({r["month"] for r in package["monthly_facts"]["operating_actual"]})
-    )
-    canonical = {
-        "FY2025": _annual_revenue_thousands(package, all_months[:12]),
-        "FY2026": _annual_revenue_thousands(package, all_months[12:]),
-    }
+def test_disclosed_anchor_values(payloads: dict) -> None:
     for fy, payload in payloads.items():
         income = {row["item"]: row for row in payload["statements"]["合并利润表"]}
-        reported = Decimal(income["营业收入"]["本期发生额"])
-        assert reported == canonical[fy], f"{fy} 收入必须与 canonical 年度汇总一致"
-
-
-def test_gross_profit_and_net_income_attribution() -> None:
-    package = build_damai_package()
-    payloads = build_damai_statement_payloads(package)
-    for payload in payloads.values():
-        income = {row["item"]: row for row in payload["statements"]["合并利润表"]}
-        revenue = Decimal(income["营业收入"]["本期发生额"])
-        cost = Decimal(income["营业成本"]["本期发生额"])
-        gross = Decimal(income["毛利"]["本期发生额"])
-        assert revenue - cost == gross
-        net = Decimal(income["五、净利润（净亏损以“－”号填列）"]["本期发生额"])
-        attr = Decimal(income["1.归属于母公司所有者的净利润"]["本期发生额"])
-        minority = Decimal(income["2.少数股东损益"]["本期发生额"])
-        assert attr + minority == net, "净利润归属拆分必须闭合"
-
-
-def test_balance_sheet_identity_holds() -> None:
-    package = build_damai_package()
-    payloads = build_damai_statement_payloads(package)
-    for payload in payloads.values():
+        assert Decimal(income["收入"]["本期发生额"]) == _ANCHORS[fy]["revenue"]
         bs = {row["item"]: row for row in payload["statements"]["合并资产负债表"]}
-        assets = Decimal(bs["资产总计"]["期末余额"])
-        liabilities = Decimal(bs["负债合计"]["期末余额"])
-        equity = Decimal(bs["所有者权益合计"]["期末余额"])
-        assert assets == liabilities + equity, "资产 = 负债 + 权益"
+        assert Decimal(bs["资产总计"]["期末余额"]) == _ANCHORS[fy]["assets"]
 
 
-def test_cash_bridge_closes_and_matches_balance_sheet() -> None:
-    package = build_damai_package()
-    payloads = build_damai_statement_payloads(package)
-    for payload in payloads.values():
-        cf = {row["item"]: row for row in payload["statements"]["合并现金流量表"]}
-        opening = Decimal(cf["加：期初现金及现金等价物余额"]["本期发生额"])
-        operating = Decimal(cf["经营活动产生的现金流量净额"]["本期发生额"])
-        investing = Decimal(cf["投资活动产生的现金流量净额"]["本期发生额"])
-        financing = Decimal(cf["筹资活动产生的现金流量净额"]["本期发生额"])
-        closing = Decimal(cf["六、期末现金及现金等价物余额"]["本期发生额"])
-        assert opening + operating + investing + financing == closing, "现金桥必须闭合"
-        bs = {row["item"]: row for row in payload["statements"]["合并资产负债表"]}
-        assert closing == Decimal(bs["货币资金"]["期末余额"]), (
-            "现金流量表期末现金必须等于资产负债表货币资金"
+def test_prior_column_matches_prior_year_file(payloads: dict) -> None:
+    cur = {row["item"]: row for row in payloads["FY2023"]["statements"]["合并利润表"]}
+    prev = {row["item"]: row for row in payloads["FY2022"]["statements"]["合并利润表"]}
+    for item in ("收入", "毛利", "年度亏损/利润"):
+        assert Decimal(cur[item]["上期发生额"]) == Decimal(prev[item]["本期发生额"]), (
+            f"{item} 上期列必须等于 FY2022 文件本期值"
         )
 
 
-def test_equity_roll_forward_matches_balance_sheet() -> None:
-    package = build_damai_package()
-    payloads = build_damai_statement_payloads(package)
+def test_income_statement_identities(payloads: dict) -> None:
     for payload in payloads.values():
-        eq = {row["item"]: row for row in payload["statements"]["合并所有者权益变动表"]}
-        opening = Decimal(eq["期初权益"]["本期发生额"])
-        net_income = Decimal(eq["本期净利润"]["本期发生额"])
-        other = Decimal(eq["其他权益变动"]["本期发生额"])
-        closing = Decimal(eq["期末权益"]["本期发生额"])
-        assert opening + net_income + other == closing, "权益 roll-forward 必须闭合"
-        bs = {row["item"]: row for row in payload["statements"]["合并资产负债表"]}
-        assert closing == Decimal(bs["所有者权益合计"]["期末余额"]), (
-            "权益变动表期末权益必须等于资产负债表权益"
-        )
+        for col in ("本期发生额", "上期发生额"):
+            income = {
+                row["item"]: row[col] for row in payload["statements"]["合并利润表"]
+            }
+            d = lambda name: Decimal(str(income[name])) if income[name] is not None else Decimal("0")  # noqa: E731
+            assert d("毛利") == d("收入") + d("营业成本")
+            assert d("经营亏损/利润") == (
+                d("毛利")
+                + d("销售及市场推广开支")
+                + d("一般及行政开支")
+                + d("产品开发开支")
+                + d("金融资产减值(转回)/计提")
+                + d("其他收入")
+                + d("其他收益/(亏损)净额")
+            )
+            assert d("年度亏损/利润") == d("归属公司所有者") + d("非控制性权益")
 
 
-# ---------------------------------------------------------------------------
-# Task A1 红灯：财报独立身份（规格 §4.3 / 计划 Task A3 前置合同）
-# ---------------------------------------------------------------------------
+def test_balance_sheet_identity_holds(payloads: dict) -> None:
+    for payload in payloads.values():
+        for col in ("期末余额", "期初余额"):
+            bs = {
+                row["item"]: row[col] for row in payload["statements"]["合并资产负债表"]
+            }
+            d = lambda name: Decimal(str(bs[name])) if bs[name] is not None else Decimal("0")  # noqa: E731
+            assert d("资产总计") == d("流动资产合计") + d("非流动资产合计")
+            assert d("负债合计") == d("流动负债合计") + d("非流动负债合计")
+            assert d("权益总额") == d("归属于公司所有者权益") + d("非控制性权益(权益)")
+            assert d("资产总计") == d("权益及负债总额")
 
 
-def test_statement_payloads_carry_damai_syn_identity() -> None:
-    """财报 payload 必须携带独立 synthetic 身份 DAMAI.SYN，
-    不得复用或冒充 9988.HK（阿里巴巴）fixture 身份。"""
-    package = build_damai_package()
-    payloads = build_damai_statement_payloads(package)
+def test_cash_bridge_closes(payloads: dict) -> None:
+    for payload in payloads.values():
+        for col in ("本期发生额", "上期发生额"):
+            cf = {
+                row["item"]: row[col] for row in payload["statements"]["合并现金流量表"]
+            }
+            d = lambda name: Decimal(str(cf[name])) if cf[name] is not None else Decimal("0")  # noqa: E731
+            assert d("现金及现金等价物(减少)/增加净额") == (
+                d("经营活动所得现金净额")
+                + d("投资活动所用现金净额")
+                + d("融资活动(所用)所得现金净额")
+            )
+            assert d("年末现金及现金等价物") == (
+                d("年初现金及现金等价物")
+                + d("现金及现金等价物(减少)/增加净额")
+                + d("汇率变动对现金的影响")
+            )
+
+
+def test_no_synthetic_assumption_lines(payloads: dict) -> None:
+    """无来源合成行必须全部移除（处置见来源登记 U-DM-*）。"""
+
+    for payload in payloads.values():
+        income_names = {
+            row["item"] for row in payload["statements"]["合并利润表"]
+        }
+        cf_names = {
+            row["item"] for row in payload["statements"]["合并现金流量表"]
+        }
+        assert "其中：利息费用" not in income_names
+        assert "折旧与摊销" not in cf_names
+
+
+def test_statement_payloads_carry_damai_syn_identity(payloads: dict) -> None:
+    """演示主体身份 DAMAI.SYN / 大麦物流；来源如实标注菜鸟申请稿。"""
+
     for fy, payload in payloads.items():
         assert payload.get("stock_code") == "DAMAI.SYN", (
             f"{fy} 必须携带 DAMAI.SYN 独立身份"
         )
         assert payload.get("company") == "大麦物流", f"{fy} 公司名必须为大麦物流"
+        provenance = payload["provenance"]
+        assert "菜鸟" in provenance["original"] and "申请版本" in provenance["original"]
+        assert "大麦" in provenance["original"]

@@ -133,7 +133,7 @@ class EnterpriseDataPackageTests(unittest.TestCase):
         )
 
     def test_real_package_passes(self) -> None:
-        package_builder.PACKAGE = ROOT / "data/enterprise/damai-logistics/v1"
+        package_builder.PACKAGE = ROOT / "data/enterprise/damai-logistics/v2"
         manifest = package_builder.verify()
         self.assertEqual(manifest["contract_version"], "flow.enterprise-package.v1")
 

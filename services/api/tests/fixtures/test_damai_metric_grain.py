@@ -39,7 +39,7 @@ from flow_api.settings import get_settings
 
 REPO_ROOT = Path(__file__).resolve().parents[4]
 CANONICAL = REPO_ROOT / "fixtures/damai/canonical"
-MONTH_KEY = "2026-08"  # 分析期最后一个月（快照 as_of_month=202608）
+MONTH_KEY = "2023-03"  # 分析期最后一个月（快照 as_of_month=202303）
 TOLERANCE = Decimal("0.01")
 
 

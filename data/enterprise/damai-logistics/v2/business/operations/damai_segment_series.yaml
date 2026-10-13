@@ -1,0 +1,46 @@
+company: 大麦物流（演示主体）——分部序列为菜鸟披露事实（演示引用）
+data_layer: disclosed_fact
+entity_note: 分部序列为菜鸟披露事实（阿里年报/业绩公告，MPM 口径），大麦演示主体引用
+note: 分部序列直接引用来源登记的菜鸟披露值（阿里年报/业绩公告分部披露，MPM 口径）：FY2026 起菜鸟重分类进「所有其他」分部，报告未单列菜鸟，不设 FY2026 值，也不得从混合组汇总反推。大麦演示报告期间的合成报表不属于本数据集。
+sample: damai_segment_series
+series:
+  FY2019:
+    fact_ids:
+      segment_revenue: CN-SEG-FY2019-SEGMENT_REVENUE
+    segment_revenue: 14885
+  FY2020:
+    fact_ids:
+      segment_revenue: CN-SEG-FY2020-SEGMENT_REVENUE
+    segment_revenue: 22233
+  FY2021:
+    fact_ids:
+      segment_revenue: CN-SEG-FY2021-SEGMENT_REVENUE
+    segment_revenue: 37258
+  FY2022:
+    fact_ids:
+      segment_revenue: CN-SEG-FY2022-SEGMENT_REVENUE
+    segment_revenue: 46107
+  FY2023:
+    adjusted_ebita: -391
+    fact_ids:
+      adjusted_ebita: CN-SEG-FY2023-ADJUSTED_EBITA
+      segment_revenue: CN-SEG-FY2023-SEGMENT_REVENUE
+    segment_revenue: 77512
+  FY2024:
+    adjusted_ebita: 1402
+    fact_ids:
+      adjusted_ebita: CN-SEG-FY2024-ADJUSTED_EBITA
+      segment_revenue: CN-SEG-FY2024-SEGMENT_REVENUE
+    segment_revenue: 99020
+  FY2025:
+    adjusted_ebita: 302
+    fact_ids:
+      adjusted_ebita: CN-SEG-FY2025-ADJUSTED_EBITA
+      segment_revenue: CN-SEG-FY2025-SEGMENT_REVENUE
+    segment_revenue: 101272
+source_ref: config/damai/source_facts_v1.yaml
+source_registry_id: flow.damai_source_facts.v1
+source_sha256_prefix: 3e2c367958eacf3b
+unavailable_periods:
+  FY2026: 菜鸟并入阿里「所有其他」分部，报告未单列（U-CN-FY2026-STANDALONE）
+unit: 人民币百万元

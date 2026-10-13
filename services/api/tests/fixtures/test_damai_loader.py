@@ -1,7 +1,7 @@
 """Task 4：大麦演示装载器 DB 集成测试（聚焦财报装载子链）。
 
 - enterprise 幂等复用 bootstrap UUID 并改名为大麦物流（授权契约单企业）；
-- 两份合成财报（FY2025/FY2026）导入 + 归一化 + 发布：source SHA 非空、
+- 两份披露财报（FY2022/FY2023）导入 + 归一化 + 发布：source SHA 非空、
   归一行含 item_id、report published；
 - 二次 seed 幂等：报告身份/归一行数不增长。
 事务回滚注入测试与指标快照/Finding 编排（规格 §4.3 全量）在后续切片。
@@ -129,7 +129,7 @@ def test_review_publish_blocks_tampered_damai_report(db_session: Session) -> Non
     from flow_api.statements.importer import import_statement_report
     from flow_api.statements.review import ReviewBlockedError, ReviewService
 
-    yaml_path = REPO_ROOT / "fixtures/damai/statements/damai_fy2026.yaml"
+    yaml_path = REPO_ROOT / "fixtures/damai/statements/damai_fy2023.yaml"
     payload = yaml.safe_load(yaml_path.read_text(encoding="utf-8"))
     for row in payload["statements"]["合并资产负债表"]:
         if row["item"] == "资产总计":
@@ -139,7 +139,7 @@ def test_review_publish_blocks_tampered_damai_report(db_session: Session) -> Non
         company_name="大麦物流",
         stock_code="DAMAI.SYN",
         report_kind="年报",
-        period_label="FY2026",
+        period_label="FY2023",
         payload=payload,
         source_ref="synthetic/damai-logistics-demo-v1/tampered",
         source_sha256="0" * 64,

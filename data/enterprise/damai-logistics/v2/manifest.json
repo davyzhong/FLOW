@@ -1,0 +1,162 @@
+{
+  "contract_version": "flow.enterprise-package.v1",
+  "enterprise_code": "damai-logistics",
+  "enterprise_name": "大麦物流集团",
+  "files": {
+    "README.md": {
+      "bytes": 4884,
+      "sha256": "6a0fb460f97d02623ebe9ddbd46dcd6b85855c2b79999beecbf97fe45fb74e9d"
+    },
+    "business/canonical/ar_collections.jsonl": {
+      "bytes": 1391909,
+      "rows": 4800,
+      "sha256": "662da1b6ead62a9f9d84c8a684d8e90cd615d20fdc3a1475edefa1b02b08e830"
+    },
+    "business/canonical/batch.jsonl": {
+      "bytes": 369,
+      "rows": 1,
+      "sha256": "8798360a71169da4e217a5f507f79468bb253ff1c39a3cf33bef75b4ece45634"
+    },
+    "business/canonical/customer_segments.jsonl": {
+      "bytes": 181,
+      "rows": 4,
+      "sha256": "1ce2dfdd36fa815be9b6b0c6062c0345286b35741e661f271342e0c49540a13b"
+    },
+    "business/canonical/customers.jsonl": {
+      "bytes": 5880,
+      "rows": 40,
+      "sha256": "bb9e7ec1f4064d63a20470c2cc4455ed098fdc219f1c632cdd2c07c38614c3af"
+    },
+    "business/canonical/financial_actuals.jsonl": {
+      "bytes": 129993,
+      "rows": 768,
+      "sha256": "f34945827e00622000d4212b0925f2a137cd6bb562116f7011b64833c297bc91"
+    },
+    "business/canonical/logistics_products.jsonl": {
+      "bytes": 639,
+      "rows": 8,
+      "sha256": "57c321b81aece35c5a0e9e58277c65df2fb7d6a4a4878647b39beb98032b0abc"
+    },
+    "business/canonical/management_accounts.jsonl": {
+      "bytes": 1140,
+      "rows": 9,
+      "sha256": "2802026cbf8cb9ffcc7b51c17ec98adca8bb3222981f72160dd51dd83ce5a6b1"
+    },
+    "business/canonical/manifest.json": {
+      "bytes": 1950,
+      "sha256": "aaca8a2af0d96dadc3344e9e5d7920a6f402586a9f00263138f005ef2be31d7e"
+    },
+    "business/canonical/monthly_budgets.jsonl": {
+      "bytes": 3177292,
+      "rows": 10752,
+      "sha256": "b0e79bd4e2d74ba1ea5b70ad5f35b54e1c921578ea517d5458f10947dc020d93"
+    },
+    "business/canonical/operating_actuals.jsonl": {
+      "bytes": 682638,
+      "rows": 1920,
+      "sha256": "ec50ecc5368ab4e60fe198e025af1c7878f78debd18005202c65359e6b599bf9"
+    },
+    "business/canonical/organizations.jsonl": {
+      "bytes": 513,
+      "rows": 5,
+      "sha256": "c558c45e6c79cddee99b4f8bf6d63b169c5d80935d20f1db1d40f87711f83778"
+    },
+    "business/canonical/periods.jsonl": {
+      "bytes": 1902,
+      "rows": 24,
+      "sha256": "82d81d4511ff6b29447e47543eceab8f445813481231d6dde4c4a2a9fa017524"
+    },
+    "business/canonical/regions.jsonl": {
+      "bytes": 492,
+      "rows": 6,
+      "sha256": "c5dc96c7542f3ce75eb5fb4147176dcfd3d88c310dc63b344397caa0437b6b06"
+    },
+    "business/canonical/scenario_versions.jsonl": {
+      "bytes": 186,
+      "rows": 2,
+      "sha256": "01d3a9d831c89b556bca914f905268b7cbcc7a1cf05c228b324e0509fa5ffefe"
+    },
+    "business/forecast/rolling_forecast.jsonl": {
+      "bytes": 636,
+      "rows": 12,
+      "sha256": "094b612b04a392241de80aeef638fc52eeafc2f031fbd881b779f2862cc2199c"
+    },
+    "business/operations/damai_operating_metrics.yaml": {
+      "bytes": 3413,
+      "sha256": "aed7c0d86b0d11bcc484c57c2cd63188eeff6206ed1ecf17b71ed03d76bc2d8a"
+    },
+    "business/operations/damai_segment_series.yaml": {
+      "bytes": 1830,
+      "sha256": "aadcedb7fc9f41990a0016357ebcea776ccd38725eaa519787ecfd89dcd9663c"
+    },
+    "business/statements/damai_fy2022.yaml": {
+      "bytes": 10865,
+      "sha256": "b58d179c2584354134321efaa7e289d6f923b23bb12c74e4f1d62c5d95869661"
+    },
+    "business/statements/damai_fy2023.yaml": {
+      "bytes": 10868,
+      "sha256": "68235f199ede79199d575dd26847adc4a57fd99aff667492b52cc19d74ab2f60"
+    },
+    "business/workbooks/damai_logistics_full_v1.xlsx": {
+      "bytes": 1325605,
+      "sha256": "b2a9d3a8f328f4c1307ba0fcb9e74db0ba700a66f1b0829633ef4418a4f3ab74"
+    },
+    "initialize.sh": {
+      "bytes": 327,
+      "sha256": "817dbe176a55fe3c1f21eb170e851cb683160179423350396112b0c2dacb1c3b"
+    },
+    "organization/departments.jsonl": {
+      "bytes": 1099,
+      "rows": 8,
+      "sha256": "4076e58db35f71d3f1853452ef6a03d1bc35ddbf2976b5f77b96155907d552f9"
+    },
+    "organization/permissions.jsonl": {
+      "bytes": 21073,
+      "rows": 142,
+      "sha256": "5d20d70db86c6a3b9149ecee68e59b1f043717259879653e23e4b161d322d490"
+    },
+    "organization/positions.jsonl": {
+      "bytes": 1218,
+      "rows": 8,
+      "sha256": "0d05dbb5b80a889dbdfb42c5c08a5756e7e2dc486a27b45f4f8b8f7625dc614c"
+    },
+    "organization/roles.jsonl": {
+      "bytes": 688,
+      "rows": 6,
+      "sha256": "3903ecd83bb373d03b28a490b3e751be55b51794322e0f6106a375a7af1d35a3"
+    },
+    "organization/users.jsonl": {
+      "bytes": 2617,
+      "rows": 8,
+      "sha256": "5bb1048719bcda40b1f6f85996d845d171071408f8050867fc524af286707c4d"
+    },
+    "sql/00_preflight.sql": {
+      "bytes": 737,
+      "sha256": "01fe69605689e7c095d45509ae9983c5c36f0685090ab1d355b0aab6ebb71ba8"
+    },
+    "sql/10_organization.sql": {
+      "bytes": 24390,
+      "sha256": "ffe1a81feac79bcb02d23b055009e1ed58564ae7a6a57fdfaed774ee5808bd1e"
+    },
+    "sql/20_business_reset.sql": {
+      "bytes": 3887,
+      "sha256": "586bf863cf072d3ad7ef979c85916738e6a12f09e16ccc80cc311df6470d98ab"
+    },
+    "sql/90_verify.sql": {
+      "bytes": 732,
+      "sha256": "4bb4d202d4950128bddf720079cfdb2099145d551a78d68306e602179ed33f1d"
+    }
+  },
+  "modules": {
+    "business": "1.0.0",
+    "organization": "1.0.0"
+  },
+  "package_id": "damai-logistics",
+  "package_version": "2.0.0",
+  "source_manifest_sha256": "c73848806010685c7b5698b5f65228db2e67e01bf38a788eda6911bbcb6ce11e",
+  "synthetic": true,
+  "system_dependencies": {
+    "business_source": "fixtures/damai",
+    "rbac_source": "services/api/src/flow_api/security/authorization.py"
+  }
+}

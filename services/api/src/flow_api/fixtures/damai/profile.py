@@ -12,7 +12,13 @@ from dataclasses import dataclass
 from decimal import Decimal
 from typing import Final, Literal
 
-PROFILE_VERSION = "damai-profile-v1"
+PROFILE_VERSION = "damai-profile-v2"
+
+# 披露锚（2026-10-13 时间线迁移）：演示财年对齐菜鸟真实财年（截至 3 月 31 日），
+# 比较期 = FY2022（2021-04~2022-03）、分析期 = FY2023（2022-04~2023-03）。
+# 收入/毛利锚定来源登记 config/damai/source_facts_v1.yaml 的申请稿披露值
+# （fact: 合并利润表 FY2022/FY2023 收入与毛利，人民币千元 ÷ 10 = 万元），
+# 生成器在运行时读取登记取值，不在本文件硬编码金额。
 
 # 当前授权契约（S01 2A）：整库单企业，复用固定 bootstrap UUID。
 # seed 时幂等 UPDATE 该企业为大麦物流（不新建第二企业）。
@@ -36,8 +42,13 @@ def _month_range(start: str, count: int) -> tuple[str, ...]:
     return tuple(months)
 
 
-PRIOR_MONTHS: Final[tuple[str, ...]] = _month_range("2024-09", 12)
-ANALYSIS_MONTHS: Final[tuple[str, ...]] = _month_range("2025-09", 12)
+PRIOR_MONTHS: Final[tuple[str, ...]] = _month_range("2021-04", 12)   # FY2022
+ANALYSIS_MONTHS: Final[tuple[str, ...]] = _month_range("2022-04", 12)  # FY2023
+
+PRIOR_FY_LABEL: Final[str] = "FY2022"
+ANALYSIS_FY_LABEL: Final[str] = "FY2023"
+# 期初余额锚财年（FY2021 = 2020-04~2021-03，申请稿资产负债表期末列）
+OPENING_FY_LABEL: Final[str] = "FY2021"
 
 
 @dataclass(frozen=True, slots=True)
@@ -74,7 +85,7 @@ class DamaiProfileV1:
     disclosure_note: str
     prior_months: tuple[str, ...]
     analysis_months: tuple[str, ...]
-    annual_revenue_target: tuple[Decimal, Decimal]  # 万元（低, 高）
+    annual_revenue_target: tuple[Decimal, Decimal]  # 万元（比较期, 分析期），披露锚定
     gross_margin_target: tuple[Decimal, Decimal]
     business_families: tuple[BusinessFamily, ...]
     business_units: tuple[str, ...]
@@ -216,11 +227,12 @@ DAMAI_PROFILE_V1 = DamaiProfileV1(
     disclosure_note=DAMAI_DISCLOSURE_NOTE,
     prior_months=PRIOR_MONTHS,
     analysis_months=ANALYSIS_MONTHS,
+    # 披露锚（占位值；生成器运行时以来源登记值覆盖校验）
     annual_revenue_target=(
-        Decimal("10500000.0000"),  # 1,050 亿 = 1,050 万万元
-        Decimal("11500000.0000"),  # 1,150 亿
+        Decimal("6686691.6000"),   # FY2022 收入 66,866,916 千元 ÷ 10
+        Decimal("7779967.5000"),   # FY2023 收入 77,799,675 千元 ÷ 10
     ),
-    gross_margin_target=(Decimal("0.09"), Decimal("0.11")),
+    gross_margin_target=(Decimal("0.1074"), Decimal("0.1047")),
     business_families=BUSINESS_FAMILIES,
     business_units=BUSINESS_UNITS,
     regions=REGIONS,
@@ -233,6 +245,7 @@ DAMAI_PROFILE_V1 = DamaiProfileV1(
 )
 
 __all__ = [
+    "ANALYSIS_FY_LABEL",
     "ANALYSIS_MONTHS",
     "BUSINESS_FAMILIES",
     "BUSINESS_UNITS",
@@ -241,6 +254,8 @@ __all__ = [
     "CUSTOMERS",
     "DAMAI_BOOTSTRAP_ENTERPRISE_ID",
     "DAMAI_PROFILE_V1",
+    "OPENING_FY_LABEL",
+    "PRIOR_FY_LABEL",
     "PRIOR_MONTHS",
     "PRODUCTS",
     "PRODUCT_ASSIGNMENTS",

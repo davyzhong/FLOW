@@ -86,7 +86,7 @@ _AR_BUCKET_RATES: tuple[tuple[str, Decimal], ...] = (
     ("61-90", Decimal("0.06")),
 )
 _E3_CUSTOMERS = ("DM-CUST-007", "DM-CUST-019")
-_E3_START_MONTH = "2026-03"
+_E3_START_MONTH = "2022-10"  # 分析期 index 6（2021-09 旧线 2026-03 的重映射）
 _E3_OVERDUE_FACTOR = Decimal("1.35")
 _E3_COLLECT_FACTOR = Decimal("0.75")
 _AR_COLLECT_RATE = Decimal("0.88")
@@ -119,7 +119,12 @@ def _family_month_revenues(
             jitter = Decimal(str(rng.uniform(0.97, 1.03)))
             raw[family_id] = target * weight * jitter
         scale = target / sum(raw.values(), Decimal("0"))
-        result[month] = {fid: _d(v * scale) for fid, v in raw.items()}
+        rounded = {fid: _d(v * scale) for fid, v in raw.items()}
+        residual = _d(target - sum(rounded.values(), Decimal("0")))
+        if residual:
+            top = max(rounded, key=lambda fid: rounded[fid])
+            rounded[top] = _d(rounded[top] + residual)  # 族级尾差入最大族
+        result[month] = rounded
     return result
 
 
@@ -157,24 +162,75 @@ def _row_margin(family_id: str, product_id: str, month: str) -> Decimal:
     return margin
 
 
+def _disclosed_anchors() -> dict[str, dict[str, Decimal]]:
+    """从来源登记读取演示财年的披露锚（收入/毛利，千元 → 万元）。
+
+    时间线迁移后演示财年即菜鸟真实财年：比较期 FY2022、分析期 FY2023。
+    登记缺失或条目不符时直接报错，绝不回退硬编码值。
+    """
+
+    from pathlib import Path
+
+    import yaml
+
+    registry_rel = "config/damai/source_facts_v1.yaml"
+    for root in (Path.cwd(), *Path.cwd().parents):
+        candidate = root / registry_rel
+        if candidate.is_file():
+            registry = yaml.safe_load(candidate.read_text(encoding="utf-8"))
+            break
+    else:
+        raise FileNotFoundError(
+            f"来源登记缺失：{registry_rel}（先运行 scripts/build_damai_source_registry.py）"
+        )
+    index = {
+        (fact["statement"], fact["period"], fact["item_zh"]): fact
+        for fact in registry["facts"]
+    }
+
+    def anchor(period: str, item: str) -> Decimal:
+        fact = index[("合并利润表", period, item)]
+        return Decimal(str(fact["value"])) / Decimal("10")  # 千元 → 万元
+
+    return {
+        period: {
+            "revenue": anchor(period, "收入"),
+            "gross": anchor(period, "毛利"),
+        }
+        for period in ("FY2022", "FY2023")
+    }
+
+
+def _fiscal_year_of(month: str) -> str:
+    return "FY2022" if month in PRIOR_MONTHS else "FY2023"
+
+
 def build_damai_package() -> dict[str, Any]:
-    """构建大麦 canonical 数据包（确定性；不读数据库、不用进程随机数）。"""
+    """构建大麦 canonical 数据包（确定性；不读数据库、不用进程随机数）。
+
+    时间线迁移（2026-10-13）：演示时间线 = 菜鸟真实财年；年度收入/毛利
+    由来源登记披露值锚定——月度目标按季节系数分布后归一化，保证每个财年
+    的月度合计恰等于披露值；毛利按披露值全局校准（保持相对结构），尾差
+    并入校准基准行。明细 ↔ 披露年度聚合零差异。
+    """
 
     profile = DAMAI_PROFILE_V1
-    revenue_low, _ = profile.annual_revenue_target
-    analysis_total = revenue_low + Decimal("500000")  # 目标区间中值：1,100 亿
-    analysis_base = _d(analysis_total / Decimal("12"))
-    prior_base = _d(analysis_base / Decimal("1.18"))  # 同比增长约 18%
+    anchors = _disclosed_anchors()
+    prior_total = anchors["FY2022"]["revenue"]
+    analysis_total = anchors["FY2023"]["revenue"]
+
+    # 月度目标：季节系数分布 → 归一化 → 年度合计恰等于披露收入（尾差入末月）
+    month_targets: dict[str, Decimal] = {}
+    for months, total in ((PRIOR_MONTHS, prior_total), (ANALYSIS_MONTHS, analysis_total)):
+        base = total / Decimal("12")
+        raw = {month: base * _SEASONALITY[_month_of(month)] for month in months}
+        norm = total / sum(raw.values(), Decimal("0"))
+        scaled = {month: _d(value * norm) for month, value in raw.items()}
+        scaled[months[-1]] += _d(total - sum(scaled.values(), Decimal("0")))
+        month_targets.update(scaled)
 
     operating_actual: list[dict[str, Any]] = []
     all_months = (*PRIOR_MONTHS, *ANALYSIS_MONTHS)
-    month_targets = {
-        month: _d(
-            (analysis_base if month in ANALYSIS_MONTHS else prior_base)
-            * _SEASONALITY[_month_of(month)]
-        )
-        for month in all_months
-    }
     by_family_by_month = _family_month_revenues(all_months, month_targets)
 
     # 经营明细：族月总额为控制总量，按 客户规模 × 产品权重 分摊到
@@ -224,6 +280,31 @@ def build_damai_package() -> dict[str, Any]:
                         "gross_profit": str(revenue - cost),
                     }
                 )
+
+    # 毛利披露校准：保持行间相对结构，按财年把毛利合计精确缩放到披露值；
+    # 舍入尾差并入该校准基准行（当年毛利最大行），保证年度合计零差异。
+    for fiscal_year, months in (
+        ("FY2022", PRIOR_MONTHS),
+        ("FY2023", ANALYSIS_MONTHS),
+    ):
+        year_rows = [row for row in operating_actual if row["month"] in months]
+        current_total = sum(
+            (Decimal(row["gross_profit"]) for row in year_rows), Decimal("0")
+        )
+        target_gross = anchors[fiscal_year]["gross"]
+        factor = target_gross / current_total
+        base_row = max(year_rows, key=lambda row: Decimal(row["gross_profit"]))
+        running = Decimal("0")
+        for row in year_rows:
+            if row is base_row:
+                continue
+            gross = _d(Decimal(row["gross_profit"]) * factor)
+            running += gross
+            row["gross_profit"] = str(gross)
+            row["cost"] = str(_d(Decimal(row["revenue"]) - gross))
+        base_gross = _d(target_gross - running)  # 基准行吸收全部舍入尾差
+        base_row["gross_profit"] = str(base_gross)
+        base_row["cost"] = str(_d(Decimal(base_row["revenue"]) - base_gross))
 
     # 业务族汇总 = 明细精确聚合（供占比校验与 statements 附注引用）
     family_agg: dict[tuple[str, str], dict[str, Decimal]] = defaultdict(
@@ -369,20 +450,21 @@ def build_damai_package() -> dict[str, Any]:
     for month in all_months:
         profit = operating_profit_by_month[month] * (Decimal("1") - expense_rate)
         ocf = profit
-        if month in ("2026-05", "2026-06"):
-            ocf = profit * Decimal("0.55")  # E5：利润-现金短期背离
+        if month in ("2022-12", "2023-01"):
+            ocf = profit * Decimal("0.55")  # E5：利润-现金短期背离（分析期 index 8/9）
         cash_flow.append(
             {"month": month, "operating_profit": str(_d(profit)), "ocf": str(_d(ocf))}
         )
 
-    # forecast sidecar：分析期逐月预测收入（static-only）
+    # forecast sidecar：分析期逐月预测收入（static-only；锚定披露分析期月均）
+    forecast_base = analysis_total / Decimal("12")
     forecast_rows = []
     for month in ANALYSIS_MONTHS:
         forecast_rows.append(
             {
                 "month": month,
                 "forecast_revenue": str(
-                    _d(analysis_base * _SEASONALITY[_month_of(month)])
+                    _d(forecast_base * _SEASONALITY[_month_of(month)])
                 ),
             }
         )

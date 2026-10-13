@@ -2,7 +2,7 @@
 
 守恒合同（tests/fixtures/test_damai_canonical.py 固定）：
 - 收入、三路成本合计、毛利、预算、AR 五桶与回款逐项与 build_damai_package() 一致；
-- 期间 = comparison 2024-09~2025-08 + analysis 2025-09~2026-08（24 个月连续）；
+- 期间 = comparison（FY2022）2021-04~2022-03 + analysis（FY2023）2022-04~2023-03；
 - 确定性：uuid5(record) 与固定比例拆分，无时钟/随机输入。
 
 粒度（规格 §3.3，Task A2 起）：经营明细为 客户×产品 粒度（1,920 行），
@@ -36,6 +36,9 @@ from flow_api.data_contract.records import (
 )
 from flow_api.fixtures.damai.generator import build_damai_package
 from flow_api.fixtures.damai.profile import (
+    ANALYSIS_MONTHS as _ANALYSIS_MONTHS,
+)
+from flow_api.fixtures.damai.profile import (
     BUSINESS_UNITS,
     CUSTOMER_ASSIGNMENTS,
     CUSTOMER_SEGMENTS,
@@ -43,15 +46,14 @@ from flow_api.fixtures.damai.profile import (
     PRODUCTS,
     REGIONS,
 )
+from flow_api.fixtures.damai.profile import (
+    PRIOR_MONTHS as _COMPARE_MONTHS,
+)
 
 _DAMAI_NAMESPACE = UUID("da0a1a10-4c41-b9d1-3d4a-2f5e6b7c9d01")
 
-_COMPARE_MONTHS = tuple(f"2024-{m:02d}" for m in range(9, 13)) + tuple(
-    f"2025-{m:02d}" for m in range(1, 9)
-)
-_ANALYSIS_MONTHS = tuple(f"2025-{m:02d}" for m in range(9, 13)) + tuple(
-    f"2026-{m:02d}" for m in range(1, 9)
-)
+# 时间线迁移（2026-10-13）：期间唯一来源是 profile 的 24 月合同（顶部导入别名）
+
 
 _GROUP_CODE = "DAMAI_GROUP"
 # 4 事业部组织编码（顺序与 BUSINESS_UNITS 一致）
@@ -385,7 +387,7 @@ def build_damai_canonical_package() -> CanonicalPackage:
     operating = _operating_actuals(raw["monthly_facts"]["operating_actual"])
     return CanonicalPackage(
         batch=BatchRecord(
-            batch_code="DAMAI_DEMO_2026_08",
+            batch_code="DAMAI_DEMO_2023_03",
             contract_version="flow.excel.v1",
             analysis_start_month=_ANALYSIS_MONTHS[0],
             analysis_end_month=_ANALYSIS_MONTHS[-1],
@@ -395,7 +397,7 @@ def build_damai_canonical_package() -> CanonicalPackage:
             actual_scenario_code="ACTUAL",
             budget_scenario_code=_BUDGET_SCENARIO,
             budget_version_label="DEMO V1",
-            generated_at=datetime(2026, 9, 24, 0, 0, tzinfo=UTC),
+            generated_at=datetime(2026, 10, 13, 0, 0, tzinfo=UTC),
         ),
         periods=_periods(),
         organizations=organizations,

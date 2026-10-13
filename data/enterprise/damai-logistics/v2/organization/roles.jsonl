@@ -1,0 +1,6 @@
+{"code":"finance_bp","name":"财务业务伙伴","system_role":"finance_bp","identity_kind":"human","synthetic":true}
+{"code":"analyst","name":"经营分析师","system_role":"analyst","identity_kind":"human","synthetic":true}
+{"code":"rule_owner","name":"规则负责人","system_role":"rule_owner","identity_kind":"human","synthetic":true}
+{"code":"ai_analyst","name":"AI 分析员","system_role":"ai_analyst","identity_kind":"ai","synthetic":true}
+{"code":"ai_cfo","name":"AI 财务负责人","system_role":"ai_cfo","identity_kind":"ai","synthetic":true}
+{"code":"service_account","name":"导入服务账号","system_role":"service_account","identity_kind":"service","synthetic":true}

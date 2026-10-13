@@ -2,7 +2,7 @@
 
 装载顺序（每步过领域服务，不绕过质量/对账）：
 1. 复用固定 bootstrap enterprise UUID（授权契约单企业），幂等改名为大麦；
-2. 两份合成财报（FY2025/FY2026）从发行版 `fixtures/damai/statements/damai_fy*.yaml`
+2. 两份披露财报（FY2022/FY2023）从发行版 `fixtures/damai/statements/damai_fy*.yaml`
    以独立 synthetic 身份 `DAMAI.SYN` 导入（source SHA 来自发行版文件），
    经归一化（damai_syn 专属映射段）后由 ReviewService.publish 过勾稽门禁发布
    ——不直改 status，不读取/冒充 9988.HK 等任何真实公司 fixture；
@@ -69,18 +69,18 @@ def _release_statements_path(fy: str) -> Path:
     )
 
 
-_DAMAI_FY: tuple[str, ...] = ("FY2025", "FY2026")
+_DAMAI_FY: tuple[str, ...] = ("FY2022", "FY2023")
 # 分析窗口：与大麦 profile 的 24 个月合同一致（后 12 个月为分析期）
 _ANALYSIS_MONTH_KEYS: tuple[int, ...] = tuple(
-    2025 * 100 + m for m in range(9, 13)
-) + tuple(2026 * 100 + m for m in range(1, 9))
+    2022 * 100 + m for m in range(4, 13)
+) + tuple(2023 * 100 + m for m in range(1, 4))
 _BOOTSTRAP_ID = "00000000-0000-0000-0000-00000000d001"
 _DAMAI_COMPANY_NAME = "大麦物流集团（synthetic 演示企业）"
-_DAMAI_CYCLE_PERIOD_KEY = "2026-08"  # 分析周期截止月（B1：显式绑定，不依赖引导周期）
+_DAMAI_CYCLE_PERIOD_KEY = "2023-03"  # 分析周期截止月（B1：显式绑定，不依赖引导周期）
 
 
 def _damai_analysis_cycle_id(session: Any) -> str:
-    """建立/复用 bootstrap 企业下截止月 2026-08 的 AnalysisCycle（幂等）。"""
+    """建立/复用 bootstrap 企业下截止月 2023-03 的 AnalysisCycle（幂等）。"""
 
     row = session.execute(
         text(
@@ -155,7 +155,7 @@ def seed_damai_demo(
         enterprise = {"id": str(existing.id), "code": existing.code, "name": existing.name}
     organization_receipt = None
     if sync_organization:
-        organization_dir = _repository_root() / "data/enterprise/damai-logistics/v1/organization"
+        organization_dir = _repository_root() / "data/enterprise/damai-logistics/v2/organization"
         organization_receipt = sync_enterprise_directory(
             session, UUID(enterprise["id"]), organization_dir
         )
@@ -276,7 +276,7 @@ def _seed_analytics(session: Any) -> dict[str, Any]:
     )
     if batch is None:
         # 首次装载：标准工作簿走完整 IntakeService 导入链；
-        # B1：批次显式绑定截止月 2026-08 的 AnalysisCycle（不依赖全库最早周期）
+        # B1：批次显式绑定截止月 2023-03 的 AnalysisCycle（不依赖全库最早周期）
         stored, proposal, candidate, report = _intake_inputs(workbook)
         assert uploaded.sha256 == stored.sha256, "上传指纹与本地摘要不一致"
         intake = IntakeService(session)
@@ -376,7 +376,7 @@ def _conclusion_sections(
             "open_questions": (
                 "E3（DM-CUST-007/019 逾期桶放大 1.35×、回款 0.75×）未触发 "
                 "ar_cash_impact playbook 阈值，收入增长的现金转换质量待应收账龄切片复核；"
-                "E5（2026-05/06 经营现金流收窄至 0.55×）与收入放量的背离需专项说明。"
+                "E5（2022-12/2023-01 经营现金流收窄至 0.55×）与收入放量的背离需专项说明。"
             ),
             "recommendation": (
                 "对电商客群续约账期与定价做专项复核；将 E3 逾期客户列入回款督办清单；"
@@ -456,7 +456,7 @@ def _build_signals(
         },
         {
             "event_code": "E5",
-            "description": "2026-05/06 经营现金流收窄至 0.55×",
+            "description": "2022-12/2023-01 经营现金流收窄至 0.55×",
             "channel": "conclusion",
             "reference": finding_ref(
                 revenue or any_finding, " conclusion.open_questions"

@@ -63,8 +63,8 @@ const DAMAI_COVERAGE = {
   synthetic: true,
   caliber_notes: ["本矩阵为 synthetic 演示数据，非任何真实公司财报"],
   snapshots: [
-    { company: "damai_syn", period: "FY2025", unit: "百万元", computable: 42, total: 50 },
-    { company: "damai_syn", period: "FY2026", unit: "百万元", computable: 45, total: 50 },
+    { company: "damai_syn", period: "FY2023", unit: "百万元", computable: 32, total: 50 },
+    { company: "damai_syn", period: "FY2022", unit: "百万元", computable: 32, total: 50 },
   ],
   metrics: [
     {
@@ -72,8 +72,8 @@ const DAMAI_COVERAGE = {
       name: "毛利率",
       unit: "%",
       cells: {
-        "damai_syn FY2025": { display: "10.5%", missing: null },
-        "damai_syn FY2026": { display: "10.5%", missing: null },
+        "damai_syn FY2023": { display: "10.5%", missing: null },
+        "damai_syn FY2022": { display: "10.5%", missing: null },
       },
     },
     {
@@ -81,8 +81,8 @@ const DAMAI_COVERAGE = {
       name: "应收账款周转天数",
       unit: "天",
       cells: {
-        "damai_syn FY2025": { display: null, missing: "bs.ar(open)" },
-        "damai_syn FY2026": { display: "45", missing: null },
+        "damai_syn FY2023": { display: null, missing: "bs.ar(open)" },
+        "damai_syn FY2022": { display: "45", missing: null },
       },
     },
   ],
@@ -147,7 +147,7 @@ describe("MetricLibraryApp 真实财报覆盖矩阵（P5）", () => {
     expect(await screen.findByText(/flow\.damai_demo_metric_coverage\.v1/)).toBeInTheDocument();
     expect(screen.getByText("合成演示数据")).toBeInTheDocument();
     expect(screen.getAllByText("大麦物流").length).toBeGreaterThan(0);
-    expect(screen.getByText("45/50")).toBeInTheDocument();
+    expect(screen.getAllByText("32/50").length).toBeGreaterThan(0);
     expect(screen.getByText(/config\/metrics\/metric_dictionary_v1_1\.yaml/)).toBeInTheDocument();
     expect(screen.getAllByText("flow.metric_dictionary.v1").length).toBeGreaterThan(0);
     expect(screen.getByText("缺 bs.ar(open)")).toBeInTheDocument();

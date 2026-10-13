@@ -461,7 +461,7 @@ def test_jdl_comprehensive_income_rows_keep_statement_identity_after_normalizati
 # Task A3 红灯：DAMAI.SYN 独立归一化映射（不与 9988.HK 身份重叠）
 # ---------------------------------------------------------------------------
 
-DAMAI_FY2026_YAML = REPO_ROOT / "fixtures/damai/statements/damai_fy2026.yaml"
+DAMAI_FY2023_YAML = REPO_ROOT / "fixtures/damai/statements/damai_fy2023.yaml"
 
 
 def test_damai_syn_company_key_registered_and_disjoint() -> None:
@@ -472,47 +472,47 @@ def test_damai_syn_company_key_registered_and_disjoint() -> None:
     assert len(keys) == len(set(keys)), "company key 必须全局唯一"
     companies = load_alias_map()["companies"]
     assert "damai_syn" in companies, "别名映射必须含 damai_syn 公司段"
-    damai_names = {
-        name
+    damai_map = {
+        name: target
         for section in companies["damai_syn"]["statements"].values()
-        for name in section.get("map", {})
+        for name, target in section.get("map", {}).items()
     }
-    alibaba_names = {
-        name
-        for section in companies["alibaba_9988"]["statements"].values()
-        for name in section.get("map", {})
-    }
-    assert damai_names.isdisjoint(alibaba_names), (
-        "damai_syn 映射行名不得与 alibaba_9988 段重叠（独立身份/重述链）"
-    )
+    # 时间线迁移（2026-10-13）：damai_syn = 菜鸟申请稿简体 IFRS 披露词汇；
+    # 与 alibaba_9988（繁体 US GAAP）行名天然不同，这里断言核心披露行存在
+    # 且旧合成专用行已移除
+    for disclosed_row in ("收入", "毛利", "经营亏损/利润", "年度亏损/利润", "资产总计", "权益总额"):
+        assert disclosed_row in damai_map, f"damai_syn 必须映射披露行 {disclosed_row}"
+    for synthetic_row in ("其中：利息费用", "折旧与摊销", "三、营业利润（亏损以“－”号填列）"):
+        assert synthetic_row not in damai_map, f"合成行 {synthetic_row} 必须已移除"
 
 
 def test_damai_syn_report_normalizes_with_own_mapping(db_session: Session) -> None:
-    payload = yaml.safe_load(DAMAI_FY2026_YAML.read_text(encoding="utf-8"))
+    payload = yaml.safe_load(DAMAI_FY2023_YAML.read_text(encoding="utf-8"))
     report = import_statement_report(
         db_session,
         company_name="大麦物流",
         stock_code="DAMAI.SYN",
         report_kind="年报",
-        period_label="FY2026",
+        period_label="FY2023",
         payload=payload,
-        source_ref="synthetic/damai-logistics-demo-v1/FY2026",
+        source_ref="synthetic/damai-logistics-demo-v1/FY2023",
         source_sha256="0" * 64,
     )
     summary = normalize_report(db_session, report)
     assert summary.resolved > 0, "damai_syn 映射必须覆盖核心行"
     for item in (
         "is.revenue",
+        "is.gross_profit",
+        "is.operating_profit",
         "is.net_profit",
-        "is.interest_exp",
         "bs.total_assets",
-        "bs.ap",
-        "bs.short_debt",
-        "bs.long_debt",
+        "bs.equity",
+        "bs.ar",
+        "bs.inventory",
         "cf.ocf",
-        "cf.cash_from_sales",
+        "cf.icf",
+        "cf.fin_cf",
         "cf.capex",
-        "is.dep_amort",
     ):
         assert any(
             row.item_id == item

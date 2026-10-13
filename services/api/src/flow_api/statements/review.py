@@ -21,6 +21,7 @@ from flow_api.infrastructure.models.statement import (
 )
 from flow_api.statements.extraction import (
     AShareTableExtractor,
+    CnIfrsSimplifiedReconciler,
     ExtractionResult,
     HkTraditionalExtractor,
 )
@@ -100,14 +101,15 @@ def evaluate_stored_report(
                 row[label] = value  # 保持 Decimal 精度，不经 float（发布门禁输入）
             grouped[item.statement_type].append(row)
         statements = dict(grouped)
-    # 简化/繁体自适应：繁体版式用港股勾稽，其余用 A 股勾稽
+    # 版式自适应：繁体港股版式用港股勾稽；简体 IFRS 申请稿版式（权益及负债总额
+    # 等整理行名）用简体 IFRS 勾稽；其余用 A 股勾稽
     sample_names = {item["item"] for rows in statements.values() for item in rows}
-    traditional = any("資產總額" in name or "營業成本" in name for name in sample_names)
-    checks = (
-        HkTraditionalExtractor()._reconcile(statements)
-        if traditional
-        else AShareTableExtractor()._reconcile(statements)
-    )
+    if any("資產總額" in name or "營業成本" in name for name in sample_names):
+        checks = HkTraditionalExtractor()._reconcile(statements)
+    elif any("权益及负债总额" in name for name in sample_names):
+        checks = CnIfrsSimplifiedReconciler()._reconcile(statements)
+    else:
+        checks = AShareTableExtractor()._reconcile(statements)
     result = ExtractionResult(
         adapter_id="stored",
         unit_note=report.unit_note,

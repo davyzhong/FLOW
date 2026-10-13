@@ -65,7 +65,7 @@ def main() -> int:
                 {"code": manifest["enterprise_code"]},
             )
             preflight = (
-                ROOT / "data/enterprise/damai-logistics/v1/sql/00_preflight.sql"
+                ROOT / "data/enterprise/damai-logistics/v2/sql/00_preflight.sql"
             ).read_text(encoding="utf-8")
             connection.exec_driver_sql(preflight)
             receipt = initialize_damai_enterprise(session, args.mode)

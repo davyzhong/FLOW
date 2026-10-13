@@ -51,8 +51,20 @@ def test_monthly_facts_cover_24_months_with_revenue_anchor() -> None:
          if r["month"] in ANALYSIS_MONTHS),
         Decimal("0"),
     )
-    low, high = Decimal("10500000"), Decimal("11500000")  # 万元
-    assert low <= analysis_revenue <= high, "分析期收入必须落在 1050–1150 亿锚区间"
+    from flow_api.fixtures.damai.generator import _disclosed_anchors
+
+    anchors = _disclosed_anchors()
+    prior_revenue = sum(
+        (Decimal(str(r["revenue"])) for r in facts["operating_actual"]
+         if r["month"] in PRIOR_MONTHS),
+        Decimal("0"),
+    )
+    assert analysis_revenue == anchors["FY2023"]["revenue"], (
+        "分析期收入必须精确等于来源登记的 FY2023 披露收入"
+    )
+    assert prior_revenue == anchors["FY2022"]["revenue"], (
+        "比较期收入必须精确等于来源登记的 FY2022 披露收入"
+    )
 
 
 def test_business_family_share_within_one_point_of_target() -> None:
@@ -198,12 +210,12 @@ def test_planted_events_traceable_to_detail_records() -> None:
     # E3：两个大客户（DM-CUST-007 / DM-CUST-019）后期账龄恶化——
     # 明细级 AR 必须能把恶化定位到具体客户
     ar = pkg["monthly_facts"]["ar_aging"]
-    late = [r for r in ar if r["month"] >= "2026-03" and r["bucket"] in ("31-60", "61-90", "90+")
+    late = [r for r in ar if r["month"] >= "2022-10" and r["bucket"] in ("31-60", "61-90", "90+")
             and r["customer_id"] in ("DM-CUST-007", "DM-CUST-019")]
     assert late, "E3 恶化必须体现在明细 AR 行上"
     # E4：某业务单元实际收入低于预算——明细级可比（同月同单元）
     #（数值由 A2 确定性参数保证；此处仅断言明细粒度存在可比键）
     budget_keys = {(r["month"], r["business_unit"]) for r in pkg["monthly_facts"]["budget"]}
-    actual_units = {r["business_unit"] for r in rows if r["month"] >= "2025-09"}
+    actual_units = {r["business_unit"] for r in rows if r["month"] >= "2022-04"}
     assert len(actual_units) == 4
     assert budget_keys, "预算必须带业务单元键以支持 E4 单元级对比"

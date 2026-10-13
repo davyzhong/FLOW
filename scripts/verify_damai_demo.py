@@ -160,8 +160,8 @@ def check_db_counts(database_url: str) -> list[Check]:
             checks.append(
                 _check(
                     "db_counts.analysis_cycle_binding",
-                    batch == "2026-08",
-                    f"批次绑定周期 {batch}（期望 2026-08）",
+                    batch == "2023-03",
+                    f"批次绑定周期 {batch}（期望 2023-03）",
                 )
             )
             return checks
@@ -170,7 +170,7 @@ def check_db_counts(database_url: str) -> list[Check]:
 
 
 def count_latest_published_damai_reports(connection: Any) -> int:
-    """计大麦FY2025/FY2026最新版本，不把保留的重述/历史版本当作额外报表。"""
+    """计大麦FY2022/FY2023最新版本，不把保留的重述/历史版本当作额外报表。"""
 
     from sqlalchemy import text
 
@@ -181,7 +181,7 @@ def count_latest_published_damai_reports(connection: Any) -> int:
                 " SELECT stock_code, period_label, report_kind, MAX(version) AS max_version"
                 " FROM statement_report"
                 " WHERE stock_code = 'DAMAI.SYN' AND report_kind = '年报'"
-                "   AND period_label IN ('FY2025', 'FY2026')"
+                "   AND period_label IN ('FY2022', 'FY2023')"
                 " GROUP BY stock_code, period_label, report_kind"
                 ")"
                 " SELECT count(*) FROM statement_report r"
@@ -197,15 +197,14 @@ def count_latest_published_damai_reports(connection: Any) -> int:
 def check_freeze_hashes(database_url: str) -> list[Check]:
     """冻结 SHA 重算：客观快照/经营概览 payload_hash；内部报告 digest_view。"""
 
-    from sqlalchemy import create_engine, select
-    from sqlalchemy.orm import Session
-
     from flow_api.infrastructure.models.publishing import ReportSnapshot
     from flow_api.publishing.objective_freeze import (
         ObjectiveReportSnapshot,
         payload_hash,
     )
     from flow_api.publishing.service import build_report_view, digest_view
+    from sqlalchemy import create_engine, select
+    from sqlalchemy.orm import Session
     engine = create_engine(database_url)
     checks: list[Check] = []
     try:
@@ -286,11 +285,10 @@ def check_object_storage(database_url: str) -> list[Check]:
 
     import tempfile
 
-    from sqlalchemy import create_engine, text
-
     from flow_api.infrastructure.object_store import ObjectStore
     from flow_api.infrastructure.s3_client import build_s3_client
     from flow_api.settings import get_settings
+    from sqlalchemy import create_engine, text
     workbook = ROOT / "fixtures/damai/workbooks/damai_logistics_full_v1.xlsx"
     engine = create_engine(database_url)
     checks: list[Check] = []

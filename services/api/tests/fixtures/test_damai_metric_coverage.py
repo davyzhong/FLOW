@@ -40,8 +40,8 @@ def test_damai_coverage_is_generated_from_current_metric_dictionary() -> None:
         snapshot["period"]: (snapshot["computable"], snapshot["total"])
         for snapshot in coverage["snapshots"]
     } == {
-        "FY2025": (42, 50),
-        "FY2026": (45, 50),
+        "FY2022": (32, 50),
+        "FY2023": (32, 50),
     }
 
 
@@ -53,12 +53,16 @@ def test_current_dictionary_formulas_reconcile_on_damai_statements() -> None:
         dictionary,
     )
     company = "damai_syn"
-    period = "FY2026"
+    period = "FY2023"
 
     def metric(code: str) -> float:
         return engine.ev_metric(code, company, period)
 
-    assert metric("interest_coverage") > 0
+    # 利息费用在申请稿披露利润表中无独立行（旧合成「其中：利息费用」已移除）
+    # →利息保障倍数必须如实缺省，不得用财务费用冒充
+    coverage = yaml.safe_load(COVERAGE_PATH.read_text(encoding="utf-8"))
+    interest = next(m for m in coverage["metrics"] if m["metric_code"] == "interest_coverage")
+    assert all(cell["missing"] for cell in interest["cells"].values())
     assert (
         abs(metric("ccc_days") - (metric("dso_days") + metric("dio_days") - metric("dpo_days")))
         < 1e-9

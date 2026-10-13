@@ -732,7 +732,7 @@ test("operations overview renders damai six-theme analysis", async ({ page }) =>
   expect(reportsResponse.ok()).toBeTruthy();
   const reportList = (await reportsResponse.json()) as StatementReportList;
   const damaiReports = reportList.reports.filter((report) => report.stock_code === "DAMAI.SYN");
-  expect(damaiReports.map((report) => report.period_label).sort()).toEqual(["FY2025", "FY2026"]);
+  expect(damaiReports.map((report) => report.period_label).sort()).toEqual(["FY2022", "FY2023"]);
 
   const periodsResponse = await page.request.get("/api/v1/operations/public-periods");
   expect(periodsResponse.ok()).toBeTruthy();
@@ -847,7 +847,7 @@ test("statements page lists damai synthetic reports", async ({ page }) => {
     page.getByRole("heading", { name: /公开财报.*分析/ }),
   ).toBeVisible();
   const tabs = page.locator("nav[aria-label='财报选择']");
-  const fy2026 = tabs.getByRole("button", { name: /FY2026/ });
+  const fy2026 = tabs.getByRole("button", { name: /FY2023/ });
   await expect(fy2026).toBeVisible({ timeout: 15_000 });
   await expect(fy2026).toContainText("大麦物流");
 
@@ -855,9 +855,9 @@ test("statements page lists damai synthetic reports", async ({ page }) => {
   expect(listResponse.ok()).toBeTruthy();
   const reportList = (await listResponse.json()) as StatementReportList;
   const summary = reportList.reports.find(
-    (report) => report.company_name === "大麦物流" && report.period_label === "FY2026",
+    (report) => report.company_name === "大麦物流" && report.period_label === "FY2023",
   );
-  expect(summary, "FY2026 报表必须来自真实隔离 API 列表").toBeDefined();
+  expect(summary, "FY2023 报表必须来自真实隔离 API 列表").toBeDefined();
 
   const detailResponse = await page.request.get(`/api/v1/statements/${summary!.id}`);
   expect(detailResponse.ok()).toBeTruthy();
@@ -962,7 +962,7 @@ test("four-question workbench loads damai report", async ({ page }) => {
     page.getByRole("heading", { name: "四问分析工作台" }),
   ).toBeVisible();
   const select = page.locator("#workbench-report");
-  const fy2026Option = select.locator("option", { hasText: "FY2026" });
+  const fy2026Option = select.locator("option", { hasText: "FY2023" });
   await expect(fy2026Option).toHaveCount(1, { timeout: 15_000 });
   await expect(fy2026Option).toContainText("大麦物流");
   const value = await fy2026Option.getAttribute("value");
@@ -987,7 +987,7 @@ test("four-question workbench loads damai report", async ({ page }) => {
   expect(allWorkbenchMetrics).toHaveLength(10);
   expect(
     allWorkbenchMetrics.filter((metric) => metric.available),
-    "大麦 FY2026 财报披露了四问十项指标所需事实，十项都应可计算",
+    "大麦分析期财报装载后四问十项指标应可计算（canonical 快照口径）",
   ).toHaveLength(10);
 
   // 实际点击四问中的指标链接，确认目标指标库定位身份，不只检查 href。
@@ -1003,10 +1003,10 @@ test("four-question workbench loads damai report", async ({ page }) => {
   await expect(page.locator(".workbench__identity a")).toBeVisible();
   await page.locator(".workbench__identity a").click();
   await expect(page).toHaveURL(`/statements?report=${encodeURIComponent(value!)}`);
-  await expect(page.locator(".stmt-report-tabs [aria-pressed='true']")).toContainText("FY2026");
+  await expect(page.locator(".stmt-report-tabs [aria-pressed='true']")).toContainText("FY2023");
   await page.goto("/analysis");
   await page.locator("#workbench-report").selectOption(value!);
-  await expect(page.locator(".workbench__identity")).toContainText("FY2026");
+  await expect(page.locator(".workbench__identity")).toContainText("FY2023");
 
   // 两个平均余额指标按字典口径，以财报原文的期初/期末余额和本期流量独立复算。
   const statementLine = (statementType: string, itemName: string) => {
@@ -1017,7 +1017,7 @@ test("four-question workbench loads damai report", async ({ page }) => {
     return line!;
   };
   const requiredValue = (value: string | null | undefined, label: string) => {
-    expect(value, `${label} 在大麦 FY2026 披露中存在`).not.toBeNull();
+    expect(value, `${label} 在大麦 FY2023 披露中存在`).not.toBeNull();
     return Number(value);
   };
   const revenueLine = statementLine("合并利润表", "营业收入");
@@ -1256,9 +1256,9 @@ test("metric library switches to damai synthetic coverage", async ({ page }) => 
   await expect(page.getByText("synthetic 演示 · 大麦物流")).toBeVisible({ timeout: 15_000 });
   await expectMetricCoverageMatchesApi(page, damaiCoverage);
   const matrix = page.locator("section[aria-label='指标覆盖矩阵']");
-  await expect(matrix).toContainText("FY2026");
+  await expect(matrix).toContainText("FY2023");
   // 直接核对年度覆盖值真正展示，而非只有年份标签/空壳矩阵。
-  await expect(matrix).toContainText("FY2025");
+  await expect(matrix).toContainText("FY2022");
   await expect(matrix).toContainText("37/40");
   await expect(matrix).toContainText("40/40");
 });

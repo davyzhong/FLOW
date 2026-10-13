@@ -1,0 +1,102 @@
+business_line_revenue_share:
+  china_logistics: 0.462
+  fact_ids:
+    china_logistics: CN-SHARE-FY2023-CHINA_LOGISTICS
+    international_logistics: CN-SHARE-FY2023-INTERNATIONAL_LOGISTICS
+    technology_and_other_services: CN-SHARE-FY2023-TECHNOLOGY_AND_OTHER_SERVICES
+  international_logistics: 0.474
+  note: FY2023 管理层口径业务线收入占比（OUR SERVICE OFFERINGS）；不延用于其他期间
+  period: FY2023
+  technology_and_other_services: 0.064
+data_layer: disclosed_fact
+network_snapshot:
+  as_of: '2023-06-30'
+  chartered_flights: 约 170 架（2023-06 月度）
+  countries_and_regions_served: 200+
+  e_hubs:
+    count: 2
+    gfa_sqm: 150,000+
+  end_to_end_parcel_visibility_countries: 179
+  liege_e_hub:
+    annual_air_freight_kilotons: 200+
+    countries_reachable: 38
+    linehaul_routes: 230+
+  linehaul_trucking_routes_global: 2,700+
+  note: 菜鸟网络快照（披露原文，点值非年度序列）；大麦演示主体引用；页锚见来源登记与申请稿 p243/245/274
+  pickup_dropoff_stations_connected: 170,000+
+  warehouses:
+    count: 1,100+
+    cross_border_dedicated: 360+
+    gfa_sqm: 约 1,650 万
+    tmall_supermarket: 90+
+non_ifrs:
+  adjusted_ebitda:
+    FY2021: 1036
+    FY2022: 1155
+    FY2023: 2873
+    Q1FY2023: 634
+    Q1FY2024: 1807
+  adjusted_ebitda_margin:
+    FY2021: 0.02
+    FY2022: 0.017
+    FY2023: 0.037
+    Q1FY2023: 0.037
+    Q1FY2024: 0.078
+  adjusted_net_profit:
+    FY2021: -829
+    FY2022: -1030
+    FY2023: 279
+    Q1FY2023: 30
+    Q1FY2024: 1093
+  adjusted_net_profit_margin:
+    FY2021: -0.016
+    FY2022: -0.015
+    FY2023: 0.004
+    Q1FY2023: 0.002
+    Q1FY2024: 0.047
+  note: Non-IFRS 为管理层口径（MPM），调节表见申请稿；不得与 IFRS 净利润混同
+note: 运营披露事实直接引用来源登记（菜鸟申请稿 Selected Operating Data、Non-IFRS、OUR SERVICE OFFERINGS 与网络快照）；Q1 stub 期间未经审计；演示期间（canonical
+  FY2025/FY2026）无披露值，按 unavailable 处理，不再用收入推导件量。
+operating_volume:
+  china_orders_fulfilled:
+    FY2021: 1116
+    FY2022: 1462
+    FY2023: 2311
+    Q1FY2023: 545
+    Q1FY2024: 736
+  fact_ids:
+    china_orders_fulfilled:
+      FY2021: CN-OPS-FY2021-CHINA_ORDERS_FULFILLED
+      FY2022: CN-OPS-FY2022-CHINA_ORDERS_FULFILLED
+      FY2023: CN-OPS-FY2023-CHINA_ORDERS_FULFILLED
+      Q1FY2023: CN-OPS-Q1FY2023-CHINA_ORDERS_FULFILLED
+      Q1FY2024: CN-OPS-Q1FY2024-CHINA_ORDERS_FULFILLED
+    international_parcels:
+      FY2021: CN-OPS-FY2021-INTERNATIONAL_PARCELS
+      FY2022: CN-OPS-FY2022-INTERNATIONAL_PARCELS
+      FY2023: CN-OPS-FY2023-INTERNATIONAL_PARCELS
+      Q1FY2023: CN-OPS-Q1FY2023-INTERNATIONAL_PARCELS
+      Q1FY2024: CN-OPS-Q1FY2024-INTERNATIONAL_PARCELS
+  international_parcels:
+    FY2021: 1381
+    FY2022: 1679
+    FY2023: 1519
+    Q1FY2023: 347
+    Q1FY2024: 439
+  unit: 百万件/百万单（披露原口径）
+periods:
+- FY2021
+- FY2022
+- FY2023
+- Q1FY2023
+- Q1FY2024
+sample: damai_operating_metrics
+source_ref: config/damai/source_facts_v1.yaml
+source_registry_id: flow.damai_source_facts.v1
+source_sha256_prefix: 3e2c367958eacf3b
+unaudited_periods:
+- Q1FY2023
+- Q1FY2024
+unavailable:
+- reason: 公开材料未披露该粒度与期间（U-CN-VOLUME-FINE-GRAINS）；由收入推导件量的旧口径已废弃
+  scope: 演示期间（canonical FY2025/FY2026）的月度/客户/产品件量与业务线占比

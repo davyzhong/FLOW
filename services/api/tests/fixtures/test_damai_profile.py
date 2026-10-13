@@ -1,6 +1,6 @@
 """Task 1：大麦物流演示画像契约测试（D052 方案 B / 规格 v1.1 §3）。
 
-- 24 个连续月（对比期 2024-09~2025-08 + 分析期 2025-09~2026-08）；
+- 24 个连续月（对比期 FY2022 2021-04~2022-03 + 分析期 FY2023 2022-04~2023-03）；
 - 分析期收入目标 1050–1150 亿（万元计），毛利率 9%–11%；
 - 业务族权重合计恰为 1（Decimal）；结构数量满足规格下限；
 - 全部实体 synthetic：客户为匿名编号，不得出现真实公司名；
@@ -27,7 +27,7 @@ from flow_api.fixtures.damai.profile import (
 def test_24_continuous_months_prior_then_analysis() -> None:
     assert len(PRIOR_MONTHS) == 12 and len(ANALYSIS_MONTHS) == 12
     all_months = PRIOR_MONTHS + ANALYSIS_MONTHS
-    assert all_months[0] == "2024-09" and all_months[-1] == "2026-08"
+    assert all_months[0] == "2021-04" and all_months[-1] == "2023-03"
     # 连续性：逐月递增无缺口
     year_month = [tuple(int(x) for x in m.split("-")) for m in all_months]
     assert len(year_month) == 24
@@ -40,12 +40,20 @@ def test_24_continuous_months_prior_then_analysis() -> None:
 
 
 def test_revenue_and_margin_targets_within_anchors() -> None:
-    low, high = DAMAI_PROFILE_V1.annual_revenue_target
-    assert Decimal("10500000") <= low < high <= Decimal("11500000"), (
-        "分析期收入目标（万元）必须落在 1050–1150 亿锚区间"
-    )
-    gm_low, gm_high = DAMAI_PROFILE_V1.gross_margin_target
-    assert Decimal("0.09") <= gm_low < gm_high <= Decimal("0.11")
+    """时间线迁移后 profile 锚 = 菜鸟披露值（FY2022, FY2023，万元 = 千元 ÷ 10）。"""
+
+    from flow_api.fixtures.damai.generator import _disclosed_anchors
+
+    anchors = _disclosed_anchors()
+    prior, analysis = DAMAI_PROFILE_V1.annual_revenue_target
+    assert prior == anchors["FY2022"]["revenue"], "FY2022 收入锚必须等于披露值"
+    assert analysis == anchors["FY2023"]["revenue"], "FY2023 收入锚必须等于披露值"
+    gm_prior, gm_analysis = DAMAI_PROFILE_V1.gross_margin_target
+    q = Decimal("0.0001")
+    assert gm_prior == (anchors["FY2022"]["gross"] / anchors["FY2022"]["revenue"]).quantize(q)
+    assert gm_analysis == (
+        anchors["FY2023"]["gross"] / anchors["FY2023"]["revenue"]
+    ).quantize(q)
 
 
 def test_business_family_weights_sum_to_exactly_one() -> None:

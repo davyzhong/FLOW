@@ -35,7 +35,7 @@ def reset_damai_business_data(session: Session, enterprise_id: UUID) -> dict[str
         text("SELECT set_config('flow.audit_retention_days', :retention_days, true)"),
         {"retention_days": str(get_settings().flow_audit_retention_days)},
     )
-    sql_path = _repository_root() / "data/enterprise/damai-logistics/v1/sql/20_business_reset.sql"
+    sql_path = _repository_root() / "data/enterprise/damai-logistics/v2/sql/20_business_reset.sql"
     source = sql_path.read_text(encoding="utf-8")
     statements = []
     for fragment in source.split(";"):

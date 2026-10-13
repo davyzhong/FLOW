@@ -78,7 +78,7 @@ def sync_enterprise_directory(
     if enterprise is None:
         raise ValueError(f"目标企业不存在: {enterprise_id}")
     root = _repository_root()
-    expected_dir = root / "data/enterprise/damai-logistics/v1/organization"
+    expected_dir = root / "data/enterprise/damai-logistics/v2/organization"
     if organization_dir.resolve() != expected_dir.resolve():
         raise ValueError("组织 SQL 与输入目录不一致；请先通过数据包构建器重新生成发行文件")
     departments, positions, users = _ensure_package_refs(organization_dir)
@@ -107,7 +107,7 @@ def sync_enterprise_directory(
         text("SELECT set_config('flow.enterprise_code', :code, true)"),
         {"code": enterprise.code},
     )
-    sql_path = root / "data/enterprise/damai-logistics/v1/sql/10_organization.sql"
+    sql_path = root / "data/enterprise/damai-logistics/v2/sql/10_organization.sql"
     for line in sql_path.read_text(encoding="utf-8").splitlines():
         statement = line.strip()
         if statement and not statement.startswith("--"):

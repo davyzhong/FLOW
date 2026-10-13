@@ -42,8 +42,8 @@ CONTRACT_PATH = REPOSITORY_ROOT / "templates/excel/flow_v1_contract.yaml"
 GENERATOR_VERSION = "damai-demo-v1"
 _WORKBOOK_REL = "workbooks/damai_logistics_full_v1.xlsx"
 _STATEMENT_RELS = {
-    "FY2025": "statements/damai_fy2025.yaml",
-    "FY2026": "statements/damai_fy2026.yaml",
+    "FY2022": "statements/damai_fy2022.yaml",
+    "FY2023": "statements/damai_fy2023.yaml",
 }
 _FORECAST_REL = "forecast/rolling_forecast.jsonl"
 _OPERATIONS_RELS = (
@@ -76,7 +76,8 @@ input_hash: deterministic-static
 - `workbooks/damai_logistics_full_v1.xlsx`：标准工作簿（Finance BP 导入用，
   actual/budget，无 forecast——预测在 sidecar，`persistence: static-only`、
   `page_coverage: excluded`，不得冒充已上线能力）；
-- `statements/damai_fy2025.yaml`、`damai_fy2026.yaml`：闭合合成财报（六大恒等锚）；
+- `statements/damai_fy2022.yaml`、`damai_fy2023.yaml`：菜鸟申请稿披露三表
+  逐行原值（IFRS，千元；来源登记血缘，非合成投影）；
 - `operations/damai_segment_series.yaml`、`damai_operating_metrics.yaml`：
   DAMAI.SYN 独立分部序列与运营事实（synthetic，血缘指向 manifest.json）；
 - `forecast/rolling_forecast.jsonl`：静态预测 sidecar；
@@ -101,8 +102,8 @@ REQUIRED_FILES: tuple[str, ...] = (
     "canonical/regions.jsonl",
     "canonical/scenario_versions.jsonl",
     _WORKBOOK_REL,
-    _STATEMENT_RELS["FY2025"],
-    _STATEMENT_RELS["FY2026"],
+    _STATEMENT_RELS["FY2022"],
+    _STATEMENT_RELS["FY2023"],
     _FORECAST_REL,
     *_OPERATIONS_RELS,
     _MANIFEST_REL,
@@ -142,10 +143,8 @@ def _decimal(value: Any) -> Any:
     return value
 
 
-def _dump_statements(
-    destination: Path, package: dict[str, Any]
-) -> dict[str, int]:
-    payloads = build_damai_statement_payloads(package)
+def _dump_statements(destination: Path) -> dict[str, int]:
+    payloads = build_damai_statement_payloads()
     counts: dict[str, int] = {}
     for fy, rel in _STATEMENT_RELS.items():
         payload = payloads[fy]
@@ -231,12 +230,12 @@ def _fiscal_year_summary(raw: dict[str, Any]) -> dict[str, Any]:
     all_months = tuple(
         sorted({row["month"] for row in raw["monthly_facts"]["operating_actual"]})
     )
-    months_by_fy = {"FY2025": all_months[:12], "FY2026": all_months[12:]}
+    months_by_fy = {"FY2022": all_months[:12], "FY2023": all_months[12:]}
     summary: dict[str, Any] = {}
     for fy, months in months_by_fy.items():
-        revenue = Decimal("0")
-        cost = Decimal("0")
-        ocf = Decimal("0")
+        revenue = Decimal(0)
+        cost = Decimal(0)
+        ocf = Decimal(0)
         for row in raw["monthly_facts"]["operating_actual"]:
             if row["month"] in months:
                 revenue += Decimal(str(row["revenue"]))
@@ -256,9 +255,9 @@ def _fiscal_year_summary(raw: dict[str, Any]) -> dict[str, Any]:
 _EVENT_TRACES: dict[str, str] = {
     "E1": "operating_actual：国际族 Q4（10-12 月）明细行毛利率 −1.5pp",
     "E2": "operating_actual：国内族分析期后 6 月明细行毛利率 +0.8pp",
-    "E3": "ar_aging：DM-CUST-007/019 自 2026-03 逾期桶 ×1.35、回款 ×0.75",
+    "E3": "ar_aging：DM-CUST-007/019 自 2022-10 逾期桶 ×1.35、回款 ×0.75",
     "E4": "budget vs operating_actual：国内仓配事业部单元格预算 ×1.12，实际低于预算",
-    "E5": "cash_flow：2026-05/2026-06 OCF = 经营利润 × 0.55（利润-现金背离）",
+    "E5": "cash_flow：2022-12/2023-01 OCF = 经营利润 × 0.55（利润-现金背离）",
     "E6": "operating_actual：分析期后 6 月 index%8∈{0,2} 客户第二产品轮换",
 }
 
@@ -280,7 +279,10 @@ def _lineage(raw: dict[str, Any]) -> dict[str, Any]:
         "generator_version": GENERATOR_VERSION,
         "profile_version": raw["profile_version"],
         "determinism": "uuid5 record_id + Decimal 全程 + fixed Random(42) 族权重扰动",
-        "units": {"canonical": "人民币万元", "statements": "人民币千元（万元 × 10）"},
+        "units": {
+            "canonical": "人民币万元",
+            "statements": "人民币千元（菜鸟申请稿披露原值，非 canonical 换算）",
+        },
         "derived_parameters": {
             "cost_split": {
                 "WAREHOUSING_COST": "0.30",
@@ -315,7 +317,7 @@ def build_release(destination: Path) -> dict[str, Any]:
     contract = load_contract(CONTRACT_PATH)
     render_workbook(contract, package, destination / _WORKBOOK_REL)
 
-    statement_counts = _dump_statements(destination, raw)
+    statement_counts = _dump_statements(destination)
     _dump_forecast(destination, raw["forecast_sidecar"])
     _dump_operations(destination, raw)
 

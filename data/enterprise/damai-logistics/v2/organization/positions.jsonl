@@ -1,0 +1,8 @@
+{"code":"POS-GM","title":"集团总经理","org_unit_code":"DAMAI_GROUP","job_family":"management","level":"executive","status":"active","synthetic":true}
+{"code":"POS-FIN-DIR","title":"财务总监","org_unit_code":"FINANCE","job_family":"finance","level":"director","status":"active","synthetic":true}
+{"code":"POS-FIN-BP","title":"事业部财务伙伴","org_unit_code":"FINANCE","job_family":"finance","level":"professional","status":"active","synthetic":true}
+{"code":"POS-ANALYST","title":"经营分析师","org_unit_code":"DATA","job_family":"analytics","level":"professional","status":"active","synthetic":true}
+{"code":"POS-RULE","title":"财务规则负责人","org_unit_code":"FINANCE","job_family":"finance","level":"lead","status":"active","synthetic":true}
+{"code":"POS-AI-ANALYST","title":"AI 经营分析员","org_unit_code":"DATA","job_family":"ai","level":"service","status":"active","synthetic":true}
+{"code":"POS-AI-CFO","title":"AI 财务负责人","org_unit_code":"FINANCE","job_family":"ai","level":"service","status":"active","synthetic":true}
+{"code":"POS-SVC","title":"数据导入服务账号","org_unit_code":"IT","job_family":"system","level":"service","status":"active","synthetic":true}

@@ -1,331 +1,148 @@
-"""大麦合成财务报告生成（Task 3 / Task A3 报表范式升级）：从 canonical 年度事实推导闭合四表。
+"""大麦演示财务报表（披露事实版，2026-10-13 时间线迁移）。
 
-数据边界：利润表收入/成本与经营现金流净额来自 canonical 月度事实（零调整
-投影）；费用、投资为确定性合成参数（synthetic，显式常量）。闭合为硬约束：
-资产 = 负债 + 权益；现金桥闭合；权益 roll-forward 闭合且与 BS 权益一致。
-金额单位统一人民币千元（canonical 万元 × 10）。
+报表载荷不再是 canonical 的合成投影（旧 65% 利息拆分、10% 折旧估算、
+负债/现金流构成拆分等无来源行已全部移除，处置见来源登记 unavailable 节
+U-DM-*），而是来源登记所依据的菜鸟申请稿披露三表逐行原值：
 
-A3 起报表范式对齐 A 股合并报表披露：报表类型用「合并*」标准名、列用披露原文
-标签（期末余额/期初余额/本期发生额/上期发生额），行项目采用 CAS 规范名，
-使 ReviewService.publish 的勾稽门禁（资产=负债+权益、净利润归属、现金桥）
-真实生效；FY2026 报告携带 FY2025 比较期列（期初/上期），链式一致。
+- statements/damai_fy2023.yaml：本期 FY2023（2022-04~2023-03）、上期 FY2022；
+- statements/damai_fy2022.yaml：本期 FY2022（2021-04~2022-03）、上期 FY2021（期初锚）；
+- 合并所有者权益变动表未在登记抽取范围 → 不再生成合成权益表，勾稽覆盖
+  如实缺省（发布门禁对权益变动表缺失本就非阻断）；
+- 资产负债表列名按 BS 惯例改为 期末余额/期初余额（原值不变，仅列名呈现）。
+
+单位：人民币千元（披露原文，不换算）。血缘：docs/implementation/p5/
+cainiao_*_statements.yaml（逐行值经登记构建脚本与 registry 交叉核验）→
+原件 PDF SHA `3e2c3679…`。跨文件同期间值不一致时直接报错，静默取值。
 """
 
 from __future__ import annotations
 
-from decimal import Decimal
+from pathlib import Path
 from typing import Any
 
-_UNIT = Decimal("10")  # canonical 万元 -> 报告千元
+import yaml
 
-# synthetic 合成参数（占收入比；规格未细化处按行业常见区间显式常量化）
-_EXPENSE_RATES = {
-    "销售费用": Decimal("0.035"),
-    "管理费用": Decimal("0.025"),
-    "研发费用": Decimal("0.012"),
+_P5_DIR_REL = "docs/implementation/p5"
+_STATEMENT_FILES = {
+    "FY2021": "cainiao_2021fy_statements.yaml",  # 仅作 FY2022 上期列核验基准
+    "FY2022": "cainiao_2022fy_statements.yaml",
+    "FY2023": "cainiao_2023fy_statements.yaml",
 }
-_FIN_EXP_RATE = Decimal("0.004")
-_TAX_RATE = Decimal("0.25")
-_ATTR_SHARE = Decimal("0.90")
-
-# 资产结构合成参数（占收入比）
-_AR_RATE = Decimal("0.35")
-_INVENTORY_RATE = Decimal("0.06")
-_FIXED_ASSET_RATE = Decimal("0.55")
-_CA_OTHER_RATE = Decimal("0.05")
-_CASH_RATE = Decimal("0.06")
-_INVEST_RATE = Decimal("0.06")  # 投资活动净流出（占收入）
-_OPENING_EQUITY_RATE = Decimal("0.45")  # 期初净资产（首份报告参数）
-_CF_OUTFLOW_RATE = Decimal("0.80")  # 经营现金流出小计（占收入，流入=流出+净额）
-_CURRENT_LIAB_SHARE = Decimal("0.70")  # 流动负债占负债合计比
-_INTEREST_SHARE_OF_FINANCE_COST = Decimal("0.65")  # 显式利息费用（财务费用子项）
-_SHORT_DEBT_SHARE = Decimal("0.25")  # 短期借款占流动负债
-_AP_SHARE = Decimal("0.35")  # 应付账款占流动负债
-_LONG_DEBT_SHARE = Decimal("0.65")  # 长期借款占非流动负债
-_DEPRECIATION_RATE_ON_FIXED_ASSETS = Decimal("0.10")  # synthetic 固定资产年度折旧率
-
-# 报表类型标准名（与 A 股勾稽门禁的覆盖判定一致）
-ST_IS = "合并利润表"
-ST_BS = "合并资产负债表"
-ST_CF = "合并现金流量表"
-ST_EQ = "合并所有者权益变动表"
+_FISCAL_MONTHS = {
+    "FY2021": ("2020-04", "2021-03"),
+    "FY2022": ("2021-04", "2022-03"),
+    "FY2023": ("2022-04", "2023-03"),
+}
+_BS_COLUMN_RENAME = {"本期发生额": "期末余额", "上期发生额": "期初余额"}
 
 
-def _d(value: Decimal) -> Decimal:
-    return value.quantize(Decimal("0.0001"))
+def _repo_root() -> Path:
+    for root in (Path.cwd(), *Path.cwd().parents):
+        if (root / "templates/excel/flow_v1_contract.yaml").is_file():
+            return root
+    raise FileNotFoundError("未找到仓库根（templates/excel/flow_v1_contract.yaml）")
 
 
-def _annual_facts(package: dict[str, Any], months: tuple[str, ...]) -> dict[str, Decimal]:
-    facts = package["monthly_facts"]
-    totals: dict[str, Decimal] = {
-        "revenue": Decimal("0"), "cost": Decimal("0"), "ocf": Decimal("0")
-    }
-    for row in facts["operating_actual"]:
-        if row["month"] in months:
-            totals["revenue"] += Decimal(str(row["revenue"]))
-            totals["cost"] += Decimal(str(row["cost"]))
-    for row in facts["cash_flow"]:
-        if row["month"] in months:
-            totals["ocf"] += Decimal(str(row["ocf"]))
-    for key in totals:
-        totals[key] *= _UNIT
-    return totals
+def _load_p5_statements(fy: str) -> dict[str, Any]:
+    path = _repo_root() / _P5_DIR_REL / _STATEMENT_FILES[fy]
+    loaded: dict[str, Any] = yaml.safe_load(path.read_text(encoding="utf-8"))
+    return loaded
 
 
-def _income_statement(f: dict[str, Decimal]) -> list[dict[str, Any]]:
-    """CAS 合并利润表：利润总额 = 营业利润（无营业外），净利润归属拆分闭合。"""
+def _month_tuple(fy: str) -> tuple[str, ...]:
+    from flow_api.fixtures.damai.profile import ANALYSIS_MONTHS, PRIOR_MONTHS
 
-    revenue = f["revenue"]
-    cost = f["cost"]
-    gross = revenue - cost
-    selling = _d(revenue * _EXPENSE_RATES["销售费用"])
-    admin = _d(revenue * _EXPENSE_RATES["管理费用"])
-    rnd = _d(revenue * _EXPENSE_RATES["研发费用"])
-    fin_exp = _d(revenue * _FIN_EXP_RATE)
-    interest_exp = _d(fin_exp * _INTEREST_SHARE_OF_FINANCE_COST)
-    operating = gross - selling - admin - rnd - fin_exp
-    pretax = operating  # 无营业外收支：利润总额 = 营业利润
-    tax = _d(abs(pretax) * _TAX_RATE)
-    net = pretax - tax if pretax >= 0 else pretax + tax
-    attr = _d(net * _ATTR_SHARE)
-    rows: list[tuple[str, Decimal]] = [
-        ("营业收入", revenue),
-        ("营业成本", cost),
-        ("毛利", gross),
-        ("销售费用", selling),
-        ("管理费用", admin),
-        ("研发费用", rnd),
-        ("财务费用", fin_exp),
-        # 财务费用总额的披露子项，不再次计入利润小计。
-        ("其中：利息费用", interest_exp),
-        ("三、营业利润（亏损以“－”号填列）", operating),
-        ("四、利润总额（亏损总额以“－”号填列）", pretax),
-        ("减：所得税费用", tax),
-        ("五、净利润（净亏损以“－”号填列）", net),
-        ("1.归属于母公司所有者的净利润", attr),
-        ("2.少数股东损益", net - attr),
-    ]
-    return [
-        {"item": item, "本期发生额": str(value), "上期发生额": None}
-        for item, value in rows
-    ]
+    if fy == "FY2022":
+        return PRIOR_MONTHS
+    if fy == "FY2023":
+        return ANALYSIS_MONTHS
+    raise KeyError(f"演示报表不含期间 {fy}")
 
 
-def _cash_flow_statement(
-    f: dict[str, Decimal], opening_cash: Decimal
-) -> tuple[list[dict[str, Any]], Decimal]:
-    """现金桥硬闭合：净增加 = 经营+投资+筹资；期末 = 期初 + 净增加。"""
+def _prior_year_values(fy: str) -> dict[tuple[str, str], Any]:
+    """上一年度文件的本期值（期初/上期列的交叉核验基准）。"""
 
-    ocf = f["ocf"]
-    outflow = _d(f["revenue"] * _CF_OUTFLOW_RATE)
-    inflow = outflow + ocf
-    investing = _d(-(f["revenue"] * _INVEST_RATE))
-    capex = abs(investing)
-    depreciation = _d(
-        f["revenue"] * _FIXED_ASSET_RATE * _DEPRECIATION_RATE_ON_FIXED_ASSETS
-    )
-    financing = Decimal("0")  # 扩张由经营积累覆盖
-    net_increase = ocf + investing + financing
-    closing = opening_cash + net_increase
-    amounts: list[tuple[str, Decimal]] = [
-        ("销售商品、提供劳务收到的现金", _d(inflow)),
-        ("经营活动现金流入小计", _d(inflow)),
-        ("经营活动现金流出小计", _d(outflow)),
-        ("经营活动产生的现金流量净额", _d(ocf)),
-        ("投资活动现金流入小计", Decimal("0")),
-        ("投资活动现金流出小计", _d(capex)),
-        ("购建固定资产、无形资产和其他长期资产支付的现金", _d(capex)),
-        ("投资活动产生的现金流量净额", _d(investing)),
-        # 现金流量表补充资料：不参与现金净额小计。
-        ("折旧与摊销", depreciation),
-        ("筹资活动产生的现金流量净额", _d(financing)),
-        ("五、现金及现金等价物净增加额", _d(net_increase)),
-        ("加：期初现金及现金等价物余额", _d(opening_cash)),
-        ("六、期末现金及现金等价物余额", _d(closing)),
-    ]
-    rows = [
-        {"item": item, "本期发生额": str(value), "上期发生额": None}
-        for item, value in amounts
-    ]
-    return rows, _d(closing)
+    prior_fy = {"FY2022": "FY2021", "FY2023": "FY2022"}[fy]
+    doc = _load_p5_statements(prior_fy)
+    values: dict[tuple[str, str], Any] = {}
+    for statement, rows in (doc.get("statements") or {}).items():
+        for row in rows:
+            values[(statement, row["item"])] = row.get("本期发生额")
+    return values
 
 
-def _equity_statement(
-    opening_equity: Decimal, net_income: Decimal, closing_equity: Decimal
-) -> list[dict[str, Any]]:
-    other = closing_equity - opening_equity - net_income
-    return [
-        {"item": "期初权益", "本期发生额": str(_d(opening_equity)), "上期发生额": None},
-        {"item": "本期净利润", "本期发生额": str(_d(net_income)), "上期发生额": None},
-        {"item": "其他权益变动", "本期发生额": str(_d(other)), "上期发生额": None},
-        {"item": "期末权益", "本期发生额": str(_d(closing_equity)), "上期发生额": None},
-    ]
-
-
-def _balance_sheet_rows(
-    cash: Decimal, revenue: Decimal, equity_total: Decimal
-) -> dict[str, tuple[Decimal, Decimal]]:
-    """构造闭合资产负债表（item → (期末, 占位)），恒等式逐条精确成立。
-
-    流动资产合计 = 货币资金+应收账款+存货+其他流动资产；非流动资产合计 = 固定资产；
-    资产总计 = 流动+非流动；负债合计 = 资产 − 权益（配平）并拆流动/非流动；
-    所有者权益合计 = 归母 + 少数股东；负债和所有者权益总计 = 资产总计。
-    """
-
-    ar = _d(revenue * _AR_RATE)
-    inventory = _d(revenue * _INVENTORY_RATE)
-    ca_other = _d(revenue * _CA_OTHER_RATE)
-    fixed = _d(revenue * _FIXED_ASSET_RATE)
-    current_assets = cash + ar + inventory + ca_other
-    noncurrent_assets = fixed
-    total_assets = current_assets + noncurrent_assets
-    liabilities = total_assets - equity_total
-    current_liab = _d(liabilities * _CURRENT_LIAB_SHARE)
-    noncurrent_liab = liabilities - current_liab
-    short_debt = _d(current_liab * _SHORT_DEBT_SHARE)
-    accounts_payable = _d(current_liab * _AP_SHARE)
-    other_current_liab = current_liab - short_debt - accounts_payable
-    long_debt = _d(noncurrent_liab * _LONG_DEBT_SHARE)
-    other_noncurrent_liab = noncurrent_liab - long_debt
-    attr_equity = _d(equity_total * _ATTR_SHARE)
-    minority_equity = equity_total - attr_equity
-    rows: list[tuple[str, Decimal]] = [
-        ("货币资金", cash),
-        ("应收账款", ar),
-        ("存货", inventory),
-        ("其他流动资产", ca_other),
-        ("流动资产合计", current_assets),
-        ("固定资产", fixed),
-        ("非流动资产合计", noncurrent_assets),
-        ("资产总计", total_assets),
-        ("流动负债合计", current_liab),
-        ("短期借款", short_debt),
-        ("应付账款", accounts_payable),
-        ("其他流动负债", other_current_liab),
-        ("非流动负债合计", noncurrent_liab),
-        ("长期借款", long_debt),
-        ("其他非流动负债", other_noncurrent_liab),
-        ("负债合计", liabilities),
-        ("归属于母公司所有者权益合计", attr_equity),
-        ("少数股东权益", minority_equity),
-        ("所有者权益合计", equity_total),
-        ("负债和所有者权益总计", total_assets),
-    ]
-    return {item: (value, value) for item, value in rows}
-
-
-def _balance_sheet(
-    cash: Decimal,
-    revenue: Decimal,
-    equity_closing: Decimal,
-    *,
-    opening: dict[str, Decimal] | None,
-) -> tuple[list[dict[str, Any]], dict[str, Decimal]]:
-    """期末 BS 闭合；期初列取上年期末（链式一致），首份报告期初由参数构造。"""
-
-    rows = _balance_sheet_rows(cash, revenue, equity_closing)
-    end_values = {item: end for item, (end, _begin) in rows.items()}
-    if opening is None:
-        # 首份报告（FY2025）：以期初现金/期初权益参数构造闭合期初 BS
-        opening_cash = _d(revenue * _CASH_RATE)
-        opening_equity = _d(revenue * _OPENING_EQUITY_RATE)
-        opening_rows = _balance_sheet_rows(opening_cash, revenue, opening_equity)
-        opening = {item: end for item, (end, _b) in opening_rows.items()}
-    result = [
-        {
-            "item": item,
-            "期末余额": str(_d(end_values[item])),
-            "期初余额": str(_d(opening[item])),
-        }
-        for item in end_values
-    ]
-    return result, end_values
-
-
-def build_damai_statement_payloads(package: dict[str, Any]) -> dict[str, dict[str, Any]]:
-    """从 canonical 事实生成 FY2025（对比期）与 FY2026（分析期）闭合报告。
-
-    FY2026 报告携带 FY2025 比较期列（上期发生额/期初余额 = FY2025 期末值），
-    保证同比列同样满足全部勾稽恒等式。
-    """
-
-    all_months = tuple(
-        sorted({row["month"] for row in package["monthly_facts"]["operating_actual"]})
-    )
-    months_by_fy = {
-        "FY2025": all_months[:12],
-        "FY2026": all_months[12:],
-    }
+def build_damai_statement_payloads() -> dict[str, dict[str, Any]]:
+    """从菜鸟申请稿整理资产生成 FY2022/FY2023 两份披露报表载荷（确定性）。"""
 
     payloads: dict[str, dict[str, Any]] = {}
-    opening_cash = _d(
-        _annual_facts(package, months_by_fy["FY2025"])["revenue"] * _CASH_RATE
-    )
-    opening_equity: Decimal | None = None
-    prior_rows: dict[str, dict[str, Any]] = {}
-    for fy, months in months_by_fy.items():
-        f = _annual_facts(package, months)
-        income_rows = _income_statement(f)
-        net_income = Decimal(
-            next(
-                r
-                for r in income_rows
-                if r["item"] == "五、净利润（净亏损以“－”号填列）"
-            )["本期发生额"]
-        )
-        if opening_equity is None:
-            opening_equity = _d(f["revenue"] * _OPENING_EQUITY_RATE)
-        cf_rows, closing_cash = _cash_flow_statement(f, opening_cash)
-        # 权益 roll-forward：期末权益 = 期末现金（synthetic 简化：扩张由经营积累覆盖）
-        closing_equity = closing_cash
-        equity_rows = _equity_statement(opening_equity, net_income, closing_equity)
-        bs_rows, bs_end = _balance_sheet(
-            closing_cash,
-            f["revenue"],
-            closing_equity,
-            opening=None,  # 期初列：FY2025 参数构造；FY2026 由上年期末统一注入
-        )
+    for fy in ("FY2022", "FY2023"):
+        doc = _load_p5_statements(fy)
+        source_statements = doc.get("statements")
+        if not source_statements:
+            raise ValueError(f"{_STATEMENT_FILES[fy]} 缺少 statements 节")
+        prior_values = _prior_year_values(fy)
 
-        # 比较期列注入：FY2026 的 上期发生额/期初余额 = FY2025 本期/期末
-        if prior_rows:
-            for row in income_rows + cf_rows + equity_rows:
-                prior = prior_rows["flow"].get(row["item"])
-                if prior is not None:
-                    row["上期发生额"] = prior
-            for row in bs_rows:
-                prior = prior_rows["BS"].get(row["item"])
-                if prior is not None:
-                    row["期初余额"] = prior
+        statements: dict[str, list[dict[str, Any]]] = {}
+        for statement, rows in source_statements.items():
+            converted: list[dict[str, Any]] = []
+            for row in rows:
+                item = row["item"]
+                current = row.get("本期发生额")
+                prior = row.get("上期发生额")
+                # 跨文件同期间值核验：本文件上期列必须等于上年文件本期值
+                baseline = prior_values.get((statement, item))
+                if baseline is not None and prior is not None and baseline != prior:
+                    raise ValueError(
+                        f"{fy} 报表跨文件值不一致：{statement}/{item} "
+                        f"上期 {prior} != 上年文件本期 {baseline}"
+                    )
+                new_row: dict[str, Any] = {"item": item}
+                if statement == "合并资产负债表":
+                    new_row["期末余额"] = current
+                    new_row["期初余额"] = prior
+                else:
+                    new_row["本期发生额"] = current
+                    new_row["上期发生额"] = prior
+                converted.append(new_row)
+            statements[statement] = converted
 
         payloads[fy] = {
-            "entity": package["enterprise"],
+            "entity": "damai-logistics",
             "stock_code": "DAMAI.SYN",
             "company": "大麦物流",
             "unit": "人民币千元",
-            "period": months,
-            "statements": {
-                ST_IS: income_rows,
-                ST_CF: cf_rows,
-                ST_EQ: equity_rows,
-                ST_BS: bs_rows,
+            "period": _month_tuple(fy),
+            "data_layer": "disclosed_fact",
+            "source_ref": f"{_P5_DIR_REL}/{_STATEMENT_FILES[fy]}",
+            "provenance": {
+                "registry": "config/damai/source_facts_v1.yaml",
+                "registry_id": "flow.damai_source_facts.v1",
+                "original": (
+                    "菜鸟智慧物流网络港交所申请版本（2023-09-26 递交、2024-03 撤回）"
+                    "附录 I 会计师报告（PwC，IFRS）；大麦物流为基于该披露构建的"
+                    "演示主体（DAMAI.SYN），不是菜鸟本身"
+                ),
+                "statement_pages": {
+                    "合并利润表": 464,
+                    "合并资产负债表": 466,
+                    "合并现金流量表": 474,
+                },
             },
+            "statements": statements,
             "notes_index": [
-                "附注 1：编制基础（synthetic 演示，CAS 合并报表简化投影）",
-                "附注 2：收入按业务族分解见 canonical family_actual",
-                "附注 3：应收账款账龄见 canonical ar_aging",
+                "编制基础：菜鸟申请稿会计师报告（IFRS，人民币千元）；大麦演示主体引用，"
+                "申请版本（draft）身份须随展示",
+                "期间口径：财年截至 3 月 31 日；FY2022 = 2021-04~2022-03，"
+                "FY2023 = 2022-04~2023-03",
+                "逐行值与来源登记 config/damai/source_facts_v1.yaml 一致（含原件 SHA 与页锚）",
                 (
-                    "附注 4：利息费用为财务费用65%的 synthetic 子项；债务和应付账款为负债小计内的"
-                    " synthetic 拆分；销售收现及资本开支用于展示现金流明细且不改变净额小计；"
-                    "折旧按固定资产账面基础的年率10%估算并仅作补充披露"
+                    "unavailable：FY2024 起无菜鸟完整三表披露（U-CN-FY2024PLUS-FULL-STATEMENTS）；"
+                    "FY2026 起菜鸟并入「所有其他」（U-CN-FY2026-STANDALONE）；"
+                    "合并所有者权益变动表未在登记抽取范围；"
+                    "旧合成行（利息 65% 拆分、折旧 10% 估算、负债/现金流构成拆分）已移除"
                 ),
             ],
         }
-        prior_rows = {
-            "flow": {row["item"]: row["本期发生额"] for row in income_rows + cf_rows + equity_rows},
-            "BS": {item: str(_d(value)) for item, value in bs_end.items()},
-        }
-        opening_cash = closing_cash
-        opening_equity = closing_equity
     return payloads
 
 

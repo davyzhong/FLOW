@@ -80,10 +80,10 @@ class LatestDamaiReportCountTest(unittest.TestCase):
                 ))
                 connection.execute(text(
                     "INSERT INTO statement_report VALUES "
-                    "('DAMAI.SYN','年报','FY2025',1,'published'), "
-                    "('DAMAI.SYN','年报','FY2025',2,'published'), "
-                    "('DAMAI.SYN','年报','FY2026',1,'published'), "
-                    "('OTHER','年报','FY2025',1,'published')"
+                    "('DAMAI.SYN','年报','FY2022',1,'published'), "
+                    "('DAMAI.SYN','年报','FY2022',2,'published'), "
+                    "('DAMAI.SYN','年报','FY2023',1,'published'), "
+                    "('OTHER','年报','FY2022',1,'published')"
                 ))
                 count = verify_damai_demo.count_latest_published_damai_reports(connection)
             self.assertEqual(count, 2)
@@ -100,9 +100,9 @@ class LatestDamaiReportCountTest(unittest.TestCase):
                 ))
                 connection.execute(text(
                     "INSERT INTO statement_report VALUES "
-                    "('DAMAI.SYN','年报','FY2025',1,'published'), "
-                    "('DAMAI.SYN','年报','FY2025',2,'draft'), "
-                    "('DAMAI.SYN','年报','FY2026',1,'published')"
+                    "('DAMAI.SYN','年报','FY2022',1,'published'), "
+                    "('DAMAI.SYN','年报','FY2022',2,'draft'), "
+                    "('DAMAI.SYN','年报','FY2023',1,'published')"
                 ))
                 count = verify_damai_demo.count_latest_published_damai_reports(connection)
             self.assertEqual(count, 1)

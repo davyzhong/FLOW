@@ -21,7 +21,8 @@ input_hash: deterministic-static
 - `workbooks/damai_logistics_full_v1.xlsx`：标准工作簿（Finance BP 导入用，
   actual/budget，无 forecast——预测在 sidecar，`persistence: static-only`、
   `page_coverage: excluded`，不得冒充已上线能力）；
-- `statements/damai_fy2025.yaml`、`damai_fy2026.yaml`：闭合合成财报（六大恒等锚）；
+- `statements/damai_fy2022.yaml`、`damai_fy2023.yaml`：菜鸟申请稿披露三表
+  逐行原值（IFRS，千元；来源登记血缘，非合成投影）；
 - `operations/damai_segment_series.yaml`、`damai_operating_metrics.yaml`：
   DAMAI.SYN 独立分部序列与运营事实（synthetic，血缘指向 manifest.json）；
 - `forecast/rolling_forecast.jsonl`：静态预测 sidecar；

@@ -46,7 +46,7 @@ def test_sync_directory_is_idempotent_and_scoped(db_session) -> None:
 
     session, enterprise_id = db_session
     package = (
-        Path(__file__).resolve().parents[4] / "data/enterprise/damai-logistics/v1/organization"
+        Path(__file__).resolve().parents[4] / "data/enterprise/damai-logistics/v2/organization"
     )
     first = sync_enterprise_directory(session, enterprise_id, package)
     session.flush()
@@ -107,7 +107,7 @@ def test_position_cannot_reference_another_enterprise_org(db_session) -> None:
 
     session, enterprise_id = db_session
     package = (
-        Path(__file__).resolve().parents[4] / "data/enterprise/damai-logistics/v1/organization"
+        Path(__file__).resolve().parents[4] / "data/enterprise/damai-logistics/v2/organization"
     )
     from flow_api.enterprise.directory import sync_enterprise_directory
 
@@ -146,7 +146,7 @@ def test_stale_enterprise_identity_is_inactivated_and_binding_revoked(db_session
 
     session, enterprise_id = db_session
     package = (
-        Path(__file__).resolve().parents[4] / "data/enterprise/damai-logistics/v1/organization"
+        Path(__file__).resolve().parents[4] / "data/enterprise/damai-logistics/v2/organization"
     )
     sync_enterprise_directory(session, enterprise_id, package)
     session.flush()

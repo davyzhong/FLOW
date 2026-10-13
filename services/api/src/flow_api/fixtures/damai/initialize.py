@@ -35,7 +35,7 @@ from flow_api.metrics.persistence import _definition_config
 from flow_api.security.models import RoleBinding
 
 ENTERPRISE_CODE = "damai-logistics"
-ENTERPRISE_PACKAGE = Path("data/enterprise/damai-logistics/v1")
+ENTERPRISE_PACKAGE = Path("data/enterprise/damai-logistics/v2")
 METRIC_CATALOG = Path("config/metrics/flow_v1_metrics.yaml")
 
 

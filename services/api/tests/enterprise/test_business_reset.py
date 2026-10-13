@@ -28,8 +28,8 @@ def test_business_reset_deletes_only_named_batch_for_target_enterprise() -> None
         other = Enterprise(id=other_id, code=f"reset-other-{other_id}", name="其他企业")
         session.add_all([target, other])
         session.flush()
-        target_cycle = AnalysisCycle(enterprise_id=target_id, period_key="2026-08", status="frozen")
-        other_cycle = AnalysisCycle(enterprise_id=other_id, period_key="2026-08", status="open")
+        target_cycle = AnalysisCycle(enterprise_id=target_id, period_key="2023-03", status="frozen")
+        other_cycle = AnalysisCycle(enterprise_id=other_id, period_key="2023-03", status="open")
         session.add_all([target_cycle, other_cycle])
         session.flush()
         target_batch = AnalysisBatch(

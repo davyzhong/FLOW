@@ -503,6 +503,130 @@ def _clean_hk_label(name: str) -> str:
     return re.sub(r"\d+(?:\([a-z]\))?$", "", _norm_item(name))
 
 
+class CnIfrsSimplifiedReconciler:
+    """简体 IFRS 申请稿版式勾稽（菜鸟申请稿整理行名；2026-10-13 时间线迁移）。
+
+    覆盖恒等式与申请稿披露列（利润表/现金流量表：本期发生额/上期发生额；
+    资产负债表：期末余额/期初余额）逐条对应；缺行如实记「披露缺失」，
+    数值不一致才记「不一致」。adapter_id 仅作标识，不做页面抽取。
+    """
+
+    adapter_id = "cn_ifrs_simplified_stored"
+
+    def _reconcile(self, st: dict[str, list[dict[str, Any]]]) -> list[ExtractionCheck]:
+        diffs: list[ExtractionCheck] = []
+        is_ = st.get("合并利润表", [])
+        bs = st.get("合并资产负债表", [])
+        cf = st.get("合并现金流量表", [])
+        for col in ("本期发生额", "上期发生额"):
+
+            def g(rows: list[dict[str, Any]], name: str, col: str = col) -> Any:
+                return (_find(rows, name) or {}).get(col)
+
+            _check(
+                diffs,
+                f"毛利=收入+营业成本 [{col}]",
+                g(is_, "毛利"),
+                (g(is_, "收入") or Decimal("0")) + (g(is_, "营业成本") or Decimal("0")),
+            )
+            _check(
+                diffs,
+                f"经营亏损/利润=毛利+期间费用及其他 [{col}]",
+                g(is_, "经营亏损/利润"),
+                (g(is_, "毛利") or Decimal("0"))
+                + (g(is_, "销售及市场推广开支") or Decimal("0"))
+                + (g(is_, "一般及行政开支") or Decimal("0"))
+                + (g(is_, "产品开发开支") or Decimal("0"))
+                + (g(is_, "金融资产减值(转回)/计提") or Decimal("0"))
+                + (g(is_, "其他收入") or Decimal("0"))
+                + (g(is_, "其他收益/(亏损)净额") or Decimal("0")),
+            )
+            _check(
+                diffs,
+                f"除税前亏损/利润=经营+财务成本净额+联营损益-联营减值 [{col}]",
+                g(is_, "除税前亏损/利润"),
+                (g(is_, "经营亏损/利润") or Decimal("0"))
+                + (g(is_, "财务成本净额") or Decimal("0"))
+                + (g(is_, "应占联营及合营损益") or Decimal("0"))
+                + (g(is_, "联营及合营减值") or Decimal("0")),
+            )
+            _check(
+                diffs,
+                f"年度亏损/利润=除税前+所得税开支 [{col}]",
+                g(is_, "年度亏损/利润"),
+                (g(is_, "除税前亏损/利润") or Decimal("0"))
+                + (g(is_, "所得税开支") or Decimal("0")),
+            )
+            _check(
+                diffs,
+                f"年度亏损/利润=归属公司所有者+非控制性权益 [{col}]",
+                g(is_, "年度亏损/利润"),
+                (g(is_, "归属公司所有者") or Decimal("0"))
+                + (g(is_, "非控制性权益") or Decimal("0")),
+            )
+        for col in ("期末余额", "期初余额"):
+
+            def gb(name: str, col: str = col) -> Any:
+                return (_find(bs, name) or {}).get(col)
+
+            _check(
+                diffs,
+                f"资产总计=流动资产合计+非流动资产合计 [{col}]",
+                gb("资产总计"),
+                (gb("流动资产合计") or Decimal("0"))
+                + (gb("非流动资产合计") or Decimal("0")),
+            )
+            _check(
+                diffs,
+                f"负债合计=流动负债合计+非流动负债合计 [{col}]",
+                gb("负债合计"),
+                (gb("流动负债合计") or Decimal("0"))
+                + (gb("非流动负债合计") or Decimal("0")),
+            )
+            _check(
+                diffs,
+                f"权益总额=归属于公司所有者权益+非控制性权益(权益) [{col}]",
+                gb("权益总额"),
+                (gb("归属于公司所有者权益") or Decimal("0"))
+                + (gb("非控制性权益(权益)") or Decimal("0")),
+            )
+            _check(
+                diffs,
+                f"资产总计=权益及负债总额 [{col}]",
+                gb("资产总计"),
+                gb("权益及负债总额"),
+            )
+        for col in ("本期发生额", "上期发生额"):
+
+            def gc(name: str, col: str = col) -> Any:
+                return (_find(cf, name) or {}).get(col)
+
+            _check(
+                diffs,
+                f"经营活动所得现金净额=经营现金+已付所得税 [{col}]",
+                gc("经营活动所得现金净额"),
+                (gc("经营活动产生/(所用)现金") or Decimal("0"))
+                + (gc("已付所得税") or Decimal("0")),
+            )
+            _check(
+                diffs,
+                f"现金及现金等价物(减少)/增加净额=经营+投资+融资 [{col}]",
+                gc("现金及现金等价物(减少)/增加净额"),
+                (gc("经营活动所得现金净额") or Decimal("0"))
+                + (gc("投资活动所用现金净额") or Decimal("0"))
+                + (gc("融资活动(所用)所得现金净额") or Decimal("0")),
+            )
+            _check(
+                diffs,
+                f"年末现金及现金等价物=年初+净变动+汇率影响 [{col}]",
+                gc("年末现金及现金等价物"),
+                (gc("年初现金及现金等价物") or Decimal("0"))
+                + (gc("现金及现金等价物(减少)/增加净额") or Decimal("0"))
+                + (gc("汇率变动对现金的影响") or Decimal("0")),
+            )
+        return diffs
+
+
 class HkTraditionalExtractor:
     adapter_id = "hk_traditional_text"
 
