@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-10-13 深夜当前状态：**时间线迁移已交付**（分支 `flow/timeline-migration-20261013`，commit `087a72f2`）——演示数据期间对齐菜鸟真实财年（FY2022 比较 / FY2023 分析），canonical 月度明细年度聚合精确等于申请稿披露值（零差异）；财务报表为 IFRS 披露原值（合成行全删），简体 IFRS 勾稽器（12 恒等式）过发布门禁；覆盖矩阵 FY2022/FY2023 各 32/50 如实缺省；ORG-LEDGER v2（v1 冻结）。验证全绿（单元/企业/scripts/隔离栈 e2e）。等待同 SHA CI 后合并 main。下一子步：驾驶舱批次 C-2 前先核对 CI 与 F3/F4 队列位置。
+2026-10-13 深夜当前状态：**时间线迁移已交付**（分支 `flow/timeline-migration-20261013`，commit `087a72f2`）——演示数据期间对齐菜鸟真实财年（FY2022 比较 / FY2023 分析），canonical 月度明细年度聚合精确等于申请稿披露值（零差异）；财务报表为 IFRS 披露原值（合成行全删），简体 IFRS 勾稽器（12 恒等式）过发布门禁；覆盖矩阵 FY2022/FY2023 各 32/50 如实缺省；ORG-LEDGER v2（v1 冻结）。验证全绿（单元/企业/scripts/隔离栈 e2e）。已合并 main（`c824f55f`，同 SHA CI 17/17 success）。下一子步：F3（指标目录收尾），随后批次 C-2。
 
 2026-10-13 当前状态（历史，已被上段覆盖）：队首子步骤「来源登记 + 运营披露层重建」已交付并推送（分支 `flow/source-registry-20261013`，commit `842c8ea8`/`e5d8d2c6`）。来源登记 `config/damai/source_facts_v1.yaml` 325 条 disclosed_fact（FY2021–FY2023 三表逐行、FY2019–FY2025 分部序列、件量/Non-IFRS/业务线占比），原件 SHA 与页锚机械核验，四分型完整，7 项无来源假设全部登记处置（U-DM-INTEREST-SPLIT 等）；`fixtures/damai/operations` 重建为披露事实层——分部序列 FY2019–FY2025 菜鸟披露值（FY2026 如实缺省）、件量修复数量级语义（FY2023 国际 1,519 百万件）、废弃「收入÷客单价」推导；大麦相关 108 项测试、scripts 155 项、发行版确定性对账、m1 全绿。Codex 分支 `codex/damai-logistics-data-audit` 已合并进 main（`3b5c82b8`）。**当前唯一子步骤：演示时间线迁移至真实财年**（比较期 FY2022、分析期 FY2023、FY2021 期初锚；生成器规模锚定披露值、statements 改由登记生成 IFRS 三表、alias map 重映射、FINMETRIC 覆盖矩阵重建、ORG-LEDGER v2 重版、测试/e2e 扫荡），迁移五步与验收见 [CURRENT_ROADMAP](../50_plans/CURRENT_ROADMAP.md) 队首行。完整队列 12 项：已完成 4、实际执行中 1、排队 4、暂停 2、外部材料受限 1。
 
