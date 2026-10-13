@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目尽调、优化与单 Agent 执行总交接
 doc_type: navigation
 status: current
-version: 5.27
+version: 5.28
 created_at: 2026-09-12
 updated_at: 2026-10-13
 owner: FLOW
@@ -13,6 +13,10 @@ applies_to: repository
 # FLOW 项目尽调、优化与单 Agent 执行总交接｜2026-09-30 更新
 
 ## 最新续接记录（2026-10-12：完成来源基线审计，登记并复用 P5 菜鸟事实）
+
+## 最新续接记录（2026-10-13 深夜：时间线迁移交付）
+
+**演示时间线已迁移至菜鸟真实财年**（`flow/timeline-migration-20261013` @ `087a72f2`）：FY2022（2021-04~2022-03）比较 / FY2023（2022-04~2023-03）分析；明细年度聚合=披露值（零差异）；报表=申请稿 IFRS 原值（合成行全删，简体 IFRS 勾稽器 12 恒等式过门禁）；覆盖矩阵 32/50×2 如实缺省；ORG-LEDGER v2（v1 冻结）。验证：报表契约 8、operations 16、normalization 14、enterprise 7、scripts 155、web 单测、隔离栈 e2e（seed+verify+八页面 Playwright）全绿；全量 API 失败 20→0（route_policy 为 main 既有本地环境项，与本次无关）。注意坑：canonical.py 曾本地复制月份常量导致批次窗口错位（已改为 profile 唯一来源）；重刷发行版后工作簿语义指纹会真实变化，不可再 checkout 回退。下一步：CI 同 SHA 全绿 → 合 main → 驾驶舱 C-2。
 
 ## 最新续接记录（2026-10-13：来源登记 + 运营披露层交付，时间线迁移为唯一子步）
 

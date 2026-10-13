@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.32
+version: 5.33
 created_at: 2026-09-12
 updated_at: 2026-10-13
 owner: FLOW
@@ -12,7 +12,9 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-10-13 当前状态：队首子步骤「来源登记 + 运营披露层重建」已交付并推送（分支 `flow/source-registry-20261013`，commit `842c8ea8`/`e5d8d2c6`）。来源登记 `config/damai/source_facts_v1.yaml` 325 条 disclosed_fact（FY2021–FY2023 三表逐行、FY2019–FY2025 分部序列、件量/Non-IFRS/业务线占比），原件 SHA 与页锚机械核验，四分型完整，7 项无来源假设全部登记处置（U-DM-INTEREST-SPLIT 等）；`fixtures/damai/operations` 重建为披露事实层——分部序列 FY2019–FY2025 菜鸟披露值（FY2026 如实缺省）、件量修复数量级语义（FY2023 国际 1,519 百万件）、废弃「收入÷客单价」推导；大麦相关 108 项测试、scripts 155 项、发行版确定性对账、m1 全绿。Codex 分支 `codex/damai-logistics-data-audit` 已合并进 main（`3b5c82b8`）。**当前唯一子步骤：演示时间线迁移至真实财年**（比较期 FY2022、分析期 FY2023、FY2021 期初锚；生成器规模锚定披露值、statements 改由登记生成 IFRS 三表、alias map 重映射、FINMETRIC 覆盖矩阵重建、ORG-LEDGER v2 重版、测试/e2e 扫荡），迁移五步与验收见 [CURRENT_ROADMAP](../50_plans/CURRENT_ROADMAP.md) 队首行。完整队列 12 项：已完成 4、实际执行中 1、排队 4、暂停 2、外部材料受限 1。
+2026-10-13 深夜当前状态：**时间线迁移已交付**（分支 `flow/timeline-migration-20261013`，commit `087a72f2`）——演示数据期间对齐菜鸟真实财年（FY2022 比较 / FY2023 分析），canonical 月度明细年度聚合精确等于申请稿披露值（零差异）；财务报表为 IFRS 披露原值（合成行全删），简体 IFRS 勾稽器（12 恒等式）过发布门禁；覆盖矩阵 FY2022/FY2023 各 32/50 如实缺省；ORG-LEDGER v2（v1 冻结）。验证全绿（单元/企业/scripts/隔离栈 e2e）。等待同 SHA CI 后合并 main。下一子步：驾驶舱批次 C-2 前先核对 CI 与 F3/F4 队列位置。
+
+2026-10-13 当前状态（历史，已被上段覆盖）：队首子步骤「来源登记 + 运营披露层重建」已交付并推送（分支 `flow/source-registry-20261013`，commit `842c8ea8`/`e5d8d2c6`）。来源登记 `config/damai/source_facts_v1.yaml` 325 条 disclosed_fact（FY2021–FY2023 三表逐行、FY2019–FY2025 分部序列、件量/Non-IFRS/业务线占比），原件 SHA 与页锚机械核验，四分型完整，7 项无来源假设全部登记处置（U-DM-INTEREST-SPLIT 等）；`fixtures/damai/operations` 重建为披露事实层——分部序列 FY2019–FY2025 菜鸟披露值（FY2026 如实缺省）、件量修复数量级语义（FY2023 国际 1,519 百万件）、废弃「收入÷客单价」推导；大麦相关 108 项测试、scripts 155 项、发行版确定性对账、m1 全绿。Codex 分支 `codex/damai-logistics-data-audit` 已合并进 main（`3b5c82b8`）。**当前唯一子步骤：演示时间线迁移至真实财年**（比较期 FY2022、分析期 FY2023、FY2021 期初锚；生成器规模锚定披露值、statements 改由登记生成 IFRS 三表、alias map 重映射、FINMETRIC 覆盖矩阵重建、ORG-LEDGER v2 重版、测试/e2e 扫荡），迁移五步与验收见 [CURRENT_ROADMAP](../50_plans/CURRENT_ROADMAP.md) 队首行。完整队列 12 项：已完成 4、实际执行中 1、排队 4、暂停 2、外部材料受限 1。
 
 2026-10-12 当前状态（历史，已被上段覆盖）：CFO 驾驶舱仍为唯一队首；FINMETRIC F1/F2 均已关闭。F1 准确 SHA CI `11129263110d296f33c48b6cb94237a6fcedfd13`（run `38147756845`，17/17）；F2 使用正式 `metric_dictionary_v1_1.yaml`（50 条通用指标），覆盖矩阵 FY2025 42/50、FY2026 45/50，并记录字典 ID 与 SHA-256，准确 SHA CI `0d4b554f33bd1c9cdab3242b25d26eb2209a632c`（run `38188010174`，17/17）。来源基线与计划更新提交 `df0f2e6782e60d65edc955918a892c34868a9c51` 的准确 SHA CI run `38188972800` 亦为 17/17。用户要求大麦全部经营 Mock 基于阿里/菜鸟公开原始披露，65% 利息拆分、10% 折旧估算等不得作为事实；需完成来源血缘重整、51 图表及全系统功能验收，交互全链路可点击可追溯，并优先复用成熟组件。首轮来源审计已完成，见[审计记录](../60_delivery/verification/2026-10-12--damai-source-baseline-audit-v1.md)：仓库已有菜鸟 FY2021–FY2023 三表、FY2019–FY2025 分部序列和运营指标数据资产，应复用而非重复录入；当前大麦生成器绕开这些来源重造了财务与运营值，件量公式存在数量级和字段语义错位。当前唯一子步骤为建立机器可读来源登记，补齐复用事实的报告/URL/SHA/页表/期间/单位定位，并设计公开事实、派生值、演示生成明细与隔离测试夹具的适配边界。尚未修改数据代码。当前完整队列为 12 项：已完成 4、实际执行中 1、排队 4、暂停 2、外部材料受限 1；唯一队列及后续工作以 [CURRENT_ROADMAP](../50_plans/CURRENT_ROADMAP.md) 为准。
 

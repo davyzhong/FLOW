@@ -3,9 +3,9 @@ doc_id: FLOW-WI-COCKPIT-CFO-001
 title: CFO 财务总监驾驶舱产品化
 doc_type: work-item
 status: active
-version: 1.5
+version: 1.6
 created_at: 2026-09-30
-updated_at: 2026-10-12
+updated_at: 2026-10-13
 owner: FLOW
 depends_on: [FLOW-WI-DAMAI-FULL-YEAR-001, FLOW-WI-ORG-LEDGER-001, FLOW-WI-S01-POST-U8-001]
 acceptance_refs: [FLOW-PLAN-COCKPIT-IMPL-20260930]
@@ -91,6 +91,10 @@ confidentiality: project-internal
 2. **ruff 导入序**（`static-python` 失败）：`api/router.py` 中 `cockpit_router` 位置违反 isort 字母序。已归位。
 
 图表技术选型已记录于实施方案 §6 Q1：ECharts 6.1.0 + 10 类可复用构建器；复杂语义关系图保留 HTML/CSS。F1 指标目录哈希兼容由 `d6afe463` 修复；其准确 SHA CI 余下三个失败已定位为固定演示数据日期与真实时钟错位。API 现提供可覆盖时钟依赖，数据库生命周期测试固定时间，dashboard/investigation E2E 使用只服务于验收的冻结时钟启动器。静态检查已通过；待数据库服务可用时的本地集成验证及修复提交后的准确 SHA CI。CI 全绿前不启动 F2。
+
+### 2026-10-13 深夜接续状态（时间线迁移已交付）
+
+演示时间线迁移完成（`087a72f2`，分支 `flow/timeline-migration-20261013`）：FY2022/FY2023 真实财年、明细↔披露零差异、IFRS 披露三表过勾稽门禁、覆盖矩阵 32/50×2、ORG-LEDGER v2。**当前唯一子步骤：同 SHA CI 全绿并合并 main 后，进入 F3（指标目录收尾）→ 批次 C-2（其余 8 模块页面）。**
 
 ### 2026-10-13 接续状态（来源登记 + 运营披露层已交付）
 
