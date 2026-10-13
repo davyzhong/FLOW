@@ -42,8 +42,8 @@
     "canonical/regions.jsonl": "c5dc96c7542f3ce75eb5fb4147176dcfd3d88c310dc63b344397caa0437b6b06",
     "canonical/scenario_versions.jsonl": "01d3a9d831c89b556bca914f905268b7cbcc7a1cf05c228b324e0509fa5ffefe",
     "forecast/rolling_forecast.jsonl": "46714251f408a84f56e45fd6fb4905308118475ef19e840a70ad00c86a237adc",
-    "operations/damai_operating_metrics.yaml": "0f8aee2d9f7e19b89c65eae11a9fcf39487cf97a29fb47686b73d38821292d2e",
-    "operations/damai_segment_series.yaml": "7158d3fc06b3ff1cce88a7b8178b2e7411c7946ec8958d9e5b6de0c130a7d446",
+    "operations/damai_operating_metrics.yaml": "aed7c0d86b0d11bcc484c57c2cd63188eeff6206ed1ecf17b71ed03d76bc2d8a",
+    "operations/damai_segment_series.yaml": "aadcedb7fc9f41990a0016357ebcea776ccd38725eaa519787ecfd89dcd9663c",
     "statements/damai_fy2025.yaml": "f5c3ddd4fac97dc59f18c31f11d9a74021fa5a0590f9c2ec7b93a9e8d2804322",
     "statements/damai_fy2026.yaml": "7ed1280aeaf18f0758f257c1059c11e37f5883683b160a6f6f6c9c3945083785",
     "workbooks/damai_logistics_full_v1.xlsx": "semantic:34a6537c444348cf1819e919ad47f94c58c3a4b98513cc539a9e1a61d69e6be3"

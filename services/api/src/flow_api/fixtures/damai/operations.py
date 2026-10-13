@@ -1,133 +1,207 @@
-"""大麦独立运营事实与分部序列生成（Task A3，规格 §4.3）。
+"""大麦运营披露层（披露事实版，2026-10-13 来源重整）。
 
-DAMAI.SYN 的 /operations 数据完全由 canonical 数据包确定性推导，
-不读取、不复用任何真实公司（阿里巴巴/菜鸟）fixture：
-- 分部序列：全集团管理层口径收入 + 经调整 EBITA（经营利润 ×1.08 加回演示参数）；
-- 运营事实：国际包裹量/国内履约单量（由收入按客单价推导）、业务线收入占比；
-- 血缘：source_ref 指向发行版 manifest.json，摘要在装载时现算现核。
+DAMAI.SYN 的 /operations 数据不再由 canonical 合成推导，而是直接引用
+`config/damai/source_facts_v1.yaml` 来源登记中的菜鸟公开披露事实
+（四分型的 disclosed_fact 层）：
+- 分部序列：阿里年报/业绩公告 FY2019–FY2025 菜鸟分部收入与经调整 EBITA；
+  FY2026 起菜鸟并入「所有其他」分部，无单独披露（unavailable，如实缺省，
+  不得从混合组汇总反推）；
+- 运营事实：申请稿 Selected Operating Data 件量（FY2021–FY2023 + 两个未经
+  审计 Q1 stub）、FY2023 业务线收入占比、Non-IFRS 指标、网络快照；
+- 演示期间（canonical FY2025/FY2026 月度）不属于披露期间，件量/占比不再
+  用「收入 ÷ 客单价」推导补位（该口径已被 2026-10-12 审计判定为数量级与
+  字段语义错误，见 U-CN-VOLUME-FINE-GRAINS）；
+- 血缘：source_ref 指向来源登记，series/metrics 逐值携带 fact_id，可回溯
+  原件 SHA 与页锚。
 
-单位：分部序列/运营金额为人民币百万元（canonical 万元 ÷ 100）。
+单位：分部序列/运营金额为人民币百万元；件量为百万件/百万单（披露原口径）。
 """
 
 from __future__ import annotations
 
-from decimal import Decimal
+from pathlib import Path
 from typing import Any
 
-from flow_api.fixtures.damai.profile import BUSINESS_FAMILIES
+import yaml
 
-_UNIT_TO_MN = Decimal("0.01")  # 万元 -> 百万元
-_ORDER_UNIT_PRICE = Decimal("120")  # 客单价 120 万元/单（与 canonical 派生口径一致）
-_SHIPMENTS_PER_ORDER = Decimal("2.0")
-_EBITA_UPLIFT = Decimal("1.08")  # 经调整 EBITA = 经营利润 × 1.08（D&A 加回演示参数）
+REGISTRY_REL = "config/damai/source_facts_v1.yaml"
+REGISTRY_ID = "flow.damai_source_facts.v1"
+_SEGMENT_YEARS = tuple(f"FY{year}" for year in range(2019, 2026))
+_VOLUME_METRICS = ("international_parcels", "china_orders_fulfilled")
+_VOLUME_UNITS = {"international_parcels": "百万件", "china_orders_fulfilled": "百万单"}
+_VOLUME_NAMES = {
+    "international_parcels": "跨境及国际包裹量",
+    "china_orders_fulfilled": "中国物流订单量",
+}
+_SHARE_METRICS = (
+    "international_logistics",
+    "china_logistics",
+    "technology_and_other_services",
+)
+_NON_IFRS_METRICS = (
+    "adjusted_net_profit",
+    "adjusted_net_profit_margin",
+    "adjusted_ebitda",
+    "adjusted_ebitda_margin",
+)
 
 
-def _d(value: Decimal, places: str = "0.0001") -> Decimal:
-    return value.quantize(Decimal(places))
-
-
-def _fy_months(package: dict[str, Any]) -> dict[str, tuple[str, ...]]:
-    all_months = tuple(
-        sorted({row["month"] for row in package["monthly_facts"]["operating_actual"]})
-    )
-    return {"FY2025": all_months[:12], "FY2026": all_months[12:]}
-
-
-def _fy_totals(package: dict[str, Any]) -> dict[str, dict[str, Decimal]]:
-    """逐财年 收入/经营利润/分族收入/分族件量（万元与百万件）。"""
-
-    months_by_fy = _fy_months(package)
-    totals: dict[str, dict[str, Decimal]] = {}
-    for fy, months in months_by_fy.items():
-        revenue = Decimal("0")
-        profit = Decimal("0")
-        by_family: dict[str, Decimal] = {}
-        for row in package["monthly_facts"]["operating_actual"]:
-            if row["month"] not in months:
-                continue
-            row_revenue = Decimal(str(row["revenue"]))
-            revenue += row_revenue
-            by_family[row["family_id"]] = (
-                by_family.get(row["family_id"], Decimal("0")) + row_revenue
+def _load_registry() -> dict[str, Any]:
+    for root in (Path.cwd(), *Path.cwd().parents):
+        candidate = root / REGISTRY_REL
+        if candidate.is_file():
+            loaded: dict[str, Any] = yaml.safe_load(
+                candidate.read_text(encoding="utf-8")
             )
-        for row in package["monthly_facts"]["cash_flow"]:
-            if row["month"] in months:
-                profit += Decimal(str(row["operating_profit"]))
-        totals[fy] = {"revenue": revenue, "operating_profit": profit, **{
-            f"family:{fid}": value for fid, value in by_family.items()
-        }}
-    return totals
+            if loaded.get("registry_id") != REGISTRY_ID:
+                raise ValueError(
+                    f"来源登记 registry_id 不符：期望 {REGISTRY_ID}，"
+                    f"实际 {loaded.get('registry_id')}"
+                )
+            return loaded
+    raise FileNotFoundError(f"来源登记缺失：{REGISTRY_REL}（先运行构建脚本）")
 
 
-def build_damai_operations_payloads(package: dict[str, Any]) -> dict[str, dict[str, Any]]:
-    """生成两个 yaml 载荷：segment_series 与 operating_metrics（确定性）。"""
+def _fact_index(registry: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    return {fact["fact_id"]: fact for fact in registry["facts"]}
 
-    totals = _fy_totals(package)
+
+def build_damai_operations_payloads() -> dict[str, dict[str, Any]]:
+    """从来源登记生成 segment_series 与 operating_metrics（确定性，披露事实）。"""
+
+    registry = _load_registry()
+    facts = _fact_index(registry)
+    sha_prefix = registry["sources"]["CNAI-IPO-2023"]["sha256"][:16]
 
     segment_series: dict[str, Any] = {
         "sample": "damai_segment_series",
-        "company": "大麦物流（synthetic 演示企业）",
+        "company": "大麦物流（演示主体）——分部序列为菜鸟披露事实（演示引用）",
+        "data_layer": "disclosed_fact",
         "unit": "人民币百万元",
+        "entity_note": "分部序列为菜鸟披露事实（阿里年报/业绩公告，MPM 口径），大麦演示主体引用",
         "note": (
-            "synthetic 演示数据：全集团管理层口径序列，由 canonical 月度事实推导；"
-            "不代表任何真实企业。"
+            "分部序列直接引用来源登记的菜鸟披露值（阿里年报/业绩公告分部披露，"
+            "MPM 口径）：FY2026 起菜鸟重分类进「所有其他」分部，报告未单列菜鸟，"
+            "不设 FY2026 值，也不得从混合组汇总反推。大麦演示报告期间的合成报表"
+            "不属于本数据集。"
         ),
-        "sources": {
-            fy: "fixtures/damai/manifest.json" for fy in totals
-        },
-        "series": {
-            fy: {
-                "segment_revenue": float(_d(t["revenue"] * _UNIT_TO_MN)),
-                "adjusted_ebita": float(
-                    _d(t["operating_profit"] * _UNIT_TO_MN * _EBITA_UPLIFT)
-                ),
-            }
-            for fy, t in totals.items()
+        "source_ref": REGISTRY_REL,
+        "source_registry_id": REGISTRY_ID,
+        "source_sha256_prefix": sha_prefix,
+        "series": {},
+        "unavailable_periods": {
+            "FY2026": "菜鸟并入阿里「所有其他」分部，报告未单列（U-CN-FY2026-STANDALONE）",
         },
     }
+    for period in _SEGMENT_YEARS:
+        revenue_id = f"CN-SEG-{period}-SEGMENT_REVENUE"
+        revenue_fact = facts.get(revenue_id)
+        if revenue_fact is None:
+            raise KeyError(f"来源登记缺少分部收入事实：{revenue_id}")
+        entry: dict[str, Any] = {
+            "segment_revenue": revenue_fact["value"],
+            "fact_ids": {"segment_revenue": revenue_id},
+        }
+        ebita_id = f"CN-SEG-{period}-ADJUSTED_EBITA"
+        ebita_fact = facts.get(ebita_id)
+        if ebita_fact is not None:
+            entry["adjusted_ebita"] = ebita_fact["value"]
+            entry["fact_ids"]["adjusted_ebita"] = ebita_id
+        segment_series["series"][period] = entry
 
-    def _volume_millions(family_id: str, fy: str) -> float:
-        revenue = totals[fy].get(f"family:{family_id}", Decimal("0"))
-        orders = revenue / _ORDER_UNIT_PRICE
-        shipments = orders * _SHIPMENTS_PER_ORDER
-        return float(_d(shipments / Decimal("1000000")))
-
-    analysis_fy = "FY2026"
-    analysis_total = totals[analysis_fy]["revenue"]
-    share = {
-        family.family_id: float(
-            _d(totals[analysis_fy].get(f"family:{family.family_id}", Decimal("0"))
-               / analysis_total)
-        )
-        for family in BUSINESS_FAMILIES
+    volume_facts = {
+        metric: {
+            fact["period"]: (fact_id, fact["value"])
+            for fact_id, fact in facts.items()
+            if fact_id.startswith("CN-OPS-") and fact["item_en"] == metric
+        }
+        for metric in _VOLUME_METRICS
     }
+    volume_periods = sorted(
+        {period for per_metric in volume_facts.values() for period in per_metric}
+    )
+    stub_periods = [period for period in volume_periods if period.startswith("Q1")]
+
     operating_metrics: dict[str, Any] = {
         "sample": "damai_operating_metrics",
-        "source_ref": "fixtures/damai/manifest.json",
-        "periods": ["FY2025", "FY2026"],
+        "data_layer": "disclosed_fact",
+        "note": (
+            "运营披露事实直接引用来源登记（菜鸟申请稿 Selected Operating Data、"
+            "Non-IFRS、OUR SERVICE OFFERINGS 与网络快照）；Q1 stub 期间未经审计；"
+            "演示期间（canonical FY2025/FY2026）无披露值，按 unavailable 处理，"
+            "不再用收入推导件量。"
+        ),
+        "source_ref": REGISTRY_REL,
+        "source_registry_id": REGISTRY_ID,
+        "source_sha256_prefix": sha_prefix,
+        "periods": volume_periods,
+        "unaudited_periods": stub_periods,
         "operating_volume": {
-            "unit": "百万件",
-            "international_parcels": {
-                fy: _volume_millions("international_cross_border", fy) for fy in totals
+            "unit": "百万件/百万单（披露原口径）",
+            **{
+                metric: {
+                    period: value for period, (_fid, value) in per_metric.items()
+                }
+                for metric, per_metric in volume_facts.items()
             },
-            "china_orders_fulfilled": {
-                fy: _volume_millions("china_logistics", fy) for fy in totals
+            "fact_ids": {
+                metric: {period: fid for period, (fid, _v) in per_metric.items()}
+                for metric, per_metric in volume_facts.items()
             },
         },
         "business_line_revenue_share": {
-            "international_logistics": share["international_cross_border"],
-            "china_logistics": share["china_logistics"],
-            "technology_and_other_services": share["tech_and_other"],
+            "period": "FY2023",
+            "note": "FY2023 管理层口径业务线收入占比（OUR SERVICE OFFERINGS）；不延用于其他期间",
+            **{
+                metric: facts[f"CN-SHARE-FY2023-{metric.upper()}"]["value"]
+                for metric in _SHARE_METRICS
+            },
+            "fact_ids": {
+                metric: f"CN-SHARE-FY2023-{metric.upper()}" for metric in _SHARE_METRICS
+            },
         },
-        "network_snapshot": {
-            "as_of": "2026-08-31",
-            "note": "synthetic 演示快照：业务单元 4 个、区域网络 6 个、产品线 8 条",
+        "non_ifrs": {
+            "note": "Non-IFRS 为管理层口径（MPM），调节表见申请稿；不得与 IFRS 净利润混同",
+            **{
+                metric: {
+                    fact["period"]: fact["value"]
+                    for fact_id, fact in facts.items()
+                    if fact_id.startswith("CN-NIFRS-") and fact["item_en"] == metric
+                }
+                for metric in _NON_IFRS_METRICS
+            },
         },
+        "network_snapshot": _network_snapshot(),
+        "unavailable": [
+            {
+                "scope": "演示期间（canonical FY2025/FY2026）的月度/客户/产品件量与业务线占比",
+                "reason": (
+                    "公开材料未披露该粒度与期间（U-CN-VOLUME-FINE-GRAINS）；"
+                    "由收入推导件量的旧口径已废弃"
+                ),
+            }
+        ],
     }
     return {
         "segment_series": segment_series,
         "operating_metrics": operating_metrics,
     }
+
+
+def _network_snapshot() -> dict[str, Any]:
+    for root in (Path.cwd(), *Path.cwd().parents):
+        candidate = root / "docs/implementation/p5/cainiao_operating_metrics.yaml"
+        if candidate.is_file():
+            doc = yaml.safe_load(candidate.read_text(encoding="utf-8"))
+            snapshot = doc.get("network_snapshot") or {}
+            return {
+                "note": (
+                    "菜鸟网络快照（披露原文，点值非年度序列）；大麦演示主体引用；"
+                    "页锚见来源登记与申请稿 p243/245/274"
+                ),
+                **snapshot,
+            }
+    raise FileNotFoundError("cainiao_operating_metrics.yaml 缺失")
 
 
 __all__ = ["build_damai_operations_payloads"]

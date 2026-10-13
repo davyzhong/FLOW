@@ -161,7 +161,7 @@ def _dump_statements(
 
 
 def _dump_operations(destination: Path, package: dict[str, Any]) -> None:
-    payloads = build_damai_operations_payloads(package)
+    payloads = build_damai_operations_payloads()
     for key, rel in zip(
         ("segment_series", "operating_metrics"), _OPERATIONS_RELS, strict=True
     ):

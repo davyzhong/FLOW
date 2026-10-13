@@ -239,7 +239,12 @@ def load_cainiao_operating_facts(
 def load_damai_operating_facts(
     path: Path, *, repo_root: Path
 ) -> list[OperatingFact]:
-    """把大麦 synthetic 运营披露转换为统一事实（血缘指向发行版 manifest）。"""
+    """把大麦运营披露层（引用来源登记的菜鸟披露事实）转换为统一事实。
+
+    2026-10-13 来源重整后：件量/占比/Non-IFRS 均为披露事实层（disclosed_fact），
+    血缘指向 config/damai/source_facts_v1.yaml；Q1 stub 期间未经审计；
+    演示期间（canonical FY2025/FY2026）无披露值，不生成事实（unavailable）。
+    """
 
     payload = yaml.safe_load(path.read_text(encoding="utf-8"))
     source_ref = str(payload["source_ref"])
@@ -247,6 +252,8 @@ def load_damai_operating_facts(
     if not source_path.is_file():
         raise ValueError(f"大麦运营事实血缘文件缺失: {source_ref}")
     source_sha256 = hashlib.sha256(source_path.read_bytes()).hexdigest()
+    stub_periods = set(payload.get("unaudited_periods") or ())
+    entity_note = "大麦演示主体引用菜鸟披露（申请版本 draft）"
     facts: list[OperatingFact] = []
 
     def _damai_fact(
@@ -257,6 +264,7 @@ def load_damai_operating_facts(
         value: Decimal | str | int | float,
         unit: str,
         caliber_note: str,
+        source_page: str,
     ) -> OperatingFact:
         numeric_value: Decimal | None
         text_value: str | None
@@ -264,6 +272,7 @@ def load_damai_operating_facts(
             numeric_value, text_value = None, value
         else:
             numeric_value, text_value = Decimal(str(value)), None
+        is_stub = period_label in stub_periods
         return OperatingFact(
             company_name="大麦物流",
             stock_code="DAMAI.SYN",
@@ -274,30 +283,27 @@ def load_damai_operating_facts(
             numeric_value=numeric_value,
             text_value=text_value,
             unit=unit,
-            assurance="management_disclosure",
-            is_stub=False,
+            assurance="unaudited" if is_stub else "management_disclosure",
+            is_stub=is_stub,
             caliber_note=caliber_note,
             source_ref=source_ref,
             source_sha256=source_sha256,
-            source_page="",
+            source_page=source_page,
         )
 
-    metric_specs = (
-        (
-            "international_parcels",
-            "国际物流包裹量",
-            "百万件",
-            "synthetic：由 canonical 国际族收入按客单价推导",
-        ),
-        (
-            "china_orders_fulfilled",
-            "中国物流履约单量",
-            "百万单",
-            "synthetic：由 canonical 国内族收入按客单价推导",
-        ),
-    )
-    for code, name, unit, note in metric_specs:
+    volume_pages = {
+        "international_parcels": "23",
+        "china_orders_fulfilled": "23",
+    }
+    for code, name in (
+        ("international_parcels", "跨境及国际包裹量"),
+        ("china_orders_fulfilled", "中国物流订单量"),
+    ):
+        unit = "百万件" if code == "international_parcels" else "百万单"
         for label, value in payload["operating_volume"][code].items():
+            note = f"披露事实：菜鸟申请稿 Selected Operating Data；{entity_note}"
+            if label in stub_periods:
+                note += "；未经审计（原文 Unaudited）"
             facts.append(
                 _damai_fact(
                     metric_code=code,
@@ -306,6 +312,7 @@ def load_damai_operating_facts(
                     value=value,
                     unit=unit,
                     caliber_note=note,
+                    source_page=volume_pages[code],
                 )
             )
 
@@ -314,17 +321,50 @@ def load_damai_operating_facts(
         "china_logistics": "中国物流收入占比",
         "technology_and_other_services": "技术及其他服务收入占比",
     }
-    for code, value in payload["business_line_revenue_share"].items():
+    shares = payload["business_line_revenue_share"]
+    share_period = str(shares.get("period", "FY2023"))
+    for code, value in shares.items():
+        if code not in share_names:
+            continue
         facts.append(
             _damai_fact(
                 metric_code=f"business_line_share.{code}",
                 metric_name=share_names[code],
-                period_label="FY2026",
+                period_label=share_period,
                 value=value,
                 unit="比率",
-                caliber_note="synthetic：管理层业务线口径，非分部报告",
+                caliber_note=(
+                    f"披露事实：FY2023 OUR SERVICE OFFERINGS 管理层口径，"
+                    f"不延用于其他期间；{entity_note}"
+                ),
+                source_page="356",
             )
         )
+
+    non_ifrs_names = {
+        "adjusted_net_profit": ("经调整净利润", "人民币百万元"),
+        "adjusted_net_profit_margin": ("经调整净利率", "比率"),
+        "adjusted_ebitda": ("经调整 EBITDA", "人民币百万元"),
+        "adjusted_ebitda_margin": ("经调整 EBITDA 利润率", "比率"),
+    }
+    for code, values in (payload.get("non_ifrs") or {}).items():
+        if code not in non_ifrs_names:
+            continue
+        name, unit = non_ifrs_names[code]
+        for label, value in values.items():
+            facts.append(
+                _damai_fact(
+                    metric_code=code,
+                    metric_name=name,
+                    period_label=str(label),
+                    value=value,
+                    unit=unit,
+                    caliber_note=(
+                        f"Non-IFRS 管理层口径（MPM），不得与 IFRS 净利润混同；{entity_note}"
+                    ),
+                    source_page="21",
+                )
+            )
     return facts
 
 

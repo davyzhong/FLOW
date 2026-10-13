@@ -531,6 +531,10 @@ def _segment_revenue_theme(
         cur_value = Decimal(str(cur_revenue))
         prev_value = Decimal(str(prev_revenue))
         yoy = ((cur_value - prev_value) / abs(prev_value)).quantize(Decimal("0.0001"))
+        entity_note = str(series.get("entity_note", "") or "")
+        caliber = series.get("unit", "")
+        if entity_note:
+            caliber = f"{caliber}；{entity_note}" if caliber else entity_note
         metrics.append(
             OperationsMetricItem(
                 entry_id="segment_revenue_yoy",
@@ -538,7 +542,7 @@ def _segment_revenue_theme(
                 status=ObjectiveStatus.COMPUTED.value,
                 value=str(yoy),
                 basis=f"{prev_period} 分部收入 {prev_value}",
-                caliber_note=series.get("unit", ""),
+                caliber_note=caliber,
                 source="fact_direct",
             )
         )

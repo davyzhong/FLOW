@@ -368,13 +368,16 @@ def test_alibaba_revenue_structure_theme(db_session: Session) -> None:
 
 
 # ---------------------------------------------------------------------------
-# Task A3 红灯：DAMAI.SYN 独立运营事实与分部序列（不读 Alibaba fixture）
+# DAMAI.SYN 运营披露层（2026-10-13 来源重整）：分部序列/件量为菜鸟披露事实
 # ---------------------------------------------------------------------------
 
+DAMAI_FY2025_YAML = REPO_ROOT / "fixtures/damai/statements/damai_fy2025.yaml"
 DAMAI_FY2026_YAML = REPO_ROOT / "fixtures/damai/statements/damai_fy2026.yaml"
 
 
-def test_damai_syn_uses_independent_operations_datasets() -> None:
+def test_damai_syn_operations_datasets_are_disclosed_facts() -> None:
+    from decimal import Decimal
+
     from flow_api.operations.engine import (
         OPERATING_FACTS_BY_STOCK,
         SEGMENT_SERIES_BY_STOCK,
@@ -393,11 +396,52 @@ def test_damai_syn_uses_independent_operations_datasets() -> None:
     facts = load_operating_facts("DAMAI.SYN")
     assert facts, "DAMAI.SYN 必须有独立运营事实"
     assert all(fact.stock_code == "DAMAI.SYN" for fact in facts)
+    by_key = {(fact.metric_code, fact.period_label): fact for fact in facts}
+    volume = by_key[("international_parcels", "FY2023")]
+    assert volume.numeric_value == Decimal(1519), "国际件量必须为披露值"
+    assert volume.source_page == "23" and len(volume.source_sha256) == 64
+    stub = by_key[("international_parcels", "Q1FY2024")]
+    assert stub.is_stub and stub.assurance == "unaudited", "Q1 stub 必须标记未经审计"
     series = load_segment_series("DAMAI.SYN")
-    assert series is not None and "FY2026" in series["series"]
+    assert series is not None
+    assert series["data_layer"] == "disclosed_fact"
+    assert "FY2025" in series["series"], "分部序列止于 FY2025（菜鸟披露）"
+    assert "FY2026" not in series["series"], "FY2026 起无单独披露，不得设值"
+    assert series["series"]["FY2025"]["segment_revenue"] == 101272
+    assert "FY2026" in series["unavailable_periods"]
 
 
-def test_damai_overview_revenue_structure_from_own_segment_series(
+def test_damai_overview_segment_theme_uses_disclosed_series(
+    db_session: Session,
+) -> None:
+    from decimal import Decimal
+
+    payload = yaml.safe_load(DAMAI_FY2025_YAML.read_text(encoding="utf-8"))
+    report = import_statement_report(
+        db_session,
+        company_name="大麦物流",
+        stock_code="DAMAI.SYN",
+        report_kind="年报",
+        period_label="FY2025",
+        payload=payload,
+        source_ref="synthetic/damai-logistics-demo-v1/FY2025",
+        source_sha256="0" * 64,
+    )
+    normalize_report(db_session, report)
+    overview = build_operations_overview(db_session, report_id=str(report.id))
+    theme = next(t for t in overview.themes if t.theme_id == "revenue_structure")
+    assert theme.status == "available", "FY2025 有菜鸟分部披露，主题必须可用"
+    by_id = {m.entry_id: m for m in theme.metrics}
+    yoy = by_id["segment_revenue_yoy"]
+    expected = ((Decimal(101272) - Decimal(99020)) / Decimal(99020)).quantize(
+        Decimal("0.0001")
+    )
+    assert yoy.value == str(expected), "同比必须由披露值复算"
+    assert "菜鸟披露" in yoy.caliber_note, "口径注必须标明披露来源"
+    assert by_id["segment_adjusted_ebita"].value == "302"
+
+
+def test_damai_fy2026_segment_theme_honestly_unavailable(
     db_session: Session,
 ) -> None:
     payload = yaml.safe_load(DAMAI_FY2026_YAML.read_text(encoding="utf-8"))
@@ -414,8 +458,9 @@ def test_damai_overview_revenue_structure_from_own_segment_series(
     normalize_report(db_session, report)
     overview = build_operations_overview(db_session, report_id=str(report.id))
     theme = next(t for t in overview.themes if t.theme_id == "revenue_structure")
-    assert theme.status == "available", "DAMAI.SYN 分部序列必须支撑收入结构主题"
-    assert any(m.entry_id == "segment_revenue_yoy" for m in theme.metrics)
+    assert theme.status == "not_applicable", "FY2026 无单独分部披露，主题必须如实缺省"
+    assert theme.reason == "segment_period_not_available"
+    assert theme.metrics == []
 
 
 # ---- 深链批次三-5：ManagementWatchItem 携带 metric_code（条目可下钻指标库） ----
