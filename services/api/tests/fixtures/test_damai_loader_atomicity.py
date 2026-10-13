@@ -1,7 +1,7 @@
 """Task B1：大麦 seed 事务化与幂等化契约测试（红灯先行）。
 
 - seed 起点先过数据包不变量门禁（validate_damai_package invalid → 拒绝落库）；
-- AnalysisBatch 显式绑定截止月 2026-08 的 AnalysisCycle，不依赖「全库最早周期」；
+- AnalysisBatch 显式绑定截止月 2023-03 的 AnalysisCycle，不依赖「全库最早周期」；
 - 装载器只在顶层提交：三类故障注入（不变量 / 第二份财报发布 / 工作簿 publish）
   均断言回滚后零部分数据；
 - 二次 seed 全对象计数不增长（batch/source/snapshot/run/report/normalized）。
@@ -95,8 +95,8 @@ def test_seed_binds_batch_to_2026_08_analysis_cycle(db_session: Session) -> None
         ),
         {"bid": receipt["analytics"]["batch_id"]},
     ).one()
-    assert row.period_key == "2026-08", (
-        "大麦批次必须绑定截止月 2026-08 的 AnalysisCycle（不得依赖全库最早周期）"
+    assert row.period_key == "2023-03", (
+        "大麦批次必须绑定截止月 2023-03 的 AnalysisCycle（不得依赖全库最早周期）"
     )
     assert row.status in ("open", "frozen", "closed")
 

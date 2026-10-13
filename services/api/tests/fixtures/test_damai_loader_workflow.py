@@ -208,7 +208,7 @@ def test_freeze_hashes_recompute_from_payload(
     for group in ("objective_statements", "operations_overview"):
         entries = freezes[group]
         assert len(entries) == 2, f"{group} 必须覆盖两年财报"
-        assert {entry["fy"] for entry in entries} == {"FY2025", "FY2026"}
+        assert {entry["fy"] for entry in entries} == {"FY2022", "FY2023"}
         for entry in entries:
             row = session.execute(
                 text(
