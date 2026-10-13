@@ -76,6 +76,7 @@ def test_catalog_fingerprint_is_deterministic() -> None:
     second = module.load_metric_catalog(CATALOG_PATH)
 
     assert module.metric_catalog_hash(first) == module.metric_catalog_hash(second)
+    # 新增可选 schema 字段不能无故改变既有 v1 目录身份。
     assert (
         module.metric_catalog_hash(first)
         == "4214ae85339eb7495defb69f1d59fdddec5e3183d5d4ba64c966be9f53270b38"
@@ -83,6 +84,16 @@ def test_catalog_fingerprint_is_deterministic() -> None:
     assert hashlib.sha256(CATALOG_PATH.read_bytes()).hexdigest() == (
         "705ee41b938d8496b870cb60f662bf14629299ed77351343792bbc07f5a22916"
     )
+
+
+def test_catalog_fingerprint_includes_explicit_conservation_law() -> None:
+    module = _catalog_module()
+    catalog = module.load_metric_catalog(CATALOG_PATH)
+    payload = catalog.model_dump(mode="json")
+    payload["metrics"][0]["conservation_law"] = "financial_identity"
+    declared = type(catalog).model_validate(payload)
+
+    assert module.metric_catalog_hash(declared) != module.metric_catalog_hash(catalog)
 
 
 @pytest.mark.parametrize(

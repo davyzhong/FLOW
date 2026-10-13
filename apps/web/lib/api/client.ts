@@ -2,6 +2,10 @@ import type { components, operations } from "@flow/contracts";
 
 export type WorkspaceResponse = components["schemas"]["WorkspaceResponse"];
 export type DashboardResponse = components["schemas"]["DashboardOverviewResponse"];
+// 驾驶舱组件层复用：数值/状态/上下文字段（不重复定义，见 components/cockpit/cockpit-types.ts）
+export type DashboardValue = components["schemas"]["DashboardValue"];
+export type DataStatus = components["schemas"]["DataStatus"];
+export type DashboardContext = components["schemas"]["DashboardContext"];
 export type DashboardFilters = NonNullable<
   operations["dashboard_overview_api_v1_dashboard_overview_get"]["parameters"]["query"]
 >;
@@ -17,6 +21,14 @@ export type StatementReportDetail = components["schemas"]["StatementReportDetail
 export type StatementSection = components["schemas"]["StatementSectionResponse"];
 export type StatementLine = components["schemas"]["StatementLineResponse"];
 export type WorkbenchResponse = components["schemas"]["WorkbenchResponse"];
+// S01 驾驶舱：直接取自 contracts（单一真相源）
+export type CockpitOverviewResponse = components["schemas"]["CockpitOverviewResponse"];
+export type CockpitKpiCard = components["schemas"]["CockpitKpiCard"];
+export type CockpitComparisons = components["schemas"]["CockpitComparisons"];
+export type CockpitTrend = components["schemas"]["CockpitTrend"];
+export type CockpitTrendSeries = components["schemas"]["CockpitTrendSeries"];
+export type CockpitConclusion = components["schemas"]["CockpitConclusion"];
+export type CockpitConclusionFinding = components["schemas"]["CockpitConclusionFinding"];
 export type OperationsOverview = components["schemas"]["OperationsOverview"];
 export type OperationsTheme = components["schemas"]["OperationsTheme"];
 export type OperationsMetricItem = components["schemas"]["OperationsMetricItem"];
@@ -185,6 +197,16 @@ export const flowApi = {
   ): Promise<DashboardResponse> {
     return request<DashboardResponse>(
       `/api/v1/dashboard/overview${dashboardQuery(filters)}`,
+      signal,
+    );
+  },
+  /** S01 驾驶舱总览（聚合 endpoint，返回三基准 KPI + 趋势 + 结论条） */
+  getCockpitOverview(
+    filters: DashboardFilters = {},
+    signal?: AbortSignal,
+  ): Promise<CockpitOverviewResponse> {
+    return request<CockpitOverviewResponse>(
+      `/api/v1/cockpit/overview${dashboardQuery(filters)}`,
       signal,
     );
   },

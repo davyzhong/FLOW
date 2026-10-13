@@ -85,7 +85,7 @@ trap 'exit 143' TERM
 (cd services/api && uv run python ../../scripts/seed_dashboard_demo.py --fresh-batch)
 (cd services/api && uv run python ../../scripts/seed_dev_principal.py)
 
-python3 scripts/run_service.py --cwd services/api -- .venv/bin/python -m uvicorn flow_api.main:app --host 127.0.0.1 --port "${api_port}" \
+python3 scripts/run_service.py --cwd services/api -- .venv/bin/python ../../scripts/run_dashboard_test_api.py --port "${api_port}" \
   >"${dashboard_logs}/api.log" 2>&1 &
 api_pid=$!
 

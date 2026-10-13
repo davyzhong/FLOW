@@ -3,9 +3,9 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 5.35
+version: 5.40
 created_at: 2026-09-12
-updated_at: 2026-09-29
+updated_at: 2026-10-12
 owner: FLOW
 depends_on: [FLOW-SPEC-V1-DESIGN-001]
 acceptance_refs: [roadmap-unique-invariant]
@@ -16,6 +16,12 @@ superseded_by: null
 ---
 
 # 当前路线图（唯一主线）
+
+> **2026-10-12 接续状态**：最新执行位置为 `codex/damai-logistics-data-audit`。F1 已完成：指标目录 v1 指纹兼容与验收时钟修复，准确 SHA CI run `38147756845` 对应 `11129263110d296f33c48b6cb94237a6fcedfd13`，17/17 全绿。F2 字典对齐、公式勾稽与测试断言修正已完成，准确 SHA `0d4b554f33bd1c9cdab3242b25d26eb2209a632c` 的 CI run `38188010174` 为 17/17 success。文档状态提交 `df0f2e6782e60d65edc955918a892c34868a9c51` 的 CI run `38188972800` 也为 17/17 success。用户于 2026-10-12 重申验收基线：全部经营数据须基于阿里/菜鸟原始公开披露，财务事实不许用无来源假设填充；大麦须被明确标为基于公开数据构建的演示主体；组织用户等非公开实体数据仅作为隔离测试夹具；全部 CFO 指标/图表/交互和全系统功能须验证，成熟组件优先。现有大麦发行包含 65% 利息拆分、10% 折旧估算等人工假设，不能作为最终事实数据源。首轮来源审计已完成，见[大麦物流来源事实与 Mock 基线审计](../60_delivery/verification/2026-10-12--damai-source-baseline-audit-v1.md)：发现仓库已有可复用的菜鸟 FY2021–FY2023 三表、FY2019–FY2025 分部序列和运营指标资产，但 `DAMAI.SYN` 生成路径另造财务值并绕开这些来源；当前件量公式存在数量级和字段语义问题。**当前唯一子步骤为机器可读来源登记与数据适配设计**：复用现有 `docs/implementation/p5/cainiao_*` 事实资产，补充逐行来源 SHA/页表定位及期间口径；将披露事实、派生值、演示生成明细和隔离测试夹具分层；再重建大麦输出，明确缺失来源为 unavailable。之后继续 F3 等步骤。图表选型已采用 ECharts 6.1.0；U04 暂停至驾驶舱产品化整体完成；公开财报 C 级维持 No-Go。
+
+> **2026-09-30 深夜·驾驶舱抢队首（用户裁决）**：用户裁决三项——① 交付形式为**真实产品页面**（Next.js 组件化 + 真实 API + `apps/web/cockpit/*` 路由，不做静态原型）；② 驾驶舱**抢在 U04 盲评复评之前当队首**，U04 转「暂停（驾驶舱让位）」；③ 第一版**用大麦物流演示数据**跑通真实链路，不等 U04 / C 级。**C 级出口状态不变（仍 No-Go），驾驶舱用演示数据不构成公开财报能力证明。** 详见下表队首行与[实施方案](../superpowers/plans/2026-09-30-cfo-cockpit-implementation-plan.md)。
+
+> （接替说明）以下 2026-09-29 的队首裁决（盲评复评为队首）已被本条接替，U04 转为暂停。
 
 > **2026-09-29 深夜·路线纠偏（用户裁决）**：用户确认 C 级 No-Go 解锁路径优先于数据扩张——ZTO 接入封存（`wip/zto-integration-20260929`），队首改为**修复后盲评复评**（C 级条件 5）；L0 挂 CI 方案待批；oracle 分批与泛化收敛随后。第 6 项 P3 暂停。
 
@@ -44,10 +50,12 @@ superseded_by: null
 
 | 顺序 | 工作包 | 状态 | 依赖 | 最近证据 |
 |---|---|---|---|---|
+| **0** | **[CFO 财务总监驾驶舱产品化（含财务指标前置）](work_items/COCKPIT--cfo-dashboard-implementation.md)** | **active（唯一队首）** | 大麦基础演示包 ✓（公开来源重整未完成）+ ORG-LEDGER ✓ + S01 ✓ | 批次 A、C-1、FINMETRIC F1/F2 完成；F2 准确 SHA CI `38188010174` 17/17，状态文档准确 SHA CI `38188972800` 17/17。大麦来源基线首轮审计已归档，识别并确认现有菜鸟 P5 来源数据资产与当前大麦合成器之间的断层。当前唯一子步骤为机器可读来源登记与适配设计：复用既有事实资产、补齐逐行页表/哈希/期间，分型数据并处理无来源假设；再按 F3→F4→B→C-2～C-5→D 串行推进；全量 51 图表和各指标/链路须纳入最终验收。U04 暂停至本工作包整体完成；**不解除 C 级门禁**。[审计记录](../60_delivery/verification/2026-10-12--damai-source-baseline-audit-v1.md) · [实施方案](../superpowers/plans/2026-09-30-cfo-cockpit-implementation-plan.md) |
+| 0a | [财务指标目录（驾驶舱前置）](work_items/FINMETRIC--financial-metric-catalog.md) | **active（队首的硬前置子流）** | 指标引擎 + 会计科目基础 ✓ | F1/F2 已由准确 SHA CI 关闭；F2 覆盖矩阵 FY2025 42/50、FY2026 45/50，准确 SHA `0d4b554f33bd1c9cdab3242b25d26eb2209a632c` / run `38188010174` 17/17 success。F3/F4 未启动，先完成 CFO 队首内的数据来源与 Mock 基线重整。[工作包](work_items/FINMETRIC--financial-metric-catalog.md) |
 | 1 | [U08 生产就绪收口](work_items/U08--production-readiness.md) | **completed** | — | U8-A～D 完成；严格 HTTPS/双格式 SHA/恢复门禁通过；冻结记录与标签 |
-| 1' | [U04 独立 oracle](work_items/U04--independent-oracle.md) | **active（唯一队首执行）** | 样本冻结已完成 | 旧三样本回归199/199完成；准确SHA CI 仅余 module-boundaries-e2e 的 uv cache cleanup 失败（测试通过），修正需用户批准；之后首次未调参运行小米2026H1、阿里FY2027Q1。完整独立 oracle 与报告盲评仍是 C 级证据门槛 |
+| 1' | [U04 独立 oracle](work_items/U04--independent-oracle.md) | **active（队列暂停·驾驶舱让位）** — 恢复条件 = CFO 驾驶舱产品化完成 | 样本冻结已完成 | 驾驶舱批次 A 完成后，用户要求继续完整驾驶舱实现；因此盲评复评暂停至本工作包整体验收，不是取消。完整独立 oracle 与报告盲评仍是 C 级证据门槛 |
 | 2 | [S01 战略边界、事实合同与安全门禁](work_items/S01--post-u8-boundary-contract-security.md) | **completed** | U08 completed | Task 1–5 完成；安全规格 V1.1 已批准且独立审查闭环（`6c3c1cd`，零 P1/P2）。2026-09-14 `ff42c67` 五路并合 + 回落修复（`c1510ce`→`2570bf8`）带入路由策略 v2、模块边界与 U8 升级门禁、迁移 0026 修复、`main.py` 启动 fail-fast、两模块入口；Kimi `0841ff9` v1 被否，由 `997c1ab` v2 取代。**Task 6 已关闭**（R2/R3/R4 交付，台账 §7），阶段 3 转入 C 级出口；[协调台账](../70_operations/2026-09-14-coordination-ledger-glm.md) / [范围计划](../superpowers/plans/2026-09-13-flow-post-u8-boundary-gate.md) / [并行执行计划](../superpowers/plans/2026-09-13-flow-three-agent-parallel-restructuring.md) |
-| 2a | [大麦物流完整财年演示数据](work_items/DAMAI--full-year-demo.md) | **completed** | 已批准规格；不依赖公开 C 级 | D1–D3 已集成 main `e22d193`，CI run `36137591750` 17/17 success；隔离栈 verify 19/19、八页面 E2E 9/9、重复 seed 零增长、发行包零漂移。**常驻开发库已装载（G2 完成 2026-09-25）**：用户裁决演示数据全部入库，集成后 main 上 verify 19/19、页面可见；合成数据不解除公开 C 级门禁 |
+| 2a | [大麦物流完整财年演示数据](work_items/DAMAI--full-year-demo.md) | **active（按用户新标准重开；CFO 队首子包，不另列任务）** | 已批准规格；不依赖公开 C 级 | D1–D3 旧版已集成 main `e22d193`，CI run `36137591750` 17/17；原隔离栈验收证据保留。用户 2026-10-12 新增来源事实要求后，旧包仅作为基础夹具完成；需在 CFO 唯一队首中重建来源登记、转换血缘及假设值处置，不与 CFO 并行执行 |
 | 2b | [大麦数据后的剩余体验收口](work_items/UX--post-damai-experience-closeout.md) | **completed** | G2 ✓；用户已批准；ORG-LEDGER CI ✓ | Gate1/Gate5关闭：隔离 Dashboard 7/7；大麦验收 verify19/19、GET矩阵159项零意外、Playwright15/15；生产E2E157/157、Web143/143、mypy203文件、typecheck/lint、M1/链接检查通过；提交`0144bad4`同SHA CI run `36371507389` 17/17 success。常驻库未触碰。 |
 | 2c | [企业组织建制与经营账套初始化包](work_items/ORG-LEDGER--enterprise-initialization-package.md) | **completed** | 大麦发行包 completed；批准三表 schema | `2c7d6eb4`；CI run `36270782272` 的17/17 jobs success。隔离 `full` 首次/重复与 `business` 对账通过；11 个企业/loader 测试、全量 API 852、Web142、脚本107、大麦 verify19/19、API43/43、Playwright9/9、合同/文档/lint/typecheck 均通过。31文件 manifest 稳定 SHA `cbc7cccf…e513`。 |
 | K | [第二代静态知识刷新与战略重基线](work_items/KNOWLEDGE--refresh-v2.md) | **active（队列排队，不并行启动）** | 按唯一队列轮到时启动；规格/preflight 已完成 | K0–K6 未执行；`CURRENT_RELEASE` 仍为 `flow-knowledge-2026-09-12.1`，用户战略裁决前不得切换。 |
@@ -64,7 +72,11 @@ superseded_by: null
 
 ## 唯一完整 To-do 与执行队列（严格串行）
 
-本轮进度及验证以本页首段为准。此前相关提交：首版台账`cbe11d6c405e0b9a23353d63b264fc57e8a360c9`/run `36391911442` 17/17；109候选重建`8cc968594aa1f087622f6155e8d3651a5d65c0bf`/run `36397631508` 17/17；JDL来源逐格复核`fdc96d63146e0ed8cb12e75a50f488dd3015398f`/run `36404144739` 17/17；BABA/P5修订`7735f273168d70e03a4b8ec43e83abd78546446e`/run `36463457793` success。109候选112组成员、去重111格，比材料统计109多2（BABA FY2020期初9,927/期末4,234）；二格原页确认流动证券投资行，但评审分母仍无证据，明确保留未决。JDL 200格本轮已逐格附页坐标和原文证据；常驻`flow`不写入。
+**当前唯一队列（12 项）**：已完成 4 项；实际执行中 1 项；排队 4 项；暂停 2 项；外部材料受限 1 项。驾驶舱与指标目录合并为一个队首，指标 F1–F4 是其顺序子步骤，不构成可并行领取的第二队列。当前唯一子步骤：来源事实登记与 Mock 数据血缘重整。
+
+0. **[实际执行中] CFO 财务总监驾驶舱产品化（含 FINMETRIC 前置）**：批次 A、C-1、F1/F2 已完成；F2 准确 SHA CI run `38188010174` 17/17 success。首轮来源审计已完成并记录于[审计文档](../60_delivery/verification/2026-10-12--damai-source-baseline-audit-v1.md)，发现既有菜鸟 P5 源数据、抽取器和 CAINIAO 加载链可复用，但 `DAMAI.SYN` 另造了一套无源报表、件量和运营分部指标。当前唯一下一动作：建立机器可读来源登记并适配设计，补齐复用事实逐行的报告 URL/SHA、页表、期间、原值/单位/币种、转换规则及定位信息；将精确披露事实、可复算派生值、交互测试生成明细和测试夹具分型；利息、折旧、债务/应付拆分、现金流等无来源假设替换为来源值、可复算值或 unavailable。随后覆盖原型 51 图表、十模块指标、交互追溯/权限/五态，成熟组件优先复用；再按 F3→F4→B→C-2～C-5→D 串行推进。
+
+以下 1–11 是驾驶舱队首调整前的原队列事项：1、2、3、5 已完成；4 U04 与 6 P3 暂停；7、9、10、11 排队；8 外部材料受限。旧验证记录仍是历史证据，不代表当前执行位置。
 
 2026-09-28 执行进度：UX Gate1/Gate5 已在`0144bad4`完成并由准确 SHA 的 CI run `36371507389` 17/17验证通过。C级只读来源基线审计提交`f1ab4283`对应CI run `36375305428` 17/17 success。JDL页界限修复提交`5c84c81fdd3c0908891d16f8dcfe05e1d2e64b6c`对应CI run `36382657675`准确SHA 17/17 success。隔离Compose栈迁移0031并装载14份报告，L0 1508/1508，L1 1775锚零失配；财报测试76项、脚本测试110项、M1、链接、定向ruff及shell语法通过。唯一下一子步为建立42异常/109口径疑点/JDL原200格的规范化逐格台账并逐项复核原件。常驻`flow`不写入/清理/重启/重建。
 
@@ -76,7 +88,7 @@ superseded_by: null
 2. **[完成] UX 可见性与全站验收关闭**（工作包见状态表2b）：Gate1/Gate5证据与准确SHA CI已收口，见上方最新状态和工作包最终关闭记录。
 
 3. **[完成—证据审计 No-Go] 公开财报 C 级样本/证据盘点与当前门禁裁定**：冻结14份 PDF/YAML、报告身份映射、行身份修订表、L1 v5、实现 SHA；哈希确定性重建测试6/6。审计证实14份报告没有完整独立 oracle；5份既有 holdout oracle 均为部分转录，两个新留出尚无首跑结果；旧首跑199行全部不可比较；现有交叉评不是成品盲评。故本阶段 C 级判为 No-Go（证据不足），详见[冻结与 oracle 审计](../60_delivery/verification/2026-09-29--public-sample-freeze-oracle-audit-v1.md)。这不是 C 级通过，剩余证据工作继续由第4、5项承接。
-4. **[进行中] U04 解析器适配与独立留出验证**（工作包见状态表1'）：顺丰文本型“合并及公司”、腾讯财报表格动态定位、中通公告重复字形解析，以及 comparator 列名/报表范围已修复；旧三样本回归199/199，见 adapter-v4。初始 smoke 缺包原因已定位为`pypdf`仅列dev组，现已移至生产依赖；独立 Compose 验证API/Web健康、迁移和dev主体seed成功。CI 收尾修正（`229069ca`，含 intake-e2e 超时 40→45 与 module-boundaries uv 缓存关闭，均经用户批准）已全绿：run `36511316012` 17/17 success。**首跑已执行**（run ID `2026-09-29-holdout-first-run`，输入/代码/oracle SHA 与完整机器 diff 已保存，人工介入 0）：小米 0/25、阿里 0/15，全部 not_comparable，零伪造输出；归因均为版式泛化失败（无对应适配器），见 holdout-results.md §4。**U4 已按范围关单（2026-09-29 深夜）**：①旧回归 adapter-v5 199/199 零退化；②小米/阿里适配器开发完成并按 §4.5 降级回归集（适配后回归 24/25、15/15+勾稽一致）；③备选 yunda/jdl 先冻结+oracle 后首跑：yunda 0/20（A 股适配器缺口）、jdl 0/25（显式降级），失败原始保留、身份保持留出；④泛化缺口登记为第5项裁决输入。关单提交链 `4f997020`+`a28b638d`（static-python 修复），准确 SHA CI run `36525496607` 17/17 success，**U4 正式关闭**。细节见 holdout-results.md §5 与 U04 工作包。不能由实现方代替独立录入/盲评。
+4. **[暂停·驾驶舱让位] U04 解析器适配与独立留出验证**（工作包见状态表1'）：顺丰文本型“合并及公司”、腾讯财报表格动态定位、中通公告重复字形解析，以及 comparator 列名/报表范围已修复；旧三样本回归199/199，见 adapter-v4。初始 smoke 缺包原因已定位为`pypdf`仅列dev组，现已移至生产依赖；独立 Compose 验证API/Web健康、迁移和dev主体seed成功。CI 收尾修正（`229069ca`，含 intake-e2e 超时 40→45 与 module-boundaries uv 缓存关闭，均经用户批准）已全绿：run `36511316012` 17/17 success。**首跑已执行**（run ID `2026-09-29-holdout-first-run`，输入/代码/oracle SHA 与完整机器 diff 已保存，人工介入 0）：小米 0/25、阿里 0/15，全部 not_comparable，零伪造输出；归因均为版式泛化失败（无对应适配器），见 holdout-results.md §4。**U4 已按范围关单（2026-09-29 深夜）**：①旧回归 adapter-v5 199/199 零退化；②小米/阿里适配器开发完成并按 §4.5 降级回归集（适配后回归 24/25、15/15+勾稽一致）；③备选 yunda/jdl 先冻结+oracle 后首跑：yunda 0/20（A 股适配器缺口）、jdl 0/25（显式降级），失败原始保留、身份保持留出；④泛化缺口登记为第5项裁决输入。关单提交链 `4f997020`+`a28b638d`（static-python 修复），准确 SHA CI run `36525496607` 17/17 success，**U4 正式关闭**。细节见 holdout-results.md §5 与 U04 工作包。不能由实现方代替独立录入/盲评。
 5. **[完成·No-Go 裁决] C 级质量基准与 Go/No-Go**：当前 HEAD `3b2d130f` 隔离栈 `flowcgo` 重跑 L0 1532/1532、L1 1776/1776 零差异并归档；§3 六条件对账裁决 **No-Go**（条件 1/2/4/5 未满足：L0 未进 CI、完整 oracle 0/14、泛化层留出失败、盲评复评未做；条件 3/6 达成）。裁决文档与四步解锁路径见 [2026-09-29 C 级基准重跑与 Go/No-Go](../60_delivery/verification/2026-09-29--c-level-benchmark-rerun-gonogo-v1.md)。**用户路线纠偏裁决（2026-09-29）**：解锁路径重排为——①盲评复评（队首，条件 5）；②L0 挂 CI（条件 1，方案待批）；③oracle 分批/泛化收敛（条件 2/4）；④数据扩张（原第 6 项）暂停。
 6. **[暂停·用户裁决 2026-09-29] P3 真实数据、来源与行业扩张**：ZTO 接入已完成大半（产品 YAML 57 行与 oracle 逐值一致、L1 答案集 v6 1823/1823 全锚定、隔离栈 L0/L1 实测零差异），按用户路线纠偏裁决**封存**于分支 `wip/zto-integration-20260929`（`2ce0700e`），未完成 API/UI 链路与文档同步。恢复条件：C 级解锁四步完成后或用户重新指令。阿里分部序列复核与 C1 扩张随本项一并暂停。
 7. **[排队] 第二代静态知识 release 与战略重基线**（工作包见状态表K）：按已批准 K0–K6 完成 Davybase 图片批次验收、非微信图片覆盖、稳定15:00 Obsidian Git 截面、来源基线与知识资产、sealed candidate、战略影响评估、用户正式裁决、原子激活和独立复验。完成用户裁决前 `CURRENT_RELEASE` 不变。

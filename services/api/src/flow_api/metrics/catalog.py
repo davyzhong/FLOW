@@ -36,8 +36,15 @@ def topological_metric_order(catalog: MetricCatalog) -> tuple[str, ...]:
 
 
 def metric_catalog_hash(catalog: MetricCatalog) -> str:
+    catalog_data = catalog.model_dump(mode="json")
+    # Schema additions with an unset optional field must not mutate the identity
+    # of a published catalog. Once a conservation law is explicitly declared,
+    # its value participates in the fingerprint.
+    for metric in catalog_data["metrics"]:
+        if metric.get("conservation_law") is None:
+            metric.pop("conservation_law", None)
     payload = json.dumps(
-        catalog.model_dump(mode="json"),
+        catalog_data,
         ensure_ascii=False,
         sort_keys=True,
         separators=(",", ":"),

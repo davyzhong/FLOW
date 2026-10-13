@@ -181,7 +181,8 @@ function CoverageSection() {
           {coverage.title}（<code>{coverage.dataset_id}</code>）：
           通用 {coverage.metrics.length} 指标 × {snapshots.length} 个公司期间快照；
           数值来自 {coverage.facts_source}，
-          口径映射见 {coverage.alias_map}，由 {coverage.generator} 生成。
+          口径映射见 {coverage.alias_map}，指标定义来自 {coverage.dictionary_id ?? "公开评审集"}
+          {coverage.metrics_source ? `（${coverage.metrics_source}）` : ""}，由 {coverage.generator} 生成。
         </p>
       </header>
 
@@ -201,7 +202,7 @@ function CoverageSection() {
           <div>
             <p className="ml-kpi__name">通用指标</p>
             <p className="ml-kpi__value">{coverage.metrics.length}<small> 个</small></p>
-            <p className="ml-kpi__foot">指标库 v0 评审集</p>
+            <p className="ml-kpi__foot">{coverage.dictionary_id ?? "指标库 v0 评审集"}</p>
           </div>
         </li>
         <li className="ml-kpi ml-kpi--red">

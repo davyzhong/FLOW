@@ -51,7 +51,9 @@ tags:
 
 [快速开始](#-快速开始) · [界面导览](#%EF%B8%8F-界面导览) · [真实财报分析](#-真实财报图形化分析) · [知识治理](#-静态知识治理项目自己的知识生产线) · [系统架构](#%EF%B8%8F-系统架构) · [当前进度](#-当前进度与边界) · [文档中心](docs/README.md)
 
-> **📚 v2 适配说明**：本 README 按 readme-craft v3.0.0-alpha.0 方法论（[16 铁律 + 10 反模式 + 80 分量表](https://github.com/davyzhong/readme-craft/blob/main/METHODOLOGY.md)）适配。**保留全部原有内容**——mermaid 架构图、截图、详细章节不删改；**新增** YAML 元数据、5 路启动、i18n 链接、Built by、Roadmap v2、收尾五件套与同行对照视角。
+> **📚 方法论适配说明**：本 README 按 [readme-craft](https://github.com/davyzhong/readme-craft) v3.0.0-alpha.0 方法论（**19 条铁律 + 13 条反模式**，评分为归一化百分制 + 适用项数 + 未核验项数）适配。**保留全部原有内容**——mermaid 架构图、截图、详细章节不删改；**新增** YAML 元数据、5 路启动、i18n 链接、Built by、Roadmap、收尾五件套与同行对照视角。
+>
+> 本仓库的评审结论见 [`review.yaml`](./review.yaml)；用 `npx github:davyzhong/readme-craft check . --review review.yaml` 可复验当前评分。
 
 </div>
 
@@ -481,7 +483,18 @@ flowchart LR
 
 ## 🚀 快速开始
 
-### 五路启动方式（v2 适配）
+### ⏱️ 先看效果（30 秒，零部署）
+
+不想装环境？先看真实产出：
+
+- **驾驶舱截图**（真实页面，标注来源 commit）：[dashboard.png](docs/assets/screenshots/dashboard.png)
+- **指标库评审台**（64 指标定义的可视化）：见下方「指标库 v0 评审台」
+- **静态资料库**（31 项静态资产，零服务器 / 零数据库）：见下方「静态资料库」章节
+- **接口文档**（FastAPI 自动生成，启动后可见）：`http://localhost:8000/docs`
+
+完整环境搭建见下方「五路启动方式」；若只想读设计与决策文档，从 [`docs/README.md`](docs/README.md) 进入。
+
+### 五路启动方式
 
 按你的使用场景选最合适的一条：
 

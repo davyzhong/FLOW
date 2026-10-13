@@ -22,6 +22,7 @@ const moduleGroups = [
     items: [
       ["report", "工作台总览", "/internal"],
       ["dashboard", "经营总览", "/"],
+      ["dashboard", "CFO 驾驶舱", "/cockpit"],
       ["upload", "数据接入", "/data"],
       ["analysis", "调查归因", "/investigations"],
       ["report", "四问工作台", "/analysis"],

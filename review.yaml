@@ -1,0 +1,97 @@
+# FLOW README 的 agent-reviewed 规则评审
+#
+# 评审对象：./README.md（795 行，version 1.4，updated_at 2026-09-24）
+# 评审时间：2026-09-27
+# 评审方式：逐条对照 rules.yaml 中 agent-reviewed 规则的 0-5 分锚点，
+#           每条评分附具体行号证据。
+# 用法：pnpm readme-craft check . --review review.yaml
+#
+# 注意：本文件只对 agent-reviewed 规则评分；确定性规则（T03/T06/T09/T10/T12/T13/
+# T15/T16/T18/T19）由脚本自动核验，不在此覆盖。
+
+specVersion: 3.0.0-alpha.0
+
+reviews:
+  # T01 视觉锤：logo + tagline + hero 视觉
+  - id: T01
+    score: 4
+    reason: >-
+      第 34 行居中标题 + 第 38 行 tagline + 第 60 行真实驾驶舱截图构成完整视觉锤，
+      且截图标注了来源 commit（c1a59d1）与核对日期，符合"真实可追溯"要求。
+      扣 1 分：仅 1 张 hero 图，未用 <picture> 做浅色/深色双 logo。
+    evidence: [hero-visual, logo-tagline]
+
+  # T02 三秒价值主张：做什么 + 给谁 + 独特优势
+  - id: T02
+    score: 4
+    reason: >-
+      第 38-40 行给出定位（Finance Intelligence OS）+ 独特优势（可追溯、确定性、可复核），
+      第 100 行进一步说明目标用户（经分专员）与解决的问题。
+      扣 1 分：未直接点明"为什么不选 Tableau/Power BI"这类竞品替代理由，
+      优势表述偏内部术语（可追溯/确定性）而非用户可感知的收益。
+    evidence: [value-proposition]
+
+  # T04 安装路径
+  - id: T04
+    score: 4
+    reason: >-
+      第 488-494 行列出 5 条可执行路径（容器+本机/全容器/纯源码/一键验收/Compose 最小），
+      第 507-541 行给出可复制的完整命令序列，含环境变量加载与数据库迁移。
+      扣 1 分：均为源码/容器路径，缺少已发布制品的一键安装（如预构建发行包直接下载）。
+    evidence: [executable-command, supported-platforms]
+
+  # T05 30 秒试用 + 60 秒 Quickstart
+  - id: T05
+    score: 4
+    reason: >-
+      「⏱️ 先看效果（30 秒，零部署）」小节提供 4 个免安装入口：真实驾驶舱截图、
+      指标库评审台、零部署静态资料库与接口文档地址，让读者无需装环境即可判断项目形态；
+      后续「五路启动方式」表格 + 可复制命令序列构成完整 Quickstart。
+      扣 1 分：仍无托管在线 Demo，试用依赖仓库内已有截图，无法交互验证。
+    evidence: [quickstart-steps]
+
+  # T07 卖点编号
+  - id: T07
+    score: 4
+    reason: >-
+      第 104-116 行以"六类工作问题 → 可复核的结果"表格组织卖点，每行都是
+      "问题场景 → 处理方式 → 可验证产出"的三段式，不是空泛特性罗列，且带量化产出（映射版本、
+      SHA、Finding、冻结报告）。
+      扣 1 分：未用编号列表 + 粗体关键词 + 量化收益的经典结构，可扫性弱于范本。
+    evidence: [numbered-selling-points, quantified-benefit]
+
+  # T08 Feature 分组
+  - id: T08
+    score: 5
+    reason: >-
+      第 155-283 行按用户任务分为 4 组界面导览（驾驶舱/数据工作台/调查/报告中心），
+      第 358-372 行"能力与实现状态"表按 11 个模块分组，且每组都标注"需要区分的边界"，
+      信息密度高且诚实。分组与命名均符合规范。
+    evidence: [feature-groups]
+
+  # T11 引用/背书
+  - id: T11
+    status: na
+    reason: >-
+      项目处于私有开发阶段，README 明确标注"企业内部"且 License badge 为"未授权发布"，
+      无外部客户可引用，也未伪造任何用户 quote。不适用，不应因缺少企业 logo 扣分。
+
+  # T14 包容性语言
+  - id: T14
+    score: 4
+    reason: >-
+      全文使用"经分专员""用户"等中性称谓，未出现 he/she 默认指代或性别化表述；
+      对不可用能力统一用"尚未接通/不冒充/需区分的边界"表述，无贬损性语言。
+      扣 1 分：存在少量密集英文缩写（Finding/Evidence/Playbook/Copilot）对非金融读者不友好，
+      虽属领域术语但未给首见释义。
+    evidence: [inclusive-language-review]
+
+  # T17 默认语言策略
+  - id: T17
+    score: 4
+    reason: >-
+      第 42 行显式声明默认语言为简体中文并说明"English（规划中，欢迎 PR）"，
+      与项目实际用户群体（企业内部中文团队）一致，理由充分。
+      扣 1 分：仅在第 42 行一处提及，未在文档导航或贡献指南中重复该策略，
+      后续维护者容易误加 README.en.md 而破坏一致性。
+    evidence: [default-language-rationale]

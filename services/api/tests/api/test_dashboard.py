@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -22,7 +23,7 @@ from sqlalchemy.orm import Session
 
 from flow_api.analysis.policy import load_analysis_policy
 from flow_api.analysis.service import AnalysisRunService
-from flow_api.api.routes.dashboard import get_dashboard_session
+from flow_api.api.routes.dashboard import get_dashboard_now, get_dashboard_session
 from flow_api.dashboard.fixture import publish_dashboard_snapshot_series
 from flow_api.main import create_app
 
@@ -36,6 +37,7 @@ async def test_dashboard_api_not_ready_ready_and_typed_filter_error(
         yield analysis_session
 
     app.dependency_overrides[get_dashboard_session] = session_override
+    app.dependency_overrides[get_dashboard_now] = lambda: datetime(2026, 9, 1, tzinfo=UTC)
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as client:
         not_ready = await client.get("/api/v1/dashboard/overview")

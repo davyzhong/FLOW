@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from datetime import UTC, datetime
+
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -41,6 +43,7 @@ def test_dashboard_demo_bootstrap_is_complete_and_idempotent(
     dashboard = DashboardService().get_overview(
         analysis_session,
         filters=ActiveFilters(period_view="month", is_total_scope=True),
+        now=datetime(2026, 9, 1, tzinfo=UTC),
     )
     assert dashboard.state == "ready"
     assert dashboard.context.batch_id == first.batch_id

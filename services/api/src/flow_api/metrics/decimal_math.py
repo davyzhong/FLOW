@@ -10,6 +10,7 @@ MetricCalculationErrorCode = Literal[
     "missing_dependency",
     "unsupported_formula",
     "zero_denominator",
+    "formula_arity_mismatch",
 ]
 PERSISTED_SCALE = 4
 
