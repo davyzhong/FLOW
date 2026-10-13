@@ -3,7 +3,7 @@
 计划《大麦物流演示数据实施计划》Task 4 —— 先写失败测试固定合同：
 - 转换守恒：canonical 包的收入/成本/AR 桶/预算合计与大麦 dict 严格一致；
 - 构建确定性：同一版本两次构建，JSONL/YAML/manifest 字节一致、XLSX 语义一致；
-- 期间合同：24 个连续期间（comparison 2024-09~2025-08 + analysis 2025-09~2026-08）。
+- 期间合同：24 个连续期间（comparison FY2022 2021-04~2022-03 + analysis FY2023 2022-04~2023-03）。
 """
 
 from __future__ import annotations
@@ -36,8 +36,8 @@ class ConversionConservationTests(unittest.TestCase):
         windows = {p.window for p in self.package.periods}
         self.assertEqual(windows, {"comparison", "analysis"})
         months = [p.month_key for p in self.package.periods]
-        self.assertEqual(months[0], "2024-09")
-        self.assertEqual(months[-1], "2026-08")
+        self.assertEqual(months[0], "2021-04")
+        self.assertEqual(months[-1], "2023-03")
 
     def test_operating_revenue_conserved(self) -> None:
         raw_total = _sum_decimal(
@@ -220,7 +220,7 @@ class FullDimensionContractTests(unittest.TestCase):
             self.assertNotIn(row.region_code, AGG_CODES)
 
     def test_every_analysis_month_covers_all_dimensions(self) -> None:
-        rows = [r for r in self.package.operating_actuals if r.month_key >= "2025-09"]
+        rows = [r for r in self.package.operating_actuals if r.month_key >= "2022-04"]
         by_month: dict[str, list] = {}
         for row in rows:
             by_month.setdefault(row.month_key, []).append(row)
@@ -352,7 +352,7 @@ class ManifestLineageTests(unittest.TestCase):
     def test_manifest_lineage_fields(self) -> None:
         lineage = self.manifest["lineage"]
         self.assertEqual(lineage["generator"], "scripts/build_damai_demo.py")
-        self.assertEqual(lineage["profile_version"], "damai-profile-v1")
+        self.assertEqual(lineage["profile_version"], "damai-profile-v2")
         self.assertIn("uuid5", lineage["determinism"])
         params = lineage["derived_parameters"]
         self.assertEqual(params["budget_ocf_rate"], "0.92")
@@ -380,13 +380,17 @@ class ManifestLineageTests(unittest.TestCase):
 
     def test_manifest_fiscal_year_summary(self) -> None:
         summary = self.manifest["fiscal_year_summary"]
-        self.assertEqual(set(summary), {"FY2025", "FY2026"})
-        revenue = Decimal(summary["FY2026"]["revenue_wan"])
-        self.assertTrue(
-            Decimal("10500000") <= revenue <= Decimal("11500000"),
-            f"FY2026 收入 {revenue} 万元须在 1050–1150 亿锚区间",
+        self.assertEqual(set(summary), {"FY2022", "FY2023"})
+        revenue = Decimal(summary["FY2023"]["revenue_wan"])
+        from flow_api.fixtures.damai.generator import _disclosed_anchors
+
+        disclosed = _disclosed_anchors()["FY2023"]["revenue"]
+        self.assertEqual(
+            revenue,
+            disclosed.quantize(Decimal("0.0001")),
+            f"FY2023 收入 {revenue} 万元必须精确等于披露锚 {disclosed}",
         )
-        for fy in ("FY2025", "FY2026"):
+        for fy in ("FY2022", "FY2023"):
             self.assertIn("gross_margin", summary[fy])
             self.assertIn("operating_cash_flow_wan", summary[fy])
 
