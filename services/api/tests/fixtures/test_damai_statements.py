@@ -28,6 +28,17 @@ def payloads() -> dict:
     return build_damai_statement_payloads()
 
 
+def _col(rows: list[dict], col: str) -> dict[str, Decimal]:
+    """行列表 → {行名: 该列 Decimal}（缺省值 None 记 0，与勾稽口径一致）。"""
+
+    return {
+        row["item"]: (Decimal(str(row[col])) if row.get(col) is not None else Decimal("0"))
+        for row in rows
+    }
+
+
+
+
 def test_two_annual_reports_generated(payloads: dict) -> None:
     assert set(payloads) == {"FY2022", "FY2023"}
     for payload in payloads.values():
@@ -61,52 +72,47 @@ def test_prior_column_matches_prior_year_file(payloads: dict) -> None:
 def test_income_statement_identities(payloads: dict) -> None:
     for payload in payloads.values():
         for col in ("本期发生额", "上期发生额"):
-            income = {
-                row["item"]: row[col] for row in payload["statements"]["合并利润表"]
-            }
-            d = lambda name: Decimal(str(income[name])) if income[name] is not None else Decimal("0")  # noqa: E731
-            assert d("毛利") == d("收入") + d("营业成本")
-            assert d("经营亏损/利润") == (
-                d("毛利")
-                + d("销售及市场推广开支")
-                + d("一般及行政开支")
-                + d("产品开发开支")
-                + d("金融资产减值(转回)/计提")
-                + d("其他收入")
-                + d("其他收益/(亏损)净额")
+            income = _col(payload["statements"]["合并利润表"], col)
+            assert income["毛利"] == income["收入"] + income["营业成本"]
+            assert income["经营亏损/利润"] == (
+                income["毛利"]
+                + income["销售及市场推广开支"]
+                + income["一般及行政开支"]
+                + income["产品开发开支"]
+                + income["金融资产减值(转回)/计提"]
+                + income["其他收入"]
+                + income["其他收益/(亏损)净额"]
             )
-            assert d("年度亏损/利润") == d("归属公司所有者") + d("非控制性权益")
+            assert income["年度亏损/利润"] == (
+                income["归属公司所有者"] + income["非控制性权益"]
+            )
 
 
 def test_balance_sheet_identity_holds(payloads: dict) -> None:
     for payload in payloads.values():
         for col in ("期末余额", "期初余额"):
-            bs = {
-                row["item"]: row[col] for row in payload["statements"]["合并资产负债表"]
-            }
-            d = lambda name: Decimal(str(bs[name])) if bs[name] is not None else Decimal("0")  # noqa: E731
-            assert d("资产总计") == d("流动资产合计") + d("非流动资产合计")
-            assert d("负债合计") == d("流动负债合计") + d("非流动负债合计")
-            assert d("权益总额") == d("归属于公司所有者权益") + d("非控制性权益(权益)")
-            assert d("资产总计") == d("权益及负债总额")
+            bs = _col(payload["statements"]["合并资产负债表"], col)
+            assert bs["资产总计"] == bs["流动资产合计"] + bs["非流动资产合计"]
+            assert bs["负债合计"] == bs["流动负债合计"] + bs["非流动负债合计"]
+            assert bs["权益总额"] == (
+                bs["归属于公司所有者权益"] + bs["非控制性权益(权益)"]
+            )
+            assert bs["资产总计"] == bs["权益及负债总额"]
 
 
 def test_cash_bridge_closes(payloads: dict) -> None:
     for payload in payloads.values():
         for col in ("本期发生额", "上期发生额"):
-            cf = {
-                row["item"]: row[col] for row in payload["statements"]["合并现金流量表"]
-            }
-            d = lambda name: Decimal(str(cf[name])) if cf[name] is not None else Decimal("0")  # noqa: E731
-            assert d("现金及现金等价物(减少)/增加净额") == (
-                d("经营活动所得现金净额")
-                + d("投资活动所用现金净额")
-                + d("融资活动(所用)所得现金净额")
+            cf = _col(payload["statements"]["合并现金流量表"], col)
+            assert cf["现金及现金等价物(减少)/增加净额"] == (
+                cf["经营活动所得现金净额"]
+                + cf["投资活动所用现金净额"]
+                + cf["融资活动(所用)所得现金净额"]
             )
-            assert d("年末现金及现金等价物") == (
-                d("年初现金及现金等价物")
-                + d("现金及现金等价物(减少)/增加净额")
-                + d("汇率变动对现金的影响")
+            assert cf["年末现金及现金等价物"] == (
+                cf["年初现金及现金等价物"]
+                + cf["现金及现金等价物(减少)/增加净额"]
+                + cf["汇率变动对现金的影响"]
             )
 
 
