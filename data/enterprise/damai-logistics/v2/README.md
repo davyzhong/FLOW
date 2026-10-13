@@ -1,5 +1,5 @@
 ---
-doc_id: FLOW-DATA-DAMAI-PACKAGE-README-001
+doc_id: FLOW-DATA-DAMAI-PACKAGE-README-002
 title: 大麦物流企业数据包说明
 doc_type: navigation
 status: current
