@@ -64,7 +64,7 @@ def test_seed_builds_snapshots_and_analysis_run(db_session: Session) -> None:
     analytics = receipt["analytics"]
     assert len(analytics["metric_snapshot_ids"]) == 12
     assert analytics["months"][0] == 202204
-    assert analytics["months"][-1] == 202608
+    assert analytics["months"][-1] == 202303
     assert analytics["analysis_run_status"] == "published"
 
     snapshot_count = db_session.execute(
