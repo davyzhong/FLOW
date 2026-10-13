@@ -1,7 +1,7 @@
 """Task 4 slice-2a：大麦装载器分析链 DB 集成测试。
 
 - 工作簿导入（IntakeService 全链：attach→mapping→validate→publish）；
-- 12 个月指标快照（202509..202608，flow_v1_metrics 目录）；
+- 12 个月指标快照（202204..202303，flow_v1_metrics 目录）；
 - 最新快照的 AnalysisRun published；
 - 二次 seed 幂等：batch/快照/run 身份不增长。
 （Finding 状态机推进、三类冻结 receipt 与事务回滚注入在 slice-2b。）
@@ -63,7 +63,7 @@ def test_seed_builds_snapshots_and_analysis_run(db_session: Session) -> None:
 
     analytics = receipt["analytics"]
     assert len(analytics["metric_snapshot_ids"]) == 12
-    assert analytics["months"][0] == 202509
+    assert analytics["months"][0] == 202204
     assert analytics["months"][-1] == 202608
     assert analytics["analysis_run_status"] == "published"
 
