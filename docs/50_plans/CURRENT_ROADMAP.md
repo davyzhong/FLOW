@@ -3,9 +3,9 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 5.40
+version: 5.41
 created_at: 2026-09-12
-updated_at: 2026-10-12
+updated_at: 2026-10-13
 owner: FLOW
 depends_on: [FLOW-SPEC-V1-DESIGN-001]
 acceptance_refs: [roadmap-unique-invariant]
@@ -16,6 +16,8 @@ superseded_by: null
 ---
 
 # 当前路线图（唯一主线）
+
+> **2026-10-13 接手（用户确认后连续执行）**：用户确认由 ZCode 会话接手全部变更与推进，按队列连续执行、不逐项征求确认。`codex/damai-logistics-data-audit` 已全部合并进 `main`（merge commit `3b5c82b8`，文档门禁 PASS），执行位置转为 main 系分支 `flow/source-registry-20261013`，队首与队列内容不变。当前唯一子步骤仍为机器可读来源登记与数据适配设计。
 
 > **2026-10-12 接续状态**：最新执行位置为 `codex/damai-logistics-data-audit`。F1 已完成：指标目录 v1 指纹兼容与验收时钟修复，准确 SHA CI run `38147756845` 对应 `11129263110d296f33c48b6cb94237a6fcedfd13`，17/17 全绿。F2 字典对齐、公式勾稽与测试断言修正已完成，准确 SHA `0d4b554f33bd1c9cdab3242b25d26eb2209a632c` 的 CI run `38188010174` 为 17/17 success。文档状态提交 `df0f2e6782e60d65edc955918a892c34868a9c51` 的 CI run `38188972800` 也为 17/17 success。用户于 2026-10-12 重申验收基线：全部经营数据须基于阿里/菜鸟原始公开披露，财务事实不许用无来源假设填充；大麦须被明确标为基于公开数据构建的演示主体；组织用户等非公开实体数据仅作为隔离测试夹具；全部 CFO 指标/图表/交互和全系统功能须验证，成熟组件优先。现有大麦发行包含 65% 利息拆分、10% 折旧估算等人工假设，不能作为最终事实数据源。首轮来源审计已完成，见[大麦物流来源事实与 Mock 基线审计](../60_delivery/verification/2026-10-12--damai-source-baseline-audit-v1.md)：发现仓库已有可复用的菜鸟 FY2021–FY2023 三表、FY2019–FY2025 分部序列和运营指标资产，但 `DAMAI.SYN` 生成路径另造财务值并绕开这些来源；当前件量公式存在数量级和字段语义问题。**当前唯一子步骤为机器可读来源登记与数据适配设计**：复用现有 `docs/implementation/p5/cainiao_*` 事实资产，补充逐行来源 SHA/页表定位及期间口径；将披露事实、派生值、演示生成明细和隔离测试夹具分层；再重建大麦输出，明确缺失来源为 unavailable。之后继续 F3 等步骤。图表选型已采用 ECharts 6.1.0；U04 暂停至驾驶舱产品化整体完成；公开财报 C 级维持 No-Go。
 
