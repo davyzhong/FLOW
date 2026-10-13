@@ -3,9 +3,9 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目尽调、优化与单 Agent 执行总交接
 doc_type: navigation
 status: current
-version: 5.26
+version: 5.27
 created_at: 2026-09-12
-updated_at: 2026-10-12
+updated_at: 2026-10-13
 owner: FLOW
 applies_to: repository
 ---
@@ -13,6 +13,16 @@ applies_to: repository
 # FLOW 项目尽调、优化与单 Agent 执行总交接｜2026-09-30 更新
 
 ## 最新续接记录（2026-10-12：完成来源基线审计，登记并复用 P5 菜鸟事实）
+
+## 最新续接记录（2026-10-13：来源登记 + 运营披露层交付，时间线迁移为唯一子步）
+
+ZCode 会话接手队首（用户授权连续执行）。Codex 分支 `codex/damai-logistics-data-audit` 已合并进 main（`3b5c82b8`）。本轮交付（分支 `flow/source-registry-20261013`）：
+
+1. **来源事实登记** `config/damai/source_facts_v1.yaml`（commit `842c8ea8`）：325 条 disclosed_fact，四分型（披露/派生/演示明细/测试建制），FY2021–FY2023 三表逐行 + FY2019–FY2025 分部序列 + 件量/Non-IFRS/业务线占比；原件 SHA 与页锚（损益 p464、资产负债 p466、现金流量 p474、件量 p23、Non-IFRS p21、业务线 p356）对申请稿 PDF（666 页，SHA `3e2c3679…`）机械核验；7 项无来源假设处置登记；校验门禁 `services/api/tests/fixtures/test_damai_source_registry.py` 13 项。申请稿为英文原件，中文行名是整理层规范名（与 item_alias_map cainiao_private 节一致），已在登记中注明。
+2. **运营披露层重建**（commit `e5d8d2c6`）：`operations.py` 改为读登记生成（分部序列 FY2019–FY2025 菜鸟披露值，FY2026 缺省；件量披露值修复数量级语义；废弃收入推导件量）；`facts.py` 加载器按披露事实转换（Q1 stub 未经审计、页锚 23/21/356）；引擎分部主题透传实体来源注记；FY2026 分部主题如实 not_applicable。大麦相关 108 项测试、scripts 155 项、发行版确定性对账、m1 全绿。
+
+**当前唯一子步骤：演示时间线迁移至真实财年**——比较期 FY2022（2021-04~2022-03）、分析期 FY2023（2022-04~2023-03）、FY2021 期初锚。五步：① profile/generator 月份与规模锚定披露值（FY2022 收入 66,866,916 千元、FY2023 77,799,675 千元）；② statements.py 改由登记生成 IFRS 三表、删无来源行、alias map `damai_syn` 重映射；③ FINMETRIC 覆盖矩阵重建；④ ORG-LEDGER v2 重版；⑤ 测试/e2e 扫荡 + 快照重录 + verify 19/19 + 同 SHA CI。验收：明细↔披露年度聚合对账零差异。步骤详情见 CURRENT_ROADMAP 队首行。
+
 
 本节覆盖下方 2026-09-30 及更早的历史接续说明。唯一完整队列、总数与状态以 [`CURRENT_ROADMAP.md`](docs/50_plans/CURRENT_ROADMAP.md) 为准：**12 项，已完成 4、实际执行中 1、排队 4、暂停 2、外部材料受限 1**。当前唯一任务为 CFO 驾驶舱产品化，FINMETRIC F1–F4 是其顺序子步骤；不并行执行其他任务。执行分支 `codex/damai-logistics-data-audit`，HEAD `11129263`，与远端同步。
 

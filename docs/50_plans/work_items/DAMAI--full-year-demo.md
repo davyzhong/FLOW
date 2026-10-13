@@ -5,7 +5,7 @@ doc_type: work-item
 status: active
 version: 1.3
 created_at: 2026-09-24
-updated_at: 2026-10-12
+updated_at: 2026-10-13
 owner: FLOW
 depends_on: [FLOW-SPEC-DAMAI-DEMO-001]
 acceptance_refs: [FLOW-PLAN-INTEGRATED-EXECUTION-20260924, FLOW-SPEC-DAMAI-DEMO-001]
@@ -26,6 +26,13 @@ applies_to: repository
 交付须区分并记录 `disclosed_fact`、`derived_fact`、`generated_demo_detail` 和隔离 `test_fixture`：每条公开事实包括报告、URL、期间、页表、原值/单位/币种和 SHA；派生值记录公式、输入和舍入；用于页面钻取的生成明细须能与来源聚合对账且明确为 Mock；组织/用户/权限信息仅作为测试夹具。无公开来源且无法复算的财务/经营值改为 unavailable。重点审查已标注的利息费用 65% 拆分、固定资产折旧 10% 估算、债务/应付拆分、销售收现及资本开支，不得继续作为实际事实。
 
 验收还需覆盖原型 51 张图表的完整数据映射、CFO 十模块与所有系统关键功能，证明指标、图形、表格和来源之间可点击、可跳转、可下钻/上算/追溯；测试限定在隔离环境。上述均纳入 CURRENT_ROADMAP CFO 唯一队首顺序，按 CFO 工作包“用户补充验收基线”执行。
+
+### 2026-10-13 来源登记与运营披露层交付
+
+- 来源登记 `config/damai/source_facts_v1.yaml`（commit `842c8ea8`）：325 条 disclosed_fact（FY2021–FY2023 三表逐行、FY2019–FY2025 分部序列、件量/Non-IFRS/业务线占比），四分型与逐行血缘；原件 SHA 与页锚（损益 p464/资产负债 p466/现金流量 p474/件量 p23/Non-IFRS p21/业务线 p356）对申请稿 PDF 机械核验；7 项无来源假设（利息 65%、折旧 10%、负债构成、现金流拆分等）全部登记处置；pytest 门禁 13 项含重建确定性一致。
+- 运营披露层重建（commit `e5d8d2c6`）：`fixtures/damai/operations/*` 改为披露事实——分部序列 FY2019–FY2025 菜鸟披露值（FY2025=101,272/302；FY2026 起无单独披露如实缺省）、件量修复为披露值（FY2023 国际 1,519 百万件/国内 2,311 百万单）、业务线占比/Non-IFRS/网络快照同为披露事实、逐值 fact_ids 回溯；废弃「收入÷客单价」推导。演示期间（canonical FY2025/FY2026）件量按 unavailable 处理。
+- 验证：大麦相关 108 项测试、scripts 155 项、发行版确定性对账、m1 全绿。
+- 剩余：演示时间线迁移至真实财年（FY2022/FY2023，含 statements 改由登记生成与 ORG-LEDGER v2 重版），计划见 CURRENT_ROADMAP 队首行。
 
 ### 2026-10-12 来源基线首轮审计
 
