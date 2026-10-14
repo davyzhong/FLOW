@@ -27,6 +27,10 @@ from flow_api.api.schemas.intake import ErrorDetail
 from flow_api.cockpit.modules import (
     ModuleDataUnavailableError,
     build_balance_sheet_module,
+    build_cashflow_module,
+    build_consolidation_module,
+    build_expenses_module,
+    build_risk_module,
     build_working_capital_module,
     load_fact_context,
 )
@@ -372,3 +376,75 @@ def _module_response(
     except ResourceScopeUnresolved as error:
         raise _error(403, "enterprise_scope_unresolved", str(error)) from error
     return CockpitModuleResponse(**payload)
+
+
+@router.get(
+    "/modules/expenses",
+    response_model=CockpitModuleResponse,
+    responses={status.HTTP_404_NOT_FOUND: {"model": ErrorDetail}},
+    dependencies=[
+        Depends(
+            require_action(
+                Action.DASHBOARD_OVERVIEW_READ,
+                LOADERS["load_single_enterprise"],
+                session_provider=get_cockpit_session,
+            )
+        )
+    ],
+)
+def cockpit_expenses_module(session: SessionDependency) -> CockpitModuleResponse:
+    return _module_response(session, build_expenses_module)
+
+
+@router.get(
+    "/modules/cashflow",
+    response_model=CockpitModuleResponse,
+    responses={status.HTTP_404_NOT_FOUND: {"model": ErrorDetail}},
+    dependencies=[
+        Depends(
+            require_action(
+                Action.DASHBOARD_OVERVIEW_READ,
+                LOADERS["load_single_enterprise"],
+                session_provider=get_cockpit_session,
+            )
+        )
+    ],
+)
+def cockpit_cashflow_module(session: SessionDependency) -> CockpitModuleResponse:
+    return _module_response(session, build_cashflow_module)
+
+
+@router.get(
+    "/modules/risk",
+    response_model=CockpitModuleResponse,
+    responses={status.HTTP_404_NOT_FOUND: {"model": ErrorDetail}},
+    dependencies=[
+        Depends(
+            require_action(
+                Action.DASHBOARD_OVERVIEW_READ,
+                LOADERS["load_single_enterprise"],
+                session_provider=get_cockpit_session,
+            )
+        )
+    ],
+)
+def cockpit_risk_module(session: SessionDependency) -> CockpitModuleResponse:
+    return _module_response(session, build_risk_module)
+
+
+@router.get(
+    "/modules/consolidation",
+    response_model=CockpitModuleResponse,
+    responses={status.HTTP_404_NOT_FOUND: {"model": ErrorDetail}},
+    dependencies=[
+        Depends(
+            require_action(
+                Action.DASHBOARD_OVERVIEW_READ,
+                LOADERS["load_single_enterprise"],
+                session_provider=get_cockpit_session,
+            )
+        )
+    ],
+)
+def cockpit_consolidation_module(session: SessionDependency) -> CockpitModuleResponse:
+    return _module_response(session, build_consolidation_module)

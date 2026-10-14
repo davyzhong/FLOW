@@ -27,6 +27,8 @@ const moduleGroups = [
       ["dashboard", "营运资金", "/cockpit/working-capital"],
       ["dashboard", "费用分析", "/cockpit/expenses"],
       ["dashboard", "现金流", "/cockpit/cashflow"],
+      ["dashboard", "财务风险", "/cockpit/risk"],
+      ["dashboard", "集团合并", "/cockpit/consolidation"],
       ["upload", "数据接入", "/data"],
       ["analysis", "调查归因", "/investigations"],
       ["report", "四问工作台", "/analysis"],

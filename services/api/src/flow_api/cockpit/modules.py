@@ -11,7 +11,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from decimal import Decimal
 from typing import Any
 from uuid import UUID
@@ -47,6 +47,9 @@ class ModuleFactContext:
     snapshot_id: str
     current: dict[str, Decimal]
     prior: dict[str, Decimal]
+    raw_current: dict[tuple[str, str, str], Decimal] = field(
+        default_factory=dict
+    )
 
 
 def load_fact_context(session: Session, stock_code: str) -> ModuleFactContext:
@@ -80,7 +83,9 @@ def load_fact_context(session: Session, stock_code: str) -> ModuleFactContext:
         .limit(1)
     )
 
-    def collect(report: StatementReport) -> dict[str, Decimal]:
+    def collect(
+        report: StatementReport,
+    ) -> tuple[dict[str, Decimal], dict[tuple[str, str, str], Decimal]]:
         rows = session.scalars(
             select(StatementNormalizedItem).where(
                 StatementNormalizedItem.report_id == report.id,
@@ -88,6 +93,7 @@ def load_fact_context(session: Session, stock_code: str) -> ModuleFactContext:
             )
         ).all()
         facts: dict[str, Decimal] = {}
+        raw: dict[tuple[str, str, str], Decimal] = {}
         for row in rows:
             if row.item_id is None:
                 continue
@@ -99,7 +105,7 @@ def load_fact_context(session: Session, stock_code: str) -> ModuleFactContext:
             ):
                 if value is not None:
                     facts[f"{row.item_id}:{column}"] = Decimal(str(value)) / _UNIT_TO_MILLION
-        return facts
+        return facts, raw
 
     return ModuleFactContext(
         current_report_id=current.id,
@@ -107,8 +113,9 @@ def load_fact_context(session: Session, stock_code: str) -> ModuleFactContext:
         period_label=current.period_label,
         prior_period_label=prior.period_label,
         snapshot_id=str(snapshot.id) if snapshot else "",
-        current=collect(current),
-        prior=collect(prior),
+        current=collect(current)[0],
+        prior=collect(prior)[0],
+        raw_current=collect(current)[1],
     )
 
 
@@ -359,3 +366,166 @@ def build_working_capital_module(ctx: ModuleFactContext) -> dict[str, Any]:
         "charts": charts,
         "unavailable": unavailable,
     }
+
+
+def build_risk_module(ctx: ModuleFactContext) -> dict[str, Any]:
+    """§5.8 财务风险：偿债比率 + Findings 预警清单；利息/净杠杆缺省。"""
+
+    current_assets = _fact(ctx, "bs.current_assets")
+    inventory = _fact(ctx, "bs.inventory")
+    cash = _fact(ctx, "bs.cash")
+    current_liab = _fact(ctx, "bs.current_liab")
+    total_liab = _fact(ctx, "bs.total_liab")
+    equity = _fact(ctx, "bs.equity")
+    total_assets = _fact(ctx, "bs.total_assets")
+    ocf = ctx.current.get("cf.ocf:cur")
+
+    def ratio(n: Decimal | None, d: Decimal | None) -> Decimal | None:
+        if n is None or d in (None, Decimal("0")):
+            return None
+        assert d is not None
+        return (n / d).quantize(Decimal("0.0001"))
+
+    quick = ratio(
+        (
+            current_assets - inventory
+            if current_assets is not None and inventory is not None
+            else None
+        ),
+        current_liab,
+    )
+    kpis = [
+        _kpi("流动比率", ratio(current_assets, current_liab), None, unit="ratio",
+             caliber_note="经验参考约 2；过高可能资金闲置"),
+        _kpi("速动比率", quick, None, unit="ratio"),
+        _kpi("现金比率", ratio(cash, current_liab), None, unit="ratio"),
+        _kpi("资产负债率", ratio(total_liab, total_assets), None, unit="ratio"),
+        _kpi("权益乘数", ratio(total_assets, equity), None, unit="ratio"),
+        _kpi("OCF/流动负债", ratio(ocf, current_liab), None, unit="ratio"),
+        _kpi("利息保障倍数", None, None, unit="ratio",
+             unavailable_code="is.interest_exp",
+             caliber_note="申请稿利润表无独立利息费用行（U-DM-INTEREST-SPLIT）"),
+        _kpi("净负债/EBITDA", None, None, unit="ratio",
+             unavailable_code="bs.short_debt + is.interest_exp",
+             caliber_note="需短债拆分与 EBITDA（均未披露）"),
+    ]
+    unavailable = [
+        {"block": "预警阈值配置", "code": "threshold_config_c06",
+         "reason": "管控线阈值属 C06 配置层，公开期使用经验参考值标注"},
+        {"block": "利息保障 / 净杠杆", "code": "interest_exp_not_disclosed",
+         "reason": "申请稿无独立利息费用行、无短债拆分"},
+    ]
+    return {
+        "module": "risk",
+        "title": "财务风险",
+        "period": ctx.period_label,
+        "prior_period": ctx.prior_period_label,
+        "snapshot_id": ctx.snapshot_id,
+        "report_ids": [str(ctx.current_report_id), str(ctx.prior_report_id)],
+        "source_notice": (
+            "数据源：菜鸟申请稿披露财报（IFRS）·大麦物流演示主体引用；"
+            "不构成公开财报 C 级能力证明"
+        ),
+        "unit": "ratio", "kpis": kpis, "charts": {}, "unavailable": unavailable,
+    }
+
+
+def build_consolidation_module(ctx: ModuleFactContext) -> dict[str, Any]:
+    """§5.9 集团合并（公开期降级态）：「主体对比」视角——菜鸟分部序列。"""
+
+    segment_facts: dict[str, int] = {
+        "FY2019": 14885, "FY2020": 22233, "FY2021": 37258,
+        "FY2022": 46107, "FY2023": 77512, "FY2024": 99020, "FY2025": 101272,
+    }
+    charts: dict[str, Any] = {
+        "cainiao_segment_series": {
+            "title": "菜鸟分部收入（阿里年报披露）",
+            "type": "line",
+            "periods": list(segment_facts.keys()),
+            "series": {"分部收入": list(segment_facts.values())},
+            "note": "FY2026 起菜鸟并入「所有其他」分部，无单独披露",
+        },
+    }
+    return {
+        "module": "consolidation",
+        "title": "集团合并（降级态）",
+        "period": ctx.period_label,
+        "prior_period": ctx.prior_period_label,
+        "snapshot_id": ctx.snapshot_id,
+        "report_ids": [],
+        "source_notice": (
+            "降级态：公开期单主体，无合并抵销数据。"
+            "菜鸟分部序列为阿里年报披露事实（CN-SEG-*）。"
+        ),
+        "unit": "百万元",
+        "kpis": [{"name": "合并抵销", "status": "unavailable",
+                   "unavailable_code": "internal_period_feature",
+                   "unit": "", "caliber_note": "合并抵销桥属内部期功能"}],
+        "charts": charts,
+        "unavailable": [{"block": "合并抵销桥", "code": "internal_period_feature",
+                          "reason": "公开期单主体（D052）；多法人合并属内部期"}],
+    }
+
+
+def build_expenses_module(ctx: ModuleFactContext) -> dict[str, Any]:
+    """费用分析。"""
+    def _exp(name: str, item_id: str) -> dict[str, Any]:
+        cur = ctx.current.get(f"{item_id}:cur")
+        rev = ctx.current.get("is.revenue:cur")
+        rate = _ratio(abs(cur) if cur is not None else None, rev)
+        return {"name": name, "status": "available" if cur is not None else "unavailable",
+                "value": str(abs(cur)) if cur is not None else None,
+                "rate": str(rate) if rate is not None else None, "unit": "百万元"}
+    selling = ctx.current.get("is.selling_exp:cur")
+    admin = ctx.current.get("is.admin_exp:cur")
+    rnd = ctx.current.get("is.rnd_exp:cur")
+    fin = ctx.current.get("is.fin_exp:cur")
+    total = sum((abs(x) for x in (selling, admin, rnd, fin) if x is not None), Decimal("0")) \
+        if all(x is not None for x in (selling, admin, rnd, fin)) else None
+    rev = ctx.current.get("is.revenue:cur")
+    pr = _ratio(total, rev)
+    return {"module": "expenses", "title": "费用分析", "period": ctx.period_label,
+        "prior_period": ctx.prior_period_label, "snapshot_id": ctx.snapshot_id,
+        "report_ids": [str(ctx.current_report_id), str(ctx.prior_report_id)],
+        "source_notice": "数据源：菜鸟申请稿披露财报（IFRS）·大麦物流演示主体引用",
+        "unit": "百万元",
+        "kpis": [_exp("销售及市场推广开支", "is.selling_exp"),
+            _exp("一般及行政开支", "is.admin_exp"), _exp("产品开发开支", "is.rnd_exp"),
+            _exp("财务成本", "is.fin_exp"),
+            {"name": "期间费用合计", "status": "available" if total is not None else "unavailable",
+             "value": str(total) if total is not None else None,
+             "rate": str(pr) if pr is not None else None, "unit": "百万元"}],
+        "charts": {"expense_structure": {"title": "费用结构", "type": "ratio_bar",
+            "series": {"销售": selling, "管理": admin, "研发": rnd, "财务": fin}}},
+        "unavailable": [{"block": "预算执行", "code": "budget_not_applicable_public_period",
+            "reason": "预算基准属内部期（D054）"}]}
+
+
+def build_cashflow_module(ctx: ModuleFactContext) -> dict[str, Any]:
+    """现金流。"""
+    def raw(item: str) -> Decimal | None:
+        return ctx.raw_current.get(("合并现金流量表", item, "cur"))
+    ocf = ctx.current.get("cf.ocf:cur")
+    np = ctx.current.get("is.net_profit:cur")
+    return {"module": "cashflow", "title": "现金流", "period": ctx.period_label,
+        "prior_period": ctx.prior_period_label, "snapshot_id": ctx.snapshot_id,
+        "report_ids": [str(ctx.current_report_id), str(ctx.prior_report_id)],
+        "source_notice": "数据源：菜鸟申请稿披露财报（IFRS）·大麦物流演示主体引用",
+        "unit": "百万元",
+        "kpis": [_kpi("经营活动现金流量净额", ocf,
+                 ctx.current.get("cf.ocf:prior_yoy"), unit="百万元"),
+            _kpi("投资活动现金流量净额", ctx.current.get("cf.icf:cur"),
+                 ctx.current.get("cf.icf:prior_yoy"), unit="百万元"),
+            _kpi("筹资活动现金流量净额", ctx.current.get("cf.fin_cf:cur"),
+                 ctx.current.get("cf.fin_cf:prior_yoy"), unit="百万元"),
+            _kpi("净现比", _ratio(ocf, np), None, unit="ratio", caliber_note="OCF/净利润")],
+        "charts": {"cash_bridge": {"title": "现金变动桥", "type": "waterfall",
+            "steps": {"年初": raw("年初现金及现金等价物"), "经营": raw("经营活动所得现金净额"),
+                "投资": raw("投资活动所用现金净额"), "筹资": raw("融资活动(所用)所得现金净额"),
+                "汇率": raw("汇率变动对现金的影响"), "年末": raw("年末现金及现金等价物")},
+            "identity": "年末 = 年初 + 净变动 + 汇率"}},
+        "unavailable": [{"block": "收现比", "code": "cash_from_sales_not_disclosed",
+            "reason": "无「销售收现」行"},
+            {"block": "13周预测", "code": "internal_period_feature", "reason": "内部期"}]}
+
+
