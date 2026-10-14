@@ -35,17 +35,15 @@ export function ActionItemPanel({
     [],
   );
   const [acknowledged, setAcknowledged] = useState<Acknowledgments>({});
-  const [error, setError] = useState<string | null>(null);
   const items = initialItems ?? query.data ?? [];
 
   const onAcknowledge = useCallback(
     async (itemId: string) => {
-      setError(null);
       try {
         const receipt = await acknowledgeActionItem(itemId);
         setAcknowledged((prev) => ({ ...prev, [itemId]: receipt.id }));
       } catch {
-        setError("确认失败；请重试。");
+        setAcknowledged((prev) => ({ ...prev, [itemId]: "failed" }));
       }
     },
     [acknowledgeActionItem],

@@ -17,6 +17,8 @@ from decimal import Decimal
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine, select, text
+from pathlib import Path
+
 from sqlalchemy.orm import Session
 
 from flow_api.api.routes.cockpit import get_cockpit_session
@@ -28,7 +30,7 @@ from flow_api.settings import get_settings
 
 CFO = "cockpit-cfo-a"
 _ENTERPRISE = "00000000-0000-0000-0000-00000000d001"
-REPO_ROOT = "/Users/qiming/workspace/FLOW/.worktrees/execution-convergence"
+REPO_ROOT = Path(__file__).resolve().parents[4]
 
 
 @pytest.fixture()

@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from "vitest";
 import { CockpitModulePage } from "../../components/cockpit/module-page";
 import type { CockpitModuleResponse } from "../../lib/api/client";
 
-const module: CockpitModuleResponse = {
+const moduleFixture: CockpitModuleResponse = {
   module: "balance-sheet",
   title: "资产负债",
   period: "FY2023",
@@ -58,7 +58,7 @@ const module: CockpitModuleResponse = {
 
 describe("CockpitModulePage", () => {
   it("渲染 KPI 网格、图表数据表与不可用块", async () => {
-    const fetcher = vi.fn().mockResolvedValue(module);
+    const fetcher = vi.fn().mockResolvedValue(moduleFixture);
     render(
       <CockpitModulePage
         moduleId="balance-sheet"
