@@ -136,6 +136,7 @@ class MetricCard(FrozenModel):
     unit: Literal["order", "CNY", "CNY/order", "ratio", "day"]
     primary: DashboardValue
     budget: DashboardValue
+    mom: DashboardValue
     yoy: DashboardValue
     ytd_budget: DashboardValue
     companion: DashboardValue | None

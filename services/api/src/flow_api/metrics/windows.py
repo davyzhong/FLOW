@@ -14,10 +14,13 @@ ComparisonType = Literal[
     "budget_variance_ytd_pct",
     "prior_year_month",
     "prior_year_ytd",
+    "prior_month",
     "yoy_variance_month",
     "yoy_variance_month_pct",
     "yoy_variance_ytd",
     "yoy_variance_ytd_pct",
+    "mom_variance_month",
+    "mom_variance_month_pct",
     "trailing_12",
 ]
 WindowComparisonType = Literal[
@@ -27,6 +30,7 @@ WindowComparisonType = Literal[
     "budget_ytd",
     "prior_year_month",
     "prior_year_ytd",
+    "prior_month",
     "trailing_12",
 ]
 
@@ -71,6 +75,7 @@ def _candidate_windows(as_of_month: int) -> tuple[MetricWindow, ...]:
     actual_ytd = _month_range(year * 100 + 1, as_of_month)
     prior_as_of = _shift_month(as_of_month, -12)
     prior_ytd = _month_range((year - 1) * 100 + 1, prior_as_of)
+    prior_month = _shift_month(as_of_month, -1)
     return (
         MetricWindow("actual_month", as_of_month, actual_month),
         MetricWindow("actual_ytd", as_of_month, actual_ytd),
@@ -78,6 +83,7 @@ def _candidate_windows(as_of_month: int) -> tuple[MetricWindow, ...]:
         MetricWindow("budget_ytd", as_of_month, actual_ytd),
         MetricWindow("prior_year_month", as_of_month, frozenset({prior_as_of})),
         MetricWindow("prior_year_ytd", as_of_month, prior_ytd),
+        MetricWindow("prior_month", as_of_month, frozenset({prior_month})),
         MetricWindow(
             "trailing_12",
             as_of_month,

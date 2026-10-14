@@ -976,6 +976,23 @@ class DashboardService:
                         comparison=True,
                         inverse=inverse,
                     ),
+                    mom=(
+                        self._project_value(
+                            bundle,
+                            metric_code,
+                            "mom_variance_month_pct"
+                            if not ratio
+                            else "mom_variance_month",
+                            filters,
+                            comparison=True,
+                            inverse=inverse,
+                        )
+                        if filters.period_view == "month"
+                        else unavailable_value(
+                            "mom_not_applicable_ytd",
+                            "YTD 视角无环比口径",
+                        )
+                    ),
                     yoy=self._project_value(
                         bundle,
                         metric_code,

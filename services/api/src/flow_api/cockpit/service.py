@@ -213,6 +213,11 @@ class CockpitProjectionService:
         yoy = _as_value_dict(card.yoy) if card.yoy else _unavailable(
             "yoy_not_published", "同比未发布"
         )
+        # F4：环比由前月冻结快照经 mom_variance_* 对比口径供给（引擎逐月窗口），
+        # YTD 视角无环比口径 → 卡片层自带 not_applicable unavailable。
+        mom = _as_value_dict(card.mom) if card.mom else _unavailable(
+            "mom_not_published", "环比未发布"
+        )
         return CockpitKpi(
             metric_code=metric_code,
             title=card.title,
@@ -221,13 +226,10 @@ class CockpitProjectionService:
             primary=primary,
             comparisons={
                 "yoy": yoy,
-                "mom": _unavailable(
-                    "mom_not_projected",
-                    "环比基准属批次 C（需逐月冻结事实对齐）",
-                ),
+                "mom": mom,
                 "percentile": _unavailable(
-                    "industry_percentile_not_projected",
-                    "行业分位需 16 行业参考包，批次 C 接入",
+                    "industry_percentile_no_distribution",
+                    "行业分位需分位分布数据；v1.2 行业包仅提供经验参考基准，不冒充分位",
                 ),
             },
             polarity=polarity,
@@ -239,7 +241,19 @@ class CockpitProjectionService:
             ),
             caliber_note=f"{card.title}（{card.category}）· 由指标字典 v1.2 计算，口径随图附",
             source_label=(
-                f"同比 {yoy['display_value']}" if yoy.get("status") == "ready" else "同比未就绪"
+                "、".join(
+                    part
+                    for part in (
+                        f"同比 {yoy['display_value']}"
+                        if yoy.get("status") == "ready"
+                        else None,
+                        f"环比 {mom['display_value']}"
+                        if mom.get("status") == "ready"
+                        else None,
+                    )
+                    if part
+                )
+                or "对比未就绪"
             ),
             snapshot_id=snapshot_id,
         )

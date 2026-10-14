@@ -64,6 +64,7 @@ def _cards() -> tuple[MetricCard, ...]:
             unit="CNY" if code != "orders" else "order",
             primary=_available(),
             budget=_unavailable(),
+            mom=_unavailable(),
             yoy=_available("0.100000"),
             ytd_budget=_unavailable(),
             companion=None,

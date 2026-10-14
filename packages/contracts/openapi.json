@@ -8973,6 +8973,9 @@
           "budget": {
             "$ref": "#/components/schemas/DashboardValue"
           },
+          "mom": {
+            "$ref": "#/components/schemas/DashboardValue"
+          },
           "yoy": {
             "$ref": "#/components/schemas/DashboardValue"
           },
@@ -8999,6 +9002,7 @@
           "unit",
           "primary",
           "budget",
+          "mom",
           "yoy",
           "ytd_budget",
           "companion"

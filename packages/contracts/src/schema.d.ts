@@ -2677,6 +2677,7 @@ export interface components {
             unit: "order" | "CNY" | "CNY/order" | "ratio" | "day";
             primary: components["schemas"]["DashboardValue"];
             budget: components["schemas"]["DashboardValue"];
+            mom: components["schemas"]["DashboardValue"];
             yoy: components["schemas"]["DashboardValue"];
             ytd_budget: components["schemas"]["DashboardValue"];
             companion: components["schemas"]["DashboardValue"] | null;

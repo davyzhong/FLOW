@@ -30,6 +30,7 @@ _ACTUAL_COMPARISONS = {
     "actual_ytd",
     "prior_year_month",
     "prior_year_ytd",
+    "prior_month",
     "trailing_12",
 }
 _BUDGET_COMPARISONS = {"budget_month", "budget_ytd"}
@@ -272,6 +273,15 @@ class MetricCalculator:
                 "prior_year_ytd",
                 "yoy_variance_ytd",
                 "yoy_variance_ytd_pct",
+            )
+        )
+        results.extend(
+            self._comparison_results(
+                window_results,
+                "actual_month",
+                "prior_month",
+                "mom_variance_month",
+                "mom_variance_month_pct",
             )
         )
         ordered = tuple(sorted(results, key=_result_sort_key))

@@ -195,7 +195,17 @@ def _card_value(
 ) -> dict[str, Any]:
     if comparison is None:
         return _unavailable()
-    change = current - comparison if ratio_metric else _percent_change(current, comparison)
+    # 与引擎存储口径一致：比较两侧先按输出精度量化，再作差——
+    # 避免「未舍入差 ≈ 1e-7」在符号/方向上与引擎分歧（-0.000000 vs 0.000000）。
+    quantized_current = current.quantize(Decimal("0.000001"))
+    quantized_comparison = comparison.quantize(Decimal("0.000001"))
+    change = (
+        quantized_current - quantized_comparison
+        if ratio_metric
+        else _percent_change(quantized_current, quantized_comparison)
+    )
+    if change == 0:
+        change = Decimal("0.000000")  # 规范化负零
     return _available(
         change,
         scale=6,
@@ -212,8 +222,10 @@ def _build_metric_cards(
 ) -> list[dict[str, Any]]:
     current_month = "2026-08"
     prior_month = "2025-08"
+    prev_calendar_month = "2026-07"
     current = _operating_totals(operating, current_month)
     prior = _operating_totals(operating, prior_month)
+    prev_calendar = _operating_totals(operating, prev_calendar_month)
     current.update(
         {
             "operating_profit": _financial_total(
@@ -223,6 +235,17 @@ def _build_metric_cards(
                 financial, current_month, "OPERATING_CASH_FLOW"
             ),
             "ar_balance": _ar_total(ar_rows, current_month),
+        }
+    )
+    prev_calendar.update(
+        {
+            "operating_profit": _financial_total(
+                financial, prev_calendar_month, "OPERATING_PROFIT"
+            ),
+            "operating_cash_flow": _financial_total(
+                financial, prev_calendar_month, "OPERATING_CASH_FLOW"
+            ),
+            "ar_balance": _ar_total(ar_rows, prev_calendar_month),
         }
     )
     prior.update(
@@ -276,6 +299,13 @@ def _build_metric_cards(
                     code,
                     current[code],
                     budget.get(code),
+                    ratio_metric=ratio_metric,
+                    inverse=inverse,
+                ),
+                "mom": _card_value(
+                    code,
+                    current[code],
+                    prev_calendar[code],
                     ratio_metric=ratio_metric,
                     inverse=inverse,
                 ),

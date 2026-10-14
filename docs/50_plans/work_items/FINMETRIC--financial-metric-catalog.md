@@ -3,7 +3,7 @@ doc_id: FLOW-WI-FINMETRIC-001
 title: 财务指标目录（驾驶舱前置）
 doc_type: work-item
 status: active
-version: 1.5
+version: 1.6
 created_at: 2026-09-30
 updated_at: 2026-10-14
 owner: FLOW
@@ -113,6 +113,12 @@ DSO/DIO/DPO、CCC、流动/速动/现金比率等。本包不得再复制一份�
 | **F4** | 驾驶舱投影接入（环比/行业分位逐步解锁）+ 契约更新 | cockpit 测试全绿 · contracts-check · 同 SHA CI 17/17 |
 
 每批门禁与驾驶舱批次 A 同级（mypy / lint / vitest / pytest / build / contracts / docs / CI）。
+
+### F4 实施记录（2026-10-14）
+
+1. **环比解锁**：指标引擎新增 `prior_month` 窗口（`windows.py`，前一日历月）与 `mom_variance_month[_pct]` 对比口径（`calculator.py`，与 yoy 同一 `_comparison_results` 路径）；`MetricCard` 增加 `mom` 字段（month 视角取 `mom_variance_*`；YTD 视角无环比口径，显式 `mom_not_applicable_ytd` unavailable，不冒充）；驾驶舱 `comparisons.mom` 改由前月冻结快照真实供给（原「批次 C 未投影」占位移除）。行业分位维持如实缺省，缺口原因更新为「v1.2 行业包仅提供经验参考基准、非分位分布」（Q4：分位需分布数据，后置）。
+2. **契约更新**：`MetricCard.mom` 进 OpenAPI/TS schema（contracts 再生成）；dashboard oracle（`fixtures/expected/dashboard_overview_v1.json`）由 `build_dashboard_known_answers` 重生成（known-answers 卡片含 mom，当月 vs 前一日历月）。
+3. **门禁**：metrics/dashboard/cockpit 单测、contracts-check、web typecheck + vitest、全量集成扫荡（见提交 CI）。
 
 ### F3 实施记录（2026-10-14，基于 FY2022/FY2023 披露财报）
 

@@ -73,6 +73,7 @@ def _card(
     primary_exact: str | None = "100",
     yoy_exact: str | None = "110",
     ytd_exact: str | None = None,
+    mom_exact: str | None = None,
 ) -> SimpleNamespace:
     return SimpleNamespace(
         metric_code=code,
@@ -81,6 +82,7 @@ def _card(
         unit="万元",
         primary=_value(primary_exact, display="100"),
         budget=_value(None),
+        mom=_value(mom_exact, display="105") if mom_exact else _value(None),
         yoy=_value(yoy_exact, display="110"),
         ytd_budget=_value(ytd_exact, display="—") if ytd_exact else None,
         companion=None,
