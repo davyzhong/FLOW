@@ -111,9 +111,9 @@
       "sha256": "4076e58db35f71d3f1853452ef6a03d1bc35ddbf2976b5f77b96155907d552f9"
     },
     "organization/permissions.jsonl": {
-      "bytes": 21073,
-      "rows": 142,
-      "sha256": "5d20d70db86c6a3b9149ecee68e59b1f043717259879653e23e4b161d322d490"
+      "bytes": 21677,
+      "rows": 146,
+      "sha256": "faefc410d7cf9fc560eeb5ba2d33a745605a67214d1e74fffe1e62c4c5b5ed9f"
     },
     "organization/positions.jsonl": {
       "bytes": 1218,

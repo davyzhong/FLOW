@@ -10,8 +10,9 @@
  * - 不做通用任务管理（无指派/排期/通知，D001 边界）。
  */
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
+import { useApiQuery } from "../../lib/api/use-api-query";
 import type { CockpitActionItemResponse } from "../../lib/api/client";
 
 interface Acknowledgments {
@@ -29,30 +30,13 @@ export function ActionItemPanel({
   ) => Promise<{ id: string }>;
   initialItems?: CockpitActionItemResponse[];
 }) {
-  const [items, setItems] = useState<CockpitActionItemResponse[]>(
-    initialItems ?? [],
-  );
-  const [state, setState] = useState<"loading" | "ready" | "error">(
-    initialItems ? "ready" : "loading",
+  const query = useApiQuery<CockpitActionItemResponse[]>(
+    () => fetchActionItems(),
+    [],
   );
   const [acknowledged, setAcknowledged] = useState<Acknowledgments>({});
   const [error, setError] = useState<string | null>(null);
-
-  const load = useCallback(async () => {
-    setState("loading");
-    setError(null);
-    try {
-      setItems(await fetchActionItems());
-      setState("ready");
-    } catch {
-      setState("error");
-      setError("行动项加载失败；稍后重试。");
-    }
-  }, [fetchActionItems]);
-
-  useEffect(() => {
-    if (!initialItems) void load();
-  }, [initialItems, load]);
+  const items = initialItems ?? query.data ?? [];
 
   const onAcknowledge = useCallback(
     async (itemId: string) => {
@@ -67,7 +51,7 @@ export function ActionItemPanel({
     [acknowledgeActionItem],
   );
 
-  if (state === "loading") {
+  if (query.loading) {
     return (
       <section
         aria-label="行动项"
@@ -79,12 +63,12 @@ export function ActionItemPanel({
       </section>
     );
   }
-  if (state === "error") {
+  if (query.error) {
     return (
       <section aria-label="行动项" data-status="error" className="action-panel">
         <h3>行动项</h3>
-        <p role="alert">{error}</p>
-        <button type="button" onClick={() => void load()}>
+        <p role="alert">{query.error}</p>
+        <button type="button" onClick={query.reload}>
           重试
         </button>
       </section>

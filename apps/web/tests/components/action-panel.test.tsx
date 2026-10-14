@@ -49,7 +49,9 @@ describe("ActionItemPanel", () => {
   });
 
   it("加载失败展示错误与重试", async () => {
-    const fetchActionItems = vi.fn().mockRejectedValue(new Error("boom"));
+    const fetchActionItems = vi
+      .fn()
+      .mockRejectedValue(new Error("boom"));
     render(
       <ActionItemPanel fetchActionItems={fetchActionItems} acknowledgeActionItem={vi.fn()} />,
     );

@@ -1,4 +1,5 @@
 {"action": "analysis_run.read", "expected": "allow", "role_code": "finance_bp", "source": "flow_api.security.authorization", "synthetic": true}
+{"action": "cockpit.action_item.read", "expected": "allow", "role_code": "finance_bp", "source": "flow_api.security.authorization", "synthetic": true}
 {"action": "intake.batch.create", "expected": "allow", "role_code": "finance_bp", "source": "flow_api.security.authorization", "synthetic": true}
 {"action": "intake.cleaning_summary.read", "expected": "allow", "role_code": "finance_bp", "source": "flow_api.security.authorization", "synthetic": true}
 {"action": "intake.issue.acknowledge", "expected": "allow", "role_code": "finance_bp", "source": "flow_api.security.authorization", "synthetic": true}
@@ -23,6 +24,9 @@
 {"action": "workbench.report.read", "expected": "allow", "role_code": "finance_bp", "source": "flow_api.security.authorization", "synthetic": true}
 {"action": "workspace.metadata.read", "expected": "allow", "role_code": "finance_bp", "source": "flow_api.security.authorization", "synthetic": true}
 {"action": "analysis_run.read", "expected": "allow", "role_code": "analyst", "source": "flow_api.security.authorization", "synthetic": true}
+{"action": "cockpit.action_item.acknowledge", "expected": "allow", "role_code": "analyst", "source": "flow_api.security.authorization", "synthetic": true}
+{"action": "cockpit.action_item.create", "expected": "allow", "role_code": "analyst", "source": "flow_api.security.authorization", "synthetic": true}
+{"action": "cockpit.action_item.read", "expected": "allow", "role_code": "analyst", "source": "flow_api.security.authorization", "synthetic": true}
 {"action": "copilot.investigation.ask", "expected": "allow", "role_code": "analyst", "source": "flow_api.security.authorization", "synthetic": true}
 {"action": "copilot.mapping.explain", "expected": "allow", "role_code": "analyst", "source": "flow_api.security.authorization", "synthetic": true}
 {"action": "copilot.report_outline.generate", "expected": "allow", "role_code": "analyst", "source": "flow_api.security.authorization", "synthetic": true}
