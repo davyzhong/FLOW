@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import uuid
 from collections.abc import Iterator
+from typing import Any
 from decimal import Decimal
 
 import pytest
@@ -116,6 +117,19 @@ def _become(actor: str) -> None:
     from flow_api.settings import get_settings
 
     os.environ["FLOW_DEV_ACTOR_ID"] = actor
+    get_settings.cache_clear()
+
+
+@pytest.fixture(autouse=True)
+def _reset_actor() -> Any:
+    """测试后恢复 dev actor——env 全局态不外泄到同会话的其他测试文件。"""
+
+    import os
+
+    from flow_api.settings import get_settings
+
+    yield
+    os.environ["FLOW_DEV_ACTOR_ID"] = "flow-dev-bp"
     get_settings.cache_clear()
 
 
