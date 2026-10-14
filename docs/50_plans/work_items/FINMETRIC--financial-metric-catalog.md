@@ -3,9 +3,9 @@ doc_id: FLOW-WI-FINMETRIC-001
 title: 财务指标目录（驾驶舱前置）
 doc_type: work-item
 status: active
-version: 1.4
+version: 1.5
 created_at: 2026-09-30
-updated_at: 2026-10-12
+updated_at: 2026-10-14
 owner: FLOW
 depends_on: [FLOW-WI-COCKPIT-CFO-001]
 acceptance_refs: [FLOW-PLAN-COCKPIT-IMPL-20260930]
@@ -113,6 +113,15 @@ DSO/DIO/DPO、CCC、流动/速动/现金比率等。本包不得再复制一份�
 | **F4** | 驾驶舱投影接入（环比/行业分位逐步解锁）+ 契约更新 | cockpit 测试全绿 · contracts-check · 同 SHA CI 17/17 |
 
 每批门禁与驾驶舱批次 A 同级（mypy / lint / vitest / pytest / build / contracts / docs / CI）。
+
+### F3 实施记录（2026-10-14，基于 FY2022/FY2023 披露财报）
+
+F3 在时间线迁移后的披露财报口径上执行，目录不再新增 YAML（维持 F2 裁决：v1.1 字典 50 条 `metrics_general` 已完整覆盖本工作包「费用 + 现金流」清单，包括期间费用率、净现比、自由现金流；不复制字典内容）：
+
+1. **capex 符号语义修复**：申请稿现金流量表「购置物业设备…」按披露原值为负入账，而字典公式 `free_cash_flow = cf.ocf − cf.capex` 在符号约定下会把资本开支加回（修复前 FY2023 显示 +74.5 亿）。`item_alias_map_v1.yaml#damai_syn` 的 capex 映射改为 `abs: true`（与营业成本同惯例），FY2023 自由现金流修正为 **−37.3 亿**（资本开支超过经营现金流入，如实为负）。P5 公开矩阵的 cainiao_private 段存在同型问题，属公开矩阵治理事项，本轮不动、已登记。
+2. **现金流家族勾稽测试**：`free_cash_flow = ocf − capex` 手工复算相等、断言为负；`ocf_net_profit_ratio = cf.ocf / is.net_profit` 手工复算相等。
+3. **缺口族裁决测试**：18 项缺口逐族断言如实缺省且缺口输入正确——利息费用无独立披露行（利息保障/EBITDA 族 8 项）、「借款」为长短期混合无短借拆分（4 项）、直接法现金流无「销售收现」行（收现比）、NOPAT/可持续增长率需披露外输入、量价拆分属运营数据集口径。
+4. **未决问题结案**：Q1 = 财报直取科目优先，无对应行的科目 not_mapped（已在 damai_syn 映射节以 note 标注混合口径行）；Q2 = 平均口径用 MetricSnapshot 历史，不足时 insufficient_history（F1 已实现）；Q3 = 利息保障倍数在演示期显式 unavailable（已实现并测试锁定）。
 
 ### F2 实施记录（2026-10-11）
 

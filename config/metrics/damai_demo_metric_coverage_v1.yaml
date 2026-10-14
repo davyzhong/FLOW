@@ -401,10 +401,10 @@ metrics:
   unit: 元
   cells:
     damai_syn FY2022:
-      display: 78.5 亿
+      display: -31.9 亿
       missing: null
     damai_syn FY2023:
-      display: 74.5 亿
+      display: -37.3 亿
       missing: null
 - metric_code: cash_short_debt_ratio
   name: 现金短期债务比

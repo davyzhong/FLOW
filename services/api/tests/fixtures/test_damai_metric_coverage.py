@@ -85,3 +85,63 @@ def test_current_dictionary_formulas_reconcile_on_damai_statements() -> None:
         for item_id in ("is.selling_exp", "is.admin_exp", "is.rnd_exp", "is.fin_exp")
     ) / facts[("is.revenue", "cur")]
     assert abs(metric("period_expense_ratio") - expected_expense_ratio) < 1e-9
+
+    # 现金流家族（F3）：申请稿直接法现金流披露 OCF/ICF/FCF 融资净额与资本开支行；
+    # capex 以绝对值入映射（披露原值为负、流出），FCF = OCF − Capex 语义成立。
+    ocf = facts[("cf.ocf", "cur")]
+    capex = facts[("cf.capex", "cur")]
+    net_profit = facts[("is.net_profit", "cur")]
+    assert capex > 0, "capex 必须以流出绝对值入库"
+    assert abs(metric("free_cash_flow") - (ocf - capex)) < 1e-9
+    assert metric("free_cash_flow") < 0, "申请稿期资本开支超过经营现金流入，FCF 必须为负"
+    assert abs(metric("ocf_net_profit_ratio") - ocf / net_profit) < 1e-9
+
+
+def test_coverage_honestly_marks_disclosure_absent_inputs() -> None:
+    """申请稿未披露的输入对应指标必须整族如实缺省（F3 口径裁决）。
+
+    - 利息费用无独立行（旧合成「其中：利息费用」已移除）→ 利息相关 8 项；
+    - 「借款」为长短期混合行，无短借拆分 → 短债相关 4 项；
+    - 直接法现金流无「销售收现」行 → 收现比；
+    - NOPAT/可持续增长率需要披露外输入；量价拆分属于运营数据集（非财报口径）。
+    """
+
+    coverage = yaml.safe_load(COVERAGE_PATH.read_text(encoding="utf-8"))
+    expected_missing = {
+        "interest_coverage": "is.interest_exp",
+        "ebitda_interest_coverage": "is.interest_exp",
+        "total_assets_return": "is.interest_exp",
+        "roce": "is.interest_exp",
+        "ebitda": "is.interest_exp",
+        "adjusted_ebitda": "is.interest_exp",
+        "ebitda_margin": "is.interest_exp",
+        "ocf_interest_coverage": "is.interest_exp",
+        "total_debt_capitalization": "bs.short_debt",
+        "cash_short_debt_ratio": "bs.short_debt",
+        "debt_ebitda": "bs.short_debt",
+        "ocf_total_debt_ratio": "bs.short_debt",
+        "roic": "nopat",
+        "eva": "nopat",
+        "sgr": "identity_1",
+        "volume_growth": "volume_current",
+        "price_change_rate": "price_current",
+    }
+    assert len(expected_missing) == 17
+    for metric_row in coverage["metrics"]:
+        cell = metric_row["cells"]["damai_syn FY2023"]
+        code = metric_row["metric_code"]
+        if code in expected_missing or code == "cash_revenue_ratio":
+            assert cell["display"] is None, f"{code} 应如实缺省"
+            assert cell["missing"], f"{code} 缺口必须带原因"
+            if code in expected_missing:
+                assert cell["missing"].startswith(expected_missing[code]), (
+                    f"{code} 缺口输入不符：{cell['missing']}"
+                )
+    computable = {
+        row["metric_code"]
+        for row in coverage["metrics"]
+        if row["cells"]["damai_syn FY2023"]["display"] is not None
+    }
+    assert expected_missing.keys() | {"cash_revenue_ratio"} <= (
+        {m["metric_code"] for m in coverage["metrics"]} - computable
+    )

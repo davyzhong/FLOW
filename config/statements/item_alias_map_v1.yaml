@@ -140,7 +140,7 @@ companies:
           经营活动所得现金净额: cf.ocf
           投资活动所用现金净额: cf.icf
           融资活动(所用)所得现金净额: cf.fin_cf
-          购置物业设备、投资物业、土地使用权及无形资产: cf.capex
+          购置物业设备、投资物业、土地使用权及无形资产: {item: cf.capex, abs: true, note: 披露原值为负（流出），取绝对值使 FCF=OCF−Capex 语义成立}
 
   alibaba_9988:
     statements:
@@ -262,4 +262,4 @@ companies:
           经营活动所得现金净额: cf.ocf
           投资活动所用现金净额: cf.icf
           融资活动(所用)所得现金净额: cf.fin_cf
-          购置物业设备、投资物业、土地使用权及无形资产: cf.capex
+          购置物业设备、投资物业、土地使用权及无形资产: {item: cf.capex, abs: true, note: 披露原值为负（流出），取绝对值使 FCF=OCF−Capex 语义成立}
