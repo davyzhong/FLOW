@@ -13,12 +13,11 @@ from __future__ import annotations
 import uuid
 from collections.abc import Iterator
 from decimal import Decimal
+from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine, select, text
-from pathlib import Path
-
 from sqlalchemy.orm import Session
 
 from flow_api.api.routes.cockpit import get_cockpit_session
