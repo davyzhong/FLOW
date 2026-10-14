@@ -12,8 +12,8 @@ from __future__ import annotations
 
 import uuid
 from collections.abc import Iterator
-from typing import Any
 from decimal import Decimal
+from typing import Any
 
 import pytest
 from fastapi.testclient import TestClient
