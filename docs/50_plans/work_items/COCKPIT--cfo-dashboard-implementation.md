@@ -3,7 +3,7 @@ doc_id: FLOW-WI-COCKPIT-CFO-001
 title: CFO 财务总监驾驶舱产品化
 doc_type: work-item
 status: active
-version: 1.7
+version: 1.8
 created_at: 2026-09-30
 updated_at: 2026-10-13
 owner: FLOW
@@ -111,6 +111,13 @@ F1 准确 SHA CI run `38147756845`（提交 `11129263110d296f33c48b6cb94237a6fce
 - **B3**：`cockpit_action_item` 表 + 迁移 0032（含 role 枚举 CHECK 增加 cfo 与 downgrade 清理；up/down/up 验证）。
 - **B4/B5**：`GET/POST /api/v1/cockpit/action-items` + `POST …/{id}/acknowledge`（只写 durable 审计）；route-inventory 双向零差集恢复（**修复批次 A 遗留：cockpit overview 未登记即 403**）；web `ActionItemPanel` + flowApi 三方法 + vitest。
 - **门禁**：§11 九类断言全绿（5 组命令）；`require_approved_specs` 通过；web 单测 173、typecheck、mypy 208、ruff 全绿。
+
+### 批次 C-2 交付记录（2026-10-14）
+
+- **后端**：`cockpit/modules.py`（披露事实装配：两期发布报表的归一化 canonical 行，千元→百万元）+ `GET /api/v1/cockpit/modules/balance-sheet|working-capital`（单聚合端点；TSV 登记，双向零差集保持 81=81）；
+- **前端**：`/cockpit/balance-sheet`、`/cockpit/working-capital` 两页（AppShell + 导航登记 + navigation.spec 路由清单）+ 共享 `module-page` 渲染器（KPI 网格 + 图表数据表 + 降级块五态）+ ActionItemPanel 集成总览页；
+- **口径**：KPI 值全部来自披露事实（总资产 FY2023 = 71,850.931 百万）；CCC 恒等式模块内自洽；债务期限拆分/应收账龄/多主体排名如实缺省并注原因；
+- **门禁**：模块 API 测试 3 项、web vitest 174、typecheck、lint、生产构建、m1 全绿。
 
 ## 范围边界（不做什么）
 

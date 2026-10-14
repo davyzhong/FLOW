@@ -23,6 +23,8 @@ export type StatementLine = components["schemas"]["StatementLineResponse"];
 export type WorkbenchResponse = components["schemas"]["WorkbenchResponse"];
 // S01 驾驶舱：直接取自 contracts（单一真相源）
 export type CockpitOverviewResponse = components["schemas"]["CockpitOverviewResponse"];
+export type CockpitModuleResponse =
+  components["schemas"]["CockpitModuleResponse"];
 export type CockpitActionItemResponse =
   components["schemas"]["CockpitActionItemResponse"];
 export type CockpitActionItemCreate =
@@ -213,6 +215,15 @@ export const flowApi = {
   ): Promise<CockpitOverviewResponse> {
     return request<CockpitOverviewResponse>(
       `/api/v1/cockpit/overview${dashboardQuery(filters)}`,
+      signal,
+    );
+  },
+  getCockpitModule(
+    module: "balance-sheet" | "working-capital",
+    signal?: AbortSignal,
+  ): Promise<CockpitModuleResponse> {
+    return request<CockpitModuleResponse>(
+      `/api/v1/cockpit/modules/${encodeURIComponent(module)}`,
       signal,
     );
   },

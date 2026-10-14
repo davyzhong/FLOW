@@ -20,9 +20,16 @@ from flow_api.api.schemas.cockpit import (
     CockpitActionItemAcknowledgeResponse,
     CockpitActionItemCreate,
     CockpitActionItemResponse,
+    CockpitModuleResponse,
     CockpitOverviewResponse,
 )
 from flow_api.api.schemas.intake import ErrorDetail
+from flow_api.cockpit.modules import (
+    ModuleDataUnavailableError,
+    build_balance_sheet_module,
+    build_working_capital_module,
+    load_fact_context,
+)
 from flow_api.cockpit.service import CockpitProjectionService
 from flow_api.dashboard.models import ActiveFilters
 from flow_api.dashboard.repositories import DashboardSourceUnavailableError
@@ -315,3 +322,53 @@ def acknowledge_cockpit_action_item(item_id: UUID) -> CockpitActionItemAcknowled
     本 handler 只做存在性回执；授权中间件已完成 durable 审计写入（fail closed）。
     """
     return CockpitActionItemAcknowledgeResponse(id=str(item_id))
+
+
+@router.get(
+    "/modules/balance-sheet",
+    response_model=CockpitModuleResponse,
+    responses={status.HTTP_404_NOT_FOUND: {"model": ErrorDetail}},
+    dependencies=[
+        Depends(
+            require_action(
+                Action.DASHBOARD_OVERVIEW_READ,
+                LOADERS["load_single_enterprise"],
+                session_provider=get_cockpit_session,
+            )
+        )
+    ],
+)
+def cockpit_balance_sheet_module(session: SessionDependency) -> CockpitModuleResponse:
+    return _module_response(session, build_balance_sheet_module)
+
+
+@router.get(
+    "/modules/working-capital",
+    response_model=CockpitModuleResponse,
+    responses={status.HTTP_404_NOT_FOUND: {"model": ErrorDetail}},
+    dependencies=[
+        Depends(
+            require_action(
+                Action.DASHBOARD_OVERVIEW_READ,
+                LOADERS["load_single_enterprise"],
+                session_provider=get_cockpit_session,
+            )
+        )
+    ],
+)
+def cockpit_working_capital_module(session: SessionDependency) -> CockpitModuleResponse:
+    return _module_response(session, build_working_capital_module)
+
+
+def _module_response(
+    session: Session, builder: Any
+) -> CockpitModuleResponse:
+    from flow_api.security.route_policy import ResourceScopeUnresolved
+
+    try:
+        payload = builder(load_fact_context(session, "DAMAI.SYN"))
+    except ModuleDataUnavailableError as error:
+        raise _error(404, error.code, str(error)) from error
+    except ResourceScopeUnresolved as error:
+        raise _error(403, "enterprise_scope_unresolved", str(error)) from error
+    return CockpitModuleResponse(**payload)

@@ -1465,6 +1465,124 @@
         }
       }
     },
+    "/api/v1/cockpit/modules/balance-sheet": {
+      "get": {
+        "tags": [
+          "cockpit"
+        ],
+        "summary": "Cockpit Balance Sheet Module",
+        "operationId": "cockpit_balance_sheet_module_api_v1_cockpit_modules_balance_sheet_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CockpitModuleResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cockpit/modules/working-capital": {
+      "get": {
+        "tags": [
+          "cockpit"
+        ],
+        "summary": "Cockpit Working Capital Module",
+        "operationId": "cockpit_working_capital_module_api_v1_cockpit_modules_working_capital_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CockpitModuleResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/investigations": {
       "get": {
         "tags": [
@@ -6433,6 +6551,84 @@
           "snapshot_id"
         ],
         "title": "CockpitKpiCard"
+      },
+      "CockpitModuleResponse": {
+        "properties": {
+          "module": {
+            "type": "string",
+            "title": "Module"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "period": {
+            "type": "string",
+            "title": "Period"
+          },
+          "prior_period": {
+            "type": "string",
+            "title": "Prior Period"
+          },
+          "snapshot_id": {
+            "type": "string",
+            "title": "Snapshot Id"
+          },
+          "report_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Report Ids"
+          },
+          "source_notice": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Notice"
+          },
+          "unit": {
+            "type": "string",
+            "title": "Unit",
+            "default": "百万元"
+          },
+          "kpis": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Kpis"
+          },
+          "charts": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Charts"
+          },
+          "unavailable": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Unavailable"
+          }
+        },
+        "type": "object",
+        "required": [
+          "module",
+          "title",
+          "period",
+          "prior_period",
+          "snapshot_id"
+        ],
+        "title": "CockpitModuleResponse",
+        "description": "模块页聚合响应（批次 C-2）：一次返回该模块 KPI + 图表 + 降级块（禁 N+1）。"
       },
       "CockpitOverviewResponse": {
         "properties": {

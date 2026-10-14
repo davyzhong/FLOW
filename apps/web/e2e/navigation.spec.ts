@@ -6,6 +6,8 @@ const INTERACTIVE_ROUTES = [
   "/",
   "/analysis",
   "/cockpit",
+  "/cockpit/balance-sheet",
+  "/cockpit/working-capital",
   "/data",
   "/investigations",
   "/reports",

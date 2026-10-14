@@ -352,6 +352,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/cockpit/modules/balance-sheet": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Cockpit Balance Sheet Module */
+        get: operations["cockpit_balance_sheet_module_api_v1_cockpit_modules_balance_sheet_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/cockpit/modules/working-capital": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Cockpit Working Capital Module */
+        get: operations["cockpit_working_capital_module_api_v1_cockpit_modules_working_capital_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/investigations": {
         parameters: {
             query?: never;
@@ -1728,6 +1762,43 @@ export interface components {
              * @description 可追溯铁律：必填
              */
             snapshot_id: string;
+        };
+        /**
+         * CockpitModuleResponse
+         * @description 模块页聚合响应（批次 C-2）：一次返回该模块 KPI + 图表 + 降级块（禁 N+1）。
+         */
+        CockpitModuleResponse: {
+            /** Module */
+            module: string;
+            /** Title */
+            title: string;
+            /** Period */
+            period: string;
+            /** Prior Period */
+            prior_period: string;
+            /** Snapshot Id */
+            snapshot_id: string;
+            /** Report Ids */
+            report_ids?: string[];
+            /** Source Notice */
+            source_notice?: string | null;
+            /**
+             * Unit
+             * @default 百万元
+             */
+            unit: string;
+            /** Kpis */
+            kpis?: {
+                [key: string]: unknown;
+            }[];
+            /** Charts */
+            charts?: {
+                [key: string]: unknown;
+            };
+            /** Unavailable */
+            unavailable?: {
+                [key: string]: unknown;
+            }[];
         };
         /** CockpitOverviewResponse */
         CockpitOverviewResponse: {
@@ -4901,6 +4972,86 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ErrorDetail"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorDetail"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    cockpit_balance_sheet_module_api_v1_cockpit_modules_balance_sheet_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CockpitModuleResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorDetail"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    cockpit_working_capital_module_api_v1_cockpit_modules_working_capital_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CockpitModuleResponse"];
                 };
             };
             /** @description Not Found */

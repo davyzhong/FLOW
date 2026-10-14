@@ -8,6 +8,8 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 from pydantic import BaseModel, Field
 
 from flow_api.dashboard.models import DashboardContext, DashboardValue, DataStatus
@@ -101,6 +103,22 @@ class CockpitActionItemAcknowledgeResponse(BaseModel):
             "业务行不可变"
         )
     )
+
+
+class CockpitModuleResponse(BaseModel):
+    """模块页聚合响应（批次 C-2）：一次返回该模块 KPI + 图表 + 降级块（禁 N+1）。"""
+
+    module: str
+    title: str
+    period: str
+    prior_period: str
+    snapshot_id: str
+    report_ids: list[str] = Field(default_factory=list)
+    source_notice: str | None = None
+    unit: str = "百万元"
+    kpis: list[dict[str, Any]] = Field(default_factory=list)
+    charts: dict[str, Any] = Field(default_factory=dict)
+    unavailable: list[dict[str, Any]] = Field(default_factory=list)
 
 
 class CockpitOverviewResponse(BaseModel):
