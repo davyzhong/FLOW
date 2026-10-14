@@ -26,7 +26,7 @@ export function CockpitModulePage({
   moduleId,
   title,
 }: {
-  moduleId: "balance-sheet" | "working-capital" | "expenses" | "cashflow";
+  moduleId: "balance-sheet" | "working-capital" | "expenses" | "cashflow" | "risk" | "consolidation";
   title: string;
 }) {
   const query = useApiQuery<CockpitModuleResponse>(
