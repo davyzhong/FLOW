@@ -10,8 +10,9 @@
  * - 演示数据源全局标注。
  */
 
-import { useApiQuery } from "../../lib/api/use-api-query";
+import { flowApi } from "../../lib/api/client";
 import type { CockpitModuleResponse } from "../../lib/api/client";
+import { useApiQuery } from "../../lib/api/use-api-query";
 
 function formatValue(raw: string | null, unit: string): string {
   if (raw === null) return "—";
@@ -24,14 +25,12 @@ function formatValue(raw: string | null, unit: string): string {
 export function CockpitModulePage({
   moduleId,
   title,
-  fetcher,
 }: {
   moduleId: "balance-sheet" | "working-capital";
   title: string;
-  fetcher: (signal: AbortSignal) => Promise<CockpitModuleResponse>;
 }) {
   const query = useApiQuery<CockpitModuleResponse>(
-    (signal) => fetcher(signal),
+    (signal) => flowApi.getCockpitModule(moduleId, signal),
     [moduleId],
   );
 

@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import { CockpitModulePage } from "../../components/cockpit/module-page";
+import * as client from "../../lib/api/client";
 import type { CockpitModuleResponse } from "../../lib/api/client";
 
 const moduleFixture: CockpitModuleResponse = {
@@ -58,19 +59,15 @@ const moduleFixture: CockpitModuleResponse = {
 
 describe("CockpitModulePage", () => {
   it("渲染 KPI 网格、图表数据表与不可用块", async () => {
-    const fetcher = vi.fn().mockResolvedValue(moduleFixture);
-    render(
-      <CockpitModulePage
-        moduleId="balance-sheet"
-        title="资产负债"
-        fetcher={fetcher}
-      />,
-    );
+    const fetchSpy = vi
+      .spyOn(client.flowApi, "getCockpitModule")
+      .mockResolvedValue(moduleFixture);
+    render(<CockpitModulePage moduleId="balance-sheet" title="资产负债" />);
     expect(await screen.findByText("71,850.9 百万元")).toBeVisible();
     expect(screen.getByText("前期 58,881.1 百万元")).toBeVisible();
     expect(screen.getByText("资本结构趋势")).toBeVisible();
     expect(screen.getByText("债务期限结构")).toBeVisible();
     expect(screen.getByText(/大麦物流演示主体引用/)).toBeVisible();
-    expect(fetcher).toHaveBeenCalledOnce();
+    expect(fetchSpy).toHaveBeenCalledOnce();
   });
 });
