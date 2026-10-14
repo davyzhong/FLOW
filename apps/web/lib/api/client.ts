@@ -219,7 +219,7 @@ export const flowApi = {
     );
   },
   getCockpitModule(
-    module: "balance-sheet" | "working-capital",
+    module: "balance-sheet" | "working-capital" | "expenses" | "cashflow",
     signal?: AbortSignal,
   ): Promise<CockpitModuleResponse> {
     return request<CockpitModuleResponse>(
