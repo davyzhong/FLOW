@@ -49,6 +49,9 @@ class Action(StrEnum):
     INTAKE_CLEANING_SUMMARY_READ = "intake.cleaning_summary.read"
     INTAKE_STANDARDIZED_WORKBOOK_READ = "intake.standardized_workbook.read"
     DASHBOARD_OVERVIEW_READ = "dashboard.overview.read"
+    COCKPIT_ACTION_ITEM_READ = "cockpit.action_item.read"
+    COCKPIT_ACTION_ITEM_CREATE = "cockpit.action_item.create"
+    COCKPIT_ACTION_ITEM_ACKNOWLEDGE = "cockpit.action_item.acknowledge"
     INVESTIGATION_LIST = "investigation.list"
     INVESTIGATION_READ = "investigation.read"
     INVESTIGATION_EVIDENCE_DECIDE = "investigation.evidence.decide"
@@ -191,6 +194,36 @@ _FINANCE_BP_ALLOW: Final[frozenset[Action]] = frozenset(
         Action.OPERATIONS_OVERVIEW_READ,
         Action.OPERATIONS_SNAPSHOT_READ,
         Action.OPERATIONS_ATTEMPT_READ,
+        Action.COCKPIT_ACTION_ITEM_READ,
+    }
+)
+
+# cfo 显式 allow actions（V1.1.1：驾驶舱行动项闭环 + 全模块只读）
+_CFO_ALLOW: Final[frozenset[Action]] = frozenset(
+    {
+        Action.SYSTEM_HEALTH_READ,
+        Action.WORKSPACE_METADATA_READ,
+        Action.DASHBOARD_OVERVIEW_READ,
+        Action.INVESTIGATION_LIST,
+        Action.INVESTIGATION_READ,
+        Action.INVESTIGATION_EVIDENCE_DECIDE,
+        Action.INVESTIGATION_CONCLUSION_WRITE,
+        Action.INVESTIGATION_TRANSITION,
+        Action.COPILOT_INVESTIGATION_ASK,
+        Action.STATEMENT_SOURCE_READ,
+        Action.STATEMENT_REPORT_READ,
+        Action.STATEMENT_PROJECTION_READ,
+        Action.STATEMENT_CORRECTION_READ,
+        Action.WORKBENCH_REPORT_READ,
+        Action.OPERATIONS_PUBLIC_READ,
+        Action.OPERATIONS_OVERVIEW_READ,
+        Action.OPERATIONS_SNAPSHOT_READ,
+        Action.OPERATIONS_ATTEMPT_READ,
+        Action.METRIC_SNAPSHOT_READ,
+        Action.ANALYSIS_RUN_READ,
+        Action.COCKPIT_ACTION_ITEM_READ,
+        Action.COCKPIT_ACTION_ITEM_CREATE,
+        Action.COCKPIT_ACTION_ITEM_ACKNOWLEDGE,
     }
 )
 
@@ -394,6 +427,10 @@ def _step5_role_in_allow_set(
         return None
     if principal.role is Role.FINANCE_BP:
         if action in _FINANCE_BP_ALLOW:
+            return None
+        return Decision(False, ReasonCode.ROLE_FORBIDDEN)
+    if principal.role is Role.CFO:
+        if action in _CFO_ALLOW:
             return None
         return Decision(False, ReasonCode.ROLE_FORBIDDEN)
     if principal.role is Role.RULE_OWNER:

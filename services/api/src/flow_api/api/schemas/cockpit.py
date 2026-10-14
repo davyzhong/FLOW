@@ -67,6 +67,42 @@ class CockpitConclusion(BaseModel):
     tone: str = "neutral"
 
 
+class CockpitActionItemCreate(BaseModel):
+    """行动项创建（B4）：从 Finding 派生的财务结论闭环载体。"""
+
+    finding_id: str = Field(description="来源 Finding id（必须属于本企业且已终审）")
+    snapshot_id: str = Field(description="关联指标快照 id（可追溯铁律）")
+    title: str = Field(min_length=1, max_length=200)
+    detail: str | None = None
+
+
+class CockpitActionItemResponse(BaseModel):
+    id: str
+    finding_id: str
+    snapshot_id: str
+    title: str
+    detail: str | None = None
+    created_by: str
+    created_at: str
+    acknowledgment: str = Field(
+        description=(
+            "闭环语义：确认动作只写 durable AuditEvent（不改业务行）；"
+            "本字段固定指向审计凭证语义"
+        )
+    )
+
+
+class CockpitActionItemAcknowledgeResponse(BaseModel):
+    id: str
+    acknowledged_via: str = Field(default="audit_event")
+    message: str = Field(
+        default=(
+            "确认已记入 durable 审计（allow 决策即凭证，resource_id=行动项 id）；"
+            "业务行不可变"
+        )
+    )
+
+
 class CockpitOverviewResponse(BaseModel):
     state: str
     context: DashboardContext

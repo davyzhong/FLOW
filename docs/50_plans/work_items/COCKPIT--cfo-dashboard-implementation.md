@@ -3,7 +3,7 @@ doc_id: FLOW-WI-COCKPIT-CFO-001
 title: CFO 财务总监驾驶舱产品化
 doc_type: work-item
 status: active
-version: 1.6
+version: 1.7
 created_at: 2026-09-30
 updated_at: 2026-10-13
 owner: FLOW
@@ -103,6 +103,14 @@ confidentiality: project-internal
 ### 2026-10-12 接续状态（历史）
 
 F1 准确 SHA CI run `38147756845`（提交 `11129263110d296f33c48b6cb94237a6fcedfd13`）17/17 success；F2 字典对齐及公式勾稽修正准确 SHA CI run `38188010174`（提交 `0d4b554f33bd1c9cdab3242b25d26eb2209a632c`）17/17 success。来源基线计划提交 `df0f2e6782e60d65edc955918a892c34868a9c51` 的准确 SHA CI run `38188972800` 17/17 success。首轮数据来源和语义审计见[验证记录](../../60_delivery/verification/2026-10-12--damai-source-baseline-audit-v1.md)：已存在的菜鸟 P5 三表抽取、运营事实和分部序列可复用；当前大麦模拟生成器未使用它们，且有件量数量级/语义问题。当前唯一子步骤为建立机器可读来源登记和适配设计，逐项补足原件页表/期间/原值单位/哈希，再将这些事实用于大麦演示包，明确隔离生成明细及不可用指标。未通过来源门禁前不启动 F3 或后续模块。
+
+### 批次 B 交付记录（2026-10-14）
+
+- **B1 安全规格 V1.1.1**（`docs/40_specs/security/internal-workbench-rbac-audit-v1.md`）：新增 `cfo` 角色、`cockpit.action_item.*` 3 Action、§4.3 allow set、§14 修订记录（§10.6 四问裁决：新增 cfo / acknowledge 独立写 Action（allow 决策即 durable 凭证，不改业务行）/ 筛选沿用既有 Action / 跨企业校验保留、公开期不触发）；连带回写枚举文本漏登的 `metric_snapshot.read`/`analysis_run.read` 与四角色 allow 行（独立审查 P1）。
+- **B2 独立审查**：隔离会话完成（结论 NEEDS_FIXES → 全部 P0/P1 修复：测试种子链、规格枚举回写、措辞；P2 中 snapshot FK、注释漂移一并修复）。
+- **B3**：`cockpit_action_item` 表 + 迁移 0032（含 role 枚举 CHECK 增加 cfo 与 downgrade 清理；up/down/up 验证）。
+- **B4/B5**：`GET/POST /api/v1/cockpit/action-items` + `POST …/{id}/acknowledge`（只写 durable 审计）；route-inventory 双向零差集恢复（**修复批次 A 遗留：cockpit overview 未登记即 403**）；web `ActionItemPanel` + flowApi 三方法 + vitest。
+- **门禁**：§11 九类断言全绿（5 组命令）；`require_approved_specs` 通过；web 单测 173、typecheck、mypy 208、ruff 全绿。
 
 ## 范围边界（不做什么）
 

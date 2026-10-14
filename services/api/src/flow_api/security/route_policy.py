@@ -1,7 +1,7 @@
 """Route policy：路由策略注册表、加载器与授权依赖（S01 Task 2B 重做）。
 
 规格：docs/40_specs/security/internal-workbench-rbac-audit-v1.md（approved）§4/§5/§6/§9。
-权威清单：docs/40_specs/security/route-inventory-v1.tsv（64 条，最终 api_router 挂载）。
+权威清单：docs/40_specs/security/route-inventory-v1.tsv（行数以文件为准；双向探针测试强制一致）。
 
 纪律：
 - TSV 是唯一 route→action/loader/owner 真相；加载即校验（§5 合并阻断项全部在此 fail-fast）；
@@ -135,6 +135,7 @@ LOADER_RESOURCE_TYPE: dict[str, str] = {
     "load_public_operations_disclosure": "operations_disclosure",
     "load_public_operations_snapshot": "operations_snapshot",
     "load_public_operations_snapshot_collection": "operations_snapshot_collection",
+    "load_cockpit_action_item": "cockpit_action_item",
 }
 
 
@@ -351,6 +352,37 @@ def _load_single_enterprise(request: Request, session: Session) -> ResourceRef:
         resource_type="enterprise_scope",
         resource_id=str(enterprises[0]),
         enterprise_id=enterprises[0],
+        owner_actor_id=None,
+        proposed_by_actor_id=None,
+    )
+
+
+def _load_cockpit_action_item(request: Request, session: Session) -> ResourceRef:
+    """行动项确认/读取：按 path item_id 装载行动项 → 企业隔离 ResourceRef。
+
+    acknowledge 语义（V1.1.1 §14 裁决 2）：独立写 Action——authorization allow
+    决策即 durable 确认凭证（resource_id=行动项 id）；loader 不改任何业务行。
+    """
+
+    from uuid import UUID
+
+    from sqlalchemy import select
+
+    from flow_api.infrastructure.models.cockpit import ActionItem
+
+    raw = request.path_params.get("item_id", "")
+    try:
+        item_id = UUID(str(raw))
+    except ValueError as error:
+        raise ResourceScopeUnresolved("cockpit_action_item", "invalid_id") from error
+    item = session.scalar(select(ActionItem).where(ActionItem.id == item_id))
+    if item is None:
+        raise ResourceScopeUnresolved("cockpit_action_item", "not_found")
+    return ResourceRef(
+        scope="enterprise",
+        resource_type="cockpit_action_item",
+        resource_id=str(item.id),
+        enterprise_id=item.enterprise_id,
         owner_actor_id=None,
         proposed_by_actor_id=None,
     )
@@ -709,6 +741,7 @@ LOADERS: dict[str, ResourceLoader] = {
     "load_blocked_entry": _load_blocked_entry,
     "load_single_enterprise": _load_single_enterprise,
     "load_default_cycle_create": _load_default_cycle_create,
+    "load_cockpit_action_item": _load_cockpit_action_item,
 }
 
 

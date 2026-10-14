@@ -21,6 +21,7 @@ from uuid import UUID
 
 class Role(StrEnum):
     FINANCE_BP = "finance_bp"
+    CFO = "cfo"
     ANALYST = "analyst"
     RULE_OWNER = "rule_owner"
     AI_ANALYST = "ai_analyst"
@@ -30,7 +31,14 @@ class Role(StrEnum):
 
 # 所有角色在 §3.1.4 都有 enterprise_id；service_account 同样受约束。
 _HUMAN_OR_AI_ROLES = frozenset(
-    {Role.FINANCE_BP, Role.ANALYST, Role.RULE_OWNER, Role.AI_ANALYST, Role.AI_CFO}
+    {
+        Role.FINANCE_BP,
+        Role.CFO,
+        Role.ANALYST,
+        Role.RULE_OWNER,
+        Role.AI_ANALYST,
+        Role.AI_CFO,
+    }
 )
 
 

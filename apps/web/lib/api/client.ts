@@ -23,6 +23,12 @@ export type StatementLine = components["schemas"]["StatementLineResponse"];
 export type WorkbenchResponse = components["schemas"]["WorkbenchResponse"];
 // S01 驾驶舱：直接取自 contracts（单一真相源）
 export type CockpitOverviewResponse = components["schemas"]["CockpitOverviewResponse"];
+export type CockpitActionItemResponse =
+  components["schemas"]["CockpitActionItemResponse"];
+export type CockpitActionItemCreate =
+  components["schemas"]["CockpitActionItemCreate"];
+export type CockpitActionItemAcknowledgeResponse =
+  components["schemas"]["CockpitActionItemAcknowledgeResponse"];
 export type CockpitKpiCard = components["schemas"]["CockpitKpiCard"];
 export type CockpitComparisons = components["schemas"]["CockpitComparisons"];
 export type CockpitTrend = components["schemas"]["CockpitTrend"];
@@ -208,6 +214,30 @@ export const flowApi = {
     return request<CockpitOverviewResponse>(
       `/api/v1/cockpit/overview${dashboardQuery(filters)}`,
       signal,
+    );
+  },
+  getCockpitActionItems(signal?: AbortSignal): Promise<CockpitActionItemResponse[]> {
+    return request<CockpitActionItemResponse[]>(
+      "/api/v1/cockpit/action-items",
+      signal,
+    );
+  },
+  acknowledgeCockpitActionItem(
+    itemId: string,
+  ): Promise<CockpitActionItemAcknowledgeResponse> {
+    return submit<CockpitActionItemAcknowledgeResponse>(
+      `/api/v1/cockpit/action-items/${encodeURIComponent(itemId)}/acknowledge`,
+      "POST",
+      null,
+    );
+  },
+  createCockpitActionItem(
+    payload: CockpitActionItemCreate,
+  ): Promise<CockpitActionItemResponse> {
+    return submit<CockpitActionItemResponse>(
+      "/api/v1/cockpit/action-items",
+      "POST",
+      payload,
     );
   },
   getInvestigation(

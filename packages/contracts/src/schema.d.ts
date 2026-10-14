@@ -312,6 +312,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/cockpit/action-items": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Cockpit Action Items */
+        get: operations["list_cockpit_action_items_api_v1_cockpit_action_items_get"];
+        put?: never;
+        /** Create Cockpit Action Item */
+        post: operations["create_cockpit_action_item_api_v1_cockpit_action_items_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/cockpit/action-items/{item_id}/acknowledge": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Acknowledge Cockpit Action Item
+         * @description B5：确认动作不改业务行——durable allow 决策（resource_id=item_id）即凭证。
+         *
+         *     本 handler 只做存在性回执；授权中间件已完成 durable 审计写入（fail closed）。
+         */
+        post: operations["acknowledge_cockpit_action_item_api_v1_cockpit_action_items__item_id__acknowledge_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/investigations": {
         parameters: {
             query?: never;
@@ -1571,6 +1611,63 @@ export interface components {
         BuildJobListResponse: {
             /** Jobs */
             jobs: components["schemas"]["BuildJobLine"][];
+        };
+        /** CockpitActionItemAcknowledgeResponse */
+        CockpitActionItemAcknowledgeResponse: {
+            /** Id */
+            id: string;
+            /**
+             * Acknowledged Via
+             * @default audit_event
+             */
+            acknowledged_via: string;
+            /**
+             * Message
+             * @default 确认已记入 durable 审计（allow 决策即凭证，resource_id=行动项 id）；业务行不可变
+             */
+            message: string;
+        };
+        /**
+         * CockpitActionItemCreate
+         * @description 行动项创建（B4）：从 Finding 派生的财务结论闭环载体。
+         */
+        CockpitActionItemCreate: {
+            /**
+             * Finding Id
+             * @description 来源 Finding id（必须属于本企业且已终审）
+             */
+            finding_id: string;
+            /**
+             * Snapshot Id
+             * @description 关联指标快照 id（可追溯铁律）
+             */
+            snapshot_id: string;
+            /** Title */
+            title: string;
+            /** Detail */
+            detail?: string | null;
+        };
+        /** CockpitActionItemResponse */
+        CockpitActionItemResponse: {
+            /** Id */
+            id: string;
+            /** Finding Id */
+            finding_id: string;
+            /** Snapshot Id */
+            snapshot_id: string;
+            /** Title */
+            title: string;
+            /** Detail */
+            detail?: string | null;
+            /** Created By */
+            created_by: string;
+            /** Created At */
+            created_at: string;
+            /**
+             * Acknowledgment
+             * @description 闭环语义：确认动作只写 durable AuditEvent（不改业务行）；本字段固定指向审计凭证语义
+             */
+            acknowledgment: string;
         };
         /** CockpitComparisons */
         CockpitComparisons: {
@@ -4676,6 +4773,152 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ErrorDetail"];
+                };
+            };
+        };
+    };
+    list_cockpit_action_items_api_v1_cockpit_action_items_get: {
+        parameters: {
+            query?: {
+                finding_id?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CockpitActionItemResponse"][];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorDetail"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_cockpit_action_item_api_v1_cockpit_action_items_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CockpitActionItemCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CockpitActionItemResponse"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorDetail"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorDetail"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorDetail"];
+                };
+            };
+        };
+    };
+    acknowledge_cockpit_action_item_api_v1_cockpit_action_items__item_id__acknowledge_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                item_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CockpitActionItemAcknowledgeResponse"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorDetail"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorDetail"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };

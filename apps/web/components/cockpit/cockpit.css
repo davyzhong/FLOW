@@ -549,3 +549,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+/* 批次 B4：行动项面板 */
+.action-panel { margin-top: var(--flow-space-4, 16px); }
+.action-panel ul { list-style: none; padding: 0; display: grid; gap: 8px; }
+.action-panel__notice { color: var(--flow-text-muted, #6b7280); font-size: 12px; }

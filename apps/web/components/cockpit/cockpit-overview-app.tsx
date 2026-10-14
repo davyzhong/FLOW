@@ -17,6 +17,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import "./cockpit.css";
 
 import { flowApi } from "../../lib/api/client";
+import { ActionItemPanel } from "./action-panel";
 import { CockpitConclusionBar, CockpitDrillDrawer } from "./drill-drawer";
 import { CockpitFilterBar } from "./cockpit-filter-bar";
 import { CockpitKpiGrid } from "./kpi-card";
@@ -199,6 +200,13 @@ export function CockpitOverviewApp({
         text={overview.conclusion.text}
         findings={overview.conclusion.findings ?? []}
         tone={overview.conclusion.tone}
+      />
+
+      <ActionItemPanel
+        fetchActionItems={() => flowApi.getCockpitActionItems()}
+        acknowledgeActionItem={(itemId) =>
+          flowApi.acknowledgeCockpitActionItem(itemId)
+        }
       />
 
       <CockpitDrillDrawer drill={drill} onClose={() => setDrill(null)} />

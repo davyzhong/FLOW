@@ -1228,6 +1228,243 @@
         }
       }
     },
+    "/api/v1/cockpit/action-items": {
+      "get": {
+        "tags": [
+          "cockpit"
+        ],
+        "summary": "List Cockpit Action Items",
+        "operationId": "list_cockpit_action_items_api_v1_cockpit_action_items_get",
+        "parameters": [
+          {
+            "name": "finding_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Finding Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CockpitActionItemResponse"
+                  },
+                  "title": "Response List Cockpit Action Items Api V1 Cockpit Action Items Get"
+                }
+              }
+            }
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "cockpit"
+        ],
+        "summary": "Create Cockpit Action Item",
+        "operationId": "create_cockpit_action_item_api_v1_cockpit_action_items_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CockpitActionItemCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CockpitActionItemResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Unprocessable Content"
+          }
+        }
+      }
+    },
+    "/api/v1/cockpit/action-items/{item_id}/acknowledge": {
+      "post": {
+        "tags": [
+          "cockpit"
+        ],
+        "summary": "Acknowledge Cockpit Action Item",
+        "description": "B5：确认动作不改业务行——durable allow 决策（resource_id=item_id）即凭证。\n\n本 handler 只做存在性回执；授权中间件已完成 durable 审计写入（fail closed）。",
+        "operationId": "acknowledge_cockpit_action_item_api_v1_cockpit_action_items__item_id__acknowledge_post",
+        "parameters": [
+          {
+            "name": "item_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Item Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CockpitActionItemAcknowledgeResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/investigations": {
       "get": {
         "tags": [
@@ -5925,6 +6162,123 @@
           "jobs"
         ],
         "title": "BuildJobListResponse"
+      },
+      "CockpitActionItemAcknowledgeResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "acknowledged_via": {
+            "type": "string",
+            "title": "Acknowledged Via",
+            "default": "audit_event"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "default": "确认已记入 durable 审计（allow 决策即凭证，resource_id=行动项 id）；业务行不可变"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "title": "CockpitActionItemAcknowledgeResponse"
+      },
+      "CockpitActionItemCreate": {
+        "properties": {
+          "finding_id": {
+            "type": "string",
+            "title": "Finding Id",
+            "description": "来源 Finding id（必须属于本企业且已终审）"
+          },
+          "snapshot_id": {
+            "type": "string",
+            "title": "Snapshot Id",
+            "description": "关联指标快照 id（可追溯铁律）"
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Title"
+          },
+          "detail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "required": [
+          "finding_id",
+          "snapshot_id",
+          "title"
+        ],
+        "title": "CockpitActionItemCreate",
+        "description": "行动项创建（B4）：从 Finding 派生的财务结论闭环载体。"
+      },
+      "CockpitActionItemResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "finding_id": {
+            "type": "string",
+            "title": "Finding Id"
+          },
+          "snapshot_id": {
+            "type": "string",
+            "title": "Snapshot Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "detail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Detail"
+          },
+          "created_by": {
+            "type": "string",
+            "title": "Created By"
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At"
+          },
+          "acknowledgment": {
+            "type": "string",
+            "title": "Acknowledgment",
+            "description": "闭环语义：确认动作只写 durable AuditEvent（不改业务行）；本字段固定指向审计凭证语义"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "finding_id",
+          "snapshot_id",
+          "title",
+          "created_by",
+          "created_at",
+          "acknowledgment"
+        ],
+        "title": "CockpitActionItemResponse"
       },
       "CockpitComparisons": {
         "properties": {

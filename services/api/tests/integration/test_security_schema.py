@@ -15,10 +15,12 @@ def session() -> Session:
     return get_session_factory()()
 
 
-def test_migration_head_is_0031(session: Session) -> None:
+def test_migration_head_is_0032(session: Session) -> None:
+    """批次 B3 后迁移头推进至 0032（cockpit_action_item + cfo 角色枚举）。"""
+
     result = session.execute(text("SELECT version_num FROM alembic_version"))
     version = result.scalar()
-    assert version == "0031_enterprise_directory", f"迁移头不是 0031: {version}"
+    assert version == "0032_cockpit_action_item", f"迁移头不是 0032: {version}"
 
 
 def test_role_binding_table_exists(session: Session) -> None:

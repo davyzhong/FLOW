@@ -3,9 +3,9 @@ doc_id: FLOW-SPEC-INTERNAL-RBAC-AUDIT-V1
 title: 内部工作台 RBAC 与追加式审计规格 V1
 doc_type: specification
 status: approved
-version: 1.1
+version: 1.1.1
 created_at: 2026-09-13
-updated_at: 2026-09-13
+updated_at: 2026-10-14
 owner: FLOW
 decision_refs: [D052, D053, D054]
 knowledge_release: flow-knowledge-2026-09-12.1
@@ -46,6 +46,7 @@ from uuid import UUID
 
 class Role(StrEnum):
     FINANCE_BP = "finance_bp"
+    CFO = "cfo"
     ANALYST = "analyst"
     RULE_OWNER = "rule_owner"
     AI_ANALYST = "ai_analyst"
@@ -70,6 +71,9 @@ class Action(StrEnum):
     INTAKE_CLEANING_SUMMARY_READ = "intake.cleaning_summary.read"
     INTAKE_STANDARDIZED_WORKBOOK_READ = "intake.standardized_workbook.read"
     DASHBOARD_OVERVIEW_READ = "dashboard.overview.read"
+    COCKPIT_ACTION_ITEM_READ = "cockpit.action_item.read"
+    COCKPIT_ACTION_ITEM_CREATE = "cockpit.action_item.create"
+    COCKPIT_ACTION_ITEM_ACKNOWLEDGE = "cockpit.action_item.acknowledge"
     INVESTIGATION_LIST = "investigation.list"
     INVESTIGATION_READ = "investigation.read"
     INVESTIGATION_EVIDENCE_DECIDE = "investigation.evidence.decide"
@@ -250,11 +254,12 @@ def authorize(principal: Principal, action: Action, resource: ResourceRef) -> De
 
 | role | 显式 allow actions |
 |---|---|
-| `finance_bp` | `system.health.read`, `workspace.metadata.read`, `intake.template.read`, `intake.batch.create`, `intake.source.upload`, `intake.source.profile.read`, `intake.mapping.confirm`, `intake.mapping.override`, `intake.issue.acknowledge`, `intake.version.read`, `intake.cleaning_summary.read`, `intake.standardized_workbook.read`, `investigation.read`, `statement.source.read`, `statement.report.read`, `statement.projection.read`, `statement.correction.read`, `workbench.report.read`, `operations.public.read`, `operations.overview.read`, `operations.snapshot.read`, `operations.attempt.read` |
+| `finance_bp` | `system.health.read`, `workspace.metadata.read`, `intake.template.read`, `intake.batch.create`, `intake.source.upload`, `intake.source.profile.read`, `intake.mapping.confirm`, `intake.mapping.override`, `intake.issue.acknowledge`, `intake.version.read`, `intake.cleaning_summary.read`, `intake.standardized_workbook.read`, `investigation.read`, `statement.source.read`, `statement.report.read`, `statement.projection.read`, `statement.correction.read`, `workbench.report.read`, `operations.public.read`, `operations.overview.read`, `operations.snapshot.read`, `operations.attempt.read`, `metric_snapshot.read`, `analysis_run.read`, `cockpit.action_item.read` |
+| `cfo` | `system.health.read`, `workspace.metadata.read`, `dashboard.overview.read`, `investigation.list`, `investigation.read`, `investigation.evidence.decide`, `investigation.conclusion.write`, `investigation.transition`, `copilot.investigation.ask`, `statement.source.read`, `statement.report.read`, `statement.projection.read`, `statement.correction.read`, `workbench.report.read`, `operations.public.read`, `operations.overview.read`, `operations.snapshot.read`, `operations.attempt.read`, `metric_snapshot.read`, `analysis_run.read`, `cockpit.action_item.read`, `cockpit.action_item.create`, `cockpit.action_item.acknowledge` |
 | `analyst` | 全部 Action，除 `metric.change.activate`, `metric.change.retire`；inventory 为 `blocked:*` 的入口仍无条件阻断 |
-| `rule_owner` | `system.health.read`, `workspace.metadata.read`, `intake.template.read`, `investigation.read`, `metric_library.read`, `metric.change.propose`, `metric.change.activate`, `metric.change.retire`, `metric.event.read`, `metric.impact.analyze`, `statement.source.read`, `statement.report.read`, `statement.projection.read`, `statement.correction.read`, `workbench.report.read`, `operations.public.read`, `operations.overview.read`, `operations.snapshot.read`, `operations.attempt.read` |
-| `ai_analyst` | `system.health.read`, `workspace.metadata.read`, `intake.source.profile.read`, `investigation.read`, `copilot.investigation.ask`, `copilot.mapping.explain`, `metric_library.read`, `metric.impact.analyze`, `statement.source.read`, `statement.report.read`, `statement.projection.read`, `workbench.report.read`, `operations.public.read`, `operations.overview.read` |
-| `ai_cfo` | `system.health.read`, `workspace.metadata.read`, `investigation.read`, `copilot.investigation.ask`, `copilot.report_outline.generate`, `statement.report.read`, `statement.projection.read`, `workbench.report.read`, `operations.public.read`, `operations.overview.read` |
+| `rule_owner` | `system.health.read`, `workspace.metadata.read`, `intake.template.read`, `investigation.read`, `metric_snapshot.read`, `analysis_run.read`, `metric_library.read`, `metric.change.propose`, `metric.change.activate`, `metric.change.retire`, `metric.event.read`, `metric.impact.analyze`, `statement.source.read`, `statement.report.read`, `statement.projection.read`, `statement.correction.read`, `workbench.report.read`, `operations.public.read`, `operations.overview.read`, `operations.snapshot.read`, `operations.attempt.read` |
+| `ai_analyst` | `system.health.read`, `workspace.metadata.read`, `intake.source.profile.read`, `investigation.read`, `copilot.investigation.ask`, `copilot.mapping.explain`, `metric_snapshot.read`, `analysis_run.read`, `metric_library.read`, `metric.impact.analyze`, `statement.source.read`, `statement.report.read`, `statement.projection.read`, `workbench.report.read`, `operations.public.read`, `operations.overview.read` |
+| `ai_cfo` | `system.health.read`, `workspace.metadata.read`, `investigation.read`, `copilot.investigation.ask`, `copilot.report_outline.generate`, `statement.report.read`, `statement.projection.read`, `workbench.report.read`, `operations.public.read`, `operations.overview.read`, `metric_snapshot.read`, `analysis_run.read` |
 | `service_account` | `system.health.read`, `workspace.metadata.read`, `intake.template.read`, `intake.source.profile.read`, `intake.source.validate`, `orchestration.build.start`, `orchestration.build.read`, `statement.source.read`, `statement.report.read`, `statement.projection.read`, `operations.public.read` |
 
 补充硬规则：
@@ -639,8 +644,8 @@ analyst 只读本企业；rule_owner 只读本企业规则治理；finance_bp �
 cd services/api
 uv run pytest tests/security/test_authorization.py tests/security/test_principal_resolution.py tests/security/test_route_policy.py -v
 uv run pytest tests/api/test_auth_boundary.py tests/integration/test_audit_atomicity.py tests/integration/test_security_schema.py -v
-uv run pytest tests/publishing/test_publication.py tests/api/test_publishing_api.py tests/operations/test_operations_publication.py tests/operations/test_operations_public_api.py tests/integration/test_object_store.py -v
-uv run pytest tests/api/test_copilot.py tests/api/test_orchestration_api.py tests/api/test_intake.py tests/api/test_investigations.py tests/api/test_metric_library.py tests/api/test_statements.py -v
+uv run pytest tests/publishing/test_freeze.py tests/publishing/test_four_stage.py tests/api/test_publishing_api.py tests/operations/test_operations_freeze.py tests/operations/test_operations_public_api.py tests/integration/test_object_store.py -v
+uv run pytest tests/api/test_copilot.py tests/api/test_intake.py tests/api/test_investigations.py tests/api/test_metric_library_api.py tests/statements/ -v
 uv run pytest tests/integration/test_migrations.py -v
 uv run ruff check src tests
 uv run mypy src
@@ -669,3 +674,29 @@ git diff --check
 - 2026-09-13：用户批准初版 V1.1 冻结值并授权执行。
 - 2026-09-13：独立审查提出 P1/P2 后进入本轮精确化；精确化期间曾保持 `review`。
 - 2026-09-13：精确化完成（GLM 独立复审清零 P1/P2，见 `docs/80_reviews/2026-09-13-s01-security-spec-v1.1-coordinator-review.md`），用户明确批准最终字节，本文转回 `approved` 并作为 Task 6 门禁（Gate R0 状态对齐，2026-09-14 多代理审计 F7 发现本节与 frontmatter 矛盾，由协调者修正）。
+
+## 14. V1.1.1 修订记录（2026-10-14，CFO 驾驶舱批次 B1）
+
+本节是 V1.1.1 相对 V1.1 的全部偏差；未列出的字节与 V1.1 一致并继续受同一门禁约束。
+
+### 14.1 设计文档 §10.6 四问裁决
+
+| # | 问题 | 裁决 | 依据 |
+|---|---|---|---|
+| 1 | 是否新增 `cfo` 角色 | **新增**（§2.1 Role + §4.3 allow set + §2.2 连带） | 实施方案 §6-Q2 建议；驾驶舱行动项闭环需要独立于 finance_bp 的确认主体 |
+| 2 | `cockpit.action_item.acknowledge` 语义归类 | **独立写 Action**（POST 语义；allow 决策即 durable 确认凭证，resource_id=行动项 id；不改任何业务行——ActionItem 行不可变） | 实施方案批次 B5「只写 AuditEvent」；HTTP 写语义进写类 allow set，避免「只读 Action 附带业务副作用」的归类污染 |
+| 3 | 驾驶舱筛选是否需要独立 Action | **沿用 `dashboard.overview.read`**（筛选是同一读资源的查询参数，不新增 Action） | 实施方案 §6-Q2 建议；避免 Action 爆炸 |
+| 4 | 公开期跨企业风险 | **`owner_actor_id`/跨企业校验逻辑保留（fail-closed 默认）**；公开期为单一演示主体（单企业事实），跨企业分支在公开期不触发；该风险登记为内部期多主体场景，进入内部期前须重新评审 | 设计文档 §10.6-4；不因公开期删除防线 |
+
+### 14.2 变更清单
+
+1. §2.1 Role 枚举新增 `cfo`（人类角色，§3.1.4 需 enterprise_id，进 `_HUMAN_OR_AI_ROLES`）；
+2. §2.1 Action 枚举新增 `cockpit.action_item.read` / `cockpit.action_item.create` / `cockpit.action_item.acknowledge`；并回写代码已在用而枚举文本漏登的 `metric_snapshot.read` / `analysis_run.read`（回写后全集与代码 63 项一致）；
+3. §4.3 allow set 新增 `cfo` 行（见上表）；`finance_bp` 追加 `cockpit.action_item.read`（BP 可读行动项；创建/确认除 analyst 全量角色外仅 `cfo`）；同表回写四个既有角色的 `metric_snapshot.read` / `analysis_run.read`；
+4. 路由登记：`route-inventory-v1.tsv` 新增 `GET /api/v1/cockpit/overview`（补登批次 A 遗留——此前未登记即 403，本轮门禁修复）与上述 3 条行动项路由，双向零差集恢复；
+5. development principal 逻辑不变：dev 绑定可声明 `cfo`（开发/验收用），仍受 §2.2 全部约束。
+
+### 14.3 批准依据
+
+- 实施方案 `2026-09-30-cfo-cockpit-implementation-plan.md` §6-Q2 的建议裁决（新增 cfo 角色、筛选沿用既有 Action）；
+- 用户 2026-10-13 连续执行授权（「中间不要停下来等我确认，一口气做到底」）覆盖本修订的批准；独立审查记录见批次 B 提交的审查文档。

@@ -1,7 +1,7 @@
 """route_policy 测试（S01 Task 2B 重做）。
 
 规格：docs/40_specs/security/internal-workbench-rbac-audit-v1.md（approved）§4/§5/§6；
-权威清单 route-inventory-v1.tsv（66 条，含已批准待挂载的 modules 行）。
+权威清单 route-inventory-v1.tsv（行数以文件为准；双向探针测试强制一致）。
 
 覆盖：
 - TSV 装载与 §5 全部合并阻断项（重复/未知 Action/写豁免/blocked 无 action）；

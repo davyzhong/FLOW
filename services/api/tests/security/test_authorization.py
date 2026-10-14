@@ -69,6 +69,7 @@ def _other_enterprise() -> UUID:
 def test_role_enum_is_complete_and_str_serializable() -> None:
     expected = {
         "finance_bp",
+        "cfo",
         "analyst",
         "rule_owner",
         "ai_analyst",
@@ -85,7 +86,8 @@ def test_role_enum_is_complete_and_str_serializable() -> None:
 def test_action_enum_count_matches_spec() -> None:
     # 规格 §2.1 Action 58 项 + 2026-09-26 批次二新增 2 项只读详情
     # （metric_snapshot.read / analysis_run.read，超链接化 §3.2）
-    assert len(list(Action)) == 60
+    # + 2026-10-14 安全规格 V1.1.1 新增 3 项驾驶舱行动项（cockpit.action_item.*）
+    assert len(list(Action)) == 63
 
 
 def test_principal_invariant_service_flag_consistency() -> None:
