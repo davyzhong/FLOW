@@ -3,7 +3,7 @@ doc_id: FLOW-WI-COCKPIT-CFO-001
 title: CFO 财务总监驾驶舱产品化
 doc_type: work-item
 status: active
-version: 1.8
+version: 1.9
 created_at: 2026-09-30
 updated_at: 2026-10-13
 owner: FLOW
@@ -118,6 +118,14 @@ F1 准确 SHA CI run `38147756845`（提交 `11129263110d296f33c48b6cb94237a6fce
 - **前端**：`/cockpit/balance-sheet`、`/cockpit/working-capital` 两页（AppShell + 导航登记 + navigation.spec 路由清单）+ 共享 `module-page` 渲染器（KPI 网格 + 图表数据表 + 降级块五态）+ ActionItemPanel 集成总览页；
 - **口径**：KPI 值全部来自披露事实（总资产 FY2023 = 71,850.931 百万）；CCC 恒等式模块内自洽；债务期限拆分/应收账龄/多主体排名如实缺省并注原因；
 - **门禁**：模块 API 测试 3 项、web vitest 174、typecheck、lint、生产构建、m1 全绿。
+
+### 批次 D 交付记录（2026-10-15）
+
+- **结论条自动生成**：已在批次 A 实现（`CockpitProjectionService._conclusion()` 从冻结 Finding 生成，不接受裸文本；`CockpitConclusionBar` 渲染溯源链接）。本轮验证通过，无需改动。
+- **Findings 跨页联动**：已在批次 A/B 实现（`CockpitDrillDrawer` 穿透至调查页；KPI 卡链接指标库；行动项面板链接审计）。本轮验证通过。
+- **问数入口嵌入**：新增驾驶舱总览页「问数 → 四问工作台」入口链接（确定性检索引用 QA；LLM 通道另行裁决）。CSS + Link + 三检通过。
+
+**结论**：批次 D 的实质交付已由批次 A/B 的架构覆盖（结论条和跨页联动为驾驶舱框架固有能力），本轮补齐了问数入口嵌入。设计文档 §8 "另行裁决" 项（LLM 通道）维持后置不阻塞。
 
 ## 范围边界（不做什么）
 

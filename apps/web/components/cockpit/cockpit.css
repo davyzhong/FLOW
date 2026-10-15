@@ -554,3 +554,9 @@
 .action-panel { margin-top: var(--flow-space-4, 16px); }
 .action-panel ul { list-style: none; padding: 0; display: grid; gap: 8px; }
 .action-panel__notice { color: var(--flow-text-muted, #6b7280); font-size: 12px; }
+
+/* 批次 D：问数入口 */
+.ask-entry { margin-top: var(--flow-space-4, 16px); padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; }
+.ask-entry__link { font-weight: 600; color: #2563eb; text-decoration: none; }
+.ask-entry__link:hover { text-decoration: underline; }
+.ask-entry__note { color: var(--flow-text-muted, #6b7280); font-size: 12px; margin-top: 4px; }

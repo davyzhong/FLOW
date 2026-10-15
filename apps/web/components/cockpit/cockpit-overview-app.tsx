@@ -12,6 +12,7 @@
  * - 趋势面板（手写 SVG，零新依赖）
  */
 
+import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import "./cockpit.css";
@@ -208,6 +209,16 @@ export function CockpitOverviewApp({
           flowApi.acknowledgeCockpitActionItem(itemId)
         }
       />
+
+      {/* 批次 D：问数入口——导航至四问工作台（确定性检索引用 QA） */}
+      <section aria-label="问数入口" className="ask-entry">
+        <Link href="/analysis" className="ask-entry__link">
+          问数 → 进入四问工作台
+        </Link>
+        <p className="ask-entry__note">
+          基于冻结事实的确定性检索引用问答；LLM 通道另行裁决（D054）。
+        </p>
+      </section>
 
       <CockpitDrillDrawer drill={drill} onClose={() => setDrill(null)} />
     </div>
