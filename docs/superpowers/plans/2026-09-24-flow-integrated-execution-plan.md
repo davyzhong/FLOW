@@ -372,6 +372,14 @@ push；敏感/排除目录 fail closed。详细 schema 和命令合同继承批�
 
 ### Task K1：Davybase K0/K1 审计与非微信图片覆盖
 
+> **2026-10-17 执行口径校准**：本计划为归档验收细节，当前任务状态只认
+> [CURRENT_ROADMAP](../../50_plans/CURRENT_ROADMAP.md)。K0 已完成：历史批次严格终态为
+> 1,265 输入、1,239 成功、2 待复核、24 过滤；32 篇/512 张图抽样对账通过。旧批次的
+> `done=true=1,241` 不等于成功数。K0 实现/证据在 Davybase 分支
+> `codex/knowledge-run-manifest-k0`，见 [FLOW 验收摘要](../../knowledge-base/02_research/synthesis/2026-09-18-davybase-image-batch-acceptance.md)。
+> 该次 ObsidianWiki 工作区有 1,365 条既存变化，因此当前 K1 先限定为只读 coverage、
+> allowlist 和 pathspec 盘点；不得运行 apply、暂存或切换 release。
+
 **Repositories:** `/Users/qiming/workspace/davybase`、`/Users/qiming/ObsidianWiki`
 
 **Files:**
@@ -391,7 +399,7 @@ push；敏感/排除目录 fail closed。详细 schema 和命令合同继承批�
       用同名同大小异内容、附录剥离、缺 envelope 和互斥终态取得预期红灯。
 - [ ] 建立 `davybase-knowledge-run/v1`，用正文/图片集合 SHA-256，不再使用名称
       和大小推导身份；dry-run 必须零写入。
-- [ ] 机器复算既有 1,265 输入的互斥终态，验收 1,241 成功与 24 装饰图，
+- [x] 机器复算既有 1,265 输入的互斥终态：1,239 成功、2 待复核、24 过滤；
       无法恢复的旧字段标 `nonconformant`，不得伪造 provenance。
 - [ ] allowlist 覆盖企业管理、财务与会计、跨境物流；拒绝绝对路径、`..`、
       symlink 逃逸和敏感目录。
@@ -400,13 +408,20 @@ push；敏感/排除目录 fail closed。详细 schema 和命令合同继承批�
 
 Run：
 
+> **归档命令警示**：下方 shell 仅保留原 Task K1 的历史命令形态。块中的 `--apply`、
+> `--retry-from`、Obsidian `git add/commit/push` 当前不可执行。现行 K1 仅按工作包做只读
+> coverage、allowlist、pathspec 盘点；如需写入，必须先更新 `CURRENT_ROADMAP` 并另行列明
+> 写入前置、影响路径和验收后，再按用户已授权范围执行。
+
 ```bash
 cd /Users/qiming/workspace/davybase
 .venv/bin/python scripts/run/knowledge_run_manifest.py retrospective \
   --vault /Users/qiming/ObsidianWiki --scope processed/微信知识库 \
   --pre-k1-commit <PRE_K1_COMMIT> --pre-k1-tree <PRE_K1_TREE> \
   --batch-code-commit <ORIGINAL_BATCH_COMMIT> \
-  --expected-inputs 1265 --expected-success 1241 --expected-filtered 24 \
+  --batch-output-commit <HISTORICAL_OUTPUT_COMMIT> \
+  --expected-inputs 1265 --expected-success 1239 --expected-review 2 --expected-filtered 24 \
+  --run-id <K0_RUN_ID> \
   --output docs/evidence/runs/<K0_RUN_ID>.jsonl
 .venv/bin/python scripts/run/knowledge_run_manifest.py verify \
   --manifest docs/evidence/runs/<K0_RUN_ID>.jsonl --strict
@@ -435,11 +450,13 @@ cd /Users/qiming/workspace/davybase
 .venv/bin/python -m pytest tests -q
 ```
 
-成功输出必须包含 `retrospective manifest: PASS`、`coverage scan: PASS`、
-`image digest dry-run: PASS`、`image digest apply: PASS`、
-`image digest retry: PASS`、`scope check: PASS`。
-Obsidian 只按已验证 pathspec 暂存；Davybase 与 Obsidian 分别 commit/push，任一失败
-则 K1 未完成。FLOW 只登记汇总、定位符和哈希，不复制原始图片或全文。
+历史原计划成功输出包括 `retrospective manifest: PASS`、`coverage scan: PASS`、
+`image digest dry-run: PASS`、`image digest apply: PASS`、`image digest retry: PASS`、
+`scope check: PASS`。当前 K1 验收只要求只读 coverage、allowlist 和候选 pathspec 检查；
+apply/retry 结果不属于当前 K1 验收，且不得执行。
+以上 Obsidian 暂存及 Davybase/Obsidian 跨仓提交要求属于归档原计划后段，当前不可执行，
+也不构成 K1 当前验收。当前 K1 只执行只读 coverage、allowlist 与候选 pathspec 核验；
+FLOW 只登记汇总、定位符和哈希，不复制原始图片或全文。
 
 ### Task K2：首个稳定 15:00 Git 截面
 

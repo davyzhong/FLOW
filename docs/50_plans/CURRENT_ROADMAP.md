@@ -21,7 +21,7 @@ superseded_by: null
 >
 > **2026-10-17 驾驶舱队首完成**：完整实现与 8 张真实截图提交并推送（代码 SHA `1a71e33fc2f779e1a848a4c3736919e98f762bdf`，前置提交 `607d07f8`）。Web 183/183、API 定向 19/19、隔离账套 19/19、驾驶舱视觉 Playwright 7/7、浏览器 E2E 15/15、162 路由矩阵无意外失败；M1/M6、plan views、155 项脚本测试及链接检查均通过。准确 SHA GitHub CI run `38936413156` 全部 job 成功。本项关闭，唯一队首切换为知识刷新 K0–K6。
 >
-> **2026-10-17 K0 执行口径**：历史 Git 输出快照实测 1,265 篇含图文档，1,241 篇曾标记 `done=true`；其中 2 篇各记录 1 张失败图，严格终态应为 1,239 成功、2 待复核、24 过滤。ObsidianWiki pre-K1 快照记录 1,365 条 dirty 路径及内容哈希，知识库全范围文件树摘要复验一致；不 pull 覆盖、不暂存、不提交、不执行图片 apply、不变更 `CURRENT_RELEASE`。历史缺 prompt SHA-256，全部 retrospective 文档标记 nonconformant，不计 L1 coverage。详细步骤见批准的[统一实施计划 K 轨](../superpowers/plans/2026-09-24-flow-integrated-execution-plan.md#10-k第二代静态知识刷新与战略重基线)。
+> **2026-10-17 K0 已完成**：Davybase 分支 `codex/knowledge-run-manifest-k0` 已推送运行审计实现、证据和交接（实现 `172a099`、证据 `94fc05d`、同步 `eb8c3d0`；远端 README 截图提交通过 merge `c51e463` 保留）。历史快照严格终态为 1,265 输入、1,239 成功、2 待复核、24 过滤；清单 SHA-256 `c603baab83f7873c852681c69dfb314e7004e43b230ea832fb2a1e9043ce26bc`，32 篇样本/512 张图逐项哈希对账通过。实现 SHA 对应本地 872 项测试、Ruff、README 统计和文档链接检查通过；GitHub `ci.yml` 未运行，成功的 README 截图工作流不替代 CI。历史批次缺 prompt SHA-256，1,265 篇均 nonconformant，不计 L1。ObsidianWiki 仍只读，dirty 1,365 路径及知识范围摘要复验一致；`CURRENT_RELEASE` 不变。唯一子步切换为 K1 覆盖盘点（队首待启动），范围见状态表 K。
 
 > **2026-10-16 用户四项裁决（U04 盲评复评前置）**：① **L0 挂 CI（选项 C）**——新增非阻断 `l0-baseline` job（continue-on-error），失败仅作信号灯不阻塞合并；② **盲评复评范围（选项 A）**——仅旧三样本（顺丰/腾讯/中通），新留出泛化失败归因已登记不扩大；③ **C 级维持 6 条件不变（选项 A）**——诚实标准，做不到如实 No-Go；④ **ZTO 立即恢复（选项 C）**——解封 `wip/zto-integration-20260929`。四项裁决由用户 2026-10-16 一次性给出。
 
@@ -72,7 +72,7 @@ superseded_by: null
 | 2a | [大麦物流完整财年演示数据](work_items/DAMAI--full-year-demo.md) | **active（按用户新标准重开；CFO 队首子包，不另列任务）** | 已批准规格；不依赖公开 C 级 | D1–D3 旧版已集成 main `e22d193`，CI run `36137591750` 17/17；原隔离栈验收证据保留。用户 2026-10-12 新增来源事实要求后，旧包仅作为基础夹具完成；需在 CFO 唯一队首中重建来源登记、转换血缘及假设值处置，不与 CFO 并行执行 |
 | 2b | [大麦数据后的剩余体验收口](work_items/UX--post-damai-experience-closeout.md) | **completed** | G2 ✓；用户已批准；ORG-LEDGER CI ✓ | Gate1/Gate5关闭：隔离 Dashboard 7/7；大麦验收 verify19/19、GET矩阵159项零意外、Playwright15/15；生产E2E157/157、Web143/143、mypy203文件、typecheck/lint、M1/链接检查通过；提交`0144bad4`同SHA CI run `36371507389` 17/17 success。常驻库未触碰。 |
 | 2c | [企业组织建制与经营账套初始化包](work_items/ORG-LEDGER--enterprise-initialization-package.md) | **completed** | 大麦发行包 completed；批准三表 schema | `2c7d6eb4`；CI run `36270782272` 的17/17 jobs success。隔离 `full` 首次/重复与 `business` 对账通过；11 个企业/loader 测试、全量 API 852、Web142、脚本107、大麦 verify19/19、API43/43、Playwright9/9、合同/文档/lint/typecheck 均通过。31文件 manifest 稳定 SHA `cbc7cccf…e513`。 |
-| K | [第二代静态知识刷新与战略重基线](work_items/KNOWLEDGE--refresh-v2.md) | **active（唯一队首，当前执行 K0）** | CFO 驾驶舱视觉收尾已完成 | K0：审查/接续 Davybase audit envelope 草稿、生成并严格核验 retrospective manifest、抽样审查旧批次；ObsidianWiki 既存 1,345 条变化只读保护，未提交状态不得冒充干净 pre-K1 snapshot。`CURRENT_RELEASE` 仍为 `flow-knowledge-2026-09-12.1`，未经用户正式裁决不得切换。 |
+| K | [第二代静态知识刷新与战略重基线](work_items/KNOWLEDGE--refresh-v2.md) | **active**（工作包未结案；当前队首待启动） | CFO 驾驶舱视觉收尾已完成 | K0 严格验收完成：1,265 输入 / 1,239 成功 / 2 待复核 / 24 过滤；32 篇与 512 张图抽样对账，Davybase evidence `94fc05d`。K1 开始实现只读 coverage scanner，再扫描企业管理、财务与会计、跨境物流图片覆盖，生成 allowlist 和候选 pathspec；ObsidianWiki 1,365 条既存变化继续只读保护。`CURRENT_RELEASE` 保持 `flow-knowledge-2026-09-12.1`。 |
 | 3 | [公开财报模块 C 级出口](work_items/PUBLIC--c-level-exit-protocol.md) | **active（C级门禁未通过）** | 行身份修订与样本冻结 ✓ | 本轮证据审计已作 No-Go（证据不足，不是准确率判负）；当前队首转入 U04，C级仍无14份完整独立 oracle、新 holdout 首跑及成品盲评 |
 | 3a | [溯源/重述/只读 MCP](work_items/PUBLIC--provenance-restatement-mcp.md) | **completed** | — | B3 溯源 95.5% 行项目带页锚（迁移 0029 + 导入/API/前端）；B4 supersedes 链 + 差异脚本；B5 只读 MCP 三工具（token fail-closed）；B6 确定性差异说明起草 |
 | 3b | [数据扩张、行业基准与 10× 性能基线](work_items/PUBLIC--data-expansion-benchmarks.md) | **active（队列排队，不并行启动）** | 性能基线 ✓；扩张待外部财报 | G2 完成：10×（1034→10340 行）P95 明细 6.2ms/检索 0.97ms/聚合 1.11ms（`perf_baseline.py`）；C1 扩张需真实财报到料 |
@@ -86,10 +86,10 @@ superseded_by: null
 
 ## 唯一完整 To-do 与执行队列（严格串行）
 
-**当前唯一队列（12 项）**：已完成 6 项；实际执行中 1 项；排队 3 项；暂停 1 项；外部材料受限 1 项。唯一执行项：知识刷新 K0–K6（当前子步 K0）；驾驶舱视觉补全与数值格式治理已关闭。
+**当前唯一队列（12 项）**：已完成 6 项；实际执行中 0 项；队首待启动 1 项；排队 3 项；暂停 1 项；外部材料受限 1 项。当前唯一队首：知识刷新 K0–K6（K0 已完成，K1 队首待启动）；驾驶舱视觉补全与数值格式治理已关闭。
 
 0. **completed** [驾驶舱视觉补全与数值格式治理](work_items/COCKPIT--visual-completion-and-number-format.md)：订单/件量整数、金额两位小数、单位格式统一、费用页错误修复、真实图表/趋势/下钻、8 页面截图及隔离浏览器验收；代码 SHA `1a71e33f`，准确 SHA CI run `38936413156` 全部 job 成功。
-7. **active** 第二代静态知识刷新与战略重基线（当前子步 K0）：复核现有 Davybase envelope 实现，移植到最新主线分支，严格验收 retrospective manifest 和旧批次抽样；ObsidianWiki 既存变化只读保护。完成 K0 前不启动 K1，不执行图片 apply 或 release 切换。
+7. **队首待启动** 第二代静态知识刷新与战略重基线（K0 完成，当前子步 K1）：先以测试驱动实现只读 allowlist/coverage scanner，再盘点非微信范围图片覆盖、异常状态和候选变更 pathspec；ObsidianWiki 既存 1,365 条变化只读保护。完成覆盖与安全边界审查前，不执行图片 apply、暂存或 release 切换。
 
 以下 1–11 是驾驶舱队首调整前的原队列事项：1、2、3、5 已完成；4 U04 与 6 P3 暂停；7、9、10、11 排队；8 外部材料受限。旧验证记录仍是历史证据，不代表当前执行位置。
 

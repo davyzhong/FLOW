@@ -12,6 +12,10 @@ applies_to: docs
 
 # 研究资料索引
 
+## Davybase 图片知识化批次验收（2026-10-17）
+
+- [微信图片知识化批次回顾性验收](synthesis/2026-09-18-davybase-image-batch-acceptance.md)：1,265 篇历史输入严格对账为 1,239 成功、2 待复核、24 过滤；32 篇/512 张图抽样哈希核验通过。原运行缺 prompt 哈希，不计 L1。详细 JSONL 证据在 Davybase 分支 `codex/knowledge-run-manifest-k0`。
+
 ## Obsidian 财经/经营预设范围固定截面扫描（2026-09-12）
 
 - [Obsidian 内部知识库固定截面扫描与借鉴评估](synthesis/2026-09-12-obsidian-internal-kb-assessment.md)：用户指令将 vault 建立为 FLOW 常驻内部知识源。首轮订正为 2188 篇（HIGH 1026），15:46 CST 微信增量后当前覆盖 3035 篇正文；八块富矿与增量五项约束登记为统一计划 #19，含授权边界、D051 与持续取用协议。8 份逐组/增量明细见 [2026-09-12-obsidian-scan/](synthesis/2026-09-12-obsidian-scan/)。
