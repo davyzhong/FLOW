@@ -486,7 +486,7 @@ deb2c31551b3e2cdc921f85b8310dc54976cee2ed0aea5583af126f0e8829b6a  ./02_research/
 a883e6891f936c052c9a6a427d27259afe5a663793e7e10123d18e6eb96e4782  ./02_research/synthesis/2026-09-12-obsidian-scan/W3-wechat-general.md
 d84f48a7e7d939d8192ef26d00c45c4676f8713d72504f5a365f89355294ce73  ./02_research/synthesis/2026-09-12-obsidian-scan/W4-wechat-1546-snapshot.md
 7a159ed3359752465050222887c005f8fd73bab1f7456c165959057a20a67f42  ./02_research/synthesis/2026-09-17-obsidian-delta-scan.md
-6fe1c5e37eac019118f3aac784b472ee0096610bf9f7b266464787a79e07d2d2  ./02_research/synthesis/2026-09-18-davybase-image-batch-acceptance.md
+4fcfd98eda1072fc328aacabcba8b46fbc0902c48290e5e2cbb0d7c374c11276  ./02_research/synthesis/2026-09-18-davybase-image-batch-acceptance.md
 68a126f10b21a897e35317c4b0ffcb678f9ed67af35ece1ec0f68d7fe91bd743  ./02_research/synthesis/2026-09-18-refresh-preflight.md
 ba97adb3aa9cb6acb35dfb26d888626bc8b7b31348eaacf45cac399925574575  ./02_research/synthesis/2026-09-19-26-album-assessment.md
 2b121a4b65e4c5a9651192941026bde0abedb4e322778a69d43dc980c9db33ad  ./02_research/synthesis/2026-09-19-finboss-assessment.md

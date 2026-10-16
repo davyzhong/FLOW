@@ -1,8 +1,8 @@
 ---
 doc_id: FLOW-RESEARCH-DAVYBASE-IMAGE-BATCH-K0-001
 title: Davybase 微信图片知识化批次回顾性验收
-doc_type: research-synthesis
-status: verified-with-limitation
+doc_type: verification
+status: verified
 version: 1.0
 created_at: 2026-10-17
 updated_at: 2026-10-17
@@ -11,6 +11,8 @@ depends_on: [FLOW-WI-KNOWLEDGE-REFRESH-V2-001]
 acceptance_refs: [FLOW-PLAN-INTEGRATED-EXECUTION-20260924, FLOW-DESIGN-KNOWLEDGE-REFRESH-002]
 knowledge_release: flow-knowledge-2026-09-12.1
 applies_to: knowledge-system
+commit_refs: [172a0990980ebe7494322f122302ee0dd6f61876, 94fc05d]
+evidence_refs: [c603baab83f7873c852681c69dfb314e7004e43b230ea832fb2a1e9043ce26bc, d638580d88fe75fe4f58ca5320c5ebe53ab40d455f9674954f5de38430e497be]
 ---
 
 # Davybase 微信图片知识化批次回顾性验收

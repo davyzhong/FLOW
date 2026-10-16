@@ -34,10 +34,10 @@ Obsidian Git 截面，重建 FLOW 来源基线与 sealed knowledge candidate；�
 
 ObsidianWiki 的 dirty working tree 不得被清理、重置或用 pull 覆盖；K0 不运行任何 `--apply`。pre-K1 快照同时记录 HEAD/tree、1,365 条 dirty 路径、其内容哈希及整个微信知识库范围文件树摘要，不能伪称仅有 Git HEAD 能代表全部 vault 内容。
 
-## 当前执行子步：K1 非微信图片覆盖（队首待启动）
+## 当前执行子步：K1 非微信图片覆盖（实际执行中）
 
 Davybase 当前没有 `scripts/run/image_coverage.py` 或 `config/knowledge_enrichment_scope.yaml`。
-K1 从 TDD 实现 allowlist 与只读 coverage scanner 开始，再扫描
+K1 已开始从 TDD 实现 allowlist 与只读 coverage scanner，再扫描
 `processed/02_企业管理`、`processed/03_财务与会计`、`processed/04_跨境物流`，统计 Markdown、
 含图文档、引用、可解析、已解释、待解释、过滤、缺失和失败，并生成只含路径定位符/哈希的报告。
 同时核验 ObsidianWiki 1,365 条既存变化未变，生成候选 pathspec 并证明范围外/敏感路径为零。

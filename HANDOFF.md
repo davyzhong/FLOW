@@ -18,7 +18,7 @@ applies_to: repository
 
 ## 一、当前任务
 
-**当前唯一队首：知识刷新 K0–K6（K0 完成，K1 覆盖盘点队首待启动）**。驾驶舱视觉补全与数值格式治理已完成：准确 SHA `1a71e33fc2f779e1a848a4c3736919e98f762bdf` 的 GitHub CI run `38936413156` 全部 job 成功。K0 已在 Davybase 分支 `codex/knowledge-run-manifest-k0` 推送实现 `172a099`、证据 `94fc05d`、交接 `eb8c3d0`；严格复算 1,265 输入、1,239 成功、2 待复核、24 过滤，32 篇/512 图样本对账通过，872 项测试与 Ruff 通过。该 SHA 的 GitHub `ci.yml` 无运行记录，截图工作流不替代 CI。ObsidianWiki `main` `e04d6833` 有 1,365 条既存变化且范围指纹为 `0a42346d…c7f7`，继续只读保护；不执行图片 apply，`CURRENT_RELEASE` 保持 `flow-knowledge-2026-09-12.1`。K1 先只读扫描三个获准目录，具体范围见[知识刷新工作包](docs/50_plans/work_items/KNOWLEDGE--refresh-v2.md)。
+**当前唯一队首：知识刷新 K0–K6（K0 完成，K1 只读覆盖扫描器实际执行中）**。驾驶舱视觉补全与数值格式治理已完成：准确 SHA `1a71e33fc2f779e1a848a4c3736919e98f762bdf` 的 GitHub CI run `38936413156` 全部 job 成功。K0 已在 Davybase 分支 `codex/knowledge-run-manifest-k0` 推送实现 `172a099`、证据 `94fc05d`、交接 `eb8c3d0`；严格复算 1,265 输入、1,239 成功、2 待复核、24 过滤，32 篇/512 图样本对账通过，872 项测试与 Ruff 通过。该 SHA 的 GitHub `ci.yml` 无运行记录，截图工作流不替代 CI。ObsidianWiki `main` `e04d6833` 有 1,365 条既存变化且范围指纹为 `0a42346d…c7f7`，继续只读保护；不执行图片 apply，`CURRENT_RELEASE` 保持 `flow-knowledge-2026-09-12.1`。K1 先只读扫描三个获准目录，具体范围见[知识刷新工作包](docs/50_plans/work_items/KNOWLEDGE--refresh-v2.md)。
 
 用户四项裁决（2026-10-16）：
 1. **L0 挂 CI（选项 C）**：非阻断 `l0-baseline` job（continue-on-error: true），失败仅作信号灯。

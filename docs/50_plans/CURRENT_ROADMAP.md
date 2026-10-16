@@ -72,7 +72,7 @@ superseded_by: null
 | 2a | [大麦物流完整财年演示数据](work_items/DAMAI--full-year-demo.md) | **active（按用户新标准重开；CFO 队首子包，不另列任务）** | 已批准规格；不依赖公开 C 级 | D1–D3 旧版已集成 main `e22d193`，CI run `36137591750` 17/17；原隔离栈验收证据保留。用户 2026-10-12 新增来源事实要求后，旧包仅作为基础夹具完成；需在 CFO 唯一队首中重建来源登记、转换血缘及假设值处置，不与 CFO 并行执行 |
 | 2b | [大麦数据后的剩余体验收口](work_items/UX--post-damai-experience-closeout.md) | **completed** | G2 ✓；用户已批准；ORG-LEDGER CI ✓ | Gate1/Gate5关闭：隔离 Dashboard 7/7；大麦验收 verify19/19、GET矩阵159项零意外、Playwright15/15；生产E2E157/157、Web143/143、mypy203文件、typecheck/lint、M1/链接检查通过；提交`0144bad4`同SHA CI run `36371507389` 17/17 success。常驻库未触碰。 |
 | 2c | [企业组织建制与经营账套初始化包](work_items/ORG-LEDGER--enterprise-initialization-package.md) | **completed** | 大麦发行包 completed；批准三表 schema | `2c7d6eb4`；CI run `36270782272` 的17/17 jobs success。隔离 `full` 首次/重复与 `business` 对账通过；11 个企业/loader 测试、全量 API 852、Web142、脚本107、大麦 verify19/19、API43/43、Playwright9/9、合同/文档/lint/typecheck 均通过。31文件 manifest 稳定 SHA `cbc7cccf…e513`。 |
-| K | [第二代静态知识刷新与战略重基线](work_items/KNOWLEDGE--refresh-v2.md) | **active**（工作包未结案；当前队首待启动） | CFO 驾驶舱视觉收尾已完成 | K0 严格验收完成：1,265 输入 / 1,239 成功 / 2 待复核 / 24 过滤；32 篇与 512 张图抽样对账，Davybase evidence `94fc05d`。K1 开始实现只读 coverage scanner，再扫描企业管理、财务与会计、跨境物流图片覆盖，生成 allowlist 和候选 pathspec；ObsidianWiki 1,365 条既存变化继续只读保护。`CURRENT_RELEASE` 保持 `flow-knowledge-2026-09-12.1`。 |
+| K | [第二代静态知识刷新与战略重基线](work_items/KNOWLEDGE--refresh-v2.md) | **active**（工作包未结案；当前 K1 实际执行中） | CFO 驾驶舱视觉收尾已完成 | K0 严格验收完成：1,265 输入 / 1,239 成功 / 2 待复核 / 24 过滤；32 篇与 512 张图抽样对账，Davybase evidence `94fc05d`。K1 正在实现只读 coverage scanner，随后扫描企业管理、财务与会计、跨境物流图片覆盖，生成 allowlist 和候选 pathspec；ObsidianWiki 1,365 条既存变化继续只读保护。`CURRENT_RELEASE` 保持 `flow-knowledge-2026-09-12.1`。 |
 | 3 | [公开财报模块 C 级出口](work_items/PUBLIC--c-level-exit-protocol.md) | **active（C级门禁未通过）** | 行身份修订与样本冻结 ✓ | 本轮证据审计已作 No-Go（证据不足，不是准确率判负）；当前队首转入 U04，C级仍无14份完整独立 oracle、新 holdout 首跑及成品盲评 |
 | 3a | [溯源/重述/只读 MCP](work_items/PUBLIC--provenance-restatement-mcp.md) | **completed** | — | B3 溯源 95.5% 行项目带页锚（迁移 0029 + 导入/API/前端）；B4 supersedes 链 + 差异脚本；B5 只读 MCP 三工具（token fail-closed）；B6 确定性差异说明起草 |
 | 3b | [数据扩张、行业基准与 10× 性能基线](work_items/PUBLIC--data-expansion-benchmarks.md) | **active（队列排队，不并行启动）** | 性能基线 ✓；扩张待外部财报 | G2 完成：10×（1034→10340 行）P95 明细 6.2ms/检索 0.97ms/聚合 1.11ms（`perf_baseline.py`）；C1 扩张需真实财报到料 |
@@ -86,10 +86,10 @@ superseded_by: null
 
 ## 唯一完整 To-do 与执行队列（严格串行）
 
-**当前唯一队列（12 项）**：已完成 6 项；实际执行中 0 项；队首待启动 1 项；排队 3 项；暂停 1 项；外部材料受限 1 项。当前唯一队首：知识刷新 K0–K6（K0 已完成，K1 队首待启动）；驾驶舱视觉补全与数值格式治理已关闭。
+**当前唯一队列（12 项）**：已完成 6 项；实际执行中 1 项；队首待启动 0 项；排队 3 项；暂停 1 项；外部材料受限 1 项。当前唯一执行项：知识刷新 K0–K6（K0 已完成，K1 正在实现只读覆盖扫描器）；驾驶舱视觉补全与数值格式治理已关闭。
 
 0. **completed** [驾驶舱视觉补全与数值格式治理](work_items/COCKPIT--visual-completion-and-number-format.md)：订单/件量整数、金额两位小数、单位格式统一、费用页错误修复、真实图表/趋势/下钻、8 页面截图及隔离浏览器验收；代码 SHA `1a71e33f`，准确 SHA CI run `38936413156` 全部 job 成功。
-7. **队首待启动** 第二代静态知识刷新与战略重基线（K0 完成，当前子步 K1）：先以测试驱动实现只读 allowlist/coverage scanner，再盘点非微信范围图片覆盖、异常状态和候选变更 pathspec；ObsidianWiki 既存 1,365 条变化只读保护。完成覆盖与安全边界审查前，不执行图片 apply、暂存或 release 切换。
+7. **active** 第二代静态知识刷新与战略重基线（K0 完成，当前子步 K1）：正在以测试驱动实现只读 allowlist/coverage scanner，再盘点非微信范围图片覆盖、异常状态和候选变更 pathspec；ObsidianWiki 既存 1,365 条变化只读保护。完成覆盖与安全边界审查前，不执行图片 apply、暂存或 release 切换。
 
 以下 1–11 是驾驶舱队首调整前的原队列事项：1、2、3、5 已完成；4 U04 与 6 P3 暂停；7、9、10、11 排队；8 外部材料受限。旧验证记录仍是历史证据，不代表当前执行位置。
 
