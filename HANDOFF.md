@@ -18,7 +18,7 @@ applies_to: repository
 
 ## 一、当前任务
 
-**当前唯一队首：知识刷新 K0–K6（当前执行 K0）**。驾驶舱视觉补全与数值格式治理已完成：准确 SHA `1a71e33fc2f779e1a848a4c3736919e98f762bdf` 的 GitHub CI run `38936413156` 全部 job 成功；Web 183/183、API 定向 19/19、隔离账套 19/19、dashboard Playwright 7/7、端到端 15/15、162 条路由矩阵及 8 张截图已核验，M1/M6/plan views/脚本测试/链接检查通过。交付与截图见[工作包](docs/50_plans/work_items/COCKPIT--visual-completion-and-number-format.md)和[视觉验收](docs/60_delivery/verification/2026-10-16--cockpit-51-chart-coverage-mapping-v1.md)。K0 当前只读同步并核验 Davybase/ObsidianWiki remotes 与旧图片批次 manifest；尚未执行 allowlist apply，`CURRENT_RELEASE` 保持 `flow-knowledge-2026-09-12.1`，不得在用户战略裁决前切换。
+**当前唯一队首：知识刷新 K0–K6（当前执行 K0）**。驾驶舱视觉补全与数值格式治理已完成：准确 SHA `1a71e33fc2f779e1a848a4c3736919e98f762bdf` 的 GitHub CI run `38936413156` 全部 job 成功；Web 183/183、API 定向 19/19、隔离账套 19/19、dashboard Playwright 7/7、端到端 15/15、162 条路由矩阵及 8 张截图已核验，M1/M6/plan views/脚本测试/链接检查通过。交付与截图见[工作包](docs/50_plans/work_items/COCKPIT--visual-completion-and-number-format.md)和[视觉验收](docs/60_delivery/verification/2026-10-16--cockpit-51-chart-coverage-mapping-v1.md)。K0 正在审查并接续 Davybase audit-envelope 草稿，随后严格验收旧图片批次 retrospective manifest；Davybase `main` `6efcd6e2` 干净且已同步。ObsidianWiki `main` `e04d6833` 与远端同步但有 1,345 条既存工作区变化，K0 只读保护、不暂存或覆盖；不执行图片 apply，`CURRENT_RELEASE` 保持 `flow-knowledge-2026-09-12.1`，不得在用户战略裁决前切换。完整执行口径见[知识刷新工作包](docs/50_plans/work_items/KNOWLEDGE--refresh-v2.md)。
 
 用户四项裁决（2026-10-16）：
 1. **L0 挂 CI（选项 C）**：非阻断 `l0-baseline` job（continue-on-error: true），失败仅作信号灯。
