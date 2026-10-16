@@ -21,7 +21,7 @@ superseded_by: null
 >
 > **2026-10-17 驾驶舱队首完成**：完整实现与 8 张真实截图提交并推送（代码 SHA `1a71e33fc2f779e1a848a4c3736919e98f762bdf`，前置提交 `607d07f8`）。Web 183/183、API 定向 19/19、隔离账套 19/19、驾驶舱视觉 Playwright 7/7、浏览器 E2E 15/15、162 路由矩阵无意外失败；M1/M6、plan views、155 项脚本测试及链接检查均通过。准确 SHA GitHub CI run `38936413156` 全部 job 成功。本项关闭，唯一队首切换为知识刷新 K0–K6。
 >
-> **2026-10-17 K0 执行口径**：复用 Davybase 已有 `codex/knowledge-audit-envelope` 未提交实现草稿，经独立审查后移植到基于最新 `origin/main` 的工作区；实现 `davybase-knowledge-run/v1` 审计 envelope 与 retrospective manifest，再对 1,265 篇既有微信图片批次验收（目标口径 1,241 成功、24 过滤，实测不符则如实订正）。ObsidianWiki 当前有 1,345 条既存工作区变化，仅只读核验和哈希，不 pull 覆盖、不暂存、不提交；K0 不执行图片 apply、不变更 `CURRENT_RELEASE`。详细步骤见批准的[统一实施计划 K 轨](../superpowers/plans/2026-09-24-flow-integrated-execution-plan.md#10-k第二代静态知识刷新与战略重基线)。
+> **2026-10-17 K0 执行口径**：历史 Git 输出快照实测 1,265 篇含图文档，1,241 篇曾标记 `done=true`；其中 2 篇各记录 1 张失败图，严格终态应为 1,239 成功、2 待复核、24 过滤。ObsidianWiki pre-K1 快照记录 1,365 条 dirty 路径及内容哈希，知识库全范围文件树摘要复验一致；不 pull 覆盖、不暂存、不提交、不执行图片 apply、不变更 `CURRENT_RELEASE`。历史缺 prompt SHA-256，全部 retrospective 文档标记 nonconformant，不计 L1 coverage。详细步骤见批准的[统一实施计划 K 轨](../superpowers/plans/2026-09-24-flow-integrated-execution-plan.md#10-k第二代静态知识刷新与战略重基线)。
 
 > **2026-10-16 用户四项裁决（U04 盲评复评前置）**：① **L0 挂 CI（选项 C）**——新增非阻断 `l0-baseline` job（continue-on-error），失败仅作信号灯不阻塞合并；② **盲评复评范围（选项 A）**——仅旧三样本（顺丰/腾讯/中通），新留出泛化失败归因已登记不扩大；③ **C 级维持 6 条件不变（选项 A）**——诚实标准，做不到如实 No-Go；④ **ZTO 立即恢复（选项 C）**——解封 `wip/zto-integration-20260929`。四项裁决由用户 2026-10-16 一次性给出。
 
