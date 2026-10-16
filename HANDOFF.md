@@ -1,584 +1,225 @@
 ---
 doc_id: FLOW-HANDOFF-STRATEGY-20260912
-title: FLOW 项目尽调、优化与单 Agent 执行总交接
+title: FLOW 项目交接文档
 doc_type: navigation
 status: current
-version: 5.29
+version: 6.0
 created_at: 2026-09-12
 updated_at: 2026-10-16
 owner: FLOW
 applies_to: repository
 ---
 
-# FLOW 项目尽调、优化与单 Agent 执行总交接｜2026-09-30 更新
+# FLOW 项目交接文档
 
-## 最新续接记录（2026-10-16：U04 盲评复评完成 + ZTO 解封 + 驾驶舱关闭）
+> 本文档是下一位 Agent 接手的唯一入口。项目唯一权威状态以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为准；本文档提供接手上下文、踩坑记录和下一步操作指引。
 
-U04 盲评复评 199/199 全绿（C 级条件 5 通过）。C 级条件对账 4/6 满足（条件 2/4 如实 No-Go，用户裁决 3A）。ZTO 解封合并（裁决 4C）。L0 挂 CI 非阻断（裁决 1C）。驾驶舱工作包 completed（批次 A~D 全量）。**下一队列项：知识刷新 K0–K6。**
+---
 
-## 最新续接记录（2026-10-12：完成来源基线审计，登记并复用 P5 菜鸟事实）
+## 一、当前任务
 
-## 最新续接记录（2026-10-13 深夜：时间线迁移交付）
+**队首为空。** 上一队首 CFO 驾驶舱产品化（含 FINMETRIC F1–F4）已于 2026-10-16 全量交付并关闭（`df6073a8` CI 17/17 success）。下一队列项为**知识刷新 K0–K6**。
 
-**演示时间线已迁移至菜鸟真实财年**（`flow/timeline-migration-20261013` @ `087a72f2`）：FY2022（2021-04~2022-03）比较 / FY2023（2022-04~2023-03）分析；明细年度聚合=披露值（零差异）；报表=申请稿 IFRS 原值（合成行全删，简体 IFRS 勾稽器 12 恒等式过门禁）；覆盖矩阵 32/50×2 如实缺省；ORG-LEDGER v2（v1 冻结）。验证：报表契约 8、operations 16、normalization 14、enterprise 7、scripts 155、web 单测、隔离栈 e2e（seed+verify+八页面 Playwright）全绿；全量 API 失败 20→0（route_policy 为 main 既有本地环境项，与本次无关）。注意坑：canonical.py 曾本地复制月份常量导致批次窗口错位（已改为 profile 唯一来源）；重刷发行版后工作簿语义指纹会真实变化，不可再 checkout 回退。已合并 main（`c824f55f`，CI 17/17）。下一步：F3 → 批次 C-2。
+用户四项裁决（2026-10-16）：
+1. **L0 挂 CI（选项 C）**：非阻断 `l0-baseline` job（continue-on-error: true），失败仅作信号灯。
+2. **盲评复评范围（选项 A）**：仅旧三样本（顺丰/腾讯/中通）。
+3. **C 级维持 6 条件不变（选项 A）**：诚实标准，做不到如实 No-Go。
+4. **ZTO 立即恢复（选项 C）**：`wip/zto-integration-20260929` 已解封合并。
 
-## 最新续接记录（2026-10-13：来源登记 + 运营披露层交付，时间线迁移为唯一子步）
+---
 
-ZCode 会话接手队首（用户授权连续执行）。Codex 分支 `codex/damai-logistics-data-audit` 已合并进 main（`3b5c82b8`）。本轮交付（分支 `flow/source-registry-20261013`）：
+## 二、已完成的内容
 
-1. **来源事实登记** `config/damai/source_facts_v1.yaml`（commit `842c8ea8`）：325 条 disclosed_fact，四分型（披露/派生/演示明细/测试建制），FY2021–FY2023 三表逐行 + FY2019–FY2025 分部序列 + 件量/Non-IFRS/业务线占比；原件 SHA 与页锚（损益 p464、资产负债 p466、现金流量 p474、件量 p23、Non-IFRS p21、业务线 p356）对申请稿 PDF（666 页，SHA `3e2c3679…`）机械核验；7 项无来源假设处置登记；校验门禁 `services/api/tests/fixtures/test_damai_source_registry.py` 13 项。申请稿为英文原件，中文行名是整理层规范名（与 item_alias_map cainiao_private 节一致），已在登记中注明。
-2. **运营披露层重建**（commit `e5d8d2c6`）：`operations.py` 改为读登记生成（分部序列 FY2019–FY2025 菜鸟披露值，FY2026 缺省；件量披露值修复数量级语义；废弃收入推导件量）；`facts.py` 加载器按披露事实转换（Q1 stub 未经审计、页锚 23/21/356）；引擎分部主题透传实体来源注记；FY2026 分部主题如实 not_applicable。大麦相关 108 项测试、scripts 155 项、发行版确定性对账、m1 全绿。
+### 本会话（2026-10-13 ~ 10-16）交付清单
 
-**当前唯一子步骤：演示时间线迁移至真实财年**——比较期 FY2022（2021-04~2022-03）、分析期 FY2023（2022-04~2023-03）、FY2021 期初锚。五步：① profile/generator 月份与规模锚定披露值（FY2022 收入 66,866,916 千元、FY2023 77,799,675 千元）；② statements.py 改由登记生成 IFRS 三表、删无来源行、alias map `damai_syn` 重映射；③ FINMETRIC 覆盖矩阵重建；④ ORG-LEDGER v2 重版；⑤ 测试/e2e 扫荡 + 快照重录 + verify 19/19 + 同 SHA CI。验收：明细↔披露年度聚合对账零差异。步骤详情见 CURRENT_ROADMAP 队首行。
+| 交付 | 分支 | main 合并 | CI | 要点 |
+|---|---|---|---|---|
+| **Codex 分支合并** | codex/damai-logistics-data-audit | `3b5c82b8` | ✅ | 28+ 提交（驾驶舱批次 A + ECharts + F1/F2 + 来源审计 + 驾驶舱批次 A 门禁），60 文件 +5552 行 |
+| **来源事实登记** | flow/source-registry-20261013 | `d9a99ece` | ✅ | 325 条 disclosed_fact + 页锚机械核验 + 7 项假设处置；13 项 pytest |
+| **运营披露层重建** | 同上 | `e5d8d2c6` | ✅ | 分部序列/件量改用菜鸟披露值（FY2023 国际 1,519 百万件）；废弃收入推导件量 |
+| **时间线迁移** | flow/timeline-migration-20261013 | `c824f55f` | 17/17 ✅ | FY2022/FY2023 真实财年；明细↔披露年度聚合零差异；IFRS 三表过发布门禁；ORG-LEDGER v2 |
+| **F3** | flow/finmetric-f3-20261014 | `4951fcfb` | ✅ | capex 符号修复（FCF −37.3 亿）；18 项缺口族裁决测试 |
+| **F4** | 同上 | `732d1dcd` | ✅ | 环比 prior_month 窗口 + MetricCard.mom 契约 |
+| **批次 B** | 同上 | `5421f01a` | 17/17 ✅ | 安全规格 V1.1.1 + cfo 角色 + 行动项闭环 + 独立审查 |
+| **C-2** | flow/cockpit-c2-20261014 | `07a07b7c` | 17/17 ✅ | 资产负债/营运资金模块页 |
+| **C-3/C-4/C-5** | flow/cockpit-c3-20261014 | `95427ae4` | 17/17 ✅ | 费用/现金流/风险/合并四模块 |
+| **批次 D** | flow/cockpit-d-20261015 | `14016297` | 17/17 ✅ | 问数入口嵌入 |
+| **51 图验收** | flow/cockpit-acceptance-20261016 | `df6073a8` | 17/17 ✅ | 10 模块×51 图覆盖映射文档 + 全链门禁绿 |
+| **U04 盲评复评** | flow/u04-blind-review-20261016 | `707733dd` | 17/17 ✅ | **199/199 全绿**（顺丰 137 + 腾讯 32 + 中通 30）；C 级条件 5 通过 |
+| **ZTO 解封** | 同上 | `ad255d3d` | ✅ | 合并 `wip/zto-integration-20260929`（+18506 行） |
+| **L0 挂 CI** | 同上 | `b5c58c59` | ✅ | `l0-baseline` CI job（非阻断）+ `l0_baseline_check.py` |
+| **路线图 v5.52** | 同上 | `08dfdfae` | ✅ | U04 → completed；队列 12 项：完成 6 / 执行中 0 / 排队 4 / 暂停 1 / 外部受限 1 |
 
+### 更早交付（已在 main，本轮验证不回退）
 
-本节覆盖下方 2026-09-30 及更早的历史接续说明。唯一完整队列、总数与状态以 [`CURRENT_ROADMAP.md`](docs/50_plans/CURRENT_ROADMAP.md) 为准：**12 项，已完成 4、实际执行中 1、排队 4、暂停 2、外部材料受限 1**。当前唯一任务为 CFO 驾驶舱产品化，FINMETRIC F1–F4 是其顺序子步骤；不并行执行其他任务。执行分支 `codex/damai-logistics-data-audit`，HEAD `11129263`，与远端同步。
+| 内容 | 要点 |
+|---|---|
+| 来源事实登记 `config/damai/source_facts_v1.yaml` | 325 条、四分型、页锚对 PDF 机械核验 |
+| 来源基线审计 | `docs/60_delivery/verification/2026-10-12--damai-source-baseline-audit-v1.md` |
+| 驾驶舱批次 A（总览页） | `ae56e96f`/`b7dc4983`，CI 17/17 |
+| ECharts 6.1.0 + 10 类构建器 | `d563b8dc` |
+| FINMETRIC F1/F2 | 指标引擎类型扩展 + 字典对齐 |
 
-已完成证据：驾驶舱批次 A（`ae56e96f`/`b7dc4983`，准确 SHA CI `36601612612` 17/17）；ECharts 6.1.0 + 10 类图表构建器（`d563b8dc`，本地 vitest 169/169、build 通过）；指标引擎 F1（提交 `11129263`，准确 SHA CI run `38147756845` 17/17）；F2 字典对齐（提交 `0d4b554f`，准确 SHA CI run `38188010174` 17/17）；来源基线计划更新提交 `df0f2e67` 的准确 SHA CI run `38188972800` 17/17。
+---
 
-**F1 已完成**：旧 v1 指纹 `4214ae85…70b38` 保持稳定；API 时钟依赖注入、集成测试固定时间、专用冻结时钟 E2E 启动器解决了验收日期漂移。提交 `11129263` 的准确 SHA CI run `38147756845` 为 17/17 success；Ruff、mypy、shell 语法、文档 M1 通过。本地数据库集成测试因本机 5432 无 PostgreSQL 未运行；CI integration 与 dashboard 两项通过。
+## 三、卡住的问题
 
-**当前唯一子步骤：机器可读来源登记与 Mock 数据适配**。F2 准确 SHA CI run `38188010174` 为 17/17 success；来源基线计划提交 `df0f2e6782e60d65edc955918a892c34868a9c51` 的准确 SHA CI run `38188972800` 为 17/17 success。来源基线首轮审计已归档在 `docs/60_delivery/verification/2026-10-12--damai-source-baseline-audit-v1.md`。审计确认现有 P5 菜鸟 FY2021–FY2023 三表、FY2019–FY2025 分部序列、运营事实和 CAINIAO 加载器可复用；当前大麦生成器绕开了这些源数据，并存在件量数量级/语义错位。下一步建立来源事实机器登记，逐项补充报告/URL/SHA、期间、页表、原值单位与定位，引用现有事实资产而不复制事实源；界定公开事实、可复算派生值、下钻演示明细与测试夹具，再调整生成器。无来源的利息、折旧、负债拆分和现金流细项须从事实层移除、隔离或标 unavailable。此步骤完成前不进 F3；后续仍须验收 51 图表、所有指标/全系统交互链路和成熟组件复用。原始报告未修改，常驻数据库未触碰。
+| 问题 | 影响 | 当前处置 |
+|---|---|---|
+| **route_policy 测试本地失败** | `test_openapi_probe_matches_tsv_two_way` 在本地 main 也失败（CI 通过） | 本地环境项（缺 S3 环境变量时 `create_app` 设置校验失败）；带完整 env 跑即绿。不阻塞 |
+| **C 级条件 2（独立 oracle 0/14）** | 14 份报告无完整独立 oracle | 用户裁决 3A：如实 No-Go，后续迭代补 |
+| **C 级条件 4（泛化留出全败）** | 小米 0/25、阿里 0/15、yunda 0/20、jdl 0/25 | 用户裁决 2A：不扩大盲评范围；适配器开发列后续迭代 |
+| **P5 capex 符号** | `cainiao_private` 段 capex 映射与 damai_syn 同型问题（披露负值应 abs:true） | 登记为公开矩阵治理事项，本轮不动 |
+| **rnd_exp 官方依据** | 原文不可得 | 外部材料受限结案；穷尽搜索后重启条件已列 |
 
-完成 F1 CI 后依次执行 FINMETRIC F2（先核对大麦科目，尤其利息费用；缺失标 unavailable，不补零）→ F3 → F4，再完成安全批次 B、模块 C-2～C-5 和 D。CFO 工作包完成后恢复 U04 盲评复评；C 级仍为 No-Go。常驻开发库不做清理、重置或迁移；数据库测试必须依赖隔离测试库。
+---
 
-严禁沿用下方旧段落所列的 U04 当前队首状态、11 项旧计数或早期指标 CI“仍在运行”的说法；它们是历史快照。项目状态只看路线图顶部当前记录。
+## 四、下一步计划
 
-## 最新续接记录（2026-09-30：CFO 驾驶舱抢队首 + 指标引擎 F1）
+### 下一个队列项：知识刷新 K0–K6
 
-**本节是当前唯一接续点，覆盖下方全部历史。** 驾驶舱线于 2026-09-30 00:14 抢在 U04 之前成为队首（用户裁决），U04 转「暂停·驾驶舱让位」，恢复条件 = 驾驶舱批次 A 完成（**批次 A 已于 01:00 完成并 17/17 CI 绿**）。
+工作包：`docs/50_plans/work_items/KNOWLEDGE--refresh-v2.md`
+规格：`docs/superpowers/specs/2026-09-17-static-knowledge-refresh-and-strategic-rebaseline-design.md`
+实施计划（archived，取方法/命令）：`docs/superpowers/plans/2026-09-18-static-knowledge-refresh-and-strategic-rebaseline-implementation-plan.md`
 
-### 当前任务
+**K0–K6 步骤概要**：
+1. **K0** 同步 Davybase/ObsidianWiki remotes，验收旧图片批次 manifest
+2. **K1** 非微信知识 allowlist dry-run + apply
+3. **K2** Obsidian Git 冻结（14:30 锁定、15:00 候选、15:30 复验）
+4. **K3** 用 accepted manifest 重建来源 registry/baseline/diff
+5. **K4** 全量路由 + HIGH 精读
+6. **K5** 构建 candidate + seal
+7. **K6/战略裁决** 原子激活 release（须用户裁决，Agent 不可代签）
 
-按 `docs/50_plans/work_items/COCKPIT--cfo-dashboard-implementation.md` 与 `FINMETRIC--financial-metric-catalog.md` 推进驾驶舱产品化。**执行位置：`codex/damai-logistics-data-audit` 分支**（HEAD `45703016`），尚未合入 main。
+### D 之后（驾驶舱后续）
 
-### 已完成（含证据）
+51 图验收已通过，驾驶舱工作包关闭。后续可选：
+- 利润增长/盈利能力拆独立路由（当前复用总览 KPI）
+- ECharts 视图层逐图增强（数据表为基线已成立）
+- 行业参考包基准接入（v1.2 16 行业包已有，缺分位分布数据）
 
-| # | 内容 | commit | 验证 |
-|---|---|---|---|
-| 1 | 实施方案文档 | `a80b551f` | docs m1 PASS |
-| 2 | 驾驶舱抢队首插入 CURRENT_ROADMAP v5.36（U04 转暂停） | `a80b551f` | 门禁 PASS |
-| 3 | 设计文档 v0.6 转 approved（用户批准） | `9832a710` | 门禁 PASS（解阻 depends_on） |
-| 4 | **批次 A**：聚合 endpoint + `/cockpit` 页面 + 组件 | `ae56e96f` | vitest 154/154 · pytest 24/24 |
-| 5 | CI 修复：CSS 作用域收敛 + ruff 导入序 | `b7dc4983` | **CI run `36601612612` 17/17 success** |
-| 6 | 批次 A 门禁达成记录 | `76f75bc7` | — |
-| 7 | **批次 C-1**：ECharts 6.1.0 + 10 类图表构建器 + 15 单测 | `d563b8dc` | vitest 169/169 · build ✅ |
-| 8 | 财务指标目录工作包 + CURRENT_ROADMAP 0a 行 | `0f5dde8c` | docs m1 PASS |
-| 9 | **F1**：指标引擎类型扩展（单位/聚合/公式注册表/守恒声明） | `45703016` | tests/metrics 69/69 · mypy 19 files |
+---
 
-### 卡住的问题
+## 五、踩过的坑（重要——新会话必读）
 
-**F1 的 CI 尚未出结论**（run `36655793563`，核对时 11/17，`integration` / `metrics-known-answers` / `intake-e2e` / `data-contract` / `analysis-invariants` / `publishing-golden` 仍在跑或待判）。这批 job 都依赖 Postgres/MinIO，`Post` cleanup 步骤会让状态滞后 10–20 分钟——**上一轮曾把这种滞后误判为失败**。核对方式：
+### 多 worktree / cwd 漂移
+
+1. **shell cwd 持久化跨命令**：上一条命令 `cd` 到了哪里，下一条命令就在哪里执行。**对策：每条 git 命令前自校验 `git branch --show-current`；多 worktree 场景用绝对路径 `git -C <path>`。**
+2. **两个工作区同时操作导致文件版本错位**：worktree 里的文件和主工作区的文件是独立 checkout。曾在 worktree 里跑 `ruff check --fix` 但编辑了主工作区的文件（或反过来）。**对策：确定一个工作区作为本轮的唯一工作区，不混用。**
+3. **分支误建到 worktree**：`git switch -c` 在 cwd 所在仓库执行，如果 cwd 在 worktree 里就建到 worktree 了。**对策：切分支前先 `pwd` 确认。**
+
+### 测试与环境
+
+4. **S3 环境变量**：`create_app()` 启动时校验 `s3_access_key`/`s3_secret_key` 等。本地跑测试必须设置：
+   ```bash
+   export DATABASE_URL='postgresql+psycopg://flow:flow_dev_only@localhost:5432/flow_test'
+   export REDIS_URL='redis://localhost:6379/0'
+   export S3_ENDPOINT_URL='http://127.0.0.1:9000'
+   export S3_BUCKET='flow' S3_ACCESS_KEY='flow' S3_SECRET_KEY='flow_dev_only'
+   export FLOW_DEV_ACTOR_ID='flow-dev-bp'
+   ```
+5. **测试连常驻库事故已修**（`b60c51b`）：conftest 默认切 `flow_test`；但如果 Docker 不在线（`docker info` 失败），PostgreSQL 5432 拒连，需要先 `open -a Docker` + `make infra-up`。
+6. **测试文件多轮字符串手术易留残留**：本次 C-3 的 `test_cockpit_modules.py` 经多轮 sed 后留下 `-> SimpleNamespace: -> SimpleNamespace:` 语法错误。**对策：复杂改动直接重写整个文件而非增量 patch。**
+7. **CI ruff 与本地 ruff 版本可能不同**：本地 `uv run ruff check` 全绿但 CI 报 `E501`（行长度）。**对策：提交前在 `services/api/` 目录下跑 `uv run ruff check src tests migrations`（CI 的确切命令）。**
+
+### 数据一致性
+
+8. **canonical 月份常量**：`canonical.py` 曾本地复制月份常量导致批次窗口错位。已改为从 `profile.py` 唯一导入。**教训：月度合同只在 profile 定义一次，别处 import。**
+9. **发行版工作簿语义指纹**：重刷发行版后 xlsx 的语义指纹会真实变化（数值变了），**不可**习惯性 `git checkout` 回退——只有 zip 容器噪音（时间戳）才该回退。
+10. **毛利校准基准行**：行间相对结构按比例缩放后，尾差并入校准基准行。基准行选择错误会导致年度合计偏差——基准行必须在循环外确定（如最大毛利行），且在循环内 `continue` 跳过常规缩放。
+11. **`_family_month_revenues` 尾差**：三业务族分摊后族之和可能偏差 0.0002——需在最大族吸收尾差保证月度目标精确闭合。
+
+### 前端 / Next.js
+
+12. **Server Component 不能传函数 prop 给 Client Component**：page.tsx（server）向 module-page.tsx（client）传 `fetcher` 函数会触发 Next.js SSR 错误。**对策：client 组件自己 import flowApi 取数，page 只传数据属性（moduleId/title）。**
+13. **`const module = ...` 触发 `@next/next/no-assign-module-variable`**：ESLint 规则禁止赋值给变量名 `module`。**对策：改名为 `data` 或 `mod`。**
+14. **`"use client"` 页面不能导出 `metadata`**：Next.js 要求 metadata 只在 Server Component 导出。**对策：page.tsx 保持 server component，client 逻辑放独立组件文件。**
+15. **ECharts 是独立依赖**：worktree 的 node_modules 可能缺 echarts（早期 lockfile 未含）。**对策：worktree 里先 `pnpm install --frozen-lockfile`。**
+
+### CI / 构建
+
+16. **CI ruff 版本 / 规则集与本地可能不同**：本地全绿但 CI 报错。**对策：提交前跑 CI 的确切命令：`cd services/api && uv run ruff check src tests migrations && uv run mypy src`。**
+17. **新增 CI job 必须同步 `test_ci_gate_inventory.py`**：`EXPECTED_GATES` 集合和 `test_every_ci_gate_has_an_explicit_timeout`（timeout-minutes 必填）都要更新。
+18. **CI 失败时先拉日志定位根因再修**：`gh api repos/davyzhong/FLOW/actions/jobs/<jobId>/logs --allow-escape-sequences | grep -a 'error\|FAILED'`。不要凭 job 名猜测。
+
+### Git / 文档
+
+19. **`git push -q` 静默失败**：如果远端有新提交（如截图 bot），push 会 rejected 但 `-q` 吞掉输出。**对策：push 后 `git fetch && git rev-parse origin/<branch>` 确认远端 SHA 与本地一致。**
+20. **docs/ 新增 .md 必须 unique doc_id**：复制文件改内容但忘改 `doc_id` 会触发 m1 重复检查。
+21. **worktree 的 `node_modules` 可能过时**：worktree 共享代码但不共享 `node_modules`。在 worktree 里跑前端测试前先 `pnpm install --frozen-lockfile`。
+22. **管道 `| tail -N` 会吃掉前置命令的退出码**：`cmd | tail` 永远返回 tail 的退出码（0）。**对策：需要检查退出码时不用管道，或用 `set -o pipefail`。**
+
+---
+
+## 六、关键命令速查
 
 ```bash
-cd /Users/qiming/workspace/FLOW
-gh run view 36655793563 --json conclusion,jobs | python3 -c "
-import sys,json
-d=json.load(sys.stdin); print(d['status'], d.get('conclusion'))
-print([j['name'] for j in d['jobs'] if j['conclusion']!='success'])
-print(sum(1 for j in d['jobs'] if j['conclusion']=='success'),'/',len(d['jobs']))"
+# 环境启动
+open -a Docker && make infra-up
+
+# 后端测试（必须从 repo 根或 services/api 运行）
+cd services/api
+export DATABASE_URL='postgresql+psycopg://flow:flow_dev_only@localhost:5432/flow_test'
+export REDIS_URL='redis://localhost:6379/0'
+export S3_ENDPOINT_URL='http://127.0.0.1:9000' S3_BUCKET='flow'
+export S3_ACCESS_KEY='flow' S3_SECRET_KEY='flow_dev_only'
+export FLOW_DEV_ACTOR_ID='flow-dev-bp'
+uv run pytest -q tests/ --ignore=tests/e2e
+
+# 静态检查（CI 确切命令）
+uv run ruff check src tests migrations && uv run mypy src
+
+# 前端
+cd apps/web && pnpm typecheck && pnpm test && pnpm lint && pnpm build
+
+# 契约再生
+cd /Users/qiming/workspace/FLOW && make contracts && make contracts-check
+
+# 文档门禁
+python3 scripts/check_docs.py --phase m1
+
+# 计划视图再生（路线图改动后必须跑）
+python3 -c "
+import sys; sys.path.insert(0, '.')
+from scripts.documentation.plan_views import write_views, check
+from pathlib import Path
+write_views(Path('.'))
+print(check(Path('.')) or 'OK')
+"
+
+# 发行版重建
+uv run --project services/api python scripts/build_damai_demo.py --output fixtures/damai
+uv run --project services/api python scripts/build_enterprise_data_package.py build
+uv run --project services/api python scripts/build_enterprise_data_package.py verify
+
+# 来源登记重建
+uv run --project services/api python scripts/build_damai_source_registry.py
+uv run --project services/api python scripts/build_damai_source_registry.py --check
+
+# 盲评复跑
+FLOW_HOLDOUT_RUN_ID=<run-id> uv run --project services/api python scripts/holdout_u4_run.py
+
+# e2e
+bash scripts/test_damai_demo_e2e.sh
 ```
 
-真实失败取证（`--log-failed` 在 run 未完成时不可用）：
-
-```bash
-gh api repos/davyzhong/FLOW/actions/jobs/<jobId>/logs --allow-escape-sequences \
-  | sed 's/\x1b\[[0-9;]*[a-zA-Z]//g' | grep -E "^E |FAILED|assert"
-```
-
-### 下一步计划（严格串行）
-
-1. **核验 F1 CI** → 绿则把 FINMETRIC 工作包 F1 标 completed；红则读日志修复（参考下方踩坑记录）。
-2. **F2**：写 `config/metrics/financial_metrics_v1.yaml`（盈利能力 + 偿债 + 营运，约 16 个指标）+ 每个指标的守恒/勾稽测试。**开工前先核实大麦演示数据是否具备所需科目**（尤其利息费用，见工作包 Q3），不能映射的显式 `unavailable`，不补零。
-3. **F3**：同目录补费用 + 现金流（约 12 个）。
-4. **F4**：驾驶舱投影接入，逐步解锁环比/行业分位（当前永久 unavailable）+ 契约更新 + CI。
-5. **批次 C-2~C-5**：8 个模块页逐个交付，每批走批次 A 同级门禁。
-6. **批次 B**：安全规格 V1.1.1（用户已批准**新增 `cfo` 角色** + 3 个 `cockpit.action_item.*` Action）→ 独立审查 → 用户批准 → 实现 → route-inventory 登记。
-
-### 本轮踩过的坑（重要）
-
-1. **重复劳动**：11:38 接到「参考微信链接做驾驶舱设计」时**没有先查仓库**，独立做了一份 D055 + 两份规格文档；仓库里已有 v0.2/v0.3 设计 + 55KB 高保真原型（另一会话产出），且我的 D055「驾驶舱作为独立产品线」与已裁决的「驾驶舱 = 工作台高管呈现层，不是独立产品」**直接冲突**。已撤销（`mavis-trash`）、删除冲突改动（`git checkout`）、只保留增量价值。**教训：接到设计/实现任务先 `git log --all` + `git status` 查已有产出。**
-
-2. **CSS 全局污染**（CI 抓出，本地全绿）：`cockpit.css` 原在 `app/layout.tsx` 全局 import，裸类名（`.kpi`/`.trend`/`.concl`/`.cmp`/`.drill`）参与全局层叠，破坏既有 dashboard 视觉基线（`toHaveScreenshot`）与 axe 判定，**连锁 7 个 job 失败**。修复：改为组件级 import（`cockpit-overview-app.tsx` 内）。**教训：新增全局 CSS 必须用组件级 import，或类名全加模块前缀。**
-
-3. **CI 状态滞后误判**：把 `Post` cleanup 未完成的 job 当成失败，凭空怀疑 contracts 污染。**教训：先看 `status` 再看 `conclusion`；`in_progress` 的 job 不算失败。**
-
-4. **本地 DB 悬挂事务**：`flow_test` 库有 `idle in transaction` 残留连接（pid 28964）锁住 `source_record`，autovacuum 被阻塞，本地测试静默卡住 5+ 分钟。查法：`docker exec flow-postgres-1 psql -U flow -d flow_test -c "SELECT pid,state FROM pg_stat_activity WHERE datname='flow_test' AND state!='idle'"`。**教训：本地测试无输出超过 2 分钟先查 DB 锁，不要等。**
-
-5. **ECharts 类型极严**：`formatter` 回调签名与 series 联合类型导致 10 个构建器全部报错。解法：统一按 `ChartOption`（宽松侧）收口，而非逐条 `as unknown as`。另注意 `{...AXIS, axisLabel}` 的展开顺序——`axisLabel` 写在 `...AXIS` 之后才不被覆盖。
-
-6. **公式注册表写坏两次**：`def _roe_du pont`（非法标识符）导致文件无法导入；正则替换 `Literal[...]` 产生双逗号 `,,`。**教训：批量文本改代码后必须立即 `ruff check` + 导入验证，别攒到最后。**
-
-### 与下方历史的关系
-
-下方 0.4 夜间接手执行手册、0.3 交接、首轮快照等均为**历史记录**，其中关于 U04 / C 级 / ZTO 的进度仍然有效（U04 现为暂停状态）。驾驶舱线的全部权威信息在本节 + `COCKPIT--cfo-dashboard-implementation.md` + `FINMETRIC--financial-metric-catalog.md` + `docs/superpowers/plans/2026-09-30-cfo-cockpit-implementation-plan.md`。
-
-### 下一位 Agent 的第一条动作
-
-```bash
-cd /Users/qiming/workspace/FLOW
-git checkout codex/damai-logistics-data-audit 2>/dev/null || git switch codex/damai-logistics-data-audit
-gh run view 36655793563 --json conclusion,jobs   # 先确认 F1 CI 结论
-```
-
-
-**唯一 To-do（11项）**：1 ORG-LEDGER 完成；2 UX 收口完成；3 C级样本/证据审计 No-Go 结案（不代表出口通过）；4 U04 解析器适配与未调参留出首跑 **当前执行**；5 C级基准与最终 Go/No-Go 排队；6 P3真实数据扩张排队；7 K静态知识刷新与战略重基线排队；8 rnd_exp官方依据核验排队；9 U09/O05试点排队；10 U10证据决策排队；11内部月度工作台与真实周期验收排队。总计11项：已完成3、执行中1、排队7、外部条件受限0。
-
-U04 现状：顺丰文本型“合并及公司”报表、腾讯动态财报表格定位、中通公告重复字形解析与逐行比较器均已修复；旧回归产物 `validation/financial_reports/holdout_runs/2026-09-29-adapter-v4/` 显示顺丰137/137、腾讯32/32、中通30/30，合计199/199匹配、0错配、0不可比较。`tests/statements` 83项、`scripts/tests` 155项、Ruff、mypy 203文件、plan-view、链接检查、文档M1均通过。准确SHA CI `07819d56`/run `36491622539` 的 smoke 揭示生产镜像缺`pypdf`，根因是此前仅列在dev依赖。已将`pypdf`移入运行依赖并更新`uv.lock`；独立 Compose `flowu04smoke`中 API/Web health 200、迁移0031与dev主体seed成功。修复提交`1b313cb`推送后，准确SHA CI run `36494934044` 的 smoke、data-contract、integration等全部通过；唯一失败为 `module-boundaries-e2e` 的 uv post-cleanup 找不到未创建的 cache 目录，Playwright 测试步骤自身成功。修复须改 `.github/workflows/ci.yml`，触及全局 CI/CD 配置红线，等待用户批准。较早 adapter-v2/v3 与日期目录保留作开发轨迹，不得覆盖或当作新留出结果。
-
-**安全顺序**：代码修复已提交推送，但准确 SHA CI 仍有 module-boundaries job 的 post-cleanup 失败；用户批准并完成最小 CI 缓存修正、准确SHA CI全绿前，禁止首次运行或查看小米/阿里抽取结果。运行器默认只跑已降级的旧三样本，小米/阿里必须显式 `--samples xiaomi_2026h1 alibaba_fy2027q1`。解锁后以唯一新 run ID 首跑一次，记录 PDF/oracle/parser SHA、完整 diff 和 `manual_intervention_count: 0`；首跑后不调参，差异只归因或按协议降级。旧199行是回归结果，不是盲留出通过。常驻`flow`及旧`flow_test`不连接、不写入。
-
-**下一单一动作**：等待用户批准最小 CI workflow 变更（在 module-boundaries job 关闭 uv 缓存），更新计划/状态后实施并推送；准确 SHA CI 全绿后执行小米/阿里未调参首跑。隔离验证的临时 Compose override `infra/compose.u04-smoke.yaml` 与 `flowu04smoke` 资源已按项目名精确清理，不纳入版本控制；禁止执行默认项目 `down` 或任何常驻数据清理。
-
-## 当前唯一接续点（2026-09-29，覆盖下方旧进度）
-
-当前唯一执行位置：按`docs/50_plans/CURRENT_ROADMAP.md`第4项执行 U04，严格在`main`串行推进。第3项样本冻结与现有证据审计已完成，结论为 C 级 No-Go（独立证据不足）；这不是准确率判负，也绝不等于出口通过。14份报告/PDF/YAML/L1/映射/实现身份已冻结在`validation/financial_reports/c-level-freeze-2026-09-29-v1.yaml`；L0 1532、L1页锚1776/1776。实施行身份修订`eb2b7f3cbadec0c36eb4b36473c6321d69aa4fff`准确SHA CI run `36478301484` 17/17 success。新冻结生成器6项定向测试通过；财报登记及5份oracle YAML可解析，当前oracle哈希全部一致，保留并纠正了小米/阿里FY2027Q1两条旧错误声明。审计发现：14份目标报告完整独立 oracle 为0；旧首跑199行全不可比较；新抽签的两份候选没有首跑结果；当前交叉评并非成品盲评。详情见`docs/60_delivery/verification/2026-09-29--public-sample-freeze-oracle-audit-v1.md`。旧`flow_test`只读、常驻`flow`未碰。
-
-**唯一完整 To-do 与进度**（完整11项及状态只以 CURRENT_ROADMAP 为准；以下仅列本工作包接续步骤）：
-1. JDL v3/L1 v3实现与验收：完成，`db646f45`/CI `36427598983` 17/17；隔离库 L0 1514/1514、当时L1 1775/1775。
-2. 菜鸟19条异常主张审定：完成，`279d5e46`/CI `36441076686` 17/17；全部为FY2021当前值或FY2022比较值，不修改抽取数据。
-3. BABA FY2023比较期与P5派生一致性：完成，`7735f273168d70e03a4b8ec43e83abd78546446e`/CI `36463457793` success；L0 1514/1514、L1 1776/1776、P5事实键670稳定。
-4. **已完成：109疑点逐格语义裁决。** v2逐格台账111格：109格归入可重建主集，2格原件值真实但摘要分母未证；另登记BABA摘要差8、阿里股权摘要差1无法从冻结选格清单复原。本步骤不代表C级通过。
-5. **已完成：版本化行身份/范围修正与全链复验。** 映射40行/79值，BABA 28格虚构 current 别名未写入产品。隔离`flowcverify` L0 1532/1532、L1 1776/1776，P5 facts 670条SHA稳定；财报API 80/80、脚本138/138。原件与常驻库未改动。
-6. **[完成—No-Go] 冻结样本与现有独立证据审计。** 确定性清单封存14份 PDF/YAML/报告身份/答案集/实现 SHA；审计现有 oracle、旧首跑、新留出及交叉评边界。0/14份完整独立 oracle；旧首跑199行不可比较；新留出暂无首跑；现有交叉评不能替代成品盲评。按证据门槛作 C 级 No-Go，具体证据见冻结与 oracle 审计记录。
-7. **[当前执行] U04 解析器适配与冻结留出首跑。** 先写测试再适配旧版式，跑旧三样本回归；实现冻结后再对小米2026H1、阿里FY2027Q1不调参首跑并存档输入/实现/oracle SHA及完整 diff。首跑之前不得为这两份样本调参；污染则按协议降级并启用预先抽中的备选。
-8. **[后续] C 级准确率和最终 Go/No-Go。** 补足完整独立 oracle 与报告成品盲评，按 100% 零容忍标准重跑 L0/L1、逐项归因并形成可审计的最终出口裁决。
-
-当前下一动作：运行新增冻结测试及全量脚本测试、文档 M1 与链接门禁；检查冻结文件可逐字节重建，再提交并立即推送。准确 SHA CI 全绿后，按唯一路线图进入 U04 解析修复。主工作树为`.worktrees/execution-convergence`的`main`；根目录被保留的未提交`AGENTS.md`与`apps/web/next-env.d.ts`不得触碰。全链财报验证只用隔离栈；旧`flow_test`不重刷，常驻`flow`不连接、不写入。不要将下方历史快照里的旧“下一步”当作当前队列。
-
-## 首轮执行快照（已由上方当前唯一接续点覆盖；仅作历史）
-
-当前唯一任务仍是 `CURRENT_ROADMAP` 第3项公开财报 C 级出口。台账首版见 `docs/80_reviews/2026-09-28-c-level-cell-ledger.md`：42异常42行；JDL 222格中22格错归属已由v2排除、200格仍未核验；109疑点组计数121，扣唯一明示重叠后120，与摘要109差11。新增生成器 `scripts/build_public_c_level_ledgers.py`、4项回归及三个CSV。定向测试与文档M1均通过；链接检查、提交推送及准确SHA CI仍待做。C级未通过。下一步先追溯109疑点逐格成员/去重键并解释差额，再复核JDL原200格。保持 `main` 串行执行，常驻 `flow` 数据库/服务不触碰。
-
-**验证更新**：脚本测试114/114、Ruff、M1（299份文档、0错误）、全库链接检查（0错误）与 `git diff --cached --check` 均通过。提交与同SHA CI仍待完成。
-
-**接续状态更新**：首版台账已提交 `cbe11d6c405e0b9a23353d63b264fc57e8a360c9` 并推送；准确SHA CI run `36391911442` 17/17 success。随后冻结疑点候选输入并形成111格唯一候选台账（112组成员、一个明示重复）；报告总表109与其差2。差额定位为BABA FY2020「股权证券及其他投资」期初9,927/期末4,234候选，原件物理41/印刷39可证流动证券投资与非流动同名行并存；但原评审没解释是否纳入分母，故保留未决，不为凑数删格。脚本全量115项、Ruff通过；需做M1/链接、提交推送、核对该SHA CI。绿后下一项为JDL英文版原200格逐格复核；常驻flow库不触碰。
-
-> 本页是下一位单一 Agent 的工作入口，整合了多 Agent 执行审计、R1 修复复核、竞品与方法论研究、工程收口计划和后续产品优化建议。它负责说明“现在在哪里、还要查什么、先改什么、怎样证明完成”；项目状态仍以 [PROJECT_STATE](docs/00_start_here/PROJECT_STATE.md) 为唯一事实源，任务顺序仍以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为唯一执行入口。
-
-## 0.4 夜间接手执行手册（2026-09-27，当前权威）
-
-> **本节覆盖本文其余旧会话交接快照。** 旧章节保留历史证据，不可据其旧顺序领取任务。下一位 Agent 开始前先从 GitHub 同步 `main`，再读 `AGENTS.md`、`docs/00_start_here/PROJECT_STATE.md`、`docs/50_plans/CURRENT_ROADMAP.md` 和相应工作包。唯一任务顺序是路线图中的 11 项队列；本节只是对同一队列逐项提供执行手册，不构成第二条队列。
-
-**最新进度更正（2026-09-28，优先于下方旧接续点）：** UX Gate1/Gate5已关闭。提交`0144bad4be1a869a5a4073c516d78b4bf333cbee`同SHA CI run `36371507389` 17/17 success；隔离Dashboard7/7，大麦旅程verify19/19、只读矩阵159项零意外、Playwright15/15，生产E2E157/157、Web143/143、API mypy203文件、typecheck/lint、文档M1/链接门禁通过。常驻`flow`未触碰。当前唯一任务为公开财报C级逐项归因、原件复核与抽取修订。只读基线审计提交`f1ab428343e809364c2fd519497c56b4ac7c53bf`对应CI run `36375305428`准确SHA 17/17 success。JDL页界限修订已完成：提交`5c84c81fdd3c0908891d16f8dcfe05e1d2e64b6c`同SHA CI run `36382657675` 17/17成功；版本化抽取v2共107行、24/24勾稽，L1答案集1,775/1,775页锚可定位。独立Compose栈迁移至0031并装载14份报告后，L0 1508/1508一致；L1 1775锚零失配（strong 981 / weak 775 / sign-flip 15 / visual 4）。财报目录76项、脚本目录110项测试及M1/链接检查通过；隔离卷已清理，常驻栈未用于测试。页锚可定位不等于准确率，C级仍未通过。**当前唯一下一步**：将准确SHA CI结果同步到权威路线图/状态/交接并提交推送，验证该状态提交；随后建立42异常/109疑点/JDL原200格逐项处置台账。旧版HANDOFF中的其他“当前下一步”均为历史快照，以本段与CURRENT_ROADMAP为准。
-
-**此前接续点（已由上方最新进度覆盖）：** 已完成Dashboard、Analysis/Investigation身份深链阶段。当前工作树与未提交项以 `git status` 为准；具体证据见路线图和UX Gate1记录。不得触碰常驻`flow`（Compose标签来源混杂）。
-
-> **2026-09-29 深夜覆盖（接手会话）**：①`229069ca` 两处最小 CI 修正准确 SHA CI 17/17；②小米/阿里适配器交付并按 §4.5 降级回归集（适配后 24/25、15/15；旧回归 199/199 零退化），U4 关单（`a28b638d`/run `36525496607` 17/17）；③备选 yunda/jdl 首跑如实失败（保持留出）；④常驻库两偏差批次授权清理完成（备份 `fc06fb58…0737`）。**第 5 项 C 级基准重跑与 Go/No-Go 已完成：No-Go 裁决**（L0 1532/1532、L1 1776/1776 隔离重跑全绿；条件 1/2/4/5 未满足，见裁决文档）。唯一队首=第 6 项数据扩张/来源接入（ZTO 文本层、阿里分部、来源链接）。
-
-### 接手基线、当前状态与操作纪律
-
-- 2026-09-27 `/metric-library` 子项正式关闭：页级 API→版本化配置→UI逐值审计完成，代码提交 `71ea2dc9` 同 SHA CI run `36299600894` 17/17作业 success。隔离大麦全旅程 verify19/19、只读矩阵159条（149预期200、10预期422、意外0）。指标库 E2E 将 `/api/v1/metric-library` 的通用/物流全部指标卡字段和每个分区（行业参考包、勾稽关系、CAS↔IFRS映射、会计基础/分录模板、治理事件）逐项和实际 UI 对账；对真实财报与大麦 synthetic 覆盖矩阵比较每个快照、40项指标单元格、缺失项/原因、汇总KPI、来源说明与财报深链。页面未发现API/UI不一致。
-- 2026-09-27 `/reports` 子项正式关闭：提交 `e869f259991830df2ac9e69929aa712f9677bf0c` 的 GitHub CI run `36306908435` 最终17/17 success（首次 `user-closure-e2e` 的 cleaning-summary GET 403；同 SHA 重跑通过，根因未知且未调整权限策略）。隔离值级 E2E10/10、verify19/19、typecheck/lint通过。此条保留阶段结论；工作区状态以后续“最新接续点”为准。
-- 2026-09-27 `/data` 与 `/investigations` 的只读逐值 E2E 由 `3660389e038083dfc92f6812c28e6ad7e2a2cfdb` 纳入主线。隔离验收 verify19/19、矩阵159项（149预期200、10预期422、零状态不匹配）、Playwright12/12、typecheck通过、lint零错误/1既有warning；CI run `36310017180` attempt2 17/17 success。attempt1 smoke `make stack-up`失败、同SHA attempt2通过，根因未知。两个页面子项均已关闭，后续只按本节最新接续点执行。
-- 2026-09-27 环境风险只读发现：本机常驻 Compose project `flow` 的 MinIO 容器标签指向 `.worktrees/execution-convergence/infra`，Postgres/Redis 标签指向旧 `.codex/worktrees/damai-logistics-implementation/FLOW/infra`，共享 project 名和端口但来源混杂。本轮未停止、重建或写入这些容器/数据库；所有隔离验收只用 `damai-demo-iso`。需在允许的常驻栈维护窗口另行核清所有权后再处理，当前不得把它当作单一工作树的可安全重启环境。
-- 2026-09-27 `/investigations` 值级页审计关闭：`3660389e` 的新增只读 E2E 逐项比对 `GET /api/v1/investigations` 与列表 DOM 的行数、Finding 类型、格式化影响金额、比较口径、状态、评分及 `/analysis?run_id=` 与调查身份深链。测试按 Finding 标题定位以规避 TanStack 表格排序差异；整行 `data-href` 与批次/指标快照/分析运行查询身份比对。未发现页面值错配；既有隔离旅程继续验证“进入调查”及审核签发。`3660389e` 同一隔离大麦旅程 Playwright12/12通过，CI run `36310017180` attempt2 17/17 success（专属 investigation-e2e job也成功）。页面子项已关闭，但 Gate1完整路由证据、所有状态/视口矩阵、所有目标下钻及Gate5仍未完成。
-- 2026-09-27 接手会话两项治理动作：①根工作树遗留的 `AGENTS.md` 语言铁律（v1.4，用户 2026-09-26 要求全部交互/文档一律中文）此前只在 `codex/damai-logistics-data-audit` 工作树未提交，已迁入 main 合并为 v1.6（提交 `bf48319e`）；②codex 两个大麦分支全部提交经 `git cherry` 核验均已有 patch 等价物在 main，无需合并，分支保留。GitHub 曾一度 SSL 中断（本机网络正常、github.com 不可达、无代理配置），恢复后推送成功；推送失败须立即向用户报告原因，不得静默搁置。
-- 同轮质量：Web143/143、全隔离 Playwright9/9、verify19/19、矩阵159无意外；生产构建 UI 一致性/响应式/状态/导航/深链 E2E93/93；`make typecheck`通过；`make lint`零错误、1条既有 TanStack Table warning。TDD 中两次红灯均证明测试预期应按页面真实合同修正（摘要 KPI 布局与 MPM 文案前缀），没有通过删断言或改产品实现来迎合；修正后全套通过。
-- 2026-09-27 `/operations` 子项正式关闭：代码提交 `0f8d92cf` 经远端 README 自动截图提交合并后的 `main@8bd71798` CI run `36293915314`，17/17作业成功。修复切换分析上下文时旧报表值残留：新上下文选择事件立即清除旧概览、冻结信息并进入 loading，避免新报表下仍展示旧值；组件回归7/7通过。
-- `/operations` 隔离旅程：`bash scripts/test_damai_demo_e2e.sh` 全程使用专属 Compose 栈，seed 后 verify19/19；安全 GET 可见矩阵159条（149预期200、10个合同禁止组合预期422、意外0）；Playwright9/9。增强的 E2E 将大麦FY2025/FY2026及公开经营7期间共9上下文逐一比对 API 与 DOM 中六主题状态、每个指标精确值/显示值、披露来源、页码/来源哈希、不可用原因、指标定义深链及管理关注。首次复跑暴露测试误重复选择当前上下文造成页面清空；已修正 E2E 等待逻辑，未降低值级断言，复跑9/9通过。
-- `/operations` 同轮回归：Web143/143、经营 API38/38、`make lint` 0 error（保留既有 TanStack Table warning）、`make typecheck` 通过；M1、文档链接、plan views门禁通过。提交 `0f8d92cf` 推送时发现远端先到 README 截图自动提交 `27babc32`，已普通合并为 `8bd71798` 并保留双方历史。该SHA的 CI run `36293915314` 17/17 success。
-
-- Dashboard筛选检查点 `99991566`/CI `36279509026` success，文档 `d836a6ca`/CI `36279766191` success；`/statements` 逐值 E2E `78722e73` 与前置状态文档CI `36282388214`、`36281158908` 均已 success。`/analysis` 十指标按 FY2026 披露原文独立复算、API/UI逐值对齐通过；发现并修正DSO错误值（旧`0.3500`，正确`116.3898`天），补齐净利润增长、ROE、流动比率、自由现金流计算，并让不可用态显示合同具体原因。隔离verify19/19、GET矩阵159项（149预期200、10预期422、零意外）、浏览器9/9；工作台API11/11、Web142/142，类型与静态检查通过。提交 `bc8fa678` 已推送；同SHA GitHub CI run `36288403912` 的17/17作业全部 success，`/analysis` 子项可关闭。旧CI影响分析单例未复现：隔离目标单跑两次、模块3/3、CI集成等价批次267 passed/3 warnings、批后单跑通过；根因未知。
-- 本轮在 `/Users/qiming/workspace/FLOW/.worktrees/execution-convergence` 的唯一 `main` 工作树串行执行；所有队列项均按主线逐步提交。ORG-LEDGER `2c7d6eb4` / CI `36270782272` 17/17 success。UX 的 Dashboard、`/statements`、`/analysis`、`/operations`、`/metric-library`、`/reports`、`/data`、`/investigations`页面子项均已值级审计；Gate 1仍未闭环：完整路由覆盖表、所有状态/视口/下钻覆盖和Gate 5同SHA全链验收。
-- **当前路线图计数（唯一队列11项）**：已完成 1（ORG-LEDGER）、实际执行中 1（UX 全站验收）、排队 8、外部材料受限 1。第1项因提交 SHA 同 CI 全绿而关闭，第2项已成为唯一执行项；不并行开启其他工作包。
-- 只在 `main` 上做，禁止新建并行任务分支；不得同时开始下一项。用户已授权常规项目实施与验证，不再为日常测试、分析、文档或常规实现请求再次批准。既有全局安全红线仍有效：真实数据迁移/schema、删除/覆盖/恢复常驻库、密钥/CI 配置、公开部署等按 `AGENTS.md` 处理；尤其常驻 `flow` 中的测试批次偏差 `01a0dcdd-8245-7c17-99aa-fce91a8a7a57` 不得自行删除、回滚或切 latest。
-- **状态口径**：`进行中`=此刻确实有命令、审查或实现正在执行；`队首待启动`=当前第一项但未开工；`排队`=严格等待前项完成；`外部材料受限`=先按本手册执行主动恢复和替代方案，不是停工态。工作包 frontmatter 的 `active/blocked` 表示工作包生命周期或验收门槛，不覆盖路线图执行状态。
-- **ORG-LEDGER 的最新事实与安全边界**：工作包由 `9729dbc4`、具体三表 schema 提案由 `880f1b76` 推送；用户批准该准确方案由 `fc6e63a7` 记录。批准仅覆盖工作包列出的三表与对应迁移，不覆盖额外 schema、认证/RBAC 改造，也不授权在共享/常驻 DB 清理/初始化。可执行已批准迁移，但只在隔离数据库验证；不要对常驻库迁移或写入。
-- **ORG-LEDGER 最终验收**：发行包两次构建一致，31文件、manifest SHA `cbc7cccf924092ae7ca5f68eb8a797473cf6efcf31f4e91fbe22aa6f7758e513`；组织8/8/8、权限快照142条。11项企业/loader测试通过；隔离 CLI 首次full、重复full、business reset对账均正确（财务实际768、预算10752、经营实际1920、应收回款4800、快照12、成员8），事务回滚、租户隔离、审计追加保留通过。旧大麦 verify19/19、只读GET43/43、Playwright9/9；全量 API852、Web142、脚本107；合同、文档、lint、typecheck通过。提交 `2c7d6eb4`，CI run `36270782272` 17/17 success。仅获批三表迁移在隔离栈验证，常驻 `flow`/MinIO未触碰。
-- **遇到失败的统一处理**：保留原始日志和失败产物 → 定位根因并判别代码/数据/环境/外部输入 → 先运行最小重现 → 做最小修复或有记录的替代验证 → 重跑原失败项及相邻回归。禁止删断言、改预期值迎合实现、重写原始 oracle、用 synthetic 结果冒充真实验收。若原验收客观上不可完成，交付可复现的调查、替代结果、未满足项与重启条件；不能声称原验收通过。
-- **当前唯一下一动作**：先核对本轮代码/文档差异并通过文档门禁，提交推送Statements PDF页锚验收，再等待该准确SHA CI全绿。之后依Gate1覆盖证据逐个盘点Reports及其余页面链接与目标API/对象身份，先查已有E2E，再只对缺少断言的安全读取下钻补测试；可能freeze的GET继续排除，变更旅程只在隔离环境。完成下钻后按全交互路由补状态×视口证据，随后Gate5全链同SHA验收。每阶段先同步状态文档、门禁、commit、立即push。常驻Compose `flow`标签来源混杂，绝不重启/重建/写入；Gate1/Gate5全验收和准确SHA CI绿前不得进入队列第3项。
-- **每项汇报格式**：完整 11 项队列和计数；当前项与细分步骤；本轮完成证据（SHA、命令、结果）；实际问题/替代路径；下一项何时解锁和唯一下一动作。不要写“等待用户验证/批准”作为常规动作；只有触及明文安全红线的 schema 执行边界才须记录为精确批准门。
-
-### 唯一串行 To-do 的逐项操作卡
-
-每张卡的“完成后”是唯一可进入下一项的条件。若发现路线图与证据不一致，先核对主线提交/原始证据，更新路线图并通过文档门禁，再按更正后的顺序工作。
-
-#### 1. 企业组织建制与经营账套初始化包（已完成：`2c7d6eb4` / CI `36270782272` success）
-
-**入口材料：** `docs/50_plans/work_items/ORG-LEDGER--enterprise-initialization-package.md`、`docs/50_plans/work_items/DAMAI--full-year-demo.md`、`docs/50_plans/CURRENT_ROADMAP.md`、`docs/20_product/` 中 enterprise/RBAC/导入发布相关规则，以及 `services/api/src/flow_api/fixtures/damai/loader.py`、`scripts/seed_damai_demo.py` 和 `fixtures/damai/`。
-
-**授权边界：** 用户已批准发行包行为：完整初始化同步组织并重建业务、业务重置保留组织、仅作用于 manifest 指定企业；包格式/SQL/初始化入口均可实施。具体三表 schema 和对应 Alembic 迁移的批准已记录在 `fc6e63a7`，可以实现并在隔离数据库验证；不得扩展为其他表、认证/RBAC 变化，禁止对常驻开发库迁移、清理或初始化。
-
-**操作步骤：**
-
-1. 开始先拉取 `main`、核实分支/HEAD/远端与同 SHA CI；逐项读取上述工作包/规则，检查当前数据库迁移头、企业/RoleBinding 模型、对象存储引用方式和 seed 实际副作用。基于 `e1a4d264` 只读审查现有发行包与校验器，核对 manifest 登记25文件为何不含 README/manifest、对现有完整发行目录的覆盖、来源 SHA、字段/引用/重复项与脚本写入面，再建立本任务内部子步骤状态表，只在 HANDOFF/路线图的当前任务栏报告，不新建第二条队列。
-2. 盘点 `fixtures/damai/` 的 canonical JSONL、报表、预算、运营侧车、来源文件和 manifest；记录文件数、行数、SHA、来源与可复用路径。目标发行目录按工作包 `data/enterprise/damai-logistics/v1/` 设计；复用现有 canonical 真相，不能复制出两份可手工编辑的数据。
-3. 固定 manifest 合同：企业稳定 code、包/模块版本、synthetic 标记、全局依赖版本、组织/业务稳定键、引用关系、每个文件 SHA/行数、校验规则及允许的数据清理范围。先写 manifest/schema 测试，再实现纯文件 validator。测试应覆盖缺文件/错 SHA/错行数/版本不匹配/非 synthetic/重复 code/断裂引用/跨企业引用/未知角色/含 credential 或敏感个人字段等拒绝路径。
-4. 组织数据只使用明确虚构人员、`example.invalid` 邮箱、保留号段电话、无凭据 actor ID；组织、岗位、成员 ID 带企业命名空间。权限文件仅表达期望映射，必须限制在现有 Role/Action 合同内；不可借 seed 绕过 Principal/RBAC，也不可制造可登录密码、token 或真实身份信息。
-5. schema 已获批准：对照工作包提案审查当前 migration/model/test 草案是否严格实现三表与约束，先跑纯模型/迁移单测与负向测试；若代码超出批准范围则收窄回批准 DDL，不可自行加表/改 RBAC。数据库验证只在隔离 PostgreSQL 栈执行。
-6. 列出逐表 business reset ownership/lineage 清单，证明只删除 manifest 企业记录。不得 `TRUNCATE`、`DROP SCHEMA`、全库 delete；保留审计事件、全局字典、共享对象及被其他企业引用的对象。`full` 与 `business` 两种动作都须事务化，完整失败能回滚到无部分写入状态。
-7. 创建/检查初始化入口：preflight 校验数据库版本与企业存在，组织同步遵循停用而非删除历史主体，业务 seed 复用领域服务完成 Intake→Review→Snapshot→Analysis→Freeze。SQL 和服务 seed 必须由同一 manifest 导出或校验，避免双重真相；不添加交互式人员/口径选择，也不偷偷自动备份。
-8. 仅在隔离 PostgreSQL + MinIO 栈做首次 full、重复 full、business-only 重置、坏包拒绝、注入中途失败回滚、目标企业隔离、组织保留/同步、对象共享保护、审计追加保留。确认 seed 幂等、失败无半写、非目标企业与全局配置不变。
-9. 回归原有大麦交付：`make damai-demo-build`、verify 19/19、业务页面 E2E 9/9（按仓库现行命令和版本复核），再跑 API/Web/合同/文档门禁及同 SHA CI。修复 README 的 M1 `doc_type` 问题并确认 frontmatter 门禁通过。保存栈配置、数据库隔离证明、对象清单、行数与 SHA、完整命令/退出码；常驻 `flow` 前后只读核对且不得被测试改动。
-10. 更新发行包 README、ORG 工作包、`PROJECT_STATE.md`、本 HANDOFF 当前快照及路线图证据；只有原验收全部满足才标 completed。提交前检查 `git diff --check`、`python3 scripts/check_docs.py --phase m1`、链接/契约/相关测试；只暂存本项文件，按 conventional commit，随后立即 `git push origin main` 并查询该 SHA CI。
-
-**验收：** 单一命令可 full 初始化和 business-only 重置；数据包可移植、可复验、版本/哈希/来源齐备；组织同步/保留符合语义；所有企业边界、审计、共享对象、失败回滚及幂等性测试通过；旧大麦 verify 19/19、E2E 9/9 不回退；文档门禁和同 SHA CI 全绿。迁移与任何破坏性验证仅在隔离栈进行。
-
-**遇到问题：** manifest 与现有 fixture 不一致时以现行 canonical 资产为起点，先解释差异并保留原文件，不手改派生产物；删除范围不能证明企业归属时拒绝删除，补 ownership/lineage 或用安全重建策略；共享对象引用不清时保留对象；seed 如会写常驻库则停用该路径并构建隔离栈；测试环境失败先检查 `flow_test`、compose project 名和 MinIO bucket 初始化，不清空常驻数据；schema 方案如出现额外表/RBAC 改动，先补具体方案和批准，不在实现中扩范围。
-
-**完成后：** 才进入第 2 项 UX 可见性与全站验收关闭。
-
-#### 2. UX 可见性与全站验收关闭
-
-**入口材料：** `docs/50_plans/work_items/UX--post-damai-experience-closeout.md`、`docs/50_plans/2026-09-26-ui-deep-link-implementation-plan.md`、`docs/60_delivery/verification/2026-09-26--damai-visibility-gate1-v1.md`、`docs/80_reviews/2026-09-26-ui-linkability-audit.md`。深链批次一至三已完成；批次三代码锚点 `cef0c362`，全量 API 845、生产 E2E 93/93、Web 142/142、脚本 101/101；隔离大麦 verify 19/19、只读 GET 43/43、浏览器 9/9。不要重复做已完成批次。
-
-**操作步骤：**
-
-1. 在当前干净 `main` 上建立 Gate 1 覆盖总表：每条路由列出方法与参数、公司/期间/批次、API 端点、来源事实、环境、SHA、响应/内容摘要、UI状态、视口和归因。先核对已有 43 条只读 GET 清单；只补未覆盖路由，不重新探测已有项。
-2. 对每个数据页逐条比对 API 与真实页面：当前已发布值、未发布、无源事实、不适用、权限不足、错误、加载中、部分降级。Dashboard 已逐项核对8卡主值与预算/同比/YTD、12月×4趋势、32格矩阵、产品表每产品七个指标显示；85条隔离GET覆盖四类维度每个选项的month/ytd单维筛选。下一步补多维交叉组合与所有筛选器的真实浏览器交互，再按同样粒度扩展其它路由。缺值按源事实/映射/计算/快照/筛选/前端消费/设计排除归因，严禁简单写“无数据”。
-3. 在 390/1024/1440 宽度验页面与状态；保存可复验的 E2E/截图摘要（按项目既有截图矩阵约定存放），补测试前先做 TDD。优先关掉有事实支持且影响页面呈现的缺口，禁止为了“填满”而补零或伪造数值。
-4. 对所有目标 KPI、趋势、矩阵、报告和 Finding 检查真实下钻目标。深链批次已交付的入口只回归验证，不重做。检查 actor/enterprise 隔离和数据工作台批次可见性。
-5. **只读安全：** 以下 GET 会 freeze/写入快照，不能当作只读探测调用：`/api/v1/statements/{report_id}/objective-snapshot`、`/api/v1/statements/{report_id}/objective-snapshot/html`、`/api/v1/operations/overview/{report_id}/{html|xlsx|pptx|pdf}`。欲验证其行为，先代码审查副作用，再只在隔离数据库/对象存储测试，不能对常驻 `flow` 或用户环境探测。
-6. 完成 Gate 5：依次运行 `make damai-demo-build`、安全隔离的 dashboard 测试（确认脚本目标为 `flow_test`）、`make test-damai-demo-e2e`、`make lint && make typecheck && make test-web`、`python3 scripts/check_docs.py --phase m1`、`python3 scripts/documentation/links.py --check`、`scripts/check_contracts.sh`；涉及 API 全量变更时再运行 `cd services/api && uv run pytest -q`。最后核对最新提交 SHA 的 GitHub required jobs 全绿。
-
-**验收：** 覆盖表无遗漏；每项显示值与 API/源事实一致；缺口有类型、原因和证据；状态/视口/下钻 E2E 通过；隔离 verify 19/19、浏览器 9/9；门禁与同 SHA CI 绿；常驻数据库未被测试写入。符合后更新 UX 工作包、路线图和 PROJECT_STATE，提交推送。
-
-**遇到问题：** API 200 不代表页面正确；页面有卡片也不代表数据链通过。副作用不明时用静态调用链审查，不能 curl“试试看”。E2E 若因 Next `.next` 锁或临时配置冲突，使用工作包记录的临时 web 副本方案，不杀未知进程、不改真实工作区配置。常驻库批次问题只做只读核对，禁止擅自清理。
-
-**完成后：** 进入第 3 项 C 级归因与修订。
-
-#### 3. 公开财报 C 级归因、原件复核与抽取修订
-
-**入口材料：** `docs/50_plans/work_items/PUBLIC--c-level-exit-protocol.md`、`docs/80_reviews/ai-cross-review/results/adjudication.md`、交叉评结果 `docs/80_reviews/ai-cross-review/results/gpt-6-astra-2026-09-25.md`、执行说明 `docs/80_reviews/ai-cross-review/README.md`。已确认 42 个真抽取异常并分类；另有 109 个字段口径疑点；JDL 200 格原不可核对的文本层问题已有英文版原件可读，SHA 见 adjudication §4。三类状态不得合并成一个“错误数”。
-
-**操作步骤：**
-
-1. 先对账最新抽取 YAML、订正表、提交和 L1 报告，确认 42 项裁决是否已进入版本化新 YAML；保留旧值，不覆盖原始财报和历史答案集。
-2. 按 `adjudication.md` 模式一修空列借邻值：源列为破折号必须输出 null；为模式二修正 JDL 权益变动表页区间/表识别；为模式三补 BABA FY2023 prior。每种模式先添加失败测试，再最小修复。
-3. 复核 109 项字段合同：确认 current/end/begin 语义、阿里现金流行名、流动/非流动限定、JDL 利润与综合收益归属。每项保留“原值/新值/口径理由/原页证据/复核者”；无法明确判定就标记未决，不静默归成数值错误。
-4. 用可读 JDL FY2025 英文版对原 200 格逐格重核，英文版只作为同版式双语源文本，不替换/删除中文原件。复核时检查页码、行列和单位；pypdf 与答案包同族，注意不要把 pdfplumber 乱序误判为源错误。
-5. 修订只产生新版本答案/抽取资产和 supersedes 链；更新差异分类和基准。执行 `python3 scripts/accuracy_benchmark.py --level L0` 和 `--level L1`，并运行受影响抽取/导入/解析测试。
-
-**验收：** 42 项有逐项修订/保留理由；109 项有字段口径结论或明确未决；JDL 200 格全部核验或逐格保留不可读证据；原文值、抽取值、页码、单位和变化关系可追溯；L0/L1 结果与 SHA 归档。不能因 L0 通过宣称 L1 或 C 级通过。
-
-**遇到问题：** 英文版数值列/页码若与中文疑似不一致，交叉检查原文版式和下载 SHA，暂停该格结论；PDF 文本层缺字时采用受审视觉/OCR证据并登记，不猜值。实现修订导致其他报告变化时跑全相关抽取集，不只跑单个样例。
-
-**完成后：** 进入第 4 项 U04 parser 与冻结留出验证。
-
-#### 4. U04 解析器适配与独立留出验证
-
-**入口材料：** U04 工作包、`validation/financial_reports/oracle-register.md`、`validation/financial_reports/holdout-lottery-2026-09-25.md`、原始首跑 `validation/financial_reports/holdout_runs/2026-09-24/`、`docs/implementation/objective-analysis/holdout-results.md`。当前已冻结并录入 oracle 的留出是 `validation/financial_reports/oracle/xiaomi_2026h1.yaml` 与 `alibaba_fy2027q1.yaml`；原件在 `validation/financial_reports/original/` 对应目录。原 3 样本全部 199 行 not_comparable，是旧版式不可比，不是精度通过。
-
-**操作步骤：**
-
-1. 阅读当前 `cn_ashare_table` 适配器、页码配置、旧首跑产物、oracle-register 和抽签记录；确认候选原件 SHA 与 oracle 文件 SHA/来源匹配，先冻结原有首跑结果。
-2. 注意 `scripts/holdout_u4_run.py` 当前 SAMPLES 默认仍是旧的 SF/Tencent/ZTO。**不可不加检查就把它当作新留出 runner。**先添加显式 sample 参数/配置及单测，能把旧样本跑作回归、将小米/阿里按冻结 oracle 跑作留出；输出目录用全新 run ID，绝不覆盖 `2026-09-24`。
-3. 对 “合并及公司” 合并标题和年报页码提示范围写失败测试；解析器最小改造后跑旧 3 样本回归。新留出原件首跑前不看抽取输出调参，不修改 oracle 期望值。
-4. 冻结新留出首次输出、source SHA、parser commit、命令与环境；逐行计 matched/mismatched/not_comparable，区别行名未匹配、页码范围、单位和真实数值错误。
-5. 对差异逐项回原 PDF；独立性受损的样本立即转回归集并注明污染史，不可继续称为 holdout。
-
-**验收：** 旧样本作为回归集有可比率/差异清单；小米和阿里按冻结名单、原件 SHA、未调参规则首跑；逐行差异和归因可复现；更新 oracle-register、holdout-results、U04 工作包和路线图。通过率门槛以 U04/C 级正式协议为准，不自设放宽线。
-
-**遇到问题：** 如果解析器仍不能比较，保留 not_comparable 和最小复现，定位版式适配；不得将 not_comparable 算作 match。若新样本文件或 oracle 真缺失，先查 Git tracked 路径、manifest 和备份再认定缺失；无法恢复时执行外部材料调查/未验证结案，不伪造答案。
-
-**完成后：** 进入第 5 项，重建 L0/L1 与 C 级 Go/No-Go 证据包。
-
-#### 5. C 级质量基准与 Go/No-Go
-
-**入口材料：** C 级出口工作包、更新后的抽取/答案集、U04 结果、发布与溯源测试证据。
-
-**操作步骤：**
-
-1. 检查 `config/statements/answer_set_l1.yaml` 是否由当前事实/来源版本确定性生成；需要重建时先保存旧版本和 supersedes 链，再运行 `python3 scripts/build_answer_set_l1.py`，不得静默覆盖历史答案集。
-2. 运行 `python3 scripts/accuracy_benchmark.py --level L0` 与 `--level L1`；若需 DB，使用隔离 `flow_test` 或专属验收栈。记录完整输出、分母、strong/weak anchors、unlocated 和 mismatch 分组。
-3. 按 C 级工作包逐项核验 L0、L1 ≥300 数值点/覆盖报告全集、公司级 holdout、页锚可复现、重述 supersedes 链、盲评无严重事实错误和拒答/降级行为。
-4. 对每项未过门槛的证据开在当前第4项内继续修，不另开平行队列；按现有责任执行原件复核或代码修复，随后重跑相关与全量基准。
-5. 形成机器可读结果和书面 Go/No-Go：只有所有硬门槛通过才写 Go；证据不足写 Hold/未通过并列精确缺口，不将覆盖 1794/1794 等同准确率。
-
-**验收：** 同一最终 SHA 上所有规定门槛和 required CI 通过；答案集和来源可复算；Go/No-Go 引用每条证据 SHA/路径。随后更新状态并提交推送。
-
-**遇到问题：** 发现旧文档与机器结果不同，以新鲜可复验机器输出为准并保留旧记录；若 DB 不可用先确认 Docker/服务并检查脚本是否会写常驻库，禁止为让测试通过而接常驻 `flow`。
-
-**完成后：** 进入第 6 项 P3 数据扩张和来源接入。
-
-#### 6. P3 真实数据、来源与行业扩张
-
-**入口材料：** `docs/50_plans/work_items/PUBLIC--data-expansion-benchmarks.md`、公开来源政策、既有财报抓取/抽取/导入管线、`docs/80_reviews/ai-cross-review/results/adjudication.md`。
-
-**操作步骤：**
-
-1. 核实公开来源政策和下载授权，对每份报告记录公司、市场、报告期、报告类型、官方 URL、下载时间、SHA-256、页数和文本层可读性。
-2. 逐批加入物流→电商→SaaS公开财报；任何批次先验 PDF 文本层，乱码时查官方英文版或可靠 OCR，并把原 PDF不可变保存。
-3. 运行抽取、L0、每公司至少20点 L1 抽核、勾稽检查、页锚和 source/supersedes 关系；导入或发布仅在隔离栈完成。
-4. 行业基准逐条记录来源、时期、样本和计算方法；缺少可靠来源就标 unavailable，不编行业数字。
-5. 运行性能脚本并形成 P95 报告及复跑脚本；阈值以既有决策/批准规格为准，不擅自固化建议阈值。
-
-**验收：** 每个批次原件和派生产物 SHA 齐全，L0 全绿、L1 样本及勾稽有记录、报告身份/重述链不冲突，性能结果可重放；同 SHA CI 绿。
-
-**遇到问题：** 下载失败查官方页面/API并保存 HTTP/时间证据；替代文本层必须能证明与原件同版本。行业基准或真实原件缺失时完成来源检索报告和“未纳入”结案，不能伪造，也不停止本队列该项其他可做的来源/工具工作。
-
-**完成后：** 进入第 7 项第二代静态知识 refresh。
-
-#### 7. 第二代静态知识 release 与战略重基线
-
-**入口材料：** `docs/50_plans/work_items/KNOWLEDGE--refresh-v2.md`、规格 `docs/superpowers/specs/2026-09-17-static-knowledge-refresh-and-strategic-rebaseline-design.md`、实施细节 `docs/superpowers/plans/2026-09-18-static-knowledge-refresh-and-strategic-rebaseline-implementation-plan.md`（该实施计划已 archived，不维护状态；只取 K0–K6 方法/命令）、Davybase 与 ObsidianWiki 仓库。正式 release 仍是 `flow-knowledge-2026-09-12.1`。
-
-**操作步骤：**
-
-1. **K0**：同步 Davybase/ObsidianWiki 最新 canonical remotes；记录各仓 HEAD、tree、dirty、批次/分母与依赖版本；验收旧图片批次 manifest，逐样抽查，确认输入/成功/过滤/失败互斥对账。不得覆盖原文或原批次证据。
-2. **K1**：对非微信核心知识目录（企业管理、财务会计、跨境物流等）先 allowlist dry-run，检查 coverage 与敏感边界；抽查路径解析，运行 apply/有限 retry；逐项终态必须闭合。只用生成的 pathspec 暂存对应 Obsidian 文件，不 `git add -A`。
-3. **K2**：严格执行 Obsidian Git 冻结流程：14:30锁定、15:00候选、15:30复验；要求两个时间点 commit/tree 相同、工作区 clean、canonical remote 可取。只有 accepted manifest 才可作为后续输入；失败则写 rejected 记录，下一可用日重试，禁止伪造时间或自动提交不明修改。
-4. **K3**：只用 K2 accepted manifest 重建来源 registry/baseline/diff；按稳定 ID 做新增/修改/删除/改名差异；敏感/排除数据仅留聚合统计。相同输入重建两次结果 SHA 应一致。
-5. **K4**：按冻结 scope 做全量路由和高价值精读，明确 coverage 分母与互斥终态；对 HIGH 回读，记录失败集中与误分类复核；生成影响 FLOW 的新素材、领域手册与采用映射，不把 L2 发布知识直接当产品既定规则。
-6. **K5**：构建 candidate、来源/coverage/reader 问题包，独立读者复核；满足 sealed lock、哈希和 reader 门槛后 seal。candidate 未 sealed 不开始正式战略影响结论；始终保持 `CURRENT_RELEASE` 不变。
-7. **战略裁决/S0–S1**：对目标、角色、报告工作流、模块可见性、规则可见性、真实数据验证等逐条形成证据、影响、替代方案和风险；正式决策由用户作出。无需每步问用户；仅这一规格明确保留的战略裁决点不可由 Agent 冒签。若接手时没有相应正式裁决，不得激活 release 或把候选写成已采用；先完成所有不依赖裁决的审计/影响材料，列明唯一待裁决问题和选项，状态保留“sealed candidate、未激活”。由于该裁决是用户主体不可代理，不能伪造“外部材料不可得”来绕过；须把当前项原验收未满足、候选未激活及可恢复的下一步写入路线图与交接，再停在该项，不得擅自推进后续队列或替用户裁决。
-8. **K6/V**：按规格在一个原子变更集合里激活 release、更新产品当前文档和唯一路线图；先在干净独立 checkout 对精确 SHA 复验，过门禁后推送、等 CI。失败用新的普通 revert/recovery commit 恢复整套一致状态，不改写历史、不只回滚指针。
-
-**验收：** 三仓库身份/hash/coverage/失败列表可重放；15:00 snapshot accepted；source baseline 四维差异对账；coverage/reader gate 全 PASS；战略决策记录已存在；release lock/manifest hash 一致；activation 同 SHA 独立复验与 CI 通过。每个代码/知识原子任务在所属仓库单独提交推送，然后才进入下一 K 步。
-
-**遇到问题：** 当前命令或脚本不存在时，先检索实际 CLI 和测试，再按 archived plan 的规格补工具与红绿测试，不照抄未实现命令。锁冲突不抢锁；Obsidian 有未归属改动不覆盖；敏感路径不得传到 FLOW 或外部模型；15:00 不稳定时明确 rejected 并顺延，不降低冻结标准。
-
-**完成后：** 进入第 8 项 `rnd_exp` 来源核验。
-
-#### 8. `rnd_exp` 官方依据核验（外部材料受限项，主动恢复后结案）
-
-**入口：** 路线图记录的《应用指南汇编 2024》核验和暂记 `4301`。先 `rg -n "rnd_exp|应用指南汇编" .` 搜仓库，再查知识库来源登记、公开官方发布渠道和可验证归档；记录查询关键词、站点、访问日期、版本、URL 和 SHA。
-
-**步骤与验收：** 找到原件时冻结原件和 SHA，逐项核对原文定义、期间、符号、公式与 `rnd_exp` 来源，更新指标口径登记与测试；找不到时完成有来源的检索过程、可替代权威来源比较、为什么不足以等同原文、哪些字段保持 unverified、影响到的指标/报告和重启条件。后者只能结案为“官方依据未核实”，不能写成核验通过。
-
-**遇到问题/下一步：** 链接失效先查官方站点检索/网页存档/公告附件；不同版本不一致则逐版登记不自行挑有利值。完成“已核实”或“原件不可得的证据化结案”后才推进第 9 项。
-
-#### 9. U09/O05 内部试点
-
-**入口材料：** `docs/50_plans/work_items/U09-O05--authorized-internal-pilot.md`、`docs/20_product/` 的主数据/经营分析规则、战略设计与已批准的内部数据治理规格。用户已授权本项目实施，不再等待泛化的“数据授权批准”；但只允许使用当前确实可合法访问的数据，不能虚构真实企业事实。
-
-**操作步骤：** 先按工作包合同核验企业/组织/科目/客户/产品/期间主数据身份、输入版本、来源、内部事件簿、收入/成本/利润守恒；再走月度批次导入、规则/指标匹配、分析计算、证据组织、AI 结论与经分专员审核发布的完整技术流程。若无真实企业输入，使用大麦 synthetic 仅做流程/接口回归，并把真实试点证据状态单独标未验证。
-
-**验收：** 一报一会闭环、主数据与版本追溯、多维盈利守恒、六主题经营分析与异常证据可追溯；角色边界符合已定原则；synthetic/真实结果分开标记，不把年度公开数据摊月，不伪造 L2/L3。
-
-**遇到问题/下一步：** 缺真实输入就完成脱敏 schema、字段映射、导入/拒绝和技术 E2E；形成精确的真实数据缺口与可接入格式说明。完成技术闭环及诚实的证据状态后进入第 10 项，不以“等批准”停工。
-
-#### 10. U10 V1.1 证据决策
-
-**入口材料：** `docs/50_plans/work_items/U10--v1-1-evidence-decision.md` 及其底稿 `docs/90_archive/plans/2026-09-07-v11-evidence-decision-pack.md`。U08 已完成；使用现有 U04、C 级、U09/O05、知识/大麦证据，不能把仍缺的证据补写成完成。
-
-**操作步骤：** 将每项 V1.1 候选能力列为 go/hold/drop；每项记录主张、证据及 SHA、来源、适用范围、风险、反证、缺失证据、替代验证。对没有证据的项按规则 hold；如果已有证据足以裁决其他项，不因少数 hold 项停止整包裁决。形成正式决策记录并关联唯一路线图。
-
-**验收：** 决策包覆盖全部候选；每项 go 有充分证据，hold 有可执行解锁条件，drop 有理由；决策不超出现有用户战略边界；文档门禁和同 SHA CI 通过。
-
-**遇到问题/下一步：** 指标矛盾则回到原始 run/报告 SHA 核实；只对受影响候选改状态，不推断整项全局通过。提交推送后推进第 11 项。
-
-#### 11. 内部月度工作台与四级真实周期验收
-
-**入口材料：** 路线图状态表中的内部月度工作台/四级验证、战略设计 §14.2、U09/O05 工作包、已 sealed/正式采用的知识与指标规则。该项是最终真实经营验证，不由大麦 synthetic 或公开年报代替。
-
-**操作步骤：** 在既有企业工作台中冻结真实月度输入和来源版本；逐月由 BP 提供数据、系统生成指标/归因/证据/分析结论、经分专员审核发布。每周期保留系统输出、同输入人工基准、盲评记录和实际工时；连续完成三个真实月度周期，不在周期中途改基准或删除失败记录。
-
-**验收：** 三个周期均有完整源数据/版本和报告；人工对照同输入；逐周期盲评满足规格；工时降低达到 20% 门槛；无严重事实错误；能复算报告结论。最终结论只在真实数据证据齐备后给出。
-
-**遇到问题与最终结案：** 若本机/企业没有真实月度数据，先完成 synthetic 技术验证、环境复现和数据接入说明，再形成“真实四级验证未完成”的正式结案，标出所缺的三个月数据及可重启条件；绝不宣称达到真实企业验收。因为它是队列末项，报告为战略验收尚未完成，而不是无限等待或虚假关单。
-
-### 每个队列项的固定关单与交接协议
-
-1. 开始前：`git pull --ff-only`；确认 `main`、clean worktree、HEAD 与 origin 一致；核对当前只允许队首任务执行。阅读本卡对应工作包和规格。
-2. 执行中：先记录当前任务的细分步骤数及逐步状态；实现按 TDD，数据任务留原件 SHA 和命令；小步完成但不同时开后续任务。
-3. 验收时：按上方对应门槛逐条跑，保存完整命令、退出码、摘要、环境和 SHA。测试失败不等用户帮忙诊断，先复现并修复；如果遇外部缺项，执行该卡替代闭环协议。
-4. 文档与提交：更新对应工作包、`CURRENT_ROADMAP.md`、`PROJECT_STATE.md` 和本 HANDOFF 中必要的当前快照；仅暂存本项文件；`git diff --check`、`python3 scripts/check_docs.py --phase m1`、相关 links/contract/tests 通过后 conventional commit 并立即 `git push origin main`。推送失败按 AGENTS 立即报告确切原因和修复方法。
-5. 进入下一项：只有当前卡达到“原验收通过”或“外部受限但替代结案已完成、且明确记录原验收未满足”之一，才能更新计数并启动下一项。不能因为一项复杂或耗时而跳过，也不能把一个 item 拆成并行 Agent。
-6. 续接播报：向用户提供 11 项完整队列、项数/计数、当前唯一 item 的子步骤进度、已完成证据、限制与已尝试恢复法，以及唯一的下一动作；没有运行中的进程时必须说“未启动/已暂停”，不得写 active 冒充进行中。
-
-**下一位 Agent 接手后的唯一下一步：** 拉取 `main` 并核对分支/HEAD/CI；检查发起终端是否保留 `uv run pytest -q tests/enterprise tests/fixtures/test_damai_loader.py` 的完整结果；若无法恢复，先审阅保护当前所有未提交的发行包 manifest/build、SQL/initialize、loader/reset、组织模型/服务、0031 迁移和 tests，再确认隔离数据库并重跑。随后对照 `fc6e63a7` 批准的三表方案补齐合同/负向测试与隔离迁移验证。不得先做 UX、C 级、知识刷新或其他队列项。
-
-> **当前状态覆盖（2026-09-26 深夜·ZCode 夜班会话收尾）**：本交接基于 `main@e78f0616`（本会话最后提交为 `b161fff`，其后并发会话叠加 UI 可链接性审计）。本会话四项交付已全部入主线：**①归因裁决 `4111f6a`**（42 异常全判真实抽取错误+证据忠实性 100%）；**②新留出双样本 `926af82`**（小米 2026H1 + 阿里 FY2027Q1 冻结+oracle 录入完成——注意：v3.6 所记“候选 PDF 未冻结”已过时）；**③测试库隔离根因修复 `b60c51b`**（conftest 默认切 `flow_test`，实证常驻库零污染——v3.6 所记“最高安全前置”已完成）；**④JDL 英文版冻结 `b161fff`**（210 页文本层可读，200 格重核输入条件已具备）。C 级出口仍未通过；抽取器修订（实现方职责）与新留出首跑是剩余关键路径。
-
-## 0.3 本轮交接（2026-09-26 ZCode 夜班会话）
-
-### 当前任务快照
-
-会话从「合并 GPT/Kimi 反馈 + 交叉评归因」接手，按用户授权（连续执行、推荐方式自决、不停顿）完成 P0–P3 四项关键路径交付。会话角色定位：**非实现方裁决/核验方**（GLM，未参与抽取器开发；oracle 登记册 §1a 授权录入者）。
-
-### 已完成（本会话四提交，全部已推 main）
-
-| 提交 | 交付 | 要点 |
-|---|---|---|
-| `4111f6a` | **P1 归因裁决** | 42 异常逐条对照原始 PDF：**全部真实抽取错误**、评审证据 100% 忠实。三模式：菜鸟 19 格破折号列借邻值（列对齐缺陷）、JDL 22 格权益变动表误入 BS（页区间缺陷）、BABA 1 格漏抽。109 存疑=字段合同问题非数值错误。产出 `docs/80_reviews/ai-cross-review/results/adjudication.md`（含实现方修订工单第五节） |
-| `926af82` | **P3 新留出冻结+oracle** | 小米 2026H1（新公司；中英双版 SHA；中文版文本层乱码→oracle 以英文版录入，7 key items+19 行）+ 阿里 FY2027Q1（新期间；5 key items 含 Non-GAAP 20,715 百万）。manifest holdouts 双条目+oracle-register §3 双行登记 |
-| `b60c51b` | **P0 测试库隔离根因修复** | conftest 本地默认从常驻 `flow` 切到自动创建的 `flow_test`；CI（GITHUB_ACTIONS）自动豁免零 CI 改动；`FLOW_TEST_ALLOW_PERSISTENT_DB=1` 显式豁免通道。5 契约测试+实证：10 个 DB 测试跑隔离库，常驻库大麦数据前后均 2 报告**零污染** |
-| `b161fff` | **P2 JDL EN 版冻结** | 京东物流 FY2025 英文年报（披露易 2026/0424/2026042401322，210 页，SHA `32a99c3a`）冻结至 `original/jdl_fy2025_readable/`；第 110 页验证可读且与中文乱码版逐字一致——200 格重核解锁 |
-
-（同会话更早还有：oracle zto `4acc1c3` + tencent `e8f2624` 录入；EXECUTION_TODO 落盘——后者已被 2A 裁决归档为参考。）
-
-### 卡住 / 未完成（按阻塞优先级）
-
-1. **抽取器修订（实现方 GPT 职责）**：adjudication §5 是完整工单——列对齐算法修空列借值、JDL 页区间修正、BABA prior 补抽、109 存疑字段合同裁决。修订须新版本进入（保留旧值+证据）→ 重跑 L1 基准。**首跑前任何人不得用新留出样本调参**。
-2. **JDL 200 格逐格重核**：EN 版输入已冻结（`b161fff`），需专注会话执行逐格对照（EN 版对照法先例：小米 oracle）。
-3. **U4 首跑（新留出盲测）**：小米/阿里 FY27Q1 的 oracle 已备，等抽取器修订完成后执行；旧三留出（tencent_fy2025/sf_2026h1/zto_2026q1）按污染史规则转回归集。
-4. **C 级 Go/No-Go**：依赖 1+2+3 全绿；`1794/1794` 只是台账覆盖口径≠出口通过。
-5. 大麦 UX 收口、ZTO 样本接入、K0–K6 静态知识：按 CURRENT_ROADMAP 排队（并发会话在推进 UI 线，`e78f0616`）。
-6. 遗留分支 `codex/frontend-consistency-remediation`：两套前端 UI 路线分歧（组件库 vs css），在途修改已保全于分支 `2b53bbe`，待用户选型。
-
-### 下一步（推荐顺序）
-
-1. 查 `b161fff`/`e78f0616` 对应 CI 最终状态（提交级核对，见踩坑#2）；
-2. JDL 200 格逐格重核（EN 版对照；独立会话或本会话续作均可）；
-3. 催办/等待实现方按 adjudication §5 修订抽取器 → L1 重跑；
-4. U4 首跑（新留出盲测）→ C 级 Go/No-Go 裁决；
-5. 其后按 CURRENT_ROADMAP 顺序（UX 收口 → K0–K6 → 部署验收）。
-
-### 本会话踩坑实录（新增）
-
-1. **多 worktree + shell cwd 漂移 = git 误操作高发区**：本会话曾误把 `reset --soft` 打在主工作区的 audit 分支上（当时 cwd 已被重置），靠 `reset --hard <原HEAD>` 恢复；另有一次 `commit --amend` 误改写已推送提交，需软重置回远端基线重新提交（禁强推）。**对策：每条 git 命令前自校验 `git branch --show-current`；worktree 操作必须显式 cd 且命令内验证。**
-2. **CI 状态是提交级事实**：报“CI 绿”必须核对与提交相同 SHA 的 run；前一提交绿不代表后一提交绿。
-3. **中文 PDF 文本层乱码规律**（EN 版对照法先例已两次验证）：阿里系/腾讯/顺丰中文版正常；**京东系（年报+业绩公告）与小米中文版全部乱码（嵌入字体映射损坏），其英文版文本层完全可读且与中文版同版式双语排版、数值逐字一致**。遇到新样本先验文本层，乱码即抓 EN 版。
-4. **psycopg 不认 SQLAlchemy URL**：`postgresql+psycopg://` 会被当非法连接串，直连 psycopg 须剥 `+psycopg` 后缀。
-5. **pypdf vs pdfplumber 文本层差异**：同一页 pdfplumber 可能输出镜像乱序而 pypdf 正常（菜鸟 473 页实例）——核对证据时用与生成器同族的提取器（pypdf）。
-6. **alembic revision ID ≤32 字符**：超长会在版本表写入时报 `StringDataRightTruncation` 且迁移半途回滚。
-7. **worktree 无 .venv**：用主工作区 `services/api/.venv` + `PYTHONPATH=src` 运行 worktree 测试。
-8. **测试连常驻库事故根因已修**（`b60c51b`）：今后本地跑测试无需再担心清掉开发库；`flow_test` 库按需自动创建、跨会话复用。
-9. **港交所披露易可编程下载三步**：`prefix.do`（代码→stockId）→ `titleSearchServlet.do`（搜公告，注意 result 是需二次 json.loads 的字符串）→ 直链下载；中文版 `_c.pdf`、英文版无后缀或 `_e`。
-
-### 历史踩坑（保留）
-
-- 交叉评的“42异常、109存疑、200不可读”是三种不同处置状态，不能合并成同一个“错误数”或宣称 C 级通过。
-- 本地未跟踪财报属于工作区材料，不要 `git add -A` 盲扫；候选样本冻结前不得当成正式 holdout。
-
-## 0. 执行摘要
-
-### 0.1 当前可信结论
-
-- **历史基线：`main@a461b54`**（2026-09-19 晨，全 job CI 绿）；当前集成主线以本页顶部覆盖状态为准。
-- **S01 / U8 关闭不变**；阶段 3 基础（T09–T12）与 C 级出口执行批次交付不变（台账 §8/§9）。
-- **指标库 v1.2 行业参考包已交付**（借鉴 #21：16 行业 + 流动资产率 + 基准增强，`5442d9c`）；**O-01/O-02（AI 问数 v2 地基）已落地**（语义上下文端点 + 提议→复算管线，`3a0ee20`）。
-- **前端一致性整改计划 Task 0–9 全部关闭**（P3–P5 批次：metric-library/investigations 深度迁移、状态门禁 frontend-states.spec、60 图状态矩阵归档；门禁矩阵 = 一致性 10 路由 + 溢出 11×3 视口 + 状态 5×3 + 导航/边界 = 69 项，全跑生产构建）。
-- **后端既有 flake 修复并 CI 实证**：objective freeze 幂等的行序漂移（`0af6a8a`，publishing-golden 绿）。
-- **数据来源政策已由用户明确（2026-09-19）**：无私有数据来源，研发期一律网络公开来源数据——A4「等待外部财报材料」的前提作废，数据扩张改为继续走公开财报抓取管线（见 §2.2/§2.3）。
-- 多 Agent 并行已终止，单一 Agent、逐 Gate、串行执行不变；产品战略方向不变（经分专员工作台，公开财报独立先行）。
-- **下一里程碑不变 = C 级出口 Go/No-Go 裁决**；前置人工项不变（见 §2.2）。
-- **大麦物流两年 synthetic 演示数据全链已交付并集成 main**：实施细节和原始分支证据见 §2.5；当前主线集成验收以顶部 `e22d193` 与 run `36137591750` 为准。
-
-### 0.2 当前最重要的偏差与缺口
-
-| 类型 | 当前判断 | 处理方式 |
-|---|---|---|
-| 10 条抽取错误候选 | BABA NCI 8 条 + JDL 现金流 2 行，值在源 PDF 文本层不存在（压力测试实锤） | 人工翻页查源（压力测试报告 §2 清单）→ 修抽取 YAML 新版本 → 重跑基准 |
-| C 级出口 PASS | 独立交叉评已完成但发现42个确认异常、109个存疑，JDL尚有200格不可完整核验；抽签有候选但未形成冻结oracle | 原PDF归因/订正 → 可读源文本 → 新留出冻结/独立录入 → 盲测与基准复跑 → Go/No-Go |
-| 数据扩张 | **政策已更新**：无私有数据线，公开网络数据是研发期唯一来源 | 走既有公开财报抓取管线（harvest/港交所）扩充，不再等待 A4 外部材料 |
-| 溯源真实来源链接 | 原卡「私有 PDF 如何经 API 供给」决策——**已被公开数据政策解开** | 按公开 URL/公开文件引用设计落地（下一个可领取项） |
-| AI 问数 LLM 通道 | 用户裁决另行 | 保持 gated；O-01/O-02 地基已就绪 |
-| F-ExportAudit | 用户明示暂不管；现有描述「补审计行」规格不足 | 搁置；领取前先补规格 |
-| 合规尽调 G4 | 未启动 | A5；阻塞 T13 与 MCP/LLM 开放 |
-
-## 1. 权威关系与阅读顺序
-
-下一位 Agent 开始工作时按以下顺序读取，禁止从历史聊天或旧三 Agent 计划直接领任务：
-
-1. [PROJECT_STATE](docs/00_start_here/PROJECT_STATE.md)：唯一 current state；
-2. [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)：唯一可领取路线图；
-3. [S01 工作包](docs/50_plans/work_items/S01--post-u8-boundary-contract-security.md)（completed）与 [C 级出口工作包](docs/50_plans/work_items/PUBLIC--c-level-exit-protocol.md)（当前 Gate，含 §3.7 出口裁决参数）；
-4. [战略重构设计 V1.1](docs/superpowers/specs/2026-09-13-flow-strategic-reset-design.md)、[PRODUCT_SCOPE](docs/20_product/PRODUCT_SCOPE.md)、[PRODUCT_PRINCIPLES](docs/20_product/PRODUCT_PRINCIPLES.md)：产品目标、固定原则和冲突裁决；
-5. [协调台账](docs/70_operations/2026-09-14-coordination-ledger-glm.md) §6–§9：R0/R1、R2/R3/R4、T09–T12、C 级出口执行批次的完成证据；
-6. [前端一致性整改计划](docs/superpowers/plans/2026-09-16-frontend-consistency-remediation-plan.md) §10 执行日志：P0–P5 批次全记录（已关闭）；
-7. [竞品优化清单](docs/competitive/optimization-checklist.md)、[知识库 O-01～O-17](docs/knowledge-base/09_competitive/2026-09-14-optimization-backlog.md)、[五维矩阵](docs/competitive/2026-09-17-five-dimension-matrix.md)：候选需求证据（O-01/O-02 已落地地基）。
-
-冲突裁决顺序：用户最新明确指令 → 已接受决策 D052–D054 → approved 规格 → PROJECT_STATE → CURRENT_ROADMAP / 当前工作包 → 本交接 → review / research → 历史计划和聊天记录。
-
-## 2. 本会话（2026-09-17～09-19 连续执行批次）交接明细
-
-### 2.1 已完成（全部推送 main，尖端 CI 全 job 绿）
-
-| 批次 | 内容 | main 锚点 |
-|---|---|---|
-| 指标库行业包 v1.2 | 借鉴 #21 落地：16 行业参考包（经营指标目录=对标参考，financial_reference 只登记素材真实值）+ 通用指标新增流动资产率 + 基准增强（现金流量比率≥1、产权比率 100%/200%）；**v1_1.yaml 是派生产物——改动走 finalize 脚本再生成（已幂等化+修 derived_from 炸字符 bug）**；前端新增「行业参考包」tab | `5442d9c` |
-| O-01/O-02 地基 | `GET /metric-library/semantic-context`（四元素投影，引用携带 entry_id 回链口径）+ `POST /metric-library/computation-proposals`（治理字典提名→确定性 Decimal 沙盒复算，缺口=结构化 refusal）+ `GET /computation-inventory`；零 RBAC 矩阵变更；路由清单 66→69 | `3a0ee20`/`c93c1f1` |
-| P4 metric-library 迁移 | PageState/flow-btn/flow-table 收编；裸色 63→7（金棕对比对固化为文件作用域 token）；CSS 871→780 行 | `0c4c45a` |
-| P5-A investigations 详情 | 四类非加载态迁 PageState（h1 稳定）、7 按钮迁 flow-btn；证据工作台专用色板按完成标准保留 | `b7b4257` |
-| P5-B Task 8 切片 | dashboard 重试按钮、四问工作台 flow-error/flow-field；public/internal 落地页审计免迁 | `3089472` |
-| P5-C1 状态门禁 | frontend-states.spec：5 路由×{加载/503/403} 结构断言（h1 稳定、role 语义、中文文案、重试）；**抓到两真缺口并修复**：operations-overview 无加载态、Next RouteAnnouncer 占 role=alert（断言收窄 main） | `9cf8cb3` |
-| P5-C2 矩阵归档 | 60 图（4 数据密集页×5 态×3 视口）+ 索引册入 docs/assets/screenshots/state-matrix/；生成器按需触发（FLOW_STATE_MATRIX_ARCHIVE=1） | `02c11ea`/`a461b54` |
-| 后端 flake 修复 | objective freeze 幂等：created_at 事务时间戳致排序键打平+无序查询行序漂移→payload 哈希不稳；tie-break 补 uuid7 主键；CI publishing-golden 实证绿 | `0af6a8a` |
-| 并行会话 | 竞对五维矩阵、知识库第二截面增量扫描（#20–#24）、roadmap v1.7 | `7717102`/`4cb2535` 等 |
-
-### 2.2 卡住的问题（外部/人工依赖为主）
-
-1. **10 条抽取错误候选人工查源**：清单在 `docs/60_delivery/2026-09-15-cainiao-stress-test-report.md` §2；需人翻 PDF 后修抽取 YAML 并重跑基准。
-2. **AI 交叉评执行**：包已备（`docs/80_reviews/ai-cross-review/README.md`），需用户开非 GLM 会话执行——实现方不得自评。
-3. **溯源真实来源链接**：决策已被公开数据政策解开，**不再是卡点，转为下一步可领取项**（按公开 URL/文件引用设计，与溯源浮层 pointer-events 联动）。
-4. **AI 问数 LLM 通道**：gated（用户另行裁决）；O-01/O-02 地基已就绪。
-5. **F-ExportAudit**：用户明示搁置；领取前先补规格。
-6. **合规尽调 G4 / U4 oracle / rnd_exp 原文 / U9·O5 / U10**：外部材料与授权，同前不变。
-7. **infra 小项**：web 容器 healthcheck busybox wget 假阴（Node 实测健康）——compose 修复方案在册待用户批准（红线）；常驻栈已刷新至 `a461b54` 并实测 200。
-
-### 2.3 下一步计划（下一 Agent 按序领取）
-
-1. **溯源真实来源链接**（已解锁）：按公开来源设计——statement 溯源行项目回链公开财报 URL/公开文件引用 + 前端浮层跳转（与既有 ProvenanceBadge/ProvenanceHover 联动）；先补半页设计输入再动工；
-2. **公开数据扩张**（政策更新后改为可领取）：按既有 harvest 管线扩公开财报公司面 → 抽取 → L0/L1 基准 → 冻结 → 重述链实战验证（原 A4 批次流程，来源改公开渠道）；
-3. 收到 10 条人工查源结果 → 修抽取 YAML → 重跑双层基准 → 更新压力测试报告；
-4. 用户执行 AI 交叉评后逐条归因写 adjudication；三项齐备 → **C 级出口 Go/No-Go 裁决** → 解锁 T13（需 A5）与 T12 LLM 通道；
-5. 同步纪律：每步完成即更新路线图/台账/PROJECT_STATE 并同 SHA CI 全绿。
-
-### 2.4 本会话踩过的坑（新增，接续 §7）
-
-- **`metric_dictionary_v1_1.yaml` 是派生产物**：手改会被 `finalize_metric_dictionary_v1_1.py` 再生成清掉——改动必须编码进脚本（NEW_METRICS/BENCHMARK_UPDATES/INDUSTRY_PACKS + 幂等 DECISION_NOTES）再运行；已验证再生成零漂移且幂等；
-- **YAML 值内 ` #` 触发注释截断**：`借鉴 #21` 前的空格让标量静默截断甚至解析报错——含 # 的 provenance 一律单引号包裹（既有先例）；
-- **本地 dev DB 是 `_db_payload` 的过滤权威**：YAML 加条目后本地测试会拿旧计数（假红），须按 conftest 同款 env 跑 `import_all` 幂等重导；CI 无 DB 走 YAML fallback 不受影响；字典升级后 api 容器镜像必须重建（`make stack-up`）；
-- **指标计数多点锁定**：改条目数必须全仓 grep 计数断言（test_metric_library_api **和** test_metric_library_store 两处，后者漏改被 CI integration 抓包）——「受影响套件」直觉清单不可靠；
-- **门禁前 pkill 必须按进程名 `pkill -f next-server`**：`pkill -f "next start"` 杀不到改名后的 next-server（残留 5 个实例曾让门禁挂 30 分钟无输出）；
-- **Next.js RouteAnnouncer 本身是 role=alert**：页面级 alert 断言必须收窄 `main [role=alert]`，否则 strict mode 双元素冲突；403 文案存在两套既定措辞（STATUS_TEXT「授权拒绝」与 operations-overview「没有访问权限」），门禁接受两套；
-- **user-closure CI flake 判定标准 = 同提交本地绿**：CI 连挂三次（清洗超时）vs 本地官方脚本 4/4 全绿 14.2s——直接 `gh run rerun --failed`，不要因「连挂」误判回归去翻代码；
-- **objective freeze 的 created_at 是事务时间戳**（server now()，同批插入全同）：排序键必打平，无 ORDER BY 查询的物理序漂移会破坏「同内容同版本」幂等——凡进 payload 的行序必须补 uuid7 主键 tie-break；
-- **docs/ 下新增任何 .md（含 assets 索引册）必须带 frontmatter**，提交后重跑 check_docs m1+m6；生成的索引册要把 frontmatter 写进生成模板，否则再生成即丢；
-- **workflow 内重跑官方脚本前先看常驻栈**：docker daemon 被用户关闭会让 DB-backed 测试全数 connection error，属环境不在线而非回归。
-
-### 2.5 大麦批次交接（2026-09-24～09-25，分支 `codex/damai-logistics-implementation`）
-
-- **完成证据**：verify 19/19（`make damai-demo-verify`）；八页面真实 E2E 9/9（`make test-damai-demo-e2e`，隔离栈 + Playwright，38s）；数据合同 8/8（含二次 seed 计数零增长）；U8 非破坏升级验证全链 PASS（dump SHA 核对 + 恢复 11 财报 + HTTPS 三方对账，证据 `work/s01-verification`）；M6 文档门禁绿（278 docs, 0 errors）。原 worktree 升级路径到 0029 是历史测试记录；当前 main/开发库迁移头均为 0030。
-- **数据实测**：24 个月（FY2025–FY2026）、1920 经营实际 / 10752 预算 / 4800 AR / 672 财务实际、4 客群 / 40 客户 / 8 产品 / 6 区域 / 5 组织；指标覆盖 FY2025 22/40、FY2026 25/40（来源 `fixtures/damai/manifest.json` 与覆盖包）。
-- **红灯抓出并修复的真实缺陷**：reports-center 两个发布 fetch 缺 `Idempotency-Key`（§7.1 合同）+ Next 代理丢弃该头——已修并补单测。
-- **一键恢复**：`make damai-demo-up`（构建发行包 → 迁移 → seed → verify）；分步 `damai-demo-build/seed/verify`。
-- **已知限制**：dashboard 总量域 OCF actual 不存在是合同真相（state=degraded 为预期）；合成数据不解除公开 C 级与真实企业门禁；常驻开发库装载已另行完成并记录于 CURRENT_ROADMAP G2；G2 过程中出现的共享库测试误连与补种事故详见 To-do 历史记录，避免无隔离地运行会清理数据的测试。
-- **新坑**：macOS Docker 无 host 网络，建 MinIO 桶须 `--network container:flow-minio-1`；`compose up -d --wait` 会误判一次性 init 容器 exit(0) 为失败；`down -v` 偶发只删网络须跑两次；**回归驱动运行期间严禁并行手动跑同库测试**（并发污染曾致 report_snapshot 计数假漂移，安静环境复跑全绿证伪）；测试 conftest 默认指向共享 `flow` 库（迁移头 0030），本 worktree 跑测试必须显式导出划痕库 env。
-- **C3 回归抓出并已修复的四个真实缺陷**（CI 全绿于 `d701c1d`，run 36098674773）：①发布服务冻结视图无粒度过滤导致二次 seed 冻结内容漂移（`082b0eb`，修复=按 snapshot.as_of_period + 五维度 IS NULL + ORDER BY id）；②集成测试清库顺序缺分析链模型致 RESTRICT FK 卡死、对象存储测试裸 boto3 被系统代理挂死（`f867842`）；③quay.io/minio 组织私有化 + Docker Hub minio 下架，compose 镜像全部不可拉，换 `bitnamilegacy/minio` 并补全路径 entrypoint/healthcheck（`307300b`）；④data-contract/intake-e2e 撞 20 分钟 `timeout-minutes`，提到 40，且注释必须独立行（`077d35c`+`d701c1d`，test_ci_gate_inventory 用行尾锚正则）。
-
-## 3. 完整尽调计划（触发条件与频率不变）
-
-| ID | 尽调包 | 触发 |
-|---|---|---|
-| DD0 | 基线冻结与证据盘点 | 每次会话开始（轻量版） |
-| DD1–DD9 | 权威文档/产品范围/数据会计/安全/架构/运行/测试供应链/UX/综合裁决 | 每个 Gate 合并前跑对应专项 + DD7；大版本全量 |
-| 触发式 | 数据扩张前 DD3+性能；内部工作台前 DD2+DD3+DD4+合规；竞对矩阵季度（2026-12）；竞对清单半年（2027-03） | 见尽调总汇 §3 |
-
-## 4. 优化改进候选（非任务批准）
-
-三来源整合（竞品清单 35 条、O-01~O-17、MCP 补充 S-1~S-6）分组 A–F 与推荐排序见[整合优化方案](docs/80_reviews/2026-09-15-integrated-optimization-program.md)。任何条目进入执行须经 CURRENT_ROADMAP 按 D053 裁决。**O-01/O-02 已落地地基（本会话）**；五维矩阵结论=主线不调整，AI 问数 v2 必须项即 O-01/O-02 全量（任意 AST 提议与 LLM 通道另行裁决）。
-
-## 5. To-do List 状态（2026-09-19 更新）
-
-| ID | 内容 | 状态 |
-|---|---|---|
-| T00–T08 | 基线核对 → R2 → R3 → R4 → S01 关闭 | **completed**（台账 §7/§9） |
-| T09 | C 级出口协议 + L0/L1 基准 | **协议与基准交付**；出口 PASS 待人工三件套 |
-| T10 | 溯源/重述/MCP/起草四子包 | **completed**；真实来源链接按公开来源设计**可领取** |
-| T11 | 性能基线（G2） | **completed**；数据扩张（C1）**改道公开管线**（政策更新） |
-| T12 | 问数 v1 + 评测集 | **completed**；**O-01/O-02 地基已交付**；LLM 通道 **gated on A5/用户裁决** |
-| T13 | 内部工作台 | **blocked**：C 级出口 PASS + 数据授权 |
-| T14 | U4 oracle / rnd_exp / U9·O5 / U10 | **blocked**：外部材料与授权 |
-| FE | 前端一致性整改 Task 0–9 | **completed**（P0–P5 全批次，计划 §10 日志）；F-ExportAudit 搁置待补规格 |
-
-## 6. 单一 Agent 工作协议
-
-1. 一个 Gate 一个 `codex/` 分支/独立 worktree；不压成一个提交。
-2. 每个 Gate 均执行：读取批准规格 → 写红灯测试 → 最小实现 → 目标测试 → 全链测试 → 独立规格审查 → 代码质量审查 → 提交推送 → 等同 SHA CI。
-3. 不整包 cherry-pick 旧 Sol/Kimi/GLM 候选；需要时只把它们当作调查材料，按当前规格重做。
-4. 禁止用 skip/xfail/弱化断言/删除测试/关闭认证/`curl -k` 换绿色。
-5. 代码、生成契约、运行证据、文档分别如实提交，提交标题不能用 docs/chore 掩盖业务代码。
-6. 修改安全、迁移、对象存储或发布事务前，先核对批准规格；规格有歧义就暂停该点，不自行创造宽松语义。
-7. 只承认目标 commit 与 CI head SHA 完全一致且 required jobs 全 success、无 skip 的结果。
-8. 完整任务结束后提交并推送；只暂存本任务文件，不带入其他会话的未跟踪或未提交内容。
-
-## 7. 已踩过的坑与停机条件
-
-- 多个 Agent 共用检出、后台 pull/push 会造成基线错乱；后续禁止。
-- 旧分支局部绿色不能替代当前主线同 SHA 全绿；审查报告也必须注明快照时点。
-- HTTP GET 不等于只读，冻结/发布等隐藏写必须按副作用保护。
-- 数据库有表不等于审计已闭环；必须覆盖 401、403、allow、写入失败和保留策略。
-- 对象存储、数据库和审计是跨边界事务，不能在 route 末尾补一条日志冒充原子性。
-- 文档新增也会让 CI 变红；**远端门禁现为 m6**——提交前本地跑 m1+m6（本会话 state-matrix README 再证：assets 下的索引册也在门禁射程内）。
-- 发现第二迁移头、跨企业可访问、AI 可发布/自批、恢复 hash 不一致、测试 skip、目标 SHA 与 CI SHA 不同，立即停止关闭流程。
-- 本会话新增坑见 §2.4（派生 YAML、# 注释截断、dev DB 过滤权威、计数多点锁定、next-server pkill、RouteAnnouncer alert、user-closure flake 判定、freeze 事务时间戳等）。
-
-## 8. 下一位 Agent 的第一条动作（历史指引，当前以 CURRENT_ROADMAP 为准）
-
-旧版建议以 `a461b54` 为基线；当前接续必须按 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 对远端状态、CI 与执行队列重新核对，不沿用该旧顺序。
-
-当前对外状态统一表述：**U8 closed；S01 completed；前端一致性 Task 0–9 关闭；大麦两年 synthetic 实施已集成 main（`e22d193`，CI run `36137591750` 17/17）且G2常驻库装载通过；U4需解析器适配与真正独立新留出；C级交叉评已发现42个确认异常、109个存疑和200格不可完整核验，仍须原件归因/订正、留出冻结与独立验证；知识 release、P3、UX收口及后续内部真实周期验证按 CURRENT_ROADMAP 顺序处理。**
+---
+
+## 七、权威文件索引
+
+| 文件 | 作用 |
+|---|---|
+| `docs/50_plans/CURRENT_ROADMAP.md` | **唯一主线**（状态 + 队列） |
+| `docs/00_start_here/PROJECT_STATE.md` | 唯一 current state |
+| `docs/50_plans/work_items/COCKPIT--cfo-dashboard-implementation.md` | 驾驶舱工作包（completed） |
+| `docs/50_plans/work_items/FINMETRIC--financial-metric-catalog.md` | 指标目录工作包（completed） |
+| `docs/50_plans/work_items/U04--independent-oracle.md` | U04 工作包（completed） |
+| `docs/50_plans/work_items/KNOWLEDGE--refresh-v2.md` | 知识刷新工作包（active·排队） |
+| `docs/60_delivery/verification/2026-10-16--u04-blind-review-rerun-v1.md` | 盲评复评验证文档 |
+| `docs/60_delivery/verification/2026-10-16--cockpit-51-chart-coverage-mapping-v1.md` | 51 图覆盖映射 |
+| `docs/60_delivery/verification/2026-10-12--damai-source-baseline-audit-v1.md` | 来源基线审计 |
+| `config/damai/source_facts_v1.yaml` | 来源事实登记（325 条） |
+| `config/metrics/damai_demo_metric_coverage_v1.yaml` | 指标覆盖矩阵（32/50×2） |
+| `config/statements/item_alias_map_v1.yaml` | 报表行名别名映射（damai_syn 段） |
+| `services/api/src/flow_api/cockpit/modules.py` | 模块构建器（8 个 build_* 函数） |
+| `services/api/src/flow_api/cockpit/service.py` | 投影服务（KPI/趋势/结论/行动项） |
