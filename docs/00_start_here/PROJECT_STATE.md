@@ -3,14 +3,18 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.33
+version: 5.34
 created_at: 2026-09-12
-updated_at: 2026-10-13
+updated_at: 2026-10-16
 owner: FLOW
 applies_to: repository
 ---
 
 # FLOW 当前项目状态（唯一 current state）
+
+# FLOW 当前项目状态（唯一 current state）
+
+2026-10-16 当前状态：**CFO 驾驶舱工作包 completed**（8 模块页面+行动项+安全规格 V1.1.1+批次 A~D 全量交付，main `14016297` CI 17/17）。**U04 盲评复评 completed**（旧三样本 199/199 全绿，C 级条件 5 通过；条件对账 4/6 满足，条件 2/4 如实 No-Go）。用户四项裁决落账：L0 挂 CI（非阻断 1C）+ 仅旧三样本盲评（2A）+ C 级 6 条件不变（3A）+ ZTO 立即恢复（4C）。ZTO 分支已解封合并。**下一队列项：知识刷新 K0–K6**。
 
 2026-10-13 深夜当前状态：**时间线迁移已交付**（分支 `flow/timeline-migration-20261013`，commit `087a72f2`）——演示数据期间对齐菜鸟真实财年（FY2022 比较 / FY2023 分析），canonical 月度明细年度聚合精确等于申请稿披露值（零差异）；财务报表为 IFRS 披露原值（合成行全删），简体 IFRS 勾稽器（12 恒等式）过发布门禁；覆盖矩阵 FY2022/FY2023 各 32/50 如实缺省；ORG-LEDGER v2（v1 冻结）。验证全绿（单元/企业/scripts/隔离栈 e2e）。已合并 main（`c824f55f`，同 SHA CI 17/17 success）。下一子步：F3（指标目录收尾），随后批次 C-2。
 

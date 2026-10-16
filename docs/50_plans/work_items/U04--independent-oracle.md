@@ -2,7 +2,7 @@
 doc_id: FLOW-WI-U04
 title: U04 独立 oracle 录入与全行验证
 doc_type: work-item
-status: active
+status: completed
 version: 1.5
 created_at: 2026-09-12
 updated_at: 2026-09-29
