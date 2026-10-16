@@ -2,7 +2,7 @@
 doc_id: FLOW-WI-FINMETRIC-001
 title: 财务指标目录（驾驶舱前置）
 doc_type: work-item
-status: active
+status: completed
 version: 1.6
 created_at: 2026-09-30
 updated_at: 2026-10-14
