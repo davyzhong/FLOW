@@ -55,7 +55,7 @@ Davybase 分支 `codex/knowledge-run-manifest-k0` 推送扫描器实现 `a0c2e67
 
 ## 当前队首：K2 稳定 15:00 截面（队首待启动）
 
-执行既定 14:30 获取排他锁、15:00 记录候选、15:30 复验流程。不得修改、暂存或提交 ObsidianWiki 中的既存变化；若 clean/tree/远端等条件失败，只能形成如实的 rejected manifest 并顺延，不得生成 accepted manifest、正式 baseline 或 release。脚本实现、隔离测试及确切验收见归档计划 K2，不得伪造时间或接受失败快照。
+K2 冻结器已在 Davybase 分支推送（提交 `730bff89dd181ec87d101d6df311790674ef7d24`），8 项定向测试与全量 887 项测试通过，Ruff、README 统计和断链检查通过。实际快照窗口尚未到达：须在上海时间 14:30 获取锁、15:00 记录候选、15:30 复验。不得修改、暂存或提交 ObsidianWiki 中的既存变化；若 clean/tree/writer/远端等条件失败，只能形成如实 rejected manifest，先推送再释放锁并顺延，不得生成 accepted manifest、正式 baseline 或 release。不得伪造时间或接受失败快照。
 
 ## 全轨退出条件
 
