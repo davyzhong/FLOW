@@ -2,7 +2,7 @@
 doc_id: FLOW-VERIFY-COCKPIT-CHART-COVERAGE-20261016-001
 title: CFO 驾驶舱 51 图覆盖映射验收
 doc_type: verification
-status: current
+status: draft
 version: "1.0"
 created_at: 2026-10-16
 updated_at: 2026-10-16

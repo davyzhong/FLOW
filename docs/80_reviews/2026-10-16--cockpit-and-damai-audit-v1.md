@@ -13,6 +13,9 @@ decision_refs: [D001, D052, D053, D054, D055]
 knowledge_release: flow-knowledge-2026-09-12.1
 supersedes: []
 superseded_by: null
+subject_ref: FLOW-WI-COCKPIT-CFO-001
+findings: |-
+  详见本报告正文；核心结论：驾驶舱 8 模块全量交付，来源事实门禁和披露边界已落地。
 source_refs:
   - docs/50_plans/work_items/COCKPIT--cfo-dashboard-implementation.md
   - docs/50_plans/work_items/FINMETRIC--financial-metric-catalog.md
