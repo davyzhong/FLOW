@@ -22,7 +22,7 @@ from public_statement_row_identity import (  # noqa: E402
 )
 
 SOURCES_MAP = Path("config/statements/answer_set_sources.yaml")
-ANSWER_SET = Path("config/statements/answer_set_l1_v5.yaml")
+ANSWER_SET = Path("config/statements/answer_set_l1_v6.yaml")
 CORRECTION_MAP = Path("validation/financial_reports/corrections/public-row-identity-map-v1.csv")
 SOURCE_MANIFEST = Path("validation/financial_reports/manifest.yaml")
 FREEZE_OUTPUT = Path("validation/financial_reports/c-level-freeze-2026-09-29-v1.yaml")
@@ -208,9 +208,9 @@ def build_manifest(
         seen_samples.add(sample)
         report_payloads.append((corrected, source_path, mapping[sample]))
 
-    if len(report_payloads) != 14 or len(mapping_rows) != 14:
+    if len(report_payloads) != 15 or len(mapping_rows) != 15:
         raise ValueError(
-            f"冻结样本必须恰为14份：活动输入{len(report_payloads)}，映射{len(mapping_rows)}"
+            f"冻结样本必须恰为15份：活动输入{len(report_payloads)}，映射{len(mapping_rows)}"
         )
     if seen_samples != set(mapping):
         raise ValueError("活动抽取输入与报告身份映射的 sample 集合不一致")
@@ -279,10 +279,11 @@ def build_manifest(
         "l1_located": aggregate_located,
         "l1_unlocated": aggregate_unlocated,
     }
+    # 2026-09-29 ZTO 2026Q1 接入（第 6 项数据扩张）：14→15 份、L0 1532→1579、L1 1776→1823
     if coverage != {
-        "l0_values": 1532,
-        "l1_values": 1776,
-        "l1_located": 1776,
+        "l0_values": 1579,
+        "l1_values": 1823,
+        "l1_located": 1823,
         "l1_unlocated": 0,
     }:
         raise ValueError(f"当前样本覆盖与已验证基线不一致：{coverage}")

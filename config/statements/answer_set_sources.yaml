@@ -5,6 +5,7 @@
 reports:
   - {sample: sf_2026q1, source_pdf_suffix: "sf_002352/SF_2026_Q1_report.pdf", stock_code: "002352.SZ", period_label: "2026Q1", report_kind: 一季报}
   - {sample: tencent_2026q2, source_pdf_suffix: "tencent_0700/Tencent_2026_Q2_results.pdf", stock_code: "0700.HK", period_label: "2026Q2", report_kind: 中期业绩公告}
+  - {sample: zto_2026q1, source_pdf_suffix: "zto_2026q1/ZTO_2026_Q1_results_announcement_c.pdf", stock_code: "ZTO.US", period_label: "2026Q1", report_kind: 季度业绩公告}
   - {sample: jdl_2025fy, source_pdf_suffix: "jd_logistics_2618/JDL_FY2025_annual_report.pdf", stock_code: "2618.HK", period_label: "FY2025", report_kind: 年报}
   - {sample: alibaba_2019fy, source_pdf_suffix: "alibaba_9988/BABA_FY2020_annual_results.pdf", stock_code: "9988.HK", period_label: "FY2019", report_kind: 年报}
   - {sample: alibaba_2020fy, source_pdf_suffix: "alibaba_9988/BABA_FY2020_annual_results.pdf", stock_code: "9988.HK", period_label: "FY2020", report_kind: 年报}

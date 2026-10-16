@@ -280,16 +280,20 @@ class VersionedExtractionSourceTest(unittest.TestCase):
                 encoding="utf-8"
             )
         )
-        root = REPO / "docs/knowledge-base/02_research/original/p5_samples"
+        # 2026-09-29 ZTO 接入后源 PDF 不再全部位于 p5_samples（ZTO 冻结于
+        # validation/financial_reports/original/）；一致性改为「suffix 是
+        # source_pdf 的路径后缀」，存在性按解析后的真实路径核验。
         for row in mapping["reports"]:
             extraction = yaml.safe_load(
                 (
                     REPO / f"docs/implementation/p5/{row['sample']}_statements.yaml"
                 ).read_text(encoding="utf-8")
             )
-            expected = extraction["source_pdf"].split("p5_samples/", 1)[1]
-            self.assertEqual(row["source_pdf_suffix"], expected, row["sample"])
-            self.assertTrue((root / row["source_pdf_suffix"]).is_file(), row["sample"])
+            source_pdf = extraction["source_pdf"]
+            self.assertTrue(
+                source_pdf.endswith(row["source_pdf_suffix"]), row["sample"]
+            )
+            self.assertTrue((REPO / source_pdf).is_file(), row["sample"])
 
 
 if __name__ == "__main__":

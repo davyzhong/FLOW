@@ -44,6 +44,7 @@ seed_file() {
 
 seed sf_2026q1_statements.yaml       顺丰控股   002352.SZ   一季报       2026Q1
 seed tencent_2026q2_statements.yaml  腾讯控股   0700.HK     中期业绩公告 2026Q2
+seed zto_2026q1_statements.yaml    中通快递   ZTO.US      季度业绩公告 2026Q1
 seed_file validation/financial_reports/corrections/jdl_2025fy_statements_v3.yaml \
   京东物流 2618.HK 年报 FY2025
 for y in 2019 2020 2021 2022 2023 2024 2025 2026; do
@@ -62,4 +63,4 @@ done
 # dev principal / legacy service_account 的 RoleBinding 统一由
 # scripts/seed_dev_principal.py 提供（make stack-up 与 e2e 脚本已接线）。
 
-echo "P5 财报种子完成：5 家公司 14 份报告。"
+echo "P5 财报种子完成：6 家公司 15 份报告。"

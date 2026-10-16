@@ -22,8 +22,8 @@ from public_statement_row_identity import apply_public_row_identity_corrections
 
 REPO = Path(__file__).resolve().parents[1]
 SOURCES_GLOB = "docs/implementation/p5/*_statements.yaml"
-OUT_DEFAULT = REPO / "config/statements/answer_set_l1_v5.yaml"
-SUPERSEDED_ANSWER_SET = "config/statements/answer_set_l1_v4.yaml"
+OUT_DEFAULT = REPO / "config/statements/answer_set_l1_v6.yaml"
+SUPERSEDED_ANSWER_SET = "config/statements/answer_set_l1_v5.yaml"
 CORRECTED_JDL = "validation/financial_reports/corrections/jdl_2025fy_statements_v3.yaml"
 CORRECTED_ALIBABA = "validation/financial_reports/corrections/alibaba_2023fy_statements_v2.yaml"
 
@@ -191,7 +191,7 @@ def build(
     out: Path,
     repo: Path = REPO,
     *,
-    version: int = 5,
+    version: int = 6,
     supersedes: str = SUPERSEDED_ANSWER_SET,
 ) -> dict:
     import yaml
