@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目交接文档
 doc_type: navigation
 status: current
-version: 6.2
+version: 6.3
 created_at: 2026-09-12
 updated_at: 2026-10-17
 owner: FLOW
@@ -18,7 +18,7 @@ applies_to: repository
 
 ## 一、当前任务
 
-**当前唯一队首：知识刷新 K0–K6（K0 完成，K1 只读覆盖扫描器实际执行中）**。驾驶舱视觉补全与数值格式治理已完成：准确 SHA `1a71e33fc2f779e1a848a4c3736919e98f762bdf` 的 GitHub CI run `38936413156` 全部 job 成功。K0 已在 Davybase 分支 `codex/knowledge-run-manifest-k0` 推送实现 `172a099`、证据 `94fc05d`、交接 `eb8c3d0`；严格复算 1,265 输入、1,239 成功、2 待复核、24 过滤，32 篇/512 图样本对账通过，872 项测试与 Ruff 通过。该 SHA 的 GitHub `ci.yml` 无运行记录，截图工作流不替代 CI。ObsidianWiki `main` `e04d6833` 有 1,365 条既存变化且范围指纹为 `0a42346d…c7f7`，继续只读保护；不执行图片 apply，`CURRENT_RELEASE` 保持 `flow-knowledge-2026-09-12.1`。K1 先只读扫描三个获准目录，具体范围见[知识刷新工作包](docs/50_plans/work_items/KNOWLEDGE--refresh-v2.md)。
+**当前唯一队列项：知识刷新 K0–K6（K0/K1 完成，K2 队首待启动）**。驾驶舱视觉补全与数值格式治理已完成：准确 SHA `1a71e33fc2f779e1a848a4c3736919e98f762bdf` 的 GitHub CI run `38936413156` 全部 job 成功。K0 已在 Davybase 分支 `codex/knowledge-run-manifest-k0` 推送实现 `172a099`、证据 `94fc05d`、交接 `eb8c3d0`；严格复算 1,265 输入、1,239 成功、2 待复核、24 过滤，32 篇/512 图样本对账通过，872 项测试与 Ruff 通过。该 SHA 的 GitHub `ci.yml` 无运行记录，截图工作流不替代 CI。ObsidianWiki `main` `e04d6833` 有 1,365 条既存变化且范围指纹为 `0a42346d…c7f7`，继续只读保护；不执行图片 apply，`CURRENT_RELEASE` 保持 `flow-knowledge-2026-09-12.1`。K1 扫描器实现 `a0c2e6762c2c212baa23f4ea4855dde5399c37a6`、证据 `a914830`；扫描 1,601 篇，566 篇人工 triage、0 可执行候选。K2 按既定 14:30/15:00/15:30 时间门禁执行；dirty 时仅记录 rejected 并顺延。详情见[知识刷新工作包](docs/50_plans/work_items/KNOWLEDGE--refresh-v2.md)。
 
 用户四项裁决（2026-10-16）：
 1. **L0 挂 CI（选项 C）**：非阻断 `l0-baseline` job（continue-on-error: true），失败仅作信号灯。
@@ -84,8 +84,8 @@ applies_to: repository
 
 **K0–K6 步骤概要**（状态以路线图和工作包为准）：
 1. **K0 已完成**：Davybase 运行清单实现、微信历史批次严格验收和证据归档已推送。
-2. **K1 队首待启动**：先实现只读 allowlist coverage 扫描器，盘点三个非微信范围、异常和候选 pathspec；当前禁止 Obsidian apply、暂存或 release 切换。
-3. **K2** Obsidian Git 冻结（14:30 锁定、15:00 候选、15:30 复验）
+2. **K1 已完成**：只读 allowlist scanner 已扫描三个非微信范围；566 篇需人工 triage，可执行候选 0，证据见工作包。
+3. **K2 队首待启动**：Obsidian Git 冻结（14:30 锁定、15:00 候选、15:30 复验）
 4. **K3** 用 accepted manifest 重建来源 registry/baseline/diff
 5. **K4** 全量路由 + HIGH 精读
 6. **K5** 构建 candidate + seal
@@ -214,7 +214,7 @@ bash scripts/test_damai_demo_e2e.sh
 | `docs/50_plans/work_items/COCKPIT--cfo-dashboard-implementation.md` | 驾驶舱工作包（completed） |
 | `docs/50_plans/work_items/FINMETRIC--financial-metric-catalog.md` | 指标目录工作包（completed） |
 | `docs/50_plans/work_items/U04--independent-oracle.md` | U04 工作包（completed） |
-| `docs/50_plans/work_items/KNOWLEDGE--refresh-v2.md` | 知识刷新工作包（K0 完成，K1 队首待启动） |
+| `docs/50_plans/work_items/KNOWLEDGE--refresh-v2.md` | 知识刷新工作包（K0/K1 完成，K2 队首待启动） |
 | `docs/60_delivery/verification/2026-10-16--u04-blind-review-rerun-v1.md` | 盲评复评验证文档 |
 | `docs/60_delivery/verification/2026-10-16--cockpit-51-chart-coverage-mapping-v1.md` | 51 图覆盖映射 |
 | `docs/60_delivery/verification/2026-10-12--damai-source-baseline-audit-v1.md` | 来源基线审计 |

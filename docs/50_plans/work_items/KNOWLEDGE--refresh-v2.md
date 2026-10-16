@@ -3,7 +3,7 @@ doc_id: FLOW-WI-KNOWLEDGE-REFRESH-V2-001
 title: 第二代静态知识刷新与战略重基线
 doc_type: work-item
 status: active
-version: 1.2
+version: 1.3
 created_at: 2026-09-24
 updated_at: 2026-10-17
 owner: FLOW
@@ -24,7 +24,7 @@ Obsidian Git 截面，重建 FLOW 来源基线与 sealed knowledge candidate；�
 ## 当前断点
 
 - 批准规格和三仓库 preflight 已完成。
-- K0 审计 envelope 与微信旧批次回顾性验收已完成。K1 非微信覆盖、稳定截面、FLOW candidate 和战略裁决仍未完成。当前下一子步为 K1：先只读盘点 `processed/02_企业管理`、`processed/03_财务与会计`、`processed/04_跨境物流` 的图片覆盖和异常，并核对 allowlist/pathspec；本次路线图更新提交推送后再启动。
+- K0 与 K1 已完成。K1 只读扫描三个获准目录，报告和 pathspec 已在 Davybase 分支推送；无可执行候选，566 篇需人工定位。下一子步为 K2：按既定时间窗验证 Obsidian Git 稳定截面门禁。K2 通过后才能构建 FLOW candidate；K3–K6 和战略裁决仍未完成。
 - 2026-10-17 只读 preflight：Davybase `main`=`6efcd6e2f0560e019f69dbbeada70e2532544f31`；审计实现在 `codex/knowledge-run-manifest-k0`，提交 `172a099`，K0 证据 `94fc05d`，交接/统计 `eb8c3d0` 均已推送。ObsidianWiki `main`=`e04d6833a623033a3601d36192f02dc15184eb6e`，K0 记录 1,365 条本地变化及内容哈希；全范围文件树摘要 `0a42346d276917c8b94f1b0c198ca5bfd68405c35c1656407bc10135e236c7f7` 复验一致。既存变化只读保护，不暂存、不提交、不覆盖，不能把 HEAD 单独称为完整工作区快照。
 - `CURRENT_RELEASE` 继续为 `flow-knowledge-2026-09-12.1`。
 
@@ -34,18 +34,28 @@ Obsidian Git 截面，重建 FLOW 来源基线与 sealed knowledge candidate；�
 
 ObsidianWiki 的 dirty working tree 不得被清理、重置或用 pull 覆盖；K0 不运行任何 `--apply`。pre-K1 快照同时记录 HEAD/tree、1,365 条 dirty 路径、其内容哈希及整个微信知识库范围文件树摘要，不能伪称仅有 Git HEAD 能代表全部 vault 内容。
 
-## 当前执行子步：K1 非微信图片覆盖（实际执行中）
+## K1 完成：非微信图片覆盖只读盘点（2026-10-17）
 
-Davybase 当前没有 `scripts/run/image_coverage.py` 或 `config/knowledge_enrichment_scope.yaml`。
-K1 已开始从 TDD 实现 allowlist 与只读 coverage scanner，再扫描
-`processed/02_企业管理`、`processed/03_财务与会计`、`processed/04_跨境物流`，统计 Markdown、
-含图文档、引用、可解析、已解释、待解释、过滤、缺失和失败，并生成只含路径定位符/哈希的报告。
-同时核验 ObsidianWiki 1,365 条既存变化未变，生成候选 pathspec 并证明范围外/敏感路径为零。
+Davybase 分支 `codex/knowledge-run-manifest-k0` 推送扫描器实现 `a0c2e6762c2c212baa23f4ea4855dde5399c37a6`，
+扫描证据提交 `a914830`。报告绑定实现 SHA，覆盖范围为
+`processed/02_企业管理`、`processed/03_财务与会计`、`processed/04_跨境物流`。
 
-K1 本阶段只读，不修改 ObsidianWiki。其现有 1,365 条变化使 `davybase-knowledge-run/v1`
-apply 的干净输入仓库前置条件不满足；不得复制到临时库、忽略 dirty 状态或使用其他写入路径
-绕过此门禁。完成覆盖 scanner、报告、pathspec 与独立审查后，先更新路线图给出后续处理方案和
-可验证的写入边界，再进入后续任务。
+扫描结果：1,601 篇 Markdown，1,004 篇含图片语法，438 篇已有受保护图解，566 篇待人工排查；
+17,450 个 Obsidian embed 引用在当前 allowlist/resolver 下未解析，另有 2,445 个标准 Markdown
+图片引用不受现有处理器支持。可执行候选 0，triage pathspec 566，范围外引用、解析错误、符号链接越界和处理失败均为 0。未解析仅表示本扫描范围与 resolver 未找到，不证明其他目录不存在原图。
+
+证据文件：Davybase `docs/evidence/runs/K1-20261017-nonwechat-image-coverage.json`
+（SHA-256 `19f94d39dfda5d19af93e1c1c9cf9ceb608387ee76a40da135f1633dded856db`）、空候选 pathspec
+（SHA-256 `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`）、triage pathspec
+（SHA-256 `dc43a968c5adf30ab41bf889b2542f385093ff8c7e1e5d10d994e7c6e9e3fafe`）。针对 scanner 的独立审查未发现未解决的 P1/P2。
+
+本步未写入 ObsidianWiki；K0 记录的 1,365 条 dirty 路径内容指纹
+`f3bf5fc0edb8981fa0a93b16915d26197963df3d56c9e13cdfdae0dd6d5ab5cf` 复验一致。
+工作区仍 dirty，`davybase-knowledge-run/v1` 的 clean-input 前置条件仍不满足；禁止绕过门禁。
+
+## 当前队首：K2 稳定 15:00 截面（队首待启动）
+
+执行既定 14:30 获取排他锁、15:00 记录候选、15:30 复验流程。不得修改、暂存或提交 ObsidianWiki 中的既存变化；若 clean/tree/远端等条件失败，只能形成如实的 rejected manifest 并顺延，不得生成 accepted manifest、正式 baseline 或 release。脚本实现、隔离测试及确切验收见归档计划 K2，不得伪造时间或接受失败快照。
 
 ## 全轨退出条件
 
