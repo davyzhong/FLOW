@@ -2,7 +2,7 @@
 doc_id: FLOW-VERIFY-PROJECT-HEALTH-20261016-001
 title: FLOW 项目整体执行与驾驶舱可视化复核
 doc_type: verification
-status: current
+status: draft
 version: "1.0"
 created_at: 2026-10-16
 updated_at: 2026-10-16

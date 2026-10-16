@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目交接文档
 doc_type: navigation
 status: current
-version: 6.0
+version: 6.1
 created_at: 2026-09-12
 updated_at: 2026-10-16
 owner: FLOW
@@ -18,7 +18,7 @@ applies_to: repository
 
 ## 一、当前任务
 
-**队首为空。** 上一队首 CFO 驾驶舱产品化（含 FINMETRIC F1–F4）已于 2026-10-16 关闭（`df6073a8` CI 17/17 success）。隔离复核显示 51 图覆盖映射不等于逐图视觉完成，费用分析页在当前演示数据下有运行时异常；详见[项目复核](docs/60_delivery/verification/2026-10-16--project-health-and-cockpit-visual-review-v1.md)。下一队列项仍为**知识刷新 K0–K6**，是否调整队列由路线图裁决。
+**当前唯一队首：驾驶舱视觉补全与数值格式治理**。原 CFO 驾驶舱产品化（API/数据/安全批次 A–D、FINMETRIC F1–F4）及 `df6073a8` CI 17/17 仍为已完成；用户于 2026-10-16 明确要求继续执行图表视觉、内容/趋势、交互和数字精度收尾。执行范围与验收见[工作包](docs/50_plans/work_items/COCKPIT--visual-completion-and-number-format.md)，基线复核见[项目复核](docs/60_delivery/verification/2026-10-16--project-health-and-cockpit-visual-review-v1.md)。完成并通过准确 SHA CI 后恢复知识刷新 K0–K6。
 
 用户四项裁决（2026-10-16）：
 1. **L0 挂 CI（选项 C）**：非阻断 `l0-baseline` job（continue-on-error: true），失败仅作信号灯。
