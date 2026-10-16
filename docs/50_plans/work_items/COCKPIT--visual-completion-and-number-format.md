@@ -2,10 +2,10 @@
 doc_id: FLOW-WI-COCKPIT-VISUAL-20261017-001
 title: CFO 驾驶舱视觉补全与数值格式治理
 doc_type: work-item
-status: active
-version: "1.0"
+status: completed
+version: "1.2"
 created_at: 2026-10-16
-updated_at: 2026-10-16
+updated_at: 2026-10-17
 owner: FLOW
 depends_on: [FLOW-WI-COCKPIT-CFO-001]
 acceptance_refs: [FLOW-VERIFY-PROJECT-HEALTH-20261016-001, FLOW-VERIFY-COCKPIT-CHART-COVERAGE-20261016-001]
@@ -55,3 +55,15 @@ superseded_by: null
 - [项目整体执行与驾驶舱可视化复核](../../60_delivery/verification/2026-10-16--project-health-and-cockpit-visual-review-v1.md)
 - [CFO 驾驶舱 51 图覆盖映射验收](../../60_delivery/verification/2026-10-16--cockpit-51-chart-coverage-mapping-v1.md)
 - [CFO 驾驶舱原工作包](COCKPIT--cfo-dashboard-implementation.md)
+
+## 2026-10-17 执行记录
+
+- 完整实现提交：`1a71e33fc2f779e1a848a4c3736919e98f762bdf`（包含前置提交
+  `607d07f853f530d153a55f92c9e9a4658eb17e93`），已推送至
+  `codex/cockpit-visual-completion`；同 SHA GitHub CI run `38936413156` 全部 job 成功。页面增高导致 Linux/macOS 视觉基线过期，已更新四个平台截图并在该 SHA 的 dashboard job 验证通过。
+- 本地验证：Web 35 个测试文件/183 项通过；API 定向测试 19/19；typecheck 通过；lint
+  0 错误（既有 TanStack Table 编译兼容警告 1 条）；隔离大麦账套 19/19、端到端 15/15。
+- 162 路由可见性矩阵：152 条 200，10 条为预期 422；无意外失败。隔离 Compose 栈已清理。
+- 8 张真实页面截图与本轮数据批次、代码 SHA 记录于[51 图覆盖验收](../../60_delivery/verification/2026-10-16--cockpit-51-chart-coverage-mapping-v1.md)。
+- M1 已通过（314 文档、0 错误），plan views 已重生成并校验；文档链接检查 0 错误，脚本测试 155/155。
+- 独立画面复核发现并修复模块页缺少布局样式的问题；本地隔离 dashboard 浏览器验收 7/7 通过；Linux 与 macOS 两套视觉基线已更新。完整 SHA CI、文档门禁和隔离验收均通过，本工作包完成。

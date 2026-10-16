@@ -14,7 +14,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-10-16 当前状态：**CFO 驾驶舱工作包 completed**（8 模块页面+行动项+安全规格 V1.1.1+批次 A~D 全量交付，main `14016297` CI 17/17）。**U04 盲评复评 completed**（旧三样本 199/199 全绿，C 级条件 5 通过；条件对账 4/6 满足，条件 2/4 如实 No-Go）。用户四项裁决落账：L0 挂 CI（非阻断 1C）+ 仅旧三样本盲评（2A）+ C 级 6 条件不变（3A）+ ZTO 立即恢复（4C）。ZTO 分支已解封合并。**当前唯一执行项：驾驶舱视觉补全与数值格式治理**（原驾驶舱 API/数据/安全产品化批次继续保持完成）；验收工作包见[COCKPIT 视觉与格式工作包](../50_plans/work_items/COCKPIT--visual-completion-and-number-format.md)，下一个队列项为知识刷新 K0–K6。整体复核及隔离截图见[2026-10-16 项目复核](../60_delivery/verification/2026-10-16--project-health-and-cockpit-visual-review-v1.md)。
+2026-10-17 当前状态：**CFO 驾驶舱视觉补全与数值格式治理已完成；唯一执行项切换为第二代静态知识刷新 K0–K6，当前仅执行 K0**。驾驶舱代码 SHA `1a71e33fc2f779e1a848a4c3736919e98f762bdf` 已推送，准确 SHA GitHub CI run `38936413156` 全部 job 成功；Web 183/183、API 定向 19/19、隔离账套 19/19、dashboard Playwright 7/7、浏览器 E2E 15/15、162 路由矩阵无意外失败，M1/M6、plan views、脚本测试和链接检查通过，8 张页面截图已登记。K0 当前只读核验 Davybase/ObsidianWiki remotes 与旧图片批次 manifest；`CURRENT_RELEASE` 仍为 `flow-knowledge-2026-09-12.1`，未经用户战略裁决不得切换。详细驾驶舱证据见[工作包](../50_plans/work_items/COCKPIT--visual-completion-and-number-format.md)、[视觉验收与截图](../60_delivery/verification/2026-10-16--cockpit-51-chart-coverage-mapping-v1.md)和[HANDOFF](../../HANDOFF.md)。
 
 2026-10-13 深夜当前状态：**时间线迁移已交付**（分支 `flow/timeline-migration-20261013`，commit `087a72f2`）——演示数据期间对齐菜鸟真实财年（FY2022 比较 / FY2023 分析），canonical 月度明细年度聚合精确等于申请稿披露值（零差异）；财务报表为 IFRS 披露原值（合成行全删），简体 IFRS 勾稽器（12 恒等式）过发布门禁；覆盖矩阵 FY2022/FY2023 各 32/50 如实缺省；ORG-LEDGER v2（v1 冻结）。验证全绿（单元/企业/scripts/隔离栈 e2e）。已合并 main（`c824f55f`，同 SHA CI 17/17 success）。下一子步：F3（指标目录收尾），随后批次 C-2。
 

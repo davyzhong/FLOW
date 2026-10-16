@@ -5,10 +5,10 @@ doc_type: generated
 status: generated
 version: 1.0
 created_at: 2026-09-12
-updated_at: 2026-10-16
+updated_at: 2026-10-17
 owner: FLOW
 generator_ref: scripts/documentation/plan_views.py
-input_hash: 7357fe56627a386e72a7b95510e42915276bede99f3d584589319ef20a915815
+input_hash: 7fc817821ec5c76555572d35199da5e76969dea315b0c8bb0cb240f847c5e9c9
 applies_to: planning
 ---
 
@@ -17,6 +17,7 @@ applies_to: planning
 > 本页由工作包元数据确定性生成，请勿手工修改。
 
 - [CFO 财务总监驾驶舱产品化](../work_items/COCKPIT--cfo-dashboard-implementation.md) — `completed`
+- [CFO 驾驶舱视觉补全与数值格式治理](../work_items/COCKPIT--visual-completion-and-number-format.md) — `completed`
 - [财务指标目录（驾驶舱前置）](../work_items/FINMETRIC--financial-metric-catalog.md) — `completed`
 - [企业组织建制与经营账套初始化包](../work_items/ORG-LEDGER--enterprise-initialization-package.md) — `completed`
 - [S01 U8 后战略边界、事实合同与安全门禁](../work_items/S01--post-u8-boundary-contract-security.md) — `completed`

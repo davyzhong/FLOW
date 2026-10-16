@@ -3,9 +3,9 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目交接文档
 doc_type: navigation
 status: current
-version: 6.1
+version: 6.2
 created_at: 2026-09-12
-updated_at: 2026-10-16
+updated_at: 2026-10-17
 owner: FLOW
 applies_to: repository
 ---
@@ -18,7 +18,7 @@ applies_to: repository
 
 ## 一、当前任务
 
-**当前唯一队首：驾驶舱视觉补全与数值格式治理**。原 CFO 驾驶舱产品化（API/数据/安全批次 A–D、FINMETRIC F1–F4）及 `df6073a8` CI 17/17 仍为已完成；用户于 2026-10-16 明确要求继续执行图表视觉、内容/趋势、交互和数字精度收尾。执行范围与验收见[工作包](docs/50_plans/work_items/COCKPIT--visual-completion-and-number-format.md)，基线复核见[项目复核](docs/60_delivery/verification/2026-10-16--project-health-and-cockpit-visual-review-v1.md)。完成并通过准确 SHA CI 后恢复知识刷新 K0–K6。
+**当前唯一队首：知识刷新 K0–K6（当前执行 K0）**。驾驶舱视觉补全与数值格式治理已完成：准确 SHA `1a71e33fc2f779e1a848a4c3736919e98f762bdf` 的 GitHub CI run `38936413156` 全部 job 成功；Web 183/183、API 定向 19/19、隔离账套 19/19、dashboard Playwright 7/7、端到端 15/15、162 条路由矩阵及 8 张截图已核验，M1/M6/plan views/脚本测试/链接检查通过。交付与截图见[工作包](docs/50_plans/work_items/COCKPIT--visual-completion-and-number-format.md)和[视觉验收](docs/60_delivery/verification/2026-10-16--cockpit-51-chart-coverage-mapping-v1.md)。K0 当前只读同步并核验 Davybase/ObsidianWiki remotes 与旧图片批次 manifest；尚未执行 allowlist apply，`CURRENT_RELEASE` 保持 `flow-knowledge-2026-09-12.1`，不得在用户战略裁决前切换。
 
 用户四项裁决（2026-10-16）：
 1. **L0 挂 CI（选项 C）**：非阻断 `l0-baseline` job（continue-on-error: true），失败仅作信号灯。
