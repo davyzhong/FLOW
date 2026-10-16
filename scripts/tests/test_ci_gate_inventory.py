@@ -26,6 +26,7 @@ EXPECTED_GATES = {
     "smoke",
     "user-closure-e2e",
     "module-boundaries-e2e",
+    "l0-baseline",
 }
 
 
