@@ -336,3 +336,16 @@ jobs:
       - run: FLOW_USER_CLOSURE_ONLY=1 bash scripts/test_user_closure_e2e.sh
       - if: failure()
         run: find apps/web/test-results -name "*.md" -exec cat {} \; 2>/dev/null || true
+
+  l0-baseline:
+    # 2026-10-16 用户裁决 1C：非阻断信号灯（continue-on-error），不阻塞合并
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: cd services/api && uv sync --all-groups --frozen
+      - name: L0 baseline check (1532 facts + 1776 anchors, non-blocking signal)
+        run: |
+          cd services/api
+          DATABASE_URL="postgresql+psycopg://flow:flow_dev_only@localhost:5432/flow" uv run python ../../scripts/l0_baseline_check.py || echo "::warning::L0 baseline check failed (non-blocking signal)"
