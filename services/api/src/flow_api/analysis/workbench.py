@@ -193,7 +193,8 @@ def management_watch(facts: dict[str, Decimal]) -> list[dict[str, str]]:
                 "code": "ar_outpacing_revenue",
                 "metric_code": "ar_turnover",
                 "message": (
-                    f"应收账款增速 {_display_percent(ar_growth)} 高于营业收入增速 {_display_percent(revenue_growth)}，"
+                    f"应收账款增速 {_display_percent(ar_growth)} 高于营业收入增速 "
+                    f"{_display_percent(revenue_growth)}，"
                     "建议核对回款与账龄（联动提示，不构成原因判断）"
                 ),
                 "direction": "warning",

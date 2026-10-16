@@ -419,13 +419,19 @@ def build_risk_module(ctx: ModuleFactContext) -> dict[str, Any]:
     equity_multiplier = ratio(total_assets, equity)
     ocf_current_liab_ratio = ratio(ocf, current_liab)
     kpis = [
-        _kpi("流动比率", current_ratio, ratio(prior_current_assets, _prior_fact(ctx, "bs.current_liab")), unit="ratio",
+        _kpi(
+            "流动比率", current_ratio,
+            ratio(prior_current_assets, _prior_fact(ctx, "bs.current_liab")), unit="ratio",
              caliber_note="经验参考约 2；过高可能资金闲置"),
         _kpi("速动比率", quick, prior_quick, unit="ratio"),
         _kpi("现金比率", cash_ratio, ratio(prior_cash, prior_current_liab), unit="ratio"),
-        _kpi("资产负债率", debt_asset_ratio, ratio(prior_total_liab, prior_total_assets), unit="ratio"),
+        _kpi(
+            "资产负债率", debt_asset_ratio,
+            ratio(prior_total_liab, prior_total_assets), unit="ratio"),
         _kpi("权益乘数", equity_multiplier, ratio(prior_total_assets, prior_equity), unit="ratio"),
-        _kpi("OCF/流动负债", ocf_current_liab_ratio, ratio(prior_ocf, prior_current_liab), unit="ratio"),
+        _kpi(
+            "OCF/流动负债", ocf_current_liab_ratio,
+            ratio(prior_ocf, prior_current_liab), unit="ratio"),
         _kpi("利息保障倍数", None, None, unit="ratio",
              unavailable_code="is.interest_exp",
              caliber_note="申请稿利润表无独立利息费用行（U-DM-INTEREST-SPLIT）"),
@@ -464,12 +470,20 @@ def build_risk_module(ctx: ModuleFactContext) -> dict[str, Any]:
             "solvency_ratios": {
                 "title": "资本结构对比", "type": "line", "unit": "ratio",
                 "periods": [ctx.prior_period_label, ctx.period_label],
-                "series": {"资产负债率": [ratio(prior_total_liab, prior_total_assets), debt_asset_ratio]},
+                "series": {
+                    "资产负债率": [
+                        ratio(prior_total_liab, prior_total_assets), debt_asset_ratio
+                    ]
+                },
             },
             "leverage_ratios": {
                 "title": "权益乘数对比", "type": "line", "unit": "倍",
                 "periods": [ctx.prior_period_label, ctx.period_label],
-                "series": {"权益乘数": [ratio(prior_total_assets, prior_equity), equity_multiplier]},
+                "series": {
+                    "权益乘数": [
+                        ratio(prior_total_assets, prior_equity), equity_multiplier
+                    ]
+                },
             },
         }, "unavailable": unavailable,
     }
