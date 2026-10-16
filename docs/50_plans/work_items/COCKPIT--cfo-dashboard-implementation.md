@@ -2,8 +2,8 @@
 doc_id: FLOW-WI-COCKPIT-CFO-001
 title: CFO 财务总监驾驶舱产品化
 doc_type: work-item
-status: active
-version: 1.9
+status: completed
+version: 2.0
 created_at: 2026-09-30
 updated_at: 2026-10-13
 owner: FLOW
@@ -23,7 +23,7 @@ confidentiality: project-internal
 
 # CFO 财务总监驾驶舱产品化
 
-## 目标
+## 目标## 目标
 
 把 `docs/05_design/prototypes/2026-09-29-cfo-cockpit-prototype-v2.html`（v2.0，51 图表、三模式、全卡穿透）**产品化**为 `apps/web/cockpit/*` 真实路由页面：Next.js 组件化实现、接真实 API 数据、受既有前端门禁（AppShell / workflow-nav / navigation.spec / 五态 / CI 17 job）约束。
 
