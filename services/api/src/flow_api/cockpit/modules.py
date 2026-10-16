@@ -217,6 +217,7 @@ def build_balance_sheet_module(ctx: ModuleFactContext) -> dict[str, Any]:
         "asset_structure": {
             "title": "资产结构（流动/非流动）",
             "type": "treemap",
+            "unit": "百万元",
             "periods": [ctx.prior_period_label, ctx.period_label],
             "series": {
                 "流动资产": [prior_current_assets, current_assets],
@@ -226,6 +227,7 @@ def build_balance_sheet_module(ctx: ModuleFactContext) -> dict[str, Any]:
         "liability_equity_structure": {
             "title": "负债与权益结构",
             "type": "ratio_bar",
+            "unit": "百万元",
             "periods": [ctx.prior_period_label, ctx.period_label],
             "series": {
                 "负债合计": [prior_total_liab, total_liab],
@@ -235,6 +237,7 @@ def build_balance_sheet_module(ctx: ModuleFactContext) -> dict[str, Any]:
         "capital_structure_trend": {
             "title": "资本结构趋势",
             "type": "line",
+            "unit": "ratio",
             "periods": [ctx.prior_period_label, ctx.period_label],
             "series": {
                 "资产负债率": [prior_debt_asset, debt_asset],
@@ -321,6 +324,7 @@ def build_working_capital_module(ctx: ModuleFactContext) -> dict[str, Any]:
         "ar_inv_ap_trend": {
             "title": "应收存货应付趋势",
             "type": "line",
+            "unit": "百万元",
             "periods": [ctx.period_label + " 期初", ctx.period_label + " 期末"],
             "series": {
                 "应收": [ar_begin, ar_cur],
@@ -331,6 +335,7 @@ def build_working_capital_module(ctx: ModuleFactContext) -> dict[str, Any]:
         "ccc_formula": {
             "title": "CCC 公式（DSO + DIO − DPO）",
             "type": "formula_card",
+            "unit": "day",
             "dso": str(dso) if dso is not None else None,
             "dio": str(dio) if dio is not None else None,
             "dpo": str(dpo) if dpo is not None else None,
@@ -394,14 +399,33 @@ def build_risk_module(ctx: ModuleFactContext) -> dict[str, Any]:
         ),
         current_liab,
     )
+    prior_current_assets = _prior_fact(ctx, "bs.current_assets")
+    prior_inventory = _prior_fact(ctx, "bs.inventory")
+    prior_cash = _prior_fact(ctx, "bs.cash")
+    prior_current_liab = _prior_fact(ctx, "bs.current_liab")
+    prior_total_liab = _prior_fact(ctx, "bs.total_liab")
+    prior_total_assets = _prior_fact(ctx, "bs.total_assets")
+    prior_equity = _prior_fact(ctx, "bs.equity")
+    prior_ocf = ctx.prior.get("cf.ocf:cur")
+    prior_quick = ratio(
+        prior_current_assets - prior_inventory
+        if prior_current_assets is not None and prior_inventory is not None
+        else None,
+        prior_current_liab,
+    )
+    current_ratio = ratio(current_assets, current_liab)
+    cash_ratio = ratio(cash, current_liab)
+    debt_asset_ratio = ratio(total_liab, total_assets)
+    equity_multiplier = ratio(total_assets, equity)
+    ocf_current_liab_ratio = ratio(ocf, current_liab)
     kpis = [
-        _kpi("流动比率", ratio(current_assets, current_liab), None, unit="ratio",
+        _kpi("流动比率", current_ratio, ratio(prior_current_assets, _prior_fact(ctx, "bs.current_liab")), unit="ratio",
              caliber_note="经验参考约 2；过高可能资金闲置"),
-        _kpi("速动比率", quick, None, unit="ratio"),
-        _kpi("现金比率", ratio(cash, current_liab), None, unit="ratio"),
-        _kpi("资产负债率", ratio(total_liab, total_assets), None, unit="ratio"),
-        _kpi("权益乘数", ratio(total_assets, equity), None, unit="ratio"),
-        _kpi("OCF/流动负债", ratio(ocf, current_liab), None, unit="ratio"),
+        _kpi("速动比率", quick, prior_quick, unit="ratio"),
+        _kpi("现金比率", cash_ratio, ratio(prior_cash, prior_current_liab), unit="ratio"),
+        _kpi("资产负债率", debt_asset_ratio, ratio(prior_total_liab, prior_total_assets), unit="ratio"),
+        _kpi("权益乘数", equity_multiplier, ratio(prior_total_assets, prior_equity), unit="ratio"),
+        _kpi("OCF/流动负债", ocf_current_liab_ratio, ratio(prior_ocf, prior_current_liab), unit="ratio"),
         _kpi("利息保障倍数", None, None, unit="ratio",
              unavailable_code="is.interest_exp",
              caliber_note="申请稿利润表无独立利息费用行（U-DM-INTEREST-SPLIT）"),
@@ -426,7 +450,28 @@ def build_risk_module(ctx: ModuleFactContext) -> dict[str, Any]:
             "数据源：菜鸟申请稿披露财报（IFRS）·大麦物流演示主体引用；"
             "不构成公开财报 C 级能力证明"
         ),
-        "unit": "ratio", "kpis": kpis, "charts": {}, "unavailable": unavailable,
+        "unit": "ratio", "kpis": kpis,
+        "charts": {
+            "liquidity_ratios": {
+                "title": "短期偿债能力对比", "type": "line", "unit": "倍",
+                "periods": [ctx.prior_period_label, ctx.period_label],
+                "series": {
+                    "流动比率": [ratio(prior_current_assets, prior_current_liab), current_ratio],
+                    "速动比率": [prior_quick, quick],
+                    "现金比率": [ratio(prior_cash, prior_current_liab), cash_ratio],
+                },
+            },
+            "solvency_ratios": {
+                "title": "资本结构对比", "type": "line", "unit": "ratio",
+                "periods": [ctx.prior_period_label, ctx.period_label],
+                "series": {"资产负债率": [ratio(prior_total_liab, prior_total_assets), debt_asset_ratio]},
+            },
+            "leverage_ratios": {
+                "title": "权益乘数对比", "type": "line", "unit": "倍",
+                "periods": [ctx.prior_period_label, ctx.period_label],
+                "series": {"权益乘数": [ratio(prior_total_assets, prior_equity), equity_multiplier]},
+            },
+        }, "unavailable": unavailable,
     }
 
 
@@ -441,6 +486,7 @@ def build_consolidation_module(ctx: ModuleFactContext) -> dict[str, Any]:
         "cainiao_segment_series": {
             "title": "菜鸟分部收入（阿里年报披露）",
             "type": "line",
+            "unit": "百万元",
             "periods": list(segment_facts.keys()),
             "series": {"分部收入": list(segment_facts.values())},
             "note": "FY2026 起菜鸟并入「所有其他」分部，无单独披露",
@@ -471,10 +517,12 @@ def build_expenses_module(ctx: ModuleFactContext) -> dict[str, Any]:
     """费用分析。"""
     def _exp(name: str, item_id: str) -> dict[str, Any]:
         cur = ctx.current.get(f"{item_id}:cur")
+        prior = ctx.current.get(f"{item_id}:prior_yoy")
         rev = ctx.current.get("is.revenue:cur")
         rate = _ratio(abs(cur) if cur is not None else None, rev)
         return {"name": name, "status": "available" if cur is not None else "unavailable",
                 "value": str(abs(cur)) if cur is not None else None,
+                "prior_value": str(abs(prior)) if prior is not None else None,
                 "rate": str(rate) if rate is not None else None, "unit": "百万元"}
     selling = ctx.current.get("is.selling_exp:cur")
     admin = ctx.current.get("is.admin_exp:cur")
@@ -495,8 +543,11 @@ def build_expenses_module(ctx: ModuleFactContext) -> dict[str, Any]:
             {"name": "期间费用合计", "status": "available" if total is not None else "unavailable",
              "value": str(total) if total is not None else None,
              "rate": str(pr) if pr is not None else None, "unit": "百万元"}],
-        "charts": {"expense_structure": {"title": "费用结构", "type": "ratio_bar",
-            "series": {"销售": selling, "管理": admin, "研发": rnd, "财务": fin}}},
+        "charts": {"expense_structure": {"title": "费用结构", "type": "ratio_bar", "unit": "百万元",
+            "series": {"销售": abs(selling) if selling is not None else None,
+                "管理": abs(admin) if admin is not None else None,
+                "研发": abs(rnd) if rnd is not None else None,
+                "财务": abs(fin) if fin is not None else None}}},
         "unavailable": [{"block": "预算执行", "code": "budget_not_applicable_public_period",
             "reason": "预算基准属内部期（D054）"}]}
 
@@ -519,7 +570,7 @@ def build_cashflow_module(ctx: ModuleFactContext) -> dict[str, Any]:
             _kpi("筹资活动现金流量净额", ctx.current.get("cf.fin_cf:cur"),
                  ctx.current.get("cf.fin_cf:prior_yoy"), unit="百万元"),
             _kpi("净现比", _ratio(ocf, np), None, unit="ratio", caliber_note="OCF/净利润")],
-        "charts": {"cash_bridge": {"title": "现金变动桥", "type": "waterfall",
+        "charts": {"cash_bridge": {"title": "现金变动桥", "type": "waterfall", "unit": "百万元",
             "steps": {"年初": raw("年初现金及现金等价物"), "经营": raw("经营活动所得现金净额"),
                 "投资": raw("投资活动所用现金净额"), "筹资": raw("融资活动(所用)所得现金净额"),
                 "汇率": raw("汇率变动对现金的影响"), "年末": raw("年末现金及现金等价物")},

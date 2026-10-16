@@ -1,5 +1,10 @@
 import { render, screen, within } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+
+vi.mock("../components/cockpit/charts/echarts-base", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("../components/cockpit/charts/echarts-base")>()),
+  ChartBox: ({ title, ariaLabel }: { title: string; ariaLabel?: string }) => <div role="img" aria-label={ariaLabel}>{title}</div>,
+}));
 
 import oracle from "../../../fixtures/expected/dashboard_overview_v1.json";
 import { AppShell } from "../components/shell/app-shell";
@@ -23,7 +28,7 @@ describe("Finance BP dashboard content", () => {
     expect(screen.getByText("调查归因")).toBeVisible();
     expect(screen.getByText("报告与导出")).toBeVisible();
     expect(screen.getAllByTestId("metric-card")).toHaveLength(8);
-    expect(screen.getByRole("img", { name: "近 12 个月经营趋势" })).toBeVisible();
+    expect(screen.getByRole("img", { name: "近 12 个月经营收入、利润与现金流趋势" })).toBeVisible();
     expect(screen.getByRole("region", { name: "经营利润变动桥" })).toBeVisible();
     expect(screen.getAllByRole("link", { name: /进入调查/ })).toHaveLength(4);
     expect(screen.getByRole("table", { name: "产品经营表现" })).toBeVisible();

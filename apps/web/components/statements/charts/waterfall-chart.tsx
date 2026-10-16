@@ -1,5 +1,7 @@
 "use client";
 
+import { formatFinancialValue } from "../../cockpit/number-format";
+
 // 利润形成 / 现金桥瀑布图：手写 SVG，无图表库依赖。
 // base/total 柱从零起画，delta 柱悬浮于累计区间；红减绿增、深色为小计。
 export type WaterfallDatum = { label: string; value: number; kind: "base" | "delta" | "total" };
@@ -52,7 +54,7 @@ export function WaterfallChart({
       <g key={g}>
         <line x1={padL} y1={gy} x2={width - padR} y2={gy} stroke="#e2e8f0" />
         <text x={padL - 6} y={gy + 4} textAnchor="end" className="stmt-tick">
-          {gv.toFixed(0)}
+          {formatFinancialValue(gv, { unit: unitLabel, appendUnit: false })}
         </text>
       </g>
     );
@@ -90,11 +92,11 @@ export function WaterfallChart({
               fill={color}
               rx={3}
             >
-              <title>{`${bar.label}：${bar.value.toFixed(2)} ${unitLabel}`}</title>
+              <title>{`${bar.label}：${formatFinancialValue(bar.value, { unit: unitLabel })}`}</title>
             </rect>
             <text x={cx} y={yTop - 6} textAnchor="middle" className="stmt-vlabel">
               {bar.value >= 0 ? "" : "−"}
-              {Math.abs(bar.value).toFixed(1)}
+              {formatFinancialValue(Math.abs(bar.value), { unit: unitLabel, appendUnit: false })}
             </text>
             <text x={cx} y={height - padB + 18} textAnchor="middle" className="stmt-xlab">
               {bar.label}

@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { formatFinancialValue } from "../../cockpit/number-format";
 
 // 构成环形图：手写 SVG donut + 右侧图例；悬停显示精确金额与占比。
 export type DonutDatum = { label: string; value: number };
@@ -52,7 +53,7 @@ export function DonutChart({
           d={`M${x0.toFixed(1)},${y0.toFixed(1)} A${r},${r} 0 ${large} 1 ${x1.toFixed(1)},${y1.toFixed(1)} L${x2.toFixed(1)},${y2.toFixed(1)} A${rIn},${rIn} 0 ${large} 0 ${x3.toFixed(1)},${y3.toFixed(1)} Z`}
           fill={COLORS[index % COLORS.length]}
         >
-          <title>{`${item.label}：${item.value.toFixed(2)} ${unitLabel}（${((item.value / (total || 1)) * 100).toFixed(1)}%）`}</title>
+          <title>{`${item.label}：${formatFinancialValue(item.value, { unit: unitLabel })}（${formatFinancialValue((item.value / (total || 1)) * 100, { unit: "%" })}）`}</title>
         </path>,
       );
       return acc;
@@ -64,7 +65,7 @@ export function DonutChart({
     <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label={ariaLabel} className="stmt-svg">
       {arcs}
       <text x={cx} y={cy - 2} textAnchor="middle" className="stmt-donut-total">
-        {total.toFixed(0)}
+        {formatFinancialValue(total, { unit: unitLabel, appendUnit: false })}
       </text>
       <text x={cx} y={cy + 15} textAnchor="middle" className="stmt-tick">
         {unitLabel}合计
@@ -83,7 +84,7 @@ export function DonutChart({
             {item.label}
           </text>
           <text x={width - 12} y={legendTop + index * 21 + 1} textAnchor="end" className="stmt-legend">
-            {((item.value / (total || 1)) * 100).toFixed(1)}%
+            {formatFinancialValue((item.value / (total || 1)) * 100, { unit: "%" })}
           </text>
         </g>
       ))}

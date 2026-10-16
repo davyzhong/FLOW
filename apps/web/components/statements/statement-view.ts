@@ -35,12 +35,12 @@ export function groupThousands(text: string): string {
   return frac ? `${grouped}.${frac}` : grouped;
 }
 
-export function formatYi(value: number, digits = 1): string {
+export function formatYi(value: number, digits = 2): string {
   return groupThousands(value.toFixed(digits));
 }
 
 export function formatRaw(value: number): string {
-  return groupThousands(value.toFixed(2).replace(/\.00$/, ""));
+  return groupThousands(value.toFixed(2));
 }
 
 export function getSection(

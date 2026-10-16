@@ -1,5 +1,10 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+
+vi.mock("../components/cockpit/charts/echarts-base", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("../components/cockpit/charts/echarts-base")>()),
+  ChartBox: ({ title }: { title: string }) => <div>{title}</div>,
+}));
 
 import oracle from "../../../fixtures/expected/dashboard_overview_v1.json";
 import { AppShell } from "../components/shell/app-shell";

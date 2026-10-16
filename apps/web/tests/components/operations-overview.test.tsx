@@ -119,7 +119,7 @@ const OVERVIEW = {
     {
       code: "cash_content_below_one",
       metric_code: "ocf_net_profit_ratio",
-      message: "净利润现金含量 0.6000，经营现金流低于净利润",
+      message: "净利润现金含量 0.60 倍，经营现金流低于净利润",
       direction: "negative",
     },
   ],
@@ -170,7 +170,7 @@ describe("OperationsOverviewApp", () => {
     expect(screen.getByText("16.00%", { selector: "strong" })).toBeTruthy();
     expect(screen.getByText("32.00%", { selector: "strong" })).toBeTruthy();
     expect(screen.getByText("1.23 倍", { selector: "strong" })).toBeTruthy();
-    expect(screen.getByText("439.1234", { selector: "strong" })).toBeTruthy();
+    expect(screen.getByText("439 百万件", { selector: "strong" })).toBeTruthy();
     expect(screen.getByText(/口径：净利润总额口径/)).toBeTruthy();
     expect(screen.getByText(/Q1FY2024 · 未经审计/)).toBeTruthy();
     expect(screen.getByText(/docs\/source.pdf · 第 22 页/)).toBeTruthy();

@@ -1,4 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
+
+vi.mock("../components/cockpit/charts/echarts-base", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("../components/cockpit/charts/echarts-base")>()),
+  ChartBox: ({ title, testId }: { title: string; testId?: string }) => <div data-testid={testId}>{title}</div>,
+}));
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 
 import { CockpitOverviewApp } from "../components/cockpit/cockpit-overview-app";

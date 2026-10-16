@@ -1,6 +1,11 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
+vi.mock("../../components/cockpit/charts/echarts-base", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("../../components/cockpit/charts/echarts-base")>()),
+  ChartBox: ({ testId, title }: { testId?: string; title: string }) => <div data-testid={testId}>{title}</div>,
+}));
+
 import { CockpitModulePage } from "../../components/cockpit/module-page";
 import * as client from "../../lib/api/client";
 import type { CockpitModuleResponse } from "../../lib/api/client";
@@ -58,16 +63,42 @@ const moduleFixture: CockpitModuleResponse = {
 };
 
 describe("CockpitModulePage", () => {
-  it("渲染 KPI 网格、图表数据表与不可用块", async () => {
+  it("渲染 KPI、真实图形、规范数值、图表数据表与不可用块", async () => {
     const fetchSpy = vi
       .spyOn(client.flowApi, "getCockpitModule")
       .mockResolvedValue(moduleFixture);
     render(<CockpitModulePage moduleId="balance-sheet" title="资产负债" />);
-    expect(await screen.findByText("71,850.9 百万元")).toBeVisible();
-    expect(screen.getByText("前期 58,881.1 百万元")).toBeVisible();
-    expect(screen.getByText("资本结构趋势")).toBeVisible();
+    expect(await screen.findByText("71,850.93 百万元")).toBeVisible();
+    expect(screen.getByText("前期 58,881.09 百万元")).toBeVisible();
+    expect(screen.getAllByText("资本结构趋势").length).toBeGreaterThan(0);
+    expect(screen.getByTestId("cockpit-module-chart-capital_structure_trend")).toBeVisible();
     expect(screen.getByText("债务期限结构")).toBeVisible();
     expect(screen.getByText(/大麦物流演示主体引用/)).toBeVisible();
     expect(fetchSpy).toHaveBeenCalledOnce();
+  });
+});
+
+
+describe("费用图表 API 形态", () => {
+  it("把标量费用系列作为单期图表渲染而不触发数组 map 错误", async () => {
+    vi.spyOn(client.flowApi, "getCockpitModule").mockResolvedValue({
+      ...moduleFixture,
+      module: "expenses",
+      title: "费用分析",
+      kpis: [{ name: "销售费用", status: "available", value: "1476.0000", rate: "0.0189", unit: "百万元" }],
+      charts: {
+        expense_structure: {
+          title: "费用结构",
+          type: "ratio_bar",
+          unit: "百万元",
+          periods: ["FY2023"],
+          series: { 销售: "1476.0000", 管理: "738.0000", 研发: "210.0000", 财务: "83.0000" },
+        },
+      },
+    } as CockpitModuleResponse);
+
+    render(<CockpitModulePage moduleId="expenses" title="费用分析" />);
+    expect(await screen.findByTestId("cockpit-module-chart-expense_structure")).toBeVisible();
+    expect(screen.getAllByText("1,476.00 百万元").length).toBeGreaterThan(0);
   });
 });

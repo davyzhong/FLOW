@@ -73,8 +73,8 @@ function formatWan(value: string): string {
   const wan = number / 10000;
   const sign = wan > 0 ? "+" : "";
   return `${sign}${wan.toLocaleString("zh-CN", {
-    maximumFractionDigits: 1,
-    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+    minimumFractionDigits: 2,
   })} 万`;
 }
 
@@ -82,7 +82,7 @@ function formatRatio(value: string | null | undefined): string {
   if (!value) return "—";
   const number = decimal(value);
   if (!Number.isFinite(number)) return value;
-  return `${(number * 100).toFixed(1)}%`;
+  return `${(number * 100).toFixed(2)}%`;
 }
 
 function driverDirection(amount: string): "is-positive" | "is-negative" | "is-neutral" {
