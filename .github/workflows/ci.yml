@@ -341,6 +341,7 @@ jobs:
     # 2026-10-16 用户裁决 1C：非阻断信号灯（continue-on-error），不阻塞合并
     runs-on: ubuntu-latest
     continue-on-error: true
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
