@@ -18,7 +18,7 @@ applies_to: repository
 
 ## 一、当前任务
 
-**队首为空。** 上一队首 CFO 驾驶舱产品化（含 FINMETRIC F1–F4）已于 2026-10-16 全量交付并关闭（`df6073a8` CI 17/17 success）。下一队列项为**知识刷新 K0–K6**。
+**队首为空。** 上一队首 CFO 驾驶舱产品化（含 FINMETRIC F1–F4）已于 2026-10-16 关闭（`df6073a8` CI 17/17 success）。隔离复核显示 51 图覆盖映射不等于逐图视觉完成，费用分析页在当前演示数据下有运行时异常；详见[项目复核](docs/60_delivery/verification/2026-10-16--project-health-and-cockpit-visual-review-v1.md)。下一队列项仍为**知识刷新 K0–K6**，是否调整队列由路线图裁决。
 
 用户四项裁决（2026-10-16）：
 1. **L0 挂 CI（选项 C）**：非阻断 `l0-baseline` job（continue-on-error: true），失败仅作信号灯。
