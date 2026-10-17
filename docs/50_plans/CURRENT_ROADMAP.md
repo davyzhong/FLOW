@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 5.47
+version: 5.48
 created_at: 2026-09-12
 updated_at: 2026-10-17
 owner: FLOW
@@ -21,7 +21,7 @@ superseded_by: null
 >
 > **2026-10-17 驾驶舱视觉补全与数值格式专项完成**：代码 SHA `1a71e33fc2f779e1a848a4c3736919e98f762bdf`，准确 SHA CI run `38936413156` 全部 job 成功。本项关闭。用户随后提出新增驾驶舱图形分析与杜邦补全，本轮根据当前验收证据重新界定为“盈利能力分析与真实图表缺口补全”，不重复 51 图和已交付模块；正式设计、计划与工作包见本页队首。
 >
-> **2026-10-17 CFO 驾驶舱盈利分析交付**：新增 `/cockpit/profitability`，杜邦指标在显式 Objective 快照冻结时计算并记录字典指纹、行级来源轨迹和勾稽结果；只读 API 返回快照值与原始报表行深链，图表复用 ECharts。没有冻结来源或期初余额时显示 unavailable，不做隐式重算。独立复核提出的比较图单位及源行深链缺口已修复。前端 36 个测试文件/184 项通过、typecheck/build 通过；后端定向 12 项、Ruff、mypy 通过；隔离账套核验 19/19、可见性矩阵 162 项无失败、浏览器全旅程 16/16 通过；契约检查、文档 M1 通过。实际截图、演示批次和哈希见[浏览器验收记录](../60_delivery/verification/2026-10-17--cockpit-profitability-browser-verification-v1.md)。代码 SHA、CI 结果将在提交后登记。本工作包关闭，唯一队列恢复知识刷新 K2。
+> **2026-10-17 CFO 驾驶舱盈利分析交付**：新增 `/cockpit/profitability`，杜邦指标在显式 Objective 快照冻结时计算并记录字典指纹、行级来源轨迹和勾稽结果；只读 API 返回快照值与原始报表行深链，图表复用 ECharts。没有冻结来源或期初余额时显示 unavailable，不做隐式重算。独立复核提出的比较图单位及源行深链缺口已修复。CI 首轮发现重复 seed 时数据库归一化行 UUID 改变会制造两份新快照；修复后针对测试 10 项通过，准确代码 SHA `08aa4cd02247f995bc990d92c8f34f5a1829afa1` 的 GitHub CI run `38996089002` 为 18/18 job success。前端 36 个测试文件/184 项通过、typecheck/build 通过；后端 Ruff、mypy 通过；隔离账套核验 19/19、可见性矩阵 162 项无失败、浏览器全旅程 16/16 通过；契约检查、文档 M1 通过。实际截图、演示批次和哈希见[浏览器验收记录](../60_delivery/verification/2026-10-17--cockpit-profitability-browser-verification-v1.md)。本工作包关闭，唯一队列恢复知识刷新 K2。
 
 > **2026-10-17 K0/K1 完成，K2 工具就绪、定时截面待执行**：K0 Davybase 实现 `172a099`、证据 `94fc05d`、同步 `eb8c3d0` 已推送；历史快照严格终态为 1,265 输入、1,239 成功、2 待复核、24 过滤，清单 SHA-256 `c603baab83f7873c852681c69dfb314e7004e43b230ea832fb2a1e9043ce26bc`，32 篇样本/512 张图对账通过。K1 只读扫描器实现 `a0c2e67`、证据 `a914830` 已推送；扫描 1,601 篇 Markdown、17,450 个 embed 未解析、2,445 个标准 Markdown 引用不受支持、566 篇进入人工 triage、可执行候选为 0。此结果限于 allowlist/resolver，不推断全库无原图。扫描未写入 ObsidianWiki，1,365 条 dirty 路径指纹仍一致。K1 独立审查无未解决 P1/P2。K2 冻结器已推送 Davybase 提交 `699e5c6`；独立复核发现的 `release()` 推送校验绕过已修复，13 项专项/892 项全量测试、Ruff、README 统计和断链检查通过。当前实际上海时间为 2026-10-17 03:19，14:30/15:00/15:30 时间窗尚未到，未伪造快照。不得改动 dirty vault，门禁失败则只记录 rejected 并顺延，`CURRENT_RELEASE` 不变。
 

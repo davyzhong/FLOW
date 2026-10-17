@@ -3,12 +3,12 @@ doc_id: FLOW-VERIFY-COCKPIT-PROFITABILITY-20261017-001
 title: CFO 驾驶舱盈利能力页面浏览器验收
 doc_type: verification
 status: verified
-version: "1.0"
+version: "1.1"
 created_at: 2026-10-17
 updated_at: 2026-10-17
 owner: FLOW
-commit_refs: "[5817efcf10bf1ce68057a626af3491b508c7513f]"
-evidence_refs: "[isolated-damai-seed, isolated-route-matrix, profitability-cockpit-e2e, profitability-cockpit-screenshot, backend-tests, web-tests]"
+commit_refs: "[5817efcf10bf1ce68057a626af3491b508c7513f, 08aa4cd02247f995bc990d92c8f34f5a1829afa1]"
+evidence_refs: "[isolated-damai-seed, isolated-route-matrix, profitability-cockpit-e2e, profitability-cockpit-screenshot, backend-tests, web-tests, repeat-seed-idempotency, github-ci-38996089002]"
 applies_to: cockpit
 ---
 
@@ -29,7 +29,9 @@ applies_to: cockpit
 - 财报：FY2022 SHA-256 `b58d179c2584354134321efaa7e289d6f923b23bb12c74e4f1d62c5d95869661`；FY2023 SHA-256 `68235f199ede79199d575dd26847adc4a57fd99aff667492b52cc19d74ab2f60`。
 - 发行版核验：19/19；可见性矩阵：162 路由、152 个 HTTP 200、10 个预期拒绝、0 失败；Playwright 全旅程：16/16。
 - 截图 SHA-256：`e66dc5e1856e0ad71c56aaa1b552eb393cecb788a6674eb74f279c4c44c4eb1e`。
-- 代码提交 SHA 与对应 GitHub CI 运行在提交后补录。
+- 代码提交：功能实现 `5817efcf10bf1ce68057a626af3491b508c7513f`；重复 seed 幂等修复 `08aa4cd02247f995bc990d92c8f34f5a1829afa1`。
+- 幂等性回归验收：盈利载荷在归一化行 UUID 重建后保持不变；冻结工作流二次 seed 计数零增长。定向后端测试 10 项通过，Ruff 与 mypy 通过。
+- GitHub CI：run `38996089002` 对应修复 SHA `08aa4cd02247f995bc990d92c8f34f5a1829afa1`，18/18 jobs success。
 
 ## 页面检查
 
