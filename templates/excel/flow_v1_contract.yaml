@@ -130,6 +130,6 @@ sheets:
     fields:
       - {field_id: management_account_code, display_name: 管理科目编码, data_type: string, required: true, nullable: false, description: 管理科目的稳定编码。}
       - {field_id: management_account_name, display_name: 管理科目名称, data_type: string, required: true, nullable: false, description: 管理科目显示名称。}
-      - {field_id: category, display_name: 科目类别, data_type: enum, required: true, nullable: false, description: 管理口径科目类别。, enum: [revenue, direct_cost, operating_expense, operating_profit, cash_flow, working_capital]}
+      - {field_id: category, display_name: 科目类别, data_type: enum, required: true, nullable: false, description: 管理口径科目类别。, enum: [revenue, direct_cost, operating_expense, operating_profit, cash_flow, working_capital, financial_position]}
       - {field_id: financial_account_code, display_name: 财务科目编码, data_type: string, required: false, nullable: true, description: 可选的会计科目映射编码。}
       - {field_id: parent_code, display_name: 上级管理科目编码, data_type: string, required: false, nullable: true, description: 可选的上级管理科目编码。, foreign_key: {sheet_id: management_account, field_id: management_account_code}}

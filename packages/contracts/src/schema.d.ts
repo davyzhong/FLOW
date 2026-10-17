@@ -2604,6 +2604,11 @@ export interface components {
             finding_type: string;
             /** Title */
             title: string;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "candidate" | "in_review" | "approved" | "rejected";
             impact: components["schemas"]["DashboardValue"];
             /** Total Score */
             total_score: string;

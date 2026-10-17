@@ -39,6 +39,7 @@ from flow_api.infrastructure.models.canonical import (
     Region,
     ScenarioVersion,
 )
+from flow_api.infrastructure.models.cockpit import ActionItem
 from flow_api.infrastructure.models.intake import (
     AnalysisBatch,
     ImportVersion,
@@ -70,6 +71,7 @@ NONSTANDARD = REPOSITORY_ROOT / "fixtures/workbooks/external_logistics_nonstanda
 STANDARD = REPOSITORY_ROOT / "fixtures/workbooks/flow_standard_v1.xlsx"
 
 MODELS_IN_DELETE_ORDER = (
+    ActionItem,
     PublicationAttempt,
     ReportSnapshotItem,
     ReportSnapshot,

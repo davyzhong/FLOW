@@ -17,6 +17,7 @@ from flow_api.fixtures.damai.canonical import build_damai_canonical_package
 from flow_api.fixtures.damai.generator import build_damai_package
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[4]
+WAN_TO_CNY = Decimal("10000")
 
 
 def _sum_decimal(values) -> Decimal:
@@ -44,7 +45,7 @@ class ConversionConservationTests(unittest.TestCase):
             row["revenue"] for row in self.raw["monthly_facts"]["operating_actual"]
         )
         pkg_total = _sum_decimal(row.revenue for row in self.package.operating_actuals)
-        self.assertEqual(raw_total, pkg_total)
+        self.assertEqual(raw_total * WAN_TO_CNY, pkg_total)
 
     def test_operating_cost_conserved_via_three_way_split(self) -> None:
         raw_total = _sum_decimal(
@@ -54,7 +55,7 @@ class ConversionConservationTests(unittest.TestCase):
             row.warehousing_cost + row.transportation_cost + row.other_direct_cost
             for row in self.package.operating_actuals
         )
-        self.assertEqual(raw_total, pkg_total)
+        self.assertEqual(raw_total * WAN_TO_CNY, pkg_total)
 
     def test_gross_profit_conserved(self) -> None:
         raw_total = _sum_decimal(
@@ -66,7 +67,7 @@ class ConversionConservationTests(unittest.TestCase):
             row.warehousing_cost + row.transportation_cost + row.other_direct_cost
             for row in self.package.operating_actuals
         )
-        self.assertEqual(raw_total, pkg_revenue - pkg_cost)
+        self.assertEqual(raw_total * WAN_TO_CNY, pkg_revenue - pkg_cost)
 
     def test_budget_conserved(self) -> None:
         raw_total = _sum_decimal(
@@ -79,7 +80,7 @@ class ConversionConservationTests(unittest.TestCase):
             for row in self.package.monthly_budgets
             if row.metric_code == "REVENUE"
         )
-        self.assertEqual(raw_total, pkg_total)
+        self.assertEqual(raw_total * WAN_TO_CNY, pkg_total)
 
     def test_ar_buckets_conserved(self) -> None:
         raw = self.raw["monthly_facts"]["ar_aging"]
@@ -92,7 +93,7 @@ class ConversionConservationTests(unittest.TestCase):
                 for row in self.package.ar_collections
                 if row.aging_bucket == bucket_code
             )
-            self.assertEqual(raw_total, pkg_total, bucket_code)
+            self.assertEqual(raw_total * WAN_TO_CNY, pkg_total, bucket_code)
         for raw_field, pkg_field in (
             ("due", "due_amount"),
             ("overdue", "overdue_amount"),
@@ -102,7 +103,7 @@ class ConversionConservationTests(unittest.TestCase):
             pkg_total = _sum_decimal(
                 getattr(row, pkg_field) for row in self.package.ar_collections
             )
-            self.assertEqual(raw_total, pkg_total, raw_field)
+            self.assertEqual(raw_total * WAN_TO_CNY, pkg_total, raw_field)
 
     def test_financial_revenue_matches_operating(self) -> None:
         op_total = _sum_decimal(row.revenue for row in self.package.operating_actuals)
@@ -219,6 +220,15 @@ class FullDimensionContractTests(unittest.TestCase):
             self.assertNotIn(row.logistics_product_code, AGG_CODES)
             self.assertNotIn(row.region_code, AGG_CODES)
 
+    def test_order_and_shipment_counts_are_integers(self) -> None:
+        for row in self.package.operating_actuals:
+            self.assertEqual(row.order_count, row.order_count.to_integral_value())
+            self.assertEqual(row.shipment_count, row.shipment_count.to_integral_value())
+            self.assertEqual(row.shipment_count, row.order_count * Decimal("2"))
+            self.assertLessEqual(
+                abs(row.revenue - row.order_count * Decimal("120")), Decimal("60")
+            )
+
     def test_every_analysis_month_covers_all_dimensions(self) -> None:
         rows = [r for r in self.package.operating_actuals if r.month_key >= "2022-04"]
         by_month: dict[str, list] = {}
@@ -237,9 +247,17 @@ class FullDimensionContractTests(unittest.TestCase):
             "REVENUE", "WAREHOUSING_COST", "TRANSPORTATION_COST",
             "OTHER_DIRECT_COST", "GROSS_PROFIT", "OPERATING_EXPENSE",
             "OPERATING_PROFIT", "OPERATING_CASH_FLOW",
+            "SALES_MARKETING_EXPENSE", "GENERAL_ADMIN_EXPENSE",
+            "PRODUCT_DEVELOPMENT_EXPENSE", "FINANCIAL_ASSET_IMPAIRMENT",
+            "OTHER_INCOME", "OTHER_NET_GAIN_LOSS", "NET_PROFIT",
+            "CASH_AND_CASH_EQUIVALENTS",
+            "AR_BALANCE", "TOTAL_ASSETS", "TOTAL_LIABILITIES", "TOTAL_EQUITY",
+            "CURRENT_ASSETS", "CURRENT_LIABILITIES", "INVENTORY_BALANCE",
+            "BORROWINGS",
         }
         cells = {(r.month_key, r.organization_code) for r in rows}
         self.assertEqual(len(cells), 24 * 4, f"财务实际须覆盖 24 月×4 单元，实际 {len(cells)}")
+        self.assertEqual(len(rows), 24 * 4 * len(core))
         by_cell: dict[tuple, set] = {}
         for row in rows:
             by_cell.setdefault((row.month_key, row.organization_code), set()).add(
@@ -247,6 +265,37 @@ class FullDimensionContractTests(unittest.TestCase):
             )
         for cell, accounts in by_cell.items():
             self.assertTrue(core <= accounts, f"{cell} 缺核心科目 {core - accounts}")
+            self.assertEqual(accounts, core, f"{cell} 科目集合与财务合同不一致")
+        values: dict[tuple[str, str], dict[str, Decimal]] = {}
+        for row in rows:
+            values.setdefault((row.month_key, row.organization_code), {})[
+                row.management_account_code
+            ] = row.amount
+        for cell, accounts in values.items():
+            self.assertEqual(
+                accounts["OPERATING_EXPENSE"],
+                sum(
+                    (
+                        accounts[code]
+                        for code in (
+                            "SALES_MARKETING_EXPENSE",
+                            "GENERAL_ADMIN_EXPENSE",
+                            "PRODUCT_DEVELOPMENT_EXPENSE",
+                            "FINANCIAL_ASSET_IMPAIRMENT",
+                        )
+                    ),
+                    Decimal("0"),
+                )
+                - accounts["OTHER_INCOME"]
+                - accounts["OTHER_NET_GAIN_LOSS"],
+                cell,
+            )
+            self.assertEqual(
+                accounts["OPERATING_PROFIT"],
+                accounts["GROSS_PROFIT"]
+                - accounts["OPERATING_EXPENSE"],
+                cell,
+            )
 
     def test_financial_ocf_is_monthly_cash_flow_conserved(self) -> None:
         raw = build_damai_package()
@@ -258,10 +307,62 @@ class FullDimensionContractTests(unittest.TestCase):
                 )
 
         expected_by_month = {
-            row["month"]: Decimal(row["ocf"])
+            row["month"]: Decimal(row["ocf"]) * WAN_TO_CNY
             for row in raw["monthly_facts"]["cash_flow"]
         }
         self.assertEqual(actual_by_month, expected_by_month)
+
+    def test_financial_actuals_reconcile_to_disclosed_fiscal_year_anchors(self) -> None:
+        """可查询的生成明细须按报告期对账到来源登记的公开财报事实。"""
+        from flow_api.fixtures.damai.generator import _disclosed_anchors
+        from flow_api.fixtures.damai.profile import ANALYSIS_MONTHS, PRIOR_MONTHS
+
+        anchors = _disclosed_anchors()
+        for fiscal_year, months in (
+            ("FY2022", PRIOR_MONTHS),
+            ("FY2023", ANALYSIS_MONTHS),
+        ):
+            rows = [row for row in self.package.financial_actuals if row.month_key in months]
+            annual = {
+                account: _sum_decimal(
+                    row.amount for row in rows if row.management_account_code == account
+                )
+                for account in (
+                    "REVENUE",
+                    "GROSS_PROFIT",
+                    "OPERATING_PROFIT",
+                    "NET_PROFIT",
+                    "OPERATING_CASH_FLOW",
+                )
+            }
+            self.assertEqual(annual["REVENUE"], anchors[fiscal_year]["revenue"] * WAN_TO_CNY)
+            self.assertEqual(annual["GROSS_PROFIT"], anchors[fiscal_year]["gross"] * WAN_TO_CNY)
+            self.assertEqual(
+                annual["OPERATING_PROFIT"],
+                anchors[fiscal_year]["operating_profit"] * WAN_TO_CNY,
+            )
+            self.assertEqual(annual["NET_PROFIT"], anchors[fiscal_year]["net_profit"] * WAN_TO_CNY)
+            self.assertEqual(
+                annual["OPERATING_CASH_FLOW"],
+                anchors[fiscal_year]["operating_cash_flow"] * WAN_TO_CNY,
+            )
+
+            closing_month = months[-1]
+            closing_cash = _sum_decimal(
+                row.amount
+                for row in rows
+                if row.month_key == closing_month
+                and row.management_account_code == "CASH_AND_CASH_EQUIVALENTS"
+            )
+            self.assertEqual(closing_cash, anchors[fiscal_year]["cash_balance"] * WAN_TO_CNY)
+            for account, expected in anchors[fiscal_year]["balance_sheet"].items():
+                closing_value = _sum_decimal(
+                    row.amount
+                    for row in rows
+                    if row.month_key == closing_month
+                    and row.management_account_code == account
+                )
+                self.assertEqual(closing_value, expected * WAN_TO_CNY, account)
 
     def test_budget_10752_raw_lines_with_cell_identity(self) -> None:
         rows = self.package.monthly_budgets
@@ -362,6 +463,8 @@ class ManifestLineageTests(unittest.TestCase):
              "OTHER_DIRECT_COST": "0.10"},
         )
         self.assertIn("credit_term_days", params["ar_outstanding_basis"])
+        self.assertIn("人民币元", lineage["units"]["canonical"])
+        self.assertEqual(params["order_unit_price_cny"], "120")
 
     def test_manifest_dimension_coverage(self) -> None:
         cov = self.manifest["dimension_coverage"]

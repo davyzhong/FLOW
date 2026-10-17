@@ -8964,6 +8964,16 @@
             "type": "string",
             "title": "Title"
           },
+          "status": {
+            "type": "string",
+            "enum": [
+              "candidate",
+              "in_review",
+              "approved",
+              "rejected"
+            ],
+            "title": "Status"
+          },
           "impact": {
             "$ref": "#/components/schemas/DashboardValue"
           },
@@ -9007,6 +9017,7 @@
           "finding_id",
           "finding_type",
           "title",
+          "status",
           "impact",
           "total_score",
           "comparison_basis",

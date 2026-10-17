@@ -37,9 +37,74 @@ def validate_damai_package(package: dict[str, Any]) -> dict[str, Any]:
     if op_totals != fin_totals:
         codes.append("operating_financial_mismatch")
 
-    # 分析期收入锚：必须精确等于来源登记的 FY2023 披露收入（±0.0001 万元）
+    # 披露锚：两财年的公开报表事实必须与生成的月度财务明细精确勾稽。
     from flow_api.fixtures.damai.generator import _disclosed_anchors
 
+    anchors = _disclosed_anchors()
+    statement_lines = facts["statement_lines"]
+    cash_flow = facts["cash_flow"]
+    balance_sheet = facts["balance_sheet"]
+    for fiscal_year, fiscal_months in (
+        ("FY2022", months[:12]),
+        ("FY2023", months[12:]),
+    ):
+        year_rows = [row for row in statement_lines if row["month"] in fiscal_months]
+        year_cash = [row for row in cash_flow if row["month"] in fiscal_months]
+        year_balance = [row for row in balance_sheet if row["month"] in fiscal_months]
+        year_revenue = sum(
+            (op_totals[month] for month in fiscal_months), Decimal("0")
+        )
+        year_gross_profit = sum(
+            (
+                Decimal(str(row["revenue"])) - Decimal(str(row["cost"]))
+                for row in facts["operating_actual"]
+                if row["month"] in fiscal_months
+            ),
+            Decimal("0"),
+        )
+        comparisons = (
+            (year_revenue, anchors[fiscal_year]["revenue"], "revenue"),
+            (year_gross_profit, anchors[fiscal_year]["gross"], "gross"),
+            (
+                sum((Decimal(row["OPERATING_PROFIT"]) for row in year_rows), Decimal("0")),
+                anchors[fiscal_year]["operating_profit"],
+                "operating_profit",
+            ),
+            (
+                sum((Decimal(row["net_profit"]) for row in year_rows), Decimal("0")),
+                anchors[fiscal_year]["net_profit"],
+                "net_profit",
+            ),
+            (
+                sum((Decimal(row["ocf"]) for row in year_cash), Decimal("0")),
+                anchors[fiscal_year]["operating_cash_flow"],
+                "operating_cash_flow",
+            ),
+            (
+                Decimal(year_cash[-1]["cash_balance"]),
+                anchors[fiscal_year]["cash_balance"],
+                "cash_balance",
+            ),
+        )
+        for actual, expected, name in comparisons:
+            if actual != expected:
+                codes.append(f"{fiscal_year.lower()}_{name}_out_of_anchor_range")
+
+        closing_balance = year_balance[-1]
+        for account, expected in anchors[fiscal_year]["balance_sheet"].items():
+            if Decimal(closing_balance[account]) != expected:
+                codes.append(f"{fiscal_year.lower()}_{account.lower()}_out_of_anchor_range")
+        if Decimal(closing_balance["TOTAL_ASSETS"]) != (
+            Decimal(closing_balance["TOTAL_LIABILITIES"])
+            + Decimal(closing_balance["TOTAL_EQUITY"])
+        ):
+            codes.append(f"{fiscal_year.lower()}_balance_sheet_identity_broken")
+        if Decimal(closing_balance["CASH_AND_CASH_EQUIVALENTS"]) != Decimal(
+            year_cash[-1]["cash_balance"]
+        ):
+            codes.append(f"{fiscal_year.lower()}_cash_balance_mismatch")
+
+    # 分析期收入锚（保留明确的核心收入合同代码，便于诊断旧版包）。
     analysis_months = {
         row["month"] for row in package["monthly_facts"]["budget"]
     }
@@ -51,7 +116,7 @@ def validate_damai_package(package: dict[str, Any]) -> dict[str, Any]:
         ),
         Decimal("0"),
     )
-    disclosed_analysis_revenue = _disclosed_anchors()["FY2023"]["revenue"]
+    disclosed_analysis_revenue = anchors["FY2023"]["revenue"]
     if abs(analysis_total - disclosed_analysis_revenue) > Decimal("0.0001"):
         codes.append("revenue_out_of_anchor_range")
 

@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目交接文档
 doc_type: navigation
 status: current
-version: 6.6
+version: 6.8
 created_at: 2026-09-12
 updated_at: 2026-10-17
 owner: FLOW
@@ -18,7 +18,7 @@ applies_to: repository
 
 ## 一、当前任务
 
-**当前任务：实施 CFO 驾驶舱全视图数据与图表完整性改造**。用户已明确要求按计划立即开始。阶段 1 的隔离复现、根因与九视图矩阵已完成；原用户浏览器 `localhost:61639` 拒绝连接，已用本分支隔离页面实测。首批修复覆盖趋势、现金流桥、费用比较、行动项播种/创建和发现状态；已补 `/data` 批次图、营运效率周期图、合并收入增长图与来源事实 ID 展示。Web 全量 187 项、TypeScript 类型检查、API 定向 41 项与 Ruff 通过；行动项播种及二次 seed 幂等测试 2 项在隔离测试库通过。实页核验修正了计数图纵轴重复刻度、总览下钻币种重复和毛利率趋势单位缺失，数据工作台、集团合并及总览均有图表/数据或可追溯下钻。准确 SHA `75d1…` 的 CI 回归发现共享投影误过滤候选发现并造成总览降级；已恢复完整发现集和状态，Ruff/mypy 通过，隔离数据库测试断言 4 项通过但 pytest 清理卡住、退出码 2，当前提交 CI 尚未回报。当前继续阶段 2 财务/运营维度数据与披露总额勾稽、四项 KPI 一致性和种子复现；阶段 5 全页浏览器验收仍待完成。知识刷新 K2 顺延至本工作包完成后。[计划工作包](docs/50_plans/work_items/COCKPIT--all-views-data-and-visual-completion.md)。
+**当前任务：实施 CFO 驾驶舱全视图数据与图表完整性改造**。用户已要求按计划立刻实施并持续推进。阶段 1 的隔离复现、根因与九视图矩阵已完成；阶段 2 数据补齐已完成本地验收，待提交与准确 SHA CI 后正式关闭。大麦财务实际扩至 2,304 条期间×组织×科目明细，补充 FY2022/FY2023 收入、利润、经营现金流、资产负债锚点及 FY2021 期初锚；月度/组织分配标记为 synthetic allocation。全部 canonical 金额转换为 CNY 元，订单与件量为整数；验证资产=负债+权益、现金勾稽及总览收入/营业利润/毛利率/经营现金流均有值、收入量级合理。发行包 check、41 项 canonical/generator 测试、23 项隔离导入/分析回归、Ruff、mypy、合同检查和文档 M1 全部通过。旧 SHA `93f389df` CI 暴露的 OpenAPI 合同同步与 ActionItem 清理问题已修复；准确新 SHA CI 尚待提交后启动。下一步按工作包继续阶段 3 聚合契约，再逐页补图和浏览器验收。知识刷新 K2 顺延至本工作包完成后。[计划工作包](docs/50_plans/work_items/COCKPIT--all-views-data-and-visual-completion.md)。
 
 **CFO 驾驶舱盈利分析与图表缺口补全已完成**。本分支新增盈利能力页面 `/cockpit/profitability`、只读 API 与冻结时杜邦指标载荷；提供净利率、ROE、总资产周转率、权益乘数、两期比较、勾稽提示、指标/报告/来源财报行深链。图表复用 ECharts；旧快照或缺少期初数据时明确显示 unavailable。前端 36 个测试文件/184 项通过、typecheck/build 通过；lint 零错误，有一条既有 TanStack Table 警告；后端隔离定向测试 12 项、Ruff、mypy 通过；隔离账套核验 19/19、可见性矩阵 162 项无失败、浏览器全旅程 16/16 通过，真实页面截图见[浏览器验收记录](docs/60_delivery/verification/2026-10-17--cockpit-profitability-browser-verification-v1.md)。CI 首轮发现重复 seed 会新增两份 Objective 快照；修复归一化行 UUID 不稳定性后，回归测试 10 项通过，准确 SHA `08aa4cd02247f995bc990d92c8f34f5a1829afa1` 的 GitHub CI run `38996089002` 为 18/18 job success。contracts、plan views、links 与 M1 通过。代码与修复提交分别为 `5817efcf`、`08aa4cd0`，均已推送。工作包/设计/计划见 [工作包](docs/50_plans/work_items/COCKPIT--visual-analysis-expansion.md)、[设计规格](docs/superpowers/specs/2026-10-17-cfo-cockpit-visual-analysis-expansion-design.md)、[实施计划](docs/superpowers/plans/2026-10-17-cockpit-visual-analysis-expansion.md)。独立审查发现的单位误标和来源行下钻缺口均已修复。
 
