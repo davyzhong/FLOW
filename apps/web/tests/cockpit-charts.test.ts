@@ -51,6 +51,13 @@ describe("chart builders", () => {
     expect(Array.isArray(opt.yAxis)).toBe(true);
   });
 
+  it("combo: 计数单位使用整数刻度，不把小数刻度格式化成重复整数", () => {
+    const opt = buildCombo([
+      { key: "batches", title: "批次数量", axis: "bar", unit: "个", points: [ready("已发布", 1)] },
+    ]) as { yAxis: { minInterval?: number } };
+    expect(opt.yAxis.minInterval).toBe(1);
+  });
+
   it("donut: 零值分片被剔除（全 0 返回 undefined）", () => {
     expect(buildDonut([{ name: "A", value: 0 }], "万元")).toBeUndefined();
     const opt = buildDonut([{ name: "A", value: 0 }, { name: "B", value: 5 }], "万元") as {

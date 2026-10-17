@@ -42,7 +42,9 @@ export function buildCombo(series: ComboSeries[]): ChartOption | undefined {
   const periods = usable[0].points.map((p) => p.period);
   const axisFor = (axis: "bar" | "line") => {
     const unit = usable.find((item) => item.axis === axis)?.unit ?? "";
+    const integerUnit = ["个", "项", "次", "家", "人", "条"].includes(unit);
     return { type: "value" as const, name: unit, ...AXIS,
+      ...(integerUnit ? { minInterval: 1 } : {}),
       axisLabel: { ...AXIS.axisLabel, formatter: (value: number) => formatFinancialValue(value, { unit, appendUnit: false }) } };
   };
   return {
