@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 5.59
+version: 5.61
 created_at: 2026-09-12
 updated_at: 2026-10-17
 owner: FLOW
@@ -17,7 +17,7 @@ superseded_by: null
 
 # 当前路线图（唯一主线）
 
-> **2026-10-17 用户调整队列并启动 CFO 全视图实施**：用户要求立即按驾驶舱计划实施，故该项调整为唯一队首；知识刷新 K2 顺延，待驾驶舱工作包完成后恢复。阶段 1 隔离复现、根因和九视图矩阵已完成；阶段 2 已补公开事实锚点、三表勾稽、CNY 单位转换、整数运营量并重建发行包，准确 SHA `09ba5722ec3e8075a3483223df4c81fe5cdaa9fa` 的 CI run `39035163288` 18/18 job 成功并正式关闭。当前队首进入阶段 3。之前 `a333b31a`、`fcfc55a4`、`c8f14b79` 的 CI 失败与修复过程保留在下方作为历史证据，不代表当前状态。
+> **2026-10-17 用户调整队列并启动 CFO 全视图实施**：用户要求立即按驾驶舱计划实施，故该项调整为唯一队首；知识刷新 K2 顺延。阶段 1–4 已完成，阶段 2 准确 SHA `09ba5722ec3e8075a3483223df4c81fe5cdaa9fa` 的 CI run `39035163288` 18/18 job 成功；阶段 3 契约代码 SHA `df5c338bc5c1d7330be2391189cdfb828099a962` 对应 CI run `39038535194` 仍在执行，其中已失败的静态 Web 与 smoke 构建发现模块图表测试 fixture 缺少契约新增的必填字段，当前分支已补齐且本地 typecheck/build 验证通过。阶段 4 页面图表、来源披露、财报行深链及九视图桌面/窄屏截图已完成；阶段 5 的浏览器 API/表格全量逐项核对、独立复核、M1、契约和相关测试已通过，当前待本轮准确 SHA 的 GitHub CI。实际截图和隔离账套证据见[浏览器验证报告](../60_delivery/verification/2026-10-17--cockpit-all-views-visual-browser-verification-v1.md)。驾驶舱工作包完成后恢复知识刷新 K2。此前 `a333b31a`、`fcfc55a4`、`c8f14b79` 的 CI 失败与修复过程保留为历史证据。
 
 > **2026-10-16 用户续做裁决**：驾驶舱视觉与数值格式专项恢复为唯一队首（已关闭的原产品化批次保留完成状态）；范围、顺序、验收见本页队首工作项。知识刷新 K0–K6 仍排队。基线问题与隔离截图见[2026-10-16 项目复核](../60_delivery/verification/2026-10-16--project-health-and-cockpit-visual-review-v1.md)。
 >
@@ -96,7 +96,7 @@ superseded_by: null
 
 0. **completed** [CFO 驾驶舱盈利分析与图表缺口补全](work_items/COCKPIT--visual-analysis-expansion.md)：四项指标于 Objective 快照冻结并存 trace；只读 API；杜邦树与两期比较图；指标/财报/来源行深链；未具备口径时 unavailable。范围与交付记录：[设计规格](../superpowers/specs/2026-10-17-cfo-cockpit-visual-analysis-expansion-design.md)、[实施计划](../superpowers/plans/2026-10-17-cockpit-visual-analysis-expansion.md)。
 0a. **completed** [驾驶舱视觉补全与数值格式治理](work_items/COCKPIT--visual-completion-and-number-format.md)：订单/件量整数、金额两位小数、单位格式统一、费用页错误修复、真实图表/趋势/下钻、8 页面截图及隔离浏览器验收；代码 SHA `1a71e33f`，准确 SHA CI run `38936413156` 全部 job 成功。
-7a. **active（唯一队首，阶段 4 执行中）** [CFO 驾驶舱全视图数据与图表完整性改造](work_items/COCKPIT--all-views-data-and-visual-completion.md)：阶段 1–3 已完成。阶段 2 准确 SHA CI run `39035163288` 18/18 成功；阶段 3 图表契约已生成并由 API/contract/typecheck 验证。当前补齐图表问题说明、事实分类、来源 ID/指标/快照披露及财报行跳转，后续完成全视图浏览器验收。
+7a. **active（唯一队首，等待本轮提交及 CI）** [CFO 驾驶舱全视图数据与图表完整性改造](work_items/COCKPIT--all-views-data-and-visual-completion.md)：阶段 1–4 已完成；九个视图有桌面/窄屏实测截图和可视图表，报告记录总计 25 个画布。阶段 2 准确 SHA CI run `39035163288` 18/18 成功；阶段 3 SHA `df5c338b` 的 run `39038535194` 仍在执行，静态 Web/smoke 的契约 fixture 问题已在当前分支修复，日志与模块边界失败待该 run 收束后确认。阶段 5 Playwright 全视图桌面/窄屏 API/表格逐项核验、独立审查、M1、契约和相关测试已通过；唯一剩余为本轮提交的准确 SHA GitHub CI。
 7b. **proposed（顺延，驾驶舱完成后）** 第二代静态知识刷新与战略重基线 K2：K0/K1 完成。K1 扫描器 `a0c2e67`、证据 `a914830`；扫描 1,601 篇，566 篇 triage、0 可执行候选。K2 冻结器已推送 Davybase `699e5c6`（13 项专项/892 项全量测试，Ruff、README 统计、断链检查通过；独立复核发现的推送校验绕过已修复）。驾驶舱工作包完成后先只读核验 ObsidianWiki 当前状态，再执行门禁；dirty 时不写入、不暂存、不伪造 accepted，按计划如实记录 rejected 并顺延。
 
 以下 1–11 是驾驶舱队首调整前的原队列事项：1、2、3、5 已完成；4 U04 与 6 P3 暂停；7、9、10、11 排队；8 外部材料受限。旧验证记录仍是历史证据，不代表当前执行位置。

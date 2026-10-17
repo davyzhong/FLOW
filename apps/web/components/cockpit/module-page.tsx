@@ -9,7 +9,7 @@ import type { CockpitModuleResponse } from "../../lib/api/client";
 import { useApiQuery } from "../../lib/api/use-api-query";
 import { ChartBox } from "./charts/echarts-base";
 import "./cockpit.css";
-import { buildModuleChartOption, normalizeModuleSeries, type ModuleChartData } from "./charts/module-options";
+import { buildModuleChartOption, normalizeModuleSeries } from "./charts/module-options";
 import { formatFinancialValue } from "./number-format";
 
 function asNumber(raw: unknown): number | null {
@@ -34,6 +34,13 @@ function metricCodeFor(name: string): string {
   if (/DSO|DIO|DPO|CCC|天数/.test(name)) return "dso_days";
   return "";
 }
+
+const FACT_CLASS_LABELS: Record<string, string> = {
+  reported: "公开披露",
+  derived: "计算指标",
+  synthetic_allocation: "演示分配",
+  scenario: "演示情景",
+};
 
 function changeSummary(
   value: unknown,
@@ -80,7 +87,7 @@ export function CockpitModulePage({
   const kpis: Record<string, unknown>[] = data.kpis ?? [];
   const unavailable: Record<string, unknown>[] = data.unavailable ?? [];
   const reportId = data.report_ids?.[0];
-  const charts = Object.entries((data.charts ?? {}) as Record<string, ModuleChartData>);
+  const charts = Object.entries(data.charts ?? {});
 
   return (
     <div className="module-page" data-status="ready" data-module={data.module}>
@@ -137,11 +144,23 @@ export function CockpitModulePage({
                 <h4>{chart.title ?? key}</h4>
                 <span>{periods.join(" / ") || data.period} · {displayUnit}</span>
               </header>
+              {chart.analysis_question ? (
+                <p className="chart-question">分析问题：{chart.analysis_question}</p>
+              ) : null}
+              {chart.fact_classes?.length ? (
+                <div className="chart-fact-badges" aria-label="图表数据类型">
+                  {chart.fact_classes.map((factClass) => (
+                    <span key={factClass} data-fact-class={factClass}>
+                      {FACT_CLASS_LABELS[factClass] ?? factClass}
+                    </span>
+                  ))}
+                </div>
+              ) : null}
               {chart.type === "formula_card" ? (
                 <div className="module-formula-card" data-testid={`cockpit-module-chart-${key}`}>
                   <p>{String(chart.identity ?? "公式关系")}</p>
                   <div>{["dso", "dio", "dpo", "ccc"].map((field) => (
-                    <span key={field}>{field.toUpperCase()}：{formatFinancialValue((chart as Record<string, unknown>)[field] as string | null, { metricCode: "dso_days", unit: "day" })}</span>
+                    <span key={field}>{field.toUpperCase()}：{formatFinancialValue(chart[field as "dso" | "dio" | "dpo" | "ccc"] ?? null, { metricCode: "dso_days", unit: "day" })}</span>
                   ))}</div>
                 </div>
               ) : option ? (
@@ -152,7 +171,7 @@ export function CockpitModulePage({
                     testId={`cockpit-module-chart-${key}`}
                     height={260}
                   /></div>
-              ) : <p className="chart-empty" data-testid={`cockpit-module-chart-${key}-empty`}>该图表无足够可用事实，未补零或生成趋势。</p>}
+              ) : <p className="chart-empty" data-testid={`cockpit-module-chart-${key}-empty`}>{chart.empty_reason || "该图表无足够可用事实，未补零或生成趋势。"}</p>}
               {seriesEntries.length ? (
                 <div className="module-table-scroll"><table className="module-chart-table">
                   <thead><tr><th>指标</th>{periods.map((period) => <th key={period}>{period}</th>)}</tr></thead>
@@ -172,13 +191,30 @@ export function CockpitModulePage({
                   <summary>查看来源登记事实 ID</summary>
                   <p>来源登记：config/damai/source_facts_v1.yaml</p>
                   <ul>
-                    {Object.entries((chart.fact_ids ?? chart.source_fact_ids) as Record<string, unknown>).map(([period, factId]) => (
-                      <li key={`${period}:${String(factId)}`}>{period} · {String(factId)}</li>
+                    {Object.entries(chart.fact_ids ?? chart.source_fact_ids ?? {}).map(([period, factId]) => (
+                      <li key={`${period}:${factId}`}>{period} · {factId}</li>
                     ))}
                   </ul>
                 </details>
               ) : null}
-              {reportId ? <Link href={`/statements?report=${encodeURIComponent(reportId)}`} className="module-source-link">追溯至来源财报</Link> : null}
+              {chart.source_ids?.length || chart.metric_codes?.length ? (
+                <details className="module-chart-sources">
+                  <summary>查看图表来源与指标口径</summary>
+                  <dl>
+                    <div><dt>指标代码</dt><dd>{chart.metric_codes?.join("、") || "—"}</dd></div>
+                    <div><dt>快照</dt><dd>{chart.snapshot_id || "未关联指标快照"}</dd></div>
+                    <div><dt>来源标识</dt><dd>{chart.source_ids?.join("、") || "—"}</dd></div>
+                  </dl>
+                </details>
+              ) : null}
+              {chart.drilldown_target || reportId ? (
+                <Link
+                  href={chart.drilldown_target ?? `/statements?report=${encodeURIComponent(reportId!)}`}
+                  className="module-source-link"
+                >
+                  追溯至来源财报
+                </Link>
+              ) : null}
             </article>
           );
         }) : <p className="chart-empty">当前期间没有可绘制的趋势数据；相关缺口见下方说明。</p>}

@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.48
+version: 5.50
 created_at: 2026-09-12
 updated_at: 2026-10-17
 owner: FLOW
@@ -14,7 +14,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-10-17 当前状态：**CFO 驾驶舱全视图数据与图表完整性改造为唯一执行项；阶段 1–3 已完成，队首执行阶段 4 页面联动与展示治理，阶段 5 浏览器验收待其后；知识刷新 K2 顺延**。大麦财务实际已扩为 2,304 条期间×组织×科目行，补 FY2022/FY2023 损益、现金流和资产负债披露锚点及 FY2021 期初锚；月度/组织分配明确标记 synthetic allocation。金额统一为 CNY 元，订单和件量为整数；校验资产负债恒等式、现金勾稽和总览四项 CFO KPI 有值。发行包 check、canonical/generator 41 项、隔离导入/分析回归 23 项、Ruff、mypy、合同检查及文档 M1 全部通过。阶段 2 准确 SHA `09ba5722ec3e8075a3483223df4c81fe5cdaa9fa` 的 CI run `39035163288` 18/18 job 成功；阶段 3 API 5 项、Web 13 项、类型检查与契约生成均通过，正在实现浏览器深链与图表 provenance 展示。详见[当前路线图](../50_plans/CURRENT_ROADMAP.md)、[驾驶舱工作包](../50_plans/work_items/COCKPIT--all-views-data-and-visual-completion.md)和[HANDOFF](../../HANDOFF.md)。
+2026-10-17 当前状态：**CFO 驾驶舱全视图数据与图表完整性改造为唯一执行项；阶段 1–4 已完成，阶段 5 的本地隔离验收、全视图 API/表格逐项对账、独立审查和文档门禁已完成；准确 SHA GitHub CI 待验收；知识刷新 K2 顺延**。九个视图在一次性隔离账套中均实际渲染，桌面/窄屏截图已采集；共 25 个图表画布，总览已显示营业收入、营业利润、毛利率、经营现金流及行动项。六模块全部 chart series、瀑布步骤、公式卡 DSO/DIO/DPO/CCC 和盈利能力期间指标均与 API 展示值逐项核对。大麦财务实际为 2,304 条期间×组织×科目行，月度/组织分配标记 synthetic allocation；金额统一为 CNY 元、订单和件量为整数。阶段 2 准确 SHA CI run `39035163288` 18/18 成功；阶段 3 SHA `df5c338b` 的旧 CI run `39038535194` 仍在执行，已定位静态 Web/smoke 构建因测试 fixture 缺少新增图表契约字段而失败，当前分支已修复。详见[当前路线图](../50_plans/CURRENT_ROADMAP.md)、[驾驶舱工作包](../50_plans/work_items/COCKPIT--all-views-data-and-visual-completion.md)和[浏览器截图报告](../60_delivery/verification/2026-10-17--cockpit-all-views-visual-browser-verification-v1.md)。
 
 2026-10-13 深夜当前状态：**时间线迁移已交付**（分支 `flow/timeline-migration-20261013`，commit `087a72f2`）——演示数据期间对齐菜鸟真实财年（FY2022 比较 / FY2023 分析），canonical 月度明细年度聚合精确等于申请稿披露值（零差异）；财务报表为 IFRS 披露原值（合成行全删），简体 IFRS 勾稽器（12 恒等式）过发布门禁；覆盖矩阵 FY2022/FY2023 各 32/50 如实缺省；ORG-LEDGER v2（v1 冻结）。验证全绿（单元/企业/scripts/隔离栈 e2e）。已合并 main（`c824f55f`，同 SHA CI 17/17 success）。下一子步：F3（指标目录收尾），随后批次 C-2。
 

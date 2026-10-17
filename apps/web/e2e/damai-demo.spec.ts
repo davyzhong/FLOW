@@ -5,6 +5,9 @@ import path from "node:path";
 import { expect, test, type Page } from "@playwright/test";
 import { formatDeltaPercent, formatFinancialValue } from "../components/cockpit/number-format";
 import type {
+  CockpitModuleResponse,
+  CockpitOverviewResponse,
+  CockpitProfitabilityResponse,
   DashboardResponse,
   FindingListItem,
   FreezeCandidate,
@@ -48,6 +51,23 @@ const COVERAGE_COMPANY_NAMES: Record<string, string> = {
   sf_002352: "顺丰控股",
   tencent_0700: "腾讯控股",
 };
+
+function cockpitSeriesMetricCode(name: string): string {
+  if (/订单|包裹|件量|客户数|件数/.test(name)) return "orders";
+  if (/资产负债率/.test(name)) return "debt_asset_ratio";
+  if (/流动比率/.test(name)) return "current_ratio";
+  if (/速动比率/.test(name)) return "quick_ratio";
+  if (/现金比率/.test(name)) return "cash_ratio";
+  if (/权益乘数/.test(name)) return "equity_multiplier";
+  if (/OCF\/流动负债/.test(name)) return "ocf_current_liab_ratio";
+  if (/利息保障倍数/.test(name)) return "interest_coverage";
+  if (/净现比/.test(name)) return "net_cash_ratio";
+  if (/毛利率/.test(name)) return "gross_margin";
+  if (/净利率/.test(name)) return "net_margin";
+  if (/周转率/.test(name)) return "inventory_turnover";
+  if (/DSO|DIO|DPO|CCC|天数/.test(name)) return "dso_days";
+  return "";
+}
 
 async function expectMetricCoverageMatchesApi(page: Page, coverage: MetricCoverage) {
   const matrix = page.locator("section[aria-label='指标覆盖矩阵']");
@@ -1696,4 +1716,204 @@ test("data workbench completes damai workbook upload journey", async ({ page }) 
   await expect(
     page.getByRole("heading", { name: "导入版本已发布" }),
   ).toBeVisible({ timeout: 120_000 });
+});
+
+test("all CFO cockpit views render real charts without narrow-screen overflow", async ({ page }) => {
+  const moduleRoutes = [
+    "/cockpit/expenses",
+    "/cockpit/balance-sheet",
+    "/cockpit/working-capital",
+    "/cockpit/cashflow",
+    "/cockpit/risk",
+    "/cockpit/consolidation",
+  ];
+  const routes = ["/cockpit", "/cockpit/profitability", ...moduleRoutes, "/data"];
+
+  for (const width of [1440, 390]) {
+    await page.setViewportSize({ width, height: width === 390 ? 844 : 1000 });
+    for (const route of routes) {
+      await page.goto(route);
+      await expect.poll(async () => page.locator("canvas").count(), {
+        message: `${route} 在 ${width}px 视口应绘制至少两张图`,
+        timeout: 20_000,
+      }).toBeGreaterThanOrEqual(2);
+      const paintedPixels = await page.locator("canvas").evaluateAll((canvases) =>
+        canvases.map((canvas) => {
+          const bitmap = canvas as HTMLCanvasElement;
+          const context = bitmap.getContext("2d");
+          if (!context) return 0;
+          const { data, width: canvasWidth, height: canvasHeight } = context.getImageData(
+            0,
+            0,
+            bitmap.width,
+            bitmap.height,
+          );
+          let visible = 0;
+          const stride = 4 * Math.max(1, Math.floor((canvasWidth * canvasHeight) / 20_000));
+          for (let index = 0; index < data.length; index += stride) {
+            if (data[index + 3] > 0 && (data[index] < 245 || data[index + 1] < 245 || data[index + 2] < 245)) {
+              visible += 1;
+            }
+          }
+          return visible;
+        }),
+      );
+      expect(paintedPixels.every((visible) => visible > 10), `${route} 存在未绘制内容的空画布`).toBe(true);
+      if (route === "/cockpit") {
+        const apiOverview = await page.evaluate(async () => {
+          const response = await fetch("/api/v1/cockpit/overview");
+          if (!response.ok) throw new Error(`驾驶舱 API 返回 ${response.status}`);
+          return response.json();
+        }) as CockpitOverviewResponse;
+        for (const label of ["营业收入", "营业利润", "毛利率", "经营现金流"]) {
+          await expect(page.getByText(label, { exact: false }).first()).toBeVisible();
+        }
+        await expect(page.getByTestId("action-item").first()).toBeVisible();
+        const trends = page.locator("article[data-testid='cockpit-trend']");
+        await expect(trends).toHaveCount(4);
+        for (const trend of await trends.all()) {
+          const key = await trend.getAttribute("data-key");
+          const series = apiOverview.trends?.flatMap((item) => item.series ?? []).find((item) => item.key === key);
+          expect(series, `${key} 应存在于趋势 API`).toBeDefined();
+          expect(Number(await trend.getAttribute("data-points"))).toBe(
+            series?.points?.filter((point) => point.status === "ready").length,
+          );
+          await trend.locator("details summary").click();
+          const renderedRows = await trend.locator("tbody tr").evaluateAll((rows) => rows.map((row) => [
+            row.querySelector("th")?.textContent?.trim() ?? "",
+            row.querySelector("td")?.textContent?.trim() ?? "",
+          ]));
+          const expectedRows = (series?.points ?? []).map((point) => [
+            point.period,
+            point.status === "ready" ? formatFinancialValue(point.value, { unit: series?.unit }) : "—",
+          ]);
+          expect(renderedRows).toEqual(expectedRows);
+        }
+        await trends.first().locator("details summary").click();
+        await expect(trends.first().locator("tbody tr")).toHaveCount(12);
+      } else if (route === "/cockpit/profitability") {
+        await expect(page.locator(".profitability-page")).toBeVisible();
+        await expect(page.locator(".profitability-comparison-grid [data-testid^='cockpit-profitability']")).toHaveCount(3);
+        const apiProfitability = await page.evaluate(async () => {
+          const response = await fetch("/api/v1/cockpit/profitability");
+          if (!response.ok) throw new Error(`盈利能力 API 返回 ${response.status}`);
+          return response.json();
+        }) as CockpitProfitabilityResponse;
+        const profitabilityRows = page.locator(".profitability-page section[aria-label='盈利能力指标明细'] tbody tr");
+        const apiMetrics = (apiProfitability.periods ?? []).flatMap((period) => (period.metrics ?? []).map((metric) => ({
+          period: period.period,
+          metric,
+        })));
+        await expect(profitabilityRows).toHaveCount(apiMetrics.length);
+        for (const [index, { period, metric }] of apiMetrics.entries()) {
+          const row = profitabilityRows.nth(index);
+          const factor = {
+            net_margin: { label: "净利率", unit: "ratio" },
+            total_asset_turnover: { label: "总资产周转率", unit: "次" },
+            equity_multiplier: { label: "权益乘数", unit: "倍" },
+            roe: { label: "净资产收益率（ROE）", unit: "ratio" },
+          }[metric.metric_code] ?? { label: metric.metric_code, unit: "" };
+          const expectedValue = metric.status === "available" && metric.value !== null
+            ? formatFinancialValue(metric.value, { metricCode: metric.metric_code, unit: factor.unit })
+            : "暂不可用";
+          const expectedStatus = metric.status === "available" ? metric.definition_version : metric.reason ?? "不可用";
+          await expect(row.locator("td").nth(0)).toHaveText(period);
+          await expect(row.locator("th")).toHaveText(factor.label);
+          await expect(row.locator("td").nth(1)).toHaveText(expectedValue);
+          await expect(row.locator("td").nth(2)).toContainText(expectedStatus ?? "不可用");
+          await expect(row.locator("td").nth(3).getByRole("link", { name: "来源财报" })).toHaveAttribute("href", new RegExp(metric.report_id));
+        }
+      } else if (moduleRoutes.includes(route)) {
+        await expect(page.locator(".module-page[data-status='ready']")).toBeVisible();
+        await expect(page.locator(".module-chart-table tbody tr").first()).toBeVisible();
+        await expect(page.locator(".chart-fact-badges").first()).toBeVisible();
+        await expect(page.locator("details.module-chart-sources").first()).toBeAttached();
+        const moduleId = route.slice("/cockpit/".length) as "balance-sheet" | "working-capital" | "expenses" | "cashflow" | "risk" | "consolidation";
+        const apiModule = await page.evaluate(async (id) => {
+          const response = await fetch(`/api/v1/cockpit/modules/${id}`);
+          if (!response.ok) throw new Error(`模块 API 返回 ${response.status}`);
+          return response.json();
+        }, moduleId) as CockpitModuleResponse;
+        const charts = Object.entries(apiModule.charts ?? {});
+        expect(charts.length, `${moduleId} 应存在图表数据`).toBeGreaterThan(0);
+        for (const [chartKey, chartData] of charts) {
+          if (chartData.type === "formula_card") {
+            const formula = page.locator(`[data-testid='cockpit-module-chart-${chartKey}']`);
+            for (const [field, label] of [["dso", "DSO"], ["dio", "DIO"], ["dpo", "DPO"], ["ccc", "CCC"]] as const) {
+              const actual = await formula.locator("span").filter({ hasText: new RegExp(`^${label}：`) }).textContent();
+              const value = chartData[field];
+              const expected = `${label}：${formatFinancialValue(value, { metricCode: "dso_days", unit: "day" })}`;
+              expect(actual?.trim(), `${moduleId}/${chartKey}/${label} 页面值应与 API 相等`).toBe(expected);
+            }
+          }
+          const rows = page.locator(`article[data-chart='${chartKey}'] .module-chart-table tbody tr`);
+          const entries = Object.entries(chartData.series ?? {});
+          if (entries.length) {
+            await expect(rows).toHaveCount(entries.length);
+            for (const [index, [seriesName, raw]] of entries.entries()) {
+              const values = Array.isArray(raw) ? raw : [raw];
+              const unit = chartData.type === "line" && /率|margin/i.test(seriesName) ? "ratio" : chartData.unit;
+              const actual = await rows.nth(index).locator("td").allTextContents();
+              const expected = values.map((value) => formatFinancialValue(value, {
+                metricCode: cockpitSeriesMetricCode(seriesName),
+                unit,
+              }));
+              expect(actual, `${moduleId}/${chartKey}/${seriesName} 页面值应与 API 相等`).toEqual(expected);
+            }
+          } else {
+            await expect(rows).toHaveCount(0);
+          }
+          const steps = Object.entries(chartData.steps ?? {});
+          const renderedSteps = page.locator(`article[data-chart='${chartKey}'] .module-waterfall-values > div`);
+          await expect(renderedSteps).toHaveCount(steps.length);
+          for (const [index, [stepName, value]] of steps.entries()) {
+            await expect(renderedSteps.nth(index).locator("dt")).toHaveText(stepName);
+            await expect(renderedSteps.nth(index).locator("dd")).toHaveText(formatFinancialValue(value, { unit: chartData.unit }));
+          }
+        }
+      } else if (route === "/data") {
+        await expect(page.getByRole("heading", { name: "最近的数据批次" })).toBeVisible();
+        await expect(page.locator("canvas")).toHaveCount(2);
+      }
+      const dimensions = await page.evaluate(() => ({
+        viewport: document.documentElement.clientWidth,
+        content: document.documentElement.scrollWidth,
+      }));
+      expect(dimensions.content, `${route} 在 ${width}px 视口发生横向溢出`).toBe(dimensions.viewport);
+    }
+  }
+
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto("/cockpit/balance-sheet");
+  const provenance = page.locator("details.module-chart-sources").first();
+  await provenance.locator("summary").focus();
+  await page.keyboard.press("Enter");
+  await expect(provenance).toHaveAttribute("open", "");
+  const sourceRowLink = page.locator(".module-chart-card a.module-source-link").first();
+  await expect(sourceRowLink).toHaveAttribute("href", /#stmt-row-/);
+  await sourceRowLink.click();
+  await expect.poll(() => page.evaluate(() => {
+    const targetId = decodeURIComponent(window.location.hash.slice(1));
+    const target = targetId ? document.getElementById(targetId) : null;
+    return target ? Math.round(target.getBoundingClientRect().top) : null;
+  })).toBeGreaterThanOrEqual(0);
+  await expect.poll(() => page.evaluate(() => {
+    const targetId = decodeURIComponent(window.location.hash.slice(1));
+    const target = targetId ? document.getElementById(targetId) : null;
+    return target ? Math.round(target.getBoundingClientRect().top) : null;
+  })).toBeLessThan(1000);
+
+  await page.goto("/cockpit");
+  const actionItem = page.getByTestId("action-item").first();
+  await expect(actionItem).toBeVisible();
+  await actionItem.getByRole("button", { name: "确认" }).click();
+  await expect(actionItem.locator("[data-status='acknowledged']")).toBeVisible();
+
+  await page.route("**/api/v1/cockpit/modules/balance-sheet", (route) => route.fulfill({
+    status: 403,
+    json: { detail: { code: "role_forbidden", message: "当前账号无权读取该模块。" } },
+  }));
+  await page.goto("/cockpit/balance-sheet");
+  await expect(page.getByText("没有访问权限：请确认当前账号的角色或数据范围")).toBeVisible();
+  await page.unroute("**/api/v1/cockpit/modules/balance-sheet");
 });

@@ -51,11 +51,29 @@ const moduleFixture: CockpitModuleResponse = {
       unit: "ratio",
       periods: ["FY2022", "FY2023"],
       series: { 资产负债率: ["0.7713", "0.6319"] },
+      analysis_question: "资产负债率在报告期之间如何变化？",
+      fact_classes: ["reported", "derived"],
+      source_ids: ["r1", "r2"],
+      metric_codes: ["bs.total_liab", "bs.total_assets"],
+      snapshot_id: "snap-1",
+      drilldown_target: "/statements?report=r1#stmt-row-合并资产负债表-负债合计",
+      empty_reason: null,
       fact_ids: {
         FY2022: "CN-SEG-FY2022-SEGMENT_REVENUE",
         FY2023: "CN-SEG-FY2023-SEGMENT_REVENUE",
       },
       note: "有息负债率需短债拆分，未披露 → unavailable",
+    },
+    unavailable_trend: {
+      title: "未披露趋势",
+      type: "line",
+      unit: "百万元",
+      periods: [],
+      series: {},
+      analysis_question: "当前是否存在可比较的来源事实？",
+      fact_classes: ["reported"],
+      snapshot_id: "snap-1",
+      empty_reason: "原始财报未披露月度明细，无法形成趋势。",
     },
   },
   unavailable: [
@@ -77,7 +95,17 @@ describe("CockpitModulePage", () => {
     expect(screen.getByText("前期 58,881.09 百万元")).toBeVisible();
     expect(screen.getAllByText("资本结构趋势").length).toBeGreaterThan(0);
     expect(screen.getByText("FY2022 / FY2023 · %")).toBeVisible();
+    expect(screen.getByText("分析问题：资产负债率在报告期之间如何变化？")).toBeVisible();
+    expect(screen.getByText("计算指标")).toBeVisible();
+    fireEvent.click(screen.getByText("查看图表来源与指标口径"));
+    expect(screen.getByText("bs.total_liab、bs.total_assets")).toBeVisible();
+    expect(
+      screen.getAllByRole("link").find(
+        (link) => link.getAttribute("href") === "/statements?report=r1#stmt-row-合并资产负债表-负债合计",
+      ),
+    ).toBeInTheDocument();
     expect(screen.getByTestId("cockpit-module-chart-capital_structure_trend")).toBeVisible();
+    expect(screen.getByText("原始财报未披露月度明细，无法形成趋势。")).toBeVisible();
     fireEvent.click(screen.getByText("查看来源登记事实 ID"));
     expect(screen.getByText("FY2023 · CN-SEG-FY2023-SEGMENT_REVENUE")).toBeVisible();
     expect(screen.getByText("来源登记：config/damai/source_facts_v1.yaml")).toBeVisible();
@@ -102,6 +130,13 @@ describe("费用图表 API 形态", () => {
           unit: "百万元",
           periods: ["FY2023"],
           series: { 销售: "1476.0000", 管理: "738.0000", 研发: "210.0000", 财务: "83.0000" },
+          analysis_question: "当期各项期间费用如何构成？",
+          fact_classes: ["reported"],
+          source_ids: ["r1", "r2"],
+          metric_codes: ["selling_expense", "admin_expense", "rnd_expense", "financial_expense"],
+          snapshot_id: "snap-1",
+          drilldown_target: "/statements?report=r1",
+          empty_reason: null,
         },
       },
     } as CockpitModuleResponse);

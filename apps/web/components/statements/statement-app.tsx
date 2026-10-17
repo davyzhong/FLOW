@@ -4,7 +4,7 @@
 // 图形是同一冻结抽取值的投影（D043），本组件不做任何财务数字的重算修饰。
 // 视觉走报告风：hero（红顶 + kicker + 大标题）+ KPI 卡带 + verdict 条。
 // 注意：导航由 AppShell 统一提供（page.tsx 层），本组件不再重复渲染。
-import { useCallback, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import {
@@ -272,6 +272,13 @@ export function StatementApp({
     queryFn: () => statementApi.getReport(activeId as string),
     enabled: activeId !== null,
   });
+
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (!hash.startsWith("#stmt-row-") || !detailQuery.data) return;
+    const rowId = decodeURIComponent(hash.slice(1));
+    document.getElementById(rowId)?.scrollIntoView({ block: "center" });
+  }, [activeId, detailQuery.data]);
 
   const refetchAll = useCallback(() => {
     void listQuery.refetch();

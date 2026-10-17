@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -108,6 +108,25 @@ describe("StatementApp", () => {
     // 四表原文表格渲染精确值
     expect(screen.getByTitle("16992297.0000")).toBeInTheDocument();
     expect(screen.getAllByTitle("2650843.0000").length).toBeGreaterThan(0);
+  });
+
+  it("异步加载财报后滚动到来源行深链", async () => {
+    const scrollIntoView = vi.fn();
+    Object.defineProperty(HTMLElement.prototype, "scrollIntoView", {
+      configurable: true,
+      value: scrollIntoView,
+    });
+    window.history.replaceState({}, "", "/statements?report=" + REPORT_ID + "#stmt-row-合并资产负债表-资产总计");
+    stubFetch({
+      "/api/v1/statements": LIST_RESPONSE,
+      [`/api/v1/statements/${REPORT_ID}`]: DETAIL_RESPONSE,
+    });
+    renderWithClient(<StatementApp initialReportId={REPORT_ID} />);
+    expect(await screen.findByText("顺丰控股")).toBeInTheDocument();
+    await waitFor(() => expect(scrollIntoView).toHaveBeenCalledWith({ block: "center" }));
+    expect(document.getElementById("stmt-row-合并资产负债表-资产总计")).toBeInTheDocument();
+    delete (HTMLElement.prototype as Partial<HTMLElement>).scrollIntoView;
+    window.history.replaceState({}, "", "/");
   });
 
   it("接口失败时给出错误与重试", async () => {    const fetchStub = vi.fn<(input?: RequestInfo | URL) => Promise<Response>>(() =>

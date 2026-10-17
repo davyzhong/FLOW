@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目交接文档
 doc_type: navigation
 status: current
-version: 7.4
+version: 7.6
 created_at: 2026-09-12
 updated_at: 2026-10-17
 owner: FLOW
@@ -18,7 +18,7 @@ applies_to: repository
 
 ## 一、当前任务
 
-**当前任务：实施 CFO 驾驶舱全视图数据与图表完整性改造**。用户已要求按计划立刻实施并持续推进。阶段 1–3 已完成；阶段 4 页面联动与事实来源披露正在执行，阶段 5 浏览器验收排在其后。大麦财务扩至 2,304 条期间×组织×科目明细，补充 FY2022/FY2023 损益、现金流和资产负债披露锚点及 FY2021 期初锚，月度/组织分配标记为 synthetic allocation。准确 SHA `09ba5722ec3e8075a3483223df4c81fe5cdaa9fa` 的 CI run `39035163288` 18/18 job 成功。阶段 3 新增严格 `CockpitModuleChart` schema、OpenAPI/TypeScript 生成、六模块来源/指标/快照/问题/下钻载荷；API 5 项、Web 13 项、typecheck、契约检查、Ruff、mypy 通过。未提交阶段 4/5 文件仍在工作区，下一步完成完整 Web/E2E 验收、截图报告并更新交接。知识刷新 K2 顺延至本工作包完成后。[计划工作包](docs/50_plans/work_items/COCKPIT--all-views-data-and-visual-completion.md)。
+**当前任务：实施 CFO 驾驶舱全视图数据与图表完整性改造**。用户已要求按计划立刻实施并持续推进。阶段 1–4 已完成；阶段 5 本地隔离浏览器验收、截图报告、全视图 API/表格逐项核对、独立审查及 M1/契约/测试已完成。九页共 25 个 ECharts 画布；总览显示四项 CFO 指标与行动项；窄屏无横向溢出；来源行深链可定位。六个模块的所有图表 series、waterfall steps、formula_card DSO/DIO/DPO/CCC，以及盈利能力所有期间指标均逐值核对 API。独立复核确认无剩余 P1/P2。大麦 2,304 条财务明细的月度/组织分配标为 synthetic allocation。阶段 2 准确 SHA `09ba5722ec3e8075a3483223df4c81fe5cdaa9fa` 的 CI run `39035163288` 18/18 成功；阶段 3 SHA `df5c338bc5c1d7330be2391189cdfb828099a962` 的旧 run `39038535194` 仍在执行，静态 Web/smoke 已定位为模块图表 fixture 未补齐新契约必填字段，当前分支已修复并本地验证通过。下一步核验文档、提交并推送，然后检查本轮准确 SHA 的 CI。知识刷新 K2 顺延至本工作包完成后。[计划工作包](docs/50_plans/work_items/COCKPIT--all-views-data-and-visual-completion.md)、[浏览器验证报告](docs/60_delivery/verification/2026-10-17--cockpit-all-views-visual-browser-verification-v1.md)。
 
 **CFO 驾驶舱盈利分析与图表缺口补全已完成**。本分支新增盈利能力页面 `/cockpit/profitability`、只读 API 与冻结时杜邦指标载荷；提供净利率、ROE、总资产周转率、权益乘数、两期比较、勾稽提示、指标/报告/来源财报行深链。图表复用 ECharts；旧快照或缺少期初数据时明确显示 unavailable。前端 36 个测试文件/184 项通过、typecheck/build 通过；lint 零错误，有一条既有 TanStack Table 警告；后端隔离定向测试 12 项、Ruff、mypy 通过；隔离账套核验 19/19、可见性矩阵 162 项无失败、浏览器全旅程 16/16 通过，真实页面截图见[浏览器验收记录](docs/60_delivery/verification/2026-10-17--cockpit-profitability-browser-verification-v1.md)。CI 首轮发现重复 seed 会新增两份 Objective 快照；修复归一化行 UUID 不稳定性后，回归测试 10 项通过，准确 SHA `08aa4cd02247f995bc990d92c8f34f5a1829afa1` 的 GitHub CI run `38996089002` 为 18/18 job success。contracts、plan views、links 与 M1 通过。代码与修复提交分别为 `5817efcf`、`08aa4cd0`，均已推送。工作包/设计/计划见 [工作包](docs/50_plans/work_items/COCKPIT--visual-analysis-expansion.md)、[设计规格](docs/superpowers/specs/2026-10-17-cfo-cockpit-visual-analysis-expansion-design.md)、[实施计划](docs/superpowers/plans/2026-10-17-cockpit-visual-analysis-expansion.md)。独立审查发现的单位误标和来源行下钻缺口均已修复。
 

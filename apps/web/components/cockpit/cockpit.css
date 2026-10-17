@@ -561,6 +561,7 @@
 .action-panel__suggestions a { color: var(--flow-link, #2457a6); font-size: 13px; }
 .action-panel__suggestions button { flex: 0 0 auto; }
 @media (max-width: 640px) {
+  .trend-grid { grid-template-columns: minmax(0, 1fr); }
   .action-panel__suggestions li { align-items: stretch; flex-direction: column; }
 }
 
@@ -741,6 +742,36 @@
   color: #94a3b8;
   font-size: 10px;
   text-align: right;
+}
+.chart-question {
+  margin: 0 0 8px;
+  color: #64748b;
+  font-size: 12px;
+}
+.chart-fact-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: 0 0 6px;
+}
+.chart-fact-badges span {
+  padding: 2px 7px;
+  border: 1px solid #dbeafe;
+  border-radius: 999px;
+  color: #1d4ed8;
+  background: #eff6ff;
+  font-size: 10px;
+}
+.chart-fact-badges [data-fact-class="derived"] {
+  border-color: #ddd6fe;
+  color: #6d28d9;
+  background: #f5f3ff;
+}
+.chart-fact-badges [data-fact-class="synthetic_allocation"],
+.chart-fact-badges [data-fact-class="scenario"] {
+  border-color: #fde68a;
+  color: #92400e;
+  background: #fffbeb;
 }
 .module-chart-visual .chart-card {
   margin: 0;

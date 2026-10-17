@@ -3,7 +3,7 @@ doc_id: FLOW-WI-COCKPIT-ALL-VIEWS-20261017-001
 title: CFO 驾驶舱全视图数据与图表完整性改造
 doc_type: work-item
 status: active
-version: "2.5"
+version: "2.7"
 created_at: 2026-10-17
 updated_at: 2026-10-17
 owner: FLOW
@@ -19,7 +19,7 @@ confidentiality: project-internal
 
 # CFO 驾驶舱全视图数据与图表完整性改造
 
-> **执行状态：实施中。** 用户于 2026-10-17 明确要求立即执行，本工作包已调整为当前唯一队首；知识刷新 K2 顺延至本工作包完成后。内部阶段按下文顺序串行推进，不形成独立子队列。用户已要求为所有 CFO 驾驶舱视图补足可见经营数据与真实图形图表。当前完成阶段 1；阶段 2 的本地数据/勾稽验证已通过，但准确 SHA CI 检出 dashboard oracle 缺少 `Finding.status`，正在修复并重验；阶段 3–5 尚未结项。
+> **执行状态：实施中（准确 SHA CI 待验收）。** 用户于 2026-10-17 明确要求立即执行，本工作包为当前唯一队首；知识刷新 K2 顺延。阶段 1–4 已完成；阶段 5 的九页桌面/窄屏渲染、API/页面全量逐项核对、键盘披露、来源行深链、行动审计确认、权限拒绝与缺数态均已通过本地隔离验收。九页截图显示总计 25 个图表画布。独立复核提出的覆盖缺口已补齐：六模块所有图表 series、瀑布步骤及 DSO/DIO/DPO/CCC 公式卡逐值对账；杜邦明细逐行对账。独立复核确认无剩余 P1/P2。最终仍需本轮提交准确 SHA 的 GitHub CI 通过后结案。
 
 **目标：** 让 CFO 驾驶舱每个主要页面一打开就能看到关键财务指标、可读图表、数据口径与来源；在公开披露不足时，允许使用明确标记、可重复且与公开事实勾稽的演示生成明细来验证更细粒度视图，不把生成数据说成菜鸟实际披露。
 
@@ -133,11 +133,11 @@ confidentiality: project-internal
 
 **主要文件：** `apps/web/components/cockpit/cockpit-overview-app.tsx`、`apps/web/components/cockpit/module-page.tsx`、`apps/web/components/cockpit/profitability-page.tsx`、`apps/web/components/cockpit/action-panel.tsx`、`apps/web/components/cockpit/charts/builders.ts`、`apps/web/components/cockpit/charts/echarts-base.tsx`、`apps/web/components/cockpit/charts/module-options.ts`、`apps/web/components/cockpit/cockpit.css`、`apps/web/components/dashboard/workflow-nav.tsx`。
 
-- [ ] 按上表顺序完成总览，再依次完成盈利能力、利润增长、费用、资产负债、营运资金、现金流、风险、合并和数据中心；新路由必须包 `<AppShell>`、登记导航与导航 E2E。
-- [ ] 每页实现至少 2 个有数据、有单位、有期间、有标题结论的图形分析区；总览至少 3 个。收入/营业利润和率类指标分面或使用有明确标注的兼容坐标轴；趋势图必须有足够连续点，只有两期时标“年度对比”。
-- [ ] 图表本身必须在验收数据下有可见绘图元素；不能用空白 ChartBox、只渲染标题、只有图表数据表或“暂无数据”块满足本验收。
-- [ ] 为每张图提供同步数据表、易读 tooltip、来源/合成标签、口径/单位、键盘可达焦点和屏幕阅读器描述；点选 bar/line/segment/KPI 可进入明细、定义或 source row。
-- [ ] 全局期间、组织、区域、产品、客户筛选以 URL 状态驱动相关视图；各页数据域不支持的筛选要禁用或说明，不静默失效。桌面、窄屏和键盘操作均验收。
+- [x] 按上表顺序完成九个视图；新路由遵守 `<AppShell>`、导航登记与导航 E2E 规范。
+- [x] 九页实测均有可见图形：总览 4 个画布，其余页面 2–4 个画布；报告记录 25 个图表画布、指标、期间、单位和配套数据表。
+- [x] 缺数图表不伪造趋势；以公开披露、派生、演示分配标签及 unavailable 原因标记数据来源。
+- [x] 图表来源追踪和财报行深链在实际浏览器中验证；窄屏九页无横向溢出，报告与截图已保存。
+- [x] E2E/单测验证图表来源键盘展开、财报行跳转与视口定位、行动项审计确认；所有模块图表 series、waterfall steps、formula_card 四项周期指标及盈利能力期间明细逐值对账 API，并由独立上下文复核；未发现剩余 P1/P2。
 
 **阶段验收：** 所有 9 个视图实际页面截图都能看到非空数据图；图表值与其下数据表、接口响应逐点相符；数据分类 badge 和跳转链正常；截图中没有无原因的空白图表区域。
 
@@ -145,11 +145,11 @@ confidentiality: project-internal
 
 **主要文件：** `apps/web/e2e/damai-demo.spec.ts`、`apps/web/e2e/navigation.spec.ts`、`apps/web/e2e/dashboard-visual.spec.ts`、`services/api/tests/cockpit/`、`services/api/tests/api/test_cockpit_modules.py`、`services/api/tests/api/test_cockpit_action_items.py`、`docs/60_delivery/verification/`、`HANDOFF.md`。
 
-- [ ] 在一次性隔离 Compose 栈加载全量发行包，逐个打开 8 个 cockpit 路由和 `/data`，跑全局筛选、图表点击下钻、行动项操作、来源行追溯与导航返回旅程。
-- [ ] 采集每个页面的长截图和首屏截图，至少覆盖桌面及窄屏；另外记录各图表可视标记数、可用数据点数、数据分类及图表—数据表核对结果。
-- [ ] 验收加载、错误、空、无权限、部分缺数等态。完整演示批次保证必要图有可绘数据；单个真实披露数据缺失时不显示假线，并有明确原因与演示模式切换方式。
-- [ ] 用全新上下文独立核对计划验收条款与 diff；只修复影响正确性或验收的缺口，不扩大范围。
-- [ ] 更新本工作包、唯一路线图、HANDOFF 和本次验证报告；M1、文档链接、契约、相关 API/Web 测试和准确代码 SHA CI 全部通过后结案，并按 GitHub 仓库规则提交、立即推送。
+- [x] 在一次性隔离账套逐个打开 8 个 cockpit 路由和 `/data`；已有报告记录图表来源深链与财报行定位实测。本轮增加自动化全视图桌面/窄屏 E2E。
+- [x] 采集九页桌面与窄屏截图，并记录可见画布数、KPI 数、数据表和页面状态。
+- [x] 验收就绪态、403 拒绝态、图表 empty_reason、模块不可用/部分缺数态；完整演示批次图表有数据，不补造缺失趋势。
+- [x] 用全新上下文独立核对计划验收条款与最终 diff；只修复影响正确性或验收的缺口，不扩大范围。
+- [ ] 本工作包、唯一路线图、HANDOFF 和验证报告已更新；M1、契约、相关 API/Web 测试通过。等待本轮提交后的准确 SHA CI 通过，再提交结案状态并推送。
 
 **阶段验收：** 8 个 cockpit 页面 + `/data` 截图齐全；页面数值与 API/manifest 行级对账通过；用例覆盖四个指定 KPI、行动项、各视觉交互和披露/演示区分；隔离数据源、数据 manifest SHA、代码 SHA、CI run 均可追溯。常驻库、原始档案与并发 worktree 不受影响。
 
