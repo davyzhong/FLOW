@@ -23,15 +23,15 @@ superseded_by: null
 ## 范围与约束
 
 - 页面：新增 `/cockpit/profitability`，杜邦分解、期间对比、指标数据表、定义与来源深链。
-- 数据：只读已发布 `MetricSnapshot` / `MetricValue` 与关联来源报告；每个上屏数字携带 `metric_snapshot_id`。不可在 cockpit 路由或页面重算财务指标。
-- 若某个杜邦指标当前未进入冻结快照，不可借最新快照 ID 为报告行重算值背书；明确显示缺失并登记为待后续指标发布链的工作。
+- 数据：只读已发布 `MetricSnapshot` / `MetricValue`、`ReportSnapshot` 或客观财报 `ObjectiveReportSnapshot`；每个上屏数字携带实际快照 ID。财务派生指标必须在现有 Objective 快照创建阶段按指标字典公式计算、保存定义版本与行级来源轨迹，Cockpit 路由和页面只读，禁止实时重算。
+- 扩展 Objective 快照 JSON payload 版本，不修改数据库表结构；旧 v1 快照不改写，继续兼容并将缺少分析指标的页面内容显示为 unavailable。只有显式冻结/重冻结动作可生成含指标值的新不可变快照。
 - 总览/其余模块：只按实际页面和 API 现状核对，已交付图表不重复开发。无数据时如实呈现不可用原因。
 - 复用 ECharts、`buildDupont`、`ChartBox`、已有格式器、指标字典、权限和聚合端点模式；不增加依赖、不改 schema/迁移/CI。
 
 ## 验收标准
 
 1. 新路由使用 AppShell，导航注册并纳入 navigation 守护测试。
-2. 至少一个完整已发布指标快照提供所有适用杜邦因子时，展示杜邦关系、期间比较、公式说明与 ROE 一致性校验；若证据不足，逐项标明 unavailable 而不伪造图表。
+2. 新 Objective 快照创建时保存遵守指标字典平均余额口径的 ROE、净利率、总资产周转率、权益乘数与 calculation trace；杜邦乘积勾稽差异及通过/失败一并冻结。新快照页面展示杜邦关系和对比图；旧 v1 快照缺少冻结值时标明 unavailable，不伪造图表。
 3. 数值携带快照、指标定义和报告来源身份，链接目标正确；访问控制沿用现有单企业权限。
 4. 加载、错误、无数据、窄屏、键盘与数据表状态可用；图表与表格数值一致。
 5. 隔离数据测试、API/Web 定向测试、typecheck/lint/build、浏览器验收、M1 与契约检查通过。

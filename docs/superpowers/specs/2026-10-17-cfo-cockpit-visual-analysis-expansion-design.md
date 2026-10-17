@@ -3,10 +3,11 @@ doc_id: FLOW-SPEC-COCKPIT-VISUAL-ANALYSIS-20261017-001
 title: CFO 驾驶舱盈利分析与图表缺口补全设计
 doc_type: specification
 status: approved
-version: "1.1"
+version: "1.2"
 created_at: 2026-10-17
 updated_at: 2026-10-17
 owner: FLOW
+knowledge_release: flow-knowledge-2026-09-12.1
 depends_on: [FLOW-WI-COCKPIT-CFO-001, FLOW-WI-COCKPIT-VISUAL-20261017-001]
 acceptance_refs: [FLOW-VERIFY-COCKPIT-CHART-COVERAGE-20261016-001]
 applies_to: cockpit
@@ -57,14 +58,14 @@ superseded_by: null
 
 - ROE 使用归属口径一致的净利润与平均权益；净利率用同口径净利润/营业收入；总资产周转率用营业收入/平均总资产；权益乘数用平均总资产/平均权益。若指标字典定义对主体/期间另有明确要求，服从字典并展示口径标签。
 - 资产/权益平均数必须具备期初与期末值。缺少期初、期末、分子/分母映射不明、分母为零或期间不一致时，该因子显示不可用，不以期末值代替平均值。
-- 页面数值必须复用已发布 `MetricSnapshot` / `ReportSnapshot` 中的值；派生比率须先由既有指标引擎按指标字典计算并冻结，页面和 cockpit handler 不得重新计算第二套财务事实。每个数值携带其 `metric_snapshot_id` 和来源报告身份，前端拒绝渲染缺少快照身份的数据。杜邦乘积仅作一致性校验展示，校验规则须来自已登记指标定义/计算轨迹。
+- 页面数值必须复用已发布 `MetricSnapshot` / `ReportSnapshot`，或客观财报不可变 `ObjectiveReportSnapshot` 中的值。允许扩展现有 Objective 快照 payload，在快照创建时按指标字典定义计算并冻结指标值、定义版本、计算轨迹及源行锚点；Cockpit 页面和读取 handler 不得重算。每个数值携带对应快照身份和来源报告身份，前端拒绝渲染缺少快照身份的数据。杜邦一致性校验在冻结阶段计算并保存，读取阶段仅展示结果。
 - 财务比较仅使用已发布、可溯源的披露事实或经登记、可复算且与披露总额勾稽的派生值。演示生成明细必须显式标记为演示数据，不能写成菜鸟实际逐月数据。
 - 所有图表提供单位/期间 tooltip 与可访问的数据表；颜色不作为唯一的涨跌表达；缺失点保持断点，格式遵守计数整数、金额两位小数、百分比/倍数按既有格式规则。
 
 ## 4. 技术架构与复用
 
 - 前端复用 ECharts 6.1.0、`components/cockpit/charts/builders.ts`、`module-options.ts`、`ChartBox`、数字格式器与现有页面状态组件。
-- 后端优先复用已发布快照与现有指标读取/发布链；不得在 `ModuleFactContext` 或 cockpit 路由里从规范化报表行重算页面比率。新增能力通过盈利能力模块的单一聚合端点提供，沿用 `Action.DASHBOARD_OVERVIEW_READ` 的单企业边界；无需 schema 迁移，若无法满足快照身份的指标尚未冻结，则如实 unavailable 并登记为数据准备缺口。
+- 后端优先复用已发布快照与现有指标读取/发布链；不得在 `ModuleFactContext` 或 cockpit 路由里从规范化报表行重算页面比率。扩展 Objective 财报快照的 JSON payload schema version（数据库表结构不变），在显式冻结动作中记录指标计算结果和血缘；既有 v1 快照保持只读兼容且盈利图表标记 unavailable。读取通过单一盈利能力聚合端点提供，沿用 `Action.DASHBOARD_OVERVIEW_READ` 单企业边界。
 - API 权限复用已批准的 `Action.DASHBOARD_OVERVIEW_READ` 和单企业范围 loader；不修改安全角色、迁移或 CI 配置。
 - 不引入新的图表依赖、不重复实现通用绘图、不创建平行指标定义。
 

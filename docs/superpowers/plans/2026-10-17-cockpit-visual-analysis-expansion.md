@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-COCKPIT-VISUAL-ANALYSIS-20261017-001
 title: CFO 驾驶舱盈利分析与图表缺口补全实施计划
 doc_type: plan
 status: active
-version: "1.0"
+version: "1.1"
 created_at: 2026-10-17
 updated_at: 2026-10-17
 owner: FLOW
@@ -24,13 +24,14 @@ superseded_by: null
 
 ### 1. 核实冻结指标数据可用性与当前视觉缺口
 - 对照 51 图验收记录、最新隔离账套接口载荷及已有路由截图，列明已完成视图、缺少视图、缺少数据的具体边界。
-- 检查目标快照是否已有 `roe`、`net_margin`、`total_asset_turnover`、`equity_multiplier` 的发布值及 calculation_trace；任何指标缺少发布值/快照身份时，不在 cockpit handler 重算，页面显示不可用并记录数据准备缺口。
-- 验收：无重复开发；对每个目标指标记录 metric snapshot ID、定义版本和来源 report ID，或记录不可用原因。
+- 检查当前客观财报快照 schema、指标字典及报表行来源定位，确定新旧快照兼容边界；已有发布 `MetricSnapshot` / `ReportSnapshot` 指标直接复用。
+- 扩展 Objective 快照冻结服务，在显式快照创建时使用既有指标字典定义及平均余额规则计算 ROE、净利率、总资产周转率、权益乘数，并将值、字典/公式版本、分子分母 trace、source report ID、原始行锚点及乘积勾稽状态写入不可变 JSON payload；递增 payload schema version，旧版本不变更。
+- 验收：测试证明冻结内容确定、哈希包含分析载荷、无必需输入时返回 unavailable 原因、精度按公式规则处理；逐指标身份/来源完整。
 
 ### 2. 后端读取聚合与契约
-- 复用已发布 MetricSnapshot/MetricValue 和现存报告 lineage；在单个盈利能力聚合接口中读取 ROE 三因子及期间比较数据。
-- 不改数据库 schema、迁移、安全 Action、CI；接口沿用 `DASHBOARD_OVERVIEW_READ` 和单企业 loader。
-- 若当前发布流程没有冻结某项比率，则明确返回 unavailable；需要补充冻结计算时只扩展既有指标字典/引擎发布链并单独遵循 schema/数据迁移授权边界（本计划不做）。
+- 复用已发布快照和现存报告 lineage；单个盈利能力聚合接口只读取客观财报冻结载荷，不触碰原始归一化行、不计算比率。
+- 扩展 Objective snapshot GET 投影以返回冻结分析摘要；增加只读盈利能力聚合路由，沿用已批准的企业域权限与 loader，不增 Action。
+- 不改数据库表 schema/迁移、CI；旧版快照返回 typed unavailable，绝不隐式冻结或重冻结。
 - 验收：响应中的每个数值有 `metric_snapshot_id`、定义身份、期间、来源报告；越权、缺失和不完整口径均 fail-closed/unavailable。
 
 ### 3. 盈利能力页面与图表
