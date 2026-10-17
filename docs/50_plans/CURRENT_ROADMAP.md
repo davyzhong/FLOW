@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 5.56
+version: 5.57
 created_at: 2026-09-12
 updated_at: 2026-10-17
 owner: FLOW
@@ -25,7 +25,7 @@ superseded_by: null
 >
 > **2026-10-17 CFO 驾驶舱盈利分析交付**：新增 `/cockpit/profitability`，杜邦指标在显式 Objective 快照冻结时计算并记录字典指纹、行级来源轨迹和勾稽结果；只读 API 返回快照值与原始报表行深链，图表复用 ECharts。没有冻结来源或期初余额时显示 unavailable，不做隐式重算。独立复核提出的比较图单位及源行深链缺口已修复。CI 首轮发现重复 seed 时数据库归一化行 UUID 改变会制造两份新快照；修复后针对测试 10 项通过，准确代码 SHA `08aa4cd02247f995bc990d92c8f34f5a1829afa1` 的 GitHub CI run `38996089002` 为 18/18 job success。前端 36 个测试文件/184 项通过、typecheck/build 通过；后端 Ruff、mypy 通过；隔离账套核验 19/19、可见性矩阵 162 项无失败、浏览器全旅程 16/16 通过；契约检查、文档 M1 通过。实际截图、演示批次和哈希见[浏览器验收记录](../60_delivery/verification/2026-10-17--cockpit-profitability-browser-verification-v1.md)。本工作包关闭，唯一队列恢复知识刷新 K2。
 
-> **2026-10-17 CFO 全视图实施继续**：大麦演示财务数据新增 FY2022/FY2023 六类公开年度锚点及 FY2021 期末现金锚，生成 2,304 条期间×组织×科目财务明细，严格区分披露值与 synthetic allocation；发行包 check、canonical/generator 41 项测试、Ruff 和 mypy 通过。准确 SHA `c8f14b79dcc24a79a43df7ce7a3612e118eddf84` 的 CI run `39028946634` 中，dashboard/static-web/smoke 等 15 项 job 成功；data-contract 与 intake-e2e 检出已提交标准工作簿未随生成器更新，integration 检出自动生成候选与冻结批准 oracle 的状态差异。已用标准生成器重建工作簿，并在集成测试中分离状态断言与共享数值字段比较；5 项定向隔离测试通过。下一步提交并推送本次门禁修复，再以准确 SHA 重跑 CI；阶段 2 尚未关闭，唯一队首不变。
+> **2026-10-17 CFO 全视图实施继续**：大麦演示财务数据新增 FY2022/FY2023 六类公开年度锚点及 FY2021 期末现金锚，生成 2,304 条期间×组织×科目财务明细，严格区分披露值与 synthetic allocation；发行包 check、canonical/generator 41 项测试、Ruff 和 mypy 通过。准确 SHA `c8f14b79dcc24a79a43df7ce7a3612e118eddf84` 的 CI run `39028946634` 中，dashboard/static-web/smoke 等 15 项 job 成功；data-contract 与 intake-e2e 检出已提交标准工作簿未随生成器更新，integration 检出自动生成候选与冻结批准 oracle 的状态差异。后续修复提交 `62af676b7519b68572e4be61b4335ab0cc1bfcab` 的 run `39032062565` 有 17/18 项成功：工作簿和候选状态修复通过，但 data-contract 清理夹具未先清除 cockpit_action_item，触发 finding 外键限制。已把 ActionItem 纳入夹具删除顺序；阶段 2 等该修复提交的准确 SHA CI 通过后关闭，唯一队首不变。
 
 > **2026-10-17 K0/K1 完成，K2 时间门禁已到、源状态待核验**：K0 Davybase 实现 `172a099`、证据 `94fc05d`、同步 `eb8c3d0` 已推送；历史快照严格终态为 1,265 输入、1,239 成功、2 待复核、24 过滤，清单 SHA-256 `c603baab83f7873c852681c69dfb314e7004e43b230ea832fb2a1e9043ce26bc`，32 篇样本/512 张图对账通过。K1 只读扫描器实现 `a0c2e67`、证据 `a914830` 已推送；扫描 1,601 篇 Markdown、17,450 个 embed 未解析、2,445 个标准 Markdown 引用不受支持、566 篇进入人工 triage、可执行候选为 0。此结果限于 allowlist/resolver，不推断全库无原图。扫描未写入 ObsidianWiki，1,365 条 dirty 路径指纹仍一致。K1 独立审查无未解决 P1/P2。K2 冻结器已推送 Davybase 提交 `699e5c6`；独立复核发现的 `release()` 推送校验绕过已修复，13 项专项/892 项全量测试、Ruff、README 统计和断链检查通过。14:30/15:00/15:30 时间窗现已到；K2 仍为队首待启动，下一步须先只读核验 ObsidianWiki 当前分支/变更/日志，再按既有冻结器门禁决定 accepted 或 rejected。不得改动 dirty vault，门禁失败则只记录 rejected 并顺延，`CURRENT_RELEASE` 不变。
 
