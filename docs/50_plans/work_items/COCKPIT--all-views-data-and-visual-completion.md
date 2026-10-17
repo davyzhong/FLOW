@@ -3,7 +3,7 @@ doc_id: FLOW-WI-COCKPIT-ALL-VIEWS-20261017-001
 title: CFO 驾驶舱全视图数据与图表完整性改造
 doc_type: work-item
 status: active
-version: "2.1"
+version: "2.2"
 created_at: 2026-10-17
 updated_at: 2026-10-17
 owner: FLOW
@@ -102,6 +102,8 @@ confidentiality: project-internal
 | `/data` 数据工作台 | 当前企业/当前账号最近 50 个内部批次接口；隔离页面实测 1 个已发布批次、1 个导入版本 | 当前批次状态分布、各批次导入版本数；共用现有 ECharts `ChartBox` 与 `buildCombo`，窄屏改为单列 | 尚未形成期间×数据域覆盖热力图和来源血缘图；两项仍需以真实 manifest/批次验证结果构建 |
 
 阶段 1 已完成隔离版本复现和根因定位。原用户端口不可达这一限制已记录；阶段 5 将以固定隔离 Compose 栈、当前代码 SHA 和浏览器新页作为可复现替代验收，不把原端口截图冒充当前代码截图。
+
+**CI 门禁修复（2026-10-17）：** 准确 SHA `c8f14b79dcc24a79a43df7ce7a3612e118eddf84` 的 run `39028946634` 显示 15/18 job 成功，失败根因为阶段 2 生成器更新后未重建已提交标准 Excel（data-contract、intake-e2e），以及集成测试把自动生成候选 `candidate` 与已批准结论 `approved` 的冻结仪表盘 oracle 状态直接比较。已运行标准工作簿生成脚本重建标准工作簿；状态仍单独断言为 `candidate`，比较时排除生命周期状态字段。隔离定向回归 5 项通过、Ruff 与 diff 检查通过。待准确新 SHA CI 通过后关闭阶段 2。
 
 ### 阶段 2：补实演示账套数据并让财务总览可用
 
