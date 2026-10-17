@@ -8,7 +8,7 @@ created_at: 2026-09-12
 updated_at: 2026-10-17
 owner: FLOW
 generator_ref: scripts/documentation/plan_views.py
-input_hash: cd7153fa8e9c12ce71b1aa176d6b8531c1591d5767abc3c1056c820ebfe9761d
+input_hash: e0471266a685dcf315279b4115b79697447847a60bf5b8438123dc823beb1a71
 applies_to: planning
 ---
 
@@ -16,7 +16,7 @@ applies_to: planning
 
 > 本页由工作包元数据确定性生成，请勿手工修改。
 
-- [CFO 驾驶舱全视图数据与图表完整性改造](../work_items/COCKPIT--all-views-data-and-visual-completion.md) — `proposed`
+- [CFO 驾驶舱全视图数据与图表完整性改造](../work_items/COCKPIT--all-views-data-and-visual-completion.md) — `active`
 - [大麦物流完整财年演示数据与全产品验收](../work_items/DAMAI--full-year-demo.md) — `active`
 - [第二代静态知识刷新与战略重基线](../work_items/KNOWLEDGE--refresh-v2.md) — `active`
 - [公开财报模块 C 级出口协议与数字级准确率基准（T09）](../work_items/PUBLIC--c-level-exit-protocol.md) — `active`
