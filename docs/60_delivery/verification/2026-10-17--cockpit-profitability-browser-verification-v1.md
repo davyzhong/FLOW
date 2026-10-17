@@ -2,11 +2,13 @@
 doc_id: FLOW-VERIFY-COCKPIT-PROFITABILITY-20261017-001
 title: CFO 驾驶舱盈利能力页面浏览器验收
 doc_type: verification
-status: current
+status: verified
 version: "1.0"
 created_at: 2026-10-17
 updated_at: 2026-10-17
 owner: FLOW
+commit_refs: "[5817efcf10bf1ce68057a626af3491b508c7513f]"
+evidence_refs: "[isolated-damai-seed, isolated-route-matrix, profitability-cockpit-e2e, profitability-cockpit-screenshot, backend-tests, web-tests]"
 applies_to: cockpit
 ---
 
