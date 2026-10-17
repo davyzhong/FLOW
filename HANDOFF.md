@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目交接文档
 doc_type: navigation
 status: current
-version: 7.6
+version: 7.7
 created_at: 2026-09-12
 updated_at: 2026-10-17
 owner: FLOW
@@ -18,7 +18,9 @@ applies_to: repository
 
 ## 一、当前任务
 
-**当前任务：实施 CFO 驾驶舱全视图数据与图表完整性改造**。用户已要求按计划立刻实施并持续推进。阶段 1–4 已完成；阶段 5 本地隔离浏览器验收、截图报告、全视图 API/表格逐项核对、独立审查及 M1/契约/测试已完成。九页共 25 个 ECharts 画布；总览显示四项 CFO 指标与行动项；窄屏无横向溢出；来源行深链可定位。六个模块的所有图表 series、waterfall steps、formula_card DSO/DIO/DPO/CCC，以及盈利能力所有期间指标均逐值核对 API。独立复核确认无剩余 P1/P2。大麦 2,304 条财务明细的月度/组织分配标为 synthetic allocation。阶段 2 准确 SHA `09ba5722ec3e8075a3483223df4c81fe5cdaa9fa` 的 CI run `39035163288` 18/18 成功；阶段 3 SHA `df5c338bc5c1d7330be2391189cdfb828099a962` 的旧 run `39038535194` 仍在执行，静态 Web/smoke 已定位为模块图表 fixture 未补齐新契约必填字段，当前分支已修复并本地验证通过。下一步核验文档、提交并推送，然后检查本轮准确 SHA 的 CI。知识刷新 K2 顺延至本工作包完成后。[计划工作包](docs/50_plans/work_items/COCKPIT--all-views-data-and-visual-completion.md)、[浏览器验证报告](docs/60_delivery/verification/2026-10-17--cockpit-all-views-visual-browser-verification-v1.md)。
+**当前任务：收尾 CFO 驾驶舱全视图数据与图表完整性改造**。阶段 1–4 已完成。阶段 5 的本地隔离浏览器验收、截图报告、全视图 API/页面逐项核对、独立复核、M1/M6/契约/相关测试均已完成；九页共 25 个 ECharts 画布，桌面/手机 18 组路由视口通过。六个模块的全部图表 series、waterfall steps、formula_card 的 DSO/DIO/DPO/CCC，以及盈利能力页全部期间指标均逐值对 API；总览四项 CFO 指标与行动项可见，来源行深链、键盘来源披露、行动项审计和 403 拒绝态均有验收。独立复核无剩余 P1/P2。演示账套 `flow_cockpit_visual_20261017a`，manifest SHA-256 `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`；月度/组织分配标记 synthetic allocation，未连接常驻业务库。
+
+代码提交 `b2ee037375ff0949a1dec442bd3ac4feb6bb078d` 已推送；报告状态修正提交 `0b9b12f3e0138898ff719d2f1db378cd793b9d5f` 已推送。最新准确 SHA CI run `39041228479`（https://github.com/davyzhong/FLOW/actions/runs/39041228479）仍在执行，最后核验时仅 `integration`、`intake-e2e`、`data-contract` 运行中，其余完成 job 全绿；因此工作包仍为 active、浏览器验收报告仍为 draft，不能宣称最终通过。旧代码 SHA run `39040652008` 的 `static-python` 曾因该报告 frontmatter 写 `status: active` 被 M6 拒绝；已改为 `draft`，最新 run 的 `static-python` 已通过。阶段 2 准确 SHA `09ba5722ec3e8075a3483223df4c81fe5cdaa9fa` CI run `39035163288` 为 18/18 成功。知识刷新 K2 顺延至本工作包关单后。[计划工作包](docs/50_plans/work_items/COCKPIT--all-views-data-and-visual-completion.md)、[浏览器验证报告](docs/60_delivery/verification/2026-10-17--cockpit-all-views-visual-browser-verification-v1.md)。
 
 **CFO 驾驶舱盈利分析与图表缺口补全已完成**。本分支新增盈利能力页面 `/cockpit/profitability`、只读 API 与冻结时杜邦指标载荷；提供净利率、ROE、总资产周转率、权益乘数、两期比较、勾稽提示、指标/报告/来源财报行深链。图表复用 ECharts；旧快照或缺少期初数据时明确显示 unavailable。前端 36 个测试文件/184 项通过、typecheck/build 通过；lint 零错误，有一条既有 TanStack Table 警告；后端隔离定向测试 12 项、Ruff、mypy 通过；隔离账套核验 19/19、可见性矩阵 162 项无失败、浏览器全旅程 16/16 通过，真实页面截图见[浏览器验收记录](docs/60_delivery/verification/2026-10-17--cockpit-profitability-browser-verification-v1.md)。CI 首轮发现重复 seed 会新增两份 Objective 快照；修复归一化行 UUID 不稳定性后，回归测试 10 项通过，准确 SHA `08aa4cd02247f995bc990d92c8f34f5a1829afa1` 的 GitHub CI run `38996089002` 为 18/18 job success。contracts、plan views、links 与 M1 通过。代码与修复提交分别为 `5817efcf`、`08aa4cd0`，均已推送。工作包/设计/计划见 [工作包](docs/50_plans/work_items/COCKPIT--visual-analysis-expansion.md)、[设计规格](docs/superpowers/specs/2026-10-17-cfo-cockpit-visual-analysis-expansion-design.md)、[实施计划](docs/superpowers/plans/2026-10-17-cockpit-visual-analysis-expansion.md)。独立审查发现的单位误标和来源行下钻缺口均已修复。
 
@@ -34,7 +36,17 @@ applies_to: repository
 
 ## 二、已完成的内容
 
-### 本会话（2026-10-13 ~ 10-16）交付清单
+### 本会话（2026-10-17）交付清单
+
+| 交付 | 提交 | 验证/状态 | 要点 |
+|---|---|---|---|
+| CFO 全视图页面、来源联动和完整浏览器验收 | `b2ee037375ff0949a1dec442bd3ac4feb6bb078d` | 本地通过；CI run `39040652008` 的 M6 因报告状态 `active` 失败，已在下一提交修正 | 九视图 25 个 canvas；桌面/手机 18 组通过；18 张截图；所有模块 series/waterfall/formula-card 与盈利明细逐项核对 API；截图报告见下方索引 |
+| 验收报告状态修正 | `0b9b12f3e0138898ff719d2f1db378cd793b9d5f` | 已推送；CI run `39041228479` 仍在执行 | verification 状态改为 `draft` 以满足 M6；CI 全绿后更新为 `verified` 并完成工作包关单 |
+| 独立复核 | — | 已完成，无 P1/P2 | 复核覆盖所有 module chart、waterfall steps、公式卡 DSO/DIO/DPO/CCC、盈利能力所有明细行 |
+
+本地验收：`pnpm -r lint && pnpm -r typecheck` 通过（3 条既有 warning）；`pnpm --filter @flow/web build` 通过；相关 Vitest 10/10；目标 Playwright 18/18 路由×视口通过（在现有隔离服务上设置 `PLAYWRIGHT_BASE_URL=http://127.0.0.1:3461`）；`make contracts-check`、文档 M1/M6、`git diff --check` 通过。浏览器报告及全部截图：[全视图浏览器核验报告](docs/60_delivery/verification/2026-10-17--cockpit-all-views-visual-browser-verification-v1.md)。
+
+### 前序批次（2026-10-13 ~ 10-16）交付清单
 
 | 交付 | 分支 | main 合并 | CI | 要点 |
 |---|---|---|---|---|
@@ -70,6 +82,8 @@ applies_to: repository
 
 | 问题 | 影响 | 当前处置 |
 |---|---|---|
+| **本轮准确 SHA CI 尚未收敛** | 最新 run `39041228479` 的 integration、intake-e2e、data-contract 最后核验时仍在运行 | 继续检查同一 run，不要启动重复实现；若失败先按具体 job 日志定位。全绿后更新报告为 `verified`、工作包/路线图/HANDOFF 状态，跑 M1/M6 后提交并推送；新 docs SHA CI 仍需核验 |
+| **已修复的文档状态失败** | 代码 SHA `b2ee0373` 的 CI run `39040652008` 因 verification 文档不允许 `status: active` 而 M6 失败 | 最新 `0b9b12f3` 已改为 `draft`，本地 M6 与最新 CI static-python 通过；只在 CI 全绿后改为 `verified` |
 | **route_policy 测试本地失败** | `test_openapi_probe_matches_tsv_two_way` 在本地 main 也失败（CI 通过） | 本地环境项（缺 S3 环境变量时 `create_app` 设置校验失败）；带完整 env 跑即绿。不阻塞 |
 | **C 级条件 2（独立 oracle 0/14）** | 14 份报告无完整独立 oracle | 用户裁决 3A：如实 No-Go，后续迭代补 |
 | **C 级条件 4（泛化留出全败）** | 小米 0/25、阿里 0/15、yunda 0/20、jdl 0/25 | 用户裁决 2A：不扩大盲评范围；适配器开发列后续迭代 |
@@ -80,7 +94,14 @@ applies_to: repository
 
 ## 四、下一步计划
 
-### 下一个队列项：知识刷新 K0–K6
+### 当前下一步：结案驾驶舱唯一队首，再继续知识刷新 K2
+
+1. 先查询 `gh run view 39041228479 --json status,conclusion,jobs`；继续观察该准确 SHA，不要把旧 SHA 的结果算作本轮结果。
+2. 若 CI 出错，逐个读取失败 job 日志（见本节“CI / 构建”命令）并修复根因；每次 GitHub commit 后立即 push。若全部通过，记录所有 job 结论及准确 SHA。
+3. 将浏览器核验报告 `status: draft` 改为 `verified`，更新 `commit_refs` 加入最终通过 SHA/run；同步更新驾驶舱工作包、唯一主线 `CURRENT_ROADMAP.md` 与本文件，准确结案队列状态，并重跑 `python3 scripts/check_docs.py --phase m1`、`--phase m6`、契约/相关测试。
+4. 提交并 push 文档状态更新后，再核验该最终 HEAD SHA 对应的 GitHub CI；之后按唯一队列恢复知识刷新 K2，先只读核验 ObsidianWiki 工作树状态。
+
+### 后续队列项：知识刷新 K0–K6
 
 工作包：`docs/50_plans/work_items/KNOWLEDGE--refresh-v2.md`
 规格：`docs/superpowers/specs/2026-09-17-static-knowledge-refresh-and-strategic-rebaseline-design.md`
@@ -97,7 +118,7 @@ applies_to: repository
 
 ### D 之后（驾驶舱后续）
 
-51 图验收已通过，驾驶舱工作包关闭。后续可选：
+完成当前全视图工作包之前，不得开始下列工作。工作包关单后按唯一队列恢复 K2；暂不另开 cockpit 任务：
 - 利润增长/盈利能力拆独立路由（当前复用总览 KPI）
 - ECharts 视图层逐图增强（数据表为基线已成立）
 - 行业参考包基准接入（v1.2 16 行业包已有，缺分位分布数据）
@@ -145,6 +166,9 @@ applies_to: repository
 16. **CI ruff 版本 / 规则集与本地可能不同**：本地全绿但 CI 报错。**对策：提交前跑 CI 的确切命令：`cd services/api && uv run ruff check src tests migrations && uv run mypy src`。**
 17. **新增 CI job 必须同步 `test_ci_gate_inventory.py`**：`EXPECTED_GATES` 集合和 `test_every_ci_gate_has_an_explicit_timeout`（timeout-minutes 必填）都要更新。
 18. **CI 失败时先拉日志定位根因再修**：`gh api repos/davyzhong/FLOW/actions/jobs/<jobId>/logs --allow-escape-sequences | grep -a 'error\|FAILED'`。不要凭 job 名猜测。
+23. **FLOW verification 文档状态受 M6 校验**：合法状态为 `draft`、`verified`、`superseded`、`archived`；`active` 会让 M6 失败。CI 最终结案前用 `draft`，全验收通过后才改 `verified`。
+24. **契约升级要同步更新强类型 fixture**：`CockpitModuleChart` 新增必填字段后，组件测试 fixture 若未同步会导致 `pnpm -r typecheck`、Next production build、依赖该构建的 smoke 全失败；本轮补上 `analysis_question`、`fact_classes`、`snapshot_id` 等字段后 static-web/smoke/module-boundaries E2E 通过。
+25. **Playwright 默认地址不是当前隔离浏览器端口**：项目配置默认 `127.0.0.1:13100`；本轮现成隔离服务的 Web 在 `3461`。复跑目标全视图用例需显式 `PLAYWRIGHT_BASE_URL=http://127.0.0.1:3461`，先核实端口对应当前 worktree 和隔离账套，不能退回常驻数据库。
 
 ### Git / 文档
 
