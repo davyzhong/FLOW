@@ -525,6 +525,8 @@ def build_dashboard_known_answers(repository_root: Path) -> dict[str, Any]:
                 "finding_id": finding_id,
                 "finding_type": finding_type,
                 "title": titles[finding_type],
+                # 该冻结仪表盘 oracle 表示已批准进入结论区的四项发现。
+                "status": "approved",
                 "impact": _available(
                     impact,
                     direction=(

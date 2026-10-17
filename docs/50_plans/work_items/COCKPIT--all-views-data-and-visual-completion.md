@@ -3,7 +3,7 @@ doc_id: FLOW-WI-COCKPIT-ALL-VIEWS-20261017-001
 title: CFO 驾驶舱全视图数据与图表完整性改造
 doc_type: work-item
 status: active
-version: "2.0"
+version: "2.1"
 created_at: 2026-10-17
 updated_at: 2026-10-17
 owner: FLOW
@@ -83,7 +83,7 @@ confidentiality: project-internal
 
 **界面实测修正（2026-10-17）：** 真实截图发现计数图纵轴的小数刻度经整数格式化后出现重复标签；`buildCombo` 对“个/项/次/家/人/条”启用整数刻度间隔，图表测试覆盖，修正后浏览器坐标显示 0、1。
 
-**阶段 2 财务公开锚点实施（2026-10-17）：** 财务生成器新增 FY2022/FY2023 六类损益/现金流公开披露锚点、8 类资产负债期末锚点，以及 FY2021 期末余额插值起点；资产负债月度值按年末披露值线性插值，年末精确回锚，资产=负债+权益及资产负债表/现金流现金余额均校验。canonical 财务实际从 16 科目扩至 24 科目，共 2,304 行；全部月度/组织拆分标记为 synthetic allocation。订单数和件量为整数演示派生量。发行包 `build_damai_demo.py --check`、canonical/generator 41 项、隔离导入/分析回归 23 项、Ruff、mypy 和合同检查均已通过。准确 SHA `a333b31a6506f5e42fa423bd2fb755e254bfe120` 的 CI run `39025836620` 中，`static-web`、`smoke`、`module-boundaries-e2e` 因冻结 fixture 缺少新契约要求的 `Finding.status` 字段失败；本地已为冻结 oracle 补齐状态字段并完成修复前的合同与前端核验。阶段 2 尚待本修复提交的准确 SHA CI 通过后关闭。
+**阶段 2 财务公开锚点实施（2026-10-17）：** 财务生成器新增 FY2022/FY2023 六类损益/现金流公开披露锚点、8 类资产负债期末锚点，以及 FY2021 期末余额插值起点；资产负债月度值按年末披露值线性插值，年末精确回锚，资产=负债+权益及资产负债表/现金流现金余额均校验。canonical 财务实际从 16 科目扩至 24 科目，共 2,304 行；全部月度/组织拆分标记为 synthetic allocation。订单数和件量为整数演示派生量。发行包 `build_damai_demo.py --check`、canonical/generator 41 项、隔离导入/分析回归 23 项、Ruff、mypy 和合同检查均已通过。准确 SHA `a333b31a6506f5e42fa423bd2fb755e254bfe120` 的 CI run `39025836620` 中，`static-web`、`smoke`、`module-boundaries-e2e` 因冻结 fixture 缺少新契约要求的 `Finding.status` 字段失败；修复 SHA `fcfc55a4d1c8022ad3b07e13a8321360c92b7997` 已通过这三项，但 `tests/dashboard/test_dashboard_oracle.py` 检出独立计算器没有同步 fixture 的状态字段。已同步生成器并由该 oracle 专测通过；阶段 2 尚待新修复提交的准确 SHA CI 通过后关闭。
 
 **总览下钻与趋势单位实测修正（2026-10-17）：** 点击总览营业收入卡后，来源抽屉原先在数值字符串和独立单位节点重复显示币种/单位。现由 KPI 下钻值仅格式化数值主体，单位由抽屉独立展示；同比/金额格式的 `appendUnit=false` 语义补齐。进一步检查发现 Dashboard 快照未下发趋势单位，毛利率 0.1087 曾显示成 0.11%；后端投影对缺失单位的趋势序列补充 CNY/ratio 默认单位，保留数据实际数值，不做数值重算。下钻测试验证金额两位小数、单位只显示一次；投影/API 定向测试 41 项、Web 全量 187 项、TypeScript 检查通过。
 
