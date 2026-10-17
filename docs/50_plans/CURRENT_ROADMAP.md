@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 5.57
+version: 5.58
 created_at: 2026-09-12
 updated_at: 2026-10-17
 owner: FLOW
@@ -17,7 +17,7 @@ superseded_by: null
 
 # 当前路线图（唯一主线）
 
-> **2026-10-17 用户调整队列并启动 CFO 全视图实施**：用户要求立即按驾驶舱计划实施，故该项调整为唯一队首并开始执行；知识刷新 K2 顺延，待驾驶舱工作包完成后恢复。阶段 1 根因复现和九视图矩阵已完成；阶段 2 的公开事实锚点、三表勾稽、CNY 单位转换、整数运营量、发行包重建及 23 项隔离导入/分析回归均已本地通过。准确 SHA `a333b31a6506f5e42fa423bd2fb755e254bfe120` 的 CI run `39025836620` 中，`static-web`、`smoke`、`module-boundaries-e2e` 因 dashboard fixture 缺 `Finding.status` 失败。修复提交 `fcfc55a4d1c8022ad3b07e13a8321360c92b7997` 已通过上述三项，但其 dashboard oracle 复算发现冻结 fixture 与独立计算器都须同步状态字段；独立计算器已在本轮补齐，阶段 2 仍待新修复提交的准确 SHA CI 通过后关闭。
+> **2026-10-17 用户调整队列并启动 CFO 全视图实施**：用户要求立即按驾驶舱计划实施，故该项调整为唯一队首；知识刷新 K2 顺延，待驾驶舱工作包完成后恢复。阶段 1 隔离复现、根因和九视图矩阵已完成；阶段 2 已补公开事实锚点、三表勾稽、CNY 单位转换、整数运营量并重建发行包，准确 SHA `09ba5722ec3e8075a3483223df4c81fe5cdaa9fa` 的 CI run `39035163288` 18/18 job 成功并正式关闭。当前队首进入阶段 3。之前 `a333b31a`、`fcfc55a4`、`c8f14b79` 的 CI 失败与修复过程保留在下方作为历史证据，不代表当前状态。
 
 > **2026-10-16 用户续做裁决**：驾驶舱视觉与数值格式专项恢复为唯一队首（已关闭的原产品化批次保留完成状态）；范围、顺序、验收见本页队首工作项。知识刷新 K0–K6 仍排队。基线问题与隔离截图见[2026-10-16 项目复核](../60_delivery/verification/2026-10-16--project-health-and-cockpit-visual-review-v1.md)。
 >
@@ -25,7 +25,7 @@ superseded_by: null
 >
 > **2026-10-17 CFO 驾驶舱盈利分析交付**：新增 `/cockpit/profitability`，杜邦指标在显式 Objective 快照冻结时计算并记录字典指纹、行级来源轨迹和勾稽结果；只读 API 返回快照值与原始报表行深链，图表复用 ECharts。没有冻结来源或期初余额时显示 unavailable，不做隐式重算。独立复核提出的比较图单位及源行深链缺口已修复。CI 首轮发现重复 seed 时数据库归一化行 UUID 改变会制造两份新快照；修复后针对测试 10 项通过，准确代码 SHA `08aa4cd02247f995bc990d92c8f34f5a1829afa1` 的 GitHub CI run `38996089002` 为 18/18 job success。前端 36 个测试文件/184 项通过、typecheck/build 通过；后端 Ruff、mypy 通过；隔离账套核验 19/19、可见性矩阵 162 项无失败、浏览器全旅程 16/16 通过；契约检查、文档 M1 通过。实际截图、演示批次和哈希见[浏览器验收记录](../60_delivery/verification/2026-10-17--cockpit-profitability-browser-verification-v1.md)。本工作包关闭，唯一队列恢复知识刷新 K2。
 
-> **2026-10-17 CFO 全视图实施继续**：大麦演示财务数据新增 FY2022/FY2023 六类公开年度锚点及 FY2021 期末现金锚，生成 2,304 条期间×组织×科目财务明细，严格区分披露值与 synthetic allocation；发行包 check、canonical/generator 41 项测试、Ruff 和 mypy 通过。准确 SHA `c8f14b79dcc24a79a43df7ce7a3612e118eddf84` 的 CI run `39028946634` 中，dashboard/static-web/smoke 等 15 项 job 成功；data-contract 与 intake-e2e 检出已提交标准工作簿未随生成器更新，integration 检出自动生成候选与冻结批准 oracle 的状态差异。后续修复提交 `62af676b7519b68572e4be61b4335ab0cc1bfcab` 的 run `39032062565` 有 17/18 项成功：工作簿和候选状态修复通过，但 data-contract 清理夹具未先清除 cockpit_action_item，触发 finding 外键限制。已把 ActionItem 纳入夹具删除顺序；阶段 2 等该修复提交的准确 SHA CI 通过后关闭，唯一队首不变。
+> **2026-10-17 CFO 全视图阶段 2 完成**：大麦演示财务数据新增 FY2022/FY2023 六类公开年度锚点及 FY2021 期末现金锚，生成 2,304 条期间×组织×科目财务明细，严格区分披露值与 synthetic allocation；发行包 check、canonical/generator 41 项测试、隔离导入/分析回归 23 项、Ruff、mypy 与契约检查通过。标准工作簿已按生成器重建；集成测试分别验证候选状态与共享指标内容；data-contract 清理夹具先清除 ActionItem 再清理其 Finding 和 MetricSnapshot。提交 `09ba5722ec3e8075a3483223df4c81fe5cdaa9fa` 的准确 SHA CI run `39035163288` 全部 18/18 job 成功，阶段 2 正式关闭。唯一队首转入阶段 3：统一图表数据契约与聚合 API，后续任务见本工作包。
 
 > **2026-10-17 K0/K1 完成，K2 时间门禁已到、源状态待核验**：K0 Davybase 实现 `172a099`、证据 `94fc05d`、同步 `eb8c3d0` 已推送；历史快照严格终态为 1,265 输入、1,239 成功、2 待复核、24 过滤，清单 SHA-256 `c603baab83f7873c852681c69dfb314e7004e43b230ea832fb2a1e9043ce26bc`，32 篇样本/512 张图对账通过。K1 只读扫描器实现 `a0c2e67`、证据 `a914830` 已推送；扫描 1,601 篇 Markdown、17,450 个 embed 未解析、2,445 个标准 Markdown 引用不受支持、566 篇进入人工 triage、可执行候选为 0。此结果限于 allowlist/resolver，不推断全库无原图。扫描未写入 ObsidianWiki，1,365 条 dirty 路径指纹仍一致。K1 独立审查无未解决 P1/P2。K2 冻结器已推送 Davybase 提交 `699e5c6`；独立复核发现的 `release()` 推送校验绕过已修复，13 项专项/892 项全量测试、Ruff、README 统计和断链检查通过。14:30/15:00/15:30 时间窗现已到；K2 仍为队首待启动，下一步须先只读核验 ObsidianWiki 当前分支/变更/日志，再按既有冻结器门禁决定 accepted 或 rejected。不得改动 dirty vault，门禁失败则只记录 rejected 并顺延，`CURRENT_RELEASE` 不变。
 
@@ -96,7 +96,7 @@ superseded_by: null
 
 0. **completed** [CFO 驾驶舱盈利分析与图表缺口补全](work_items/COCKPIT--visual-analysis-expansion.md)：四项指标于 Objective 快照冻结并存 trace；只读 API；杜邦树与两期比较图；指标/财报/来源行深链；未具备口径时 unavailable。范围与交付记录：[设计规格](../superpowers/specs/2026-10-17-cfo-cockpit-visual-analysis-expansion-design.md)、[实施计划](../superpowers/plans/2026-10-17-cockpit-visual-analysis-expansion.md)。
 0a. **completed** [驾驶舱视觉补全与数值格式治理](work_items/COCKPIT--visual-completion-and-number-format.md)：订单/件量整数、金额两位小数、单位格式统一、费用页错误修复、真实图表/趋势/下钻、8 页面截图及隔离浏览器验收；代码 SHA `1a71e33f`，准确 SHA CI run `38936413156` 全部 job 成功。
-7a. **active（唯一队首，实施中）** [CFO 驾驶舱全视图数据与图表完整性改造](work_items/COCKPIT--all-views-data-and-visual-completion.md)：阶段 1 已完成。阶段 2 数据、导入、勾稽和本地回归已通过；准确 SHA `a333b31a6506f5e42fa423bd2fb755e254bfe120` 的 CI run `39025836620` 有 3 个前端静态/烟测失败；修复 SHA `fcfc55a4d1c8022ad3b07e13a8321360c92b7997` 的上述作业通过，但 dashboard oracle 因冻结 fixture 与独立计算器状态不一致失败。现已同步独立计算器并通过专测，正准备提交以触发准确 SHA CI。阶段 2 仍未关闭；后续阶段须按串行门禁推进。
+7a. **active（唯一队首，阶段 3 待执行）** [CFO 驾驶舱全视图数据与图表完整性改造](work_items/COCKPIT--all-views-data-and-visual-completion.md)：阶段 1、2 已完成。阶段 2 的准确 SHA CI run `39035163288` 全部 18/18 job 成功。下一步是统一图表数据契约、API 来源/指标/快照标识与空值原因；其后按序完成页面联动及阶段 5 浏览器实绘验收。
 7b. **proposed（顺延，驾驶舱完成后）** 第二代静态知识刷新与战略重基线 K2：K0/K1 完成。K1 扫描器 `a0c2e67`、证据 `a914830`；扫描 1,601 篇，566 篇 triage、0 可执行候选。K2 冻结器已推送 Davybase `699e5c6`（13 项专项/892 项全量测试，Ruff、README 统计、断链检查通过；独立复核发现的推送校验绕过已修复）。驾驶舱工作包完成后先只读核验 ObsidianWiki 当前状态，再执行门禁；dirty 时不写入、不暂存、不伪造 accepted，按计划如实记录 rejected 并顺延。
 
 以下 1–11 是驾驶舱队首调整前的原队列事项：1、2、3、5 已完成；4 U04 与 6 P3 暂停；7、9、10、11 排队；8 外部材料受限。旧验证记录仍是历史证据，不代表当前执行位置。
