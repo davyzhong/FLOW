@@ -1118,7 +1118,8 @@
       "evidence_verified": 5,
       "evidence_total": 5,
       "scope": "global",
-      "investigation_path": "/investigations/5535b51a-f81f-5e6d-8ef2-fd4d2552f984?batch_id=934072b5-8f89-5f96-a498-c88b26483908&metric_snapshot_id=87d9dfbb-0ac7-5dde-9675-537459961f15&analysis_run_id=639f2271-5816-51d4-8f5d-038b6d98e08c"
+      "investigation_path": "/investigations/5535b51a-f81f-5e6d-8ef2-fd4d2552f984?batch_id=934072b5-8f89-5f96-a498-c88b26483908&metric_snapshot_id=87d9dfbb-0ac7-5dde-9675-537459961f15&analysis_run_id=639f2271-5816-51d4-8f5d-038b6d98e08c",
+      "status": "approved"
     },
     {
       "finding_id": "598cafad-7b5f-5298-a4a6-9f2d6829e318",
@@ -1137,7 +1138,8 @@
       "evidence_verified": 5,
       "evidence_total": 5,
       "scope": "global",
-      "investigation_path": "/investigations/598cafad-7b5f-5298-a4a6-9f2d6829e318?batch_id=934072b5-8f89-5f96-a498-c88b26483908&metric_snapshot_id=87d9dfbb-0ac7-5dde-9675-537459961f15&analysis_run_id=639f2271-5816-51d4-8f5d-038b6d98e08c"
+      "investigation_path": "/investigations/598cafad-7b5f-5298-a4a6-9f2d6829e318?batch_id=934072b5-8f89-5f96-a498-c88b26483908&metric_snapshot_id=87d9dfbb-0ac7-5dde-9675-537459961f15&analysis_run_id=639f2271-5816-51d4-8f5d-038b6d98e08c",
+      "status": "approved"
     },
     {
       "finding_id": "7616e23b-d0f1-58be-8572-ac6d9589e779",
@@ -1156,7 +1158,8 @@
       "evidence_verified": 5,
       "evidence_total": 5,
       "scope": "global",
-      "investigation_path": "/investigations/7616e23b-d0f1-58be-8572-ac6d9589e779?batch_id=934072b5-8f89-5f96-a498-c88b26483908&metric_snapshot_id=87d9dfbb-0ac7-5dde-9675-537459961f15&analysis_run_id=639f2271-5816-51d4-8f5d-038b6d98e08c"
+      "investigation_path": "/investigations/7616e23b-d0f1-58be-8572-ac6d9589e779?batch_id=934072b5-8f89-5f96-a498-c88b26483908&metric_snapshot_id=87d9dfbb-0ac7-5dde-9675-537459961f15&analysis_run_id=639f2271-5816-51d4-8f5d-038b6d98e08c",
+      "status": "approved"
     },
     {
       "finding_id": "9311f743-04f8-5b9b-80e1-f890c581903f",
@@ -1175,7 +1178,8 @@
       "evidence_verified": 5,
       "evidence_total": 5,
       "scope": "global",
-      "investigation_path": "/investigations/9311f743-04f8-5b9b-80e1-f890c581903f?batch_id=934072b5-8f89-5f96-a498-c88b26483908&metric_snapshot_id=87d9dfbb-0ac7-5dde-9675-537459961f15&analysis_run_id=639f2271-5816-51d4-8f5d-038b6d98e08c"
+      "investigation_path": "/investigations/9311f743-04f8-5b9b-80e1-f890c581903f?batch_id=934072b5-8f89-5f96-a498-c88b26483908&metric_snapshot_id=87d9dfbb-0ac7-5dde-9675-537459961f15&analysis_run_id=639f2271-5816-51d4-8f5d-038b6d98e08c",
+      "status": "approved"
     }
   ],
   "product_table": {

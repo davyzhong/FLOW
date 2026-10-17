@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.42
+version: 5.43
 created_at: 2026-09-12
 updated_at: 2026-10-17
 owner: FLOW
@@ -14,7 +14,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-10-17 当前状态：**CFO 驾驶舱全视图数据与图表完整性改造为唯一执行项；阶段 1 完成，阶段 2 已完成本地验收、待提交及准确 SHA CI 关闭；知识刷新 K2 顺延**。大麦财务实际已扩为 2,304 条期间×组织×科目行，补 FY2022/FY2023 损益、现金流和资产负债披露锚点及 FY2021 期初锚；月度/组织分配明确标记 synthetic allocation。金额统一为 CNY 元，订单和件量为整数；校验资产负债恒等式、现金勾稽和总览四项 CFO KPI 有值。发行包 check、canonical/generator 41 项、隔离导入/分析回归 23 项、Ruff、mypy、合同检查及文档 M1 全部通过。此前 SHA `93f389df` CI 暴露的合同和 ActionItem 清理问题均已修复；新提交的准确 SHA CI 待启动。逐页图表、下钻交互和视口验收尚未完成。详见[当前路线图](../50_plans/CURRENT_ROADMAP.md)、[驾驶舱工作包](../50_plans/work_items/COCKPIT--all-views-data-and-visual-completion.md)和[HANDOFF](../../HANDOFF.md)。
+2026-10-17 当前状态：**CFO 驾驶舱全视图数据与图表完整性改造为唯一执行项；阶段 1 完成，阶段 2 本地数据与勾稽验收通过、正修复准确 SHA CI 的 fixture 契约失败；知识刷新 K2 顺延**。大麦财务实际已扩为 2,304 条期间×组织×科目行，补 FY2022/FY2023 损益、现金流和资产负债披露锚点及 FY2021 期初锚；月度/组织分配明确标记 synthetic allocation。金额统一为 CNY 元，订单和件量为整数；校验资产负债恒等式、现金勾稽和总览四项 CFO KPI 有值。发行包 check、canonical/generator 41 项、隔离导入/分析回归 23 项、Ruff、mypy、合同检查及文档 M1 全部通过。准确 SHA `a333b31a6506f5e42fa423bd2fb755e254bfe120` 的 CI run `39025836620` 有 3 个前端作业因 dashboard fixture 缺 `Finding.status` 失败，字段已在本轮工作区补齐，仍需准确修复 SHA CI 通过后关闭阶段 2。详见[当前路线图](../50_plans/CURRENT_ROADMAP.md)、[驾驶舱工作包](../50_plans/work_items/COCKPIT--all-views-data-and-visual-completion.md)和[HANDOFF](../../HANDOFF.md)。
 
 2026-10-13 深夜当前状态：**时间线迁移已交付**（分支 `flow/timeline-migration-20261013`，commit `087a72f2`）——演示数据期间对齐菜鸟真实财年（FY2022 比较 / FY2023 分析），canonical 月度明细年度聚合精确等于申请稿披露值（零差异）；财务报表为 IFRS 披露原值（合成行全删），简体 IFRS 勾稽器（12 恒等式）过发布门禁；覆盖矩阵 FY2022/FY2023 各 32/50 如实缺省；ORG-LEDGER v2（v1 冻结）。验证全绿（单元/企业/scripts/隔离栈 e2e）。已合并 main（`c824f55f`，同 SHA CI 17/17 success）。下一子步：F3（指标目录收尾），随后批次 C-2。
 
