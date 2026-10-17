@@ -2,12 +2,12 @@
 doc_id: FLOW-VERIFY-COCKPIT-ALL-VIEWS-20261017-001
 title: CFO 驾驶舱全视图图表浏览器核验
 doc_type: verification
-status: active
-version: "1.2"
+status: draft
+version: "1.3"
 created_at: 2026-10-17
 updated_at: 2026-10-17
 owner: FLOW
-commit_refs: "df5c338bc5c1d7330be2391189cdfb828099a962; 本轮代码提交待生成"
+commit_refs: "df5c338bc5c1d7330be2391189cdfb828099a962; b2ee037375ff0949a1dec442bd3ac4feb6bb078d"
 evidence_refs: "[isolated-damai-seed-6f3ef917, nine-route-browser-render, playwright-18-viewport-cases, chart-pixel-and-api-table-equality, keyboard-provenance-disclosure, source-row-browser-deep-link, action-acknowledgment-audit, module-forbidden-state, empty-reason-unit-test, echarts-canvas-counts, module-page-and-statement-tests-10, web-typecheck, docs-m1]"
 applies_to: cockpit
 ---
