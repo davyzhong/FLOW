@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 vi.mock("../../components/cockpit/charts/echarts-base", async (importOriginal) => ({
@@ -48,8 +48,13 @@ const moduleFixture: CockpitModuleResponse = {
     capital_structure_trend: {
       title: "资本结构趋势",
       type: "line",
+      unit: "ratio",
       periods: ["FY2022", "FY2023"],
       series: { 资产负债率: ["0.7713", "0.6319"] },
+      fact_ids: {
+        FY2022: "CN-SEG-FY2022-SEGMENT_REVENUE",
+        FY2023: "CN-SEG-FY2023-SEGMENT_REVENUE",
+      },
       note: "有息负债率需短债拆分，未披露 → unavailable",
     },
   },
@@ -71,7 +76,11 @@ describe("CockpitModulePage", () => {
     expect(await screen.findByText("71,850.93 百万元")).toBeVisible();
     expect(screen.getByText("前期 58,881.09 百万元")).toBeVisible();
     expect(screen.getAllByText("资本结构趋势").length).toBeGreaterThan(0);
+    expect(screen.getByText("FY2022 / FY2023 · %")).toBeVisible();
     expect(screen.getByTestId("cockpit-module-chart-capital_structure_trend")).toBeVisible();
+    fireEvent.click(screen.getByText("查看来源登记事实 ID"));
+    expect(screen.getByText("FY2023 · CN-SEG-FY2023-SEGMENT_REVENUE")).toBeVisible();
+    expect(screen.getByText("来源登记：config/damai/source_facts_v1.yaml")).toBeVisible();
     expect(screen.getByText("债务期限结构")).toBeVisible();
     expect(screen.getByText(/大麦物流演示主体引用/)).toBeVisible();
     expect(fetchSpy).toHaveBeenCalledOnce();

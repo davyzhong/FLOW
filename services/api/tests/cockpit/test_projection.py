@@ -304,6 +304,14 @@ def test_negative_polarity_expense_metric(filters: ActiveFilters) -> None:
     assert projection.kpi_cards[0].polarity == "negative"
 
 
+def test_operating_profit_kpi_uses_statement_label(filters: ActiveFilters) -> None:
+    overview = _overview(cards=[_card(code="operating_profit")])
+
+    projection = _project(overview, filters)
+
+    assert projection.kpi_cards[0].title == "营业利润"
+
+
 # ── 趋势 ───────────────────────────────────────────────────────────
 
 

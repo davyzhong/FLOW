@@ -12,6 +12,8 @@ export interface ModuleChartData {
   steps?: Record<string, unknown>;
   identity?: string;
   note?: string;
+  fact_ids?: Record<string, string>;
+  source_fact_ids?: Record<string, string>;
   dso?: unknown;
   dio?: unknown;
   dpo?: unknown;

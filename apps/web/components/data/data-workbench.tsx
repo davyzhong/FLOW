@@ -11,6 +11,9 @@ import type {
   IntakeSource,
   MappingOverrideInput,
 } from "../../lib/api/client";
+import { ChartBox } from "../cockpit/charts/echarts-base";
+import { buildCombo } from "../cockpit/charts/builders";
+import type { ComboSeries } from "../cockpit/charts/builders";
 import "./data-workbench.css";
 
 type Stage = "prepare" | "upload" | "map" | "clean" | "publish";
@@ -22,6 +25,48 @@ const STAGES: { id: Stage; label: string }[] = [
   { id: "clean", label: "清洗与校验" },
   { id: "publish", label: "发布" },
 ];
+
+function buildBatchHistoryCharts(items: IntakeBatchHistoryItem[]): {
+  status: ReturnType<typeof buildCombo>;
+  versions: ReturnType<typeof buildCombo>;
+} {
+  const statusLabels: Record<string, string> = {
+    draft: "草稿",
+    published: "已发布",
+    ready: "待发布",
+    blocked: "已阻断",
+    failed: "失败",
+  };
+  const statuses = [...new Set(items.map((item) => item.status))].sort();
+  const statusSeries: ComboSeries = {
+    key: "batch-status",
+    title: "批次数量",
+    axis: "bar",
+    unit: "个",
+    points: statuses.map((status) => ({
+      period: statusLabels[status] ?? status,
+      value: items.filter((item) => item.status === status).length,
+      display: `${items.filter((item) => item.status === status).length} 个`,
+      status: "ready",
+    })),
+  };
+  const versionSeries: ComboSeries = {
+    key: "import-versions",
+    title: "导入版本数",
+    axis: "bar",
+    unit: "个",
+    points: [...items.slice(0, 10)].reverse().map((item) => ({
+      period: item.name,
+      value: item.version_count,
+      display: `${item.version_count} 个版本`,
+      status: "ready",
+    })),
+  };
+  return {
+    status: items.length ? buildCombo([statusSeries]) : undefined,
+    versions: items.length ? buildCombo([versionSeries]) : undefined,
+  };
+}
 
 
 type WorkbenchState =
@@ -67,6 +112,7 @@ export function DataWorkbench({
   const batchMiss = initialBatchId !== null && historyLoaded
     && !batchHistory.some((item) => item.id === initialBatchId)
     && sessionBatchId !== initialBatchId;
+  const historyCharts = useMemo(() => buildBatchHistoryCharts(batchHistory), [batchHistory]);
 
   const refreshBatchHistory = useCallback(async () => {
     setHistoryLoaded(false);
@@ -250,6 +296,26 @@ export function DataWorkbench({
             <p role="status">正在读取历史批次…</p>
           ) : null}
           {historyError ? <p role="status">{historyError}</p> : null}
+          {historyLoaded && !historyError && batchHistory.length > 0 ? (
+            <div className="data-workbench__charts" aria-label="批次与版本分析">
+              <ChartBox
+                title="批次状态分布"
+                sub={`当前企业、当前账号最近 ${batchHistory.length} 个批次`}
+                option={historyCharts.status}
+                ariaLabel="当前账号可见批次按实际状态分布"
+                testId="data-batch-status-chart"
+                height={230}
+              />
+              <ChartBox
+                title="各批次导入版本数"
+                sub="最近 10 个批次；完整版本明细见下表"
+                option={historyCharts.versions}
+                ariaLabel="最近批次的导入版本数量"
+                testId="data-batch-version-chart"
+                height={230}
+              />
+            </div>
+          ) : null}
           {historyLoaded && !historyError && batchHistory.length === 0 ? (
             <p role="status">暂无可见批次。上传并发布工作簿后，批次会显示在这里。</p>
           ) : null}

@@ -13,6 +13,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from decimal import Decimal
+from functools import lru_cache
 from typing import Any
 from uuid import UUID
 
@@ -146,6 +147,29 @@ def _fact(ctx: ModuleFactContext, item_id: str, role: str = "end") -> Decimal | 
 
 def _prior_fact(ctx: ModuleFactContext, item_id: str, role: str = "end") -> Decimal | None:
     return ctx.prior.get(f"{item_id}:{role}")
+
+
+def _annual_cycle_days(facts: dict[str, Decimal]) -> dict[str, Decimal | None]:
+    """按同一财年平均余额与财年流量计算周转天数。"""
+
+    def average(item_id: str) -> Decimal | None:
+        beginning = facts.get(f"{item_id}:begin")
+        ending = facts.get(f"{item_id}:end")
+        if beginning is None or ending is None:
+            return None
+        return (beginning + ending) / Decimal("2")
+
+    def days(balance: Decimal | None, flow: Decimal | None) -> Decimal | None:
+        if balance is None or flow in (None, Decimal("0")):
+            return None
+        assert flow is not None
+        return (balance / abs(flow) * Decimal("365")).quantize(Decimal("0.0001"))
+
+    dso = days(average("bs.ar"), facts.get("is.revenue:cur"))
+    dio = days(average("bs.inventory"), facts.get("is.cogs:cur"))
+    dpo = days(average("bs.ap"), facts.get("is.cogs:cur"))
+    ccc = dso + dio - dpo if dso is not None and dio is not None and dpo is not None else None
+    return {"DSO": dso, "DIO": dio, "DPO": dpo, "CCC": ccc}
 
 
 def _ratio(numerator: Decimal | None, denominator: Decimal | None) -> Decimal | None:
@@ -286,8 +310,6 @@ def build_balance_sheet_module(ctx: ModuleFactContext) -> dict[str, Any]:
 def build_working_capital_module(ctx: ModuleFactContext) -> dict[str, Any]:
     """§5.6 营运资金：KPI ×8 + 趋势 + CCC 恒等；账龄/排名降级。"""
 
-    revenue_cur = ctx.current.get("is.revenue:cur")
-    cogs_cur = ctx.current.get("is.cogs:cur")
     ar_cur = _fact(ctx, "bs.ar")
     ar_begin = _fact(ctx, "bs.ar", "begin")
     inv_cur = _fact(ctx, "bs.inventory")
@@ -295,26 +317,11 @@ def build_working_capital_module(ctx: ModuleFactContext) -> dict[str, Any]:
     ap_cur = _fact(ctx, "bs.ap")
     ap_begin = _fact(ctx, "bs.ap", "begin")
 
-    def avg(cur: Decimal | None, begin: Decimal | None) -> Decimal | None:
-        if cur is None or begin is None:
-            return None
-        return (cur + begin) / Decimal("2")
-
-    ar_avg, inv_avg, ap_avg = avg(ar_cur, ar_begin), avg(inv_cur, inv_begin), avg(ap_cur, ap_begin)
-
-    def days(avg_balance: Decimal | None, flow: Decimal | None) -> Decimal | None:
-        if avg_balance is None or flow in (None, Decimal("0")):
-            return None
-        assert flow is not None
-        return (avg_balance / flow * Decimal("365")).quantize(Decimal("0.0001"))
-
-    dso = days(ar_avg, revenue_cur)
-    dio = days(inv_avg, cogs_cur)
-    dpo = days(ap_avg, cogs_cur)
-    ccc = (
-        dso + dio - dpo
-        if dso is not None and dio is not None and dpo is not None
-        else None
+    prior_cycle = _annual_cycle_days(ctx.prior)
+    current_cycle = _annual_cycle_days(ctx.current)
+    dso, dio, dpo, ccc = (
+        current_cycle["DSO"], current_cycle["DIO"],
+        current_cycle["DPO"], current_cycle["CCC"],
     )
     working_capital = (
         ar_cur + inv_cur - ap_cur
@@ -328,10 +335,13 @@ def build_working_capital_module(ctx: ModuleFactContext) -> dict[str, Any]:
         _kpi("应付账款（含其他应付款）", ap_cur, ap_begin, unit="百万元",
              caliber_note="申请稿混合口径行"),
         _kpi("营运资金占用", working_capital, None, unit="百万元"),
-        _kpi("DSO", dso, None, unit="day", caliber_note="平均应收 / 收入 × 365"),
-        _kpi("DIO", dio, None, unit="day", caliber_note="平均存货 / 营业成本 × 365"),
-        _kpi("DPO", dpo, None, unit="day", caliber_note="平均应付 / 营业成本 × 365"),
-        _kpi("CCC", ccc, None, unit="day", caliber_note="DSO + DIO − DPO（恒等式随图断言）"),
+        _kpi("DSO", dso, prior_cycle["DSO"], unit="day", caliber_note="平均应收 / 收入 × 365"),
+        _kpi("DIO", dio, prior_cycle["DIO"], unit="day", caliber_note="平均存货 / 营业成本 × 365"),
+        _kpi("DPO", dpo, prior_cycle["DPO"], unit="day", caliber_note="平均应付 / 营业成本 × 365"),
+        _kpi(
+            "CCC", ccc, prior_cycle["CCC"], unit="day",
+            caliber_note="DSO + DIO − DPO（恒等式随图断言）",
+        ),
     ]
     charts: dict[str, Any] = {
         "ar_inv_ap_trend": {
@@ -354,6 +364,17 @@ def build_working_capital_module(ctx: ModuleFactContext) -> dict[str, Any]:
             "dpo": str(dpo) if dpo is not None else None,
             "ccc": str(ccc) if ccc is not None else None,
             "identity": "CCC = DSO + DIO − DPO",
+        },
+        "efficiency_cycle": {
+            "title": "营运效率周期对比",
+            "type": "line",
+            "unit": "day",
+            "periods": [ctx.prior_period_label, ctx.period_label],
+            "series": {
+                name: [prior_cycle[name], current_cycle[name]]
+                for name in ("DSO", "DIO", "DPO", "CCC")
+            },
+            "note": "各期均按期初、期末平均余额除以该财年流量计算；CCC = DSO + DIO − DPO。",
         },
     }
     unavailable = [
@@ -505,18 +526,40 @@ def build_risk_module(ctx: ModuleFactContext) -> dict[str, Any]:
 def build_consolidation_module(ctx: ModuleFactContext) -> dict[str, Any]:
     """§5.9 集团合并（公开期降级态）：「主体对比」视角——菜鸟分部序列。"""
 
-    segment_facts: dict[str, int] = {
-        "FY2019": 14885, "FY2020": 22233, "FY2021": 37258,
-        "FY2022": 46107, "FY2023": 77512, "FY2024": 99020, "FY2025": 101272,
-    }
+    segment_facts = _disclosed_segment_facts()
+    segment_periods = list(segment_facts)
     charts: dict[str, Any] = {
         "cainiao_segment_series": {
             "title": "菜鸟分部收入（阿里年报披露）",
             "type": "line",
             "unit": "百万元",
             "periods": list(segment_facts.keys()),
-            "series": {"分部收入": list(segment_facts.values())},
+            "series": {"分部收入": [value for value, _fact_id in segment_facts.values()]},
+            "fact_ids": {
+                period: fact_id for period, (_value, fact_id) in segment_facts.items()
+            },
             "note": "FY2026 起菜鸟并入「所有其他」分部，无单独披露",
+        },
+        "cainiao_segment_growth": {
+            "title": "菜鸟分部收入同比增幅",
+            "type": "bar",
+            "unit": "ratio",
+            "periods": segment_periods[1:],
+            "series": {
+                "同比增幅": [
+                    (
+                        (segment_facts[current][0] - segment_facts[prior][0])
+                        / segment_facts[prior][0]
+                    ).quantize(Decimal("0.0001"))
+                    for prior, current in zip(
+                        segment_periods[:-1], segment_periods[1:], strict=True
+                    )
+                ]
+            },
+            "note": "由阿里年报披露的分部收入逐年计算；FY2026 起不再单独披露。",
+            "source_fact_ids": {
+                period: segment_facts[period][1] for period in segment_periods
+            },
         },
     }
     return {
@@ -537,6 +580,22 @@ def build_consolidation_module(ctx: ModuleFactContext) -> dict[str, Any]:
         "charts": charts,
         "unavailable": [{"block": "合并抵销桥", "code": "internal_period_feature",
                           "reason": "公开期单主体（D052）；多法人合并属内部期"}],
+    }
+
+
+@lru_cache(maxsize=1)
+def _disclosed_segment_facts() -> dict[str, tuple[Decimal, str]]:
+    """复用来源登记生成的菜鸟分部事实，避免在模块中重复维护披露数值。"""
+
+    from flow_api.fixtures.damai.operations import build_damai_operations_payloads
+
+    source = build_damai_operations_payloads()["segment_series"]
+    return {
+        period: (
+            Decimal(str(fact["segment_revenue"])),
+            str(fact["fact_ids"]["segment_revenue"]),
+        )
+        for period, fact in source["series"].items()
     }
 
 

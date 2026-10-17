@@ -218,9 +218,10 @@ class CockpitProjectionService:
         mom = _as_value_dict(card.mom) if card.mom else _unavailable(
             "mom_not_published", "环比未发布"
         )
+        title = "营业利润" if metric_code == "operating_profit" else card.title
         return CockpitKpi(
             metric_code=metric_code,
-            title=card.title,
+            title=title,
             category=card.category,
             unit=card.unit,
             primary=primary,
@@ -239,7 +240,7 @@ class CockpitProjectionService:
                 if control_line and control_line.get("status") == "ready"
                 else None
             ),
-            caliber_note=f"{card.title}（{card.category}）· 由指标字典 v1.2 计算，口径随图附",
+            caliber_note=f"{title}（{card.category}）· 由指标字典 v1.2 计算，口径随图附",
             source_label=(
                 "、".join(
                     part

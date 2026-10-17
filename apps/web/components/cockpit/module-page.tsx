@@ -128,12 +128,14 @@ export function CockpitModulePage({
           const seriesEntries = Object.entries(chart.series ?? {});
           const periods = chart.periods ?? [];
           const seriesUnit = chart.unit ?? data.unit;
+          const displayUnit =
+            seriesUnit === "ratio" ? "%" : seriesUnit === "day" ? "天" : seriesUnit;
           const steps = chart.steps ?? {};
           return (
             <article key={key} data-chart={key} className="module-chart-card">
               <header className="module-chart-heading">
                 <h4>{chart.title ?? key}</h4>
-                <span>{periods.join(" / ") || data.period} · {seriesUnit}</span>
+                <span>{periods.join(" / ") || data.period} · {displayUnit}</span>
               </header>
               {chart.type === "formula_card" ? (
                 <div className="module-formula-card" data-testid={`cockpit-module-chart-${key}`}>
@@ -165,6 +167,17 @@ export function CockpitModulePage({
               ) : null}
               {Object.keys(steps).length ? <dl className="module-waterfall-values">{Object.entries(steps).map(([name, value]) => <div key={name}><dt>{name}</dt><dd>{formatFinancialValue(value as string | number | null, { unit: seriesUnit })}</dd></div>)}</dl> : null}
               {chart.note ? <p className="chart-note">{chart.note}</p> : null}
+              {chart.fact_ids || chart.source_fact_ids ? (
+                <details className="module-chart-sources">
+                  <summary>查看来源登记事实 ID</summary>
+                  <p>来源登记：config/damai/source_facts_v1.yaml</p>
+                  <ul>
+                    {Object.entries((chart.fact_ids ?? chart.source_fact_ids) as Record<string, unknown>).map(([period, factId]) => (
+                      <li key={`${period}:${String(factId)}`}>{period} · {String(factId)}</li>
+                    ))}
+                  </ul>
+                </details>
+              ) : null}
               {reportId ? <Link href={`/statements?report=${encodeURIComponent(reportId)}`} className="module-source-link">追溯至来源财报</Link> : null}
             </article>
           );

@@ -825,6 +825,14 @@
   font-size: 11px;
   line-height: 1.55;
 }
+.module-chart-sources {
+  margin-top: 10px;
+  color: #475569;
+  font-size: 11px;
+}
+.module-chart-sources summary { cursor: pointer; font-weight: 650; }
+.module-chart-sources p { margin: 7px 0 3px; }
+.module-chart-sources ul { margin: 0; padding-left: 18px; line-height: 1.6; }
 .module-unavailable {
   padding: 14px 16px;
   border: 1px solid #e2e8f0;

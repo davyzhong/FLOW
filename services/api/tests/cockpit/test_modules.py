@@ -6,8 +6,10 @@ from uuid import uuid4
 from flow_api.cockpit.modules import (
     ModuleFactContext,
     build_cashflow_module,
+    build_consolidation_module,
     build_expenses_module,
     build_risk_module,
+    build_working_capital_module,
     load_fact_context,
 )
 
@@ -158,3 +160,59 @@ def test_expenses_module_compares_two_reported_periods() -> None:
         Decimal("0.1000"),
         Decimal("0.1000"),
     ]
+
+
+def test_working_capital_compares_reported_annual_efficiency_cycles() -> None:
+    prior = {
+        "bs.ar:begin": Decimal("80"),
+        "bs.ar:end": Decimal("90"),
+        "bs.inventory:begin": Decimal("30"),
+        "bs.inventory:end": Decimal("50"),
+        "bs.ap:begin": Decimal("20"),
+        "bs.ap:end": Decimal("30"),
+        "is.revenue:cur": Decimal("1825"),
+        "is.cogs:cur": Decimal("-1000"),
+    }
+    current = {
+        "bs.ar:begin": Decimal("100"),
+        "bs.ar:end": Decimal("120"),
+        "bs.inventory:begin": Decimal("50"),
+        "bs.inventory:end": Decimal("70"),
+        "bs.ap:begin": Decimal("30"),
+        "bs.ap:end": Decimal("40"),
+        "is.revenue:cur": Decimal("3650"),
+        "is.cogs:cur": Decimal("-1825"),
+    }
+    context = ModuleFactContext(
+        current_report_id=uuid4(),
+        prior_report_id=uuid4(),
+        period_label="FY2023",
+        prior_period_label="FY2022",
+        snapshot_id="snapshot",
+        current=current,
+        prior=prior,
+    )
+
+    response = build_working_capital_module(context)
+
+    chart = response["charts"]["efficiency_cycle"]
+    assert chart["series"]["DSO"] == [Decimal("17.0000"), Decimal("11.0000")]
+    assert chart["series"]["CCC"] == [Decimal("22.4750"), Decimal("16.0000")]
+
+
+def test_consolidation_adds_growth_view_from_disclosed_segment_series() -> None:
+    context = ModuleFactContext(
+        current_report_id=uuid4(),
+        prior_report_id=uuid4(),
+        period_label="FY2023",
+        prior_period_label="FY2022",
+        snapshot_id="snapshot",
+        current={},
+        prior={},
+    )
+
+    response = build_consolidation_module(context)
+
+    growth = response["charts"]["cainiao_segment_growth"]
+    assert len(growth["periods"]) == 6
+    assert growth["series"]["同比增幅"][0] == Decimal("0.4937")

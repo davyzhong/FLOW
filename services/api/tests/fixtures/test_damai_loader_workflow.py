@@ -58,6 +58,7 @@ _BASE_TABLES = (
     "analysis_batch",
 )
 _WORKFLOW_TABLES = (
+    "cockpit_action_item",
     "finding",
     "evidence",
     "conclusion",
@@ -74,6 +75,7 @@ def migrated_database() -> None:
 
 
 def _wipe(session: Session) -> None:
+    session.execute(text("DELETE FROM cockpit_action_item"))
     clean(session)  # canonical 事实/维度 + intake 链全清（须先于 batch 删除，FK RESTRICT）
     for table in (
         MetricValue,
@@ -299,6 +301,31 @@ def test_second_seed_keeps_workflow_counts_stable(db_session: Session) -> None:
     db_session.commit()
     second = _counts(db_session, _WORKFLOW_TABLES)
     assert second == first, f"二次 seed 工作流计数必须零增长：{first} → {second}"
+
+
+def test_demo_seed_creates_traceable_action_items_for_approved_findings(
+    db_session: Session,
+) -> None:
+    receipt = damai_loader.seed_damai_demo(db_session)
+    db_session.commit()
+
+    items = receipt["workflow"]["action_items"]
+    approved_ids = {
+        item["finding_id"]
+        for item in receipt["workflow"]["findings"]
+        if item["status"] == "approved"
+    }
+    rows = db_session.execute(
+        text(
+            "SELECT finding_id, snapshot_id, title, detail, created_by "
+            "FROM cockpit_action_item"
+        )
+    ).all()
+
+    assert len(items) == len(rows) == len(approved_ids)
+    assert {str(row.finding_id) for row in rows} == approved_ids
+    assert all("演示" in row.title and "演示" in row.detail for row in rows)
+    assert all(row.created_by == "damai-demo-seed" for row in rows)
 
 
 def test_seed_rolls_back_when_objective_freeze_fails(
