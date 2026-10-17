@@ -213,6 +213,7 @@ def test_filtered_dashboard_findings_must_be_labelled_global_scope() -> None:
         finding_id=_id(10),
         finding_type="revenue_growth",
         title="收入增长",
+        status="approved",
         impact=_available("2356634.0957"),
         total_score="82.000000",
         comparison_basis="prior_year",

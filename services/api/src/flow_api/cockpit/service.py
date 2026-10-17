@@ -266,12 +266,16 @@ class CockpitProjectionService:
             for point in trend.points:
                 value = _as_value_dict(getattr(point, key, None))
                 exact = _decimal(value.get("exact_value"))
+                status = str(value.get("status", "unavailable"))
                 points.append(
                     {
                         "period": point.month,
                         "value": float(exact) if exact is not None else 0.0,
                         "display_value": value.get("display_value", "—"),
-                        "status": str(value.get("status", "unavailable")),
+                        # DashboardValue 使用 available/unavailable；驾驶舱图表契约
+                        # 使用 ready/unavailable。跨层投影时必须显式归一化，
+                        # 否则所有真实 available 点都会被前端误判为空数据。
+                        "status": "ready" if status == "available" else status,
                         "unit": str(value.get("unit", "")),
                     }
                 )
@@ -299,8 +303,10 @@ class CockpitProjectionService:
                 "title": item.title,
                 "investigation_path": item.investigation_path,
             }
-            for item in base.findings[:3]
+            for item in base.findings
+            if item.status == "approved"
         ]
+        findings = findings[:3]
         if not findings:
             return CockpitConclusionProjection(
                 text="本期无已终审结论；不补造经营判断。",
@@ -308,14 +314,15 @@ class CockpitProjectionService:
                 tone="neutral",
             )
         # 色调由 Finding 影响值的语义方向决定（impact 已带 semantic_direction）
-        risky = [f for f in base.findings[:3] if f.impact.semantic_direction == "negative"]
+        approved = [item for item in base.findings if item.status == "approved"][:3]
+        risky = [f for f in approved if f.impact.semantic_direction == "negative"]
         if len(risky) >= 2:
             tone = "risk"
         elif risky:
             tone = "attention"
         else:
             tone = "neutral"
-        titles = "、".join(item.title for item in base.findings[:2])
+        titles = "、".join(item.title for item in approved[:2])
         return CockpitConclusionProjection(
             text=f"本期关注 {len(findings)} 项已终审发现：{titles}。",
             findings=findings,

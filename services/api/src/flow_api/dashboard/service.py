@@ -724,6 +724,11 @@ class DashboardService:
         for published in bundle.findings:
             finding = published.finding
             if (
+                # The dashboard labels these as finalized findings and exposes
+                # them as action recommendations. Draft/review findings must
+                # remain visible in the investigation workflow, not here.
+                finding.status != "approved"
+                or
                 finding.finding_type is None
                 or finding.total_score is None
                 or finding.comparison_basis not in {"prior_year", "budget"}
@@ -743,6 +748,7 @@ class DashboardService:
                     finding_id=finding.id,
                     finding_type=finding.finding_type,
                     title=finding.title,
+                    status=finding.status,
                     impact=available_value(
                         finding.impact_amount,
                         direction=(

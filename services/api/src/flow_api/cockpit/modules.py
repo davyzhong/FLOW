@@ -94,6 +94,17 @@ def load_fact_context(session: Session, stock_code: str) -> ModuleFactContext:
         ).all()
         facts: dict[str, Decimal] = {}
         raw: dict[tuple[str, str, str], Decimal] = {}
+        for row in report.items:
+            for column, value in (
+                ("end", row.value_end),
+                ("begin", row.value_begin),
+                ("cur", row.value_current),
+                ("prior", row.value_prior),
+            ):
+                if value is not None:
+                    raw[(row.statement_type, row.item_name, column)] = (
+                        Decimal(str(value)) / _UNIT_TO_MILLION
+                    )
         for row in rows:
             if row.item_id is None:
                 continue
@@ -107,15 +118,17 @@ def load_fact_context(session: Session, stock_code: str) -> ModuleFactContext:
                     facts[f"{row.item_id}:{column}"] = Decimal(str(value)) / _UNIT_TO_MILLION
         return facts, raw
 
+    current_facts, raw_current = collect(current)
+    prior_facts, _ = collect(prior)
     return ModuleFactContext(
         current_report_id=current.id,
         prior_report_id=prior.id,
         period_label=current.period_label,
         prior_period_label=prior.period_label,
         snapshot_id=str(snapshot.id) if snapshot else "",
-        current=collect(current)[0],
-        prior=collect(prior)[0],
-        raw_current=collect(current)[1],
+        current=current_facts,
+        prior=prior_facts,
+        raw_current=raw_current,
     )
 
 
@@ -531,7 +544,7 @@ def build_expenses_module(ctx: ModuleFactContext) -> dict[str, Any]:
     """费用分析。"""
     def _exp(name: str, item_id: str) -> dict[str, Any]:
         cur = ctx.current.get(f"{item_id}:cur")
-        prior = ctx.current.get(f"{item_id}:prior_yoy")
+        prior = ctx.prior.get(f"{item_id}:cur")
         rev = ctx.current.get("is.revenue:cur")
         rate = _ratio(abs(cur) if cur is not None else None, rev)
         return {"name": name, "status": "available" if cur is not None else "unavailable",
@@ -546,6 +559,32 @@ def build_expenses_module(ctx: ModuleFactContext) -> dict[str, Any]:
         if all(x is not None for x in (selling, admin, rnd, fin)) else None
     rev = ctx.current.get("is.revenue:cur")
     pr = _ratio(total, rev)
+    expense_items = (
+        ("销售", "is.selling_exp", "销售费用率"),
+        ("管理", "is.admin_exp", "管理费用率"),
+        ("研发", "is.rnd_exp", "研发费用率"),
+        ("财务", "is.fin_exp", "财务费用率"),
+    )
+    prior_revenue = ctx.prior.get("is.revenue:cur")
+    prior_expenses = {
+        name: abs(ctx.prior[item_id + ":cur"])
+        if ctx.prior.get(item_id + ":cur") is not None
+        else None
+        for name, item_id, _ in expense_items
+    }
+    current_expenses = {
+        name: abs(ctx.current[item_id + ":cur"])
+        if ctx.current.get(item_id + ":cur") is not None
+        else None
+        for name, item_id, _ in expense_items
+    }
+    expense_rates = {
+        rate_name: [
+            _ratio(prior_expenses[name], prior_revenue),
+            _ratio(current_expenses[name], rev),
+        ]
+        for name, _, rate_name in expense_items
+    }
     return {"module": "expenses", "title": "费用分析", "period": ctx.period_label,
         "prior_period": ctx.prior_period_label, "snapshot_id": ctx.snapshot_id,
         "report_ids": [str(ctx.current_report_id), str(ctx.prior_report_id)],
@@ -557,11 +596,20 @@ def build_expenses_module(ctx: ModuleFactContext) -> dict[str, Any]:
             {"name": "期间费用合计", "status": "available" if total is not None else "unavailable",
              "value": str(total) if total is not None else None,
              "rate": str(pr) if pr is not None else None, "unit": "百万元"}],
-        "charts": {"expense_structure": {"title": "费用结构", "type": "ratio_bar", "unit": "百万元",
-            "series": {"销售": abs(selling) if selling is not None else None,
-                "管理": abs(admin) if admin is not None else None,
-                "研发": abs(rnd) if rnd is not None else None,
-                "财务": abs(fin) if fin is not None else None}}},
+        "charts": {
+            "expense_structure": {"title": "费用结构", "type": "ratio_bar", "unit": "百万元",
+                "series": {"销售": abs(selling) if selling is not None else None,
+                    "管理": abs(admin) if admin is not None else None,
+                    "研发": abs(rnd) if rnd is not None else None,
+                    "财务": abs(fin) if fin is not None else None}},
+            "expense_comparison": {"title": "费用项目年度对比", "type": "bar", "unit": "百万元",
+                "periods": [ctx.prior_period_label, ctx.period_label],
+                "series": {name: [prior_expenses[name], current_expenses[name]]
+                    for name, _, _ in expense_items}},
+            "expense_rate_trend": {"title": "费用率年度对比", "type": "line", "unit": "ratio",
+                "periods": [ctx.prior_period_label, ctx.period_label],
+                "series": expense_rates},
+        },
         "unavailable": [{"block": "预算执行", "code": "budget_not_applicable_public_period",
             "reason": "预算基准属内部期（D054）"}]}
 
@@ -584,11 +632,20 @@ def build_cashflow_module(ctx: ModuleFactContext) -> dict[str, Any]:
             _kpi("筹资活动现金流量净额", ctx.current.get("cf.fin_cf:cur"),
                  ctx.current.get("cf.fin_cf:prior_yoy"), unit="百万元"),
             _kpi("净现比", _ratio(ocf, np), None, unit="ratio", caliber_note="OCF/净利润")],
-        "charts": {"cash_bridge": {"title": "现金变动桥", "type": "waterfall", "unit": "百万元",
+        "charts": {
+            "cash_bridge": {"title": "现金变动桥", "type": "waterfall", "unit": "百万元",
             "steps": {"年初": raw("年初现金及现金等价物"), "经营": raw("经营活动所得现金净额"),
                 "投资": raw("投资活动所用现金净额"), "筹资": raw("融资活动(所用)所得现金净额"),
                 "汇率": raw("汇率变动对现金的影响"), "年末": raw("年末现金及现金等价物")},
-            "identity": "年末 = 年初 + 净变动 + 汇率"}},
+            "identity": "年末 = 年初 + 净变动 + 汇率"},
+            "cashflow_activities": {"title": "三类现金流量净额", "type": "bar", "unit": "百万元",
+                "periods": [ctx.prior_period_label, ctx.period_label],
+                "series": {
+                    "经营活动": [ctx.prior.get("cf.ocf:cur"), ocf],
+                    "投资活动": [ctx.prior.get("cf.icf:cur"), ctx.current.get("cf.icf:cur")],
+                    "筹资活动": [ctx.prior.get("cf.fin_cf:cur"), ctx.current.get("cf.fin_cf:cur")],
+                }},
+        },
         "unavailable": [{"block": "收现比", "code": "cash_from_sales_not_disclosed",
             "reason": "无「销售收现」行"},
             {"block": "13周预测", "code": "internal_period_feature", "reason": "内部期"}]}

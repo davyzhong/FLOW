@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.36
+version: 5.37
 created_at: 2026-09-12
 updated_at: 2026-10-17
 owner: FLOW
@@ -14,7 +14,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-10-17 当前状态：**CFO 驾驶舱全视图数据与图表完整性改造为唯一执行项，处于阶段 1 页面与数据断点复现；知识刷新 K2 顺延**。用户要求基于已登记计划立即实施。驾驶舱原视觉补全（代码 SHA `1a71e33fc2f779e1a848a4c3736919e98f762bdf`）及盈利分析页面（SHA `08aa4cd02247f995bc990d92c8f34f5a1829afa1`）已完成；本工作新增范围聚焦四项核心 KPI、行动项和全视图实际绘图。驾驶舱代码 SHA `1a71e33fc2f779e1a848a4c3736919e98f762bdf` 已推送，准确 SHA GitHub CI run `38936413156` 全部 job 成功；Web 183/183、API 定向 19/19、隔离账套 19/19、dashboard Playwright 7/7、浏览器 E2E 15/15、162 路由矩阵无意外失败，M1/M6、plan views、脚本测试和链接检查通过，8 张页面截图已登记。K0 当前复核并接续 Davybase audit-envelope 草稿，严格验收旧图片批次 manifest；Davybase `main` `6efcd6e2` 干净且已同步，ObsidianWiki `main` `e04d6833` 与远端同步但保留 1,345 条既存本地变化，只读保护、不暂存或覆盖。K0 不执行图片 apply；`CURRENT_RELEASE` 保持 `flow-knowledge-2026-09-12.1`，未经用户战略裁决不得切换。详细状态见[知识刷新工作包](../50_plans/work_items/KNOWLEDGE--refresh-v2.md)、[驾驶舱验收与截图](../60_delivery/verification/2026-10-16--cockpit-51-chart-coverage-mapping-v1.md)和[HANDOFF](../../HANDOFF.md)。
+2026-10-17 当前状态：**CFO 驾驶舱全视图数据与图表完整性改造为唯一执行项，首批实现已启动，阶段 1 尚未结项；知识刷新 K2 顺延**。隔离环境定位并修复总览趋势 48 个点被前端丢弃、现金流桥原始行未采集、费用页上一期取值错误及图表不足、行动项没有从发现创建的入口、审核中发现误标终审等问题。隔离发行包 19/19；相关 API 40/40、Web 16/16、Web 类型检查与 Ruff 通过。原用户浏览器 `localhost:61639` 拒绝连接，未声称该地址完成复现；当前以最新分支代码的隔离栈持续核验。驾驶舱原视觉补全 SHA `1a71e33fc2f779e1a848a4c3736919e98f762bdf` 及盈利分析页面 SHA `08aa4cd02247f995bc990d92c8f34f5a1829afa1` 为既有完成项，不代表本工作包完成。下一步完成九视图矩阵并逐页补齐真实数据图表，最终逐路由截图、逐点对账和同 SHA CI 验收。详细状态见[当前路线图](../50_plans/CURRENT_ROADMAP.md)、[驾驶舱工作包](../50_plans/work_items/COCKPIT--all-views-data-and-visual-completion.md)和[HANDOFF](../../HANDOFF.md)。
 
 2026-10-13 深夜当前状态：**时间线迁移已交付**（分支 `flow/timeline-migration-20261013`，commit `087a72f2`）——演示数据期间对齐菜鸟真实财年（FY2022 比较 / FY2023 分析），canonical 月度明细年度聚合精确等于申请稿披露值（零差异）；财务报表为 IFRS 披露原值（合成行全删），简体 IFRS 勾稽器（12 恒等式）过发布门禁；覆盖矩阵 FY2022/FY2023 各 32/50 如实缺省；ORG-LEDGER v2（v1 冻结）。验证全绿（单元/企业/scripts/隔离栈 e2e）。已合并 main（`c824f55f`，同 SHA CI 17/17 success）。下一子步：F3（指标目录收尾），随后批次 C-2。
 

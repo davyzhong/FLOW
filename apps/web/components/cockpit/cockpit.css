@@ -554,6 +554,15 @@
 .action-panel { margin-top: var(--flow-space-4, 16px); }
 .action-panel ul { list-style: none; padding: 0; display: grid; gap: 8px; }
 .action-panel__notice { color: var(--flow-text-muted, #6b7280); font-size: 12px; }
+.action-panel__suggestions { margin-top: 12px; padding: 14px; border: 1px solid var(--flow-border, #dbe2ea); border-radius: 10px; background: var(--flow-surface-subtle, #f8fafc); }
+.action-panel__suggestions > p { margin: 0 0 10px; color: var(--flow-text-muted, #586476); }
+.action-panel__suggestions li { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 10px 0; border-top: 1px solid var(--flow-border, #dbe2ea); }
+.action-panel__suggestions li > div { display: grid; gap: 4px; }
+.action-panel__suggestions a { color: var(--flow-link, #2457a6); font-size: 13px; }
+.action-panel__suggestions button { flex: 0 0 auto; }
+@media (max-width: 640px) {
+  .action-panel__suggestions li { align-items: stretch; flex-direction: column; }
+}
 
 /* 批次 D：问数入口 */
 .ask-entry { margin-top: var(--flow-space-4, 16px); padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; }

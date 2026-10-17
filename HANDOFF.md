@@ -18,7 +18,7 @@ applies_to: repository
 
 ## 一、当前任务
 
-**当前任务：实施 CFO 驾驶舱全视图数据与图表完整性改造**。用户已明确要求按计划立即开始。当前唯一队首为阶段 1：复现用户实际页面与数据批次，追踪营业收入、营业利润、毛利率、经营现金流及行动项从来源到 UI 的断点，并盘点九个视图的真实绘图状态；知识刷新 K2 顺延至本工作包完成后。[计划工作包](docs/50_plans/work_items/COCKPIT--all-views-data-and-visual-completion.md)。
+**当前任务：实施 CFO 驾驶舱全视图数据与图表完整性改造**。用户已明确要求按计划立即开始。阶段 1 在隔离版本中已查明并修复趋势点全部被过滤、现金流桥数据为空、费用页比较缺失、行动项无创建入口及审核中发现误标终审等断点。接着完成九视图数据—图表矩阵；原用户浏览器 `localhost:61639` 当前拒绝连接，因此以该分支最新代码隔离栈进行复现。之后按工作包阶段继续真实数据和全视图图表改造；知识刷新 K2 顺延至本工作包完成后。[计划工作包](docs/50_plans/work_items/COCKPIT--all-views-data-and-visual-completion.md)。
 
 **CFO 驾驶舱盈利分析与图表缺口补全已完成**。本分支新增盈利能力页面 `/cockpit/profitability`、只读 API 与冻结时杜邦指标载荷；提供净利率、ROE、总资产周转率、权益乘数、两期比较、勾稽提示、指标/报告/来源财报行深链。图表复用 ECharts；旧快照或缺少期初数据时明确显示 unavailable。前端 36 个测试文件/184 项通过、typecheck/build 通过；lint 零错误，有一条既有 TanStack Table 警告；后端隔离定向测试 12 项、Ruff、mypy 通过；隔离账套核验 19/19、可见性矩阵 162 项无失败、浏览器全旅程 16/16 通过，真实页面截图见[浏览器验收记录](docs/60_delivery/verification/2026-10-17--cockpit-profitability-browser-verification-v1.md)。CI 首轮发现重复 seed 会新增两份 Objective 快照；修复归一化行 UUID 不稳定性后，回归测试 10 项通过，准确 SHA `08aa4cd02247f995bc990d92c8f34f5a1829afa1` 的 GitHub CI run `38996089002` 为 18/18 job success。contracts、plan views、links 与 M1 通过。代码与修复提交分别为 `5817efcf`、`08aa4cd0`，均已推送。工作包/设计/计划见 [工作包](docs/50_plans/work_items/COCKPIT--visual-analysis-expansion.md)、[设计规格](docs/superpowers/specs/2026-10-17-cfo-cockpit-visual-analysis-expansion-design.md)、[实施计划](docs/superpowers/plans/2026-10-17-cockpit-visual-analysis-expansion.md)。独立审查发现的单位误标和来源行下钻缺口均已修复。
 

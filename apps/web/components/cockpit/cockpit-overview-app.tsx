@@ -205,6 +205,9 @@ export function CockpitOverviewApp({
 
       <ActionItemPanel
         fetchActionItems={() => flowApi.getCockpitActionItems()}
+        createActionItem={(payload) => flowApi.createCockpitActionItem(payload)}
+        findings={overview.conclusion.findings ?? []}
+        snapshotId={overview.context.metric_snapshot_id ?? undefined}
         acknowledgeActionItem={(itemId) =>
           flowApi.acknowledgeCockpitActionItem(itemId)
         }
