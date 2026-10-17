@@ -40,9 +40,28 @@ def test_freezes_average_balance_dupont_metrics_with_source_trace() -> None:
     assert Decimal(metrics["total_asset_turnover"]["value"]) == Decimal("1")
     assert Decimal(metrics["equity_multiplier"]["value"]) == Decimal("2")
     assert payload["consistency"]["status"] == "passed"
-    assert payload["inputs"]["bs.equity:beginning"]["row_id"] == "equity"
     assert payload["inputs"]["bs.equity:beginning"]["page_number"] == 3
+    assert payload["inputs"]["bs.equity:beginning"]["statement_type"] == "合并财务报表"
     assert payload["dictionary_sha256"]
+
+
+def test_payload_is_stable_when_normalization_rebuilds_database_row_ids() -> None:
+    rows = [
+        _row("is.net_profit", current="15", row_id="old-profit"),
+        _row("is.revenue", current="100", row_id="old-revenue"),
+        _row("bs.total_assets", ending="120", beginning="80", row_id="old-assets"),
+        _row("bs.equity", ending="60", beginning="40", row_id="old-equity"),
+    ]
+    rebuilt_rows = [
+        _row("is.net_profit", current="15", row_id="new-profit"),
+        _row("is.revenue", current="100", row_id="new-revenue"),
+        _row("bs.total_assets", ending="120", beginning="80", row_id="new-assets"),
+        _row("bs.equity", ending="60", beginning="40", row_id="new-equity"),
+    ]
+
+    assert build_profitability_payload(rows, report_id="report-1") == build_profitability_payload(
+        rebuilt_rows, report_id="report-1"
+    )
 
 
 def test_missing_opening_balance_does_not_substitute_closing_balance() -> None:

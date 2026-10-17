@@ -67,7 +67,6 @@ def build_profitability_payload(
         trace = row.trace if isinstance(row.trace, dict) else {}
         return value, {
             "item_id": item_id,
-            "row_id": str(row.id),
             "statement_type": row.statement_type,
             "item_name": getattr(row, "item_name", None),
             "value": str(value) if value is not None else None,
