@@ -1,24 +1,10 @@
 import type { EChartsOption } from "echarts";
 
+import type { CockpitModuleChart } from "../../../lib/api/client";
 import { buildCombo, buildDonut, buildWaterfall } from "./builders";
 import { formatFinancialValue } from "../number-format";
 
-export interface ModuleChartData {
-  title?: string;
-  type?: string;
-  unit?: string;
-  periods?: string[];
-  series?: Record<string, unknown>;
-  steps?: Record<string, unknown>;
-  identity?: string;
-  note?: string;
-  fact_ids?: Record<string, string>;
-  source_fact_ids?: Record<string, string>;
-  dso?: unknown;
-  dio?: unknown;
-  dpo?: unknown;
-  ccc?: unknown;
-}
+export type ModuleChartData = Partial<CockpitModuleChart> & Pick<CockpitModuleChart, "type" | "unit">;
 
 function asNumber(value: unknown): number | null {
   if (value === null || value === undefined || value === "") return null;

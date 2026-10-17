@@ -3,7 +3,7 @@ doc_id: FLOW-WI-COCKPIT-ALL-VIEWS-20261017-001
 title: CFO 驾驶舱全视图数据与图表完整性改造
 doc_type: work-item
 status: active
-version: "2.4"
+version: "2.5"
 created_at: 2026-10-17
 updated_at: 2026-10-17
 owner: FLOW
@@ -123,11 +123,11 @@ confidentiality: project-internal
 
 **主要文件：** `services/api/src/flow_api/cockpit/service.py`、`services/api/src/flow_api/cockpit/modules.py`、`services/api/src/flow_api/api/routes/cockpit.py`、`services/api/src/flow_api/api/schemas/cockpit.py`、`apps/web/components/cockpit/cockpit-types.ts`、`apps/web/components/cockpit/charts/module-options.ts`。
 
-- [ ] 定义每类视觉的 typed payload：分析问题、图形类型、期间/维度、系列和单位、source/metric/snapshot IDs、事实分类、空值原因、可点击目标、图旁数据表。
-- [ ] 每页通过一个已有或扩展后的聚合接口返回首屏所需指标、图表、行动项与来源引用；避免一图一请求和 N+1；保持权限依赖、单企业范围、导入批次边界。
-- [ ] 在 API/fixture 定向测试中校验四项 CFO 指标、每种 chart payload、期间覆盖、合计勾稽、空态 reason、来源 ID 和权限拒绝。
+- [x] 定义每类视觉的 typed payload：分析问题、图形类型、期间、系列和单位、source/metric/snapshot IDs、事实分类、空值原因和可点击目标；图旁数据表复用同一 chart series 与 periods 渲染，避免产生第二数据事实源。
+- [x] 每页通过既有模块聚合接口一次返回 KPI、图表、行动项与来源引用；保持权限依赖、单企业范围、报告边界，不新增逐图请求。
+- [x] 在 API/fixture 定向测试中校验模块 chart payload、期间覆盖、单位、来源分类/ID、snapshot、下钻目标及报告不可用状态；CFO 四项总览 KPI 与行动项在阶段 2 验收。
 
-**阶段验收：** 所有用于视图的数据可从 API 契约独立验证；指标卡、图、表数值一致；任何图表 payload 缺单位、期间、来源分类或 snapshot/batch 身份时，契约测试失败。
+**阶段验收：** 所有用于视图的数据可从 API 契约独立验证；指标卡、图、表数值一致；任何图表 payload 缺单位、期间、来源分类或 snapshot/batch 身份时，契约测试失败。2026-10-17 阶段 3 已完成：新增 `CockpitModuleChart` 严格 schema 并生成 OpenAPI/TypeScript contract；六个模块 API 统一附带分析问题、事实分类、来源 fact/report IDs、metric codes、snapshot、报表行锚点及空值原因；Web 消费生成的契约类型。API 定向 5 项、Web 组件定向 13 项、TypeScript typecheck、`make contracts-check`、Ruff 和 mypy 全部通过。
 
 ### 阶段 4：逐页补充图形、图例、数据表与联动
 

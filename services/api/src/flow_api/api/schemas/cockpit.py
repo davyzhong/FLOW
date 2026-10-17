@@ -8,7 +8,8 @@
 
 from __future__ import annotations
 
-from typing import Any
+from decimal import Decimal
+from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
@@ -105,6 +106,37 @@ class CockpitActionItemAcknowledgeResponse(BaseModel):
     )
 
 
+CockpitChartValue = Decimal | float | int | str | None
+CockpitChartSeries = CockpitChartValue | list[CockpitChartValue]
+
+
+class CockpitModuleChart(BaseModel):
+    """模块图表的结构化载荷；所有标识均沿用已发布事实链。"""
+
+    title: str
+    type: Literal["bar", "formula_card", "line", "ratio_bar", "treemap", "waterfall"]
+    unit: str
+    periods: list[str] = Field(default_factory=list)
+    series: dict[str, CockpitChartSeries] = Field(default_factory=dict)
+    steps: dict[str, CockpitChartValue] = Field(default_factory=dict)
+    identity: str | None = None
+    note: str | None = None
+    dso: CockpitChartValue = None
+    dio: CockpitChartValue = None
+    dpo: CockpitChartValue = None
+    ccc: CockpitChartValue = None
+    # 聚合入口在构造响应时填充；来源 ID 不在模块页重复维护。
+    analysis_question: str
+    fact_classes: list[Literal["reported", "derived", "synthetic_allocation", "scenario"]]
+    source_ids: list[str] = Field(default_factory=list)
+    metric_codes: list[str] = Field(default_factory=list)
+    snapshot_id: str
+    drilldown_target: str | None = None
+    empty_reason: str | None = None
+    fact_ids: dict[str, str] = Field(default_factory=dict)
+    source_fact_ids: dict[str, str] = Field(default_factory=dict)
+
+
 class CockpitModuleResponse(BaseModel):
     """模块页聚合响应（批次 C-2）：一次返回该模块 KPI + 图表 + 降级块（禁 N+1）。"""
 
@@ -117,7 +149,7 @@ class CockpitModuleResponse(BaseModel):
     source_notice: str | None = None
     unit: str = "百万元"
     kpis: list[dict[str, Any]] = Field(default_factory=list)
-    charts: dict[str, Any] = Field(default_factory=dict)
+    charts: dict[str, CockpitModuleChart] = Field(default_factory=dict)
     unavailable: list[dict[str, Any]] = Field(default_factory=list)
 
 

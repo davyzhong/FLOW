@@ -1852,6 +1852,65 @@ export interface components {
             snapshot_id: string;
         };
         /**
+         * CockpitModuleChart
+         * @description 模块图表的结构化载荷；所有标识均沿用已发布事实链。
+         */
+        CockpitModuleChart: {
+            /** Title */
+            title: string;
+            /**
+             * Type
+             * @enum {string}
+             */
+            type: "bar" | "formula_card" | "line" | "ratio_bar" | "treemap" | "waterfall";
+            /** Unit */
+            unit: string;
+            /** Periods */
+            periods?: string[];
+            /** Series */
+            series?: {
+                [key: string]: string | number | (string | number | null)[] | null;
+            };
+            /** Steps */
+            steps?: {
+                [key: string]: string | number | null;
+            };
+            /** Identity */
+            identity?: string | null;
+            /** Note */
+            note?: string | null;
+            /** Dso */
+            dso?: string | number | null;
+            /** Dio */
+            dio?: string | number | null;
+            /** Dpo */
+            dpo?: string | number | null;
+            /** Ccc */
+            ccc?: string | number | null;
+            /** Analysis Question */
+            analysis_question: string;
+            /** Fact Classes */
+            fact_classes: ("reported" | "derived" | "synthetic_allocation" | "scenario")[];
+            /** Source Ids */
+            source_ids?: string[];
+            /** Metric Codes */
+            metric_codes?: string[];
+            /** Snapshot Id */
+            snapshot_id: string;
+            /** Drilldown Target */
+            drilldown_target?: string | null;
+            /** Empty Reason */
+            empty_reason?: string | null;
+            /** Fact Ids */
+            fact_ids?: {
+                [key: string]: string;
+            };
+            /** Source Fact Ids */
+            source_fact_ids?: {
+                [key: string]: string;
+            };
+        };
+        /**
          * CockpitModuleResponse
          * @description 模块页聚合响应（批次 C-2）：一次返回该模块 KPI + 图表 + 降级块（禁 N+1）。
          */
@@ -1881,7 +1940,7 @@ export interface components {
             }[];
             /** Charts */
             charts?: {
-                [key: string]: unknown;
+                [key: string]: components["schemas"]["CockpitModuleChart"];
             };
             /** Unavailable */
             unavailable?: {

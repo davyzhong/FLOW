@@ -37,6 +37,9 @@ REPO_ROOT = Path(__file__).resolve().parents[4]
 def db_session() -> Iterator[Session]:
     engine = create_engine(get_settings().database_url)
     session = Session(engine, expire_on_commit=False)
+    session.execute(text("DELETE FROM publication_attempt"))
+    session.execute(text("DELETE FROM report_snapshot_item"))
+    session.execute(text("DELETE FROM report_snapshot"))
     for table in (ActionItem, Finding, MetricSnapshot, ImportVersion, AnalysisBatch):
         session.execute(text(f"DELETE FROM {table.__tablename__}"))
     session.execute(text("DELETE FROM statement_normalized_item"))
@@ -44,6 +47,17 @@ def db_session() -> Iterator[Session]:
     session.execute(text("DELETE FROM analysis_cycle"))
     session.add(
         AnalysisCycle(enterprise_id=uuid.UUID(_ENTERPRISE), period_key="2023-03")
+    )
+    session.execute(
+        text("DELETE FROM role_binding WHERE actor_id = :actor"), {"actor": CFO}
+    )
+    session.execute(
+        text(
+            "INSERT INTO role_binding (actor_id, role, enterprise_id,"
+            " is_service_account, active)"
+            " VALUES (:actor, 'cfo', :enterprise, false, true)"
+        ),
+        {"actor": CFO, "enterprise": uuid.UUID(_ENTERPRISE)},
     )
     session.commit()
     yield session
@@ -159,7 +173,22 @@ def test_balance_sheet_module_kpis_from_disclosed_facts(api_client: TestClient) 
     assert by_name["总负债"]["status"] == "available"
     assert by_name["资产负债率"]["status"] == "available"
     # 结构图两期齐备
-    assert body["charts"]["asset_structure"]["periods"] == ["FY2022", "FY2023"]
+    chart = body["charts"]["asset_structure"]
+    assert chart["periods"] == ["FY2022", "FY2023"]
+    assert chart["analysis_question"]
+    assert chart["fact_classes"] == ["reported"]
+    assert body["report_ids"][0] in chart["source_ids"]
+    assert chart["snapshot_id"] == body["snapshot_id"]
+    assert chart["drilldown_target"] == (
+        f"/statements?report={body['report_ids'][0]}"
+        "#stmt-row-合并资产负债表-流动资产合计"
+    )
+    assert chart["metric_codes"] == ["bs.current_assets", "bs.total_assets"]
+    for payload in body["charts"].values():
+        assert payload["analysis_question"]
+        assert payload["unit"]
+        assert payload["fact_classes"]
+        assert payload["snapshot_id"] == body["snapshot_id"]
     # 期限拆分如实缺省
     assert any(
         block["code"] == "debt_maturity_split_not_disclosed"
@@ -183,6 +212,28 @@ def test_working_capital_ccc_identity(api_client: TestClient) -> None:
     assert any(
         block["code"] == "ar_aging_not_disclosed" for block in body["unavailable"]
     )
+
+
+def test_every_module_chart_has_a_typed_traceable_payload(
+    api_client: TestClient,
+) -> None:
+    for module in (
+        "balance-sheet", "working-capital", "expenses", "cashflow", "risk",
+        "consolidation",
+    ):
+        response = api_client.get(f"/api/v1/cockpit/modules/{module}")
+        assert response.status_code == 200, response.text
+        body = response.json()
+        assert body["charts"], module
+        for chart_id, chart in body["charts"].items():
+            assert chart["analysis_question"], (module, chart_id)
+            assert chart["type"] in {
+                "bar", "formula_card", "line", "ratio_bar", "treemap", "waterfall"
+            }
+            assert chart["unit"], (module, chart_id)
+            assert chart["fact_classes"], (module, chart_id)
+            assert chart["snapshot_id"] == body["snapshot_id"]
+            assert chart["source_ids"] or chart["source_fact_ids"] or chart["fact_ids"]
 
 
 def test_profitability_module_reads_frozen_analysis_payload(

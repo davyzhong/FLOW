@@ -498,7 +498,117 @@ def _module_response(
         raise _error(404, error.code, str(error)) from error
     except ResourceScopeUnresolved as error:
         raise _error(403, "enterprise_scope_unresolved", str(error)) from error
+    _enrich_module_charts(payload)
     return CockpitModuleResponse(**payload)
+
+
+_CHART_QUESTIONS = {
+    "asset_structure": "资产由流动资产与非流动资产如何构成？",
+    "liability_equity_structure": "报告期负债与权益规模如何变化？",
+    "capital_structure_trend": "资产负债率在报告期之间如何变化？",
+    "ar_inv_ap_trend": "应收、存货与应付余额如何变化？",
+    "ccc_formula": "现金转换周期如何由 DSO、DIO 与 DPO 计算？",
+    "efficiency_cycle": "营运效率天数及现金转换周期如何变化？",
+    "liquidity_ratios": "流动比率、速动比率和现金比率如何变化？",
+    "solvency_ratios": "偿债与资本结构比率如何变化？",
+    "leverage_ratios": "权益乘数如何变化？",
+    "segment_revenue": "公开披露的各分部收入如何变化？",
+    "segment_growth": "各分部公开披露收入的同比变化如何？",
+    "expense_structure": "当期各项期间费用如何构成？",
+    "expense_comparison": "各项期间费用在报告期之间如何变化？",
+    "expense_rate_trend": "各项期间费用占营业收入的比例如何变化？",
+    "cash_bridge": "现金余额如何由期初经过经营、投资、筹资和汇率变动到期末？",
+    "cashflow_activities": "经营、投资与筹资现金流净额如何变化？",
+}
+
+_CHART_METRICS = {
+    "asset_structure": ["bs.current_assets", "bs.total_assets"],
+    "liability_equity_structure": ["bs.total_liab", "bs.equity"],
+    "capital_structure_trend": ["bs.total_liab", "bs.total_assets"],
+    "ar_inv_ap_trend": ["bs.ar", "bs.inventory", "bs.ap"],
+    "ccc_formula": ["dso_days", "dio_days", "dpo_days", "ccc_days"],
+    "efficiency_cycle": ["dso_days", "dio_days", "dpo_days", "ccc_days"],
+    "liquidity_ratios": ["current_ratio", "quick_ratio", "cash_ratio"],
+    "solvency_ratios": ["debt_asset_ratio", "ocf_current_liab_ratio"],
+    "leverage_ratios": ["equity_multiplier"],
+    "segment_revenue": ["segment_revenue"],
+    "segment_growth": ["segment_revenue_yoy"],
+    "expense_structure": ["selling_expense", "admin_expense", "rnd_expense", "financial_expense"],
+    "expense_comparison": ["selling_expense", "admin_expense", "rnd_expense", "financial_expense"],
+    "expense_rate_trend": [
+        "selling_expense_ratio", "admin_expense_ratio", "rnd_expense_ratio",
+        "financial_expense_ratio",
+    ],
+    "cash_bridge": [
+        "cash_beginning", "operating_cash_flow", "investing_cash_flow",
+        "financing_cash_flow", "fx_cash_effect", "cash_ending",
+    ],
+    "cashflow_activities": ["operating_cash_flow", "investing_cash_flow", "financing_cash_flow"],
+}
+
+_CHART_SOURCE_ROWS = {
+    "asset_structure": ("合并资产负债表", "流动资产合计"),
+    "liability_equity_structure": ("合并资产负债表", "权益及负债总额"),
+    "capital_structure_trend": ("合并资产负债表", "负债合计"),
+    "ar_inv_ap_trend": ("合并资产负债表", "贸易应收及其他预付款(流动)"),
+    "liquidity_ratios": ("合并资产负债表", "流动资产合计"),
+    "solvency_ratios": ("合并资产负债表", "负债合计"),
+    "leverage_ratios": ("合并资产负债表", "资产总计"),
+    "expense_structure": ("合并利润表", "销售及市场推广开支"),
+    "expense_comparison": ("合并利润表", "销售及市场推广开支"),
+    "expense_rate_trend": ("合并利润表", "销售及市场推广开支"),
+    "cash_bridge": ("合并现金流量表", "年末现金及现金等价物"),
+    "cashflow_activities": ("合并现金流量表", "经营活动所得现金净额"),
+}
+
+
+def _has_chart_value(value: Any) -> bool:
+    if isinstance(value, dict):
+        return any(_has_chart_value(item) for item in value.values())
+    if isinstance(value, (list, tuple)):
+        return any(_has_chart_value(item) for item in value)
+    return value is not None
+
+
+def _enrich_module_charts(payload: dict[str, Any]) -> None:
+    """给既有图表统一补齐来源、口径与可追溯字段。"""
+
+    report_ids = [str(item) for item in payload.get("report_ids", [])]
+    snapshot_id = str(payload.get("snapshot_id", ""))
+    for key, chart in payload.get("charts", {}).items():
+        if not isinstance(chart, dict):
+            continue
+        chart["analysis_question"] = _CHART_QUESTIONS.get(
+            key, f"{chart.get('title', key)}回答了什么经营问题？"
+        )
+        is_derived = chart.get("type") == "formula_card" or key in {
+            "capital_structure_trend", "efficiency_cycle", "liquidity_ratios",
+            "solvency_ratios", "leverage_ratios", "expense_rate_trend",
+        }
+        chart["fact_classes"] = ["reported", "derived"] if is_derived else ["reported"]
+        chart["source_ids"] = report_ids + [
+            str(value)
+            for value in (chart.get("fact_ids") or chart.get("source_fact_ids") or {}).values()
+        ]
+        chart["metric_codes"] = _CHART_METRICS.get(key, [])
+        chart["snapshot_id"] = snapshot_id
+        chart["drilldown_target"] = (
+            _statement_row_href(report_ids[0], _CHART_SOURCE_ROWS[key])
+            if report_ids and key in _CHART_SOURCE_ROWS
+            else f"/statements?report={report_ids[0]}" if report_ids else None
+        )
+        if not _has_chart_value(chart.get("series") or chart.get("steps") or {
+            name: chart.get(name) for name in ("dso", "dio", "dpo", "ccc")
+        }):
+            chart["empty_reason"] = "当前报告期间没有可用来源数值，未补零或推测。"
+
+
+def _statement_row_href(report_id: str, row: tuple[str, str]) -> str:
+    """与前端 statementRowId 保持同一锚点约定，直接定位到来源报表行。"""
+
+    statement_type, item_name = row
+    anchor = "stmt-row-" + "_".join(statement_type.split()) + "-" + "_".join(item_name.split())
+    return f"/statements?report={report_id}#{anchor}"
 
 
 @router.get(

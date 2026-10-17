@@ -25,6 +25,7 @@ export type WorkbenchResponse = components["schemas"]["WorkbenchResponse"];
 export type CockpitOverviewResponse = components["schemas"]["CockpitOverviewResponse"];
 export type CockpitModuleResponse =
   components["schemas"]["CockpitModuleResponse"];
+export type CockpitModuleChart = components["schemas"]["CockpitModuleChart"];
 export type CockpitProfitabilityResponse =
   components["schemas"]["CockpitProfitabilityResponse"];
 export type CockpitProfitabilityMetric =
