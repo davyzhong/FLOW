@@ -95,28 +95,30 @@ def load_fact_context(session: Session, stock_code: str) -> ModuleFactContext:
         ).all()
         facts: dict[str, Decimal] = {}
         raw: dict[tuple[str, str, str], Decimal] = {}
-        for row in report.items:
+        for raw_row in report.items:
             for column, value in (
-                ("end", row.value_end),
-                ("begin", row.value_begin),
-                ("cur", row.value_current),
-                ("prior", row.value_prior),
+                ("end", raw_row.value_end),
+                ("begin", raw_row.value_begin),
+                ("cur", raw_row.value_current),
+                ("prior", raw_row.value_prior),
             ):
                 if value is not None:
-                    raw[(row.statement_type, row.item_name, column)] = (
+                    raw[(raw_row.statement_type, raw_row.item_name, column)] = (
                         Decimal(str(value)) / _UNIT_TO_MILLION
                     )
-        for row in rows:
-            if row.item_id is None:
+        for normalized_row in rows:
+            if normalized_row.item_id is None:
                 continue
             for column, value in (
-                ("end", row.value_end),
-                ("begin", row.value_begin),
-                ("cur", row.value_current),
-                ("prior", row.value_prior),
+                ("end", normalized_row.value_end),
+                ("begin", normalized_row.value_begin),
+                ("cur", normalized_row.value_current),
+                ("prior", normalized_row.value_prior),
             ):
                 if value is not None:
-                    facts[f"{row.item_id}:{column}"] = Decimal(str(value)) / _UNIT_TO_MILLION
+                    facts[f"{normalized_row.item_id}:{column}"] = (
+                        Decimal(str(value)) / _UNIT_TO_MILLION
+                    )
         return facts, raw
 
     current_facts, raw_current = collect(current)

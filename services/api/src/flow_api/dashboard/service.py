@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from decimal import Decimal
-from typing import Literal
+from typing import Literal, cast
 from uuid import UUID
 
 from sqlalchemy.orm import Session
@@ -229,6 +229,8 @@ class DashboardService:
         data_status = self._data_status(bundle, generated_at)
         trends = self.get_trends(session)
         bridge = self._profit_bridge(bundle)
+        # Keep the complete analysis projection here. Consumers that create
+        # actions must apply the approval gate at their own boundary.
         findings = self._finding_items(bundle)
         product_fact_ids, margin_product_fact_ids, margin_segment_fact_ids = (
             self._dimension_fact_ids(bundle)
@@ -724,11 +726,6 @@ class DashboardService:
         for published in bundle.findings:
             finding = published.finding
             if (
-                # The dashboard labels these as finalized findings and exposes
-                # them as action recommendations. Draft/review findings must
-                # remain visible in the investigation workflow, not here.
-                finding.status != "approved"
-                or
                 finding.finding_type is None
                 or finding.total_score is None
                 or finding.comparison_basis not in {"prior_year", "budget"}
@@ -748,7 +745,10 @@ class DashboardService:
                     finding_id=finding.id,
                     finding_type=finding.finding_type,
                     title=finding.title,
-                    status=finding.status,
+                    status=cast(
+                        Literal["candidate", "in_review", "approved", "rejected"],
+                        finding.status,
+                    ),
                     impact=available_value(
                         finding.impact_amount,
                         direction=(

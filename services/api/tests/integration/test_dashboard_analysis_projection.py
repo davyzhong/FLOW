@@ -48,6 +48,7 @@ def test_analysis_projection_preserves_bridge_finding_rank_evidence_and_handoff(
         payload = actual.model_dump(mode="json")
         payload.pop("finding_id")
         payload.pop("investigation_path")
+        assert payload.pop("status") == "candidate"
         oracle = dict(oracle)
         oracle.pop("finding_id")
         oracle.pop("investigation_path")
