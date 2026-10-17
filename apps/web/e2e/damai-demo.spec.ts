@@ -834,6 +834,19 @@ test("operations overview renders damai six-theme analysis", async ({ page }) =>
   await expect(focusedWatchMetric.locator(".ml-metric__head")).toContainText(watchTarget.metric_code);
 });
 
+test("profitability cockpit renders frozen DuPont analysis and captures the real page", async ({ page }) => {
+  await page.goto("/cockpit/profitability");
+  await expect(page.getByRole("heading", { name: "盈利能力与杜邦分析" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "杜邦三因子" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "杜邦驱动关系" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "ROE 与净利率" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "总资产周转率（次）" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "权益乘数（倍）" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "指标口径与关系" }).first()).toBeVisible();
+  await expect(page.getByRole("link", { name: "来源财报" }).first()).toBeVisible();
+  await page.screenshot({ path: path.resolve(process.cwd(), "work/damai-demo/profitability-cockpit.png"), fullPage: true });
+});
+
 test("statements page lists damai synthetic reports", async ({ page }) => {
   test.setTimeout(90_000);
   await page.goto("/statements");

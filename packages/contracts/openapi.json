@@ -1228,6 +1228,66 @@
         }
       }
     },
+    "/api/v1/cockpit/profitability": {
+      "get": {
+        "tags": [
+          "cockpit"
+        ],
+        "summary": "Cockpit Profitability",
+        "description": "读取最新两期不可变客观财报快照中的盈利指标；此接口不冻结、不重算。",
+        "operationId": "cockpit_profitability_api_v1_cockpit_profitability_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CockpitProfitabilityResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/cockpit/action-items": {
       "get": {
         "tags": [
@@ -6915,6 +6975,313 @@
           "conclusion"
         ],
         "title": "CockpitOverviewResponse"
+      },
+      "CockpitProfitabilityMetric": {
+        "properties": {
+          "metric_code": {
+            "type": "string",
+            "title": "Metric Code"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          },
+          "unit": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unit"
+          },
+          "formula": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Formula"
+          },
+          "definition_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Definition Version"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          },
+          "report_id": {
+            "type": "string",
+            "title": "Report Id"
+          },
+          "snapshot_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Snapshot Id"
+          },
+          "source_facts": {
+            "items": {
+              "$ref": "#/components/schemas/CockpitProfitabilitySourceFact"
+            },
+            "type": "array",
+            "title": "Source Facts"
+          }
+        },
+        "type": "object",
+        "required": [
+          "metric_code",
+          "status",
+          "report_id"
+        ],
+        "title": "CockpitProfitabilityMetric"
+      },
+      "CockpitProfitabilityPeriod": {
+        "properties": {
+          "period": {
+            "type": "string",
+            "title": "Period"
+          },
+          "report_id": {
+            "type": "string",
+            "title": "Report Id"
+          },
+          "snapshot_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Snapshot Id"
+          },
+          "snapshot_version": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Snapshot Version"
+          },
+          "source_ref": {
+            "type": "string",
+            "title": "Source Ref"
+          },
+          "source_sha256": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Sha256"
+          },
+          "metrics": {
+            "items": {
+              "$ref": "#/components/schemas/CockpitProfitabilityMetric"
+            },
+            "type": "array",
+            "title": "Metrics"
+          },
+          "consistency": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "object",
+            "title": "Consistency"
+          }
+        },
+        "type": "object",
+        "required": [
+          "period",
+          "report_id",
+          "source_ref"
+        ],
+        "title": "CockpitProfitabilityPeriod"
+      },
+      "CockpitProfitabilityResponse": {
+        "properties": {
+          "module": {
+            "type": "string",
+            "title": "Module",
+            "default": "profitability"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title",
+            "default": "盈利能力与杜邦分析"
+          },
+          "source_notice": {
+            "type": "string",
+            "title": "Source Notice"
+          },
+          "periods": {
+            "items": {
+              "$ref": "#/components/schemas/CockpitProfitabilityPeriod"
+            },
+            "type": "array",
+            "title": "Periods"
+          },
+          "unavailable": {
+            "items": {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Unavailable"
+          }
+        },
+        "type": "object",
+        "required": [
+          "source_notice"
+        ],
+        "title": "CockpitProfitabilityResponse"
+      },
+      "CockpitProfitabilitySourceFact": {
+        "properties": {
+          "item_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Item Id"
+          },
+          "row_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Row Id"
+          },
+          "statement_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Statement Type"
+          },
+          "item_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Item Name"
+          },
+          "page_number": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Page Number"
+          },
+          "page_anchor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Page Anchor"
+          },
+          "role": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Role"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          }
+        },
+        "type": "object",
+        "title": "CockpitProfitabilitySourceFact"
       },
       "CockpitTrend": {
         "properties": {

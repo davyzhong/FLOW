@@ -94,7 +94,7 @@ async def test_freeze_creates_typed_payload(db_session: Session) -> None:
 
     assert snapshot.payload is not None
     view = snapshot.payload
-    assert view["schema_version"] == "objective.v1"
+    assert view["schema_version"] == "objective.v2"
     assert view["report_type"] == "objective_statement"
     assert view["source"]["report_id"] == str(report.id)
     assert view["source"]["source_sha256"] == "a" * 64
@@ -106,6 +106,11 @@ async def test_freeze_creates_typed_payload(db_session: Session) -> None:
     )
     assert source_link_row["page_number"] == 5
     assert source_link_row["page_anchor"] == "strong"
+    assert view["profitability_metrics"]["report_id"] == str(report.id)
+    assert view["profitability_metrics"]["dictionary_sha256"]
+    assert set(view["profitability_metrics"]["metrics"]) == {
+        "roe", "net_margin", "total_asset_turnover", "equity_multiplier"
+    }
     # 不可变兜底：UPDATE objective_report_snapshot 必须被 CHECK 触发器/规则拒绝。
     # （当前实现为整版重冻结幂等：内容相同复用行；此处仅断言 payload 非空且可读。）
     assert view["report_type"] == "objective_statement"

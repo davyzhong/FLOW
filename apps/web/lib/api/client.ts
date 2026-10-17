@@ -25,6 +25,10 @@ export type WorkbenchResponse = components["schemas"]["WorkbenchResponse"];
 export type CockpitOverviewResponse = components["schemas"]["CockpitOverviewResponse"];
 export type CockpitModuleResponse =
   components["schemas"]["CockpitModuleResponse"];
+export type CockpitProfitabilityResponse =
+  components["schemas"]["CockpitProfitabilityResponse"];
+export type CockpitProfitabilityMetric =
+  components["schemas"]["CockpitProfitabilityMetric"];
 export type CockpitActionItemResponse =
   components["schemas"]["CockpitActionItemResponse"];
 export type CockpitActionItemCreate =
@@ -226,6 +230,9 @@ export const flowApi = {
       `/api/v1/cockpit/modules/${encodeURIComponent(module)}`,
       signal,
     );
+  },
+  getCockpitProfitability(signal?: AbortSignal): Promise<CockpitProfitabilityResponse> {
+    return request<CockpitProfitabilityResponse>("/api/v1/cockpit/profitability", signal);
   },
   getCockpitActionItems(signal?: AbortSignal): Promise<CockpitActionItemResponse[]> {
     return request<CockpitActionItemResponse[]>(

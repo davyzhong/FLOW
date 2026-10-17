@@ -25,6 +25,7 @@ from flow_api.enterprise.models import AnalysisCycle
 from flow_api.infrastructure.models.analytics import Finding, MetricSnapshot, Period
 from flow_api.infrastructure.models.cockpit import ActionItem
 from flow_api.infrastructure.models.intake import AnalysisBatch, ImportVersion
+from flow_api.infrastructure.models.statement import StatementReport
 from flow_api.settings import get_settings
 
 CFO = "cockpit-cfo-a"
@@ -182,6 +183,33 @@ def test_working_capital_ccc_identity(api_client: TestClient) -> None:
     assert any(
         block["code"] == "ar_aging_not_disclosed" for block in body["unavailable"]
     )
+
+
+def test_profitability_module_reads_frozen_analysis_payload(
+    api_client: TestClient, db_session: Session
+) -> None:
+    from flow_api.publishing.objective_freeze import freeze_objective_statement_report
+
+    reports = list(
+        db_session.scalars(
+            select(StatementReport).where(StatementReport.stock_code == "DAMAI.SYN")
+        )
+    )
+    for report in reports:
+        freeze_objective_statement_report(db_session, report_id=report.id)
+    db_session.commit()
+
+    response = api_client.get("/api/v1/cockpit/profitability")
+    assert response.status_code == 200, response.text
+    body = response.json()
+    assert body["module"] == "profitability"
+    assert [period["period"] for period in body["periods"]] == ["FY2022", "FY2023"]
+    current = body["periods"][-1]
+    assert current["snapshot_id"]
+    assert all(metric["snapshot_id"] == current["snapshot_id"] for metric in current["metrics"])
+    assert all(metric["report_id"] == current["report_id"] for metric in current["metrics"])
+    assert all(metric["status"] == "available" for metric in current["metrics"])
+    assert current["consistency"]["status"] == "passed"
 
 
 def test_modules_404_when_statements_not_published(

@@ -14,6 +14,7 @@ from typing import Annotated, Any, Literal
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from flow_api.api.schemas.cockpit import (
@@ -22,6 +23,10 @@ from flow_api.api.schemas.cockpit import (
     CockpitActionItemResponse,
     CockpitModuleResponse,
     CockpitOverviewResponse,
+    CockpitProfitabilityMetric,
+    CockpitProfitabilityPeriod,
+    CockpitProfitabilityResponse,
+    CockpitProfitabilitySourceFact,
 )
 from flow_api.api.schemas.intake import ErrorDetail
 from flow_api.cockpit.modules import (
@@ -39,6 +44,8 @@ from flow_api.dashboard.models import ActiveFilters
 from flow_api.dashboard.repositories import DashboardSourceUnavailableError
 from flow_api.dashboard.service import DashboardFilterError
 from flow_api.infrastructure.db import get_session_factory
+from flow_api.infrastructure.models.statement import StatementReport
+from flow_api.publishing.objective_freeze import ObjectiveReportSnapshot
 from flow_api.security.authorization import Action
 from flow_api.security.route_policy import (
     LOADERS,
@@ -155,6 +162,122 @@ def cockpit_overview(
             },
             "source_notice": projection.source_notice,
         }
+    )
+
+
+@router.get(
+    "/profitability",
+    response_model=CockpitProfitabilityResponse,
+    responses={status.HTTP_404_NOT_FOUND: {"model": ErrorDetail}},
+    dependencies=[
+        Depends(
+            require_action(
+                Action.DASHBOARD_OVERVIEW_READ,
+                LOADERS["load_single_enterprise"],
+                session_provider=get_cockpit_session,
+            )
+        )
+    ],
+)
+def cockpit_profitability(session: SessionDependency) -> CockpitProfitabilityResponse:
+    """读取最新两期不可变客观财报快照中的盈利指标；此接口不冻结、不重算。"""
+
+    reports = list(
+        session.scalars(
+            select(StatementReport)
+            .where(
+                StatementReport.stock_code == "DAMAI.SYN",
+                StatementReport.status == "published",
+            )
+            .order_by(StatementReport.period_label.desc())
+            .limit(2)
+        )
+    )
+    if not reports:
+        raise _error(404, "profitability_reports_unavailable", "没有已发布的财务报表")
+
+    periods: list[CockpitProfitabilityPeriod] = []
+    unavailable: list[dict[str, str]] = []
+    for report in reversed(reports):
+        snapshot = session.scalar(
+            select(ObjectiveReportSnapshot)
+            .where(
+                ObjectiveReportSnapshot.statement_report_id == report.id,
+                ObjectiveReportSnapshot.report_type == "objective_statement",
+            )
+            .order_by(ObjectiveReportSnapshot.version.desc())
+            .limit(1)
+        )
+        analysis = snapshot.payload.get("profitability_metrics", {}) if snapshot else {}
+        frozen_metrics = analysis.get("metrics", {}) if isinstance(analysis, dict) else {}
+        frozen_inputs = analysis.get("inputs", {}) if isinstance(analysis, dict) else {}
+        fact_keys = {
+            "roe": ("is.net_profit:flow", "bs.equity:beginning", "bs.equity:ending"),
+            "net_margin": ("is.net_profit:flow", "is.revenue:flow"),
+            "total_asset_turnover": (
+                "is.revenue:flow", "bs.total_assets:beginning", "bs.total_assets:ending"
+            ),
+            "equity_multiplier": (
+                "bs.total_assets:beginning", "bs.total_assets:ending",
+                "bs.equity:beginning", "bs.equity:ending"
+            ),
+        }
+        metric_items: list[CockpitProfitabilityMetric] = []
+        for code in ("roe", "net_margin", "total_asset_turnover", "equity_multiplier"):
+            metric = frozen_metrics.get(code, {})
+            if not isinstance(metric, dict):
+                metric = {}
+            reason = metric.get("reason")
+            if snapshot and not metric:
+                reason = "snapshot_payload_does_not_contain_frozen_metric"
+            elif not snapshot:
+                reason = "objective_snapshot_not_frozen"
+            metric_items.append(
+                CockpitProfitabilityMetric(
+                    metric_code=code,
+                    status=str(metric.get("status", "unavailable")),
+                    value=metric.get("value"),
+                    unit=metric.get("unit"),
+                    formula=metric.get("formula"),
+                    definition_version=metric.get("definition_version"),
+                    reason=reason,
+                    report_id=str(report.id),
+                    snapshot_id=str(snapshot.id) if snapshot else None,
+                    source_facts=[
+                        CockpitProfitabilitySourceFact(**fact)
+                        for key in fact_keys[code]
+                        if isinstance((fact := frozen_inputs.get(key)), dict)
+                    ],
+                )
+            )
+            if metric_items[-1].status != "available":
+                unavailable.append(
+                    {
+                        "period": report.period_label,
+                        "metric_code": code,
+                        "reason": str(reason or "value_not_frozen"),
+                    }
+                )
+        periods.append(
+            CockpitProfitabilityPeriod(
+                period=report.period_label,
+                report_id=str(report.id),
+                snapshot_id=str(snapshot.id) if snapshot else None,
+                snapshot_version=snapshot.version if snapshot else None,
+                source_ref=report.source_ref,
+                source_sha256=report.source_sha256,
+                metrics=metric_items,
+                consistency=(
+                    analysis.get("consistency", {})
+                    if isinstance(analysis, dict)
+                    else {"status": "unavailable", "difference": None}
+                ),
+            )
+        )
+    return CockpitProfitabilityResponse(
+        source_notice=SOURCE_NOTICE,
+        periods=periods,
+        unavailable=unavailable,
     )
 
 

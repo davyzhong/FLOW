@@ -121,6 +121,49 @@ class CockpitModuleResponse(BaseModel):
     unavailable: list[dict[str, Any]] = Field(default_factory=list)
 
 
+class CockpitProfitabilitySourceFact(BaseModel):
+    item_id: str | None = None
+    row_id: str | None = None
+    statement_type: str | None = None
+    item_name: str | None = None
+    page_number: int | None = None
+    page_anchor: str | None = None
+    role: str | None = None
+    value: str | None = None
+
+
+class CockpitProfitabilityMetric(BaseModel):
+    metric_code: str
+    status: str
+    value: str | None = None
+    unit: str | None = None
+    formula: str | None = None
+    definition_version: str | None = None
+    reason: str | None = None
+    report_id: str
+    snapshot_id: str | None = None
+    source_facts: list[CockpitProfitabilitySourceFact] = Field(default_factory=list)
+
+
+class CockpitProfitabilityPeriod(BaseModel):
+    period: str
+    report_id: str
+    snapshot_id: str | None = None
+    snapshot_version: int | None = None
+    source_ref: str
+    source_sha256: str | None = None
+    metrics: list[CockpitProfitabilityMetric] = Field(default_factory=list)
+    consistency: dict[str, str | None] = Field(default_factory=dict)
+
+
+class CockpitProfitabilityResponse(BaseModel):
+    module: str = "profitability"
+    title: str = "盈利能力与杜邦分析"
+    source_notice: str
+    periods: list[CockpitProfitabilityPeriod] = Field(default_factory=list)
+    unavailable: list[dict[str, str]] = Field(default_factory=list)
+
+
 class CockpitOverviewResponse(BaseModel):
     state: str
     context: DashboardContext

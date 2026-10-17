@@ -17,7 +17,7 @@
 
 import { useEffect, useRef } from "react";
 import * as echarts from "echarts/core";
-import { BarChart, GaugeChart, HeatmapChart, LineChart, PieChart, RadarChart, ScatterChart, TreemapChart } from "echarts/charts";
+import { BarChart, GaugeChart, GraphChart, HeatmapChart, LineChart, PieChart, RadarChart, ScatterChart, TreemapChart } from "echarts/charts";
 import {
   DataZoomComponent,
   GridComponent,
@@ -38,6 +38,7 @@ echarts.use([
   ScatterChart,
   RadarChart,
   GaugeChart,
+  GraphChart,
   HeatmapChart,
   TreemapChart,
   GridComponent,

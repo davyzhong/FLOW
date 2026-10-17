@@ -312,6 +312,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/cockpit/profitability": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Cockpit Profitability
+         * @description 读取最新两期不可变客观财报快照中的盈利指标；此接口不冻结、不重算。
+         */
+        get: operations["cockpit_profitability_api_v1_cockpit_profitability_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/cockpit/action-items": {
         parameters: {
             query?: never;
@@ -1881,6 +1901,90 @@ export interface components {
             conclusion: components["schemas"]["CockpitConclusion"];
             /** Source Notice */
             source_notice?: string | null;
+        };
+        /** CockpitProfitabilityMetric */
+        CockpitProfitabilityMetric: {
+            /** Metric Code */
+            metric_code: string;
+            /** Status */
+            status: string;
+            /** Value */
+            value?: string | null;
+            /** Unit */
+            unit?: string | null;
+            /** Formula */
+            formula?: string | null;
+            /** Definition Version */
+            definition_version?: string | null;
+            /** Reason */
+            reason?: string | null;
+            /** Report Id */
+            report_id: string;
+            /** Snapshot Id */
+            snapshot_id?: string | null;
+            /** Source Facts */
+            source_facts?: components["schemas"]["CockpitProfitabilitySourceFact"][];
+        };
+        /** CockpitProfitabilityPeriod */
+        CockpitProfitabilityPeriod: {
+            /** Period */
+            period: string;
+            /** Report Id */
+            report_id: string;
+            /** Snapshot Id */
+            snapshot_id?: string | null;
+            /** Snapshot Version */
+            snapshot_version?: number | null;
+            /** Source Ref */
+            source_ref: string;
+            /** Source Sha256 */
+            source_sha256?: string | null;
+            /** Metrics */
+            metrics?: components["schemas"]["CockpitProfitabilityMetric"][];
+            /** Consistency */
+            consistency?: {
+                [key: string]: string | null;
+            };
+        };
+        /** CockpitProfitabilityResponse */
+        CockpitProfitabilityResponse: {
+            /**
+             * Module
+             * @default profitability
+             */
+            module: string;
+            /**
+             * Title
+             * @default 盈利能力与杜邦分析
+             */
+            title: string;
+            /** Source Notice */
+            source_notice: string;
+            /** Periods */
+            periods?: components["schemas"]["CockpitProfitabilityPeriod"][];
+            /** Unavailable */
+            unavailable?: {
+                [key: string]: string;
+            }[];
+        };
+        /** CockpitProfitabilitySourceFact */
+        CockpitProfitabilitySourceFact: {
+            /** Item Id */
+            item_id?: string | null;
+            /** Row Id */
+            row_id?: string | null;
+            /** Statement Type */
+            statement_type?: string | null;
+            /** Item Name */
+            item_name?: string | null;
+            /** Page Number */
+            page_number?: number | null;
+            /** Page Anchor */
+            page_anchor?: string | null;
+            /** Role */
+            role?: string | null;
+            /** Value */
+            value?: string | null;
         };
         /** CockpitTrend */
         CockpitTrend: {
@@ -4912,6 +5016,46 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ErrorDetail"];
+                };
+            };
+        };
+    };
+    cockpit_profitability_api_v1_cockpit_profitability_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CockpitProfitabilityResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorDetail"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };

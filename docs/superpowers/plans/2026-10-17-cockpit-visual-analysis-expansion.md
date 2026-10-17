@@ -2,8 +2,8 @@
 doc_id: FLOW-PLAN-COCKPIT-VISUAL-ANALYSIS-20261017-001
 title: CFO 驾驶舱盈利分析与图表缺口补全实施计划
 doc_type: plan
-status: active
-version: "1.1"
+status: completed
+version: "1.2"
 created_at: 2026-10-17
 updated_at: 2026-10-17
 owner: FLOW
@@ -55,3 +55,9 @@ superseded_by: null
 ## 明确不做
 
 不新增图表库；不编造长期趋势/预算/预测/行业基准；不重算已发布事实；不进行 schema/迁移/CI 改动；不改动原始财报、常驻账套和其他 worktree。
+
+## 完成记录（2026-10-17）
+
+- 完成：快照冻结时生成四项杜邦指标、字典指纹、输入行定位与勾稽状态；新增只读盈利能力 API 和 `/cockpit/profitability` 页面；复用 ECharts，提供杜邦树、两期指标图、明细与财报行深链。
+- 验证：前端 36 个测试文件/184 项通过、typecheck 通过；后端 12 项定向 pytest、Ruff 与 mypy 通过；契约检查及文档 M1 通过。完整记录与提交/CI 状态见 [CURRENT_ROADMAP](../../50_plans/CURRENT_ROADMAP.md) 与 [HANDOFF](../../../HANDOFF.md)。
+- 独立复核找到并已修复两项 P2：周转率图单位误标、页面缺少源行下钻。最终复核重跑随修复后验收记录。

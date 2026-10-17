@@ -31,7 +31,7 @@ from flow_api.infrastructure.models.statement import (
     StatementSource,
 )
 
-SCHEMA_VERSION = "objective.v1"
+SCHEMA_VERSION = "objective.v2"
 REPORT_TYPE = "objective_statement"
 
 
@@ -248,6 +248,9 @@ def freeze_objective_statement_report(
         },
         "statements": _statements_payload(normalized_rows),
         "statements_raw": _statements_payload(raw_rows_sorted),
+        "profitability_metrics": _profitability_metrics(
+            normalized_rows, report_id=str(report.id)
+        ),
         "eligibility": {
             "published": eligibility.published,
             "unresolved_count": len(eligibility.unresolved_names),
@@ -288,6 +291,16 @@ def freeze_objective_statement_report(
     session.add(snapshot)
     session.flush()
     return snapshot
+
+
+def _profitability_metrics(
+    rows: list[StatementNormalizedItem], *, report_id: str
+) -> dict[str, Any]:
+    """财务指标在冻结时计算；读取端只消费这一不可变结果。"""
+
+    from flow_api.publishing.profitability_snapshot import build_profitability_payload
+
+    return build_profitability_payload(rows, report_id=report_id)
 
 
 def _statements_payload(rows: list[Any]) -> dict[str, list[dict[str, Any]]]:

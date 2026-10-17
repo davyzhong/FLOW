@@ -16,6 +16,7 @@ const COUNT_METRICS = new Set([
 ]);
 const PERCENT_METRICS = new Set([
   "gross_margin",
+  "roe",
   "net_margin",
   "debt_asset_ratio",
   "revenue_growth",
@@ -31,6 +32,7 @@ const MULTIPLE_METRICS = new Set([
   "ar_turnover",
   "ap_turnover",
   "equity_multiplier",
+  "total_asset_turnover",
   "interest_coverage",
   "ocf_current_liab_ratio",
   "ocf_to_net_profit",

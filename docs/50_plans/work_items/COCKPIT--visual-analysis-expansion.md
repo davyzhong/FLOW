@@ -2,8 +2,8 @@
 doc_id: FLOW-WI-COCKPIT-VISUAL-ANALYSIS-20261017-001
 title: CFO 驾驶舱盈利分析与图表缺口补全
 doc_type: work-item
-status: active
-version: "1.0"
+status: completed
+version: "1.1"
 created_at: 2026-10-17
 updated_at: 2026-10-17
 owner: FLOW
@@ -15,6 +15,8 @@ superseded_by: null
 ---
 
 # CFO 驾驶舱盈利分析与图表缺口补全
+
+> 状态：已完成并待本轮提交推送。交付包括杜邦盈利能力页面、冻结期指标与来源行深链、两期图表、接口契约与权限登记。详细实现及验证结果记录在 CURRENT_ROADMAP 和 HANDOFF。
 
 ## 目的
 
