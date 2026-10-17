@@ -322,6 +322,27 @@ def test_trend_series_cover_four_metrics(filters: ActiveFilters) -> None:
     assert keys == expected
 
 
+def test_gross_margin_trend_has_ratio_unit_when_snapshot_omits_unit(
+    filters: ActiveFilters,
+) -> None:
+    overview = _overview()
+    for point in overview.trends.points:
+        point.gross_margin = {
+            "status": "ready",
+            "exact_value": "0.1087",
+            "display_value": "0.1087",
+            "unit": "",
+        }
+
+    projection = _project(overview, filters)
+    gross_margin = next(
+        series for series in projection.trends[0].series if series.key == "gross_margin"
+    )
+
+    assert gross_margin.unit == "ratio"
+    assert gross_margin.points[0]["unit"] == "ratio"
+
+
 def test_trend_points_keep_month_and_display(filters: ActiveFilters) -> None:
     projection = _project(_overview(), filters)
     revenue = next(s for s in projection.trends[0].series if s.key == "revenue")

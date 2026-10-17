@@ -151,6 +151,7 @@ describe("CockpitOverviewApp", () => {
     fireEvent.click(screen.getByRole("button", { name: /营业收入/ }));
     const drawer = await screen.findByTestId("cockpit-drill");
     expect(drawer.textContent).toContain("ms-12345678-rest");
+    expect(drawer.querySelector(".drill__value")?.textContent).toBe("126,895.00万元");
   });
 
   it("Esc 关闭穿透抽屉", async () => {

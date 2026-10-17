@@ -79,7 +79,7 @@ export function formatFinancialValue(
   }
   if (unit === "ratio" || PERCENT_METRICS.has(metricCode)) {
     const percent = unit === "ratio" || !unit ? value * 100 : value;
-    return `${formatRounded(percent)}%`;
+    return `${formatRounded(percent)}${context.appendUnit === false ? "" : "%"}`;
   }
   if (COUNT_METRICS.has(metricCode) || /^(单|件|票|客户|家|个|人)$/.test(unit)) {
     const countUnit = unit === "order" ? "单" : unit === "parcel" ? "件" : unit;
@@ -90,7 +90,7 @@ export function formatFinancialValue(
     return `${formatRounded(value, 0, 1)}${context.appendUnit === false ? "" : " 天"}`;
   }
   if (unit.includes("%")) {
-    return `${formatRounded(value)}%`;
+    return `${formatRounded(value)}${context.appendUnit === false ? "" : "%"}`;
   }
   if (isMoneyUnit(unit)) {
     return `${formatRounded(value)}${unitSuffix}`;

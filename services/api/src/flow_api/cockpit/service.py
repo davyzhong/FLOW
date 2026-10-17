@@ -169,10 +169,10 @@ def _control_status(
 
 
 _TREND_SERIES = (
-    ("revenue", "营业收入"),
-    ("operating_profit", "营业利润"),
-    ("gross_margin", "毛利率"),
-    ("operating_cash_flow", "经营现金流"),
+    ("revenue", "营业收入", "CNY"),
+    ("operating_profit", "营业利润", "CNY"),
+    ("gross_margin", "毛利率", "ratio"),
+    ("operating_cash_flow", "经营现金流", "CNY"),
 )
 
 
@@ -262,7 +262,7 @@ class CockpitProjectionService:
     def _trends(self, base: DashboardOverview) -> list[CockpitTrendProjection]:
         trend = base.trends
         series: list[CockpitTrendSeries] = []
-        for key, title in _TREND_SERIES:
+        for key, title, default_unit in _TREND_SERIES:
             points: list[dict[str, Any]] = []
             for point in trend.points:
                 value = _as_value_dict(getattr(point, key, None))
@@ -277,7 +277,7 @@ class CockpitProjectionService:
                         # 使用 ready/unavailable。跨层投影时必须显式归一化，
                         # 否则所有真实 available 点都会被前端误判为空数据。
                         "status": "ready" if status == "available" else status,
-                        "unit": str(value.get("unit", "")),
+                        "unit": str(value.get("unit") or default_unit),
                     }
                 )
             if points:

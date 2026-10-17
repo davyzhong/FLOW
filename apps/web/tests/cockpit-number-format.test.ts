@@ -15,6 +15,11 @@ describe("驾驶舱数字格式", () => {
     expect(formatFinancialValue("-0.001", { metricCode: "cashflow", unit: "CNY" })).toBe("0.00 CNY");
   });
 
+  it("appendUnit=false 仅输出格式化数值，供独立单位标签组合展示", () => {
+    expect(formatFinancialValue("126895", { unit: "万元", appendUnit: false })).toBe("126,895.00");
+    expect(formatFinancialValue("0.1087", { unit: "ratio", appendUnit: false })).toBe("10.87");
+  });
+
   it("比例、倍数和天数遵循其业务单位", () => {
     expect(formatFinancialValue("0.6319", { metricCode: "debt_asset_ratio", unit: "ratio" })).toBe("63.19%");
     expect(formatFinancialValue("63.1900", { metricCode: "", unit: "%" })).toBe("63.19%");

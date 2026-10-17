@@ -83,7 +83,7 @@ export function CockpitKpiCard({
     onDrill?.({
       metricCode: card.metric_code,
       title: card.title,
-      value: formatFinancialValue(card.primary.exact_value ?? card.primary.display_value, { metricCode: card.metric_code, unit: card.unit }),
+      value: formatFinancialValue(card.primary.exact_value ?? card.primary.display_value, { metricCode: card.metric_code, unit: card.unit, appendUnit: false }),
       unit: card.unit,
       caliberNote: card.caliber_note,
       snapshotId: card.snapshot_id ?? "",
