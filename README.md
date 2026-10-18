@@ -3,14 +3,14 @@ doc_id: FLOW-NAV-ROOT-README-001
 title: FLOW repository README
 doc_type: navigation
 status: current
-version: 1.4
+version: 1.5
 created_at: 2026-08-29
-updated_at: 2026-09-24
+updated_at: 2026-10-18
 owner: FLOW
 applies_to: repository
 # readme-craft v3.0.0-alpha.0 metadata（机器可读，LLM/Agent 友好）
 name: flow
-description: Finance Intelligence OS — 可追溯、确定性、可复核的企业内部财务经营分析平台与公开财报分析模块。
+description: Finance Intelligence OS — 面向单机验证原型的可追溯、确定性财务分析平台，逐步完善 CFO 驾驶舱与财务报告视觉体验。
 model: gpt-4 / claude-sonnet / gemini-2.5
 intent: code-generation / question-answering / agent-tool
 capabilities:
@@ -24,6 +24,7 @@ tags:
   - fastapi
   - nextjs
   - postgres
+  - sqlite
   - excel
   - analytics
   - auditability
@@ -37,7 +38,7 @@ tags:
 
 ### Finance Intelligence OS · 可追溯、确定性、可复核的财务分析平台
 
-**企业内部 AI 财务分析工作台为最终产品 · 公开财报分析模块先行成熟共享底座（D052–D054）**
+**长期产品方向遵循 D052–D054 · 当前交付阶段按 D055 聚焦单机单用户原型与可视化验收**
 
 **Languages / 语言**: [简体中文](./README.md) · English（规划中，欢迎 PR）
 
@@ -49,9 +50,9 @@ tags:
 
 ![真实财报汇总数据](https://img.shields.io/badge/%E7%9C%9F%E5%AE%9E%E8%B4%A2%E6%8A%A5-5%E5%AE%B6%E5%85%AC%E5%8F%B8%C2%B714%E4%BB%BD%E6%8A%A5%E5%91%8A-0ea5e9) ![量化指标体系统计](https://img.shields.io/badge/%E6%8C%87%E6%A0%87%E5%AE%9A%E4%B9%89-64%2B15%2B11%E6%9D%A1%E7%9B%AE-f59e0b) ![静态知识资产清单](https://img.shields.io/badge/%E9%9D%99%E6%80%81%E7%9F%A5%E8%AF%86%E8%B5%84%E4%BA%A7-31%E9%A1%B9%E9%94%81%E5%AE%9A-8b5cf6) ![治理门禁测试状态](https://img.shields.io/badge/%E6%B2%BB%E7%90%86%E9%97%A8%E7%A6%81-6%E9%81%93%E5%85%A8%E7%BB%BF-2e8562) ![文档迁移进度状态](https://img.shields.io/badge/%E6%96%87%E6%A1%A3%E8%BF%81%E7%A7%BB-M0%E2%80%93M6%20%E5%B7%B2%E5%85%B3%E9%97%AD-14243a)
 
-[快速开始](#-快速开始) · [界面导览](#%EF%B8%8F-界面导览) · [真实财报分析](#-真实财报图形化分析) · [知识治理](#-静态知识治理项目自己的知识生产线) · [系统架构](#%EF%B8%8F-系统架构) · [当前进度](#-当前进度与边界) · [文档中心](docs/README.md)
+[快速开始](#-快速开始) · [视觉设计基准](#-当前视觉设计基准) · [界面导览](#%EF%B8%8F-界面导览) · [真实财报分析](#-真实财报图形化分析) · [知识治理](#-静态知识治理项目自己的知识生产线) · [系统架构](#%EF%B8%8F-系统架构) · [当前进度](#-当前进度与边界) · [文档中心](docs/README.md)
 
-> **📚 方法论适配说明**：本 README 按 [readme-craft](https://github.com/davyzhong/readme-craft) v3.0.0-alpha.0 方法论（**19 条铁律 + 13 条反模式**，评分为归一化百分制 + 适用项数 + 未核验项数）适配。**保留全部原有内容**——mermaid 架构图、截图、详细章节不删改；**新增** YAML 元数据、5 路启动、i18n 链接、Built by、Roadmap、收尾五件套与同行对照视角。
+> **📚 README 维护约定**：参考 [readme-craft](https://github.com/davyzhong/readme-craft) 的结构化写作方式。运行截图必须来自真实界面，设计概念图必须明确标注；版本、状态、指标统计和命令要能回到项目记录或实测证据。项目当前状态始终以 CURRENT_ROADMAP 为准。
 >
 > 本仓库的评审结论见 [`review.yaml`](./review.yaml)；用 `npx github:davyzhong/readme-craft check . --review review.yaml` 可复验当前评分。
 
@@ -61,7 +62,28 @@ tags:
 
 ![FLOW Finance BP 驾驶舱：核心指标、趋势、利润桥、经营发现与毛利矩阵](docs/assets/screenshots/dashboard.png)
 
-> 截图来自 `c1a59d1` 的真实页面和确定性物流演示数据，不是客户数据或设计效果图。文档核对日期：**2026-09-08**，读取基线 `861acad`。截图保留原拍摄日期，不代表本次最新界面。当前产品方向已由 2026-09-13 战略重构（[D052–D054](docs/10_governance/DECISION_INDEX.md)）重新定义为**三层两模块**：企业内部月度财务经营分析工作台是最终目标产品，公开财报分析是先行成熟共享底座的独立模块；功能实现与生产部署验收分别记录。
+> 截图来自 `c1a59d1` 的真实页面和确定性物流演示数据，不是客户数据或设计效果图。文档核对日期：**2026-09-08**，读取基线 `861acad`。截图保留原拍摄日期，不代表本次最新界面。长期产品方向继续遵循 [D052–D054](docs/10_governance/DECISION_INDEX.md)；本阶段交付边界已由 [D055](docs/10_governance/decisions/D055--单机单用户验证原型.md) 明确为单机单用户财务分析验证原型。下方另列经用户确认的视觉方向和逐页验收标准。
+
+## 🎨 当前视觉设计基准
+
+### 高管编辑部 × 财务报告画布
+
+FLOW 后续驾驶舱与报告页面统一采用 **A「高管编辑部」主风格 + C「财务报告画布」叙事方式**。下图是本轮生成的**设计概念图**，用于表达目标布局与视觉气质；它不是当前产品运行截图，图中的示意排版不代表已完成的动态页面或已验证业务数据。
+
+![FLOW 单机财务驾驶舱与报告画布的视觉方向概念图：高管编辑部主风格与财务报告叙事](docs/assets/cockpit-visual-direction-2026-10-18.png)
+
+| 视觉层 | 统一标准 | 页面落实方式 |
+| --- | --- | --- |
+| 主风格 | 暖白与浅纸色作为分析画布，墨蓝建立标题、导航和信息层级，克制的金色强调结论，翡翠绿与砖红表达正负变化 | 保持专业、稳重、高级；用字体层级、留白、网格和精细边界建立质感，不依赖大幅装饰图、发光渐变或无意义纹理 |
+| 报告叙事 | 结论先行，再展示支持图表、关键口径、期间、来源和需要关注的事项 | 把报告组织成可连续阅读的分析画布；读者能从结论顺着图表回到指标定义和原始披露 |
+| 图表密度 | 每个分析视图都要有与主题匹配的趋势、构成、比较或驱动拆解 | CFO 总览展示收入、营业利润、毛利率、经营现金流趋势和行动项；盈利页展示利润率与杜邦分解；费用、资产负债、营运资金、现金流、风险和集团视图分别展示可被数据支持的结构和变化 |
+| 数据真实 | 图表数值必须来自已验证的公开财报、标记清楚的演示数据或可重复计算的指标 | 缺少数据时呈现缺口及原因，不补零、不造趋势、不用图片遮盖空白；每张图同时给出可核对的数值表或数据摘要 |
+| 指标可读 | 指标显示名称、期间、单位、比较基准、数据类型和来源状态 | 订单量等计数使用整数；金额显示两位小数；百分比使用明确精度；颜色之外同时使用文字、符号或图例解释变化 |
+| 交互追溯 | 页面中的 KPI、图表、表格、行动项和报告结论之间建立明确的下钻与返回路径 | 点击数据可继续查看公式、指标定义、明细构成、Finding、报告来源行或原始证据；交互不能丢失期间与数据批次上下文 |
+| 响应式与无障碍 | 桌面和手机都能阅读数值、比较关系与图表图例 | 按 1440 px 桌面和 390 px 手机视口核验，不横向溢出；用足够对比度、键盘可达焦点和非颜色提示表达状态 |
+| 成熟组件复用 | 优先扩展项目已采用的 ECharts 和现有筛选、表格、来源披露组件 | 只有现有成熟能力无法满足且经维护状态、许可、兼容性、安全与成本评估后，才引入新依赖或自研 |
+
+**后续验收规则：** 设计概念图只定义方向，不能替代真实页面验收。每次交付须使用真实运行页面截图，标明代码提交、视口、数据来源/演示批次与采集日期；截图中的数字必须能回到页面数据或接口。每个视图均须核对图表与 API/指标口径一致、缺数状态清楚、核心数字可追溯、关键交互可操作。视觉目标和逐阶段验收以 [D055 决策](docs/10_governance/decisions/D055--单机单用户验证原型.md)、[单机原型视觉设计规格](docs/superpowers/specs/2026-10-18-single-machine-visual-prototype-design.md)与[当前实施工作包](docs/50_plans/work_items/FLOW--single-machine-visual-prototype.md)为准；README 中真实截图与概念图必须分别标注。
 
 ## 🏛️ 三层两模块：产品结构一图
 
@@ -339,7 +361,7 @@ flowchart LR
 
 ## 📍 当前进度
 
-状态以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为唯一权威，详细步骤统一见 [FLOW 统一完整实施计划](docs/superpowers/plans/2026-09-24-flow-integrated-execution-plan.md)；旧 U/O、S01、多 Agent、前端、知识刷新和大麦分散计划只保留历史细节。战略方向见 [战略重构设计](docs/superpowers/specs/2026-09-13-flow-strategic-reset-design.md)（D052–D054）：U8、S01、前端一致性整改与大麦完整财年演示数据已关闭；当前推进第二代静态知识刷新，公开 C 级和真实企业验证仍受外部门禁。
+状态以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为唯一权威。长期产品战略由 D052–D054 定义；当前产品交付边界按 [D055](docs/10_governance/decisions/D055--单机单用户验证原型.md) 聚焦单机单用户财务分析验证原型。驾驶舱视觉与架构改造的队列、验收和 CI 状态见[正式工作包](docs/50_plans/work_items/FLOW--single-machine-visual-prototype.md)。
 
 | 阶段 | 任务 | 状态 |
 | --- | --- | --- |
@@ -352,7 +374,8 @@ flowchart LR
 | **U8** | 生产就绪收口（真实存储旅程、HTTPS 拓扑、统一部署验收） | ✅ completed；严格冻结门禁通过 |
 | **S01** | 战略边界、Financial Facts V2、安全/RBAC/审计门禁 | ✅ completed |
 | **D 轨** | 大麦物流完整财年演示数据、正式工作流与八页面 E2E | ✅ completed（verify 19/19、E2E 9/9、17 门禁绿；CI 全绿于 `d701c1d`） |
-| **K 轨** | 第二代静态知识刷新、sealed candidate 与战略重基线 | 🚧 active（用户裁决前不切换 release） |
+| **D055 当前交付** | 单机单用户、SQLite + 本地目录、A+C 驾驶舱/报告视觉升级 | 🚧 active；设计与工作包已批准，SQLite 隔离验收和页面改造进行前置 CI 收敛 |
+| **K 轨** | 第二代静态知识刷新、sealed candidate 与战略重基线 | ⏭️ 顺延；当前工作包关闭后恢复 |
 | U9–U10 | 内部试点、V1.1 证据决策 | ⬜ 待授权，且 U8 后按 [D053](docs/10_governance/decisions/D053--三层两模块边界与执行顺序.md) 重新裁决 |
 
 已登记的确定性原语：CAGR（n−1 间隔）、可加和守恒桥（残差显式）、经验阈值提示（无普适判定）、口径标签值（登记制）、应收-收入增速联看提示。
@@ -362,7 +385,7 @@ flowchart LR
 | 模块 | 当前已实现 | 需要区分的边界 |
 | --- | --- | --- |
 | 数据接入 | 上传、画像、映射覆盖、清洗、警告确认、版本发布、标准化导出 | 任意新批次的指标/分析自动编排尚未接通 |
-| 标准数据 | `flow.excel.v1`，10 张交换工作表，公共维度与主题事实 | Excel 是交换格式，PostgreSQL 是标准关系数据层 |
+| 标准数据 | `flow.excel.v1`，10 张交换工作表，公共维度与主题事实 | Excel 是交换格式；当前代码使用 PostgreSQL，D055 规划切换为 SQLite 单文件，改造尚未完成 |
 | 指标引擎 | 物流 15 指标 + 知识库 64 指标定义（v1.1）、Decimal、月/YTD/预算/同比/T12 窗口 | 登记数不等于任意财报可算数 |
 | 指标治理 | 定义、绑定、语义、草稿/验证/激活/退役、审计、影响沙箱和界面（迁移头 `0018_metric_governance`） | 既有字段审计不能证明所有会计分类正确 |
 | 客观分析引擎 | `objective_finance_v1`：净现比、杜邦三分解（全链口径标注）等条目 + 五个确定性原语 | 数学分解不冒充业务因果；报告门禁在 U5 建设 |
@@ -370,8 +393,8 @@ flowchart LR
 | 驾驶舱与调查 | 多维浏览、身份交接、证据复核、四要素结论、审阅历史 | 演示数据通过不替代真实客户试点 |
 | Copilot | 上下文绑定、引用和数字校验、降级与持久审计 | 默认是离线 `DeterministicProvider`，尚无现成在线大模型适配器 |
 | 报告发布 | JSONB 冻结内容、版本幂等、独立尝试、下载头与字节校验 | API 默认没有 PDF 打印器；PPTX/XLSX/HTML 仍依赖可用对象存储 |
-| 认证 | 单用户密码、会话、服务端 Bearer、同源代理与 HTTPS 拓扑 | 非多租户/角色权限/SSO；生产部署需替换真实 CA，RBAC 在 S01 实施 |
-| 异步基础设施 | Celery、Redis、任务身份与 Worker 健康检查 | Worker 示例任务仅返回 accepted，核心业务未全面接入队列 |
+| 认证 | 单用户密码、会话、服务端 Bearer、同源代理与 HTTPS 拓扑 | 多租户、复杂角色权限与 SSO 暂缓；保留本机登录保护和审计身份 |
+| 异步基础设施 | 当前代码含 Celery、Redis 与 Worker 健康检查 | Worker 示例任务仅返回 accepted；D055 规划移除 Redis/Celery/MinIO，使用本机同步分析路径，尚待隔离验证与实施 |
 
 ## 🏗️ 系统架构
 
@@ -395,6 +418,8 @@ flowchart TB
     Worker[Celery Worker 基础设施] --> Redis[(Redis 8)]
     API -. 幂等任务基础设施 .-> Redis
 ```
+
+> 上图和下表描述的是**当前代码实现**，并非 D055 的最终单机目标架构。SQLite 与本地文件存储必须先通过隔离迁移、精度、来源追溯和备份恢复验收，再更新为实际实现图。
 
 | 层 | 技术与职责 |
 | --- | --- |
@@ -716,7 +741,7 @@ FLOW/
 └── docs/
     ├── README.md                 # 全部文档导航与当前阅读路径
     ├── 00_start_here/            # 唯一入口：PROJECT_STATE / READING_ORDER / DOCUMENT_MAP
-    ├── 10_governance/            # 决策索引 D001–D054 + 单项决策 + 治理规则 + legacy 豁免锁
+    ├── 10_governance/            # 决策索引 D001–D055 + 单项决策 + 治理规则 + legacy 豁免锁
     ├── 20_product/               # 产品定义六件套（愿景/范围/用户/能力/边界/发布）
     ├── 30_architecture/          # 架构聚合五文档（系统/数据/领域/指标/安全部署）
     ├── 40_specs/                 # SPEC_INDEX + 九个规格域
@@ -730,13 +755,15 @@ FLOW/
     ├── knowledge-base/           # 静态知识库：10_sources 来源层 / 20_cards 知识卡 /
     │                             #   30_handbooks 领域手册 / 50_mappings 产品映射 +
     │                             #   不可变档案（会话/研究/原图/微信）
-    └── assets/screenshots/       # 当前真实页面截图与来源说明
+    └── assets/                   # README 视觉资产
+        ├── cockpit-visual-direction-2026-10-18.png # 视觉概念图（不是产品实拍）
+        └── screenshots/          # 当前真实页面截图与来源说明
 ```
 
 | 你想了解什么 | 推荐入口 |
 | --- | --- |
 | 全部文档与哪份是最新 | [文档中心](docs/README.md)、[文档状态登记](docs/documentation-status.md) |
-| 产品为什么这样设计 | [战略重构设计（D052–D054）](docs/superpowers/specs/2026-09-13-flow-strategic-reset-design.md)、[固定产品原则](docs/20_product/PRODUCT_PRINCIPLES.md)、[正式 V1 规格](docs/superpowers/specs/2026-08-29-flow-v1-design.md)、[决策索引 D001–D054](docs/10_governance/DECISION_INDEX.md) |
+| 产品为什么这样设计 | [战略重构设计（D052–D054）](docs/superpowers/specs/2026-09-13-flow-strategic-reset-design.md)、[D055 单机单用户原型决策](docs/10_governance/decisions/D055--单机单用户验证原型.md)、[固定产品原则](docs/20_product/PRODUCT_PRINCIPLES.md)、[正式 V1 规格](docs/superpowers/specs/2026-08-29-flow-v1-design.md)、[决策索引 D001–D055](docs/10_governance/DECISION_INDEX.md) |
 | 当前完成到哪一步 | [项目状态](docs/00_start_here/PROJECT_STATE.md)、[当前路线图](docs/50_plans/CURRENT_ROADMAP.md) |
 | 新 Agent 接续 | [Agent 起点](docs/knowledge-base/00_start_here/AGENT_START_HERE.md)、[交接指南](docs/knowledge-base/07_handoff/CONTINUATION_GUIDE.md) |
 | API 方法、路径与类型 | [API 路径索引](docs/api-reference.md)、[OpenAPI](packages/contracts/openapi.json) |
@@ -747,15 +774,14 @@ FLOW/
 
 ```mermaid
 flowchart LR
-    A["Phase 1–10<br/>窄切片 ✅"] --> B["P5 真实财报反向解析<br/>顺丰 + 腾讯 ✅"]
-    B --> C["客观分析主线<br/>U1–U7 ✅（U2 剩 2 项外部依赖）"]
-    C --> D["U8 生产就绪收口<br/>✅ completed"]
-    D --> E["S01 边界与合同门禁<br/>🚧 active"]
-    E --> F["公开模块 C 级出口 → 内部工作台<br/>→ 四级验证 ⬜"]
-    style E fill:#fff0cd,stroke:#aa7918,stroke-width:2px
+    A["已交付基础<br/>公开财报 · 客观指标 · 证据报告"] --> B["D055 当前唯一队首<br/>单机单用户原型"]
+    B --> C["先验收<br/>SQLite + 本地文件隔离验证"]
+    C --> D["再实施<br/>运行简化 + 全视图 A+C 视觉升级"]
+    D --> E["后续恢复<br/>静态知识刷新 K2"]
+    style B fill:#fff0cd,stroke:#aa7918,stroke-width:2px
 ```
 
-下一阶段按 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 推进：U1–U8 已交付并冻结，当前主线为 S01 战略边界、Financial Facts Contract V2 与安全/RBAC/审计门禁；三份实施子规格 approved 前不进入代码重构。U2 仍有外部核验项（rnd_exp 科目编号待准则原文）；旧 U9/O5、U10 按 [D053](docs/10_governance/decisions/D053--三层两模块边界与执行顺序.md) 重新裁决，内部真实数据仍需另行授权。
+本次 README 更新时，单机原型工作包处于队首；D055 的方案和视觉标准已正式记录，SQLite 隔离验收及页面改造仍待实施。准确进展、CI 和各阶段验收以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 与 [HANDOFF](HANDOFF.md) 为准。公开财报 C 级验证和企业内部真实数据验证仍按各自数据与证据门槛推进；本阶段演示数据不得冒充真实披露。
 
 本仓库尚未提供独立的 LICENSE 文件；使用与分发授权请向项目维护者确认。贡献与协作遵循 [AGENTS.md](AGENTS.md)：先读项目状态和正式决策，保护原始档案，按风险验证，每个完整任务只提交相关文件并推送规范远端。
 
@@ -763,7 +789,7 @@ flowchart LR
 
 ## 🗓️ Roadmap（v2 视角）
 
-> 战略方向以 [战略重构设计（D052–D054）](docs/superpowers/specs/2026-09-13-flow-strategic-reset-design.md) 为唯一权威；执行入口以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为唯一执行入口。
+> 长期战略方向以 [D052–D054](docs/superpowers/specs/2026-09-13-flow-strategic-reset-design.md) 为准；当前原型阶段边界与执行顺序以 [D055](docs/10_governance/decisions/D055--单机单用户验证原型.md) 和 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为准。
 
 - [x] **Phase 1–10** — 窄切片 + Pilot + 双轮审查修复（R1–R9 / N1–N3） ✅
 - [x] **P5 真实财报反向解析** — 5 家公司 / 14 份报告 / 670 科目事实 ✅
@@ -771,7 +797,9 @@ flowchart LR
 - [x] **U1–U3** — 主题/比较合同 + 确定性拆解 + 同源证据与快照投影（U2 剩 2 项外部依赖登记中） ✅
 - [x] **U5–U7** — 客观报告门禁 + 统一冻结 + 四问工作台 ✅
 - [x] **U8** — 生产就绪收口（真实存储旅程 + HTTPS 拓扑 + 统一部署验收） ✅ completed；严格冻结门禁通过
-- [🚧] **S01** — 战略边界 + Financial Facts Contract V2 + 安全/RBAC/审计门禁（当前：三份实施子规格）
+- [x] **S01** — 战略边界 + Financial Facts Contract V2 + 安全/RBAC/审计门禁 ✅
+- [🚧] **D055** — 单机单用户原型、SQLite + 本地文件存储、Redis/Celery/MinIO 移除评估与 A+C 驾驶舱/报告视觉升级（按唯一工作包逐段验收）
+- [ ] **K2** — 单机原型工作包完成后恢复静态知识刷新；启动前只读核验外部知识库工作区
 - [ ] **U4** — 独立全行验证与留出泛化（依赖 oracle 人工录入）⬜ 外部到料即并行
 - [ ] **公开模块 C 级出口** — Go/No-Go 裁决（前置人工项不变）
 - [ ] **U9–U10** — 内部试点 + V1.1 证据决策（⬜ 待授权；按 [D053](docs/10_governance/decisions/D053--三层两模块边界与执行顺序.md) 重新裁决）
@@ -801,7 +829,7 @@ flowchart LR
 
 <sub>🤖 [FLOW 团队](https://github.com/davyzhong) 用 ❤️ 维护 · [⭐ Star 我们](https://github.com/davyzhong/FLOW) · [🐛 报告 Bug](https://github.com/davyzhong/FLOW/issues)</sub>
 <br>
-<sub>📜 本 README 按 readme-craft v3.0.0-alpha.0（16 铁律 + 10 反模式 + 80 分量表）适配，原文核心内容 100% 保留。</sub>
+<sub>📜 本 README 的截图、数据、架构和进度说明均应标明事实状态与来源。</sub>
 <br>
 <sub>📸 Screenshots auto-generated by GitHub Actions（<a href=".github/workflows/screenshot.yml">view workflow</a>）— readme-craft v3.0.0-alpha.0 T18</sub>
 
