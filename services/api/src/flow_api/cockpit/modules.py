@@ -12,6 +12,7 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Sequence
 from dataclasses import dataclass, field
 from decimal import Decimal
 from functools import lru_cache
@@ -163,15 +164,15 @@ def load_fact_context(session: Session, stock_code: str) -> ModuleFactContext:
 
 def _snapshot_matches_rows(
     payload: dict[str, Any],
-    normalized_rows: list[StatementNormalizedItem],
-    raw_rows: list[Any],
+    normalized_rows: Sequence[StatementNormalizedItem],
+    raw_rows: Sequence[Any],
 ) -> bool:
     """拒绝把已变化的实时投影标注成旧冻结快照。"""
 
     columns = ("value_end", "value_begin", "value_current", "value_prior")
 
     def project(
-        rows: list[Any], *, include_item_id: bool
+        rows: Sequence[Any], *, include_item_id: bool
     ) -> dict[str, list[tuple[str, ...]]]:
         result: dict[str, list[tuple[str, ...]]] = {}
         for row in rows:
