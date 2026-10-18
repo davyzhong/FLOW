@@ -2,13 +2,13 @@
 doc_id: FLOW-VERIFY-SINGLE-MACHINE-RUNTIME-20261018-001
 title: 单机运行结构收敛阶段验收记录
 doc_type: verification
-status: draft
-version: 1.0
+status: verified
+version: 1.1
 created_at: 2026-10-18
 updated_at: 2026-10-18
 owner: FLOW
-commit_refs: "[pending: codex/single-machine-runtime-convergence]"
-evidence_refs: "[isolated-sqlite-schema-jobs-object-store-16, sqlite-settings-1, postgres-damai-reset-1, package-manifest-6, ruff, mypy, flow-bootstrap, isolated-init-health-200, docs-m6]"
+commit_refs: "[a2ce20644217ece4bae0635794b41f2256cedba7, 4c3e87e05ae9fe380abb7002ba260de6d654d15c, 20a511f66e4bfe65ab02edc091c7b49e2cbcbe67]"
+evidence_refs: "[isolated-sqlite-schema-jobs-object-store-16, sqlite-settings-1, postgres-damai-reset-1, package-manifest-6, scripts-unittest-155, ruff, mypy, flow-bootstrap, isolated-init-health-200, docs-m1-m6, github-actions-39125304357-18-of-18]"
 applies_to: repository
 ---
 
@@ -16,7 +16,7 @@ applies_to: repository
 
 ## 范围与结论
 
-记录单机原型工作包第 3 阶段的本地实现与验收。该阶段已完成本地验收，待提交后的准确代码 SHA 通过 GitHub CI；因此目前不将阶段标为最终完成。测试和启动均使用隔离 SQLite/文件目录，未连接常驻业务库。
+记录单机原型工作包第 3 阶段的本地实现与验收。该阶段的最终状态提交 `20a511f66e4bfe65ab02edc091c7b49e2cbcbe67` 对应 GitHub Actions run `39125304357`，18/18 jobs 全部成功，第 3 阶段正式验收通过。所有测试和启动均使用隔离 SQLite/文件目录，未连接常驻业务库。
 
 ## 交付变化
 
@@ -47,10 +47,10 @@ applies_to: repository
 
 全量 API 回归此前用时 42 分 20 秒，结果 973 通过、2 失败、3 警告。两项失败已针对性修复并复验：PostgreSQL Damai 重置外键顺序及已移除运行时设置的旧契约测试。相应回归现为 2/2 通过。独立复核还发现通用开发身份种子会将数据库错误宽松跳过；单机初始化现启用严格模式，缺表或写入失败会中止初始化。使用无开发依赖的生产 Python 环境再次从空 SQLite 初始化，并请求受权限保护的经营期间 API 得到 200。没有据此重跑 42 分钟全套，准确 SHA GitHub CI 将提供本提交的全量门禁结果。
 
-准确 SHA CI 首轮发现大麦企业初始化包 manifest 未同步更新的重置 SQL 哈希与字节数；已只修正该 SQL 对应的清单项，未重生成或改动包内业务数据。发行包校验及其 6 项专项测试现已通过，正在以修复后的新提交重新验证。
+首轮准确 SHA CI 发现大麦企业初始化包 manifest 未同步更新的重置 SQL 哈希与字节数；已只修正该 SQL 对应的清单项，未重生成或改动包内业务数据。发行包校验及其 6 项专项测试、完整脚本测试 155 项均通过。最终状态提交的全量 CI 18/18 通过。
 
 ## 限制与下一步
 
-1. 本地结论不代替准确 SHA CI；CI 通过后才关闭第 3 阶段。
-2. 本记录状态保持 `draft`，待同 SHA CI 通过后按项目门禁改为 `verified`。
-3. 下一项按唯一工作包顺序进入第 4 阶段：逐视图补齐 A+C 图表叙事和真实数据、趋势/对比、来源追溯与交互。截图采集/自动生成工作流仍按用户裁决暂停。
+1. 第 3 阶段已关闭；准确 SHA CI 为 run `39125304357`（18/18 jobs success）。
+2. 唯一队列已进入第 4 阶段子步 4.1：先完成参考文章 10 个模块与现有路由/API/指标/真实事实的覆盖映射，核实数据粒度、来源、图表和差距，再据矩阵顺序实施视觉与数据增强。
+3. 截图采集/自动生成工作流仍按用户裁决暂停；阶段 4 采用浏览器交互与数据验收，不生成新截图。
