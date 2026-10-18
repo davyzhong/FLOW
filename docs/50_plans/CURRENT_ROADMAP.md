@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 5.62
+version: 5.63
 created_at: 2026-09-12
 updated_at: 2026-10-18
 owner: FLOW
@@ -17,7 +17,7 @@ superseded_by: null
 
 # 当前路线图（唯一主线）
 
-> **2026-10-18 用户确认原型方向并完成队首重规划**：当前交付定位调整为单机单用户验证原型；用户选择 SQLite 单文件 + 本地文件目录、移除 Redis/Celery/MinIO，并确认 A 主风格 + C 报告叙事。旧驾驶舱全视图工作包归档，其九页/25 图与桌面/手机实测作为回归基线。旧 CI 实际结果为：`39042517573`、`39041228479` cancelled；`39040652008`、`39038535194` failure；不得描述为 CI 全绿。新的唯一队首为单机原型架构简化与全视图视觉升级，正式设计见[规格](../superpowers/specs/2026-10-18-single-machine-visual-prototype-design.md)与[D055](../10_governance/decisions/D055--单机单用户验证原型.md)。计划提交的准确 SHA CI 通过后，第一实施子步为 SQLite/本地内容存储隔离验证；完成整个工作包后再恢复知识刷新 K2。
+> **2026-10-18 用户确认原型方向并完成队首重规划**：当前交付定位调整为单机单用户验证原型；用户选择 SQLite 单文件 + 本地文件目录、移除 Redis/Celery/MinIO，并确认 A 主风格 + C 报告叙事。旧驾驶舱全视图工作包归档，其九页/25 图与桌面/手机实测作为回归基线。旧 CI 实际结果为：`39042517573`、`39041228479` cancelled；`39040652008`、`39038535194` failure；不得描述为 CI 全绿。新的唯一队首为单机原型架构简化与全视图视觉升级，正式设计见[规格](../superpowers/specs/2026-10-18-single-machine-visual-prototype-design.md)与[D055](../10_governance/decisions/D055--单机单用户验证原型.md)。README 视觉基准说明提交 `d51af7ad` 的准确 SHA 主 CI run `39087270646` 最终 cancelled：data-contract 与 intake-e2e 分别到达 40/45 分钟 job 超时；其他 job 已完成且未报告失败。先查明并解决这两个长测未能结束的原因，准确 SHA 全 CI 通过后再开始工作包第 1 阶段。README 截图工作流已按用户要求在 GitHub 暂停。完成整个工作包后再恢复知识刷新 K2。
 
 > **2026-10-17 用户调整队列并启动 CFO 全视图实施**：用户要求立即按驾驶舱计划实施，故该项调整为唯一队首；知识刷新 K2 顺延。阶段 1–4 已完成，阶段 2 准确 SHA `09ba5722ec3e8075a3483223df4c81fe5cdaa9fa` 的 CI run `39035163288` 18/18 job 成功；阶段 3 契约代码 SHA `df5c338bc5c1d7330be2391189cdfb828099a962` 对应 CI run `39038535194` 仍在执行，其中已失败的静态 Web 与 smoke 构建发现模块图表测试 fixture 缺少契约新增的必填字段，当前分支已补齐且本地 typecheck/build 验证通过。阶段 4 页面图表、来源披露、财报行深链及九视图桌面/窄屏截图已完成；阶段 5 的浏览器 API/表格全量逐项核对、独立复核、M1、契约和相关测试已通过，当前待本轮准确 SHA 的 GitHub CI。实际截图和隔离账套证据见[浏览器验证报告](../60_delivery/verification/2026-10-17--cockpit-all-views-visual-browser-verification-v1.md)。驾驶舱工作包完成后恢复知识刷新 K2。此前 `a333b31a`、`fcfc55a4`、`c8f14b79` 的 CI 失败与修复过程保留为历史证据。
 
@@ -96,11 +96,11 @@ superseded_by: null
 
 ## 唯一完整 To-do 与执行队列（严格串行）
 
-**当前唯一队列（14 项）**：已完成 7 项；实际执行中 1 项（单机原型架构简化与全视图视觉升级的正式计划沉淀）；队首待启动 0 项；排队 4 项（含顺延的 K2）；暂停 1 项；外部材料受限 1 项。当前唯一执行项为单机原型架构与视觉升级；计划提交/推送及其准确 SHA CI 通过后，启动 SQLite 与本地文件存储的隔离验证。
+**当前唯一队列（14 项）**：已完成 7 项；实际执行中 1 项（单机原型架构简化与全视图视觉升级，当前子步为诊断准确 SHA CI 长测超时）；队首待启动 0 项；排队 4 项（含顺延的 K2）；暂停 1 项；外部材料受限 1 项。当前唯一执行项为单机原型架构与视觉升级；CI 通过后依工作包次序先做现状/影响审计，再做隔离 SQLite 与本地存储验证。
 
 0. **completed** [CFO 驾驶舱盈利分析与图表缺口补全](work_items/COCKPIT--visual-analysis-expansion.md)：四项指标于 Objective 快照冻结并存 trace；只读 API；杜邦树与两期比较图；指标/财报/来源行深链；未具备口径时 unavailable。范围与交付记录：[设计规格](../superpowers/specs/2026-10-17-cfo-cockpit-visual-analysis-expansion-design.md)、[实施计划](../superpowers/plans/2026-10-17-cockpit-visual-analysis-expansion.md)。
 0a. **completed** [驾驶舱视觉补全与数值格式治理](work_items/COCKPIT--visual-completion-and-number-format.md)：订单/件量整数、金额两位小数、单位格式统一、费用页错误修复、真实图表/趋势/下钻、8 页面截图及隔离浏览器验收；代码 SHA `1a71e33f`，准确 SHA CI run `38936413156` 全部 job 成功。
-7a. **active（唯一队首，收敛准确 SHA CI）** 单机原型架构简化与全视图视觉升级：D055 已记录单机单用户、SQLite + 本地目录、移除 Redis/Celery/MinIO 和 A+C 视觉方向。提交 `241720f5` 的 run `39085175546` 揭示决策完整性测试硬编码 D001–D054；工作包已补充新增决策同步该门禁，测试在 `f4d791e9` 修复并定向 5/5 通过。该准确 SHA 的 CI run `39085504926` 中 `metrics-known-answers` 失败，`data-contract`、`intake-e2e`、`integration` 等仍在运行；待日志和最终结果可用后先归因，再以完整通过的准确 SHA 进入 SQLite 隔离验证。详细设计与剩余分阶段验收见规格和工作包。旧工作包归档且 `do_not_execute`，其本地全视图验收仅为回归基线。
+7a. **active（唯一队首，诊断 CI 长测超时）** 单机原型架构简化与全视图视觉升级：D055 已记录单机单用户、SQLite + 本地目录、移除 Redis/Celery/MinIO 和 A+C 视觉方向。决策编号门禁定向测试 5/5 通过。README 更新准确 SHA `d51af7ad7ec89218eb954a3ede1d5a264c3f9a66` 的 CI run `39087270646` 最终 cancelled：`data-contract` 于配置的 40 分钟 job 上限结束，`intake-e2e` 于 45 分钟上限结束；二者均无可用步骤日志，其他 job 未见失败。当前动作是定位长测超时原因并形成可复现通过证据，不把 cancelled 当作通过；通过后再进入第 1 阶段审计。截图工作流已按用户要求在 GitHub 手动暂停。详细设计与剩余分阶段验收见规格和工作包。旧工作包归档且 `do_not_execute`，其本地全视图验收仅为回归基线。
 7b. **proposed（顺延，驾驶舱完成后）** 第二代静态知识刷新与战略重基线 K2：K0/K1 完成。K1 扫描器 `a0c2e67`、证据 `a914830`；扫描 1,601 篇，566 篇 triage、0 可执行候选。K2 冻结器已推送 Davybase `699e5c6`（13 项专项/892 项全量测试，Ruff、README 统计、断链检查通过；独立复核发现的推送校验绕过已修复）。驾驶舱工作包完成后先只读核验 ObsidianWiki 当前状态，再执行门禁；dirty 时不写入、不暂存、不伪造 accepted，按计划如实记录 rejected 并顺延。
 
 以下 1–11 是驾驶舱队首调整前的原队列事项：1、2、3、5 已完成；4 U04 与 6 P3 暂停；7、9、10、11 排队；8 外部材料受限。旧验证记录仍是历史证据，不代表当前执行位置。
