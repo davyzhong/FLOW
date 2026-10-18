@@ -20,7 +20,6 @@ from uuid import UUID
 from sqlalchemy import select
 from sqlalchemy.orm import Session, selectinload
 
-from flow_api.infrastructure.models.analytics import MetricSnapshot
 from flow_api.infrastructure.models.statement import (
     StatementNormalizedItem,
     StatementReport,
@@ -77,10 +76,15 @@ def load_fact_context(session: Session, stock_code: str) -> ModuleFactContext:
     current = by_period["FY2023"]
     prior = by_period["FY2022"]
 
+    from flow_api.publishing.objective_freeze import ObjectiveReportSnapshot
+
     snapshot = session.scalar(
-        select(MetricSnapshot)
-        .where(MetricSnapshot.batch_id == _latest_batch_id(session))
-        .order_by(MetricSnapshot.version.desc())
+        select(ObjectiveReportSnapshot)
+        .where(
+            ObjectiveReportSnapshot.statement_report_id == current.id,
+            ObjectiveReportSnapshot.report_type == "objective_statement",
+        )
+        .order_by(ObjectiveReportSnapshot.version.desc())
         .limit(1)
     )
 
@@ -132,14 +136,6 @@ def load_fact_context(session: Session, stock_code: str) -> ModuleFactContext:
         current=current_facts,
         prior=prior_facts,
         raw_current=raw_current,
-    )
-
-
-def _latest_batch_id(session: Session) -> Any:
-    from flow_api.infrastructure.models.intake import AnalysisBatch
-
-    return session.scalar(
-        select(AnalysisBatch.id).order_by(AnalysisBatch.created_at.desc()).limit(1)
     )
 
 

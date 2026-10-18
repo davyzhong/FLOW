@@ -202,7 +202,7 @@ export function CockpitModulePage({
                   <summary>查看图表来源与指标口径</summary>
                   <dl>
                     <div><dt>指标代码</dt><dd>{chart.metric_codes?.join("、") || "—"}</dd></div>
-                    <div><dt>快照</dt><dd>{chart.snapshot_id || "未关联指标快照"}</dd></div>
+                    <div><dt>来源快照</dt><dd>{chart.snapshot_id || "未关联财报冻结快照"}</dd></div>
                     <div><dt>来源标识</dt><dd>{chart.source_ids?.join("、") || "—"}</dd></div>
                   </dl>
                 </details>

@@ -105,7 +105,14 @@ def api_client(
 
     _import_and_publish(db_session, "FY2022")
     _import_and_publish(db_session, "FY2023")
-    # 模块快照上下文：任一批次即可（snapshot_id 只作追溯标识）
+    from flow_api.publishing.objective_freeze import freeze_objective_statement_report
+
+    for report in db_session.scalars(
+        select(StatementReport).where(StatementReport.stock_code == "DAMAI.SYN")
+    ):
+        freeze_objective_statement_report(db_session, report_id=report.id)
+    db_session.commit()
+    # 故意保留无关的指标快照，模块 API 不得将其当作财报来源快照返回。
     db_session.add(
         MetricSnapshot(
             batch_id=_seed_batch(db_session),
@@ -196,6 +203,34 @@ def test_balance_sheet_module_kpis_from_disclosed_facts(api_client: TestClient) 
         block["code"] == "debt_maturity_split_not_disclosed"
         for block in body["unavailable"]
     )
+
+
+def test_module_snapshot_is_tied_to_current_report_not_latest_metric_batch(
+    api_client: TestClient, db_session: Session
+) -> None:
+    from flow_api.publishing.objective_freeze import ObjectiveReportSnapshot
+
+    current_report = db_session.scalar(
+        select(StatementReport).where(
+            StatementReport.stock_code == "DAMAI.SYN",
+            StatementReport.period_label == "FY2023",
+        )
+    )
+    assert current_report is not None
+    expected_snapshot = db_session.scalar(
+        select(ObjectiveReportSnapshot).where(
+            ObjectiveReportSnapshot.statement_report_id == current_report.id,
+            ObjectiveReportSnapshot.report_type == "objective_statement",
+        )
+    )
+    unrelated_metric_snapshot = db_session.scalar(select(MetricSnapshot.id))
+
+    response = api_client.get("/api/v1/cockpit/modules/balance-sheet")
+
+    assert response.status_code == 200, response.text
+    assert expected_snapshot is not None
+    assert response.json()["snapshot_id"] == str(expected_snapshot.id)
+    assert response.json()["snapshot_id"] != str(unrelated_metric_snapshot)
 
 
 def test_working_capital_ccc_identity(api_client: TestClient) -> None:

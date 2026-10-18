@@ -7087,7 +7087,8 @@
           },
           "snapshot_id": {
             "type": "string",
-            "title": "Snapshot Id"
+            "title": "Snapshot Id",
+            "description": "关联当前期客观财报冻结快照 id"
           },
           "drilldown_target": {
             "anyOf": [
@@ -7158,7 +7159,8 @@
           },
           "snapshot_id": {
             "type": "string",
-            "title": "Snapshot Id"
+            "title": "Snapshot Id",
+            "description": "关联当前期客观财报冻结快照 id"
           },
           "report_ids": {
             "items": {

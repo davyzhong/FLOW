@@ -130,7 +130,7 @@ class CockpitModuleChart(BaseModel):
     fact_classes: list[Literal["reported", "derived", "synthetic_allocation", "scenario"]]
     source_ids: list[str] = Field(default_factory=list)
     metric_codes: list[str] = Field(default_factory=list)
-    snapshot_id: str
+    snapshot_id: str = Field(description="关联当前期客观财报冻结快照 id")
     drilldown_target: str | None = None
     empty_reason: str | None = None
     fact_ids: dict[str, str] = Field(default_factory=dict)
@@ -144,7 +144,7 @@ class CockpitModuleResponse(BaseModel):
     title: str
     period: str
     prior_period: str
-    snapshot_id: str
+    snapshot_id: str = Field(description="关联当前期客观财报冻结快照 id")
     report_ids: list[str] = Field(default_factory=list)
     source_notice: str | None = None
     unit: str = "百万元"
