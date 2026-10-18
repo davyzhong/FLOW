@@ -7,6 +7,7 @@ version: 1.0
 created_at: 2026-10-18
 updated_at: 2026-10-18
 owner: FLOW
+commit_refs: [29e7b347]
 evidence_refs: [enterprise-package-tests-7, damai-release-manifest-tests-7, enterprise-package-deterministic-build]
 applies_to: data-package
 ---
