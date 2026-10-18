@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目交接文档
 doc_type: navigation
 status: current
-version: 8.0
+version: 8.1
 created_at: 2026-09-12
 updated_at: 2026-10-18
 owner: FLOW
@@ -18,7 +18,7 @@ applies_to: repository
 
 ## 一、当前任务
 
-**当前任务：单机原型架构简化与全视图视觉升级**。用户已选择单机单用户、SQLite 单文件 + 本地文件目录、移除 Redis/Celery/MinIO，并批准 A「高管编辑部」+ C「财务报告画布」视觉方向。正式设计、D055 决策和工作包已写入并推送。决策编号门禁定向测试 5/5 通过。README 更新提交 `d51af7ad7ec89218eb954a3ede1d5a264c3f9a66` 的 CI run `39087270646` 曾在 `data-contract`/`intake-e2e` 的 40/45 分钟 job 上限处 cancelled；同一代码的文档状态更新提交 `a331f03075c95f3b371b5a0ebd0fd91cac9dfeae` 对应 run `39090417203` 全 job success，超时未复现，因此未更改 CI 超时或测试覆盖。第 1 阶段现状/影响审计已完成，记录 19 个页面路由、32 个 PostgreSQL revisions、SQLite 方言与金额精度风险、S3/Redis/Celery 调用点和主 checkout 四处未提交改动；当前进入第 2 阶段隔离 SQLite 与本地内容存储验证，详见[架构审计报告](docs/60_delivery/verification/2026-10-18--single-machine-architecture-dependency-audit-v1.md)。审计未连接数据库、未触碰主 checkout。README 截图工作流已根据用户要求在 GitHub 手动禁用；FLOW CI 保持启用。完整范围与顺序见[唯一工作包](docs/50_plans/work_items/FLOW--single-machine-visual-prototype.md)、[设计规格](docs/superpowers/specs/2026-10-18-single-machine-visual-prototype-design.md)和[当前路线图](docs/50_plans/CURRENT_ROADMAP.md)。
+**当前任务：单机原型架构简化与全视图视觉升级**。用户已选择单机单用户、SQLite 单文件 + 本地文件目录、移除 Redis/Celery/MinIO，并批准 A「高管编辑部」+ C「财务报告画布」视觉方向。正式设计、D055 决策和工作包已写入并推送。决策编号门禁定向测试 5/5 通过。README 更新提交 `d51af7ad7ec89218eb954a3ede1d5a264c3f9a66` 的 CI run `39087270646` 曾在 `data-contract`/`intake-e2e` 的 40/45 分钟 job 上限处 cancelled；同一代码的文档状态更新提交 `a331f03075c95f3b371b5a0ebd0fd91cac9dfeae` 对应 run `39090417203` 全 job success，超时未复现，因此未更改 CI 超时或测试覆盖。第 1 阶段现状/影响审计已完成，记录 19 个页面路由、32 个 PostgreSQL revisions、SQLite 方言与金额精度风险、S3/Redis/Celery 调用点和主 checkout 四处未提交改动；README 视觉同步也已完成：首屏使用现有 A+C 概念板，并以旧版驾驶舱、调查页、公开财报图和离线知识库组成实景导览，逐项说明示意数据、演示数据和公开数据边界；路线图中的陈旧阶段记录已更正。文档 M6、readme-craft（81.1/100）与 71 项相对链接/图像引用检查通过。当前下一步为第 2 阶段隔离 SQLite 与本地内容存储验证，详见[架构审计报告](docs/60_delivery/verification/2026-10-18--single-machine-architecture-dependency-audit-v1.md)。本轮未触碰主 checkout，也未触发 README 截图采集工作流；该工作流按用户要求在 GitHub 手动禁用，FLOW CI 保持启用。完整范围与顺序见[唯一工作包](docs/50_plans/work_items/FLOW--single-machine-visual-prototype.md)、[设计规格](docs/superpowers/specs/2026-10-18-single-machine-visual-prototype-design.md)和[当前路线图](docs/50_plans/CURRENT_ROADMAP.md)。
 
 此前全视图驾驶舱工作包作为回归基线归档：九页 25 个 ECharts 画布、桌面/手机 18 组视口验收、API/页面数据对账、来源深链与缺数态等本地证据保留。真实 CI 状态：`39042517573`（SHA `e6b68c8a`）和 `39041228479`（SHA `0b9b12f3`）均 cancelled；`39040652008`（SHA `b2ee0373`）和 `39038535194`（SHA `df5c338b`）均 failure；不能说旧全视图任务准确 SHA CI 已通过。阶段 2 准确 SHA `09ba5722ec3e8075a3483223df4c81fe5cdaa9fa` 的 run `39035163288` 为 18/18 成功。相关[旧工作包](docs/50_plans/work_items/COCKPIT--all-views-data-and-visual-completion.md)已 archived 且禁止继续执行；[浏览器验证报告](docs/60_delivery/verification/2026-10-17--cockpit-all-views-visual-browser-verification-v1.md)仅作为回归基线。
 
@@ -26,7 +26,7 @@ applies_to: repository
 
 **CFO 驾驶舱盈利分析与图表缺口补全已完成**。本分支新增盈利能力页面 `/cockpit/profitability`、只读 API 与冻结时杜邦指标载荷；提供净利率、ROE、总资产周转率、权益乘数、两期比较、勾稽提示、指标/报告/来源财报行深链。图表复用 ECharts；旧快照或缺少期初数据时明确显示 unavailable。前端 36 个测试文件/184 项通过、typecheck/build 通过；lint 零错误，有一条既有 TanStack Table 警告；后端隔离定向测试 12 项、Ruff、mypy 通过；隔离账套核验 19/19、可见性矩阵 162 项无失败、浏览器全旅程 16/16 通过，真实页面截图见[浏览器验收记录](docs/60_delivery/verification/2026-10-17--cockpit-profitability-browser-verification-v1.md)。CI 首轮发现重复 seed 会新增两份 Objective 快照；修复归一化行 UUID 不稳定性后，回归测试 10 项通过，准确 SHA `08aa4cd02247f995bc990d92c8f34f5a1829afa1` 的 GitHub CI run `38996089002` 为 18/18 job success。contracts、plan views、links 与 M1 通过。代码与修复提交分别为 `5817efcf`、`08aa4cd0`，均已推送。工作包/设计/计划见 [工作包](docs/50_plans/work_items/COCKPIT--visual-analysis-expansion.md)、[设计规格](docs/superpowers/specs/2026-10-17-cfo-cockpit-visual-analysis-expansion-design.md)、[实施计划](docs/superpowers/plans/2026-10-17-cockpit-visual-analysis-expansion.md)。独立审查发现的单位误标和来源行下钻缺口均已修复。
 
-**当前唯一队列：14 项，已完成 7、实际执行中 1（单机原型架构与视觉升级，当前子步为第 1 阶段现状/影响审计）、队首待启动 0、排队 4（含顺延的 K2）、暂停 1、外部材料受限 1。** 本工作包关闭后恢复知识刷新 K2；执行前只读核验 ObsidianWiki 状态。K0/K1/K2 的已完成证据、dirty vault 保护与来源说明见[知识刷新工作包](docs/50_plans/work_items/KNOWLEDGE--refresh-v2.md)。
+**当前唯一队列：14 项，已完成 7、实际执行中 0、队首待开始 1（D055 第 2 阶段隔离验证）、排队 4（含顺延的 K2）、暂停 1、外部材料受限 1。** D055 完成后恢复知识刷新 K2；执行前只读核验 ObsidianWiki 状态。K0/K1/K2 的已完成证据、dirty vault 保护与来源说明见[知识刷新工作包](docs/50_plans/work_items/KNOWLEDGE--refresh-v2.md)。
 
 用户四项裁决（2026-10-16）：
 1. **L0 挂 CI（选项 C）**：非阻断 `l0-baseline` job（continue-on-error: true），失败仅作信号灯。
@@ -98,14 +98,16 @@ applies_to: repository
 
 ## 四、下一步计划
 
-### 当前下一步：完成工作包第 1 阶段审计
+### 当前下一步：第 2 阶段隔离验证待启动
 
-1. 盘点交互路由、页面数据契约、KPI/图表、来源与下钻，形成页面—指标—图表—追溯覆盖矩阵。
-2. 对账 SQLAlchemy 模型和 PostgreSQL migration head，登记 Postgres 专用 DDL/DML、UUID/JSON/Decimal/约束/事务风险。
-3. 搜索 S3/MinIO、Redis/Celery、Compose、Nginx、启动器的实际调用点，并分类为业务能力、桩/死代码、测试专用。
-4. 只读核对主 checkout 四处未提交驾驶舱改动，记录差异与后续集成处置，不覆盖、不暂存。
-5. 审计清单经 M1/M6/链接门禁后提交推送；随后才按队列启动隔离 SQLite 与本地存储验证，不连接常驻库。
-6. 逐阶段更新唯一路线图与本交接；该队首完整结案后，才恢复知识刷新 K2。
+第 1 阶段审计已完成，证据见[架构审计报告](docs/60_delivery/verification/2026-10-18--single-machine-architecture-dependency-audit-v1.md)。下一位接手者依次执行：
+
+1. 使用一次性隔离 SQLite 库核验 schema、UUID/JSON、外键、Decimal 精度、事务回滚和单用户并发行为。
+2. 用最小真实样例串通财报装载、指标快照、FactTrace 查询、驾驶舱聚合、报告冻结与恢复。
+3. 在隔离本地内容目录验证 SHA 幂等、字节冲突、缺文件、下载与完整性错误。
+4. 生成备份并恢复到新的隔离目录，对账来源、报告与驾驶舱结果；不连接或重置常驻库。
+5. 先完成 schema 与初始化方案对账；按工作包执行 M1/M6、独立复核和准确 SHA CI，再推进单机运行结构与全视图验收。
+6. 逐阶段更新唯一路线图与本交接；D055 全部结案后才恢复知识刷新 K2。
 
 ### 后续队列项：知识刷新 K0–K6
 
