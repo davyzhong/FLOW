@@ -40,8 +40,9 @@ confidentiality: project-internal
 - 对照 SQLAlchemy 最终模型与当前 PostgreSQL migration head，列出 Postgres 专用 DDL/DML、JSON/UUID、Decimal 精度、外键/约束/并发锁等 SQLite 风险。
 - 逐调用点盘点 S3/MinIO、Redis/Celery、Docker Compose、Nginx 与启动脚本；区分实际业务能力、基础设施桩和测试专用环境。
 - 盘点主 checkout 未提交改动，记录路径、基准差异与集成处置，未经用户指示不得覆盖/清理。
+- 新增或修订正式决策时同步更新决策完整性门禁，避免测试仍将历史编号上限写死。
 
-**通过条件：** 审计有机器可查的页面/功能/依赖清单；每个拟移除组件都有完整替代路径和测试点；旧全视图测试失败/取消与本轮新 CI 分开记录。
+**通过条件：** 审计有机器可查的页面/功能/依赖清单；每个拟移除组件都有完整替代路径和测试点；决策完整性测试覆盖当前索引全部编号；旧全视图测试失败/取消与本轮新 CI 分开记录。
 
 ### 2. SQLite 与本地内容存储隔离验证
 
