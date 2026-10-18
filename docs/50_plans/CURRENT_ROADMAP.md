@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 5.68
+version: 5.69
 created_at: 2026-09-12
 updated_at: 2026-10-18
 owner: FLOW
@@ -17,7 +17,7 @@ superseded_by: null
 
 # 当前路线图（唯一主线）
 
-> **2026-10-18 用户确认原型方向并完成队首重规划**：当前交付定位调整为单机单用户验证原型；用户选择 SQLite 单文件 + 本地文件目录、移除 Redis/Celery/MinIO，并确认 A 主风格 + C 报告叙事。旧驾驶舱全视图工作包归档，其九页/25 图与桌面/手机实测作为回归基线。旧 CI 实际结果为：`39042517573`、`39041228479` cancelled；`39040652008`、`39038535194` failure；不得描述为 CI 全绿。新的唯一队首为单机原型架构简化与全视图视觉升级，正式设计见[规格](../superpowers/specs/2026-10-18-single-machine-visual-prototype-design.md)与[D055](../10_governance/decisions/D055--单机单用户验证原型.md)。README 视觉基准说明提交 `d51af7ad` 的准确 SHA 主 CI run `39087270646` 曾因 data-contract 与 intake-e2e 到达 40/45 分钟 job 上限而 cancelled；同一代码的后续文档状态提交 `a331f03075c95f3b371b5a0ebd0fd91cac9dfeae` 对应 run `39090417203` 全部 job success，取消未复现。未改 CI 超时或缩减覆盖。第 1 阶段现状/影响审计已完成，清单与风险见[审计报告](../60_delivery/verification/2026-10-18--single-machine-architecture-dependency-audit-v1.md)。README 视觉素材编排已完成，只用仓库已有概念板与截图；截图素材采集/自动生成工作流继续暂停，未触发。D055 第 2 阶段 SQLite/本地内容存储已完成：隔离全链和兼容性验证通过；残留 PostgreSQL 专用 `.astext` 测试查询已改为跨库 `.as_string()`。准确代码 SHA `b0e1eb787592ff84bc4c19873a1e61cad1f9f3e6` 的 GitHub Actions run `39099573268` 为 18/18 jobs success，第 2 阶段正式关闭。第 3 阶段现已启动，当前细分动作是核对任务调度、对象存储注入、设置和普通启动路径，随后按工作包完成 Redis/Celery/MinIO 移除、本地实现接线及单一启动入口。SQLite 使用专用 Alembic 基线链，PostgreSQL 历史链保留。整个工作包完成后再恢复知识刷新 K2。
+> **2026-10-18 用户确认原型方向并完成队首重规划**：当前交付定位调整为单机单用户验证原型；用户选择 SQLite 单文件 + 本地文件目录、移除 Redis/Celery/MinIO，并确认 A 主风格 + C 报告叙事。旧驾驶舱全视图工作包归档，其九页/25 图与桌面/手机实测作为回归基线。旧 CI 实际结果为：`39042517573`、`39041228479` cancelled；`39040652008`、`39038535194` failure；不得描述为 CI 全绿。新的唯一队首为单机原型架构简化与全视图视觉升级，正式设计见[规格](../superpowers/specs/2026-10-18-single-machine-visual-prototype-design.md)与[D055](../10_governance/decisions/D055--单机单用户验证原型.md)。README 视觉基准说明提交 `d51af7ad` 的准确 SHA 主 CI run `39087270646` 曾因 data-contract 与 intake-e2e 到达 40/45 分钟 job 上限而 cancelled；同一代码的后续文档状态提交 `a331f03075c95f3b371b5a0ebd0fd91cac9dfeae` 对应 run `39090417203` 全部 job success，取消未复现。未改 CI 超时或缩减覆盖。第 1 阶段现状/影响审计已完成，清单与风险见[审计报告](../60_delivery/verification/2026-10-18--single-machine-architecture-dependency-audit-v1.md)。README 视觉素材编排已完成，只用仓库已有概念板与截图；截图素材采集/自动生成工作流继续暂停，未触发。D055 第 2 阶段 SQLite/本地内容存储已完成：隔离全链和兼容性验证通过；残留 PostgreSQL 专用 `.astext` 测试查询已改为跨库 `.as_string()`。准确代码 SHA `b0e1eb787592ff84bc4c19873a1e61cad1f9f3e6` 的 GitHub Actions run `39099573268` 为 18/18 jobs success，第 2 阶段正式关闭。第 3 阶段在官方队列中仍为队首待启动，当前工作包已完成依赖路径盘点；该阶段完成后，第 4 阶段将按《集团财务总监经营驾驶舱》做现有页面/指标/图表覆盖核对，补强有真实来源支撑的分析呈现。文章中的示例数值不作业务事实，利润增长是否独立成页由场景和数据覆盖决定。截图工作流继续暂停。SQLite 使用专用 Alembic 基线链，PostgreSQL 历史链保留。整个工作包完成后再恢复知识刷新 K2。
 
 > **2026-10-17 用户调整队列并启动 CFO 全视图实施**：用户要求立即按驾驶舱计划实施，故该项调整为唯一队首；知识刷新 K2 顺延。阶段 1–4 已完成，阶段 2 准确 SHA `09ba5722ec3e8075a3483223df4c81fe5cdaa9fa` 的 CI run `39035163288` 18/18 job 成功；阶段 3 契约代码 SHA `df5c338bc5c1d7330be2391189cdfb828099a962` 对应 CI run `39038535194` 仍在执行，其中已失败的静态 Web 与 smoke 构建发现模块图表测试 fixture 缺少契约新增的必填字段，当前分支已补齐且本地 typecheck/build 验证通过。阶段 4 页面图表、来源披露、财报行深链及九视图桌面/窄屏截图已完成；阶段 5 的浏览器 API/表格全量逐项核对、独立复核、M1、契约和相关测试已通过，当前待本轮准确 SHA 的 GitHub CI。实际截图和隔离账套证据见[浏览器验证报告](../60_delivery/verification/2026-10-17--cockpit-all-views-visual-browser-verification-v1.md)。驾驶舱工作包完成后恢复知识刷新 K2。此前 `a333b31a`、`fcfc55a4`、`c8f14b79` 的 CI 失败与修复过程保留为历史证据。
 
@@ -96,11 +96,11 @@ superseded_by: null
 
 ## 唯一完整 To-do 与执行队列（严格串行）
 
-**当前唯一队列（14 项）**：已完成 7 项；实际执行中 0 项；队首待开始 1 项（单机原型架构简化与全视图视觉升级，下一子步骤为第 3 阶段接入同步任务与本地内容存储）；排队 4 项（含顺延的 K2）；暂停 1 项；外部材料受限 1 项。本轮按用户要求先行完成该工作包中的 README 视觉素材编排。准确 SHA CI run `39090417203` 全绿；该历史 CI 结果不代表本轮文档提交的 CI 状态。
+**当前唯一队列（14 项）**：已完成 7 项；实际执行中 0 项；队首待开始 1 项（单机原型架构简化与全视图视觉升级，下一子步骤为第 3 阶段接入同步任务与本地内容存储；第 4 阶段新增公众号驾驶舱参考映射与数据能力验收）；排队 4 项（含顺延的 K2）；暂停 1 项；外部材料受限 1 项。README 视觉素材编排已完成，截图采集/自动化工作流继续暂停。第 2 阶段准确 SHA CI run `39099573268` 为 18/18 jobs success；README 文档更新准确 SHA 的 run `39090417203` 全绿；这些历史结果不代表本轮文档提交的 CI 状态。
 
 0. **completed** [CFO 驾驶舱盈利分析与图表缺口补全](work_items/COCKPIT--visual-analysis-expansion.md)：四项指标于 Objective 快照冻结并存 trace；只读 API；杜邦树与两期比较图；指标/财报/来源行深链；未具备口径时 unavailable。范围与交付记录：[设计规格](../superpowers/specs/2026-10-17-cfo-cockpit-visual-analysis-expansion-design.md)、[实施计划](../superpowers/plans/2026-10-17-cockpit-visual-analysis-expansion.md)。
 0a. **completed** [驾驶舱视觉补全与数值格式治理](work_items/COCKPIT--visual-completion-and-number-format.md)：订单/件量整数、金额两位小数、单位格式统一、费用页错误修复、真实图表/趋势/下钻、8 页面截图及隔离浏览器验收；代码 SHA `1a71e33f`，准确 SHA CI run `38936413156` 全部 job 成功。
-7a. **队首待开始（唯一队首，第 3 阶段实施）** 单机原型架构简化与全视图视觉升级：D055 已记录单机单用户、SQLite + 本地目录、移除 Redis/Celery/MinIO 和 A+C 视觉方向。决策编号门禁定向测试 5/5 通过。README 更新提交 `d51af7ad7ec89218eb954a3ede1d5a264c3f9a66` 的 CI run `39087270646` 曾在 data-contract/intake-e2e 的 40/45 分钟上限处 cancelled；仅文档状态更新提交 `a331f03075c95f3b371b5a0ebd0fd91cac9dfeae` 对应的 run `39090417203` 随后全 job success，超时未复现，故未改超时或减少覆盖。第 1 阶段审计、第 2 阶段 SQLite/本地内容存储隔离验证及本轮 README 视觉编排均已完成；第 3 阶段依赖路径盘点已交付，下一步接入同步任务与本地内容存储并收敛设置/启动入口。截图采集/自动化工作流继续暂停，本轮没有触发。详细设计与剩余分阶段验收见规格和工作包。旧工作包归档且 `do_not_execute`，其本地全视图验收仅为回归基线。
+7a. **队首待开始（唯一队首，第 3 阶段实施）** 单机原型架构简化与全视图视觉升级：D055 已记录单机单用户、SQLite + 本地目录、移除 Redis/Celery/MinIO 和 A+C 视觉方向。决策编号门禁定向测试 5/5 通过。README 更新提交 `d51af7ad7ec89218eb954a3ede1d5a264c3f9a66` 的 CI run `39087270646` 曾在 data-contract/intake-e2e 的 40/45 分钟上限处 cancelled；仅文档状态更新提交 `a331f03075c95f3b371b5a0ebd0fd91cac9dfeae` 对应的 run `39090417203` 随后全 job success，超时未复现，故未改超时或减少覆盖。第 1 阶段审计、第 2 阶段 SQLite/本地内容存储隔离验证及 README 视觉编排均已完成；第 3 阶段依赖路径盘点已交付，下一步接入同步任务与本地内容存储并收敛设置/启动入口。之后按工作包第 4 阶段对照公众号参考与真实来源补强现有驾驶舱，优先复用 ECharts；已有杜邦页和 `/data` 数据中心不重复建设，“利润增长”是否独立成页由覆盖核查决定。不得复制素材中的演示数值或伪造公开数据不支持的趋势、预算、账龄、预测与行业分位。截图采集/自动化工作流继续暂停。详细验收见正式工作包。旧工作包归档且 `do_not_execute`，其本地全视图验收仅为回归基线。
 7b. **proposed（顺延，驾驶舱完成后）** 第二代静态知识刷新与战略重基线 K2：K0/K1 完成。K1 扫描器 `a0c2e67`、证据 `a914830`；扫描 1,601 篇，566 篇 triage、0 可执行候选。K2 冻结器已推送 Davybase `699e5c6`（13 项专项/892 项全量测试，Ruff、README 统计、断链检查通过；独立复核发现的推送校验绕过已修复）。驾驶舱工作包完成后先只读核验 ObsidianWiki 当前状态，再执行门禁；dirty 时不写入、不暂存、不伪造 accepted，按计划如实记录 rejected 并顺延。
 
 以下 1–11 是驾驶舱队首调整前的原队列事项：1、2、3、5 已完成；4 U04 与 6 P3 暂停；7、9、10、11 排队；8 外部材料受限。旧验证记录仍是历史证据，不代表当前执行位置。
