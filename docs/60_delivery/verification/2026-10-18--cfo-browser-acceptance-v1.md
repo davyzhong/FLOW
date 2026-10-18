@@ -2,12 +2,13 @@
 doc_id: FLOW-VER-CFO-BROWSER-ACCEPTANCE-20261018
 title: CFO 驾驶舱真实数据浏览器验收
 doc_type: verification
-status: current
+status: verified
 version: 1.0
 created_at: 2026-10-18
 updated_at: 2026-10-18
 owner: FLOW
 commit_refs: [65a08706]
+evidence_refs: "[isolated-cockpit-compose-35432, damai-package-verify-19, cfo-browser-9-routes, cfo-ui-regression-playwright-165, screenshot-trace-disabled]"
 applies_to: cockpit
 ---
 

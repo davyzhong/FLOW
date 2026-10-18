@@ -2,7 +2,7 @@
 doc_id: FLOW-VER-CFO-METRIC-DISPLAY-20261018
 title: CFO 模块指标展示与追溯验收
 doc_type: verification
-status: current
+status: verified
 version: 1.0
 created_at: 2026-10-18
 updated_at: 2026-10-18
