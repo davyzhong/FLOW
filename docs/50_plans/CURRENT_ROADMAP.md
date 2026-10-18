@@ -100,7 +100,7 @@ superseded_by: null
 
 0. **completed** [CFO 驾驶舱盈利分析与图表缺口补全](work_items/COCKPIT--visual-analysis-expansion.md)：四项指标于 Objective 快照冻结并存 trace；只读 API；杜邦树与两期比较图；指标/财报/来源行深链；未具备口径时 unavailable。范围与交付记录：[设计规格](../superpowers/specs/2026-10-17-cfo-cockpit-visual-analysis-expansion-design.md)、[实施计划](../superpowers/plans/2026-10-17-cockpit-visual-analysis-expansion.md)。
 0a. **completed** [驾驶舱视觉补全与数值格式治理](work_items/COCKPIT--visual-completion-and-number-format.md)：订单/件量整数、金额两位小数、单位格式统一、费用页错误修复、真实图表/趋势/下钻、8 页面截图及隔离浏览器验收；代码 SHA `1a71e33f`，准确 SHA CI run `38936413156` 全部 job 成功。
-7a. **active（唯一队首，修复准确 SHA CI 门禁）** 单机原型架构简化与全视图视觉升级：D055 已记录单机单用户、SQLite + 本地目录、移除 Redis/Celery/MinIO 和 A+C 视觉方向。提交 `241720f5` 的 CI run `39085175546` 有一项决策完整性测试因硬编码 D001–D054 失败；工作包已补充新增决策时同步更新该测试的验收条件。先提交计划修订并修复测试，再以全绿准确 SHA 进入 SQLite 隔离验证。详细设计与剩余分阶段验收见规格和工作包。旧工作包归档且 `do_not_execute`，其本地全视图验收仅为回归基线。
+7a. **active（唯一队首，收敛准确 SHA CI）** 单机原型架构简化与全视图视觉升级：D055 已记录单机单用户、SQLite + 本地目录、移除 Redis/Celery/MinIO 和 A+C 视觉方向。提交 `241720f5` 的 run `39085175546` 揭示决策完整性测试硬编码 D001–D054；工作包已补充新增决策同步该门禁，测试在 `f4d791e9` 修复并定向 5/5 通过。该准确 SHA 的 CI run `39085504926` 中 `metrics-known-answers` 失败，`data-contract`、`intake-e2e`、`integration` 等仍在运行；待日志和最终结果可用后先归因，再以完整通过的准确 SHA 进入 SQLite 隔离验证。详细设计与剩余分阶段验收见规格和工作包。旧工作包归档且 `do_not_execute`，其本地全视图验收仅为回归基线。
 7b. **proposed（顺延，驾驶舱完成后）** 第二代静态知识刷新与战略重基线 K2：K0/K1 完成。K1 扫描器 `a0c2e67`、证据 `a914830`；扫描 1,601 篇，566 篇 triage、0 可执行候选。K2 冻结器已推送 Davybase `699e5c6`（13 项专项/892 项全量测试，Ruff、README 统计、断链检查通过；独立复核发现的推送校验绕过已修复）。驾驶舱工作包完成后先只读核验 ObsidianWiki 当前状态，再执行门禁；dirty 时不写入、不暂存、不伪造 accepted，按计划如实记录 rejected 并顺延。
 
 以下 1–11 是驾驶舱队首调整前的原队列事项：1、2、3、5 已完成；4 U04 与 6 P3 暂停；7、9、10、11 排队；8 外部材料受限。旧验证记录仍是历史证据，不代表当前执行位置。

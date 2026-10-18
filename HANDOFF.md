@@ -18,7 +18,7 @@ applies_to: repository
 
 ## 一、当前任务
 
-**当前任务：单机原型架构简化与全视图视觉升级**。用户已选择单机单用户、SQLite 单文件 + 本地文件目录、移除 Redis/Celery/MinIO，并批准 A「高管编辑部」+ C「财务报告画布」视觉方向。正式设计、D055 决策和工作包已写入并推送。准确 SHA `241720f5433cd34a6f4337a8a1d89663a817ce68` 的 CI run `39085175546` 正在执行，其中 `static-python` 因决策完整性门禁硬编码 D001–D054 而失败；本地已复现，工作包现已补入同步更新该门禁的验收项。接下来提交此计划修订，修复测试断言并跑定向验证，再核验新的准确 SHA CI；CI 通过后开始隔离 SQLite/本地内容存储验证。完整范围与顺序见[唯一工作包](docs/50_plans/work_items/FLOW--single-machine-visual-prototype.md)、[设计规格](docs/superpowers/specs/2026-10-18-single-machine-visual-prototype-design.md)和[当前路线图](docs/50_plans/CURRENT_ROADMAP.md)。
+**当前任务：单机原型架构简化与全视图视觉升级**。用户已选择单机单用户、SQLite 单文件 + 本地文件目录、移除 Redis/Celery/MinIO，并批准 A「高管编辑部」+ C「财务报告画布」视觉方向。正式设计、D055 决策和工作包已写入并推送。计划基线 `241720f5` 的 run `39085175546` 因决策完整性测试写死 D001–D054 失败；工作包已补入同步维护该门禁的验收，并在 `7a87f3f2` 推送。测试现按目录中的实际决策数量校验连续编号，5 项定向测试通过，修复提交 `f4d791e925c291cc6a82ac481e0d3e9ee6656859` 已推送。对应 CI run `39085504926` 仍在执行：`static-web`、`dashboard`、`migrations` 等已通过，`metrics-known-answers` 失败，`data-contract`、`intake-e2e`、`integration` 等仍运行；失败日志须待 run 结束后读取。CI 全绿前不进入 SQLite 隔离验证。完整范围与顺序见[唯一工作包](docs/50_plans/work_items/FLOW--single-machine-visual-prototype.md)、[设计规格](docs/superpowers/specs/2026-10-18-single-machine-visual-prototype-design.md)和[当前路线图](docs/50_plans/CURRENT_ROADMAP.md)。
 
 此前全视图驾驶舱工作包作为回归基线归档：九页 25 个 ECharts 画布、桌面/手机 18 组视口验收、API/页面数据对账、来源深链与缺数态等本地证据保留。真实 CI 状态：`39042517573`（SHA `e6b68c8a`）和 `39041228479`（SHA `0b9b12f3`）均 cancelled；`39040652008`（SHA `b2ee0373`）和 `39038535194`（SHA `df5c338b`）均 failure；不能说旧全视图任务准确 SHA CI 已通过。阶段 2 准确 SHA `09ba5722ec3e8075a3483223df4c81fe5cdaa9fa` 的 run `39035163288` 为 18/18 成功。相关[旧工作包](docs/50_plans/work_items/COCKPIT--all-views-data-and-visual-completion.md)已 archived 且禁止继续执行；[浏览器验证报告](docs/60_delivery/verification/2026-10-17--cockpit-all-views-visual-browser-verification-v1.md)仅作为回归基线。
 
@@ -87,7 +87,7 @@ applies_to: repository
 | **旧驾驶舱全视图 CI 未通过** | `39042517573`、`39041228479` cancelled；`39040652008`、`39038535194` failure | 旧包已归档；不反复重跑旧 SHA。新范围最终以本工作包的准确 SHA 做完整 CI 验收 |
 | **主 checkout 有 4 处未提交驾驶舱修改** | 4 个文件最后修改时间为 2026-10-16；改动内容与驾驶舱 UI/API 有交集 | 保持原位、不覆盖、不暂存；最终集成前对照新实现和 owner 信息，决定保留或确认已被取代 |
 | **SQLite 兼容与迁移成本未验证** | 现有 32 个 PostgreSQL Alembic revisions 含 JSONB、UUID 与 Postgres SQL；存储接口被多个流程调用 | 首先在隔离库做 schema、Decimal、事务、导入、来源追溯、报告和备份恢复验证；通过前不移除现有实现 |
-| **计划提交准确 SHA CI 有失败项** | `241720f5` 的 run `39085175546`：`static-python` 的决策完整性测试未覆盖 D055；其余 CI job 曾在执行，准确结论待该 run 收敛 | 工作包已补入“新增决策同步门禁”验收。先提交计划修订，再将测试期望改为当前决策序号并定向验证；推送后检查新 SHA 全量 CI |
+| **最新准确 SHA CI 尚未通过** | `f4d791e9` 的 run `39085504926`：`metrics-known-answers` 失败，日志尚不可用；`data-contract`、`intake-e2e`、`integration` 等仍在运行 | 等待该 run 完成并读取失败日志。先判断是否与本轮决策/文档修复相关；修复真实回归或记录可证实的既有基线原因，再按准确 SHA 重验。完整 CI 通过后进入工作包第 1 阶段 |
 | **route_policy 测试本地失败** | `test_openapi_probe_matches_tsv_two_way` 在本地 main 也失败（CI 通过） | 本地环境项（缺 S3 环境变量时 `create_app` 设置校验失败）；带完整 env 跑即绿。不阻塞 |
 | **C 级条件 2（独立 oracle 0/14）** | 14 份报告无完整独立 oracle | 用户裁决 3A：如实 No-Go，后续迭代补 |
 | **C 级条件 4（泛化留出全败）** | 小米 0/25、阿里 0/15、yunda 0/20、jdl 0/25 | 用户裁决 2A：不扩大盲评范围；适配器开发列后续迭代 |
@@ -98,11 +98,11 @@ applies_to: repository
 
 ## 四、下一步计划
 
-### 当前下一步：完成计划提交门禁，再开始 SQLite 隔离验证
+### 当前下一步：收敛最新准确 SHA CI
 
-1. 审查正式规格、决策、工作包、CURRENT_ROADMAP、PROJECT_STATE、AGENTS 索引和本 HANDOFF 之间的链接与状态一致性；运行 `python3 scripts/check_docs.py --phase m1` 和 `git diff --check`。
-2. 对本任务范围内文件 conventional commit 并立即 push；核对 push 的 SHA 与 GitHub CI 对应 SHA。
-3. CI 失败时按准确 job 日志修复，不将取消/失败说成通过。CI 全绿后启动隔离 SQLite 验证：schema/Decimal/导入/来源/报告/本地文件/备份恢复全链，不连接常驻库。
+1. 等待并读取 run `39085504926` 的失败日志和最终结论，重点定位 `metrics-known-answers`。
+2. 按日志区分本轮引入的问题与已有基线；若需改范围/验收，先修订工作包和路线图，再改代码。每次 commit 后立即 push 并核对新 SHA CI。
+3. 准确 SHA 全 CI 通过后，开始工作包第 1 阶段审计，再在隔离 SQLite 验证 schema/Decimal/导入/来源/报告/本地文件/备份恢复，不连接常驻库。
 4. 逐阶段更新唯一路线图与本交接；该队首完整结案后，才恢复知识刷新 K2。
 
 ### 后续队列项：知识刷新 K0–K6
