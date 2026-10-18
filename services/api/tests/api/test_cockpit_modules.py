@@ -233,6 +233,66 @@ def test_module_snapshot_is_tied_to_current_report_not_latest_metric_batch(
     assert response.json()["snapshot_id"] != str(unrelated_metric_snapshot)
 
 
+def test_module_rejects_values_changed_after_report_freeze(
+    api_client: TestClient, db_session: Session
+) -> None:
+    from flow_api.infrastructure.models.statement import StatementNormalizedItem
+
+    current_report = db_session.scalar(
+        select(StatementReport).where(
+            StatementReport.stock_code == "DAMAI.SYN",
+            StatementReport.period_label == "FY2023",
+        )
+    )
+    assert current_report is not None
+    row = db_session.scalar(
+        select(StatementNormalizedItem)
+        .where(
+            StatementNormalizedItem.report_id == current_report.id,
+            StatementNormalizedItem.value_end.is_not(None),
+        )
+        .limit(1)
+    )
+    assert row is not None and row.value_end is not None
+    row.value_end += Decimal("1")
+    db_session.commit()
+
+    response = api_client.get("/api/v1/cockpit/modules/balance-sheet")
+
+    assert response.status_code == 404, response.text
+    assert response.json()["detail"]["code"] == "module_snapshot_mismatch"
+
+
+def test_module_rejects_canonical_mapping_changed_after_report_freeze(
+    api_client: TestClient, db_session: Session
+) -> None:
+    from flow_api.infrastructure.models.statement import StatementNormalizedItem
+
+    current_report = db_session.scalar(
+        select(StatementReport).where(
+            StatementReport.stock_code == "DAMAI.SYN",
+            StatementReport.period_label == "FY2023",
+        )
+    )
+    assert current_report is not None
+    row = db_session.scalar(
+        select(StatementNormalizedItem)
+        .where(
+            StatementNormalizedItem.report_id == current_report.id,
+            StatementNormalizedItem.item_id.is_not(None),
+        )
+        .limit(1)
+    )
+    assert row is not None
+    row.item_id = "bs.changed_after_freeze"
+    db_session.commit()
+
+    response = api_client.get("/api/v1/cockpit/modules/balance-sheet")
+
+    assert response.status_code == 404, response.text
+    assert response.json()["detail"]["code"] == "module_snapshot_mismatch"
+
+
 def test_working_capital_ccc_identity(api_client: TestClient) -> None:
     response = api_client.get("/api/v1/cockpit/modules/working-capital")
     assert response.status_code == 200, response.text

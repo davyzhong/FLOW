@@ -94,13 +94,16 @@ async def test_freeze_creates_typed_payload(db_session: Session) -> None:
 
     assert snapshot.payload is not None
     view = snapshot.payload
-    assert view["schema_version"] == "objective.v2"
+    assert view["schema_version"] == "objective.v3"
     assert view["report_type"] == "objective_statement"
     assert view["source"]["report_id"] == str(report.id)
     assert view["source"]["source_sha256"] == "a" * 64
     assert view["source"]["unit_note"] == "人民币千元（每股收益为元）"
     # 行项目进载荷（原值不换算）
-    assert any(row["item"] == "货币资金" for row in view["statements"]["合并资产负债表"])
+    assert any(
+        row["item"] == "货币资金" and row["item_id"] == "bs.cash"
+        for row in view["statements"]["合并资产负债表"]
+    )
     source_link_row = next(
         row for row in view["statements"]["合并利润表"] if row["item"] == "一、营业总收入"
     )

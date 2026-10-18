@@ -78,25 +78,46 @@ def load_fact_context(session: Session, stock_code: str) -> ModuleFactContext:
 
     from flow_api.publishing.objective_freeze import ObjectiveReportSnapshot
 
-    snapshot = session.scalar(
-        select(ObjectiveReportSnapshot)
-        .where(
-            ObjectiveReportSnapshot.statement_report_id == current.id,
-            ObjectiveReportSnapshot.report_type == "objective_statement",
+    def latest_snapshot(report: StatementReport) -> Any | None:
+        return session.scalar(
+            select(ObjectiveReportSnapshot)
+            .where(
+                ObjectiveReportSnapshot.statement_report_id == report.id,
+                ObjectiveReportSnapshot.report_type == "objective_statement",
+            )
+            .order_by(ObjectiveReportSnapshot.version.desc())
+            .limit(1)
         )
-        .order_by(ObjectiveReportSnapshot.version.desc())
-        .limit(1)
-    )
+
+    current_snapshot = latest_snapshot(current)
+    prior_snapshot = latest_snapshot(prior)
+    if current_snapshot is None or prior_snapshot is None:
+        raise ModuleDataUnavailableError(
+            "module_statement_snapshot_missing",
+            "模块所需财报尚未生成冻结快照",
+        )
+    if (
+        current_snapshot.schema_version != "objective.v3"
+        or prior_snapshot.schema_version != "objective.v3"
+    ):
+        raise ModuleDataUnavailableError(
+            "module_statement_snapshot_outdated",
+            "模块所需财报冻结快照缺少标准科目身份，请重新冻结财报",
+        )
 
     def collect(
-        report: StatementReport,
+        report: StatementReport, snapshot: Any
     ) -> tuple[dict[str, Decimal], dict[tuple[str, str, str], Decimal]]:
         rows = session.scalars(
             select(StatementNormalizedItem).where(
                 StatementNormalizedItem.report_id == report.id,
-                StatementNormalizedItem.item_id.isnot(None),
             )
         ).all()
+        if not _snapshot_matches_rows(snapshot.payload, rows, report.items):
+            raise ModuleDataUnavailableError(
+                "module_snapshot_mismatch",
+                f"{report.period_label} 财报投影与冻结快照不一致",
+            )
         facts: dict[str, Decimal] = {}
         raw: dict[tuple[str, str, str], Decimal] = {}
         for raw_row in report.items:
@@ -125,17 +146,80 @@ def load_fact_context(session: Session, stock_code: str) -> ModuleFactContext:
                     )
         return facts, raw
 
-    current_facts, raw_current = collect(current)
-    prior_facts, _ = collect(prior)
+    current_facts, raw_current = collect(current, current_snapshot)
+    prior_facts, _ = collect(prior, prior_snapshot)
     return ModuleFactContext(
         current_report_id=current.id,
         prior_report_id=prior.id,
         period_label=current.period_label,
         prior_period_label=prior.period_label,
-        snapshot_id=str(snapshot.id) if snapshot else "",
+        snapshot_id=str(current_snapshot.id),
         current=current_facts,
         prior=prior_facts,
         raw_current=raw_current,
+    )
+
+
+def _snapshot_matches_rows(
+    payload: dict[str, Any],
+    normalized_rows: list[StatementNormalizedItem],
+    raw_rows: list[Any],
+) -> bool:
+    """拒绝把已变化的实时投影标注成旧冻结快照。"""
+
+    columns = ("value_end", "value_begin", "value_current", "value_prior")
+
+    def project(
+        rows: list[Any], *, include_item_id: bool
+    ) -> dict[str, list[tuple[str, ...]]]:
+        result: dict[str, list[tuple[str, ...]]] = {}
+        for row in rows:
+            values = tuple(
+                str(value) if value is not None else ""
+                for value in (getattr(row, column, None) for column in columns)
+            )
+            identity = ""
+            if include_item_id:
+                item_id = getattr(row, "item_id", None)
+                identity = str(item_id) if item_id is not None else ""
+            result.setdefault(row.statement_type, []).append((row.item_name, identity, *values))
+        return {key: sorted(values) for key, values in result.items()}
+
+    def project_payload(
+        value: Any, *, include_item_id: bool
+    ) -> dict[str, list[tuple[str, ...]]]:
+        if not isinstance(value, dict):
+            return {}
+        result: dict[str, list[tuple[str, ...]]] = {}
+        for statement_type, entries in value.items():
+            if not isinstance(entries, list):
+                return {}
+            projected: list[tuple[str, ...]] = []
+            for entry in entries:
+                if (
+                    not isinstance(entry, dict)
+                    or not isinstance(entry.get("item"), str)
+                    or (include_item_id and not isinstance(entry.get("item_id"), str))
+                ):
+                    return {}
+                projected.append(
+                    (
+                        entry["item"],
+                        entry.get("item_id", "") if include_item_id else "",
+                        *(
+                            str(entry[column]) if entry.get(column) is not None else ""
+                            for column in columns
+                        ),
+                    )
+                )
+            result[statement_type] = sorted(projected)
+        return result
+
+    return (
+        project_payload(payload.get("statements"), include_item_id=True)
+        == project(normalized_rows, include_item_id=True)
+        and project_payload(payload.get("statements_raw"), include_item_id=False)
+        == project(raw_rows, include_item_id=False)
     )
 
 

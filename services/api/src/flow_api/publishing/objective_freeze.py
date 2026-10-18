@@ -29,7 +29,7 @@ from flow_api.infrastructure.models.statement import (
     StatementSource,
 )
 
-SCHEMA_VERSION = "objective.v2"
+SCHEMA_VERSION = "objective.v3"
 REPORT_TYPE = "objective_statement"
 
 
@@ -305,6 +305,9 @@ def _statements_payload(rows: list[Any]) -> dict[str, list[dict[str, Any]]]:
     statements: dict[str, list[dict[str, Any]]] = {}
     for row in rows:
         entry = {"item": row.item_name}
+        item_id = getattr(row, "item_id", None)
+        if item_id is not None:
+            entry["item_id"] = item_id
         for column in ("value_end", "value_begin", "value_current", "value_prior"):
             value = getattr(row, column, None)
             entry[column] = None if value is None else str(value)
