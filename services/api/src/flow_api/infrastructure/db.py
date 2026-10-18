@@ -4,13 +4,20 @@ from functools import lru_cache
 from typing import Any
 
 from sqlalchemy import Engine, create_engine, event
+from sqlalchemy.engine import make_url
 from sqlalchemy.orm import Session, sessionmaker
 
 from flow_api.settings import get_settings
 
 
 def build_engine(database_url: str) -> Engine:
-    engine = create_engine(database_url, pool_pre_ping=True)
+    url = make_url(database_url)
+    if url.get_backend_name() == "sqlite" and url.database and url.database != ":memory:":
+        from pathlib import Path
+
+        Path(url.database).expanduser().resolve().parent.mkdir(parents=True, exist_ok=True)
+    connect_args = {"check_same_thread": False} if url.get_backend_name() == "sqlite" else {}
+    engine = create_engine(database_url, pool_pre_ping=True, connect_args=connect_args)
     if engine.dialect.name == "sqlite":
 
         @event.listens_for(engine, "connect")

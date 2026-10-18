@@ -7,11 +7,12 @@ from datetime import UTC, datetime
 from typing import Any
 from uuid import UUID
 
-from sqlalchemy import func, select, text
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from flow_api.data_contract.models import WorkbookContract
 from flow_api.data_contract.persistence import load_canonical_package
+from flow_api.enterprise.models import AnalysisCycle, Enterprise
 from flow_api.infrastructure.models.intake import (
     AnalysisBatch,
     ImportVersion,
@@ -84,34 +85,32 @@ class IntakeService:
     def _bootstrap_cycle_id(self) -> Any:
         """单租户引导 cycle：查无则自建 enterprise + cycle（自愈，不依赖 0027 回填）。"""
 
-        row = self.session.execute(
-            text("SELECT id FROM analysis_cycle ORDER BY created_at LIMIT 1")
-        ).scalar()
-        if row is not None:
-            return row
+        cycle = self.session.scalar(
+            select(AnalysisCycle).order_by(AnalysisCycle.created_at).limit(1)
+        )
+        if cycle is not None:
+            return cycle.id
         # 固定引导企业 UUID：与 dev principal binding（conftest/seed_dev_principal.py）
         # 和 0027 回填同一常量，避免自愈后产生第二企业导致跨企业拒绝。
-        enterprise_id = self.session.execute(
-            text(
-                "INSERT INTO enterprise (id, code, name, created_at)"
-                " VALUES ('00000000-0000-0000-0000-00000000d001', 'flow-bootstrap',"
-                " 'FLOW Bootstrap Enterprise', now())"
-                " ON CONFLICT (id) DO NOTHING"
-                " RETURNING id"
+        enterprise_id = UUID("00000000-0000-0000-0000-00000000d001")
+        enterprise = self.session.get(Enterprise, enterprise_id)
+        if enterprise is None:
+            enterprise = Enterprise(
+                id=enterprise_id,
+                code="flow-bootstrap",
+                name="FLOW Bootstrap Enterprise",
             )
-        ).scalar()
-        if enterprise_id is None:
-            enterprise_id = self.session.execute(
-                text("SELECT id FROM enterprise WHERE id = '00000000-0000-0000-0000-00000000d001'")
-            ).scalar()
-        return self.session.execute(
-            text(
-                "INSERT INTO analysis_cycle (id, enterprise_id, period_key, status, created_at)"
-                " VALUES (gen_random_uuid(), :eid, '2026-09', 'open', now())"
-                " RETURNING id"
-            ),
-            {"eid": enterprise_id},
-        ).scalar()
+            self.session.add(enterprise)
+            self.session.flush()
+
+        cycle = AnalysisCycle(
+            enterprise_id=enterprise.id,
+            period_key="2026-09",
+            status="open",
+        )
+        self.session.add(cycle)
+        self.session.flush()
+        return cycle.id
 
     def create_batch(
         self,
@@ -128,8 +127,7 @@ class IntakeService:
         # B1：调用方可显式指定 analysis_cycle_id（如大麦演示绑定截止月 2026-08），
         # 缺省保持原语义——绑定引导 cycle，不依赖参数的既有调用不受影响。
         cycle_id = (
-            analysis_cycle_id if analysis_cycle_id is not None
-            else self._bootstrap_cycle_id()
+            analysis_cycle_id if analysis_cycle_id is not None else self._bootstrap_cycle_id()
         )
         batch = AnalysisBatch(
             name=name.strip(),
@@ -284,9 +282,7 @@ class IntakeService:
         for override in overrides:
             sheet_contract = sheet_contract_by_id.get(override.target_sheet_id)
             if sheet_contract is None:
-                raise UnknownMappingTargetError(
-                    f"未知目标工作表: {override.target_sheet_id}"
-                )
+                raise UnknownMappingTargetError(f"未知目标工作表: {override.target_sheet_id}")
             field_contract = next(
                 (
                     field
@@ -301,7 +297,8 @@ class IntakeService:
                 )
             mapped_sheet = next(
                 (
-                    sheet for sheet in proposal.sheets
+                    sheet
+                    for sheet in proposal.sheets
                     if sheet.target_sheet_id == override.target_sheet_id
                 ),
                 None,
@@ -310,9 +307,7 @@ class IntakeService:
                 raise UnknownSourceColumnError("字段修正必须引用目标映射绑定的源工作表")
             profile_sheet = profile_sheets.get(override.source_sheet)
             if profile_sheet is None:
-                raise UnknownSourceColumnError(
-                    f"源工作簿不存在工作表: {override.source_sheet}"
-                )
+                raise UnknownSourceColumnError(f"源工作簿不存在工作表: {override.source_sheet}")
             column = next(
                 (
                     column
@@ -327,8 +322,7 @@ class IntakeService:
                 )
             if not _source_type_compatible(column, field_contract):
                 raise IncompatibleMappingTargetError(
-                    f"目标字段 {override.target_field_id} 与源列类型 "
-                    f"{column.inferred_type} 不兼容"
+                    f"目标字段 {override.target_field_id} 与源列类型 {column.inferred_type} 不兼容"
                 )
             fields_by_sheet[override.target_sheet_id][override.target_field_id] = FieldMapping(
                 source_header=column.header,

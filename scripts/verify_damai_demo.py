@@ -30,8 +30,6 @@ from typing import Any
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "services/api/src"))
 
-DEFAULT_DATABASE_URL = "postgresql+psycopg://flow:flow_dev_only@localhost:5432/flow"
-
 Check = dict[str, Any]
 
 
@@ -197,14 +195,15 @@ def count_latest_published_damai_reports(connection: Any) -> int:
 def check_freeze_hashes(database_url: str) -> list[Check]:
     """冻结 SHA 重算：客观快照/经营概览 payload_hash；内部报告 digest_view。"""
 
+    from sqlalchemy import create_engine, select
+    from sqlalchemy.orm import Session
+
     from flow_api.infrastructure.models.publishing import ReportSnapshot
     from flow_api.publishing.objective_freeze import (
         ObjectiveReportSnapshot,
         payload_hash,
     )
     from flow_api.publishing.service import build_report_view, digest_view
-    from sqlalchemy import create_engine, select
-    from sqlalchemy.orm import Session
     engine = create_engine(database_url)
     checks: list[Check] = []
     try:
@@ -285,10 +284,10 @@ def check_object_storage(database_url: str) -> list[Check]:
 
     import tempfile
 
-    from flow_api.infrastructure.object_store import ObjectStore
-    from flow_api.infrastructure.s3_client import build_s3_client
-    from flow_api.settings import get_settings
     from sqlalchemy import create_engine, text
+
+    from flow_api.infrastructure.local_object_store import LocalObjectStore
+    from flow_api.settings import get_settings
     workbook = ROOT / "fixtures/damai/workbooks/damai_logistics_full_v1.xlsx"
     engine = create_engine(database_url)
     checks: list[Check] = []
@@ -307,7 +306,7 @@ def check_object_storage(database_url: str) -> list[Check]:
         if not rows:
             return checks
         settings = get_settings()
-        store = ObjectStore(client=build_s3_client(settings), bucket=settings.s3_bucket)
+        store = LocalObjectStore(settings.object_directory)
         registered = rows[0]
         content = store.read_by_sha(registered.sha256)  # 读回路径内部即校验 SHA 完整性
         checks.append(
@@ -355,7 +354,9 @@ def main() -> int:
     checks: list[Check] = []
     checks += check_release_manifest()
 
-    database_url = os.environ.get("DATABASE_URL", DEFAULT_DATABASE_URL)
+    from flow_api.settings import get_settings
+
+    database_url = os.environ.get("DATABASE_URL") or get_settings().database_url
     checks += check_db_counts(database_url)
     checks += check_freeze_hashes(database_url)
     if args.api_url:

@@ -16,7 +16,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from flow_api.infrastructure.models.statement import StatementSource
-from flow_api.infrastructure.object_store import ObjectStore
+from flow_api.infrastructure.storage_contract import ObjectStorage
 
 MIN_TEXT_CHARS = 200
 PROBE_PAGES = 3
@@ -131,7 +131,7 @@ def probe_statement_pdf(content: bytes, filename: str, *, max_bytes: int) -> Sou
 class StatementSourceIntake:
     """登记公开财报原始文件：内容寻址存储 + 幂等数据库登记。"""
 
-    def __init__(self, object_store: ObjectStore, *, max_bytes: int) -> None:
+    def __init__(self, object_store: ObjectStorage, *, max_bytes: int) -> None:
         self._object_store = object_store
         self._max_bytes = max_bytes
 

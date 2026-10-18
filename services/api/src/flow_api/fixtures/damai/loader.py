@@ -18,7 +18,7 @@ from __future__ import annotations
 
 import hashlib
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 from uuid import UUID
 
 import yaml
@@ -28,7 +28,7 @@ from flow_api.analysis.policy import load_analysis_policy
 from flow_api.analysis.service import AnalysisRunService
 from flow_api.data_contract.contract import load_contract
 from flow_api.enterprise.directory import sync_enterprise_directory
-from flow_api.enterprise.models import Enterprise
+from flow_api.enterprise.models import AnalysisCycle, Enterprise
 from flow_api.fixtures.damai.generator import build_damai_package
 from flow_api.fixtures.damai.validation import validate_damai_package
 from flow_api.infrastructure.models.analytics import Conclusion, Finding
@@ -65,59 +65,57 @@ def _release_statements_path(fy: str) -> Path:
         candidate = root / relative
         if candidate.is_file():
             return candidate
-    raise FileNotFoundError(
-        f"未找到 {relative}（先运行 scripts/build_damai_demo.py 构建发行版）"
-    )
+    raise FileNotFoundError(f"未找到 {relative}（先运行 scripts/build_damai_demo.py 构建发行版）")
 
 
 _DAMAI_FY: tuple[str, ...] = ("FY2022", "FY2023")
 # 分析窗口：与大麦 profile 的 24 个月合同一致（后 12 个月为分析期）
-_ANALYSIS_MONTH_KEYS: tuple[int, ...] = tuple(
-    2022 * 100 + m for m in range(4, 13)
-) + tuple(2023 * 100 + m for m in range(1, 4))
+_ANALYSIS_MONTH_KEYS: tuple[int, ...] = tuple(2022 * 100 + m for m in range(4, 13)) + tuple(
+    2023 * 100 + m for m in range(1, 4)
+)
 _BOOTSTRAP_ID = "00000000-0000-0000-0000-00000000d001"
 _DAMAI_COMPANY_NAME = "大麦物流集团（synthetic 演示企业）"
 _DAMAI_CYCLE_PERIOD_KEY = "2023-03"  # 分析周期截止月（B1：显式绑定，不依赖引导周期）
 
 
-def _damai_analysis_cycle_id(session: Any) -> str:
+def _damai_analysis_cycle_id(session: Any) -> UUID:
     """建立/复用 bootstrap 企业下截止月 2023-03 的 AnalysisCycle（幂等）。"""
 
-    row = session.execute(
-        text(
-            "INSERT INTO analysis_cycle (id, enterprise_id, period_key, status, created_at)"
-            " VALUES (gen_random_uuid(), :eid, :period, 'open', now())"
-            " ON CONFLICT (enterprise_id, period_key) DO NOTHING"
-            " RETURNING id"
-        ),
-        {"eid": _BOOTSTRAP_ID, "period": _DAMAI_CYCLE_PERIOD_KEY},
-    ).scalar()
-    if row is not None:
-        return str(row)
-    return str(
-        session.execute(
-            text(
-                "SELECT id FROM analysis_cycle"
-                " WHERE enterprise_id = :eid AND period_key = :period"
-            ),
-            {"eid": _BOOTSTRAP_ID, "period": _DAMAI_CYCLE_PERIOD_KEY},
-        ).scalar_one()
+    cycle = session.scalar(
+        select(AnalysisCycle).where(
+            AnalysisCycle.enterprise_id == UUID(_BOOTSTRAP_ID),
+            AnalysisCycle.period_key == _DAMAI_CYCLE_PERIOD_KEY,
+        )
     )
+    if cycle is None:
+        cycle = AnalysisCycle(
+            enterprise_id=UUID(_BOOTSTRAP_ID),
+            period_key=_DAMAI_CYCLE_PERIOD_KEY,
+            status="open",
+        )
+        session.add(cycle)
+        session.flush()
+    return cast(UUID, cycle.id)
 
 
 def _upsert_enterprise(session: Any) -> dict[str, str]:
     """复用固定 bootstrap enterprise，幂等改名为大麦（授权契约单企业）。"""
 
-    session.execute(
-        text(
-            "INSERT INTO enterprise (id, code, name, created_at)"
-            " VALUES (:id, :code, :name, now())"
-            " ON CONFLICT (id) DO UPDATE SET code = :code, name = :name"
-        ),
-        {"id": _BOOTSTRAP_ID, "code": "damai-logistics", "name": _DAMAI_COMPANY_NAME},
-    )
+    enterprise_id = UUID(_BOOTSTRAP_ID)
+    enterprise = session.get(Enterprise, enterprise_id)
+    if enterprise is None:
+        enterprise = Enterprise(
+            id=enterprise_id,
+            code="damai-logistics",
+            name=_DAMAI_COMPANY_NAME,
+        )
+        session.add(enterprise)
+    else:
+        enterprise.code = "damai-logistics"
+        enterprise.name = _DAMAI_COMPANY_NAME
+    session.flush()
     return {
-        "id": _BOOTSTRAP_ID,
+        "id": str(enterprise_id),
         "code": "damai-logistics",
         "name": _DAMAI_COMPANY_NAME,
     }
@@ -143,8 +141,7 @@ def seed_damai_demo(
     package_validation = validate_damai_package(build_damai_package())
     if not package_validation["valid"]:
         raise RuntimeError(
-            "大麦数据包不变量校验失败，拒绝装载："
-            + ",".join(package_validation["invariant_codes"])
+            "大麦数据包不变量校验失败，拒绝装载：" + ",".join(package_validation["invariant_codes"])
         )
 
     if upsert_enterprise:
@@ -238,10 +235,7 @@ def _seed_action_items(
                 finding_id=finding_id,
                 snapshot_id=finding.metric_snapshot_id,
                 title=f"演示行动：跟进{finding.title}",
-                detail=(
-                    "演示行动项，源自已批准的客观分析发现；"
-                    "需在调查详情中补充处理方案。"
-                ),
+                detail=("演示行动项，源自已批准的客观分析发现；需在调查详情中补充处理方案。"),
                 created_by="damai-demo-seed",
             )
             session.add(action)
@@ -274,9 +268,7 @@ def _release_workbook_path() -> Path:
         candidate = root / relative
         if candidate.is_file():
             return candidate
-    raise FileNotFoundError(
-        f"未找到 {relative}（先运行 scripts/build_damai_demo.py 构建发行版）"
-    )
+    raise FileNotFoundError(f"未找到 {relative}（先运行 scripts/build_damai_demo.py 构建发行版）")
 
 
 def _intake_inputs(workbook: Path) -> tuple[StoredSource, Any, Any, Any]:
@@ -307,22 +299,20 @@ def _seed_analytics(session: Any) -> dict[str, Any]:
 
     actor = "damai-demo-seed"
     workbook = _release_workbook_path()
-    # 对象存储真实上传（content-addressed，幂等）：seed 链不绕过 §7 存储层。
-    # 每次 seed 都确保对象存在（修复历史半成品库也适用）；若后续步骤失败回滚，
-    # MinIO 里可能残留孤儿字节——内容寻址下无害，下次 seed 直接复用。
-    from flow_api.infrastructure.object_store import ObjectStore
-    from flow_api.infrastructure.s3_client import build_s3_client
+    # 原始工作簿写入应用数据目录的内容寻址存储，seed 链不绕过存储层。
+    # 每次 seed 都确保对象存在；若后续步骤失败回滚，孤儿字节可由备份/清理流程识别。
+    from flow_api.infrastructure.local_object_store import LocalObjectStore
     from flow_api.settings import get_settings
 
     settings = get_settings()
-    uploaded = ObjectStore(
-        client=build_s3_client(settings), bucket=settings.s3_bucket
-    ).put_immutable(workbook.read_bytes(), workbook.name)
+    uploaded = LocalObjectStore(settings.object_directory).put_immutable(
+        workbook.read_bytes(), workbook.name
+    )
     cycle_id = _damai_analysis_cycle_id(session)
     batch = session.scalar(
         select(AnalysisBatch).where(
             AnalysisBatch.name == "damai-demo-v1",
-            AnalysisBatch.analysis_cycle_id == UUID(cycle_id),
+            AnalysisBatch.analysis_cycle_id == cycle_id,
         )
     )
     if batch is None:
@@ -351,9 +341,7 @@ def _seed_analytics(session: Any) -> dict[str, Any]:
         intake.publish_import(version.id)
         session.flush()
     else:
-        version = session.scalar(
-            select(ImportVersion).where(ImportVersion.batch_id == batch.id)
-        )
+        version = session.scalar(select(ImportVersion).where(ImportVersion.batch_id == batch.id))
 
     repo_root = _repository_root()
     catalog = load_metric_catalog(repo_root / "config/metrics/flow_v1_metrics.yaml")
@@ -365,9 +353,7 @@ def _seed_analytics(session: Any) -> dict[str, Any]:
         for month in _ANALYSIS_MONTH_KEYS
     ]
     session.flush()
-    policy = load_analysis_policy(
-        repo_root / "services/api/config/analysis/flow-logistics-v1.yaml"
-    )
+    policy = load_analysis_policy(repo_root / "services/api/config/analysis/flow-logistics-v1.yaml")
     run = AnalysisRunService().create_run(
         session, snapshot_id=snapshots[-1].id, loaded_policy=policy
     )
@@ -394,9 +380,7 @@ def _release_manifest_sha256() -> str:
         candidate = root / relative
         if candidate.is_file():
             return _sha256_of(candidate)
-    raise FileNotFoundError(
-        f"未找到 {relative}（先运行 scripts/build_damai_demo.py 构建发行版）"
-    )
+    raise FileNotFoundError(f"未找到 {relative}（先运行 scripts/build_damai_demo.py 构建发行版）")
 
 
 def _conclusion_sections(
@@ -463,9 +447,7 @@ def _conclusion_sections(
     }
 
 
-def _build_signals(
-    findings: list[Finding], *, canonical_ref: str
-) -> list[dict[str, str]]:
+def _build_signals(findings: list[Finding], *, canonical_ref: str) -> list[dict[str, str]]:
     """六个植入事件 → 可追溯信号：只挂到真实存在的 Finding/证据/结论。"""
 
     by_type = {finding.finding_type: finding for finding in findings}
@@ -501,17 +483,13 @@ def _build_signals(
             "event_code": "E4",
             "description": "国内仓配事业部预算上调 1.12×（其余 1.03×）",
             "channel": "conclusion",
-            "reference": finding_ref(
-                fulfillment or any_finding, " conclusion.analysis_judgment"
-            ),
+            "reference": finding_ref(fulfillment or any_finding, " conclusion.analysis_judgment"),
         },
         {
             "event_code": "E5",
             "description": "2022-12/2023-01 经营现金流收窄至 0.55×",
             "channel": "conclusion",
-            "reference": finding_ref(
-                revenue or any_finding, " conclusion.open_questions"
-            ),
+            "reference": finding_ref(revenue or any_finding, " conclusion.open_questions"),
         },
         {
             "event_code": "E6",
@@ -542,9 +520,7 @@ def _seed_workflow(
         )
     )
     for index, finding in enumerate(findings):
-        conclusion = session.scalar(
-            select(Conclusion).where(Conclusion.finding_id == finding.id)
-        )
+        conclusion = session.scalar(select(Conclusion).where(Conclusion.finding_id == finding.id))
         if conclusion is None:
             evidence_refs = ",".join(
                 str(object_id)
@@ -589,9 +565,7 @@ def _seed_workflow(
     objective_entries = []
     overview_entries = []
     for report in reports:
-        frozen = freeze_objective_statement_report(
-            session, report_id=UUID(report["report_id"])
-        )
+        frozen = freeze_objective_statement_report(session, report_id=UUID(report["report_id"]))
         objective_entries.append(
             {
                 "fy": report["fy"],
@@ -600,9 +574,7 @@ def _seed_workflow(
                 "payload_hash": str(frozen.payload_hash),
             }
         )
-        overview = freeze_operations_overview(
-            session, report_id=UUID(report["report_id"])
-        )
+        overview = freeze_operations_overview(session, report_id=UUID(report["report_id"]))
         overview_entries.append(
             {
                 "fy": report["fy"],

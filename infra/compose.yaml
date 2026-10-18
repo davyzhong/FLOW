@@ -1,10 +1,12 @@
+# PostgreSQL/Redis/MinIO legacy compatibility stack for CI and integration tests only.
+# Ordinary single-machine use starts with `make flow` and does not load this file.
 name: flow
 
 services:
   api:
     build:
       context: ..
-      dockerfile: infra/api.Dockerfile
+      dockerfile: infra/api-test.Dockerfile
     environment: &application-environment
       FLOW_ENV: development
       FLOW_TIMEZONE: Asia/Shanghai
@@ -122,7 +124,7 @@ services:
   worker:
     build:
       context: ..
-      dockerfile: infra/api.Dockerfile
+      dockerfile: infra/api-test.Dockerfile
     command: celery -A flow_api.worker:celery_app worker --loglevel=INFO --concurrency=2
     environment: *application-environment
     depends_on: *application-dependencies

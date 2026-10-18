@@ -5,17 +5,10 @@
 #
 # 用法（仓库根目录）：
 #   bash scripts/seed_p5_statements.sh
-# 需要 DATABASE_URL 指向目标库（缺省取本机 Compose 开发库），
-# 以及 services/api 的 Python 环境（优先 .venv，其次 uv run）。
+# 默认使用 FLOW 单机 SQLite；如测试需要，可显式设置 DATABASE_URL。
+# 需要 services/api 的 Python 环境（优先 .venv，其次 uv run）。
 set -euo pipefail
 cd "$(dirname "$0")/.."
-
-export DATABASE_URL="${DATABASE_URL:-postgresql+psycopg://flow:flow_dev_only@localhost:5432/flow}"
-export REDIS_URL="${REDIS_URL:-redis://localhost:6379/0}"
-export S3_ENDPOINT_URL="${S3_ENDPOINT_URL:-http://localhost:9000}"
-export S3_BUCKET="${S3_BUCKET:-flow}"
-export S3_ACCESS_KEY="${S3_ACCESS_KEY:-flow}"
-export S3_SECRET_KEY="${S3_SECRET_KEY:-flow_dev_only}"
 
 if [ -x services/api/.venv/bin/python ]; then
   PY=(services/api/.venv/bin/python)

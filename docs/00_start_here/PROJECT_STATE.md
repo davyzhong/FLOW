@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.53
+version: 5.54
 created_at: 2026-09-12
 updated_at: 2026-10-18
 owner: FLOW
@@ -14,7 +14,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-10-18 当前状态：**单机单用户验证原型的架构简化与全视图视觉升级为唯一队首**。用户已确认 SQLite 单文件 + 本地文件目录、移除 Redis/Celery/MinIO，视觉采用 A「高管编辑部」+ C「财务报告画布」。第 1 阶段现状/依赖审计与第 2 阶段 SQLite/本地内容存储隔离全链验证均已完成。准确代码 SHA `b0e1eb787592ff84bc4c19873a1e61cad1f9f3e6` 的 CI run `39099573268` 为 18/18 jobs success，第 2 阶段正式关闭；队首转入第 3 阶段单机运行结构收敛。验证覆盖 SQLite 61 表、两期财报导入/归一化/冻结、内容目录与数据库备份恢复、恢复后驾驶舱聚合以及 SQLite/PostgreSQL Decimal 零差异。架构审计报告见[交付记录](../60_delivery/verification/2026-10-18--single-machine-architecture-dependency-audit-v1.md)。正式设计与工作包已落盘；准确 SHA `a331f03075c95f3b371b5a0ebd0fd91cac9dfeae` 的 CI run `39090417203` 全 job success。此前 `d51af7ad` 的 CI run `39087270646` 因两个长测触及 job 上限 cancelled，同一代码的后续完整运行通过，未调整 CI 超时或测试覆盖。旧全视图工作包已归档，其九页、25 个 ECharts 画布、桌面/窄屏截图和逐值对账作为回归基线；旧 CI run `39042517573`、`39041228479` cancelled，`39040652008`、`39038535194` failure，均未通过全量 CI。知识刷新 K2 顺延。另有主 checkout 四处 2026-10-16 未提交驾驶舱改动，本工作分支未触碰，最终集成前需核对处置。详见[当前路线图](../50_plans/CURRENT_ROADMAP.md)、[D055](../10_governance/decisions/D055--单机单用户验证原型.md)、[正式设计](../superpowers/specs/2026-10-18-single-machine-visual-prototype-design.md)和[实施工作包](../50_plans/work_items/FLOW--single-machine-visual-prototype.md)。
+2026-10-18 当前状态：**单机单用户验证原型的架构简化与全视图视觉升级为唯一队首**。用户已确认 SQLite 单文件 + 本地文件目录、移除 Redis/Celery/MinIO，视觉采用 A「高管编辑部」+ C「财务报告画布」。第 1 阶段现状/依赖审计、第 2 阶段 SQLite/本地内容存储隔离验证已完成；第 3 阶段同步任务、本地文件存储、SQLite 专用 migration、默认设置及单一启动入口的本地验收也已完成，准确 SHA CI 待提交后验证。第 3 阶段覆盖隔离 SQLite/账套重置 16/16、PostgreSQL 兼容回归 2/2、Ruff/mypy/M1、完整生产依赖引导和临时数据目录启动 smoke（Web/API health 均 200），详见[第 3 阶段验收记录](../60_delivery/verification/2026-10-18--single-machine-runtime-convergence-v1.md)。第 2 阶段准确代码 SHA `b0e1eb787592ff84bc4c19873a1e61cad1f9f3e6` 的 CI run `39099573268` 为 18/18 jobs success。架构审计报告见[交付记录](../60_delivery/verification/2026-10-18--single-machine-architecture-dependency-audit-v1.md)。正式设计与工作包已落盘；准确 SHA `a331f03075c95f3b371b5a0ebd0fd91cac9dfeae` 的 CI run `39090417203` 全 job success。此前 `d51af7ad` 的 CI run `39087270646` 因两个长测触及 job 上限 cancelled，同一代码的后续完整运行通过，未调整 CI 超时或测试覆盖。旧全视图工作包已归档，其九页、25 个 ECharts 画布、桌面/窄屏截图和逐值对账作为回归基线；旧 CI run `39042517573`、`39041228479` cancelled，`39040652008`、`39038535194` failure，均未通过全量 CI。知识刷新 K2 顺延。另有主 checkout 四处 2026-10-16 未提交驾驶舱改动，本工作分支未触碰，最终集成前需核对处置。详见[当前路线图](../50_plans/CURRENT_ROADMAP.md)、[D055](../10_governance/decisions/D055--单机单用户验证原型.md)、[正式设计](../superpowers/specs/2026-10-18-single-machine-visual-prototype-design.md)和[实施工作包](../50_plans/work_items/FLOW--single-machine-visual-prototype.md)。
 
 本轮将用户提供的《集团财务总监经营驾驶舱》纳入现有工作包第 4 阶段：以其模块组织和图表叙事作为候选参考，不采用文章演示数值或未经核验的摘要结论。最新路由盘点确认已有 `/cockpit/profitability` 杜邦页与 `/data` 数据中心；“利润增长”先核查总览覆盖和数据能力，再决定是否独立成页。按唯一队列，第 3 阶段架构收敛完成前不启动本轮驾驶舱增强；截图采集工作流继续暂停。计划、数据边界及验收见[当前路线图](../50_plans/CURRENT_ROADMAP.md)和[实施工作包](../50_plans/work_items/FLOW--single-machine-visual-prototype.md)。
 

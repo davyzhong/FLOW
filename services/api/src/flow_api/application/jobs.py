@@ -1,8 +1,5 @@
 from collections.abc import Callable
-from typing import cast
 from uuid import UUID
-
-from redis import Redis
 
 from flow_api.domain.enums import JobStatus
 from flow_api.domain.ids import new_uuid7
@@ -12,33 +9,32 @@ JobDispatcher = Callable[[str, str], None]
 
 
 class JobService:
-    def __init__(self, redis_client: Redis, dispatcher: JobDispatcher) -> None:
-        self._redis = redis_client
+    """单进程同步任务分派器；流程状态由业务记录维护，不依赖外部队列。"""
+
+    def __init__(self, dispatcher: JobDispatcher) -> None:
         self._dispatcher = dispatcher
+        self._receipts: dict[tuple[str, UUID, int], JobReceipt] = {}
 
     @staticmethod
     def job_key(job_type: str, resource_id: UUID, version: int) -> str:
         return f"flow:job:{job_type}:{resource_id}:{version}"
 
     def enqueue_once(self, job_type: str, resource_id: UUID, version: int) -> JobReceipt:
-        key = self.job_key(job_type, resource_id, version)
+        key = (job_type, resource_id, version)
+        existing = self._receipts.get(key)
+        if existing is not None:
+            return existing
         receipt = JobReceipt(
             job_id=new_uuid7(),
             resource_id=resource_id,
-            status=JobStatus.QUEUED,
+            status=JobStatus.RUNNING,
         )
-        claimed = self._redis.set(key, receipt.model_dump_json(), nx=True)
-        if claimed:
-            try:
-                self._dispatcher(job_type, str(receipt.job_id))
-            except Exception:
-                self._redis.delete(key)
-                raise
-            return receipt
-
-        existing = self._redis.get(key)
-        if existing is None:
-            return self.enqueue_once(job_type, resource_id, version)
-        if isinstance(existing, bytes):
-            existing = existing.decode()
-        return JobReceipt.model_validate_json(cast(str | bytes, existing))
+        self._receipts[key] = receipt
+        try:
+            self._dispatcher(job_type, str(receipt.job_id))
+        except Exception:
+            self._receipts.pop(key, None)
+            raise
+        completed = receipt.model_copy(update={"status": JobStatus.SUCCEEDED})
+        self._receipts[key] = completed
+        return completed

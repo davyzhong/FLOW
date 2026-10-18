@@ -245,12 +245,11 @@ def _operations_audit_context(auth: AuthorizationContext, snapshot_id: str) -> A
 
 
 def _operations_object_store() -> Any:
-    from flow_api.infrastructure.object_store import ObjectStore
-    from flow_api.infrastructure.s3_client import build_s3_client
+    from flow_api.infrastructure.local_object_store import LocalObjectStore
     from flow_api.settings import get_settings
 
     settings = get_settings()
-    return ObjectStore(client=build_s3_client(settings), bucket=settings.s3_bucket)
+    return LocalObjectStore(settings.object_directory)
 
 
 _DEP_PUBLISH_OPERATIONS = require_action(
@@ -312,9 +311,7 @@ def publish_operations_overview(
                 "message": f"不支持的发布格式：{sorted(unknown)}",
             },
         )
-    formats = tuple(
-        sorted((PublicationFormat(f) for f in request.formats), key=lambda f: f.value)
-    )
+    formats = tuple(sorted((PublicationFormat(f) for f in request.formats), key=lambda f: f.value))
     pub_request = PublicationRequest(
         publication_id=request.publication_id,
         idempotency_key=idempotency_key,

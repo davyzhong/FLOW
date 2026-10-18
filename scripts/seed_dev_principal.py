@@ -5,68 +5,79 @@
 - development 模式：`FLOW_DEV_ACTOR_ID` 指向的 actor 必须有一条 active RoleBinding；
 - legacy Bearer（AUTH_TOKEN）：必须有一条 active service_account RoleBinding。
 
-本脚本在两个环境补齐这两行（均幂等）：
-- pytest / e2e：conftest.py 内联同逻辑（不经本脚本，避免子进程开销）；
-- 本地/CI 真实栈：`make stack-up` 与 scripts/test_*_e2e.sh 在 alembic upgrade 后调用。
-  DATABASE_URL 未设置时默认本地开发库（与 tests/conftest.py 同默认）。
+本脚本按当前 DATABASE_URL 的 SQLAlchemy 方言补齐两行（均幂等）：
+- pytest：conftest.py 内联同逻辑；
+- 本地原型：`scripts/flow.py init` 在 SQLite 迁移后调用；
+- 隔离 PostgreSQL 集成栈：CI 脚本可显式传入 job 级数据库 URL。
 
 库不可达或 role_binding 表未迁移时打印原因并退出 0（不阻塞调用方）。
 """
 from __future__ import annotations
 
-import os
+from uuid import UUID
 
-import psycopg
+from sqlalchemy import inspect, select
+from sqlalchemy.orm import Session
+
+from flow_api.infrastructure.db import get_engine
+from flow_api.security.models import RoleBinding
+from flow_api.settings import get_settings
 
 DEV_ENTERPRISE_ID = "00000000-0000-0000-0000-00000000d001"
 DEV_ACTOR_DEFAULT = "flow-dev-bp"
 LEGACY_ACTOR_DEFAULT = "local-dev-web"
 
 
-def main() -> int:
-    # 与 tests/conftest.py 同款默认：未显式配置时指向本地开发库。
-    os.environ.setdefault(
-        "DATABASE_URL", "postgresql+psycopg://flow:flow_dev_only@localhost:5432/flow"
-    )
-    raw = os.environ["DATABASE_URL"]
-    url = raw.replace("postgresql+psycopg://", "postgresql://", 1)
-    dev_actor = os.environ.get("FLOW_DEV_ACTOR_ID") or DEV_ACTOR_DEFAULT
-    legacy_actor = os.environ.get("FLOW_LEGACY_ACTOR_ID") or LEGACY_ACTOR_DEFAULT
+def main(*, strict: bool = False) -> int:
+    settings = get_settings()
+    engine = get_engine()
+    dev_actor = settings.flow_dev_actor_id or DEV_ACTOR_DEFAULT
+    legacy_actor = settings.flow_legacy_actor_id or LEGACY_ACTOR_DEFAULT
     try:
-        with psycopg.connect(url, autocommit=True, connect_timeout=3) as conn:
-            has_table = conn.execute(
-                "SELECT to_regclass('public.role_binding') IS NOT NULL"
-            ).fetchone()
-            if not has_table or not has_table[0]:
-                print("seed_dev_principal: role_binding 表不存在（未迁移），跳过")
-                return 0
-            conn.execute(
-                """
-                INSERT INTO role_binding (actor_id, role, enterprise_id,
-                                          is_service_account, active)
-                SELECT CAST(%s AS varchar), 'analyst', %s::uuid, false, true
-                WHERE NOT EXISTS (
-                    SELECT 1 FROM role_binding
-                    WHERE actor_id = %s AND active IS TRUE
+        if not inspect(engine).has_table("role_binding"):
+            if strict:
+                raise RuntimeError("role_binding 表不存在，请先完成数据库迁移")
+            print("seed_dev_principal: role_binding 表不存在（未迁移），跳过")
+            return 0
+        enterprise_id = UUID(DEV_ENTERPRISE_ID)
+        with Session(engine) as session, session.begin():
+            dev_binding = session.scalar(
+                select(RoleBinding).where(
+                    RoleBinding.actor_id == dev_actor,
+                    RoleBinding.active.is_(True),
                 )
-                """,
-                (dev_actor, DEV_ENTERPRISE_ID, dev_actor),
             )
-            conn.execute(
-                """
-                INSERT INTO role_binding (actor_id, role, enterprise_id,
-                                          is_service_account, active)
-                SELECT %s, 'service_account', %s::uuid, true, true
-                WHERE NOT EXISTS (
-                    SELECT 1 FROM role_binding
-                    WHERE role = 'service_account' AND active IS TRUE
+            if dev_binding is None:
+                session.add(
+                    RoleBinding(
+                        actor_id=dev_actor,
+                        role="analyst",
+                        enterprise_id=enterprise_id,
+                        is_service_account=False,
+                        active=True,
+                    )
                 )
-                """,
-                (legacy_actor, DEV_ENTERPRISE_ID),
+            service_account = session.scalar(
+                select(RoleBinding).where(
+                    RoleBinding.role == "service_account",
+                    RoleBinding.active.is_(True),
+                )
             )
+            if service_account is None:
+                session.add(
+                    RoleBinding(
+                        actor_id=legacy_actor,
+                        role="service_account",
+                        enterprise_id=enterprise_id,
+                        is_service_account=True,
+                        active=True,
+                    )
+                )
         print(f"seed_dev_principal: ok (dev_actor={dev_actor})")
         return 0
-    except Exception as exc:  # noqa: BLE001 - 种子失败不得阻塞调用方
+    except Exception as exc:  # noqa: BLE001 - 保持原有幂等开发种子语义
+        if strict:
+            raise RuntimeError("开发身份初始化失败") from exc
         print(f"seed_dev_principal: 数据库不可达，跳过（{type(exc).__name__}: {exc}）")
         return 0
 

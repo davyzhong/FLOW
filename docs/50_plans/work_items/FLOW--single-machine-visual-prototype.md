@@ -3,7 +3,7 @@ doc_id: FLOW-WI-SINGLE-MACHINE-VISUAL-20261018-001
 title: 单机原型架构简化与全视图视觉升级
 doc_type: work-item
 status: active
-version: 1.6
+version: 1.7
 created_at: 2026-10-18
 updated_at: 2026-10-18
 owner: FLOW
@@ -19,7 +19,7 @@ confidentiality: project-internal
 
 # 单机原型架构简化与全视图视觉升级
 
-> **当前状态：第 1、2 阶段已完成，第 3 阶段队首待启动（依赖路径盘点已完成）。** 第 2 阶段准确代码 SHA `b0e1eb787592ff84bc4c19873a1e61cad1f9f3e6` 的 CI run `39099573268` 18/18 jobs success。架构盘点与调用点矩阵见[审计报告](../../60_delivery/verification/2026-10-18--single-machine-architecture-dependency-audit-v1.md)。唯一状态/顺序见 [CURRENT_ROADMAP](../CURRENT_ROADMAP.md)。本工作包替代旧全视图驾驶舱任务的剩余队列；既有 9 页、25 个画布、18 组路由/视口浏览器验收作为回归基线保留，不沿用取消/失败的 CI 运行作成功证据。
+> **当前状态：第 1、2 阶段已完成；第 3 阶段实现与本地验收完成，待本提交准确 SHA 的 CI。** 第 2 阶段准确代码 SHA `b0e1eb787592ff84bc4c19873a1e61cad1f9f3e6` 的 CI run `39099573268` 18/18 jobs success。第 3 阶段实现与验证记录见[单机运行收敛验收记录](../../60_delivery/verification/2026-10-18--single-machine-runtime-convergence-v1.md)。唯一状态/顺序见 [CURRENT_ROADMAP](../CURRENT_ROADMAP.md)。本工作包替代旧全视图驾驶舱任务的剩余队列；既有 9 页、25 个画布、18 组路由/视口浏览器验收作为回归基线保留，不沿用取消/失败的 CI 运行作成功证据。
 
 ## 目标
 

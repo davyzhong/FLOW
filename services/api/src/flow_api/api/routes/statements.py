@@ -35,13 +35,13 @@ from flow_api.api.schemas.statement import (
     exact,
 )
 from flow_api.infrastructure.db import get_session_factory
+from flow_api.infrastructure.local_object_store import LocalObjectStore
 from flow_api.infrastructure.models.statement import StatementCorrection, StatementSource
-from flow_api.infrastructure.object_store import (
+from flow_api.infrastructure.storage_contract import (
     ImmutableObjectConflictError,
     ImmutableObjectNotFoundError,
-    ObjectStore,
+    ObjectStorage,
 )
-from flow_api.infrastructure.s3_client import build_s3_client
 from flow_api.security.authorization import Action
 from flow_api.security.route_policy import (
     LOADERS,
@@ -75,7 +75,7 @@ UPLOAD_CHUNK_SIZE = 1024 * 1024
 def get_statement_source_intake() -> StatementSourceIntake:
     settings = get_settings()
     return StatementSourceIntake(
-        ObjectStore(client=build_s3_client(settings), bucket=settings.s3_bucket),
+        LocalObjectStore(settings.object_directory),
         max_bytes=settings.statement_max_upload_bytes,
     )
 
@@ -83,14 +83,12 @@ def get_statement_source_intake() -> StatementSourceIntake:
 IntakeDependency = Annotated[StatementSourceIntake, Depends(get_statement_source_intake)]
 
 
-def get_statement_source_store() -> ObjectStore:
+def get_statement_source_store() -> ObjectStorage:
     settings = get_settings()
-    return ObjectStore(client=build_s3_client(settings), bucket=settings.s3_bucket)
+    return LocalObjectStore(settings.object_directory)
 
 
-StatementSourceStoreDependency = Annotated[
-    ObjectStore, Depends(get_statement_source_store)
-]
+StatementSourceStoreDependency = Annotated[ObjectStorage, Depends(get_statement_source_store)]
 
 
 def _error(http_status: int, code: str, message: str) -> HTTPException:
@@ -204,9 +202,7 @@ def read_statement_source_content(
     source_sha256: Annotated[str, Path(pattern=r"^[0-9a-f]{64}$")],
 ) -> Response:
     """读取已登记的公开财报 PDF；仅按登记表解析对象键，且授权决策已 durable audit。"""
-    source = session.scalar(
-        select(StatementSource).where(StatementSource.sha256 == source_sha256)
-    )
+    source = session.scalar(select(StatementSource).where(StatementSource.sha256 == source_sha256))
     if source is None:
         # 防御性二次校验；通常未登记对象已在授权 loader 阶段 fail closed。
         raise _error(status.HTTP_404_NOT_FOUND, "statement_source_not_found", "来源文件不存在")
@@ -299,12 +295,15 @@ def get_statement_report(
         ) from error
     source_available = False
     if detail.source_sha256:
-        source_available = session.scalar(
-            select(StatementSource.id).where(
-                StatementSource.sha256 == detail.source_sha256,
-                StatementSource.status == "registered",
+        source_available = (
+            session.scalar(
+                select(StatementSource.id).where(
+                    StatementSource.sha256 == detail.source_sha256,
+                    StatementSource.status == "registered",
+                )
             )
-        ) is not None
+            is not None
+        )
     return StatementReportDetailResponse(
         **detail.model_dump(exclude={"sections"}),
         source_available=source_available,
