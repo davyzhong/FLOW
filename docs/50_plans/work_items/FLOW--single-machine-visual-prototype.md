@@ -2,10 +2,10 @@
 doc_id: FLOW-WI-SINGLE-MACHINE-VISUAL-20261018-001
 title: 单机原型架构简化与全视图视觉升级
 doc_type: work-item
-status: active
-version: 2.3
+status: completed
+version: 2.4
 created_at: 2026-10-18
-updated_at: 2026-10-18
+updated_at: 2026-10-19
 owner: FLOW
 depends_on: [FLOW-SPEC-SINGLE-MACHINE-VISUAL-20261018-001]
 acceptance_refs: [FLOW-DECISION-D055]
@@ -19,7 +19,7 @@ confidentiality: project-internal
 
 # 单机原型架构简化与全视图视觉升级
 
-> **当前状态：第 1–3 阶段完成；第 4 阶段 4.1–4.7 的实现与本地验收已完成；当前等待准确 SHA GitHub CI 与最终集成门禁结案。** 4.4 首轮已复用单期分类横条 builder，修正资产结构图型、标量值表期间列，并添加指标定义深链；前端测试/类型/构建与 API 路由专项通过，另将一处旧 cockpit fixture 对齐至 `objective.v3` 快照合同；具体进度以 CURRENT_ROADMAP 为准。4.4 验收记录：[模块图表适配与追溯验收](../../60_delivery/verification/2026-10-18--cfo-module-chart-adapter-acceptance-v1.md)。4.5 已修复发行包与 `fixtures/damai` 的源 manifest/逐文件内容偏差，且发行版经营订单/件量已通过整数语义核验。 第 2 阶段准确代码 SHA `b0e1eb787592ff84bc4c19873a1e61cad1f9f3e6` 的 CI run `39099573268` 18/18 jobs success；第 3 阶段最终状态 SHA `20a511f66e4bfe65ab02edc091c7b49e2cbcbe67` 的 CI run `39125304357` 18/18 jobs success。4.1 矩阵验收与准确 SHA data-contract 两次取消后的隔离替代验证见[验收记录](../../60_delivery/verification/2026-10-18--cfo-reference-matrix-ci-and-isolated-validation-v1.md)。第 3 阶段实现与验证记录见[单机运行收敛验收记录](../../60_delivery/verification/2026-10-18--single-machine-runtime-convergence-v1.md)。唯一状态/顺序见 [CURRENT_ROADMAP](../CURRENT_ROADMAP.md)。本工作包替代旧全视图驾驶舱任务的剩余队列；既有 9 页、25 个画布、18 组路由/视口浏览器验收作为回归基线保留，不沿用取消/失败的 CI 运行作成功证据。
+> **当前状态：第 1–3 阶段完成；第 4 阶段 4.1–4.7 及最终集成门禁已全部结案（2026-10-19）。** 4.4 首轮已复用单期分类横条 builder，修正资产结构图型、标量值表期间列，并添加指标定义深链；前端测试/类型/构建与 API 路由专项通过，另将一处旧 cockpit fixture 对齐至 `objective.v3` 快照合同；具体进度以 CURRENT_ROADMAP 为准。4.4 验收记录：[模块图表适配与追溯验收](../../60_delivery/verification/2026-10-18--cfo-module-chart-adapter-acceptance-v1.md)。4.5 已修复发行包与 `fixtures/damai` 的源 manifest/逐文件内容偏差，且发行版经营订单/件量已通过整数语义核验。 第 2 阶段准确代码 SHA `b0e1eb787592ff84bc4c19873a1e61cad1f9f3e6` 的 CI run `39099573268` 18/18 jobs success；第 3 阶段最终状态 SHA `20a511f66e4bfe65ab02edc091c7b49e2cbcbe67` 的 CI run `39125304357` 18/18 jobs success。4.1 矩阵验收与准确 SHA data-contract 两次取消后的隔离替代验证见[验收记录](../../60_delivery/verification/2026-10-18--cfo-reference-matrix-ci-and-isolated-validation-v1.md)。第 3 阶段实现与验证记录见[单机运行收敛验收记录](../../60_delivery/verification/2026-10-18--single-machine-runtime-convergence-v1.md)。唯一状态/顺序见 [CURRENT_ROADMAP](../CURRENT_ROADMAP.md)。本工作包替代旧全视图驾驶舱任务的剩余队列；既有 9 页、25 个画布、18 组路由/视口浏览器验收作为回归基线保留，不沿用取消/失败的 CI 运行作成功证据。
 
 ## 目标
 
