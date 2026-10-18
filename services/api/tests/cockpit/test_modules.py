@@ -95,6 +95,8 @@ def test_load_fact_context_retains_raw_cashflow_statement_rows() -> None:
     )
     normalized_rows = [
         SimpleNamespace(
+            statement_type="合并现金流量表",
+            item_name="经营活动所得现金净额",
             item_id="cf.ocf",
             value_end=None,
             value_begin=None,
@@ -102,12 +104,41 @@ def test_load_fact_context_retains_raw_cashflow_statement_rows() -> None:
             value_prior=Decimal("2330178"),
         )
     ]
-    result = SimpleNamespace(all=lambda: normalized_rows)
+    current_payload = {
+        "statements": {
+            "合并现金流量表": [{
+                "item": "经营活动所得现金净额",
+                "item_id": "cf.ocf",
+                "value_end": None,
+                "value_begin": None,
+                "value_current": "1859349",
+                "value_prior": "2330178",
+            }]
+        },
+        "statements_raw": {
+            "合并现金流量表": [
+                {"item": row.item_name, **{
+                    column: getattr(row, column)
+                    for column in ("value_end", "value_begin", "value_current", "value_prior")
+                }}
+                for row in current_report.items
+            ]
+        },
+    }
+    current_snapshot = SimpleNamespace(
+        id=uuid4(), schema_version="objective.v3", payload=current_payload
+    )
+    prior_snapshot = SimpleNamespace(
+        id=uuid4(), schema_version="objective.v3",
+        payload={"statements": {}, "statements_raw": {}},
+    )
     session = Mock()
     session.scalars.side_effect = [
-        [prior_report, current_report], result, result, result
+        [prior_report, current_report],
+        SimpleNamespace(all=lambda: normalized_rows),
+        SimpleNamespace(all=lambda: []),
     ]
-    session.scalar.side_effect = [uuid4(), SimpleNamespace(id=uuid4())]
+    session.scalar.side_effect = [current_snapshot, prior_snapshot]
 
     context = load_fact_context(session, "DAMAI.SYN")
 
