@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目交接文档
 doc_type: navigation
 status: current
-version: 8.1
+version: 8.2
 created_at: 2026-09-12
 updated_at: 2026-10-18
 owner: FLOW
@@ -18,7 +18,7 @@ applies_to: repository
 
 ## 一、当前任务
 
-**当前任务：单机原型架构简化与全视图视觉升级**。用户已选择单机单用户、SQLite 单文件 + 本地文件目录、移除 Redis/Celery/MinIO，并批准 A「高管编辑部」+ C「财务报告画布」视觉方向。正式设计、D055 决策和工作包已写入并推送。决策编号门禁定向测试 5/5 通过。README 更新提交 `d51af7ad7ec89218eb954a3ede1d5a264c3f9a66` 的 CI run `39087270646` 曾在 `data-contract`/`intake-e2e` 的 40/45 分钟 job 上限处 cancelled；同一代码的文档状态更新提交 `a331f03075c95f3b371b5a0ebd0fd91cac9dfeae` 对应 run `39090417203` 全 job success，超时未复现，因此未更改 CI 超时或测试覆盖。第 1 阶段现状/影响审计已完成，记录 19 个页面路由、32 个 PostgreSQL revisions、SQLite 方言与金额精度风险、S3/Redis/Celery 调用点和主 checkout 四处未提交改动；README 视觉同步也已完成：首屏使用现有 A+C 概念板，并以旧版驾驶舱、调查页、公开财报图和离线知识库组成实景导览，逐项说明示意数据、演示数据和公开数据边界；路线图中的陈旧阶段记录已更正。文档 M6、readme-craft（81.1/100）与 71 项相对链接/图像引用检查通过。第 2 阶段隔离验证的实现及本地检查已完成，当前待准确 SHA CI；已覆盖 SQLite Alembic 初始化、财务导入/指标快照/冻结/FactTrace/驾驶舱恢复、本地 SHA 存储和 PostgreSQL 金额/API 基线。CI 通过后进入第 3 阶段单机运行结构收敛。详见[架构审计报告](docs/60_delivery/verification/2026-10-18--single-machine-architecture-dependency-audit-v1.md)。本轮未触碰主 checkout，也未触发 README 截图采集工作流；该工作流按用户要求在 GitHub 手动禁用，FLOW CI 保持启用。完整范围与顺序见[唯一工作包](docs/50_plans/work_items/FLOW--single-machine-visual-prototype.md)、[设计规格](docs/superpowers/specs/2026-10-18-single-machine-visual-prototype-design.md)和[当前路线图](docs/50_plans/CURRENT_ROADMAP.md)。
+**当前任务：单机原型架构简化与全视图视觉升级**。用户已选择单机单用户、SQLite 单文件 + 本地文件目录、移除 Redis/Celery/MinIO，并批准 A「高管编辑部」+ C「财务报告画布」视觉方向。正式设计、D055 决策和工作包已写入并推送。第 1 阶段现状/影响审计已完成，记录 19 个页面路由、32 个 PostgreSQL revisions、SQLite 方言与金额精度风险、S3/Redis/Celery 调用点和主 checkout 四处未提交改动；README 视觉同步也已完成：首屏使用现有 A+C 概念板，并以旧版驾驶舱、调查页、公开财报图和离线知识库组成实景导览，逐项说明示意数据、演示数据和公开数据边界；路线图中的陈旧阶段记录已更正。文档 M6、readme-craft（81.1/100）与 71 项相对链接/图像引用检查通过。第 2 阶段 SQLite/本地内容存储实现和隔离验证已完成；准确 SHA `1311d6c0` 的 run `39096880139` 有 13/18 jobs 成功、4 项失败、data-contract 在 40 分钟上限取消。失败根因是测试 `test_intake_e2e.py` 留存 `.astext`，现已改 `.as_string()`；隔离 PostgreSQL 定向用例、整个测试文件和 Ruff 均通过。当前唯一执行动作是提交修复并重跑该 SHA CI；不能进入第 3 阶段，直到准确 SHA CI验收关闭。data-contract 时限问题需按 CI 实际结果处置；本轮未调整 CI 配置或删减覆盖。详见[架构审计报告](docs/60_delivery/verification/2026-10-18--single-machine-architecture-dependency-audit-v1.md)。本轮未触碰主 checkout，也未触发 README 截图采集工作流；该工作流按用户要求在 GitHub 手动禁用，FLOW CI 保持启用。完整范围与顺序见[唯一工作包](docs/50_plans/work_items/FLOW--single-machine-visual-prototype.md)、[设计规格](docs/superpowers/specs/2026-10-18-single-machine-visual-prototype-design.md)和[当前路线图](docs/50_plans/CURRENT_ROADMAP.md)。
 
 此前全视图驾驶舱工作包作为回归基线归档：九页 25 个 ECharts 画布、桌面/手机 18 组视口验收、API/页面数据对账、来源深链与缺数态等本地证据保留。真实 CI 状态：`39042517573`（SHA `e6b68c8a`）和 `39041228479`（SHA `0b9b12f3`）均 cancelled；`39040652008`（SHA `b2ee0373`）和 `39038535194`（SHA `df5c338b`）均 failure；不能说旧全视图任务准确 SHA CI 已通过。阶段 2 准确 SHA `09ba5722ec3e8075a3483223df4c81fe5cdaa9fa` 的 run `39035163288` 为 18/18 成功。相关[旧工作包](docs/50_plans/work_items/COCKPIT--all-views-data-and-visual-completion.md)已 archived 且禁止继续执行；[浏览器验证报告](docs/60_delivery/verification/2026-10-17--cockpit-all-views-visual-browser-verification-v1.md)仅作为回归基线。
 

@@ -124,6 +124,7 @@ applies_to: architecture
 - SQLite CFO 模块 API 5/5，SQLite 基础/迁移/财务全链测试 16/16；隔离 PostgreSQL 16 完整迁移至 `0032` 后同模块 API 5/5。金额读回与 SQL `SUM` 在 SQLite/PostgreSQL 大额 Decimal 样本零差异。Ruff、mypy 与文档 M1/M6 通过。
 - 过程发现并修正 `RoleBinding` ORM 检查约束遗漏 `cfo`（PostgreSQL `0032` 已允许）以及 SQLite 企业范围 UUID 查询返回字符串导致的类型不一致。
 - 首轮准确 SHA CI `cff0a94666c7b041689499af94bc28f0aef7b98b` 的 Copilot job 暴露 JSON 通用类型不再提供 PostgreSQL `.astext` 比较器；两个查询已改用跨库 `.as_string()`。修复后隔离 PostgreSQL 的 Copilot 测试/评测和数据契约测试均通过；修复提交 CI 仍待验证。
+- 后续准确 SHA `1311d6c093af2ca4d44dee8dcf10a23c3150b912` 的 run `39096880139` 有 13/18 jobs 成功、4 项失败、`data-contract` 在 40 分钟时限取消。4 项失败共同来自 `tests/integration/test_intake_e2e.py` 的测试查询仍使用 `.astext`；生产查询的残留调用已先行修复。该测试表达式现也改用 `.as_string()`，并在隔离 PostgreSQL 16 全量迁移后的新数据库上完成定向用例 1/1、测试文件 1/1 和 Ruff 检查。data-contract 是长时间数据/fixture 门禁，当前没有失败断言日志且本轮确实达到 40 分钟时限；没有调整 CI 配置或削减覆盖。新修复 SHA 的 CI 尚待运行。
 
 这些验证只使用内存库、`/tmp` 文件数据库/对象目录和一次性 PostgreSQL 16 容器，未连接常驻开发库。当前代码提交后的准确 SHA CI 尚待验证；阶段状态以 [CURRENT_ROADMAP](../../50_plans/CURRENT_ROADMAP.md) 与 [工作包](../../50_plans/work_items/FLOW--single-machine-visual-prototype.md) 为准。
 

@@ -3,7 +3,7 @@ doc_id: FLOW-WI-SINGLE-MACHINE-VISUAL-20261018-001
 title: 单机原型架构简化与全视图视觉升级
 doc_type: work-item
 status: active
-version: 1.2
+version: 1.3
 created_at: 2026-10-18
 updated_at: 2026-10-18
 owner: FLOW
@@ -54,7 +54,7 @@ confidentiality: project-internal
 - 构造 SQLite + 文件目录备份包，恢复到新隔离目录并重验来源/报告/驾驶舱结果。
 - 先完成当前 ORM schema 对账和可重复的 SQLite 初始化/升级方案，再决定历史 32 个 PostgreSQL revisions 的归档方式；不同时维护两套运行 schema。
 
-**本地执行证据（2026-10-18）：** 新增 SQLite 通用模型注册、JSON/UUID 方言适配、定标整数 Decimal（SQLite）/原生 NUMERIC（PostgreSQL）、SQLite 外键连接钩子、文件内容寻址存储、自校验备份恢复，以及复用现有 Alembic 的 SQLite 专用基线链。SQLite 空库迁移创建 61 张模型表，重复 `upgrade head` 不重复执行基线；CFO 角色约束与 `0032` 迁移对齐。两期大麦财报导入、归一化、指标快照、客观冻结后备份恢复到新目录，来源字节/哈希、FactTrace、报表快照哈希及恢复后驾驶舱总资产 `71850.9310` 一致。CFO 模块 API SQLite 5/5、基础/备份/财务全链 16/16；隔离 PostgreSQL 16 完整迁移至 `0032` 后同 API 5/5；SQLite/PostgreSQL 大额 Decimal 读值与 SUM 零差异。首轮准确 SHA CI `cff0a94666c7b041689499af94bc28f0aef7b98b` 的 run `39096602647` 暴露跨库 JSON 包装后仍使用 `.astext` 的 4 个 Copilot 测试失败，已改用通用 `.as_string()` 并在隔离 PostgreSQL 上复验 Copilot 29/29 + eval 6/6、数据契约 26/26。Ruff、mypy、`git diff --check` 通过。所有数据库和文件均为一次性临时隔离目标。PostgreSQL 既有 32 个 revisions 未改动并保留为历史/测试链；SQLite 使用 `migrations_sqlite/` Alembic 链从当前 ORM 建立本地原型 schema。**修复提交的准确 SHA CI 通过后关闭本阶段。**
+**本地执行证据（2026-10-18）：** 新增 SQLite 通用模型注册、JSON/UUID 方言适配、定标整数 Decimal（SQLite）/原生 NUMERIC（PostgreSQL）、SQLite 外键连接钩子、文件内容寻址存储、自校验备份恢复，以及复用现有 Alembic 的 SQLite 专用基线链。SQLite 空库迁移创建 61 张模型表，重复 `upgrade head` 不重复执行基线；CFO 角色约束与 `0032` 迁移对齐。两期大麦财报导入、归一化、指标快照、客观冻结后备份恢复到新目录，来源字节/哈希、FactTrace、报表快照哈希及恢复后驾驶舱总资产 `71850.9310` 一致。CFO 模块 API SQLite 5/5、基础/备份/财务全链 16/16；隔离 PostgreSQL 16 完整迁移至 `0032` 后同 API 5/5；SQLite/PostgreSQL 大额 Decimal 读值与 SUM 零差异。首轮准确 SHA CI `cff0a94666c7b041689499af94bc28f0aef7b98b` 的 run `39096602647` 暴露跨库 JSON 包装后仍使用 `.astext` 的 4 个 Copilot 测试失败，生产查询已改用通用 `.as_string()` 并在隔离 PostgreSQL 上复验 Copilot 29/29 + eval 6/6、数据契约 26/26。随后准确 SHA `1311d6c093af2ca4d44dee8dcf10a23c3150b912` 的 run `39096880139` 有 13/18 jobs 成功、4 项失败、data-contract 在 40 分钟 job 上限被取消；剩余失败全部因 `tests/integration/test_intake_e2e.py` 中一个 PostgreSQL 专用 `.astext` 测试表达式。改为 `.as_string()` 后，在新建临时 PostgreSQL 16 数据库上定向用例 1/1、该测试文件全量 1/1、Ruff 通过。data-contract 超时已有仓库历史记录，本轮复现；CI 配置未获授权修改，当前维持原覆盖与时限。该修复提交准确 SHA CI 待验证。所有数据库和文件均为一次性临时隔离目标。PostgreSQL 既有 32 个 revisions 未改动并保留为历史/测试链；SQLite 使用 `migrations_sqlite/` Alembic 链从当前 ORM 建立本地原型 schema。**修复提交的准确 SHA CI 通过后关闭本阶段。**
 
 **通过条件：** 全流程在隔离环境从空库完成；全部关键金额仍使用 Decimal 并与 PostgreSQL 基线零差异；来源锚点、哈希、分析值、报告与图表数值一致；备份恢复全链通过；失败记录可复现且未连接常驻库。
 
