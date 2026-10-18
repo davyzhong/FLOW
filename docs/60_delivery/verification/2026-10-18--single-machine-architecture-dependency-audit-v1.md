@@ -123,6 +123,7 @@ applies_to: architecture
 - SQLite 本地内容存储保持项目 SHA-256 不可变契约：幂等、并发同内容写入、键冲突、缺失、坏哈希和路径穿越均有隔离测试；备份包有逐文件 SHA-256 清单，恢复拒绝覆盖已有目标。
 - SQLite CFO 模块 API 5/5，SQLite 基础/迁移/财务全链测试 16/16；隔离 PostgreSQL 16 完整迁移至 `0032` 后同模块 API 5/5。金额读回与 SQL `SUM` 在 SQLite/PostgreSQL 大额 Decimal 样本零差异。Ruff、mypy 与文档 M1/M6 通过。
 - 过程发现并修正 `RoleBinding` ORM 检查约束遗漏 `cfo`（PostgreSQL `0032` 已允许）以及 SQLite 企业范围 UUID 查询返回字符串导致的类型不一致。
+- 首轮准确 SHA CI `cff0a94666c7b041689499af94bc28f0aef7b98b` 的 Copilot job 暴露 JSON 通用类型不再提供 PostgreSQL `.astext` 比较器；两个查询已改用跨库 `.as_string()`。修复后隔离 PostgreSQL 的 Copilot 测试/评测和数据契约测试均通过；修复提交 CI 仍待验证。
 
 这些验证只使用内存库、`/tmp` 文件数据库/对象目录和一次性 PostgreSQL 16 容器，未连接常驻开发库。当前代码提交后的准确 SHA CI 尚待验证；阶段状态以 [CURRENT_ROADMAP](../../50_plans/CURRENT_ROADMAP.md) 与 [工作包](../../50_plans/work_items/FLOW--single-machine-visual-prototype.md) 为准。
 

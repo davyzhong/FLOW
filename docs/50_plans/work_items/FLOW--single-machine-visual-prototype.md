@@ -54,7 +54,7 @@ confidentiality: project-internal
 - 构造 SQLite + 文件目录备份包，恢复到新隔离目录并重验来源/报告/驾驶舱结果。
 - 先完成当前 ORM schema 对账和可重复的 SQLite 初始化/升级方案，再决定历史 32 个 PostgreSQL revisions 的归档方式；不同时维护两套运行 schema。
 
-**本地执行证据（2026-10-18）：** 新增 SQLite 通用模型注册、JSON/UUID 方言适配、定标整数 Decimal（SQLite）/原生 NUMERIC（PostgreSQL）、SQLite 外键连接钩子、文件内容寻址存储、自校验备份恢复，以及复用现有 Alembic 的 SQLite 专用基线链。SQLite 空库迁移创建 61 张模型表，重复 `upgrade head` 不重复执行基线；CFO 角色约束与 `0032` 迁移对齐。两期大麦财报导入、归一化、指标快照、客观冻结后备份恢复到新目录，来源字节/哈希、FactTrace、报表快照哈希及恢复后驾驶舱总资产 `71850.9310` 一致。CFO 模块 API SQLite 5/5、基础/备份/财务全链 16/16；隔离 PostgreSQL 16 完整迁移至 `0032` 后同 API 5/5；SQLite/PostgreSQL 大额 Decimal 读值与 SUM 零差异。Ruff、mypy、`git diff --check` 通过。所有数据库和文件均为一次性临时隔离目标。PostgreSQL 既有 32 个 revisions 未改动并保留为历史/测试链；SQLite 使用 `migrations_sqlite/` Alembic 链从当前 ORM 建立本地原型 schema。**本阶段待准确 SHA CI 通过后关闭。**
+**本地执行证据（2026-10-18）：** 新增 SQLite 通用模型注册、JSON/UUID 方言适配、定标整数 Decimal（SQLite）/原生 NUMERIC（PostgreSQL）、SQLite 外键连接钩子、文件内容寻址存储、自校验备份恢复，以及复用现有 Alembic 的 SQLite 专用基线链。SQLite 空库迁移创建 61 张模型表，重复 `upgrade head` 不重复执行基线；CFO 角色约束与 `0032` 迁移对齐。两期大麦财报导入、归一化、指标快照、客观冻结后备份恢复到新目录，来源字节/哈希、FactTrace、报表快照哈希及恢复后驾驶舱总资产 `71850.9310` 一致。CFO 模块 API SQLite 5/5、基础/备份/财务全链 16/16；隔离 PostgreSQL 16 完整迁移至 `0032` 后同 API 5/5；SQLite/PostgreSQL 大额 Decimal 读值与 SUM 零差异。首轮准确 SHA CI `cff0a94666c7b041689499af94bc28f0aef7b98b` 的 run `39096602647` 暴露跨库 JSON 包装后仍使用 `.astext` 的 4 个 Copilot 测试失败，已改用通用 `.as_string()` 并在隔离 PostgreSQL 上复验 Copilot 29/29 + eval 6/6、数据契约 26/26。Ruff、mypy、`git diff --check` 通过。所有数据库和文件均为一次性临时隔离目标。PostgreSQL 既有 32 个 revisions 未改动并保留为历史/测试链；SQLite 使用 `migrations_sqlite/` Alembic 链从当前 ORM 建立本地原型 schema。**修复提交的准确 SHA CI 通过后关闭本阶段。**
 
 **通过条件：** 全流程在隔离环境从空库完成；全部关键金额仍使用 Decimal 并与 PostgreSQL 基线零差异；来源锚点、哈希、分析值、报告与图表数值一致；备份恢复全链通过；失败记录可复现且未连接常驻库。
 

@@ -752,7 +752,7 @@ def read_canonical_package_by_version(
 def read_canonical_package(session: Session, batch_code: str) -> CanonicalPackage:
     version = session.scalar(
         select(ImportVersion)
-        .where(ImportVersion.summary["batch_code"].astext == batch_code)
+        .where(ImportVersion.summary["batch_code"].as_string() == batch_code)
         .order_by(ImportVersion.sequence.desc())
         .limit(1)
     )

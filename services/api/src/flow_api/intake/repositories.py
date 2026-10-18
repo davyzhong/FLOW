@@ -83,7 +83,7 @@ class IntakeRepository:
         return self.session.scalar(
             select(ImportVersion).where(
                 ImportVersion.mapping_version_id == mapping_version_id,
-                ImportVersion.summary["source_file_id"].astext == str(source_file_id),
+                ImportVersion.summary["source_file_id"].as_string() == str(source_file_id),
             )
         )
 
