@@ -3,7 +3,7 @@ doc_id: FLOW-WI-SINGLE-MACHINE-VISUAL-20261018-001
 title: 单机原型架构简化与全视图视觉升级
 doc_type: work-item
 status: active
-version: 2.2
+version: 2.3
 created_at: 2026-10-18
 updated_at: 2026-10-18
 owner: FLOW
@@ -19,7 +19,7 @@ confidentiality: project-internal
 
 # 单机原型架构简化与全视图视觉升级
 
-> **当前状态：第 1–3 阶段完成；第 4 阶段 4.1–4.4 已结案，4.5 真实性、数值和追溯核验实际执行中。** 4.4 首轮已复用单期分类横条 builder，修正资产结构图型、标量值表期间列，并添加指标定义深链；前端测试/类型/构建与 API 路由专项通过，另将一处旧 cockpit fixture 对齐至 `objective.v3` 快照合同；具体进度以 CURRENT_ROADMAP 为准。4.4 验收记录：[模块图表适配与追溯验收](../../60_delivery/verification/2026-10-18--cfo-module-chart-adapter-acceptance-v1.md)。4.5 当前发现企业发行包源 manifest 指纹与 `fixtures/damai` 不一致，且发行版经营订单/件量小数；源 fixture 已整数化。 第 2 阶段准确代码 SHA `b0e1eb787592ff84bc4c19873a1e61cad1f9f3e6` 的 CI run `39099573268` 18/18 jobs success；第 3 阶段最终状态 SHA `20a511f66e4bfe65ab02edc091c7b49e2cbcbe67` 的 CI run `39125304357` 18/18 jobs success。4.1 矩阵验收与准确 SHA data-contract 两次取消后的隔离替代验证见[验收记录](../../60_delivery/verification/2026-10-18--cfo-reference-matrix-ci-and-isolated-validation-v1.md)。第 3 阶段实现与验证记录见[单机运行收敛验收记录](../../60_delivery/verification/2026-10-18--single-machine-runtime-convergence-v1.md)。唯一状态/顺序见 [CURRENT_ROADMAP](../CURRENT_ROADMAP.md)。本工作包替代旧全视图驾驶舱任务的剩余队列；既有 9 页、25 个画布、18 组路由/视口浏览器验收作为回归基线保留，不沿用取消/失败的 CI 运行作成功证据。
+> **当前状态：第 1–3 阶段完成；第 4 阶段 4.1–4.7 的实现与本地验收已完成；当前等待准确 SHA GitHub CI 与最终集成门禁结案。** 4.4 首轮已复用单期分类横条 builder，修正资产结构图型、标量值表期间列，并添加指标定义深链；前端测试/类型/构建与 API 路由专项通过，另将一处旧 cockpit fixture 对齐至 `objective.v3` 快照合同；具体进度以 CURRENT_ROADMAP 为准。4.4 验收记录：[模块图表适配与追溯验收](../../60_delivery/verification/2026-10-18--cfo-module-chart-adapter-acceptance-v1.md)。4.5 已修复发行包与 `fixtures/damai` 的源 manifest/逐文件内容偏差，且发行版经营订单/件量已通过整数语义核验。 第 2 阶段准确代码 SHA `b0e1eb787592ff84bc4c19873a1e61cad1f9f3e6` 的 CI run `39099573268` 18/18 jobs success；第 3 阶段最终状态 SHA `20a511f66e4bfe65ab02edc091c7b49e2cbcbe67` 的 CI run `39125304357` 18/18 jobs success。4.1 矩阵验收与准确 SHA data-contract 两次取消后的隔离替代验证见[验收记录](../../60_delivery/verification/2026-10-18--cfo-reference-matrix-ci-and-isolated-validation-v1.md)。第 3 阶段实现与验证记录见[单机运行收敛验收记录](../../60_delivery/verification/2026-10-18--single-machine-runtime-convergence-v1.md)。唯一状态/顺序见 [CURRENT_ROADMAP](../CURRENT_ROADMAP.md)。本工作包替代旧全视图驾驶舱任务的剩余队列；既有 9 页、25 个画布、18 组路由/视口浏览器验收作为回归基线保留，不沿用取消/失败的 CI 运行作成功证据。
 
 ## 目标
 
@@ -82,8 +82,8 @@ confidentiality: project-internal
 - **4.3（completed，2026-10-18）：组件复用与视图方案。** 完成逐视图 builder/组件映射和事实分层、URL 状态、表格/深链、移动/无障碍合同，详见[设计记录](../../60_delivery/verification/2026-10-18--cfo-chart-component-and-interaction-design-v1.md)。结论为继续复用 ECharts 6.1 和现有 builders，不增加图表依赖；已标出尚未接入的 aging/rank/heatmap/quadrant 适配器和资产负债图型语义缺口。
 - **4.4（completed，2026-10-18）：视图实现。** 按 4.3 优先序接通已有 ECharts builders、补同值 DOM 数据表与明确深链，优化图表标题/期间/单位/缺失态。先核实源合同和测试，业务值不重算、不补零、不混合公开披露与 synthetic；单独账龄、预算图必须带“合成演示数据”标识。保持截图采集工作流暂停；验收见[模块图表适配与追溯验收](../../60_delivery/verification/2026-10-18--cfo-module-chart-adapter-acceptance-v1.md)。
 - **4.5（completed，2026-10-18）：真实性、数值和追溯核验。** 重建大麦企业发行包，使 31 个发行文件与当前源 fixture 一致；verify 现在检查源 manifest 指纹及 business 下五类目录的逐文件字节一致性。经营实际 1,920 行中订单数、件量全部整数语义。公开年度事实与 synthetic allocation 保持原有分层，不插值或伪装为月度披露；无来源支持的预算、原因、阈值、预测和行业分位仍不生成。验收见[发行包血缘与整数数量验收](../../60_delivery/verification/2026-10-18--cfo-enterprise-package-lineage-and-integer-counts-v1.md)。
-- **4.6（active，2026-10-18）：指标展示与交互补全。** 逐项核验关键指标的绝对值、单位、合理的小数位、同期/环比变化；来源和公式版本常显或一键可达。
-- **4.7（4.6 验收后启动）：浏览器验收和结案。** 图表、表格、KPI、Finding、Action、指标定义、财报来源行之间建立可操作的导航/钻取；保证 URL 状态、返回路径、键盘和手机触控。视觉只使用真实数据图层；可用受来源允许的企业标识/报告缩略图辅助定位，不用装饰图片掩盖业务数据空缺。
+- **4.6（completed，2026-10-18）：指标展示与交互补全。** 关键指标绝对值、单位、合理精度、期间变化和来源/公式可达性已核验；未知指标不猜测映射，倍率指标按字典单位显示。验收见[指标展示与追溯验收](../../60_delivery/verification/2026-10-18--cfo-metric-display-and-traceability-v1.md)，独立审查无 P1/P2。
+- **4.7（本地验收完成，2026-10-18；最终关闭待准确 SHA CI）：浏览器验收和结案。** 隔离真实大麦双财年数据下 9 个 CFO/数据页面、165 项浏览器回归通过，验证图表与 API 一致、来源/Action交互、响应式和触控；截图/trace 关闭。证据见[浏览器验收记录](../../60_delivery/verification/2026-10-18--cfo-browser-acceptance-v1.md)。
 
 当前公开事实只有年度粒度的项目，不得在页面上插值或分摊后冒充月度披露。Synthetic allocation 只能明确标识为演示分配数据并与披露事实分层展示；不产生未经来源支持的预算、原因、阈值、预测和行业分位。
 - 第 4 阶段逐步完成时，确保营业收入、营业利润、毛利率、经营现金流和行动项在 CFO 首页首屏可见；杜邦拆解和各财务主题图表按页面契约完整呈现。
