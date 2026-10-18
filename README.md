@@ -3,7 +3,7 @@ doc_id: FLOW-NAV-ROOT-README-001
 title: FLOW repository README
 doc_type: navigation
 status: current
-version: 1.5
+version: 1.6
 created_at: 2026-08-29
 updated_at: 2026-10-18
 owner: FLOW
@@ -68,9 +68,9 @@ tags:
 
 ### 高管编辑部 × 财务报告画布
 
-FLOW 后续驾驶舱与报告页面统一采用 **A「高管编辑部」主风格 + C「财务报告画布」叙事方式**。下图是本轮生成的**设计概念图**，用于表达目标布局与视觉气质；它不是当前产品运行截图，图中的示意排版不代表已完成的动态页面或已验证业务数据。
+FLOW 后续驾驶舱与报告页面统一采用 **A「高管编辑部」主风格 + C「财务报告画布」叙事方式**。下图是浏览器中展示并确认的**A+C 桌面与手机布局概念板**，用于明确页面结构、图表类型和视觉气质；它是静态设计验证页面，不是当前产品运行截图，也不代表这些页面功能已经实现。图中指标数值均为**示意数据**，不能作为企业经营事实引用。
 
-![FLOW 单机财务驾驶舱与报告画布的视觉方向概念图：高管编辑部主风格与财务报告叙事](docs/assets/cockpit-visual-direction-2026-10-18.png)
+![浏览器确认的 FLOW A+C 财务驾驶舱与报告画布概念板，呈现桌面和手机布局、趋势图、现金流桥、杜邦分析及经营指标；静态概念稿，所有数值均为示意数据](docs/assets/cockpit-visual-direction-2026-10-18.png)
 
 | 视觉层 | 统一标准 | 页面落实方式 |
 | --- | --- | --- |
@@ -756,7 +756,7 @@ FLOW/
     │                             #   30_handbooks 领域手册 / 50_mappings 产品映射 +
     │                             #   不可变档案（会话/研究/原图/微信）
     └── assets/                   # README 视觉资产
-        ├── cockpit-visual-direction-2026-10-18.png # 视觉概念图（不是产品实拍）
+        ├── cockpit-visual-direction-2026-10-18.png # 浏览器确认的 A+C 概念板（示意数据，非产品截图）
         └── screenshots/          # 当前真实页面截图与来源说明
 ```
 
