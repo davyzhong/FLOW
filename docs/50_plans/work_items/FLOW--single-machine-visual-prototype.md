@@ -19,7 +19,7 @@ confidentiality: project-internal
 
 # 单机原型架构简化与全视图视觉升级
 
-> **当前状态：队首执行中（第 1 阶段现状/影响审计）。** 起始 CI 基线：准确 SHA `a331f03075c95f3b371b5a0ebd0fd91cac9dfeae` 的 run `39090417203` 全部 job success。唯一状态/顺序见 [CURRENT_ROADMAP](../CURRENT_ROADMAP.md)。本工作包替代旧全视图驾驶舱任务的剩余队列；既有 9 页、25 个画布、18 组路由/视口浏览器验收作为回归基线保留，不沿用取消/失败的 CI 运行作成功证据。
+> **当前状态：第 1 阶段审计完成，队首转入第 2 阶段隔离 SQLite 与本地内容存储验证。** 架构盘点与调用点矩阵见[审计报告](../../60_delivery/verification/2026-10-18--single-machine-architecture-dependency-audit-v1.md)。起始 CI 基线：准确 SHA `a331f03075c95f3b371b5a0ebd0fd91cac9dfeae` 的 run `39090417203` 全部 job success。唯一状态/顺序见 [CURRENT_ROADMAP](../CURRENT_ROADMAP.md)。本工作包替代旧全视图驾驶舱任务的剩余队列；既有 9 页、25 个画布、18 组路由/视口浏览器验收作为回归基线保留，不沿用取消/失败的 CI 运行作成功证据。
 
 ## 目标
 
@@ -34,7 +34,9 @@ confidentiality: project-internal
 
 ## 队列内执行步骤与验收
 
-### 1. 现状与依赖审计
+### 1. 现状与依赖审计（已完成，2026-10-18）
+
+正式审计：[单机原型架构依赖与页面现状审计](../../60_delivery/verification/2026-10-18--single-machine-architecture-dependency-audit-v1.md)。共盘点 19 个页面路由、9 页/25 画布浏览器回归基线、32 个 PostgreSQL migrations、SQLite 方言和金额精度风险、对象存储及队列实际调用点，并只读登记主 checkout 四个未提交改动。未连接或修改任何数据库。
 
 - 对照所有交互路由、页面状态、API 数据、指标目录、图表系列、数据表、报告和可用来源，建立页面/指标/图形/追溯覆盖矩阵。
 - 对照 SQLAlchemy 最终模型与当前 PostgreSQL migration head，列出 Postgres 专用 DDL/DML、JSON/UUID、Decimal 精度、外键/约束/并发锁等 SQLite 风险。
