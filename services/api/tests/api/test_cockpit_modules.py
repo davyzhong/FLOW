@@ -293,6 +293,38 @@ def test_module_rejects_canonical_mapping_changed_after_report_freeze(
     assert response.json()["detail"]["code"] == "module_snapshot_mismatch"
 
 
+def test_module_allows_unmapped_rows_in_frozen_report(
+    api_client: TestClient, db_session: Session
+) -> None:
+    from flow_api.infrastructure.models.statement import StatementNormalizedItem
+    from flow_api.publishing.objective_freeze import freeze_objective_statement_report
+
+    current_report = db_session.scalar(
+        select(StatementReport).where(
+            StatementReport.stock_code == "DAMAI.SYN",
+            StatementReport.period_label == "FY2023",
+        )
+    )
+    assert current_report is not None
+    row = db_session.scalar(
+        select(StatementNormalizedItem)
+        .where(
+            StatementNormalizedItem.report_id == current_report.id,
+            StatementNormalizedItem.item_id == "is.revenue",
+        )
+        .limit(1)
+    )
+    assert row is not None
+    row.item_id = None
+    db_session.flush()
+    freeze_objective_statement_report(db_session, report_id=current_report.id)
+    db_session.commit()
+
+    response = api_client.get("/api/v1/cockpit/modules/balance-sheet")
+
+    assert response.status_code == 200, response.text
+
+
 def test_working_capital_ccc_identity(api_client: TestClient) -> None:
     response = api_client.get("/api/v1/cockpit/modules/working-capital")
     assert response.status_code == 200, response.text

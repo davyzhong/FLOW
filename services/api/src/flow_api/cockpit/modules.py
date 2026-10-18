@@ -11,6 +11,7 @@
 
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass, field
 from decimal import Decimal
 from functools import lru_cache
@@ -181,7 +182,7 @@ def _snapshot_matches_rows(
             identity = ""
             if include_item_id:
                 item_id = getattr(row, "item_id", None)
-                identity = str(item_id) if item_id is not None else ""
+                identity = json.dumps(item_id, ensure_ascii=False)
             result.setdefault(row.statement_type, []).append((row.item_name, identity, *values))
         return {key: sorted(values) for key, values in result.items()}
 
@@ -199,13 +200,24 @@ def _snapshot_matches_rows(
                 if (
                     not isinstance(entry, dict)
                     or not isinstance(entry.get("item"), str)
-                    or (include_item_id and not isinstance(entry.get("item_id"), str))
+                    or (
+                        include_item_id
+                        and (
+                            "item_id" not in entry
+                            or (
+                                entry["item_id"] is not None
+                                and not isinstance(entry["item_id"], str)
+                            )
+                        )
+                    )
                 ):
                     return {}
                 projected.append(
                     (
                         entry["item"],
-                        entry.get("item_id", "") if include_item_id else "",
+                        json.dumps(entry["item_id"], ensure_ascii=False)
+                        if include_item_id
+                        else "",
                         *(
                             str(entry[column]) if entry.get(column) is not None else ""
                             for column in columns
