@@ -3,9 +3,9 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 5.61
+version: 5.62
 created_at: 2026-09-12
-updated_at: 2026-10-17
+updated_at: 2026-10-18
 owner: FLOW
 depends_on: [FLOW-SPEC-V1-DESIGN-001]
 acceptance_refs: [roadmap-unique-invariant]
@@ -16,6 +16,8 @@ superseded_by: null
 ---
 
 # 当前路线图（唯一主线）
+
+> **2026-10-18 用户确认原型方向并完成队首重规划**：当前交付定位调整为单机单用户验证原型；用户选择 SQLite 单文件 + 本地文件目录、移除 Redis/Celery/MinIO，并确认 A 主风格 + C 报告叙事。旧驾驶舱全视图工作包归档，其九页/25 图与桌面/手机实测作为回归基线。旧 CI 实际结果为：`39042517573`、`39041228479` cancelled；`39040652008`、`39038535194` failure；不得描述为 CI 全绿。新的唯一队首为单机原型架构简化与全视图视觉升级，正式设计见[规格](../superpowers/specs/2026-10-18-single-machine-visual-prototype-design.md)与[D055](../10_governance/decisions/D055--单机单用户验证原型.md)。计划提交的准确 SHA CI 通过后，第一实施子步为 SQLite/本地内容存储隔离验证；完成整个工作包后再恢复知识刷新 K2。
 
 > **2026-10-17 用户调整队列并启动 CFO 全视图实施**：用户要求立即按驾驶舱计划实施，故该项调整为唯一队首；知识刷新 K2 顺延。阶段 1–4 已完成，阶段 2 准确 SHA `09ba5722ec3e8075a3483223df4c81fe5cdaa9fa` 的 CI run `39035163288` 18/18 job 成功；阶段 3 契约代码 SHA `df5c338bc5c1d7330be2391189cdfb828099a962` 对应 CI run `39038535194` 仍在执行，其中已失败的静态 Web 与 smoke 构建发现模块图表测试 fixture 缺少契约新增的必填字段，当前分支已补齐且本地 typecheck/build 验证通过。阶段 4 页面图表、来源披露、财报行深链及九视图桌面/窄屏截图已完成；阶段 5 的浏览器 API/表格全量逐项核对、独立复核、M1、契约和相关测试已通过，当前待本轮准确 SHA 的 GitHub CI。实际截图和隔离账套证据见[浏览器验证报告](../60_delivery/verification/2026-10-17--cockpit-all-views-visual-browser-verification-v1.md)。驾驶舱工作包完成后恢复知识刷新 K2。此前 `a333b31a`、`fcfc55a4`、`c8f14b79` 的 CI 失败与修复过程保留为历史证据。
 
@@ -72,6 +74,8 @@ superseded_by: null
 |---|---|---|---|---|
 | **0** ✅ | **[CFO 财务总监驾驶舱产品化（含财务指标前置）](work_items/COCKPIT--cfo-dashboard-implementation.md)** | **completed** | 大麦基础演示包 ✓（公开来源重整进行中）+ ORG-LEDGER ✓ + S01 ✓ | 批次 A、C-1、FINMETRIC F1/F2 完成；来源登记 + 运营披露层重建已交付（`842c8ea8`/`e5d8d2c6`，见 2026-10-13 交付记录）。**时间线迁移已完成（`087a72f2`）**：比较期 FY2022、分析期 FY2023、明细↔披露年度聚合零差异、IFRS 披露三表过勾稽门禁、ORG-LEDGER v2。原迁移步骤（已完成留档）：① profile/generator 月份常量与规模锚改披露值（FY2022 收入 66,866,916 千元、FY2023 77,799,675 千元，成本/毛利同步锚定，季节系数归一化保证年度聚合恒等），种植事件月份重映射；② statements.py 改由来源登记生成 IFRS 披露三表（删除 65% 利息、10% 折旧、负债/现金流拆分等无来源行，处置见登记 U-DM-*），alias map `damai_syn` 段重映射；③ FINMETRIC 覆盖矩阵按 FY2022/FY2023 重建；④ ORG-LEDGER v1 冻结包重版 v2；⑤ 测试/e2e 扫荡（44 个 FY2025/FY2026 引用文件 + 18 个月份字符串文件）、web 生产构建与快照重录、verify 19/19、全链同 SHA CI。验收：明细↔披露年度聚合对账零差异。之后再按 F3→F4→B→C-2～C-5→D 串行推进；全量 51 图表和各指标/链路须纳入最终验收。U04 暂停至本工作包整体完成；**不解除 C 级门禁**。[审计记录](../60_delivery/verification/2026-10-12--damai-source-baseline-audit-v1.md) · [实施方案](../superpowers/plans/2026-09-30-cfo-cockpit-implementation-plan.md) |
 | 0a | [财务指标目录（驾驶舱前置）](work_items/FINMETRIC--financial-metric-catalog.md) | **completed** | 指标引擎 + 会计科目基础 ✓ | F1/F2 已由准确 SHA CI 关闭；F2 覆盖矩阵 FY2025 42/50、FY2026 45/50，准确 SHA `0d4b554f33bd1c9cdab3242b25d26eb2209a632c` / run `38188010174` 17/17 success。F3/F4 未启动，先完成 CFO 队首内的数据来源与 Mock 基线重整。[工作包](work_items/FINMETRIC--financial-metric-catalog.md) |
+| 0b | [CFO 全视图数据与图表完整性改造（旧工作包）](work_items/COCKPIT--all-views-data-and-visual-completion.md) | **archived** | 已由 7a 队首接替；禁止独立执行 | 九页/25 图本地验收保留为回归基线；`39042517573`、`39041228479` cancelled，`39040652008`、`39038535194` failure，准确 SHA CI 未通过。|
+| 7a | [单机原型架构简化与全视图视觉升级](work_items/FLOW--single-machine-visual-prototype.md) | **active** | D055 已确认；计划门禁与提交在进行 | 单机单用户；SQLite + 本地内容目录；移除 Redis/Celery/MinIO；A+C 视觉；下一子步为隔离 SQLite 与本地存储全链验证。|
 | 1 | [U08 生产就绪收口](work_items/U08--production-readiness.md) | **completed** | — | U8-A～D 完成；严格 HTTPS/双格式 SHA/恢复门禁通过；冻结记录与标签 |
 | 1' | [U04 独立 oracle](work_items/U04--independent-oracle.md) | **completed** | 样本冻结已完成 | 驾驶舱批次 A 完成后，用户要求继续完整驾驶舱实现；因此盲评复评暂停至本工作包整体验收，不是取消。完整独立 oracle 与报告盲评仍是 C 级证据门槛 |
 | 2 | [S01 战略边界、事实合同与安全门禁](work_items/S01--post-u8-boundary-contract-security.md) | **completed** | U08 completed | Task 1–5 完成；安全规格 V1.1 已批准且独立审查闭环（`6c3c1cd`，零 P1/P2）。2026-09-14 `ff42c67` 五路并合 + 回落修复（`c1510ce`→`2570bf8`）带入路由策略 v2、模块边界与 U8 升级门禁、迁移 0026 修复、`main.py` 启动 fail-fast、两模块入口；Kimi `0841ff9` v1 被否，由 `997c1ab` v2 取代。**Task 6 已关闭**（R2/R3/R4 交付，台账 §7），阶段 3 转入 C 级出口；[协调台账](../70_operations/2026-09-14-coordination-ledger-glm.md) / [范围计划](../superpowers/plans/2026-09-13-flow-post-u8-boundary-gate.md) / [并行执行计划](../superpowers/plans/2026-09-13-flow-three-agent-parallel-restructuring.md) |
@@ -92,11 +96,11 @@ superseded_by: null
 
 ## 唯一完整 To-do 与执行队列（严格串行）
 
-**当前唯一队列（14 项）**：已完成 7 项；实际执行中 1 项（CFO 驾驶舱全视图）；队首待启动 0 项；排队 4 项（含顺延的 K2）；暂停 1 项；外部材料受限 1 项。当前唯一执行项为 CFO 驾驶舱全视图数据与图表完整性改造。
+**当前唯一队列（14 项）**：已完成 7 项；实际执行中 1 项（单机原型架构简化与全视图视觉升级的正式计划沉淀）；队首待启动 0 项；排队 4 项（含顺延的 K2）；暂停 1 项；外部材料受限 1 项。当前唯一执行项为单机原型架构与视觉升级；计划提交/推送及其准确 SHA CI 通过后，启动 SQLite 与本地文件存储的隔离验证。
 
 0. **completed** [CFO 驾驶舱盈利分析与图表缺口补全](work_items/COCKPIT--visual-analysis-expansion.md)：四项指标于 Objective 快照冻结并存 trace；只读 API；杜邦树与两期比较图；指标/财报/来源行深链；未具备口径时 unavailable。范围与交付记录：[设计规格](../superpowers/specs/2026-10-17-cfo-cockpit-visual-analysis-expansion-design.md)、[实施计划](../superpowers/plans/2026-10-17-cockpit-visual-analysis-expansion.md)。
 0a. **completed** [驾驶舱视觉补全与数值格式治理](work_items/COCKPIT--visual-completion-and-number-format.md)：订单/件量整数、金额两位小数、单位格式统一、费用页错误修复、真实图表/趋势/下钻、8 页面截图及隔离浏览器验收；代码 SHA `1a71e33f`，准确 SHA CI run `38936413156` 全部 job 成功。
-7a. **active（唯一队首，等待本轮提交及 CI）** [CFO 驾驶舱全视图数据与图表完整性改造](work_items/COCKPIT--all-views-data-and-visual-completion.md)：阶段 1–4 已完成；九个视图有桌面/窄屏实测截图和可视图表，报告记录总计 25 个画布。阶段 2 准确 SHA CI run `39035163288` 18/18 成功；阶段 3 SHA `df5c338b` 的 run `39038535194` 仍在执行，静态 Web/smoke 的契约 fixture 问题已在当前分支修复，日志与模块边界失败待该 run 收束后确认。阶段 5 Playwright 全视图桌面/窄屏 API/表格逐项核验、独立审查、M1、契约和相关测试已通过；唯一剩余为本轮提交的准确 SHA GitHub CI。
+7a. **active（唯一队首，计划已落盘；待本轮计划提交 CI 后进入隔离验证）** 单机原型架构简化与全视图视觉升级：D055 已记录单机单用户、SQLite + 本地目录、移除 Redis/Celery/MinIO 和 A+C 视觉方向。详细设计与分阶段验收见规格和工作包。启动前先清点 SQLite 对 32 个 PostgreSQL revisions、Decimal、事实/快照和报告链路的兼容性，替换对象存储前先验证本地内容寻址、SHA/幂等和备份恢复；之后再收敛启动方式并逐页完成图表/报告/来源交互。旧工作包归档且 `do_not_execute`，其本地全视图验收仅为回归基线。
 7b. **proposed（顺延，驾驶舱完成后）** 第二代静态知识刷新与战略重基线 K2：K0/K1 完成。K1 扫描器 `a0c2e67`、证据 `a914830`；扫描 1,601 篇，566 篇 triage、0 可执行候选。K2 冻结器已推送 Davybase `699e5c6`（13 项专项/892 项全量测试，Ruff、README 统计、断链检查通过；独立复核发现的推送校验绕过已修复）。驾驶舱工作包完成后先只读核验 ObsidianWiki 当前状态，再执行门禁；dirty 时不写入、不暂存、不伪造 accepted，按计划如实记录 rejected 并顺延。
 
 以下 1–11 是驾驶舱队首调整前的原队列事项：1、2、3、5 已完成；4 U04 与 6 P3 暂停；7、9、10、11 排队；8 外部材料受限。旧验证记录仍是历史证据，不代表当前执行位置。

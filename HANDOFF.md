@@ -3,9 +3,9 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目交接文档
 doc_type: navigation
 status: current
-version: 7.7
+version: 7.8
 created_at: 2026-09-12
-updated_at: 2026-10-17
+updated_at: 2026-10-18
 owner: FLOW
 applies_to: repository
 ---
@@ -18,13 +18,15 @@ applies_to: repository
 
 ## 一、当前任务
 
-**当前任务：收尾 CFO 驾驶舱全视图数据与图表完整性改造**。阶段 1–4 已完成。阶段 5 的本地隔离浏览器验收、截图报告、全视图 API/页面逐项核对、独立复核、M1/M6/契约/相关测试均已完成；九页共 25 个 ECharts 画布，桌面/手机 18 组路由视口通过。六个模块的全部图表 series、waterfall steps、formula_card 的 DSO/DIO/DPO/CCC，以及盈利能力页全部期间指标均逐值对 API；总览四项 CFO 指标与行动项可见，来源行深链、键盘来源披露、行动项审计和 403 拒绝态均有验收。独立复核无剩余 P1/P2。演示账套 `flow_cockpit_visual_20261017a`，manifest SHA-256 `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`；月度/组织分配标记 synthetic allocation，未连接常驻业务库。
+**当前任务：单机原型架构简化与全视图视觉升级**。用户已选择单机单用户、SQLite 单文件 + 本地文件目录、移除 Redis/Celery/MinIO，并批准 A「高管编辑部」+ C「财务报告画布」视觉方向。正式设计、D055 决策和工作包已写入；本轮先验证文档门禁、提交并推送计划变更，准确 SHA CI 通过后开始隔离 SQLite/本地内容存储验证。完整范围与顺序见[唯一工作包](docs/50_plans/work_items/FLOW--single-machine-visual-prototype.md)、[设计规格](docs/superpowers/specs/2026-10-18-single-machine-visual-prototype-design.md)和[当前路线图](docs/50_plans/CURRENT_ROADMAP.md)。
 
-代码提交 `b2ee037375ff0949a1dec442bd3ac4feb6bb078d` 已推送；报告状态修正提交 `0b9b12f3e0138898ff719d2f1db378cd793b9d5f` 已推送。最新准确 SHA CI run `39041228479`（https://github.com/davyzhong/FLOW/actions/runs/39041228479）仍在执行，最后核验时仅 `integration`、`intake-e2e`、`data-contract` 运行中，其余完成 job 全绿；因此工作包仍为 active、浏览器验收报告仍为 draft，不能宣称最终通过。旧代码 SHA run `39040652008` 的 `static-python` 曾因该报告 frontmatter 写 `status: active` 被 M6 拒绝；已改为 `draft`，最新 run 的 `static-python` 已通过。阶段 2 准确 SHA `09ba5722ec3e8075a3483223df4c81fe5cdaa9fa` CI run `39035163288` 为 18/18 成功。知识刷新 K2 顺延至本工作包关单后。[计划工作包](docs/50_plans/work_items/COCKPIT--all-views-data-and-visual-completion.md)、[浏览器验证报告](docs/60_delivery/verification/2026-10-17--cockpit-all-views-visual-browser-verification-v1.md)。
+此前全视图驾驶舱工作包作为回归基线归档：九页 25 个 ECharts 画布、桌面/手机 18 组视口验收、API/页面数据对账、来源深链与缺数态等本地证据保留。真实 CI 状态：`39042517573`（SHA `e6b68c8a`）和 `39041228479`（SHA `0b9b12f3`）均 cancelled；`39040652008`（SHA `b2ee0373`）和 `39038535194`（SHA `df5c338b`）均 failure；不能说旧全视图任务准确 SHA CI 已通过。阶段 2 准确 SHA `09ba5722ec3e8075a3483223df4c81fe5cdaa9fa` 的 run `39035163288` 为 18/18 成功。相关[旧工作包](docs/50_plans/work_items/COCKPIT--all-views-data-and-visual-completion.md)已 archived 且禁止继续执行；[浏览器验证报告](docs/60_delivery/verification/2026-10-17--cockpit-all-views-visual-browser-verification-v1.md)仅作为回归基线。
+
+发现主 checkout `/Users/qiming/workspace/FLOW` 保留四处 2026-10-16 未提交驾驶舱修改：`cockpit.css`、`kpi-card.tsx`、`module-page.tsx`、`cockpit/modules.py`。本 worktree 没有覆盖或暂存它们；在最终集成前核实这些更改的归属和是否已被新实现取代。未搜索或连接常驻业务库。
 
 **CFO 驾驶舱盈利分析与图表缺口补全已完成**。本分支新增盈利能力页面 `/cockpit/profitability`、只读 API 与冻结时杜邦指标载荷；提供净利率、ROE、总资产周转率、权益乘数、两期比较、勾稽提示、指标/报告/来源财报行深链。图表复用 ECharts；旧快照或缺少期初数据时明确显示 unavailable。前端 36 个测试文件/184 项通过、typecheck/build 通过；lint 零错误，有一条既有 TanStack Table 警告；后端隔离定向测试 12 项、Ruff、mypy 通过；隔离账套核验 19/19、可见性矩阵 162 项无失败、浏览器全旅程 16/16 通过，真实页面截图见[浏览器验收记录](docs/60_delivery/verification/2026-10-17--cockpit-profitability-browser-verification-v1.md)。CI 首轮发现重复 seed 会新增两份 Objective 快照；修复归一化行 UUID 不稳定性后，回归测试 10 项通过，准确 SHA `08aa4cd02247f995bc990d92c8f34f5a1829afa1` 的 GitHub CI run `38996089002` 为 18/18 job success。contracts、plan views、links 与 M1 通过。代码与修复提交分别为 `5817efcf`、`08aa4cd0`，均已推送。工作包/设计/计划见 [工作包](docs/50_plans/work_items/COCKPIT--visual-analysis-expansion.md)、[设计规格](docs/superpowers/specs/2026-10-17-cfo-cockpit-visual-analysis-expansion-design.md)、[实施计划](docs/superpowers/plans/2026-10-17-cockpit-visual-analysis-expansion.md)。独立审查发现的单位误标和来源行下钻缺口均已修复。
 
-**当前唯一队列：14 项，已完成 7、实际执行中 1（驾驶舱全视图）、队首待启动 0、排队 4（含顺延的 K2）、暂停 1、外部材料受限 1。当前唯一执行项为驾驶舱全视图；K2 待本工作包完成后先只读核验 ObsidianWiki 状态并执行门禁。K0 已在 Davybase 分支 `codex/knowledge-run-manifest-k0` 推送实现 `172a099`、证据 `94fc05d`、交接 `eb8c3d0`；严格复算 1,265 输入、1,239 成功、2 待复核、24 过滤，32 篇/512 图样本对账通过，872 项测试与 Ruff 通过。ObsidianWiki `main` `e04d6833` 有 1,365 条既存变化且范围指纹为 `0a42346d…c7f7`，继续只读保护；`CURRENT_RELEASE` 保持 `flow-knowledge-2026-09-12.1`。K1 扫描器实现 `a0c2e6762c2c212baa23f4ea4855dde5399c37a6`、证据 `a914830`；扫描 1,601 篇，566 篇人工 triage、0 可执行候选。K2 冻结器实现提交 `699e5c6`（13 项专项/892 项全量测试通过；独立复核发现的发布校验绕过已修复）；README 截图工作流 run `38953998448` 成功，自动截图更新 `b051c35` 已同步。截图工作流不替代 GitHub CI。详情见[知识刷新工作包](docs/50_plans/work_items/KNOWLEDGE--refresh-v2.md)。
+**当前唯一队列：14 项，已完成 7、实际执行中 1（单机原型架构与视觉升级）、队首待启动 0、排队 4（含顺延的 K2）、暂停 1、外部材料受限 1。** 本工作包关闭后恢复知识刷新 K2；执行前只读核验 ObsidianWiki 状态。K0/K1/K2 的已完成证据、dirty vault 保护与来源说明见[知识刷新工作包](docs/50_plans/work_items/KNOWLEDGE--refresh-v2.md)。
 
 用户四项裁决（2026-10-16）：
 1. **L0 挂 CI（选项 C）**：非阻断 `l0-baseline` job（continue-on-error: true），失败仅作信号灯。
@@ -36,12 +38,12 @@ applies_to: repository
 
 ## 二、已完成的内容
 
-### 本会话（2026-10-17）交付清单
+### 前序驾驶舱交付清单（2026-10-17，历史基线）
 
 | 交付 | 提交 | 验证/状态 | 要点 |
 |---|---|---|---|
 | CFO 全视图页面、来源联动和完整浏览器验收 | `b2ee037375ff0949a1dec442bd3ac4feb6bb078d` | 本地通过；CI run `39040652008` 的 M6 因报告状态 `active` 失败，已在下一提交修正 | 九视图 25 个 canvas；桌面/手机 18 组通过；18 张截图；所有模块 series/waterfall/formula-card 与盈利明细逐项核对 API；截图报告见下方索引 |
-| 验收报告状态修正 | `0b9b12f3e0138898ff719d2f1db378cd793b9d5f` | 已推送；CI run `39041228479` 仍在执行 | verification 状态改为 `draft` 以满足 M6；CI 全绿后更新为 `verified` 并完成工作包关单 |
+| 验收报告状态修正 | `0b9b12f3e0138898ff719d2f1db378cd793b9d5f` | 已推送；CI run `39041228479` cancelled | verification 状态改为 `draft` 以满足 M6；本包被新工作包接替，准确 SHA 全 CI 未通过 |
 | 独立复核 | — | 已完成，无 P1/P2 | 复核覆盖所有 module chart、waterfall steps、公式卡 DSO/DIO/DPO/CCC、盈利能力所有明细行 |
 
 本地验收：`pnpm -r lint && pnpm -r typecheck` 通过（3 条既有 warning）；`pnpm --filter @flow/web build` 通过；相关 Vitest 10/10；目标 Playwright 18/18 路由×视口通过（在现有隔离服务上设置 `PLAYWRIGHT_BASE_URL=http://127.0.0.1:3461`）；`make contracts-check`、文档 M1/M6、`git diff --check` 通过。浏览器报告及全部截图：[全视图浏览器核验报告](docs/60_delivery/verification/2026-10-17--cockpit-all-views-visual-browser-verification-v1.md)。
@@ -78,12 +80,14 @@ applies_to: repository
 
 ---
 
-## 三、卡住的问题
+## 三、待处理事项与限制
 
 | 问题 | 影响 | 当前处置 |
 |---|---|---|
-| **本轮准确 SHA CI 尚未收敛** | 最新 run `39041228479` 的 integration、intake-e2e、data-contract 最后核验时仍在运行 | 继续检查同一 run，不要启动重复实现；若失败先按具体 job 日志定位。全绿后更新报告为 `verified`、工作包/路线图/HANDOFF 状态，跑 M1/M6 后提交并推送；新 docs SHA CI 仍需核验 |
-| **已修复的文档状态失败** | 代码 SHA `b2ee0373` 的 CI run `39040652008` 因 verification 文档不允许 `status: active` 而 M6 失败 | 最新 `0b9b12f3` 已改为 `draft`，本地 M6 与最新 CI static-python 通过；只在 CI 全绿后改为 `verified` |
+| **旧驾驶舱全视图 CI 未通过** | `39042517573`、`39041228479` cancelled；`39040652008`、`39038535194` failure | 旧包已归档；不反复重跑旧 SHA。新范围最终以本工作包的准确 SHA 做完整 CI 验收 |
+| **主 checkout 有 4 处未提交驾驶舱修改** | 4 个文件最后修改时间为 2026-10-16；改动内容与驾驶舱 UI/API 有交集 | 保持原位、不覆盖、不暂存；最终集成前对照新实现和 owner 信息，决定保留或确认已被取代 |
+| **SQLite 兼容与迁移成本未验证** | 现有 32 个 PostgreSQL Alembic revisions 含 JSONB、UUID 与 Postgres SQL；存储接口被多个流程调用 | 首先在隔离库做 schema、Decimal、事务、导入、来源追溯、报告和备份恢复验证；通过前不移除现有实现 |
+| **计划提交准确 SHA CI 待运行** | 本轮 roadmap/spec/work-item 尚待提交 | 完成 M1、链接/前置门禁、diff 检查后 conventional commit 并立即 push；按准确 SHA 核对 GitHub CI，全绿后开始 SQLite 隔离验证 |
 | **route_policy 测试本地失败** | `test_openapi_probe_matches_tsv_two_way` 在本地 main 也失败（CI 通过） | 本地环境项（缺 S3 环境变量时 `create_app` 设置校验失败）；带完整 env 跑即绿。不阻塞 |
 | **C 级条件 2（独立 oracle 0/14）** | 14 份报告无完整独立 oracle | 用户裁决 3A：如实 No-Go，后续迭代补 |
 | **C 级条件 4（泛化留出全败）** | 小米 0/25、阿里 0/15、yunda 0/20、jdl 0/25 | 用户裁决 2A：不扩大盲评范围；适配器开发列后续迭代 |
@@ -94,12 +98,12 @@ applies_to: repository
 
 ## 四、下一步计划
 
-### 当前下一步：结案驾驶舱唯一队首，再继续知识刷新 K2
+### 当前下一步：完成计划提交门禁，再开始 SQLite 隔离验证
 
-1. 先查询 `gh run view 39041228479 --json status,conclusion,jobs`；继续观察该准确 SHA，不要把旧 SHA 的结果算作本轮结果。
-2. 若 CI 出错，逐个读取失败 job 日志（见本节“CI / 构建”命令）并修复根因；每次 GitHub commit 后立即 push。若全部通过，记录所有 job 结论及准确 SHA。
-3. 将浏览器核验报告 `status: draft` 改为 `verified`，更新 `commit_refs` 加入最终通过 SHA/run；同步更新驾驶舱工作包、唯一主线 `CURRENT_ROADMAP.md` 与本文件，准确结案队列状态，并重跑 `python3 scripts/check_docs.py --phase m1`、`--phase m6`、契约/相关测试。
-4. 提交并 push 文档状态更新后，再核验该最终 HEAD SHA 对应的 GitHub CI；之后按唯一队列恢复知识刷新 K2，先只读核验 ObsidianWiki 工作树状态。
+1. 审查正式规格、决策、工作包、CURRENT_ROADMAP、PROJECT_STATE、AGENTS 索引和本 HANDOFF 之间的链接与状态一致性；运行 `python3 scripts/check_docs.py --phase m1` 和 `git diff --check`。
+2. 对本任务范围内文件 conventional commit 并立即 push；核对 push 的 SHA 与 GitHub CI 对应 SHA。
+3. CI 失败时按准确 job 日志修复，不将取消/失败说成通过。CI 全绿后启动隔离 SQLite 验证：schema/Decimal/导入/来源/报告/本地文件/备份恢复全链，不连接常驻库。
+4. 逐阶段更新唯一路线图与本交接；该队首完整结案后，才恢复知识刷新 K2。
 
 ### 后续队列项：知识刷新 K0–K6
 

@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 项目协作规则
 
-> 当前唯一主线入口：[CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)（状态真相 + 执行队列）；详细接手操作卡：[HANDOFF.md](HANDOFF.md)（与路线图同序，不另设待办）。
+> 当前唯一主线入口：[CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)（状态真相 + 执行队列）；当前队首工作包：[单机原型架构简化与全视图视觉升级](docs/50_plans/work_items/FLOW--single-machine-visual-prototype.md)；详细接手操作卡：[HANDOFF.md](HANDOFF.md)（与路线图同序，不另设待办）。
 
 本仓库是 FLOW（Finance Intelligence OS / AI 财务经营分析平台）项目的唯一正式工程仓库。
 

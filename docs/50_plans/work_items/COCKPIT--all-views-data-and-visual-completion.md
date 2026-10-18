@@ -2,24 +2,25 @@
 doc_id: FLOW-WI-COCKPIT-ALL-VIEWS-20261017-001
 title: CFO 驾驶舱全视图数据与图表完整性改造
 doc_type: work-item
-status: active
-version: "2.7"
+status: archived
+version: "2.8"
 created_at: 2026-10-17
-updated_at: 2026-10-17
+updated_at: 2026-10-18
 owner: FLOW
 depends_on: [FLOW-WI-COCKPIT-CFO-001, FLOW-WI-DAMAI-FULL-YEAR-001]
 acceptance_refs: [FLOW-VERIFY-PROJECT-PROGRESS-20261017-001, FLOW-VERIFY-COCKPIT-CHART-COVERAGE-20261016-001]
 applies_to: cockpit
 decision_refs: [D001, D040, D047, D052, D053]
 supersedes: []
-superseded_by: null
+superseded_by: FLOW-WI-SINGLE-MACHINE-VISUAL-20261018-001
+do_not_execute: true
 related_plan: null
 confidentiality: project-internal
 ---
 
 # CFO 驾驶舱全视图数据与图表完整性改造
 
-> **执行状态：实施中（准确 SHA CI 待验收）。** 用户于 2026-10-17 明确要求立即执行，本工作包为当前唯一队首；知识刷新 K2 顺延。阶段 1–4 已完成；阶段 5 的九页桌面/窄屏渲染、API/页面全量逐项核对、键盘披露、来源行深链、行动审计确认、权限拒绝与缺数态均已通过本地隔离验收。九页截图显示总计 25 个图表画布。独立复核提出的覆盖缺口已补齐：六模块所有图表 series、瀑布步骤及 DSO/DIO/DPO/CCC 公式卡逐值对账；杜邦明细逐行对账。独立复核确认无剩余 P1/P2。最终仍需本轮提交准确 SHA 的 GitHub CI 通过后结案。
+> **状态：归档且停止执行（2026-10-18）。** 本工作包已由 [单机原型架构简化与全视图视觉升级](FLOW--single-machine-visual-prototype.md) 接替。九页桌面/窄屏渲染、API/页面全量核对、来源深链等本地隔离验收继续作为回归基线；CI 结论按 GitHub 实际状态记录：`39042517573` 和 `39041228479` cancelled，`39040652008` 和 `39038535194` failure。不得把此前局部本地验收或旧 SHA 成功状态当成本工作包的准确 SHA 全量 CI 通过。
 
 **目标：** 让 CFO 驾驶舱每个主要页面一打开就能看到关键财务指标、可读图表、数据口径与来源；在公开披露不足时，允许使用明确标记、可重复且与公开事实勾稽的演示生成明细来验证更细粒度视图，不把生成数据说成菜鸟实际披露。
 

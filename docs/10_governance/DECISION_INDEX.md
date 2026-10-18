@@ -10,7 +10,7 @@ owner: FLOW
 applies_to: repository
 ---
 
-# 决策索引 D001–D054
+# 决策索引 D001–D055
 
 单项决策文件在 [decisions/](decisions/)。状态映射：有效→accepted、被取代→superseded、被修订→amended、未来/未决→proposed；原文状态保留在单项文件内。
 
@@ -70,5 +70,6 @@ applies_to: repository
 | D052 | 企业内部月度财务经营分析工作台成为核心产品 | accepted | D002/D010（取代）、D039（修订） | [D052--内部月度财务经营分析工作台成为核心产品.md](decisions/D052--内部月度财务经营分析工作台成为核心产品.md)|
 | D053 | 三层两模块边界与执行顺序 | accepted | D045/D046（取代）、D049/D050（修订） | [D053--三层两模块边界与执行顺序.md](decisions/D053--三层两模块边界与执行顺序.md)|
 | D054 | AI 报告生产链与证据、计算、学习原则 | accepted | | [D054--AI生产链与证据计算学习原则.md](decisions/D054--AI生产链与证据计算学习原则.md)|
+| D055 | 单机单用户验证原型 | accepted | 修订 D053 的当前实施边界 | [D055--单机单用户验证原型.md](decisions/D055--单机单用户验证原型.md)|
 
 修订规则：已接受决策不抹改；修订以 amends/supersedes 新版本表达，编号不复用。历史原日志见 [DECISION_LOG.md（兼容页）](../knowledge-base/04_decisions/DECISION_LOG.md)。

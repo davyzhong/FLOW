@@ -5,10 +5,10 @@ doc_type: generated
 status: generated
 version: 1.0
 created_at: 2026-09-12
-updated_at: 2026-10-17
+updated_at: 2026-10-18
 owner: FLOW
 generator_ref: scripts/documentation/plan_views.py
-input_hash: e0471266a685dcf315279b4115b79697447847a60bf5b8438123dc823beb1a71
+input_hash: 498ab1bc13d2154ae2124951766c7dc0a6ead9b0304dc5bae57282da2c766bc6
 applies_to: planning
 ---
 
@@ -16,6 +16,7 @@ applies_to: planning
 
 > 本页由工作包元数据确定性生成，请勿手工修改。
 
+- [CFO 驾驶舱全视图数据与图表完整性改造](../work_items/COCKPIT--all-views-data-and-visual-completion.md) — `archived`
 - [CFO 财务总监驾驶舱产品化](../work_items/COCKPIT--cfo-dashboard-implementation.md) — `completed`
 - [CFO 驾驶舱视觉补全与数值格式治理](../work_items/COCKPIT--visual-completion-and-number-format.md) — `completed`
 - [CFO 驾驶舱盈利分析与图表缺口补全](../work_items/COCKPIT--visual-analysis-expansion.md) — `completed`

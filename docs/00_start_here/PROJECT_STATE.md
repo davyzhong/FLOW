@@ -3,9 +3,9 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.50
+version: 5.51
 created_at: 2026-09-12
-updated_at: 2026-10-17
+updated_at: 2026-10-18
 owner: FLOW
 applies_to: repository
 ---
@@ -14,7 +14,9 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-10-17 当前状态：**CFO 驾驶舱全视图数据与图表完整性改造为唯一执行项；阶段 1–4 已完成，阶段 5 的本地隔离验收、全视图 API/表格逐项对账、独立审查和文档门禁已完成；准确 SHA GitHub CI 待验收；知识刷新 K2 顺延**。九个视图在一次性隔离账套中均实际渲染，桌面/窄屏截图已采集；共 25 个图表画布，总览已显示营业收入、营业利润、毛利率、经营现金流及行动项。六模块全部 chart series、瀑布步骤、公式卡 DSO/DIO/DPO/CCC 和盈利能力期间指标均与 API 展示值逐项核对。大麦财务实际为 2,304 条期间×组织×科目行，月度/组织分配标记 synthetic allocation；金额统一为 CNY 元、订单和件量为整数。阶段 2 准确 SHA CI run `39035163288` 18/18 成功；阶段 3 SHA `df5c338b` 的旧 CI run `39038535194` 仍在执行，已定位静态 Web/smoke 构建因测试 fixture 缺少新增图表契约字段而失败，当前分支已修复。详见[当前路线图](../50_plans/CURRENT_ROADMAP.md)、[驾驶舱工作包](../50_plans/work_items/COCKPIT--all-views-data-and-visual-completion.md)和[浏览器截图报告](../60_delivery/verification/2026-10-17--cockpit-all-views-visual-browser-verification-v1.md)。
+2026-10-18 当前状态：**单机单用户验证原型的架构简化与全视图视觉升级为唯一队首**。用户已确认 SQLite 单文件 + 本地文件目录、移除 Redis/Celery/MinIO，视觉采用 A「高管编辑部」+ C「财务报告画布」。正式设计与工作包已落盘，计划提交准确 SHA CI 通过后先做隔离 SQLite/本地文件存储兼容性验证，再实施运行架构和 UI 改造。旧全视图工作包已归档，其九页、25 个 ECharts 画布、桌面/窄屏截图和逐值对账作为回归基线；旧 CI run `39042517573`、`39041228479` cancelled，`39040652008`、`39038535194` failure，均未通过全量 CI。知识刷新 K2 顺延。另有主 checkout 四处 2026-10-16 未提交驾驶舱改动，本工作分支未触碰，最终集成前需核对处置。详见[当前路线图](../50_plans/CURRENT_ROADMAP.md)、[D055](../10_governance/decisions/D055--单机单用户验证原型.md)、[正式设计](../superpowers/specs/2026-10-18-single-machine-visual-prototype-design.md)和[实施工作包](../50_plans/work_items/FLOW--single-machine-visual-prototype.md)。
+
+2026-10-17（历史状态）：CFO 驾驶舱九个视图在一次性隔离账套中均实际渲染，桌面/窄屏截图已采集；共 25 个图表画布，总览已显示营业收入、营业利润、毛利率、经营现金流及行动项。六模块全部 chart series、瀑布步骤、公式卡 DSO/DIO/DPO/CCC 和盈利能力期间指标均与 API 展示值逐项核对。大麦财务实际为 2,304 条期间×组织×科目行，月度/组织分配标记 synthetic allocation；金额统一为 CNY 元、订单和件量为整数。阶段 2 准确 SHA CI run `39035163288` 18/18 成功；此前 `39038535194` 有失败且后续 `39041228479`、`39042517573` 被取消，详见[旧工作包](../50_plans/work_items/COCKPIT--all-views-data-and-visual-completion.md)与[浏览器截图报告](../60_delivery/verification/2026-10-17--cockpit-all-views-visual-browser-verification-v1.md)。
 
 2026-10-13 深夜当前状态：**时间线迁移已交付**（分支 `flow/timeline-migration-20261013`，commit `087a72f2`）——演示数据期间对齐菜鸟真实财年（FY2022 比较 / FY2023 分析），canonical 月度明细年度聚合精确等于申请稿披露值（零差异）；财务报表为 IFRS 披露原值（合成行全删），简体 IFRS 勾稽器（12 恒等式）过发布门禁；覆盖矩阵 FY2022/FY2023 各 32/50 如实缺省；ORG-LEDGER v2（v1 冻结）。验证全绿（单元/企业/scripts/隔离栈 e2e）。已合并 main（`c824f55f`，同 SHA CI 17/17 success）。下一子步：F3（指标目录收尾），随后批次 C-2。
 
@@ -68,11 +70,11 @@ applies_to: repository
 
 历史状态快照：下文部分 S01/R0–R4 描述记录了各自交付时的上下文；若与当前状态、分支集成或门禁冲突，以本段和 [CURRENT_ROADMAP](../50_plans/CURRENT_ROADMAP.md) 为准。
 
-**战略方向（2026-09-13 已批准）**：D052–D054 + 经三轮独立规格审查通过的[战略重构设计 V1.1](../superpowers/specs/2026-09-13-flow-strategic-reset-design.md)生效——企业内部月度财务经营分析工作台为最终产品，公开财报为独立模块（三层两模块）；固定原则见 [PRODUCT_PRINCIPLES](../20_product/PRODUCT_PRINCIPLES.md)。U8 冻结后先完成 Financial Facts Contract V2、安全/权限子规格和模块边界门禁，旧 U9/U10 不自动续跑。
+**当前阶段边界（2026-10-18，D055）**：优先交付单机单用户验证原型，企业级部署、多租户和多角色权限暂缓；D052–D054 中关于客观财务事实、可追溯计算与报告原则继续适用。长期产品目标和重启企业级能力的时机未被本阶段工作包提前裁决，详见[决策索引](../10_governance/DECISION_INDEX.md)。
 
 ## 当前执行入口
 
-- **[CURRENT_ROADMAP.md](../50_plans/CURRENT_ROADMAP.md)**（唯一主线：状态真相 + 单一串行 To-do）：当前唯一执行项为 CFO 驾驶舱全视图数据与图表完整性改造；知识刷新 K2 顺延。全部后续任务及状态只按该路线图执行。
+- **[CURRENT_ROADMAP.md](../50_plans/CURRENT_ROADMAP.md)**（唯一主线：状态真相 + 单一串行 To-do）：当前唯一执行项为单机原型架构简化与全视图视觉升级；知识刷新 K2 顺延。全部后续任务及状态只按该路线图执行。
 - 旧统一计划、O 系列计划、EXECUTION_TODO 与 2026-09-24/25 三份总计划均已 superseded/archived（保留历史细节与证据，不再作为执行依据）
 - 文档迁移：[迁移实施计划 M0–M6](../superpowers/plans/2026-09-12-static-knowledge-and-document-migration.md) 已全部关闭（bfc1271 / e373e25，用户确认 2026-09-13）
 
