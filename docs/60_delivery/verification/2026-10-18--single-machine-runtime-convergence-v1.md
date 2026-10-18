@@ -8,7 +8,7 @@ created_at: 2026-10-18
 updated_at: 2026-10-18
 owner: FLOW
 commit_refs: "[pending: codex/single-machine-runtime-convergence]"
-evidence_refs: "[isolated-sqlite-schema-jobs-object-store-16, sqlite-settings-1, postgres-damai-reset-1, ruff, mypy, flow-bootstrap, isolated-init-health-200, docs-m6]"
+evidence_refs: "[isolated-sqlite-schema-jobs-object-store-16, sqlite-settings-1, postgres-damai-reset-1, package-manifest-6, ruff, mypy, flow-bootstrap, isolated-init-health-200, docs-m6]"
 applies_to: repository
 ---
 
@@ -37,6 +37,7 @@ applies_to: repository
 | SQLite jobs 与本地 object store 定向回归（包含于上项） | 通过 |
 | SQLite 设置类型测试 | 1/1 通过 |
 | PostgreSQL Damai reset 兼容测试 | 1/1 通过 |
+| 企业初始化发行包 manifest 专项测试 | 6/6 通过；同步重置 SQL 的 SHA256 与字节数 |
 | Ruff | 通过 |
 | mypy | 213 个源文件通过 |
 | 文档门禁 `python3 scripts/check_docs.py --phase m1` | 通过，327 文档、89 项旧版豁免、0 错误 |
@@ -45,6 +46,8 @@ applies_to: repository
 | 同目录运行 `make flow` 并请求本地服务 | Web `/` HTTP 200；API `/api/v1/health` HTTP 200；受权限保护的 `/api/v1/operations/public-periods` HTTP 200 并返回期间数据，验证 SQLite 开发身份绑定可用 |
 
 全量 API 回归此前用时 42 分 20 秒，结果 973 通过、2 失败、3 警告。两项失败已针对性修复并复验：PostgreSQL Damai 重置外键顺序及已移除运行时设置的旧契约测试。相应回归现为 2/2 通过。独立复核还发现通用开发身份种子会将数据库错误宽松跳过；单机初始化现启用严格模式，缺表或写入失败会中止初始化。使用无开发依赖的生产 Python 环境再次从空 SQLite 初始化，并请求受权限保护的经营期间 API 得到 200。没有据此重跑 42 分钟全套，准确 SHA GitHub CI 将提供本提交的全量门禁结果。
+
+准确 SHA CI 首轮发现大麦企业初始化包 manifest 未同步更新的重置 SQL 哈希与字节数；已只修正该 SQL 对应的清单项，未重生成或改动包内业务数据。发行包校验及其 6 项专项测试现已通过，正在以修复后的新提交重新验证。
 
 ## 限制与下一步
 

@@ -139,8 +139,8 @@
       "sha256": "ffe1a81feac79bcb02d23b055009e1ed58564ae7a6a57fdfaed774ee5808bd1e"
     },
     "sql/20_business_reset.sql": {
-      "bytes": 3887,
-      "sha256": "586bf863cf072d3ad7ef979c85916738e6a12f09e16ccc80cc311df6470d98ab"
+      "bytes": 4042,
+      "sha256": "9777462e8b3f06b8ce8577b85b92f6d3fce081949677b5727a87837852a9c582"
     },
     "sql/90_verify.sql": {
       "bytes": 732,
