@@ -32,6 +32,7 @@ from flow_api.enterprise.models import Enterprise
 from flow_api.fixtures.damai.generator import build_damai_package
 from flow_api.fixtures.damai.validation import validate_damai_package
 from flow_api.infrastructure.models.analytics import Conclusion, Finding
+from flow_api.infrastructure.models.cockpit import ActionItem
 from flow_api.infrastructure.models.intake import (
     AnalysisBatch,
     ImportVersion,
@@ -202,8 +203,58 @@ def seed_damai_demo(
         receipt["organization"] = organization_receipt
     receipt["analytics"] = _seed_analytics(session)
     receipt["workflow"] = _seed_workflow(session, reports, receipt["analytics"])
+    receipt["workflow"]["action_items"] = _seed_action_items(
+        session, UUID(enterprise["id"]), receipt["workflow"]["findings"]
+    )
     session.flush()
     return receipt
+
+
+def _seed_action_items(
+    session: Any,
+    enterprise_id: UUID,
+    findings: list[dict[str, Any]],
+) -> list[dict[str, str]]:
+    """为已批准的大麦演示发现创建可追溯、幂等的行动项。"""
+
+    created: list[dict[str, str]] = []
+    for item in findings:
+        if item["status"] != "approved":
+            continue
+        finding_id = UUID(item["finding_id"])
+        finding = session.get(Finding, finding_id)
+        if finding is None:
+            raise RuntimeError(f"演示行动项缺少发现来源：{finding_id}")
+        action = session.scalar(
+            select(ActionItem).where(
+                ActionItem.enterprise_id == enterprise_id,
+                ActionItem.finding_id == finding_id,
+                ActionItem.snapshot_id == finding.metric_snapshot_id,
+            )
+        )
+        if action is None:
+            action = ActionItem(
+                enterprise_id=enterprise_id,
+                finding_id=finding_id,
+                snapshot_id=finding.metric_snapshot_id,
+                title=f"演示行动：跟进{finding.title}",
+                detail=(
+                    "演示行动项，源自已批准的客观分析发现；"
+                    "需在调查详情中补充处理方案。"
+                ),
+                created_by="damai-demo-seed",
+            )
+            session.add(action)
+            session.flush()
+        created.append(
+            {
+                "action_item_id": str(action.id),
+                "finding_id": str(finding_id),
+                "snapshot_id": str(action.snapshot_id),
+                "created_by": action.created_by,
+            }
+        )
+    return created
 
 
 def _repository_root() -> Path:

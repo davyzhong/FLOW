@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from decimal import Decimal
-from typing import Literal
+from typing import Literal, cast
 from uuid import UUID
 
 from sqlalchemy.orm import Session
@@ -229,6 +229,8 @@ class DashboardService:
         data_status = self._data_status(bundle, generated_at)
         trends = self.get_trends(session)
         bridge = self._profit_bridge(bundle)
+        # Keep the complete analysis projection here. Consumers that create
+        # actions must apply the approval gate at their own boundary.
         findings = self._finding_items(bundle)
         product_fact_ids, margin_product_fact_ids, margin_segment_fact_ids = (
             self._dimension_fact_ids(bundle)
@@ -743,6 +745,10 @@ class DashboardService:
                     finding_id=finding.id,
                     finding_type=finding.finding_type,
                     title=finding.title,
+                    status=cast(
+                        Literal["candidate", "in_review", "approved", "rejected"],
+                        finding.status,
+                    ),
                     impact=available_value(
                         finding.impact_amount,
                         direction=(

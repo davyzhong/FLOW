@@ -162,7 +162,7 @@ def _row_margin(family_id: str, product_id: str, month: str) -> Decimal:
     return margin
 
 
-def _disclosed_anchors() -> dict[str, dict[str, Decimal]]:
+def _disclosed_anchors() -> dict[str, dict[str, Any]]:
     """从来源登记读取演示财年的披露锚（收入/毛利，千元 → 万元）。
 
     时间线迁移后演示财年即菜鸟真实财年：比较期 FY2022、分析期 FY2023。
@@ -188,16 +188,67 @@ def _disclosed_anchors() -> dict[str, dict[str, Decimal]]:
         for fact in registry["facts"]
     }
 
-    def anchor(period: str, item: str) -> Decimal:
-        fact = index[("合并利润表", period, item)]
+    def anchor(period: str, statement: str, item: str) -> Decimal:
+        fact = index[(statement, period, item)]
         return Decimal(str(fact["value"])) / Decimal("10")  # 千元 → 万元
 
-    return {
-        period: {
-            "revenue": anchor(period, "收入"),
-            "gross": anchor(period, "毛利"),
+    def annual_income_statement(period: str) -> dict[str, Decimal]:
+        expense_items = {
+            "SALES_MARKETING_EXPENSE": "销售及市场推广开支",
+            "GENERAL_ADMIN_EXPENSE": "一般及行政开支",
+            "PRODUCT_DEVELOPMENT_EXPENSE": "产品开发开支",
+            "FINANCIAL_ASSET_IMPAIRMENT": "金融资产减值(转回)/计提",
         }
-        for period in ("FY2022", "FY2023")
+        expenses = {
+            code: abs(anchor(period, "合并利润表", item))
+            for code, item in expense_items.items()
+        }
+        return {
+            **expenses,
+            "OTHER_INCOME": anchor(period, "合并利润表", "其他收入"),
+            "OTHER_NET_GAIN_LOSS": anchor(period, "合并利润表", "其他收益/(亏损)净额"),
+            "operating_profit": anchor(period, "合并利润表", "经营亏损/利润"),
+            "net_profit": anchor(period, "合并利润表", "年度亏损/利润"),
+        }
+
+    def annual_balance_sheet(period: str) -> dict[str, Decimal]:
+        balance_items = {
+            "TOTAL_ASSETS": "资产总计",
+            "TOTAL_LIABILITIES": "负债合计",
+            "TOTAL_EQUITY": "权益总额",
+            "CURRENT_ASSETS": "流动资产合计",
+            "CURRENT_LIABILITIES": "流动负债合计",
+            "AR_BALANCE": "贸易应收及其他预付款(流动)",
+            "INVENTORY_BALANCE": "存货",
+            "BORROWINGS": "借款",
+        }
+        return {
+            code: anchor(period, "合并资产负债表", item)
+            for code, item in balance_items.items()
+        }
+
+    return {
+        "FY2021": {
+            "cash_balance": anchor(
+                "FY2021", "合并现金流量表", "年末现金及现金等价物"
+            ),
+            "balance_sheet": annual_balance_sheet("FY2021"),
+        },
+        **{
+            period: {
+                "revenue": anchor(period, "合并利润表", "收入"),
+                "gross": anchor(period, "合并利润表", "毛利"),
+                "operating_cash_flow": anchor(
+                    period, "合并现金流量表", "经营活动所得现金净额"
+                ),
+                "cash_balance": anchor(
+                    period, "合并现金流量表", "年末现金及现金等价物"
+                ),
+                "balance_sheet": annual_balance_sheet(period),
+                **annual_income_statement(period),
+            }
+            for period in ("FY2022", "FY2023")
+        },
     }
 
 
@@ -441,20 +492,135 @@ def build_damai_package() -> dict[str, Any]:
                     }
                 )
 
-    # 经营现金流：经营利润 + 背离调整（E5：2026-05/06 现金流反常走低）
-    operating_profit_by_month: dict[str, Decimal] = defaultdict(Decimal)
+    # 公开年报只披露年度损益与现金流总额。月度值按收入/毛利权重确定性分
+    # 配，明确是 synthetic allocation；每个财年合计精确回到披露锚。
+    revenue_by_month: dict[str, Decimal] = defaultdict(Decimal)
+    gross_by_month: dict[str, Decimal] = defaultdict(Decimal)
     for row in operating_actual:
-        operating_profit_by_month[row["month"]] += Decimal(row["gross_profit"])
-    expense_rate = Decimal("0.06")
-    cash_flow = []
-    for month in all_months:
-        profit = operating_profit_by_month[month] * (Decimal("1") - expense_rate)
-        ocf = profit
-        if month in ("2022-12", "2023-01"):
-            ocf = profit * Decimal("0.55")  # E5：利润-现金短期背离（分析期 index 8/9）
-        cash_flow.append(
-            {"month": month, "operating_profit": str(_d(profit)), "ocf": str(_d(ocf))}
+        revenue_by_month[row["month"]] += Decimal(row["revenue"])
+        gross_by_month[row["month"]] += Decimal(row["gross_profit"])
+
+    statement_lines: list[dict[str, str]] = []
+    cash_flow: list[dict[str, str]] = []
+    balance_sheet: list[dict[str, str]] = []
+    anchors = _disclosed_anchors()
+    for fiscal_year, months in (
+        ("FY2022", PRIOR_MONTHS),
+        ("FY2023", ANALYSIS_MONTHS),
+    ):
+        annual = anchors[fiscal_year]
+
+        def allocate(
+            total: Decimal,
+            weights: dict[str, Decimal],
+            allocation_months: tuple[str, ...],
+            allocation_year: str,
+        ) -> dict[str, Decimal]:
+            denominator = sum(weights.values(), Decimal("0"))
+            if denominator <= 0:
+                raise ValueError(f"{allocation_year} 年度分配权重必须为正")
+            values: dict[str, Decimal] = {}
+            running = Decimal("0")
+            for month in allocation_months[:-1]:
+                amount = _d(total * weights[month] / denominator)
+                values[month] = amount
+                running += amount
+            values[allocation_months[-1]] = _d(total - running)
+            return values
+
+        line_allocations = {
+            code: allocate(
+                amount,
+                {month: revenue_by_month[month] for month in months},
+                months,
+                fiscal_year,
+            )
+            for code, amount in annual.items()
+            if code
+            in {
+                "SALES_MARKETING_EXPENSE",
+                "GENERAL_ADMIN_EXPENSE",
+                "PRODUCT_DEVELOPMENT_EXPENSE",
+                "FINANCIAL_ASSET_IMPAIRMENT",
+                "OTHER_INCOME",
+                "OTHER_NET_GAIN_LOSS",
+                "net_profit",
+            }
+        }
+        ocf_weights = {
+            month: gross_by_month[month]
+            * (Decimal("0.55") if month in ("2022-12", "2023-01") else Decimal("1"))
+            for month in months
+        }
+        ocf_months = allocate(
+            annual["operating_cash_flow"], ocf_weights, months, fiscal_year
         )
+
+        previous_fiscal_year = "FY2021" if fiscal_year == "FY2022" else "FY2022"
+        previous_cash = anchors[previous_fiscal_year]["cash_balance"]
+        closing_cash = annual["cash_balance"]
+        previous_balance = anchors[previous_fiscal_year]["balance_sheet"]
+        closing_balance = annual["balance_sheet"]
+        for index, month in enumerate(months, start=1):
+            lines = {
+                code: values[month] for code, values in line_allocations.items()
+            }
+            gross_operating_expenses = sum(
+                (
+                    lines[code]
+                    for code in (
+                        "SALES_MARKETING_EXPENSE",
+                        "GENERAL_ADMIN_EXPENSE",
+                        "PRODUCT_DEVELOPMENT_EXPENSE",
+                        "FINANCIAL_ASSET_IMPAIRMENT",
+                    )
+                ),
+                Decimal("0"),
+            )
+            lines["OPERATING_EXPENSE"] = _d(
+                gross_operating_expenses
+                - lines["OTHER_INCOME"]
+                - lines["OTHER_NET_GAIN_LOSS"]
+            )
+            lines["OPERATING_PROFIT"] = _d(
+                gross_by_month[month] - lines["OPERATING_EXPENSE"]
+            )
+            statement_lines.append(
+                {"month": month, **{key: str(_d(value)) for key, value in lines.items()}}
+            )
+            cash = (
+                closing_cash
+                if index == len(months)
+                else _d(previous_cash + (closing_cash - previous_cash) * index / 12)
+            )
+            cash_flow.append(
+                {
+                    "month": month,
+                    "operating_profit": str(lines["OPERATING_PROFIT"]),
+                    "ocf": str(ocf_months[month]),
+                    "cash_balance": str(cash),
+                }
+            )
+            balance_values = {
+                code: (
+                    closing_balance[code]
+                    if index == len(months)
+                    else _d(
+                        previous_balance[code]
+                        + (closing_balance[code] - previous_balance[code])
+                        * index
+                        / 12
+                    )
+                )
+                for code in closing_balance
+            }
+            balance_values["CASH_AND_CASH_EQUIVALENTS"] = cash
+            balance_sheet.append(
+                {
+                    "month": month,
+                    **{key: str(_d(value)) for key, value in balance_values.items()},
+                }
+            )
 
     # forecast sidecar：分析期逐月预测收入（static-only；锚定披露分析期月均）
     forecast_base = analysis_total / Decimal("12")
@@ -527,7 +693,9 @@ def build_damai_package() -> dict[str, Any]:
             "financial_actual": financial_actual,
             "budget": budget,
             "ar_aging": ar_aging,
+            "statement_lines": statement_lines,
             "cash_flow": cash_flow,
+            "balance_sheet": balance_sheet,
         },
         "forecast_sidecar": forecast_sidecar,
         "planted_events": [

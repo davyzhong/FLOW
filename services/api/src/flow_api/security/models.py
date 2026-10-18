@@ -17,18 +17,18 @@ from typing import Any
 from uuid import UUID
 
 from sqlalchemy import Boolean, CheckConstraint, DateTime, Index, String, func
-from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
-from flow_api.infrastructure.models.base import Base
+from flow_api.domain.ids import new_uuid7
+from flow_api.infrastructure.models.base import JSON_TYPE, UUID_TYPE, Base
 
 
 class RoleBinding(Base):
     __tablename__ = "role_binding"
     __table_args__ = (
         CheckConstraint(
-            "role IN ('finance_bp','analyst','rule_owner','ai_analyst','ai_cfo','service_account')",
+            "role IN ('finance_bp','cfo','analyst','rule_owner',"
+            "'ai_analyst','ai_cfo','service_account')",
             name="ck_role_binding_role_enum",
         ),
         CheckConstraint(
@@ -40,11 +40,11 @@ class RoleBinding(Base):
     )
 
     id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True), primary_key=True, server_default=func.gen_random_uuid()
+        UUID_TYPE, primary_key=True, default=new_uuid7
     )
     actor_id: Mapped[str] = mapped_column(String(128), nullable=False)
     role: Mapped[str] = mapped_column(String(32), nullable=False)
-    enterprise_id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), nullable=False)
+    enterprise_id: Mapped[UUID] = mapped_column(UUID_TYPE, nullable=False)
     is_service_account: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
     created_at: Mapped[datetime] = mapped_column(
@@ -78,12 +78,12 @@ class AuditEvent(Base):
     )
 
     id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True), primary_key=True, server_default=func.gen_random_uuid()
+        UUID_TYPE, primary_key=True, default=new_uuid7
     )
     event_type: Mapped[str] = mapped_column(String(64), nullable=False)
     actor_id: Mapped[str | None] = mapped_column(String(128), nullable=True)
     actor_role: Mapped[str | None] = mapped_column(String(32), nullable=True)
-    enterprise_id: Mapped[UUID | None] = mapped_column(PG_UUID(as_uuid=True), nullable=True)
+    enterprise_id: Mapped[UUID | None] = mapped_column(UUID_TYPE, nullable=True)
     resource_scope: Mapped[str] = mapped_column(String(16), nullable=False)
     resource_type: Mapped[str] = mapped_column(String(64), nullable=False)
     resource_id: Mapped[str] = mapped_column(String(128), nullable=False)
@@ -92,12 +92,12 @@ class AuditEvent(Base):
     reason_code: Mapped[str] = mapped_column(String(64), nullable=False)
     correlation_id: Mapped[str] = mapped_column(String(128), nullable=False)
     request_id: Mapped[str] = mapped_column(String(128), nullable=False)
-    model_boundary: Mapped[dict[str, Any] | None] = mapped_column(JSONB, nullable=True)
+    model_boundary: Mapped[dict[str, Any] | None] = mapped_column(JSON_TYPE, nullable=True)
     artifact_refs: Mapped[list[dict[str, Any]]] = mapped_column(
-        JSONB, nullable=False, default=list, server_default="[]"
+        JSON_TYPE, nullable=False, default=list, server_default="[]"
     )
     redacted_metadata: Mapped[dict[str, Any]] = mapped_column(
-        JSONB, nullable=False, default=dict, server_default="{}"
+        JSON_TYPE, nullable=False, default=dict, server_default="{}"
     )
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, server_default=func.now()

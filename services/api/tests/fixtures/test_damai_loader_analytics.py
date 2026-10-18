@@ -10,6 +10,7 @@
 from __future__ import annotations
 
 from collections.abc import Iterator
+from datetime import UTC, datetime
 
 import pytest
 from alembic import command
@@ -18,6 +19,8 @@ from integration.intake_service_support import clean
 from sqlalchemy import create_engine, delete, text
 from sqlalchemy.orm import Session
 
+from flow_api.dashboard.models import ActiveFilters
+from flow_api.dashboard.service import DashboardService
 from flow_api.fixtures.damai.loader import seed_damai_demo
 from flow_api.infrastructure.models.analytics import (
     AnalysisRun,
@@ -76,6 +79,17 @@ def test_seed_builds_snapshots_and_analysis_run(db_session: Session) -> None:
         text("SELECT count(*) FROM metric_value")
     ).scalar_one()
     assert value_count > 0, "快照必须带指标值"
+
+    core = DashboardService().get_core(
+        db_session,
+        filters=ActiveFilters(period_view="month", is_total_scope=True),
+        now=datetime(2023, 3, 1, tzinfo=UTC),
+    )
+    cards = {card.metric_code: card for card in core.metric_cards}
+    for code in ("revenue", "operating_profit", "gross_margin", "operating_cash_flow"):
+        assert cards[code].primary.status == "available", code
+        assert cards[code].primary.exact_value is not None, code
+    assert cards["revenue"].primary.exact_value > 1_000_000_000
 
 
 def test_seed_analytics_is_idempotent(db_session: Session) -> None:

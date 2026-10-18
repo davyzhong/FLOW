@@ -156,6 +156,21 @@ def test_validate_damai_package_passes_on_generated_package() -> None:
     assert result["invariant_codes"] == []
 
 
+def test_validate_damai_package_blocks_disclosed_anchor_drift() -> None:
+    from copy import deepcopy
+
+    from flow_api.fixtures.damai.validation import validate_damai_package
+
+    pkg = deepcopy(build_damai_package())
+    pkg["monthly_facts"]["statement_lines"][0]["OPERATING_PROFIT"] = str(
+        Decimal(pkg["monthly_facts"]["statement_lines"][0]["OPERATING_PROFIT"])
+        + Decimal("1.0000")
+    )
+    result = validate_damai_package(pkg)
+    assert result["valid"] is False
+    assert "fy2022_operating_profit_out_of_anchor_range" in result["invariant_codes"]
+
+
 # ---------------------------------------------------------------------------
 # Task A1 红灯：生成器必须产出明细级事实（规格 §3.3）
 # ---------------------------------------------------------------------------

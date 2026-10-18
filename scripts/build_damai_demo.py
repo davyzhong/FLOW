@@ -39,7 +39,7 @@ from flow_api.fixtures.damai.statements import (
 from flow_api.fixtures.generator import write_canonical_package
 
 CONTRACT_PATH = REPOSITORY_ROOT / "templates/excel/flow_v1_contract.yaml"
-GENERATOR_VERSION = "damai-demo-v1"
+GENERATOR_VERSION = "damai-demo-v2"
 _WORKBOOK_REL = "workbooks/damai_logistics_full_v1.xlsx"
 _STATEMENT_RELS = {
     "FY2022": "statements/damai_fy2022.yaml",
@@ -73,6 +73,8 @@ input_hash: deterministic-static
     python3 scripts/build_damai_demo.py --output fixtures/damai --check
 
 - `canonical/*.jsonl`：flow.excel.v1 canonical 数据包（批次/期间/维度/事实）；
+- `canonical/financial_actuals.jsonl`：24 个月 × 4 个模拟业务单元 × 24 个科目，共 2,304 行；金额单位为人民币元。损益、现金流、资产负债关键余额分别勾稽至来源登记的菜鸟 FY2022/FY2023 年报；FY2021 年末余额用于月度插值起点。公开资料没有月度或事业部明细，故这些明细按登记的确定性规则分配，属于 synthetic allocation，不是菜鸟逐月/逐事业部实际值；
+- 订单数和件量是基于演示客单价派生的整数，不是菜鸟披露的实际单量；每单件数按确定性演示参数派生；
 - `workbooks/damai_logistics_full_v1.xlsx`：标准工作簿（Finance BP 导入用，
   actual/budget，无 forecast——预测在 sidecar，`persistence: static-only`、
   `page_coverage: excluded`，不得冒充已上线能力）；
@@ -81,7 +83,7 @@ input_hash: deterministic-static
 - `operations/damai_segment_series.yaml`、`damai_operating_metrics.yaml`：
   DAMAI.SYN 独立分部序列与运营事实（synthetic，血缘指向 manifest.json）；
 - `forecast/rolling_forecast.jsonl`：静态预测 sidecar；
-- `manifest.json`：期间、行数、核心汇总、逐文件 SHA-256、`synthetic: true`。
+- `manifest.json`：期间、行数、披露年度汇总、年度来源 fact ID、合成分配说明、逐文件 SHA-256、`synthetic: true`。
 
 装载：`python3 scripts/seed_damai_demo.py`（幂等，经 IntakeService/领域服务链，
 见规格《大麦物流演示数据设计》§4.3）。
@@ -236,6 +238,7 @@ def _fiscal_year_summary(raw: dict[str, Any]) -> dict[str, Any]:
         revenue = Decimal(0)
         cost = Decimal(0)
         ocf = Decimal(0)
+        closing_cash = Decimal(0)
         for row in raw["monthly_facts"]["operating_actual"]:
             if row["month"] in months:
                 revenue += Decimal(str(row["revenue"]))
@@ -243,11 +246,40 @@ def _fiscal_year_summary(raw: dict[str, Any]) -> dict[str, Any]:
         for row in raw["monthly_facts"]["cash_flow"]:
             if row["month"] in months:
                 ocf += Decimal(str(row["ocf"]))
+                if row["month"] == months[-1]:
+                    closing_cash = Decimal(str(row["cash_balance"]))
+        statement_totals = {
+            account: sum(
+                (
+                    Decimal(str(row[account]))
+                    for row in raw["monthly_facts"]["statement_lines"]
+                    if row["month"] in months
+                ),
+                Decimal("0"),
+            )
+            for account in ("OPERATING_PROFIT", "net_profit")
+        }
+        closing_balance = next(
+            row
+            for row in raw["monthly_facts"]["balance_sheet"]
+            if row["month"] == months[-1]
+        )
         summary[fy] = {
             "months": [months[0], months[-1]],
             "revenue_wan": format(revenue, ".4f"),
             "gross_margin": format((revenue - cost) / revenue, ".4f"),
+            "operating_profit_wan": format(statement_totals["OPERATING_PROFIT"], ".4f"),
+            "net_profit_wan": format(statement_totals["net_profit"], ".4f"),
             "operating_cash_flow_wan": format(ocf, ".4f"),
+            "closing_cash_wan": format(closing_cash, ".4f"),
+            "total_assets_wan": closing_balance["TOTAL_ASSETS"],
+            "total_liabilities_wan": closing_balance["TOTAL_LIABILITIES"],
+            "total_equity_wan": closing_balance["TOTAL_EQUITY"],
+            "current_assets_wan": closing_balance["CURRENT_ASSETS"],
+            "current_liabilities_wan": closing_balance["CURRENT_LIABILITIES"],
+            "ar_balance_wan": closing_balance["AR_BALANCE"],
+            "inventory_wan": closing_balance["INVENTORY_BALANCE"],
+            "borrowings_wan": closing_balance["BORROWINGS"],
         }
     return summary
 
@@ -274,14 +306,88 @@ def _planted_events(raw: dict[str, Any]) -> list[dict[str, Any]]:
 
 
 def _lineage(raw: dict[str, Any]) -> dict[str, Any]:
+    import yaml
+
+    registry = yaml.safe_load(
+        (REPOSITORY_ROOT / "config/damai/source_facts_v1.yaml").read_text(
+            encoding="utf-8"
+        )
+    )
+    anchor_items = {
+        "REVENUE": ("合并利润表", "收入"),
+        "GROSS_PROFIT": ("合并利润表", "毛利"),
+        "SALES_MARKETING_EXPENSE": ("合并利润表", "销售及市场推广开支"),
+        "GENERAL_ADMIN_EXPENSE": ("合并利润表", "一般及行政开支"),
+        "PRODUCT_DEVELOPMENT_EXPENSE": ("合并利润表", "产品开发开支"),
+        "FINANCIAL_ASSET_IMPAIRMENT": (
+            "合并利润表",
+            "金融资产减值(转回)/计提",
+        ),
+        "OTHER_INCOME": ("合并利润表", "其他收入"),
+        "OTHER_NET_GAIN_LOSS": ("合并利润表", "其他收益/(亏损)净额"),
+        "OPERATING_PROFIT": ("合并利润表", "经营亏损/利润"),
+        "NET_PROFIT": ("合并利润表", "年度亏损/利润"),
+        "OPERATING_CASH_FLOW": ("合并现金流量表", "经营活动所得现金净额"),
+        "CASH_AND_CASH_EQUIVALENTS": (
+            "合并现金流量表",
+            "年末现金及现金等价物",
+        ),
+        "TOTAL_ASSETS": ("合并资产负债表", "资产总计"),
+        "TOTAL_LIABILITIES": ("合并资产负债表", "负债合计"),
+        "TOTAL_EQUITY": ("合并资产负债表", "权益总额"),
+        "CURRENT_ASSETS": ("合并资产负债表", "流动资产合计"),
+        "CURRENT_LIABILITIES": ("合并资产负债表", "流动负债合计"),
+        "AR_BALANCE": ("合并资产负债表", "贸易应收及其他预付款(流动)"),
+        "INVENTORY_BALANCE": ("合并资产负债表", "存货"),
+        "BORROWINGS": ("合并资产负债表", "借款"),
+    }
+    facts_by_period = {
+        period: {
+            (fact["statement"], fact["item_zh"]): fact["fact_id"]
+            for fact in registry["facts"]
+            if fact["period"] == period
+        }
+        for period in ("FY2021", "FY2022", "FY2023")
+    }
+    annual_fact_ids = {
+        period: {
+            account: facts_by_period[period][statement_item]
+            for account, statement_item in anchor_items.items()
+        }
+        for period in ("FY2022", "FY2023")
+    }
+    annual_fact_ids["FY2021"] = {
+        account: facts_by_period["FY2021"][statement_item]
+        for account, statement_item in anchor_items.items()
+        if account in {"CASH_AND_CASH_EQUIVALENTS", *{
+            "TOTAL_ASSETS", "TOTAL_LIABILITIES", "TOTAL_EQUITY", "CURRENT_ASSETS",
+            "CURRENT_LIABILITIES", "AR_BALANCE", "INVENTORY_BALANCE", "BORROWINGS",
+        }}
+    }
     return {
         "generator": "scripts/build_damai_demo.py",
         "generator_version": GENERATOR_VERSION,
         "profile_version": raw["profile_version"],
         "determinism": "uuid5 record_id + Decimal 全程 + fixed Random(42) 族权重扰动",
         "units": {
-            "canonical": "人民币万元",
+            "canonical": "人民币元（原始公开锚点千元→万元→元）",
             "statements": "人民币千元（菜鸟申请稿披露原值，非 canonical 换算）",
+        },
+        "annual_public_anchors": {
+            "registry": "config/damai/source_facts_v1.yaml",
+            "allocation": "公开财报仅披露年度/期末数；月度、组织明细是 synthetic 分配，尾差保留以逐级勾稽年度锚点",
+            "fact_ids": annual_fact_ids,
+            "methods": {
+                "income_statement_by_month": "各披露行按同财年 synthetic 月度收入权重分配",
+                "canonical_amount_conversion": "源事实人民币千元先转换万元用于可读生成，再按 10,000 转换为 flow.excel.v1 的人民币元",
+                "operating_expense_net": "管理口径 OPERATING_EXPENSE = 销售/行政/研发/减值开支 - 其他收入 - 其他收益/(亏损)净额；营业利润 = 毛利 - 该净额",
+                "operating_cash_flow_by_month": "按月度毛利权重分配；E5 异常月权重乘 0.55 后年度归一",
+                "organization_detail": "按同月 synthetic 业务单元收入占比分配，尾差并入最后单元",
+                "cash_balance_by_month": "FY2021/FY2022/FY2023 年末披露余额之间按月线性插值；每年年末精确锚定",
+                "balance_sheet_by_month": "资产负债项目按 FY2021/FY2022/FY2023 年末披露锚点线性插值；年末总额与资产=负债+权益恒等式精确校验",
+                "direct_cost_by_category": "披露收入与毛利之间的营业成本按仓储 30%、运输 60%、其他 10% synthetic 拆分",
+            "order_and_shipment_counts": "按每单 120 元确定性派生，订单四舍五入为整数，每单 2 件；属于演示派生量",
+            },
         },
         "derived_parameters": {
             "cost_split": {
@@ -298,8 +404,9 @@ def _lineage(raw: dict[str, Any]) -> dict[str, Any]:
                 "current": "0.70", "1-30": "0.12", "31-60": "0.08",
                 "61-90": "0.06", "90+": "尾差",
             },
-            "order_unit_price_wan": "120",
-            "shipments_per_order": "2.0",
+            "order_unit_price_cny": "120",
+            "shipments_per_order": "2",
+            "order_count_rounding": "ROUND_HALF_UP to integer",
         },
     }
 

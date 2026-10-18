@@ -76,7 +76,7 @@ git diff --check
 **Steps:**
 
 1. [ ] 将规格状态从 `review` 改为 `approved`，更新时间改为 `2026-09-18`；正文不得改写已审查合同，并在 `SPEC_INDEX` 登记同一路径和 approved 状态。
-2. [ ] 记录 FLOW、Davybase、ObsidianWiki 的 canonical remote、完整 HEAD/tree、clean/dirty、当前 release、Davybase 图片批次最终统计 `1241/1265 + 24 decoration-only`，并标出哪些是上游事实、哪些待复验。
+2. [ ] 记录 FLOW、Davybase、ObsidianWiki 的 canonical remote、完整 HEAD/tree、clean/dirty、当前 release、Davybase 图片批次最终统计 `1,265 输入；1,239 成功、2 待复核、24 过滤`（历史 `done=true` 1,241 中有 2 篇各记 1 张失败图），并标出哪些是上游事实、哪些待复验。
 3. [ ] 运行 `python3 scripts/documentation/metadata.py --check`、`python3 scripts/documentation/require_approved_specs.py FLOW-DESIGN-KNOWLEDGE-REFRESH-002` 和 `git diff --check`，预期全部 PASS。
 4. [ ] 提交并推送 FLOW 前置证据：`docs: approve knowledge refresh execution baseline`。
 
@@ -102,7 +102,7 @@ git diff --check
 5. [ ] 运行 `.venv/bin/python -m pytest tests/test_knowledge_run_manifest.py tests/test_image_digest.py tests/test_note_summary.py -q` 和 `.venv/bin/python -m pytest tests -q`；均须返回 0，摘要行不得含 failed/error。
 6. [ ] 提交并推送：`feat: make knowledge enrichment runs auditable`。
 
-**Acceptance:** 内容变化可检测；1241 批次可以补建 retrospective manifest；新运行可按 run ID 完整审计。
+**Acceptance:** 内容变化可检测；历史批次可以从明确的输入/输出 Git 快照补建 retrospective manifest；新 apply 运行必须按 run ID 完整审计，dry-run 零写入。
 
 ### Task 2: 验收既有 Davybase 图片批次并封存 K0 证据
 
@@ -116,13 +116,13 @@ git diff --check
 **Steps:**
 
 1. [ ] 在任何 K1 apply 之前记录 Obsidian 的 pre-K1 完整 commit/tree、Davybase 原批次 commit、输入 universe 和输出 universe。
-2. [ ] 从文档 frontmatter 和图片附录重算 1,265 个输入终态；验证 1,241 成功、24 decoration-only，或记录实测订正。
-3. [ ] 抽样验证至少 30 篇：内容哈希、图片顺序、原图可定位、摘要与图片段存在、失败数真实。
+2. [ ] 从文档 frontmatter 和图片附录重算 1,265 个输入终态；严格终态为 1,239 成功、2 待复核、24 decoration-only（历史交接中的 1,241 是 `done=true`，其中 2 篇各有 1 张图失败）。
+3. [ ] 抽样验证至少 30 篇（success/filtered 各 15）：内容哈希、图片顺序、原图可定位及失败数真实；不读取或导出正文内容。
 4. [ ] 对旧批次构造 `retrospective=true` manifest。不可恢复必需字段必须标记 `nonconformant`：缺 code commit/input tree/prompt hash 的条目不得计入完整 L1 coverage、不得支撑 HIGH/L2；只有重跑或用户批准的正式例外合同才能解除。
 5. [ ] FLOW 只复制汇总、定位符和哈希，不复制全部原文/图片。
 6. [ ] 两仓库分别运行文档/测试门禁、提交并推送；提交后才允许 Task 3 写 Obsidian。
 
-精确验收命令合同（返回 0，输出 `retrospective manifest: PASS (inputs=1265, success=1241, filtered=24)`；实测不符时返回非零并先订正报告，不能改 expected 掩盖差异）：
+精确验收命令合同（返回 0，输出 `retrospective manifest: PASS (inputs=1265, success=1239, review=2, filtered=24)`；实测不符时返回非零并先订正报告，不能改 expected 掩盖差异）：
 
 ```bash
 cd /Users/qiming/workspace/davybase
@@ -131,7 +131,8 @@ cd /Users/qiming/workspace/davybase
   --scope processed/微信知识库 \
   --pre-k1-commit <PRE_K1_COMMIT> --pre-k1-tree <PRE_K1_TREE> \
   --batch-code-commit <ORIGINAL_BATCH_COMMIT> \
-  --expected-inputs 1265 --expected-success 1241 --expected-filtered 24 \
+  --batch-output-commit <HISTORICAL_OUTPUT_COMMIT> \
+  --expected-inputs 1265 --expected-success 1239 --expected-review 2 --expected-filtered 24 \
   --output docs/evidence/runs/<K0_RUN_ID>.jsonl
 .venv/bin/python scripts/run/knowledge_run_manifest.py verify \
   --manifest docs/evidence/runs/<K0_RUN_ID>.jsonl --strict

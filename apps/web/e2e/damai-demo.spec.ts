@@ -3,7 +3,11 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 
 import { expect, test, type Page } from "@playwright/test";
+import { formatDeltaPercent, formatFinancialValue } from "../components/cockpit/number-format";
 import type {
+  CockpitModuleResponse,
+  CockpitOverviewResponse,
+  CockpitProfitabilityResponse,
   DashboardResponse,
   FindingListItem,
   FreezeCandidate,
@@ -47,6 +51,23 @@ const COVERAGE_COMPANY_NAMES: Record<string, string> = {
   sf_002352: "顺丰控股",
   tencent_0700: "腾讯控股",
 };
+
+function cockpitSeriesMetricCode(name: string): string {
+  if (/订单|包裹|件量|客户数|件数/.test(name)) return "orders";
+  if (/资产负债率/.test(name)) return "debt_asset_ratio";
+  if (/流动比率/.test(name)) return "current_ratio";
+  if (/速动比率/.test(name)) return "quick_ratio";
+  if (/现金比率/.test(name)) return "cash_ratio";
+  if (/权益乘数/.test(name)) return "equity_multiplier";
+  if (/OCF\/流动负债/.test(name)) return "ocf_current_liab_ratio";
+  if (/利息保障倍数/.test(name)) return "interest_coverage";
+  if (/净现比/.test(name)) return "net_cash_ratio";
+  if (/毛利率/.test(name)) return "gross_margin";
+  if (/净利率/.test(name)) return "net_margin";
+  if (/周转率/.test(name)) return "inventory_turnover";
+  if (/DSO|DIO|DPO|CCC|天数/.test(name)) return "dso_days";
+  return "";
+}
 
 async function expectMetricCoverageMatchesApi(page: Page, coverage: MetricCoverage) {
   const matrix = page.locator("section[aria-label='指标覆盖矩阵']");
@@ -273,14 +294,19 @@ async function expectDashboardCardsMatch(page: Page, response: DashboardResponse
   for (const metric of response.metric_cards) {
     const uiCard = cards.filter({ hasText: metric.title });
     await expect(uiCard).toHaveCount(1);
-    await expect(uiCard.locator(".metric-card__value")).toHaveText(metric.primary.display_value);
+    await expect(uiCard.locator(".metric-card__value")).toHaveText(
+      formatFinancialValue(metric.primary.exact_value, { metricCode: metric.metric_code, unit: metric.unit, appendUnit: false }),
+    );
     const expectedComparisons = [metric.budget, metric.yoy, metric.ytd_budget];
     const uiComparisons = uiCard.locator(".metric-comparison");
     await expect(uiComparisons).toHaveCount(expectedComparisons.length);
     for (const [index, expected] of expectedComparisons.entries()) {
       const actual = uiComparisons.nth(index);
       await expect(actual).toHaveAttribute("data-status", expected.status);
-      await expect(actual.locator(".metric-comparison__value")).toContainText(expected.display_value);
+      const formatted = ["gross_margin", "fulfillment_cost_rate"].includes(metric.metric_code)
+        ? formatFinancialValue(expected.exact_value, { unit: "ratio" })
+        : formatDeltaPercent(expected.exact_value);
+      await expect(actual.locator(".metric-comparison__value")).toContainText(expected.status === "unavailable" ? expected.display_value : formatted);
     }
   }
 }
@@ -289,7 +315,6 @@ function formatStatementValue(value: string, unitNote: string): string {
   const scale = unitNote.includes("千元") ? 1e5 : unitNote.includes("百万") ? 1e2 : 1;
   return (Number(value) / scale)
     .toFixed(2)
-    .replace(/\.00$/, "")
     .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
@@ -320,31 +345,16 @@ const OPERATIONS_MULTIPLE_METRICS = new Set([
   "current_asset_turnover",
 ]);
 
-const OPERATIONS_EXACT_PRECISION_METRICS = new Set([
-  "international_parcels",
-  "china_orders_fulfilled",
-  "adjusted_net_profit",
-  "adjusted_ebitda",
-]);
-
 function formatOperationsMetric(entryId: string, value: string): string {
-  if (OPERATIONS_EXACT_PRECISION_METRICS.has(entryId)) return value;
-  const numericValue = Number(value);
-  if (!Number.isFinite(numericValue)) return value;
-  const isRatio =
-    OPERATIONS_PERCENT_METRICS.has(entryId) ||
-    OPERATIONS_MULTIPLE_METRICS.has(entryId) ||
-    entryId === "dso_days";
-  const formatted = new Intl.NumberFormat("zh-CN", {
-    minimumFractionDigits: isRatio ? 2 : 0,
-    maximumFractionDigits: 2,
-  }).format(OPERATIONS_PERCENT_METRICS.has(entryId) ? numericValue * 100 : numericValue);
-  if (OPERATIONS_PERCENT_METRICS.has(entryId)) return `${formatted}%`;
-  if (OPERATIONS_MULTIPLE_METRICS.has(entryId)) {
-    return `${formatted}${entryId === "current_ratio" || entryId === "ocf_to_net_profit" ? " 倍" : " 次"}`;
-  }
-  if (entryId === "dso_days") return `${formatted} 天`;
-  return formatted;
+  const unit = ["international_parcels", "china_orders_fulfilled"].includes(entryId)
+    ? "百万件"
+    : OPERATIONS_PERCENT_METRICS.has(entryId)
+      ? "ratio"
+      : OPERATIONS_MULTIPLE_METRICS.has(entryId)
+        ? "倍"
+        : entryId === "dso_days" ? "day"
+          : entryId === "revenue_per_order" ? "元/单" : "百万元";
+  return formatFinancialValue(value, { metricCode: entryId, unit });
 }
 
 async function expectOperationsOverviewMatchesApi(
@@ -559,7 +569,7 @@ test("dashboard API serves customer-grain overview", async ({ page }) => {
   expect(overview.ok()).toBeTruthy();
   const body = (await overview.json()) as DashboardResponse;
   // OCF actual 已进入财务事实与指标快照，应返回真实可用值。
-  expect(["ready", "degraded"]).toContain(body.state);
+  expect(["ready", "degraded", "stale"]).toContain(body.state);
   const ocfCard = body.metric_cards.find((card) => card.metric_code === "operating_cash_flow");
   expect(ocfCard?.primary.status).toBe("available");
   expect(ocfCard?.primary.exact_value).not.toBeNull();
@@ -580,10 +590,10 @@ test("dashboard API serves customer-grain overview", async ({ page }) => {
     const cells = trendRows.nth(index).locator("th, td");
     await expect(cells).toHaveCount(5);
     await expect(cells.nth(0)).toHaveText(point.month);
-    await expect(cells.nth(1)).toHaveText(point.revenue.display_value);
-    await expect(cells.nth(2)).toHaveText(point.operating_profit.display_value);
-    await expect(cells.nth(3)).toHaveText(point.operating_cash_flow.display_value);
-    await expect(cells.nth(4)).toHaveText(point.gross_margin.display_value);
+    await expect(cells.nth(1)).toHaveText(formatFinancialValue(point.revenue.exact_value, { unit: "CNY" }));
+    await expect(cells.nth(2)).toHaveText(formatFinancialValue(point.operating_profit.exact_value, { unit: "CNY" }));
+    await expect(cells.nth(3)).toHaveText(formatFinancialValue(point.operating_cash_flow.exact_value, { unit: "CNY" }));
+    await expect(cells.nth(4)).toHaveText(formatFinancialValue(point.gross_margin.exact_value, { metricCode: "gross_margin", unit: "ratio" }));
   }
 
   // 源事实只覆盖10种客群×产品组合；不补零，并优先展示覆盖更高的预算比较。
@@ -619,10 +629,14 @@ test("dashboard API serves customer-grain overview", async ({ page }) => {
       );
       const uiCell = uiCells.nth(columnIndex);
       await expect(uiCell.locator("strong")).toHaveText(
-        expected?.actual_margin.display_value ?? "—",
+        expected?.actual_margin.status === "available"
+          ? formatFinancialValue(expected.actual_margin.exact_value, { metricCode: "gross_margin", unit: "ratio" })
+          : "—",
       );
       await expect(uiCell.locator("small")).toHaveText(
-        expected?.comparison.display_value ?? "—",
+        expected?.comparison.status === "available"
+          ? `${formatFinancialValue(expected.comparison.exact_value, { unit: "ratio" })} 个百分点`
+          : expected?.comparison.display_value ?? "—",
       );
     }
   }
@@ -637,13 +651,13 @@ test("dashboard API serves customer-grain overview", async ({ page }) => {
     await expect(cells).toHaveCount(8);
     await expect(cells.nth(0).locator("span")).toHaveText(product.name);
     const expectedValues = [
-      product.revenue.display_value,
-      product.revenue_comparison.display_value,
-      product.orders.display_value,
-      product.orders_comparison.display_value,
-      product.gross_margin.display_value,
-      product.gross_margin_comparison.display_value,
-      product.fulfillment_cost_rate.display_value,
+      formatFinancialValue(product.revenue.exact_value, { metricCode: "revenue", unit: "CNY" }),
+      formatDeltaPercent(product.revenue_comparison.exact_value),
+      formatFinancialValue(product.orders.exact_value, { metricCode: "orders", unit: "单" }),
+      formatDeltaPercent(product.orders_comparison.exact_value),
+      formatFinancialValue(product.gross_margin.exact_value, { metricCode: "gross_margin", unit: "ratio" }),
+      formatFinancialValue(product.gross_margin_comparison.exact_value, { unit: "ratio" }),
+      formatFinancialValue(product.fulfillment_cost_rate.exact_value, { metricCode: "fulfillment_cost_rate", unit: "ratio" }),
     ];
     for (const [index, expected] of expectedValues.entries()) {
       await expect(cells.nth(index + 1)).toHaveText(expected);
@@ -670,7 +684,7 @@ test("dashboard API serves customer-grain overview", async ({ page }) => {
     metric_cards: { metric_code: string; primary: { status: string; exact_value: string | null } }[];
   };
   // 客户群粒度下部分指标（利润/OCF）按合同不可用，状态允许 degraded
-  expect(["ready", "degraded"]).toContain(filteredBody.state);
+  expect(["ready", "degraded", "stale"]).toContain(filteredBody.state);
   expect(filteredBody.active_filters.customer_segment_id).toBe(segment.id);
   expect(filteredBody.context.batch_id).toBe(body.context.batch_id);
 
@@ -737,7 +751,7 @@ test("operations overview renders damai six-theme analysis", async ({ page }) =>
   const periodsResponse = await page.request.get("/api/v1/operations/public-periods");
   expect(periodsResponse.ok()).toBeTruthy();
   const publicPeriodList = (await periodsResponse.json()) as PublicOperatingPeriodList;
-  expect(publicPeriodList.periods).toHaveLength(7);
+  expect(publicPeriodList.periods).toHaveLength(10);
   const contexts = [
     ...damaiReports.map((report) => ({
       selectorValue: `report:${report.id}`,
@@ -750,7 +764,7 @@ test("operations overview renders damai six-theme analysis", async ({ page }) =>
       label: `${period.company_name} ${period.period_label}`,
     })),
   ];
-  expect(contexts).toHaveLength(9);
+  expect(contexts).toHaveLength(damaiReports.length + publicPeriodList.periods.length);
   // 下拉菜单还包含其他已导入财报；本测试逐项遍历 Damai 与公开经营期，不把总数写死。
   await expect(select.locator("option")).toHaveCount(
     reportList.reports.length + publicPeriodList.periods.length,
@@ -838,6 +852,19 @@ test("operations overview renders damai six-theme analysis", async ({ page }) =>
   const focusedWatchMetric = page.locator(".ml-metric--focused");
   await expect(focusedWatchMetric.locator(".ml-metric__head")).toContainText(expectedMetric!.name);
   await expect(focusedWatchMetric.locator(".ml-metric__head")).toContainText(watchTarget.metric_code);
+});
+
+test("profitability cockpit renders frozen DuPont analysis and captures the real page", async ({ page }) => {
+  await page.goto("/cockpit/profitability");
+  await expect(page.getByRole("heading", { name: "盈利能力与杜邦分析" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "杜邦三因子" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "杜邦驱动关系" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "ROE 与净利率" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "总资产周转率（次）" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "权益乘数（倍）" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "指标口径与关系" }).first()).toBeVisible();
+  await expect(page.getByRole("link", { name: "来源财报" }).first()).toBeVisible();
+  await page.screenshot({ path: path.resolve(process.cwd(), "work/damai-demo/profitability-cockpit.png"), fullPage: true });
 });
 
 test("statements page lists damai synthetic reports", async ({ page }) => {
@@ -987,8 +1014,9 @@ test("four-question workbench loads damai report", async ({ page }) => {
   expect(allWorkbenchMetrics).toHaveLength(10);
   expect(
     allWorkbenchMetrics.filter((metric) => metric.available),
-    "大麦分析期财报装载后四问十项指标应可计算（canonical 快照口径）",
-  ).toHaveLength(10);
+    "大麦分析期财报装载后应展示可计算指标，未披露项须保留 unavailable 状态",
+  ).toHaveLength(9);
+  expect(allWorkbenchMetrics.filter((metric) => !metric.available)).toHaveLength(1);
 
   // 实际点击四问中的指标链接，确认目标指标库定位身份，不只检查 href。
   const firstMetricCode = allWorkbenchMetrics[0].metric_code;
@@ -1020,30 +1048,24 @@ test("four-question workbench loads damai report", async ({ page }) => {
     expect(value, `${label} 在大麦 FY2023 披露中存在`).not.toBeNull();
     return Number(value);
   };
-  const revenueLine = statementLine("合并利润表", "营业收入");
-  const netProfitLine = statementLine(
-    "合并利润表",
-    "五、净利润（净亏损以“－”号填列）",
-  );
+  const revenueLine = statementLine("合并利润表", "收入");
+  const netProfitLine = statementLine("合并利润表", "年度亏损/利润");
   const revenue = requiredValue(revenueLine.value_current, "营业收入");
   const revenuePrior = requiredValue(revenueLine.value_prior, "上期营业收入");
   const netProfit = requiredValue(netProfitLine.value_current, "净利润");
   const netProfitPrior = requiredValue(netProfitLine.value_prior, "上期净利润");
   const grossProfit = requiredValue(statementLine("合并利润表", "毛利").value_current, "毛利");
-  const receivables = statementLine("合并资产负债表", "应收账款");
+  const receivables = statementLine("合并资产负债表", "贸易应收及其他预付款(流动)");
   const totalAssets = statementLine("合并资产负债表", "资产总计");
-  const equity = statementLine("合并资产负债表", "所有者权益合计");
+  const equity = statementLine("合并资产负债表", "权益总额");
   const currentAssets = statementLine("合并资产负债表", "流动资产合计");
   const currentLiabilities = statementLine("合并资产负债表", "流动负债合计");
   const totalLiabilities = statementLine("合并资产负债表", "负债合计");
-  const ocf = requiredValue(
-    statementLine("合并现金流量表", "经营活动产生的现金流量净额").value_current,
-    "经营活动现金流量净额",
-  );
+  const ocf = requiredValue(statementLine("合并现金流量表", "经营活动所得现金净额").value_current, "经营活动现金流量净额");
   const capex = requiredValue(
     statementLine(
       "合并现金流量表",
-      "购建固定资产、无形资产和其他长期资产支付的现金",
+      "购置物业设备、投资物业、土地使用权及无形资产",
     ).value_current,
     "资本开支",
   );
@@ -1059,7 +1081,7 @@ test("four-question workbench loads damai report", async ({ page }) => {
   expect(findMetric("dso_days")?.value, "DSO 要用 360 / 应收账款周转率（平均应收余额）").toBe(
     expectedDso,
   );
-  const expectedByMetric: Record<string, string> = {
+  const expectedByMetric: Record<string, string | null> = {
     revenue_growth: ((revenue - revenuePrior) / Math.abs(revenuePrior)).toFixed(4),
     net_profit_growth: ((netProfit - netProfitPrior) / Math.abs(netProfitPrior)).toFixed(4),
     gross_margin: (grossProfit / revenue).toFixed(4),
@@ -1079,8 +1101,11 @@ test("four-question workbench loads damai report", async ({ page }) => {
       requiredValue(currentLiabilities.value_end, "期末流动负债")
     ).toFixed(4),
     dso_days: expectedDso,
-    ocf_net_profit_ratio: (ocf / netProfit).toFixed(4),
-    free_cash_flow: (ocf - capex).toFixed(4),
+    // 净利润为负时，现金含量倍数没有可解释的经营含义，工作台应保留为不可用。
+    ocf_net_profit_ratio: netProfit > 0 ? (ocf / netProfit).toFixed(4) : null,
+    // 公开现金流量表按现金流方向列示资本开支为负数；归一化事实映射会取绝对值，
+    // 因此从披露原文复算时应将其加到经营现金流上。
+    free_cash_flow: (ocf + capex).toFixed(4),
   };
   for (const [metricCode, expected] of Object.entries(expectedByMetric)) {
     expect(findMetric(metricCode)?.value, `${metricCode} 与报表披露及指标字典复算值一致`).toBe(
@@ -1259,8 +1284,8 @@ test("metric library switches to damai synthetic coverage", async ({ page }) => 
   await expect(matrix).toContainText("FY2023");
   // 直接核对年度覆盖值真正展示，而非只有年份标签/空壳矩阵。
   await expect(matrix).toContainText("FY2022");
-  await expect(matrix).toContainText("37/40");
-  await expect(matrix).toContainText("40/40");
+  // 当前披露映射可计算 32/50；其余缺失项逐格标注原因，不伪造为满覆盖。
+  await expect(matrix).toContainText("32/50");
 });
 
 test("investigations index mirrors findings api values", async ({ page }) => {
@@ -1286,7 +1311,7 @@ test("investigations index mirrors findings api values", async ({ page }) => {
     const amount = Number(value);
     if (!Number.isFinite(amount)) return value;
     if (Math.abs(amount) >= 100_000_000) return `${(amount / 100_000_000).toFixed(2)} 亿元`;
-    if (Math.abs(amount) >= 10_000) return `${(amount / 10_000).toFixed(1)} 万元`;
+    if (Math.abs(amount) >= 10_000) return `${(amount / 10_000).toFixed(2)} 万元`;
     return `${amount.toFixed(2)} 元`;
   };
   const buildHref = (finding: FindingListItem): string => {
@@ -1691,4 +1716,204 @@ test("data workbench completes damai workbook upload journey", async ({ page }) 
   await expect(
     page.getByRole("heading", { name: "导入版本已发布" }),
   ).toBeVisible({ timeout: 120_000 });
+});
+
+test("all CFO cockpit views render real charts without narrow-screen overflow", async ({ page }) => {
+  const moduleRoutes = [
+    "/cockpit/expenses",
+    "/cockpit/balance-sheet",
+    "/cockpit/working-capital",
+    "/cockpit/cashflow",
+    "/cockpit/risk",
+    "/cockpit/consolidation",
+  ];
+  const routes = ["/cockpit", "/cockpit/profitability", ...moduleRoutes, "/data"];
+
+  for (const width of [1440, 390]) {
+    await page.setViewportSize({ width, height: width === 390 ? 844 : 1000 });
+    for (const route of routes) {
+      await page.goto(route);
+      await expect.poll(async () => page.locator("canvas").count(), {
+        message: `${route} 在 ${width}px 视口应绘制至少两张图`,
+        timeout: 20_000,
+      }).toBeGreaterThanOrEqual(2);
+      const paintedPixels = await page.locator("canvas").evaluateAll((canvases) =>
+        canvases.map((canvas) => {
+          const bitmap = canvas as HTMLCanvasElement;
+          const context = bitmap.getContext("2d");
+          if (!context) return 0;
+          const { data, width: canvasWidth, height: canvasHeight } = context.getImageData(
+            0,
+            0,
+            bitmap.width,
+            bitmap.height,
+          );
+          let visible = 0;
+          const stride = 4 * Math.max(1, Math.floor((canvasWidth * canvasHeight) / 20_000));
+          for (let index = 0; index < data.length; index += stride) {
+            if (data[index + 3] > 0 && (data[index] < 245 || data[index + 1] < 245 || data[index + 2] < 245)) {
+              visible += 1;
+            }
+          }
+          return visible;
+        }),
+      );
+      expect(paintedPixels.every((visible) => visible > 10), `${route} 存在未绘制内容的空画布`).toBe(true);
+      if (route === "/cockpit") {
+        const apiOverview = await page.evaluate(async () => {
+          const response = await fetch("/api/v1/cockpit/overview");
+          if (!response.ok) throw new Error(`驾驶舱 API 返回 ${response.status}`);
+          return response.json();
+        }) as CockpitOverviewResponse;
+        for (const label of ["营业收入", "营业利润", "毛利率", "经营现金流"]) {
+          await expect(page.getByText(label, { exact: false }).first()).toBeVisible();
+        }
+        await expect(page.getByTestId("action-item").first()).toBeVisible();
+        const trends = page.locator("article[data-testid='cockpit-trend']");
+        await expect(trends).toHaveCount(4);
+        for (const trend of await trends.all()) {
+          const key = await trend.getAttribute("data-key");
+          const series = apiOverview.trends?.flatMap((item) => item.series ?? []).find((item) => item.key === key);
+          expect(series, `${key} 应存在于趋势 API`).toBeDefined();
+          expect(Number(await trend.getAttribute("data-points"))).toBe(
+            series?.points?.filter((point) => point.status === "ready").length,
+          );
+          await trend.locator("details summary").click();
+          const renderedRows = await trend.locator("tbody tr").evaluateAll((rows) => rows.map((row) => [
+            row.querySelector("th")?.textContent?.trim() ?? "",
+            row.querySelector("td")?.textContent?.trim() ?? "",
+          ]));
+          const expectedRows = (series?.points ?? []).map((point) => [
+            point.period,
+            point.status === "ready" ? formatFinancialValue(point.value, { unit: series?.unit }) : "—",
+          ]);
+          expect(renderedRows).toEqual(expectedRows);
+        }
+        await trends.first().locator("details summary").click();
+        await expect(trends.first().locator("tbody tr")).toHaveCount(12);
+      } else if (route === "/cockpit/profitability") {
+        await expect(page.locator(".profitability-page")).toBeVisible();
+        await expect(page.locator(".profitability-comparison-grid [data-testid^='cockpit-profitability']")).toHaveCount(3);
+        const apiProfitability = await page.evaluate(async () => {
+          const response = await fetch("/api/v1/cockpit/profitability");
+          if (!response.ok) throw new Error(`盈利能力 API 返回 ${response.status}`);
+          return response.json();
+        }) as CockpitProfitabilityResponse;
+        const profitabilityRows = page.locator(".profitability-page section[aria-label='盈利能力指标明细'] tbody tr");
+        const apiMetrics = (apiProfitability.periods ?? []).flatMap((period) => (period.metrics ?? []).map((metric) => ({
+          period: period.period,
+          metric,
+        })));
+        await expect(profitabilityRows).toHaveCount(apiMetrics.length);
+        for (const [index, { period, metric }] of apiMetrics.entries()) {
+          const row = profitabilityRows.nth(index);
+          const factor = {
+            net_margin: { label: "净利率", unit: "ratio" },
+            total_asset_turnover: { label: "总资产周转率", unit: "次" },
+            equity_multiplier: { label: "权益乘数", unit: "倍" },
+            roe: { label: "净资产收益率（ROE）", unit: "ratio" },
+          }[metric.metric_code] ?? { label: metric.metric_code, unit: "" };
+          const expectedValue = metric.status === "available" && metric.value !== null
+            ? formatFinancialValue(metric.value, { metricCode: metric.metric_code, unit: factor.unit })
+            : "暂不可用";
+          const expectedStatus = metric.status === "available" ? metric.definition_version : metric.reason ?? "不可用";
+          await expect(row.locator("td").nth(0)).toHaveText(period);
+          await expect(row.locator("th")).toHaveText(factor.label);
+          await expect(row.locator("td").nth(1)).toHaveText(expectedValue);
+          await expect(row.locator("td").nth(2)).toContainText(expectedStatus ?? "不可用");
+          await expect(row.locator("td").nth(3).getByRole("link", { name: "来源财报" })).toHaveAttribute("href", new RegExp(metric.report_id));
+        }
+      } else if (moduleRoutes.includes(route)) {
+        await expect(page.locator(".module-page[data-status='ready']")).toBeVisible();
+        await expect(page.locator(".module-chart-table tbody tr").first()).toBeVisible();
+        await expect(page.locator(".chart-fact-badges").first()).toBeVisible();
+        await expect(page.locator("details.module-chart-sources").first()).toBeAttached();
+        const moduleId = route.slice("/cockpit/".length) as "balance-sheet" | "working-capital" | "expenses" | "cashflow" | "risk" | "consolidation";
+        const apiModule = await page.evaluate(async (id) => {
+          const response = await fetch(`/api/v1/cockpit/modules/${id}`);
+          if (!response.ok) throw new Error(`模块 API 返回 ${response.status}`);
+          return response.json();
+        }, moduleId) as CockpitModuleResponse;
+        const charts = Object.entries(apiModule.charts ?? {});
+        expect(charts.length, `${moduleId} 应存在图表数据`).toBeGreaterThan(0);
+        for (const [chartKey, chartData] of charts) {
+          if (chartData.type === "formula_card") {
+            const formula = page.locator(`[data-testid='cockpit-module-chart-${chartKey}']`);
+            for (const [field, label] of [["dso", "DSO"], ["dio", "DIO"], ["dpo", "DPO"], ["ccc", "CCC"]] as const) {
+              const actual = await formula.locator("span").filter({ hasText: new RegExp(`^${label}：`) }).textContent();
+              const value = chartData[field];
+              const expected = `${label}：${formatFinancialValue(value, { metricCode: "dso_days", unit: "day" })}`;
+              expect(actual?.trim(), `${moduleId}/${chartKey}/${label} 页面值应与 API 相等`).toBe(expected);
+            }
+          }
+          const rows = page.locator(`article[data-chart='${chartKey}'] .module-chart-table tbody tr`);
+          const entries = Object.entries(chartData.series ?? {});
+          if (entries.length) {
+            await expect(rows).toHaveCount(entries.length);
+            for (const [index, [seriesName, raw]] of entries.entries()) {
+              const values = Array.isArray(raw) ? raw : [raw];
+              const unit = chartData.type === "line" && /率|margin/i.test(seriesName) ? "ratio" : chartData.unit;
+              const actual = await rows.nth(index).locator("td").allTextContents();
+              const expected = values.map((value) => formatFinancialValue(value, {
+                metricCode: cockpitSeriesMetricCode(seriesName),
+                unit,
+              }));
+              expect(actual, `${moduleId}/${chartKey}/${seriesName} 页面值应与 API 相等`).toEqual(expected);
+            }
+          } else {
+            await expect(rows).toHaveCount(0);
+          }
+          const steps = Object.entries(chartData.steps ?? {});
+          const renderedSteps = page.locator(`article[data-chart='${chartKey}'] .module-waterfall-values > div`);
+          await expect(renderedSteps).toHaveCount(steps.length);
+          for (const [index, [stepName, value]] of steps.entries()) {
+            await expect(renderedSteps.nth(index).locator("dt")).toHaveText(stepName);
+            await expect(renderedSteps.nth(index).locator("dd")).toHaveText(formatFinancialValue(value, { unit: chartData.unit }));
+          }
+        }
+      } else if (route === "/data") {
+        await expect(page.getByRole("heading", { name: "最近的数据批次" })).toBeVisible();
+        await expect(page.locator("canvas")).toHaveCount(2);
+      }
+      const dimensions = await page.evaluate(() => ({
+        viewport: document.documentElement.clientWidth,
+        content: document.documentElement.scrollWidth,
+      }));
+      expect(dimensions.content, `${route} 在 ${width}px 视口发生横向溢出`).toBe(dimensions.viewport);
+    }
+  }
+
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto("/cockpit/balance-sheet");
+  const provenance = page.locator("details.module-chart-sources").first();
+  await provenance.locator("summary").focus();
+  await page.keyboard.press("Enter");
+  await expect(provenance).toHaveAttribute("open", "");
+  const sourceRowLink = page.locator(".module-chart-card a.module-source-link").first();
+  await expect(sourceRowLink).toHaveAttribute("href", /#stmt-row-/);
+  await sourceRowLink.click();
+  await expect.poll(() => page.evaluate(() => {
+    const targetId = decodeURIComponent(window.location.hash.slice(1));
+    const target = targetId ? document.getElementById(targetId) : null;
+    return target ? Math.round(target.getBoundingClientRect().top) : null;
+  })).toBeGreaterThanOrEqual(0);
+  await expect.poll(() => page.evaluate(() => {
+    const targetId = decodeURIComponent(window.location.hash.slice(1));
+    const target = targetId ? document.getElementById(targetId) : null;
+    return target ? Math.round(target.getBoundingClientRect().top) : null;
+  })).toBeLessThan(1000);
+
+  await page.goto("/cockpit");
+  const actionItem = page.getByTestId("action-item").first();
+  await expect(actionItem).toBeVisible();
+  await actionItem.getByRole("button", { name: "确认" }).click();
+  await expect(actionItem.locator("[data-status='acknowledged']")).toBeVisible();
+
+  await page.route("**/api/v1/cockpit/modules/balance-sheet", (route) => route.fulfill({
+    status: 403,
+    json: { detail: { code: "role_forbidden", message: "当前账号无权读取该模块。" } },
+  }));
+  await page.goto("/cockpit/balance-sheet");
+  await expect(page.getByText("没有访问权限：请确认当前账号的角色或数据范围")).toBeVisible();
+  await page.unroute("**/api/v1/cockpit/modules/balance-sheet");
 });

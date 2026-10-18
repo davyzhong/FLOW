@@ -3,6 +3,19 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 
 import { DataWorkbench } from "../../components/data/data-workbench";
 
+vi.mock("../../components/cockpit/charts/echarts-base", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("../../components/cockpit/charts/echarts-base")>();
+  return {
+    ...actual,
+    ChartBox: ({ title, testId, ariaLabel }: { title: string; testId?: string; ariaLabel?: string }) => (
+      <article data-testid={testId}>
+        <h3>{title}</h3>
+        <div role="img" aria-label={ariaLabel} />
+      </article>
+    ),
+  };
+});
+
 function jsonResponse(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
     status,
@@ -221,6 +234,9 @@ it("shows the authenticated batch history with version and latest status", async
   expect(await screen.findByRole("heading", { name: "最近的数据批次" })).toBeInTheDocument();
   expect(await screen.findByRole("link", { name: "8月报告" })).toHaveAttribute("href", "/data?batch=batch-1");
   expect(screen.getByText("v2 · published")).toBeInTheDocument();
+  expect(await screen.findByTestId("data-batch-status-chart")).toHaveAttribute("data-testid", "data-batch-status-chart");
+  expect(screen.getByTestId("data-batch-version-chart")).toHaveAttribute("data-testid", "data-batch-version-chart");
+  expect(screen.getAllByRole("img", { name: /批次|导入版本/ })).toHaveLength(2);
 });
 async function uploadAndValidate() {
   fireEvent.change(screen.getByLabelText("选择文件"), { target: { files: [makeXlsxFile()] } });

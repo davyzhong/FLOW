@@ -1,4 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
+
+vi.mock("../components/cockpit/charts/echarts-base", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("../components/cockpit/charts/echarts-base")>()),
+  ChartBox: ({ title, testId }: { title: string; testId?: string }) => <div data-testid={testId}>{title}</div>,
+}));
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 
 import { CockpitOverviewApp } from "../components/cockpit/cockpit-overview-app";
@@ -146,6 +151,7 @@ describe("CockpitOverviewApp", () => {
     fireEvent.click(screen.getByRole("button", { name: /营业收入/ }));
     const drawer = await screen.findByTestId("cockpit-drill");
     expect(drawer.textContent).toContain("ms-12345678-rest");
+    expect(drawer.querySelector(".drill__value")?.textContent).toBe("126,895.00万元");
   });
 
   it("Esc 关闭穿透抽屉", async () => {

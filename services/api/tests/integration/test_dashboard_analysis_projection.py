@@ -48,9 +48,12 @@ def test_analysis_projection_preserves_bridge_finding_rank_evidence_and_handoff(
         payload = actual.model_dump(mode="json")
         payload.pop("finding_id")
         payload.pop("investigation_path")
+        assert payload.pop("status") == "candidate"
         oracle = dict(oracle)
         oracle.pop("finding_id")
         oracle.pop("investigation_path")
+        # 冻结仪表盘 oracle 表示人工批准后的结论；本测试验证自动生成阶段，状态应为 candidate。
+        oracle.pop("status")
         assert payload == oracle
         assert str(actual.finding_id) in actual.investigation_path
         assert f"analysis_run_id={run.id}" in actual.investigation_path

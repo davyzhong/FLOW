@@ -10,7 +10,6 @@ from sqlalchemy import (
     ForeignKeyConstraint,
     Index,
     Integer,
-    Numeric,
     String,
     Text,
     UniqueConstraint,
@@ -19,11 +18,9 @@ from sqlalchemy import (
     select,
     text,
 )
-from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from flow_api.infrastructure.models.base import Base
+from flow_api.infrastructure.models.base import JSON_TYPE, UUID_TYPE, Base, ExactNumeric
 from flow_api.infrastructure.models.canonical import Period
 from flow_api.infrastructure.models.intake import (
     AnalysisBatch,
@@ -48,11 +45,11 @@ class MetricDefinition(IdentityTimestampMixin, Base):
     unit: Mapped[str] = mapped_column(String(32), nullable=False)
     format_pattern: Mapped[str | None] = mapped_column(String(64))
     effective_from_month: Mapped[int | None] = mapped_column(Integer)
-    target_value: Mapped[Decimal | None] = mapped_column(Numeric(24, 4))
-    warning_threshold: Mapped[Decimal | None] = mapped_column(Numeric(24, 4))
-    critical_threshold: Mapped[Decimal | None] = mapped_column(Numeric(24, 4))
+    target_value: Mapped[Decimal | None] = mapped_column(ExactNumeric(24, 4))
+    warning_threshold: Mapped[Decimal | None] = mapped_column(ExactNumeric(24, 4))
+    critical_threshold: Mapped[Decimal | None] = mapped_column(ExactNumeric(24, 4))
     definition_config: Mapped[dict[str, Any]] = mapped_column(
-        JSONB, nullable=False, default=dict, server_default=text("'{}'::jsonb")
+        JSON_TYPE, nullable=False, default=dict, server_default=text("'{}'")
     )
 
 
@@ -79,12 +76,12 @@ class MetricDefinitionDependency(IdentityTimestampMixin, Base):
     )
 
     metric_definition_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True),
+        UUID_TYPE,
         ForeignKey("metric_definition.id", ondelete="RESTRICT"),
         nullable=False,
     )
     dependency_definition_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True),
+        UUID_TYPE,
         ForeignKey("metric_definition.id", ondelete="RESTRICT"),
         nullable=False,
     )
@@ -135,13 +132,13 @@ class MetricSnapshot(IdentityTimestampMixin, Base):
     )
 
     batch_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("analysis_batch.id", ondelete="RESTRICT"), nullable=False
+        UUID_TYPE, ForeignKey("analysis_batch.id", ondelete="RESTRICT"), nullable=False
     )
     import_version_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True), nullable=False
+        UUID_TYPE, nullable=False
     )
     as_of_period_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("dim_period.id", ondelete="RESTRICT"), nullable=False
+        UUID_TYPE, ForeignKey("dim_period.id", ondelete="RESTRICT"), nullable=False
     )
     version: Mapped[int] = mapped_column(Integer, nullable=False)
     engine_version: Mapped[str] = mapped_column(String(128), nullable=False)
@@ -196,10 +193,10 @@ class MetricValue(IdentityTimestampMixin, Base):
     )
 
     metric_snapshot_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("metric_snapshot.id", ondelete="CASCADE"), nullable=False
+        UUID_TYPE, ForeignKey("metric_snapshot.id", ondelete="CASCADE"), nullable=False
     )
     metric_definition_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True),
+        UUID_TYPE,
         ForeignKey("metric_definition.id", ondelete="RESTRICT"),
         nullable=False,
     )
@@ -212,10 +209,10 @@ class MetricValue(IdentityTimestampMixin, Base):
         ForeignKey("dim_logistics_product.id")
     )
     region_id: Mapped[UUID | None] = mapped_column(ForeignKey("dim_region.id"))
-    value: Mapped[Decimal] = mapped_column(Numeric(24, 4), nullable=False)
+    value: Mapped[Decimal] = mapped_column(ExactNumeric(24, 4), nullable=False)
     exact_value: Mapped[str] = mapped_column(Text, nullable=False)
     calculation_trace: Mapped[dict[str, Any]] = mapped_column(
-        JSONB, nullable=False, default=dict, server_default=text("'{}'::jsonb")
+        JSON_TYPE, nullable=False, default=dict, server_default=text("'{}'")
     )
 
     metric_snapshot: Mapped[MetricSnapshot] = relationship()
@@ -263,12 +260,12 @@ class AnalysisRun(IdentityTimestampMixin, Base):
     )
 
     metric_snapshot_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True),
+        UUID_TYPE,
         ForeignKey("metric_snapshot.id", ondelete="RESTRICT"),
         nullable=False,
     )
     import_version_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True),
+        UUID_TYPE,
         ForeignKey("import_version.id", ondelete="RESTRICT"),
         nullable=False,
     )
@@ -335,7 +332,7 @@ class AnalysisResult(IdentityTimestampMixin, Base):
     )
 
     analysis_run_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True),
+        UUID_TYPE,
         ForeignKey("analysis_run.id", ondelete="CASCADE"),
         nullable=False,
     )
@@ -343,22 +340,22 @@ class AnalysisResult(IdentityTimestampMixin, Base):
     playbook_version: Mapped[int] = mapped_column(Integer, nullable=False)
     status: Mapped[str] = mapped_column(String(32), nullable=False)
     comparison_basis: Mapped[str] = mapped_column(String(32), nullable=False)
-    impact_amount: Mapped[Decimal] = mapped_column(Numeric(24, 4), nullable=False)
+    impact_amount: Mapped[Decimal] = mapped_column(ExactNumeric(24, 4), nullable=False)
     unit: Mapped[str] = mapped_column(String(32), nullable=False)
-    reconciliation_difference: Mapped[Decimal] = mapped_column(Numeric(24, 4), nullable=False)
-    reconciliation_tolerance: Mapped[Decimal] = mapped_column(Numeric(24, 4), nullable=False)
+    reconciliation_difference: Mapped[Decimal] = mapped_column(ExactNumeric(24, 4), nullable=False)
+    reconciliation_tolerance: Mapped[Decimal] = mapped_column(ExactNumeric(24, 4), nullable=False)
     required_fields: Mapped[list[str]] = mapped_column(
-        JSONB, nullable=False, default=list, server_default=text("'[]'::jsonb")
+        JSON_TYPE, nullable=False, default=list, server_default=text("'[]'")
     )
     available_fields: Mapped[list[str]] = mapped_column(
-        JSONB, nullable=False, default=list, server_default=text("'[]'::jsonb")
+        JSON_TYPE, nullable=False, default=list, server_default=text("'[]'")
     )
     missing_fields: Mapped[list[str]] = mapped_column(
-        JSONB, nullable=False, default=list, server_default=text("'[]'::jsonb")
+        JSON_TYPE, nullable=False, default=list, server_default=text("'[]'")
     )
     source_record_count: Mapped[int] = mapped_column(Integer, nullable=False)
     calculation_trace: Mapped[dict[str, Any]] = mapped_column(
-        JSONB, nullable=False, default=dict, server_default=text("'{}'::jsonb")
+        JSON_TYPE, nullable=False, default=dict, server_default=text("'{}'")
     )
     degradation_code: Mapped[str | None] = mapped_column(String(64))
     degradation_message: Mapped[str | None] = mapped_column(Text)
@@ -380,17 +377,17 @@ class AnalysisDriver(IdentityTimestampMixin, Base):
     )
 
     analysis_result_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True),
+        UUID_TYPE,
         ForeignKey("analysis_result.id", ondelete="CASCADE"),
         nullable=False,
     )
     position: Mapped[int] = mapped_column(Integer, nullable=False)
     driver_code: Mapped[str] = mapped_column(String(128), nullable=False)
     calculation_method: Mapped[str | None] = mapped_column(Text)
-    contribution_amount: Mapped[Decimal] = mapped_column(Numeric(24, 4), nullable=False)
-    contribution_ratio: Mapped[Decimal | None] = mapped_column(Numeric(16, 6))
+    contribution_amount: Mapped[Decimal] = mapped_column(ExactNumeric(24, 4), nullable=False)
+    contribution_ratio: Mapped[Decimal | None] = mapped_column(ExactNumeric(16, 6))
     calculation_trace: Mapped[dict[str, Any]] = mapped_column(
-        JSONB, nullable=False, default=dict, server_default=text("'{}'::jsonb")
+        JSON_TYPE, nullable=False, default=dict, server_default=text("'{}'")
     )
 
     analysis_result: Mapped[AnalysisResult] = relationship(back_populates="drivers")
@@ -454,30 +451,30 @@ class Finding(IdentityTimestampMixin, Base):
     )
 
     metric_snapshot_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("metric_snapshot.id", ondelete="CASCADE"), nullable=False
+        UUID_TYPE, ForeignKey("metric_snapshot.id", ondelete="CASCADE"), nullable=False
     )
     metric_definition_id: Mapped[UUID | None] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("metric_definition.id", ondelete="RESTRICT")
+        UUID_TYPE, ForeignKey("metric_definition.id", ondelete="RESTRICT")
     )
     analysis_run_id: Mapped[UUID | None] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("analysis_run.id", ondelete="CASCADE")
+        UUID_TYPE, ForeignKey("analysis_run.id", ondelete="CASCADE")
     )
     analysis_result_id: Mapped[UUID | None] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("analysis_result.id", ondelete="CASCADE")
+        UUID_TYPE, ForeignKey("analysis_result.id", ondelete="CASCADE")
     )
     finding_type: Mapped[str | None] = mapped_column(String(128))
     title: Mapped[str] = mapped_column(String(512), nullable=False)
     status: Mapped[str] = mapped_column(String(32), nullable=False, default="candidate")
-    impact_amount: Mapped[Decimal] = mapped_column(Numeric(24, 4), nullable=False)
-    confidence: Mapped[Decimal] = mapped_column(Numeric(5, 4), nullable=False)
+    impact_amount: Mapped[Decimal] = mapped_column(ExactNumeric(24, 4), nullable=False)
+    confidence: Mapped[Decimal] = mapped_column(ExactNumeric(5, 4), nullable=False)
     business_meaning: Mapped[str | None] = mapped_column(Text)
     fact_statement: Mapped[str | None] = mapped_column(Text)
     comparison_basis: Mapped[str | None] = mapped_column(String(32))
-    total_score: Mapped[Decimal | None] = mapped_column(Numeric(12, 6))
+    total_score: Mapped[Decimal | None] = mapped_column(ExactNumeric(12, 6))
     policy_version: Mapped[str | None] = mapped_column(String(128))
     fingerprint: Mapped[str | None] = mapped_column(String(64))
     qualification_trace: Mapped[dict[str, Any]] = mapped_column(
-        JSONB, nullable=False, default=dict, server_default=text("'{}'::jsonb")
+        JSON_TYPE, nullable=False, default=dict, server_default=text("'{}'")
     )
 
     metric_snapshot: Mapped[MetricSnapshot] = relationship()
@@ -500,15 +497,15 @@ class DriverContribution(IdentityTimestampMixin, Base):
     )
 
     finding_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("finding.id", ondelete="CASCADE"), nullable=False
+        UUID_TYPE, ForeignKey("finding.id", ondelete="CASCADE"), nullable=False
     )
     position: Mapped[int] = mapped_column(Integer, nullable=False)
     driver_code: Mapped[str] = mapped_column(String(128), nullable=False)
     calculation_method: Mapped[str | None] = mapped_column(Text)
-    contribution_amount: Mapped[Decimal] = mapped_column(Numeric(24, 4), nullable=False)
-    contribution_ratio: Mapped[Decimal | None] = mapped_column(Numeric(16, 6))
+    contribution_amount: Mapped[Decimal] = mapped_column(ExactNumeric(24, 4), nullable=False)
+    contribution_ratio: Mapped[Decimal | None] = mapped_column(ExactNumeric(16, 6))
     calculation_trace: Mapped[dict[str, Any]] = mapped_column(
-        JSONB, nullable=False, default=dict, server_default=text("'{}'::jsonb")
+        JSON_TYPE, nullable=False, default=dict, server_default=text("'{}'")
     )
 
     finding: Mapped[Finding] = relationship(back_populates="drivers")
@@ -527,7 +524,7 @@ class Evidence(IdentityTimestampMixin, Base):
     )
 
     finding_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("finding.id", ondelete="CASCADE"), nullable=False
+        UUID_TYPE, ForeignKey("finding.id", ondelete="CASCADE"), nullable=False
     )
     status: Mapped[str] = mapped_column(String(32), nullable=False, default="pending")
     evidence_type: Mapped[str] = mapped_column(String(64), nullable=False)
@@ -536,7 +533,7 @@ class Evidence(IdentityTimestampMixin, Base):
     note: Mapped[str | None] = mapped_column(Text)
     evidence_digest: Mapped[str | None] = mapped_column(String(64))
     verification_trace: Mapped[dict[str, Any]] = mapped_column(
-        JSONB, nullable=False, default=dict, server_default=text("'{}'::jsonb")
+        JSON_TYPE, nullable=False, default=dict, server_default=text("'{}'")
     )
 
     finding: Mapped[Finding] = relationship()
@@ -560,15 +557,15 @@ class FindingScoreComponent(IdentityTimestampMixin, Base):
     )
 
     finding_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("finding.id", ondelete="CASCADE"), nullable=False
+        UUID_TYPE, ForeignKey("finding.id", ondelete="CASCADE"), nullable=False
     )
     component_code: Mapped[str] = mapped_column(String(64), nullable=False)
-    raw_value: Mapped[Decimal] = mapped_column(Numeric(24, 6), nullable=False)
-    normalized_score: Mapped[Decimal] = mapped_column(Numeric(12, 6), nullable=False)
-    weight: Mapped[Decimal] = mapped_column(Numeric(12, 6), nullable=False)
-    weighted_score: Mapped[Decimal] = mapped_column(Numeric(12, 6), nullable=False)
+    raw_value: Mapped[Decimal] = mapped_column(ExactNumeric(24, 6), nullable=False)
+    normalized_score: Mapped[Decimal] = mapped_column(ExactNumeric(12, 6), nullable=False)
+    weight: Mapped[Decimal] = mapped_column(ExactNumeric(12, 6), nullable=False)
+    weighted_score: Mapped[Decimal] = mapped_column(ExactNumeric(12, 6), nullable=False)
     calculation_trace: Mapped[dict[str, Any]] = mapped_column(
-        JSONB, nullable=False, default=dict, server_default=text("'{}'::jsonb")
+        JSON_TYPE, nullable=False, default=dict, server_default=text("'{}'")
     )
 
     finding: Mapped[Finding] = relationship(back_populates="score_components")
@@ -608,7 +605,7 @@ class ReviewEvent(IdentityTimestampMixin, Base):
     )
 
     finding_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("finding.id", ondelete="CASCADE"), nullable=False
+        UUID_TYPE, ForeignKey("finding.id", ondelete="CASCADE"), nullable=False
     )
     sequence: Mapped[int] = mapped_column(Integer, nullable=False)
     reviewer: Mapped[str] = mapped_column(String(255), nullable=False)
@@ -628,7 +625,7 @@ class Conclusion(IdentityTimestampMixin, Base):
     __tablename__ = "conclusion"
 
     finding_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True),
+        UUID_TYPE,
         ForeignKey("finding.id", ondelete="CASCADE"),
         nullable=False,
         unique=True,

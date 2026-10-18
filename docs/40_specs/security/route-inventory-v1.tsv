@@ -18,6 +18,7 @@ GET	/api/v1/intake/imports/{import_version_id}/cleaning-summary	database_read:se
 GET	/api/v1/intake/imports/{import_version_id}/standardized-workbook	database_read_and_in_process_xlsx_render	intake.standardized_workbook.read	load_import_batch_scope_owner_or_deny_legacy	route-policy	-
 GET	/api/v1/dashboard/overview	database_read:latest_published_analysis_single_enterprise	dashboard.overview.read	load_single_enterprise	route-policy	-
 GET	/api/v1/cockpit/overview	database_read:latest_published_analysis_single_enterprise	dashboard.overview.read	load_single_enterprise	route-policy	-
+GET	/api/v1/cockpit/profitability	database_read:published_financial_snapshots_single_enterprise	dashboard.overview.read	load_single_enterprise	route-policy	-
 GET	/api/v1/cockpit/action-items	database_read:cockpit_action_item_collection	cockpit.action_item.read	load_single_enterprise	route-policy	-
 GET	/api/v1/cockpit/modules/balance-sheet	database_read:latest_published_analysis_single_enterprise	dashboard.overview.read	load_single_enterprise	route-policy	-
 GET	/api/v1/cockpit/modules/working-capital	database_read:latest_published_analysis_single_enterprise	dashboard.overview.read	load_single_enterprise	route-policy	-

@@ -12,11 +12,10 @@ from __future__ import annotations
 from uuid import UUID
 
 from sqlalchemy import CheckConstraint, ForeignKey, String, UniqueConstraint
-from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
 from flow_api.financial_facts_v2.models import ContractV2Violation
-from flow_api.infrastructure.models.base import Base
+from flow_api.infrastructure.models.base import UUID_TYPE, Base
 from flow_api.infrastructure.models.canonical import CanonicalIdentityMixin
 from flow_api.infrastructure.models.intake import AnalysisBatch
 
@@ -35,7 +34,10 @@ class AnalysisCycle(CanonicalIdentityMixin, Base):
             "enterprise_id", "period_key", name="uq_analysis_cycle_enterprise_period"
         ),
         CheckConstraint(
-            r"period_key ~ '^\d{4}-(0[1-9]|1[0-2])$'", name="ck_analysis_cycle_period_key"
+            "length(period_key) = 7 AND substr(period_key, 5, 1) = '-'"
+            " AND CAST(substr(period_key, 6, 2) AS INTEGER) BETWEEN 1 AND 12"
+            " AND CAST(substr(period_key, 1, 4) AS INTEGER) BETWEEN 0 AND 9999",
+            name="ck_analysis_cycle_period_key",
         ),
         CheckConstraint(
             "status in ('open', 'frozen', 'closed')", name="ck_analysis_cycle_status"
@@ -43,7 +45,7 @@ class AnalysisCycle(CanonicalIdentityMixin, Base):
     )
 
     enterprise_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True),
+        UUID_TYPE,
         ForeignKey("enterprise.id", ondelete="RESTRICT"),
         nullable=False,
     )

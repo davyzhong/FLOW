@@ -14,6 +14,7 @@ from uuid import UUID
 from sqlalchemy import CheckConstraint, ForeignKey, Index, Text, Uuid
 from sqlalchemy.orm import Mapped, mapped_column
 
+from flow_api.domain.ids import new_uuid7
 from flow_api.infrastructure.models.base import Base
 from flow_api.infrastructure.models.intake import IdentityTimestampMixin
 
@@ -24,7 +25,7 @@ class ActionItem(IdentityTimestampMixin, Base):
     __tablename__ = "cockpit_action_item"
     __table_args__ = (
         CheckConstraint(
-            "char_length(title) between 1 and 200", name="ck_action_item_title_len"
+            "length(title) between 1 and 200", name="ck_action_item_title_len"
         ),
         Index(
             "ix_action_item_enterprise_created",
@@ -40,7 +41,7 @@ class ActionItem(IdentityTimestampMixin, Base):
     )
 
     id: Mapped[UUID] = mapped_column(
-        Uuid(), primary_key=True, server_default="gen_random_uuid()"
+        Uuid(), primary_key=True, default=new_uuid7
     )
     enterprise_id: Mapped[UUID] = mapped_column(Uuid(), nullable=False)
     finding_id: Mapped[UUID] = mapped_column(

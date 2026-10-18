@@ -169,10 +169,10 @@ def _control_status(
 
 
 _TREND_SERIES = (
-    ("revenue", "营业收入"),
-    ("operating_profit", "营业利润"),
-    ("gross_margin", "毛利率"),
-    ("operating_cash_flow", "经营现金流"),
+    ("revenue", "营业收入", "CNY"),
+    ("operating_profit", "营业利润", "CNY"),
+    ("gross_margin", "毛利率", "ratio"),
+    ("operating_cash_flow", "经营现金流", "CNY"),
 )
 
 
@@ -218,9 +218,10 @@ class CockpitProjectionService:
         mom = _as_value_dict(card.mom) if card.mom else _unavailable(
             "mom_not_published", "环比未发布"
         )
+        title = "营业利润" if metric_code == "operating_profit" else card.title
         return CockpitKpi(
             metric_code=metric_code,
-            title=card.title,
+            title=title,
             category=card.category,
             unit=card.unit,
             primary=primary,
@@ -239,7 +240,7 @@ class CockpitProjectionService:
                 if control_line and control_line.get("status") == "ready"
                 else None
             ),
-            caliber_note=f"{card.title}（{card.category}）· 由指标字典 v1.2 计算，口径随图附",
+            caliber_note=f"{title}（{card.category}）· 由指标字典 v1.2 计算，口径随图附",
             source_label=(
                 "、".join(
                     part
@@ -261,18 +262,22 @@ class CockpitProjectionService:
     def _trends(self, base: DashboardOverview) -> list[CockpitTrendProjection]:
         trend = base.trends
         series: list[CockpitTrendSeries] = []
-        for key, title in _TREND_SERIES:
+        for key, title, default_unit in _TREND_SERIES:
             points: list[dict[str, Any]] = []
             for point in trend.points:
                 value = _as_value_dict(getattr(point, key, None))
                 exact = _decimal(value.get("exact_value"))
+                status = str(value.get("status", "unavailable"))
                 points.append(
                     {
                         "period": point.month,
                         "value": float(exact) if exact is not None else 0.0,
                         "display_value": value.get("display_value", "—"),
-                        "status": str(value.get("status", "unavailable")),
-                        "unit": str(value.get("unit", "")),
+                        # DashboardValue 使用 available/unavailable；驾驶舱图表契约
+                        # 使用 ready/unavailable。跨层投影时必须显式归一化，
+                        # 否则所有真实 available 点都会被前端误判为空数据。
+                        "status": "ready" if status == "available" else status,
+                        "unit": str(value.get("unit") or default_unit),
                     }
                 )
             if points:
@@ -299,8 +304,10 @@ class CockpitProjectionService:
                 "title": item.title,
                 "investigation_path": item.investigation_path,
             }
-            for item in base.findings[:3]
+            for item in base.findings
+            if item.status == "approved"
         ]
+        findings = findings[:3]
         if not findings:
             return CockpitConclusionProjection(
                 text="本期无已终审结论；不补造经营判断。",
@@ -308,14 +315,15 @@ class CockpitProjectionService:
                 tone="neutral",
             )
         # 色调由 Finding 影响值的语义方向决定（impact 已带 semantic_direction）
-        risky = [f for f in base.findings[:3] if f.impact.semantic_direction == "negative"]
+        approved = [item for item in base.findings if item.status == "approved"][:3]
+        risky = [f for f in approved if f.impact.semantic_direction == "negative"]
         if len(risky) >= 2:
             tone = "risk"
         elif risky:
             tone = "attention"
         else:
             tone = "neutral"
-        titles = "、".join(item.title for item in base.findings[:2])
+        titles = "、".join(item.title for item in approved[:2])
         return CockpitConclusionProjection(
             text=f"本期关注 {len(findings)} 项已终审发现：{titles}。",
             findings=findings,

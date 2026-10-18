@@ -100,6 +100,14 @@ def _ratio_pct(facts: dict[str, Decimal], num_id: str, den_id: str) -> Decimal |
     return (num / den).quantize(Decimal("0.0001"))
 
 
+def _display_percent(value: Decimal) -> str:
+    return f"{value * Decimal('100'):.2f}%"
+
+
+def _display_multiple(value: Decimal) -> str:
+    return f"{value:.2f} 倍"
+
+
 def _average_balance(facts: dict[str, Decimal], item_id: str) -> Decimal | None:
     """平均余额指标必须同时有本期与期初值；缺期初时不以期末余额冒充平均数。"""
 
@@ -185,7 +193,8 @@ def management_watch(facts: dict[str, Decimal]) -> list[dict[str, str]]:
                 "code": "ar_outpacing_revenue",
                 "metric_code": "ar_turnover",
                 "message": (
-                    f"应收账款增速 {ar_growth} 高于营业收入增速 {revenue_growth}，"
+                    f"应收账款增速 {_display_percent(ar_growth)} 高于营业收入增速 "
+                    f"{_display_percent(revenue_growth)}，"
                     "建议核对回款与账龄（联动提示，不构成原因判断）"
                 ),
                 "direction": "warning",
@@ -197,7 +206,7 @@ def management_watch(facts: dict[str, Decimal]) -> list[dict[str, str]]:
             {
                 "code": "cash_content_below_one",
                 "metric_code": "ocf_net_profit_ratio",
-                "message": f"净利润现金含量 {cash_ratio}，经营现金流低于净利润",
+                "message": f"净利润现金含量 {_display_multiple(cash_ratio)}，经营现金流低于净利润",
                 "direction": "negative",
             }
         )
@@ -206,7 +215,7 @@ def management_watch(facts: dict[str, Decimal]) -> list[dict[str, str]]:
             {
                 "code": "revenue_decline",
                 "metric_code": "revenue_growth",
-                "message": f"营业收入同比 {revenue_growth}，同比下降",
+                "message": f"营业收入同比 {_display_percent(revenue_growth)}，同比下降",
                 "direction": "negative",
             }
         )
@@ -223,7 +232,7 @@ def management_watch(facts: dict[str, Decimal]) -> list[dict[str, str]]:
             {
                 "code": "leverage_rising",
                 "metric_code": "debt_asset_ratio",
-                "message": f"资产负债率较上期上升至 {leverage_current}",
+                "message": f"资产负债率较上期上升至 {_display_percent(leverage_current)}",
                 "direction": "warning",
             }
         )

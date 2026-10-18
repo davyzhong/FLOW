@@ -190,6 +190,7 @@ class FindingItem(FrozenModel):
     finding_id: UUID
     finding_type: str
     title: str
+    status: Literal["candidate", "in_review", "approved", "rejected"]
     impact: DashboardValue
     total_score: StrictDecimal = Field(ge=0, le=100)
     comparison_basis: Literal["prior_year", "budget"]

@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import type { DashboardResponse } from "../../lib/api/client";
 import { dashboardFilterHref } from "../../lib/deep-links";
+import { formatFinancialValue } from "../cockpit/number-format";
 
 function band(value: string): string {
   const margin = Number(value);
@@ -31,7 +32,7 @@ export function MarginMatrix({
             href={dashboardFilterHref({ customer_segment_id: row.id, logistics_product_id: column.id })}
             title={`${row.name} × ${column.name}：按组合筛选驾驶舱`}
           >
-            <strong>{cell.actual_margin.display_value}</strong><small className={`is-${cell.comparison.semantic_direction}`}>{cell.comparison.display_value}</small>
+            <strong>{formatFinancialValue(cell.actual_margin.exact_value, { metricCode: "gross_margin", unit: "ratio" })}</strong><small className={`is-${cell.comparison.semantic_direction}`}>{cell.comparison.status === "available" ? `${formatFinancialValue(cell.comparison.exact_value, { unit: "ratio" })} 个百分点` : cell.comparison.display_value}</small>
           </Link>
         ) : <><strong>—</strong><small className="is-neutral">—</small></>}</td>; })}</tr>) : <tr><td colSpan={Math.max(2, matrix.columns.length + 1)}>{matrix.degradation_message ?? "当前已发布快照未提供客户群×产品毛利事实"}</td></tr>}</tbody>
       </table></div>

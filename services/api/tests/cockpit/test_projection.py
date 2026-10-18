@@ -99,6 +99,7 @@ def _finding(impact_direction: str = "positive") -> SimpleNamespace:
         finding_id=finding_id,
         finding_type="variance",
         title="收入结构变化",
+        status="approved",
         impact=SimpleNamespace(
             semantic_direction=impact_direction,
             model_dump=_impact_dump,
@@ -303,6 +304,14 @@ def test_negative_polarity_expense_metric(filters: ActiveFilters) -> None:
     assert projection.kpi_cards[0].polarity == "negative"
 
 
+def test_operating_profit_kpi_uses_statement_label(filters: ActiveFilters) -> None:
+    overview = _overview(cards=[_card(code="operating_profit")])
+
+    projection = _project(overview, filters)
+
+    assert projection.kpi_cards[0].title == "营业利润"
+
+
 # ── 趋势 ───────────────────────────────────────────────────────────
 
 
@@ -313,12 +322,55 @@ def test_trend_series_cover_four_metrics(filters: ActiveFilters) -> None:
     assert keys == expected
 
 
+def test_gross_margin_trend_has_ratio_unit_when_snapshot_omits_unit(
+    filters: ActiveFilters,
+) -> None:
+    overview = _overview()
+    for point in overview.trends.points:
+        point.gross_margin = {
+            "status": "ready",
+            "exact_value": "0.1087",
+            "display_value": "0.1087",
+            "unit": "",
+        }
+
+    projection = _project(overview, filters)
+    gross_margin = next(
+        series for series in projection.trends[0].series if series.key == "gross_margin"
+    )
+
+    assert gross_margin.unit == "ratio"
+    assert gross_margin.points[0]["unit"] == "ratio"
+
+
 def test_trend_points_keep_month_and_display(filters: ActiveFilters) -> None:
     projection = _project(_overview(), filters)
     revenue = next(s for s in projection.trends[0].series if s.key == "revenue")
     assert [p["period"] for p in revenue.points] == ["2026-05", "2026-06"]
     assert revenue.points[-1]["display_value"] == "100"
     assert Decimal(str(revenue.points[-1]["value"])) == Decimal("100")
+
+
+def test_dashboard_available_trend_points_are_exposed_as_chart_ready(
+    filters: ActiveFilters,
+) -> None:
+    overview = _overview()
+    point = _trend_point("2026-06", "100")
+    point.revenue = SimpleNamespace(
+        model_dump=lambda **_kwargs: {
+            "status": "available",
+            "exact_value": "100",
+            "display_value": "100",
+            "unit": "CNY",
+        }
+    )
+    overview.trends.points = (point,)
+
+    projection = _project(overview, filters)
+
+    revenue = next(series for series in projection.trends[0].series if series.key == "revenue")
+    assert revenue.points[0]["status"] == "ready"
+    assert revenue.points[0]["value"] == 100.0
 
 
 # ── 结论条 ─────────────────────────────────────────────────────────
@@ -340,6 +392,20 @@ def test_conclusion_links_finding_investigation_path(filters: ActiveFilters) -> 
 def test_conclusion_neutral_when_no_negative_findings(filters: ActiveFilters) -> None:
     projection = _project(_overview(findings=[_finding("positive")]), filters)
     assert projection.conclusion.tone == "neutral"
+
+
+def test_conclusion_excludes_findings_that_are_still_in_review(
+    filters: ActiveFilters,
+) -> None:
+    approved = _finding("negative")
+    in_review = _finding("negative")
+    in_review.status = "in_review"
+
+    projection = _project(_overview(findings=[approved, in_review]), filters)
+
+    assert len(projection.conclusion.findings) == 1
+    assert projection.conclusion.findings[0]["id"] == str(approved.finding_id)
+    assert "1 项已终审发现" in projection.conclusion.text
 
 
 def test_source_notice_is_carried(filters: ActiveFilters) -> None:

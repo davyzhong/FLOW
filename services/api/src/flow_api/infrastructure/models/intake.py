@@ -18,17 +18,15 @@ from sqlalchemy import (
     func,
     text,
 )
-from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from flow_api.domain.enums import BatchStatus, QualitySeverity
 from flow_api.domain.ids import new_uuid7
-from flow_api.infrastructure.models.base import Base
+from flow_api.infrastructure.models.base import JSON_TYPE, UUID_TYPE, Base
 
 
 class IdentityTimestampMixin:
-    id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, default=new_uuid7)
+    id: Mapped[UUID] = mapped_column(UUID_TYPE, primary_key=True, default=new_uuid7)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, server_default=func.now()
     )
@@ -67,7 +65,7 @@ class AnalysisBatch(IdentityTimestampMixin, Base):
         Integer, nullable=False, default=1, server_default="1"
     )
     analysis_cycle_id: Mapped[UUID | None] = mapped_column(
-        PG_UUID(as_uuid=True),
+        UUID_TYPE,
         ForeignKey("analysis_cycle.id", ondelete="RESTRICT"),
     )
 
@@ -98,14 +96,14 @@ class SourceFile(IdentityTimestampMixin, Base):
     __tablename__ = "source_file"
 
     batch_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("analysis_batch.id", ondelete="CASCADE"), nullable=False
+        UUID_TYPE, ForeignKey("analysis_batch.id", ondelete="CASCADE"), nullable=False
     )
     stored_object_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("stored_object.id", ondelete="RESTRICT"), nullable=False
+        UUID_TYPE, ForeignKey("stored_object.id", ondelete="RESTRICT"), nullable=False
     )
     original_filename: Mapped[str] = mapped_column(String(512), nullable=False)
     workbook_metadata: Mapped[dict[str, Any]] = mapped_column(
-        JSONB, nullable=False, default=dict, server_default=text("'{}'::jsonb")
+        JSON_TYPE, nullable=False, default=dict, server_default=text("'{}'")
     )
 
     batch: Mapped[AnalysisBatch] = relationship(back_populates="source_files")
@@ -126,16 +124,16 @@ class MappingVersion(IdentityTimestampMixin, Base):
     )
 
     batch_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("analysis_batch.id", ondelete="CASCADE"), nullable=False
+        UUID_TYPE, ForeignKey("analysis_batch.id", ondelete="CASCADE"), nullable=False
     )
     sequence: Mapped[int] = mapped_column(Integer, nullable=False)
     mapping_hash: Mapped[str | None] = mapped_column(String(64))
-    mapping_spec: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False)
+    mapping_spec: Mapped[dict[str, Any]] = mapped_column(JSON_TYPE, nullable=False)
     confidence_summary: Mapped[dict[str, Any]] = mapped_column(
-        JSONB, nullable=False, default=dict, server_default=text("'{}'::jsonb")
+        JSON_TYPE, nullable=False, default=dict, server_default=text("'{}'")
     )
     rationale_summary: Mapped[dict[str, Any]] = mapped_column(
-        JSONB, nullable=False, default=dict, server_default=text("'{}'::jsonb")
+        JSON_TYPE, nullable=False, default=dict, server_default=text("'{}'")
     )
     created_by: Mapped[str] = mapped_column(String(255), nullable=False, default="system")
 
@@ -155,21 +153,22 @@ class ImportVersion(IdentityTimestampMixin, Base):
             "batch_id",
             unique=True,
             postgresql_where=text("is_published"),
+            sqlite_where=text("is_published"),
         ),
     )
 
     batch_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("analysis_batch.id", ondelete="CASCADE"), nullable=False
+        UUID_TYPE, ForeignKey("analysis_batch.id", ondelete="CASCADE"), nullable=False
     )
     mapping_version_id: Mapped[UUID | None] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("mapping_version.id", ondelete="RESTRICT")
+        UUID_TYPE, ForeignKey("mapping_version.id", ondelete="RESTRICT")
     )
     sequence: Mapped[int] = mapped_column(Integer, nullable=False)
     status: Mapped[str] = mapped_column(String(32), nullable=False, default="draft")
     is_published: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     published_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     summary: Mapped[dict[str, Any]] = mapped_column(
-        JSONB, nullable=False, default=dict, server_default=text("'{}'::jsonb")
+        JSON_TYPE, nullable=False, default=dict, server_default=text("'{}'")
     )
 
     batch: Mapped[AnalysisBatch] = relationship(back_populates="import_versions")
@@ -181,12 +180,12 @@ class TransformationEvent(IdentityTimestampMixin, Base):
     __tablename__ = "transformation_event"
 
     import_version_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("import_version.id", ondelete="CASCADE"), nullable=False
+        UUID_TYPE, ForeignKey("import_version.id", ondelete="CASCADE"), nullable=False
     )
     sequence: Mapped[int] = mapped_column(Integer, nullable=False)
     operation: Mapped[str] = mapped_column(String(128), nullable=False)
     parameters: Mapped[dict[str, Any]] = mapped_column(
-        JSONB, nullable=False, default=dict, server_default=text("'{}'::jsonb")
+        JSON_TYPE, nullable=False, default=dict, server_default=text("'{}'")
     )
     actor: Mapped[str] = mapped_column(String(255), nullable=False, default="system")
 
@@ -201,10 +200,10 @@ class QualityIssue(IdentityTimestampMixin, Base):
     )
 
     import_version_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("import_version.id", ondelete="CASCADE"), nullable=False
+        UUID_TYPE, ForeignKey("import_version.id", ondelete="CASCADE"), nullable=False
     )
     source_file_id: Mapped[UUID | None] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("source_file.id", ondelete="CASCADE")
+        UUID_TYPE, ForeignKey("source_file.id", ondelete="CASCADE")
     )
     severity: Mapped[str] = mapped_column(
         String(16), nullable=False, default=QualitySeverity.WARNING.value
@@ -225,12 +224,12 @@ class WarningAcknowledgement(IdentityTimestampMixin, Base):
     __tablename__ = "warning_acknowledgement"
     __table_args__ = (
         UniqueConstraint("quality_issue_id", name="uq_warning_ack_issue"),
-        CheckConstraint("length(btrim(actor)) > 0", name="ck_warning_ack_actor_nonempty"),
-        CheckConstraint("length(btrim(reason)) > 0", name="ck_warning_ack_reason_nonempty"),
+        CheckConstraint("length(trim(actor)) > 0", name="ck_warning_ack_actor_nonempty"),
+        CheckConstraint("length(trim(reason)) > 0", name="ck_warning_ack_reason_nonempty"),
     )
 
     quality_issue_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("quality_issue.id", ondelete="CASCADE"), nullable=False
+        UUID_TYPE, ForeignKey("quality_issue.id", ondelete="CASCADE"), nullable=False
     )
     actor: Mapped[str] = mapped_column(String(255), nullable=False)
     reason: Mapped[str] = mapped_column(Text, nullable=False)
@@ -252,14 +251,14 @@ class ReconciliationResult(IdentityTimestampMixin, Base):
     )
 
     import_version_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("import_version.id", ondelete="CASCADE"), nullable=False
+        UUID_TYPE, ForeignKey("import_version.id", ondelete="CASCADE"), nullable=False
     )
     reconciliation_code: Mapped[str] = mapped_column(String(128), nullable=False)
     passed: Mapped[bool] = mapped_column(Boolean, nullable=False)
     expected_value: Mapped[str | None] = mapped_column(String(255))
     actual_value: Mapped[str | None] = mapped_column(String(255))
     details: Mapped[dict[str, Any]] = mapped_column(
-        JSONB, nullable=False, default=dict, server_default=text("'{}'::jsonb")
+        JSON_TYPE, nullable=False, default=dict, server_default=text("'{}'")
     )
 
 
@@ -284,17 +283,17 @@ class SourceRecord(IdentityTimestampMixin, Base):
     )
 
     import_version_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("import_version.id", ondelete="CASCADE"), nullable=False
+        UUID_TYPE, ForeignKey("import_version.id", ondelete="CASCADE"), nullable=False
     )
     source_file_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("source_file.id", ondelete="CASCADE"), nullable=False
+        UUID_TYPE, ForeignKey("source_file.id", ondelete="CASCADE"), nullable=False
     )
     sheet_name: Mapped[str] = mapped_column(String(255), nullable=False)
     source_row: Mapped[int] = mapped_column(Integer, nullable=False)
     source_column: Mapped[str] = mapped_column(String(32), nullable=False)
     canonical_field: Mapped[str] = mapped_column(String(255), nullable=False)
-    raw_value: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False)
-    transformed_value: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False)
+    raw_value: Mapped[dict[str, Any]] = mapped_column(JSON_TYPE, nullable=False)
+    transformed_value: Mapped[dict[str, Any]] = mapped_column(JSON_TYPE, nullable=False)
     transform_rule_id: Mapped[str | None] = mapped_column(String(128))
     transform_rule_version: Mapped[int | None] = mapped_column(Integer)
     transform_reason: Mapped[str | None] = mapped_column(Text)
@@ -316,17 +315,17 @@ class BuildJob(IdentityTimestampMixin, Base):
     )
 
     batch_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True),
+        UUID_TYPE,
         ForeignKey("analysis_batch.id", ondelete="CASCADE"),
         nullable=False,
     )
     status: Mapped[str] = mapped_column(String(32), nullable=False, default="queued")
-    months: Mapped[list[int]] = mapped_column(JSONB, nullable=False)
+    months: Mapped[list[int]] = mapped_column(JSON_TYPE, nullable=False)
     fingerprint: Mapped[str | None] = mapped_column(String(128), nullable=True)
     metric_snapshot_ids: Mapped[list[str]] = mapped_column(
-        JSONB, nullable=False, default=list, server_default=text("'[]'::jsonb")
+        JSON_TYPE, nullable=False, default=list, server_default=text("'[]'")
     )
-    analysis_run_id: Mapped[UUID | None] = mapped_column(PG_UUID(as_uuid=True), nullable=True)
+    analysis_run_id: Mapped[UUID | None] = mapped_column(UUID_TYPE, nullable=True)
     error: Mapped[str | None] = mapped_column(Text)
     finished_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 

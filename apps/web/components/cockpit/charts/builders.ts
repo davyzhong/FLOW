@@ -16,6 +16,7 @@
 import type { EChartsOption } from "echarts";
 
 import { AXIS, CHART_THEME, TOOLTIP, legend } from "./echarts-base";
+import { formatFinancialValue } from "../number-format";
 
 /**
  * ECharts 的 TS 联合类型对回调签名与 series 形状要求极严；构建器产出的是
@@ -39,23 +40,40 @@ export function buildCombo(series: ComboSeries[]): ChartOption | undefined {
   const usable = series.filter((s) => s.points.some((p) => p.status === "ready"));
   if (usable.length === 0) return undefined;
   const periods = usable[0].points.map((p) => p.period);
+  const axisFor = (axis: "bar" | "line") => {
+    const unit = usable.find((item) => item.axis === axis)?.unit ?? "";
+    const integerUnit = ["个", "项", "次", "家", "人", "条"].includes(unit);
+    return { type: "value" as const, name: unit, ...AXIS,
+      ...(integerUnit ? { minInterval: 1 } : {}),
+      axisLabel: { ...AXIS.axisLabel, formatter: (value: number) => formatFinancialValue(value, { unit, appendUnit: false }) } };
+  };
   return {
-    tooltip: { ...TOOLTIP, axisPointer: { type: "cross" } },
+    tooltip: {
+      ...TOOLTIP,
+      axisPointer: { type: "cross" },
+      formatter: (params: unknown) => {
+        const rows = Array.isArray(params) ? params as { axisValueLabel?: string; seriesName?: string; value?: number | null }[] : [];
+        const heading = rows[0]?.axisValueLabel ?? "";
+        return [heading, ...rows.map((row) => {
+          const source = usable.find((item) => `${item.title}（${item.unit}）` === row.seriesName);
+          const unit = source?.unit ?? "";
+          const value = row.value === null || row.value === undefined
+            ? "—"
+            : formatFinancialValue(row.value, { unit, appendUnit: true });
+          return `${row.seriesName ?? ""}：${value}`;
+        })].join("<br>");
+      },
+    },
     legend: legend(usable.map((s) => `${s.title}（${s.unit}）`)),
     grid: { left: 56, right: usable.some((s) => s.axis === "line") ? 56 : 20, top: 34, bottom: 30 },
     xAxis: { type: "category", data: periods, ...AXIS },
     yAxis:
       usable.some((s) => s.axis === "line") && usable.some((s) => s.axis === "bar")
         ? [
-            { type: "value", name: usable.find((s) => s.axis === "bar")?.unit ?? "", ...AXIS },
-            {
-              type: "value",
-              name: usable.find((s) => s.axis === "line")?.unit ?? "",
-              ...AXIS,
-              splitLine: { show: false },
-            },
+            axisFor("bar"),
+            { ...axisFor("line"), splitLine: { show: false } },
           ]
-        : { type: "value", ...AXIS },
+        : axisFor(usable[0].axis),
     series: usable.map((s, i) => {
       const isLine = s.axis === "line";
       const yAxisIndex = isLine && usable.some((x) => x.axis === "bar") ? 1 : 0;
@@ -65,6 +83,7 @@ export function buildCombo(series: ComboSeries[]): ChartOption | undefined {
         type: s.axis,
         yAxisIndex,
         data: s.points.map((p) => (p.status === "ready" ? p.value : null)),
+        emphasis: { focus: "series" },
         itemStyle: { color },
         lineStyle: isLine ? { width: 2.4, color } : undefined,
         areaStyle: isLine ? { color: `${color}14` } : undefined,
@@ -185,12 +204,12 @@ export function buildWaterfall(
         const i = ps[0].dataIndex;
         const s = steps[i];
         const sign = s.kind === "down" ? "−" : s.kind === "up" ? "+" : "";
-        return `${s.label}<br>${sign}${Math.abs(s.value).toLocaleString()} ${unit}`;
+        return `${s.label}<br>${sign}${formatFinancialValue(Math.abs(s.value), { unit })}`;
       },
     },
     grid: { left: 58, right: 20, top: 20, bottom: opts.checkLine ? 44 : 30 },
     xAxis: { type: "category", data: steps.map((s) => s.label), ...AXIS, axisLabel: { ...AXIS.axisLabel, interval: 0, fontSize: 10 } },
-    yAxis: { type: "value", name: unit, ...AXIS },
+    yAxis: { type: "value", name: unit, ...AXIS, axisLabel: { ...AXIS.axisLabel, formatter: (value: number) => formatFinancialValue(value, { unit, appendUnit: false }) } },
     series: [
       { type: "bar", stack: "w", itemStyle: { color: "transparent" }, data: base, barMaxWidth: 44 },
       {
@@ -217,7 +236,7 @@ export function buildWaterfall(
           formatter: (p: { dataIndex: number }) => {
             const s = steps[p.dataIndex];
             const sign = s.kind === "down" ? "−" : s.kind === "up" ? "+" : "";
-            return `${sign}${Math.abs(s.value).toLocaleString()}`;
+            return `${sign}${formatFinancialValue(Math.abs(s.value), { unit, appendUnit: false })}`;
           },
         },
       },
@@ -273,7 +292,7 @@ export function buildGauges(specs: GaugeSpec[]): ChartOption | undefined {
           distance: -2,
           fontSize: 8,
           color: CHART_THEME.gray,
-          formatter: (v: number) => (v % (s.max / 4) === 0 ? v : ""),
+          formatter: (v: number) => (v % (s.max / 4) === 0 ? formatFinancialValue(v, { unit: s.unit, appendUnit: false }) : ""),
         },
         title: { offsetCenter: [0, "64%"], fontSize: 10.5, color: CHART_THEME.mut },
         detail: {
@@ -281,7 +300,7 @@ export function buildGauges(specs: GaugeSpec[]): ChartOption | undefined {
           fontSize: 14,
           fontWeight: 700,
           color: CHART_THEME.ink,
-          formatter: (v: number) => `${v}${s.unit}`,
+          formatter: (v: number) => formatFinancialValue(v, { unit: s.unit }),
         },
         data: [{ value: s.value, name: `${s.title}｜管控线 ${s.controlLine}${s.unit}` }],
       };
@@ -308,7 +327,7 @@ export function buildDonut(slices: Slice[], unit: string, rose = false): ChartOp
       borderColor: CHART_THEME.line,
       textStyle: { color: CHART_THEME.ink, fontSize: 12 },
       formatter: (p: { name: string; value: number; percent: number }) =>
-        `${p.name}<br>${p.value.toLocaleString()} ${unit}（${p.percent}%）`,
+        `${p.name}<br>${formatFinancialValue(p.value, { unit })}（${formatFinancialValue(p.percent, { unit: "%" })}）`,
     },
     series: [
       {
@@ -388,7 +407,7 @@ export function buildHeatmap(
       textStyle: { color: CHART_THEME.ink, fontSize: 12 },
       formatter: (p: { value: [number, number, number] }) => {
         const c = cells.find((x) => x.x === xs[p.value[0]] && x.y === ys[p.value[1]]);
-        return c ? `${c.y} · ${c.x}<br>${c.value}${opts.suffix ?? ""}${c.extra ? `<br>${c.extra}` : ""}` : "";
+        return c ? `${c.y} · ${c.x}<br>${formatFinancialValue(c.value, { unit: opts.suffix })}${c.extra ? `<br>${c.extra}` : ""}` : "";
       },
     },
     grid: { left: 14, right: 14, top: 10, bottom: opts.thresholds ? 26 : 12 },
@@ -411,7 +430,7 @@ export function buildHeatmap(
         type: "heatmap",
         data: cells.map((c) => [xs.indexOf(c.x), ys.indexOf(c.y), c.value]),
         itemStyle: { borderColor: "#fff", borderWidth: 2 },
-        label: { show: true, fontSize: 11, fontWeight: 700, color: CHART_THEME.ink, formatter: (p: { value: [number, number, number] }) => String(p.value[2]) },
+        label: { show: true, fontSize: 11, fontWeight: 700, color: CHART_THEME.ink, formatter: (p: { value: [number, number, number] }) => formatFinancialValue(p.value[2], { unit: opts.suffix, appendUnit: false }) },
         emphasis: { itemStyle: { shadowBlur: 6 } },
       },
     ],
@@ -488,10 +507,10 @@ export function buildRankBar(
       backgroundColor: "rgba(255,255,255,.97)",
       borderColor: CHART_THEME.line,
       textStyle: { color: CHART_THEME.ink, fontSize: 12 },
-      formatter: (p: { name: string; value: number }) => `${p.name}<br>${p.value.toLocaleString()} ${unit}`,
+      formatter: (p: { name: string; value: number }) => `${p.name}<br>${formatFinancialValue(p.value, { unit })}`,
     },
     grid: { left: 96, right: 60, top: 12, bottom: 20 },
-    xAxis: { type: "value", ...AXIS },
+    xAxis: { type: "value", ...AXIS, axisLabel: { ...AXIS.axisLabel, formatter: (value: number) => formatFinancialValue(value, { unit, appendUnit: false }) } },
     yAxis: { type: "category", data: sorted.map((r) => r.name), ...AXIS, axisLabel: { ...AXIS.axisLabel, interval: 0, fontSize: 10.5 } },
     series: [
       {
@@ -522,17 +541,17 @@ export function buildAgingBars(segs: { label: string; pct: number; days?: string
       backgroundColor: "rgba(255,255,255,.97)",
       borderColor: CHART_THEME.line,
       textStyle: { color: CHART_THEME.ink, fontSize: 12 },
-      formatter: (p: { name: string; value: number }) => `${p.name}<br>${p.value}%${segs[usable.indexOf(p as never)]?.days ? `（约 ${segs[usable.indexOf(p as never)].days} 天）` : ""}`,
+      formatter: (p: { name: string; value: number }) => `${p.name}<br>${formatFinancialValue(p.value, { unit: "%" })}${segs[usable.indexOf(p as never)]?.days ? `（约 ${formatFinancialValue(segs[usable.indexOf(p as never)].days, { metricCode: "dso_days", unit: "day" })}）` : ""}`,
     },
     grid: { left: 110, right: 56, top: 12, bottom: 20 },
-    xAxis: { ...AXIS, type: "value", max: 100, axisLabel: { ...AXIS.axisLabel, formatter: "{value}%" } },
+    xAxis: { ...AXIS, type: "value", max: 100, axisLabel: { ...AXIS.axisLabel, formatter: (value: number) => formatFinancialValue(value, { unit: "%" }) } },
     yAxis: { ...AXIS, type: "category", data: usable.map((s) => s.label), axisLabel: { ...AXIS.axisLabel, interval: 0, fontSize: 10.5 } },
     series: [
       {
         type: "bar",
         barMaxWidth: 16,
         data: usable.map((s, i) => ({ value: s.pct, itemStyle: { color: colors[i % colors.length], borderRadius: [0, 4, 4, 0] } })),
-        label: { show: true, position: "right", fontSize: 10.5, color: CHART_THEME.ink, formatter: "{c}%" },
+        label: { show: true, position: "right", fontSize: 10.5, color: CHART_THEME.ink, formatter: (p: { value: number }) => formatFinancialValue(p.value, { unit: "%" }) },
       },
     ],
   };

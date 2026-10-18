@@ -9,7 +9,7 @@
     "customers": 40,
     "financial_actuals": {
       "grain": "month × business_unit × management_account",
-      "rows": 768
+      "rows": 2304
     },
     "logistics_products": 8,
     "monthly_budgets": {
@@ -27,16 +27,16 @@
     "regions": 6
   },
   "files": {
-    "README.md": "676d3f9d8a2c4d907a6286478cfa05009c1f57760cd37d2d14ccab167c2129a6",
-    "canonical/ar_collections.jsonl": "662da1b6ead62a9f9d84c8a684d8e90cd615d20fdc3a1475edefa1b02b08e830",
+    "README.md": "361ce19a0190dc4273edecb50455e51092de0fe54f4acc0cd0e9784be9d4344e",
+    "canonical/ar_collections.jsonl": "ad23eaaae4ded2e5e99d9b136c251a8fff8dd14c5843dd5c0848c315e6ee774a",
     "canonical/batch.jsonl": "8798360a71169da4e217a5f507f79468bb253ff1c39a3cf33bef75b4ece45634",
     "canonical/customer_segments.jsonl": "1ce2dfdd36fa815be9b6b0c6062c0345286b35741e661f271342e0c49540a13b",
     "canonical/customers.jsonl": "bb9e7ec1f4064d63a20470c2cc4455ed098fdc219f1c632cdd2c07c38614c3af",
-    "canonical/financial_actuals.jsonl": "f34945827e00622000d4212b0925f2a137cd6bb562116f7011b64833c297bc91",
+    "canonical/financial_actuals.jsonl": "e595d3a55c19d9d74bad551a8bae9305481c7192157410020b2845691891f789",
     "canonical/logistics_products.jsonl": "57c321b81aece35c5a0e9e58277c65df2fb7d6a4a4878647b39beb98032b0abc",
-    "canonical/management_accounts.jsonl": "2802026cbf8cb9ffcc7b51c17ec98adca8bb3222981f72160dd51dd83ce5a6b1",
-    "canonical/monthly_budgets.jsonl": "b0e79bd4e2d74ba1ea5b70ad5f35b54e1c921578ea517d5458f10947dc020d93",
-    "canonical/operating_actuals.jsonl": "ec50ecc5368ab4e60fe198e025af1c7878f78debd18005202c65359e6b599bf9",
+    "canonical/management_accounts.jsonl": "9c688341494dc2602a9dbfac1de21e0d00285adcdb6e3063a0d1b85284b34c45",
+    "canonical/monthly_budgets.jsonl": "64824cf766fe36b507e09644929f519465ad9355104e1af3d48452ef4d74a7d4",
+    "canonical/operating_actuals.jsonl": "efd09766206aa8274418b09cb6fb92bf6c11967d8ed37a097a665f34b3c88305",
     "canonical/organizations.jsonl": "c558c45e6c79cddee99b4f8bf6d63b169c5d80935d20f1db1d40f87711f83778",
     "canonical/periods.jsonl": "82d81d4511ff6b29447e47543eceab8f445813481231d6dde4c4a2a9fa017524",
     "canonical/regions.jsonl": "c5dc96c7542f3ce75eb5fb4147176dcfd3d88c310dc63b344397caa0437b6b06",
@@ -46,31 +46,125 @@
     "operations/damai_segment_series.yaml": "aadcedb7fc9f41990a0016357ebcea776ccd38725eaa519787ecfd89dcd9663c",
     "statements/damai_fy2022.yaml": "b58d179c2584354134321efaa7e289d6f923b23bb12c74e4f1d62c5d95869661",
     "statements/damai_fy2023.yaml": "68235f199ede79199d575dd26847adc4a57fd99aff667492b52cc19d74ab2f60",
-    "workbooks/damai_logistics_full_v1.xlsx": "semantic:286a3132261e438d57b364d5f3df74ee84e0c77124159d9387e9c50c6fe389c9"
+    "workbooks/damai_logistics_full_v1.xlsx": "semantic:b2089acedc68fb6e39f772df9471d7c7a326ba2f949bb7fb0ea572924de008a5"
   },
   "fiscal_year_summary": {
     "FY2022": {
+      "ar_balance_wan": "704227.5000",
+      "borrowings_wan": "686227.4000",
+      "closing_cash_wan": "1019774.2000",
+      "current_assets_wan": "1750280.4000",
+      "current_liabilities_wan": "2148608.6000",
       "gross_margin": "0.1074",
+      "inventory_wan": "14626.0000",
       "months": [
         "2021-04",
         "2022-03"
       ],
-      "operating_cash_flow_wan": "674979.1260",
-      "revenue_wan": "6686691.6000"
+      "net_profit_wan": "-228566.5000",
+      "operating_cash_flow_wan": "233017.8000",
+      "operating_profit_wan": "-130397.9000",
+      "revenue_wan": "6686691.6000",
+      "total_assets_wan": "5888108.7000",
+      "total_equity_wan": "2187008.0000",
+      "total_liabilities_wan": "3701100.7000"
     },
     "FY2023": {
+      "ar_balance_wan": "993043.0000",
+      "borrowings_wan": "1404181.6000",
+      "closing_cash_wan": "878440.4000",
+      "current_assets_wan": "2600902.8000",
+      "current_liabilities_wan": "2239956.0000",
       "gross_margin": "0.1047",
+      "inventory_wan": "15324.1000",
       "months": [
         "2022-04",
         "2023-03"
       ],
-      "operating_cash_flow_wan": "707558.1722",
-      "revenue_wan": "7779967.5000"
+      "net_profit_wan": "-280139.1000",
+      "operating_cash_flow_wan": "185934.9000",
+      "operating_profit_wan": "-170144.4000",
+      "revenue_wan": "7779967.5000",
+      "total_assets_wan": "7185093.1000",
+      "total_equity_wan": "2644949.5000",
+      "total_liabilities_wan": "4540143.6000"
     }
   },
   "generator": "scripts/build_damai_demo.py",
-  "generator_version": "damai-demo-v1",
+  "generator_version": "damai-demo-v2",
   "lineage": {
+    "annual_public_anchors": {
+      "allocation": "公开财报仅披露年度/期末数；月度、组织明细是 synthetic 分配，尾差保留以逐级勾稽年度锚点",
+      "fact_ids": {
+        "FY2021": {
+          "AR_BALANCE": "CN-BS-FY2021-XA155F13235",
+          "BORROWINGS": "CN-BS-FY2021-XEA340B7C35",
+          "CASH_AND_CASH_EQUIVALENTS": "CN-CF-FY2021-X14F4417A89",
+          "CURRENT_ASSETS": "CN-BS-FY2021-X021C5F1BA0",
+          "CURRENT_LIABILITIES": "CN-BS-FY2021-X3D5066D622",
+          "INVENTORY_BALANCE": "CN-BS-FY2021-X929EF90016",
+          "TOTAL_ASSETS": "CN-BS-FY2021-XF9DDDFB859",
+          "TOTAL_EQUITY": "CN-BS-FY2021-X6E754A86B1",
+          "TOTAL_LIABILITIES": "CN-BS-FY2021-X9C7729D472"
+        },
+        "FY2022": {
+          "AR_BALANCE": "CN-BS-FY2022-XA155F13235",
+          "BORROWINGS": "CN-BS-FY2022-XEA340B7C35",
+          "CASH_AND_CASH_EQUIVALENTS": "CN-CF-FY2022-X14F4417A89",
+          "CURRENT_ASSETS": "CN-BS-FY2022-X021C5F1BA0",
+          "CURRENT_LIABILITIES": "CN-BS-FY2022-X3D5066D622",
+          "FINANCIAL_ASSET_IMPAIRMENT": "CN-PL-FY2022-X9CAED36F6B",
+          "GENERAL_ADMIN_EXPENSE": "CN-PL-FY2022-X00EE022D73",
+          "GROSS_PROFIT": "CN-PL-FY2022-X7DBD743BBC",
+          "INVENTORY_BALANCE": "CN-BS-FY2022-X929EF90016",
+          "NET_PROFIT": "CN-PL-FY2022-XEFF629888D",
+          "OPERATING_CASH_FLOW": "CN-CF-FY2022-XF51D1A23D9",
+          "OPERATING_PROFIT": "CN-PL-FY2022-XD8A905FCC6",
+          "OTHER_INCOME": "CN-PL-FY2022-X59157882B0",
+          "OTHER_NET_GAIN_LOSS": "CN-PL-FY2022-X230E52470C",
+          "PRODUCT_DEVELOPMENT_EXPENSE": "CN-PL-FY2022-XB0C24816E8",
+          "REVENUE": "CN-PL-FY2022-X6C2FB35BE5",
+          "SALES_MARKETING_EXPENSE": "CN-PL-FY2022-X1BBD332728",
+          "TOTAL_ASSETS": "CN-BS-FY2022-XF9DDDFB859",
+          "TOTAL_EQUITY": "CN-BS-FY2022-X6E754A86B1",
+          "TOTAL_LIABILITIES": "CN-BS-FY2022-X9C7729D472"
+        },
+        "FY2023": {
+          "AR_BALANCE": "CN-BS-FY2023-XA155F13235",
+          "BORROWINGS": "CN-BS-FY2023-XEA340B7C35",
+          "CASH_AND_CASH_EQUIVALENTS": "CN-CF-FY2023-X14F4417A89",
+          "CURRENT_ASSETS": "CN-BS-FY2023-X021C5F1BA0",
+          "CURRENT_LIABILITIES": "CN-BS-FY2023-X3D5066D622",
+          "FINANCIAL_ASSET_IMPAIRMENT": "CN-PL-FY2023-X9CAED36F6B",
+          "GENERAL_ADMIN_EXPENSE": "CN-PL-FY2023-X00EE022D73",
+          "GROSS_PROFIT": "CN-PL-FY2023-X7DBD743BBC",
+          "INVENTORY_BALANCE": "CN-BS-FY2023-X929EF90016",
+          "NET_PROFIT": "CN-PL-FY2023-XEFF629888D",
+          "OPERATING_CASH_FLOW": "CN-CF-FY2023-XF51D1A23D9",
+          "OPERATING_PROFIT": "CN-PL-FY2023-XD8A905FCC6",
+          "OTHER_INCOME": "CN-PL-FY2023-X59157882B0",
+          "OTHER_NET_GAIN_LOSS": "CN-PL-FY2023-X230E52470C",
+          "PRODUCT_DEVELOPMENT_EXPENSE": "CN-PL-FY2023-XB0C24816E8",
+          "REVENUE": "CN-PL-FY2023-X6C2FB35BE5",
+          "SALES_MARKETING_EXPENSE": "CN-PL-FY2023-X1BBD332728",
+          "TOTAL_ASSETS": "CN-BS-FY2023-XF9DDDFB859",
+          "TOTAL_EQUITY": "CN-BS-FY2023-X6E754A86B1",
+          "TOTAL_LIABILITIES": "CN-BS-FY2023-X9C7729D472"
+        }
+      },
+      "methods": {
+        "balance_sheet_by_month": "资产负债项目按 FY2021/FY2022/FY2023 年末披露锚点线性插值；年末总额与资产=负债+权益恒等式精确校验",
+        "canonical_amount_conversion": "源事实人民币千元先转换万元用于可读生成，再按 10,000 转换为 flow.excel.v1 的人民币元",
+        "cash_balance_by_month": "FY2021/FY2022/FY2023 年末披露余额之间按月线性插值；每年年末精确锚定",
+        "direct_cost_by_category": "披露收入与毛利之间的营业成本按仓储 30%、运输 60%、其他 10% synthetic 拆分",
+        "income_statement_by_month": "各披露行按同财年 synthetic 月度收入权重分配",
+        "operating_cash_flow_by_month": "按月度毛利权重分配；E5 异常月权重乘 0.55 后年度归一",
+        "operating_expense_net": "管理口径 OPERATING_EXPENSE = 销售/行政/研发/减值开支 - 其他收入 - 其他收益/(亏损)净额；营业利润 = 毛利 - 该净额",
+        "order_and_shipment_counts": "按每单 120 元确定性派生，订单四舍五入为整数，每单 2 件；属于演示派生量",
+        "organization_detail": "按同月 synthetic 业务单元收入占比分配，尾差并入最后单元"
+      },
+      "registry": "config/damai/source_facts_v1.yaml"
+    },
     "derived_parameters": {
       "ar_bucket_rates": {
         "1-30": "0.12",
@@ -90,15 +184,16 @@
         "TRANSPORTATION_COST": "0.60",
         "WAREHOUSING_COST": "0.30"
       },
-      "order_unit_price_wan": "120",
-      "shipments_per_order": "2.0"
+      "order_count_rounding": "ROUND_HALF_UP to integer",
+      "order_unit_price_cny": "120",
+      "shipments_per_order": "2"
     },
     "determinism": "uuid5 record_id + Decimal 全程 + fixed Random(42) 族权重扰动",
     "generator": "scripts/build_damai_demo.py",
-    "generator_version": "damai-demo-v1",
+    "generator_version": "damai-demo-v2",
     "profile_version": "damai-profile-v2",
     "units": {
-      "canonical": "人民币万元",
+      "canonical": "人民币元（原始公开锚点千元→万元→元）",
       "statements": "人民币千元（菜鸟申请稿披露原值，非 canonical 换算）"
     }
   },
@@ -165,9 +260,9 @@
     "canonical/batch.jsonl": 1,
     "canonical/customer_segments.jsonl": 4,
     "canonical/customers.jsonl": 40,
-    "canonical/financial_actuals.jsonl": 768,
+    "canonical/financial_actuals.jsonl": 2304,
     "canonical/logistics_products.jsonl": 8,
-    "canonical/management_accounts.jsonl": 9,
+    "canonical/management_accounts.jsonl": 24,
     "canonical/monthly_budgets.jsonl": 10752,
     "canonical/operating_actuals.jsonl": 1920,
     "canonical/organizations.jsonl": 5,
@@ -180,7 +275,7 @@
     "statements/damai_fy2023.yaml": 3
   },
   "summaries": {
-    "operating_revenue_total": "14466659.1000"
+    "operating_revenue_total": "144666591000.0000"
   },
   "synthetic": true
 }

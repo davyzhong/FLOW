@@ -31,6 +31,15 @@
 .data-workbench__history-heading { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--flow-space-3); }
 .data-workbench__history-heading > div { min-width: 0; }
 .data-workbench__history .flow-table-wrap { min-width: 0; max-width: 100%; overflow-x: auto; }
+.data-workbench__charts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--flow-space-4);
+}
+.data-workbench__charts > * { min-width: 0; }
+@media (max-width: 760px) {
+  .data-workbench__charts { grid-template-columns: minmax(0, 1fr); }
+}
 
 .data-workbench__stages {
   display: flex;

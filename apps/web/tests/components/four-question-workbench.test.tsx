@@ -56,7 +56,7 @@ const WORKBENCH = {
     {
       code: "cash_content_below_one",
       metric_code: "cash_content_ratio",
-      message: "净利润现金含量 0.6000，经营现金流低于净利润",
+      message: "净利润现金含量 0.60 倍，经营现金流低于净利润",
       direction: "negative",
     },
   ],
@@ -84,7 +84,7 @@ describe("FourQuestionWorkbench", () => {
     expect(screen.getByText("盈利")).toBeTruthy();
     // 管理关注：≤3 条、带方向标签与数值
     expect(screen.getByText("管理关注（≤3 条，提示复核）")).toBeTruthy();
-    expect(screen.getByText(/净利润现金含量 0.6000/)).toBeTruthy();
+    expect(screen.getByText(/净利润现金含量 0.60 倍/)).toBeTruthy();
     // 不可用指标诚实降级
     expect(
       screen.getByText("暂不可算（上年同期收入缺失或基数为零）"),
@@ -109,7 +109,7 @@ describe("FourQuestionWorkbench 深链", () => {
       "/metric-library?focus=revenue_growth",
     );
     expect(
-      screen.getByRole("link", { name: /净利润现金含量 0.6000.*查看指标/ }),
+      screen.getByRole("link", { name: /净利润现金含量 0.60 倍.*查看指标/ }),
     ).toHaveAttribute("href", "/metric-library?focus=cash_content_ratio");
   });
 });

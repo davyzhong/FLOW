@@ -347,11 +347,14 @@ def _load_single_enterprise(request: Request, session: Session) -> ResourceRef:
     ]
     if len(enterprises) != 1 or enterprises[0] is None:
         raise ResourceScopeUnresolved("enterprise_scope", "ambiguous_or_missing")
+    enterprise_id = enterprises[0]
+    if not isinstance(enterprise_id, UUID):
+        enterprise_id = UUID(str(enterprise_id))
     return ResourceRef(
         scope="enterprise",
         resource_type="enterprise_scope",
-        resource_id=str(enterprises[0]),
-        enterprise_id=enterprises[0],
+        resource_id=str(enterprise_id),
+        enterprise_id=enterprise_id,
         owner_actor_id=None,
         proposed_by_actor_id=None,
     )

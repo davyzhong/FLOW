@@ -25,6 +25,8 @@ from flow_api.enterprise.models import AnalysisCycle
 from flow_api.infrastructure.models.analytics import Finding, MetricSnapshot, Period
 from flow_api.infrastructure.models.cockpit import ActionItem
 from flow_api.infrastructure.models.intake import AnalysisBatch, ImportVersion
+from flow_api.infrastructure.models.statement import StatementReport
+from flow_api.security.models import RoleBinding
 from flow_api.settings import get_settings
 
 CFO = "cockpit-cfo-a"
@@ -36,6 +38,9 @@ REPO_ROOT = Path(__file__).resolve().parents[4]
 def db_session() -> Iterator[Session]:
     engine = create_engine(get_settings().database_url)
     session = Session(engine, expire_on_commit=False)
+    session.execute(text("DELETE FROM publication_attempt"))
+    session.execute(text("DELETE FROM report_snapshot_item"))
+    session.execute(text("DELETE FROM report_snapshot"))
     for table in (ActionItem, Finding, MetricSnapshot, ImportVersion, AnalysisBatch):
         session.execute(text(f"DELETE FROM {table.__tablename__}"))
     session.execute(text("DELETE FROM statement_normalized_item"))
@@ -43,6 +48,18 @@ def db_session() -> Iterator[Session]:
     session.execute(text("DELETE FROM analysis_cycle"))
     session.add(
         AnalysisCycle(enterprise_id=uuid.UUID(_ENTERPRISE), period_key="2023-03")
+    )
+    session.execute(
+        text("DELETE FROM role_binding WHERE actor_id = :actor"), {"actor": CFO}
+    )
+    session.add(
+        RoleBinding(
+            actor_id=CFO,
+            role="cfo",
+            enterprise_id=uuid.UUID(_ENTERPRISE),
+            is_service_account=False,
+            active=True,
+        )
     )
     session.commit()
     yield session
@@ -88,7 +105,14 @@ def api_client(
 
     _import_and_publish(db_session, "FY2022")
     _import_and_publish(db_session, "FY2023")
-    # 模块快照上下文：任一批次即可（snapshot_id 只作追溯标识）
+    from flow_api.publishing.objective_freeze import freeze_objective_statement_report
+
+    for report in db_session.scalars(
+        select(StatementReport).where(StatementReport.stock_code == "DAMAI.SYN")
+    ):
+        freeze_objective_statement_report(db_session, report_id=report.id)
+    db_session.commit()
+    # 故意保留无关的指标快照，模块 API 不得将其当作财报来源快照返回。
     db_session.add(
         MetricSnapshot(
             batch_id=_seed_batch(db_session),
@@ -158,12 +182,147 @@ def test_balance_sheet_module_kpis_from_disclosed_facts(api_client: TestClient) 
     assert by_name["总负债"]["status"] == "available"
     assert by_name["资产负债率"]["status"] == "available"
     # 结构图两期齐备
-    assert body["charts"]["asset_structure"]["periods"] == ["FY2022", "FY2023"]
+    chart = body["charts"]["asset_structure"]
+    assert chart["periods"] == ["FY2022", "FY2023"]
+    assert chart["analysis_question"]
+    assert chart["fact_classes"] == ["reported"]
+    assert body["report_ids"][0] in chart["source_ids"]
+    assert chart["snapshot_id"] == body["snapshot_id"]
+    assert chart["drilldown_target"] == (
+        f"/statements?report={body['report_ids'][0]}"
+        "#stmt-row-合并资产负债表-流动资产合计"
+    )
+    assert chart["metric_codes"] == ["bs.current_assets", "bs.total_assets"]
+    for payload in body["charts"].values():
+        assert payload["analysis_question"]
+        assert payload["unit"]
+        assert payload["fact_classes"]
+        assert payload["snapshot_id"] == body["snapshot_id"]
     # 期限拆分如实缺省
     assert any(
         block["code"] == "debt_maturity_split_not_disclosed"
         for block in body["unavailable"]
     )
+
+
+def test_module_snapshot_is_tied_to_current_report_not_latest_metric_batch(
+    api_client: TestClient, db_session: Session
+) -> None:
+    from flow_api.publishing.objective_freeze import ObjectiveReportSnapshot
+
+    current_report = db_session.scalar(
+        select(StatementReport).where(
+            StatementReport.stock_code == "DAMAI.SYN",
+            StatementReport.period_label == "FY2023",
+        )
+    )
+    assert current_report is not None
+    expected_snapshot = db_session.scalar(
+        select(ObjectiveReportSnapshot).where(
+            ObjectiveReportSnapshot.statement_report_id == current_report.id,
+            ObjectiveReportSnapshot.report_type == "objective_statement",
+        )
+    )
+    unrelated_metric_snapshot = db_session.scalar(select(MetricSnapshot.id))
+
+    response = api_client.get("/api/v1/cockpit/modules/balance-sheet")
+
+    assert response.status_code == 200, response.text
+    assert expected_snapshot is not None
+    assert response.json()["snapshot_id"] == str(expected_snapshot.id)
+    assert response.json()["snapshot_id"] != str(unrelated_metric_snapshot)
+
+
+def test_module_rejects_values_changed_after_report_freeze(
+    api_client: TestClient, db_session: Session
+) -> None:
+    from flow_api.infrastructure.models.statement import StatementNormalizedItem
+
+    current_report = db_session.scalar(
+        select(StatementReport).where(
+            StatementReport.stock_code == "DAMAI.SYN",
+            StatementReport.period_label == "FY2023",
+        )
+    )
+    assert current_report is not None
+    row = db_session.scalar(
+        select(StatementNormalizedItem)
+        .where(
+            StatementNormalizedItem.report_id == current_report.id,
+            StatementNormalizedItem.value_end.is_not(None),
+        )
+        .limit(1)
+    )
+    assert row is not None and row.value_end is not None
+    row.value_end += Decimal("1")
+    db_session.commit()
+
+    response = api_client.get("/api/v1/cockpit/modules/balance-sheet")
+
+    assert response.status_code == 404, response.text
+    assert response.json()["detail"]["code"] == "module_snapshot_mismatch"
+
+
+def test_module_rejects_canonical_mapping_changed_after_report_freeze(
+    api_client: TestClient, db_session: Session
+) -> None:
+    from flow_api.infrastructure.models.statement import StatementNormalizedItem
+
+    current_report = db_session.scalar(
+        select(StatementReport).where(
+            StatementReport.stock_code == "DAMAI.SYN",
+            StatementReport.period_label == "FY2023",
+        )
+    )
+    assert current_report is not None
+    row = db_session.scalar(
+        select(StatementNormalizedItem)
+        .where(
+            StatementNormalizedItem.report_id == current_report.id,
+            StatementNormalizedItem.item_id.is_not(None),
+        )
+        .limit(1)
+    )
+    assert row is not None
+    row.item_id = "bs.changed_after_freeze"
+    db_session.commit()
+
+    response = api_client.get("/api/v1/cockpit/modules/balance-sheet")
+
+    assert response.status_code == 404, response.text
+    assert response.json()["detail"]["code"] == "module_snapshot_mismatch"
+
+
+def test_module_allows_unmapped_rows_in_frozen_report(
+    api_client: TestClient, db_session: Session
+) -> None:
+    from flow_api.infrastructure.models.statement import StatementNormalizedItem
+    from flow_api.publishing.objective_freeze import freeze_objective_statement_report
+
+    current_report = db_session.scalar(
+        select(StatementReport).where(
+            StatementReport.stock_code == "DAMAI.SYN",
+            StatementReport.period_label == "FY2023",
+        )
+    )
+    assert current_report is not None
+    row = db_session.scalar(
+        select(StatementNormalizedItem)
+        .where(
+            StatementNormalizedItem.report_id == current_report.id,
+            StatementNormalizedItem.item_id == "is.revenue",
+        )
+        .limit(1)
+    )
+    assert row is not None
+    row.item_id = None
+    db_session.flush()
+    freeze_objective_statement_report(db_session, report_id=current_report.id)
+    db_session.commit()
+
+    response = api_client.get("/api/v1/cockpit/modules/balance-sheet")
+
+    assert response.status_code == 200, response.text
 
 
 def test_working_capital_ccc_identity(api_client: TestClient) -> None:
@@ -182,6 +341,55 @@ def test_working_capital_ccc_identity(api_client: TestClient) -> None:
     assert any(
         block["code"] == "ar_aging_not_disclosed" for block in body["unavailable"]
     )
+
+
+def test_every_module_chart_has_a_typed_traceable_payload(
+    api_client: TestClient,
+) -> None:
+    for module in (
+        "balance-sheet", "working-capital", "expenses", "cashflow", "risk",
+        "consolidation",
+    ):
+        response = api_client.get(f"/api/v1/cockpit/modules/{module}")
+        assert response.status_code == 200, response.text
+        body = response.json()
+        assert body["charts"], module
+        for chart_id, chart in body["charts"].items():
+            assert chart["analysis_question"], (module, chart_id)
+            assert chart["type"] in {
+                "bar", "formula_card", "line", "ratio_bar", "treemap", "waterfall"
+            }
+            assert chart["unit"], (module, chart_id)
+            assert chart["fact_classes"], (module, chart_id)
+            assert chart["snapshot_id"] == body["snapshot_id"]
+            assert chart["source_ids"] or chart["source_fact_ids"] or chart["fact_ids"]
+
+
+def test_profitability_module_reads_frozen_analysis_payload(
+    api_client: TestClient, db_session: Session
+) -> None:
+    from flow_api.publishing.objective_freeze import freeze_objective_statement_report
+
+    reports = list(
+        db_session.scalars(
+            select(StatementReport).where(StatementReport.stock_code == "DAMAI.SYN")
+        )
+    )
+    for report in reports:
+        freeze_objective_statement_report(db_session, report_id=report.id)
+    db_session.commit()
+
+    response = api_client.get("/api/v1/cockpit/profitability")
+    assert response.status_code == 200, response.text
+    body = response.json()
+    assert body["module"] == "profitability"
+    assert [period["period"] for period in body["periods"]] == ["FY2022", "FY2023"]
+    current = body["periods"][-1]
+    assert current["snapshot_id"]
+    assert all(metric["snapshot_id"] == current["snapshot_id"] for metric in current["metrics"])
+    assert all(metric["report_id"] == current["report_id"] for metric in current["metrics"])
+    assert all(metric["status"] == "available" for metric in current["metrics"])
+    assert current["consistency"]["status"] == "passed"
 
 
 def test_modules_404_when_statements_not_published(

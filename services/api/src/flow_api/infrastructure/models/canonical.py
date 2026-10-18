@@ -10,21 +10,19 @@ from sqlalchemy import (
     ForeignKey,
     Index,
     Integer,
-    Numeric,
     String,
     UniqueConstraint,
     func,
 )
-from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy.orm import Mapped, declared_attr, mapped_column, relationship
 
 from flow_api.domain.ids import new_uuid7
-from flow_api.infrastructure.models.base import Base
+from flow_api.infrastructure.models.base import UUID_TYPE, Base, ExactNumeric
 from flow_api.infrastructure.models.intake import ImportVersion, SourceRecord
 
 
 class CanonicalIdentityMixin:
-    id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), primary_key=True, default=new_uuid7)
+    id: Mapped[UUID] = mapped_column(UUID_TYPE, primary_key=True, default=new_uuid7)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, server_default=func.now()
     )
@@ -51,7 +49,7 @@ class Organization(CanonicalIdentityMixin, Base):
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     level: Mapped[str] = mapped_column(String(64), nullable=False)
     parent_id: Mapped[UUID | None] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("dim_organization.id", ondelete="RESTRICT")
+        UUID_TYPE, ForeignKey("dim_organization.id", ondelete="RESTRICT")
     )
 
 
@@ -77,7 +75,7 @@ class Customer(CanonicalIdentityMixin, Base):
     tier: Mapped[str | None] = mapped_column(String(64))
     credit_term_days: Mapped[int | None] = mapped_column(Integer)
     segment_id: Mapped[UUID | None] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("dim_customer_segment.id", ondelete="RESTRICT")
+        UUID_TYPE, ForeignKey("dim_customer_segment.id", ondelete="RESTRICT")
     )
 
     segment: Mapped[CustomerSegment | None] = relationship()
@@ -90,7 +88,7 @@ class LogisticsProduct(CanonicalIdentityMixin, Base):
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     level: Mapped[str | None] = mapped_column(String(64))
     parent_id: Mapped[UUID | None] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("dim_logistics_product.id", ondelete="RESTRICT")
+        UUID_TYPE, ForeignKey("dim_logistics_product.id", ondelete="RESTRICT")
     )
 
 
@@ -102,7 +100,7 @@ class Region(CanonicalIdentityMixin, Base):
     province: Mapped[str | None] = mapped_column(String(128))
     city: Mapped[str | None] = mapped_column(String(128))
     parent_id: Mapped[UUID | None] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("dim_region.id", ondelete="RESTRICT")
+        UUID_TYPE, ForeignKey("dim_region.id", ondelete="RESTRICT")
     )
 
 
@@ -114,7 +112,7 @@ class ManagementAccount(CanonicalIdentityMixin, Base):
     category: Mapped[str] = mapped_column(String(64), nullable=False)
     financial_account_code: Mapped[str | None] = mapped_column(String(128))
     parent_id: Mapped[UUID | None] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("dim_management_account.id", ondelete="RESTRICT")
+        UUID_TYPE, ForeignKey("dim_management_account.id", ondelete="RESTRICT")
     )
 
 
@@ -129,13 +127,13 @@ class ScenarioVersion(CanonicalIdentityMixin, Base):
 
 class LineageFactMixin:
     business_record_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True), nullable=False, default=new_uuid7
+        UUID_TYPE, nullable=False, default=new_uuid7
     )
     import_version_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("import_version.id", ondelete="RESTRICT"), nullable=False
+        UUID_TYPE, ForeignKey("import_version.id", ondelete="RESTRICT"), nullable=False
     )
     source_record_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("source_record.id", ondelete="RESTRICT"), nullable=False
+        UUID_TYPE, ForeignKey("source_record.id", ondelete="RESTRICT"), nullable=False
     )
 
     @declared_attr
@@ -168,12 +166,12 @@ class FactOperatingActual(CanonicalIdentityMixin, LineageFactMixin, Base):
         ForeignKey("dim_logistics_product.id"), nullable=False
     )
     region_id: Mapped[UUID] = mapped_column(ForeignKey("dim_region.id"), nullable=False)
-    order_count: Mapped[Decimal] = mapped_column(Numeric(24, 4), nullable=False)
-    shipment_count: Mapped[Decimal] = mapped_column(Numeric(24, 4), nullable=False)
-    revenue: Mapped[Decimal] = mapped_column(Numeric(24, 4), nullable=False)
-    warehousing_cost: Mapped[Decimal] = mapped_column(Numeric(24, 4), nullable=False)
-    transportation_cost: Mapped[Decimal] = mapped_column(Numeric(24, 4), nullable=False)
-    other_direct_cost: Mapped[Decimal] = mapped_column(Numeric(24, 4), nullable=False)
+    order_count: Mapped[Decimal] = mapped_column(ExactNumeric(24, 4), nullable=False)
+    shipment_count: Mapped[Decimal] = mapped_column(ExactNumeric(24, 4), nullable=False)
+    revenue: Mapped[Decimal] = mapped_column(ExactNumeric(24, 4), nullable=False)
+    warehousing_cost: Mapped[Decimal] = mapped_column(ExactNumeric(24, 4), nullable=False)
+    transportation_cost: Mapped[Decimal] = mapped_column(ExactNumeric(24, 4), nullable=False)
+    other_direct_cost: Mapped[Decimal] = mapped_column(ExactNumeric(24, 4), nullable=False)
 
     period: Mapped[Period] = relationship()
     organization: Mapped[Organization] = relationship()
@@ -199,7 +197,7 @@ class FactFinancialActual(CanonicalIdentityMixin, LineageFactMixin, Base):
     management_account_id: Mapped[UUID] = mapped_column(
         ForeignKey("dim_management_account.id"), nullable=False
     )
-    amount: Mapped[Decimal] = mapped_column(Numeric(24, 4), nullable=False)
+    amount: Mapped[Decimal] = mapped_column(ExactNumeric(24, 4), nullable=False)
 
     period: Mapped[Period] = relationship()
     organization: Mapped[Organization] = relationship()
@@ -237,7 +235,7 @@ class FactBudget(CanonicalIdentityMixin, LineageFactMixin, Base):
         ForeignKey("dim_scenario_version.id"), nullable=False
     )
     metric_code: Mapped[str] = mapped_column(String(128), nullable=False)
-    amount: Mapped[Decimal] = mapped_column(Numeric(24, 4), nullable=False)
+    amount: Mapped[Decimal] = mapped_column(ExactNumeric(24, 4), nullable=False)
 
     period: Mapped[Period] = relationship()
     organization: Mapped[Organization] = relationship()
@@ -270,10 +268,10 @@ class FactArCollection(CanonicalIdentityMixin, LineageFactMixin, Base):
     customer_id: Mapped[UUID] = mapped_column(ForeignKey("dim_customer.id"), nullable=False)
     invoice_number: Mapped[str | None] = mapped_column(String(128))
     aging_bucket: Mapped[str | None] = mapped_column(String(64))
-    receivable_balance: Mapped[Decimal] = mapped_column(Numeric(24, 4), nullable=False)
-    due_amount: Mapped[Decimal] = mapped_column(Numeric(24, 4), nullable=False)
-    overdue_amount: Mapped[Decimal] = mapped_column(Numeric(24, 4), nullable=False)
-    collected_amount: Mapped[Decimal] = mapped_column(Numeric(24, 4), nullable=False)
+    receivable_balance: Mapped[Decimal] = mapped_column(ExactNumeric(24, 4), nullable=False)
+    due_amount: Mapped[Decimal] = mapped_column(ExactNumeric(24, 4), nullable=False)
+    overdue_amount: Mapped[Decimal] = mapped_column(ExactNumeric(24, 4), nullable=False)
+    collected_amount: Mapped[Decimal] = mapped_column(ExactNumeric(24, 4), nullable=False)
 
     period: Mapped[Period] = relationship()
     customer: Mapped[Customer] = relationship()

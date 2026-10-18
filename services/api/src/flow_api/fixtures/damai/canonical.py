@@ -14,7 +14,7 @@
 from __future__ import annotations
 
 from datetime import UTC, datetime
-from decimal import Decimal
+from decimal import ROUND_HALF_UP, Decimal
 from typing import Any
 from uuid import UUID, uuid5
 
@@ -51,6 +51,7 @@ from flow_api.fixtures.damai.profile import (
 )
 
 _DAMAI_NAMESPACE = UUID("da0a1a10-4c41-b9d1-3d4a-2f5e6b7c9d01")
+_WAN_TO_CNY = Decimal("10000")
 
 # 时间线迁移（2026-10-13）：期间唯一来源是 profile 的 24 月合同（顶部导入别名）
 
@@ -86,10 +87,6 @@ _METRIC_CODE_MAP: dict[str, str] = {
 }
 
 _BUDGET_SCENARIO = "BUDGET_DAMAI_V1"
-
-
-def _month_of(month: str) -> int:
-    return int(month.split("-")[1])
 
 
 def _rid(prefix: str, *parts: str) -> str:
@@ -169,16 +166,65 @@ def _dimensions() -> tuple[
         ),
         ManagementAccountRecord(code="GROSS_PROFIT", name="毛利", category="operating_profit"),
         ManagementAccountRecord(
-            code="OPERATING_EXPENSE", name="期间费用", category="operating_expense"
+            code="OPERATING_EXPENSE",
+            name="经营费用及其他经营项目净额",
+            category="operating_expense",
         ),
         ManagementAccountRecord(
             code="OPERATING_PROFIT", name="经营利润", category="operating_profit"
+        ),
+        ManagementAccountRecord(
+            code="SALES_MARKETING_EXPENSE", name="销售及市场推广开支", category="operating_expense"
+        ),
+        ManagementAccountRecord(
+            code="GENERAL_ADMIN_EXPENSE", name="一般及行政开支", category="operating_expense"
+        ),
+        ManagementAccountRecord(
+            code="PRODUCT_DEVELOPMENT_EXPENSE", name="产品开发开支", category="operating_expense"
+        ),
+        ManagementAccountRecord(
+            code="FINANCIAL_ASSET_IMPAIRMENT", name="金融资产减值", category="operating_expense"
+        ),
+        ManagementAccountRecord(
+            code="OTHER_INCOME", name="其他收入", category="operating_profit"
+        ),
+        ManagementAccountRecord(
+            code="OTHER_NET_GAIN_LOSS", name="其他收益及亏损净额", category="operating_profit"
+        ),
+        ManagementAccountRecord(
+            code="NET_PROFIT", name="年度溢利或亏损", category="operating_profit"
+        ),
+        ManagementAccountRecord(
+            code="CASH_AND_CASH_EQUIVALENTS",
+            name="现金及现金等价物",
+            category="working_capital",
         ),
         ManagementAccountRecord(
             code="OPERATING_CASH_FLOW", name="经营现金流", category="cash_flow"
         ),
         ManagementAccountRecord(
             code="AR_BALANCE", name="应收账款余额", category="working_capital"
+        ),
+        ManagementAccountRecord(
+            code="TOTAL_ASSETS", name="资产总计", category="financial_position"
+        ),
+        ManagementAccountRecord(
+            code="TOTAL_LIABILITIES", name="负债合计", category="financial_position"
+        ),
+        ManagementAccountRecord(
+            code="TOTAL_EQUITY", name="权益总额", category="financial_position"
+        ),
+        ManagementAccountRecord(
+            code="CURRENT_ASSETS", name="流动资产合计", category="financial_position"
+        ),
+        ManagementAccountRecord(
+            code="CURRENT_LIABILITIES", name="流动负债合计", category="financial_position"
+        ),
+        ManagementAccountRecord(
+            code="INVENTORY_BALANCE", name="存货余额", category="working_capital"
+        ),
+        ManagementAccountRecord(
+            code="BORROWINGS", name="借款余额", category="financial_position"
         ),
     )
     scenarios = (
@@ -199,9 +245,11 @@ def _operating_actuals(raw_rows: list[dict[str, Any]]) -> tuple[OperatingActualR
         org_code = _UNIT_TO_ORG[row["business_unit"]][0]
         revenue = _d(row["revenue"])
         cost_total = _d(row["cost"])
-        # 收入派生单量（确定性演示口径）：客单价 120、每单 2.0 件
-        order_count = (revenue / Decimal("120")).quantize(Decimal("0.0001"))
-        shipment_count = (order_count * Decimal("2.0")).quantize(Decimal("0.0001"))
+        # 原始收入以万元计；按人民币 120 元客单价派生整数演示单量。
+        order_count = (revenue * _WAN_TO_CNY / Decimal("120")).quantize(
+            Decimal("1"), rounding=ROUND_HALF_UP
+        )
+        shipment_count = order_count * Decimal("2")
         values: list[Decimal] = []
         last = len(_COST_SPLIT) - 1
         running = Decimal("0")
@@ -229,10 +277,10 @@ def _operating_actuals(raw_rows: list[dict[str, Any]]) -> tuple[OperatingActualR
                 region_code=_REGION_TO_CODE[row["region"]],
                 order_count=order_count,
                 shipment_count=shipment_count,
-                revenue=revenue,
-                warehousing_cost=warehousing,
-                transportation_cost=transportation,
-                other_direct_cost=other,
+                revenue=_d(revenue * _WAN_TO_CNY),
+                warehousing_cost=_d(warehousing * _WAN_TO_CNY),
+                transportation_cost=_d(transportation * _WAN_TO_CNY),
+                other_direct_cost=_d(other * _WAN_TO_CNY),
             )
         )
     return tuple(rows)
@@ -242,9 +290,10 @@ def _financial_actuals(
     raw: dict[str, Any],
     operating: tuple[OperatingActualRecord, ...],
 ) -> tuple[FinancialActualRecord, ...]:
-    """财务账 = 经营账聚合（REVENUE/三成本/毛利）+ 全司口径分摊（OCF/AR）。
+    """构造公开披露锚定的月度/组织财务视图。
 
-    分摊份额 = 各组织当月经营收入 / 全司当月经营收入，逐项守恒（尾差入末位组织）。
+    公开年度损益、现金流和期末现金只按收入权重拆为演示明细，尾差并入
+    当月最后一个组织；组织合计始终回到月度生成值，年度合计回到披露事实。
     """
 
     by_month_org: dict[tuple[str, str], dict[str, Decimal]] = {}
@@ -265,61 +314,131 @@ def _financial_actuals(
         )
 
     rows: list[FinancialActualRecord] = []
-    cash_flow_by_month = {
-        row["month"]: Decimal(row["ocf"])
-        for row in raw["monthly_facts"]["cash_flow"]
+    statement_lines_by_month = {
+        row["month"]: row for row in raw["monthly_facts"]["statement_lines"]
     }
-    ocf_allocated_by_month: dict[str, Decimal] = {}
+    cash_flow_by_month = {
+        row["month"]: row for row in raw["monthly_facts"]["cash_flow"]
+    }
+    balance_sheet_by_month = {
+        row["month"]: row for row in raw["monthly_facts"]["balance_sheet"]
+    }
     organizations_by_month: dict[str, list[str]] = {}
     for month, org_code in by_month_org:
         organizations_by_month.setdefault(month, []).append(org_code)
 
-    for _month_index, (month, org_code) in enumerate(sorted(by_month_org.keys())):
-        agg = by_month_org[(month, org_code)]
-        # 期间费用率：与窄切片同口径（分析期 Q4 0.100、其余 0.080）
-        in_analysis_q4 = month in _ANALYSIS_MONTHS and _month_of(month) in (10, 11, 12)
-        expense_rate = Decimal("0.100") if in_analysis_q4 else Decimal("0.080")
-        expense = _d(agg["REVENUE"] * expense_rate)
-        values = {
-            **agg,
-            "OPERATING_EXPENSE": expense,
-            "OPERATING_PROFIT": _d(agg["GROSS_PROFIT"] - expense),
-        }
+    statement_accounts = (
+        "SALES_MARKETING_EXPENSE",
+        "GENERAL_ADMIN_EXPENSE",
+        "PRODUCT_DEVELOPMENT_EXPENSE",
+        "FINANCIAL_ASSET_IMPAIRMENT",
+        "OTHER_INCOME",
+        "OTHER_NET_GAIN_LOSS",
+        "NET_PROFIT",
+    )
+    balance_sheet_accounts = (
+        "TOTAL_ASSETS",
+        "TOTAL_LIABILITIES",
+        "TOTAL_EQUITY",
+        "CURRENT_ASSETS",
+        "CURRENT_LIABILITIES",
+        "AR_BALANCE",
+        "INVENTORY_BALANCE",
+        "BORROWINGS",
+    )
+    all_accounts = (
+        "REVENUE",
+        "WAREHOUSING_COST",
+        "TRANSPORTATION_COST",
+        "OTHER_DIRECT_COST",
+        "GROSS_PROFIT",
+        "OPERATING_EXPENSE",
+        "OPERATING_PROFIT",
+        *statement_accounts,
+        "OPERATING_CASH_FLOW",
+        "CASH_AND_CASH_EQUIVALENTS",
+        *balance_sheet_accounts,
+    )
+    for month in sorted(organizations_by_month):
         month_organizations = sorted(organizations_by_month[month])
-        position = month_organizations.index(org_code)
-        if position == len(month_organizations) - 1:
-            ocf = cash_flow_by_month[month] - ocf_allocated_by_month.get(
-                month, Decimal("0")
+        monthly_revenue = sum(
+            (by_month_org[(month, code)]["REVENUE"] for code in month_organizations),
+            Decimal("0"),
+        )
+        statement_lines = statement_lines_by_month[month]
+        cash_flow = cash_flow_by_month[month]
+        balance_sheet = balance_sheet_by_month[month]
+        statement_source_keys = {"NET_PROFIT": "net_profit"}
+        monthly_values = {
+            account: Decimal(
+                statement_lines[statement_source_keys.get(account, account)]
             )
-        else:
-            monthly_revenue = sum(
-                (by_month_org[(month, code)]["REVENUE"] for code in month_organizations),
+            * _WAN_TO_CNY
+            for account in statement_accounts
+        }
+        monthly_values["OPERATING_CASH_FLOW"] = (
+            Decimal(cash_flow["ocf"]) * _WAN_TO_CNY
+        )
+        monthly_values["CASH_AND_CASH_EQUIVALENTS"] = Decimal(
+            cash_flow["cash_balance"]
+        ) * _WAN_TO_CNY
+        monthly_values.update(
+            {
+                account: Decimal(balance_sheet[account]) * _WAN_TO_CNY
+                for account in balance_sheet_accounts
+            }
+        )
+        allocated: dict[str, dict[str, Decimal]] = {}
+        for account, total in monthly_values.items():
+            account_rows: dict[str, Decimal] = {}
+            running = Decimal("0")
+            for org_code in month_organizations[:-1]:
+                amount = _d(
+                    total
+                    * by_month_org[(month, org_code)]["REVENUE"]
+                    / monthly_revenue
+                )
+                account_rows[org_code] = amount
+                running += amount
+            account_rows[month_organizations[-1]] = _d(total - running)
+            allocated[account] = account_rows
+
+        for org_code in month_organizations:
+            values = {
+                **by_month_org[(month, org_code)],
+                **{
+                    account: account_rows[org_code]
+                    for account, account_rows in allocated.items()
+                },
+            }
+            values["OPERATING_EXPENSE"] = sum(
+                (
+                    values[account]
+                    for account in (
+                        "SALES_MARKETING_EXPENSE",
+                        "GENERAL_ADMIN_EXPENSE",
+                        "PRODUCT_DEVELOPMENT_EXPENSE",
+                        "FINANCIAL_ASSET_IMPAIRMENT",
+                    )
+                ),
                 Decimal("0"),
             )
-            ocf = _d(cash_flow_by_month[month] * agg["REVENUE"] / monthly_revenue)
-            ocf_allocated_by_month[month] = (
-                ocf_allocated_by_month.get(month, Decimal("0")) + ocf
+            values["OPERATING_EXPENSE"] -= (
+                values["OTHER_INCOME"] + values["OTHER_NET_GAIN_LOSS"]
             )
-        values["OPERATING_CASH_FLOW"] = ocf
-        for account_code in (
-            "REVENUE",
-            "WAREHOUSING_COST",
-            "TRANSPORTATION_COST",
-            "OTHER_DIRECT_COST",
-            "GROSS_PROFIT",
-            "OPERATING_EXPENSE",
-            "OPERATING_PROFIT",
-            "OPERATING_CASH_FLOW",
-        ):
-            rows.append(
-                FinancialActualRecord(
-                    record_id=_rid("financial", month, org_code, account_code),
-                    month_key=month,
-                    organization_code=org_code,
-                    management_account_code=account_code,
-                    amount=values[account_code],
+            values["OPERATING_PROFIT"] = (
+                values["GROSS_PROFIT"] - values["OPERATING_EXPENSE"]
+            )
+            for account in all_accounts:
+                rows.append(
+                    FinancialActualRecord(
+                        record_id=_rid("financial", month, org_code, account),
+                        month_key=month,
+                        organization_code=org_code,
+                        management_account_code=account,
+                        amount=values[account],
+                    )
                 )
-            )
 
     return tuple(rows)
 
@@ -342,7 +461,7 @@ def _budgets(raw_rows: list[dict[str, Any]]) -> tuple[MonthlyBudgetRecord, ...]:
                 management_account_code=account,
                 scenario_code=_BUDGET_SCENARIO,
                 metric_code=_METRIC_CODE_MAP[account],
-                amount=_d(row["amount"]),
+                amount=_d(Decimal(row["amount"]) * _WAN_TO_CNY),
             )
         )
     return tuple(rows)
@@ -362,10 +481,10 @@ def _ar_collections(raw_rows: list[dict[str, Any]]) -> tuple[ArCollectionRecord,
                 customer_code=customer_code,
                 invoice_number=f"INV-SYN-{stem}",
                 aging_bucket=bucket_code,
-                receivable_balance=_d(row["balance"]),
-                due_amount=_d(row["due"]),
-                overdue_amount=_d(row["overdue"]),
-                collected_amount=_d(row["collected"]),
+                receivable_balance=_d(Decimal(row["balance"]) * _WAN_TO_CNY),
+                due_amount=_d(Decimal(row["due"]) * _WAN_TO_CNY),
+                overdue_amount=_d(Decimal(row["overdue"]) * _WAN_TO_CNY),
+                collected_amount=_d(Decimal(row["collected"]) * _WAN_TO_CNY),
             )
         )
     return tuple(rows)

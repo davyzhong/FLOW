@@ -23,6 +23,7 @@ const moduleGroups = [
       ["report", "工作台总览", "/internal"],
       ["dashboard", "经营总览", "/"],
       ["dashboard", "CFO 驾驶舱", "/cockpit"],
+      ["chart", "盈利能力与杜邦分析", "/cockpit/profitability"],
       ["dashboard", "资产负债", "/cockpit/balance-sheet"],
       ["dashboard", "营运资金", "/cockpit/working-capital"],
       ["dashboard", "费用分析", "/cockpit/expenses"],

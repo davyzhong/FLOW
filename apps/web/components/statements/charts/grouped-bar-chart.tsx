@@ -1,5 +1,7 @@
 "use client";
 
+import { formatFinancialValue } from "../../cockpit/number-format";
+
 // 分组柱状图（本期 vs 上期）：手写 SVG，正负共用零基线。
 export type GroupedBarDatum = { label: string; current: number; prior: number | null };
 
@@ -38,7 +40,7 @@ export function GroupedBarChart({
       <g key={g}>
         <line x1={padL} y1={gy} x2={width - padR} y2={gy} stroke="#e2e8f0" />
         <text x={padL - 6} y={gy + 4} textAnchor="end" className="stmt-tick">
-          {gv.toFixed(0)}
+          {formatFinancialValue(gv, { unit: unitLabel, appendUnit: false })}
         </text>
       </g>
     );
@@ -63,7 +65,7 @@ export function GroupedBarChart({
                 fill={value >= 0 ? fill : "#dc2626"}
                 rx={3}
               >
-                <title>{`${item.label} ${seriesLabel}：${value.toFixed(2)} ${unitLabel}`}</title>
+                <title>{`${item.label} ${seriesLabel}：${formatFinancialValue(value, { unit: unitLabel })}`}</title>
               </rect>
               <text
                 x={groupX - (priorLabel === null ? barW / 2 : barW * 1.06) + offset + barW / 2}
@@ -71,7 +73,7 @@ export function GroupedBarChart({
                 textAnchor="middle"
                 className="stmt-vlabel"
               >
-                {value.toFixed(1)}
+                {formatFinancialValue(value, { unit: unitLabel, appendUnit: false })}
               </text>
             </g>,
           );

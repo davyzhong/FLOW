@@ -67,7 +67,7 @@ def _overview() -> OperationsOverview:
         management_watch=[
             {
                 "code": "cash_content_below_one",
-                "message": "净利润现金含量 0.6000，经营现金流低于净利润",
+                "message": "净利润现金含量 0.60 倍，经营现金流低于净利润",
                 "direction": "negative",
             }
         ],
@@ -98,7 +98,7 @@ def test_renders_not_applicable_with_typed_reason() -> None:
 def test_renders_management_watch_with_direction() -> None:
     html = render_operations_html(_overview())
     assert "管理关注" in html
-    assert "净利润现金含量 0.6000" in html
+    assert "净利润现金含量 0.60 倍" in html
     assert "关注" in html
 
 

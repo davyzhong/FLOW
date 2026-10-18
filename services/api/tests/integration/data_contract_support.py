@@ -34,6 +34,7 @@ from flow_api.infrastructure.models.canonical import (
     Region,
     ScenarioVersion,
 )
+from flow_api.infrastructure.models.cockpit import ActionItem
 from flow_api.infrastructure.models.intake import (
     AnalysisBatch,
     ImportVersion,
@@ -53,6 +54,7 @@ STANDARD_WORKBOOK = REPOSITORY_ROOT / "fixtures/workbooks/flow_standard_v1.xlsx"
 # 分析/工作流链先行（FK RESTRICT：metric_snapshot/analysis_run 引用 import_version，
 # 不先清会阻塞下方 intake 链删除——大麦 fixture 套件跑完后残留即触发）。
 ANALYTICS_MODELS_IN_DELETE_ORDER = (
+    ActionItem,
     PublicationAttempt,
     ReportSnapshotItem,
     ReportSnapshot,

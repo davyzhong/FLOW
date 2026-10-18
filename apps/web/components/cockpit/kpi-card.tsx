@@ -21,16 +21,19 @@
 import { useCallback, useState } from "react";
 
 import type { DashboardValue } from "../../lib/api/client";
+import { formatDeltaPercent, formatFinancialValue } from "./number-format";
 import type { CockpitDrill, CockpitKpiCard as Card, CockpitPolarity } from "./cockpit-types";
 
 function Comparison({
   label,
   value,
   polarity,
+  metricCode,
 }: {
   label: string;
   value: DashboardValue;
   polarity: CockpitPolarity;
+  metricCode: string;
 }) {
   if (value.status === "unavailable") {
     const isUnpublished = value.unavailable_code?.includes("not_published");
@@ -46,17 +49,21 @@ function Comparison({
   // contracts 的 semantic_direction 枚举：positive / negative / neutral / warning
   // polarity 决定着色方向：positive=越高越好，negative=越低越好，neutral=不着色
   const rising = value.semantic_direction === "positive";
+  const exact = value.exact_value ?? value.display_value;
+  const comparisonDisplay = ["gross_margin", "fulfillment_cost_rate"].includes(metricCode)
+    ? formatFinancialValue(exact, { unit: "ratio" })
+    : formatDeltaPercent(exact);
   const good = polarity === "positive" ? rising : polarity === "negative" ? !rising : true;
   return (
     <span
       className={`cmp ${good ? "is-good" : "is-bad"}`}
       data-status="ok"
-      aria-label={`${label}：${value.display_value}`}
+      aria-label={`${label}：${comparisonDisplay}`}
     >
       <small>{label}</small>
       <span className="cmp__value">
         {rising ? "↑" : value.semantic_direction === "negative" ? "↓" : "→"}
-        {value.display_value}
+        {comparisonDisplay}
       </span>
     </span>
   );
@@ -76,7 +83,7 @@ export function CockpitKpiCard({
     onDrill?.({
       metricCode: card.metric_code,
       title: card.title,
-      value: card.primary.display_value,
+      value: formatFinancialValue(card.primary.exact_value ?? card.primary.display_value, { metricCode: card.metric_code, unit: card.unit, appendUnit: false }),
       unit: card.unit,
       caliberNote: card.caliber_note,
       snapshotId: card.snapshot_id ?? "",
@@ -117,21 +124,21 @@ export function CockpitKpiCard({
         type="button"
         className="kpi__open"
         onClick={open}
-        aria-label={`${card.title}：${card.primary.display_value}${card.unit}，查看计算口径与来源`}
+        aria-label={`${card.title}：${formatFinancialValue(card.primary.exact_value ?? card.primary.display_value, { metricCode: card.metric_code, unit: card.unit })}，查看计算口径与来源`}
       >
         <div className="kpi__top">
           <span className="kpi__cat">{card.category}</span>
-          {card.control_line ? <span className="kpi__line">管控线 {card.control_line.display_value}</span> : null}
+          {card.control_line ? <span className="kpi__line">管控线 {formatFinancialValue(card.control_line.exact_value ?? card.control_line.display_value, { metricCode: card.metric_code, unit: card.unit })}</span> : null}
         </div>
         <h4>{card.title}</h4>
         <div className="kpi__value">
-          {card.primary.display_value}
-          <small>{card.unit}</small>
+          {formatFinancialValue(card.primary.exact_value ?? card.primary.display_value, { metricCode: card.metric_code, unit: card.unit })}
+
         </div>
         <div className="kpi__cmps">
-          <Comparison label="同比" value={card.comparisons.yoy} polarity={card.polarity} />
-          <Comparison label="环比" value={card.comparisons.mom} polarity={card.polarity} />
-          <Comparison label="行业分位" value={card.comparisons.percentile} polarity="neutral" />
+          <Comparison label="同比" value={card.comparisons.yoy} polarity={card.polarity} metricCode={card.metric_code} />
+          <Comparison label="环比" value={card.comparisons.mom} polarity={card.polarity} metricCode={card.metric_code} />
+          <Comparison label="行业分位" value={card.comparisons.percentile} polarity="neutral" metricCode={card.metric_code} />
         </div>
         {card.caliber_note ? <div className="kpi__caliber">口径：{card.caliber_note}</div> : null}
         {card.source_label ? <div className="kpi__source">{card.source_label}</div> : null}

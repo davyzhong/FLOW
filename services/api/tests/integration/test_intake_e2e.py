@@ -138,7 +138,7 @@ def test_standard_and_external_workbooks_publish_identical_auditable_versions(
         .where(
             SourceRecord.import_version_id == external_version.id,
             SourceRecord.transform_rule_id == "parse_decimal",
-            SourceRecord.raw_value["value"].astext.like("%,%"),
+            SourceRecord.raw_value["value"].as_string().like("%,%"),
         )
         .limit(1)
     )

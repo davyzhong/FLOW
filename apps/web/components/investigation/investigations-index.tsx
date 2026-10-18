@@ -30,7 +30,7 @@ function formatImpact(value: string): string {
   const amount = Number(value);
   if (!Number.isFinite(amount)) return value;
   if (Math.abs(amount) >= 100_000_000) return `${(amount / 100_000_000).toFixed(2)} 亿元`;
-  if (Math.abs(amount) >= 10_000) return `${(amount / 10_000).toFixed(1)} 万元`;
+  if (Math.abs(amount) >= 10_000) return `${(amount / 10_000).toFixed(2)} 万元`;
   return `${amount.toFixed(2)} 元`;
 }
 

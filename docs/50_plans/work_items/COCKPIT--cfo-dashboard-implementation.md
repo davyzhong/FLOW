@@ -3,9 +3,9 @@ doc_id: FLOW-WI-COCKPIT-CFO-001
 title: CFO 财务总监驾驶舱产品化
 doc_type: work-item
 status: completed
-version: 2.0
+version: 2.1
 created_at: 2026-09-30
-updated_at: 2026-10-13
+updated_at: 2026-10-17
 owner: FLOW
 depends_on: [FLOW-WI-DAMAI-FULL-YEAR-001, FLOW-WI-ORG-LEDGER-001, FLOW-WI-S01-POST-U8-001]
 acceptance_refs: [FLOW-PLAN-COCKPIT-IMPL-20260930]
@@ -23,7 +23,7 @@ confidentiality: project-internal
 
 # CFO 财务总监驾驶舱产品化
 
-## 目标## 目标
+## 目标
 
 把 `docs/05_design/prototypes/2026-09-29-cfo-cockpit-prototype-v2.html`（v2.0，51 图表、三模式、全卡穿透）**产品化**为 `apps/web/cockpit/*` 真实路由页面：Next.js 组件化实现、接真实 API 数据、受既有前端门禁（AppShell / workflow-nav / navigation.spec / 五态 / CI 17 job）约束。
 
@@ -65,12 +65,14 @@ confidentiality: project-internal
 
 ## 批次与状态
 
+> 本工作包代表驾驶舱产品化主批次，已于 2026-10-17 完成并归档；下表保留历史分批和最终状态。原先标为“next/pending”的阶段已由下方交付记录及路线图历史关闭。当前新提出的盈利分析补充单独登记在 `COCKPIT--visual-analysis-expansion.md`，当前唯一执行状态只认 `CURRENT_ROADMAP.md`。
+
 | 批次 | 范围 | 状态 | 门禁摘要 |
 |---|---|---|---|
 | **A** | 框架 + 集团总览页（真实数据链路） | **completed** | ✅ 同 SHA CI `36601612612` 17/17 success（commit `b7dc4983`） |
-| B | 安全规格 V1.1.1 + ActionItem + 行动项闭环 | blocked（待 §6 Q2 裁决） | approved-spec 门禁 + 安全规格 §11 九类断言 + route-inventory 双向零差集 |
-| C | 其余 8 模块（利润/盈利/资产负债/营运/费用/现金/风险/合并/数据中心） | **next** | C-1 图表组件库已实现 ECharts 6.1.0 与 10 类构建器；F1/F2 已由同 SHA CI 关闭。先完成 2026-10-12 来源事实与 Mock 血缘门禁，再依次推进 F3–F4、C-2～C-5 |
-| D | 经分会计期增强（结论条自动生成、Findings 跨页联动、问数入口） | pending | 设计文档 §8 批次 D |
+| B | 安全规格 V1.1.1 + ActionItem + 行动项闭环 | **completed** | 安全规格 §11 九类断言、approved-spec 门禁、route-inventory 双向零差集通过 |
+| C | 其余驾驶舱模块与图表能力 | **completed** | C-2～C-5、F1–F4、51 图覆盖及真实页面验收由后续工作包完成；详见下方交付记录与路线图历史 |
+| D | 结论条、Findings 联动、问数入口 | **completed** | 下方 D 批次交付记录 |
 
 ### 批次 A 交付清单（2026-09-30 完成，commit `ae56e96f` + `b7dc4983`）
 

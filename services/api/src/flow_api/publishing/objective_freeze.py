@@ -18,11 +18,9 @@ from sqlalchemy import (
     func,
     select,
 )
-from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy.orm import Mapped, Session, mapped_column
 
-from flow_api.infrastructure.models.base import Base
+from flow_api.infrastructure.models.base import JSON_TYPE, UUID_TYPE, Base
 from flow_api.infrastructure.models.canonical import CanonicalIdentityMixin
 from flow_api.infrastructure.models.statement import (
     StatementLineItem,
@@ -31,7 +29,7 @@ from flow_api.infrastructure.models.statement import (
     StatementSource,
 )
 
-SCHEMA_VERSION = "objective.v1"
+SCHEMA_VERSION = "objective.v3"
 REPORT_TYPE = "objective_statement"
 
 
@@ -55,14 +53,14 @@ class ObjectiveReportSnapshot(CanonicalIdentityMixin, Base):
     )
 
     statement_report_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True),
+        UUID_TYPE,
         ForeignKey("statement_report.id", ondelete="CASCADE"),
         nullable=False,
     )
     version: Mapped[int] = mapped_column(Integer, nullable=False)
     schema_version: Mapped[str] = mapped_column(String(32), nullable=False)
     report_type: Mapped[str] = mapped_column(String(32), nullable=False)
-    payload: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False)
+    payload: Mapped[dict[str, Any]] = mapped_column(JSON_TYPE, nullable=False)
     payload_hash: Mapped[str] = mapped_column(String(64), nullable=False)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, server_default=func.now()
@@ -248,6 +246,9 @@ def freeze_objective_statement_report(
         },
         "statements": _statements_payload(normalized_rows),
         "statements_raw": _statements_payload(raw_rows_sorted),
+        "profitability_metrics": _profitability_metrics(
+            normalized_rows, report_id=str(report.id)
+        ),
         "eligibility": {
             "published": eligibility.published,
             "unresolved_count": len(eligibility.unresolved_names),
@@ -290,10 +291,22 @@ def freeze_objective_statement_report(
     return snapshot
 
 
+def _profitability_metrics(
+    rows: list[StatementNormalizedItem], *, report_id: str
+) -> dict[str, Any]:
+    """财务指标在冻结时计算；读取端只消费这一不可变结果。"""
+
+    from flow_api.publishing.profitability_snapshot import build_profitability_payload
+
+    return build_profitability_payload(rows, report_id=report_id)
+
+
 def _statements_payload(rows: list[Any]) -> dict[str, list[dict[str, Any]]]:
     statements: dict[str, list[dict[str, Any]]] = {}
     for row in rows:
         entry = {"item": row.item_name}
+        if hasattr(row, "item_id"):
+            entry["item_id"] = row.item_id
         for column in ("value_end", "value_begin", "value_current", "value_prior"):
             value = getattr(row, column, None)
             entry[column] = None if value is None else str(value)

@@ -1,4 +1,4 @@
-"""Task 5 (M1.3) tests: D001-D054 decision integrity (plan Task 5 Step 1)."""
+"""验证决策编号连续、索引完整，并维护历史原件不变。"""
 
 from __future__ import annotations
 
@@ -14,10 +14,10 @@ INDEX = REPO / "docs/10_governance/DECISION_INDEX.md"
 
 
 class DecisionIntegrityTests(unittest.TestCase):
-    def test_d001_through_d054_present_exactly_once(self) -> None:
+    def test_all_decisions_present_exactly_once(self) -> None:
         files = sorted(DECISIONS_DIR.glob("D*.md")) if DECISIONS_DIR.exists() else []
         ids = [f.name.split("--")[0] for f in files]
-        expected = [f"D{n:03d}" for n in range(1, 55)]
+        expected = [f"D{n:03d}" for n in range(1, len(files) + 1)]
         self.assertEqual(ids, expected, f"missing={set(expected)-set(ids)} extra={set(ids)-set(expected)}")
 
     def test_each_decision_has_compliant_frontmatter(self) -> None:
@@ -38,7 +38,8 @@ class DecisionIntegrityTests(unittest.TestCase):
         if not INDEX.exists():
             self.skipTest("index not yet built")
         text = INDEX.read_text(encoding="utf-8")
-        for n in range(1, 55):
+        files = sorted(DECISIONS_DIR.glob("D*.md")) if DECISIONS_DIR.exists() else []
+        for n in range(1, len(files) + 1):
             self.assertIn(f"D{n:03d}", text)
 
     def test_superseded_relations_resolve(self) -> None:

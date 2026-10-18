@@ -43,7 +43,7 @@ def test_management_watch_response_accepts_metric_deep_link() -> None:
         {
             "code": "leverage_rising",
             "metric_code": "debt_asset_ratio",
-            "message": "资产负债率较上期上升至 0.9100",
+            "message": "资产负债率较上期上升至 91.00%",
             "direction": "warning",
         }
     )
