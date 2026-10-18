@@ -2,7 +2,7 @@
 doc_id: FLOW-VER-CFO-MODULE-CHART-ADAPTER-20261018
 title: CFO 模块图表适配与追溯验收
 doc_type: verification
-status: current
+status: draft
 version: 1.0
 created_at: 2026-10-18
 updated_at: 2026-10-18
