@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 5.64
+version: 5.65
 created_at: 2026-09-12
 updated_at: 2026-10-18
 owner: FLOW
@@ -17,7 +17,7 @@ superseded_by: null
 
 # 当前路线图（唯一主线）
 
-> **2026-10-18 用户确认原型方向并完成队首重规划**：当前交付定位调整为单机单用户验证原型；用户选择 SQLite 单文件 + 本地文件目录、移除 Redis/Celery/MinIO，并确认 A 主风格 + C 报告叙事。旧驾驶舱全视图工作包归档，其九页/25 图与桌面/手机实测作为回归基线。旧 CI 实际结果为：`39042517573`、`39041228479` cancelled；`39040652008`、`39038535194` failure；不得描述为 CI 全绿。新的唯一队首为单机原型架构简化与全视图视觉升级，正式设计见[规格](../superpowers/specs/2026-10-18-single-machine-visual-prototype-design.md)与[D055](../10_governance/decisions/D055--单机单用户验证原型.md)。README 视觉基准说明提交 `d51af7ad` 的准确 SHA 主 CI run `39087270646` 曾因 data-contract 与 intake-e2e 到达 40/45 分钟 job 上限而 cancelled；同一代码的后续文档状态提交 `a331f03075c95f3b371b5a0ebd0fd91cac9dfeae` 对应 run `39090417203` 全部 job success，取消未复现。无需改动超时或缩减覆盖。第 1 阶段现状/影响审计已完成，清单与风险见[审计报告](../60_delivery/verification/2026-10-18--single-machine-architecture-dependency-audit-v1.md)；当前唯一子步骤转入第 2 阶段隔离 SQLite 与本地内容存储验证。README 截图工作流已按用户要求在 GitHub 暂停。完成整个工作包后再恢复知识刷新 K2。
+> **2026-10-18 用户确认原型方向并完成队首重规划**：当前交付定位调整为单机单用户验证原型；用户选择 SQLite 单文件 + 本地文件目录、移除 Redis/Celery/MinIO，并确认 A 主风格 + C 报告叙事。旧驾驶舱全视图工作包归档，其九页/25 图与桌面/手机实测作为回归基线。旧 CI 实际结果为：`39042517573`、`39041228479` cancelled；`39040652008`、`39038535194` failure；不得描述为 CI 全绿。新的唯一队首为单机原型架构简化与全视图视觉升级，正式设计见[规格](../superpowers/specs/2026-10-18-single-machine-visual-prototype-design.md)与[D055](../10_governance/decisions/D055--单机单用户验证原型.md)。README 视觉基准说明提交 `d51af7ad` 的准确 SHA 主 CI run `39087270646` 曾因 data-contract 与 intake-e2e 到达 40/45 分钟 job 上限而 cancelled；同一代码的后续文档状态提交 `a331f03075c95f3b371b5a0ebd0fd91cac9dfeae` 对应 run `39090417203` 全部 job success，取消未复现。无需改动超时或缩减覆盖。第 1 阶段现状/影响审计已完成，清单与风险见[审计报告](../60_delivery/verification/2026-10-18--single-machine-architecture-dependency-audit-v1.md)；当前唯一子步骤转入第 2 阶段隔离 SQLite 与本地内容存储验证。README 视觉素材采集/自动生成工作流继续暂停；按用户本轮明确要求，本轮先行同步 README，只用仓库已有概念板与截图，不触发截图工作流。README 完成后恢复第 2 阶段，单机架构与全视图工作包全部完成后再恢复知识刷新 K2。
 
 > **2026-10-17 用户调整队列并启动 CFO 全视图实施**：用户要求立即按驾驶舱计划实施，故该项调整为唯一队首；知识刷新 K2 顺延。阶段 1–4 已完成，阶段 2 准确 SHA `09ba5722ec3e8075a3483223df4c81fe5cdaa9fa` 的 CI run `39035163288` 18/18 job 成功；阶段 3 契约代码 SHA `df5c338bc5c1d7330be2391189cdfb828099a962` 对应 CI run `39038535194` 仍在执行，其中已失败的静态 Web 与 smoke 构建发现模块图表测试 fixture 缺少契约新增的必填字段，当前分支已补齐且本地 typecheck/build 验证通过。阶段 4 页面图表、来源披露、财报行深链及九视图桌面/窄屏截图已完成；阶段 5 的浏览器 API/表格全量逐项核对、独立复核、M1、契约和相关测试已通过，当前待本轮准确 SHA 的 GitHub CI。实际截图和隔离账套证据见[浏览器验证报告](../60_delivery/verification/2026-10-17--cockpit-all-views-visual-browser-verification-v1.md)。驾驶舱工作包完成后恢复知识刷新 K2。此前 `a333b31a`、`fcfc55a4`、`c8f14b79` 的 CI 失败与修复过程保留为历史证据。
 
