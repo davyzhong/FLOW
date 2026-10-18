@@ -20,19 +20,29 @@ function asNumber(raw: unknown): number | null {
 }
 
 function metricCodeFor(name: string): string {
-  if (/订单|包裹|件量|客户数|件数/.test(name)) return "orders";
-  if (/资产负债率/.test(name)) return "debt_asset_ratio";
-  if (/流动比率/.test(name)) return "current_ratio";
-  if (/速动比率/.test(name)) return "quick_ratio";
-  if (/现金比率/.test(name)) return "cash_ratio";
-  if (/权益乘数/.test(name)) return "equity_multiplier";
-  if (/OCF\/流动负债/.test(name)) return "ocf_current_liab_ratio";
-  if (/利息保障倍数/.test(name)) return "interest_coverage";
-  if (/净现比/.test(name)) return "net_cash_ratio";
-  if (/毛利率/.test(name)) return "gross_margin";
-  if (/净利率/.test(name)) return "net_margin";
-  if (/周转率/.test(name)) return "inventory_turnover";
-  if (/DSO|DIO|DPO|CCC|天数/.test(name)) return "dso_days";
+  const knownMetrics: Record<string, string> = {
+    CCC: "ccc_days",
+    DIO: "dio_days",
+    DPO: "dpo_days",
+    DSO: "dso_days",
+    "资产负债率": "debt_asset_ratio",
+    "流动比率": "current_ratio",
+    "速动比率": "quick_ratio",
+    "现金比率": "cash_ratio",
+    "权益乘数": "equity_multiplier",
+    "OCF/流动负债": "ocf_current_liab_ratio",
+    "总资产周转率": "total_asset_turnover",
+    "应收账款周转率": "ar_turnover",
+    "存货周转率": "inventory_turnover",
+    "应付账款周转率": "ap_turnover",
+    "毛利率": "gross_margin",
+    "净利率": "net_margin",
+    "净现比": "ocf_net_profit_ratio",
+    "利息保障倍数": "interest_coverage",
+    "净负债/EBITDA": "debt_ebitda",
+    "经营活动现金流量净额": "operating_cash_flow",
+  };
+  if (knownMetrics[name]) return knownMetrics[name];
   return "";
 }
 
@@ -56,7 +66,7 @@ function changeSummary(
   if (previous === 0) return current === 0 ? `较 ${priorPeriod} 持平` : `较 ${priorPeriod} 新增`;
   const difference = current - previous;
   const direction = difference > 0 ? "上升" : difference < 0 ? "下降" : "持平";
-  if (unit === "ratio" && !["current_ratio", "quick_ratio", "cash_ratio", "equity_multiplier", "ocf_current_liab_ratio", "interest_coverage", "net_cash_ratio"].includes(metricCode)) {
+  if (unit === "ratio" && !["current_ratio", "quick_ratio", "cash_ratio", "equity_multiplier", "ocf_current_liab_ratio", "interest_coverage", "debt_ebitda", "ocf_net_profit_ratio", "net_cash_ratio"].includes(metricCode)) {
     const points = formatFinancialValue(difference, { metricCode: "", unit: "ratio" });
     return `较 ${priorPeriod} ${direction} ${points} 个百分点`;
   }
@@ -88,6 +98,7 @@ export function CockpitModulePage({
   const kpis: Record<string, unknown>[] = data.kpis ?? [];
   const unavailable: Record<string, unknown>[] = data.unavailable ?? [];
   const reportId = data.report_ids?.[0];
+  const priorReportId = data.report_ids?.[1];
   const charts = Object.entries(data.charts ?? {});
 
   return (
@@ -104,6 +115,15 @@ export function CockpitModulePage({
             const unit = String(kpi.unit ?? data.unit);
             const metricCode = metricCodeFor(name);
             const available = kpi.status === "available";
+            const currentValue = asNumber(kpi.value);
+            const priorValue = asNumber(kpi.prior_value);
+            const direction = currentValue === null || priorValue === null
+              ? "unavailable"
+              : currentValue > priorValue
+                ? "up"
+                : currentValue < priorValue
+                  ? "down"
+                  : "flat";
             return (
               <li key={name} className="module-kpi-card" data-testid="module-kpi" data-status={kpi.status}>
                 <span className="kpi-name">{name}</span>
@@ -113,16 +133,20 @@ export function CockpitModulePage({
                   </strong>
                 ) : <strong data-status="unavailable">{String(kpi.unavailable_code ?? "not_disclosed")}</strong>}
                 {kpi.prior_value !== null && kpi.prior_value !== undefined ? (
-                  <span className="kpi-prior">前期 {formatFinancialValue(kpi.prior_value as string | number, { metricCode, unit })}</span>
+                  <span className="kpi-prior">前期 {data.prior_period} {formatFinancialValue(kpi.prior_value as string | number, { metricCode, unit })}</span>
                 ) : null}
                 {available && kpi.prior_value !== null && kpi.prior_value !== undefined ? (
-                  <span className="kpi-change" data-direction={Number(kpi.value) >= Number(kpi.prior_value) ? "up" : "down"}>
+                  <span className="kpi-change" data-direction={direction}>
                     {changeSummary(kpi.value, kpi.prior_value, unit, metricCode, data.prior_period)}
                   </span>
                 ) : null}
                 {typeof kpi.rate === "string" ? <span className="kpi-caliber">费用占收入 {formatFinancialValue(kpi.rate, { unit: "ratio" })}</span> : null}
                 {kpi.caliber_note ? <span className="kpi-caliber">{String(kpi.caliber_note)}</span> : null}
-                {reportId ? <Link href={`/statements?report=${encodeURIComponent(reportId)}`} className="module-source-link">查看来源财报</Link> : null}
+                {metricCode ? <Link href={metricFocusHref(metricCode)} className="module-source-link">查看指标口径</Link> : null}
+                {priorReportId && kpi.prior_value !== null && kpi.prior_value !== undefined ? (
+                  <Link href={`/statements?report=${encodeURIComponent(priorReportId)}`} className="module-source-link">查看 {data.prior_period} 来源财报</Link>
+                ) : null}
+                {reportId ? <Link href={`/statements?report=${encodeURIComponent(reportId)}`} className="module-source-link">查看 {data.period} 来源财报</Link> : null}
               </li>
             );
           })}

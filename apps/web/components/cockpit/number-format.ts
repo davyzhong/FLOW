@@ -34,6 +34,8 @@ const MULTIPLE_METRICS = new Set([
   "equity_multiplier",
   "total_asset_turnover",
   "interest_coverage",
+  "debt_ebitda",
+  "ocf_net_profit_ratio",
   "ocf_current_liab_ratio",
   "ocf_to_net_profit",
   "net_cash_ratio",

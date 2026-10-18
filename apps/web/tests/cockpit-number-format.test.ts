@@ -27,6 +27,8 @@ describe("驾驶舱数字格式", () => {
     expect(formatFinancialValue("1.156", { metricCode: "current_ratio", unit: "倍" })).toBe("1.16 倍");
     expect(formatFinancialValue("1.156", { metricCode: "current_ratio", unit: "ratio" })).toBe("1.16 倍");
     expect(formatFinancialValue("1.156", { metricCode: "equity_multiplier", unit: "ratio" })).toBe("1.16 倍");
+    expect(formatFinancialValue("0.8", { metricCode: "ocf_net_profit_ratio", unit: "ratio" })).toBe("0.80 倍");
+    expect(formatFinancialValue("4.2", { metricCode: "debt_ebitda", unit: "ratio" })).toBe("4.20 倍");
     expect(formatFinancialValue("34.5000", { metricCode: "dso_days", unit: "day" })).toBe("34.5 天");
   });
 

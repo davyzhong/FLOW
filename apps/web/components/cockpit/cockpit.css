@@ -681,8 +681,6 @@
   line-height: 1.45;
   font-variant-numeric: tabular-nums;
 }
-.module-kpi-card .kpi-change[data-direction="up"] { color: #047857; }
-.module-kpi-card .kpi-change[data-direction="down"] { color: #b91c1c; }
 .module-source-link {
   margin-top: auto;
   color: #2563eb;
