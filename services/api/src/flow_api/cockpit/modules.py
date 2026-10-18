@@ -354,7 +354,7 @@ def build_balance_sheet_module(ctx: ModuleFactContext) -> dict[str, Any]:
     charts: dict[str, Any] = {
         "asset_structure": {
             "title": "资产结构（流动/非流动）",
-            "type": "treemap",
+            "type": "bar",
             "unit": "百万元",
             "periods": [ctx.prior_period_label, ctx.period_label],
             "series": {

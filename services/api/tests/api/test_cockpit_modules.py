@@ -183,6 +183,7 @@ def test_balance_sheet_module_kpis_from_disclosed_facts(api_client: TestClient) 
     assert by_name["资产负债率"]["status"] == "available"
     # 结构图两期齐备
     chart = body["charts"]["asset_structure"]
+    assert chart["type"] == "bar", "两桶资产的跨期比较应使用并列柱图，而非面积 treemap"
     assert chart["periods"] == ["FY2022", "FY2023"]
     assert chart["analysis_question"]
     assert chart["fact_classes"] == ["reported"]

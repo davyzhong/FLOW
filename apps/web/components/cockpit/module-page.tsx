@@ -7,6 +7,7 @@ import Link from "next/link";
 import { flowApi } from "../../lib/api/client";
 import type { CockpitModuleResponse } from "../../lib/api/client";
 import { useApiQuery } from "../../lib/api/use-api-query";
+import { metricFocusHref } from "../../lib/deep-links";
 import { ChartBox } from "./charts/echarts-base";
 import "./cockpit.css";
 import { buildModuleChartOption, normalizeModuleSeries } from "./charts/module-options";
@@ -134,6 +135,10 @@ export function CockpitModulePage({
           const option = buildModuleChartOption(chart, data.unit);
           const seriesEntries = Object.entries(chart.series ?? {});
           const periods = chart.periods ?? [];
+          const tablePeriods = periods.length === 0 && seriesEntries.length > 0
+            && seriesEntries.every(([, raw]) => !Array.isArray(raw))
+            ? [data.period]
+            : periods;
           const seriesUnit = chart.unit ?? data.unit;
           const displayUnit =
             seriesUnit === "ratio" ? "%" : seriesUnit === "day" ? "天" : seriesUnit;
@@ -174,7 +179,7 @@ export function CockpitModulePage({
               ) : <p className="chart-empty" data-testid={`cockpit-module-chart-${key}-empty`}>{chart.empty_reason || "该图表无足够可用事实，未补零或生成趋势。"}</p>}
               {seriesEntries.length ? (
                 <div className="module-table-scroll"><table className="module-chart-table">
-                  <thead><tr><th>指标</th>{periods.map((period) => <th key={period}>{period}</th>)}</tr></thead>
+                  <thead><tr><th>指标</th>{tablePeriods.map((period) => <th key={period}>{period}</th>)}</tr></thead>
                   <tbody>{seriesEntries.map(([name, raw]) => {
                     const values = normalizeModuleSeries(raw);
                     const unit = chart.type === "line" && /率|margin/i.test(name) ? "ratio" : seriesUnit;
@@ -201,7 +206,9 @@ export function CockpitModulePage({
                 <details className="module-chart-sources">
                   <summary>查看图表来源与指标口径</summary>
                   <dl>
-                    <div><dt>指标代码</dt><dd>{chart.metric_codes?.join("、") || "—"}</dd></div>
+                    <div><dt>指标代码</dt><dd>{chart.metric_codes?.length ? chart.metric_codes.map((code, index) => (
+                      <span key={code}>{index > 0 ? "、" : ""}<Link href={metricFocusHref(code)}>{code}</Link></span>
+                    )) : "—"}</dd></div>
                     <div><dt>来源快照</dt><dd>{chart.snapshot_id || "未关联财报冻结快照"}</dd></div>
                     <div><dt>来源标识</dt><dd>{chart.source_ids?.join("、") || "—"}</dd></div>
                   </dl>

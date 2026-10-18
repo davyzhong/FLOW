@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目交接文档
 doc_type: navigation
 status: current
-version: 8.7
+version: 8.8
 created_at: 2026-09-12
 updated_at: 2026-10-18
 owner: FLOW
@@ -100,7 +100,7 @@ applies_to: repository
 
 ### 当前下一步：视图实现（工作包 7a 子步 4.4）
 
-第 3 阶段已正式关闭：最终状态 SHA `20a511f66e4bfe65ab02edc091c7b49e2cbcbe67` 的 CI run `39125304357` 18/18 success。阶段 4 子步 4.1 已按工作包 §4.1 完成静态核查并生成[覆盖矩阵](docs/60_delivery/verification/2026-10-18--cfo-reference-module-data-coverage-v1.md)：10 模块逐项登记路由/API、指标字典、来源类别、期间粒度、图表交互和缺失字段，并发现 `/` 与 `/cockpit` 的经营分析入口割裂。准确 SHA 的 CI `data-contract` 两次触及 40 分钟上限取消，其余 jobs 成功；隔离 Compose/数据库执行同一完整脚本后 133+3 测试、Ruff、mypy 213 文件、摘要检查均通过，M1/M6 与链接检查通过。详见[4.1 验收记录](docs/60_delivery/verification/2026-10-18--cfo-reference-matrix-ci-and-isolated-validation-v1.md)。4.2 已产出[14 视图数据与图表可用性盘点](docs/60_delivery/verification/2026-10-18--cfo-chart-and-data-availability-v1.md)：大麦演示包账龄/预算等数据存在但页面未消费，公开年度与 synthetic 月度必须分层，订单数分配明细存在小数；无数据支持的 13 周现金预测、风险矩阵和合并抵销继续视为受限。4.3 已完成并通过 M1/M6，组件与逐页方案见[设计记录](docs/60_delivery/verification/2026-10-18--cfo-chart-component-and-interaction-design-v1.md)。当前 4.4 按该方案开始接通 ECharts builders、同值数据表、缺数和来源提示；严守公开/演示隔离，不新增依赖。杜邦页和数据中心不重复建设；账龄与预算可用的是明确标注的合成演示事实，公开月度数据仍缺失；13 周现金预测/风险矩阵/合并抵销继续受数据限制，不把文章摘要或演示数字写成公开事实。当前 4.3 逐页映射 ECharts builders、事实类别切换、深链、移动端/URL 状态，不新增依赖。本轮未使用独立 Agent，不将作者自查表述为独立复核。
+第 3 阶段已正式关闭：最终状态 SHA `20a511f66e4bfe65ab02edc091c7b49e2cbcbe67` 的 CI run `39125304357` 18/18 success。阶段 4 子步 4.1 已按工作包 §4.1 完成静态核查并生成[覆盖矩阵](docs/60_delivery/verification/2026-10-18--cfo-reference-module-data-coverage-v1.md)：10 模块逐项登记路由/API、指标字典、来源类别、期间粒度、图表交互和缺失字段，并发现 `/` 与 `/cockpit` 的经营分析入口割裂。准确 SHA 的 CI `data-contract` 两次触及 40 分钟上限取消，其余 jobs 成功；隔离 Compose/数据库执行同一完整脚本后 133+3 测试、Ruff、mypy 213 文件、摘要检查均通过，M1/M6 与链接检查通过。详见[4.1 验收记录](docs/60_delivery/verification/2026-10-18--cfo-reference-matrix-ci-and-isolated-validation-v1.md)。4.2 已产出[14 视图数据与图表可用性盘点](docs/60_delivery/verification/2026-10-18--cfo-chart-and-data-availability-v1.md)：大麦演示包账龄/预算等数据存在但页面未消费，公开年度与 synthetic 月度必须分层，订单数分配明细存在小数；无数据支持的 13 周现金预测、风险矩阵和合并抵销继续视为受限。4.3 已完成并通过 M1/M6，组件与逐页方案见[设计记录](docs/60_delivery/verification/2026-10-18--cfo-chart-component-and-interaction-design-v1.md)。当前 4.4 正在执行，已接通单期分类柱图至排名横条 builder，把两期资产结构从 treemap 改为并列柱图，修复标量系列值表缺少当前期间列的问题，并将图表指标代码链接至指标库定义。前端全量单测 189/189、typecheck、生产 build 通过，API cockpit route 9/9 通过；M1 通过。Cockpit领域单测仍有一项旧 fixture 缺少 `objective.v3` schema_version，未涉及本次改动，单独运行 API route 套件均通过。严守公开/演示隔离，不新增依赖。杜邦页和数据中心不重复建设；账龄与预算可用的是明确标注的合成演示事实，公开月度数据仍缺失；13 周现金预测/风险矩阵/合并抵销继续受数据限制，不把文章摘要或演示数字写成公开事实。当前 4.3 逐页映射 ECharts builders、事实类别切换、深链、移动端/URL 状态，不新增依赖。本轮未使用独立 Agent，不将作者自查表述为独立复核。
 
 ### 后续队列项：知识刷新 K0–K6
 

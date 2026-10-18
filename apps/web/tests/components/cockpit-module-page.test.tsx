@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 vi.mock("../../components/cockpit/charts/echarts-base", async (importOriginal) => ({
@@ -98,7 +98,12 @@ describe("CockpitModulePage", () => {
     expect(screen.getByText("分析问题：资产负债率在报告期之间如何变化？")).toBeVisible();
     expect(screen.getByText("计算指标")).toBeVisible();
     fireEvent.click(screen.getByText("查看图表来源与指标口径"));
-    expect(screen.getByText("bs.total_liab、bs.total_assets")).toBeVisible();
+    expect(screen.getByRole("link", { name: "bs.total_liab" })).toHaveAttribute(
+      "href", "/metric-library?focus=bs.total_liab",
+    );
+    expect(screen.getByRole("link", { name: "bs.total_assets" })).toHaveAttribute(
+      "href", "/metric-library?focus=bs.total_assets",
+    );
     expect(
       screen.getAllByRole("link").find(
         (link) => link.getAttribute("href") === "/statements?report=r1#stmt-row-合并资产负债表-负债合计",
@@ -128,7 +133,7 @@ describe("费用图表 API 形态", () => {
           title: "费用结构",
           type: "ratio_bar",
           unit: "百万元",
-          periods: ["FY2023"],
+          periods: [],
           series: { 销售: "1476.0000", 管理: "738.0000", 研发: "210.0000", 财务: "83.0000" },
           analysis_question: "当期各项期间费用如何构成？",
           fact_classes: ["reported"],
@@ -143,6 +148,7 @@ describe("费用图表 API 形态", () => {
 
     render(<CockpitModulePage moduleId="expenses" title="费用分析" />);
     expect(await screen.findByTestId("cockpit-module-chart-expense_structure")).toBeVisible();
+    expect(within(screen.getByRole("table")).getByRole("columnheader", { name: "FY2023" })).toBeVisible();
     expect(screen.getAllByText("1,476.00 百万元").length).toBeGreaterThan(0);
   });
 });

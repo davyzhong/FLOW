@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 5.74
+version: 5.75
 created_at: 2026-09-12
 updated_at: 2026-10-18
 owner: FLOW
@@ -18,6 +18,7 @@ superseded_by: null
 # 当前路线图（唯一主线）
 
 > **2026-10-18 用户确认原型方向并完成队首重规划**：当前交付定位调整为单机单用户验证原型；用户选择 SQLite 单文件 + 本地文件目录、移除 Redis/Celery/MinIO，并确认 A 主风格 + C 报告叙事。旧驾驶舱全视图工作包归档，其九页/25 图与桌面/手机实测作为回归基线。旧 CI 实际结果为：`39042517573`、`39041228479` cancelled；`39040652008`、`39038535194` failure；不得描述为 CI 全绿。新的唯一队首为单机原型架构简化与全视图视觉升级，正式设计见[规格](../superpowers/specs/2026-10-18-single-machine-visual-prototype-design.md)与[D055](../10_governance/decisions/D055--单机单用户验证原型.md)。README 视觉基准说明提交 `d51af7ad` 的准确 SHA 主 CI run `39087270646` 曾因 data-contract 与 intake-e2e 到达 40/45 分钟 job 上限而 cancelled；同一代码的后续文档状态提交 `a331f03075c95f3b371b5a0ebd0fd91cac9dfeae` 对应 run `39090417203` 全部 job success，取消未复现。未改 CI 超时或缩减覆盖。第 1 阶段现状/影响审计已完成，清单与风险见[审计报告](../60_delivery/verification/2026-10-18--single-machine-architecture-dependency-audit-v1.md)。README 视觉素材编排已完成，只用仓库已有概念板与截图；截图素材采集/自动生成工作流继续暂停，未触发。D055 第 2 阶段 SQLite/本地内容存储已完成：隔离全链和兼容性验证通过；残留 PostgreSQL 专用 `.astext` 测试查询已改为跨库 `.as_string()`。准确代码 SHA `b0e1eb787592ff84bc4c19873a1e61cad1f9f3e6` 的 GitHub Actions run `39099573268` 为 18/18 jobs success，第 2 阶段正式关闭。第 3 阶段现已实现并本地验收：同步处理、本地内容寻址文件存储、单一启动入口与 SQLite 默认数据目录完成；隔离 Damai 账套重置回归 2/2、SQLite schema/jobs/object-store 16/16、设置/重置 PostgreSQL 兼容回归 2/2、Ruff/mypy、文档 M1 均通过。`make flow-bootstrap` 生产依赖裁剪增加 `CI=true` 以支持无 TTY 环境，完整引导成功；临时目录初始化成功，Web 与 API health 均 HTTP 200。详细证据见[第 3 阶段验收记录](../60_delivery/verification/2026-10-18--single-machine-runtime-convergence-v1.md)。本阶段仍待本提交准确 SHA 的 GitHub CI；通过后按序进入第 4 阶段全视图 A+C 视觉与数据补全。整个工作包完成后再恢复知识刷新 K2。
+> **2026-10-18 第 4 阶段 4.4 实施进度**：接通单期 `bar` 分类数据至已有排名横条 builder；资产结构两期比较由双桶 treemap 改为并列柱图；无期间字段的标量图表值表补充当前财年列；图表指标代码可直达指标库定义。未扩展 API 合同或新增依赖。验收：前端 189/189 单测、typecheck、生产构建通过；API cockpit route 9/9 通过；文档 M1 通过。模块领域单测 `test_load_fact_context_retains_raw_cashflow_statement_rows` 仍有既存 fixture 缺少 `objective.v3` schema_version 的失败，未修改该测试或数据装载逻辑。当前 4.4 仍在执行，后续需检查逐视图已有数据形态、来源/缺数状态和可访问表格，再交独立审查与完整验证。
 > **2026-10-18 第 4 阶段子步 4.1–4.3 已结案，当前执行 4.4**：准确 SHA `d8f2ae8d617914fcd05cfd21d8484154b1411a65` 的 GitHub Actions run `39128676851` 中，除 `data-contract` 外所有 jobs 成功；该 job 初跑及一次重跑均在约 40 分钟上限被取消，没有测试失败结论。未继续重跑、未修改 CI 或降低覆盖。隔离 Compose 项目与独立库执行完整 `scripts/test_data_contract.sh` 成功：133 项夹具/契约测试、3 项数据库往返测试、Ruff、213 源文件 mypy 与摘要检查全通过。M1/M6、文档链接和 diff 检查通过。证据见[验收记录](../60_delivery/verification/2026-10-18--cfo-reference-matrix-ci-and-isolated-validation-v1.md)与[覆盖矩阵](../60_delivery/verification/2026-10-18--cfo-reference-module-data-coverage-v1.md)。据完整隔离替代验收关闭 4.1，保留远端 40 分钟取消这一限制；唯一子步推进到 4.4：按已批准组件/交互方案开始实现视图。
 > **2026-10-18 第 3 阶段关闭，第 4 阶段启动**：第 3 阶段代码 SHA `a2ce20644217ece4bae0635794b41f2256cedba7` 首轮 CI 暴露初始化包 manifest 哈希未同步；修复 SQL 清单后，最终状态提交 SHA `20a511f66e4bfe65ab02edc091c7b49e2cbcbe67` 的 CI run `39125304357` 为 18/18 jobs success，第 3 阶段正式关闭。实现、隔离验收和首轮问题处置记录见[阶段 3 验收记录](../60_delivery/verification/2026-10-18--single-machine-runtime-convergence-v1.md)。第 4 阶段按已批准工作包开始，唯一当前子步为 4.1：将参考文章的 10 个模块映射到现有路由/API/指标字典/真实数据，核实页面和数据覆盖、粒度、来源及缺口；先产出可审阅的覆盖矩阵，再决定逐视图增强顺序，不先加页面或图表。截图采集与自动化工作流仍暂停。工作包完成后再恢复知识刷新 K2。
 >

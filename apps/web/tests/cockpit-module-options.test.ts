@@ -16,6 +16,17 @@ describe("模块图表数据适配", () => {
     ]);
   });
 
+  it("单期分类柱图复用排名横条构建器并保留分类值", () => {
+    const option = buildModuleChartOption({
+      type: "bar",
+      unit: "百万元",
+      series: { 经营活动: "120.5", 投资活动: "-30.2" },
+    }, "百万元") as { series: { type: string; data: { value: number }[] }[]; yAxis: { data: string[] } };
+    expect(option.series[0].type).toBe("bar");
+    expect(option.yAxis.data).toEqual(["投资活动", "经营活动"]);
+    expect(option.series[0].data.map((item) => item.value)).toEqual([-30.2, 120.5]);
+  });
+
   it("比例趋势按百分比展示并保留期间空值", () => {
     const option = buildModuleChartOption({
       type: "line",

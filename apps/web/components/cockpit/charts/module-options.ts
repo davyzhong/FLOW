@@ -1,7 +1,7 @@
 import type { EChartsOption } from "echarts";
 
 import type { CockpitModuleChart } from "../../../lib/api/client";
-import { buildCombo, buildDonut, buildWaterfall } from "./builders";
+import { buildCombo, buildDonut, buildRankBar, buildWaterfall } from "./builders";
 import { formatFinancialValue } from "../number-format";
 
 export type ModuleChartData = Partial<CockpitModuleChart> & Pick<CockpitModuleChart, "type" | "unit">;
@@ -48,6 +48,18 @@ export function buildModuleChartOption(
       } },
       series: [{ type: "treemap", data, roam: false, breadcrumb: { show: false }, label: { show: true, formatter: "{b}" } }],
     };
+  }
+
+  if (chart.type === "bar" && entries.length > 0 && entries.every(([, value]) => !Array.isArray(value))) {
+    const rows = entries.flatMap(([name, raw]) => {
+      const value = asNumber(raw);
+      return value === null ? [] : [{
+        name,
+        value,
+        display: formatFinancialValue(value, { unit }),
+      }];
+    });
+    return buildRankBar(rows, unit) as EChartsOption | undefined;
   }
 
   if (chart.type === "ratio_bar" && entries.length > 0 && entries.every(([, value]) => !Array.isArray(value))) {
