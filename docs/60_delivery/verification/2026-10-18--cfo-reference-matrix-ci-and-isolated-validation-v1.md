@@ -7,6 +7,8 @@ version: 1.0
 created_at: 2026-10-18
 updated_at: 2026-10-18
 owner: FLOW
+commit_refs: [d8f2ae8d617914fcd05cfd21d8484154b1411a65]
+evidence_refs: [github-actions-run-39128676851, isolated-compose-test-data-contract, local-m1-m6-links]
 applies_to: verification
 ---
 
