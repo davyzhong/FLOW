@@ -111,7 +111,20 @@ applies_to: architecture
 4. **全视图视觉收敛：**沿用已验收九页当回归基线，扩充到其他路由；每个页面关联指标、真实来源、图形、交互和 unavailable 状态。
 5. **全链验收与独立复核：**准确代码 SHA 测试和 CI、文档门禁、备份恢复、桌面/手机及独立复核。
 
-此审计没有将迁移写成执行完成，也没有启动 SQLite 改造。架构实现依次进入第二阶段；具体验收细节仍以唯一工作包和路线图为准。
+初始只读审计没有将迁移写成执行完成；第 2 阶段已另行完成隔离实现和本地验证，待准确 SHA CI 后关闭。其余架构实现依次按第 3–5 阶段推进；具体验收细节仍以唯一工作包和路线图为准。
+
+## 第 2 阶段隔离验证补充（2026-10-18）
+
+原审计没有执行 SQLite 改造。随后按工作包第 2 阶段，在临时数据源完成以下验证；本段与初始只读审计边界分开记录：
+
+- ORM 使用 SQLAlchemy 通用 JSON/UUID 类型，并对 PostgreSQL 保留 JSONB/UUID 方言；SQLite 启用外键，金额使用 scale-aware `ExactNumeric`（SQLite 定标整数、PostgreSQL 原生 NUMERIC）。模型注册补齐 `copilot_interaction` 与 `objective_report_snapshot`，共 61 张表。
+- 新增 `alembic-sqlite.ini` 与 `migrations_sqlite/` 基线链。空 SQLite 文件迁移创建全 schema，重复 `upgrade head` 保持同一 revision；原有 PostgreSQL `0001`–`0032` 未改写。
+- 隔离 SQLite 中导入 FY2022/FY2023 大麦公开财报、归一化并冻结客观报告；同时保存指标快照和来源文件。SQLite 数据库与 SHA 内容目录备份恢复至新目录后，报告与快照哈希、来源文件字节、FactTrace 及驾驶舱总资产 `71850.9310` 一致。
+- SQLite 本地内容存储保持项目 SHA-256 不可变契约：幂等、并发同内容写入、键冲突、缺失、坏哈希和路径穿越均有隔离测试；备份包有逐文件 SHA-256 清单，恢复拒绝覆盖已有目标。
+- SQLite CFO 模块 API 5/5，SQLite 基础/迁移/财务全链测试 16/16；隔离 PostgreSQL 16 完整迁移至 `0032` 后同模块 API 5/5。金额读回与 SQL `SUM` 在 SQLite/PostgreSQL 大额 Decimal 样本零差异。Ruff、mypy 与文档 M1/M6 通过。
+- 过程发现并修正 `RoleBinding` ORM 检查约束遗漏 `cfo`（PostgreSQL `0032` 已允许）以及 SQLite 企业范围 UUID 查询返回字符串导致的类型不一致。
+
+这些验证只使用内存库、`/tmp` 文件数据库/对象目录和一次性 PostgreSQL 16 容器，未连接常驻开发库。当前代码提交后的准确 SHA CI 尚待验证；阶段状态以 [CURRENT_ROADMAP](../../50_plans/CURRENT_ROADMAP.md) 与 [工作包](../../50_plans/work_items/FLOW--single-machine-visual-prototype.md) 为准。
 
 ## 已知限制
 

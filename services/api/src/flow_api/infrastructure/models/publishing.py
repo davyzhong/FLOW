@@ -13,12 +13,10 @@ from sqlalchemy import (
     UniqueConstraint,
     text,
 )
-from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from flow_api.infrastructure.models.analytics import MetricSnapshot
-from flow_api.infrastructure.models.base import Base
+from flow_api.infrastructure.models.base import JSON_TYPE, UUID_TYPE, Base, json_type
 from flow_api.infrastructure.models.intake import IdentityTimestampMixin, StoredObject
 
 
@@ -30,17 +28,17 @@ class ReportSnapshot(IdentityTimestampMixin, Base):
     )
 
     metric_snapshot_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("metric_snapshot.id", ondelete="RESTRICT"), nullable=False
+        UUID_TYPE, ForeignKey("metric_snapshot.id", ondelete="RESTRICT"), nullable=False
     )
     version: Mapped[int] = mapped_column(Integer, nullable=False)
     title: Mapped[str] = mapped_column(String(512), nullable=False)
     template_code: Mapped[str] = mapped_column(String(128), nullable=False)
     presentation_config: Mapped[dict[str, Any]] = mapped_column(
-        JSONB, nullable=False, default=dict, server_default=text("'{}'::jsonb")
+        JSON_TYPE, nullable=False, default=dict, server_default=text("'{}'")
     )
 
     frozen_view: Mapped[dict[str, Any] | None] = mapped_column(
-        JSONB(none_as_null=True), nullable=True
+        json_type(none_as_null=True), nullable=True
     )
 
     metric_snapshot: Mapped[MetricSnapshot] = relationship()
@@ -66,13 +64,13 @@ class ReportSnapshotItem(IdentityTimestampMixin, Base):
     )
 
     report_snapshot_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("report_snapshot.id", ondelete="CASCADE"), nullable=False
+        UUID_TYPE, ForeignKey("report_snapshot.id", ondelete="CASCADE"), nullable=False
     )
     position: Mapped[int] = mapped_column(Integer, nullable=False)
     object_type: Mapped[str] = mapped_column(String(32), nullable=False)
     object_id: Mapped[str] = mapped_column(String(128), nullable=False)
     presentation_config: Mapped[dict[str, Any]] = mapped_column(
-        JSONB, nullable=False, default=dict, server_default=text("'{}'::jsonb")
+        JSON_TYPE, nullable=False, default=dict, server_default=text("'{}'")
     )
 
     report_snapshot: Mapped[ReportSnapshot] = relationship(back_populates="items")
@@ -103,7 +101,8 @@ class PublicationAttempt(IdentityTimestampMixin, Base):
             name="ck_publication_attempt_status",
         ),
         CheckConstraint(
-            "num_nonnulls(report_snapshot_id, objective_report_snapshot_id) = 1",
+            "(report_snapshot_id IS NOT NULL AND objective_report_snapshot_id IS NULL)"
+            " OR (report_snapshot_id IS NULL AND objective_report_snapshot_id IS NOT NULL)",
             name="ck_publication_attempt_single_parent",
         ),
         CheckConstraint(
@@ -113,10 +112,10 @@ class PublicationAttempt(IdentityTimestampMixin, Base):
     )
 
     report_snapshot_id: Mapped[UUID | None] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("report_snapshot.id", ondelete="CASCADE"), nullable=True
+        UUID_TYPE, ForeignKey("report_snapshot.id", ondelete="CASCADE"), nullable=True
     )
     objective_report_snapshot_id: Mapped[UUID | None] = mapped_column(
-        PG_UUID(as_uuid=True),
+        UUID_TYPE,
         ForeignKey("objective_report_snapshot.id", ondelete="CASCADE"),
         nullable=True,
     )
@@ -124,11 +123,11 @@ class PublicationAttempt(IdentityTimestampMixin, Base):
     format: Mapped[str] = mapped_column(String(16), nullable=False)
     status: Mapped[str] = mapped_column(String(32), nullable=False)
     stored_object_id: Mapped[UUID | None] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("stored_object.id", ondelete="RESTRICT")
+        UUID_TYPE, ForeignKey("stored_object.id", ondelete="RESTRICT")
     )
     error_message: Mapped[str | None] = mapped_column(Text)
     # --- S01 §7 四阶段列（0028；旧行保持 NULL） ---
-    publication_id: Mapped[UUID | None] = mapped_column(PG_UUID(as_uuid=True), index=True)
+    publication_id: Mapped[UUID | None] = mapped_column(UUID_TYPE, index=True)
     idempotency_key: Mapped[str | None] = mapped_column(String(128))
     source_payload_sha256: Mapped[str | None] = mapped_column(String(64))
     object_key: Mapped[str | None] = mapped_column(String(1024))

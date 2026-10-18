@@ -3,7 +3,9 @@
 # 反向 from-import 会在部分初始化时构成循环导入。
 import flow_api.enterprise.models as _enterprise_models  # noqa: E402,F401
 import flow_api.infrastructure.models.cockpit as _cockpit_models  # noqa: E402,F401
+import flow_api.infrastructure.models.copilot as _copilot_models  # noqa: E402,F401
 import flow_api.infrastructure.models.enterprise_directory as _enterprise_directory_models  # noqa: E402,F401
+import flow_api.publishing.objective_freeze as _objective_freeze_models  # noqa: E402,F401
 import flow_api.security.models as _security_models  # noqa: E402,F401
 from flow_api.infrastructure.models.analytics import (
     AnalysisDriver,

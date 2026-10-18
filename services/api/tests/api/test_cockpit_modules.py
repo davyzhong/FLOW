@@ -26,6 +26,7 @@ from flow_api.infrastructure.models.analytics import Finding, MetricSnapshot, Pe
 from flow_api.infrastructure.models.cockpit import ActionItem
 from flow_api.infrastructure.models.intake import AnalysisBatch, ImportVersion
 from flow_api.infrastructure.models.statement import StatementReport
+from flow_api.security.models import RoleBinding
 from flow_api.settings import get_settings
 
 CFO = "cockpit-cfo-a"
@@ -51,13 +52,14 @@ def db_session() -> Iterator[Session]:
     session.execute(
         text("DELETE FROM role_binding WHERE actor_id = :actor"), {"actor": CFO}
     )
-    session.execute(
-        text(
-            "INSERT INTO role_binding (actor_id, role, enterprise_id,"
-            " is_service_account, active)"
-            " VALUES (:actor, 'cfo', :enterprise, false, true)"
-        ),
-        {"actor": CFO, "enterprise": uuid.UUID(_ENTERPRISE)},
+    session.add(
+        RoleBinding(
+            actor_id=CFO,
+            role="cfo",
+            enterprise_id=uuid.UUID(_ENTERPRISE),
+            is_service_account=False,
+            active=True,
+        )
     )
     session.commit()
     yield session

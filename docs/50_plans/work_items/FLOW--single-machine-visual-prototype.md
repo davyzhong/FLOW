@@ -19,7 +19,7 @@ confidentiality: project-internal
 
 # 单机原型架构简化与全视图视觉升级
 
-> **当前状态：第 1 阶段审计完成，队首转入第 2 阶段隔离 SQLite 与本地内容存储验证。** 架构盘点与调用点矩阵见[审计报告](../../60_delivery/verification/2026-10-18--single-machine-architecture-dependency-audit-v1.md)。起始 CI 基线：准确 SHA `a331f03075c95f3b371b5a0ebd0fd91cac9dfeae` 的 run `39090417203` 全部 job success。唯一状态/顺序见 [CURRENT_ROADMAP](../CURRENT_ROADMAP.md)。本工作包替代旧全视图驾驶舱任务的剩余队列；既有 9 页、25 个画布、18 组路由/视口浏览器验收作为回归基线保留，不沿用取消/失败的 CI 运行作成功证据。
+> **当前状态：第 1 阶段审计与第 2 阶段隔离验证的实现及本地检查已完成，待本轮准确 SHA 的 CI 验收后进入第 3 阶段。** 架构盘点与调用点矩阵见[审计报告](../../60_delivery/verification/2026-10-18--single-machine-architecture-dependency-audit-v1.md)。起始 CI 基线：准确 SHA `a331f03075c95f3b371b5a0ebd0fd91cac9dfeae` 的 run `39090417203` 全部 job success。唯一状态/顺序见 [CURRENT_ROADMAP](../CURRENT_ROADMAP.md)。本工作包替代旧全视图驾驶舱任务的剩余队列；既有 9 页、25 个画布、18 组路由/视口浏览器验收作为回归基线保留，不沿用取消/失败的 CI 运行作成功证据。
 
 ## 目标
 
@@ -46,13 +46,15 @@ confidentiality: project-internal
 
 **通过条件：** 审计有机器可查的页面/功能/依赖清单；每个拟移除组件都有完整替代路径和测试点；决策完整性测试覆盖当前索引全部编号；旧全视图测试失败/取消与本轮新 CI 分开记录。
 
-### 2. SQLite 与本地内容存储隔离验证
+### 2. SQLite 与本地内容存储隔离验证（实现完成，待准确 SHA CI）
 
 - 在一次性隔离 SQLite 数据库上验证模型建表/升级、UUID 与 JSON、外键、Decimal 精确读写、事务回滚和并发单用户行为。
 - 以最小的真实样例验证公开报告装载、指标快照、财报/FactTrace 查询、驾驶舱聚合、报告冻结与恢复。
 - 替换对象存储契约为本地内容寻址文件目录，覆盖同一 SHA 幂等、字节冲突、缺文件、下载和完整性错误。
 - 构造 SQLite + 文件目录备份包，恢复到新隔离目录并重验来源/报告/驾驶舱结果。
 - 先完成当前 ORM schema 对账和可重复的 SQLite 初始化/升级方案，再决定历史 32 个 PostgreSQL revisions 的归档方式；不同时维护两套运行 schema。
+
+**本地执行证据（2026-10-18）：** 新增 SQLite 通用模型注册、JSON/UUID 方言适配、定标整数 Decimal（SQLite）/原生 NUMERIC（PostgreSQL）、SQLite 外键连接钩子、文件内容寻址存储、自校验备份恢复，以及复用现有 Alembic 的 SQLite 专用基线链。SQLite 空库迁移创建 61 张模型表，重复 `upgrade head` 不重复执行基线；CFO 角色约束与 `0032` 迁移对齐。两期大麦财报导入、归一化、指标快照、客观冻结后备份恢复到新目录，来源字节/哈希、FactTrace、报表快照哈希及恢复后驾驶舱总资产 `71850.9310` 一致。CFO 模块 API SQLite 5/5、基础/备份/财务全链 16/16；隔离 PostgreSQL 16 完整迁移至 `0032` 后同 API 5/5；SQLite/PostgreSQL 大额 Decimal 读值与 SUM 零差异。Ruff、mypy、`git diff --check` 通过。所有数据库和文件均为一次性临时隔离目标。PostgreSQL 既有 32 个 revisions 未改动并保留为历史/测试链；SQLite 使用 `migrations_sqlite/` Alembic 链从当前 ORM 建立本地原型 schema。**本阶段待准确 SHA CI 通过后关闭。**
 
 **通过条件：** 全流程在隔离环境从空库完成；全部关键金额仍使用 Decimal 并与 PostgreSQL 基线零差异；来源锚点、哈希、分析值、报告与图表数值一致；备份恢复全链通过；失败记录可复现且未连接常驻库。
 

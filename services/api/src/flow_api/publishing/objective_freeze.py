@@ -18,11 +18,9 @@ from sqlalchemy import (
     func,
     select,
 )
-from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy.orm import Mapped, Session, mapped_column
 
-from flow_api.infrastructure.models.base import Base
+from flow_api.infrastructure.models.base import JSON_TYPE, UUID_TYPE, Base
 from flow_api.infrastructure.models.canonical import CanonicalIdentityMixin
 from flow_api.infrastructure.models.statement import (
     StatementLineItem,
@@ -55,14 +53,14 @@ class ObjectiveReportSnapshot(CanonicalIdentityMixin, Base):
     )
 
     statement_report_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True),
+        UUID_TYPE,
         ForeignKey("statement_report.id", ondelete="CASCADE"),
         nullable=False,
     )
     version: Mapped[int] = mapped_column(Integer, nullable=False)
     schema_version: Mapped[str] = mapped_column(String(32), nullable=False)
     report_type: Mapped[str] = mapped_column(String(32), nullable=False)
-    payload: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False)
+    payload: Mapped[dict[str, Any]] = mapped_column(JSON_TYPE, nullable=False)
     payload_hash: Mapped[str] = mapped_column(String(64), nullable=False)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), nullable=False, server_default=func.now()

@@ -16,17 +16,14 @@ from sqlalchemy import (
     ForeignKey,
     Index,
     Integer,
-    Numeric,
     String,
     Text,
     UniqueConstraint,
     text,
 )
-from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from flow_api.infrastructure.models.base import Base
+from flow_api.infrastructure.models.base import JSON_TYPE, UUID_TYPE, Base, ExactNumeric
 from flow_api.infrastructure.models.canonical import CanonicalIdentityMixin
 
 
@@ -53,7 +50,7 @@ class StatementReport(CanonicalIdentityMixin, Base):
     content_sha256: Mapped[str | None] = mapped_column(String(64), nullable=True)
     # --- T10-B4 重述 supersedes 链（0029）：本版本取代的旧版本 ---
     supersedes_id: Mapped[UUID | None] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("statement_report.id", ondelete="SET NULL")
+        UUID_TYPE, ForeignKey("statement_report.id", ondelete="SET NULL")
     )
     unit_note: Mapped[str] = mapped_column(String(64), nullable=False)
     source_ref: Mapped[str] = mapped_column(String(512), nullable=False)
@@ -78,7 +75,7 @@ class StatementLineItem(CanonicalIdentityMixin, Base):
     )
 
     report_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True),
+        UUID_TYPE,
         ForeignKey("statement_report.id", ondelete="CASCADE"),
         nullable=False,
     )
@@ -86,10 +83,10 @@ class StatementLineItem(CanonicalIdentityMixin, Base):
     item_name: Mapped[str] = mapped_column(String(255), nullable=False)
     sort_order: Mapped[int] = mapped_column(Integer, nullable=False)
     # 余额列式（资产负债表）：期末 / 期初；发生额列式（利润表、现金流量表）：本期 / 上期。
-    value_end: Mapped[Decimal | None] = mapped_column(Numeric(24, 4), nullable=True)
-    value_begin: Mapped[Decimal | None] = mapped_column(Numeric(24, 4), nullable=True)
-    value_current: Mapped[Decimal | None] = mapped_column(Numeric(24, 4), nullable=True)
-    value_prior: Mapped[Decimal | None] = mapped_column(Numeric(24, 4), nullable=True)
+    value_end: Mapped[Decimal | None] = mapped_column(ExactNumeric(24, 4), nullable=True)
+    value_begin: Mapped[Decimal | None] = mapped_column(ExactNumeric(24, 4), nullable=True)
+    value_current: Mapped[Decimal | None] = mapped_column(ExactNumeric(24, 4), nullable=True)
+    value_prior: Mapped[Decimal | None] = mapped_column(ExactNumeric(24, 4), nullable=True)
     # --- T10-B3 数据点级溯源（0029）：源 PDF 页码与锚定模式 ---
     page_number: Mapped[int | None] = mapped_column(Integer, nullable=True)
     page_anchor: Mapped[str | None] = mapped_column(String(32), nullable=True)
@@ -153,7 +150,7 @@ class StatementNormalizedItem(CanonicalIdentityMixin, Base):
     )
 
     report_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True),
+        UUID_TYPE,
         ForeignKey("statement_report.id", ondelete="CASCADE"),
         nullable=False,
     )
@@ -164,12 +161,12 @@ class StatementNormalizedItem(CanonicalIdentityMixin, Base):
         Integer, nullable=False, default=0, server_default=text("'0'")
     )
     item_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
-    value_end: Mapped[Decimal | None] = mapped_column(Numeric(24, 4), nullable=True)
-    value_begin: Mapped[Decimal | None] = mapped_column(Numeric(24, 4), nullable=True)
-    value_current: Mapped[Decimal | None] = mapped_column(Numeric(24, 4), nullable=True)
-    value_prior: Mapped[Decimal | None] = mapped_column(Numeric(24, 4), nullable=True)
+    value_end: Mapped[Decimal | None] = mapped_column(ExactNumeric(24, 4), nullable=True)
+    value_begin: Mapped[Decimal | None] = mapped_column(ExactNumeric(24, 4), nullable=True)
+    value_current: Mapped[Decimal | None] = mapped_column(ExactNumeric(24, 4), nullable=True)
+    value_prior: Mapped[Decimal | None] = mapped_column(ExactNumeric(24, 4), nullable=True)
     trace: Mapped[dict[str, Any]] = mapped_column(
-        JSONB, nullable=False, default=dict, server_default=text("'{}'::jsonb")
+        JSON_TYPE, nullable=False, default=dict, server_default=text("'{}'")
     )
 
     report: Mapped[StatementReport] = relationship()
@@ -193,15 +190,15 @@ class StatementCorrection(CanonicalIdentityMixin, Base):
     )
 
     report_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True),
+        UUID_TYPE,
         ForeignKey("statement_report.id", ondelete="CASCADE"),
         nullable=False,
     )
     statement_type: Mapped[str] = mapped_column(String(64), nullable=False)
     item_name: Mapped[str] = mapped_column(String(255), nullable=False)
     column_key: Mapped[str] = mapped_column(String(32), nullable=False)
-    old_value: Mapped[Decimal | None] = mapped_column(Numeric(24, 4), nullable=True)
-    new_value: Mapped[Decimal | None] = mapped_column(Numeric(24, 4), nullable=True)
+    old_value: Mapped[Decimal | None] = mapped_column(ExactNumeric(24, 4), nullable=True)
+    new_value: Mapped[Decimal | None] = mapped_column(ExactNumeric(24, 4), nullable=True)
     reason: Mapped[str] = mapped_column(Text, nullable=False)
     operator: Mapped[str] = mapped_column(String(128), nullable=False)
 

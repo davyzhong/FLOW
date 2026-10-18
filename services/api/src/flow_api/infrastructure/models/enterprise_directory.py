@@ -12,11 +12,9 @@ from sqlalchemy import (
     String,
     UniqueConstraint,
 )
-from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
-from flow_api.infrastructure.models.base import Base
+from flow_api.infrastructure.models.base import JSON_TYPE, UUID_TYPE, Base
 from flow_api.infrastructure.models.canonical import CanonicalIdentityMixin
 
 
@@ -39,15 +37,15 @@ class EnterpriseOrgUnit(CanonicalIdentityMixin, Base):
     )
 
     enterprise_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("enterprise.id", ondelete="RESTRICT"), nullable=False
+        UUID_TYPE, ForeignKey("enterprise.id", ondelete="RESTRICT"), nullable=False
     )
     code: Mapped[str] = mapped_column(String(128), nullable=False)
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     unit_type: Mapped[str] = mapped_column(String(32), nullable=False)
-    parent_id: Mapped[UUID | None] = mapped_column(PG_UUID(as_uuid=True))
+    parent_id: Mapped[UUID | None] = mapped_column(UUID_TYPE)
     status: Mapped[str] = mapped_column(String(16), nullable=False, default="active")
     attributes: Mapped[dict[str, Any]] = mapped_column(
-        JSONB, nullable=False, default=dict, server_default="{}"
+        JSON_TYPE, nullable=False, default=dict, server_default="{}"
     )
 
 
@@ -66,9 +64,9 @@ class EnterprisePosition(CanonicalIdentityMixin, Base):
     )
 
     enterprise_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("enterprise.id", ondelete="RESTRICT"), nullable=False
+        UUID_TYPE, ForeignKey("enterprise.id", ondelete="RESTRICT"), nullable=False
     )
-    org_unit_id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), nullable=False)
+    org_unit_id: Mapped[UUID] = mapped_column(UUID_TYPE, nullable=False)
     code: Mapped[str] = mapped_column(String(128), nullable=False)
     title: Mapped[str] = mapped_column(String(255), nullable=False)
     job_family: Mapped[str] = mapped_column(String(128), nullable=False)
@@ -110,17 +108,19 @@ class EnterpriseMember(CanonicalIdentityMixin, Base):
     )
 
     enterprise_id: Mapped[UUID] = mapped_column(
-        PG_UUID(as_uuid=True), ForeignKey("enterprise.id", ondelete="RESTRICT"), nullable=False
+        UUID_TYPE, ForeignKey("enterprise.id", ondelete="RESTRICT"), nullable=False
     )
     actor_id: Mapped[str] = mapped_column(String(128), nullable=False)
     employee_code: Mapped[str] = mapped_column(String(128), nullable=False)
     display_name: Mapped[str] = mapped_column(String(255), nullable=False)
     email: Mapped[str | None] = mapped_column(String(320))
     phone: Mapped[str | None] = mapped_column(String(32))
-    org_unit_id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), nullable=False)
-    position_id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), nullable=False)
+    org_unit_id: Mapped[UUID] = mapped_column(UUID_TYPE, nullable=False)
+    position_id: Mapped[UUID] = mapped_column(UUID_TYPE, nullable=False)
     supervisor_actor_id: Mapped[str | None] = mapped_column(String(128))
-    identity_metadata: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False, default=dict)
+    identity_metadata: Mapped[dict[str, Any]] = mapped_column(
+        JSON_TYPE, nullable=False, default=dict
+    )
     identity_kind: Mapped[str] = mapped_column(String(16), nullable=False)
     status: Mapped[str] = mapped_column(String(16), nullable=False, default="active")
 
