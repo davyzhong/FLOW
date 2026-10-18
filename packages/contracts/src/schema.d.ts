@@ -1895,7 +1895,10 @@ export interface components {
             source_ids?: string[];
             /** Metric Codes */
             metric_codes?: string[];
-            /** Snapshot Id */
+            /**
+             * Snapshot Id
+             * @description 关联当前期客观财报冻结快照 id
+             */
             snapshot_id: string;
             /** Drilldown Target */
             drilldown_target?: string | null;
@@ -1923,7 +1926,10 @@ export interface components {
             period: string;
             /** Prior Period */
             prior_period: string;
-            /** Snapshot Id */
+            /**
+             * Snapshot Id
+             * @description 关联当前期客观财报冻结快照 id
+             */
             snapshot_id: string;
             /** Report Ids */
             report_ids?: string[];
