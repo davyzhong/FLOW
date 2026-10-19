@@ -2,11 +2,12 @@
 doc_id: FLOW-VER-COCKPIT-VISUAL-PHASE6-20261019-001
 title: CFO 驾驶舱概念板视觉升级阶段六本机验收
 doc_type: verification
-status: current
+status: draft
 version: 1.0
 created_at: 2026-10-19
 updated_at: 2026-10-19
 owner: FLOW
+commit_refs: [e1fa91cbce5997f306479cdcb5344d1587c57369]
 evidence_refs: [web-vitest-196, web-build, web-lint, damai-isolated-e2e-9-routes-2-viewports, cockpit-visual-screenshots-20261019]
 applies_to: repository
 ---
