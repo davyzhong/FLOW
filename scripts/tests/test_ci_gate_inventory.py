@@ -7,6 +7,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[2]
 CI_WORKFLOW = REPO_ROOT / ".github" / "workflows" / "ci.yml"
 PUBLISHING_GATE = REPO_ROOT / "scripts" / "test_publishing_golden.sh"
+CI_DEDUP_GUARD = 'if [[ "${GITHUB_ACTIONS:-false}" != "true" ]]; then'
 
 EXPECTED_GATES = {
     "static-python",
@@ -68,6 +69,35 @@ class CiGateInventoryTests(unittest.TestCase):
             "FLOW_USER_CLOSURE_ONLY=1 bash scripts/test_user_closure_e2e.sh",
             workflow,
         )
+
+    def test_ci_specialized_scripts_keep_local_full_mode_and_skip_cross_gate_duplicates(self) -> None:
+        local_full_runs = {
+            "test_data_contract.sh": [
+                "tests/integration/test_data_contract_persistence.py",
+                "tests/integration/test_excel_database_round_trip.py",
+            ],
+            "test_intake_e2e.sh": [
+                "uv run pytest tests/data_contract tests/fixtures -q",
+                "uv run ruff check src tests migrations",
+                "bash scripts/check_contracts.sh",
+            ],
+            "test_metrics_known_answers.sh": [
+                "uv run pytest tests/integration/test_metric_*.py -q",
+                "uv run pytest tests/integration/test_intake_e2e.py -q",
+            ],
+            "test_analysis_invariants.sh": [
+                "uv run pytest tests/integration/test_analysis_*.py -q",
+                "uv run pytest tests/integration/test_metric_*.py -q",
+                "uv run pytest tests/integration/test_intake_e2e.py -q",
+            ],
+        }
+
+        for filename, expected_runs in local_full_runs.items():
+            with self.subTest(script=filename):
+                script = (REPO_ROOT / "scripts" / filename).read_text(encoding="utf-8")
+                self.assertIn(CI_DEDUP_GUARD, script)
+                for command in expected_runs:
+                    self.assertIn(command, script)
 
     def test_publishing_gate_uses_the_workspace_playwright_version(self) -> None:
         script = PUBLISHING_GATE.read_text(encoding="utf-8")
