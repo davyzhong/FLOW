@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目交接文档
 doc_type: navigation
 status: current
-version: 9.5
+version: 9.9
 created_at: 2026-09-12
 updated_at: 2026-10-19
 owner: FLOW
@@ -18,7 +18,7 @@ applies_to: repository
 
 ## 一、当前任务
 
-**当前执行项：K3 来源基线与知识候选构建。** 单机原型第 1–3 阶段、驾驶舱 4.1–4.7、准确 SHA CI 和最终集成门禁均已关闭。知识刷新 K0/K1/K2 已完成；K2 accepted manifest 位于 Davybase 的 `codex/knowledge-run-manifest-k0` 分支，冻结器、浅层远端检查与 accepted 快照提交 `ea04578`、`c057acb`、`57c4738` 均已推送。ObsidianWiki `main@e04d6833` 有 1,377 条 dirty 路径，accepted working-tree 快照纳入 111,912 个文件/4,240,118,843 字节；候选与复验 HEAD/tree/status/content SHA 一致，可写句柄为 0。验收报告：[K2 快照验收](docs/60_delivery/verification/2026-10-19--k2-working-tree-snapshot-v1.md)。Davybase `make check` 为 Ruff 通过、897 项测试通过；该分支没有对应 CI run。ObsidianWiki 未修改。K3 读取前及生成后必须复核来源指纹，漂移则停止 candidate；该库只读，`CURRENT_RELEASE` 不变，K6 激活裁决由用户完成。
+**当前执行项：K3 来源覆盖与知识候选构建。** 单机原型第 1–3 阶段、驾驶舱 4.1–4.7、准确 SHA CI 和最终集成门禁均已关闭。知识刷新 K0/K1/K2 已完成；K3 的来源基线/diff 已覆盖 allowlist 9,671 篇，差异全集 9,956 条（新增 6,639、仍存在 3,032、删除 285；正文变化 1,868、enrichment 变化 1,310，重复 ID 0）。同一 accepted 截面二次构建逐字节一致，构建前后七项来源指纹均匹配，写句柄为 0。FLOW 的资料源是只读 ObsidianWiki；Davybase 只在历史工具链中承载过一次性扫描/快照工具和凭证，不是 FLOW 的代码或运行依赖。报告：[K2 快照验收](docs/60_delivery/verification/2026-10-19--k2-working-tree-snapshot-v1.md)、[K3 来源基线验收](docs/60_delivery/verification/2026-10-19--k3-source-baseline-v2.md)。K3 仍未完成全量语义路由、HIGH 全文审阅、MED/LOW 双审、coverage 闭合、知识综合与独立 reader；旧来源没有完整改名 registry，未确认改名不做标题猜测。ObsidianWiki 未修改，`CURRENT_RELEASE` 不变，不 seal/激活；K6 裁决留给用户。
 
 下方为 K2 执行前形成的架构工作包摘要，当前状态以本段和 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为准。
 

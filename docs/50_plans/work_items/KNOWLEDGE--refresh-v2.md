@@ -3,7 +3,7 @@ doc_id: FLOW-WI-KNOWLEDGE-REFRESH-V2-001
 title: 第二代静态知识刷新与战略重基线
 doc_type: work-item
 status: active
-version: 1.7
+version: 1.9
 created_at: 2026-09-24
 updated_at: 2026-10-19
 owner: FLOW
@@ -24,7 +24,7 @@ Obsidian 工作区快照，重建 FLOW 来源基线与 sealed knowledge candidat
 ## 当前断点
 
 - 批准规格和三仓库 preflight 已完成。
-- K0/K1/K2 已完成，K3 当前实际执行。K2 accepted working-tree manifest：ObsidianWiki `main@e04d6833`、1,377 条 dirty 路径、111,912 个文件/4,240,118,843 字节；HEAD/tree、Git 状态与完整内容 SHA 的候选/复验值一致，真实可写句柄均为 0。Davybase 冻结器/远端浅校验/accepted 证据提交 `ea04578`、`c057acb`、`57c4738` 已推送。K3 读前复核已通过：Davybase HEAD 等于远端分支，manifest/sidecar 与已推送内容匹配；Obsidian 当前 HEAD/tree/status/content SHA、文件数与字节数均与 accepted manifest 一致，可写句柄 0。当前后续仍限于只读 baseline/diff，生成后再做来源指纹复核。详细 K2 报告见[FLOW K2 验收](../../60_delivery/verification/2026-10-19--k2-working-tree-snapshot-v1.md)，ObsidianWiki 未修改。K4–K6 与战略裁决仍未完成。
+- K0/K1/K2 已完成，K3 当前实际执行。FLOW 的实际资料源是 ObsidianWiki；Davybase 只在 K0–K2 的历史工具链中承载过扫描/快照工具及一次性证据，不构成 FLOW 代码、运行时或产品依赖。K2 accepted working-tree manifest：ObsidianWiki `main@e04d6833`、1,377 条 dirty 路径、111,912 个文件/4,240,118,843 字节；HEAD/tree、Git 状态与完整内容 SHA 的候选/复验值一致，真实可写句柄均为 0。K3 读前复核已通过，Obsidian 当前 HEAD/tree/status/content SHA、文件数与字节数均与 accepted manifest 一致，可写句柄 0。当前后续仍限于只读 baseline/diff，生成后再做来源指纹复核。详细 K2 报告见[FLOW K2 验收](../../60_delivery/verification/2026-10-19--k2-working-tree-snapshot-v1.md)，ObsidianWiki 未修改。K4–K6 与战略裁决仍未完成。
 - 2026-10-17 只读 preflight：Davybase `main`=`6efcd6e2f0560e019f69dbbeada70e2532544f31`；审计实现在 `codex/knowledge-run-manifest-k0`，提交 `172a099`，K0 证据 `94fc05d`，交接/统计 `eb8c3d0` 均已推送。ObsidianWiki `main`=`e04d6833a623033a3601d36192f02dc15184eb6e`，K0 记录 1,365 条本地变化及内容哈希；全范围文件树摘要 `0a42346d276917c8b94f1b0c198ca5bfd68405c35c1656407bc10135e236c7f7` 复验一致。既存变化只读保护，不暂存、不提交、不覆盖，不能把 HEAD 单独称为完整工作区快照。
 - `CURRENT_RELEASE` 继续为 `flow-knowledge-2026-09-12.1`。
 
@@ -59,7 +59,11 @@ K2 accepted working-tree manifest 已提交并推送至 Davybase，远端确认�
 
 ## 当前队首：K3 来源基线、全量差异与知识候选
 
-按已批准 Task K3 执行：以 Davybase accepted manifest 为来源凭据，先复核 ObsidianWiki 当前 HEAD/tree/status/content 指纹；生成期间保持只读，完成后再复核同一指纹。输入稳定后，按已版本化 source-inputs / source-id-registry 规则生成新增、删除、重命名、正文变化与 enrichment 四维 diff，运行 allowlist 全量路由、HIGH 全量精读、MED/LOW 双审与错误集中度检查；通过全量 coverage 后构建 draft candidate。逐项验收、工具和目标文件见统一实施计划 Task K3。不得清洗/提交 ObsidianWiki，不得替用户 seal activation 或修改 `CURRENT_RELEASE`。
+K2 accepted manifest 为 Davybase `obsidianwiki-k2-2026-10-19-final.json`，SHA-256 `b7e566e68b1119117999fc9ef08f7fae657e6bcbc3d3482d77ea56caf0e44654`。K3 前后重算的 HEAD/tree/status/content SHA、文件数、字节数和 dirty 路径数均与 manifest 一致，可写句柄 0；ObsidianWiki 未修改。
+
+已完成 K3 自动来源基线与四维差异构建：allowlist 登记 9,671 篇，universe 9,956 条（新增 6,639、仍存在 3,032、删除 285），正文变化 1,868、enrichment 变化 1,310、重复 ID 0。同一截面复跑逐字节一致。报告见[来源基线验收](../../60_delivery/verification/2026-10-19--k3-source-baseline-v2.md)。实现包含 `build-v2` 和严格 coverage 闭合校验器。
+
+**当前子步仍属 K3，未完成整轨验收**：逐条主题路由和 HIGH 全文审阅、MED/LOW 双审抽样、错误集中度检查、coverage/例外闭合、知识综合和独立 reader 尚待完成。旧 2026-09-12 baseline 没有完整历史改名 registry；本轮以精确路径迁移旧 ID，未匹配项记为新增/删除，不用标题相似度推断改名。不得据此声称“没有改名”。`CURRENT_RELEASE` 仍为 `flow-knowledge-2026-09-12.1`，未 seal、未激活。
 
 ## 全轨退出条件
 

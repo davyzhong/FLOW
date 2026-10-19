@@ -10,8 +10,9 @@ from __future__ import annotations
 import tempfile
 import unittest
 from pathlib import Path
+import json
 
-from scripts.documentation.source_baseline import build, check
+from scripts.documentation.source_baseline import build, build_v2, check
 
 HEADER = [
     "source_id", "snapshot_id", "locator", "title", "author", "bytes",
@@ -155,6 +156,59 @@ class SourceBaselineTests(unittest.TestCase):
         out.write_text(out.read_text(encoding="utf-8") + "extra-row\tx\n", encoding="utf-8")
         with self.assertRaises(ValueError):
             check(self.root, out, hash_file)
+
+    def test_build_v2_normalizes_text_strips_machine_appendices_and_is_deterministic(self) -> None:
+        vault = self.root / "vault"
+        source = vault / "processed/03_财务与会计/利润率.md"
+        source.parent.mkdir(parents=True)
+        source.write_text("# 毛利率\r\n正文 e\u0301。\r\n%%davybase-summary-begin%%\r\n机器摘要\r\n%%davybase-summary-end%%\r\n", encoding="utf-8")
+        (vault / "processed/03_财务与会计/图.png").write_bytes(b"image")
+        manifest = self.root / "accepted.json"
+        manifest.write_text(json.dumps({"status":"accepted","snapshot_id":"snap-1","snapshot_kind":"working_tree","candidate":{"head":"abc","tree":"tree"},"verification":{"content_sha256":"x"}}), encoding="utf-8")
+        inputs = self.root / "inputs.yaml"
+        inputs.write_text("snapshot_id: snap-1\nvault_root: '" + str(vault) + "'\nsource_roots: [\"processed/03_财务与会计\"]\n", encoding="utf-8")
+        registry = self.root / "registry.tsv"
+        baseline = self.root / "baseline.tsv"
+        diff = self.root / "diff.tsv"
+        result = build_v2(manifest, inputs, registry, baseline, diff, self.root / "none.tsv")
+        first = (baseline.read_bytes(), registry.read_bytes(), diff.read_bytes())
+        result2 = build_v2(manifest, inputs, registry, baseline, diff, self.root / "none.tsv")
+        self.assertEqual(first, (baseline.read_bytes(), registry.read_bytes(), diff.read_bytes()))
+        self.assertEqual(result, result2)
+        text = baseline.read_text(encoding="utf-8")
+        import hashlib
+        self.assertEqual(text.splitlines()[1].split("\t")[6], hashlib.sha256("# 毛利率\n正文 é。\n\n".encode("utf-8")).hexdigest())
+        self.assertEqual(len(result), 1)
+        self.assertEqual(diff.read_text(encoding="utf-8").splitlines()[1].split("\t")[5], r"\N")
+
+    def test_build_v2_rejects_nonaccepted_manifest_and_duplicate_registry_identity(self) -> None:
+        manifest = self.root / "bad.json"
+        manifest.write_text(json.dumps({"status":"rejected","snapshot_kind":"working_tree"}), encoding="utf-8")
+        inputs = self.root / "inputs.yaml"
+        inputs.write_text("snapshot_id: snap-1\nvault_root: /tmp\nsource_roots: [\"wiki\"]\n", encoding="utf-8")
+        with self.assertRaises(ValueError):
+            build_v2(manifest, inputs, self.root / "registry.tsv", self.root / "base.tsv", self.root / "diff.tsv", self.root / "old.tsv")
+
+    def test_build_v2_reports_body_and_enrichment_changes_without_false_positives(self) -> None:
+        vault = self.root / "vault"
+        source = vault / "processed/03_财务与会计/利润率.md"
+        source.parent.mkdir(parents=True)
+        source.write_text("# 毛利率\n旧正文\n", encoding="utf-8")
+        import hashlib
+        old_body_hash = hashlib.sha256("# 毛利率\n旧正文\n".encode("utf-8")).hexdigest()
+        old = self.root / "old.tsv"
+        old.write_text("source_id\tlocator\tbody_sha256\timage_set_sha256\thas_summary_appendix\thas_image_appendix\n"
+                       f"legacy-1\tvault:processed/03_财务与会计/利润率.md\t{old_body_hash}\timages0\tfalse\tfalse\n", encoding="utf-8")
+        manifest = self.root / "accepted.json"
+        manifest.write_text(json.dumps({"status":"accepted","snapshot_id":"snap-1","snapshot_kind":"working_tree","candidate":{"head":"abc","tree":"tree"}}), encoding="utf-8")
+        inputs = self.root / "inputs.yaml"
+        inputs.write_text("snapshot_id: snap-1\nvault_root: '" + str(vault) + "'\nsource_roots: [\"processed/03_财务与会计\"]\n", encoding="utf-8")
+        source.write_text("# 毛利率\n新正文\n%%davybase-summary-begin%%\n摘要\n%%davybase-summary-end%%\n", encoding="utf-8")
+        diff = self.root / "diff.tsv"
+        build_v2(manifest, inputs, self.root / "registry.tsv", self.root / "base.tsv", diff, old)
+        fields = diff.read_text(encoding="utf-8").splitlines()[1].split("\t")
+        self.assertEqual(fields[0], "legacy-1")
+        self.assertEqual(fields[1:5], ["present", "false", "true", "true"])
 
 
 if __name__ == "__main__":
