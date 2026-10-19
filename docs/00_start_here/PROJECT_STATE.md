@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-10-19 最新状态：**单机原型第 1–3 阶段完成，第 4 阶段 4.1–4.7 与准确 SHA CI 已关闭；知识刷新 K2 已完成，当前唯一队首为 K3 来源基线与知识候选构建（队首待启动）。** Davybase 冻结器、浅层远端验证与 accepted manifest 分别推送于 `ea04578`、`c057acb`、`57c4738`。ObsidianWiki `main@e04d6833` 的 accepted working-tree 快照覆盖 1,377 条 dirty 状态、111,912 个文件/4,240,118,843 字节；候选/复验 HEAD、tree、Git 状态和内容 SHA 一致，真实可写句柄 0。完整记录见[K2 验收](../60_delivery/verification/2026-10-19--k2-working-tree-snapshot-v1.md)。Davybase `make check` 897 项通过、Ruff 通过；对应分支无 CI 运行，未宣称远端 CI 通过。ObsidianWiki 未写入。K3 开始前和完成后复核 accepted 来源指纹，按批准计划生成 registry、baseline 与四维 diff；来源漂移即停止当前 candidate。`CURRENT_RELEASE` 保持 `flow-knowledge-2026-09-12.1`，K6 战略激活需用户裁决。
+2026-10-19 最新状态：**单机原型第 1–3 阶段完成，第 4 阶段 4.1–4.7 与准确 SHA CI 已关闭；知识刷新 K2 已完成，当前唯一执行项为 K3 来源基线与知识候选构建。** Davybase 冻结器、浅层远端验证与 accepted manifest 分别推送于 `ea04578`、`c057acb`、`57c4738`。ObsidianWiki `main@e04d6833` 的 accepted working-tree 快照覆盖 1,377 条 dirty 状态、111,912 个文件/4,240,118,843 字节；候选/复验 HEAD、tree、Git 状态和内容 SHA 一致，真实可写句柄 0。完整记录见[K2 验收](../60_delivery/verification/2026-10-19--k2-working-tree-snapshot-v1.md)。Davybase `make check` 897 项通过、Ruff 通过；对应分支无 CI 运行，未宣称远端 CI 通过。ObsidianWiki 未写入。K3 开始前和完成后复核 accepted 来源指纹，按批准计划生成 registry、baseline 与四维 diff；来源漂移即停止当前 candidate。`CURRENT_RELEASE` 保持 `flow-knowledge-2026-09-12.1`，K6 战略激活需用户裁决。
 
 下段为 K2 执行前的状态快照，已过时；当前状态以本段及 [CURRENT_ROADMAP](../50_plans/CURRENT_ROADMAP.md) 为准。
 

@@ -3,7 +3,7 @@ doc_id: FLOW-WI-KNOWLEDGE-REFRESH-V2-001
 title: 第二代静态知识刷新与战略重基线
 doc_type: work-item
 status: active
-version: 1.6
+version: 1.7
 created_at: 2026-09-24
 updated_at: 2026-10-19
 owner: FLOW
@@ -24,7 +24,7 @@ Obsidian 工作区快照，重建 FLOW 来源基线与 sealed knowledge candidat
 ## 当前断点
 
 - 批准规格和三仓库 preflight 已完成。
-- K0/K1/K2 已完成，K3 为当前唯一队首。K2 accepted working-tree manifest：ObsidianWiki `main@e04d6833`、1,377 条 dirty 路径、111,912 个文件/4,240,118,843 字节；HEAD/tree、Git 状态与完整内容 SHA 的候选/复验值一致，真实可写句柄均为 0。Davybase 冻结器/远端浅校验/accepted 证据提交 `ea04578`、`c057acb`、`57c4738` 已推送。详细报告见[FLOW K2 验收](../../60_delivery/verification/2026-10-19--k2-working-tree-snapshot-v1.md)，ObsidianWiki 未修改。K3 读取前与构建后都要复核来源指纹；若任何源变化，不继续当前 candidate。K4–K6 与战略裁决仍未完成。
+- K0/K1/K2 已完成，K3 当前实际执行。K2 accepted working-tree manifest：ObsidianWiki `main@e04d6833`、1,377 条 dirty 路径、111,912 个文件/4,240,118,843 字节；HEAD/tree、Git 状态与完整内容 SHA 的候选/复验值一致，真实可写句柄均为 0。Davybase 冻结器/远端浅校验/accepted 证据提交 `ea04578`、`c057acb`、`57c4738` 已推送。K3 读前复核已通过：Davybase HEAD 等于远端分支，manifest/sidecar 与已推送内容匹配；Obsidian 当前 HEAD/tree/status/content SHA、文件数与字节数均与 accepted manifest 一致，可写句柄 0。当前后续仍限于只读 baseline/diff，生成后再做来源指纹复核。详细 K2 报告见[FLOW K2 验收](../../60_delivery/verification/2026-10-19--k2-working-tree-snapshot-v1.md)，ObsidianWiki 未修改。K4–K6 与战略裁决仍未完成。
 - 2026-10-17 只读 preflight：Davybase `main`=`6efcd6e2f0560e019f69dbbeada70e2532544f31`；审计实现在 `codex/knowledge-run-manifest-k0`，提交 `172a099`，K0 证据 `94fc05d`，交接/统计 `eb8c3d0` 均已推送。ObsidianWiki `main`=`e04d6833a623033a3601d36192f02dc15184eb6e`，K0 记录 1,365 条本地变化及内容哈希；全范围文件树摘要 `0a42346d276917c8b94f1b0c198ca5bfd68405c35c1656407bc10135e236c7f7` 复验一致。既存变化只读保护，不暂存、不提交、不覆盖，不能把 HEAD 单独称为完整工作区快照。
 - `CURRENT_RELEASE` 继续为 `flow-knowledge-2026-09-12.1`。
 

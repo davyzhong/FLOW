@@ -7,6 +7,8 @@ version: 1.0
 created_at: 2026-10-19
 updated_at: 2026-10-19
 owner: FLOW
+commit_refs: [ea04578, c057acb, 57c4738, b12289a0]
+evidence_refs: "[davybase-accepted-working-tree-manifest, davybase-manifest-sha256-sidecar, obsidianwiki-content-sha256, make-check-897-tests]"
 applies_to: knowledge-refresh
 ---
 
