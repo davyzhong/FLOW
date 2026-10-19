@@ -128,6 +128,16 @@ describe("CockpitOverviewApp", () => {
     expect(notice.textContent).toContain("演示数据");
   });
 
+  it("明确提示已过期的数据快照", async () => {
+    const stale = overview({ state: "stale" });
+    const load = vi.fn().mockResolvedValue(stale);
+    render(<CockpitOverviewApp load={load} loadSupplement={loadSupplement} />);
+    expect(await screen.findByTestId("cockpit-stale-notice")).toHaveTextContent(
+      "数据快照已过期",
+    );
+    expect(screen.getByTestId("cockpit-stale-notice").textContent).toContain("2026-06");
+  });
+
   it("大额人民币 KPI 使用亿元展示并保留两位小数", async () => {
     const data = overview();
     const card = data.kpi_cards?.[0];

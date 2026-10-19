@@ -209,6 +209,11 @@ export function CockpitOverviewApp({
           {overview.source_notice}
         </p>
       ) : null}
+      {overview.data_status.freshness_status === "stale" || overview.state === "stale" ? (
+        <p className="cockpit__stale-notice" role="status" data-testid="cockpit-stale-notice">
+          数据快照已过期；当前显示最近一次已发布结果，数据截止 {overview.context.as_of_month}。
+        </p>
+      ) : null}
 
       <header className="cockpit__head">
         <h1>集团财务总览</h1>

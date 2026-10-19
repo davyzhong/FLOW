@@ -60,6 +60,17 @@
   margin: 0;
 }
 
+.cockpit__stale-notice {
+  margin: 0;
+  padding: 8px 14px;
+  border: 1px solid #d8c28c;
+  border-radius: 10px;
+  background: #faf3e4;
+  color: #765c2d;
+  font-size: 12px;
+  font-weight: 600;
+}
+
 .cockpit__head h1 {
   font-size: 20px;
   font-weight: 700;
