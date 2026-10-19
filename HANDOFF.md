@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目交接文档
 doc_type: navigation
 status: current
-version: 10.2
+version: 10.3
 created_at: 2026-09-12
 updated_at: 2026-10-19
 owner: FLOW
@@ -18,11 +18,11 @@ applies_to: repository
 
 ## 一、当前任务
 
-**当前执行项：7a 阶段 6，按概念板完成视觉高保真，队首待启动。** 阶段 5 CI 门禁治理已按外部运行时限制结案：同分支过期 run 自动取消已实测；准确 SHA `dfc67283751a357d43ae23296e561cd286fea1dc` 的 run `39251870852` 为 17/18 成功，`data-contract` 在声明的 40 分钟上限被取消；同一 SHA 的隔离 Compose 验收 133/133 通过，摘要检查通过。不得把远端 CI 描述为全绿。证据见[验收记录](docs/60_delivery/verification/2026-10-19--ci-concurrency-and-data-contract-isolated-acceptance-v1.md)。接下来依序为概念板视觉高保真、单机静态运行/验收/本机截图；阶段 1–4 旧交付作为基线。GitHub 自动截图 workflow 继续暂停。K3 排在 7a 结案后。详细顺序见 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)。
+**当前执行项：7a 阶段 6，按概念板完成视觉高保真（总览报告画布实现中）。** 阶段 5 CI 门禁治理已按外部运行时限制结案：同分支过期 run 自动取消已实测；准确 SHA `dfc67283751a357d43ae23296e561cd286fea1dc` 的 run `39251870852` 为 17/18 成功，`data-contract` 在声明的 40 分钟上限被取消；同一 SHA 的隔离 Compose 验收 133/133 通过，摘要检查通过。不得把远端 CI 描述为全绿。证据见[验收记录](docs/60_delivery/verification/2026-10-19--ci-concurrency-and-data-contract-isolated-acceptance-v1.md)。接下来依序为概念板视觉高保真、单机静态运行/验收/本机截图；阶段 1–4 旧交付作为基线。GitHub 自动截图 workflow 继续暂停。K3 排在 7a 结案后。详细顺序见 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)。
 
 下方为 K2 执行前形成的架构工作包摘要，当前状态以本段和 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为准。
 
-**唯一路线图执行队列：当前统计 15 项，已完成 8 项，实际执行中 0 项，队首待启动 1 项（7a 阶段 6），排队 4 项，暂停 1 项，外部条件受限 1 项。逐项状态只以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为准。**
+**唯一路线图执行队列：当前统计 15 项，已完成 8 项，实际执行中 1 项（7a 阶段 6），队首待启动 0 项，排队 4 项，暂停 1 项，外部条件受限 1 项。逐项状态只以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为准。**
 
 **历史交接快照（K2 阶段）：以下为阶段 5 重开前的上下文记录，当前执行项和队列以本文件首段及 CURRENT_ROADMAP 为准；本段不得作为当前状态读取。** 用户已选择单机单用户、SQLite 单文件 + 本地文件目录、移除 Redis/Celery/MinIO，并批准 A「高管编辑部」+ C「财务报告画布」。第 1–3 阶段完成；第 3 阶段最终状态 SHA `20a511f66e4bfe65ab02edc091c7b49e2cbcbe67` 的 CI run `39125304357` 18/18 jobs success。首轮 CI 曾发现大麦 reset SQL 的发行包 manifest 哈希未同步；在 `4c3e87e05ae9fe380abb7002ba260de6d654d15c` 只更新对应清单，未改业务数据；脚本 155/155、清单专项 6/6、Ruff/mypy 和 M1/M6 均通过。正式验收见[阶段 3 记录](docs/60_delivery/verification/2026-10-18--single-machine-runtime-convergence-v1.md)。参考文章 10 模块的映射报告已写入[覆盖矩阵](docs/60_delivery/verification/2026-10-18--cfo-reference-module-data-coverage-v1.md)，覆盖页面/API/指标/事实类型/粒度/图表与交互缺口。准确 SHA `d8f2ae8d617914fcd05cfd21d8484154b1411a65` 的 CI run `39128676851` 中 `data-contract` 两次均约 40 分钟触限取消；隔离数据库执行原脚本全通过（133+3 tests、Ruff、mypy 213 files、契约摘要），M1/M6 和链接检查通过，详细结果及限制见[4.1 验收记录](docs/60_delivery/verification/2026-10-18--cfo-reference-matrix-ci-and-isolated-validation-v1.md)。4.2 已完成 14 视图图表/数据盘点，识别合成账龄/预算可用而未展示、订单数小数数据语义问题和不能宣称的预测/风险/合并能力；报告见[4.2盘点](docs/60_delivery/verification/2026-10-18--cfo-chart-and-data-availability-v1.md)。4.3 已完成并形成[组件复用与交互方案](docs/60_delivery/verification/2026-10-18--cfo-chart-component-and-interaction-design-v1.md)：继续复用 ECharts 6.1，接通已有但未被分发器使用的构建器；修复图表语义并配同值表格、事实来源标签和深链。第 4 阶段 4.1–4.7 已结案，代码 SHA `65a08706` 与最终文档 SHA `a1fe50ef` 对应 GitHub CI 均 18/18 成功。截图采集/自动生成继续暂停。审计包含 19 个页面路由、32 个 PostgreSQL revisions、SQLite 方言与金额精度风险、S3/Redis/Celery 调用点及主 checkout 四处未提交更改；README 视觉同步完成。主 checkout 的四处改动仍原位，本 worktree 未触碰。当前分支为 `codex/single-machine-runtime-convergence`，原未提交实现仍保存在 stash 备份中。范围见[唯一工作包](docs/50_plans/work_items/FLOW--single-machine-visual-prototype.md)、[设计规格](docs/superpowers/specs/2026-10-18-single-machine-visual-prototype-design.md)和[路线图](docs/50_plans/CURRENT_ROADMAP.md)。
 

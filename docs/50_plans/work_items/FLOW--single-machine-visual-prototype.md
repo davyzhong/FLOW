@@ -3,7 +3,7 @@ doc_id: FLOW-WI-SINGLE-MACHINE-VISUAL-20261018-001
 title: 单机原型架构简化与全视图视觉升级
 doc_type: work-item
 status: active
-version: 2.6
+version: 2.7
 created_at: 2026-10-18
 updated_at: 2026-10-19
 owner: FLOW
@@ -19,7 +19,7 @@ confidentiality: project-internal
 
 # 单机原型架构简化与全视图视觉升级
 
-> **当前状态：阶段 5 门禁治理已结案，阶段 6 概念板视觉高保真是队首待启动。** 旧阶段 1–3 与 4.1–4.7 的交付继续作为完成基线；新增阶段 5–7 严格顺序为 5→6→7。阶段 5 证明同分支过期 run 自动取消，17/18 项准确 SHA 远端门禁成功，`data-contract` 在 40 分钟上限取消但同一 SHA 的独立 Compose 验收 133/133 通过；远端限制保留，详见[阶段 5 验收记录](../../60_delivery/verification/2026-10-19--ci-concurrency-and-data-contract-isolated-acceptance-v1.md)。阶段 6 按概念板逐项重构 CFO 总览和相关视图；阶段 7 验收本地单机启动、静态财务画布、数据复验及本机截图。GitHub 截图工作流继续暂停。既有验收记录：[模块图表适配与追溯](../../60_delivery/verification/2026-10-18--cfo-module-chart-adapter-acceptance-v1.md)、[真实数据浏览器验收](../../60_delivery/verification/2026-10-18--cfo-browser-acceptance-v1.md)、[单机运行收敛](../../60_delivery/verification/2026-10-18--single-machine-runtime-convergence-v1.md)。唯一状态/顺序见 [CURRENT_ROADMAP](../CURRENT_ROADMAP.md)。
+> **当前状态：阶段 5 门禁治理已结案，阶段 6 概念板视觉高保真实施中，当前首项为总览报告画布。** 旧阶段 1–3 与 4.1–4.7 的交付继续作为完成基线；新增阶段 5–7 严格顺序为 5→6→7。阶段 5 证明同分支过期 run 自动取消，17/18 项准确 SHA 远端门禁成功，`data-contract` 在 40 分钟上限取消但同一 SHA 的独立 Compose 验收 133/133 通过；远端限制保留，详见[阶段 5 验收记录](../../60_delivery/verification/2026-10-19--ci-concurrency-and-data-contract-isolated-acceptance-v1.md)。阶段 6 按概念板逐项重构 CFO 总览和相关视图；阶段 7 验收本地单机启动、静态财务画布、数据复验及本机截图。GitHub 截图工作流继续暂停。既有验收记录：[模块图表适配与追溯](../../60_delivery/verification/2026-10-18--cfo-module-chart-adapter-acceptance-v1.md)、[真实数据浏览器验收](../../60_delivery/verification/2026-10-18--cfo-browser-acceptance-v1.md)、[单机运行收敛](../../60_delivery/verification/2026-10-18--single-machine-runtime-convergence-v1.md)。唯一状态/顺序见 [CURRENT_ROADMAP](../CURRENT_ROADMAP.md)。
 
 ## 目标
 
@@ -114,6 +114,9 @@ confidentiality: project-internal
 **结案条件与结果：** M1 队列状态门禁通过；新 SHA 推送后，同分支旧 run 自动取消；准确 SHA `dfc67283751a357d43ae23296e561cd286fea1dc` 的其余 17 项门禁成功；`data-contract` 的 CI 测试主体在同 SHA 全新隔离 Compose 项目上 133/133 通过，契约摘要通过。远端 `data-contract` 仍因 40 分钟 job 上限取消，完整限制见[阶段 5 验收记录](../../60_delivery/verification/2026-10-19--ci-concurrency-and-data-contract-isolated-acceptance-v1.md)。阶段 5 结案；如要进一步拆分此 job 或改变 timeout，需单独获得 CI 配置授权。
 
 ### 6. 按概念板完成视觉高保真（新阶段）
+
+**当前细分动作：总览报告画布。** 组合图只使用同一趋势响应中的收入/营业利润数据；现金流瀑布、杜邦因子、费用结构分别复用现有现金流、盈利能力、费用模块 API 和 ECharts builders。每个模块呈现自身期间、单位、事实类型、快照及来源入口；不同接口的披露期与上方筛选趋势明确分层，绝不混称同一筛选结果。移动端先呈现指标与主证据图，表格以详情展开补充。失败/缺数态保留说明，不造数。
+
 
 - 以 `docs/assets/cockpit-visual-direction-2026-10-18.png` 为验收基准，将概念板拆为可核对的视觉清单：纸白/暖白报告画布、墨蓝工作流导航、克制金色重点、编辑部标题与留白、首屏四项 CFO KPI、收入/利润趋势、经营现金流瀑布、杜邦驱动分解、成本结构、关键洞察/行动项、口径与来源说明。
 - 先重构 `/cockpit` 总览，保证 1440px 首屏版式与概念图同构；随后按现有数据和能力覆盖扩展至 8 个 CFO 主题页及 `/data`，不重复创建已有功能，不为凑图表虚构事实。

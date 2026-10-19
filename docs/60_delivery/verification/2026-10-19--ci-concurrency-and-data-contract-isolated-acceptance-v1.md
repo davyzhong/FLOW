@@ -2,7 +2,7 @@
 doc_id: FLOW-VER-CI-GATE-20261019-001
 title: CI 并发治理与数据契约隔离验收
 doc_type: verification
-status: current
+status: verified
 version: 1.0
 created_at: 2026-10-19
 updated_at: 2026-10-19
