@@ -3,7 +3,7 @@ doc_id: FLOW-WI-SINGLE-MACHINE-VISUAL-20261018-001
 title: 单机原型架构简化与全视图视觉升级
 doc_type: work-item
 status: active
-version: 2.7
+version: 2.8
 created_at: 2026-10-18
 updated_at: 2026-10-19
 owner: FLOW
@@ -19,7 +19,7 @@ confidentiality: project-internal
 
 # 单机原型架构简化与全视图视觉升级
 
-> **当前状态：阶段 5 门禁治理已结案；阶段 6 本机实现和浏览器验收完成，队首待当前提交的准确 SHA CI 结案。** 旧阶段 1–3 与 4.1–4.7 的交付继续作为完成基线；新增阶段 5–7 严格顺序为 5→6→7。阶段 5 证明同分支过期 run 自动取消，17/18 项准确 SHA 远端门禁成功，`data-contract` 在 40 分钟上限取消但同一 SHA 的独立 Compose 验收 133/133 通过；远端限制保留，详见[阶段 5 验收记录](../../60_delivery/verification/2026-10-19--ci-concurrency-and-data-contract-isolated-acceptance-v1.md)。阶段 6 交付和本机证据见[阶段 6 验收记录](../../60_delivery/verification/2026-10-19--cfo-cockpit-visual-phase6-local-acceptance-v1.md)；阶段 7 验收本地单机启动、静态财务画布、数据复验及本机截图。GitHub 截图工作流继续暂停。既有验收记录：[模块图表适配与追溯](../../60_delivery/verification/2026-10-18--cfo-module-chart-adapter-acceptance-v1.md)、[真实数据浏览器验收](../../60_delivery/verification/2026-10-18--cfo-browser-acceptance-v1.md)、[单机运行收敛](../../60_delivery/verification/2026-10-18--single-machine-runtime-convergence-v1.md)。唯一状态/顺序见 [CURRENT_ROADMAP](../CURRENT_ROADMAP.md)。
+> **当前状态：阶段 5 门禁治理已结案；阶段 6 视觉实现和准确 SHA 替代门禁验收已结案；发现单个 `data-contract` job 超过 40 分钟的实际阻滞，新增阶段 6.5 优先收敛长作业，完成后再进入阶段 7 单机静态运行/验收/截图。** 旧阶段 1–3 与 4.1–4.7 的交付继续作为完成基线；新增阶段 5–7 按当前队列顺序执行：并发治理→视觉实现→长作业收敛→单机静态运行。阶段 5 证明同分支过期 run 自动取消，17/18 项准确 SHA 远端门禁成功，`data-contract` 在 40 分钟上限取消但同一 SHA 的独立 Compose 验收 133/133 通过；远端限制保留，详见[阶段 5 验收记录](../../60_delivery/verification/2026-10-19--ci-concurrency-and-data-contract-isolated-acceptance-v1.md)。阶段 6 交付和本机证据见[阶段 6 验收记录](../../60_delivery/verification/2026-10-19--cfo-cockpit-visual-phase6-local-acceptance-v1.md)；阶段 7 验收本地单机启动、静态财务画布、数据复验及本机截图。GitHub 截图工作流继续暂停。既有验收记录：[模块图表适配与追溯](../../60_delivery/verification/2026-10-18--cfo-module-chart-adapter-acceptance-v1.md)、[真实数据浏览器验收](../../60_delivery/verification/2026-10-18--cfo-browser-acceptance-v1.md)、[单机运行收敛](../../60_delivery/verification/2026-10-18--single-machine-runtime-convergence-v1.md)。唯一状态/顺序见 [CURRENT_ROADMAP](../CURRENT_ROADMAP.md)。
 
 ## 目标
 
@@ -113,9 +113,9 @@ confidentiality: project-internal
 
 **结案条件与结果：** M1 队列状态门禁通过；新 SHA 推送后，同分支旧 run 自动取消；准确 SHA `dfc67283751a357d43ae23296e561cd286fea1dc` 的其余 17 项门禁成功；`data-contract` 的 CI 测试主体在同 SHA 全新隔离 Compose 项目上 133/133 通过，契约摘要通过。远端 `data-contract` 仍因 40 分钟 job 上限取消，完整限制见[阶段 5 验收记录](../../60_delivery/verification/2026-10-19--ci-concurrency-and-data-contract-isolated-acceptance-v1.md)。阶段 5 结案；如要进一步拆分此 job 或改变 timeout，需单独获得 CI 配置授权。
 
-### 6. 按概念板完成视觉高保真（本机实现和浏览器验收已完成，准确 SHA CI 待结案）
+### 6. 按概念板完成视觉高保真（completed，2026-10-19）
 
-**本机交付完成：总览报告画布及 9 路由双视口验收。** 组合图只使用同一趋势响应中的收入/营业利润数据；现金流瀑布、杜邦因子、费用结构分别复用现有现金流、盈利能力、费用模块 API 和 ECharts builders。每个模块呈现自身期间、单位、事实类型、快照及来源入口；不同接口的披露期与上方筛选趋势明确分层，绝不混称同一筛选结果。移动端先呈现指标与主证据图，表格以详情展开补充。失败/缺数态保留说明，不造数。
+**阶段已结案：本机交付、准确 SHA 门禁与隔离替代验收全部完成。** 组合图只使用同一趋势响应中的收入/营业利润数据；现金流瀑布、杜邦因子、费用结构分别复用现有现金流、盈利能力、费用模块 API 和 ECharts builders。每个模块呈现自身期间、单位、事实类型、快照及来源入口；不同接口的披露期与上方筛选趋势明确分层，绝不混称同一筛选结果。移动端先呈现指标与主证据图，表格以详情展开补充。失败/缺数态保留说明，不造数。
 
 
 - 以 `docs/assets/cockpit-visual-direction-2026-10-18.png` 为验收基准，将概念板拆为可核对的视觉清单：纸白/暖白报告画布、墨蓝工作流导航、克制金色重点、编辑部标题与留白、首屏四项 CFO KPI、收入/利润趋势、经营现金流瀑布、杜邦驱动分解、成本结构、关键洞察/行动项、口径与来源说明。
@@ -124,7 +124,23 @@ confidentiality: project-internal
 - 使用真实大麦发行包或公开财报数据验证。概念板内虚构的指标数值不得用作事实；无法被当前来源支持的视觉模块显示明确缺数/待配置状态。
 - 本机验收启用截图：固定 `1440×900` 与 `390×844` 视口，保存总览及主题页面截图、数据批次与代码 SHA；截图为实际浏览器输出，不对图像摆拍或后期改数。
 
-**本机验收结果：** 概念板对应的暖纸白画布、墨蓝导航、金色重点、四项核心 KPI、收入/营业利润趋势、经营现金流瀑布、杜邦拆解、费用排名、来源说明和行动项已落地。9 个 CFO/数据路由在桌面与手机共 18 个组合验证真实图表和无横向溢出；总览 KPI 与趋势明细逐项核对 API；桌面总览、手机总览和盈利能力页面截图已保存。详见[阶段 6 本机验收记录](../../60_delivery/verification/2026-10-19--cfo-cockpit-visual-phase6-local-acceptance-v1.md)。本阶段只剩当前提交的准确 SHA CI 核验；通过阶段 5 的替代结案条件处理既有 40 分钟 `data-contract` 门禁限制。
+**本机验收结果：** 概念板对应的暖纸白画布、墨蓝导航、金色重点、四项核心 KPI、收入/营业利润趋势、经营现金流瀑布、杜邦拆解、费用排名、来源说明和行动项已落地。9 个 CFO/数据路由在桌面与手机共 18 个组合验证真实图表和无横向溢出；总览 KPI 与趋势明细逐项核对 API；桌面总览、手机总览和盈利能力页面截图已保存。详见[阶段 6 本机验收记录](../../60_delivery/verification/2026-10-19--cfo-cockpit-visual-phase6-local-acceptance-v1.md)。准确 SHA `dc705fec087c0b4d41e3a5a85baa38d9811269d8` 的 GitHub Actions run `39265415539` 为 17/18 成功，唯一取消项 `data-contract` 达到 40 分钟上限且无失败报告；同一 SHA 的隔离 Compose 执行 `GITHUB_ACTIONS=true bash scripts/test_data_contract.sh`，133/133 通过、契约摘要检查通过。阶段六按[验收记录](../../60_delivery/verification/2026-10-19--cfo-cockpit-visual-phase6-local-acceptance-v1.md)结案；阶段 7 已排至唯一队首。
+
+### 6.5 收敛 data-contract 单个长作业（当前队首；保留全量测试）
+
+**现状证据：** 阶段 6 准确 SHA `dc705fec087c0b4d41e3a5a85baa38d9811269d8` 的 GitHub Actions run `39265415539` 为 17/18 jobs success，唯一取消项 `data-contract` 达到 40 分钟上限且没有测试失败报告。相同 SHA 的新隔离 Compose 环境执行 `GITHUB_ACTIONS=true bash scripts/test_data_contract.sh`，133 项通过（1066.42 秒），数据摘要 `operating=3072 financial=432 budget=120 ar=1920` 一致。说明当前反馈障碍来自单 job 时长，不是测试失败或前一 SHA 占队列。
+
+**本阶段执行方案：** 将 `tests/data_contract` 与 `tests/fixtures` 的 133 项全量测试按文件分配到五个独立 CI shard，每个 shard 使用 runner 自带的隔离服务/数据库，避免共享可变数据库造成并行竞争；五个 shard 全成功后，由稳定名称 `data-contract` 的汇总 job 执行摘要校验并作为唯一汇总检查。依据当前收集的文件/测试分布分组：
+
+1. 契约/workbook 测试（`tests/data_contract/`，26 项）；
+2. 菜鸟 canonical 与 statements（35 项）；
+3. generator 与 source registry（30 项）；
+4. profile、已知答案、workflow loader 与 analytics loader（26 项）；
+5. atomicity、通用 generator/loader 与 metric grain（16 项）。
+
+每个文件只归入一个 shard；固定 `pytest` 路径映射，不使用基于运行时顺序的随机拆分。每个 shard 保留 `uv sync`、`make infra-up`、相同 Python 版本和现有 40 分钟上限；不改变 workflow 触发器、测试内容、覆盖范围或 timeout。汇总 job 必须在任一 shard 失败/取消时失败，不能以 skipped/neutral 掩盖失败；全部 shard 成功后运行 `scripts/summarize_data_contract.py`，保持稳定 `data-contract` 检查名。
+
+**验收：** 本机核对 shard 路径互斥且并集精确等于当前 133 项；新增脚本/门禁测试断言所有目标文件恰好出现一次且未遗漏。准确 SHA 的 GitHub CI 中五个 shard 和汇总 job 全成功；记录各 shard 用时，并确认单个 shard 未触及 40 分钟。若某 shard 仍触限，继续在同一范围内按测试文件拆分并保留原子测试，不删减或跳过；用相同 SHA 的隔离替代验收记录限制。通过后关闭阶段 6.5，再开始阶段 7。
 
 ### 7. 单机静态运行、验收与截图闭环（新阶段）
 

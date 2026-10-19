@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-10-19 最新状态：**7a 阶段 5 门禁治理已结案；阶段 6 A+C 概念视觉本地实现和验收完成，准确 SHA CI 待本轮提交后运行；通过后进入阶段 7 单机静态运行/验收/截图，K3 排队。** 同分支过期 CI 自动取消已实测。准确 SHA `dfc67283751a357d43ae23296e561cd286fea1dc` 的 run `39251870852` 为 17/18 成功；`data-contract` 在 40 分钟上限被取消，无测试失败结论。同一 SHA 的隔离 Compose 脚本验收为 133/133，摘要检查通过。完整限制和环境见[阶段 5 验收记录](../60_delivery/verification/2026-10-19--ci-concurrency-and-data-contract-isolated-acceptance-v1.md)。阶段 6 前端 196/196、生产构建、9 路由 × 2 视口 Playwright 通过；真实图片与数据来源见[本机验收记录](../60_delivery/verification/2026-10-19--cfo-cockpit-visual-phase6-local-acceptance-v1.md)。计划视图 7/7、门禁清单 6/6、M1/M6 通过。旧阶段 1–4 交付保留。7a 唯一顺序见[路线图](../50_plans/CURRENT_ROADMAP.md)和[工作包](../50_plans/work_items/FLOW--single-machine-visual-prototype.md)。**
+2026-10-19 最新状态：**阶段 6视觉实现已完成；当前最高优先级为修复 CI `data-contract` 单个 job 的 40 分钟触限，再执行单机阶段 7。** 准确 SHA `dc705fec087c0b4d41e3a5a85baa38d9811269d8` 的 run `39265415539` 为 17/18 success；同 SHA 全新隔离 Compose 执行契约脚本 133/133 通过、摘要校验通过（1066.42 秒），无测试失败报告。已正式计划按文件拆分为隔离 shard，保持全部测试覆盖、触发器、timeout 与稳定汇总检查。唯一队列和验收见[路线图](../50_plans/CURRENT_ROADMAP.md)及[工作包阶段 6.5](../50_plans/work_items/FLOW--single-machine-visual-prototype.md)。阶段 7本机 SQLite/静态图表尚未开始。
 
 下段为 K2 执行前的状态快照，已过时；当前状态以本段及 [CURRENT_ROADMAP](../50_plans/CURRENT_ROADMAP.md) 为准。
 

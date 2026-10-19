@@ -2,13 +2,13 @@
 doc_id: FLOW-VER-COCKPIT-VISUAL-PHASE6-20261019-001
 title: CFO 驾驶舱概念板视觉升级阶段六本机验收
 doc_type: verification
-status: draft
+status: verified
 version: 1.0
 created_at: 2026-10-19
 updated_at: 2026-10-19
 owner: FLOW
 commit_refs: [e1fa91cbce5997f306479cdcb5344d1587c57369]
-evidence_refs: [web-vitest-196, web-build, web-lint, damai-isolated-e2e-9-routes-2-viewports, cockpit-visual-screenshots-20261019]
+evidence_refs: [web-vitest-196, web-build, web-lint, damai-isolated-e2e-9-routes-2-viewports, cockpit-visual-screenshots-20261019, github-run-39265415539, isolated-data-contract-dc705]
 applies_to: repository
 ---
 
@@ -16,7 +16,7 @@ applies_to: repository
 
 ## 结论
 
-阶段六的本机实现和浏览器验收通过；准确 SHA GitHub CI 尚待本轮提交后运行，未将本地结果表述为远端 CI 通过。实现沿用项目已有 ECharts、图表构建器、冻结指标 API、模块 API、深链和来源数据表，没有增加依赖或生成业务数值。
+阶段六完成。代码提交 `e1fa91cbce5997f306479cdcb5344d1587c57369`，文档门禁修正提交 `dc705fec087c0b4d41e3a5a85baa38d9811269d8`。准确 SHA `dc705fec` 的 GitHub Actions run `39265415539` 为 17/18 job success；`data-contract` 在既有 40 分钟上限被取消，无测试失败结论。同一 SHA 的独立 Compose 环境执行 CI 同一脚本，133/133 通过且契约摘要检查通过。实现沿用项目已有 ECharts、图表构建器、冻结指标 API、模块 API、深链和来源数据表，没有增加依赖或生成业务数值。
 
 ## 实现范围
 
@@ -37,6 +37,8 @@ applies_to: repository
 | `pnpm --filter @flow/web build` | Next.js 16.3.3 生产构建通过 |
 | `pnpm --filter @flow/web lint` | 0 errors；3 条现有 warning（action-panel 两条、TanStack Table 编译提示一条），本轮新增测试 warning 已清除 |
 | `all CFO cockpit views render real charts without narrow-screen overflow` | Playwright 1/1 通过；8 个 CFO 页面与 `/data`，1440×1000 和 390×844 共 18 个页面/视口组合均有真实绘制图表且无页面横向溢出 |
+| GitHub Actions run `39265415539`（SHA `dc705fec087c0b4d41e3a5a85baa38d9811269d8`） | 17/18 success；唯一取消为 `data-contract` 达到既有 40 分钟限制，无测试失败报告 |
+| `GITHUB_ACTIONS=true bash scripts/test_data_contract.sh`（同 SHA） | 独立 Compose 项目 `flow-contract-dc705-20261019`，133/133 通过，1066.42 秒；摘要 `operating=3072 financial=432 budget=120 ar=1920` 通过 |
 | 总览 KPI 与趋势 | 四项 KPI 与完整趋势明细逐项对照 API；页面只有来源支持的期间/原值 |
 | 截图浏览器日志 | `pageerror` 0，console warning/error 0 |
 | 文档门禁 | 本记录写入后运行 `python3 scripts/check_docs.py --phase m1`；结果随最终提交记录更新 |
@@ -51,5 +53,5 @@ applies_to: repository
 ## 保留的限制
 
 - 本记录证明总览与八个既有主题页面的数据图表、窄屏和局部视觉一致性，不代表公开财报 C 级能力，也不替代真实企业验证。
-- 远端准确 SHA CI 尚未运行；待当前阶段代码/证据提交推送后记录对应 run。CI 结果和提交 SHA 将在同一验收记录后续版本补齐。
+- 远端 `data-contract` job 仍受 40 分钟上限限制；本阶段依既定替代验收条件以同 SHA 隔离 Compose 133/133 通过结案，不把远端取消描述成成功。
 - 项目原有 CI `data-contract` 40 分钟上限及阶段 5 结案限制仍按[门禁验收记录](2026-10-19--ci-concurrency-and-data-contract-isolated-acceptance-v1.md)执行，本阶段没有变更其 timeout 或测试覆盖。
