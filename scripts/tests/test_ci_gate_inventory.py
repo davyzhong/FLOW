@@ -37,7 +37,7 @@ class CiGateInventoryTests(unittest.TestCase):
 
         self.assertRegex(workflow, r"(?m)^concurrency:\s*$")
         self.assertIn("github.event.pull_request.head.repo.full_name || github.repository", workflow)
-        self.assertIn("github.event.pull_request.head.ref || github.ref_name", workflow)
+        self.assertIn("github.head_ref || github.ref_name", workflow)
         self.assertRegex(workflow, r"(?m)^  cancel-in-progress: true$")
 
     def test_ci_contains_all_seventeen_acceptance_gates(self) -> None:
