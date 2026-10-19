@@ -19,7 +19,7 @@ confidentiality: project-internal
 
 # 单机原型架构简化与全视图视觉升级
 
-> **当前状态：阶段 5 门禁治理已结案，阶段 6 概念板视觉高保真实施中，当前首项为总览报告画布。** 旧阶段 1–3 与 4.1–4.7 的交付继续作为完成基线；新增阶段 5–7 严格顺序为 5→6→7。阶段 5 证明同分支过期 run 自动取消，17/18 项准确 SHA 远端门禁成功，`data-contract` 在 40 分钟上限取消但同一 SHA 的独立 Compose 验收 133/133 通过；远端限制保留，详见[阶段 5 验收记录](../../60_delivery/verification/2026-10-19--ci-concurrency-and-data-contract-isolated-acceptance-v1.md)。阶段 6 按概念板逐项重构 CFO 总览和相关视图；阶段 7 验收本地单机启动、静态财务画布、数据复验及本机截图。GitHub 截图工作流继续暂停。既有验收记录：[模块图表适配与追溯](../../60_delivery/verification/2026-10-18--cfo-module-chart-adapter-acceptance-v1.md)、[真实数据浏览器验收](../../60_delivery/verification/2026-10-18--cfo-browser-acceptance-v1.md)、[单机运行收敛](../../60_delivery/verification/2026-10-18--single-machine-runtime-convergence-v1.md)。唯一状态/顺序见 [CURRENT_ROADMAP](../CURRENT_ROADMAP.md)。
+> **当前状态：阶段 5 门禁治理已结案；阶段 6 本机实现和浏览器验收完成，队首待当前提交的准确 SHA CI 结案。** 旧阶段 1–3 与 4.1–4.7 的交付继续作为完成基线；新增阶段 5–7 严格顺序为 5→6→7。阶段 5 证明同分支过期 run 自动取消，17/18 项准确 SHA 远端门禁成功，`data-contract` 在 40 分钟上限取消但同一 SHA 的独立 Compose 验收 133/133 通过；远端限制保留，详见[阶段 5 验收记录](../../60_delivery/verification/2026-10-19--ci-concurrency-and-data-contract-isolated-acceptance-v1.md)。阶段 6 交付和本机证据见[阶段 6 验收记录](../../60_delivery/verification/2026-10-19--cfo-cockpit-visual-phase6-local-acceptance-v1.md)；阶段 7 验收本地单机启动、静态财务画布、数据复验及本机截图。GitHub 截图工作流继续暂停。既有验收记录：[模块图表适配与追溯](../../60_delivery/verification/2026-10-18--cfo-module-chart-adapter-acceptance-v1.md)、[真实数据浏览器验收](../../60_delivery/verification/2026-10-18--cfo-browser-acceptance-v1.md)、[单机运行收敛](../../60_delivery/verification/2026-10-18--single-machine-runtime-convergence-v1.md)。唯一状态/顺序见 [CURRENT_ROADMAP](../CURRENT_ROADMAP.md)。
 
 ## 目标
 
@@ -113,9 +113,9 @@ confidentiality: project-internal
 
 **结案条件与结果：** M1 队列状态门禁通过；新 SHA 推送后，同分支旧 run 自动取消；准确 SHA `dfc67283751a357d43ae23296e561cd286fea1dc` 的其余 17 项门禁成功；`data-contract` 的 CI 测试主体在同 SHA 全新隔离 Compose 项目上 133/133 通过，契约摘要通过。远端 `data-contract` 仍因 40 分钟 job 上限取消，完整限制见[阶段 5 验收记录](../../60_delivery/verification/2026-10-19--ci-concurrency-and-data-contract-isolated-acceptance-v1.md)。阶段 5 结案；如要进一步拆分此 job 或改变 timeout，需单独获得 CI 配置授权。
 
-### 6. 按概念板完成视觉高保真（新阶段）
+### 6. 按概念板完成视觉高保真（本机实现和浏览器验收已完成，准确 SHA CI 待结案）
 
-**当前细分动作：总览报告画布。** 组合图只使用同一趋势响应中的收入/营业利润数据；现金流瀑布、杜邦因子、费用结构分别复用现有现金流、盈利能力、费用模块 API 和 ECharts builders。每个模块呈现自身期间、单位、事实类型、快照及来源入口；不同接口的披露期与上方筛选趋势明确分层，绝不混称同一筛选结果。移动端先呈现指标与主证据图，表格以详情展开补充。失败/缺数态保留说明，不造数。
+**本机交付完成：总览报告画布及 9 路由双视口验收。** 组合图只使用同一趋势响应中的收入/营业利润数据；现金流瀑布、杜邦因子、费用结构分别复用现有现金流、盈利能力、费用模块 API 和 ECharts builders。每个模块呈现自身期间、单位、事实类型、快照及来源入口；不同接口的披露期与上方筛选趋势明确分层，绝不混称同一筛选结果。移动端先呈现指标与主证据图，表格以详情展开补充。失败/缺数态保留说明，不造数。
 
 
 - 以 `docs/assets/cockpit-visual-direction-2026-10-18.png` 为验收基准，将概念板拆为可核对的视觉清单：纸白/暖白报告画布、墨蓝工作流导航、克制金色重点、编辑部标题与留白、首屏四项 CFO KPI、收入/利润趋势、经营现金流瀑布、杜邦驱动分解、成本结构、关键洞察/行动项、口径与来源说明。
@@ -124,7 +124,7 @@ confidentiality: project-internal
 - 使用真实大麦发行包或公开财报数据验证。概念板内虚构的指标数值不得用作事实；无法被当前来源支持的视觉模块显示明确缺数/待配置状态。
 - 本机验收启用截图：固定 `1440×900` 与 `390×844` 视口，保存总览及主题页面截图、数据批次与代码 SHA；截图为实际浏览器输出，不对图像摆拍或后期改数。
 
-**通过条件：** 逐项概念板视觉清单均有页面落点和验收证据；桌面主要版式/图表组合接近参考，手机内容完整可读；9 个 CFO/数据路由的图表、数值/API、数据来源和深链一致；截图和脚本可在本机复跑；所有视图状态和业务数据真实可追溯。
+**本机验收结果：** 概念板对应的暖纸白画布、墨蓝导航、金色重点、四项核心 KPI、收入/营业利润趋势、经营现金流瀑布、杜邦拆解、费用排名、来源说明和行动项已落地。9 个 CFO/数据路由在桌面与手机共 18 个组合验证真实图表和无横向溢出；总览 KPI 与趋势明细逐项核对 API；桌面总览、手机总览和盈利能力页面截图已保存。详见[阶段 6 本机验收记录](../../60_delivery/verification/2026-10-19--cfo-cockpit-visual-phase6-local-acceptance-v1.md)。本阶段只剩当前提交的准确 SHA CI 核验；通过阶段 5 的替代结案条件处理既有 40 分钟 `data-contract` 门禁限制。
 
 ### 7. 单机静态运行、验收与截图闭环（新阶段）
 

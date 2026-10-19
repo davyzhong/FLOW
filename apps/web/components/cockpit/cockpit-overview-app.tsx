@@ -17,11 +17,12 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 import "./cockpit.css";
 
-import { flowApi } from "../../lib/api/client";
+import { flowApi, type CockpitModuleResponse, type CockpitProfitabilityResponse } from "../../lib/api/client";
 import { ActionItemPanel } from "./action-panel";
 import { CockpitConclusionBar, CockpitDrillDrawer } from "./drill-drawer";
 import { CockpitFilterBar } from "./cockpit-filter-bar";
 import { CockpitKpiGrid } from "./kpi-card";
+import { CockpitOverviewVisuals, type CockpitOverviewSupplements } from "./cockpit-overview-visuals";
 import type {
   CockpitDrill,
   CockpitFilters,
@@ -29,7 +30,24 @@ import type {
   CockpitRequestState,
   CockpitTrendSeries,
 } from "./cockpit-types";
-import { CockpitTrendPanel } from "./trend-panel";
+
+const defaultLoadSupplement = async (signal: AbortSignal): Promise<CockpitOverviewSupplements> => {
+  const [profitability, cashflow, expenses] = await Promise.allSettled([
+    flowApi.getCockpitProfitability(signal),
+    flowApi.getCockpitModule("cashflow", signal),
+    flowApi.getCockpitModule("expenses", signal),
+  ]);
+  const failures: string[] = [];
+  if (profitability.status === "rejected") failures.push("盈利能力");
+  if (cashflow.status === "rejected") failures.push("现金流");
+  if (expenses.status === "rejected") failures.push("费用分析");
+  return {
+    profitability: profitability.status === "fulfilled" ? profitability.value as CockpitProfitabilityResponse : null,
+    cashflow: cashflow.status === "fulfilled" ? cashflow.value as CockpitModuleResponse : null,
+    expenses: expenses.status === "fulfilled" ? expenses.value as CockpitModuleResponse : null,
+    failures,
+  };
+};
 
 const defaultLoad = (
   filters: CockpitFilters,
@@ -53,6 +71,7 @@ function queryString(filters: CockpitFilters): string {
 
 export function CockpitOverviewApp({
   load = defaultLoad,
+  loadSupplement = defaultLoadSupplement,
   initialFilters = {},
 }: {
   load?: (
@@ -60,12 +79,33 @@ export function CockpitOverviewApp({
     signal: AbortSignal,
   ) => Promise<CockpitOverviewResponse>;
   initialFilters?: CockpitFilters;
+  loadSupplement?: (signal: AbortSignal) => Promise<CockpitOverviewSupplements>;
 }) {
   const [filters, setFilters] = useState<CockpitFilters>(initialFilters);
   const [request, setRequest] = useState<CockpitRequestState>({ kind: "loading" });
   const [drill, setDrill] = useState<CockpitDrill | null>(null);
+  const [supplements, setSupplements] = useState<CockpitOverviewSupplements | null>(null);
+  const [supplementsLoading, setSupplementsLoading] = useState(true);
   const [requestKey, setRequestKey] = useState(0);
   const serialized = useMemo(() => queryString(filters), [filters]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    loadSupplement(controller.signal).then(
+      (result) => {
+        if (controller.signal.aborted) return;
+        setSupplements(result);
+        setSupplementsLoading(false);
+      },
+      () => {
+        if (!controller.signal.aborted) {
+          setSupplements({ profitability: null, cashflow: null, expenses: null, failures: ["披露补充"] });
+          setSupplementsLoading(false);
+        }
+      },
+    );
+    return () => controller.abort();
+  }, [loadSupplement]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -178,24 +218,8 @@ export function CockpitOverviewApp({
         </p>
       </header>
 
-      <CockpitKpiGrid cards={overview.kpi_cards ?? []} onDrill={setDrill} />
-
-      {trendSeries.length > 0 ? (
-        <section className="cockpit__trends" aria-label="趋势">
-          <div className="section-heading">
-            <div>
-              <span>02</span>
-              <h3>趋势</h3>
-            </div>
-            <small>只读已冻结事实，不重算</small>
-          </div>
-          <div className="trend-grid">
-            {trendSeries.map((series) => (
-              <CockpitTrendPanel key={series.key} series={series} />
-            ))}
-          </div>
-        </section>
-      ) : null}
+      <CockpitKpiGrid cards={overview.kpi_cards ?? []} trends={trendSeries} onDrill={setDrill} />
+      <CockpitOverviewVisuals overview={overview} supplements={supplements} loading={supplementsLoading} />
 
       <CockpitConclusionBar
         text={overview.conclusion.text}

@@ -22,7 +22,15 @@ import { useCallback, useState } from "react";
 
 import type { DashboardValue } from "../../lib/api/client";
 import { formatDeltaPercent, formatFinancialValue } from "./number-format";
-import type { CockpitDrill, CockpitKpiCard as Card, CockpitPolarity } from "./cockpit-types";
+import type { CockpitDrill, CockpitKpiCard as Card, CockpitPolarity, CockpitTrendSeries } from "./cockpit-types";
+
+function formatKpiValue(value: string | number | null | undefined, metricCode: string, unit: string, appendUnit = true): string {
+  const numeric = typeof value === "number" ? value : Number(value);
+  if (["CNY", "人民币", "元"].includes(unit) && Number.isFinite(numeric) && Math.abs(numeric) >= 100_000_000) {
+    return formatFinancialValue(numeric / 100_000_000, { unit: "亿元", appendUnit });
+  }
+  return formatFinancialValue(value, { metricCode, unit, appendUnit });
+}
 
 function Comparison({
   label,
@@ -69,12 +77,32 @@ function Comparison({
   );
 }
 
+function KpiSparkline({ series, title }: { series: CockpitTrendSeries; title: string }) {
+  const points = (series.points ?? []).filter((point) => point.status === "ready" && Number.isFinite(point.value));
+  if (points.length < 2) return null;
+  const values = points.map((point) => point.value);
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const span = max - min || 1;
+  const line = values.map((value, index) => `${(index / Math.max(values.length - 1, 1)) * 58},${19 - ((value - min) / span) * 15}`).join(" ");
+  return (
+    <svg className="kpi__sparkline" data-testid="cockpit-kpi-sparkline" viewBox="0 0 60 22" role="img" aria-label={`${title} ${points.length}期趋势`}>
+      <polyline points={line} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx={(values.length - 1) / Math.max(values.length - 1, 1) * 58} cy={19 - ((values.at(-1)! - min) / span) * 15} r="2.4" fill="currentColor" />
+    </svg>
+  );
+}
+
 export function CockpitKpiCard({
   card,
+  trend,
   onDrill,
+  compact = false,
 }: {
   card: Card;
+  trend?: CockpitTrendSeries;
   onDrill?: (drill: CockpitDrill) => void;
+  compact?: boolean;
 }) {
   const [opened, setOpened] = useState(false);
 
@@ -83,7 +111,7 @@ export function CockpitKpiCard({
     onDrill?.({
       metricCode: card.metric_code,
       title: card.title,
-      value: formatFinancialValue(card.primary.exact_value ?? card.primary.display_value, { metricCode: card.metric_code, unit: card.unit, appendUnit: false }),
+      value: formatKpiValue(card.primary.exact_value ?? card.primary.display_value, card.metric_code, card.unit, false),
       unit: card.unit,
       caliberNote: card.caliber_note,
       snapshotId: card.snapshot_id ?? "",
@@ -116,7 +144,7 @@ export function CockpitKpiCard({
 
   return (
     <article
-      className={`kpi ${stateClass}`}
+      className={`kpi ${stateClass}${compact ? " kpi--supporting" : ""}`}
       data-testid="cockpit-kpi"
       data-metric={card.metric_code}
     >
@@ -124,16 +152,18 @@ export function CockpitKpiCard({
         type="button"
         className="kpi__open"
         onClick={open}
-        aria-label={`${card.title}：${formatFinancialValue(card.primary.exact_value ?? card.primary.display_value, { metricCode: card.metric_code, unit: card.unit })}，查看计算口径与来源`}
+        aria-label={`${card.title}：${formatKpiValue(card.primary.exact_value ?? card.primary.display_value, card.metric_code, card.unit)}，查看计算口径与来源`}
       >
         <div className="kpi__top">
           <span className="kpi__cat">{card.category}</span>
           {card.control_line ? <span className="kpi__line">管控线 {formatFinancialValue(card.control_line.exact_value ?? card.control_line.display_value, { metricCode: card.metric_code, unit: card.unit })}</span> : null}
         </div>
         <h4>{card.title}</h4>
-        <div className="kpi__value">
-          {formatFinancialValue(card.primary.exact_value ?? card.primary.display_value, { metricCode: card.metric_code, unit: card.unit })}
-
+        <div className="kpi__value-row">
+          <div className="kpi__value">
+            {formatKpiValue(card.primary.exact_value ?? card.primary.display_value, card.metric_code, card.unit)}
+          </div>
+          {trend ? <KpiSparkline series={trend} title={card.title} /> : null}
         </div>
         <div className="kpi__cmps">
           <Comparison label="同比" value={card.comparisons.yoy} polarity={card.polarity} metricCode={card.metric_code} />
@@ -150,11 +180,30 @@ export function CockpitKpiCard({
 
 export function CockpitKpiGrid({
   cards,
+  trends = [],
   onDrill,
 }: {
   cards: Card[];
+  trends?: CockpitTrendSeries[];
   onDrill?: (drill: CockpitDrill) => void;
 }) {
+  const primaryOrder = ["revenue", "operating_profit", "gross_margin", "operating_cash_flow"];
+  const orderedCards = [...cards].sort((left, right) => {
+    const leftOrder = primaryOrder.indexOf(left.metric_code);
+    const rightOrder = primaryOrder.indexOf(right.metric_code);
+    return (leftOrder < 0 ? primaryOrder.length : leftOrder) - (rightOrder < 0 ? primaryOrder.length : rightOrder);
+  });
+  const primaryCards = orderedCards.filter((card) => primaryOrder.includes(card.metric_code));
+  const supportingCards = orderedCards.filter((card) => !primaryOrder.includes(card.metric_code));
+  const renderCard = (card: Card, compact: boolean) => (
+    <CockpitKpiCard
+      card={card}
+      trend={trends.find((series) => series.key === card.metric_code)}
+      key={card.metric_code}
+      onDrill={onDrill}
+      compact={compact}
+    />
+  );
   return (
     <section className="kpi-section" aria-label="核心经营指标">
       <div className="section-heading">
@@ -164,11 +213,11 @@ export function CockpitKpiGrid({
         </div>
         <small>三基准：同比 / 环比 / 行业分位 · 口径常驻 · 点击穿透</small>
       </div>
-      <div className="kpi-grid">
-        {cards.map((card) => (
-          <CockpitKpiCard card={card} key={card.metric_code} onDrill={onDrill} />
-        ))}
-      </div>
+      <div className="kpi-grid">{primaryCards.map((card) => renderCard(card, false))}</div>
+      {supportingCards.length ? <section className="kpi-supporting" aria-label="补充经营指标">
+        <div className="section-heading"><div><span>01A</span><h3>补充经营指标</h3></div><small>规模、单均效率、成本与营运资本</small></div>
+        <div className="kpi-grid kpi-grid--supporting">{supportingCards.map((card) => renderCard(card, true))}</div>
+      </section> : null}
     </section>
   );
 }

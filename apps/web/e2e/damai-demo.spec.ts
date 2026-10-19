@@ -1769,28 +1769,21 @@ test("all CFO cockpit views render real charts without narrow-screen overflow", 
           await expect(page.getByText(label, { exact: false }).first()).toBeVisible();
         }
         await expect(page.getByTestId("action-item").first()).toBeVisible();
-        const trends = page.locator("article[data-testid='cockpit-trend']");
-        await expect(trends).toHaveCount(4);
-        for (const trend of await trends.all()) {
-          const key = await trend.getAttribute("data-key");
-          const series = apiOverview.trends?.flatMap((item) => item.series ?? []).find((item) => item.key === key);
-          expect(series, `${key} 应存在于趋势 API`).toBeDefined();
-          expect(Number(await trend.getAttribute("data-points"))).toBe(
-            series?.points?.filter((point) => point.status === "ready").length,
-          );
-          await trend.locator("details summary").click();
-          const renderedRows = await trend.locator("tbody tr").evaluateAll((rows) => rows.map((row) => [
-            row.querySelector("th")?.textContent?.trim() ?? "",
-            row.querySelector("td")?.textContent?.trim() ?? "",
-          ]));
-          const expectedRows = (series?.points ?? []).map((point) => [
-            point.period,
-            point.status === "ready" ? formatFinancialValue(point.value, { unit: series?.unit }) : "—",
-          ]);
-          expect(renderedRows).toEqual(expectedRows);
+        await expect(page.getByTestId("cockpit-overview-revenue-profit-chart")).toBeVisible();
+        await expect(page.getByTestId("cockpit-kpi-sparkline")).toHaveCount(4);
+        const trendDetails = page.locator(".overview-panel--trend details");
+        await trendDetails.locator("summary").click();
+        const trendRows = trendDetails.locator("tbody tr");
+        const expectedSeries = apiOverview.trends?.flatMap((item) => item.series ?? []) ?? [];
+        await expect(trendRows).toHaveCount(expectedSeries.length);
+        for (const series of expectedSeries) {
+          const row = page.getByTestId(`cockpit-overview-trend-row-${series.key}`);
+          await expect(row.locator("th")).toHaveText(series.title);
+          const renderedValues = await row.locator("td").allTextContents();
+          expect(renderedValues).toEqual((series.points ?? []).map((point) =>
+            point.status === "ready" ? formatFinancialValue(point.value, { unit: series.unit }) : "—",
+          ));
         }
-        await trends.first().locator("details summary").click();
-        await expect(trends.first().locator("tbody tr")).toHaveCount(12);
       } else if (route === "/cockpit/profitability") {
         await expect(page.locator(".profitability-page")).toBeVisible();
         await expect(page.locator(".profitability-comparison-grid [data-testid^='cockpit-profitability']")).toHaveCount(3);

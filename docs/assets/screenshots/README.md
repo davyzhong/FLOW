@@ -1,6 +1,39 @@
+---
+doc_id: FLOW-INDEX-SCREENSHOTS-001
+title: 项目实测与报告截图索引
+doc_type: navigation
+status: current
+version: 1.1
+created_at: 2026-09-04
+updated_at: 2026-10-19
+owner: FLOW
+applies_to: repository
+---
+
 # 当前界面截图
 
-采集日期：2026-09-04。被展示的应用代码：`c1a59d1`。全部图片为真实浏览器截图，没有替换数值、拼接控件或使用生成图冒充页面。
+本文件按采集批次记录真实页面截图；每个批次分别注明代码和数据来源。图片没有替换数值、拼接控件或使用生成图冒充页面。
+
+## A+C CFO 驾驶舱实测截图（cockpit-visual/）
+
+采集日期：2026-10-19。页面来自本轮工作树实现，运行于隔离大麦演示环境；浏览器视口固定为桌面 `1440 × 900`、手机 `390 × 844`，截图按全页高度采集。采集时记录 `pageerror` 与浏览器 console 的 warning/error 均为空；开发指示器仅在临时截图服务配置中关闭，不改变应用代码和页面行为。
+
+- 数据库与服务：独立 Compose 项目 `flow-stage6-cockpit-20261019`（PostgreSQL/Redis/MinIO 独立端口与卷），API 与 Next.js 本地运行；不连接常驻开发库。
+- 数据发行包：大麦物流合成发行包 manifest SHA-256 `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`；批次 `01a15463-cbbc-71dc-8f09-4b4cfdd586d8`；测试库为虚构企业数据，不是真实企业披露。
+- 浏览器回归：Playwright `all CFO cockpit views render real charts without narrow-screen overflow`，9 路由 × 2 视口通过；总览四项 KPI 的完整趋势表逐项对照趋势 API。
+- 截图记录的是真实应用页面。视觉概念图中的数字仍只是设计示意，不能与本批实测演示数据混用。
+
+| 文件 | 页面与状态 | 视口 / 图片尺寸 |
+| --- | --- | --- |
+| [overview-desktop-2026-10-19.png](cockpit-visual/overview-desktop-2026-10-19.png) | 当前 CFO 总览：核心 KPI、收入/营业利润双轴趋势、现金流桥、杜邦、费用、来源和行动项 | 1440 × 900 / 1440 × 2296 |
+| [overview-mobile-2026-10-19.png](cockpit-visual/overview-mobile-2026-10-19.png) | 同一总览的手机布局 | 390 × 844 / 390 × 4217 |
+| [profitability-desktop-2026-10-19.png](cockpit-visual/profitability-desktop-2026-10-19.png) | 盈利能力、杜邦驱动、两期财年比较及来源行追溯 | 1440 × 900 / 1440 × 1777 |
+
+本批截图通过 `/cockpit` 与 `/cockpit/profitability` 浏览器加载后直接采集。没有修饰图表、数值或页面控件。其准确代码提交与 CI 结果以阶段 6 验收记录为准。
+
+## 2026-09-04 用户闭环截图（历史批次）
+
+被展示的应用代码：`c1a59d1`。这些图片记录历史 UI，不代表当前页面样式。
 
 ## 环境与来源
 

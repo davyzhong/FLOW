@@ -85,6 +85,21 @@ FLOW 的视觉方向已经明确，接下来的工作是在单机原型边界内
 </tr>
 </table>
 
+### 当前 A+C 驾驶舱 · 真实页面实测
+
+下面是概念板方向已经落到产品页面后的本机浏览器实测。桌面总览优先呈现营业收入、营业利润、毛利率和经营现金流；完整趋势、现金流桥、杜邦分解、费用结构、行动项及来源口径均可在同一画布查看。手机截图展示同一数据视图的窄屏排列。
+
+<table>
+<tr>
+<td width="50%"><strong>集团财务总览 · 桌面全页</strong><br/><img src="docs/assets/screenshots/cockpit-visual/overview-desktop-2026-10-19.png" width="100%" alt="FLOW CFO 财务总览真实浏览器截图，显示四项核心 KPI、收入利润双轴趋势、经营现金流变动桥、杜邦分析、费用结构、来源和行动项"/><br/><sub>真实页面｜1440 px 视口｜大麦物流合成演示数据。</sub></td>
+<td width="50%"><strong>集团财务总览 · 手机全页</strong><br/><img src="docs/assets/screenshots/cockpit-visual/overview-mobile-2026-10-19.png" width="100%" alt="FLOW CFO 财务总览真实手机视口截图，展示核心指标、趋势图、财务分析和来源信息的窄屏布局"/><br/><sub>真实页面｜390 px 视口｜同一演示数据与代码版本。</sub></td>
+</tr>
+<tr>
+<td width="50%"><strong>盈利能力与杜邦分析 · 桌面全页</strong><br/><img src="docs/assets/screenshots/cockpit-visual/profitability-desktop-2026-10-19.png" width="100%" alt="FLOW 盈利能力与杜邦分析真实浏览器页面，展示杜邦关系图、两期财年比较、来源口径表和财报行链接"/><br/><sub>真实页面｜1440 px 视口｜财报快照、指标关系和来源行可追溯。</sub></td>
+<td width="50%"><strong>验收口径</strong><br/>9 个 CFO/数据路由通过 1440 px 与 390 px 图表绘制和溢出检查；总览四项 KPI 趋势明细逐项与 API 对账。此组图片为当前产品页面，不是概念稿；数字来自隔离的大麦物流合成发行包，不是阿里、菜鸟或真实客户财报。</td>
+</tr>
+</table>
+
 <div align="center"><sub>实景截图核对与操作边界见 <a href="docs/assets/screenshots/README.md">截图说明</a>。旧版产品截图不是当前视觉验收证据；概念图也不替代真实页面交付。</sub></div>
 
 > 长期产品方向遵循 [D052–D054](docs/10_governance/DECISION_INDEX.md)；当前交付边界由 [D055](docs/10_governance/decisions/D055--单机单用户验证原型.md) 定义为单机单用户财务分析验证原型。最新状态、实际执行位置与验收证据以 [唯一当前路线图](docs/50_plans/CURRENT_ROADMAP.md) 为准。
