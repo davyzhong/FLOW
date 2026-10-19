@@ -106,7 +106,9 @@ confidentiality: project-internal
 - 修复 M1 暴露的计划状态门禁缺陷：状态表与详细执行队列重复引用工作包时，只认路线图状态表作为状态真相；支持合法 `queued` 状态并生成独立排队视图。补充回归测试，确保叙述链接不被误识别为重复状态记录。
 - 准备 GitHub Actions 并发策略，使同一分支只保留最新 push 的全量 run，PR 与不同分支互不误取消；保留所有现存检查，不跳过测试、不降低覆盖、不把本地通过冒充远端通过。
 - 已授权的具体最小 diff：在 workflow 顶层加入 `concurrency.group: flow-ci-${{ github.workflow }}-${{ github.event.pull_request.head.repo.full_name || github.repository }}-${{ github.event.pull_request.head.ref || github.ref_name }}` 与 `cancel-in-progress: true`。push 与 PR 对同一来源仓库/分支共用组，不同分支和 fork 不相互取消；只取消该组过期运行，不变更任何 job、触发器或测试命令。用户于 2026-10-19 明确选择允许修改。
-- 对 `data-contract`、`intake-e2e`、`integration` 做耗时归因；提出可复现的切片/缓存/并行方案，维持稳定汇总检查名与全量测试集合。没有证据的拆分不实施。
+- 长作业脚本审计发现明确重复：`integration` 已跑全量 `tests/integration`，而 `data-contract` 再跑 `test_data_contract_persistence.py` 与 `test_excel_database_round_trip.py`；`data-contract` 和 `intake-e2e` 均跑 `tests/data_contract`、`tests/fixtures`；`metrics-known-answers` 与 `analysis-invariants` 都重跑 `tests/integration/test_intake_e2e.py`，后者还重复指标测试；四个脚本重复 Ruff/mypy，三个脚本重复迁移校验，intake 脚本还重复合约检查及 web lint/typecheck（各有专门门禁）。
+- 按唯一归属划分：全量集成测试归 `integration`；`tests/data_contract` 与 fixtures 归 `data-contract`；指标已知答案归 `metrics-known-answers`；分析测试归 `analysis-invariants`；intake 专项归 `intake-e2e`；静态、迁移、合约和 web 检查分别归对应门禁。对每一旧脚本的独立本地运行仍保留完整验证；GitHub Actions 环境仅运行该脚本独占范围。增加回归核对，证明原测试集合仍由全量 workflow 覆盖，且没有测试被移除。
+- 对 `data-contract`、`intake-e2e`、`integration` 记录准确 SHA 的单次耗时与子步骤；保留稳定汇总检查名和完整测试集合。缓存或并行切片只有在测试隔离和确定性得到证据后再考虑。
 - **授权边界：** 修改 `.github/workflows/ci.yml` 属 CI/CD 配置红线；本次顶层并发 diff 已于 2026-10-19 获用户明确授权并实施。后续如需修改其他 workflow 行为，须重新提交具体 diff 供用户选择。本阶段仍须以新 SHA 的完整 CI 结果验收，不能把本地配置测试视为远端通过。
 
 **通过条件：** M1 状态门禁能区分活动/排队并通过当前路线图；过期同分支 run 不再与最新提交重复争用 runner；最终最新 SHA 的所有必需 CI 检查均完成并成功；无检查被跳过/弱化；长作业的耗时和分片证据可复验，若远端环境限制仍在，必须提供同范围隔离替代证据并明确保留限制。
