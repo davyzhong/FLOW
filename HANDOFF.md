@@ -18,6 +18,12 @@ applies_to: repository
 
 ## 一、当前任务
 
+**当前下一项：K3 来源基线与知识候选构建（队首待启动）。** 单机原型第 1–3 阶段、驾驶舱 4.1–4.7、准确 SHA CI 和最终集成门禁均已关闭。知识刷新 K0/K1/K2 已完成；K2 accepted manifest 位于 Davybase 的 `codex/knowledge-run-manifest-k0` 分支，冻结器、浅层远端检查与 accepted 快照提交 `ea04578`、`c057acb`、`57c4738` 均已推送。ObsidianWiki `main@e04d6833` 有 1,377 条 dirty 路径，accepted working-tree 快照纳入 111,912 个文件/4,240,118,843 字节；候选与复验 HEAD/tree/status/content SHA 一致，可写句柄为 0。验收报告：[K2 快照验收](docs/60_delivery/verification/2026-10-19--k2-working-tree-snapshot-v1.md)。Davybase `make check` 为 Ruff 通过、897 项测试通过；该分支没有对应 CI run。ObsidianWiki 未修改。K3 读取前及生成后必须复核来源指纹，漂移则停止 candidate；该库只读，`CURRENT_RELEASE` 不变，K6 激活裁决由用户完成。
+
+下方为 K2 执行前形成的架构工作包摘要，当前状态以本段和 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为准。
+
+**唯一完整 To-do：14 项，已完成 9 项，实际执行中 0 项，队首待启动 1 项（K3），排队 3 项，暂停 1 项，外部条件受限 1 项；另 1 项等待外部材料。** 逐项状态只以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为准。
+
 **当前任务：单机原型架构简化与全视图视觉升级，第 4 阶段 4.1–4.7、准确 SHA CI 与最终集成门禁已全部关闭；当前唯一队首为 K2 快照冻结器简化和即时验收。** 用户已选择单机单用户、SQLite 单文件 + 本地文件目录、移除 Redis/Celery/MinIO，并批准 A「高管编辑部」+ C「财务报告画布」。第 1–3 阶段完成；第 3 阶段最终状态 SHA `20a511f66e4bfe65ab02edc091c7b49e2cbcbe67` 的 CI run `39125304357` 18/18 jobs success。首轮 CI 曾发现大麦 reset SQL 的发行包 manifest 哈希未同步；在 `4c3e87e05ae9fe380abb7002ba260de6d654d15c` 只更新对应清单，未改业务数据；脚本 155/155、清单专项 6/6、Ruff/mypy 和 M1/M6 均通过。正式验收见[阶段 3 记录](docs/60_delivery/verification/2026-10-18--single-machine-runtime-convergence-v1.md)。参考文章 10 模块的映射报告已写入[覆盖矩阵](docs/60_delivery/verification/2026-10-18--cfo-reference-module-data-coverage-v1.md)，覆盖页面/API/指标/事实类型/粒度/图表与交互缺口。准确 SHA `d8f2ae8d617914fcd05cfd21d8484154b1411a65` 的 CI run `39128676851` 中 `data-contract` 两次均约 40 分钟触限取消；隔离数据库执行原脚本全通过（133+3 tests、Ruff、mypy 213 files、契约摘要），M1/M6 和链接检查通过，详细结果及限制见[4.1 验收记录](docs/60_delivery/verification/2026-10-18--cfo-reference-matrix-ci-and-isolated-validation-v1.md)。4.2 已完成 14 视图图表/数据盘点，识别合成账龄/预算可用而未展示、订单数小数数据语义问题和不能宣称的预测/风险/合并能力；报告见[4.2盘点](docs/60_delivery/verification/2026-10-18--cfo-chart-and-data-availability-v1.md)。4.3 已完成并形成[组件复用与交互方案](docs/60_delivery/verification/2026-10-18--cfo-chart-component-and-interaction-design-v1.md)：继续复用 ECharts 6.1，接通已有但未被分发器使用的构建器；修复图表语义并配同值表格、事实来源标签和深链。第 4 阶段 4.1–4.7 已结案，代码 SHA `65a08706` 与最终文档 SHA `a1fe50ef` 对应 GitHub CI 均 18/18 成功。截图采集/自动生成继续暂停。审计包含 19 个页面路由、32 个 PostgreSQL revisions、SQLite 方言与金额精度风险、S3/Redis/Celery 调用点及主 checkout 四处未提交更改；README 视觉同步完成。主 checkout 的四处改动仍原位，本 worktree 未触碰。当前分支为 `codex/single-machine-runtime-convergence`，原未提交实现仍保存在 stash 备份中。范围见[唯一工作包](docs/50_plans/work_items/FLOW--single-machine-visual-prototype.md)、[设计规格](docs/superpowers/specs/2026-10-18-single-machine-visual-prototype-design.md)和[路线图](docs/50_plans/CURRENT_ROADMAP.md)。
 
 此前全视图驾驶舱工作包作为回归基线归档：九页 25 个 ECharts 画布、桌面/手机 18 组视口验收、API/页面数据对账、来源深链与缺数态等本地证据保留。真实 CI 状态：`39042517573`（SHA `e6b68c8a`）和 `39041228479`（SHA `0b9b12f3`）均 cancelled；`39040652008`（SHA `b2ee0373`）和 `39038535194`（SHA `df5c338b`）均 failure；不能说旧全视图任务准确 SHA CI 已通过。阶段 2 准确 SHA `09ba5722ec3e8075a3483223df4c81fe5cdaa9fa` 的 run `39035163288` 为 18/18 成功。相关[旧工作包](docs/50_plans/work_items/COCKPIT--all-views-data-and-visual-completion.md)已 archived 且禁止继续执行；[浏览器验证报告](docs/60_delivery/verification/2026-10-17--cockpit-all-views-visual-browser-verification-v1.md)仅作为回归基线。
@@ -26,7 +32,7 @@ applies_to: repository
 
 **CFO 驾驶舱盈利分析与图表缺口补全已完成**。本分支新增盈利能力页面 `/cockpit/profitability`、只读 API 与冻结时杜邦指标载荷；提供净利率、ROE、总资产周转率、权益乘数、两期比较、勾稽提示、指标/报告/来源财报行深链。图表复用 ECharts；旧快照或缺少期初数据时明确显示 unavailable。前端 36 个测试文件/184 项通过、typecheck/build 通过；lint 零错误，有一条既有 TanStack Table 警告；后端隔离定向测试 12 项、Ruff、mypy 通过；隔离账套核验 19/19、可见性矩阵 162 项无失败、浏览器全旅程 16/16 通过，真实页面截图见[浏览器验收记录](docs/60_delivery/verification/2026-10-17--cockpit-profitability-browser-verification-v1.md)。CI 首轮发现重复 seed 会新增两份 Objective 快照；修复归一化行 UUID 不稳定性后，回归测试 10 项通过，准确 SHA `08aa4cd02247f995bc990d92c8f34f5a1829afa1` 的 GitHub CI run `38996089002` 为 18/18 job success。contracts、plan views、links 与 M1 通过。代码与修复提交分别为 `5817efcf`、`08aa4cd0`，均已推送。工作包/设计/计划见 [工作包](docs/50_plans/work_items/COCKPIT--visual-analysis-expansion.md)、[设计规格](docs/superpowers/specs/2026-10-17-cfo-cockpit-visual-analysis-expansion-design.md)、[实施计划](docs/superpowers/plans/2026-10-17-cockpit-visual-analysis-expansion.md)。独立审查发现的单位误标和来源行下钻缺口均已修复。
 
-**当前唯一队列：14 项，已完成 8、实际执行中 1（K2 冻结器简化）、队首待启动 0、排队 3、暂停 1、外部条件受限 1（另 1 项等待外部材料）。** 已取消 K2 墙上时钟等待，工作包记录新的验收合同。K0/K1/K2 的已完成证据、dirty vault 保护与来源说明见[知识刷新工作包](docs/50_plans/work_items/KNOWLEDGE--refresh-v2.md)。
+前序交接快照（已由本页最新队列更新）：K2 冻结器曾受墙上时间和 clean-only 条件限制；详情见[知识刷新工作包](docs/50_plans/work_items/KNOWLEDGE--refresh-v2.md)。
 
 用户四项裁决（2026-10-16）：
 1. **L0 挂 CI（选项 C）**：非阻断 `l0-baseline` job（continue-on-error: true），失败仅作信号灯。
@@ -240,7 +246,7 @@ bash scripts/test_damai_demo_e2e.sh
 | `docs/50_plans/work_items/COCKPIT--cfo-dashboard-implementation.md` | 驾驶舱工作包（completed） |
 | `docs/50_plans/work_items/FINMETRIC--financial-metric-catalog.md` | 指标目录工作包（completed） |
 | `docs/50_plans/work_items/U04--independent-oracle.md` | U04 工作包（completed） |
-| `docs/50_plans/work_items/KNOWLEDGE--refresh-v2.md` | 知识刷新工作包（K0/K1 完成，K2 冻结器简化中） |
+| `docs/50_plans/work_items/KNOWLEDGE--refresh-v2.md` | 知识刷新工作包（K0/K1/K2 完成，当前执行 K3） |
 | `docs/60_delivery/verification/2026-10-16--u04-blind-review-rerun-v1.md` | 盲评复评验证文档 |
 | `docs/60_delivery/verification/2026-10-16--cockpit-51-chart-coverage-mapping-v1.md` | 51 图覆盖映射 |
 | `docs/60_delivery/verification/2026-10-12--damai-source-baseline-audit-v1.md` | 来源基线审计 |

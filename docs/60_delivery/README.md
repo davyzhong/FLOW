@@ -13,3 +13,5 @@ applies_to: docs
 # 交付与证明
 
 实施、验证、迁移、发布与机器生成结果（M5 迁入 implementation/）。允许 doc_type: delivery/verification/generated。禁止: 计划与规格正文。
+
+- [K2 Obsidian 工作区快照验收](verification/2026-10-19--k2-working-tree-snapshot-v1.md)：即时 working-tree 快照与双指纹复核结果。
