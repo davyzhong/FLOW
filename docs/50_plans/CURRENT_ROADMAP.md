@@ -3,9 +3,9 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 5.91
+version: 5.92
 created_at: 2026-09-12
-updated_at: 2026-10-19
+updated_at: 2026-10-20
 owner: FLOW
 depends_on: [FLOW-SPEC-V1-DESIGN-001]
 acceptance_refs: [roadmap-unique-invariant]
@@ -17,7 +17,7 @@ superseded_by: null
 
 # 当前路线图（唯一主线）
 
-> **2026-10-19 最新状态：7a 阶段 5 门禁并发治理和阶段 6 概念板视觉实现已结案；发现单个 `data-contract` 长作业仍在 40 分钟上限取消，新增阶段 6.5 为当前唯一队首，先按文件拆成隔离 shard 并保留全部 133 项测试与稳定汇总检查，再进入阶段 7 单机静态运行/验收/截图。** 阶段 6 准确 SHA `dc705fec087c0b4d41e3a5a85baa38d9811269d8` 的 GitHub Actions run `39265415539` 为 17/18 success；同 SHA 独立 Compose 执行 CI 数据契约脚本 133/133 通过、摘要检查通过，用时 1066.42 秒。运行证据见[阶段 6验收记录](../60_delivery/verification/2026-10-19--cfo-cockpit-visual-phase6-local-acceptance-v1.md)。当前阻滞已界定为 runner 单 job 时长，不是测试失败；阶段 6.5 详细拆分与验收见[工作包](work_items/FLOW--single-machine-visual-prototype.md#65-收敛-data-contract-单个长作业当前队首保留全量测试)。阶段 7尚未开始，K3 仍排在 7a 完成后。
+> **2026-10-20 最新状态：7a 阶段 5 门禁并发治理、阶段 6 视觉实现与阶段 6.5 数据契约分片均已完成；阶段 7 单机静态运行、验收和截图已在隔离环境本机完成。** `make flow-bootstrap` 与 `FLOW_DATA_DIR=/tmp/flow-stage7-20261020 make flow` 完成生产构建、SQLite 冷启动、迁移和 Web/API 200；大麦发行包校验 19/19。总览真实显示收入、营业利润、毛利率、经营现金流、趋势、现金流桥、杜邦、费用和行动项，并暴露数据 stale 状态。生成的自包含 `offline-preview.html` 以 `file://` 打开时 8 KPI 和来源 JSON 可读、外部请求 0、页面错误 0；桌面、手机与盈利能力截图已保存。截图及运行证明见[阶段 7验收记录](../60_delivery/verification/2026-10-20--single-machine-visual-static-acceptance-v1.md)。准确 SHA `9ec0611562569b33bc3dac28c16445aa9470b150` 的 run `39283815189` 当前为 queued，故队列仍标 7a 实际执行中，待该 SHA 完整 CI 后结案；CI 工作流仍保持已批准的分支级并发取消策略。K3 排在 7a 后。
 
 > **2026-10-18 用户确认原型方向并完成队首重规划**：当前交付定位调整为单机单用户验证原型；用户选择 SQLite 单文件 + 本地文件目录、移除 Redis/Celery/MinIO，并确认 A 主风格 + C 报告叙事。旧驾驶舱全视图工作包归档，其九页/25 图与桌面/手机实测作为回归基线。旧 CI 实际结果为：`39042517573`、`39041228479` cancelled；`39040652008`、`39038535194` failure；不得描述为 CI 全绿。新的唯一队首为单机原型架构简化与全视图视觉升级，正式设计见[规格](../superpowers/specs/2026-10-18-single-machine-visual-prototype-design.md)与[D055](../10_governance/decisions/D055--单机单用户验证原型.md)。README 视觉基准说明提交 `d51af7ad` 的准确 SHA 主 CI run `39087270646` 曾因 data-contract 与 intake-e2e 到达 40/45 分钟 job 上限而 cancelled；同一代码的后续文档状态提交 `a331f03075c95f3b371b5a0ebd0fd91cac9dfeae` 对应 run `39090417203` 全部 job success，取消未复现。未改 CI 超时或缩减覆盖。第 1 阶段现状/影响审计已完成，清单与风险见[审计报告](../60_delivery/verification/2026-10-18--single-machine-architecture-dependency-audit-v1.md)。README 视觉素材编排已完成，只用仓库已有概念板与截图；截图素材采集/自动生成工作流继续暂停，未触发。D055 第 2 阶段 SQLite/本地内容存储已完成：隔离全链和兼容性验证通过；残留 PostgreSQL 专用 `.astext` 测试查询已改为跨库 `.as_string()`。准确代码 SHA `b0e1eb787592ff84bc4c19873a1e61cad1f9f3e6` 的 GitHub Actions run `39099573268` 为 18/18 jobs success，第 2 阶段正式关闭。第 3 阶段现已实现并本地验收：同步处理、本地内容寻址文件存储、单一启动入口与 SQLite 默认数据目录完成；隔离 Damai 账套重置回归 2/2、SQLite schema/jobs/object-store 16/16、设置/重置 PostgreSQL 兼容回归 2/2、Ruff/mypy、文档 M1 均通过。`make flow-bootstrap` 生产依赖裁剪增加 `CI=true` 以支持无 TTY 环境，完整引导成功；临时目录初始化成功，Web 与 API health 均 HTTP 200。详细证据见[第 3 阶段验收记录](../60_delivery/verification/2026-10-18--single-machine-runtime-convergence-v1.md)。本阶段仍待本提交准确 SHA 的 GitHub CI；通过后按序进入第 4 阶段全视图 A+C 视觉与数据补全。整个工作包完成后再恢复知识刷新 K2。
 > **2026-10-19 工作包 7a 已关闭，K2 转为唯一队首**：4.6 指标期间、方向、单位与来源链接已修复，独立审查无 P1/P2，详见[指标展示验收](../60_delivery/verification/2026-10-18--cfo-metric-display-and-traceability-v1.md)。4.7 隔离真实数据验收覆盖 9 个 CFO/数据页面及 165 项浏览器回归，详见[浏览器验收](../60_delivery/verification/2026-10-18--cfo-browser-acceptance-v1.md)。代码 SHA `65a087063ad67702172430702590083f8991a884` 的 run `39139310634` 18/18 success；最终文档 SHA `a1fe50ef4e71298767b4fe8e22ab47d780f28552` 的 run `39140563811` 18/18 success。中间文档 SHA `8bf7535c` 曾有 M6 metadata failure 与 data-contract cancelled，已在 `a1fe50ef` 修复并全绿。工作包 7a 正式关闭，验收见[4.6](../60_delivery/verification/2026-10-18--cfo-metric-display-and-traceability-v1.md)和[4.7](../60_delivery/verification/2026-10-18--cfo-browser-acceptance-v1.md)；当时 K2 为唯一队首，后续验收以本页最新状态为准。
@@ -104,11 +104,11 @@ superseded_by: null
 
 ## 唯一完整 To-do 与执行队列（严格串行）
 
-**当前唯一队列（15 项）**：已完成 8 项；实际执行中 1 项（7a 阶段 7，单机静态运行/验收/截图）；队首待启动 0 项；排队 4 项（含 K3）；暂停 1 项；外部条件受限 1 项。阶段 6概念视觉已交付。阶段 6.5 的 133 项数据契约全量测试按文件拆为 5 个隔离 shard，准确 SHA `3ac44738` 的 5 shard 与稳定 `data-contract` 汇总检查全部成功；最慢分片 21分26秒，未触及 40 分钟限制。run `39276126532` 的 `integration` 截至状态更新仍运行，因此不宣称整条 workflow 全绿；该项已在验收记录中如实保留。阶段 7已开始审查本地启动链与空数据目录隔离，随后执行单机启动与静态页面验收；K3 仍在 7a 之后。
+**当前唯一队列（15 项）**：已完成 8 项；实际执行中 1 项（7a 阶段 7准确 SHA CI 待完成）；队首待启动 0 项；排队 4 项（含 K3）；暂停 1 项；外部条件受限 1 项。阶段 6.5 的 133 项数据契约测试拆为 5 个隔离 shard，准确 SHA `3ac44738` 的 shard 与稳定汇总检查全成功；该 run 的 `integration` 曾持续运行，不能据此宣称该 SHA 整体 CI 全绿。阶段 7本地实现与验收已完成；当前唯一动作是跟踪准确 SHA `9ec0611562569b33bc3dac28c16445aa9470b150` 的 GitHub run `39283815189`，完成后结案或按实际失败诊断。详见[阶段 7验收记录](../60_delivery/verification/2026-10-20--single-machine-visual-static-acceptance-v1.md)。
 
 0. **completed** [CFO 驾驶舱盈利分析与图表缺口补全](work_items/COCKPIT--visual-analysis-expansion.md)：四项指标于 Objective 快照冻结并存 trace；只读 API；杜邦树与两期比较图；指标/财报/来源行深链；未具备口径时 unavailable。范围与交付记录：[设计规格](../superpowers/specs/2026-10-17-cfo-cockpit-visual-analysis-expansion-design.md)、[实施计划](../superpowers/plans/2026-10-17-cockpit-visual-analysis-expansion.md)。
 0a. **completed** [驾驶舱视觉补全与数值格式治理](work_items/COCKPIT--visual-completion-and-number-format.md)：订单/件量整数、金额两位小数、单位格式统一、费用页错误修复、真实图表/趋势/下钻、8 页面截图及隔离浏览器验收；代码 SHA `1a71e33f`，准确 SHA CI run `38936413156` 全部 job 成功。
-7a. **active（阶段 6.5 已完成；阶段 7执行中）** 单机原型架构简化与全视图视觉升级：准确 SHA `3ac44738c75f710156724a8584bda1144624235d` / run `39276126532` 的五个数据契约 shard 与汇总检查全部成功，133 项完整覆盖，最慢分片 21分26秒；`integration` 仍在运行，整条 workflow 不声称全绿。阶段 7已开始审查本地启动链、服务进程与数据隔离；后续从新数据目录验收 SQLite 单机启动、静态财务输出、离线浏览、来源/版本追溯、备份恢复和桌面/手机真实截图。GitHub 自动截图 workflow 仍暂停。详细步骤见[工作包](work_items/FLOW--single-machine-visual-prototype.md#7-单机静态运行验收与截图闭环)。
+7a. **active（本地阶段 1–7 验收完成；准确 SHA CI 待结案）** 单机原型架构简化与全视图视觉升级：阶段 7从隔离目录冷启动成功，19/19 数据包校验通过；离线静态 HTML 验证零外部请求，桌面/手机无横向溢出，来源和版本写入快照。SQLite + 本地对象目录的备份恢复全链证据见阶段 2验收记录。代码/静态产物及截图见[阶段 7验收记录](../60_delivery/verification/2026-10-20--single-machine-visual-static-acceptance-v1.md)。最新 SHA `9ec0611562569b33bc3dac28c16445aa9470b150` / run `39283815189` 状态 queued，未宣称 CI 通过；唯一当前动作是确认该准确 SHA 的全量 CI 结论。GitHub 自动截图 workflow 仍暂停。详细范围见[工作包](work_items/FLOW--single-machine-visual-prototype.md#7-单机静态运行验收与截图闭环)。
 K. **queued（待 7a 阶段 5–7）** 第二代静态知识刷新与战略重基线：K0/K1/K2 已完成，K3 baseline/diff 已生成并复验。语义路由、HIGH 全审、MED/LOW 双审、coverage 闭合、候选与独立 reader 尚未完成；不得将自动登记冒充语义审阅。ObsidianWiki 保持只读，`CURRENT_RELEASE` 不变。
 
 以下 1–11 是驾驶舱队首调整前的原队列事项：1、2、3、5 已完成；4 U04 与 6 P3 暂停；7、9、10、11 排队；8 外部材料受限。旧验证记录仍是历史证据，不代表当前执行位置。

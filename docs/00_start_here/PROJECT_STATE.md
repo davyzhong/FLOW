@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.69
+version: 5.70
 created_at: 2026-09-12
 updated_at: 2026-10-20
 owner: FLOW
@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-10-20 最新状态：**阶段 6.5 的 CI 长作业收敛已验收；阶段 7 单机静态运行/验收/截图正在执行。** 准确 SHA `3ac44738c75f710156724a8584bda1144624235d`、run `39276126532` 中五个 `data-contract-shards` 与稳定 `data-contract` 汇总检查全部成功；133 项覆盖不变，最慢分片 21分26秒。该 run 的其他已完成门禁均通过，但 `integration` 在记录时仍是 `in_progress`，所以整条 workflow 不标为全绿。阶段 7当前审查已有 `make flow`、SQLite 与静态产物路径，接下来从全新隔离数据目录执行启动和离线视觉验收；目标覆盖单机 SQLite 启动、静态图表、来源/版本追溯、备份恢复和真实截图。唯一状态与队列见[路线图](../50_plans/CURRENT_ROADMAP.md)和[工作包阶段 7](../50_plans/work_items/FLOW--single-machine-visual-prototype.md#7-单机静态运行验收与截图闭环)。
+2026-10-20 最新状态：**阶段 7本机单机与视觉验收已完成，当前仅待准确 SHA GitHub CI 结案。** 在 `/tmp/flow-stage7-20261020` 空隔离目录中，`make flow-bootstrap` + `make flow-init` + `make flow` 成功完成生产构建、SQLite 迁移、API/Web 本机启动；大麦合成发行包 `verify` 19/19 通过。总览含营业收入、营业利润、毛利率、经营现金流、趋势/瀑布/杜邦/费用/行动项；过期状态提示已补齐。桌面、手机、盈利页真实截图和自包含离线 HTML 已交付；离线打开 8 KPI 与来源 JSON 存在，外部请求 0、页面错误 0。SQLite + 本地文件目录备份恢复的全链证据引用阶段 2隔离验收。准确 SHA `9ec0611562569b33bc3dac28c16445aa9470b150` 的 GitHub Actions run `39283815189` 当前 queued，不能宣称工作包或 CI 全绿。详细记录：[阶段 7验收](../60_delivery/verification/2026-10-20--single-machine-visual-static-acceptance-v1.md)、[截图索引](../assets/screenshots/README.md)。唯一队列与下一动作见[路线图](../50_plans/CURRENT_ROADMAP.md)和[工作包](../50_plans/work_items/FLOW--single-machine-visual-prototype.md)。
 
 下段为 K2 执行前的状态快照，已过时；当前状态以本段及 [CURRENT_ROADMAP](../50_plans/CURRENT_ROADMAP.md) 为准。
 

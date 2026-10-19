@@ -102,6 +102,22 @@ FLOW 的视觉方向已经明确，接下来的工作是在单机原型边界内
 
 <div align="center"><sub>实景截图核对与操作边界见 <a href="docs/assets/screenshots/README.md">截图说明</a>。旧版产品截图不是当前视觉验收证据；概念图也不替代真实页面交付。</sub></div>
 
+### 单机运行成果与离线驾驶舱
+
+下图与离线报告来自 2026-10-20 的本机生产构建，代码 SHA `9ec0611562569b33bc3dac28c16445aa9470b150`。它们使用隔离目录中的大麦物流**合成演示批次**（manifest SHA-256 `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`），验证报告 19/19 通过；不可将这些数据当作阿里巴巴、菜鸟或真实客户披露数据。
+
+![单机版财务驾驶舱总览：核心指标、趋势图、现金流桥、杜邦分析、费用结构与行动项](docs/assets/screenshots/cockpit-single-machine/overview-desktop-2026-10-20.png)
+
+![单机版财务驾驶舱手机布局](docs/assets/screenshots/cockpit-single-machine/overview-mobile-2026-10-20.png)
+
+| 可直接查看的交付 | 内容 |
+| --- | --- |
+| [离线静态驾驶舱 HTML](docs/assets/screenshots/cockpit-single-machine/offline-preview.html) | 单文件、自包含图表和数据快照；可断网打开，快照内嵌来源与代码版本信息。离线版适合阅读和展示，动态筛选与页面跳转仍通过本地应用提供。 |
+| [盈利能力与杜邦分析截图](docs/assets/screenshots/cockpit-single-machine/profitability-desktop-2026-10-20.png) | 实际页面全页截图。 |
+| [截图与单机验收说明](docs/assets/screenshots/README.md) | 视口、数据批次、哈希、截图和离线检查结果。 |
+
+本批静态文件以 `file://` 浏览器实测，外部请求为 0、页面错误为 0；生产应用由本机 SQLite 与文件目录驱动。完整命令和当前 GitHub CI 状态以[路线图](docs/50_plans/CURRENT_ROADMAP.md)及[验收记录](docs/60_delivery/verification/2026-10-20--single-machine-visual-static-acceptance-v1.md)为准。
+
 > 长期产品方向遵循 [D052–D054](docs/10_governance/DECISION_INDEX.md)；当前交付边界由 [D055](docs/10_governance/decisions/D055--单机单用户验证原型.md) 定义为单机单用户财务分析验证原型。最新状态、实际执行位置与验收证据以 [唯一当前路线图](docs/50_plans/CURRENT_ROADMAP.md) 为准。
 
 ## 🎨 当前视觉设计基准
@@ -414,7 +430,7 @@ flowchart LR
 | **U8** | 生产就绪收口（真实存储旅程、HTTPS 拓扑、统一部署验收） | ✅ completed；严格冻结门禁通过 |
 | **S01** | 战略边界、Financial Facts V2、安全/RBAC/审计门禁 | ✅ completed |
 | **D 轨** | 大麦物流完整财年演示数据、正式工作流与八页面 E2E | ✅ completed（verify 19/19、E2E 9/9、17 门禁绿；CI 全绿于 `d701c1d`） |
-| **D055 当前交付** | 单机单用户、SQLite + 本地目录、A+C 驾驶舱/报告视觉升级 | 🚧 第 3 阶段本地实现与验收完成，待本次提交对应 CI；通过后进入第 4 阶段全视图 A+C 视觉与数据补全 |
+| **D055 当前交付** | 单机单用户、SQLite + 本地目录、A+C 驾驶舱/报告视觉升级 | 🚧 阶段 7 单机冷启动、数据校验、离线快照和真实截图已本地验收；准确 SHA GitHub CI 尚未完成，详见路线图 |
 | **K 轨** | 第二代静态知识刷新、sealed candidate 与战略重基线 | ⏭️ 顺延；当前工作包关闭后恢复 |
 | U9–U10 | 内部试点、V1.1 证据决策 | ⬜ 待授权，且 U8 后按 [D053](docs/10_governance/decisions/D053--三层两模块边界与执行顺序.md) 重新裁决 |
 
@@ -789,14 +805,14 @@ FLOW/
 ```mermaid
 flowchart LR
     A["已交付基础<br/>公开财报 · 客观指标 · 证据报告"] --> B["D055 当前唯一队首<br/>单机单用户原型"]
-    B --> C["第 1、2 阶段已完成<br/>依赖审计 + SQLite/本地文件隔离验证"]
-    C --> D["第 3 阶段本地验收完成<br/>待准确 SHA CI"]
-    D --> E["第 4 阶段<br/>全视图 A+C 视觉与真实数据补全"]
-    E --> F["后续恢复<br/>静态知识刷新 K2"]
+    B --> C["阶段 1–6.5 已完成<br/>SQLite · 视觉升级 · CI 分片"]
+    C --> D["阶段 7 本地验收完成<br/>单机启动 · 离线快照 · 截图"]
+    D --> E["当前待结案<br/>准确 SHA CI + 文档验收"]
+    E --> F["后续恢复<br/>静态知识刷新 K3"]
     style B fill:#fff0cd,stroke:#aa7918,stroke-width:2px
 ```
 
-单机原型工作包处于唯一队首：第 1、2 阶段及第 3 阶段本地实现和验收已完成；当前等待本次提交对应的完整 GitHub CI。通过后按顺序进入第 4 阶段，先将经营驾驶舱参考映射到现有页面和真实数据，再补足有来源支持的图表、指标和下钻。概念稿不代表页面已实现；旧版浏览器截图仅展示对应采集时的真实状态。准确进展、CI 和各阶段验收以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 与 [HANDOFF](HANDOFF.md) 为准。公开财报 C 级验证和企业内部真实数据验证仍按各自数据与证据门槛推进；演示数据不得冒充真实披露。
+单机原型工作包处于唯一队首：阶段 1–6.5 的架构、视觉和 CI 工作已完成；阶段 7 已从全新隔离 SQLite 目录冷启动本机应用，生成可离线浏览的自包含静态驾驶舱，并完成数据核验及桌面/手机截图。准确 SHA `9ec0611562569b33bc3dac28c16445aa9470b150` 的 GitHub Actions run `39283815189` 在本报告生成时仍为 queued，所以整体工作包尚未结案。页面截图、离线 HTML 和验收证据已可直接查看；完成条件与下一步以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 与 [HANDOFF](HANDOFF.md) 为准。演示数据不得冒充真实披露。
 
 本仓库尚未提供独立的 LICENSE 文件；使用与分发授权请向项目维护者确认。贡献与协作遵循 [AGENTS.md](AGENTS.md)：先读项目状态和正式决策，保护原始档案，按风险验证，每个完整任务只提交相关文件并推送规范远端。
 

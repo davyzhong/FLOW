@@ -3,9 +3,9 @@ doc_id: FLOW-WI-SINGLE-MACHINE-VISUAL-20261018-001
 title: 单机原型架构简化与全视图视觉升级
 doc_type: work-item
 status: active
-version: 2.8
+version: 2.9
 created_at: 2026-10-18
-updated_at: 2026-10-19
+updated_at: 2026-10-20
 owner: FLOW
 depends_on: [FLOW-SPEC-SINGLE-MACHINE-VISUAL-20261018-001]
 acceptance_refs: [FLOW-DECISION-D055]
@@ -19,7 +19,7 @@ confidentiality: project-internal
 
 # 单机原型架构简化与全视图视觉升级
 
-> **当前状态：阶段 5 门禁治理、阶段 6 视觉实现、阶段 6.5 `data-contract` 长作业拆分均已结案；阶段 7 单机静态运行/验收/截图进入队首。** 阶段 6.5 在准确 SHA `3ac44738c75f710156724a8584bda1144624235d` 的 run `39276126532` 中，五个隔离 shard 和稳定 `data-contract` 汇总检查全部成功；分片耗时 1–21 分钟，最慢的 `profile-known-workflow` 为 21 分 26 秒，低于 40 分钟限制。133 项未删减。该 run 的其余门禁均成功；`integration` 在记录时仍由 GitHub 报告运行中，因此不宣称整条 workflow 已全绿。阶段 5 证据见[验收记录](../../60_delivery/verification/2026-10-19--ci-concurrency-and-data-contract-isolated-acceptance-v1.md)，阶段 6 见[验收记录](../../60_delivery/verification/2026-10-19--cfo-cockpit-visual-phase6-local-acceptance-v1.md)。阶段 7 验收本地单机启动、静态财务画布、数据复验及本机截图。GitHub 截图工作流继续暂停。既有验收记录：[模块图表适配与追溯](../../60_delivery/verification/2026-10-18--cfo-module-chart-adapter-acceptance-v1.md)、[真实数据浏览器验收](../../60_delivery/verification/2026-10-18--cfo-browser-acceptance-v1.md)、[单机运行收敛](../../60_delivery/verification/2026-10-18--single-machine-runtime-convergence-v1.md)。唯一状态/顺序见 [CURRENT_ROADMAP](../CURRENT_ROADMAP.md)。
+> **当前状态：阶段 5 门禁治理、阶段 6 视觉实现、阶段 6.5 `data-contract` 分片已结案；阶段 7 本地冷启动、离线快照和真实截图已完成，准确 SHA CI 待结案。** 阶段 6.5 在准确 SHA `3ac44738c75f710156724a8584bda1144624235d` 的 run `39276126532` 中，五个隔离 shard 和稳定 `data-contract` 汇总检查全部成功，133 项未删减；`integration` 曾持续运行，因此不称该 run 全绿。阶段 7验收记录见[报告](../../60_delivery/verification/2026-10-20--single-machine-visual-static-acceptance-v1.md)：`make flow-bootstrap`、空隔离目录 SQLite 冷启动、演示包 19/19、静态 HTML 离线打开与桌面/手机实图均通过。准确 SHA `9ec0611562569b33bc3dac28c16445aa9470b150` 的 run `39283815189` 当前 queued。备份恢复能力沿用阶段 2已验证的 SQLite + 本地文件目录新目录恢复证据。GitHub 截图工作流继续暂停。既有记录：[阶段 5–6.5 验收](../../60_delivery/verification/2026-10-19--ci-concurrency-and-data-contract-isolated-acceptance-v1.md)、[视觉实现](../../60_delivery/verification/2026-10-19--cfo-cockpit-visual-phase6-local-acceptance-v1.md)、[SQLite 隔离与恢复](../../60_delivery/verification/2026-10-18--single-machine-runtime-convergence-v1.md)。唯一状态/顺序见 [CURRENT_ROADMAP](../CURRENT_ROADMAP.md)。
 
 ## 目标
 
@@ -153,6 +153,8 @@ confidentiality: project-internal
 - 更新 README、安装/运行/备份文档和 HANDOFF，明确最低环境要求、实际命令、截图位置、常见故障恢复；截图仍不自动上传。
 
 **通过条件：** 在无 Docker/无服务容器且无外部网络的本机环境，从新数据目录可一次完成 build/init、启动、关键路径验证与截图；静态图表可离线浏览且数据有来源/版本追溯；常驻用户数据不被测试重置；性能/容量边界与仍保留的动态路径如实记录。
+
+**阶段 7 本机验收结果（2026-10-20）：** 在 `/tmp/flow-stage7-20261020` 空隔离目录执行 `make flow-bootstrap`、`make flow-init`、`make flow`，生产 Web 构建完成，SQLite migrations `sqlite0001`–`sqlite0004` 执行，API 与 Web 绑定 `127.0.0.1` 并返回 HTTP 200；普通启动未使用 Docker、PostgreSQL、Redis 或 MinIO。加载大麦合成演示批次后，`scripts/verify_damai_demo.py --check-storage` 报告 `ok=true`、19/19、failed=[]；发行包 manifest SHA `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`、批次 `01a154ea-455d-79fb-8521-072795629bec`。真实总览包含四项核心 KPI、趋势、经营现金流桥、杜邦、费用和行动项；新增 stale 数据提示回归测试。桌面总览、手机总览、盈利分析和自包含 HTML 均截图。离线 HTML 打开检查：8 KPI、内嵌 API JSON、来源/代码版本均存在，外部网络请求 0、页面错误 0；移动视口无横向溢出。截图索引：[screenshots README](../../assets/screenshots/README.md)，原图位于 `docs/assets/screenshots/cockpit-single-machine/`。SQLite + 内容目录备份恢复至新目录、逐文件校验及驾驶舱结果一致的既有验证见[阶段 2验收记录](../../60_delivery/verification/2026-10-18--single-machine-runtime-convergence-v1.md)。本阶段唯一剩余结案项为本次文档提交后准确 SHA 的 GitHub CI；当前代码 SHA 对应 run `39283815189` 仍为 queued。
 
 ### 8. 集成、独立复核与结案
 

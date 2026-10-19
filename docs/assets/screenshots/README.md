@@ -3,9 +3,9 @@ doc_id: FLOW-INDEX-SCREENSHOTS-001
 title: 项目实测与报告截图索引
 doc_type: navigation
 status: current
-version: 1.1
+version: 1.2
 created_at: 2026-09-04
-updated_at: 2026-10-19
+updated_at: 2026-10-20
 owner: FLOW
 applies_to: repository
 ---
@@ -13,6 +13,26 @@ applies_to: repository
 # 当前界面截图
 
 本文件按采集批次记录真实页面截图；每个批次分别注明代码和数据来源。图片没有替换数值、拼接控件或使用生成图冒充页面。
+
+## 单机原型验收截图与离线快照（cockpit-single-machine/）
+
+采集日期：2026-10-20。应用从隔离 SQLite 数据目录冷启动，Next.js 生产构建与 FastAPI 分别监听本机回环地址；此批是最新真实运行截图和离线 HTML 快照。
+
+- 代码提交：`9ec0611562569b33bc3dac28c16445aa9470b150`（截图与离线快照基于此 SHA）。
+- 数据源：大麦物流合成发行包，manifest SHA-256 `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`，批次 `01a154ea-455d-79fb-8521-072795629bec`；隔离数据目录 `/tmp/flow-stage7-20261020`，验证报告 19/19 通过。它是模拟经营数据，不是阿里巴巴、菜鸟或客户披露事实。
+- 页面状态：真实总览显示营业收入、营业利润、毛利率、经营现金流、趋势图、现金流桥、杜邦拆解、费用结构和行动项；数据过期状态有醒目提示。金额按两位小数展示，订单数量按整数展示。
+- 离线检查：`offline-preview.html` 是自包含静态快照；Playwright 以 `file://` 打开，8 项 KPI 与内嵌 API JSON 存在、图像加载成功、外部请求 0、页面错误 0。图表数据和来源说明可离线浏览；页面跳转、筛选等动态操作仍需启动本地应用。
+- 生产构建和本地服务的控制台/页面错误为 0；手机视口未出现水平溢出。该验收使用一次性 `/tmp` 数据目录，不连接常驻演示数据。
+
+| 文件 | 页面与状态 | 图片尺寸 |
+| --- | --- | --- |
+| [overview-desktop-2026-10-20.png](cockpit-single-machine/overview-desktop-2026-10-20.png) | 单机运行版 CFO 总览全页 | 1440 × 2350 |
+| [overview-mobile-2026-10-20.png](cockpit-single-machine/overview-mobile-2026-10-20.png) | 手机总览全页，无横向溢出 | 390 × 4282 |
+| [profitability-desktop-2026-10-20.png](cockpit-single-machine/profitability-desktop-2026-10-20.png) | 盈利能力和杜邦分析全页 | 1440 × 1777 |
+| [offline-preview.png](cockpit-single-machine/offline-preview.png) | 离线 HTML 中嵌入的实际总览画面 | 1440 × 2350 |
+| [offline-preview.html](cockpit-single-machine/offline-preview.html) | 可直接以浏览器打开的自包含离线报告 | 单个 HTML 文件 |
+
+重新生成 HTML 的命令：`node scripts/export_cockpit_snapshot.mjs --url http://127.0.0.1:3000 --output docs/assets/screenshots/cockpit-single-machine/offline-preview.html`。运行和隔离验收细节见[单机视觉原型验收记录](../../60_delivery/verification/2026-10-20--single-machine-visual-static-acceptance-v1.md)。
 
 ## A+C CFO 驾驶舱实测截图（cockpit-visual/）
 
