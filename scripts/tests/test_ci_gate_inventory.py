@@ -31,6 +31,14 @@ EXPECTED_GATES = {
 
 
 class CiGateInventoryTests(unittest.TestCase):
+    def test_same_branch_runs_share_a_cancel_in_progress_group(self) -> None:
+        workflow = CI_WORKFLOW.read_text(encoding="utf-8")
+
+        self.assertRegex(workflow, r"(?m)^concurrency:\s*$")
+        self.assertIn("github.event.pull_request.head.repo.full_name || github.repository", workflow)
+        self.assertIn("github.event.pull_request.head.ref || github.ref_name", workflow)
+        self.assertRegex(workflow, r"(?m)^  cancel-in-progress: true$")
+
     def test_ci_contains_all_seventeen_acceptance_gates(self) -> None:
         workflow = CI_WORKFLOW.read_text(encoding="utf-8")
         jobs = workflow.split("\njobs:\n", maxsplit=1)[1]

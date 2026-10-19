@@ -105,9 +105,9 @@ confidentiality: project-internal
 - 先收敛已知重复负载：过期 SHA 的整套运行不再与最新 SHA 竞争；旧 run `39179389944`（SHA `e27ad1c0`）已取消。失败提交 `b12289a0` 的 M6 元数据错误作为已修复历史问题；以最新 SHA 的作业结果为准。
 - 修复 M1 暴露的计划状态门禁缺陷：状态表与详细执行队列重复引用工作包时，只认路线图状态表作为状态真相；支持合法 `queued` 状态并生成独立排队视图。补充回归测试，确保叙述链接不被误识别为重复状态记录。
 - 准备 GitHub Actions 并发策略，使同一分支只保留最新 push 的全量 run，PR 与不同分支互不误取消；保留所有现存检查，不跳过测试、不降低覆盖、不把本地通过冒充远端通过。
-- 拟议的具体最小 diff：在 workflow 顶层加入 `concurrency.group: flow-ci-${{ github.workflow }}-${{ github.event.pull_request.head.repo.full_name || github.repository }}-${{ github.event.pull_request.head.ref || github.ref_name }}` 与 `cancel-in-progress: true`。push 与 PR 对同一来源仓库/分支共用组，不同分支和 fork 不相互取消；只取消该组过期运行，不变更任何 job、触发器或测试命令。此 diff 需获用户选择授权后才实施。
+- 已授权的具体最小 diff：在 workflow 顶层加入 `concurrency.group: flow-ci-${{ github.workflow }}-${{ github.event.pull_request.head.repo.full_name || github.repository }}-${{ github.event.pull_request.head.ref || github.ref_name }}` 与 `cancel-in-progress: true`。push 与 PR 对同一来源仓库/分支共用组，不同分支和 fork 不相互取消；只取消该组过期运行，不变更任何 job、触发器或测试命令。用户于 2026-10-19 明确选择允许修改。
 - 对 `data-contract`、`intake-e2e`、`integration` 做耗时归因；提出可复现的切片/缓存/并行方案，维持稳定汇总检查名与全量测试集合。没有证据的拆分不实施。
-- **授权边界：** 修改 `.github/workflows/ci.yml` 属 CI/CD 配置红线。先将具体 diff、覆盖保持方式与回滚方式交用户选择；获批后再修改、提交、推送。未获批前仅可做只读诊断和现有脚本验证，不把该阶段标为完成。
+- **授权边界：** 修改 `.github/workflows/ci.yml` 属 CI/CD 配置红线；本次顶层并发 diff 已于 2026-10-19 获用户明确授权并实施。后续如需修改其他 workflow 行为，须重新提交具体 diff 供用户选择。本阶段仍须以新 SHA 的完整 CI 结果验收，不能把本地配置测试视为远端通过。
 
 **通过条件：** M1 状态门禁能区分活动/排队并通过当前路线图；过期同分支 run 不再与最新提交重复争用 runner；最终最新 SHA 的所有必需 CI 检查均完成并成功；无检查被跳过/弱化；长作业的耗时和分片证据可复验，若远端环境限制仍在，必须提供同范围隔离替代证据并明确保留限制。
 
