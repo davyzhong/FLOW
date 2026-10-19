@@ -130,7 +130,7 @@ confidentiality: project-internal
 
 **现状证据：** 阶段 6 准确 SHA `dc705fec087c0b4d41e3a5a85baa38d9811269d8` 的 GitHub Actions run `39265415539` 为 17/18 jobs success，唯一取消项 `data-contract` 达到 40 分钟上限且没有测试失败报告。相同 SHA 的新隔离 Compose 环境执行 `GITHUB_ACTIONS=true bash scripts/test_data_contract.sh`，133 项通过（1066.42 秒），数据摘要 `operating=3072 financial=432 budget=120 ar=1920` 一致。说明当前反馈障碍来自单 job 时长，不是测试失败或前一 SHA 占队列。
 
-**本阶段执行方案：** 将 `tests/data_contract` 与 `tests/fixtures` 的 133 项全量测试按文件分配到五个独立 CI shard，每个 shard 使用 runner 自带的隔离服务/数据库，避免共享可变数据库造成并行竞争；五个 shard 全成功后，由稳定名称 `data-contract` 的汇总 job 执行摘要校验并作为唯一汇总检查。依据当前收集的文件/测试分布分组：
+**本阶段执行方案与本机结果：** 已将 `tests/data_contract` 与 `tests/fixtures` 的 133 项全量测试按文件分配到五个独立 CI shard，每个 shard 使用 runner 自带的隔离服务/数据库，避免共享可变数据库造成并行竞争；五个 shard 全成功后，由稳定名称 `data-contract` 的汇总 job 执行摘要校验并作为唯一汇总检查。固定分组为：
 
 1. 契约/workbook 测试（`tests/data_contract/`，26 项）；
 2. 菜鸟 canonical 与 statements（35 项）；
@@ -139,6 +139,8 @@ confidentiality: project-internal
 5. atomicity、通用 generator/loader 与 metric grain（16 项）。
 
 每个文件只归入一个 shard；固定 `pytest` 路径映射，不使用基于运行时顺序的随机拆分。每个 shard 保留 `uv sync`、`make infra-up`、相同 Python 版本和现有 40 分钟上限；不改变 workflow 触发器、测试内容、覆盖范围或 timeout。汇总 job 必须在任一 shard 失败/取消时失败，不能以 skipped/neutral 掩盖失败；全部 shard 成功后运行 `scripts/summarize_data_contract.py`，保持稳定 `data-contract` 检查名。
+
+**本机验证：** `scripts/data_contract_shards.py --verify` 通过；五组分别 collect 为 26+35+30+26+16=133 项；新增映射/CI 结构测试 3/3、门禁清单测试 6/6，workflow job 验证 26/26。服务端 Ruff、mypy 与脚本测试已运行；`make contracts-check`、M1/M6 和 Markdown 链接检查通过（链接检查使用 `python3 scripts/documentation/links.py --check`）。完整准确 SHA GitHub CI 尚待本次提交后确认。
 
 **验收：** 本机核对 shard 路径互斥且并集精确等于当前 133 项；新增脚本/门禁测试断言所有目标文件恰好出现一次且未遗漏。准确 SHA 的 GitHub CI 中五个 shard 和汇总 job 全成功；记录各 shard 用时，并确认单个 shard 未触及 40 分钟。若某 shard 仍触限，继续在同一范围内按测试文件拆分并保留原子测试，不删减或跳过；用相同 SHA 的隔离替代验收记录限制。通过后关闭阶段 6.5，再开始阶段 7。
 

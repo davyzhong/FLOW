@@ -9,12 +9,13 @@ CI_WORKFLOW = REPO_ROOT / ".github" / "workflows" / "ci.yml"
 PUBLISHING_GATE = REPO_ROOT / "scripts" / "test_publishing_golden.sh"
 CI_DEDUP_GUARD = 'if [[ "${GITHUB_ACTIONS:-false}" != "true" ]]; then'
 
-EXPECTED_GATES = {
+EXPECTED_JOBS = {
     "static-python",
     "static-web",
     "unit",
     "integration",
     "data-contract",
+    "data-contract-shards",
     "intake-e2e",
     "metrics-known-answers",
     "analysis-invariants",
@@ -36,16 +37,19 @@ class CiGateInventoryTests(unittest.TestCase):
         workflow = CI_WORKFLOW.read_text(encoding="utf-8")
 
         self.assertRegex(workflow, r"(?m)^concurrency:\s*$")
-        self.assertIn("github.event.pull_request.head.repo.full_name || github.repository", workflow)
+        self.assertIn(
+            "github.event.pull_request.head.repo.full_name || github.repository",
+            workflow,
+        )
         self.assertIn("github.head_ref || github.ref_name", workflow)
         self.assertRegex(workflow, r"(?m)^  cancel-in-progress: true$")
 
-    def test_ci_contains_all_seventeen_acceptance_gates(self) -> None:
+    def test_ci_contains_all_acceptance_and_support_jobs(self) -> None:
         workflow = CI_WORKFLOW.read_text(encoding="utf-8")
         jobs = workflow.split("\njobs:\n", maxsplit=1)[1]
         actual = set(re.findall(r"^  ([a-z0-9-]+):\s*$", jobs, re.MULTILINE))
 
-        self.assertEqual(actual, EXPECTED_GATES)
+        self.assertEqual(actual, EXPECTED_JOBS)
 
     def test_every_ci_gate_has_an_explicit_timeout(self) -> None:
         workflow = CI_WORKFLOW.read_text(encoding="utf-8")
@@ -55,7 +59,12 @@ class CiGateInventoryTests(unittest.TestCase):
         missing = []
         for index, match in enumerate(matches):
             end = matches[index + 1].start() if index + 1 < len(matches) else len(jobs)
-            if not re.search(r"^    timeout-minutes: [1-9][0-9]*$", jobs[match.end():end], re.MULTILINE):
+            has_timeout = re.search(
+                r"^    timeout-minutes: [1-9][0-9]*$",
+                jobs[match.end():end],
+                re.MULTILINE,
+            )
+            if not has_timeout:
                 missing.append(match.group(1))
 
         self.assertEqual(missing, [])
@@ -70,7 +79,7 @@ class CiGateInventoryTests(unittest.TestCase):
             workflow,
         )
 
-    def test_ci_specialized_scripts_keep_local_full_mode_and_skip_cross_gate_duplicates(self) -> None:
+    def test_specialized_scripts_keep_local_full_mode_and_skip_cross_gate_duplicates(self) -> None:
         local_full_runs = {
             "test_data_contract.sh": [
                 "tests/integration/test_data_contract_persistence.py",
