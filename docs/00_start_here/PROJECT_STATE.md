@@ -3,16 +3,16 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.68
+version: 5.69
 created_at: 2026-09-12
-updated_at: 2026-10-19
+updated_at: 2026-10-20
 owner: FLOW
 applies_to: repository
 ---
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-10-19 最新状态：**阶段 6视觉实现已完成；当前最高优先级为修复 CI `data-contract` 单个 job 的 40 分钟触限，再执行单机阶段 7。** 准确 SHA `dc705fec087c0b4d41e3a5a85baa38d9811269d8` 的 run `39265415539` 为 17/18 success；同 SHA 全新隔离 Compose 执行契约脚本 133/133 通过、摘要校验通过（1066.42 秒），无测试失败报告。已正式计划按文件拆分为隔离 shard，保持全部测试覆盖、触发器、timeout 与稳定汇总检查。唯一队列和验收见[路线图](../50_plans/CURRENT_ROADMAP.md)及[工作包阶段 6.5](../50_plans/work_items/FLOW--single-machine-visual-prototype.md)。阶段 7本机 SQLite/静态图表尚未开始。
+2026-10-20 最新状态：**阶段 6.5 的 CI 长作业收敛已验收，当前唯一队首转入阶段 7 单机静态运行/验收/截图。** 准确 SHA `3ac44738c75f710156724a8584bda1144624235d`、run `39276126532` 中五个 `data-contract-shards` 与稳定 `data-contract` 汇总检查全部成功；133 项覆盖不变，最慢分片 21分26秒。该 run 的其他已完成门禁均通过，但 `integration` 在记录时仍是 `in_progress`，所以整条 workflow 不标为全绿。此前 `dc705fec` 的 `data-contract` 单 job 曾触及 40 分钟；现在其工作已被分片且各片低于 timeout。阶段 7将验收本机 SQLite 启动、静态图表、离线浏览、来源/版本追溯和真实截图。唯一状态与队列见[路线图](../50_plans/CURRENT_ROADMAP.md)和[工作包阶段 7](../50_plans/work_items/FLOW--single-machine-visual-prototype.md#7-单机静态运行验收与截图闭环)。
 
 下段为 K2 执行前的状态快照，已过时；当前状态以本段及 [CURRENT_ROADMAP](../50_plans/CURRENT_ROADMAP.md) 为准。
 

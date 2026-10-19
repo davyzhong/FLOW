@@ -19,7 +19,7 @@ confidentiality: project-internal
 
 # 单机原型架构简化与全视图视觉升级
 
-> **当前状态：阶段 5 门禁治理已结案；阶段 6 视觉实现和准确 SHA 替代门禁验收已结案；发现单个 `data-contract` job 超过 40 分钟的实际阻滞，新增阶段 6.5 优先收敛长作业，完成后再进入阶段 7 单机静态运行/验收/截图。** 旧阶段 1–3 与 4.1–4.7 的交付继续作为完成基线；新增阶段 5–7 按当前队列顺序执行：并发治理→视觉实现→长作业收敛→单机静态运行。阶段 5 证明同分支过期 run 自动取消，17/18 项准确 SHA 远端门禁成功，`data-contract` 在 40 分钟上限取消但同一 SHA 的独立 Compose 验收 133/133 通过；远端限制保留，详见[阶段 5 验收记录](../../60_delivery/verification/2026-10-19--ci-concurrency-and-data-contract-isolated-acceptance-v1.md)。阶段 6 交付和本机证据见[阶段 6 验收记录](../../60_delivery/verification/2026-10-19--cfo-cockpit-visual-phase6-local-acceptance-v1.md)；阶段 7 验收本地单机启动、静态财务画布、数据复验及本机截图。GitHub 截图工作流继续暂停。既有验收记录：[模块图表适配与追溯](../../60_delivery/verification/2026-10-18--cfo-module-chart-adapter-acceptance-v1.md)、[真实数据浏览器验收](../../60_delivery/verification/2026-10-18--cfo-browser-acceptance-v1.md)、[单机运行收敛](../../60_delivery/verification/2026-10-18--single-machine-runtime-convergence-v1.md)。唯一状态/顺序见 [CURRENT_ROADMAP](../CURRENT_ROADMAP.md)。
+> **当前状态：阶段 5 门禁治理、阶段 6 视觉实现、阶段 6.5 `data-contract` 长作业拆分均已结案；阶段 7 单机静态运行/验收/截图进入队首。** 阶段 6.5 在准确 SHA `3ac44738c75f710156724a8584bda1144624235d` 的 run `39276126532` 中，五个隔离 shard 和稳定 `data-contract` 汇总检查全部成功；分片耗时 1–21 分钟，最慢的 `profile-known-workflow` 为 21 分 26 秒，低于 40 分钟限制。133 项未删减。该 run 的其余门禁均成功；`integration` 在记录时仍由 GitHub 报告运行中，因此不宣称整条 workflow 已全绿。阶段 5 证据见[验收记录](../../60_delivery/verification/2026-10-19--ci-concurrency-and-data-contract-isolated-acceptance-v1.md)，阶段 6 见[验收记录](../../60_delivery/verification/2026-10-19--cfo-cockpit-visual-phase6-local-acceptance-v1.md)。阶段 7 验收本地单机启动、静态财务画布、数据复验及本机截图。GitHub 截图工作流继续暂停。既有验收记录：[模块图表适配与追溯](../../60_delivery/verification/2026-10-18--cfo-module-chart-adapter-acceptance-v1.md)、[真实数据浏览器验收](../../60_delivery/verification/2026-10-18--cfo-browser-acceptance-v1.md)、[单机运行收敛](../../60_delivery/verification/2026-10-18--single-machine-runtime-convergence-v1.md)。唯一状态/顺序见 [CURRENT_ROADMAP](../CURRENT_ROADMAP.md)。
 
 ## 目标
 
@@ -126,7 +126,7 @@ confidentiality: project-internal
 
 **本机验收结果：** 概念板对应的暖纸白画布、墨蓝导航、金色重点、四项核心 KPI、收入/营业利润趋势、经营现金流瀑布、杜邦拆解、费用排名、来源说明和行动项已落地。9 个 CFO/数据路由在桌面与手机共 18 个组合验证真实图表和无横向溢出；总览 KPI 与趋势明细逐项核对 API；桌面总览、手机总览和盈利能力页面截图已保存。详见[阶段 6 本机验收记录](../../60_delivery/verification/2026-10-19--cfo-cockpit-visual-phase6-local-acceptance-v1.md)。准确 SHA `dc705fec087c0b4d41e3a5a85baa38d9811269d8` 的 GitHub Actions run `39265415539` 为 17/18 成功，唯一取消项 `data-contract` 达到 40 分钟上限且无失败报告；同一 SHA 的隔离 Compose 执行 `GITHUB_ACTIONS=true bash scripts/test_data_contract.sh`，133/133 通过、契约摘要检查通过。阶段六按[验收记录](../../60_delivery/verification/2026-10-19--cfo-cockpit-visual-phase6-local-acceptance-v1.md)结案；阶段 7 已排至唯一队首。
 
-### 6.5 收敛 data-contract 单个长作业（当前队首；保留全量测试）
+### 6.5 收敛 data-contract 单个长作业（completed，2026-10-20；保留全量测试）
 
 **现状证据：** 阶段 6 准确 SHA `dc705fec087c0b4d41e3a5a85baa38d9811269d8` 的 GitHub Actions run `39265415539` 为 17/18 jobs success，唯一取消项 `data-contract` 达到 40 分钟上限且没有测试失败报告。相同 SHA 的新隔离 Compose 环境执行 `GITHUB_ACTIONS=true bash scripts/test_data_contract.sh`，133 项通过（1066.42 秒），数据摘要 `operating=3072 financial=432 budget=120 ar=1920` 一致。说明当前反馈障碍来自单 job 时长，不是测试失败或前一 SHA 占队列。
 
@@ -142,7 +142,7 @@ confidentiality: project-internal
 
 **本机验证：** `scripts/data_contract_shards.py --verify` 通过；五组分别 collect 为 26+35+30+26+16=133 项；新增映射/CI 结构测试 3/3、门禁清单测试 6/6，workflow job 验证 26/26。服务端 Ruff、mypy 与脚本测试已运行；`make contracts-check`、M1/M6 和 Markdown 链接检查通过（链接检查使用 `python3 scripts/documentation/links.py --check`）。完整准确 SHA GitHub CI 尚待本次提交后确认。
 
-**验收：** 本机核对 shard 路径互斥且并集精确等于当前 133 项；新增脚本/门禁测试断言所有目标文件恰好出现一次且未遗漏。准确 SHA 的 GitHub CI 中五个 shard 和汇总 job 全成功；记录各 shard 用时，并确认单个 shard 未触及 40 分钟。若某 shard 仍触限，继续在同一范围内按测试文件拆分并保留原子测试，不删减或跳过；用相同 SHA 的隔离替代验收记录限制。通过后关闭阶段 6.5，再开始阶段 7。
+**验收结果：** 本机 shard 路径互斥且并集精确覆盖 133 项；新增映射测试 3/3、CI 清单测试 6/6、workflow job 验证 26/26；准确 SHA `3ac44738c75f710156724a8584bda1144624235d` / run `39276126532` 的五个 shard 和 `data-contract` 汇总全部 success。各 shard 用时：`contracts` 1分14秒、`canonical-statements` 1分16秒、`generator-source` 1分14秒、`profile-known-workflow` 21分26秒、`loader-atomicity-edges` 11分18秒；稳定汇总检查约 49 秒。全量 133 项未删减，均低于 40 分钟。workflow 其他已完成门禁均成功；`integration` 在记录时仍处于 GitHub `in_progress`，所以整条 workflow 尚无全绿结论。阶段 6.5 的指定验收目标已满足，阶段 7 进入唯一队首。
 
 ### 7. 单机静态运行、验收与截图闭环（新阶段）
 
