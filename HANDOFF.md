@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目交接文档
 doc_type: navigation
 status: current
-version: 10.0
+version: 10.1
 created_at: 2026-09-12
 updated_at: 2026-10-19
 owner: FLOW
@@ -18,7 +18,7 @@ applies_to: repository
 
 ## 一、当前任务
 
-**当前执行项：7a 阶段 5，CI 门禁治理（高优先级）。** 用户于 2026-10-19 重开已结案的单机视觉工作包：先解决重复/长时 CI 门禁，再按概念板提高视觉保真度，最后验收本机静态运行、数据校验和截图闭环。旧阶段 1–3、4.1–4.7 的交付与测试证据保留。准确 SHA `01d757c38a85e555999339db8f6cf11c50823a21` 对应 GitHub run `39181351969` 当时仅 `intake-e2e`、`integration`、`data-contract` 三项仍运行，其余作业通过；过期 SHA `e27ad1c0` 的重复 run `39179389944` 已取消。CI/CD 配置变更是授权红线，须先取得用户批准。截图仅新增本机复验能力，GitHub 自动截图 workflow 维持暂停。K3 来源 baseline/diff 已复验，人工路由/审阅排在 7a 之后。状态与唯一顺序见 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)。
+**当前执行项：7a 阶段 5，CI 门禁治理（高优先级）。** 用户于 2026-10-19 重开工作包，顺序为门禁治理 → 概念板视觉高保真 → 单机静态运行、验收与本机截图。阶段 1–4 的旧交付保留。已提交 M1 队列状态门禁修复、同分支并发取消策略及专项脚本重复测试去重；本地门禁清单 6/6、计划视图 7/7、M1/M6 通过。最新代码 SHA `b2524ab4311d9c6e82c3b5ef88d6e92f42403a90` 的 GitHub run `39251317737` 截至本交接状态快照正在运行；此前同分支旧 SHA 运行均已取消。CI 仍须以最新 SHA 的完整作业结果验收。GitHub 自动截图 workflow 继续暂停，仅建立本机截图能力。K3 排在 7a 结案后。详细顺序见 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)。
 
 下方为 K2 执行前形成的架构工作包摘要，当前状态以本段和 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为准。
 

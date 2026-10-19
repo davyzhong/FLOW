@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.64
+version: 5.65
 created_at: 2026-09-12
 updated_at: 2026-10-19
 owner: FLOW
@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-10-19 最新状态：**按用户最新要求重开 7a 工作包并严格优先：CI 门禁治理 → 概念板视觉高保真 → 单机静态运行/验收/截图闭环；K3 排队。** 旧阶段 1–3、4.1–4.7 已有实现与验收保留；准确 SHA `01d757c38a85e555999339db8f6cf11c50823a21` 的 GitHub run `39181351969` 中三个长任务 `intake-e2e`、`integration`、`data-contract` 当时仍执行，其余相关作业通过；旧 SHA 重复 run 已取消。当前唯一工作包与验收见[路线图](../50_plans/CURRENT_ROADMAP.md)和[工作包](../50_plans/work_items/FLOW--single-machine-visual-prototype.md)。阶段 6 以 2026-10-18 A+C 概念板为基准，阶段 7要求本机无 Docker 单机启动、可离线静态财务图表、自动验收和本机截图。**
+2026-10-19 最新状态：**7a 阶段 5 门禁治理进行中；优先级为门禁 → 概念板视觉高保真 → 单机静态运行/验收/截图，K3 排队。** 已完成并推送计划状态门禁修复、同分支 CI 并发取消、专项脚本重复测试去重。计划视图 7/7、CI 门禁清单 6/6、文档 M1/M6 通过。准确 SHA `b2524ab4311d9c6e82c3b5ef88d6e92f42403a90` 的 run `39251317737` 截至本状态快照正在运行，先前分支旧 run 已取消；须以最新 SHA 完整 CI 结果结案。旧阶段 1–4 交付保留。7a 工作包与唯一顺序见[路线图](../50_plans/CURRENT_ROADMAP.md)和[工作包](../50_plans/work_items/FLOW--single-machine-visual-prototype.md)。**
 
 下段为 K2 执行前的状态快照，已过时；当前状态以本段及 [CURRENT_ROADMAP](../50_plans/CURRENT_ROADMAP.md) 为准。
 

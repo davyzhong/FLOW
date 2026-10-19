@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 5.88
+version: 5.89
 created_at: 2026-09-12
 updated_at: 2026-10-19
 owner: FLOW
@@ -17,7 +17,7 @@ superseded_by: null
 
 # 当前路线图（唯一主线）
 
-> **2026-10-19 最新状态：7a 工作包按用户新增验收要求重开；优先级为 CI 门禁治理 → 概念板视觉高保真 → 单机静态运行/验收/截图闭环；K3 顺延排队。** 旧阶段 1–3 与 4.1–4.7 交付保留，不重复实施。准确 SHA `01d757c38a85e555999339db8f6cf11c50823a21` 的 GitHub run `39181351969` 中，静态检查、迁移、单测、Dashboard、模块边界和契约等作业通过；`intake-e2e`、`integration`、`data-contract` 当时仍运行。旧 SHA `e27ad1c0` 的重复 run `39179389944` 已取消。门禁诊断和授权边界见[当前工作包](work_items/FLOW--single-machine-visual-prototype.md)。阶段 6 以概念板为视觉验收基准，阶段 7 验收本地单机静态输出与截图；GitHub 自动截图工作流仍暂停。K3 baseline/diff 已完成可复验构建，待上述工作包结案后恢复人工语义路由与知识候选工作。
+> **2026-10-19 最新状态：7a 阶段 5 门禁治理进行中，之后依序执行概念板视觉高保真和单机静态运行/验收/截图；K3 顺延排队。** 已推送计划状态门禁修复、CI 同分支并发取消和专项脚本重复门禁去重。计划视图 7/7、门禁清单 6/6、文档 M1/M6 本地通过。准确 SHA `b2524ab4311d9c6e82c3b5ef88d6e92f42403a90` 的 run `39251317737` 截至本路线图快照正在运行；此前分支过期 SHA run 均取消。完整远端 CI 尚未结案。最新工作包记录了测试归属矩阵及剩余验收；GitHub 自动截图工作流仍暂停，仅计划恢复本机截图。K3 baseline/diff 已完成可复验构建，待 7a 全部结案后恢复人工语义路由与知识候选工作。
 
 > **2026-10-18 用户确认原型方向并完成队首重规划**：当前交付定位调整为单机单用户验证原型；用户选择 SQLite 单文件 + 本地文件目录、移除 Redis/Celery/MinIO，并确认 A 主风格 + C 报告叙事。旧驾驶舱全视图工作包归档，其九页/25 图与桌面/手机实测作为回归基线。旧 CI 实际结果为：`39042517573`、`39041228479` cancelled；`39040652008`、`39038535194` failure；不得描述为 CI 全绿。新的唯一队首为单机原型架构简化与全视图视觉升级，正式设计见[规格](../superpowers/specs/2026-10-18-single-machine-visual-prototype-design.md)与[D055](../10_governance/decisions/D055--单机单用户验证原型.md)。README 视觉基准说明提交 `d51af7ad` 的准确 SHA 主 CI run `39087270646` 曾因 data-contract 与 intake-e2e 到达 40/45 分钟 job 上限而 cancelled；同一代码的后续文档状态提交 `a331f03075c95f3b371b5a0ebd0fd91cac9dfeae` 对应 run `39090417203` 全部 job success，取消未复现。未改 CI 超时或缩减覆盖。第 1 阶段现状/影响审计已完成，清单与风险见[审计报告](../60_delivery/verification/2026-10-18--single-machine-architecture-dependency-audit-v1.md)。README 视觉素材编排已完成，只用仓库已有概念板与截图；截图素材采集/自动生成工作流继续暂停，未触发。D055 第 2 阶段 SQLite/本地内容存储已完成：隔离全链和兼容性验证通过；残留 PostgreSQL 专用 `.astext` 测试查询已改为跨库 `.as_string()`。准确代码 SHA `b0e1eb787592ff84bc4c19873a1e61cad1f9f3e6` 的 GitHub Actions run `39099573268` 为 18/18 jobs success，第 2 阶段正式关闭。第 3 阶段现已实现并本地验收：同步处理、本地内容寻址文件存储、单一启动入口与 SQLite 默认数据目录完成；隔离 Damai 账套重置回归 2/2、SQLite schema/jobs/object-store 16/16、设置/重置 PostgreSQL 兼容回归 2/2、Ruff/mypy、文档 M1 均通过。`make flow-bootstrap` 生产依赖裁剪增加 `CI=true` 以支持无 TTY 环境，完整引导成功；临时目录初始化成功，Web 与 API health 均 HTTP 200。详细证据见[第 3 阶段验收记录](../60_delivery/verification/2026-10-18--single-machine-runtime-convergence-v1.md)。本阶段仍待本提交准确 SHA 的 GitHub CI；通过后按序进入第 4 阶段全视图 A+C 视觉与数据补全。整个工作包完成后再恢复知识刷新 K2。
 > **2026-10-19 工作包 7a 已关闭，K2 转为唯一队首**：4.6 指标期间、方向、单位与来源链接已修复，独立审查无 P1/P2，详见[指标展示验收](../60_delivery/verification/2026-10-18--cfo-metric-display-and-traceability-v1.md)。4.7 隔离真实数据验收覆盖 9 个 CFO/数据页面及 165 项浏览器回归，详见[浏览器验收](../60_delivery/verification/2026-10-18--cfo-browser-acceptance-v1.md)。代码 SHA `65a087063ad67702172430702590083f8991a884` 的 run `39139310634` 18/18 success；最终文档 SHA `a1fe50ef4e71298767b4fe8e22ab47d780f28552` 的 run `39140563811` 18/18 success。中间文档 SHA `8bf7535c` 曾有 M6 metadata failure 与 data-contract cancelled，已在 `a1fe50ef` 修复并全绿。工作包 7a 正式关闭，验收见[4.6](../60_delivery/verification/2026-10-18--cfo-metric-display-and-traceability-v1.md)和[4.7](../60_delivery/verification/2026-10-18--cfo-browser-acceptance-v1.md)；当时 K2 为唯一队首，后续验收以本页最新状态为准。
