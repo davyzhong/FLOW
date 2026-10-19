@@ -9,6 +9,8 @@ updated_at: 2026-10-20
 owner: FLOW
 applies_to: verification
 code_sha: 9ec0611562569b33bc3dac28c16445aa9470b150
+commit_refs: "9ec0611562569b33bc3dac28c16445aa9470b150;433f5a7b7b04b29f499594f06f3f991f71f4a904"
+evidence_refs: "[isolated-sqlite-cold-start,damai-demo-verify-19-of-19,offline-html-zero-network,desktop-mobile-screenshots,sqlite-local-restore-stage2,github-actions-39284568713]"
 ---
 
 # 单机视觉静态运行验收记录
@@ -39,4 +41,4 @@ SQLite 与内容寻址文件目录备份恢复到新隔离目录、逐文件哈�
 
 ## CI 状态与剩余事项
 
-准确 SHA `9ec0611562569b33bc3dac28c16445aa9470b150` 的 GitHub Actions run `39283815189` 在记录时为 `queued`。本地验证不能替代 GitHub CI；唯一未结案动作是等待并检查该准确 SHA 的 workflow 完整结果，再按真实结果结案或修复。
+准确 SHA `433f5a7b7b04b29f499594f06f3f991f71f4a904` 的 GitHub Actions run `39284568713` 为 `failure`。`static-python` 的 M6 因本验收记录未包含必填 `commit_refs` 和 `evidence_refs` 而失败，现已补齐并在本地 M6 验证通过。`user-closure-e2e` 的前三项通过；标准 Excel 上传旅程在等待“确认映射并校验”按钮 60 秒后失败，当前已知现象是该按钮未出现在页面，尚未获得根因证据。其他作业及 5 个数据契约 shard 成功。本地修正不能替代新的准确 SHA CI，也不能把该 E2E 失败归为纯环境故障；需继续诊断并在新 SHA 上复验。

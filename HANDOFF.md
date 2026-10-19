@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目交接文档
 doc_type: navigation
 status: current
-version: 10.5
+version: 10.6
 created_at: 2026-09-12
 updated_at: 2026-10-20
 owner: FLOW
@@ -18,7 +18,7 @@ applies_to: repository
 
 ## 一、当前任务
 
-**当前执行项：7a 阶段 7，单机静态运行、验收与截图闭环；本地验收已完成，准确 SHA CI 待结案。** 阶段 5并发治理、阶段 6视觉实现和阶段 6.5 `data-contract` 分片均已完成。阶段 7在 `/tmp/flow-stage7-20261020` 冷启动 SQLite、本机 API/Web 均 HTTP 200，大麦数据验证 19/19；截图、离线自包含 HTML、来源指纹与版本记录齐全。离线页面浏览器实测 8 KPI、外部请求 0、页面错误 0，手机无水平溢出；截图和验收详情见[验收记录](docs/60_delivery/verification/2026-10-20--single-machine-visual-static-acceptance-v1.md)。准确 SHA `9ec0611562569b33bc3dac28c16445aa9470b150` 的 run `39283815189` 当前 queued。唯一队列见[CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)和[工作包阶段 7](docs/50_plans/work_items/FLOW--single-machine-visual-prototype.md#7-单机静态运行验收与截图闭环)。
+**当前执行项：7a 阶段 7；本机验收已完成，CI 存在两项失败待收敛。** run `39284568713`/SHA `433f5a7b` 的 M6 失败源于本次新增验收文档漏写 `commit_refs`、`evidence_refs`，已补齐且本地 M6 通过；`user-closure-e2e` 上传标准 Excel 后 60 秒未出现“确认映射并校验”，根因仍待查。其他作业与数据契约 5 个 shard 成功。修正后的新 SHA CI 尚未产生结论。阶段 7本地冷启动和静态快照证据见[验收记录](docs/60_delivery/verification/2026-10-20--single-machine-visual-static-acceptance-v1.md)；队列见[CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)。
 
 下方为 K2 执行前形成的架构工作包摘要，当前状态以本段和 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为准。
 

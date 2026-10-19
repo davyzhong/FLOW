@@ -19,7 +19,7 @@ confidentiality: project-internal
 
 # 单机原型架构简化与全视图视觉升级
 
-> **当前状态：阶段 5 门禁治理、阶段 6 视觉实现、阶段 6.5 `data-contract` 分片已结案；阶段 7 本地冷启动、离线快照和真实截图已完成，准确 SHA CI 待结案。** 阶段 6.5 在准确 SHA `3ac44738c75f710156724a8584bda1144624235d` 的 run `39276126532` 中，五个隔离 shard 和稳定 `data-contract` 汇总检查全部成功，133 项未删减；`integration` 曾持续运行，因此不称该 run 全绿。阶段 7验收记录见[报告](../../60_delivery/verification/2026-10-20--single-machine-visual-static-acceptance-v1.md)：`make flow-bootstrap`、空隔离目录 SQLite 冷启动、演示包 19/19、静态 HTML 离线打开与桌面/手机实图均通过。准确 SHA `9ec0611562569b33bc3dac28c16445aa9470b150` 的 run `39283815189` 当前 queued。备份恢复能力沿用阶段 2已验证的 SQLite + 本地文件目录新目录恢复证据。GitHub 截图工作流继续暂停。既有记录：[阶段 5–6.5 验收](../../60_delivery/verification/2026-10-19--ci-concurrency-and-data-contract-isolated-acceptance-v1.md)、[视觉实现](../../60_delivery/verification/2026-10-19--cfo-cockpit-visual-phase6-local-acceptance-v1.md)、[SQLite 隔离与恢复](../../60_delivery/verification/2026-10-18--single-machine-runtime-convergence-v1.md)。唯一状态/顺序见 [CURRENT_ROADMAP](../CURRENT_ROADMAP.md)。
+> **当前状态：阶段 5门禁治理、阶段 6视觉实现、阶段 6.5数据契约分片已完成；阶段 7本地验收完成，准确 SHA CI 尚未全绿。** run `39284568713` / SHA `433f5a7b` 有两项失败：新验收文档缺 `commit_refs`、`evidence_refs` 已修复且本地 M6 通过；`user-closure-e2e` 在 Excel 上传后等待映射确认按钮超时 60 秒，根因待查。其他作业和数据契约五分片成功。隔离 SQLite 冷启动、演示包 19/19、离线 HTML 和截图证据见[阶段 7验收记录](../../60_delivery/verification/2026-10-20--single-machine-visual-static-acceptance-v1.md)。阶段 2已验证 SQLite + 本地文件目录备份恢复。工作包不结案，直到用户闭环失败诊断并以准确 SHA 复验。GitHub 截图工作流仍暂停。唯一状态/顺序见 [CURRENT_ROADMAP](../CURRENT_ROADMAP.md)。
 
 ## 目标
 

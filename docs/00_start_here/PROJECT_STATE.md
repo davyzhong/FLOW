@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-10-20 最新状态：**阶段 7本机单机与视觉验收已完成，当前仅待准确 SHA GitHub CI 结案。** 在 `/tmp/flow-stage7-20261020` 空隔离目录中，`make flow-bootstrap` + `make flow-init` + `make flow` 成功完成生产构建、SQLite 迁移、API/Web 本机启动；大麦合成发行包 `verify` 19/19 通过。总览含营业收入、营业利润、毛利率、经营现金流、趋势/瀑布/杜邦/费用/行动项；过期状态提示已补齐。桌面、手机、盈利页真实截图和自包含离线 HTML 已交付；离线打开 8 KPI 与来源 JSON 存在，外部请求 0、页面错误 0。SQLite + 本地文件目录备份恢复的全链证据引用阶段 2隔离验收。准确 SHA `9ec0611562569b33bc3dac28c16445aa9470b150` 的 GitHub Actions run `39283815189` 当前 queued，不能宣称工作包或 CI 全绿。详细记录：[阶段 7验收](../60_delivery/verification/2026-10-20--single-machine-visual-static-acceptance-v1.md)、[截图索引](../assets/screenshots/README.md)。唯一队列与下一动作见[路线图](../50_plans/CURRENT_ROADMAP.md)和[工作包](../50_plans/work_items/FLOW--single-machine-visual-prototype.md)。
+2026-10-20 最新状态：**阶段 7本机单机与视觉验收完成；准确 SHA CI 有两项失败待收敛。** `/tmp/flow-stage7-20261020` 隔离冷启动、SQLite 迁移、API/Web 200 和大麦数据 19/19 通过；离线 HTML 8 KPI/来源数据可读，外部请求与页面错误为 0；桌面、手机、盈利页截图已交付。准确 SHA `433f5a7b7b04b29f499594f06f3f991f71f4a904` 的 run `39284568713` 有两项失败：M6 文档必填元数据已补齐且本地 M6 通过；`user-closure-e2e` 上传标准 Excel 后 60 秒未出现映射确认按钮，尚未确定根因。其他作业与 5 个数据契约分片成功。详细证据见[阶段 7验收](../60_delivery/verification/2026-10-20--single-machine-visual-static-acceptance-v1.md)与[截图索引](../assets/screenshots/README.md)；唯一下一动作见[路线图](../50_plans/CURRENT_ROADMAP.md)。
 
 下段为 K2 执行前的状态快照，已过时；当前状态以本段及 [CURRENT_ROADMAP](../50_plans/CURRENT_ROADMAP.md) 为准。
 

@@ -430,7 +430,7 @@ flowchart LR
 | **U8** | 生产就绪收口（真实存储旅程、HTTPS 拓扑、统一部署验收） | ✅ completed；严格冻结门禁通过 |
 | **S01** | 战略边界、Financial Facts V2、安全/RBAC/审计门禁 | ✅ completed |
 | **D 轨** | 大麦物流完整财年演示数据、正式工作流与八页面 E2E | ✅ completed（verify 19/19、E2E 9/9、17 门禁绿；CI 全绿于 `d701c1d`） |
-| **D055 当前交付** | 单机单用户、SQLite + 本地目录、A+C 驾驶舱/报告视觉升级 | 🚧 阶段 7 单机冷启动、数据校验、离线快照和真实截图已本地验收；准确 SHA GitHub CI 尚未完成，详见路线图 |
+| **D055 当前交付** | 单机单用户、SQLite + 本地目录、A+C 驾驶舱/报告视觉升级 | 🚧 本机阶段验收通过；run `39284568713` 有 2 项 CI 失败，其中 M6 已修正，Excel 上传 E2E 超时待查，详见路线图 |
 | **K 轨** | 第二代静态知识刷新、sealed candidate 与战略重基线 | ⏭️ 顺延；当前工作包关闭后恢复 |
 | U9–U10 | 内部试点、V1.1 证据决策 | ⬜ 待授权，且 U8 后按 [D053](docs/10_governance/decisions/D053--三层两模块边界与执行顺序.md) 重新裁决 |
 
@@ -812,7 +812,7 @@ flowchart LR
     style B fill:#fff0cd,stroke:#aa7918,stroke-width:2px
 ```
 
-单机原型工作包处于唯一队首：阶段 1–6.5 的架构、视觉和 CI 工作已完成；阶段 7 已从全新隔离 SQLite 目录冷启动本机应用，生成可离线浏览的自包含静态驾驶舱，并完成数据核验及桌面/手机截图。准确 SHA `9ec0611562569b33bc3dac28c16445aa9470b150` 的 GitHub Actions run `39283815189` 在本报告生成时仍为 queued，所以整体工作包尚未结案。页面截图、离线 HTML 和验收证据已可直接查看；完成条件与下一步以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 与 [HANDOFF](HANDOFF.md) 为准。演示数据不得冒充真实披露。
+单机原型工作包处于唯一队首：阶段 1–6.5 已完成，阶段 7本机验收完成。准确 SHA `433f5a7b7b04b29f499594f06f3f991f71f4a904` 的 run `39284568713` 失败：M6 元数据错误已修复并本地复验；`user-closure-e2e` 的 Excel 上传流程等待映射按钮 60 秒超时，尚未查明原因。截图和离线 HTML 可直接查看，工作包尚未结案；下一步按 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 诊断 E2E 并核对修正后准确 SHA 的 CI。演示数据不得冒充真实披露。
 
 本仓库尚未提供独立的 LICENSE 文件；使用与分发授权请向项目维护者确认。贡献与协作遵循 [AGENTS.md](AGENTS.md)：先读项目状态和正式决策，保护原始档案，按风险验证，每个完整任务只提交相关文件并推送规范远端。
 
