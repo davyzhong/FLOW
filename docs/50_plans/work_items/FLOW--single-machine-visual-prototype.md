@@ -3,7 +3,7 @@ doc_id: FLOW-WI-SINGLE-MACHINE-VISUAL-20261018-001
 title: 单机原型架构简化与全视图视觉升级
 doc_type: work-item
 status: active
-version: 2.5
+version: 2.6
 created_at: 2026-10-18
 updated_at: 2026-10-19
 owner: FLOW
@@ -19,7 +19,7 @@ confidentiality: project-internal
 
 # 单机原型架构简化与全视图视觉升级
 
-> **当前状态：已重开，按新优先级补完门禁治理、概念图高保真实现和单机静态运行闭环。** 旧阶段 1–3 与 4.1–4.7 的既有交付继续作为已完成基线，不重复执行；用户于 2026-10-19 新增三项验收要求，形成下方阶段 5–7，严格顺序为 5→6→7。阶段 5 优先处理过期提交重复跑全量 CI、长耗时作业及准确 SHA 结案；阶段 6 按概念板逐项重构 CFO 总览和相关视图；阶段 7 验收本地单机启动、静态财务画布、数据复验及本机截图。截图工作流原先暂停；本次只恢复本机可控的验收/截图能力，不自动开启 GitHub 截图工作流。CI 配置变更在用户批准前不实施。既有验收记录：[模块图表适配与追溯](../../60_delivery/verification/2026-10-18--cfo-module-chart-adapter-acceptance-v1.md)、[真实数据浏览器验收](../../60_delivery/verification/2026-10-18--cfo-browser-acceptance-v1.md)、[单机运行收敛](../../60_delivery/verification/2026-10-18--single-machine-runtime-convergence-v1.md)。唯一状态/顺序见 [CURRENT_ROADMAP](../CURRENT_ROADMAP.md)。
+> **当前状态：阶段 5 门禁治理已结案，阶段 6 概念板视觉高保真是队首待启动。** 旧阶段 1–3 与 4.1–4.7 的交付继续作为完成基线；新增阶段 5–7 严格顺序为 5→6→7。阶段 5 证明同分支过期 run 自动取消，17/18 项准确 SHA 远端门禁成功，`data-contract` 在 40 分钟上限取消但同一 SHA 的独立 Compose 验收 133/133 通过；远端限制保留，详见[阶段 5 验收记录](../../60_delivery/verification/2026-10-19--ci-concurrency-and-data-contract-isolated-acceptance-v1.md)。阶段 6 按概念板逐项重构 CFO 总览和相关视图；阶段 7 验收本地单机启动、静态财务画布、数据复验及本机截图。GitHub 截图工作流继续暂停。既有验收记录：[模块图表适配与追溯](../../60_delivery/verification/2026-10-18--cfo-module-chart-adapter-acceptance-v1.md)、[真实数据浏览器验收](../../60_delivery/verification/2026-10-18--cfo-browser-acceptance-v1.md)、[单机运行收敛](../../60_delivery/verification/2026-10-18--single-machine-runtime-convergence-v1.md)。唯一状态/顺序见 [CURRENT_ROADMAP](../CURRENT_ROADMAP.md)。
 
 ## 目标
 
@@ -109,9 +109,9 @@ confidentiality: project-internal
 - 长作业脚本审计发现明确重复：`integration` 已跑全量 `tests/integration`，而 `data-contract` 再跑 `test_data_contract_persistence.py` 与 `test_excel_database_round_trip.py`；`data-contract` 和 `intake-e2e` 均跑 `tests/data_contract`、`tests/fixtures`；`metrics-known-answers` 与 `analysis-invariants` 都重跑 `tests/integration/test_intake_e2e.py`，后者还重复指标测试；四个脚本重复 Ruff/mypy，三个脚本重复迁移校验，intake 脚本还重复合约检查及 web lint/typecheck（各有专门门禁）。
 - 按唯一归属划分：全量集成测试归 `integration`；`tests/data_contract` 与 fixtures 归 `data-contract`；指标已知答案归 `metrics-known-answers`；分析测试归 `analysis-invariants`；intake 专项归 `intake-e2e`；静态、迁移、合约和 web 检查分别归对应门禁。对每一旧脚本的独立本地运行仍保留完整验证；GitHub Actions 环境仅运行该脚本独占范围。增加回归核对，证明原测试集合仍由全量 workflow 覆盖，且没有测试被移除。
 - 对 `data-contract`、`intake-e2e`、`integration` 记录准确 SHA 的单次耗时与子步骤；保留稳定汇总检查名和完整测试集合。缓存或并行切片只有在测试隔离和确定性得到证据后再考虑。
-- **授权边界：** 修改 `.github/workflows/ci.yml` 属 CI/CD 配置红线；本次顶层并发 diff 已于 2026-10-19 获用户明确授权并实施。后续如需修改其他 workflow 行为，须重新提交具体 diff 供用户选择。本阶段仍须以新 SHA 的完整 CI 结果验收，不能把本地配置测试视为远端通过。
+- **授权边界与结案：** 顶层并发 diff 已于 2026-10-19 获用户明确授权并实施；不再改动 workflow 的触发器、job 超时或测试命令。最新远端 `data-contract` 达到现有 40 分钟上限后取消；同一 SHA 的隔离替代验收已完成，结论和限制见阶段 5 验收记录。
 
-**通过条件：** M1 状态门禁能区分活动/排队并通过当前路线图；过期同分支 run 不再与最新提交重复争用 runner；最终最新 SHA 的所有必需 CI 检查均完成并成功；无检查被跳过/弱化；长作业的耗时和分片证据可复验，若远端环境限制仍在，必须提供同范围隔离替代证据并明确保留限制。
+**结案条件与结果：** M1 队列状态门禁通过；新 SHA 推送后，同分支旧 run 自动取消；准确 SHA `dfc67283751a357d43ae23296e561cd286fea1dc` 的其余 17 项门禁成功；`data-contract` 的 CI 测试主体在同 SHA 全新隔离 Compose 项目上 133/133 通过，契约摘要通过。远端 `data-contract` 仍因 40 分钟 job 上限取消，完整限制见[阶段 5 验收记录](../../60_delivery/verification/2026-10-19--ci-concurrency-and-data-contract-isolated-acceptance-v1.md)。阶段 5 结案；如要进一步拆分此 job 或改变 timeout，需单独获得 CI 配置授权。
 
 ### 6. 按概念板完成视觉高保真（新阶段）
 

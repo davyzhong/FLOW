@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.65
+version: 5.66
 created_at: 2026-09-12
 updated_at: 2026-10-19
 owner: FLOW
@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-10-19 最新状态：**7a 阶段 5 门禁治理进行中；优先级为门禁 → 概念板视觉高保真 → 单机静态运行/验收/截图，K3 排队。** 已完成并推送计划状态门禁修复、同分支 CI 并发取消、专项脚本重复测试去重。计划视图 7/7、CI 门禁清单 6/6、文档 M1/M6 通过。准确 SHA `b2524ab4311d9c6e82c3b5ef88d6e92f42403a90` 的 run `39251317737` 截至本状态快照正在运行，先前分支旧 run 已取消；须以最新 SHA 完整 CI 结果结案。旧阶段 1–4 交付保留。7a 工作包与唯一顺序见[路线图](../50_plans/CURRENT_ROADMAP.md)和[工作包](../50_plans/work_items/FLOW--single-machine-visual-prototype.md)。**
+2026-10-19 最新状态：**7a 阶段 5 门禁治理已结案，阶段 6 概念板视觉高保真为队首待启动，之后阶段 7 单机静态运行/验收/截图；K3 排队。** 同分支过期 CI 自动取消已实测。准确 SHA `dfc67283751a357d43ae23296e561cd286fea1dc` 的 run `39251870852` 为 17/18 成功；`data-contract` 在 40 分钟上限被取消，无测试失败结论。同一 SHA 的隔离 Compose 脚本验收为 133/133，摘要检查通过。完整限制和环境见[阶段 5 验收记录](../60_delivery/verification/2026-10-19--ci-concurrency-and-data-contract-isolated-acceptance-v1.md)。计划视图 7/7、门禁清单 6/6、M1/M6 通过。旧阶段 1–4 交付保留。7a 唯一顺序见[路线图](../50_plans/CURRENT_ROADMAP.md)和[工作包](../50_plans/work_items/FLOW--single-machine-visual-prototype.md)。**
 
 下段为 K2 执行前的状态快照，已过时；当前状态以本段及 [CURRENT_ROADMAP](../50_plans/CURRENT_ROADMAP.md) 为准。
 
