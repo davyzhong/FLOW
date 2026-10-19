@@ -83,6 +83,31 @@ class PlanViewsTests(unittest.TestCase):
         )
         self.assertIn("status mismatch", " ".join(check(self.root)))
 
+    def test_queued_items_have_a_separate_generated_view(self) -> None:
+        _work_item(self.root, "S01--gate.md", "FLOW-WI-S01", "S01 战略门禁", "queued")
+        _roadmap(
+            self.root,
+            [
+                "| 1 | [U08](work_items/U08--production-readiness.md) | **completed** |",
+                "| 2 | [S01](work_items/S01--gate.md) | **queued** |",
+            ],
+        )
+        write_views(self.root)
+        queued = self.root / "docs/50_plans/views/queued.md"
+        self.assertIn("S01 战略门禁", queued.read_text(encoding="utf-8"))
+        self.assertNotIn("S01 战略门禁", (self.root / "docs/50_plans/views/active.md").read_text(encoding="utf-8"))
+        self.assertEqual(check(self.root), [])
+
+    def test_prose_links_do_not_count_as_duplicate_roadmap_statuses(self) -> None:
+        roadmap = self.root / "docs/50_plans/CURRENT_ROADMAP.md"
+        roadmap.write_text(
+            roadmap.read_text(encoding="utf-8")
+            + "\n详情见 [S01](work_items/S01--gate.md)。\n",
+            encoding="utf-8",
+        )
+        write_views(self.root)
+        self.assertEqual(check(self.root), [])
+
     def test_views_are_deterministic_and_check_detects_drift(self) -> None:
         write_views(self.root)
         first = render_views(self.root)

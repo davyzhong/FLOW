@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.63
+version: 5.64
 created_at: 2026-09-12
 updated_at: 2026-10-19
 owner: FLOW
@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-10-19 最新状态：**单机原型第 1–3 阶段完成，第 4 阶段 4.1–4.7 与准确 SHA CI 已关闭；知识刷新 K2 已完成，当前唯一执行项为 K3 来源基线与知识候选构建。** Davybase 冻结器、浅层远端验证与 accepted manifest 分别推送于 `ea04578`、`c057acb`、`57c4738`。ObsidianWiki `main@e04d6833` 的 accepted working-tree 快照覆盖 1,377 条 dirty 状态、111,912 个文件/4,240,118,843 字节；候选/复验 HEAD、tree、Git 状态和内容 SHA 一致，真实可写句柄 0。完整记录见[K2 验收](../60_delivery/verification/2026-10-19--k2-working-tree-snapshot-v1.md)。Davybase `make check` 897 项通过、Ruff 通过；对应分支无 CI 运行，未宣称远端 CI 通过。ObsidianWiki 未写入。K3 开始前和完成后复核 accepted 来源指纹，按批准计划生成 registry、baseline 与四维 diff；来源漂移即停止当前 candidate。`CURRENT_RELEASE` 保持 `flow-knowledge-2026-09-12.1`，K6 战略激活需用户裁决。
+2026-10-19 最新状态：**按用户最新要求重开 7a 工作包并严格优先：CI 门禁治理 → 概念板视觉高保真 → 单机静态运行/验收/截图闭环；K3 排队。** 旧阶段 1–3、4.1–4.7 已有实现与验收保留；准确 SHA `01d757c38a85e555999339db8f6cf11c50823a21` 的 GitHub run `39181351969` 中三个长任务 `intake-e2e`、`integration`、`data-contract` 当时仍执行，其余相关作业通过；旧 SHA 重复 run 已取消。当前唯一工作包与验收见[路线图](../50_plans/CURRENT_ROADMAP.md)和[工作包](../50_plans/work_items/FLOW--single-machine-visual-prototype.md)。阶段 6 以 2026-10-18 A+C 概念板为基准，阶段 7要求本机无 Docker 单机启动、可离线静态财务图表、自动验收和本机截图。**
 
 下段为 K2 执行前的状态快照，已过时；当前状态以本段及 [CURRENT_ROADMAP](../50_plans/CURRENT_ROADMAP.md) 为准。
 

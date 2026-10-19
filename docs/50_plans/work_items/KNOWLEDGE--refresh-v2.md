@@ -2,7 +2,7 @@
 doc_id: FLOW-WI-KNOWLEDGE-REFRESH-V2-001
 title: 第二代静态知识刷新与战略重基线
 doc_type: work-item
-status: active
+status: queued
 version: 1.9
 created_at: 2026-09-24
 updated_at: 2026-10-19

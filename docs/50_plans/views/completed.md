@@ -8,7 +8,7 @@ created_at: 2026-09-12
 updated_at: 2026-10-19
 owner: FLOW
 generator_ref: scripts/documentation/plan_views.py
-input_hash: 0d65872d3fd61ee81d57dbae19d7a093147fae3cc20f4755e44f6aa15f825407
+input_hash: 4db5fd98b83f41fde70397536e06c74ad6e9370ef500f5fa0eb65c935fb51883
 applies_to: planning
 ---
 
@@ -23,7 +23,6 @@ applies_to: planning
 - [财务指标目录（驾驶舱前置）](../work_items/FINMETRIC--financial-metric-catalog.md) — `completed`
 - [企业组织建制与经营账套初始化包](../work_items/ORG-LEDGER--enterprise-initialization-package.md) — `completed`
 - [S01 U8 后战略边界、事实合同与安全门禁](../work_items/S01--post-u8-boundary-contract-security.md) — `completed`
-- [单机原型架构简化与全视图视觉升级](../work_items/FLOW--single-machine-visual-prototype.md) — `completed`
 - [U04 独立 oracle 录入与全行验证](../work_items/U04--independent-oracle.md) — `completed`
 - [U08 生产就绪收口](../work_items/U08--production-readiness.md) — `completed`
 - [大麦数据后的剩余体验收口](../work_items/UX--post-damai-experience-closeout.md) — `completed`
