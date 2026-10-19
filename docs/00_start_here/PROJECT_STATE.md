@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-10-20 最新状态：**阶段 6.5 的 CI 长作业收敛已验收，当前唯一队首转入阶段 7 单机静态运行/验收/截图。** 准确 SHA `3ac44738c75f710156724a8584bda1144624235d`、run `39276126532` 中五个 `data-contract-shards` 与稳定 `data-contract` 汇总检查全部成功；133 项覆盖不变，最慢分片 21分26秒。该 run 的其他已完成门禁均通过，但 `integration` 在记录时仍是 `in_progress`，所以整条 workflow 不标为全绿。此前 `dc705fec` 的 `data-contract` 单 job 曾触及 40 分钟；现在其工作已被分片且各片低于 timeout。阶段 7将验收本机 SQLite 启动、静态图表、离线浏览、来源/版本追溯和真实截图。唯一状态与队列见[路线图](../50_plans/CURRENT_ROADMAP.md)和[工作包阶段 7](../50_plans/work_items/FLOW--single-machine-visual-prototype.md#7-单机静态运行验收与截图闭环)。
+2026-10-20 最新状态：**阶段 6.5 的 CI 长作业收敛已验收；阶段 7 单机静态运行/验收/截图正在执行。** 准确 SHA `3ac44738c75f710156724a8584bda1144624235d`、run `39276126532` 中五个 `data-contract-shards` 与稳定 `data-contract` 汇总检查全部成功；133 项覆盖不变，最慢分片 21分26秒。该 run 的其他已完成门禁均通过，但 `integration` 在记录时仍是 `in_progress`，所以整条 workflow 不标为全绿。阶段 7当前审查已有 `make flow`、SQLite 与静态产物路径，接下来从全新隔离数据目录执行启动和离线视觉验收；目标覆盖单机 SQLite 启动、静态图表、来源/版本追溯、备份恢复和真实截图。唯一状态与队列见[路线图](../50_plans/CURRENT_ROADMAP.md)和[工作包阶段 7](../50_plans/work_items/FLOW--single-machine-visual-prototype.md#7-单机静态运行验收与截图闭环)。
 
 下段为 K2 执行前的状态快照，已过时；当前状态以本段及 [CURRENT_ROADMAP](../50_plans/CURRENT_ROADMAP.md) 为准。
 

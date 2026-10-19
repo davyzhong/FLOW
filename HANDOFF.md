@@ -18,7 +18,7 @@ applies_to: repository
 
 ## 一、当前任务
 
-**当前执行项：7a 阶段 7，单机静态运行、验收与截图闭环。** 阶段 5并发治理、阶段 6视觉实现和阶段 6.5 `data-contract` 长作业收敛均已结案。准确 SHA `3ac44738c75f710156724a8584bda1144624235d` / run `39276126532` 的五个数据契约 shard 和稳定汇总检查全部成功，133 项完整覆盖，最慢分片 `profile-known-workflow` 用时 21分26秒。该 run 的其他已完成门禁均成功；`integration` 在状态更新时仍为 `in_progress`，因此整条 workflow 未宣称全绿。现在按路线图开始阶段 7：验收从空数据目录启动、SQLite 单机运行、静态图表离线浏览、来源/版本追溯、备份恢复与桌面/手机真实截图。阶段 6页面及截图见[阶段 6验收记录](docs/60_delivery/verification/2026-10-19--cfo-cockpit-visual-phase6-local-acceptance-v1.md)。唯一队列见[CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)和[工作包阶段 7](docs/50_plans/work_items/FLOW--single-machine-visual-prototype.md#7-单机静态运行验收与截图闭环)。
+**当前执行项：7a 阶段 7，单机静态运行、验收与截图闭环。** 阶段 5并发治理、阶段 6视觉实现和阶段 6.5 `data-contract` 长作业收敛均已结案。准确 SHA `3ac44738c75f710156724a8584bda1144624235d` / run `39276126532` 的五个数据契约 shard 和稳定汇总检查全部成功，133 项完整覆盖，最慢分片 `profile-known-workflow` 用时 21分26秒。该 run 的其他已完成门禁均成功；`integration` 在状态更新时仍为 `in_progress`，因此整条 workflow 未宣称全绿。阶段 7当前审查本机启动链与数据目录隔离，已确认默认 Web/API 端口空闲；下一步用全新隔离目录执行初始化、启动、静态页面离线验证、来源/版本追溯、备份恢复和桌面/手机真实截图。阶段 6页面及截图见[阶段 6验收记录](docs/60_delivery/verification/2026-10-19--cfo-cockpit-visual-phase6-local-acceptance-v1.md)。唯一队列见[CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)和[工作包阶段 7](docs/50_plans/work_items/FLOW--single-machine-visual-prototype.md#7-单机静态运行验收与截图闭环)。
 
 下方为 K2 执行前形成的架构工作包摘要，当前状态以本段和 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为准。
 
