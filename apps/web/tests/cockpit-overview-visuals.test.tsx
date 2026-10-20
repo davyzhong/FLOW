@@ -67,7 +67,6 @@ describe("CockpitOverviewVisuals", () => {
     expect(screen.getByTestId("cockpit-overview-expense-chart")).toBeTruthy();
     expect(screen.getByText("净资产收益率 ROE")).toBeTruthy();
     expect(screen.getByText("12.60%")).toBeTruthy();
-    expect(screen.getByText(/集团披露口径/)).toBeTruthy();
     expect(screen.getByRole("link", { name: /查看现金流明细/ }).getAttribute("href")).toBe("/cockpit/cashflow");
     expect(screen.getByRole("link", { name: /查看费用分析/ }).getAttribute("href")).toBe("/cockpit/expenses");
     expect(screen.getByRole("link", { name: /杜邦分析/ }).getAttribute("href")).toBe("/cockpit/profitability");

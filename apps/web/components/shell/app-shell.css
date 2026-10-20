@@ -18,6 +18,10 @@
   padding: 28px 32px 56px;
 }
 
+.workflow-rail__topbar { display: contents; }
+.workflow-rail__toggle { display: none; }
+.workflow-rail__links { display: flex; flex: 1; flex-direction: column; }
+
 /* CFO 与数据工作台沿用概念板的报告画布；其余产品区保留现行全局主题。 */
 .app-shell:has(.cockpit),
 .app-shell:has(.module-page),
@@ -85,6 +89,101 @@
 
   .app-shell__main {
     padding: 20px 18px 48px;
+  }
+}
+
+@media (max-width: 760px) {
+  .app-shell { display: block; }
+
+  .app-shell .workflow-rail {
+    position: sticky;
+    z-index: 30;
+    top: 0;
+    box-shadow: 0 4px 16px rgb(12 25 36 / 12%);
+  }
+
+  .app-shell .workflow-rail nav {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+    padding: 9px 16px;
+  }
+
+  .app-shell .workflow-rail__topbar {
+    display: flex;
+    min-height: 42px;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .app-shell .workflow-rail__brand {
+    gap: 10px;
+    padding: 0;
+    color: #f4e8c9;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 18px;
+    letter-spacing: 0.12em;
+  }
+
+  .app-shell .workflow-rail__brand > span { display: none; }
+  .app-shell .workflow-rail__brand strong { display: inline; }
+
+  .app-shell .workflow-rail__toggle {
+    display: grid;
+    width: 44px;
+    height: 44px;
+    place-items: center;
+    border: 1px solid rgb(244 232 201 / 28%);
+    border-radius: 7px;
+    background: transparent;
+    color: #f4e8c9;
+    cursor: pointer;
+  }
+
+  .app-shell .workflow-rail__toggle:focus-visible {
+    outline: 2px solid #d8b66d;
+    outline-offset: 2px;
+  }
+
+  .app-shell .workflow-rail__links { display: none; }
+
+  .app-shell .workflow-rail.is-open .workflow-rail__links {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    display: block;
+    max-height: calc(100dvh - 72px);
+    overflow-y: auto;
+    padding: 12px 14px 16px;
+    background: #142e3c;
+    box-shadow: 0 12px 18px rgb(12 25 36 / 20%);
+  }
+
+  .app-shell .workflow-rail__group { margin-bottom: 12px; }
+  .app-shell .workflow-rail__group-label { display: block; padding: 6px 10px; }
+  .app-shell .workflow-rail li a {
+    display: grid;
+    grid-template-columns: 22px 1fr;
+    min-height: 48px;
+    place-items: center start;
+    padding: 8px 10px;
+  }
+  .app-shell .workflow-rail li a > span { display: grid; }
+  .app-shell .workflow-rail__footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 8px 0;
+  }
+  .app-shell .workflow-rail__status { display: flex; }
+  .app-shell__main,
+  .app-shell:has(.cockpit) .app-shell__main,
+  .app-shell:has(.module-page) .app-shell__main,
+  .app-shell:has(.data-workbench) .app-shell__main {
+    padding: 16px 12px 36px;
   }
 }
 

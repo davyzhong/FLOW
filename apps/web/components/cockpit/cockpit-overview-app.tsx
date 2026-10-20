@@ -22,7 +22,7 @@ import { ActionItemPanel } from "./action-panel";
 import { CockpitConclusionBar, CockpitDrillDrawer } from "./drill-drawer";
 import { CockpitFilterBar } from "./cockpit-filter-bar";
 import { CockpitKpiGrid } from "./kpi-card";
-import { CockpitOverviewVisuals, type CockpitOverviewSupplements } from "./cockpit-overview-visuals";
+import { CockpitOverviewSourcePanel, CockpitOverviewVisuals, type CockpitOverviewSupplements } from "./cockpit-overview-visuals";
 import type {
   CockpitDrill,
   CockpitFilters,
@@ -199,29 +199,39 @@ export function CockpitOverviewApp({
 
   return (
     <div className="cockpit" data-state={overview.state}>
-      <CockpitFilterBar
-        filters={filters}
-        onChange={onFilterChange}
-        sourceNotice={overview.source_notice}
-      />
-      {overview.source_notice ? (
-        <p className="cockpit__notice" data-testid="cockpit-source-notice">
-          {overview.source_notice}
-        </p>
-      ) : null}
-      {overview.data_status.freshness_status === "stale" || overview.state === "stale" ? (
-        <p className="cockpit__stale-notice" role="status" data-testid="cockpit-stale-notice">
-          数据快照已过期；当前显示最近一次已发布结果，数据截止 {overview.context.as_of_month}。
-        </p>
-      ) : null}
-
       <header className="cockpit__head">
-        <h1>集团财务总览</h1>
+        <div className="cockpit__title-group">
+          <p className="cockpit__eyebrow">FLOW / FINANCE INTELLIGENCE</p>
+          <div className="cockpit__title-line">
+            <h1>集团财务总览</h1>
+            {overview.source_notice ? (
+              <span
+                className="cockpit__source-badge"
+                data-testid="cockpit-source-notice"
+                title={overview.source_notice}
+                aria-label={`数据标记：${overview.source_notice}`}
+              >
+                {overview.source_notice.includes("演示") ? "演示数据" : "数据来源已标注"}
+              </span>
+            ) : null}
+          </div>
+          <p className="cockpit__deck">从财务视角，快速把握经营表现、关键驱动与待跟进事项。</p>
+        </div>
         <p className="cockpit__meta">
           截至 {overview.context.as_of_month} · 快照 {overview.context.metric_snapshot_id?.slice(0, 8) ?? "—"} ·
           指标集 {overview.context.metric_definition_set_id?.slice(0, 8) ?? "—"}
         </p>
       </header>
+
+      <CockpitFilterBar
+        filters={filters}
+        onChange={onFilterChange}
+      />
+      {overview.data_status.freshness_status === "stale" || overview.state === "stale" ? (
+        <p className="cockpit__stale-notice" role="status" data-testid="cockpit-stale-notice">
+          数据快照已过期；当前显示最近一次已发布结果，数据截止 {overview.context.as_of_month}。
+        </p>
+      ) : null}
 
       <CockpitKpiGrid cards={overview.kpi_cards ?? []} trends={trendSeries} onDrill={setDrill} />
       <CockpitOverviewVisuals overview={overview} supplements={supplements} loading={supplementsLoading} />
@@ -232,15 +242,18 @@ export function CockpitOverviewApp({
         tone={overview.conclusion.tone}
       />
 
-      <ActionItemPanel
-        fetchActionItems={() => flowApi.getCockpitActionItems()}
-        createActionItem={(payload) => flowApi.createCockpitActionItem(payload)}
-        findings={overview.conclusion.findings ?? []}
-        snapshotId={overview.context.metric_snapshot_id ?? undefined}
-        acknowledgeActionItem={(itemId) =>
-          flowApi.acknowledgeCockpitActionItem(itemId)
-        }
-      />
+      <div className="cockpit__closeout-grid">
+        <ActionItemPanel
+          fetchActionItems={() => flowApi.getCockpitActionItems()}
+          createActionItem={(payload) => flowApi.createCockpitActionItem(payload)}
+          findings={overview.conclusion.findings ?? []}
+          snapshotId={overview.context.metric_snapshot_id ?? undefined}
+          acknowledgeActionItem={(itemId) =>
+            flowApi.acknowledgeCockpitActionItem(itemId)
+          }
+        />
+        <CockpitOverviewSourcePanel overview={overview} supplements={supplements} />
+      </div>
 
       {/* 批次 D：问数入口——导航至四问工作台（确定性检索引用 QA） */}
       <section aria-label="问数入口" className="ask-entry">

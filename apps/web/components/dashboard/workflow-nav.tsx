@@ -1,6 +1,8 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import { Menu, X } from "lucide-react";
 
 import { FlowIcon } from "./icons";
 
@@ -47,35 +49,64 @@ function isActiveItem(pathname: string | null, target: string): boolean {
 
 export function WorkflowNav({ showLogout = false }: { showLogout?: boolean }) {
   const pathname = usePathname();
+  return <WorkflowNavContent key={pathname ?? ""} pathname={pathname} showLogout={showLogout} />;
+}
+
+function WorkflowNavContent({ pathname, showLogout }: { pathname: string | null; showLogout: boolean }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setIsOpen(false);
+    };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [isOpen]);
+
   return (
-    <aside className="workflow-rail">
+    <aside className={`workflow-rail${isOpen ? " is-open" : ""}`}>
       <nav aria-label="FLOW 工作流">
-        <div className="workflow-rail__brand"><span>F</span><strong>FLOW</strong></div>
-        {moduleGroups.map((group) => (
-          <div className="workflow-rail__group" key={group.label}>
-            <p className="workflow-rail__group-label">{group.label}</p>
-            <ol>
-              {group.items.map(([icon, label, target]) => {
-                const isActive = isActiveItem(pathname, target);
-                return (
-                  <li key={label} className={isActive ? "is-active" : undefined}>
-                    <a href={target} aria-current={isActive ? "page" : undefined}>
-                      <FlowIcon name={icon} />
-                      <span><strong>{label}</strong><small>{isActive ? "当前" : "进入"}</small></span>
-                    </a>
-                  </li>
-                );
-              })}
-            </ol>
+        <div className="workflow-rail__topbar">
+          <div className="workflow-rail__brand"><span>F</span><strong>FLOW</strong></div>
+          <button
+            type="button"
+            className="workflow-rail__toggle"
+            aria-label={isOpen ? "关闭导航菜单" : "打开导航菜单"}
+            aria-controls="flow-workflow-links"
+            aria-expanded={isOpen}
+            onClick={() => setIsOpen((open) => !open)}
+          >
+            {isOpen ? <X aria-hidden size={21} /> : <Menu aria-hidden size={21} />}
+          </button>
+        </div>
+        <div className="workflow-rail__links" id="flow-workflow-links">
+          {moduleGroups.map((group) => (
+            <div className="workflow-rail__group" key={group.label}>
+              <p className="workflow-rail__group-label">{group.label}</p>
+              <ol>
+                {group.items.map(([icon, label, target]) => {
+                  const isActive = isActiveItem(pathname, target);
+                  return (
+                    <li key={label} className={isActive ? "is-active" : undefined}>
+                      <a href={target} aria-current={isActive ? "page" : undefined} onClick={() => setIsOpen(false)}>
+                        <FlowIcon name={icon} />
+                        <span><strong>{label}</strong><small>{isActive ? "当前" : "进入"}</small></span>
+                      </a>
+                    </li>
+                  );
+                })}
+              </ol>
+            </div>
+          ))}
+          <div className="workflow-rail__footer">
+            <span className="workflow-rail__status"><span className="status-dot" />已连接治理数据层</span>
+            {showLogout ? (
+              <form action="/api/auth/logout" method="post">
+                <button type="submit" className="workflow-rail__logout">退出登录</button>
+              </form>
+            ) : null}
           </div>
-        ))}
-        <div className="workflow-rail__footer">
-          <span className="workflow-rail__status"><span className="status-dot" />已连接治理数据层</span>
-          {showLogout ? (
-            <form action="/api/auth/logout" method="post">
-              <button type="submit" className="workflow-rail__logout">退出登录</button>
-            </form>
-          ) : null}
         </div>
       </nav>
     </aside>

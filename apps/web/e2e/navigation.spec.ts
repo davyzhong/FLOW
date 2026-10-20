@@ -44,4 +44,25 @@ test.describe("navigation integrity", () => {
       ).toHaveCount(1);
     }
   });
+
+  test("mobile navigation opens, closes with Escape, and closes after route selection", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/cockpit");
+    const toggle = page.getByRole("button", { name: "打开导航菜单" });
+    const nav = page.locator('nav[aria-label="FLOW 工作流"]');
+    const links = nav.locator(".workflow-rail__links");
+
+    await expect(toggle).toBeVisible();
+    await expect(links).toBeHidden();
+    await toggle.click();
+    await expect(page.getByRole("button", { name: "关闭导航菜单" })).toHaveAttribute("aria-expanded", "true");
+    await expect(nav.getByRole("link", { name: /盈利能力与杜邦分析/ })).toBeVisible();
+
+    await page.keyboard.press("Escape");
+    await expect(links).toBeHidden();
+    await page.getByRole("button", { name: "打开导航菜单" }).click();
+    await nav.getByRole("link", { name: /盈利能力与杜邦分析/ }).click();
+    await expect(page).toHaveURL(/\/cockpit\/profitability$/);
+    await expect(links).toBeHidden();
+  });
 });

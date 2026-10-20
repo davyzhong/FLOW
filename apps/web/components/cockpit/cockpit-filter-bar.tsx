@@ -21,13 +21,10 @@ export function CockpitFilterBar({
   filters,
   onChange,
   disabled,
-  sourceNotice,
 }: {
   filters: CockpitFilters;
   onChange: (next: CockpitFilters) => void;
   disabled?: boolean;
-  /** 演示/公开期提示：预算类基准不可用时显示 */
-  sourceNotice?: string | null;
 }) {
   const set = (patch: Partial<CockpitFilters>) => onChange({ ...filters, ...patch });
 
@@ -117,8 +114,7 @@ export function CockpitFilterBar({
       </label>
 
       <p className="cp-filters__hint">
-        币种与对比基准属内部期功能
-        {sourceNotice ? ` · ${sourceNotice}` : ""}
+        币种与预算对比适用于内部经营数据
       </p>
     </div>
   );

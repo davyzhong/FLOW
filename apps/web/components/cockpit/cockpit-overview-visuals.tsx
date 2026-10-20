@@ -217,13 +217,24 @@ export function CockpitOverviewVisuals({
         </article>
       </div>
 
-      <aside className="overview-source-panel" aria-label="数据来源与口径说明">
-        <div className="overview-source-panel__title"><FileText aria-hidden="true" size={18} /><div><strong>数据来源与口径</strong><span>每张图表都保留期间、快照与来源入口</span></div></div>
-        <div className="overview-source-panel__item"><span>驾驶舱趋势</span><strong>快照 {overview.context.metric_snapshot_id?.slice(0, 8) ?? "—"}</strong><small>{overview.context.as_of_month} · 按当前筛选口径</small></div>
-        <div className="overview-source-panel__item"><span>盈利、现金流、费用</span><strong>集团披露口径</strong><small>独立列示各自财报期间，不继承总览筛选条件</small></div>
-        <Link href={sourceLink(supplements?.cashflow?.report_ids)}>打开来源财报 <ArrowUpRight size={14} aria-hidden="true" /></Link>
-      </aside>
       {supplements?.failures?.length ? <p className="overview-supplement-warning" role="status">部分披露模块暂不可读取：{supplements.failures.join("、")}。其他可用视图继续展示。</p> : null}
     </section>
+  );
+}
+
+export function CockpitOverviewSourcePanel({
+  overview,
+  supplements,
+}: {
+  overview: CockpitOverviewResponse;
+  supplements: CockpitOverviewSupplements | null;
+}) {
+  return (
+    <aside className="overview-source-panel" aria-label="数据来源与口径说明">
+      <div className="overview-source-panel__title"><FileText aria-hidden="true" size={18} /><div><strong>数据来源与口径</strong><span>{overview.source_notice ?? "每张图表都保留期间、快照与来源入口"}</span></div></div>
+      <div className="overview-source-panel__item"><span>驾驶舱趋势</span><strong>快照 {overview.context.metric_snapshot_id?.slice(0, 8) ?? "—"}</strong><small>{overview.context.as_of_month} · 按当前筛选口径</small></div>
+      <div className="overview-source-panel__item"><span>盈利、现金流、费用</span><strong>集团披露口径</strong><small>独立列示各自财报期间，不继承总览筛选条件</small></div>
+      <Link href={sourceLink(supplements?.cashflow?.report_ids)}>打开来源财报 <ArrowUpRight size={14} aria-hidden="true" /></Link>
+    </aside>
   );
 }

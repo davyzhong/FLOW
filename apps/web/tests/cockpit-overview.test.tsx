@@ -126,6 +126,16 @@ describe("CockpitOverviewApp", () => {
     render(<CockpitOverviewApp load={load} loadSupplement={loadSupplement} />);
     const notice = await screen.findByTestId("cockpit-source-notice");
     expect(notice.textContent).toContain("演示数据");
+    expect(screen.getByRole("complementary", { name: "数据来源与口径说明" }).textContent)
+      .toContain("当前数据源为演示数据（大麦物流合成财报）。");
+  });
+
+  it("先呈现报告标题，再呈现筛选；不让筛选和提示压住首屏内容", async () => {
+    const load = vi.fn().mockResolvedValue(overview());
+    render(<CockpitOverviewApp load={load} loadSupplement={loadSupplement} />);
+    const heading = await screen.findByRole("heading", { name: "集团财务总览" });
+    const filters = screen.getByTestId("cockpit-filters");
+    expect(heading.compareDocumentPosition(filters) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 
   it("明确提示已过期的数据快照", async () => {
