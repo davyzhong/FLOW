@@ -32,6 +32,10 @@ export interface ComboSeries {
   key: string;
   title: string;
   axis: "bar" | "line";
+  /** 用于将同一期间的组成项堆叠显示（例如费用构成）。 */
+  stack?: string;
+  /** 分类堆叠图可指定稳定颜色，避免新增序列导致颜色循环重复。 */
+  color?: string;
   points: { period: string; value: number; display: string; status: string }[];
   unit: string;
   /** 将序列放到第二纵轴，适用于单位相同但数量级差异明显的可比趋势。 */
@@ -87,10 +91,11 @@ export function buildCombo(series: ComboSeries[]): ChartOption | undefined {
       const isLine = s.axis === "line";
       const yAxisIndex = seriesAxisIndex(s);
       // 财务报告主图使用墨蓝与古金区分核心序列；第三序列才使用青绿。
-      const color = [CHART_THEME.blue, CHART_THEME.gold, CHART_THEME.teal][i % 3];
+      const color = s.color ?? [CHART_THEME.blue, CHART_THEME.gold, CHART_THEME.teal][i % 3];
       return {
         name: `${s.title}（${s.unit}）`,
         type: s.axis,
+        ...(s.stack ? { stack: s.stack } : {}),
         yAxisIndex,
         data: s.points.map((p) => (p.status === "ready" ? p.value : null)),
         emphasis: { focus: "series" },

@@ -10,7 +10,7 @@ import type {
   CockpitProfitabilityResponse,
 } from "../../lib/api/client";
 import { metricFocusHref } from "../../lib/deep-links";
-import { ChartBox } from "./charts/echarts-base";
+import { ChartBox, CHART_THEME } from "./charts/echarts-base";
 import { buildCombo, type ComboSeries } from "./charts/builders";
 import { buildModuleChartOption } from "./charts/module-options";
 import { formatFinancialValue } from "./number-format";
@@ -89,12 +89,42 @@ export function CockpitOverviewVisuals({
   const chart = trendOption(overview);
   const cashBridge = supplements?.cashflow?.charts?.cash_bridge;
   const expenseStructure = supplements?.expenses?.charts?.expense_structure;
+  const expenseComparison = supplements?.expenses?.charts?.expense_comparison;
   const cashOption = cashBridge
     ? buildModuleChartOption(cashBridge, supplements?.cashflow?.unit ?? "百万元")
     : undefined;
-  const expenseOption = expenseStructure
+  const expenseComparisonPeriods = Array.isArray(expenseComparison?.periods) ? expenseComparison.periods : [];
+  const expenseComparisonSeries = expenseComparison?.series && typeof expenseComparison.series === "object"
+    ? Object.entries(expenseComparison.series as Record<string, unknown>)
+    : [];
+  const expenseComparisonReady = expenseComparisonPeriods.length > 0 && expenseComparisonSeries.length > 0;
+  const expenseColors: Record<string, string> = {
+    销售: CHART_THEME.blue,
+    管理: CHART_THEME.gold,
+    研发: CHART_THEME.teal,
+    财务: CHART_THEME.purple,
+  };
+  const expenseComparisonOption = expenseComparisonReady ? buildCombo(expenseComparisonSeries.map(([title, values]) => ({
+    key: title,
+    title,
+    axis: "bar" as const,
+    stack: "period-expenses",
+    color: expenseColors[title],
+    unit: expenseComparison?.unit ?? supplements?.expenses?.unit ?? "百万元",
+    points: expenseComparisonPeriods.map((period, index) => {
+      const rawValue = Array.isArray(values) ? values[index] : null;
+      const value = rawValue === null || rawValue === undefined ? Number.NaN : Number(rawValue);
+      return {
+        period,
+        value,
+        display: Number.isFinite(value) ? formatFinancialValue(value, { unit: expenseComparison?.unit ?? "百万元" }) : "—",
+        status: Number.isFinite(value) ? "ready" : "unavailable",
+      };
+    }),
+  }))) : undefined;
+  const expenseOption = expenseComparisonOption ?? (expenseStructure
     ? buildModuleChartOption({ ...expenseStructure, type: "bar" }, supplements?.expenses?.unit ?? "百万元")
-    : undefined;
+    : undefined);
   const profitability = supplements?.profitability;
   const periods = profitability?.periods ?? [];
   const current = periods[periods.length - 1];
@@ -104,7 +134,7 @@ export function CockpitOverviewVisuals({
   const multiplier = factor(current, "equity_multiplier");
   const dupontReady = current?.consistency?.status === "passed"
     && available(roe) && available(netMargin) && available(turnover) && available(multiplier);
-  const expenseRows = Object.entries(expenseStructure?.series ?? {});
+  const expenseRows = expenseComparisonReady ? expenseComparisonSeries : Object.entries(expenseStructure?.series ?? {});
   const cashSteps = Object.entries(cashBridge?.steps ?? {});
 
   return (
@@ -197,19 +227,19 @@ export function CockpitOverviewVisuals({
             <div><span className="overview-kicker">成本与费用 · 年度披露</span><h2>期间费用结构</h2></div>
             <Database aria-hidden="true" size={20} />
           </header>
-          {expenseStructure && supplements?.expenses ? (
+          {expenseOption && supplements?.expenses ? (
             <>
-          <p className="overview-panel__note">{supplements.expenses.period} · {expenseStructure.unit} · 按披露金额排序，不推算费用率</p>
+          <p className="overview-panel__note">{expenseComparisonReady ? `${expenseComparisonPeriods[0]} 与 ${expenseComparisonPeriods.at(-1)} · ${expenseComparison?.unit ?? supplements?.expenses?.unit ?? "百万元"}` : `${supplements?.expenses?.period ?? "—"} · ${expenseStructure?.unit ?? supplements?.expenses?.unit ?? "百万元"}`} · 仅展示销售、管理、研发、财务四项披露费用，不含营业成本；不推算费用率</p>
               <div className="expense-visual-row">
-            <ChartBox title="" sub="" option={expenseOption} ariaLabel={`${expenseStructure.title}，${supplements.expenses.period}，按披露金额排序，单位${expenseStructure.unit}`} height={250} testId="cockpit-overview-expense-chart" />
+            <ChartBox title="" sub="" option={expenseOption} ariaLabel={expenseComparisonReady ? `销售、管理、研发、财务四项期间费用年度堆叠对比，${expenseComparisonPeriods.join(" 与 ")}，单位${expenseComparison?.unit ?? supplements?.expenses?.unit ?? "百万元"}` : `${expenseStructure?.title ?? "费用结构"}，${supplements?.expenses?.period ?? "—"}，单位${expenseStructure?.unit ?? supplements?.expenses?.unit ?? "百万元"}`} height={250} testId="cockpit-overview-expense-chart" />
               </div>
           <details className="overview-data-details"><summary>查看费用披露原值</summary>
-            <div className="overview-table-scroll"><table><thead><tr><th>费用项目</th><th>{expenseStructure.unit}</th></tr></thead><tbody>
-              {expenseRows.map(([name, value]) => <tr key={name}><th scope="row">{name}</th><td>{formatFinancialValue(value as string | number | null, { unit: expenseStructure.unit })}</td></tr>)}
+            <div className="overview-table-scroll"><table><thead><tr><th>费用项目</th>{expenseComparisonReady ? expenseComparisonPeriods.map((period) => <th key={period}>{period}（{expenseComparison?.unit ?? supplements?.expenses?.unit ?? "百万元"}）</th>) : <th>{expenseStructure?.unit ?? supplements?.expenses?.unit ?? "百万元"}</th>}</tr></thead><tbody>
+              {expenseRows.map(([name, values]) => <tr key={name}><th scope="row">{name}</th>{expenseComparisonReady ? expenseComparisonPeriods.map((period, index) => { const rawValue = Array.isArray(values) ? values[index] : null; return <td key={period}>{formatFinancialValue(rawValue as string | number | null, { unit: expenseComparison?.unit ?? supplements?.expenses?.unit ?? "百万元" })}</td>; }) : <td>{formatFinancialValue(values as string | number | null, { unit: expenseStructure?.unit ?? supplements?.expenses?.unit ?? "百万元" })}</td>}</tr>)}
             </tbody></table></div>
           </details>
               <div className="overview-chart-foot">
-                {(expenseStructure.fact_classes ?? []).map((kind) => <FactBadge key={kind} label={kind} />)}
+                {(expenseStructure?.fact_classes ?? []).map((kind) => <FactBadge key={kind} label={kind} />)}
                 <Link href="/cockpit/expenses">查看费用分析 <ArrowUpRight size={14} aria-hidden="true" /></Link>
               </div>
             </>

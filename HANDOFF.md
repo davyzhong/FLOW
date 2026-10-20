@@ -18,7 +18,7 @@ applies_to: repository
 
 ## 一、当前任务
 
-**当前执行项：7a 全视图视觉收敛、门禁分片与项目文档治理。** 已完成总览与主题页报告层级、移动导航、数据工作台报告式布局；本轮补修 390px 费用页五项 KPI 三列挤压，改为两列，并加隔离响应 fixture E2E。Web 198/198、导航 Playwright 21/21、typecheck/生产 build、文档 M1/M2/M6 通过；lint 零错误、3 条既有 warning。最新推送文档 SHA `4073d5118172cb5a52b293a047620f20ffec38c6` 的准确 SHA CI run `39447663998` 已 28/28 jobs success；本轮代码和项目状态文档改动待提交。六个主题模块 390px 实测 ready、有图表且无横向溢出；费用页 KPI 栅格回归通过。SQLite + 本地文件、同步处理和一键启动保持不变；本轮没有新增依赖/服务或数据库改动。运行架构文档已校准备份恢复验收状态和 SQLite JSON / PostgreSQL JSONB 差异。继续完成文档现状与清理候选审计、最终复核和新 SHA CI；任何文件删除仍需逐项授权。验收顺序见[7a 工作包第 9 节](docs/50_plans/work_items/FLOW--single-machine-visual-prototype.md#9-概念图视觉差距门禁负载与文档治理)，唯一队列见[CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)。
+**当前执行项：7a 全视图视觉收敛、门禁分片与项目文档治理。** 已完成总览与主题页报告层级、移动导航、数据工作台报告式布局；本轮修补 390px 费用页五项 KPI 三列挤压，改为两列，并将驾驶舱费用结构图升级为已披露两年的堆叠对比及双期原值表，显式说明不含营业成本。前端 199/199、typecheck/生产 build 通过；lint 零错误、3 条既有 warning。代码修复 SHA `87e1829d32d6281fe1dad7ee978f39e0c1b4e5f2` 已推送，准确 SHA CI run `39451521454` 仍有浏览器 E2E 分片运行，完成前不记全绿；上一文档 SHA `4073d511` / run `39447663998` 28/28 jobs success。费用两年图表变更尚在本地，需等该 run 收敛后再提交以免取消门禁。六个主题模块 390px 实测 ready、有图表且无横向溢出；费用 KPI 栅格回归通过。SQLite + 本地文件、同步处理和一键启动保持不变；本轮没有新增依赖/服务或数据库改动。运行架构文档已校准备份恢复验收状态和 SQLite JSON / PostgreSQL JSONB 差异。继续完成文档现状与清理候选审计、最终复核和新 SHA CI；任何文件删除仍需逐项授权。验收顺序见[7a 工作包第 9 节](docs/50_plans/work_items/FLOW--single-machine-visual-prototype.md#9-概念图视觉差距门禁负载与文档治理)，唯一队列见[CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)。
 
 ### 本会话交接补记（2026-10-20）
 

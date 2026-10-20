@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 
 vi.mock("../components/cockpit/charts/echarts-base", async (importOriginal) => ({
   ...(await importOriginal<typeof import("../components/cockpit/charts/echarts-base")>()),
-  ChartBox: ({ title, testId }: { title: string; testId?: string }) => <div data-testid={testId}>{title}</div>,
+  ChartBox: ({ title, testId, ariaLabel, option }: { title: string; testId?: string; ariaLabel?: string; option?: { series?: { stack?: string }[] } }) => <div data-testid={testId} aria-label={ariaLabel} data-stacks={option?.series?.map((item) => item.stack).join(",")}>{title}</div>,
 }));
 import { render, screen } from "@testing-library/react";
 
@@ -53,6 +53,10 @@ const supplements = {
       title: "费用结构", type: "ratio_bar", unit: "百万元",
       series: { 销售: 20, 管理: 12, 研发: 8, 财务: 3 },
       analysis_question: "各项费用如何构成？", fact_classes: ["reported"], source_ids: ["expense"], metric_codes: [], snapshot_id: "expense-snapshot",
+    }, expense_comparison: {
+      title: "费用项目年度对比", type: "bar", unit: "百万元", periods: ["FY2022", "FY2023"],
+      series: { 销售: [18, 20], 管理: [10, 12], 研发: [7, 8], 财务: [4, 3] },
+      analysis_question: "期间费用年度对比", fact_classes: ["reported"], source_ids: ["expense"], metric_codes: [], snapshot_id: "expense-snapshot",
     } },
   } as unknown as CockpitModuleResponse,
 };
@@ -65,6 +69,11 @@ describe("CockpitOverviewVisuals", () => {
     expect(screen.getByRole("heading", { name: "收入与营业利润" })).toBeTruthy();
     expect(screen.getByTestId("cockpit-overview-cashflow-chart")).toBeTruthy();
     expect(screen.getByTestId("cockpit-overview-expense-chart")).toBeTruthy();
+    expect(screen.getByTestId("cockpit-overview-expense-chart").getAttribute("data-stacks")).toBe("period-expenses,period-expenses,period-expenses,period-expenses");
+    expect(screen.getByTestId("cockpit-overview-expense-chart").getAttribute("aria-label")).toContain("年度堆叠对比");
+    expect(screen.getByText(/不含营业成本/)).toBeTruthy();
+    expect(screen.getByText("FY2022（百万元）")).toBeTruthy();
+    expect(screen.getByText("FY2023（百万元）")).toBeTruthy();
     expect(screen.getByText("净资产收益率 ROE")).toBeTruthy();
     expect(screen.getByText("12.60%")).toBeTruthy();
     expect(screen.getByRole("link", { name: /查看现金流明细/ }).getAttribute("href")).toBe("/cockpit/cashflow");
