@@ -153,7 +153,7 @@ export function CockpitModulePage({
         </ul>
       </section>
 
-      <section aria-label={`${data.title} 图表`} className="module-charts">
+      <section aria-label={`${data.title} 图表`} className="module-charts" data-count={charts.length}>
         <div className="module-section-heading"><h3>经营趋势与结构</h3><span>期间序列 · 可追溯至来源财报</span></div>
         {charts.length ? charts.map(([key, chart]) => {
           const option = buildModuleChartOption(chart, data.unit);

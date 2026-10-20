@@ -196,3 +196,127 @@
 }
 
 .data-workbench__dropzone label { color: #315c73; }
+
+/* 企业数据接入页与驾驶舱共用报告画布，流程步骤和上传入口保持清晰可操作。 */
+.data-workbench {
+  --rep-line-5: #e4ded3;
+  --rep-zebra: #f4f0e7;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(18px, 2vw, 28px);
+  color: #172c40;
+}
+
+.data-workbench__header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: "title template" "stages stages";
+  align-items: center;
+  column-gap: 24px;
+  row-gap: 20px;
+  padding: 6px 0 20px;
+  border-bottom: 1px solid #ded6c8;
+}
+
+.data-workbench__title { grid-area: title; }
+.data-workbench__eyebrow {
+  color: #9a7535;
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: .14em;
+}
+.data-workbench__header h1 {
+  margin: 5px 0 4px;
+  font-size: clamp(30px, 3vw, 42px);
+  line-height: 1.18;
+}
+.data-workbench__title p { margin: 0; color: #687584; font-size: 14px; }
+.data-workbench__header > .flow-btn { grid-area: template; }
+.data-workbench__stages {
+  grid-area: stages;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+  color: #73808a;
+}
+.data-workbench__stages li {
+  min-width: 0;
+  padding: 11px 12px;
+  border: 1px solid #e4ded3;
+  border-radius: 5px;
+  background: #fffefa;
+  text-align: center;
+  white-space: nowrap;
+  box-shadow: 0 3px 12px rgb(45 49 53 / 3%);
+}
+.data-workbench__stages li[aria-current="step"],
+.data-workbench__stages li[data-active="true"] {
+  border-color: #b28a44;
+  background: #f5ecd8;
+  color: #735926;
+  text-decoration: none;
+}
+.data-workbench__history,
+.data-workbench__dropzone,
+.data-workbench__published { border-radius: 5px; }
+.data-workbench__history { gap: 18px; padding: clamp(18px, 2vw, 26px); }
+.data-workbench__history-heading h2 { font-size: 21px; }
+.data-workbench__history-heading p { margin-top: 6px; }
+.data-workbench__charts { gap: 18px; }
+.data-workbench__charts > .chart-card { min-width: 0; border-color: #e4ded3; background: #fffefa; }
+.data-workbench__history .flow-table-wrap { border: 1px solid #e4ded3; border-radius: 4px; }
+.data-workbench__history .flow-table { color: #40566a; }
+.data-workbench__history .flow-table caption { padding: 10px 12px; color: #687584; text-align: left; }
+.data-workbench__history .flow-table th,
+.data-workbench__history .flow-table td { border-color: #e8e1d5; padding: 11px 12px; }
+.data-workbench__history .flow-table th { background: #f3f0e8; }
+.data-workbench__history .flow-table a { color: #285472; font-weight: 650; }
+.data-workbench__dropzone {
+  display: flex;
+  min-height: 250px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 1px dashed #c6b58e;
+  background: linear-gradient(135deg, #fffefa, #f8f3e8);
+  color: #314b60;
+  transition: border-color .18s ease, background-color .18s ease;
+}
+.data-workbench__dropzone[data-drag="true"] { border-style: solid; }
+.data-workbench__upload-icon { width: 35px; height: 35px; color: #a17a33; }
+.data-workbench__drop-title { margin: 0; color: #172c40; font-family: "Songti SC", "Noto Serif CJK SC", serif; font-size: 21px; font-weight: 650; }
+.data-workbench__drop-note { margin: 0; color: #77828a; font-size: 12px; }
+.data-workbench__dropzone .data-workbench__file-picker {
+  position: relative;
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 7px;
+  padding: 0 18px;
+  border: 1px solid #142e3c;
+  border-radius: 4px;
+  background: #142e3c;
+  color: #fffefa;
+  font-size: 13px;
+  font-weight: 650;
+}
+.data-workbench__file-picker:hover { background: #1e4553; }
+.data-workbench__file-picker:focus-within { outline: 3px solid #c6a45e; outline-offset: 3px; }
+.data-workbench__file-picker input[type="file"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (max-width: 760px) {
+  .data-workbench__header { grid-template-columns: minmax(0, 1fr); grid-template-areas: "title" "template" "stages"; row-gap: 14px; }
+  .data-workbench__header > .flow-btn { justify-self: start; }
+  .data-workbench__stages { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .data-workbench__stages li:last-child { grid-column: 1 / -1; }
+  .data-workbench__dropzone { min-height: 220px; padding: 24px 16px; }
+}

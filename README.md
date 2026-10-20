@@ -3,9 +3,9 @@ doc_id: FLOW-NAV-ROOT-README-001
 title: FLOW repository README
 doc_type: navigation
 status: current
-version: 1.7
+version: 1.8
 created_at: 2026-08-29
-updated_at: 2026-10-18
+updated_at: 2026-10-20
 owner: FLOW
 applies_to: repository
 # readme-craft v3.0.0-alpha.0 metadata（机器可读，LLM/Agent 友好）
@@ -72,7 +72,7 @@ tags:
 
 </div>
 
-FLOW 的视觉方向已经明确，接下来的工作是在单机原型边界内，把有来源、有口径、有解释的财务事实变成一张能阅读、能追问、能复核的分析画布。概念板负责展示设计目标；下面的实景截图记录此前真实运行过的页面和公开财报实验，两者分开呈现。
+FLOW 的视觉方向已经明确，接下来的工作是在单机原型边界内，把有来源、有口径、有解释的财务事实变成一张能阅读、能追问、能复核的分析画布。概念板负责展示设计目标；下面的实景截图记录此前真实运行过的页面和公开财报实验，两者分开呈现。2026-10-20 起，驾驶舱视觉重新进入全视图收敛：当前截图仅作历史基线，主题模块与数据工作台的最新实测仍保存在本机临时目录；截图自动化与截图资产发布流程继续暂停，待视觉验收收敛后再更新可发布截图。
 
 <table>
 <tr>

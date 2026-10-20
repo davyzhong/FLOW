@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目交接文档
 doc_type: navigation
 status: current
-version: 11.0
+version: 11.1
 created_at: 2026-09-12
 updated_at: 2026-10-20
 owner: FLOW
@@ -18,7 +18,7 @@ applies_to: repository
 
 ## 一、当前任务
 
-**当前执行项：7a 全视图视觉收敛、门禁分片与项目文档治理。** 本轮已完成总览的报告式信息层级、行动项/来源并列布局，以及移动端品牌顶栏和可展开导航；核心事实、图表、来源链接沿用现有 API/ECharts。代码 SHA `694fe84e9b18471a226feb0f3f01d9c73040df4d` 已推送，准确 SHA CI run `39437197882` 已 28/28 成功。Web 198/198、typecheck/build、导航 Playwright 20/20、手机 390px 无横向溢出；lint 0 error、3 条既有 warning。实测截图 `/tmp/flow-cockpit-visual-20261020/final-1440.png` 与 `final-390.png`。单机架构此前已完成 SQLite + 本地文件目录、同步处理和一键启动验收；本轮未新增依赖或服务。继续步骤：检查其他主题页和 `/data` 的概念视觉差距；完成文档现状/链接审查，列清删除候选但未经逐项授权不删；最终准确 SHA 全 CI 通过后才关闭 7a。验收顺序见[7a 工作包第 9 节](docs/50_plans/work_items/FLOW--single-machine-visual-prototype.md#9-概念图视觉差距门禁负载与文档治理)，唯一队列见[CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)。
+**当前执行项：7a 全视图视觉收敛、门禁分片与项目文档治理。** 已完成总览报告层级、行动项/来源并列布局和手机品牌导航；本轮新增主题模块 KPI 居中、单 KPI 降级摘要通栏、三图末图通栏，以及 `/data` 报告式标题、五步流程条、批次表和键盘可访问上传入口。核心事实、图表、来源链接沿用现有 API/ECharts。Web 198/198、typecheck/build、导航 Playwright 20/20 均通过，lint 0 error、3 条既有 warning。费用、现金流、营运资金、风险、合并、资产负债和 `/data` 页面实测截图保存在 `/tmp/flow-cockpit-visual-20261020/`；390px 无横向溢出。单机架构仍为 SQLite + 本地文件、同步处理和一键启动，本轮无新依赖/服务或数据库改动。继续步骤：完成其余主题页视觉核对；审查运行/备份文档及清理候选（未逐项授权前不删）；独立复核、文档门禁和最终准确 SHA CI 后才关闭 7a。验收顺序见[7a 工作包第 9 节](docs/50_plans/work_items/FLOW--single-machine-visual-prototype.md#9-概念图视觉差距门禁负载与文档治理)，唯一队列见[CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)。
 
 ### 本会话交接补记（2026-10-20）
 

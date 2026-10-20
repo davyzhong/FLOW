@@ -1317,6 +1317,49 @@
 .profitability-metric > a,
 .profitability-source a { color: #315c73; }
 
+/* 桌面端让五项指标形成居中的 3+2 版面，并给三图模块留出完整的趋势画幅。 */
+@media (min-width: 1101px) {
+  .module-kpi-grid[data-count="1"] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .module-kpi-grid[data-count="1"] > .module-kpi-card {
+    display: grid;
+    min-height: 104px;
+    grid-template-columns: minmax(140px, 0.8fr) minmax(230px, 1.2fr) minmax(260px, 2fr);
+    align-items: center;
+    gap: 7px 22px;
+  }
+
+  .module-kpi-grid[data-count="1"] .kpi-name { grid-column: 1; }
+  .module-kpi-grid[data-count="1"] > .module-kpi-card > strong { grid-column: 2; grid-row: 1; }
+  .module-kpi-grid[data-count="1"] .kpi-prior,
+  .module-kpi-grid[data-count="1"] .kpi-caliber,
+  .module-kpi-grid[data-count="1"] .kpi-change,
+  .module-kpi-grid[data-count="1"] .module-source-link { grid-column: 3; }
+  .module-kpi-grid[data-count="1"] .module-source-link { width: fit-content; }
+
+  .module-kpi-grid[data-count="5"] {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .module-kpi-grid[data-count="5"] > .module-kpi-card {
+    grid-column: span 2;
+  }
+
+  .module-kpi-grid[data-count="5"] > .module-kpi-card:nth-of-type(4) {
+    grid-column: 2 / span 2;
+  }
+
+  .module-kpi-grid[data-count="5"] > .module-kpi-card:nth-of-type(5) {
+    grid-column: 4 / span 2;
+  }
+
+  .module-charts[data-count="3"] > .module-chart-card:last-of-type {
+    grid-column: 1 / -1;
+  }
+}
+
 @media (max-width: 640px) {
   .cockpit__head h1 { font-size: 30px; }
   .cockpit .kpi__open { min-height: 136px; }

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { FileSpreadsheet, UploadCloud } from "lucide-react";
 
 import { FlowApiError, intakeApi } from "../../lib/api/client";
 import type {
@@ -251,7 +252,11 @@ export function DataWorkbench({
   return (
     <section aria-label="数据工作台" className="data-workbench">
       <header className="data-workbench__header">
-        <h1>数据工作台</h1>
+        <div className="data-workbench__title">
+          <span className="data-workbench__eyebrow">数据接入 · 企业账套</span>
+          <h1>数据工作台</h1>
+          <p>从标准工作簿开始，完成字段映射、质量检查与数据发布。</p>
+        </div>
         <ol aria-label="工作流阶段" className="data-workbench__stages">
           {STAGES.map((item, index) => (
             <li
@@ -357,11 +362,14 @@ export function DataWorkbench({
             if (file) void handleFile(file);
           }}
         >
-          <p>将外部工作簿拖入此处，或</p>
-          <label>
-            选择文件
+          <UploadCloud aria-hidden="true" className="data-workbench__upload-icon" />
+          <p className="data-workbench__drop-title">将企业工作簿拖入此处</p>
+          <p className="data-workbench__drop-note">支持 .xlsx 格式 · 上传后将进入字段映射与质量校验</p>
+          <label className="data-workbench__file-picker">
+            <FileSpreadsheet aria-hidden="true" size={17} /> 选择工作簿
             <input
               type="file"
+              aria-label="选择文件"
               accept=".xlsx"
               onChange={(event) => {
                 const file = event.target.files?.[0];
