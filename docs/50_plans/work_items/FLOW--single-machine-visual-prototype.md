@@ -3,9 +3,9 @@ doc_id: FLOW-WI-SINGLE-MACHINE-VISUAL-20261018-001
 title: 单机原型架构简化与全视图视觉升级
 doc_type: work-item
 status: active
-version: 1.5
+version: 1.6
 created_at: 2026-10-18
-updated_at: 2026-10-18
+updated_at: 2026-10-20
 owner: FLOW
 depends_on: [FLOW-SPEC-SINGLE-MACHINE-VISUAL-20261018-001]
 acceptance_refs: [FLOW-DECISION-D055]
@@ -46,7 +46,7 @@ confidentiality: project-internal
 
 **通过条件：** 审计有机器可查的页面/功能/依赖清单；每个拟移除组件都有完整替代路径和测试点；决策完整性测试覆盖当前索引全部编号；旧全视图测试失败/取消与本轮新 CI 分开记录。
 
-### 2. SQLite 与本地内容存储隔离验证（实现完成，待准确 SHA CI）
+### 2. SQLite 与本地内容存储隔离验证（已完成，准确 SHA CI 验收通过）
 
 - 在一次性隔离 SQLite 数据库上验证模型建表/升级、UUID 与 JSON、外键、Decimal 精确读写、事务回滚和并发单用户行为。
 - 以最小的真实样例验证公开报告装载、指标快照、财报/FactTrace 查询、驾驶舱聚合、报告冻结与恢复。
