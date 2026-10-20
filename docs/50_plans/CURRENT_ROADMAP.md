@@ -104,7 +104,7 @@ superseded_by: null
 
 ## 唯一完整 To-do 与执行队列（严格串行）
 
-**当前唯一队列（15 项）**：已完成 8 项；实际执行中 1 项（7a，视觉差距收敛与文档审查）；队首待启动 0 项；排队 4 项（含 K3）；暂停 1 项；外部条件受限 1 项。最新准确 SHA `368a0190` / run `39349190031` 为 28/28 jobs success。原 `integration` 基线用时 36分51秒；新结构已按 4 个隔离 shard 保留全量 284 项测试，66 文件映射零遗漏/重复。CI 子项已通过，视觉和文档复核尚待结案。唯一顺序见[工作包第 9 节](work_items/FLOW--single-machine-visual-prototype.md#9-概念图视觉差距门禁负载与文档治理)：视觉差距闭合 → 文档现状校准与清理候选复核 → 最终集成结案。
+**当前唯一队列（15 项）**：已完成 8 项；实际执行中 1 项（7a，视觉差距收敛与文档审查）；队首待启动 0 项；排队 4 项（含 K3）；暂停 1 项；外部条件受限 1 项。最新准确 SHA `368a0190` / run `39349190031` 为 28/28 jobs success。原 `integration` 基线用时 36分51秒；新结构已按 4 个隔离 shard 保留全量 284 项测试，66 文件映射零遗漏/重复。CI 子项已通过，视觉和文档复核尚待结案。视觉验收补充了移动端概念板一致性：品牌顶栏、可展开且键盘可用的导航、路由切换后收起；当前窄图标侧栏仍是可见差距。唯一顺序见[工作包第 9 节](work_items/FLOW--single-machine-visual-prototype.md#9-概念图视觉差距门禁负载与文档治理)：视觉差距闭合 → 文档现状校准与清理候选复核 → 最终集成结案。
 
 0. **completed** [CFO 驾驶舱盈利分析与图表缺口补全](work_items/COCKPIT--visual-analysis-expansion.md)：四项指标于 Objective 快照冻结并存 trace；只读 API；杜邦树与两期比较图；指标/财报/来源行深链；未具备口径时 unavailable。范围与交付记录：[设计规格](../superpowers/specs/2026-10-17-cfo-cockpit-visual-analysis-expansion-design.md)、[实施计划](../superpowers/plans/2026-10-17-cockpit-visual-analysis-expansion.md)。
 0a. **completed** [驾驶舱视觉补全与数值格式治理](work_items/COCKPIT--visual-completion-and-number-format.md)：订单/件量整数、金额两位小数、单位格式统一、费用页错误修复、真实图表/趋势/下钻、8 页面截图及隔离浏览器验收；代码 SHA `1a71e33f`，准确 SHA CI run `38936413156` 全部 job 成功。
