@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目交接文档
 doc_type: navigation
 status: current
-version: 10.7
+version: 10.8
 created_at: 2026-09-12
 updated_at: 2026-10-20
 owner: FLOW
@@ -19,6 +19,12 @@ applies_to: repository
 ## 一、当前任务
 
 **当前执行项：7a 概念图视觉收敛、CI 长作业拆分与项目文档治理。** 已完成：实际驾驶舱暖白/墨蓝/金色主题、ECharts 核心趋势改为墨蓝+古金、总览桌面浏览器无页面错误；原 284 项集成测试完成四组文件映射，66 文件零遗漏/零重复；README、文档导航与唯一路线图的过时状态已更新。基线准确 SHA `431cf62bec94bd009cce8b205962eeb8bff68120` / run `39343622288` 为 23/23 success，原 `integration` 用时 36分51秒。待办：完整验证前端/文档与 CI 新分片、记录本次准确 SHA 结果；完成文档引用审计，列明不删除的历史档案及有据可查的删除候选。验收顺序见[7a 工作包第 9 节](docs/50_plans/work_items/FLOW--single-machine-visual-prototype.md#9-概念图视觉差距门禁负载与文档治理)，唯一队列见[CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)。
+
+### 本会话交接补记（2026-10-20）
+
+- 用户要求合入整个视觉分支；PR [#2](https://github.com/davyzhong/FLOW/pull/2) 已合并至 GitHub `main`，merge commit `5ed61af91ea4c1c2a2078fd654accf671ba805ba`，feature head 为 `27d8f566d7d130f67fa19ad2f745632f07b5d34c`。合并范围包括已提交的 SQLite/架构实现、README 视觉更新及相关文档；未提交改动未纳入。
+- 该 feature head 的 CI 为 17/18 jobs 成功；`intake-e2e` 达到 GitHub 45 分钟上限并被取消。取消前日志显示 intake 测试 41+2+11+133 项、Ruff/mypy 与迁移往返检查通过，但后续步骤没有跑完。因此不得将这次 CI 描述为全绿；用户已明确选择按现有通过日志合并。此为历史合并验收限制，不替代 7a 当前工作所需的准确 SHA 完整验证。
+- 接手时优先按本节“当前任务”和[唯一队列](docs/50_plans/CURRENT_ROADMAP.md)续做；本次合并已完成，不要重复合并 PR #2。主 checkout `/Users/qiming/workspace/FLOW` 有未提交用户改动，必须保留原样。
 
 下方为 K2 执行前形成的架构工作包摘要，当前状态以本段和 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为准。
 
@@ -94,6 +100,7 @@ applies_to: repository
 | **主 checkout 有 4 处未提交驾驶舱修改** | 4 个文件最后修改时间为 2026-10-16；改动内容与驾驶舱 UI/API 有交集 | 保持原位、不覆盖、不暂存；最终集成前对照新实现和 owner 信息，决定保留或确认已被取代 |
 | **SQLite 兼容与迁移成本未验证** | 现有 32 个 PostgreSQL Alembic revisions 含 JSONB、UUID 与 Postgres SQL；存储接口被多个流程调用 | 首先在隔离库做 schema、Decimal、事务、导入、来源追溯、报告和备份恢复验证；通过前不移除现有实现 |
 | **历史 CI 曾受长测超时取消** | README SHA `d51af7ad` 的 run `39087270646` cancelled；同代码 docs-only SHA `a331f03075c95f3b371b5a0ebd0fd91cac9dfeae` 的 run `39090417203` 为 success | 超时未复现；不增超时、不减覆盖、不改 CI 配置。以成功 run 为本阶段起始门禁证据，后续实现 SHA 仍各自核对准确 CI |
+| **PR #2 的 intake-e2e job 触及 45 分钟上限** | feature SHA `27d8f566d7d130f67fa19ad2f745632f07b5d34c` 的 GitHub CI 为 17/18 jobs success，`intake-e2e` cancelled | 用户依据可见通过日志批准合并；测试子步骤日志通过，但 job 后续步骤未完整执行。记录为限制，不称全 CI 通过；7a 仍须验证自己的最终准确 SHA |
 | **route_policy 测试本地失败** | `test_openapi_probe_matches_tsv_two_way` 在本地 main 也失败（CI 通过） | 本地环境项（缺 S3 环境变量时 `create_app` 设置校验失败）；带完整 env 跑即绿。不阻塞 |
 | **C 级条件 2（独立 oracle 0/14）** | 14 份报告无完整独立 oracle | 用户裁决 3A：如实 No-Go，后续迭代补 |
 | **C 级条件 4（泛化留出全败）** | 小米 0/25、阿里 0/15、yunda 0/20、jdl 0/25 | 用户裁决 2A：不扩大盲评范围；适配器开发列后续迭代 |
@@ -173,6 +180,7 @@ applies_to: repository
 23. **FLOW verification 文档状态受 M6 校验**：合法状态为 `draft`、`verified`、`superseded`、`archived`；`active` 会让 M6 失败。CI 最终结案前用 `draft`，全验收通过后才改 `verified`。
 24. **契约升级要同步更新强类型 fixture**：`CockpitModuleChart` 新增必填字段后，组件测试 fixture 若未同步会导致 `pnpm -r typecheck`、Next production build、依赖该构建的 smoke 全失败；本轮补上 `analysis_question`、`fact_classes`、`snapshot_id` 等字段后 static-web/smoke/module-boundaries E2E 通过。
 25. **Playwright 默认地址不是当前隔离浏览器端口**：项目配置默认 `127.0.0.1:13100`；本轮现成隔离服务的 Web 在 `3461`。复跑目标全视图用例需显式 `PLAYWRIGHT_BASE_URL=http://127.0.0.1:3461`，先核实端口对应当前 worktree 和隔离账套，不能退回常驻数据库。
+26. **CI 中测试日志通过不代表 job 完成**：PR #2 的 `intake-e2e` 日志中主要测试命令和迁移往返显示通过，但 job 因 45 分钟上限取消，后续步骤未执行。交接时同时记 job 总状态、准确 SHA 和未运行步骤，不把局部通过写成整项 CI 通过。
 
 ### Git / 文档
 
