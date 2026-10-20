@@ -54,19 +54,19 @@ echarts.use([
 
 /** 语义色：与 cockpit.css 的 CSS 变量保持一致（正/负/警示/未就绪） */
 export const CHART_THEME = {
-  blue: "#2563eb",
-  blueSoft: "#93c5fd",
+  blue: "#173f64",
+  blueSoft: "#6f8ba0",
   green: "#16a34a",
   red: "#dc2626",
   warn: "#d97706",
-  gold: "#b45309",
-  gray: "#b0b0b0",
-  ink: "#0f172a",
-  mut: "#64748b",
-  line: "#e2e8f0",
-  teal: "#0d9488",
-  purple: "#7c3aed",
-  ltblue: "#60a5fa",
+  gold: "#a17a33",
+  gray: "#9a9b96",
+  ink: "#172c40",
+  mut: "#687584",
+  line: "#e7e1d5",
+  teal: "#5b9b85",
+  purple: "#84759a",
+  ltblue: "#9aadb8",
 } as const;
 
 /** 通用轴配置（保持所有图表的坐标轴行为一致） */

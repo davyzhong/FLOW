@@ -14,6 +14,8 @@ EXPECTED_JOBS = {
     "static-web",
     "unit",
     "integration",
+    "integration-shards",
+    "perf-gate",
     "data-contract",
     "data-contract-shards",
     "intake-e2e",
@@ -118,6 +120,25 @@ class CiGateInventoryTests(unittest.TestCase):
             script,
         )
         self.assertNotIn("npx --yes playwright pdf", script)
+
+    def test_integration_shards_cover_original_pytest_collection_exactly(self) -> None:
+        from scripts.integration_test_shards import (
+            SHARD_NAMES,
+            all_test_files,
+            files_for_shard,
+            validate,
+        )
+
+        self.assertEqual(validate(), [])
+        assigned = [path for shard in SHARD_NAMES for path in files_for_shard(shard)]
+        self.assertEqual(len(assigned), len(set(assigned)))
+        self.assertEqual(set(assigned), all_test_files())
+        workflow = CI_WORKFLOW.read_text(encoding="utf-8")
+        self.assertIn(
+            "matrix:\n        shard: [analysis-dashboard, intake-metrics, core, api]",
+            workflow,
+        )
+        self.assertIn("needs: [integration-shards, perf-gate]", workflow)
 
 
 if __name__ == "__main__":

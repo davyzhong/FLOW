@@ -3,26 +3,26 @@ doc_id: FLOW-NAV-KB-README-001
 title: 知识库导航
 doc_type: navigation
 status: current
-version: 1.2
+version: 1.3
 created_at: 2026-09-12
-updated_at: 2026-09-13
+updated_at: 2026-10-20
 owner: FLOW
 applies_to: knowledge-base
 ---
 
-# FLOW 项目知识库｜2026-09-13
+# FLOW 项目知识库｜2026-10-20
 
 状态：当前索引。当前工程状态和下一步只维护在[PROJECT_STATE](00_start_here/PROJECT_STATE.md)；历史时间线已独立留档，不再与当前摘要并列争夺优先级。
 
 ## 阅读顺序
 
 1. [Agent 兼容入口](00_start_here/AGENT_START_HERE.md)跳转到唯一[当前状态](../00_start_here/PROJECT_STATE.md)与[最短阅读顺序](../00_start_here/READING_ORDER.md)。
-2. [当前路线图](../50_plans/CURRENT_ROADMAP.md)是唯一执行入口；U8 后下一阶段的 [S01 详细计划](../superpowers/plans/2026-09-13-flow-post-u8-boundary-gate.md)当前仍被 U8 阻塞；历史统一 U 计划和其他旧计划只保留任务细节与证据。
+2. [当前路线图](../50_plans/CURRENT_ROADMAP.md)是全项目唯一执行入口。当前队首与状态以路线图及其当前工作包为准；历史统一 U 计划和旧计划只保留任务细节与证据。
 3. [战略重构设计 V1.1](../superpowers/specs/2026-09-13-flow-strategic-reset-design.md)、[固定产品原则](../20_product/PRODUCT_PRINCIPLES.md)与[决策索引 D001–D054](../10_governance/DECISION_INDEX.md)定义当前产品方向和裁决。
 4. [现行事实合同 V1](../superpowers/specs/financial-facts-contract.md)约束当前实现；内部工作台所需 Financial Facts Contract V2 是 U8 后前置规格，不得把目标字段误称为已实现。
 5. [财经分析知识地图](02_research/2026-09-11-finance-knowledge-map.md)、[Obsidian 固定截面扫描评估](02_research/synthesis/2026-09-12-obsidian-internal-kb-assessment.md)与[累计参考订正总册](02_research/synthesis/2026-09-07-reference-and-improvement-master.md)是静态素材与方法来源，不自动批准功能或成为企业事实。
 
-当前迁移头为 `0024_operations_publication`；U1–U3、U5–U7 与 O1–O4 已完成，U8 仍是当前主线，U4 等独立 oracle 到料可并行。U8 后依次经过边界重构、Facts V2 与安全/权限门禁、公开模块 C 级量化出口、内部工作台和真实企业验证；旧 U9/O5、U10 必须重新裁决，不自动续跑。每个后续任务按 D051 默认引用静态知识发布 `flow-knowledge-2026-09-12.1`；只有显式知识库维护才建立新截面。当前 CI 和在途工作见状态页。
+当前代码迁移头为 `0032_cockpit_action_item`。原型方向已收敛为单机单用户、SQLite 与本地文件目录；当前唯一在途项目为概念图视觉收敛、CI 门禁拆分及文档审查。详细状态和顺序只见 [PROJECT_STATE](../00_start_here/PROJECT_STATE.md) 与 [CURRENT_ROADMAP](../50_plans/CURRENT_ROADMAP.md)。知识库正文、原始研究与图片仍按本目录保护规则治理；它们不是当前产品事实来源，也不自动成为执行任务。
 
 ## 分类导航
 

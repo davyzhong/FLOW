@@ -1026,16 +1026,16 @@
   background: var(--cp-surface);
   box-shadow: 0 5px 18px rgb(45 49 53 / 3%);
 }
-.cockpit .kpi::before { width: 2px; background: #1d527a; }
-.cockpit .kpi.is-breach::before { background: #a54e46; }
-.cockpit .kpi.is-near::before { background: #b28a44; }
+.cockpit .kpi::before { width: 2px; background: #a17a33; }
+.cockpit .kpi.is-breach::before { background: #a84f46; }
+.cockpit .kpi.is-near::before { background: #a87d2e; }
 .cockpit .kpi__open { min-height: 154px; padding: 15px 16px 13px; }
 .cockpit .kpi__open:hover { background: #fbf8f0; }
 .cockpit .kpi h4 { margin-top: 9px; color: #36495a; font-size: 12px; font-weight: 600; }
 .cockpit .kpi__value-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .cockpit .kpi__value { margin: 6px 0 2px; color: #142d42; font-family: "Songti SC", "Noto Serif CJK SC", serif; font-size: clamp(23px, 2.1vw, 30px); font-weight: 600; letter-spacing: 0; }
 .cockpit .kpi__value small { color: #65717c; font-family: inherit; }
-.cockpit .kpi__sparkline { width: 70px; height: 27px; flex: none; color: #17846c; overflow: visible; }
+.cockpit .kpi__sparkline { width: 70px; height: 27px; flex: none; color: #5b9b85; overflow: visible; }
 .cockpit .kpi__cmps { margin-top: 8px; gap: 5px; }
 .cockpit .cmp { border-radius: 3px; font-size: 10px; }
 .cockpit .cmp.is-good { background: #e6f1eb; color: #26745f; }
@@ -1048,9 +1048,29 @@
 .cockpit .kpi--supporting .kpi__open { min-height: 116px; padding-top: 11px; padding-bottom: 10px; }
 .cockpit .kpi--supporting .kpi__value { font-size: clamp(20px, 1.7vw, 25px); }
 .cockpit .kpi--supporting .kpi__caliber { margin-top: 5px; }
-.cockpit .concl { border-radius: 4px; background: #1a3d58; box-shadow: none; }
-.cockpit .concl.is-attention { background: #87672d; }
-.cockpit .concl.is-risk { background: #8d453e; }
+.cockpit .kpi-supporting > .section-heading { margin: 10px 0 7px; padding-top: 8px; border-top: 1px solid #ded7ca; }
+.cockpit .kpi-grid--supporting {
+  gap: 0;
+  overflow: hidden;
+  border: 1px solid #e4ded3;
+  border-radius: 5px;
+  background: #f2eee4;
+}
+.cockpit .kpi-grid--supporting .kpi {
+  border: 0;
+  border-right: 1px solid #ded7ca;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.cockpit .kpi-grid--supporting .kpi:last-child { border-right: 0; }
+.cockpit .kpi-grid--supporting .kpi::before { display: none; }
+.cockpit .kpi-grid--supporting .kpi__open { min-height: 96px; padding: 9px 12px; }
+.cockpit .kpi-grid--supporting .kpi__caliber,
+.cockpit .kpi-grid--supporting .kpi__source { display: none; }
+.cockpit .concl { border-radius: 4px; background: linear-gradient(100deg, #173f5b, #806332); box-shadow: none; }
+.cockpit .concl.is-attention { background: linear-gradient(100deg, #81632f, #a17a33); }
+.cockpit .concl.is-risk { background: linear-gradient(100deg, #713f3c, #a84f46); }
 .cockpit .concl__ref { border-radius: 3px; }
 .cockpit .action-panel,
 .cockpit .ask-entry {
@@ -1080,6 +1100,10 @@
   background: var(--cp-surface);
   box-shadow: 0 6px 18px rgb(45 49 53 / 3%);
 }
+.cockpit .overview-panel--trend { border-top: 2px solid #173f64; }
+.cockpit .overview-panel--cash { border-top: 2px solid #a17a33; }
+.cockpit .overview-panel--dupont { border-top: 2px solid #5b9b85; }
+.cockpit .overview-panel--expenses { border-top: 2px solid #8a7a5e; }
 .overview-panel__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .overview-panel__head > svg { flex: none; color: #a07b37; }
 .overview-panel__head h2 { margin: 3px 0 0; color: #203a50; font-family: "Songti SC", "Noto Serif CJK SC", serif; font-size: 18px; font-weight: 600; letter-spacing: .025em; }
@@ -1153,6 +1177,9 @@
   .cockpit__head h1 { font-size: 29px; }
   .cockpit__meta { max-width: none; padding: 0 0 0 9px; }
   .cockpit .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; }
+  .cockpit .kpi-grid--supporting { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cockpit .kpi-grid--supporting .kpi:nth-child(2) { border-right: 0; }
+  .cockpit .kpi-grid--supporting .kpi:nth-child(n + 3) { border-top: 1px solid #ded7ca; }
   .cockpit .kpi__open { min-height: 142px; padding: 11px 10px; }
   .cockpit .kpi__value { font-size: 21px; }
   .cockpit .kpi__sparkline { width: 45px; }
@@ -1208,6 +1235,61 @@
 .profitability-metric > a,
 .profitability-source a { color: #285472; }
 .module-section-heading span { color: #7b858a; }
+
+/* 2026-10-20：把实际图表及分析页统一到已确认的暖纸白、墨蓝与古金概念板。 */
+.cockpit {
+  --cp-paper: #f7f4ed;
+  --cp-surface: #fffefa;
+  --cp-ink: #172c40;
+  --cp-mut: #687584;
+  --cp-line: #e7e1d5;
+  --cp-blue: #173f64;
+  --cp-green: #4f8b70;
+  --cp-red: #a84f46;
+  --cp-warn: #a87d2e;
+}
+
+.cockpit .kpi::before { background: #a17a33; }
+.cockpit .kpi.is-breach::before { background: #a84f46; }
+.cockpit .kpi.is-near::before { background: #a87d2e; }
+.cockpit .kpi.is-notready::before { background: #9a9b96; }
+.cockpit .kpi__sparkline { color: #5b9b85; }
+.cockpit .overview-panel,
+.cockpit .kpi,
+.cockpit .action-panel,
+.cockpit .ask-entry { border-color: #e4ded3; }
+.cockpit .concl { background: linear-gradient(100deg, #173f5b, #806332); }
+.cockpit .concl.is-attention { background: linear-gradient(100deg, #81632f, #a17a33); }
+.cockpit .concl.is-risk { background: linear-gradient(100deg, #713f3c, #a84f46); }
+.cockpit .overview-panel--trend { border-top: 2px solid #173f64; }
+.cockpit .overview-panel--cash { border-top: 2px solid #a17a33; }
+.cockpit .overview-panel--dupont { border-top: 2px solid #5b9b85; }
+.cockpit .overview-panel--expenses { border-top: 2px solid #8a7a5e; }
+
+.module-page {
+  --module-line: #e4ded3;
+  --module-muted: #687584;
+  color: #172c40;
+  background: #f7f4ed;
+}
+.module-page__header h2,
+.module-section-heading h3 { color: #172c40; }
+.module-page__eyebrow { color: #a17a33; }
+.module-period { border-color: #e4d8bd; background: #f5ecd8; color: #735926; }
+.module-source-notice { border-color: #e4d8bd; background: #f5ecd8; color: #62573f; }
+.module-kpi-card,
+.module-chart-card,
+.profitability-metric { border-color: #e4ded3; background: #fffefa; }
+.module-source-link,
+.profitability-metric > a,
+.profitability-source a { color: #315c73; }
+
+@media (max-width: 640px) {
+  .cockpit__head h1 { font-size: 30px; }
+  .cockpit .kpi__open { min-height: 136px; }
+  .cockpit .kpi--supporting .kpi__open { min-height: 112px; }
+  .module-page { background: #f7f4ed; }
+}
 .module-chart-heading h4 { color: #354b5c; font-family: "Songti SC", "Noto Serif CJK SC", serif; }
 .chart-fact-badges span { border-color: #e5ddcc; border-radius: 3px; color: #806536; background: #f8f3e9; }
 .module-chart-table { color: #40566a; }

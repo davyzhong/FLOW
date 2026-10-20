@@ -18,6 +18,47 @@
   padding: 28px 32px 56px;
 }
 
+/* CFO 与数据工作台沿用概念板的报告画布；其余产品区保留现行全局主题。 */
+.app-shell:has(.cockpit),
+.app-shell:has(.module-page),
+.app-shell:has(.data-workbench) {
+  --ink: #172c40;
+  --muted: #687584;
+  --line: #e7e1d5;
+  --blue: #173f64;
+  --navy: #142e3c;
+  --green: #4f8b70;
+  --red: #a84f46;
+  --amber: #a17a33;
+  background: #f7f4ed;
+}
+
+.app-shell:has(.cockpit) .workflow-rail,
+.app-shell:has(.module-page) .workflow-rail,
+.app-shell:has(.data-workbench) .workflow-rail {
+  background: #142e3c;
+}
+
+.app-shell:has(.cockpit) .workflow-rail__brand > span,
+.app-shell:has(.module-page) .workflow-rail__brand > span,
+.app-shell:has(.data-workbench) .workflow-rail__brand > span {
+  background: #b28a44;
+  color: #142e3c;
+}
+
+.app-shell:has(.cockpit) .workflow-rail li.is-active a,
+.app-shell:has(.module-page) .workflow-rail li.is-active a,
+.app-shell:has(.data-workbench) .workflow-rail li.is-active a {
+  background: rgb(255 255 255 / 9%);
+  box-shadow: inset 3px 0 0 #c6a45e;
+}
+
+.app-shell:has(.cockpit) .app-shell__main,
+.app-shell:has(.module-page) .app-shell__main,
+.app-shell:has(.data-workbench) .app-shell__main {
+  padding: 16px 20px 44px;
+}
+
 @media (max-width: 1200px) {
   .app-shell {
     grid-template-columns: 62px minmax(0, 1fr);
@@ -44,5 +85,13 @@
 
   .app-shell__main {
     padding: 20px 18px 48px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .app-shell:has(.cockpit) .app-shell__main,
+  .app-shell:has(.module-page) .app-shell__main,
+  .app-shell:has(.data-workbench) .app-shell__main {
+    padding: 14px 16px 36px;
   }
 }

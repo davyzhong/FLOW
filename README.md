@@ -430,9 +430,9 @@ flowchart LR
 | **U8** | 生产就绪收口（真实存储旅程、HTTPS 拓扑、统一部署验收） | ✅ completed；严格冻结门禁通过 |
 | **S01** | 战略边界、Financial Facts V2、安全/RBAC/审计门禁 | ✅ completed |
 | **D 轨** | 大麦物流完整财年演示数据、正式工作流与八页面 E2E | ✅ completed（verify 19/19、E2E 9/9、17 门禁绿；CI 全绿于 `d701c1d`） |
-| **D055 当前交付** | 单机单用户、SQLite + 本地目录、A+C 驾驶舱/报告视觉升级 | 🚧 本机阶段验收通过；run `39284568713` 有 2 项 CI 失败，其中 M6 已修正，Excel 上传 E2E 超时待查，详见路线图 |
+| **D055 当前交付** | 单机单用户、SQLite + 本地目录、A+C 驾驶舱/报告视觉升级 | 🚧 单机验收与最新准确 SHA CI（23/23）已通过；正在按概念板统一视觉并拆分长集成门禁，详见路线图 |
 | **K 轨** | 第二代静态知识刷新、sealed candidate 与战略重基线 | ⏭️ 顺延；当前工作包关闭后恢复 |
-| U9–U10 | 内部试点、V1.1 证据决策 | ⬜ 待授权，且 U8 后按 [D053](docs/10_governance/decisions/D053--三层两模块边界与执行顺序.md) 重新裁决 |
+| U9–U10 | 内部试点、V1.1 证据决策 | ⏭️ 排队；依赖公开 C 级证据与真实企业数据，轮到后按路线图验收 |
 
 已登记的确定性原语：CAGR（n−1 间隔）、可加和守恒桥（残差显式）、经验阈值提示（无普适判定）、口径标签值（登记制）、应收-收入增速联看提示。
 
@@ -726,7 +726,7 @@ CI 定义见 [FLOW CI](.github/workflows/ci.yml)。无数据库 unit job 与需�
 - ❄️ **冻结报告与发布** —— JSONB 冻结视图，导出仅读冻结内容
 - 🤖 **多 Agent 协作纪律**（[HANDOFF.md](HANDOFF.md)）—— 串行集成 + 逐 Gate 验证 + commit → 自动 push
 - 🧪 **六道门禁矩阵**（`make test-web` / `test-api` / `test-data-contract` / `test-intake-e2e` / `test-metrics-known-answers` / `test-analysis-invariants` / `test-dashboard` / `test-investigation-e2e` / `test-publishing-golden` / `test-user-closure-e2e`）
-- 📦 **工程栈**：Python 3.13 + FastAPI + Pydantic + SQLAlchemy + Next.js 16 + React 19 + TypeScript + PostgreSQL 18 + Redis 8 + S3 + Celery + pnpm + uv + Playwright + GitHub Actions
+- 📦 **日常单机运行**：Python 3.13 + FastAPI + SQLAlchemy + SQLite + 本地文件目录 + Next.js 16 + React 19 + TypeScript。PostgreSQL/Redis/S3/Celery 保留在兼容性测试链中，不是普通启动依赖；pnpm、uv、Playwright 与 GitHub Actions 用于开发和验收。
 
 ## 💖 致谢
 
@@ -805,14 +805,14 @@ FLOW/
 ```mermaid
 flowchart LR
     A["已交付基础<br/>公开财报 · 客观指标 · 证据报告"] --> B["D055 当前唯一队首<br/>单机单用户原型"]
-    B --> C["阶段 1–6.5 已完成<br/>SQLite · 视觉升级 · CI 分片"]
-    C --> D["阶段 7 本地验收完成<br/>单机启动 · 离线快照 · 截图"]
-    D --> E["当前待结案<br/>准确 SHA CI + 文档验收"]
+    B --> C["阶段 1–7 本机验收完成<br/>SQLite · 离线快照 · 驾驶舱"]
+    C --> D["当前执行<br/>概念图视觉收敛 + 集成 CI 分片"]
+    D --> E["最终验收<br/>覆盖映射 + 准确 SHA CI + 文档审查"]
     E --> F["后续恢复<br/>静态知识刷新 K3"]
     style B fill:#fff0cd,stroke:#aa7918,stroke-width:2px
 ```
 
-单机原型工作包处于唯一队首：阶段 1–6.5 已完成，阶段 7本机验收完成。准确 SHA `433f5a7b7b04b29f499594f06f3f991f71f4a904` 的 run `39284568713` 失败：M6 元数据错误已修复并本地复验；`user-closure-e2e` 的 Excel 上传流程等待映射按钮 60 秒超时，尚未查明原因。截图和离线 HTML 可直接查看，工作包尚未结案；下一步按 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 诊断 E2E 并核对修正后准确 SHA 的 CI。演示数据不得冒充真实披露。
+单机原型工作包处于唯一队首：阶段 1–7 的本机验收完成；最新已完成 CI SHA `431cf62bec94bd009cce8b205962eeb8bff68120` / run `39343622288` 为 23/23 jobs success，包含此前超时的 Excel 上传 E2E。当前进一步对齐概念图视觉，并将原 284 项集成测试分为四组独立 CI shard；本次改动后的准确 SHA CI 尚待运行。最新状态与单一 To-do 只以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为准，演示数据不得冒充真实披露。
 
 本仓库尚未提供独立的 LICENSE 文件；使用与分发授权请向项目维护者确认。贡献与协作遵循 [AGENTS.md](AGENTS.md)：先读项目状态和正式决策，保护原始档案，按风险验证，每个完整任务只提交相关文件并推送规范远端。
 

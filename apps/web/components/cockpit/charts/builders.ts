@@ -86,7 +86,8 @@ export function buildCombo(series: ComboSeries[]): ChartOption | undefined {
     series: usable.map((s, i) => {
       const isLine = s.axis === "line";
       const yAxisIndex = seriesAxisIndex(s);
-      const color = [CHART_THEME.blue, CHART_THEME.green, CHART_THEME.warn][i % 3];
+      // 财务报告主图使用墨蓝与古金区分核心序列；第三序列才使用青绿。
+      const color = [CHART_THEME.blue, CHART_THEME.gold, CHART_THEME.teal][i % 3];
       return {
         name: `${s.title}（${s.unit}）`,
         type: s.axis,

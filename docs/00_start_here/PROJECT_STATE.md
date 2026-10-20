@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.71
+version: 5.72
 created_at: 2026-09-12
 updated_at: 2026-10-20
 owner: FLOW
@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-10-20 最新状态：**阶段 7本机单机验收完成；概念图视觉差距整改与门禁长作业收敛进入当前工作包。** `/tmp/flow-stage7-20261020` 隔离冷启动、SQLite 迁移、API/Web 200 和大麦数据 19/19 通过；离线 HTML 8 KPI/来源数据可读，外部请求与页面错误均为 0。概念板与当前驾驶舱已有图表和页面结构，但实际样式仍由旧蓝色 token 主导，图表叙事密度和编辑部层级不足。准确 SHA `431cf62bec94bd009cce8b205962eeb8bff68120` / run `39343622288` 的 23/23 jobs 已全部成功；此前映射按钮超时的 `user-closure-e2e` 已通过，唯一显著性能瓶颈为 `integration`（36分51秒）。截图与完整验收见[阶段 7记录](../60_delivery/verification/2026-10-20--single-machine-visual-static-acceptance-v1.md)；唯一执行队列见[路线图](../50_plans/CURRENT_ROADMAP.md)，细化验收顺序见[7a 工作包](../50_plans/work_items/FLOW--single-machine-visual-prototype.md#9-概念图视觉差距门禁负载与文档治理)。
+2026-10-20 最新状态：**阶段 7本机单机验收与准确 SHA CI 已完成；7a 正在收敛概念图视觉差距、拆分长集成门禁并整理项目文档。** 最新通过的基线 SHA `431cf62bec94bd009cce8b205962eeb8bff68120` / run `39343622288` 为 23/23 jobs success，原 `integration` 单 job 用时 36分51秒。当前驾驶舱已实测暖白画布、墨蓝导航、古金重点与衬线报告标题；浏览器无页面错误。CI 改动把原 284 项集成测试按 66 个文件映射为四组，自动校验零遗漏/零重复，保留稳定汇总门禁和性能门禁；本次准确 SHA CI 尚待核验。详情与顺序见[路线图](../50_plans/CURRENT_ROADMAP.md)及[7a 工作包](../50_plans/work_items/FLOW--single-machine-visual-prototype.md#9-概念图视觉差距门禁负载与文档治理)。
 
 下段为 K2 执行前的状态快照，已过时；当前状态以本段及 [CURRENT_ROADMAP](../50_plans/CURRENT_ROADMAP.md) 为准。
 
