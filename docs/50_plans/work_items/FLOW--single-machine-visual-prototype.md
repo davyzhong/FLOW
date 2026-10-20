@@ -3,7 +3,7 @@ doc_id: FLOW-WI-SINGLE-MACHINE-VISUAL-20261018-001
 title: 单机原型架构简化与全视图视觉升级
 doc_type: work-item
 status: active
-version: 3.1
+version: 3.2
 created_at: 2026-10-18
 updated_at: 2026-10-20
 owner: FLOW
@@ -19,7 +19,7 @@ confidentiality: project-internal
 
 # 单机原型架构简化与全视图视觉升级
 
-> **当前状态：阶段 5门禁治理、阶段 6视觉实现、阶段 6.5数据契约分片已完成；阶段 7本地验收完成，准确 SHA CI 尚未全绿。** run `39284568713` / SHA `433f5a7b` 有两项失败：新验收文档缺 `commit_refs`、`evidence_refs` 已修复且本地 M6 通过；`user-closure-e2e` 在 Excel 上传后等待映射确认按钮超时 60 秒，根因待查。其他作业和数据契约五分片成功。隔离 SQLite 冷启动、演示包 19/19、离线 HTML 和截图证据见[阶段 7验收记录](../../60_delivery/verification/2026-10-20--single-machine-visual-static-acceptance-v1.md)。阶段 2已验证 SQLite + 本地文件目录备份恢复。工作包不结案，直到用户闭环失败诊断并以准确 SHA 复验。GitHub 截图工作流仍暂停。唯一状态/顺序见 [CURRENT_ROADMAP](../CURRENT_ROADMAP.md)。
+> **当前状态：阶段 5门禁治理、阶段 6视觉实现、阶段 6.5数据契约分片、阶段 7单机验收和本轮门禁分片均已通过；7a 继续收敛概念图视觉差距并完成文档复核。** 最新准确 SHA `368a01902124351401d73dc9329800d7f00f3953` 对应 run `39349190031`，28/28 jobs success。阶段 7隔离 SQLite 冷启动、演示包 19/19、离线 HTML 和截图证据见[阶段 7验收记录](../../60_delivery/verification/2026-10-20--single-machine-visual-static-acceptance-v1.md)。SQLite + 本地文件目录备份恢复已在阶段 2验证。GitHub 截图工作流仍暂停。唯一状态/顺序见 [CURRENT_ROADMAP](../CURRENT_ROADMAP.md)。
 
 ## 目标
 
@@ -171,8 +171,8 @@ confidentiality: project-internal
 
 严格按以下单一顺序执行；状态与队列只写入 `CURRENT_ROADMAP.md`：
 
-1. **视觉差距闭合（实现完成，验证进行中）：** 以概念板为视觉基准，统一总览、主题模块、`/data`、工作流侧栏的暖纸白、墨蓝、古金、衬线标题和报告式层级。沿用 ECharts 与现有数据/公式，不使用概念稿示意数；保留语义状态色和准确金额、百分比及 synthetic/reported 标签。桌面浏览器实测总览无前端错误；九个现有路由在 1440px/390px 均返回 200、无横向溢出。完整 Web tests/typecheck/build 与图表数据/深链回归须在最终提交前复核。实际渲染图仅作临时验证，暂停的截图自动化工作流不恢复。
-2. **门禁减负（分片实现完成，准确 SHA 验收待执行）：** 基线准确 SHA `431cf62b` 的 `integration` job 为 36分51秒。新增固定文件映射的四个隔离 shard，包含原 284 项测试/66 个文件，校验脚本证明零遗漏、零重复；每个 shard 独立准备服务并迁移数据库。稳定 `integration` 汇总检查负责失败传播，10x 性能门禁独立保留。回归覆盖以脚本测试和当前 SHA 全量 CI 验证；不得降低断言、静默跳过测试或以本地通过代替远端 CI。
+1. **视觉差距闭合（持续执行）：** 以概念板为视觉基准，统一总览、主题模块、`/data`、工作流侧栏的暖纸白、墨蓝、古金、衬线标题和报告式层级。沿用 ECharts 与现有数据/公式，不使用概念稿示意数；保留语义状态色和准确金额、百分比及 synthetic/reported 标签。已有桌面总览实测和九路由 1440px/390px 断言，但用户反馈实际风格、配色与概念图仍有明显距离，因此不得以配色 token 已改或路由正常作为关闭条件。下一轮须先逐屏对照概念板，核实实际渲染的容器色、导航、标题层级、卡片尺寸、图表面积/比例、标签、留白及移动阅读顺序，再针对造成差距的通用组件落地修正；验证 Web tests/typecheck/build、图表数据/深链及 1440/1024/390 视口。实测图仅用于本机验证，GitHub 截图自动化工作流保持暂停。
+2. **门禁减负（已通过，2026-10-20）：** 基线 SHA `431cf62b` 的 `integration` job 为 36分51秒。固定文件映射的四个隔离 shard 覆盖原 284 项测试/66 个文件，校验脚本证明零遗漏、零重复；每个 shard 独立准备服务并迁移数据库。稳定 `integration` 汇总检查负责失败传播，10x 性能门禁独立保留。准确 SHA `368a01902124351401d73dc9329800d7f00f3953` / run `39349190031` 为 28/28 jobs success；各测试未被移除。不得降低断言、静默跳过测试或以本地通过代替远端通过。
 3. **项目文档 review 精简（进行中）：** 已更新 README、文档导航、计划导航、知识库导航、PROJECT_STATE、CURRENT_ROADMAP 与 HANDOFF 的当前状态；校正日常 SQLite/本地文件运行边界与旧 CI 失败叙述。继续检查运行/备份说明、有效交接引用、状态和截图元数据。原始研究、有效历史决策与验收证据按规范保留；只改正当前入口中的过时内容。对疑似删除项做精确路径、引用扫描与保留价值审计；未获得具体路径授权前不删文件。
 4. **最终复核与交接：** 本机文档 M1/M6、链接、计划视图、前后端相关验证和浏览器回归通过；远端全量 CI 对应最终提交 SHA 全绿后才能关闭 7a。同步 README、PROJECT_STATE、CURRENT_ROADMAP、HANDOFF 与截图索引；记录视觉验收图和门禁分组/耗时，核实没有触碰常驻账套。
 
