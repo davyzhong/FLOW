@@ -932,6 +932,7 @@
   .module-page__header { align-items: flex-start; flex-direction: column; }
   .module-period { align-self: flex-start; }
   .module-kpi-grid { grid-template-columns: minmax(0, 1fr); }
+  .module-kpi-grid[data-count="5"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .module-kpi-card { min-height: 0; }
   .module-chart-card { padding: 12px; }
   .module-formula-card > div { grid-template-columns: repeat(2, minmax(0, 1fr)); }

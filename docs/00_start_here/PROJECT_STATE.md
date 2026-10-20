@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.76
+version: 5.77
 created_at: 2026-09-12
 updated_at: 2026-10-20
 owner: FLOW
@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-10-20 最新状态：**阶段 7单机验收与门禁分片已完成；7a 继续全视图视觉收敛和文档复核。** 本轮代码 SHA `2f1b549261b9662f4d0ceea8c522baa766ed3fce` 已推送；准确 SHA CI run `39447424948` 当前 queued，尚无远端通过结论。主题页与 `/data` 的视觉改进已完成本地验收：总览保留报告式标题、筛选、关键指标、图表及行动/来源区，手机导航为品牌顶栏和键盘可用菜单；主题模块五张 KPI 卡居中、单 KPI 降级摘要通栏、三图模块末图通栏；数据工作台补齐页面导语、五步流程层级、批次表格暖色报告样式和无障碍文件选择入口。前端 198/198、typecheck/build、导航 Playwright 20/20 通过；lint 0 error、3 条既有 warning。实测费用、现金流、营运资金、风险、合并、资产负债、`/data` 桌面及 `/data` 390px 页面均无横向溢出。本轮没有新增依赖/服务、没有改数据库；单机仍为 SQLite/本地文件、同步处理和单一启动入口。实测图存于 `/tmp/flow-cockpit-visual-20261020/`；截图自动化工作流仍暂停。剩余：完成其余主题页视觉核对、审查运行/备份文档与清理候选、独立复核并对最终 SHA 完成 CI；顺序见[路线图](../50_plans/CURRENT_ROADMAP.md)及[7a 工作包](../50_plans/work_items/FLOW--single-machine-visual-prototype.md#9-概念图视觉差距门禁负载与文档治理)。
+2026-10-20 最新状态：**阶段 7 单机冷启动/离线验收与集成门禁分片已完成；唯一执行项 7a 正在收敛全视图视觉差距并复核文档。** 已推送主题模块报告布局和数据工作台视觉改进；最新推送 SHA `4073d5118172cb5a52b293a047620f20ffec38c6` 的准确 SHA CI run `39447663998` 已 28/28 jobs success。本地工作树另有费用 KPI 窄屏布局修复与状态文档更新，待本轮提交后再核验新 SHA。概念板关键视觉签名已覆盖总览、六个主题模块和 `/data`：暖纸白、墨蓝、古金、衬线标题、期间对比、图表与可追溯来源；桌面费用页 3+2 KPI 居中，390px 窄屏为两列，单 KPI 降级摘要通栏，三图模块末图通栏。单机仍采用 SQLite 单文件、本地文件目录、同步处理与单一启动入口，本轮没有新增依赖、服务或数据库变更。六个主题模块在 390px 下均实测 HTTP 200、页面 ready、图表可见且无横向溢出；`/data` 390px 与桌面样例也通过。费用、现金流、营运资金、风险、合并、资产负债、盈利杜邦与 `/data` 实测截图位于本机 `/tmp/flow-cockpit-visual-20261020/`，未提交仓库；截图自动发布/自动化工作流仍暂停。前端 198/198、typecheck、production build、导航 Playwright 20/20 已通过；lint 0 error、3 条既有 warning。门禁四分片仍完整覆盖原 284 项测试/66 文件，零遗漏/重复；阶段 7 冷启动与离线静态页验收见[阶段 7验收](../60_delivery/verification/2026-10-20--single-machine-visual-static-acceptance-v1.md)。剩余为文档现状核准与清理候选审计、全视图最终复核及准确 SHA CI；不删除文件，疑似过时内容保留历史并校正当前入口。顺序见[路线图](../50_plans/CURRENT_ROADMAP.md)和[7a 工作包第 9 节](../50_plans/work_items/FLOW--single-machine-visual-prototype.md#9-概念图视觉差距门禁负载与文档治理)。
 
 下段为 K2 执行前的状态快照，已过时；当前状态以本段及 [CURRENT_ROADMAP](../50_plans/CURRENT_ROADMAP.md) 为准。
 
@@ -80,7 +80,7 @@ applies_to: repository
 
 ## 当前执行入口
 
-- **[CURRENT_ROADMAP.md](../50_plans/CURRENT_ROADMAP.md)**（唯一主线：状态真相 + 单一串行 To-do）：当前唯一执行项为单机原型架构简化与全视图视觉升级；阶段 6 本机验收完成，准确 SHA CI 结案后执行阶段 7；知识刷新 K3 顺延。全部后续任务及状态只按该路线图执行。
+- **[CURRENT_ROADMAP.md](../50_plans/CURRENT_ROADMAP.md)**（唯一主线：状态真相 + 单一串行 To-do）：当前唯一执行项为 7a 单机原型架构简化与全视图视觉升级；阶段 7 单机冷启动、离线展示与门禁分片已完成，当前按阶段 9顺序完成视觉闭环、文档复核与最终集成。其后再恢复知识刷新 K3。全部后续任务及状态只按该路线图执行。
 - 旧统一计划、O 系列计划、EXECUTION_TODO 与 2026-09-24/25 三份总计划均已 superseded/archived（保留历史细节与证据，不再作为执行依据）
 - 文档迁移：[迁移实施计划 M0–M6](../superpowers/plans/2026-09-12-static-knowledge-and-document-migration.md) 已全部关闭（bfc1271 / e373e25，用户确认 2026-09-13）
 

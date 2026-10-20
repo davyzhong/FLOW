@@ -18,7 +18,7 @@ applies_to: repository
 
 ## 一、当前任务
 
-**当前执行项：7a 全视图视觉收敛、门禁分片与项目文档治理。** 已完成总览报告层级、行动项/来源并列布局和手机品牌导航；本轮新增主题模块 KPI 居中、单 KPI 降级摘要通栏、三图末图通栏，以及 `/data` 报告式标题、五步流程条、批次表和键盘可访问上传入口。代码 SHA `2f1b549261b9662f4d0ceea8c522baa766ed3fce` 已推送，准确 SHA CI run `39447424948` 正在排队；本地 Web 198/198、typecheck/build、导航 Playwright 20/20 均通过，lint 0 error、3 条既有 warning。费用、现金流、营运资金、风险、合并、资产负债和 `/data` 页面实测截图保存在 `/tmp/flow-cockpit-visual-20261020/`；390px 无横向溢出。单机架构仍为 SQLite + 本地文件、同步处理和一键启动，本轮无新依赖/服务或数据库改动。继续步骤：完成其余主题页视觉核对；审查运行/备份文档及清理候选（未逐项授权前不删）；独立复核、文档门禁和最终准确 SHA CI 后才关闭 7a。验收顺序见[7a 工作包第 9 节](docs/50_plans/work_items/FLOW--single-machine-visual-prototype.md#9-概念图视觉差距门禁负载与文档治理)，唯一队列见[CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)。
+**当前执行项：7a 全视图视觉收敛、门禁分片与项目文档治理。** 已完成总览与主题页报告层级、移动导航、数据工作台报告式布局；本轮补修 390px 费用页五项 KPI 三列挤压，改为两列，并加隔离响应 fixture E2E。Web 198/198、导航 Playwright 21/21、typecheck/生产 build、文档 M1/M2/M6 通过；lint 零错误、3 条既有 warning。最新推送文档 SHA `4073d5118172cb5a52b293a047620f20ffec38c6` 的准确 SHA CI run `39447663998` 已 28/28 jobs success；本轮代码和项目状态文档改动待提交。六个主题模块 390px 实测 ready、有图表且无横向溢出；费用页 KPI 栅格回归通过。SQLite + 本地文件、同步处理和一键启动保持不变；本轮没有新增依赖/服务或数据库改动。运行架构文档已校准备份恢复验收状态和 SQLite JSON / PostgreSQL JSONB 差异。继续完成文档现状与清理候选审计、最终复核和新 SHA CI；任何文件删除仍需逐项授权。验收顺序见[7a 工作包第 9 节](docs/50_plans/work_items/FLOW--single-machine-visual-prototype.md#9-概念图视觉差距门禁负载与文档治理)，唯一队列见[CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)。
 
 ### 本会话交接补记（2026-10-20）
 

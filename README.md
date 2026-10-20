@@ -726,7 +726,7 @@ CI 定义见 [FLOW CI](.github/workflows/ci.yml)。无数据库 unit job 与需�
 - ❄️ **冻结报告与发布** —— JSONB 冻结视图，导出仅读冻结内容
 - 🤖 **多 Agent 协作纪律**（[HANDOFF.md](HANDOFF.md)）—— 串行集成 + 逐 Gate 验证 + commit → 自动 push
 - 🧪 **六道门禁矩阵**（`make test-web` / `test-api` / `test-data-contract` / `test-intake-e2e` / `test-metrics-known-answers` / `test-analysis-invariants` / `test-dashboard` / `test-investigation-e2e` / `test-publishing-golden` / `test-user-closure-e2e`）
-- 📦 **日常单机运行**：Python 3.13 + FastAPI + SQLAlchemy + SQLite + 本地文件目录 + Next.js 16 + React 19 + TypeScript。PostgreSQL/Redis/S3/Celery 保留在兼容性测试链中，不是普通启动依赖；pnpm、uv、Playwright 与 GitHub Actions 用于开发和验收。
+- 📦 **日常单机运行**：Python 3.13 + FastAPI + SQLAlchemy + SQLite + 本地文件目录 + Next.js 16 + React 19 + TypeScript。PostgreSQL、Redis、S3/MinIO、Celery 只留在兼容性测试链，不属于普通启动路径；pnpm、uv、Playwright 与 GitHub Actions 用于开发和验收。
 
 ## 💖 致谢
 
@@ -812,7 +812,7 @@ flowchart LR
     style B fill:#fff0cd,stroke:#aa7918,stroke-width:2px
 ```
 
-单机原型工作包处于唯一队首：SQLite + 本地文件目录、同步处理、单一启动入口和阶段 7 冷启动/离线展示验收已完成。代码 SHA `694fe84e9b18471a226feb0f3f01d9c73040df4d` / run `39437197882` 为 28/28 jobs success；原 284 项集成测试按四组隔离 shard 覆盖，66 文件映射零遗漏、零重复。总览已调整为报告式层级，手机导航已改为品牌顶栏和可展开菜单。当前继续校准其他主题模块与 `/data`，并审查项目文档；GitHub 截图自动化仍暂停。最新状态与唯一 To-do 只以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为准，演示数据不得冒充真实披露。
+单机原型工作包处于唯一队首：SQLite + 本地文件目录、同步处理、单一启动入口和阶段 7冷启动/离线展示验收已完成。7a 正在按 A+C 概念板收敛全视图视觉，并复核项目文档；本轮新增 390px 费用页 KPI 两列布局及响应式回归用例。准确 SHA CI、状态与剩余步骤见 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)。GitHub 截图自动化仍暂停；页面实际演示数据仍标识为合成数据，不冒充真实披露。
 
 本仓库尚未提供独立的 LICENSE 文件；使用与分发授权请向项目维护者确认。贡献与协作遵循 [AGENTS.md](AGENTS.md)：先读项目状态和正式决策，保护原始档案，按风险验证，每个完整任务只提交相关文件并推送规范远端。
 
@@ -829,8 +829,8 @@ flowchart LR
 - [x] **U5–U7** — 客观报告门禁 + 统一冻结 + 四问工作台 ✅
 - [x] **U8** — 生产就绪收口（真实存储旅程 + HTTPS 拓扑 + 统一部署验收） ✅ completed；严格冻结门禁通过
 - [x] **S01** — 战略边界 + Financial Facts Contract V2 + 安全/RBAC/审计门禁 ✅
-- [🚧] **D055** — 单机单用户原型、SQLite + 本地文件存储、Redis/Celery/MinIO 移除评估与 A+C 驾驶舱/报告视觉升级（按唯一工作包逐段验收）
-- [ ] **K2** — 单机原型工作包完成后恢复静态知识刷新；启动前只读核验外部知识库工作区
+- [🚧] **D055 / 7a** — 单机单用户原型运行架构已完成验收；继续按 A+C 概念板收敛总览、主题页与数据工作台视觉，随后完成文档复核和最终集成（见唯一 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)）
+- [ ] **K3** — 7a 结案后恢复静态知识刷新与战略重基线；ObsidianWiki 保持只读，启动前核验外部知识库工作区
 - [ ] **U4** — 独立全行验证与留出泛化（依赖 oracle 人工录入）⬜ 外部到料即并行
 - [ ] **公开模块 C 级出口** — Go/No-Go 裁决（前置人工项不变）
 - [ ] **U9–U10** — 内部试点 + V1.1 证据决策（⬜ 待授权；按 [D053](docs/10_governance/decisions/D053--三层两模块边界与执行顺序.md) 重新裁决）

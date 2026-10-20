@@ -3,9 +3,9 @@ doc_id: FLOW-ARCH-RUNTIME-000
 title: 运行架构（原位，机器消费描述）
 doc_type: architecture
 status: approved
-version: 1.2
+version: 1.3
 created_at: 2026-08-30
-updated_at: 2026-10-18
+updated_at: 2026-10-20
 owner: FLOW
 decision_refs: [D029]
 applies_to: runtime
@@ -14,7 +14,7 @@ supersedes: []
 superseded_by: null
 ---
 
-# FLOW 运行架构与部署边界｜2026-10-18
+# FLOW 运行架构与部署边界｜2026-10-20
 
 当前目标为单机单用户验证原型，正式决策见 D055。普通使用由本机 Web/API 进程、一个 SQLite 文件和一个本地内容目录组成；历史 Compose 基础设施仅供既有 PostgreSQL 兼容性与 CI 验证使用，不是普通启动路径。
 
@@ -54,7 +54,7 @@ flowchart LR
   C -->|领域服务构建| M[MetricSnapshot]
   M -->|确定性 Playbook| A[AnalysisRun]
   A --> V[Finding / Evidence / 人工复核]
-  V --> F[JSONB 冻结 ReportView]
+  V --> F[冻结 ReportView：SQLite JSON / PostgreSQL JSONB]
   M --> F
   F --> P[PPTX / XLSX / HTML]
   F -.需注入 Chromium printer.-> PDF[PDF]
@@ -72,7 +72,7 @@ flowchart LR
 | 下载 | 读取成功尝试的存储字节，核对 SHA-256，使用服务端文件名与 `no-store` / `nosniff` |
 | 历史无载荷报告 | 已有产物仍可下载；重新渲染返回 `freeze_blocked`，需按当前合格对象重新冻结 |
 
-不能用四格式黄金测试通过来宣称默认部署已提供 PDF 下载。文件存储验收应检查本地内容寻址、SHA-256 和新目录备份恢复。
+不能用四格式黄金测试通过来宣称默认部署已提供 PDF 下载。阶段 2 已在隔离 SQLite + 本地内容目录上验证备份恢复到新目录，并逐文件核对 SHA-256、来源锚点、冻结报告与恢复后的驾驶舱结果；详见[单机原型架构验收记录](../60_delivery/verification/2026-10-18--single-machine-runtime-convergence-v1.md)。
 
 ## 启动、迁移与配置
 
@@ -88,6 +88,6 @@ flowchart LR
 | `make acceptance` | 七道功能门禁；脚本先删除并重建本地 `public` schema，只能用于隔离演示/测试库 |
 | `make test-user-closure-e2e` | 回归加浏览器闭环；监督器清理本次启动的进程组，仍须使用隔离测试库与端口 |
 
-普通启动默认绑定回环地址，只允许本机使用。`FLOW_DATA_DIR` 下的数据库与文件共同构成应用数据；使用系统备份工具或应用备份功能保存数据目录。历史 Compose 栈仍使用开发凭据与暴露端口，不能作为产品运行入口。单用户认证见[认证配置](../operations/authentication.md)。备份恢复及真实数据试点仍需独立验收。
+普通启动默认绑定回环地址，只允许本机使用。`FLOW_DATA_DIR` 下的数据库与文件共同构成应用数据；使用系统备份工具或应用备份功能保存数据目录。单机冷启动、SQLite 初始化、Web/API 健康检查和离线快照展示已通过阶段 7隔离验收；备份恢复已在阶段 2隔离验收。历史 Compose 栈仍使用开发凭据与暴露端口，不能作为产品运行入口。单用户认证见[认证配置](../operations/authentication.md)。真实企业数据试点仍未验收，不应以合成演示数据替代。
 
 源码入口：[Compose](../../infra/compose.yaml)、[Makefile](../../Makefile)、[API 路由](../../services/api/src/flow_api/api/routes)、[旧 CI Worker 桩](../../services/api/src/flow_api/worker.py)、[发布服务](../../services/api/src/flow_api/publishing/（模块化拆分：four_stage_binding / objective_freeze / objective_renderers）)。
