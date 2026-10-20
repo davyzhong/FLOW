@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.72
+version: 5.73
 created_at: 2026-09-12
 updated_at: 2026-10-20
 owner: FLOW
@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-10-20 最新状态：**阶段 7本机单机验收与准确 SHA CI 已完成；7a 正在收敛概念图视觉差距、拆分长集成门禁并整理项目文档。** 最新通过的基线 SHA `431cf62bec94bd009cce8b205962eeb8bff68120` / run `39343622288` 为 23/23 jobs success，原 `integration` 单 job 用时 36分51秒。当前驾驶舱已实测暖白画布、墨蓝导航、古金重点与衬线报告标题；浏览器无页面错误。CI 改动把原 284 项集成测试按 66 个文件映射为四组，自动校验零遗漏/零重复，保留稳定汇总门禁和性能门禁；本次准确 SHA CI 尚待核验。详情与顺序见[路线图](../50_plans/CURRENT_ROADMAP.md)及[7a 工作包](../50_plans/work_items/FLOW--single-machine-visual-prototype.md#9-概念图视觉差距门禁负载与文档治理)。
+2026-10-20 最新状态：**阶段 7单机验收与门禁分片已完成；7a 继续全视图视觉收敛和文档复核。** 最新代码 SHA `694fe84e9b18471a226feb0f3f01d9c73040df4d` 已推送，准确 SHA run `39437197882` 当前 pending。总览已重排为报告式标题、筛选、关键指标、图表及行动/来源区；手机导航改为品牌顶栏和键盘可用菜单。Web 198/198、typecheck/build、Playwright 导航 20/20、390px 无横向溢出；lint 零错误、3 条既有警告。单机运行已采用 SQLite/本地文件、同步处理和一个启动入口，本轮没有引入服务或依赖。当前实测图 `/tmp/flow-cockpit-visual-20261020/final-1440.png`、`final-390.png`；GitHub 截图工作流仍暂停。剩余：核对主题模块与 `/data` 的视觉实现、文档审查和清理候选复核；具体状态与顺序见[路线图](../50_plans/CURRENT_ROADMAP.md)及[7a 工作包](../50_plans/work_items/FLOW--single-machine-visual-prototype.md#9-概念图视觉差距门禁负载与文档治理)。
 
 下段为 K2 执行前的状态快照，已过时；当前状态以本段及 [CURRENT_ROADMAP](../50_plans/CURRENT_ROADMAP.md) 为准。
 
