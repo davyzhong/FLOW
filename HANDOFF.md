@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目交接文档
 doc_type: navigation
 status: current
-version: 10.9
+version: 11.0
 created_at: 2026-09-12
 updated_at: 2026-10-20
 owner: FLOW
@@ -18,7 +18,7 @@ applies_to: repository
 
 ## 一、当前任务
 
-**当前执行项：7a 全视图视觉收敛、门禁分片与项目文档治理。** 本轮已完成总览的报告式信息层级、行动项/来源并列布局，以及移动端品牌顶栏和可展开导航；核心事实、图表、来源链接沿用现有 API/ECharts。代码 SHA `694fe84e9b18471a226feb0f3f01d9c73040df4d` 已推送，准确 SHA CI run `39437197882` pending。Web 198/198、typecheck/build、导航 Playwright 20/20、手机 390px 无横向溢出；lint 0 error、3 条既有 warning。实测截图 `/tmp/flow-cockpit-visual-20261020/final-1440.png` 与 `final-390.png`。单机架构此前已完成 SQLite + 本地文件目录、同步处理和一键启动验收；本轮未新增依赖或服务。继续步骤：检查其他主题页和 `/data` 的概念视觉差距；完成文档现状/链接审查，列清删除候选但未经逐项授权不删；最终准确 SHA 全 CI 通过后才关闭 7a。验收顺序见[7a 工作包第 9 节](docs/50_plans/work_items/FLOW--single-machine-visual-prototype.md#9-概念图视觉差距门禁负载与文档治理)，唯一队列见[CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)。
+**当前执行项：7a 全视图视觉收敛、门禁分片与项目文档治理。** 本轮已完成总览的报告式信息层级、行动项/来源并列布局，以及移动端品牌顶栏和可展开导航；核心事实、图表、来源链接沿用现有 API/ECharts。代码 SHA `694fe84e9b18471a226feb0f3f01d9c73040df4d` 已推送，准确 SHA CI run `39437197882` 已 28/28 成功。Web 198/198、typecheck/build、导航 Playwright 20/20、手机 390px 无横向溢出；lint 0 error、3 条既有 warning。实测截图 `/tmp/flow-cockpit-visual-20261020/final-1440.png` 与 `final-390.png`。单机架构此前已完成 SQLite + 本地文件目录、同步处理和一键启动验收；本轮未新增依赖或服务。继续步骤：检查其他主题页和 `/data` 的概念视觉差距；完成文档现状/链接审查，列清删除候选但未经逐项授权不删；最终准确 SHA 全 CI 通过后才关闭 7a。验收顺序见[7a 工作包第 9 节](docs/50_plans/work_items/FLOW--single-machine-visual-prototype.md#9-概念图视觉差距门禁负载与文档治理)，唯一队列见[CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)。
 
 ### 本会话交接补记（2026-10-20）
 

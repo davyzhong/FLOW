@@ -3,7 +3,7 @@ doc_id: FLOW-WI-SINGLE-MACHINE-VISUAL-20261018-001
 title: 单机原型架构简化与全视图视觉升级
 doc_type: work-item
 status: active
-version: 3.3
+version: 3.4
 created_at: 2026-10-18
 updated_at: 2026-10-20
 owner: FLOW
@@ -19,7 +19,7 @@ confidentiality: project-internal
 
 # 单机原型架构简化与全视图视觉升级
 
-> **当前状态：阶段 5门禁治理、阶段 6视觉实现、阶段 6.5数据契约分片、阶段 7单机验收和本轮门禁分片均已通过；7a 仍在执行全视图视觉收敛与文档复核。** 本轮提交 `694fe84e9b18471a226feb0f3f01d9c73040df4d` 的准确 SHA CI run `39437197882` 待运行。总览页改为报告式标题/筛选层级、行动与来源并列；移动端工作流导航改为品牌顶栏和可展开菜单。Web 198/198、typecheck/build、导航 Playwright 20/20、390px 无横向溢出通过；lint 零错误、保留 3 条既有警告。截图和隔离环境记录见交接与阶段 9；截图文件只放在本机 `/tmp`，GitHub 截图工作流仍暂停。阶段 7隔离 SQLite 冷启动、演示包 19/19、离线 HTML 和截图证据见[阶段 7验收记录](../../60_delivery/verification/2026-10-20--single-machine-visual-static-acceptance-v1.md)。SQLite + 本地文件目录备份恢复已在阶段 2验证。唯一状态/顺序见 [CURRENT_ROADMAP](../CURRENT_ROADMAP.md)。
+> **当前状态：阶段 5门禁治理、阶段 6视觉实现、阶段 6.5数据契约分片、阶段 7单机验收和本轮门禁分片均已通过；7a 仍在执行全视图视觉收敛与文档复核。** 本轮提交 `694fe84e9b18471a226feb0f3f01d9c73040df4d` 的准确 SHA CI run `39437197882` 为 28/28 jobs success。总览页改为报告式标题/筛选层级、行动与来源并列；移动端工作流导航改为品牌顶栏和可展开菜单。Web 198/198、typecheck/build、导航 Playwright 20/20、390px 无横向溢出通过；lint 零错误、保留 3 条既有警告。截图和隔离环境记录见交接与阶段 9；截图文件只放在本机 `/tmp`，GitHub 截图工作流仍暂停。阶段 7隔离 SQLite 冷启动、演示包 19/19、离线 HTML 和截图证据见[阶段 7验收记录](../../60_delivery/verification/2026-10-20--single-machine-visual-static-acceptance-v1.md)。SQLite + 本地文件目录备份恢复已在阶段 2验证。唯一状态/顺序见 [CURRENT_ROADMAP](../CURRENT_ROADMAP.md)。
 
 ## 目标
 
