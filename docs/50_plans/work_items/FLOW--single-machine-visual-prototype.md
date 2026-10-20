@@ -3,7 +3,7 @@ doc_id: FLOW-WI-SINGLE-MACHINE-VISUAL-20261018-001
 title: 单机原型架构简化与全视图视觉升级
 doc_type: work-item
 status: active
-version: 2.9
+version: 3.0
 created_at: 2026-10-18
 updated_at: 2026-10-20
 owner: FLOW
@@ -111,11 +111,11 @@ confidentiality: project-internal
 - 对 `data-contract`、`intake-e2e`、`integration` 记录准确 SHA 的单次耗时与子步骤；保留稳定汇总检查名和完整测试集合。缓存或并行切片只有在测试隔离和确定性得到证据后再考虑。
 - **授权边界与结案：** 顶层并发 diff 已于 2026-10-19 获用户明确授权并实施；不再改动 workflow 的触发器、job 超时或测试命令。最新远端 `data-contract` 达到现有 40 分钟上限后取消；同一 SHA 的隔离替代验收已完成，结论和限制见阶段 5 验收记录。
 
-**结案条件与结果：** M1 队列状态门禁通过；新 SHA 推送后，同分支旧 run 自动取消；准确 SHA `dfc67283751a357d43ae23296e561cd286fea1dc` 的其余 17 项门禁成功；`data-contract` 的 CI 测试主体在同 SHA 全新隔离 Compose 项目上 133/133 通过，契约摘要通过。远端 `data-contract` 仍因 40 分钟 job 上限取消，完整限制见[阶段 5 验收记录](../../60_delivery/verification/2026-10-19--ci-concurrency-and-data-contract-isolated-acceptance-v1.md)。阶段 5 结案；如要进一步拆分此 job 或改变 timeout，需单独获得 CI 配置授权。
+**结案条件与结果：** M1 队列状态门禁通过；新 SHA 推送后，同分支旧 run 自动取消；准确 SHA `dfc67283751a357d43ae23296e561cd286fea1dc` 的其余 17 项门禁成功；`data-contract` 的 CI 测试主体在同 SHA 全新隔离 Compose 项目上 133/133 通过，契约摘要通过。远端 `data-contract` 仍因 40 分钟 job 上限取消，完整限制见[阶段 5 验收记录](../../60_delivery/verification/2026-10-19--ci-concurrency-and-data-contract-isolated-acceptance-v1.md)。阶段 5并发治理与契约分片已结案；后续 CI 执行结构仍可能按本工作包第 9 节的覆盖证明继续优化，当前用户已明确授权实施门禁简化。
 
-### 6. 按概念板完成视觉高保真（completed，2026-10-19）
+### 6. 按概念板完成视觉高保真（本机首轮完成；差距复核后重开，2026-10-20）
 
-**阶段已结案：本机交付、准确 SHA 门禁与隔离替代验收全部完成。** 组合图只使用同一趋势响应中的收入/营业利润数据；现金流瀑布、杜邦因子、费用结构分别复用现有现金流、盈利能力、费用模块 API 和 ECharts builders。每个模块呈现自身期间、单位、事实类型、快照及来源入口；不同接口的披露期与上方筛选趋势明确分层，绝不混称同一筛选结果。移动端先呈现指标与主证据图，表格以详情展开补充。失败/缺数态保留说明，不造数。
+**首轮本机实现已交付，但此前“高保真结案”结论过早。** 组合图使用同一趋势响应中的收入/营业利润数据；现金流瀑布、杜邦因子、费用结构复用现有模块 API 和 ECharts builders。事实期间、单位、类别及来源入口已呈现，缺数态保留说明。2026-10-20 对照概念图发现页面仍受旧蓝色设计 token 与后台式布局控制，因此视觉验收重新打开；阶段 9重新按概念图逐项核对，不推翻已有的数据真实性和交互验收。
 
 
 - 以 `docs/assets/cockpit-visual-direction-2026-10-18.png` 为验收基准，将概念板拆为可核对的视觉清单：纸白/暖白报告画布、墨蓝工作流导航、克制金色重点、编辑部标题与留白、首屏四项 CFO KPI、收入/利润趋势、经营现金流瀑布、杜邦驱动分解、成本结构、关键洞察/行动项、口径与来源说明。
@@ -154,7 +154,7 @@ confidentiality: project-internal
 
 **通过条件：** 在无 Docker/无服务容器且无外部网络的本机环境，从新数据目录可一次完成 build/init、启动、关键路径验证与截图；静态图表可离线浏览且数据有来源/版本追溯；常驻用户数据不被测试重置；性能/容量边界与仍保留的动态路径如实记录。
 
-**阶段 7 本机验收结果（2026-10-20）：** 在 `/tmp/flow-stage7-20261020` 空隔离目录执行 `make flow-bootstrap`、`make flow-init`、`make flow`，生产 Web 构建完成，SQLite migrations `sqlite0001`–`sqlite0004` 执行，API 与 Web 绑定 `127.0.0.1` 并返回 HTTP 200；普通启动未使用 Docker、PostgreSQL、Redis 或 MinIO。加载大麦合成演示批次后，`scripts/verify_damai_demo.py --check-storage` 报告 `ok=true`、19/19、failed=[]；发行包 manifest SHA `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`、批次 `01a154ea-455d-79fb-8521-072795629bec`。真实总览包含四项核心 KPI、趋势、经营现金流桥、杜邦、费用和行动项；新增 stale 数据提示回归测试。桌面总览、手机总览、盈利分析和自包含 HTML 均截图。离线 HTML 打开检查：8 KPI、内嵌 API JSON、来源/代码版本均存在，外部网络请求 0、页面错误 0；移动视口无横向溢出。截图索引：[screenshots README](../../assets/screenshots/README.md)，原图位于 `docs/assets/screenshots/cockpit-single-machine/`。SQLite + 内容目录备份恢复至新目录、逐文件校验及驾驶舱结果一致的既有验证见[阶段 2验收记录](../../60_delivery/verification/2026-10-18--single-machine-runtime-convergence-v1.md)。本阶段唯一剩余结案项为本次文档提交后准确 SHA 的 GitHub CI；当前代码 SHA 对应 run `39283815189` 仍为 queued。
+**阶段 7 本机验收结果（2026-10-20；准确 SHA CI 已闭环）：** 在 `/tmp/flow-stage7-20261020` 空隔离目录执行 `make flow-bootstrap`、`make flow-init`、`make flow`，生产 Web 构建完成，SQLite migrations `sqlite0001`–`sqlite0004` 执行，API 与 Web 绑定 `127.0.0.1` 并返回 HTTP 200；普通启动未使用 Docker、PostgreSQL、Redis 或 MinIO。加载大麦合成演示批次后，`scripts/verify_damai_demo.py --check-storage` 报告 `ok=true`、19/19、failed=[]；发行包 manifest SHA `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`、批次 `01a154ea-455d-79fb-8521-072795629bec`。真实总览包含四项核心 KPI、趋势、经营现金流桥、杜邦、费用和行动项；新增 stale 数据提示回归测试。桌面总览、手机总览、盈利分析和自包含 HTML 均截图。离线 HTML 打开检查：8 KPI、内嵌 API JSON、来源/代码版本均存在，外部网络请求 0、页面错误 0；移动视口无横向溢出。截图索引：[screenshots README](../../assets/screenshots/README.md)，原图位于 `docs/assets/screenshots/cockpit-single-machine/`。SQLite + 内容目录备份恢复至新目录、逐文件校验及驾驶舱结果一致的既有验证见[阶段 2验收记录](../../60_delivery/verification/2026-10-18--single-machine-runtime-convergence-v1.md)。阶段 7准确 SHA `431cf62bec94bd009cce8b205962eeb8bff68120` 的 GitHub Actions run `39343622288` 为 23/23 jobs success；其中 `integration` 用时 36分51秒，是后续门禁拆分的实测基线。
 
 ### 8. 集成、独立复核与结案
 
@@ -164,6 +164,19 @@ confidentiality: project-internal
 - 契约、API/Web 测试、lint、typecheck、生产构建、文档 M1/M6、完整 GitHub CI 全绿；每个实现提交后立刻 push，并核对准确 SHA CI。
 - 由独立上下文只按 diff、验收标准和项目约定复核，修复影响正确性/需求的 P1/P2 后再运行最终门禁。
 - 同步 PROJECT_STATE、CURRENT_ROADMAP、HANDOFF、README、安装与运行/备份文档；全任务 commit+push 后将本 work item 标记 completed，再恢复 K3 来源审核队列。
+
+### 9. 概念图视觉差距、门禁负载与文档治理（当前 7a 串行执行依据）
+
+本轮对照证据：概念图为暖纸白画布、墨蓝导航、金色重点、衬线编辑部标题、明显的图表主次与叙事卡片；当前 `/cockpit` 共享 CSS 仍注释并使用旧版 `#2563eb` 蓝色主色、标准后台灰白底和紧凑标题。两边虽都有 KPI、趋势、瀑布、杜邦、成本和行动项，视觉语言与层级并未对齐。不得把“已有对应组件”当成视觉验收完成。
+
+严格按以下单一顺序执行；状态与队列只写入 `CURRENT_ROADMAP.md`：
+
+1. **视觉差距闭合：** 以概念板为视觉基准，整理可复用的驾驶舱局部色彩、字体、留白、边线、阴影与图表色板；统一总览与 8 个 CFO 主题页及 `/data` 的外观。总览优先呈现金色/墨蓝焦点、四项财务核心 KPI、宽幅收入与利润趋势、现金流瀑布、杜邦拆解、成本结构、行动项和来源说明。改动须沿用 ECharts 与现有数据/公式，不把概念稿示意数用于产品；金额、百分比、负值与 synthetic/reported 标签保持准确。验收为 1440px 桌面与 390px 移动视口、九个现有路由、关键图表/同值表格与深链不回退；实际页面与概念图的配色/版式差距以新旧同视口截图逐项核对。
+2. **门禁减负：** 先记录准确 SHA 各 job 的墙钟时间和覆盖范围；重点对当前 45 分钟 `integration` 长作业按相互独立的测试目录/资源边界拆成可并行、隔离的组。通过自动清单证明原 `pytest tests/integration tests/investigation tests/copilot tests/api` 中每个测试恰好仍被某一必需 job 覆盖；保留迁移/服务 fixture 前置、稳定 required check 与失败传播。继续删除 CI 内跨 job 重复执行的测试/静态检查，但本地聚合脚本的完整模式保留。不得降低断言、静默跳过测试、放宽阈值或以本地通过代替同 SHA CI。
+3. **项目文档 review 精简：** 逐份检查 `README.md`、`PROJECT_STATE.md`、`READING_ORDER.md`、路线图、HANDOFF、D055 工作包和单机运行/备份说明之间的状态、命令、路径、截图和验收 SHA；改正失效/相互矛盾内容，压缩已过期的 current-state 重复叙述，以唯一路线图为状态来源。审查不删改原始研究证据、历史决策与有效验收记录。将疑似可删除的文件列成精确路径、引用扫描、保留价值与建议；逐项取得删除授权后再删除，并复核所有链接。
+4. **最终复核与交接：** 本机文档 M1/M6、链接、计划视图、前后端相关验证和浏览器回归通过；远端全量 CI 对应最终提交 SHA 全绿后才能关闭 7a。同步 README、PROJECT_STATE、CURRENT_ROADMAP、HANDOFF 与截图索引；记录视觉验收图和门禁分组/耗时，核实没有触碰常驻账套。
+
+**结案条件：** 概念板关键视觉签名实际落地且九路由统一；核心图表与数据无回归；当前最长 CI 等待有可复现的分组耗时下降且测试集合零减少；current-state 文档只保留最新状态且所有链接有效；删除项未获逐项授权前一律只登记、不执行。
 
 ## 明确不做
 
