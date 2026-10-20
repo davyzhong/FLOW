@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.75
+version: 5.76
 created_at: 2026-09-12
 updated_at: 2026-10-20
 owner: FLOW
@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-10-20 最新状态：**阶段 7单机验收与门禁分片已完成；7a 继续全视图视觉收敛和文档复核。** 基线代码 SHA `694fe84e` 的 CI run `39437197882` 为 28/28 success；本轮主题页与 `/data` 的视觉改进已完成本地验收。总览保留报告式标题、筛选、关键指标、图表及行动/来源区，手机导航为品牌顶栏和键盘可用菜单；主题模块五张 KPI 卡居中、单 KPI 降级摘要通栏、三图模块末图通栏；数据工作台补齐页面导语、五步流程层级、批次表格暖色报告样式和无障碍文件选择入口。前端 198/198、typecheck/build、导航 Playwright 20/20 通过；lint 0 error、3 条既有 warning。实测费用、现金流、营运资金、风险、合并、资产负债、`/data` 桌面及 `/data` 390px 页面均无横向溢出。本轮没有新增依赖/服务、没有改数据库；单机仍为 SQLite/本地文件、同步处理和单一启动入口。实测图存于 `/tmp/flow-cockpit-visual-20261020/`；截图自动化工作流仍暂停。剩余：完成其余主题页视觉核对、审查运行/备份文档与清理候选、独立复核并对最终 SHA 完成 CI；顺序见[路线图](../50_plans/CURRENT_ROADMAP.md)及[7a 工作包](../50_plans/work_items/FLOW--single-machine-visual-prototype.md#9-概念图视觉差距门禁负载与文档治理)。
+2026-10-20 最新状态：**阶段 7单机验收与门禁分片已完成；7a 继续全视图视觉收敛和文档复核。** 本轮代码 SHA `2f1b549261b9662f4d0ceea8c522baa766ed3fce` 已推送；准确 SHA CI run `39447424948` 当前 queued，尚无远端通过结论。主题页与 `/data` 的视觉改进已完成本地验收：总览保留报告式标题、筛选、关键指标、图表及行动/来源区，手机导航为品牌顶栏和键盘可用菜单；主题模块五张 KPI 卡居中、单 KPI 降级摘要通栏、三图模块末图通栏；数据工作台补齐页面导语、五步流程层级、批次表格暖色报告样式和无障碍文件选择入口。前端 198/198、typecheck/build、导航 Playwright 20/20 通过；lint 0 error、3 条既有 warning。实测费用、现金流、营运资金、风险、合并、资产负债、`/data` 桌面及 `/data` 390px 页面均无横向溢出。本轮没有新增依赖/服务、没有改数据库；单机仍为 SQLite/本地文件、同步处理和单一启动入口。实测图存于 `/tmp/flow-cockpit-visual-20261020/`；截图自动化工作流仍暂停。剩余：完成其余主题页视觉核对、审查运行/备份文档与清理候选、独立复核并对最终 SHA 完成 CI；顺序见[路线图](../50_plans/CURRENT_ROADMAP.md)及[7a 工作包](../50_plans/work_items/FLOW--single-machine-visual-prototype.md#9-概念图视觉差距门禁负载与文档治理)。
 
 下段为 K2 执行前的状态快照，已过时；当前状态以本段及 [CURRENT_ROADMAP](../50_plans/CURRENT_ROADMAP.md) 为准。
 

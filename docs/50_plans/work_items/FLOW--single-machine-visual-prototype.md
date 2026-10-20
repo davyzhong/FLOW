@@ -3,7 +3,7 @@ doc_id: FLOW-WI-SINGLE-MACHINE-VISUAL-20261018-001
 title: 单机原型架构简化与全视图视觉升级
 doc_type: work-item
 status: active
-version: 3.4
+version: 3.5
 created_at: 2026-10-18
 updated_at: 2026-10-20
 owner: FLOW
