@@ -29,12 +29,12 @@
 .statements-layout {
   display: flex;
   min-height: 100vh;
-  background: #f4f6fb;
+  background: var(--flow-vl-colors-surface-paper);
   --ink: #15243b;
   --muted: var(--rep-muted);
   --line: var(--rep-line);
   --blue: var(--rep-blue);
-  --navy: #13223a;
+  --navy: var(--flow-vl-colors-brand-navy);
   --green: var(--rep-teal);
   --red: #912f3b;
   --amber: var(--flow-vl-colors-semantic-warning);
@@ -42,7 +42,7 @@
 
 /* ===== Hero 页头 ===== */
 .stmt-hero {
-  border-top: 4px solid var(--rep-red);
+  border-top: 4px solid var(--flow-vl-colors-brand-gold);
   padding-top: 16px;
   margin-bottom: 4px;
 }
@@ -60,7 +60,7 @@
   color: var(--rep-navy);
 }
 .stmt-hero__title em {
-  color: var(--rep-red);
+  color: var(--flow-vl-colors-brand-gold);
   font-style: normal;
 }
 .stmt-hero__lede {
@@ -207,8 +207,8 @@
   place-items: center;
 }
 
-.stmt-kpi--red .stmt-kpi__seal {
-  background: var(--rep-red, var(--rep-red));
+.stmt-kpi--gold .stmt-kpi__seal {
+  background: var(--flow-vl-colors-brand-gold);
 }
 
 .stmt-kpi > dt, .stmt-kpi > dd { min-width: 0; flex: 1; }
@@ -271,11 +271,11 @@
 .stmt-legend { font-size: 11px; fill: var(--rep-slate); }
 .stmt-donut-total { font-size: 17px; font-weight: 700; fill: var(--rep-navy, #1e293b); }
 
-/* ===== Verdict 红竖线结论条 ===== */
+/* ===== Verdict 古金强调结论条 ===== */
 .stmt-verdict {
   margin: 4px 0 16px;
   padding: 12px 16px 12px 18px;
-  border-left: 4px solid var(--rep-red, var(--rep-red));
+  border-left: 4px solid var(--flow-vl-colors-brand-gold);
   background: #fff;
   border-top: 1px solid var(--rep-line, var(--rep-line));
   border-right: 1px solid var(--rep-line, var(--rep-line));
@@ -370,7 +370,7 @@
 .stmt-review__empty { color: var(--rep-muted); font-size: 12.5px; }
 .stmt-review__form { display: flex; flex-wrap: wrap; gap: 8px; }
 .stmt-review__form select, .stmt-review__form input { padding: 6px 10px; border: 1px solid var(--rep-line-5); border-radius: 6px; font-size: 12.5px; }
-.stmt-review__form button { padding: 6px 14px; border: none; border-radius: 6px; background: var(--rep-blue); color: #fff; cursor: pointer; font-size: 12.5px; }
+.stmt-review__form button { padding: 6px 14px; border: none; border-radius: 6px; background: var(--flow-vl-colors-brand-navy); color: #fff; cursor: pointer; font-size: 12.5px; }
 .stmt-review__form button:disabled { opacity: 0.5; cursor: not-allowed; }
 .stmt-review__publish { background: var(--rep-teal-strong) !important; }
 .stmt-review__message { margin-top: 10px; font-size: 12.5px; color: #33465e; }
