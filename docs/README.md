@@ -3,18 +3,18 @@ doc_id: FLOW-NAV-DOCS-001
 title: docs navigation
 doc_type: navigation
 status: current
-version: 1.2
+version: 1.3
 created_at: 2026-09-12
-updated_at: 2026-10-20
+updated_at: 2026-10-24
 owner: FLOW
 applies_to: docs
 ---
 
 > 文档唯一入口：[00_start_here](00_start_here/README.md)（PROJECT_STATE / READING_ORDER / DOCUMENT_MAP）。M1–M5 迁移期间 superpowers/ 与旧目录仍有效，接替关系见 DOCUMENT_MAP。
 
-# FLOW 文档中心｜2026-10-20
+# FLOW 文档中心｜2026-10-24
 
-状态：当前导航。迁移头 `0024_operations_publication`；不以文档更新代替功能验收，CI 时点见 PROJECT_STATE。
+状态：当前导航。迁移头 `0032_cockpit_action_item`；D055/7a 原型已完成；可复用视觉语言与全项目统一为唯一队首，设计稿待用户审阅。CI 时点见 PROJECT_STATE。
 
 ## 01｜先看当前结论
 
@@ -32,7 +32,7 @@ applies_to: docs
 [战略重构设计（D052–D054）](superpowers/specs/2026-09-13-flow-strategic-reset-design.md)是当前最高产品方向：企业内部 AI 财务分析工作台为最终产品，公开财报为独立模块；固定原则见 [PRODUCT_PRINCIPLES](20_product/PRODUCT_PRINCIPLES.md)。[D049 方向与验收](superpowers/specs/2026-09-06-objective-financial-analysis-direction.md)继续约束公开模块；[统一财务事实合同](superpowers/specs/financial-facts-contract.md)、[指标治理规格](superpowers/specs/2026-09-05-flow-metric-dictionary-design.md)和既有领域规格共同约束实现。较晚的已确认决策覆盖旧范围，不因整理文档改变财务公式。
 
 [CURRENT_ROADMAP](50_plans/CURRENT_ROADMAP.md) 是全仓唯一状态与 To-do 入口；
-[稳定工作包](50_plans/work_items/FLOW--single-machine-visual-prototype.md)保存当前队首的验收细节。
+[可复用视觉语言设计稿](superpowers/specs/2026-10-24-flow-visual-language-system-design.md)和[全项目视觉统一工作包](50_plans/work_items/FLOW--portable-visual-language-and-full-project-restyle.md)保存当前队首的设计及验收细节；产品实现开始前须先获用户审阅确认。
 其余旧统一计划、S01、多 Agent、前端、知识刷新及大麦计划均为归档参考，不再作为当前执行合同。
 
 ## 03｜使用与开发

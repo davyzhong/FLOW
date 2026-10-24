@@ -3,13 +3,13 @@ doc_id: FLOW-SPEC-VISUAL-LANGUAGE-20261024-001
 title: FLOW 可移植视觉语言与全项目视觉统一设计
 doc_type: specification
 status: draft
-version: 1.0
+version: 1.1
 created_at: 2026-10-24
 updated_at: 2026-10-24
 owner: FLOW
 applies_to: product-visual-language
 decision_refs: [D052, D053, D054, D055]
-acceptance_refs: [FLOW-WI-VISUAL-LANGUAGE-20261024-001]
+acceptance_refs: [FLOW-WI-VISUAL-LANGUAGE-20261024-001, FLOW-PLAN-CURRENT]
 knowledge_release: flow-knowledge-2026-09-12.1
 ---
 
@@ -99,3 +99,9 @@ knowledge_release: flow-knowledge-2026-09-12.1
 - 既有页面、图表和报告规模较大，按当前唯一队列内的串行小切片完成；页面差异和未验证项登记，不以全局 CSS 覆盖隐藏问题。
 - 不修改数据库 schema、迁移、CI/CD 工作流或发布流程；不重启 GitHub 截图自动化。
 - 不删除旧截图、旧 README 视觉材料或历史文档；由索引区分 current 与 historical。
+
+## 8. 当前基线
+
+- 当前 main 为 PR #4 merge commit `b068796f906cfbb91ac33775f5578194acc98a51`，准确 SHA GitHub Actions run `40096497668` 为 28/28 success；D055/7a.1–7a.8 已结案。
+- 新任务经用户选择后插入唯一路线图，作为 K2 前的队首待启动事项。当前设计稿仍为 draft，用户确认前不开始页面、报告或截图改造。
+- 主 README、PROJECT_STATE、HANDOFF、路线图、文档中心和阅读顺序的当前入口已随本计划更新为 7a 完成与新任务队列；日期明确且折叠的旧快照保留为历史，不作为当前状态。
