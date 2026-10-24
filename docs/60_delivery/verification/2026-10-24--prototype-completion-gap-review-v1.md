@@ -15,6 +15,14 @@ decision_refs: [D052, D053, D054, D055]
 
 # 单机原型完结差距审查
 
+## 7a.1 基线复核补记（2026-10-24）
+
+- 唯一候选工作树为 `codex/single-machine-runtime-convergence`，接管 SHA `191cddd38a03bfa898a1d517c1992dcdc444b5fb`，执行前已 `git pull --ff-only` 且工作树干净。
+- 当前 `origin/main` 为 `96c570191d52910c78849b2cbd3f1e33998e33e2`；双向差异为 main 独有 2 个文档提交、开发分支独有 57 个提交，merge-base 为 `5ed61af91ea4c1c2a2078fd654accf671ba805ba`。main 两提交只改 `HANDOFF.md`、路线图视图与单机工作包的历史交接摘要；这些状态内容已被后续当前路线图/交接取代，最终整合时保留语义、不回流过时状态。
+- 主 checkout 仍有 4 个修改文件：`cockpit.css`、`kpi-card.tsx`、`module-page.tsx`、API `cockpit/modules.py`，以及未跟踪 `source-inputs-2026-10-19.yaml`。不读取/搬运/暂存它们，本次 worktree 与主 checkout 保持隔离。
+- 已有离线预览在 [offline-preview.html](../../assets/screenshots/cockpit-single-machine/offline-preview.html)（含旧 `9ec06115` 总览图、快照 `01a154ee-8319-79c9-9b83-95c6631eab0b`），可直接以浏览器打开；仅作为历史总览预览，不能代表当前候选或九页静态交付。
+- 唯一实施基线为接管时 `191cddd3`；候选演示包为仓库 `data/enterprise/damai-logistics/v2`，后续验收须在临时隔离 SQLite 上装载并记录其 manifest SHA，不触碰常驻数据。
+
 ## 结论与完成边界
 
 FLOW 已有可运行的财务分析底座和可见驾驶舱，SQLite、本地文件、同步处理及 CI 分片有实测证据。当前主要差距在应用闭环、概念视觉的一致落地、可携带交付和正式分支集成。不能把“基础功能已有”“CI 通过”或旧工作包的完成数量直接换算成产品完成率。
