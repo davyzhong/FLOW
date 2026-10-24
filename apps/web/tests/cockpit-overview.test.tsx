@@ -257,4 +257,15 @@ describe("CockpitOverviewApp", () => {
     await waitFor(() => expect(load).toHaveBeenCalledTimes(2));
     expect(window.location.search).toContain("period_view=month");
   });
+
+  it("浏览器后退会恢复 URL 中的筛选并重新加载", async () => {
+    const load = vi.fn().mockResolvedValue(overview());
+    render(<CockpitOverviewApp load={load} initialFilters={{ period_view: "month" }} />);
+    await screen.findByTestId("cockpit-kpi");
+    window.history.replaceState(null, "", "/cockpit?period_view=ytd");
+    window.dispatchEvent(new PopStateEvent("popstate"));
+    await waitFor(() => expect(load).toHaveBeenCalledTimes(2));
+    expect(load.mock.calls[1]?.[0]).toEqual({ period_view: "ytd" });
+    expect((screen.getByLabelText("期间") as HTMLSelectElement).value).toBe("ytd");
+  });
 });

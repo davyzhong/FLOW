@@ -115,3 +115,10 @@ FLOW 已有可运行的财务分析底座和可见驾驶舱，SQLite、本地文
 - 变更：`apps/web/components/cockpit/cockpit-overview-visuals.tsx`、`cockpit.css`，及对应组件断言。
 - 验证：`pnpm --filter @flow/web exec vitest run tests/cockpit-overview-visuals.test.tsx`（2/2）；`pnpm --filter @flow/web typecheck`；`git diff --check`。
 - 未验证：真实 SQLite 账龄切片仍未接通；继续沿用当前调查证据，并在后续收尾裁定为外部/能力受限还是以有保留状态交付。
+
+## 7a.3 已交付切片：总览筛选后退恢复（2026-10-24）
+
+CFO 总览筛选变更现在写入浏览器历史；浏览器 `popstate` 读取 URL 并重新加载相应视图，筛选控件同步恢复。路由刷新仍由现有服务端 `searchParams` 初始化。
+
+- 验证：`pnpm --filter @flow/web exec vitest run tests/cockpit-overview.test.tsx`（15/15）；`pnpm --filter @flow/web typecheck`；`git diff --check`。
+- 未完成：按名称选择组织/客户群/产品/区域仍缺少 CFO 专用选项数据；当前输入仍为 ID。年度模块图固定范围及点选到来源明细也需后续收尾，不得将本切片表述为完整 7a.3。

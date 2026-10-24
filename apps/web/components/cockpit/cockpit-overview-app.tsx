@@ -127,17 +127,32 @@ export function CockpitOverviewApp({
     return () => controller.abort();
   }, [filters, load, requestKey]);
 
-  const onFilterChange = useCallback((next: CockpitFilters) => {
+  useEffect(() => {
+    const onPopState = () => {
+      const params = new URLSearchParams(window.location.search);
+      const next: CockpitFilters = {};
+      for (const key of ["period_view", "organization_id", "customer_segment_id", "logistics_product_id", "region_id"] as const) {
+        const value = params.get(key);
+        if (!value) continue;
+        if (key === "period_view") {
+          if (value === "month" || value === "ytd") next.period_view = value;
+        } else {
+          Object.assign(next, { [key]: value });
+        }
+      }
+      setRequest({ kind: "loading" });
+      setFilters(next);
+    };
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, []);
+
+  const changeFilters = useCallback((next: CockpitFilters) => {
+    const query = queryString(next);
+    window.history.pushState(null, "", query ? `?${query}` : window.location.pathname);
     setRequest({ kind: "loading" });
     setFilters(next);
   }, []);
-
-  useEffect(() => {
-    const location = serialized
-      ? `?${serialized}`
-      : window.location.pathname;
-    window.history.replaceState(null, "", location);
-  }, [serialized]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -155,8 +170,9 @@ export function CockpitOverviewApp({
     return (
       <div className="cockpit">
         <CockpitFilterBar
+          key={serialized}
           filters={filters}
-          onChange={onFilterChange}
+          onChange={changeFilters}
           disabled
         />
         <div className="cockpit cockpit--state" role="status" aria-live="polite">
@@ -169,7 +185,7 @@ export function CockpitOverviewApp({
   if (request.kind === "error") {
     return (
       <div className="cockpit">
-        <CockpitFilterBar filters={filters} onChange={onFilterChange} />
+        <CockpitFilterBar key={serialized} filters={filters} onChange={changeFilters} />
         <div className="cockpit cockpit--state cockpit--error" role="alert">
           <p>驾驶舱数据加载失败。</p>
           <button type="button" onClick={retry}>
@@ -183,7 +199,7 @@ export function CockpitOverviewApp({
   if (request.kind === "empty") {
     return (
       <div className="cockpit">
-        <CockpitFilterBar filters={filters} onChange={onFilterChange} />
+        <CockpitFilterBar key={serialized} filters={filters} onChange={changeFilters} />
         <div className="cockpit cockpit--state cockpit--empty" data-testid="cockpit-empty">
           <p>当前筛选条件下没有可展示的经营数据。</p>
           <p className="cockpit__hint">可调整上方筛选条件后重试；本系统不补零、不造数。</p>
@@ -224,8 +240,9 @@ export function CockpitOverviewApp({
       </header>
 
       <CockpitFilterBar
+        key={serialized}
         filters={filters}
-        onChange={onFilterChange}
+        onChange={changeFilters}
       />
       {overview.data_status.freshness_status === "stale" || overview.state === "stale" ? (
         <p className="cockpit__stale-notice" role="status" data-testid="cockpit-stale-notice">
