@@ -2,7 +2,7 @@ PNPM := npx --yes pnpm@10.17.1
 UV := uv
 COMPOSE := docker compose -f infra/compose.yaml
 
-.PHONY: docs-check plan-views bootstrap flow-bootstrap contracts contracts-check infra-up infra-down stack-up stack-down dev-api dev-web flow-init flow test-api test-web test lint typecheck phase-1-acceptance test-data-contract test-intake-e2e test-metrics-known-answers test-analysis-invariants test-dashboard test-investigation-e2e test-copilot-evals test-publishing-golden test-user-closure-e2e test-statements-e2e test-module-boundaries-e2e
+.PHONY: docs-check plan-views bootstrap flow-bootstrap contracts contracts-check infra-up infra-down stack-up stack-down dev-api dev-web flow-init flow flow-demo flow-demo-reset flow-check flow-backup flow-restore test-api test-web test lint typecheck phase-1-acceptance test-data-contract test-intake-e2e test-metrics-known-answers test-analysis-invariants test-dashboard test-investigation-e2e test-copilot-evals test-publishing-golden test-user-closure-e2e test-statements-e2e test-module-boundaries-e2e
 
 bootstrap:
 	$(PNPM) install --frozen-lockfile
@@ -46,10 +46,32 @@ dev-web:
 	$(PNPM) --filter @flow/web dev
 
 flow-init:
-	$(UV) run --no-dev --project services/api python scripts/flow.py init
+	FLOW_DATA_DIR="$(FLOW_DATA_DIR)" DATABASE_URL= $(UV) run --no-dev --project services/api python scripts/flow.py init
 
 flow:
-	$(UV) run --no-dev --project services/api python scripts/flow.py run
+	FLOW_DATA_DIR="$(FLOW_DATA_DIR)" DATABASE_URL= FLOW_WEB_PORT="$(FLOW_WEB_PORT)" FLOW_API_PORT="$(FLOW_API_PORT)" $(UV) run --no-dev --project services/api python scripts/flow.py run
+
+FLOW_DATA_DIR ?= $(HOME)/.flow
+FLOW_WEB_PORT ?= 3000
+FLOW_API_PORT ?= 8000
+
+flow-demo: flow-init
+	FLOW_DATA_DIR="$(FLOW_DATA_DIR)" DATABASE_URL= $(UV) run --no-dev --project services/api python scripts/seed_damai_demo.py
+
+flow-demo-reset:
+	@test -n "$(ENTERPRISE_ID)" || (echo "用法：make flow-demo-reset ENTERPRISE_ID=<大麦企业 UUID>" >&2; exit 2)
+	FLOW_DATA_DIR="$(FLOW_DATA_DIR)" DATABASE_URL= $(UV) run --no-dev --project services/api python scripts/reset_damai_business.py --enterprise-id "$(ENTERPRISE_ID)"
+
+flow-check:
+	FLOW_DATA_DIR="$(FLOW_DATA_DIR)" DATABASE_URL= $(UV) run --no-dev --project services/api python scripts/verify_damai_demo.py --check-storage
+
+flow-backup:
+	@test -n "$(BACKUP_PATH)" || (echo "用法：make flow-backup BACKUP_PATH=/path/to/flow.zip" >&2; exit 2)
+	FLOW_DATA_DIR="$(FLOW_DATA_DIR)" DATABASE_URL= $(UV) run --no-dev --project services/api python scripts/flow.py backup "$(BACKUP_PATH)"
+
+flow-restore:
+	@test -n "$(BACKUP_PATH)" -a -n "$(RESTORE_DIR)" || (echo "用法：make flow-restore BACKUP_PATH=/path/to/flow.zip RESTORE_DIR=/new/path" >&2; exit 2)
+	DATABASE_URL= $(UV) run --no-dev --project services/api python scripts/flow.py restore "$(BACKUP_PATH)" "$(RESTORE_DIR)"
 
 test-api:
 	cd services/api && $(UV) run pytest -q

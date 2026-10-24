@@ -28,7 +28,16 @@ from flow_api.security.models import AuditEvent
 
 @pytest.fixture(scope="module", autouse=True)
 def migrated_database() -> None:
-    command.upgrade(Config("alembic.ini"), "head")
+    from flow_api.settings import get_settings
+
+    config_name = (
+        "alembic-sqlite.ini"
+        if get_settings().database_url.startswith("sqlite:")
+        else "alembic.ini"
+    )
+    config = Config(config_name)
+    config.set_main_option("sqlalchemy.url", get_settings().database_url.replace("%", "%%"))
+    command.upgrade(config, "head")
 
 
 def test_reset_archives_review_history_and_rebuilds_business_data() -> None:

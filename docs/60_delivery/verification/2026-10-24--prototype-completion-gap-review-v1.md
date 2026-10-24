@@ -122,3 +122,23 @@ CFO 总览筛选变更现在写入浏览器历史；浏览器 `popstate` 读取 
 
 - 验证：`pnpm --filter @flow/web exec vitest run tests/cockpit-overview.test.tsx`（15/15）；`pnpm --filter @flow/web typecheck`；`git diff --check`。
 - 未完成：按名称选择组织/客户群/产品/区域仍缺少 CFO 专用选项数据；当前输入仍为 ID。年度模块图固定范围及点选到来源明细也需后续收尾，不得将本切片表述为完整 7a.3。
+
+## 7a.4–7a.6 本机收尾切片验证（2026-10-24）
+
+### 视觉与九页离线包生成器
+
+在候选页面 SHA `a5eefb325e364304c1d35be6e3b184e807e42d3a`、演示批次 `01a16cf8-918b-75e8-9e85-415199207d7c` 上运行新离线包生成器，输出临时包 `/tmp/flow-closeout-artifacts-a5eefb32-final/`。九个重点路由均采集桌面与 390px 手机全页截图，共 18 张；采集 10 个 API JSON 响应，数据发行包 manifest SHA-256 为 `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`。检查结果：横向溢出 0、浏览器错误 0、外网请求 0；离线 `index.html` 的 9 张桌面图全部加载、静态链接无断链、HTTP(S) 请求 0。桌面总览、数据工作台、营运资金与风险页已人工核看，布局保持真实负数/缺数与来源说明。该临时包是旧于本次单机操作脚本改动的页面候选；正式包须在 7a.7 冻结 SHA 后重新生成，不能沿用旧 SHA 标记。
+
+### 显式单机操作
+
+新增 `make flow-demo`、`flow-demo-reset`、`flow-check`、`flow-backup`、`flow-restore`；可通过 `FLOW_DATA_DIR` 指向用户目录，并通过 `FLOW_WEB_PORT` / `FLOW_API_PORT` 改端口。`flow.py restore` 仅接受不存在的新目录，校验备份 manifest 后把数据库恢复为 `flow.sqlite3`，可直接以该目录启动。普通 `make flow` 只初始化 schema/开发身份，不自动装载或重置演示业务。
+
+所有副作用验收均在 `/tmp/flow-closeout-20261024-a5eefb32` 及其独立恢复/重置副本中完成：
+
+- `make flow-demo`：SQLite 冷初始化并明确装载；返回发行包 SHA `6f3ef917…`、大麦企业 `00000000-0000-0000-0000-00000000d001`、批次 `01a16cf8-918b-75e8-9e85-415199207d7c`。
+- `make flow-check`：发行 manifest、DB counts、快照摘要与对象存储读回 17/17。备份恢复到新目录后再次运行 17/17。
+- `flow-demo-reset`：只在恢复副本执行；删除批次/导入/12 个指标快照，归档 5 条 review event。重置后核对 enterprise 1、org unit 8、member 8、position 8 保留；预算/应收明细及该批快照为 0。
+- `make flow-bootstrap` 后 `make flow` 以 3137/8137 启动；健康接口与 `/cockpit`、费用、营运资金、`/data` 路由 HTTP 200。首次运行暴露 standalone 未复制静态资源，按现有 bootstrap 复制后复测，零浏览器 404/错误。
+- `scripts/flow.py`、`reset_damai_business.py` 编译通过；SQLite reset 测试夹具改为按数据库方言选择现有 migration 配置，隔离 pytest 2/2 通过。
+
+所有记录的数据库和服务均为一次性 `/tmp` 隔离资源，不连接常驻数据库或 Docker。当前主 checkout 仍有用户改动，未触碰。

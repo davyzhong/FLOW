@@ -56,9 +56,11 @@ def run() -> int:
     from flow_api.settings import get_settings
 
     settings = get_settings()
+    web_port = int(os.environ.get("FLOW_WEB_PORT", "3000"))
+    api_port = int(os.environ.get("FLOW_API_PORT", "8000"))
     environment["FLOW_DATA_DIR"] = str(settings.flow_data_dir)
     environment["DATABASE_URL"] = settings.database_url
-    environment.setdefault("FLOW_API_INTERNAL_URL", "http://127.0.0.1:8000")
+    environment["FLOW_API_INTERNAL_URL"] = f"http://127.0.0.1:{api_port}"
     environment["FLOW_ENV"] = settings.flow_env
     environment["FLOW_TIMEZONE"] = settings.flow_timezone
     environment["AUTH_TOKEN"] = settings.auth_token or ""
@@ -69,7 +71,7 @@ def run() -> int:
     environment["FLOW_LEGACY_BEARER_CUTOFF"] = settings.flow_legacy_bearer_cutoff
     environment["FLOW_AUDIT_RETENTION_DAYS"] = str(settings.flow_audit_retention_days)
     environment["HOSTNAME"] = "127.0.0.1"
-    environment["PORT"] = "3000"
+    environment["PORT"] = str(web_port)
     environment["INTAKE_MAX_UPLOAD_BYTES"] = str(settings.intake_max_upload_bytes)
     environment["STATEMENT_MAX_UPLOAD_BYTES"] = str(settings.statement_max_upload_bytes)
     web_command = [node, str(web_server)]
@@ -83,7 +85,7 @@ def run() -> int:
                 "--host",
                 "127.0.0.1",
                 "--port",
-                "8000",
+                str(api_port),
             ],
             cwd=API_ROOT,
             env=environment,
@@ -103,8 +105,8 @@ def run() -> int:
     signal.signal(signal.SIGTERM, stop_children)
     try:
         ready_urls = (
-            "http://127.0.0.1:8000/api/v1/health",
-            "http://127.0.0.1:3000/",
+            f"http://127.0.0.1:{api_port}/api/v1/health",
+            f"http://127.0.0.1:{web_port}/",
         )
         deadline = time.monotonic() + 30
         ready = False
@@ -113,7 +115,7 @@ def run() -> int:
             if failed is not None:
                 raise RuntimeError(
                     f"FLOW 子进程启动失败（退出码 {failed.returncode}）；"
-                    "请检查端口 8000/3000 是否已被占用"
+                    f"请检查端口 {api_port}/{web_port} 是否已被占用"
                 )
             try:
                 for url in ready_urls:
@@ -126,7 +128,7 @@ def run() -> int:
                 time.sleep(0.5)
         if not ready:
             raise RuntimeError("FLOW 服务启动超时；请检查本机端口、依赖和启动日志")
-        print("FLOW 已启动：http://127.0.0.1:3000（API：http://127.0.0.1:8000）")
+        print(f"FLOW 已启动：http://127.0.0.1:{web_port}（API：http://127.0.0.1:{api_port}）")
         while all(process.poll() is None for process in processes):
             time.sleep(0.5)
     finally:
@@ -147,7 +149,52 @@ def main() -> int:
         return 0
     if command == "run":
         return run()
-    print("用法：python scripts/flow.py [init|run]", file=sys.stderr)
+    if command in {"backup", "restore"}:
+        import argparse
+
+        parser = argparse.ArgumentParser(prog=f"flow.py {command}")
+        if command == "backup":
+            parser.add_argument("path", help="新备份文件路径")
+        else:
+            parser.add_argument("path", help="已有备份文件路径")
+            parser.add_argument("destination", help="必须尚不存在的恢复目录")
+        args = parser.parse_args(sys.argv[2:])
+
+        from sqlalchemy.engine import make_url
+
+        from flow_api.infrastructure.local_backup import (
+            create_local_backup,
+            restore_local_backup,
+        )
+        from flow_api.settings import get_settings
+
+        settings = get_settings()
+        url = make_url(settings.database_url)
+        if url.get_backend_name() != "sqlite" or not url.database:
+            raise RuntimeError("单机备份/恢复仅支持已配置的本地 SQLite 文件数据库")
+        database_path = Path(url.database).expanduser().resolve()
+        if command == "backup":
+            output = create_local_backup(
+                database_path=database_path,
+                object_root=settings.object_directory,
+                backup_path=args.path,
+            )
+            print(f"FLOW 备份已创建：{output}")
+            return 0
+        restored_database, restored_objects = restore_local_backup(
+            backup_path=args.path,
+            destination=args.destination,
+        )
+        app_database = restored_database.with_name("flow.sqlite3")
+        restored_database.rename(app_database)
+        print(f"FLOW 已恢复到新目录：{Path(args.destination).expanduser().resolve()}")
+        print(f"数据库：{app_database}；对象目录：{restored_objects}")
+        print("启动时将 FLOW_DATA_DIR 指向该目录；备份内容已通过清单 SHA-256 校验。")
+        return 0
+    print(
+        "用法：python scripts/flow.py [init|run|backup PATH|restore PATH NEW_DIRECTORY]",
+        file=sys.stderr,
+    )
     return 2
 
 
