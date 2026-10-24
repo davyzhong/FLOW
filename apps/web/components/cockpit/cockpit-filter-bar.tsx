@@ -10,6 +10,7 @@
  * - 对比基准含「预算」时若预算未就绪则该选项置灰 + 说明（不假装可用）。
  */
 
+import type { DashboardResponse } from "../../lib/api/client";
 import type { CockpitFilters } from "./cockpit-types";
 
 const PERIOD_VIEWS = [
@@ -17,12 +18,21 @@ const PERIOD_VIEWS = [
   { value: "month", label: "当月" },
 ] as const;
 
+const DIMENSIONS = [
+  { dimension: "organization", field: "organization_id", label: "组织口径", ariaLabel: "组织口径筛选" },
+  { dimension: "customer_segment", field: "customer_segment_id", label: "客户群", ariaLabel: "客户群筛选" },
+  { dimension: "logistics_product", field: "logistics_product_id", label: "产品", ariaLabel: "产品筛选" },
+  { dimension: "region", field: "region_id", label: "区域", ariaLabel: "区域筛选" },
+] as const;
+
 export function CockpitFilterBar({
   filters,
+  dimensions,
   onChange,
   disabled,
 }: {
   filters: CockpitFilters;
+  dimensions: DashboardResponse["filter_options"]["dimensions"];
   onChange: (next: CockpitFilters) => void;
   disabled?: boolean;
 }) {
@@ -45,73 +55,28 @@ export function CockpitFilterBar({
         </select>
       </label>
 
-      <label className="cp-filters__item">
-        <span>组织口径</span>
-        <input
-          type="text"
-          placeholder="组织 ID（留空=全部）"
-          defaultValue={filters.organization_id ?? ""}
-          disabled={disabled}
-          onBlur={(e) => {
-            const v = e.target.value.trim();
-            if ((filters.organization_id ?? "") !== v) {
-              set({ organization_id: v === "" ? null : v });
-            }
-          }}
-          aria-label="组织口径筛选"
-        />
-      </label>
-
-      <label className="cp-filters__item">
-        <span>客户群</span>
-        <input
-          type="text"
-          placeholder="客户群 ID"
-          defaultValue={filters.customer_segment_id ?? ""}
-          disabled={disabled}
-          onBlur={(e) => {
-            const v = e.target.value.trim();
-            if ((filters.customer_segment_id ?? "") !== v) {
-              set({ customer_segment_id: v === "" ? null : v });
-            }
-          }}
-          aria-label="客户群筛选"
-        />
-      </label>
-
-      <label className="cp-filters__item">
-        <span>产品</span>
-        <input
-          type="text"
-          placeholder="产品 ID"
-          defaultValue={filters.logistics_product_id ?? ""}
-          disabled={disabled}
-          onBlur={(e) => {
-            const v = e.target.value.trim();
-            if ((filters.logistics_product_id ?? "") !== v) {
-              set({ logistics_product_id: v === "" ? null : v });
-            }
-          }}
-          aria-label="产品筛选"
-        />
-      </label>
-
-      <label className="cp-filters__item">
-        <span>区域</span>
-        <input
-          type="text"
-          placeholder="区域 ID"
-          defaultValue={filters.region_id ?? ""}
-          disabled={disabled}
-          onBlur={(e) => {
-            const v = e.target.value.trim();
-            if ((filters.region_id ?? "") !== v) {
-              set({ region_id: v === "" ? null : v });
-            }
-          }}
-          aria-label="区域筛选"
-        />
-      </label>
+      {DIMENSIONS.map(({ dimension, field, label, ariaLabel }) => {
+        const optionGroup = dimensions.find((entry) => entry.dimension === dimension);
+        const options = optionGroup?.options ?? [];
+        const active = filters[field];
+        return (
+          <label className="cp-filters__item" key={dimension}>
+            <span>{label}</span>
+            <select
+              value={active ?? ""}
+              disabled={disabled}
+              aria-label={ariaLabel}
+              onChange={(event) => set({ [field]: event.target.value || null })}
+            >
+              <option value="">全部{label}</option>
+              {active && !options.some((option) => option.id === active) ? (
+                <option value={active}>当前 ID（选项不可用）</option>
+              ) : null}
+              {options.map((option) => <option key={option.id} value={option.id}>{option.name}</option>)}
+            </select>
+          </label>
+        );
+      })}
 
       <p className="cp-filters__hint">
         币种与预算对比适用于内部经营数据

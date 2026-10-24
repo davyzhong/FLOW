@@ -71,6 +71,8 @@ class CockpitOverviewProjection:
     state: str
     context: dict[str, Any]
     data_status: dict[str, Any]
+    # 7a.3：维度可选项（id+code+name）透传，供筛选条渲染名称下拉（不再手输 ID）
+    filter_options: dict[str, Any]
     kpi_cards: list[CockpitKpi]
     # 单元素列表（结构预留多面板，批次 C 扩展）
     trends: list[CockpitTrendProjection]
@@ -198,6 +200,7 @@ class CockpitProjectionService:
             state=base.state,
             context=base.context.model_dump(mode="json"),
             data_status=base.data_status.model_dump(mode="json"),
+            filter_options=base.filter_options.model_dump(mode="json"),
             kpi_cards=[self._kpi(card, snapshot_id) for card in base.metric_cards],
             trends=self._trends(base),
             conclusion=self._conclusion(base),
@@ -271,6 +274,7 @@ class CockpitProjectionService:
                 points.append(
                     {
                         "period": point.month,
+                        "snapshot_id": str(point.metric_snapshot_id),
                         "value": float(exact) if exact is not None else 0.0,
                         "display_value": value.get("display_value", "—"),
                         # DashboardValue 使用 available/unavailable；驾驶舱图表契约

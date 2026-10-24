@@ -119,6 +119,9 @@ describe("CockpitModulePage", () => {
       ),
     ).toBeInTheDocument();
     expect(screen.getByTestId("cockpit-module-chart-capital_structure_trend")).toBeVisible();
+    expect(screen.getByRole("link", { name: "FY2022 资产负债率 来源财报" })).toHaveAttribute(
+      "href", "/statements?report=r2",
+    );
     expect(screen.getByText("原始财报未披露月度明细，无法形成趋势。")).toBeVisible();
     fireEvent.click(screen.getByText("查看来源登记事实 ID"));
     expect(screen.getByText("FY2023 · CN-SEG-FY2023-SEGMENT_REVENUE")).toBeVisible();

@@ -9,7 +9,7 @@ import type {
   CockpitProfitabilityMetric,
   CockpitProfitabilityResponse,
 } from "../../lib/api/client";
-import { metricFocusHref } from "../../lib/deep-links";
+import { metricFocusHref, reportsSnapshotHref } from "../../lib/deep-links";
 import { ChartBox, CHART_THEME } from "./charts/echarts-base";
 import { buildCombo, type ComboSeries } from "./charts/builders";
 import { buildModuleChartOption } from "./charts/module-options";
@@ -86,6 +86,7 @@ export function CockpitOverviewVisuals({
   const focusSeries = allSeries.filter((series) => ["revenue", "operating_profit"].includes(series.key));
   const hasFocusFacts = focusSeries.some((series) => series.points?.some((point) => point.status === "ready" && Number.isFinite(point.value)));
   const detailPeriods = [...new Set(allSeries.flatMap((series) => (series.points ?? []).map((point) => point.period)))];
+  const snapshotForPeriod = (period: string) => allSeries.flatMap((series) => series.points ?? []).find((point) => point.period === period)?.snapshot_id;
   const chart = trendOption(overview);
   const cashBridge = supplements?.cashflow?.charts?.cash_bridge;
   const expenseStructure = supplements?.expenses?.charts?.expense_structure;
@@ -156,18 +157,23 @@ export function CockpitOverviewVisuals({
             ariaLabel="已发布期间的营业收入与营业利润趋势，单位亿元"
             height={300}
             testId="cockpit-overview-revenue-profit-chart"
+            onDataPointClick={({ dataIndex }) => {
+              const period = focusSeries[0]?.points?.[dataIndex ?? -1]?.period;
+              const snapshotId = period ? snapshotForPeriod(period) : undefined;
+              if (snapshotId) window.location.assign(reportsSnapshotHref(snapshotId));
+            }}
           /> : null}
           {!hasFocusFacts ? <p className="overview-unavailable">当前筛选期间没有收入与营业利润趋势事实。</p> : null}
           {allSeries.length > 0 ? (
             <details className="overview-data-details">
               <summary>查看全部指标趋势明细与原值</summary>
               <div className="overview-table-scroll"><table>
-                <thead><tr><th>指标</th>{detailPeriods.map((period) => <th key={period}>{period}</th>)}</tr></thead>
+                <thead><tr><th>指标</th>{detailPeriods.map((period) => { const snapshotId = snapshotForPeriod(period); return <th key={period}>{snapshotId ? <Link href={reportsSnapshotHref(snapshotId)} aria-label={`${period} 冻结指标快照`}>{period}</Link> : period}</th>; })}</tr></thead>
                 <tbody>{allSeries.map((series) => <tr key={series.key} data-testid={`cockpit-overview-trend-row-${series.key}`}>
                   <th scope="row">{series.title}</th>
                   {detailPeriods.map((period) => {
                     const point = series.points?.find((item) => item.period === period);
-                    return <td key={period}>{point?.status === "ready" ? formatFinancialValue(point.value, { unit: series.unit }) : "—"}</td>;
+                    return <td key={period}>{point?.status === "ready" && point.snapshot_id ? <Link href={reportsSnapshotHref(point.snapshot_id)} aria-label={`${period} ${series.title} 冻结指标快照`}>{formatFinancialValue(point.value, { unit: series.unit })}</Link> : point?.status === "ready" ? formatFinancialValue(point.value, { unit: series.unit }) : "—"}</td>;
                   })}
                 </tr>)}</tbody>
               </table></div>

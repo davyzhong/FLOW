@@ -8,6 +8,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 
 import { CockpitOverviewApp } from "../components/cockpit/cockpit-overview-app";
 import type { CockpitOverviewResponse } from "../components/cockpit/cockpit-types";
+import type { DashboardResponse } from "../lib/api/client";
 
 function value(
   exact: string | null,
@@ -60,6 +61,7 @@ function overview(
       analysis_run_status: "published",
       freshness_status: "fresh",
     },
+    filter_options: { dimensions: [], supported_combinations: [] },
     kpi_cards: [
       {
         metric_code: "revenue",
@@ -90,8 +92,8 @@ function overview(
             title: "营业收入",
             unit: "万元",
             points: [
-              { period: "2026-05", value: 90000, display_value: "90,000", status: "ready" },
-              { period: "2026-06", value: 100000, display_value: "100,000", status: "ready" },
+              { period: "2026-05", snapshot_id: "snapshot-may", value: 90000, display_value: "90,000", status: "ready" },
+              { period: "2026-06", snapshot_id: "snapshot-june", value: 100000, display_value: "100,000", status: "ready" },
             ],
           },
         ],
@@ -267,5 +269,23 @@ describe("CockpitOverviewApp", () => {
     await waitFor(() => expect(load).toHaveBeenCalledTimes(2));
     expect(load.mock.calls[1]?.[0]).toEqual({ period_view: "ytd" });
     expect((screen.getByLabelText("期间") as HTMLSelectElement).value).toBe("ytd");
+  });
+
+  it("筛选器显示服务端维度名称并仍以 ID 传参", async () => {
+    const load = vi.fn().mockResolvedValue(overview());
+    const loadFilterOptions = vi.fn().mockResolvedValue({
+      filter_options: { dimensions: [
+        { dimension: "organization", label: "组织", options: [{ id: "org-1", code: "NORTH", name: "国内仓配" }] },
+        { dimension: "customer_segment", label: "客户群", options: [{ id: "customer-1", code: "VIP", name: "重点客户" }] },
+        { dimension: "logistics_product", label: "产品", options: [{ id: "product-1", code: "COLD", name: "冷链配送" }] },
+        { dimension: "region", label: "区域", options: [{ id: "region-1", code: "EAST", name: "华东" }] },
+      ] },
+    } as unknown as DashboardResponse);
+    render(<CockpitOverviewApp load={load} loadFilterOptions={loadFilterOptions} />);
+    const organization = await screen.findByLabelText("组织口径筛选") as HTMLSelectElement;
+    expect([...organization.options].map((option) => option.textContent)).toContain("国内仓配");
+    fireEvent.change(organization, { target: { value: "org-1" } });
+    await waitFor(() => expect(load).toHaveBeenLastCalledWith({ organization_id: "org-1" }, expect.any(AbortSignal)));
+    expect(window.location.search).toContain("organization_id=org-1");
   });
 });

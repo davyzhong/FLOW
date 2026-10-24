@@ -13,7 +13,12 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
-from flow_api.dashboard.models import DashboardContext, DashboardValue, DataStatus
+from flow_api.dashboard.models import (
+    DashboardContext,
+    DashboardValue,
+    DataStatus,
+    FilterOptions,
+)
 
 
 class CockpitComparisons(BaseModel):
@@ -39,6 +44,7 @@ class CockpitKpiCard(BaseModel):
 
 class CockpitTrendPoint(BaseModel):
     period: str
+    snapshot_id: str = Field(description="该期间的冻结指标快照 ID")
     value: float
     display_value: str
     status: str = "ready"
@@ -200,6 +206,7 @@ class CockpitOverviewResponse(BaseModel):
     state: str
     context: DashboardContext
     data_status: DataStatus
+    filter_options: FilterOptions
     kpi_cards: list[CockpitKpiCard] = Field(default_factory=list)
     trends: list[CockpitTrend] = Field(default_factory=list)
     conclusion: CockpitConclusion

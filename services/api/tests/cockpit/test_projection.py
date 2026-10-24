@@ -27,6 +27,7 @@ from flow_api.dashboard.models import (
     ActiveFilters,
     DashboardContext,
     DataStatus,
+    FilterOptions,
 )
 
 SNAPSHOT_ID = uuid4()
@@ -167,6 +168,7 @@ def _overview(
         state="ready",
         context=context,
         data_status=data_status,
+        filter_options=FilterOptions(dimensions=(), supported_combinations=()),
         metric_cards=tuple(cards or [_card()]),
         trends=trends,
         findings=tuple(findings or []),
@@ -347,6 +349,7 @@ def test_trend_points_keep_month_and_display(filters: ActiveFilters) -> None:
     projection = _project(_overview(), filters)
     revenue = next(s for s in projection.trends[0].series if s.key == "revenue")
     assert [p["period"] for p in revenue.points] == ["2026-05", "2026-06"]
+    assert all(p["snapshot_id"] == str(SNAPSHOT_ID) for p in revenue.points)
     assert revenue.points[-1]["display_value"] == "100"
     assert Decimal(str(revenue.points[-1]["value"])) == Decimal("100")
 

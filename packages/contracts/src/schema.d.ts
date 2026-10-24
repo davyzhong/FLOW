@@ -1959,6 +1959,7 @@ export interface components {
             state: string;
             context: components["schemas"]["DashboardContext"];
             data_status: components["schemas"]["DataStatus"];
+            filter_options: components["schemas"]["FilterOptions"];
             /** Kpi Cards */
             kpi_cards?: components["schemas"]["CockpitKpiCard"][];
             /** Trends */
@@ -2066,6 +2067,11 @@ export interface components {
         CockpitTrendPoint: {
             /** Period */
             period: string;
+            /**
+             * Snapshot Id
+             * @description 该期间的冻结指标快照 ID
+             */
+            snapshot_id: string;
             /** Value */
             value: number;
             /** Display Value */

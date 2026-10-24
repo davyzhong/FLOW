@@ -199,6 +199,14 @@ export function CockpitModulePage({
                     ariaLabel={`${chart.title ?? key}，${periods.join("、") || data.period}`}
                     testId={`cockpit-module-chart-${key}`}
                     height={260}
+                    onDataPointClick={({ dataIndex }) => {
+                      const period = periods[dataIndex ?? -1];
+                      const targetReportId = period === data.period ? reportId
+                        : period === data.prior_period ? priorReportId : undefined;
+                      if (targetReportId) {
+                        window.location.assign(`/statements?report=${encodeURIComponent(targetReportId)}`);
+                      }
+                    }}
                   /></div>
               ) : <p className="chart-empty" data-testid={`cockpit-module-chart-${key}-empty`}>{chart.empty_reason || "该图表无足够可用事实，未补零或生成趋势。"}</p>}
               {seriesEntries.length ? (
@@ -207,9 +215,14 @@ export function CockpitModulePage({
                   <tbody>{seriesEntries.map(([name, raw]) => {
                     const values = normalizeModuleSeries(raw);
                     const unit = chart.type === "line" && /率|margin/i.test(name) ? "ratio" : seriesUnit;
-                    return <tr key={name}><th>{name}</th>{values.map((value, index) => (
-                      <td key={index}>{formatFinancialValue(value as string | number | null, { metricCode: metricCodeFor(name), unit })}</td>
-                    ))}</tr>;
+                    const metricCode = metricCodeFor(name);
+                    return <tr key={name}><th>{metricCode ? <Link href={metricFocusHref(metricCode)}>{name}</Link> : name}</th>{values.map((value, index) => {
+                      const period = tablePeriods[index];
+                      const targetReportId = period === data.period ? reportId
+                        : period === data.prior_period ? priorReportId : undefined;
+                      const display = formatFinancialValue(value as string | number | null, { metricCode, unit });
+                      return <td key={index}>{targetReportId ? <Link href={`/statements?report=${encodeURIComponent(targetReportId)}`} aria-label={`${period} ${name} 来源财报`}>{display}</Link> : display}</td>;
+                    })}</tr>;
                   })}</tbody>
                 </table></div>
               ) : null}

@@ -20,7 +20,7 @@ applies_to: repository
 
 **连续收尾接管授权（2026-10-24）：** 用户已要求开启新任务连续执行路线图 7a.1–7a.8，把可做事项做完后进入收尾。范围和跳过规则已落在 CURRENT_ROADMAP：外部长等待先做一次诊断与安全替代，仍无进展则记“跳过/未验证”并继续；不能绕过红线、虚报验收或把长期事项加回当前版本。新任务沿用 `/Users/qiming/workspace/FLOW/.worktrees/cockpit-visual-completion` 与 `codex/single-machine-runtime-convergence`，接管后是该资源唯一写入者；本会话停止写入。开工先 pull、检查是否已有进展，不重复造实现。当前 `6757b4b6` / CI run `40075162854` 仍在执行，前一开发基线 `92079f77` 的 CI 为 28/28 success。下一单一动作仍为 7a.1；实际启动后由执行任务更新状态。新任务须持续推进，不以“计划已写好”或阶段汇报代替实施；最终统一汇报完成、跳过、验收与交付入口。
 
-**2026-10-24 接手结论：审查与收尾计划已交付，当前没有后台实施任务；下一单一动作是 7a.1 统一交付基线。** 当前开发基线 `92079f7734dbe9809a7bef97d825e8993221cfba` / CI run `39516118760` 为 28/28 success，最长集成分片 21分32秒；main `96c57019` 尚未纳入开发分支独有的 55 个提交，main 两次文档更新也需回流。主目录 4 个修改/1 个未跟踪 YAML 保留原位。当前 D055 原型剩余分为 8 个可验收动作，工程量估计 6–10 个有效工程日；不能把长期知识刷新/真实企业三周期混作本版结案条件。当前 14 个唯一事项：已完成 7、执行中 0、队首待启动 1、排队 4、暂停 1、外部条件受限 1；旧 K/7 重复、完成数错误已校正。详细审查与历史图片限制见[审查报告](docs/60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)；可领取步骤只看[路线图 7a](docs/50_plans/CURRENT_ROADMAP.md#7a-单机原型收尾动作与完成条件2026-10-24)。本轮仅改文档，未连接/写入数据库，未改 CI/schema，未采集新截图。最终独立复核、主线集成与冻结仍未完成。本轮计划已通过独立新上下文只读复核（无必要 P1/P2）；文档 M1/M6、计划视图和链接检查通过。本结论不代表业务代码已做最终复核。
+**2026-10-24 当前交接：路线图 7a.1–7a.3 已完成，当前唯一执行动作是 7a.4。** worktree `/Users/qiming/workspace/FLOW/.worktrees/cockpit-visual-completion`，分支 `codex/single-machine-runtime-convergence`。已完成演示经营入口、名称筛选/后退恢复、图表点选和快照追溯；候选单机操作、隔离恢复/重置与九页采集证据见[差距审查](docs/60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)。当前前端定向测试 201/201、typecheck、contracts、API 投影 28/28、Ruff 均通过。下一步按路线图依序完成视觉巡检与正式静态包、最终隔离旅程和独立复核，再做 main 集成。主 checkout 用户文件保持原位。`/Users/qiming/.flow/flow.sqlite3` 零字节误建文件未经用户选择不得触碰。
 
 <details>
 <summary>2026-10-21 及以前的状态快照（历史，不代表当前执行）</summary>

@@ -17,7 +17,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 import "./cockpit.css";
 
-import { flowApi, type CockpitModuleResponse, type CockpitProfitabilityResponse } from "../../lib/api/client";
+import { flowApi, type CockpitModuleResponse, type CockpitProfitabilityResponse, type DashboardResponse } from "../../lib/api/client";
 import { ActionItemPanel } from "./action-panel";
 import { CockpitConclusionBar, CockpitDrillDrawer } from "./drill-drawer";
 import { CockpitFilterBar } from "./cockpit-filter-bar";
@@ -54,6 +54,8 @@ const defaultLoad = (
   signal: AbortSignal,
 ): Promise<CockpitOverviewResponse> => flowApi.getCockpitOverview(filters, signal);
 
+const defaultLoadFilterOptions = (signal: AbortSignal) => flowApi.getDashboard({}, signal);
+
 function queryString(filters: CockpitFilters): string {
   const query = new URLSearchParams();
   for (const key of [
@@ -72,6 +74,7 @@ function queryString(filters: CockpitFilters): string {
 export function CockpitOverviewApp({
   load = defaultLoad,
   loadSupplement = defaultLoadSupplement,
+  loadFilterOptions = defaultLoadFilterOptions,
   initialFilters = {},
 }: {
   load?: (
@@ -80,12 +83,14 @@ export function CockpitOverviewApp({
   ) => Promise<CockpitOverviewResponse>;
   initialFilters?: CockpitFilters;
   loadSupplement?: (signal: AbortSignal) => Promise<CockpitOverviewSupplements>;
+  loadFilterOptions?: (signal: AbortSignal) => Promise<DashboardResponse>;
 }) {
   const [filters, setFilters] = useState<CockpitFilters>(initialFilters);
   const [request, setRequest] = useState<CockpitRequestState>({ kind: "loading" });
   const [drill, setDrill] = useState<CockpitDrill | null>(null);
   const [supplements, setSupplements] = useState<CockpitOverviewSupplements | null>(null);
   const [supplementsLoading, setSupplementsLoading] = useState(true);
+  const [filterDimensions, setFilterDimensions] = useState<DashboardResponse["filter_options"]["dimensions"]>([]);
   const [requestKey, setRequestKey] = useState(0);
   const serialized = useMemo(() => queryString(filters), [filters]);
 
@@ -106,6 +111,15 @@ export function CockpitOverviewApp({
     );
     return () => controller.abort();
   }, [loadSupplement]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    loadFilterOptions(controller.signal).then(
+      (dashboard) => { if (!controller.signal.aborted) setFilterDimensions(dashboard.filter_options.dimensions); },
+      () => { if (!controller.signal.aborted) setFilterDimensions([]); },
+    );
+    return () => controller.abort();
+  }, [loadFilterOptions]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -172,6 +186,7 @@ export function CockpitOverviewApp({
         <CockpitFilterBar
           key={serialized}
           filters={filters}
+          dimensions={filterDimensions}
           onChange={changeFilters}
           disabled
         />
@@ -185,7 +200,7 @@ export function CockpitOverviewApp({
   if (request.kind === "error") {
     return (
       <div className="cockpit">
-        <CockpitFilterBar key={serialized} filters={filters} onChange={changeFilters} />
+        <CockpitFilterBar key={serialized} filters={filters} dimensions={filterDimensions} onChange={changeFilters} />
         <div className="cockpit cockpit--state cockpit--error" role="alert">
           <p>驾驶舱数据加载失败。</p>
           <button type="button" onClick={retry}>
@@ -199,7 +214,7 @@ export function CockpitOverviewApp({
   if (request.kind === "empty") {
     return (
       <div className="cockpit">
-        <CockpitFilterBar key={serialized} filters={filters} onChange={changeFilters} />
+        <CockpitFilterBar key={serialized} filters={filters} dimensions={filterDimensions} onChange={changeFilters} />
         <div className="cockpit cockpit--state cockpit--empty" data-testid="cockpit-empty">
           <p>当前筛选条件下没有可展示的经营数据。</p>
           <p className="cockpit__hint">可调整上方筛选条件后重试；本系统不补零、不造数。</p>
@@ -242,6 +257,7 @@ export function CockpitOverviewApp({
       <CockpitFilterBar
         key={serialized}
         filters={filters}
+        dimensions={filterDimensions}
         onChange={changeFilters}
       />
       {overview.data_status.freshness_status === "stale" || overview.state === "stale" ? (

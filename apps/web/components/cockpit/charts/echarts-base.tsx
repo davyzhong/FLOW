@@ -94,7 +94,18 @@ export function legend(names: string[]) {
  * @param option 图表配置；传 undefined 时不渲染
  * @param deps   依赖变化时 setOption（避免每次渲染都重建）
  */
-export function useEChart(option: EChartsOption | undefined, deps: unknown[] = []) {
+export interface ChartDataPointClick {
+  seriesName?: string;
+  name?: string;
+  value?: unknown;
+  dataIndex?: number;
+}
+
+export function useEChart(
+  option: EChartsOption | undefined,
+  deps: unknown[] = [],
+  onDataPointClick?: (point: ChartDataPointClick) => void,
+) {
   const ref = useRef<HTMLDivElement | null>(null);
   const chartRef = useRef<echarts.ECharts | null>(null);
 
@@ -119,6 +130,14 @@ export function useEChart(option: EChartsOption | undefined, deps: unknown[] = [
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
 
+  useEffect(() => {
+    const chart = chartRef.current;
+    if (!chart || !onDataPointClick) return;
+    const handleClick = (event: ChartDataPointClick) => onDataPointClick(event);
+    chart.on("click", handleClick);
+    return () => { chart.off("click", handleClick); };
+  }, [onDataPointClick]);
+
   return ref;
 }
 
@@ -131,6 +150,7 @@ export function ChartBox({
   ariaLabel,
   height = 280,
   testId,
+  onDataPointClick,
 }: {
   title: string;
   sub?: string;
@@ -139,8 +159,9 @@ export function ChartBox({
   ariaLabel?: string;
   height?: number;
   testId?: string;
+  onDataPointClick?: (point: ChartDataPointClick) => void;
 }) {
-  const ref = useEChart(option, deps ?? [option]);
+  const ref = useEChart(option, deps ?? [option], onDataPointClick);
   const empty = !option;
   return (
     <article className="card chart-card" data-testid={testId}>
