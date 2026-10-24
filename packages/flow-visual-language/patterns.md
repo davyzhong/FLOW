@@ -1,3 +1,17 @@
+---
+doc_id: FLOW-VISUAL-LANGUAGE-PATTERNS-20261024-001
+title: FLOW Editorial Finance Canvas 表达范式
+doc_type: design
+status: approved
+version: "1.0"
+created_at: 2026-10-24
+updated_at: 2026-10-24
+owner: FLOW
+decision_refs: [D055]
+knowledge_release: flow-knowledge-2026-09-12.1
+applies_to: product-visual-language
+---
+
 # FLOW Editorial Finance Canvas：表达范式
 
 本手册把 2026-10-18 A+C 概念板中的编辑部层级与财务画布表达拆成可复用模式。它约束信息表达，不限定每个项目必须使用同一导航或布局。

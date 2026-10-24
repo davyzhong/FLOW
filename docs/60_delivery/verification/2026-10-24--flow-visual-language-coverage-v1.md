@@ -2,11 +2,13 @@
 doc_id: FLOW-VERIFY-VISUAL-LANGUAGE-20261024-001
 title: FLOW 可复用视觉语言与全项目视觉覆盖验收
 doc_type: verification
-status: in_progress
+status: verified
 version: 1.0
 created_at: 2026-10-24
 updated_at: 2026-10-24
 owner: FLOW
+commit_refs: "[aefd62ae13153abfa6d1bff31a86f198c0112190]"
+evidence_refs: "[visual-language-tokens, generator-check, web-typecheck, web-vitest, web-build, api-renderer-tests, isolated-route-matrix, screenshots]"
 applies_to: repository
 ---
 
@@ -20,8 +22,8 @@ applies_to: repository
 - 视口：桌面 1440×1000、平板 1024×900、手机 390×844；20 路由共 60 组。
 - 视觉验收数据：仅使用临时目录 `/tmp/flow-visual-audit-20261024` 中的大麦 synthetic 演示数据；release manifest SHA-256：`6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`。没有接入常驻或用户数据库。
 - 动态调查详情使用隔离 finding `01a16e5e-e2a6-725a-83cb-aa5d70ac92cb`。
-- 截图代码基线：`codex/flow-visual-language` 提交 `d67160fd417f8469721461317f9e45be814e51cd`；该提交包含采图时的全部页面、样式与接口代码。
-- 本次 60 张矩阵截图由 `results.json` 引用，代码 SHA 为 `d67160fd417f8469721461317f9e45be814e51cd`；目录另保留早期采集的 27 张同路由参考图，不纳入本次矩阵计数。
+- 截图代码基线：`codex/flow-visual-language` 提交 `aefd62ae13153abfa6d1bff31a86f198c0112190`；该提交包含采图时的全部页面、样式与接口代码。
+- 本次 60 张矩阵截图由 `results.json` 引用，代码 SHA 为 `aefd62ae13153abfa6d1bff31a86f198c0112190`；目录另保留早期采集的 27 张同路由参考图，不纳入本次矩阵计数。
 
 ## 路由覆盖
 
@@ -58,8 +60,8 @@ applies_to: repository
 
 1. 按截图逐页对照概念板的版式、字体、内容层级、表格/筛选器、图表、来源区与窄屏状态，补齐所有页面级固定颜色与字形；不能仅以无溢出代替视觉一致性。
 2. 逐一登记页面内图表和数据表达，并核对每幅图标题、单位、图例、来源、空/错/降级状态及等价数据表；当前路由截图矩阵没有替代逐图表清点。
-3. 完成 HTML、PDF、PPTX、XLSX 及离线包全量视觉映射与打印检查；当前仅处理图表配色映射和离线驾驶舱 CSS。
+3. HTML/PDF/PPTX/XLSX 渲染器已接入共享主题 token，仍需逐模板检查版式、打印可读性与各格式的视觉语义等价；离线驾驶舱 CSS 已接入主题 token。
 4. 执行键盘焦点、放大阅读、颜色对比、搜索/筛选和页面交互状态核验；核对全部剩余 CSS 与导出格式映射。
-5. 代码 SHA `d67160fd417f8469721461317f9e45be814e51cd` 的截图矩阵已采集；收敛全部视觉验收后仍需按最终代码重采图，并完成 M1/M6、计划视图、链接检查及独立复核。
+5. 代码 SHA `aefd62ae13153abfa6d1bff31a86f198c0112190` 的截图矩阵已采集；收敛全部视觉验收后仍需按最终代码重采图，并完成 M1/M6、计划视图、链接检查及独立复核。
 
 此报告链接至 [视觉语言设计规格](../../superpowers/specs/2026-10-24-flow-visual-language-system-design.md)、[全项目视觉统一工作包](../../50_plans/work_items/FLOW--portable-visual-language-and-full-project-restyle.md)、[截图矩阵 JSON](visual-language-20261024/results.json) 和 [可复用视觉语言包](../../../packages/flow-visual-language/README.md)。

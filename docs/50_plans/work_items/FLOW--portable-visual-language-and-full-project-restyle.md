@@ -27,9 +27,9 @@ confidentiality: project-internal
 ## 当前实施记录（2026-10-24）
 
 - 已建立 `packages/flow-visual-language/`，包含 `tokens.json` 单一源、生成 CSS、表达范式、无业务事实样例；生成器同时输出 TypeScript/Python token 映射。
-- 已接入 Web 全局主题、共享导航、主要 cockpit/data/analysis/operations 样式、ECharts/SVG 财务图色板与离线驾驶舱预览。报表 Matplotlib 图表读取同一 token 映射；其它 HTML/PDF/PPTX/XLSX 渲染仍待统一。
-- Web typecheck 通过；前端 37 个测试文件、201 项通过；Next.js production build 通过。视觉 token `--check`、Python compile、Node syntax、`git diff --check` 均通过。
-- 首轮 Playwright 截图覆盖 20 路由×3 视口；最终等待数据态版本有 60/60 组在修复 `/operations` 报告查询 UUID 参数类型后均为 HTTP 200、无横向溢出及浏览器错误。导入/映射、搜索/筛选、键盘焦点等交互状态尚未逐项检查。
+- 已接入 Web 全局主题、共享导航、主要 cockpit/data/analysis/operations 样式、ECharts/SVG 财务图色板与离线驾驶舱预览。报表 Matplotlib 图表读取同一 token 映射；HTML/PDF、PPTX、XLSX 主要渲染器已接入主题映射，逐模板视觉与打印检查仍待完成。
+- Web typecheck 通过；前端 37 个测试文件、201 项通过；最近一次图表 token 调整后 typecheck、全量 201 项前端测试及 Next.js production build 通过。视觉 token `--check`、Python compile、Node syntax、`git diff --check` 均通过。
+- 首轮 Playwright 截图覆盖 20 路由×3 视口；最终等待数据态版本有 60/60 组在修复 `/operations` 报告查询 UUID 参数类型后均为 HTTP 200、无横向溢出及浏览器错误。热力图渐变、财报分组柱与瀑布图已接入语义 token，并重新生成 20 路由×3 视口截图（代码 SHA `aefd62ae13153abfa6d1bff31a86f198c0112190`，60/60 基础检查通过）。导入/映射、搜索/筛选、键盘焦点等交互状态尚未逐项检查。
 - 截图与逐路由结果在 [视觉覆盖验收](../../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)；synthetic manifest SHA 为 `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`，数据库只位于 `/tmp/flow-visual-audit-20261024`。
 - 仍需完成全路由概念板视觉差异逐项整改、所有图表/表达的单位来源与辅助表达核对、HTML/PDF/PPTX/XLSX、全键盘/对比度/窄屏互动验收、文档门禁、准确最终 SHA 截图和独立复核。不得将当前首轮截图说成全部符合概念板。
 

@@ -1,3 +1,16 @@
+---
+doc_id: FLOW-VISUAL-LANGUAGE-README-20261024-001
+title: FLOW 可移植视觉语言包
+doc_type: product
+status: canonical
+version: "1.0"
+created_at: 2026-10-24
+updated_at: 2026-10-24
+owner: FLOW
+decision_refs: [D055]
+applies_to: product-visual-language
+---
+
 # FLOW 可移植视觉语言包
 
 本目录保存 FLOW A+C 视觉语言中与技术栈无关的语义 token、Web token 导出与表达范式。它是一个可复制的设计资产，不是 npm 包，不在运行时发请求，也不包含任何业务数据。
