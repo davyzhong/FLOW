@@ -2,8 +2,8 @@
 doc_id: FLOW-WI-VISUAL-LANGUAGE-20261024-001
 title: 可复用视觉语言提炼与 FLOW 全项目视觉统一
 doc_type: work-item
-status: queued
-version: 1.0
+status: active
+version: 1.1
 created_at: 2026-10-24
 updated_at: 2026-10-24
 do_not_execute: false
@@ -27,10 +27,42 @@ confidentiality: project-internal
 ## 依赖与执行门
 
 - 唯一范围与验收定义见[视觉语言设计规格](../../superpowers/specs/2026-10-24-flow-visual-language-system-design.md)。本工作包落实路线图事项 12；规格/工作包获用户确认前不进入产品实现。
-- 当前项已由用户选择插入 K2 前，位于唯一主线队列队首。开始产品实现前，须由用户审阅并批准设计规格和本工作包。
+- 当前项已由用户选择插入 K2 前，位于唯一主线队列队首；用户已批准设计规格与工作包，可开始实施。
 - 实施始终串行推进；路线图是唯一 To-do。此工作包提供范围与验收，不另建可独立领取的任务清单。
 - 视觉概念板是风格参考，不是数据来源。真实披露、模拟数据、预测、缺失和降级状态须保留各自事实标签；不生成伪指标或装饰性假数据。
 - 全部浏览器截图和数据相关检查使用临时隔离数据目录；不连接或恢复常驻库，不修改用户目录中的 `/Users/qiming/.flow/flow.sqlite3`，不触碰其他 worktree 内的用户修改。
+
+## 串行实施顺序与文件映射
+
+以下阶段是此工作包内的执行次序，不是独立 To-do；始终只有 CURRENT_ROADMAP 中的本事项可领取。
+
+### 可复制视觉语言资产与 token 流程
+
+- 在 `packages/flow-visual-language/` 建立带目录约定的资产包：`README.md`（结构、版本与跨项目复制说明）、`tokens.json`（唯一源）、`tokens.css`（可直接复制的 Web tokens）、`patterns.md`（版式/图表范式）、`specimen.html`（不含财务事实的离线样式样例）。
+- 编写 `scripts/build_flow_visual_language.py`，仅用 Python 标准库从 `tokens.json` 生成 CSS、TypeScript 消费映射和 Python 报告主题映射；`--check` 比较工作树文件与生成结果，防止多份颜色/字体真相漂移。
+- 建立 `apps/web/lib/visual-tokens.generated.ts` 和 `services/api/src/flow_api/visual_tokens.py` 作为生成目标。非 Web 项目可直接复制 JSON/CSS 与模式手册；不发布 npm 包或安装运行时依赖。
+
+### Web 基础主题与共享外壳
+
+- 先改 `apps/web/app/globals.css`、`apps/web/components/shell/app-shell.css`、`apps/web/app/login/login.css`，以 tokens 统一纸白背景、海军蓝外壳、古金强调、衬线标题/无衬线正文和数字样式。
+- 用 `apps/web/components/modules/module-landing.css` 与共享 UI 样式核对表面、控件、卡片、边框、焦点态和语义状态；保留登录页不包 AppShell 的路由规则。
+
+### 全路由页面与全部图表
+
+- 按现有页面边界逐页改造，不重排无关业务流程：`cockpit/cockpit.css`、`dashboard/dashboard.css`、`data/data-workbench.css`、`analysis/four-question-workbench.css`、`investigation/investigation.css`、`investigation/investigations-index.css`、`metric-library/metric-library.css`、`operations/operations-overview.css`、`operations/operations.css`、`reports/reports-center.css`、`statements/statements.css`，以及实际存在的 page/component 样式文件。
+- 在所有 20 个路由逐个检查导航/页眉、核心结论、筛选、内容密度、表格、来源、空错加载降级态；对登录、内部、公开、动态调查详情保留各自任务结构。
+- 统一图表系列、坐标、提示框、标题、图例与同值表样式：`cockpit/charts/echarts-base.tsx`、`cockpit/charts/builders.ts`、`cockpit/charts/module-options.ts`、驾驶舱可视化组件，以及 `statements/charts/{donut-chart,grouped-bar-chart,kpi-cards,waterfall-chart}.tsx`。
+
+### 报告/出版与离线输出
+
+- 用同一 token 语义校准 `services/api/src/flow_api/publishing/renderers.py`、`operations/renderers.py`、`statements/objective_report_html.py`、`statements/objective_report_charts.py`、`statements/objective_report_pdf.py` 中的 HTML/PDF/PPTX/XLSX 视觉映射。
+- 调整 `scripts/export_cockpit_snapshot.mjs` 生成的离线页面结构/样式引用；不要编辑由它生成的当前预览 HTML 作为源文件，也不启动 GitHub 自动截图工作流。
+
+### 全量差距验收与文档同步
+
+- 以 `docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md` 记录 20 路由 × 3 视口、逐图表/表达状态、代码 SHA、隔离批次 manifest SHA 和采集限制；截图放入该报告索引的专属目录。
+- 同步本工作包“当前成果与限制”及 README、状态、交接、规格、页面/报告/截图索引；旧 7a 与历史截图内容保留为注明版本/日期的历史证据。
+- 最终运行 generator `--check`、Web 相关单元测试/typecheck/build、报告渲染器定向测试、隔离数据的 20 路由三视口浏览器验收、M1/M6、计划视图、链接与 diff 检查；随后由独立上下文复核。
 
 ## 范围
 

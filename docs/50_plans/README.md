@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-050
 title: 计划体系
 doc_type: navigation
 status: current
-version: 1.9
+version: 2.0
 created_at: 2026-09-12
 updated_at: 2026-10-24
 owner: FLOW
@@ -22,4 +22,4 @@ applies_to: docs
 [统一完整实施计划（2026-09-24）](../superpowers/plans/2026-09-24-flow-integrated-execution-plan.md)、
 [执行收敛与验收计划（2026-09-25）](2026-09-25-project-execution-convergence-plan.md)。
 
-D055 单机原型收尾已完成：7a.1–7a.8 已关闭并合入 main；PR #4 状态归档 merge commit `b068796f906cfbb91ac33775f5578194acc98a51` 的准确 SHA run `40096497668` 为 28/28 success。当前唯一队首为“可复用视觉语言提炼与 FLOW 全项目视觉统一”，设计规格和工作包已推送，待用户审阅；产品实现尚未开始。K2 顺延为排队。完整状态见 [CURRENT_ROADMAP](CURRENT_ROADMAP.md) 和[完结差距报告](../60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)。历史状态和旧分支指引不作为执行入口。
+D055 单机原型收尾已完成：7a.1–7a.8 已关闭并合入 main；PR #4 状态归档 merge commit `b068796f906cfbb91ac33775f5578194acc98a51` 的准确 SHA run `40096497668` 为 28/28 success。当前唯一执行项为“可复用视觉语言提炼与 FLOW 全项目视觉统一”，设计规格与工作包已获用户批准，正在分支 `codex/flow-visual-language` 串行实施。K2 顺延为排队。完整状态见 [CURRENT_ROADMAP](CURRENT_ROADMAP.md) 和[完结差距报告](../60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)。历史状态和旧分支指引不作为执行入口。

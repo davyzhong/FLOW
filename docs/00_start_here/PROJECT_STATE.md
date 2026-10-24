@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.81
+version: 5.82
 created_at: 2026-09-12
 updated_at: 2026-10-24
 owner: FLOW
@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-10-24 当前状态：**单机原型 7a.1–7a.8 已完成并合入 main。** PR #3 merge commit `b2a1bf22df91239eb311d1692c30c666250678bf` 对应 run `40092106547` 为 28/28 success；PR #4 文档状态 merge commit `b068796f906cfbb91ac33775f5578194acc98a51` 对应准确 SHA run `40096497668` 也为 28/28 success。隔离验收、独立复核、M1/M6、链接检查均通过；经营入口、名称筛选/后退恢复、图表追溯、A+C 原型视觉、九页离线包和本机数据操作已交付，限制见[差距审查](../60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)。用户将“可复用视觉语言提炼与 FLOW 全项目视觉统一”插入 K2 前；设计规格及工作包已在分支 `codex/flow-visual-language` 推送，当前队首待启动并等待用户审阅，产品实现尚未开始。15 项主队列现为完成 8、实际执行中 0、队首待启动 1、排队 4、暂停 1、外部条件受限 1。唯一队列见[CURRENT_ROADMAP](../50_plans/CURRENT_ROADMAP.md)；K2 已顺延为排队。用户选择保留 `/Users/qiming/.flow/flow.sqlite3` 空文件；`services/api/flow.sqlite3` 未跟踪文件也保持原样。
+2026-10-24 当前状态：**单机原型 7a.1–7a.8 已完成并合入 main。** PR #3 merge commit `b2a1bf22df91239eb311d1692c30c666250678bf` 对应 run `40092106547` 为 28/28 success；PR #4 文档状态 merge commit `b068796f906cfbb91ac33775f5578194acc98a51` 对应准确 SHA run `40096497668` 也为 28/28 success。隔离验收、独立复核、M1/M6、链接检查均通过；经营入口、名称筛选/后退恢复、图表追溯、A+C 原型视觉、九页离线包和本机数据操作已交付，限制见[差距审查](../60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)。用户已批准“可复用视觉语言提炼与 FLOW 全项目视觉统一”；当前在分支 `codex/flow-visual-language` 执行，先交付可复制 token/模式资产，再逐页统一 Web、图表和报告输出，之后完成全量视觉与文档验收。15 项主队列现为完成 8、实际执行中 1、队首待启动 0、排队 4、暂停 1、外部条件受限 1。唯一队列见[CURRENT_ROADMAP](../50_plans/CURRENT_ROADMAP.md)；K2 已顺延为排队。用户选择保留 `/Users/qiming/.flow/flow.sqlite3` 空文件；`services/api/flow.sqlite3` 未跟踪文件也保持原样。
 
 <details>
 <summary>2026-10-21 及以前的状态快照（历史，不代表当前执行）</summary>

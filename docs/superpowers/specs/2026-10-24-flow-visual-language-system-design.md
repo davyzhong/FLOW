@@ -2,7 +2,7 @@
 doc_id: FLOW-SPEC-VISUAL-LANGUAGE-20261024-001
 title: FLOW 可移植视觉语言与全项目视觉统一设计
 doc_type: specification
-status: draft
+status: approved
 version: 1.1
 created_at: 2026-10-24
 updated_at: 2026-10-24
