@@ -3,6 +3,10 @@
 import { formatFinancialValue } from "../../cockpit/number-format";
 import { VISUAL_TOKENS } from "../../../lib/visual-tokens.generated";
 
+const GRID_COLOR = VISUAL_TOKENS["chart-grid"];
+const CURRENT_COLOR = VISUAL_TOKENS["colors-data-revenue"];
+const PRIOR_COLOR = VISUAL_TOKENS["colors-data-series4"];
+
 // 分组柱状图（本期 vs 上期）：手写 SVG，正负共用零基线。
 export type GroupedBarDatum = { label: string; current: number; prior: number | null };
 
@@ -39,7 +43,7 @@ export function GroupedBarChart({
     const gv = maxV - ((maxV - minV) * g) / 4;
     return (
       <g key={g}>
-        <line x1={padL} y1={gy} x2={width - padR} y2={gy} stroke="#e2e8f0" />
+        <line x1={padL} y1={gy} x2={width - padR} y2={gy} stroke={GRID_COLOR} />
         <text x={padL - 6} y={gy + 4} textAnchor="end" className="stmt-tick">
           {formatFinancialValue(gv, { unit: unitLabel, appendUnit: false })}
         </text>
@@ -49,7 +53,7 @@ export function GroupedBarChart({
   return (
     <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label={ariaLabel} className="stmt-svg">
       {gridLines}
-      <line x1={padL} y1={zero} x2={width - padR} y2={zero} stroke="#64748b" />
+      <line x1={padL} y1={zero} x2={width - padR} y2={zero} stroke={VISUAL_TOKENS["colors-text-muted"]} />
       {items.map((item, index) => {
         const groupX = padL + groupW * (index + 0.5);
         const bars: React.ReactNode[] = [];
@@ -79,9 +83,9 @@ export function GroupedBarChart({
             </g>,
           );
         };
-        draw(item.current, priorLabel === null ? 0 : -2, "#2563eb", currentLabel);
+        draw(item.current, priorLabel === null ? 0 : -2, CURRENT_COLOR, currentLabel);
         if (priorLabel !== null && item.prior !== null) {
-          draw(item.prior, barW + 4, "#93c5fd", priorLabel);
+          draw(item.prior, barW + 4, PRIOR_COLOR, priorLabel);
         }
         return (
           <g key={item.label}>
@@ -94,11 +98,11 @@ export function GroupedBarChart({
       })}
       {priorLabel !== null ? (
         <g>
-          <rect x={padL} y={height - 20} width={11} height={11} fill="#2563eb" rx={2} />
+          <rect x={padL} y={height - 20} width={11} height={11} fill={CURRENT_COLOR} rx={2} />
           <text x={padL + 16} y={height - 11} className="stmt-legend">
             {currentLabel}
           </text>
-          <rect x={padL + 92} y={height - 20} width={11} height={11} fill="#93c5fd" rx={2} />
+          <rect x={padL + 92} y={height - 20} width={11} height={11} fill={PRIOR_COLOR} rx={2} />
           <text x={padL + 108} y={height - 11} className="stmt-legend">
             {priorLabel}
           </text>
