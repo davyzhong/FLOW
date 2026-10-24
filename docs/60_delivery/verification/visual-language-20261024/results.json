@@ -13,7 +13,8 @@
       "client": 1440,
       "body": 1440,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "home--desktop.png"
     },
     {
       "route": "/",
@@ -23,7 +24,8 @@
       "client": 1024,
       "body": 1024,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "home--tablet.png"
     },
     {
       "route": "/",
@@ -33,7 +35,8 @@
       "client": 390,
       "body": 390,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "home--mobile.png"
     },
     {
       "route": "/analysis",
@@ -43,7 +46,8 @@
       "client": 1440,
       "body": 1440,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "analysis--desktop.png"
     },
     {
       "route": "/analysis",
@@ -53,7 +57,8 @@
       "client": 1024,
       "body": 1024,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "analysis--tablet.png"
     },
     {
       "route": "/analysis",
@@ -63,7 +68,8 @@
       "client": 390,
       "body": 390,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "analysis--mobile.png"
     },
     {
       "route": "/cockpit",
@@ -73,7 +79,8 @@
       "client": 1440,
       "body": 1440,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "cockpit--desktop.png"
     },
     {
       "route": "/cockpit",
@@ -83,7 +90,8 @@
       "client": 1024,
       "body": 1024,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "cockpit--tablet.png"
     },
     {
       "route": "/cockpit",
@@ -93,7 +101,8 @@
       "client": 390,
       "body": 390,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "cockpit--mobile.png"
     },
     {
       "route": "/cockpit/balance-sheet",
@@ -103,7 +112,8 @@
       "client": 1440,
       "body": 1440,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "cockpit--balance-sheet--desktop.png"
     },
     {
       "route": "/cockpit/balance-sheet",
@@ -113,7 +123,8 @@
       "client": 1024,
       "body": 1024,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "cockpit--balance-sheet--tablet.png"
     },
     {
       "route": "/cockpit/balance-sheet",
@@ -123,7 +134,8 @@
       "client": 390,
       "body": 390,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "cockpit--balance-sheet--mobile.png"
     },
     {
       "route": "/cockpit/cashflow",
@@ -133,7 +145,8 @@
       "client": 1440,
       "body": 1440,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "cockpit--cashflow--desktop.png"
     },
     {
       "route": "/cockpit/cashflow",
@@ -143,7 +156,8 @@
       "client": 1024,
       "body": 1024,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "cockpit--cashflow--tablet.png"
     },
     {
       "route": "/cockpit/cashflow",
@@ -153,7 +167,8 @@
       "client": 390,
       "body": 390,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "cockpit--cashflow--mobile.png"
     },
     {
       "route": "/cockpit/consolidation",
@@ -163,7 +178,8 @@
       "client": 1440,
       "body": 1440,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "cockpit--consolidation--desktop.png"
     },
     {
       "route": "/cockpit/consolidation",
@@ -173,7 +189,8 @@
       "client": 1024,
       "body": 1024,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "cockpit--consolidation--tablet.png"
     },
     {
       "route": "/cockpit/consolidation",
@@ -183,7 +200,8 @@
       "client": 390,
       "body": 390,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "cockpit--consolidation--mobile.png"
     },
     {
       "route": "/cockpit/expenses",
@@ -193,7 +211,8 @@
       "client": 1440,
       "body": 1440,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "cockpit--expenses--desktop.png"
     },
     {
       "route": "/cockpit/expenses",
@@ -203,7 +222,8 @@
       "client": 1024,
       "body": 1024,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "cockpit--expenses--tablet.png"
     },
     {
       "route": "/cockpit/expenses",
@@ -213,7 +233,8 @@
       "client": 390,
       "body": 390,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "cockpit--expenses--mobile.png"
     },
     {
       "route": "/cockpit/profitability",
@@ -223,7 +244,8 @@
       "client": 1440,
       "body": 1440,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "cockpit--profitability--desktop.png"
     },
     {
       "route": "/cockpit/profitability",
@@ -233,7 +255,8 @@
       "client": 1024,
       "body": 1024,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "cockpit--profitability--tablet.png"
     },
     {
       "route": "/cockpit/profitability",
@@ -243,7 +266,8 @@
       "client": 390,
       "body": 390,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "cockpit--profitability--mobile.png"
     },
     {
       "route": "/cockpit/risk",
@@ -253,7 +277,8 @@
       "client": 1440,
       "body": 1440,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "cockpit--risk--desktop.png"
     },
     {
       "route": "/cockpit/risk",
@@ -263,7 +288,8 @@
       "client": 1024,
       "body": 1024,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "cockpit--risk--tablet.png"
     },
     {
       "route": "/cockpit/risk",
@@ -273,7 +299,8 @@
       "client": 390,
       "body": 390,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "cockpit--risk--mobile.png"
     },
     {
       "route": "/cockpit/working-capital",
@@ -283,7 +310,8 @@
       "client": 1440,
       "body": 1440,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "cockpit--working-capital--desktop.png"
     },
     {
       "route": "/cockpit/working-capital",
@@ -293,7 +321,8 @@
       "client": 1024,
       "body": 1024,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "cockpit--working-capital--tablet.png"
     },
     {
       "route": "/cockpit/working-capital",
@@ -303,7 +332,8 @@
       "client": 390,
       "body": 390,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "cockpit--working-capital--mobile.png"
     },
     {
       "route": "/data",
@@ -313,7 +343,8 @@
       "client": 1440,
       "body": 1440,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "data--desktop.png"
     },
     {
       "route": "/data",
@@ -323,7 +354,8 @@
       "client": 1024,
       "body": 1024,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "data--tablet.png"
     },
     {
       "route": "/data",
@@ -333,7 +365,8 @@
       "client": 390,
       "body": 390,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "data--mobile.png"
     },
     {
       "route": "/internal",
@@ -343,7 +376,8 @@
       "client": 1440,
       "body": 1440,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "internal--desktop.png"
     },
     {
       "route": "/internal",
@@ -353,7 +387,8 @@
       "client": 1024,
       "body": 1024,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "internal--tablet.png"
     },
     {
       "route": "/internal",
@@ -363,7 +398,8 @@
       "client": 390,
       "body": 390,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "internal--mobile.png"
     },
     {
       "route": "/investigations",
@@ -373,7 +409,8 @@
       "client": 1440,
       "body": 1440,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "investigations--desktop.png"
     },
     {
       "route": "/investigations",
@@ -383,7 +420,8 @@
       "client": 1024,
       "body": 1024,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "investigations--tablet.png"
     },
     {
       "route": "/investigations",
@@ -393,7 +431,8 @@
       "client": 390,
       "body": 390,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "investigations--mobile.png"
     },
     {
       "route": "/investigations/01a16e5e-e2a6-725a-83cb-aa5d70ac92cb",
@@ -403,7 +442,8 @@
       "client": 1440,
       "body": 1440,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "investigations--01a16e5e-e2a6-725a-83cb-aa5d70ac92cb--desktop.png"
     },
     {
       "route": "/investigations/01a16e5e-e2a6-725a-83cb-aa5d70ac92cb",
@@ -413,7 +453,8 @@
       "client": 1024,
       "body": 1024,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "investigations--01a16e5e-e2a6-725a-83cb-aa5d70ac92cb--tablet.png"
     },
     {
       "route": "/investigations/01a16e5e-e2a6-725a-83cb-aa5d70ac92cb",
@@ -423,7 +464,8 @@
       "client": 390,
       "body": 390,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "investigations--01a16e5e-e2a6-725a-83cb-aa5d70ac92cb--mobile.png"
     },
     {
       "route": "/login",
@@ -433,7 +475,8 @@
       "client": 1440,
       "body": 1440,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "login--desktop.png"
     },
     {
       "route": "/login",
@@ -443,7 +486,8 @@
       "client": 1024,
       "body": 1024,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "login--tablet.png"
     },
     {
       "route": "/login",
@@ -453,7 +497,8 @@
       "client": 390,
       "body": 390,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "login--mobile.png"
     },
     {
       "route": "/metric-library",
@@ -463,7 +508,8 @@
       "client": 1440,
       "body": 1440,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "metric-library--desktop.png"
     },
     {
       "route": "/metric-library",
@@ -473,7 +519,8 @@
       "client": 1024,
       "body": 1024,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "metric-library--tablet.png"
     },
     {
       "route": "/metric-library",
@@ -483,7 +530,8 @@
       "client": 390,
       "body": 390,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "metric-library--mobile.png"
     },
     {
       "route": "/operations",
@@ -493,7 +541,8 @@
       "client": 1440,
       "body": 1440,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "operations--desktop.png"
     },
     {
       "route": "/operations",
@@ -503,7 +552,8 @@
       "client": 1024,
       "body": 1024,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "operations--tablet.png"
     },
     {
       "route": "/operations",
@@ -513,7 +563,8 @@
       "client": 390,
       "body": 390,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "operations--mobile.png"
     },
     {
       "route": "/public",
@@ -523,7 +574,8 @@
       "client": 1440,
       "body": 1440,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "public--desktop.png"
     },
     {
       "route": "/public",
@@ -533,7 +585,8 @@
       "client": 1024,
       "body": 1024,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "public--tablet.png"
     },
     {
       "route": "/public",
@@ -543,7 +596,8 @@
       "client": 390,
       "body": 390,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "public--mobile.png"
     },
     {
       "route": "/reports",
@@ -553,7 +607,8 @@
       "client": 1440,
       "body": 1440,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "reports--desktop.png"
     },
     {
       "route": "/reports",
@@ -563,7 +618,8 @@
       "client": 1024,
       "body": 1024,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "reports--tablet.png"
     },
     {
       "route": "/reports",
@@ -573,7 +629,8 @@
       "client": 390,
       "body": 390,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "reports--mobile.png"
     },
     {
       "route": "/statements",
@@ -583,7 +640,8 @@
       "client": 1440,
       "body": 1440,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "statements--desktop.png"
     },
     {
       "route": "/statements",
@@ -593,7 +651,8 @@
       "client": 1024,
       "body": 1024,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "statements--tablet.png"
     },
     {
       "route": "/statements",
@@ -603,7 +662,38 @@
       "client": 390,
       "body": 390,
       "errors": [],
-      "bad": false
+      "bad": false,
+      "screenshot": "statements--mobile.png"
     }
-  ]
+  ],
+  "supplementalReferenceScreenshots": [
+    "cockpit__balance-sheet--desktop.png",
+    "cockpit__balance-sheet--mobile.png",
+    "cockpit__balance-sheet--tablet.png",
+    "cockpit__cashflow--desktop.png",
+    "cockpit__cashflow--mobile.png",
+    "cockpit__cashflow--tablet.png",
+    "cockpit__consolidation--desktop.png",
+    "cockpit__consolidation--mobile.png",
+    "cockpit__consolidation--tablet.png",
+    "cockpit__expenses--desktop.png",
+    "cockpit__expenses--mobile.png",
+    "cockpit__expenses--tablet.png",
+    "cockpit__profitability--desktop.png",
+    "cockpit__profitability--mobile.png",
+    "cockpit__profitability--tablet.png",
+    "cockpit__risk--desktop.png",
+    "cockpit__risk--mobile.png",
+    "cockpit__risk--tablet.png",
+    "cockpit__working-capital--desktop.png",
+    "cockpit__working-capital--mobile.png",
+    "cockpit__working-capital--tablet.png",
+    "investigations__01a16e5e-e2a6-725a-83cb-aa5d70ac92cb--desktop.png",
+    "investigations__01a16e5e-e2a6-725a-83cb-aa5d70ac92cb--mobile.png",
+    "investigations__01a16e5e-e2a6-725a-83cb-aa5d70ac92cb--tablet.png",
+    "investigations__visual-audit-no-sample--desktop.png",
+    "investigations__visual-audit-no-sample--mobile.png",
+    "investigations__visual-audit-no-sample--tablet.png"
+  ],
+  "screenshotNamingRule": "当前矩阵每项使用 route 去除首尾 / 后将 / 替换为 --，首页为 home，再追加 --{viewport}.png；双下划线文件是更早的参考截图，不计入当前 60 项。"
 }

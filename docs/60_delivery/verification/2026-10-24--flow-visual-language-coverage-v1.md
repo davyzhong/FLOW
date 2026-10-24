@@ -7,8 +7,8 @@ version: 1.0
 created_at: 2026-10-24
 updated_at: 2026-10-24
 owner: FLOW
-commit_refs: "[dcd4c026ec66245e8362fc4d37474640c59d9af9]"
-evidence_refs: "[visual-language-tokens, generator-check, web-typecheck, web-vitest, web-build, api-renderer-tests, isolated-route-matrix, screenshots]"
+commit_refs: "[dcd4c026ec66245e8362fc4d37474640c59d9af9, 9da910e2456a4f7044a2049950e60b7cadb73bb4]"
+evidence_refs: "[visual-language-tokens, generator-check, web-typecheck, web-vitest, web-build, api-renderer-tests, api-ruff, api-mypy, isolated-route-matrix, screenshots]"
 applies_to: repository
 ---
 
@@ -16,14 +16,14 @@ applies_to: repository
 
 ## 当前状态
 
-本记录是仍在执行中的视觉统一验收，不表示全部视觉差距已经关闭。阶段性截图位于 [`visual-language-20261024/`](visual-language-20261024/)，其中 `results.json` 保存每条路由、视口、HTTP 状态、横向溢出和浏览器错误摘要。
+本记录是仍在执行中的视觉统一验收，不表示全部视觉差距已经关闭。阶段性截图位于 [`visual-language-20261024/`](visual-language-20261024/)，其中 `results.json` 逐条记录路由、视口、截图相对路径、HTTP 状态、横向溢出和浏览器错误；并明确列出 27 张更早采集的参考图。
 
 - 浏览器：Chromium / Playwright，生产 standalone Web 构建；API 与 Web 均在本机隔离进程运行。
 - 视口：桌面 1440×1000、平板 1024×900、手机 390×844；20 路由共 60 组。
 - 视觉验收数据：仅使用临时目录 `/tmp/flow-visual-audit-20261024` 中的大麦 synthetic 演示数据；release manifest SHA-256：`6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`。没有接入常驻或用户数据库。
 - 动态调查详情使用隔离 finding `01a16e5e-e2a6-725a-83cb-aa5d70ac92cb`。
 - 截图代码基线：`codex/flow-visual-language` 提交 `dcd4c026ec66245e8362fc4d37474640c59d9af9`；该提交包含采图时的全部页面、样式与接口代码。
-- 本次 60 张矩阵截图由 `results.json` 引用，代码 SHA 为 `dcd4c026ec66245e8362fc4d37474640c59d9af9`；目录另保留早期采集的 27 张同路由参考图，不纳入本次矩阵计数。
+- 本次 60 张矩阵截图由 `results.json` 的 `screenshot` 字段逐行引用，Web 代码 SHA 为 `dcd4c026ec66245e8362fc4d37474640c59d9af9`。目录另保留的 27 张双下划线参考图在 `supplementalReferenceScreenshots` 中逐一登记，不纳入本次矩阵计数。报告导出字体与打印样式映射提交为 `9da910e2456a4f7044a2049950e60b7cadb73bb4`；其渲染器定向测试 20/20、Ruff 和 mypy 通过。
 
 ## 路由覆盖
 
@@ -60,7 +60,7 @@ applies_to: repository
 
 1. 按截图逐页对照概念板的版式、字体、内容层级、表格/筛选器、图表、来源区与窄屏状态，补齐所有页面级固定颜色与字形；不能仅以无溢出代替视觉一致性。
 2. 逐一登记页面内图表和数据表达，并核对每幅图标题、单位、图例、来源、空/错/降级状态及等价数据表；当前路由截图矩阵没有替代逐图表清点。
-3. HTML/PDF/PPTX/XLSX 渲染器已接入共享主题 token，仍需逐模板检查版式、打印可读性与各格式的视觉语义等价；离线驾驶舱 CSS 已接入主题 token。
+3. HTML/PDF/PPTX/XLSX 渲染器已接入共享主题 token；渲染器定向测试 20/20、Ruff 和 mypy 通过。逐模板版式、打印可读性与各格式视觉语义等价仍需继续核验；离线驾驶舱 CSS 已接入主题 token。
 4. 执行键盘焦点、放大阅读、颜色对比、搜索/筛选和页面交互状态核验；核对全部剩余 CSS 与导出格式映射。
 5. 代码 SHA `dcd4c026ec66245e8362fc4d37474640c59d9af9` 的截图矩阵已采集；收敛全部视觉验收后仍需按最终代码重采图，并完成 M1/M6、计划视图、链接检查及独立复核。
 
