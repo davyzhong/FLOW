@@ -49,6 +49,7 @@ from flow_api.data_contract.template import (
 from flow_api.data_contract.workbook import render_workbook
 from flow_api.enterprise.models import AnalysisCycle
 from flow_api.infrastructure.db import get_session_factory
+from flow_api.infrastructure.local_object_store import LocalObjectStore
 from flow_api.infrastructure.logging import log_event
 from flow_api.infrastructure.models.intake import (
     AnalysisBatch,
@@ -59,8 +60,6 @@ from flow_api.infrastructure.models.intake import (
     SourceFile,
     SourceRecord,
 )
-from flow_api.infrastructure.object_store import ObjectStore
-from flow_api.infrastructure.s3_client import build_s3_client
 from flow_api.intake.detector import WorkbookDetectionError, profile_workbook
 from flow_api.intake.extractor import CandidateExtractionError, extract_candidate_package
 from flow_api.intake.mapping import (
@@ -120,7 +119,7 @@ def get_db_session() -> Iterator[Session]:
 @lru_cache
 def get_source_storage() -> SourceStorage:
     settings = get_settings()
-    return SourceStorage(ObjectStore(client=build_s3_client(settings), bucket=settings.s3_bucket))
+    return SourceStorage(LocalObjectStore(settings.object_directory))
 
 
 @lru_cache

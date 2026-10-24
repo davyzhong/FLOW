@@ -66,9 +66,7 @@ class MetricDefinitionDependency(IdentityTimestampMixin, Base):
             "position",
             name="uq_metric_definition_dependency_position",
         ),
-        CheckConstraint(
-            "position > 0", name="ck_metric_definition_dependency_position_positive"
-        ),
+        CheckConstraint("position > 0", name="ck_metric_definition_dependency_position_positive"),
         CheckConstraint(
             "metric_definition_id <> dependency_definition_id",
             name="ck_metric_definition_dependency_not_self",
@@ -87,9 +85,7 @@ class MetricDefinitionDependency(IdentityTimestampMixin, Base):
     )
     position: Mapped[int] = mapped_column(Integer, nullable=False)
 
-    metric_definition: Mapped[MetricDefinition] = relationship(
-        foreign_keys=[metric_definition_id]
-    )
+    metric_definition: Mapped[MetricDefinition] = relationship(foreign_keys=[metric_definition_id])
     dependency_definition: Mapped[MetricDefinition] = relationship(
         foreign_keys=[dependency_definition_id]
     )
@@ -120,9 +116,7 @@ class MetricSnapshot(IdentityTimestampMixin, Base):
             "length(definition_set_hash) = 64",
             name="ck_metric_snapshot_definition_hash_length",
         ),
-        CheckConstraint(
-            "length(fingerprint) = 64", name="ck_metric_snapshot_fingerprint_length"
-        ),
+        CheckConstraint("length(fingerprint) = 64", name="ck_metric_snapshot_fingerprint_length"),
         ForeignKeyConstraint(
             ["import_version_id", "batch_id"],
             ["import_version.id", "import_version.batch_id"],
@@ -134,9 +128,7 @@ class MetricSnapshot(IdentityTimestampMixin, Base):
     batch_id: Mapped[UUID] = mapped_column(
         UUID_TYPE, ForeignKey("analysis_batch.id", ondelete="RESTRICT"), nullable=False
     )
-    import_version_id: Mapped[UUID] = mapped_column(
-        UUID_TYPE, nullable=False
-    )
+    import_version_id: Mapped[UUID] = mapped_column(UUID_TYPE, nullable=False)
     as_of_period_id: Mapped[UUID] = mapped_column(
         UUID_TYPE, ForeignKey("dim_period.id", ondelete="RESTRICT"), nullable=False
     )
@@ -159,9 +151,9 @@ def _protect_published_metric_snapshot_update(
     _mapper: object, _connection: object, target: MetricSnapshot
 ) -> None:
     prior_statuses = inspect(target).attrs.status.history.deleted
-    if (
-        target.status == "published" or "published" in prior_statuses
-    ) and list(prior_statuses) != ["building"]:
+    if (target.status == "published" or "published" in prior_statuses) and list(prior_statuses) != [
+        "building"
+    ]:
         raise ValueError("published metric snapshots are append-only")
 
 
@@ -231,9 +223,7 @@ def _metric_value_snapshot_is_published(connection: Any, target: MetricValue) ->
 
 @event.listens_for(MetricValue, "before_update")
 @event.listens_for(MetricValue, "before_delete")
-def _protect_published_metric_value(
-    _mapper: object, connection: Any, target: MetricValue
-) -> None:
+def _protect_published_metric_value(_mapper: object, connection: Any, target: MetricValue) -> None:
     if _metric_value_snapshot_is_published(connection, target):
         raise ValueError("published metric values are append-only")
 
@@ -251,12 +241,8 @@ class AnalysisRun(IdentityTimestampMixin, Base):
             "status in ('building', 'published', 'failed')",
             name="ck_analysis_run_status",
         ),
-        CheckConstraint(
-            "length(policy_set_hash) = 64", name="ck_analysis_run_policy_hash_length"
-        ),
-        CheckConstraint(
-            "length(fingerprint) = 64", name="ck_analysis_run_fingerprint_length"
-        ),
+        CheckConstraint("length(policy_set_hash) = 64", name="ck_analysis_run_policy_hash_length"),
+        CheckConstraint("length(fingerprint) = 64", name="ck_analysis_run_fingerprint_length"),
     )
 
     metric_snapshot_id: Mapped[UUID] = mapped_column(
@@ -289,9 +275,9 @@ def _protect_published_analysis_run_update(
     _mapper: object, _connection: object, target: AnalysisRun
 ) -> None:
     status_history = inspect(target).attrs.status.history
-    publishing = list(status_history.deleted) == ["building"] and list(
-        status_history.added
-    ) == ["published"]
+    publishing = list(status_history.deleted) == ["building"] and list(status_history.added) == [
+        "published"
+    ]
     if target.status == "published" and not publishing:
         raise ValueError("published analysis runs are append-only")
 
@@ -396,9 +382,7 @@ class AnalysisDriver(IdentityTimestampMixin, Base):
 def _analysis_run_is_published(connection: Any, analysis_run_id: UUID | None) -> bool:
     if analysis_run_id is None:
         return False
-    status = connection.scalar(
-        select(AnalysisRun.status).where(AnalysisRun.id == analysis_run_id)
-    )
+    status = connection.scalar(select(AnalysisRun.status).where(AnalysisRun.id == analysis_run_id))
     return status is not None and str(status) == "published"
 
 
@@ -440,14 +424,23 @@ class Finding(IdentityTimestampMixin, Base):
             "status in ('candidate', 'in_review', 'approved', 'rejected')",
             name="ck_finding_status",
         ),
-        CheckConstraint("confidence between 0 and 1", name="ck_finding_confidence_range"),
+        CheckConstraint(
+            "confidence between 0 and 1",
+            name="ck_finding_confidence_range",
+        ).ddl_if(dialect="postgresql"),
+        CheckConstraint(
+            "confidence between 0 and 10000",
+            name="ck_finding_confidence_range_sqlite",
+        ).ddl_if(dialect="sqlite"),
         CheckConstraint(
             "total_score is null or total_score between 0 and 100",
             name="ck_finding_total_score_range",
-        ),
-        UniqueConstraint(
-            "analysis_run_id", "fingerprint", name="uq_finding_run_fingerprint"
-        ),
+        ).ddl_if(dialect="postgresql"),
+        CheckConstraint(
+            "total_score is null or total_score between 0 and 100000000",
+            name="ck_finding_total_score_range_sqlite",
+        ).ddl_if(dialect="sqlite"),
+        UniqueConstraint("analysis_run_id", "fingerprint", name="uq_finding_run_fingerprint"),
     )
 
     metric_snapshot_id: Mapped[UUID] = mapped_column(
@@ -542,18 +535,30 @@ class Evidence(IdentityTimestampMixin, Base):
 class FindingScoreComponent(IdentityTimestampMixin, Base):
     __tablename__ = "finding_score_component"
     __table_args__ = (
-        UniqueConstraint(
-            "finding_id", "component_code", name="uq_finding_score_component_code"
-        ),
+        UniqueConstraint("finding_id", "component_code", name="uq_finding_score_component_code"),
         CheckConstraint(
             "normalized_score between 0 and 100",
             name="ck_finding_score_normalized_range",
+        ).ddl_if(dialect="postgresql"),
+        CheckConstraint(
+            "normalized_score between 0 and 100000000",
+            name="ck_finding_score_normalized_range_sqlite",
+        ).ddl_if(dialect="sqlite"),
+        CheckConstraint("weight between 0 and 1", name="ck_finding_score_weight_range").ddl_if(
+            dialect="postgresql"
         ),
-        CheckConstraint("weight between 0 and 1", name="ck_finding_score_weight_range"),
+        CheckConstraint(
+            "weight between 0 and 1000000",
+            name="ck_finding_score_weight_range_sqlite",
+        ).ddl_if(dialect="sqlite"),
         CheckConstraint(
             "weighted_score between 0 and 100",
             name="ck_finding_score_weighted_range",
-        ),
+        ).ddl_if(dialect="postgresql"),
+        CheckConstraint(
+            "weighted_score between 0 and 100000000",
+            name="ck_finding_score_weighted_range_sqlite",
+        ).ddl_if(dialect="sqlite"),
     )
 
     finding_id: Mapped[UUID] = mapped_column(
@@ -576,9 +581,7 @@ def _finding_run_id(connection: Any, finding_id: UUID | None) -> UUID | None:
         return None
     return cast(
         UUID | None,
-        connection.scalar(
-            select(Finding.analysis_run_id).where(Finding.id == finding_id)
-        ),
+        connection.scalar(select(Finding.analysis_run_id).where(Finding.id == finding_id)),
     )
 
 
@@ -587,9 +590,7 @@ def _finding_run_id(connection: Any, finding_id: UUID | None) -> UUID | None:
 def _protect_published_finding_score(
     _mapper: object, connection: Any, target: FindingScoreComponent
 ) -> None:
-    if _analysis_run_is_published(
-        connection, _finding_run_id(connection, target.finding_id)
-    ):
+    if _analysis_run_is_published(connection, _finding_run_id(connection, target.finding_id)):
         raise ValueError("published finding scores are append-only")
 
 

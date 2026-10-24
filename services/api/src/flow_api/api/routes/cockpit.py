@@ -137,6 +137,7 @@ def cockpit_overview(
             "state": projection.state,
             "context": projection.context,
             "data_status": projection.data_status,
+            "filter_options": projection.filter_options,
             "kpi_cards": [card.__dict__ for card in projection.kpi_cards],
             "trends": [
                 {

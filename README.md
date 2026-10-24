@@ -3,9 +3,9 @@ doc_id: FLOW-NAV-ROOT-README-001
 title: FLOW repository README
 doc_type: navigation
 status: current
-version: 1.7
+version: 1.8
 created_at: 2026-08-29
-updated_at: 2026-10-18
+updated_at: 2026-10-20
 owner: FLOW
 applies_to: repository
 # readme-craft v3.0.0-alpha.0 metadata（机器可读，LLM/Agent 友好）
@@ -72,7 +72,7 @@ tags:
 
 </div>
 
-FLOW 的视觉方向已经明确，接下来的工作是在单机原型边界内，把有来源、有口径、有解释的财务事实变成一张能阅读、能追问、能复核的分析画布。概念板负责展示设计目标；下面的实景截图记录此前真实运行过的页面和公开财报实验，两者分开呈现。
+FLOW 的视觉方向已经明确，接下来的工作是在单机原型边界内，把有来源、有口径、有解释的财务事实变成一张能阅读、能追问、能复核的分析画布。概念板负责展示设计目标；下面的实景截图记录此前真实运行过的页面和公开财报实验，两者分开呈现。2026-10-20 起，驾驶舱视觉重新进入全视图收敛：当前截图仅作历史基线，主题模块与数据工作台的最新实测仍保存在本机临时目录；截图自动化与截图资产发布流程继续暂停，待视觉验收收敛后再更新可发布截图。
 
 <table>
 <tr>
@@ -85,7 +85,38 @@ FLOW 的视觉方向已经明确，接下来的工作是在单机原型边界内
 </tr>
 </table>
 
+### 当前 A+C 驾驶舱 · 真实页面实测
+
+下面是概念板方向已经落到产品页面后的本机浏览器实测。桌面总览优先呈现营业收入、营业利润、毛利率和经营现金流；完整趋势、现金流桥、杜邦分解、费用结构、行动项及来源口径均可在同一画布查看。手机截图展示同一数据视图的窄屏排列。
+
+<table>
+<tr>
+<td width="50%"><strong>集团财务总览 · 桌面全页</strong><br/><img src="docs/assets/screenshots/cockpit-visual/overview-desktop-2026-10-19.png" width="100%" alt="FLOW CFO 财务总览真实浏览器截图，显示四项核心 KPI、收入利润双轴趋势、经营现金流变动桥、杜邦分析、费用结构、来源和行动项"/><br/><sub>真实页面｜1440 px 视口｜大麦物流合成演示数据。</sub></td>
+<td width="50%"><strong>集团财务总览 · 手机全页</strong><br/><img src="docs/assets/screenshots/cockpit-visual/overview-mobile-2026-10-19.png" width="100%" alt="FLOW CFO 财务总览真实手机视口截图，展示核心指标、趋势图、财务分析和来源信息的窄屏布局"/><br/><sub>真实页面｜390 px 视口｜同一演示数据与代码版本。</sub></td>
+</tr>
+<tr>
+<td width="50%"><strong>盈利能力与杜邦分析 · 桌面全页</strong><br/><img src="docs/assets/screenshots/cockpit-visual/profitability-desktop-2026-10-19.png" width="100%" alt="FLOW 盈利能力与杜邦分析真实浏览器页面，展示杜邦关系图、两期财年比较、来源口径表和财报行链接"/><br/><sub>真实页面｜1440 px 视口｜财报快照、指标关系和来源行可追溯。</sub></td>
+<td width="50%"><strong>验收口径</strong><br/>9 个 CFO/数据路由通过 1440 px 与 390 px 图表绘制和溢出检查；总览四项 KPI 趋势明细逐项与 API 对账。此组图片为当前产品页面，不是概念稿；数字来自隔离的大麦物流合成发行包，不是阿里、菜鸟或真实客户财报。</td>
+</tr>
+</table>
+
 <div align="center"><sub>实景截图核对与操作边界见 <a href="docs/assets/screenshots/README.md">截图说明</a>。旧版产品截图不是当前视觉验收证据；概念图也不替代真实页面交付。</sub></div>
+
+### 单机运行成果与离线驾驶舱
+
+下图与离线报告来自 2026-10-20 的本机生产构建，代码 SHA `9ec0611562569b33bc3dac28c16445aa9470b150`。它们使用隔离目录中的大麦物流**合成演示批次**（manifest SHA-256 `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`），验证报告 19/19 通过；不可将这些数据当作阿里巴巴、菜鸟或真实客户披露数据。
+
+![单机版财务驾驶舱总览：核心指标、趋势图、现金流桥、杜邦分析、费用结构与行动项](docs/assets/screenshots/cockpit-single-machine/overview-desktop-2026-10-20.png)
+
+![单机版财务驾驶舱手机布局](docs/assets/screenshots/cockpit-single-machine/overview-mobile-2026-10-20.png)
+
+| 可直接查看的交付 | 内容 |
+| --- | --- |
+| [离线静态驾驶舱 HTML](docs/assets/screenshots/cockpit-single-machine/offline-preview.html) | 单文件、自包含图表和数据快照；可断网打开，快照内嵌来源与代码版本信息。离线版适合阅读和展示，动态筛选与页面跳转仍通过本地应用提供。 |
+| [盈利能力与杜邦分析截图](docs/assets/screenshots/cockpit-single-machine/profitability-desktop-2026-10-20.png) | 实际页面全页截图。 |
+| [截图与单机验收说明](docs/assets/screenshots/README.md) | 视口、数据批次、哈希、截图和离线检查结果。 |
+
+本批静态文件以 `file://` 浏览器实测，外部请求为 0、页面错误为 0；生产应用由本机 SQLite 与文件目录驱动。完整命令和当前 GitHub CI 状态以[路线图](docs/50_plans/CURRENT_ROADMAP.md)及[验收记录](docs/60_delivery/verification/2026-10-20--single-machine-visual-static-acceptance-v1.md)为准。
 
 > 长期产品方向遵循 [D052–D054](docs/10_governance/DECISION_INDEX.md)；当前交付边界由 [D055](docs/10_governance/decisions/D055--单机单用户验证原型.md) 定义为单机单用户财务分析验证原型。最新状态、实际执行位置与验收证据以 [唯一当前路线图](docs/50_plans/CURRENT_ROADMAP.md) 为准。
 
@@ -399,9 +430,9 @@ flowchart LR
 | **U8** | 生产就绪收口（真实存储旅程、HTTPS 拓扑、统一部署验收） | ✅ completed；严格冻结门禁通过 |
 | **S01** | 战略边界、Financial Facts V2、安全/RBAC/审计门禁 | ✅ completed |
 | **D 轨** | 大麦物流完整财年演示数据、正式工作流与八页面 E2E | ✅ completed（verify 19/19、E2E 9/9、17 门禁绿；CI 全绿于 `d701c1d`） |
-| **D055 当前交付** | 单机单用户、SQLite + 本地目录、A+C 驾驶舱/报告视觉升级 | ⏭️ 第 3 阶段待启动：依赖路径盘点已完成，下一步接入同步任务与本地内容存储并收敛设置/启动入口；前两阶段隔离验证已通过 |
+| **D055 当前交付** | 单机单用户、SQLite + 本地目录、A+C 驾驶舱/报告视觉升级 | 🚧 单机验收与门禁拆分已完成；总览、主题页及 `/data` 已采用报告式视觉，费用页新增双期堆叠图和原值表，7a 的文档审查与最终视觉复核仍在进行。准确 SHA `21b650a1` / run `39457446117` 为 28/28 jobs success；最新状态见路线图 |
 | **K 轨** | 第二代静态知识刷新、sealed candidate 与战略重基线 | ⏭️ 顺延；当前工作包关闭后恢复 |
-| U9–U10 | 内部试点、V1.1 证据决策 | ⬜ 待授权，且 U8 后按 [D053](docs/10_governance/decisions/D053--三层两模块边界与执行顺序.md) 重新裁决 |
+| U9–U10 | 内部试点、V1.1 证据决策 | ⏭️ 排队；依赖公开 C 级证据与真实企业数据，轮到后按路线图验收 |
 
 已登记的确定性原语：CAGR（n−1 间隔）、可加和守恒桥（残差显式）、经验阈值提示（无普适判定）、口径标签值（登记制）、应收-收入增速联看提示。
 
@@ -410,16 +441,16 @@ flowchart LR
 | 模块 | 当前已实现 | 需要区分的边界 |
 | --- | --- | --- |
 | 数据接入 | 上传、画像、映射覆盖、清洗、警告确认、版本发布、标准化导出 | 任意新批次的指标/分析自动编排尚未接通 |
-| 标准数据 | `flow.excel.v1`，10 张交换工作表，公共维度与主题事实 | Excel 是交换格式；当前代码使用 PostgreSQL，D055 规划切换为 SQLite 单文件，改造尚未完成 |
+| 标准数据 | `flow.excel.v1`，10 张交换工作表，公共维度与主题事实 | Excel 是交换格式；单机原型以 `~/.flow/flow.sqlite3` 为业务数据权威源 |
 | 指标引擎 | 物流 15 指标 + 知识库 64 指标定义（v1.1）、Decimal、月/YTD/预算/同比/T12 窗口 | 登记数不等于任意财报可算数 |
 | 指标治理 | 定义、绑定、语义、草稿/验证/激活/退役、审计、影响沙箱和界面（迁移头 `0018_metric_governance`） | 既有字段审计不能证明所有会计分类正确 |
 | 客观分析引擎 | `objective_finance_v1`：净现比、杜邦三分解（全链口径标注）等条目 + 五个确定性原语 | 数学分解不冒充业务因果；报告门禁在 U5 建设 |
 | 分析引擎 | 5 个 typed Playbook、驱动对账、Finding 与 Evidence | 确定性政策与阈值，非自动学习模型 |
 | 驾驶舱与调查 | 多维浏览、身份交接、证据复核、四要素结论、审阅历史 | 演示数据通过不替代真实客户试点 |
 | Copilot | 上下文绑定、引用和数字校验、降级与持久审计 | 默认是离线 `DeterministicProvider`，尚无现成在线大模型适配器 |
-| 报告发布 | JSONB 冻结内容、版本幂等、独立尝试、下载头与字节校验 | API 默认没有 PDF 打印器；PPTX/XLSX/HTML 仍依赖可用对象存储 |
+| 报告发布 | 冻结内容、版本幂等、独立尝试、下载头与字节校验 | API 默认没有 PDF 打印器；PPTX/XLSX/HTML 产物保存在本地内容目录 |
 | 认证 | 单用户密码、会话、服务端 Bearer、同源代理与 HTTPS 拓扑 | 多租户、复杂角色权限与 SSO 暂缓；保留本机登录保护和审计身份 |
-| 异步基础设施 | 当前代码含 Celery、Redis 与 Worker 健康检查 | Worker 示例任务仅返回 accepted；D055 规划移除 Redis/Celery/MinIO，使用本机同步分析路径，尚待隔离验证与实施 |
+| 任务执行 | 同步请求内运行，单机 API 启动时无需独立 Worker | 长耗时操作不由后台队列执行；状态记录与重试语义仍由业务流程负责 |
 
 ## 🏗️ 系统架构
 
@@ -434,17 +465,15 @@ flowchart TB
     API --> Metrics[Metrics / Analysis]
     API --> Review[Investigation / Copilot]
     API --> Publish[Publishing]
-    Intake --> PG[(PostgreSQL 18)]
-    Metrics --> PG
-    Review --> PG
-    Publish --> PG
-    Intake --> S3[(S3 兼容存储 / MinIO)]
-    Publish --> S3
-    Worker[Celery Worker 基础设施] --> Redis[(Redis 8)]
-    API -. 幂等任务基础设施 .-> Redis
+    Intake --> DB[(SQLite 单文件)]
+    Metrics --> DB
+    Review --> DB
+    Publish --> DB
+    Intake --> Files[(本地内容目录)]
+    Publish --> Files
 ```
 
-> 上图和下表描述的是**当前代码实现**，并非 D055 的最终单机目标架构。SQLite 与本地文件存储必须先通过隔离迁移、精度、来源追溯和备份恢复验收，再更新为实际实现图。
+> 上图描述 D055 单机原型的普通运行路径。历史 PostgreSQL/Redis/MinIO Compose 仅用于兼容性测试，不属于用户日常启动依赖。
 
 | 层 | 技术与职责 |
 | --- | --- |
@@ -452,10 +481,10 @@ flowchart TB
 | API | Python 3.13、FastAPI、Pydantic、SQLAlchemy、Alembic |
 | 计算 | Python Decimal、数据库版本化指标目录与治理（D048 库内权威 + YAML 兼容），YAML 配置 |
 | 文件 | openpyxl、python-pptx、HTML 渲染、可注入 PDF 打印器 |
-| 存储 | PostgreSQL NUMERIC、S3 内容寻址对象、Redis |
+| 存储 | SQLite 单文件、Decimal 定标存储、本地 SHA-256 内容寻址文件 |
 | 工程 | pnpm 10.17.1、uv 锁文件、pytest、Vitest、Playwright、GitHub Actions |
 
-版本以锁文件为准；系统是模块化单体加 Worker 基础设施，没有把每个领域拆成微服务。详见[运行架构](docs/architecture/flow-v1-runtime.md)。
+版本以锁文件为准；系统是本机 Web/API 双进程的模块化单体，不启动独立 Worker。SQLite 与本地内容目录由同一数据根目录管理。详见[运行架构](docs/architecture/flow-v1-runtime.md)。
 
 ### 身份、血缘与冻结边界
 
@@ -542,67 +571,46 @@ flowchart LR
 - **静态资料库**（31 项静态资产，零服务器 / 零数据库）：见下方「静态资料库」章节
 - **接口文档**（FastAPI 自动生成，启动后可见）：`http://localhost:8000/docs`
 
-完整环境搭建见下方「五路启动方式」；若只想读设计与决策文档，从 [`docs/README.md`](docs/README.md) 进入。
+完整环境搭建见下方「单机启动」；若只想读设计与决策文档，从 [`docs/README.md`](docs/README.md) 进入。
 
-### 五路启动方式
+### 单机启动
 
-按你的使用场景选最合适的一条：
-
-| 路径 | 命令（详见下文） | 适用场景 |
-|---|---|---|
-| **1. 推荐 · 容器基础设施 + 本机应用** | `make bootstrap && make infra-up && make dev-api && make dev-web` | 日常开发，调试方便 |
-| **2. 全容器运行** | `make stack-up` | 演示 / 评审 / 一次性起停 |
-| **3. 从源码编译（纯本机）** | `pnpm install && (cd services/api && uv sync)` | 无 Docker 时的回退 |
-| **4. 一键验收（Phase 1–10 七组组合）** | `make acceptance` | 发版前严格门禁 |
-| **5. Docker Compose 最小启动** | `docker compose -f infra/compose.yml up -d` | 仅验证基础设施连通 |
+日常使用只有一条启动路径：先准备 Python 3.13、Node.js 24、`uv`、Make 与 Git，再初始化并启动本地应用。无需 Docker 或后台基础服务。
 
 ### 依赖
 
-- Docker Desktop 或可用的 Docker Engine + Compose；
 - Python **3.13** 与 `uv`；
 - Node.js **24**；Make 和 Git；
 - pnpm 由 Makefile 使用 `npx --yes pnpm@10.17.1` 调用，无需全局安装。
 
-### 推荐：基础设施在容器，应用在本机
-
-从一个新的开发数据库开始。以下命令不包含验收脚本的数据库清空动作。
+### 初始化与启动
 
 ```bash
 git clone https://github.com/davyzhong/FLOW.git
 cd FLOW
 cp .env.example .env
-make bootstrap
-
-# 在当前 shell 导出刚复制的本地配置
-set -a
-. ./.env
-set +a
-
-make infra-up
-(cd services/api && uv run alembic upgrade head)
-
-# 可选：初始化确定性演示数据、12 个月指标快照和分析运行
-(cd services/api && uv run python ../../scripts/seed_dashboard_demo.py)
-
-# 可选：导入 P5 反向解析的真实财报（5 家公司 14 份报告，幂等）
-bash scripts/seed_p5_statements.sh
-
-# 可选：大麦物流两年 synthetic 演示数据（一键：构建发行包 → 迁移 → seed → verify）
-make damai-demo-up
-# 分步：make damai-demo-build / damai-demo-seed / damai-demo-verify
-# 端到端验收（隔离栈 + Playwright 八页面）：make test-damai-demo-e2e
-
-make dev-api
+make flow-bootstrap
+make flow-init
+make flow
 ```
 
-另开一个终端，在仓库根目录加载同一份配置后启动 Web：
+默认数据保存在 `~/.flow/`：`flow.sqlite3` 为关系数据文件，`objects/` 保存源文件和报告产物。需要使用独立目录时，在 `.env` 中设置 `FLOW_DATA_DIR=/your/local/path`。`make flow` 会初始化数据库并在本机启动 API 与 Web。
+
+演示与真实来源数据通过页面导入或下列发行命令加载：
 
 ```bash
-set -a
-. ./.env
-set +a
-make dev-web
+# 可选：导入 P5 反向解析的已登记财报
+bash scripts/seed_p5_statements.sh
+
+# 可选：大麦物流 synthetic 演示数据；先确保 make flow 已启动并完成 SQLite 初始化
+make damai-demo-load
+make damai-demo-verify
+# 分步：make damai-demo-build / damai-demo-seed / damai-demo-verify
+# 端到端验收（旧 PostgreSQL/Redis/MinIO 测试栈）：make test-damai-demo-e2e
+
 ```
+
+`make damai-demo-up` 是旧兼容性验收入口，仍依赖 PostgreSQL/Redis/MinIO；本机普通启动使用 `make flow`。
 
 | 入口 | 地址 | 用途 |
 | --- | --- | --- |
@@ -611,16 +619,16 @@ make dev-web
 | 报告中心 | [localhost:3000/reports](http://localhost:3000/reports) | 冻结、生成和下载 |
 | API 文档 | [localhost:8000/docs](http://localhost:8000/docs) | FastAPI 交互式接口文档 |
 | API 健康检查 | [localhost:8000/api/v1/health](http://localhost:8000/api/v1/health) | 进程健康状态 |
-| MinIO Console | [localhost:9001](http://localhost:9001) | 开发对象存储管理 |
+| 本地原始文件与报告 | `~/.flow/objects/` | 内容寻址文件目录；可由 `FLOW_DATA_DIR` 更换 |
 
-`seed_dashboard_demo.py` 默认复用已有演示批次；加 `--fresh-batch` 会创建一个新的演示批次。它直接编排领域服务，不代表原始文件已实际上传到 S3。使用自己的工作簿时，先通过 `/data` 完成数据接入。
+`seed_dashboard_demo.py` 默认复用已有演示批次；加 `--fresh-batch` 会创建一个新的演示批次。使用自己的工作簿时，先通过 `/data` 完成数据接入。
 
 <details>
-<summary><strong>全容器运行</strong></summary>
+<summary><strong>仅测试用途的历史 Compose 栈</strong></summary>
 
-在完成依赖、基础设施和数据库迁移后，可用 `make stack-up` 构建并启动 API、Worker、Web；`make stack-down` 停止 Compose 栈。不要与占用相同端口的本机应用同时启动。
+既有 PostgreSQL/Redis/MinIO Compose 环境仅供尚未迁移的兼容性测试与 CI 使用。普通使用不要运行 `make infra-up` 或 `make stack-up`；它们会启动多个基础服务和独立 Worker。
 
-当前 Compose 是开发基线。API 镜像的资源打包、真实存储与业务路径仍需要按目标部署验证，不能仅凭容器健康检查认定全部页面和发布路径已可用。迁移命令不由 `make stack-up` 自动执行。
+单机原型的启动入口是 `make flow`，数据位置为 `FLOW_DATA_DIR`，与 Compose 测试数据隔离。
 
 </details>
 
@@ -648,11 +656,8 @@ sequenceDiagram
 
 | 变量 | 设置位置 | 说明 |
 | --- | --- | --- |
-| `DATABASE_URL` | API / Worker / 迁移进程 | PostgreSQL 连接 |
-| `REDIS_URL` | API / Worker | Redis 连接 |
-| `S3_ENDPOINT_URL`、`S3_BUCKET` | API / Worker | 对象存储地址与桶 |
-| `S3_ACCESS_KEY`、`S3_SECRET_KEY` | API / Worker | 对象存储凭据 |
-| `S3_USE_SYSTEM_PROXY` | API / Worker | 默认 `false`：S3 客户端绕过系统/环境代理（防止本机代理未运行时请求挂起）；经代理访问外部对象存储时设 `true` |
+| `FLOW_DATA_DIR` | 本机 API / 初始化命令 | SQLite 与本地对象目录的共同数据根目录；默认 `~/.flow` |
+| `DATABASE_URL` | 测试与兼容性工具 | 可选数据库覆盖；普通单机使用无需设置，默认为 `FLOW_DATA_DIR/flow.sqlite3` |
 | `FLOW_API_INTERNAL_URL` | Web 服务端 | 内部 API 地址 |
 | `AUTH_TOKEN` | API + Web | 相同的服务端共享 token |
 | `FLOW_WEB_PASSWORD` | Web 服务端 | 单用户访问密码 |
@@ -664,10 +669,10 @@ sequenceDiagram
 
 ### 从旧版本升级
 
-当前数据库迁移头为 **`0018_metric_governance`**（指标知识与治理轮）：
+单机应用首次启动由 `make flow-init` 执行 SQLite 专用基线迁移；PostgreSQL 迁移历史保留供兼容性测试：
 
 ```bash
-(cd services/api && uv run alembic upgrade head)
+make flow-init
 ```
 
 迁移不会为历史报告伪造冻结内容。没有 `frozen_view` 的旧快照仍可下载已经生成的产物，但不能重新渲染；需要从当前符合审批条件的数据重新冻结。数据库触发器阻止已冻结 payload 被改写。
@@ -690,9 +695,9 @@ make contracts-check
 | 命令 | 覆盖范围 | 环境与注意事项 |
 | --- | --- | --- |
 | `make test-web` | Vitest 组件、代理与会话测试 | 不需数据库 |
-| `make test-api` | 全部 Python 测试 | 包含迁移和数据库清理，使用独立测试库及所需存储 |
+| `make test-api` | 全部 Python 测试 | 涉及迁移的集成测试使用隔离测试库；不可指向个人数据目录 |
 | `make test-data-contract` | 工作簿与数据库语义往返 | 会启动开发基础设施 |
-| `make test-intake-e2e` | 映射、质量、对账、发布与血缘 | 独立数据库 / S3 环境 |
+| `make test-intake-e2e` | 映射、质量、对账、发布与血缘 | 隔离 PostgreSQL 兼容性测试环境 |
 | `make test-metrics-known-answers` | 指标精确已知答案 | 独立数据库 |
 | `make test-analysis-invariants` | 分析政策与驱动不变量 | 独立数据库 |
 | `make test-dashboard` | 页面、筛选、身份交接 | PostgreSQL + Playwright Chromium |
@@ -721,7 +726,7 @@ CI 定义见 [FLOW CI](.github/workflows/ci.yml)。无数据库 unit job 与需�
 - ❄️ **冻结报告与发布** —— JSONB 冻结视图，导出仅读冻结内容
 - 🤖 **多 Agent 协作纪律**（[HANDOFF.md](HANDOFF.md)）—— 串行集成 + 逐 Gate 验证 + commit → 自动 push
 - 🧪 **六道门禁矩阵**（`make test-web` / `test-api` / `test-data-contract` / `test-intake-e2e` / `test-metrics-known-answers` / `test-analysis-invariants` / `test-dashboard` / `test-investigation-e2e` / `test-publishing-golden` / `test-user-closure-e2e`）
-- 📦 **工程栈**：Python 3.13 + FastAPI + Pydantic + SQLAlchemy + Next.js 16 + React 19 + TypeScript + PostgreSQL 18 + Redis 8 + S3 + Celery + pnpm + uv + Playwright + GitHub Actions
+- 📦 **日常单机运行**：Python 3.13 + FastAPI + SQLAlchemy + SQLite + 本地文件目录 + Next.js 16 + React 19 + TypeScript。PostgreSQL、Redis、S3/MinIO、Celery 只留在兼容性测试链，不属于普通启动路径；pnpm、uv、Playwright 与 GitHub Actions 用于开发和验收。
 
 ## 💖 致谢
 
@@ -800,13 +805,14 @@ FLOW/
 ```mermaid
 flowchart LR
     A["已交付基础<br/>公开财报 · 客观指标 · 证据报告"] --> B["D055 当前唯一队首<br/>单机单用户原型"]
-    B --> C["第 1、2 阶段已完成<br/>依赖审计 + SQLite/本地文件隔离验证"]
-    C --> D["第 3 阶段待启动<br/>接入本地实现 + 收敛运行结构 + 全视图 A+C 验收"]
-    D --> E["后续恢复<br/>静态知识刷新 K2"]
+    B --> C["阶段 1–7 本机验收完成<br/>SQLite · 离线快照 · 驾驶舱"]
+    C --> D["当前执行<br/>概念图视觉收敛 + 集成 CI 分片"]
+    D --> E["最终验收<br/>覆盖映射 + 准确 SHA CI + 文档审查"]
+    E --> F["后续恢复<br/>静态知识刷新 K3"]
     style B fill:#fff0cd,stroke:#aa7918,stroke-width:2px
 ```
 
-单机原型工作包处于唯一队首：第 1 阶段依赖审计和第 2 阶段 SQLite/本地内容存储隔离验证均已完成；第 3 阶段尚待启动，依赖路径盘点已交付，下一步接入同步任务与本地内容存储并收敛设置/启动入口，随后完成全视图视觉验收。概念稿不代表页面已实现；旧版浏览器截图仅展示对应采集时的真实状态。准确进展、CI 和各阶段验收以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 与 [HANDOFF](HANDOFF.md) 为准。公开财报 C 级验证和企业内部真实数据验证仍按各自数据与证据门槛推进；演示数据不得冒充真实披露。
+单机原型工作包处于唯一队首：SQLite + 本地文件目录、同步处理、单一启动入口和阶段 7冷启动/离线展示验收已完成。7a 正在按 A+C 概念板收敛全视图视觉，并复核项目文档；本轮新增 390px 费用页 KPI 两列布局及响应式回归用例。准确 SHA CI、状态与剩余步骤见 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)。GitHub 截图自动化仍暂停；页面实际演示数据仍标识为合成数据，不冒充真实披露。
 
 本仓库尚未提供独立的 LICENSE 文件；使用与分发授权请向项目维护者确认。贡献与协作遵循 [AGENTS.md](AGENTS.md)：先读项目状态和正式决策，保护原始档案，按风险验证，每个完整任务只提交相关文件并推送规范远端。
 
@@ -823,8 +829,8 @@ flowchart LR
 - [x] **U5–U7** — 客观报告门禁 + 统一冻结 + 四问工作台 ✅
 - [x] **U8** — 生产就绪收口（真实存储旅程 + HTTPS 拓扑 + 统一部署验收） ✅ completed；严格冻结门禁通过
 - [x] **S01** — 战略边界 + Financial Facts Contract V2 + 安全/RBAC/审计门禁 ✅
-- [🚧] **D055** — 单机单用户原型、SQLite + 本地文件存储、Redis/Celery/MinIO 移除评估与 A+C 驾驶舱/报告视觉升级（按唯一工作包逐段验收）
-- [ ] **K2** — 单机原型工作包完成后恢复静态知识刷新；启动前只读核验外部知识库工作区
+- [🚧] **D055 / 7a** — 单机单用户原型运行架构已完成验收；继续按 A+C 概念板收敛总览、主题页与数据工作台视觉，随后完成文档复核和最终集成（见唯一 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)）
+- [ ] **K3** — 7a 结案后恢复静态知识刷新与战略重基线；ObsidianWiki 保持只读，启动前核验外部知识库工作区
 - [ ] **U4** — 独立全行验证与留出泛化（依赖 oracle 人工录入）⬜ 外部到料即并行
 - [ ] **公开模块 C 级出口** — Go/No-Go 裁决（前置人工项不变）
 - [ ] **U9–U10** — 内部试点 + V1.1 证据决策（⬜ 待授权；按 [D053](docs/10_governance/decisions/D053--三层两模块边界与执行顺序.md) 重新裁决）

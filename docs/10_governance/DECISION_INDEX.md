@@ -5,12 +5,12 @@ doc_type: governance
 status: current
 version: 1.0
 created_at: 2026-09-12
-updated_at: 2026-09-13
+updated_at: 2026-10-19
 owner: FLOW
 applies_to: repository
 ---
 
-# 决策索引 D001–D055
+# 决策索引 D001–D056
 
 单项决策文件在 [decisions/](decisions/)。状态映射：有效→accepted、被取代→superseded、被修订→amended、未来/未决→proposed；原文状态保留在单项文件内。
 
@@ -66,10 +66,11 @@ applies_to: repository
 | D048 | 引擎指标目录库内化（P4 物流指标集迁移完成） | accepted | | [D048--引擎指标目录库内化P4物流指标集迁移完成.md](decisions/D048--引擎指标目录库内化P4物流指标集迁移完成.md)|
 | D049 | 客观基础优先与公开数据阶段交付 | amended | D053 | [D049--客观基础优先与公开数据阶段交付.md](decisions/D049--客观基础优先与公开数据阶段交付.md)|
 | D050 | 经营分析轨方法论采纳（外部 SOP 分析判断后的默认推荐） | amended | D053 | [D050--经营分析轨方法论采纳外部SOP分析判断后的默认推.md](decisions/D050--经营分析轨方法论采纳外部SOP分析判断后的默认推.md)|
-| D051 | Obsidian 常驻内部知识源与任务取用门禁 | accepted | | [D051--Obsidian常驻内部知识源与任务取用门禁.md](decisions/D051--Obsidian常驻内部知识源与任务取用门禁.md)|
+| D051 | Obsidian 常驻内部知识源与任务取用门禁 | amended | D056 | [D051--Obsidian常驻内部知识源与任务取用门禁.md](decisions/D051--Obsidian常驻内部知识源与任务取用门禁.md)|
 | D052 | 企业内部月度财务经营分析工作台成为核心产品 | accepted | D002/D010（取代）、D039（修订） | [D052--内部月度财务经营分析工作台成为核心产品.md](decisions/D052--内部月度财务经营分析工作台成为核心产品.md)|
 | D053 | 三层两模块边界与执行顺序 | accepted | D045/D046（取代）、D049/D050（修订） | [D053--三层两模块边界与执行顺序.md](decisions/D053--三层两模块边界与执行顺序.md)|
 | D054 | AI 报告生产链与证据、计算、学习原则 | accepted | | [D054--AI生产链与证据计算学习原则.md](decisions/D054--AI生产链与证据计算学习原则.md)|
 | D055 | 单机单用户验证原型 | accepted | 修订 D053 的当前实施边界 | [D055--单机单用户验证原型.md](decisions/D055--单机单用户验证原型.md)|
+| D056 | K2 即时工作区快照与内容稳定性门禁 | accepted | 修订 D051 的 K2 快照执行机制 | [D056--K2即时工作区快照与内容稳定性门禁.md](decisions/D056--K2即时工作区快照与内容稳定性门禁.md)|
 
 修订规则：已接受决策不抹改；修订以 amends/supersedes 新版本表达，编号不复用。历史原日志见 [DECISION_LOG.md（兼容页）](../knowledge-base/04_decisions/DECISION_LOG.md)。

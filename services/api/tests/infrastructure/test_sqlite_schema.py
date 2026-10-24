@@ -1,5 +1,6 @@
 from decimal import Decimal
 from pathlib import Path
+from uuid import uuid4
 
 import yaml
 from alembic import command
@@ -8,22 +9,34 @@ from sqlalchemy import Column, MetaData, Table, func, insert, select, text
 from sqlalchemy.orm import Session
 
 from flow_api.cockpit.modules import build_balance_sheet_module, load_fact_context
+from flow_api.enterprise.directory import sync_enterprise_directory
+from flow_api.enterprise.models import AnalysisCycle, Enterprise
+from flow_api.fixtures.damai.loader import (
+    _damai_analysis_cycle_id,
+    _upsert_enterprise,
+    seed_damai_demo,
+)
+from flow_api.fixtures.damai.reset import reset_damai_business_data
 from flow_api.infrastructure.db import build_engine
 from flow_api.infrastructure.local_backup import create_local_backup, restore_local_backup
 from flow_api.infrastructure.local_object_store import LocalObjectStore
 from flow_api.infrastructure.models import Base
-from flow_api.infrastructure.models.analytics import MetricSnapshot
+from flow_api.infrastructure.models.analytics import MetricSnapshot, ReviewEvent
 from flow_api.infrastructure.models.canonical import FactFinancialActual, Period
+from flow_api.infrastructure.models.cockpit import ActionItem
+from flow_api.infrastructure.models.enterprise_directory import EnterpriseMember
 from flow_api.infrastructure.models.intake import (
     AnalysisBatch,
     ImportVersion,
     StoredObject,
 )
 from flow_api.infrastructure.models.statement import StatementReport
+from flow_api.intake.service import IntakeService
 from flow_api.publishing.objective_freeze import (
     ObjectiveReportSnapshot,
     freeze_objective_statement_report,
 )
+from flow_api.security.models import AuditEvent
 from flow_api.statements.importer import import_statement_report
 from flow_api.statements.normalization import normalize_report
 from flow_api.statements.projection import SnapshotIdentity, build_topic_projection
@@ -61,7 +74,7 @@ def test_sqlite_alembic_initialization_and_repeat_upgrade(tmp_path) -> None:
         table_count = connection.exec_driver_sql(
             "SELECT count(*) FROM sqlite_master WHERE type = 'table'"
         ).scalar_one()
-    assert version == "sqlite0001"
+    assert version == "sqlite0004"
     assert table_count == len(Base.metadata.tables) + 1
 
 
@@ -72,6 +85,127 @@ def test_sqlite_engine_enforces_foreign_keys() -> None:
         assert connection.exec_driver_sql("PRAGMA foreign_keys").scalar_one() == 1
 
 
+def test_settings_default_to_local_sqlite_paths(tmp_path) -> None:
+    from flow_api.settings import Settings
+
+    settings = Settings(_env_file=None, flow_data_dir=tmp_path, database_url="")
+
+    assert settings.database_url == f"sqlite:///{tmp_path.resolve() / 'flow.sqlite3'}"
+    assert settings.object_directory == tmp_path.resolve() / "objects"
+    assert not hasattr(settings, "redis_url")
+    assert not hasattr(settings, "s3_bucket")
+
+
+def test_sqlite_intake_service_creates_bootstrap_enterprise_and_cycle() -> None:
+    engine = build_engine("sqlite://")
+    Base.metadata.create_all(engine)
+
+    with Session(engine) as session:
+        batch = IntakeService(session).create_batch("SQLite bootstrap")
+        cycle = session.get(AnalysisCycle, batch.analysis_cycle_id)
+
+        assert cycle is not None
+        assert cycle.period_key == "2026-09"
+        enterprise = session.get(Enterprise, cycle.enterprise_id)
+        assert enterprise is not None
+        assert enterprise.code == "flow-bootstrap"
+
+
+def test_sqlite_damai_enterprise_and_analysis_cycle_upserts_are_idempotent() -> None:
+    engine = build_engine("sqlite://")
+    Base.metadata.create_all(engine)
+
+    with Session(engine) as session:
+        first_enterprise = _upsert_enterprise(session)
+        first_cycle_id = _damai_analysis_cycle_id(session)
+        session.flush()
+
+        second_enterprise = _upsert_enterprise(session)
+        second_cycle_id = _damai_analysis_cycle_id(session)
+        cycle = session.get(AnalysisCycle, first_cycle_id)
+
+        assert first_enterprise == second_enterprise
+        assert first_cycle_id == second_cycle_id
+        assert cycle is not None
+        assert cycle.period_key == "2023-03"
+
+
+def test_sqlite_organization_package_sync_is_idempotent() -> None:
+    engine = build_engine("sqlite://")
+    Base.metadata.create_all(engine)
+    enterprise_id = uuid4()
+    package = (
+        Path(__file__).resolve().parents[4] / "data/enterprise/damai-logistics/v2/organization"
+    )
+
+    with Session(engine) as session:
+        session.add(
+            Enterprise(
+                id=enterprise_id,
+                code="damai-logistics",
+                name="大麦物流测试企业",
+            )
+        )
+        session.flush()
+        first = sync_enterprise_directory(session, enterprise_id, package)
+        second = sync_enterprise_directory(session, enterprise_id, package)
+        session.flush()
+
+        assert first == second == {"org_units": 8, "positions": 8, "members": 8}
+
+
+def test_sqlite_damai_business_reset_preserves_organization_and_archives_reviews() -> None:
+    engine = build_engine("sqlite://")
+    Base.metadata.create_all(engine)
+
+    with Session(engine, expire_on_commit=False) as session:
+        seed_damai_demo(session)
+        session.commit()
+        enterprise = session.scalar(
+            select(Enterprise).where(Enterprise.code == "damai-logistics")
+        )
+        assert enterprise is not None
+        member_count = session.scalar(
+            select(func.count())
+            .select_from(EnterpriseMember)
+            .where(EnterpriseMember.enterprise_id == enterprise.id)
+        )
+        review_count = session.scalar(select(func.count()).select_from(ReviewEvent))
+        assert member_count and member_count > 0
+        assert review_count and review_count > 0
+
+        receipt = reset_damai_business_data(session, enterprise.id)
+        assert receipt["batches_deleted"] == 1
+        assert receipt["review_events_archived"] == review_count
+        assert session.scalar(select(func.count()).select_from(ActionItem)) == 0
+        assert (
+            session.scalar(
+                select(func.count())
+                .select_from(AuditEvent)
+                .where(AuditEvent.event_type == "finding.review_history.archived")
+            )
+            == review_count
+        )
+        assert (
+            session.scalar(
+                select(func.count())
+                .select_from(EnterpriseMember)
+                .where(EnterpriseMember.enterprise_id == enterprise.id)
+            )
+            == member_count
+        )
+        session.commit()
+
+        seed_damai_demo(session)
+        session.commit()
+        assert session.scalar(
+            select(func.count())
+            .select_from(AnalysisBatch)
+            .where(AnalysisBatch.name == "damai-demo-v1")
+        ) == 1
+        assert session.scalar(select(func.count()).select_from(ActionItem)) > 0
+
+
 def test_sqlite_transaction_rollback_discards_uncommitted_rows() -> None:
     engine = build_engine("sqlite://")
     with engine.connect() as connection:
@@ -80,9 +214,7 @@ def test_sqlite_transaction_rollback_discards_uncommitted_rows() -> None:
         transaction = connection.begin()
         connection.execute(text("INSERT INTO rollback_probe VALUES ('temporary')"))
         transaction.rollback()
-        count = connection.execute(
-            text("SELECT count(*) FROM rollback_probe")
-        ).scalar_one()
+        count = connection.execute(text("SELECT count(*) FROM rollback_probe")).scalar_one()
 
     assert count == 0
 
@@ -133,9 +265,7 @@ def test_statement_import_normalize_and_freeze_work_on_sqlite(tmp_path) -> None:
         for period in ("FY2022", "FY2023"):
             fixture = fixture_root / f"damai_{period.lower()}.yaml"
             source_bytes = fixture.read_bytes()
-            stored_object = LocalObjectStore(object_root).put_immutable(
-                source_bytes, fixture.name
-            )
+            stored_object = LocalObjectStore(object_root).put_immutable(source_bytes, fixture.name)
             stored_objects[period] = stored_object
             session.add(stored_object)
             payload = yaml.safe_load(source_bytes)
@@ -153,6 +283,7 @@ def test_statement_import_normalize_and_freeze_work_on_sqlite(tmp_path) -> None:
             normalize_report(session, report)
             report.status = "published"
             reports[period] = report
+        freeze_objective_statement_report(session, report_id=reports["FY2022"].id)
         report = reports["FY2023"]
         stored_object = stored_objects["FY2023"]
         first = freeze_objective_statement_report(session, report_id=report.id)
@@ -213,9 +344,7 @@ def test_statement_import_normalize_and_freeze_work_on_sqlite(tmp_path) -> None:
         assert LocalObjectStore(restored_object_root).read_by_sha(restored_source.sha256) == (
             fixture_root.joinpath("damai_fy2023.yaml").read_bytes()
         )
-        cockpit = build_balance_sheet_module(
-            load_fact_context(restored_session, "DAMAI.SYN")
-        )
+        cockpit = build_balance_sheet_module(load_fact_context(restored_session, "DAMAI.SYN"))
         assert cockpit["module"] == "balance-sheet"
         assert cockpit["period"] == "FY2023"
         assert cockpit["kpis"][0]["value"] == "71850.9310"
@@ -254,6 +383,7 @@ def test_sqlite_financial_facts_feed_cockpit_aggregation() -> None:
             session.flush()
             normalize_report(session, report)
             report.status = "published"
+            freeze_objective_statement_report(session, report_id=report.id)
         session.commit()
 
         result = build_balance_sheet_module(load_fact_context(session, "DAMAI.SYN"))

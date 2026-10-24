@@ -14,7 +14,7 @@ from __future__ import annotations
 import json
 from collections.abc import Sequence
 from dataclasses import dataclass, field
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 from functools import lru_cache
 from typing import Any
 from uuid import UUID
@@ -171,15 +171,24 @@ def _snapshot_matches_rows(
 
     columns = ("value_end", "value_begin", "value_current", "value_prior")
 
+    def value_text(value: Any) -> str:
+        if value is None:
+            return ""
+        try:
+            number = Decimal(str(value))
+        except InvalidOperation:
+            return str(value)
+        if number.is_zero():
+            return "0"
+        text = format(number, "f")
+        return text.rstrip("0").rstrip(".") if "." in text else text
+
     def project(
         rows: Sequence[Any], *, include_item_id: bool
     ) -> dict[str, list[tuple[str, ...]]]:
         result: dict[str, list[tuple[str, ...]]] = {}
         for row in rows:
-            values = tuple(
-                str(value) if value is not None else ""
-                for value in (getattr(row, column, None) for column in columns)
-            )
+            values = tuple(value_text(getattr(row, column, None)) for column in columns)
             identity = ""
             if include_item_id:
                 item_id = getattr(row, "item_id", None)
@@ -219,10 +228,7 @@ def _snapshot_matches_rows(
                         json.dumps(entry["item_id"], ensure_ascii=False)
                         if include_item_id
                         else "",
-                        *(
-                            str(entry[column]) if entry.get(column) is not None else ""
-                            for column in columns
-                        ),
+                        *(value_text(entry.get(column)) for column in columns),
                     )
                 )
             result[statement_type] = sorted(projected)
@@ -348,7 +354,7 @@ def build_balance_sheet_module(ctx: ModuleFactContext) -> dict[str, Any]:
     charts: dict[str, Any] = {
         "asset_structure": {
             "title": "资产结构（流动/非流动）",
-            "type": "treemap",
+            "type": "bar",
             "unit": "百万元",
             "periods": [ctx.prior_period_label, ctx.period_label],
             "series": {

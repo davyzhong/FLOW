@@ -8,6 +8,8 @@ c804e9ceb80ea507c6df81635098bd130bc4e380c1b615a6e44e18d327d823c0  ./00_governanc
 a15b7eb1ce48fd793a628ad6fa0a80d5f96dc047e9ababa3963ae94cead2e2f4  ./00_governance/migration/scan-entries.tsv
 5d41ba2abc2edb342e4e3bd32451feaf6fba96992ac118dd25f4a170fc818ff8  ./00_governance/migration/source-baseline.sha256
 dfe350785e1f1d845d5104ab30a82db2a4477db76ab770838d34a939e11c5482  ./00_governance/migration/source-baseline.tsv
+c041c6922c78f143db788c98fc602e10f3ab6e33fa5eafd518d77bfec08d1b48  ./00_governance/migration/source-id-registry-2026-10-19.tsv
+784d2c1580d996e04e3c4c6957ba9aa50d888a2f657bf61b312e98344480745b  ./00_governance/migration/source-inputs-2026-10-19.yaml
 030d3dfde7f02ce7a611f1ac4ea9b1bcf7bc4480ab799543f852434cb664901d  ./00_governance/migration/source-inputs.yaml
 0a13823803f106a4368f3f97a3f40d85bae2b26da7679fd4735003a64faf7a1f  ./00_governance/migration/storage-inventory.tsv
 c5b63620ec6a7d66c13d64f17eca4a54b85e2a2161336619f6daa5ca9c87d295  ./00_governance/releases/CURRENT_RELEASE
@@ -2133,10 +2135,12 @@ b33fa5803e59db30ca9cd936772e2843dadbf946dfc4fee6289738ebc565a08f  ./09_competiti
 ce0f3ba366328342710562a2f980ac2b0265cd9f98a0cd3f82e6a34fa87fd3d8  ./09_competitive/screenshots/c18-redash-home.png
 92eeae88a30403edf870d8b86b3a918ac5f6f52d9f899a96aec853806e549eeb  ./09_competitive/screenshots/c19-dataease-home.png
 60667d4e6ba888d5ba5396a8d9353c22adc8322c6f22475ab80f75fe5b659954  ./09_competitive/screenshots/c20-jimu-report-github.png
-e85df86ba316bd64b1e21e2aff86b4a2514612b131b20519248dcb1e36d4258d  ./10_sources/README.md
+7c6233ec58353c142127c9e2abe203d887999bac4319486acc07ddbfbe906b49  ./10_sources/README.md
 ecd3cb7c4fb22de8313fe9cc5e3fe5a567f455a8cc56fe8f236569e2bbaabb60  ./10_sources/SOURCE_REGISTER.md
 a18e8156910880f1b8d211802038bbaceb94aee6c211c2dfc33f35cb699ee705  ./10_sources/snapshots/obsidian-2026-09-12T15-46+08-00.yaml
 6accd8ff3644f8f06eac12c585905d74e11e93aa61c4da33dc74db6cae416274  ./10_sources/snapshots/obsidian-2026-09-12T16-17+08-00.yaml
+901bee24f27c26e12e94518a99665d279dfdec1e333bc4c7a950651386a5af3b  ./10_sources/source-baseline-2026-10-19.tsv
+ac987729a96d3cad33c6d773ca0021e379247574a156bd0c0d54306c595284e1  ./10_sources/source-diff-2026-10-19.tsv
 8d2ca3f8169dcd201f8c90d1b380d88101595073d46097bb894e9571c3437c45  ./10_sources/source-register.tsv
 6e821d89874ccc9f619d928ea9604725771ab97d7e5cf51ddf1e50a50ae1c2d8  ./20_knowledge_cards/TAXONOMY--v1.0.yaml
 fe14c5fec8b12d800215cc07e795856f5a8557de8e5d97c9967b7113ec6681d6  ./20_knowledge_cards/authoring-batches.tsv

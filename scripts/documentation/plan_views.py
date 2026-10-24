@@ -18,9 +18,10 @@ sys.path.insert(0, str(ROOT))
 from scripts.documentation.metadata import parse_frontmatter  # noqa: E402
 
 WORK_ITEM_LINK = re.compile(r"\]\(work_items/([^\)]+\.md)\)")
-STATUS_TOKEN = re.compile(r"\*\*(proposed|active|blocked|completed|cancelled|archived)")
+STATUS_TOKEN = re.compile(r"\*\*(proposed|queued|active|blocked|completed|cancelled|archived)")
 VIEW_META = {
     "active": ("FLOW-VIEW-ACTIVE-001", "活动视图", "活动工作包"),
+    "queued": ("FLOW-VIEW-QUEUED-001", "排队视图", "排队工作包"),
     "blocked": ("FLOW-VIEW-BLOCKED-001", "阻塞视图", "阻塞工作包"),
     "completed": ("FLOW-VIEW-COMPLETED-001", "已完成视图", "已完成工作包"),
 }
@@ -53,19 +54,33 @@ def load_work_items(root: Path) -> Dict[str, WorkItem]:
 
 def load_roadmap_states(root: Path) -> Dict[str, List[str]]:
     states: Dict[str, List[str]] = {}
+    table_files: set[str] = set()
     roadmap = root / "docs/50_plans/CURRENT_ROADMAP.md"
     for line in roadmap.read_text(encoding="utf-8").splitlines():
+        is_table_row = line.lstrip().startswith("|")
+        is_queue_item = re.match(r"^\s*\d+[a-zA-Z']?\.\s+", line) is not None
+        # The status table is authoritative when present. Numbered execution
+        # items provide the state for work packages that only appear in the queue.
+        if not (is_table_row or is_queue_item):
+            continue
         link = WORK_ITEM_LINK.search(line)
         if not link:
             continue
         token = STATUS_TOKEN.search(line)
-        states.setdefault(link.group(1), []).append(token.group(1) if token else "")
+        filename = link.group(1)
+        if is_table_row:
+            table_files.add(filename)
+            states.setdefault(filename, []).append(token.group(1) if token else "")
+        elif filename not in table_files:
+            states.setdefault(filename, []).append(token.group(1) if token else "")
     return states
 
 
 def _view_for(status: str) -> str | None:
     if status in {"active", "proposed"}:
         return "active"
+    if status == "queued":
+        return "queued"
     if status == "blocked":
         return "blocked"
     if status in {"completed", "cancelled", "archived"}:

@@ -44,4 +44,68 @@ test.describe("navigation integrity", () => {
       ).toHaveCount(1);
     }
   });
+
+  test("mobile navigation opens, closes with Escape, and closes after route selection", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/cockpit");
+    const toggle = page.getByRole("button", { name: "打开导航菜单" });
+    const nav = page.locator('nav[aria-label="FLOW 工作流"]');
+    const links = nav.locator(".workflow-rail__links");
+
+    await expect(toggle).toBeVisible();
+    await expect(links).toBeHidden();
+    await toggle.click();
+    await expect(page.getByRole("button", { name: "关闭导航菜单" })).toHaveAttribute("aria-expanded", "true");
+    await expect(nav.getByRole("link", { name: /盈利能力与杜邦分析/ })).toBeVisible();
+
+    await page.keyboard.press("Escape");
+    await expect(links).toBeHidden();
+    await page.getByRole("button", { name: "打开导航菜单" }).click();
+    await nav.getByRole("link", { name: /盈利能力与杜邦分析/ }).click();
+    await expect(page).toHaveURL(/\/cockpit\/profitability$/);
+    await expect(links).toBeHidden();
+  });
+
+  test("five KPI cards stay readable on a narrow viewport", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.route("**/api/v1/cockpit/modules/expenses", (route) => route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        module: "expenses",
+        title: "费用分析",
+        period: "FY2023",
+        prior_period: "FY2022",
+        snapshot_id: "visual-regression",
+        report_ids: [],
+        source_notice: "布局回归样例",
+        unit: "百万元",
+        kpis: ["销售费用", "管理费用", "研发费用", "财务费用", "期间费用"].map((name) => ({
+          name,
+          status: "available",
+          value: "1234.56",
+          prior_value: "1200.00",
+          unit: "百万元",
+          caliber_note: null,
+        })),
+        charts: {},
+        unavailable: [],
+      }),
+    }));
+    await page.goto("/cockpit/expenses");
+
+    await expect(page.locator('.module-page[data-status="ready"]')).toBeVisible();
+    const grid = page.locator(".module-kpi-grid[data-count='5']");
+    await expect(grid).toBeVisible();
+    const layout = await grid.evaluate((element) => ({
+      columns: getComputedStyle(element).gridTemplateColumns.split(" ").length,
+      cardWidth: element.querySelector(".module-kpi-card")?.getBoundingClientRect().width ?? 0,
+      viewportWidth: document.documentElement.clientWidth,
+      pageWidth: document.documentElement.scrollWidth,
+    }));
+
+    expect(layout.columns).toBe(2);
+    expect(layout.cardWidth).toBeGreaterThan(140);
+    expect(layout.pageWidth).toBe(layout.viewportWidth);
+  });
 });

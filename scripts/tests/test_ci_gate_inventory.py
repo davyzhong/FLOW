@@ -7,13 +7,17 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[2]
 CI_WORKFLOW = REPO_ROOT / ".github" / "workflows" / "ci.yml"
 PUBLISHING_GATE = REPO_ROOT / "scripts" / "test_publishing_golden.sh"
+CI_DEDUP_GUARD = 'if [[ "${GITHUB_ACTIONS:-false}" != "true" ]]; then'
 
-EXPECTED_GATES = {
+EXPECTED_JOBS = {
     "static-python",
     "static-web",
     "unit",
     "integration",
+    "integration-shards",
+    "perf-gate",
     "data-contract",
+    "data-contract-shards",
     "intake-e2e",
     "metrics-known-answers",
     "analysis-invariants",
@@ -31,12 +35,23 @@ EXPECTED_GATES = {
 
 
 class CiGateInventoryTests(unittest.TestCase):
-    def test_ci_contains_all_seventeen_acceptance_gates(self) -> None:
+    def test_same_branch_runs_share_a_cancel_in_progress_group(self) -> None:
+        workflow = CI_WORKFLOW.read_text(encoding="utf-8")
+
+        self.assertRegex(workflow, r"(?m)^concurrency:\s*$")
+        self.assertIn(
+            "github.event.pull_request.head.repo.full_name || github.repository",
+            workflow,
+        )
+        self.assertIn("github.head_ref || github.ref_name", workflow)
+        self.assertRegex(workflow, r"(?m)^  cancel-in-progress: true$")
+
+    def test_ci_contains_all_acceptance_and_support_jobs(self) -> None:
         workflow = CI_WORKFLOW.read_text(encoding="utf-8")
         jobs = workflow.split("\njobs:\n", maxsplit=1)[1]
         actual = set(re.findall(r"^  ([a-z0-9-]+):\s*$", jobs, re.MULTILINE))
 
-        self.assertEqual(actual, EXPECTED_GATES)
+        self.assertEqual(actual, EXPECTED_JOBS)
 
     def test_every_ci_gate_has_an_explicit_timeout(self) -> None:
         workflow = CI_WORKFLOW.read_text(encoding="utf-8")
@@ -46,7 +61,12 @@ class CiGateInventoryTests(unittest.TestCase):
         missing = []
         for index, match in enumerate(matches):
             end = matches[index + 1].start() if index + 1 < len(matches) else len(jobs)
-            if not re.search(r"^    timeout-minutes: [1-9][0-9]*$", jobs[match.end():end], re.MULTILINE):
+            has_timeout = re.search(
+                r"^    timeout-minutes: [1-9][0-9]*$",
+                jobs[match.end():end],
+                re.MULTILINE,
+            )
+            if not has_timeout:
                 missing.append(match.group(1))
 
         self.assertEqual(missing, [])
@@ -61,6 +81,35 @@ class CiGateInventoryTests(unittest.TestCase):
             workflow,
         )
 
+    def test_specialized_scripts_keep_local_full_mode_and_skip_cross_gate_duplicates(self) -> None:
+        local_full_runs = {
+            "test_data_contract.sh": [
+                "tests/integration/test_data_contract_persistence.py",
+                "tests/integration/test_excel_database_round_trip.py",
+            ],
+            "test_intake_e2e.sh": [
+                "uv run pytest tests/data_contract tests/fixtures -q",
+                "uv run ruff check src tests migrations",
+                "bash scripts/check_contracts.sh",
+            ],
+            "test_metrics_known_answers.sh": [
+                "uv run pytest tests/integration/test_metric_*.py -q",
+                "uv run pytest tests/integration/test_intake_e2e.py -q",
+            ],
+            "test_analysis_invariants.sh": [
+                "uv run pytest tests/integration/test_analysis_*.py -q",
+                "uv run pytest tests/integration/test_metric_*.py -q",
+                "uv run pytest tests/integration/test_intake_e2e.py -q",
+            ],
+        }
+
+        for filename, expected_runs in local_full_runs.items():
+            with self.subTest(script=filename):
+                script = (REPO_ROOT / "scripts" / filename).read_text(encoding="utf-8")
+                self.assertIn(CI_DEDUP_GUARD, script)
+                for command in expected_runs:
+                    self.assertIn(command, script)
+
     def test_publishing_gate_uses_the_workspace_playwright_version(self) -> None:
         script = PUBLISHING_GATE.read_text(encoding="utf-8")
 
@@ -71,6 +120,25 @@ class CiGateInventoryTests(unittest.TestCase):
             script,
         )
         self.assertNotIn("npx --yes playwright pdf", script)
+
+    def test_integration_shards_cover_original_pytest_collection_exactly(self) -> None:
+        from scripts.integration_test_shards import (
+            SHARD_NAMES,
+            all_test_files,
+            files_for_shard,
+            validate,
+        )
+
+        self.assertEqual(validate(), [])
+        assigned = [path for shard in SHARD_NAMES for path in files_for_shard(shard)]
+        self.assertEqual(len(assigned), len(set(assigned)))
+        self.assertEqual(set(assigned), all_test_files())
+        workflow = CI_WORKFLOW.read_text(encoding="utf-8")
+        self.assertIn(
+            "matrix:\n        shard: [analysis-dashboard, intake-metrics, core, api]",
+            workflow,
+        )
+        self.assertIn("needs: [integration-shards, perf-gate]", workflow)
 
 
 if __name__ == "__main__":

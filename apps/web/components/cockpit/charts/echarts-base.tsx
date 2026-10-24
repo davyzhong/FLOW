@@ -54,19 +54,19 @@ echarts.use([
 
 /** 语义色：与 cockpit.css 的 CSS 变量保持一致（正/负/警示/未就绪） */
 export const CHART_THEME = {
-  blue: "#2563eb",
-  blueSoft: "#93c5fd",
+  blue: "#173f64",
+  blueSoft: "#6f8ba0",
   green: "#16a34a",
   red: "#dc2626",
   warn: "#d97706",
-  gold: "#b45309",
-  gray: "#b0b0b0",
-  ink: "#0f172a",
-  mut: "#64748b",
-  line: "#e2e8f0",
-  teal: "#0d9488",
-  purple: "#7c3aed",
-  ltblue: "#60a5fa",
+  gold: "#a17a33",
+  gray: "#9a9b96",
+  ink: "#172c40",
+  mut: "#687584",
+  line: "#e7e1d5",
+  teal: "#5b9b85",
+  purple: "#84759a",
+  ltblue: "#9aadb8",
 } as const;
 
 /** 通用轴配置（保持所有图表的坐标轴行为一致） */
@@ -94,7 +94,18 @@ export function legend(names: string[]) {
  * @param option 图表配置；传 undefined 时不渲染
  * @param deps   依赖变化时 setOption（避免每次渲染都重建）
  */
-export function useEChart(option: EChartsOption | undefined, deps: unknown[] = []) {
+export interface ChartDataPointClick {
+  seriesName?: string;
+  name?: string;
+  value?: unknown;
+  dataIndex?: number;
+}
+
+export function useEChart(
+  option: EChartsOption | undefined,
+  deps: unknown[] = [],
+  onDataPointClick?: (point: ChartDataPointClick) => void,
+) {
   const ref = useRef<HTMLDivElement | null>(null);
   const chartRef = useRef<echarts.ECharts | null>(null);
 
@@ -119,6 +130,14 @@ export function useEChart(option: EChartsOption | undefined, deps: unknown[] = [
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps);
 
+  useEffect(() => {
+    const chart = chartRef.current;
+    if (!chart || !onDataPointClick) return;
+    const handleClick = (event: ChartDataPointClick) => onDataPointClick(event);
+    chart.on("click", handleClick);
+    return () => { chart.off("click", handleClick); };
+  }, [onDataPointClick]);
+
   return ref;
 }
 
@@ -131,6 +150,7 @@ export function ChartBox({
   ariaLabel,
   height = 280,
   testId,
+  onDataPointClick,
 }: {
   title: string;
   sub?: string;
@@ -139,8 +159,9 @@ export function ChartBox({
   ariaLabel?: string;
   height?: number;
   testId?: string;
+  onDataPointClick?: (point: ChartDataPointClick) => void;
 }) {
-  const ref = useEChart(option, deps ?? [option]);
+  const ref = useEChart(option, deps ?? [option], onDataPointClick);
   const empty = !option;
   return (
     <article className="card chart-card" data-testid={testId}>

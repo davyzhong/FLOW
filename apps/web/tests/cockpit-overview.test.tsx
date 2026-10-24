@@ -8,6 +8,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 
 import { CockpitOverviewApp } from "../components/cockpit/cockpit-overview-app";
 import type { CockpitOverviewResponse } from "../components/cockpit/cockpit-types";
+import type { DashboardResponse } from "../lib/api/client";
 
 function value(
   exact: string | null,
@@ -26,6 +27,8 @@ function value(
     unavailable_message: exact === null ? "未发布" : undefined,
   };
 }
+
+const loadSupplement = vi.fn().mockResolvedValue({ profitability: null, cashflow: null, expenses: null });
 
 function overview(
   overrides: Partial<CockpitOverviewResponse> = {},
@@ -58,6 +61,7 @@ function overview(
       analysis_run_status: "published",
       freshness_status: "fresh",
     },
+    filter_options: { dimensions: [], supported_combinations: [] },
     kpi_cards: [
       {
         metric_code: "revenue",
@@ -88,8 +92,8 @@ function overview(
             title: "营业收入",
             unit: "万元",
             points: [
-              { period: "2026-05", value: 90000, display_value: "90,000", status: "ready" },
-              { period: "2026-06", value: 100000, display_value: "100,000", status: "ready" },
+              { period: "2026-05", snapshot_id: "snapshot-may", value: 90000, display_value: "90,000", status: "ready" },
+              { period: "2026-06", snapshot_id: "snapshot-june", value: 100000, display_value: "100,000", status: "ready" },
             ],
           },
         ],
@@ -111,23 +115,55 @@ function overview(
 describe("CockpitOverviewApp", () => {
   it("渲染驾驶舱结构：KPI 卡 + 趋势 + 结论条", async () => {
     const load = vi.fn().mockResolvedValue(overview());
-    render(<CockpitOverviewApp load={load} />);
+    render(<CockpitOverviewApp load={load} loadSupplement={loadSupplement} />);
     await screen.findByTestId("cockpit-kpi");
     expect(screen.getByText("集团财务总览")).toBeTruthy();
-    expect(screen.getByTestId("cockpit-trend")).toBeTruthy();
+    expect(screen.getByTestId("cockpit-overview-revenue-profit-chart")).toBeTruthy();
+    expect(screen.getByTestId("cockpit-kpi-sparkline")).toBeTruthy();
     expect(screen.getByTestId("cockpit-conclusion")).toBeTruthy();
   });
 
   it("展示演示数据源提示（不解除 C 级门禁）", async () => {
     const load = vi.fn().mockResolvedValue(overview());
-    render(<CockpitOverviewApp load={load} />);
+    render(<CockpitOverviewApp load={load} loadSupplement={loadSupplement} />);
     const notice = await screen.findByTestId("cockpit-source-notice");
     expect(notice.textContent).toContain("演示数据");
+    expect(screen.getByRole("complementary", { name: "数据来源与口径说明" }).textContent)
+      .toContain("当前数据源为演示数据（大麦物流合成财报）。");
+  });
+
+  it("先呈现报告标题，再呈现筛选；不让筛选和提示压住首屏内容", async () => {
+    const load = vi.fn().mockResolvedValue(overview());
+    render(<CockpitOverviewApp load={load} loadSupplement={loadSupplement} />);
+    const heading = await screen.findByRole("heading", { name: "集团财务总览" });
+    const filters = screen.getByTestId("cockpit-filters");
+    expect(heading.compareDocumentPosition(filters) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
+  it("明确提示已过期的数据快照", async () => {
+    const stale = overview({ state: "stale" });
+    const load = vi.fn().mockResolvedValue(stale);
+    render(<CockpitOverviewApp load={load} loadSupplement={loadSupplement} />);
+    expect(await screen.findByTestId("cockpit-stale-notice")).toHaveTextContent(
+      "数据快照已过期",
+    );
+    expect(screen.getByTestId("cockpit-stale-notice").textContent).toContain("2026-06");
+  });
+
+  it("大额人民币 KPI 使用亿元展示并保留两位小数", async () => {
+    const data = overview();
+    const card = data.kpi_cards?.[0];
+    if (!card) throw new Error("测试总览缺少 KPI 卡片");
+    card.unit = "CNY";
+    card.primary = value("17623488861", "17,623,488,861");
+    const load = vi.fn().mockResolvedValue(data);
+    render(<CockpitOverviewApp load={load} loadSupplement={loadSupplement} />);
+    expect(await screen.findByText("176.23 亿元")).toBeTruthy();
   });
 
   it("KPI 卡展示三基准与口径注", async () => {
     const load = vi.fn().mockResolvedValue(overview());
-    render(<CockpitOverviewApp load={load} />);
+    render(<CockpitOverviewApp load={load} loadSupplement={loadSupplement} />);
     await screen.findByTestId("cockpit-kpi");
     expect(screen.getByText("同比")).toBeTruthy();
     expect(screen.getByText("环比")).toBeTruthy();
@@ -137,7 +173,7 @@ describe("CockpitOverviewApp", () => {
 
   it("unavailable 基准显示为「—」而不是 0", async () => {
     const load = vi.fn().mockResolvedValue(overview());
-    render(<CockpitOverviewApp load={load} />);
+    render(<CockpitOverviewApp load={load} loadSupplement={loadSupplement} />);
     await screen.findByTestId("cockpit-kpi");
     const card = screen.getByTestId("cockpit-kpi");
     expect(card.textContent).not.toContain("0.0%");
@@ -146,7 +182,7 @@ describe("CockpitOverviewApp", () => {
 
   it("点击 KPI 卡打开穿透抽屉并显示快照 ID", async () => {
     const load = vi.fn().mockResolvedValue(overview());
-    render(<CockpitOverviewApp load={load} />);
+    render(<CockpitOverviewApp load={load} loadSupplement={loadSupplement} />);
     await screen.findByTestId("cockpit-kpi");
     fireEvent.click(screen.getByRole("button", { name: /营业收入/ }));
     const drawer = await screen.findByTestId("cockpit-drill");
@@ -156,7 +192,7 @@ describe("CockpitOverviewApp", () => {
 
   it("Esc 关闭穿透抽屉", async () => {
     const load = vi.fn().mockResolvedValue(overview());
-    render(<CockpitOverviewApp load={load} />);
+    render(<CockpitOverviewApp load={load} loadSupplement={loadSupplement} />);
     await screen.findByTestId("cockpit-kpi");
     fireEvent.click(screen.getByRole("button", { name: /营业收入/ }));
     await screen.findByTestId("cockpit-drill");
@@ -171,21 +207,21 @@ describe("CockpitOverviewApp", () => {
       kpi_cards: first ? [{ ...first, snapshot_id: "" }] : [],
     });
     const load = vi.fn().mockResolvedValue(bad);
-    render(<CockpitOverviewApp load={load} />);
+    render(<CockpitOverviewApp load={load} loadSupplement={loadSupplement} />);
     const el = await screen.findByTestId("cockpit-kpi-untraceable");
     expect(el.textContent).toContain("不可追溯");
   });
 
   it("empty 态提示不补零", async () => {
     const load = vi.fn().mockResolvedValue(overview({ kpi_cards: [], state: "empty" }));
-    render(<CockpitOverviewApp load={load} />);
+    render(<CockpitOverviewApp load={load} loadSupplement={loadSupplement} />);
     const el = await screen.findByTestId("cockpit-empty");
     expect(el.textContent).toContain("不补零");
   });
 
   it("error 态提供重试", async () => {
     const load = vi.fn().mockRejectedValue(new Error("boom"));
-    render(<CockpitOverviewApp load={load} />);
+    render(<CockpitOverviewApp load={load} loadSupplement={loadSupplement} />);
     const alert = await screen.findByRole("alert");
     expect(alert.textContent).toContain("加载失败");
     expect(screen.getByRole("button", { name: "重试" })).toBeTruthy();
@@ -209,18 +245,47 @@ describe("CockpitOverviewApp", () => {
       },
     ];
     const load = vi.fn().mockResolvedValue(data);
-    render(<CockpitOverviewApp load={load} />);
-    const el = await screen.findByTestId("cockpit-trend-unavailable");
-    expect(el.textContent).toContain("不补零");
+    render(<CockpitOverviewApp load={load} loadSupplement={loadSupplement} />);
+    const el = await screen.findByText(/当前筛选期间没有收入与营业利润趋势事实/);
+    expect(el.textContent).toContain("趋势事实");
   });
 
   it("筛选变更会写回 URL（可分享/可回链）", async () => {
     const load = vi.fn().mockResolvedValue(overview());
-    render(<CockpitOverviewApp load={load} />);
+    render(<CockpitOverviewApp load={load} loadSupplement={loadSupplement} />);
     await screen.findByTestId("cockpit-kpi");
     const period = screen.getByLabelText("期间") as HTMLSelectElement;
     fireEvent.change(period, { target: { value: "month" } });
     await waitFor(() => expect(load).toHaveBeenCalledTimes(2));
     expect(window.location.search).toContain("period_view=month");
+  });
+
+  it("浏览器后退会恢复 URL 中的筛选并重新加载", async () => {
+    const load = vi.fn().mockResolvedValue(overview());
+    render(<CockpitOverviewApp load={load} initialFilters={{ period_view: "month" }} />);
+    await screen.findByTestId("cockpit-kpi");
+    window.history.replaceState(null, "", "/cockpit?period_view=ytd");
+    window.dispatchEvent(new PopStateEvent("popstate"));
+    await waitFor(() => expect(load).toHaveBeenCalledTimes(2));
+    expect(load.mock.calls[1]?.[0]).toEqual({ period_view: "ytd" });
+    expect((screen.getByLabelText("期间") as HTMLSelectElement).value).toBe("ytd");
+  });
+
+  it("筛选器显示服务端维度名称并仍以 ID 传参", async () => {
+    const load = vi.fn().mockResolvedValue(overview());
+    const loadFilterOptions = vi.fn().mockResolvedValue({
+      filter_options: { dimensions: [
+        { dimension: "organization", label: "组织", options: [{ id: "org-1", code: "NORTH", name: "国内仓配" }] },
+        { dimension: "customer_segment", label: "客户群", options: [{ id: "customer-1", code: "VIP", name: "重点客户" }] },
+        { dimension: "logistics_product", label: "产品", options: [{ id: "product-1", code: "COLD", name: "冷链配送" }] },
+        { dimension: "region", label: "区域", options: [{ id: "region-1", code: "EAST", name: "华东" }] },
+      ] },
+    } as unknown as DashboardResponse);
+    render(<CockpitOverviewApp load={load} loadFilterOptions={loadFilterOptions} />);
+    const organization = await screen.findByLabelText("组织口径筛选") as HTMLSelectElement;
+    expect([...organization.options].map((option) => option.textContent)).toContain("国内仓配");
+    fireEvent.change(organization, { target: { value: "org-1" } });
+    await waitFor(() => expect(load).toHaveBeenLastCalledWith({ organization_id: "org-1" }, expect.any(AbortSignal)));
+    expect(window.location.search).toContain("organization_id=org-1");
   });
 });

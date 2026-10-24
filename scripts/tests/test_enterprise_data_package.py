@@ -2,9 +2,11 @@ from __future__ import annotations
 
 import hashlib
 import json
+import shutil
 import sys
 import tempfile
 import unittest
+from decimal import Decimal
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -136,6 +138,47 @@ class EnterpriseDataPackageTests(unittest.TestCase):
         package_builder.PACKAGE = ROOT / "data/enterprise/damai-logistics/v2"
         manifest = package_builder.verify()
         self.assertEqual(manifest["contract_version"], "flow.enterprise-package.v1")
+        source_manifest_sha256 = hashlib.sha256(
+            (package_builder.SOURCE / "manifest.json").read_bytes()
+        ).hexdigest()
+        self.assertEqual(manifest["source_manifest_sha256"], source_manifest_sha256)
+        source = package_builder.SOURCE / "canonical/operating_actuals.jsonl"
+        packaged = package_builder.PACKAGE / "business/canonical/operating_actuals.jsonl"
+        self.assertEqual(packaged.read_bytes(), source.read_bytes())
+        rows = [
+            json.loads(line, parse_float=Decimal)
+            for line in packaged.read_text(encoding="utf-8").splitlines()
+            if line.strip()
+        ]
+        self.assertEqual(len(rows), 1920)
+        for field in ("order_count", "shipment_count"):
+            fractional = [
+                row[field]
+                for row in rows
+                if row.get(field) is not None
+                and Decimal(str(row[field])) != Decimal(str(row[field])).to_integral_value()
+            ]
+            self.assertEqual(fractional, [], f"{field} 必须是整数语义")
+
+    def test_rejects_business_payload_that_diverges_from_source(self) -> None:
+        source_package = ROOT / "data/enterprise/damai-logistics/v2"
+        copied_package = self.root / "copied-package"
+        shutil.copytree(source_package, copied_package)
+        package_builder.PACKAGE = copied_package
+        relative = "business/canonical/operating_actuals.jsonl"
+        payload_path = copied_package / relative
+        payload = payload_path.read_bytes().replace(b"\n", b"  \n", 1)
+        payload_path.write_bytes(payload)
+        manifest_path = copied_package / "manifest.json"
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        manifest["files"][relative] = {
+            "sha256": hashlib.sha256(payload).hexdigest(),
+            "bytes": len(payload),
+            "rows": len(payload.splitlines()),
+        }
+        manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+        with self.assertRaisesRegex(SystemExit, "与业务源不一致"):
+            package_builder.verify()
 
     def test_rejects_unmanifested_file(self) -> None:
         (self.package / "untracked.txt").write_text("not covered\n", encoding="utf-8")

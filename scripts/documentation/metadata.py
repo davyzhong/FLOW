@@ -29,7 +29,7 @@ DOC_TYPES: Dict[str, dict] = {
     "governance": {"statuses": {"draft", "current", "superseded", "archived"}, "required": []},
     "plan": {"statuses": {"proposed", "active", "blocked", "completed", "cancelled", "archived"},
              "required": ["depends_on", "acceptance_refs"]},
-    "work-item": {"statuses": {"proposed", "active", "blocked", "completed", "cancelled", "archived"},
+    "work-item": {"statuses": {"proposed", "queued", "active", "blocked", "completed", "cancelled", "archived"},
                   "required": ["depends_on", "acceptance_refs"]},
     "decision": {"statuses": {"proposed", "accepted", "amended", "superseded", "retired", "rejected"},
                  "required": ["decided_at", "authority"]},

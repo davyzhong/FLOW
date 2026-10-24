@@ -7,11 +7,11 @@ import tempfile
 from pathlib import Path
 
 from flow_api.infrastructure.models.intake import StoredObject
-from flow_api.infrastructure.object_store import (
+from flow_api.infrastructure.storage_contract import (
     SHA256_PATTERN,
     ImmutableObjectConflictError,
     ImmutableObjectNotFoundError,
-    ObjectStore,
+    object_key_for_sha,
 )
 
 
@@ -23,7 +23,7 @@ class LocalObjectStore:
 
     @staticmethod
     def object_key_for_sha(sha256: str) -> str:
-        return ObjectStore.object_key_for_sha(sha256)
+        return object_key_for_sha(sha256)
 
     def _path_for_key(self, object_key: str) -> Path:
         relative = Path(object_key)
@@ -108,9 +108,7 @@ class LocalObjectStore:
         return content
 
     @staticmethod
-    def _validate_existing(
-        path: Path, content: bytes, sha256: str, object_key: str
-    ) -> None:
+    def _validate_existing(path: Path, content: bytes, sha256: str, object_key: str) -> None:
         existing = path.read_bytes()
         if existing != content or hashlib.sha256(existing).hexdigest() != sha256:
             raise ImmutableObjectConflictError(

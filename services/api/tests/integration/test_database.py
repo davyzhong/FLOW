@@ -1,7 +1,6 @@
 from uuid import uuid4
 
 import pytest
-from pydantic import SecretStr
 from sqlalchemy import text
 
 from flow_api.infrastructure.db import transaction
@@ -11,10 +10,11 @@ from flow_api.settings import get_settings
 def test_required_settings_are_typed() -> None:
     settings = get_settings()
 
-    assert settings.database_url.startswith("postgresql+psycopg://")
-    assert settings.redis_url.startswith("redis://")
-    assert isinstance(settings.s3_access_key, SecretStr)
-    assert isinstance(settings.s3_secret_key, SecretStr)
+    assert settings.database_url
+    assert settings.flow_data_dir.is_absolute()
+    assert settings.object_directory == settings.flow_data_dir / "objects"
+    assert not hasattr(settings, "redis_url")
+    assert not hasattr(settings, "s3_endpoint_url")
 
 
 def test_postgres_transaction_is_available() -> None:

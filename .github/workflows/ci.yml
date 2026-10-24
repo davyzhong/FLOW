@@ -4,6 +4,10 @@ on:
   push:
   pull_request:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.head.repo.full_name || github.repository }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
@@ -67,7 +71,31 @@ jobs:
           tests/api/test_workspace.py tests/test_health.py
           tests/security/test_authorization.py -q
 
-  integration:
+  # 测试覆盖按稳定文件映射分片，每个分片独占 runner 和数据库。
+  integration-shards:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [analysis-dashboard, intake-metrics, core, api]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.13"
+          enable-cache: true
+      - run: cd services/api && uv sync --all-groups --frozen
+      - run: make infra-up
+      - run: cd services/api && uv run alembic upgrade head
+      - name: 校验 integration 分片映射
+        run: python3 scripts/integration_test_shards.py --verify
+      - name: 运行当前 integration 分片
+        env:
+          INTEGRATION_SHARD: ${{ matrix.shard }}
+        run: python3 scripts/integration_test_shards.py --run-shard "$INTEGRATION_SHARD"
+
+  perf-gate:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
@@ -79,11 +107,6 @@ jobs:
       - run: cd services/api && uv sync --all-groups --frozen
       - run: make infra-up
       - run: cd services/api && uv run alembic upgrade head
-      - run: >-
-          cd services/api && uv run pytest tests/integration tests/investigation tests/copilot
-          tests/api -q
-          --ignore=tests/api/test_auth_boundary.py
-          --ignore=tests/api/test_workspace.py
       # T11-G2 性能回归门禁（用户批准）：10× 合成规模下三类读路径 P95 ≤ 50ms
       # （本地基线 6.23/0.97/1.11ms 的 8-50 倍余量，只拦数量级劣化；CI 硬件差异见
       # docs/60_delivery/2026-09-15-cainiao-stress-test-report.md）
@@ -93,10 +116,36 @@ jobs:
           bash ../../scripts/seed_p5_statements.sh > /dev/null &&
           uv run python ../../scripts/perf_baseline.py --scale 10 --max-p95 50
 
-  # 大麦 fixture 套件（多次真实 seed）使本门禁翻倍，20 分钟预算已撞线
-  data-contract:
+  # 保留稳定的 required check 名称 integration，确保分片或性能门禁任一失败都阻断。
+  integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: [integration-shards, perf-gate]
+    if: always()
+    steps:
+      - name: 汇总 integration 与性能门禁
+        env:
+          SHARD_RESULT: ${{ needs.integration-shards.result }}
+          PERF_RESULT: ${{ needs.perf-gate.result }}
+        run: |
+          if [[ "$SHARD_RESULT" != "success" || "$PERF_RESULT" != "success" ]]; then
+            echo "integration 未全部成功：shards=$SHARD_RESULT perf=$PERF_RESULT"
+            exit 1
+          fi
+
+  # 每个 shard 独占 runner/数据库；保留全量测试，避免大麦真实 seed 在单个 job 串行堆积。
+  data-contract-shards:
     runs-on: ubuntu-latest
     timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        shard:
+          - contracts
+          - canonical-statements
+          - generator-source
+          - profile-known-workflow
+          - loader-atomicity-edges
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
@@ -104,7 +153,31 @@ jobs:
           python-version: "3.13"
           enable-cache: true
       - run: cd services/api && uv sync --all-groups --frozen
-      - run: make test-data-contract
+      - run: make infra-up
+      - name: 校验分片映射
+        run: python3 scripts/data_contract_shards.py --verify
+      - name: 运行当前分片
+        env:
+          DATA_CONTRACT_SHARD: ${{ matrix.shard }}
+        run: python3 scripts/data_contract_shards.py --run-shard "$DATA_CONTRACT_SHARD"
+
+  # 保留稳定的 required check 名称；任何 shard 失败都必须让汇总检查失败。
+  data-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: [data-contract-shards]
+    if: always()
+    steps:
+      - uses: actions/checkout@v4
+      - name: 汇总 shard 结果并校验数据摘要
+        env:
+          SHARD_RESULT: ${{ needs.data-contract-shards.result }}
+        run: |
+          if [[ "$SHARD_RESULT" != "success" ]]; then
+            echo "data-contract shard 未全部成功：$SHARD_RESULT"
+            exit 1
+          fi
+          python3 scripts/summarize_data_contract.py
 
   # 同上：含 tests/fixtures 大麦套件，实测 20 分钟不足
   # 2026-09-29 用户批准：实测 32→37→40+ 分钟贴近 40 分钟上限（曾两次超时取消整 run），放宽至 45 对齐 integration

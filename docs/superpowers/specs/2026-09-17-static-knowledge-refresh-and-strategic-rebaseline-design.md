@@ -3,11 +3,11 @@ doc_id: FLOW-DESIGN-KNOWLEDGE-REFRESH-002
 title: FLOW 第二代静态知识刷新与战略重基线设计
 doc_type: design
 status: approved
-version: 1.1
+version: 1.2
 created_at: 2026-09-17
-updated_at: 2026-09-18
+updated_at: 2026-10-19
 owner: FLOW
-decision_refs: [D051, D052, D053, D054]
+decision_refs: [D051, D052, D053, D054, D056]
 knowledge_release: flow-knowledge-2026-09-12.1
 supersedes: []
 superseded_by: null
@@ -22,7 +22,7 @@ superseded_by: null
 采用“两阶段、四证据层、单一静态出口”方案：
 
 1. 等待当前 Davybase 全库图片解读批次结束并完成失败收口；
-2. 以批次结束后的首个 15:00 对应 Obsidian Git 提交作为新截面；若 15:00 时仍有知识化写入，则顺延到下一次满足稳定条件的 15:00；
+2. 以一次性、内容指纹可复验的 Obsidian 工作区快照作为新截面；可以随时启动，提交与未提交但稳定的内容均须明确记录；
 3. 从旧可复现截面 `ada825ce` 增量重建来源目录、主题路由、图文摘要、知识卡片、领域手册和产品映射；
 4. 按 `flow-knowledge-YYYY-MM-DD.N` 规则构建并封存 sealed candidate，但保持 `CURRENT_RELEASE` 不变；
 5. 基于 sealed candidate 完成战略影响评估和用户裁决，再通过 K6 原子激活新 release、产品文档和路线图；
@@ -98,17 +98,18 @@ Davybase 已提供两条互斥知识化路径：
 
 ## 4. 新截面冻结合同
 
-### 4.1 截面时点
+### 4.1 截面冻结合同（2026-10-19 修订）
 
-新截面采用“图片批次完成后的首个稳定 15:00”：
+固定时刻、必须 clean 和按进程名称拦截均不再作为快照前置条件。它们没有提高内容证据质量，反而令稳定的本地资料长期无法进入流程。新合同是“随时启动、内容纳入指纹、同次运行复验”：
 
-1. Davybase 图片解读主进程已经退出；
-2. 失败队列完成重试或形成显式例外清单；
-3. 15:00 前后至少 30 分钟没有任何 vault writer 写入；
-4. Obsidian 工作树已提交，包含 staged、unstaged 和 untracked 在内均为空；
-5. 记录规范仓库 URL、完整 commit、完整 tree hash、提交时间、文件数和字节数。
+1. 操作者可在任意真实时间启动单次冻结；不要求等待 14:30/15:00/15:30，也不模拟时间。
+2. 获取排他锁后，冻结器对纳入范围的所有受版本控制文件及 Git status 列出的未提交/未跟踪文件生成确定性内容指纹（相对路径、文件内容 SHA-256、文件数、字节数）；明确记录 HEAD/tree、dirty 路径数、来源范围和远端。不得把 dirty 状态本身当作拒绝理由，也不得把只记录 `git status` 文本误称为 dirty 内容已被快照。
+3. writer 判定仅以 vault 范围内实际可写文件句柄为阻塞条件；单凭 `backupd`、同步客户端等进程名称不得拒绝。无法完成句柄或内容读取检查时 fail closed，并写明检查失败原因。
+4. 单次 `freeze` 流程依次取得候选和复验指纹；两次 HEAD/tree/status 与完整内容指纹一致且无实际写句柄，才可标为 `accepted`。任一差异则写 `rejected` 和 SHA-256 sidecar。不得等待固定时段或在失败时构造 accepted。
+5. manifest 明确标记 `snapshot_kind: working_tree`；区分远端可复现的 HEAD/tree 与仅由当前工作区指纹证明的 dirty 内容，不声称未提交内容已存在于远端。K3 开始读取前及生成后必须重算来源指纹；不一致即停止该 candidate，保留证据并重新冻结。
+6. 远端 HEAD 可获取、manifest 与 sidecar 已在 Davybase 分支提交并推送后才释放锁；冻结器绝不写入、暂存、清理、提交或覆盖 ObsidianWiki。
 
-时区固定为 `Asia/Shanghai`。执行者在 14:30 获取 vault 全 writer 排他锁，禁止 Davybase、Obsidian 同步、备份、人工编辑和其他任务继续写入；15:00 记录候选 HEAD/tree；15:30 验证 HEAD/tree 未变化、工作树为空、所有 writer 已退出，再把该完整 commit/tree 锚定为正式截面。任一条件失败则释放锁并顺延到下一次稳定的 15:00。不得再用 mtime、birth time 或运行中的目录计数代替 Git tree。
+旧 14:30/15:00/15:30 命令仅为历史设计，已由本节取代。稳定性由同一次运行内的实际内容指纹复验提供，不由墙上时钟提供。
 
 ### 4.2 差异基线
 

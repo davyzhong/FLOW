@@ -190,8 +190,8 @@ export function CockpitProfitabilityPage() {
               <td>{metric.status === "available" ? metric.definition_version : metric.reason ?? "不可用"}</td>
               <td>
                 <Link href={statementReportHref(period.report_id)}>来源财报</Link>
-                {(metric.source_facts ?? []).map((fact) => fact.statement_type && fact.item_name ? (
-                  <span key={`${fact.statement_type}:${fact.item_name}`}>
+                {(metric.source_facts ?? []).map((fact, factIndex) => fact.statement_type && fact.item_name ? (
+                  <span key={`${fact.statement_type}:${fact.item_name}:${fact.page_number ?? ""}:${factIndex}`}>
                     {" · "}<Link href={`${statementReportHref(period.report_id)}#${statementRowId(fact.statement_type, fact.item_name)}`}>{fact.item_name}行</Link>
                     {fact.page_number ? `（第 ${fact.page_number} 页）` : ""}
                   </span>

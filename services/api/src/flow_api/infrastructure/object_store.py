@@ -8,16 +8,12 @@ from typing import Any
 from botocore.exceptions import ClientError  # type: ignore[import-untyped]
 
 from flow_api.infrastructure.models.intake import StoredObject
+from flow_api.infrastructure.storage_contract import (
+    ImmutableObjectConflictError,
+    ImmutableObjectNotFoundError,
+)
 
 SHA256_PATTERN = re.compile(r"^[0-9a-f]{64}$")
-
-
-class ImmutableObjectConflictError(RuntimeError):
-    """An existing content-addressed key does not contain the expected bytes."""
-
-
-class ImmutableObjectNotFoundError(FileNotFoundError):
-    """A content-addressed object does not exist."""
 
 
 class ObjectStore:
@@ -98,9 +94,10 @@ class ObjectStore:
             return (content_sha256, True)
         # 已存在：与新内容字节级一致
         head = self._client.head_object(Bucket=self._bucket, Key=object_key)
-        if head.get("ContentLength") != len(content) or head.get("Metadata", {}).get(
-            "sha256"
-        ) != content_sha256:
+        if (
+            head.get("ContentLength") != len(content)
+            or head.get("Metadata", {}).get("sha256") != content_sha256
+        ):
             raise ImmutableObjectConflictError(
                 f"existing object {object_key} conflicts with content {content_sha256}"
             )

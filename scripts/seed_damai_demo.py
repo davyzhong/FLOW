@@ -10,7 +10,7 @@
 - 输出机器可读 receipt（JSON）：release manifest SHA、enterprise/cycle、
   batch/import、snapshots/run、findings、三类冻结 SHA，供 verify 与 CI 对账。
 
-环境：DATABASE_URL 必填（默认指向本地 compose 的 flow 库）。
+环境：默认使用 FLOW 单机 SQLite；如测试需要，可显式设置 DATABASE_URL。
 """
 
 from __future__ import annotations
@@ -18,7 +18,6 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import os
 import sys
 from pathlib import Path
 
@@ -27,9 +26,6 @@ sys.path.insert(0, str(ROOT / "services/api/src"))
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
-
-DEFAULT_DATABASE_URL = "postgresql+psycopg://flow:flow_dev_only@localhost:5432/flow"
-
 
 def _release_manifest_sha256() -> str:
     return hashlib.sha256((ROOT / "fixtures/damai/manifest.json").read_bytes()).hexdigest()
@@ -40,7 +36,9 @@ def main() -> int:
     parser.add_argument("--output", help="receipt JSON 落盘路径（同时打印到 stdout）")
     args = parser.parse_args()
 
-    database_url = os.environ.get("DATABASE_URL", DEFAULT_DATABASE_URL)
+    from flow_api.settings import get_settings
+
+    database_url = get_settings().database_url
     from flow_api.fixtures.damai.loader import seed_damai_demo
 
     engine = create_engine(database_url)

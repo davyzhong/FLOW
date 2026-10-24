@@ -1,0 +1,275 @@
+{
+  "format": "flow-cockpit-closeout-bundle/v1",
+  "candidate_sha": "003bfa4b8a104b1c92bc6afb54c79c2f6965647d",
+  "data_package_manifest_sha256": "64c465ba009107dfee14191dad6e2e4484dea436ee0a95306a79ae102b9b6604",
+  "batch_id": "01a16cf8-918b-75e8-9e85-415199207d7c",
+  "metric_snapshot_id": "01a16cfc-cf99-7843-ba4c-b07c4acdf981",
+  "created_at_utc": "2026-10-24T08:33:36.391Z",
+  "pages": [
+    {
+      "id": "cockpit",
+      "title": "集团财务总览",
+      "route": "/cockpit",
+      "viewport": "desktop",
+      "width": 1440,
+      "height": 1000,
+      "image": "images/cockpit-desktop.png",
+      "sha256": "c8e5090e91d1aeaba2db1bc09d7bbf9cc63fafc72919bf41b80d432d44fe902c",
+      "bytes": 478019,
+      "horizontal_overflow": false,
+      "api_routes": [
+        "/api/v1/cockpit/profitability",
+        "/api/v1/cockpit/modules/cashflow",
+        "/api/v1/cockpit/modules/expenses",
+        "/api/v1/cockpit/overview",
+        "/api/v1/dashboard/overview",
+        "/api/v1/cockpit/action-items"
+      ]
+    },
+    {
+      "id": "cockpit",
+      "title": "集团财务总览",
+      "route": "/cockpit",
+      "viewport": "mobile",
+      "width": 390,
+      "height": 844,
+      "image": "images/cockpit-mobile.png",
+      "sha256": "7b995f8cea1fce2359da235485c9d984b364d2dbe4e23e3118eb090ec336c30a",
+      "bytes": 374224,
+      "horizontal_overflow": false,
+      "api_routes": []
+    },
+    {
+      "id": "profitability",
+      "title": "盈利能力与杜邦分析",
+      "route": "/cockpit/profitability",
+      "viewport": "desktop",
+      "width": 1440,
+      "height": 1000,
+      "image": "images/profitability-desktop.png",
+      "sha256": "80b3c9ad4517949bef385950155b04678a39ce77fe897f6164bcc07e46818c77",
+      "bytes": 313484,
+      "horizontal_overflow": false,
+      "api_routes": []
+    },
+    {
+      "id": "profitability",
+      "title": "盈利能力与杜邦分析",
+      "route": "/cockpit/profitability",
+      "viewport": "mobile",
+      "width": 390,
+      "height": 844,
+      "image": "images/profitability-mobile.png",
+      "sha256": "20c371fc911c34592fa329a9d7146f2c837327e17ebc5eb8c4a8a3532b904022",
+      "bytes": 221151,
+      "horizontal_overflow": false,
+      "api_routes": []
+    },
+    {
+      "id": "balance-sheet",
+      "title": "资产负债",
+      "route": "/cockpit/balance-sheet",
+      "viewport": "desktop",
+      "width": 1440,
+      "height": 1000,
+      "image": "images/balance-sheet-desktop.png",
+      "sha256": "b831265732d2743e95091599bdacd7853cb8929b3c0d9982a25949a5ab147c25",
+      "bytes": 275731,
+      "horizontal_overflow": false,
+      "api_routes": [
+        "/api/v1/cockpit/modules/balance-sheet"
+      ]
+    },
+    {
+      "id": "balance-sheet",
+      "title": "资产负债",
+      "route": "/cockpit/balance-sheet",
+      "viewport": "mobile",
+      "width": 390,
+      "height": 844,
+      "image": "images/balance-sheet-mobile.png",
+      "sha256": "7cf28794d62d73a1f2cf84ef39bf6383bf94e0eb6e3f40008d925b9b826ab8b2",
+      "bytes": 276763,
+      "horizontal_overflow": false,
+      "api_routes": []
+    },
+    {
+      "id": "working-capital",
+      "title": "营运资金",
+      "route": "/cockpit/working-capital",
+      "viewport": "desktop",
+      "width": 1440,
+      "height": 1000,
+      "image": "images/working-capital-desktop.png",
+      "sha256": "2f979dc3ff1f8450229a257f6b3be075357ba10d0055a81baa7dfdc7ebe512df",
+      "bytes": 299140,
+      "horizontal_overflow": false,
+      "api_routes": [
+        "/api/v1/cockpit/modules/working-capital"
+      ]
+    },
+    {
+      "id": "working-capital",
+      "title": "营运资金",
+      "route": "/cockpit/working-capital",
+      "viewport": "mobile",
+      "width": 390,
+      "height": 844,
+      "image": "images/working-capital-mobile.png",
+      "sha256": "24ba6480d9dcc4357ec424c2c4c464d3dea9e89833c0dc4b3d974eb7a76219c0",
+      "bytes": 276410,
+      "horizontal_overflow": false,
+      "api_routes": []
+    },
+    {
+      "id": "expenses",
+      "title": "费用分析",
+      "route": "/cockpit/expenses",
+      "viewport": "desktop",
+      "width": 1440,
+      "height": 1000,
+      "image": "images/expenses-desktop.png",
+      "sha256": "5d4cd20e0fcc586d07f1ffbffd141dde3c1da2fe0b852835194b3133526fd5be",
+      "bytes": 263565,
+      "horizontal_overflow": false,
+      "api_routes": []
+    },
+    {
+      "id": "expenses",
+      "title": "费用分析",
+      "route": "/cockpit/expenses",
+      "viewport": "mobile",
+      "width": 390,
+      "height": 844,
+      "image": "images/expenses-mobile.png",
+      "sha256": "283f4484c841f76c0d09d1ef7ffeed4a0fb4d8edda1fdadba6c7e2c6ae938e46",
+      "bytes": 214100,
+      "horizontal_overflow": false,
+      "api_routes": []
+    },
+    {
+      "id": "cashflow",
+      "title": "现金流",
+      "route": "/cockpit/cashflow",
+      "viewport": "desktop",
+      "width": 1440,
+      "height": 1000,
+      "image": "images/cashflow-desktop.png",
+      "sha256": "40551e7c702adbdf92574d18df63efa6ffbe2c303bf8e78679596a6b9b59f8c1",
+      "bytes": 192047,
+      "horizontal_overflow": false,
+      "api_routes": []
+    },
+    {
+      "id": "cashflow",
+      "title": "现金流",
+      "route": "/cockpit/cashflow",
+      "viewport": "mobile",
+      "width": 390,
+      "height": 844,
+      "image": "images/cashflow-mobile.png",
+      "sha256": "2dbadd205752c72ac43e0bf30861b1ab3b71fbb1b354fc7352cb1931cffb63de",
+      "bytes": 166362,
+      "horizontal_overflow": false,
+      "api_routes": []
+    },
+    {
+      "id": "risk",
+      "title": "财务风险",
+      "route": "/cockpit/risk",
+      "viewport": "desktop",
+      "width": 1440,
+      "height": 1000,
+      "image": "images/risk-desktop.png",
+      "sha256": "e29ef8f2e182b9b7a61f92e3493982f8c5030123f2144fd08c366571b81e4ac9",
+      "bytes": 279111,
+      "horizontal_overflow": false,
+      "api_routes": [
+        "/api/v1/cockpit/modules/risk"
+      ]
+    },
+    {
+      "id": "risk",
+      "title": "财务风险",
+      "route": "/cockpit/risk",
+      "viewport": "mobile",
+      "width": 390,
+      "height": 844,
+      "image": "images/risk-mobile.png",
+      "sha256": "c60b659f129835123b6db20a29f0941cb0797ca3d3ae765c4fee9ff18983f7ca",
+      "bytes": 255594,
+      "horizontal_overflow": false,
+      "api_routes": []
+    },
+    {
+      "id": "consolidation",
+      "title": "分部趋势",
+      "route": "/cockpit/consolidation",
+      "viewport": "desktop",
+      "width": 1440,
+      "height": 1000,
+      "image": "images/consolidation-desktop.png",
+      "sha256": "a781160306f8f6969327f74329e0e729595a54b7f2a007c85ec2e2949d767817",
+      "bytes": 190429,
+      "horizontal_overflow": false,
+      "api_routes": [
+        "/api/v1/cockpit/modules/consolidation"
+      ]
+    },
+    {
+      "id": "consolidation",
+      "title": "分部趋势",
+      "route": "/cockpit/consolidation",
+      "viewport": "mobile",
+      "width": 390,
+      "height": 844,
+      "image": "images/consolidation-mobile.png",
+      "sha256": "019b366cfa71d43c09005510ead3ef85d641d1020b4818fc4bbedcfa2eadab9c",
+      "bytes": 135556,
+      "horizontal_overflow": false,
+      "api_routes": []
+    },
+    {
+      "id": "data",
+      "title": "数据工作台",
+      "route": "/data",
+      "viewport": "desktop",
+      "width": 1440,
+      "height": 1000,
+      "image": "images/data-desktop.png",
+      "sha256": "01f457f0c898e4b093c2ef20e0421f58d2d5f54df961ddf31e3a62169fa8fc4f",
+      "bytes": 234511,
+      "horizontal_overflow": false,
+      "api_routes": [
+        "/api/v1/intake/batches"
+      ]
+    },
+    {
+      "id": "data",
+      "title": "数据工作台",
+      "route": "/data",
+      "viewport": "mobile",
+      "width": 390,
+      "height": 844,
+      "image": "images/data-mobile.png",
+      "sha256": "02aab4a6c0cb46c8e8c09a293e81f96c0ecfd3a4c4600ca09b2cb3c5b357f417",
+      "bytes": 124301,
+      "horizontal_overflow": false,
+      "api_routes": []
+    }
+  ],
+  "api_responses_sha256": "c2737fbc02e04f23c519e8b43c0991c249c49deb8ddd5520cc110bc9a3cb7068",
+  "browser_errors": [],
+  "external_requests": [],
+  "limits": [
+    "静态图像/页面与 API 响应可离线查看；筛选、点击、编辑和报告生成需启动 FLOW。",
+    "数据属于大麦 synthetic 演示，不是企业真实月度数据或公开 C 级证明。"
+  ],
+  "offline": {
+    "external_requests": [],
+    "browser_errors": [],
+    "images_total": 9,
+    "images_loaded": 9,
+    "broken_static_links": []
+  }
+}

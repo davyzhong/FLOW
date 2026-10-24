@@ -389,6 +389,26 @@ def verify() -> dict:
         errors.append("拒绝非 synthetic 企业包")
     if manifest.get("contract_version") != "flow.enterprise-package.v1":
         errors.append(f"不支持的企业包 contract_version: {manifest.get('contract_version')!r}")
+    source_manifest_path = SOURCE / "manifest.json"
+    try:
+        current_source_manifest_sha256 = hashlib.sha256(source_manifest_path.read_bytes()).hexdigest()
+    except OSError as exc:
+        errors.append(f"无法读取业务源 manifest: {exc}")
+    else:
+        if manifest.get("source_manifest_sha256") != current_source_manifest_sha256:
+            errors.append("企业包 source_manifest_sha256 与当前 fixtures/damai/manifest.json 不一致，请重新 build")
+    for source_dir in ("canonical", "statements", "operations", "forecast", "workbooks"):
+        source_root = SOURCE / source_dir
+        package_root = PACKAGE / "business" / source_dir
+        source_files = {path.relative_to(source_root) for path in source_root.rglob("*") if path.is_file()}
+        package_files = {path.relative_to(package_root) for path in package_root.rglob("*") if path.is_file()} if package_root.is_dir() else set()
+        for relative in sorted(source_files - package_files):
+            errors.append(f"发行包缺少业务源文件: business/{source_dir}/{relative.as_posix()}")
+        for relative in sorted(package_files - source_files):
+            errors.append(f"发行包含有非当前业务源文件: business/{source_dir}/{relative.as_posix()}")
+        for relative in sorted(source_files & package_files):
+            if (source_root / relative).read_bytes() != (package_root / relative).read_bytes():
+                errors.append(f"发行包业务文件与业务源不一致: business/{source_dir}/{relative.as_posix()}")
     if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]{0,127}", str(manifest.get("package_id", ""))):
         errors.append("package_id 缺失或格式无效")
     if not re.fullmatch(r"\d+\.\d+\.\d+", str(manifest.get("package_version", ""))):

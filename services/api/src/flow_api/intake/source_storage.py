@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from flow_api.infrastructure.object_store import (
+from flow_api.infrastructure.storage_contract import (
     ImmutableObjectConflictError,
-    ObjectStore,
+    ObjectStorage,
 )
 
 
@@ -34,7 +34,7 @@ class StoredSource:
 
 
 class SourceStorage:
-    def __init__(self, object_store: ObjectStore) -> None:
+    def __init__(self, object_store: ObjectStorage) -> None:
         self._object_store = object_store
 
     def store(self, content: bytes, filename: str) -> StoredSource:

@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 vi.mock("../../components/cockpit/charts/echarts-base", async (importOriginal) => ({
@@ -92,19 +92,36 @@ describe("CockpitModulePage", () => {
       .mockResolvedValue(moduleFixture);
     render(<CockpitModulePage moduleId="balance-sheet" title="资产负债" />);
     expect(await screen.findByText("71,850.93 百万元")).toBeVisible();
-    expect(screen.getByText("前期 58,881.09 百万元")).toBeVisible();
+    expect(within(screen.getAllByTestId("module-kpi")[0]).getByText(/前期/)).toHaveTextContent(
+      "前期 FY2022 58,881.09 百万元",
+    );
+    expect(screen.getAllByRole("link", { name: "查看 FY2022 来源财报" }).length).toBe(2);
+    for (const link of screen.getAllByRole("link", { name: "查看 FY2022 来源财报" })) {
+      expect(link).toHaveAttribute("href", "/statements?report=r2");
+    }
+    for (const link of screen.getAllByRole("link", { name: "查看 FY2023 来源财报" })) {
+      expect(link).toHaveAttribute("href", "/statements?report=r1");
+    }
     expect(screen.getAllByText("资本结构趋势").length).toBeGreaterThan(0);
     expect(screen.getByText("FY2022 / FY2023 · %")).toBeVisible();
     expect(screen.getByText("分析问题：资产负债率在报告期之间如何变化？")).toBeVisible();
     expect(screen.getByText("计算指标")).toBeVisible();
     fireEvent.click(screen.getByText("查看图表来源与指标口径"));
-    expect(screen.getByText("bs.total_liab、bs.total_assets")).toBeVisible();
+    expect(screen.getByRole("link", { name: "bs.total_liab" })).toHaveAttribute(
+      "href", "/metric-library?focus=bs.total_liab",
+    );
+    expect(screen.getByRole("link", { name: "bs.total_assets" })).toHaveAttribute(
+      "href", "/metric-library?focus=bs.total_assets",
+    );
     expect(
       screen.getAllByRole("link").find(
         (link) => link.getAttribute("href") === "/statements?report=r1#stmt-row-合并资产负债表-负债合计",
       ),
     ).toBeInTheDocument();
     expect(screen.getByTestId("cockpit-module-chart-capital_structure_trend")).toBeVisible();
+    expect(screen.getByRole("link", { name: "FY2022 资产负债率 来源财报" })).toHaveAttribute(
+      "href", "/statements?report=r2",
+    );
     expect(screen.getByText("原始财报未披露月度明细，无法形成趋势。")).toBeVisible();
     fireEvent.click(screen.getByText("查看来源登记事实 ID"));
     expect(screen.getByText("FY2023 · CN-SEG-FY2023-SEGMENT_REVENUE")).toBeVisible();
@@ -117,6 +134,85 @@ describe("CockpitModulePage", () => {
 
 
 describe("费用图表 API 形态", () => {
+  it("KPI 标明比较期间、只表达变化方向并提供指标口径深链", async () => {
+    vi.spyOn(client.flowApi, "getCockpitModule").mockResolvedValue({
+      ...moduleFixture,
+      kpis: [{
+        name: "现金比率",
+        status: "available",
+        value: "0.5000",
+        prior_value: "0.5000",
+        unit: "ratio",
+        caliber_note: null,
+      }],
+    });
+
+    render(<CockpitModulePage moduleId="balance-sheet" title="资产负债" />);
+    const kpi = (await screen.findByText("现金比率")).closest("li");
+    expect(kpi).not.toBeNull();
+    expect(within(kpi as HTMLElement).getByText(/前期/)).toHaveTextContent(
+      "前期 FY2022 0.50 倍",
+    );
+    expect(screen.getByText("较 FY2022 持平 0.00%（0.00 倍）")).toHaveAttribute(
+      "data-direction",
+      "flat",
+    );
+    expect(screen.getByRole("link", { name: "查看指标口径" })).toHaveAttribute(
+      "href",
+      "/metric-library?focus=cash_ratio",
+    );
+  });
+
+  it("将 DSO、DIO、DPO 与 CCC 分别链接到正确指标定义", async () => {
+    vi.spyOn(client.flowApi, "getCockpitModule").mockResolvedValue({
+      ...moduleFixture,
+      module: "working-capital",
+      kpis: [
+        ["DSO", "dso_days"],
+        ["DIO", "dio_days"],
+        ["DPO", "dpo_days"],
+        ["CCC", "ccc_days"],
+      ].map(([name]) => ({
+        name,
+        status: "available",
+        value: "30.0000",
+        unit: "day",
+        caliber_note: null,
+      })),
+    } as CockpitModuleResponse);
+
+    render(<CockpitModulePage moduleId="working-capital" title="营运资金" />);
+    await screen.findByText("DSO");
+    for (const code of ["dso_days", "dio_days", "dpo_days", "ccc_days"]) {
+      const link = screen.getAllByRole("link", { name: "查看指标口径" }).find(
+        (candidate) => candidate.getAttribute("href") === `/metric-library?focus=${code}`,
+      );
+      expect(link).toHaveAttribute("href", `/metric-library?focus=${code}`);
+    }
+  });
+
+  it("不为无法确认指标口径的名称生成猜测链接", async () => {
+    vi.spyOn(client.flowApi, "getCockpitModule").mockResolvedValue({
+      ...moduleFixture,
+      kpis: [{
+        name: "客户数",
+        status: "available",
+        value: "1200",
+        unit: "人",
+        caliber_note: null,
+      }],
+    });
+
+    render(<CockpitModulePage moduleId="working-capital" title="营运资金" />);
+    const kpi = (await screen.findByText("客户数")).closest("li");
+    expect(kpi).not.toBeNull();
+    expect(within(kpi as HTMLElement).queryByRole("link", { name: "查看指标口径" })).toBeNull();
+    expect(within(kpi as HTMLElement).getByRole("link", { name: "查看 FY2023 来源财报" })).toHaveAttribute(
+      "href",
+      "/statements?report=r1",
+    );
+  });
+
   it("把标量费用系列作为单期图表渲染而不触发数组 map 错误", async () => {
     vi.spyOn(client.flowApi, "getCockpitModule").mockResolvedValue({
       ...moduleFixture,
@@ -128,7 +224,7 @@ describe("费用图表 API 形态", () => {
           title: "费用结构",
           type: "ratio_bar",
           unit: "百万元",
-          periods: ["FY2023"],
+          periods: [],
           series: { 销售: "1476.0000", 管理: "738.0000", 研发: "210.0000", 财务: "83.0000" },
           analysis_question: "当期各项期间费用如何构成？",
           fact_classes: ["reported"],
@@ -143,6 +239,7 @@ describe("费用图表 API 形态", () => {
 
     render(<CockpitModulePage moduleId="expenses" title="费用分析" />);
     expect(await screen.findByTestId("cockpit-module-chart-expense_structure")).toBeVisible();
+    expect(within(screen.getByRole("table")).getByRole("columnheader", { name: "FY2023" })).toBeVisible();
     expect(screen.getAllByText("1,476.00 百万元").length).toBeGreaterThan(0);
   });
 });

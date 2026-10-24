@@ -6,6 +6,8 @@ export type DashboardResponse = components["schemas"]["DashboardOverviewResponse
 export type DashboardValue = components["schemas"]["DashboardValue"];
 export type DataStatus = components["schemas"]["DataStatus"];
 export type DashboardContext = components["schemas"]["DashboardContext"];
+export type FilterOptions = components["schemas"]["FilterOptions"];
+export type FilterDimension = components["schemas"]["FilterDimension"];
 export type DashboardFilters = NonNullable<
   operations["dashboard_overview_api_v1_dashboard_overview_get"]["parameters"]["query"]
 >;

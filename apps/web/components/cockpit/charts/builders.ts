@@ -32,16 +32,29 @@ export interface ComboSeries {
   key: string;
   title: string;
   axis: "bar" | "line";
+  /** 用于将同一期间的组成项堆叠显示（例如费用构成）。 */
+  stack?: string;
+  /** 分类堆叠图可指定稳定颜色，避免新增序列导致颜色循环重复。 */
+  color?: string;
   points: { period: string; value: number; display: string; status: string }[];
   unit: string;
+  /** 将序列放到第二纵轴，适用于单位相同但数量级差异明显的可比趋势。 */
+  secondaryAxis?: boolean;
 }
 
 export function buildCombo(series: ComboSeries[]): ChartOption | undefined {
   const usable = series.filter((s) => s.points.some((p) => p.status === "ready"));
   if (usable.length === 0) return undefined;
   const periods = usable[0].points.map((p) => p.period);
-  const axisFor = (axis: "bar" | "line") => {
-    const unit = usable.find((item) => item.axis === axis)?.unit ?? "";
+  const hasBar = usable.some((item) => item.axis === "bar");
+  const hasLine = usable.some((item) => item.axis === "line");
+  const hasExplicitSecondary = usable.some((item) => item.secondaryAxis);
+  const hasSecondary = hasExplicitSecondary || (hasBar && hasLine);
+  const seriesAxisIndex = (item: ComboSeries) => hasExplicitSecondary
+    ? item.secondaryAxis ? 1 : 0
+    : item.axis === "line" && hasBar ? 1 : 0;
+  const axisFor = (index: 0 | 1) => {
+    const unit = usable.find((item) => seriesAxisIndex(item) === index)?.unit ?? "";
     const integerUnit = ["个", "项", "次", "家", "人", "条"].includes(unit);
     return { type: "value" as const, name: unit, ...AXIS,
       ...(integerUnit ? { minInterval: 1 } : {}),
@@ -68,19 +81,21 @@ export function buildCombo(series: ComboSeries[]): ChartOption | undefined {
     grid: { left: 56, right: usable.some((s) => s.axis === "line") ? 56 : 20, top: 34, bottom: 30 },
     xAxis: { type: "category", data: periods, ...AXIS },
     yAxis:
-      usable.some((s) => s.axis === "line") && usable.some((s) => s.axis === "bar")
+      hasSecondary
         ? [
-            axisFor("bar"),
-            { ...axisFor("line"), splitLine: { show: false } },
+            axisFor(0),
+            { ...axisFor(1), splitLine: { show: false }, position: "right" },
           ]
-        : axisFor(usable[0].axis),
+        : axisFor(0),
     series: usable.map((s, i) => {
       const isLine = s.axis === "line";
-      const yAxisIndex = isLine && usable.some((x) => x.axis === "bar") ? 1 : 0;
-      const color = [CHART_THEME.blue, CHART_THEME.green, CHART_THEME.warn][i % 3];
+      const yAxisIndex = seriesAxisIndex(s);
+      // 财务报告主图使用墨蓝与古金区分核心序列；第三序列才使用青绿。
+      const color = s.color ?? [CHART_THEME.blue, CHART_THEME.gold, CHART_THEME.teal][i % 3];
       return {
         name: `${s.title}（${s.unit}）`,
         type: s.axis,
+        ...(s.stack ? { stack: s.stack } : {}),
         yAxisIndex,
         data: s.points.map((p) => (p.status === "ready" ? p.value : null)),
         emphasis: { focus: "series" },
@@ -510,7 +525,7 @@ export function buildRankBar(
       formatter: (p: { name: string; value: number }) => `${p.name}<br>${formatFinancialValue(p.value, { unit })}`,
     },
     grid: { left: 96, right: 60, top: 12, bottom: 20 },
-    xAxis: { type: "value", ...AXIS, axisLabel: { ...AXIS.axisLabel, formatter: (value: number) => formatFinancialValue(value, { unit, appendUnit: false }) } },
+    xAxis: { type: "value", splitNumber: 3, ...AXIS, axisLabel: { ...AXIS.axisLabel, formatter: (value: number) => formatFinancialValue(value, { unit, appendUnit: false }) } },
     yAxis: { type: "category", data: sorted.map((r) => r.name), ...AXIS, axisLabel: { ...AXIS.axisLabel, interval: 0, fontSize: 10.5 } },
     series: [
       {

@@ -1,31 +1,17 @@
 from __future__ import annotations
 
-from typing import Any
-
-import boto3  # type: ignore[import-untyped]
-from botocore.config import Config  # type: ignore[import-untyped]
-
-from flow_api.settings import Settings
+"""已移除 S3 客户端；保留模块路径以给旧集成调用明确迁移错误。"""
 
 
-def build_s3_client(settings: Settings) -> Any:
-    # boto3 会通过 getproxies() 拾取操作系统级代理（macOS 系统设置），
-    # 本机代理未运行时指向 MinIO 的请求会被送入死代理并长期挂起。
-    # 默认对 S3 流量禁用代理；经代理访问外部对象存储时设 S3_USE_SYSTEM_PROXY=true。
-    proxies = None if settings.s3_use_system_proxy else {"http": None, "https": None}
-    config = Config(
-        connect_timeout=5,
-        read_timeout=60,
-        retries={"max_attempts": 3},
-        proxies=proxies,
-    )
-    return boto3.client(
-        "s3",
-        endpoint_url=settings.s3_endpoint_url,
-        aws_access_key_id=settings.s3_access_key.get_secret_value(),
-        aws_secret_access_key=settings.s3_secret_key.get_secret_value(),
-        config=config,
+class S3StorageRemovedError(RuntimeError):
+    """FLOW 单机原型使用本地内容目录，不再构造 S3 客户端。"""
+
+
+def build_s3_client(*_args: object, **_kwargs: object) -> None:
+    raise S3StorageRemovedError(
+        "S3 已从单机运行路径移除，请改用 "
+        "flow_api.infrastructure.local_object_store.LocalObjectStore"
     )
 
 
-__all__ = ["build_s3_client"]
+__all__ = ["S3StorageRemovedError", "build_s3_client"]

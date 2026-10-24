@@ -51,6 +51,26 @@ describe("chart builders", () => {
     expect(Array.isArray(opt.yAxis)).toBe(true);
   });
 
+  it("combo: 可复用同一类别的堆叠柱序列", () => {
+    const opt = buildCombo([
+      { key: "selling", title: "销售", axis: "bar", stack: "expenses", color: "#123456", unit: "百万元", points: [ready("FY2022", 20), ready("FY2023", 25)] },
+      { key: "admin", title: "管理", axis: "bar", stack: "expenses", color: "#654321", unit: "百万元", points: [ready("FY2022", 12), ready("FY2023", 14)] },
+    ]) as { series: { stack?: string; data: number[]; itemStyle: { color: string } }[] };
+
+    expect(opt.series.map((item) => item.stack)).toEqual(["expenses", "expenses"]);
+    expect(opt.series.map((item) => item.data)).toEqual([[20, 25], [12, 14]]);
+    expect(opt.series.map((item) => item.itemStyle.color)).toEqual(["#123456", "#654321"]);
+  });
+
+  it("combo: 同单位但数量级悬殊的两条线可显式使用独立刻度", () => {
+    const opt = buildCombo([
+      { key: "revenue", title: "营业收入", axis: "line", unit: "亿元", points: [ready("FY2023", 176)] },
+      { key: "profit", title: "营业利润", axis: "line", unit: "亿元", secondaryAxis: true, points: [ready("FY2023", -3)] },
+    ]) as { yAxis: unknown[]; series: { yAxisIndex: number }[] };
+    expect(opt.yAxis).toHaveLength(2);
+    expect(opt.series.map((item) => item.yAxisIndex)).toEqual([0, 1]);
+  });
+
   it("combo: 计数单位使用整数刻度，不把小数刻度格式化成重复整数", () => {
     const opt = buildCombo([
       { key: "batches", title: "批次数量", axis: "bar", unit: "个", points: [ready("已发布", 1)] },

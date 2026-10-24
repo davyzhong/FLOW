@@ -51,6 +51,9 @@ SELECT
   now() + make_interval(days => current_setting('flow.audit_retention_days', true)::integer)
 FROM review_event re
 WHERE re.finding_id IN (SELECT id FROM _damai_target_findings);
+DELETE FROM cockpit_action_item
+WHERE finding_id IN (SELECT id FROM _damai_target_findings)
+   OR snapshot_id IN (SELECT id FROM _damai_target_snapshots);
 DELETE FROM report_snapshot
 WHERE metric_snapshot_id IN (SELECT id FROM _damai_target_snapshots);
 DELETE FROM analysis_run

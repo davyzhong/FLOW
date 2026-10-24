@@ -25,6 +25,7 @@ from flow_api.api.schemas.publishing import (
     ReportSnapshotLine,
     ReportSnapshotListResponse,
 )
+from flow_api.infrastructure.local_object_store import LocalObjectStore
 from flow_api.infrastructure.logging import log_event
 from flow_api.infrastructure.models.analytics import Finding, MetricSnapshot
 from flow_api.infrastructure.models.canonical import Period
@@ -33,12 +34,11 @@ from flow_api.infrastructure.models.publishing import (
     PublicationAttempt,
     ReportSnapshot,
 )
-from flow_api.infrastructure.object_store import (
+from flow_api.infrastructure.storage_contract import (
     ImmutableObjectConflictError,
     ImmutableObjectNotFoundError,
-    ObjectStore,
+    ObjectStorage,
 )
-from flow_api.infrastructure.s3_client import build_s3_client
 from flow_api.publication.four_stage import (
     AuditContext,
     FinalizedPublication,
@@ -87,9 +87,9 @@ FORMAT_CONTENT_TYPES = {
 
 
 @lru_cache
-def get_publication_object_store() -> ObjectStore:
+def get_publication_object_store() -> ObjectStorage:
     settings = get_settings()
-    return ObjectStore(client=build_s3_client(settings), bucket=settings.s3_bucket)
+    return LocalObjectStore(settings.object_directory)
 
 
 def _error(http_status: int, code: str, message: str) -> HTTPException:
@@ -234,9 +234,7 @@ def publish_report(
             "unsupported_format",
             f"不支持的发布格式：{sorted(unknown)}",
         )
-    formats = tuple(
-        sorted((PublicationFormat(f) for f in request.formats), key=lambda f: f.value)
-    )
+    formats = tuple(sorted((PublicationFormat(f) for f in request.formats), key=lambda f: f.value))
     pub_request = PublicationRequest(
         publication_id=request.publication_id,
         idempotency_key=idempotency_key,

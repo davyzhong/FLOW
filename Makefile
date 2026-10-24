@@ -2,11 +2,19 @@ PNPM := npx --yes pnpm@10.17.1
 UV := uv
 COMPOSE := docker compose -f infra/compose.yaml
 
-.PHONY: docs-check plan-views bootstrap contracts contracts-check infra-up infra-down stack-up stack-down dev-api dev-web test-api test-web test lint typecheck phase-1-acceptance test-data-contract test-intake-e2e test-metrics-known-answers test-analysis-invariants test-dashboard test-investigation-e2e test-copilot-evals test-publishing-golden test-user-closure-e2e test-statements-e2e test-module-boundaries-e2e
+.PHONY: docs-check plan-views bootstrap flow-bootstrap contracts contracts-check infra-up infra-down stack-up stack-down dev-api dev-web flow-init flow flow-demo flow-demo-reset flow-check flow-backup flow-restore test-api test-web test lint typecheck phase-1-acceptance test-data-contract test-intake-e2e test-metrics-known-answers test-analysis-invariants test-dashboard test-investigation-e2e test-copilot-evals test-publishing-golden test-user-closure-e2e test-statements-e2e test-module-boundaries-e2e
 
 bootstrap:
 	$(PNPM) install --frozen-lockfile
 	cd services/api && $(UV) sync --all-groups --frozen
+
+flow-bootstrap:
+	$(PNPM) install --frozen-lockfile
+	$(PNPM) --filter @flow/web build
+	mkdir -p apps/web/.next/standalone/apps/web/.next/static
+	cp -R apps/web/.next/static/. apps/web/.next/standalone/apps/web/.next/static/
+	CI=true $(PNPM) install --prod --frozen-lockfile
+	cd services/api && $(UV) sync --no-dev --frozen
 
 contracts:
 	bash scripts/generate_contracts.sh
@@ -36,6 +44,34 @@ dev-api:
 
 dev-web:
 	$(PNPM) --filter @flow/web dev
+
+flow-init:
+	FLOW_DATA_DIR="$(FLOW_DATA_DIR)" DATABASE_URL= $(UV) run --no-dev --project services/api python scripts/flow.py init
+
+flow:
+	FLOW_DATA_DIR="$(FLOW_DATA_DIR)" DATABASE_URL= FLOW_WEB_PORT="$(FLOW_WEB_PORT)" FLOW_API_PORT="$(FLOW_API_PORT)" $(UV) run --no-dev --project services/api python scripts/flow.py run
+
+FLOW_DATA_DIR ?= $(HOME)/.flow
+FLOW_WEB_PORT ?= 3000
+FLOW_API_PORT ?= 8000
+
+flow-demo: flow-init
+	FLOW_DATA_DIR="$(FLOW_DATA_DIR)" DATABASE_URL= $(UV) run --no-dev --project services/api python scripts/seed_damai_demo.py
+
+flow-demo-reset:
+	@test -n "$(ENTERPRISE_ID)" || (echo "用法：make flow-demo-reset ENTERPRISE_ID=<大麦企业 UUID>" >&2; exit 2)
+	FLOW_DATA_DIR="$(FLOW_DATA_DIR)" DATABASE_URL= $(UV) run --no-dev --project services/api python scripts/reset_damai_business.py --enterprise-id "$(ENTERPRISE_ID)"
+
+flow-check:
+	FLOW_DATA_DIR="$(FLOW_DATA_DIR)" DATABASE_URL= $(UV) run --no-dev --project services/api python scripts/verify_damai_demo.py --check-storage
+
+flow-backup:
+	@test -n "$(BACKUP_PATH)" || (echo "用法：make flow-backup BACKUP_PATH=/path/to/flow.zip" >&2; exit 2)
+	FLOW_DATA_DIR="$(FLOW_DATA_DIR)" DATABASE_URL= $(UV) run --no-dev --project services/api python scripts/flow.py backup "$(BACKUP_PATH)"
+
+flow-restore:
+	@test -n "$(BACKUP_PATH)" -a -n "$(RESTORE_DIR)" || (echo "用法：make flow-restore BACKUP_PATH=/path/to/flow.zip RESTORE_DIR=/new/path" >&2; exit 2)
+	DATABASE_URL= $(UV) run --no-dev --project services/api python scripts/flow.py restore "$(BACKUP_PATH)" "$(RESTORE_DIR)"
 
 test-api:
 	cd services/api && $(UV) run pytest -q
@@ -98,25 +134,30 @@ docs-check:
 # ---------------------------------------------------------------------------
 # 大麦 synthetic 演示（Task C1）：stack-up 保持空环境语义，大麦走独立命令
 # ---------------------------------------------------------------------------
-.PHONY: damai-demo-build damai-demo-seed damai-demo-verify damai-demo-up test-damai-demo-e2e
+.PHONY: damai-demo-build damai-demo-seed damai-demo-verify damai-demo-load damai-demo-up test-damai-demo-e2e
 
 DAMAI_WORK := $(shell pwd)/work/damai-demo
 
 damai-demo-build:
-	$(UV) run --project services/api python scripts/build_damai_demo.py --output fixtures/damai --check
-	$(UV) run --project services/api python scripts/build_damai_metric_coverage.py
+	$(UV) run --no-dev --project services/api python scripts/build_damai_demo.py --output fixtures/damai --check
+	$(UV) run --no-dev --project services/api python scripts/build_damai_metric_coverage.py
 
 damai-demo-seed:
 	mkdir -p $(DAMAI_WORK)
-	cd services/api && $(UV) run python ../../scripts/seed_damai_demo.py --output $(DAMAI_WORK)/seed_receipt.json
+	$(UV) run --no-dev --project services/api python scripts/seed_damai_demo.py --output $(DAMAI_WORK)/seed_receipt.json
 
 damai-demo-verify:
 	mkdir -p $(DAMAI_WORK)
-	cd services/api && $(UV) run python ../../scripts/verify_damai_demo.py \
+	$(UV) run --no-dev --project services/api python scripts/verify_damai_demo.py \
 		--api-url $${DAMAI_API_URL:-http://localhost:8000} --check-storage \
 		--output $(DAMAI_WORK)/verify_receipt.json
 
+damai-demo-load:
+	$(MAKE) damai-demo-build
+	$(MAKE) damai-demo-seed
+
 damai-demo-up:
+	# 历史 PostgreSQL/Redis/MinIO 全栈验收入口，仅保留兼容性测试用途。
 	$(MAKE) infra-up
 	$(COMPOSE) up -d --build --wait --wait-timeout 120 api worker web
 	$(UV) run scripts/wait_for_services.py localhost:5432 localhost:6379 localhost:9000 localhost:8000 localhost:3000

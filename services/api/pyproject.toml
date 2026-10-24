@@ -5,18 +5,14 @@ description = "FLOW Finance Intelligence API"
 requires-python = ">=3.13,<3.14"
 dependencies = [
   "alembic>=1.16,<2",
-  "boto3>=1.40,<2",
-  "celery>=5.5,<6",
   "fastapi>=0.116,<1",
   "openpyxl>=3.1,<4",
   "polars>=1.33,<2",
-  "psycopg[binary]>=3.2,<4",
   "pydantic>=2.11,<3",
   "pydantic-settings>=2.10,<3",
   "python-pptx>=1.0,<2",
   "python-multipart>=0.0.20,<1",
   "pyyaml>=6.0,<7",
-  "redis>=6.4,<7",
   "sqlalchemy>=2.0,<3",
   "uuid6>=2025.0.1,<2027",
   "uvicorn[standard]>=0.35,<1",
@@ -28,6 +24,10 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+	"boto3>=1.40,<2",
+	"celery>=5.5,<6",
+	"psycopg[binary]>=3.2,<4",
+	"redis>=6.4,<7",
   "httpx>=0.28,<1",
   "mypy>=1.17,<2",
   "pytest>=8.4,<9",

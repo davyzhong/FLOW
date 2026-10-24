@@ -3,18 +3,31 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.52
+version: 5.79
 created_at: 2026-09-12
-updated_at: 2026-10-18
+updated_at: 2026-10-24
 owner: FLOW
 applies_to: repository
 ---
 
 # FLOW 当前项目状态（唯一 current state）
 
+2026-10-24 当前状态：**单机原型收尾正在执行 7a.8 主线整合与交付归档；7a.1–7a.7 已完成。** 候选代码 SHA `0a43d131d44a5891181b2e935e011888b3101660` 对应 GitHub Actions run `40079923908`，28/28 jobs success；隔离验收、独立复核、M1/M6、计划视图和链接检查已通过。预算/账龄边界、名称筛选/后退恢复、图表追溯、A+C 视觉、九页报告/离线包、本机数据操作证据见[差距审查](../60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)。14 项主队列为完成 7、实际执行中 1（7a）、队首待启动 0、排队 4、暂停 1、外部条件受限 1。唯一执行序列见[路线图 7a](../50_plans/CURRENT_ROADMAP.md#7a-单机原型收尾动作与完成条件2026-10-24)。当前在专用 worktree 整合 main 文档状态并推进 draft PR #3；合并提交的 CI 与最终交付归档尚待完成。用户已选择保留 `/Users/qiming/.flow/flow.sqlite3` 空文件；`services/api/flow.sqlite3` 未跟踪文件也保持原样。
+
+<details>
+<summary>2026-10-21 及以前的状态快照（历史，不代表当前执行）</summary>
+
+2026-10-21 最新状态：**阶段 7 单机冷启动/离线验收与集成门禁分片已完成；唯一执行项 7a 正在收敛全视图视觉差距并复核文档。** 主题模块报告布局、数据工作台改进和费用页 KPI 窄屏两列修复已提交并推送；代码 SHA `87e1829d32d6281fe1dad7ee978f39e0c1b4e5f2` 的 run `39451521454` 因随后提交已取消；期间费用堆叠图 SHA `65d7dc61d18e0ebe2f2bc582c3f99e4bbe3e4d5d` 的 run `39453419044` 因后续状态提交取消，汇总 job 失败由分片取消导致、非测试断言失败；状态提交 SHA `a71cb28eedc6bca8019e7552fe7b2348f28f1239` 对应准确 SHA run `39453752316` 已 28/28 jobs success；最新文档 SHA `21b650a108e7d906338454d661b7cfe178e13487` / run `39457446117` 也已 28/28 success。上一文档 SHA `4073d511` / run `39447663998` 为 28/28 success。本地进一步将总览期间费用图改为 API 已发布的两年、四项披露费用堆叠对比，并同步双期间原值表；明确不含营业成本、不推算费用率。前端 199/199、typecheck、production build 已通过；lint 0 error、3 条既有 warning。概念板关键视觉签名已覆盖总览、六个主题模块和 `/data`：暖纸白、墨蓝、古金、衬线标题、期间对比、图表与可追溯来源；桌面费用页 3+2 KPI 居中，390px 窄屏为两列，单 KPI 降级摘要通栏，三图模块末图通栏。单机仍采用 SQLite 单文件、本地文件目录、同步处理与单一启动入口，本轮没有新增依赖、服务或数据库变更。六个主题模块在 390px 下均实测 HTTP 200、页面 ready、有图表且无横向溢出；`/data` 390px 与桌面样例也通过。实际截图位于本机 `/tmp/flow-cockpit-visual-20261020/`，未提交仓库；截图自动发布/自动化工作流仍暂停。门禁四分片仍完整覆盖原 284 项测试/66 文件，零遗漏/零重复；阶段 7 冷启动与离线静态页验收见[阶段 7验收](../60_delivery/verification/2026-10-20--single-machine-visual-static-acceptance-v1.md)。剩余为文档现状核准与清理候选审计、最终复核及准确 SHA CI；不删除文件，疑似过时内容保留历史并校正当前入口。顺序见[路线图](../50_plans/CURRENT_ROADMAP.md)和[7a 工作包第 9 节](../50_plans/work_items/FLOW--single-machine-visual-prototype.md#9-概念图视觉差距门禁负载与文档治理)。
+
+</details>
+
+下段为 K2 执行前的状态快照，已过时；当前状态以本段及 [CURRENT_ROADMAP](../50_plans/CURRENT_ROADMAP.md) 为准。
+
 # FLOW 当前项目状态（唯一 current state）
 
-2026-10-18 当前状态：**单机单用户验证原型的架构简化与全视图视觉升级为唯一队首**。用户已确认 SQLite 单文件 + 本地文件目录、移除 Redis/Celery/MinIO，视觉采用 A「高管编辑部」+ C「财务报告画布」。第 1 阶段现状/依赖审计与第 2 阶段 SQLite/本地内容存储隔离全链验证均已完成。准确代码 SHA `b0e1eb787592ff84bc4c19873a1e61cad1f9f3e6` 的 CI run `39099573268` 为 18/18 jobs success，第 2 阶段正式关闭；队首转入第 3 阶段单机运行结构收敛。验证覆盖 SQLite 61 表、两期财报导入/归一化/冻结、内容目录与数据库备份恢复、恢复后驾驶舱聚合以及 SQLite/PostgreSQL Decimal 零差异。架构审计报告见[交付记录](../60_delivery/verification/2026-10-18--single-machine-architecture-dependency-audit-v1.md)。正式设计与工作包已落盘；准确 SHA `a331f03075c95f3b371b5a0ebd0fd91cac9dfeae` 的 CI run `39090417203` 全 job success。此前 `d51af7ad` 的 CI run `39087270646` 因两个长测触及 job 上限 cancelled，同一代码的后续完整运行通过，未调整 CI 超时或测试覆盖。旧全视图工作包已归档，其九页、25 个 ECharts 画布、桌面/窄屏截图和逐值对账作为回归基线；旧 CI run `39042517573`、`39041228479` cancelled，`39040652008`、`39038535194` failure，均未通过全量 CI。知识刷新 K2 顺延。另有主 checkout 四处 2026-10-16 未提交驾驶舱改动，本工作分支未触碰，最终集成前需核对处置。详见[当前路线图](../50_plans/CURRENT_ROADMAP.md)、[D055](../10_governance/decisions/D055--单机单用户验证原型.md)、[正式设计](../superpowers/specs/2026-10-18-single-machine-visual-prototype-design.md)和[实施工作包](../50_plans/work_items/FLOW--single-machine-visual-prototype.md)。
+2026-10-19 当前状态：**单机原型架构收敛第 1–3 阶段已完成；第 4 阶段 4.1–4.6 已结案，4.7 浏览器验收、准确 SHA GitHub CI 与最终集成门禁均已完成；当前执行 K2 冻结器简化与即时快照验收；已批准移除上海墙上时钟门禁和 clean-only 条件，改用工作区内容双重指纹与实际写句柄检查**。用户已确认 SQLite 单文件 + 本地文件目录、移除 Redis/Celery/MinIO，视觉采用 A「高管编辑部」+ C「财务报告画布」。第 3 阶段最终状态 SHA `20a511f66e4bfe65ab02edc091c7b49e2cbcbe67` 的 CI run `39125304357` 18/18 jobs success；其隔离 SQLite/账套重置、PostgreSQL 兼容、生产 bootstrap、空库初始化与 Web/API 200 smoke 均通过，完整证据见[验收记录](../60_delivery/verification/2026-10-18--single-machine-runtime-convergence-v1.md)。参考文章 10 个模块的覆盖矩阵已交付，映射到现有页面、API、指标、披露/演示事实、来源与粒度，记录入口割裂和能力缺口；准确 SHA `d8f2ae8d617914fcd05cfd21d8484154b1411a65` 的 run `39128676851` 中，`data-contract` 两次在约 40 分钟限制被取消；隔离独立 Compose/数据库运行原验收脚本完整通过（133+3 项测试、Ruff、213 文件 mypy、摘要检查），M1/M6、链接和差异检查通过。验收记录见[4.1 验收](../60_delivery/verification/2026-10-18--cfo-reference-matrix-ci-and-isolated-validation-v1.md)。4.2 已交付 14 个视图的图表/数据可用性矩阵，确认合成账龄和预算数据已有但未呈现，并登记订单数小数语义缺口；4.3 已完成复用方案，继续采用 ECharts 6.1；账龄/排名/矩阵构建器已有但未连到通用模块图表分发器，且当前 canvas 缺少点击/键盘数据入口。4.4 图表与同值数据表/链接已完成，不增加依赖。已接通单期分类柱图 builder、修正资产结构图型语义、为无期间标量图表补当前期间列，并链接指标定义；前端 189/189、typecheck、build、API 模块路由 9/9、cockpit 单测/API 14/14 通过，M1 通过；旧快照测试夹具已对齐 `objective.v3` 合同。4.4 模块图表适配已结案，验收记录见[报告](../60_delivery/verification/2026-10-18--cfo-module-chart-adapter-acceptance-v1.md)。4.5 已重建企业发行包并补强 verify：当前源 manifest 指纹与发行包一致，经营数据文件逐字节对应源 fixture，1,920 行订单/件量均为整数语义；发行包 31 文件校验、重复构建确定性、相关 14 项测试通过，验收见[记录](../60_delivery/verification/2026-10-18--cfo-enterprise-package-lineage-and-integer-counts-v1.md)。4.6 已完成指标绝对值、单位、精度、期间变化及来源/公式可达性核验，独立复核无 P1/P2，详见[4.6 验收](../60_delivery/verification/2026-10-18--cfo-metric-display-and-traceability-v1.md)。4.7 已完成 9 个真实数据视图及 165 项浏览器回归，无截图/trace；验收见[浏览器验收记录](../60_delivery/verification/2026-10-18--cfo-browser-acceptance-v1.md)。代码 SHA `65a087063ad67702172430702590083f8991a884` 的 GitHub run `39139310634` 18/18 jobs success；最终文档 SHA `a1fe50ef4e71298767b4fe8e22ab47d780f28552` 的 run `39140563811` 18/18 success，工作包 7a 已关闭。中间文档提交 `8bf7535c` 曾因 M6 元数据错误失败且 data-contract 触限取消，已在 `a1fe50ef` 修正并以准确 SHA 全绿复验。当前唯一队首为知识刷新 K2 冻结器简化：内容指纹需覆盖未提交和未跟踪文件，双次复验一致且无实际写句柄后才能 accepted。只读预检发现 1,377 条 dirty 路径（K0 为 1,365）、知识库范围指纹变化及冻结器识别的潜在 writer；没有写入 vault。完整证据见[K2 只读预检](../60_delivery/verification/2026-10-19--k2-obsidian-readonly-preflight-v1.md)。已批准的新合同取消墙上时钟等待；冻结器实现、双指纹验证、dirty 工作区回归和准确 SHA CI 通过后，立即在现有工作区执行 K2；漂移时如实 rejected，不触碰 vault。报告见[4.2盘点](../60_delivery/verification/2026-10-18--cfo-chart-and-data-availability-v1.md)和[4.3组件方案](../60_delivery/verification/2026-10-18--cfo-chart-component-and-interaction-design-v1.md)。截图采集工作流仍暂停。第 2 阶段 SHA `b0e1eb787592ff84bc4c19873a1e61cad1f9f3e6` / run `39099573268` 18/18 success。旧全视图任务作为回归基线，旧 CI run `39042517573`、`39041228479` cancelled，`39040652008`、`39038535194` failure，不能宣称通过。知识刷新 K2 顺延。另有主 checkout 四处 2026-10-16 未提交驾驶舱改动，本分支未触碰，最终集成前需核对处置。详见[路线图](../50_plans/CURRENT_ROADMAP.md)、[D055](../10_governance/decisions/D055--单机单用户验证原型.md)、[正式设计](../superpowers/specs/2026-10-18-single-machine-visual-prototype-design.md)和[工作包](../50_plans/work_items/FLOW--single-machine-visual-prototype.md)。
+
+用户提供的《集团财务总监经营驾驶舱》已纳入第 4 阶段覆盖矩阵：借鉴模块组织与图表叙事，不采用文章演示数值或未经原图核验的 AI 摘要。已有 `/cockpit/profitability` 杜邦页与 `/data` 数据中心不重复建设；“利润增长”先核查现有覆盖和数据能力，再决定是否需要独立页面。覆盖矩阵见[核查报告](../60_delivery/verification/2026-10-18--cfo-reference-module-data-coverage-v1.md)，4.1 已按隔离替代验收结案（远端 data-contract 两次 40 分钟取消，结果详见4.1验收记录）；4.2–4.7 已按唯一工作包完成，浏览器验收与准确 SHA CI 状态见上方当前状态和路线图。截图采集工作流继续暂停。执行顺序见[路线图](../50_plans/CURRENT_ROADMAP.md)和[工作包](../50_plans/work_items/FLOW--single-machine-visual-prototype.md)。
 
 2026-10-17（历史状态）：CFO 驾驶舱九个视图在一次性隔离账套中均实际渲染，桌面/窄屏截图已采集；共 25 个图表画布，总览已显示营业收入、营业利润、毛利率、经营现金流及行动项。六模块全部 chart series、瀑布步骤、公式卡 DSO/DIO/DPO/CCC 和盈利能力期间指标均与 API 展示值逐项核对。大麦财务实际为 2,304 条期间×组织×科目行，月度/组织分配标记 synthetic allocation；金额统一为 CNY 元、订单和件量为整数。阶段 2 准确 SHA CI run `39035163288` 18/18 成功；此前 `39038535194` 有失败且后续 `39041228479`、`39042517573` 被取消，详见[旧工作包](../50_plans/work_items/COCKPIT--all-views-data-and-visual-completion.md)与[浏览器截图报告](../60_delivery/verification/2026-10-17--cockpit-all-views-visual-browser-verification-v1.md)。
 
@@ -74,7 +87,7 @@ applies_to: repository
 
 ## 当前执行入口
 
-- **[CURRENT_ROADMAP.md](../50_plans/CURRENT_ROADMAP.md)**（唯一主线：状态真相 + 单一串行 To-do）：当前唯一执行项为单机原型架构简化与全视图视觉升级；知识刷新 K2 顺延。全部后续任务及状态只按该路线图执行。
+- **[CURRENT_ROADMAP.md](../50_plans/CURRENT_ROADMAP.md)**（唯一主线：状态真相 + 单一串行 To-do）：当前唯一执行项为 7a.8 主线整合与交付归档；7a.1–7a.7 已完成。合并 SHA 的 CI 核验和 PR #3 最终归档完成后再关闭 7a；其后暂不自动启动知识刷新、真实企业试点或行业扩张。全部后续任务及状态只按该路线图执行。
 - 旧统一计划、O 系列计划、EXECUTION_TODO 与 2026-09-24/25 三份总计划均已 superseded/archived（保留历史细节与证据，不再作为执行依据）
 - 文档迁移：[迁移实施计划 M0–M6](../superpowers/plans/2026-09-12-static-knowledge-and-document-migration.md) 已全部关闭（bfc1271 / e373e25，用户确认 2026-09-13）
 

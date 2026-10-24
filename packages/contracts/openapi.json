@@ -7232,6 +7232,9 @@
           "data_status": {
             "$ref": "#/components/schemas/DataStatus"
           },
+          "filter_options": {
+            "$ref": "#/components/schemas/FilterOptions"
+          },
           "kpi_cards": {
             "items": {
               "$ref": "#/components/schemas/CockpitKpiCard"
@@ -7266,6 +7269,7 @@
           "state",
           "context",
           "data_status",
+          "filter_options",
           "conclusion"
         ],
         "title": "CockpitOverviewResponse"
@@ -7619,6 +7623,11 @@
             "type": "string",
             "title": "Period"
           },
+          "snapshot_id": {
+            "type": "string",
+            "title": "Snapshot Id",
+            "description": "该期间的冻结指标快照 ID"
+          },
           "value": {
             "type": "number",
             "title": "Value"
@@ -7636,6 +7645,7 @@
         "type": "object",
         "required": [
           "period",
+          "snapshot_id",
           "value",
           "display_value"
         ],

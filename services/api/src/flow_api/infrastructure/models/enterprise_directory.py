@@ -104,7 +104,11 @@ class EnterpriseMember(CanonicalIdentityMixin, Base):
         CheckConstraint(
             "identity_metadata ->> 'synthetic' = 'true'",
             name="ck_enterprise_member_synthetic",
-        ),
+        ).ddl_if(dialect="postgresql"),
+        CheckConstraint(
+            "json_extract(identity_metadata, '$.synthetic') = 1",
+            name="ck_enterprise_member_synthetic_sqlite",
+        ).ddl_if(dialect="sqlite"),
     )
 
     enterprise_id: Mapped[UUID] = mapped_column(

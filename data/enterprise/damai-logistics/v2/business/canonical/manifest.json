@@ -4,7 +4,7 @@
   "files": {
     "ar_collections.jsonl": {
       "row_count": 4800,
-      "sha256": "662da1b6ead62a9f9d84c8a684d8e90cd615d20fdc3a1475edefa1b02b08e830"
+      "sha256": "ad23eaaae4ded2e5e99d9b136c251a8fff8dd14c5843dd5c0848c315e6ee774a"
     },
     "batch.jsonl": {
       "row_count": 1,
@@ -19,24 +19,24 @@
       "sha256": "bb9e7ec1f4064d63a20470c2cc4455ed098fdc219f1c632cdd2c07c38614c3af"
     },
     "financial_actuals.jsonl": {
-      "row_count": 768,
-      "sha256": "f34945827e00622000d4212b0925f2a137cd6bb562116f7011b64833c297bc91"
+      "row_count": 2304,
+      "sha256": "e595d3a55c19d9d74bad551a8bae9305481c7192157410020b2845691891f789"
     },
     "logistics_products.jsonl": {
       "row_count": 8,
       "sha256": "57c321b81aece35c5a0e9e58277c65df2fb7d6a4a4878647b39beb98032b0abc"
     },
     "management_accounts.jsonl": {
-      "row_count": 9,
-      "sha256": "2802026cbf8cb9ffcc7b51c17ec98adca8bb3222981f72160dd51dd83ce5a6b1"
+      "row_count": 24,
+      "sha256": "9c688341494dc2602a9dbfac1de21e0d00285adcdb6e3063a0d1b85284b34c45"
     },
     "monthly_budgets.jsonl": {
       "row_count": 10752,
-      "sha256": "b0e79bd4e2d74ba1ea5b70ad5f35b54e1c921578ea517d5458f10947dc020d93"
+      "sha256": "64824cf766fe36b507e09644929f519465ad9355104e1af3d48452ef4d74a7d4"
     },
     "operating_actuals.jsonl": {
       "row_count": 1920,
-      "sha256": "ec50ecc5368ab4e60fe198e025af1c7878f78debd18005202c65359e6b599bf9"
+      "sha256": "efd09766206aa8274418b09cb6fb92bf6c11967d8ed37a097a665f34b3c88305"
     },
     "organizations.jsonl": {
       "row_count": 5,

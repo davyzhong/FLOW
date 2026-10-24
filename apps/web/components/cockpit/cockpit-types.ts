@@ -15,6 +15,8 @@ import type {
   CockpitOverviewResponse,
   CockpitTrend,
   CockpitTrendSeries,
+  FilterDimension,
+  FilterOptions,
 } from "../../lib/api/client";
 
 export type {
@@ -26,6 +28,10 @@ export type {
   CockpitTrend,
   CockpitTrendSeries,
 };
+
+/** 7a.3：维度可选项（id+name 下拉），来源=服务端 filter_options，不前端拼接 */
+export type CockpitFilterDimension = FilterDimension;
+export type CockpitFilterOptions = FilterOptions;
 
 /** 指标极性：决定比较值着色方向（费用率下降是好事，不能一律「上升=绿」） */
 export type CockpitPolarity = string;

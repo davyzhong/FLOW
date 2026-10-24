@@ -5,7 +5,7 @@ doc_type: navigation
 status: current
 version: 2.0
 created_at: 2026-10-13
-updated_at: 2026-10-13
+updated_at: 2026-10-18
 owner: FLOW
 applies_to: repository
 ---
@@ -45,12 +45,13 @@ uv run --project services/api python scripts/build_enterprise_data_package.py bu
 uv run --project services/api python scripts/build_enterprise_data_package.py verify
 ```
 
-`build` 将当前大麦业务 fixture 拷贝到发行目录、生成组织 SQL、校验组织引用并重算清单；`verify` 检查 synthetic 标记、组织/岗位/用户引用、企业命名空间、邮箱保留域、现有 RBAC Role/Action 快照、业务组织引用、路径边界、文件覆盖、SHA/字节数/JSONL 行数，以及组织 SQL 是否与 JSONL 源一致。构建可重复执行。
+`build` 将当前大麦业务 fixture 拷贝到发行目录、生成组织 SQL、校验组织引用并重算清单；`verify` 检查 synthetic 标记、组织/岗位/用户引用、企业命名空间、邮箱保留域、现有 RBAC Role/Action 快照、业务组织引用、路径边界、文件覆盖、SHA/字节数/JSONL 行数、发行清单与当前源清单的指纹，以及每个业务文件与源 fixture 的逐字节一致性，并核对组织 SQL 是否与 JSONL 源一致。构建可重复执行。
 
 ## 数据约定
 
 - 企业标识固定为 `damai-logistics`（系统内需先存在此企业空间；初始化不会创建或改写企业空间），所有跨模块关联使用稳定 code，而非数据库生成 ID。
 - JSONL 每行一个 UTF-8 JSON 对象，字段名使用英文 snake_case；金额和单位遵从业务源文件约定。
+- `order_count`、`shipment_count` 等计数型经营事实采用整数语义；发行包必须与 `fixtures/damai/` 当前源文件完全一致，禁止以旧版比例分摊小数替代源事实。
 - 所有组织、岗位和用户记录必须有 `synthetic: true`。邮箱使用 `.example.invalid` 保留域；不生成电话、政府身份证号、密码、token 或密钥。
 - 组织用户映射到 FLOW 当前已有六类系统角色之一。若系统授权矩阵改变，应重建权限快照并重新审阅，不得借数据包增加系统未批准的权限。
 - `identity_kind` 用于标明 human、AI 或 service 类型；模拟身份本身不创建认证凭据。
