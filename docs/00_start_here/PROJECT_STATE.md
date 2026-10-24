@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.78
+version: 5.79
 created_at: 2026-09-12
 updated_at: 2026-10-24
 owner: FLOW
@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-10-24 当前状态：**单机原型正在执行 7a 收尾；7a.1–7a.3 已完成，当前唯一动作转为 7a.4 视觉基准与跨页面核对。** 基线和演示包已固定；7a.2 接通现有预算、利润桥、产品/毛利与调查入口，账龄能力如实标注受限；7a.3 完成名称筛选、URL 后退恢复、图表点选和快照追溯。Web 37 个测试文件/201 项、typecheck、契约检查、API 投影 28 项与 Ruff 已通过。7a.4–7a.6 候选操作/截图证据见[差距审查](../60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)；正式离线包要在最终代码冻结后重采。14 项主队列仍为完成 7、实际执行中 1（7a）、队首待启动 0、排队 4、暂停 1、外部条件受限 1。唯一执行序列见[路线图 7a](../50_plans/CURRENT_ROADMAP.md#7a-单机原型收尾动作与完成条件2026-10-24)。最终隔离验收、独立复核、main 集成与冻结仍未完成；意外产生的 `/Users/qiming/.flow/flow.sqlite3` 零字节文件保持不动，待用户处置选择。
+2026-10-24 当前状态：**单机原型收尾正在执行 7a.8 主线整合与交付归档；7a.1–7a.7 已完成。** 候选代码 SHA `0a43d131d44a5891181b2e935e011888b3101660` 对应 GitHub Actions run `40079923908`，28/28 jobs success；隔离验收、独立复核、M1/M6、计划视图和链接检查已通过。预算/账龄边界、名称筛选/后退恢复、图表追溯、A+C 视觉、九页报告/离线包、本机数据操作证据见[差距审查](../60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)。14 项主队列为完成 7、实际执行中 1（7a）、队首待启动 0、排队 4、暂停 1、外部条件受限 1。唯一执行序列见[路线图 7a](../50_plans/CURRENT_ROADMAP.md#7a-单机原型收尾动作与完成条件2026-10-24)。当前在专用 worktree 整合 main 文档状态并推进 draft PR #3；合并提交的 CI 与最终交付归档尚待完成。用户已选择保留 `/Users/qiming/.flow/flow.sqlite3` 空文件；`services/api/flow.sqlite3` 未跟踪文件也保持原样。
 
 <details>
 <summary>2026-10-21 及以前的状态快照（历史，不代表当前执行）</summary>
@@ -87,7 +87,7 @@ applies_to: repository
 
 ## 当前执行入口
 
-- **[CURRENT_ROADMAP.md](../50_plans/CURRENT_ROADMAP.md)**（唯一主线：状态真相 + 单一串行 To-do）：当前唯一执行项为 7a 单机原型架构简化与全视图视觉升级；阶段 7 单机冷启动、离线展示与门禁分片已完成，当前按阶段 9顺序完成视觉闭环、文档复核与最终集成。其后再恢复知识刷新 K3。全部后续任务及状态只按该路线图执行。
+- **[CURRENT_ROADMAP.md](../50_plans/CURRENT_ROADMAP.md)**（唯一主线：状态真相 + 单一串行 To-do）：当前唯一执行项为 7a.8 主线整合与交付归档；7a.1–7a.7 已完成。合并 SHA 的 CI 核验和 PR #3 最终归档完成后再关闭 7a；其后暂不自动启动知识刷新、真实企业试点或行业扩张。全部后续任务及状态只按该路线图执行。
 - 旧统一计划、O 系列计划、EXECUTION_TODO 与 2026-09-24/25 三份总计划均已 superseded/archived（保留历史细节与证据，不再作为执行依据）
 - 文档迁移：[迁移实施计划 M0–M6](../superpowers/plans/2026-09-12-static-knowledge-and-document-migration.md) 已全部关闭（bfc1271 / e373e25，用户确认 2026-09-13）
 

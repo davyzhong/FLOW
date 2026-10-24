@@ -20,12 +20,21 @@ applies_to: repository
 
 **连续收尾接管授权（2026-10-24）：** 用户已要求按 `CURRENT_ROADMAP` 顺序连续执行路线图 7a.1–7a.8，完成可做事项后进入收尾。范围和跳过规则已落盘：外部长等待先诊断并尝试安全替代，仍无进展则如实记为跳过/未验证；不得绕过红线或虚报验收。本 worktree 与分支为该任务唯一写入目标；当前进度与下一动作见下方最新交接段，历史接手状态不再作为现况依据。
 
-**2026-10-24 当前交接：路线图 7a.1–7a.3 已完成，当前唯一执行动作是 7a.4。** worktree `/Users/qiming/workspace/FLOW/.worktrees/cockpit-visual-completion`，分支 `codex/single-machine-runtime-convergence`。已完成演示经营入口、名称筛选/后退恢复、图表点选和快照追溯；候选单机操作、隔离恢复/重置与九页采集证据见[差距审查](docs/60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)。当前前端定向测试 201/201、typecheck、contracts、API 投影 28/28、Ruff 均通过。下一步按路线图依序完成视觉巡检与正式静态包、最终隔离旅程和独立复核，再做 main 集成。主 checkout 用户文件保持原位。`/Users/qiming/.flow/flow.sqlite3` 零字节误建文件未经用户选择不得触碰。
+**2026-10-24 当前交接：7a.1–7a.7 已完成，当前唯一执行动作是 7a.8 主线整合与交付归档。** worktree `/Users/qiming/workspace/FLOW/.worktrees/cockpit-visual-completion`，分支 `codex/single-machine-runtime-convergence`。候选代码 SHA `0a43d131d44a5891181b2e935e011888b3101660` 的 GitHub Actions run `40079923908` 为 28/28 success；M1/M6、计划视图、链接与差异检查通过。候选九页视觉包、隔离旅程及独立复核证据见[差距审查](docs/60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)。当前在 worktree 内整合 `origin/main` 文档快照，完成后提交并推送，核验合并 SHA 的 CI，再更新 PR #3 交付状态。主 checkout 用户文件保持原位；`/Users/qiming/.flow/flow.sqlite3` 零字节文件按用户选择保留，`services/api/flow.sqlite3` 未跟踪文件也保持原样。
 
 <details>
 <summary>2026-10-21 及以前的状态快照（历史，不代表当前执行）</summary>
 
 **当前执行项：7a 全视图视觉收敛、门禁分片与项目文档治理。** 已完成总览与主题页报告层级、移动导航、数据工作台报告式布局；本轮修补 390px 费用页五项 KPI 三列挤压，改为两列，并将驾驶舱费用结构图升级为已披露两年的堆叠对比及双期原值表，显式说明不含营业成本。前端 199/199、typecheck/生产 build 通过；lint 零错误、3 条既有 warning。费用页 KPI 修复 SHA `87e1829d32d6281fe1dad7ee978f39e0c1b4e5f2` 对应准确 SHA CI run `39451521454` 已因后续提交取消；堆叠费用图提交 SHA `65d7dc61d18e0ebe2f2bc582c3f99e4bbe3e4d5d` 的 run `39453419044` 因后续文档提交取消，汇总失败由分片取消导致、非断言失败；状态提交 `a71cb28eedc6bca8019e7552fe7b2348f28f1239` 的准确 SHA run `39453752316` 已 28/28 jobs success；最新文档 SHA `21b650a108e7d906338454d661b7cfe178e13487` / run `39457446117` 也已 28/28 success。上一文档 SHA `4073d511` / run `39447663998` 28/28 jobs success。六个主题模块 390px 实测 ready、有图表且无横向溢出；费用 KPI 栅格回归通过。SQLite + 本地文件、同步处理和一键启动保持不变；本轮没有新增依赖/服务或数据库改动。运行架构文档已校准备份恢复验收状态和 SQLite JSON / PostgreSQL JSONB 差异。继续完成文档现状与清理候选审计、最终复核和新 SHA CI；任何文件删除仍需逐项授权。验收顺序见[7a 工作包第 9 节](docs/50_plans/work_items/FLOW--single-machine-visual-prototype.md#9-概念图视觉差距门禁负载与文档治理)，唯一队列见[CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)。
+
+</details>
+
+<details>
+<summary>2026-10-20 main 接手核验快照（历史）</summary>
+
+- 当时 main HEAD `5ed61af91ea4c1c2a2078fd654accf671ba805ba` 对应 CI run `39119888132`，18/18 jobs success；该结果仅代表当时 SHA。
+- 当时唯一队列为 14 项：完成 7、执行中 0、队首待启动 1、排队 4、暂停 1、外部材料受限 1；队首是 D055 单机原型架构简化与全视图视觉升级。
+- 当时主 checkout 有 4 个修改文件及 1 个未跟踪 YAML，均未触碰；该历史快照不替代本文顶部的 2026-10-24 当前状态。
 
 </details>
 

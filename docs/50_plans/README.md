@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-050
 title: 计划体系
 doc_type: navigation
 status: current
-version: 1.6
+version: 1.7
 created_at: 2026-09-12
 updated_at: 2026-10-24
 owner: FLOW
@@ -22,4 +22,4 @@ applies_to: docs
 [统一完整实施计划（2026-09-24）](../superpowers/plans/2026-09-24-flow-integrated-execution-plan.md)、
 [执行收敛与验收计划（2026-09-25）](2026-09-25-project-execution-convergence-plan.md)。
 
-当前队首为 D055 单机原型收尾：已有架构和 CI 基础，按 [CURRENT_ROADMAP 的 7a 收尾队列](CURRENT_ROADMAP.md#7a-单机原型收尾动作与完成条件2026-10-24)完成 8 个动作。审查依据见[完结差距报告](../60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)。本轮未启动代码实施，下一动作为 7a.1；历史状态和旧分支指引不作为执行入口。
+当前队首为 D055 单机原型收尾：7a.1–7a.7 已完成，当前执行 7a.8 主线整合与交付归档。候选代码 SHA `0a43d131d44a5891181b2e935e011888b3101660` 的 CI run `40079923908` 为 28/28 success；交付状态见 [CURRENT_ROADMAP 的 7a 收尾队列](CURRENT_ROADMAP.md#7a-单机原型收尾动作与完成条件2026-10-24) 和[完结差距报告](../60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)。历史状态和旧分支指引不作为执行入口。

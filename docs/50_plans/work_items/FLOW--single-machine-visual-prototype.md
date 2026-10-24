@@ -19,7 +19,7 @@ confidentiality: project-internal
 
 # 单机原型架构简化与全视图视觉升级
 
-> **2026-10-24 接续说明：** 单机架构基础和 CI 分片已有通过证据；准确开发 SHA `92079f77` / run `39516118760` 为 28/28 success，整个 7a 尚未结案。收尾范围细化为数据呈现、交互/筛选、概念视觉、报告/离线、单机操作、最终验收与集成；现有规格继续适用，不新增企业级架构。审查见[完结差距报告](../../60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)，唯一可领取顺序只在[CURRENT_ROADMAP 7a 收尾队列](../CURRENT_ROADMAP.md#7a-单机原型收尾动作与完成条件2026-10-24)。本工作包下方阶段记录为验收细节/历史，不产生第二份 To-do；代码动作尚未启动。
+> **2026-10-24 接续说明：** 7a.1–7a.7 已完成，当前执行 7a.8 主线整合与交付归档。候选代码 SHA `0a43d131d44a5891181b2e935e011888b3101660` 对应 GitHub Actions run `40079923908`，28/28 jobs success；候选隔离旅程、九页离线包和独立复核证据见[完结差距报告](../../60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)。代码与范围不扩展，现有规格继续适用。唯一可领取顺序只在[CURRENT_ROADMAP 7a 收尾队列](../CURRENT_ROADMAP.md#7a-单机原型收尾动作与完成条件2026-10-24)；本工作包下方阶段记录为验收细节/历史，不产生第二份 To-do。
 
 <details>
 <summary>2026-10-21 及以前的状态快照（历史，不代表当前执行）</summary>
