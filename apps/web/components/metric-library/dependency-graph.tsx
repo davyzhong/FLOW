@@ -186,6 +186,10 @@ export function DependencyGraph({
     [metrics, tierFilter],
   );
   const layout = useMemo(() => computeLayout(visible), [visible]);
+  const graphHeight = useMemo(
+    () => Math.max(560, ...[...layout.positions.values()].map(({ y }) => y + NODE_H + PADDING)),
+    [layout],
+  );
   const edgesIndex = useMemo(
     () => new Map(visible.map((m) => [m.metric_code, (m.depends_on ?? []).filter((d) => layout.positions.has(d))])),
     [visible, layout],
@@ -290,7 +294,7 @@ export function DependencyGraph({
 
       <div
         className="ml-graph__flow"
-        style={{ height: 560 }}
+        style={{ height: graphHeight }}
         role="region"
         aria-label="指标依赖关系有向图（可缩放平移）"
       >
