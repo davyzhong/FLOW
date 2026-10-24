@@ -4,9 +4,9 @@
   --line: var(--rep-line);
   --blue: var(--rep-blue);
   --navy: #13223a;
-  --green: #075f45; /* F2 曾误改为 var(--rep-teal)（#0d9488 对白字 3.05:1 不达标），恢复 F2 前值 */
+  --green: var(--flow-vl-colors-semantic-positive); /* F2 曾误改为 var(--rep-teal)（#0d9488 对白字 3.05:1 不达标），恢复 F2 前值 */
   --red: #912f3b;
-  --amber: #805000;
+  --amber: var(--flow-vl-colors-semantic-warning);
   padding: 18px;
   background: var(--rep-line-4);
 }
@@ -30,7 +30,7 @@
   overflow: hidden;
   border: 1px solid #d6dee9;
   border-radius: 12px;
-  background: #f5f7fa;
+  background: var(--flow-vl-colors-surface-canvas);
   box-shadow: 0 12px 35px rgb(32 54 83 / 8%);
 }
 
@@ -138,7 +138,7 @@
   margin-top: auto;
   padding: 16px 8px 0;
   border-top: 1px solid rgb(255 255 255 / 10%);
-  color: #afbdd0;
+  color: var(--flow-vl-colors-line-strong);
   font-size: 9px;
 }
 
@@ -152,7 +152,7 @@
   border: none;
   background: none;
   padding: 2px 4px;
-  color: #afbdd0;
+  color: var(--flow-vl-colors-line-strong);
   font-size: 9px;
   cursor: pointer;
 }
@@ -277,7 +277,7 @@
   min-height: 36px;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid #e9edf3;
+  border-bottom: 1px solid var(--flow-vl-colors-surface-soft);
   padding: 7px 10px;
 }
 
@@ -316,8 +316,8 @@
 .metric-card {
   min-width: 0;
   padding: 11px;
-  border-right: 1px solid #e9edf3;
-  border-bottom: 1px solid #e9edf3;
+  border-right: 1px solid var(--flow-vl-colors-surface-soft);
+  border-bottom: 1px solid var(--flow-vl-colors-surface-soft);
 }
 
 .metric-card:nth-child(4n) {
@@ -432,8 +432,8 @@
 }
 
 .trend-line--revenue { stroke: var(--rep-blue); }
-.trend-line--profit { stroke: #075f45; }
-.trend-line--cash { stroke: #8a4b00; }
+.trend-line--profit { stroke: var(--flow-vl-colors-semantic-positive); }
+.trend-line--cash { stroke: var(--flow-vl-colors-semantic-warning); }
 
 .chart-legend {
   display: flex;
@@ -454,11 +454,11 @@
 }
 
 .chart-legend .revenue { color: var(--rep-blue); }
-.chart-legend .profit { color: #075f45; }
-.chart-legend .cash { color: #8a4b00; }
+.chart-legend .profit { color: var(--flow-vl-colors-semantic-positive); }
+.chart-legend .cash { color: var(--flow-vl-colors-semantic-warning); }
 
 .trend-details {
-  border-top: 1px solid #edf1f5;
+  border-top: 1px solid var(--flow-vl-colors-surface-soft);
   padding: 7px 10px;
   color: var(--muted);
   font-size: 8px;
@@ -507,7 +507,7 @@
 
 .bridge-reconcile {
   margin: 0;
-  border-top: 1px solid #edf1f5;
+  border-top: 1px solid var(--flow-vl-colors-surface-soft);
   padding: 7px 12px;
   color: var(--muted);
   font-size: 7px;
@@ -540,7 +540,7 @@
   align-items: center;
   min-height: 58px;
   border-right: 0;
-  border-bottom: 1px solid #e9edf3;
+  border-bottom: 1px solid var(--flow-vl-colors-surface-soft);
   padding: 8px 10px;
 }
 
@@ -585,8 +585,8 @@ table {
 
 th,
 td {
-  border-right: 1px solid #edf1f5;
-  border-bottom: 1px solid #edf1f5;
+  border-right: 1px solid var(--flow-vl-colors-surface-soft);
+  border-bottom: 1px solid var(--flow-vl-colors-surface-soft);
   padding: 7px 9px;
   text-align: right;
   white-space: nowrap;
@@ -637,7 +637,7 @@ tbody th:first-child { text-align: left; }
   gap: 3px;
   align-items: center;
   justify-content: flex-end;
-  border-top: 1px solid #edf1f5;
+  border-top: 1px solid var(--flow-vl-colors-surface-soft);
   padding: 6px 10px;
   color: var(--muted);
   font-size: 7px;
@@ -673,8 +673,8 @@ tbody th:first-child { text-align: left; }
   .dashboard-filters select { width: 100%; }
   .metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .metric-card:nth-child(2n) { border-right: 0; }
-  .metric-card:nth-child(odd) { border-right: 1px solid #e9edf3; }
-  .metric-card:nth-last-child(-n + 4) { border-bottom: 1px solid #e9edf3; }
+  .metric-card:nth-child(odd) { border-right: 1px solid var(--flow-vl-colors-surface-soft); }
+  .metric-card:nth-last-child(-n + 4) { border-bottom: 1px solid var(--flow-vl-colors-surface-soft); }
   .metric-card:nth-last-child(-n + 2) { border-bottom: 0; }
   .dashboard-analysis-grid { grid-template-columns: 1fr; }
   .findings-panel ol { grid-template-columns: 1fr; }
@@ -695,7 +695,7 @@ tbody th:first-child { text-align: left; }
 .operations-state--guide a { color: var(--flow-info); font-weight: 600; text-decoration: underline; }
 .operations-state--guide {
   border: 1px dashed #94a3b8; border-radius: 8px;
-  padding: 20px 24px; background: #f8fafc; color: #334155;
+  padding: 20px 24px; background: var(--flow-vl-colors-surface-soft); color: var(--flow-vl-colors-text-primary);
 }
 .operations-state--guide p { margin: 0 0 8px; }
 

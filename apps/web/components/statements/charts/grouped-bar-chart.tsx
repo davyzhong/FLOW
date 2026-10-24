@@ -1,6 +1,7 @@
 "use client";
 
 import { formatFinancialValue } from "../../cockpit/number-format";
+import { VISUAL_TOKENS } from "../../../lib/visual-tokens.generated";
 
 // 分组柱状图（本期 vs 上期）：手写 SVG，正负共用零基线。
 export type GroupedBarDatum = { label: string; current: number; prior: number | null };
@@ -62,7 +63,7 @@ export function GroupedBarChart({
                 y={yTop}
                 width={barW}
                 height={barH}
-                fill={value >= 0 ? fill : "#dc2626"}
+                fill={value >= 0 ? fill : VISUAL_TOKENS["colors-semantic-negative"]}
                 rx={3}
               >
                 <title>{`${item.label} ${seriesLabel}：${formatFinancialValue(value, { unit: unitLabel })}`}</title>

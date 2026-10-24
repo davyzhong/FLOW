@@ -4,6 +4,7 @@
 @layer theme, base, components, utilities;
 @import "tailwindcss/theme.css" layer(theme);
 @import "tailwindcss/utilities.css" layer(utilities);
+@import "../../../packages/flow-visual-language/tokens.css";
 @theme inline {
   --color-ink: var(--rep-ink);
   --color-ink-2: var(--rep-ink-2);
@@ -35,61 +36,65 @@
 
 :root {
   color-scheme: light;
-  font-family:
-    "Inter Variable", "Noto Sans SC Variable", "PingFang SC", "Microsoft YaHei",
-    system-ui, -apple-system, sans-serif;
-  background: #f3f6fa;
-  color: #13233a;
+  font-family: var(--flow-vl-typography-family-body);
+  background: var(--flow-vl-colors-surface-canvas);
+  color: var(--flow-vl-colors-text-primary);
   /* v2 报告风共用设计令牌（与 scripts/build_static_library_site.py 同源）：
      深藏青（标题/正文重）+ 中国红（强调/缺口/下行）+ 金棕（评级/中性） */
-  --rep-ink: #13233a;
-  --rep-ink-2: #233043;
-  --rep-navy: #16324f;
-  --rep-navy-2: #1f4e79;
-  --rep-muted: #52637a;
-  --rep-line: #dfe6ef;
-  --rep-line-2: #edf1f6;
-  --rep-bg: #f3f6fa;
-  --rep-card: #ffffff;
-  --rep-red: #c0392b;
-  --rep-red-soft: #fbeae8;
-  --rep-ok: #18794e;
-  --rep-ok-soft: #e5f5ec;
-  --rep-warn: #b7791f;
-  --rep-warn-soft: #fdf3e3;
-  --rep-blue: #1769e8;
-  --rep-blue-soft: #eaf1fe;
-  --rep-zebra: #f6f8fb;
+  --rep-ink: var(--flow-vl-colors-text-primary);
+  --rep-ink-2: var(--flow-vl-colors-text-secondary);
+  --rep-navy: var(--flow-vl-colors-brand-navy);
+  --rep-navy-2: var(--flow-vl-colors-data-revenue);
+  --rep-muted: var(--flow-vl-colors-text-muted);
+  --rep-line: var(--flow-vl-colors-line-default);
+  --rep-line-2: var(--flow-vl-colors-line-subtle);
+  --rep-bg: var(--flow-vl-colors-surface-canvas);
+  --rep-card: var(--flow-vl-colors-surface-paper);
+  --rep-red: var(--flow-vl-colors-semantic-negative);
+  --rep-red-soft: var(--flow-vl-colors-semantic-negative-soft);
+  --rep-ok: var(--flow-vl-colors-semantic-positive);
+  --rep-ok-soft: var(--flow-vl-colors-semantic-positive-soft);
+  --rep-warn: var(--flow-vl-colors-semantic-warning);
+  --rep-warn-soft: var(--flow-vl-colors-semantic-warning-soft);
+  --rep-blue: var(--flow-vl-colors-semantic-info);
+  --rep-blue-soft: var(--flow-vl-colors-semantic-info-soft);
+  --rep-zebra: var(--flow-vl-colors-surface-soft);
   /* 线阶（monotone：line-2 最浅 → line-5 最深，输入框/强边框用深端）。
      F2 批次曾声称落地 token 集但定义从未入库（c84b006 只加了消费方），
      下列 --flow-* 与 --rep-line-3..5/--rep-slate/--rep-teal/--rep-ok-soft-2
      长期处于未定义状态——2026-09-17 一致性整改补齐。 */
-  --rep-line-3: #d3dce7;
-  --rep-line-4: #c9d4e0;
-  --rep-line-5: #bfccdc;
-  --rep-slate: #475569;
+  --rep-line-3: var(--flow-vl-colors-line-default);
+  --rep-line-4: var(--flow-vl-colors-line-strong);
+  --rep-line-5: var(--flow-vl-colors-line-strong);
+  --rep-slate: var(--flow-vl-colors-text-secondary);
   --rep-teal: #0d9488;
   --rep-teal-strong: #0f766e; /* 白字按钮/正文用（#0d9488 对白字对比 3.74 不达 4.5:1） */
   --rep-ok-soft-2: #d3ecdf;
 
   /* 间距 / 圆角 / 字号刻度（flow-* 基础类消费） */
-  --flow-space-1: 4px;
-  --flow-space-2: 8px;
-  --flow-space-3: 12px;
-  --flow-space-4: 16px;
-  --flow-space-5: 24px;
-  --flow-space-6: 32px;
-  --flow-radius-s: 6px;
-  --flow-radius-m: 10px;
-  --flow-radius-l: 14px;
+  --flow-space-1: var(--flow-vl-space-1);
+  --flow-space-2: var(--flow-vl-space-2);
+  --flow-space-3: var(--flow-vl-space-3);
+  --flow-space-4: var(--flow-vl-space-4);
+  --flow-space-5: var(--flow-vl-space-5);
+  --flow-space-6: var(--flow-vl-space-6);
+  --flow-radius-s: var(--flow-vl-radius-sm);
+  --flow-radius-m: var(--flow-vl-radius-md);
+  --flow-radius-l: var(--flow-vl-radius-lg);
   --flow-font-xs: 11px;
   --flow-font-s: 12.5px;
   --flow-font-m: 14px;
   --flow-error: var(--rep-red);
   --flow-error-bg: var(--rep-red-soft);
   --flow-info: var(--rep-blue);
-  --flow-shadow-card: 0 8px 24px rgb(19 35 58 / 8%);
+  --flow-shadow-card: var(--flow-vl-shadow-panel);
 }
+
+/* A+C 视觉语言基础：纸白画布、编辑式标题、统一表面与焦点语义。 */
+body { background: var(--flow-vl-colors-surface-canvas); color: var(--flow-vl-colors-text-primary); }
+:where(h1, h2, .page-title, .report-title) { font-family: var(--flow-vl-typography-family-display); }
+:where(button, input, select, textarea) { font-family: inherit; }
+:where(:focus-visible) { outline-color: var(--flow-vl-colors-brand-gold); }
 
 * {
   box-sizing: border-box;
@@ -146,7 +151,7 @@ body {
   height: 2.6rem;
   place-items: center;
   border-radius: 0.65rem;
-  background: #1463ff;
+  background: var(--flow-vl-colors-brand-gold);
   color: #fff;
   font-weight: 800;
 }
@@ -172,7 +177,7 @@ body {
   width: 2rem;
   height: 2rem;
   border: 3px solid #dbe8ff;
-  border-top-color: #1463ff;
+  border-top-color: var(--flow-vl-colors-brand-gold);
   border-radius: 50%;
   animation: dashboard-spin 0.9s linear infinite;
 }
@@ -181,7 +186,7 @@ body {
   border: 0;
   border-radius: 0.5rem;
   padding: 0.65rem 1rem;
-  background: #1463ff;
+  background: var(--flow-vl-colors-brand-gold);
   color: #fff;
   cursor: pointer;
 }
@@ -221,7 +226,7 @@ body {
   height: 3rem;
   place-items: center;
   border-radius: 0.75rem;
-  background: #1463ff;
+  background: var(--flow-vl-colors-brand-gold);
   color: white;
   font-weight: 700;
 }
@@ -235,7 +240,7 @@ body {
 .investigation-shell__back {
   display: inline-block;
   margin-bottom: 1rem;
-  color: #1769e8;
+  color: var(--flow-vl-colors-data-revenue);
   font-size: 0.85rem;
   font-weight: 700;
   text-decoration: none;
@@ -245,7 +250,7 @@ body {
   max-width: 820px;
   margin: 0 auto;
   border: 1px solid #dce4ee;
-  border-top: 4px solid #1769e8;
+  border-top: 4px solid var(--flow-vl-colors-data-revenue);
   border-radius: 0.75rem;
   padding: clamp(1.25rem, 4vw, 2.5rem);
   background: #fff;
@@ -260,7 +265,7 @@ body {
 
 .investigation-receipt__lead {
   max-width: 650px;
-  color: #66758b;
+  color: var(--flow-vl-colors-text-muted);
   line-height: 1.7;
 }
 
@@ -283,7 +288,7 @@ body {
 }
 
 .investigation-receipt dt {
-  color: #66758b;
+  color: var(--flow-vl-colors-text-muted);
   font-size: 0.75rem;
   font-weight: 700;
 }
@@ -292,7 +297,7 @@ body {
   min-width: 0;
   margin: 0;
   overflow-wrap: anywhere;
-  color: #20344f;
+  color: var(--flow-vl-colors-brand-navy);
   font-family: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.75rem;
 }
@@ -300,7 +305,7 @@ body {
 .investigation-receipt__next {
   display: grid;
   gap: 0.3rem;
-  border-left: 3px solid #1769e8;
+  border-left: 3px solid var(--flow-vl-colors-data-revenue);
   padding: 0.8rem 1rem;
   background: #f2f7ff;
 }
@@ -311,7 +316,7 @@ body {
 }
 
 .investigation-receipt__next span {
-  color: #66758b;
+  color: var(--flow-vl-colors-text-muted);
   font-size: 0.75rem;
 }
 

@@ -11,6 +11,8 @@ from __future__ import annotations
 from html import escape
 from typing import Any
 
+from flow_api.visual_tokens import VISUAL_TOKENS
+from flow_api.visual_theme import apply_pptx_visual_theme, style_workbook_headers
 from flow_api.operations.engine import OperationsOverview
 
 _DIRECTION_LABEL = {"negative": "关注", "warning": "提示复核"}
@@ -90,7 +92,7 @@ def render_operations_html(overview: OperationsOverview | dict[str, Any]) -> str
         else "<h2>管理关注</h2><p class='muted'>本期无确定性提示信号。</p>"
     )
 
-    return (
+    html = (
         "<!DOCTYPE html><html lang='zh-CN'><head><meta charset='utf-8'>"
         "<title>经营分析概览</title>"
         "<style>body{font-family:'PingFang SC',sans-serif;margin:32px;color:#1e293b}"
@@ -121,6 +123,15 @@ def render_operations_html(overview: OperationsOverview | dict[str, Any]) -> str
         "（主观内容需证据门槛，见 U5 门禁）。</div>"
         "</body></html>"
     )
+    for literal, token in {
+        "#1e293b": "colors-text-primary", "#eee": "colors-line-subtle",
+        "#475569": "colors-text-secondary", "#64748b": "colors-text-muted",
+        "#e2e8f0": "colors-line-default", "#d97706": "colors-semantic-warning",
+        "#b91c1c": "colors-semantic-negative", "#cbd5e1": "colors-line-strong",
+    }.items():
+        html = html.replace(literal, VISUAL_TOKENS[token])
+    html = html.replace("'PingFang SC',sans-serif", VISUAL_TOKENS["typography-family-body"])
+    return html
 
 
 def render_operations_xlsx(
@@ -205,6 +216,7 @@ def render_operations_xlsx(
                 sheet.column_dimensions[get_column_letter(column_index)].width = width
 
     buffer = BytesIO()
+    style_workbook_headers(workbook)
     workbook.save(buffer)
     return buffer.getvalue()
 
@@ -278,6 +290,7 @@ def render_operations_pptx(
     )
 
     buffer = BytesIO()
+    apply_pptx_visual_theme(presentation)
     presentation.save(buffer)
     return buffer.getvalue()
 

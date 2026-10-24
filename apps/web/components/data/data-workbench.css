@@ -133,8 +133,8 @@
   margin: 0;
   padding: 8px 12px;
   border-radius: var(--flow-radius-m);
-  background: var(--ml-warn-bg, #fdf0dc);
-  color: var(--ml-warn-ink, #805000);
+  background: var(--ml-warn-bg, var(--flow-vl-colors-semantic-warning-soft));
+  color: var(--ml-warn-ink, var(--flow-vl-colors-semantic-warning));
   font-size: var(--flow-font-s);
 }
 
@@ -151,17 +151,17 @@
 
 /* 数据工作台与 CFO 报告画布共用同一纸白、墨蓝、古金视觉语言。 */
 .data-workbench {
-  --rep-ink: #172c40;
+  --rep-ink: var(--flow-vl-colors-text-primary);
   --rep-ink-2: #314b60;
-  --rep-navy: #142e3c;
-  --rep-navy-2: #315c73;
-  --rep-muted: #687584;
+  --rep-navy: var(--flow-vl-colors-surface-nav);
+  --rep-navy-2: var(--flow-vl-colors-data-revenue);
+  --rep-muted: var(--flow-vl-colors-text-muted);
   --rep-line: #e4ded3;
   --rep-line-2: #eee8dc;
   --rep-bg: #f7f4ed;
-  --rep-card: #fffefa;
-  --rep-blue: #a17a33;
-  --rep-blue-soft: #f5ecd8;
+  --rep-card: var(--flow-vl-colors-surface-paper);
+  --rep-blue: var(--flow-vl-colors-brand-gold);
+  --rep-blue-soft: var(--flow-vl-colors-brand-gold-soft);
   padding: clamp(18px, 2vw, 30px);
   background: #f7f4ed;
 }
@@ -169,7 +169,7 @@
 .data-workbench__header h1,
 .data-workbench__history h2,
 .data-workbench__cleaning h2 {
-  color: #172c40;
+  color: var(--flow-vl-colors-text-primary);
   font-family: "Songti SC", "Noto Serif CJK SC", "Source Han Serif SC", serif;
 }
 
@@ -179,23 +179,23 @@
 .data-workbench__published {
   border-color: #e4ded3;
   border-radius: 6px;
-  background: #fffefa;
+  background: var(--flow-vl-colors-surface-paper);
   box-shadow: 0 5px 18px rgb(45 49 53 / 3%);
 }
 
 .data-workbench__stages li[aria-current="step"],
 .data-workbench__stages li[data-active="true"] {
   color: #8a682f;
-  text-decoration-color: #b28a44;
+  text-decoration-color: var(--flow-vl-colors-brand-gold);
 }
 
 .data-workbench__dropzone[data-drag="true"] {
-  border-color: #a17a33;
-  background: #f5ecd8;
+  border-color: var(--flow-vl-colors-brand-gold);
+  background: var(--flow-vl-colors-brand-gold-soft);
   color: #735926;
 }
 
-.data-workbench__dropzone label { color: #315c73; }
+.data-workbench__dropzone label { color: var(--flow-vl-colors-data-revenue); }
 
 /* 企业数据接入页与驾驶舱共用报告画布，流程步骤和上传入口保持清晰可操作。 */
 .data-workbench {
@@ -203,7 +203,7 @@
   --rep-zebra: #f4f0e7;
   grid-template-columns: minmax(0, 1fr);
   gap: clamp(18px, 2vw, 28px);
-  color: #172c40;
+  color: var(--flow-vl-colors-text-primary);
 }
 
 .data-workbench__header {
@@ -229,7 +229,7 @@
   font-size: clamp(30px, 3vw, 42px);
   line-height: 1.18;
 }
-.data-workbench__title p { margin: 0; color: #687584; font-size: 14px; }
+.data-workbench__title p { margin: 0; color: var(--flow-vl-colors-text-muted); font-size: 14px; }
 .data-workbench__header > .flow-btn { grid-area: template; }
 .data-workbench__stages {
   grid-area: stages;
@@ -243,15 +243,15 @@
   padding: 11px 12px;
   border: 1px solid #e4ded3;
   border-radius: 5px;
-  background: #fffefa;
+  background: var(--flow-vl-colors-surface-paper);
   text-align: center;
   white-space: nowrap;
   box-shadow: 0 3px 12px rgb(45 49 53 / 3%);
 }
 .data-workbench__stages li[aria-current="step"],
 .data-workbench__stages li[data-active="true"] {
-  border-color: #b28a44;
-  background: #f5ecd8;
+  border-color: var(--flow-vl-colors-brand-gold);
+  background: var(--flow-vl-colors-brand-gold-soft);
   color: #735926;
   text-decoration: none;
 }
@@ -262,14 +262,14 @@
 .data-workbench__history-heading h2 { font-size: 21px; }
 .data-workbench__history-heading p { margin-top: 6px; }
 .data-workbench__charts { gap: 18px; }
-.data-workbench__charts > .chart-card { min-width: 0; border-color: #e4ded3; background: #fffefa; }
+.data-workbench__charts > .chart-card { min-width: 0; border-color: #e4ded3; background: var(--flow-vl-colors-surface-paper); }
 .data-workbench__history .flow-table-wrap { border: 1px solid #e4ded3; border-radius: 4px; }
 .data-workbench__history .flow-table { color: #40566a; }
-.data-workbench__history .flow-table caption { padding: 10px 12px; color: #687584; text-align: left; }
+.data-workbench__history .flow-table caption { padding: 10px 12px; color: var(--flow-vl-colors-text-muted); text-align: left; }
 .data-workbench__history .flow-table th,
 .data-workbench__history .flow-table td { border-color: #e8e1d5; padding: 11px 12px; }
 .data-workbench__history .flow-table th { background: #f3f0e8; }
-.data-workbench__history .flow-table a { color: #285472; font-weight: 650; }
+.data-workbench__history .flow-table a { color: var(--flow-vl-colors-data-revenue); font-weight: 650; }
 .data-workbench__dropzone {
   display: flex;
   min-height: 250px;
@@ -278,14 +278,14 @@
   justify-content: center;
   gap: 10px;
   border: 1px dashed #c6b58e;
-  background: linear-gradient(135deg, #fffefa, #f8f3e8);
+  background: linear-gradient(135deg, var(--flow-vl-colors-surface-paper), #f8f3e8);
   color: #314b60;
   transition: border-color .18s ease, background-color .18s ease;
 }
 .data-workbench__dropzone[data-drag="true"] { border-style: solid; }
-.data-workbench__upload-icon { width: 35px; height: 35px; color: #a17a33; }
-.data-workbench__drop-title { margin: 0; color: #172c40; font-family: "Songti SC", "Noto Serif CJK SC", serif; font-size: 21px; font-weight: 650; }
-.data-workbench__drop-note { margin: 0; color: #77828a; font-size: 12px; }
+.data-workbench__upload-icon { width: 35px; height: 35px; color: var(--flow-vl-colors-brand-gold); }
+.data-workbench__drop-title { margin: 0; color: var(--flow-vl-colors-text-primary); font-family: "Songti SC", "Noto Serif CJK SC", serif; font-size: 21px; font-weight: 650; }
+.data-workbench__drop-note { margin: 0; color: var(--flow-vl-colors-text-muted); font-size: 12px; }
 .data-workbench__dropzone .data-workbench__file-picker {
   position: relative;
   display: inline-flex;
@@ -295,10 +295,10 @@
   gap: 8px;
   margin-top: 7px;
   padding: 0 18px;
-  border: 1px solid #142e3c;
+  border: 1px solid var(--flow-vl-colors-surface-nav);
   border-radius: 4px;
-  background: #142e3c;
-  color: #fffefa;
+  background: var(--flow-vl-colors-surface-nav);
+  color: var(--flow-vl-colors-surface-paper);
   font-size: 13px;
   font-weight: 650;
 }

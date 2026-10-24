@@ -14,6 +14,7 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
+from flow_api.visual_tokens import VISUAL_TOKENS
 
 plt.rcParams["font.sans-serif"] = [
     "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Arial Unicode MS",
@@ -21,12 +22,12 @@ plt.rcParams["font.sans-serif"] = [
 ]
 plt.rcParams["axes.unicode_minus"] = False
 
-BLUE = "#2f6bd8"
-LIGHT_BLUE = "#9db6e8"
-ORANGE = "#e08a3c"
-GREY = "#8a94a6"
-NEG = "#c2604f"
-GREEN = "#2e8b57"
+BLUE = VISUAL_TOKENS["colors-data-revenue"]
+LIGHT_BLUE = VISUAL_TOKENS["colors-data-series4"]
+ORANGE = VISUAL_TOKENS["colors-brand-gold"]
+GREY = VISUAL_TOKENS["colors-semantic-unavailable"]
+NEG = VISUAL_TOKENS["colors-semantic-negative"]
+GREEN = VISUAL_TOKENS["colors-semantic-positive"]
 
 DPI = 150
 
@@ -123,7 +124,9 @@ def donut(title: str, items: list[tuple[str, Decimal | None]]) -> bytes:
     names = [name if value / total >= Decimal("0.03") else ""
              for name, value in pairs]
     values = [float(value) for _, value in pairs]
-    palette = ["#2f6bd8", "#9db6e8", "#e08a3c", "#f2c57c", "#7fb3a3", "#b7a6d9", "#d98a8a"]
+    palette = [
+        VISUAL_TOKENS[f"chart-series-{index}"] for index in range(1, 7)
+    ] + [VISUAL_TOKENS["colors-semantic-negative"]]
     fig, ax = plt.subplots(figsize=(5.2, 3.6))
     wedges, _, autotexts = ax.pie(
         values, labels=names,

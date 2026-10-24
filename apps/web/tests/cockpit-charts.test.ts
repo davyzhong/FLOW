@@ -90,21 +90,21 @@ describe("chart builders", () => {
     const opt = buildGauges([
       { title: "资产负债率", value: 70, max: 100, controlLine: 60, unit: "%", higherIsWorse: true },
     ]) as { series: { pointer: { itemStyle: { color: string } } }[] };
-    expect(opt.series[0].pointer.itemStyle.color).toBe("#dc2626");
+    expect(opt.series[0].pointer.itemStyle.color).toBe("#B1483E");
   });
 
   it("gauge: 越低越好指标明显低于管控线为绿（距线>20%）", () => {
     const opt = buildGauges([
       { title: "资产负债率", value: 30, max: 100, controlLine: 60, unit: "%", higherIsWorse: true },
     ]) as { series: { pointer: { itemStyle: { color: string } } }[] };
-    expect(opt.series[0].pointer.itemStyle.color).toBe("#16a34a");
+    expect(opt.series[0].pointer.itemStyle.color).toBe("#34795B");
   });
 
   it("gauge: 越低越好指标贴近管控线为黄（距线<=20%）", () => {
     const opt = buildGauges([
       { title: "资产负债率", value: 50, max: 100, controlLine: 60, unit: "%", higherIsWorse: true },
     ]) as { series: { pointer: { itemStyle: { color: string } } }[] };
-    expect(opt.series[0].pointer.itemStyle.color).toBe("#d97706");
+    expect(opt.series[0].pointer.itemStyle.color).toBe("#93651D");
   });
 
   it("gauge: 空输入返回 undefined", () => {

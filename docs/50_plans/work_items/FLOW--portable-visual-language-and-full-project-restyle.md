@@ -24,6 +24,15 @@ confidentiality: project-internal
 
 从已确认的 A「高管编辑部」+ C「财务报告画布」概念图中提炼跨项目可复用的视觉语言；将这套语言应用到 FLOW 全部产品页面、图表、报告/离线输出及当前用户可见的 README 视觉材料；校准当前有效文档，使其准确描述已完成的 7a 原型及本任务的真实状态。
 
+## 当前实施记录（2026-10-24）
+
+- 已建立 `packages/flow-visual-language/`，包含 `tokens.json` 单一源、生成 CSS、表达范式、无业务事实样例；生成器同时输出 TypeScript/Python token 映射。
+- 已接入 Web 全局主题、共享导航、主要 cockpit/data/analysis/operations 样式、ECharts/SVG 财务图色板与离线驾驶舱预览。报表 Matplotlib 图表读取同一 token 映射；其它 HTML/PDF/PPTX/XLSX 渲染仍待统一。
+- Web typecheck 通过；前端 37 个测试文件、201 项通过；Next.js production build 通过。视觉 token `--check`、Python compile、Node syntax、`git diff --check` 均通过。
+- 首轮 Playwright 截图覆盖 20 路由×3 视口；最终等待数据态版本有 60/60 组在修复 `/operations` 报告查询 UUID 参数类型后均为 HTTP 200、无横向溢出及浏览器错误。导入/映射、搜索/筛选、键盘焦点等交互状态尚未逐项检查。
+- 截图与逐路由结果在 [视觉覆盖验收](../../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)；synthetic manifest SHA 为 `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`，数据库只位于 `/tmp/flow-visual-audit-20261024`。
+- 仍需完成全路由概念板视觉差异逐项整改、所有图表/表达的单位来源与辅助表达核对、HTML/PDF/PPTX/XLSX、全键盘/对比度/窄屏互动验收、文档门禁、准确最终 SHA 截图和独立复核。不得将当前首轮截图说成全部符合概念板。
+
 ## 依赖与执行门
 
 - 唯一范围与验收定义见[视觉语言设计规格](../../superpowers/specs/2026-10-24-flow-visual-language-system-design.md)。本工作包落实路线图事项 12；规格/工作包获用户确认前不进入产品实现。

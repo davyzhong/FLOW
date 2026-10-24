@@ -1,0 +1,608 @@
+{
+  "capturedAt": "2026-10-24T14:58:44.496Z",
+  "baseUrl": "http://127.0.0.1:3100",
+  "routes": 20,
+  "viewports": 3,
+  "results": [
+    {
+      "route": "/",
+      "viewport": "desktop",
+      "status": 200,
+      "doc": 1440,
+      "client": 1440,
+      "body": 1440,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/",
+      "viewport": "tablet",
+      "status": 200,
+      "doc": 1024,
+      "client": 1024,
+      "body": 1024,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/",
+      "viewport": "mobile",
+      "status": 200,
+      "doc": 390,
+      "client": 390,
+      "body": 390,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/analysis",
+      "viewport": "desktop",
+      "status": 200,
+      "doc": 1440,
+      "client": 1440,
+      "body": 1440,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/analysis",
+      "viewport": "tablet",
+      "status": 200,
+      "doc": 1024,
+      "client": 1024,
+      "body": 1024,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/analysis",
+      "viewport": "mobile",
+      "status": 200,
+      "doc": 390,
+      "client": 390,
+      "body": 390,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/cockpit",
+      "viewport": "desktop",
+      "status": 200,
+      "doc": 1440,
+      "client": 1440,
+      "body": 1440,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/cockpit",
+      "viewport": "tablet",
+      "status": 200,
+      "doc": 1024,
+      "client": 1024,
+      "body": 1024,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/cockpit",
+      "viewport": "mobile",
+      "status": 200,
+      "doc": 390,
+      "client": 390,
+      "body": 390,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/cockpit/balance-sheet",
+      "viewport": "desktop",
+      "status": 200,
+      "doc": 1440,
+      "client": 1440,
+      "body": 1440,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/cockpit/balance-sheet",
+      "viewport": "tablet",
+      "status": 200,
+      "doc": 1024,
+      "client": 1024,
+      "body": 1024,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/cockpit/balance-sheet",
+      "viewport": "mobile",
+      "status": 200,
+      "doc": 390,
+      "client": 390,
+      "body": 390,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/cockpit/cashflow",
+      "viewport": "desktop",
+      "status": 200,
+      "doc": 1440,
+      "client": 1440,
+      "body": 1440,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/cockpit/cashflow",
+      "viewport": "tablet",
+      "status": 200,
+      "doc": 1024,
+      "client": 1024,
+      "body": 1024,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/cockpit/cashflow",
+      "viewport": "mobile",
+      "status": 200,
+      "doc": 390,
+      "client": 390,
+      "body": 390,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/cockpit/consolidation",
+      "viewport": "desktop",
+      "status": 200,
+      "doc": 1440,
+      "client": 1440,
+      "body": 1440,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/cockpit/consolidation",
+      "viewport": "tablet",
+      "status": 200,
+      "doc": 1024,
+      "client": 1024,
+      "body": 1024,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/cockpit/consolidation",
+      "viewport": "mobile",
+      "status": 200,
+      "doc": 390,
+      "client": 390,
+      "body": 390,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/cockpit/expenses",
+      "viewport": "desktop",
+      "status": 200,
+      "doc": 1440,
+      "client": 1440,
+      "body": 1440,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/cockpit/expenses",
+      "viewport": "tablet",
+      "status": 200,
+      "doc": 1024,
+      "client": 1024,
+      "body": 1024,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/cockpit/expenses",
+      "viewport": "mobile",
+      "status": 200,
+      "doc": 390,
+      "client": 390,
+      "body": 390,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/cockpit/profitability",
+      "viewport": "desktop",
+      "status": 200,
+      "doc": 1440,
+      "client": 1440,
+      "body": 1440,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/cockpit/profitability",
+      "viewport": "tablet",
+      "status": 200,
+      "doc": 1024,
+      "client": 1024,
+      "body": 1024,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/cockpit/profitability",
+      "viewport": "mobile",
+      "status": 200,
+      "doc": 390,
+      "client": 390,
+      "body": 390,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/cockpit/risk",
+      "viewport": "desktop",
+      "status": 200,
+      "doc": 1440,
+      "client": 1440,
+      "body": 1440,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/cockpit/risk",
+      "viewport": "tablet",
+      "status": 200,
+      "doc": 1024,
+      "client": 1024,
+      "body": 1024,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/cockpit/risk",
+      "viewport": "mobile",
+      "status": 200,
+      "doc": 390,
+      "client": 390,
+      "body": 390,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/cockpit/working-capital",
+      "viewport": "desktop",
+      "status": 200,
+      "doc": 1440,
+      "client": 1440,
+      "body": 1440,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/cockpit/working-capital",
+      "viewport": "tablet",
+      "status": 200,
+      "doc": 1024,
+      "client": 1024,
+      "body": 1024,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/cockpit/working-capital",
+      "viewport": "mobile",
+      "status": 200,
+      "doc": 390,
+      "client": 390,
+      "body": 390,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/data",
+      "viewport": "desktop",
+      "status": 200,
+      "doc": 1440,
+      "client": 1440,
+      "body": 1440,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/data",
+      "viewport": "tablet",
+      "status": 200,
+      "doc": 1024,
+      "client": 1024,
+      "body": 1024,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/data",
+      "viewport": "mobile",
+      "status": 200,
+      "doc": 390,
+      "client": 390,
+      "body": 390,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/internal",
+      "viewport": "desktop",
+      "status": 200,
+      "doc": 1440,
+      "client": 1440,
+      "body": 1440,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/internal",
+      "viewport": "tablet",
+      "status": 200,
+      "doc": 1024,
+      "client": 1024,
+      "body": 1024,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/internal",
+      "viewport": "mobile",
+      "status": 200,
+      "doc": 390,
+      "client": 390,
+      "body": 390,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/investigations",
+      "viewport": "desktop",
+      "status": 200,
+      "doc": 1440,
+      "client": 1440,
+      "body": 1440,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/investigations",
+      "viewport": "tablet",
+      "status": 200,
+      "doc": 1024,
+      "client": 1024,
+      "body": 1024,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/investigations",
+      "viewport": "mobile",
+      "status": 200,
+      "doc": 390,
+      "client": 390,
+      "body": 390,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/investigations/01a16e5e-e2a6-725a-83cb-aa5d70ac92cb",
+      "viewport": "desktop",
+      "status": 200,
+      "doc": 1440,
+      "client": 1440,
+      "body": 1440,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/investigations/01a16e5e-e2a6-725a-83cb-aa5d70ac92cb",
+      "viewport": "tablet",
+      "status": 200,
+      "doc": 1024,
+      "client": 1024,
+      "body": 1024,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/investigations/01a16e5e-e2a6-725a-83cb-aa5d70ac92cb",
+      "viewport": "mobile",
+      "status": 200,
+      "doc": 390,
+      "client": 390,
+      "body": 390,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/login",
+      "viewport": "desktop",
+      "status": 200,
+      "doc": 1440,
+      "client": 1440,
+      "body": 1440,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/login",
+      "viewport": "tablet",
+      "status": 200,
+      "doc": 1024,
+      "client": 1024,
+      "body": 1024,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/login",
+      "viewport": "mobile",
+      "status": 200,
+      "doc": 390,
+      "client": 390,
+      "body": 390,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/metric-library",
+      "viewport": "desktop",
+      "status": 200,
+      "doc": 1440,
+      "client": 1440,
+      "body": 1440,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/metric-library",
+      "viewport": "tablet",
+      "status": 200,
+      "doc": 1024,
+      "client": 1024,
+      "body": 1024,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/metric-library",
+      "viewport": "mobile",
+      "status": 200,
+      "doc": 390,
+      "client": 390,
+      "body": 390,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/operations",
+      "viewport": "desktop",
+      "status": 200,
+      "doc": 1440,
+      "client": 1440,
+      "body": 1440,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/operations",
+      "viewport": "tablet",
+      "status": 200,
+      "doc": 1024,
+      "client": 1024,
+      "body": 1024,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/operations",
+      "viewport": "mobile",
+      "status": 200,
+      "doc": 390,
+      "client": 390,
+      "body": 390,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/public",
+      "viewport": "desktop",
+      "status": 200,
+      "doc": 1440,
+      "client": 1440,
+      "body": 1440,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/public",
+      "viewport": "tablet",
+      "status": 200,
+      "doc": 1024,
+      "client": 1024,
+      "body": 1024,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/public",
+      "viewport": "mobile",
+      "status": 200,
+      "doc": 390,
+      "client": 390,
+      "body": 390,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/reports",
+      "viewport": "desktop",
+      "status": 200,
+      "doc": 1440,
+      "client": 1440,
+      "body": 1440,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/reports",
+      "viewport": "tablet",
+      "status": 200,
+      "doc": 1024,
+      "client": 1024,
+      "body": 1024,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/reports",
+      "viewport": "mobile",
+      "status": 200,
+      "doc": 390,
+      "client": 390,
+      "body": 390,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/statements",
+      "viewport": "desktop",
+      "status": 200,
+      "doc": 1440,
+      "client": 1440,
+      "body": 1440,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/statements",
+      "viewport": "tablet",
+      "status": 200,
+      "doc": 1024,
+      "client": 1024,
+      "body": 1024,
+      "errors": [],
+      "bad": false
+    },
+    {
+      "route": "/statements",
+      "viewport": "mobile",
+      "status": 200,
+      "doc": 390,
+      "client": 390,
+      "body": 390,
+      "errors": [],
+      "bad": false
+    }
+  ]
+}

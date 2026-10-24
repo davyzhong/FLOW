@@ -9,10 +9,10 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr); /* 窄视口轨道随容器收缩 */
   gap: 18px;
-  /* 金棕警示对：#805000 深琥珀在浅琥珀底上对比 ≥4.9:1，达 AA；
+  /* 金棕警示对：var(--flow-vl-colors-semantic-warning) 深琥珀在浅琥珀底上对比 ≥4.9:1，达 AA；
      --rep-warn (#b7791f) 对小字号软底不达标，故本页保留专用对。 */
-  --ml-warn-ink: #805000;
-  --ml-warn-bg: #fdf0dc;
+  --ml-warn-ink: var(--flow-vl-colors-semantic-warning);
+  --ml-warn-bg: var(--flow-vl-colors-semantic-warning-soft);
 }
 
 /* ===== Hero 页头（红顶线 + kicker + 超大标题 + 副标题） ===== */
@@ -804,8 +804,8 @@
 }
 
 .ml-coverage__synthetic-badge {
-  border: 1px dashed var(--rep-warn, #b45309);
-  color: var(--rep-warn, #b45309);
+  border: 1px dashed var(--rep-warn, var(--flow-vl-colors-semantic-warning));
+  color: var(--rep-warn, var(--flow-vl-colors-semantic-warning));
   border-radius: 999px;
   padding: 3px 12px;
   font-size: 12px;

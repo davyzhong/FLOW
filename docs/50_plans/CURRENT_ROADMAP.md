@@ -17,7 +17,7 @@ superseded_by: null
 
 # 当前路线图（唯一主线）
 
-> **2026-10-24 最新状态：** D055 单机原型 7a.1–7a.8 已完成。PR [#3](https://github.com/davyzhong/FLOW/pull/3) 的 merge commit `b2a1bf22df91239eb311d1692c30c666250678bf`、PR [#4](https://github.com/davyzhong/FLOW/pull/4) 的文档状态 merge commit `b068796f906cfbb91ac33775f5578194acc98a51` 均已合入 main；后者准确 SHA 对应 run `40096497668` 为 28/28 success。原型验收及限制见[完结差距审查](../60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)。**去重后 15 个唯一事项：已完成 8、实际执行中 1（可复用视觉语言与全项目统一）、队首待启动 0、排队 4、暂停 1、外部条件受限 1。** 用户已批准新队首设计与工作包，当前实施只写于分支 `codex/flow-visual-language`；K2 顺延为排队。原型使用 synthetic 演示数据；真实账龄切片、公开 C 级、知识刷新、真实企业试点与行业扩张不在 7a 完成范围。
+> **2026-10-24 最新状态：** D055 单机原型 7a.1–7a.8 已完成。PR [#3](https://github.com/davyzhong/FLOW/pull/3) 的 merge commit `b2a1bf22df91239eb311d1692c30c666250678bf`、PR [#4](https://github.com/davyzhong/FLOW/pull/4) 的文档状态 merge commit `b068796f906cfbb91ac33775f5578194acc98a51` 均已合入 main；后者准确 SHA 对应 run `40096497668` 为 28/28 success。原型验收及限制见[完结差距审查](../60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)。**去重后 15 个唯一事项：已完成 8、实际执行中 1（可复用视觉语言与全项目统一）、队首待启动 0、排队 4、暂停 1、外部条件受限 1。** 用户已批准新队首设计与工作包，当前实施只写于分支 `codex/flow-visual-language`；可复用视觉语言包、Web token/外壳与主要图表映射已开始落地；typecheck、201 项 Web 测试、production build 通过。修复 `/operations` UUID 参数后，20 路由×3 视口基础采图检查 60/60 通过；逐图表、跨输出格式、无障碍和最终准确 SHA 截图仍待验收；进度以[视觉覆盖记录](../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)为准。K2 顺延为排队。原型使用 synthetic 演示数据；真实账龄切片、公开 C 级、知识刷新、真实企业试点与行业扩张不在 7a 完成范围。
 
 > 当前完结目标依据 D055：交付本机单用户可启动、可加载/重置演示业务、可看丰富 CFO 图表、可下钻追溯、可分析和导出报告、可备份恢复、可离线浏览的验证原型。公开 C 级、知识刷新、真实企业三周期仍未完成，保留在长期队列，不作为本原型无限延期的理由。**下方 2026-10-21 及以前的状态段落均为历史，当前只按本段及唯一执行队列。**
 

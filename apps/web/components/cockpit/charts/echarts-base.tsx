@@ -30,6 +30,7 @@ import {
 } from "echarts/components";
 import { CanvasRenderer } from "echarts/renderers";
 import type { EChartsOption } from "echarts";
+import { VISUAL_TOKENS } from "../../../lib/visual-tokens.generated";
 
 echarts.use([
   BarChart,
@@ -54,19 +55,19 @@ echarts.use([
 
 /** 语义色：与 cockpit.css 的 CSS 变量保持一致（正/负/警示/未就绪） */
 export const CHART_THEME = {
-  blue: "#173f64",
-  blueSoft: "#6f8ba0",
-  green: "#16a34a",
-  red: "#dc2626",
-  warn: "#d97706",
-  gold: "#a17a33",
-  gray: "#9a9b96",
-  ink: "#172c40",
-  mut: "#687584",
-  line: "#e7e1d5",
-  teal: "#5b9b85",
-  purple: "#84759a",
-  ltblue: "#9aadb8",
+  blue: VISUAL_TOKENS["colors-data-revenue"],
+  blueSoft: VISUAL_TOKENS["colors-data-series4"],
+  green: VISUAL_TOKENS["colors-semantic-positive"],
+  red: VISUAL_TOKENS["colors-semantic-negative"],
+  warn: VISUAL_TOKENS["colors-semantic-warning"],
+  gold: VISUAL_TOKENS["colors-brand-gold"],
+  gray: VISUAL_TOKENS["colors-semantic-unavailable"],
+  ink: VISUAL_TOKENS["colors-text-primary"],
+  mut: VISUAL_TOKENS["colors-text-muted"],
+  line: VISUAL_TOKENS["chart-grid"],
+  teal: VISUAL_TOKENS["colors-data-cash"],
+  purple: VISUAL_TOKENS["colors-data-series5"],
+  ltblue: VISUAL_TOKENS["colors-data-series4"],
 } as const;
 
 /** 通用轴配置（保持所有图表的坐标轴行为一致） */
@@ -79,7 +80,7 @@ export const AXIS = {
 
 export const TOOLTIP = {
   trigger: "axis" as const,
-  backgroundColor: "rgba(255,255,255,.97)",
+  backgroundColor: VISUAL_TOKENS["chart-tooltipBackground"],
   borderColor: CHART_THEME.line,
   textStyle: { color: CHART_THEME.ink, fontSize: 12 },
 } as const;

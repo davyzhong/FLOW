@@ -15,6 +15,8 @@ from datetime import datetime
 from decimal import Decimal, InvalidOperation
 from typing import Any
 
+from flow_api.visual_tokens import VISUAL_TOKENS
+
 from flow_api.statements.objective_report_charts import (
     bar_compare,
     cashflow_bars,
@@ -63,6 +65,25 @@ _PRINT_CSS = """
   .keep { page-break-inside: avoid; }
   li { page-break-inside: avoid; }
 """
+for _literal, _token in {
+    "#1a2233": "colors-text-primary",
+    "#ffffff": "colors-surface-paper",
+    "#14337a": "colors-brand-navy",
+    "#475069": "colors-text-secondary",
+    "#f0f4fc": "colors-brand-navySoft",
+    "#37415c": "colors-text-secondary",
+    "#d5dae3": "colors-line-default",
+    "#2f6bd8": "colors-data-revenue",
+    "#5b6478": "colors-text-muted",
+    "#a1260d": "colors-semantic-negative",
+    "#0a7f3f": "colors-semantic-positive",
+    "#ccd3e0": "colors-line-strong",
+    "#e9eef9": "colors-surface-soft",
+    "#9a6700": "colors-semantic-warning",
+    "#6b7280": "colors-text-muted",
+}.items():
+    _PRINT_CSS = _PRINT_CSS.replace(_literal, VISUAL_TOKENS[_token])
+del _literal, _token
 
 
 def _esc(value: Any) -> str:

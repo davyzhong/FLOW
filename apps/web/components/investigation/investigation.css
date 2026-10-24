@@ -18,7 +18,7 @@
   border: 1px solid #cfd9e4;
   border-radius: 6px;
   padding: 0.32rem 0.6rem;
-  color: #315f82;
+  color: var(--flow-vl-colors-data-revenue);
   background: #fff;
   text-decoration: none;
 }
@@ -33,7 +33,7 @@
 .investigation-rail,
 .investigation-inspect-card {
   background: #fff;
-  border: 1px solid #dae3ec;
+  border: 1px solid var(--flow-vl-colors-line-default);
   border-radius: 10px;
 }
 
@@ -112,7 +112,7 @@
   grid-template-columns: minmax(0, 1fr) 240px;
   gap: 0.8rem;
   background: #fff;
-  border: 1px solid #dae3ec;
+  border: 1px solid var(--flow-vl-colors-line-default);
   border-left: 4px solid #d25d57;
   border-radius: 10px;
   padding: 0.9rem 1rem;
@@ -148,7 +148,7 @@
 
 .investigation-review-flow li {
   border: 1px solid #dfe6ee;
-  background: #f8fafc;
+  background: var(--flow-vl-colors-surface-soft);
   border-radius: 6px;
   padding: 0.32rem;
   text-align: center;
@@ -157,15 +157,15 @@
 }
 
 .investigation-review-flow li.is-done {
-  background: #e8f4f0;
-  border-color: #cfe7df;
-  color: #226b5a;
+  background: var(--flow-vl-colors-semantic-positive-soft);
+  border-color: var(--flow-vl-colors-semantic-positive-soft);
+  color: var(--flow-vl-colors-semantic-positive);
 }
 
 .investigation-review-flow li.is-active {
-  background: #fff5e7;
+  background: var(--flow-vl-colors-semantic-warning-soft);
   border-color: #ead2a6;
-  color: #996516;
+  color: var(--flow-vl-colors-semantic-warning);
   font-weight: 700;
 }
 
@@ -180,23 +180,23 @@
   border-radius: 6px;
   padding: 0.25rem 0.55rem;
   font-size: 0.7rem;
-  background: #eef3f8;
+  background: var(--flow-vl-colors-surface-soft);
   color: #3c536e;
 }
 
 .investigation-badge.is-approved {
-  background: #e7f3ef;
-  color: #216f5d;
+  background: var(--flow-vl-colors-semantic-positive-soft);
+  color: var(--flow-vl-colors-semantic-positive);
 }
 
 .investigation-badge.is-rejected {
-  background: #f9e9e7;
-  color: #a4443d;
+  background: var(--flow-vl-colors-semantic-negative-soft);
+  color: var(--flow-vl-colors-semantic-negative);
 }
 
 .investigation-badge.is-in_review {
-  background: #fff5e7;
-  color: #996516;
+  background: var(--flow-vl-colors-semantic-warning-soft);
+  color: var(--flow-vl-colors-semantic-warning);
 }
 
 .investigation-head-metrics {
@@ -209,7 +209,7 @@
 .investigation-head-metrics div {
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid #edf1f5;
+  border-bottom: 1px solid var(--flow-vl-colors-surface-soft);
   padding-bottom: 0.25rem;
 }
 
@@ -226,7 +226,7 @@
 
 .investigation-panel {
   background: #fff;
-  border: 1px solid #dae3ec;
+  border: 1px solid var(--flow-vl-colors-line-default);
   border-radius: 10px;
   padding: 0.85rem 1rem;
   min-width: 0;
@@ -246,7 +246,7 @@
 }
 
 .investigation-panel__head small {
-  color: #75859a;
+  color: var(--flow-vl-colors-text-muted);
   font-size: 0.66rem;
 }
 
@@ -266,13 +266,13 @@
   font-weight: 600;
   text-align: left;
   padding: 0.35rem 0.4rem;
-  border-bottom: 1px solid #dce4ed;
+  border-bottom: 1px solid var(--flow-vl-colors-line-default);
   white-space: nowrap;
 }
 
 .investigation-table-scroll td {
   padding: 0.35rem 0.4rem;
-  border-bottom: 1px solid #edf1f5;
+  border-bottom: 1px solid var(--flow-vl-colors-surface-soft);
   vertical-align: top;
 }
 
@@ -297,7 +297,7 @@
   background: transparent;
   padding: 0;
   cursor: pointer;
-  color: #315f82;
+  color: var(--flow-vl-colors-data-revenue);
   font-family: "JetBrains Mono Variable", ui-monospace, monospace;
   font-size: 0.68rem;
   text-decoration: underline;
@@ -373,7 +373,7 @@
 .investigation-bridge__col small {
   display: block;
   margin-top: 0.25rem;
-  color: #75859a;
+  color: var(--flow-vl-colors-text-muted);
   font-size: 0.62rem;
   white-space: nowrap;
 }
@@ -386,7 +386,7 @@
 
 .investigation-check {
   background: #fff;
-  border: 1px solid #dce4ed;
+  border: 1px solid var(--flow-vl-colors-line-default);
   border-radius: 8px;
   padding: 0.55rem 0.6rem;
   font-size: 0.7rem;
@@ -412,13 +412,13 @@
 
 .investigation-empty {
   margin: 0;
-  color: #75859a;
+  color: var(--flow-vl-colors-text-muted);
   font-size: 0.75rem;
 }
 
 .investigation-conclusion button {
-  border: 1px solid #183654;
-  background: #183654;
+  border: 1px solid var(--flow-vl-colors-brand-navy);
+  background: var(--flow-vl-colors-brand-navy);
   color: #fff;
   border-radius: 6px;
   padding: 0.42rem 0.9rem;
@@ -445,12 +445,12 @@
 
 .investigation-fields textarea {
   width: 100%;
-  border: 1px solid #dbe3ec;
+  border: 1px solid var(--flow-vl-colors-line-default);
   border-radius: 6px;
   padding: 0.4rem;
   font: inherit;
   font-size: 0.74rem;
-  color: #20344f;
+  color: var(--flow-vl-colors-brand-navy);
   resize: vertical;
 }
 
@@ -465,9 +465,9 @@
 }
 
 .investigation-lock.is-ready {
-  border-color: #cfe7df;
-  background: #e8f4f0;
-  color: #226b5a;
+  border-color: var(--flow-vl-colors-semantic-positive-soft);
+  background: var(--flow-vl-colors-semantic-positive-soft);
+  color: var(--flow-vl-colors-semantic-positive);
 }
 
 .investigation-inspector {
@@ -515,18 +515,18 @@
 }
 
 .investigation-evidence__status.is-verified {
-  background: #e7f3ef;
-  color: #216f5d;
+  background: var(--flow-vl-colors-semantic-positive-soft);
+  color: var(--flow-vl-colors-semantic-positive);
 }
 
 .investigation-evidence__status.is-pending {
-  background: #fff5e7;
-  color: #996516;
+  background: var(--flow-vl-colors-semantic-warning-soft);
+  color: var(--flow-vl-colors-semantic-warning);
 }
 
 .investigation-evidence__status.is-rejected {
-  background: #f9e9e7;
-  color: #a4443d;
+  background: var(--flow-vl-colors-semantic-negative-soft);
+  color: var(--flow-vl-colors-semantic-negative);
 }
 
 .investigation-evidence dl {
@@ -549,7 +549,7 @@
   margin: 0;
   font-size: 0.68rem;
   overflow-wrap: anywhere;
-  color: #20344f;
+  color: var(--flow-vl-colors-brand-navy);
 }
 
 .investigation-evidence__actions {
@@ -569,8 +569,8 @@
 }
 
 .investigation-actions button.is-primary {
-  background: #183654;
-  border-color: #183654;
+  background: var(--flow-vl-colors-brand-navy);
+  border-color: var(--flow-vl-colors-brand-navy);
   color: #fff;
 }
 
@@ -586,7 +586,7 @@
 
 .investigation-history__item {
   margin: 0 0 0.35rem;
-  border-bottom: 1px solid #edf1f5;
+  border-bottom: 1px solid var(--flow-vl-colors-surface-soft);
   padding-bottom: 0.3rem;
 }
 
@@ -623,8 +623,8 @@
 .investigation-action-error {
   margin: 0;
   border: 1px solid #e5c2be;
-  background: #f9e9e7;
-  color: #a4443d;
+  background: var(--flow-vl-colors-semantic-negative-soft);
+  color: var(--flow-vl-colors-semantic-negative);
   border-radius: 8px;
   padding: 0.5rem 0.7rem;
   font-size: 0.74rem;
@@ -681,12 +681,12 @@
 
 .investigation-copilot-question textarea {
   width: 100%;
-  border: 1px solid #dbe3ec;
+  border: 1px solid var(--flow-vl-colors-line-default);
   border-radius: 6px;
   padding: 0.4rem;
   font: inherit;
   font-size: 0.72rem;
-  color: #20344f;
+  color: var(--flow-vl-colors-brand-navy);
   resize: vertical;
   margin-bottom: 0.4rem;
 }
@@ -701,22 +701,22 @@
   margin: 0 0 0.3rem;
   font-size: 0.72rem;
   line-height: 1.5;
-  color: #20344f;
+  color: var(--flow-vl-colors-brand-navy);
 }
 
 .investigation-copilot-citations code {
   display: inline-block;
   margin-left: 0.25rem;
-  background: #eef3f8;
+  background: var(--flow-vl-colors-surface-soft);
   border-radius: 4px;
   padding: 0.05rem 0.25rem;
   font-size: 0.6rem;
-  color: #315f82;
+  color: var(--flow-vl-colors-data-revenue);
 }
 
 .investigation-copilot-answer {
   margin-top: 0.5rem;
-  border-top: 1px solid #edf1f5;
+  border-top: 1px solid var(--flow-vl-colors-surface-soft);
   padding-top: 0.3rem;
 }
 
@@ -728,7 +728,7 @@
 }
 
 .investigation-check__link:hover {
-  color: var(--blue, #1d4ed8);
+  color: var(--blue, var(--flow-vl-colors-data-revenue));
 }
 
 .investigation-identity-note a {
@@ -737,14 +737,14 @@
 }
 
 .investigation-identity-note a:hover {
-  color: var(--blue, #1d4ed8);
+  color: var(--blue, var(--flow-vl-colors-data-revenue));
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
 /* 批次二 §3.3：citation 点击定位 —— 页内锚点高亮 + 引用链接化 */
 .investigation-evidence:target {
-  border-color: #315f82;
+  border-color: var(--flow-vl-colors-data-revenue);
   box-shadow: 0 0 0 2px rgba(49, 95, 130, 0.18);
 }
 

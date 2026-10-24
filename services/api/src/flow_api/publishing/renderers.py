@@ -12,6 +12,8 @@ import html as html_module
 from collections.abc import Callable
 
 from flow_api.publishing.models import ReportView, SnapshotFinding
+from flow_api.visual_tokens import VISUAL_TOKENS
+from flow_api.visual_theme import apply_pptx_visual_theme, style_workbook_headers
 
 
 def _money(value: str) -> str:
@@ -94,6 +96,7 @@ def render_pptx(view: ReportView) -> bytes:
         )
 
     buffer = BytesIO()
+    apply_pptx_visual_theme(presentation)
     presentation.save(buffer)
     return buffer.getvalue()
 
@@ -163,6 +166,7 @@ def render_xlsx(view: ReportView) -> bytes:
         footer.append([footer_key, footer_value])
 
     buffer = BytesIO()
+    style_workbook_headers(workbook)
     workbook.save(buffer)
     return buffer.getvalue()
 
@@ -172,12 +176,12 @@ def _escape(value: str) -> str:
 
 
 _STYLE = (
-    "body{margin:2rem;color:#1b2a3f;"
-    'font-family:"Inter Variable","Noto Sans SC Variable",sans-serif}'
+    f"body{{margin:2rem;color:{VISUAL_TOKENS['colors-text-primary']};"
+    f"font-family:{VISUAL_TOKENS['typography-family-body']}}}"
     "table{border-collapse:collapse}"
-    "td,th{border:1px solid #ccd6e0;padding:.35rem .6rem;font-size:.9rem}"
-    ".finding{border-left:3px solid #49a389;padding-left:.8rem;margin:1rem 0}"
-    "footer{margin-top:2rem;font-size:.8rem;color:#5c6b80}"
+    f"td,th{{border:1px solid {VISUAL_TOKENS['colors-line-default']};padding:.35rem .6rem;font-size:.9rem}}"
+    f".finding{{border-left:3px solid {VISUAL_TOKENS['colors-brand-gold']};padding-left:.8rem;margin:1rem 0}}"
+    f"footer{{margin-top:2rem;font-size:.8rem;color:{VISUAL_TOKENS['colors-text-muted']}}}"
 )
 
 

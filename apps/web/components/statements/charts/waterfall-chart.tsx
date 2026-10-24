@@ -1,6 +1,7 @@
 "use client";
 
 import { formatFinancialValue } from "../../cockpit/number-format";
+import { VISUAL_TOKENS } from "../../../lib/visual-tokens.generated";
 
 // 利润形成 / 现金桥瀑布图：手写 SVG，无图表库依赖。
 // base/total 柱从零起画，delta 柱悬浮于累计区间；红减绿增、深色为小计。
@@ -70,8 +71,8 @@ export function WaterfallChart({
           bar.kind === "base" || bar.kind === "total"
             ? "#334155"
             : bar.value >= 0
-              ? "#16a34a"
-              : "#dc2626";
+              ? VISUAL_TOKENS["colors-semantic-positive"]
+              : VISUAL_TOKENS["colors-semantic-negative"];
         return (
           <g key={bar.label}>
             {index > 0 ? (

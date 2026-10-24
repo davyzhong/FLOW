@@ -7,7 +7,7 @@
 
 .workbench__intro,
 .workbench__muted {
-  color: #64748b;
+  color: var(--flow-vl-colors-text-muted);
   font-size: 13px;
 }
 
@@ -16,7 +16,7 @@
 }
 
 .workbench__identity {
-  color: #334155;
+  color: var(--flow-vl-colors-text-primary);
   font-size: 14px;
 }
 
@@ -38,11 +38,11 @@
 }
 
 .workbench__watch li[data-direction="warning"] {
-  border-left-color: #d97706;
+  border-left-color: var(--flow-vl-colors-semantic-warning);
 }
 
 .workbench__watch li[data-direction="negative"] {
-  border-left-color: #b91c1c;
+  border-left-color: var(--flow-vl-colors-semantic-negative);
 }
 
 .workbench__watch-direction {
