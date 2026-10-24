@@ -347,6 +347,10 @@ def test_working_capital_ccc_identity(api_client: TestClient) -> None:
 def test_every_module_chart_has_a_typed_traceable_payload(
     api_client: TestClient,
 ) -> None:
+    overview = api_client.get("/api/v1/cockpit/overview")
+    assert overview.status_code == 200, overview.text
+    assert overview.json()["filter_options"]["dimensions"]
+
     for module in (
         "balance-sheet", "working-capital", "expenses", "cashflow", "risk",
         "consolidation",

@@ -18,7 +18,7 @@ applies_to: repository
 
 ## 一、当前任务
 
-**连续收尾接管授权（2026-10-24）：** 用户已要求开启新任务连续执行路线图 7a.1–7a.8，把可做事项做完后进入收尾。范围和跳过规则已落在 CURRENT_ROADMAP：外部长等待先做一次诊断与安全替代，仍无进展则记“跳过/未验证”并继续；不能绕过红线、虚报验收或把长期事项加回当前版本。新任务沿用 `/Users/qiming/workspace/FLOW/.worktrees/cockpit-visual-completion` 与 `codex/single-machine-runtime-convergence`，接管后是该资源唯一写入者；本会话停止写入。开工先 pull、检查是否已有进展，不重复造实现。当前 `6757b4b6` / CI run `40075162854` 仍在执行，前一开发基线 `92079f77` 的 CI 为 28/28 success。下一单一动作仍为 7a.1；实际启动后由执行任务更新状态。新任务须持续推进，不以“计划已写好”或阶段汇报代替实施；最终统一汇报完成、跳过、验收与交付入口。
+**连续收尾接管授权（2026-10-24）：** 用户已要求按 `CURRENT_ROADMAP` 顺序连续执行路线图 7a.1–7a.8，完成可做事项后进入收尾。范围和跳过规则已落盘：外部长等待先诊断并尝试安全替代，仍无进展则如实记为跳过/未验证；不得绕过红线或虚报验收。本 worktree 与分支为该任务唯一写入目标；当前进度与下一动作见下方最新交接段，历史接手状态不再作为现况依据。
 
 **2026-10-24 当前交接：路线图 7a.1–7a.3 已完成，当前唯一执行动作是 7a.4。** worktree `/Users/qiming/workspace/FLOW/.worktrees/cockpit-visual-completion`，分支 `codex/single-machine-runtime-convergence`。已完成演示经营入口、名称筛选/后退恢复、图表点选和快照追溯；候选单机操作、隔离恢复/重置与九页采集证据见[差距审查](docs/60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)。当前前端定向测试 201/201、typecheck、contracts、API 投影 28/28、Ruff 均通过。下一步按路线图依序完成视觉巡检与正式静态包、最终隔离旅程和独立复核，再做 main 集成。主 checkout 用户文件保持原位。`/Users/qiming/.flow/flow.sqlite3` 零字节误建文件未经用户选择不得触碰。
 
