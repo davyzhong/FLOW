@@ -563,6 +563,13 @@
 
 /* 批次 B4：行动项面板 */
 .action-panel { margin-top: var(--flow-space-4, 16px); }
+.overview-analysis-entry { margin-top: 18px; padding: 18px 20px; border: 1px solid var(--flow-border, #dbe2ea); border-radius: 12px; background: #fffdf8; }
+.overview-analysis-entry header h2 { margin: 3px 0 6px; color: var(--flow-ink, #173247); font: 600 21px/1.25 Georgia, "Songti SC", serif; }
+.overview-analysis-entry > p { margin: 0; color: var(--flow-text-muted, #586476); font-size: 13px; }
+.overview-analysis-entry__links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.overview-analysis-entry__links a { display: inline-flex; align-items: center; gap: 5px; padding: 8px 11px; border: 1px solid #d8c28c; border-radius: 7px; color: var(--flow-ink, #173247); background: #fbf6e8; font-size: 13px; font-weight: 650; text-decoration: none; }
+.overview-analysis-entry__links a:hover { background: #f4ead0; }
+.overview-analysis-entry > small { display: block; margin-top: 10px; color: var(--flow-text-muted, #586476); font-size: 12px; }
 .action-panel ul { list-style: none; padding: 0; display: grid; gap: 8px; }
 .action-panel__notice { color: var(--flow-text-muted, #6b7280); font-size: 12px; }
 .action-panel__suggestions { margin-top: 12px; padding: 14px; border: 1px solid var(--flow-border, #dbe2ea); border-radius: 10px; background: var(--flow-surface-subtle, #f8fafc); }

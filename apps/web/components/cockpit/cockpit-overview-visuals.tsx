@@ -247,6 +247,17 @@ export function CockpitOverviewVisuals({
         </article>
       </div>
 
+      <section className="overview-analysis-entry" aria-label="演示经营分析入口">
+        <header><span className="overview-kicker">经营分析 · 演示口径</span><h2>继续查看经营驱动</h2></header>
+        <p>以下视图来自大麦物流合成月度经营账套，与上方公开年度披露财报分区呈现；不得将演示分配数据解读为企业真实月度事实。</p>
+        <div className="overview-analysis-entry__links">
+          <Link href="/" aria-label="查看预算执行、利润桥、产品表现与毛利矩阵">预算执行 · 利润桥 · 产品表现 · 毛利矩阵 <ArrowUpRight size={14} aria-hidden="true" /></Link>
+          <Link href="/investigations" aria-label="查看经营调查与账龄相关证据">经营调查 · 账龄相关证据 <ArrowUpRight size={14} aria-hidden="true" /></Link>
+          <Link href="/cockpit/working-capital">公开年度营运资金分析 <ArrowUpRight size={14} aria-hidden="true" /></Link>
+        </div>
+        <small>账龄客户切片尚无独立图表/API；调查页仅展示已有调查与证据，不代表完整账龄明细分析。</small>
+      </section>
+
       {supplements?.failures?.length ? <p className="overview-supplement-warning" role="status">部分披露模块暂不可读取：{supplements.failures.join("、")}。其他可用视图继续展示。</p> : null}
     </section>
   );

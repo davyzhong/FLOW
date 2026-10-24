@@ -79,6 +79,9 @@ describe("CockpitOverviewVisuals", () => {
     expect(screen.getByRole("link", { name: /查看现金流明细/ }).getAttribute("href")).toBe("/cockpit/cashflow");
     expect(screen.getByRole("link", { name: /查看费用分析/ }).getAttribute("href")).toBe("/cockpit/expenses");
     expect(screen.getByRole("link", { name: /杜邦分析/ }).getAttribute("href")).toBe("/cockpit/profitability");
+    expect(screen.getByRole("link", { name: /预算执行、利润桥、产品表现与毛利矩阵/ }).getAttribute("href")).toBe("/");
+    expect(screen.getByRole("link", { name: /经营调查与账龄相关证据/ }).getAttribute("href")).toBe("/investigations");
+    expect(screen.getByText(/尚无独立图表\/API/)).toBeTruthy();
     for (const key of ["revenue", "operating_profit", "gross_margin", "operating_cash_flow"]) {
       expect(screen.getByTestId(`cockpit-overview-trend-row-${key}`)).toBeTruthy();
     }
