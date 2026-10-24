@@ -1,9 +1,13 @@
 {
-  "capturedAt": "2026-10-24T15:30:39.345Z",
-  "codeCommit": "6a49401d55c275decf30dc63f419233b7928997d",
+  "capturedAt": "2026-10-24T16:09:34.516Z",
+  "codeCommit": "28c0e7a29d7812106709947414c9a560f1c530b0",
   "baseUrl": "http://127.0.0.1:3100",
   "routes": 20,
-  "viewports": 3,
+  "viewports": [
+    "desktop",
+    "tablet",
+    "mobile"
+  ],
   "results": [
     {
       "route": "/",
@@ -13,6 +17,8 @@
       "client": 1440,
       "body": 1440,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "home--desktop.png"
     },
@@ -24,6 +30,8 @@
       "client": 1024,
       "body": 1024,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "home--tablet.png"
     },
@@ -35,6 +43,8 @@
       "client": 390,
       "body": 390,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "home--mobile.png"
     },
@@ -46,6 +56,8 @@
       "client": 1440,
       "body": 1440,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "analysis--desktop.png"
     },
@@ -57,6 +69,8 @@
       "client": 1024,
       "body": 1024,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "analysis--tablet.png"
     },
@@ -68,6 +82,8 @@
       "client": 390,
       "body": 390,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "analysis--mobile.png"
     },
@@ -79,6 +95,8 @@
       "client": 1440,
       "body": 1440,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "cockpit--desktop.png"
     },
@@ -90,6 +108,8 @@
       "client": 1024,
       "body": 1024,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "cockpit--tablet.png"
     },
@@ -101,6 +121,8 @@
       "client": 390,
       "body": 390,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "cockpit--mobile.png"
     },
@@ -112,6 +134,8 @@
       "client": 1440,
       "body": 1440,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "cockpit--balance-sheet--desktop.png"
     },
@@ -123,6 +147,8 @@
       "client": 1024,
       "body": 1024,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "cockpit--balance-sheet--tablet.png"
     },
@@ -134,6 +160,8 @@
       "client": 390,
       "body": 390,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "cockpit--balance-sheet--mobile.png"
     },
@@ -145,6 +173,8 @@
       "client": 1440,
       "body": 1440,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "cockpit--cashflow--desktop.png"
     },
@@ -156,6 +186,8 @@
       "client": 1024,
       "body": 1024,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "cockpit--cashflow--tablet.png"
     },
@@ -167,6 +199,8 @@
       "client": 390,
       "body": 390,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "cockpit--cashflow--mobile.png"
     },
@@ -178,6 +212,8 @@
       "client": 1440,
       "body": 1440,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "cockpit--consolidation--desktop.png"
     },
@@ -189,6 +225,8 @@
       "client": 1024,
       "body": 1024,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "cockpit--consolidation--tablet.png"
     },
@@ -200,6 +238,8 @@
       "client": 390,
       "body": 390,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "cockpit--consolidation--mobile.png"
     },
@@ -211,6 +251,8 @@
       "client": 1440,
       "body": 1440,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "cockpit--expenses--desktop.png"
     },
@@ -222,6 +264,8 @@
       "client": 1024,
       "body": 1024,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "cockpit--expenses--tablet.png"
     },
@@ -233,6 +277,8 @@
       "client": 390,
       "body": 390,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "cockpit--expenses--mobile.png"
     },
@@ -244,6 +290,8 @@
       "client": 1440,
       "body": 1440,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "cockpit--profitability--desktop.png"
     },
@@ -255,6 +303,8 @@
       "client": 1024,
       "body": 1024,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "cockpit--profitability--tablet.png"
     },
@@ -266,6 +316,8 @@
       "client": 390,
       "body": 390,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "cockpit--profitability--mobile.png"
     },
@@ -277,6 +329,8 @@
       "client": 1440,
       "body": 1440,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "cockpit--risk--desktop.png"
     },
@@ -288,6 +342,8 @@
       "client": 1024,
       "body": 1024,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "cockpit--risk--tablet.png"
     },
@@ -299,6 +355,8 @@
       "client": 390,
       "body": 390,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "cockpit--risk--mobile.png"
     },
@@ -310,6 +368,8 @@
       "client": 1440,
       "body": 1440,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "cockpit--working-capital--desktop.png"
     },
@@ -321,6 +381,8 @@
       "client": 1024,
       "body": 1024,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "cockpit--working-capital--tablet.png"
     },
@@ -332,6 +394,8 @@
       "client": 390,
       "body": 390,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "cockpit--working-capital--mobile.png"
     },
@@ -343,6 +407,8 @@
       "client": 1440,
       "body": 1440,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "data--desktop.png"
     },
@@ -354,6 +420,8 @@
       "client": 1024,
       "body": 1024,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "data--tablet.png"
     },
@@ -365,6 +433,8 @@
       "client": 390,
       "body": 390,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "data--mobile.png"
     },
@@ -376,6 +446,8 @@
       "client": 1440,
       "body": 1440,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "internal--desktop.png"
     },
@@ -387,6 +459,8 @@
       "client": 1024,
       "body": 1024,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "internal--tablet.png"
     },
@@ -398,6 +472,8 @@
       "client": 390,
       "body": 390,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "internal--mobile.png"
     },
@@ -409,6 +485,8 @@
       "client": 1440,
       "body": 1440,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "investigations--desktop.png"
     },
@@ -420,6 +498,8 @@
       "client": 1024,
       "body": 1024,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "investigations--tablet.png"
     },
@@ -431,6 +511,8 @@
       "client": 390,
       "body": 390,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "investigations--mobile.png"
     },
@@ -442,6 +524,8 @@
       "client": 1440,
       "body": 1440,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "investigations--01a16e5e-e2a6-725a-83cb-aa5d70ac92cb--desktop.png"
     },
@@ -453,6 +537,8 @@
       "client": 1024,
       "body": 1024,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "investigations--01a16e5e-e2a6-725a-83cb-aa5d70ac92cb--tablet.png"
     },
@@ -464,6 +550,8 @@
       "client": 390,
       "body": 390,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "investigations--01a16e5e-e2a6-725a-83cb-aa5d70ac92cb--mobile.png"
     },
@@ -475,6 +563,8 @@
       "client": 1440,
       "body": 1440,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "login--desktop.png"
     },
@@ -486,6 +576,8 @@
       "client": 1024,
       "body": 1024,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "login--tablet.png"
     },
@@ -497,6 +589,8 @@
       "client": 390,
       "body": 390,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "login--mobile.png"
     },
@@ -508,6 +602,8 @@
       "client": 1440,
       "body": 1440,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "metric-library--desktop.png"
     },
@@ -519,6 +615,8 @@
       "client": 1024,
       "body": 1024,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "metric-library--tablet.png"
     },
@@ -530,6 +628,8 @@
       "client": 390,
       "body": 390,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "metric-library--mobile.png"
     },
@@ -541,6 +641,8 @@
       "client": 1440,
       "body": 1440,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "operations--desktop.png"
     },
@@ -552,6 +654,8 @@
       "client": 1024,
       "body": 1024,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "operations--tablet.png"
     },
@@ -563,6 +667,8 @@
       "client": 390,
       "body": 390,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "operations--mobile.png"
     },
@@ -574,6 +680,8 @@
       "client": 1440,
       "body": 1440,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "public--desktop.png"
     },
@@ -585,6 +693,8 @@
       "client": 1024,
       "body": 1024,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "public--tablet.png"
     },
@@ -596,6 +706,8 @@
       "client": 390,
       "body": 390,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "public--mobile.png"
     },
@@ -607,6 +719,8 @@
       "client": 1440,
       "body": 1440,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "reports--desktop.png"
     },
@@ -618,6 +732,8 @@
       "client": 1024,
       "body": 1024,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "reports--tablet.png"
     },
@@ -629,6 +745,8 @@
       "client": 390,
       "body": 390,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "reports--mobile.png"
     },
@@ -640,6 +758,8 @@
       "client": 1440,
       "body": 1440,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "statements--desktop.png"
     },
@@ -651,6 +771,8 @@
       "client": 1024,
       "body": 1024,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "statements--tablet.png"
     },
@@ -662,6 +784,8 @@
       "client": 390,
       "body": 390,
       "errors": [],
+      "apiErrors": [],
+      "contentReady": true,
       "bad": false,
       "screenshot": "statements--mobile.png"
     }
@@ -695,5 +819,29 @@
     "investigations__visual-audit-no-sample--mobile.png",
     "investigations__visual-audit-no-sample--tablet.png"
   ],
-  "screenshotNamingRule": "当前矩阵每项使用 route 去除首尾 / 后将 / 替换为 --，首页为 home，再追加 --{viewport}.png；双下划线文件是更早的参考截图，不计入当前 60 项。"
+  "screenshotNamingRule": "当前矩阵每项使用 route 去除首尾 / 后将 / 替换为 --，首页为 home，再追加 --{viewport}.png；双下划线文件是更早的参考截图，不计入当前 60 项。",
+  "summary": {
+    "total": 60,
+    "bad": 0,
+    "contentReady": 60,
+    "apiErrors": 0,
+    "dependencyGraphNodes": 31,
+    "dependencyGraphCanvasHeight": 1436,
+    "dependencyGraphErrors": 0
+  },
+  "supplementalInteractionScreenshots": [
+    {
+      "screenshot": "metric-library--dependency-graph-desktop.png",
+      "route": "/metric-library?tab=graph",
+      "viewport": "desktop",
+      "status": 200,
+      "nodes": 31,
+      "regionVisible": true,
+      "canvasHeight": 1436,
+      "viewportWidth": 1440,
+      "hint": "32 个指标、13 条依赖边。 点击节点查看上下游；颜色为能力域（偿债能力 / 营运能力 / 盈利能力 / 发展能力 / 现金流 / 规模（物流行业集专用） / 价值创造）。 默认聚焦常用指标，可切换全部或专业层；支持缩放/平移/拖拽节点与 MiniMap 导航。",
+      "errors": [],
+      "apiErrors": []
+    }
+  ]
 }

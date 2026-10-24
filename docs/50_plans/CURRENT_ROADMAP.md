@@ -3,9 +3,9 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 6.5
+version: 6.8
 created_at: 2026-09-12
-updated_at: 2026-10-24
+updated_at: 2026-10-25
 owner: FLOW
 depends_on: [FLOW-SPEC-V1-DESIGN-001]
 acceptance_refs: [roadmap-unique-invariant]
@@ -17,7 +17,7 @@ superseded_by: null
 
 # 当前路线图（唯一主线）
 
-> **2026-10-24 最新状态：** D055 单机原型 7a.1–7a.8 已完成。PR [#3](https://github.com/davyzhong/FLOW/pull/3) 的 merge commit `b2a1bf22df91239eb311d1692c30c666250678bf`、PR [#4](https://github.com/davyzhong/FLOW/pull/4) 的文档状态 merge commit `b068796f906cfbb91ac33775f5578194acc98a51` 均已合入 main；后者准确 SHA 对应 run `40096497668` 为 28/28 success。原型验收及限制见[完结差距审查](../60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)。**去重后 15 个唯一事项：已完成 8、实际执行中 1（可复用视觉语言与全项目统一）、队首待启动 0、排队 4、暂停 1、外部条件受限 1。** 用户已批准新队首设计与工作包，当前实施只写于分支 `codex/flow-visual-language`；视觉包、Web token/外壳、主要图表及导出映射已实施，Web typecheck、201 项测试、production build 通过。`6a49401d` 的 20 路由×3 视口截图基础检查 60/60 通过，20 张桌面截图已首轮人工审阅：驾驶舱和财报出版页最接近概念板，分析、指标库、数据、内部、公开页的留白/层级与多页亮蓝链接/控件仍需整改；逐图表、导出模板、无障碍和交互验收未完成。以主队列事项数计算，8/15 已完成（约 53%）；这不是当前视觉工作包完成率。下一动作是先统一共享链接/控件样式，再针对差距页修订并复查，详情见[视觉覆盖记录](../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。K2 顺延为排队。原型使用 synthetic 演示数据；真实账龄切片、公开 C 级、知识刷新、真实企业试点与行业扩张不在 7a 完成范围。
+> **2026-10-25 最新状态：** D055 单机原型 7a.1–7a.8 已完成。PR [#3](https://github.com/davyzhong/FLOW/pull/3) 的 merge commit `b2a1bf22df91239eb311d1692c30c666250678bf`、PR [#4](https://github.com/davyzhong/FLOW/pull/4) 的文档状态 merge commit `b068796f906cfbb91ac33775f5578194acc98a51` 均已合入 main；后者准确 SHA 对应 run `40096497668` 为 28/28 success。原型验收及限制见[完结差距审查](../60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)。**去重后 15 个唯一事项：已完成 8、实际执行中 1（可复用视觉语言与全项目统一）、队首待启动 0、排队 4、暂停 1、外部条件受限 1。** 用户已批准新队首设计与工作包，当前实施只写于分支 `codex/flow-visual-language`；视觉包、Web token/外壳、主要图表及导出映射已实施，Web typecheck、201 项测试、production build 通过。`28c0e7a2` 的 20 路由×3 视口截图矩阵 60/60 内容就绪、API 零错误、无溢出/浏览器错误；人工首轮审阅后已修正共享链接/控件颜色、指标库强调线、模块入口层级和财报页品牌强调。驾驶舱、财务出版页与数据工作台较接近目标，分析与内容范围较窄页面仍有真实数据/功能带来的留白。逐图表、导出模板、无障碍和交互验收未完成。以主队列事项数计算，8/15 已完成（约 53%）；这不是当前视觉工作包完成率。下一动作是逐项核验图表/数据表达清单，再进入导出模板、键盘/对比度和交互状态验收，详情见[视觉覆盖记录](../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。K2 顺延为排队。原型使用 synthetic 演示数据；真实账龄切片、公开 C 级、知识刷新、真实企业试点与行业扩张不在 7a 完成范围。
 
 > 当前完结目标依据 D055：交付本机单用户可启动、可加载/重置演示业务、可看丰富 CFO 图表、可下钻追溯、可分析和导出报告、可备份恢复、可离线浏览的验证原型。公开 C 级、知识刷新、真实企业三周期仍未完成，保留在长期队列，不作为本原型无限延期的理由。**下方 2026-10-21 及以前的状态段落均为历史，当前只按本段及唯一执行队列。**
 

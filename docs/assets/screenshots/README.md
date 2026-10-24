@@ -3,9 +3,9 @@ doc_id: FLOW-INDEX-SCREENSHOTS-001
 title: 项目实测与报告截图索引
 doc_type: navigation
 status: current
-version: 1.2
+version: 1.5
 created_at: 2026-09-04
-updated_at: 2026-10-20
+updated_at: 2026-10-25
 owner: FLOW
 applies_to: repository
 ---
@@ -16,10 +16,10 @@ applies_to: repository
 
 ## 可复用视觉语言阶段截图矩阵（2026-10-24）
 
-本批记录 A「高管编辑部」× C「财务报告画布」视觉语言应用中的全路由首轮矩阵。实际页面截图对应代码 SHA `6a49401d55c275decf30dc63f419233b7928997d`，20 个路由 × 桌面 1440、平板 1024、手机 390 三种视口，共 60 张；`results.json` 为每行记录对应截图路径、状态码、页面宽度和浏览器错误，并列出 27 张不计入本矩阵的早期双下划线参考图。
+本批记录 A「高管编辑部」× C「财务报告画布」视觉语言应用中的全路由首轮矩阵。实际页面截图对应代码 SHA `28c0e7a29d7812106709947414c9a560f1c530b0`，20 个路由 × 桌面 1440、平板 1024、手机 390 三种视口，共 60 张；`results.json` 为每行记录对应截图路径、状态码、页面宽度、内容就绪、API 错误和浏览器错误，并列出 27 张不计入本矩阵的早期双下划线参考图，并登记 1 张显式打开指标依赖图标签的交互截图。
 
 - 数据：隔离目录 `/tmp/flow-visual-audit-20261024` 中的大麦物流 synthetic 演示发行包，manifest SHA-256 `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`；不是客户或真实企业披露数据。
-- 结果：60/60 路由视口 HTTP 200、无页面级横向溢出、无浏览器错误。按 20 张桌面截图完成首轮人工审阅；具体差距见[视觉覆盖报告](../../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md#20-路由截图首轮差异盘点2026-10-24)。该结果不代表逐图表、交互态、可访问性或打印格式均已完成视觉验收。
+- 结果：60/60 路由视口 HTTP 200 且内容就绪、API 零错误、无页面级横向溢出及浏览器错误。按 20 张桌面截图完成首轮人工审阅；具体差距见[视觉覆盖报告](../../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md#20-路由截图首轮差异盘点2026-10-24)。该结果不代表逐图表、交互态、可访问性或打印格式均已完成视觉验收。
 - 入口：[视觉覆盖报告](../../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)、[逐路由结果与截图](../../60_delivery/verification/visual-language-20261024/results.json)、[桌面总览截图](../../60_delivery/verification/visual-language-20261024/cockpit--desktop.png)。
 - README 中的旧视觉截图按历史批次保留；此矩阵仅用于本轮视觉差距检查。
 

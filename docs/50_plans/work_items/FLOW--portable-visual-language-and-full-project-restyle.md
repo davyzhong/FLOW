@@ -3,9 +3,9 @@ doc_id: FLOW-WI-VISUAL-LANGUAGE-20261024-001
 title: 可复用视觉语言提炼与 FLOW 全项目视觉统一
 doc_type: work-item
 status: active
-version: 1.1
+version: 1.4
 created_at: 2026-10-24
-updated_at: 2026-10-24
+updated_at: 2026-10-25
 do_not_execute: false
 owner: FLOW
 depends_on: [FLOW-SPEC-VISUAL-LANGUAGE-20261024-001]
@@ -29,7 +29,7 @@ confidentiality: project-internal
 - 已建立 `packages/flow-visual-language/`，包含 `tokens.json` 单一源、生成 CSS、表达范式、无业务事实样例；生成器同时输出 TypeScript/Python token 映射。
 - 已接入 Web 全局主题、共享导航、主要 cockpit/data/analysis/operations 样式、ECharts/SVG 财务图色板与离线驾驶舱预览。报表 Matplotlib 图表读取同一 token 映射；HTML/PDF、PPTX、XLSX 主要渲染器已接入主题映射，逐模板视觉与打印检查仍待完成。
 - Web typecheck 通过；前端 37 个测试文件、201 项通过；最近一次图表 token 调整后 typecheck、全量 201 项前端测试及 Next.js production build 通过。视觉 token `--check`、Python compile、Node syntax、`git diff --check` 均通过。
-- 首轮 Playwright 截图覆盖 20 路由×3 视口；修复 `/operations` 报告查询 UUID 参数类型后，代码 SHA `6a49401d55c275decf30dc63f419233b7928997d` 下的 60 张矩阵截图重新采集，60/60 HTTP 200、无横向溢出及浏览器错误。热力图渐变、财报分组柱与瀑布图已接入语义 token。人工审阅 20 张桌面图，差距与整改顺序已登记于[视觉覆盖验收](../../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md#20-路由截图首轮差异盘点2026-10-24)：驾驶舱和财务出版页较接近；`/analysis`、`/metric-library`、`/data`、`/internal`、`/public` 的留白/层级，以及多页亮蓝链接和默认控件色仍需整改。导入/映射、搜索/筛选、键盘焦点等交互状态尚未逐项检查。
+- Playwright 截图覆盖 20 路由×3 视口；修复 `/operations` 报告查询 UUID 参数类型后，代码 SHA `28c0e7a2` 下最新矩阵重采，60/60 HTTP 200、内容就绪、API 零错误、无横向溢出及浏览器错误；另有指标依赖图交互截图。热力图渐变、财报分组柱与瀑布图已接入语义 token。20 张桌面图审阅后已调整共享链接/控件色、指标库古金强调线、模块落地页衬线标题/卡片节奏和财报页品牌强调色；红色财务负值语义保持不变。指标依赖图默认聚焦“常用”层，并保留“全部/专业”范围切换；图谱画布按当前节点层高度展开，默认截图 31 个节点可见、零错误；“全部”视图的高密度缩放仍待核。视觉差异与剩余顺序见[视觉覆盖验收](../../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md#20-路由截图首轮差异盘点2026-10-24)：驾驶舱、财务出版页和数据工作台较接近；分析及功能范围较窄的页面仍有自然留白；逐图表、报告模板/打印、图表辅助表达、导入/映射与筛选交互、键盘焦点及对比度尚未验收。
 - 截图与逐路由结果在 [视觉覆盖验收](../../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)；synthetic manifest SHA 为 `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`，数据库只位于 `/tmp/flow-visual-audit-20261024`。
 - 仍需完成全路由概念板视觉差异逐项整改、所有图表/表达的单位来源与辅助表达核对、HTML/PDF/PPTX/XLSX、全键盘/对比度/窄屏互动验收、文档门禁、准确最终 SHA 截图和独立复核。不得将当前首轮截图说成全部符合概念板。
 

@@ -89,7 +89,7 @@ FLOW 的视觉方向已经明确，接下来的工作是在单机原型边界内
 
 下面是概念板方向已经落到产品页面后的本机浏览器实测。桌面总览优先呈现营业收入、营业利润、毛利率和经营现金流；完整趋势、现金流桥、杜邦分解、费用结构、行动项及来源口径均可在同一画布查看。手机截图展示同一数据视图的窄屏排列。
 
-2026-10-24 起，项目正在把 A「高管编辑部」× C「财务报告画布」抽象为可复制的 [FLOW Visual Language 包](packages/flow-visual-language/README.md)，并分阶段统一全项目页面、图表与报告输出。下图是本轮生产构建的真实页面截图；隔离 synthetic 数据，不代表真实企业经营结果。`6a49401d` 代码下 20 路由×3 视口基础渲染矩阵 60/60 通过；人工首轮审阅已标记各页视觉差距，逐图表、交互状态、无障碍与各类报告打印仍在验收。完整记录：[视觉覆盖报告](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)；60 张对应截图和代码 SHA `6a49401d55c275decf30dc63f419233b7928997d` 见[矩阵目录](docs/60_delivery/verification/visual-language-20261024/)。
+2026-10-24 起，项目正在把 A「高管编辑部」× C「财务报告画布」抽象为可复制的 [FLOW Visual Language 包](packages/flow-visual-language/README.md)，并分阶段统一全项目页面、图表与报告输出。下图是本轮生产构建的真实页面截图；隔离 synthetic 数据，不代表真实企业经营结果。代码 SHA `28c0e7a29d7812106709947414c9a560f1c530b0` 下 20 路由×3 视口矩阵 60/60 内容就绪、API 零错误、无横向溢出及浏览器错误。逐图表、交互状态、无障碍与各类报告打印仍在验收。完整记录：[视觉覆盖报告](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)；60 张截图和准确代码 SHA `28c0e7a29d7812106709947414c9a560f1c530b0` 见[矩阵目录](docs/60_delivery/verification/visual-language-20261024/)。
 
 ![FLOW A+C 视觉语言实施中的集团财务总览真实页面，展示纸白画布、深海军蓝导航、衬线标题、指标卡、趋势图、现金流桥与来源面板；经营数据为隔离 synthetic 演示数据](docs/60_delivery/verification/visual-language-20261024/cockpit--desktop.png)
 

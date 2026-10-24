@@ -3,16 +3,16 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.82
+version: 5.85
 created_at: 2026-09-12
-updated_at: 2026-10-24
+updated_at: 2026-10-25
 owner: FLOW
 applies_to: repository
 ---
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-10-24 当前状态：**单机原型 7a.1–7a.8 已完成并合入 main。** PR #3 merge commit `b2a1bf22df91239eb311d1692c30c666250678bf` 对应 run `40092106547` 为 28/28 success；PR #4 文档状态 merge commit `b068796f906cfbb91ac33775f5578194acc98a51` 对应准确 SHA run `40096497668` 也为 28/28 success。隔离验收、独立复核、M1/M6、链接检查均通过；经营入口、名称筛选/后退恢复、图表追溯、A+C 原型视觉、九页离线包和本机数据操作已交付，限制见[差距审查](../60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)。用户已批准“可复用视觉语言提炼与 FLOW 全项目视觉统一”；当前在分支 `codex/flow-visual-language` 执行，可复制视觉包、共享 Web token/外壳、主要图表和离线快照映射已实施。Web typecheck、37 文件 201 项测试、production build 通过。代码 SHA `6a49401d` 下 20 路由×3 视口 60/60 基础检查通过，且已完成 20 张桌面截图的首轮人工对照：驾驶舱/财务出版页最接近概念板，分析、指标库、数据、内部、公开页仍有留白/层级差距，多页链接和控件仍偏亮蓝。逐图表对照、键盘/对比度和 HTML/PDF/PPTX/XLSX 尚未完成，因此不能宣布全项目视觉验收完成。页面差异、总完成度与阶段证据见[视觉覆盖记录](../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。15 项主队列仍为完成 8、实际执行中 1、队首待启动 0、排队 4、暂停 1、外部条件受限 1。唯一队列见[CURRENT_ROADMAP](../50_plans/CURRENT_ROADMAP.md)；K2 已顺延为排队。用户选择保留 `/Users/qiming/.flow/flow.sqlite3` 空文件；`services/api/flow.sqlite3` 未跟踪文件也保持原样。
+2026-10-25 当前状态：**单机原型 7a.1–7a.8 已完成并合入 main。** PR #3 merge commit `b2a1bf22df91239eb311d1692c30c666250678bf` 对应 run `40092106547` 为 28/28 success；PR #4 文档状态 merge commit `b068796f906cfbb91ac33775f5578194acc98a51` 对应准确 SHA run `40096497668` 也为 28/28 success。隔离验收、独立复核、M1/M6、链接检查均通过；经营入口、名称筛选/后退恢复、图表追溯、A+C 原型视觉、九页离线包和本机数据操作已交付，限制见[差距审查](../60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)。用户已批准“可复用视觉语言提炼与 FLOW 全项目视觉统一”；当前分支 `codex/flow-visual-language` 已有可复制视觉包、共享 Web token/外壳、主要图表和离线快照映射。当前代码 SHA `28c0e7a2` 下 20 路由×3 视口矩阵 60/60 内容就绪、API 零错误、无横溢或浏览器错误；财报分析页品牌强调已校为古金/墨蓝，语义红保留；指标依赖图默认聚焦“常用”分层并按节点数展开画布，仍可切换完整图谱。驾驶舱、财务出版页和数据工作台较接近概念板；分析及内容范围较窄入口仍有真实内容带来的留白。逐图表、键盘/对比度和 HTML/PDF/PPTX/XLSX 尚未完成，不能宣布全项目视觉验收完成。阶段证据见[视觉覆盖记录](../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。15 项主队列仍为完成 8、实际执行中 1、队首待启动 0、排队 4、暂停 1、外部条件受限 1；8/15（约 53%）仅为路线图事项比例，不代表视觉工作包完成度。唯一队列见[CURRENT_ROADMAP](../50_plans/CURRENT_ROADMAP.md)；K2 已顺延为排队。用户选择保留 `/Users/qiming/.flow/flow.sqlite3` 空文件；`services/api/flow.sqlite3` 未跟踪文件也保持原样。
 
 <details>
 <summary>2026-10-21 及以前的状态快照（历史，不代表当前执行）</summary>

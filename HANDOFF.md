@@ -3,9 +3,9 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目交接文档
 doc_type: navigation
 status: current
-version: 11.7
+version: 12.0
 created_at: 2026-09-12
-updated_at: 2026-10-24
+updated_at: 2026-10-25
 owner: FLOW
 applies_to: repository
 ---
@@ -18,7 +18,7 @@ applies_to: repository
 
 ## 一、当前任务
 
-**2026-10-24 当前交接：路线图 7a.1–7a.8 已完成。** PR [#3](https://github.com/davyzhong/FLOW/pull/3) 与状态归档 PR [#4](https://github.com/davyzhong/FLOW/pull/4) 已合入 main；#4 merge commit `b068796f906cfbb91ac33775f5578194acc98a51` 的准确 SHA run `40096497668` 为 28/28 success。原型及限制见[差距审查](docs/60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)。用户已批准“可复用视觉语言提炼与 FLOW 全项目视觉统一”；当前在分支 `codex/flow-visual-language` 实施，先完成文件级视觉 token 与样例，再统一 20 个路由、图表、报告输出与有效文档。详细顺序与验收见[视觉语言设计规格](docs/superpowers/specs/2026-10-24-flow-visual-language-system-design.md)、[视觉统一工作包](docs/50_plans/work_items/FLOW--portable-visual-language-and-full-project-restyle.md)和[CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)。用户选择保留 `/Users/qiming/.flow/flow.sqlite3` 零字节文件，`services/api/flow.sqlite3` 未跟踪文件也保持原样；主 checkout 用户文件未触碰。 可复制视觉包、主题 token、共享导航、主要图表与导出映射已落地。`6a49401d` 下 20 路由×3 视口基础检查 60/60 通过，并完成 20 张桌面截图首轮人工审阅：驾驶舱与财报出版页最接近概念板，分析、指标库、数据、内部、公开页仍有留白/层级差距，多页链接/控件偏亮蓝。逐图表、交互状态、可访问性、各导出模板和打印仍未验收；当前项目约为 15 项路线图事项中完成 8 项、执行中 1 项（53% 是事项数比例，不代表视觉子任务完成度），视觉子任务没有可靠的百分比口径。下一步先对齐共享链接和控件，再逐页修留白/层级并更新截图/差异台账。详细设计与验收见[视觉语言设计规格](docs/superpowers/specs/2026-10-24-flow-visual-language-system-design.md)、[视觉统一工作包](docs/50_plans/work_items/FLOW--portable-visual-language-and-full-project-restyle.md)、[CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)与[视觉覆盖记录](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。
+**2026-10-25 当前交接：路线图 7a.1–7a.8 已完成。** PR [#3](https://github.com/davyzhong/FLOW/pull/3) 与状态归档 PR [#4](https://github.com/davyzhong/FLOW/pull/4) 已合入 main；#4 merge commit `b068796f906cfbb91ac33775f5578194acc98a51` 的准确 SHA run `40096497668` 为 28/28 success。原型及限制见[差距审查](docs/60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)。用户已批准“可复用视觉语言提炼与 FLOW 全项目视觉统一”；当前分支 `codex/flow-visual-language` 已有可复制视觉包、共享主题、主要图表与导出映射。代码 SHA `28c0e7a2` 下 20 路由×3 视口矩阵 60/60 内容就绪、API 零错误、无横向溢出及浏览器错误；财报分析页的品牌强调已校为古金/墨蓝，红色财务负值语义保留；指标依赖图默认聚焦“常用”层并按节点数展开画布，完整图谱仍可筛选查看。驾驶舱、财务出版页和数据工作台较接近概念板；逐图表、交互状态、可访问性、导出模板和打印仍未验收。当前路线图 15 项中已完成 8 项、执行中 1 项（事项数 53%，不代表视觉子任务完成率）；视觉子任务没有可靠的百分比口径。下一步按图表和数据表达清单逐项核验，再完成交互/可访问性及报告输出验收。详细设计和限制见[视觉语言设计规格](docs/superpowers/specs/2026-10-24-flow-visual-language-system-design.md)、[视觉统一工作包](docs/50_plans/work_items/FLOW--portable-visual-language-and-full-project-restyle.md)、[CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)与[视觉覆盖记录](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。用户选择保留 `/Users/qiming/.flow/flow.sqlite3` 零字节文件；`services/api/flow.sqlite3` 未跟踪文件也保持原样。此前一次测试从主 checkout 错误启动，触发 `services/api/.venv` 重建；该环境未恢复或继续改动，相关主 checkout 用户文件未触碰。
 
 <details>
 <summary>2026-10-21 及以前的状态快照（历史，不代表当前执行）</summary>
