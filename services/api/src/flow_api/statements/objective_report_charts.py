@@ -14,11 +14,13 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
+
 from flow_api.visual_tokens import VISUAL_TOKENS
 
 plt.rcParams["font.sans-serif"] = [
-    "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Arial Unicode MS",
-    "Noto Sans CJK SC", "Microsoft YaHei",
+    family.strip().strip("\"'")
+    for family in VISUAL_TOKENS["typography-family-body"].split(",")
+    if family.strip().strip("\"'") not in {"system-ui", "sans-serif"}
 ]
 plt.rcParams["axes.unicode_minus"] = False
 
@@ -39,7 +41,7 @@ def _finish(fig: Any) -> bytes:
     buffer = io.BytesIO()
     # bbox_inches="tight" 把画布外的元素（如 suptitle y>1）一并纳入输出，避免裁切
     fig.savefig(
-        buffer, format="png", dpi=DPI, facecolor="white",
+        buffer, format="png", dpi=DPI, facecolor=VISUAL_TOKENS["colors-surface-paper"],
         bbox_inches="tight", pad_inches=0.08,
     )
     plt.close(fig)
