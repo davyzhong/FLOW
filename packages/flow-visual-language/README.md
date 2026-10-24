@@ -33,6 +33,8 @@ python3 scripts/build_flow_visual_language.py --check
 
 生成的消费映射位于 `apps/web/lib/visual-tokens.generated.ts` 和 `services/api/src/flow_api/visual_tokens.py`。外部项目无需引入 FLOW 运行时或发布依赖。
 
+本仓库未提供独立 LICENSE；此包说明了如何复用设计语言，不授予对 FLOW 其他源代码、商标或资产的额外授权。外部公开分发前须核对仓库授权。
+
 ## 原则
 
 视觉样例不是真实财务事实；数据颜色不能取代正负/缺失文字标识；不能为了匹配示意构图而填补缺失数据。字体使用可回退的本地字体栈，不依赖外网下载。

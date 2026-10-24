@@ -14,6 +14,15 @@ applies_to: repository
 
 本文件按采集批次记录真实页面截图；每个批次分别注明代码和数据来源。图片没有替换数值、拼接控件或使用生成图冒充页面。
 
+## 可复用视觉语言阶段截图矩阵（2026-10-24）
+
+本批记录 A「高管编辑部」× C「财务报告画布」视觉语言应用中的全路由初始矩阵。实际页面截图对应代码 SHA `aefd62ae13153abfa6d1bff31a86f198c0112190`，20 个路由 × 桌面 1440、平板 1024、手机 390 三种视口，共 60 张；`results.json` 记录状态码、页面宽度和浏览器错误检查。
+
+- 数据：隔离目录 `/tmp/flow-visual-audit-20261024` 中的大麦物流 synthetic 演示发行包，manifest SHA-256 `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`；不是客户或真实企业披露数据。
+- 结果：60/60 路由视口 HTTP 200、无页面级横向溢出、无浏览器错误。该结果不代表逐图表、交互态、可访问性或打印格式均已完成视觉验收。
+- 入口：[视觉覆盖报告](../../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)、[逐路由结果与截图](../../60_delivery/verification/visual-language-20261024/results.json)、[桌面总览截图](../../60_delivery/verification/visual-language-20261024/cockpit--desktop.png)。
+- README 中的旧视觉截图按历史批次保留；此矩阵仅用于本轮视觉差距检查。
+
 ## 单机原型收尾候选（2026-10-24，closeout-003bfa4b/）
 
 采集日期：2026-10-24。当前代码从 SQLite 备份恢复到新隔离目录，在本机生产构建与 FastAPI 服务上重新采集。此批严格对应 7a 候选代码 SHA 与演示批次；静态 HTML 只展示截图和 API 固化响应，动态筛选/跳转/编辑需启动本地服务。
