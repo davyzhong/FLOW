@@ -1,13 +1,17 @@
 .workbench {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  max-width: 1080px;
+  gap: 16px;
+  max-width: 1140px;
+  color: var(--flow-vl-colors-text-primary);
 }
+
+.workbench h1 { margin: 0; line-height: 1.2; }
+.workbench h2 { margin: 12px 0 0; font-family: var(--flow-vl-typography-family-display); }
 
 .workbench__intro,
 .workbench__muted {
-  color: #64748b;
+  color: var(--flow-vl-colors-text-muted);
   font-size: 13px;
 }
 
@@ -15,8 +19,11 @@
   margin: 4px 0;
 }
 
+.workbench__controls label { color: var(--flow-vl-colors-brand-goldStrong); font-size: 12px; font-weight: 650; }
+.workbench__controls select { min-height: 40px; border-color: var(--flow-vl-colors-line-default); border-radius: var(--flow-vl-radius-sm); background: var(--flow-vl-colors-surface-paper); }
+
 .workbench__identity {
-  color: #334155;
+  color: var(--flow-vl-colors-text-primary);
   font-size: 14px;
 }
 
@@ -32,17 +39,18 @@
 .workbench__watch li {
   border: 1px solid var(--rep-line-3);
   border-left-width: 4px;
-  border-radius: 6px;
-  padding: 8px 12px;
+  border-radius: var(--flow-vl-radius-sm);
+  padding: 10px 14px;
+  background: var(--flow-vl-colors-surface-paper);
   font-size: 14px;
 }
 
 .workbench__watch li[data-direction="warning"] {
-  border-left-color: #d97706;
+  border-left-color: var(--flow-vl-colors-semantic-warning);
 }
 
 .workbench__watch li[data-direction="negative"] {
-  border-left-color: #b91c1c;
+  border-left-color: var(--flow-vl-colors-semantic-negative);
 }
 
 .workbench__watch-direction {
@@ -56,18 +64,37 @@
 .workbench__questions {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 12px;
+  gap: 14px;
+  counter-reset: question;
 }
 
 .workbench__question {
-  border: 1px solid var(--rep-line-3);
-  border-radius: 8px;
-  padding: 12px 16px;
+  position: relative;
+  min-height: 164px;
+  counter-increment: question;
+  border: 1px solid var(--flow-vl-colors-line-subtle);
+  border-top: 3px solid var(--flow-vl-colors-brand-navy);
+  border-radius: var(--flow-vl-radius-sm);
+  padding: 16px 18px;
+  background: var(--flow-vl-colors-surface-paper);
+  box-shadow: var(--flow-vl-shadow-panel);
+}
+
+.workbench__question::before {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--flow-vl-colors-brand-goldStrong);
+  font-family: var(--flow-vl-typography-family-numeric);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  content: "0" counter(question);
 }
 
 .workbench__question h3 {
   margin: 0 0 8px;
   font-size: 15px;
+  font-family: var(--flow-vl-typography-family-display);
 }
 
 .workbench__question ul {
@@ -87,8 +114,15 @@
 }
 
 .workbench__metric-code {
-  color: var(--rep-slate);
+  color: var(--flow-vl-colors-brand-navy);
+  font-family: var(--flow-vl-typography-family-mono);
+  font-size: 11px;
+  text-decoration-color: var(--flow-vl-colors-line-default);
+  text-underline-offset: 3px;
 }
+
+.workbench a { color: var(--flow-vl-colors-brand-navy); text-underline-offset: 3px; }
+.workbench a:hover { color: var(--flow-vl-colors-brand-goldStrong); }
 
 /* 批次一 深链：身份行 → /statements?report=；指标编码 → /metric-library?focus= */
 .workbench__identity a {
@@ -97,13 +131,13 @@
 }
 
 .workbench__identity a:hover {
-  color: var(--flow-info);
+  color: var(--flow-vl-colors-brand-goldStrong);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
 a.workbench__metric-code:hover {
-  color: var(--flow-info);
+  color: var(--flow-vl-colors-brand-goldStrong);
   text-decoration: underline;
   text-underline-offset: 2px;
 }

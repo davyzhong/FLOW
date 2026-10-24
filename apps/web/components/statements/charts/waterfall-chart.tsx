@@ -1,6 +1,9 @@
 "use client";
 
 import { formatFinancialValue } from "../../cockpit/number-format";
+import { VISUAL_TOKENS } from "../../../lib/visual-tokens.generated";
+
+const GRID_COLOR = VISUAL_TOKENS["chart-grid"];
 
 // 利润形成 / 现金桥瀑布图：手写 SVG，无图表库依赖。
 // base/total 柱从零起画，delta 柱悬浮于累计区间；红减绿增、深色为小计。
@@ -52,7 +55,7 @@ export function WaterfallChart({
     const gv = maxV - (maxV * g) / 4;
     return (
       <g key={g}>
-        <line x1={padL} y1={gy} x2={width - padR} y2={gy} stroke="#e2e8f0" />
+        <line x1={padL} y1={gy} x2={width - padR} y2={gy} stroke={GRID_COLOR} />
         <text x={padL - 6} y={gy + 4} textAnchor="end" className="stmt-tick">
           {formatFinancialValue(gv, { unit: unitLabel, appendUnit: false })}
         </text>
@@ -68,10 +71,10 @@ export function WaterfallChart({
         const barH = Math.max(2, Math.abs(y(bar.lo) - y(bar.hi)));
         const color =
           bar.kind === "base" || bar.kind === "total"
-            ? "#334155"
+            ? VISUAL_TOKENS["colors-data-revenue"]
             : bar.value >= 0
-              ? "#16a34a"
-              : "#dc2626";
+              ? VISUAL_TOKENS["colors-semantic-positive"]
+              : VISUAL_TOKENS["colors-semantic-negative"];
         return (
           <g key={bar.label}>
             {index > 0 ? (
@@ -80,7 +83,7 @@ export function WaterfallChart({
                 y1={y(bar.lo)}
                 x2={cx - barWidth / 2}
                 y2={y(bar.lo)}
-                stroke="#cbd5e1"
+                stroke={VISUAL_TOKENS["colors-line-default"]}
                 strokeDasharray="3,3"
               />
             ) : null}

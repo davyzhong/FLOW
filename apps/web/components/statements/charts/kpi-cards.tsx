@@ -20,7 +20,7 @@ export function KpiCards({ items }: { items: KpiCardDatum[] }): ReactNode {
     <dl className="stmt-kpi-grid" aria-label="核心财务指标">
       {items.map((item, index) => (
         <div
-          className={index % 5 === 1 ? "stmt-kpi stmt-kpi--red" : "stmt-kpi"}
+          className={index % 5 === 1 ? "stmt-kpi stmt-kpi--gold" : "stmt-kpi"}
           data-testid="statement-kpi"
           key={item.label}
         >

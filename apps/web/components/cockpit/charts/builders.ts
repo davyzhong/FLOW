@@ -17,6 +17,7 @@ import type { EChartsOption } from "echarts";
 
 import { AXIS, CHART_THEME, TOOLTIP, legend } from "./echarts-base";
 import { formatFinancialValue } from "../number-format";
+import { VISUAL_TOKENS } from "../../../lib/visual-tokens.generated";
 
 /**
  * ECharts 的 TS 联合类型对回调签名与 series 形状要求极严；构建器产出的是
@@ -131,7 +132,7 @@ export function buildQuadrant(
   return {
     tooltip: {
       trigger: "item",
-      backgroundColor: "rgba(255,255,255,.97)",
+      backgroundColor: VISUAL_TOKENS["chart-tooltipBackground"],
       borderColor: CHART_THEME.line,
       textStyle: { color: CHART_THEME.ink, fontSize: 12 },
       formatter: (p: unknown) => {
@@ -212,7 +213,7 @@ export function buildWaterfall(
     tooltip: {
       trigger: "axis",
       axisPointer: { type: "shadow" },
-      backgroundColor: "rgba(255,255,255,.97)",
+      backgroundColor: VISUAL_TOKENS["chart-tooltipBackground"],
       borderColor: CHART_THEME.line,
       textStyle: { color: CHART_THEME.ink, fontSize: 12 },
       formatter: (ps: { name: string; dataIndex: number }[]) => {
@@ -338,7 +339,7 @@ export function buildDonut(slices: Slice[], unit: string, rose = false): ChartOp
   return {
     tooltip: {
       trigger: "item",
-      backgroundColor: "rgba(255,255,255,.97)",
+      backgroundColor: VISUAL_TOKENS["chart-tooltipBackground"],
       borderColor: CHART_THEME.line,
       textStyle: { color: CHART_THEME.ink, fontSize: 12 },
       formatter: (p: { name: string; value: number; percent: number }) =>
@@ -417,7 +418,7 @@ export function buildHeatmap(
   return {
     tooltip: {
       position: "top",
-      backgroundColor: "rgba(255,255,255,.97)",
+      backgroundColor: VISUAL_TOKENS["chart-tooltipBackground"],
       borderColor: CHART_THEME.line,
       textStyle: { color: CHART_THEME.ink, fontSize: 12 },
       formatter: (p: { value: [number, number, number] }) => {
@@ -426,8 +427,8 @@ export function buildHeatmap(
       },
     },
     grid: { left: 14, right: 14, top: 10, bottom: opts.thresholds ? 26 : 12 },
-    xAxis: { type: "category", data: xs, ...AXIS, splitArea: { show: true, areaStyle: { color: ["#fff", "#fafafa"] } } },
-    yAxis: { type: "category", data: ys, ...AXIS, splitArea: { show: true, areaStyle: { color: ["#fff", "#fafafa"] } } },
+    xAxis: { type: "category", data: xs, ...AXIS, splitArea: { show: true, areaStyle: { color: [VISUAL_TOKENS["colors-surface-raised"], VISUAL_TOKENS["colors-surface-soft"]] } } },
+    yAxis: { type: "category", data: ys, ...AXIS, splitArea: { show: true, areaStyle: { color: [VISUAL_TOKENS["colors-surface-raised"], VISUAL_TOKENS["colors-surface-soft"]] } } },
     visualMap: {
       show: !!opts.thresholds?.length,
       min: 0,
@@ -438,13 +439,19 @@ export function buildHeatmap(
       itemWidth: 9,
       itemHeight: 80,
       textStyle: { fontSize: 9 },
-      inRange: { color: ["#dcfce7", "#fef3c7", "#fee2e2"] },
+      inRange: {
+        color: [
+          VISUAL_TOKENS["colors-semantic-positiveSoft"],
+          VISUAL_TOKENS["colors-semantic-warningSoft"],
+          VISUAL_TOKENS["colors-semantic-negativeSoft"],
+        ],
+      },
     },
     series: [
       {
         type: "heatmap",
         data: cells.map((c) => [xs.indexOf(c.x), ys.indexOf(c.y), c.value]),
-        itemStyle: { borderColor: "#fff", borderWidth: 2 },
+        itemStyle: { borderColor: VISUAL_TOKENS["colors-surface-raised"], borderWidth: 2 },
         label: { show: true, fontSize: 11, fontWeight: 700, color: CHART_THEME.ink, formatter: (p: { value: [number, number, number] }) => formatFinancialValue(p.value[2], { unit: opts.suffix, appendUnit: false }) },
         emphasis: { itemStyle: { shadowBlur: 6 } },
       },
@@ -474,7 +481,7 @@ export function buildDupont(
   ];
   return {
     tooltip: {
-      backgroundColor: "rgba(255,255,255,.97)",
+      backgroundColor: VISUAL_TOKENS["chart-tooltipBackground"],
       borderColor: CHART_THEME.line,
       textStyle: { color: CHART_THEME.ink, fontSize: 12 },
       formatter: (p: { data?: { formula?: string } }) => p.data?.formula ?? "",
@@ -500,7 +507,7 @@ export function buildDupont(
         edgeSymbol: ["none", "arrow"],
         edgeSymbolSize: [0, 6],
         lineStyle: { color: CHART_THEME.mut, width: 1.4, curveness: 0.06, opacity: 0.85 },
-        label: { show: true, position: "inside", fontSize: 9.5, color: "#fff", fontWeight: 600, lineHeight: 12 },
+        label: { show: true, position: "inside", fontSize: 9.5, color: VISUAL_TOKENS["colors-text-inverse"], fontWeight: 600, lineHeight: 12 },
         emphasis: { scale: 1.05 },
       },
     ],
@@ -519,7 +526,7 @@ export function buildRankBar(
   return {
     tooltip: {
       trigger: "item",
-      backgroundColor: "rgba(255,255,255,.97)",
+      backgroundColor: VISUAL_TOKENS["chart-tooltipBackground"],
       borderColor: CHART_THEME.line,
       textStyle: { color: CHART_THEME.ink, fontSize: 12 },
       formatter: (p: { name: string; value: number }) => `${p.name}<br>${formatFinancialValue(p.value, { unit })}`,
@@ -553,7 +560,7 @@ export function buildAgingBars(segs: { label: string; pct: number; days?: string
   return {
     tooltip: {
       trigger: "item",
-      backgroundColor: "rgba(255,255,255,.97)",
+      backgroundColor: VISUAL_TOKENS["chart-tooltipBackground"],
       borderColor: CHART_THEME.line,
       textStyle: { color: CHART_THEME.ink, fontSize: 12 },
       formatter: (p: { name: string; value: number }) => `${p.name}<br>${formatFinancialValue(p.value, { unit: "%" })}${segs[usable.indexOf(p as never)]?.days ? `（约 ${formatFinancialValue(segs[usable.indexOf(p as never)].days, { metricCode: "dso_days", unit: "day" })}）` : ""}`,

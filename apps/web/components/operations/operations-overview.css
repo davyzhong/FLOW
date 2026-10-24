@@ -8,7 +8,7 @@
 }
 
 .ops-overview__intro {
-  color: #64748b;
+  color: var(--flow-vl-colors-text-muted);
   font-size: 13px;
 }
 
@@ -33,20 +33,20 @@
 
 .ops-overview__controls a {
   font-size: 13px;
-  color: var(--rep-blue);
+  color: var(--flow-vl-colors-brand-navy);
 }
 
 .ops-overview__context-note {
   margin: 0;
-  border-left: 3px solid #2563eb;
-  background: #eff6ff;
+  border-left: 3px solid var(--flow-vl-colors-data-revenue);
+  background: var(--flow-vl-colors-brand-navy-soft);
   padding: 8px 12px;
-  color: #334155;
+  color: var(--flow-vl-colors-text-primary);
   font-size: 13px;
 }
 
 .ops-overview__error {
-  color: #b91c1c;
+  color: var(--flow-vl-colors-semantic-negative);
   font-weight: 600;
 }
 
@@ -76,11 +76,11 @@
 }
 
 .ops-overview__watch li[data-direction="warning"] {
-  border-left-color: #d97706;
+  border-left-color: var(--flow-vl-colors-semantic-warning);
 }
 
 .ops-overview__watch li[data-direction="negative"] {
-  border-left-color: #b91c1c;
+  border-left-color: var(--flow-vl-colors-semantic-negative);
 }
 
 .ops-overview__tag {
@@ -105,7 +105,7 @@
 }
 
 .ops-overview__theme[data-status="not_applicable"] {
-  background: #f8fafc;
+  background: var(--flow-vl-colors-surface-soft);
 }
 
 .ops-overview__theme h3 {
@@ -149,7 +149,7 @@
 .ops-overview__evidence {
   display: block;
   margin-top: 4px;
-  color: #64748b;
+  color: var(--flow-vl-colors-text-muted);
   font-size: 11px;
   overflow-wrap: anywhere;
 }
@@ -180,13 +180,13 @@ a.ops-overview__metric-name {
 }
 
 a.ops-overview__metric-name:hover {
-  color: var(--rep-blue, #1d4ed8);
+  color: var(--rep-blue, var(--flow-vl-colors-data-revenue));
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
 .ops-overview__watch-link {
-  color: #1769e8;
+  color: var(--flow-vl-colors-data-revenue);
   text-decoration: none;
 }
 

@@ -45,7 +45,7 @@
 }
 
 .investigations-index__table th {
-  background: #f5f7fa;
+  background: var(--flow-vl-colors-surface-canvas);
   color: var(--rep-muted);
   font-weight: 600;
 }
@@ -64,8 +64,8 @@
 }
 
 .investigations-index__status--in_review {
-  background: #fdf0dc;
-  color: #805000;
+  background: var(--flow-vl-colors-semantic-warning-soft);
+  color: var(--flow-vl-colors-semantic-warning);
 }
 
 .investigations-index__status--rejected {

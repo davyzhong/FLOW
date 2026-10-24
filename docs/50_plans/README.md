@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-050
 title: 计划体系
 doc_type: navigation
 status: current
-version: 1.8
+version: 2.0
 created_at: 2026-09-12
 updated_at: 2026-10-24
 owner: FLOW
@@ -22,4 +22,4 @@ applies_to: docs
 [统一完整实施计划（2026-09-24）](../superpowers/plans/2026-09-24-flow-integrated-execution-plan.md)、
 [执行收敛与验收计划（2026-09-25）](2026-09-25-project-execution-convergence-plan.md)。
 
-D055 单机原型收尾已完成：7a.1–7a.8 已关闭并合入 main，merge commit `b2a1bf22df91239eb311d1692c30c666250678bf` 的 CI run `40092106547` 为 28/28 success。当前队首待启动为 K2；完整状态见 [CURRENT_ROADMAP](CURRENT_ROADMAP.md) 和[完结差距报告](../60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)。历史状态和旧分支指引不作为执行入口。
+D055 单机原型收尾已完成：7a.1–7a.8 已关闭并合入 main；PR #4 状态归档 merge commit `b068796f906cfbb91ac33775f5578194acc98a51` 的准确 SHA run `40096497668` 为 28/28 success。当前唯一执行项为“可复用视觉语言提炼与 FLOW 全项目视觉统一”，设计规格与工作包已获用户批准，正在分支 `codex/flow-visual-language` 串行实施；代码 SHA `28c0e7a2` 的 20 路由×3 视口矩阵 60/60 内容就绪、API 零错误、无横溢/浏览器错误，20 张桌面图已完成人工首轮差异盘点。驾驶舱、财报出版页和数据工作台较接近目标；共享链接/控件颜色、指标库强调线、模块入口层级及财报页品牌强调色已调整；分析和内容范围较窄的页面留白仍需结合真实功能边界审阅；逐图表与导出格式视觉验收尚未关闭。阶段记录见[视觉覆盖验收](../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。K2 顺延为排队。完整状态见 [CURRENT_ROADMAP](CURRENT_ROADMAP.md) 和[完结差距报告](../60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)。历史状态和旧分支指引不作为执行入口。

@@ -25,6 +25,8 @@ from typing import Any
 
 from websockets.asyncio.client import connect
 
+from flow_api.visual_tokens import VISUAL_TOKENS
+
 
 class ChromiumNotFoundError(RuntimeError):
     pass
@@ -81,9 +83,9 @@ def _wait_for_debug_endpoint(port: int, timeout_s: float = 20.0) -> str:
 def _footer_template(footer_left: str) -> str:
     left = html.escape(footer_left or "FLOW 客观财务分析引擎")
     style = (
-        "width:100%; font-size:8px; color:#6b7280; padding:0 12mm;"
+        f"width:100%; font-size:8px; color:{VISUAL_TOKENS['colors-text-muted']}; padding:0 12mm;"
         " display:flex; justify-content:space-between;"
-        " font-family:'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;"
+        f" font-family:{VISUAL_TOKENS['typography-family-body']};"
     )
     return (
         f'<div style="{style}"><span>{left}</span>'

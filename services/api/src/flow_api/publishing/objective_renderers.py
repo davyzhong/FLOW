@@ -14,6 +14,9 @@ from openpyxl import Workbook
 from openpyxl.styles import Alignment, Font
 from openpyxl.worksheet.worksheet import Worksheet
 
+from flow_api.visual_tokens import VISUAL_TOKENS
+from flow_api.visual_theme import style_workbook_headers
+
 _GOLDEN_SCALE_NOTE = "单位以 unit_note 为准，数值为披露原值的字符串投影"
 
 
@@ -106,7 +109,7 @@ def render_html_from_payload(payload: dict[str, Any]) -> str:
     sha256 = str(source.get("source_sha256", ""))
     # 叙事结构（借鉴 #9 客观部分）：现状判断 → 勾稽与质量核对 → 口径与溯源。
     # 原因推断与行动章不在客观报告范围（U5 主观证据门禁），显式标注。
-    return (
+    html_doc = (
         "<!DOCTYPE html><html lang='zh-CN'><head><meta charset='utf-8'>"
         "<title>客观财报分析报告</title>"
         "<style>body{font-family:'PingFang SC',sans-serif;margin:32px;color:#1e293b}"
@@ -145,6 +148,15 @@ def render_html_from_payload(payload: dict[str, Any]) -> str:
         "确定性原语仅输出提示复核信号，不断言因果）。</div>"
         "</body></html>"
     )
+    for literal, token in {
+        "#1e293b": "colors-text-primary", "#eee": "colors-line-subtle",
+        "#475569": "colors-text-secondary", "#64748b": "colors-text-muted",
+        "#15803d": "colors-semantic-positive", "#b91c1c": "colors-semantic-negative",
+        "#e2e8f0": "colors-line-default", "#94a3b8": "colors-text-subtle",
+    }.items():
+        html_doc = html_doc.replace(literal, VISUAL_TOKENS[token])
+    html_doc = html_doc.replace("'PingFang SC',sans-serif", VISUAL_TOKENS["typography-family-body"])
+    return html_doc
 
 
 def render_xlsx_bytes_from_payload(payload: dict[str, Any]) -> bytes:
@@ -189,5 +201,6 @@ def render_xlsx_bytes_from_payload(payload: dict[str, Any]) -> bytes:
                 cell.alignment = Alignment(horizontal="right")
 
     buffer = io.BytesIO()
+    style_workbook_headers(wb)
     wb.save(buffer)
     return buffer.getvalue()
