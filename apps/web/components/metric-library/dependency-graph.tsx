@@ -179,7 +179,7 @@ export function DependencyGraph({
   domains: Record<string, string>;
 }) {
   const [selected, setSelected] = useState<string | null>(null);
-  const [tierFilter, setTierFilter] = useState<"all" | "core" | "professional">("all");
+  const [tierFilter, setTierFilter] = useState<"all" | "core" | "professional">("core");
 
   const visible = useMemo(
     () => metrics.filter((m) => tierFilter === "all" || (m.tier ?? "professional") === tierFilter),
@@ -267,7 +267,7 @@ export function DependencyGraph({
         <p className="ml-graph__hint">
           {visible.length} 个指标、{edgeCount} 条依赖边。
           点击节点查看上下游；颜色为能力域（{Object.values(domains).join(" / ")}）。
-          支持缩放/平移/拖拽节点与 MiniMap 导航。
+          默认聚焦常用指标，可切换全部或专业层；支持缩放/平移/拖拽节点与 MiniMap 导航。
         </p>
         <label className="ml-graph__filter">
           分层{" "}
@@ -295,6 +295,7 @@ export function DependencyGraph({
         aria-label="指标依赖关系有向图（可缩放平移）"
       >
         <ReactFlow
+          key={tierFilter}
           nodes={nodes}
           edges={edges}
           nodeTypes={nodeTypes}

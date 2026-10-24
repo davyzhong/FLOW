@@ -458,6 +458,12 @@
 .ml-graph__filter select { font: inherit; }
 .ml-graph__clear { border: 1px solid var(--rep-line-4); background: var(--rep-card); border-radius: 6px; padding: 4px 10px; cursor: pointer; }
 .ml-graph__scroll { overflow: auto; max-height: 640px; border: 1px solid var(--rep-line-3); border-radius: var(--flow-radius-m); background: var(--rep-bg); }
+.ml-graph__flow { border: 1px solid var(--flow-vl-colors-line-default); border-radius: var(--flow-radius-m); background: var(--flow-vl-colors-surface-paper); }
+.ml-graph__flow .react-flow__controls { overflow: hidden; border: 1px solid var(--flow-vl-colors-line-default); border-radius: 8px; box-shadow: 0 2px 8px rgb(23 43 59 / 8%); }
+.ml-graph__flow .react-flow__controls-button { border-color: var(--flow-vl-colors-line-subtle); background: var(--flow-vl-colors-surface-raised); }
+.ml-graph__flow .react-flow__controls-button:hover { background: var(--flow-vl-colors-brand-gold-soft); }
+.ml-graph__flow .react-flow__controls-button svg { fill: var(--flow-vl-colors-brand-navy); }
+.ml-graph__flow .react-flow__minimap { overflow: hidden; border: 1px solid var(--flow-vl-colors-line-default); border-radius: 8px; background: var(--flow-vl-colors-surface-raised); }
 .ml-graph__node { cursor: pointer; }
 .ml-graph__node:hover rect { stroke-width: 2.5; }
 .ml-graph__node-name { font-size: 13px; font-weight: 600; fill: var(--rep-ink); }

@@ -45,9 +45,12 @@ const metrics = [
 ];
 
 describe("DependencyGraph", () => {
-  it("渲染全部节点与分层", () => {
+  it("默认聚焦常用指标，切换全部后可见完整图谱", () => {
     render(<DependencyGraph metrics={metrics} domains={{ profitability: "盈利能力" }} />);
     expect(screen.getByRole("region", { name: /指标依赖关系有向图/ })).toBeInTheDocument();
+    expect(screen.getByText(/默认聚焦常用指标/)).toBeInTheDocument();
+    expect(screen.queryByLabelText("指标eva（eva）")).not.toBeInTheDocument();
+    fireEvent.change(screen.getByLabelText(/分层/), { target: { value: "all" } });
     for (const code of ["revenue", "gross_margin", "net_margin", "eva"]) {
       expect(screen.getByLabelText(`指标${code}（${code}）`)).toBeInTheDocument();
     }
@@ -55,6 +58,7 @@ describe("DependencyGraph", () => {
 
   it("点击节点高亮上下游并显示计数", () => {
     render(<DependencyGraph metrics={metrics} domains={{}} />);
+    fireEvent.change(screen.getByLabelText(/分层/), { target: { value: "all" } });
     fireEvent.click(screen.getByLabelText("指标net_margin（net_margin）"));
     expect(screen.getByRole("status")).toHaveTextContent(/上游依赖 2 个、下游引用 1 个/);
     fireEvent.click(screen.getByRole("button", { name: "清除选择" }));
