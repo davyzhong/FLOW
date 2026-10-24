@@ -3,16 +3,23 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.77
+version: 5.78
 created_at: 2026-09-12
-updated_at: 2026-10-20
+updated_at: 2026-10-24
 owner: FLOW
 applies_to: repository
 ---
 
 # FLOW 当前项目状态（唯一 current state）
 
+2026-10-24 当前状态：**单机原型基础已具备，当前完成审查与收尾计划，下一单一动作是路线图 7a.1，代码实施尚未启动。** 开发基线 `92079f7734dbe9809a7bef97d825e8993221cfba` 的 CI run `39516118760` 已 28/28 success；最长集成分片 21分32秒。main 为 `96c57019`，开发分支独有 55 个提交、main 独有 2 个文档提交，正式集成未完成。主要剩余是已有预算/账龄呈现、图表下钻与筛选范围、概念视觉收敛、报告和九页离线包、单机数据操作与最终验收。去重队列 14 项：完成 7、实际执行中 0、队首待启动 1、排队 4、暂停 1、外部条件受限 1；旧 K/7 重复且完成计数多算已校正。详细证据见[完结差距审查](../60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)，全部动作只在[唯一路线图](../50_plans/CURRENT_ROADMAP.md#7a-单机原型收尾动作与完成条件2026-10-24)。当前完结边界按 D055；真实企业周期/公开 C 级和知识刷新保留为后续范围。本轮没有运行数据库或新截图，GitHub 截图工作流仍暂停。
+
+<details>
+<summary>2026-10-21 及以前的状态快照（历史，不代表当前执行）</summary>
+
 2026-10-21 最新状态：**阶段 7 单机冷启动/离线验收与集成门禁分片已完成；唯一执行项 7a 正在收敛全视图视觉差距并复核文档。** 主题模块报告布局、数据工作台改进和费用页 KPI 窄屏两列修复已提交并推送；代码 SHA `87e1829d32d6281fe1dad7ee978f39e0c1b4e5f2` 的 run `39451521454` 因随后提交已取消；期间费用堆叠图 SHA `65d7dc61d18e0ebe2f2bc582c3f99e4bbe3e4d5d` 的 run `39453419044` 因后续状态提交取消，汇总 job 失败由分片取消导致、非测试断言失败；状态提交 SHA `a71cb28eedc6bca8019e7552fe7b2348f28f1239` 对应准确 SHA run `39453752316` 已 28/28 jobs success；最新文档 SHA `21b650a108e7d906338454d661b7cfe178e13487` / run `39457446117` 也已 28/28 success。上一文档 SHA `4073d511` / run `39447663998` 为 28/28 success。本地进一步将总览期间费用图改为 API 已发布的两年、四项披露费用堆叠对比，并同步双期间原值表；明确不含营业成本、不推算费用率。前端 199/199、typecheck、production build 已通过；lint 0 error、3 条既有 warning。概念板关键视觉签名已覆盖总览、六个主题模块和 `/data`：暖纸白、墨蓝、古金、衬线标题、期间对比、图表与可追溯来源；桌面费用页 3+2 KPI 居中，390px 窄屏为两列，单 KPI 降级摘要通栏，三图模块末图通栏。单机仍采用 SQLite 单文件、本地文件目录、同步处理与单一启动入口，本轮没有新增依赖、服务或数据库变更。六个主题模块在 390px 下均实测 HTTP 200、页面 ready、有图表且无横向溢出；`/data` 390px 与桌面样例也通过。实际截图位于本机 `/tmp/flow-cockpit-visual-20261020/`，未提交仓库；截图自动发布/自动化工作流仍暂停。门禁四分片仍完整覆盖原 284 项测试/66 文件，零遗漏/零重复；阶段 7 冷启动与离线静态页验收见[阶段 7验收](../60_delivery/verification/2026-10-20--single-machine-visual-static-acceptance-v1.md)。剩余为文档现状核准与清理候选审计、最终复核及准确 SHA CI；不删除文件，疑似过时内容保留历史并校正当前入口。顺序见[路线图](../50_plans/CURRENT_ROADMAP.md)和[7a 工作包第 9 节](../50_plans/work_items/FLOW--single-machine-visual-prototype.md#9-概念图视觉差距门禁负载与文档治理)。
+
+</details>
 
 下段为 K2 执行前的状态快照，已过时；当前状态以本段及 [CURRENT_ROADMAP](../50_plans/CURRENT_ROADMAP.md) 为准。
 

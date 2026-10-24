@@ -3,9 +3,9 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目交接文档
 doc_type: navigation
 status: current
-version: 11.2
+version: 11.3
 created_at: 2026-09-12
-updated_at: 2026-10-20
+updated_at: 2026-10-24
 owner: FLOW
 applies_to: repository
 ---
@@ -18,7 +18,14 @@ applies_to: repository
 
 ## 一、当前任务
 
+**2026-10-24 接手结论：审查与收尾计划已交付，当前没有后台实施任务；下一单一动作是 7a.1 统一交付基线。** 当前开发基线 `92079f7734dbe9809a7bef97d825e8993221cfba` / CI run `39516118760` 为 28/28 success，最长集成分片 21分32秒；main `96c57019` 尚未纳入开发分支独有的 55 个提交，main 两次文档更新也需回流。主目录 4 个修改/1 个未跟踪 YAML 保留原位。当前 D055 原型剩余分为 8 个可验收动作，工程量估计 6–10 个有效工程日；不能把长期知识刷新/真实企业三周期混作本版结案条件。当前 14 个唯一事项：已完成 7、执行中 0、队首待启动 1、排队 4、暂停 1、外部条件受限 1；旧 K/7 重复、完成数错误已校正。详细审查与历史图片限制见[审查报告](docs/60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)；可领取步骤只看[路线图 7a](docs/50_plans/CURRENT_ROADMAP.md#7a-单机原型收尾动作与完成条件2026-10-24)。本轮仅改文档，未连接/写入数据库，未改 CI/schema，未采集新截图。最终独立复核、主线集成与冻结仍未完成。本轮计划已通过独立新上下文只读复核（无必要 P1/P2）；文档 M1/M6、计划视图和链接检查通过。本结论不代表业务代码已做最终复核。
+
+<details>
+<summary>2026-10-21 及以前的状态快照（历史，不代表当前执行）</summary>
+
 **当前执行项：7a 全视图视觉收敛、门禁分片与项目文档治理。** 已完成总览与主题页报告层级、移动导航、数据工作台报告式布局；本轮修补 390px 费用页五项 KPI 三列挤压，改为两列，并将驾驶舱费用结构图升级为已披露两年的堆叠对比及双期原值表，显式说明不含营业成本。前端 199/199、typecheck/生产 build 通过；lint 零错误、3 条既有 warning。费用页 KPI 修复 SHA `87e1829d32d6281fe1dad7ee978f39e0c1b4e5f2` 对应准确 SHA CI run `39451521454` 已因后续提交取消；堆叠费用图提交 SHA `65d7dc61d18e0ebe2f2bc582c3f99e4bbe3e4d5d` 的 run `39453419044` 因后续文档提交取消，汇总失败由分片取消导致、非断言失败；状态提交 `a71cb28eedc6bca8019e7552fe7b2348f28f1239` 的准确 SHA run `39453752316` 已 28/28 jobs success；最新文档 SHA `21b650a108e7d906338454d661b7cfe178e13487` / run `39457446117` 也已 28/28 success。上一文档 SHA `4073d511` / run `39447663998` 28/28 jobs success。六个主题模块 390px 实测 ready、有图表且无横向溢出；费用 KPI 栅格回归通过。SQLite + 本地文件、同步处理和一键启动保持不变；本轮没有新增依赖/服务或数据库改动。运行架构文档已校准备份恢复验收状态和 SQLite JSON / PostgreSQL JSONB 差异。继续完成文档现状与清理候选审计、最终复核和新 SHA CI；任何文件删除仍需逐项授权。验收顺序见[7a 工作包第 9 节](docs/50_plans/work_items/FLOW--single-machine-visual-prototype.md#9-概念图视觉差距门禁负载与文档治理)，唯一队列见[CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)。
+
+</details>
 
 ### 本会话交接补记（2026-10-20）
 
@@ -28,7 +35,7 @@ applies_to: repository
 
 下方为 K2 执行前形成的架构工作包摘要，当前状态以本段和 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为准。
 
-**唯一路线图执行队列：当前统计 15 项，已完成 8 项，实际执行中 1 项（7a），队首待启动 0 项，排队 4 项，暂停 1 项，外部条件受限 1 项。逐项状态只以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为准。**
+**历史统计已由 2026-10-24 更正：14 个唯一事项，完成 7、执行中 0、队首待启动 1、排队 4、暂停 1、外部条件受限 1。逐项状态只以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为准。**
 
 **历史交接快照（K2 阶段）：以下为阶段 5 重开前的上下文记录，当前执行项和队列以本文件首段及 CURRENT_ROADMAP 为准；本段不得作为当前状态读取。** 用户已选择单机单用户、SQLite 单文件 + 本地文件目录、移除 Redis/Celery/MinIO，并批准 A「高管编辑部」+ C「财务报告画布」。第 1–3 阶段完成；第 3 阶段最终状态 SHA `20a511f66e4bfe65ab02edc091c7b49e2cbcbe67` 的 CI run `39125304357` 18/18 jobs success。首轮 CI 曾发现大麦 reset SQL 的发行包 manifest 哈希未同步；在 `4c3e87e05ae9fe380abb7002ba260de6d654d15c` 只更新对应清单，未改业务数据；脚本 155/155、清单专项 6/6、Ruff/mypy 和 M1/M6 均通过。正式验收见[阶段 3 记录](docs/60_delivery/verification/2026-10-18--single-machine-runtime-convergence-v1.md)。参考文章 10 模块的映射报告已写入[覆盖矩阵](docs/60_delivery/verification/2026-10-18--cfo-reference-module-data-coverage-v1.md)，覆盖页面/API/指标/事实类型/粒度/图表与交互缺口。准确 SHA `d8f2ae8d617914fcd05cfd21d8484154b1411a65` 的 CI run `39128676851` 中 `data-contract` 两次均约 40 分钟触限取消；隔离数据库执行原脚本全通过（133+3 tests、Ruff、mypy 213 files、契约摘要），M1/M6 和链接检查通过，详细结果及限制见[4.1 验收记录](docs/60_delivery/verification/2026-10-18--cfo-reference-matrix-ci-and-isolated-validation-v1.md)。4.2 已完成 14 视图图表/数据盘点，识别合成账龄/预算可用而未展示、订单数小数数据语义问题和不能宣称的预测/风险/合并能力；报告见[4.2盘点](docs/60_delivery/verification/2026-10-18--cfo-chart-and-data-availability-v1.md)。4.3 已完成并形成[组件复用与交互方案](docs/60_delivery/verification/2026-10-18--cfo-chart-component-and-interaction-design-v1.md)：继续复用 ECharts 6.1，接通已有但未被分发器使用的构建器；修复图表语义并配同值表格、事实来源标签和深链。第 4 阶段 4.1–4.7 已结案，代码 SHA `65a08706` 与最终文档 SHA `a1fe50ef` 对应 GitHub CI 均 18/18 成功。截图采集/自动生成继续暂停。审计包含 19 个页面路由、32 个 PostgreSQL revisions、SQLite 方言与金额精度风险、S3/Redis/Celery 调用点及主 checkout 四处未提交更改；README 视觉同步完成。主 checkout 的四处改动仍原位，本 worktree 未触碰。当前分支为 `codex/single-machine-runtime-convergence`，原未提交实现仍保存在 stash 备份中。范围见[唯一工作包](docs/50_plans/work_items/FLOW--single-machine-visual-prototype.md)、[设计规格](docs/superpowers/specs/2026-10-18-single-machine-visual-prototype-design.md)和[路线图](docs/50_plans/CURRENT_ROADMAP.md)。
 

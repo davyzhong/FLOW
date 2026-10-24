@@ -3,9 +3,9 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 6.0
+version: 6.1
 created_at: 2026-09-12
-updated_at: 2026-10-20
+updated_at: 2026-10-24
 owner: FLOW
 depends_on: [FLOW-SPEC-V1-DESIGN-001]
 acceptance_refs: [roadmap-unique-invariant]
@@ -17,7 +17,11 @@ superseded_by: null
 
 # 当前路线图（唯一主线）
 
-> **2026-10-21 最新状态：单机启动/本机验收、门禁拆分已完成；7a 仍在收敛全视图视觉差距和文档治理。** 费用页 KPI 修复 SHA `87e1829d32d6281fe1dad7ee978f39e0c1b4e5f2` 的准确 SHA CI run `39451521454` 因后续提交已取消；期间费用堆叠对比提交 SHA `65d7dc61d18e0ebe2f2bc582c3f99e4bbe3e4d5d` 的 CI run `39453419044` 因后续状态提交取消；汇总 job 标记失败的原因是分片被取消，非测试断言失败。状态提交 SHA `a71cb28eedc6bca8019e7552fe7b2348f28f1239` 对应 run `39453752316` 已 28/28 success；最新文档提交 SHA `21b650a108e7d906338454d661b7cfe178e13487` 对应 run `39457446117` 已 28/28 success。上一文档 SHA `4073d511` / run `39447663998` 为 28/28 success。此前代码 SHA `2f1b549...` / run `39447424948` 被后续提交取消，不据此判断失败。本轮修复 390px 费用页五项 KPI 栅格：原规则被特异度更高的三列选择器覆盖，现改为两列并新增隔离响应 fixture E2E。进一步将驾驶舱期间费用图改为 API 已发布的两年四项披露费用堆叠对比，并同步双期间原值表，注明不含营业成本、不推算费用率。前端 199/199、typecheck、生产 build 通过；lint 零错误、3 条既有警告；文档 M1/M2/M6 通过。六个主题模块在 390px 实测 ready、有图表且无横向溢出。README、PROJECT_STATE 与运行架构文档已校正；疑似清理项只做引用审计，不删除文件。截图位于本机 `/tmp/flow-cockpit-visual-20261020/`，没有恢复截图自动化工作流。架构继续采用 SQLite、本地文件目录、同步处理和单一启动入口，本轮未增加依赖/服务或改数据库。原 284 项/66 文件集成测试分片零遗漏、零重复，准确 SHA `368a01902124351401d73dc9329800d7f00f3953` / run `39349190031` 为 28/28 success。仍需完成文档审查、最终复核和准确 SHA CI 后才可结案。详情见[阶段 9 执行卡](work_items/FLOW--single-machine-visual-prototype.md#9-概念图视觉差距门禁负载与文档治理)。
+> **2026-10-24 当前结论：单机架构基础与 CI 分片已有通过证据，原型尚未最终交付。** 开发基线 `92079f7734dbe9809a7bef97d825e8993221cfba` 对应 CI run `39516118760` 为 28/28 success；最长集成分片 21分32秒，workflow 21分43秒。`origin/main` 为 `96c57019`，开发分支独有 55 个提交、main 独有 2 个文档提交，尚未最终整合。剩余聚焦演示预算/账龄呈现、图表下钻与筛选边界、A+C 视觉、报告/离线交付、本地操作、最终复验和集成。证据见[完结差距审查](../60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)。**去重后共 14 项：完成 7、执行中 0、队首待启动 1（7a）、排队 4、暂停 1、外部条件受限 1。** 旧“15 项/完成 8 项”存在 K/7 重复和完成数多算。下一单一动作是 7a.1；本轮仅审查和制定计划，未实施下面的代码动作。
+
+> 当前完结目标依据 D055：交付本机单用户可启动、可加载/重置演示业务、可看丰富 CFO 图表、可下钻追溯、可分析和导出报告、可备份恢复、可离线浏览的验证原型。公开 C 级、知识刷新、真实企业三周期仍未完成，保留在长期队列，不作为本原型无限延期的理由。**下方 2026-10-21 及以前的状态段落均为历史，当前只按本段及唯一执行队列。**
+
+> **2026-10-21 历史状态：单机启动/本机验收、门禁拆分已完成；7a 仍在收敛全视图视觉差距和文档治理。** 费用页 KPI 修复 SHA `87e1829d32d6281fe1dad7ee978f39e0c1b4e5f2` 的准确 SHA CI run `39451521454` 因后续提交已取消；期间费用堆叠对比提交 SHA `65d7dc61d18e0ebe2f2bc582c3f99e4bbe3e4d5d` 的 CI run `39453419044` 因后续状态提交取消；汇总 job 标记失败的原因是分片被取消，非测试断言失败。状态提交 SHA `a71cb28eedc6bca8019e7552fe7b2348f28f1239` 对应 run `39453752316` 已 28/28 success；最新文档提交 SHA `21b650a108e7d906338454d661b7cfe178e13487` 对应 run `39457446117` 已 28/28 success。上一文档 SHA `4073d511` / run `39447663998` 为 28/28 success。此前代码 SHA `2f1b549...` / run `39447424948` 被后续提交取消，不据此判断失败。本轮修复 390px 费用页五项 KPI 栅格：原规则被特异度更高的三列选择器覆盖，现改为两列并新增隔离响应 fixture E2E。进一步将驾驶舱期间费用图改为 API 已发布的两年四项披露费用堆叠对比，并同步双期间原值表，注明不含营业成本、不推算费用率。前端 199/199、typecheck、生产 build 通过；lint 零错误、3 条既有警告；文档 M1/M2/M6 通过。六个主题模块在 390px 实测 ready、有图表且无横向溢出。README、PROJECT_STATE 与运行架构文档已校正；疑似清理项只做引用审计，不删除文件。截图位于本机 `/tmp/flow-cockpit-visual-20261020/`，没有恢复截图自动化工作流。架构继续采用 SQLite、本地文件目录、同步处理和单一启动入口，本轮未增加依赖/服务或改数据库。原 284 项/66 文件集成测试分片零遗漏、零重复，准确 SHA `368a01902124351401d73dc9329800d7f00f3953` / run `39349190031` 为 28/28 success。仍需完成文档审查、最终复核和准确 SHA CI 后才可结案。详情见[阶段 9 执行卡](work_items/FLOW--single-machine-visual-prototype.md#9-概念图视觉差距门禁负载与文档治理)。
 
 > **2026-10-18 用户确认原型方向并完成队首重规划**：当前交付定位调整为单机单用户验证原型；用户选择 SQLite 单文件 + 本地文件目录、移除 Redis/Celery/MinIO，并确认 A 主风格 + C 报告叙事。旧驾驶舱全视图工作包归档，其九页/25 图与桌面/手机实测作为回归基线。旧 CI 实际结果为：`39042517573`、`39041228479` cancelled；`39040652008`、`39038535194` failure；不得描述为 CI 全绿。新的唯一队首为单机原型架构简化与全视图视觉升级，正式设计见[规格](../superpowers/specs/2026-10-18-single-machine-visual-prototype-design.md)与[D055](../10_governance/decisions/D055--单机单用户验证原型.md)。README 视觉基准说明提交 `d51af7ad` 的准确 SHA 主 CI run `39087270646` 曾因 data-contract 与 intake-e2e 到达 40/45 分钟 job 上限而 cancelled；同一代码的后续文档状态提交 `a331f03075c95f3b371b5a0ebd0fd91cac9dfeae` 对应 run `39090417203` 全部 job success，取消未复现。未改 CI 超时或缩减覆盖。第 1 阶段现状/影响审计已完成，清单与风险见[审计报告](../60_delivery/verification/2026-10-18--single-machine-architecture-dependency-audit-v1.md)。README 视觉素材编排已完成，只用仓库已有概念板与截图；截图素材采集/自动生成工作流继续暂停，未触发。D055 第 2 阶段 SQLite/本地内容存储已完成：隔离全链和兼容性验证通过；残留 PostgreSQL 专用 `.astext` 测试查询已改为跨库 `.as_string()`。准确代码 SHA `b0e1eb787592ff84bc4c19873a1e61cad1f9f3e6` 的 GitHub Actions run `39099573268` 为 18/18 jobs success，第 2 阶段正式关闭。第 3 阶段现已实现并本地验收：同步处理、本地内容寻址文件存储、单一启动入口与 SQLite 默认数据目录完成；隔离 Damai 账套重置回归 2/2、SQLite schema/jobs/object-store 16/16、设置/重置 PostgreSQL 兼容回归 2/2、Ruff/mypy、文档 M1 均通过。`make flow-bootstrap` 生产依赖裁剪增加 `CI=true` 以支持无 TTY 环境，完整引导成功；临时目录初始化成功，Web 与 API health 均 HTTP 200。详细证据见[第 3 阶段验收记录](../60_delivery/verification/2026-10-18--single-machine-runtime-convergence-v1.md)。本阶段仍待本提交准确 SHA 的 GitHub CI；通过后按序进入第 4 阶段全视图 A+C 视觉与数据补全。整个工作包完成后再恢复知识刷新 K2。
 > **2026-10-19 工作包 7a 已关闭，K2 转为唯一队首**：4.6 指标期间、方向、单位与来源链接已修复，独立审查无 P1/P2，详见[指标展示验收](../60_delivery/verification/2026-10-18--cfo-metric-display-and-traceability-v1.md)。4.7 隔离真实数据验收覆盖 9 个 CFO/数据页面及 165 项浏览器回归，详见[浏览器验收](../60_delivery/verification/2026-10-18--cfo-browser-acceptance-v1.md)。代码 SHA `65a087063ad67702172430702590083f8991a884` 的 run `39139310634` 18/18 success；最终文档 SHA `a1fe50ef4e71298767b4fe8e22ab47d780f28552` 的 run `39140563811` 18/18 success。中间文档 SHA `8bf7535c` 曾有 M6 metadata failure 与 data-contract cancelled，已在 `a1fe50ef` 修复并全绿。工作包 7a 正式关闭，验收见[4.6](../60_delivery/verification/2026-10-18--cfo-metric-display-and-traceability-v1.md)和[4.7](../60_delivery/verification/2026-10-18--cfo-browser-acceptance-v1.md)；当时 K2 为唯一队首，后续验收以本页最新状态为准。
@@ -74,7 +78,7 @@ superseded_by: null
 > **测试库安全状态**：共享库误清根因已修复并于 `b60c51b` 验证：测试默认使用
 > `flow_test`，常驻 `flow` 零污染。仍须保留该保护，不得将本地破坏性测试指向常驻库。
 
-## 项目状态盘点（仅说明各工作包状态；可执行事项只认下面唯一的“执行队列”）
+## 历史工作包登记与元数据索引（禁止从本表领取；当前状态只认下方唯一执行队列）
 
 2026-09-28 当前状态补记（再由本页首段最新进度覆盖）：JDL原200格英文版逐格对照已完成；184格来源行/列/值匹配（含5个源表空值），16格综合收益表归属与父项语义未决。109候选比材料统计多2，保留并行核验，不阻塞后续。C级仍未通过。
 
@@ -83,7 +87,7 @@ superseded_by: null
 | **0** ✅ | **[CFO 财务总监驾驶舱产品化（含财务指标前置）](work_items/COCKPIT--cfo-dashboard-implementation.md)** | **completed** | 大麦基础演示包 ✓（公开来源重整进行中）+ ORG-LEDGER ✓ + S01 ✓ | 批次 A、C-1、FINMETRIC F1/F2 完成；来源登记 + 运营披露层重建已交付（`842c8ea8`/`e5d8d2c6`，见 2026-10-13 交付记录）。**时间线迁移已完成（`087a72f2`）**：比较期 FY2022、分析期 FY2023、明细↔披露年度聚合零差异、IFRS 披露三表过勾稽门禁、ORG-LEDGER v2。原迁移步骤（已完成留档）：① profile/generator 月份常量与规模锚改披露值（FY2022 收入 66,866,916 千元、FY2023 77,799,675 千元，成本/毛利同步锚定，季节系数归一化保证年度聚合恒等），种植事件月份重映射；② statements.py 改由来源登记生成 IFRS 披露三表（删除 65% 利息、10% 折旧、负债/现金流拆分等无来源行，处置见登记 U-DM-*），alias map `damai_syn` 段重映射；③ FINMETRIC 覆盖矩阵按 FY2022/FY2023 重建；④ ORG-LEDGER v1 冻结包重版 v2；⑤ 测试/e2e 扫荡（44 个 FY2025/FY2026 引用文件 + 18 个月份字符串文件）、web 生产构建与快照重录、verify 19/19、全链同 SHA CI。验收：明细↔披露年度聚合对账零差异。之后再按 F3→F4→B→C-2～C-5→D 串行推进；全量 51 图表和各指标/链路须纳入最终验收。U04 暂停至本工作包整体完成；**不解除 C 级门禁**。[审计记录](../60_delivery/verification/2026-10-12--damai-source-baseline-audit-v1.md) · [实施方案](../superpowers/plans/2026-09-30-cfo-cockpit-implementation-plan.md) |
 | 0a | [财务指标目录（驾驶舱前置）](work_items/FINMETRIC--financial-metric-catalog.md) | **completed** | 指标引擎 + 会计科目基础 ✓ | F1/F2 已由准确 SHA CI 关闭；F2 覆盖矩阵 FY2025 42/50、FY2026 45/50，准确 SHA `0d4b554f33bd1c9cdab3242b25d26eb2209a632c` / run `38188010174` 17/17 success。F3/F4 未启动，先完成 CFO 队首内的数据来源与 Mock 基线重整。[工作包](work_items/FINMETRIC--financial-metric-catalog.md) |
 | 0b | [CFO 全视图数据与图表完整性改造（旧工作包）](work_items/COCKPIT--all-views-data-and-visual-completion.md) | **archived** | 已由 7a 队首接替；禁止独立执行 | 九页/25 图本地验收保留为回归基线；`39042517573`、`39041228479` cancelled，`39040652008`、`39038535194` failure，准确 SHA CI 未通过。|
-| 7a | [单机原型架构简化与全视图视觉升级](work_items/FLOW--single-machine-visual-prototype.md) | **active（视觉差距收敛与文档复核进行中；准确 SHA CI 待结论）** | D055 已确认；阶段 7本机验收完成 | 总览、六个主题模块、杜邦分析与 `/data` 桌面/手机视图均已检查；已修复 390px 费用页 KPI 三列挤压，改为两列并由隔离响应 fixture E2E 验证；已提交两年期间费用堆叠披露图与双期原值表。代码 SHA `65d7dc61` / run `39453419044` 因后续状态文档提交取消（汇总失败由分片取消导致、非断言失败）；状态提交 SHA `a71cb28e` / run `39453752316` 28/28 jobs success。本地 Web 199/199、typecheck/build、文档 M1/M2/M6 通过。下一步收敛当前 CI、完成文档审查与最终复核，再对新 SHA 做准确门禁；SQLite/本地文件架构已通过冷启动、离线展示和备份恢复验证，不增加服务。|
+| 7a | [单机原型架构简化与全视图视觉升级](work_items/FLOW--single-machine-visual-prototype.md) | **active（范围未结案；7a.1 队首待启动）** | D055 已确认；阶段 7本机验收完成 | 总览、六个主题模块、杜邦分析与 `/data` 桌面/手机视图均已检查；已修复 390px 费用页 KPI 三列挤压，改为两列并由隔离响应 fixture E2E 验证；已提交两年期间费用堆叠披露图与双期原值表。代码 SHA `65d7dc61` / run `39453419044` 因后续状态文档提交取消（汇总失败由分片取消导致、非断言失败）；状态提交 SHA `a71cb28e` / run `39453752316` 28/28 jobs success。本地 Web 199/199、typecheck/build、文档 M1/M2/M6 通过。下一步收敛当前 CI、完成文档审查与最终复核，再对新 SHA 做准确门禁；SQLite/本地文件架构已通过冷启动、离线展示和备份恢复验证，不增加服务。|
 | 1 | [U08 生产就绪收口](work_items/U08--production-readiness.md) | **completed** | — | U8-A～D 完成；严格 HTTPS/双格式 SHA/恢复门禁通过；冻结记录与标签 |
 | 1' | [U04 独立 oracle](work_items/U04--independent-oracle.md) | **completed** | 样本冻结已完成 | 驾驶舱批次 A 完成后，用户要求继续完整驾驶舱实现；因此盲评复评暂停至本工作包整体验收，不是取消。完整独立 oracle 与报告盲评仍是 C 级证据门槛 |
 | 2 | [S01 战略边界、事实合同与安全门禁](work_items/S01--post-u8-boundary-contract-security.md) | **completed** | U08 completed | Task 1–5 完成；安全规格 V1.1 已批准且独立审查闭环（`6c3c1cd`，零 P1/P2）。2026-09-14 `ff42c67` 五路并合 + 回落修复（`c1510ce`→`2570bf8`）带入路由策略 v2、模块边界与 U8 升级门禁、迁移 0026 修复、`main.py` 启动 fail-fast、两模块入口；Kimi `0841ff9` v1 被否，由 `997c1ab` v2 取代。**Task 6 已关闭**（R2/R3/R4 交付，台账 §7），阶段 3 转入 C 级出口；[协调台账](../70_operations/2026-09-14-coordination-ledger-glm.md) / [范围计划](../superpowers/plans/2026-09-13-flow-post-u8-boundary-gate.md) / [并行执行计划](../superpowers/plans/2026-09-13-flow-three-agent-parallel-restructuring.md) |
@@ -103,6 +107,66 @@ superseded_by: null
 | D1 | [DOC-M5/M6 文档迁移](../superpowers/plans/2026-09-12-static-knowledge-and-document-migration.md) | **done**（bfc1271 / e373e25） | — | M0–M6 全部关闭 |
 
 ## 唯一完整 To-do 与执行队列（严格串行）
+
+**统计口径：14 个唯一事项；已完成 7，实际执行中 0，队首待启动 1，排队 4，暂停 1，外部条件受限 1。** 本轮审查/计划已完成，实施未启动。历史 K 是 7 的别名，不再重复计数；保留原编号。工作包元数据 `active` 表示范围未结案，不表示此刻有后台 Agent 执行。
+
+| 原编号 | 唯一事项 | 当前事实状态 | 证据与处理边界 |
+|---|---|---|---|
+| 0 | CFO 盈利分析与图表补全 | 已完成 | 四因子、冻结值、来源深链；`08aa4cd0` 准确 SHA CI 18/18；新验收由 7a 承接 |
+| 0a | 驾驶舱数值格式治理 | 已完成 | 整数订单、金额两位小数；`1a71e33f` 准确 SHA CI 通过 |
+| 7a | 单机原型与全视图视觉升级 | **队首待启动：7a.1** | 按下方 8 个动作结案；当前基线 CI 已绿，不再等待旧 run |
+| 1 | 组织与经营账套初始化包 | 已完成 | 历史 full/business 重置、幂等/隔离和发行验证；最终 SQLite 操作由 7a.6 复验 |
+| 2 | 大麦数据后体验收口 | 已完成 | `0144bad4` 准确 SHA CI；新视觉由 7a 承接 |
+| 3 | 公开财报样本/证据审计 | 已完成（No-Go 审计） | 证据不足裁定已交付，不代表 C 级通过 |
+| 4 | U04 解析与盲评复评 | 已完成（限定样本） | 旧三样本 199/199，不等于全部报告 oracle 完成 |
+| 5 | C 级质量基准与 Go/No-Go | 已完成（裁定 No-Go） | 部分条件后续已有改善，仍无整体验收 Go |
+| 6 | P3 真实数据/来源与行业扩张 | 暂停 | 历史 ZTO 封存已于 2026-10-16 恢复合并，不重复合并；其余扩张暂缓 |
+| 7（原 K） | 第二代静态知识刷新 | 排队 | K0–K2 与 K3 baseline/diff 已有；语义审阅、候选/激活未完成，CURRENT_RELEASE 不变 |
+| 8 | rnd_exp 官方依据核验 | 外部条件受限 | 已有来源基线处理记录；轮到后恢复检索或附原文不可得证明结案，不伪造核验 |
+| 9 | U09/O05 真实内部试点 | 排队 | 需要真实企业数据及质量门槛；技术原型不冒充真实试点 |
+| 10 | U10 V1.1 证据决策 | 排队 | 依实际证据 go/hold，不作为原型的无限开发项 |
+| 11 | 内部月度工作台与真实周期验收 | 排队 | 真实连续 3 个周期、人工基准、盲评与工时比较；模拟数据不能替代 |
+
+### 7a 单机原型收尾动作与完成条件（2026-10-24）
+
+本表是 7a 唯一可领取子步骤，不在审查报告、工作包或交接复制另一份 To-do。**8 项均未实施，7a.1 是下一单一动作。** 严格串行，每项完成定向验证和必要独立复核后提交并立即 push；不为写“CI 已绿”无限追加纯状态提交。最终代码候选冻结后核对完整准确 SHA CI。新的 CI 配置、数据库迁移、删除仍遵守授权红线。
+
+**工程量估计：单写者连续投入约 6–10 个有效工程日，包含修复和复核；不承诺日历日期，也不含新的真实数据到料/外部审批。** 7a.1 提供现有可打开预览，7a.4 提供新版视觉预览，7a.8 提供正式版本与静态包。新缺口只修影响以下完成条件的 P1/P2，不自动扩张范围。
+
+| 动作 | 目的与交付 | 主要文件/复用对象 | 通过条件 | 估计 |
+|---|---|---|---|---|
+| **7a.1 统一交付基线** | 核对 main/开发分支双向差异、主目录 4 个修改与 1 个未跟踪文件；登记保留/已被替代/待归属；确定唯一候选和数据批次 | Git diff、HANDOFF、现有离线预览 | 不覆盖用户文件，不遗漏 main 文档；选定唯一实施分支；现有预览明确版本；未核验项如实记录 | 0.5 日 |
+| **7a.2 补齐已有演示数据的 CFO 呈现** | 冻结页面—指标—数据—图表矩阵；接通预算执行、合成账龄、利润桥/产品毛利入口 | `cockpit/modules.py`、`cockpit/service.py`、`dashboard/service.py`、`cockpit-overview-visuals.tsx`、`module-page.tsx`；既有总览组件、canonical 只读 | 图/表/来源同值；合成与披露分区；账龄总额按自身余额口径对账；已有数据无无解释空洞；缺预测/抵销/概率事实时清楚说明 | 1.5–2.5 日 |
+| **7a.3 接通图表、筛选与追溯** | 点选/触屏和键盘等价表格进入指标/明细/来源；筛选可选名称；年度固定图与月度筛选边界明确 | `charts/echarts-base.tsx`、`charts/builders.ts`、`module-page.tsx`、`drill-drawer.tsx`、`cockpit-filter-bar.tsx`、`cockpit-overview-app.tsx`、`lib/deep-links.ts` | 每种核心图型至少一条真实点选到明细；关键值到定义/输入/来源全链；URL 刷新/后退恢复筛选；无伪链接和不适用维度合计；键盘可达 | 1–1.5 日 |
+| **7a.4 收敛 A+C 视觉** | 总览桌面/手机定基准，推广六主题/杜邦/数据中心，巡检其余页面 | `cockpit.css`、`kpi-card.tsx`、`cockpit-overview-visuals.tsx`、`module-page.tsx`、`profitability-page.tsx`、workflow-nav、shell/data 与支撑页样式 | 1440×1000 首屏有四核心 KPI、主趋势和现金桥有效图形区；辅助指标/来源/设置不挤压主图；九重点页 390/1440px 无溢出；20 路由模板无明显样式断层；图例/标签/期间清楚 | 1–2 日 |
+| **7a.5 图文报告与九页离线包** | 复用冻结快照发布 HTML/PPTX/XLSX；九重点页静态索引、图像/图表、同值数据和来源清单绑定同一版本 | 现有 publishing renderers、报告中心、`scripts/export_cockpit_snapshot.mjs`、截图索引 | 导出数值与冻结快照一致；离线无外网依赖、内部静态导航有效；动态操作说明清楚；PDF 后端未配置时明确不可用且可浏览器打印，不虚报成功；图片/API/候选/批次一致 | 0.5–1 日 |
+| **7a.6 单机数据操作入口** | 复用 loader/reset/backup，提供显式演示装载、business 重置、备份、新目录恢复、校验命令；配置端口和清楚故障提示 | `scripts/flow.py`、`Makefile`、`infrastructure/local_backup.py`、`fixtures/damai/{loader,reset}.py`；新增隔离验收入口/定向测试 | 初始化/装载/重启一致；business 只动指定企业经营数据且组织/系统保留；full 模式兼容但不自动执行；恢复后来源/图表/报告一致；普通运行和新验收无需 Docker/PostgreSQL/Redis/MinIO | 0.5–1 日 |
+| **7a.7 最终隔离验收与独立复核** | 冻结代码候选；SQLite 全业务旅程、数值/图表、桌面手机、缺数/失败态、离线和恢复；新上下文独立评审；准确 SHA 全量 CI | navigation/damai-demo/deep-links E2E、cockpit/SQLite/local-store 测试、新单机闭环入口、现有全量 CI | verify 19/19（扩展须说明新增契约）、核心值零不明差异、20 路由模板/九重点页覆盖、离线外部请求/错误均 0、无未修 P1/P2、准确 SHA CI success；不以旧库 CI 代替 SQLite 旅程 | 0.5–1 日 |
+| **7a.8 主线集成与交付归档** | 回流 main 有价值文档；创建可审阅 PR，按已有授权/保护规则集成；提交最终说明、验收总表、版本/数据/演进清单及恢复档案 | README、HANDOFF、PROJECT_STATE、本路线图、现有文档/图片索引、Git PR、最终静态包 | 正式交付指向 main 准确版本/CI；新环境能按说明启动；交付物可打开；文档无过时进行中；历史/决策/操作知识可恢复；全部通过才关闭 7a，不宣称长期目标已达成 | 0.5 日 |
+
+#### 实施细节与验证约定
+
+路径约定：上表前端组件简称均在 `apps/web/components/`，其中驾驶舱在 `cockpit/`；后端模块在 `services/api/src/flow_api/`。7a.2 复用 `apps/web/components/dashboard/profit-bridge-panel.tsx`、`product-performance-table.tsx`、`margin-matrix.tsx`；7a.5 修改 `apps/web/components/reports/reports-center.tsx`、`reports-center.css` 及 `services/api/src/flow_api/publishing/{renderers,objective_renderers}.py`。7a.6 拟新增 `scripts/test_single_machine_closeout.py` 和 `scripts/tests/test_flow_cli.py`；7a.7 通过新 `make flow-check` 执行隔离 SQLite 浏览器旅程（此入口当前尚不存在）。测试复用 `apps/web/tests/cockpit-overview-visuals.test.tsx`、`apps/web/tests/components/cockpit-module-page.test.tsx`、`apps/web/e2e/{navigation,deep-links,damai-demo}.spec.ts` 及 `services/api/tests/cockpit/test_modules.py`；仅为真实行为缺口加断言，不复制实现。API 参数或响应变化时同步 OpenAPI/TypeScript 契约并执行 `make contracts-check`。
+
+- **7a.1：** 使用 `git log --left-right --oneline origin/main...HEAD`、`git diff origin/main HEAD --stat`，并只读核对主目录精确四文件差异。不自动 stash、删除或覆盖；main 内容做语义回流，不把旧状态覆盖新状态；最终普通 merge/PR，不 rebase/强推。实际共享写入冲突才暂停相应目标。
+- **7a.2：** 先核验现有预算/应收的期间、单位、维度、事实类别和加总基准；为投影/图表同值的实际缺口加定向测试再接线。复用 `/` 已有利润桥、产品表、毛利矩阵，不建第二个公式引擎。账龄与公开应收行不同口径时不强行勾稽。合并页缺抵销数据时校准标题/说明；月度收入预测不改名为 13 周现金预测。
+- **7a.3：** 点选传既有 period/metric/source ID 到现有深链，不从坐标反推事实。显式值表共用同一映射；有 fact ID 但无原件时解释缺失。年度补充区明确不随内部组织/客户筛选变化；需要联动时由经核验 API 提供同范围数据，不前端拼接。
+- **7a.4：** 核对[概念板](../assets/cockpit-visual-direction-2026-10-18.png)六个签名：暖纸白、墨蓝、古金、衬线标题、图表主次面积、结论/来源/行动叙事。保持语义红绿和实际负数。图表都有标题、期间、单位、事实类别、支持值/来源；状态覆盖 loading/empty/error/ready/degraded。复用 ECharts/现有表格，不引新图表库，不加装饰性伪数据图。
+- **7a.5：** 先检查导出图像和 API 是否同批/同期间；输出到独立目录，manifest 记录 full SHA、数据包 SHA、批次/快照、视口、事实类别和限制。静态链接指向静态目标。使用已授权的本机验收截图能力；GitHub/README 自动采集工作流保持暂停，不新造截图管线。
+- **7a.6：** 拟新增 `make flow-demo`、`make flow-check`、`make flow-backup`、`make flow-restore`，**这些是计划产物，当前不可宣称已可用**。沿用 FLOW_DATA_DIR 和显式企业 ID；restore 仅写不存在的新目录；seed/reset 不混入普通启动。端口同步传 Web 内部 API、健康检查和地址输出。验收只用新隔离目录/空闲端口，不停常驻服务。
+- **7a.7：** 每切片执行相关 Vitest/API pytest 与 typecheck，视觉/交互完成再做 production build/浏览器，最后完整冻结验收。现有命令：`pnpm --filter @flow/web test`、`pnpm --filter @flow/web typecheck`、`pnpm --filter @flow/web build`；后端定向执行 cockpit、local_object_store、sqlite_schema 测试，先核对 fixture，临时 SQLite 与隔离 PostgreSQL 分开。浏览器指向隔离服务 PLAYWRIGHT_BASE_URL；旧 user-closure 脚本会调用 infra-up，不能拿来证明无 Docker 的单机验收。
+- **7a.8：** 运行 `python3 scripts/check_docs.py --phase m1`、`--phase m6`、`python3 scripts/documentation/links.py --check`、`git diff --check`；不新增 release 服务。归档保留版本、演进时间线、决策、操作知识和恢复入口；文件/历史删除、CI/schema 改动仍按原红线授权。审批确有限制时保留可验收候选、PR 与明确限制，不隐去未集成状态。
+
+7a.7 冻结最终代码候选后，必须重验 7a.5 静态包/图片 manifest；若 7a.6 等后续代码改变页面、数据或导出行为，重新生成受影响交付物再核验。纯文档提交可保留明确标注的实际采集代码 SHA，不能把旧图片改标为新版本。
+
+#### 当前版本的结束判定
+
+8 个动作逐项附证据后交付五件可直接使用的成果：**正式 main 版本、本机启动/数据操作说明、大麦演示包、九页静态展示/图文报告包、同版本验收与恢复档案**。仅以是否违反本节验收条件决定追加修复，不以“还可以美化”无限延期。长期知识刷新、行业扩张和真实试点继续保留，不自动启动来延长本原型结案。
+
+<details>
+<summary>历史队列全文（2026-10-21 及以前；冻结参考，禁止独立执行）</summary>
+
+以下保存演进依据，旧 K/7 重复、旧计数及待验证文字由上方 2026-10-24 队列接替，不作为当前进度。
 
 **当前唯一队列（15 项）**：已完成 8 项；实际执行中 1 项（7a，视觉差距收敛与文档审查）；队首待启动 0 项；排队 4 项（含 K3）；暂停 1 项；外部条件受限 1 项。代码 SHA `65d7dc61` / run `39453419044` 因状态更新提交而取消，汇总 job 失败仅反映分片取消；状态提交 `a71cb28e` / run `39453752316` 已 28/28 success；最新文档 SHA `21b650a1` / run `39457446117` 已 28/28 success。移动 KPI 修复由隔离 fixture E2E 21/21 验证；本地期间费用堆叠图由 Web 199/199、typecheck/build 验证。准确 SHA `a71cb28e` CI 28/28 success；lint 0 error、文档 M1/M2/M6 通过。原 `integration` 基线用时 36分51秒；新结构按 4 个隔离 shard 保留全量 284 项测试，66 文件映射零遗漏、零重复，准确 SHA `368a0190` / run `39349190031` 为 28/28 success。单机架构继续采用 SQLite、本地文件、同步处理和一键启动；本轮无依赖、服务或数据库变化。剩余为文档审查/清理候选复核、独立复核及最终准确 SHA CI。唯一顺序见[工作包第 9 节](work_items/FLOW--single-machine-visual-prototype.md#9-概念图视觉差距门禁负载与文档治理)：全视图视觉差距闭合 → 文档现状校准与清理候选复核 → 最终集成结案。
 
@@ -139,6 +203,8 @@ K. **queued（待 7a 阶段 5–7）** 第二代静态知识刷新与战略重�
 2026-09-24 补充：大麦合成发行版是“系统完整性验证工具”，知识刷新是“静态知识
 维护轨”，两者可在公开 C 级外部门禁等待期间推进；二者均不改变 D052–D054 的
 真实数据验收顺序，也不能代替独立 oracle、holdout 或真实企业三周期验证。
+
+</details>
 
 ## 已完成的非待办参考
 
