@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目交接文档
 doc_type: navigation
 status: current
-version: 11.4
+version: 11.5
 created_at: 2026-09-12
 updated_at: 2026-10-24
 owner: FLOW
@@ -20,7 +20,7 @@ applies_to: repository
 
 **连续收尾接管授权（2026-10-24）：** 用户已要求按 `CURRENT_ROADMAP` 顺序连续执行路线图 7a.1–7a.8，完成可做事项后进入收尾。范围和跳过规则已落盘：外部长等待先诊断并尝试安全替代，仍无进展则如实记为跳过/未验证；不得绕过红线或虚报验收。本 worktree 与分支为该任务唯一写入目标；当前进度与下一动作见下方最新交接段，历史接手状态不再作为现况依据。
 
-**2026-10-24 当前交接：7a.1–7a.7 已完成，当前唯一执行动作是 7a.8 主线整合与交付归档。** worktree `/Users/qiming/workspace/FLOW/.worktrees/cockpit-visual-completion`，分支 `codex/single-machine-runtime-convergence`。候选代码 SHA `0a43d131d44a5891181b2e935e011888b3101660` 的 GitHub Actions run `40079923908` 为 28/28 success；M1/M6、计划视图、链接与差异检查通过。候选九页视觉包、隔离旅程及独立复核证据见[差距审查](docs/60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)。当前在 worktree 内整合 `origin/main` 文档快照，完成后提交并推送，核验合并 SHA 的 CI，再更新 PR #3 交付状态。主 checkout 用户文件保持原位；`/Users/qiming/.flow/flow.sqlite3` 零字节文件按用户选择保留，`services/api/flow.sqlite3` 未跟踪文件也保持原样。
+**2026-10-24 当前交接：路线图 7a.1–7a.8 已完成。** PR [#3](https://github.com/davyzhong/FLOW/pull/3) 已合入 main，merge commit `b2a1bf22df91239eb311d1692c30c666250678bf` 的 GitHub Actions run `40092106547` 为 28/28 success。候选离线包、隔离旅程及独立复核证据见[差距审查](docs/60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)。唯一队列的下一项 K2 为队首待启动，本轮未开始；版本与状态见[CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)。用户选择保留 `/Users/qiming/.flow/flow.sqlite3` 零字节文件，`services/api/flow.sqlite3` 未跟踪文件也保持原样；主 checkout 用户文件未触碰。
 
 <details>
 <summary>2026-10-21 及以前的状态快照（历史，不代表当前执行）</summary>
