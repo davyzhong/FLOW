@@ -14,9 +14,28 @@ applies_to: repository
 
 本文件按采集批次记录真实页面截图；每个批次分别注明代码和数据来源。图片没有替换数值、拼接控件或使用生成图冒充页面。
 
-## 单机原型验收截图与离线快照（cockpit-single-machine/）
+## 单机原型收尾候选（2026-10-24，closeout-003bfa4b/）
 
-采集日期：2026-10-20。应用从隔离 SQLite 数据目录冷启动，Next.js 生产构建与 FastAPI 分别监听本机回环地址；此批是最新真实运行截图和离线 HTML 快照。
+采集日期：2026-10-24。当前代码从 SQLite 备份恢复到新隔离目录，在本机生产构建与 FastAPI 服务上重新采集。此批严格对应 7a 候选代码 SHA 与演示批次；静态 HTML 只展示截图和 API 固化响应，动态筛选/跳转/编辑需启动本地服务。
+
+- 代码提交：`003bfa4b8a104b1c92bc6afb54c79c2f6965647d`。
+- 数据源：大麦物流 synthetic 发行包，manifest SHA-256 `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`，批次 `01a16cf8-918b-75e8-9e85-415199207d7c`，指标快照 `01a16cfc-cf99-7843-ba4c-b07c4acdf981`。数据库来自一次性 `/tmp/flow-closeout-run-2f92fe4c` 恢复副本；不是客户真实月度数据，也不构成公开 C 级能力证明。
+- 采集：九个路由各含桌面 1440px 与手机 390px 全页图，共 18 张；另存 11 个 JSON API 响应。viewport 横向溢出 0、浏览器错误 0、外网请求 0。
+- 离线检查：`index.html` 的 9 张桌面图加载 9/9、静态链接断链 0、HTTP(S) 请求 0、浏览器错误 0。筛选、路由跳转、编辑与报告生成需要运行应用。
+- 人工核看：桌面总览四项核心 KPI、收入/营业利润趋势、现金桥、杜邦与费用图均有实际图区；筛选条显示名称选项；390px 总览无水平溢出。账龄能力继续显示现有受限说明。
+
+| 文件 | 内容 |
+| --- | --- |
+| [index.html](cockpit-single-machine/closeout-003bfa4b/index.html) | 九页桌面静态展示入口 |
+| [manifest.json](cockpit-single-machine/closeout-003bfa4b/manifest.json) | 代码、数据批次、截图摘要与离线验收结果 |
+| [api-responses.json](cockpit-single-machine/closeout-003bfa4b/api-responses.json) | 页面实采的 API 原始 JSON 响应 |
+| [images/](cockpit-single-machine/closeout-003bfa4b/images/) | 九页桌面/手机实测截图 |
+
+生成命令：`node scripts/export_cockpit_closeout_bundle.mjs --url http://127.0.0.1:3140 --output /tmp/flow-closeout-artifacts-003bfa4b`。
+
+## 单机原型历史验收截图（cockpit-single-machine/）
+
+采集日期：2026-10-20。此批为前一候选 SHA 的历史真实运行截图与离线 HTML 快照，不代表当前候选。
 
 - 代码提交：`9ec0611562569b33bc3dac28c16445aa9470b150`（截图与离线快照基于此 SHA）。
 - 数据源：大麦物流合成发行包，manifest SHA-256 `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`，批次 `01a154ea-455d-79fb-8521-072795629bec`；隔离数据目录 `/tmp/flow-stage7-20261020`，验证报告 19/19 通过。它是模拟经营数据，不是阿里巴巴、菜鸟或客户披露事实。

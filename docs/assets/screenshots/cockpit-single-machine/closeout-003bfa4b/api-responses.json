@@ -1,0 +1,4968 @@
+{
+  "/api/v1/cockpit/profitability": {
+    "module": "profitability",
+    "title": "盈利能力与杜邦分析",
+    "source_notice": "当前数据源为演示数据（大麦物流合成财报）。本看板不构成公开财报 C 级能力证明，不解除 C 级门禁。",
+    "periods": [
+      {
+        "period": "FY2022",
+        "report_id": "01a16cf8-89c1-7231-b860-789af9f7c7f0",
+        "snapshot_id": "01a16cfc-f9ca-73cc-b051-b0b79a66d354",
+        "snapshot_version": 1,
+        "source_ref": "fixtures/damai/statements/damai_fy2022.yaml",
+        "source_sha256": "b58d179c2584354134321efaa7e289d6f923b23bb12c74e4f1d62c5d95869661",
+        "metrics": [
+          {
+            "metric_code": "roe",
+            "status": "available",
+            "value": "-0.1009223673808368065805375981",
+            "unit": "%",
+            "formula": "净利润 ÷ 平均净资产 × 100%",
+            "definition_version": "flow.metric_dictionary.v1",
+            "reason": null,
+            "report_id": "01a16cf8-89c1-7231-b860-789af9f7c7f0",
+            "snapshot_id": "01a16cfc-f9ca-73cc-b051-b0b79a66d354",
+            "source_facts": [
+              {
+                "item_id": "is.net_profit",
+                "row_id": null,
+                "statement_type": "合并利润表",
+                "item_name": "年度亏损/利润",
+                "page_number": null,
+                "page_anchor": null,
+                "role": "flow",
+                "value": "-2285665.0000"
+              },
+              {
+                "item_id": "bs.equity",
+                "row_id": null,
+                "statement_type": "合并资产负债表",
+                "item_name": "权益总额",
+                "page_number": null,
+                "page_anchor": null,
+                "role": "beginning",
+                "value": "23425429.0000"
+              },
+              {
+                "item_id": "bs.equity",
+                "row_id": null,
+                "statement_type": "合并资产负债表",
+                "item_name": "权益总额",
+                "page_number": null,
+                "page_anchor": null,
+                "role": "ending",
+                "value": "21870080.0000"
+              }
+            ]
+          },
+          {
+            "metric_code": "net_margin",
+            "status": "available",
+            "value": "-0.03418230025742476294255891808",
+            "unit": "%",
+            "formula": "净利润 ÷ 营业收入 × 100%",
+            "definition_version": "flow.metric_dictionary.v1",
+            "reason": null,
+            "report_id": "01a16cf8-89c1-7231-b860-789af9f7c7f0",
+            "snapshot_id": "01a16cfc-f9ca-73cc-b051-b0b79a66d354",
+            "source_facts": [
+              {
+                "item_id": "is.net_profit",
+                "row_id": null,
+                "statement_type": "合并利润表",
+                "item_name": "年度亏损/利润",
+                "page_number": null,
+                "page_anchor": null,
+                "role": "flow",
+                "value": "-2285665.0000"
+              },
+              {
+                "item_id": "is.revenue",
+                "row_id": null,
+                "statement_type": "合并利润表",
+                "item_name": "收入",
+                "page_number": null,
+                "page_anchor": null,
+                "role": "flow",
+                "value": "66866916.0000"
+              }
+            ]
+          },
+          {
+            "metric_code": "total_asset_turnover",
+            "status": "available",
+            "value": "1.166615687030675922977411729",
+            "unit": "次",
+            "formula": "营业收入 ÷ 平均资产总额",
+            "definition_version": "flow.metric_dictionary.v1",
+            "reason": null,
+            "report_id": "01a16cf8-89c1-7231-b860-789af9f7c7f0",
+            "snapshot_id": "01a16cfc-f9ca-73cc-b051-b0b79a66d354",
+            "source_facts": [
+              {
+                "item_id": "is.revenue",
+                "row_id": null,
+                "statement_type": "合并利润表",
+                "item_name": "收入",
+                "page_number": null,
+                "page_anchor": null,
+                "role": "flow",
+                "value": "66866916.0000"
+              },
+              {
+                "item_id": "bs.total_assets",
+                "row_id": null,
+                "statement_type": "合并资产负债表",
+                "item_name": "资产总计",
+                "page_number": null,
+                "page_anchor": null,
+                "role": "beginning",
+                "value": "55752921.0000"
+              },
+              {
+                "item_id": "bs.total_assets",
+                "row_id": null,
+                "statement_type": "合并资产负债表",
+                "item_name": "资产总计",
+                "page_number": null,
+                "page_anchor": null,
+                "role": "ending",
+                "value": "58881087.0000"
+              }
+            ]
+          },
+          {
+            "metric_code": "equity_multiplier",
+            "status": "available",
+            "value": "2.530802954438595667398284452",
+            "unit": "倍",
+            "formula": "平均总资产 ÷ 平均净资产",
+            "definition_version": "flow.metric_dictionary.v1",
+            "reason": null,
+            "report_id": "01a16cf8-89c1-7231-b860-789af9f7c7f0",
+            "snapshot_id": "01a16cfc-f9ca-73cc-b051-b0b79a66d354",
+            "source_facts": [
+              {
+                "item_id": "bs.total_assets",
+                "row_id": null,
+                "statement_type": "合并资产负债表",
+                "item_name": "资产总计",
+                "page_number": null,
+                "page_anchor": null,
+                "role": "beginning",
+                "value": "55752921.0000"
+              },
+              {
+                "item_id": "bs.total_assets",
+                "row_id": null,
+                "statement_type": "合并资产负债表",
+                "item_name": "资产总计",
+                "page_number": null,
+                "page_anchor": null,
+                "role": "ending",
+                "value": "58881087.0000"
+              },
+              {
+                "item_id": "bs.equity",
+                "row_id": null,
+                "statement_type": "合并资产负债表",
+                "item_name": "权益总额",
+                "page_number": null,
+                "page_anchor": null,
+                "role": "beginning",
+                "value": "23425429.0000"
+              },
+              {
+                "item_id": "bs.equity",
+                "row_id": null,
+                "statement_type": "合并资产负债表",
+                "item_name": "权益总额",
+                "page_number": null,
+                "page_anchor": null,
+                "role": "ending",
+                "value": "21870080.0000"
+              }
+            ]
+          }
+        ],
+        "consistency": {
+          "status": "passed",
+          "difference": "0E-28",
+          "tolerance": "1E-8"
+        }
+      },
+      {
+        "period": "FY2023",
+        "report_id": "01a16cf8-8a94-77b5-8b27-97b5e341de8b",
+        "snapshot_id": "01a16cfc-f9cc-7e10-a008-8c204bde5dfd",
+        "snapshot_version": 1,
+        "source_ref": "fixtures/damai/statements/damai_fy2023.yaml",
+        "source_sha256": "68235f199ede79199d575dd26847adc4a57fd99aff667492b52cc19d74ab2f60",
+        "metrics": [
+          {
+            "metric_code": "roe",
+            "status": "available",
+            "value": "-0.1159526341032593933204089647",
+            "unit": "%",
+            "formula": "净利润 ÷ 平均净资产 × 100%",
+            "definition_version": "flow.metric_dictionary.v1",
+            "reason": null,
+            "report_id": "01a16cf8-8a94-77b5-8b27-97b5e341de8b",
+            "snapshot_id": "01a16cfc-f9cc-7e10-a008-8c204bde5dfd",
+            "source_facts": [
+              {
+                "item_id": "is.net_profit",
+                "row_id": null,
+                "statement_type": "合并利润表",
+                "item_name": "年度亏损/利润",
+                "page_number": null,
+                "page_anchor": null,
+                "role": "flow",
+                "value": "-2801391.0000"
+              },
+              {
+                "item_id": "bs.equity",
+                "row_id": null,
+                "statement_type": "合并资产负债表",
+                "item_name": "权益总额",
+                "page_number": null,
+                "page_anchor": null,
+                "role": "beginning",
+                "value": "21870080.0000"
+              },
+              {
+                "item_id": "bs.equity",
+                "row_id": null,
+                "statement_type": "合并资产负债表",
+                "item_name": "权益总额",
+                "page_number": null,
+                "page_anchor": null,
+                "role": "ending",
+                "value": "26449495.0000"
+              }
+            ]
+          },
+          {
+            "metric_code": "net_margin",
+            "status": "available",
+            "value": "-0.03600774681899378114368729689",
+            "unit": "%",
+            "formula": "净利润 ÷ 营业收入 × 100%",
+            "definition_version": "flow.metric_dictionary.v1",
+            "reason": null,
+            "report_id": "01a16cf8-8a94-77b5-8b27-97b5e341de8b",
+            "snapshot_id": "01a16cfc-f9cc-7e10-a008-8c204bde5dfd",
+            "source_facts": [
+              {
+                "item_id": "is.net_profit",
+                "row_id": null,
+                "statement_type": "合并利润表",
+                "item_name": "年度亏损/利润",
+                "page_number": null,
+                "page_anchor": null,
+                "role": "flow",
+                "value": "-2801391.0000"
+              },
+              {
+                "item_id": "is.revenue",
+                "row_id": null,
+                "statement_type": "合并利润表",
+                "item_name": "收入",
+                "page_number": null,
+                "page_anchor": null,
+                "role": "flow",
+                "value": "77799675.0000"
+              }
+            ]
+          },
+          {
+            "metric_code": "total_asset_turnover",
+            "status": "available",
+            "value": "1.190216080042457540891015696",
+            "unit": "次",
+            "formula": "营业收入 ÷ 平均资产总额",
+            "definition_version": "flow.metric_dictionary.v1",
+            "reason": null,
+            "report_id": "01a16cf8-8a94-77b5-8b27-97b5e341de8b",
+            "snapshot_id": "01a16cfc-f9cc-7e10-a008-8c204bde5dfd",
+            "source_facts": [
+              {
+                "item_id": "is.revenue",
+                "row_id": null,
+                "statement_type": "合并利润表",
+                "item_name": "收入",
+                "page_number": null,
+                "page_anchor": null,
+                "role": "flow",
+                "value": "77799675.0000"
+              },
+              {
+                "item_id": "bs.total_assets",
+                "row_id": null,
+                "statement_type": "合并资产负债表",
+                "item_name": "资产总计",
+                "page_number": null,
+                "page_anchor": null,
+                "role": "beginning",
+                "value": "58881087.0000"
+              },
+              {
+                "item_id": "bs.total_assets",
+                "row_id": null,
+                "statement_type": "合并资产负债表",
+                "item_name": "资产总计",
+                "page_number": null,
+                "page_anchor": null,
+                "role": "ending",
+                "value": "71850931.0000"
+              }
+            ]
+          },
+          {
+            "metric_code": "equity_multiplier",
+            "status": "available",
+            "value": "2.705570527058650660731183997",
+            "unit": "倍",
+            "formula": "平均总资产 ÷ 平均净资产",
+            "definition_version": "flow.metric_dictionary.v1",
+            "reason": null,
+            "report_id": "01a16cf8-8a94-77b5-8b27-97b5e341de8b",
+            "snapshot_id": "01a16cfc-f9cc-7e10-a008-8c204bde5dfd",
+            "source_facts": [
+              {
+                "item_id": "bs.total_assets",
+                "row_id": null,
+                "statement_type": "合并资产负债表",
+                "item_name": "资产总计",
+                "page_number": null,
+                "page_anchor": null,
+                "role": "beginning",
+                "value": "58881087.0000"
+              },
+              {
+                "item_id": "bs.total_assets",
+                "row_id": null,
+                "statement_type": "合并资产负债表",
+                "item_name": "资产总计",
+                "page_number": null,
+                "page_anchor": null,
+                "role": "ending",
+                "value": "71850931.0000"
+              },
+              {
+                "item_id": "bs.equity",
+                "row_id": null,
+                "statement_type": "合并资产负债表",
+                "item_name": "权益总额",
+                "page_number": null,
+                "page_anchor": null,
+                "role": "beginning",
+                "value": "21870080.0000"
+              },
+              {
+                "item_id": "bs.equity",
+                "row_id": null,
+                "statement_type": "合并资产负债表",
+                "item_name": "权益总额",
+                "page_number": null,
+                "page_anchor": null,
+                "role": "ending",
+                "value": "26449495.0000"
+              }
+            ]
+          }
+        ],
+        "consistency": {
+          "status": "passed",
+          "difference": "0E-28",
+          "tolerance": "1E-8"
+        }
+      }
+    ],
+    "unavailable": []
+  },
+  "/api/v1/cockpit/modules/cashflow": {
+    "module": "cashflow",
+    "title": "现金流",
+    "period": "FY2023",
+    "prior_period": "FY2022",
+    "snapshot_id": "01a16cfc-f9cc-7e10-a008-8c204bde5dfd",
+    "report_ids": [
+      "01a16cf8-8a94-77b5-8b27-97b5e341de8b",
+      "01a16cf8-89c1-7231-b860-789af9f7c7f0"
+    ],
+    "source_notice": "数据源：菜鸟申请稿披露财报（IFRS）·大麦物流演示主体引用",
+    "unit": "百万元",
+    "kpis": [
+      {
+        "name": "经营活动现金流量净额",
+        "status": "available",
+        "value": "1859.3490",
+        "prior_value": null,
+        "unit": "百万元",
+        "caliber_note": null
+      },
+      {
+        "name": "投资活动现金流量净额",
+        "status": "available",
+        "value": "-11295.8480",
+        "prior_value": null,
+        "unit": "百万元",
+        "caliber_note": null
+      },
+      {
+        "name": "筹资活动现金流量净额",
+        "status": "available",
+        "value": "7624.8620",
+        "prior_value": null,
+        "unit": "百万元",
+        "caliber_note": null
+      },
+      {
+        "name": "净现比",
+        "status": "available",
+        "value": "-0.6637",
+        "prior_value": null,
+        "unit": "ratio",
+        "caliber_note": "OCF/净利润"
+      }
+    ],
+    "charts": {
+      "cash_bridge": {
+        "title": "现金变动桥",
+        "type": "waterfall",
+        "unit": "百万元",
+        "periods": [],
+        "series": {},
+        "steps": {
+          "年初": "10197.7420",
+          "经营": "1859.3490",
+          "投资": "-11295.8480",
+          "筹资": "7624.8620",
+          "汇率": "398.2990",
+          "年末": "8784.4040"
+        },
+        "identity": "年末 = 年初 + 净变动 + 汇率",
+        "note": null,
+        "dso": null,
+        "dio": null,
+        "dpo": null,
+        "ccc": null,
+        "analysis_question": "现金余额如何由期初经过经营、投资、筹资和汇率变动到期末？",
+        "fact_classes": [
+          "reported"
+        ],
+        "source_ids": [
+          "01a16cf8-8a94-77b5-8b27-97b5e341de8b",
+          "01a16cf8-89c1-7231-b860-789af9f7c7f0"
+        ],
+        "metric_codes": [
+          "cash_beginning",
+          "operating_cash_flow",
+          "investing_cash_flow",
+          "financing_cash_flow",
+          "fx_cash_effect",
+          "cash_ending"
+        ],
+        "snapshot_id": "01a16cfc-f9cc-7e10-a008-8c204bde5dfd",
+        "drilldown_target": "/statements?report=01a16cf8-8a94-77b5-8b27-97b5e341de8b#stmt-row-合并现金流量表-年末现金及现金等价物",
+        "empty_reason": null,
+        "fact_ids": {},
+        "source_fact_ids": {}
+      },
+      "cashflow_activities": {
+        "title": "三类现金流量净额",
+        "type": "bar",
+        "unit": "百万元",
+        "periods": [
+          "FY2022",
+          "FY2023"
+        ],
+        "series": {
+          "经营活动": [
+            "2330.1780",
+            "1859.3490"
+          ],
+          "投资活动": [
+            "-2776.7870",
+            "-11295.8480"
+          ],
+          "筹资活动": [
+            "-696.2180",
+            "7624.8620"
+          ]
+        },
+        "steps": {},
+        "identity": null,
+        "note": null,
+        "dso": null,
+        "dio": null,
+        "dpo": null,
+        "ccc": null,
+        "analysis_question": "经营、投资与筹资现金流净额如何变化？",
+        "fact_classes": [
+          "reported"
+        ],
+        "source_ids": [
+          "01a16cf8-8a94-77b5-8b27-97b5e341de8b",
+          "01a16cf8-89c1-7231-b860-789af9f7c7f0"
+        ],
+        "metric_codes": [
+          "operating_cash_flow",
+          "investing_cash_flow",
+          "financing_cash_flow"
+        ],
+        "snapshot_id": "01a16cfc-f9cc-7e10-a008-8c204bde5dfd",
+        "drilldown_target": "/statements?report=01a16cf8-8a94-77b5-8b27-97b5e341de8b#stmt-row-合并现金流量表-经营活动所得现金净额",
+        "empty_reason": null,
+        "fact_ids": {},
+        "source_fact_ids": {}
+      }
+    },
+    "unavailable": [
+      {
+        "block": "收现比",
+        "code": "cash_from_sales_not_disclosed",
+        "reason": "无「销售收现」行"
+      },
+      {
+        "block": "13周预测",
+        "code": "internal_period_feature",
+        "reason": "内部期"
+      }
+    ]
+  },
+  "/api/v1/cockpit/modules/expenses": {
+    "module": "expenses",
+    "title": "费用分析",
+    "period": "FY2023",
+    "prior_period": "FY2022",
+    "snapshot_id": "01a16cfc-f9cc-7e10-a008-8c204bde5dfd",
+    "report_ids": [
+      "01a16cf8-8a94-77b5-8b27-97b5e341de8b",
+      "01a16cf8-89c1-7231-b860-789af9f7c7f0"
+    ],
+    "source_notice": "数据源：菜鸟申请稿披露财报（IFRS）·大麦物流演示主体引用",
+    "unit": "百万元",
+    "kpis": [
+      {
+        "name": "销售及市场推广开支",
+        "status": "available",
+        "value": "1215.8070",
+        "prior_value": "1758.9760",
+        "rate": "0.0156",
+        "unit": "百万元"
+      },
+      {
+        "name": "一般及行政开支",
+        "status": "available",
+        "value": "6153.5130",
+        "prior_value": "6094.2410",
+        "rate": "0.0791",
+        "unit": "百万元"
+      },
+      {
+        "name": "产品开发开支",
+        "status": "available",
+        "value": "2511.8090",
+        "prior_value": "2281.9620",
+        "rate": "0.0323",
+        "unit": "百万元"
+      },
+      {
+        "name": "财务成本",
+        "status": "available",
+        "value": "1257.7160",
+        "prior_value": "1213.4870",
+        "rate": "0.0162",
+        "unit": "百万元"
+      },
+      {
+        "name": "期间费用合计",
+        "status": "available",
+        "value": "11138.8450",
+        "rate": "0.1432",
+        "unit": "百万元"
+      }
+    ],
+    "charts": {
+      "expense_structure": {
+        "title": "费用结构",
+        "type": "ratio_bar",
+        "unit": "百万元",
+        "periods": [],
+        "series": {
+          "销售": "1215.8070",
+          "管理": "6153.5130",
+          "研发": "2511.8090",
+          "财务": "1257.7160"
+        },
+        "steps": {},
+        "identity": null,
+        "note": null,
+        "dso": null,
+        "dio": null,
+        "dpo": null,
+        "ccc": null,
+        "analysis_question": "当期各项期间费用如何构成？",
+        "fact_classes": [
+          "reported"
+        ],
+        "source_ids": [
+          "01a16cf8-8a94-77b5-8b27-97b5e341de8b",
+          "01a16cf8-89c1-7231-b860-789af9f7c7f0"
+        ],
+        "metric_codes": [
+          "selling_expense",
+          "admin_expense",
+          "rnd_expense",
+          "financial_expense"
+        ],
+        "snapshot_id": "01a16cfc-f9cc-7e10-a008-8c204bde5dfd",
+        "drilldown_target": "/statements?report=01a16cf8-8a94-77b5-8b27-97b5e341de8b#stmt-row-合并利润表-销售及市场推广开支",
+        "empty_reason": null,
+        "fact_ids": {},
+        "source_fact_ids": {}
+      },
+      "expense_comparison": {
+        "title": "费用项目年度对比",
+        "type": "bar",
+        "unit": "百万元",
+        "periods": [
+          "FY2022",
+          "FY2023"
+        ],
+        "series": {
+          "销售": [
+            "1758.9760",
+            "1215.8070"
+          ],
+          "管理": [
+            "6094.2410",
+            "6153.5130"
+          ],
+          "研发": [
+            "2281.9620",
+            "2511.8090"
+          ],
+          "财务": [
+            "1213.4870",
+            "1257.7160"
+          ]
+        },
+        "steps": {},
+        "identity": null,
+        "note": null,
+        "dso": null,
+        "dio": null,
+        "dpo": null,
+        "ccc": null,
+        "analysis_question": "各项期间费用在报告期之间如何变化？",
+        "fact_classes": [
+          "reported"
+        ],
+        "source_ids": [
+          "01a16cf8-8a94-77b5-8b27-97b5e341de8b",
+          "01a16cf8-89c1-7231-b860-789af9f7c7f0"
+        ],
+        "metric_codes": [
+          "selling_expense",
+          "admin_expense",
+          "rnd_expense",
+          "financial_expense"
+        ],
+        "snapshot_id": "01a16cfc-f9cc-7e10-a008-8c204bde5dfd",
+        "drilldown_target": "/statements?report=01a16cf8-8a94-77b5-8b27-97b5e341de8b#stmt-row-合并利润表-销售及市场推广开支",
+        "empty_reason": null,
+        "fact_ids": {},
+        "source_fact_ids": {}
+      },
+      "expense_rate_trend": {
+        "title": "费用率年度对比",
+        "type": "line",
+        "unit": "ratio",
+        "periods": [
+          "FY2022",
+          "FY2023"
+        ],
+        "series": {
+          "销售费用率": [
+            "0.0263",
+            "0.0156"
+          ],
+          "管理费用率": [
+            "0.0911",
+            "0.0791"
+          ],
+          "研发费用率": [
+            "0.0341",
+            "0.0323"
+          ],
+          "财务费用率": [
+            "0.0181",
+            "0.0162"
+          ]
+        },
+        "steps": {},
+        "identity": null,
+        "note": null,
+        "dso": null,
+        "dio": null,
+        "dpo": null,
+        "ccc": null,
+        "analysis_question": "各项期间费用占营业收入的比例如何变化？",
+        "fact_classes": [
+          "reported",
+          "derived"
+        ],
+        "source_ids": [
+          "01a16cf8-8a94-77b5-8b27-97b5e341de8b",
+          "01a16cf8-89c1-7231-b860-789af9f7c7f0"
+        ],
+        "metric_codes": [
+          "selling_expense_ratio",
+          "admin_expense_ratio",
+          "rnd_expense_ratio",
+          "financial_expense_ratio"
+        ],
+        "snapshot_id": "01a16cfc-f9cc-7e10-a008-8c204bde5dfd",
+        "drilldown_target": "/statements?report=01a16cf8-8a94-77b5-8b27-97b5e341de8b#stmt-row-合并利润表-销售及市场推广开支",
+        "empty_reason": null,
+        "fact_ids": {},
+        "source_fact_ids": {}
+      }
+    },
+    "unavailable": [
+      {
+        "block": "预算执行",
+        "code": "budget_not_applicable_public_period",
+        "reason": "预算基准属内部期（D054）"
+      }
+    ]
+  },
+  "/api/v1/cockpit/overview": {
+    "state": "stale",
+    "context": {
+      "batch_id": "01a16cf8-918b-75e8-9e85-415199207d7c",
+      "import_version_id": "01a16cf8-9193-7f90-980f-cf00e9c36d19",
+      "metric_snapshot_id": "01a16cfc-cf99-7843-ba4c-b07c4acdf981",
+      "analysis_run_id": "01a16cfc-f962-742a-a291-b7325babc769",
+      "as_of_month": "2023-03",
+      "metric_definition_set_id": "flow.metrics.logistics.v1",
+      "metric_definition_set_hash": "4214ae85339eb7495defb69f1d59fdddec5e3183d5d4ba64c966be9f53270b38",
+      "metric_engine_version": "flow.metrics.engine.v1",
+      "analysis_policy_id": "flow.analysis.logistics.v1",
+      "analysis_policy_hash": "448b390877b20090af02f6584e79a1c9796fe5ab0a5c9aeb784f6ab497e94f5a",
+      "analysis_engine_version": "flow-analysis/1",
+      "generated_at": "2026-10-24T08:33:16.144715Z"
+    },
+    "data_status": {
+      "batch_status": "published",
+      "import_status": "published",
+      "quality_status": "passed",
+      "blocking_issue_count": 0,
+      "warning_issue_count": 0,
+      "acknowledged_warning_count": 0,
+      "reconciliation_status": "passed",
+      "metric_snapshot_status": "published",
+      "analysis_run_status": "published",
+      "freshness_status": "stale"
+    },
+    "filter_options": {
+      "dimensions": [
+        {
+          "dimension": "organization",
+          "label": "组织",
+          "options": [
+            {
+              "id": "88644a56-232b-5455-acc2-27c4a0dce86a",
+              "code": "BU-01",
+              "name": "国际供应链事业部"
+            },
+            {
+              "id": "f2d71652-f617-5cce-91ff-52eb82a315aa",
+              "code": "BU-02",
+              "name": "跨境包裹事业部"
+            },
+            {
+              "id": "9e2b2f9c-f11f-5adc-ac37-17a2fd498538",
+              "code": "BU-03",
+              "name": "国内仓配事业部"
+            },
+            {
+              "id": "8186fe72-7093-5c25-9b09-ab6ed639ef53",
+              "code": "BU-04",
+              "name": "末端配送与冷链事业部"
+            },
+            {
+              "id": "240464bc-92df-5edb-8926-13b38de092c6",
+              "code": "DAMAI_GROUP",
+              "name": "大麦物流集团(synthetic)"
+            }
+          ]
+        },
+        {
+          "dimension": "customer_segment",
+          "label": "客户群",
+          "options": [
+            {
+              "id": "5652f38c-c9d5-565b-ac24-1e0bda56acd8",
+              "code": "SEG-01",
+              "name": "电商平台客户"
+            },
+            {
+              "id": "a0e554a7-656a-5a9a-bacb-8a90dd7a566b",
+              "code": "SEG-02",
+              "name": "品牌直客"
+            },
+            {
+              "id": "81e2a8da-5548-5e13-998a-9b528faa0097",
+              "code": "SEG-03",
+              "name": "中小企业客户"
+            },
+            {
+              "id": "28b0988a-4e8a-5a11-b9ca-eb7e692c4d78",
+              "code": "SEG-04",
+              "name": "政企与项目客户"
+            }
+          ]
+        },
+        {
+          "dimension": "logistics_product",
+          "label": "物流产品",
+          "options": [
+            {
+              "id": "84ff92e0-413d-5cfe-89ed-e0c0ca3c155c",
+              "code": "P-01",
+              "name": "跨境标准包裹"
+            },
+            {
+              "id": "227ab1df-7a8e-54d9-b0ce-c6f7b4ab5ee8",
+              "code": "P-02",
+              "name": "跨境供应链专线"
+            },
+            {
+              "id": "8d04a92c-7e8e-5676-b0bd-a5a6fbd5368c",
+              "code": "P-03",
+              "name": "海外仓履约"
+            },
+            {
+              "id": "a86a970a-ef20-503d-b348-5d98d53d4cea",
+              "code": "P-04",
+              "name": "国内仓配一体"
+            },
+            {
+              "id": "5cd602fa-0b39-51ec-a13c-18ccca6b14fd",
+              "code": "P-05",
+              "name": "供应链干线"
+            },
+            {
+              "id": "c8e8622f-4f3d-58a0-a93e-db3a7e7d2888",
+              "code": "P-06",
+              "name": "末端配送"
+            },
+            {
+              "id": "ea0701e9-04d6-53e1-9b41-075a55004369",
+              "code": "P-07",
+              "name": "冷链运输"
+            },
+            {
+              "id": "7c2adf1e-5dd0-525c-a6af-64010a06b55f",
+              "code": "P-08",
+              "name": "物流科技平台服务"
+            }
+          ]
+        },
+        {
+          "dimension": "region",
+          "label": "区域",
+          "options": [
+            {
+              "id": "774497da-eff7-5f21-8bcb-c4d4702097fc",
+              "code": "R-01",
+              "name": "华东区"
+            },
+            {
+              "id": "e6ba6354-e570-5c07-a0e8-0660fa473317",
+              "code": "R-02",
+              "name": "华南区"
+            },
+            {
+              "id": "b431c3d9-e346-5748-b211-0b18a304877b",
+              "code": "R-03",
+              "name": "华北区"
+            },
+            {
+              "id": "19b00a16-8787-5439-8ddc-ec55b29b5582",
+              "code": "R-04",
+              "name": "西南区"
+            },
+            {
+              "id": "b08145df-2590-5ad3-abd4-aea674894f4c",
+              "code": "R-05",
+              "name": "中亚区"
+            },
+            {
+              "id": "edf36ff1-79d8-5b0a-8284-4831ae869f2e",
+              "code": "R-06",
+              "name": "海外区"
+            }
+          ]
+        }
+      ],
+      "supported_combinations": [
+        [],
+        [
+          "organization"
+        ],
+        [
+          "customer_segment"
+        ],
+        [
+          "logistics_product"
+        ],
+        [
+          "region"
+        ],
+        [
+          "customer_segment",
+          "logistics_product"
+        ]
+      ]
+    },
+    "kpi_cards": [
+      {
+        "metric_code": "orders",
+        "title": "履约订单量",
+        "category": "规模",
+        "unit": "order",
+        "primary": {
+          "status": "available",
+          "exact_value": "146862383.0000",
+          "display_value": "146862383.0000",
+          "semantic_direction": "neutral",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "comparisons": {
+          "yoy": {
+            "status": "available",
+            "exact_value": "0.163500",
+            "display_value": "0.163500",
+            "semantic_direction": "positive",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "mom": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "mom_not_applicable_ytd",
+            "unavailable_message": "YTD 视角无环比口径"
+          },
+          "percentile": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "industry_percentile_no_distribution",
+            "unavailable_message": "行业分位需分位分布数据；v1.2 行业包仅提供经验参考基准，不冒充分位"
+          }
+        },
+        "polarity": "positive",
+        "control_status": "not_ready",
+        "control_line": null,
+        "caliber_note": "履约订单量（规模）· 由指标字典 v1.2 计算，口径随图附",
+        "source_label": "对比未就绪",
+        "snapshot_id": "01a16cfc-cf99-7843-ba4c-b07c4acdf981"
+      },
+      {
+        "metric_code": "revenue",
+        "title": "营业收入",
+        "category": "增长",
+        "unit": "CNY",
+        "primary": {
+          "status": "available",
+          "exact_value": "17623484861.0000",
+          "display_value": "17623484861.0000",
+          "semantic_direction": "neutral",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "comparisons": {
+          "yoy": {
+            "status": "available",
+            "exact_value": "0.163500",
+            "display_value": "0.163500",
+            "semantic_direction": "positive",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "mom": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "mom_not_applicable_ytd",
+            "unavailable_message": "YTD 视角无环比口径"
+          },
+          "percentile": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "industry_percentile_no_distribution",
+            "unavailable_message": "行业分位需分位分布数据；v1.2 行业包仅提供经验参考基准，不冒充分位"
+          }
+        },
+        "polarity": "positive",
+        "control_status": "not_ready",
+        "control_line": null,
+        "caliber_note": "营业收入（增长）· 由指标字典 v1.2 计算，口径随图附",
+        "source_label": "对比未就绪",
+        "snapshot_id": "01a16cfc-cf99-7843-ba4c-b07c4acdf981"
+      },
+      {
+        "metric_code": "revenue_per_order",
+        "title": "单均收入",
+        "category": "价格/结构",
+        "unit": "CNY/order",
+        "primary": {
+          "status": "available",
+          "exact_value": "119.999993",
+          "display_value": "119.999993",
+          "semantic_direction": "neutral",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "comparisons": {
+          "yoy": {
+            "status": "available",
+            "exact_value": "-0.000000",
+            "display_value": "-0.000000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "mom": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "mom_not_applicable_ytd",
+            "unavailable_message": "YTD 视角无环比口径"
+          },
+          "percentile": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "industry_percentile_no_distribution",
+            "unavailable_message": "行业分位需分位分布数据；v1.2 行业包仅提供经验参考基准，不冒充分位"
+          }
+        },
+        "polarity": "positive",
+        "control_status": "not_ready",
+        "control_line": null,
+        "caliber_note": "单均收入（价格/结构）· 由指标字典 v1.2 计算，口径随图附",
+        "source_label": "对比未就绪",
+        "snapshot_id": "01a16cfc-cf99-7843-ba4c-b07c4acdf981"
+      },
+      {
+        "metric_code": "gross_margin",
+        "title": "毛利率",
+        "category": "盈利",
+        "unit": "ratio",
+        "primary": {
+          "status": "available",
+          "exact_value": "0.108741",
+          "display_value": "0.108741",
+          "semantic_direction": "neutral",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "comparisons": {
+          "yoy": {
+            "status": "available",
+            "exact_value": "0.001382",
+            "display_value": "0.001382",
+            "semantic_direction": "positive",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "mom": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "mom_not_applicable_ytd",
+            "unavailable_message": "YTD 视角无环比口径"
+          },
+          "percentile": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "industry_percentile_no_distribution",
+            "unavailable_message": "行业分位需分位分布数据；v1.2 行业包仅提供经验参考基准，不冒充分位"
+          }
+        },
+        "polarity": "positive",
+        "control_status": "not_ready",
+        "control_line": null,
+        "caliber_note": "毛利率（盈利）· 由指标字典 v1.2 计算，口径随图附",
+        "source_label": "对比未就绪",
+        "snapshot_id": "01a16cfc-cf99-7843-ba4c-b07c4acdf981"
+      },
+      {
+        "metric_code": "fulfillment_cost_rate",
+        "title": "履约成本率",
+        "category": "成本",
+        "unit": "ratio",
+        "primary": {
+          "status": "available",
+          "exact_value": "0.891259",
+          "display_value": "0.891259",
+          "semantic_direction": "neutral",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "comparisons": {
+          "yoy": {
+            "status": "available",
+            "exact_value": "-0.001382",
+            "display_value": "-0.001382",
+            "semantic_direction": "positive",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "mom": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "mom_not_applicable_ytd",
+            "unavailable_message": "YTD 视角无环比口径"
+          },
+          "percentile": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "industry_percentile_no_distribution",
+            "unavailable_message": "行业分位需分位分布数据；v1.2 行业包仅提供经验参考基准，不冒充分位"
+          }
+        },
+        "polarity": "negative",
+        "control_status": "not_ready",
+        "control_line": null,
+        "caliber_note": "履约成本率（成本）· 由指标字典 v1.2 计算，口径随图附",
+        "source_label": "对比未就绪",
+        "snapshot_id": "01a16cfc-cf99-7843-ba4c-b07c4acdf981"
+      },
+      {
+        "metric_code": "operating_profit",
+        "title": "营业利润",
+        "category": "利润",
+        "unit": "CNY",
+        "primary": {
+          "status": "available",
+          "exact_value": "-314432483.0000",
+          "display_value": "-314432483.0000",
+          "semantic_direction": "neutral",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "comparisons": {
+          "yoy": {
+            "status": "available",
+            "exact_value": "0.062964",
+            "display_value": "0.062964",
+            "semantic_direction": "positive",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "mom": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "mom_not_applicable_ytd",
+            "unavailable_message": "YTD 视角无环比口径"
+          },
+          "percentile": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "industry_percentile_no_distribution",
+            "unavailable_message": "行业分位需分位分布数据；v1.2 行业包仅提供经验参考基准，不冒充分位"
+          }
+        },
+        "polarity": "positive",
+        "control_status": "not_ready",
+        "control_line": null,
+        "caliber_note": "营业利润（利润）· 由指标字典 v1.2 计算，口径随图附",
+        "source_label": "对比未就绪",
+        "snapshot_id": "01a16cfc-cf99-7843-ba4c-b07c4acdf981"
+      },
+      {
+        "metric_code": "ar_balance",
+        "title": "应收账款",
+        "category": "营运资本",
+        "unit": "CNY",
+        "primary": {
+          "status": "available",
+          "exact_value": "2385893359.0000",
+          "display_value": "2385893359.0000",
+          "semantic_direction": "neutral",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "comparisons": {
+          "yoy": {
+            "status": "available",
+            "exact_value": "0.096333",
+            "display_value": "0.096333",
+            "semantic_direction": "negative",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "mom": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "mom_not_applicable_ytd",
+            "unavailable_message": "YTD 视角无环比口径"
+          },
+          "percentile": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "industry_percentile_no_distribution",
+            "unavailable_message": "行业分位需分位分布数据；v1.2 行业包仅提供经验参考基准，不冒充分位"
+          }
+        },
+        "polarity": "positive",
+        "control_status": "not_ready",
+        "control_line": null,
+        "caliber_note": "应收账款（营运资本）· 由指标字典 v1.2 计算，口径随图附",
+        "source_label": "对比未就绪",
+        "snapshot_id": "01a16cfc-cf99-7843-ba4c-b07c4acdf981"
+      },
+      {
+        "metric_code": "operating_cash_flow",
+        "title": "经营现金流",
+        "category": "现金",
+        "unit": "CNY",
+        "primary": {
+          "status": "available",
+          "exact_value": "399815276.0000",
+          "display_value": "399815276.0000",
+          "semantic_direction": "neutral",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "comparisons": {
+          "yoy": {
+            "status": "available",
+            "exact_value": "-0.242348",
+            "display_value": "-0.242348",
+            "semantic_direction": "negative",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "mom": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "mom_not_applicable_ytd",
+            "unavailable_message": "YTD 视角无环比口径"
+          },
+          "percentile": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "industry_percentile_no_distribution",
+            "unavailable_message": "行业分位需分位分布数据；v1.2 行业包仅提供经验参考基准，不冒充分位"
+          }
+        },
+        "polarity": "positive",
+        "control_status": "not_ready",
+        "control_line": null,
+        "caliber_note": "经营现金流（现金）· 由指标字典 v1.2 计算，口径随图附",
+        "source_label": "对比未就绪",
+        "snapshot_id": "01a16cfc-cf99-7843-ba4c-b07c4acdf981"
+      }
+    ],
+    "trends": [
+      {
+        "status": "complete",
+        "unit": "CNY",
+        "series": [
+          {
+            "key": "revenue",
+            "title": "营业收入",
+            "unit": "CNY",
+            "points": [
+              {
+                "period": "2022-04",
+                "snapshot_id": "01a16cfb-5adb-76d7-8ffa-61e9f451534b",
+                "value": 6408539951,
+                "display_value": "6408539951.0000",
+                "status": "ready"
+              },
+              {
+                "period": "2022-05",
+                "snapshot_id": "01a16cfb-7ad1-78b1-867f-004a3201e432",
+                "value": 6536710750,
+                "display_value": "6536710750.0000",
+                "status": "ready"
+              },
+              {
+                "period": "2022-06",
+                "snapshot_id": "01a16cfb-9ac7-75af-9165-eb7bcc75bc39",
+                "value": 6408539951,
+                "display_value": "6408539951.0000",
+                "status": "ready"
+              },
+              {
+                "period": "2022-07",
+                "snapshot_id": "01a16cfb-babd-7faa-9b72-792e0f59b139",
+                "value": 6408539951,
+                "display_value": "6408539951.0000",
+                "status": "ready"
+              },
+              {
+                "period": "2022-08",
+                "snapshot_id": "01a16cfb-dab3-77e2-95e5-c07fe5ea2e62",
+                "value": 6536710750,
+                "display_value": "6536710750.0000",
+                "status": "ready"
+              },
+              {
+                "period": "2022-09",
+                "snapshot_id": "01a16cfb-faa9-7baa-b995-07f1875854bc",
+                "value": 6728966948,
+                "display_value": "6728966948.0000",
+                "status": "ready"
+              },
+              {
+                "period": "2022-10",
+                "snapshot_id": "01a16cfc-1a9f-7e89-a184-795a60727a93",
+                "value": 6921223147,
+                "display_value": "6921223147.0000",
+                "status": "ready"
+              },
+              {
+                "period": "2022-11",
+                "snapshot_id": "01a16cfc-3af3-7d91-a102-a8697231d02c",
+                "value": 7177564745,
+                "display_value": "7177564745.0000",
+                "status": "ready"
+              },
+              {
+                "period": "2022-12",
+                "snapshot_id": "01a16cfc-5b7d-7ac7-948e-1604a3e6f9bc",
+                "value": 7049393946,
+                "display_value": "7049393946.0000",
+                "status": "ready"
+              },
+              {
+                "period": "2023-01",
+                "snapshot_id": "01a16cfc-7c07-77e2-88cd-2a24af2bdc7e",
+                "value": 6088112953,
+                "display_value": "6088112953.0000",
+                "status": "ready"
+              },
+              {
+                "period": "2023-02",
+                "snapshot_id": "01a16cfc-a5d0-7936-a4c5-50548c574fb3",
+                "value": 5255002759,
+                "display_value": "5255002759.0000",
+                "status": "ready"
+              },
+              {
+                "period": "2023-03",
+                "snapshot_id": "01a16cfc-cf99-7843-ba4c-b07c4acdf981",
+                "value": 6280369149,
+                "display_value": "6280369149.0000",
+                "status": "ready"
+              }
+            ]
+          },
+          {
+            "key": "operating_profit",
+            "title": "营业利润",
+            "unit": "CNY",
+            "points": [
+              {
+                "period": "2022-04",
+                "snapshot_id": "01a16cfb-5adb-76d7-8ffa-61e9f451534b",
+                "value": -140093445,
+                "display_value": "-140093445.0000",
+                "status": "ready"
+              },
+              {
+                "period": "2022-05",
+                "snapshot_id": "01a16cfb-7ad1-78b1-867f-004a3201e432",
+                "value": -143949642,
+                "display_value": "-143949642.0000",
+                "status": "ready"
+              },
+              {
+                "period": "2022-06",
+                "snapshot_id": "01a16cfb-9ac7-75af-9165-eb7bcc75bc39",
+                "value": -140559759,
+                "display_value": "-140559759.0000",
+                "status": "ready"
+              },
+              {
+                "period": "2022-07",
+                "snapshot_id": "01a16cfb-babd-7faa-9b72-792e0f59b139",
+                "value": -140133203,
+                "display_value": "-140133203.0000",
+                "status": "ready"
+              },
+              {
+                "period": "2022-08",
+                "snapshot_id": "01a16cfb-dab3-77e2-95e5-c07fe5ea2e62",
+                "value": -143257801,
+                "display_value": "-143257801.0000",
+                "status": "ready"
+              },
+              {
+                "period": "2022-09",
+                "snapshot_id": "01a16cfb-faa9-7baa-b995-07f1875854bc",
+                "value": -146312657,
+                "display_value": "-146312657.0000",
+                "status": "ready"
+              },
+              {
+                "period": "2022-10",
+                "snapshot_id": "01a16cfc-1a9f-7e89-a184-795a60727a93",
+                "value": -173952006,
+                "display_value": "-173952006.0000",
+                "status": "ready"
+              },
+              {
+                "period": "2022-11",
+                "snapshot_id": "01a16cfc-3af3-7d91-a102-a8697231d02c",
+                "value": -181129381,
+                "display_value": "-181129381.0000",
+                "status": "ready"
+              },
+              {
+                "period": "2022-12",
+                "snapshot_id": "01a16cfc-5b7d-7ac7-948e-1604a3e6f9bc",
+                "value": -177623623,
+                "display_value": "-177623623.0000",
+                "status": "ready"
+              },
+              {
+                "period": "2023-01",
+                "snapshot_id": "01a16cfc-7c07-77e2-88cd-2a24af2bdc7e",
+                "value": -108822218,
+                "display_value": "-108822218.0000",
+                "status": "ready"
+              },
+              {
+                "period": "2023-02",
+                "snapshot_id": "01a16cfc-a5d0-7936-a4c5-50548c574fb3",
+                "value": -94023811,
+                "display_value": "-94023811.0000",
+                "status": "ready"
+              },
+              {
+                "period": "2023-03",
+                "snapshot_id": "01a16cfc-cf99-7843-ba4c-b07c4acdf981",
+                "value": -111586454,
+                "display_value": "-111586454.0000",
+                "status": "ready"
+              }
+            ]
+          },
+          {
+            "key": "gross_margin",
+            "title": "毛利率",
+            "unit": "ratio",
+            "points": [
+              {
+                "period": "2022-04",
+                "snapshot_id": "01a16cfb-5adb-76d7-8ffa-61e9f451534b",
+                "value": 0.104722,
+                "display_value": "0.104722",
+                "status": "ready"
+              },
+              {
+                "period": "2022-05",
+                "snapshot_id": "01a16cfb-7ad1-78b1-867f-004a3201e432",
+                "value": 0.104561,
+                "display_value": "0.104561",
+                "status": "ready"
+              },
+              {
+                "period": "2022-06",
+                "snapshot_id": "01a16cfb-9ac7-75af-9165-eb7bcc75bc39",
+                "value": 0.10465,
+                "display_value": "0.104650",
+                "status": "ready"
+              },
+              {
+                "period": "2022-07",
+                "snapshot_id": "01a16cfb-babd-7faa-9b72-792e0f59b139",
+                "value": 0.104716,
+                "display_value": "0.104716",
+                "status": "ready"
+              },
+              {
+                "period": "2022-08",
+                "snapshot_id": "01a16cfb-dab3-77e2-95e5-c07fe5ea2e62",
+                "value": 0.104667,
+                "display_value": "0.104667",
+                "status": "ready"
+              },
+              {
+                "period": "2022-09",
+                "snapshot_id": "01a16cfb-faa9-7baa-b995-07f1875854bc",
+                "value": 0.104839,
+                "display_value": "0.104839",
+                "status": "ready"
+              },
+              {
+                "period": "2022-10",
+                "snapshot_id": "01a16cfc-1a9f-7e89-a184-795a60727a93",
+                "value": 0.10145,
+                "display_value": "0.101450",
+                "status": "ready"
+              },
+              {
+                "period": "2022-11",
+                "snapshot_id": "01a16cfc-3af3-7d91-a102-a8697231d02c",
+                "value": 0.101347,
+                "display_value": "0.101347",
+                "status": "ready"
+              },
+              {
+                "period": "2022-12",
+                "snapshot_id": "01a16cfc-5b7d-7ac7-948e-1604a3e6f9bc",
+                "value": 0.101386,
+                "display_value": "0.101386",
+                "status": "ready"
+              },
+              {
+                "period": "2023-01",
+                "snapshot_id": "01a16cfc-7c07-77e2-88cd-2a24af2bdc7e",
+                "value": 0.108708,
+                "display_value": "0.108708",
+                "status": "ready"
+              },
+              {
+                "period": "2023-02",
+                "snapshot_id": "01a16cfc-a5d0-7936-a4c5-50548c574fb3",
+                "value": 0.108691,
+                "display_value": "0.108691",
+                "status": "ready"
+              },
+              {
+                "period": "2023-03",
+                "snapshot_id": "01a16cfc-cf99-7843-ba4c-b07c4acdf981",
+                "value": 0.108815,
+                "display_value": "0.108815",
+                "status": "ready"
+              }
+            ]
+          },
+          {
+            "key": "operating_cash_flow",
+            "title": "经营现金流",
+            "unit": "CNY",
+            "points": [
+              {
+                "period": "2022-04",
+                "snapshot_id": "01a16cfb-5adb-76d7-8ffa-61e9f451534b",
+                "value": 165777327,
+                "display_value": "165777327.0000",
+                "status": "ready"
+              },
+              {
+                "period": "2022-05",
+                "snapshot_id": "01a16cfb-7ad1-78b1-867f-004a3201e432",
+                "value": 168832437,
+                "display_value": "168832437.0000",
+                "status": "ready"
+              },
+              {
+                "period": "2022-06",
+                "snapshot_id": "01a16cfb-9ac7-75af-9165-eb7bcc75bc39",
+                "value": 165662140,
+                "display_value": "165662140.0000",
+                "status": "ready"
+              },
+              {
+                "period": "2022-07",
+                "snapshot_id": "01a16cfb-babd-7faa-9b72-792e0f59b139",
+                "value": 165767506,
+                "display_value": "165767506.0000",
+                "status": "ready"
+              },
+              {
+                "period": "2022-08",
+                "snapshot_id": "01a16cfb-dab3-77e2-95e5-c07fe5ea2e62",
+                "value": 169003334,
+                "display_value": "169003334.0000",
+                "status": "ready"
+              },
+              {
+                "period": "2022-09",
+                "snapshot_id": "01a16cfb-faa9-7baa-b995-07f1875854bc",
+                "value": 174260216,
+                "display_value": "174260216.0000",
+                "status": "ready"
+              },
+              {
+                "period": "2022-10",
+                "snapshot_id": "01a16cfc-1a9f-7e89-a184-795a60727a93",
+                "value": 173444313,
+                "display_value": "173444313.0000",
+                "status": "ready"
+              },
+              {
+                "period": "2022-11",
+                "snapshot_id": "01a16cfc-3af3-7d91-a102-a8697231d02c",
+                "value": 179686691,
+                "display_value": "179686691.0000",
+                "status": "ready"
+              },
+              {
+                "period": "2022-12",
+                "snapshot_id": "01a16cfc-5b7d-7ac7-948e-1604a3e6f9bc",
+                "value": 97099760,
+                "display_value": "97099760.0000",
+                "status": "ready"
+              },
+              {
+                "period": "2023-01",
+                "snapshot_id": "01a16cfc-7c07-77e2-88cd-2a24af2bdc7e",
+                "value": 89915490,
+                "display_value": "89915490.0000",
+                "status": "ready"
+              },
+              {
+                "period": "2023-02",
+                "snapshot_id": "01a16cfc-a5d0-7936-a4c5-50548c574fb3",
+                "value": 141088405,
+                "display_value": "141088405.0000",
+                "status": "ready"
+              },
+              {
+                "period": "2023-03",
+                "snapshot_id": "01a16cfc-cf99-7843-ba4c-b07c4acdf981",
+                "value": 168811381,
+                "display_value": "168811381.0000",
+                "status": "ready"
+              }
+            ]
+          }
+        ],
+        "degradation_message": null
+      }
+    ],
+    "conclusion": {
+      "text": "本期关注 1 项已终审发现：应收资金占用增加。",
+      "findings": [
+        {
+          "id": "01a16cfc-f98c-7515-9147-41a439661f75",
+          "title": "应收资金占用增加",
+          "investigation_path": "/investigations/01a16cfc-f98c-7515-9147-41a439661f75?batch_id=01a16cf8-918b-75e8-9e85-415199207d7c&metric_snapshot_id=01a16cfc-cf99-7843-ba4c-b07c4acdf981&analysis_run_id=01a16cfc-f962-742a-a291-b7325babc769"
+        }
+      ],
+      "tone": "attention"
+    },
+    "source_notice": "当前数据源为演示数据（大麦物流合成财报）。本看板不构成公开财报 C 级能力证明，不解除 C 级门禁。"
+  },
+  "/api/v1/dashboard/overview": {
+    "state": "stale",
+    "context": {
+      "batch_id": "01a16cf8-918b-75e8-9e85-415199207d7c",
+      "import_version_id": "01a16cf8-9193-7f90-980f-cf00e9c36d19",
+      "metric_snapshot_id": "01a16cfc-cf99-7843-ba4c-b07c4acdf981",
+      "analysis_run_id": "01a16cfc-f962-742a-a291-b7325babc769",
+      "as_of_month": "2023-03",
+      "metric_definition_set_id": "flow.metrics.logistics.v1",
+      "metric_definition_set_hash": "4214ae85339eb7495defb69f1d59fdddec5e3183d5d4ba64c966be9f53270b38",
+      "metric_engine_version": "flow.metrics.engine.v1",
+      "analysis_policy_id": "flow.analysis.logistics.v1",
+      "analysis_policy_hash": "448b390877b20090af02f6584e79a1c9796fe5ab0a5c9aeb784f6ab497e94f5a",
+      "analysis_engine_version": "flow-analysis/1",
+      "generated_at": "2026-10-24T08:33:16.143834Z"
+    },
+    "filter_options": {
+      "dimensions": [
+        {
+          "dimension": "organization",
+          "label": "组织",
+          "options": [
+            {
+              "id": "88644a56-232b-5455-acc2-27c4a0dce86a",
+              "code": "BU-01",
+              "name": "国际供应链事业部"
+            },
+            {
+              "id": "f2d71652-f617-5cce-91ff-52eb82a315aa",
+              "code": "BU-02",
+              "name": "跨境包裹事业部"
+            },
+            {
+              "id": "9e2b2f9c-f11f-5adc-ac37-17a2fd498538",
+              "code": "BU-03",
+              "name": "国内仓配事业部"
+            },
+            {
+              "id": "8186fe72-7093-5c25-9b09-ab6ed639ef53",
+              "code": "BU-04",
+              "name": "末端配送与冷链事业部"
+            },
+            {
+              "id": "240464bc-92df-5edb-8926-13b38de092c6",
+              "code": "DAMAI_GROUP",
+              "name": "大麦物流集团(synthetic)"
+            }
+          ]
+        },
+        {
+          "dimension": "customer_segment",
+          "label": "客户群",
+          "options": [
+            {
+              "id": "5652f38c-c9d5-565b-ac24-1e0bda56acd8",
+              "code": "SEG-01",
+              "name": "电商平台客户"
+            },
+            {
+              "id": "a0e554a7-656a-5a9a-bacb-8a90dd7a566b",
+              "code": "SEG-02",
+              "name": "品牌直客"
+            },
+            {
+              "id": "81e2a8da-5548-5e13-998a-9b528faa0097",
+              "code": "SEG-03",
+              "name": "中小企业客户"
+            },
+            {
+              "id": "28b0988a-4e8a-5a11-b9ca-eb7e692c4d78",
+              "code": "SEG-04",
+              "name": "政企与项目客户"
+            }
+          ]
+        },
+        {
+          "dimension": "logistics_product",
+          "label": "物流产品",
+          "options": [
+            {
+              "id": "84ff92e0-413d-5cfe-89ed-e0c0ca3c155c",
+              "code": "P-01",
+              "name": "跨境标准包裹"
+            },
+            {
+              "id": "227ab1df-7a8e-54d9-b0ce-c6f7b4ab5ee8",
+              "code": "P-02",
+              "name": "跨境供应链专线"
+            },
+            {
+              "id": "8d04a92c-7e8e-5676-b0bd-a5a6fbd5368c",
+              "code": "P-03",
+              "name": "海外仓履约"
+            },
+            {
+              "id": "a86a970a-ef20-503d-b348-5d98d53d4cea",
+              "code": "P-04",
+              "name": "国内仓配一体"
+            },
+            {
+              "id": "5cd602fa-0b39-51ec-a13c-18ccca6b14fd",
+              "code": "P-05",
+              "name": "供应链干线"
+            },
+            {
+              "id": "c8e8622f-4f3d-58a0-a93e-db3a7e7d2888",
+              "code": "P-06",
+              "name": "末端配送"
+            },
+            {
+              "id": "ea0701e9-04d6-53e1-9b41-075a55004369",
+              "code": "P-07",
+              "name": "冷链运输"
+            },
+            {
+              "id": "7c2adf1e-5dd0-525c-a6af-64010a06b55f",
+              "code": "P-08",
+              "name": "物流科技平台服务"
+            }
+          ]
+        },
+        {
+          "dimension": "region",
+          "label": "区域",
+          "options": [
+            {
+              "id": "774497da-eff7-5f21-8bcb-c4d4702097fc",
+              "code": "R-01",
+              "name": "华东区"
+            },
+            {
+              "id": "e6ba6354-e570-5c07-a0e8-0660fa473317",
+              "code": "R-02",
+              "name": "华南区"
+            },
+            {
+              "id": "b431c3d9-e346-5748-b211-0b18a304877b",
+              "code": "R-03",
+              "name": "华北区"
+            },
+            {
+              "id": "19b00a16-8787-5439-8ddc-ec55b29b5582",
+              "code": "R-04",
+              "name": "西南区"
+            },
+            {
+              "id": "b08145df-2590-5ad3-abd4-aea674894f4c",
+              "code": "R-05",
+              "name": "中亚区"
+            },
+            {
+              "id": "edf36ff1-79d8-5b0a-8284-4831ae869f2e",
+              "code": "R-06",
+              "name": "海外区"
+            }
+          ]
+        }
+      ],
+      "supported_combinations": [
+        [],
+        [
+          "organization"
+        ],
+        [
+          "customer_segment"
+        ],
+        [
+          "logistics_product"
+        ],
+        [
+          "region"
+        ],
+        [
+          "customer_segment",
+          "logistics_product"
+        ]
+      ]
+    },
+    "active_filters": {
+      "period_view": "month",
+      "organization_id": null,
+      "customer_segment_id": null,
+      "logistics_product_id": null,
+      "region_id": null,
+      "is_total_scope": true
+    },
+    "data_status": {
+      "batch_status": "published",
+      "import_status": "published",
+      "quality_status": "passed",
+      "blocking_issue_count": 0,
+      "warning_issue_count": 0,
+      "acknowledged_warning_count": 0,
+      "reconciliation_status": "passed",
+      "metric_snapshot_status": "published",
+      "analysis_run_status": "published",
+      "freshness_status": "stale"
+    },
+    "metric_cards": [
+      {
+        "metric_code": "orders",
+        "title": "履约订单量",
+        "category": "规模",
+        "unit": "order",
+        "primary": {
+          "status": "available",
+          "exact_value": "52336414.0000",
+          "display_value": "52336414.0000",
+          "semantic_direction": "neutral",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "budget": {
+          "status": "unavailable",
+          "exact_value": null,
+          "display_value": "—",
+          "semantic_direction": "neutral",
+          "unavailable_code": "comparison_not_published",
+          "unavailable_message": "当前口径未发布该比较值"
+        },
+        "mom": {
+          "status": "available",
+          "exact_value": "0.195122",
+          "display_value": "0.195122",
+          "semantic_direction": "positive",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "yoy": {
+          "status": "available",
+          "exact_value": "0.163500",
+          "display_value": "0.163500",
+          "semantic_direction": "positive",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "ytd_budget": {
+          "status": "unavailable",
+          "exact_value": null,
+          "display_value": "—",
+          "semantic_direction": "neutral",
+          "unavailable_code": "comparison_not_published",
+          "unavailable_message": "当前口径未发布该比较值"
+        },
+        "companion": null
+      },
+      {
+        "metric_code": "revenue",
+        "title": "营业收入",
+        "category": "增长",
+        "unit": "CNY",
+        "primary": {
+          "status": "available",
+          "exact_value": "6280369149.0000",
+          "display_value": "6280369149.0000",
+          "semantic_direction": "neutral",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "budget": {
+          "status": "available",
+          "exact_value": "-0.069393",
+          "display_value": "-0.069393",
+          "semantic_direction": "negative",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "mom": {
+          "status": "available",
+          "exact_value": "0.195122",
+          "display_value": "0.195122",
+          "semantic_direction": "positive",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "yoy": {
+          "status": "available",
+          "exact_value": "0.163500",
+          "display_value": "0.163500",
+          "semantic_direction": "positive",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "ytd_budget": {
+          "status": "available",
+          "exact_value": "-0.069661",
+          "display_value": "-0.069661",
+          "semantic_direction": "negative",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "companion": null
+      },
+      {
+        "metric_code": "revenue_per_order",
+        "title": "单均收入",
+        "category": "价格/结构",
+        "unit": "CNY/order",
+        "primary": {
+          "status": "available",
+          "exact_value": "119.999990",
+          "display_value": "119.999990",
+          "semantic_direction": "neutral",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "budget": {
+          "status": "unavailable",
+          "exact_value": null,
+          "display_value": "—",
+          "semantic_direction": "neutral",
+          "unavailable_code": "comparison_not_published",
+          "unavailable_message": "当前口径未发布该比较值"
+        },
+        "mom": {
+          "status": "available",
+          "exact_value": "0.000000",
+          "display_value": "0.000000",
+          "semantic_direction": "neutral",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "yoy": {
+          "status": "available",
+          "exact_value": "-0.000000",
+          "display_value": "-0.000000",
+          "semantic_direction": "neutral",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "ytd_budget": {
+          "status": "unavailable",
+          "exact_value": null,
+          "display_value": "—",
+          "semantic_direction": "neutral",
+          "unavailable_code": "comparison_not_published",
+          "unavailable_message": "当前口径未发布该比较值"
+        },
+        "companion": null
+      },
+      {
+        "metric_code": "gross_margin",
+        "title": "毛利率",
+        "category": "盈利",
+        "unit": "ratio",
+        "primary": {
+          "status": "available",
+          "exact_value": "0.108815",
+          "display_value": "0.108815",
+          "semantic_direction": "neutral",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "budget": {
+          "status": "available",
+          "exact_value": "0.008815",
+          "display_value": "0.008815",
+          "semantic_direction": "positive",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "mom": {
+          "status": "available",
+          "exact_value": "0.000124",
+          "display_value": "0.000124",
+          "semantic_direction": "positive",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "yoy": {
+          "status": "available",
+          "exact_value": "0.001456",
+          "display_value": "0.001456",
+          "semantic_direction": "positive",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "ytd_budget": {
+          "status": "available",
+          "exact_value": "0.008741",
+          "display_value": "0.008741",
+          "semantic_direction": "positive",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "companion": null
+      },
+      {
+        "metric_code": "fulfillment_cost_rate",
+        "title": "履约成本率",
+        "category": "成本",
+        "unit": "ratio",
+        "primary": {
+          "status": "available",
+          "exact_value": "0.891185",
+          "display_value": "0.891185",
+          "semantic_direction": "neutral",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "budget": {
+          "status": "available",
+          "exact_value": "-0.008815",
+          "display_value": "-0.008815",
+          "semantic_direction": "positive",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "mom": {
+          "status": "available",
+          "exact_value": "-0.000124",
+          "display_value": "-0.000124",
+          "semantic_direction": "positive",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "yoy": {
+          "status": "available",
+          "exact_value": "-0.001456",
+          "display_value": "-0.001456",
+          "semantic_direction": "positive",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "ytd_budget": {
+          "status": "available",
+          "exact_value": "-0.008741",
+          "display_value": "-0.008741",
+          "semantic_direction": "positive",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "companion": null
+      },
+      {
+        "metric_code": "operating_profit",
+        "title": "经营利润",
+        "category": "利润",
+        "unit": "CNY",
+        "primary": {
+          "status": "available",
+          "exact_value": "-111586454.0000",
+          "display_value": "-111586454.0000",
+          "semantic_direction": "neutral",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "budget": {
+          "status": "available",
+          "exact_value": "-1.413364",
+          "display_value": "-1.413364",
+          "semantic_direction": "negative",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "mom": {
+          "status": "available",
+          "exact_value": "0.186789",
+          "display_value": "0.186789",
+          "semantic_direction": "positive",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "yoy": {
+          "status": "available",
+          "exact_value": "0.058530",
+          "display_value": "0.058530",
+          "semantic_direction": "positive",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "ytd_budget": {
+          "status": "available",
+          "exact_value": "-1.414970",
+          "display_value": "-1.414970",
+          "semantic_direction": "negative",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "companion": null
+      },
+      {
+        "metric_code": "ar_balance",
+        "title": "应收账款",
+        "category": "营运资本",
+        "unit": "CNY",
+        "primary": {
+          "status": "available",
+          "exact_value": "2385893359.0000",
+          "display_value": "2385893359.0000",
+          "semantic_direction": "neutral",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "budget": {
+          "status": "unavailable",
+          "exact_value": null,
+          "display_value": "—",
+          "semantic_direction": "neutral",
+          "unavailable_code": "comparison_not_published",
+          "unavailable_message": "当前口径未发布该比较值"
+        },
+        "mom": {
+          "status": "available",
+          "exact_value": "0.197786",
+          "display_value": "0.197786",
+          "semantic_direction": "negative",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "yoy": {
+          "status": "available",
+          "exact_value": "0.096333",
+          "display_value": "0.096333",
+          "semantic_direction": "negative",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "ytd_budget": {
+          "status": "unavailable",
+          "exact_value": null,
+          "display_value": "—",
+          "semantic_direction": "neutral",
+          "unavailable_code": "comparison_not_published",
+          "unavailable_message": "当前口径未发布该比较值"
+        },
+        "companion": {
+          "status": "available",
+          "exact_value": "11.193505",
+          "display_value": "11.193505",
+          "semantic_direction": "neutral",
+          "unavailable_code": null,
+          "unavailable_message": null
+        }
+      },
+      {
+        "metric_code": "operating_cash_flow",
+        "title": "经营现金流",
+        "category": "现金",
+        "unit": "CNY",
+        "primary": {
+          "status": "available",
+          "exact_value": "168811381.0000",
+          "display_value": "168811381.0000",
+          "semantic_direction": "neutral",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "budget": {
+          "status": "available",
+          "exact_value": "-0.320272",
+          "display_value": "-0.320272",
+          "semantic_direction": "negative",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "mom": {
+          "status": "available",
+          "exact_value": "0.196494",
+          "display_value": "0.196494",
+          "semantic_direction": "positive",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "yoy": {
+          "status": "available",
+          "exact_value": "-0.102324",
+          "display_value": "-0.102324",
+          "semantic_direction": "negative",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "ytd_budget": {
+          "status": "available",
+          "exact_value": "-0.426464",
+          "display_value": "-0.426464",
+          "semantic_direction": "negative",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "companion": {
+          "status": "available",
+          "exact_value": "-1.512830",
+          "display_value": "-1.512830",
+          "semantic_direction": "neutral",
+          "unavailable_code": null,
+          "unavailable_message": null
+        }
+      }
+    ],
+    "trends": {
+      "status": "complete",
+      "coverage_count": 12,
+      "expected_count": 12,
+      "missing_months": [],
+      "points": [
+        {
+          "month": "2022-04",
+          "metric_snapshot_id": "01a16cfb-5adb-76d7-8ffa-61e9f451534b",
+          "revenue": {
+            "status": "available",
+            "exact_value": "6408539951.0000",
+            "display_value": "6408539951.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "operating_profit": {
+            "status": "available",
+            "exact_value": "-140093445.0000",
+            "display_value": "-140093445.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "gross_margin": {
+            "status": "available",
+            "exact_value": "0.104722",
+            "display_value": "0.104722",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "operating_cash_flow": {
+            "status": "available",
+            "exact_value": "165777327.0000",
+            "display_value": "165777327.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          }
+        },
+        {
+          "month": "2022-05",
+          "metric_snapshot_id": "01a16cfb-7ad1-78b1-867f-004a3201e432",
+          "revenue": {
+            "status": "available",
+            "exact_value": "6536710750.0000",
+            "display_value": "6536710750.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "operating_profit": {
+            "status": "available",
+            "exact_value": "-143949642.0000",
+            "display_value": "-143949642.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "gross_margin": {
+            "status": "available",
+            "exact_value": "0.104561",
+            "display_value": "0.104561",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "operating_cash_flow": {
+            "status": "available",
+            "exact_value": "168832437.0000",
+            "display_value": "168832437.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          }
+        },
+        {
+          "month": "2022-06",
+          "metric_snapshot_id": "01a16cfb-9ac7-75af-9165-eb7bcc75bc39",
+          "revenue": {
+            "status": "available",
+            "exact_value": "6408539951.0000",
+            "display_value": "6408539951.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "operating_profit": {
+            "status": "available",
+            "exact_value": "-140559759.0000",
+            "display_value": "-140559759.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "gross_margin": {
+            "status": "available",
+            "exact_value": "0.104650",
+            "display_value": "0.104650",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "operating_cash_flow": {
+            "status": "available",
+            "exact_value": "165662140.0000",
+            "display_value": "165662140.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          }
+        },
+        {
+          "month": "2022-07",
+          "metric_snapshot_id": "01a16cfb-babd-7faa-9b72-792e0f59b139",
+          "revenue": {
+            "status": "available",
+            "exact_value": "6408539951.0000",
+            "display_value": "6408539951.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "operating_profit": {
+            "status": "available",
+            "exact_value": "-140133203.0000",
+            "display_value": "-140133203.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "gross_margin": {
+            "status": "available",
+            "exact_value": "0.104716",
+            "display_value": "0.104716",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "operating_cash_flow": {
+            "status": "available",
+            "exact_value": "165767506.0000",
+            "display_value": "165767506.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          }
+        },
+        {
+          "month": "2022-08",
+          "metric_snapshot_id": "01a16cfb-dab3-77e2-95e5-c07fe5ea2e62",
+          "revenue": {
+            "status": "available",
+            "exact_value": "6536710750.0000",
+            "display_value": "6536710750.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "operating_profit": {
+            "status": "available",
+            "exact_value": "-143257801.0000",
+            "display_value": "-143257801.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "gross_margin": {
+            "status": "available",
+            "exact_value": "0.104667",
+            "display_value": "0.104667",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "operating_cash_flow": {
+            "status": "available",
+            "exact_value": "169003334.0000",
+            "display_value": "169003334.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          }
+        },
+        {
+          "month": "2022-09",
+          "metric_snapshot_id": "01a16cfb-faa9-7baa-b995-07f1875854bc",
+          "revenue": {
+            "status": "available",
+            "exact_value": "6728966948.0000",
+            "display_value": "6728966948.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "operating_profit": {
+            "status": "available",
+            "exact_value": "-146312657.0000",
+            "display_value": "-146312657.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "gross_margin": {
+            "status": "available",
+            "exact_value": "0.104839",
+            "display_value": "0.104839",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "operating_cash_flow": {
+            "status": "available",
+            "exact_value": "174260216.0000",
+            "display_value": "174260216.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          }
+        },
+        {
+          "month": "2022-10",
+          "metric_snapshot_id": "01a16cfc-1a9f-7e89-a184-795a60727a93",
+          "revenue": {
+            "status": "available",
+            "exact_value": "6921223147.0000",
+            "display_value": "6921223147.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "operating_profit": {
+            "status": "available",
+            "exact_value": "-173952006.0000",
+            "display_value": "-173952006.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "gross_margin": {
+            "status": "available",
+            "exact_value": "0.101450",
+            "display_value": "0.101450",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "operating_cash_flow": {
+            "status": "available",
+            "exact_value": "173444313.0000",
+            "display_value": "173444313.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          }
+        },
+        {
+          "month": "2022-11",
+          "metric_snapshot_id": "01a16cfc-3af3-7d91-a102-a8697231d02c",
+          "revenue": {
+            "status": "available",
+            "exact_value": "7177564745.0000",
+            "display_value": "7177564745.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "operating_profit": {
+            "status": "available",
+            "exact_value": "-181129381.0000",
+            "display_value": "-181129381.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "gross_margin": {
+            "status": "available",
+            "exact_value": "0.101347",
+            "display_value": "0.101347",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "operating_cash_flow": {
+            "status": "available",
+            "exact_value": "179686691.0000",
+            "display_value": "179686691.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          }
+        },
+        {
+          "month": "2022-12",
+          "metric_snapshot_id": "01a16cfc-5b7d-7ac7-948e-1604a3e6f9bc",
+          "revenue": {
+            "status": "available",
+            "exact_value": "7049393946.0000",
+            "display_value": "7049393946.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "operating_profit": {
+            "status": "available",
+            "exact_value": "-177623623.0000",
+            "display_value": "-177623623.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "gross_margin": {
+            "status": "available",
+            "exact_value": "0.101386",
+            "display_value": "0.101386",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "operating_cash_flow": {
+            "status": "available",
+            "exact_value": "97099760.0000",
+            "display_value": "97099760.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          }
+        },
+        {
+          "month": "2023-01",
+          "metric_snapshot_id": "01a16cfc-7c07-77e2-88cd-2a24af2bdc7e",
+          "revenue": {
+            "status": "available",
+            "exact_value": "6088112953.0000",
+            "display_value": "6088112953.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "operating_profit": {
+            "status": "available",
+            "exact_value": "-108822218.0000",
+            "display_value": "-108822218.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "gross_margin": {
+            "status": "available",
+            "exact_value": "0.108708",
+            "display_value": "0.108708",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "operating_cash_flow": {
+            "status": "available",
+            "exact_value": "89915490.0000",
+            "display_value": "89915490.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          }
+        },
+        {
+          "month": "2023-02",
+          "metric_snapshot_id": "01a16cfc-a5d0-7936-a4c5-50548c574fb3",
+          "revenue": {
+            "status": "available",
+            "exact_value": "5255002759.0000",
+            "display_value": "5255002759.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "operating_profit": {
+            "status": "available",
+            "exact_value": "-94023811.0000",
+            "display_value": "-94023811.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "gross_margin": {
+            "status": "available",
+            "exact_value": "0.108691",
+            "display_value": "0.108691",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "operating_cash_flow": {
+            "status": "available",
+            "exact_value": "141088405.0000",
+            "display_value": "141088405.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          }
+        },
+        {
+          "month": "2023-03",
+          "metric_snapshot_id": "01a16cfc-cf99-7843-ba4c-b07c4acdf981",
+          "revenue": {
+            "status": "available",
+            "exact_value": "6280369149.0000",
+            "display_value": "6280369149.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "operating_profit": {
+            "status": "available",
+            "exact_value": "-111586454.0000",
+            "display_value": "-111586454.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "gross_margin": {
+            "status": "available",
+            "exact_value": "0.108815",
+            "display_value": "0.108815",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "operating_cash_flow": {
+            "status": "available",
+            "exact_value": "168811381.0000",
+            "display_value": "168811381.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          }
+        }
+      ],
+      "degradation_message": null
+    },
+    "profit_bridge": {
+      "status": "complete",
+      "comparison_basis": "prior_year",
+      "impact": {
+        "status": "available",
+        "exact_value": "-397465000.0000",
+        "display_value": "-397465000.0000",
+        "semantic_direction": "negative",
+        "unavailable_code": null,
+        "unavailable_message": null
+      },
+      "reconciliation_status": "passed",
+      "reconciliation_difference": "0.0000",
+      "drivers": [
+        {
+          "driver_code": "revenue_volume",
+          "label": "收入业务量",
+          "contribution": {
+            "status": "available",
+            "exact_value": "10932759643.7997",
+            "display_value": "10932759643.7997",
+            "semantic_direction": "positive",
+            "unavailable_code": null,
+            "unavailable_message": null
+          }
+        },
+        {
+          "driver_code": "revenue_mix",
+          "label": "收入结构",
+          "contribution": {
+            "status": "available",
+            "exact_value": "153.0225",
+            "display_value": "153.0225",
+            "semantic_direction": "positive",
+            "unavailable_code": null,
+            "unavailable_message": null
+          }
+        },
+        {
+          "driver_code": "revenue_price",
+          "label": "收入单价",
+          "contribution": {
+            "status": "available",
+            "exact_value": "-796.8222",
+            "display_value": "-796.8222",
+            "semantic_direction": "negative",
+            "unavailable_code": null,
+            "unavailable_message": null
+          }
+        },
+        {
+          "driver_code": "warehousing_cost",
+          "label": "仓储成本",
+          "contribution": {
+            "status": "available",
+            "exact_value": "-2990019609.0000",
+            "display_value": "-2990019609.0000",
+            "semantic_direction": "negative",
+            "unavailable_code": null,
+            "unavailable_message": null
+          }
+        },
+        {
+          "driver_code": "transportation_cost",
+          "label": "运输成本",
+          "contribution": {
+            "status": "available",
+            "exact_value": "-5980039201.0000",
+            "display_value": "-5980039201.0000",
+            "semantic_direction": "negative",
+            "unavailable_code": null,
+            "unavailable_message": null
+          }
+        },
+        {
+          "driver_code": "other_direct_cost",
+          "label": "其他直接成本",
+          "contribution": {
+            "status": "available",
+            "exact_value": "-996673190.0000",
+            "display_value": "-996673190.0000",
+            "semantic_direction": "negative",
+            "unavailable_code": null,
+            "unavailable_message": null
+          }
+        },
+        {
+          "driver_code": "operating_expense",
+          "label": "期间费用",
+          "contribution": {
+            "status": "available",
+            "exact_value": "-1363492000.0000",
+            "display_value": "-1363492000.0000",
+            "semantic_direction": "negative",
+            "unavailable_code": null,
+            "unavailable_message": null
+          }
+        }
+      ],
+      "degradation_message": null
+    },
+    "findings": [
+      {
+        "finding_id": "01a16cfc-f980-7319-a391-6b2b1ce33c70",
+        "finding_type": "operating_profit_deterioration",
+        "title": "经营利润下降",
+        "status": "in_review",
+        "impact": {
+          "status": "available",
+          "exact_value": "-397465000.0000",
+          "display_value": "-397465000.0000",
+          "semantic_direction": "negative",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "total_score": "90.000000",
+        "comparison_basis": "prior_year",
+        "evidence_verified": 5,
+        "evidence_total": 5,
+        "scope": "global",
+        "investigation_path": "/investigations/01a16cfc-f980-7319-a391-6b2b1ce33c70?batch_id=01a16cf8-918b-75e8-9e85-415199207d7c&metric_snapshot_id=01a16cfc-cf99-7843-ba4c-b07c4acdf981&analysis_run_id=01a16cfc-f962-742a-a291-b7325babc769"
+      },
+      {
+        "finding_id": "01a16cfc-f98c-7515-9147-41a439661f75",
+        "finding_type": "ar_cash_deterioration",
+        "title": "应收资金占用增加",
+        "status": "approved",
+        "impact": {
+          "status": "available",
+          "exact_value": "-209643864.0000",
+          "display_value": "-209643864.0000",
+          "semantic_direction": "negative",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "total_score": "90.000000",
+        "comparison_basis": "prior_year",
+        "evidence_verified": 5,
+        "evidence_total": 5,
+        "scope": "global",
+        "investigation_path": "/investigations/01a16cfc-f98c-7515-9147-41a439661f75?batch_id=01a16cf8-918b-75e8-9e85-415199207d7c&metric_snapshot_id=01a16cfc-cf99-7843-ba4c-b07c4acdf981&analysis_run_id=01a16cfc-f962-742a-a291-b7325babc769"
+      },
+      {
+        "finding_id": "01a16cfc-f99b-7ad5-be97-21740e294e80",
+        "finding_type": "fulfillment_cost_increase",
+        "title": "履约成本增加",
+        "status": "in_review",
+        "impact": {
+          "status": "available",
+          "exact_value": "9966732000.0000",
+          "display_value": "9966732000.0000",
+          "semantic_direction": "negative",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "total_score": "87.000000",
+        "comparison_basis": "prior_year",
+        "evidence_verified": 5,
+        "evidence_total": 5,
+        "scope": "global",
+        "investigation_path": "/investigations/01a16cfc-f99b-7ad5-be97-21740e294e80?batch_id=01a16cf8-918b-75e8-9e85-415199207d7c&metric_snapshot_id=01a16cfc-cf99-7843-ba4c-b07c4acdf981&analysis_run_id=01a16cfc-f962-742a-a291-b7325babc769"
+      },
+      {
+        "finding_id": "01a16cfc-f9a8-75e7-b24e-4f9c04706f8d",
+        "finding_type": "revenue_growth",
+        "title": "收入增长",
+        "status": "in_review",
+        "impact": {
+          "status": "available",
+          "exact_value": "10932759000.0000",
+          "display_value": "10932759000.0000",
+          "semantic_direction": "positive",
+          "unavailable_code": null,
+          "unavailable_message": null
+        },
+        "total_score": "82.000000",
+        "comparison_basis": "prior_year",
+        "evidence_verified": 5,
+        "evidence_total": 5,
+        "scope": "global",
+        "investigation_path": "/investigations/01a16cfc-f9a8-75e7-b24e-4f9c04706f8d?batch_id=01a16cf8-918b-75e8-9e85-415199207d7c&metric_snapshot_id=01a16cfc-cf99-7843-ba4c-b07c4acdf981&analysis_run_id=01a16cfc-f962-742a-a291-b7325babc769"
+      }
+    ],
+    "product_table": {
+      "status": "complete",
+      "comparison_label": "同比",
+      "rows": [
+        {
+          "logistics_product_id": "a86a970a-ef20-503d-b348-5d98d53d4cea",
+          "code": "P-04",
+          "name": "国内仓配一体",
+          "revenue": {
+            "status": "available",
+            "exact_value": "1624794674.0000",
+            "display_value": "1624794674.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "orders": {
+            "status": "available",
+            "exact_value": "13539957.0000",
+            "display_value": "13539957.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "gross_margin": {
+            "status": "available",
+            "exact_value": "0.113112",
+            "display_value": "0.113112",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "fulfillment_cost_rate": {
+            "status": "available",
+            "exact_value": "0.886888",
+            "display_value": "0.886888",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "revenue_comparison": {
+            "status": "available",
+            "exact_value": "0.705039",
+            "display_value": "0.705039",
+            "semantic_direction": "positive",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "orders_comparison": {
+            "status": "available",
+            "exact_value": "0.705039",
+            "display_value": "0.705039",
+            "semantic_direction": "positive",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "gross_margin_comparison": {
+            "status": "available",
+            "exact_value": "0.005313",
+            "display_value": "0.005313",
+            "semantic_direction": "positive",
+            "unavailable_code": null,
+            "unavailable_message": null
+          }
+        },
+        {
+          "logistics_product_id": "84ff92e0-413d-5cfe-89ed-e0c0ca3c155c",
+          "code": "P-01",
+          "name": "跨境标准包裹",
+          "revenue": {
+            "status": "available",
+            "exact_value": "1533376389.0000",
+            "display_value": "1533376389.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "orders": {
+            "status": "available",
+            "exact_value": "12778138.0000",
+            "display_value": "12778138.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "gross_margin": {
+            "status": "available",
+            "exact_value": "0.100099",
+            "display_value": "0.100099",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "fulfillment_cost_rate": {
+            "status": "available",
+            "exact_value": "0.899901",
+            "display_value": "0.899901",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "revenue_comparison": {
+            "status": "available",
+            "exact_value": "0.355939",
+            "display_value": "0.355939",
+            "semantic_direction": "positive",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "orders_comparison": {
+            "status": "available",
+            "exact_value": "0.355939",
+            "display_value": "0.355939",
+            "semantic_direction": "positive",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "gross_margin_comparison": {
+            "status": "available",
+            "exact_value": "-0.002567",
+            "display_value": "-0.002567",
+            "semantic_direction": "negative",
+            "unavailable_code": null,
+            "unavailable_message": null
+          }
+        },
+        {
+          "logistics_product_id": "8d04a92c-7e8e-5676-b0bd-a5a6fbd5368c",
+          "code": "P-03",
+          "name": "海外仓履约",
+          "revenue": {
+            "status": "available",
+            "exact_value": "975784976.0000",
+            "display_value": "975784976.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "orders": {
+            "status": "available",
+            "exact_value": "8131540.0000",
+            "display_value": "8131540.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "gross_margin": {
+            "status": "available",
+            "exact_value": "0.095094",
+            "display_value": "0.095094",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "fulfillment_cost_rate": {
+            "status": "available",
+            "exact_value": "0.904906",
+            "display_value": "0.904906",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "revenue_comparison": {
+            "status": "available",
+            "exact_value": "0.355939",
+            "display_value": "0.355939",
+            "semantic_direction": "positive",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "orders_comparison": {
+            "status": "available",
+            "exact_value": "0.355939",
+            "display_value": "0.355939",
+            "semantic_direction": "positive",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "gross_margin_comparison": {
+            "status": "available",
+            "exact_value": "-0.002439",
+            "display_value": "-0.002439",
+            "semantic_direction": "negative",
+            "unavailable_code": null,
+            "unavailable_message": null
+          }
+        },
+        {
+          "logistics_product_id": "5cd602fa-0b39-51ec-a13c-18ccca6b14fd",
+          "code": "P-05",
+          "name": "供应链干线",
+          "revenue": {
+            "status": "available",
+            "exact_value": "656482697.0000",
+            "display_value": "656482697.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "orders": {
+            "status": "available",
+            "exact_value": "5470689.0000",
+            "display_value": "5470689.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "gross_margin": {
+            "status": "available",
+            "exact_value": "0.108107",
+            "display_value": "0.108107",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "fulfillment_cost_rate": {
+            "status": "available",
+            "exact_value": "0.891893",
+            "display_value": "0.891893",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "revenue_comparison": {
+            "status": "available",
+            "exact_value": "0.085025",
+            "display_value": "0.085025",
+            "semantic_direction": "positive",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "orders_comparison": {
+            "status": "available",
+            "exact_value": "0.085025",
+            "display_value": "0.085025",
+            "semantic_direction": "positive",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "gross_margin_comparison": {
+            "status": "available",
+            "exact_value": "0.005441",
+            "display_value": "0.005441",
+            "semantic_direction": "positive",
+            "unavailable_code": null,
+            "unavailable_message": null
+          }
+        },
+        {
+          "logistics_product_id": "227ab1df-7a8e-54d9-b0ce-c6f7b4ab5ee8",
+          "code": "P-02",
+          "name": "跨境供应链专线",
+          "revenue": {
+            "status": "available",
+            "exact_value": "464659510.0000",
+            "display_value": "464659510.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "orders": {
+            "status": "available",
+            "exact_value": "3872165.0000",
+            "display_value": "3872165.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "gross_margin": {
+            "status": "available",
+            "exact_value": "0.110109",
+            "display_value": "0.110109",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "fulfillment_cost_rate": {
+            "status": "available",
+            "exact_value": "0.889891",
+            "display_value": "0.889891",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "revenue_comparison": {
+            "status": "available",
+            "exact_value": "-0.383664",
+            "display_value": "-0.383664",
+            "semantic_direction": "negative",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "orders_comparison": {
+            "status": "available",
+            "exact_value": "-0.383664",
+            "display_value": "-0.383664",
+            "semantic_direction": "negative",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "gross_margin_comparison": {
+            "status": "available",
+            "exact_value": "-0.002823",
+            "display_value": "-0.002823",
+            "semantic_direction": "negative",
+            "unavailable_code": null,
+            "unavailable_message": null
+          }
+        },
+        {
+          "logistics_product_id": "7c2adf1e-5dd0-525c-a6af-64010a06b55f",
+          "code": "P-08",
+          "name": "物流科技平台服务",
+          "revenue": {
+            "status": "available",
+            "exact_value": "418024410.0000",
+            "display_value": "418024410.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "orders": {
+            "status": "available",
+            "exact_value": "3483537.0000",
+            "display_value": "3483537.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "gross_margin": {
+            "status": "available",
+            "exact_value": "0.160159",
+            "display_value": "0.160159",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "fulfillment_cost_rate": {
+            "status": "available",
+            "exact_value": "0.839841",
+            "display_value": "0.839841",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "revenue_comparison": {
+            "status": "available",
+            "exact_value": "0.218693",
+            "display_value": "0.218693",
+            "semantic_direction": "positive",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "orders_comparison": {
+            "status": "available",
+            "exact_value": "0.218693",
+            "display_value": "0.218693",
+            "semantic_direction": "positive",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "gross_margin_comparison": {
+            "status": "available",
+            "exact_value": "-0.004106",
+            "display_value": "-0.004106",
+            "semantic_direction": "negative",
+            "unavailable_code": null,
+            "unavailable_message": null
+          }
+        },
+        {
+          "logistics_product_id": "ea0701e9-04d6-53e1-9b41-075a55004369",
+          "code": "P-07",
+          "name": "冷链运输",
+          "revenue": {
+            "status": "available",
+            "exact_value": "311829279.0000",
+            "display_value": "311829279.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "orders": {
+            "status": "available",
+            "exact_value": "2598578.0000",
+            "display_value": "2598578.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "gross_margin": {
+            "status": "available",
+            "exact_value": "0.113112",
+            "display_value": "0.113112",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "fulfillment_cost_rate": {
+            "status": "available",
+            "exact_value": "0.886888",
+            "display_value": "0.886888",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "revenue_comparison": {
+            "status": "available",
+            "exact_value": "0.085025",
+            "display_value": "0.085025",
+            "semantic_direction": "positive",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "orders_comparison": {
+            "status": "available",
+            "exact_value": "0.085024",
+            "display_value": "0.085024",
+            "semantic_direction": "positive",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "gross_margin_comparison": {
+            "status": "available",
+            "exact_value": "0.005313",
+            "display_value": "0.005313",
+            "semantic_direction": "positive",
+            "unavailable_code": null,
+            "unavailable_message": null
+          }
+        },
+        {
+          "logistics_product_id": "c8e8622f-4f3d-58a0-a93e-db3a7e7d2888",
+          "code": "P-06",
+          "name": "末端配送",
+          "revenue": {
+            "status": "available",
+            "exact_value": "295417214.0000",
+            "display_value": "295417214.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "orders": {
+            "status": "available",
+            "exact_value": "2461810.0000",
+            "display_value": "2461810.0000",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "gross_margin": {
+            "status": "available",
+            "exact_value": "0.098097",
+            "display_value": "0.098097",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "fulfillment_cost_rate": {
+            "status": "available",
+            "exact_value": "0.901903",
+            "display_value": "0.901903",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "revenue_comparison": {
+            "status": "available",
+            "exact_value": "-0.511739",
+            "display_value": "-0.511739",
+            "semantic_direction": "negative",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "orders_comparison": {
+            "status": "available",
+            "exact_value": "-0.511739",
+            "display_value": "-0.511739",
+            "semantic_direction": "negative",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "gross_margin_comparison": {
+            "status": "available",
+            "exact_value": "0.005698",
+            "display_value": "0.005698",
+            "semantic_direction": "positive",
+            "unavailable_code": null,
+            "unavailable_message": null
+          }
+        }
+      ],
+      "degradation_message": null
+    },
+    "margin_matrix": {
+      "status": "degraded",
+      "comparison_label": "预算",
+      "rows": [
+        {
+          "id": "5652f38c-c9d5-565b-ac24-1e0bda56acd8",
+          "code": "SEG-01",
+          "name": "电商平台客户"
+        },
+        {
+          "id": "a0e554a7-656a-5a9a-bacb-8a90dd7a566b",
+          "code": "SEG-02",
+          "name": "品牌直客"
+        },
+        {
+          "id": "81e2a8da-5548-5e13-998a-9b528faa0097",
+          "code": "SEG-03",
+          "name": "中小企业客户"
+        },
+        {
+          "id": "28b0988a-4e8a-5a11-b9ca-eb7e692c4d78",
+          "code": "SEG-04",
+          "name": "政企与项目客户"
+        }
+      ],
+      "columns": [
+        {
+          "id": "84ff92e0-413d-5cfe-89ed-e0c0ca3c155c",
+          "code": "P-01",
+          "name": "跨境标准包裹"
+        },
+        {
+          "id": "227ab1df-7a8e-54d9-b0ce-c6f7b4ab5ee8",
+          "code": "P-02",
+          "name": "跨境供应链专线"
+        },
+        {
+          "id": "8d04a92c-7e8e-5676-b0bd-a5a6fbd5368c",
+          "code": "P-03",
+          "name": "海外仓履约"
+        },
+        {
+          "id": "a86a970a-ef20-503d-b348-5d98d53d4cea",
+          "code": "P-04",
+          "name": "国内仓配一体"
+        },
+        {
+          "id": "5cd602fa-0b39-51ec-a13c-18ccca6b14fd",
+          "code": "P-05",
+          "name": "供应链干线"
+        },
+        {
+          "id": "c8e8622f-4f3d-58a0-a93e-db3a7e7d2888",
+          "code": "P-06",
+          "name": "末端配送"
+        },
+        {
+          "id": "ea0701e9-04d6-53e1-9b41-075a55004369",
+          "code": "P-07",
+          "name": "冷链运输"
+        },
+        {
+          "id": "7c2adf1e-5dd0-525c-a6af-64010a06b55f",
+          "code": "P-08",
+          "name": "物流科技平台服务"
+        }
+      ],
+      "cells": [
+        {
+          "customer_segment_id": "5652f38c-c9d5-565b-ac24-1e0bda56acd8",
+          "logistics_product_id": "84ff92e0-413d-5cfe-89ed-e0c0ca3c155c",
+          "actual_margin": {
+            "status": "available",
+            "exact_value": "0.100099",
+            "display_value": "0.100099",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "comparison": {
+            "status": "available",
+            "exact_value": "0.000099",
+            "display_value": "0.000099",
+            "semantic_direction": "positive",
+            "unavailable_code": null,
+            "unavailable_message": null
+          }
+        },
+        {
+          "customer_segment_id": "5652f38c-c9d5-565b-ac24-1e0bda56acd8",
+          "logistics_product_id": "227ab1df-7a8e-54d9-b0ce-c6f7b4ab5ee8",
+          "actual_margin": {
+            "status": "available",
+            "exact_value": "0.110109",
+            "display_value": "0.110109",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "comparison": {
+            "status": "available",
+            "exact_value": "0.010109",
+            "display_value": "0.010109",
+            "semantic_direction": "positive",
+            "unavailable_code": null,
+            "unavailable_message": null
+          }
+        },
+        {
+          "customer_segment_id": "5652f38c-c9d5-565b-ac24-1e0bda56acd8",
+          "logistics_product_id": "8d04a92c-7e8e-5676-b0bd-a5a6fbd5368c",
+          "actual_margin": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "metric_grain_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          },
+          "comparison": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "comparison_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          }
+        },
+        {
+          "customer_segment_id": "5652f38c-c9d5-565b-ac24-1e0bda56acd8",
+          "logistics_product_id": "a86a970a-ef20-503d-b348-5d98d53d4cea",
+          "actual_margin": {
+            "status": "available",
+            "exact_value": "0.113112",
+            "display_value": "0.113112",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "comparison": {
+            "status": "available",
+            "exact_value": "0.013112",
+            "display_value": "0.013112",
+            "semantic_direction": "positive",
+            "unavailable_code": null,
+            "unavailable_message": null
+          }
+        },
+        {
+          "customer_segment_id": "5652f38c-c9d5-565b-ac24-1e0bda56acd8",
+          "logistics_product_id": "5cd602fa-0b39-51ec-a13c-18ccca6b14fd",
+          "actual_margin": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "metric_grain_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          },
+          "comparison": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "comparison_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          }
+        },
+        {
+          "customer_segment_id": "5652f38c-c9d5-565b-ac24-1e0bda56acd8",
+          "logistics_product_id": "c8e8622f-4f3d-58a0-a93e-db3a7e7d2888",
+          "actual_margin": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "metric_grain_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          },
+          "comparison": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "comparison_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          }
+        },
+        {
+          "customer_segment_id": "5652f38c-c9d5-565b-ac24-1e0bda56acd8",
+          "logistics_product_id": "ea0701e9-04d6-53e1-9b41-075a55004369",
+          "actual_margin": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "metric_grain_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          },
+          "comparison": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "comparison_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          }
+        },
+        {
+          "customer_segment_id": "5652f38c-c9d5-565b-ac24-1e0bda56acd8",
+          "logistics_product_id": "7c2adf1e-5dd0-525c-a6af-64010a06b55f",
+          "actual_margin": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "metric_grain_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          },
+          "comparison": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "comparison_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          }
+        },
+        {
+          "customer_segment_id": "a0e554a7-656a-5a9a-bacb-8a90dd7a566b",
+          "logistics_product_id": "84ff92e0-413d-5cfe-89ed-e0c0ca3c155c",
+          "actual_margin": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "metric_grain_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          },
+          "comparison": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "comparison_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          }
+        },
+        {
+          "customer_segment_id": "a0e554a7-656a-5a9a-bacb-8a90dd7a566b",
+          "logistics_product_id": "227ab1df-7a8e-54d9-b0ce-c6f7b4ab5ee8",
+          "actual_margin": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "metric_grain_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          },
+          "comparison": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "comparison_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          }
+        },
+        {
+          "customer_segment_id": "a0e554a7-656a-5a9a-bacb-8a90dd7a566b",
+          "logistics_product_id": "8d04a92c-7e8e-5676-b0bd-a5a6fbd5368c",
+          "actual_margin": {
+            "status": "available",
+            "exact_value": "0.095094",
+            "display_value": "0.095094",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "comparison": {
+            "status": "available",
+            "exact_value": "-0.004906",
+            "display_value": "-0.004906",
+            "semantic_direction": "negative",
+            "unavailable_code": null,
+            "unavailable_message": null
+          }
+        },
+        {
+          "customer_segment_id": "a0e554a7-656a-5a9a-bacb-8a90dd7a566b",
+          "logistics_product_id": "a86a970a-ef20-503d-b348-5d98d53d4cea",
+          "actual_margin": {
+            "status": "available",
+            "exact_value": "0.113112",
+            "display_value": "0.113112",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "comparison": {
+            "status": "available",
+            "exact_value": "0.013112",
+            "display_value": "0.013112",
+            "semantic_direction": "positive",
+            "unavailable_code": null,
+            "unavailable_message": null
+          }
+        },
+        {
+          "customer_segment_id": "a0e554a7-656a-5a9a-bacb-8a90dd7a566b",
+          "logistics_product_id": "5cd602fa-0b39-51ec-a13c-18ccca6b14fd",
+          "actual_margin": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "metric_grain_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          },
+          "comparison": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "comparison_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          }
+        },
+        {
+          "customer_segment_id": "a0e554a7-656a-5a9a-bacb-8a90dd7a566b",
+          "logistics_product_id": "c8e8622f-4f3d-58a0-a93e-db3a7e7d2888",
+          "actual_margin": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "metric_grain_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          },
+          "comparison": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "comparison_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          }
+        },
+        {
+          "customer_segment_id": "a0e554a7-656a-5a9a-bacb-8a90dd7a566b",
+          "logistics_product_id": "ea0701e9-04d6-53e1-9b41-075a55004369",
+          "actual_margin": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "metric_grain_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          },
+          "comparison": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "comparison_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          }
+        },
+        {
+          "customer_segment_id": "a0e554a7-656a-5a9a-bacb-8a90dd7a566b",
+          "logistics_product_id": "7c2adf1e-5dd0-525c-a6af-64010a06b55f",
+          "actual_margin": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "metric_grain_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          },
+          "comparison": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "comparison_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          }
+        },
+        {
+          "customer_segment_id": "81e2a8da-5548-5e13-998a-9b528faa0097",
+          "logistics_product_id": "84ff92e0-413d-5cfe-89ed-e0c0ca3c155c",
+          "actual_margin": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "metric_grain_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          },
+          "comparison": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "comparison_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          }
+        },
+        {
+          "customer_segment_id": "81e2a8da-5548-5e13-998a-9b528faa0097",
+          "logistics_product_id": "227ab1df-7a8e-54d9-b0ce-c6f7b4ab5ee8",
+          "actual_margin": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "metric_grain_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          },
+          "comparison": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "comparison_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          }
+        },
+        {
+          "customer_segment_id": "81e2a8da-5548-5e13-998a-9b528faa0097",
+          "logistics_product_id": "8d04a92c-7e8e-5676-b0bd-a5a6fbd5368c",
+          "actual_margin": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "metric_grain_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          },
+          "comparison": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "comparison_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          }
+        },
+        {
+          "customer_segment_id": "81e2a8da-5548-5e13-998a-9b528faa0097",
+          "logistics_product_id": "a86a970a-ef20-503d-b348-5d98d53d4cea",
+          "actual_margin": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "metric_grain_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          },
+          "comparison": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "comparison_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          }
+        },
+        {
+          "customer_segment_id": "81e2a8da-5548-5e13-998a-9b528faa0097",
+          "logistics_product_id": "5cd602fa-0b39-51ec-a13c-18ccca6b14fd",
+          "actual_margin": {
+            "status": "available",
+            "exact_value": "0.108107",
+            "display_value": "0.108107",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "comparison": {
+            "status": "available",
+            "exact_value": "0.008107",
+            "display_value": "0.008107",
+            "semantic_direction": "positive",
+            "unavailable_code": null,
+            "unavailable_message": null
+          }
+        },
+        {
+          "customer_segment_id": "81e2a8da-5548-5e13-998a-9b528faa0097",
+          "logistics_product_id": "c8e8622f-4f3d-58a0-a93e-db3a7e7d2888",
+          "actual_margin": {
+            "status": "available",
+            "exact_value": "0.098097",
+            "display_value": "0.098097",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "comparison": {
+            "status": "available",
+            "exact_value": "-0.001903",
+            "display_value": "-0.001903",
+            "semantic_direction": "negative",
+            "unavailable_code": null,
+            "unavailable_message": null
+          }
+        },
+        {
+          "customer_segment_id": "81e2a8da-5548-5e13-998a-9b528faa0097",
+          "logistics_product_id": "ea0701e9-04d6-53e1-9b41-075a55004369",
+          "actual_margin": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "metric_grain_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          },
+          "comparison": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "comparison_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          }
+        },
+        {
+          "customer_segment_id": "81e2a8da-5548-5e13-998a-9b528faa0097",
+          "logistics_product_id": "7c2adf1e-5dd0-525c-a6af-64010a06b55f",
+          "actual_margin": {
+            "status": "available",
+            "exact_value": "0.160159",
+            "display_value": "0.160159",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "comparison": {
+            "status": "available",
+            "exact_value": "0.060159",
+            "display_value": "0.060159",
+            "semantic_direction": "positive",
+            "unavailable_code": null,
+            "unavailable_message": null
+          }
+        },
+        {
+          "customer_segment_id": "28b0988a-4e8a-5a11-b9ca-eb7e692c4d78",
+          "logistics_product_id": "84ff92e0-413d-5cfe-89ed-e0c0ca3c155c",
+          "actual_margin": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "metric_grain_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          },
+          "comparison": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "comparison_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          }
+        },
+        {
+          "customer_segment_id": "28b0988a-4e8a-5a11-b9ca-eb7e692c4d78",
+          "logistics_product_id": "227ab1df-7a8e-54d9-b0ce-c6f7b4ab5ee8",
+          "actual_margin": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "metric_grain_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          },
+          "comparison": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "comparison_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          }
+        },
+        {
+          "customer_segment_id": "28b0988a-4e8a-5a11-b9ca-eb7e692c4d78",
+          "logistics_product_id": "8d04a92c-7e8e-5676-b0bd-a5a6fbd5368c",
+          "actual_margin": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "metric_grain_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          },
+          "comparison": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "comparison_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          }
+        },
+        {
+          "customer_segment_id": "28b0988a-4e8a-5a11-b9ca-eb7e692c4d78",
+          "logistics_product_id": "a86a970a-ef20-503d-b348-5d98d53d4cea",
+          "actual_margin": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "metric_grain_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          },
+          "comparison": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "comparison_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          }
+        },
+        {
+          "customer_segment_id": "28b0988a-4e8a-5a11-b9ca-eb7e692c4d78",
+          "logistics_product_id": "5cd602fa-0b39-51ec-a13c-18ccca6b14fd",
+          "actual_margin": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "metric_grain_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          },
+          "comparison": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "comparison_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          }
+        },
+        {
+          "customer_segment_id": "28b0988a-4e8a-5a11-b9ca-eb7e692c4d78",
+          "logistics_product_id": "c8e8622f-4f3d-58a0-a93e-db3a7e7d2888",
+          "actual_margin": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "metric_grain_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          },
+          "comparison": {
+            "status": "unavailable",
+            "exact_value": null,
+            "display_value": "—",
+            "semantic_direction": "neutral",
+            "unavailable_code": "comparison_not_published",
+            "unavailable_message": "当前口径未发布该比较值"
+          }
+        },
+        {
+          "customer_segment_id": "28b0988a-4e8a-5a11-b9ca-eb7e692c4d78",
+          "logistics_product_id": "ea0701e9-04d6-53e1-9b41-075a55004369",
+          "actual_margin": {
+            "status": "available",
+            "exact_value": "0.113112",
+            "display_value": "0.113112",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "comparison": {
+            "status": "available",
+            "exact_value": "0.013112",
+            "display_value": "0.013112",
+            "semantic_direction": "positive",
+            "unavailable_code": null,
+            "unavailable_message": null
+          }
+        },
+        {
+          "customer_segment_id": "28b0988a-4e8a-5a11-b9ca-eb7e692c4d78",
+          "logistics_product_id": "7c2adf1e-5dd0-525c-a6af-64010a06b55f",
+          "actual_margin": {
+            "status": "available",
+            "exact_value": "0.160159",
+            "display_value": "0.160159",
+            "semantic_direction": "neutral",
+            "unavailable_code": null,
+            "unavailable_message": null
+          },
+          "comparison": {
+            "status": "available",
+            "exact_value": "0.060159",
+            "display_value": "0.060159",
+            "semantic_direction": "positive",
+            "unavailable_code": null,
+            "unavailable_message": null
+          }
+        }
+      ],
+      "degradation_message": "部分矩阵指标或比较值未发布"
+    },
+    "highlights": [
+      {
+        "finding_id": "01a16cfc-f980-7319-a391-6b2b1ce33c70",
+        "title": "经营利润下降",
+        "impact_display": "-397465000.0000"
+      },
+      {
+        "finding_id": "01a16cfc-f98c-7515-9147-41a439661f75",
+        "title": "应收资金占用增加",
+        "impact_display": "-209643864.0000"
+      },
+      {
+        "finding_id": "01a16cfc-f99b-7ad5-be97-21740e294e80",
+        "title": "履约成本增加",
+        "impact_display": "9966732000.0000"
+      }
+    ],
+    "degradations": [
+      {
+        "panel": "margin_matrix",
+        "code": "degraded",
+        "message": "部分矩阵指标或比较值未发布"
+      }
+    ]
+  },
+  "/api/v1/cockpit/action-items": [
+    {
+      "id": "01a16cfc-f9ce-7e11-b366-3fb409ad474e",
+      "finding_id": "01a16cfc-f98c-7515-9147-41a439661f75",
+      "snapshot_id": "01a16cfc-cf99-7843-ba4c-b07c4acdf981",
+      "title": "演示行动：跟进应收资金占用增加",
+      "detail": "演示行动项，源自已批准的客观分析发现；需在调查详情中补充处理方案。",
+      "created_by": "damai-demo-seed",
+      "created_at": "2026-10-24T08:13:44",
+      "acknowledgment": "audit_event"
+    }
+  ],
+  "/api/v1/cockpit/modules/balance-sheet": {
+    "module": "balance-sheet",
+    "title": "资产负债",
+    "period": "FY2023",
+    "prior_period": "FY2022",
+    "snapshot_id": "01a16cfc-f9cc-7e10-a008-8c204bde5dfd",
+    "report_ids": [
+      "01a16cf8-8a94-77b5-8b27-97b5e341de8b",
+      "01a16cf8-89c1-7231-b860-789af9f7c7f0"
+    ],
+    "source_notice": "数据源：菜鸟申请稿披露财报（IFRS）·大麦物流演示主体引用；不构成公开财报 C 级能力证明",
+    "unit": "百万元",
+    "kpis": [
+      {
+        "name": "总资产",
+        "status": "available",
+        "value": "71850.9310",
+        "prior_value": "58881.0870",
+        "unit": "百万元",
+        "caliber_note": null
+      },
+      {
+        "name": "总负债",
+        "status": "available",
+        "value": "45401.4360",
+        "prior_value": "37011.0070",
+        "unit": "百万元",
+        "caliber_note": null
+      },
+      {
+        "name": "所有者权益",
+        "status": "available",
+        "value": "26449.4950",
+        "prior_value": "21870.0800",
+        "unit": "百万元",
+        "caliber_note": null
+      },
+      {
+        "name": "资产负债率",
+        "status": "available",
+        "value": "0.6319",
+        "prior_value": "0.6286",
+        "unit": "ratio",
+        "caliber_note": null
+      },
+      {
+        "name": "货币资金",
+        "status": "available",
+        "value": "8784.4040",
+        "prior_value": "10197.7420",
+        "unit": "百万元",
+        "caliber_note": null
+      },
+      {
+        "name": "应收账款（含其他预付款）",
+        "status": "available",
+        "value": "9930.4300",
+        "prior_value": "7042.2750",
+        "unit": "百万元",
+        "caliber_note": "申请稿混合口径行（贸易应收及其他预付款）"
+      },
+      {
+        "name": "存货",
+        "status": "available",
+        "value": "153.2410",
+        "prior_value": "146.2600",
+        "unit": "百万元",
+        "caliber_note": null
+      },
+      {
+        "name": "有息负债（借款总额）",
+        "status": "available",
+        "value": "14041.8160",
+        "prior_value": "6862.2740",
+        "unit": "百万元",
+        "caliber_note": "申请稿「借款」为长短期混合行；短债拆分未披露（U-CN 口径）"
+      }
+    ],
+    "charts": {
+      "asset_structure": {
+        "title": "资产结构（流动/非流动）",
+        "type": "bar",
+        "unit": "百万元",
+        "periods": [
+          "FY2022",
+          "FY2023"
+        ],
+        "series": {
+          "流动资产": [
+            "17502.8040",
+            "26009.0280"
+          ],
+          "非流动资产": [
+            "41378.2830",
+            "45841.9030"
+          ]
+        },
+        "steps": {},
+        "identity": null,
+        "note": null,
+        "dso": null,
+        "dio": null,
+        "dpo": null,
+        "ccc": null,
+        "analysis_question": "资产由流动资产与非流动资产如何构成？",
+        "fact_classes": [
+          "reported"
+        ],
+        "source_ids": [
+          "01a16cf8-8a94-77b5-8b27-97b5e341de8b",
+          "01a16cf8-89c1-7231-b860-789af9f7c7f0"
+        ],
+        "metric_codes": [
+          "bs.current_assets",
+          "bs.total_assets"
+        ],
+        "snapshot_id": "01a16cfc-f9cc-7e10-a008-8c204bde5dfd",
+        "drilldown_target": "/statements?report=01a16cf8-8a94-77b5-8b27-97b5e341de8b#stmt-row-合并资产负债表-流动资产合计",
+        "empty_reason": null,
+        "fact_ids": {},
+        "source_fact_ids": {}
+      },
+      "liability_equity_structure": {
+        "title": "负债与权益结构",
+        "type": "ratio_bar",
+        "unit": "百万元",
+        "periods": [
+          "FY2022",
+          "FY2023"
+        ],
+        "series": {
+          "负债合计": [
+            "37011.0070",
+            "45401.4360"
+          ],
+          "所有者权益": [
+            "21870.0800",
+            "26449.4950"
+          ]
+        },
+        "steps": {},
+        "identity": null,
+        "note": null,
+        "dso": null,
+        "dio": null,
+        "dpo": null,
+        "ccc": null,
+        "analysis_question": "报告期负债与权益规模如何变化？",
+        "fact_classes": [
+          "reported"
+        ],
+        "source_ids": [
+          "01a16cf8-8a94-77b5-8b27-97b5e341de8b",
+          "01a16cf8-89c1-7231-b860-789af9f7c7f0"
+        ],
+        "metric_codes": [
+          "bs.total_liab",
+          "bs.equity"
+        ],
+        "snapshot_id": "01a16cfc-f9cc-7e10-a008-8c204bde5dfd",
+        "drilldown_target": "/statements?report=01a16cf8-8a94-77b5-8b27-97b5e341de8b#stmt-row-合并资产负债表-权益及负债总额",
+        "empty_reason": null,
+        "fact_ids": {},
+        "source_fact_ids": {}
+      },
+      "capital_structure_trend": {
+        "title": "资本结构趋势",
+        "type": "line",
+        "unit": "ratio",
+        "periods": [
+          "FY2022",
+          "FY2023"
+        ],
+        "series": {
+          "资产负债率": [
+            "0.6286",
+            "0.6319"
+          ]
+        },
+        "steps": {},
+        "identity": null,
+        "note": "有息负债率需短债拆分，未披露 → unavailable",
+        "dso": null,
+        "dio": null,
+        "dpo": null,
+        "ccc": null,
+        "analysis_question": "资产负债率在报告期之间如何变化？",
+        "fact_classes": [
+          "reported",
+          "derived"
+        ],
+        "source_ids": [
+          "01a16cf8-8a94-77b5-8b27-97b5e341de8b",
+          "01a16cf8-89c1-7231-b860-789af9f7c7f0"
+        ],
+        "metric_codes": [
+          "bs.total_liab",
+          "bs.total_assets"
+        ],
+        "snapshot_id": "01a16cfc-f9cc-7e10-a008-8c204bde5dfd",
+        "drilldown_target": "/statements?report=01a16cf8-8a94-77b5-8b27-97b5e341de8b#stmt-row-合并资产负债表-负债合计",
+        "empty_reason": null,
+        "fact_ids": {},
+        "source_fact_ids": {}
+      }
+    },
+    "unavailable": [
+      {
+        "block": "债务期限结构",
+        "code": "debt_maturity_split_not_disclosed",
+        "reason": "申请稿「借款」为长短期混合行，期限拆分未披露"
+      }
+    ]
+  },
+  "/api/v1/cockpit/modules/working-capital": {
+    "module": "working-capital",
+    "title": "营运资金",
+    "period": "FY2023",
+    "prior_period": "FY2022",
+    "snapshot_id": "01a16cfc-f9cc-7e10-a008-8c204bde5dfd",
+    "report_ids": [
+      "01a16cf8-8a94-77b5-8b27-97b5e341de8b",
+      "01a16cf8-89c1-7231-b860-789af9f7c7f0"
+    ],
+    "source_notice": "数据源：菜鸟申请稿披露财报（IFRS）·大麦物流演示主体引用；不构成公开财报 C 级能力证明",
+    "unit": "百万元",
+    "kpis": [
+      {
+        "name": "应收账款",
+        "status": "available",
+        "value": "9930.4300",
+        "prior_value": "7042.2750",
+        "unit": "百万元",
+        "caliber_note": null
+      },
+      {
+        "name": "存货",
+        "status": "available",
+        "value": "153.2410",
+        "prior_value": "146.2600",
+        "unit": "百万元",
+        "caliber_note": null
+      },
+      {
+        "name": "应付账款（含其他应付款）",
+        "status": "available",
+        "value": "16973.2010",
+        "prior_value": "14734.7720",
+        "unit": "百万元",
+        "caliber_note": "申请稿混合口径行"
+      },
+      {
+        "name": "营运资金占用",
+        "status": "available",
+        "value": "-6889.5300",
+        "prior_value": null,
+        "unit": "百万元",
+        "caliber_note": null
+      },
+      {
+        "name": "DSO",
+        "status": "available",
+        "value": "39.8140",
+        "prior_value": "34.4495",
+        "unit": "day",
+        "caliber_note": "平均应收 / 收入 × 365"
+      },
+      {
+        "name": "DIO",
+        "status": "available",
+        "value": "0.7847",
+        "prior_value": "0.7329",
+        "unit": "day",
+        "caliber_note": "平均存货 / 营业成本 × 365"
+      },
+      {
+        "name": "DPO",
+        "status": "available",
+        "value": "83.0790",
+        "prior_value": "80.8232",
+        "unit": "day",
+        "caliber_note": "平均应付 / 营业成本 × 365"
+      },
+      {
+        "name": "CCC",
+        "status": "available",
+        "value": "-42.4803",
+        "prior_value": "-45.6408",
+        "unit": "day",
+        "caliber_note": "DSO + DIO − DPO（恒等式随图断言）"
+      }
+    ],
+    "charts": {
+      "ar_inv_ap_trend": {
+        "title": "应收存货应付趋势",
+        "type": "line",
+        "unit": "百万元",
+        "periods": [
+          "FY2023 期初",
+          "FY2023 期末"
+        ],
+        "series": {
+          "应收": [
+            "7042.2750",
+            "9930.4300"
+          ],
+          "存货": [
+            "146.2600",
+            "153.2410"
+          ],
+          "应付": [
+            "14734.7720",
+            "16973.2010"
+          ]
+        },
+        "steps": {},
+        "identity": null,
+        "note": null,
+        "dso": null,
+        "dio": null,
+        "dpo": null,
+        "ccc": null,
+        "analysis_question": "应收、存货与应付余额如何变化？",
+        "fact_classes": [
+          "reported"
+        ],
+        "source_ids": [
+          "01a16cf8-8a94-77b5-8b27-97b5e341de8b",
+          "01a16cf8-89c1-7231-b860-789af9f7c7f0"
+        ],
+        "metric_codes": [
+          "bs.ar",
+          "bs.inventory",
+          "bs.ap"
+        ],
+        "snapshot_id": "01a16cfc-f9cc-7e10-a008-8c204bde5dfd",
+        "drilldown_target": "/statements?report=01a16cf8-8a94-77b5-8b27-97b5e341de8b#stmt-row-合并资产负债表-贸易应收及其他预付款(流动)",
+        "empty_reason": null,
+        "fact_ids": {},
+        "source_fact_ids": {}
+      },
+      "ccc_formula": {
+        "title": "CCC 公式（DSO + DIO − DPO）",
+        "type": "formula_card",
+        "unit": "day",
+        "periods": [],
+        "series": {},
+        "steps": {},
+        "identity": "CCC = DSO + DIO − DPO",
+        "note": null,
+        "dso": "39.8140",
+        "dio": "0.7847",
+        "dpo": "83.0790",
+        "ccc": "-42.4803",
+        "analysis_question": "现金转换周期如何由 DSO、DIO 与 DPO 计算？",
+        "fact_classes": [
+          "reported",
+          "derived"
+        ],
+        "source_ids": [
+          "01a16cf8-8a94-77b5-8b27-97b5e341de8b",
+          "01a16cf8-89c1-7231-b860-789af9f7c7f0"
+        ],
+        "metric_codes": [
+          "dso_days",
+          "dio_days",
+          "dpo_days",
+          "ccc_days"
+        ],
+        "snapshot_id": "01a16cfc-f9cc-7e10-a008-8c204bde5dfd",
+        "drilldown_target": "/statements?report=01a16cf8-8a94-77b5-8b27-97b5e341de8b",
+        "empty_reason": null,
+        "fact_ids": {},
+        "source_fact_ids": {}
+      },
+      "efficiency_cycle": {
+        "title": "营运效率周期对比",
+        "type": "line",
+        "unit": "day",
+        "periods": [
+          "FY2022",
+          "FY2023"
+        ],
+        "series": {
+          "DSO": [
+            "34.4495",
+            "39.8140"
+          ],
+          "DIO": [
+            "0.7329",
+            "0.7847"
+          ],
+          "DPO": [
+            "80.8232",
+            "83.0790"
+          ],
+          "CCC": [
+            "-45.6408",
+            "-42.4803"
+          ]
+        },
+        "steps": {},
+        "identity": null,
+        "note": "各期均按期初、期末平均余额除以该财年流量计算；CCC = DSO + DIO − DPO。",
+        "dso": null,
+        "dio": null,
+        "dpo": null,
+        "ccc": null,
+        "analysis_question": "营运效率天数及现金转换周期如何变化？",
+        "fact_classes": [
+          "reported",
+          "derived"
+        ],
+        "source_ids": [
+          "01a16cf8-8a94-77b5-8b27-97b5e341de8b",
+          "01a16cf8-89c1-7231-b860-789af9f7c7f0"
+        ],
+        "metric_codes": [
+          "dso_days",
+          "dio_days",
+          "dpo_days",
+          "ccc_days"
+        ],
+        "snapshot_id": "01a16cfc-f9cc-7e10-a008-8c204bde5dfd",
+        "drilldown_target": "/statements?report=01a16cf8-8a94-77b5-8b27-97b5e341de8b",
+        "empty_reason": null,
+        "fact_ids": {},
+        "source_fact_ids": {}
+      }
+    },
+    "unavailable": [
+      {
+        "block": "应收账龄",
+        "code": "ar_aging_not_disclosed",
+        "reason": "申请稿无账龄明细；演示明细层（demo_detail）隔离展示，不在本模块冒充披露"
+      },
+      {
+        "block": "主体/分部效率排名",
+        "code": "multi_entity_not_applicable",
+        "reason": "公开期单主体；分部披露止于 FY2025 且无周转口径"
+      }
+    ]
+  },
+  "/api/v1/cockpit/modules/risk": {
+    "module": "risk",
+    "title": "财务风险",
+    "period": "FY2023",
+    "prior_period": "FY2022",
+    "snapshot_id": "01a16cfc-f9cc-7e10-a008-8c204bde5dfd",
+    "report_ids": [
+      "01a16cf8-8a94-77b5-8b27-97b5e341de8b",
+      "01a16cf8-89c1-7231-b860-789af9f7c7f0"
+    ],
+    "source_notice": "数据源：菜鸟申请稿披露财报（IFRS）·大麦物流演示主体引用；不构成公开财报 C 级能力证明",
+    "unit": "ratio",
+    "kpis": [
+      {
+        "name": "流动比率",
+        "status": "available",
+        "value": "1.1611",
+        "prior_value": "0.8146",
+        "unit": "ratio",
+        "caliber_note": "经验参考约 2；过高可能资金闲置"
+      },
+      {
+        "name": "速动比率",
+        "status": "available",
+        "value": "1.1543",
+        "prior_value": "0.8078",
+        "unit": "ratio",
+        "caliber_note": null
+      },
+      {
+        "name": "现金比率",
+        "status": "available",
+        "value": "0.3922",
+        "prior_value": "0.4746",
+        "unit": "ratio",
+        "caliber_note": null
+      },
+      {
+        "name": "资产负债率",
+        "status": "available",
+        "value": "0.6319",
+        "prior_value": "0.6286",
+        "unit": "ratio",
+        "caliber_note": null
+      },
+      {
+        "name": "权益乘数",
+        "status": "available",
+        "value": "2.7165",
+        "prior_value": "2.6923",
+        "unit": "ratio",
+        "caliber_note": null
+      },
+      {
+        "name": "OCF/流动负债",
+        "status": "available",
+        "value": "0.0830",
+        "prior_value": "0.1085",
+        "unit": "ratio",
+        "caliber_note": null
+      },
+      {
+        "name": "利息保障倍数",
+        "status": "unavailable",
+        "unavailable_code": "is.interest_exp",
+        "unit": "ratio",
+        "caliber_note": "申请稿利润表无独立利息费用行（U-DM-INTEREST-SPLIT）"
+      },
+      {
+        "name": "净负债/EBITDA",
+        "status": "unavailable",
+        "unavailable_code": "bs.short_debt + is.interest_exp",
+        "unit": "ratio",
+        "caliber_note": "需短债拆分与 EBITDA（均未披露）"
+      }
+    ],
+    "charts": {
+      "liquidity_ratios": {
+        "title": "短期偿债能力对比",
+        "type": "line",
+        "unit": "倍",
+        "periods": [
+          "FY2022",
+          "FY2023"
+        ],
+        "series": {
+          "流动比率": [
+            "0.8146",
+            "1.1611"
+          ],
+          "速动比率": [
+            "0.8078",
+            "1.1543"
+          ],
+          "现金比率": [
+            "0.4746",
+            "0.3922"
+          ]
+        },
+        "steps": {},
+        "identity": null,
+        "note": null,
+        "dso": null,
+        "dio": null,
+        "dpo": null,
+        "ccc": null,
+        "analysis_question": "流动比率、速动比率和现金比率如何变化？",
+        "fact_classes": [
+          "reported",
+          "derived"
+        ],
+        "source_ids": [
+          "01a16cf8-8a94-77b5-8b27-97b5e341de8b",
+          "01a16cf8-89c1-7231-b860-789af9f7c7f0"
+        ],
+        "metric_codes": [
+          "current_ratio",
+          "quick_ratio",
+          "cash_ratio"
+        ],
+        "snapshot_id": "01a16cfc-f9cc-7e10-a008-8c204bde5dfd",
+        "drilldown_target": "/statements?report=01a16cf8-8a94-77b5-8b27-97b5e341de8b#stmt-row-合并资产负债表-流动资产合计",
+        "empty_reason": null,
+        "fact_ids": {},
+        "source_fact_ids": {}
+      },
+      "solvency_ratios": {
+        "title": "资本结构对比",
+        "type": "line",
+        "unit": "ratio",
+        "periods": [
+          "FY2022",
+          "FY2023"
+        ],
+        "series": {
+          "资产负债率": [
+            "0.6286",
+            "0.6319"
+          ]
+        },
+        "steps": {},
+        "identity": null,
+        "note": null,
+        "dso": null,
+        "dio": null,
+        "dpo": null,
+        "ccc": null,
+        "analysis_question": "偿债与资本结构比率如何变化？",
+        "fact_classes": [
+          "reported",
+          "derived"
+        ],
+        "source_ids": [
+          "01a16cf8-8a94-77b5-8b27-97b5e341de8b",
+          "01a16cf8-89c1-7231-b860-789af9f7c7f0"
+        ],
+        "metric_codes": [
+          "debt_asset_ratio",
+          "ocf_current_liab_ratio"
+        ],
+        "snapshot_id": "01a16cfc-f9cc-7e10-a008-8c204bde5dfd",
+        "drilldown_target": "/statements?report=01a16cf8-8a94-77b5-8b27-97b5e341de8b#stmt-row-合并资产负债表-负债合计",
+        "empty_reason": null,
+        "fact_ids": {},
+        "source_fact_ids": {}
+      },
+      "leverage_ratios": {
+        "title": "权益乘数对比",
+        "type": "line",
+        "unit": "倍",
+        "periods": [
+          "FY2022",
+          "FY2023"
+        ],
+        "series": {
+          "权益乘数": [
+            "2.6923",
+            "2.7165"
+          ]
+        },
+        "steps": {},
+        "identity": null,
+        "note": null,
+        "dso": null,
+        "dio": null,
+        "dpo": null,
+        "ccc": null,
+        "analysis_question": "权益乘数如何变化？",
+        "fact_classes": [
+          "reported",
+          "derived"
+        ],
+        "source_ids": [
+          "01a16cf8-8a94-77b5-8b27-97b5e341de8b",
+          "01a16cf8-89c1-7231-b860-789af9f7c7f0"
+        ],
+        "metric_codes": [
+          "equity_multiplier"
+        ],
+        "snapshot_id": "01a16cfc-f9cc-7e10-a008-8c204bde5dfd",
+        "drilldown_target": "/statements?report=01a16cf8-8a94-77b5-8b27-97b5e341de8b#stmt-row-合并资产负债表-资产总计",
+        "empty_reason": null,
+        "fact_ids": {},
+        "source_fact_ids": {}
+      }
+    },
+    "unavailable": [
+      {
+        "block": "预警阈值配置",
+        "code": "threshold_config_c06",
+        "reason": "管控线阈值属 C06 配置层，公开期使用经验参考值标注"
+      },
+      {
+        "block": "利息保障 / 净杠杆",
+        "code": "interest_exp_not_disclosed",
+        "reason": "申请稿无独立利息费用行、无短债拆分"
+      }
+    ]
+  },
+  "/api/v1/cockpit/modules/consolidation": {
+    "module": "consolidation",
+    "title": "集团合并（降级态）",
+    "period": "FY2023",
+    "prior_period": "FY2022",
+    "snapshot_id": "01a16cfc-f9cc-7e10-a008-8c204bde5dfd",
+    "report_ids": [],
+    "source_notice": "降级态：公开期单主体，无合并抵销数据。菜鸟分部序列为阿里年报披露事实（CN-SEG-*）。",
+    "unit": "百万元",
+    "kpis": [
+      {
+        "name": "合并抵销",
+        "status": "unavailable",
+        "unavailable_code": "internal_period_feature",
+        "unit": "",
+        "caliber_note": "合并抵销桥属内部期功能"
+      }
+    ],
+    "charts": {
+      "cainiao_segment_series": {
+        "title": "菜鸟分部收入（阿里年报披露）",
+        "type": "line",
+        "unit": "百万元",
+        "periods": [
+          "FY2019",
+          "FY2020",
+          "FY2021",
+          "FY2022",
+          "FY2023",
+          "FY2024",
+          "FY2025"
+        ],
+        "series": {
+          "分部收入": [
+            "14885",
+            "22233",
+            "37258",
+            "46107",
+            "77512",
+            "99020",
+            "101272"
+          ]
+        },
+        "steps": {},
+        "identity": null,
+        "note": "FY2026 起菜鸟并入「所有其他」分部，无单独披露",
+        "dso": null,
+        "dio": null,
+        "dpo": null,
+        "ccc": null,
+        "analysis_question": "菜鸟分部收入（阿里年报披露）回答了什么经营问题？",
+        "fact_classes": [
+          "reported"
+        ],
+        "source_ids": [
+          "CN-SEG-FY2019-SEGMENT_REVENUE",
+          "CN-SEG-FY2020-SEGMENT_REVENUE",
+          "CN-SEG-FY2021-SEGMENT_REVENUE",
+          "CN-SEG-FY2022-SEGMENT_REVENUE",
+          "CN-SEG-FY2023-SEGMENT_REVENUE",
+          "CN-SEG-FY2024-SEGMENT_REVENUE",
+          "CN-SEG-FY2025-SEGMENT_REVENUE"
+        ],
+        "metric_codes": [],
+        "snapshot_id": "01a16cfc-f9cc-7e10-a008-8c204bde5dfd",
+        "drilldown_target": null,
+        "empty_reason": null,
+        "fact_ids": {
+          "FY2019": "CN-SEG-FY2019-SEGMENT_REVENUE",
+          "FY2020": "CN-SEG-FY2020-SEGMENT_REVENUE",
+          "FY2021": "CN-SEG-FY2021-SEGMENT_REVENUE",
+          "FY2022": "CN-SEG-FY2022-SEGMENT_REVENUE",
+          "FY2023": "CN-SEG-FY2023-SEGMENT_REVENUE",
+          "FY2024": "CN-SEG-FY2024-SEGMENT_REVENUE",
+          "FY2025": "CN-SEG-FY2025-SEGMENT_REVENUE"
+        },
+        "source_fact_ids": {}
+      },
+      "cainiao_segment_growth": {
+        "title": "菜鸟分部收入同比增幅",
+        "type": "bar",
+        "unit": "ratio",
+        "periods": [
+          "FY2020",
+          "FY2021",
+          "FY2022",
+          "FY2023",
+          "FY2024",
+          "FY2025"
+        ],
+        "series": {
+          "同比增幅": [
+            "0.4937",
+            "0.6758",
+            "0.2375",
+            "0.6811",
+            "0.2775",
+            "0.0227"
+          ]
+        },
+        "steps": {},
+        "identity": null,
+        "note": "由阿里年报披露的分部收入逐年计算；FY2026 起不再单独披露。",
+        "dso": null,
+        "dio": null,
+        "dpo": null,
+        "ccc": null,
+        "analysis_question": "菜鸟分部收入同比增幅回答了什么经营问题？",
+        "fact_classes": [
+          "reported"
+        ],
+        "source_ids": [
+          "CN-SEG-FY2019-SEGMENT_REVENUE",
+          "CN-SEG-FY2020-SEGMENT_REVENUE",
+          "CN-SEG-FY2021-SEGMENT_REVENUE",
+          "CN-SEG-FY2022-SEGMENT_REVENUE",
+          "CN-SEG-FY2023-SEGMENT_REVENUE",
+          "CN-SEG-FY2024-SEGMENT_REVENUE",
+          "CN-SEG-FY2025-SEGMENT_REVENUE"
+        ],
+        "metric_codes": [],
+        "snapshot_id": "01a16cfc-f9cc-7e10-a008-8c204bde5dfd",
+        "drilldown_target": null,
+        "empty_reason": null,
+        "fact_ids": {},
+        "source_fact_ids": {
+          "FY2019": "CN-SEG-FY2019-SEGMENT_REVENUE",
+          "FY2020": "CN-SEG-FY2020-SEGMENT_REVENUE",
+          "FY2021": "CN-SEG-FY2021-SEGMENT_REVENUE",
+          "FY2022": "CN-SEG-FY2022-SEGMENT_REVENUE",
+          "FY2023": "CN-SEG-FY2023-SEGMENT_REVENUE",
+          "FY2024": "CN-SEG-FY2024-SEGMENT_REVENUE",
+          "FY2025": "CN-SEG-FY2025-SEGMENT_REVENUE"
+        }
+      }
+    },
+    "unavailable": [
+      {
+        "block": "合并抵销桥",
+        "code": "internal_period_feature",
+        "reason": "公开期单主体（D052）；多法人合并属内部期"
+      }
+    ]
+  },
+  "/api/v1/intake/batches": {
+    "items": [
+      {
+        "id": "01a16cf8-918b-75e8-9e85-415199207d7c",
+        "name": "damai-demo-v1",
+        "status": "published",
+        "description": null,
+        "created_by": "flow-dev-bp",
+        "created_at": "2026-10-24T08:13:11",
+        "version_count": 1,
+        "latest_version_sequence": 1,
+        "latest_version_status": "published"
+      }
+    ],
+    "limit": 50
+  }
+}
