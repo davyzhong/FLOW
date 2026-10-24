@@ -104,6 +104,14 @@ body {
   margin: 0;
 }
 
+/* 统一可操作链接的品牌墨蓝；古金用于强调与交互提示，语义信息蓝仅用于状态/数据。 */
+:where(a) {
+  color: var(--flow-vl-colors-brand-navy);
+  text-decoration-color: var(--flow-vl-colors-brand-gold);
+  text-underline-offset: 0.16em;
+}
+:where(a:hover) { text-decoration-thickness: 2px; }
+
 .home-shell,
 .dashboard-app {
   min-height: 100vh;
@@ -362,7 +370,7 @@ body {
   color: var(--rep-ink); font-size: var(--flow-font-m); font-weight: 600;
   cursor: pointer;
 }
-.flow-btn:hover:not(:disabled) { border-color: var(--rep-blue); color: var(--rep-blue); }
+.flow-btn:hover:not(:disabled) { border-color: var(--flow-vl-colors-brand-gold); color: var(--flow-vl-colors-brand-navy); }
 .flow-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 .flow-btn--primary { background: var(--rep-navy-2); border-color: var(--rep-navy-2); color: #fff; }
 .flow-btn--primary:hover:not(:disabled) { background: var(--rep-navy); color: #fff; }
@@ -378,7 +386,7 @@ body {
   color: var(--rep-ink); background: var(--rep-card);
 }
 .flow-field input:focus, .flow-field select:focus, .flow-field textarea:focus {
-  outline: 2px solid var(--rep-blue-soft); border-color: var(--rep-blue);
+  outline: 2px solid var(--flow-vl-colors-brand-gold-soft); border-color: var(--flow-vl-colors-brand-goldStrong);
 }
 
 /* 错误块 */
@@ -396,7 +404,7 @@ body {
   background: var(--rep-card); color: var(--rep-slate);
   text-align: center; font-size: var(--flow-font-m);
 }
-.flow-empty a { color: var(--flow-info); font-weight: 600; }
+.flow-empty a { color: var(--flow-vl-colors-brand-navy); font-weight: 600; }
 
 /* 加载 */
 .flow-loading {
@@ -405,7 +413,7 @@ body {
 }
 .flow-loading::before {
   content: ""; width: 14px; height: 14px; border-radius: 50%;
-  border: 2px solid var(--rep-line-3); border-top-color: var(--rep-blue);
+  border: 2px solid var(--rep-line-3); border-top-color: var(--flow-vl-colors-brand-gold);
   animation: flow-spin 0.8s linear infinite;
 }
 @keyframes flow-spin { to { transform: rotate(360deg); } }

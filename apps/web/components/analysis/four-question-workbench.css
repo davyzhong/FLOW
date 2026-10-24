@@ -131,13 +131,13 @@
 }
 
 .workbench__identity a:hover {
-  color: var(--flow-info);
+  color: var(--flow-vl-colors-brand-goldStrong);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
 a.workbench__metric-code:hover {
-  color: var(--flow-info);
+  color: var(--flow-vl-colors-brand-goldStrong);
   text-decoration: underline;
   text-underline-offset: 2px;
 }

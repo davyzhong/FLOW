@@ -87,7 +87,7 @@
   align-items: center;
   justify-content: center;
   gap: var(--flow-space-2);
-  color: var(--flow-info);
+  color: var(--flow-vl-colors-brand-navy);
   font-weight: 600;
   cursor: pointer;
 }

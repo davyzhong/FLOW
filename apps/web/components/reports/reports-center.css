@@ -48,7 +48,7 @@
 }
 
 .reports-center__objective-list a {
-  color: var(--flow-info);
+  color: var(--flow-vl-colors-brand-navy);
   font-weight: 600;
 }
 

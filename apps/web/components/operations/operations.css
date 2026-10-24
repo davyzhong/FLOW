@@ -38,7 +38,7 @@
   padding: 7px 16px;
   border: none;
   border-radius: 7px;
-  background: var(--rep-blue);
+  background: var(--flow-vl-colors-brand-navy);
   color: #fff;
   cursor: pointer;
 }

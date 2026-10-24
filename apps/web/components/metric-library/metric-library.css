@@ -17,7 +17,7 @@
 
 /* ===== Hero 页头（红顶线 + kicker + 超大标题 + 副标题） ===== */
 .ml-hero {
-  border-top: 4px solid var(--rep-red);
+  border-top: 4px solid var(--flow-vl-colors-brand-gold);
   padding-top: 16px;
 }
 .ml-hero--compact { padding-top: 12px; margin-bottom: 4px; }
@@ -37,7 +37,7 @@
 }
 .ml-hero--compact .ml-hero__title { font-size: 22px; }
 .ml-hero__title em {
-  color: var(--rep-red);
+  color: var(--flow-vl-colors-brand-goldStrong);
   font-style: normal;
 }
 .ml-hero__lede {
@@ -159,8 +159,8 @@
 }
 
 .ml-tabs button.is-active {
-  border-color: var(--rep-blue);
-  background: var(--rep-blue);
+  border-color: var(--flow-vl-colors-brand-navy);
+  background: var(--flow-vl-colors-brand-navy);
   color: #fff;
 }
 
@@ -835,7 +835,7 @@ a.ml-dep:hover {
 }
 
 .ml-graph__selected a {
-  color: var(--rep-blue);
+  color: var(--flow-vl-colors-brand-navy);
   font-weight: 600;
 }
 
