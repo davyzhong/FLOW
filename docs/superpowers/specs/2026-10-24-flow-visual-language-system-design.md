@@ -103,5 +103,6 @@ knowledge_release: flow-knowledge-2026-09-12.1
 ## 8. 当前基线
 
 - 当前 main 为 PR #4 merge commit `b068796f906cfbb91ac33775f5578194acc98a51`，准确 SHA GitHub Actions run `40096497668` 为 28/28 success；D055/7a.1–7a.8 已结案。
-- 新任务经用户选择后插入唯一路线图，作为 K2 前的队首待启动事项。当前设计稿仍为 draft，用户确认前不开始页面、报告或截图改造。
-- 主 README、PROJECT_STATE、HANDOFF、路线图、文档中心和阅读顺序的当前入口已随本计划更新为 7a 完成与新任务队列；日期明确且折叠的旧快照保留为历史，不作为当前状态。
+- 用户已批准本规格与工作包；本事项已在 K2 前成为唯一执行队首，当前在 `codex/flow-visual-language` 按工作包串行实施。
+- 已建立可复制 token/CSS/范式/specimen 资产；全局主题、共享外壳、主要页面/图表、离线驾驶舱和报告渲染器已接入共享主题。20 路由×3 视口基础检查 60/60 通过，图表及其他输出的逐项视觉、交互和无障碍验收仍在进行；当前证据与限制见[视觉覆盖报告](../../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。
+- 主 README、PROJECT_STATE、HANDOFF、路线图、文档中心和阅读顺序均已同步 7a 完成与新任务的当前入口；README 展示本轮真实页面截图。日期明确且折叠的旧快照保留为历史，不作为当前状态。
