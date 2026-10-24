@@ -2,10 +2,11 @@
 doc_id: FLOW-WI-SINGLE-MACHINE-VISUAL-20261018-001
 title: 单机原型架构简化与全视图视觉升级
 doc_type: work-item
-status: active
-version: 3.7
+status: completed
+version: 3.8
 created_at: 2026-10-18
 updated_at: 2026-10-24
+do_not_execute: true
 owner: FLOW
 depends_on: [FLOW-SPEC-SINGLE-MACHINE-VISUAL-20261018-001]
 acceptance_refs: [FLOW-DECISION-D055]
@@ -19,7 +20,7 @@ confidentiality: project-internal
 
 # 单机原型架构简化与全视图视觉升级
 
-> **2026-10-24 接续说明：** 7a.1–7a.7 已完成，当前执行 7a.8 主线整合与交付归档。候选代码 SHA `0a43d131d44a5891181b2e935e011888b3101660` 对应 GitHub Actions run `40079923908`，28/28 jobs success；候选隔离旅程、九页离线包和独立复核证据见[完结差距报告](../../60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)。代码与范围不扩展，现有规格继续适用。唯一可领取顺序只在[CURRENT_ROADMAP 7a 收尾队列](../CURRENT_ROADMAP.md#7a-单机原型收尾动作与完成条件2026-10-24)；本工作包下方阶段记录为验收细节/历史，不产生第二份 To-do。
+> **2026-10-24 结案记录：** 7a.1–7a.8 已完成。PR [#3](https://github.com/davyzhong/FLOW/pull/3) 已合入 main，merge commit `b2a1bf22df91239eb311d1692c30c666250678bf` 的 run `40092106547` 为 28/28 success；候选隔离旅程、九页离线包、独立复核及限制见[完结差距报告](../../60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)。本工作包已关闭并禁止继续执行；状态与后续顺序只见[CURRENT_ROADMAP](../CURRENT_ROADMAP.md)。
 
 <details>
 <summary>2026-10-21 及以前的状态快照（历史，不代表当前执行）</summary>
@@ -172,7 +173,7 @@ confidentiality: project-internal
 - 由独立上下文只按 diff、验收标准和项目约定复核，修复影响正确性/需求的 P1/P2 后再运行最终门禁。
 - 同步 PROJECT_STATE、CURRENT_ROADMAP、HANDOFF、README、安装与运行/备份文档；全任务 commit+push 后将本 work item 标记 completed，再恢复 K3 来源审核队列。
 
-### 9. 概念图视觉差距、门禁负载与文档治理（当前 7a 串行执行依据）
+### 9. 概念图视觉差距、门禁负载与文档治理（历史验收细节，已由路线图接替）
 
 本轮对照证据：概念图为暖纸白画布、墨蓝导航、金色重点、衬线编辑部标题、明显的图表主次与叙事卡片；当前 `/cockpit` 共享 CSS 仍注释并使用旧版 `#2563eb` 蓝色主色、标准后台灰白底和紧凑标题。两边虽都有 KPI、趋势、瀑布、杜邦、成本和行动项，视觉语言与层级并未对齐。不得把“已有对应组件”当成视觉验收完成。
 
