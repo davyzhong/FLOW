@@ -213,7 +213,7 @@ export function buildWaterfall(
     tooltip: {
       trigger: "axis",
       axisPointer: { type: "shadow" },
-      backgroundColor: "rgba(255,255,255,.97)",
+      backgroundColor: VISUAL_TOKENS["chart-tooltipBackground"],
       borderColor: CHART_THEME.line,
       textStyle: { color: CHART_THEME.ink, fontSize: 12 },
       formatter: (ps: { name: string; dataIndex: number }[]) => {
@@ -339,7 +339,7 @@ export function buildDonut(slices: Slice[], unit: string, rose = false): ChartOp
   return {
     tooltip: {
       trigger: "item",
-      backgroundColor: "rgba(255,255,255,.97)",
+      backgroundColor: VISUAL_TOKENS["chart-tooltipBackground"],
       borderColor: CHART_THEME.line,
       textStyle: { color: CHART_THEME.ink, fontSize: 12 },
       formatter: (p: { name: string; value: number; percent: number }) =>
@@ -418,7 +418,7 @@ export function buildHeatmap(
   return {
     tooltip: {
       position: "top",
-      backgroundColor: "rgba(255,255,255,.97)",
+      backgroundColor: VISUAL_TOKENS["chart-tooltipBackground"],
       borderColor: CHART_THEME.line,
       textStyle: { color: CHART_THEME.ink, fontSize: 12 },
       formatter: (p: { value: [number, number, number] }) => {
@@ -481,7 +481,7 @@ export function buildDupont(
   ];
   return {
     tooltip: {
-      backgroundColor: "rgba(255,255,255,.97)",
+      backgroundColor: VISUAL_TOKENS["chart-tooltipBackground"],
       borderColor: CHART_THEME.line,
       textStyle: { color: CHART_THEME.ink, fontSize: 12 },
       formatter: (p: { data?: { formula?: string } }) => p.data?.formula ?? "",
@@ -507,7 +507,7 @@ export function buildDupont(
         edgeSymbol: ["none", "arrow"],
         edgeSymbolSize: [0, 6],
         lineStyle: { color: CHART_THEME.mut, width: 1.4, curveness: 0.06, opacity: 0.85 },
-        label: { show: true, position: "inside", fontSize: 9.5, color: "#fff", fontWeight: 600, lineHeight: 12 },
+        label: { show: true, position: "inside", fontSize: 9.5, color: VISUAL_TOKENS["colors-text-inverse"], fontWeight: 600, lineHeight: 12 },
         emphasis: { scale: 1.05 },
       },
     ],
@@ -526,7 +526,7 @@ export function buildRankBar(
   return {
     tooltip: {
       trigger: "item",
-      backgroundColor: "rgba(255,255,255,.97)",
+      backgroundColor: VISUAL_TOKENS["chart-tooltipBackground"],
       borderColor: CHART_THEME.line,
       textStyle: { color: CHART_THEME.ink, fontSize: 12 },
       formatter: (p: { name: string; value: number }) => `${p.name}<br>${formatFinancialValue(p.value, { unit })}`,
@@ -560,7 +560,7 @@ export function buildAgingBars(segs: { label: string; pct: number; days?: string
   return {
     tooltip: {
       trigger: "item",
-      backgroundColor: "rgba(255,255,255,.97)",
+      backgroundColor: VISUAL_TOKENS["chart-tooltipBackground"],
       borderColor: CHART_THEME.line,
       textStyle: { color: CHART_THEME.ink, fontSize: 12 },
       formatter: (p: { name: string; value: number }) => `${p.name}<br>${formatFinancialValue(p.value, { unit: "%" })}${segs[usable.indexOf(p as never)]?.days ? `（约 ${formatFinancialValue(segs[usable.indexOf(p as never)].days, { metricCode: "dso_days", unit: "day" })}）` : ""}`,

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 
-import { ChartBox } from "./charts/echarts-base";
+import { ChartBox, CHART_THEME } from "./charts/echarts-base";
 import { buildCombo, buildDupont, type ComboSeries, type DupontNode } from "./charts/builders";
 import "./cockpit.css";
 import { formatFinancialValue } from "./number-format";
@@ -53,11 +53,11 @@ function dupontOption(data: CockpitProfitabilityResponse): ReturnType<typeof bui
     };
   };
   return buildDupont(
-    node("ROE", "roe", 80, 150, 78, "#1d4ed8"),
+    node("ROE", "roe", 80, 150, 78, CHART_THEME.blue),
     [
-      { node: node("净利率", "net_margin", 300, 45, 68, "#0f766e"), children: [] },
-      { node: node("总资产周转率", "total_asset_turnover", 300, 150, 68, "#7c3aed"), children: [] },
-      { node: node("权益乘数", "equity_multiplier", 300, 255, 68, "#b45309"), children: [] },
+      { node: node("净利率", "net_margin", 300, 45, 68, CHART_THEME.teal), children: [] },
+      { node: node("总资产周转率", "total_asset_turnover", 300, 150, 68, CHART_THEME.purple), children: [] },
+      { node: node("权益乘数", "equity_multiplier", 300, 255, 68, CHART_THEME.gold), children: [] },
     ],
   );
 }

@@ -20,12 +20,17 @@ import {
 import "@xyflow/react/dist/style.css";
 import type { MetricLibraryEntry } from "../../lib/api/client";
 import { metricFocusHref } from "../../lib/deep-links";
+import { VISUAL_TOKENS } from "../../lib/visual-tokens.generated";
 
 const NODE_W = 168;
 const NODE_H = 46;
 const COL_GAP = 84;
 const ROW_GAP = 18;
 const PADDING = 24;
+const GRAPH_EDGE = VISUAL_TOKENS["colors-line-default"];
+const GRAPH_ACTIVE_EDGE = VISUAL_TOKENS["colors-brand-gold"];
+const GRAPH_TEXT = VISUAL_TOKENS["colors-text-primary"];
+const GRAPH_MUTED = VISUAL_TOKENS["colors-text-muted"];
 
 type GraphNodeData = {
   entry: MetricLibraryEntry;
@@ -111,8 +116,13 @@ function closure(
 }
 
 const DOMAIN_PALETTE: Record<string, string> = {
-  solvency: "#1d4ed8", operation: "#0f766e", profitability: "#b45309",
-  growth: "#7c3aed", cashflow: "#15803d", value: "#be185d", scale: "#475569",
+  solvency: VISUAL_TOKENS["colors-brand-navy"],
+  operation: VISUAL_TOKENS["colors-data-cash"],
+  profitability: VISUAL_TOKENS["colors-brand-gold"],
+  growth: VISUAL_TOKENS["colors-data-series5"],
+  cashflow: VISUAL_TOKENS["colors-semantic-positive"],
+  value: VISUAL_TOKENS["colors-data-revenue"],
+  scale: VISUAL_TOKENS["colors-text-muted"],
 };
 
 function MetricNode({ data }: NodeProps<Node<GraphNodeData>>) {
@@ -123,9 +133,9 @@ function MetricNode({ data }: NodeProps<Node<GraphNodeData>>) {
         width: NODE_W,
         height: NODE_H,
         borderRadius: 8,
-        background: "#fff",
-        border: `1.5px solid ${selected ? "#1d4ed8" : domainColor}`,
-        boxShadow: selected ? "0 0 0 2px rgba(29,78,216,.25)" : undefined,
+        background: VISUAL_TOKENS["colors-surface-raised"],
+        border: `1.5px solid ${selected ? GRAPH_ACTIVE_EDGE : domainColor}`,
+        boxShadow: selected ? `0 0 0 2px ${VISUAL_TOKENS["colors-brand-goldSoft"]}` : undefined,
         opacity: dim ? 0.3 : 1,
         padding: "6px 10px",
         display: "flex",
@@ -143,15 +153,15 @@ function MetricNode({ data }: NodeProps<Node<GraphNodeData>>) {
           : "")
       }
     >
-      <span style={{ fontSize: 12, fontWeight: 600, color: "#14243a", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+      <span style={{ fontSize: 12, fontWeight: 600, color: GRAPH_TEXT, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
         {entry.name}
       </span>
-      <span style={{ fontSize: 11, color: "#5b6774", fontFamily: "var(--font-mono, monospace)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+      <span style={{ fontSize: 11, color: GRAPH_MUTED, fontFamily: VISUAL_TOKENS["typography-family-mono"], whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
         {entry.metric_code}
       </span>
       {(entry.tier ?? "professional") === "core" ? (
         <span
-          style={{ position: "absolute", top: 8, right: 8, width: 8, height: 8, borderRadius: "50%", background: "#f59e0b" }}
+          style={{ position: "absolute", top: 8, right: 8, width: 8, height: 8, borderRadius: "50%", background: VISUAL_TOKENS["colors-brand-gold"] }}
           title="常用指标"
         />
       ) : null}
@@ -214,7 +224,7 @@ export function DependencyGraph({
           data: {
             entry,
             domainLabel: domains[entry.domain] ?? entry.domain,
-            domainColor: DOMAIN_PALETTE[entry.domain] ?? "#475569",
+            domainColor: DOMAIN_PALETTE[entry.domain] ?? GRAPH_MUTED,
             selected: isSelected,
             dim,
           },
@@ -239,7 +249,7 @@ export function DependencyGraph({
           targetHandle: Position.Left,
           animated: active,
           style: {
-            stroke: active ? "#1d4ed8" : "#c3ccd8",
+            stroke: active ? GRAPH_ACTIVE_EDGE : GRAPH_EDGE,
             strokeWidth: active ? 2 : 1,
             opacity: selected !== null && !active ? 0.25 : 1,
           },
@@ -297,7 +307,7 @@ export function DependencyGraph({
           proOptions={{ hideAttribution: true }}
           onNodeClick={(_event, node) => setSelected(node.id === selected ? null : node.id)}
         >
-          <Background gap={24} color="#eef2f6" />
+          <Background gap={24} color={VISUAL_TOKENS["colors-line-subtle"]} />
           <Controls showInteractive={false} />
           <MiniMap
             pannable
