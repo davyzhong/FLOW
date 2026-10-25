@@ -323,3 +323,8 @@ W3 MED 第二十四组完成1条全文双审，SHA匹配 accepted baseline 且�
 ### K3 全量语义路由批次 057（2026-10-26）
 
 按当前 baseline source_id 升序处理最前12条未覆盖来源，逐篇核对 ObsidianWiki 原文 SHA 与 accepted snapshot。一条baseline文档仅有 YAML 元数据壳；发现同标题全文位于当前baseline allowlist外、原始出处未核，未用其替代accepted来源，标 locator-only / pending-review；一条企业内部HR/薪酬与OKR来源标 project-internal/rejected，不进入候选；其余10条完成K4/K5/K7/K8主题路由，均为待核验而非已验证事实。覆盖计数为 routed 168、filtered 19、pending_review 9,486。详见 `semantic-review-2026-10-26-batch-057.tsv`；下一批从剩余 pending_review 中按 baseline ID 升序继续。
+
+
+### K3 全量语义路由批次 058（2026-10-26）
+
+按 accepted baseline `source_id` 升序完成12条可读全文审阅并核对快照 SHA；批次057留下更小ID例外 `SRC-LOCAL-v1-00625bae4e08042539d1`，其全文位于当前allowlist外，故继续locator-only / pending-review，不以范围外内容替代。9条保留 routed / pending-verification：AI产业观点、客户主数据治理、备份与本地部署笔记、数据分析/决策框架、产品功能名录及企业战略文章；原始出处、版本、方法与数据均未充分核实，不采纳为已证实事实。3条含内部OKR/组织经营内容的来源设为 project-internal / rejected，不进入产品候选且不复述内部指标。coverage 更新为 routed 177、filtered 22、pending_review 9,474；逐条证据见 `semantic-review-2026-10-26-batch-058.tsv`。下一批继续按 baseline ID 升序。
