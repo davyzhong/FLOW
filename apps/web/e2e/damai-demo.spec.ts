@@ -1196,20 +1196,24 @@ test("metric library switches to damai synthetic coverage", async ({ page }) => 
   await nav.getByRole("button", { name: "依赖图谱" }).click();
   const graph = page.getByRole("region", { name: "指标依赖关系有向图（可缩放平移）" });
   await expect(graph).toBeVisible();
+  // 首屏默认仅显示常用指标；API 返回的第一项依赖指标可能位于专业层。
+  // 切到完整层后再验证该指标的节点选择和卡片深链。
+  await page.getByLabel("分层").selectOption("all");
   await graph.getByRole("button", {
     name: `${graphTarget.name}（${graphTarget.metric_code}）`,
     exact: true,
   }).click();
   await expect(page.getByRole("status")).toContainText(graphTarget.name);
   const graphCardLink = page.getByRole("link", { name: "查看指标卡片" });
+  const graphTargetHref =
+    `/metric-library?focus=${encodeURIComponent(graphTarget.metric_code)}` +
+    `&collection=${encodeURIComponent(graphTarget.collection)}`;
   await expect(graphCardLink).toHaveAttribute(
     "href",
-    `/metric-library?focus=${encodeURIComponent(graphTarget.metric_code)}`,
+    graphTargetHref,
   );
   await graphCardLink.click();
-  await expect(page).toHaveURL(
-    `/metric-library?focus=${encodeURIComponent(graphTarget.metric_code)}`,
-  );
+  await expect(page).toHaveURL(graphTargetHref);
   const focusedGraphTarget = page.locator(".ml-metric--focused");
   await expect(focusedGraphTarget).toHaveClass(/ml-metric--focused/);
   await expect(focusedGraphTarget.locator(".ml-metric__head")).toContainText(graphTarget.name);
@@ -1640,7 +1644,9 @@ test("data workbench history mirrors intake batches api", async ({ page }) => {
 
   const history = page.getByRole("region", { name: "最近的数据批次" });
   await expect(history).toBeVisible({ timeout: 15_000 });
-  const rows = history.locator("tbody tr");
+  const rows = history.getByRole("table", {
+    name: "按创建时间倒序排列的内部数据批次",
+  }).locator("tbody tr");
   await expect(rows).toHaveCount(items.length);
   for (const [index, item] of items.entries()) {
     const row = rows.nth(index);
