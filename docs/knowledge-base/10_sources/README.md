@@ -3,7 +3,7 @@ doc_id: FLOW-SRC-README-001
 title: 来源与证据层
 doc_type: navigation
 status: current
-version: 1.4
+version: 1.6
 created_at: 2026-09-12
 updated_at: 2026-10-26
 owner: FLOW
@@ -50,3 +50,5 @@ applies_to: knowledge-base
 - `semantic-review-2026-10-26-batch-022.tsv` —— 第二十二批 3 条 HIGH/簇3 全文审阅，记录案例证据缺失、不同日期/URL 的同题文章暂不合并，以及业务映射文章的示例阈值不采纳。
 
 - `semantic-review-2026-10-26-batch-023.tsv` —— 第二十三批 3 条 HIGH/簇3 全文审阅；核算粒度、经营思维、汇报框架中的案例数字、ROI 和操作阈值均缺少独立证据，保留为待核验。
+
+- `semantic-review-2026-10-26-batch-024.tsv` —— 第二十四批 2 条 HIGH/簇3 审阅：闭环案例 Getnote 笔记与既有文章高度相似但原文关联未核，暂不标 duplicate；经营驱动树文章保留待验证，未采纳无来源数字与 BI 能力主张。
