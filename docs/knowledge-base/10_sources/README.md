@@ -3,7 +3,7 @@ doc_id: FLOW-SRC-README-001
 title: 来源与证据层
 doc_type: navigation
 status: current
-version: 2.3
+version: 2.4
 created_at: 2026-09-12
 updated_at: 2026-10-26
 owner: FLOW
@@ -17,7 +17,7 @@ applies_to: knowledge-base
 - `SOURCE_REGISTER.md` —— 来源登记册（人类可读）与分层登记策略
 - `source-register.tsv` —— 机器可读登记（活登记，知识卡按需追加篇级）
 - `snapshots/` —— 固定截面定义（当前唯一截面：obsidian-2026-09-12T15:46+08:00）
-- `coverage-2026-10-26.tsv`、`coverage-exceptions-2026-10-26.tsv` 与 `../00_governance/change-manifests/obsidianwiki-20261026T005516+0800-d601b4d5-l2.tsv` —— 9,673 个来源的逐 ID 进度、例外与变更追溯；当前 routed 75、filtered 16、pending_review 9,582。
+- `coverage-2026-10-26.tsv`、`coverage-exceptions-2026-10-26.tsv` 与 `../00_governance/change-manifests/obsidianwiki-20261026T005516+0800-d601b4d5-l2.tsv` —— 9,673 个来源的逐 ID 进度、例外与变更追溯；当前 routed 78、filtered 16、pending_review 9,579。
 - `source-baseline-2026-10-26.tsv`、`source-delta-2026-10-26.tsv`、
   `source-diff-2026-10-26.tsv` 与 `../00_governance/migration/source-id-registry-2026-10-26.tsv`
   —— K3 当前资料内容来自 `obsidianwiki-20261026T005516+0800-d601b4d5`。当前 registry/baseline/delta 已统一绑定该 accepted snapshot；已审阅条目的语义字段按批次登记，其余来源仍待审，不能视为已路由或可采纳。详见[当前快照与基线复核](../../60_delivery/verification/2026-10-26--k3-current-snapshot-v1.md)。
@@ -60,4 +60,5 @@ applies_to: knowledge-base
 - `semantic-review-2026-10-26-batch-028.tsv` —— 第二十八批旧 W1 MED 组第 3 组 3 条双审；Power BI/AI宣传能力及产品时价未核，AI就业预测无证据。
 - `semantic-review-2026-10-26-batch-029.tsv` —— 第二十九批旧 W1 MED 组第 4 组 3 条双审；盈利指标公式有量纲/口径风险，酒店指标定义与效果案例无可追溯证据。
 - `semantic-review-2026-10-26-batch-030.tsv` —— 第三十批旧 W1 MED 组第 5 组 3 条双审；记录财务比率概念与阈值风险、三表关系简化及无来源投资案例。
+- `semantic-review-2026-10-26-batch-031.tsv` —— 第三十一批完成旧 W1 MED 17 篇队列的最后 3 条来源双审；记录绩效口径冲突及匿名案例数据/因果结论的证据限制。
 - 旧 A-finance HIGH 清单中的 AI 财务专题经 ObsidianWiki Git 提交 `c743b98972d45794d5948787ab65e7fd9afcbad1` 证实为跨目录同 blob 迁移；迁入路径不在当前 accepted baseline，故作为基线外迁移从本轮候选排除，不计入 76 条已审候选，正文未打开。详见当前快照复核报告。
