@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 6.0
+version: 6.2
 created_at: 2026-09-12
 updated_at: 2026-10-26
 owner: FLOW
@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-10-26 当前状态：**单机原型 7a.1–7a.8 已合入 main；视觉语言资产提炼与 FLOW 全项目视觉统一已结案。** 16 项路线图：完成 10、实际执行中 1（K/K3）、排队 3、暂停 1、外部条件受限 1。最终隔离验收使用 synthetic manifest `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`：验证器 19/19，可见性矩阵 164/164（154 HTTP 200、10 预期拒绝、0 失败），Playwright 17/17；页面截图矩阵应用 SHA `01e8e25dd426ed43ad6a2cad76544bbbe623eb99` 为 60/60，Axe 桌面 20 路由零违规。最后 E2E 断言修复 `d01daa11` 已通过独立复核（无 P1/P2）及 diff 检查。原生浏览器 200% 缩放受 Mac 锁屏与工具能力限制未直接验收；窄视口数据不替代，解锁设备并可操作原生缩放后补验。当前队首为知识刷新 K3。最新 accepted snapshot `obsidianwiki-20261026T005516+0800-d601b4d5`，manifest SHA `593715c832a538d9ba83df4e077b8dd9bace24f40d3c0d5262fc3779b20f0e77`，候选/复验完整内容 SHA `c84efd671e2b90e4f69152c3dd04a570d9c378d08fb7a3cb97b86e322f123df0` 一致、写句柄 0。它与已构建基线输入内容一致；registry/baseline/diff 待绑定至这个最新 snapshot ID 后，继续全量主题路由和 HIGH 全读，再完成 MED/LOW 双审与 coverage 闭合。ObsidianWiki 保持只读，`CURRENT_RELEASE` 不变。当前分支 `codex/flow-visual-language` / PR #5，文档提交后的准确 SHA CI 尚待查询。视觉证据见[覆盖记录](../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。用户选择保留 `/Users/qiming/.flow/flow.sqlite3` 零字节文件；`services/api/flow.sqlite3` 未跟踪文件原样保留。
+2026-10-26 当前状态：**单机原型 7a.1–7a.8 已合入 main；视觉语言资产提炼与 FLOW 全项目视觉统一已结案。** 16 项路线图：完成 10、实际执行中 1（K/K3）、排队 3、暂停 1、外部条件受限 1。最终隔离验收使用 synthetic manifest `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`：验证器 19/19，可见性矩阵 164/164（154 HTTP 200、10 预期拒绝、0 失败），Playwright 17/17；页面截图矩阵应用 SHA `01e8e25dd426ed43ad6a2cad76544bbbe623eb99` 为 60/60，Axe 桌面 20 路由零违规。最后 E2E 断言修复 `d01daa11` 已通过独立复核（无 P1/P2）及 diff 检查。原生浏览器 200% 缩放受 Mac 锁屏与工具能力限制未直接验收；窄视口数据不替代，解锁设备并可操作原生缩放后补验。当前队首为知识刷新 K3。最新 accepted snapshot `obsidianwiki-20261026T005516+0800-d601b4d5`，manifest SHA `593715c832a538d9ba83df4e077b8dd9bace24f40d3c0d5262fc3779b20f0e77`，候选/复验完整内容 SHA `c84efd671e2b90e4f69152c3dd04a570d9c378d08fb7a3cb97b86e322f123df0` 一致、写句柄 0。它与已构建基线输入内容一致；registry/baseline/delta/diff 均已绑定至该 snapshot ID。语义审阅批次 001–003 记录 9 条 HIGH 候选（8 篇正文已读、1 篇元数据不足），均 pending-verification；下一步继续 HIGH 全审、MED/LOW 双审与 coverage 闭合。ObsidianWiki 保持只读，`CURRENT_RELEASE` 不变。当前分支 `codex/flow-visual-language` / PR #5，文档提交后的准确 SHA CI 尚待查询。视觉证据见[覆盖记录](../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。用户选择保留 `/Users/qiming/.flow/flow.sqlite3` 零字节文件；`services/api/flow.sqlite3` 未跟踪文件原样保留。
 
 2026-10-25 视觉验收历次增量与历史证据见[覆盖记录](../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。页面矩阵及键盘状态绑定 `52418d88c9338b41c59f14f3d699d758c36bf8a1`；导出/打印现状以 `d554bc317e8c948d776833b9868cdce4a9dd4c81` 记录为准。不要把旧快照中的 205 项测试或已关闭的导出检查覆盖为当前事实。
 
@@ -89,7 +89,7 @@ applies_to: repository
 
 ## 当前执行入口
 
-- **[CURRENT_ROADMAP.md](../50_plans/CURRENT_ROADMAP.md)**（唯一主线：状态真相 + 单一串行 To-do）：7a.1–7a.8 已完成，PR #3 已合入 main；当前唯一执行项为全项目视觉统一，K2 排队。用户已授权在完成该项后继续队列，不需另行启动确认。
+- **[CURRENT_ROADMAP.md](../50_plans/CURRENT_ROADMAP.md)**（唯一主线：状态真相 + 单一串行 To-do）：7a.1–7a.8 已完成，PR #3 已合入 main；当前唯一执行项为知识刷新 K3 语义审阅；K0–K2 已完成。用户已授权在完成该项后继续队列，不需另行启动确认。
 - 旧统一计划、O 系列计划、EXECUTION_TODO 与 2026-09-24/25 三份总计划均已 superseded/archived（保留历史细节与证据，不再作为执行依据）
 - 文档迁移：[迁移实施计划 M0–M6](../superpowers/plans/2026-09-12-static-knowledge-and-document-migration.md) 已全部关闭（bfc1271 / e373e25，用户确认 2026-09-13）
 
@@ -104,7 +104,7 @@ applies_to: repository
 5. **内部工作台与真实企业验证（C 级出口后）**：需内部数据授权；至少连续三个完整月度周期，与同输入人工基准逐周期比较。
 6. **旧 U9/O5、U10（待重新裁决）**：仅保留历史工作包身份，不按旧依赖链自动领取。
 7. **大麦完整财年演示数据（底座 completed；页面覆盖部分完成）**：24个月synthetic全链已落地；常驻开发库受控恢复、verify19/19两次通过。Dashboard API 200、8卡、趋势12/12、2条findings，仍degraded；财报2份、发布快照1、冻结候选12，静态覆盖FY2025 37/40、FY2026 40/40。毛利矩阵实际/预算比较各10/32格可用，缺格不补零。常驻只读页面显示批次/Finding/财报/经营快照，未发布比较值显式标记；经营分析资产负债表点余额角色问题修复，百分比/倍数/天数已单位化显示。正式报告产物历史为空，其他页面金额/数量格式审计仍待完成。隔离栈verify19/19、浏览器E2E9/9；FY2025四问API500已修复。Gate 1全路由响应矩阵、Gate3/4其他页面呈现/下钻及深链批次三未完成。详见[Gate 1/Gate 2记录](../60_delivery/verification/2026-09-26--damai-visibility-gate1-v1.md)和[剩余体验收口工作包](../50_plans/work_items/UX--post-damai-experience-closeout.md)。合成数据不解除公开C级或真实企业门禁。
-8. **第二代静态知识刷新（active）**：批准规格与 preflight 已完成；K0–K6 尚待执行，用户战略裁决前不得切换 `CURRENT_RELEASE`。
+8. **第二代静态知识刷新（active）**：K0–K2 已完成，当前执行 K3；用户战略裁决前不得切换 `CURRENT_RELEASE`。
 
 ## 知识基线
 

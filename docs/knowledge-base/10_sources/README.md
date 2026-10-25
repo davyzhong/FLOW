@@ -19,9 +19,10 @@ applies_to: knowledge-base
 - `snapshots/` —— 固定截面定义（当前唯一截面：obsidian-2026-09-12T15:46+08:00）
 - `source-baseline-2026-10-26.tsv`、`source-delta-2026-10-26.tsv`、
   `source-diff-2026-10-26.tsv` 与 `../00_governance/migration/source-id-registry-2026-10-26.tsv`
-  —— K3 当前资料内容来自 `obsidianwiki-20261026T005516+0800-d601b4d5`。当前登记表仍绑定此前内容相同的快照 ID，待重建后统一指向最新 accepted 快照；语义字段仍待审，不能视为已路由或可采纳。详见[当前快照与基线复核](../../60_delivery/verification/2026-10-26--k3-current-snapshot-v1.md)。
+  —— K3 当前资料内容来自 `obsidianwiki-20261026T005516+0800-d601b4d5`。当前 registry/baseline/delta 已统一绑定该 accepted snapshot；已审阅条目的语义字段按批次登记，其余来源仍待审，不能视为已路由或可采纳。详见[当前快照与基线复核](../../60_delivery/verification/2026-10-26--k3-current-snapshot-v1.md)。
 - 同名 `2026-10-19` 文件仅代表旧 accepted 工作区截面，保留为历史证据，不再作为当前输入。旧历史没有完整改名 registry，因此未确认的改名以新增/删除分别登记，不以标题相似度推断。
 - `semantic-review-2026-10-26-batch-001.tsv` —— 首批 3 条 HIGH 主题候选的只读路由/可读性记录；不代表来源采纳或原始来源核验完成。
+- `semantic-review-2026-10-26-batch-002.tsv` —— 第二批 3 条 HIGH 候选的全笔记核验、路由和内容风险记录；原始来源核验及采纳仍未完成。
 - `source_notes/`（M2 后启用）—— 外部研究摘要（自 02_research/synthesis 迁入，M2 后续批次）
 
 处置枚举：adopted / partially-adopted / duplicate / background / rejected / pending-verification；核验等级独立记录（program-routed / representative-read / human-verified）。

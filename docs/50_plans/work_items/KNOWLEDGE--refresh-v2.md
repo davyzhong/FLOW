@@ -3,7 +3,7 @@ doc_id: FLOW-WI-KNOWLEDGE-REFRESH-V2-001
 title: 第二代静态知识刷新与战略重基线
 doc_type: work-item
 status: active
-version: 2.4
+version: 2.6
 created_at: 2026-09-24
 updated_at: 2026-10-26
 owner: FLOW
@@ -65,7 +65,7 @@ K2 accepted working-tree manifest 已提交并推送至 Davybase，远端确认�
 
 **当前子步仍属 K3，未完成整轨验收**：逐条主题路由和 HIGH 全文审阅、MED/LOW 双审抽样、错误集中度检查、coverage/例外闭合、知识综合和独立 reader 尚待完成。旧 2026-09-12 baseline 没有完整历史改名 registry；本轮以精确路径迁移旧 ID，未匹配项记为新增/删除，不用标题相似度推断改名。不得据此声称“没有改名”。`CURRENT_RELEASE` 仍为 `flow-knowledge-2026-09-12.1`，未 seal、未激活。
 
-语义批次 001 已检查 3 条既有 D-wiki HIGH 主题簇来源：三表勾稽与杜邦分析的本地笔记正文已读；现金流分析条目只有元数据，记录为 `locator-only`。三条按 K1/K2 路由，权威级别与敏感级别仍为 `unclassified`，处置均为 `pending-verification`，不进入 candidate。审阅台账见[`semantic-review-2026-10-26-batch-001.tsv`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-001.tsv)。原始来源全文未核验，不把本地摘要等同原始材料。
+语义批次 001–003 共记录 9 条 HIGH 候选：8 篇本地笔记正文已读、1 条只有元数据；按 K1/K2 路由，9 条均为 `pending-verification`，不进入 candidate。批次 001 见[`batch-001`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-001.tsv)，批次 002 见[`batch-002`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-002.tsv)，批次 003 见[`batch-003`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-003.tsv)。来源原文未独立核验；已记录单位冲突、公式符号缺失、算例不闭合及定义过度概括等风险，详见审阅台账。
 
 ### K3 语义审阅操作口径（依既有规格执行）
 
@@ -85,4 +85,9 @@ K2 accepted working-tree manifest 已提交并推送至 Davybase，远端确认�
 
 ## 2026-10-26 队首启动记录
 
-K3 是当前唯一执行项。首个只读复核发现 accepted manifest `obsidianwiki-k2-2026-10-19-final.json` 与当前 vault 状态不匹配：HEAD/tree 仍为 `e04d6833` / `aa7d84d3`，但 dirty 路径从 1,377 变为 1,434，当前 porcelain SHA-256 `d2535e6478caaadee622e3551a730335ec273f46d68e5f2fdb9d92096bf8dfed`（两次读取一致），旧 manifest 状态 SHA 为 `c688b336f3cd86c84e3f40874838e0c1083db75b201cde2985cee4cc10f35fdc`。ObsidianWiki `.davybase/image_evidence` 最近文件时间为 2026-10-25；未发现活动 Davybase/Obsidian 任务进程。故旧 K3 baseline/diff 仍是其 10 月 19 日 accepted 截面的历史有效结果，但不作为当前正文审阅输入。已在 vault 外重新冻结并接受 10-26 快照：候选/复验内容 SHA `c84efd671e2b90e4f69152c3dd04a570d9c378d08fb7a3cb97b86e322f123df0` 一致、写句柄 0；manifest 已随 Davybase `f65df69` 推送并释放锁。registry/baseline/delta/cumulative diff 均已生成；14 项 source baseline/coverage tests 通过，生成结果可逐字节复现，生成后 fingerprint 与 accepted snapshot 一致。当前唯一下一步为逐条主题路由与 HIGH 全文审阅，再完成 MED/LOW 双审和 coverage 闭合。ObsidianWiki 不写入，`CURRENT_RELEASE` 不变。
+K3 是当前唯一执行项。首个只读复核发现 accepted manifest `obsidianwiki-k2-2026-10-19-final.json` 与当前 vault 状态不匹配：HEAD/tree 仍为 `e04d6833` / `aa7d84d3`，但 dirty 路径从 1,377 变为 1,434，当前 porcelain SHA-256 `d2535e6478caaadee622e3551a730335ec273f46d68e5f2fdb9d92096bf8dfed`（两次读取一致），旧 manifest 状态 SHA 为 `c688b336f3cd86c84e3f40874838e0c1083db75b201cde2985cee4cc10f35fdc`。ObsidianWiki `.davybase/image_evidence` 最近文件时间为 2026-10-25；未发现活动 Davybase/Obsidian 任务进程。故旧 K3 baseline/diff 仍是其 10 月 19 日 accepted 截面的历史有效结果，但不作为当前正文审阅输入。已在 vault 外重新冻结并接受 10-26 快照：候选/复验内容 SHA `c84efd671e2b90e4f69152c3dd04a570d9c378d08fb7a3cb97b86e322f123df0` 一致、写句柄 0；manifest 已随 Davybase `f65df69` 推送并释放锁。registry/baseline/delta/cumulative diff 均已生成；14 项 source baseline/coverage tests 通过，生成结果可逐字节复现，生成后 fingerprint 与 accepted snapshot 一致。当时下一步为逐条主题路由与 HIGH 全文审阅；该步骤已开始，最新进度见本文件上方当前状态与各批次台账。ObsidianWiki 不写入，`CURRENT_RELEASE` 不变。
+
+
+### K3 语义审阅批次 003
+
+第三批完成 A-finance HIGH 簇 7 的三篇全文本地审阅，覆盖三表勾稽、现金流分析、资产负债表分析。三条来源哈希均匹配 accepted snapshot；路由 K1/K2，处置仍为 pending-verification。审阅发现现金流桥算例不闭合，现金流指标阈值/行业判断待验证，部分资产负债表原则概括过度且 ROE/EVA 定义不完整。详见来源层 [`semantic-review-2026-10-26-batch-003.tsv`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-003.tsv)。
