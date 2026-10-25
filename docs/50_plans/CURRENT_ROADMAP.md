@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 7.4
+version: 7.5
 created_at: 2026-09-12
 updated_at: 2026-10-25
 owner: FLOW
@@ -17,7 +17,7 @@ superseded_by: null
 
 # 当前路线图（唯一主线）
 
-> **2026-10-25 最新状态：** D055 单机原型 7a.1–7a.8 已合入 main。去重后 16 项：已完成 9、实际执行中 1（视觉统一 PR #5）、排队 4、暂停 1、外部条件受限 1。当前分支 `codex/flow-visual-language`。页面/键盘证据仍绑定代码 SHA `52418d88c9338b41c59f14f3d699d758c36bf8a1`：Web 38 文件/209 项测试、typecheck、production build 通过；lint 0 错误/4 条既有警告；20 路由×3 视口矩阵 60/60 ready，Axe 桌面 20 路由零违规，19/19 AppShell 键盘跳转通过。报告导出代码 SHA `d554bc317e8c948d776833b9868cdce4a9dd4c81` 下，HTML/PDF/PPTX/XLSX 代表性版式与打印检查完成，后端定向测试 27 项、Ruff、token 检查通过；离线预览已重采并嵌入此 SHA。原生浏览器 200% 缩放仍未直接验收：快捷键自动化无效，当前受控浏览器能力不能操作 Edge 工具栏缩放；390 CSS px 是补充证据。下一步按工作包顺序完成全路由最终差距核对、可行缩放路径复查、最终矩阵与独立复核。视觉工作包未结案前不启动 K2。详细证据见[视觉覆盖验收](../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)；GitHub Actions 结论按当前准确 HEAD 查询。
+> **2026-10-25 最新状态：** D055 单机原型 7a.1–7a.8 已合入 main。去重后 16 项：已完成 9、实际执行中 1（视觉统一 PR #5）、排队 4、暂停 1、外部条件受限 1。当前分支 `codex/flow-visual-language`。页面/键盘 SHA `52418d88c9338b41c59f14f3d699d758c36bf8a1` 的 Web 38 文件/209 项测试、typecheck、production build 通过；lint 0 错误/4 条既有警告；19/19 AppShell 键盘跳转通过。报告导出代码 SHA `d554bc317e8c948d776833b9868cdce4a9dd4c81` 下，HTML/PDF/PPTX/XLSX 代表性版式与打印检查完成，后端定向测试 27 项、Ruff、token 检查通过；离线预览已重采并嵌入此 SHA。最新矩阵和 Axe 结果绑定当前准确 SHA `32e4b08fb2fddc0ad424a5ac3bb5d8cc519414c4`：20 路由×3 视口 60/60 ready，页面/API/浏览器错误、外部请求、横向溢出均为 0，Axe 桌面 20 路由零违规。全路由人工截图复核确认留白均对应当前功能/隔离样本真实范围，不以虚构内容填补。原生浏览器 200% 缩放仍未直接验收：快捷键自动化无效，当前受控浏览器能力不能操作 Edge 工具栏缩放；390 CSS px 是补充证据。下一步按序完成剩余图表语义和复杂交互态，再复查可行放大路径、独立复核及准确 SHA CI。视觉工作包未结案前不启动 K2。详细证据见[视觉覆盖验收](../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)；GitHub Actions 结论按当前准确 HEAD 查询。
 
 > 当前完结目标依据 D055：交付本机单用户可启动、可加载/重置演示业务、可看丰富 CFO 图表、可下钻追溯、可分析和导出报告、可备份恢复、可离线浏览的验证原型。公开 C 级、知识刷新、真实企业三周期仍未完成，保留在长期队列，不作为本原型无限延期的理由。**下方 2026-10-21 及以前的状态段落均为历史，当前只按本段及唯一执行队列。**
 

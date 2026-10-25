@@ -3,7 +3,7 @@ doc_id: FLOW-WI-VISUAL-LANGUAGE-20261024-001
 title: 可复用视觉语言提炼与 FLOW 全项目视觉统一
 doc_type: work-item
 status: active
-version: 2.4
+version: 2.5
 created_at: 2026-10-24
 updated_at: 2026-10-25
 do_not_execute: false
@@ -26,6 +26,8 @@ confidentiality: project-internal
 
 ## 当前实施记录（2026-10-24）
 
+- **2026-10-25 全路由最终截图复核（代码 SHA `32e4b08fb2fddc0ad424a5ac3bb5d8cc519414c4`）：** 20 路由×3 视口 60/60 内容就绪，页面/API/浏览器错误、外部请求、横向溢出均为 0；Axe 4.13 桌面 20 路由零违规。人工复核全部 20 张桌面截图，确认功能范围较窄页面留白与当前真实功能/隔离样本相符，不用虚构内容填充；未发现需代码修正的 P1/P2。原生浏览器 200% 缩放仍无法由受控 API 设置，标为未直接验收；390/360 CSS px 仅作为窄视口补充证据。当前证据和限制已同步覆盖报告、README、项目状态、交接与路线图。下一步按序完成剩余图表语义及复杂交互态核对，再做独立复核与准确 SHA CI。
+
 - **2026-10-25 导出与打印视觉核验（代码 SHA `d554bc317e8c948d776833b9868cdce4a9dd4c81`）：** 统一 operations、冻结客观报告、通用出版 HTML/PDF 与离线驾驶舱的纸白/墨蓝/古金 token、衬线标题、数字字体和打印页式；PPTX 添加纸面背景/金色识别线并按平台映射中文字体；XLSX 统一表头、斑马纹、A4/分页/筛选冻结和宽表 fit-to-width，修复默认证据列未自适应导致打印内容挤在窄栏的问题。同步将 PDF 数字族、报告利润图强调色、环图文字与现金流零轴接入 token。使用隔离 synthetic 样例检查 HTML、Chromium PDF、PPTX Quick Look、XLSX A4 打印预览；未把样例输出提交为业务数据。定向 API 测试 27/27、Ruff、视觉 token 生成器 `--check`、离线 CSS token unittest、`git diff --check` 通过；独立复核无 P1/P2。离线总览已按此 SHA 重生成，批次 `01a16e5a-7c2c-79ab-9608-522ba64cce88`、manifest SHA `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`。原生浏览器 200% 缩放仍未直接验收，浏览器快捷键无效且当前自动化不能操作 Edge 工具栏；不能以 390 CSS px 重排代替。下一子步为全路由最终差距复核和最终矩阵，不结案、不启动 K2。
 
 - **2026-10-25 交互与键盘增量（代码 SHA `52418d88c9338b41c59f14f3d699d758c36bf8a1`）：** 全站跳过导航入口及主内容键盘焦点已接入；19/19 AppShell 路由首 Tab/Enter 导航通过。依赖图修复重复 metric_code 节点身份、边端点、图层切换残留选择和窄屏阅读；常用/全部/专业层分别 32/13、65/28、33/7 个节点/边，零重复 ID，边路径正常。重复编码深链按 collection 正确定位。390 CSS px 页面无溢出，图谱可横向滚动并键盘阅读。Web 测试 38 文件/209 项、typecheck、production build 通过；lint 0 错误/4 条既有警告；独立复核无 P1/P2。精确 SHA 下矩阵 60/60 ready，Axe 桌面 20 路由零违规。受控 CLI 无法直接设置浏览器原生 200% 缩放；窄屏重排只作为补充证据，原生缩放保留未验收。下一子步是 HTML/PDF/PPTX/XLSX 模板与打印，不结案、不启动 K2。
@@ -34,7 +36,7 @@ confidentiality: project-internal
 
 - **2026-10-25 前一代码阶段记录（准确代码 SHA `b04a7c5425c340681828f1c15c15f3071b1e2782`）：** 修复瀑布图只含负 `total` 时纵轴漏算 `hi` 端点导致的画布裁切；负值范围现按所有柱的 `lo/hi` 端点计算，负 delta 连接线锚定变动前累计值，负值标签绘制在柱下方。新增负利润与仅负总计回归用例，相关 4 个测试文件 33/33、Web typecheck、视觉 token 检查和 `git diff --check` 通过，独立代码复核无 P1/P2。精确 SHA 下矩阵 60/60 ready，浏览器/API 错误、外部请求、横向溢出为 0；Axe 4.13 桌面 20 路由零违规，截图及 JSON 均绑定此 SHA。GitHub Actions run `40199235605` 正在运行，最终状态须以该 SHA 对应结果为准。此修复只关闭负值瀑布图绘制缺陷；图表逐对象事实/单位/期间/来源审查、交互/键盘、真实 200% 缩放和四类输出模板/打印仍未验收。
 
-- **2026-10-25 当前状态（准确代码 SHA `0b06d01c07bf7e7c12e1565a17bce2b94c83aa04`）：** 报告中心编辑式双栏/窄屏单栏和指标库桌面双列卡片已完成；报告中心组件 12/12、指标库定向测试 16/16、Web typecheck、production build 通过。20 路由×3 视口矩阵 60/60 ready、页面/API/浏览器错误、外部请求、横向溢出为 0；Axe 4.13 桌面 20 路由零违规。远端 CI 状态按当前 HEAD 精确 SHA 实时查询；文档快照不代替 GitHub Actions 状态。当前本地没有浏览器验收脚本运行；下一步从逐图表事实/单位/期间/图例/来源/同值表达审查继续，再完成交互/键盘、真实 200% 缩放和四种导出/打印。Axe 整改已完成，不再列为待办。
+- **2026-10-25 历史状态（准确代码 SHA `0b06d01c07bf7e7c12e1565a17bce2b94c83aa04`）：** 报告中心编辑式双栏/窄屏单栏和指标库桌面双列卡片已完成；报告中心组件 12/12、指标库定向测试 16/16、Web typecheck、production build 通过。20 路由×3 视口矩阵 60/60 ready、页面/API/浏览器错误、外部请求、横向溢出为 0；Axe 4.13 桌面 20 路由零违规。远端 CI 状态按当前 HEAD 精确 SHA 实时查询；文档快照不代替 GitHub Actions 状态。当前本地没有浏览器验收脚本运行；下一步从逐图表事实/单位/期间/图例/来源/同值表达审查继续，再完成交互/键盘、真实 200% 缩放和四种导出/打印。Axe 整改已完成，不再列为待办。
 
 - 2026-10-25（代码 SHA `2abdad9621ab03141beb3ceb5e0da64f3d636cba`）：报告中心桌面改为双栏编辑式卡片，使用概念板的衬线主标题、古金眉线和纸面分区，窄屏回到单栏；报告数据和操作逻辑不变。报告中心组件 12/12、Web typecheck、production build 通过。新增可复跑矩阵脚本 `scripts/capture_visual_language_matrix.mjs`；当前 20 路由×3 视口 60/60 内容就绪，页面/API 错误、外部请求、横向溢出均为 0。Axe 4.13 桌面 20 路由零违规。当时 SHA 的 PR CI run `40195231596` 已由后续代码 SHA `0b06d01c` 的 run `40195845311` 接替；当前状态见本节最新记录。图表事实逐项复核、完整交互、实际 200% 浏览器缩放以及 HTML/PDF/PPTX/XLSX 版式与打印仍未验收。
 
@@ -43,7 +45,7 @@ confidentiality: project-internal
 - 2026-10-25（代码 SHA `3e8a1676f79e0e7c350cd950326ac2128c08ddc7`）：全站对比度/结构修复已提交推送；Web typecheck、37 文件 201/201 单测、Next.js production build、token 生成检查、M1 和 diff-check 通过。Axe 4.13 对 20 个桌面路由为零违规；20×3 截图矩阵 60/60 ready，错误/外部请求/溢出为零；360 CSS px 的 20 路由首 Tab 焦点可见且零溢出。独立输出矩阵和限制见[覆盖验收](../../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。图表逐对象语义、导入/筛选/报告交互和四类导出打印验收仍未完成。
 
 - 已建立 `packages/flow-visual-language/`，包含 `tokens.json` 单一源、生成 CSS、表达范式、无业务事实样例；生成器同时输出 TypeScript/Python token 映射。
-- 已接入 Web 全局主题、共享导航、主要 cockpit/data/analysis/operations 样式、ECharts/SVG 财务图色板与离线驾驶舱预览。报表 Matplotlib 图表读取同一 token 映射；HTML/PDF、PPTX、XLSX 主要渲染器已接入主题映射。代表性 HTML/PDF/PPTX/XLSX 输出和打印核验已于 2026-10-25 完成（代码 SHA `d554bc317e8c948d776833b9868cdce4a9dd4c81`，27 项定向后端测试通过）；全路由最终差距复核、原生 200% 阅读与最终矩阵仍待结案。
+- 已接入 Web 全局主题、共享导航、主要 cockpit/data/analysis/operations 样式、ECharts/SVG 财务图色板与离线驾驶舱预览。报表 Matplotlib 图表读取同一 token 映射；HTML/PDF、PPTX、XLSX 主要渲染器已接入主题映射。代表性 HTML/PDF/PPTX/XLSX 输出和打印核验已于 2026-10-25 完成（代码 SHA `d554bc317e8c948d776833b9868cdce4a9dd4c81`，27 项定向后端测试通过）；原生 200% 阅读仍无法直接验收；最终矩阵与桌面视觉总览已按 SHA `32e4b08fb2fddc0ad424a5ac3bb5d8cc519414c4` 完成。剩余为图表语义与复杂交互态核对、独立复核及准确 SHA CI。
 - Web typecheck 通过；前端 37 个测试文件、201 项通过；调查表和全局原生表单控件视觉调整后，typecheck、全量 201 项前端测试及 Next.js production build 通过。视觉 token `--check` 和 `git diff --check` 通过。
 - 2026-10-25：提交 `9cf65f6d58e0cdb33d8e04c17d843a8c9bbc1489` 下重采 20 路由×3 视口，60/60 内容就绪、API/浏览器错误/横向溢出/外部请求均为 0；60 张截图与 supplemental 引用已同步到覆盖报告。调查表按纸面风格修正，所有原生单选/复选控件改用古金品牌色。此轮截图矩阵关闭了默认视图加载和版面边界验收；最终视觉整改后仍需更新截图，逐图表、交互、无障碍和输出模板仍待验收。PR #5 的 dashboard 视觉回归暴露 Linux/macOS 两套截图基线都滞后于当前纸白/海军蓝主题与仪表盘版式。核对 CI 实际截图后确认这是已批准视觉更新，不是页面故障；更新 Linux 与 macOS 两组平台基线。隔离临时 Postgres/Redis/MinIO Compose 项目上，`scripts/test_dashboard.sh` 连续两次 7/7 通过，第二次为不更新快照的验收；同轮报告渲染器定向测试 21/21 通过。临时容器、专属数据库卷与 Compose 网络已清理。Linux 基线更新后的准确 SHA 全量 PR CI 尚待完成；此记录不代表视觉工作包完成。
 - Playwright 截图覆盖 20 路由×3 视口；修复 `/operations` 报告查询 UUID 参数类型后，代码 SHA `9cf65f6d` 下最新矩阵重采，60/60 HTTP 200、内容就绪、API/浏览器错误、外部请求、横向溢出均为零；指标依赖图交互截图也在同一 SHA 重采。热力图渐变、财报分组柱与瀑布图已接入语义 token。20 张桌面图审阅后已调整共享链接/控件色、指标库古金强调线、模块落地页衬线标题/卡片节奏和财报页品牌强调色；红色财务负值语义保持不变。指标依赖图默认聚焦“常用”层，并保留“全部/专业”范围切换；图谱画布按当前节点层高度展开，默认截图 31 个节点可见、零错误；“全部”视图的高密度缩放仍待核。视觉差异与剩余顺序见[视觉覆盖验收](../../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md#20-路由截图首轮差异盘点2026-10-24)：驾驶舱、财务出版页和数据工作台较接近；分析及功能范围较窄的页面仍有自然留白；逐图表、报告模板/打印、图表辅助表达、导入/映射与筛选交互、键盘焦点及对比度尚未验收。
