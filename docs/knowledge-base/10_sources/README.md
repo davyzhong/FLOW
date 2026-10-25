@@ -26,3 +26,4 @@ applies_to: knowledge-base
 - `source_notes/`（M2 后启用）—— 外部研究摘要（自 02_research/synthesis 迁入，M2 后续批次）
 
 处置枚举：adopted / partially-adopted / duplicate / background / rejected / pending-verification；核验等级独立记录（program-routed / representative-read / human-verified）。
+- `semantic-review-2026-10-26-batch-004.tsv` —— 第四批 3 条 HIGH 候选的全文审阅与现金流阈值/编制口径风险记录；均为 pending-verification。
