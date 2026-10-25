@@ -3,7 +3,7 @@ doc_id: FLOW-VERIFY-K3-CURRENT-SNAPSHOT-20261026
 title: K3 当前 Obsidian 工作区稳定快照复核
 doc_type: verification
 status: verified
-version: 1.3
+version: 1.4
 created_at: 2026-10-26
 updated_at: 2026-10-26
 owner: FLOW
@@ -58,7 +58,7 @@ Davybase `scripts/run/freeze_snapshot.py freeze` 运行于分支 `codex/knowledg
 | `source-delta-2026-10-26.tsv` | `689b7761d048e24bf7a879d5d87f4fcd047a527e70b6fdce79ce81a136f49c91` |
 | `source-diff-2026-10-26.tsv` | `9e781828298245be3c9b9e295eb5da825d04c6092393913a0fd8d03c36e70b90` |
 
-同一 accepted manifest 重建至独立 `/tmp` 输出目录，registry/baseline/delta 与累计 diff 均逐字节一致。生成后重算的 vault HEAD/tree、状态 SHA、内容 SHA、文件数、字节数与 dirty 路径数全部匹配 accepted manifest，写句柄 0。source baseline 与 coverage validator 专项测试 14/14 通过；知识库清单重生成 2,203 项并 `--check` 通过。全量语义路由、HIGH 全读、MED/LOW 双审、coverage 闭合、知识综合与独立 reader 尚待完成；语义批次 001–022 已记录 68 条 HIGH 候选（57 篇本地正文已读、11 条仅元数据筛查）；55 条 pending-verification，2 条同源副本 duplicate，11 条内部敏感来源 rejected 并排除候选；第二十批的三篇方法文章仍 pending-verification，示例数字与阈值未获独立证据。`CURRENT_RELEASE` 不变。
+同一 accepted manifest 重建至独立 `/tmp` 输出目录，registry/baseline/delta 与累计 diff 均逐字节一致。生成后重算的 vault HEAD/tree、状态 SHA、内容 SHA、文件数、字节数与 dirty 路径数全部匹配 accepted manifest，写句柄 0。source baseline 与 coverage validator 专项测试 14/14 通过；知识库清单重生成 2,203 项并 `--check` 通过。全量语义路由、HIGH 全读、MED/LOW 双审、coverage 闭合、知识综合与独立 reader 尚待完成；语义批次 001–023 已记录 71 条 HIGH 候选（60 篇本地正文已读、11 条仅元数据筛查）；58 条 pending-verification，2 条同源副本 duplicate，11 条内部敏感来源 rejected 并排除候选；第二十批的三篇方法文章仍 pending-verification，示例数字与阈值未获独立证据。`CURRENT_RELEASE` 不变。
 
 ## 语义审阅前复验快照（2026-10-26）
 
@@ -150,3 +150,6 @@ Davybase `scripts/run/freeze_snapshot.py freeze` 运行于分支 `codex/knowledg
 
 
 第二十二批审阅两篇同题“财务分析必须基于业务逻辑”文章及业务穿透分析文章。前两篇内容高度相似，但来源 URL 和发布日期不同，未核明关系，保持独立 pending-verification；案例、阈值与 KPI 均无独立证据。详见 `semantic-review-2026-10-26-batch-022.tsv`。
+
+
+第二十三批审阅核算粒度、七种经营思维及降本增效汇报三篇全文，案例数字、ROI、阈值及效果没有独立来源；多账套建议不作为普遍要求。详见 `semantic-review-2026-10-26-batch-023.tsv`。
