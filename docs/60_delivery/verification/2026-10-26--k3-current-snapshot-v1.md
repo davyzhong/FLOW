@@ -3,7 +3,7 @@ doc_id: FLOW-VERIFY-K3-CURRENT-SNAPSHOT-20261026
 title: K3 当前 Obsidian 工作区稳定快照复核
 doc_type: verification
 status: verified
-version: 4.1
+version: 4.2
 created_at: 2026-10-26
 updated_at: 2026-10-26
 owner: FLOW
@@ -430,3 +430,8 @@ W3 MED 第二十四组完成1条全文双审，保留 pending-verification。同
 ## K3 全量语义路由批次 083
 
 按 accepted baseline source_id 顺序审阅12条来源；逐条文件 SHA 与规范化正文 SHA 均匹配。4条路由为 pending-verification，涉及中小企业数字化转型、组织能力风险、经济租与DeepSeek-V4架构；相关理论、历史案例、市场判断和性能主张均未独立核验。7条来源过滤：采购协同架构、WMS实施、企业Agent知识库及AI生成知识草稿涉及企业内部/不可追溯内容；AI服务中转套利、池化技术及个人课程推荐与FLOW范围无直接关系。另有 `SRC-LOCAL-v1-0bd79ce2c2d600301852` accepted来源仅110字节元数据及空代码围栏，保持 locator-only / pending-review，不按标题推断；当前共4条locator-only例外。coverage累计为9,673条：routed 362、filtered 134、pending_review 9,177；下一批为084。ObsidianWiki与CURRENT_RELEASE未改动。逐条记录见 `../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-083.tsv`。
+
+
+## K3 全量语义路由批次 084
+
+按 accepted baseline source_id 顺序审阅12条来源；逐条文件 SHA 与规范化正文 SHA 均匹配。9条路由为 pending-verification，涉及AI制造业规模化、供应链敏捷、数据标签、DeepSeek训练架构、销售报告、财务交接、PDCA、Claude Code工程化及本量利分析；相关案例数字、政策/会计口径、模型性能、流程适用性与公式未独立核验。销售分析与本量利看板共30条图片引用按source_baseline.py来源目录及vault根目录回退规则均无法解析，未据图判断。3条来源过滤：五年规划宏观/地缘评论、个人研究品味和Transformer教育工具与FLOW财务经营分析范围无直接关系。coverage累计为9,673条：routed 371、filtered 137、pending_review 9,165；四个locator-only例外仍待审，下一批为085。ObsidianWiki与CURRENT_RELEASE未改动。逐条记录见 `../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-084.tsv`。
