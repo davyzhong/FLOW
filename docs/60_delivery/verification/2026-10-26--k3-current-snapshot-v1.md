@@ -266,3 +266,8 @@ W3 MED 第十八组完成三条全文双审，均保留 pending-verification。B
 ## 语义审阅批次 050（2026-10-26）
 
 W3 MED 第十九组完成三条全文双审，均为 pending-verification。母婴看板缺原始交易表及份额/同比口径；波士顿矩阵宝洁案例缺期间、市场分母与原始数据，象限策略是启发式。2022/2023同题文章在核心内容上重合，保留两条来源、不合并。coverage 为 routed 135、filtered 16、pending_review 9,522。详见 `semantic-review-2026-10-26-batch-050.tsv`。
+
+
+## 语义审阅批次 051（2026-10-26）
+
+W3 MED 第二十组完成三条全文双审，均保留 pending-verification。模型合集“8种”标题与“15种”摘要不一致；RFM分位阈值依赖样本、M口径可变；折扣购买筛选不能证明“羊毛党”身份，案例人数和策略收益缺复核。coverage 为 routed 138、filtered 16、pending_review 9,519。详见 `semantic-review-2026-10-26-batch-051.tsv`。
