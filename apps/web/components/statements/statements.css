@@ -358,6 +358,14 @@
   color: var(--rep-red, var(--rep-red));
 }
 
+.stmt-chart-data { margin-top: 8px; border-top: 1px solid var(--flow-vl-colors-line-default); color: var(--flow-vl-colors-text-secondary); font-size: 12px; }
+.stmt-chart-data summary { width: fit-content; padding: 7px 0; color: var(--flow-vl-colors-brand-navy); cursor: pointer; }
+.stmt-chart-data__scroll { max-width: 100%; overflow-x: auto; }
+.stmt-chart-data table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.stmt-chart-data th, .stmt-chart-data td { padding: 6px 9px; border-bottom: 1px solid var(--flow-vl-colors-line-default); text-align: left; }
+.stmt-chart-data thead th { background: var(--flow-vl-colors-surface-soft); color: var(--flow-vl-colors-text-primary); }
+.stmt-chart-data td { text-align: right; font-variant-numeric: tabular-nums; }
+
 /* 事实复核面板（B05） */
 .stmt-review { background: #fff; border: 1px solid var(--rep-line); border-radius: 10px; padding: 16px; margin-top: 16px; }
 .stmt-review__head { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }

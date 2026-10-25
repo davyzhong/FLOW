@@ -104,7 +104,9 @@ describe("StatementApp", () => {
     expect(screen.getByRole("img", { name: /期末资产构成环形图/ })).toBeInTheDocument();
     expect(screen.getByRole("img", { name: /现金流量三类活动净额柱状图/ })).toBeInTheDocument();
     // 瀑布图 KPI 数字来自同一抽取值：营业总收入 741.42 亿（74142121 千元）
-    expect(screen.getByText("741.42 亿元")).toBeInTheDocument();
+    expect(screen.getAllByText("741.42 亿元").length).toBeGreaterThanOrEqual(2);
+    fireEvent.click(screen.getAllByText("查看图表数据明细")[0]);
+    expect(screen.getByRole("region", { name: "利润形成瀑布数据表" })).toBeInTheDocument();
     // 四表原文表格渲染精确值
     expect(screen.getByTitle("16992297.0000")).toBeInTheDocument();
     expect(screen.getAllByTitle("2650843.0000").length).toBeGreaterThan(0);
@@ -216,7 +218,7 @@ describe("StatementApp", () => {
     const kpis = await screen.findAllByTestId("statement-kpi");
     expect(kpis.length).toBeGreaterThan(3);
     // 百万元 → 亿元：1,023,670 百万 = 10,236.70 亿；不是 10.24（千元缩放）。
-    expect(screen.getByText("10,236.70 亿元")).toBeInTheDocument();
+    expect(screen.getAllByText("10,236.70 亿元").length).toBeGreaterThanOrEqual(2);
     // IFRS 利润瀑布、资产构成环形、现金流柱状与现金桥
     expect(screen.getByRole("img", { name: /利润形成瀑布图/ })).toBeInTheDocument();
     expect(screen.getByRole("img", { name: /期末资产构成环形图/ })).toBeInTheDocument();

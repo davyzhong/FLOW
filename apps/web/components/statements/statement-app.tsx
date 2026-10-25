@@ -15,6 +15,7 @@ import {
 import { statementRowId } from "../../lib/deep-links";
 import type { ColumnDef } from "@tanstack/react-table";
 import { FlowDataTable } from "../ui/flow-data-table";
+import { formatFinancialValue } from "../cockpit/number-format";
 import { ProvenanceBadge, ProvenanceHover } from "../ui/provenance-badge";
 import type { StatementLine as StatementLineResponse } from "../../lib/api/client";
 import { ReviewPanel } from "./review-panel";
@@ -142,6 +143,19 @@ function StatementTable({
   );
 }
 
+function WaterfallDataTable({ items, unitLabel, label }: { items: { label: string; value: number }[]; unitLabel: string; label: string }) {
+  return <details className="stmt-chart-data"><summary>查看图表数据明细</summary><div className="stmt-chart-data__scroll" role="region" aria-label={`${label}数据表`} tabIndex={0}><table><thead><tr><th scope="col">项目</th><th scope="col">数值（{unitLabel}）</th></tr></thead><tbody>{items.map((item) => <tr key={item.label}><th scope="row">{item.label}</th><td>{formatFinancialValue(item.value, { unit: unitLabel })}</td></tr>)}</tbody></table></div></details>;
+}
+
+function DonutDataTable({ items, unitLabel, label }: { items: { label: string; value: number }[]; unitLabel: string; label: string }) {
+  const total = items.reduce((sum, item) => sum + item.value, 0);
+  return <details className="stmt-chart-data"><summary>查看图表数据明细</summary><div className="stmt-chart-data__scroll" role="region" aria-label={`${label}数据表`} tabIndex={0}><table><thead><tr><th scope="col">项目</th><th scope="col">数值（{unitLabel}）</th><th scope="col">占比</th></tr></thead><tbody>{items.map((item) => <tr key={item.label}><th scope="row">{item.label}</th><td>{formatFinancialValue(item.value, { unit: unitLabel })}</td><td>{formatFinancialValue(total ? item.value / total : 0, { unit: "ratio" })}</td></tr>)}</tbody></table></div></details>;
+}
+
+function GroupedBarDataTable({ items, currentLabel, priorLabel, unitLabel, label }: { items: { label: string; current: number; prior: number | null }[]; currentLabel: string; priorLabel: string | null; unitLabel: string; label: string }) {
+  return <details className="stmt-chart-data"><summary>查看图表数据明细</summary><div className="stmt-chart-data__scroll" role="region" aria-label={`${label}数据表`} tabIndex={0}><table><thead><tr><th scope="col">项目</th><th scope="col">{currentLabel}（{unitLabel}）</th>{priorLabel ? <th scope="col">{priorLabel}（{unitLabel}）</th> : null}</tr></thead><tbody>{items.map((item) => <tr key={item.label}><th scope="row">{item.label}</th><td>{formatFinancialValue(item.current, { unit: unitLabel })}</td>{priorLabel ? <td>{item.prior === null ? "—" : formatFinancialValue(item.prior, { unit: unitLabel })}</td> : null}</tr>)}</tbody></table></div></details>;
+}
+
 function ReportDetail({
   detail,
   onChanged,
@@ -187,6 +201,7 @@ function ReportDetail({
             unitLabel="亿元"
             ariaLabel="利润形成瀑布图，从营业收入到净利润"
           />
+          <WaterfallDataTable items={waterfall} unitLabel="亿元" label="利润形成瀑布" />
         </section>
       ) : null}
       {assetDonut || capitalDonut ? (
@@ -195,12 +210,14 @@ function ReportDetail({
             <section className="stmt-chart-card">
               <h3>资产构成（期末，亿元）</h3>
               <DonutChart items={assetDonut} unitLabel="亿元" ariaLabel="期末资产构成环形图" />
+              <DonutDataTable items={assetDonut} unitLabel="亿元" label="资产构成" />
             </section>
           ) : null}
           {capitalDonut ? (
             <section className="stmt-chart-card">
               <h3>资本结构（期末，亿元）</h3>
               <DonutChart items={capitalDonut} unitLabel="亿元" ariaLabel="期末资本结构环形图" />
+              <DonutDataTable items={capitalDonut} unitLabel="亿元" label="资本结构" />
             </section>
           ) : null}
         </div>
@@ -215,12 +232,14 @@ function ReportDetail({
             unitLabel="亿元"
             ariaLabel="现金流量三类活动净额柱状图，本期与上期对比"
           />
+          <GroupedBarDataTable items={cashflow} currentLabel="本期" priorLabel="上期" unitLabel="亿元" label="现金流量三活动净额" />
         </section>
       ) : null}
       {cashBridge ? (
         <section className="stmt-chart-card">
           <h3>现金桥：期初 → 期末（亿元）</h3>
           <WaterfallChart items={cashBridge} unitLabel="亿元" ariaLabel="期初到期末的现金变动桥" />
+          <WaterfallDataTable items={cashBridge} unitLabel="亿元" label="现金变动桥" />
         </section>
       ) : null}
       {summary.length > 0 ? (
