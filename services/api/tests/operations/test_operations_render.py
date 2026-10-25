@@ -81,6 +81,17 @@ def test_renders_fact_cards_with_basis_and_caliber() -> None:
     assert "本期/上年同期−1" in html, "口径必须可见（借鉴 #2）"
 
 
+def test_html_uses_shared_paper_and_display_theme() -> None:
+    from flow_api.visual_tokens import VISUAL_TOKENS
+
+    html = render_operations_html(_overview())
+    display_font = VISUAL_TOKENS["typography-family-display"].split(",", maxsplit=1)[0]
+    assert display_font in html
+    assert VISUAL_TOKENS["colors-surface-canvas"] in html
+    assert VISUAL_TOKENS["colors-brand-gold"] in html
+    assert "@media print" in html
+
+
 def test_renders_operating_fact_period_and_source_evidence() -> None:
     html = render_operations_html(_overview())
     assert "Q1FY2024" in html and "未经审计" in html

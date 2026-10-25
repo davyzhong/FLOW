@@ -176,14 +176,25 @@ def _escape(value: str) -> str:
 
 
 _STYLE = (
+    f"@page{{size:A4;margin:14mm}}*{{box-sizing:border-box}}"
     f"body{{margin:2rem;color:{VISUAL_TOKENS['colors-text-primary']};"
+    f"background:{VISUAL_TOKENS['colors-surface-canvas']};line-height:1.55;"
     f"font-family:{VISUAL_TOKENS['typography-family-body']}}}"
-    "table{border-collapse:collapse}"
+    f"h1,h2,h3{{font-family:{VISUAL_TOKENS['typography-family-display']};"
+    f"color:{VISUAL_TOKENS['colors-brand-navy']}}}"
+    f"h1{{border-bottom:2px solid {VISUAL_TOKENS['colors-brand-gold']};padding-bottom:.5rem}}"
+    "table{border-collapse:collapse;width:100%;margin:.8rem 0 1rem}"
     f"td,th{{border:1px solid {VISUAL_TOKENS['colors-line-default']};"
-    "padding:.35rem .6rem;font-size:.9rem}}"
-    f".finding{{border-left:3px solid {VISUAL_TOKENS['colors-brand-gold']};"
-    "padding-left:.8rem;margin:1rem 0}}"
+    "padding:.45rem .6rem;font-size:.9rem;text-align:left;vertical-align:top}}"
+    f"th{{background:{VISUAL_TOKENS['colors-surface-soft']};"
+    f"color:{VISUAL_TOKENS['colors-brand-navy']}}}"
+    f".finding{{border:1px solid {VISUAL_TOKENS['colors-line-default']};"
+    f"border-left:3px solid {VISUAL_TOKENS['colors-brand-gold']};"
+    f"background:{VISUAL_TOKENS['colors-surface-paper']};"
+    "padding:.5rem .8rem;margin:1rem 0;break-inside:avoid}"
     f"footer{{margin-top:2rem;font-size:.8rem;color:{VISUAL_TOKENS['colors-text-muted']}}}"
+    f"@media print{{body{{margin:0}}h1,h2,h3{{break-after:avoid}}"
+    ".finding,tr{break-inside:avoid}}}"
 )
 
 

@@ -111,20 +111,40 @@ def render_html_from_payload(payload: dict[str, Any]) -> str:
     # 原因推断与行动章不在客观报告范围（U5 主观证据门禁），显式标注。
     html_doc = (
         "<!DOCTYPE html><html lang='zh-CN'><head><meta charset='utf-8'>"
+        "<meta name='viewport' content='width=device-width, initial-scale=1'>"
         "<title>客观财报分析报告</title>"
-        "<style>body{font-family:'PingFang SC',sans-serif;margin:32px;color:#1e293b}"
+        f"<style>@page{{size:A4;margin:14mm}}*{{box-sizing:border-box}}"
+        f"body{{font-family:{VISUAL_TOKENS['typography-family-body']};margin:32px;"
+        f"color:{VISUAL_TOKENS['colors-text-primary']};"
+        f"background:{VISUAL_TOKENS['colors-surface-canvas']};line-height:1.55}}"
+        f"h1,h2,h3{{font-family:{VISUAL_TOKENS['typography-family-display']};"
+        f"color:{VISUAL_TOKENS['colors-brand-navy']}}}"
+        f"h1{{font-size:26px;padding-bottom:12px;"
+        f"border-bottom:2px solid {VISUAL_TOKENS['colors-brand-gold']}}}"
+        f"h2{{font-size:18px;border-left:3px solid {VISUAL_TOKENS['colors-brand-gold']};"
+        "padding-left:10px}"
         "table{border-collapse:collapse;width:100%;margin:12px 0}"
-        "td,th{border-bottom:1px solid #eee;padding:6px 10px;text-align:left}"
-        "th{color:#475569;font-weight:600}"
-        ".num{text-align:right;font-variant-numeric:tabular-nums}"
-        "h1{font-size:22px}h2{font-size:16px;margin-top:24px}"
-        "h3{font-size:14px;margin-top:16px}"
-        ".src{color:#64748b;font-size:13px;margin-bottom:18px}"
-        ".ok{color:#15803d}.bad{color:#b91c1c;font-weight:600}"
-        ".note{color:#64748b;font-size:12px}"
-        ".chapter{margin-top:28px;border-top:2px solid #e2e8f0;padding-top:8px}"
-        ".chapter-label{color:#94a3b8;font-size:12px;font-weight:600;"
-        "letter-spacing:0.1em}</style></head><body>"
+        f"td,th{{border-bottom:1px solid {VISUAL_TOKENS['colors-line-default']};"
+        f"padding:7px 10px;text-align:left;vertical-align:top}}"
+        f"th{{color:{VISUAL_TOKENS['colors-brand-navy']};font-weight:600;"
+        f"background:{VISUAL_TOKENS['colors-surface-soft']}}}"
+        f".num{{text-align:right;font-variant-numeric:tabular-nums;"
+        f"font-family:{VISUAL_TOKENS['typography-family-numeric']}}}"
+        "h2{margin-top:24px}h3{font-size:14px;margin-top:16px}"
+        f".src{{color:{VISUAL_TOKENS['colors-text-muted']};font-size:13px;margin-bottom:18px}}"
+        f".ok{{color:{VISUAL_TOKENS['colors-semantic-positive']}}}"
+        f".bad{{color:{VISUAL_TOKENS['colors-semantic-negative']};font-weight:600}}"
+        f".note{{color:{VISUAL_TOKENS['colors-text-muted']};font-size:12px}}"
+        f".chapter{{margin-top:28px;border-top:2px solid {VISUAL_TOKENS['colors-line-default']};"
+        f"padding-top:8px}}.chapter-label{{color:{VISUAL_TOKENS['colors-brand-goldStrong']};"
+        "font-size:12px;font-weight:600;letter-spacing:0.1em}"
+        f".scope{{border:1px solid {VISUAL_TOKENS['colors-line-strong']};"
+        f"border-left:3px solid {VISUAL_TOKENS['colors-brand-gold']};"
+        f"background:{VISUAL_TOKENS['colors-surface-paper']};padding:12px 16px;"
+        f"color:{VISUAL_TOKENS['colors-text-secondary']}}}"
+        f"@media(max-width:700px){{body{{margin:16px}}td,th{{padding:6px}}}}"
+        f"@media print{{body{{margin:0}}tr{{break-inside:avoid}}h1,h2,h3{{break-after:avoid}}}}"
+        "</style></head><body>"
         "<h1>客观财报分析报告</h1>"
         f"<div class='src'>{src_block}冻结时间：{frozen_at}</div>"
         "<div class='chapter'><span class='chapter-label'>第一章 · 现状判断</span>"
@@ -148,14 +168,6 @@ def render_html_from_payload(payload: dict[str, Any]) -> str:
         "确定性原语仅输出提示复核信号，不断言因果）。</div>"
         "</body></html>"
     )
-    for literal, token in {
-        "#1e293b": "colors-text-primary", "#eee": "colors-line-subtle",
-        "#475569": "colors-text-secondary", "#64748b": "colors-text-muted",
-        "#15803d": "colors-semantic-positive", "#b91c1c": "colors-semantic-negative",
-        "#e2e8f0": "colors-line-default", "#94a3b8": "colors-text-subtle",
-    }.items():
-        html_doc = html_doc.replace(literal, VISUAL_TOKENS[token])
-    html_doc = html_doc.replace("'PingFang SC',sans-serif", VISUAL_TOKENS["typography-family-body"])
     return html_doc
 
 
@@ -165,6 +177,8 @@ def render_xlsx_bytes_from_payload(payload: dict[str, Any]) -> bytes:
     wb = Workbook()
     evidence = cast(Worksheet, wb.active)
     evidence.title = "口径与证据"
+    evidence.column_dimensions["A"].width = 74
+    evidence.column_dimensions["B"].width = 18
     evidence["A1"] = "FLOW 客观财报分析（冻结载荷投影）"
     evidence["A1"].font = Font(bold=True)
     for idx, line in enumerate(_source_lines(payload), start=3):
