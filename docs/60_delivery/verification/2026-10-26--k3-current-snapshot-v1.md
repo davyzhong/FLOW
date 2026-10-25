@@ -236,3 +236,8 @@ W3 MED 第十二组完成三条全文双审，正文 SHA 匹配 accepted baselin
 ## 语义审阅批次 044（2026-10-26）
 
 W3 MED 第十三组完成三条全文双审，正文 SHA 匹配 accepted baseline 且此前未审，均为 pending-verification。盈亏平衡公式转录缺运算符，数值暗示除法但需核原图；Altman Z-Score变量描述与1968经典模型不同且未注明版本；DeepSeek效率对比为个人叙述，“90%岗位”是反问假设，没有量化性能或劳动力证据。coverage 为 routed 117、filtered 16、pending_review 9,540。详见 `semantic-review-2026-10-26-batch-044.tsv`。
+
+
+## 语义审阅批次 045（2026-10-26）
+
+W3 MED 第十四组完成三条全文双审，正文 SHA 匹配 accepted baseline 且此前未审，均为 pending-verification。电商报告无可复算底表；AI因果发现、准确率提升及五分钟效率主张无基线；风险文章的市场规模、退货率、库存和流失数字缺来源/分母/范围，预警工具能力与阈值未独立验证。coverage 为 routed 120、filtered 16、pending_review 9,537。详见 `semantic-review-2026-10-26-batch-045.tsv`。

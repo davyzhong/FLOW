@@ -7659,7 +7659,7 @@ wechat-3a2cbca1073e	pending_review
 wechat-3a9c8e7af291	routed	semantic-review-2026-10-26-batch-035.tsv
 wechat-3aa9b4d07af4	pending_review	
 wechat-3ab74ec866c1	pending_review	
-wechat-3ac765068dfa	pending_review	
+wechat-3ac765068dfa	routed	semantic-review-2026-10-26-batch-045.tsv
 wechat-3adf93b48f17	pending_review	
 wechat-3b1e6518b256	pending_review	
 wechat-3b318e80017d	pending_review	
@@ -7792,7 +7792,7 @@ wechat-50e372c3ffbb	pending_review
 wechat-50f3179caf1d	pending_review	
 wechat-51000b762039	pending_review	
 wechat-512497959d65	pending_review	
-wechat-513f91fbaa47	pending_review	
+wechat-513f91fbaa47	routed	semantic-review-2026-10-26-batch-045.tsv
 wechat-5170f15baf81	pending_review	
 wechat-51947b45cc75	pending_review	
 wechat-51ca2f4d26c1	pending_review	
@@ -7844,7 +7844,7 @@ wechat-56a3314b8549	pending_review
 wechat-56aa323c0d27	pending_review	
 wechat-56b4e8b9b512	pending_review	
 wechat-57083e368118	pending_review	
-wechat-5714996be1c6	pending_review	
+wechat-5714996be1c6	routed	semantic-review-2026-10-26-batch-045.tsv
 wechat-578693e3f6b8	pending_review	
 wechat-58070ca0b8c7	pending_review	
 wechat-58073c818b89	routed	baseline k_domain; source review tracked in semantic batch
