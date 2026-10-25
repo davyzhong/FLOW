@@ -3,7 +3,7 @@ doc_id: FLOW-VERIFY-K3-CURRENT-SNAPSHOT-20261026
 title: K3 当前 Obsidian 工作区稳定快照复核
 doc_type: verification
 status: verified
-version: 4.3
+version: 4.4
 created_at: 2026-10-26
 updated_at: 2026-10-26
 owner: FLOW
@@ -440,3 +440,8 @@ W3 MED 第二十四组完成1条全文双审，保留 pending-verification。同
 ## K3 全量语义路由批次 085
 
 按 accepted baseline source_id 顺序审阅12条来源；逐条文件 SHA 与规范化正文 SHA 均匹配。6条路由为 pending-verification，涉及AI销售智能体、经营指标、成本核算、经营计划、S2P套件与GitHub Agent HQ；二手案例数据、财务口径、市场/技术主张及当前产品规格均未独立核验。美的经营指标、成本核算指南、年度经营计划三篇共47条图片引用按source_baseline.py来源目录及vault根目录回退规则均无法解析，未据图判断。6条拒绝：量化投资工具、企业Agent规划、AI供应链履约系统及客户主数据架构按不适用投资场景或企业内部资料排除；即时零售竞争评论与Spring Data JPA开发笔记超出FLOW范围。coverage累计为9,673条：routed 377、filtered 143、pending_review 9,153；四个locator-only例外仍待审，下一批为086。ObsidianWiki与CURRENT_RELEASE未改动。逐条记录见 `../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-085.tsv`。
+
+
+## K3 路由进度增量（2026-10-26）
+
+accepted snapshot 未变；第086批按 baseline ID 顺序审阅 12 条，coverage 当前为 routed 384、filtered 148、pending_review 9,141。来源正文与 accepted baseline 哈希一致；理想汽车管理文章的 2 条图片引用未解析并明确不据图推断。批次分类与理由见[语义审阅表](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-086.tsv)。本增量未访问或写入 ObsidianWiki，也未改变 `CURRENT_RELEASE`。
