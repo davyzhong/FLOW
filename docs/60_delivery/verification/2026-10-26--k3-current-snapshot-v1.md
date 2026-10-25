@@ -196,3 +196,8 @@ W3 MED 第四组完成三条全文双审，三条源 SHA 均匹配 accepted base
 ## 语义审阅批次 036（2026-10-26）
 
 W3 MED 第五组完成三条全文双审，源 SHA 与 accepted baseline 一致，均为 pending-verification。电商指标文章存在库存周转公式/量纲与分母口径切换；新品推广的脱敏样本、虚拟品牌与客户分群无底表可复算，Q1完成率不足以证明Q2目标合理；房地产案例虽描述企业及外部数据来源，但未附复核数据/时间与清洗规则，观察性对比不能证明因果或作为投资结论。coverage 更新至 routed 93、filtered 16、pending_review 9,564。详见 `semantic-review-2026-10-26-batch-036.tsv`。
+
+
+## 语义审阅批次 037（2026-10-26）
+
+W3 MED 第六组完成三条全文双审，三条源 SHA 与 accepted baseline 一致，处置均为 pending-verification。年度报告案例只有2010–2018九行年度汇总，不能支持客户/商品级结论或因果；门店鞋类折扣与目标完成率的比较缺混杂控制，无法验证折扣导致未达标；供应链文章的匿名案例、SCOR版本、APQC对标及供应商产品能力未提供原始材料和可复算效果。coverage 更新为 routed 96、filtered 16、pending_review 9,561。详见 `semantic-review-2026-10-26-batch-037.tsv`。
