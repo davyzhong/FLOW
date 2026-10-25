@@ -3,11 +3,11 @@ doc_id: FLOW-VERIFY-VISUAL-LANGUAGE-20261024-001
 title: FLOW 可复用视觉语言与全项目视觉覆盖验收
 doc_type: verification
 status: verified
-version: 1.3
+version: 1.6
 created_at: 2026-10-24
 updated_at: 2026-10-25
 owner: FLOW
-commit_refs: "[28c0e7a29d7812106709947414c9a560f1c530b0, faaa446b6540565f54290a8f558a7b80b302d39b, 4645c43c4d7c67dc0cd588cea2a32e427f83ff27, 6a49401d55c275decf30dc63f419233b7928997d, 9da910e2456a4f7044a2049950e60b7cadb73bb4]"
+commit_refs: "[28c0e7a29d7812106709947414c9a560f1c530b0, faaa446b6540565f54290a8f558a7b80b302d39b, 4645c43c4d7c67dc0cd588cea2a32e427f83ff27, 6a49401d55c275decf30dc63f419233b7928997d, 9da910e2456a4f7044a2049950e60b7cadb73bb4, 9cf65f6d58e0cdb33d8e04c17d843a8c9bbc1489]"
 evidence_refs: "[visual-language-tokens, generator-check, web-typecheck, web-vitest, web-build, api-renderer-tests, api-ruff, api-mypy, isolated-route-matrix, screenshots]"
 applies_to: repository
 ---
@@ -20,15 +20,17 @@ applies_to: repository
 
 2026-10-25 补充：PR #5 的 dashboard 截图回归因 Linux/macOS 基线旧于已实施的纸白/海军蓝主题和仪表盘版式而失败。对照 CI 实际截图确认变更符合已批准视觉方向，已同步更新两种平台的 1440×900 与 1920×1080 基线。独立临时 Compose 数据源上 `scripts/test_dashboard.sh` 7/7 通过（含正常快照比对与 Axe 严重/致命违规检查），报告渲染器定向测试 21/21 通过。该修复只关闭 dashboard 基线门禁，不关闭本报告列出的全路由图表、交互、输出模板和无障碍验收。
 
+2026-10-25 阶段截图复采：在提交 `9cf65f6d58e0cdb33d8e04c17d843a8c9bbc1489` 下，以生产 Web 构建和隔离 synthetic 数据库副本重采 20 路由×3 视口。60/60 内容就绪，页面与 API 错误、外部请求、横向溢出均为 0。该结果更新了本目录 60 张矩阵图及 `results.json`；旧参考图清单保留，指标依赖图交互截图也已在同 SHA 重采（31 节点、画布高 1436px、错误为 0）。截图审阅发现调查列表排序按钮与全站原生表单控件此前仍沿用默认浏览器样式，已在 `41016d7c` 和 `9cf65f6d` 分别统一为纸面表格/编辑式标题/古金眉线及古金表单控件。截图证据确认纸白、墨蓝、古金和衬线标题等共享视觉特征已进入全路由；矩阵只证明默认视图的可加载与版面边界，不代表逐图表/交互/无障碍/导出验收完成。
+
 - 浏览器：Chromium / Playwright，生产 standalone Web 构建；API 与 Web 均在本机隔离进程运行。
 - 视口：桌面 1440×1000、平板 1024×900、手机 390×844；20 路由共 60 组。
 - 视觉验收数据：仅使用临时目录 `/tmp/flow-visual-audit-20261024` 中的大麦 synthetic 演示数据；release manifest SHA-256：`6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`。没有接入常驻或用户数据库。
 - 动态调查详情使用隔离 finding `01a16e5e-e2a6-725a-83cb-aa5d70ac92cb`。
-- 截图代码基线：`codex/flow-visual-language` 提交 `28c0e7a29d7812106709947414c9a560f1c530b0`；矩阵在该提交的代码下重新采集，60 项截图均由 `results.json` 的 `screenshot` 字段逐条引用。60/60 页面内容就绪，API 错误 0、横向溢出 0、浏览器错误 0。目录另保留的 27 张双下划线参考图在 `supplementalReferenceScreenshots` 中逐一登记，不纳入矩阵计数；另登记一张依赖图标签交互截图：默认“常用”层渲染 32 项指标，画布依节点层高展开至 1436px，31 个 DOM 节点、零前端/API 错误。财报分析页品牌装饰已采用古金/墨蓝，财务负值仍保留语义红。报告导出字体与打印样式映射提交为 `9da910e2456a4f7044a2049950e60b7cadb73bb4`；其渲染器定向测试 20/20、Ruff 和 mypy 通过。
+- 截图代码基线：`codex/flow-visual-language` 提交 `9cf65f6d58e0cdb33d8e04c17d843a8c9bbc1489`；矩阵在该提交的代码下重新采集，60 项截图均由 `results.json` 的 `screenshot` 字段逐条引用。60/60 页面内容就绪，API 错误 0、外部请求 0、横向溢出 0、浏览器错误 0。目录另保留的 27 张双下划线参考图在 `supplementalReferenceScreenshots` 中逐一登记，不纳入矩阵计数；另登记一张依赖图标签交互截图：默认“常用”层渲染 32 项指标，画布依节点层高展开至 1436px，31 个 DOM 节点、零前端/API 错误。财报分析页品牌装饰已采用古金/墨蓝，财务负值仍保留语义红。报告导出字体与打印样式映射提交为 `9da910e2456a4f7044a2049950e60b7cadb73bb4`；其渲染器定向测试 20/20、Ruff 和 mypy 通过。
 
 ## 路由覆盖
 
-修复 `/operations` 报告读取端点的 UUID 参数类型后，60 组路由视口均为 HTTP 200、内容就绪、API 零错误、无横向溢出、无前端错误；页面从加载态离开后截图。矩阵结果保存在 `results.json`，统计为 `total=60, bad=0, contentReady=60, apiErrors=0`。这代表默认页面数据已渲染和溢出检查通过，不代表每个页面交互状态、图表视觉语义或导出模板已完成概念图逐项验收。指标依赖图标签另行打开，核心分层默认图及完整节点数见 `supplementalInteractionScreenshots`。
+修复 `/operations` 报告读取端点的 UUID 参数类型后，最终 SHA `9cf65f6d` 下 60 组路由视口均为 HTTP 200、内容就绪、API 零错误、无外部请求、无横向溢出、无前端错误；页面从加载态离开后截图。矩阵结果保存在 `results.json`，统计为 `total=60, bad=0, contentReady=60, apiErrors=0, externalRequests=0, horizontalOverflow=0, browserErrors=0`。这代表默认页面数据已渲染和溢出检查通过，不代表每个页面交互状态、图表视觉语义或导出模板已完成概念图逐项验收。指标依赖图标签另行打开，核心分层默认图及完整节点数见 `supplementalInteractionScreenshots`。
 
 | 路由 | 覆盖视口 | 当前验收备注 |
 |---|---|---|
@@ -121,6 +123,6 @@ applies_to: repository
 2. 逐一登记页面内图表和数据表达，并核对每幅图标题、单位、图例、来源、空/错/降级状态及等价数据表；当前路由截图矩阵没有替代逐图表清点。
 3. HTML/PDF/PPTX/XLSX 渲染器已接入共享主题 token；渲染器定向测试 20/20、Ruff 和 mypy 通过。逐模板版式、打印可读性与各格式视觉语义等价仍需继续核验；离线驾驶舱 CSS 已接入主题 token。
 4. 执行键盘焦点、放大阅读、颜色对比、搜索/筛选和页面交互状态核验；核对全部剩余 CSS 与导出格式映射。
-5. `28c0e7a2` 的 60 张内容就绪截图矩阵和指标图交互补充图已重采；全项目视觉收敛后仍需按最终代码重采图，并完成 M1/M6、计划视图、链接检查及独立复核。
+5. `9cf65f6d` 的阶段截图矩阵已重采，60 张内容就绪截图均与结果 JSON 对应；待下方剩余视觉差距整改后再采最终矩阵，并完成 M1/M6、计划视图、链接检查及独立复核。
 
 此报告链接至 [视觉语言设计规格](../../superpowers/specs/2026-10-24-flow-visual-language-system-design.md)、[全项目视觉统一工作包](../../50_plans/work_items/FLOW--portable-visual-language-and-full-project-restyle.md)、[截图矩阵 JSON](visual-language-20261024/results.json) 和 [可复用视觉语言包](../../../packages/flow-visual-language/README.md)。

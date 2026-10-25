@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.85
+version: 5.86
 created_at: 2026-09-12
 updated_at: 2026-10-25
 owner: FLOW
@@ -12,10 +12,10 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-10-25 当前状态：**单机原型 7a.1–7a.8 已完成并合入 main。** PR #3 merge commit `b2a1bf22df91239eb311d1692c30c666250678bf` 对应 run `40092106547` 为 28/28 success；PR #4 文档状态 merge commit `b068796f906cfbb91ac33775f5578194acc98a51` 对应准确 SHA run `40096497668` 也为 28/28 success。隔离验收、独立复核、M1/M6、链接检查均通过；经营入口、名称筛选/后退恢复、图表追溯、A+C 原型视觉、九页离线包和本机数据操作已交付，限制见[差距审查](../60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)。用户已批准“可复用视觉语言提炼与 FLOW 全项目视觉统一”；当前分支 `codex/flow-visual-language` 已有可复制视觉包、共享 Web token/外壳、主要图表和离线快照映射。当前代码 SHA `28c0e7a2` 下 20 路由×3 视口矩阵 60/60 内容就绪、API 零错误、无横溢或浏览器错误；财报分析页品牌强调已校为古金/墨蓝，语义红保留；指标依赖图默认聚焦“常用”分层并按节点数展开画布，仍可切换完整图谱。驾驶舱、财务出版页和数据工作台较接近概念板；分析及内容范围较窄入口仍有真实内容带来的留白。逐图表、键盘/对比度和 HTML/PDF/PPTX/XLSX 尚未完成，不能宣布全项目视觉验收完成。阶段证据见[视觉覆盖记录](../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。16 项主队列为完成 9、实际执行中 1、队首待启动 0、排队 4、暂停 1、外部条件受限 1；9/16（约 56%）仅为路线图事项比例，不代表视觉工作包完成度。用户授权的并行分支清理已完成：15 个已合入 main 的历史远端分支逐支复核后删除，保留活动 PR #5 与暂停的 ZTO 分支；原 tip SHA 见[分支清理工作包](../50_plans/work_items/FLOW--merged-branch-cleanup.md)。唯一队列见[CURRENT_ROADMAP](../50_plans/CURRENT_ROADMAP.md)；K2 已顺延为排队。用户选择保留 `/Users/qiming/.flow/flow.sqlite3` 空文件；`services/api/flow.sqlite3` 未跟踪文件也保持原样。
+2026-10-25 当前状态：**单机原型 7a.1–7a.8 已完成并合入 main。** PR #3 merge commit `b2a1bf22df91239eb311d1692c30c666250678bf` 对应 run `40092106547` 为 28/28 success；PR #4 文档状态 merge commit `b068796f906cfbb91ac33775f5578194acc98a51` 对应准确 SHA run `40096497668` 也为 28/28 success。单机原型功能与限制见[差距审查](../60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)。当前唯一执行项是用户已批准的“可复用视觉语言提炼与 FLOW 全项目视觉统一”；工作分支 `codex/flow-visual-language` 已建立可复制视觉包、共享主题、主要图表和导出映射。代码 SHA `9cf65f6d58e0cdb33d8e04c17d843a8c9bbc1489` 下 20 路由×3 视口矩阵为 60/60 内容就绪，API/浏览器错误/外部请求/横向溢出均为 0；调查列表已补齐概念板式标题、纸面表格和品牌控件。驾驶舱、财务出版和数据工作台较接近概念板，分析及功能范围较窄的入口保留真实内容所致留白。逐图表数据语义、交互/键盘/对比度和 HTML/PDF/PPTX/XLSX 模板与打印验收未完成，当前不能结案。阶段证据见[视觉覆盖记录](../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。唯一路线图 16 项中完成 9、执行中 1、排队 4、暂停 1、外部条件受限 1；9/16（约 56%）是主队列事项比例，不代表视觉工作包完成度。用户授权的历史分支清理已完成：15 个已合入 main 的远端旧分支逐一复核后删除，保留活动 PR #5 和暂停的 ZTO 分支；证据见[分支清理工作包](../50_plans/work_items/FLOW--merged-branch-cleanup.md)。队列和状态以[CURRENT_ROADMAP](../50_plans/CURRENT_ROADMAP.md)为唯一事实源；K2 仍排队，视觉工作包未验收前不启动。用户选择保留 `/Users/qiming/.flow/flow.sqlite3` 零字节文件；`services/api/flow.sqlite3` 未跟踪文件也保持原样。
 
 
-2026-10-25 视觉验收增量：dashboard Linux/macOS 视觉基线已更新；独立临时 Compose 上 dashboard E2E 7/7 与渲染器定向测试 21/21 通过，M1、计划视图、链接检查及脚本 170/170 通过。实现/截图基线 SHA `1e0b5fbe` 对应 PR CI run `40190300136` 曾排队；目前仅局部验收有结论，最新提交的准确 SHA 全量 CI 应按 PR #5 当前记录核对。
+2026-10-25 视觉验收增量：dashboard Linux/macOS 基线已更新；独立临时 Compose 上 dashboard E2E 7/7、报告渲染器定向测试 21/21 通过。调查列表视觉已改并生成准确 SHA `9cf65f6d` 的 20×3 视口截图，60/60 就绪且零页面/API 错误、外部请求与溢出；本地 Web typecheck、201/201 测试、production build、M1/M6 与计划视图通过。该 SHA 的 PR CI run `40191445288` 仍在进行；逐图表、交互、无障碍、输出模板与独立复核仍未完成。
 <details>
 <summary>2026-10-21 及以前的状态快照（历史，不代表当前执行）</summary>
 
@@ -89,7 +89,7 @@ applies_to: repository
 
 ## 当前执行入口
 
-- **[CURRENT_ROADMAP.md](../50_plans/CURRENT_ROADMAP.md)**（唯一主线：状态真相 + 单一串行 To-do）：7a.1–7a.8 已完成，PR #3 已合入并通过 main merge SHA CI；当前队首待启动为 K2，尚未执行。本轮收尾不自动启动知识刷新、真实企业试点或行业扩张。全部后续任务及状态只按该路线图执行。
+- **[CURRENT_ROADMAP.md](../50_plans/CURRENT_ROADMAP.md)**（唯一主线：状态真相 + 单一串行 To-do）：7a.1–7a.8 已完成，PR #3 已合入 main；当前唯一执行项为全项目视觉统一，K2 排队。用户已授权在完成该项后继续队列，不需另行启动确认。
 - 旧统一计划、O 系列计划、EXECUTION_TODO 与 2026-09-24/25 三份总计划均已 superseded/archived（保留历史细节与证据，不再作为执行依据）
 - 文档迁移：[迁移实施计划 M0–M6](../superpowers/plans/2026-09-12-static-knowledge-and-document-migration.md) 已全部关闭（bfc1271 / e373e25，用户确认 2026-09-13）
 
