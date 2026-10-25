@@ -1,6 +1,6 @@
 {
-  "capturedAt": "2026-10-25",
-  "codeCommit": "9cf65f6d58e0cdb33d8e04c17d843a8c9bbc1489",
+  "capturedAt": "2026-10-25T12:44:55.687Z",
+  "codeCommit": "cc0fb2eff5d7dbb01f48fda3e84c8c23c9e35583",
   "baseUrl": "http://127.0.0.1:13100",
   "routes": 20,
   "viewports": [
@@ -852,12 +852,12 @@
   ],
   "summary": {
     "total": 60,
-    "contentReady": 60,
     "bad": 0,
+    "contentReady": 60,
     "apiErrors": 0,
-    "browserErrors": 0,
     "externalRequests": 0,
-    "horizontalOverflow": 0
+    "horizontalOverflow": 0,
+    "browserErrors": 0
   },
   "supplementalReferenceScreenshots": [
     "cockpit__balance-sheet--desktop.png",
@@ -896,12 +896,12 @@
       "status": 200,
       "nodes": 31,
       "regionVisible": true,
-      "canvasHeight": 1436,
+      "canvasHeight": 1438,
       "viewportWidth": 1440,
-      "hint": "32 个指标、13 条依赖边。 点击节点查看上下游；颜色为能力域（偿债能力 / 营运能力 / 盈利能力 / 发展能力 / 现金流 / 规模（物流行业集专用） / 价值创造）。 默认聚焦常用指标，可切换全部或专业层；支持缩放/平移/拖拽节点与 MiniMap 导航。",
+      "hint": "32 个指标、13 条依赖边。点击节点查看上下游；颜色为能力域。默认聚焦常用指标，可切换全部或专业层；支持缩放/平移/拖拽节点与 MiniMap 导航。",
       "errors": [],
       "apiErrors": [],
-      "codeCommit": "9cf65f6d58e0cdb33d8e04c17d843a8c9bbc1489"
+      "codeCommit": "cc0fb2eff5d7dbb01f48fda3e84c8c23c9e35583"
     }
   ],
   "screenshotNamingRule": "当前矩阵每项使用 route 去除首尾 / 后将 / 替换为 --，首页为 home，再追加 --{viewport}.png；双下划线文件是更早的参考截图，不计入当前 60 项。"

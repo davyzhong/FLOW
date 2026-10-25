@@ -3,7 +3,7 @@ doc_id: FLOW-WI-VISUAL-LANGUAGE-20261024-001
 title: 可复用视觉语言提炼与 FLOW 全项目视觉统一
 doc_type: work-item
 status: active
-version: 1.6
+version: 1.8
 created_at: 2026-10-24
 updated_at: 2026-10-25
 do_not_execute: false
@@ -26,6 +26,10 @@ confidentiality: project-internal
 
 ## 当前实施记录（2026-10-24）
 
+- 2026-10-25（代码 SHA `cc0fb2eff5d7dbb01f48fda3e84c8c23c9e35583`）：财报页利润瀑布、现金桥、资产/资本结构、现金流比较图新增同值折叠表；原图表标签与数据口径保持不变，移动端可聚焦横向阅读。财报组件 8/8、前端 201/201、typecheck、production build 通过。更新后的 20×3 路由矩阵 60/60 ready，Axe 4.13 桌面 20 路由零违规，指标依赖图交互无错误；矩阵及逐路由 Axe JSON 均绑定此 SHA。仍待图表期间/单位/来源逐对象审计、复杂交互状态和四类导出打印验收。
+
+- 2026-10-25（代码 SHA `3e8a1676f79e0e7c350cd950326ac2128c08ddc7`）：全站对比度/结构修复已提交推送；Web typecheck、37 文件 201/201 单测、Next.js production build、token 生成检查、M1 和 diff-check 通过。Axe 4.13 对 20 个桌面路由为零违规；20×3 截图矩阵 60/60 ready，错误/外部请求/溢出为零；360 CSS px 的 20 路由首 Tab 焦点可见且零溢出。独立输出矩阵和限制见[覆盖验收](../../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。图表逐对象语义、导入/筛选/报告交互和四类导出打印验收仍未完成。
+
 - 已建立 `packages/flow-visual-language/`，包含 `tokens.json` 单一源、生成 CSS、表达范式、无业务事实样例；生成器同时输出 TypeScript/Python token 映射。
 - 已接入 Web 全局主题、共享导航、主要 cockpit/data/analysis/operations 样式、ECharts/SVG 财务图色板与离线驾驶舱预览。报表 Matplotlib 图表读取同一 token 映射；HTML/PDF、PPTX、XLSX 主要渲染器已接入主题映射，逐模板视觉与打印检查仍待完成。
 - Web typecheck 通过；前端 37 个测试文件、201 项通过；调查表和全局原生表单控件视觉调整后，typecheck、全量 201 项前端测试及 Next.js production build 通过。视觉 token `--check` 和 `git diff --check` 通过。
@@ -33,7 +37,7 @@ confidentiality: project-internal
 - Playwright 截图覆盖 20 路由×3 视口；修复 `/operations` 报告查询 UUID 参数类型后，代码 SHA `9cf65f6d` 下最新矩阵重采，60/60 HTTP 200、内容就绪、API/浏览器错误、外部请求、横向溢出均为零；指标依赖图交互截图也在同一 SHA 重采。热力图渐变、财报分组柱与瀑布图已接入语义 token。20 张桌面图审阅后已调整共享链接/控件色、指标库古金强调线、模块落地页衬线标题/卡片节奏和财报页品牌强调色；红色财务负值语义保持不变。指标依赖图默认聚焦“常用”层，并保留“全部/专业”范围切换；图谱画布按当前节点层高度展开，默认截图 31 个节点可见、零错误；“全部”视图的高密度缩放仍待核。视觉差异与剩余顺序见[视觉覆盖验收](../../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md#20-路由截图首轮差异盘点2026-10-24)：驾驶舱、财务出版页和数据工作台较接近；分析及功能范围较窄的页面仍有自然留白；逐图表、报告模板/打印、图表辅助表达、导入/映射与筛选交互、键盘焦点及对比度尚未验收。
 - 2026-10-25：在 `9cf65f6d` 阶段基线上对 20 个默认桌面路由运行 Axe。发现 359 个 color-contrast 节点、7 个驾驶舱子页缺少 H1、1 个不可聚焦滚动区，以及调查详情的定义列表/landmark 语义问题。为先消除全站共享的颜色和语义根因，执行顺序调整为：Axe 对比度/结构问题整改与全路由复验 → 逐图表/数据表达核对 → 交互/键盘/200% 阅读 → HTML/PDF/PPTX/XLSX 版式与打印核验 → 最终矩阵和独立复核。此次仅调整工作包内部顺序，不新增产品范围。
 - 截图与逐路由结果在 [视觉覆盖验收](../../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)；synthetic manifest SHA 为 `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`，数据库只位于 `/tmp/flow-visual-audit-20261024`。
-- 仍需完成全路由概念板视觉差异逐项整改；修复并复测 Axe 扫描的低对比文本、标题/滚动区/定义列表语义；核对所有图表/表达的单位来源与辅助表达；验收 HTML/PDF/PPTX/XLSX、全键盘/200% 阅读/窄屏互动；完成文档门禁、准确最终 SHA 截图和独立复核。当前 `9cf65f6d` 矩阵为阶段截图；待后续视觉差距整改完成后仅需再采一次最终矩阵，不重复本轮截图。不得将阶段截图说成全部符合概念板。
+- 尚待完成的当前验收：逐页复核剩余概念板差异；逐图表核对期间、单位、图例、事实类型、来源与同值表达；验证依赖图全部/专业分层、导入/筛选/报告空错状态；完成完整键盘路径、实际 200% 阅读与窄屏交互；逐模板核验 HTML/PDF/PPTX/XLSX 版式与打印；更新所有有效文档，完成 M1/M6、链接检查、独立复核和当前准确 SHA CI。Axe 20 路由零违规与 `cc0fb2ef` 的 20×3 默认态矩阵 60/60 已完成；后续视觉修正若改变截图页面，再于结案前重采一次矩阵。阶段矩阵只证明已记录 SHA 的默认态，不代表剩余图表、交互和输出格式已验收。
 
 ## 依赖与执行门
 

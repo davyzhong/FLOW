@@ -14,7 +14,7 @@ applies_to: docs
 
 # FLOW 文档中心｜2026-10-24
 
-状态：当前导航。迁移头 `0032_cockpit_action_item`；D055/7a 原型已完成；可复用视觉语言与全项目统一为唯一执行项，规格已获用户批准。可复制的主题资产在 [`packages/flow-visual-language`](../packages/flow-visual-language/README.md)，全路由截图矩阵与阶段限制见[视觉覆盖报告](60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。CI 时点见 PROJECT_STATE。
+状态：当前导航。迁移头 `0032_cockpit_action_item`；D055/7a 原型已完成；可复用视觉语言与全项目统一为唯一执行项，规格已获用户批准。可复制的主题资产在 [`packages/flow-visual-language`](../packages/flow-visual-language/README.md)，20×3 最新路由截图矩阵、Axe 与 200% 可用宽度复核及其剩余验收范围见[视觉覆盖报告](60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。CI 时点见 PROJECT_STATE。
 
 ## 01｜先看当前结论
 
