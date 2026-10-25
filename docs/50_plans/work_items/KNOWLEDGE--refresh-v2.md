@@ -3,7 +3,7 @@ doc_id: FLOW-WI-KNOWLEDGE-REFRESH-V2-001
 title: 第二代静态知识刷新与战略重基线
 doc_type: work-item
 status: active
-version: 6.0
+version: 6.1
 created_at: 2026-09-24
 updated_at: 2026-10-26
 owner: FLOW
@@ -353,3 +353,8 @@ W3 MED 第二十四组完成1条全文双审，SHA匹配 accepted baseline 且�
 ### K3 全量语义路由批次 063（2026-10-26）
 
 按 accepted baseline ID 顺序核验12条全文 SHA。7条作为待核主题索引，涉及数据本体、财务职业发展、上下文优化、插画提示、利润表分析、工具笔记与开发工具版本记录；未经核实的数值、功能及口径均不作事实。5条涉及企业内部数据产品、仓库元数据、供应链金融、全球IT运维及组织运营资料，设 project-internal / rejected，不复制内部细节或指标。coverage 更新为 routed 212、filtered 47、pending_review 9,414。逐条记录见 `semantic-review-2026-10-26-batch-063.tsv`；下一批继续按 baseline ID 顺序。
+
+
+### K3 全量语义路由批次 064（2026-10-26）
+
+按 accepted baseline ID 顺序核验12条来源的文件与正文规范化 SHA。10条完成主题路由并保留 pending-verification；其中2条文章正文主体为图片引用，49张和9张嵌入图片在 accepted vault 中均存在，但本轮未审阅图像内容，未据图示下结论，仅保留来源主题索引。2条包含企业内部全球技术运营或物流AI治理资料，设 project-internal / rejected，不复制系统和指标细节。coverage 更新为 routed 222、filtered 49、pending_review 9,402。逐条记录见 `semantic-review-2026-10-26-batch-064.tsv`；下一批按 baseline ID 顺序。
