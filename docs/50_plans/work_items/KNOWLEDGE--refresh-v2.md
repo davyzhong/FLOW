@@ -328,3 +328,8 @@ W3 MED 第二十四组完成1条全文双审，SHA匹配 accepted baseline 且�
 ### K3 全量语义路由批次 058（2026-10-26）
 
 按 accepted baseline `source_id` 升序完成12条可读全文审阅并核对快照 SHA；批次057留下更小ID例外 `SRC-LOCAL-v1-00625bae4e08042539d1`，其全文位于当前allowlist外，故继续locator-only / pending-review，不以范围外内容替代。9条保留 routed / pending-verification：AI产业观点、客户主数据治理、备份与本地部署笔记、数据分析/决策框架、产品功能名录及企业战略文章；原始出处、版本、方法与数据均未充分核实，不采纳为已证实事实。3条含内部OKR/组织经营内容的来源设为 project-internal / rejected，不进入产品候选且不复述内部指标。coverage 更新为 routed 177、filtered 22、pending_review 9,474；逐条证据见 `semantic-review-2026-10-26-batch-058.tsv`。下一批继续按 baseline ID 升序。
+
+
+### K3 全量语义路由批次 059（2026-10-26）
+
+按 baseline ID 升序对12条可读全文核对 accepted snapshot SHA。6条保留 routed / pending-verification，涉及资金预算、系统架构、监管互操作、概率决策、AI工具和指标体系；其中数值、法规、效能、工具版本及指标定义均未独立验证。另6条包含个人隐私或企业内部规划/会议信息，设 project-internal / rejected，不进入产品候选；本工作包不记录其具体内容。coverage 更新为 routed 183、filtered 28、pending_review 9,462。逐条证据见 `semantic-review-2026-10-26-batch-059.tsv`；下一批继续按 baseline ID 升序。

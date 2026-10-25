@@ -309,3 +309,8 @@ W3 MED 第二十四组完成1条全文双审，保留 pending-verification。同
 ## 语义审阅批次 058（2026-10-26）
 
 在明确跳过批次057已登记的更小ID locator-only例外 `SRC-LOCAL-v1-00625bae4e08042539d1`（全文位于allowlist外、不作证据）后，按accepted baseline source_id升序审阅12条可读全文并逐条校验本地文件 SHA。9条保留 pending-verification，3条涉及内部组织/经营资料而 rejected；所有定量、产品能力、市场判断及因果主张均未作为已验证事实。批次台账 `semantic-review-2026-10-26-batch-058.tsv`，coverage 更新为 routed 177、filtered 22、pending_review 9,474；知识发布版本未变化。
+
+
+## 语义审阅批次 059（2026-10-26）
+
+按baseline ID顺序核验12条可读全文的快照 SHA。6条路由为 pending-verification；6条因个人隐私或企业内部材料而 rejected，细节未复制到交付文档。预算、监管、架构、方法和产品能力主张保持待核。coverage 为 routed 183、filtered 28、pending_review 9,462；`CURRENT_RELEASE` 不变。
