@@ -3,7 +3,7 @@ doc_id: FLOW-VERIFY-K3-CURRENT-SNAPSHOT-20261026
 title: K3 当前 Obsidian 工作区稳定快照复核
 doc_type: verification
 status: verified
-version: 1.6
+version: 1.7
 created_at: 2026-10-26
 updated_at: 2026-10-26
 owner: FLOW
@@ -58,7 +58,7 @@ Davybase `scripts/run/freeze_snapshot.py freeze` 运行于分支 `codex/knowledg
 | `source-delta-2026-10-26.tsv` | `689b7761d048e24bf7a879d5d87f4fcd047a527e70b6fdce79ce81a136f49c91` |
 | `source-diff-2026-10-26.tsv` | `9e781828298245be3c9b9e295eb5da825d04c6092393913a0fd8d03c36e70b90` |
 
-同一 accepted manifest 重建至独立 `/tmp` 输出目录，registry/baseline/delta 与累计 diff 均逐字节一致。生成后重算的 vault HEAD/tree、状态 SHA、内容 SHA、文件数、字节数与 dirty 路径数全部匹配 accepted manifest，写句柄 0。source baseline 与 coverage validator 专项测试 14/14 通过；知识库清单重生成 2,206 项并 `--check` 通过。全量语义路由、HIGH 全读、MED/LOW 双审、coverage 闭合、知识综合与独立 reader 尚待完成；语义批次 001–024 已记录 73 条 HIGH 候选（62 篇本地正文已读、11 条仅元数据筛查）；60 条 pending-verification，2 条同源副本 duplicate，11 条内部敏感来源 rejected 并排除候选；第二十批的三篇方法文章仍 pending-verification，示例数字与阈值未获独立证据。`CURRENT_RELEASE` 不变。
+同一 accepted manifest 重建至独立 `/tmp` 输出目录，registry/baseline/delta 与累计 diff 均逐字节一致。生成后重算的 vault HEAD/tree、状态 SHA、内容 SHA、文件数、字节数与 dirty 路径数全部匹配 accepted manifest，写句柄 0。source baseline 与 coverage validator 专项测试 14/14 通过；知识库清单重生成 2,207 项并 `--check` 通过。全量语义路由、HIGH 全读、MED/LOW 双审、coverage 闭合、知识综合与独立 reader 尚待完成；语义批次 001–025 已记录 76 条 HIGH 候选（62 篇本地正文已读、14 条仅元数据筛查）；60 条 pending-verification，2 条同源副本 duplicate，14 条内部敏感来源 rejected 并排除候选；第二十批的三篇方法文章仍 pending-verification，示例数字与阈值未获独立证据。`CURRENT_RELEASE` 不变。
 
 ## 语义审阅前复验快照（2026-10-26）
 
@@ -156,3 +156,6 @@ Davybase `scripts/run/freeze_snapshot.py freeze` 运行于分支 `codex/knowledg
 
 
 第二十四批对闭环案例链接笔记与 wechat-72e4a10ae09e 正文作比对，发现内容和单箱案例高度相似，但本地无原文 URL 或可追溯原件关联，保留 pending-verification，不标 duplicate；经营驱动树文章中未带底层数据的数字与 BI 看板产品主张保留待核验。详见 `semantic-review-2026-10-26-batch-024.tsv`。
+
+
+第二十五批只按元数据筛查 3 条余下簇2内部架构/讨论/归集材料，未打开正文，标 project-internal/rejected。旧 A-finance 中 AI 财务专题路径不在当前 baseline；同名文件存在于不同目录但未登记，未以标题推断迁移，保留为 coverage exception，后续按路径/哈希证据闭合。详见 `semantic-review-2026-10-26-batch-025.tsv`。
