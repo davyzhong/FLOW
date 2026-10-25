@@ -38,3 +38,4 @@ applies_to: knowledge-base
 - `semantic-review-2026-10-26-batch-013.tsv` —— 第十三批 1 条 HIGH/K7 全文审阅；来源含敏感合同/付款资料，已标 project-internal 并排除候选，不在本库复述明细。
 - `semantic-review-2026-10-26-batch-014.tsv` —— 第十四批 4 条 HIGH 全文审阅，覆盖 AI 财务、业财模型与分析框架；促销内容、无来源数字、缺公式/验证等均留待核验。
 - `semantic-review-2026-10-26-batch-015.tsv` —— 第十五批 3 条 HIGH/K5 全文审阅，覆盖财务能力看板与动态指标切换；阈值冲突、匿名案例和简化公式留待核验。
+- `semantic-review-2026-10-26-batch-016.tsv` —— 第十六批 3 条 HIGH/K4/K5 全文审阅，覆盖自动导入看板（含疑似重发）与财务分析 PPT 框架；均缺实物/原始数据验证。
