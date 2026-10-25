@@ -3,7 +3,7 @@ doc_id: FLOW-WI-KNOWLEDGE-REFRESH-V2-001
 title: 第二代静态知识刷新与战略重基线
 doc_type: work-item
 status: active
-version: 3.6
+version: 3.7
 created_at: 2026-09-24
 updated_at: 2026-10-26
 owner: FLOW
@@ -65,7 +65,7 @@ K2 accepted working-tree manifest 已提交并推送至 Davybase，远端确认�
 
 **当前子步仍属 K3，未完成整轨验收**：逐条主题路由和 HIGH 全文审阅、MED/LOW 双审抽样、错误集中度检查、coverage/例外闭合、知识综合和独立 reader 尚待完成。旧 2026-09-12 baseline 没有完整历史改名 registry；本轮以精确路径迁移旧 ID，未匹配项记为新增/删除，不用标题相似度推断改名。不得据此声称“没有改名”。`CURRENT_RELEASE` 仍为 `flow-knowledge-2026-09-12.1`，未 seal、未激活。
 
-语义批次 001–013 共记录 35 条 HIGH 候选：34 篇本地笔记正文已读、1 条只有元数据；34 条为 `pending-verification`，1 条敏感来源 `rejected` 并排除产品候选，不进入 candidate。批次 001 见[`batch-001`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-001.tsv)，批次 002 见[`batch-002`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-002.tsv)，批次 003 见[`batch-003`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-003.tsv)，批次 004 见[`batch-004`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-004.tsv)，批次 005 见[`batch-005`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-005.tsv)，批次 006 见[`batch-006`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-006.tsv)，批次 007 见[`batch-007`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-007.tsv)，批次 008 见[`batch-008`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-008.tsv)，批次 009 见[`batch-009`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-009.tsv)，[`batch-010`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-010.tsv)，[`batch-011`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-011.tsv)，[`batch-012`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-012.tsv)，[`batch-013`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-013.tsv)。来源原文未独立核验；已记录单位冲突、公式符号缺失、算例不闭合、阈值缺乏依据及定义过度概括等风险，详见审阅台账。
+语义批次 001–014 共记录 39 条 HIGH 候选：38 篇本地笔记正文已读、1 条只有元数据；38 条为 `pending-verification`，1 条敏感来源 `rejected` 并排除产品候选，不进入 candidate。批次 001 见[`batch-001`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-001.tsv)，批次 002 见[`batch-002`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-002.tsv)，批次 003 见[`batch-003`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-003.tsv)，批次 004 见[`batch-004`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-004.tsv)，批次 005 见[`batch-005`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-005.tsv)，批次 006 见[`batch-006`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-006.tsv)，批次 007 见[`batch-007`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-007.tsv)，批次 008 见[`batch-008`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-008.tsv)，批次 009 见[`batch-009`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-009.tsv)，[`batch-010`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-010.tsv)，[`batch-011`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-011.tsv)，[`batch-012`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-012.tsv)，[`batch-013`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-013.tsv)，[`batch-014`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-014.tsv)。来源原文未独立核验；已记录单位冲突、公式符号缺失、算例不闭合、阈值缺乏依据及定义过度概括等风险，详见审阅台账。
 
 ### K3 语义审阅操作口径（依既有规格执行）
 
@@ -141,3 +141,8 @@ K3 是当前唯一执行项。首个只读复核发现 accepted manifest `obsidi
 ### K3 语义审阅批次 013
 
 第十三批审阅自动计费/付款资料 1 篇，全文哈希匹配 accepted snapshot，路由 K7。因原文含可识别第三方合同、付款和账户信息，按 project-internal 标注、处置 rejected 并排除产品候选；仓内只保留定位和最小化风险摘要，不复述敏感明细。详见 [`semantic-review-2026-10-26-batch-013.tsv`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-013.tsv)。
+
+
+### K3 语义审阅批次 014
+
+第十四批审阅 AI 财务应用、业财模型、运营到财务映射及综合分析框架 4 篇全文，哈希匹配 accepted snapshot，均 pending-verification。记录促销材料缺少独立效果证据、模拟/样例数值没有出处、映射和模型缺少定义/公式/边界等限制。详见 [`semantic-review-2026-10-26-batch-014.tsv`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-014.tsv)。
