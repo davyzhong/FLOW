@@ -291,3 +291,8 @@ W3 MED 第二十三组完成三条全文双审，保留 pending-verification。�
 ## 语义审阅批次 055（2026-10-26）
 
 W3 MED 第二十四组完成1条全文双审，保留 pending-verification。同标题的 2024-11-04 与 2025-01-17 文章保留独立来源，后者有较多新增内容；发现“租金倍率”、库存周转期间及员工转化绩效主张须核定义/证据。W3 MED 有效审阅范围完成：72条中70条有W3批次审阅记录，2条按规则采用W1既有审阅。coverage 为 routed 148、filtered 16、pending_review 9,509。详见 `semantic-review-2026-10-26-batch-055.tsv`。
+
+
+## W3 LOW 分层样本批次 056（2026-10-26）
+
+从冻结抽样框94条 pending_review 中按六层哈希抽取12条全文双审，覆盖行业运营、职场、工具、HR、用户营销和杂项。10条保留 pending-verification；差旅记录及HR薪酬案例因内部经营/个人数据标为 project-internal/rejected。高频风险为未验证效果数字、因果跳跃、口径/期间不清与供应商宣传无独立证据。coverage 为 routed 158、filtered 18、pending_review 9,497。抽样选择和哈希见 `w3-low-sampling-selection-2026-10-26.tsv`，逐条结论见 `semantic-review-2026-10-26-batch-056.tsv`。

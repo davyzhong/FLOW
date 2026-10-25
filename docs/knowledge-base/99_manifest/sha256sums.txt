@@ -1,4 +1,4 @@
-957e9d92a052c04167b81a26401347623f3a1945032851732a8762b2b2e9f39a  ./00_governance/change-manifests/obsidianwiki-20261026T005516+0800-d601b4d5-l2.tsv
+0f6391140f87bdbd993f5b51d5ef6a66e91f6b499542130c7b291b73a02edcbc  ./00_governance/change-manifests/obsidianwiki-20261026T005516+0800-d601b4d5-l2.tsv
 9caf15ecafd8fdf8168d0b02ef3626bd1abfe54fa24280543ab1b641f0441e6f  ./00_governance/immutable-paths.lock.tsv
 4304a67cd995a62c133d7db330957908d87c593d96f845879f34dc0f2bdbe659  ./00_governance/migration/M0-ACCEPTANCE.md
 8cecefc3aa45e2eab7fd35bfee58a9d27f00882f48bf644001c95a6930e1c2fb  ./00_governance/migration/baseline.yaml
@@ -2138,9 +2138,9 @@ b33fa5803e59db30ca9cd936772e2843dadbf946dfc4fee6289738ebc565a08f  ./09_competiti
 ce0f3ba366328342710562a2f980ac2b0265cd9f98a0cd3f82e6a34fa87fd3d8  ./09_competitive/screenshots/c18-redash-home.png
 92eeae88a30403edf870d8b86b3a918ac5f6f52d9f899a96aec853806e549eeb  ./09_competitive/screenshots/c19-dataease-home.png
 60667d4e6ba888d5ba5396a8d9353c22adc8322c6f22475ab80f75fe5b659954  ./09_competitive/screenshots/c20-jimu-report-github.png
-d78031e5730e6c8ba3b10115bc3884340899c2a8682fdb8878cab4ad3da36d9f  ./10_sources/README.md
+009ef95e0974e2dd24487c800993f0c35c5ab324fecebdbd3dc175e61a8b7e47  ./10_sources/README.md
 ecd3cb7c4fb22de8313fe9cc5e3fe5a567f455a8cc56fe8f236569e2bbaabb60  ./10_sources/SOURCE_REGISTER.md
-7edcf0b62838ade4c6919b028b43e675b1d45180c640cd56d680c15d488b08e0  ./10_sources/coverage-2026-10-26.tsv
+dc8c60940d3ff0f1cb841af5723990ec9da94d7f937519eec1917b0552ab1b03  ./10_sources/coverage-2026-10-26.tsv
 415820a2fd5e7c6f7af1282dc744a6eaa344f52f4406096c25170e0dfaa22e68  ./10_sources/coverage-exceptions-2026-10-26.tsv
 ab841e127619097707dfafe29a2da96ba7680ed34d4261ec5a06d45aa3eb00d3  ./10_sources/semantic-review-2026-10-26-batch-001.tsv
 760713e2cd504e176131083bc4ae10ad2a04b0e8341584b5e6522c5b3423240b  ./10_sources/semantic-review-2026-10-26-batch-002.tsv
@@ -2197,15 +2197,17 @@ f65b517e356ec8f1153fe978bc87b3d8ce7152a9405241f6a7bff64e6f56a481  ./10_sources/s
 daf126ce3a213dc37dc7636d9f1afba3574b11f861cad69305300d6d78ee424e  ./10_sources/semantic-review-2026-10-26-batch-053.tsv
 bb26805f14ce99c5e4d3a840b2a1323c16d8b783679b19a55b335b11c30ed947  ./10_sources/semantic-review-2026-10-26-batch-054.tsv
 0c2d37dd75c5bf7161b940215e20b22c627a4e22037a1026099df28ed7edbf61  ./10_sources/semantic-review-2026-10-26-batch-055.tsv
+ca6659071c0920d42d92c0137356ab99fd05198a87f9c02e53955e33203a508a  ./10_sources/semantic-review-2026-10-26-batch-056.tsv
 a18e8156910880f1b8d211802038bbaceb94aee6c211c2dfc33f35cb699ee705  ./10_sources/snapshots/obsidian-2026-09-12T15-46+08-00.yaml
 6accd8ff3644f8f06eac12c585905d74e11e93aa61c4da33dc74db6cae416274  ./10_sources/snapshots/obsidian-2026-09-12T16-17+08-00.yaml
 901bee24f27c26e12e94518a99665d279dfdec1e333bc4c7a950651386a5af3b  ./10_sources/source-baseline-2026-10-19.tsv
-6b1151b03d22086832b50b0c0b38bdac478c4e6e8765d7622e7141ac38c164e1  ./10_sources/source-baseline-2026-10-26.tsv
+45269b0b0ac72f36d2bdece9af01f750d1365e1fa7ed912d5ad9c20f037e07bd  ./10_sources/source-baseline-2026-10-26.tsv
 689b7761d048e24bf7a879d5d87f4fcd047a527e70b6fdce79ce81a136f49c91  ./10_sources/source-delta-2026-10-26.tsv
 ac987729a96d3cad33c6d773ca0021e379247574a156bd0c0d54306c595284e1  ./10_sources/source-diff-2026-10-19.tsv
 9e781828298245be3c9b9e295eb5da825d04c6092393913a0fd8d03c36e70b90  ./10_sources/source-diff-2026-10-26.tsv
 8d2ca3f8169dcd201f8c90d1b380d88101595073d46097bb894e9571c3437c45  ./10_sources/source-register.tsv
 77b03004beccc2b295b7c340da3c9c2e6ce167aa3665dc2b2aeb56331ee2505b  ./10_sources/w3-low-sampling-frame-2026-10-26.tsv
+26ff5bf26bdf0cc9797dce896692ed2f1f3a94c6cd310c73b131085c53916b55  ./10_sources/w3-low-sampling-selection-2026-10-26.tsv
 6e821d89874ccc9f619d928ea9604725771ab97d7e5cf51ddf1e50a50ae1c2d8  ./20_knowledge_cards/TAXONOMY--v1.0.yaml
 fe14c5fec8b12d800215cc07e795856f5a8557de8e5d97c9967b7113ec6681d6  ./20_knowledge_cards/authoring-batches.tsv
 70cf69c4a263690c4b7558ebe46dcfc59195dc9041d73a2b57f4c26136c532e7  ./20_knowledge_cards/finance/FIN-DUPONT-001--杜邦分解--v1.0.md

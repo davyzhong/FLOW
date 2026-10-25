@@ -7366,7 +7366,7 @@ wechat-0fbe2f438b5b	pending_review
 wechat-0fc8fb894292	pending_review	
 wechat-0fe79b91ca7c	pending_review	
 wechat-0fe949a3f759	pending_review	
-wechat-1039fc890f25	pending_review	
+wechat-1039fc890f25	routed	semantic-review-2026-10-26-batch-056.tsv
 wechat-10426a9303b8	pending_review	
 wechat-104287e5ea81	pending_review	
 wechat-10476f8fb9f3	pending_review	
@@ -7463,7 +7463,7 @@ wechat-1ce0457c3b26	pending_review
 wechat-1cf092df8b84	pending_review	
 wechat-1d310a64b36c	pending_review	
 wechat-1d44fde054c6	pending_review	
-wechat-1d85664fba76	pending_review	
+wechat-1d85664fba76	routed	semantic-review-2026-10-26-batch-056.tsv
 wechat-1d8f5dcf84dd	pending_review	
 wechat-1dabef3b6a0a	pending_review	
 wechat-1de1baf89f23	pending_review	
@@ -7524,7 +7524,7 @@ wechat-266d4b718f2c	pending_review
 wechat-26791c286ca3	pending_review	
 wechat-269aaa6e639c	pending_review	
 wechat-26ace5849527	pending_review	
-wechat-26bb088e841c	pending_review	
+wechat-26bb088e841c	filtered	semantic-review-2026-10-26-batch-056.tsv
 wechat-26da07b9b6be	routed	semantic-review-2026-10-26-batch-050.tsv
 wechat-2746523a68bd	pending_review	
 wechat-275a8b8f7e29	pending_review	
@@ -7613,7 +7613,7 @@ wechat-338351e6cc05	pending_review
 wechat-339e3e902cba	pending_review	
 wechat-33cc227d5450	pending_review	
 wechat-3451935e3c1f	pending_review	
-wechat-3472f12ee25e	pending_review	
+wechat-3472f12ee25e	routed	semantic-review-2026-10-26-batch-056.tsv
 wechat-34748aa32f93	pending_review	
 wechat-34890d0fa89f	pending_review	
 wechat-34b982c2814a	pending_review	
@@ -7693,7 +7693,7 @@ wechat-3f52c4a81043	pending_review
 wechat-3f75324e34c0	pending_review	
 wechat-3f79536d26e1	pending_review	
 wechat-3fab2ebcf477	pending_review	
-wechat-3fec114c3852	pending_review	
+wechat-3fec114c3852	routed	semantic-review-2026-10-26-batch-056.tsv
 wechat-40023842b87b	pending_review	
 wechat-4022fbfd34a1	pending_review	
 wechat-402b8b155617	pending_review	
@@ -7951,7 +7951,7 @@ wechat-6877ce381c2d	pending_review
 wechat-687ae104cb66	pending_review	
 wechat-68ba404d45b6	routed	semantic-review-2026-10-26-batch-053.tsv
 wechat-68c8aad10ea1	pending_review	
-wechat-6947e7e71bdb	pending_review	
+wechat-6947e7e71bdb	routed	semantic-review-2026-10-26-batch-056.tsv
 wechat-69d210ab3833	pending_review	
 wechat-69db8f7fd922	pending_review	
 wechat-69dec731a814	pending_review	
@@ -7989,7 +7989,7 @@ wechat-6d9f0b3d394f	pending_review
 wechat-6dbfe430ff2d	pending_review	
 wechat-6dcbca5a394d	pending_review	
 wechat-6dd27cffba47	pending_review	
-wechat-6e7b6fd7326c	pending_review	
+wechat-6e7b6fd7326c	routed	semantic-review-2026-10-26-batch-056.tsv
 wechat-6e819654242f	pending_review	
 wechat-6e8cf0e4e287	pending_review	
 wechat-6e99eedb29d0	pending_review	
@@ -8005,7 +8005,7 @@ wechat-706167923d73	pending_review
 wechat-7071222246b9	pending_review	
 wechat-709fd26d56a4	routed	semantic-review-2026-10-26-batch-053.tsv
 wechat-70cdfeef1b70	pending_review	
-wechat-70cf5accfef2	pending_review	
+wechat-70cf5accfef2	routed	semantic-review-2026-10-26-batch-056.tsv
 wechat-70ea42455c00	pending_review	
 wechat-70f6168a5605	pending_review	
 wechat-7106d8d1f521	pending_review	
@@ -8429,7 +8429,7 @@ wechat-b5a70a643621	pending_review
 wechat-b5be7519884e	pending_review	
 wechat-b5cea3e89722	pending_review	
 wechat-b5d4eee86bd8	pending_review	
-wechat-b5e67f89c85a	pending_review	
+wechat-b5e67f89c85a	routed	semantic-review-2026-10-26-batch-056.tsv
 wechat-b6266e2823f0	pending_review	
 wechat-b67fccfbbd2e	pending_review	
 wechat-b6b35c92bdd1	pending_review	
@@ -8634,7 +8634,7 @@ wechat-d41943cd4a5d	pending_review
 wechat-d424a246df8f	pending_review	
 wechat-d45b659fa2a7	pending_review	
 wechat-d4f5329ec17d	pending_review	
-wechat-d5a550c7684d	pending_review	
+wechat-d5a550c7684d	routed	semantic-review-2026-10-26-batch-056.tsv
 wechat-d5bc996f075b	pending_review	
 wechat-d5cc9679a62c	pending_review	
 wechat-d5d0a90f1ae1	pending_review	
@@ -8817,9 +8817,9 @@ wechat-f28589baafcc	pending_review
 wechat-f2bf956c8db0	pending_review	
 wechat-f2cb12c7acc0	pending_review	
 wechat-f2cb1d071752	pending_review	
-wechat-f2ef394d6a35	pending_review	
+wechat-f2ef394d6a35	filtered	semantic-review-2026-10-26-batch-056.tsv
 wechat-f3060291adf2	pending_review	
-wechat-f330debdb44d	pending_review	
+wechat-f330debdb44d	routed	semantic-review-2026-10-26-batch-056.tsv
 wechat-f34ab888d352	pending_review	
 wechat-f34c8c6c2878	pending_review	
 wechat-f3fab30cf47b	pending_review	
