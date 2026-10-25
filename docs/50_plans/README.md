@@ -3,9 +3,9 @@ doc_id: FLOW-PLAN-050
 title: 计划体系
 doc_type: navigation
 status: current
-version: 2.1
+version: 2.2
 created_at: 2026-09-12
-updated_at: 2026-10-25
+updated_at: 2026-10-26
 owner: FLOW
 applies_to: docs
 ---
@@ -22,4 +22,4 @@ applies_to: docs
 [统一完整实施计划（2026-09-24）](../superpowers/plans/2026-09-24-flow-integrated-execution-plan.md)、
 [执行收敛与验收计划（2026-09-25）](2026-09-25-project-execution-convergence-plan.md)。
 
-D055 单机原型收尾已完成：7a.1–7a.8 已关闭并合入 main；PR #4 状态归档 merge commit `b068796f906cfbb91ac33775f5578194acc98a51` 的准确 SHA run `40096497668` 为 28/28 success。当前主线执行项为“可复用视觉语言提炼与 FLOW 全项目视觉统一”；历史分支清理已完成，状态和原 tip SHA 见[清理工作包](work_items/FLOW--merged-branch-cleanup.md)。设计规格与工作包已获用户批准，在 `codex/flow-visual-language` 串行实施。页面/交互 SHA `52418d88` 的 20 路由×3 视口矩阵 60/60、Axe 桌面 20 路由零违规、键盘入口与图谱主要交互均通过；导出/打印 SHA `d554bc31` 的 HTML/PDF/PPTX/XLSX 代表性验收已完成。原生 200% 浏览器缩放仍未直接验收，全路由最终差距和最终矩阵待完成。阶段证据见[视觉覆盖验收](../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。K2 继续排队。完整状态见 [CURRENT_ROADMAP](CURRENT_ROADMAP.md) 和[完结差距报告](../60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)。历史状态和旧分支指引不作为执行入口。
+D055 单机原型收尾已完成：7a.1–7a.8 已关闭并合入 main；PR #4 状态归档 merge commit `b068796f906cfbb91ac33775f5578194acc98a51` 的准确 SHA run `40096497668` 为 28/28 success。视觉语言包与全项目视觉统一已于 2026-10-26 结案，原生 200% 缩放保留外部条件受限补验项；历史分支清理已完成，状态和原 tip SHA 见[清理工作包](work_items/FLOW--merged-branch-cleanup.md)。页面、图表、导出与最终矩阵证据见[视觉覆盖验收](../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。当前主线执行项为知识刷新 K3：先只读核验 accepted manifest 和来源工作区，再按工作包完成语义审阅。完整状态见 [CURRENT_ROADMAP](CURRENT_ROADMAP.md) 和[完结差距报告](../60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)。历史状态和旧分支指引不作为执行入口。

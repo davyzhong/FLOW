@@ -2,10 +2,10 @@
 doc_id: FLOW-WI-KNOWLEDGE-REFRESH-V2-001
 title: 第二代静态知识刷新与战略重基线
 doc_type: work-item
-status: queued
+status: active
 version: 1.9
 created_at: 2026-09-24
-updated_at: 2026-10-19
+updated_at: 2026-10-26
 owner: FLOW
 depends_on: [FLOW-DESIGN-KNOWLEDGE-REFRESH-002]
 acceptance_refs: [FLOW-PLAN-INTEGRATED-EXECUTION-20260924, FLOW-DESIGN-KNOWLEDGE-REFRESH-002]
@@ -72,3 +72,8 @@ K2 accepted manifest 为 Davybase `obsidianwiki-k2-2026-10-19-final.json`，SHA-
 - 用户逐项裁决，activation commit 的干净 worktree、门禁和远端 CI 全绿。
 
 详细步骤见[统一完整实施计划 K 轨](../../superpowers/plans/2026-09-24-flow-integrated-execution-plan.md#10-k第二代静态知识刷新与战略重基线)。
+
+
+## 2026-10-26 队首启动记录
+
+K3 是当前唯一执行项。首个动作是只读复核 accepted manifest `obsidianwiki-k2-2026-10-19-final.json`、对应工作区 HEAD/tree/status/content 指纹及最新日志；不写入或清理 ObsidianWiki，不更改 `CURRENT_RELEASE`。

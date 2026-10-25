@@ -5,10 +5,10 @@ doc_type: generated
 status: generated
 version: 1.0
 created_at: 2026-09-12
-updated_at: 2026-10-25
+updated_at: 2026-10-26
 owner: FLOW
 generator_ref: scripts/documentation/plan_views.py
-input_hash: f9b46d08198719fbb7f13c7537617271f0c28612ffb63464a0625bf80e417e0e
+input_hash: 46774c54f3c98147caf98cffbcaca085bba0b7c606a84412dd8fa238d4f23f7b
 applies_to: planning
 ---
 
@@ -28,5 +28,6 @@ applies_to: planning
 - [U04 独立 oracle 录入与全行验证](../work_items/U04--independent-oracle.md) — `completed`
 - [U08 生产就绪收口](../work_items/U08--production-readiness.md) — `completed`
 - [大麦数据后的剩余体验收口](../work_items/UX--post-damai-experience-closeout.md) — `completed`
+- [可复用视觉语言提炼与 FLOW 全项目视觉统一](../work_items/FLOW--portable-visual-language-and-full-project-restyle.md) — `completed`
 - [AI 问数 v1 与 100 问评测集（T12）](../work_items/PUBLIC--ai-qa-v1.md) — `completed`
 - [数据点级溯源、重述检测、AI 起草与只读 MCP（T10）](../work_items/PUBLIC--provenance-restatement-mcp.md) — `completed`

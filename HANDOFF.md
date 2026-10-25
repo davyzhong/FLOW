@@ -18,10 +18,10 @@ applies_to: repository
 
 ## 一、当前任务
 
-**2026-10-25 当前交接：** 路线图共 16 项：完成 9、实际执行中 1（第 12 项视觉统一）、排队 4、暂停 1、外部条件受限 1。当前分支 `codex/flow-visual-language`，PR #5。页面/键盘 SHA `52418d88c9338b41c59f14f3d699d758c36bf8a1` 的 Web 209/209、typecheck、build 通过，lint 0 错误/4 条既有警告；19/19 AppShell 键盘导航通过。导出/打印 SHA `d554bc317e8c948d776833b9868cdce4a9dd4c81` 已完成 HTML/PDF/PPTX/XLSX 代表性版式检查，后端定向测试 27 项通过；离线快照嵌入该 SHA。最新截图矩阵与 Axe 结果绑定准确 SHA `01e8e25dd426ed43ad6a2cad76544bbbe623eb99`：60/60 ready、错误/外部请求/溢出均为 0，Axe 桌面 20 路由零违规。原生浏览器 200% 缩放仍未直接验收，受控浏览器 API 无法操作 Edge 工具栏。下一步完成图表语义与复杂交互态核对，再复核可行放大路径、最终矩阵、独立复核和准确 SHA CI；视觉包未结案前不启动 K2。结果见[覆盖报告](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)和[唯一队列](docs/50_plans/CURRENT_ROADMAP.md)。用户选择保留 `/Users/qiming/.flow/flow.sqlite3` 零字节文件；其他未跟踪数据库文件保持原样。
+**2026-10-26 当前交接：** 路线图共 16 项：完成 10、实际执行中 1（K 轨 K3）、排队 3、暂停 1、外部条件受限 1。视觉语言包及全项目视觉统一已结案，准确证据见[覆盖报告](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)：隔离 manifest `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed` 下验证器 19/19、可见性矩阵 164/164（154 HTTP 200、10 预期拒绝、0 失败）、Playwright 17/17；应用 SHA `01e8e25dd426ed43ad6a2cad76544bbbe623eb99` 的 20×3 矩阵 60/60、Axe 桌面 20 路由零违规。E2E 断言修正 `d01daa11` 独立复核无 P1/P2。原生浏览器 200% 缩放因 Mac 锁屏及工具能力限制未直接验收，待设备解锁且有可操作原生缩放工具时补验；390/360 CSS px 不是替代。当前分支 `codex/flow-visual-language`，PR #5；视觉结案文档提交后的准确 SHA CI 待查。下一项已启动为 K3：先只读复核 accepted manifest、工作区指纹、来源基线及最新日志，再进入逐条语义路由与审阅。ObsidianWiki 严格只读，`CURRENT_RELEASE` 不变。用户选择保留 `/Users/qiming/.flow/flow.sqlite3` 零字节文件；其他未跟踪数据库文件保持原样。
 
 
-**最新操作记录（2026-10-25）：** 页面/交互 SHA `52418d88c9338b41c59f14f3d699d758c36bf8a1` 已推送。Web 测试 209/209，typecheck、build 通过，lint 0 错误/4 警告；19/19 AppShell 键盘跳转、图谱三层、重复指标深链、窄屏图谱键盘横读均通过。导出/打印 SHA `d554bc317e8c948d776833b9868cdce4a9dd4c81` 的 HTML/PDF/PPTX/XLSX 代表性版式审计完成，相关 27 项后端测试、Ruff、token 检查均通过。最新矩阵/Axe SHA `32e4b08fb2fddc0ad424a5ac3bb5d8cc519414c4`：60/60 ready，零页面/API/浏览器错误、零外部请求、零横向溢出；Axe 20 路由零违规。原生 200% 缩放仍未直接验证，受控浏览器 API 无法操作 Edge 工具栏。下一步做图表语义和复杂交互状态核对，再进行最终复核与准确 SHA 验收。
+**最新操作记录（2026-10-26）：** 最终隔离验收为 19/19、164/164、17/17；独立代码复核无 P1/P2。最后 E2E 断言修复已提交 `d01daa11` 并推送。视觉工作包正式结案，唯一队首转到 K3；第一步按只读方式复核 accepted manifest 与 vault 状态，不触碰常驻知识库。
 
 <details>
 <summary>2026-10-21 及以前的状态快照（历史，不代表当前执行）</summary>

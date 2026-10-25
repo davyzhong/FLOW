@@ -3,9 +3,9 @@ doc_id: FLOW-VERIFY-VISUAL-LANGUAGE-20261024-001
 title: FLOW 可复用视觉语言与全项目视觉覆盖验收
 doc_type: verification
 status: verified
-version: 1.15
+version: 1.16
 created_at: 2026-10-24
-updated_at: 2026-10-25
+updated_at: 2026-10-26
 owner: FLOW
 commit_refs: "[28c0e7a29d7812106709947414c9a560f1c530b0, faaa446b6540565f54290a8f558a7b80b302d39b, 4645c43c4d7c67dc0cd588cea2a32e427f83ff27, 6a49401d55c275decf30dc63f419233b7928997d, 9da910e2456a4f7044a2049950e60b7cadb73bb4, 9cf65f6d58e0cdb33d8e04c17d843a8c9bbc1489, cc0fb2eff5d7dbb01f48fda3e84c8c23c9e35583, b04a7c5425c340681828f1c15c15f3071b1e2782, 1f75792a103af0cbe0d6b483316a26cc958fe391, 52418d88c9338b41c59f14f3d699d758c36bf8a1, a8f500990811bb5de0bac04be49c90cc541da5e2, d554bc317e8c948d776833b9868cdce4a9dd4c81, 32e4b08fb2fddc0ad424a5ac3bb5d8cc519414c4, 01e8e25dd426ed43ad6a2cad76544bbbe623eb99]"
 evidence_refs: "[visual-language-tokens, generator-check, web-typecheck, web-vitest, web-build, api-renderer-tests, api-ruff, api-mypy, isolated-route-matrix, screenshots, axe-desktop-route-audit, chart-value-alternatives, waterfall-negative-total-regression, chart-accessibility-labels, batch-chart-value-tables, profitability-zero-value-regression, skip-link-keyboard-audit, graph-layer-interaction, duplicate-code-deep-link, narrow-graph-keyboard-scroll, export-print-layout-audit, xlsx-a4-preview, offline-snapshot-d554bc31]"
@@ -172,3 +172,14 @@ Web 全量 `pnpm test`：38 个文件、205 项通过；`pnpm typecheck` 与 `pn
 5. `cc0fb2ef` 的最新截图矩阵已重采，60 张内容就绪截图均与结果 JSON 对应；它通过默认页面和版面边界检查，不替代图表/交互/输出格式验收。完成剩余验收后还需执行 M1/M6、计划视图、链接检查和独立复核。
 
 此报告链接至 [视觉语言设计规格](../../superpowers/specs/2026-10-24-flow-visual-language-system-design.md)、[全项目视觉统一工作包](../../50_plans/work_items/FLOW--portable-visual-language-and-full-project-restyle.md)、[截图矩阵 JSON](visual-language-20261024/results.json) 和 [可复用视觉语言包](../../../packages/flow-visual-language/README.md)。
+
+
+## 2026-10-26 最终结案与外部条件限制
+
+最终隔离验证使用 synthetic manifest SHA-256 `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`。`verify_damai_demo` 19/19；可见性矩阵 164/164，其中 154 HTTP 200、10 项为预期拒绝、0 失败；Playwright 17/17。临时 Compose 项目 `damai-demo-visual-20261025` 已 `down -v`，容器清单为空。E2E 最后断言修复提交 `d01daa11`，独立复核无 P1/P2，`git diff --check` 通过。
+
+全路由视觉结果仍绑定应用 SHA `01e8e25dd426ed43ad6a2cad76544bbbe623eb99`：20 路由×桌面/平板/手机 60/60 ready，页面/API/浏览器错误、外部请求、横向溢出均为 0；Axe 桌面 20 路由零违规。最后代码变更只修正 E2E 定位/断言，不改变产品页面，因此矩阵应用 SHA 无需重采；E2E 源码 SHA 为 `d01daa11`。此前 HTML/PDF/PPTX/XLSX、键盘、图表、离线快照证据按本报告相应小节绑定各自准确 SHA。
+
+**原生浏览器 200% 缩放未直接验收，作为外部条件受限项结案。** Mac 当前锁屏，无法操作本机 Edge 外层工具栏；受控浏览器 API 不提供该控件。390/360 CSS px 检查仅是响应式补充证据，不能替代原生 200%。已完成其余可执行验证；恢复条件为设备解锁并能使用可设置原生缩放的浏览器工具，届时补验并追加结果。
+
+视觉语言包、全项目页面/图表/输出样式与 README 视觉材料已完成。唯一队列已推进至知识刷新 K3；不写入 ObsidianWiki，`CURRENT_RELEASE` 保持不变。

@@ -89,7 +89,7 @@ FLOW 的视觉方向已经明确：把有来源、有口径、有解释的财务
 
 下面是概念板方向已经落到产品页面后的本机浏览器实测。桌面总览优先呈现营业收入、营业利润、毛利率和经营现金流；完整趋势、现金流桥、杜邦分解、费用结构、行动项及来源口径均可在同一画布查看。手机截图展示同一数据视图的窄屏排列。
 
-2026-10-24 起，项目正在把 A「高管编辑部」× C「财务报告画布」抽象为可复制的 [FLOW Visual Language 包](packages/flow-visual-language/README.md)，并分阶段统一全项目页面、图表与报告输出。下图是生产构建的真实页面截图；使用隔离 synthetic 数据，不代表真实企业经营结果。当前路由矩阵与 Axe 结果均绑定代码 SHA `01e8e25dd426ed43ad6a2cad76544bbbe623eb99`：20 路由×3 视口 60/60 ready，页面/API/浏览器错误、外部请求和横向溢出均为 0；Axe 桌面 20 路由零违规。页面/键盘代码 SHA `52418d88c9338b41c59f14f3d699d758c36bf8a1` 下 Web 全量 209 项测试、typecheck 与生产 build 通过；19/19 AppShell 首 Tab/Enter、图谱分层和重复编码深链通过。导出视觉代码 SHA `d554bc317e8c948d776833b9868cdce4a9dd4c81` 完成 HTML/PDF/PPTX/XLSX 代表性版式与打印检查，定向后端测试 27 项通过；原生 200% 缩放未直接验收。CI 结果须与当前 HEAD 对应；实时状态见 [GitHub Actions](https://github.com/davyzhong/FLOW/actions)。完整记录：[视觉覆盖报告](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)；截图数据仅使用隔离 synthetic 批次。
+2026-10-24 起，项目已将 A「高管编辑部」× C「财务报告画布」抽象为可复制的 [FLOW Visual Language 包](packages/flow-visual-language/README.md)，并完成全项目页面、图表与报告输出统一。下图是生产构建的真实页面截图；使用隔离 synthetic 数据，不代表真实企业经营结果。当前路由矩阵与 Axe 结果均绑定代码 SHA `01e8e25dd426ed43ad6a2cad76544bbbe623eb99`：20 路由×3 视口 60/60 ready，页面/API/浏览器错误、外部请求和横向溢出均为 0；Axe 桌面 20 路由零违规。页面/键盘代码 SHA `52418d88c9338b41c59f14f3d699d758c36bf8a1` 下 Web 全量 209 项测试、typecheck 与生产 build 通过；19/19 AppShell 首 Tab/Enter、图谱分层和重复编码深链通过。导出视觉代码 SHA `d554bc317e8c948d776833b9868cdce4a9dd4c81` 完成 HTML/PDF/PPTX/XLSX 代表性版式与打印检查，定向后端测试 27 项通过；原生 200% 缩放未直接验收。CI 结果须与当前 HEAD 对应；实时状态见 [GitHub Actions](https://github.com/davyzhong/FLOW/actions)。完整记录：[视觉覆盖报告](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)；截图数据仅使用隔离 synthetic 批次。
 
 ![FLOW A+C 视觉语言实施中的集团财务总览真实页面，展示纸白画布、深海军蓝导航、衬线标题、指标卡、趋势图、现金流桥与来源面板；经营数据为隔离 synthetic 演示数据](docs/60_delivery/verification/visual-language-20261024/cockpit--desktop.png)
 
@@ -132,7 +132,7 @@ FLOW 后续驾驶舱与报告页面统一采用 **A「高管编辑部」主风�
 
 概念板已放在页面首屏，供读者先建立视觉印象；本节保留可执行的视觉原则与逐页验收口径。
 
-可跨项目复用的视觉语言资产现已开始在 [`packages/flow-visual-language/`](packages/flow-visual-language/README.md) 沉淀：语义颜色/字体/间距 token、CSS 导出、页面与图表表达范式，以及无业务数据 specimen。全路由阶段验收与截图索引见[视觉覆盖记录](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)；该记录会随当前实施更新，截图是当前代码阶段证据，不代表全项目视觉收敛已经结束。
+可跨项目复用的视觉语言资产现已开始在 [`packages/flow-visual-language/`](packages/flow-visual-language/README.md) 沉淀：语义颜色/字体/间距 token、CSS 导出、页面与图表表达范式，以及无业务数据 specimen。全路由阶段验收与截图索引见[视觉覆盖记录](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)；全项目视觉工作包已结案，原生 200% 缩放保留明确外部条件限制。
 
 
 | 视觉层 | 统一标准 | 页面落实方式 |
@@ -424,7 +424,7 @@ flowchart LR
 
 ## 📍 当前进度
 
-状态以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为唯一权威。长期产品战略由 D052–D054 定义；当前产品交付边界按 [D055](docs/10_governance/decisions/D055--单机单用户验证原型.md) 聚焦单机单用户财务分析验证原型。当前唯一执行项是可复用视觉语言提炼与全项目视觉统一（路线图第 12 项）；视觉差距、精确验收和下一步顺序见[唯一路线图](docs/50_plans/CURRENT_ROADMAP.md)、[视觉工作包](docs/50_plans/work_items/FLOW--portable-visual-language-and-full-project-restyle.md)与[覆盖验收](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。
+状态以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为唯一权威。长期产品战略由 D052–D054 定义；当前产品交付边界按 [D055](docs/10_governance/decisions/D055--单机单用户验证原型.md) 聚焦单机单用户财务分析验证原型。可复用视觉语言与全项目视觉统一（路线图第 12 项）已结案；原生 200% 缩放保留外部条件受限补验项。当前唯一执行项为知识刷新 K3；状态和顺序见[唯一路线图](docs/50_plans/CURRENT_ROADMAP.md)、[视觉工作包](docs/50_plans/work_items/FLOW--portable-visual-language-and-full-project-restyle.md)与[覆盖验收](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。
 
 | 阶段 | 任务 | 状态 |
 | --- | --- | --- |
@@ -438,11 +438,11 @@ flowchart LR
 | **S01** | 战略边界、Financial Facts V2、安全/RBAC/审计门禁 | ✅ completed |
 | **D 轨** | 大麦物流完整财年演示数据、正式工作流与八页面 E2E | ✅ completed（verify 19/19、E2E 9/9、17 门禁绿；CI 全绿于 `d701c1d`） |
 | **D055 原型交付** | 单机单用户、SQLite + 本地目录、A+C 驾驶舱/报告视觉升级 | ✅ 7a.1–7a.8 已完成并合入 main；PR #4 文档状态 merge commit `b068796f` 的准确 SHA run `40096497668` 为 28/28 success。原型限制见路线图与完结差距审查 |
-| **当前队首** | 提炼可移植视觉语言并统一 FLOW 全项目页面、图表、报告与有效文档 | 🚧 用户已批准，现于 `codex/flow-visual-language` 实施。唯一顺序见路线图 |
-| **K 轨** | 第二代静态知识刷新、sealed candidate 与战略重基线 | ⏭️ 排队；当前视觉语言任务之后再启动 K2 |
+| **当前队首** | 知识刷新 K3 语义路由与审阅 | 🚧 先只读核验 accepted manifest 与来源工作区；ObsidianWiki 保持只读。唯一顺序见路线图 |
+| **视觉统一** | 可复用视觉语言与全项目页面、图表、报告统一 | ✅ 已结案；原生 200% 缩放待设备/工具条件恢复后补验 |
 | U9–U10 | 内部试点、V1.1 证据决策 | ⏭️ 排队；依赖公开 C 级证据与真实企业数据，轮到后按路线图验收 |
 
-**2026-10-25 进度：** 页面与交互代码 SHA `52418d88c9338b41c59f14f3d699d758c36bf8a1` 已推送。Web 38 文件/209 项测试、typecheck、production build 通过；lint 0 错误/4 条既有警告。20 路由×3 视口矩阵 60/60 ready，Axe 桌面 20 路由零违规；19/19 个 AppShell 路由键盘跳转通过。图谱常用/全部/专业层级均可操作，重复指标深链可定位；390 CSS px 下无页面溢出、图谱可横向键盘阅读。导出代码 SHA `d554bc317e8c948d776833b9868cdce4a9dd4c81` 下 HTML/PDF/PPTX/XLSX 代表性输出及打印版式已检查，定向后端测试 27 项通过；离线快照已绑定该 SHA 和隔离 synthetic 数据批次。原生浏览器 200% 缩放未能通过浏览器自动化设置，现记录为未直接验收；不以窄视口代理冒充。下一步按工作包顺序完成全路由最终视觉差距复核、原生缩放的可行路径与最终矩阵。
+**2026-10-26 结案：** 页面与交互代码 SHA `52418d88c9338b41c59f14f3d699d758c36bf8a1` 已推送。Web 38 文件/209 项测试、typecheck、production build 通过；lint 0 错误/4 条既有警告。20 路由×3 视口矩阵 60/60 ready，Axe 桌面 20 路由零违规；19/19 个 AppShell 路由键盘跳转通过。图谱常用/全部/专业层级均可操作，重复指标深链可定位；390 CSS px 下无页面溢出、图谱可横向键盘阅读。导出代码 SHA `d554bc317e8c948d776833b9868cdce4a9dd4c81` 下 HTML/PDF/PPTX/XLSX 代表性输出及打印版式已检查，定向后端测试 27 项通过；离线快照已绑定该 SHA 和隔离 synthetic 数据批次。原生浏览器 200% 缩放未能通过浏览器自动化设置，现记录为未直接验收；不以窄视口代理冒充。最终隔离验收：验证器 19/19、可见性矩阵 164/164（154 HTTP 200、10 预期拒绝、0 失败）、Playwright 17/17；最后断言修复 `d01daa11` 独立复核无 P1/P2。原生 200% 缩放受设备锁屏与工具能力限制未直接验收，390/360 CSS px 不替代。当前队首已转入知识刷新 K3。
 
 已登记的确定性原语：CAGR（n−1 间隔）、可加和守恒桥（残差显式）、经验阈值提示（无普适判定）、口径标签值（登记制）、应收-收入增速联看提示。
 
@@ -815,13 +815,13 @@ FLOW/
 ```mermaid
 flowchart LR
     A["已交付基础<br/>公开财报 · 客观指标 · 证据报告"] --> B["D055 / 7a 已结案<br/>单机单用户原型"]
-    B --> C["当前执行中<br/>可移植视觉语言 + 全项目视觉统一"]
+    B --> C["已结案<br/>可移植视觉语言 + 全项目视觉统一"]
     C --> D["覆盖全部页面、图表、报告与有效文档<br/>逐项视觉验收和准确 SHA CI"]
-    D --> E["后续队列<br/>K2 静态知识刷新"]
+    D --> E["当前队首<br/>K3 知识刷新与语义审阅"]
     style C fill:#fff0cd,stroke:#aa7918,stroke-width:2px
 ```
 
-单机原型工作包已结案：SQLite + 本地文件目录、同步处理、单一启动入口、阶段 7 冷启动/离线展示验收均已交付。当前唯一执行项是 A+C 可复用视觉语言提炼与全项目视觉统一；可移植 token、CSS、表达范式与 specimen 已建立，Web 主题、共享外壳、主要页面/图表、离线快照和报告导出映射已接入。页面矩阵和键盘证据绑定 SHA `52418d88c9338b41c59f14f3d699d758c36bf8a1`；导出/打印代码 SHA `d554bc317e8c948d776833b9868cdce4a9dd4c81` 下，HTML/PDF/PPTX/XLSX 代表性版式完成检查、后端定向测试 27 项通过。原生 200% 缩放未直接验收；浏览器快捷键自动化无效，Edge UI 缩放控件不在当前浏览器自动化能力范围内。CI 必须按当前 HEAD 精确 SHA 判读，实时状态见 [GitHub Actions](https://github.com/davyzhong/FLOW/actions)。完整状态与队列见 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)。页面演示数据继续标识为合成数据，不冒充真实披露。
+单机原型与 A+C 可复用视觉语言工作包均已结案：SQLite + 本地文件目录、同步处理、单一启动入口、阶段 7 冷启动/离线展示及全项目视觉统一均已交付。当前唯一执行项是知识刷新 K3；可移植 token、CSS、表达范式与 specimen 已建立，Web 主题、共享外壳、主要页面/图表、离线快照和报告导出映射已接入。页面矩阵和键盘证据绑定 SHA `52418d88c9338b41c59f14f3d699d758c36bf8a1`；导出/打印代码 SHA `d554bc317e8c948d776833b9868cdce4a9dd4c81` 下，HTML/PDF/PPTX/XLSX 代表性版式完成检查、后端定向测试 27 项通过。原生 200% 缩放未直接验收；Mac 锁屏且当前自动化不能操作 Edge 缩放控件，待设备/工具条件恢复后补验。CI 必须按当前 HEAD 精确 SHA 判读，实时状态见 [GitHub Actions](https://github.com/davyzhong/FLOW/actions)。完整状态与队列见 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)。页面演示数据继续标识为合成数据，不冒充真实披露。
 
 本仓库尚未提供独立的 LICENSE 文件；使用与分发授权请向项目维护者确认。贡献与协作遵循 [AGENTS.md](AGENTS.md)：先读项目状态和正式决策，保护原始档案，按风险验证，每个完整任务只提交相关文件并推送规范远端。
 
@@ -840,7 +840,7 @@ flowchart LR
 - [x] **S01** — 战略边界 + Financial Facts Contract V2 + 安全/RBAC/审计门禁 ✅
 - [x] **D055 / 7a** — 单机单用户原型、A+C 驾驶舱及离线预览已完成；详见[结案差距审查](docs/60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)
 - [🚧] **可移植视觉语言与全项目统一** — 当前唯一执行项；用户已批准，按工作包逐项实施
-- [ ] **K2** — 当前队首任务结案后恢复静态知识刷新；ObsidianWiki 保持只读，启动前核验外部知识库工作区
+- [ ] **K3** — 当前知识刷新队首；只读核验 accepted manifest 和外部知识库工作区后继续语义路由/审阅，ObsidianWiki 保持只读
 - [ ] **U4** — 独立全行验证与留出泛化（依赖 oracle 人工录入）⬜ 外部到料即并行
 - [ ] **公开模块 C 级出口** — Go/No-Go 裁决（前置人工项不变）
 - [ ] **U9–U10** — 内部试点 + V1.1 证据决策（⬜ 待授权；按 [D053](docs/10_governance/decisions/D053--三层两模块边界与执行顺序.md) 重新裁决）

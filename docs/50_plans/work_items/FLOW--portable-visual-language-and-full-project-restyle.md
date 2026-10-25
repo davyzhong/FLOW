@@ -2,11 +2,11 @@
 doc_id: FLOW-WI-VISUAL-LANGUAGE-20261024-001
 title: 可复用视觉语言提炼与 FLOW 全项目视觉统一
 doc_type: work-item
-status: active
-version: 2.6
+status: completed
+version: 2.7
 created_at: 2026-10-24
-updated_at: 2026-10-25
-do_not_execute: false
+updated_at: 2026-10-26
+do_not_execute: true
 owner: FLOW
 depends_on: [FLOW-SPEC-VISUAL-LANGUAGE-20261024-001]
 acceptance_refs: [FLOW-DECISION-D055]
@@ -147,3 +147,12 @@ confidentiality: project-internal
 - 视觉相似度不覆盖真实数据完整性；账龄独立真实切片、真实企业周期、公开财报 C 级和其他长期路线图目标依旧受各自门禁约束。
 - 不更改 CI/CD 配置、数据库 schema/migration、部署发布流程；不删除历史材料，不恢复截图工作流。
 - 已完成 D055/7a 工作包保持 completed；本工作包是在原型交付后的视觉语言产品化与全项目统一，不重新打开或改写 7a 的历史验收结论。
+
+
+## 2026-10-26 结案
+
+- 可复用视觉语言资产及全项目视觉收敛已完成：20 个路由、图表同值表达、键盘/交互、HTML/PDF/PPTX/XLSX 代表性输出版式、离线快照、README 视觉材料均有实施和验收证据。
+- 本轮最终隔离验收：synthetic manifest `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`；`verify_damai_demo` 19/19；可见性矩阵 164/164（154 HTTP 200、10 预期拒绝、0 失败）；Playwright 17/17。应用截图矩阵 SHA `01e8e25dd426ed43ad6a2cad76544bbbe623eb99` 为 20 路由×3 视口 60/60，Axe 桌面 20 路由零违规。最后的 E2E 选择器修正提交 `d01daa11`，独立复核无 P1/P2，`git diff --check` 通过。
+- **外部条件受限项：** 原生浏览器 200% 缩放未直接验收。Mac 锁屏导致无法操作本机 Edge 工具栏，受控浏览器 API 也不提供该控件；390/360 CSS px 响应式检查不等价。可完成部分已用响应式矩阵、键盘和 Axe 证据验收。恢复条件：设备解锁且可直接设置原生缩放的自动化/人工浏览器可用时，补做原生 200% 核验并追加记录。
+- 独立代码复核未发现影响正确性或既定需求的 P1/P2。
+- 视觉包结案后按唯一队列启动 K 轨 K3；此包不再执行。

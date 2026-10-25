@@ -3,18 +3,18 @@ doc_id: FLOW-NAV-DOCS-001
 title: docs navigation
 doc_type: navigation
 status: current
-version: 1.4
+version: 1.5
 created_at: 2026-09-12
-updated_at: 2026-10-25
+updated_at: 2026-10-26
 owner: FLOW
 applies_to: docs
 ---
 
 > 文档唯一入口：[00_start_here](00_start_here/README.md)（PROJECT_STATE / READING_ORDER / DOCUMENT_MAP）。M1–M5 迁移期间 superpowers/ 与旧目录仍有效，接替关系见 DOCUMENT_MAP。
 
-# FLOW 文档中心｜2026-10-25
+# FLOW 文档中心｜2026-10-26
 
-状态：当前导航。迁移头 `0032_cockpit_action_item`；D055/7a 原型已完成；可复用视觉语言与全项目统一为唯一执行项，规格已获用户批准。可复制的主题资产在 [`packages/flow-visual-language`](../packages/flow-visual-language/README.md)，页面矩阵、Axe、图表和 HTML/PDF/PPTX/XLSX 导出/打印验收及剩余 200% 缩放限制见[视觉覆盖报告](60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。CI 时点见 PROJECT_STATE。
+状态：当前导航。迁移头 `0032_cockpit_action_item`；D055/7a 原型已完成；视觉语言资产与全项目统一已结案，原生 200% 缩放因设备/工具外部条件待补验；当前执行项为知识刷新 K3。可复制主题资产在 [`packages/flow-visual-language`](../packages/flow-visual-language/README.md)，视觉证据及限制见[视觉覆盖报告](60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。CI 时点见 PROJECT_STATE。
 
 ## 01｜先看当前结论
 

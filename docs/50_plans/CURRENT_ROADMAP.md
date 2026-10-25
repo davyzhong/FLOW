@@ -3,9 +3,9 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 7.6
+version: 7.7
 created_at: 2026-09-12
-updated_at: 2026-10-25
+updated_at: 2026-10-26
 owner: FLOW
 depends_on: [FLOW-SPEC-V1-DESIGN-001]
 acceptance_refs: [roadmap-unique-invariant]
@@ -17,7 +17,7 @@ superseded_by: null
 
 # 当前路线图（唯一主线）
 
-> **2026-10-25 最新状态：** D055 单机原型 7a.1–7a.8 已合入 main。去重后 16 项：已完成 9、实际执行中 1（视觉统一 PR #5）、排队 4、暂停 1、外部条件受限 1。当前分支 `codex/flow-visual-language`。页面/键盘 SHA `52418d88c9338b41c59f14f3d699d758c36bf8a1` 的 Web 38 文件/209 项测试、typecheck、production build 通过；lint 0 错误/4 条既有警告；19/19 AppShell 键盘跳转通过。报告导出代码 SHA `d554bc317e8c948d776833b9868cdce4a9dd4c81` 下，HTML/PDF/PPTX/XLSX 代表性版式与打印检查完成，后端定向测试 27 项、Ruff、token 检查通过；离线预览已重采并嵌入此 SHA。最新矩阵和 Axe 结果绑定当前准确 SHA `01e8e25dd426ed43ad6a2cad76544bbbe623eb99`：20 路由×3 视口 60/60 ready，页面/API/浏览器错误、外部请求、横向溢出均为 0，Axe 桌面 20 路由零违规。全路由人工截图复核确认留白均对应当前功能/隔离样本真实范围，不以虚构内容填补。原生浏览器 200% 缩放仍未直接验收：快捷键自动化无效，当前受控浏览器能力不能操作 Edge 工具栏缩放；390 CSS px 是补充证据。下一步按序完成剩余图表语义和复杂交互态，再复查可行放大路径、独立复核及准确 SHA CI。视觉工作包未结案前不启动 K2。详细证据见[视觉覆盖验收](../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)；GitHub Actions 结论按当前准确 HEAD 查询。
+> **2026-10-26 最新状态：** D055 单机原型 7a.1–7a.8 已合入 main；视觉语言包及全项目页面、图表、报告/离线输出和 README 视觉统一已完成。路线图仍为 16 项：完成 10、实际执行中 1（K 轨 K3）、排队 3、暂停 1、外部条件受限 1。视觉覆盖验收：隔离 synthetic manifest `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed` 下验证器 19/19、可见性矩阵 164/164（154 HTTP 200、10 预期拒绝、0 失败）、Playwright 17/17；20 路由×3 视口 60/60 与 Axe 桌面 20 路由零违规仍对应应用 SHA `01e8e25dd426ed43ad6a2cad76544bbbe623eb99`。最新 E2E 断言修复已提交于 `d01daa11`，独立复核无 P1/P2，`git diff --check` 通过。原生浏览器 200% 缩放因 Mac 锁屏且当前工具不能操作 Edge 工具栏，未直接验收；390/360 CSS px 证据不替代。按外部条件受限替代结案，待设备解锁且可控工具可用时补验。当前分支 `codex/flow-visual-language` / PR #5；工作包结案文档随后提交并以准确 SHA 查询 GitHub CI。视觉包证据见[覆盖验收](../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。下一唯一事项 K 轨当前子步 K3：只读核验 accepted manifest、来源差异和工作区状态，再执行语义路由与审阅；ObsidianWiki 和 `CURRENT_RELEASE` 保持不变。
 
 > 当前完结目标依据 D055：交付本机单用户可启动、可加载/重置演示业务、可看丰富 CFO 图表、可下钻追溯、可分析和导出报告、可备份恢复、可离线浏览的验证原型。公开 C 级、知识刷新、真实企业三周期仍未完成，保留在长期队列，不作为本原型无限延期的理由。**下方 2026-10-21 及以前的状态段落均为历史，当前只按本段及唯一执行队列。**
 
@@ -96,7 +96,7 @@ superseded_by: null
 | 2a | [大麦物流完整财年演示数据](work_items/DAMAI--full-year-demo.md) | **active（按用户新标准重开；CFO 队首子包，不另列任务）** | 已批准规格；不依赖公开 C 级 | D1–D3 旧版已集成 main `e22d193`，CI run `36137591750` 17/17；原隔离栈验收证据保留。用户 2026-10-12 新增来源事实要求后，旧包仅作为基础夹具完成；需在 CFO 唯一队首中重建来源登记、转换血缘及假设值处置，不与 CFO 并行执行 |
 | 2b | [大麦数据后的剩余体验收口](work_items/UX--post-damai-experience-closeout.md) | **completed** | G2 ✓；用户已批准；ORG-LEDGER CI ✓ | Gate1/Gate5关闭：隔离 Dashboard 7/7；大麦验收 verify19/19、GET矩阵159项零意外、Playwright15/15；生产E2E157/157、Web143/143、mypy203文件、typecheck/lint、M1/链接检查通过；提交`0144bad4`同SHA CI run `36371507389` 17/17 success。常驻库未触碰。 |
 | 2c | [企业组织建制与经营账套初始化包](work_items/ORG-LEDGER--enterprise-initialization-package.md) | **completed** | 大麦发行包 completed；批准三表 schema | `2c7d6eb4`；CI run `36270782272` 的17/17 jobs success。隔离 `full` 首次/重复与 `business` 对账通过；11 个企业/loader 测试、全量 API 852、Web142、脚本107、大麦 verify19/19、API43/43、Playwright9/9、合同/文档/lint/typecheck 均通过。31文件 manifest 稳定 SHA `cbc7cccf…e513`。 |
-| K | [第二代静态知识刷新与战略重基线](work_items/KNOWLEDGE--refresh-v2.md) | **queued（待 7a 新增验收结案）** | K0–K2 完成，K3 baseline/diff 已复验 | 语义路由、HIGH 全审、MED/LOW 双审、coverage 闭合、候选与 independent reader 未完成；ObsidianWiki 只读，`CURRENT_RELEASE` 不变。|
+| K | [第二代静态知识刷新与战略重基线](work_items/KNOWLEDGE--refresh-v2.md) | **active（K3；2026-10-26 启动）** | K0–K2 完成，K3 baseline/diff 已复验 | 当前先只读核验工作区与 accepted manifest；之后按工作包逐条语义路由、HIGH 全审、MED/LOW 双审、coverage 闭合与 independent reader。ObsidianWiki 只读，`CURRENT_RELEASE` 不变。|
 | 3 | [公开财报模块 C 级出口](work_items/PUBLIC--c-level-exit-protocol.md) | **active（C级门禁未通过）** | 行身份修订与样本冻结 ✓ | 本轮证据审计已作 No-Go（证据不足，不是准确率判负）；当前队首转入 U04，C级仍无14份完整独立 oracle、新 holdout 首跑及成品盲评 |
 | 3a | [溯源/重述/只读 MCP](work_items/PUBLIC--provenance-restatement-mcp.md) | **completed** | — | B3 溯源 95.5% 行项目带页锚（迁移 0029 + 导入/API/前端）；B4 supersedes 链 + 差异脚本；B5 只读 MCP 三工具（token fail-closed）；B6 确定性差异说明起草 |
 | 3b | [数据扩张、行业基准与 10× 性能基线](work_items/PUBLIC--data-expansion-benchmarks.md) | **active（队列排队，不并行启动）** | 性能基线 ✓；扩张待外部财报 | G2 完成：10×（1034→10340 行）P95 明细 6.2ms/检索 0.97ms/聚合 1.11ms（`perf_baseline.py`）；C1 扩张需真实财报到料 |
@@ -110,11 +110,11 @@ superseded_by: null
 
 ## 唯一完整 To-do 与执行队列（严格串行）
 
-**统计口径：16 个唯一事项；已完成 9，实际执行中 1（12），队首待启动 0，排队 4，暂停 1，外部条件受限 1。** 视觉语言是当前执行项；事项 13 的并行例外已关闭，15 个已合入 main 的历史分支已删除，保留 main、开放 PR #5 分支与暂停的 ZTO 分支；K2 已退至排队，历史 K 仍是 7 的别名，不重复计数。
+**统计口径：16 个唯一事项；已完成 10，实际执行中 1（K/K3），队首待启动 0，排队 3，暂停 1，外部条件受限 1。** 视觉语言工作包已结案；事项 13 的并行例外已关闭，15 个已合入 main 的历史分支已删除，保留 main、开放 PR #5 分支与暂停的 ZTO 分支；历史 K 仍是 7 的别名，不重复计数。
 
 | 原编号 | 唯一事项 | 当前事实状态 | 证据与处理边界 |
 |---|---|---|---|
-| 12 | [可复用视觉语言提炼与 FLOW 全项目视觉统一](work_items/FLOW--portable-visual-language-and-full-project-restyle.md) | **active（用户已批准，实施中）** | [视觉语言设计规格](../superpowers/specs/2026-10-24-flow-visual-language-system-design.md)；覆盖全部页面、图表、报告/离线输出与有效文档，按 A+C 概念板统一视觉并沉淀跨项目可复用资产 |
+| 12 | [可复用视觉语言提炼与 FLOW 全项目视觉统一](work_items/FLOW--portable-visual-language-and-full-project-restyle.md) | **completed（2026-10-26；原生 200% 外部条件受限结案）** | [视觉语言设计规格](../superpowers/specs/2026-10-24-flow-visual-language-system-design.md)；20 路由、图表、导出、README 与可复用资产均完成；200% 原生缩放待设备/工具条件恢复后补验 |
 | 13 | [清理已合入 main 的历史远端分支](work_items/FLOW--merged-branch-cleanup.md) | **completed（2026-10-25）** | 15 个旧分支经逐支 SHA、祖先与开放 PR 复核后分三批删除；远端仅保留 main、开放 PR #5 的视觉分支和暂停的 ZTO 分支。未改 main、未重写历史 |
 | 0 | CFO 盈利分析与图表补全 | 已完成 | 四因子、冻结值、来源深链；`08aa4cd0` 准确 SHA CI 18/18；新验收由 7a 承接 |
 | 0a | 驾驶舱数值格式治理 | 已完成 | 整数订单、金额两位小数；`1a71e33f` 准确 SHA CI 通过 |
@@ -125,7 +125,7 @@ superseded_by: null
 | 4 | U04 解析与盲评复评 | 已完成（限定样本） | 旧三样本 199/199，不等于全部报告 oracle 完成 |
 | 5 | C 级质量基准与 Go/No-Go | 已完成（裁定 No-Go） | 部分条件后续已有改善，仍无整体验收 Go |
 | 6 | P3 真实数据/来源与行业扩张 | 暂停 | 历史 ZTO 封存已于 2026-10-16 恢复合并，不重复合并；其余扩张暂缓 |
-| 7（原 K） | 第二代静态知识刷新 | **排队：视觉语言任务结案后再启动 K2** | K0–K2 与 K3 baseline/diff 已有；语义审阅、候选/激活未完成，CURRENT_RELEASE 不变 |
+| 7（原 K） | 第二代静态知识刷新 | **进行中：K3 语义路由与审阅** | K0–K2 与 K3 baseline/diff 已有；语义审阅、候选/激活未完成，CURRENT_RELEASE 不变 |
 | 8 | rnd_exp 官方依据核验 | 外部条件受限 | 已有来源基线处理记录；轮到后恢复检索或附原文不可得证明结案，不伪造核验 |
 | 9 | U09/O05 真实内部试点 | 排队 | 需要真实企业数据及质量门槛；技术原型不冒充真实试点 |
 | 10 | U10 V1.1 证据决策 | 排队 | 依实际证据 go/hold，不作为原型的无限开发项 |
