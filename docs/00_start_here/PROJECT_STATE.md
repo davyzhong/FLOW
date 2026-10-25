@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.87
+version: 5.88
 created_at: 2026-09-12
 updated_at: 2026-10-25
 owner: FLOW
@@ -12,10 +12,10 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-10-25 当前状态：**单机原型 7a.1–7a.8 已完成并合入 main。** 当前唯一执行项是“可复用视觉语言提炼与 FLOW 全项目视觉统一”，工作分支 `codex/flow-visual-language`，PR #5。准确代码 SHA `0b06d01c07bf7e7c12e1565a17bce2b94c83aa04` 上，20 路由×3 视口矩阵 60/60 ready、Axe 桌面 20 路由零违规；报告中心改为编辑式双栏/窄屏单栏，指标库桌面卡片改为双列；定向组件测试 12/12、typecheck 和生产构建通过。当前 HEAD 的 CI 状态以 [GitHub Actions](https://github.com/davyzhong/FLOW/actions) 对应精确 SHA 的运行记录为准。矩阵只覆盖默认态加载和视口，不等于完成逐图表语义、完整交互/键盘、真实 200% 浏览器缩放、HTML/PDF/PPTX/XLSX 模板及打印验收；这些才是下一步的具体工作。目前没有本地视觉验收脚本运行。主路线图 16 项中已完成 9、视觉任务 1、排队 4、暂停 1、外部条件受限 1（9/16 不是视觉工作包完成率）。详细差距见[视觉覆盖记录](../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)；视觉验收未完成前 K2 不启动。历史分支清理已处理 15 个已合入旧分支，活动 PR #5 与暂停的 ZTO 分支保留。用户选择保留 `/Users/qiming/.flow/flow.sqlite3` 零字节文件；`services/api/flow.sqlite3` 未跟踪文件原样保留。
+2026-10-25 当前状态：**单机原型 7a.1–7a.8 已完成并合入 main。** 当前唯一执行项是“可复用视觉语言提炼与 FLOW 全项目视觉统一”，工作分支 `codex/flow-visual-language`，PR #5。最新代码 SHA `b04a7c5425c340681828f1c15c15f3071b1e2782` 修复瀑布图负总计裁切；相关 4 个测试文件 33/33、typecheck、视觉 token 检查通过。精确 SHA 下 20 路由×3 视口矩阵 60/60 ready，Axe 桌面 20 路由零违规；浏览器/API 错误、外部请求、横向溢出为 0。当前 SHA 的 CI run `40199235605` 正在运行，以 [GitHub Actions](https://github.com/davyzhong/FLOW/actions) 精确 SHA 记录为准。矩阵只覆盖默认态加载和视口，不等于完成逐图表语义、完整交互/键盘、真实 200% 浏览器缩放、HTML/PDF/PPTX/XLSX 模板及打印验收；接下来逐项完成这些差距。主路线图 16 项中已完成 9、视觉任务 1、排队 4、暂停 1、外部条件受限 1（9/16 不是视觉工作包完成率）。详细差距见[视觉覆盖记录](../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)；视觉验收未完成前 K2 不启动。历史分支清理已处理 15 个已合入旧分支，活动 PR #5 与暂停的 ZTO 分支保留。用户选择保留 `/Users/qiming/.flow/flow.sqlite3` 零字节文件；`services/api/flow.sqlite3` 未跟踪文件原样保留。
 
 
-2026-10-25 视觉验收增量：代码 SHA `0b06d01c07bf7e7c12e1565a17bce2b94c83aa04` 包含报告中心编辑式双栏和指标库桌面双列布局；矩阵 60/60 ready，Axe 桌面 20 路由零违规，定向组件 12/12、typecheck、production build 通过。CI 必须核对当前 HEAD 的精确 SHA；实时状态见 [GitHub Actions](https://github.com/davyzhong/FLOW/actions)。开发脚本当前未运行；下一项本地工作是逐图表语义和交互/键盘验收，再完成实际 200% 缩放及导出打印。
+2026-10-25 视觉验收增量：代码 SHA `b04a7c5425c340681828f1c15c15f3071b1e2782` 修复负利润和仅负总计瀑布图坐标裁切；相关 4 个测试文件 33/33、typecheck、token 检查通过，独立复核无 P1/P2。精确 SHA 下矩阵 60/60、Axe 桌面 20 路由零违规；CI run `40199235605` 正在运行。矩阵截图、`results.json` 与 `axe-results.json` 均绑定该 SHA；浏览器脚本已退出。下一项本地工作继续逐图表语义和交互/键盘验收，再完成真实 200% 缩放及导出打印。
 <details>
 <summary>2026-10-21 及以前的状态快照（历史，不代表当前执行）</summary>
 

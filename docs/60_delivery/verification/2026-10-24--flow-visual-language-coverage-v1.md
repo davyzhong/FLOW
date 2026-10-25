@@ -3,12 +3,12 @@ doc_id: FLOW-VERIFY-VISUAL-LANGUAGE-20261024-001
 title: FLOW 可复用视觉语言与全项目视觉覆盖验收
 doc_type: verification
 status: verified
-version: 1.8
+version: 1.9
 created_at: 2026-10-24
 updated_at: 2026-10-25
 owner: FLOW
-commit_refs: "[28c0e7a29d7812106709947414c9a560f1c530b0, faaa446b6540565f54290a8f558a7b80b302d39b, 4645c43c4d7c67dc0cd588cea2a32e427f83ff27, 6a49401d55c275decf30dc63f419233b7928997d, 9da910e2456a4f7044a2049950e60b7cadb73bb4, 9cf65f6d58e0cdb33d8e04c17d843a8c9bbc1489, cc0fb2eff5d7dbb01f48fda3e84c8c23c9e35583]"
-evidence_refs: "[visual-language-tokens, generator-check, web-typecheck, web-vitest, web-build, api-renderer-tests, api-ruff, api-mypy, isolated-route-matrix, screenshots, axe-desktop-route-audit, chart-value-alternatives]"
+commit_refs: "[28c0e7a29d7812106709947414c9a560f1c530b0, faaa446b6540565f54290a8f558a7b80b302d39b, 4645c43c4d7c67dc0cd588cea2a32e427f83ff27, 6a49401d55c275decf30dc63f419233b7928997d, 9da910e2456a4f7044a2049950e60b7cadb73bb4, 9cf65f6d58e0cdb33d8e04c17d843a8c9bbc1489, cc0fb2eff5d7dbb01f48fda3e84c8c23c9e35583, b04a7c5425c340681828f1c15c15f3071b1e2782]"
+evidence_refs: "[visual-language-tokens, generator-check, web-typecheck, web-vitest, web-build, api-renderer-tests, api-ruff, api-mypy, isolated-route-matrix, screenshots, axe-desktop-route-audit, chart-value-alternatives, waterfall-negative-total-regression]"
 applies_to: repository
 ---
 
@@ -17,6 +17,8 @@ applies_to: repository
 ## 当前状态
 
 本记录是仍在执行中的视觉统一验收，不表示全部视觉差距已经关闭。
+
+2026-10-25 最新代码验收（准确 SHA `b04a7c5425c340681828f1c15c15f3071b1e2782`）：修复瀑布图仅负总计时漏算 `hi` 端点造成的 SVG 裁切；轴范围使用全部柱的两个端点，负 delta 连接线回到变动前累计值，负值标签显示在柱下。独立复核无 P1/P2；含负利润和仅负总计的相关 4 个测试文件 33/33、Web typecheck、视觉 token 检查通过。精确 SHA 下 20×3 矩阵 60/60 内容就绪、浏览器/API 错误、外部请求和横向溢出均为 0；Axe 4.13 桌面 20 路由零违规。矩阵 `results.json` 与 `axe-results.json`、60 张截图均绑定该 SHA；数据来自隔离 synthetic manifest `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`。GitHub Actions run `40199235605` 仍待完成，文档不预判其结果。工作包未结案：接下来继续逐图表事实/单位/期间/图例/来源审计，随后完成交互/键盘、真实 200% 阅读和 HTML/PDF/PPTX/XLSX 版式与打印。
 
 2026-10-25 增量（准确代码 SHA `0b06d01c07bf7e7c12e1565a17bce2b94c83aa04`）：报告中心编辑式双栏/窄屏单栏，指标库桌面卡片双列排列；指标库定向测试 16/16、报告中心定向组件 12/12、typecheck、production build 均通过。重采矩阵仍为 20 路由×3 视口 60/60 ready，API/浏览器错误、外部请求、横向溢出为 0；Axe 桌面 20 路由零违规。截图和 `results.json`、Axe 结果均绑定该 SHA。准确 SHA 的远端 CI 状态随提交变化；请按当前 HEAD 在 GitHub Actions 核对，不把历史运行状态当作当前结论。开发脚本已退出，现阶段仅远端 CI 在执行。工作包未结案：图表事实/单位/期间/图例/来源核对、完整交互与键盘路径、实际 200% 浏览器缩放和 HTML/PDF/PPTX/XLSX 模板/打印仍未验收。
 
