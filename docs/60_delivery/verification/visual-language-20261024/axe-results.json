@@ -1,6 +1,6 @@
 {
-  "capturedAt": "2026-10-25T15:39:54.167Z",
-  "codeCommit": "32e4b08fb2fddc0ad424a5ac3bb5d8cc519414c4",
+  "capturedAt": "2026-10-25T15:49:15.499Z",
+  "codeCommit": "01e8e25dd426ed43ad6a2cad76544bbbe623eb99",
   "axePackage": "@axe-core/playwright 4.13.0",
   "viewport": "1440x1000 desktop default state",
   "routes": 20,

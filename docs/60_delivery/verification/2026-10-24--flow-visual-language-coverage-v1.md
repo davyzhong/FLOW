@@ -3,11 +3,11 @@ doc_id: FLOW-VERIFY-VISUAL-LANGUAGE-20261024-001
 title: FLOW 可复用视觉语言与全项目视觉覆盖验收
 doc_type: verification
 status: verified
-version: 1.14
+version: 1.15
 created_at: 2026-10-24
 updated_at: 2026-10-25
 owner: FLOW
-commit_refs: "[28c0e7a29d7812106709947414c9a560f1c530b0, faaa446b6540565f54290a8f558a7b80b302d39b, 4645c43c4d7c67dc0cd588cea2a32e427f83ff27, 6a49401d55c275decf30dc63f419233b7928997d, 9da910e2456a4f7044a2049950e60b7cadb73bb4, 9cf65f6d58e0cdb33d8e04c17d843a8c9bbc1489, cc0fb2eff5d7dbb01f48fda3e84c8c23c9e35583, b04a7c5425c340681828f1c15c15f3071b1e2782, 1f75792a103af0cbe0d6b483316a26cc958fe391, 52418d88c9338b41c59f14f3d699d758c36bf8a1, a8f500990811bb5de0bac04be49c90cc541da5e2, d554bc317e8c948d776833b9868cdce4a9dd4c81, 32e4b08fb2fddc0ad424a5ac3bb5d8cc519414c4]"
+commit_refs: "[28c0e7a29d7812106709947414c9a560f1c530b0, faaa446b6540565f54290a8f558a7b80b302d39b, 4645c43c4d7c67dc0cd588cea2a32e427f83ff27, 6a49401d55c275decf30dc63f419233b7928997d, 9da910e2456a4f7044a2049950e60b7cadb73bb4, 9cf65f6d58e0cdb33d8e04c17d843a8c9bbc1489, cc0fb2eff5d7dbb01f48fda3e84c8c23c9e35583, b04a7c5425c340681828f1c15c15f3071b1e2782, 1f75792a103af0cbe0d6b483316a26cc958fe391, 52418d88c9338b41c59f14f3d699d758c36bf8a1, a8f500990811bb5de0bac04be49c90cc541da5e2, d554bc317e8c948d776833b9868cdce4a9dd4c81, 32e4b08fb2fddc0ad424a5ac3bb5d8cc519414c4, 01e8e25dd426ed43ad6a2cad76544bbbe623eb99]"
 evidence_refs: "[visual-language-tokens, generator-check, web-typecheck, web-vitest, web-build, api-renderer-tests, api-ruff, api-mypy, isolated-route-matrix, screenshots, axe-desktop-route-audit, chart-value-alternatives, waterfall-negative-total-regression, chart-accessibility-labels, batch-chart-value-tables, profitability-zero-value-regression, skip-link-keyboard-audit, graph-layer-interaction, duplicate-code-deep-link, narrow-graph-keyboard-scroll, export-print-layout-audit, xlsx-a4-preview, offline-snapshot-d554bc31]"
 applies_to: repository
 ---
@@ -17,7 +17,7 @@ applies_to: repository
 
 ## 2026-10-25 当前截图复核与最新矩阵
 
-准确代码 SHA `32e4b08fb2fddc0ad424a5ac3bb5d8cc519414c4`。使用本机隔离 synthetic 应用复采 20 路由×桌面 1440×1000、平板 1024×900、手机 390×844，共 60 组：60/60 内容就绪，页面/API/浏览器错误、外部请求和横向溢出均为 0。Axe 4.13 对同一 SHA 的 20 个桌面默认路由扫描，违规数为 0。截图、`results.json` 和 `axe-results.json` 均在本目录。
+准确代码 SHA `01e8e25dd426ed43ad6a2cad76544bbbe623eb99`。使用本机隔离 synthetic 应用复采 20 路由×桌面 1440×1000、平板 1024×900、手机 390×844，共 60 组：60/60 内容就绪，页面/API/浏览器错误、外部请求和横向溢出均为 0。Axe 4.13 对同一 SHA 的 20 个桌面默认路由扫描，违规数为 0。驾驶舱总览趋势、现金桥和费用的三张同值表补充了可访问名称；组件测试 2/2、Web typecheck 与 production build 通过。截图、`results.json` 和 `axe-results.json` 均在本目录。
 
 对全部 20 张桌面视图进行人工总览后，驾驶舱、报表、财报和数据工作台保持概念图的暖纸白、墨蓝、古金、衬线标题和出版式信息层级。`/analysis`、`/internal`、`/public`、`/investigations` 的大面积留白与真实功能/隔离演示样本的数据量一致；在不增加真实内容或编造指标的前提下，不以装饰组件填充。指标库和财报长页的整页缩略图会缩小文字，这是全页截图缩放造成的显示效果；原页面使用浏览器滚动与图表同值表分段阅读，不能据缩略图单独判为字号缺陷。此轮没有识别出有充分证据支持的布局代码修正项。
 
