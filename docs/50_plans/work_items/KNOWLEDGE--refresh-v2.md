@@ -3,7 +3,7 @@ doc_id: FLOW-WI-KNOWLEDGE-REFRESH-V2-001
 title: 第二代静态知识刷新与战略重基线
 doc_type: work-item
 status: active
-version: 5.2
+version: 5.3
 created_at: 2026-09-24
 updated_at: 2026-10-26
 owner: FLOW
@@ -182,4 +182,4 @@ K3 是当前唯一执行项。首个只读复核发现 accepted manifest `obsidi
 
 第二十四批审阅 2 条 HIGH/簇3：闭环案例 Getnote 笔记与 wechat-72e4a10ae09e 内容高度相似，但原文关联未核且 URL 不可用，保留 pending-verification、不作 duplicate；经营驱动树文章全文核阅并保留 pending-verification，未核验的示例数字、FineBI 看板主张不作事实。详见 [`semantic-review-2026-10-26-batch-024.tsv`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-024.tsv)。
 
-第二十五批对 3 条簇2 内部业财架构/讨论/支出归集资料只做元数据筛查，未打开正文，统一标 project-internal/rejected。旧 A-finance 高优先级清单中的“AI财务2026Q3”路径经 ObsidianWiki Git 元数据追溯：提交 `c743b98972d45794d5948787ab65e7fd9afcbad1` 删除旧财务路径，同一 tree 中系统架构新路径指向相同 blob `2b4dd69c5505711c6b2ea3b4fa5fa4a6d1aebcc3`。新路径不在当前 accepted baseline，故作为基线外迁移从当前 coverage 候选中排除；正文未打开，不计入 76 条 HIGH 审阅。此项路径迁移关系已闭合，来源是否纳入产品知识仍不在本轮结论内。详见 [`semantic-review-2026-10-26-batch-025.tsv`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-025.tsv) 与当前快照报告。第二十六批开始旧 W1 MED 队列双审，完成 6/17 条（美的、小米、京东财报；泡泡玛特定价；制度与流程；数据驱动分析）。均为公开二手材料，保留 MED/pending-verification；京东分部收入相加高于合并净收入 181.5 亿元；数据驱动看板优先级计数 28,155 高于总量 26,935，占比合计约 104.6%；均未核原始出处前不得作为产品事实。制度/流程二分法不作为权限或合规设计依据。coverage 台账覆盖 9,673 个 source_id：routed 66、filtered 16、pending_review 9,591。
+第二十五批对 3 条簇2 内部业财架构/讨论/支出归集资料只做元数据筛查，未打开正文，统一标 project-internal/rejected。旧 A-finance 高优先级清单中的“AI财务2026Q3”路径经 ObsidianWiki Git 元数据追溯：提交 `c743b98972d45794d5948787ab65e7fd9afcbad1` 删除旧财务路径，同一 tree 中系统架构新路径指向相同 blob `2b4dd69c5505711c6b2ea3b4fa5fa4a6d1aebcc3`。新路径不在当前 accepted baseline，故作为基线外迁移从当前 coverage 候选中排除；正文未打开，不计入 76 条 HIGH 审阅。此项路径迁移关系已闭合，来源是否纳入产品知识仍不在本轮结论内。详见 [`semantic-review-2026-10-26-batch-025.tsv`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-025.tsv) 与当前快照报告。第二十六批开始旧 W1 MED 队列双审，完成 9/17 条（美的、小米、京东财报；泡泡玛特定价；制度与流程；数据驱动分析；Power BI 多表合并及AI工具路线；AI与财务观点）。均为公开二手材料，保留 MED/pending-verification；京东分部收入相加高于合并净收入 181.5 亿元；数据驱动看板优先级计数 28,155 高于总量 26,935，占比合计约 104.6%；均未核原始出处前不得作为产品事实。制度/流程二分法不作为权限或合规设计依据；Power BI 价格/功能和AI替代就业预测不得当作当前事实。coverage 台账覆盖 9,673 个 source_id：routed 69、filtered 16、pending_review 9,588。
