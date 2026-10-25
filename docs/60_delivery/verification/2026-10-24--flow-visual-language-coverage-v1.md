@@ -3,16 +3,26 @@ doc_id: FLOW-VERIFY-VISUAL-LANGUAGE-20261024-001
 title: FLOW 可复用视觉语言与全项目视觉覆盖验收
 doc_type: verification
 status: verified
-version: 1.12
+version: 1.13
 created_at: 2026-10-24
 updated_at: 2026-10-25
 owner: FLOW
-commit_refs: "[28c0e7a29d7812106709947414c9a560f1c530b0, faaa446b6540565f54290a8f558a7b80b302d39b, 4645c43c4d7c67dc0cd588cea2a32e427f83ff27, 6a49401d55c275decf30dc63f419233b7928997d, 9da910e2456a4f7044a2049950e60b7cadb73bb4, 9cf65f6d58e0cdb33d8e04c17d843a8c9bbc1489, cc0fb2eff5d7dbb01f48fda3e84c8c23c9e35583, b04a7c5425c340681828f1c15c15f3071b1e2782, 1f75792a103af0cbe0d6b483316a26cc958fe391, 52418d88c9338b41c59f14f3d699d758c36bf8a1]"
-evidence_refs: "[visual-language-tokens, generator-check, web-typecheck, web-vitest, web-build, api-renderer-tests, api-ruff, api-mypy, isolated-route-matrix, screenshots, axe-desktop-route-audit, chart-value-alternatives, waterfall-negative-total-regression, chart-accessibility-labels, batch-chart-value-tables, profitability-zero-value-regression, skip-link-keyboard-audit, graph-layer-interaction, duplicate-code-deep-link, narrow-graph-keyboard-scroll]"
+commit_refs: "[28c0e7a29d7812106709947414c9a560f1c530b0, faaa446b6540565f54290a8f558a7b80b302d39b, 4645c43c4d7c67dc0cd588cea2a32e427f83ff27, 6a49401d55c275decf30dc63f419233b7928997d, 9da910e2456a4f7044a2049950e60b7cadb73bb4, 9cf65f6d58e0cdb33d8e04c17d843a8c9bbc1489, cc0fb2eff5d7dbb01f48fda3e84c8c23c9e35583, b04a7c5425c340681828f1c15c15f3071b1e2782, 1f75792a103af0cbe0d6b483316a26cc958fe391, 52418d88c9338b41c59f14f3d699d758c36bf8a1, a8f500990811bb5de0bac04be49c90cc541da5e2, d554bc317e8c948d776833b9868cdce4a9dd4c81]"
+evidence_refs: "[visual-language-tokens, generator-check, web-typecheck, web-vitest, web-build, api-renderer-tests, api-ruff, api-mypy, isolated-route-matrix, screenshots, axe-desktop-route-audit, chart-value-alternatives, waterfall-negative-total-regression, chart-accessibility-labels, batch-chart-value-tables, profitability-zero-value-regression, skip-link-keyboard-audit, graph-layer-interaction, duplicate-code-deep-link, narrow-graph-keyboard-scroll, export-print-layout-audit, xlsx-a4-preview, offline-snapshot-d554bc31]"
 applies_to: repository
 ---
 
 # FLOW 可复用视觉语言与全项目视觉覆盖验收
+
+## 2026-10-25 HTML/PDF/PPTX/XLSX 与打印核验
+
+导出视觉代码 SHA `d554bc317e8c948d776833b9868cdce4a9dd4c81`（主题基础提交 `a8f500990811bb5de0bac04be49c90cc541da5e2`）。operations HTML、冻结客观报告 HTML/PDF、通用快照 HTML、离线驾驶舱及 Office 输出统一使用纸白/墨蓝/古金、衬线标题、数字字体 token；PPTX 增加纸面背景和识别线，按 macOS/Windows/Linux 映射字体；XLSX 使用 A4、表头/斑马纹、打印标题、页码、冻结行和筛选，并将宽表按宽度分 1–2 页。代表性 XLSX 打印预览暴露证据页默认列宽过窄；修正自动列宽判定并为证据页设定可读列宽。报告图表的盈利强调色、环图文字、现金流零轴已统一到语义 token。
+
+在当前 macOS 工作树，用隔离 synthetic payload 输出 XLSX 并经 LibreOffice 转 A4 PDF，页面为 2 页（证据页与资产负债表分开），证据页已铺满页面可打印宽度；LibreOffice 的中文字体映射与原生 Office 不同，PPTX 中文字体另由 Quick Look 检查。Chromium HTML/PDF、operations 与通用快照代表性输出已检查纸白/墨蓝/古金层级、表格/图表可读性与 A4 分页；未将 synthetic 文件作为项目业务资料提交。定向 API 测试命令为 `cd services/api && .venv/bin/python -m pytest tests/publishing/test_visual_export_theme.py tests/operations/test_operations_render.py tests/publishing/test_renderer_layout.py tests/publishing/test_objective_renderers.py tests/statements/test_objective_report_html.py -q`，结果 27 passed；Ruff、`python3 scripts/build_flow_visual_language.py --check`、`python3 -m unittest scripts.tests.test_cockpit_snapshot_visual_tokens -v` 与 `git diff --check` 均通过。独立复核无 P1/P2。
+
+离线总览从隔离本机应用重生成并嵌入短 SHA `d554bc31`；批次 `01a16e5a-7c2c-79ab-9608-522ba64cce88`，发行包 manifest SHA-256 `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`，8 个 KPI。该 SHA 的 GitHub Actions run `40206948803` 查询时为 `queued`，不能据此标为 CI 通过；最终结论以包含本次文档后的精确 HEAD run 为准。
+
+原生浏览器 200% 缩放仍未直接验收。IAB 与 Edge 标签页中的浏览器自动化快捷键未改变 `innerWidth`/`devicePixelRatio`；Edge 工具栏虽显示缩放控件，但受控浏览器 API 不提供浏览器外层控件点击能力。已关闭临时本机验收标签；390 CSS px 证据保留为补充，不冒充原生缩放通过。
 
 ## 2026-10-25 交互/键盘增量
 
@@ -32,7 +42,7 @@ Web 全量 `pnpm test`：38 个文件、205 项通过；`pnpm typecheck` 与 `pn
 
 本记录是仍在执行中的视觉统一验收，不表示全部视觉差距已经关闭。
 
-**当前最新证据以本段为准：** 代码 SHA `52418d88c9338b41c59f14f3d699d758c36bf8a1`。Web 测试 209/209、typecheck、build 通过，lint 0 错误/4 警告；20×3 矩阵 60/60 ready、错误/请求/溢出为 0；Axe 桌面 20 路由零违规。目录内 60 张截图、`results.json` 和 `axe-results.json` 均绑定该 SHA；隔离 manifest SHA `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`。19/19 AppShell 键盘入口、图谱 3 层与重复指标深链通过；原生 200% 缩放未能在受控 CLI 设置，仍待直接验收。下一步是 HTML/PDF/PPTX/XLSX 模板和打印；完整交互剩余状态、最终复核和准确 SHA CI 未结案，K2 不启动。
+**当前最新证据以本段及“导出/打印核验”段为准：** 页面/键盘代码 SHA `52418d88c9338b41c59f14f3d699d758c36bf8a1` 下 Web 测试 209/209、typecheck、build 通过，lint 0 错误/4 警告；20×3 矩阵 60/60 ready、错误/请求/溢出为 0；Axe 桌面 20 路由零违规。目录内 60 张截图、`results.json` 与 `axe-results.json` 均绑定该 SHA；19/19 AppShell 键盘入口、图谱 3 层与重复指标深链通过。导出/打印代码 SHA `d554bc317e8c948d776833b9868cdce4a9dd4c81` 的代表性核验 27 项后端测试、Ruff 与 token 检查通过，离线预览已同步。原生 200% 缩放仍未直接验收。下一步是全路由最终视觉差距、最终矩阵、独立复核及准确 SHA CI，K2 不启动。
 
 2026-10-25 前一代码阶段验收（准确 SHA `b04a7c5425c340681828f1c15c15f3071b1e2782`）：瀑布图仅负总计时漏算 `hi` 端点造成的 SVG 裁切已修复；负 delta 连接线回到变动前累计值，负值标签显示在柱下。独立复核无 P1/P2；相关 4 个测试文件 33/33、Web typecheck、视觉 token 检查通过。该阶段矩阵和 Axe 结果为历史证据，现由本报告最新段落中的 `52418d88` 当前结果替代。GitHub Actions run `40199235605` 后续取消，不代表当前提交结果。工作包未结案。
 

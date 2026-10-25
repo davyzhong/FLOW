@@ -3,7 +3,7 @@ doc_id: FLOW-INDEX-SCREENSHOTS-001
 title: 项目实测与报告截图索引
 doc_type: navigation
 status: current
-version: 1.5
+version: 1.6
 created_at: 2026-09-04
 updated_at: 2026-10-25
 owner: FLOW
@@ -13,6 +13,10 @@ applies_to: repository
 # 当前界面截图
 
 本文件按采集批次记录真实页面截图；每个批次分别注明代码和数据来源。图片没有替换数值、拼接控件或使用生成图冒充页面。
+
+## 离线驾驶舱导出主题复采（2026-10-25）
+
+`cockpit-single-machine/offline-preview.html` 与同名 PNG 于视觉导出代码 SHA `d554bc317e8c948d776833b9868cdce4a9dd4c81` 重生成；截图对应当前隔离本机演示页面。数据仍是 synthetic 演示批次 `01a16e5a-7c2c-79ab-9608-522ba64cce88`，发行包 manifest SHA-256 `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`，8 个 KPI。该批只用于视觉输出核验，不能视为客户或真实企业数据。页面内嵌纸白、墨蓝、古金与字体 token，不依赖外部字体/CDN。
 
 ## 可复用视觉语言阶段截图矩阵（2026-10-24）
 

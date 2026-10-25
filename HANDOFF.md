@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目交接文档
 doc_type: navigation
 status: current
-version: 12.2
+version: 12.3
 created_at: 2026-09-12
 updated_at: 2026-10-25
 owner: FLOW
@@ -18,10 +18,10 @@ applies_to: repository
 
 ## 一、当前任务
 
-**2026-10-25 当前交接：** 路线图共 16 项：完成 9、实际执行中 1（第 12 项视觉统一）、排队 4、暂停 1、外部条件受限 1。当前分支 `codex/flow-visual-language`，代码 SHA `52418d88c9338b41c59f14f3d699d758c36bf8a1` 已推送；PR #5。Web 209/209、typecheck、build 通过，lint 0 错误/4 条既有警告；独立复核无 P1/P2。矩阵 60/60、Axe 20 路由零违规；19/19 AppShell 路由键盘跳转通过。常用/全部/专业图谱、重复指标深链及 390 CSS px 图谱横向键盘阅读均通过。原生浏览器 200% 缩放在此 CLI 环境无法直接操作，尚未验收。当前应继续验收 HTML/PDF/PPTX/XLSX 模板与打印，再按工作包完成全量复核；本包关闭前不启动 K2。结果见[覆盖报告](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)和[唯一队列](docs/50_plans/CURRENT_ROADMAP.md)。用户选择保留 `/Users/qiming/.flow/flow.sqlite3` 零字节文件；其他未跟踪数据库文件保持原样。
+**2026-10-25 当前交接：** 路线图共 16 项：完成 9、实际执行中 1（第 12 项视觉统一）、排队 4、暂停 1、外部条件受限 1。当前分支 `codex/flow-visual-language`，PR #5。页面/交互 SHA `52418d88c9338b41c59f14f3d699d758c36bf8a1` 已推送；Web 209/209、typecheck、build 通过，lint 0 错误/4 条既有警告；矩阵 60/60、Axe 20 路由零违规；19/19 AppShell 键盘导航通过。导出/打印 SHA `d554bc317e8c948d776833b9868cdce4a9dd4c81` 已完成 HTML/PDF/PPTX/XLSX 代表性版式检查，后端定向测试 27 项通过；离线快照嵌入该 SHA。原生浏览器 200% 缩放仍未直接验收：浏览器自动化快捷键无效，当前自动化不能点击 Edge 工具栏缩放。下一步完成全路由最终差距复核、最终矩阵、独立复核和准确 SHA CI；视觉包未结案前不启动 K2。结果见[覆盖报告](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)和[唯一队列](docs/50_plans/CURRENT_ROADMAP.md)。用户选择保留 `/Users/qiming/.flow/flow.sqlite3` 零字节文件；其他未跟踪数据库文件保持原样。
 
 
-**最新操作记录（2026-10-25）：** 代码 SHA `52418d88c9338b41c59f14f3d699d758c36bf8a1` 已推送。交互/键盘验收后 Web 测试增至 209/209，typecheck、build 通过，lint 0 错误/4 警告；矩阵 60/60、Axe 桌面 20 路由零违规。19/19 AppShell 路由键盘跳转、图谱三层、重复指标深链、窄屏图谱键盘横读均通过；原生 200% 缩放未在受控 CLI 直接验证。接手后按工作包顺序做输出模板/打印验收，更新证据并完成准确 SHA CI。
+**最新操作记录（2026-10-25）：** 页面/交互 SHA `52418d88c9338b41c59f14f3d699d758c36bf8a1` 已推送。Web 测试 209/209，typecheck、build 通过，lint 0 错误/4 警告；矩阵 60/60、Axe 桌面 20 路由零违规；19/19 AppShell 键盘跳转、图谱三层、重复指标深链、窄屏图谱键盘横读均通过。导出/打印 SHA `d554bc317e8c948d776833b9868cdce4a9dd4c81` 的 HTML/PDF/PPTX/XLSX 代表性版式审计完成；相关 27 项后端测试、Ruff、token 检查均通过。原生 200% 缩放仍未直接验证，快捷键自动化不起作用。下一步做全路由最终差距与准确 SHA 验收。
 
 <details>
 <summary>2026-10-21 及以前的状态快照（历史，不代表当前执行）</summary>
