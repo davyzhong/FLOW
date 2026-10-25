@@ -18,10 +18,10 @@ applies_to: repository
 
 ## 一、当前任务
 
-**2026-10-25 当前交接：路线图 7a.1–7a.8 已完成并合入 main。原型验收与限制见[差距审查](docs/60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)。当前唯一执行项为可复用视觉语言提炼与 FLOW 全项目视觉统一，分支 `codex/flow-visual-language`，PR #5。最新代码 SHA `2abdad9621ab03141beb3ceb5e0da64f3d636cba` 下 20 路由×3 视口矩阵 60/60 ready，API/浏览器错误、外部请求、横向溢出为 0；Axe 4.13 桌面 20 路由零违规；报告中心改为编辑式双栏和窄屏单栏，组件 12/12、typecheck、production build 通过。准确 SHA CI run `40195231596` 排队中。尚未完成逐图表事实语义、完整图谱/导入/筛选/报告交互、全键盘路径、实际 200% 缩放及 HTML/PDF/PPTX/XLSX 模板与打印验收，因此不能关闭视觉工作包或启动 K2。当前矩阵、Axe 结果与截图采集脚本见[覆盖报告](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)；唯一队列见[CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)。用户选择保留 `/Users/qiming/.flow/flow.sqlite3` 零字节文件；`services/api/flow.sqlite3` 未跟踪文件原样保留。此前错误启动测试触发主 checkout `.venv` 重建的记录保留为操作历史；当前任务使用独立 worktree。
+**2026-10-25 当前交接：路线图 7a.1–7a.8 已完成并合入 main。原型验收与限制见[差距审查](docs/60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)。当前唯一执行项为可复用视觉语言提炼与 FLOW 全项目视觉统一，分支 `codex/flow-visual-language`，PR #5。最新代码 SHA `0b06d01c07bf7e7c12e1565a17bce2b94c83aa04` 下 20 路由×3 视口矩阵 60/60 ready，API/浏览器错误、外部请求、横向溢出为 0；Axe 4.13 桌面 20 路由零违规；报告中心编辑式双栏/窄屏单栏、指标库桌面双列已完成，定向测试 12/12、typecheck、production build 通过。准确 SHA CI run `40195845311` 仍有 5 个 job 运行。本地没有视觉验收脚本在执行；逐图表事实语义、图谱/导入/筛选/报告交互、全键盘、实际 200% 缩放和 HTML/PDF/PPTX/XLSX 模板与打印仍未完成，不能关闭视觉工作包或启动 K2。当前矩阵、Axe 结果与截图采集脚本见[覆盖报告](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)；唯一队列见[CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)。用户选择保留 `/Users/qiming/.flow/flow.sqlite3` 零字节文件；`services/api/flow.sqlite3` 未跟踪文件原样保留。此前错误启动测试触发主 checkout `.venv` 重建的记录保留为操作历史；当前任务使用独立 worktree。
 
 
-**最新操作记录（2026-10-25）：** 报告中心样式优化与可复跑矩阵脚本已提交推送，提交 `97a0de5d`、`2abdad96`。最新代码 SHA `2abdad9621ab03141beb3ceb5e0da64f3d636cba` 的 20×3 视口矩阵 60/60、Axe 20 路由零违规；报告中心定向组件 12/12、Web typecheck、production build 通过。PR 准确 SHA CI run `40195231596` 当前排队。下一步继续逐图表事实/视觉核对、图谱与上传/筛选/报告交互、键盘/缩放、四种导出和打印验收。视觉工作包未结案前不启动 K2。
+**最新操作记录（2026-10-25）：** 报告中心样式优化与可复跑矩阵脚本已提交推送，提交 `97a0de5d`、`2abdad96`。最新代码 SHA `0b06d01c07bf7e7c12e1565a17bce2b94c83aa04` 的 20×3 视口矩阵 60/60、Axe 20 路由零违规；报告中心定向组件 12/12、Web typecheck、production build 通过。PR 准确 SHA CI run `40195845311` 当前有 5 个 job 运行。下一步继续逐图表事实/视觉核对、图谱与上传/筛选/报告交互、键盘/缩放、四种导出和打印验收。视觉工作包未结案前不启动 K2。
 <details>
 <summary>2026-10-21 及以前的状态快照（历史，不代表当前执行）</summary>
 
