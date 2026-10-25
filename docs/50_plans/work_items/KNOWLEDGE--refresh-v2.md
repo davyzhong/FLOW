@@ -338,3 +338,8 @@ W3 MED 第二十四组完成1条全文双审，SHA匹配 accepted baseline 且�
 ### K3 全量语义路由批次 060（2026-10-26）
 
 按baseline ID升序核验12条可读全文的accepted snapshot SHA。9条作为主题索引路由至待核验，涵盖AI原生重构、零售/财务/销售分析、平衡计分卡、行业研究、财务岗位SOP与企业RAG；案例数字、行业关系、因果解释和产品/技术能力均未确证。3条企业内部Copilot、远程运营与物流架构来源设 project-internal / rejected，未复制其内部细节。coverage 更新为 routed 192、filtered 31、pending_review 9,450。逐条证据见 `semantic-review-2026-10-26-batch-060.tsv`；下一批按baseline ID继续。
+
+
+### K3 全量语义路由批次 061（2026-10-26）
+
+按baseline ID升序核验12条可读全文的快照SHA。6条待核验主题涵盖叙事观点、家电/工具索引、电商经营框架、AI技能机制和Agent产品线索；规范、产品能力、成本与效果主张没有独立核验。另6条涉及企业采购目标、技术战略、团队公约、客户体验架构、数据仓库元数据或个人健康场景，按 project-internal / rejected 排除产品候选，交付文档不包含具体信息。coverage 更新为 routed 198、filtered 37、pending_review 9,438。详见 `semantic-review-2026-10-26-batch-061.tsv`；下一批按baseline ID继续。

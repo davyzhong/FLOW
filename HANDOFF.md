@@ -294,3 +294,6 @@ bash scripts/test_damai_demo_e2e.sh
 
 
 2026-10-26 K3 接续（批次060）：按baseline ID升序核验12条全文SHA，9条保留待核、3条企业内部Copilot/运营/物流架构材料拒绝且不复述内容。coverage 当前 routed 192、filtered 31、pending_review 9,450。`CURRENT_RELEASE` 不变，ObsidianWiki 只读。下一步继续K3全量路由批次061；随后闭合coverage、知识综合与independent reader。
+
+
+2026-10-26 K3 接续（批次061）：按baseline ID升序核对12条可读全文SHA。6条低/中优先级主题保留待核；6条涉及个人健康场景或企业采购/战略/团队/产品架构/仓库元数据，已拒绝且未复制具体敏感内容。coverage 为 routed 198、filtered 37、pending_review 9,438。`CURRENT_RELEASE` 不变，ObsidianWiki只读。下一步继续批次062，再完成coverage闭合、知识综合与independent reader。
