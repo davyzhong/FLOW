@@ -295,7 +295,7 @@
   font-weight: 900;
 }
 
-.section-heading h3,
+.section-heading h2,
 .panel-heading h3 {
   margin: 0;
   color: var(--ink);
@@ -340,7 +340,7 @@
   font-size: 8px;
 }
 
-.metric-card h4 {
+.metric-card h3 {
   margin: 6px 0 2px;
   color: var(--ink);
   font-size: 10px;
@@ -709,7 +709,7 @@ tbody th:first-child { text-align: left; }
   border-radius: 2px;
 }
 
-.metric-card__link:hover h4 {
+.metric-card__link:hover h3 {
   color: var(--blue);
   text-decoration: underline;
   text-underline-offset: 2px;

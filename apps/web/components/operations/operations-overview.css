@@ -142,7 +142,7 @@
 
 .ops-overview__metric-value small,
 .ops-overview__caliber {
-  color: #8a97a8;
+  color: var(--flow-vl-colors-text-muted);
   font-size: 12px;
 }
 

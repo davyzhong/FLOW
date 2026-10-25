@@ -214,7 +214,7 @@
 }
 
 .investigation-head-metrics dt {
-  color: #78879a;
+  color: var(--flow-vl-colors-text-muted);
   font-size: 0.7rem;
 }
 
@@ -262,7 +262,7 @@
 
 .investigation-table-scroll th {
   background: #f4f7f9;
-  color: #69798e;
+  color: var(--flow-vl-colors-text-muted);
   font-weight: 600;
   text-align: left;
   padding: 0.35rem 0.4rem;
@@ -399,7 +399,7 @@
 }
 
 .investigation-check span {
-  color: #718197;
+  color: var(--flow-vl-colors-text-muted);
 }
 
 .investigation-check.is-good {
@@ -438,7 +438,7 @@
 
 .investigation-fields label span {
   display: block;
-  color: #7a899b;
+  color: var(--flow-vl-colors-text-muted);
   font-size: 0.66rem;
   margin-bottom: 0.2rem;
 }
@@ -541,7 +541,7 @@
 }
 
 .investigation-evidence dt {
-  color: #78879b;
+  color: var(--flow-vl-colors-text-muted);
   font-size: 0.66rem;
 }
 
@@ -596,7 +596,7 @@
 }
 
 .investigation-history__item span {
-  color: #79889a;
+  color: var(--flow-vl-colors-text-muted);
   font-size: 0.66rem;
 }
 
@@ -612,7 +612,7 @@
 }
 
 .investigation-identity-note dt {
-  color: #8b99ac;
+  color: var(--flow-vl-colors-text-muted);
 }
 
 .investigation-identity-note dd {
@@ -668,13 +668,13 @@
 
 .investigation-copilot-note {
   margin: 0 0 0.5rem;
-  color: #718197;
+  color: var(--flow-vl-colors-text-muted);
   font-size: 0.66rem;
 }
 
 .investigation-copilot-question span {
   display: block;
-  color: #7a899b;
+  color: var(--flow-vl-colors-text-muted);
   font-size: 0.66rem;
   margin-bottom: 0.2rem;
 }

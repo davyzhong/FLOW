@@ -97,14 +97,14 @@ describe("chart builders", () => {
     const opt = buildGauges([
       { title: "资产负债率", value: 30, max: 100, controlLine: 60, unit: "%", higherIsWorse: true },
     ]) as { series: { pointer: { itemStyle: { color: string } } }[] };
-    expect(opt.series[0].pointer.itemStyle.color).toBe("#34795B");
+    expect(opt.series[0].pointer.itemStyle.color).toBe("#286048");
   });
 
   it("gauge: 越低越好指标贴近管控线为黄（距线<=20%）", () => {
     const opt = buildGauges([
       { title: "资产负债率", value: 50, max: 100, controlLine: 60, unit: "%", higherIsWorse: true },
     ]) as { series: { pointer: { itemStyle: { color: string } } }[] };
-    expect(opt.series[0].pointer.itemStyle.color).toBe("#93651D");
+    expect(opt.series[0].pointer.itemStyle.color).toBe("#805415");
   });
 
   it("gauge: 空输入返回 undefined", () => {

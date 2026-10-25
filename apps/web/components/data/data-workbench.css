@@ -219,7 +219,7 @@
 
 .data-workbench__title { grid-area: title; }
 .data-workbench__eyebrow {
-  color: #9a7535;
+  color: var(--flow-vl-colors-brand-gold-strong);
   font-size: 11px;
   font-weight: 750;
   letter-spacing: .14em;
@@ -236,7 +236,7 @@
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 8px;
-  color: #73808a;
+  color: var(--flow-vl-colors-text-muted);
 }
 .data-workbench__stages li {
   min-width: 0;

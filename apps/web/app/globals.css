@@ -67,8 +67,8 @@
   --rep-line-4: var(--flow-vl-colors-line-strong);
   --rep-line-5: var(--flow-vl-colors-line-strong);
   --rep-slate: var(--flow-vl-colors-text-secondary);
-  --rep-teal: #0d9488;
-  --rep-teal-strong: #0f766e; /* 白字按钮/正文用（#0d9488 对白字对比 3.74 不达 4.5:1） */
+  --rep-teal: #0b655e;
+  --rep-teal-strong: #0b655e; /* 白字按钮/正文用（#0d9488 对白字对比 3.74 不达 4.5:1） */
   --rep-ok-soft-2: #d3ecdf;
 
   /* 间距 / 圆角 / 字号刻度（flow-* 基础类消费） */

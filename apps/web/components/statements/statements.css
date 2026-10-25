@@ -265,7 +265,7 @@
   display: block;
 }
 
-.stmt-tick { font-size: 10px; fill: #94a3b8; }
+.stmt-tick { font-size: 10px; fill: var(--flow-vl-colors-text-muted); }
 .stmt-xlab { font-size: 11.5px; fill: var(--rep-slate); }
 .stmt-vlabel { font-size: 10.5px; fill: var(--flow-vl-colors-text-primary); font-weight: 600; }
 .stmt-legend { font-size: 11px; fill: var(--rep-slate); }

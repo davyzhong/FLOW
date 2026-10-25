@@ -95,8 +95,8 @@ export function CockpitProfitabilityPage() {
     [],
   );
 
-  if (query.loading) return <div className="module-page" data-status="loading" aria-busy="true"><h2>盈利能力与杜邦分析</h2><p>读取已发布的财报快照…</p></div>;
-  if (query.error || !query.data) return <div className="module-page" data-status="error"><h2>盈利能力与杜邦分析</h2><p role="alert">{query.error ?? "盈利分析数据未就绪。"}</p><button type="button" onClick={query.reload}>重试</button></div>;
+  if (query.loading) return <div className="module-page" data-status="loading" aria-busy="true"><h1>盈利能力与杜邦分析</h1><p>读取已发布的财报快照…</p></div>;
+  if (query.error || !query.data) return <div className="module-page" data-status="error"><h1>盈利能力与杜邦分析</h1><p role="alert">{query.error ?? "盈利分析数据未就绪。"}</p><button type="button" onClick={query.reload}>重试</button></div>;
 
   const data = query.data;
   const periods = data.periods ?? [];
@@ -107,13 +107,13 @@ export function CockpitProfitabilityPage() {
   return (
     <div className="module-page profitability-page" data-status="ready" data-module="profitability">
       <header className="module-page__header">
-        <div><span className="module-page__eyebrow">FLOW · 财务驾驶舱</span><h2>盈利能力与杜邦分析</h2></div>
+        <div><span className="module-page__eyebrow">FLOW · 财务驾驶舱</span><h1>盈利能力与杜邦分析</h1></div>
         <span className="module-period">{prior?.period ?? "—"} → {current?.period ?? "—"}</span>
       </header>
       <p className="module-source-notice">{data.source_notice} 本页只读取已冻结客观财报快照，不在展示时重算指标。</p>
 
       <section className="profitability-summary" aria-label="杜邦三因子">
-        <div className="module-section-heading"><h3>杜邦三因子</h3><span>ROE = 净利率 × 总资产周转率 × 权益乘数</span></div>
+        <div className="module-section-heading"><h2>杜邦三因子</h2><span>ROE = 净利率 × 总资产周转率 × 权益乘数</span></div>
         <div className="profitability-grid">
           {FACTORS.map((factor) => {
             const value = metricFor(current, factor.code);
@@ -149,7 +149,7 @@ export function CockpitProfitabilityPage() {
       </section>
 
       <section className="profitability-comparisons" aria-label="两期财年比较">
-        <div className="module-section-heading"><h3>两期财年比较</h3><span>仅比较已冻结的披露财年，不延伸推断长期趋势</span></div>
+        <div className="module-section-heading"><h2>两期财年比较</h2><span>仅比较已冻结的披露财年，不延伸推断长期趋势</span></div>
         <div className="profitability-comparison-grid">
           <ChartBox
             title="ROE 与净利率"
@@ -179,8 +179,8 @@ export function CockpitProfitabilityPage() {
       </section>
 
       <section className="module-unavailable" aria-label="盈利能力指标明细">
-        <div className="module-section-heading"><h3>期间、来源与口径</h3><span>仅显示冻结快照中实际存在的结果</span></div>
-        <div className="module-table-scroll"><table className="module-chart-table">
+        <div className="module-section-heading"><h2>期间、来源与口径</h2><span>仅显示冻结快照中实际存在的结果</span></div>
+        <div className="module-table-scroll" role="region" aria-label="期间来源与口径数据表" tabIndex={0}><table className="module-chart-table">
           <thead><tr><th>期间</th><th>指标</th><th>数值</th><th>状态/口径版本</th><th>来源</th></tr></thead>
           <tbody>{periods.flatMap((period) => (period.metrics ?? []).map((metric) => (
             <tr key={`${period.period}:${metric.metric_code}`}>
@@ -202,7 +202,7 @@ export function CockpitProfitabilityPage() {
           )))}</tbody>
         </table></div>
       </section>
-      {(data.unavailable ?? []).length ? <section className="module-unavailable" aria-label="数据缺口"><div className="module-section-heading"><h3>当前不可用项</h3><span>不补零、不推测</span></div><ul>{(data.unavailable ?? []).map((item) => <li key={`${item.period}:${item.metric_code}`}><strong>{item.period} · {item.metric_code}</strong>：{item.reason}</li>)}</ul></section> : null}
+      {(data.unavailable ?? []).length ? <section className="module-unavailable" aria-label="数据缺口"><div className="module-section-heading"><h2>当前不可用项</h2><span>不补零、不推测</span></div><ul>{(data.unavailable ?? []).map((item) => <li key={`${item.period}:${item.metric_code}`}><strong>{item.period} · {item.metric_code}</strong>：{item.reason}</li>)}</ul></section> : null}
       {current ? <p className="profitability-source">报告：<Link href={statementReportHref(current.report_id)}>{current.source_ref}</Link>{current.source_sha256 ? ` · SHA-256 ${current.source_sha256}` : " · 来源指纹未提供"}</p> : null}
     </div>
   );

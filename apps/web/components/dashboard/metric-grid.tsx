@@ -33,7 +33,7 @@ function Comparison({ label, value, metricCode }: { label: string; value: Card["
 export function MetricGrid({ cards }: { cards: DashboardResponse["metric_cards"] }) {
   return (
     <section className="metric-section" aria-label="核心经营指标">
-      <div className="section-heading"><div><span>01</span><h3>核心经营指标</h3></div><small>实际 / 预算差异 / 同比 / YTD 预算差异</small></div>
+      <div className="section-heading"><div><span>01</span><h2>核心经营指标</h2></div><small>实际 / 预算差异 / 同比 / YTD 预算差异</small></div>
       <div className="metric-grid">
         {cards.map((card) => (
           <article className="metric-card" data-testid="metric-card" key={card.metric_code}>
@@ -43,7 +43,7 @@ export function MetricGrid({ cards }: { cards: DashboardResponse["metric_cards"]
               aria-label={`${card.title}：在指标库中查看口径`}
             >
               <div className="metric-card__top"><span>{card.category}</span><small>{card.unit}</small></div>
-              <h4>{card.title}</h4>
+              <h3>{card.title}</h3>
               <div className="metric-card__value">{formatFinancialValue(card.primary.exact_value ?? card.primary.display_value, { metricCode: card.metric_code, unit: card.unit, appendUnit: false })}</div>
               <div className="metric-card__comparisons">
                 <Comparison label="预算" value={card.budget} metricCode={card.metric_code} />

@@ -139,7 +139,7 @@ export function InvestigationApp({
   );
 
   return (
-    <main className="investigation-app">
+    <div className="investigation-app">
       {/* 四类非加载态统一走 PageState 外壳：h1「经营调查」在任何状态下稳定渲染。 */}
       {request.kind === "loading" ? (
         <PageState title="经营调查" status="loading" message="正在加载证据与复核上下文…" />
@@ -181,7 +181,7 @@ export function InvestigationApp({
           onConclusionSave={onConclusionSave}
         />
       ) : null}
-    </main>
+    </div>
   );
 }
 
@@ -238,7 +238,7 @@ function InvestigationWorkspace({
             <p className="investigation-action-error" role="alert">{actionError}</p>
           ) : null}
         </section>
-        <aside className="investigation-inspector">
+        <aside className="investigation-inspector" aria-label="调查详情工具栏">
           <InvestigationEvidenceInspector
             context={context}
             busy={busy}
@@ -252,12 +252,8 @@ function InvestigationWorkspace({
           <CopilotPanel context={context} query={query} />
         </aside>
       </div>
-      <dl
-        className="investigation-identity-note"
-        role="region"
-        aria-label="不可变分析上下文"
-        data-testid="investigation-identity"
-      >
+      <section aria-label="不可变分析上下文" data-testid="investigation-identity">
+      <dl className="investigation-identity-note">
         <div>
           <dt>Finding ID</dt>
           <dd>{context.identity.finding_id}</dd>
@@ -283,6 +279,7 @@ function InvestigationWorkspace({
           </dd>
         </div>
       </dl>
+      </section>
     </>
   );
 }

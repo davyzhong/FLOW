@@ -126,7 +126,7 @@ export function CockpitKpiCard({
         <div className="kpi__top">
           <span className="kpi__cat">{card.category}</span>
         </div>
-        <h4>{card.title}</h4>
+        <h2>{card.title}</h2>
         <div className="kpi__value">⚠ 不可追溯</div>
         <div className="kpi__caliber">缺少 snapshot_id，按可追溯铁律拒绝渲染</div>
       </article>
@@ -158,7 +158,7 @@ export function CockpitKpiCard({
           <span className="kpi__cat">{card.category}</span>
           {card.control_line ? <span className="kpi__line">管控线 {formatFinancialValue(card.control_line.exact_value ?? card.control_line.display_value, { metricCode: card.metric_code, unit: card.unit })}</span> : null}
         </div>
-        <h4>{card.title}</h4>
+        <h2>{card.title}</h2>
         <div className="kpi__value-row">
           <div className="kpi__value">
             {formatKpiValue(card.primary.exact_value ?? card.primary.display_value, card.metric_code, card.unit)}
@@ -209,13 +209,13 @@ export function CockpitKpiGrid({
       <div className="section-heading">
         <div>
           <span>01</span>
-          <h3>核心经营指标</h3>
+          <h2>核心经营指标</h2>
         </div>
         <small>三基准：同比 / 环比 / 行业分位 · 口径常驻 · 点击穿透</small>
       </div>
       <div className="kpi-grid">{primaryCards.map((card) => renderCard(card, false))}</div>
       {supportingCards.length ? <section className="kpi-supporting" aria-label="补充经营指标">
-        <div className="section-heading"><div><span>01A</span><h3>补充经营指标</h3></div><small>规模、单均效率、成本与营运资本</small></div>
+        <div className="section-heading"><div><span>01A</span><h2>补充经营指标</h2></div><small>规模、单均效率、成本与营运资本</small></div>
         <div className="kpi-grid kpi-grid--supporting">{supportingCards.map((card) => renderCard(card, true))}</div>
       </section> : null}
     </section>
