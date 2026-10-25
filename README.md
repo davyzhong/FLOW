@@ -72,7 +72,7 @@ tags:
 
 </div>
 
-FLOW 的视觉方向已经明确：把有来源、有口径、有解释的财务事实组织成可阅读、可追问、可复核的分析画布。概念板展示设计目标；下方实景图记录此前真实运行的页面与公开财报实验。2026-10-25 已将共享视觉语言推广至全路由，修复对比度与结构语义，并优化报告中心编辑式双栏及指标库桌面双列；代码 SHA `0b06d01c07bf7e7c12e1565a17bce2b94c83aa04` 下 20 路由×3 视口矩阵 60/60 ready，Axe 桌面 20 路由零违规。准确 SHA CI run `40195845311` 仍有 5 个 job 运行。逐图表语义、交互/键盘、实际 200% 浏览器缩放和 HTML/PDF/PPTX/XLSX 打印尚未验收；当前没有本地视觉验收脚本在执行。最新截图、可复跑检查与剩余范围见[视觉覆盖报告](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)；公开截图发布仍暂停。
+FLOW 的视觉方向已经明确：把有来源、有口径、有解释的财务事实组织成可阅读、可追问、可复核的分析画布。概念板展示设计目标；下方实景图记录此前真实运行的页面与公开财报实验。2026-10-25 已将共享视觉语言推广至全路由，修复对比度与结构语义，并优化报告中心编辑式双栏及指标库桌面双列；代码 SHA `0b06d01c07bf7e7c12e1565a17bce2b94c83aa04` 下 20 路由×3 视口矩阵 60/60 ready，Axe 桌面 20 路由零违规。远端 CI 必须按当前 HEAD 精确 SHA 判读，实时状态见 [GitHub Actions](https://github.com/davyzhong/FLOW/actions)。逐图表语义、交互/键盘、实际 200% 浏览器缩放和 HTML/PDF/PPTX/XLSX 打印尚未验收；当前没有本地视觉验收脚本在执行。最新截图、可复跑检查与剩余范围见[视觉覆盖报告](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)；公开截图发布仍暂停。
 
 <table>
 <tr>
@@ -89,7 +89,7 @@ FLOW 的视觉方向已经明确：把有来源、有口径、有解释的财务
 
 下面是概念板方向已经落到产品页面后的本机浏览器实测。桌面总览优先呈现营业收入、营业利润、毛利率和经营现金流；完整趋势、现金流桥、杜邦分解、费用结构、行动项及来源口径均可在同一画布查看。手机截图展示同一数据视图的窄屏排列。
 
-2026-10-24 起，项目正在把 A「高管编辑部」× C「财务报告画布」抽象为可复制的 [FLOW Visual Language 包](packages/flow-visual-language/README.md)，并分阶段统一全项目页面、图表与报告输出。下图是生产构建的真实页面截图；使用隔离 synthetic 数据，不代表真实企业经营结果。当前代码 SHA `0b06d01c07bf7e7c12e1565a17bce2b94c83aa04` 下 20 路由×3 视口矩阵 60/60 内容就绪，Axe 桌面 20 路由零违规；报告中心采用编辑式分区，指标库桌面卡片双列排列。准确 SHA CI run `40195845311` 查询时有 5 个 job 运行。逐图表语义、复杂交互、键盘、实际 200% 缩放及 HTML/PDF/PPTX/XLSX 版式与打印仍待验收。完整记录：[视觉覆盖报告](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)；60 张最新截图与准确 SHA 见[矩阵目录](docs/60_delivery/verification/visual-language-20261024/)。
+2026-10-24 起，项目正在把 A「高管编辑部」× C「财务报告画布」抽象为可复制的 [FLOW Visual Language 包](packages/flow-visual-language/README.md)，并分阶段统一全项目页面、图表与报告输出。下图是生产构建的真实页面截图；使用隔离 synthetic 数据，不代表真实企业经营结果。当前代码 SHA `0b06d01c07bf7e7c12e1565a17bce2b94c83aa04` 下 20 路由×3 视口矩阵 60/60 内容就绪，Axe 桌面 20 路由零违规；报告中心采用编辑式分区，指标库桌面卡片双列排列。CI 结果须与当前 HEAD 精确 SHA 对应；实时状态见 [GitHub Actions](https://github.com/davyzhong/FLOW/actions)。逐图表语义、复杂交互、键盘、实际 200% 缩放及 HTML/PDF/PPTX/XLSX 版式与打印仍待验收。完整记录：[视觉覆盖报告](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)；60 张最新截图与准确 SHA 见[矩阵目录](docs/60_delivery/verification/visual-language-20261024/)。
 
 ![FLOW A+C 视觉语言实施中的集团财务总览真实页面，展示纸白画布、深海军蓝导航、衬线标题、指标卡、趋势图、现金流桥与来源面板；经营数据为隔离 synthetic 演示数据](docs/60_delivery/verification/visual-language-20261024/cockpit--desktop.png)
 
@@ -819,7 +819,7 @@ flowchart LR
     style C fill:#fff0cd,stroke:#aa7918,stroke-width:2px
 ```
 
-单机原型工作包已结案：SQLite + 本地文件目录、同步处理、单一启动入口、阶段 7 冷启动/离线展示验收均已交付。当前唯一执行项是 A+C 可复用视觉语言提炼与全项目视觉统一；可移植 token、CSS、表达范式与 specimen 已建立，Web 主题、共享外壳、主要页面/图表、离线快照和报告导出映射已接入。当前视觉代码 SHA `0b06d01c07bf7e7c12e1565a17bce2b94c83aa04` 上，20 路由 Axe 零违规、20×3 页面矩阵 60/60 ready；报告中心完成编辑式双栏优化，定向组件测试 12/12、typecheck、production build 通过。逐图表事实核对、完整交互、实际 200% 缩放和导出打印尚未验收；准确 SHA CI run `40195845311` 仍有 5 个 job 运行。完整状态、限制与队列见 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)。页面演示数据继续标识为合成数据，不冒充真实披露。
+单机原型工作包已结案：SQLite + 本地文件目录、同步处理、单一启动入口、阶段 7 冷启动/离线展示验收均已交付。当前唯一执行项是 A+C 可复用视觉语言提炼与全项目视觉统一；可移植 token、CSS、表达范式与 specimen 已建立，Web 主题、共享外壳、主要页面/图表、离线快照和报告导出映射已接入。当前视觉代码 SHA `0b06d01c07bf7e7c12e1565a17bce2b94c83aa04` 上，20 路由 Axe 零违规、20×3 页面矩阵 60/60 ready；报告中心完成编辑式双栏优化，定向组件测试 12/12、typecheck、production build 通过。逐图表事实核对、完整交互、实际 200% 缩放和导出打印尚未验收；远端 CI 必须按当前 HEAD 精确 SHA 判读，实时状态见 [GitHub Actions](https://github.com/davyzhong/FLOW/actions)。完整状态、限制与队列见 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)。页面演示数据继续标识为合成数据，不冒充真实披露。
 
 本仓库尚未提供独立的 LICENSE 文件；使用与分发授权请向项目维护者确认。贡献与协作遵循 [AGENTS.md](AGENTS.md)：先读项目状态和正式决策，保护原始档案，按风险验证，每个完整任务只提交相关文件并推送规范远端。
 
