@@ -3,7 +3,7 @@ doc_id: FLOW-VERIFY-K3-CURRENT-SNAPSHOT-20261026
 title: K3 当前 Obsidian 工作区稳定快照复核
 doc_type: verification
 status: verified
-version: 3.9
+version: 4.0
 created_at: 2026-10-26
 updated_at: 2026-10-26
 owner: FLOW
@@ -420,3 +420,8 @@ W3 MED 第二十四组完成1条全文双审，保留 pending-verification。同
 ## K3 全量语义路由批次 081
 
 按 accepted baseline source_id 顺序审阅12条来源；逐条文件 SHA 与规范化正文 SHA 均匹配。6条路由为 pending-verification，涉及财务账务自查、预算管理、财务分析资源、AI Native研发、应收应付汇报和财务健康指标；会计规则、指标阈值、工具能力及行业实践未独立核验。四篇带图来源共137条图片引用按source_baseline.py来源目录及vault根目录回退规则均无法解析，未据图判断。6条拒绝：SRM规划、AR/AP结算运营、供应商风险系统和合同AI资料标 project-internal；OpenManus代码走读与数据库工具清单超出FLOW范围。coverage累计为9,673条：routed 351、filtered 122、pending_review 9,200；下一批为082。ObsidianWiki与CURRENT_RELEASE未改动。逐条记录见 `../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-081.tsv`。
+
+
+## K3 全量语义路由批次 082
+
+按 accepted baseline source_id 顺序审阅12条来源；逐条文件 SHA 与规范化正文 SHA 均匹配。7条路由为 pending-verification，涉及AI投资调查解读、经营分析闭环、财务总监总结、Agent工作流、垂直AI、Harness框架与经营分析指标；相关统计数据、方法出处、指标口径和技术效果未独立核验。一报一会和财务总监总结两篇文章的49条图片引用按source_baseline.py来源目录及vault根目录回退规则均无法解析，未据图判断。5条拒绝：经营服务平台规划和AI法律合同内部规划标 project-internal；酒馆运营案例、消息总线架构和播客推荐与FLOW范围无直接关系。coverage累计为9,673条：routed 358、filtered 127、pending_review 9,188；下一批为083。ObsidianWiki与CURRENT_RELEASE未改动。逐条记录见 `../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-082.tsv`。
