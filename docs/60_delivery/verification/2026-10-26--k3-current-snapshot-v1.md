@@ -160,7 +160,7 @@ Davybase `scripts/run/freeze_snapshot.py freeze` 运行于分支 `codex/knowledg
 
 第二十五批只按元数据筛查 3 条余下簇2内部架构/讨论/归集材料，未打开正文，标 project-internal/rejected。覆盖追溯发现旧 A-finance 中 AI 财务专题路径已在 ObsidianWiki 提交 `c743b98972d45794d5948787ab65e7fd9afcbad1` 删除；该提交的 Git tree 显示新系统架构路径与旧财务路径指向同一 blob `2b4dd69c5505711c6b2ea3b4fa5fa4a6d1aebcc3`。新路径不在当前 accepted baseline，因此将旧 HIGH 行登记为基线外迁移并排除当前候选；未读取正文，也未将其计入 76 条已审候选。详见 `semantic-review-2026-10-26-batch-025.tsv` 与本次路径/hash 追溯记录。
 
-第二十六至三十一批对旧 W1 MED 17 篇组完成 17 篇双审。coverage 表覆盖 9,673 个当前 baseline source_id，其中 routed 87、filtered 16、pending_review 9,570；严格终态尚未闭合。第30批三篇分别标记为 K2/K1/K4 主域及相关域，均为 pending-verification；财务比率概念/阈值、三表关系简化和无来源投资案例不作产品事实。详见 `semantic-review-2026-10-26-batch-030.tsv`。京东季度拆分项合计高出合并净收入 181.5 亿元；数据驱动看板优先级计数 28,155 高于总量 26,935，占比合计约 104.6%。均未核原始来源前排除产品事实使用。
+第二十六至三十一批对旧 W1 MED 清单标注17篇；其末行合并两篇独立来源，核对后18个source_id均完成双审。coverage 表覆盖 9,673 个当前 baseline source_id，其中 routed 87、filtered 16、pending_review 9,570；严格终态尚未闭合。第30批三篇分别标记为 K2/K1/K4 主域及相关域，均为 pending-verification；财务比率概念/阈值、三表关系简化和无来源投资案例不作产品事实。详见 `semantic-review-2026-10-26-batch-030.tsv`。京东季度拆分项合计高出合并净收入 181.5 亿元；数据驱动看板优先级计数 28,155 高于总量 26,935，占比合计约 104.6%。均未核原始来源前排除产品事实使用。
 
 
 ## 语义审阅批次 030（2026-10-26）
@@ -170,7 +170,7 @@ Davybase `scripts/run/freeze_snapshot.py freeze` 运行于分支 `codex/knowledg
 
 ## 语义审阅批次 031（2026-10-26）
 
-本批完成旧 W1 MED 17 篇组最后三条来源双审，均匹配 accepted baseline 的正文 SHA，保留 pending-verification。组织绩效模板的目标完成过滤期间与结论期间不一致、正文指标基线与图中警戒线冲突，且权重/评分公式缺少完整口径；营销绩效材料中的 K 值解释、指标利润率以及 40/30/30 权重与复用仪表板口径不一，数据和案例结论缺原始资料；匿名共享中心绩效案例未提供原始样本、数据和统计检验，分钟折算、正态分布与性别/组别因果归因不能独立核实，绩效排名与减编主张不能泛化为制度建议。coverage 更新为 routed 87、filtered 16、pending_review 9,570。详见 `semantic-review-2026-10-26-batch-031.tsv`。
+本批完成旧 W1 MED 队列最后三条来源双审；旧清单标注17篇但实际18个source_id，均匹配 accepted baseline 的正文 SHA，保留 pending-verification。组织绩效模板的目标完成过滤期间与结论期间不一致、正文指标基线与图中警戒线冲突，且权重/评分公式缺少完整口径；营销绩效材料中的 K 值解释、指标利润率以及 40/30/30 权重与复用仪表板口径不一，数据和案例结论缺原始资料；匿名共享中心绩效案例未提供原始样本、数据和统计检验，分钟折算、正态分布与性别/组别因果归因不能独立核实，绩效排名与减编主张不能泛化为制度建议。coverage 更新为 routed 87、filtered 16、pending_review 9,570。详见 `semantic-review-2026-10-26-batch-031.tsv`。
 
 
 ## 语义审阅批次 032（2026-10-26）
@@ -296,3 +296,7 @@ W3 MED 第二十四组完成1条全文双审，保留 pending-verification。同
 ## W3 LOW 分层样本批次 056（2026-10-26）
 
 从冻结抽样框94条 pending_review 中按六层哈希抽取12条全文双审，覆盖行业运营、职场、工具、HR、用户营销和杂项。10条保留 pending-verification；差旅记录及HR薪酬案例因内部经营/个人数据标为 project-internal/rejected。高频风险为未验证效果数字、因果跳跃、口径/期间不清与供应商宣传无独立证据。coverage 为 routed 158、filtered 18、pending_review 9,497。抽样选择和哈希见 `w3-low-sampling-selection-2026-10-26.tsv`，逐条结论见 `semantic-review-2026-10-26-batch-056.tsv`。
+
+## 跨优先级错误集中度复核
+
+批次001–056的176个唯一 source_id 已完成 HIGH/MED/LOW 风险摘要交叉分析。证据缺失、口径/公式问题、模型阈值泛化及因果/效果证据不足跨层重复；LOW 12条未出现新的路由或处置缺陷，因此不扩样，按序进入全量语义路由。多标签计数与边界见[错误集中度复核报告](2026-10-26--k3-error-concentration-v1.md)。W1 MED 原清单“17篇”计数已复核为18个 source_id（末行合并两篇）；其中两条与 W3 MED 重合，W3 其余70条单独审阅。

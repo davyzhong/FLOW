@@ -61,7 +61,7 @@ applies_to: knowledge-base
 - `semantic-review-2026-10-26-batch-028.tsv` —— 第二十八批旧 W1 MED 组第 3 组 3 条双审；Power BI/AI宣传能力及产品时价未核，AI就业预测无证据。
 - `semantic-review-2026-10-26-batch-029.tsv` —— 第二十九批旧 W1 MED 组第 4 组 3 条双审；盈利指标公式有量纲/口径风险，酒店指标定义与效果案例无可追溯证据。
 - `semantic-review-2026-10-26-batch-030.tsv` —— 第三十批旧 W1 MED 组第 5 组 3 条双审；记录财务比率概念与阈值风险、三表关系简化及无来源投资案例。
-- `semantic-review-2026-10-26-batch-031.tsv` —— 第三十一批完成旧 W1 MED 17 篇队列的最后 3 条来源双审；记录绩效口径冲突及匿名案例数据/因果结论的证据限制。
+- `semantic-review-2026-10-26-batch-031.tsv` —— 第三十一批完成旧 W1 MED 队列的最后 3 条来源双审（旧清单标注17篇但实际18个source_id）；记录绩效口径冲突及匿名案例数据/因果结论的证据限制。
 - `semantic-review-2026-10-26-batch-032.tsv` —— 第三十二批从 W3 MED 分层抽审3条，记录回归统计简化、时点性五力案例未经证实、门店策略效果无对照及数据口径矛盾。
 - `semantic-review-2026-10-26-batch-033.tsv` —— 第三十三批续审 W3 MED 3条，记录电商驾驶舱指标定义/数据验证缺口及零售系列文的高度相似、原稿关系待核。
 - `semantic-review-2026-10-26-batch-034.tsv` —— 第三十四批续审 W3 MED 3条，记录人货匹配预测边界、BI产品能力推广主张未核及零售RFM/购物篮案例缺原始数据。
@@ -89,3 +89,4 @@ applies_to: knowledge-base
 - `semantic-review-2026-10-26-batch-055.tsv` —— 第五十五批完成 W3 MED 收尾1条：区分同题不同URL/正文版本，记录租金倍率/库存周转期间定义疑点及未经验证的员工绩效结论。
 - `w3-low-sampling-selection-2026-10-26.tsv` —— W3 LOW 12条分层哈希抽样记录，含层内序号、抽样哈希和源SHA。
 - `semantic-review-2026-10-26-batch-056.tsv` —— 第五十六批W3 LOW六层双审样本12条；10条待核、2条含敏感企业/个人数据而拒绝，集中记录未证效果、因果外推、公式口径与供应商宣传边界。
+- [K3 分层错误集中度复核](../../60_delivery/verification/2026-10-26--k3-error-concentration-v1.md) —— 批次001–056的风险类型交叉复核、W1 MED 17/18清单计数纠正及 LOW 不扩样结论。
