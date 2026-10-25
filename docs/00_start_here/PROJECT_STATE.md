@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.93
+version: 5.94
 created_at: 2026-09-12
 updated_at: 2026-10-26
 owner: FLOW
@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-10-26 当前状态：**单机原型 7a.1–7a.8 已合入 main；视觉语言资产提炼与 FLOW 全项目视觉统一已结案。** 16 项路线图：完成 10、实际执行中 1（K/K3）、排队 3、暂停 1、外部条件受限 1。最终隔离验收使用 synthetic manifest `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`：验证器 19/19，可见性矩阵 164/164（154 HTTP 200、10 预期拒绝、0 失败），Playwright 17/17；页面截图矩阵应用 SHA `01e8e25dd426ed43ad6a2cad76544bbbe623eb99` 为 60/60，Axe 桌面 20 路由零违规。最后 E2E 断言修复 `d01daa11` 已通过独立复核（无 P1/P2）及 diff 检查。原生浏览器 200% 缩放受 Mac 锁屏与工具能力限制未直接验收；窄视口数据不替代，解锁设备并可操作原生缩放后补验。当前队首已转为知识刷新 K3：先只读核验 accepted manifest、来源与工作区，再按包完成语义路由和审阅；ObsidianWiki 保持只读，`CURRENT_RELEASE` 不变。当前分支 `codex/flow-visual-language` / PR #5，文档提交后的准确 SHA CI 尚待查询。视觉证据见[覆盖记录](../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。用户选择保留 `/Users/qiming/.flow/flow.sqlite3` 零字节文件；`services/api/flow.sqlite3` 未跟踪文件原样保留。
+2026-10-26 当前状态：**单机原型 7a.1–7a.8 已合入 main；视觉语言资产提炼与 FLOW 全项目视觉统一已结案。** 16 项路线图：完成 10、实际执行中 1（K/K3）、排队 3、暂停 1、外部条件受限 1。最终隔离验收使用 synthetic manifest `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`：验证器 19/19，可见性矩阵 164/164（154 HTTP 200、10 预期拒绝、0 失败），Playwright 17/17；页面截图矩阵应用 SHA `01e8e25dd426ed43ad6a2cad76544bbbe623eb99` 为 60/60，Axe 桌面 20 路由零违规。最后 E2E 断言修复 `d01daa11` 已通过独立复核（无 P1/P2）及 diff 检查。原生浏览器 200% 缩放受 Mac 锁屏与工具能力限制未直接验收；窄视口数据不替代，解锁设备并可操作原生缩放后补验。当前队首已转为知识刷新 K3；10 月 26 日只读核验发现 ObsidianWiki dirty 路径由旧 accepted manifest 的 1,377 增至 1,434，Git 状态 SHA 也不同。先在 vault 外重建稳定快照（要求双指纹一致、写句柄为 0），再继续逐篇语义审阅；ObsidianWiki 保持只读，`CURRENT_RELEASE` 不变。旧 K3 registry/baseline/diff 仅代表 10 月 19 日截面。当前分支 `codex/flow-visual-language` / PR #5，文档提交后的准确 SHA CI 尚待查询。视觉证据见[覆盖记录](../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。用户选择保留 `/Users/qiming/.flow/flow.sqlite3` 零字节文件；`services/api/flow.sqlite3` 未跟踪文件原样保留。
 
 2026-10-25 视觉验收历次增量与历史证据见[覆盖记录](../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。页面矩阵及键盘状态绑定 `52418d88c9338b41c59f14f3d699d758c36bf8a1`；导出/打印现状以 `d554bc317e8c948d776833b9868cdce4a9dd4c81` 记录为准。不要把旧快照中的 205 项测试或已关闭的导出检查覆盖为当前事实。
 

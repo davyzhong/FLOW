@@ -76,4 +76,4 @@ K2 accepted manifest 为 Davybase `obsidianwiki-k2-2026-10-19-final.json`，SHA-
 
 ## 2026-10-26 队首启动记录
 
-K3 是当前唯一执行项。首个动作是只读复核 accepted manifest `obsidianwiki-k2-2026-10-19-final.json`、对应工作区 HEAD/tree/status/content 指纹及最新日志；不写入或清理 ObsidianWiki，不更改 `CURRENT_RELEASE`。
+K3 是当前唯一执行项。首个只读复核发现 accepted manifest `obsidianwiki-k2-2026-10-19-final.json` 与当前 vault 状态不匹配：HEAD/tree 仍为 `e04d6833` / `aa7d84d3`，但 dirty 路径从 1,377 变为 1,434，当前 porcelain SHA-256 `d2535e6478caaadee622e3551a730335ec273f46d68e5f2fdb9d92096bf8dfed`（两次读取一致），旧 manifest 状态 SHA 为 `c688b336f3cd86c84e3f40874838e0c1083db75b201cde2985cee4cc10f35fdc`。ObsidianWiki `.davybase/image_evidence` 最近文件时间为 2026-10-25；未发现活动 Davybase/Obsidian 任务进程。故旧 K3 baseline/diff 仍是其 10 月 19 日 accepted 截面的历史有效结果，但不作为当前正文审阅输入。当前先在 vault 外运行冻结器重新取稳定快照，要求前后完整内容指纹一致、写句柄为 0；manifest/sidecar 和核验报告写入 FLOW 工作区并版本化。快照被拒绝时只保留拒绝证据并诊断变化，不写 vault、不更改 `CURRENT_RELEASE`。稳定快照验收后继续 K3 语义路由与审阅。

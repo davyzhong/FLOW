@@ -424,7 +424,7 @@ flowchart LR
 
 ## 📍 当前进度
 
-状态以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为唯一权威。长期产品战略由 D052–D054 定义；当前产品交付边界按 [D055](docs/10_governance/decisions/D055--单机单用户验证原型.md) 聚焦单机单用户财务分析验证原型。可复用视觉语言与全项目视觉统一（路线图第 12 项）已结案；原生 200% 缩放保留外部条件受限补验项。当前唯一执行项为知识刷新 K3；状态和顺序见[唯一路线图](docs/50_plans/CURRENT_ROADMAP.md)、[视觉工作包](docs/50_plans/work_items/FLOW--portable-visual-language-and-full-project-restyle.md)与[覆盖验收](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。
+状态以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为唯一权威。长期产品战略由 D052–D054 定义；当前产品交付边界按 [D055](docs/10_governance/decisions/D055--单机单用户验证原型.md) 聚焦单机单用户财务分析验证原型。可复用视觉语言与全项目视觉统一（路线图第 12 项）已结案；原生 200% 缩放保留外部条件受限补验项。当前唯一执行项为知识刷新 K3；因当前 vault 相比旧 accepted manifest 有 57 条 dirty 路径增量，首步需在 vault 外重新取得稳定快照；状态和顺序见[唯一路线图](docs/50_plans/CURRENT_ROADMAP.md)、[视觉工作包](docs/50_plans/work_items/FLOW--portable-visual-language-and-full-project-restyle.md)与[覆盖验收](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。
 
 | 阶段 | 任务 | 状态 |
 | --- | --- | --- |
@@ -442,7 +442,7 @@ flowchart LR
 | **视觉统一** | 可复用视觉语言与全项目页面、图表、报告统一 | ✅ 已结案；原生 200% 缩放待设备/工具条件恢复后补验 |
 | U9–U10 | 内部试点、V1.1 证据决策 | ⏭️ 排队；依赖公开 C 级证据与真实企业数据，轮到后按路线图验收 |
 
-**2026-10-26 结案：** 页面与交互代码 SHA `52418d88c9338b41c59f14f3d699d758c36bf8a1` 已推送。Web 38 文件/209 项测试、typecheck、production build 通过；lint 0 错误/4 条既有警告。20 路由×3 视口矩阵 60/60 ready，Axe 桌面 20 路由零违规；19/19 个 AppShell 路由键盘跳转通过。图谱常用/全部/专业层级均可操作，重复指标深链可定位；390 CSS px 下无页面溢出、图谱可横向键盘阅读。导出代码 SHA `d554bc317e8c948d776833b9868cdce4a9dd4c81` 下 HTML/PDF/PPTX/XLSX 代表性输出及打印版式已检查，定向后端测试 27 项通过；离线快照已绑定该 SHA 和隔离 synthetic 数据批次。原生浏览器 200% 缩放未能通过浏览器自动化设置，现记录为未直接验收；不以窄视口代理冒充。最终隔离验收：验证器 19/19、可见性矩阵 164/164（154 HTTP 200、10 预期拒绝、0 失败）、Playwright 17/17；最后断言修复 `d01daa11` 独立复核无 P1/P2。原生 200% 缩放受设备锁屏与工具能力限制未直接验收，390/360 CSS px 不替代。当前队首已转入知识刷新 K3。
+**2026-10-26 结案：** 页面与交互代码 SHA `52418d88c9338b41c59f14f3d699d758c36bf8a1` 已推送。Web 38 文件/209 项测试、typecheck、production build 通过；lint 0 错误/4 条既有警告。20 路由×3 视口矩阵 60/60 ready，Axe 桌面 20 路由零违规；19/19 个 AppShell 路由键盘跳转通过。图谱常用/全部/专业层级均可操作，重复指标深链可定位；390 CSS px 下无页面溢出、图谱可横向键盘阅读。导出代码 SHA `d554bc317e8c948d776833b9868cdce4a9dd4c81` 下 HTML/PDF/PPTX/XLSX 代表性输出及打印版式已检查，定向后端测试 27 项通过；离线快照已绑定该 SHA 和隔离 synthetic 数据批次。原生浏览器 200% 缩放未能通过浏览器自动化设置，现记录为未直接验收；不以窄视口代理冒充。最终隔离验收：验证器 19/19、可见性矩阵 164/164（154 HTTP 200、10 预期拒绝、0 失败）、Playwright 17/17；最后断言修复 `d01daa11` 独立复核无 P1/P2。原生 200% 缩放受设备锁屏与工具能力限制未直接验收，390/360 CSS px 不替代。当前队首已转入知识刷新 K3；最新只读检查发现 vault 工作区变化，先重新取得稳定快照后开展逐篇审阅。
 
 已登记的确定性原语：CAGR（n−1 间隔）、可加和守恒桥（残差显式）、经验阈值提示（无普适判定）、口径标签值（登记制）、应收-收入增速联看提示。
 
