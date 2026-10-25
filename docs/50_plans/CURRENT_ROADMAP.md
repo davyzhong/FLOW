@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 6.8
+version: 6.9
 created_at: 2026-09-12
 updated_at: 2026-10-25
 owner: FLOW
@@ -17,7 +17,7 @@ superseded_by: null
 
 # 当前路线图（唯一主线）
 
-> **2026-10-25 最新状态：** D055 单机原型 7a.1–7a.8 已完成。PR [#3](https://github.com/davyzhong/FLOW/pull/3) 的 merge commit `b2a1bf22df91239eb311d1692c30c666250678bf`、PR [#4](https://github.com/davyzhong/FLOW/pull/4) 的文档状态 merge commit `b068796f906cfbb91ac33775f5578194acc98a51` 均已合入 main；后者准确 SHA 对应 run `40096497668` 为 28/28 success。原型验收及限制见[完结差距审查](../60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)。**去重后 15 个唯一事项：已完成 8、实际执行中 1（可复用视觉语言与全项目统一）、队首待启动 0、排队 4、暂停 1、外部条件受限 1。** 用户已批准新队首设计与工作包，当前实施只写于分支 `codex/flow-visual-language`；视觉包、Web token/外壳、主要图表及导出映射已实施，Web typecheck、201 项测试、production build 通过。`28c0e7a2` 的 20 路由×3 视口截图矩阵 60/60 内容就绪、API 零错误、无溢出/浏览器错误；人工首轮审阅后已修正共享链接/控件颜色、指标库强调线、模块入口层级和财报页品牌强调。驾驶舱、财务出版页与数据工作台较接近目标，分析与内容范围较窄页面仍有真实数据/功能带来的留白。逐图表、导出模板、无障碍和交互验收未完成。以主队列事项数计算，8/15 已完成（约 53%）；这不是当前视觉工作包完成率。下一动作是逐项核验图表/数据表达清单，再进入导出模板、键盘/对比度和交互状态验收，详情见[视觉覆盖记录](../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。K2 顺延为排队。原型使用 synthetic 演示数据；真实账龄切片、公开 C 级、知识刷新、真实企业试点与行业扩张不在 7a 完成范围。
+> **2026-10-25 最新状态：** D055 单机原型 7a.1–7a.8 已完成。PR [#3](https://github.com/davyzhong/FLOW/pull/3) 的 merge commit `b2a1bf22df91239eb311d1692c30c666250678bf`、PR [#4](https://github.com/davyzhong/FLOW/pull/4) 的文档状态 merge commit `b068796f906cfbb91ac33775f5578194acc98a51` 均已合入 main；后者准确 SHA 对应 run `40096497668` 为 28/28 success。原型验收及限制见[完结差距审查](../60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)。**去重后 16 个唯一事项：已完成 8、实际执行中 2（视觉统一、已合入历史分支清理）、队首待启动 0、排队 4、暂停 1、外部条件受限 1。** 两项并行是用户 2026-10-25 明确授权的唯一例外：分支清理只删除逐支证明已包含于 main 的历史远端引用，不写 main；当前视觉工作仍在 `codex/flow-visual-language`。视觉包、Web token/外壳、主要图表及导出映射已实施，Web typecheck、201 项测试、production build 通过。`28c0e7a2` 的 20 路由×3 视口截图矩阵 60/60 内容就绪、API 零错误、无溢出/浏览器错误；人工首轮审阅后已修正共享链接/控件颜色、指标库强调线、模块入口层级和财报页品牌强调。驾驶舱、财务出版页与数据工作台较接近目标，分析与内容范围较窄页面仍有真实数据/功能带来的留白。逐图表、导出模板、无障碍和交互验收未完成。以主队列事项数计算，8/16 已完成（50%）；这不是当前视觉工作包完成率。下一视觉动作是逐项核验图表/数据表达清单；分支清理工作包记录了 15 个候选分支和逐支安全门。详情见[视觉覆盖记录](../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)和[分支清理工作包](work_items/FLOW--merged-branch-cleanup.md)。K2 顺延为排队。原型使用 synthetic 演示数据；真实账龄切片、公开 C 级、知识刷新、真实企业试点与行业扩张不在 7a 完成范围。
 
 > 当前完结目标依据 D055：交付本机单用户可启动、可加载/重置演示业务、可看丰富 CFO 图表、可下钻追溯、可分析和导出报告、可备份恢复、可离线浏览的验证原型。公开 C 级、知识刷新、真实企业三周期仍未完成，保留在长期队列，不作为本原型无限延期的理由。**下方 2026-10-21 及以前的状态段落均为历史，当前只按本段及唯一执行队列。**
 
@@ -110,11 +110,12 @@ superseded_by: null
 
 ## 唯一完整 To-do 与执行队列（严格串行）
 
-**统计口径：15 个唯一事项；已完成 8，实际执行中 1（12），队首待启动 0，排队 4，暂停 1，外部条件受限 1。** 视觉语言任务是当前唯一执行项；K2 已退至排队，历史 K 仍是 7 的别名，不重复计数。
+**统计口径：16 个唯一事项；已完成 8，实际执行中 2（12、13），队首待启动 0，排队 4，暂停 1，外部条件受限 1。** 视觉语言是主线执行项；事项 13 为用户明确授权的并行例外，仅清理已合入 main 的历史分支；K2 已退至排队，历史 K 仍是 7 的别名，不重复计数。
 
 | 原编号 | 唯一事项 | 当前事实状态 | 证据与处理边界 |
 |---|---|---|---|
 | 12 | [可复用视觉语言提炼与 FLOW 全项目视觉统一](work_items/FLOW--portable-visual-language-and-full-project-restyle.md) | **active（用户已批准，实施中）** | [视觉语言设计规格](../superpowers/specs/2026-10-24-flow-visual-language-system-design.md)；覆盖全部页面、图表、报告/离线输出与有效文档，按 A+C 概念板统一视觉并沉淀跨项目可复用资产 |
+| 13 | [清理已合入 main 的历史远端分支](work_items/FLOW--merged-branch-cleanup.md) | **active（用户明确授权的并行例外）** | 15 个旧分支 tip 均已确认是 main 祖先；分三批逐支复核 tip SHA 后删除。保留 main、开放 PR #5 的视觉分支及项目标记暂停的 ZTO 分支；不改 main、不重写历史 |
 | 0 | CFO 盈利分析与图表补全 | 已完成 | 四因子、冻结值、来源深链；`08aa4cd0` 准确 SHA CI 18/18；新验收由 7a 承接 |
 | 0a | 驾驶舱数值格式治理 | 已完成 | 整数订单、金额两位小数；`1a71e33f` 准确 SHA CI 通过 |
 | 7a | 单机原型与全视图视觉升级 | **已完成** | PR #3 merge commit `b2a1bf22df91239eb311d1692c30c666250678bf`；run `40092106547` 为 28/28 success；交付限制见验收报告 |

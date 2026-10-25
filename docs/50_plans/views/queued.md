@@ -8,7 +8,7 @@ created_at: 2026-09-12
 updated_at: 2026-10-25
 owner: FLOW
 generator_ref: scripts/documentation/plan_views.py
-input_hash: 58bdea68bcfb354256f37aec892f5dd6a91d175fa6ce491814d4448ef6388ab4
+input_hash: d972f235996cc9be44d421c2d0ac74058aa74303f829ff8996e5d134933f876c
 applies_to: planning
 ---
 
