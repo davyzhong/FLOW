@@ -2137,7 +2137,7 @@ b33fa5803e59db30ca9cd936772e2843dadbf946dfc4fee6289738ebc565a08f  ./09_competiti
 ce0f3ba366328342710562a2f980ac2b0265cd9f98a0cd3f82e6a34fa87fd3d8  ./09_competitive/screenshots/c18-redash-home.png
 92eeae88a30403edf870d8b86b3a918ac5f6f52d9f899a96aec853806e549eeb  ./09_competitive/screenshots/c19-dataease-home.png
 60667d4e6ba888d5ba5396a8d9353c22adc8322c6f22475ab80f75fe5b659954  ./09_competitive/screenshots/c20-jimu-report-github.png
-57ce66768b1073757ed6694920b5014f8ec01ce81aef3cd87d1bb1c1dc95410a  ./10_sources/README.md
+831a1930cc379fa8c2fa33d0a09762be7a5b92b25f3696bc2210d189ec9d4d2c  ./10_sources/README.md
 ecd3cb7c4fb22de8313fe9cc5e3fe5a567f455a8cc56fe8f236569e2bbaabb60  ./10_sources/SOURCE_REGISTER.md
 ab841e127619097707dfafe29a2da96ba7680ed34d4261ec5a06d45aa3eb00d3  ./10_sources/semantic-review-2026-10-26-batch-001.tsv
 760713e2cd504e176131083bc4ae10ad2a04b0e8341584b5e6522c5b3423240b  ./10_sources/semantic-review-2026-10-26-batch-002.tsv
@@ -2151,10 +2151,11 @@ ecb551b699c120d5366ba96887250634831eed492300045500a21223bd3a7385  ./10_sources/s
 7916380582cc63bf5391916e5afe85af029385df6b54c99d76971efe1530987f  ./10_sources/semantic-review-2026-10-26-batch-010.tsv
 037de1cd066bdc392538eecc3dea9bb505a17a5af2cf6b6f1943f789a2a7ba96  ./10_sources/semantic-review-2026-10-26-batch-011.tsv
 7fa363fbd358cdc2248ff4ad6ba74d5d835ef758fe4bf2ee303504507160118e  ./10_sources/semantic-review-2026-10-26-batch-012.tsv
+1aa924a1092a6e7e8b733f97a4077c39b2e153386dbe9a03f746a9c921d49757  ./10_sources/semantic-review-2026-10-26-batch-013.tsv
 a18e8156910880f1b8d211802038bbaceb94aee6c211c2dfc33f35cb699ee705  ./10_sources/snapshots/obsidian-2026-09-12T15-46+08-00.yaml
 6accd8ff3644f8f06eac12c585905d74e11e93aa61c4da33dc74db6cae416274  ./10_sources/snapshots/obsidian-2026-09-12T16-17+08-00.yaml
 901bee24f27c26e12e94518a99665d279dfdec1e333bc4c7a950651386a5af3b  ./10_sources/source-baseline-2026-10-19.tsv
-4583cca3ba479f271ea1133a32eea286363e11d59e760ad774b253589cdeafdc  ./10_sources/source-baseline-2026-10-26.tsv
+d8e80f46874f90f47896e23e15729992fadfee4e7c49893b801d6a138ed52b73  ./10_sources/source-baseline-2026-10-26.tsv
 689b7761d048e24bf7a879d5d87f4fcd047a527e70b6fdce79ce81a136f49c91  ./10_sources/source-delta-2026-10-26.tsv
 ac987729a96d3cad33c6d773ca0021e379247574a156bd0c0d54306c595284e1  ./10_sources/source-diff-2026-10-19.tsv
 9e781828298245be3c9b9e295eb5da825d04c6092393913a0fd8d03c36e70b90  ./10_sources/source-diff-2026-10-26.tsv

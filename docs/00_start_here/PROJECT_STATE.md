@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 7.1
+version: 7.2
 created_at: 2026-09-12
 updated_at: 2026-10-26
 owner: FLOW
@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-10-26 当前状态：**单机原型 7a.1–7a.8 已合入 main；视觉语言资产提炼与 FLOW 全项目视觉统一已结案。** 16 项路线图：完成 10、实际执行中 1（K/K3）、排队 3、暂停 1、外部条件受限 1。最终隔离验收使用 synthetic manifest `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`：验证器 19/19，可见性矩阵 164/164（154 HTTP 200、10 预期拒绝、0 失败），Playwright 17/17；页面截图矩阵应用 SHA `01e8e25dd426ed43ad6a2cad76544bbbe623eb99` 为 60/60，Axe 桌面 20 路由零违规。最后 E2E 断言修复 `d01daa11` 已通过独立复核（无 P1/P2）及 diff 检查。原生浏览器 200% 缩放受 Mac 锁屏与工具能力限制未直接验收；窄视口数据不替代，解锁设备并可操作原生缩放后补验。当前队首为知识刷新 K3。最新 accepted snapshot `obsidianwiki-20261026T005516+0800-d601b4d5`，manifest SHA `593715c832a538d9ba83df4e077b8dd9bace24f40d3c0d5262fc3779b20f0e77`，候选/复验完整内容 SHA `c84efd671e2b90e4f69152c3dd04a570d9c378d08fb7a3cb97b86e322f123df0` 一致、写句柄 0。它与已构建基线输入内容一致；registry/baseline/delta/diff 均已绑定至该 snapshot ID。语义审阅批次 001–012 记录 34 条 HIGH 候选（33 篇正文已读、1 篇元数据不足），均 pending-verification；下一步继续 HIGH 全审、MED/LOW 双审与 coverage 闭合。ObsidianWiki 保持只读，`CURRENT_RELEASE` 不变。当前分支 `codex/flow-visual-language` / PR #5，文档提交后的准确 SHA CI 尚待查询。视觉证据见[覆盖记录](../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。用户选择保留 `/Users/qiming/.flow/flow.sqlite3` 零字节文件；`services/api/flow.sqlite3` 未跟踪文件原样保留。
+2026-10-26 当前状态：**单机原型 7a.1–7a.8 已合入 main；视觉语言资产提炼与 FLOW 全项目视觉统一已结案。** 16 项路线图：完成 10、实际执行中 1（K/K3）、排队 3、暂停 1、外部条件受限 1。最终隔离验收使用 synthetic manifest `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`：验证器 19/19，可见性矩阵 164/164（154 HTTP 200、10 预期拒绝、0 失败），Playwright 17/17；页面截图矩阵应用 SHA `01e8e25dd426ed43ad6a2cad76544bbbe623eb99` 为 60/60，Axe 桌面 20 路由零违规。最后 E2E 断言修复 `d01daa11` 已通过独立复核（无 P1/P2）及 diff 检查。原生浏览器 200% 缩放受 Mac 锁屏与工具能力限制未直接验收；窄视口数据不替代，解锁设备并可操作原生缩放后补验。当前队首为知识刷新 K3。最新 accepted snapshot `obsidianwiki-20261026T005516+0800-d601b4d5`，manifest SHA `593715c832a538d9ba83df4e077b8dd9bace24f40d3c0d5262fc3779b20f0e77`，候选/复验完整内容 SHA `c84efd671e2b90e4f69152c3dd04a570d9c378d08fb7a3cb97b86e322f123df0` 一致、写句柄 0。它与已构建基线输入内容一致；registry/baseline/delta/diff 均已绑定至该 snapshot ID。语义审阅批次 001–013 记录 35 条 HIGH 候选（34 篇正文已读、1 篇元数据不足）；34 条 pending-verification，1 条敏感来源 rejected 并排除候选；下一步继续 HIGH 全审、MED/LOW 双审与 coverage 闭合。ObsidianWiki 保持只读，`CURRENT_RELEASE` 不变。当前分支 `codex/flow-visual-language` / PR #5，文档提交后的准确 SHA CI 尚待查询。视觉证据见[覆盖记录](../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。用户选择保留 `/Users/qiming/.flow/flow.sqlite3` 零字节文件；`services/api/flow.sqlite3` 未跟踪文件原样保留。
 
 2026-10-25 视觉验收历次增量与历史证据见[覆盖记录](../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。页面矩阵及键盘状态绑定 `52418d88c9338b41c59f14f3d699d758c36bf8a1`；导出/打印现状以 `d554bc317e8c948d776833b9868cdce4a9dd4c81` 记录为准。不要把旧快照中的 205 项测试或已关闭的导出检查覆盖为当前事实。
 

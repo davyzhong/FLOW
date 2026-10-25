@@ -35,3 +35,4 @@ applies_to: knowledge-base
 - `semantic-review-2026-10-26-batch-010.tsv` —— 第十批 3 条 HIGH/K2 全文审阅，记录净利润与现金流关系的算例缺项、公式边界及防舞弊表述风险；均 pending-verification。
 - `semantic-review-2026-10-26-batch-011.tsv` —— 第十一批 1 条 HIGH/K2 全文审阅，记录同主题可能更新版、现金流管理阈值缺少依据及公式简化；pending-verification。
 - `semantic-review-2026-10-26-batch-012.tsv` —— 第十二批 3 条 HIGH/K1 全文审阅，覆盖内控五流、收入确认与记账凭证证据链；记录规则概括及清单边界问题，均 pending-verification。
+- `semantic-review-2026-10-26-batch-013.tsv` —— 第十三批 1 条 HIGH/K7 全文审阅；来源含敏感合同/付款资料，已标 project-internal 并排除候选，不在本库复述明细。
