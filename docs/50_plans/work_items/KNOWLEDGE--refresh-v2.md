@@ -302,9 +302,9 @@ W3 MED 第二十三组完成三条全文双审，SHA匹配 accepted baseline 且
 
 ### K3 W3 LOW 分层抽审执行口径（2026-10-26）
 
-- 从 accepted snapshot 的来源 baseline 与 W3 HIGH/MED 清单逐 ID 重建 LOW 抽样框；须恰为 95 条，否则先查清重复、已审和清单映射差异，不开始抽样。
-- 按既有六类 LOW 主题分层：行业运营案例 38、职场成长 16、工具操作 13、HR 分析 10、用户/会员/营销 12、杂项 6。按约 10% 分配 12 条样本：4、2、2、1、2、1。
-- 每层按 `SHA-256(source_id + snapshot_id)` 升序选取前 N 条，以确保可复现；记录分类依据、源 SHA、正文证据和 disposition。每条样本由两名审阅者独立核对语义路由、证据与 disposition，并重点复核高风险断言；12 条是风险导向抽审，不代表统计置信区间或可推断全部 LOW。
+- 已从 accepted snapshot 的 baseline 与 W3 HIGH/MED 清单逐 ID 重建 LOW 抽样框，冻结于 [`w3-low-sampling-frame-2026-10-26.tsv`](../../knowledge-base/10_sources/w3-low-sampling-frame-2026-10-26.tsv)：HIGH 9、MED 72、LOW 95，总计176，与扫描总量相符；2篇目录页不计入文章数。清单记录每个 LOW source_id、快照、分类触发词、源路径、SHA 和现有 coverage 状态/证据引用。
+- 层级采用文件名（去日期前缀）中的首个命中词，优先级固定为用户营销→HR→职场→工具→杂项；无命中则归行业运营。完整分类结果及触发词已冻结在上述清单，题名与目录冲突时以文件名标题命中结果为准。数量为行业运营36、职场14、工具15、HR9、用户/营销14、杂项7，共95。其中94条仍为 pending_review；1条“营销绩效”已有 W1 MED 语义审阅并 routed，作为既有审阅保留，不重复抽样。
+- 从94条 pending_review 来源中抽12条，按各层约10%比例并至少覆盖每层分配：行业4、职场2、工具2、HR1、用户/营销2、杂项1。每层仅在 `existing_coverage_status=pending_review` 的 ID 中按 `SHA-256(source_id + snapshot_id)` 升序选取前 N 条，以确保可复现；记录分类依据、源 SHA、正文证据和 disposition。每条样本由两名审阅者独立核对语义路由、证据与 disposition，并重点复核高风险断言；12 条是风险导向抽审，不代表统计置信区间或可推断全部 LOW。
 - 抽样暴露系统性错误或跨层分类问题时，按错误集中度证据扩大到受影响层；无此证据时完成 12 条后进入全量逐条路由和 coverage 闭合。所有记录仍只写 FLOW 仓库，ObsidianWiki 保持只读。
 
 ### K3 语义审阅批次 055

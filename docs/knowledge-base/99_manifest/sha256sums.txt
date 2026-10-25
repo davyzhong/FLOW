@@ -2138,7 +2138,7 @@ b33fa5803e59db30ca9cd936772e2843dadbf946dfc4fee6289738ebc565a08f  ./09_competiti
 ce0f3ba366328342710562a2f980ac2b0265cd9f98a0cd3f82e6a34fa87fd3d8  ./09_competitive/screenshots/c18-redash-home.png
 92eeae88a30403edf870d8b86b3a918ac5f6f52d9f899a96aec853806e549eeb  ./09_competitive/screenshots/c19-dataease-home.png
 60667d4e6ba888d5ba5396a8d9353c22adc8322c6f22475ab80f75fe5b659954  ./09_competitive/screenshots/c20-jimu-report-github.png
-4455878d21caa372c276e7114b833bf3ff5f0fb19351024b89f88aabcf307806  ./10_sources/README.md
+d78031e5730e6c8ba3b10115bc3884340899c2a8682fdb8878cab4ad3da36d9f  ./10_sources/README.md
 ecd3cb7c4fb22de8313fe9cc5e3fe5a567f455a8cc56fe8f236569e2bbaabb60  ./10_sources/SOURCE_REGISTER.md
 7edcf0b62838ade4c6919b028b43e675b1d45180c640cd56d680c15d488b08e0  ./10_sources/coverage-2026-10-26.tsv
 415820a2fd5e7c6f7af1282dc744a6eaa344f52f4406096c25170e0dfaa22e68  ./10_sources/coverage-exceptions-2026-10-26.tsv
@@ -2205,6 +2205,7 @@ a18e8156910880f1b8d211802038bbaceb94aee6c211c2dfc33f35cb699ee705  ./10_sources/s
 ac987729a96d3cad33c6d773ca0021e379247574a156bd0c0d54306c595284e1  ./10_sources/source-diff-2026-10-19.tsv
 9e781828298245be3c9b9e295eb5da825d04c6092393913a0fd8d03c36e70b90  ./10_sources/source-diff-2026-10-26.tsv
 8d2ca3f8169dcd201f8c90d1b380d88101595073d46097bb894e9571c3437c45  ./10_sources/source-register.tsv
+77b03004beccc2b295b7c340da3c9c2e6ce167aa3665dc2b2aeb56331ee2505b  ./10_sources/w3-low-sampling-frame-2026-10-26.tsv
 6e821d89874ccc9f619d928ea9604725771ab97d7e5cf51ddf1e50a50ae1c2d8  ./20_knowledge_cards/TAXONOMY--v1.0.yaml
 fe14c5fec8b12d800215cc07e795856f5a8557de8e5d97c9967b7113ec6681d6  ./20_knowledge_cards/authoring-batches.tsv
 70cf69c4a263690c4b7558ebe46dcfc59195dc9041d73a2b57f4c26136c532e7  ./20_knowledge_cards/finance/FIN-DUPONT-001--杜邦分解--v1.0.md

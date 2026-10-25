@@ -2139,7 +2139,7 @@ relative_path	size_bytes	modified_time	mime_type
 09_competitive/screenshots/c18-redash-home.png	146963	2026-10-16T23:46:50+08:00	image/png
 09_competitive/screenshots/c19-dataease-home.png	508624	2026-10-16T23:46:50+08:00	image/png
 09_competitive/screenshots/c20-jimu-report-github.png	223902	2026-10-16T23:46:50+08:00	image/png
-10_sources/README.md	13478	2026-10-26T03:57:05+08:00	text/markdown
+10_sources/README.md	13748	2026-10-26T04:09:19+08:00	text/markdown
 10_sources/SOURCE_REGISTER.md	3493	2026-10-16T23:46:50+08:00	text/markdown
 10_sources/coverage-2026-10-26.tsv	447899	2026-10-26T03:57:05+08:00	text/tab-separated-values
 10_sources/coverage-exceptions-2026-10-26.tsv	32	2026-10-26T02:22:42+0800	text/tab-separated-values
@@ -2206,6 +2206,7 @@ relative_path	size_bytes	modified_time	mime_type
 10_sources/source-diff-2026-10-19.tsv	1467511	2026-10-19T08:32:39+08:00	text/tab-separated-values
 10_sources/source-diff-2026-10-26.tsv	1467886	2026-10-26T00:42:25+08:00	text/tab-separated-values
 10_sources/source-register.tsv	2785	2026-10-16T23:46:50+08:00	text/tab-separated-values
+10_sources/w3-low-sampling-frame-2026-10-26.tsv	31154	2026-10-26T04:09:19+08:00	text/tab-separated-values
 20_knowledge_cards/TAXONOMY--v1.0.yaml	1350	2026-10-16T23:46:50+08:00	application/yaml
 20_knowledge_cards/authoring-batches.tsv	160	2026-10-16T23:46:50+08:00	text/tab-separated-values
 20_knowledge_cards/finance/FIN-DUPONT-001--杜邦分解--v1.0.md	1416	2026-10-16T23:46:50+08:00	text/markdown
