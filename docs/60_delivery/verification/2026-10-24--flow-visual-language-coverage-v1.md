@@ -3,22 +3,32 @@ doc_id: FLOW-VERIFY-VISUAL-LANGUAGE-20261024-001
 title: FLOW 可复用视觉语言与全项目视觉覆盖验收
 doc_type: verification
 status: verified
-version: 1.9
+version: 1.10
 created_at: 2026-10-24
 updated_at: 2026-10-25
 owner: FLOW
-commit_refs: "[28c0e7a29d7812106709947414c9a560f1c530b0, faaa446b6540565f54290a8f558a7b80b302d39b, 4645c43c4d7c67dc0cd588cea2a32e427f83ff27, 6a49401d55c275decf30dc63f419233b7928997d, 9da910e2456a4f7044a2049950e60b7cadb73bb4, 9cf65f6d58e0cdb33d8e04c17d843a8c9bbc1489, cc0fb2eff5d7dbb01f48fda3e84c8c23c9e35583, b04a7c5425c340681828f1c15c15f3071b1e2782]"
-evidence_refs: "[visual-language-tokens, generator-check, web-typecheck, web-vitest, web-build, api-renderer-tests, api-ruff, api-mypy, isolated-route-matrix, screenshots, axe-desktop-route-audit, chart-value-alternatives, waterfall-negative-total-regression]"
+commit_refs: "[28c0e7a29d7812106709947414c9a560f1c530b0, faaa446b6540565f54290a8f558a7b80b302d39b, 4645c43c4d7c67dc0cd588cea2a32e427f83ff27, 6a49401d55c275decf30dc63f419233b7928997d, 9da910e2456a4f7044a2049950e60b7cadb73bb4, 9cf65f6d58e0cdb33d8e04c17d843a8c9bbc1489, cc0fb2eff5d7dbb01f48fda3e84c8c23c9e35583, b04a7c5425c340681828f1c15c15f3071b1e2782, 1f75792a103af0cbe0d6b483316a26cc958fe391]"
+evidence_refs: "[visual-language-tokens, generator-check, web-typecheck, web-vitest, web-build, api-renderer-tests, api-ruff, api-mypy, isolated-route-matrix, screenshots, axe-desktop-route-audit, chart-value-alternatives, waterfall-negative-total-regression, chart-accessibility-labels, batch-chart-value-tables, profitability-zero-value-regression]"
 applies_to: repository
 ---
 
 # FLOW 可复用视觉语言与全项目视觉覆盖验收
 
+## 2026-10-25 图表语义首轮审计增量
+
+代码 SHA `1f75792a103af0cbe0d6b483316a26cc958fe391`：复核 20 路由的 34 个可视对象及代表性 API 图表数据，重点核对期间、单位、事实/正负语义、来源链和图表同值表达。图表无障碍名称现包含相关期间与单位；数据工作台批次状态、版本图表增加与图表共用派生行的可展开明细表；瀑布图亏损总额使用负向语义色；盈利能力比较图以显式空值判断保留合法 0 值，并补回归测试。独立新上下文复核未发现 P1/P2。
+
+Web 全量 `pnpm test`：38 个文件、205 项通过；`pnpm typecheck` 与 `pnpm build` 通过；`pnpm lint` 0 错误、4 条 warning（既有 action-panel、module-page、flow-data-table 规则告警）。20 路由×3 视口重新采集，60/60 内容就绪，API/浏览器错误、外部请求及横向溢出均为 0；Axe 4.13 桌面 20 路由 0 violations。矩阵、Axe JSON 和 60 张截图绑定代码 SHA `1f75792a103af0cbe0d6b483316a26cc958fe391`，隔离 synthetic manifest SHA 仍为 `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`。准确 SHA GitHub Actions run `40200680895` 当前 `in_progress`。
+
+本轮只完成图表默认态/数据语义的首轮审计；未覆盖所有图谱层级、筛选/导入/报告交互、完整键盘路径、浏览器实际 200% 缩放、HTML/PDF/PPTX/XLSX 模板和打印。视觉工作包继续执行，不能据本轮将它关闭或启动 K2。
+
 ## 当前状态
 
 本记录是仍在执行中的视觉统一验收，不表示全部视觉差距已经关闭。
 
-2026-10-25 最新代码验收（准确 SHA `b04a7c5425c340681828f1c15c15f3071b1e2782`）：修复瀑布图仅负总计时漏算 `hi` 端点造成的 SVG 裁切；轴范围使用全部柱的两个端点，负 delta 连接线回到变动前累计值，负值标签显示在柱下。独立复核无 P1/P2；含负利润和仅负总计的相关 4 个测试文件 33/33、Web typecheck、视觉 token 检查通过。精确 SHA 下 20×3 矩阵 60/60 内容就绪、浏览器/API 错误、外部请求和横向溢出均为 0；Axe 4.13 桌面 20 路由零违规。矩阵 `results.json` 与 `axe-results.json`、60 张截图均绑定该 SHA；数据来自隔离 synthetic manifest `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`。GitHub Actions run `40199235605` 仍待完成，文档不预判其结果。工作包未结案：接下来继续逐图表事实/单位/期间/图例/来源审计，随后完成交互/键盘、真实 200% 阅读和 HTML/PDF/PPTX/XLSX 版式与打印。
+**当前最新证据以本段为准：** 代码 SHA `1f75792a103af0cbe0d6b483316a26cc958fe391`。Web 测试 205/205、typecheck、build 通过，lint 0 错误/4 警告；20×3 矩阵 60/60 ready、错误/请求/溢出为 0；Axe 4.13 桌面 20 路由 0 violations。目录内 60 张矩阵截图、`results.json` 和 `axe-results.json` 均在该 SHA 采集。隔离 manifest SHA `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`。CI run `40200680895` 正在运行。逐图表、交互/键盘、真实 200% 缩放和导出打印仍有待验收，K2 不启动。
+
+2026-10-25 前一代码阶段验收（准确 SHA `b04a7c5425c340681828f1c15c15f3071b1e2782`）：瀑布图仅负总计时漏算 `hi` 端点造成的 SVG 裁切已修复；负 delta 连接线回到变动前累计值，负值标签显示在柱下。独立复核无 P1/P2；相关 4 个测试文件 33/33、Web typecheck、视觉 token 检查通过。该阶段矩阵和 Axe 结果为历史证据，现由上方 `1f75792a` 当前结果替代。GitHub Actions run `40199235605` 后续取消，不代表当前提交结果。工作包未结案。
 
 2026-10-25 增量（准确代码 SHA `0b06d01c07bf7e7c12e1565a17bce2b94c83aa04`）：报告中心编辑式双栏/窄屏单栏，指标库桌面卡片双列排列；指标库定向测试 16/16、报告中心定向组件 12/12、typecheck、production build 均通过。重采矩阵仍为 20 路由×3 视口 60/60 ready，API/浏览器错误、外部请求、横向溢出为 0；Axe 桌面 20 路由零违规。截图和 `results.json`、Axe 结果均绑定该 SHA。准确 SHA 的远端 CI 状态随提交变化；请按当前 HEAD 在 GitHub Actions 核对，不把历史运行状态当作当前结论。开发脚本已退出，现阶段仅远端 CI 在执行。工作包未结案：图表事实/单位/期间/图例/来源核对、完整交互与键盘路径、实际 200% 浏览器缩放和 HTML/PDF/PPTX/XLSX 模板/打印仍未验收。
 
@@ -67,21 +77,21 @@ applies_to: repository
 
 ## 图表与数据表达的实现级盘点
 
-以下按 20 个路由的默认页面结构和现有实现组件登记视觉对象。该表先保证每种页面表达都被纳入范围；ECharts/SVG 图表的单位、事实类型、图例、空/错/降级和同值表仍需逐对象检查。指标依赖图是交互式图谱，在当前默认矩阵截图中未主动切换到图谱标签。
+以下按 20 个路由的默认页面结构和现有实现组件登记视觉对象。2026-10-25 已完成人工首轮盘点：34 个可视对象；补上期间/单位辅助名称，并抽核代表性 API 图表数据、同值表及正负语义。各图表所有序列、复杂交互态、图谱层级、空/错/降级态和来源逐条验收仍需继续。指标依赖图是交互式图谱，在当前默认矩阵截图中未主动切换到图谱标签。
 
 | 路由 | 当前表达对象（默认页面或已实现交互） | 审核状态 |
 | --- | --- | --- |
-| `/` | KPI 与微趋势、12 个月经营趋势、利润桥、产品表现表、毛利矩阵/热力格 | 主题接近；逐项校核系列色、单位、表图同值与窄屏阅读 |
+| `/` | KPI 与微趋势、12 个月经营趋势、利润桥、产品表现表、毛利矩阵/热力格 | 期间与单位纳入图表辅助名称；仍待按全系列逐值核对来源、同值表、颜色语义与窄屏阅读 |
 | `/analysis` | 管理关注列表、四问指标卡、指标编码/数值/不可用解释 | 有卡片与来源链；无图表，留白由真实数据范围决定 |
-| `/cockpit` | 四项 KPI 微趋势、收入/营业利润趋势、现金流桥、年度费用结构与堆叠对比、杜邦因素图示、来源/行动面板 | 图表 token 已接入；图例、期间、单位、同值表、异常/缺数逐项待核 |
+| `/cockpit` | 四项 KPI 微趋势、收入/营业利润趋势、现金流桥、年度费用结构与堆叠对比、杜邦因素图示、来源/行动面板 | 图表辅助名称补了期间与单位；仍待核每个系列同值、图例、异常/缺数状态 |
 | `/cockpit/balance-sheet` | 资产结构、负债权益构成、资本结构趋势与对应数值表 | 含 3 个图表表达；逐项核对科目类别色和单位 |
 | `/cockpit/cashflow` | 现金变动桥、三类活动净额对比与同值数据表 | 含 2 个图表表达；正负现金流语义需保留 |
 | `/cockpit/consolidation` | 分部收入柱状比较、分部收入同比/期间对照与数据表 | 含 2 个图表表达；核对历史期间与分部披露范围 |
 | `/cockpit/expenses` | 费用结构、费用项目年度比较、费用率年度比较及明细表 | 含 3 个图表表达；费用范围/单位/比例语义逐项核验 |
-| `/cockpit/profitability` | 杜邦驱动关系、ROE/净利率趋势、总资产周转率、权益乘数及一致性校验 | 含 4 个图表/公式表达；杜邦方向、单位和勾稽结果重点复核 |
+| `/cockpit/profitability` | 杜邦驱动关系、ROE/净利率趋势、总资产周转率、权益乘数及一致性校验 | 已修复比较图合法 0 值漏显并加入回归；期间/单位纳入辅助名称，仍待逐项对账系列来源与图表/表格值 |
 | `/cockpit/risk` | 短期偿债能力、资本结构、权益乘数对比及指标来源表 | 含 3 个图表表达；风险方向使用语义色，不替换成品牌装饰色 |
 | `/cockpit/working-capital` | 应收/存货/应付趋势、现金转换周期公式卡、营运效率周期对比与来源表 | 含 2 个图表及公式表达；天数单位/口径须逐项核验 |
-| `/data` | 批次状态分布、导入版本数量、批次表、拖放上传/映射/清洗阶段 | 两图已入矩阵；工作流的上传、映射、校验、错误态需交互采集 |
+| `/data` | 批次状态分布、导入版本数量、批次表、拖放上传/映射/清洗阶段 | 两图新增共用派生数据的展开明细表；工作流上传、映射、校验和错误态仍需交互采集 |
 | `/internal` | 已上线功能入口卡、规划中模块状态卡 | 无图表；内容不足的留白按入口页处理，不造虚构 KPI |
 | `/investigations` | 调查列表、状态标签、行级深链 | 无图表；表格密度、筛选和空态待核 |
 | `/investigations/01a16e5e-e2a6-725a-83cb-aa5d70ac92cb` | 证据/结论/审阅表单、来源引用和动态状态 | 无图表；隔离 Finding 默认态已截图，提交/缺件/错误交互待核 |
@@ -90,7 +100,7 @@ applies_to: repository
 | `/operations` | 六主题经营指标卡、管理关注与口径/来源说明 | 当前页不绘图表；关注密集数字的字号、分组和事实标签 |
 | `/public` | 已上线公开分析入口卡与模块状态 | 无图表；只有两个公开功能入口，保留真实范围并处理自然留白 |
 | `/reports` | 冻结快照列表、报告口径字段、格式选择/发布流程 | 无图表；HTML/PDF/PPTX/XLSX 生成与下载状态需逐格式验收 |
-| `/statements` | KPI 卡、利润形成瀑布、资产构成环图、资本结构环图、三类现金流净额、现金变动桥、三类报表科目表 | 5 个 SVG 图已截图；核对分组色、长报表排版、来源和打印分页 |
+| `/statements` | KPI 卡、利润形成瀑布、资产构成环图、资本结构环图、三类现金流净额、现金变动桥、三类报表科目表 | 瀑布亏损总额语义色修正，负值图表裁切已修复；图表辅助名称含公司/期间/单位。打印分页与全系列来源逐项验收仍待完成 |
 
 当前默认矩阵中可直接数到的图表并不是全交互图表清单：数据选择会改变系列与状态，指标库依赖图默认折叠在标签内，数据导入和报告导出也需经过真实操作。因此本表明确对象类别和覆盖边界，但不伪报“所有状态已通过”。
 
