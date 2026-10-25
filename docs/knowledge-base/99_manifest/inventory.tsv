@@ -2138,7 +2138,7 @@ relative_path	size_bytes	modified_time	mime_type
 09_competitive/screenshots/c18-redash-home.png	146963	2026-10-16T23:46:50+08:00	image/png
 09_competitive/screenshots/c19-dataease-home.png	508624	2026-10-16T23:46:50+08:00	image/png
 09_competitive/screenshots/c20-jimu-report-github.png	223902	2026-10-16T23:46:50+08:00	image/png
-10_sources/README.md	6555	2026-10-26T02:12:57+08:00	text/markdown
+10_sources/README.md	6887	2026-10-26T02:16:09+0800	text/markdown
 10_sources/SOURCE_REGISTER.md	3493	2026-10-16T23:46:50+08:00	text/markdown
 10_sources/semantic-review-2026-10-26-batch-001.tsv	1905	2026-10-26T01:06:16+08:00	text/tab-separated-values
 10_sources/semantic-review-2026-10-26-batch-002.tsv	2355	2026-10-26T01:09:43+08:00	text/tab-separated-values

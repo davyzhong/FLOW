@@ -3,7 +3,7 @@ doc_id: FLOW-SRC-README-001
 title: 来源与证据层
 doc_type: navigation
 status: current
-version: 1.7
+version: 1.8
 created_at: 2026-09-12
 updated_at: 2026-10-26
 owner: FLOW
@@ -54,3 +54,4 @@ applies_to: knowledge-base
 - `semantic-review-2026-10-26-batch-024.tsv` —— 第二十四批 2 条 HIGH/簇3 审阅：闭环案例 Getnote 笔记与既有文章高度相似但原文关联未核，暂不标 duplicate；经营驱动树文章保留待验证，未采纳无来源数字与 BI 能力主张。
 
 - `semantic-review-2026-10-26-batch-025.tsv` —— 第二十五批 3 条 HIGH/簇2 内部业财架构与规则资料，均只作元数据筛查并标 project-internal/rejected。
+- 旧 A-finance HIGH 清单中的 AI 财务专题经 ObsidianWiki Git 提交 `c743b98972d45794d5948787ab65e7fd9afcbad1` 证实为跨目录同 blob 迁移；迁入路径不在当前 accepted baseline，故作为基线外迁移从本轮候选排除，不计入 76 条已审候选，正文未打开。详见当前快照复核报告。

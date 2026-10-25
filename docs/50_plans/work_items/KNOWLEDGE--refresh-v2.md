@@ -3,7 +3,7 @@ doc_id: FLOW-WI-KNOWLEDGE-REFRESH-V2-001
 title: 第二代静态知识刷新与战略重基线
 doc_type: work-item
 status: active
-version: 4.9
+version: 5.0
 created_at: 2026-09-24
 updated_at: 2026-10-26
 owner: FLOW
@@ -182,4 +182,4 @@ K3 是当前唯一执行项。首个只读复核发现 accepted manifest `obsidi
 
 第二十四批审阅 2 条 HIGH/簇3：闭环案例 Getnote 笔记与 wechat-72e4a10ae09e 内容高度相似，但原文关联未核且 URL 不可用，保留 pending-verification、不作 duplicate；经营驱动树文章全文核阅并保留 pending-verification，未核验的示例数字、FineBI 看板主张不作事实。详见 [`semantic-review-2026-10-26-batch-024.tsv`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-024.tsv)。
 
-第二十五批对 3 条簇2 内部业财架构/讨论/支出归集资料只做元数据筛查，未打开正文，统一标 project-internal/rejected。覆盖清点发现旧 A-finance 高优先级清单引用的“AI财务2026Q3”文件路径已从当前 baseline 缺失；同名候选位于 `processed/10_系统架构/` 且未入 baseline。因无路径/哈希迁移证据，不按标题推断为同一来源；当前作为 coverage exception，后续按 accepted snapshot 路径及哈希闭合，不能计入已核验。详见 [`semantic-review-2026-10-26-batch-025.tsv`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-025.tsv)。
+第二十五批对 3 条簇2 内部业财架构/讨论/支出归集资料只做元数据筛查，未打开正文，统一标 project-internal/rejected。旧 A-finance 高优先级清单中的“AI财务2026Q3”路径经 ObsidianWiki Git 元数据追溯：提交 `c743b98972d45794d5948787ab65e7fd9afcbad1` 删除旧财务路径，同一 tree 中系统架构新路径指向相同 blob `2b4dd69c5505711c6b2ea3b4fa5fa4a6d1aebcc3`。新路径不在当前 accepted baseline，故作为基线外迁移从当前 coverage 候选中排除；正文未打开，不计入 76 条 HIGH 审阅。此项路径迁移关系已闭合，来源是否纳入产品知识仍不在本轮结论内。详见 [`semantic-review-2026-10-26-batch-025.tsv`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-025.tsv) 与当前快照报告。

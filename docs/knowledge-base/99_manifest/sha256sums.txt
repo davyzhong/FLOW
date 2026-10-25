@@ -2137,7 +2137,7 @@ b33fa5803e59db30ca9cd936772e2843dadbf946dfc4fee6289738ebc565a08f  ./09_competiti
 ce0f3ba366328342710562a2f980ac2b0265cd9f98a0cd3f82e6a34fa87fd3d8  ./09_competitive/screenshots/c18-redash-home.png
 92eeae88a30403edf870d8b86b3a918ac5f6f52d9f899a96aec853806e549eeb  ./09_competitive/screenshots/c19-dataease-home.png
 60667d4e6ba888d5ba5396a8d9353c22adc8322c6f22475ab80f75fe5b659954  ./09_competitive/screenshots/c20-jimu-report-github.png
-e443865e5a02ebce15cc0c0d9fb0170cce56fcb5c94c6c464af5161f73af71f6  ./10_sources/README.md
+496ee8cab22c76daa8196511f90ad63fd204296a15e3027646fb215fb9668c6f  ./10_sources/README.md
 ecd3cb7c4fb22de8313fe9cc5e3fe5a567f455a8cc56fe8f236569e2bbaabb60  ./10_sources/SOURCE_REGISTER.md
 ab841e127619097707dfafe29a2da96ba7680ed34d4261ec5a06d45aa3eb00d3  ./10_sources/semantic-review-2026-10-26-batch-001.tsv
 760713e2cd504e176131083bc4ae10ad2a04b0e8341584b5e6522c5b3423240b  ./10_sources/semantic-review-2026-10-26-batch-002.tsv

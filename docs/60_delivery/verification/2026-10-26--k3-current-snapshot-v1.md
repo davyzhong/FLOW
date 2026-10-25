@@ -3,7 +3,7 @@ doc_id: FLOW-VERIFY-K3-CURRENT-SNAPSHOT-20261026
 title: K3 当前 Obsidian 工作区稳定快照复核
 doc_type: verification
 status: verified
-version: 1.7
+version: 1.8
 created_at: 2026-10-26
 updated_at: 2026-10-26
 owner: FLOW
@@ -158,4 +158,4 @@ Davybase `scripts/run/freeze_snapshot.py freeze` 运行于分支 `codex/knowledg
 第二十四批对闭环案例链接笔记与 wechat-72e4a10ae09e 正文作比对，发现内容和单箱案例高度相似，但本地无原文 URL 或可追溯原件关联，保留 pending-verification，不标 duplicate；经营驱动树文章中未带底层数据的数字与 BI 看板产品主张保留待核验。详见 `semantic-review-2026-10-26-batch-024.tsv`。
 
 
-第二十五批只按元数据筛查 3 条余下簇2内部架构/讨论/归集材料，未打开正文，标 project-internal/rejected。旧 A-finance 中 AI 财务专题路径不在当前 baseline；同名文件存在于不同目录但未登记，未以标题推断迁移，保留为 coverage exception，后续按路径/哈希证据闭合。详见 `semantic-review-2026-10-26-batch-025.tsv`。
+第二十五批只按元数据筛查 3 条余下簇2内部架构/讨论/归集材料，未打开正文，标 project-internal/rejected。覆盖追溯发现旧 A-finance 中 AI 财务专题路径已在 ObsidianWiki 提交 `c743b98972d45794d5948787ab65e7fd9afcbad1` 删除；该提交的 Git tree 显示新系统架构路径与旧财务路径指向同一 blob `2b4dd69c5505711c6b2ea3b4fa5fa4a6d1aebcc3`。新路径不在当前 accepted baseline，因此将旧 HIGH 行登记为基线外迁移并排除当前候选；未读取正文，也未将其计入 76 条已审候选。详见 `semantic-review-2026-10-26-batch-025.tsv` 与本次路径/hash 追溯记录。
