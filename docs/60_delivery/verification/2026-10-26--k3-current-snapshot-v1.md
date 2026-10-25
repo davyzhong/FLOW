@@ -3,7 +3,7 @@ doc_id: FLOW-VERIFY-K3-CURRENT-SNAPSHOT-20261026
 title: K3 当前 Obsidian 工作区稳定快照复核
 doc_type: verification
 status: verified
-version: 3.4
+version: 3.5
 created_at: 2026-10-26
 updated_at: 2026-10-26
 owner: FLOW
@@ -397,3 +397,7 @@ W3 MED 第二十四组完成1条全文双审，保留 pending-verification。同
 ## K3 全量语义路由批次 076
 
 按 accepted baseline source_id 顺序审阅12条来源；逐条文件 SHA 与正文规范化 SHA 均匹配。8条路由为 pending-verification，涉及财务岗位能力、资金预测、AI研发效能、垂直领域AI、人效、AI辅助开发、增长分析和RPA/IPA；薪资、效益、预测假设、效能指标、商业模式及技术市场主张均不作为已核事实。两篇来源共36条图像引用按source_baseline.py的来源目录/ vault根目录回退规则均无法解析，未据图判断。4条拒绝：绩效模板、采购平台标准与团队管理笔记涉内部人事/产品治理；另1条为范围外职业建议。coverage累计为9,673条：routed 321、filtered 92、pending_review 9,260；下一批为077。ObsidianWiki与CURRENT_RELEASE未改动。逐条记录见 `../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-076.tsv`。
+
+## K3 全量语义路由批次 077
+
+按 accepted baseline source_id 顺序审阅12条来源；逐条文件 SHA 与正文规范化 SHA 均匹配。6条路由为 pending-verification，涉及AI驱动PRD、Lobster工作流、毛利率分析、AI原生CRM、LLM Wiki及AI经营分析；协议/产品能力、分析口径、知识库范式和模型效果均不作为已核事实。经营分析案例的8条图片引用按source_baseline.py的来源目录/ vault根目录回退规则均无法解析，未据图判断。6条拒绝：4条特定企业AI调用量、技术财务复盘、组织绩效及客服AHT资料标 project-internal；经济学课程简介与一般思维文章属范围外。coverage累计为9,673条：routed 327、filtered 98、pending_review 9,248；下一批为078。ObsidianWiki与CURRENT_RELEASE未改动。逐条记录见 `../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-077.tsv`。
