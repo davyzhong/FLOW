@@ -3,7 +3,7 @@ doc_id: FLOW-VERIFY-K3-CURRENT-SNAPSHOT-20261026
 title: K3 当前 Obsidian 工作区稳定快照复核
 doc_type: verification
 status: verified
-version: 4.8
+version: 4.9
 created_at: 2026-10-26
 updated_at: 2026-10-26
 owner: FLOW
@@ -444,4 +444,4 @@ W3 MED 第二十四组完成1条全文双审，保留 pending-verification。同
 
 ## K3 路由进度增量（2026-10-26）
 
-accepted snapshot 未变；第090批按 baseline ID 顺序审阅 12 条，coverage 当前为 routed 409、filtered 170、pending_review 9,094。来源文件 SHA 与 accepted baseline 一致；本批无图片引用需要据图推断，五个 locator-only 例外保持待审。批次分类与理由见[语义审阅表](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-090.tsv)。本增量未访问或写入 ObsidianWiki，也未改变 `CURRENT_RELEASE`。
+accepted snapshot 未变；第091批按 baseline ID 顺序审阅 12 条，coverage 当前为 routed 415、filtered 176、pending_review 9,082。来源文件 SHA 与 accepted baseline 一致；华为经营分析文章17条图片引用均未解析且未据图推断，五个 locator-only 例外保持待审。批次分类与理由见[语义审阅表](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-091.tsv)。本增量未访问或写入 ObsidianWiki，也未改变 `CURRENT_RELEASE`。
