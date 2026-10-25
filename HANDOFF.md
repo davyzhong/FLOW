@@ -3,9 +3,9 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目交接文档
 doc_type: navigation
 status: current
-version: 12.5
+version: 12.6
 created_at: 2026-09-12
-updated_at: 2026-10-25
+updated_at: 2026-10-26
 owner: FLOW
 applies_to: repository
 ---
@@ -18,7 +18,7 @@ applies_to: repository
 
 ## 一、当前任务
 
-**2026-10-26 当前交接：** 路线图共 16 项：完成 10、实际执行中 1（K 轨 K3）、排队 3、暂停 1、外部条件受限 1。视觉语言包及全项目视觉统一已结案，准确证据见[覆盖报告](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)：隔离 manifest `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed` 下验证器 19/19、可见性矩阵 164/164（154 HTTP 200、10 预期拒绝、0 失败）、Playwright 17/17；应用 SHA `01e8e25dd426ed43ad6a2cad76544bbbe623eb99` 的 20×3 矩阵 60/60、Axe 桌面 20 路由零违规。E2E 断言修正 `d01daa11` 独立复核无 P1/P2。原生浏览器 200% 缩放因 Mac 锁屏及工具能力限制未直接验收，待设备解锁且有可操作原生缩放工具时补验；390/360 CSS px 不是替代。当前分支 `codex/flow-visual-language`，PR #5；视觉结案文档提交后的准确 SHA CI 待查。下一项已启动为 K3：10 月 26 日只读核验发现当前 ObsidianWiki dirty 路径为 1,434（旧 accepted manifest 为 1,377），Git 状态 SHA 也变化。已在 vault 外取得 accepted snapshot `obsidianwiki-20261026T003619+0800-4ea1c067`（Davybase commit `f65df69`，manifest SHA `ede08faabcf5c70222fec7c628f9ae778deba82dbdf5bdab26ad154184269e39`），候选/复验指纹一致、写句柄 0。下一步按新 snapshot 重建 K3 registry/baseline/diff，构建前后复核 vault 指纹后开展语义审阅。旧 K3 baseline/diff 只代表 10 月 19 日截面。ObsidianWiki 严格只读，`CURRENT_RELEASE` 不变。用户选择保留 `/Users/qiming/.flow/flow.sqlite3` 零字节文件；其他未跟踪数据库文件保持原样。
+**2026-10-26 当前交接：** 路线图共 16 项：完成 10、实际执行中 1（K 轨 K3）、排队 3、暂停 1、外部条件受限 1。视觉语言包及全项目视觉统一已结案，准确证据见[覆盖报告](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)：隔离 manifest `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed` 下验证器 19/19、可见性矩阵 164/164（154 HTTP 200、10 预期拒绝、0 失败）、Playwright 17/17；应用 SHA `01e8e25dd426ed43ad6a2cad76544bbbe623eb99` 的 20×3 矩阵 60/60、Axe 桌面 20 路由零违规。E2E 断言修正 `d01daa11` 独立复核无 P1/P2。原生浏览器 200% 缩放因 Mac 锁屏及工具能力限制未直接验收，待设备解锁且有可操作原生缩放工具时补验；390/360 CSS px 不是替代。当前分支 `codex/flow-visual-language`，PR #5。K3 使用 accepted snapshot `obsidianwiki-20261026T003619+0800-4ea1c067`（Davybase commit `f65df69`，manifest SHA `ede08faabcf5c70222fec7c628f9ae778deba82dbdf5bdab26ad154184269e39`）；候选/复验指纹一致、写句柄 0。registry/baseline/delta/累计 diff 已按该 snapshot 重建并逐字节复验，覆盖 9,673 来源和 9,958 个 diff ID。当前继续按工作包口径进行只读语义路由与 HIGH 全审，再做 MED/LOW 双审及 coverage 闭合。旧 K3 结果仅代表 10 月 19 日截面。ObsidianWiki 严格只读，`CURRENT_RELEASE` 不变。用户选择保留 `/Users/qiming/.flow/flow.sqlite3` 零字节文件；其他未跟踪数据库文件保持原样。
 
 
 **最新操作记录（2026-10-26）：** 最终隔离验收为 19/19、164/164、17/17；独立代码复核无 P1/P2。最后 E2E 断言修复已提交 `d01daa11` 并推送。视觉工作包正式结案，唯一队首转到 K3；第一步按只读方式复核 accepted manifest 与 vault 状态，不触碰常驻知识库。
@@ -140,12 +140,12 @@ applies_to: repository
 规格：`docs/superpowers/specs/2026-09-17-static-knowledge-refresh-and-strategic-rebaseline-design.md`
 旧实施计划（archived，仅历史参考；K2 时间门禁命令已被设计 v1.2 取代）：`docs/superpowers/plans/2026-09-18-static-knowledge-refresh-and-strategic-rebaseline-implementation-plan.md`
 
-**K0–K6 步骤概要**（状态以路线图和工作包为准）：
+**K0–K6 步骤概要**（状态以路线图和工作包为准；下表是阶段划分，不是第二份待办）：
 1. **K0 已完成**：Davybase 运行清单实现、微信历史批次严格验收和证据归档已推送。
 2. **K1 已完成**：只读 allowlist scanner 已扫描三个非微信范围；566 篇需人工 triage，可执行候选 0，证据见工作包。
-3. **K2 当前执行**：即时稳定工作区快照，验收见知识刷新设计 v1.2。
-4. **K3** 用 accepted manifest 重建来源 registry/baseline/diff
-5. **K4** 全量路由 + HIGH 精读
+3. **K2 已完成**：即时稳定工作区快照，验收见知识刷新设计 v1.2。
+4. **K3 当前执行**：registry/baseline/diff 已按 10-26 accepted manifest 重建；当前进行逐条语义路由与 HIGH 精读。
+5. **K4** MED/LOW 双审抽样、错误集中度与 coverage 闭合
 6. **K5** 构建 candidate + seal
 7. **K6/战略裁决** 原子激活 release（须用户裁决，Agent 不可代签）
 

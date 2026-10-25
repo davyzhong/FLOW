@@ -10,7 +10,9 @@ relative_path	size_bytes	modified_time	mime_type
 00_governance/migration/source-baseline.sha256	86	2026-10-16T23:46:49+08:00	application/octet-stream
 00_governance/migration/source-baseline.tsv	978807	2026-10-16T23:46:49+08:00	text/tab-separated-values
 00_governance/migration/source-id-registry-2026-10-19.tsv	2977135	2026-10-19T08:32:39+08:00	text/tab-separated-values
+00_governance/migration/source-id-registry-2026-10-26.tsv	2978067	2026-10-26T00:40:23+08:00	text/tab-separated-values
 00_governance/migration/source-inputs-2026-10-19.yaml	314	2026-10-19T08:10:45+08:00	application/yaml
+00_governance/migration/source-inputs-2026-10-26.yaml	314	2026-10-26T00:40:15+08:00	application/yaml
 00_governance/migration/source-inputs.yaml	969	2026-10-16T23:46:49+08:00	application/yaml
 00_governance/migration/storage-inventory.tsv	614648	2026-10-16T23:46:49+08:00	text/tab-separated-values
 00_governance/releases/CURRENT_RELEASE	28	2026-10-16T23:46:49+08:00	application/octet-stream
@@ -2136,12 +2138,15 @@ relative_path	size_bytes	modified_time	mime_type
 09_competitive/screenshots/c18-redash-home.png	146963	2026-10-16T23:46:50+08:00	image/png
 09_competitive/screenshots/c19-dataease-home.png	508624	2026-10-16T23:46:50+08:00	image/png
 09_competitive/screenshots/c20-jimu-report-github.png	223902	2026-10-16T23:46:50+08:00	image/png
-10_sources/README.md	1286	2026-10-19T08:16:29+08:00	text/markdown
+10_sources/README.md	1594	2026-10-26T00:48:04+08:00	text/markdown
 10_sources/SOURCE_REGISTER.md	3493	2026-10-16T23:46:50+08:00	text/markdown
 10_sources/snapshots/obsidian-2026-09-12T15-46+08-00.yaml	898	2026-10-16T23:46:50+08:00	application/yaml
 10_sources/snapshots/obsidian-2026-09-12T16-17+08-00.yaml	1470	2026-10-16T23:46:50+08:00	application/yaml
 10_sources/source-baseline-2026-10-19.tsv	5552683	2026-10-19T08:32:39+08:00	text/tab-separated-values
+10_sources/source-baseline-2026-10-26.tsv	5554012	2026-10-26T00:40:23+08:00	text/tab-separated-values
+10_sources/source-delta-2026-10-26.tsv	1689810	2026-10-26T00:40:23+08:00	text/tab-separated-values
 10_sources/source-diff-2026-10-19.tsv	1467511	2026-10-19T08:32:39+08:00	text/tab-separated-values
+10_sources/source-diff-2026-10-26.tsv	1467886	2026-10-26T00:42:25+08:00	text/tab-separated-values
 10_sources/source-register.tsv	2785	2026-10-16T23:46:50+08:00	text/tab-separated-values
 20_knowledge_cards/TAXONOMY--v1.0.yaml	1350	2026-10-16T23:46:50+08:00	application/yaml
 20_knowledge_cards/authoring-batches.tsv	160	2026-10-16T23:46:50+08:00	text/tab-separated-values
@@ -2175,4 +2180,4 @@ relative_path	size_bytes	modified_time	mime_type
 40_methods_and_patterns/README.md	709	2026-10-16T23:46:50+08:00	text/markdown
 50_product_mappings/FLOW-PRODUCT-MAPPING--v1.0.md	2614	2026-10-16T23:46:50+08:00	text/markdown
 50_product_mappings/README.md	488	2026-10-16T23:46:50+08:00	text/markdown
-README.md	4822	2026-10-16T23:46:50+08:00	text/markdown
+README.md	4726	2026-10-24T21:56:35+08:00	text/markdown

@@ -9,7 +9,9 @@ a15b7eb1ce48fd793a628ad6fa0a80d5f96dc047e9ababa3963ae94cead2e2f4  ./00_governanc
 5d41ba2abc2edb342e4e3bd32451feaf6fba96992ac118dd25f4a170fc818ff8  ./00_governance/migration/source-baseline.sha256
 dfe350785e1f1d845d5104ab30a82db2a4477db76ab770838d34a939e11c5482  ./00_governance/migration/source-baseline.tsv
 c041c6922c78f143db788c98fc602e10f3ab6e33fa5eafd518d77bfec08d1b48  ./00_governance/migration/source-id-registry-2026-10-19.tsv
+7579a7e704f1946525b24b0c38c84922abaceb0430ef423df94ed2c1e1a72a3a  ./00_governance/migration/source-id-registry-2026-10-26.tsv
 784d2c1580d996e04e3c4c6957ba9aa50d888a2f657bf61b312e98344480745b  ./00_governance/migration/source-inputs-2026-10-19.yaml
+035eb0f983285395f9a6d34469f19833ae947bf4af3331c7af766af62a03623c  ./00_governance/migration/source-inputs-2026-10-26.yaml
 030d3dfde7f02ce7a611f1ac4ea9b1bcf7bc4480ab799543f852434cb664901d  ./00_governance/migration/source-inputs.yaml
 0a13823803f106a4368f3f97a3f40d85bae2b26da7679fd4735003a64faf7a1f  ./00_governance/migration/storage-inventory.tsv
 c5b63620ec6a7d66c13d64f17eca4a54b85e2a2161336619f6daa5ca9c87d295  ./00_governance/releases/CURRENT_RELEASE
@@ -2135,12 +2137,15 @@ b33fa5803e59db30ca9cd936772e2843dadbf946dfc4fee6289738ebc565a08f  ./09_competiti
 ce0f3ba366328342710562a2f980ac2b0265cd9f98a0cd3f82e6a34fa87fd3d8  ./09_competitive/screenshots/c18-redash-home.png
 92eeae88a30403edf870d8b86b3a918ac5f6f52d9f899a96aec853806e549eeb  ./09_competitive/screenshots/c19-dataease-home.png
 60667d4e6ba888d5ba5396a8d9353c22adc8322c6f22475ab80f75fe5b659954  ./09_competitive/screenshots/c20-jimu-report-github.png
-7c6233ec58353c142127c9e2abe203d887999bac4319486acc07ddbfbe906b49  ./10_sources/README.md
+d0eecf48e627c770bb326a77d41140ec18cab6324ca51a733829dfa7a787129c  ./10_sources/README.md
 ecd3cb7c4fb22de8313fe9cc5e3fe5a567f455a8cc56fe8f236569e2bbaabb60  ./10_sources/SOURCE_REGISTER.md
 a18e8156910880f1b8d211802038bbaceb94aee6c211c2dfc33f35cb699ee705  ./10_sources/snapshots/obsidian-2026-09-12T15-46+08-00.yaml
 6accd8ff3644f8f06eac12c585905d74e11e93aa61c4da33dc74db6cae416274  ./10_sources/snapshots/obsidian-2026-09-12T16-17+08-00.yaml
 901bee24f27c26e12e94518a99665d279dfdec1e333bc4c7a950651386a5af3b  ./10_sources/source-baseline-2026-10-19.tsv
+dcc2b3d01b7fc5200294593c5797b9703c98465d2f0c4eee2ec2c98349a395d4  ./10_sources/source-baseline-2026-10-26.tsv
+689b7761d048e24bf7a879d5d87f4fcd047a527e70b6fdce79ce81a136f49c91  ./10_sources/source-delta-2026-10-26.tsv
 ac987729a96d3cad33c6d773ca0021e379247574a156bd0c0d54306c595284e1  ./10_sources/source-diff-2026-10-19.tsv
+9e781828298245be3c9b9e295eb5da825d04c6092393913a0fd8d03c36e70b90  ./10_sources/source-diff-2026-10-26.tsv
 8d2ca3f8169dcd201f8c90d1b380d88101595073d46097bb894e9571c3437c45  ./10_sources/source-register.tsv
 6e821d89874ccc9f619d928ea9604725771ab97d7e5cf51ddf1e50a50ae1c2d8  ./20_knowledge_cards/TAXONOMY--v1.0.yaml
 fe14c5fec8b12d800215cc07e795856f5a8557de8e5d97c9967b7113ec6681d6  ./20_knowledge_cards/authoring-batches.tsv
@@ -2174,4 +2179,4 @@ ace8b24161011617a94c4a2a1b87adcb76121bac3aaa4b49b4df4914b11defc2  ./30_domain_ha
 d80f509de5c36c24d86bbbac07d7c35eddedc862c536f9b5d21e6a6e178d9e74  ./40_methods_and_patterns/README.md
 4666243e7af893feec890f24d28c4ea8d9271f3cc752f56f40f6f1998e267434  ./50_product_mappings/FLOW-PRODUCT-MAPPING--v1.0.md
 b4d200cc989f4642c66da1061742f842d83467caa4d92774df4d2caf4b0cb56d  ./50_product_mappings/README.md
-4131636ec380e5b5ebcc0f06e865af69be815d8d99855c67e1b7459e5377cc4a  ./README.md
+1a58152f4299a5415a457b687f1cb305f79588f7758971a131ff3caa182cca2e  ./README.md

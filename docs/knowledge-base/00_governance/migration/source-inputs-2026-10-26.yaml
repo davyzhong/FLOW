@@ -1,0 +1,4 @@
+# K3 来源 allowlist；只读扫描，根目录相对 ObsidianWiki vault。
+snapshot_id: obsidianwiki-20261026T003619+0800-4ea1c067
+vault_root: /Users/qiming/ObsidianWiki
+source_roots: ["processed/03_财务与会计", "processed/02_企业管理", "processed/04_跨境物流", "processed/微信知识库", "wiki"]

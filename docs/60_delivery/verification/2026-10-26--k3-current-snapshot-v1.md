@@ -41,4 +41,21 @@ applies_to: knowledge-refresh
 
 Davybase `scripts/run/freeze_snapshot.py freeze` 运行于分支 `codex/knowledge-run-manifest-k0` 的提交 `f65df69`，将 manifest/sidecar 写入 Davybase 工作区；没有触碰 ObsidianWiki。manifest JSON 可解析，sidecar SHA 与本地 `shasum -a 256` 一致，提交已推送至 GitHub；之后冻结器 `release` 删除其外置锁文件。项目分支工作树干净。
 
-下一步以 snapshot ID `obsidianwiki-20261026T003619+0800-4ea1c067` 新建 K3 source-input manifest，并从旧基线重建 source registry、source baseline 与四维 diff；构建前后再次核对当前 vault 指纹。通过后才开始逐条路由与语义审阅。`CURRENT_RELEASE` 继续保持 `flow-knowledge-2026-09-12.1`。
+本报告创建时的后续步骤已完成：registry、baseline、delta 与累计 diff 均已按该 snapshot 构建并复验，详见下节。当前下一步为按工作包口径开展只读语义路由和 HIGH 全审；`CURRENT_RELEASE` 继续保持 `flow-knowledge-2026-09-12.1`。
+
+
+## K3 来源基线与累计差异重建（2026-10-26）
+
+以本报告的 accepted snapshot 和原有 allowlist（`processed/03_财务与会计`、`processed/02_企业管理`、`processed/04_跨境物流`、`processed/微信知识库`、`wiki`）运行 `source_baseline.py build-v2`。生成 9,673 篇来源，ID 唯一；类别为 wiki 6,413、domain-note 1,601、wechat 1,659。与 10-19 baseline 比较的增量为 9,671 篇保持存在、2 篇新增；正文、路径、图片/附录 enrichment 变化均为 0。
+
+累计四维 diff 从 10-19 的 9,956 个 ID 基础应用上述增量，得 9,958 个 ID：新增 6,641、存在 3,032、删除 285；旧的 1,868 个正文变化与 1,310 个 enrichment 变化保持记录。本次新增两条均是 `added`，没有改写历史条目。增量 delta 另行保存，便于复验。当前 9,673 条的 `k_domain` 仍为 `pending-review`，`authority_level`/`sensitivity` 为 `unclassified`；来源自动登记不冒充语义审阅。
+
+| 文件 | SHA-256 |
+|---|---|
+| `source-inputs-2026-10-26.yaml` | 已纳入知识库 `sha256sums.txt` |
+| `source-id-registry-2026-10-26.tsv` | `7579a7e704f1946525b24b0c38c84922abaceb0430ef423df94ed2c1e1a72a3a` |
+| `source-baseline-2026-10-26.tsv` | `dcc2b3d01b7fc5200294593c5797b9703c98465d2f0c4eee2ec2c98349a395d4` |
+| `source-delta-2026-10-26.tsv` | `689b7761d048e24bf7a879d5d87f4fcd047a527e70b6fdce79ce81a136f49c91` |
+| `source-diff-2026-10-26.tsv` | `9e781828298245be3c9b9e295eb5da825d04c6092393913a0fd8d03c36e70b90` |
+
+同一 accepted manifest 重建至独立 `/tmp` 输出目录，registry/baseline/delta 与累计 diff 均逐字节一致。生成后重算的 vault HEAD/tree、状态 SHA、内容 SHA、文件数、字节数与 dirty 路径数全部匹配 accepted manifest，写句柄 0。source baseline 与 coverage validator 专项测试 14/14 通过；知识库清单重生成 2,182 项并 `--check` 通过。全量语义路由、HIGH 全读、MED/LOW 双审、coverage 闭合、知识综合与独立 reader 尚待完成；`CURRENT_RELEASE` 不变。

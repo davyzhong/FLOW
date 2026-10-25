@@ -3,7 +3,7 @@ doc_id: FLOW-WI-KNOWLEDGE-REFRESH-V2-001
 title: 第二代静态知识刷新与战略重基线
 doc_type: work-item
 status: active
-version: 2.0
+version: 2.2
 created_at: 2026-09-24
 updated_at: 2026-10-26
 owner: FLOW
@@ -24,7 +24,7 @@ Obsidian 工作区快照，重建 FLOW 来源基线与 sealed knowledge candidat
 ## 当前断点
 
 - 批准规格和三仓库 preflight 已完成。
-- K0/K1/K2 已完成，K3 当前实际执行。FLOW 的实际资料源是 ObsidianWiki；Davybase 只在 K0–K2 的历史工具链中承载过扫描/快照工具及一次性证据，不构成 FLOW 代码、运行时或产品依赖。K2 accepted working-tree manifest：ObsidianWiki `main@e04d6833`、1,377 条 dirty 路径、111,912 个文件/4,240,118,843 字节；HEAD/tree、Git 状态与完整内容 SHA 的候选/复验值一致，真实可写句柄均为 0。K3 读前复核已通过，Obsidian 当前 HEAD/tree/status/content SHA、文件数与字节数均与 accepted manifest 一致，可写句柄 0。当前后续仍限于只读 baseline/diff，生成后再做来源指纹复核。详细 K2 报告见[FLOW K2 验收](../../60_delivery/verification/2026-10-19--k2-working-tree-snapshot-v1.md)，ObsidianWiki 未修改。K4–K6 与战略裁决仍未完成。
+- K0/K1/K2 已完成，K3 当前实际执行。FLOW 的实际资料源是 ObsidianWiki；Davybase 仅承载过快照工具与一次性证据，不构成 FLOW 代码、运行时或产品依赖。最新 accepted working-tree manifest 为 `obsidianwiki-20261026T003619+0800-4ea1c067`：ObsidianWiki `main@e04d6833`、1,475 条 dirty 路径、112,010 个文件/4,260,351,293 字节；候选/复验全部指纹一致，可写句柄 0。当前 K3 registry/baseline/delta/cumulative diff 已完成并复验。接下来只读语义审阅 9,673 个来源，ObsidianWiki 不写入；K4–K6 与战略裁决仍未完成。详见[当前快照与基线复核](../../60_delivery/verification/2026-10-26--k3-current-snapshot-v1.md)。
 - 2026-10-17 只读 preflight：Davybase `main`=`6efcd6e2f0560e019f69dbbeada70e2532544f31`；审计实现在 `codex/knowledge-run-manifest-k0`，提交 `172a099`，K0 证据 `94fc05d`，交接/统计 `eb8c3d0` 均已推送。ObsidianWiki `main`=`e04d6833a623033a3601d36192f02dc15184eb6e`，K0 记录 1,365 条本地变化及内容哈希；全范围文件树摘要 `0a42346d276917c8b94f1b0c198ca5bfd68405c35c1656407bc10135e236c7f7` 复验一致。既存变化只读保护，不暂存、不提交、不覆盖，不能把 HEAD 单独称为完整工作区快照。
 - `CURRENT_RELEASE` 继续为 `flow-knowledge-2026-09-12.1`。
 
@@ -61,9 +61,16 @@ K2 accepted working-tree manifest 已提交并推送至 Davybase，远端确认�
 
 2026-10-19 accepted manifest `obsidianwiki-20261019T075638+0800-0c0ac842`（SHA-256 `b7e566e68b1119117999fc9ef08f7fae657e6bcbc3d3482d77ea56caf0e44654`）为历史输入。10-26 检出当前 dirty 路径已变，故新取稳定快照；当前 K3 输入改为 snapshot `obsidianwiki-20261026T003619+0800-4ea1c067`（manifest SHA-256 `ede08faabcf5c70222fec7c628f9ae778deba82dbdf5bdab26ad154184269e39`），详情见[当前快照复核](../../60_delivery/verification/2026-10-26--k3-current-snapshot-v1.md)。
 
-10-19 K3 自动来源基线与四维差异已完成，结果（allowlist 9,671 篇，universe 9,956 条）仅适用于 10-19 accepted snapshot，见[历史来源基线验收](../../60_delivery/verification/2026-10-19--k3-source-baseline-v2.md)。当前要以 10-26 snapshot 重新构建 registry/baseline/diff，生成前后确认指纹一致；不复用旧数据冒充当前结果。实现包含 `build-v2` 和严格 coverage 闭合校验器。
+10-19 K3 自动来源基线与四维差异已完成，结果（allowlist 9,671 篇，universe 9,956 条）仅适用于 10-19 accepted snapshot，见[历史来源基线验收](../../60_delivery/verification/2026-10-19--k3-source-baseline-v2.md)。10-26 registry/baseline/diff 已重建并在生成后复验 vault 指纹：来源 9,673、唯一 ID 9,673；相较 10-19 baseline 增量为 2 篇新增，0 篇既有正文/路径/enrichment 变化。累计 diff 为 9,958 ID（新增 6,641、存在 3,032、删除 285）。独立目录重复生成逐字节一致；详情见[当前快照与基线复核](../../60_delivery/verification/2026-10-26--k3-current-snapshot-v1.md)。当前下一步转为全量语义路由与 HIGH/MED/LOW 审阅。实现包含 `build-v2` 和严格 coverage 闭合校验器。
 
 **当前子步仍属 K3，未完成整轨验收**：逐条主题路由和 HIGH 全文审阅、MED/LOW 双审抽样、错误集中度检查、coverage/例外闭合、知识综合和独立 reader 尚待完成。旧 2026-09-12 baseline 没有完整历史改名 registry；本轮以精确路径迁移旧 ID，未匹配项记为新增/删除，不用标题相似度推断改名。不得据此声称“没有改名”。`CURRENT_RELEASE` 仍为 `flow-knowledge-2026-09-12.1`，未 seal、未激活。
+
+### K3 语义审阅操作口径（依既有规格执行）
+
+- 主域只允许 K1–K8，定义以 [`TAXONOMY--v1.0.yaml`](../../knowledge-base/20_knowledge_cards/TAXONOMY--v1.0.yaml) 为准；每条只落一个主域，跨域只记相关域。不能由文件目录或标题单独定域，至少核对正文及来源定位；不可读或证据不足时保持待审并登记例外。
+- `authority_level`、`sensitivity`、`availability` 和 `flow_disposition` 按现行来源治理字段逐条给值。缺少原始出处不推断权威级别；含内部企业/个人/合同/经营数据的来源从严标注并禁止进入产品候选，AI 未核验摘要不得采纳。此批次的输入清单、全量文本和指纹留在 ObsidianWiki，本仓只存定位、分类、证据引用和必要处置摘要。
+- HIGH/MED/LOW 采用已有规格定义的审阅级别；先用来源类型、知识地图关系和已有覆盖信息形成可复核优先级，再检查正文，记录 `source_id`、输入快照、审核级别、字段结论、证据定位、审核状态与例外原因。不能从标题关键词直接宣称已全文审阅；HIGH 全量读，MED/LOW 按规格双审抽样并检查误差集中度。
+- 每批次先写入独立批次文件并运行 coverage validator；按 source ID 闭合核对，未覆盖条目不得进入 adopted/candidate。semantic batch 合并前复核快照指纹；每批提交后更新知识库 inventory/checksum、路线图与交接，再继续下一批。候选 seal 及 `CURRENT_RELEASE` 变更仍遵守原有独立 reader 和用户战略裁决门槛。
 
 ## 全轨退出条件
 
@@ -76,4 +83,4 @@ K2 accepted working-tree manifest 已提交并推送至 Davybase，远端确认�
 
 ## 2026-10-26 队首启动记录
 
-K3 是当前唯一执行项。首个只读复核发现 accepted manifest `obsidianwiki-k2-2026-10-19-final.json` 与当前 vault 状态不匹配：HEAD/tree 仍为 `e04d6833` / `aa7d84d3`，但 dirty 路径从 1,377 变为 1,434，当前 porcelain SHA-256 `d2535e6478caaadee622e3551a730335ec273f46d68e5f2fdb9d92096bf8dfed`（两次读取一致），旧 manifest 状态 SHA 为 `c688b336f3cd86c84e3f40874838e0c1083db75b201cde2985cee4cc10f35fdc`。ObsidianWiki `.davybase/image_evidence` 最近文件时间为 2026-10-25；未发现活动 Davybase/Obsidian 任务进程。故旧 K3 baseline/diff 仍是其 10 月 19 日 accepted 截面的历史有效结果，但不作为当前正文审阅输入。已在 vault 外重新冻结并接受 10-26 快照：候选/复验内容 SHA `c84efd671e2b90e4f69152c3dd04a570d9c378d08fb7a3cb97b86e322f123df0` 一致、写句柄 0；manifest 已随 Davybase `f65df69` 推送并释放锁。当前下一步是使用新 snapshot 重建 K3 registry/baseline/diff，并在构建后复核指纹；随后开展语义路由与审阅。ObsidianWiki 不写入，`CURRENT_RELEASE` 不变。
+K3 是当前唯一执行项。首个只读复核发现 accepted manifest `obsidianwiki-k2-2026-10-19-final.json` 与当前 vault 状态不匹配：HEAD/tree 仍为 `e04d6833` / `aa7d84d3`，但 dirty 路径从 1,377 变为 1,434，当前 porcelain SHA-256 `d2535e6478caaadee622e3551a730335ec273f46d68e5f2fdb9d92096bf8dfed`（两次读取一致），旧 manifest 状态 SHA 为 `c688b336f3cd86c84e3f40874838e0c1083db75b201cde2985cee4cc10f35fdc`。ObsidianWiki `.davybase/image_evidence` 最近文件时间为 2026-10-25；未发现活动 Davybase/Obsidian 任务进程。故旧 K3 baseline/diff 仍是其 10 月 19 日 accepted 截面的历史有效结果，但不作为当前正文审阅输入。已在 vault 外重新冻结并接受 10-26 快照：候选/复验内容 SHA `c84efd671e2b90e4f69152c3dd04a570d9c378d08fb7a3cb97b86e322f123df0` 一致、写句柄 0；manifest 已随 Davybase `f65df69` 推送并释放锁。registry/baseline/delta/cumulative diff 均已生成；14 项 source baseline/coverage tests 通过，生成结果可逐字节复现，生成后 fingerprint 与 accepted snapshot 一致。当前唯一下一步为逐条主题路由与 HIGH 全文审阅，再完成 MED/LOW 双审和 coverage 闭合。ObsidianWiki 不写入，`CURRENT_RELEASE` 不变。
