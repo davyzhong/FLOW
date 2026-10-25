@@ -97,6 +97,10 @@ _PRINT_CSS = _PRINT_CSS.replace(
     '"Noto Serif SC", "Songti SC", "STSong", serif',
     VISUAL_TOKENS["typography-family-display"],
 )
+_PRINT_CSS = _PRINT_CSS.replace(
+    '"JetBrains Mono", Menlo, monospace',
+    VISUAL_TOKENS["typography-family-numeric"],
+)
 del _literal, _token
 
 
@@ -310,7 +314,8 @@ def render_objective_report_v3(
         chart_revenue = b""
     try:
         chart_profit = bar_compare(
-            "归母净利润", yuan(net_profit), yuan(net_profit_prior), color="#e08a3c"
+            "归母净利润", yuan(net_profit), yuan(net_profit_prior),
+            color=VISUAL_TOKENS["colors-brand-gold"],
         )
     except ValueError:
         chart_profit = b""

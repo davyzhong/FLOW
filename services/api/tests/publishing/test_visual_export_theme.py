@@ -14,6 +14,8 @@ def test_print_report_uses_display_type_and_paper_gold_theme() -> None:
 
     display_font = VISUAL_TOKENS["typography-family-display"].split(",", maxsplit=1)[0]
     assert display_font in _PRINT_CSS
+    assert VISUAL_TOKENS["typography-family-numeric"].split(",", maxsplit=1)[0] in _PRINT_CSS
+    assert "JetBrains Mono\", Menlo" not in _PRINT_CSS
     assert VISUAL_TOKENS["colors-brand-gold"] in _PRINT_CSS
     assert "@page" in _PRINT_CSS and "@media print" in _PRINT_CSS
 

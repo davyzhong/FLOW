@@ -140,7 +140,7 @@ def donut(title: str, items: list[tuple[str, Decimal | None]]) -> bytes:
     )
     for text in autotexts:
         text.set_fontsize(8.5)
-        text.set_color("#1a2233")
+        text.set_color(VISUAL_TOKENS["colors-text-primary"])
     ax.set_title(title, fontsize=11)
     return _finish(fig)
 
@@ -156,7 +156,7 @@ def cashflow_bars(operating: Decimal | None, investing: Decimal | None,
     colors = [GREEN if value >= 0 else NEG for value in floats]
     fig, ax = plt.subplots(figsize=(2.2 * len(present) + 1.2, 2.9))
     bars = ax.bar(labels, floats, color=colors, width=0.5)
-    ax.axhline(0, color="#5b6478", linewidth=0.8)
+    ax.axhline(0, color=VISUAL_TOKENS["colors-line-strong"], linewidth=0.8)
     for bar, scaled in zip(bars, floats, strict=False):
         ax.annotate(_fmt_scaled(scaled, unit),
                     (bar.get_x() + bar.get_width() / 2, bar.get_height()),
