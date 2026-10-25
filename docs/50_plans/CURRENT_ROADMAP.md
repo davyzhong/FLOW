@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 9.3
+version: 9.4
 created_at: 2026-09-12
 updated_at: 2026-10-26
 owner: FLOW
@@ -96,7 +96,7 @@ superseded_by: null
 | 2a | [大麦物流完整财年演示数据](work_items/DAMAI--full-year-demo.md) | **active（按用户新标准重开；CFO 队首子包，不另列任务）** | 已批准规格；不依赖公开 C 级 | D1–D3 旧版已集成 main `e22d193`，CI run `36137591750` 17/17；原隔离栈验收证据保留。用户 2026-10-12 新增来源事实要求后，旧包仅作为基础夹具完成；需在 CFO 唯一队首中重建来源登记、转换血缘及假设值处置，不与 CFO 并行执行 |
 | 2b | [大麦数据后的剩余体验收口](work_items/UX--post-damai-experience-closeout.md) | **completed** | G2 ✓；用户已批准；ORG-LEDGER CI ✓ | Gate1/Gate5关闭：隔离 Dashboard 7/7；大麦验收 verify19/19、GET矩阵159项零意外、Playwright15/15；生产E2E157/157、Web143/143、mypy203文件、typecheck/lint、M1/链接检查通过；提交`0144bad4`同SHA CI run `36371507389` 17/17 success。常驻库未触碰。 |
 | 2c | [企业组织建制与经营账套初始化包](work_items/ORG-LEDGER--enterprise-initialization-package.md) | **completed** | 大麦发行包 completed；批准三表 schema | `2c7d6eb4`；CI run `36270782272` 的17/17 jobs success。隔离 `full` 首次/重复与 `business` 对账通过；11 个企业/loader 测试、全量 API 852、Web142、脚本107、大麦 verify19/19、API43/43、Playwright9/9、合同/文档/lint/typecheck 均通过。31文件 manifest 稳定 SHA `cbc7cccf…e513`。 |
-| K | [第二代静态知识刷新与战略重基线](work_items/KNOWLEDGE--refresh-v2.md) | **active（K3；2026-10-26 启动）** | K0–K2 完成，基线已绑定最新 accepted snapshot；语义批次 001–011 记录 31 条 | 9,673 来源的 registry/baseline/delta 已生成并重复构建一致；批次 001–011 已记录 31 条 HIGH 候选（30 篇本地正文已读，1 篇元数据不足）；均 pending-verification。第三批发现算例不闭合和定义不完整；第四批发现现金流阈值缺少依据及报表编制口径不可靠；第五批发现合并案例失衡和指标阈值泛化；第六批发现合并抵销规范依据与分摊解释不清；第七批补审三表关系摘要；第八批审阅资金预测模型并标出疑似重复发布；第九批核对监管测算示例及资金缺口模型边界；第十批审阅净利润与现金流关系，发现算例与防舞弊表述风险；第十一批记录现金流阈值与公式边界风险。下一步继续 HIGH 来源全文核验，再做 MED/LOW 双审、coverage 闭合和 independent reader。ObsidianWiki 只读，`CURRENT_RELEASE` 不变。|
+| K | [第二代静态知识刷新与战略重基线](work_items/KNOWLEDGE--refresh-v2.md) | **active（K3；2026-10-26 启动）** | K0–K2 完成，基线已绑定最新 accepted snapshot；语义批次 001–012 记录 34 条 | 9,673 来源的 registry/baseline/delta 已生成并重复构建一致；批次 001–012 已记录 34 条 HIGH 候选（33 篇本地正文已读，1 篇元数据不足）；均 pending-verification。第三批发现算例不闭合和定义不完整；第四批发现现金流阈值缺少依据及报表编制口径不可靠；第五批发现合并案例失衡和指标阈值泛化；第六批发现合并抵销规范依据与分摊解释不清；第七批补审三表关系摘要；第八批审阅资金预测模型并标出疑似重复发布；第九批核对监管测算示例及资金缺口模型边界；第十批审阅净利润与现金流关系，发现算例与防舞弊表述风险；第十一批记录现金流阈值与公式边界风险；第十二批覆盖内控五流、收入确认和记账证据链，标记准则与清单边界。下一步继续 HIGH 来源全文核验，再做 MED/LOW 双审、coverage 闭合和 independent reader。ObsidianWiki 只读，`CURRENT_RELEASE` 不变。|
 | 3 | [公开财报模块 C 级出口](work_items/PUBLIC--c-level-exit-protocol.md) | **active（C级门禁未通过）** | 行身份修订与样本冻结 ✓ | 本轮证据审计已作 No-Go（证据不足，不是准确率判负）；当前队首转入 U04，C级仍无14份完整独立 oracle、新 holdout 首跑及成品盲评 |
 | 3a | [溯源/重述/只读 MCP](work_items/PUBLIC--provenance-restatement-mcp.md) | **completed** | — | B3 溯源 95.5% 行项目带页锚（迁移 0029 + 导入/API/前端）；B4 supersedes 链 + 差异脚本；B5 只读 MCP 三工具（token fail-closed）；B6 确定性差异说明起草 |
 | 3b | [数据扩张、行业基准与 10× 性能基线](work_items/PUBLIC--data-expansion-benchmarks.md) | **active（队列排队，不并行启动）** | 性能基线 ✓；扩张待外部财报 | G2 完成：10×（1034→10340 行）P95 明细 6.2ms/检索 0.97ms/聚合 1.11ms（`perf_baseline.py`）；C1 扩张需真实财报到料 |

@@ -54,15 +54,15 @@ Davybase `scripts/run/freeze_snapshot.py freeze` 运行于分支 `codex/knowledg
 |---|---|
 | `source-inputs-2026-10-26.yaml` | 已纳入知识库 `sha256sums.txt` |
 | `source-id-registry-2026-10-26.tsv` | `ebd33a89055592314a6d24ea9ddce66dcd3caaca2ead33e301324844a17ec83b` |
-| `source-baseline-2026-10-26.tsv` | `efa002e07d65793747f2a685af0732b3cdc3f6d293921abbd16759bff1969650` |
+| `source-baseline-2026-10-26.tsv` | `4583cca3ba479f271ea1133a32eea286363e11d59e760ad774b253589cdeafdc` |
 | `source-delta-2026-10-26.tsv` | `689b7761d048e24bf7a879d5d87f4fcd047a527e70b6fdce79ce81a136f49c91` |
 | `source-diff-2026-10-26.tsv` | `9e781828298245be3c9b9e295eb5da825d04c6092393913a0fd8d03c36e70b90` |
 
-同一 accepted manifest 重建至独立 `/tmp` 输出目录，registry/baseline/delta 与累计 diff 均逐字节一致。生成后重算的 vault HEAD/tree、状态 SHA、内容 SHA、文件数、字节数与 dirty 路径数全部匹配 accepted manifest，写句柄 0。source baseline 与 coverage validator 专项测试 14/14 通过；知识库清单重生成 2,182 项并 `--check` 通过。全量语义路由、HIGH 全读、MED/LOW 双审、coverage 闭合、知识综合与独立 reader 尚待完成；语义批次 001–011 已记录 31 条 HIGH 候选（30 篇本地正文已读、1 篇元数据不足），均 pending-verification；`CURRENT_RELEASE` 不变。
+同一 accepted manifest 重建至独立 `/tmp` 输出目录，registry/baseline/delta 与累计 diff 均逐字节一致。生成后重算的 vault HEAD/tree、状态 SHA、内容 SHA、文件数、字节数与 dirty 路径数全部匹配 accepted manifest，写句柄 0。source baseline 与 coverage validator 专项测试 14/14 通过；知识库清单重生成 2,182 项并 `--check` 通过。全量语义路由、HIGH 全读、MED/LOW 双审、coverage 闭合、知识综合与独立 reader 尚待完成；语义批次 001–012 已记录 34 条 HIGH 候选（33 篇本地正文已读、1 篇元数据不足），均 pending-verification；`CURRENT_RELEASE` 不变。
 
 ## 语义审阅前复验快照（2026-10-26）
 
-基线提交推送后原 manifest 锁已按流程释放，不能在无锁状态重跑 `verify`。随后按 Davybase 冻结器新建 accepted snapshot `obsidianwiki-20261026T005516+0800-d601b4d5`，Davybase 分支 `codex/knowledge-run-manifest-k0` commit `110fe57`。manifest SHA-256 为 `593715c832a538d9ba83df4e077b8dd9bace24f40d3c0d5262fc3779b20f0e77`；候选与复验内容 SHA 均为 `c84efd671e2b90e4f69152c3dd04a570d9c378d08fb7a3cb97b86e322f123df0`，状态 SHA `5f058092c29641f9f4d60b46c07d36437798584e4c4c95864d7a3da629a3f82f`，HEAD/tree、文件数 112,010、总字节数 4,260,351,293、dirty 路径数 1,475 均一致，写句柄 0。它与前一 accepted snapshot 的输入内容完全一致，因此不会改变来源内容；按最新快照 ID 重建后，registry SHA 为 `ebd33a89055592314a6d24ea9ddce66dcd3caaca2ead33e301324844a17ec83b`，baseline SHA 为 `efa002e07d65793747f2a685af0732b3cdc3f6d293921abbd16759bff1969650`，delta SHA 仍为 `689b7761d048e24bf7a879d5d87f4fcd047a527e70b6fdce79ce81a136f49c91`；独立目录重复构建逐字节一致。另一次尝试因误传 HTTPS canonical remote 被门禁拒绝，拒绝证据同分支保留；使用仓库真实 `origin` 后通过。vault 未写入。
+基线提交推送后原 manifest 锁已按流程释放，不能在无锁状态重跑 `verify`。随后按 Davybase 冻结器新建 accepted snapshot `obsidianwiki-20261026T005516+0800-d601b4d5`，Davybase 分支 `codex/knowledge-run-manifest-k0` commit `110fe57`。manifest SHA-256 为 `593715c832a538d9ba83df4e077b8dd9bace24f40d3c0d5262fc3779b20f0e77`；候选与复验内容 SHA 均为 `c84efd671e2b90e4f69152c3dd04a570d9c378d08fb7a3cb97b86e322f123df0`，状态 SHA `5f058092c29641f9f4d60b46c07d36437798584e4c4c95864d7a3da629a3f82f`，HEAD/tree、文件数 112,010、总字节数 4,260,351,293、dirty 路径数 1,475 均一致，写句柄 0。它与前一 accepted snapshot 的输入内容完全一致，因此不会改变来源内容；按最新快照 ID 重建后，registry SHA 为 `ebd33a89055592314a6d24ea9ddce66dcd3caaca2ead33e301324844a17ec83b`，baseline SHA 为 `4583cca3ba479f271ea1133a32eea286363e11d59e760ad774b253589cdeafdc`，delta SHA 仍为 `689b7761d048e24bf7a879d5d87f4fcd047a527e70b6fdce79ce81a136f49c91`；独立目录重复构建逐字节一致。另一次尝试因误传 HTTPS canonical remote 被门禁拒绝，拒绝证据同分支保留；使用仓库真实 `origin` 后通过。vault 未写入。
 
 
 ## 语义审阅批次 001（2026-10-26）
@@ -109,3 +109,7 @@ Davybase `scripts/run/freeze_snapshot.py freeze` 运行于分支 `codex/knowledg
 ## 语义审阅批次 011（2026-10-26）
 
 第十一批审阅同账号发布的 1 篇净利润与现金流文章，全文哈希匹配 accepted snapshot，路由 K2、pending-verification。其与 2025-05-24 同题旧文可能存在版本关系，但本地内容不足以确认重复；新增现金流管理阈值未提供来源，转换公式也不完整。详见 `semantic-review-2026-10-26-batch-011.tsv`。
+
+## 语义审阅批次 012（2026-10-26）
+
+第十二批完成内控、收入确认与会计凭证证据链 3 篇全文审阅，哈希匹配 accepted snapshot，均路由 K1、pending-verification。五流框架与凭证清单只能作主题参考，不能视为完整内控方案或通用法定资料要求；收入确认文章引用规则的版本与具体交易适用性仍待核。详见 `semantic-review-2026-10-26-batch-012.tsv`。

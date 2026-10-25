@@ -34,3 +34,4 @@ applies_to: knowledge-base
 - `semantic-review-2026-10-26-batch-009.tsv` —— 第九批 3 条 HIGH/K6 全文审阅，包含 2024 年流动资金贷款规则的官方来源核对、模型边界及重复候选记录；均 pending-verification。
 - `semantic-review-2026-10-26-batch-010.tsv` —— 第十批 3 条 HIGH/K2 全文审阅，记录净利润与现金流关系的算例缺项、公式边界及防舞弊表述风险；均 pending-verification。
 - `semantic-review-2026-10-26-batch-011.tsv` —— 第十一批 1 条 HIGH/K2 全文审阅，记录同主题可能更新版、现金流管理阈值缺少依据及公式简化；pending-verification。
+- `semantic-review-2026-10-26-batch-012.tsv` —— 第十二批 3 条 HIGH/K1 全文审阅，覆盖内控五流、收入确认与记账凭证证据链；记录规则概括及清单边界问题，均 pending-verification。
