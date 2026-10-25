@@ -2,12 +2,31 @@
 
 .investigations-index {
   display: grid;
-  gap: 16px;
+  gap: 22px;
+  color: var(--flow-vl-colors-text-primary);
+}
+
+.investigations-index header {
+  max-width: 760px;
+  padding: 4px 0 18px;
+  border-bottom: 1px solid var(--flow-vl-colors-line-default);
+}
+
+.investigations-index__eyebrow {
+  display: inline-block;
+  margin-bottom: 8px;
+  color: var(--flow-vl-colors-brand-gold);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 .investigations-index header h1 {
-  margin: 0 0 8px;
-  font-size: 22px;
+  margin: 0 0 10px;
+  color: var(--flow-vl-colors-brand-navy);
+  font-size: clamp(28px, 3vw, 36px);
+  line-height: 1.15;
 }
 
 .investigations-index header p {
@@ -27,7 +46,59 @@
 }
 
 .investigations-index__table-wrap {
+  min-width: 0;
   overflow-x: auto; /* 窄视口横向滚动在容器内，不撑破页面 */
+  border: 1px solid var(--flow-vl-colors-line-default);
+  border-radius: var(--flow-radius-s);
+  background: var(--flow-vl-colors-surface-paper);
+  box-shadow: var(--flow-shadow-card);
+}
+
+.investigations-index__table-wrap > div {
+  min-width: 760px;
+}
+
+.investigations-index__table table {
+  color: var(--flow-vl-colors-text-secondary);
+}
+
+.investigations-index__table thead th {
+  padding-top: 11px;
+  padding-bottom: 11px;
+  border-color: var(--flow-vl-colors-line-default);
+  background: var(--flow-vl-colors-surface-soft);
+  color: var(--flow-vl-colors-text-muted);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.investigations-index__table thead th button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.investigations-index__table thead th button:hover {
+  color: var(--flow-vl-colors-brand-navy);
+}
+
+.investigations-index__table thead th button:focus-visible {
+  outline: 2px solid var(--flow-vl-colors-brand-gold);
+  outline-offset: 3px;
+}
+
+.investigations-index__table tbody td {
+  padding-top: 11px;
+  padding-bottom: 11px;
+  border-color: var(--flow-vl-colors-line-subtle);
+}
+
+.investigations-index__table tbody tr:hover {
+  background: var(--flow-vl-colors-surface-soft);
 }
 
 .investigations-index__table {
