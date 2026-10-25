@@ -3,7 +3,7 @@ doc_id: FLOW-VERIFY-VISUAL-LANGUAGE-20261024-001
 title: FLOW 可复用视觉语言与全项目视觉覆盖验收
 doc_type: verification
 status: verified
-version: 1.10
+version: 1.11
 created_at: 2026-10-24
 updated_at: 2026-10-25
 owner: FLOW
@@ -18,7 +18,7 @@ applies_to: repository
 
 代码 SHA `1f75792a103af0cbe0d6b483316a26cc958fe391`：复核 20 路由的 34 个可视对象及代表性 API 图表数据，重点核对期间、单位、事实/正负语义、来源链和图表同值表达。图表无障碍名称现包含相关期间与单位；数据工作台批次状态、版本图表增加与图表共用派生行的可展开明细表；瀑布图亏损总额使用负向语义色；盈利能力比较图以显式空值判断保留合法 0 值，并补回归测试。独立新上下文复核未发现 P1/P2。
 
-Web 全量 `pnpm test`：38 个文件、205 项通过；`pnpm typecheck` 与 `pnpm build` 通过；`pnpm lint` 0 错误、4 条 warning（既有 action-panel、module-page、flow-data-table 规则告警）。20 路由×3 视口重新采集，60/60 内容就绪，API/浏览器错误、外部请求及横向溢出均为 0；Axe 4.13 桌面 20 路由 0 violations。矩阵、Axe JSON 和 60 张截图绑定代码 SHA `1f75792a103af0cbe0d6b483316a26cc958fe391`，隔离 synthetic manifest SHA 仍为 `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`。准确 SHA GitHub Actions run `40200680895` 当前 `in_progress`。
+Web 全量 `pnpm test`：38 个文件、205 项通过；`pnpm typecheck` 与 `pnpm build` 通过；`pnpm lint` 0 错误、4 条 warning（既有 action-panel、module-page、flow-data-table 规则告警）。20 路由×3 视口重新采集，60/60 内容就绪，API/浏览器错误、外部请求及横向溢出均为 0；Axe 4.13 桌面 20 路由 0 violations。矩阵、Axe JSON 和 60 张截图绑定代码 SHA `1f75792a103af0cbe0d6b483316a26cc958fe391`，隔离 synthetic manifest SHA 仍为 `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`。该代码 SHA 的 run 在后续文档提交时被替代；最新分支提交的 CI 状态请按 Actions 实时核对。
 
 本轮只完成图表默认态/数据语义的首轮审计；未覆盖所有图谱层级、筛选/导入/报告交互、完整键盘路径、浏览器实际 200% 缩放、HTML/PDF/PPTX/XLSX 模板和打印。视觉工作包继续执行，不能据本轮将它关闭或启动 K2。
 
@@ -26,7 +26,7 @@ Web 全量 `pnpm test`：38 个文件、205 项通过；`pnpm typecheck` 与 `pn
 
 本记录是仍在执行中的视觉统一验收，不表示全部视觉差距已经关闭。
 
-**当前最新证据以本段为准：** 代码 SHA `1f75792a103af0cbe0d6b483316a26cc958fe391`。Web 测试 205/205、typecheck、build 通过，lint 0 错误/4 警告；20×3 矩阵 60/60 ready、错误/请求/溢出为 0；Axe 4.13 桌面 20 路由 0 violations。目录内 60 张矩阵截图、`results.json` 和 `axe-results.json` 均在该 SHA 采集。隔离 manifest SHA `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`。CI run `40200680895` 正在运行。逐图表、交互/键盘、真实 200% 缩放和导出打印仍有待验收，K2 不启动。
+**当前最新证据以本段为准：** 代码 SHA `1f75792a103af0cbe0d6b483316a26cc958fe391`。Web 测试 205/205、typecheck、build 通过，lint 0 错误/4 警告；20×3 矩阵 60/60 ready、错误/请求/溢出为 0；Axe 4.13 桌面 20 路由 0 violations。目录内 60 张矩阵截图、`results.json` 和 `axe-results.json` 均在该 SHA 采集。隔离 manifest SHA `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`。代码 SHA 的旧 run 已由后续文档提交触发的 run 替代；CI 结论按最新提交准确 SHA 在 Actions 实时查询。逐图表、交互/键盘、真实 200% 缩放和导出打印仍有待验收，K2 不启动。
 
 2026-10-25 前一代码阶段验收（准确 SHA `b04a7c5425c340681828f1c15c15f3071b1e2782`）：瀑布图仅负总计时漏算 `hi` 端点造成的 SVG 裁切已修复；负 delta 连接线回到变动前累计值，负值标签显示在柱下。独立复核无 P1/P2；相关 4 个测试文件 33/33、Web typecheck、视觉 token 检查通过。该阶段矩阵和 Axe 结果为历史证据，现由上方 `1f75792a` 当前结果替代。GitHub Actions run `40199235605` 后续取消，不代表当前提交结果。工作包未结案。
 
