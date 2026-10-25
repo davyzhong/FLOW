@@ -41,3 +41,4 @@ applies_to: knowledge-base
 - `semantic-review-2026-10-26-batch-016.tsv` —— 第十六批 3 条 HIGH/K4/K5 全文审阅，覆盖自动导入看板（含疑似重发）与财务分析 PPT 框架；均缺实物/原始数据验证。
 - `semantic-review-2026-10-26-batch-017.tsv` —— 第十七批 3 条 HIGH/K5 驾驶舱蓝本全文审阅；记录演示数据来源、数值排序与未验证产品自述限制。
 - `semantic-review-2026-10-26-batch-018.tsv` —— 第十八批 2 条 HIGH/K5 同源管理报表记录；一条待验证，一条同源副本标记 duplicate，未取得原始 XLSX。
+- `semantic-review-2026-10-26-batch-019.tsv` —— 第十九批对 9 条 HIGH/簇2 内部资料做元数据筛查；标为 project-internal 并排除产品候选，未展开内容审阅。
