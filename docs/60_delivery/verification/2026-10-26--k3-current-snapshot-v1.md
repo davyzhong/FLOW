@@ -3,7 +3,7 @@ doc_id: FLOW-VERIFY-K3-CURRENT-SNAPSHOT-20261026
 title: K3 当前 Obsidian 工作区稳定快照复核
 doc_type: verification
 status: verified
-version: 3.7
+version: 3.8
 created_at: 2026-10-26
 updated_at: 2026-10-26
 owner: FLOW
@@ -410,3 +410,8 @@ W3 MED 第二十四组完成1条全文双审，保留 pending-verification。同
 ## K3 全量语义路由批次 079
 
 按 accepted baseline source_id 顺序审阅12条来源；逐条文件 SHA 与规范化正文 SHA 均匹配。7条路由为 pending-verification，涉及 Claude Code 使用、数据资产化、ERP替代、A股年报/季报汇总、经营分析报告结构和主数据治理；相关工具版本、会计/政策口径、汇总数字、案例与因果未独立核验。数据资产化、经营分析报告、主数据文章125条图片引用按source_baseline.py来源目录及vault根目录回退规则均无法解析，未据图判断。5条拒绝：法务合同产品、采资法产品架构、跨境物流运营标准和Payroll系统资料标 project-internal；新基建宏观投资观点与FLOW范围无直接可复用方法而过滤。coverage累计为9,673条：routed 339、filtered 110、pending_review 9,224；下一批为080。ObsidianWiki与CURRENT_RELEASE未改动。逐条记录见 `../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-079.tsv`。
+
+
+## K3 全量语义路由批次 080
+
+按 accepted baseline source_id 顺序审阅12条来源；逐条文件 SHA 与规范化正文 SHA 均匹配。6条路由为 pending-verification，涉及多智能体协同、经营分析体系、财务分析汇报、企业AI转型、电商数据化运营和数智化框架；其中协议能力、案例、经营/财务指标与技术效果主张均未独立核验。美的经营分析、财务分析汇报、企业AI转型三篇文章的43条图片引用按source_baseline.py来源目录及vault根目录回退规则均无法解析，未据图判断。6条拒绝：企业UAT门槛、菜鸟智能组织实践和双十一项目复盘标 project-internal；需求Review提示模板与两篇个人知识管理内容超出FLOW范围。coverage累计为9,673条：routed 345、filtered 116、pending_review 9,212；下一批为081。ObsidianWiki与CURRENT_RELEASE未改动。逐条记录见 `../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-080.tsv`。
