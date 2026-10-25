@@ -3,7 +3,7 @@ doc_id: FLOW-VERIFY-K3-CURRENT-SNAPSHOT-20261026
 title: K3 当前 Obsidian 工作区稳定快照复核
 doc_type: verification
 status: verified
-version: 2.6
+version: 2.7
 created_at: 2026-10-26
 updated_at: 2026-10-26
 owner: FLOW
@@ -160,7 +160,7 @@ Davybase `scripts/run/freeze_snapshot.py freeze` 运行于分支 `codex/knowledg
 
 第二十五批只按元数据筛查 3 条余下簇2内部架构/讨论/归集材料，未打开正文，标 project-internal/rejected。覆盖追溯发现旧 A-finance 中 AI 财务专题路径已在 ObsidianWiki 提交 `c743b98972d45794d5948787ab65e7fd9afcbad1` 删除；该提交的 Git tree 显示新系统架构路径与旧财务路径指向同一 blob `2b4dd69c5505711c6b2ea3b4fa5fa4a6d1aebcc3`。新路径不在当前 accepted baseline，因此将旧 HIGH 行登记为基线外迁移并排除当前候选；未读取正文，也未将其计入 76 条已审候选。详见 `semantic-review-2026-10-26-batch-025.tsv` 与本次路径/hash 追溯记录。
 
-第二十六至三十一批对旧 W1 MED 17 篇组完成 17 篇双审。coverage 表覆盖 9,673 个当前 baseline source_id，其中 routed 84、filtered 16、pending_review 9,573；严格终态尚未闭合。第30批三篇分别标记为 K2/K1/K4 主域及相关域，均为 pending-verification；财务比率概念/阈值、三表关系简化和无来源投资案例不作产品事实。详见 `semantic-review-2026-10-26-batch-030.tsv`。京东季度拆分项合计高出合并净收入 181.5 亿元；数据驱动看板优先级计数 28,155 高于总量 26,935，占比合计约 104.6%。均未核原始来源前排除产品事实使用。
+第二十六至三十一批对旧 W1 MED 17 篇组完成 17 篇双审。coverage 表覆盖 9,673 个当前 baseline source_id，其中 routed 87、filtered 16、pending_review 9,570；严格终态尚未闭合。第30批三篇分别标记为 K2/K1/K4 主域及相关域，均为 pending-verification；财务比率概念/阈值、三表关系简化和无来源投资案例不作产品事实。详见 `semantic-review-2026-10-26-batch-030.tsv`。京东季度拆分项合计高出合并净收入 181.5 亿元；数据驱动看板优先级计数 28,155 高于总量 26,935，占比合计约 104.6%。均未核原始来源前排除产品事实使用。
 
 
 ## 语义审阅批次 030（2026-10-26）
@@ -170,14 +170,19 @@ Davybase `scripts/run/freeze_snapshot.py freeze` 运行于分支 `codex/knowledg
 
 ## 语义审阅批次 031（2026-10-26）
 
-本批完成旧 W1 MED 17 篇组最后三条来源双审，均匹配 accepted baseline 的正文 SHA，保留 pending-verification。组织绩效模板的目标完成过滤期间与结论期间不一致、正文指标基线与图中警戒线冲突，且权重/评分公式缺少完整口径；营销绩效材料中的 K 值解释、指标利润率以及 40/30/30 权重与复用仪表板口径不一，数据和案例结论缺原始资料；匿名共享中心绩效案例未提供原始样本、数据和统计检验，分钟折算、正态分布与性别/组别因果归因不能独立核实，绩效排名与减编主张不能泛化为制度建议。coverage 更新为 routed 84、filtered 16、pending_review 9,573。详见 `semantic-review-2026-10-26-batch-031.tsv`。
+本批完成旧 W1 MED 17 篇组最后三条来源双审，均匹配 accepted baseline 的正文 SHA，保留 pending-verification。组织绩效模板的目标完成过滤期间与结论期间不一致、正文指标基线与图中警戒线冲突，且权重/评分公式缺少完整口径；营销绩效材料中的 K 值解释、指标利润率以及 40/30/30 权重与复用仪表板口径不一，数据和案例结论缺原始资料；匿名共享中心绩效案例未提供原始样本、数据和统计检验，分钟折算、正态分布与性别/组别因果归因不能独立核实，绩效排名与减编主张不能泛化为制度建议。coverage 更新为 routed 87、filtered 16、pending_review 9,570。详见 `semantic-review-2026-10-26-batch-031.tsv`。
 
 
 ## 语义审阅批次 032（2026-10-26）
 
-从 W3 MED 分层首批抽审三条正文，文件 SHA 与 accepted baseline 一致，均为 pending-verification。回归文章将相关性/拟合度及显著性检验简化为普适判断，示例样本不完整；波特五力的市场进入时点陈述与投票图缺乏可核证据；门店品类调整报告以相邻期间比较推断策略效果，缺少对照/混杂因素控制，正文和图示中的时间、转化与期间指标存在口径差异。coverage 为 routed 84、filtered 16、pending_review 9,573。详见 `semantic-review-2026-10-26-batch-032.tsv`。
+从 W3 MED 分层首批抽审三条正文，文件 SHA 与 accepted baseline 一致，均为 pending-verification。回归文章将相关性/拟合度及显著性检验简化为普适判断，示例样本不完整；波特五力的市场进入时点陈述与投票图缺乏可核证据；门店品类调整报告以相邻期间比较推断策略效果，缺少对照/混杂因素控制，正文和图示中的时间、转化与期间指标存在口径差异。coverage 为 routed 87、filtered 16、pending_review 9,570。详见 `semantic-review-2026-10-26-batch-032.tsv`。
 
 
 ## 语义审阅批次 033（2026-10-26）
 
-W3 MED 第二组抽审三条来源，文件 SHA 与 accepted baseline 一致，处置均 pending-verification。电商驾驶舱列出多类成交/流量/推广指标，但未见统计定义、原始数据和模板复现；零售框架仅提供建议，没有独立验证效率或预测效果；2024-08-08 与 2024-08-22 两篇文章正文高度相似，但原文 URL 和日期不同，未核清来源关系前不合并。正文与生成附录分开取证，不采纳未核附录中的指标数字。coverage 更新为 routed 84、filtered 16、pending_review 9,573。详见 `semantic-review-2026-10-26-batch-033.tsv`。
+W3 MED 第二组抽审三条来源，文件 SHA 与 accepted baseline 一致，处置均 pending-verification。电商驾驶舱列出多类成交/流量/推广指标，但未见统计定义、原始数据和模板复现；零售框架仅提供建议，没有独立验证效率或预测效果；2024-08-08 与 2024-08-22 两篇文章正文高度相似，但原文 URL 和日期不同，未核清来源关系前不合并。正文与生成附录分开取证，不采纳未核附录中的指标数字。coverage 更新为 routed 87、filtered 16、pending_review 9,570。详见 `semantic-review-2026-10-26-batch-033.tsv`。
+
+
+## 语义审阅批次 034（2026-10-26）
+
+W3 MED 第三组抽审三条全文，source SHA 均与 accepted baseline 匹配，处置为 pending-verification。人货匹配模板可参考其问题分解，历史销售不足以独立预测新品需求；BI科普中的边界定义与FineBI实时预警、预算审批等能力未独立验证；零售多场景案例涉及星型模型、购物篮和RFM，但无原始数据/工作簿，AI派生图表数据存在跨图差异，不作事实。coverage 当前 routed 87、filtered 16、pending_review 9,570。详见 `semantic-review-2026-10-26-batch-034.tsv`。
