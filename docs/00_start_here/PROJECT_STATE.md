@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 5.98
+version: 5.99
 created_at: 2026-09-12
 updated_at: 2026-10-26
 owner: FLOW

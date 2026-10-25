@@ -9,7 +9,7 @@ a15b7eb1ce48fd793a628ad6fa0a80d5f96dc047e9ababa3963ae94cead2e2f4  ./00_governanc
 5d41ba2abc2edb342e4e3bd32451feaf6fba96992ac118dd25f4a170fc818ff8  ./00_governance/migration/source-baseline.sha256
 dfe350785e1f1d845d5104ab30a82db2a4477db76ab770838d34a939e11c5482  ./00_governance/migration/source-baseline.tsv
 c041c6922c78f143db788c98fc602e10f3ab6e33fa5eafd518d77bfec08d1b48  ./00_governance/migration/source-id-registry-2026-10-19.tsv
-7579a7e704f1946525b24b0c38c84922abaceb0430ef423df94ed2c1e1a72a3a  ./00_governance/migration/source-id-registry-2026-10-26.tsv
+ebd33a89055592314a6d24ea9ddce66dcd3caaca2ead33e301324844a17ec83b  ./00_governance/migration/source-id-registry-2026-10-26.tsv
 784d2c1580d996e04e3c4c6957ba9aa50d888a2f657bf61b312e98344480745b  ./00_governance/migration/source-inputs-2026-10-19.yaml
 313318f9c4e29603e2d36206f6b536263f9065e70861731cd319cb81818f77e6  ./00_governance/migration/source-inputs-2026-10-26.yaml
 030d3dfde7f02ce7a611f1ac4ea9b1bcf7bc4480ab799543f852434cb664901d  ./00_governance/migration/source-inputs.yaml
@@ -2142,7 +2142,7 @@ ecd3cb7c4fb22de8313fe9cc5e3fe5a567f455a8cc56fe8f236569e2bbaabb60  ./10_sources/S
 a18e8156910880f1b8d211802038bbaceb94aee6c211c2dfc33f35cb699ee705  ./10_sources/snapshots/obsidian-2026-09-12T15-46+08-00.yaml
 6accd8ff3644f8f06eac12c585905d74e11e93aa61c4da33dc74db6cae416274  ./10_sources/snapshots/obsidian-2026-09-12T16-17+08-00.yaml
 901bee24f27c26e12e94518a99665d279dfdec1e333bc4c7a950651386a5af3b  ./10_sources/source-baseline-2026-10-19.tsv
-dcc2b3d01b7fc5200294593c5797b9703c98465d2f0c4eee2ec2c98349a395d4  ./10_sources/source-baseline-2026-10-26.tsv
+add274220d144f88027b942ae48cd17ebbddc1a25c760eb51ebd42362ac8362a  ./10_sources/source-baseline-2026-10-26.tsv
 689b7761d048e24bf7a879d5d87f4fcd047a527e70b6fdce79ce81a136f49c91  ./10_sources/source-delta-2026-10-26.tsv
 ac987729a96d3cad33c6d773ca0021e379247574a156bd0c0d54306c595284e1  ./10_sources/source-diff-2026-10-19.tsv
 9e781828298245be3c9b9e295eb5da825d04c6092393913a0fd8d03c36e70b90  ./10_sources/source-diff-2026-10-26.tsv
