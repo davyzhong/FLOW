@@ -94,6 +94,9 @@
 body { background: var(--flow-vl-colors-surface-canvas); color: var(--flow-vl-colors-text-primary); }
 :where(h1, h2, .page-title, .report-title) { font-family: var(--flow-vl-typography-family-display); }
 :where(button, input, select, textarea) { font-family: inherit; }
+:where(input[type="checkbox"], input[type="radio"], progress) {
+  accent-color: var(--flow-vl-colors-brand-gold);
+}
 :where(:focus-visible) { outline-color: var(--flow-vl-colors-brand-gold); }
 
 * {
