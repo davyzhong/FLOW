@@ -1,16 +1,16 @@
 source_id	terminal_status	evidence_ref
-SRC-LOCAL-v1-000aa0fc671afc7f3cee	pending_review	
-SRC-LOCAL-v1-0013654193b03b2c3de8	pending_review	
-SRC-LOCAL-v1-00188b2df9b66c237170	pending_review	
-SRC-LOCAL-v1-001cdc8849adea3e3ada	pending_review	
-SRC-LOCAL-v1-0024fcdf0ae6825e1d6a	pending_review	
-SRC-LOCAL-v1-003a6bfa4e9a36b00e4b	pending_review	
-SRC-LOCAL-v1-003ccade6a5cf1cc6fc2	pending_review	
-SRC-LOCAL-v1-00413ff1ac40fb16e2f8	pending_review	
-SRC-LOCAL-v1-005ad36f49e78040a423	pending_review	
+SRC-LOCAL-v1-000aa0fc671afc7f3cee	routed	semantic-review-2026-10-26-batch-057.tsv
+SRC-LOCAL-v1-0013654193b03b2c3de8	routed	semantic-review-2026-10-26-batch-057.tsv
+SRC-LOCAL-v1-00188b2df9b66c237170	routed	semantic-review-2026-10-26-batch-057.tsv
+SRC-LOCAL-v1-001cdc8849adea3e3ada	routed	semantic-review-2026-10-26-batch-057.tsv
+SRC-LOCAL-v1-0024fcdf0ae6825e1d6a	routed	semantic-review-2026-10-26-batch-057.tsv
+SRC-LOCAL-v1-003a6bfa4e9a36b00e4b	routed	semantic-review-2026-10-26-batch-057.tsv
+SRC-LOCAL-v1-003ccade6a5cf1cc6fc2	routed	semantic-review-2026-10-26-batch-057.tsv
+SRC-LOCAL-v1-00413ff1ac40fb16e2f8	routed	semantic-review-2026-10-26-batch-057.tsv
+SRC-LOCAL-v1-005ad36f49e78040a423	routed	semantic-review-2026-10-26-batch-057.tsv
 SRC-LOCAL-v1-00625bae4e08042539d1	pending_review	
-SRC-LOCAL-v1-006d850f9fdda2d2ac83	pending_review	
-SRC-LOCAL-v1-00846691448458b6e89a	pending_review	
+SRC-LOCAL-v1-006d850f9fdda2d2ac83	filtered	semantic-review-2026-10-26-batch-057.tsv
+SRC-LOCAL-v1-00846691448458b6e89a	routed	semantic-review-2026-10-26-batch-057.tsv
 SRC-LOCAL-v1-00994a79e28eedb44cc7	pending_review	
 SRC-LOCAL-v1-00a6ebc0f9f987020a4f	pending_review	
 SRC-LOCAL-v1-00aefae1d3290cab36d9	pending_review	

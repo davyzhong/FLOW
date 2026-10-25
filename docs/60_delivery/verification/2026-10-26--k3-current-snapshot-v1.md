@@ -300,3 +300,7 @@ W3 MED 第二十四组完成1条全文双审，保留 pending-verification。同
 ## 跨优先级错误集中度复核
 
 批次001–056的176个唯一 source_id 已完成 HIGH/MED/LOW 风险摘要交叉分析。证据缺失、口径/公式问题、模型阈值泛化及因果/效果证据不足跨层重复；LOW 12条未出现新的路由或处置缺陷，因此不扩样，按序进入全量语义路由。多标签计数与边界见[错误集中度复核报告](2026-10-26--k3-error-concentration-v1.md)。W1 MED 原清单“17篇”计数已复核为18个 source_id（末行合并两篇）；其中两条与 W3 MED 重合，W3 其余70条单独审阅。
+
+## 全量语义路由批次 057（2026-10-26）
+
+基于 accepted snapshot 核验首批12个按 baseline source_id 升序的待审 Wiki 来源，12条正文/元数据文件 SHA 均与 baseline 一致。10条完成主题路由并保留 pending-verification；1条含内部HR/薪酬/OKR信息，设 project-internal/rejected 并计入 filtered；1条baseline条目仅存YAML空壳；发现同标题全文位于当前allowlist外且出处未核，未用范围外正文替代accepted来源，标 locator-only / pending-review。coverage 更新为 routed 168、filtered 19、pending_review 9,486。逐条记录见 `../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-057.tsv`。
