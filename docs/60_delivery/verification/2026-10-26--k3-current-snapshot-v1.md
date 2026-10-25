@@ -251,3 +251,8 @@ W3 MED 第十五组完成三条全文双审，均为 pending-verification。财�
 ## 语义审阅批次 047（2026-10-26）
 
 W3 MED 第十六组完成三条全文双审，均保留 pending-verification。人效案例的绩效/晋升/薪酬图表无可追溯依据且涉及人事数据；转型失败70%断言未给研究；电商盈利引用中报告名称与TOP100数据期间关系不明，退货率敏感度缺方法。coverage 为 routed 126、filtered 16、pending_review 9,531。详见 `semantic-review-2026-10-26-batch-047.tsv`。
+
+
+## 语义审阅批次 048（2026-10-26）
+
+W3 MED 第十七组完成三条全文双审，均保留 pending-verification。财务文章所述马斯克审计团队效率、五角大楼预算黑洞及95%岗位替代未给可核来源，AI附录置信度标注不是证据；分析方法案例附录不可复算，关联不能推作因果；LTV/CAC≥3未定义收益口径与回收期，非普适阈值。coverage 为 routed 129、filtered 16、pending_review 9,528。详见 `semantic-review-2026-10-26-batch-048.tsv`。
