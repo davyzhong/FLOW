@@ -3,7 +3,7 @@ doc_id: FLOW-VERIFY-K3-CURRENT-SNAPSHOT-20261026
 title: K3 当前 Obsidian 工作区稳定快照复核
 doc_type: verification
 status: verified
-version: 3.8
+version: 3.9
 created_at: 2026-10-26
 updated_at: 2026-10-26
 owner: FLOW
@@ -415,3 +415,8 @@ W3 MED 第二十四组完成1条全文双审，保留 pending-verification。同
 ## K3 全量语义路由批次 080
 
 按 accepted baseline source_id 顺序审阅12条来源；逐条文件 SHA 与规范化正文 SHA 均匹配。6条路由为 pending-verification，涉及多智能体协同、经营分析体系、财务分析汇报、企业AI转型、电商数据化运营和数智化框架；其中协议能力、案例、经营/财务指标与技术效果主张均未独立核验。美的经营分析、财务分析汇报、企业AI转型三篇文章的43条图片引用按source_baseline.py来源目录及vault根目录回退规则均无法解析，未据图判断。6条拒绝：企业UAT门槛、菜鸟智能组织实践和双十一项目复盘标 project-internal；需求Review提示模板与两篇个人知识管理内容超出FLOW范围。coverage累计为9,673条：routed 345、filtered 116、pending_review 9,212；下一批为081。ObsidianWiki与CURRENT_RELEASE未改动。逐条记录见 `../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-080.tsv`。
+
+
+## K3 全量语义路由批次 081
+
+按 accepted baseline source_id 顺序审阅12条来源；逐条文件 SHA 与规范化正文 SHA 均匹配。6条路由为 pending-verification，涉及财务账务自查、预算管理、财务分析资源、AI Native研发、应收应付汇报和财务健康指标；会计规则、指标阈值、工具能力及行业实践未独立核验。四篇带图来源共137条图片引用按source_baseline.py来源目录及vault根目录回退规则均无法解析，未据图判断。6条拒绝：SRM规划、AR/AP结算运营、供应商风险系统和合同AI资料标 project-internal；OpenManus代码走读与数据库工具清单超出FLOW范围。coverage累计为9,673条：routed 351、filtered 122、pending_review 9,200；下一批为082。ObsidianWiki与CURRENT_RELEASE未改动。逐条记录见 `../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-081.tsv`。
