@@ -7273,11 +7273,11 @@ management-fd8d8cfb06d4	pending_review
 management-fe815fcb444a	pending_review	
 management-ffeae0c645a2	pending_review	
 wechat-0018d9988ded	pending_review	
-wechat-008c34240b03	pending_review	
+wechat-008c34240b03	routed	semantic-review-2026-10-26-batch-052.tsv
 wechat-00a1d3163370	pending_review	
 wechat-00a5d39957c6	pending_review	
 wechat-00b709e4a77b	pending_review	
-wechat-00f1f306d5e0	pending_review	
+wechat-00f1f306d5e0	routed	semantic-review-2026-10-26-batch-052.tsv
 wechat-0124f3c02286	pending_review	
 wechat-014b030e237d	pending_review	
 wechat-014f70e4d8c1	routed	semantic-review-2026-10-26-batch-044.tsv
@@ -7498,7 +7498,7 @@ wechat-22b178addcbf	pending_review
 wechat-235d3bc5b54a	pending_review	
 wechat-238feacfbcde	routed	semantic-review-2026-10-26-batch-042.tsv
 wechat-23b9c38aab6a	pending_review	
-wechat-23c79bd39cd2	pending_review	
+wechat-23c79bd39cd2	routed	semantic-review-2026-10-26-batch-052.tsv
 wechat-23f141ebd9b4	pending_review	
 wechat-23f7782485e5	pending_review	
 wechat-24404528d216	pending_review	

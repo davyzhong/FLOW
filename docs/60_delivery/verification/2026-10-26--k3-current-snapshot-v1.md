@@ -271,3 +271,8 @@ W3 MED 第十九组完成三条全文双审，均为 pending-verification。母�
 ## 语义审阅批次 051（2026-10-26）
 
 W3 MED 第二十组完成三条全文双审，均保留 pending-verification。模型合集“8种”标题与“15种”摘要不一致；RFM分位阈值依赖样本、M口径可变；折扣购买筛选不能证明“羊毛党”身份，案例人数和策略收益缺复核。coverage 为 routed 138、filtered 16、pending_review 9,519。详见 `semantic-review-2026-10-26-batch-051.tsv`。
+
+
+## 语义审阅批次 052（2026-10-26）
+
+W3 MED 第二十一组完成三条全文双审，均保留 pending-verification。人货场实例使用2020年天猫美妆数据，发布时已滞后近四年且受前1000万行截断；618派生指标/归因未作对照验证；5W2H是问题拆解工具，不是因果/效果证明。coverage 为 routed 141、filtered 16、pending_review 9,516。详见 `semantic-review-2026-10-26-batch-052.tsv`。
