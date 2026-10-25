@@ -3,7 +3,7 @@ doc_id: FLOW-SRC-README-001
 title: 来源与证据层
 doc_type: navigation
 status: current
-version: 1.2
+version: 1.3
 created_at: 2026-09-12
 updated_at: 2026-10-26
 owner: FLOW
@@ -46,3 +46,5 @@ applies_to: knowledge-base
 - `semantic-review-2026-10-26-batch-020.tsv` —— 第二十批 3 条 HIGH/簇3 经营分析方法全文审阅；示例数据、阈值和效果缺少独立依据，均待核验。
 
 - `semantic-review-2026-10-26-batch-021.tsv` —— 第二十一批 3 条 HIGH/簇3 记录：KPI/阈值证据缺失、同发布物副本去重，以及可能含内部经营数据的报告元数据筛查。
+
+- `semantic-review-2026-10-26-batch-022.tsv` —— 第二十二批 3 条 HIGH/簇3 全文审阅，记录案例证据缺失、不同日期/URL 的同题文章暂不合并，以及业务映射文章的示例阈值不采纳。
