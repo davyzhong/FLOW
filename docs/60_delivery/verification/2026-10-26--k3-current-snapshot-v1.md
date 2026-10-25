@@ -221,3 +221,8 @@ W3 MED 第九组完成三条全文双审，正文 SHA 匹配 accepted baseline �
 ## 语义审阅批次 041（2026-10-26）
 
 W3 MED 第十组完成三条全文双审，正文 SHA 匹配 accepted baseline 且此前未审，均为 pending-verification。金融机构指标及“监管合规/实时”看板主张无权威定义和独立验证；电商销售渠道案例原始底表未附，AI生成附录2017销售额同比计算与其列出的年度数不符（24,491,328相对27,902,378约为-12.22%（精确值-12.22494%），非-19.21%）；女装RFM、购物篮阈值与策略不可脱离案例样本泛化。coverage 为 routed 108、filtered 16、pending_review 9,549。详见 `semantic-review-2026-10-26-batch-041.tsv`。
+
+
+## 语义审阅批次 042（2026-10-26）
+
+W3 MED 第十一组完成三条全文双审，正文 SHA 匹配 accepted baseline 且此前未审，均为 pending-verification。业财BI厂商宣称报表时间缩短80%、培训200人等缺可核基线，BI分析不等同总账核算/自动合规；Excel/BI“效率分”无定义及基准；电商对账示例未给完整结账差异闭环，建模须验证明细粒度、唯一键、维度版本及退款/拆单造成的重复风险，对账证据与审批不能由看板替代。coverage 为 routed 111、filtered 16、pending_review 9,546。详见 `semantic-review-2026-10-26-batch-042.tsv`。
