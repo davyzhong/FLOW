@@ -256,3 +256,8 @@ W3 MED 第十六组完成三条全文双审，均保留 pending-verification。�
 ## 语义审阅批次 048（2026-10-26）
 
 W3 MED 第十七组完成三条全文双审，均保留 pending-verification。财务文章所述马斯克审计团队效率、五角大楼预算黑洞及95%岗位替代未给可核来源，AI附录置信度标注不是证据；分析方法案例附录不可复算，关联不能推作因果；LTV/CAC≥3未定义收益口径与回收期，非普适阈值。coverage 为 routed 129、filtered 16、pending_review 9,528。详见 `semantic-review-2026-10-26-batch-048.tsv`。
+
+
+## 语义审阅批次 049（2026-10-26）
+
+W3 MED 第十八组完成三条全文双审，均保留 pending-verification。BI市场规模及前三档渗透率缺来源与分类定义，附录虽将智能BI 100%标作理论目标但未给定义或依据；六步流程图仅作概览而不替代数据治理控制；36模型清单不代表完整或有效。coverage 为 routed 132、filtered 16、pending_review 9,525。详见 `semantic-review-2026-10-26-batch-049.tsv`。
