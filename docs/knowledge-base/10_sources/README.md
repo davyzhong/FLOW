@@ -39,3 +39,4 @@ applies_to: knowledge-base
 - `semantic-review-2026-10-26-batch-014.tsv` —— 第十四批 4 条 HIGH 全文审阅，覆盖 AI 财务、业财模型与分析框架；促销内容、无来源数字、缺公式/验证等均留待核验。
 - `semantic-review-2026-10-26-batch-015.tsv` —— 第十五批 3 条 HIGH/K5 全文审阅，覆盖财务能力看板与动态指标切换；阈值冲突、匿名案例和简化公式留待核验。
 - `semantic-review-2026-10-26-batch-016.tsv` —— 第十六批 3 条 HIGH/K4/K5 全文审阅，覆盖自动导入看板（含疑似重发）与财务分析 PPT 框架；均缺实物/原始数据验证。
+- `semantic-review-2026-10-26-batch-017.tsv` —— 第十七批 3 条 HIGH/K5 驾驶舱蓝本全文审阅；记录演示数据来源、数值排序与未验证产品自述限制。
