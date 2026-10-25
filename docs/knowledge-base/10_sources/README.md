@@ -33,3 +33,4 @@ applies_to: knowledge-base
 - `semantic-review-2026-10-26-batch-008.tsv` —— 第八批 3 条 HIGH/K6 全文审阅，覆盖资金预测方法与现金流模型；记录模型简化和两篇疑似重复发布，均 pending-verification。
 - `semantic-review-2026-10-26-batch-009.tsv` —— 第九批 3 条 HIGH/K6 全文审阅，包含 2024 年流动资金贷款规则的官方来源核对、模型边界及重复候选记录；均 pending-verification。
 - `semantic-review-2026-10-26-batch-010.tsv` —— 第十批 3 条 HIGH/K2 全文审阅，记录净利润与现金流关系的算例缺项、公式边界及防舞弊表述风险；均 pending-verification。
+- `semantic-review-2026-10-26-batch-011.tsv` —— 第十一批 1 条 HIGH/K2 全文审阅，记录同主题可能更新版、现金流管理阈值缺少依据及公式简化；pending-verification。
