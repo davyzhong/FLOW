@@ -3,7 +3,7 @@ doc_id: FLOW-VERIFY-K3-CURRENT-SNAPSHOT-20261026
 title: K3 当前 Obsidian 工作区稳定快照复核
 doc_type: verification
 status: verified
-version: 2.1
+version: 2.2
 created_at: 2026-10-26
 updated_at: 2026-10-26
 owner: FLOW
@@ -160,4 +160,4 @@ Davybase `scripts/run/freeze_snapshot.py freeze` 运行于分支 `codex/knowledg
 
 第二十五批只按元数据筛查 3 条余下簇2内部架构/讨论/归集材料，未打开正文，标 project-internal/rejected。覆盖追溯发现旧 A-finance 中 AI 财务专题路径已在 ObsidianWiki 提交 `c743b98972d45794d5948787ab65e7fd9afcbad1` 删除；该提交的 Git tree 显示新系统架构路径与旧财务路径指向同一 blob `2b4dd69c5505711c6b2ea3b4fa5fa4a6d1aebcc3`。新路径不在当前 accepted baseline，因此将旧 HIGH 行登记为基线外迁移并排除当前候选；未读取正文，也未将其计入 76 条已审候选。详见 `semantic-review-2026-10-26-batch-025.tsv` 与本次路径/hash 追溯记录。
 
-第二十六至二十八批对旧 W1 MED 17 篇组完成 9 篇双审。coverage 表覆盖 9,673 个当前 baseline source_id，其中 routed 69、filtered 16、pending_review 9,588；严格终态尚未闭合。京东季度拆分项合计高出合并净收入 181.5 亿元；数据驱动看板优先级计数 28,155 高于总量 26,935，占比合计约 104.6%。均未核原始来源前排除产品事实使用。
+第二十六至二十九批对旧 W1 MED 17 篇组完成 12 篇双审。coverage 表覆盖 9,673 个当前 baseline source_id，其中 routed 72、filtered 16、pending_review 9,585；严格终态尚未闭合。京东季度拆分项合计高出合并净收入 181.5 亿元；数据驱动看板优先级计数 28,155 高于总量 26,935，占比合计约 104.6%。均未核原始来源前排除产品事实使用。
