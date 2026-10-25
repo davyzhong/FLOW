@@ -3,7 +3,7 @@ doc_id: FLOW-VERIFY-K3-CURRENT-SNAPSHOT-20261026
 title: K3 当前 Obsidian 工作区稳定快照复核
 doc_type: verification
 status: verified
-version: 3.3
+version: 3.4
 created_at: 2026-10-26
 updated_at: 2026-10-26
 owner: FLOW
@@ -393,3 +393,7 @@ W3 MED 第二十四组完成1条全文双审，保留 pending-verification。同
 ## K3 全量语义路由批次 075
 
 按 accepted baseline source_id 顺序审阅12条来源；逐条文件 SHA 与正文规范化 SHA 均匹配。7条路由为 pending-verification，涉及AI开发工具、政策解读、市场分析、API/MCP、AAR、电商运营和未核验模型架构；具体技术版本、政策因果、指标口径及效果均不作为已核事实。目标市场分析的1条和电商运营的47条图片引用按source_baseline.py的来源目录/ vault根目录回退规则均无法解析，未据图判断。5条拒绝：1条企业自动驾驶经营数据、1条采购本体规划标 project-internal；另有不可追溯AI生成汇编、无正文的自动目录和范围外个人创作文章。coverage累计为9,673条：routed 313、filtered 88、pending_review 9,272；下一批为076。ObsidianWiki与CURRENT_RELEASE未改动。逐条记录见 `../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-075.tsv`。
+
+## K3 全量语义路由批次 076
+
+按 accepted baseline source_id 顺序审阅12条来源；逐条文件 SHA 与正文规范化 SHA 均匹配。8条路由为 pending-verification，涉及财务岗位能力、资金预测、AI研发效能、垂直领域AI、人效、AI辅助开发、增长分析和RPA/IPA；薪资、效益、预测假设、效能指标、商业模式及技术市场主张均不作为已核事实。两篇来源共36条图像引用按source_baseline.py的来源目录/ vault根目录回退规则均无法解析，未据图判断。4条拒绝：绩效模板、采购平台标准与团队管理笔记涉内部人事/产品治理；另1条为范围外职业建议。coverage累计为9,673条：routed 321、filtered 92、pending_review 9,260；下一批为077。ObsidianWiki与CURRENT_RELEASE未改动。逐条记录见 `../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-076.tsv`。
