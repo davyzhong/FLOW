@@ -3,7 +3,7 @@ doc_id: FLOW-VERIFY-K3-CURRENT-SNAPSHOT-20261026
 title: K3 当前 Obsidian 工作区稳定快照复核
 doc_type: verification
 status: verified
-version: 3.6
+version: 3.7
 created_at: 2026-10-26
 updated_at: 2026-10-26
 owner: FLOW
@@ -400,8 +400,13 @@ W3 MED 第二十四组完成1条全文双审，保留 pending-verification。同
 
 ## K3 全量语义路由批次 077
 
-按 accepted baseline source_id 顺序审阅12条来源；逐条文件 SHA 与正文规范化 SHA 均匹配。6条路由为 pending-verification，涉及AI驱动PRD、Lobster工作流、毛利率分析、AI原生CRM、LLM Wiki及AI经营分析；协议/产品能力、分析口径、知识库范式和模型效果均不作为已核事实。经营分析案例的8条图片引用按source_baseline.py的来源目录/ vault根目录回退规则均无法解析，未据图判断。6条拒绝：4条特定企业AI调用量、技术财务复盘、组织绩效及客服AHT资料标 project-internal；经济学课程简介与一般思维文章属范围外。coverage累计为9,673条：routed 327、filtered 98、pending_review 9,248；下一批为078。ObsidianWiki与CURRENT_RELEASE未改动。逐条记录见 `../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-077.tsv`。
+按 accepted baseline source_id 顺序审阅12条来源；逐条文件 SHA 与正文规范化 SHA 均匹配。7条路由为 pending-verification，涉及AI驱动PRD、Lobster工作流、毛利率分析、AI原生CRM、LLM Wiki及AI经营分析；协议/产品能力、分析口径、知识库范式和模型效果均不作为已核事实。经营分析案例的8条图片引用按source_baseline.py的来源目录/ vault根目录回退规则均无法解析，未据图判断。5条拒绝：4条特定企业AI调用量、技术财务复盘、组织绩效及客服AHT资料标 project-internal；经济学课程简介与一般思维文章属范围外。coverage累计为9,673条：routed 327、filtered 98、pending_review 9,248；下一批为078。ObsidianWiki与CURRENT_RELEASE未改动。逐条记录见 `../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-077.tsv`。
 
 ## K3 全量语义路由批次 078
 
 按 accepted baseline source_id 顺序审阅12条来源；逐条文件 SHA 与正文规范化 SHA 均匹配。5条路由为 pending-verification，涉及报告叙事、财务指标、AI行业应用、业务敏感度及AI硬件趋势；指标公式与适用边界、报告口径、行业效果和市场/技术趋势均不作为已核事实。财务指标文章32条图片引用按source_baseline.py来源目录及vault根目录回退规则均无法解析，未据图判断。7条拒绝：4条特定企业研发KPI、战略规划、制造系统和HR/法务产品资料标 project-internal；法务AI、课程投资观点与财务职业建议超出FLOW知识范围。coverage累计为9,673条：routed 332、filtered 105、pending_review 9,236；下一批为079。ObsidianWiki与CURRENT_RELEASE未改动。逐条记录见 `../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-078.tsv`。
+
+
+## K3 全量语义路由批次 079
+
+按 accepted baseline source_id 顺序审阅12条来源；逐条文件 SHA 与规范化正文 SHA 均匹配。7条路由为 pending-verification，涉及 Claude Code 使用、数据资产化、ERP替代、A股年报/季报汇总、经营分析报告结构和主数据治理；相关工具版本、会计/政策口径、汇总数字、案例与因果未独立核验。数据资产化、经营分析报告、主数据文章125条图片引用按source_baseline.py来源目录及vault根目录回退规则均无法解析，未据图判断。5条拒绝：法务合同产品、采资法产品架构、跨境物流运营标准和Payroll系统资料标 project-internal；新基建宏观投资观点与FLOW范围无直接可复用方法而过滤。coverage累计为9,673条：routed 339、filtered 110、pending_review 9,224；下一批为080。ObsidianWiki与CURRENT_RELEASE未改动。逐条记录见 `../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-079.tsv`。
