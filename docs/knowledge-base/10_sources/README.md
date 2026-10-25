@@ -3,7 +3,7 @@ doc_id: FLOW-SRC-README-001
 title: 来源与证据层
 doc_type: navigation
 status: current
-version: 1.8
+version: 1.9
 created_at: 2026-09-12
 updated_at: 2026-10-26
 owner: FLOW
@@ -17,6 +17,7 @@ applies_to: knowledge-base
 - `SOURCE_REGISTER.md` —— 来源登记册（人类可读）与分层登记策略
 - `source-register.tsv` —— 机器可读登记（活登记，知识卡按需追加篇级）
 - `snapshots/` —— 固定截面定义（当前唯一截面：obsidian-2026-09-12T15:46+08:00）
+- `coverage-2026-10-26.tsv`、`coverage-exceptions-2026-10-26.tsv` 与 `../00_governance/change-manifests/obsidianwiki-20261026T005516+0800-d601b4d5-l2.tsv` —— 9,673 个来源的逐 ID 进度、例外与变更追溯；当前 routed 63、filtered 16、pending_review 9,594。
 - `source-baseline-2026-10-26.tsv`、`source-delta-2026-10-26.tsv`、
   `source-diff-2026-10-26.tsv` 与 `../00_governance/migration/source-id-registry-2026-10-26.tsv`
   —— K3 当前资料内容来自 `obsidianwiki-20261026T005516+0800-d601b4d5`。当前 registry/baseline/delta 已统一绑定该 accepted snapshot；已审阅条目的语义字段按批次登记，其余来源仍待审，不能视为已路由或可采纳。详见[当前快照与基线复核](../../60_delivery/verification/2026-10-26--k3-current-snapshot-v1.md)。
@@ -54,4 +55,5 @@ applies_to: knowledge-base
 - `semantic-review-2026-10-26-batch-024.tsv` —— 第二十四批 2 条 HIGH/簇3 审阅：闭环案例 Getnote 笔记与既有文章高度相似但原文关联未核，暂不标 duplicate；经营驱动树文章保留待验证，未采纳无来源数字与 BI 能力主张。
 
 - `semantic-review-2026-10-26-batch-025.tsv` —— 第二十五批 3 条 HIGH/簇2 内部业财架构与规则资料，均只作元数据筛查并标 project-internal/rejected。
+- `semantic-review-2026-10-26-batch-026.tsv` —— 第二十六批旧 W1 MED 组首 3 条双审；原始事实未逐项核对，京东分部收入差额列为不可用于产品事实的风险。
 - 旧 A-finance HIGH 清单中的 AI 财务专题经 ObsidianWiki Git 提交 `c743b98972d45794d5948787ab65e7fd9afcbad1` 证实为跨目录同 blob 迁移；迁入路径不在当前 accepted baseline，故作为基线外迁移从本轮候选排除，不计入 76 条已审候选，正文未打开。详见当前快照复核报告。
