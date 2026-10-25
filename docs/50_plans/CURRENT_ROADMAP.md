@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 14.1
+version: 14.2
 created_at: 2026-09-12
 updated_at: 2026-10-26
 owner: FLOW
@@ -17,7 +17,7 @@ superseded_by: null
 
 # 当前路线图（唯一主线）
 
-> **2026-10-26 最新状态：** D055 单机原型 7a.1–7a.8 已合入 main；视觉语言包及全项目页面、图表、报告/离线输出和 README 视觉统一已完成。路线图仍为 16 项：完成 10、实际执行中 1（K 轨 K3）、排队 3、暂停 1、外部条件受限 1。视觉覆盖验收：隔离 synthetic manifest `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed` 下验证器 19/19、可见性矩阵 164/164（154 HTTP 200、10 预期拒绝、0 失败）、Playwright 17/17；20 路由×3 视口 60/60 与 Axe 桌面 20 路由零违规仍对应应用 SHA `01e8e25dd426ed43ad6a2cad76544bbbe623eb99`。最新 E2E 断言修复已提交于 `d01daa11`，独立复核无 P1/P2，`git diff --check` 通过。原生浏览器 200% 缩放因 Mac 锁屏且当前工具不能操作 Edge 工具栏，未直接验收；390/360 CSS px 证据不替代。按外部条件受限替代结案，待设备解锁且可控工具可用时补验。当前分支 `codex/flow-visual-language` / PR #5；工作包结案文档随后提交并以准确 SHA 查询 GitHub CI。视觉包证据见[覆盖验收](../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。下一唯一事项 K 轨当前子步为 K3 语义审阅前置复核：当前 accepted snapshot `obsidianwiki-20261026T005516+0800-d601b4d5`（manifest SHA `593715c832a538d9ba83df4e077b8dd9bace24f40d3c0d5262fc3779b20f0e77`）候选/复验一致、内容 SHA `c84efd671e2b90e4f69152c3dd04a570d9c378d08fb7a3cb97b86e322f123df0`、可写句柄 0。新 snapshot 与之前 K3 基线内容指纹一致；registry/baseline/delta 已绑定最新 snapshot 并重复构建一致。当前按序进行全量逐条主题路由及 coverage 闭合；全量路由已完成至第091批，coverage 为 routed 415、filtered 176、pending_review 9,082；下一动作是第092批。当前有五个 locator-only / pending-review 例外（新增 `SRC-LOCAL-v1-0de553da4d8d857b90d3`；其他包括 `SRC-LOCAL-v1-00625bae4e08042539d1`、`SRC-LOCAL-v1-0428a240b0361157ffa1`、`SRC-LOCAL-v1-057cabfb9baca9f47c44` 和 `SRC-LOCAL-v1-0bd79ce2c2d600301852`），均未使用范围外内容或链接标题推断。HIGH 全读及 MED/LOW 双审已完成。旧 10-19 baseline/diff 保留为历史结果。ObsidianWiki 和 `CURRENT_RELEASE` 保持不变。
+> **2026-10-26 最新状态：** D055 单机原型 7a.1–7a.8 已合入 main；视觉语言包及全项目页面、图表、报告/离线输出和 README 视觉统一已完成。路线图仍为 16 项：完成 10、实际执行中 1（K 轨 K3）、排队 3、暂停 1、外部条件受限 1。视觉覆盖验收：隔离 synthetic manifest `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed` 下验证器 19/19、可见性矩阵 164/164（154 HTTP 200、10 预期拒绝、0 失败）、Playwright 17/17；20 路由×3 视口 60/60 与 Axe 桌面 20 路由零违规仍对应应用 SHA `01e8e25dd426ed43ad6a2cad76544bbbe623eb99`。最新 E2E 断言修复已提交于 `d01daa11`，独立复核无 P1/P2，`git diff --check` 通过。原生浏览器 200% 缩放因 Mac 锁屏且当前工具不能操作 Edge 工具栏，未直接验收；390/360 CSS px 证据不替代。按外部条件受限替代结案，待设备解锁且可控工具可用时补验。当前分支 `codex/flow-visual-language` / PR #5；工作包结案文档随后提交并以准确 SHA 查询 GitHub CI。视觉包证据见[覆盖验收](../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。下一唯一事项 K 轨当前子步为 K3 语义审阅前置复核：当前 accepted snapshot `obsidianwiki-20261026T005516+0800-d601b4d5`（manifest SHA `593715c832a538d9ba83df4e077b8dd9bace24f40d3c0d5262fc3779b20f0e77`）候选/复验一致、内容 SHA `c84efd671e2b90e4f69152c3dd04a570d9c378d08fb7a3cb97b86e322f123df0`、可写句柄 0。新 snapshot 与之前 K3 基线内容指纹一致；registry/baseline/delta 已绑定最新 snapshot 并重复构建一致。当前按序进行全量逐条主题路由及 coverage 闭合；全量路由已完成至第092批，coverage 为 routed 427、filtered 176、pending_review 9,070；下一动作是第093批。当前有五个 locator-only / pending-review 例外（新增 `SRC-LOCAL-v1-0de553da4d8d857b90d3`；其他包括 `SRC-LOCAL-v1-00625bae4e08042539d1`、`SRC-LOCAL-v1-0428a240b0361157ffa1`、`SRC-LOCAL-v1-057cabfb9baca9f47c44` 和 `SRC-LOCAL-v1-0bd79ce2c2d600301852`），均未使用范围外内容或链接标题推断。HIGH 全读及 MED/LOW 双审已完成。旧 10-19 baseline/diff 保留为历史结果。ObsidianWiki 和 `CURRENT_RELEASE` 保持不变。
 
 > 当前完结目标依据 D055：交付本机单用户可启动、可加载/重置演示业务、可看丰富 CFO 图表、可下钻追溯、可分析和导出报告、可备份恢复、可离线浏览的验证原型。公开 C 级、知识刷新、真实企业三周期仍未完成，保留在长期队列，不作为本原型无限延期的理由。**下方 2026-10-21 及以前的状态段落均为历史，当前只按本段及唯一执行队列。**
 
@@ -96,7 +96,7 @@ superseded_by: null
 | 2a | [大麦物流完整财年演示数据](work_items/DAMAI--full-year-demo.md) | **active（按用户新标准重开；CFO 队首子包，不另列任务）** | 已批准规格；不依赖公开 C 级 | D1–D3 旧版已集成 main `e22d193`，CI run `36137591750` 17/17；原隔离栈验收证据保留。用户 2026-10-12 新增来源事实要求后，旧包仅作为基础夹具完成；需在 CFO 唯一队首中重建来源登记、转换血缘及假设值处置，不与 CFO 并行执行 |
 | 2b | [大麦数据后的剩余体验收口](work_items/UX--post-damai-experience-closeout.md) | **completed** | G2 ✓；用户已批准；ORG-LEDGER CI ✓ | Gate1/Gate5关闭：隔离 Dashboard 7/7；大麦验收 verify19/19、GET矩阵159项零意外、Playwright15/15；生产E2E157/157、Web143/143、mypy203文件、typecheck/lint、M1/链接检查通过；提交`0144bad4`同SHA CI run `36371507389` 17/17 success。常驻库未触碰。 |
 | 2c | [企业组织建制与经营账套初始化包](work_items/ORG-LEDGER--enterprise-initialization-package.md) | **completed** | 大麦发行包 completed；批准三表 schema | `2c7d6eb4`；CI run `36270782272` 的17/17 jobs success。隔离 `full` 首次/重复与 `business` 对账通过；11 个企业/loader 测试、全量 API 852、Web142、脚本107、大麦 verify19/19、API43/43、Playwright9/9、合同/文档/lint/typecheck 均通过。31文件 manifest 稳定 SHA `cbc7cccf…e513`。 |
-| K | [第二代静态知识刷新与战略重基线](work_items/KNOWLEDGE--refresh-v2.md) | **active（K3 全量语义路由）** | K0–K2 完成；HIGH/MED/LOW审阅与错误集中度复核已完成 | 9,673个来源：routed 415、filtered 176、pending_review 9,082。全量路由至第091批；6条待核、6条企业内部或范围外来源过滤。华为经营分析文章17条图片引用未解析，不据图推断；5个locator-only例外继续待审，不使用范围外内容或链接标题推断。下一批第092批；随后完成coverage闭合、知识综合、独立reader与结案门禁；`CURRENT_RELEASE`不变。详见工作包。 |
+| K | [第二代静态知识刷新与战略重基线](work_items/KNOWLEDGE--refresh-v2.md) | **active（K3 全量语义路由）** | K0–K2 完成；HIGH/MED/LOW审阅与错误集中度复核已完成 | 9,673个来源：routed 427、filtered 176、pending_review 9,070。全量路由至第092批；12条待独立核验。库存健康看板正文14条图片引用未解析，不据图推断；5个locator-only例外继续待审，不使用范围外内容或链接标题推断。下一批第093批；随后完成coverage闭合、知识综合、独立reader与结案门禁；`CURRENT_RELEASE`不变。详见工作包。 |
 | 3 | [公开财报模块 C 级出口](work_items/PUBLIC--c-level-exit-protocol.md) | **active（C级门禁未通过）** | 行身份修订与样本冻结 ✓ | 本轮证据审计已作 No-Go（证据不足，不是准确率判负）；当前队首转入 U04，C级仍无14份完整独立 oracle、新 holdout 首跑及成品盲评 |
 | 3a | [溯源/重述/只读 MCP](work_items/PUBLIC--provenance-restatement-mcp.md) | **completed** | — | B3 溯源 95.5% 行项目带页锚（迁移 0029 + 导入/API/前端）；B4 supersedes 链 + 差异脚本；B5 只读 MCP 三工具（token fail-closed）；B6 确定性差异说明起草 |
 | 3b | [数据扩张、行业基准与 10× 性能基线](work_items/PUBLIC--data-expansion-benchmarks.md) | **active（队列排队，不并行启动）** | 性能基线 ✓；扩张待外部财报 | G2 完成：10×（1034→10340 行）P95 明细 6.2ms/检索 0.97ms/聚合 1.11ms（`perf_baseline.py`）；C1 扩张需真实财报到料 |
@@ -125,7 +125,7 @@ superseded_by: null
 | 4 | U04 解析与盲评复评 | 已完成（限定样本） | 旧三样本 199/199，不等于全部报告 oracle 完成 |
 | 5 | C 级质量基准与 Go/No-Go | 已完成（裁定 No-Go） | 部分条件后续已有改善，仍无整体验收 Go |
 | 6 | P3 真实数据/来源与行业扩张 | 暂停 | 历史 ZTO 封存已于 2026-10-16 恢复合并，不重复合并；其余扩张暂缓 |
-| 7（原 K） | 第二代静态知识刷新 | **进行中：K3 全量语义路由与 coverage 闭合** | registry/baseline 与 9,958 ID 累计 diff 已复验；HIGH 全文、MED/LOW 双审和错误集中度复核已完成。全量路由至第091批，coverage 9,673条（routed 415、filtered 176、pending_review 9,082）；5个locator-only例外保持待审；下一步第092批，之后完成知识综合、独立 reader 与结案门禁；CURRENT_RELEASE 不变 |
+| 7（原 K） | 第二代静态知识刷新 | **进行中：K3 全量语义路由与 coverage 闭合** | registry/baseline 与 9,958 ID 累计 diff 已复验；HIGH 全文、MED/LOW 双审和错误集中度复核已完成。全量路由至第092批，coverage 9,673条（routed 427、filtered 176、pending_review 9,070）；5个locator-only例外保持待审；下一步第093批，之后完成知识综合、独立 reader 与结案门禁；CURRENT_RELEASE 不变 |
 | 8 | rnd_exp 官方依据核验 | 外部条件受限 | 已有来源基线处理记录；轮到后恢复检索或附原文不可得证明结案，不伪造核验 |
 | 9 | U09/O05 真实内部试点 | 排队 | 需要真实企业数据及质量门槛；技术原型不冒充真实试点 |
 | 10 | U10 V1.1 证据决策 | 排队 | 依实际证据 go/hold，不作为原型的无限开发项 |
