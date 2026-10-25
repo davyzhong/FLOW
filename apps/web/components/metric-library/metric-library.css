@@ -197,10 +197,12 @@
 .ml-metric-list {
   display: grid;
   grid-template-columns: minmax(0, 1fr); /* 轨道随容器收缩，最宽卡片的 min-content 不再定轨（FE-06） */
+  align-items: start;
   gap: 12px;
 }
 
 .ml-metric {
+  min-width: 0;
   padding: 14px 16px;
   border: 1px solid var(--rep-line);
   border-radius: var(--flow-radius-m);
@@ -302,6 +304,10 @@
   margin-top: 8px;
   font-size: 11.5px;
   color: var(--rep-muted);
+}
+
+@media (min-width: 1200px) {
+  .ml-metric-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 .ml-relations {
