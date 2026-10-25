@@ -324,3 +324,8 @@ W3 MED 第二十四组完成1条全文双审，保留 pending-verification。同
 ## 语义审阅批次 061（2026-10-26）
 
 按baseline ID顺序核验12条可读全文SHA。6条保留 pending-verification；6条涉及个人健康场景或企业内部规划/架构与数据元信息而 rejected，交付文档未复述细节。coverage 更新为 routed 198、filtered 37、pending_review 9,438，`CURRENT_RELEASE` 未变。
+
+
+## 语义审阅批次 062（2026-10-26）
+
+按baseline ID序核验12条全文SHA。7条保留 pending-verification；5条因企业内部运营、产品或架构信息而 rejected，细节未在交付文档复述。coverage 更新为 routed 205、filtered 42、pending_review 9,426，`CURRENT_RELEASE` 不变。
