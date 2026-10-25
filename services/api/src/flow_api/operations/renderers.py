@@ -11,9 +11,9 @@ from __future__ import annotations
 from html import escape
 from typing import Any
 
-from flow_api.visual_tokens import VISUAL_TOKENS
-from flow_api.visual_theme import apply_pptx_visual_theme, style_workbook_headers
 from flow_api.operations.engine import OperationsOverview
+from flow_api.visual_theme import apply_pptx_visual_theme, style_workbook_headers
+from flow_api.visual_tokens import VISUAL_TOKENS
 
 _DIRECTION_LABEL = {"negative": "关注", "warning": "提示复核"}
 _ASSURANCE_LABEL = {

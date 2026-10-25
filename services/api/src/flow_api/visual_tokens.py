@@ -8,7 +8,7 @@ VISUAL_TOKENS = {
     'colors-surface-navHover': '#1B3545',
     'colors-text-primary': '#172B3B',
     'colors-text-secondary': '#34495A',
-    'colors-text-muted': '#6D7680',
+    'colors-text-muted': '#6A737D',
     'colors-text-subtle': '#8B8E8C',
     'colors-text-inverse': '#FBF8F0',
     'colors-line-subtle': '#ECE7DE',
@@ -35,10 +35,20 @@ VISUAL_TOKENS = {
     'colors-semantic-infoSoft': '#E8F0F3',
     'colors-semantic-unavailable': '#787C79',
     'colors-semantic-unavailableSoft': '#F0EEE8',
-    'typography-family-display': '"Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", "SimSun", "Noto Serif CJK SC", serif',
-    'typography-family-body': '"Noto Sans SC Variable", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif',
-    'typography-family-numeric': '"Inter Variable", "Inter", "Noto Sans SC Variable", "PingFang SC", sans-serif',
-    'typography-family-mono': '"JetBrains Mono Variable", "JetBrains Mono", ui-monospace, SFMono-Regular, monospace',
+    'typography-family-display': (
+        '"Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", "SimSun", "Noto Serif '
+        'CJK SC", serif'
+    ),
+    'typography-family-body': (
+        '"Noto Sans SC Variable", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, '
+        'sans-serif'
+    ),
+    'typography-family-numeric': (
+        '"Inter Variable", "Inter", "Noto Sans SC Variable", "PingFang SC", sans-serif'
+    ),
+    'typography-family-mono': (
+        '"JetBrains Mono Variable", "JetBrains Mono", ui-monospace, SFMono-Regular, monospace'
+    ),
     'typography-size-xs': '0.6875rem',
     'typography-size-sm': '0.8125rem',
     'typography-size-md': '0.9375rem',

@@ -14,8 +14,8 @@ from openpyxl import Workbook
 from openpyxl.styles import Alignment, Font
 from openpyxl.worksheet.worksheet import Worksheet
 
-from flow_api.visual_tokens import VISUAL_TOKENS
 from flow_api.visual_theme import style_workbook_headers
+from flow_api.visual_tokens import VISUAL_TOKENS
 
 _GOLDEN_SCALE_NOTE = "单位以 unit_note 为准，数值为披露原值的字符串投影"
 

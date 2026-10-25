@@ -12,8 +12,8 @@ import html as html_module
 from collections.abc import Callable
 
 from flow_api.publishing.models import ReportView, SnapshotFinding
-from flow_api.visual_tokens import VISUAL_TOKENS
 from flow_api.visual_theme import apply_pptx_visual_theme, style_workbook_headers
+from flow_api.visual_tokens import VISUAL_TOKENS
 
 
 def _money(value: str) -> str:
@@ -179,8 +179,10 @@ _STYLE = (
     f"body{{margin:2rem;color:{VISUAL_TOKENS['colors-text-primary']};"
     f"font-family:{VISUAL_TOKENS['typography-family-body']}}}"
     "table{border-collapse:collapse}"
-    f"td,th{{border:1px solid {VISUAL_TOKENS['colors-line-default']};padding:.35rem .6rem;font-size:.9rem}}"
-    f".finding{{border-left:3px solid {VISUAL_TOKENS['colors-brand-gold']};padding-left:.8rem;margin:1rem 0}}"
+    f"td,th{{border:1px solid {VISUAL_TOKENS['colors-line-default']};"
+    "padding:.35rem .6rem;font-size:.9rem}}"
+    f".finding{{border-left:3px solid {VISUAL_TOKENS['colors-brand-gold']};"
+    "padding-left:.8rem;margin:1rem 0}}"
     f"footer{{margin-top:2rem;font-size:.8rem;color:{VISUAL_TOKENS['colors-text-muted']}}}"
 )
 

@@ -15,8 +15,6 @@ from datetime import datetime
 from decimal import Decimal, InvalidOperation
 from typing import Any
 
-from flow_api.visual_tokens import VISUAL_TOKENS
-
 from flow_api.statements.objective_report_charts import (
     bar_compare,
     cashflow_bars,
@@ -24,6 +22,7 @@ from flow_api.statements.objective_report_charts import (
     dupont_chart,
     hbar_structure,
 )
+from flow_api.visual_tokens import VISUAL_TOKENS
 
 _PRINT_CSS = """
   /* 纸张与页边距由 CDP Page.printToPDF 控制（页脚页码需其 margin 空间） */

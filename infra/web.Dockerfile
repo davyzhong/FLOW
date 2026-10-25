@@ -6,6 +6,7 @@ COPY apps/web/package.json apps/web/package.json
 COPY packages/contracts/package.json packages/contracts/package.json
 RUN pnpm install --frozen-lockfile
 COPY packages/contracts packages/contracts
+COPY packages/flow-visual-language packages/flow-visual-language
 COPY apps/web apps/web
 COPY fixtures/expected/dashboard_overview_v1.json fixtures/expected/dashboard_overview_v1.json
 RUN pnpm --filter @flow/web build

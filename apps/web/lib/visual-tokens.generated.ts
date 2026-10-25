@@ -8,7 +8,7 @@ export const VISUAL_TOKENS = {
   "colors-surface-navHover": "#1B3545",
   "colors-text-primary": "#172B3B",
   "colors-text-secondary": "#34495A",
-  "colors-text-muted": "#6D7680",
+  "colors-text-muted": "#6A737D",
   "colors-text-subtle": "#8B8E8C",
   "colors-text-inverse": "#FBF8F0",
   "colors-line-subtle": "#ECE7DE",
