@@ -3,7 +3,7 @@ doc_id: FLOW-VERIFY-K3-CURRENT-SNAPSHOT-20261026
 title: K3 当前 Obsidian 工作区稳定快照复核
 doc_type: verification
 status: verified
-version: 6.0
+version: 6.1
 created_at: 2026-10-26
 updated_at: 2026-10-26
 owner: FLOW
@@ -500,3 +500,8 @@ accepted snapshot 未变；第101批按 baseline ID 顺序审阅12条，coverage
 ## K3 路由进度增量（2026-10-26，批次102）
 
 accepted snapshot 未变；第102批按 baseline ID 顺序审阅12条，coverage 当前为 routed 494、filtered 229、pending_review 8,950。来源文件 SHA 与规范化正文 SHA 均与 accepted baseline 一致；6条待核、6条过滤。经营驾驶舱指标文章20条图片引用未解析，不据图像/OCR摘要推断。批次分类与理由见[语义审阅表](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-102.tsv)。本增量未访问或写入 ObsidianWiki，也未改变 `CURRENT_RELEASE`。
+
+
+## K3 路由进度增量（2026-10-26，批次103）
+
+accepted snapshot 未变；第103批按 baseline ID 顺序审阅12条，coverage 当前为 routed 501、filtered 234、pending_review 8,938。来源文件 SHA 与规范化正文 SHA 均与 accepted baseline 一致；7条待核、5条过滤。应收账款模型16条与合同到总账文章7条图片引用未解析，不据图或图像摘要推断。批次分类与理由见[语义审阅表](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-103.tsv)。本增量未访问或写入 ObsidianWiki，也未改变 `CURRENT_RELEASE`。
