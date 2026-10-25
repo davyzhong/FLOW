@@ -3,7 +3,7 @@ doc_id: FLOW-VERIFY-K3-CURRENT-SNAPSHOT-20261026
 title: K3 当前 Obsidian 工作区稳定快照复核
 doc_type: verification
 status: verified
-version: 3.2
+version: 3.3
 created_at: 2026-10-26
 updated_at: 2026-10-26
 owner: FLOW
@@ -389,3 +389,7 @@ W3 MED 第二十四组完成1条全文双审，保留 pending-verification。同
 ## K3 全量语义路由增量（批次 074）
 
 按 accepted baseline 的 source_id 顺序处理12条。12条来源文件 SHA 与正文规范化 SHA 均匹配冻结基线；7条记为 routed / pending-verification，5条特定企业采购、组织、人力或系统资料记为 filtered / rejected，不复制内部细节。库存驾驶舱来源的19个嵌入图片引用按规则均未解析；同名文件在另一目录出现但关联未确认，本批未据图判断；模型、市场、会计口径、企业效果和财务数值均不作为已核事实。coverage累计为9,673条：routed 306、filtered 83、pending_review 9,284；下一批为075。ObsidianWiki与CURRENT_RELEASE未改动。
+
+## K3 全量语义路由批次 075
+
+按 accepted baseline source_id 顺序审阅12条来源；逐条文件 SHA 与正文规范化 SHA 均匹配。7条路由为 pending-verification，涉及AI开发工具、政策解读、市场分析、API/MCP、AAR、电商运营和未核验模型架构；具体技术版本、政策因果、指标口径及效果均不作为已核事实。目标市场分析的1条和电商运营的47条图片引用按source_baseline.py的来源目录/ vault根目录回退规则均无法解析，未据图判断。5条拒绝：1条企业自动驾驶经营数据、1条采购本体规划标 project-internal；另有不可追溯AI生成汇编、无正文的自动目录和范围外个人创作文章。coverage累计为9,673条：routed 313、filtered 88、pending_review 9,272；下一批为076。ObsidianWiki与CURRENT_RELEASE未改动。逐条记录见 `../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-075.tsv`。
