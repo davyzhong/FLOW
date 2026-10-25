@@ -216,3 +216,8 @@ W3 MED 第八组完成三条全文双审，正文 SHA 匹配 accepted baseline �
 ## 语义审阅批次 040（2026-10-26）
 
 W3 MED 第九组完成三条全文双审，正文 SHA 匹配 accepted baseline 且此前未审，均为 pending-verification。供应链直播整理中的成熟度模型版本、指标目标和15%/2%效果缺权威依据；财务BI文章带产品推广，后附AI生成模型情景缺原始数据、口径和独立验证；电商店铺数据表未随来源提供，AI附录把退款订单率约54.49%和退款金额率约48.82%均称退款率，已分别标注，禁止混用。coverage 为 routed 105、filtered 16、pending_review 9,552。详见 `semantic-review-2026-10-26-batch-040.tsv`。
+
+
+## 语义审阅批次 041（2026-10-26）
+
+W3 MED 第十组完成三条全文双审，正文 SHA 匹配 accepted baseline 且此前未审，均为 pending-verification。金融机构指标及“监管合规/实时”看板主张无权威定义和独立验证；电商销售渠道案例原始底表未附，AI生成附录2017销售额同比计算与其列出的年度数不符（24,491,328相对27,902,378约为-12.22%（精确值-12.22494%），非-19.21%）；女装RFM、购物篮阈值与策略不可脱离案例样本泛化。coverage 为 routed 108、filtered 16、pending_review 9,549。详见 `semantic-review-2026-10-26-batch-041.tsv`。
