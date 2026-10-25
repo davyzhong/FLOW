@@ -42,3 +42,5 @@ applies_to: knowledge-base
 - `semantic-review-2026-10-26-batch-017.tsv` —— 第十七批 3 条 HIGH/K5 驾驶舱蓝本全文审阅；记录演示数据来源、数值排序与未验证产品自述限制。
 - `semantic-review-2026-10-26-batch-018.tsv` —— 第十八批 2 条 HIGH/K5 同源管理报表记录；一条待验证，一条同源副本标记 duplicate，未取得原始 XLSX。
 - `semantic-review-2026-10-26-batch-019.tsv` —— 第十九批对 9 条 HIGH/簇2 内部资料做元数据筛查；标为 project-internal 并排除产品候选，未展开内容审阅。
+
+- `semantic-review-2026-10-26-batch-020.tsv` —— 第二十批 3 条 HIGH/簇3 经营分析方法全文审阅；示例数据、阈值和效果缺少独立依据，均待核验。
