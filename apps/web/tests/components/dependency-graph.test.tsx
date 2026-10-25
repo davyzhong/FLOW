@@ -65,11 +65,53 @@ describe("DependencyGraph", () => {
     expect(screen.queryByRole("status")).not.toBeInTheDocument();
   });
 
+  it("键盘 Enter/Space 可切换节点选中态", () => {
+    render(<DependencyGraph metrics={metrics} domains={{}} />);
+    fireEvent.change(screen.getByLabelText(/分层/), { target: { value: "all" } });
+    const node = screen.getByLabelText("指标net_margin（net_margin）");
+
+    fireEvent.keyDown(node, { key: "Enter" });
+    expect(node).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByRole("status")).toHaveTextContent(/上游依赖 2 个、下游引用 1 个/);
+
+    fireEvent.keyDown(node, { key: " " });
+    expect(node).toHaveAttribute("aria-pressed", "false");
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
+  });
+
+  it("跨 collection 重复指标编码保留为独立图节点", () => {
+    const duplicates = [
+      { ...entry("gross_margin", [], "core"), name: "毛利率", collection: "general" as const },
+      { ...entry("gross_margin", [], "core"), name: "毛利率（物流口径）", collection: "logistics" as const },
+    ];
+    render(<DependencyGraph metrics={duplicates} domains={{}} />);
+
+    expect(screen.getAllByLabelText(/gross_margin/)).toHaveLength(2);
+    expect(screen.getByLabelText("毛利率（gross_margin）")).toBeInTheDocument();
+    expect(screen.getByLabelText("毛利率（物流口径）（gross_margin）")).toBeInTheDocument();
+    fireEvent.click(screen.getByLabelText("毛利率（物流口径）（gross_margin）"));
+    expect(screen.getByRole("link", { name: "查看指标卡片" })).toHaveAttribute(
+      "href",
+      "/metric-library?focus=gross_margin&collection=logistics",
+    );
+  });
+
   it("分层过滤只保留对应节点", () => {
     render(<DependencyGraph metrics={metrics} domains={{}} />);
     fireEvent.change(screen.getByLabelText(/分层/), { target: { value: "professional" } });
     expect(screen.getByLabelText("指标eva（eva）")).toBeInTheDocument();
     expect(screen.queryByLabelText("指标revenue（revenue）")).not.toBeInTheDocument();
+  });
+
+  it("切换分层时清除已隐藏节点的选中状态", () => {
+    render(<DependencyGraph metrics={metrics} domains={{}} />);
+    fireEvent.change(screen.getByLabelText(/分层/), { target: { value: "all" } });
+    fireEvent.click(screen.getByLabelText("指标eva（eva）"));
+    expect(screen.getByRole("status")).toHaveTextContent("指标eva");
+
+    fireEvent.change(screen.getByLabelText(/分层/), { target: { value: "core" } });
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "查看指标卡片" })).not.toBeInTheDocument();
   });
 
   it("环依赖不崩溃并给出警示", () => {

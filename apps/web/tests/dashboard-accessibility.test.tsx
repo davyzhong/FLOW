@@ -22,6 +22,9 @@ describe("Dashboard accessibility structure", () => {
     );
 
     expect(await screen.findByRole("navigation", { name: "FLOW 工作流" })).toBeVisible();
+    const skipLink = screen.getByRole("link", { name: "跳到主要内容" });
+    expect(skipLink).toHaveAttribute("href", "#main-content");
+    expect(screen.getByRole("main")).toHaveAttribute("id", "main-content");
     expect(
       screen.getByRole("heading", { name: "Finance BP 经营驾驶舱", level: 1 }),
     ).toBeVisible();

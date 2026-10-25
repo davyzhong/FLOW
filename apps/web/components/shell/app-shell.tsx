@@ -8,8 +8,9 @@ export function AppShell({ children }: Readonly<{ children: ReactNode }>) {
   const showLogout = Boolean(process.env.AUTH_TOKEN);
   return (
     <div className="app-shell">
+      <a className="app-shell__skip-link" href="#main-content">跳到主要内容</a>
       <WorkflowNav showLogout={showLogout} />
-      <main className="app-shell__main">{children}</main>
+      <main className="app-shell__main" id="main-content" tabIndex={-1}>{children}</main>
     </div>
   );
 }

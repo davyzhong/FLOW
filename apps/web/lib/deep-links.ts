@@ -7,8 +7,9 @@
 //   /operations     ?report={statement_report_id}
 //   /               ?region_id=…&customer_segment_id=…&logistics_product_id=…&organization_id=…
 
-export function metricFocusHref(metricCode: string): string {
-  return `/metric-library?focus=${encodeURIComponent(metricCode)}`;
+export function metricFocusHref(metricCode: string, collection?: string | null): string {
+  const href = `/metric-library?focus=${encodeURIComponent(metricCode)}`;
+  return collection ? `${href}&collection=${encodeURIComponent(collection)}` : href;
 }
 
 export function metricEntryHref(entryId: string): string {

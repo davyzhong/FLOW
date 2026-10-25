@@ -18,6 +18,26 @@
   padding: 28px 32px 56px;
 }
 
+.app-shell__skip-link {
+  position: fixed;
+  z-index: 100;
+  top: -4rem;
+  left: 1rem;
+  padding: 0.7rem 1rem;
+  border: 2px solid var(--flow-vl-colors-brand-gold);
+  border-radius: 4px;
+  background: var(--flow-vl-colors-surface-paper);
+  color: var(--flow-vl-colors-text-primary);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.app-shell__skip-link:focus-visible {
+  top: 1rem;
+  outline: 3px solid var(--flow-vl-colors-brand-gold-strong);
+  outline-offset: 2px;
+}
+
 .workflow-rail__topbar { display: contents; }
 .workflow-rail__toggle { display: none; }
 .workflow-rail__links { display: flex; flex: 1; flex-direction: column; }

@@ -3,7 +3,7 @@
 // 指标库（D040）：只读呈现 flow.metric_dictionary.v0-draft 与会计基础数据集。
 // 数据全部来自 GET /api/v1/metric-library（版本化 YAML 数据集），页面不修改、不计算口径。
 // 视觉走报告风：hero（红顶 + kicker + 大标题）+ KPI 卡带 + 覆盖矩阵热力图 + verdict 条。
-// 深链接收端（2026-09-26 批次一）：?focus={metric_code} / ?entry={entry_id}
+// 深链接收端（2026-09-26 批次一）：?focus={metric_code}[&collection={collection}] / ?entry={entry_id}
 // → 切到对应分区、卡片加 id 锚点并高亮；对象不存在时显式提示而非静默忽略。
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -296,10 +296,13 @@ function MetricList({
 /** 标签页切换后的下一帧再回调（滚动定位），避免目标卡片尚未挂载。 */
 export function MetricLibraryApp({
   focus = null,
+  collection = null,
   entry = null,
 }: {
-  /** ?focus={metric_code}：按编码定位（跨 collection 重复时取第一条，可用 entry 消歧） */
+  /** ?focus={metric_code}：按编码定位；重复编码可用 collection 消歧 */
   focus?: string | null;
+  /** ?collection={collection}：与 focus 联用，区分同编码的不同指标集 */
+  collection?: string | null;
   /** ?entry={entry_id}：按库内条目 id 精确定位 */
   entry?: string | null;
 }) {
@@ -343,7 +346,9 @@ export function MetricLibraryApp({
   const focusedMetric =
     state.kind === "loaded" && requested
       ? (state.library.metrics.find((m) =>
-          entry ? m.entry_id === entry : m.metric_code === focus,
+          entry
+            ? m.entry_id === entry
+            : m.metric_code === focus && (!collection || m.collection === collection),
         ) ?? null)
       : null;
   const focusMiss = state.kind === "loaded" && requested && !focusedMetric ? requested : null;
