@@ -226,3 +226,8 @@ W3 MED 第十组完成三条全文双审，正文 SHA 匹配 accepted baseline �
 ## 语义审阅批次 042（2026-10-26）
 
 W3 MED 第十一组完成三条全文双审，正文 SHA 匹配 accepted baseline 且此前未审，均为 pending-verification。业财BI厂商宣称报表时间缩短80%、培训200人等缺可核基线，BI分析不等同总账核算/自动合规；Excel/BI“效率分”无定义及基准；电商对账示例未给完整结账差异闭环，建模须验证明细粒度、唯一键、维度版本及退款/拆单造成的重复风险，对账证据与审批不能由看板替代。coverage 为 routed 111、filtered 16、pending_review 9,546。详见 `semantic-review-2026-10-26-batch-042.tsv`。
+
+
+## 语义审阅批次 043（2026-10-26）
+
+W3 MED 第十二组完成三条全文双审，正文 SHA 匹配 accepted baseline 且此前未审，均为 pending-verification。校服案例全年度结果、利润和RFM策略无底表/阈值，生成附录所示可见时间范围与全年结论需回查；万昌财务BP为BI厂商直播案例且无基线成效；竞品分析第三方市场数据和雷达评分缺原始方法，广告投入导致留存低的解释无对照证据。coverage 为 routed 114、filtered 16、pending_review 9,543。详见 `semantic-review-2026-10-26-batch-043.tsv`。
