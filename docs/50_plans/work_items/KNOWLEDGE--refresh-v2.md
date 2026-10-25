@@ -3,9 +3,9 @@ doc_id: FLOW-WI-KNOWLEDGE-REFRESH-V2-001
 title: 第二代静态知识刷新与战略重基线
 doc_type: work-item
 status: queued
-version: 1.9
+version: 1.10
 created_at: 2026-09-24
-updated_at: 2026-10-19
+updated_at: 2026-10-25
 owner: FLOW
 depends_on: [FLOW-DESIGN-KNOWLEDGE-REFRESH-002]
 acceptance_refs: [FLOW-PLAN-INTEGRATED-EXECUTION-20260924, FLOW-DESIGN-KNOWLEDGE-REFRESH-002]
@@ -22,6 +22,8 @@ Obsidian 工作区快照，重建 FLOW 来源基线与 sealed knowledge candidat
 战略裁决后，才原子激活新 release、产品文档和路线图。
 
 ## 当前断点
+
+> 2026-10-25 资料补充：用户新增《经营驾驶舱分析指标库》，本轮已直接核读 20 张原图并完成[查重与映射](../../60_delivery/verification/2026-10-25--business-metric-library-reference-review-v1.md)，[产品目标](../../20_product/METRIC_SYSTEM_GOALS.md)已纳入“从指标定义到指标体系建立”。该学习记录进入本包后续来源语义复核/战略影响评审，未修改来源基线或切换 release，也不等于 K3–K6 已完成。当前唯一队列和该增量的依赖/验收仅见 [CURRENT_ROADMAP](../CURRENT_ROADMAP.md#指标体系资料增量2026-10-25-用户补充归属既有事项-7)；下方 K3 实际执行等文字是 2026-10-19 的历史断点，不表示本包此刻在执行。
 
 - 批准规格和三仓库 preflight 已完成。
 - K0/K1/K2 已完成，K3 当前实际执行。FLOW 的实际资料源是 ObsidianWiki；Davybase 只在 K0–K2 的历史工具链中承载过扫描/快照工具及一次性证据，不构成 FLOW 代码、运行时或产品依赖。K2 accepted working-tree manifest：ObsidianWiki `main@e04d6833`、1,377 条 dirty 路径、111,912 个文件/4,240,118,843 字节；HEAD/tree、Git 状态与完整内容 SHA 的候选/复验值一致，真实可写句柄均为 0。K3 读前复核已通过，Obsidian 当前 HEAD/tree/status/content SHA、文件数与字节数均与 accepted manifest 一致，可写句柄 0。当前后续仍限于只读 baseline/diff，生成后再做来源指纹复核。详细 K2 报告见[FLOW K2 验收](../../60_delivery/verification/2026-10-19--k2-working-tree-snapshot-v1.md)，ObsidianWiki 未修改。K4–K6 与战略裁决仍未完成。

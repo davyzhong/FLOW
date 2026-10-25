@@ -3,11 +3,11 @@ doc_id: FLOW-PROD-SCOPE-001
 title: 产品范围
 doc_type: product
 status: canonical
-version: 1.2
+version: 1.3
 created_at: 2026-09-12
-updated_at: 2026-09-13
+updated_at: 2026-10-25
 owner: FLOW
-decision_refs: [D039, D047, D049, D052, D053, D054]
+decision_refs: [D039, D047, D049, D052, D053, D054, D055]
 knowledge_release: flow-knowledge-2026-09-12.1
 applies_to: product
 supersedes: []
@@ -31,10 +31,18 @@ superseded_by: null
 ## 已实现能力（保留，归属共享底座与公开模块）
 
 1. **数据与事实**：来源登记与财报抽取（B01–B05）、事实合同与勾稽、Excel 工作簿画像/映射/清洗/对账/发布。
-2. **指标与计算**：指标库 v1.1（64 条）、客观快照与冻结、确定性分析原语、四表一注阅读。
+2. **指标与计算**：指标库 v1.1（50 通用 + 15 物流定义条目；gross_margin 跨集合有不同口径，不能仅按代码去重）、客观快照与冻结、确定性分析原语、四表一注阅读。库内定义不等于各期间都有计算值；运行物流定义集为 15 条。
 3. **分析与复核**：四问工作台、Investigation 证据链、Finding/Evidence/Conclusion、追加式审阅事件。
 4. **报告与发布**：报告中心（多格式发布）、经营六主题快照与 /operations 概览（O4）、Copilot（约束回答）。
 5. **横切**：单用户认证与会话、对象存储与发布登记、结构化日志（U8-C）、CI 门禁。
+
+## 指标库与指标体系的目标范围（2026-10-25 补充）
+
+在既有专业治理底座中补齐[经营指标体系建设目标](METRIC_SYSTEM_GOALS.md)：以主题目录和标准指标卡组织已有定义，表达计算依赖、数学分解、维度汇总、比较、诊断线索、数据血缘、页面使用/变更影响七类关系；覆盖从来源候选、查重与口径定义到覆盖校验、版本发布和页面/报告消费的建立流程。
+
+首批验证增长盈利、资金周转、预算执行、杜邦四条已有关系链；CRM、人效、供应商质量和项目等只登记候选及缺失输入。新资料为研究输入，不能直接覆盖财务公式、天数口径或预警阈值。企业/业务/区域/项目是观察维度，不要求建设多租户或多层运行架构。
+
+当前已有字典、React Flow 计算依赖图、定义依赖持久化、治理与覆盖入口；关系分类、完整业务层级及使用影响等是目标态，不将其写成已实现。资料审查见[20 图映射报告](../60_delivery/verification/2026-10-25--business-metric-library-reference-review-v1.md)，实施只从[唯一路线图](../50_plans/CURRENT_ROADMAP.md)领取，不重开已结案 7a。
 
 ## 不含（PRODUCT_BOUNDARIES 的范围侧摘要）
 

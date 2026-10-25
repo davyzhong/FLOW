@@ -3,9 +3,9 @@ doc_id: FLOW-PROD-020
 title: 产品定义
 doc_type: navigation
 status: current
-version: 1.1
+version: 1.2
 created_at: 2026-09-12
-updated_at: 2026-09-13
+updated_at: 2026-10-25
 owner: FLOW
 applies_to: docs
 ---
@@ -20,6 +20,7 @@ PRODUCT_VISION/PRODUCT_SCOPE 等（M3 建立）。允许 doc_type: product。禁
 |---|---|
 | [PRODUCT_VISION.md](PRODUCT_VISION.md) | 产品愿景与核心目标（D052） |
 | [PRODUCT_SCOPE.md](PRODUCT_SCOPE.md) | 三层两模块范围与冲突裁决矩阵（D053） |
+| [METRIC_SYSTEM_GOALS.md](METRIC_SYSTEM_GOALS.md) | 从指标定义到指标体系：主题、口径、关系、数据可用性、页面消费与建立流程（2026-10-25 用户补充） |
 | [PRODUCT_PRINCIPLES.md](PRODUCT_PRINCIPLES.md) | 固定原则：用户、证据、计算、AI、治理、发布（D052–D054） |
 | [USER_AND_WORKSPACES.md](USER_AND_WORKSPACES.md) | 角色边界与工作区 |
 | [CAPABILITY_MAP.md](CAPABILITY_MAP.md) | 能力四态地图（implemented / designed / external-dependency / out-of-scope） |

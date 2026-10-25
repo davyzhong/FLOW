@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目交接文档
 doc_type: navigation
 status: current
-version: 12.0
+version: 12.1
 created_at: 2026-09-12
 updated_at: 2026-10-25
 owner: FLOW
@@ -17,6 +17,8 @@ applies_to: repository
 ---
 
 ## 一、当前任务
+
+**2026-10-25 指标资料学习补记（独立文档分支）：** 已直接核读“数研复盘狮”《经营驾驶舱分析指标库》20 张原图，完成来源指纹/逐图采用映射与现有指标库查重；补入 [METRIC_SYSTEM_GOALS](docs/20_product/METRIC_SYSTEM_GOALS.md)、愿景/范围和路线图既有事项 7 的来源评审/影响范围。本轮不改运行公式/数据/阈值/数据库或 CURRENT_RELEASE，也不写视觉任务活动工作树；视觉事项 12 继续由原任务执行，队列数量不变。后续应从本路线图资料增量进入既有来源与产品影响评审，再安排代码切片；不能从文章截图直接发布公式或通用阈值。图片抽取进程的完成状态未被本次独立核读替代，Obsidian/原图未修改。本分支文档已通过独立新上下文复核（无必要 P1/P2）和 M1/M6、计划视图、链接/差异检查，集成时保留视觉分支更新后的当前状态，不把本文快照覆盖为新状态。完整依据见[二十图核读报告](docs/60_delivery/verification/2026-10-25--business-metric-library-reference-review-v1.md)。
 
 **2026-10-25 当前交接：路线图 7a.1–7a.8 已完成。** PR [#3](https://github.com/davyzhong/FLOW/pull/3) 与状态归档 PR [#4](https://github.com/davyzhong/FLOW/pull/4) 已合入 main；#4 merge commit `b068796f906cfbb91ac33775f5578194acc98a51` 的准确 SHA run `40096497668` 为 28/28 success。原型及限制见[差距审查](docs/60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)。用户已批准“可复用视觉语言提炼与 FLOW 全项目视觉统一”；当前分支 `codex/flow-visual-language` 已有可复制视觉包、共享主题、主要图表与导出映射。代码 SHA `28c0e7a2` 下 20 路由×3 视口矩阵 60/60 内容就绪、API 零错误、无横向溢出及浏览器错误；财报分析页的品牌强调已校为古金/墨蓝，红色财务负值语义保留；指标依赖图默认聚焦“常用”层并按节点数展开画布，完整图谱仍可筛选查看。驾驶舱、财务出版页和数据工作台较接近概念板；逐图表、交互状态、可访问性、导出模板和打印仍未验收。当前路线图 16 项中已完成 9 项、执行中 1 项（事项数约 56%，不代表视觉子任务完成率）；获用户授权的分支清理并行例外已完成，15 个已合入分支已删，保留活动 PR #5 与暂停的 ZTO 分支；逐支 SHA 见分支清理工作包。视觉子任务没有可靠的百分比口径。下一步按图表和数据表达清单逐项核验，再完成交互/可访问性及报告输出验收。详细设计和限制见[视觉语言设计规格](docs/superpowers/specs/2026-10-24-flow-visual-language-system-design.md)、[视觉统一工作包](docs/50_plans/work_items/FLOW--portable-visual-language-and-full-project-restyle.md)、[CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)与[视觉覆盖记录](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。用户选择保留 `/Users/qiming/.flow/flow.sqlite3` 零字节文件；`services/api/flow.sqlite3` 未跟踪文件也保持原样。此前一次测试从主 checkout 错误启动，触发 `services/api/.venv` 重建；该环境未恢复或继续改动，相关主 checkout 用户文件未触碰。
 
