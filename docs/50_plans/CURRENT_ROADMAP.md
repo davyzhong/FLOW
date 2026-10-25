@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 15.6
+version: 15.7
 created_at: 2026-09-12
 updated_at: 2026-10-26
 owner: FLOW
@@ -17,7 +17,7 @@ superseded_by: null
 
 # 当前路线图（唯一主线）
 
-> **2026-10-26 最新状态：** D055 单机原型 7a.1–7a.8 已合入 main；视觉语言包及全项目页面、图表、报告/离线输出和 README 视觉统一已完成。路线图仍为 16 项：完成 10、实际执行中 1（K 轨 K3）、排队 3、暂停 1、外部条件受限 1。视觉覆盖验收：隔离 synthetic manifest `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed` 下验证器 19/19、可见性矩阵 164/164（154 HTTP 200、10 预期拒绝、0 失败）、Playwright 17/17；20 路由×3 视口 60/60 与 Axe 桌面 20 路由零违规仍对应应用 SHA `01e8e25dd426ed43ad6a2cad76544bbbe623eb99`。最新 E2E 断言修复已提交于 `d01daa11`，独立复核无 P1/P2，`git diff --check` 通过。原生浏览器 200% 缩放因 Mac 锁屏且当前工具不能操作 Edge 工具栏，未直接验收；390/360 CSS px 证据不替代。按外部条件受限替代结案，待设备解锁且可控工具可用时补验。当前分支 `codex/flow-visual-language` / PR #5；工作包结案文档随后提交并以准确 SHA 查询 GitHub CI。视觉包证据见[覆盖验收](../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。下一唯一事项 K 轨当前子步为 K3 全量逐条语义路由：当前 accepted snapshot `obsidianwiki-20261026T005516+0800-d601b4d5`（manifest SHA `593715c832a538d9ba83df4e077b8dd9bace24f40d3c0d5262fc3779b20f0e77`）候选/复验一致、内容 SHA `c84efd671e2b90e4f69152c3dd04a570d9c378d08fb7a3cb97b86e322f123df0`、可写句柄 0。新 snapshot 与之前 K3 基线内容指纹一致；registry/baseline/delta 已绑定最新 snapshot 并重复构建一致。当前按序进行全量逐条主题路由及 coverage 闭合；全量路由已完成至第106批，coverage 为 routed 521、filtered 250、pending_review 8,902；下一动作是第107批。当前有五个 locator-only / pending-review 例外（新增 `SRC-LOCAL-v1-0de553da4d8d857b90d3`；其他包括 `SRC-LOCAL-v1-00625bae4e08042539d1`、`SRC-LOCAL-v1-0428a240b0361157ffa1`、`SRC-LOCAL-v1-057cabfb9baca9f47c44` 和 `SRC-LOCAL-v1-0bd79ce2c2d600301852`），均未使用范围外内容或链接标题推断。HIGH 全读及 MED/LOW 双审已完成。旧 10-19 baseline/diff 保留为历史结果。ObsidianWiki 和 `CURRENT_RELEASE` 保持不变。
+> **2026-10-26 最新状态：** D055 单机原型 7a.1–7a.8 已合入 main；视觉语言包及全项目页面、图表、报告/离线输出和 README 视觉统一已完成。路线图仍为 16 项：完成 10、实际执行中 1（K 轨 K3）、排队 3、暂停 1、外部条件受限 1。视觉覆盖验收：隔离 synthetic manifest `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed` 下验证器 19/19、可见性矩阵 164/164（154 HTTP 200、10 预期拒绝、0 失败）、Playwright 17/17；20 路由×3 视口 60/60 与 Axe 桌面 20 路由零违规仍对应应用 SHA `01e8e25dd426ed43ad6a2cad76544bbbe623eb99`。最新 E2E 断言修复已提交于 `d01daa11`，独立复核无 P1/P2，`git diff --check` 通过。原生浏览器 200% 缩放因 Mac 锁屏且当前工具不能操作 Edge 工具栏，未直接验收；390/360 CSS px 证据不替代。按外部条件受限替代结案，待设备解锁且可控工具可用时补验。当前分支 `codex/flow-visual-language` / PR #5；工作包结案文档随后提交并以准确 SHA 查询 GitHub CI。视觉包证据见[覆盖验收](../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。下一唯一事项 K 轨当前子步为 K3 全量逐条语义路由：当前 accepted snapshot `obsidianwiki-20261026T005516+0800-d601b4d5`（manifest SHA `593715c832a538d9ba83df4e077b8dd9bace24f40d3c0d5262fc3779b20f0e77`）候选/复验一致、内容 SHA `c84efd671e2b90e4f69152c3dd04a570d9c378d08fb7a3cb97b86e322f123df0`、可写句柄 0。新 snapshot 与之前 K3 基线内容指纹一致；registry/baseline/delta 已绑定最新 snapshot 并重复构建一致。当前按序进行全量逐条主题路由及 coverage 闭合；全量路由已完成至第107批，coverage 为 routed 527、filtered 256、pending_review 8,890；下一动作是第108批。当前有五个 locator-only / pending-review 例外（新增 `SRC-LOCAL-v1-0de553da4d8d857b90d3`；其他包括 `SRC-LOCAL-v1-00625bae4e08042539d1`、`SRC-LOCAL-v1-0428a240b0361157ffa1`、`SRC-LOCAL-v1-057cabfb9baca9f47c44` 和 `SRC-LOCAL-v1-0bd79ce2c2d600301852`），均未使用范围外内容或链接标题推断。HIGH 全读及 MED/LOW 双审已完成。旧 10-19 baseline/diff 保留为历史结果。ObsidianWiki 和 `CURRENT_RELEASE` 保持不变。
 
 > 当前完结目标依据 D055：交付本机单用户可启动、可加载/重置演示业务、可看丰富 CFO 图表、可下钻追溯、可分析和导出报告、可备份恢复、可离线浏览的验证原型。公开 C 级、知识刷新、真实企业三周期仍未完成，保留在长期队列，不作为本原型无限延期的理由。**下方 2026-10-21 及以前的状态段落均为历史，当前只按本段及唯一执行队列。**
 
@@ -125,7 +125,7 @@ superseded_by: null
 | 4 | U04 解析与盲评复评 | 已完成（限定样本） | 旧三样本 199/199，不等于全部报告 oracle 完成 |
 | 5 | C 级质量基准与 Go/No-Go | 已完成（裁定 No-Go） | 部分条件后续已有改善，仍无整体验收 Go |
 | 6 | P3 真实数据/来源与行业扩张 | 暂停 | 历史 ZTO 封存已于 2026-10-16 恢复合并，不重复合并；其余扩张暂缓 |
-| 7（原 K） | 第二代静态知识刷新 | **进行中：K3 全量语义路由与 coverage 闭合** | registry/baseline 与 9,958 ID 累计 diff 已复验；HIGH 全文、MED/LOW 双审和错误集中度复核已完成。全量路由至第106批，coverage 9,673条（routed 521、filtered 250、pending_review 8,902）；5个locator-only例外保持待审；下一步第107批，之后完成知识综合、独立 reader 与结案门禁；CURRENT_RELEASE 不变 |
+| 7（原 K） | 第二代静态知识刷新 | **进行中：K3 全量语义路由与 coverage 闭合** | registry/baseline 与 9,958 ID 累计 diff 已复验；HIGH 全文、MED/LOW 双审和错误集中度复核已完成。全量路由至第107批，coverage 9,673条（routed 527、filtered 256、pending_review 8,890）；5个locator-only例外保持待审；下一步第108批，之后完成知识综合、独立 reader 与结案门禁；CURRENT_RELEASE 不变 |
 | 8 | rnd_exp 官方依据核验 | 外部条件受限 | 已有来源基线处理记录；轮到后恢复检索或附原文不可得证明结案，不伪造核验 |
 | 9 | U09/O05 真实内部试点 | 排队 | 需要真实企业数据及质量门槛；技术原型不冒充真实试点 |
 | 10 | U10 V1.1 证据决策 | 排队 | 依实际证据 go/hold，不作为原型的无限开发项 |
