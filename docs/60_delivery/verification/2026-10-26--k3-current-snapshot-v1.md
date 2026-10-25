@@ -344,3 +344,8 @@ W3 MED 第二十四组完成1条全文双审，保留 pending-verification。同
 ## 全量语义路由批次 065（2026-10-26）
 
 按 accepted baseline ID 顺序检查12条来源，文件和正文规范化 SHA 均与快照一致。4条为 pending-verification，7条被过滤（6条内部企业资料、1条范围外消费建议）；另1条来源文件仅含换行符，保持 locator-only / pending-review，未按标题推断。两个 locator-only 例外均保留待审，未使用 allowlist 外全文。coverage 为 routed 226、filtered 56、pending_review 9,391；`CURRENT_RELEASE` 未变化。逐条记录见 `../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-065.tsv`。
+
+
+## 全量语义路由批次 066（2026-10-26）
+
+按 accepted baseline ID 顺序核验12条来源的文件与正文 SHA，全部匹配。10条保留 pending-verification；2条企业内部资料标 project-internal / rejected，不复述细节。coverage 为 routed 236、filtered 58、pending_review 9,379；两个 locator-only 例外继续待审，`CURRENT_RELEASE` 不变。逐条记录见 `../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-066.tsv`。
