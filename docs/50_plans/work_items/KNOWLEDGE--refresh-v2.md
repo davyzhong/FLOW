@@ -3,7 +3,7 @@ doc_id: FLOW-WI-KNOWLEDGE-REFRESH-V2-001
 title: 第二代静态知识刷新与战略重基线
 doc_type: work-item
 status: active
-version: 2.3
+version: 2.4
 created_at: 2026-09-24
 updated_at: 2026-10-26
 owner: FLOW
@@ -64,6 +64,8 @@ K2 accepted working-tree manifest 已提交并推送至 Davybase，远端确认�
 10-19 K3 自动来源基线与四维差异已完成，结果（allowlist 9,671 篇，universe 9,956 条）仅适用于 10-19 accepted snapshot，见[历史来源基线验收](../../60_delivery/verification/2026-10-19--k3-source-baseline-v2.md)。10-26 registry/baseline/diff 已重建并在生成后复验 vault 指纹：来源 9,673、唯一 ID 9,673；相较 10-19 baseline 增量为 2 篇新增，0 篇既有正文/路径/enrichment 变化。累计 diff 为 9,958 ID（新增 6,641、存在 3,032、删除 285）。独立目录重复生成逐字节一致；详情见[当前快照与基线复核](../../60_delivery/verification/2026-10-26--k3-current-snapshot-v1.md)。当前下一步转为全量语义路由与 HIGH/MED/LOW 审阅。实现包含 `build-v2` 和严格 coverage 闭合校验器。
 
 **当前子步仍属 K3，未完成整轨验收**：逐条主题路由和 HIGH 全文审阅、MED/LOW 双审抽样、错误集中度检查、coverage/例外闭合、知识综合和独立 reader 尚待完成。旧 2026-09-12 baseline 没有完整历史改名 registry；本轮以精确路径迁移旧 ID，未匹配项记为新增/删除，不用标题相似度推断改名。不得据此声称“没有改名”。`CURRENT_RELEASE` 仍为 `flow-knowledge-2026-09-12.1`，未 seal、未激活。
+
+语义批次 001 已检查 3 条既有 D-wiki HIGH 主题簇来源：三表勾稽与杜邦分析的本地笔记正文已读；现金流分析条目只有元数据，记录为 `locator-only`。三条按 K1/K2 路由，权威级别与敏感级别仍为 `unclassified`，处置均为 `pending-verification`，不进入 candidate。审阅台账见[`semantic-review-2026-10-26-batch-001.tsv`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-001.tsv)。原始来源全文未核验，不把本地摘要等同原始材料。
 
 ### K3 语义审阅操作口径（依既有规格执行）
 
