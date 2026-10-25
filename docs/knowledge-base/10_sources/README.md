@@ -30,3 +30,4 @@ applies_to: knowledge-base
 - `semantic-review-2026-10-26-batch-005.tsv` —— 第五批 3 条 HIGH 候选全文审阅，记录合并报表案例不平衡、勾稽简化及通用指标阈值风险；均 pending-verification。
 - `semantic-review-2026-10-26-batch-006.tsv` —— 第六批 3 条 HIGH 候选全文审阅，记录合并会计处理和内部交易抵消的规则边界风险；均 pending-verification。
 - `semantic-review-2026-10-26-batch-007.tsv` —— 第七批 3 条 HIGH 候选全文审阅，记录三表案例信息不全、现金流编制摘要缺少边界及同主题材料重叠；均 pending-verification。
+- `semantic-review-2026-10-26-batch-008.tsv` —— 第八批 3 条 HIGH/K6 全文审阅，覆盖资金预测方法与现金流模型；记录模型简化和两篇疑似重复发布，均 pending-verification。
