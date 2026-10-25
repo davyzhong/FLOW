@@ -80,13 +80,14 @@ function Comparison({
 function KpiSparkline({ series, title }: { series: CockpitTrendSeries; title: string }) {
   const points = (series.points ?? []).filter((point) => point.status === "ready" && Number.isFinite(point.value));
   if (points.length < 2) return null;
+  const unit = series.unit === "ratio" ? "百分比" : series.unit === "CNY" ? "人民币元" : series.unit;
   const values = points.map((point) => point.value);
   const min = Math.min(...values);
   const max = Math.max(...values);
   const span = max - min || 1;
   const line = values.map((value, index) => `${(index / Math.max(values.length - 1, 1)) * 58},${19 - ((value - min) / span) * 15}`).join(" ");
   return (
-    <svg className="kpi__sparkline" data-testid="cockpit-kpi-sparkline" viewBox="0 0 60 22" role="img" aria-label={`${title} ${points.length}期趋势`}>
+    <svg className="kpi__sparkline" data-testid="cockpit-kpi-sparkline" viewBox="0 0 60 22" role="img" aria-label={`${title} ${points[0].period} 至 ${points.at(-1)?.period}，${points.length}期趋势，单位${unit}`}>
       <polyline points={line} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
       <circle cx={(values.length - 1) / Math.max(values.length - 1, 1) * 58} cy={19 - ((values.at(-1)! - min) / span) * 15} r="2.4" fill="currentColor" />
     </svg>

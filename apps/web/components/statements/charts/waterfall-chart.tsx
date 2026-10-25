@@ -83,12 +83,11 @@ export function WaterfallChart({
         const cx = padL + (innerW * (index + 0.5)) / bars.length;
         const yTop = y(Math.max(bar.hi, bar.lo));
         const barH = Math.max(2, Math.abs(y(bar.lo) - y(bar.hi)));
-        const color =
-          bar.kind === "base" || bar.kind === "total"
+        const color = bar.value < 0
+          ? VISUAL_TOKENS["colors-semantic-negative"]
+          : bar.kind === "base" || bar.kind === "total"
             ? VISUAL_TOKENS["colors-data-revenue"]
-            : bar.value >= 0
-              ? VISUAL_TOKENS["colors-semantic-positive"]
-              : VISUAL_TOKENS["colors-semantic-negative"];
+            : VISUAL_TOKENS["colors-semantic-positive"];
         return (
           <g key={bar.label}>
             {index > 0 ? (

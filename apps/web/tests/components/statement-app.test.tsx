@@ -100,9 +100,9 @@ describe("StatementApp", () => {
     expect(await screen.findByText("顺丰控股")).toBeInTheDocument();
     const kpis = await screen.findAllByTestId("statement-kpi");
     expect(kpis.length).toBeGreaterThan(3);
-    expect(screen.getByRole("img", { name: /利润形成瀑布图/ })).toBeInTheDocument();
-    expect(screen.getByRole("img", { name: /期末资产构成环形图/ })).toBeInTheDocument();
-    expect(screen.getByRole("img", { name: /现金流量三类活动净额柱状图/ })).toBeInTheDocument();
+    expect(screen.getByRole("img", { name: /顺丰控股 2026Q1 利润形成瀑布图.*单位亿元/ })).toBeInTheDocument();
+    expect(screen.getByRole("img", { name: /顺丰控股 2026Q1 期末资产构成环形图，单位亿元/ })).toBeInTheDocument();
+    expect(screen.getByRole("img", { name: /顺丰控股 2026Q1 现金流量三类活动净额柱状图.*单位亿元/ })).toBeInTheDocument();
     // 瀑布图 KPI 数字来自同一抽取值：营业总收入 741.42 亿（74142121 千元）
     expect(screen.getAllByText("741.42 亿元").length).toBeGreaterThanOrEqual(2);
     fireEvent.click(screen.getAllByText("查看图表数据明细")[0]);

@@ -28,7 +28,7 @@ describe("Finance BP dashboard content", () => {
     expect(screen.getByText("调查归因")).toBeVisible();
     expect(screen.getByText("报告与导出")).toBeVisible();
     expect(screen.getAllByTestId("metric-card")).toHaveLength(8);
-    expect(screen.getByRole("img", { name: "近 12 个月经营收入、利润与现金流趋势" })).toBeVisible();
+    expect(screen.getByRole("img", { name: "近 12 个月经营收入、利润与现金流趋势，单位人民币元" })).toBeVisible();
     expect(screen.getByRole("region", { name: "经营利润变动桥" })).toBeVisible();
     expect(screen.getAllByRole("link", { name: /进入调查/ })).toHaveLength(4);
     expect(screen.getByRole("table", { name: "产品经营表现" })).toBeVisible();

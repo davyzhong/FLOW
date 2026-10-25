@@ -196,7 +196,7 @@ export function CockpitModulePage({
                 <div className="module-chart-visual"><ChartBox
                     title=""
                     option={option}
-                    ariaLabel={`${chart.title ?? key}，${periods.join("、") || data.period}`}
+                    ariaLabel={`${chart.title ?? key}，${periods.join("、") || data.period}，单位${displayUnit}`}
                     testId={`cockpit-module-chart-${key}`}
                     height={260}
                     onDataPointClick={({ dataIndex }) => {

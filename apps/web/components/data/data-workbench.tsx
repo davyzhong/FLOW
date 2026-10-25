@@ -30,6 +30,8 @@ const STAGES: { id: Stage; label: string }[] = [
 function buildBatchHistoryCharts(items: IntakeBatchHistoryItem[]): {
   status: ReturnType<typeof buildCombo>;
   versions: ReturnType<typeof buildCombo>;
+  statusRows: { label: string; count: number }[];
+  versionRows: { name: string; count: number }[];
 } {
   const statusLabels: Record<string, string> = {
     draft: "草稿",
@@ -39,15 +41,23 @@ function buildBatchHistoryCharts(items: IntakeBatchHistoryItem[]): {
     failed: "失败",
   };
   const statuses = [...new Set(items.map((item) => item.status))].sort();
+  const statusRows = statuses.map((status) => ({
+    label: statusLabels[status] ?? status,
+    count: items.filter((item) => item.status === status).length,
+  }));
+  const versionRows = [...items.slice(0, 10)].reverse().map((item) => ({
+    name: item.name,
+    count: item.version_count,
+  }));
   const statusSeries: ComboSeries = {
     key: "batch-status",
     title: "批次数量",
     axis: "bar",
     unit: "个",
-    points: statuses.map((status) => ({
-      period: statusLabels[status] ?? status,
-      value: items.filter((item) => item.status === status).length,
-      display: `${items.filter((item) => item.status === status).length} 个`,
+    points: statusRows.map((row) => ({
+      period: row.label,
+      value: row.count,
+      display: `${row.count} 个`,
       status: "ready",
     })),
   };
@@ -56,16 +66,18 @@ function buildBatchHistoryCharts(items: IntakeBatchHistoryItem[]): {
     title: "导入版本数",
     axis: "bar",
     unit: "个",
-    points: [...items.slice(0, 10)].reverse().map((item) => ({
-      period: item.name,
-      value: item.version_count,
-      display: `${item.version_count} 个版本`,
+    points: versionRows.map((row) => ({
+      period: row.name,
+      value: row.count,
+      display: `${row.count} 个版本`,
       status: "ready",
     })),
   };
   return {
     status: items.length ? buildCombo([statusSeries]) : undefined,
     versions: items.length ? buildCombo([versionSeries]) : undefined,
+    statusRows,
+    versionRows,
   };
 }
 
@@ -303,22 +315,50 @@ export function DataWorkbench({
           {historyError ? <p role="status">{historyError}</p> : null}
           {historyLoaded && !historyError && batchHistory.length > 0 ? (
             <div className="data-workbench__charts" aria-label="批次与版本分析">
-              <ChartBox
-                title="批次状态分布"
-                sub={`当前企业、当前账号最近 ${batchHistory.length} 个批次`}
-                option={historyCharts.status}
-                ariaLabel="当前账号可见批次按实际状态分布"
-                testId="data-batch-status-chart"
-                height={230}
-              />
-              <ChartBox
-                title="各批次导入版本数"
-                sub="最近 10 个批次；完整版本明细见下表"
-                option={historyCharts.versions}
-                ariaLabel="最近批次的导入版本数量"
-                testId="data-batch-version-chart"
-                height={230}
-              />
+              <div className="data-workbench__chart-group">
+                <ChartBox
+                  title="批次状态分布"
+                  sub={`当前企业、当前账号最近 ${batchHistory.length} 个批次`}
+                  option={historyCharts.status}
+                  ariaLabel="当前账号可见批次按实际状态分布，单位个"
+                  testId="data-batch-status-chart"
+                  height={230}
+                />
+                <details className="data-workbench__chart-details" data-testid="data-batch-status-details">
+                  <summary>查看批次状态计数</summary>
+                  <div className="flow-table-wrap" role="region" aria-label="批次状态分布数据表" tabIndex={0}>
+                    <table className="flow-table">
+                      <caption>当前账号可见批次状态数量（单位：个）</caption>
+                      <thead><tr><th scope="col">批次状态</th><th scope="col">批次数量</th></tr></thead>
+                      <tbody>{historyCharts.statusRows.map((row) => (
+                        <tr key={row.label}><th scope="row">{row.label}</th><td>{row.count}</td></tr>
+                      ))}</tbody>
+                    </table>
+                  </div>
+                </details>
+              </div>
+              <div className="data-workbench__chart-group">
+                <ChartBox
+                  title="各批次导入版本数"
+                  sub="最近 10 个批次；可展开查看逐批数值"
+                  option={historyCharts.versions}
+                  ariaLabel="最近 10 个批次的导入版本数量，单位个"
+                  testId="data-batch-version-chart"
+                  height={230}
+                />
+                <details className="data-workbench__chart-details" data-testid="data-batch-version-details">
+                  <summary>查看逐批版本数</summary>
+                  <div className="flow-table-wrap" role="region" aria-label="批次导入版本数数据表" tabIndex={0}>
+                    <table className="flow-table">
+                      <caption>按最近批次图表顺序列出导入版本数（单位：个）</caption>
+                      <thead><tr><th scope="col">批次</th><th scope="col">导入版本数</th></tr></thead>
+                      <tbody>{historyCharts.versionRows.map((row) => (
+                        <tr key={row.name}><th scope="row">{row.name}</th><td>{row.count}</td></tr>
+                      ))}</tbody>
+                    </table>
+                  </div>
+                </details>
+              </div>
             </div>
           ) : null}
           {historyLoaded && !historyError && batchHistory.length === 0 ? (

@@ -262,7 +262,11 @@
 .data-workbench__history-heading h2 { font-size: 21px; }
 .data-workbench__history-heading p { margin-top: 6px; }
 .data-workbench__charts { gap: 18px; }
-.data-workbench__charts > .chart-card { min-width: 0; border-color: #e4ded3; background: var(--flow-vl-colors-surface-paper); }
+.data-workbench__chart-group { display: grid; min-width: 0; align-content: start; }
+.data-workbench__chart-group > .chart-card { min-width: 0; border-color: #e4ded3; background: var(--flow-vl-colors-surface-paper); }
+.data-workbench__chart-details { min-width: 0; padding: 0 12px 8px; border: 1px solid #e4ded3; border-top: 0; border-radius: 0 0 4px 4px; background: var(--flow-vl-colors-surface-paper); color: var(--flow-vl-colors-text-secondary); font-size: 12px; }
+.data-workbench__chart-details summary { width: fit-content; padding: 7px 0; color: var(--flow-vl-colors-brand-navy); cursor: pointer; }
+.data-workbench__chart-details[open] .flow-table-wrap { margin-bottom: 4px; }
 .data-workbench__history .flow-table-wrap { border: 1px solid #e4ded3; border-radius: 4px; }
 .data-workbench__history .flow-table { color: #40566a; }
 .data-workbench__history .flow-table caption { padding: 10px 12px; color: var(--flow-vl-colors-text-muted); text-align: left; }

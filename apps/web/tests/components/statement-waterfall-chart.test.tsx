@@ -2,6 +2,7 @@ import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import { WaterfallChart } from "../../components/statements/charts/waterfall-chart";
+import { VISUAL_TOKENS } from "../../lib/visual-tokens.generated";
 
 describe("WaterfallChart", () => {
   it("负利润时仍将负值柱与标签绘制在 SVG 画布内", () => {
@@ -22,6 +23,8 @@ describe("WaterfallChart", () => {
     const viewBoxHeight = Number(svg?.viewBox.baseVal.height);
     const bars = [...(svg?.querySelectorAll("rect") ?? [])];
     expect(bars).toHaveLength(3);
+    expect(bars[0]?.getAttribute("fill")).toBe(VISUAL_TOKENS["colors-data-revenue"]);
+    expect(bars[2]?.getAttribute("fill")).toBe(VISUAL_TOKENS["colors-semantic-negative"]);
     for (const bar of bars) {
       const bottom = Number(bar.getAttribute("y")) + Number(bar.getAttribute("height"));
       expect(bottom).toBeLessThanOrEqual(viewBoxHeight);

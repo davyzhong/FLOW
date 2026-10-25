@@ -75,7 +75,7 @@ function comparisonOption(
     unit: unit === "ratio" ? "%" : unit,
     points: periods.map((period) => {
       const item = metricFor(period, code);
-      const value = item?.status === "available" && item.value
+      const value = item?.status === "available" && item.value !== null && item.value !== undefined
         ? Number(item.value) * (unit === "ratio" ? 100 : 1)
         : null;
       return {
@@ -136,7 +136,7 @@ export function CockpitProfitabilityPage() {
           title="杜邦驱动关系"
           sub={current?.snapshot_id ? `冻结快照 ${current.snapshot_id}` : "缺少冻结的分析指标"}
           option={option}
-          ariaLabel="ROE 由净利率、总资产周转率和权益乘数构成的杜邦关系图"
+          ariaLabel={`ROE 由净利率、总资产周转率和权益乘数构成的杜邦关系图，期间${current?.period ?? "不可用"}；ROE 和净利率单位百分比、总资产周转率单位次、权益乘数单位倍`}
           testId="cockpit-profitability-dupont"
           height={350}
         />
@@ -155,7 +155,7 @@ export function CockpitProfitabilityPage() {
             title="ROE 与净利率"
             sub={periods.map((period) => period.period).join(" / ")}
             option={comparisonOption(periods, [{ code: "roe", label: "ROE" }, { code: "net_margin", label: "净利率" }], "ratio")}
-            ariaLabel="ROE 和净利率的两期财年比较图"
+            ariaLabel={`ROE 和净利率的两期财年比较图，期间${periods.map((period) => period.period).join("、")}，单位百分比`}
             testId="cockpit-profitability-roe-comparison"
             height={280}
           />
@@ -163,7 +163,7 @@ export function CockpitProfitabilityPage() {
             title="总资产周转率（次）"
             sub={periods.map((period) => period.period).join(" / ")}
             option={comparisonOption(periods, [{ code: "total_asset_turnover", label: "总资产周转率" }], "次")}
-            ariaLabel="总资产周转率的两期财年比较图，单位为次"
+            ariaLabel={`总资产周转率的两期财年比较图，期间${periods.map((period) => period.period).join("、")}，单位次`}
             testId="cockpit-profitability-efficiency-comparison"
             height={280}
           />
@@ -171,7 +171,7 @@ export function CockpitProfitabilityPage() {
             title="权益乘数（倍）"
             sub={periods.map((period) => period.period).join(" / ")}
             option={comparisonOption(periods, [{ code: "equity_multiplier", label: "权益乘数" }], "倍")}
-            ariaLabel="权益乘数的两期财年比较图，单位为倍"
+            ariaLabel={`权益乘数的两期财年比较图，期间${periods.map((period) => period.period).join("、")}，单位倍`}
             testId="cockpit-profitability-leverage-comparison"
             height={280}
           />
