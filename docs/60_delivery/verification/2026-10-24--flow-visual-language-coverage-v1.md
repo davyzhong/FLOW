@@ -18,6 +18,8 @@ applies_to: repository
 
 本记录是仍在执行中的视觉统一验收，不表示全部视觉差距已经关闭。阶段性截图位于 [`visual-language-20261024/`](visual-language-20261024/)，其中 `results.json` 逐条记录路由、视口、截图相对路径、HTTP 状态、内容是否就绪、API 错误、横向溢出和浏览器错误；并明确列出 27 张更早采集的参考图；本轮另有一张指标依赖图交互截图。
 
+2026-10-25 补充：PR #5 的 dashboard 截图回归因 Linux/macOS 基线旧于已实施的纸白/海军蓝主题和仪表盘版式而失败。对照 CI 实际截图确认变更符合已批准视觉方向，已同步更新两种平台的 1440×900 与 1920×1080 基线。独立临时 Compose 数据源上 `scripts/test_dashboard.sh` 7/7 通过（含正常快照比对与 Axe 严重/致命违规检查），报告渲染器定向测试 21/21 通过。该修复只关闭 dashboard 基线门禁，不关闭本报告列出的全路由图表、交互、输出模板和无障碍验收。
+
 - 浏览器：Chromium / Playwright，生产 standalone Web 构建；API 与 Web 均在本机隔离进程运行。
 - 视口：桌面 1440×1000、平板 1024×900、手机 390×844；20 路由共 60 组。
 - 视觉验收数据：仅使用临时目录 `/tmp/flow-visual-audit-20261024` 中的大麦 synthetic 演示数据；release manifest SHA-256：`6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`。没有接入常驻或用户数据库。
