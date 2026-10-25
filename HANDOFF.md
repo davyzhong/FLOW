@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目交接文档
 doc_type: navigation
 status: current
-version: 16.3
+version: 16.4
 created_at: 2026-09-12
 updated_at: 2026-10-26
 owner: FLOW
