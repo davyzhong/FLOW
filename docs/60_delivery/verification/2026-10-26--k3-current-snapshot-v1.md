@@ -186,3 +186,8 @@ W3 MED 第二组抽审三条来源，文件 SHA 与 accepted baseline 一致，�
 ## 语义审阅批次 034（2026-10-26）
 
 W3 MED 第三组抽审三条全文，source SHA 均与 accepted baseline 匹配，处置为 pending-verification。人货匹配模板可参考其问题分解，历史销售不足以独立预测新品需求；BI科普中的边界定义与FineBI实时预警、预算审批等能力未独立验证；零售多场景案例涉及星型模型、购物篮和RFM，但无原始数据/工作簿，AI派生图表数据存在跨图差异，不作事实。coverage 当前 routed 87、filtered 16、pending_review 9,570。详见 `semantic-review-2026-10-26-batch-034.tsv`。
+
+
+## 语义审阅批次 035（2026-10-26）
+
+W3 MED 第四组完成三条全文双审，三条源 SHA 均匹配 accepted baseline，处置均为 pending-verification。零售B2B案例将地区和排名数据映射改写、按随机函数产生目标，所有案例数值/趋势不作经营事实；业财一体化材料无企业实施证据且包含工具推广；零售五场景文章缺数据、口径与模型，固定ABC占比和效果主张不作通用规则。coverage 更新为 routed 90、filtered 16、pending_review 9,567。详见 `semantic-review-2026-10-26-batch-035.tsv`。
