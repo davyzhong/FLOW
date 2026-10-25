@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 7.2
+version: 7.3
 created_at: 2026-09-12
 updated_at: 2026-10-25
 owner: FLOW
@@ -17,7 +17,7 @@ superseded_by: null
 
 # 当前路线图（唯一主线）
 
-> **2026-10-25 最新状态：** D055 单机原型 7a.1–7a.8 已完成并合入 main；原型验收见[完结差距审查](../60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)。**去重后 16 个唯一事项：已完成 9、实际执行中 1（视觉统一 PR #5 当前 CI 状态以准确 HEAD 核对）、队首待启动 0、排队 4、暂停 1、外部条件受限 1。** 当前工作分支 `codex/flow-visual-language`。最新代码 SHA `1f75792a103af0cbe0d6b483316a26cc958fe391` 修复图表辅助说明、数据工作台同值表、瀑布图亏损总额语义色及盈利比较图合法 0 值漏显。Web 全量 38 文件/205 项测试、typecheck、production build 通过；lint 0 错误、4 条既有警告。准确 SHA 下 20 路由×3 视口矩阵 60/60 ready，页面/API/浏览器错误、外部请求和横向溢出均为 0；Axe 4.13 桌面 20 路由零违规。GitHub Actions 状态按当前 HEAD 在 [GitHub Actions](https://github.com/davyzhong/FLOW/actions) 实时核对；文档提交会触发新 run，不以先前 SHA 结果代替。图表语义首轮审计覆盖 34 个可视对象，进一步交互/键盘、真实 200% 缩放及 HTML/PDF/PPTX/XLSX 版式与打印仍未完成，不能把默认态矩阵当作工作包完成。主队列完成比例 9/16（约 56%），不代表视觉工作包完成率。视觉差距与截图见[验收记录](../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)；报告中心真实内容留白不得用虚构数据填充。分支清理证据记录于工作包；K2 仍排队，待视觉工作包完整验收后启动。
+> **2026-10-25 最新状态：** D055 单机原型 7a.1–7a.8 已合入 main。去重后 16 项：已完成 9、实际执行中 1（视觉统一 PR #5）、排队 4、暂停 1、外部条件受限 1。当前分支 `codex/flow-visual-language`，代码 SHA `52418d88c9338b41c59f14f3d699d758c36bf8a1` 已推送。Web 38 文件/209 项测试、typecheck、production build 通过；lint 0 错误/4 条既有警告。20 路由×3 视口矩阵 60/60 ready，Axe 桌面 20 路由零违规，19/19 AppShell 路由键盘跳转通过；图谱分层、重复指标深链、390 CSS px 重排均已验收。原生浏览器 200% 缩放无法由当前 CLI 直接设置，明确保留为未直接验收项。当前代码/键盘子项已结束，队首仍是路线图第 12 项；下一子步按工作包顺序验收 HTML/PDF/PPTX/XLSX 模板与打印。视觉工作包未结案前不启动 K2。详细证据见[视觉覆盖验收](../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)；GitHub Actions 结论按当前准确 HEAD 查询。
 
 > 当前完结目标依据 D055：交付本机单用户可启动、可加载/重置演示业务、可看丰富 CFO 图表、可下钻追溯、可分析和导出报告、可备份恢复、可离线浏览的验证原型。公开 C 级、知识刷新、真实企业三周期仍未完成，保留在长期队列，不作为本原型无限延期的理由。**下方 2026-10-21 及以前的状态段落均为历史，当前只按本段及唯一执行队列。**
 

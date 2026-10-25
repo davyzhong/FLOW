@@ -3,16 +3,22 @@ doc_id: FLOW-VERIFY-VISUAL-LANGUAGE-20261024-001
 title: FLOW 可复用视觉语言与全项目视觉覆盖验收
 doc_type: verification
 status: verified
-version: 1.11
+version: 1.12
 created_at: 2026-10-24
 updated_at: 2026-10-25
 owner: FLOW
-commit_refs: "[28c0e7a29d7812106709947414c9a560f1c530b0, faaa446b6540565f54290a8f558a7b80b302d39b, 4645c43c4d7c67dc0cd588cea2a32e427f83ff27, 6a49401d55c275decf30dc63f419233b7928997d, 9da910e2456a4f7044a2049950e60b7cadb73bb4, 9cf65f6d58e0cdb33d8e04c17d843a8c9bbc1489, cc0fb2eff5d7dbb01f48fda3e84c8c23c9e35583, b04a7c5425c340681828f1c15c15f3071b1e2782, 1f75792a103af0cbe0d6b483316a26cc958fe391]"
-evidence_refs: "[visual-language-tokens, generator-check, web-typecheck, web-vitest, web-build, api-renderer-tests, api-ruff, api-mypy, isolated-route-matrix, screenshots, axe-desktop-route-audit, chart-value-alternatives, waterfall-negative-total-regression, chart-accessibility-labels, batch-chart-value-tables, profitability-zero-value-regression]"
+commit_refs: "[28c0e7a29d7812106709947414c9a560f1c530b0, faaa446b6540565f54290a8f558a7b80b302d39b, 4645c43c4d7c67dc0cd588cea2a32e427f83ff27, 6a49401d55c275decf30dc63f419233b7928997d, 9da910e2456a4f7044a2049950e60b7cadb73bb4, 9cf65f6d58e0cdb33d8e04c17d843a8c9bbc1489, cc0fb2eff5d7dbb01f48fda3e84c8c23c9e35583, b04a7c5425c340681828f1c15c15f3071b1e2782, 1f75792a103af0cbe0d6b483316a26cc958fe391, 52418d88c9338b41c59f14f3d699d758c36bf8a1]"
+evidence_refs: "[visual-language-tokens, generator-check, web-typecheck, web-vitest, web-build, api-renderer-tests, api-ruff, api-mypy, isolated-route-matrix, screenshots, axe-desktop-route-audit, chart-value-alternatives, waterfall-negative-total-regression, chart-accessibility-labels, batch-chart-value-tables, profitability-zero-value-regression, skip-link-keyboard-audit, graph-layer-interaction, duplicate-code-deep-link, narrow-graph-keyboard-scroll]"
 applies_to: repository
 ---
 
 # FLOW 可复用视觉语言与全项目视觉覆盖验收
+
+## 2026-10-25 交互/键盘增量
+
+准确代码 SHA `52418d88c9338b41c59f14f3d699d758c36bf8a1`。全站加入可见 skip link 与主内容焦点；19/19 AppShell 路由首 Tab/Enter 均可见并聚焦主内容。图谱各层节点/边计数：常用 32/13、全部 65/28、专业 33/7；零重复 ID，React Flow edge paths 存在。图层改变清空旧选择；同名指标深链包含 collection 并准确切换高亮。390 CSS px 下无页面横向溢出，图谱容器宽 364px、内容宽 720px，ArrowRight 可滚动，节点可读。测试 38 文件/209 项通过，typecheck/build 通过，lint 0 错误/4 条既有警告；矩阵 60/60，Axe 20 路由零违规。独立复核无 P1/P2。
+
+原生浏览器 200% 缩放无法由当前受控 CLI 直接设置（CLI 缩放快捷键不生效，Edge 可见性能力不可用），因此记为未直接验收；390 CSS px 重排是辅助证据，不能替代原生缩放。下一步按序检查 HTML/PDF/PPTX/XLSX 模板与打印。本轮未触碰常驻数据库或任何写入型业务流程。
 
 ## 2026-10-25 图表语义首轮审计增量
 
@@ -26,9 +32,9 @@ Web 全量 `pnpm test`：38 个文件、205 项通过；`pnpm typecheck` 与 `pn
 
 本记录是仍在执行中的视觉统一验收，不表示全部视觉差距已经关闭。
 
-**当前最新证据以本段为准：** 代码 SHA `1f75792a103af0cbe0d6b483316a26cc958fe391`。Web 测试 205/205、typecheck、build 通过，lint 0 错误/4 警告；20×3 矩阵 60/60 ready、错误/请求/溢出为 0；Axe 4.13 桌面 20 路由 0 violations。目录内 60 张矩阵截图、`results.json` 和 `axe-results.json` 均在该 SHA 采集。隔离 manifest SHA `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`。代码 SHA 的旧 run 已由后续文档提交触发的 run 替代；CI 结论按最新提交准确 SHA 在 Actions 实时查询。逐图表、交互/键盘、真实 200% 缩放和导出打印仍有待验收，K2 不启动。
+**当前最新证据以本段为准：** 代码 SHA `52418d88c9338b41c59f14f3d699d758c36bf8a1`。Web 测试 209/209、typecheck、build 通过，lint 0 错误/4 警告；20×3 矩阵 60/60 ready、错误/请求/溢出为 0；Axe 桌面 20 路由零违规。目录内 60 张截图、`results.json` 和 `axe-results.json` 均绑定该 SHA；隔离 manifest SHA `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`。19/19 AppShell 键盘入口、图谱 3 层与重复指标深链通过；原生 200% 缩放未能在受控 CLI 设置，仍待直接验收。下一步是 HTML/PDF/PPTX/XLSX 模板和打印；完整交互剩余状态、最终复核和准确 SHA CI 未结案，K2 不启动。
 
-2026-10-25 前一代码阶段验收（准确 SHA `b04a7c5425c340681828f1c15c15f3071b1e2782`）：瀑布图仅负总计时漏算 `hi` 端点造成的 SVG 裁切已修复；负 delta 连接线回到变动前累计值，负值标签显示在柱下。独立复核无 P1/P2；相关 4 个测试文件 33/33、Web typecheck、视觉 token 检查通过。该阶段矩阵和 Axe 结果为历史证据，现由上方 `1f75792a` 当前结果替代。GitHub Actions run `40199235605` 后续取消，不代表当前提交结果。工作包未结案。
+2026-10-25 前一代码阶段验收（准确 SHA `b04a7c5425c340681828f1c15c15f3071b1e2782`）：瀑布图仅负总计时漏算 `hi` 端点造成的 SVG 裁切已修复；负 delta 连接线回到变动前累计值，负值标签显示在柱下。独立复核无 P1/P2；相关 4 个测试文件 33/33、Web typecheck、视觉 token 检查通过。该阶段矩阵和 Axe 结果为历史证据，现由本报告最新段落中的 `52418d88` 当前结果替代。GitHub Actions run `40199235605` 后续取消，不代表当前提交结果。工作包未结案。
 
 2026-10-25 增量（准确代码 SHA `0b06d01c07bf7e7c12e1565a17bce2b94c83aa04`）：报告中心编辑式双栏/窄屏单栏，指标库桌面卡片双列排列；指标库定向测试 16/16、报告中心定向组件 12/12、typecheck、production build 均通过。重采矩阵仍为 20 路由×3 视口 60/60 ready，API/浏览器错误、外部请求、横向溢出为 0；Axe 桌面 20 路由零违规。截图和 `results.json`、Axe 结果均绑定该 SHA。准确 SHA 的远端 CI 状态随提交变化；请按当前 HEAD 在 GitHub Actions 核对，不把历史运行状态当作当前结论。开发脚本已退出，现阶段仅远端 CI 在执行。工作包未结案：图表事实/单位/期间/图例/来源核对、完整交互与键盘路径、实际 200% 浏览器缩放和 HTML/PDF/PPTX/XLSX 模板/打印仍未验收。
 

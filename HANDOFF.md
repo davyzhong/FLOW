@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目交接文档
 doc_type: navigation
 status: current
-version: 12.1
+version: 12.2
 created_at: 2026-09-12
 updated_at: 2026-10-25
 owner: FLOW
@@ -18,10 +18,11 @@ applies_to: repository
 
 ## 一、当前任务
 
-**2026-10-25 当前交接：路线图 7a.1–7a.8 已完成并合入 main。原型验收与限制见[差距审查](docs/60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)。当前唯一执行项为可复用视觉语言提炼与 FLOW 全项目视觉统一，分支 `codex/flow-visual-language`，PR #5。代码提交 `1f75792a103af0cbe0d6b483316a26cc958fe391` 已推送；全量 Web 205 项测试、typecheck、build 通过，lint 0 错误/4 警告，独立终审无 P1/P2。20 路由×3 视口矩阵 60/60 ready、Axe 4.13 桌面 20 路由零违规；错误、外部请求和横向溢出均为 0。图表首轮审计登记 34 个可视对象，并修复单位/期间辅助说明、批次同值表、亏损总额语义色和盈利比较图 0 值漏显。CI 状态按当前准确 HEAD 在 GitHub Actions 实时核对。本地视觉验收脚本已退出；下一步继续完整图谱/导入/筛选/报告交互、全键盘、实际 200% 缩放和 HTML/PDF/PPTX/XLSX 模板与打印；视觉工作包未结案前不启动 K2。当前矩阵、Axe 结果与截图采集脚本见[覆盖报告](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)；唯一队列见[CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)。用户选择保留 `/Users/qiming/.flow/flow.sqlite3` 零字节文件；`services/api/flow.sqlite3` 未跟踪文件原样保留。此前错误启动测试触发主 checkout `.venv` 重建的记录保留为操作历史；当前任务使用独立 worktree。
+**2026-10-25 当前交接：** 路线图共 16 项：完成 9、实际执行中 1（第 12 项视觉统一）、排队 4、暂停 1、外部条件受限 1。当前分支 `codex/flow-visual-language`，代码 SHA `52418d88c9338b41c59f14f3d699d758c36bf8a1` 已推送；PR #5。Web 209/209、typecheck、build 通过，lint 0 错误/4 条既有警告；独立复核无 P1/P2。矩阵 60/60、Axe 20 路由零违规；19/19 AppShell 路由键盘跳转通过。常用/全部/专业图谱、重复指标深链及 390 CSS px 图谱横向键盘阅读均通过。原生浏览器 200% 缩放在此 CLI 环境无法直接操作，尚未验收。当前应继续验收 HTML/PDF/PPTX/XLSX 模板与打印，再按工作包完成全量复核；本包关闭前不启动 K2。结果见[覆盖报告](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)和[唯一队列](docs/50_plans/CURRENT_ROADMAP.md)。用户选择保留 `/Users/qiming/.flow/flow.sqlite3` 零字节文件；其他未跟踪数据库文件保持原样。
 
 
-**最新操作记录（2026-10-25）：** 图表语义首轮审计代码提交 `1f75792a103af0cbe0d6b483316a26cc958fe391` 已推送；Web 205/205、typecheck、build 通过，lint 0 错误/4 警告，独立终审无 P1/P2。准确 SHA 的矩阵 60/60、Axe 桌面 20 路由零违规，截图和结果文件已重采；CI 状态按当前准确 HEAD 在 GitHub Actions 实时核对。34 个可视对象已完成首轮登记/抽查，接下来继续交互/键盘、200% 缩放、四种导出和打印。视觉工作包未结案前不启动 K2。
+**最新操作记录（2026-10-25）：** 代码 SHA `52418d88c9338b41c59f14f3d699d758c36bf8a1` 已推送。交互/键盘验收后 Web 测试增至 209/209，typecheck、build 通过，lint 0 错误/4 警告；矩阵 60/60、Axe 桌面 20 路由零违规。19/19 AppShell 路由键盘跳转、图谱三层、重复指标深链、窄屏图谱键盘横读均通过；原生 200% 缩放未在受控 CLI 直接验证。接手后按工作包顺序做输出模板/打印验收，更新证据并完成准确 SHA CI。
+
 <details>
 <summary>2026-10-21 及以前的状态快照（历史，不代表当前执行）</summary>
 
