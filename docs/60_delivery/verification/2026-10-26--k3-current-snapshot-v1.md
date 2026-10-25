@@ -206,3 +206,8 @@ W3 MED 第六组完成三条全文双审，三条源 SHA 与 accepted baseline �
 ## 语义审阅批次 038（2026-10-26）
 
 W3 MED 第七组完成三条全文双审，源 SHA 均匹配 accepted baseline，处置均为 pending-verification。竞品分析图表数据明示并非企业实绩；FineBI财务数字化和费用案例为供应商自述、无原始指标或独立效果验证；库存ABC/XYZ阈值及批次逆推库龄依赖业务约定与完整流水，不能直接当普适规则或真实库龄。coverage 更新至 routed 99、filtered 16、pending_review 9,558。详见 `semantic-review-2026-10-26-batch-038.tsv`。
+
+
+## 语义审阅批次 039（2026-10-26）
+
+W3 MED 第八组完成三条全文双审，正文 SHA 匹配 accepted baseline 且不与既有语义批次重复，均为 pending-verification。财务BP示例来自称为脱敏的订单/支付宝数据，正文列值还存在 19,947.05−556.75−3,283.09=16,107.21 元而列报 16,312.06 元的204.85元内部差异，妥投率等衍生值须重算，经营口径不替代会计定义；渠道重点商品专案缺少可复算明细与对照，观察到的份额/达成不能证明措施效果；客户分析模型文章缺少样本、标签、验证和性能证据，标题数量/分节对应不清，正相关不是干预因果。coverage 为 routed 102、filtered 16、pending_review 9,555。详见 `semantic-review-2026-10-26-batch-039.tsv`。
