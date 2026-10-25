@@ -191,3 +191,8 @@ W3 MED 第三组抽审三条全文，source SHA 均与 accepted baseline 匹配�
 ## 语义审阅批次 035（2026-10-26）
 
 W3 MED 第四组完成三条全文双审，三条源 SHA 均匹配 accepted baseline，处置均为 pending-verification。零售B2B案例将地区和排名数据映射改写、按随机函数产生目标，所有案例数值/趋势不作经营事实；业财一体化材料无企业实施证据且包含工具推广；零售五场景文章缺数据、口径与模型，固定ABC占比和效果主张不作通用规则。coverage 更新为 routed 90、filtered 16、pending_review 9,567。详见 `semantic-review-2026-10-26-batch-035.tsv`。
+
+
+## 语义审阅批次 036（2026-10-26）
+
+W3 MED 第五组完成三条全文双审，源 SHA 与 accepted baseline 一致，均为 pending-verification。电商指标文章存在库存周转公式/量纲与分母口径切换；新品推广的脱敏样本、虚拟品牌与客户分群无底表可复算，Q1完成率不足以证明Q2目标合理；房地产案例虽描述企业及外部数据来源，但未附复核数据/时间与清洗规则，观察性对比不能证明因果或作为投资结论。coverage 更新至 routed 93、filtered 16、pending_review 9,564。详见 `semantic-review-2026-10-26-batch-036.tsv`。
