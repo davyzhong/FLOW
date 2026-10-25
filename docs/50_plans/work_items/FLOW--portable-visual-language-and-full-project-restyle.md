@@ -26,6 +26,8 @@ confidentiality: project-internal
 
 ## 当前实施记录（2026-10-24）
 
+- 2026-10-25（代码 SHA `2abdad9621ab03141beb3ceb5e0da64f3d636cba`）：报告中心桌面改为双栏编辑式卡片，使用概念板的衬线主标题、古金眉线和纸面分区，窄屏回到单栏；报告数据和操作逻辑不变。报告中心组件 12/12、Web typecheck、production build 通过。新增可复跑矩阵脚本 `scripts/capture_visual_language_matrix.mjs`；当前 20 路由×3 视口 60/60 内容就绪，页面/API 错误、外部请求、横向溢出均为 0。Axe 4.13 桌面 20 路由零违规。准确 SHA 的 PR CI run `40195231596` 当前排队。图表事实逐项复核、完整交互、实际 200% 浏览器缩放以及 HTML/PDF/PPTX/XLSX 版式与打印仍未验收。
+
 - 2026-10-25（代码 SHA `cc0fb2eff5d7dbb01f48fda3e84c8c23c9e35583`）：财报页利润瀑布、现金桥、资产/资本结构、现金流比较图新增同值折叠表；原图表标签与数据口径保持不变，移动端可聚焦横向阅读。财报组件 8/8、前端 201/201、typecheck、production build 通过。更新后的 20×3 路由矩阵 60/60 ready，Axe 4.13 桌面 20 路由零违规，指标依赖图交互无错误；矩阵及逐路由 Axe JSON 均绑定此 SHA。仍待图表期间/单位/来源逐对象审计、复杂交互状态和四类导出打印验收。
 
 - 2026-10-25（代码 SHA `3e8a1676f79e0e7c350cd950326ac2128c08ddc7`）：全站对比度/结构修复已提交推送；Web typecheck、37 文件 201/201 单测、Next.js production build、token 生成检查、M1 和 diff-check 通过。Axe 4.13 对 20 个桌面路由为零违规；20×3 截图矩阵 60/60 ready，错误/外部请求/溢出为零；360 CSS px 的 20 路由首 Tab 焦点可见且零溢出。独立输出矩阵和限制见[覆盖验收](../../60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。图表逐对象语义、导入/筛选/报告交互和四类导出打印验收仍未完成。

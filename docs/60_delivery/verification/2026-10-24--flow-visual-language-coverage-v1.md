@@ -18,6 +18,8 @@ applies_to: repository
 
 本记录是仍在执行中的视觉统一验收，不表示全部视觉差距已经关闭。
 
+2026-10-25 最新复验（代码 SHA `2abdad9621ab03141beb3ceb5e0da64f3d636cba`）：报告中心完成编辑式双栏桌面版式和单栏窄屏响应调整，定向组件测试 12/12、Web typecheck、production build 通过。使用 `node scripts/capture_visual_language_matrix.mjs` 重采 20 路由×3 视口，60/60 内容就绪，页面/API 错误、浏览器错误、外部请求及横向溢出均为 0；Axe 4.13 桌面扫描 20 路由零违规。可复现截图及逐路由数据见本目录 `visual-language-20261024/`；矩阵采集与 Axe 结果均绑定此 SHA。准确 SHA PR CI run `40195231596` 仍排队。视觉差异仍待逐页逐图表核对，全部/专业图谱与导入、筛选、报告交互状态尚未完整验收，当前键盘路径/实际 200% 浏览器缩放和 HTML/PDF/PPTX/XLSX 版式、打印也未完成；因此工作包仍不能结案，K2 仍排队。
+
 2026-10-25 最新代码验收（SHA `cc0fb2eff5d7dbb01f48fda3e84c8c23c9e35583`）：修复共享文字色对比度、7 个驾驶舱子页的 H1、不可聚焦数据表滚动区、调查详情定义列表/landmark，以及标题层级。Axe 4.13 对 20 个桌面路由复扫为 0 个违规；可用 `node scripts/audit_visual_language_accessibility.mjs` 重跑，完整路由结果见 [`axe-results.json`](visual-language-20261024/axe-results.json)，含色彩对比、标题顺序和 landmark）；20 路由×3 视口截图重采 60/60 内容就绪，API/浏览器错误、外部请求及横向溢出均为 0。以 360 CSS px（相当于 720 CSS px 视口 200% 放大后的可用宽度）检查 20 路由，页面横向溢出为 0，首个 Tab 焦点均可见。截图与结果 JSON 位于本目录 `visual-language-20261024/`；演示来源仍是临时 synthetic 数据库，manifest SHA 为 `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`。财报页五类手绘图已补同值表；其他图表仍需逐项核对期间/单位/图例/来源/同值表，图谱全部分层与复杂上传/报告交互状态、HTML/PDF/PPTX/XLSX 打印版式尚未完成，因此本轮不能结案或启动 K2。阶段性截图位于 [`visual-language-20261024/`](visual-language-20261024/)，其中 `results.json` 逐条记录路由、视口、截图相对路径、HTTP 状态、内容是否就绪、API 错误、横向溢出和浏览器错误；并明确列出 27 张更早采集的参考图；本轮另有一张指标依赖图交互截图。
 
 2026-10-25 补充：PR #5 的 dashboard 截图回归因 Linux/macOS 基线旧于已实施的纸白/海军蓝主题和仪表盘版式而失败。对照 CI 实际截图确认变更符合已批准视觉方向，已同步更新两种平台的 1440×900 与 1920×1080 基线。独立临时 Compose 数据源上 `scripts/test_dashboard.sh` 7/7 通过（含正常快照比对与 Axe 严重/致命违规检查），报告渲染器定向测试 21/21 通过。该修复只关闭 dashboard 基线门禁，不关闭本报告列出的全路由图表、交互、输出模板和无障碍验收。

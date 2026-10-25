@@ -72,7 +72,7 @@ tags:
 
 </div>
 
-FLOW 的视觉方向已经明确：把有来源、有口径、有解释的财务事实组织成可阅读、可追问、可复核的分析画布。概念板展示设计目标；下方实景图记录此前真实运行的页面与公开财报实验。2026-10-25 已将共享视觉语言推广至全路由，并修复桌面 Axe 扫描发现的对比度与结构问题；当前 20 路由×3 视口矩阵 60/60 内容就绪，交互图表、复杂状态和 HTML/PDF/PPTX/XLSX 打印验收仍在进行。最新截图、准确代码 SHA 与验收限制见[视觉覆盖报告](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)；截图自动化与公开截图发布仍暂停。
+FLOW 的视觉方向已经明确：把有来源、有口径、有解释的财务事实组织成可阅读、可追问、可复核的分析画布。概念板展示设计目标；下方实景图记录此前真实运行的页面与公开财报实验。2026-10-25 已将共享视觉语言推广至全路由，修复对比度与结构语义，并把报告中心调整为编辑式双栏、窄屏单栏；当前代码 SHA `2abdad9621ab03141beb3ceb5e0da64f3d636cba` 下 20 路由×3 视口矩阵 60/60 内容就绪，Axe 桌面 20 路由零违规。逐图表/复杂交互、实际 200% 浏览器缩放和 HTML/PDF/PPTX/XLSX 打印验收仍在进行。最新截图、可复跑检查与剩余范围见[视觉覆盖报告](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)；公开截图发布仍暂停。
 
 <table>
 <tr>
@@ -89,7 +89,7 @@ FLOW 的视觉方向已经明确：把有来源、有口径、有解释的财务
 
 下面是概念板方向已经落到产品页面后的本机浏览器实测。桌面总览优先呈现营业收入、营业利润、毛利率和经营现金流；完整趋势、现金流桥、杜邦分解、费用结构、行动项及来源口径均可在同一画布查看。手机截图展示同一数据视图的窄屏排列。
 
-2026-10-24 起，项目正在把 A「高管编辑部」× C「财务报告画布」抽象为可复制的 [FLOW Visual Language 包](packages/flow-visual-language/README.md)，并分阶段统一全项目页面、图表与报告输出。下图是生产构建的真实页面截图；使用隔离 synthetic 数据，不代表真实企业经营结果。最新代码 SHA `cc0fb2eff5d7dbb01f48fda3e84c8c23c9e35583` 下 20 路由×3 视口矩阵 60/60 内容就绪，Axe 桌面 20 路由零违规，360 CSS px 下 20 路由首个 Tab 焦点可见且无溢出。图表逐项语义、复杂交互、HTML/PDF/PPTX/XLSX 版式和打印仍待验收。完整记录：[视觉覆盖报告](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)；60 张最新截图与准确 SHA 见[矩阵目录](docs/60_delivery/verification/visual-language-20261024/)。
+2026-10-24 起，项目正在把 A「高管编辑部」× C「财务报告画布」抽象为可复制的 [FLOW Visual Language 包](packages/flow-visual-language/README.md)，并分阶段统一全项目页面、图表与报告输出。下图是生产构建的真实页面截图；使用隔离 synthetic 数据，不代表真实企业经营结果。当前代码 SHA `2abdad9621ab03141beb3ceb5e0da64f3d636cba` 下 20 路由×3 视口矩阵 60/60 内容就绪，Axe 桌面 20 路由零违规；报告中心采用更接近概念板的编辑式分区。逐图表语义、复杂交互、实际 200% 缩放及 HTML/PDF/PPTX/XLSX 版式与打印仍待验收。完整记录：[视觉覆盖报告](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)；60 张最新截图与准确 SHA 见[矩阵目录](docs/60_delivery/verification/visual-language-20261024/)。
 
 ![FLOW A+C 视觉语言实施中的集团财务总览真实页面，展示纸白画布、深海军蓝导航、衬线标题、指标卡、趋势图、现金流桥与来源面板；经营数据为隔离 synthetic 演示数据](docs/60_delivery/verification/visual-language-20261024/cockpit--desktop.png)
 
@@ -819,7 +819,7 @@ flowchart LR
     style C fill:#fff0cd,stroke:#aa7918,stroke-width:2px
 ```
 
-单机原型工作包已结案：SQLite + 本地文件目录、同步处理、单一启动入口、阶段 7 冷启动/离线展示验收均已交付。当前唯一执行项是 A+C 可复用视觉语言提炼与全项目视觉统一；可移植 token、CSS、表达范式与 specimen 已建立，Web 主题、共享外壳、主要页面/图表、离线快照和报告导出映射已接入。2026-10-25 的准确代码 SHA `cc0fb2eff5d7dbb01f48fda3e84c8c23c9e35583` 上，20 路由 Axe 零违规、20×3 页面矩阵 60/60 ready、360 CSS px 的焦点和横向布局检查通过；dashboard E2E 7/7、报告渲染器定向测试 21/21 通过。逐图表事实核对、复杂交互和导出打印验收仍在进行；准确 SHA 的全量 CI 尚待结案。完整状态、限制与队列见 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)。页面演示数据继续标识为合成数据，不冒充真实披露。
+单机原型工作包已结案：SQLite + 本地文件目录、同步处理、单一启动入口、阶段 7 冷启动/离线展示验收均已交付。当前唯一执行项是 A+C 可复用视觉语言提炼与全项目视觉统一；可移植 token、CSS、表达范式与 specimen 已建立，Web 主题、共享外壳、主要页面/图表、离线快照和报告导出映射已接入。当前视觉代码 SHA `2abdad9621ab03141beb3ceb5e0da64f3d636cba` 上，20 路由 Axe 零违规、20×3 页面矩阵 60/60 ready；报告中心完成编辑式双栏优化，定向组件测试 12/12、typecheck、production build 通过。逐图表事实核对、完整交互、实际 200% 缩放和导出打印验收仍在进行，准确 SHA CI run `40195231596` 排队中。完整状态、限制与队列见 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)。页面演示数据继续标识为合成数据，不冒充真实披露。
 
 本仓库尚未提供独立的 LICENSE 文件；使用与分发授权请向项目维护者确认。贡献与协作遵循 [AGENTS.md](AGENTS.md)：先读项目状态和正式决策，保护原始档案，按风险验证，每个完整任务只提交相关文件并推送规范远端。
 
