@@ -3,12 +3,12 @@ doc_id: FLOW-VERIFY-VISUAL-LANGUAGE-20261024-001
 title: FLOW 可复用视觉语言与全项目视觉覆盖验收
 doc_type: verification
 status: verified
-version: 1.6
+version: 1.7
 created_at: 2026-10-24
 updated_at: 2026-10-25
 owner: FLOW
 commit_refs: "[28c0e7a29d7812106709947414c9a560f1c530b0, faaa446b6540565f54290a8f558a7b80b302d39b, 4645c43c4d7c67dc0cd588cea2a32e427f83ff27, 6a49401d55c275decf30dc63f419233b7928997d, 9da910e2456a4f7044a2049950e60b7cadb73bb4, 9cf65f6d58e0cdb33d8e04c17d843a8c9bbc1489]"
-evidence_refs: "[visual-language-tokens, generator-check, web-typecheck, web-vitest, web-build, api-renderer-tests, api-ruff, api-mypy, isolated-route-matrix, screenshots]"
+evidence_refs: "[visual-language-tokens, generator-check, web-typecheck, web-vitest, web-build, api-renderer-tests, api-ruff, api-mypy, isolated-route-matrix, screenshots, axe-desktop-route-audit]"
 applies_to: repository
 ---
 
@@ -21,6 +21,8 @@ applies_to: repository
 2026-10-25 补充：PR #5 的 dashboard 截图回归因 Linux/macOS 基线旧于已实施的纸白/海军蓝主题和仪表盘版式而失败。对照 CI 实际截图确认变更符合已批准视觉方向，已同步更新两种平台的 1440×900 与 1920×1080 基线。独立临时 Compose 数据源上 `scripts/test_dashboard.sh` 7/7 通过（含正常快照比对与 Axe 严重/致命违规检查），报告渲染器定向测试 21/21 通过。该修复只关闭 dashboard 基线门禁，不关闭本报告列出的全路由图表、交互、输出模板和无障碍验收。
 
 2026-10-25 阶段截图复采：在提交 `9cf65f6d58e0cdb33d8e04c17d843a8c9bbc1489` 下，以生产 Web 构建和隔离 synthetic 数据库副本重采 20 路由×3 视口。60/60 内容就绪，页面与 API 错误、外部请求、横向溢出均为 0。该结果更新了本目录 60 张矩阵图及 `results.json`；旧参考图清单保留，指标依赖图交互截图也已在同 SHA 重采（31 节点、画布高 1436px、错误为 0）。截图审阅发现调查列表排序按钮与全站原生表单控件此前仍沿用默认浏览器样式，已在 `41016d7c` 和 `9cf65f6d` 分别统一为纸面表格/编辑式标题/古金眉线及古金表单控件。截图证据确认纸白、墨蓝、古金和衬线标题等共享视觉特征已进入全路由；矩阵只证明默认视图的可加载与版面边界，不代表逐图表/交互/无障碍/导出验收完成。
+
+2026-10-25 无障碍初扫：在上述隔离运行环境、9cf65f6d 构建和同一 synthetic 数据副本上，对 20 路由桌面默认态运行 Axe。共发现 359 个 color-contrast 节点；另有 7 个 cockpit 子页缺 H1、1 个不可聚焦的横向滚动区、调查详情 8 个 dlitem 节点、错误 role 和重复/嵌套 main landmark。扫描结果仅作为整改清单，不计作通过；此扫描未覆盖平板/手机、键盘全流程或 200% 缩放。当前先修共享文本色和结构语义，随后复扫并继续逐图表审计。原始 JSON 暂存 `/tmp/axe-flow-routes.json` 与 `/tmp/axe-color-summary.json`，不作为交付产物；最终可复验结果将记录到本报告。
 
 - 浏览器：Chromium / Playwright，生产 standalone Web 构建；API 与 Web 均在本机隔离进程运行。
 - 视口：桌面 1440×1000、平板 1024×900、手机 390×844；20 路由共 60 组。
