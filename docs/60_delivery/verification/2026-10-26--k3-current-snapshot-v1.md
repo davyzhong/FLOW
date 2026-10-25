@@ -3,7 +3,7 @@ doc_id: FLOW-VERIFY-K3-CURRENT-SNAPSHOT-20261026
 title: K3 当前 Obsidian 工作区稳定快照复核
 doc_type: verification
 status: verified
-version: 2.8
+version: 2.9
 created_at: 2026-10-26
 updated_at: 2026-10-26
 owner: FLOW
@@ -374,3 +374,8 @@ W3 MED 第二十四组完成1条全文双审，保留 pending-verification。同
 ## K3 全量语义路由增量（批次 071）
 
 按 accepted baseline 的 `source_id` 顺序处理12条。12条来源文件 SHA 与正文规范化 SHA 均匹配冻结基线；9条记为 routed / pending-verification，3条特定企业内部系统或运营资料记为 filtered / rejected。来源中的模型能力、性能数字、财务示例和业务效果未经独立核验，不作为产品事实；内部资料不复制具体内容。coverage 累计为9,673条：routed 282、filtered 71、pending_review 9,320；下一批为072。ObsidianWiki 与 `CURRENT_RELEASE` 未改动。
+
+
+## K3 全量语义路由增量（批次 072）
+
+按 accepted baseline 的 source_id 顺序处理12条。12条来源文件 SHA 与正文规范化 SHA 均匹配冻结基线；7条记为 routed / pending-verification，5条排除（2条企业内部产品/治理资料、2条范围外消费建议、1条不可追溯生成草稿）。两篇财务/数据资产资料分别引用20张和5张图片，附件均在accepted working tree中存在，但本批未审图像内容，不据图下结论；模型能力、会计口径、数值与效果均未独立核验。coverage累计为9,673条：routed 289、filtered 76、pending_review 9,308；下一批为073。ObsidianWiki与CURRENT_RELEASE未改动。

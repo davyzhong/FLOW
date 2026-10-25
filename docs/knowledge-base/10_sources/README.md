@@ -3,7 +3,7 @@ doc_id: FLOW-SRC-README-001
 title: 来源与证据层
 doc_type: navigation
 status: current
-version: 3.4
+version: 3.5
 created_at: 2026-09-12
 updated_at: 2026-10-26
 owner: FLOW
@@ -17,7 +17,7 @@ applies_to: knowledge-base
 - `SOURCE_REGISTER.md` —— 来源登记册（人类可读）与分层登记策略
 - `source-register.tsv` —— 机器可读登记（活登记，知识卡按需追加篇级）
 - `snapshots/` —— 固定截面定义（当前唯一截面：obsidian-2026-09-12T15:46+08:00）
-- `coverage-2026-10-26.tsv`、`coverage-exceptions-2026-10-26.tsv` 与 `../00_governance/change-manifests/obsidianwiki-20261026T005516+0800-d601b4d5-l2.tsv` —— 9,673 个来源的逐 ID 进度、例外与变更追溯；当前 routed 282、filtered 71、pending_review 9,320。三个 locator-only 来源继续待审，具体见当前 K3 工作包。
+- `coverage-2026-10-26.tsv`、`coverage-exceptions-2026-10-26.tsv` 与 `../00_governance/change-manifests/obsidianwiki-20261026T005516+0800-d601b4d5-l2.tsv` —— 9,673 个来源的逐 ID 进度、例外与变更追溯；当前 routed 289、filtered 76、pending_review 9,308。三个 locator-only 来源继续待审，具体见当前 K3 工作包。
 - `w3-low-sampling-frame-2026-10-26.tsv` —— 从 accepted snapshot 精确重建的 W3 LOW 95 条抽样框，含固定分层、触发词、源路径、SHA 与既有 coverage 状态；其中94条待审，1条沿用既有W1审阅。审阅抽样规则见 K3 工作包。
 - `source-baseline-2026-10-26.tsv`、`source-delta-2026-10-26.tsv`、
   `source-diff-2026-10-26.tsv` 与 `../00_governance/migration/source-id-registry-2026-10-26.tsv`
@@ -111,3 +111,5 @@ applies_to: knowledge-base
 - `semantic-review-2026-10-26-batch-070.tsv` —— 第七十批全量路由12条；8条待核、3条内部资料拒绝、1条范围外来源拒绝。
 
 - `semantic-review-2026-10-26-batch-071.tsv` —— 第七十一批全量路由12条；9条待核、3条企业内部系统/运营资料拒绝，均不复制内部细节。
+
+- semantic-review-2026-10-26-batch-072.tsv —— 第七十二批全量路由12条；7条待核、2条企业内部资料拒绝、2条范围外消费建议拒绝、1条不可追溯生成草稿排除。25张图片附件未审阅，不据图推断。
