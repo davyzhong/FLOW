@@ -201,3 +201,8 @@ W3 MED 第五组完成三条全文双审，源 SHA 与 accepted baseline 一致�
 ## 语义审阅批次 037（2026-10-26）
 
 W3 MED 第六组完成三条全文双审，三条源 SHA 与 accepted baseline 一致，处置均为 pending-verification。年度报告案例只有2010–2018九行年度汇总，不能支持客户/商品级结论或因果；门店鞋类折扣与目标完成率的比较缺混杂控制，无法验证折扣导致未达标；供应链文章的匿名案例、SCOR版本、APQC对标及供应商产品能力未提供原始材料和可复算效果。coverage 更新为 routed 96、filtered 16、pending_review 9,561。详见 `semantic-review-2026-10-26-batch-037.tsv`。
+
+
+## 语义审阅批次 038（2026-10-26）
+
+W3 MED 第七组完成三条全文双审，源 SHA 均匹配 accepted baseline，处置均为 pending-verification。竞品分析图表数据明示并非企业实绩；FineBI财务数字化和费用案例为供应商自述、无原始指标或独立效果验证；库存ABC/XYZ阈值及批次逆推库龄依赖业务约定与完整流水，不能直接当普适规则或真实库龄。coverage 更新至 routed 99、filtered 16、pending_review 9,558。详见 `semantic-review-2026-10-26-batch-038.tsv`。
