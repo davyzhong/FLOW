@@ -167,7 +167,7 @@ export function CockpitOverviewVisuals({
           {allSeries.length > 0 ? (
             <details className="overview-data-details">
               <summary>查看全部指标趋势明细与原值</summary>
-              <div className="overview-table-scroll"><table>
+              <div className="overview-table-scroll"><table aria-label="经营指标趋势原值对照">
                 <thead><tr><th>指标</th>{detailPeriods.map((period) => { const snapshotId = snapshotForPeriod(period); return <th key={period}>{snapshotId ? <Link href={reportsSnapshotHref(snapshotId)} aria-label={`${period} 冻结指标快照`}>{period}</Link> : period}</th>; })}</tr></thead>
                 <tbody>{allSeries.map((series) => <tr key={series.key} data-testid={`cockpit-overview-trend-row-${series.key}`}>
                   <th scope="row">{series.title}</th>
@@ -195,7 +195,7 @@ export function CockpitOverviewVisuals({
                 <Link href="/cockpit/cashflow">查看现金流明细 <ArrowUpRight size={14} aria-hidden="true" /></Link>
               </div>
               <details className="overview-data-details"><summary>查看现金变动构成</summary>
-                <div className="overview-table-scroll"><table><thead><tr><th>现金流项目</th><th>{cashBridge.unit}</th></tr></thead><tbody>
+                <div className="overview-table-scroll"><table aria-label="经营现金变动桥数据明细"><thead><tr><th>现金流项目</th><th>{cashBridge.unit}</th></tr></thead><tbody>
                   {cashSteps.map(([name, value]) => <tr key={name}><th scope="row">{name}</th><td>{formatFinancialValue(value, { unit: cashBridge.unit })}</td></tr>)}
                 </tbody></table></div>
               </details>
@@ -240,7 +240,7 @@ export function CockpitOverviewVisuals({
             <ChartBox title="" sub="" option={expenseOption} ariaLabel={expenseComparisonReady ? `销售、管理、研发、财务四项期间费用年度堆叠对比，${expenseComparisonPeriods.join(" 与 ")}，单位${expenseComparison?.unit ?? supplements?.expenses?.unit ?? "百万元"}` : `${expenseStructure?.title ?? "费用结构"}，${supplements?.expenses?.period ?? "—"}，单位${expenseStructure?.unit ?? supplements?.expenses?.unit ?? "百万元"}`} height={250} testId="cockpit-overview-expense-chart" />
               </div>
           <details className="overview-data-details"><summary>查看费用披露原值</summary>
-            <div className="overview-table-scroll"><table><thead><tr><th>费用项目</th>{expenseComparisonReady ? expenseComparisonPeriods.map((period) => <th key={period}>{period}（{expenseComparison?.unit ?? supplements?.expenses?.unit ?? "百万元"}）</th>) : <th>{expenseStructure?.unit ?? supplements?.expenses?.unit ?? "百万元"}</th>}</tr></thead><tbody>
+            <div className="overview-table-scroll"><table aria-label="期间费用披露原值"><thead><tr><th>费用项目</th>{expenseComparisonReady ? expenseComparisonPeriods.map((period) => <th key={period}>{period}（{expenseComparison?.unit ?? supplements?.expenses?.unit ?? "百万元"}）</th>) : <th>{expenseStructure?.unit ?? supplements?.expenses?.unit ?? "百万元"}</th>}</tr></thead><tbody>
               {expenseRows.map(([name, values]) => <tr key={name}><th scope="row">{name}</th>{expenseComparisonReady ? expenseComparisonPeriods.map((period, index) => { const rawValue = Array.isArray(values) ? values[index] : null; return <td key={period}>{formatFinancialValue(rawValue as string | number | null, { unit: expenseComparison?.unit ?? supplements?.expenses?.unit ?? "百万元" })}</td>; }) : <td>{formatFinancialValue(values as string | number | null, { unit: expenseStructure?.unit ?? supplements?.expenses?.unit ?? "百万元" })}</td>}</tr>)}
             </tbody></table></div>
           </details>
