@@ -246,3 +246,8 @@ W3 MED 第十四组完成三条全文双审，正文 SHA 匹配 accepted baselin
 ## 语义审阅批次 046（2026-10-26）
 
 W3 MED 第十五组完成三条全文双审，均为 pending-verification。财务四看板缺比较底表、期间和行业样本；渠道示例ROI未扣商品/平台成本且无增量归因；电商成本行业统计缺成本分母/总体范围，案例数据不可复核。coverage 为 routed 123、filtered 16、pending_review 9,534。详见 `semantic-review-2026-10-26-batch-046.tsv`。
+
+
+## 语义审阅批次 047（2026-10-26）
+
+W3 MED 第十六组完成三条全文双审，均保留 pending-verification。人效案例的绩效/晋升/薪酬图表无可追溯依据且涉及人事数据；转型失败70%断言未给研究；电商盈利引用中报告名称与TOP100数据期间关系不明，退货率敏感度缺方法。coverage 为 routed 126、filtered 16、pending_review 9,531。详见 `semantic-review-2026-10-26-batch-047.tsv`。
