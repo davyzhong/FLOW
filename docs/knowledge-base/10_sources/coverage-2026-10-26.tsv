@@ -335,18 +335,18 @@ SRC-LOCAL-v1-0c5a2d85cfa8b4afb7f9	routed	semantic-review-2026-10-26-batch-084.ts
 SRC-LOCAL-v1-0c62b1cacbc6e6cee902	routed	semantic-review-2026-10-26-batch-084.tsv
 SRC-LOCAL-v1-0c6e66d2d90191473d00	routed	semantic-review-2026-10-26-batch-084.tsv
 SRC-LOCAL-v1-0c709bc32aeedb45107e	routed	semantic-review-2026-10-26-batch-084.tsv
-SRC-LOCAL-v1-0c8dce5af61301b17588	pending_review	
-SRC-LOCAL-v1-0c96fbadd1efb11f8b6d	pending_review	
-SRC-LOCAL-v1-0ca7ecd7a6a51ccec439	pending_review	
-SRC-LOCAL-v1-0cabc5e901606f36914b	pending_review	
-SRC-LOCAL-v1-0cb0927fb5ae8aa78d5f	pending_review	
-SRC-LOCAL-v1-0cb407b37a2fa4bccb58	pending_review	
-SRC-LOCAL-v1-0cbbe8f30c3278bcaaf1	pending_review	
-SRC-LOCAL-v1-0cc21310dd786a874563	pending_review	
-SRC-LOCAL-v1-0ccca78a9df5e7d60903	pending_review	
-SRC-LOCAL-v1-0ccdf390f63a24c30978	pending_review	
-SRC-LOCAL-v1-0cd547748b4f9dc13c6e	pending_review	
-SRC-LOCAL-v1-0cd6ec3af2f139ad1e6e	pending_review	
+SRC-LOCAL-v1-0c8dce5af61301b17588	routed	semantic-review-2026-10-26-batch-085.tsv
+SRC-LOCAL-v1-0c96fbadd1efb11f8b6d	routed	semantic-review-2026-10-26-batch-085.tsv
+SRC-LOCAL-v1-0ca7ecd7a6a51ccec439	filtered	semantic-review-2026-10-26-batch-085.tsv
+SRC-LOCAL-v1-0cabc5e901606f36914b	routed	semantic-review-2026-10-26-batch-085.tsv
+SRC-LOCAL-v1-0cb0927fb5ae8aa78d5f	routed	semantic-review-2026-10-26-batch-085.tsv
+SRC-LOCAL-v1-0cb407b37a2fa4bccb58	filtered	semantic-review-2026-10-26-batch-085.tsv
+SRC-LOCAL-v1-0cbbe8f30c3278bcaaf1	routed	semantic-review-2026-10-26-batch-085.tsv
+SRC-LOCAL-v1-0cc21310dd786a874563	filtered	semantic-review-2026-10-26-batch-085.tsv
+SRC-LOCAL-v1-0ccca78a9df5e7d60903	filtered	semantic-review-2026-10-26-batch-085.tsv
+SRC-LOCAL-v1-0ccdf390f63a24c30978	filtered	semantic-review-2026-10-26-batch-085.tsv
+SRC-LOCAL-v1-0cd547748b4f9dc13c6e	filtered	semantic-review-2026-10-26-batch-085.tsv
+SRC-LOCAL-v1-0cd6ec3af2f139ad1e6e	routed	semantic-review-2026-10-26-batch-085.tsv
 SRC-LOCAL-v1-0cd7af70fbcf9888e5aa	pending_review	
 SRC-LOCAL-v1-0cdb14ff3072a0bfc7c0	pending_review	
 SRC-LOCAL-v1-0ce02514576d219a70a6	pending_review	
