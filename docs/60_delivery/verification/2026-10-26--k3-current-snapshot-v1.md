@@ -231,3 +231,8 @@ W3 MED 第十一组完成三条全文双审，正文 SHA 匹配 accepted baselin
 ## 语义审阅批次 043（2026-10-26）
 
 W3 MED 第十二组完成三条全文双审，正文 SHA 匹配 accepted baseline 且此前未审，均为 pending-verification。校服案例全年度结果、利润和RFM策略无底表/阈值，生成附录所示可见时间范围与全年结论需回查；万昌财务BP为BI厂商直播案例且无基线成效；竞品分析第三方市场数据和雷达评分缺原始方法，广告投入导致留存低的解释无对照证据。coverage 为 routed 114、filtered 16、pending_review 9,543。详见 `semantic-review-2026-10-26-batch-043.tsv`。
+
+
+## 语义审阅批次 044（2026-10-26）
+
+W3 MED 第十三组完成三条全文双审，正文 SHA 匹配 accepted baseline 且此前未审，均为 pending-verification。盈亏平衡公式转录缺运算符，数值暗示除法但需核原图；Altman Z-Score变量描述与1968经典模型不同且未注明版本；DeepSeek效率对比为个人叙述，“90%岗位”是反问假设，没有量化性能或劳动力证据。coverage 为 routed 117、filtered 16、pending_review 9,540。详见 `semantic-review-2026-10-26-batch-044.tsv`。

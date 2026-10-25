@@ -17,7 +17,7 @@ applies_to: knowledge-base
 - `SOURCE_REGISTER.md` —— 来源登记册（人类可读）与分层登记策略
 - `source-register.tsv` —— 机器可读登记（活登记，知识卡按需追加篇级）
 - `snapshots/` —— 固定截面定义（当前唯一截面：obsidian-2026-09-12T15:46+08:00）
-- `coverage-2026-10-26.tsv`、`coverage-exceptions-2026-10-26.tsv` 与 `../00_governance/change-manifests/obsidianwiki-20261026T005516+0800-d601b4d5-l2.tsv` —— 9,673 个来源的逐 ID 进度、例外与变更追溯；当前 routed 114、filtered 16、pending_review 9,543。
+- `coverage-2026-10-26.tsv`、`coverage-exceptions-2026-10-26.tsv` 与 `../00_governance/change-manifests/obsidianwiki-20261026T005516+0800-d601b4d5-l2.tsv` —— 9,673 个来源的逐 ID 进度、例外与变更追溯；当前 routed 117、filtered 16、pending_review 9,540。
 - `source-baseline-2026-10-26.tsv`、`source-delta-2026-10-26.tsv`、
   `source-diff-2026-10-26.tsv` 与 `../00_governance/migration/source-id-registry-2026-10-26.tsv`
   —— K3 当前资料内容来自 `obsidianwiki-20261026T005516+0800-d601b4d5`。当前 registry/baseline/delta 已统一绑定该 accepted snapshot；已审阅条目的语义字段按批次登记，其余来源仍待审，不能视为已路由或可采纳。详见[当前快照与基线复核](../../60_delivery/verification/2026-10-26--k3-current-snapshot-v1.md)。
@@ -74,3 +74,4 @@ applies_to: knowledge-base
 - `semantic-review-2026-10-26-batch-041.tsv` —— 第四十一批续审 W3 MED 3条，记录金融监管/会计指标边界、电商渠道年份增速算术错误及女装RFM/购物篮阈值条件。
 - `semantic-review-2026-10-26-batch-042.tsv` —— 第四十二批续审 W3 MED 3条，记录BI厂商案例效果不可核、Excel/BI评分缺基准、对账模型需验证粒度/键/结账闭环。
 - `semantic-review-2026-10-26-batch-043.tsv` —— 第四十三批续审 W3 MED 3条，记录校服案例年度数据覆盖待核、财务BP厂商案例无量化验证、竞品第三方数据/因果归因不足。
+- `semantic-review-2026-10-26-batch-044.tsv` —— 第四十四批续审 W3 MED 3条，登记盈亏平衡公式转录歧义、Altman经典模型变量不一致、AI性能/就业主张缺量化证据。
