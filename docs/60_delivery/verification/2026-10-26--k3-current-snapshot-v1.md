@@ -359,3 +359,8 @@ W3 MED 第二十四组完成1条全文双审，保留 pending-verification。同
 ## 全量路由批次 068（2026-10-26）
 
 按accepted baseline ID顺序审阅12条来源，文件 SHA 与剔除附录后的正文 SHA 均与冻结基线匹配。10条主题索引保留 pending-verification；2条企业内部项目资料 rejected，不复制细节。一篇财务文章引用的16个图像附件在accepted working tree中均存在，但本轮未作图像审阅或推断。coverage更新为 routed 255、filtered 63、pending_review 9,355；两个 locator-only 例外不变。逐条记录见 `docs/knowledge-base/10_sources/semantic-review-2026-10-26-batch-068.tsv`。ObsidianWiki保持只读，`CURRENT_RELEASE` 未变。
+
+
+## 全量路由批次 069（2026-10-26）
+
+按accepted baseline ID顺序审阅12条，文件 SHA 与剔除附录后的正文 SHA 均匹配。10条路由为 pending-verification，1条内部经营报告 rejected；另1条自动生成目录因关联正文不在accepted来源文件内，保持 locator-only / pending-review，不根据链接标题推断。多项来源引用的图像附件在accepted working tree中存在但本轮未审阅图像内容，不据图下结论。coverage更新为 routed 265、filtered 64、pending_review 9,344；locator-only例外共3条，包括 `SRC-LOCAL-v1-057cabfb9baca9f47c44`。ObsidianWiki只读，`CURRENT_RELEASE`未变。逐条审阅见 `docs/knowledge-base/10_sources/semantic-review-2026-10-26-batch-069.tsv`。
