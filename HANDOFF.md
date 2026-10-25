@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目交接文档
 doc_type: navigation
 status: current
-version: 13.6
+version: 13.7
 created_at: 2026-09-12
 updated_at: 2026-10-26
 owner: FLOW
@@ -18,7 +18,7 @@ applies_to: repository
 
 ## 一、当前任务
 
-**2026-10-26 当前交接：** 路线图共 16 项：完成 10、实际执行中 1（K 轨 K3）、排队 3、暂停 1、外部条件受限 1。视觉语言包及全项目视觉统一已结案，准确证据见[覆盖报告](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)：隔离 manifest `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed` 下验证器 19/19、可见性矩阵 164/164（154 HTTP 200、10 预期拒绝、0 失败）、Playwright 17/17；应用 SHA `01e8e25dd426ed43ad6a2cad76544bbbe623eb99` 的 20×3 矩阵 60/60、Axe 桌面 20 路由零违规。E2E 断言修正 `d01daa11` 独立复核无 P1/P2。原生浏览器 200% 缩放因 Mac 锁屏及工具能力限制未直接验收，待设备解锁且有可操作原生缩放工具时补验；390/360 CSS px 不是替代。当前分支 `codex/flow-visual-language`，PR #5。K3 最新 accepted snapshot 为 `obsidianwiki-20261026T005516+0800-d601b4d5`（Davybase commit `110fe57`，manifest SHA `593715c832a538d9ba83df4e077b8dd9bace24f40d3c0d5262fc3779b20f0e77`）；完整内容 SHA 与先前 K3 baseline 输入一致，写句柄 0。registry/baseline/delta 已重新绑定最新 snapshot ID 并重复生成一致，批次 001–009 已完成 27 条 HIGH 候选本地审阅，其中 26 篇全文、1 篇仅元数据；全部 pending-verification。下一步继续 HIGH 全审，随后 MED/LOW 双审及 coverage 闭合。旧 10-19 结果是历史截面。ObsidianWiki 严格只读，`CURRENT_RELEASE` 不变。用户选择保留 `/Users/qiming/.flow/flow.sqlite3` 零字节文件；其他未跟踪数据库文件保持原样。
+**2026-10-26 当前交接：** 路线图共 16 项：完成 10、实际执行中 1（K 轨 K3）、排队 3、暂停 1、外部条件受限 1。视觉语言包及全项目视觉统一已结案，准确证据见[覆盖报告](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)：隔离 manifest `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed` 下验证器 19/19、可见性矩阵 164/164（154 HTTP 200、10 预期拒绝、0 失败）、Playwright 17/17；应用 SHA `01e8e25dd426ed43ad6a2cad76544bbbe623eb99` 的 20×3 矩阵 60/60、Axe 桌面 20 路由零违规。E2E 断言修正 `d01daa11` 独立复核无 P1/P2。原生浏览器 200% 缩放因 Mac 锁屏及工具能力限制未直接验收，待设备解锁且有可操作原生缩放工具时补验；390/360 CSS px 不是替代。当前分支 `codex/flow-visual-language`，PR #5。K3 最新 accepted snapshot 为 `obsidianwiki-20261026T005516+0800-d601b4d5`（Davybase commit `110fe57`，manifest SHA `593715c832a538d9ba83df4e077b8dd9bace24f40d3c0d5262fc3779b20f0e77`）；完整内容 SHA 与先前 K3 baseline 输入一致，写句柄 0。registry/baseline/delta 已重新绑定最新 snapshot ID 并重复生成一致，批次 001–010 已完成 30 条 HIGH 候选本地审阅，其中 29 篇全文、1 篇仅元数据；全部 pending-verification。下一步继续 HIGH 全审，随后 MED/LOW 双审及 coverage 闭合。旧 10-19 结果是历史截面。ObsidianWiki 严格只读，`CURRENT_RELEASE` 不变。用户选择保留 `/Users/qiming/.flow/flow.sqlite3` 零字节文件；其他未跟踪数据库文件保持原样。
 
 
 **最新操作记录（2026-10-26）：** 最终隔离验收为 19/19、164/164、17/17；独立代码复核无 P1/P2。最后 E2E 断言修复已提交 `d01daa11` 并推送。视觉工作包正式结案，唯一队首转到 K3；第一步按只读方式复核 accepted manifest 与 vault 状态，不触碰常驻知识库。
@@ -284,4 +284,4 @@ bash scripts/test_damai_demo_e2e.sh
 | `services/api/src/flow_api/cockpit/service.py` | 投影服务（KPI/趋势/结论/行动项） |
 
 
-2026-10-26 K3 接续：语义审阅批次 001–003 共 9 条 HIGH 候选，8 篇本地正文已读、1 篇只有元数据；全部 pending-verification，来源原文尚未独立核验。最新批次已用官方 2024 年贷款办法核对周转公式的适用边界，并记录两篇资金缺口文章的疑似重复。下一步继续 HIGH 全审，再依工作包完成 MED/LOW 双审、coverage 闭合与 independent reader；`CURRENT_RELEASE` 未变，ObsidianWiki 只读。
+2026-10-26 K3 接续：语义审阅批次 001–010 共 30 条 HIGH 候选，29 篇本地正文已读、1 篇只有元数据；全部 pending-verification，来源原文尚未独立核验。第九批已用官方 2024 年贷款办法核对周转公式的适用边界；第十批记录现金流防舞弊断言与算例/公式边界风险。下一步继续 HIGH 全审，再依工作包完成 MED/LOW 双审、coverage 闭合与 independent reader；`CURRENT_RELEASE` 未变，ObsidianWiki 只读。
