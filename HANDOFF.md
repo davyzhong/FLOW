@@ -22,6 +22,8 @@ applies_to: repository
 
 **2026-10-25 当前交接：路线图 7a.1–7a.8 已完成。** PR [#3](https://github.com/davyzhong/FLOW/pull/3) 与状态归档 PR [#4](https://github.com/davyzhong/FLOW/pull/4) 已合入 main；#4 merge commit `b068796f906cfbb91ac33775f5578194acc98a51` 的准确 SHA run `40096497668` 为 28/28 success。原型及限制见[差距审查](docs/60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)。用户已批准“可复用视觉语言提炼与 FLOW 全项目视觉统一”；当前分支 `codex/flow-visual-language` 已有可复制视觉包、共享主题、主要图表与导出映射。代码 SHA `28c0e7a2` 下 20 路由×3 视口矩阵 60/60 内容就绪、API 零错误、无横向溢出及浏览器错误；财报分析页的品牌强调已校为古金/墨蓝，红色财务负值语义保留；指标依赖图默认聚焦“常用”层并按节点数展开画布，完整图谱仍可筛选查看。驾驶舱、财务出版页和数据工作台较接近概念板；逐图表、交互状态、可访问性、导出模板和打印仍未验收。当前路线图 16 项中已完成 9 项、执行中 1 项（事项数约 56%，不代表视觉子任务完成率）；获用户授权的分支清理并行例外已完成，15 个已合入分支已删，保留活动 PR #5 与暂停的 ZTO 分支；逐支 SHA 见分支清理工作包。视觉子任务没有可靠的百分比口径。下一步按图表和数据表达清单逐项核验，再完成交互/可访问性及报告输出验收。详细设计和限制见[视觉语言设计规格](docs/superpowers/specs/2026-10-24-flow-visual-language-system-design.md)、[视觉统一工作包](docs/50_plans/work_items/FLOW--portable-visual-language-and-full-project-restyle.md)、[CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)与[视觉覆盖记录](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。用户选择保留 `/Users/qiming/.flow/flow.sqlite3` 零字节文件；`services/api/flow.sqlite3` 未跟踪文件也保持原样。此前一次测试从主 checkout 错误启动，触发 `services/api/.venv` 重建；该环境未恢复或继续改动，相关主 checkout 用户文件未触碰。
 
+
+**最新操作记录（2026-10-25）：** dashboard Linux/macOS 基线已更新，独立隔离环境下 dashboard 7/7、渲染器 21/21、文档/计划/链接及脚本 170/170 通过。提交 `18fd9560` 更新 Linux 基线，提交 `1e0b5fbe` 补充 macOS 基线并同步路线图、工作包和视觉覆盖记录；均已推送。此前实现/截图基线 SHA `1e0b5fbe` 的 PR CI run `40190300136` 曾排队；后续文档提交的准确 SHA 与 CI 应以 PR #5 当前记录为准。之后继续逐图表、交互/无障碍、导出模板/打印验收；视觉工作包未结案前不要启动 K2。
 <details>
 <summary>2026-10-21 及以前的状态快照（历史，不代表当前执行）</summary>
 
