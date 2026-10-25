@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目交接文档
 doc_type: navigation
 status: current
-version: 16.32
+version: 16.33
 created_at: 2026-09-12
 updated_at: 2026-10-26
 owner: FLOW
@@ -18,7 +18,7 @@ applies_to: repository
 
 ## 一、当前任务
 
-**2026-10-26 当前交接：** 路线图共 16 项：完成 10、实际执行中 1（K 轨 K3）、排队 3、暂停 1、外部条件受限 1。视觉语言包及全项目视觉统一已结案，准确证据见[覆盖报告](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)：隔离 manifest `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed` 下验证器 19/19、可见性矩阵 164/164（154 HTTP 200、10 预期拒绝、0 失败）、Playwright 17/17；应用 SHA `01e8e25dd426ed43ad6a2cad76544bbbe623eb99` 的 20×3 矩阵 60/60、Axe 桌面 20 路由零违规。E2E 断言修正 `d01daa11` 独立复核无 P1/P2。原生浏览器 200% 缩放因 Mac 锁屏及工具能力限制未直接验收，待设备解锁且有可操作原生缩放工具时补验；390/360 CSS px 不是替代。当前分支 `codex/flow-visual-language`，PR #5。K3 最新 accepted snapshot 为 `obsidianwiki-20261026T005516+0800-d601b4d5`（Davybase commit `110fe57`，manifest SHA `593715c832a538d9ba83df4e077b8dd9bace24f40d3c0d5262fc3779b20f0e77`）；完整内容 SHA 与先前 K3 baseline 输入一致，写句柄 0。registry/baseline/delta 已重新绑定最新 snapshot ID 并重复生成一致，批次001–025登记的76条HIGH来源及后续HIGH全文审阅、W1/W3 MED/LOW双审和错误集中度复核均已完成。全量路由已推进至第095批，coverage共9,673条：routed 449、filtered 190、pending_review 9,034；第095批7条待核、5条过滤。BI、闭环财务分析与战略汇编的60条图片引用未解析，不据图推断。下一步按ID顺序执行第096批。五个locator-only例外为 `SRC-LOCAL-v1-00625bae4e08042539d1`、`SRC-LOCAL-v1-0428a240b0361157ffa1`、`SRC-LOCAL-v1-057cabfb9baca9f47c44`、`SRC-LOCAL-v1-0bd79ce2c2d600301852`、`SRC-LOCAL-v1-0de553da4d8d857b90d3`；不使用范围外正文或链接标题推断替代。旧 10-19 结果是历史截面。ObsidianWiki 严格只读，`CURRENT_RELEASE` 不变。用户选择保留 `/Users/qiming/.flow/flow.sqlite3` 零字节文件；其他未跟踪数据库文件保持原样。
+**2026-10-26 当前交接：** 路线图共 16 项：完成 10、实际执行中 1（K 轨 K3）、排队 3、暂停 1、外部条件受限 1。视觉语言包及全项目视觉统一已结案，准确证据见[覆盖报告](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)：隔离 manifest `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed` 下验证器 19/19、可见性矩阵 164/164（154 HTTP 200、10 预期拒绝、0 失败）、Playwright 17/17；应用 SHA `01e8e25dd426ed43ad6a2cad76544bbbe623eb99` 的 20×3 矩阵 60/60、Axe 桌面 20 路由零违规。E2E 断言修正 `d01daa11` 独立复核无 P1/P2。原生浏览器 200% 缩放因 Mac 锁屏及工具能力限制未直接验收，待设备解锁且有可操作原生缩放工具时补验；390/360 CSS px 不是替代。当前分支 `codex/flow-visual-language`，PR #5。K3 最新 accepted snapshot 为 `obsidianwiki-20261026T005516+0800-d601b4d5`（Davybase commit `110fe57`，manifest SHA `593715c832a538d9ba83df4e077b8dd9bace24f40d3c0d5262fc3779b20f0e77`）；完整内容 SHA 与先前 K3 baseline 输入一致，写句柄 0。registry/baseline/delta 已重新绑定最新 snapshot ID 并重复生成一致，批次001–025登记的76条HIGH来源及后续HIGH全文审阅、W1/W3 MED/LOW双审和错误集中度复核均已完成。全量路由已推进至第096批，coverage共9,673条：routed 455、filtered 196、pending_review 9,022；第096批6条保留待核、6条内部或范围外来源过滤；净利润质量文章5条图片引用未解析，不据图推断。下一步按ID顺序执行第097批。五个locator-only例外为 `SRC-LOCAL-v1-00625bae4e08042539d1`、`SRC-LOCAL-v1-0428a240b0361157ffa1`、`SRC-LOCAL-v1-057cabfb9baca9f47c44`、`SRC-LOCAL-v1-0bd79ce2c2d600301852`、`SRC-LOCAL-v1-0de553da4d8d857b90d3`；不使用范围外正文或链接标题推断替代。旧 10-19 结果是历史截面。ObsidianWiki 严格只读，`CURRENT_RELEASE` 不变。用户选择保留 `/Users/qiming/.flow/flow.sqlite3` 零字节文件；其他未跟踪数据库文件保持原样。
 
 
 **历史操作记录（2026-10-26视觉结案时点；当前K3状态以上方交接段落为准）：** 最终隔离验收为 19/19、164/164、17/17；独立代码复核无 P1/P2。最后 E2E 断言修复已提交 `d01daa11` 并推送。视觉工作包正式结案，队首转到 K3；当时第一步为只读复核 accepted manifest 与 vault 状态，不触碰常驻知识库。
