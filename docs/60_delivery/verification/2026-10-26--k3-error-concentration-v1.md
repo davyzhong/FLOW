@@ -7,6 +7,7 @@ version: 1.0
 created_at: 2026-10-26
 updated_at: 2026-10-26
 owner: FLOW
+commit_refs: [b2cd8540]
 evidence_refs: "[semantic-review-batches-001-056, w3-low-sampling-selection-2026-10-26]"
 applies_to: knowledge-refresh
 ---
