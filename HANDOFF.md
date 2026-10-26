@@ -3,9 +3,9 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目交接文档
 doc_type: navigation
 status: current
-version: 16.70
+version: 16.71
 created_at: 2026-09-12
-updated_at: 2026-10-26
+updated_at: 2026-10-27
 owner: FLOW
 applies_to: repository
 ---
@@ -18,7 +18,20 @@ applies_to: repository
 
 ## 一、当前任务
 
-**2026-10-26 当前交接：** 路线图共 16 项：完成 10、实际执行中 1（K 轨 K3）、排队 3、暂停 1、外部条件受限 1。视觉语言包及全项目视觉统一已结案，准确证据见[覆盖报告](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)：隔离 manifest `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed` 下验证器 19/19、可见性矩阵 164/164（154 HTTP 200、10 预期拒绝、0 失败）、Playwright 17/17；应用 SHA `01e8e25dd426ed43ad6a2cad76544bbbe623eb99` 的 20×3 矩阵 60/60、Axe 桌面 20 路由零违规。E2E 断言修正 `d01daa11` 独立复核无 P1/P2。原生浏览器 200% 缩放因 Mac 锁屏及工具能力限制未直接验收，待设备解锁且有可操作原生缩放工具时补验；390/360 CSS px 不是替代。当前分支 `codex/flow-visual-language`，PR #5。K3 最新 accepted snapshot 为 `obsidianwiki-20261026T005516+0800-d601b4d5`（Davybase commit `110fe57`，manifest SHA `593715c832a538d9ba83df4e077b8dd9bace24f40d3c0d5262fc3779b20f0e77`）；完整内容 SHA 与先前 K3 baseline 输入一致，写句柄 0。registry/baseline/delta 已重新绑定最新 snapshot ID 并重复生成一致，批次001–025登记的76条HIGH来源及后续HIGH全文审阅、W1/W3 MED/LOW双审和错误集中度复核均已完成。全量路由已推进至第133批，coverage共9,673条：routed 755、filtered 412、pending_review 8,506；本批24条中9条路由、15条过滤。经营分析与财务报告两篇共有28个本地图像引用按基线规则未解析，OEE成本分析另有18个外链图像未归档；本批均未审图。下一批按ID顺序为第134批。五个locator-only例外为 `SRC-LOCAL-v1-00625bae4e08042539d1`、`SRC-LOCAL-v1-0428a240b0361157ffa1`、`SRC-LOCAL-v1-057cabfb9baca9f47c44`、`SRC-LOCAL-v1-0bd79ce2c2d600301852`、`SRC-LOCAL-v1-0de553da4d8d857b90d3`；不使用范围外正文或链接标题推断替代。旧 10-19 结果是历史截面。ObsidianWiki 严格只读，`CURRENT_RELEASE` 不变。用户选择保留 `/Users/qiming/.flow/flow.sqlite3` 零字节文件；其他未跟踪数据库文件保持原样。
+**2026-10-27 当前交接：** 路线图共 16 项：完成 10、实际执行中 0、队首待启动 1（K 轨 K3）、排队 3、暂停 1、外部条件受限 1。视觉语言包及全项目视觉统一已结案，准确证据见[覆盖报告](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)：隔离 manifest `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed` 下验证器 19/19、可见性矩阵 164/164（154 HTTP 200、10 预期拒绝、0 失败）、Playwright 17/17；应用 SHA `01e8e25dd426ed43ad6a2cad76544bbbe623eb99` 的 20×3 矩阵 60/60、Axe 桌面 20 路由零违规。E2E 断言修正 `d01daa11` 独立复核无 P1/P2。原生浏览器 200% 缩放因 Mac 锁屏及工具能力限制未直接验收，待设备解锁且有可操作原生缩放工具时补验；390/360 CSS px 不是替代。当前分支 `codex/flow-visual-language`，PR #5。K3 最新 accepted snapshot 为 `obsidianwiki-20261026T005516+0800-d601b4d5`（Davybase commit `110fe57`，manifest SHA `593715c832a538d9ba83df4e077b8dd9bace24f40d3c0d5262fc3779b20f0e77`）；完整内容 SHA 与先前 K3 baseline 输入一致，写句柄 0。registry/baseline/delta 已重新绑定最新 snapshot ID 并重复生成一致，批次001–025登记的76条HIGH来源及后续HIGH全文审阅、W1/W3 MED/LOW双审和错误集中度复核均已完成。全量路由已推进至第133批，coverage共9,673条：routed 755、filtered 412、pending_review 8,506；本批24条中9条路由、15条过滤。经营分析与财务报告两篇共有28个本地图像引用按基线规则未解析，OEE成本分析另有18个外链图像未归档；本批均未审图。下一批按ID顺序为第134批。五个locator-only例外为 `SRC-LOCAL-v1-00625bae4e08042539d1`、`SRC-LOCAL-v1-0428a240b0361157ffa1`、`SRC-LOCAL-v1-057cabfb9baca9f47c44`、`SRC-LOCAL-v1-0bd79ce2c2d600301852`、`SRC-LOCAL-v1-0de553da4d8d857b90d3`；不使用范围外正文或链接标题推断替代。旧 10-19 结果是历史截面。ObsidianWiki 严格只读，`CURRENT_RELEASE` 不变。用户选择保留 `/Users/qiming/.flow/flow.sqlite3` 零字节文件；其他未跟踪数据库文件保持原样。
+
+
+### 2026-10-27 会话结束交接
+
+**当前任务与状态。** 唯一主线仍是 K3 全量逐条语义路由与 coverage 闭合，权威队列以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为准。本会话结束时没有正在运行的审阅或验证进程；第133批已提交推送，下一单一动作是第134批。路线图总计16项：完成10、实际执行中0、K3队首待启动1、后续排队3、暂停1、外部条件受限1。当前分支为 `codex/flow-visual-language`，PR #5；2026-10-27 开工前 `git pull --ff-only origin codex/flow-visual-language` 已确认远端无新提交，工作区干净，HEAD `75ae401c03013009306cd1640a6dd8f472b66ba7`。
+
+**已完成。** 2026-10-26 连续完成第129–133批，共120条 accepted 来源的逐 ID 审阅与文件/规范化正文 SHA 核对：新增 routed 62、filtered 58；全量9,673条目前为 routed 755、filtered 412、pending_review 8,506。每批均更新来源基线、coverage、change manifest、批次审阅表、路线图、项目状态、来源 README、工作包、知识库 inventory/SHA 清单和本交接；M1、M6、coverage validator、链接、KB manifest 与 diff 检查通过，独立只读复核均无剩余 P1/P2。五批提交依次为 `45e0357e`、`46e3b774`、`9c667d6c`、`f436ec0a`、`75ae401c`，均已推送 GitHub。视觉语言包与全项目页面、图表、报告及 README 的视觉统一此前已结案，证据见上方当前交接段及[覆盖报告](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。
+
+**限制与未满足验收。** K3 尚有8,506条待审，五个 locator-only 例外缺可用 accepted 正文，不能按标题或范围外文件补全；后续还需 coverage 终态闭合、知识综合和独立 reader，`CURRENT_RELEASE` 尚未 seal/激活。部分来源的图片引用按基线解析规则未解析，不能推断附件不存在：第132批的34个同名附件实际位于 accepted vault tree 其他路径；关联的27张截图在当前 accepted 工作区但未进入 Git tree；第133批有28个本地引用未按规则解析及18个未归档外链图像。这些批次只根据已读文字路由，未审图，付费 Word/Excel 模板未取得。原生浏览器200%缩放的外部条件受限项仍按既有视觉验收结案记录保留，不能将 CSS 窄屏测试说成原生缩放通过。前一轮连续执行因系统用量限制停止；这不是来源审阅本身的技术阻塞，也不构成 K3 完成。
+
+**下一单一动作。** 下一会话先核验仓库/分支及可见在途工作，拉取 GitHub 最新提交；从 accepted baseline 中第133批末尾 `SRC-LOCAL-v1-25f831bfad9d00b1f553` 之后的首个未审 source_id 开始第134批，继续逐条读 accepted 正文、复算 file/body SHA、核对图片实际位置与敏感边界。完成一批后同步唯一路线图及交接，通过文档门禁、独立复核、提交并立即推送，再开始下一批；不得跳过 K3 去做排队项。五个 locator-only 例外保留 pending_review，直到取得同一 accepted 范围内的可验证正文或按工作包给出有依据处置。
+
+**踩坑与恢复要点。** ① `source_baseline.py` 的图片解析只查源文件目录和 vault 根目录，按该规则未解析不等于快照缺图；须区分 Git tree、accepted 工作区、外链未归档和本批未审图四种情况。② ObsidianWiki accepted snapshot 是 working-tree 快照，个别来源或附件不在 Git tree；以登记的文件 SHA 核对当前只读工作区，不能仅用 `git show HEAD` 取证。③ 自动生成摘要、AI图注、二次人工摘述和付费模板各有不同证据层级，不能冒充原件或将来源数值写成产品事实。④ 企业内部架构、运营指标和规划资料只登记过滤理由，不在 FLOW 审阅表复述细节。⑤ 每次提交后立即推送；M1/M6 通过只代表该次提交前的本地门禁，报告远端 CI 时须核其准确提交 SHA。主 checkout 的用户改动及 `/Users/qiming/.flow/flow.sqlite3` 零字节文件均保持原样。
 
 
 **历史操作记录（2026-10-26视觉结案时点；当前K3状态以上方交接段落为准）：** 最终隔离验收为 19/19、164/164、17/17；独立代码复核无 P1/P2。最后 E2E 断言修复已提交 `d01daa11` 并推送。视觉工作包正式结案，队首转到 K3；当时第一步为只读复核 accepted manifest 与 vault 状态，不触碰常驻知识库。
