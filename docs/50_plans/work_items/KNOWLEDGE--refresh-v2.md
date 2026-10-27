@@ -3,7 +3,7 @@ doc_id: FLOW-WI-KNOWLEDGE-REFRESH-V2-001
 title: 第二代静态知识刷新与战略重基线
 doc_type: work-item
 status: active
-version: 11.43
+version: 11.44
 created_at: 2026-09-24
 updated_at: 2026-10-26
 owner: FLOW
@@ -23,7 +23,7 @@ Obsidian 工作区快照，重建 FLOW 来源基线与 sealed knowledge candidat
 
 ## 当前状态（2026-10-26）
 
-K3 全量路由已完成至第156批。coverage 共 9,673 条：routed 1,101、filtered 615、pending_review 7,957；五个 locator-only 来源仍待审，ObsidianWiki 只读，`CURRENT_RELEASE` 未变。第156批审阅 24 条，17 条保留待核、7 条过滤；一篇图文共 44 个本地图像引用按基线规则未解析，本批均未审图；下一批按 baseline ID 顺序执行第157批。详细证据见[批次156](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-156.tsv)。
+K3 全量路由已完成至第157批。coverage 共 9,673 条：routed 1,115、filtered 625、pending_review 7,933；五个 locator-only 来源仍待审，ObsidianWiki 只读，`CURRENT_RELEASE` 未变。第157批审阅 24 条，14 条保留待核、10 条过滤；两篇图文共 42 个本地图像引用按基线规则未解析，本批均未审图；下一批按 baseline ID 顺序执行第158批。详细证据见[批次157](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-157.tsv)。
 
 ## 当前断点
 
@@ -69,7 +69,7 @@ K2 accepted working-tree manifest 已提交并推送至 Davybase，远端确认�
 
 10-19 K3 自动来源基线与四维差异已完成，结果（allowlist 9,671 篇，universe 9,956 条）仅适用于 10-19 accepted snapshot，见[历史来源基线验收](../../60_delivery/verification/2026-10-19--k3-source-baseline-v2.md)。10-26 registry/baseline/diff 已重建并在生成后复验 vault 指纹：来源 9,673、唯一 ID 9,673；相较 10-19 baseline 增量为 2 篇新增，0 篇既有正文/路径/enrichment 变化。累计 diff 为 9,958 ID（新增 6,641、存在 3,032、删除 285）。独立目录重复生成逐字节一致；详情见[当前快照与基线复核](../../60_delivery/verification/2026-10-26--k3-current-snapshot-v1.md)。当前下一步转为全量语义路由与 HIGH/MED/LOW 审阅。实现包含 `build-v2` 和严格 coverage 闭合校验器。
 
-**当前子步仍属 K3，未完成整轨验收**：旧 HIGH 清单76条审阅、MED/LOW分层双审和错误集中度复核均已完成。全量语义路由至第156批，coverage共9,673条：routed 1,101、filtered 615、pending_review 7,957；下一批为第157批。五个来源保持 locator-only / pending-review：`SRC-LOCAL-v1-00625bae4e08042539d1`（accepted正文只有元数据，范围外同标题正文不作证据）、`SRC-LOCAL-v1-0428a240b0361157ffa1`（accepted正文仅一个换行符，不按标题推断）及 `SRC-LOCAL-v1-057cabfb9baca9f47c44`（自动生成目录，关联文章正文未进入accepted来源文件，不按链接标题推断），以及 `SRC-LOCAL-v1-0bd79ce2c2d600301852`（accepted文件仅元数据及空代码围栏，不按标题推断），以及 `SRC-LOCAL-v1-0de553da4d8d857b90d3`（accepted 文件为自动生成目录，仅含文章链接而没有正文，不按链接标题推断）。随后仍需完成coverage终态闭合、知识综合和独立 reader；`CURRENT_RELEASE` 仍为 `flow-knowledge-2026-09-12.1`，未 seal、未激活。历史差异与审阅记录见下方各批次。
+**当前子步仍属 K3，未完成整轨验收**：旧 HIGH 清单76条审阅、MED/LOW分层双审和错误集中度复核均已完成。全量语义路由至第157批，coverage共9,673条：routed 1,115、filtered 625、pending_review 7,933；下一批为第158批。五个来源保持 locator-only / pending-review：`SRC-LOCAL-v1-00625bae4e08042539d1`（accepted正文只有元数据，范围外同标题正文不作证据）、`SRC-LOCAL-v1-0428a240b0361157ffa1`（accepted正文仅一个换行符，不按标题推断）及 `SRC-LOCAL-v1-057cabfb9baca9f47c44`（自动生成目录，关联文章正文未进入accepted来源文件，不按链接标题推断），以及 `SRC-LOCAL-v1-0bd79ce2c2d600301852`（accepted文件仅元数据及空代码围栏，不按标题推断），以及 `SRC-LOCAL-v1-0de553da4d8d857b90d3`（accepted 文件为自动生成目录，仅含文章链接而没有正文，不按链接标题推断）。随后仍需完成coverage终态闭合、知识综合和独立 reader；`CURRENT_RELEASE` 仍为 `flow-knowledge-2026-09-12.1`，未 seal、未激活。历史差异与审阅记录见下方各批次。
 
 语义批次 001–025 共记录 76 条 HIGH 候选：62 篇本地笔记正文已读、14 条仅元数据筛查；60 条为 `pending-verification`，2 条同源副本 `duplicate`，14 条内部敏感来源 `rejected` 并排除产品候选，不进入 candidate。批次 001 见[`batch-001`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-001.tsv)，批次 002 见[`batch-002`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-002.tsv)，批次 003 见[`batch-003`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-003.tsv)，批次 004 见[`batch-004`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-004.tsv)，批次 005 见[`batch-005`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-005.tsv)，批次 006 见[`batch-006`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-006.tsv)，批次 007 见[`batch-007`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-007.tsv)，批次 008 见[`batch-008`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-008.tsv)，批次 009 见[`batch-009`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-009.tsv)，[`batch-010`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-010.tsv)，[`batch-011`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-011.tsv)，[`batch-012`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-012.tsv)，[`batch-013`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-013.tsv)，[`batch-014`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-014.tsv)，[`batch-015`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-015.tsv)，[`batch-016`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-016.tsv)，[`batch-017`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-017.tsv)，[`batch-018`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-018.tsv)，[`batch-019`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-019.tsv), [`batch-020`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-020.tsv), [`batch-021`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-021.tsv), [`batch-022`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-022.tsv), [`batch-023`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-023.tsv), [`batch-024`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-024.tsv), [`batch-025`](../../knowledge-base/10_sources/semantic-review-2026-10-26-batch-025.tsv)。来源原文未独立核验；已记录单位冲突、公式符号缺失、算例不闭合、阈值缺乏依据及定义过度概括等风险，详见审阅台账。
 
@@ -686,6 +686,10 @@ W3 MED 第二十四组完成1条全文双审，SHA匹配 accepted baseline 且�
 
 按 accepted baseline source_id 顺序审阅24条，来源文件 SHA 与规范化正文 SHA 均匹配。13条保留 pending-verification，覆盖财务与预算报告、数据治理、ERP业财一体、零售风险及AI知识工程；指标与效果主张均需独立核验。11条过滤：企业数据治理复盘、主数据、库内规划、物流详情与大促泄洪涉及特定内部系统或经营资料，标为 project-internal 并拒绝、不复述；Python/Spring Boot/ClickHouse技术教程、营销自动化、管理哲学及任务报告超出FLOW知识范围或缺有效正文。两篇财务图文有24+10共34个本地图片引用按当前基线规则未解析，34个同名附件均在accepted vault tree的其他路径，已按文件名和Git对象核对，本批未审图；另有人工完成的27张截图二次整理笔记，关联剪藏附件在当前accepted工作区存在但未纳入Git tree，本批未审图，原始付费Word/Excel未取得。仅用可见文字作为待核线索，不据图片或模板推断。coverage更新为 routed 746、filtered 397、pending_review 8,530；五个locator-only例外保持待审。逐条证据见 `semantic-review-2026-10-26-batch-132.tsv`；下一批按baseline ID顺序执行第133批。
 
+
+### K3 语义审阅批次 157
+
+按 accepted baseline source_id 顺序审阅24条，来源文件 SHA 与规范化正文 SHA 均匹配。14条保留 pending-verification，覆盖预算看板指标口径、VOI 决策价值筛选、DQC 数据质量四分类、OpenHuman 记忆压缩、金字塔结构化表达、BI 人货场拆解、税负率 72 指标勾稽、动态资金看板 DAX、麦肯锡智能体组织模式、NL2Code MVP、多智能体 TAB 框架与经营分析四步闭环等；数字、口径与原始出处均需独立核验。其中 DQC 条目 source 为内部笔记 ID 且含系统痕迹，入库需脱敏处理。10条过滤：经营服务平台、客服智能体财年规划、薪资支付域、组织治理杂谈、综管平台空壳属企业内部系统或组织资料，标为 project-internal 并拒绝、不复述；旅游攻略、辅酶 Q10 科普、pprof 工具笔记、二手交易避坑超出知识资产范围。两篇图文共 42 个本地图像引用按当前基线规则未解析，本批未审图。重复嫌疑已登记：内部资料转 wiki 概念页同批产物批量查重、OpenHuman 双份同主题表述合并、税负与 CFO 汇报模板营销账号聚类。coverage 更新为 routed 1,115、filtered 625、pending_review 7,933；五个 locator-only 例外保持待审。逐条证据见 `semantic-review-2026-10-26-batch-157.tsv`；下一批按 baseline ID 顺序执行第158批。
 
 ### K3 语义审阅批次 156
 
