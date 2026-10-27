@@ -63,6 +63,7 @@ dashboard_logs="$(mktemp -d)"
 api_pid=""
 web_pid=""
 web_app_dir=""
+dashboard_workspace_dir=""
 
 cleanup() {
   status=$?
@@ -72,8 +73,8 @@ cleanup() {
     tail -80 "${dashboard_logs}/api.log" 2>/dev/null || true
     tail -80 "${dashboard_logs}/web.log" 2>/dev/null || true
   fi
-  case "${web_app_dir}" in
-    "${ROOT}"/work/dashboard-e2e/web-app.*) rm -rf "${web_app_dir}" ;;
+  case "${dashboard_workspace_dir}" in
+    "${ROOT}"/work/dashboard-e2e/project.*) rm -rf "${dashboard_workspace_dir}" ;;
   esac
   rm -rf "${dashboard_logs}"
 }
@@ -90,7 +91,9 @@ python3 scripts/run_service.py --cwd services/api -- .venv/bin/python ../../scri
 api_pid=$!
 
 mkdir -p work/dashboard-e2e
-web_app_dir="$(mktemp -d "${ROOT}/work/dashboard-e2e/web-app.XXXXXX")"
+dashboard_workspace_dir="$(mktemp -d "${ROOT}/work/dashboard-e2e/project.XXXXXX")"
+web_app_dir="${dashboard_workspace_dir}/apps/web"
+mkdir -p "${web_app_dir}" "${dashboard_workspace_dir}/packages/flow-visual-language"
 rsync -a \
   --exclude='node_modules/' \
   --exclude='.next/' \
@@ -99,6 +102,7 @@ rsync -a \
   --exclude='playwright-report/' \
   --exclude='*.tsbuildinfo' \
   "${ROOT}/apps/web/" "${web_app_dir}/"
+rsync -a "${ROOT}/packages/flow-visual-language/" "${dashboard_workspace_dir}/packages/flow-visual-language/"
 ln -s "${ROOT}/apps/web/node_modules" "${web_app_dir}/node_modules"
 
 python3 scripts/run_service.py --cwd "${web_app_dir}" -- node node_modules/next/dist/bin/next dev --hostname 127.0.0.1 --port "${web_port}" \

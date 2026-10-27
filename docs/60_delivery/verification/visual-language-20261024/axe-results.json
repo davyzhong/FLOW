@@ -1,0 +1,91 @@
+{
+  "capturedAt": "2026-10-25T15:49:15.499Z",
+  "codeCommit": "01e8e25dd426ed43ad6a2cad76544bbbe623eb99",
+  "axePackage": "@axe-core/playwright 4.13.0",
+  "viewport": "1440x1000 desktop default state",
+  "routes": 20,
+  "violations": 0,
+  "rules": [],
+  "results": [
+    {
+      "route": "/",
+      "violations": []
+    },
+    {
+      "route": "/analysis",
+      "violations": []
+    },
+    {
+      "route": "/cockpit",
+      "violations": []
+    },
+    {
+      "route": "/cockpit/balance-sheet",
+      "violations": []
+    },
+    {
+      "route": "/cockpit/cashflow",
+      "violations": []
+    },
+    {
+      "route": "/cockpit/consolidation",
+      "violations": []
+    },
+    {
+      "route": "/cockpit/expenses",
+      "violations": []
+    },
+    {
+      "route": "/cockpit/profitability",
+      "violations": []
+    },
+    {
+      "route": "/cockpit/risk",
+      "violations": []
+    },
+    {
+      "route": "/cockpit/working-capital",
+      "violations": []
+    },
+    {
+      "route": "/data",
+      "violations": []
+    },
+    {
+      "route": "/internal",
+      "violations": []
+    },
+    {
+      "route": "/investigations",
+      "violations": []
+    },
+    {
+      "route": "/investigations/01a16e5e-e2a6-725a-83cb-aa5d70ac92cb",
+      "violations": []
+    },
+    {
+      "route": "/login",
+      "violations": []
+    },
+    {
+      "route": "/metric-library",
+      "violations": []
+    },
+    {
+      "route": "/operations",
+      "violations": []
+    },
+    {
+      "route": "/public",
+      "violations": []
+    },
+    {
+      "route": "/reports",
+      "violations": []
+    },
+    {
+      "route": "/statements",
+      "violations": []
+    }
+  ]
+}

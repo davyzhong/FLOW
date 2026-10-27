@@ -31,7 +31,7 @@ export function TrendPanel({ trends }: { trends: DashboardResponse["trends"] }) 
   return (
     <section className="panel trend-panel" aria-labelledby="trend-heading">
       <div className="panel-heading"><div><span>02</span><h3 id="trend-heading">12 个月经营趋势</h3></div><small>{trends.coverage_count}/12 月已发布</small></div>
-      <ChartBox title="近 12 个月经营趋势" sub="人民币元" option={option} ariaLabel="近 12 个月经营收入、利润与现金流趋势" height={260} />
+      <ChartBox title="近 12 个月经营趋势" sub="人民币元" option={option} ariaLabel="近 12 个月经营收入、利润与现金流趋势，单位人民币元" height={260} />
       <div className="chart-legend"><span className="revenue">营业收入</span><span className="profit">经营利润</span><span className="cash">经营现金流</span></div>
       <details className="trend-details"><summary>查看趋势数据</summary>
         <table aria-label="趋势数据明细"><thead><tr><th>月份</th><th>收入</th><th>经营利润</th><th>现金流</th><th>毛利率</th></tr></thead>

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 
-import { ChartBox } from "./charts/echarts-base";
+import { ChartBox, CHART_THEME } from "./charts/echarts-base";
 import { buildCombo, buildDupont, type ComboSeries, type DupontNode } from "./charts/builders";
 import "./cockpit.css";
 import { formatFinancialValue } from "./number-format";
@@ -53,11 +53,11 @@ function dupontOption(data: CockpitProfitabilityResponse): ReturnType<typeof bui
     };
   };
   return buildDupont(
-    node("ROE", "roe", 80, 150, 78, "#1d4ed8"),
+    node("ROE", "roe", 80, 150, 78, CHART_THEME.blue),
     [
-      { node: node("净利率", "net_margin", 300, 45, 68, "#0f766e"), children: [] },
-      { node: node("总资产周转率", "total_asset_turnover", 300, 150, 68, "#7c3aed"), children: [] },
-      { node: node("权益乘数", "equity_multiplier", 300, 255, 68, "#b45309"), children: [] },
+      { node: node("净利率", "net_margin", 300, 45, 68, CHART_THEME.teal), children: [] },
+      { node: node("总资产周转率", "total_asset_turnover", 300, 150, 68, CHART_THEME.purple), children: [] },
+      { node: node("权益乘数", "equity_multiplier", 300, 255, 68, CHART_THEME.gold), children: [] },
     ],
   );
 }
@@ -75,7 +75,7 @@ function comparisonOption(
     unit: unit === "ratio" ? "%" : unit,
     points: periods.map((period) => {
       const item = metricFor(period, code);
-      const value = item?.status === "available" && item.value
+      const value = item?.status === "available" && item.value !== null && item.value !== undefined
         ? Number(item.value) * (unit === "ratio" ? 100 : 1)
         : null;
       return {
@@ -95,8 +95,8 @@ export function CockpitProfitabilityPage() {
     [],
   );
 
-  if (query.loading) return <div className="module-page" data-status="loading" aria-busy="true"><h2>盈利能力与杜邦分析</h2><p>读取已发布的财报快照…</p></div>;
-  if (query.error || !query.data) return <div className="module-page" data-status="error"><h2>盈利能力与杜邦分析</h2><p role="alert">{query.error ?? "盈利分析数据未就绪。"}</p><button type="button" onClick={query.reload}>重试</button></div>;
+  if (query.loading) return <div className="module-page" data-status="loading" aria-busy="true"><h1>盈利能力与杜邦分析</h1><p>读取已发布的财报快照…</p></div>;
+  if (query.error || !query.data) return <div className="module-page" data-status="error"><h1>盈利能力与杜邦分析</h1><p role="alert">{query.error ?? "盈利分析数据未就绪。"}</p><button type="button" onClick={query.reload}>重试</button></div>;
 
   const data = query.data;
   const periods = data.periods ?? [];
@@ -107,13 +107,13 @@ export function CockpitProfitabilityPage() {
   return (
     <div className="module-page profitability-page" data-status="ready" data-module="profitability">
       <header className="module-page__header">
-        <div><span className="module-page__eyebrow">FLOW · 财务驾驶舱</span><h2>盈利能力与杜邦分析</h2></div>
+        <div><span className="module-page__eyebrow">FLOW · 财务驾驶舱</span><h1>盈利能力与杜邦分析</h1></div>
         <span className="module-period">{prior?.period ?? "—"} → {current?.period ?? "—"}</span>
       </header>
       <p className="module-source-notice">{data.source_notice} 本页只读取已冻结客观财报快照，不在展示时重算指标。</p>
 
       <section className="profitability-summary" aria-label="杜邦三因子">
-        <div className="module-section-heading"><h3>杜邦三因子</h3><span>ROE = 净利率 × 总资产周转率 × 权益乘数</span></div>
+        <div className="module-section-heading"><h2>杜邦三因子</h2><span>ROE = 净利率 × 总资产周转率 × 权益乘数</span></div>
         <div className="profitability-grid">
           {FACTORS.map((factor) => {
             const value = metricFor(current, factor.code);
@@ -136,7 +136,7 @@ export function CockpitProfitabilityPage() {
           title="杜邦驱动关系"
           sub={current?.snapshot_id ? `冻结快照 ${current.snapshot_id}` : "缺少冻结的分析指标"}
           option={option}
-          ariaLabel="ROE 由净利率、总资产周转率和权益乘数构成的杜邦关系图"
+          ariaLabel={`ROE 由净利率、总资产周转率和权益乘数构成的杜邦关系图，期间${current?.period ?? "不可用"}；ROE 和净利率单位百分比、总资产周转率单位次、权益乘数单位倍`}
           testId="cockpit-profitability-dupont"
           height={350}
         />
@@ -149,13 +149,13 @@ export function CockpitProfitabilityPage() {
       </section>
 
       <section className="profitability-comparisons" aria-label="两期财年比较">
-        <div className="module-section-heading"><h3>两期财年比较</h3><span>仅比较已冻结的披露财年，不延伸推断长期趋势</span></div>
+        <div className="module-section-heading"><h2>两期财年比较</h2><span>仅比较已冻结的披露财年，不延伸推断长期趋势</span></div>
         <div className="profitability-comparison-grid">
           <ChartBox
             title="ROE 与净利率"
             sub={periods.map((period) => period.period).join(" / ")}
             option={comparisonOption(periods, [{ code: "roe", label: "ROE" }, { code: "net_margin", label: "净利率" }], "ratio")}
-            ariaLabel="ROE 和净利率的两期财年比较图"
+            ariaLabel={`ROE 和净利率的两期财年比较图，期间${periods.map((period) => period.period).join("、")}，单位百分比`}
             testId="cockpit-profitability-roe-comparison"
             height={280}
           />
@@ -163,7 +163,7 @@ export function CockpitProfitabilityPage() {
             title="总资产周转率（次）"
             sub={periods.map((period) => period.period).join(" / ")}
             option={comparisonOption(periods, [{ code: "total_asset_turnover", label: "总资产周转率" }], "次")}
-            ariaLabel="总资产周转率的两期财年比较图，单位为次"
+            ariaLabel={`总资产周转率的两期财年比较图，期间${periods.map((period) => period.period).join("、")}，单位次`}
             testId="cockpit-profitability-efficiency-comparison"
             height={280}
           />
@@ -171,7 +171,7 @@ export function CockpitProfitabilityPage() {
             title="权益乘数（倍）"
             sub={periods.map((period) => period.period).join(" / ")}
             option={comparisonOption(periods, [{ code: "equity_multiplier", label: "权益乘数" }], "倍")}
-            ariaLabel="权益乘数的两期财年比较图，单位为倍"
+            ariaLabel={`权益乘数的两期财年比较图，期间${periods.map((period) => period.period).join("、")}，单位倍`}
             testId="cockpit-profitability-leverage-comparison"
             height={280}
           />
@@ -179,8 +179,8 @@ export function CockpitProfitabilityPage() {
       </section>
 
       <section className="module-unavailable" aria-label="盈利能力指标明细">
-        <div className="module-section-heading"><h3>期间、来源与口径</h3><span>仅显示冻结快照中实际存在的结果</span></div>
-        <div className="module-table-scroll"><table className="module-chart-table">
+        <div className="module-section-heading"><h2>期间、来源与口径</h2><span>仅显示冻结快照中实际存在的结果</span></div>
+        <div className="module-table-scroll" role="region" aria-label="期间来源与口径数据表" tabIndex={0}><table className="module-chart-table">
           <thead><tr><th>期间</th><th>指标</th><th>数值</th><th>状态/口径版本</th><th>来源</th></tr></thead>
           <tbody>{periods.flatMap((period) => (period.metrics ?? []).map((metric) => (
             <tr key={`${period.period}:${metric.metric_code}`}>
@@ -202,7 +202,7 @@ export function CockpitProfitabilityPage() {
           )))}</tbody>
         </table></div>
       </section>
-      {(data.unavailable ?? []).length ? <section className="module-unavailable" aria-label="数据缺口"><div className="module-section-heading"><h3>当前不可用项</h3><span>不补零、不推测</span></div><ul>{(data.unavailable ?? []).map((item) => <li key={`${item.period}:${item.metric_code}`}><strong>{item.period} · {item.metric_code}</strong>：{item.reason}</li>)}</ul></section> : null}
+      {(data.unavailable ?? []).length ? <section className="module-unavailable" aria-label="数据缺口"><div className="module-section-heading"><h2>当前不可用项</h2><span>不补零、不推测</span></div><ul>{(data.unavailable ?? []).map((item) => <li key={`${item.period}:${item.metric_code}`}><strong>{item.period} · {item.metric_code}</strong>：{item.reason}</li>)}</ul></section> : null}
       {current ? <p className="profitability-source">报告：<Link href={statementReportHref(current.report_id)}>{current.source_ref}</Link>{current.source_sha256 ? ` · SHA-256 ${current.source_sha256}` : " · 来源指纹未提供"}</p> : null}
     </div>
   );

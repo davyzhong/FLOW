@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 
 vi.mock("../../components/cockpit/charts/echarts-base", async (importOriginal) => ({
   ...(await importOriginal<typeof import("../../components/cockpit/charts/echarts-base")>()),
-  ChartBox: ({ testId, title }: { testId?: string; title: string }) => <div data-testid={testId}>{title}</div>,
+  ChartBox: ({ testId, title, ariaLabel }: { testId?: string; title: string; ariaLabel?: string }) => <div data-testid={testId}>{title}<span role="img" aria-label={ariaLabel} /></div>,
 }));
 
 import { CockpitModulePage } from "../../components/cockpit/module-page";
@@ -104,6 +104,7 @@ describe("CockpitModulePage", () => {
     }
     expect(screen.getAllByText("资本结构趋势").length).toBeGreaterThan(0);
     expect(screen.getByText("FY2022 / FY2023 · %")).toBeVisible();
+    expect(screen.getByRole("img", { name: "资本结构趋势，FY2022、FY2023，单位%" })).toBeInTheDocument();
     expect(screen.getByText("分析问题：资产负债率在报告期之间如何变化？")).toBeVisible();
     expect(screen.getByText("计算指标")).toBeVisible();
     fireEvent.click(screen.getByText("查看图表来源与指标口径"));

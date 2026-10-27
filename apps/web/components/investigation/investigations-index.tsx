@@ -123,6 +123,7 @@ export function InvestigationsIndex() {
   return (
     <div className="investigations-index">
       <header>
+        <span className="investigations-index__eyebrow">证据工作台</span>
         <h1>分析与归因</h1>
         <p>
           全部确定性 Finding 入口。选择一项进入证据优先调查工作台，身份（批次 / 指标快照 /
@@ -152,6 +153,7 @@ export function InvestigationsIndex() {
             rowHref={(finding) => investigationHref(finding)}
             dense
             pageSize={20}
+            className="investigations-index__table"
           />
         </div>
       ) : null}

@@ -59,7 +59,7 @@ async function fetchJson(page, route) {
   return result;
 }
 
-function renderHtml({ title, captureDate, commit, manifestSha, screenshot, payload, overview }) {
+function renderHtml({ title, captureDate, commit, manifestSha, screenshot, payload, overview, tokens }) {
   const kpis = (overview.kpi_cards ?? []).map((card) => `
     <article class="kpi"><span>${escapeHtml(card.title)}</span><strong>${formatKpi(card)}</strong>
       <small>${escapeHtml(card.caliber_note ?? "")}</small></article>`).join("");
@@ -69,17 +69,17 @@ function renderHtml({ title, captureDate, commit, manifestSha, screenshot, paylo
 <html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="FLOW CFO 驾驶舱离线静态快照，含真实页面截图、API 数据和来源指纹。">
 <title>${escapeHtml(title)}</title><style>
-:root{color-scheme:light;--ink:#173247;--navy:#102438;--paper:#f5f2eb;--gold:#98723a;--line:#e2ddd2;--muted:#647789}
-*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB",sans-serif}
+:root{color-scheme:light;--ink:${tokens.colors.text.primary};--navy:${tokens.colors.surface.nav};--paper:${tokens.colors.surface.canvas};--gold:${tokens.colors.brand.gold};--line:${tokens.colors.line.default};--muted:${tokens.colors.text.muted}}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.6 ${tokens.typography.family.body}}
 main{max-width:1320px;margin:0 auto;padding:32px 24px 64px}.masthead{display:flex;justify-content:space-between;gap:24px;align-items:end;border-bottom:1px solid var(--line);padding-bottom:22px}
-.eyebrow{color:var(--gold);letter-spacing:.15em;font-size:12px;font-weight:700}.masthead h1{margin:5px 0 0;font-family:Georgia,"Songti SC",serif;font-size:clamp(28px,5vw,48px);line-height:1.1}.meta{text-align:right;color:var(--muted);font-size:13px}
-.notice{margin:20px 0;padding:13px 16px;border:1px solid #d8c28c;background:#f7efd9;border-radius:8px;color:#684f24;font-weight:600}
-.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:20px 0}.kpi{background:#fff;border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:8px;padding:16px;min-height:118px}.kpi span{display:block;color:var(--muted);font-size:13px}.kpi strong{display:block;font:700 clamp(22px,3vw,34px)/1.25 Georgia,"Songti SC",serif;margin:6px 0}.kpi small{display:block;color:var(--muted);font-size:11px}
-.figure{margin:18px 0;background:white;border:1px solid var(--line);border-radius:10px;padding:14px;box-shadow:0 4px 16px #1024380a}.figure img{display:block;width:100%;height:auto;border-radius:4px}.figure figcaption{padding:10px 4px 0;color:var(--muted);font-size:13px}
-details{margin-top:20px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:14px 18px}summary{cursor:pointer;font-weight:700}pre{max-height:560px;overflow:auto;white-space:pre-wrap;word-break:break-word;background:#f7f8fa;padding:14px;border-radius:6px;font:12px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace}
-footer{margin-top:24px;color:var(--muted);font-size:12px}.tag{display:inline-block;margin:3px 6px 3px 0;padding:2px 8px;border:1px solid var(--line);border-radius:999px;background:#fff}
+.eyebrow{color:var(--gold);letter-spacing:.15em;font-size:12px;font-weight:700}.masthead h1{margin:5px 0 0;font-family:${tokens.typography.family.display};font-size:clamp(28px,5vw,48px);line-height:1.1}.meta{text-align:right;color:var(--muted);font-size:13px}
+.notice{margin:20px 0;padding:13px 16px;border:1px solid ${tokens.colors.brand.gold};background:${tokens.colors.brand.goldSoft};border-radius:${tokens.radius.md};color:${tokens.colors.text.secondary};font-weight:600}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:20px 0}.kpi{background:${tokens.colors.surface.paper};border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:${tokens.radius.md};padding:16px;min-height:118px}.kpi span{display:block;color:var(--muted);font-size:13px}.kpi strong{display:block;font:${tokens.typography.weight.bold} clamp(22px,3vw,34px)/1.25 ${tokens.typography.family.numeric};margin:6px 0}.kpi small{display:block;color:var(--muted);font-size:11px}
+.figure{margin:18px 0;background:${tokens.colors.surface.paper};border:1px solid var(--line);border-radius:${tokens.radius.lg};padding:14px;box-shadow:${tokens.shadow.panel}}.figure img{display:block;width:100%;height:auto;border-radius:${tokens.radius.sm}}.figure figcaption{padding:10px 4px 0;color:var(--muted);font-size:13px}
+details{margin-top:20px;background:${tokens.colors.surface.paper};border:1px solid var(--line);border-radius:${tokens.radius.md};padding:14px 18px}summary{cursor:pointer;font-weight:${tokens.typography.weight.bold}}pre{max-height:560px;overflow:auto;white-space:pre-wrap;word-break:break-word;background:${tokens.colors.surface.soft};padding:14px;border-radius:${tokens.radius.sm};font:12px/1.5 ${tokens.typography.family.mono}}
+footer{margin-top:24px;color:var(--muted);font-size:12px}.tag{display:inline-block;margin:3px 6px 3px 0;padding:2px 8px;border:1px solid var(--line);border-radius:${tokens.radius.pill};background:${tokens.colors.surface.paper}}
 @media(max-width:760px){main{padding:22px 14px 44px}.masthead{display:block}.meta{text-align:left;margin-top:12px}.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.kpi{padding:12px}.figure{padding:7px}}
-@media print{body{background:#fff}.figure,.kpi{box-shadow:none;break-inside:avoid}details{display:none}}
+@media print{body{background:${tokens.colors.surface.paper}}.figure,.kpi{box-shadow:none;break-inside:avoid}details{display:none}}
 </style></head><body><main>
 <header class="masthead"><div><div class="eyebrow">FLOW / FINANCE INTELLIGENCE</div><h1>集团财务总览</h1></div>
 <div class="meta">离线静态快照 · ${escapeHtml(captureDate)}<br>代码 ${escapeHtml(commit)} · 快照 ${escapeHtml(overview.context?.metric_snapshot_id ?? "未知")}</div></header>
@@ -94,6 +94,7 @@ footer{margin-top:24px;color:var(--muted);font-size:12px}.tag{display:inline-blo
 
 async function main() {
   const args = argumentsFrom(process.argv.slice(2));
+  const tokens = JSON.parse(await readFile(path.join(root, "packages/flow-visual-language/tokens.json"), "utf8"));
   const output = path.resolve(root, args.output);
   const outputDir = path.dirname(output);
   const browser = await chromium.launch({ headless: true });
@@ -122,7 +123,7 @@ async function main() {
     const title = "大麦物流集团财务驾驶舱静态快照";
     const captureDate = new Date().toISOString().slice(0, 10);
     await mkdir(outputDir, { recursive: true });
-    await writeFile(output, renderHtml({ title, captureDate, commit, manifestSha, screenshot, payload, overview }), "utf8");
+    await writeFile(output, renderHtml({ title, captureDate, commit, manifestSha, screenshot, payload, overview, tokens }), "utf8");
     const imagePath = output.replace(/\.html$/i, ".png");
     await writeFile(imagePath, screenshot);
     if (errors.length) throw new Error(`浏览器错误：${errors.join("；")}`);

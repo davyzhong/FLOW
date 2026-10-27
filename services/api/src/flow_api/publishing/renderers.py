@@ -12,6 +12,8 @@ import html as html_module
 from collections.abc import Callable
 
 from flow_api.publishing.models import ReportView, SnapshotFinding
+from flow_api.visual_theme import apply_pptx_visual_theme, style_workbook_headers
+from flow_api.visual_tokens import VISUAL_TOKENS
 
 
 def _money(value: str) -> str:
@@ -94,6 +96,7 @@ def render_pptx(view: ReportView) -> bytes:
         )
 
     buffer = BytesIO()
+    apply_pptx_visual_theme(presentation)
     presentation.save(buffer)
     return buffer.getvalue()
 
@@ -163,6 +166,7 @@ def render_xlsx(view: ReportView) -> bytes:
         footer.append([footer_key, footer_value])
 
     buffer = BytesIO()
+    style_workbook_headers(workbook)
     workbook.save(buffer)
     return buffer.getvalue()
 
@@ -172,12 +176,25 @@ def _escape(value: str) -> str:
 
 
 _STYLE = (
-    "body{margin:2rem;color:#1b2a3f;"
-    'font-family:"Inter Variable","Noto Sans SC Variable",sans-serif}'
-    "table{border-collapse:collapse}"
-    "td,th{border:1px solid #ccd6e0;padding:.35rem .6rem;font-size:.9rem}"
-    ".finding{border-left:3px solid #49a389;padding-left:.8rem;margin:1rem 0}"
-    "footer{margin-top:2rem;font-size:.8rem;color:#5c6b80}"
+    f"@page{{size:A4;margin:14mm}}*{{box-sizing:border-box}}"
+    f"body{{margin:2rem;color:{VISUAL_TOKENS['colors-text-primary']};"
+    f"background:{VISUAL_TOKENS['colors-surface-canvas']};line-height:1.55;"
+    f"font-family:{VISUAL_TOKENS['typography-family-body']}}}"
+    f"h1,h2,h3{{font-family:{VISUAL_TOKENS['typography-family-display']};"
+    f"color:{VISUAL_TOKENS['colors-brand-navy']}}}"
+    f"h1{{border-bottom:2px solid {VISUAL_TOKENS['colors-brand-gold']};padding-bottom:.5rem}}"
+    "table{border-collapse:collapse;width:100%;margin:.8rem 0 1rem}"
+    f"td,th{{border:1px solid {VISUAL_TOKENS['colors-line-default']};"
+    "padding:.45rem .6rem;font-size:.9rem;text-align:left;vertical-align:top}}"
+    f"th{{background:{VISUAL_TOKENS['colors-surface-soft']};"
+    f"color:{VISUAL_TOKENS['colors-brand-navy']}}}"
+    f".finding{{border:1px solid {VISUAL_TOKENS['colors-line-default']};"
+    f"border-left:3px solid {VISUAL_TOKENS['colors-brand-gold']};"
+    f"background:{VISUAL_TOKENS['colors-surface-paper']};"
+    "padding:.5rem .8rem;margin:1rem 0;break-inside:avoid}"
+    f"footer{{margin-top:2rem;font-size:.8rem;color:{VISUAL_TOKENS['colors-text-muted']}}}"
+    f"@media print{{body{{margin:0}}h1,h2,h3{{break-after:avoid}}"
+    ".finding,tr{break-inside:avoid}}}"
 )
 
 

@@ -1,22 +1,23 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { VISUAL_TOKENS } from "../../../lib/visual-tokens.generated";
 import { formatFinancialValue } from "../../cockpit/number-format";
 
 // 构成环形图：手写 SVG donut + 右侧图例；悬停显示精确金额与占比。
 export type DonutDatum = { label: string; value: number };
 
 const COLORS = [
-  "#2563eb",
-  "#0d9488",
-  "#16a34a",
-  "#ea580c",
-  "#7c3aed",
-  "#dc2626",
-  "#0891b2",
-  "#65a30d",
-  "#d97706",
-  "#475569",
+  VISUAL_TOKENS["colors-data-revenue"],
+  VISUAL_TOKENS["colors-brand-gold"],
+  VISUAL_TOKENS["colors-data-cash"],
+  VISUAL_TOKENS["colors-data-series4"],
+  VISUAL_TOKENS["colors-data-series5"],
+  VISUAL_TOKENS["colors-semantic-negative"],
+  VISUAL_TOKENS["colors-data-series6"],
+  VISUAL_TOKENS["colors-semantic-positive"],
+  VISUAL_TOKENS["colors-semantic-warning"],
+  VISUAL_TOKENS["colors-semantic-unavailable"],
 ];
 
 export function DonutChart({

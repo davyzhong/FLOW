@@ -2,11 +2,35 @@
 .reports-center {
   padding: var(--flow-space-5);
   display: grid;
-  grid-template-columns: minmax(0, 1fr); /* 窄视口轨道随容器收缩 */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
   gap: var(--flow-space-4);
 }
 
-.reports-center__header h1 { margin: 0; font-size: 20px; color: var(--rep-ink); }
+.reports-center > :not(.reports-center__objective):not(.reports-center__freeze):not(.reports-center__snapshots):not(.reports-center__publish) { grid-column: 1 / -1; }
+
+.reports-center__header {
+  display: grid;
+  gap: 5px;
+  padding: 4px 0 12px;
+  border-bottom: 1px solid var(--flow-vl-colors-line-default);
+}
+
+.reports-center__header::before {
+  content: "FLOW / REPORTS";
+  color: var(--flow-vl-colors-brand-gold-strong);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .16em;
+}
+
+.reports-center__header h1 {
+  margin: 0;
+  color: var(--rep-ink);
+  font-family: var(--flow-vl-typography-family-display);
+  font-size: clamp(28px, 3vw, 36px);
+  line-height: 1.2;
+}
 
 .reports-center__error { margin: 0; }
 
@@ -18,15 +42,29 @@
   border: 1px solid var(--rep-line);
   border-radius: var(--flow-radius-m);
   background: var(--rep-card);
+  box-shadow: var(--flow-shadow-card);
   display: grid;
   gap: var(--flow-space-3);
-  justify-items: start;
+  justify-items: stretch;
+  min-width: 0;
+}
+
+.reports-center__objective,
+.reports-center__freeze,
+.reports-center__snapshots {
+  border-top: 3px solid var(--flow-vl-colors-brand-gold);
 }
 
 .reports-center__objective h2,
 .reports-center__freeze h2,
 .reports-center__snapshots h2,
-.reports-center__publish h2 { margin: 0; font-size: 16px; color: var(--rep-ink); }
+.reports-center__publish h2 {
+  margin: 0;
+  color: var(--rep-ink);
+  font-family: var(--flow-vl-typography-family-display);
+  font-size: 19px;
+  line-height: 1.35;
+}
 
 .reports-center__publish h3 { margin: var(--flow-space-2) 0 0; font-size: 14px; color: var(--rep-ink-2); }
 
@@ -48,7 +86,7 @@
 }
 
 .reports-center__objective-list a {
-  color: var(--flow-info);
+  color: var(--flow-vl-colors-brand-navy);
   font-weight: 600;
 }
 
@@ -135,4 +173,9 @@
   margin: 0;
   font-size: var(--flow-font-s);
   word-break: break-all;
+}
+
+@media (max-width: 900px) {
+  .reports-center { grid-template-columns: minmax(0, 1fr); }
+  .reports-center > :not(.reports-center__objective):not(.reports-center__freeze):not(.reports-center__snapshots):not(.reports-center__publish) { grid-column: auto; }
 }

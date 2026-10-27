@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 vi.mock("../../components/cockpit/charts/echarts-base", () => ({
-  ChartBox: ({ testId, title }: { testId?: string; title: string }) => <div data-testid={testId}>{title}</div>,
+  ChartBox: ({ testId, title, ariaLabel, option }: { testId?: string; title: string; ariaLabel?: string; option?: unknown }) => <div data-testid={testId} data-chart-option={JSON.stringify(option)}>{title}<span role="img" aria-label={ariaLabel} /></div>,
   CHART_THEME: { blue: "#2563eb", blueSoft: "#93c5fd", green: "#16a34a", red: "#dc2626", warn: "#d97706", gold: "#b45309", gray: "#b0b0b0", ink: "#0f172a", mut: "#64748b", line: "#e2e8f0", teal: "#0d9488", purple: "#7c3aed", ltblue: "#60a5fa" },
   AXIS: {},
   TOOLTIP: {},
@@ -56,12 +56,26 @@ const fixture: CockpitProfitabilityResponse = {
 };
 
 describe("CockpitProfitabilityPage", () => {
+  it("盈利能力图表保留合法的零值并与明细一致", async () => {
+    const zeroFixture = structuredClone(fixture);
+    const currentMargin = zeroFixture.periods?.[1].metrics?.find((item) => item.metric_code === "net_margin");
+    if (currentMargin) currentMargin.value = "0";
+    vi.spyOn(client.flowApi, "getCockpitProfitability").mockResolvedValue(zeroFixture);
+    render(<CockpitProfitabilityPage />);
+
+    expect(await screen.findAllByText("0.00%")).toHaveLength(2);
+    const chart = screen.getByTestId("cockpit-profitability-roe-comparison");
+    expect(chart.getAttribute("data-chart-option")).toContain('"data":[10,0]');
+  });
+
   it("shows DuPont chart, period values, frozen lineage and metric deep links", async () => {
     const fetchSpy = vi.spyOn(client.flowApi, "getCockpitProfitability").mockResolvedValue(fixture);
     render(<CockpitProfitabilityPage />);
 
     expect(await screen.findAllByText("30.00%")).toHaveLength(2);
     expect(screen.getByTestId("cockpit-profitability-dupont")).toBeVisible();
+    expect(screen.getByRole("img", { name: /杜邦关系图，期间FY2023.*单位百分比.*单位次.*单位倍/ })).toBeInTheDocument();
+    expect(screen.getByRole("img", { name: /ROE 和净利率.*期间FY2022、FY2023，单位百分比/ })).toBeInTheDocument();
     expect(screen.getAllByText(/snapshot-current/).length).toBeGreaterThan(0);
     expect(screen.getAllByRole("link", { name: "指标口径与关系" }).map((link) => link.getAttribute("href"))).toContain("/metric-library?focus=net_margin");
     expect(screen.getAllByRole("link", { name: "来源财报" })).toHaveLength(8);

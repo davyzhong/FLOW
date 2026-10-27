@@ -88,10 +88,10 @@ export function CockpitModulePage({
   );
 
   if (query.loading) {
-    return <div data-status="loading" aria-busy="true"><h2>{title}</h2><p>加载中…</p></div>;
+    return <div data-status="loading" aria-busy="true"><h1>{title}</h1><p>加载中…</p></div>;
   }
   if (query.error || !query.data) {
-    return <div data-status="error"><h2>{title}</h2><p role="alert">{query.error ?? "模块数据未就绪。"}</p><button type="button" onClick={query.reload}>重试</button></div>;
+    return <div data-status="error"><h1>{title}</h1><p role="alert">{query.error ?? "模块数据未就绪。"}</p><button type="button" onClick={query.reload}>重试</button></div>;
   }
 
   const data = query.data;
@@ -104,7 +104,7 @@ export function CockpitModulePage({
   return (
     <div className="module-page" data-status="ready" data-module={data.module}>
       <header className="module-page__header">
-        <div><span className="module-page__eyebrow">FLOW · 财务驾驶舱</span><h2>{data.title}</h2></div>
+        <div><span className="module-page__eyebrow">FLOW · 财务驾驶舱</span><h1>{data.title}</h1></div>
         <span className="module-period">{data.period} · 对比 {data.prior_period}</span>
       </header>
       <p className="module-source-notice">{data.source_notice}</p>
@@ -154,7 +154,7 @@ export function CockpitModulePage({
       </section>
 
       <section aria-label={`${data.title} 图表`} className="module-charts" data-count={charts.length}>
-        <div className="module-section-heading"><h3>经营趋势与结构</h3><span>期间序列 · 可追溯至来源财报</span></div>
+        <div className="module-section-heading"><h2>经营趋势与结构</h2><span>期间序列 · 可追溯至来源财报</span></div>
         {charts.length ? charts.map(([key, chart]) => {
           const option = buildModuleChartOption(chart, data.unit);
           const seriesEntries = Object.entries(chart.series ?? {});
@@ -170,7 +170,7 @@ export function CockpitModulePage({
           return (
             <article key={key} data-chart={key} className="module-chart-card">
               <header className="module-chart-heading">
-                <h4>{chart.title ?? key}</h4>
+                <h3>{chart.title ?? key}</h3>
                 <span>{periods.join(" / ") || data.period} · {displayUnit}</span>
               </header>
               {chart.analysis_question ? (
@@ -196,7 +196,7 @@ export function CockpitModulePage({
                 <div className="module-chart-visual"><ChartBox
                     title=""
                     option={option}
-                    ariaLabel={`${chart.title ?? key}，${periods.join("、") || data.period}`}
+                    ariaLabel={`${chart.title ?? key}，${periods.join("、") || data.period}，单位${displayUnit}`}
                     testId={`cockpit-module-chart-${key}`}
                     height={260}
                     onDataPointClick={({ dataIndex }) => {
@@ -210,7 +210,7 @@ export function CockpitModulePage({
                   /></div>
               ) : <p className="chart-empty" data-testid={`cockpit-module-chart-${key}-empty`}>{chart.empty_reason || "该图表无足够可用事实，未补零或生成趋势。"}</p>}
               {seriesEntries.length ? (
-                <div className="module-table-scroll"><table className="module-chart-table">
+                <div className="module-table-scroll" role="region" aria-label={`${chart.title ?? data.title}数据表`} tabIndex={0}><table className="module-chart-table">
                   <thead><tr><th>指标</th>{tablePeriods.map((period) => <th key={period}>{period}</th>)}</tr></thead>
                   <tbody>{seriesEntries.map(([name, raw]) => {
                     const values = normalizeModuleSeries(raw);
@@ -266,7 +266,7 @@ export function CockpitModulePage({
 
       {unavailable.length > 0 ? (
         <section aria-label={`${data.title} 不可用块`} className="module-unavailable">
-          <div className="module-section-heading"><h3>当前未披露或暂不可计算</h3><span>不补零、不推测</span></div>
+          <div className="module-section-heading"><h2>当前未披露或暂不可计算</h2><span>不补零、不推测</span></div>
           <ul>{unavailable.map((block) => <li key={String(block.code)} data-status="unavailable"><strong>{String(block.block)}</strong>：{String(block.reason)}</li>)}</ul>
         </section>
       ) : null}

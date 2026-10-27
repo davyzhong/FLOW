@@ -49,6 +49,7 @@ const LIBRARY = {
   metrics: [
     metric("roe", "entry-roe", "general"),
     metric("gross_margin", "entry-gm", "general", ["roe", "unknown_code"]),
+    { ...metric("gross_margin", "entry-gm-logistics", "logistics"), name: "物流指标-gross_margin" },
     metric("on_time_rate", "entry-otr", "logistics"),
   ],
   relations: [],
@@ -121,6 +122,15 @@ describe("MetricLibraryApp 深链定位", () => {
     expect(card).toHaveClass("ml-metric--focused");
     expect(screen.getByRole("button", { name: "物流行业指标" })).toHaveClass("is-active");
     expect(screen.queryByText(/未找到指标/)).not.toBeInTheDocument();
+  });
+
+  it("重复 metric_code 联用 collection 时精确定位对应口径", async () => {
+    stubLibraryFetch();
+    render(<MetricLibraryApp focus="gross_margin" collection="logistics" />);
+    expect(await screen.findByText("物流指标-gross_margin")).toBeInTheDocument();
+    expect(document.getElementById("metric-entry-entry-gm-logistics")).toHaveClass("ml-metric--focused");
+    expect(document.getElementById("metric-entry-entry-gm")).toBeNull();
+    expect(screen.getByRole("button", { name: "物流行业指标" })).toHaveClass("is-active");
   });
 
   it("?entry= 按 entry_id 定位并赋予卡片锚点 id", async () => {

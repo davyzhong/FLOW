@@ -71,6 +71,9 @@ describe("CockpitOverviewVisuals", () => {
     expect(screen.getByTestId("cockpit-overview-expense-chart")).toBeTruthy();
     expect(screen.getByTestId("cockpit-overview-expense-chart").getAttribute("data-stacks")).toBe("period-expenses,period-expenses,period-expenses,period-expenses");
     expect(screen.getByTestId("cockpit-overview-expense-chart").getAttribute("aria-label")).toContain("年度堆叠对比");
+    expect(screen.getByRole("table", { name: "经营指标趋势原值对照" })).toBeTruthy();
+    expect(screen.getByRole("table", { name: "经营现金变动桥数据明细" })).toBeTruthy();
+    expect(screen.getByRole("table", { name: "期间费用披露原值" })).toBeTruthy();
     expect(screen.getByText(/不含营业成本/)).toBeTruthy();
     expect(screen.getByText("FY2022（百万元）")).toBeTruthy();
     expect(screen.getByText("FY2023（百万元）")).toBeTruthy();

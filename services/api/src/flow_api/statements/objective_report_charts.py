@@ -15,18 +15,21 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 
+from flow_api.visual_tokens import VISUAL_TOKENS
+
 plt.rcParams["font.sans-serif"] = [
-    "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Arial Unicode MS",
-    "Noto Sans CJK SC", "Microsoft YaHei",
+    family.strip().strip("\"'")
+    for family in VISUAL_TOKENS["typography-family-body"].split(",")
+    if family.strip().strip("\"'") not in {"system-ui", "sans-serif"}
 ]
 plt.rcParams["axes.unicode_minus"] = False
 
-BLUE = "#2f6bd8"
-LIGHT_BLUE = "#9db6e8"
-ORANGE = "#e08a3c"
-GREY = "#8a94a6"
-NEG = "#c2604f"
-GREEN = "#2e8b57"
+BLUE = VISUAL_TOKENS["colors-data-revenue"]
+LIGHT_BLUE = VISUAL_TOKENS["colors-data-series4"]
+ORANGE = VISUAL_TOKENS["colors-brand-gold"]
+GREY = VISUAL_TOKENS["colors-semantic-unavailable"]
+NEG = VISUAL_TOKENS["colors-semantic-negative"]
+GREEN = VISUAL_TOKENS["colors-semantic-positive"]
 
 DPI = 150
 
@@ -38,7 +41,7 @@ def _finish(fig: Any) -> bytes:
     buffer = io.BytesIO()
     # bbox_inches="tight" 把画布外的元素（如 suptitle y>1）一并纳入输出，避免裁切
     fig.savefig(
-        buffer, format="png", dpi=DPI, facecolor="white",
+        buffer, format="png", dpi=DPI, facecolor=VISUAL_TOKENS["colors-surface-paper"],
         bbox_inches="tight", pad_inches=0.08,
     )
     plt.close(fig)
@@ -123,7 +126,9 @@ def donut(title: str, items: list[tuple[str, Decimal | None]]) -> bytes:
     names = [name if value / total >= Decimal("0.03") else ""
              for name, value in pairs]
     values = [float(value) for _, value in pairs]
-    palette = ["#2f6bd8", "#9db6e8", "#e08a3c", "#f2c57c", "#7fb3a3", "#b7a6d9", "#d98a8a"]
+    palette = [
+        VISUAL_TOKENS[f"chart-series-{index}"] for index in range(1, 7)
+    ] + [VISUAL_TOKENS["colors-semantic-negative"]]
     fig, ax = plt.subplots(figsize=(5.2, 3.6))
     wedges, _, autotexts = ax.pie(
         values, labels=names,
@@ -135,7 +140,7 @@ def donut(title: str, items: list[tuple[str, Decimal | None]]) -> bytes:
     )
     for text in autotexts:
         text.set_fontsize(8.5)
-        text.set_color("#1a2233")
+        text.set_color(VISUAL_TOKENS["colors-text-primary"])
     ax.set_title(title, fontsize=11)
     return _finish(fig)
 
@@ -151,7 +156,7 @@ def cashflow_bars(operating: Decimal | None, investing: Decimal | None,
     colors = [GREEN if value >= 0 else NEG for value in floats]
     fig, ax = plt.subplots(figsize=(2.2 * len(present) + 1.2, 2.9))
     bars = ax.bar(labels, floats, color=colors, width=0.5)
-    ax.axhline(0, color="#5b6478", linewidth=0.8)
+    ax.axhline(0, color=VISUAL_TOKENS["colors-line-strong"], linewidth=0.8)
     for bar, scaled in zip(bars, floats, strict=False):
         ax.annotate(_fmt_scaled(scaled, unit),
                     (bar.get_x() + bar.get_width() / 2, bar.get_height()),

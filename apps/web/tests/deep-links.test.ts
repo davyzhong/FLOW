@@ -17,6 +17,9 @@ import {
 describe("deep-link href builders", () => {
   it("builds receiver hrefs matching the batch-1 parameter contract", () => {
     expect(metricFocusHref("gross_margin")).toBe("/metric-library?focus=gross_margin");
+    expect(metricFocusHref("gross_margin", "logistics")).toBe(
+      "/metric-library?focus=gross_margin&collection=logistics",
+    );
     expect(metricEntryHref("entry-1")).toBe("/metric-library?entry=entry-1");
     expect(statementReportHref("r-1")).toBe("/statements?report=r-1");
     expect(reportsSnapshotHref("snap-1")).toBe("/reports?snapshot=snap-1");

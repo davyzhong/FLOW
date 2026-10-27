@@ -3,9 +3,9 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目交接文档
 doc_type: navigation
 status: current
-version: 11.5
+version: 16.72
 created_at: 2026-09-12
-updated_at: 2026-10-24
+updated_at: 2026-10-27
 owner: FLOW
 applies_to: repository
 ---
@@ -18,9 +18,25 @@ applies_to: repository
 
 ## 一、当前任务
 
-**连续收尾接管授权（2026-10-24）：** 用户已要求按 `CURRENT_ROADMAP` 顺序连续执行路线图 7a.1–7a.8，完成可做事项后进入收尾。范围和跳过规则已落盘：外部长等待先诊断并尝试安全替代，仍无进展则如实记为跳过/未验证；不得绕过红线或虚报验收。本 worktree 与分支为该任务唯一写入目标；当前进度与下一动作见下方最新交接段，历史接手状态不再作为现况依据。
+**2026-10-27 路线图结构性规整（v17.17）：** 用户要求对任务/目标/待验证清单做删减规整。路线图已重组为四层结构——**战略目标（G1 单机原型已交付 / G2 知识刷新 K3 进行中 / G3 公开 C 级 No-Go 维持 / G4 内部工作台 gated）→ 唯一执行队列（16 项编号不变）→ 工作包登记表（21 包每包一行）→ 待验证清单（活跃仅 4 项，其余显式关闭）**；原 60 行裸历史段落、7a 收尾执行卡和历史队列全部折进 `<details>` 只读归档，内容未删减；纪律节两条 2026-09-26 过时补记并入正文。规整不改变任何队列状态或下一动作（仍为 K3 第 134 批），plan_views PASS。本规整在分支 `flow/roadmap-cleanup-20261027`（基于 PR #5 head `10f6e82e`）交付，合入时保留两边内容取并集，不得让任一侧状态回退。
 
-**2026-10-24 当前交接：路线图 7a.1–7a.8 已完成。** PR [#3](https://github.com/davyzhong/FLOW/pull/3) 已合入 main，merge commit `b2a1bf22df91239eb311d1692c30c666250678bf` 的 GitHub Actions run `40092106547` 为 28/28 success。候选离线包、隔离旅程及独立复核证据见[差距审查](docs/60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)。唯一队列的下一项 K2 为队首待启动，本轮未开始；版本与状态见[CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)。用户选择保留 `/Users/qiming/.flow/flow.sqlite3` 零字节文件，`services/api/flow.sqlite3` 未跟踪文件也保持原样；主 checkout 用户文件未触碰。
+**2026-10-27 当前交接：** 路线图共 16 项：完成 10、实际执行中 0、队首待启动 1（K 轨 K3）、排队 3、暂停 1、外部条件受限 1。视觉语言包及全项目视觉统一已结案，准确证据见[覆盖报告](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)：隔离 manifest `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed` 下验证器 19/19、可见性矩阵 164/164（154 HTTP 200、10 预期拒绝、0 失败）、Playwright 17/17；应用 SHA `01e8e25dd426ed43ad6a2cad76544bbbe623eb99` 的 20×3 矩阵 60/60、Axe 桌面 20 路由零违规。E2E 断言修正 `d01daa11` 独立复核无 P1/P2。原生浏览器 200% 缩放因 Mac 锁屏及工具能力限制未直接验收，待设备解锁且有可操作原生缩放工具时补验；390/360 CSS px 不是替代。当前分支 `codex/flow-visual-language`，PR #5。K3 最新 accepted snapshot 为 `obsidianwiki-20261026T005516+0800-d601b4d5`（Davybase commit `110fe57`，manifest SHA `593715c832a538d9ba83df4e077b8dd9bace24f40d3c0d5262fc3779b20f0e77`）；完整内容 SHA 与先前 K3 baseline 输入一致，写句柄 0。registry/baseline/delta 已重新绑定最新 snapshot ID 并重复生成一致，批次001–025登记的76条HIGH来源及后续HIGH全文审阅、W1/W3 MED/LOW双审和错误集中度复核均已完成。全量路由已推进至第133批，coverage共9,673条：routed 755、filtered 412、pending_review 8,506；本批24条中9条路由、15条过滤。经营分析与财务报告两篇共有28个本地图像引用按基线规则未解析，OEE成本分析另有18个外链图像未归档；本批均未审图。下一批按ID顺序为第134批。五个locator-only例外为 `SRC-LOCAL-v1-00625bae4e08042539d1`、`SRC-LOCAL-v1-0428a240b0361157ffa1`、`SRC-LOCAL-v1-057cabfb9baca9f47c44`、`SRC-LOCAL-v1-0bd79ce2c2d600301852`、`SRC-LOCAL-v1-0de553da4d8d857b90d3`；不使用范围外正文或链接标题推断替代。旧 10-19 结果是历史截面。ObsidianWiki 严格只读，`CURRENT_RELEASE` 不变。用户选择保留 `/Users/qiming/.flow/flow.sqlite3` 零字节文件；其他未跟踪数据库文件保持原样。
+
+
+### 2026-10-27 会话结束交接
+
+**当前任务与状态。** 唯一主线仍是 K3 全量逐条语义路由与 coverage 闭合，权威队列以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为准。本会话结束时没有正在运行的审阅或验证进程；第133批已提交推送，下一单一动作是第134批。路线图总计16项：完成10、实际执行中0、K3队首待启动1、后续排队3、暂停1、外部条件受限1。当前分支为 `codex/flow-visual-language`，PR #5；2026-10-27 开工前 `git pull --ff-only origin codex/flow-visual-language` 已确认远端无新提交，工作区干净，HEAD `75ae401c03013009306cd1640a6dd8f472b66ba7`。
+
+**已完成。** 2026-10-26 连续完成第129–133批，共120条 accepted 来源的逐 ID 审阅与文件/规范化正文 SHA 核对：新增 routed 62、filtered 58；全量9,673条目前为 routed 755、filtered 412、pending_review 8,506。每批均更新来源基线、coverage、change manifest、批次审阅表、路线图、项目状态、来源 README、工作包、知识库 inventory/SHA 清单和本交接；M1、M6、coverage validator、链接、KB manifest 与 diff 检查通过，独立只读复核均无剩余 P1/P2。五批提交依次为 `45e0357e`、`46e3b774`、`9c667d6c`、`f436ec0a`、`75ae401c`，均已推送 GitHub。视觉语言包与全项目页面、图表、报告及 README 的视觉统一此前已结案，证据见上方当前交接段及[覆盖报告](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。
+
+**限制与未满足验收。** K3 尚有8,506条待审，五个 locator-only 例外缺可用 accepted 正文，不能按标题或范围外文件补全；后续还需 coverage 终态闭合、知识综合和独立 reader，`CURRENT_RELEASE` 尚未 seal/激活。部分来源的图片引用按基线解析规则未解析，不能推断附件不存在：第132批的34个同名附件实际位于 accepted vault tree 其他路径；关联的27张截图在当前 accepted 工作区但未进入 Git tree；第133批有28个本地引用未按规则解析及18个未归档外链图像。这些批次只根据已读文字路由，未审图，付费 Word/Excel 模板未取得。原生浏览器200%缩放的外部条件受限项仍按既有视觉验收结案记录保留，不能将 CSS 窄屏测试说成原生缩放通过。前一轮连续执行因系统用量限制停止；这不是来源审阅本身的技术阻塞，也不构成 K3 完成。
+
+**下一单一动作。** 下一会话先核验仓库/分支及可见在途工作，拉取 GitHub 最新提交；从 accepted baseline 中第133批末尾 `SRC-LOCAL-v1-25f831bfad9d00b1f553` 之后的首个未审 source_id 开始第134批，继续逐条读 accepted 正文、复算 file/body SHA、核对图片实际位置与敏感边界。完成一批后同步唯一路线图及交接，通过文档门禁、独立复核、提交并立即推送，再开始下一批；不得跳过 K3 去做排队项。五个 locator-only 例外保留 pending_review，直到取得同一 accepted 范围内的可验证正文或按工作包给出有依据处置。
+
+**踩坑与恢复要点。** ① `source_baseline.py` 的图片解析只查源文件目录和 vault 根目录，按该规则未解析不等于快照缺图；须区分 Git tree、accepted 工作区、外链未归档和本批未审图四种情况。② ObsidianWiki accepted snapshot 是 working-tree 快照，个别来源或附件不在 Git tree；以登记的文件 SHA 核对当前只读工作区，不能仅用 `git show HEAD` 取证。③ 自动生成摘要、AI图注、二次人工摘述和付费模板各有不同证据层级，不能冒充原件或将来源数值写成产品事实。④ 企业内部架构、运营指标和规划资料只登记过滤理由，不在 FLOW 审阅表复述细节。⑤ 每次提交后立即推送；M1/M6 通过只代表该次提交前的本地门禁，报告远端 CI 时须核其准确提交 SHA。主 checkout 的用户改动及 `/Users/qiming/.flow/flow.sqlite3` 零字节文件均保持原样。
+
+
+**历史操作记录（2026-10-26视觉结案时点；当前K3状态以上方交接段落为准）：** 最终隔离验收为 19/19、164/164、17/17；独立代码复核无 P1/P2。最后 E2E 断言修复已提交 `d01daa11` 并推送。视觉工作包正式结案，队首转到 K3；当时第一步为只读复核 accepted manifest 与 vault 状态，不触碰常驻知识库。
 
 <details>
 <summary>2026-10-21 及以前的状态快照（历史，不代表当前执行）</summary>
@@ -139,12 +155,12 @@ applies_to: repository
 规格：`docs/superpowers/specs/2026-09-17-static-knowledge-refresh-and-strategic-rebaseline-design.md`
 旧实施计划（archived，仅历史参考；K2 时间门禁命令已被设计 v1.2 取代）：`docs/superpowers/plans/2026-09-18-static-knowledge-refresh-and-strategic-rebaseline-implementation-plan.md`
 
-**K0–K6 步骤概要**（状态以路线图和工作包为准）：
+**K0–K6 步骤概要**（状态以路线图和工作包为准；下表是阶段划分，不是第二份待办）：
 1. **K0 已完成**：Davybase 运行清单实现、微信历史批次严格验收和证据归档已推送。
 2. **K1 已完成**：只读 allowlist scanner 已扫描三个非微信范围；566 篇需人工 triage，可执行候选 0，证据见工作包。
-3. **K2 当前执行**：即时稳定工作区快照，验收见知识刷新设计 v1.2。
-4. **K3** 用 accepted manifest 重建来源 registry/baseline/diff
-5. **K4** 全量路由 + HIGH 精读
+3. **K2 已完成**：即时稳定工作区快照，验收见知识刷新设计 v1.2。
+4. **K3 当前执行**：registry/baseline/diff 已按 10-26 accepted manifest 重建；当前进行逐条语义路由与 HIGH 精读。
+5. **K4** MED/LOW 双审抽样、错误集中度与 coverage 闭合
 6. **K5** 构建 candidate + seal
 7. **K6/战略裁决** 原子激活 release（须用户裁决，Agent 不可代签）
 
@@ -281,3 +297,33 @@ bash scripts/test_damai_demo_e2e.sh
 | `config/statements/item_alias_map_v1.yaml` | 报表行名别名映射（damai_syn 段） |
 | `services/api/src/flow_api/cockpit/modules.py` | 模块构建器（8 个 build_* 函数） |
 | `services/api/src/flow_api/cockpit/service.py` | 投影服务（KPI/趋势/结论/行动项） |
+
+
+2026-10-26 K3 接续：语义审阅批次 001–025 共 76 条 HIGH 候选，62 篇本地正文已读、14 条仅元数据筛查；60 条 pending-verification，2 条同源副本 duplicate，14 条内部敏感来源 rejected 并排除产品候选，来源原文尚未独立核验。第二十三批将核算粒度、经营思维和降本增效文章作为待验证框架；第二十四批发现闭环案例笔记与已审文章内容高度相似但出处未核，保留待核；第二十五批将 3 条余下的内部业财规划/规则材料仅做元数据筛查并排除候选。旧 HIGH 清单中的 AI 财务专题经 Git 元数据追溯到 2026-09-26 去重提交：旧财务路径被删除，同一 Git blob 保留在系统架构路径；该路径不在当前 accepted baseline，故记为基线外迁移并排除本轮候选，不打开正文、不计入已审候选。第二十六至三十一批已双审 W1 MED 18/18 条（旧清单标17篇，末行合并两篇）；第二十九批发现盈利分析公式错误（毛利率量纲、有效税率、ROE拆解），以及酒店案例指标口径和无来源效果数字；禁止直接作为定义或事实。Power BI 操作/AI路线和AI财务观点均保留背景级，不采纳宣传性能力、时点价格或替代就业预测。第二十七批发现流程分类过于绝对、数据看板计数与总数不符（28,155 vs. 26,935，占比约 104.6%），均不作事实。京东分部列值较合计收入高 181.5 亿元，须核原始季报。coverage 台账 9,673 条中 routed 168、filtered 19、pending_review 9,486；W1 MED 已完成18/18（旧清单标17篇，末行合并两篇）；W3 MED有效范围完成；W3 LOW分层样本首批12/12完成（10待核、2敏感来源拒绝）。第三十九批发现财务BP脱敏数据中实际销售额公式差204.85元且经营公式不能替代会计定义、渠道专案结果无对照不能确证因果、模型阈值/性能缺实证且正文标题分类不一致；第四十批补充供应链成熟度及ROI数据无权威/独立来源、财务BI附录为AI生成且指标定义不足、电商退款订单率与金额率混用；第四十一批发现渠道同比计算错误、金融指标监管定义缺位、RFM/购物篮阈值须本地验证；第四十二批记录BI收益和效率分无测量基线、对账关系需核查粒度/唯一键并保留账务审批闭环；第四十三批发现校服年度数据覆盖待核、财务BP成效无量化基线、竞品第三方数据及归因不可复核；第四十四批记录盈亏平衡公式转录歧义、Altman模型变量不一致和AI效率/就业主张无量化证据；第四十五批记录AI因果/效率主张及电商风险指标缺乏可核口径；第四十六批记录财务看板比较、渠道ROI和电商成本率的证据边界；第四十七批记录敏感人效数据、转型失败比例和电商利润统计出处待核；第四十八批记录马斯克审计效率/预算/岗位说法无来源、附录分析数据和LTV/CAC阈值证据不足；第四十九批记录BI渗透率来源缺失、流程控制与分析方法适用边界；第五十批记录母婴销售看板与波士顿矩阵案例证据不足、同题版本单独保留；第五十一批记录模型数量冲突、RFM阈值依赖样本、疑似羊毛党规则需人工复核；第五十二批记录旧人货场案例及618指标的口径/因果限制；第五十三批记录思维系列“4+4=7”算术冲突、相关不等于因果及战略钟案例不可外推；第五十四批记录门店指标/图示缺验证、模型合集仅作索引、报告规范案例来源边界；第五十五批完成W3 MED收尾，区分同题不同版本并标记公式与绩效主张待核；第五十六批完成W3 LOW六层抽样12条，发现公式、因果、宣传证据问题并拒绝2条敏感数据来源。10 条保留 pending-verification、2 条因敏感内容 rejected 并计入 filtered。第三十八批竞品看板非实数、财务BI供应商案例、库存阈值及库龄数据条件和此前各批证据边界继续保留。MED/LOW 分层抽审及错误集中度复核已完成，未触发扩样（见 `docs/60_delivery/verification/2026-10-26--k3-error-concentration-v1.md`）；全量路由批次057处理12条中的11条并发现1条baseline元数据空壳及allowlist外同标题全文，关联未核；下一步按baseline ID升序继续路由；`CURRENT_RELEASE` 未变，ObsidianWiki 只读。
+
+
+2026-10-26 K3 接续（批次058）：在批次057已登记的更小ID locator-only例外 `SRC-LOCAL-v1-00625bae4e08042539d1`（全文位于allowlist外）保持待审的前提下，按accepted baseline ID顺序全文审阅12条，9条 routed / pending-verification，3条内部组织/经营来源 project-internal / rejected；未将未核原始出处、产品版本、方法或经营主张写成事实。coverage 9,673 条更新为 routed 177、filtered 22、pending_review 9,474；ObsidianWiki 保持只读，`CURRENT_RELEASE` 不变。下一步继续 K3 全量路由批次059，按 baseline ID 升序，随后完成 coverage 闭合、知识综合与 independent reader。
+
+
+2026-10-26 K3 接续（批次059）：按baseline ID升序核对12条可读全文及原始 SHA。6条保留待核（资金预算、系统架构、监管互操作、概率决策、AI工具、指标体系）；6条涉及个人隐私或内部企业规划/会议资料而拒绝，未复制敏感细节。coverage 为 routed 183、filtered 28、pending_review 9,462；`CURRENT_RELEASE` 不变，ObsidianWiki 只读。下一步继续全量路由批次060，然后完成coverage闭合、知识综合和independent reader。
+
+
+2026-10-26 K3 接续（批次060）：按baseline ID升序核验12条全文SHA，9条保留待核、3条企业内部Copilot/运营/物流架构材料拒绝且不复述内容。coverage 当前 routed 192、filtered 31、pending_review 9,450。`CURRENT_RELEASE` 不变，ObsidianWiki 只读。下一步继续K3全量路由批次061；随后闭合coverage、知识综合与independent reader。
+
+
+2026-10-26 K3 接续（批次061）：按baseline ID升序核对12条可读全文SHA。6条低/中优先级主题保留待核；6条涉及个人健康场景或企业采购/战略/团队/产品架构/仓库元数据，已拒绝且未复制具体敏感内容。coverage 为 routed 198、filtered 37、pending_review 9,438。`CURRENT_RELEASE` 不变，ObsidianWiki只读。下一步继续批次062，再完成coverage闭合、知识综合与independent reader。
+
+
+2026-10-26 K3 接续（批次062）：按baseline ID升序核对12条全文SHA，7条主题索引保留待核，5条企业内部运营指标、物流/安全架构、身份权限或数据产品设计资料拒绝，不复制细节。coverage 为 routed 205、filtered 42、pending_review 9,426。`CURRENT_RELEASE` 未变，ObsidianWiki只读。下一步继续批次063，继而完成coverage闭合、知识综合与independent reader。
+
+
+2026-10-26 K3 接续（批次067）：按accepted baseline ID顺序审阅12条，9条完成主题路由并保留 pending-verification，涉及组织管理、应收协同、检索、决策、指令配置、Go性能分析、AI资本叙述、程序化工具调用及注意力架构；原始出处、案例、效果与技术版本未独立核验。3条企业内部系统/产品资料标 project-internal / rejected，不复制细节。正文和文件哈希均与accepted snapshot基线相符。coverage为 routed 245、filtered 61、pending_review 9,367；两个locator-only例外继续待审。ObsidianWiki只读、`CURRENT_RELEASE`不变。下一步立即执行批次068。
+
+
+2026-10-26 K3 接续（批次068）：按accepted baseline ID顺序审阅12条，10条完成主题路由并保留 pending-verification，涉及AI工程工作流、ERP、Odoo、模型对比、财务职业习惯、RAG、AI编程工具、ReAct与经济租理论；来源、版本、案例与效果未独立核验。一篇财务文章引用的16个图像附件在accepted working tree中均存在，但本轮未审阅图像内容，未据图推断。2条企业内部物流结算和跨境通关方案资料设 project-internal / rejected，不复制系统或指标细节。正文和文件哈希均与accepted snapshot基线相符。coverage为 routed 255、filtered 63、pending_review 9,355；两个locator-only例外继续待审。ObsidianWiki只读、`CURRENT_RELEASE`不变。下一步立即执行批次069。
+
+
+2026-10-26 K3 接续（批次069）：按accepted baseline ID顺序审阅12条，10条完成主题路由并保留 pending-verification；附件存在但未审阅图像内容的来源仅作正文主题索引，不据图下结论。1条未说明数据主体/底稿的企业月度经营报告标 project-internal / rejected，不复制经营数据。另1条是自动生成目录页，正文记录关联文章元数据缺失且抓取受阻，保持 locator-only / pending-review；新增 locator-only source `SRC-LOCAL-v1-057cabfb9baca9f47c44`，不按链接标题分类。哈希与accepted snapshot基线相符。coverage为 routed 265、filtered 64、pending_review 9,344；三个locator-only来源继续待审。ObsidianWiki只读、`CURRENT_RELEASE`不变。下一步立即执行批次070。
+
+
+2026-10-26 K3 接续（批次070）：按accepted baseline ID顺序审阅12条，8条完成主题路由并保留 pending-verification；经营指标文章的51张附件在accepted working tree中存在但本轮未审阅图像内容，不据图下结论。3条企业内部Copilot、HR应用与产品规划资料设 project-internal / rejected，不复制内部细节；1条消费品建议与FLOW范围无关而拒绝。所有来源文件与正文哈希均与accepted snapshot基线相符。coverage为 routed 273、filtered 68、pending_review 9,332；三个locator-only例外继续待审。ObsidianWiki只读、`CURRENT_RELEASE`不变。下一步立即执行批次071。

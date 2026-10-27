@@ -94,7 +94,7 @@ export function ActionItemPanel({
         data-status="loading"
         className="action-panel"
       >
-        <h3>行动项</h3>
+        <h2>行动项</h2>
         <p>加载中…</p>
       </section>
     );
@@ -102,7 +102,7 @@ export function ActionItemPanel({
   if (query.error) {
     return (
       <section aria-label="行动项" data-status="error" className="action-panel">
-        <h3>行动项</h3>
+        <h2>行动项</h2>
         <p role="alert">{query.error}</p>
         <button type="button" onClick={query.reload}>
           重试
@@ -112,7 +112,7 @@ export function ActionItemPanel({
   }
   return (
     <section aria-label="行动项" data-status="ready" className="action-panel">
-      <h3>行动项</h3>
+      <h2>行动项</h2>
       {items.length === 0 ? (
         pendingFindings.length === 0 ? (
           <p>本期无行动项；结论确认后由 CFO 在此建立闭环。</p>

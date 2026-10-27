@@ -31,6 +31,8 @@ export function CockpitTrendPanel({ series }: { series: CockpitTrendSeries }) {
 
   const isRatio = series.unit === "ratio";
   const chartUnit = isRatio ? "%" : series.unit;
+  const firstPeriod = ready[0].period;
+  const lastPeriod = ready[ready.length - 1].period;
   const option = buildCombo([{
     key: series.key,
     title: series.title,
@@ -52,7 +54,7 @@ export function CockpitTrendPanel({ series }: { series: CockpitTrendSeries }) {
         title={series.title}
         sub={chartUnit}
         option={option}
-        ariaLabel={`${series.title}趋势，${ready.length} 期，从 ${formatFinancialValue(ready[0].value, { unit: series.unit })} 到 ${formatFinancialValue(ready[ready.length - 1].value, { unit: series.unit })}`}
+        ariaLabel={`${series.title}趋势，${firstPeriod} 至 ${lastPeriod}，${ready.length} 期，单位${chartUnit}，从 ${formatFinancialValue(ready[0].value, { unit: series.unit })} 到 ${formatFinancialValue(ready[ready.length - 1].value, { unit: series.unit })}`}
         height={250}
       />
       <details className="trend-details">

@@ -80,13 +80,14 @@ function Comparison({
 function KpiSparkline({ series, title }: { series: CockpitTrendSeries; title: string }) {
   const points = (series.points ?? []).filter((point) => point.status === "ready" && Number.isFinite(point.value));
   if (points.length < 2) return null;
+  const unit = series.unit === "ratio" ? "百分比" : series.unit === "CNY" ? "人民币元" : series.unit;
   const values = points.map((point) => point.value);
   const min = Math.min(...values);
   const max = Math.max(...values);
   const span = max - min || 1;
   const line = values.map((value, index) => `${(index / Math.max(values.length - 1, 1)) * 58},${19 - ((value - min) / span) * 15}`).join(" ");
   return (
-    <svg className="kpi__sparkline" data-testid="cockpit-kpi-sparkline" viewBox="0 0 60 22" role="img" aria-label={`${title} ${points.length}期趋势`}>
+    <svg className="kpi__sparkline" data-testid="cockpit-kpi-sparkline" viewBox="0 0 60 22" role="img" aria-label={`${title} ${points[0].period} 至 ${points.at(-1)?.period}，${points.length}期趋势，单位${unit}`}>
       <polyline points={line} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
       <circle cx={(values.length - 1) / Math.max(values.length - 1, 1) * 58} cy={19 - ((values.at(-1)! - min) / span) * 15} r="2.4" fill="currentColor" />
     </svg>
@@ -126,7 +127,7 @@ export function CockpitKpiCard({
         <div className="kpi__top">
           <span className="kpi__cat">{card.category}</span>
         </div>
-        <h4>{card.title}</h4>
+        <h2>{card.title}</h2>
         <div className="kpi__value">⚠ 不可追溯</div>
         <div className="kpi__caliber">缺少 snapshot_id，按可追溯铁律拒绝渲染</div>
       </article>
@@ -158,7 +159,7 @@ export function CockpitKpiCard({
           <span className="kpi__cat">{card.category}</span>
           {card.control_line ? <span className="kpi__line">管控线 {formatFinancialValue(card.control_line.exact_value ?? card.control_line.display_value, { metricCode: card.metric_code, unit: card.unit })}</span> : null}
         </div>
-        <h4>{card.title}</h4>
+        <h2>{card.title}</h2>
         <div className="kpi__value-row">
           <div className="kpi__value">
             {formatKpiValue(card.primary.exact_value ?? card.primary.display_value, card.metric_code, card.unit)}
@@ -209,13 +210,13 @@ export function CockpitKpiGrid({
       <div className="section-heading">
         <div>
           <span>01</span>
-          <h3>核心经营指标</h3>
+          <h2>核心经营指标</h2>
         </div>
         <small>三基准：同比 / 环比 / 行业分位 · 口径常驻 · 点击穿透</small>
       </div>
       <div className="kpi-grid">{primaryCards.map((card) => renderCard(card, false))}</div>
       {supportingCards.length ? <section className="kpi-supporting" aria-label="补充经营指标">
-        <div className="section-heading"><div><span>01A</span><h3>补充经营指标</h3></div><small>规模、单均效率、成本与营运资本</small></div>
+        <div className="section-heading"><div><span>01A</span><h2>补充经营指标</h2></div><small>规模、单均效率、成本与营运资本</small></div>
         <div className="kpi-grid kpi-grid--supporting">{supportingCards.map((card) => renderCard(card, true))}</div>
       </section> : null}
     </section>

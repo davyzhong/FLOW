@@ -5,10 +5,10 @@ doc_type: generated
 status: generated
 version: 1.0
 created_at: 2026-09-12
-updated_at: 2026-10-24
+updated_at: 2026-10-26
 owner: FLOW
 generator_ref: scripts/documentation/plan_views.py
-input_hash: 1f5f93cbb1c132926066ae50657f62a36f7d6b51609c7c98be36278a045efa50
+input_hash: 46774c54f3c98147caf98cffbcaca085bba0b7c606a84412dd8fa238d4f23f7b
 applies_to: planning
 ---
 
@@ -21,11 +21,13 @@ applies_to: planning
 - [CFO 驾驶舱视觉补全与数值格式治理](../work_items/COCKPIT--visual-completion-and-number-format.md) — `completed`
 - [CFO 驾驶舱盈利分析与图表缺口补全](../work_items/COCKPIT--visual-analysis-expansion.md) — `completed`
 - [财务指标目录（驾驶舱前置）](../work_items/FINMETRIC--financial-metric-catalog.md) — `completed`
+- [清理已合入 main 的历史远端分支](../work_items/FLOW--merged-branch-cleanup.md) — `completed`
 - [企业组织建制与经营账套初始化包](../work_items/ORG-LEDGER--enterprise-initialization-package.md) — `completed`
 - [S01 U8 后战略边界、事实合同与安全门禁](../work_items/S01--post-u8-boundary-contract-security.md) — `completed`
 - [单机原型架构简化与全视图视觉升级](../work_items/FLOW--single-machine-visual-prototype.md) — `completed`
 - [U04 独立 oracle 录入与全行验证](../work_items/U04--independent-oracle.md) — `completed`
 - [U08 生产就绪收口](../work_items/U08--production-readiness.md) — `completed`
 - [大麦数据后的剩余体验收口](../work_items/UX--post-damai-experience-closeout.md) — `completed`
+- [可复用视觉语言提炼与 FLOW 全项目视觉统一](../work_items/FLOW--portable-visual-language-and-full-project-restyle.md) — `completed`
 - [AI 问数 v1 与 100 问评测集（T12）](../work_items/PUBLIC--ai-qa-v1.md) — `completed`
 - [数据点级溯源、重述检测、AI 起草与只读 MCP（T10）](../work_items/PUBLIC--provenance-restatement-mcp.md) — `completed`

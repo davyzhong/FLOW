@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 
 import { DataWorkbench } from "../../components/data/data-workbench";
 
@@ -156,6 +156,40 @@ describe("DataWorkbench", () => {
     vi.stubGlobal("fetch", vi.fn(() => new Promise<Response>(() => undefined)));
     render(<DataWorkbench />);
     expect(await screen.findByRole("status")).toHaveTextContent("正在读取历史批次");
+  });
+
+  it("为批次历史图表提供与绘图数据一致的可读明细表", async () => {
+    vi.stubGlobal("fetch", vi.fn(async (input: RequestInfo | URL) => {
+      if (String(input).endsWith("/api/v1/intake/batches")) {
+        return jsonResponse({
+          limit: 50,
+          items: [
+            { id: "batch-1", name: "一月批次", status: "published", description: null, created_by: "user-1", created_at: "2026-01-01T00:00:00Z", version_count: 3, latest_version_sequence: 3, latest_version_status: "published" },
+            { id: "batch-2", name: "二月批次", status: "draft", description: null, created_by: "user-1", created_at: "2026-02-01T00:00:00Z", version_count: 1, latest_version_sequence: 1, latest_version_status: "draft" },
+            { id: "batch-3", name: "三月批次", status: "published", description: null, created_by: "user-1", created_at: "2026-03-01T00:00:00Z", version_count: 2, latest_version_sequence: 2, latest_version_status: "ready" },
+          ],
+        });
+      }
+      return jsonResponse({ detail: { code: "not_found", message: "unknown" } }, 404);
+    }));
+
+    render(<DataWorkbench />);
+
+    const statusDetails = await screen.findByTestId("data-batch-status-details");
+    fireEvent.click(statusDetails.querySelector("summary")!);
+    const statusTable = within(statusDetails).getByRole("table");
+    expect(within(statusTable).getByText("已发布")).toBeInTheDocument();
+    expect(within(statusTable).getByRole("cell", { name: "2" })).toBeInTheDocument();
+    expect(within(statusTable).getByText("草稿")).toBeInTheDocument();
+    expect(within(statusTable).getByRole("cell", { name: "1" })).toBeInTheDocument();
+
+    const versionsDetails = screen.getByTestId("data-batch-version-details");
+    fireEvent.click(versionsDetails.querySelector("summary")!);
+    const versionsTable = within(versionsDetails).getByRole("table");
+    expect(within(versionsTable).getByText("一月批次")).toBeInTheDocument();
+    expect(within(versionsTable).getByRole("cell", { name: "3" })).toBeInTheDocument();
+    expect(within(versionsTable).getByText("二月批次")).toBeInTheDocument();
+    expect(within(versionsTable).getByRole("cell", { name: "1" })).toBeInTheDocument();
   });
 
   it("explains forbidden batch history separately from transient errors", async () => {

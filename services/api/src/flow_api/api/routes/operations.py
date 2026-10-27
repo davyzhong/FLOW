@@ -143,7 +143,7 @@ def get_operations_overview(
             status_code=404,
             detail={"code": "statement_report_not_found", "message": "财报不存在"},
         )
-    return build_operations_overview(session, report_id=str(report.id))
+    return build_operations_overview(session, report_id=report.id)
 
 
 @router.get(

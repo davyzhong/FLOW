@@ -22,47 +22,86 @@ from flow_api.statements.objective_report_charts import (
     dupont_chart,
     hbar_structure,
 )
+from flow_api.visual_tokens import VISUAL_TOKENS
 
 _PRINT_CSS = """
   /* 纸张与页边距由 CDP Page.printToPDF 控制（页脚页码需其 margin 空间） */
   :root { color-scheme: light; }
   * { box-sizing: border-box; }
-  body { font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
-         "Noto Sans CJK SC", sans-serif; color: #1a2233; font-size: 10pt;
-         line-height: 1.5; margin: 0; background: #ffffff; }
-  .cover { border-bottom: 2.5px solid #14337a; padding-bottom: 12px; margin-bottom: 14px; }
-  .cover h1 { font-size: 20pt; margin: 0 0 6px; color: #14337a; }
-  .cover .meta { color: #475069; font-size: 9.5pt; line-height: 1.7; }
-  .disclaimer { background: #f0f4fc; border-left: 4px solid #14337a;
-                padding: 7px 11px; font-size: 8.6pt; color: #37415c;
+  @page { size: A4; margin: 14mm 13mm 18mm; }
+  body { font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei",
+         sans-serif; color: #172B3B; font-size: 10pt;
+         line-height: 1.55; margin: 0; background: #FFFEFB;
+         print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .cover { border-bottom: 2px solid #A98137; padding-bottom: 12px; margin-bottom: 14px; }
+  .cover h1 { font-family: "Noto Serif SC", "Songti SC", "STSong", serif;
+              font-size: 22pt; margin: 0 0 6px; color: #18354D; }
+  .cover .meta { color: #34495A; font-size: 9.5pt; line-height: 1.7; }
+  .disclaimer { background: #F3E9D3; border-left: 4px solid #A98137;
+                padding: 7px 11px; font-size: 8.6pt; color: #34495A;
                 margin: 0 0 14px; }
-  h2 { font-size: 13pt; color: #14337a; border-left: 5px solid #14337a;
+  h2 { font-family: "Noto Serif SC", "Songti SC", "STSong", serif;
+       font-size: 13pt; color: #18354D; border-left: 3px solid #A98137;
        padding-left: 9px; margin: 20px 0 8px; page-break-after: avoid; }
-  h3 { font-size: 11pt; margin: 12px 0 5px; page-break-after: avoid; }
+  h3 { font-family: "Noto Serif SC", "Songti SC", "STSong", serif;
+       font-size: 11pt; color: #18354D; margin: 12px 0 5px; page-break-after: avoid; }
   p { margin: 4px 0; }
   .kpi-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 12px; }
-  .kpi { flex: 1 1 21%; min-width: 130px; border: 1px solid #d5dae3;
-         border-top: 3px solid #2f6bd8; padding: 7px 10px; }
-  .kpi .label { font-size: 8.5pt; color: #5b6478; }
-  .kpi .value { font-size: 13pt; font-weight: 700; color: #14337a;
+  .kpi { flex: 1 1 21%; min-width: 130px; border: 1px solid #DED8CC;
+         border-top: 3px solid #A98137; background: #FFFEFB; padding: 7px 10px; }
+  .kpi .label { font-size: 8.5pt; color: #59636C; }
+  .kpi .value { font-size: 13pt; font-weight: 700; color: #18354D;
                 font-family: "JetBrains Mono", Menlo, monospace; }
-  .delta.up { color: #a1260d; }  .delta.down { color: #0a7f3f; }
+  .delta.up { color: #B1483E; }  .delta.down { color: #286048; }
   .chart { margin: 10px 0 14px; page-break-inside: avoid; text-align: center; }
-  .chart img { max-width: 100%; }
+  .chart img { max-width: 100%; height: auto; }
   table { width: 100%; border-collapse: collapse; margin: 6px 0 14px; }
-  th, td { border: 1px solid #ccd3e0; padding: 4px 8px; text-align: left;
+  th, td { border: 1px solid #C9C1B4; padding: 4px 8px; text-align: left;
            vertical-align: top; font-size: 9pt; }
-  th { background: #e9eef9; font-weight: 600; }
-  td { background: #ffffff; }
+  th { background: #F4F1EA; color: #18354D; font-weight: 600; }
+  td { background: #FFFEFB; }
   tr { page-break-inside: avoid; }
   td.num { text-align: right; font-family: "JetBrains Mono", Menlo, monospace;
            white-space: nowrap; }
-  .reason { color: #9a6700; font-size: 8.8pt; }
-  .refs { color: #6b7280; font-size: 8pt; font-family: "JetBrains Mono", Menlo, monospace; }
-  .muted { color: #6b7280; }
+  .reason { color: #805415; font-size: 8.8pt; }
+  .refs { color: #59636C; font-size: 8pt; font-family: "JetBrains Mono", Menlo, monospace; }
+  .muted { color: #59636C; }
   .keep { page-break-inside: avoid; }
   li { page-break-inside: avoid; }
+  @media print {
+    h1, h2, h3 { break-after: avoid; }
+    .kpi, .chart, .keep, tr { break-inside: avoid; }
+    a { color: #18354D; text-decoration: none; }
+  }
 """
+for _literal, _token in {
+    "#172B3B": "colors-text-primary",
+    "#FFFEFB": "colors-surface-paper",
+    "#18354D": "colors-brand-navy",
+    "#34495A": "colors-text-secondary",
+    "#F3E9D3": "colors-brand-goldSoft",
+    "#A98137": "colors-brand-gold",
+    "#DED8CC": "colors-line-default",
+    "#59636C": "colors-text-muted",
+    "#B1483E": "colors-semantic-negative",
+    "#286048": "colors-semantic-positive",
+    "#C9C1B4": "colors-line-strong",
+    "#F4F1EA": "colors-surface-soft",
+}.items():
+    _PRINT_CSS = _PRINT_CSS.replace(_literal, VISUAL_TOKENS[_token])
+_PRINT_CSS = _PRINT_CSS.replace(
+    '"Noto Sans SC", "PingFang SC", "Microsoft YaHei",\n         sans-serif',
+    VISUAL_TOKENS["typography-family-body"],
+)
+_PRINT_CSS = _PRINT_CSS.replace(
+    '"Noto Serif SC", "Songti SC", "STSong", serif',
+    VISUAL_TOKENS["typography-family-display"],
+)
+_PRINT_CSS = _PRINT_CSS.replace(
+    '"JetBrains Mono", Menlo, monospace',
+    VISUAL_TOKENS["typography-family-numeric"],
+)
+del _literal, _token
 
 
 def _esc(value: Any) -> str:
@@ -275,7 +314,8 @@ def render_objective_report_v3(
         chart_revenue = b""
     try:
         chart_profit = bar_compare(
-            "归母净利润", yuan(net_profit), yuan(net_profit_prior), color="#e08a3c"
+            "归母净利润", yuan(net_profit), yuan(net_profit_prior),
+            color=VISUAL_TOKENS["colors-brand-gold"],
         )
     except ValueError:
         chart_profit = b""

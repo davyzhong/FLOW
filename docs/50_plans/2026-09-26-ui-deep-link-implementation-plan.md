@@ -37,7 +37,7 @@ superseded_by: null
 
 | 页面 | 新增参数 | 定位行为 |
 |---|---|---|
-| `/metric-library` | `?focus={metric_code}` 或 `?entry={entry_id}` | 滚动定位并高亮对应指标卡片；卡片加 `id` 锚点 |
+| `/metric-library` | `?focus={metric_code}[&collection={collection}]` 或 `?entry={entry_id}` | 滚动定位并高亮对应指标卡片；重复编码以 collection 消歧，卡片加 `id` 锚点 |
 | `/statements` | `?report={report_id}` | 初始选中对应财报 tab（替代默认第一条） |
 | `/reports` | `?snapshot={snapshot_id}` / `?focus={metric_snapshot_id}` | 初始选中对应快照/冻结候选 |
 | `/data` | `?batch={batch_id}` | 恢复对应批次上下文（无批次列表端点，仅定位已有会话内对象；批次不存在时显式提示） |

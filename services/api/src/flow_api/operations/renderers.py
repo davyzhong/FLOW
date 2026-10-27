@@ -12,6 +12,8 @@ from html import escape
 from typing import Any
 
 from flow_api.operations.engine import OperationsOverview
+from flow_api.visual_theme import apply_pptx_visual_theme, style_workbook_headers
+from flow_api.visual_tokens import VISUAL_TOKENS
 
 _DIRECTION_LABEL = {"negative": "关注", "warning": "提示复核"}
 _ASSURANCE_LABEL = {
@@ -90,27 +92,52 @@ def render_operations_html(overview: OperationsOverview | dict[str, Any]) -> str
         else "<h2>管理关注</h2><p class='muted'>本期无确定性提示信号。</p>"
     )
 
-    return (
+    html = (
         "<!DOCTYPE html><html lang='zh-CN'><head><meta charset='utf-8'>"
+        "<meta name='viewport' content='width=device-width, initial-scale=1'>"
         "<title>经营分析概览</title>"
-        "<style>body{font-family:'PingFang SC',sans-serif;margin:32px;color:#1e293b}"
+        f"<style>@page{{size:A4;margin:14mm}}"
+        f"*{{box-sizing:border-box}}body{{font-family:{VISUAL_TOKENS['typography-family-body']};"
+        f"margin:32px;color:{VISUAL_TOKENS['colors-text-primary']};"
+        f"background:{VISUAL_TOKENS['colors-surface-canvas']};line-height:1.55}}"
+        f"h1{{font-family:{VISUAL_TOKENS['typography-family-display']};font-size:28px;"
+        f"color:{VISUAL_TOKENS['colors-brand-navy']};padding-bottom:12px;"
+        f"border-bottom:2px solid {VISUAL_TOKENS['colors-brand-gold']}}}"
+        f"h2{{font-family:{VISUAL_TOKENS['typography-family-display']};font-size:18px;"
+        f"color:{VISUAL_TOKENS['colors-brand-navy']};border-left:3px solid "
+        f"{VISUAL_TOKENS['colors-brand-gold']};padding-left:10px;margin-top:24px}}"
+        f".theme{{background:{VISUAL_TOKENS['colors-surface-paper']};"
+        f"border:1px solid {VISUAL_TOKENS['colors-line-default']};border-radius:8px;"
+        "padding:4px 16px 12px;margin:16px 0;break-inside:avoid}"
         "table{border-collapse:collapse;width:100%;margin:12px 0}"
-        "td,th{border-bottom:1px solid #eee;padding:6px 10px;text-align:left}"
-        "th{color:#475569;font-weight:600}"
-        ".num{text-align:right;font-variant-numeric:tabular-nums}"
-        "h1{font-size:22px}h2{font-size:16px;margin-top:24px}"
-        ".muted{color:#64748b;font-size:13px}"
-        ".caliber{color:#64748b;font-size:12px}"
-        ".evidence{color:#64748b;font-size:11px;margin-top:3px;overflow-wrap:anywhere}"
+        f"td,th{{border-bottom:1px solid {VISUAL_TOKENS['colors-line-subtle']};"
+        "padding:8px 10px;text-align:left;vertical-align:top}"
+        f"th{{color:{VISUAL_TOKENS['colors-brand-navy']};font-weight:600;"
+        f"background:{VISUAL_TOKENS['colors-surface-soft']}}}"
+        f".num{{text-align:right;font-variant-numeric:tabular-nums;"
+        f"font-family:{VISUAL_TOKENS['typography-family-numeric']}}}"
+        f".muted{{color:{VISUAL_TOKENS['colors-text-muted']};font-size:13px}}"
+        f".caliber{{color:{VISUAL_TOKENS['colors-text-secondary']};font-size:12px}}"
+        f".evidence{{color:{VISUAL_TOKENS['colors-text-muted']};font-size:11px;"
+        "margin-top:3px;overflow-wrap:anywhere}"
         ".watch{list-style:none;padding:0;display:flex;flex-direction:column;gap:8px}"
-        ".watch li{border:1px solid #e2e8f0;border-left-width:4px;border-radius:6px;"
-        "padding:8px 12px;font-size:14px}"
-        ".watch li[data-direction='warning']{border-left-color:#d97706}"
-        ".watch li[data-direction='negative']{border-left-color:#b91c1c}"
-        ".tag{display:inline-block;margin-right:8px;font-size:12px;font-weight:600;"
-        "color:#475569}"
-        ".scope{border:1px solid #cbd5e1;border-radius:6px;padding:10px 14px;"
-        "color:#475569;font-size:13px;margin-top:24px}</style></head><body>"
+        f".watch li{{background:{VISUAL_TOKENS['colors-surface-paper']};"
+        f"border:1px solid {VISUAL_TOKENS['colors-line-default']};"
+        f"border-left:4px solid {VISUAL_TOKENS['colors-brand-gold']};border-radius:8px;"
+        "padding:10px 14px;font-size:14px;break-inside:avoid}"
+        f".watch li[data-direction='warning']{{border-left-color:"
+        f"{VISUAL_TOKENS['colors-semantic-warning']}}}"
+        f".watch li[data-direction='negative']{{border-left-color:"
+        f"{VISUAL_TOKENS['colors-semantic-negative']}}}"
+        f".tag{{display:inline-block;margin-right:8px;font-size:12px;font-weight:600;"
+        f"color:{VISUAL_TOKENS['colors-text-secondary']}}}"
+        f".scope{{border:1px solid {VISUAL_TOKENS['colors-line-strong']};"
+        f"border-left:3px solid {VISUAL_TOKENS['colors-brand-gold']};border-radius:8px;"
+        f"background:{VISUAL_TOKENS['colors-surface-paper']};padding:10px 14px;"
+        f"color:{VISUAL_TOKENS['colors-text-secondary']};font-size:13px;margin-top:24px}}"
+        f"@media(max-width:700px){{body{{margin:16px}}td,th{{padding:6px}}}}"
+        f"@media print{{body{{margin:0}}.theme,.scope{{break-inside:avoid}}"
+        "h1,h2{break-after:avoid}}}</style></head><body>"
         "<h1>经营分析概览</h1>"
         f"<div class='muted'>目录：{overview.catalog_id}（L1 结果层，"
         "数据可得性分层见 D050）</div>"
@@ -121,6 +148,7 @@ def render_operations_html(overview: OperationsOverview | dict[str, Any]) -> str
         "（主观内容需证据门槛，见 U5 门禁）。</div>"
         "</body></html>"
     )
+    return html
 
 
 def render_operations_xlsx(
@@ -205,6 +233,7 @@ def render_operations_xlsx(
                 sheet.column_dimensions[get_column_letter(column_index)].width = width
 
     buffer = BytesIO()
+    style_workbook_headers(workbook)
     workbook.save(buffer)
     return buffer.getvalue()
 
@@ -278,6 +307,7 @@ def render_operations_pptx(
     )
 
     buffer = BytesIO()
+    apply_pptx_visual_theme(presentation)
     presentation.save(buffer)
     return buffer.getvalue()
 

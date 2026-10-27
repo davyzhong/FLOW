@@ -16,10 +16,11 @@ export default async function MetricLibraryPage({
   const query = await searchParams;
   const focus = first(query.focus);
   const entry = first(query.entry);
+  const collection = first(query.collection);
   return (
     <AppShell>
       {/* key 随深链参数变化强制重挂载，清空定位/筛选等会话态 */}
-      <MetricLibraryApp key={`${focus ?? ""}|${entry ?? ""}`} focus={focus} entry={entry} />
+      <MetricLibraryApp key={`${focus ?? ""}|${collection ?? ""}|${entry ?? ""}`} focus={focus} collection={collection} entry={entry} />
     </AppShell>
   );
 }
