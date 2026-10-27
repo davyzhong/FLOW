@@ -1,4 +1,4 @@
-386a624f15b8e6e7e3a5ababa5039637f38c2dab27f222b58c855120210c40c5  ./00_governance/change-manifests/obsidianwiki-20261026T005516+0800-d601b4d5-l2.tsv
+6b5f76ddf8d90c2cc4a87d1052efb8369a9dff5d976b0fb73a2e3a28f3b40956  ./00_governance/change-manifests/obsidianwiki-20261026T005516+0800-d601b4d5-l2.tsv
 9caf15ecafd8fdf8168d0b02ef3626bd1abfe54fa24280543ab1b641f0441e6f  ./00_governance/immutable-paths.lock.tsv
 4304a67cd995a62c133d7db330957908d87c593d96f845879f34dc0f2bdbe659  ./00_governance/migration/M0-ACCEPTANCE.md
 8cecefc3aa45e2eab7fd35bfee58a9d27f00882f48bf644001c95a6930e1c2fb  ./00_governance/migration/baseline.yaml
@@ -2138,9 +2138,9 @@ b33fa5803e59db30ca9cd936772e2843dadbf946dfc4fee6289738ebc565a08f  ./09_competiti
 ce0f3ba366328342710562a2f980ac2b0265cd9f98a0cd3f82e6a34fa87fd3d8  ./09_competitive/screenshots/c18-redash-home.png
 92eeae88a30403edf870d8b86b3a918ac5f6f52d9f899a96aec853806e549eeb  ./09_competitive/screenshots/c19-dataease-home.png
 60667d4e6ba888d5ba5396a8d9353c22adc8322c6f22475ab80f75fe5b659954  ./09_competitive/screenshots/c20-jimu-report-github.png
-a0946ad2e74457b78fa88b8745822bd7ad47ebd6632845728a07a366edb327f3  ./10_sources/README.md
+1f1fa7ff3b32a5cdc55c21cb7e5f3f42eabb9847779949cc8af3d049711eede4  ./10_sources/README.md
 ecd3cb7c4fb22de8313fe9cc5e3fe5a567f455a8cc56fe8f236569e2bbaabb60  ./10_sources/SOURCE_REGISTER.md
-96e3ee9d1a3f40e0a62ca23fe11012fcbcbebd28aeefe92d3e3f2b50305c560d  ./10_sources/coverage-2026-10-26.tsv
+6d6fc8cad366ff11c4d7993c5d7a04d6e013b49d757ac40f37c0208097afd92d  ./10_sources/coverage-2026-10-26.tsv
 415820a2fd5e7c6f7af1282dc744a6eaa344f52f4406096c25170e0dfaa22e68  ./10_sources/coverage-exceptions-2026-10-26.tsv
 ab841e127619097707dfafe29a2da96ba7680ed34d4261ec5a06d45aa3eb00d3  ./10_sources/semantic-review-2026-10-26-batch-001.tsv
 760713e2cd504e176131083bc4ae10ad2a04b0e8341584b5e6522c5b3423240b  ./10_sources/semantic-review-2026-10-26-batch-002.tsv
@@ -2281,10 +2281,11 @@ b8286f1bb672304634d8a429dfe3306cf487c072c4b9c571918f2dddef51e9a4  ./10_sources/s
 fbf4a21305250d0b154239c5d10b12186548a7cd5fc0d68b4b82798a5b4df652  ./10_sources/semantic-review-2026-10-26-batch-137.tsv
 2435c145de4ac61743376487a807fbe5c3a1a4abc4c53f7749c3d013b26fac26  ./10_sources/semantic-review-2026-10-26-batch-138.tsv
 5170f32adb5f8e04446740187149ea37feb40468b685f63686bb36d4e5dabf12  ./10_sources/semantic-review-2026-10-26-batch-139.tsv
+f672a7eb39112c7f596620a0d9a105c0d8e4c6ef278cae5190c01d5395ed3546  ./10_sources/semantic-review-2026-10-26-batch-140.tsv
 a18e8156910880f1b8d211802038bbaceb94aee6c211c2dfc33f35cb699ee705  ./10_sources/snapshots/obsidian-2026-09-12T15-46+08-00.yaml
 6accd8ff3644f8f06eac12c585905d74e11e93aa61c4da33dc74db6cae416274  ./10_sources/snapshots/obsidian-2026-09-12T16-17+08-00.yaml
 901bee24f27c26e12e94518a99665d279dfdec1e333bc4c7a950651386a5af3b  ./10_sources/source-baseline-2026-10-19.tsv
-070304023d1b8ee9c85ce7edb0de70c0d0eaafd582d7ca5ab8511be23601e798  ./10_sources/source-baseline-2026-10-26.tsv
+5d0d7367f8a12b96b84bad7671fbce3aff8ab7ea6d11844b52c8cf1bcf6f4634  ./10_sources/source-baseline-2026-10-26.tsv
 689b7761d048e24bf7a879d5d87f4fcd047a527e70b6fdce79ce81a136f49c91  ./10_sources/source-delta-2026-10-26.tsv
 ac987729a96d3cad33c6d773ca0021e379247574a156bd0c0d54306c595284e1  ./10_sources/source-diff-2026-10-19.tsv
 9e781828298245be3c9b9e295eb5da825d04c6092393913a0fd8d03c36e70b90  ./10_sources/source-diff-2026-10-26.tsv
