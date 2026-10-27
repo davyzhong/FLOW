@@ -3,11 +3,11 @@ doc_id: FLOW-PROD-VISION-001
 title: 产品愿景
 doc_type: product
 status: canonical
-version: 1.2
+version: 1.3
 created_at: 2026-09-12
-updated_at: 2026-09-13
+updated_at: 2026-10-25
 owner: FLOW
-decision_refs: [D001, D049, D052, D053]
+decision_refs: [D001, D049, D052, D053, D055]
 knowledge_release: flow-knowledge-2026-09-12.1
 applies_to: product
 supersedes: []
@@ -23,6 +23,8 @@ FLOW（Finance Intelligence OS）是**可追溯、确定性、可复核的财务
 - **三个不可妥协**：数字同源（同一指标快照身份链）；事实与推断分离（客观口径冻结，推断显式标注）；AI 不创造数字（生成内容不得进入事实层，TECH-COPILOT-001）。
 - **目标结构（D053）**：三层、两模块——可见的专业治理底座 + 共享分析底座，支撑两个独立产品模块：**企业内部分析工作台**（最终目标产品）与**公开财报分析模块**（先行成熟共享底座，拥有独立入口、规格、验收和模块 workstream/backlog 视图；全仓仍只有一份执行路线图）。
 - **路径（D049/D053）**：客观事实与计算 → 证据支持的推断 → 改善行动；U8 收口后先冻结并重构模块边界，公开财报模块达到 C 级出口，再建设企业内部月度分析工作台，最终以授权脱敏真实企业数据完成验证。
-- **成功标准（原型阶段）**：专业经分人员确认关键事实和 Finding 可用，报告质量不低于人工基准，人工工作量不超过传统流程的 20%（D052）。
+- **经营指标体系目标（用户补充，2026-10-25）**：从单指标定义推进到可查询、可维护、可观测和可使用的指标体系；每个关键值能关联公式/输入、业务层级、可比期间、数据来源、上下游及使用页面，区分数学关系与诊断线索。复用现有字典、治理和关系图，不新建第二套计算事实源。详见[指标体系建设目标](METRIC_SYSTEM_GOALS.md)。
+- **当前交付边界（D055）**：单机单用户、SQLite/本地文件、确定性计算、可追溯驾驶舱与报告；本轮资料学习只补目标和来源映射，不重开已结案原型或增加运行中间件。
+- **长期真实企业验收标准（D052）**：专业经分人员确认关键事实和 Finding 可用，报告质量不低于人工基准，人工工作量不超过传统流程的 20%；这不是已完成单机原型的实测结论。
 
 详细范围见 [PRODUCT_SCOPE.md](PRODUCT_SCOPE.md)；固定原则见 [PRODUCT_PRINCIPLES.md](PRODUCT_PRINCIPLES.md)；能力现状见 [CAPABILITY_MAP.md](CAPABILITY_MAP.md)。

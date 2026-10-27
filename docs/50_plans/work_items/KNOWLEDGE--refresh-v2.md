@@ -27,6 +27,8 @@ K3 全量路由已完成至第133批。coverage 共 9,673 条：routed 755、fil
 
 ## 当前断点
 
+> 2026-10-25 资料补充：用户新增《经营驾驶舱分析指标库》，本轮已直接核读 20 张原图并完成[查重与映射](../../60_delivery/verification/2026-10-25--business-metric-library-reference-review-v1.md)，[产品目标](../../20_product/METRIC_SYSTEM_GOALS.md)已纳入“从指标定义到指标体系建立”。该学习记录进入本包后续来源语义复核/战略影响评审，未修改来源基线或切换 release，也不等于 K3–K6 已完成。当前唯一队列和该增量的依赖/验收仅见 [CURRENT_ROADMAP](../CURRENT_ROADMAP.md#指标体系资料增量2026-10-25-用户补充归属既有事项-7)；下方 K3 实际执行等文字是 2026-10-19 的历史断点，不表示本包此刻在执行。
+
 - 批准规格和三仓库 preflight 已完成。
 - K0/K1/K2 已完成，K3 当前实际执行。FLOW 的实际资料源是 ObsidianWiki；Davybase 仅承载过快照工具与一次性证据，不构成 FLOW 代码、运行时或产品依赖。当前 accepted working-tree manifest 为 `obsidianwiki-20261026T005516+0800-d601b4d5`（SHA-256 `593715c832a538d9ba83df4e077b8dd9bace24f40d3c0d5262fc3779b20f0e77`）：ObsidianWiki `main@e04d6833`、1,475 条 dirty 路径、112,010 个文件/4,260,351,293 字节；候选/复验全部指纹一致，可写句柄 0，完整内容 SHA `c84efd671e2b90e4f69152c3dd04a570d9c378d08fb7a3cb97b86e322f123df0`。它与此前基线输入 snapshot 内容指纹完全相同；registry/baseline/delta 已按最新 snapshot ID 重建并逐字节复验。ObsidianWiki 不写入；K4–K6 与战略裁决仍未完成。详见[当前快照与基线复核](../../60_delivery/verification/2026-10-26--k3-current-snapshot-v1.md)及 Davybase 分支 `codex/knowledge-run-manifest-k0` 的快照证据。
 - 2026-10-17 只读 preflight：Davybase `main`=`6efcd6e2f0560e019f69dbbeada70e2532544f31`；审计实现在 `codex/knowledge-run-manifest-k0`，提交 `172a099`，K0 证据 `94fc05d`，交接/统计 `eb8c3d0` 均已推送。ObsidianWiki `main`=`e04d6833a623033a3601d36192f02dc15184eb6e`，K0 记录 1,365 条本地变化及内容哈希；全范围文件树摘要 `0a42346d276917c8b94f1b0c198ca5bfd68405c35c1656407bc10135e236c7f7` 复验一致。既存变化只读保护，不暂存、不提交、不覆盖，不能把 HEAD 单独称为完整工作区快照。
