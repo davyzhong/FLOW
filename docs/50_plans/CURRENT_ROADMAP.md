@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 17.34
+version: 17.35
 created_at: 2026-09-12
 updated_at: 2026-10-27
 owner: FLOW
@@ -17,7 +17,7 @@ superseded_by: null
 
 # 当前路线图（唯一主线）
 
-> **状态速览（2026-10-27）：** 唯一队首 = K 轨 K3 全量逐条语义路由，第 148 批已完成，下一单一动作是**第 149 批**（从第 148 批末尾 `SRC-LOCAL-v1-333ef7b362a226e40cd3` 之后首个未审 source_id 开始）。队列 16 项：完成 10 / 队首执行中 1 / 排队 3 / 暂停 1 / 外部条件受限 1。K3 进度：coverage 9,673 条 = routed 985 / filtered 540 / pending_review 8,148；accepted snapshot `obsidianwiki-20261026T005516+0800-d601b4d5`（manifest SHA `593715c8…`，可写句柄 0）；五个 locator-only 例外保持待审；ObsidianWiki 严格只读，`CURRENT_RELEASE` 不变。**环境已收敛（用户指令）：全部活动分支合并进 main，远端仅剩 `main`；main 基线 `b70de445`（含视觉语言统一 PR #5、K3 批次 129–133、路线图规整 v17.17、指标资料 PR #6 与 publishing-golden 字体断言平台化修复 `775f283a`）；本地保留 2 个含未提交内容的 worktree 与 1 个未合并 wip 分支（`codex/frontend-consistency-remediation`），其余已清理。本版（v17.19）补充环境收敛记录；v17.17 规整结构不变。**
+> **状态速览（2026-10-27）：** 唯一队首 = K 轨 K3 全量逐条语义路由，第 149 批已完成，下一单一动作是**第 150 批**（从第 149 批末尾 `SRC-LOCAL-v1-34377a78ec420298fb87` 之后首个未审 source_id 开始）。队列 16 项：完成 10 / 队首执行中 1 / 排队 3 / 暂停 1 / 外部条件受限 1。K3 进度：coverage 9,673 条 = routed 997 / filtered 552 / pending_review 8,124；accepted snapshot `obsidianwiki-20261026T005516+0800-d601b4d5`（manifest SHA `593715c8…`，可写句柄 0）；五个 locator-only 例外保持待审；ObsidianWiki 严格只读，`CURRENT_RELEASE` 不变。**环境已收敛（用户指令）：全部活动分支合并进 main，远端仅剩 `main`；main 基线 `b70de445`（含视觉语言统一 PR #5、K3 批次 129–133、路线图规整 v17.17、指标资料 PR #6 与 publishing-golden 字体断言平台化修复 `775f283a`）；本地保留 2 个含未提交内容的 worktree 与 1 个未合并 wip 分支（`codex/frontend-consistency-remediation`），其余已清理。本版（v17.19）补充环境收敛记录；v17.17 规整结构不变。**
 
 ## 战略目标（唯一目标清单，当前有效四项）
 
@@ -45,7 +45,7 @@ superseded_by: null
 | 4 | U04 解析与盲评复评 | completed（限定样本） | 旧三样本 199/199；不等于全部报告 oracle 完成 |
 | 5 | C 级质量基准与 Go/No-Go | completed（裁定 No-Go） | 维持 No-Go；解锁路径归 G3 长期 |
 | 6 | P3 真实数据/来源与行业扩张 | 暂停 | ZTO 已于 2026-10-16 恢复合并；其余扩张等真实财报到料或用户指令 |
-| **7（原 K）** | **第二代静态知识刷新** | **队首执行中：K3** | **下一动作 = 第 149 批**（148 批完成：24 条审阅、14 routed / 10 filtered，coverage routed 985 / filtered 540 / pending 8,148）；之后 coverage 闭合 → 知识综合 → 独立 reader → K5 seal → K6 用户裁决（Agent 不可代签） |
+| **7（原 K）** | **第二代静态知识刷新** | **队首执行中：K3** | **下一动作 = 第 150 批**（149 批完成：24 条审阅、12 routed / 12 filtered，coverage routed 997 / filtered 552 / pending 8,124）；之后 coverage 闭合 → 知识综合 → 独立 reader → K5 seal → K6 用户裁决（Agent 不可代签） |
 | 8 | rnd_exp 官方依据核验 | 外部条件受限 | 原文不可得结案；穷尽搜索记录与重启条件已登记，不得伪造核验 |
 | 9 | U09/O05 真实内部试点 | 排队（blocked） | 需真实企业数据与质量门槛；技术原型不冒充真实试点 |
 | 10 | U10 V1.1 证据决策 | 排队（blocked） | 依实际证据逐项 go/hold，不作为原型无限开发项 |
@@ -69,7 +69,7 @@ superseded_by: null
 | [大麦完整财年演示数据](work_items/DAMAI--full-year-demo.md) | **active** | FY2022/FY2023 披露事实层固化；仅随产品需求增量维护，不与 K3 并行 |
 | [UX 剩余体验收口](work_items/UX--post-damai-experience-closeout.md) | **completed** | Gate1/Gate5 关闭 |
 | [组织账套初始化包](work_items/ORG-LEDGER--enterprise-initialization-package.md) | **completed** | ORG-LEDGER v2 重版 |
-| [知识刷新 K0–K6](work_items/KNOWLEDGE--refresh-v2.md) | **active** | 队首：K3 第 149 批 |
+| [知识刷新 K0–K6](work_items/KNOWLEDGE--refresh-v2.md) | **active** | 队首：K3 第 150 批 |
 | [公开财报 C 级出口](work_items/PUBLIC--c-level-exit-protocol.md) | **active** | No-Go 维持；条件 2/4 归长期 |
 | [溯源/重述/只读 MCP](work_items/PUBLIC--provenance-restatement-mcp.md) | **completed** | 溯源页锚 + supersedes 链 + 只读 MCP |
 | [数据扩张与行业基准](work_items/PUBLIC--data-expansion-benchmarks.md) | **active** | 10× 性能基线已交付；扩张等真实财报 |
