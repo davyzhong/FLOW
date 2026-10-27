@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 14.23
+version: 14.24
 created_at: 2026-09-12
 updated_at: 2026-10-27
 owner: FLOW
@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-10-27 当前状态：全项目实际执行中 0，知识刷新 K3 全量语义路由为唯一队首待启动事项。accepted snapshot `obsidianwiki-20261026T005516+0800-d601b4d5` 已完成来源基线、优先级审阅与错误集中度复核；当前 coverage 9,673 条：routed 755、filtered 412、pending_review 8,506。第133批完成 24 条审阅，9 条保留待核、15 条过滤；28个本地图像引用按基线规则未解析，18个外链图像未归档；本批未审图。ObsidianWiki 保持只读，`CURRENT_RELEASE` 未变。下一步按 accepted baseline ID 顺序执行第134批，完整证据及范围见[路线图](../50_plans/CURRENT_ROADMAP.md)和[知识刷新工作包](../50_plans/work_items/KNOWLEDGE--refresh-v2.md)。
+2026-10-27 当前状态：全项目实际执行中 0，知识刷新 K3 全量语义路由为唯一队首待启动事项。accepted snapshot `obsidianwiki-20261026T005516+0800-d601b4d5` 已完成来源基线、优先级审阅与错误集中度复核；当前 coverage 9,673 条：routed 769、filtered 422、pending_review 8,482。第134批完成 24 条审阅，14 条保留待核、10 条过滤；95 个本地图像引用按基线规则未解析；本批未审图。ObsidianWiki 保持只读，`CURRENT_RELEASE` 未变。下一步按 accepted baseline ID 顺序执行第135批，完整证据及范围见[路线图](../50_plans/CURRENT_ROADMAP.md)和[知识刷新工作包](../50_plans/work_items/KNOWLEDGE--refresh-v2.md)。
 
 2026-10-13 深夜当前状态：**时间线迁移已交付**（分支 `flow/timeline-migration-20261013`，commit `087a72f2`）——演示数据期间对齐菜鸟真实财年（FY2022 比较 / FY2023 分析），canonical 月度明细年度聚合精确等于申请稿披露值（零差异）；财务报表为 IFRS 披露原值（合成行全删），简体 IFRS 勾稽器（12 恒等式）过发布门禁；覆盖矩阵 FY2022/FY2023 各 32/50 如实缺省；ORG-LEDGER v2（v1 冻结）。验证全绿（单元/企业/scripts/隔离栈 e2e）。已合并 main（`c824f55f`，同 SHA CI 17/17 success）。下一子步：F3（指标目录收尾），随后批次 C-2。
 
