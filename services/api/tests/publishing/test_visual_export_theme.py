@@ -29,6 +29,8 @@ def test_office_font_names_resolve_to_native_mac_families(monkeypatch) -> None:
 
 
 def test_pptx_has_paper_background_and_gold_heading_accent() -> None:
+    import flow_api.visual_theme as theme
+
     presentation = Presentation()
     slide = presentation.slides.add_slide(presentation.slide_layouts[5])
     slide.shapes.title.text = "财务报告"
@@ -39,11 +41,16 @@ def test_pptx_has_paper_background_and_gold_heading_accent() -> None:
     gold = VISUAL_TOKENS["colors-brand-gold"].removeprefix("#")
     assert str(slide.background.fill.fore_color.rgb) == paper
     title = slide.shapes.title
-    assert title.text_frame.paragraphs[0].font.name == "Songti SC"
+    assert (
+        title.text_frame.paragraphs[0].font.name
+        == theme._primary_font("typography-family-display")
+    )
     assert str(slide.shapes[-1].fill.fore_color.rgb) == gold
 
 
 def test_pptx_without_title_placeholder_still_styles_body_text() -> None:
+    import flow_api.visual_theme as theme
+
     presentation = Presentation()
     slide = presentation.slides.add_slide(presentation.slide_layouts[6])
     textbox = slide.shapes.add_textbox(0, 0, 3000000, 500000)
@@ -51,7 +58,10 @@ def test_pptx_without_title_placeholder_still_styles_body_text() -> None:
 
     apply_pptx_visual_theme(presentation)
 
-    assert textbox.text_frame.paragraphs[0].font.name == "PingFang SC"
+    assert (
+        textbox.text_frame.paragraphs[0].font.name
+        == theme._primary_font("typography-family-body")
+    )
 
 
 def test_xlsx_theme_has_readable_print_layout() -> None:
