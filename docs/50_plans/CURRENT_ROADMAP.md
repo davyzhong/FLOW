@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 17.18
+version: 17.19
 created_at: 2026-09-12
 updated_at: 2026-10-27
 owner: FLOW
@@ -17,7 +17,7 @@ superseded_by: null
 
 # 当前路线图（唯一主线）
 
-> **状态速览（2026-10-27）：** 唯一队首 = K 轨 K3 全量逐条语义路由，下一单一动作是**第 134 批**（从第 133 批末尾 `SRC-LOCAL-v1-25f831bfad9d00b1f553` 之后首个未审 source_id 开始）。队列 16 项：完成 10 / 队首待启动 1 / 排队 3 / 暂停 1 / 外部条件受限 1。K3 进度：coverage 9,673 条 = routed 755 / filtered 412 / pending_review 8,506；accepted snapshot `obsidianwiki-20261026T005516+0800-d601b4d5`（manifest SHA `593715c8…`，可写句柄 0）；五个 locator-only 例外保持待审；ObsidianWiki 严格只读，`CURRENT_RELEASE` 不变。活动分支 `codex/flow-visual-language`（PR #5）。本版（v17.17）为结构性规整：新增目标层、工作包登记表与待验证清单，全部历史段落折叠保留、内容未删减。
+> **状态速览（2026-10-27）：** 唯一队首 = K 轨 K3 全量逐条语义路由，下一单一动作是**第 134 批**（从第 133 批末尾 `SRC-LOCAL-v1-25f831bfad9d00b1f553` 之后首个未审 source_id 开始）。队列 16 项：完成 10 / 队首待启动 1 / 排队 3 / 暂停 1 / 外部条件受限 1。K3 进度：coverage 9,673 条 = routed 755 / filtered 412 / pending_review 8,506；accepted snapshot `obsidianwiki-20261026T005516+0800-d601b4d5`（manifest SHA `593715c8…`，可写句柄 0）；五个 locator-only 例外保持待审；ObsidianWiki 严格只读，`CURRENT_RELEASE` 不变。**环境已收敛（用户指令）：全部活动分支合并进 main，远端仅剩 `main`；main 基线 `b70de445`（含视觉语言统一 PR #5、K3 批次 129–133、路线图规整 v17.17、指标资料 PR #6 与 publishing-golden 字体断言平台化修复 `775f283a`）；本地保留 2 个含未提交内容的 worktree 与 1 个未合并 wip 分支（`codex/frontend-consistency-remediation`），其余已清理。本版（v17.19）补充环境收敛记录；v17.17 规整结构不变。**
 
 ## 战略目标（唯一目标清单，当前有效四项）
 
@@ -34,8 +34,8 @@ superseded_by: null
 
 | 原编号 | 事项 | 状态 | 下一步 / 结案证据 |
 |---|---|---|---|
-| 12 | 可复用视觉语言提炼与 FLOW 全项目视觉统一 | completed（2026-10-26） | 全部验收结案；唯一遗留：原生浏览器 200% 缩放待设备解锁补验（外部条件受限结案） |
-| 13 | 清理已合入 main 的历史远端分支 | completed（2026-10-25） | 15 个旧分支经逐支复核后删除；远端仅剩 main、开放 PR #5 分支与暂停的 ZTO 分支 |
+| 12 | 可复用视觉语言提炼与 FLOW 全项目视觉统一 | completed（2026-10-26） | 全部验收结案并合入 main（PR #5 → merge `5d2b77f6`）；唯一遗留：原生浏览器 200% 缩放待设备解锁补验（外部条件受限结案） |
+| 13 | 清理已合入 main 的历史远端分支 | completed（2026-10-25；10-27 增补） | 10-25 删 15 个旧分支；10-27 二轮：合并 PR #5/#6 后删除全部活动分支（含 ZTO），远端仅剩 `main`；本地删 17 分支 + 6 worktree，保留 2 个含未提交内容的 worktree 与 1 个未合并 wip 分支 |
 | 0 | CFO 盈利分析与图表补全 | completed | `08aa4cd0` 准确 SHA CI 18/18；后续验收由 7a 承接 |
 | 0a | 驾驶舱数值格式治理 | completed | `1a71e33f` 准确 SHA CI 通过 |
 | 7a | 单机原型与全视图视觉升级 | completed（2026-10-24） | PR #3 merge `b2a1bf22`，run 40092106547 为 28/28 success |

@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目交接文档
 doc_type: navigation
 status: current
-version: 16.73
+version: 16.74
 created_at: 2026-09-12
 updated_at: 2026-10-27
 owner: FLOW
@@ -18,7 +18,9 @@ applies_to: repository
 
 ## 一、当前任务
 
-**2026-10-27 路线图结构性规整（v17.17）：** 用户要求对任务/目标/待验证清单做删减规整。路线图已重组为四层结构——**战略目标（G1 单机原型已交付 / G2 知识刷新 K3 进行中 / G3 公开 C 级 No-Go 维持 / G4 内部工作台 gated）→ 唯一执行队列（16 项编号不变）→ 工作包登记表（21 包每包一行）→ 待验证清单（活跃仅 4 项，其余显式关闭）**；原 60 行裸历史段落、7a 收尾执行卡和历史队列全部折进 `<details>` 只读归档，内容未删减；纪律节两条 2026-09-26 过时补记并入正文。规整不改变任何队列状态或下一动作（仍为 K3 第 134 批），plan_views PASS。本规整在分支 `flow/roadmap-cleanup-20261027`（基于 PR #5 head `10f6e82e`）交付，合入时保留两边内容取并集，不得让任一侧状态回退。
+**2026-10-27 分支合并与环境清理（用户指令「干净清爽的环境」）：** 全部活动分支已合并进 main 并删除，**远端现仅剩 `main` 一个分支**。合并序列：① `flow/roadmap-cleanup-20261027`（含 PR #5 视觉语言/K3 批次 129–133 + 路线图规整 v17.17 + publishing-golden 修复 `775f283a`）合入 main（merge `5d2b77f6`）；② PR #6 `codex/metric-system-reference-20261025` union 合入（merge `b70de445`：保留 main 最新状态 + METRIC_SYSTEM_GOALS/20 图核读报告/产品文档增量，「指标体系资料增量」节归档进路线图历史 details）。**publishing-golden CI 失败已修复**（`775f283a`）：`test_visual_export_theme` 硬编码 macOS 字体名而生成器按 `platform.system()` 选择字体，断言改为跟随 `_primary_font()`；本地 5/5 通过，Linux CI 将走 Noto 路径。合并后 main 准确基线 `b70de445`；PR #5 自动标记 MERGED，PR #6 因先删分支记为 CLOSED、已留评论说明内容经 `b70de445` 合入。已删远端分支：`codex/flow-visual-language`、`codex/metric-system-reference-20261025`、`flow/roadmap-cleanup-20261027`、`wip/zto-integration-20260929`（内容早已全在 main）。本地删除 17 个已合并分支并移除 6 个干净 worktree；**保留 3 项**：`.worktrees/readme-visual-main`（11 个 staged 的 10-18 D055 文档暂存，内容均已有 main 更新版，可安全清理但留待用户确认）、`.worktrees/cockpit-visual-completion`（含用户要求保留的 `services/api/flow.sqlite3` 未跟踪文件）、`codex/frontend-consistency-remediation` 本地分支（9-18 的 wip 保存，未全在 main）。主 checkout 仍在 `flow/u04-closeout-20261016`（已全在 main），其 4 个未提交驾驶舱文件保持原样；切回 main 由用户决定。队列状态不变：下一单一动作 = **K3 第 134 批**。
+
+**2026-10-27 路线图结构性规整（v17.17）：** 用户要求对任务/目标/待验证清单做删减规整。路线图已重组为四层结构——**战略目标（G1 单机原型已交付 / G2 知识刷新 K3 进行中 / G3 公开 C 级 No-Go 维持 / G4 内部工作台 gated）→ 唯一执行队列（16 项编号不变）→ 工作包登记表（21 包每包一行）→ 待验证清单（活跃仅 4 项，其余显式关闭）**；原 60 行裸历史段落、7a 收尾执行卡和历史队列全部折进 `<details>` 只读归档，内容未删减；纪律节两条 2026-09-26 过时补记并入正文。规整不改变任何队列状态或下一动作（仍为 K3 第 134 批），plan_views PASS。
 
 **2026-10-27 当前交接：** 路线图共 16 项：完成 10、实际执行中 0、队首待启动 1（K 轨 K3）、排队 3、暂停 1、外部条件受限 1。视觉语言包及全项目视觉统一已结案，准确证据见[覆盖报告](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)：隔离 manifest `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed` 下验证器 19/19、可见性矩阵 164/164（154 HTTP 200、10 预期拒绝、0 失败）、Playwright 17/17；应用 SHA `01e8e25dd426ed43ad6a2cad76544bbbe623eb99` 的 20×3 矩阵 60/60、Axe 桌面 20 路由零违规。E2E 断言修正 `d01daa11` 独立复核无 P1/P2。原生浏览器 200% 缩放因 Mac 锁屏及工具能力限制未直接验收，待设备解锁且有可操作原生缩放工具时补验；390/360 CSS px 不是替代。当前分支 `codex/flow-visual-language`，PR #5。K3 最新 accepted snapshot 为 `obsidianwiki-20261026T005516+0800-d601b4d5`（Davybase commit `110fe57`，manifest SHA `593715c832a538d9ba83df4e077b8dd9bace24f40d3c0d5262fc3779b20f0e77`）；完整内容 SHA 与先前 K3 baseline 输入一致，写句柄 0。registry/baseline/delta 已重新绑定最新 snapshot ID 并重复生成一致，批次001–025登记的76条HIGH来源及后续HIGH全文审阅、W1/W3 MED/LOW双审和错误集中度复核均已完成。全量路由已推进至第133批，coverage共9,673条：routed 755、filtered 412、pending_review 8,506；本批24条中9条路由、15条过滤。经营分析与财务报告两篇共有28个本地图像引用按基线规则未解析，OEE成本分析另有18个外链图像未归档；本批均未审图。下一批按ID顺序为第134批。五个locator-only例外为 `SRC-LOCAL-v1-00625bae4e08042539d1`、`SRC-LOCAL-v1-0428a240b0361157ffa1`、`SRC-LOCAL-v1-057cabfb9baca9f47c44`、`SRC-LOCAL-v1-0bd79ce2c2d600301852`、`SRC-LOCAL-v1-0de553da4d8d857b90d3`；不使用范围外正文或链接标题推断替代。旧 10-19 结果是历史截面。ObsidianWiki 严格只读，`CURRENT_RELEASE` 不变。用户选择保留 `/Users/qiming/.flow/flow.sqlite3` 零字节文件；其他未跟踪数据库文件保持原样。
 
