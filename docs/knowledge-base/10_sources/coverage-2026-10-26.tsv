@@ -1499,30 +1499,30 @@ SRC-LOCAL-v1-38765291887c524e9dbf	routed	semantic-review-2026-10-26-batch-154.ts
 SRC-LOCAL-v1-387a275e2606aad3301e	routed	semantic-review-2026-10-26-batch-154.tsv
 SRC-LOCAL-v1-38907f5bec5494652941	routed	semantic-review-2026-10-26-batch-154.tsv
 SRC-LOCAL-v1-389a9e9d361064a5c888	routed	semantic-review-2026-10-26-batch-154.tsv
-SRC-LOCAL-v1-38a15d66c3b117cd9eae	pending_review	
-SRC-LOCAL-v1-38b9663887bbcd83cfc2	pending_review	
-SRC-LOCAL-v1-38bad70d451417bb0e82	pending_review	
-SRC-LOCAL-v1-38c0fd709f1da3b70f5c	pending_review	
-SRC-LOCAL-v1-38d902f96e2124213c8b	pending_review	
-SRC-LOCAL-v1-38d92cb30d8c7faddb53	pending_review	
-SRC-LOCAL-v1-38db910e4e15a6b164f1	pending_review	
-SRC-LOCAL-v1-38e1fc2205feb53c18fe	pending_review	
-SRC-LOCAL-v1-38e41d7f6a439bbc0856	routed	baseline k_domain; source review tracked in semantic batch
-SRC-LOCAL-v1-38e5f5329a8dfe6a700a	pending_review	
-SRC-LOCAL-v1-38e86583012e4940f943	pending_review	
-SRC-LOCAL-v1-38ea28f8d2313c11c644	pending_review	
-SRC-LOCAL-v1-38f0bbfff536202d9a8a	pending_review	
-SRC-LOCAL-v1-38f7800e778dfc282da6	pending_review	
-SRC-LOCAL-v1-39178701fa6172ee0096	pending_review	
-SRC-LOCAL-v1-391e6641248d50cd1826	pending_review	
-SRC-LOCAL-v1-39270e0f2cc70d598ffc	pending_review	
-SRC-LOCAL-v1-39379e679912316341eb	pending_review	
-SRC-LOCAL-v1-3947408247b667d9afa9	pending_review	
-SRC-LOCAL-v1-394e0ce9f23d6dfc7cc4	pending_review	
-SRC-LOCAL-v1-395282845aee9a05a9bb	pending_review	
-SRC-LOCAL-v1-395fa3d1324baf38e3c6	pending_review	
-SRC-LOCAL-v1-397065c0263cf2155193	pending_review	
-SRC-LOCAL-v1-397e84785b1d29c40a29	pending_review	
+SRC-LOCAL-v1-38a15d66c3b117cd9eae	routed	semantic-review-2026-10-26-batch-155.tsv
+SRC-LOCAL-v1-38b9663887bbcd83cfc2	filtered	semantic-review-2026-10-26-batch-155.tsv
+SRC-LOCAL-v1-38bad70d451417bb0e82	filtered	semantic-review-2026-10-26-batch-155.tsv
+SRC-LOCAL-v1-38c0fd709f1da3b70f5c	routed	semantic-review-2026-10-26-batch-155.tsv
+SRC-LOCAL-v1-38d902f96e2124213c8b	filtered	semantic-review-2026-10-26-batch-155.tsv
+SRC-LOCAL-v1-38d92cb30d8c7faddb53	routed	semantic-review-2026-10-26-batch-155.tsv
+SRC-LOCAL-v1-38db910e4e15a6b164f1	filtered	semantic-review-2026-10-26-batch-155.tsv
+SRC-LOCAL-v1-38e1fc2205feb53c18fe	filtered	semantic-review-2026-10-26-batch-155.tsv
+SRC-LOCAL-v1-38e41d7f6a439bbc0856	routed	semantic-review-2026-10-26-batch-155.tsv
+SRC-LOCAL-v1-38e5f5329a8dfe6a700a	filtered	semantic-review-2026-10-26-batch-155.tsv
+SRC-LOCAL-v1-38e86583012e4940f943	routed	semantic-review-2026-10-26-batch-155.tsv
+SRC-LOCAL-v1-38ea28f8d2313c11c644	filtered	semantic-review-2026-10-26-batch-155.tsv
+SRC-LOCAL-v1-38f0bbfff536202d9a8a	filtered	semantic-review-2026-10-26-batch-155.tsv
+SRC-LOCAL-v1-38f7800e778dfc282da6	filtered	semantic-review-2026-10-26-batch-155.tsv
+SRC-LOCAL-v1-39178701fa6172ee0096	routed	semantic-review-2026-10-26-batch-155.tsv
+SRC-LOCAL-v1-391e6641248d50cd1826	filtered	semantic-review-2026-10-26-batch-155.tsv
+SRC-LOCAL-v1-39270e0f2cc70d598ffc	routed	semantic-review-2026-10-26-batch-155.tsv
+SRC-LOCAL-v1-39379e679912316341eb	filtered	semantic-review-2026-10-26-batch-155.tsv
+SRC-LOCAL-v1-3947408247b667d9afa9	filtered	semantic-review-2026-10-26-batch-155.tsv
+SRC-LOCAL-v1-394e0ce9f23d6dfc7cc4	routed	semantic-review-2026-10-26-batch-155.tsv
+SRC-LOCAL-v1-395282845aee9a05a9bb	filtered	semantic-review-2026-10-26-batch-155.tsv
+SRC-LOCAL-v1-395fa3d1324baf38e3c6	routed	semantic-review-2026-10-26-batch-155.tsv
+SRC-LOCAL-v1-397065c0263cf2155193	routed	semantic-review-2026-10-26-batch-155.tsv
+SRC-LOCAL-v1-397e84785b1d29c40a29	routed	semantic-review-2026-10-26-batch-155.tsv
 SRC-LOCAL-v1-3981b1977d7c49a3070f	pending_review	
 SRC-LOCAL-v1-399704ff9d08657b32f5	pending_review	
 SRC-LOCAL-v1-399cf4057804f6ca12f4	pending_review	
