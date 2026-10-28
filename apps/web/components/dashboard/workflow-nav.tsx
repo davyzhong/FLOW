@@ -33,6 +33,7 @@ const moduleGroups = [
       ["dashboard", "财务风险", "/cockpit/risk"],
       ["dashboard", "集团合并", "/cockpit/consolidation"],
       ["upload", "数据接入", "/data"],
+      ["upload", "真实数据导入", "/data/import"],
       ["analysis", "调查归因", "/investigations"],
       ["report", "四问工作台", "/analysis"],
       ["report", "报告与导出", "/reports"],

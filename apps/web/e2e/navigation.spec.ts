@@ -14,6 +14,7 @@ const INTERACTIVE_ROUTES = [
   "/cockpit/risk",
   "/cockpit/consolidation",
   "/data",
+  "/data/import",
   "/investigations",
   "/reports",
   "/statements",

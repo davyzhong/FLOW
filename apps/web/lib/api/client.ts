@@ -202,7 +202,81 @@ export type CopilotQuestionInput = {
   analysis_run_id?: string | null;
 };
 
+export type ImporterDatasetSummary = {
+  id: string;
+  name: string;
+  created_at: string;
+  source_filename: string;
+};
+
+export type ImporterRowError = { row: string; column: string; message: string };
+
+export type ImporterUploadOk = {
+  ok: true;
+  dataset_id: string;
+  trial_balance_rows: number;
+  income_statement_rows: number;
+  balance_summary: Record<string, string>;
+};
+
+export type ImporterUploadRejected = { ok: false; errors: ImporterRowError[] };
+
+export type ImporterUploadResult = ImporterUploadOk | ImporterUploadRejected;
+
+export type ImporterCockpitKpi = {
+  code: string;
+  label: string;
+  value: string | null;
+  unit: string;
+};
+
+export type ImporterCockpitView = {
+  dataset_id: string;
+  periods: string[];
+  account_count: number;
+  kpi: ImporterCockpitKpi[];
+  identity_check: { formula: string; value: string; passed: boolean };
+  source_note: string;
+};
+
 export const flowApi = {
+  listImporterDatasets(): Promise<{ datasets: ImporterDatasetSummary[] }> {
+    return request<{ datasets: ImporterDatasetSummary[] }>("/api/v1/importer/dataset");
+  },
+  importerCockpit(datasetId: string): Promise<ImporterCockpitView> {
+    return request<ImporterCockpitView>(
+      `/api/v1/importer/dataset/${encodeURIComponent(datasetId)}/cockpit`,
+    );
+  },
+  async deleteImporterDataset(datasetId: string): Promise<{ ok: boolean; deleted: string }> {
+    const response = await fetch(
+      requestUrl(`/api/v1/importer/dataset/${encodeURIComponent(datasetId)}`),
+      { method: "DELETE", headers: { Accept: "application/json" } },
+    );
+    if (!response.ok) {
+      throw new FlowApiError(
+        response.status,
+        `upstream_status_${response.status}`,
+        statusText(response.status),
+      );
+    }
+    return (await response.json()) as { ok: boolean; deleted: string };
+  },
+  async uploadImporterDataset(
+    file: File,
+    name: string,
+  ): Promise<ImporterUploadResult> {
+    const form = new FormData();
+    form.append("file", file);
+    const query = name ? `?name=${encodeURIComponent(name)}` : "";
+    const response = await fetch(requestUrl(`/api/v1/importer/dataset${query}`), {
+      method: "POST",
+      headers: { Accept: "application/json" },
+      body: form,
+    });
+    return (await response.json()) as ImporterUploadResult;
+  },
+
   getWorkspace(): Promise<WorkspaceResponse> {
     return request<WorkspaceResponse>("/api/v1/workspace");
   },
