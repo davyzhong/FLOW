@@ -24,6 +24,7 @@ from __future__ import annotations
 
 import json
 import uuid
+from dataclasses import dataclass
 from datetime import UTC, datetime
 from decimal import Decimal
 from pathlib import Path
@@ -46,6 +47,7 @@ from flow_api.data_contract.records import (
     ScenarioVersionRecord,
 )
 from flow_api.importer.account_mapping import load_account_groups, map_balance_rows
+from flow_api.importer.income_items import INCOME_ITEM_ACCOUNTS, map_income_items
 from flow_api.importer.store import ImportStore
 from flow_api.infrastructure.local_object_store import LocalObjectStore
 from flow_api.infrastructure.models.analytics import (
@@ -132,7 +134,11 @@ def _period_amounts(
     return periods
 
 
-def _artifact_bytes(dataset_name: str, balances: list[dict[str, object]]) -> bytes:
+def _artifact_bytes(
+    dataset_name: str,
+    balances: list[dict[str, object]],
+    income_rows: list[dict[str, object]] | None = None,
+) -> bytes:
     """已校验行的确定性 JSON 序列化（sort_keys + 紧凑分隔符，同数据同 SHA）。"""
     payload = {
         "artifact": "flow.importer.trial-balance.v1",
@@ -151,32 +157,75 @@ def _artifact_bytes(dataset_name: str, balances: list[dict[str, object]]) -> byt
             }
             for row in balances
         ],
+        "income_statement_rows": [
+            {
+                "period": row["period"],
+                "item": row["item"],
+                "current_amount": str(row["current_amount"]),
+                "ytd_amount": str(row["ytd_amount"]),
+            }
+            for row in (income_rows or [])
+        ],
     }
     return json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode(
         "utf-8"
     )
 
 
+@dataclass(frozen=True, slots=True)
+class _PackageDraft:
+    package: CanonicalPackage
+    identity: Decimal
+    # M2 净利润勾稽：(期间, TB 净利润, IS 净利润) 差异超容差的清单
+    net_mismatches: tuple[tuple[str, str, str], ...]
+
+
+def _tb_net_profit_by_period(balances: list[dict[str, object]]) -> dict[str, Decimal]:
+    """期间 × TB 净利润（Σ损益贷 − Σ损益借，全部损益类科目）。"""
+    nets: dict[str, Decimal] = {}
+    for row in balances:
+        if str(row["account_category"]) != "损益":
+            continue
+        period = str(row["period"])
+        nets[period] = nets.get(period, _ZERO) + row["credit_amount"] - row["debit_amount"]  # type: ignore[operator]
+    return nets
+
+
 def _build_package(
     dataset_id: str,
     dataset_name: str,
     balances: list[dict[str, object]],
-) -> tuple[CanonicalPackage, Decimal]:
-    """构造 CanonicalPackage；返回包与最新期间期末勾稽值（资产−负债−权益）。
+    income_rows: list[dict[str, object]] | None = None,
+) -> _PackageDraft:
+    """构造 CanonicalPackage；返回包与勾稽信息。
 
-    事实三层（M1 起）：① 类别五科目（R5 基线，等价测试锚定）；② 科目级明细组
-    （前缀映射、组内方向净额，未命中科目不进组）；③ 后续阶段（利润表 IS_* /
-    银行流水现金口径）。
+    事实分层（R5 基线 → M1 → M2）：① 类别五科目（等价测试锚定，零扰动）；
+    ② 科目级明细组（前缀映射、组内方向净额，未命中不进组不补零）；
+    ③ 利润表 IS_* 项目（损益明细唯一来源；净利润与 TB 逐期勾稽）。
+    期间集 = 余额表 ∪ 利润表（仅利润表期间的部分指标如实缺席）。
     """
-    periods = sorted({str(row["period"]) for row in balances})
+    tb_periods = sorted({str(row["period"]) for row in balances})
     amounts = _period_amounts(balances)
-    last = amounts[periods[-1]]
+    last = amounts[tb_periods[-1]]
     identity = last["TB_ASSET"] - last["TB_LIABILITY"] - last["TB_EQUITY"]
-    groups = load_account_groups(
-        _repository_root() / "config/importer/account_mapping_v1.yaml"
-    )
+    groups = load_account_groups(_repository_root() / "config/importer/account_mapping_v1.yaml")
     mapping = map_balance_rows(balances, groups)
     detail_periods = sorted(mapping.amounts)
+
+    income = map_income_items(income_rows or [])
+    periods = sorted({*tb_periods, *income.periods})
+
+    # M2 净利润勾稽：期间交集内 |TB 净利润 − IS 净利润| > 0.01 记不一致
+    tb_nets = _tb_net_profit_by_period(balances)
+    net_mismatches: list[tuple[str, str, str]] = []
+    for period in sorted(set(tb_nets) & set(income.amounts)):
+        if "IS_NET_PROFIT" not in income.amounts[period]:
+            continue
+        tb_net = tb_nets[period]
+        is_net = income.amounts[period]["IS_NET_PROFIT"]
+        if abs(tb_net - is_net) > Decimal("0.01"):
+            net_mismatches.append((period, str(tb_net), str(is_net)))
+
     package = CanonicalPackage(
         batch=BatchRecord(
             batch_code=batch_name_for(dataset_id),
@@ -217,6 +266,12 @@ def _build_package(
                 code=group.management_account, name=group.name, category="明细组"
             )
             for group in groups
+        )
+        + tuple(
+            ManagementAccountRecord(code=account, name=item, category="利润表")
+            for item, account in INCOME_ITEM_ACCOUNTS
+            # 只登记实际映射到的 IS_* 科目（空项目不进包）
+            if any(account in income.amounts[period] for period in income.periods)
         ),
         scenario_versions=(
             ScenarioVersionRecord(code=_ACTUAL_SCENARIO, name="实际", scenario_type="actual"),
@@ -254,11 +309,27 @@ def _build_package(
             for period in detail_periods
             for group in groups
             if group.management_account in mapping.matched_by_period.get(period, set())
+        )
+        + tuple(
+            FinancialActualRecord(
+                record_id=str(
+                    uuid.uuid5(
+                        NAMESPACE_URL,
+                        f"flow:importer:{dataset_id}:{period}:{account}",
+                    )
+                ),
+                month_key=period,
+                organization_code=_ORG_CODE,
+                management_account_code=account,
+                amount=income.amounts[period][account],
+            )
+            for period in income.periods
+            for account in income.amounts[period]
         ),
         monthly_budgets=(),
         ar_collections=(),
     )
-    return package, identity
+    return _PackageDraft(package=package, identity=identity, net_mismatches=tuple(net_mismatches))
 
 
 def publish_dataset(session: Session, store: ImportStore, dataset_id: str) -> dict[str, object]:
@@ -274,9 +345,11 @@ def publish_dataset(session: Session, store: ImportStore, dataset_id: str) -> di
     if existing is not None:
         return chain_receipt(session, dataset_id)
 
-    package, identity = _build_package(dataset_id, str(dataset["name"]), balances)
+    income_rows = store.dataset_income_items(dataset_id)
+    draft = _build_package(dataset_id, str(dataset["name"]), balances, income_rows or None)
+    package = draft.package
     uploaded = LocalObjectStore(get_settings().object_directory).put_immutable(
-        _artifact_bytes(str(dataset["name"]), balances),
+        _artifact_bytes(str(dataset["name"]), balances, income_rows),
         f"{dataset_id}-trial-balance.json",
     )
 
@@ -310,13 +383,31 @@ def publish_dataset(session: Session, store: ImportStore, dataset_id: str) -> di
         ReconciliationResult(
             import_version_id=version.id,
             reconciliation_code="trial_balance_identity",
-            passed=identity == _ZERO,
+            passed=draft.identity == _ZERO,
             expected_value="0",
-            actual_value=str(identity),
+            actual_value=str(draft.identity),
             details={
-                "difference": str(identity),
+                "difference": str(draft.identity),
                 "tolerance": "0",
                 "description": "资产总计 − 负债总计 − 权益总计（最新期间期末口径）",
+            },
+        )
+    )
+    # M2 净利润勾稽：余额表损益（Σ贷−Σ借）逐期对照利润表净利润
+    session.add(
+        ReconciliationResult(
+            import_version_id=version.id,
+            reconciliation_code="income_statement_net_profit",
+            passed=not draft.net_mismatches,
+            expected_value="0",
+            actual_value=str(len(draft.net_mismatches)),
+            details={
+                "difference": ";".join(
+                    f"{period}:TB={tb_net},IS={is_net}"
+                    for period, tb_net, is_net in draft.net_mismatches
+                ),
+                "tolerance": "0.01",
+                "description": "科目余额表损益净额 − 利润表净利润（逐期间，容差 0.01）",
             },
         )
     )

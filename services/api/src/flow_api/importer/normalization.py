@@ -4,6 +4,7 @@
 无法从余额表得出的指标（毛利率、DSO、经营现金流等）一律不生成，不虚构。
 不写治理发布链（MetricSnapshot/MetricDefinition），独立只读视图。
 """
+
 from __future__ import annotations
 
 from decimal import Decimal
@@ -104,7 +105,6 @@ def derive_metrics(store: ImportStore, dataset_id: str) -> dict[str, Any] | None
             "科目余额表无法推导，一律不生成（不虚构口径）。"
         ),
         "source_note": (
-            "导入账套派生指标；未进入治理发布链，"
-            "与九页驾驶舱（大麦演示数据治理链）数值互不混用。"
+            "导入账套派生指标；未进入治理发布链，与九页驾驶舱（大麦演示数据治理链）数值互不混用。"
         ),
     }

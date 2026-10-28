@@ -2,6 +2,7 @@
 
 金额以原始字符串落库（Decimal 精度由调用方保证），读取时再转 Decimal。
 """
+
 from __future__ import annotations
 
 import uuid
@@ -155,6 +156,24 @@ class ImportStore:
                 "debit_amount": Decimal(row.debit_amount),
                 "credit_amount": Decimal(row.credit_amount),
                 "closing_balance": Decimal(row.closing_balance),
+            }
+            for row in rows
+        ]
+
+    def dataset_income_items(self, dataset_id: str) -> list[dict[str, Any]]:
+        """利润表存储行（M2）；金额读回 Decimal，与余额行同口径。"""
+        with Session(self._engine) as session:
+            rows = session.execute(
+                select(self._is_rows)
+                .where(self._is_rows.c.dataset_id == dataset_id)
+                .order_by(self._is_rows.c.row_index)
+            ).all()
+        return [
+            {
+                "period": row.period,
+                "item": row.item,
+                "current_amount": Decimal(row.current_amount),
+                "ytd_amount": Decimal(row.ytd_amount),
             }
             for row in rows
         ]

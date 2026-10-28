@@ -3,6 +3,7 @@
 边界：不写治理发布链（AnalysisRun/MetricSnapshot），只读校验视图。
 九页驾驶舱全量接线需要归一化管线设计，属后续阶段；本视图让导入数据立即可查。
 """
+
 from __future__ import annotations
 
 from decimal import Decimal

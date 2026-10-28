@@ -43,7 +43,7 @@ _HEADERS = {"Authorization": "Bearer flow-dev-bp"}
 _PERIODS: tuple[str, ...] = ("2025-01", "2025-02")
 # 每行：科目编码/名称/类别/方向/期初/借方发生/贷方发生/期末。
 # 期末资产 20000→21000、负债 8000→7000、权益 12000→14000 → 每期勾稽均为 0；
-# 收入贷方 5000→7000、费用借方 2000→3000（净利润 3000→4000）。
+# 损益明细（收入/成本/销售/管理）与利润表样例逐期一致（净利润勾稽通过）。
 _ROWS: dict[str, tuple[tuple[str, str, str, str, str, str, str, str], ...]] = {
     "2025-01": (
         ("1001", "库存现金", "资产", "借", "10000", "0", "0", "12000"),
@@ -51,7 +51,9 @@ _ROWS: dict[str, tuple[tuple[str, str, str, str, str, str, str, str], ...]] = {
         ("2001", "短期借款", "负债", "贷", "10000", "0", "0", "8000"),
         ("3001", "实收资本", "权益", "贷", "10000", "0", "0", "12000"),
         ("6001", "主营业务收入", "损益", "贷", "0", "0", "5000", "0"),
-        ("6602", "管理费用", "损益", "借", "0", "2000", "0", "0"),
+        ("6401", "主营业务成本", "损益", "借", "0", "1800", "0", "0"),
+        ("6601", "销售费用", "损益", "借", "0", "200", "0", "0"),
+        ("6602", "管理费用", "损益", "借", "0", "1000", "0", "0"),
     ),
     "2025-02": (
         ("1001", "库存现金", "资产", "借", "12000", "0", "0", "13000"),
@@ -59,7 +61,26 @@ _ROWS: dict[str, tuple[tuple[str, str, str, str, str, str, str, str], ...]] = {
         ("2001", "短期借款", "负债", "贷", "8000", "0", "0", "7000"),
         ("3001", "实收资本", "权益", "贷", "12000", "0", "0", "14000"),
         ("6001", "主营业务收入", "损益", "贷", "0", "0", "7000", "0"),
-        ("6602", "管理费用", "损益", "借", "0", "3000", "0", "0"),
+        ("6401", "主营业务成本", "损益", "借", "0", "2400", "0", "0"),
+        ("6601", "销售费用", "损益", "借", "0", "300", "0", "0"),
+        ("6602", "管理费用", "损益", "借", "0", "1300", "0", "0"),
+    ),
+}
+# 利润表样例（与 _ROWS 损益发生额逐期一致；净利润勾稽通过）
+_INCOME_ROWS: dict[str, tuple[tuple[str, str], ...]] = {
+    "2025-01": (
+        ("营业收入", "5000"),
+        ("营业成本", "1800"),
+        ("销售费用", "200"),
+        ("管理费用", "1000"),
+        ("净利润", "2000"),
+    ),
+    "2025-02": (
+        ("营业收入", "7000"),
+        ("营业成本", "2400"),
+        ("销售费用", "300"),
+        ("管理费用", "1300"),
+        ("净利润", "3000"),
     ),
 }
 _TB_HEADER = (
@@ -73,6 +94,7 @@ _TB_HEADER = (
     "本期贷方发生额",
     "期末余额",
 )
+_IS_HEADER = ("会计期间", "项目", "本期金额", "本年累计金额")
 
 
 def _expected_period_metrics(period: str) -> dict[str, Decimal]:
@@ -98,6 +120,23 @@ def _expected_period_metrics(period: str) -> dict[str, Decimal]:
         "total_equity": equity,
         # 引擎 output_scale=6（trial_balance_v1 目录声明）
         "debt_ratio": (liabilities / assets).quantize(Decimal("0.000001")),
+    }
+
+
+def _expected_income_metrics(period: str) -> dict[str, Decimal]:
+    """M2 利润表指标期望：独立复算营业成本/毛利/毛利率/费用分项。
+
+    rd/finance 样例无数据 → 缺席（返回集中不出现）。
+    """
+    items = {item: Decimal(amount) for item, amount in _INCOME_ROWS[period]}
+    revenue = _expected_period_metrics(period)["revenue"]
+    cost = items["营业成本"]
+    return {
+        "operating_cost": cost,
+        "gross_profit": revenue - cost,
+        "gross_margin": ((revenue - cost) / revenue).quantize(Decimal("0.000001")),
+        "selling_expense": items["销售费用"],
+        "admin_expense": items["管理费用"],
     }
 
 
@@ -128,7 +167,8 @@ def _snapshot_values(session: Session, snapshot_id: str) -> dict[str, Decimal]:
     return {code: Decimal(value) for code, value in rows}
 
 
-def _workbook_bytes() -> bytes:
+def _workbook_bytes(*, with_income: bool = False, net_override: str | None = None) -> bytes:
+    """样例工作簿；with_income 附带利润表（net_override 用于勾稽拒绝用例）。"""
     workbook = Workbook()
     ws = workbook.active
     ws.title = "科目余额表"
@@ -136,6 +176,14 @@ def _workbook_bytes() -> bytes:
     for period in _PERIODS:
         for row in _ROWS[period]:
             ws.append([period, *row])
+    if with_income:
+        ws_income = workbook.create_sheet("利润表")
+        ws_income.append(list(_IS_HEADER))
+        for period in _PERIODS:
+            for item, amount in _INCOME_ROWS[period]:
+                if net_override is not None and item == "净利润":
+                    amount = net_override
+                ws_income.append([period, item, amount, amount])
     buffer = BytesIO()
     workbook.save(buffer)
     return buffer.getvalue()
@@ -181,7 +229,7 @@ def _upload(client: TestClient, content: bytes, name: str) -> str:
 
 def test_publish_chain_equivalence_and_dashboard_switch(chain_env) -> None:
     client, session = chain_env
-    dataset_id = _upload(client, _workbook_bytes(), "接线账套")
+    dataset_id = _upload(client, _workbook_bytes(with_income=True), "接线账套")
 
     published = client.post(f"/api/v1/importer/dataset/{dataset_id}/publish", headers=_HEADERS)
     assert published.status_code == 200, published.text
@@ -191,13 +239,21 @@ def test_publish_chain_equivalence_and_dashboard_switch(chain_env) -> None:
     assert receipt["analysis_run_status"] == "published"
     assert receipt["is_active_source"] is True
 
-    # 口径等价：逐期间快照值 == 独立复算期望值（7 项基线 + 5 项 M1 结构指标）
+    # 口径等价：逐期间快照值 == 独立复算期望值（7 基线 + M1 结构 + M2 损益明细）
     for period, snapshot_id in zip(_PERIODS, receipt["metric_snapshot_ids"], strict=True):
         expected = _expected_period_metrics(period)
         detail_expected = _expected_detail_metrics(period)
+        income_expected = _expected_income_metrics(period)
         actual = _snapshot_values(session, snapshot_id)
-        assert set(actual) == set(expected) | set(detail_expected), (period, set(actual))
-        for code, expected_value in {**expected, **detail_expected}.items():
+        assert set(actual) == set(expected) | set(detail_expected) | set(income_expected), (
+            period,
+            set(actual),
+        )
+        for code, expected_value in {
+            **expected,
+            **detail_expected,
+            **income_expected,
+        }.items():
             assert actual[code] == expected_value, (period, code, actual[code])
 
     # 流量指标：全部期间快照之和 == derive_metrics 直读全期合计
@@ -228,7 +284,13 @@ def test_publish_chain_equivalence_and_dashboard_switch(chain_env) -> None:
     revenue_card = next(card for card in overview.metric_cards if card.metric_code == "revenue")
     assert revenue_card.primary.status == "available"
     assert Decimal(str(revenue_card.primary.exact_value)) == expected_last["revenue"]
-    for code in ("orders", "gross_margin", "operating_cash_flow"):
+    # M2：利润表接线后毛利率卡出真数（P2 毛利率 4600/7000）
+    margin_card = next(card for card in overview.metric_cards if card.metric_code == "gross_margin")
+    assert margin_card.primary.status == "available"
+    assert Decimal(str(margin_card.primary.exact_value)) == _expected_income_metrics("2025-02")[
+        "gross_margin"
+    ]
+    for code in ("orders", "operating_cash_flow"):
         card = next(c for c in overview.metric_cards if c.metric_code == code)
         assert card.primary.status == "unavailable", code
 
@@ -250,6 +312,24 @@ def test_identity_mismatch_blocks_publish(chain_env) -> None:
     assert response.status_code == 422
     chain = client.get(f"/api/v1/importer/dataset/{dataset_id}/chain", headers=_HEADERS).json()
     assert chain["published"] is False
+    assert (
+        session.query(AnalysisBatch)
+        .filter(AnalysisBatch.name == f"import-dataset-{dataset_id}")
+        .count()
+        == 0
+    )
+
+
+def test_income_net_profit_mismatch_blocks_publish(chain_env) -> None:
+    """M2 勾稽门禁：利润表净利润与余额表损益净额不符 → 发布拒绝且零残留。"""
+    client, session = chain_env
+    dataset_id = _upload(
+        client,
+        _workbook_bytes(with_income=True, net_override="9999"),
+        "净利润不符账套",
+    )
+    response = client.post(f"/api/v1/importer/dataset/{dataset_id}/publish", headers=_HEADERS)
+    assert response.status_code == 422
     assert (
         session.query(AnalysisBatch)
         .filter(AnalysisBatch.name == f"import-dataset-{dataset_id}")

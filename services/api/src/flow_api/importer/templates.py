@@ -3,6 +3,7 @@
 模板列名即导入契约：用户按中文列名填数，校验引擎按同名列解析。
 金额一律 Decimal 字符串处理，禁止 float。
 """
+
 from __future__ import annotations
 
 from io import BytesIO

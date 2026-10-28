@@ -180,3 +180,102 @@ metrics:
     output_scale: 4
     allowed_dimension_sets: *tb_dimensions
     budget_dimension_sets: []
+
+  # —— M2 利润表接线（损益结构与毛利；损益明细唯一来源=利润表 IS_* 项目）——
+  # 口径：revenue 仍=科目余额表损益贷方发生额合计（R5 基线零扰动），
+  # 毛利率分母即该口径；无利润表时下列指标如实缺席（不虚构）。
+  - metric_code: operating_cost
+    version: 1
+    name: 营业成本
+    business_definition: 利润表营业成本本期金额（损益明细来自利润表）。
+    formula: sum_financial_account_amount
+    financial_account: IS_COST
+    dependencies: []
+    aggregation: sum
+    time_behavior: flow
+    unit: CNY
+    output_scale: 4
+    allowed_dimension_sets: *tb_dimensions
+    budget_dimension_sets: []
+
+  - metric_code: gross_profit
+    version: 1
+    name: 毛利
+    business_definition: 收入减营业成本（收入为损益贷方发生额合计口径）。
+    formula: subtract
+    dependencies: [revenue, operating_cost]
+    aggregation: sum
+    time_behavior: flow
+    unit: CNY
+    output_scale: 4
+    allowed_dimension_sets: *tb_dimensions
+    budget_dimension_sets: []
+
+  - metric_code: gross_margin
+    version: 1
+    name: 毛利率
+    business_definition: 毛利除以收入（收入为损益贷方发生额合计口径）。
+    formula: ratio
+    dependencies: [gross_profit, revenue]
+    aggregation: ratio
+    time_behavior: flow
+    unit: ratio
+    output_scale: 6
+    allowed_dimension_sets: *tb_dimensions
+    budget_dimension_sets: []
+
+  - metric_code: selling_expense
+    version: 1
+    name: 销售费用
+    business_definition: 利润表销售费用本期金额。
+    formula: sum_financial_account_amount
+    financial_account: IS_SELLING
+    dependencies: []
+    aggregation: sum
+    time_behavior: flow
+    unit: CNY
+    output_scale: 4
+    allowed_dimension_sets: *tb_dimensions
+    budget_dimension_sets: []
+
+  - metric_code: admin_expense
+    version: 1
+    name: 管理费用
+    business_definition: 利润表管理费用本期金额。
+    formula: sum_financial_account_amount
+    financial_account: IS_ADMIN
+    dependencies: []
+    aggregation: sum
+    time_behavior: flow
+    unit: CNY
+    output_scale: 4
+    allowed_dimension_sets: *tb_dimensions
+    budget_dimension_sets: []
+
+  - metric_code: rd_expense
+    version: 1
+    name: 研发费用
+    business_definition: 利润表研发费用本期金额。
+    formula: sum_financial_account_amount
+    financial_account: IS_RD
+    dependencies: []
+    aggregation: sum
+    time_behavior: flow
+    unit: CNY
+    output_scale: 4
+    allowed_dimension_sets: *tb_dimensions
+    budget_dimension_sets: []
+
+  - metric_code: finance_expense
+    version: 1
+    name: 财务费用
+    business_definition: 利润表财务费用本期金额。
+    formula: sum_financial_account_amount
+    financial_account: IS_FINANCE
+    dependencies: []
+    aggregation: sum
+    time_behavior: flow
+    unit: CNY
+    output_scale: 4
+    allowed_dimension_sets: *tb_dimensions
+    budget_dimension_sets: []

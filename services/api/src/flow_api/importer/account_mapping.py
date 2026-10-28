@@ -6,6 +6,7 @@
   固定资产净额=借向原值−贷向折旧/减值由此成立）；
 - 未命中科目由调用方回落类别聚合，本模块不负责基线五科目。
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -92,9 +93,7 @@ def map_balance_rows(
         )
         signed = closing if direction == group.direction else -closing  # type: ignore[operator]
         bucket[group.management_account] += signed  # type: ignore[operator]
-        matched_rows[group.management_account] = (
-            matched_rows.get(group.management_account, 0) + 1
-        )
+        matched_rows[group.management_account] = matched_rows.get(group.management_account, 0) + 1
         matched_by_period.setdefault(period, set()).add(group.management_account)
     return MappingResult(
         amounts=periods,

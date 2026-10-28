@@ -3,6 +3,7 @@
 校验器是纯函数：输入解析后的字典行，输出结构化结果，不触数据库——
 R2 的 API 层负责读文件与写库，本模块只回答「这批数据能不能收」。
 """
+
 from __future__ import annotations
 
 import re
