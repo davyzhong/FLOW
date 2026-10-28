@@ -9,7 +9,7 @@ from datetime import datetime
 from decimal import Decimal
 from typing import Any
 
-from sqlalchemy import select
+from sqlalchemy import create_engine, select
 from sqlalchemy.orm import Session, sessionmaker
 
 from flow_api.importer.validation import ValidationResult
@@ -205,3 +205,7 @@ class ImportStore:
             "total_equity": str(equity),
             "identity_check": str(assets - liabilities - equity),
         }
+
+
+def default_store(database_url: str) -> ImportStore:
+    return ImportStore(create_engine(database_url))
