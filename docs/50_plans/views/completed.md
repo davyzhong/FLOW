@@ -8,7 +8,7 @@ created_at: 2026-09-12
 updated_at: 2026-10-28
 owner: FLOW
 generator_ref: scripts/documentation/plan_views.py
-input_hash: 6f795f79189e7e0af475eb83e7eeade3a25532ba6d67236a9dc0cdf5ae510158
+input_hash: 9068bfa772fda9ce0dddfecc74ed71ad98a09436774a8a326f180c42439ba4da
 applies_to: planning
 ---
 
@@ -21,6 +21,7 @@ applies_to: planning
 - [CFO 驾驶舱视觉补全与数值格式治理](../work_items/COCKPIT--visual-completion-and-number-format.md) — `completed`
 - [CFO 驾驶舱盈利分析与图表缺口补全](../work_items/COCKPIT--visual-analysis-expansion.md) — `completed`
 - [财务指标目录（驾驶舱前置）](../work_items/FINMETRIC--financial-metric-catalog.md) — `completed`
+- [导入账套指标补厚（科目级映射 + 利润表/银行流水接线）](../work_items/FLOW--importer-rich-metrics.md) — `completed`
 - [清理已合入 main 的历史远端分支](../work_items/FLOW--merged-branch-cleanup.md) — `completed`
 - [企业组织建制与经营账套初始化包](../work_items/ORG-LEDGER--enterprise-initialization-package.md) — `completed`
 - [真实数据导入（单机原型从演示走向可用）](../work_items/FLOW--real-data-import.md) — `completed`

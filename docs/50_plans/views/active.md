@@ -8,7 +8,7 @@ created_at: 2026-09-12
 updated_at: 2026-10-28
 owner: FLOW
 generator_ref: scripts/documentation/plan_views.py
-input_hash: 6f795f79189e7e0af475eb83e7eeade3a25532ba6d67236a9dc0cdf5ae510158
+input_hash: 9068bfa772fda9ce0dddfecc74ed71ad98a09436774a8a326f180c42439ba4da
 applies_to: planning
 ---
 
@@ -17,7 +17,6 @@ applies_to: planning
 > 本页由工作包元数据确定性生成，请勿手工修改。
 
 - [大麦物流完整财年演示数据与全产品验收](../work_items/DAMAI--full-year-demo.md) — `active`
-- [导入账套指标补厚（科目级映射 + 利润表/银行流水接线）](../work_items/FLOW--importer-rich-metrics.md) — `active`
 - [第二代静态知识刷新与战略重基线](../work_items/KNOWLEDGE--refresh-v2.md) — `active`
 - [公开财报模块 C 级出口协议与数字级准确率基准（T09）](../work_items/PUBLIC--c-level-exit-protocol.md) — `active`
 - [数据扩张、行业基准与性能容量基线（T11）](../work_items/PUBLIC--data-expansion-benchmarks.md) — `active`

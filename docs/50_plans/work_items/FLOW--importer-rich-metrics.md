@@ -2,8 +2,8 @@
 doc_id: FLOW-WI-IMPORTER-RICH-METRICS-20261028-001
 title: 导入账套指标补厚（科目级映射 + 利润表/银行流水接线）
 doc_type: work-item
-status: active
-version: 1.0
+status: completed
+version: 1.1
 created_at: 2026-10-28
 updated_at: 2026-10-28
 owner: FLOW
@@ -55,6 +55,13 @@ confidentiality: project-internal
 ### 指标目录
 
 全部新指标并入 `config/metrics/trial_balance_v1_metrics.yaml`（文件名与 definition_set_id 不变，只追加条目；既有 7 指标逐字节不动）。流水模板链接补进导入向导；上传回执增加流水行数。
+
+## 交付记录（2026-10-28，M1–M3 全部交付）
+
+- **M1**（`082f2f94`）：`config/importer/account_mapping_v1.yaml`（5 组前缀映射）+ `importer/account_mapping.py`（前缀优先/方向净额/逐期命中登记）+ 桥接明细组事实 + 目录 5 指标（cash/receivables/inventory/fixed_assets/accounts_payable）；实施修正：**空组不写 0 金额事实**（缺席≠零——0 会冒充真实余额并让环比 variance_pct 0/0 硬崩）。映射单测 6 项。
+- **M2**（`f6a52467`）：`importer/income_items.py`（13 项标准化项目字典，去「减：/加：/其中：」前缀）+ 桥接 IS_* 事实与期间并集 + **净利润勾稽门禁**（income_statement_net_profit，TB Σ损益贷−Σ损益借 vs IS 净利润逐期对照，容差 0.01，不符发布拒绝且零残留）+ 目录 7 指标（operating_cost/gross_profit/gross_margin/selling/admin/rd/finance expense）；dashboard 毛利率卡随之出真数。
+- **M3**（`715a2d6d`）：银行流水模板/读取/校验（**余额连续性**：余额[i]=余额[i-1]+收入−支出±0.01，整批拒绝）+ `import_bank_statement_row` 存储 + 上传链路第三张可选表 + 桥接现金口径事实 + 目录 3 指标（cash_inflow/cash_outflow/net_cash_flow，收付实现制，不绑权责 OCF）+ 向导模板链接与行数。
+- 验收：集成测试 6/6（进 CI core 分片）+ importer 本地套件 28 项 + metrics 70 项 + 前端 213 项全绿；六门禁 PASS；目录终态 22 指标；准确 SHA CI 见路线图。
 
 ## 范围与批次（严格串行 M1→M2→M3，每批门禁全绿→提交→立即推送）
 
