@@ -95,3 +95,19 @@ def test_e2e_dataset_list(client: TestClient) -> None:
     datasets = client.get("/api/v1/importer/dataset").json()["datasets"]
     assert len(datasets) == 1
     assert datasets[0]["name"] == "清单账套"
+
+
+def test_e2e_derived_metrics(client: TestClient) -> None:
+    response = client.post(
+        "/api/v1/importer/dataset?name=指标账套",
+        files={"file": ("m.xlsx", _workbook_bytes())},
+    )
+    dataset_id = response.json()["dataset_id"]
+    view = client.get(f"/api/v1/importer/dataset/{dataset_id}/metrics").json()
+    codes = {m["metric_code"]: m["value"] for m in view["metrics"]}
+    assert codes["total_assets"] == "12000"
+    assert codes["total_liabilities"] == "12000"
+    assert codes["debt_ratio"] == "1.0000"
+    formulas = {m["metric_code"]: m["formula"] for m in view["metrics"]}
+    assert "损益类科目本期贷方发生额合计" in formulas["revenue"]
+    assert "不虚构" in view["excluded_note"]
