@@ -3,7 +3,7 @@ doc_id: FLOW-WI-REAL-DATA-IMPORT-20261028-001
 title: 真实数据导入（单机原型从演示走向可用）
 doc_type: work-item
 status: active
-version: 1.2
+version: 1.3
 created_at: 2026-10-28
 updated_at: 2026-10-28
 owner: FLOW
@@ -61,7 +61,9 @@ K3 知识刷新已于 2026-10-28 由用户裁决挂起（批次 134–162 共 69
 
 - HTTP 级端到端 4 项（TestClient）：模板下载 PK 魔数、上传→概览→cockpit→余额→删除全链、不平衡整批拒绝含行级定位、数据集清单——全过。
 - 后端 21 项单测 + 4 项 e2e 全绿；ruff/mypy 干净；前端 213 项 vitest 全绿、typecheck/build 通过。
-- 准确 SHA CI：main `43b4a957`（run 40625363976，进行中）。
+- 契约首轮失败（openapi.json 未随 importer 路由再生成），`make contracts` 修复后推送。
+- 准确 SHA CI：main `3d6e1fb3`（run `40627155163`）全部 job success，**工作包关闭**。
+- 后续阶段（不在本包）：九页驾驶舱全量接线需 AnalysisRun→MetricSnapshot 归一化管线设计。
 
 ### R4 验收
 
