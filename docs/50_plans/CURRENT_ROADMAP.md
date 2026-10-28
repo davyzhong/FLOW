@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 17.50
+version: 17.51
 created_at: 2026-09-12
 updated_at: 2026-10-27
 owner: FLOW
@@ -17,7 +17,7 @@ superseded_by: null
 
 # 当前路线图（唯一主线）
 
-> **状态速览（2026-10-28）：** **用户裁决（2026-10-28）：K3 挂起，转产品功能。** K3 已完成批次 134–162 共 29 批 2,928 条审阅并全部推送（coverage 9,673 条 = routed 1,200 / filtered 660 / pending_review 7,813）；剩余 7,813 条保持 pending_review 挂起，`CURRENT_RELEASE` 不变，ObsidianWiki 保持只读。恢复条件：用户重新指令恢复 K3，或产品知识引用层需要更大覆盖面时按缩减策略（HIGH 候选精读 + 批量过滤）重启。队列 16 项调整为：完成 10 / 队首待裁决 1（下一产品功能方向）/ 排队 3 / 暂停 2（P3 数据扩张 + K3 知识刷新）/ 外部条件受限 1。用户已按推荐确认 **A·真实数据导入** 为新队首（工作包 FLOW-WI-REAL-DATA-IMPORT-20261028-001）：R1 模板与校验引擎 → R2 导入 API → R3 导入向导 UI → R4 端到端验收，严格串行；目标=原型从「只能看大麦演示数据」升级为「能导入用户自己的财务数据生成驾驶舱」。**环境已收敛（用户指令）：全部活动分支合并进 main，远端仅剩 `main`；main 基线 `b70de445`（含视觉语言统一 PR #5、K3 批次 129–133、路线图规整 v17.17、指标资料 PR #6 与 publishing-golden 字体断言平台化修复 `775f283a`）；本地保留 2 个含未提交内容的 worktree 与 1 个未合并 wip 分支（`codex/frontend-consistency-remediation`），其余已清理。本版（v17.19）补充环境收敛记录；v17.17 规整结构不变。**
+> **状态速览（2026-10-28）：** **用户裁决（2026-10-28）：K3 挂起，转产品功能。** K3 已完成批次 134–162 共 29 批 2,928 条审阅并全部推送（coverage 9,673 条 = routed 1,200 / filtered 660 / pending_review 7,813）；剩余 7,813 条保持 pending_review 挂起，`CURRENT_RELEASE` 不变，ObsidianWiki 保持只读。恢复条件：用户重新指令恢复 K3，或产品知识引用层需要更大覆盖面时按缩减策略（HIGH 候选精读 + 批量过滤）重启。队列 16 项调整为：完成 10 / 队首待裁决 1（下一产品功能方向）/ 排队 3 / 暂停 2（P3 数据扩张 + K3 知识刷新）/ 外部条件受限 1。用户已确认 **A·真实数据导入** 为队首（工作包 FLOW-WI-REAL-DATA-IMPORT-20261028-001）：R1 模板与校验引擎、R2 导入 API、R3 导入向导 UI、R4 端到端验收**已全部交付**（main `4f633a24`，CI run 40627155163 全绿）；追加交付派生指标端点 `GET /dataset/{id}/metrics`（d4c03829，七项可推导指标带公式，推不出的口径一律不生成）。**下一单一动作 = 九页驾驶舱全量接线**：设计科目类别→治理指标快照的归一化管线（AnalysisRun→MetricSnapshot，参照 dashboard/repositories.py:121 DashboardSourceBundle），属独立设计任务，建议新会话全新上下文开工。**环境已收敛（用户指令）：全部活动分支合并进 main，远端仅剩 `main`；main 基线 `b70de445`（含视觉语言统一 PR #5、K3 批次 129–133、路线图规整 v17.17、指标资料 PR #6 与 publishing-golden 字体断言平台化修复 `775f283a`）；本地保留 2 个含未提交内容的 worktree 与 1 个未合并 wip 分支（`codex/frontend-consistency-remediation`），其余已清理。本版（v17.19）补充环境收敛记录；v17.17 规整结构不变。**
 
 ## 战略目标（唯一目标清单，当前有效四项）
 
@@ -45,7 +45,7 @@ superseded_by: null
 | 4 | U04 解析与盲评复评 | completed（限定样本） | 旧三样本 199/199；不等于全部报告 oracle 完成 |
 | 5 | C 级质量基准与 Go/No-Go | completed（裁定 No-Go） | 维持 No-Go；解锁路径归 G3 长期 |
 | 6 | P3 真实数据/来源与行业扩张 | 暂停 | ZTO 已于 2026-10-16 恢复合并；其余扩张等真实财报到料或用户指令 |
-| **N1** | [真实数据导入（单机原型从演示走向可用）](work_items/FLOW--real-data-import.md) | **active（唯一队首）** | R1 模板与校验引擎 → R2 导入 API → R3 导入向导 UI → R4 端到端验收，严格串行；用户裁决 K3 挂起后的新队首 |
+| **N1** | [真实数据导入（单机原型从演示走向可用）](work_items/FLOW--real-data-import.md) | **active（唯一队首）** | R1–R4 全部交付（main `4f633a24` CI 全绿）+ 派生指标端点（d4c03829）；下一子步 = 九页全量接线的归一化管线设计（新会话开工） |
 | **7（原 K）** | **第二代静态知识刷新** | **暂停（用户裁决 2026-10-28）** | 134–162 批 2,928 条已审并推送（routed 1,200 / filtered 660）；剩余 7,813 条挂起，`CURRENT_RELEASE` 不变，ObsidianWiki 只读未动。恢复条件：用户重新指令，或按缩减策略（HIGH 精读+批量过滤）重启；恢复时从第 163 批（`SRC-LOCAL-v1-40251d629ebbd4f57558` 之后）继续 |
 | 8 | rnd_exp 官方依据核验 | 外部条件受限 | 原文不可得结案；穷尽搜索记录与重启条件已登记，不得伪造核验 |
 | 9 | U09/O05 真实内部试点 | 排队（blocked） | 需真实企业数据与质量门槛；技术原型不冒充真实试点 |
