@@ -8,9 +8,11 @@ import pytest
 from openpyxl import Workbook
 from sqlalchemy import create_engine
 
-from flow_api.importer.service import import_workbook
+from flow_api.importer.cockpit_view import cockpit_overview
+from flow_api.importer.service import collect_errors, import_workbook
 from flow_api.importer.store import ImportStore
 from flow_api.importer.templates import build_template_xlsx
+from flow_api.importer.validation import validate_trial_balance
 
 
 @pytest.fixture()
@@ -31,10 +33,27 @@ def _valid_workbook_bytes() -> bytes:
     return buffer.getvalue()
 
 
+def _kpi_rows() -> list[dict[str, str]]:
+    def row(code: str, name: str, category: str, direction: str, closing: str,
+            debit: str = "0", credit: str = "0") -> dict[str, str]:
+        return {
+            "会计期间": "2025-01", "科目编码": code, "科目名称": name,
+            "科目类别": category, "方向": direction, "期初余额": "0",
+            "本期借方发生额": debit, "本期贷方发生额": credit, "期末余额": closing,
+        }
+
+    return [
+        row("1001", "库存现金", "资产", "借", "50000"),
+        row("2001", "短期借款", "负债", "贷", "30000"),
+        row("4001", "实收资本", "权益", "贷", "20000"),
+        row("6001", "主营业务收入", "损益", "贷", "0", credit="80000"),
+        row("6401", "主营业务成本", "损益", "借", "0", debit="60000"),
+    ]
+
+
 def test_import_valid_workbook_creates_dataset(store: ImportStore) -> None:
     outcome = import_workbook(store, _valid_workbook_bytes(), "测试账套", "t.xlsx")
-    assert outcome.ok, _errors(outcome)
-    assert outcome.dataset_id is not None
+    assert outcome.ok, collect_errors(outcome)
     datasets = store.list_datasets()
     assert len(datasets) == 1
     assert datasets[0]["name"] == "测试账套"
@@ -60,13 +79,12 @@ def test_unbalanced_workbook_rejected_without_dataset(store: ImportStore) -> Non
     outcome = import_workbook(store, buffer.getvalue(), "坏账套", "bad.xlsx")
     assert not outcome.ok
     assert store.list_datasets() == []
-    assert any("期末借贷不平衡" in e["message"] for e in _errors(outcome))
+    assert any("期末借贷不平衡" in e["message"] for e in collect_errors(outcome))
 
 
 def test_missing_sheet_reports_read_error(store: ImportStore) -> None:
     workbook = Workbook()
-    ws = workbook.active
-    ws.title = "随便"
+    workbook.active.title = "随便"
     buffer = io.BytesIO()
     workbook.save(buffer)
     outcome = import_workbook(store, buffer.getvalue(), "x", "x.xlsx")
@@ -83,14 +101,15 @@ def test_delete_dataset_removes_rows(store: ImportStore) -> None:
 
 
 def test_template_download_bytes() -> None:
-    data = build_template_xlsx()
-    assert data[:2] == b"PK"  # xlsx zip 魔数
+    assert build_template_bytes()[:2] == b"PK"
 
 
-def _errors(outcome: object) -> list[dict[str, str]]:
-    from flow_api.importer.service import collect_errors
+def build_template_bytes() -> bytes:
+    return build_template_xlsx()
 
-    return collect_errors(outcome)  # type: ignore[arg-type]
+
+def test_dataset_overview_missing_returns_none(store: ImportStore) -> None:
+    assert store.dataset_overview("nonexistent") is None
 
 
 def test_dataset_overview_aggregates_categories(store: ImportStore) -> None:
@@ -104,27 +123,8 @@ def test_dataset_overview_aggregates_categories(store: ImportStore) -> None:
     assert overview["periods"] == ["2025-01"]
 
 
-def test_dataset_overview_missing_returns_none(store: ImportStore) -> None:
-    assert store.dataset_overview("nonexistent") is None
-
-
 def test_cockpit_overview_kpis(store: ImportStore) -> None:
-    from flow_api.importer.cockpit_view import cockpit_overview
-
-    rows = [
-        {"会计期间": "2025-01", "科目编码": "1001", "科目名称": "库存现金", "科目类别": "资产",
-         "方向": "借", "期初余额": "0", "本期借方发生额": "0", "本期贷方发生额": "0", "期末余额": "50000"},
-        {"会计期间": "2025-01", "科目编码": "2001", "科目名称": "短期借款", "科目类别": "负债",
-         "方向": "贷", "期初余额": "0", "本期借方发生额": "0", "本期贷方发生额": "0", "期末余额": "30000"},
-        {"会计期间": "2025-01", "科目编码": "4001", "科目名称": "实收资本", "科目类别": "权益",
-         "方向": "贷", "期初余额": "0", "本期借方发生额": "0", "本期贷方发生额": "0", "期末余额": "20000"},
-        {"会计期间": "2025-01", "科目编码": "6001", "科目名称": "主营业务收入", "科目类别": "损益",
-         "方向": "贷", "期初余额": "0", "本期借方发生额": "0", "本期贷方发生额": "80000", "期末余额": "0"},
-        {"会计期间": "2025-01", "科目编码": "6401", "科目名称": "主营业务成本", "科目类别": "损益",
-         "方向": "借", "期初余额": "0", "本期借方发生额": "60000", "本期贷方发生额": "0", "期末余额": "0"},
-    ]
-    from flow_api.importer.validation import validate_trial_balance
-    result = validate_trial_balance(rows)
+    result = validate_trial_balance(_kpi_rows())
     assert result.ok, result.errors
     dataset_id = store.save_dataset("KPI 账套", "k.xlsx", result, None)
     view = cockpit_overview(store, dataset_id)

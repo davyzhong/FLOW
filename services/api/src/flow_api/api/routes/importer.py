@@ -9,7 +9,6 @@ from typing import Any, Literal
 from fastapi import APIRouter, HTTPException, UploadFile
 
 from flow_api.importer.service import collect_errors, import_workbook
-from flow_api.importer.store import default_store
 from flow_api.importer.templates import build_template_xlsx
 
 router = APIRouter(prefix="/importer", tags=["importer"])
