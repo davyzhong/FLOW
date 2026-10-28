@@ -2,8 +2,8 @@
 doc_id: FLOW-WI-REAL-DATA-IMPORT-20261028-001
 title: 真实数据导入（单机原型从演示走向可用）
 doc_type: work-item
-status: active
-version: 1.5
+status: completed
+version: 1.6
 created_at: 2026-10-28
 updated_at: 2026-10-28
 owner: FLOW
@@ -82,7 +82,7 @@ K3 知识刷新已于 2026-10-28 由用户裁决挂起（批次 134–162 共 69
 
 - 集成测试 4/4（`tests/integration/test_importer_publish_chain.py`，进 CI core 分片）：口径等价（逐期间快照==独立复算；流量指标全期快照和==直读合计）、治理切换（总览活跃源==最新导入快照，revenue 卡出真数 7000，orders/gross_margin/operating_cash_flow 如实 unavailable；两期数据凑不满 12 月趋势→degraded 属设计内降级）、幂等发布、勾稽不平 422 且零残留、删除级联后 get_latest 回到基线 run。
 - 六门禁：plan_views / m1 / m6 / links / kb_manifest / contracts-check 全 PASS（coverage_validator 属 K3 知识批次门禁，本轮未动知识库不适用）。
-- CI：准确 SHA 待推送后核对。
+- CI：准确 SHA `a2510344`（run `40651999130`）全部 job success——**工作包 R1–R5 关闭**。contracts 门禁此前两个纯文档提交（b4756942/2818dc17）两连挂的根因 = d4c03829 新增 metrics 端点未再生成契约；a2510344 已修复并确认。
 
 **已知边界**：CI 分片映射只跑 `tests/{integration,investigation,copilot,api}`——既有 `tests/importer` 套件（R1–R4 的 25 项）不在 CI 分片内，属本地回归套件（不改 CI 配置，此处如实登记）。
 
