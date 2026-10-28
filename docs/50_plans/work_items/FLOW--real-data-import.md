@@ -3,7 +3,7 @@ doc_id: FLOW-WI-REAL-DATA-IMPORT-20261028-001
 title: 真实数据导入（单机原型从演示走向可用）
 doc_type: work-item
 status: active
-version: 1.1
+version: 1.2
 created_at: 2026-10-28
 updated_at: 2026-10-28
 owner: FLOW
@@ -56,6 +56,12 @@ K3 知识刷新已于 2026-10-28 由用户裁决挂起（批次 134–162 共 69
 
 - cockpit_view.py：五项 KPI（资产/负债/权益总计、本期净利润、资产负债率）+ 勾稽校验直接派生自科目余额表；GET /dataset/{id}/cockpit。
 - 边界：只读校验视图，不写治理发布链；九页全量接线需要归一化管线设计（AnalysisRun→MetricSnapshot），列为独立后续阶段。
+
+### R4 验收（本地已完成，CI 进行中）
+
+- HTTP 级端到端 4 项（TestClient）：模板下载 PK 魔数、上传→概览→cockpit→余额→删除全链、不平衡整批拒绝含行级定位、数据集清单——全过。
+- 后端 21 项单测 + 4 项 e2e 全绿；ruff/mypy 干净；前端 213 项 vitest 全绿、typecheck/build 通过。
+- 准确 SHA CI：main `43b4a957`（run 40625363976，进行中）。
 
 ### R4 验收
 
