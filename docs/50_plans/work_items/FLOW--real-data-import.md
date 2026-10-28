@@ -3,7 +3,7 @@ doc_id: FLOW-WI-REAL-DATA-IMPORT-20261028-001
 title: 真实数据导入（单机原型从演示走向可用）
 doc_type: work-item
 status: active
-version: 1.3
+version: 1.4
 created_at: 2026-10-28
 updated_at: 2026-10-28
 owner: FLOW
@@ -57,19 +57,36 @@ K3 知识刷新已于 2026-10-28 由用户裁决挂起（批次 134–162 共 69
 - cockpit_view.py：五项 KPI（资产/负债/权益总计、本期净利润、资产负债率）+ 勾稽校验直接派生自科目余额表；GET /dataset/{id}/cockpit。
 - 边界：只读校验视图，不写治理发布链；九页全量接线需要归一化管线设计（AnalysisRun→MetricSnapshot），列为独立后续阶段。
 
-### R4 验收（本地已完成，CI 进行中）
+### R4 验收（已完成）
 
 - HTTP 级端到端 4 项（TestClient）：模板下载 PK 魔数、上传→概览→cockpit→余额→删除全链、不平衡整批拒绝含行级定位、数据集清单——全过。
 - 后端 21 项单测 + 4 项 e2e 全绿；ruff/mypy 干净；前端 213 项 vitest 全绿、typecheck/build 通过。
 - 契约首轮失败（openapi.json 未随 importer 路由再生成），`make contracts` 修复后推送。
-- 准确 SHA CI：main `3d6e1fb3`（run `40627155163`）全部 job success，**工作包关闭**。
-- 后续阶段（不在本包）：九页驾驶舱全量接线需 AnalysisRun→MetricSnapshot 归一化管线设计。
+- 准确 SHA CI：main `3d6e1fb3`（run `40627155163`）全部 job success。
 
-### R4 验收
+### R5 九页驾驶舱全量接线（设计定稿，待实施）
 
-- 端到端：下载模板 → 填入样例数据 → 导入 → 九页驾驶舱出数 → 导出报告数值一致。
-- 异常路径：不平衡文件被拒且错误定位到行。
-- 浏览器验收 + 准确 SHA CI 全绿。
+**目标**：导入账套经归一化管线升格为治理发布链（AnalysisRun→MetricSnapshot），九页驾驶舱自动以导入数据为活跃源；不直接改 dashboard service 伪装接通，不重复造业务事实源。
+
+**管线设计（已按代码核实，main `b4756942`）**：
+
+1. **桥接模块** `flow_api/importer/publish_chain.py`：从 `import_trial_balance_row`（Decimal 已校验）构造 `CanonicalPackage`（`data_contract/records.py`）——BatchRecord（分析窗口=数据集期间范围，场景码 ACTUAL/BUDGET）、PeriodRecord（`period` 列 `YYYY-MM` 与 `month_key` 格式直通）、单主体 OrganizationRecord、五个管理科目（TB_REVENUE/TB_EXPENSE/TB_ASSET/TB_LIABILITY/TB_EQUITY，按科目类别聚合）、FinancialActualRecord（期间×科目：损益贷方=收入、损益借方=费用、三类期末余额按方向）。`_validate_package` 仅校验存在行引用完整性，空维度元组合法。
+2. **canonical 直写**：复用 `data_contract/persistence.load_canonical_package` 写 Period/Organization/ManagementAccount/FactFinancialActual + SourceRecord 溯源；`version.summary["batch"]` 由包元数据自动写入（`MetricSourceRepository.get_published_source` 的读取契约）。原始上传字节经 LocalObjectStore 留存为不可变源。
+3. **质量与发布**：勾稽校验（资产−负债−权益=0）写入 ReconciliationResult；`IntakeService.publish_import` 复用既有发布门禁（无 blocking、勾稽全过、版本与批次置 published）。
+4. **快照与运行**：`MetricSnapshotService.create_snapshot` 逐期间（新目录 `config/metrics/trial_balance_v1_metrics.yaml`，definition_set_id `flow.metrics.trial-balance.v1`）+ `AnalysisRunService.create_run`（最新期间快照，published）。
+5. **引擎最小通用化** `metrics/calculator.py` + `metrics/models.py`：MetricSpec 增可选 `financial_account` 声明；计算器财务科目绑定 = 显式声明 or 既有 `_FINANCIAL_ACCOUNTS` 兜底（**flow_v1 目录与 YAML 不动 → definition hash/fingerprint 不变 → 大麦链零扰动**）；operating/AR/dso 块加 specs 成员守卫；`direct_codes` 改为固定序+目录声明财务基座按 specs 成员过滤；存量科目 `aggregation: closing_balance`，损益发生额 `flow`。
+6. **指标口径对齐**：目录 7 指标与 `normalization.derive_metrics` 同码同式（revenue/total_expenses/net_profit/total_assets/total_liabilities/total_equity/debt_ratio）；**口径一致性验收 = 治理链快照值 == 直读派生值（等价测试）**。
+7. **删除与活跃源语义**：dataset 删除级联下线其发布链（batch 名 `import-dataset-{dataset_id}` 定位；链行删除，原始字节留存不可变对象存储）；`DashboardSourceRepository.get_latest` 按期间最新优先，导入期间晚于大麦（2023-03）自然成为活跃源；数据集概览 API 报告 `active` 布尔，向导如实呈现。
+
+**九页口径**：九页（/cockpit 总览+7 子模块 + /data/import）全部以导入数据集快照为数据契约；科目余额表可推导的指标出真数，不可推导（毛利率/DSO/经营现金流/客户维度）如实 unavailable 灰态（D054 不虚构）；趋势序列按数据集期间出线。
+
+**验收**：
+- 等价测试：TB 目录快照值 == derive_metrics 直读值（七项全等）。
+- HTTP e2e：上传合法样例账套 → 发布链 → `/api/dashboard/overview` 返回导入 revenue 与新 snapshot_id → metrics 端点与快照等值 → 删除数据集 → 总览回落（无导入链时回落大麦演示或如实无源）。
+- 回归：flow_v1 既有快照/指纹不受引擎通用化影响（大麦测试全绿）。
+- 契约再生成（make contracts）；前端 vitest/typecheck/build；六门禁。
+
+**不做什么**：不改 dashboard service 与 CARD_DEFINITIONS；不做利润表/流水模板接线（后续迭代）；不做自动科目映射 AI；不动大麦演示链路数据。
 
 ## 不做什么
 
