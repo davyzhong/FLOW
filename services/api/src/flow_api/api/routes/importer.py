@@ -84,6 +84,15 @@ def dataset_balances(dataset_id: str) -> Any:
     return {"dataset_id": dataset_id, "rows": store.dataset_balances(dataset_id)}
 
 
+@router.get("/dataset/{dataset_id}/overview")
+def dataset_overview(dataset_id: str) -> Any:
+    store = _get_store()
+    overview = store.dataset_overview(dataset_id)
+    if overview is None:
+        raise HTTPException(status_code=404, detail="dataset not found")
+    return overview
+
+
 @router.delete("/dataset/{dataset_id}")
 def delete_dataset(dataset_id: str) -> Any:
     deleted = _get_store().delete_dataset(dataset_id)

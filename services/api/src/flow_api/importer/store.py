@@ -9,7 +9,7 @@ from datetime import datetime
 from decimal import Decimal
 from typing import Any
 
-from sqlalchemy import create_engine, select
+from sqlalchemy import select
 from sqlalchemy.orm import Session, sessionmaker
 
 from flow_api.importer.validation import ValidationResult
@@ -175,6 +175,33 @@ class ImportStore:
             )
         return bool(deleted)
 
+    def dataset_overview(self, dataset_id: str) -> dict[str, Any] | None:
+        """从科目余额表直接聚合的概览口径（不进治理发布链，只读校验视图）。
 
-def default_store(database_url: str) -> ImportStore:
-    return ImportStore(create_engine(database_url))
+        资产合计=期末余额方向为借且类别为资产的行合计；负债/权益同理。
+        勾稽校验=资产 −(负债+权益)，理想为 0（不等说明科目类别标注有误）。
+        """
+        balances = self.dataset_balances(dataset_id)
+        if not balances:
+            return None
+        assets = liabilities = equity = Decimal("0")
+        periods: set[str] = set()
+        for row in balances:
+            periods.add(row["period"])
+            closing = row["closing_balance"]
+            category = row["account_category"]
+            if category == "资产":
+                assets += closing
+            elif category == "负债":
+                liabilities += closing
+            elif category == "权益":
+                equity += closing
+        return {
+            "dataset_id": dataset_id,
+            "periods": sorted(periods),
+            "account_count": len(balances),
+            "total_assets": str(assets),
+            "total_liabilities": str(liabilities),
+            "total_equity": str(equity),
+            "identity_check": str(assets - liabilities - equity),
+        }

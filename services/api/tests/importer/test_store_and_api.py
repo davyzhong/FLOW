@@ -91,3 +91,18 @@ def _errors(outcome: object) -> list[dict[str, str]]:
     from flow_api.importer.service import collect_errors
 
     return collect_errors(outcome)  # type: ignore[arg-type]
+
+
+def test_dataset_overview_aggregates_categories(store: ImportStore) -> None:
+    outcome = import_workbook(store, _valid_workbook_bytes(), "概览账套", "o.xlsx")
+    overview = store.dataset_overview(outcome.dataset_id)  # type: ignore[arg-type]
+    assert overview is not None
+    assert overview["total_assets"] == "12000"
+    assert overview["total_liabilities"] == "12000"
+    assert overview["total_equity"] == "0"
+    assert Decimal(overview["identity_check"]) == Decimal("0")
+    assert overview["periods"] == ["2025-01"]
+
+
+def test_dataset_overview_missing_returns_none(store: ImportStore) -> None:
+    assert store.dataset_overview("nonexistent") is None
