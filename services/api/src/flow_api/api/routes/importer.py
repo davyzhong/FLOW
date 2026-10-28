@@ -84,6 +84,17 @@ def dataset_balances(dataset_id: str) -> Any:
     return {"dataset_id": dataset_id, "rows": store.dataset_balances(dataset_id)}
 
 
+@router.get("/dataset/{dataset_id}/cockpit")
+def dataset_cockpit(dataset_id: str) -> Any:
+    from flow_api.importer.cockpit_view import cockpit_overview
+
+    store = _get_store()
+    view = cockpit_overview(store, dataset_id)
+    if view is None:
+        raise HTTPException(status_code=404, detail="dataset not found")
+    return view
+
+
 @router.get("/dataset/{dataset_id}/overview")
 def dataset_overview(dataset_id: str) -> Any:
     store = _get_store()

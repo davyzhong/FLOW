@@ -106,3 +106,33 @@ def test_dataset_overview_aggregates_categories(store: ImportStore) -> None:
 
 def test_dataset_overview_missing_returns_none(store: ImportStore) -> None:
     assert store.dataset_overview("nonexistent") is None
+
+
+def test_cockpit_overview_kpis(store: ImportStore) -> None:
+    from flow_api.importer.cockpit_view import cockpit_overview
+
+    rows = [
+        {"会计期间": "2025-01", "科目编码": "1001", "科目名称": "库存现金", "科目类别": "资产",
+         "方向": "借", "期初余额": "0", "本期借方发生额": "0", "本期贷方发生额": "0", "期末余额": "50000"},
+        {"会计期间": "2025-01", "科目编码": "2001", "科目名称": "短期借款", "科目类别": "负债",
+         "方向": "贷", "期初余额": "0", "本期借方发生额": "0", "本期贷方发生额": "0", "期末余额": "30000"},
+        {"会计期间": "2025-01", "科目编码": "4001", "科目名称": "实收资本", "科目类别": "权益",
+         "方向": "贷", "期初余额": "0", "本期借方发生额": "0", "本期贷方发生额": "0", "期末余额": "20000"},
+        {"会计期间": "2025-01", "科目编码": "6001", "科目名称": "主营业务收入", "科目类别": "损益",
+         "方向": "贷", "期初余额": "0", "本期借方发生额": "0", "本期贷方发生额": "80000", "期末余额": "0"},
+        {"会计期间": "2025-01", "科目编码": "6401", "科目名称": "主营业务成本", "科目类别": "损益",
+         "方向": "借", "期初余额": "0", "本期借方发生额": "60000", "本期贷方发生额": "0", "期末余额": "0"},
+    ]
+    from flow_api.importer.validation import validate_trial_balance
+    result = validate_trial_balance(rows)
+    assert result.ok, result.errors
+    dataset_id = store.save_dataset("KPI 账套", "k.xlsx", result, None)
+    view = cockpit_overview(store, dataset_id)
+    assert view is not None
+    kpis = {k["code"]: k["value"] for k in view["kpi"]}
+    assert kpis["total_assets"] == "50000"
+    assert kpis["total_liabilities"] == "30000"
+    assert kpis["total_equity"] == "20000"
+    assert kpis["net_profit"] == "20000"
+    assert kpis["debt_ratio"] == "0.6000"
+    assert view["identity_check"]["passed"] is True
