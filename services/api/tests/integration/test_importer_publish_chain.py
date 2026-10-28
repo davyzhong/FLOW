@@ -101,6 +101,19 @@ def _expected_period_metrics(period: str) -> dict[str, Decimal]:
     }
 
 
+def _expected_detail_metrics(period: str) -> dict[str, Decimal]:
+    """M1 结构指标期望：样例科目按前缀映射组独立复算（组内方向净额）。
+
+    样例只有 1001/1002（货币资金组）命中——其余组无命中科目，
+    事实缺席 → 指标缺席（不写 0 冒充真实余额）。
+    """
+    cash = Decimal("0")
+    for code, _name, category, direction, _opening, _debit, _credit, closing in _ROWS[period]:
+        if code.startswith(("1001", "1002")) and category == "资产":
+            cash += Decimal(closing) if direction == "借" else -Decimal(closing)
+    return {"cash": cash}
+
+
 def _snapshot_values(session: Session, snapshot_id: str) -> dict[str, Decimal]:
     """无维度、actual_month 口径的快照值（与总览 total scope 匹配粒度一致）。"""
     rows = session.execute(
@@ -178,12 +191,13 @@ def test_publish_chain_equivalence_and_dashboard_switch(chain_env) -> None:
     assert receipt["analysis_run_status"] == "published"
     assert receipt["is_active_source"] is True
 
-    # 口径等价：逐期间快照值 == 独立复算期望值
+    # 口径等价：逐期间快照值 == 独立复算期望值（7 项基线 + 5 项 M1 结构指标）
     for period, snapshot_id in zip(_PERIODS, receipt["metric_snapshot_ids"], strict=True):
         expected = _expected_period_metrics(period)
+        detail_expected = _expected_detail_metrics(period)
         actual = _snapshot_values(session, snapshot_id)
-        assert set(actual) == set(expected), (period, set(actual))
-        for code, expected_value in expected.items():
+        assert set(actual) == set(expected) | set(detail_expected), (period, set(actual))
+        for code, expected_value in {**expected, **detail_expected}.items():
             assert actual[code] == expected_value, (period, code, actual[code])
 
     # 流量指标：全部期间快照之和 == derive_metrics 直读全期合计

@@ -1,0 +1,30 @@
+# 导入账套科目级映射 v1（M1，work_item FLOW-WI-IMPORTER-RICH-METRICS-20261028-001）
+#
+# 规则：
+# - 按科目编码前缀匹配（prefix 顺序即优先级，一个科目只归最先命中的组）；
+# - 组内金额 = Σ(方向匹配组的期末余额) − Σ(反向期末余额)——固定资产净额
+#   （1601 借向原值 − 1602/1603 贷向折旧与减值）由此直接成立；
+# - 未命中任何组的科目回落类别聚合（R5 五 TB_* 合计），基线零扰动；
+# - 映射只做资产负债结构；损益明细一律来自利润表（不双源）。
+version: account-mapping.v1
+groups:
+  - management_account: TB_CASH
+    name: 货币资金
+    direction: 借
+    code_prefixes: ["1001", "1002", "1012", "1021", "1031"]
+  - management_account: TB_AR
+    name: 应收账款
+    direction: 借
+    code_prefixes: ["1122", "1123"]
+  - management_account: TB_INVENTORY
+    name: 存货
+    direction: 借
+    code_prefixes: ["1403", "1405", "1406", "1411"]
+  - management_account: TB_FIXED_ASSET
+    name: 固定资产净额
+    direction: 借
+    code_prefixes: ["1601", "1602", "1603", "1604"]
+  - management_account: TB_AP
+    name: 应付账款
+    direction: 贷
+    code_prefixes: ["2202", "2203"]

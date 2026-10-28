@@ -107,3 +107,76 @@ metrics:
     output_scale: 6
     allowed_dimension_sets: *tb_dimensions
     budget_dimension_sets: []
+
+  # —— M1 科目级映射（资产负债结构；前缀映射组、组内方向净额）——
+  # 口径：明细组来自科目编码前缀映射（config/importer/account_mapping_v1.yaml），
+  # 未命中科目不进组；类别合计（上表）不变。
+  - metric_code: cash
+    version: 1
+    name: 货币资金
+    business_definition: 货币资金组科目期末方向净额（现金/银行存款等前缀组）。
+    formula: sum_financial_account_amount
+    financial_account: TB_CASH
+    dependencies: []
+    aggregation: closing_balance
+    time_behavior: balance
+    unit: CNY
+    output_scale: 4
+    allowed_dimension_sets: *tb_dimensions
+    budget_dimension_sets: []
+
+  - metric_code: receivables
+    version: 1
+    name: 应收账款
+    business_definition: 应收账款组科目期末方向净额。
+    formula: sum_financial_account_amount
+    financial_account: TB_AR
+    dependencies: []
+    aggregation: closing_balance
+    time_behavior: balance
+    unit: CNY
+    output_scale: 4
+    allowed_dimension_sets: *tb_dimensions
+    budget_dimension_sets: []
+
+  - metric_code: inventory
+    version: 1
+    name: 存货
+    business_definition: 存货组科目期末方向净额。
+    formula: sum_financial_account_amount
+    financial_account: TB_INVENTORY
+    dependencies: []
+    aggregation: closing_balance
+    time_behavior: balance
+    unit: CNY
+    output_scale: 4
+    allowed_dimension_sets: *tb_dimensions
+    budget_dimension_sets: []
+
+  - metric_code: fixed_assets
+    version: 1
+    name: 固定资产净额
+    business_definition: 固定资产组期末方向净额（借向原值−贷向折旧/减值）。
+    formula: sum_financial_account_amount
+    financial_account: TB_FIXED_ASSET
+    dependencies: []
+    aggregation: closing_balance
+    time_behavior: balance
+    unit: CNY
+    output_scale: 4
+    allowed_dimension_sets: *tb_dimensions
+    budget_dimension_sets: []
+
+  - metric_code: accounts_payable
+    version: 1
+    name: 应付账款
+    business_definition: 应付账款组科目期末方向净额。
+    formula: sum_financial_account_amount
+    financial_account: TB_AP
+    dependencies: []
+    aggregation: closing_balance
+    time_behavior: balance
+    unit: CNY
+    output_scale: 4
+    allowed_dimension_sets: *tb_dimensions
+    budget_dimension_sets: []

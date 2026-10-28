@@ -45,6 +45,7 @@ from flow_api.data_contract.records import (
     PeriodRecord,
     ScenarioVersionRecord,
 )
+from flow_api.importer.account_mapping import load_account_groups, map_balance_rows
 from flow_api.importer.store import ImportStore
 from flow_api.infrastructure.local_object_store import LocalObjectStore
 from flow_api.infrastructure.models.analytics import (
@@ -161,11 +162,21 @@ def _build_package(
     dataset_name: str,
     balances: list[dict[str, object]],
 ) -> tuple[CanonicalPackage, Decimal]:
-    """构造 CanonicalPackage；返回包与最新期间期末勾稽值（资产−负债−权益）。"""
+    """构造 CanonicalPackage；返回包与最新期间期末勾稽值（资产−负债−权益）。
+
+    事实三层（M1 起）：① 类别五科目（R5 基线，等价测试锚定）；② 科目级明细组
+    （前缀映射、组内方向净额，未命中科目不进组）；③ 后续阶段（利润表 IS_* /
+    银行流水现金口径）。
+    """
     periods = sorted({str(row["period"]) for row in balances})
     amounts = _period_amounts(balances)
     last = amounts[periods[-1]]
     identity = last["TB_ASSET"] - last["TB_LIABILITY"] - last["TB_EQUITY"]
+    groups = load_account_groups(
+        _repository_root() / "config/importer/account_mapping_v1.yaml"
+    )
+    mapping = map_balance_rows(balances, groups)
+    detail_periods = sorted(mapping.amounts)
     package = CanonicalPackage(
         batch=BatchRecord(
             batch_code=batch_name_for(dataset_id),
@@ -200,6 +211,12 @@ def _build_package(
         management_accounts=tuple(
             ManagementAccountRecord(code=code, name=name, category=label)
             for label, code, name in _CATEGORY_ACCOUNTS
+        )
+        + tuple(
+            ManagementAccountRecord(
+                code=group.management_account, name=group.name, category="明细组"
+            )
+            for group in groups
         ),
         scenario_versions=(
             ScenarioVersionRecord(code=_ACTUAL_SCENARIO, name="实际", scenario_type="actual"),
@@ -219,6 +236,24 @@ def _build_package(
             )
             for period in periods
             for code in _ACCOUNT_CODES
+        )
+        + tuple(
+            FinancialActualRecord(
+                record_id=str(
+                    uuid.uuid5(
+                        NAMESPACE_URL,
+                        f"flow:importer:{dataset_id}:{period}:{group.management_account}",
+                    )
+                ),
+                month_key=period,
+                organization_code=_ORG_CODE,
+                management_account_code=group.management_account,
+                amount=mapping.amounts[period][group.management_account],
+            )
+            # 空组不写 0 金额事实（缺席≠零：0 会冒充真实余额并让环比 0/0 硬崩）
+            for period in detail_periods
+            for group in groups
+            if group.management_account in mapping.matched_by_period.get(period, set())
         ),
         monthly_budgets=(),
         ar_collections=(),
