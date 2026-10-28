@@ -216,6 +216,7 @@ export type ImporterUploadOk = {
   dataset_id: string;
   trial_balance_rows: number;
   income_statement_rows: number;
+  bank_statement_rows: number;
   balance_summary: Record<string, string>;
 };
 

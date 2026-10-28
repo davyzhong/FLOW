@@ -12,6 +12,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from decimal import Decimal
 from pathlib import Path
+from typing import cast
 
 import yaml
 
@@ -81,7 +82,7 @@ def map_balance_rows(
     for row in balances:
         period = str(row["period"])
         account_code = str(row["account_code"])
-        closing = row["closing_balance"]  # type: ignore[union-attr]
+        closing = row["closing_balance"]
         direction = str(row["direction"])
         group = _match_prefix(account_code, groups)
         if group is None:
@@ -91,8 +92,9 @@ def map_balance_rows(
             period,
             {group.management_account: _ZERO for group in groups},
         )
-        signed = closing if direction == group.direction else -closing  # type: ignore[operator]
-        bucket[group.management_account] += signed  # type: ignore[operator]
+        amount = cast(Decimal, closing)
+        signed = amount if direction == group.direction else -amount
+        bucket[group.management_account] += signed
         matched_rows[group.management_account] = matched_rows.get(group.management_account, 0) + 1
         matched_by_period.setdefault(period, set()).add(group.management_account)
     return MappingResult(

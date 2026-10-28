@@ -83,6 +83,17 @@ _INCOME_ROWS: dict[str, tuple[tuple[str, str], ...]] = {
         ("净利润", "3000"),
     ),
 }
+# 银行流水样例（M3；余额连续：期初锚 100000 → 112000 → 104000 → …）
+_BANK_ROWS: dict[str, tuple[tuple[str, str, str, str], ...]] = {
+    "2025-01": (
+        ("2025-01-05", "收到货款", "12000", "0", "112000"),
+        ("2025-01-18", "支付房租", "0", "8000", "104000"),
+    ),
+    "2025-02": (
+        ("2025-02-06", "收到货款", "15000", "0", "119000"),
+        ("2025-02-20", "支付工资", "0", "6000", "113000"),
+    ),
+}
 _TB_HEADER = (
     "会计期间",
     "科目编码",
@@ -95,6 +106,7 @@ _TB_HEADER = (
     "期末余额",
 )
 _IS_HEADER = ("会计期间", "项目", "本期金额", "本年累计金额")
+_BANK_HEADER = ("交易日期", "摘要", "收入金额", "支出金额", "账户余额")
 
 
 def _expected_period_metrics(period: str) -> dict[str, Decimal]:
@@ -140,6 +152,19 @@ def _expected_income_metrics(period: str) -> dict[str, Decimal]:
     }
 
 
+def _expected_cash_metrics(period: str) -> dict[str, Decimal]:
+    """M3 现金口径期望：银行流水按期间聚合（收付实现制）。"""
+    inflow = outflow = Decimal("0")
+    for _date, _summary, income, expense, _balance in _BANK_ROWS[period]:
+        inflow += Decimal(income)
+        outflow += Decimal(expense)
+    return {
+        "cash_inflow": inflow,
+        "cash_outflow": outflow,
+        "net_cash_flow": inflow - outflow,
+    }
+
+
 def _expected_detail_metrics(period: str) -> dict[str, Decimal]:
     """M1 结构指标期望：样例科目按前缀映射组独立复算（组内方向净额）。
 
@@ -167,8 +192,14 @@ def _snapshot_values(session: Session, snapshot_id: str) -> dict[str, Decimal]:
     return {code: Decimal(value) for code, value in rows}
 
 
-def _workbook_bytes(*, with_income: bool = False, net_override: str | None = None) -> bytes:
-    """样例工作簿；with_income 附带利润表（net_override 用于勾稽拒绝用例）。"""
+def _workbook_bytes(
+    *,
+    with_income: bool = False,
+    net_override: str | None = None,
+    with_bank: bool = False,
+    break_bank_balance: bool = False,
+) -> bytes:
+    """样例工作簿；可选附利润表（net_override 用于勾稽拒绝）与银行流水。"""
     workbook = Workbook()
     ws = workbook.active
     ws.title = "科目余额表"
@@ -184,6 +215,14 @@ def _workbook_bytes(*, with_income: bool = False, net_override: str | None = Non
                 if net_override is not None and item == "净利润":
                     amount = net_override
                 ws_income.append([period, item, amount, amount])
+    if with_bank:
+        ws_bank = workbook.create_sheet("银行流水")
+        ws_bank.append(list(_BANK_HEADER))
+        for period in _PERIODS:
+            for date_text, summary, income, expense, balance in _BANK_ROWS[period]:
+                if break_bank_balance and summary == "支付房租":
+                    balance = "999999"
+                ws_bank.append([date_text, summary, income, expense, balance])
     buffer = BytesIO()
     workbook.save(buffer)
     return buffer.getvalue()
@@ -229,7 +268,7 @@ def _upload(client: TestClient, content: bytes, name: str) -> str:
 
 def test_publish_chain_equivalence_and_dashboard_switch(chain_env) -> None:
     client, session = chain_env
-    dataset_id = _upload(client, _workbook_bytes(with_income=True), "接线账套")
+    dataset_id = _upload(client, _workbook_bytes(with_income=True, with_bank=True), "接线账套")
 
     published = client.post(f"/api/v1/importer/dataset/{dataset_id}/publish", headers=_HEADERS)
     assert published.status_code == 200, published.text
@@ -244,15 +283,16 @@ def test_publish_chain_equivalence_and_dashboard_switch(chain_env) -> None:
         expected = _expected_period_metrics(period)
         detail_expected = _expected_detail_metrics(period)
         income_expected = _expected_income_metrics(period)
+        cash_expected = _expected_cash_metrics(period)
         actual = _snapshot_values(session, snapshot_id)
-        assert set(actual) == set(expected) | set(detail_expected) | set(income_expected), (
-            period,
-            set(actual),
-        )
+        assert set(actual) == (
+            set(expected) | set(detail_expected) | set(income_expected) | set(cash_expected)
+        ), (period, set(actual))
         for code, expected_value in {
             **expected,
             **detail_expected,
             **income_expected,
+            **cash_expected,
         }.items():
             assert actual[code] == expected_value, (period, code, actual[code])
 
@@ -287,9 +327,10 @@ def test_publish_chain_equivalence_and_dashboard_switch(chain_env) -> None:
     # M2：利润表接线后毛利率卡出真数（P2 毛利率 4600/7000）
     margin_card = next(card for card in overview.metric_cards if card.metric_code == "gross_margin")
     assert margin_card.primary.status == "available"
-    assert Decimal(str(margin_card.primary.exact_value)) == _expected_income_metrics("2025-02")[
-        "gross_margin"
-    ]
+    assert (
+        Decimal(str(margin_card.primary.exact_value))
+        == _expected_income_metrics("2025-02")["gross_margin"]
+    )
     for code in ("orders", "operating_cash_flow"):
         card = next(c for c in overview.metric_cards if c.metric_code == code)
         assert card.primary.status == "unavailable", code
@@ -303,6 +344,10 @@ def test_publish_is_idempotent(chain_env) -> None:
     assert first["batch_id"] == second["batch_id"]
     assert first["analysis_run_id"] == second["analysis_run_id"]
     assert first["metric_snapshot_ids"] == second["metric_snapshot_ids"]
+
+    # 无流水工作簿：现金口径指标缺席（不虚构）
+    absent = _snapshot_values(_session, first["metric_snapshot_ids"][0])
+    assert "cash_inflow" not in absent and "net_cash_flow" not in absent
 
 
 def test_identity_mismatch_blocks_publish(chain_env) -> None:
@@ -318,6 +363,24 @@ def test_identity_mismatch_blocks_publish(chain_env) -> None:
         .count()
         == 0
     )
+
+
+def test_bank_balance_discontinuity_rejected_at_upload(chain_env) -> None:
+    """M3 上传门禁：流水余额不连续整批拒绝且逐行定位。"""
+    client, _session = chain_env
+    response = client.post(
+        "/api/v1/importer/dataset?name=流水断档账套",
+        files={
+            "file": (
+                "bank.xlsx",
+                _workbook_bytes(with_bank=True, break_bank_balance=True),
+            )
+        },
+        headers=_HEADERS,
+    )
+    body = response.json()
+    assert body["ok"] is False
+    assert any("余额不连续" in error["message"] for error in body["errors"])
 
 
 def test_income_net_profit_mismatch_blocks_publish(chain_env) -> None:

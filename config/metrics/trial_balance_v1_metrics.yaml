@@ -279,3 +279,47 @@ metrics:
     output_scale: 4
     allowed_dimension_sets: *tb_dimensions
     budget_dimension_sets: []
+
+  # —— M3 银行流水接线（现金收付实现制口径）——
+  # 口径红线：不绑 dashboard 的 operating_cash_flow（权责发生制 OCF），
+  # 现金流量口径只出以下三项；无流水时如实缺席。
+  - metric_code: cash_inflow
+    version: 1
+    name: 现金流入
+    business_definition: 银行流水收入金额期间合计（现金收付口径）。
+    formula: sum_financial_account_amount
+    financial_account: CASH_INFLOW
+    dependencies: []
+    aggregation: sum
+    time_behavior: flow
+    unit: CNY
+    output_scale: 4
+    allowed_dimension_sets: *tb_dimensions
+    budget_dimension_sets: []
+
+  - metric_code: cash_outflow
+    version: 1
+    name: 现金流出
+    business_definition: 银行流水支出金额期间合计（现金收付口径）。
+    formula: sum_financial_account_amount
+    financial_account: CASH_OUTFLOW
+    dependencies: []
+    aggregation: sum
+    time_behavior: flow
+    unit: CNY
+    output_scale: 4
+    allowed_dimension_sets: *tb_dimensions
+    budget_dimension_sets: []
+
+  - metric_code: net_cash_flow
+    version: 1
+    name: 净现金流
+    business_definition: 现金流入减现金流出（现金收付口径，非权责 OCF）。
+    formula: subtract
+    dependencies: [cash_inflow, cash_outflow]
+    aggregation: sum
+    time_behavior: flow
+    unit: CNY
+    output_scale: 4
+    allowed_dimension_sets: *tb_dimensions
+    budget_dimension_sets: []

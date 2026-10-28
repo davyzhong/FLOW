@@ -138,6 +138,7 @@ def _artifact_bytes(
     dataset_name: str,
     balances: list[dict[str, object]],
     income_rows: list[dict[str, object]] | None = None,
+    bank_rows: list[dict[str, object]] | None = None,
 ) -> bytes:
     """已校验行的确定性 JSON 序列化（sort_keys + 紧凑分隔符，同数据同 SHA）。"""
     payload = {
@@ -166,6 +167,17 @@ def _artifact_bytes(
             }
             for row in (income_rows or [])
         ],
+        "bank_statement_rows": [
+            {
+                "period": row["period"],
+                "trade_date": row["trade_date"],
+                "summary": row["summary"],
+                "income_amount": str(row["income_amount"]),
+                "expense_amount": str(row["expense_amount"]),
+                "account_balance": str(row["account_balance"]),
+            }
+            for row in (bank_rows or [])
+        ],
     }
     return json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode(
         "utf-8"
@@ -178,6 +190,19 @@ class _PackageDraft:
     identity: Decimal
     # M2 净利润勾稽：(期间, TB 净利润, IS 净利润) 差异超容差的清单
     net_mismatches: tuple[tuple[str, str, str], ...]
+
+
+def _bank_flow_by_period(
+    bank_rows: list[dict[str, object]] | None,
+) -> dict[str, dict[str, Decimal]]:
+    """期间 × 现金收付口径（CASH_INFLOW/CASH_OUTFLOW）聚合（M3）。"""
+    flows: dict[str, dict[str, Decimal]] = {}
+    for row in bank_rows or []:
+        period = str(row["period"])
+        bucket = flows.setdefault(period, {"CASH_INFLOW": _ZERO, "CASH_OUTFLOW": _ZERO})
+        bucket["CASH_INFLOW"] += row["income_amount"]  # type: ignore[operator]
+        bucket["CASH_OUTFLOW"] += row["expense_amount"]  # type: ignore[operator]
+    return flows
 
 
 def _tb_net_profit_by_period(balances: list[dict[str, object]]) -> dict[str, Decimal]:
@@ -196,6 +221,7 @@ def _build_package(
     dataset_name: str,
     balances: list[dict[str, object]],
     income_rows: list[dict[str, object]] | None = None,
+    bank_rows: list[dict[str, object]] | None = None,
 ) -> _PackageDraft:
     """构造 CanonicalPackage；返回包与勾稽信息。
 
@@ -213,7 +239,8 @@ def _build_package(
     detail_periods = sorted(mapping.amounts)
 
     income = map_income_items(income_rows or [])
-    periods = sorted({*tb_periods, *income.periods})
+    bank_flows = _bank_flow_by_period(bank_rows)
+    periods = sorted({*tb_periods, *income.periods, *bank_flows})
 
     # M2 净利润勾稽：期间交集内 |TB 净利润 − IS 净利润| > 0.01 记不一致
     tb_nets = _tb_net_profit_by_period(balances)
@@ -272,6 +299,14 @@ def _build_package(
             for item, account in INCOME_ITEM_ACCOUNTS
             # 只登记实际映射到的 IS_* 科目（空项目不进包）
             if any(account in income.amounts[period] for period in income.periods)
+        )
+        + tuple(
+            ManagementAccountRecord(code=code, name=name, category="现金口径")
+            for code, name in (
+                ("CASH_INFLOW", "现金流入（银行流水收付口径）"),
+                ("CASH_OUTFLOW", "现金流出（银行流水收付口径）"),
+            )
+            if bank_flows
         ),
         scenario_versions=(
             ScenarioVersionRecord(code=_ACTUAL_SCENARIO, name="实际", scenario_type="actual"),
@@ -325,6 +360,22 @@ def _build_package(
             )
             for period in income.periods
             for account in income.amounts[period]
+        )
+        + tuple(
+            FinancialActualRecord(
+                record_id=str(
+                    uuid.uuid5(
+                        NAMESPACE_URL,
+                        f"flow:importer:{dataset_id}:{period}:{code}",
+                    )
+                ),
+                month_key=period,
+                organization_code=_ORG_CODE,
+                management_account_code=code,
+                amount=bank_flows[period][code],
+            )
+            for period in bank_flows
+            for code in ("CASH_INFLOW", "CASH_OUTFLOW")
         ),
         monthly_budgets=(),
         ar_collections=(),
@@ -346,10 +397,17 @@ def publish_dataset(session: Session, store: ImportStore, dataset_id: str) -> di
         return chain_receipt(session, dataset_id)
 
     income_rows = store.dataset_income_items(dataset_id)
-    draft = _build_package(dataset_id, str(dataset["name"]), balances, income_rows or None)
+    bank_rows = store.dataset_bank_transactions(dataset_id)
+    draft = _build_package(
+        dataset_id,
+        str(dataset["name"]),
+        balances,
+        income_rows or None,
+        bank_rows or None,
+    )
     package = draft.package
     uploaded = LocalObjectStore(get_settings().object_directory).put_immutable(
-        _artifact_bytes(str(dataset["name"]), balances, income_rows),
+        _artifact_bytes(str(dataset["name"]), balances, income_rows, bank_rows),
         f"{dataset_id}-trial-balance.json",
     )
 

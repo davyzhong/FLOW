@@ -11,6 +11,8 @@ from typing import Any
 from openpyxl import load_workbook
 
 from flow_api.importer.templates import (
+    BANK_STATEMENT_COLUMNS,
+    BANK_STATEMENT_SHEET,
     INCOME_STATEMENT_COLUMNS,
     INCOME_STATEMENT_SHEET,
     TRIAL_BALANCE_COLUMNS,
@@ -67,3 +69,12 @@ def read_income_statement(data: bytes) -> list[dict[str, str]] | None:
     if not has_sheet:
         return None  # 利润表可选
     return _read_sheet(data, INCOME_STATEMENT_SHEET, INCOME_STATEMENT_COLUMNS)
+
+
+def read_bank_statement(data: bytes) -> list[dict[str, str]] | None:
+    workbook = load_workbook(BytesIO(data), read_only=True)
+    has_sheet = BANK_STATEMENT_SHEET in workbook.sheetnames
+    workbook.close()
+    if not has_sheet:
+        return None  # 银行流水可选（M3）
+    return _read_sheet(data, BANK_STATEMENT_SHEET, BANK_STATEMENT_COLUMNS)

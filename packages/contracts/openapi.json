@@ -45,7 +45,8 @@
             "schema": {
               "enum": [
                 "trial_balance",
-                "income_statement"
+                "income_statement",
+                "bank_statement"
               ],
               "type": "string",
               "title": "Sheet Kind"

@@ -15,7 +15,7 @@ from flow_api.importer.templates import build_template_xlsx
 
 router = APIRouter(prefix="/importer", tags=["importer"])
 
-_SheetKind = Literal["trial_balance", "income_statement"]
+_SheetKind = Literal["trial_balance", "income_statement", "bank_statement"]
 
 _STORE: Any = None  # 延迟初始化（测试可注入隔离 engine）
 
@@ -39,7 +39,11 @@ def set_store(store: Any) -> None:
 def download_template(sheet_kind: _SheetKind) -> Any:
     from fastapi.responses import Response
 
-    sheet = {"trial_balance": "科目余额表", "income_statement": "利润表"}[sheet_kind]
+    sheet = {
+        "trial_balance": "科目余额表",
+        "income_statement": "利润表",
+        "bank_statement": "银行流水",
+    }[sheet_kind]
     data = build_template_xlsx(sheet)
     return Response(
         content=data,
@@ -67,6 +71,9 @@ async def upload_dataset(file: UploadFile, name: str = "") -> Any:
         "trial_balance_rows": len(outcome.trial_balance.rows),
         "income_statement_rows": (
             len(outcome.income_statement.rows) if outcome.income_statement else 0
+        ),
+        "bank_statement_rows": (
+            len(outcome.bank_statement.rows) if outcome.bank_statement else 0
         ),
         "balance_summary": outcome.trial_balance.balance_summary,
     }

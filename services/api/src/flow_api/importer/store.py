@@ -67,6 +67,19 @@ class ImportStore:
             sa.Column("ytd_amount", sa.String(64), nullable=False),
             sa.Column("row_index", sa.Integer(), nullable=False),
         )
+        self._bank_rows = sa.Table(
+            "import_bank_statement_row",
+            meta,
+            sa.Column("id", sa.String(36), primary_key=True),
+            sa.Column("dataset_id", sa.String(36), nullable=False),
+            sa.Column("period", sa.String(7), nullable=False),
+            sa.Column("trade_date", sa.String(10), nullable=False),
+            sa.Column("summary", sa.String(512), nullable=False),
+            sa.Column("income_amount", sa.String(64), nullable=False),
+            sa.Column("expense_amount", sa.String(64), nullable=False),
+            sa.Column("account_balance", sa.String(64), nullable=False),
+            sa.Column("row_index", sa.Integer(), nullable=False),
+        )
         meta.create_all(self._engine)
 
     def save_dataset(
@@ -75,6 +88,7 @@ class ImportStore:
         source_filename: str,
         trial_balance: ValidationResult,
         income_statement: ValidationResult | None,
+        bank_statement: ValidationResult | None = None,
     ) -> str:
         dataset_id = _new_id()
         with Session(self._engine) as session, session.begin():
@@ -113,6 +127,21 @@ class ImportStore:
                             item=row["项目"],
                             current_amount=row["本期金额"],
                             ytd_amount=row["本年累计金额"],
+                            row_index=index,
+                        )
+                    )
+            if bank_statement is not None:
+                for index, row in enumerate(bank_statement.rows, start=1):
+                    session.execute(
+                        self._bank_rows.insert().values(
+                            id=_new_id(),
+                            dataset_id=dataset_id,
+                            period=row["交易日期"][:7],
+                            trade_date=row["交易日期"],
+                            summary=row["摘要"],
+                            income_amount=row["收入金额"],
+                            expense_amount=row["支出金额"],
+                            account_balance=row["账户余额"],
                             row_index=index,
                         )
                     )
@@ -174,6 +203,26 @@ class ImportStore:
                 "item": row.item,
                 "current_amount": Decimal(row.current_amount),
                 "ytd_amount": Decimal(row.ytd_amount),
+            }
+            for row in rows
+        ]
+
+    def dataset_bank_transactions(self, dataset_id: str) -> list[dict[str, Any]]:
+        """银行流水存储行（M3）；金额读回 Decimal，period 由交易日期截取。"""
+        with Session(self._engine) as session:
+            rows = session.execute(
+                select(self._bank_rows)
+                .where(self._bank_rows.c.dataset_id == dataset_id)
+                .order_by(self._bank_rows.c.row_index)
+            ).all()
+        return [
+            {
+                "period": row.period,
+                "trade_date": row.trade_date,
+                "summary": row.summary,
+                "income_amount": Decimal(row.income_amount),
+                "expense_amount": Decimal(row.expense_amount),
+                "account_balance": Decimal(row.account_balance),
             }
             for row in rows
         ]

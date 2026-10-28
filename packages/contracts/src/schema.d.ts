@@ -4664,7 +4664,7 @@ export interface operations {
                 authorization?: string | null;
             };
             path: {
-                sheet_kind: "trial_balance" | "income_statement";
+                sheet_kind: "trial_balance" | "income_statement" | "bank_statement";
             };
             cookie?: never;
         };

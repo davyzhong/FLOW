@@ -36,6 +36,17 @@ INCOME_STATEMENT_COLUMNS: Final[tuple[str, ...]] = (
     "本年累计金额",
 )
 
+# 银行流水（M3）：现金收付口径；余额连续性校验锚定数据完整性
+BANK_STATEMENT_SHEET: Final = "银行流水"
+BANK_STATEMENT_COLUMNS: Final[tuple[str, ...]] = (
+    "交易日期",
+    "摘要",
+    "收入金额",
+    "支出金额",
+    "账户余额",
+)
+_DATE_PATTERN_ERROR: Final = "交易日期须为 YYYY-MM-DD 格式（如 2025-01-05）"
+
 PERIOD_PATTERN_ERROR: Final = "会计期间须为 YYYY-MM 格式（如 2025-01）"
 
 _SAMPLE_TRIAL_ROWS: Final[tuple[tuple[str, ...], ...]] = (
@@ -48,9 +59,15 @@ _SAMPLE_INCOME_ROWS: Final[tuple[tuple[str, ...], ...]] = (
     ("2025-01", "营业成本", "", "60000.00", "60000.00"),
 )
 
+_SAMPLE_BANK_ROWS: Final[tuple[tuple[str, ...], ...]] = (
+    ("2025-01-05", "收到货款", "12000.00", "0.00", "112000.00"),
+    ("2025-01-18", "支付房租", "0.00", "8000.00", "104000.00"),
+)
+
 _TEMPLATES: Final[dict[str, tuple[tuple[str, ...], tuple[tuple[str, ...], ...]]]] = {
     TRIAL_BALANCE_SHEET: (TRIAL_BALANCE_COLUMNS, _SAMPLE_TRIAL_ROWS),
     INCOME_STATEMENT_SHEET: (INCOME_STATEMENT_COLUMNS, _SAMPLE_INCOME_ROWS),
+    BANK_STATEMENT_SHEET: (BANK_STATEMENT_COLUMNS, _SAMPLE_BANK_ROWS),
 }
 
 

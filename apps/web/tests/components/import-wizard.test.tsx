@@ -69,6 +69,7 @@ describe("ImportWizard", () => {
       dataset_id: "ds-1",
       trial_balance_rows: 2,
       income_statement_rows: 0,
+      bank_statement_rows: 0,
       balance_summary: { 期末借方合计: "12000", 期末贷方合计: "12000" },
     });
     render(<ImportWizard />);

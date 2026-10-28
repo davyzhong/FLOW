@@ -12,6 +12,8 @@ from decimal import Decimal, InvalidOperation
 
 from flow_api.importer.templates import (
     ACCOUNT_CATEGORIES,
+    BANK_STATEMENT_COLUMNS,
+    BANK_STATEMENT_SHEET,
     DIRECTIONS,
     INCOME_STATEMENT_COLUMNS,
     INCOME_STATEMENT_SHEET,
@@ -20,8 +22,11 @@ from flow_api.importer.templates import (
 )
 
 _PERIOD_RE = re.compile(r"^\d{4}-(0[1-9]|1[0-2])$")
+_BANK_DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
 _ZERO = Decimal("0")
+# 银行流水余额连续性容差（分位）
+_BALANCE_TOLERANCE = Decimal("0.01")
 
 
 @dataclass(frozen=True, slots=True)
@@ -153,6 +158,55 @@ def validate_income_statement(rows: list[dict[str, str]]) -> ValidationResult:
     return ValidationResult(
         ok=not errors,
         sheet=INCOME_STATEMENT_SHEET,
+        errors=tuple(errors),
+        rows=tuple(parsed),
+    )
+
+
+def validate_bank_statement(rows: list[dict[str, str]]) -> ValidationResult:
+    """银行流水校验（M3）：列完整 → 日期/金额格式 → 余额连续性（整批拒绝制）。
+
+    余额连续性：余额[i] = 余额[i-1] + 收入 − 支出（容差 0.01，首行自由锚定）；
+    逐期现金流（现金收付口径）由桥接层聚合，本函数不归属会计科目。
+    """
+    errors: list[RowError] = []
+    parsed: list[dict[str, str]] = []
+    previous_balance: Decimal | None = None
+    for index, row in enumerate(rows, start=1):
+        date_text = (row.get("交易日期") or "").strip()
+        if not _BANK_DATE_RE.match(date_text):
+            errors.append(
+                RowError(index, "交易日期", "交易日期须为 YYYY-MM-DD 格式（如 2025-01-05）")
+            )
+        income = _parse_amount(row.get("收入金额", ""), index, "收入金额", errors)
+        expense = _parse_amount(row.get("支出金额", ""), index, "支出金额", errors)
+        balance = _parse_amount(row.get("账户余额", ""), index, "账户余额", errors)
+        if (row.get("摘要") or "").strip() == "":
+            errors.append(RowError(index, "摘要", "摘要不能为空"))
+        if (
+            previous_balance is not None
+            and balance is not None
+            and income is not None
+            and expense is not None
+        ):
+            expected = previous_balance + income - expense
+            if abs(balance - expected) > _BALANCE_TOLERANCE:
+                errors.append(
+                    RowError(
+                        index,
+                        "账户余额",
+                        f"余额不连续：本行 {balance} ≠ 上行 {previous_balance}"
+                        f" + 收入 {income} − 支出 {expense}",
+                    )
+                )
+        if balance is not None:
+            previous_balance = balance
+        parsed.append(
+            {column: (row.get(column) or "").strip() for column in BANK_STATEMENT_COLUMNS}
+        )
+    return ValidationResult(
+        ok=not errors,
+        sheet=BANK_STATEMENT_SHEET,
         errors=tuple(errors),
         rows=tuple(parsed),
     )

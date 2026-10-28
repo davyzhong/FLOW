@@ -119,6 +119,9 @@ export function ImportWizard() {
         {" · "}
         {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
         <a href="/api/v1/importer/template/income_statement">下载利润表模板（可选）</a>
+        {" · "}
+        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+        <a href="/api/v1/importer/template/bank_statement">下载银行流水模板（可选）</a>
       </fieldset>
 
       <fieldset>
@@ -168,6 +171,9 @@ export function ImportWizard() {
             科目余额 {uploadResult.trial_balance_rows} 行
             {uploadResult.income_statement_rows > 0
               ? ` · 利润表 ${uploadResult.income_statement_rows} 行`
+              : ""}
+            {uploadResult.bank_statement_rows > 0
+              ? ` · 银行流水 ${uploadResult.bank_statement_rows} 行`
               : ""}
             ；期间 {cockpit.periods.join("、")}
           </p>
