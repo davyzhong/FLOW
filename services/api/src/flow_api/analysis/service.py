@@ -79,9 +79,7 @@ def _revenue_cells(bundle: AnalysisSourceBundle) -> tuple[RevenueMixCell, ...]:
     for row in comparison:
         comparison_by_product[row.logistics_product_id].append(row)
     cells: list[RevenueMixCell] = []
-    for product_id in sorted(
-        set(analysis_by_product) | set(comparison_by_product), key=str
-    ):
+    for product_id in sorted(set(analysis_by_product) | set(comparison_by_product), key=str):
         analysis_rows = analysis_by_product[product_id]
         comparison_rows = comparison_by_product[product_id]
         cells.append(
@@ -131,26 +129,15 @@ def _profit_input(
         comparison_other_direct_cost=comparison_other,
         analysis_other_direct_cost=analysis_other,
         comparison_gross_profit=(
-            comparison_revenue
-            - comparison_warehouse
-            - comparison_transport
-            - comparison_other
+            comparison_revenue - comparison_warehouse - comparison_transport - comparison_other
         ),
         analysis_gross_profit=(
             analysis_revenue - analysis_warehouse - analysis_transport - analysis_other
         ),
-        comparison_operating_expense=_financial_total(
-            bundle, "OPERATING_EXPENSE", analysis=False
-        ),
-        analysis_operating_expense=_financial_total(
-            bundle, "OPERATING_EXPENSE", analysis=True
-        ),
-        comparison_operating_profit=_financial_total(
-            bundle, "OPERATING_PROFIT", analysis=False
-        ),
-        analysis_operating_profit=_financial_total(
-            bundle, "OPERATING_PROFIT", analysis=True
-        ),
+        comparison_operating_expense=_financial_total(bundle, "OPERATING_EXPENSE", analysis=False),
+        analysis_operating_expense=_financial_total(bundle, "OPERATING_EXPENSE", analysis=True),
+        comparison_operating_profit=_financial_total(bundle, "OPERATING_PROFIT", analysis=False),
+        analysis_operating_profit=_financial_total(bundle, "OPERATING_PROFIT", analysis=True),
         source_record_count=len(analysis) + len(comparison) + len(bundle.financial_rows),
     )
 
@@ -176,13 +163,21 @@ def _ar_input(bundle: AnalysisSourceBundle) -> ArCashInput:
     comparison_revenue = _sum([row.revenue for row in comparison])
     analysis_ar = _sum([row.receivable_balance for row in analysis_rows])
     comparison_ar = _sum([row.receivable_balance for row in comparison_rows])
+
+    def _dso(ar: Decimal, revenue: Decimal) -> Decimal:
+        # 无收入分母（如科目余额表导入无经营行）时 DSO 记 0；
+        # playbook 凭 source_record_count=0 走 degraded，不把 0 当真实 DSO。
+        if revenue == 0:
+            return Decimal("0")
+        return ratio(ar / revenue * Decimal("365"))
+
     return ArCashInput(
         comparison_bucket_balances=dict(comparison_buckets),
         analysis_bucket_balances=dict(analysis_buckets),
         comparison_closing_ar=comparison_ar,
         analysis_closing_ar=analysis_ar,
-        comparison_dso=ratio(comparison_ar / comparison_revenue * Decimal("365")),
-        analysis_dso=ratio(analysis_ar / analysis_revenue * Decimal("365")),
+        comparison_dso=_dso(comparison_ar, comparison_revenue),
+        analysis_dso=_dso(analysis_ar, analysis_revenue),
         due_amount=_sum([row.due_amount for row in analysis_rows]),
         collected_amount=_sum([row.collected_amount for row in analysis_rows]),
         overdue_by_customer=dict(overdue_by_customer),
@@ -203,9 +198,7 @@ def calculate_analysis_results(
             comparison_shipments=_sum([row.shipment_count for row in comparison]),
             comparison_cost=_sum(
                 [
-                    row.warehousing_cost
-                    + row.transportation_cost
-                    + row.other_direct_cost
+                    row.warehousing_cost + row.transportation_cost + row.other_direct_cost
                     for row in comparison
                 ]
             ),
@@ -213,9 +206,7 @@ def calculate_analysis_results(
             analysis_shipments=_sum([row.shipment_count for row in analysis]),
             analysis_cost=_sum(
                 [
-                    row.warehousing_cost
-                    + row.transportation_cost
-                    + row.other_direct_cost
+                    row.warehousing_cost + row.transportation_cost + row.other_direct_cost
                     for row in analysis
                 ]
             ),
@@ -232,9 +223,7 @@ def calculate_analysis_results(
     return revenue, fulfillment, gross, operating, ar_cash
 
 
-def _run_fingerprint(
-    snapshot_id: UUID, policy_hash: str, engine_version: str
-) -> str:
+def _run_fingerprint(snapshot_id: UUID, policy_hash: str, engine_version: str) -> str:
     canonical = json.dumps(
         {
             "snapshot_id": str(snapshot_id),
@@ -372,9 +361,7 @@ class AnalysisRunService:
         if existing is not None:
             return existing
         bundle = self.repository.get_bound_source(session, snapshot_id)
-        drafts = calculate_analysis_results(
-            bundle, tolerance=policy.reconciliation_tolerance
-        )
+        drafts = calculate_analysis_results(bundle, tolerance=policy.reconciliation_tolerance)
         run_identity = _run_fingerprint(
             snapshot_id, loaded_policy.policy_hash, policy.engine_version
         )
@@ -391,8 +378,7 @@ class AnalysisRunService:
             session.add(run)
             session.flush()
             persisted_results = {
-                draft.playbook_code: _persist_result(session, run, draft)
-                for draft in drafts
+                draft.playbook_code: _persist_result(session, run, draft) for draft in drafts
             }
             finding_drafts: list[FindingDraft] = []
             fingerprints: set[str] = set()

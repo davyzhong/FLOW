@@ -2,6 +2,7 @@
 
 单机边界：只操作当前 SQLite，按 dataset_id 与大麦演示数据隔离。
 """
+
 from __future__ import annotations
 
 from typing import Any, Literal
@@ -115,9 +116,51 @@ def dataset_overview(dataset_id: str) -> Any:
     return overview
 
 
+@router.get("/dataset/{dataset_id}/chain")
+def dataset_chain(dataset_id: str) -> Any:
+    """数据集治理发布链回执（published / is_active_source）。"""
+    from flow_api.importer.publish_chain import chain_receipt
+    from flow_api.infrastructure.db import get_session_factory
+
+    if not any(d["id"] == dataset_id for d in _get_store().list_datasets()):
+        raise HTTPException(status_code=404, detail="dataset not found")
+    with get_session_factory()() as session:
+        return chain_receipt(session, dataset_id)
+
+
+@router.post("/dataset/{dataset_id}/publish")
+def publish_dataset_route(dataset_id: str) -> Any:
+    """把导入账套发布为治理链（CanonicalPackage→发布门禁→快照→AnalysisRun）。
+
+    勾稽不平（资产−负债−权益≠0）会被发布门禁拒绝（422），与上传校验的
+    借贷平衡是两道独立的真实门禁：借贷平衡管行间记账，勾稽管类别归属。
+    """
+    from flow_api.importer.publish_chain import publish_dataset
+    from flow_api.infrastructure.db import get_session_factory
+    from flow_api.metrics.service import MetricSnapshotBlockedError
+
+    store = _get_store()
+    with get_session_factory()() as session:
+        try:
+            receipt = publish_dataset(session, store, dataset_id)
+        except LookupError as error:
+            raise HTTPException(status_code=404, detail=str(error)) from error
+        except (ValueError, MetricSnapshotBlockedError) as error:
+            session.rollback()
+            raise HTTPException(status_code=422, detail=str(error)) from error
+        session.commit()
+    return receipt
+
+
 @router.delete("/dataset/{dataset_id}")
 def delete_dataset(dataset_id: str) -> Any:
-    deleted = _get_store().delete_dataset(dataset_id)
-    if not deleted:
+    from flow_api.importer.publish_chain import withdraw_dataset_chain
+    from flow_api.infrastructure.db import get_session_factory
+
+    store = _get_store()
+    if not store.delete_dataset(dataset_id):
         raise HTTPException(status_code=404, detail="dataset not found")
-    return {"ok": True, "deleted": dataset_id}
+    with get_session_factory()() as session:
+        withdrawn = withdraw_dataset_chain(session, dataset_id)
+        session.commit()
+    return {"ok": True, "deleted": dataset_id, "chain_withdrawn": withdrawn}

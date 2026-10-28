@@ -1,0 +1,109 @@
+# 科目余额表指标目录（R5 九页接线，work_item FLOW-WI-REAL-DATA-IMPORT-20261028-001）
+#
+# 边界（不虚构口径）：
+# - 只收录科目余额表可真实推导的七项指标，与 importer/normalization.derive_metrics
+#   同码同式；治理链快照值必须与直读派生值全等（tests/importer 口径等价测试）。
+# - 毛利率、DSO、经营现金流等需要收入/成本分项、账龄或现金流量表数据，
+#   科目余额表推导不出，一律不设指标。
+# - financial_account 显式绑定五管理科目（桥接层按科目类别聚合写入
+#   FactFinancialActual）；flow_v1 目录与引擎兜底绑定不受影响。
+definition_set_id: flow.metrics.trial-balance.v1
+engine_version: flow.metrics.engine.v1
+metrics:
+  - metric_code: revenue
+    version: 1
+    name: 营业收入
+    business_definition: 损益类科目本期贷方发生额合计（科目余额表推导）。
+    formula: sum_financial_account_amount
+    financial_account: TB_REVENUE
+    dependencies: []
+    aggregation: sum
+    time_behavior: flow
+    unit: CNY
+    output_scale: 4
+    allowed_dimension_sets: &tb_dimensions
+      - []
+      - [organization]
+    budget_dimension_sets: []
+
+  - metric_code: total_expenses
+    version: 1
+    name: 费用总额
+    business_definition: 损益类科目本期借方发生额合计（科目余额表推导）。
+    formula: sum_financial_account_amount
+    financial_account: TB_EXPENSE
+    dependencies: []
+    aggregation: sum
+    time_behavior: flow
+    unit: CNY
+    output_scale: 4
+    allowed_dimension_sets: *tb_dimensions
+    budget_dimension_sets: []
+
+  - metric_code: net_profit
+    version: 1
+    name: 净利润
+    business_definition: 营业收入减费用总额（损益类贷方减借方发生额）。
+    formula: subtract
+    dependencies: [revenue, total_expenses]
+    aggregation: sum
+    time_behavior: flow
+    unit: CNY
+    output_scale: 4
+    allowed_dimension_sets: *tb_dimensions
+    budget_dimension_sets: []
+
+  - metric_code: total_assets
+    version: 1
+    name: 资产总计
+    business_definition: 资产类科目期末余额（借向）合计（科目余额表推导）。
+    formula: sum_financial_account_amount
+    financial_account: TB_ASSET
+    dependencies: []
+    aggregation: closing_balance
+    time_behavior: balance
+    unit: CNY
+    output_scale: 4
+    allowed_dimension_sets: *tb_dimensions
+    budget_dimension_sets: []
+
+  - metric_code: total_liabilities
+    version: 1
+    name: 负债总计
+    business_definition: 负债类科目期末余额（贷向）合计（科目余额表推导）。
+    formula: sum_financial_account_amount
+    financial_account: TB_LIABILITY
+    dependencies: []
+    aggregation: closing_balance
+    time_behavior: balance
+    unit: CNY
+    output_scale: 4
+    allowed_dimension_sets: *tb_dimensions
+    budget_dimension_sets: []
+
+  - metric_code: total_equity
+    version: 1
+    name: 权益总计
+    business_definition: 权益类科目期末余额（贷向）合计（科目余额表推导）。
+    formula: sum_financial_account_amount
+    financial_account: TB_EQUITY
+    dependencies: []
+    aggregation: closing_balance
+    time_behavior: balance
+    unit: CNY
+    output_scale: 4
+    allowed_dimension_sets: *tb_dimensions
+    budget_dimension_sets: []
+
+  - metric_code: debt_ratio
+    version: 1
+    name: 资产负债率
+    business_definition: 负债总计除以资产总计（期末口径）。
+    formula: ratio
+    dependencies: [total_liabilities, total_assets]
+    aggregation: ratio
+    time_behavior: balance
+    unit: ratio
+    output_scale: 6
+    allowed_dimension_sets: *tb_dimensions
+    budget_dimension_sets: []

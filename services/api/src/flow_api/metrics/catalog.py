@@ -39,10 +39,13 @@ def metric_catalog_hash(catalog: MetricCatalog) -> str:
     catalog_data = catalog.model_dump(mode="json")
     # Schema additions with an unset optional field must not mutate the identity
     # of a published catalog. Once a conservation law is explicitly declared,
-    # its value participates in the fingerprint.
+    # its value participates in the fingerprint. Same rule for the financial
+    # account binding (R5): only explicitly declared bindings are identity-bearing.
     for metric in catalog_data["metrics"]:
         if metric.get("conservation_law") is None:
             metric.pop("conservation_law", None)
+        if metric.get("financial_account") is None:
+            metric.pop("financial_account", None)
     payload = json.dumps(
         catalog_data,
         ensure_ascii=False,

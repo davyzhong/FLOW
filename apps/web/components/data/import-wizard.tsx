@@ -4,15 +4,18 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import {
   flowApi,
+  ImporterChainReceipt,
   ImporterCockpitView,
   ImporterDatasetSummary,
   ImporterUploadResult,
 } from "../../lib/api/client";
 
 type Phase = "idle" | "uploading" | "ok" | "rejected" | "error";
+type PublishPhase = "idle" | "publishing" | "published" | "failed";
 
-// R3 导入向导：模板下载 → 上传 → 逐行错误 → 成功出概览 KPI。
-// 五态：idle/uploading/ok/rejected/error；空态=无数据集列表。
+// R3 导入向导：模板下载 → 上传 → 逐行错误 → 成功出概览 KPI → 发布到驾驶舱。
+// 五态：idle/uploading/ok/rejected/error；发布是治理链升格（AnalysisRun→MetricSnapshot），
+// 勾稽不平会被发布门禁拒绝。
 export function ImportWizard() {
   const [datasets, setDatasets] = useState<ImporterDatasetSummary[] | null>(null);
   const [phase, setPhase] = useState<Phase>("idle");
@@ -20,6 +23,9 @@ export function ImportWizard() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [cockpit, setCockpit] = useState<ImporterCockpitView | null>(null);
   const [datasetName, setDatasetName] = useState("");
+  const [publishPhase, setPublishPhase] = useState<PublishPhase>("idle");
+  const [publishReceipt, setPublishReceipt] = useState<ImporterChainReceipt | null>(null);
+  const [publishError, setPublishError] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const refreshDatasets = useCallback(() => {
@@ -41,6 +47,9 @@ export function ImportWizard() {
     setErrorMessage(null);
     setUploadResult(null);
     setCockpit(null);
+    setPublishPhase("idle");
+    setPublishReceipt(null);
+    setPublishError(null);
     try {
       const result: ImporterUploadResult = await flowApi.uploadImporterDataset(
         file,
@@ -60,6 +69,31 @@ export function ImportWizard() {
       setErrorMessage("导入请求失败，请确认服务已启动后重试");
     }
   }, [datasetName, refreshDatasets]);
+
+  const publish = useCallback(async () => {
+    if (!uploadResult || !uploadResult.ok) {
+      return;
+    }
+    setPublishPhase("publishing");
+    setPublishError(null);
+    try {
+      const receipt = await flowApi.publishImporterDataset(uploadResult.dataset_id);
+      if ("detail" in receipt) {
+        setPublishPhase("failed");
+        setPublishError(
+          typeof receipt.detail === "string"
+            ? receipt.detail
+            : "发布被治理门禁拒绝（常见原因：勾稽不平）",
+        );
+        return;
+      }
+      setPublishReceipt(receipt);
+      setPublishPhase("published");
+    } catch {
+      setPublishPhase("failed");
+      setPublishError("发布请求失败，请确认服务已启动后重试");
+    }
+  }, [uploadResult]);
 
   const remove = useCallback(
     async (datasetId: string) => {
@@ -163,6 +197,29 @@ export function ImportWizard() {
             </tbody>
           </table>
           <p>{cockpit.source_note}</p>
+          {publishPhase === "idle" && (
+            <button type="button" onClick={publish}>
+              发布到驾驶舱
+            </button>
+          )}
+          {publishPhase === "publishing" && <p role="status">正在发布到治理链…</p>}
+          {publishPhase === "failed" && publishError && (
+            <div role="alert">
+              <p>发布未通过：{publishError}</p>
+            </div>
+          )}
+          {publishPhase === "published" && publishReceipt && (
+            <div role="status">
+              <p>
+                已发布到治理链（快照 {publishReceipt.metric_snapshot_ids?.length ?? 0} 份）；
+                {publishReceipt.is_active_source
+                  ? "驾驶舱当前展示本数据集。"
+                  : "驾驶舱当前展示期间更新的其他数据源。"}
+              </p>
+              {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+              <a href="/cockpit">前往驾驶舱查看</a>
+            </div>
+          )}
         </div>
       )}
 

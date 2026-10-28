@@ -31,7 +31,9 @@ class FulfillmentTotals(FrozenModel):
     analysis_orders: StrictDecimal = Field(ge=0)
     analysis_shipments: StrictDecimal = Field(ge=0)
     analysis_cost: StrictDecimal
-    source_record_count: int = Field(gt=0)
+    # R5：允许 0——无经营行的导入账套（科目余额表）必须能走到 playbook 内部的
+    # degraded 分支（zero_denominator），而不是在输入模型处硬崩。
+    source_record_count: int = Field(ge=0)
 
 
 def _driver(
@@ -90,9 +92,7 @@ def calculate_revenue_vpm(
     checked_tolerance = ensure_decimal(tolerance)
     required = ("order_count", "revenue", "logistics_product")
     row_count = sum(cell.source_record_count for cell in cells)
-    comparison_revenue = sum(
-        (cell.comparison_revenue for cell in cells), start=Decimal("0")
-    )
+    comparison_revenue = sum((cell.comparison_revenue for cell in cells), start=Decimal("0"))
     analysis_revenue = sum((cell.analysis_revenue for cell in cells), start=Decimal("0"))
     impact = analysis_revenue - comparison_revenue
 
@@ -121,9 +121,7 @@ def calculate_revenue_vpm(
             },
             tolerance=checked_tolerance,
         )
-    if not cells or any(
-        cell.comparison_orders <= 0 or cell.analysis_orders <= 0 for cell in cells
-    ):
+    if not cells or any(cell.comparison_orders <= 0 or cell.analysis_orders <= 0 for cell in cells):
         return _degraded(
             playbook_code="revenue_vpm",
             impact=impact,
@@ -198,9 +196,7 @@ def calculate_revenue_vpm(
             cell_count=len(cells),
         ),
     )
-    persisted_sum = sum(
-        (driver.contribution_amount for driver in drivers), start=Decimal("0")
-    )
+    persisted_sum = sum((driver.contribution_amount for driver in drivers), start=Decimal("0"))
     difference = reconcile(persisted_sum, money(impact), checked_tolerance)
     return AnalysisResultDraft(
         playbook_code="revenue_vpm",
@@ -265,18 +261,14 @@ def calculate_fulfillment_rve(
         * cost_per_shipment_0
     )
     rate = (
-        totals.analysis_orders
-        * shipments_per_order_1
-        * (cost_per_shipment_1 - cost_per_shipment_0)
+        totals.analysis_orders * shipments_per_order_1 * (cost_per_shipment_1 - cost_per_shipment_0)
     )
     drivers = (
         _driver("volume", "order volume effect", volume, impact),
         _driver("efficiency", "shipments per order effect", efficiency, impact),
         _driver("rate", "cost per shipment effect", rate, impact),
     )
-    persisted_sum = sum(
-        (driver.contribution_amount for driver in drivers), start=Decimal("0")
-    )
+    persisted_sum = sum((driver.contribution_amount for driver in drivers), start=Decimal("0"))
     difference = reconcile(persisted_sum, money(impact), checked_tolerance)
     return AnalysisResultDraft(
         playbook_code="fulfillment_cost_rve",

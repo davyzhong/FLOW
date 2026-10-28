@@ -34,7 +34,8 @@ class ProfitBridgeInput(FrozenModel):
     analysis_operating_expense: StrictDecimal
     comparison_operating_profit: StrictDecimal
     analysis_operating_profit: StrictDecimal
-    source_record_count: int = Field(gt=0)
+    # R5：允许 0——无经营行的导入账套（科目余额表）走 playbook 内部 degraded 分支。
+    source_record_count: int = Field(ge=0)
 
 
 class ArCashInput(FrozenModel):
@@ -48,7 +49,7 @@ class ArCashInput(FrozenModel):
     collected_amount: StrictDecimal = Field(ge=0)
     overdue_by_customer: dict[str, StrictDecimal]
     aging_complete: bool
-    source_record_count: int = Field(gt=0)
+    source_record_count: int = Field(ge=0)
 
 
 class PlaybookSpec(FrozenModel):
@@ -139,10 +140,7 @@ def calculate_gross_profit_bridge(
         _driver(
             "transportation_cost",
             "-(analysis transportation cost - comparison transportation cost)",
-            -(
-                payload.analysis_transportation_cost
-                - payload.comparison_transportation_cost
-            ),
+            -(payload.analysis_transportation_cost - payload.comparison_transportation_cost),
             impact,
         ),
         _driver(
@@ -152,9 +150,7 @@ def calculate_gross_profit_bridge(
             impact,
         ),
     )
-    driver_sum = sum(
-        (driver.contribution_amount for driver in drivers), start=Decimal("0")
-    )
+    driver_sum = sum((driver.contribution_amount for driver in drivers), start=Decimal("0"))
     difference = reconcile(driver_sum, money(impact), checked_tolerance)
     fields = (
         "revenue_vpm",
@@ -214,9 +210,7 @@ def calculate_operating_profit_bridge(
             impact,
         ),
     )
-    driver_sum = sum(
-        (driver.contribution_amount for driver in drivers), start=Decimal("0")
-    )
+    driver_sum = sum((driver.contribution_amount for driver in drivers), start=Decimal("0"))
     difference = reconcile(driver_sum, money(impact), checked_tolerance)
     fields = ("gross_profit_bridge", "operating_expense", "operating_profit")
     return AnalysisResultDraft(
@@ -242,9 +236,7 @@ def _aging_driver_code(bucket: str) -> str:
     return f"aging_{normalized}"
 
 
-def calculate_ar_cash_impact(
-    payload: ArCashInput, *, tolerance: Decimal
-) -> AnalysisResultDraft:
+def calculate_ar_cash_impact(payload: ArCashInput, *, tolerance: Decimal) -> AnalysisResultDraft:
     checked_tolerance = ensure_decimal(tolerance)
     impact = -(payload.analysis_closing_ar - payload.comparison_closing_ar)
     required = (
@@ -296,15 +288,9 @@ def calculate_ar_cash_impact(
             degradation_code="zero_denominator",
             degradation_message="collection rate requires a positive due amount",
         )
-    bucket_codes = set(payload.comparison_bucket_balances) | set(
-        payload.analysis_bucket_balances
-    )
-    comparison_bucket_total = sum(
-        payload.comparison_bucket_balances.values(), start=Decimal("0")
-    )
-    analysis_bucket_total = sum(
-        payload.analysis_bucket_balances.values(), start=Decimal("0")
-    )
+    bucket_codes = set(payload.comparison_bucket_balances) | set(payload.analysis_bucket_balances)
+    comparison_bucket_total = sum(payload.comparison_bucket_balances.values(), start=Decimal("0"))
+    analysis_bucket_total = sum(payload.analysis_bucket_balances.values(), start=Decimal("0"))
     if (
         abs(comparison_bucket_total - payload.comparison_closing_ar) > checked_tolerance
         or abs(analysis_bucket_total - payload.analysis_closing_ar) > checked_tolerance
@@ -343,9 +329,7 @@ def calculate_ar_cash_impact(
         )
         for bucket in sorted(bucket_codes)
     )
-    driver_sum = sum(
-        (driver.contribution_amount for driver in drivers), start=Decimal("0")
-    )
+    driver_sum = sum((driver.contribution_amount for driver in drivers), start=Decimal("0"))
     difference = reconcile(driver_sum, money(impact), checked_tolerance)
     collection_rate = ratio(payload.collected_amount / payload.due_amount)
     collection_shortfall = money(payload.due_amount - payload.collected_amount)
@@ -393,11 +377,7 @@ def build_registry(specs: tuple[PlaybookSpec, ...]) -> PlaybookRegistry:
     completed: list[str] = []
     remaining = list(codes)
     while remaining:
-        ready = [
-            code
-            for code in remaining
-            if set(by_code[code].dependencies).issubset(completed)
-        ]
+        ready = [code for code in remaining if set(by_code[code].dependencies).issubset(completed)]
         if not ready:
             raise ValueError("playbook dependency graph contains a cycle")
         for code in ready:
@@ -412,9 +392,7 @@ def build_default_registry() -> PlaybookRegistry:
             PlaybookSpec(code="revenue_vpm", version=1, dependencies=()),
             PlaybookSpec(code="fulfillment_cost_rve", version=1, dependencies=()),
             PlaybookSpec(code="ar_cash_impact", version=1, dependencies=()),
-            PlaybookSpec(
-                code="gross_profit_bridge", version=1, dependencies=("revenue_vpm",)
-            ),
+            PlaybookSpec(code="gross_profit_bridge", version=1, dependencies=("revenue_vpm",)),
             PlaybookSpec(
                 code="operating_profit_bridge",
                 version=1,

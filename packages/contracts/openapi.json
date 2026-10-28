@@ -266,6 +266,64 @@
         }
       }
     },
+    "/api/v1/importer/dataset/{dataset_id}/metrics": {
+      "get": {
+        "tags": [
+          "importer"
+        ],
+        "summary": "Dataset Metrics",
+        "operationId": "dataset_metrics_api_v1_importer_dataset__dataset_id__metrics_get",
+        "parameters": [
+          {
+            "name": "dataset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Dataset Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response Dataset Metrics Api V1 Importer Dataset  Dataset Id  Metrics Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/importer/dataset/{dataset_id}/cockpit": {
       "get": {
         "tags": [
@@ -365,6 +423,124 @@
               "application/json": {
                 "schema": {
                   "title": "Response Dataset Overview Api V1 Importer Dataset  Dataset Id  Overview Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/importer/dataset/{dataset_id}/chain": {
+      "get": {
+        "tags": [
+          "importer"
+        ],
+        "summary": "Dataset Chain",
+        "description": "数据集治理发布链回执（published / is_active_source）。",
+        "operationId": "dataset_chain_api_v1_importer_dataset__dataset_id__chain_get",
+        "parameters": [
+          {
+            "name": "dataset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Dataset Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response Dataset Chain Api V1 Importer Dataset  Dataset Id  Chain Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/importer/dataset/{dataset_id}/publish": {
+      "post": {
+        "tags": [
+          "importer"
+        ],
+        "summary": "Publish Dataset Route",
+        "description": "把导入账套发布为治理链（CanonicalPackage→发布门禁→快照→AnalysisRun）。\n\n勾稽不平（资产−负债−权益≠0）会被发布门禁拒绝（422），与上传校验的\n借贷平衡是两道独立的真实门禁：借贷平衡管行间记账，勾稽管类别归属。",
+        "operationId": "publish_dataset_route_api_v1_importer_dataset__dataset_id__publish_post",
+        "parameters": [
+          {
+            "name": "dataset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Dataset Id"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response Publish Dataset Route Api V1 Importer Dataset  Dataset Id  Publish Post"
                 }
               }
             }

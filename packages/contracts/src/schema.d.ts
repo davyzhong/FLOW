@@ -73,6 +73,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/importer/dataset/{dataset_id}/metrics": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Dataset Metrics */
+        get: operations["dataset_metrics_api_v1_importer_dataset__dataset_id__metrics_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/importer/dataset/{dataset_id}/cockpit": {
         parameters: {
             query?: never;
@@ -101,6 +118,49 @@ export interface paths {
         get: operations["dataset_overview_api_v1_importer_dataset__dataset_id__overview_get"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/importer/dataset/{dataset_id}/chain": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Dataset Chain
+         * @description 数据集治理发布链回执（published / is_active_source）。
+         */
+        get: operations["dataset_chain_api_v1_importer_dataset__dataset_id__chain_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/importer/dataset/{dataset_id}/publish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Publish Dataset Route
+         * @description 把导入账套发布为治理链（CanonicalPackage→发布门禁→快照→AnalysisRun）。
+         *
+         *     勾稽不平（资产−负债−权益≠0）会被发布门禁拒绝（422），与上传校验的
+         *     借贷平衡是两道独立的真实门禁：借贷平衡管行间记账，勾稽管类别归属。
+         */
+        post: operations["publish_dataset_route_api_v1_importer_dataset__dataset_id__publish_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -4731,6 +4791,39 @@ export interface operations {
             };
         };
     };
+    dataset_metrics_api_v1_importer_dataset__dataset_id__metrics_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                dataset_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     dataset_cockpit_api_v1_importer_dataset__dataset_id__cockpit_get: {
         parameters: {
             query?: never;
@@ -4765,6 +4858,72 @@ export interface operations {
         };
     };
     dataset_overview_api_v1_importer_dataset__dataset_id__overview_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                dataset_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    dataset_chain_api_v1_importer_dataset__dataset_id__chain_get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                dataset_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    publish_dataset_route_api_v1_importer_dataset__dataset_id__publish_post: {
         parameters: {
             query?: never;
             header?: {

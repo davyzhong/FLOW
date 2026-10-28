@@ -18,8 +18,8 @@ MetricUnit = Literal[
     "ratio",
     "day",
     # S01 F1 新增：财务标准单位
-    "percent",           # 百分比（毛利率/净利率/资产负债率），小数口径，*100 展示
-    "multiple",          # 倍数（流动比率/利息保障倍数/权益乘数）
+    "percent",  # 百分比（毛利率/净利率/资产负债率），小数口径，*100 展示
+    "multiple",  # 倍数（流动比率/利息保障倍数/权益乘数）
     "percentage_point",  # 百分点（pp），用于同比变动量
 ]
 DimensionName = Literal[
@@ -50,6 +50,12 @@ class MetricSpec(BaseModel):
     # 形如 ("roe_identity", ("net_margin", "asset_turnover", "equity_multiplier"))；
     # 声明后由 tests/metrics 逐条断言，避免财务指标悄悄失去勾稽关系。
     conservation_law: str | None = None
+    # R5 九页接线（work_item FLOW-WI-REAL-DATA-IMPORT-20261028-001）：
+    # 目录驱动的财务科目基座绑定。声明后该指标为基座指标（无依赖），取值来自
+    # FactFinancialActual 中 management_account_code 等于声明值的行；
+    # 未声明时保持既有来源（operating 行 / 计算器内置 _FINANCIAL_ACCOUNTS 兜底），
+    # flow_v1 目录因此无需改动，指纹不变。
+    financial_account: str | None = None
 
     @model_validator(mode="after")
     def validate_definition(self) -> MetricSpec:
@@ -59,6 +65,13 @@ class MetricSpec(BaseModel):
             raise ValueError("metric version must be positive")
         if self.output_scale not in {4, 6}:
             raise ValueError("metric output_scale must be 4 or 6")
+        if self.financial_account is not None and (
+            not self.financial_account.strip() or self.dependencies
+        ):
+            raise ValueError(
+                f"{self.metric_code}: financial_account binding requires a non-empty"
+                " code and no dependencies"
+            )
         if len(self.dependencies) != len(set(self.dependencies)):
             raise ValueError(f"{self.metric_code} has duplicate dependencies")
         for dimensions in (*self.allowed_dimension_sets, *self.budget_dimension_sets):

@@ -34,6 +34,8 @@ _ACTUAL_COMPARISONS = {
     "trailing_12",
 }
 _BUDGET_COMPARISONS = {"budget_month", "budget_ytd"}
+# 既有目录的财务科目兜底绑定：flow_v1 的两个财务基座指标按 metric_code 隐式绑定。
+# 目录显式声明 financial_account 时以声明优先（R5 目录驱动绑定）。
 _FINANCIAL_ACCOUNTS = {
     "operating_profit": "OPERATING_PROFIT",
     "operating_cash_flow": "OPERATING_CASH_FLOW",
@@ -44,6 +46,16 @@ _BUDGET_CODES = {
     "OPERATING_PROFIT": "operating_profit",
     "OPERATING_CASH_FLOW": "operating_cash_flow",
 }
+
+
+def _financial_bindings(specs: Mapping[str, MetricSpec]) -> dict[str, str]:
+    """目录驱动的财务科目绑定：显式声明优先，flow_v1 内置兜底。"""
+    bindings: dict[str, str] = {}
+    for metric_code, spec in specs.items():
+        account = spec.financial_account or _FINANCIAL_ACCOUNTS.get(metric_code)
+        if account is not None:
+            bindings[metric_code] = account
+    return bindings
 
 
 def _dimensions(
@@ -94,9 +106,7 @@ def _result_sort_key(value: CalculatedMetricValue) -> tuple[object, ...]:
 
 
 class MetricCalculator:
-    def __init__(
-        self, session: Session, repository: MetricSourceRepository | None = None
-    ) -> None:
+    def __init__(self, session: Session, repository: MetricSourceRepository | None = None) -> None:
         self._session = session
         self._repository = repository or MetricSourceRepository()
 
@@ -107,6 +117,7 @@ class MetricCalculator:
         as_of_month: int,
     ) -> MetricCalculationResult:
         specs = {metric.metric_code: metric for metric in catalog.metrics}
+        financial_bindings = _financial_bindings(specs)
         operating_rows = self._repository.operating_rows(self._session, source)
         financial_rows = self._repository.financial_rows(self._session, source)
         budget_rows = self._repository.budget_rows(self._session, source)
@@ -129,14 +140,19 @@ class MetricCalculator:
                 region=row.region_id,
             )
             source_values = {
-                "orders": row.order_count,
-                "fulfilled_units": row.shipment_count,
-                "revenue": row.revenue,
-                "direct_cost": (
-                    row.warehousing_cost
-                    + row.transportation_cost
-                    + row.other_direct_cost
-                ),
+                code: value
+                for code, value in (
+                    ("orders", row.order_count),
+                    ("fulfilled_units", row.shipment_count),
+                    ("revenue", row.revenue),
+                    (
+                        "direct_cost",
+                        (row.warehousing_cost + row.transportation_cost + row.other_direct_cost),
+                    ),
+                )
+                # 目录未声明该 operating 基座码，或该码已显式绑定财务科目
+                # （如科目余额表目录的 revenue←TB_REVENUE）时不再双喂。
+                if code in specs and code not in financial_bindings
             }
             for metric_code, raw_value in source_values.items():
                 for grain in project_metric_grains(specs[metric_code], dimensions):
@@ -147,9 +163,12 @@ class MetricCalculator:
                         _period_value(row.period_id, row.month_key, grain, Decimal("1"))
                     )
 
+        bound_accounts = set(financial_bindings.values())
         for row in financial_rows:
+            if row.management_account_code not in bound_accounts:
+                continue
             dimensions = _dimensions(organization=row.organization_id)
-            for metric_code, account_code in _FINANCIAL_ACCOUNTS.items():
+            for metric_code, account_code in financial_bindings.items():
                 if row.management_account_code != account_code:
                     continue
                 for grain in project_metric_grains(specs[metric_code], dimensions):
@@ -160,45 +179,42 @@ class MetricCalculator:
                         _period_value(row.period_id, row.month_key, grain, Decimal("1"))
                     )
 
-        for row in ar_rows:
-            dimensions = _dimensions(
-                customer=row.customer_id,
-                customer_segment=row.customer_segment_id,
-            )
-            for grain in project_metric_grains(specs["ar_balance"], dimensions):
-                actual_values["ar_balance"].append(
-                    _period_value(
-                        row.period_id, row.month_key, grain, row.receivable_balance
+        if "ar_balance" in specs and "collection_rate" in specs:
+            for row in ar_rows:
+                dimensions = _dimensions(
+                    customer=row.customer_id,
+                    customer_segment=row.customer_segment_id,
+                )
+                for grain in project_metric_grains(specs["ar_balance"], dimensions):
+                    actual_values["ar_balance"].append(
+                        _period_value(row.period_id, row.month_key, grain, row.receivable_balance)
                     )
-                )
-                actual_counts["ar_balance"].append(
-                    _period_value(row.period_id, row.month_key, grain, Decimal("1"))
-                )
-            for grain in project_metric_grains(specs["collection_rate"], dimensions):
-                actual_values["collection_collected"].append(
-                    _period_value(row.period_id, row.month_key, grain, row.collected_amount)
-                )
-                actual_values["collection_due"].append(
-                    _period_value(row.period_id, row.month_key, grain, row.due_amount)
-                )
-                actual_counts["collection_rate"].append(
-                    _period_value(row.period_id, row.month_key, grain, Decimal("1"))
-                )
+                    actual_counts["ar_balance"].append(
+                        _period_value(row.period_id, row.month_key, grain, Decimal("1"))
+                    )
+                for grain in project_metric_grains(specs["collection_rate"], dimensions):
+                    actual_values["collection_collected"].append(
+                        _period_value(row.period_id, row.month_key, grain, row.collected_amount)
+                    )
+                    actual_values["collection_due"].append(
+                        _period_value(row.period_id, row.month_key, grain, row.due_amount)
+                    )
+                    actual_counts["collection_rate"].append(
+                        _period_value(row.period_id, row.month_key, grain, Decimal("1"))
+                    )
 
         budget_values: defaultdict[str, list[PeriodValue]] = defaultdict(list)
         budget_counts: defaultdict[str, list[PeriodValue]] = defaultdict(list)
         for row in budget_rows:
             budget_metric_code = _BUDGET_CODES.get(row.metric_code)
-            if budget_metric_code is None:
+            if budget_metric_code is None or budget_metric_code not in specs:
                 continue
             dimensions = _dimensions(
                 organization=row.organization_id,
                 customer_segment=row.customer_segment_id,
                 logistics_product=row.logistics_product_id,
             )
-            for grain in project_metric_grains(
-                specs[budget_metric_code], dimensions, budget=True
-            ):
+            for grain in project_metric_grains(specs[budget_metric_code], dimensions, budget=True):
                 budget_values[budget_metric_code].append(
                     _period_value(row.period_id, row.month_key, grain, row.amount)
                 )
@@ -208,9 +224,7 @@ class MetricCalculator:
 
         windows = metric_windows(tuple(sorted(period_ids)), as_of_month)
         results: list[CalculatedMetricValue] = []
-        window_results: dict[
-            str, dict[tuple[str, MetricGrain], CalculatedMetricValue]
-        ] = {}
+        window_results: dict[str, dict[tuple[str, MetricGrain], CalculatedMetricValue]] = {}
         for window in windows:
             if window.comparison_type in _ACTUAL_COMPARISONS:
                 values = self._calculate_window(
@@ -307,7 +321,7 @@ class MetricCalculator:
         budget: bool,
     ) -> tuple[CalculatedMetricValue, ...]:
         values: dict[tuple[str, MetricGrain], CalculatedMetricValue] = {}
-        direct_codes = (
+        fixed_base = (
             ("revenue", "direct_cost", "operating_profit", "operating_cash_flow")
             if budget
             else (
@@ -319,6 +333,13 @@ class MetricCalculator:
                 "ar_balance",
                 "operating_cash_flow",
             )
+        )
+        # 基座码 = 固定序中目录已声明的码 + 目录显式声明财务科目绑定的新基座
+        # （R5：科目余额表目录的 total_assets 等存量基座）。固定序内已含的码不重复。
+        direct_codes = tuple(code for code in fixed_base if code in specs) + tuple(
+            code
+            for code in specs
+            if code not in fixed_base and specs[code].financial_account is not None
         )
         for metric_code in direct_codes:
             spec = specs[metric_code]
@@ -345,14 +366,12 @@ class MetricCalculator:
                     source_fact_count=int(counts.get(grain, Decimal("0"))),
                 )
 
-        if not budget:
+        if not budget and "collection_rate" in specs:
             collected = aggregate_flow(
                 raw_values.get("collection_collected", ()), window.included_months
             )
             due = aggregate_flow(raw_values.get("collection_due", ()), window.included_months)
-            counts = aggregate_flow(
-                raw_counts.get("collection_rate", ()), window.included_months
-            )
+            counts = aggregate_flow(raw_counts.get("collection_rate", ()), window.included_months)
             spec = specs["collection_rate"]
             for grain in sorted(set(collected) & set(due), key=lambda item: item.sort_key):
                 calculated = calculate_ratio(
@@ -398,8 +417,7 @@ class MetricCalculator:
                     continue
                 calculated = evaluate_derived_metric(spec, dependencies)
                 dependency_values = tuple(
-                    (dependency, dependencies[dependency])
-                    for dependency in spec.dependencies
+                    (dependency, dependencies[dependency]) for dependency in spec.dependencies
                 )
                 source_count = sum(
                     values[(dependency, grain)].source_fact_count
@@ -417,12 +435,10 @@ class MetricCalculator:
                     source_fact_count=source_count,
                 )
 
-        if not budget:
+        if not budget and "dso" in specs:
             spec = specs["dso"]
             ar_values = {
-                grain: value
-                for (code, grain), value in values.items()
-                if code == "ar_balance"
+                grain: value for (code, grain), value in values.items() if code == "ar_balance"
             }
             revenue = aggregate_flow(
                 raw_values.get("revenue", ()), _trailing_months(_ending_month(window))
@@ -449,8 +465,7 @@ class MetricCalculator:
                         ("revenue", revenue[grain]),
                     ),
                     source_fact_count=(
-                        ar_value.source_fact_count
-                        + int(revenue_counts.get(grain, Decimal("0")))
+                        ar_value.source_fact_count + int(revenue_counts.get(grain, Decimal("0")))
                     ),
                 )
         return tuple(values.values())
@@ -505,8 +520,7 @@ class MetricCalculator:
                     exact_value=calculated_variance.exact_value,
                     persisted_value=calculated_variance.persisted_value,
                     dependency_values=dependencies,
-                    source_fact_count=actual.source_fact_count
-                    + comparison.source_fact_count,
+                    source_fact_count=actual.source_fact_count + comparison.source_fact_count,
                 )
             )
             calculated_pct = variance_pct(
@@ -522,24 +536,20 @@ class MetricCalculator:
                     exact_value=calculated_pct.exact_value,
                     persisted_value=calculated_pct.persisted_value,
                     dependency_values=dependencies,
-                    source_fact_count=actual.source_fact_count
-                    + comparison.source_fact_count,
+                    source_fact_count=actual.source_fact_count + comparison.source_fact_count,
                 )
             )
         return tuple(output)
 
     @staticmethod
-    def _fingerprint(
-        definition_hash: str, values: Iterable[CalculatedMetricValue]
-    ) -> str:
+    def _fingerprint(definition_hash: str, values: Iterable[CalculatedMetricValue]) -> str:
         payload = {
             "definition_set_hash": definition_hash,
             "values": [
                 {
                     "comparison_type": value.comparison_type,
                     "dependencies": [
-                        [code, str(dependency)]
-                        for code, dependency in value.dependency_values
+                        [code, str(dependency)] for code, dependency in value.dependency_values
                     ],
                     "exact_value": str(value.exact_value),
                     "grain": [
@@ -560,7 +570,5 @@ class MetricCalculator:
                 for value in values
             ],
         }
-        serialized = json.dumps(
-            payload, ensure_ascii=False, sort_keys=True, separators=(",", ":")
-        )
+        serialized = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
         return hashlib.sha256(serialized.encode("utf-8")).hexdigest()

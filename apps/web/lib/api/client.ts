@@ -239,6 +239,17 @@ export type ImporterCockpitView = {
   source_note: string;
 };
 
+export type ImporterChainReceipt = {
+  dataset_id: string;
+  published: boolean;
+  batch_id?: string | null;
+  import_version_id?: string | null;
+  metric_snapshot_ids?: string[];
+  analysis_run_id?: string | null;
+  analysis_run_status?: string | null;
+  is_active_source?: boolean;
+};
+
 export const flowApi = {
   listImporterDatasets(): Promise<{ datasets: ImporterDatasetSummary[] }> {
     return request<{ datasets: ImporterDatasetSummary[] }>("/api/v1/importer/dataset");
@@ -247,6 +258,20 @@ export const flowApi = {
     return request<ImporterCockpitView>(
       `/api/v1/importer/dataset/${encodeURIComponent(datasetId)}/cockpit`,
     );
+  },
+  importerChain(datasetId: string): Promise<ImporterChainReceipt> {
+    return request<ImporterChainReceipt>(
+      `/api/v1/importer/dataset/${encodeURIComponent(datasetId)}/chain`,
+    );
+  },
+  async publishImporterDataset(
+    datasetId: string,
+  ): Promise<ImporterChainReceipt | { detail: string }> {
+    const response = await fetch(
+      requestUrl(`/api/v1/importer/dataset/${encodeURIComponent(datasetId)}/publish`),
+      { method: "POST", headers: { Accept: "application/json" } },
+    );
+    return (await response.json()) as ImporterChainReceipt | { detail: string };
   },
   async deleteImporterDataset(datasetId: string): Promise<{ ok: boolean; deleted: string }> {
     const response = await fetch(
