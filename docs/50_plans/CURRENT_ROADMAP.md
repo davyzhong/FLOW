@@ -3,7 +3,7 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 17.49
+version: 17.50
 created_at: 2026-09-12
 updated_at: 2026-10-27
 owner: FLOW
@@ -17,7 +17,7 @@ superseded_by: null
 
 # 当前路线图（唯一主线）
 
-> **状态速览（2026-10-28）：** **用户裁决（2026-10-28）：K3 挂起，转产品功能。** K3 已完成批次 134–162 共 29 批 2,928 条审阅并全部推送（coverage 9,673 条 = routed 1,200 / filtered 660 / pending_review 7,813）；剩余 7,813 条保持 pending_review 挂起，`CURRENT_RELEASE` 不变，ObsidianWiki 保持只读。恢复条件：用户重新指令恢复 K3，或产品知识引用层需要更大覆盖面时按缩减策略（HIGH 候选精读 + 批量过滤）重启。队列 16 项调整为：完成 10 / 队首待裁决 1（下一产品功能方向）/ 排队 3 / 暂停 2（P3 数据扩张 + K3 知识刷新）/ 外部条件受限 1。下一单一动作：用户在产品功能候选中拍板方向后开工。**环境已收敛（用户指令）：全部活动分支合并进 main，远端仅剩 `main`；main 基线 `b70de445`（含视觉语言统一 PR #5、K3 批次 129–133、路线图规整 v17.17、指标资料 PR #6 与 publishing-golden 字体断言平台化修复 `775f283a`）；本地保留 2 个含未提交内容的 worktree 与 1 个未合并 wip 分支（`codex/frontend-consistency-remediation`），其余已清理。本版（v17.19）补充环境收敛记录；v17.17 规整结构不变。**
+> **状态速览（2026-10-28）：** **用户裁决（2026-10-28）：K3 挂起，转产品功能。** K3 已完成批次 134–162 共 29 批 2,928 条审阅并全部推送（coverage 9,673 条 = routed 1,200 / filtered 660 / pending_review 7,813）；剩余 7,813 条保持 pending_review 挂起，`CURRENT_RELEASE` 不变，ObsidianWiki 保持只读。恢复条件：用户重新指令恢复 K3，或产品知识引用层需要更大覆盖面时按缩减策略（HIGH 候选精读 + 批量过滤）重启。队列 16 项调整为：完成 10 / 队首待裁决 1（下一产品功能方向）/ 排队 3 / 暂停 2（P3 数据扩张 + K3 知识刷新）/ 外部条件受限 1。用户已按推荐确认 **A·真实数据导入** 为新队首（工作包 FLOW-WI-REAL-DATA-IMPORT-20261028-001）：R1 模板与校验引擎 → R2 导入 API → R3 导入向导 UI → R4 端到端验收，严格串行；目标=原型从「只能看大麦演示数据」升级为「能导入用户自己的财务数据生成驾驶舱」。**环境已收敛（用户指令）：全部活动分支合并进 main，远端仅剩 `main`；main 基线 `b70de445`（含视觉语言统一 PR #5、K3 批次 129–133、路线图规整 v17.17、指标资料 PR #6 与 publishing-golden 字体断言平台化修复 `775f283a`）；本地保留 2 个含未提交内容的 worktree 与 1 个未合并 wip 分支（`codex/frontend-consistency-remediation`），其余已清理。本版（v17.19）补充环境收敛记录；v17.17 规整结构不变。**
 
 ## 战略目标（唯一目标清单，当前有效四项）
 
