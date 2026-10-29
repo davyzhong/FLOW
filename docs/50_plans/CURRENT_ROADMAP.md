@@ -3,9 +3,9 @@ doc_id: FLOW-PLAN-CURRENT
 title: 当前路线图（唯一）
 doc_type: plan
 status: active
-version: 17.57
+version: 17.58
 created_at: 2026-09-12
-updated_at: 2026-10-28
+updated_at: 2026-10-30
 owner: FLOW
 depends_on: [FLOW-SPEC-V1-DESIGN-001]
 acceptance_refs: [roadmap-unique-invariant]
@@ -17,6 +17,8 @@ superseded_by: null
 
 # 当前路线图（唯一主线）
 
+> **状态校正（2026-10-30）：** 唯一队列共 18 项：完成 12 / 实际执行中 0 / 排队 3 / 暂停 2（P3、K3）/ 外部条件受限 1。下一产品方向尚待用户裁决，未列为已启动任务。下段 2026-10-28 速览中的「16 项」「保留 worktree」等环境描述为历史记录，当前状态以本段和下方队列表格为准。远端、本地均仅 `main`；本次开工前工作区干净。
+
 > **状态速览（2026-10-28）：** **用户裁决（2026-10-28）：K3 挂起，转产品功能。** K3 已完成批次 134–162 共 29 批 2,928 条审阅并全部推送（coverage 9,673 条 = routed 1,200 / filtered 660 / pending_review 7,813）；剩余 7,813 条保持 pending_review 挂起，`CURRENT_RELEASE` 不变，ObsidianWiki 保持只读。恢复条件：用户重新指令恢复 K3，或产品知识引用层需要更大覆盖面时按缩减策略（HIGH 候选精读 + 批量过滤）重启。队列 16 项调整为：完成 10 / 队首待裁决 1（下一产品功能方向）/ 排队 3 / 暂停 2（P3 数据扩张 + K3 知识刷新）/ 外部条件受限 1。用户已确认 **A·真实数据导入** 为队首（工作包 FLOW-WI-REAL-DATA-IMPORT-20261028-001）：R1 模板与校验引擎、R2 导入 API、R3 导入向导 UI、R4 端到端验收**已全部交付**（main `4f633a24`，CI run 40627155163 全绿）；追加交付派生指标端点 `GET /dataset/{id}/metrics`（d4c03829，七项可推导指标带公式，推不出的口径一律不生成）。**R5 已交付并关闭工作包（2026-10-28）**：导入账套→CanonicalPackage 桥接→发布门禁→trial_balance_v1 逐期间快照→AnalysisRun，九页经 get_latest 自动切换活跃源；准确 SHA `a2510344` CI run `40651999130` 全绿（contracts 门禁此前两连挂根因=d4c03829 新增 metrics 端点未再生成契约，本轮已修复并确认）。**用户裁决（2026-10-28）**：新队首 = **导入账套指标补厚**（科目级映射 + 利润表/银行流水接线，工作包 FLOW-WI-IMPORTER-RICH-METRICS-20261028-001，M1→M2→M3 串行），详见该工作包文档。**M1–M3 已全部交付**（详见工作包 v1.1 交付记录）；**准确 SHA CI 已核验全绿**（`90dce69e` run `40665135693`）；工作包完成，**下一单一动作 = 队首裁决（下一产品方向，待用户拍板）**。**环境已收敛（用户指令）：全部活动分支合并进 main，远端仅剩 `main`；main 基线 `b70de445`（含视觉语言统一 PR #5、K3 批次 129–133、路线图规整 v17.17、指标资料 PR #6 与 publishing-golden 字体断言平台化修复 `775f283a`）；本地保留 2 个含未提交内容的 worktree 与 1 个未合并 wip 分支（`codex/frontend-consistency-remediation`），其余已清理。本版（v17.19）补充环境收敛记录；v17.17 规整结构不变。**
 
 ## 战略目标（唯一目标清单，当前有效四项）
@@ -24,18 +26,18 @@ superseded_by: null
 | # | 目标 | 状态 | 口径 |
 |---|---|---|---|
 | G1 | 单机单用户验证原型（D055） | ✅ 已交付 | 可启动/可装载重置演示业务/图表下钻追溯/分析导出报告/备份恢复/离线浏览，全部按验收结案（7a.1–7a.8 + 视觉语言统一）；原型使用 synthetic 演示数据 |
-| G2 | 第二代知识刷新与战略重基线（K0–K6） | ▶ 进行中（唯一活跃工程线） | K0–K2 完成；K3 全量路由第 133 批；K5 候选封存与 K6 用户裁决未到，`CURRENT_RELEASE` 保持 `flow-knowledge-2026-09-12.1` |
+| G2 | 第二代知识刷新与战略重基线（K0–K6） | 暂停（用户裁决 2026-10-28） | K0–K2 完成；K3 已审至第 162 批，待审 7,813 条；K5 候选封存与 K6 用户裁决未到，`CURRENT_RELEASE` 保持 `flow-knowledge-2026-09-12.1` |
 | G3 | 公开财报 C 级出口 | ⏸ No-Go 维持（长期） | 条件 2（完整独立 oracle 0/14）、条件 4（泛化留出全败）未满足；用户裁决不扩大盲评；证据工作归长期队列 |
 | G4 | 企业内部月度工作台 + 四级真实验证 | 🔒 gated | 依赖 G3 通过 + 真实企业数据 + 连续 3 个真实月度周期、人工基准、盲评与工时门槛 |
 
 已终结的历史目标不单列：早期「D052–D054 公开模块先行」路径已被 2026-10-18 D055 转向与 2026-10-24 原型结案吸收；完整演进见文末时间线与折叠历史。D055 结案边界明确：账龄独立切片、公开 C 级、知识刷新、真实企业试点与行业扩张**不在原型完成范围**，不得为美化原型重开。
 
-## 唯一执行队列（16 项，严格串行；编号保持历史可追溯）
+## 唯一执行队列（18 项，严格串行；编号保持历史可追溯）
 
 | 原编号 | 事项 | 状态 | 下一步 / 结案证据 |
 |---|---|---|---|
 | 12 | 可复用视觉语言提炼与 FLOW 全项目视觉统一 | completed（2026-10-26） | 全部验收结案并合入 main（PR #5 → merge `5d2b77f6`）；唯一遗留：原生浏览器 200% 缩放待设备解锁补验（外部条件受限结案） |
-| 13 | 清理已合入 main 的历史远端分支 | completed（2026-10-25；10-27 增补） | 10-25 删 15 个旧分支；10-27 二轮：合并 PR #5/#6 后删除全部活动分支（含 ZTO），远端仅剩 `main`；本地删 17 分支 + 6 worktree，保留 2 个含未提交内容的 worktree 与 1 个未合并 wip 分支 |
+| 13 | 清理已合入 main 的历史远端分支 | completed（2026-10-25；10-30 收敛） | 10-25 删 15 个旧分支；10-27 合并 PR #5/#6 后删除活动远端分支（含 ZTO）；截至 10-30 本地与远端仅 `main`，本地仅一个 checkout |
 | 0 | CFO 盈利分析与图表补全 | completed | `08aa4cd0` 准确 SHA CI 18/18；后续验收由 7a 承接 |
 | 0a | 驾驶舱数值格式治理 | completed | `1a71e33f` 准确 SHA CI 通过 |
 | 7a | 单机原型与全视图视觉升级 | completed（2026-10-24） | PR #3 merge `b2a1bf22`，run 40092106547 为 28/28 success |
@@ -71,7 +73,7 @@ superseded_by: null
 | [大麦完整财年演示数据](work_items/DAMAI--full-year-demo.md) | **active** | FY2022/FY2023 披露事实层固化；仅随产品需求增量维护，不与 K3 并行 |
 | [UX 剩余体验收口](work_items/UX--post-damai-experience-closeout.md) | **completed** | Gate1/Gate5 关闭 |
 | [组织账套初始化包](work_items/ORG-LEDGER--enterprise-initialization-package.md) | **completed** | ORG-LEDGER v2 重版 |
-| [知识刷新 K0–K6](work_items/KNOWLEDGE--refresh-v2.md) | **active** | 队首：K3 第 163 批 |
+| [知识刷新 K0–K6](work_items/KNOWLEDGE--refresh-v2.md) | **active**（执行暂停） | K3 第 163 批为恢复点，当前不在队首 |
 | [公开财报 C 级出口](work_items/PUBLIC--c-level-exit-protocol.md) | **active** | No-Go 维持；条件 2/4 归长期 |
 | [溯源/重述/只读 MCP](work_items/PUBLIC--provenance-restatement-mcp.md) | **completed** | 溯源页锚 + supersedes 链 + 只读 MCP |
 | [数据扩张与行业基准](work_items/PUBLIC--data-expansion-benchmarks.md) | **active** | 10× 性能基线已交付；扩张等真实财报 |
@@ -79,13 +81,13 @@ superseded_by: null
 | [U09/O05 授权内部试点](work_items/U09-O05--authorized-internal-pilot.md) | **blocked** | 等 C 级 Go + 真实企业数据 |
 | [U10 V1.1 证据决策](work_items/U10--v1-1-evidence-decision.md) | **blocked** | 等证据门槛；轮到即整理 go/hold |
 
-## 待验证清单（收缩后仅 4 项活跃）
+## 待验证清单（4 项未关闭，K3 相关项暂停）
 
 | 验证项 | 归属 | 状态 |
 |---|---|---|
-| K3 全量语义路由（pending_review 8,506 条）+ coverage 终态闭合 | G2 | 随批次推进，第 134 批起 |
-| K3 知识综合 + 独立 reader 复核 | G2 | 路由闭合后执行 |
-| K5 candidate seal → K6 原子激活 | G2 | 须用户正式裁决，Agent 不可代签 |
+| K3 全量语义路由（pending_review 7,813 条）+ coverage 终态闭合 | G2 | 暂停；恢复点第 163 批 |
+| K3 知识综合 + 独立 reader 复核 | G2 | 暂停；路由闭合后执行 |
+| K5 candidate seal → K6 原子激活 | G2 | 暂停；须用户正式裁决，Agent 不可代签 |
 | 原生浏览器 200% 缩放补验 | G1 唯一遗留 | 外部条件受限：待设备解锁且有可控缩放工具；390/360 CSS px 不替代 |
 
 **已关闭的验证（不再挂账，证据见 docs/60_delivery/verification/）**：C 级六条件（已裁决 No-Go，条件 2/4 归 G3 长期）；视觉矩阵（20 路由×3 视口 60/60、Axe 桌面 20 路由零违规、可见性 164/164、Playwright 17/17）；7a 单机验收（SQLite 旅程、离线零外呼、备份恢复、verify 19/19）；大麦来源勾稽（IFRS 12 恒等式 + 明细↔披露年度聚合零差异）；U04 旧三样本盲评 199/199。
