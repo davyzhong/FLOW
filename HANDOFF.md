@@ -3,9 +3,9 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目交接文档
 doc_type: navigation
 status: current
-version: 17.13
+version: 17.14
 created_at: 2026-09-12
-updated_at: 2026-10-29
+updated_at: 2026-10-30
 owner: FLOW
 applies_to: repository
 ---
@@ -26,6 +26,18 @@ applies_to: repository
 
 **2026-10-25 指标资料学习补记（独立文档分支）：** 已直接核读“数研复盘狮”《经营驾驶舱分析指标库》20 张原图，完成来源指纹/逐图采用映射与现有指标库查重；补入 [METRIC_SYSTEM_GOALS](docs/20_product/METRIC_SYSTEM_GOALS.md)、愿景/范围和路线图既有事项 7 的来源评审/影响范围。本轮不改运行公式/数据/阈值/数据库或 CURRENT_RELEASE，也不写视觉任务活动工作树；视觉事项 12 继续由原任务执行，队列数量不变。后续应从本路线图资料增量进入既有来源与产品影响评审，再安排代码切片；不能从文章截图直接发布公式或通用阈值。图片抽取进程的完成状态未被本次独立核读替代，Obsidian/原图未修改。本分支文档已通过独立新上下文复核（无必要 P1/P2）和 M1/M6、计划视图、链接/差异检查，集成时保留视觉分支更新后的当前状态，不把本文快照覆盖为新状态。完整依据见[二十图核读报告](docs/60_delivery/verification/2026-10-25--business-metric-library-reference-review-v1.md)。
 
+
+### 2026-10-30 会话结束交接
+
+**当前任务与状态。** 唯一队列以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)（v17.57）为准：完成 12 / 排队 3 / 暂停 2（P3 数据扩张 + K3 知识刷新）/ 外部条件受限 1；**队首仍待用户裁决下一产品方向**，本轮全部工作属于文档与视觉收尾，未新增队列项。分支 `main`，远端仅 `main`，HEAD 为本交接提交的父提交 `bf98ed87`（CI run `40850010252` 全绿）；工作区干净，无在途进程。单机栈 `make flow`（localhost:3000/8000）仍在运行，`~/.flow/flow.sqlite3` 为纯大麦演示态（测试导入的数据集已级联删除）。K3 保持挂起（恢复点第 163 批，pending 7,813），`CURRENT_RELEASE` 不变，ObsidianWiki 只读。
+
+**已完成（本会话，均已推送）。** ① **README 与项目文档大更新（`b15b0c85`，CI run `40829859560` 全绿；CI 结论回填 `9de0d983`）**：新增「真实数据导入 + 治理发布链 · 2026-10-29 实测」截图区与「真实数据导入」导览小节；14 张真实截图入库 `docs/assets/screenshots/2026-10-29/`（九页桌面 + 导入向导桌面/移动 + 上传态/发布态 + 导入态驾驶舱 + 报告中心），采集脚本 `apps/web/capture-readme-screens.mjs` / `capture-import-flow.mjs` 入库可复现；截图索引、PROJECT_STATE 顶部快照、文档中心同步更新。② **途中暴露并修复真实缺陷（`4d7877ae`）**：MetricDefinition 注册表按 `(metric_code, version)` 全局唯一，先有 flow_v1（大麦）定义的库上发布导入账套在 `revenue@1` 内容比对处 500——CI 测试库因写入顺序不同未暴露，真实单机库复现；修复=trial_balance_v1 目录 revenue/gross_profit/gross_margin 及依赖图牵连的 net_profit 升 version 2，回归测试 `test_publish_coexists_with_legacy_same_code_definition` 锁定。③ **图表视觉方案修复（`bf98ed87`，CI run `40850010252` 全绿，用户反馈「柱状图/饼状图不像概念图」）**：诊断三根因（扩展系列色无概念板出处、ECharts 画布文字未消费 chart-fontFamily token、图表细节无规格）；修复=tokens.json 系列色阶改概念板推导六色（墨蓝/古金/翡翠绿图表阶/墨蓝亮/金沙亮/墨蓝深）+ 三产物脚本重生成 + CHART_THEME 消费画布字族并正名键位 + SERIES_PALETTE 统一色阶 + treemap 显式绑色板 + `patterns.md` 新增「图表视觉规格」验收口径；截图按新色阶重采并逐页目检（费用环形图/堆叠柱已换推导色）。
+
+**卡住的问题与真实限制（无阻塞项，如实登记）。** ① compose 栈（`make stack-up`）的 web 服务端身份 `local-dev-web` 对 cockpit 系列接口 403 `role_forbidden`（postgres 常驻库的 role_binding 缺 cockpit 动作授权）——演示与截图一律走 `make flow` SQLite 单机栈；compose 栈 403 的授权修复未做（不属于本轮范围，如需用 compose 栈看驾驶舱须先补角色绑定）。② `scripts/audit_visual_language_accessibility.mjs` 会覆盖 `docs/60_delivery/verification/visual-language-20261024/axe-results.json` 历史验收记录（本轮已还原该文件；新色未引入 axe 违规，唯一违规是页面结构类且属运行态差异）。③ `715a2d6d`/`4d7877ae` 等代码提交的 CI run 被同分支紧随推送取消，均按后继同码提交核验并在文档说明。④ 导入态驾驶舱的总览 KPI/趋势来自导入快照，模块级面板（现金流桥/杜邦/费用）仍读各自已发布大麦快照，页面横幅如实标注——这是设计内行为，不是缺陷。⑤ 九页 KPI 卡固定八张，orders/revenue_per_order/fulfillment_cost_rate/ar_balance/operating_cash_flow 对导入账套永远灰态（D054 不虚构）。⑥ 明暗阶梯色方案在六系列以上图表需靠线型/标签区分（已写入规格第 1 条）。
+
+**下一单一动作。** 接手先 `git pull --ff-only`、读本节与 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)。**队首待用户裁决**，候选方向：① 科目级映射扩展到损益类科目（利润表缺席时的费用分项降级源，需先修订「不双源」规则）；② 银行流水净现金流 ↔ 余额表货币资金变动交叉核对（建议 warning 级）；③ 向导内用户自定义科目映射；④ 恢复 K3 缩减策略；⑤ 其他。裁决后按计划治理铁律先落盘工作包与路线图、门禁、提交推送，再改代码。
+
+**踩坑与恢复要点。** ① **演示/截图只走 `make flow` 单机栈**；compose 栈 web 会 403。② **web 生产构建链=`make flow-bootstrap`**（pnpm build 后必须把 `.next/static` 拷进 `.next/standalone/apps/web/.next/static`，只跑 build 会 CSS 404 裸 HTML）；改 web 代码后重启 `make flow` 前先 pkill 旧 server.js/uvicorn。③ `~/.flow/flow.sqlite3` 的 flow-init **非幂等**（半途失败后再跑报 `import_dataset already exists`）——本会话已删过一次半成品库重灌；库内容仅演示数据，可安全重建。④ **新增/修改 API 路由必须 `make contracts`**（否则后续提交 CI 在 contracts 连挂）；**要进 CI 的测试放 `tests/integration/`**。⑤ 跨目录同码指标：新目录与 flow_v1 同码但口径不同时一律 version 升位，禁止照抄 flow_v1 口径文本来"消冲突"；依赖图牵连的派生码要一并升位。⑥ token 管线：只改 `packages/flow-visual-language/tokens.json`，跑 `scripts/build_flow_visual_language.py` 重生成三产物（键为驼峰扁平化如 `chart-fontFamily`）；ECharts mock 的测试必须同步 CHART_THEME 键名与 SERIES_PALETTE 导出。⑦ 本地调试脚本三件套 `DATABASE_URL`/`FLOW_ENV=development`/`FLOW_DEV_ACTOR_ID=flow-dev-bp`，鉴权头 `Bearer flow-dev-bp`；中文 heredoc python 脚本须 `PYTHONUTF8=1`（系统 python stdin 非 UTF-8 会 SyntaxError）。⑧ flow_test 残留清理：遍历 `import-dataset-%` 批次 `withdraw_dataset_chain` + `store.delete_dataset`。⑨ 同分支紧随推送会取消前一 CI run，代码提交后先等 CI 再推文档，或以后继同码提交核验。⑩ plan_views 状态令牌必须 **粗体**，改状态后 `plan_views.py --write` 重生成；改 API 路由后截图流程重跑前记得契约再生成。⑪ 采集截图：先 `make flow-demo`（幂等重灌演示）再跑 capture 脚本；导入流程截图会真实写入数据集，采完删除恢复演示态。
 
 ### 2026-10-29 会话结束交接
 
