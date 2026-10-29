@@ -16,7 +16,7 @@ applies_to: repository
 
 ## 真实数据导入与九页驾驶舱（2026-10-29，2026-10-29/）
 
-采集日期：2026-10-29。本机生产构建（`make flow`，Next.js standalone + FastAPI + SQLite `~/.flow/flow.sqlite3`），入口 `apps/web/capture-readme-screens.mjs` 与 `capture-import-flow.mjs`（Playwright 真实登录/操作，fullPage）。
+采集日期：2026-10-29。本机生产构建（`make flow`，Next.js standalone + FastAPI + SQLite `~/.flow/flow.sqlite3`），入口 `apps/web/capture-readme-screens.mjs` 与 `capture-import-flow.mjs`（Playwright 真实登录/操作，fullPage）。同内容提交 `b15b0c85` CI run `40829859560` 全绿（前置 `4d7877ae` 的 run 被同分支紧随推送取消，按后继同码提交核验）。
 
 - 代码基线：main `3d9dd6e6` 工作树 + 同日「跨目录同码定义共存」修复（trial_balance_v1 目录 revenue/gross_profit/gross_margin/net_profit 升 version 2；本次提交包含该修复与采集脚本）。flow_v1 指标目录未改动。
 - 演示数据：大麦物流 synthetic 演示（`make flow-demo` 当日重灌，分析运行 `01a1863f`，截至 2023-03）；导入演示为自构样例账套（科目余额 16 行 + 利润表 10 行 + 银行流水 4 行，期间 2025-01/02），发布产生快照 2 份并成为驾驶舱活跃源；采集完成后该数据集已删除，库恢复演示态。
