@@ -1,5 +1,11 @@
 # 科目余额表指标目录（R5 九页接线，work_item FLOW-WI-REAL-DATA-IMPORT-20261028-001）
 #
+# 跨目录共存规则（2026-10-29 修正）：MetricDefinition 注册表按 (metric_code,
+# version) 全局唯一。version: 2 集合 = 与 flow_v1 同码但口径不同的三个基座/派生码
+# （revenue/gross_profit/gross_margin）+ 依赖 revenue 的 net_profit（依赖图随
+# revenue@2 变更，旧版本依赖行不匹配会触发依赖图冲突）。两套定义并存，驾驶舱按
+# metric_code 匹配不受影响。禁止把本目录口径文本改成与 flow_v1 一致来"消冲突"。
+#
 # 边界（不虚构口径）：
 # - 只收录科目余额表可真实推导的七项指标，与 importer/normalization.derive_metrics
 #   同码同式；治理链快照值必须与直读派生值全等（tests/importer 口径等价测试）。
@@ -11,7 +17,7 @@ definition_set_id: flow.metrics.trial-balance.v1
 engine_version: flow.metrics.engine.v1
 metrics:
   - metric_code: revenue
-    version: 1
+    version: 2
     name: 营业收入
     business_definition: 损益类科目本期贷方发生额合计（科目余额表推导）。
     formula: sum_financial_account_amount
@@ -41,7 +47,7 @@ metrics:
     budget_dimension_sets: []
 
   - metric_code: net_profit
-    version: 1
+    version: 2
     name: 净利润
     business_definition: 营业收入减费用总额（损益类贷方减借方发生额）。
     formula: subtract
@@ -199,7 +205,7 @@ metrics:
     budget_dimension_sets: []
 
   - metric_code: gross_profit
-    version: 1
+    version: 2
     name: 毛利
     business_definition: 收入减营业成本（收入为损益贷方发生额合计口径）。
     formula: subtract
@@ -212,7 +218,7 @@ metrics:
     budget_dimension_sets: []
 
   - metric_code: gross_margin
-    version: 1
+    version: 2
     name: 毛利率
     business_definition: 毛利除以收入（收入为损益贷方发生额合计口径）。
     formula: ratio

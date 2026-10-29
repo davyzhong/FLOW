@@ -365,6 +365,49 @@ def test_identity_mismatch_blocks_publish(chain_env) -> None:
     )
 
 
+def test_publish_coexists_with_legacy_same_code_definition(chain_env) -> None:
+    """回归（2026-10-29 真实环境暴露）：MetricDefinition 注册表按
+    (metric_code, version) 全局唯一。库中已有同码旧定义（如 flow_v1 的
+    revenue@1 或历史 TB 目录残留）时，TB 目录的备择定义走 version 2，
+    发布不得 500，且旧定义内容不得被改动。"""
+    client, session = chain_env
+    from sqlalchemy import select
+
+    from flow_api.infrastructure.models.analytics import MetricDefinition
+
+    legacy = session.scalar(
+        select(MetricDefinition).where(
+            MetricDefinition.metric_code == "revenue",
+            MetricDefinition.version == 1,
+        )
+    )
+    legacy_payload = (
+        None if legacy is None else (legacy.name, legacy.formula, legacy.aggregation, legacy.unit)
+    )
+
+    dataset_id = _upload(client, _workbook_bytes(with_income=True), "共存账套")
+    receipt = client.post(f"/api/v1/importer/dataset/{dataset_id}/publish", headers=_HEADERS)
+    assert receipt.status_code == 200, receipt.text
+    assert receipt.json()["published"] is True
+
+    revenue_v2 = session.scalar(
+        select(MetricDefinition).where(
+            MetricDefinition.metric_code == "revenue",
+            MetricDefinition.version == 2,
+        )
+    )
+    assert revenue_v2 is not None
+    # 发布后快照的 revenue 值挂在 v2 定义上（此前如存在同码 v1，其内容保持原样）
+    if legacy_payload is not None:
+        session.refresh(legacy)
+        assert (
+            legacy.name,
+            legacy.formula,
+            legacy.aggregation,
+            legacy.unit,
+        ) == legacy_payload
+
+
 def test_bank_balance_discontinuity_rejected_at_upload(chain_env) -> None:
     """M3 上传门禁：流水余额不连续整批拒绝且逐行定位。"""
     client, _session = chain_env
