@@ -1,6 +1,7 @@
 import type { EChartsOption } from "echarts";
 
 import type { CockpitModuleChart } from "../../../lib/api/client";
+import { CHART_THEME, SERIES_PALETTE } from "./echarts-base";
 import { buildCombo, buildDonut, buildRankBar, buildWaterfall } from "./builders";
 import { formatFinancialValue } from "../number-format";
 
@@ -46,7 +47,17 @@ export function buildModuleChartOption(
         const item = params as { name?: string; value?: number };
         return `${item.name ?? ""}<br>${formatFinancialValue(item.value ?? 0, { unit })}`;
       } },
-      series: [{ type: "treemap", data, roam: false, breadcrumb: { show: false }, label: { show: true, formatter: "{b}" } }],
+      textStyle: { fontFamily: CHART_THEME.font },
+      series: [
+        {
+          type: "treemap",
+          data,
+          roam: false,
+          breadcrumb: { show: false },
+          color: [...SERIES_PALETTE],
+          label: { show: true, formatter: "{b}", color: CHART_THEME.ink, fontFamily: CHART_THEME.font },
+        },
+      ],
     };
   }
 

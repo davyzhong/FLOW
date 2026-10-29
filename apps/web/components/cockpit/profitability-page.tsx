@@ -55,8 +55,8 @@ function dupontOption(data: CockpitProfitabilityResponse): ReturnType<typeof bui
   return buildDupont(
     node("ROE", "roe", 80, 150, 78, CHART_THEME.blue),
     [
-      { node: node("净利率", "net_margin", 300, 45, 68, CHART_THEME.teal), children: [] },
-      { node: node("总资产周转率", "total_asset_turnover", 300, 150, 68, CHART_THEME.purple), children: [] },
+      { node: node("净利率", "net_margin", 300, 45, 68, CHART_THEME.emerald), children: [] },
+      { node: node("总资产周转率", "total_asset_turnover", 300, 150, 68, CHART_THEME.sand), children: [] },
       { node: node("权益乘数", "equity_multiplier", 300, 255, 68, CHART_THEME.gold), children: [] },
     ],
   );

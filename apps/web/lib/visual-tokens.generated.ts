@@ -21,10 +21,10 @@ export const VISUAL_TOKENS = {
   "colors-brand-navySoft": "#E8EEF1",
   "colors-data-revenue": "#1F4D70",
   "colors-data-profit": "#A98137",
-  "colors-data-cash": "#5EAA89",
-  "colors-data-series4": "#7F8FA0",
-  "colors-data-series5": "#877693",
-  "colors-data-series6": "#99A47E",
+  "colors-data-cash": "#398C65",
+  "colors-data-series4": "#2E699E",
+  "colors-data-series5": "#C7A471",
+  "colors-data-series6": "#163B5C",
   "colors-semantic-positive": "#286048",
   "colors-semantic-positiveSoft": "#E6F1E9",
   "colors-semantic-negative": "#B1483E",
@@ -75,8 +75,8 @@ export const VISUAL_TOKENS = {
   "chart-tooltipBorder": "#DED8CC",
   "chart-series-1": "#1F4D70",
   "chart-series-2": "#A98137",
-  "chart-series-3": "#5EAA89",
-  "chart-series-4": "#7F8FA0",
-  "chart-series-5": "#877693",
-  "chart-series-6": "#99A47E"
+  "chart-series-3": "#398C65",
+  "chart-series-4": "#2E699E",
+  "chart-series-5": "#C7A471",
+  "chart-series-6": "#163B5C"
 } as const;

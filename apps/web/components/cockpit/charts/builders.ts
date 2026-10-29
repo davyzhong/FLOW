@@ -15,7 +15,7 @@
 
 import type { EChartsOption } from "echarts";
 
-import { AXIS, CHART_THEME, TOOLTIP, legend } from "./echarts-base";
+import { AXIS, CHART_THEME, SERIES_PALETTE, TOOLTIP, legend } from "./echarts-base";
 import { formatFinancialValue } from "../number-format";
 import { VISUAL_TOKENS } from "../../../lib/visual-tokens.generated";
 
@@ -91,8 +91,8 @@ export function buildCombo(series: ComboSeries[]): ChartOption | undefined {
     series: usable.map((s, i) => {
       const isLine = s.axis === "line";
       const yAxisIndex = seriesAxisIndex(s);
-      // 财务报告主图使用墨蓝与古金区分核心序列；第三序列才使用青绿。
-      const color = s.color ?? [CHART_THEME.blue, CHART_THEME.gold, CHART_THEME.teal][i % 3];
+      // 财务报告主图使用墨蓝与古金区分核心序列；第三序列起按色阶（patterns.md 图表视觉规格）。
+      const color = s.color ?? SERIES_PALETTE[i % SERIES_PALETTE.length];
       return {
         name: `${s.title}（${s.unit}）`,
         type: s.axis,
@@ -134,7 +134,7 @@ export function buildQuadrant(
       trigger: "item",
       backgroundColor: VISUAL_TOKENS["chart-tooltipBackground"],
       borderColor: CHART_THEME.line,
-      textStyle: { color: CHART_THEME.ink, fontSize: 12 },
+      textStyle: { color: CHART_THEME.ink, fontSize: 12, fontFamily: CHART_THEME.font },
       formatter: (p: unknown) => {
         const d = (p as { data?: QuadrantPoint[] })?.data?.[0];
         return d ? `${d.name}<br>${d.detail}` : "";
@@ -144,13 +144,13 @@ export function buildQuadrant(
     xAxis: {
       type: "value",
       name: opts.xName + (opts.xUnit ? `（${opts.xUnit}）` : ""),
-      nameTextStyle: { color: CHART_THEME.mut, fontSize: 10 },
+      nameTextStyle: { color: CHART_THEME.mut, fontSize: 10, fontFamily: CHART_THEME.font },
       ...AXIS,
     },
     yAxis: {
       type: "value",
       name: opts.yName + (opts.yUnit ? `（${opts.yUnit}）` : ""),
-      nameTextStyle: { color: CHART_THEME.mut, fontSize: 10 },
+      nameTextStyle: { color: CHART_THEME.mut, fontSize: 10, fontFamily: CHART_THEME.font },
       ...AXIS,
     },
     series: [
@@ -164,14 +164,15 @@ export function buildQuadrant(
           position: "top",
           fontSize: 10.5,
           color: CHART_THEME.ink,
+          fontFamily: CHART_THEME.font,
         },
         markLine: {
           silent: true,
           symbol: "none",
-          lineStyle: { type: "dashed", color: CHART_THEME.gray },
+          lineStyle: { type: "dashed", color: CHART_THEME.gray, fontFamily: CHART_THEME.font },
           data: [
-            { xAxis: opts.vLine, label: { formatter: `关注线 ${opts.vLine}`, fontSize: 9, color: CHART_THEME.gray } },
-            { yAxis: opts.hLine, label: { formatter: `均值 ${opts.hLine}`, fontSize: 9, color: CHART_THEME.gray } },
+            { xAxis: opts.vLine, label: { formatter: `关注线 ${opts.vLine}`, fontSize: 9, color: CHART_THEME.gray, fontFamily: CHART_THEME.font } },
+            { yAxis: opts.hLine, label: { formatter: `均值 ${opts.hLine}`, fontSize: 9, color: CHART_THEME.gray, fontFamily: CHART_THEME.font } },
           ],
         },
       },
@@ -215,7 +216,7 @@ export function buildWaterfall(
       axisPointer: { type: "shadow" },
       backgroundColor: VISUAL_TOKENS["chart-tooltipBackground"],
       borderColor: CHART_THEME.line,
-      textStyle: { color: CHART_THEME.ink, fontSize: 12 },
+      textStyle: { color: CHART_THEME.ink, fontSize: 12, fontFamily: CHART_THEME.font },
       formatter: (ps: { name: string; dataIndex: number }[]) => {
         const i = ps[0].dataIndex;
         const s = steps[i];
@@ -248,7 +249,7 @@ export function buildWaterfall(
           show: true,
           position: "top",
           fontSize: 10,
-          color: CHART_THEME.ink,
+          color: CHART_THEME.ink, fontFamily: CHART_THEME.font,
           formatter: (p: { dataIndex: number }) => {
             const s = steps[p.dataIndex];
             const sign = s.kind === "down" ? "−" : s.kind === "up" ? "+" : "";
@@ -307,15 +308,15 @@ export function buildGauges(specs: GaugeSpec[]): ChartOption | undefined {
         axisLabel: {
           distance: -2,
           fontSize: 8,
-          color: CHART_THEME.gray,
+          color: CHART_THEME.gray, fontFamily: CHART_THEME.font,
           formatter: (v: number) => (v % (s.max / 4) === 0 ? formatFinancialValue(v, { unit: s.unit, appendUnit: false }) : ""),
         },
-        title: { offsetCenter: [0, "64%"], fontSize: 10.5, color: CHART_THEME.mut },
+        title: { offsetCenter: [0, "64%"], fontSize: 10.5, color: CHART_THEME.mut, fontFamily: CHART_THEME.font },
         detail: {
           offsetCenter: [0, "94%"],
           fontSize: 14,
           fontWeight: 700,
-          color: CHART_THEME.ink,
+          color: CHART_THEME.ink, fontFamily: CHART_THEME.font,
           formatter: (v: number) => formatFinancialValue(v, { unit: s.unit }),
         },
         data: [{ value: s.value, name: `${s.title}｜管控线 ${s.controlLine}${s.unit}` }],
@@ -335,13 +336,13 @@ export interface Slice {
 export function buildDonut(slices: Slice[], unit: string, rose = false): ChartOption | undefined {
   const usable = slices.filter((s) => Number.isFinite(s.value) && s.value > 0);
   if (usable.length === 0) return undefined;
-  const palette = [CHART_THEME.blue, CHART_THEME.teal, CHART_THEME.purple, CHART_THEME.gold, CHART_THEME.ltblue];
+  const palette = SERIES_PALETTE;
   return {
     tooltip: {
       trigger: "item",
       backgroundColor: VISUAL_TOKENS["chart-tooltipBackground"],
       borderColor: CHART_THEME.line,
-      textStyle: { color: CHART_THEME.ink, fontSize: 12 },
+      textStyle: { color: CHART_THEME.ink, fontSize: 12, fontFamily: CHART_THEME.font },
       formatter: (p: { name: string; value: number; percent: number }) =>
         `${p.name}<br>${formatFinancialValue(p.value, { unit })}（${formatFinancialValue(p.percent, { unit: "%" })}）`,
     },
@@ -356,7 +357,7 @@ export function buildDonut(slices: Slice[], unit: string, rose = false): ChartOp
           show: true,
           position: "outside",
           fontSize: 10.5,
-          color: CHART_THEME.ink,
+          color: CHART_THEME.ink, fontFamily: CHART_THEME.font,
           formatter: "{b}\n{d}%",
         },
         labelLine: { length: 10, length2: 10 },
@@ -380,14 +381,14 @@ export interface RadarSeries {
 
 export function buildRadar(indicators: string[], series: RadarSeries[], max = 100): ChartOption | undefined {
   if (indicators.length === 0 || series.length === 0) return undefined;
-  const colors = [CHART_THEME.blue, CHART_THEME.gold, CHART_THEME.teal];
+  const colors = SERIES_PALETTE;
   return {
     tooltip: {},
     legend: legend(series.map((s) => s.name)),
     radar: {
       indicator: indicators.map((name) => ({ name, max })),
       radius: "62%",
-      axisName: { color: CHART_THEME.mut, fontSize: 10.5 },
+      axisName: { color: CHART_THEME.mut, fontSize: 10.5, fontFamily: CHART_THEME.font },
       splitLine: { lineStyle: { color: CHART_THEME.line } },
       splitArea: { show: false },
     },
@@ -420,7 +421,7 @@ export function buildHeatmap(
       position: "top",
       backgroundColor: VISUAL_TOKENS["chart-tooltipBackground"],
       borderColor: CHART_THEME.line,
-      textStyle: { color: CHART_THEME.ink, fontSize: 12 },
+      textStyle: { color: CHART_THEME.ink, fontSize: 12, fontFamily: CHART_THEME.font },
       formatter: (p: { value: [number, number, number] }) => {
         const c = cells.find((x) => x.x === xs[p.value[0]] && x.y === ys[p.value[1]]);
         return c ? `${c.y} · ${c.x}<br>${formatFinancialValue(c.value, { unit: opts.suffix })}${c.extra ? `<br>${c.extra}` : ""}` : "";
@@ -452,7 +453,7 @@ export function buildHeatmap(
         type: "heatmap",
         data: cells.map((c) => [xs.indexOf(c.x), ys.indexOf(c.y), c.value]),
         itemStyle: { borderColor: VISUAL_TOKENS["colors-surface-raised"], borderWidth: 2 },
-        label: { show: true, fontSize: 11, fontWeight: 700, color: CHART_THEME.ink, formatter: (p: { value: [number, number, number] }) => formatFinancialValue(p.value[2], { unit: opts.suffix, appendUnit: false }) },
+        label: { show: true, fontSize: 11, fontWeight: 700, color: CHART_THEME.ink, fontFamily: CHART_THEME.font, formatter: (p: { value: [number, number, number] }) => formatFinancialValue(p.value[2], { unit: opts.suffix, appendUnit: false }) },
         emphasis: { itemStyle: { shadowBlur: 6 } },
       },
     ],
@@ -483,7 +484,7 @@ export function buildDupont(
     tooltip: {
       backgroundColor: VISUAL_TOKENS["chart-tooltipBackground"],
       borderColor: CHART_THEME.line,
-      textStyle: { color: CHART_THEME.ink, fontSize: 12 },
+      textStyle: { color: CHART_THEME.ink, fontSize: 12, fontFamily: CHART_THEME.font },
       formatter: (p: { data?: { formula?: string } }) => p.data?.formula ?? "",
     },
     series: [
@@ -528,7 +529,7 @@ export function buildRankBar(
       trigger: "item",
       backgroundColor: VISUAL_TOKENS["chart-tooltipBackground"],
       borderColor: CHART_THEME.line,
-      textStyle: { color: CHART_THEME.ink, fontSize: 12 },
+      textStyle: { color: CHART_THEME.ink, fontSize: 12, fontFamily: CHART_THEME.font },
       formatter: (p: { name: string; value: number }) => `${p.name}<br>${formatFinancialValue(p.value, { unit })}`,
     },
     grid: { left: 96, right: 60, top: 12, bottom: 20 },
@@ -545,7 +546,7 @@ export function buildRankBar(
             borderRadius: [0, 4, 4, 0],
           },
         })),
-        label: { show: true, position: "right", fontSize: 10.5, color: CHART_THEME.ink, formatter: (p: { dataIndex: number }) => sorted[p.dataIndex].display },
+        label: { show: true, position: "right", fontSize: 10.5, color: CHART_THEME.ink, fontFamily: CHART_THEME.font, formatter: (p: { dataIndex: number }) => sorted[p.dataIndex].display },
       },
     ],
   };
@@ -562,7 +563,7 @@ export function buildAgingBars(segs: { label: string; pct: number; days?: string
       trigger: "item",
       backgroundColor: VISUAL_TOKENS["chart-tooltipBackground"],
       borderColor: CHART_THEME.line,
-      textStyle: { color: CHART_THEME.ink, fontSize: 12 },
+      textStyle: { color: CHART_THEME.ink, fontSize: 12, fontFamily: CHART_THEME.font },
       formatter: (p: { name: string; value: number }) => `${p.name}<br>${formatFinancialValue(p.value, { unit: "%" })}${segs[usable.indexOf(p as never)]?.days ? `（约 ${formatFinancialValue(segs[usable.indexOf(p as never)].days, { metricCode: "dso_days", unit: "day" })}）` : ""}`,
     },
     grid: { left: 110, right: 56, top: 12, bottom: 20 },
@@ -573,7 +574,7 @@ export function buildAgingBars(segs: { label: string; pct: number; days?: string
         type: "bar",
         barMaxWidth: 16,
         data: usable.map((s, i) => ({ value: s.pct, itemStyle: { color: colors[i % colors.length], borderRadius: [0, 4, 4, 0] } })),
-        label: { show: true, position: "right", fontSize: 10.5, color: CHART_THEME.ink, formatter: (p: { value: number }) => formatFinancialValue(p.value, { unit: "%" }) },
+        label: { show: true, position: "right", fontSize: 10.5, color: CHART_THEME.ink, fontFamily: CHART_THEME.font, formatter: (p: { value: number }) => formatFinancialValue(p.value, { unit: "%" }) },
       },
     ],
   };

@@ -53,10 +53,16 @@ echarts.use([
   CanvasRenderer,
 ]);
 
-/** 语义色：与 cockpit.css 的 CSS 变量保持一致（正/负/警示/未就绪） */
+/**
+ * 语义色与图表字族：全部来自视觉语言包 token（patterns.md「图表视觉规格」）。
+ * - 数据系列色阶由概念板四语义色推导：墨蓝(收入)/古金(利润)/翡翠绿(现金，
+ *   semantic-positive 提明度)/墨蓝亮·金沙亮·墨蓝深（同色相明暗阶梯，多系列明暗区分）。
+ * - chart-font-family 是画布内文字（轴标签/图例/数据标签/tooltip）的统一字族，
+ *   不设置会退回浏览器默认 sans-serif，与页面字系脱节。
+ */
 export const CHART_THEME = {
   blue: VISUAL_TOKENS["colors-data-revenue"],
-  blueSoft: VISUAL_TOKENS["colors-data-series4"],
+  navyLight: VISUAL_TOKENS["colors-data-series4"],
   green: VISUAL_TOKENS["colors-semantic-positive"],
   red: VISUAL_TOKENS["colors-semantic-negative"],
   warn: VISUAL_TOKENS["colors-semantic-warning"],
@@ -65,16 +71,27 @@ export const CHART_THEME = {
   ink: VISUAL_TOKENS["colors-text-primary"],
   mut: VISUAL_TOKENS["colors-text-muted"],
   line: VISUAL_TOKENS["chart-grid"],
-  teal: VISUAL_TOKENS["colors-data-cash"],
-  purple: VISUAL_TOKENS["colors-data-series5"],
-  ltblue: VISUAL_TOKENS["colors-data-series4"],
+  emerald: VISUAL_TOKENS["colors-data-cash"],
+  sand: VISUAL_TOKENS["colors-data-series5"],
+  navyDeep: VISUAL_TOKENS["colors-data-series6"],
+  font: VISUAL_TOKENS["chart-fontFamily"],
 } as const;
+
+/** 多系列图表的默认系列色阶（相邻色相/明度错开） */
+export const SERIES_PALETTE = [
+  CHART_THEME.blue,
+  CHART_THEME.gold,
+  CHART_THEME.emerald,
+  CHART_THEME.navyLight,
+  CHART_THEME.sand,
+  CHART_THEME.navyDeep,
+] as const;
 
 /** 通用轴配置（保持所有图表的坐标轴行为一致） */
 export const AXIS = {
   axisLine: { lineStyle: { color: CHART_THEME.line } },
   axisTick: { show: false },
-  axisLabel: { color: CHART_THEME.mut, fontSize: 11 },
+  axisLabel: { color: CHART_THEME.mut, fontSize: 11, fontFamily: CHART_THEME.font },
   splitLine: { lineStyle: { color: CHART_THEME.line } },
 } as const;
 
@@ -82,11 +99,11 @@ export const TOOLTIP = {
   trigger: "axis" as const,
   backgroundColor: VISUAL_TOKENS["chart-tooltipBackground"],
   borderColor: CHART_THEME.line,
-  textStyle: { color: CHART_THEME.ink, fontSize: 12 },
+  textStyle: { color: CHART_THEME.ink, fontSize: 12, fontFamily: CHART_THEME.font },
 } as const;
 
 export function legend(names: string[]) {
-  return { data: names, top: 0, right: 0, itemWidth: 10, itemHeight: 8, textStyle: { fontSize: 11, color: CHART_THEME.mut } };
+  return { data: names, top: 0, right: 0, itemWidth: 10, itemHeight: 8, textStyle: { fontSize: 11, color: CHART_THEME.mut, fontFamily: CHART_THEME.font } };
 }
 
 /**

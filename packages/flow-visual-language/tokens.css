@@ -21,10 +21,10 @@
   --flow-vl-colors-brand-navy-soft: #E8EEF1;
   --flow-vl-colors-data-revenue: #1F4D70;
   --flow-vl-colors-data-profit: #A98137;
-  --flow-vl-colors-data-cash: #5EAA89;
-  --flow-vl-colors-data-series4: #7F8FA0;
-  --flow-vl-colors-data-series5: #877693;
-  --flow-vl-colors-data-series6: #99A47E;
+  --flow-vl-colors-data-cash: #398C65;
+  --flow-vl-colors-data-series4: #2E699E;
+  --flow-vl-colors-data-series5: #C7A471;
+  --flow-vl-colors-data-series6: #163B5C;
   --flow-vl-colors-semantic-positive: #286048;
   --flow-vl-colors-semantic-positive-soft: #E6F1E9;
   --flow-vl-colors-semantic-negative: #B1483E;
@@ -75,8 +75,8 @@
   --flow-vl-chart-tooltip-border: #DED8CC;
   --flow-vl-chart-series-1: #1F4D70;
   --flow-vl-chart-series-2: #A98137;
-  --flow-vl-chart-series-3: #5EAA89;
-  --flow-vl-chart-series-4: #7F8FA0;
-  --flow-vl-chart-series-5: #877693;
-  --flow-vl-chart-series-6: #99A47E;
+  --flow-vl-chart-series-3: #398C65;
+  --flow-vl-chart-series-4: #2E699E;
+  --flow-vl-chart-series-5: #C7A471;
+  --flow-vl-chart-series-6: #163B5C;
 }

@@ -102,8 +102,8 @@ export function CockpitOverviewVisuals({
   const expenseColors: Record<string, string> = {
     销售: CHART_THEME.blue,
     管理: CHART_THEME.gold,
-    研发: CHART_THEME.teal,
-    财务: CHART_THEME.purple,
+    研发: CHART_THEME.emerald,
+    财务: CHART_THEME.sand,
   };
   const expenseComparisonOption = expenseComparisonReady ? buildCombo(expenseComparisonSeries.map(([title, values]) => ({
     key: title,

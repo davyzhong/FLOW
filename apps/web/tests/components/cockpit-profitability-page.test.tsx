@@ -3,7 +3,8 @@ import { describe, expect, it, vi } from "vitest";
 
 vi.mock("../../components/cockpit/charts/echarts-base", () => ({
   ChartBox: ({ testId, title, ariaLabel, option }: { testId?: string; title: string; ariaLabel?: string; option?: unknown }) => <div data-testid={testId} data-chart-option={JSON.stringify(option)}>{title}<span role="img" aria-label={ariaLabel} /></div>,
-  CHART_THEME: { blue: "#2563eb", blueSoft: "#93c5fd", green: "#16a34a", red: "#dc2626", warn: "#d97706", gold: "#b45309", gray: "#b0b0b0", ink: "#0f172a", mut: "#64748b", line: "#e2e8f0", teal: "#0d9488", purple: "#7c3aed", ltblue: "#60a5fa" },
+  CHART_THEME: { blue: "#2563eb", navyLight: "#60a5fa", green: "#16a34a", red: "#dc2626", warn: "#d97706", gold: "#b45309", gray: "#b0b0b0", ink: "#0f172a", mut: "#64748b", line: "#e2e8f0", emerald: "#0d9488", sand: "#d9a441", navyDeep: "#1e3a5f", font: "test-sans" },
+  SERIES_PALETTE: ["#2563eb", "#b45309", "#0d9488", "#60a5fa", "#d9a441", "#1e3a5f"],
   AXIS: {},
   TOOLTIP: {},
   legend: () => ({}),
