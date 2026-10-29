@@ -3,9 +3,9 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目交接文档
 doc_type: navigation
 status: current
-version: 17.12
+version: 17.13
 created_at: 2026-09-12
-updated_at: 2026-10-28
+updated_at: 2026-10-29
 owner: FLOW
 applies_to: repository
 ---
@@ -26,6 +26,18 @@ applies_to: repository
 
 **2026-10-25 指标资料学习补记（独立文档分支）：** 已直接核读“数研复盘狮”《经营驾驶舱分析指标库》20 张原图，完成来源指纹/逐图采用映射与现有指标库查重；补入 [METRIC_SYSTEM_GOALS](docs/20_product/METRIC_SYSTEM_GOALS.md)、愿景/范围和路线图既有事项 7 的来源评审/影响范围。本轮不改运行公式/数据/阈值/数据库或 CURRENT_RELEASE，也不写视觉任务活动工作树；视觉事项 12 继续由原任务执行，队列数量不变。后续应从本路线图资料增量进入既有来源与产品影响评审，再安排代码切片；不能从文章截图直接发布公式或通用阈值。图片抽取进程的完成状态未被本次独立核读替代，Obsidian/原图未修改。本分支文档已通过独立新上下文复核（无必要 P1/P2）和 M1/M6、计划视图、链接/差异检查，集成时保留视觉分支更新后的当前状态，不把本文快照覆盖为新状态。完整依据见[二十图核读报告](docs/60_delivery/verification/2026-10-25--business-metric-library-reference-review-v1.md)。
 
+
+### 2026-10-29 会话结束交接
+
+**当前任务与状态。** 唯一队列以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)（v17.57）为准：队列 18 行（历史 16 项 + N1/N2）= 完成 12 / 排队 3 / 暂停 2（P3 数据扩张 + K3 知识刷新）/ 外部条件受限 1；**当前没有活跃执行项，队首待用户裁决下一产品方向**。本会话结束时没有正在运行的进程；分支 `main`，远端仅 `main` 一个分支，本地只有 main 一个 checkout，工作区干净，本交接提交的父提交为 `3d9dd6e6`。两个工作包均已关闭：真实数据导入（FLOW-WI-REAL-DATA-IMPORT，R1–R5）与导入账套指标补厚（FLOW-WI-IMPORTER-RICH-METRICS，M1–M3）。K3 知识刷新保持挂起（恢复点第 163 批，pending 7,813），`CURRENT_RELEASE` 不变，ObsidianWiki 只读未动。
+
+**已完成（本会话，均已推送）。** ① **R5 九页驾驶舱全量接线**（`a2510344`，CI run `40651999130` 全绿）：`importer/publish_chain.py` 把已校验科目余额表构造为 CanonicalPackage → `load_canonical_package` 直写 canonical → 勾稽写 ReconciliationResult → `IntakeService.publish_import` 复用发布门禁 → `config/metrics/trial_balance_v1_metrics.yaml` 逐期间 MetricSnapshot → AnalysisRun；九页经 `DashboardSourceRepository.get_latest` 自动切换活跃源，未改 dashboard service。引擎最小通用化：`MetricSpec.financial_account` 目录驱动财务科目绑定（flow_v1 指纹经 stash 对比确认不变 `4214ae85339e`）；playbook 输入模型 `source_record_count` 放宽 `ge=0` + `_ar_input` DSO 零分母守卫（空经营行走既有 degraded 分支）。路由 `GET /dataset/{id}/chain`、`POST /dataset/{id}/publish`、DELETE 级联下线；向导「发布到驾驶舱」步骤。工作包关闭 `7400c44f`。② **指标补厚 M1–M3**：M1 `082f2f94` 科目级映射（`config/importer/account_mapping_v1.yaml` 5 组前缀映射、组内方向净额、未命中回落类别聚合，+5 结构指标）；M2 `f6a52467` 利润表接线（`importer/income_items.py` 13 项标准化字典、IS_* 事实、期间并集、**净利润勾稽门禁** `income_statement_net_profit`，+7 指标含毛利率，dashboard 毛利率卡点亮）；M3 `715a2d6d` 银行流水（模板/读取/**余额连续性**校验/`import_bank_statement_row` 存储/路由第三张可选表、现金收付口径 +3 指标，不绑权责 `operating_cash_flow`）。导入链指标 7→22；集成测试 6/6（`tests/integration/test_importer_publish_chain.py`，进 CI core 分片）；准确 SHA CI `90dce69e` run `40665135693` 全绿，回填 `3d9dd6e6`。③ 修复 CI contracts 两连挂根因（`d4c03829` 加 metrics 端点未再生成契约）。④ 环境清理：移除 `/private/tmp/flow-realdata` worktree 与已合并分支 `flow/real-data-import-20261028`（本地+远端）。⑤ 记忆文件 `flow-real-data-import-20261028.md` 与索引已更新。
+
+**卡住的问题与真实限制（无阻塞项，以下为如实登记）。** ① `715a2d6d` 的 CI run `40664953717` 被同分支紧随的文档提交并发取消，按铁律以其后继同码提交 `90dce69e` 的 run 核验全绿，已在路线图说明。② `tests/importer` 本地套件（28 项）不在 CI 分片映射内（分片只跑 `tests/{integration,investigation,copilot,api}`），属本地回归；不改 CI 配置的红线下未纳入。③ 活跃源语义=`get_latest` 按期间最新优先：导入账套期间早于大麦 2023-03 时不会成为驾驶舱活跃源，向导以 `is_active_source` 如实提示，未做显式切换 UI。④ 仪表盘新鲜度：快照月距当前 >1 月判 `stale`、不足 12 期趋势判 `degraded`，均为设计内诚实降级，导入历史账套会如此显示。⑤ 八张 KPI 卡固定（CARD_DEFINITIONS 未动）：orders/revenue_per_order/fulfillment_cost_rate/ar_balance/operating_cash_flow 对导入账套永远 unavailable（D054 不虚构）。⑥ 口径边界：revenue 仍=损益贷方发生额合计（含其他业务/营业外贷方项），毛利率分母即该口径；损益明细只来自利润表，利润表缺席则成本/费用分项缺席；科目级映射只做资产负债结构（不双源）。⑦ 流水与货币资金变动的交叉核对未做（口径差异源多），登记为后续候选。⑧ GitHub 推送间歇 `SSL_ERROR_SYSCALL`，重试即过，无需处置。
+
+**下一单一动作。** 接手先 `git pull --ff-only`、读本节与 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)、[指标补厚工作包](docs/50_plans/work_items/FLOW--importer-rich-metrics.md)。**队首待用户裁决**，候选方向（按与现有链路的衔接度排序）：① 科目级映射扩展到损益类科目（利润表缺席时的费用分项降级源，需先修订「不双源」规则：有利润表时以利润表为准）；② 银行流水净现金流 ↔ 余额表货币资金组变动交叉核对（M3 登记候选，建议 warning 级）；③ 向导内用户自定义科目映射（前缀表可编辑/可导出）；④ 恢复 K3 缩减策略（HIGH 精读 + 批量过滤）；⑤ 其他。裁决后按计划治理铁律：先落盘工作包与路线图、门禁、提交推送，再改代码。
+
+**踩坑与恢复要点。** ① 新增/修改 API 路由后必须 `make contracts` 再生成 openapi.json，否则后续任何提交（含纯文档）CI 在 contracts job 连挂。② 要进 CI 的测试放 `tests/integration/`（`scripts/integration_test_shards.py` 自动归入 core 分片）。③ 给 `MetricSpec` 加可选字段时必须在 `metric_catalog_hash` 对 None 做 pop，否则 flow_v1 definition hash 漂移；验证法：`git stash` 前后比对 hash。④ canonical 载荷 `FinancialActualRecord.record_id` 必须是 UUID 字符串（用 uuid5 确定性生成保证幂等）。⑤ **空映射组不写 0 金额事实**：0 会让 prior_month 环比 `variance_pct(0,0)` 抛 zero_denominator 让整次发布 422，且 0 会冒充真实余额——缺席≠零。⑥ 多期样例工作簿每期必须期初借贷平衡、期末借贷平衡、科目编码期内唯一，否则上传校验整批拒绝。⑦ 本地调试脚本直连 flow_test 需三件套 `DATABASE_URL`（flow_test）/`FLOW_ENV=development`/`FLOW_DEV_ACTOR_ID=flow-dev-bp`，鉴权头 `Bearer flow-dev-bp`；调试残留清理：遍历 `import-dataset-%` 批次 `withdraw_dataset_chain` + `store.delete_dataset`（本会话曾积 14 链 21 数据集并污染 get_latest）。⑧ 级联删除顺序：Fact* 先于 SourceRecord（RESTRICT FK），共享维度 Period/Organization/ManagementAccount 不删；数据集删除后 `/chain` 端点 404 属预期。⑨ plan_views 门禁：工作包状态令牌必须以 **粗体** 出现在路线图表格行（`**completed**`），改状态后 `scripts/documentation/plan_views.py --write` 重生成视图再 `--check`。⑩ 同分支紧随提交会并发取消前一 CI run，代码提交后先等 CI 再推文档提交，或在文档中说明以后继同码提交核验。⑪ `ruff format` 会改动刚读过的文件，再 Edit 前须重新 Read；多处字符串替换用脚本 + 断言锚点，锚点失配时整体不写入。
 
 ### 2026-10-27 会话结束交接
 
