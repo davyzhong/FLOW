@@ -2,10 +2,11 @@
 doc_id: FLOW-WI-KNOWLEDGE-REFRESH-V2-001
 title: 第二代静态知识刷新与战略重基线
 doc_type: work-item
-status: active
-version: 11.49
+status: cancelled
+version: 11.50
 created_at: 2026-09-24
-updated_at: 2026-10-26
+updated_at: 2026-10-30
+do_not_execute: true
 owner: FLOW
 depends_on: [FLOW-DESIGN-KNOWLEDGE-REFRESH-002]
 acceptance_refs: [FLOW-PLAN-INTEGRATED-EXECUTION-20260924, FLOW-DESIGN-KNOWLEDGE-REFRESH-002]
@@ -14,6 +15,8 @@ applies_to: knowledge-system
 ---
 
 # 第二代静态知识刷新与战略重基线
+
+> **2026-10-30 用户取消：** K3 全量知识库与文档整理以及后续 K4–K6 不再是 FLOW 项目任务，不读取全量知识库，不继续批次审阅，不生成候选 release。下文为截至取消前的历史证据与操作记录，不是可领取的执行步骤。K0–K2 已完成事实保留；原始档案和 `CURRENT_RELEASE` 均不改动。
 
 ## 范围
 

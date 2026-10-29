@@ -5,10 +5,10 @@ doc_type: generated
 status: generated
 version: 1.0
 created_at: 2026-09-12
-updated_at: 2026-10-28
+updated_at: 2026-10-30
 owner: FLOW
 generator_ref: scripts/documentation/plan_views.py
-input_hash: 9068bfa772fda9ce0dddfecc74ed71ad98a09436774a8a326f180c42439ba4da
+input_hash: d931df7b3f3df87a0ef57f2aa62e4c7896b5cba76cc48a7973494c33850349f4
 applies_to: planning
 ---
 
@@ -22,6 +22,7 @@ applies_to: planning
 - [CFO 驾驶舱盈利分析与图表缺口补全](../work_items/COCKPIT--visual-analysis-expansion.md) — `completed`
 - [财务指标目录（驾驶舱前置）](../work_items/FINMETRIC--financial-metric-catalog.md) — `completed`
 - [导入账套指标补厚（科目级映射 + 利润表/银行流水接线）](../work_items/FLOW--importer-rich-metrics.md) — `completed`
+- [第二代静态知识刷新与战略重基线](../work_items/KNOWLEDGE--refresh-v2.md) — `cancelled`
 - [清理已合入 main 的历史远端分支](../work_items/FLOW--merged-branch-cleanup.md) — `completed`
 - [企业组织建制与经营账套初始化包](../work_items/ORG-LEDGER--enterprise-initialization-package.md) — `completed`
 - [真实数据导入（单机原型从演示走向可用）](../work_items/FLOW--real-data-import.md) — `completed`
@@ -30,6 +31,5 @@ applies_to: planning
 - [U04 独立 oracle 录入与全行验证](../work_items/U04--independent-oracle.md) — `completed`
 - [U08 生产就绪收口](../work_items/U08--production-readiness.md) — `completed`
 - [大麦数据后的剩余体验收口](../work_items/UX--post-damai-experience-closeout.md) — `completed`
-- [可复用视觉语言提炼与 FLOW 全项目视觉统一](../work_items/FLOW--portable-visual-language-and-full-project-restyle.md) — `completed`
 - [AI 问数 v1 与 100 问评测集（T12）](../work_items/PUBLIC--ai-qa-v1.md) — `completed`
 - [数据点级溯源、重述检测、AI 起草与只读 MCP（T10）](../work_items/PUBLIC--provenance-restatement-mcp.md) — `completed`

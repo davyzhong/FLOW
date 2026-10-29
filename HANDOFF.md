@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目交接文档
 doc_type: navigation
 status: current
-version: 17.14
+version: 17.16
 created_at: 2026-09-12
 updated_at: 2026-10-30
 owner: FLOW
@@ -16,7 +16,19 @@ applies_to: repository
 
 ---
 
-## 一、当前任务
+### 2026-10-30 最新接手记录
+
+**当前任务。** 用户 2026-10-30 明确纠偏：取消 K3 全量知识库/文档整理，接手概念图的全部图形、图像和图表视觉统一。唯一队列调整为 17 项：完成 11、实际执行中 1（事项 12 视觉复工）、排队 3、暂停 1、外部条件受限 1。K3/K4–K6 已取消，不再扫描全量知识库；既有证据与 `CURRENT_RELEASE` 保持原样。此前银行流水交叉核对选项已被本次新指令覆盖，不启动。
+
+**本次完成。** 核对本地与远端仅 `main`、本地仅一个 checkout；`make flow` 单机演示服务仍运行，无开发或审阅任务进程。修正路线图旧的 16 项/K3 进行中/worktree 状态与阅读入口，提交 `bb0e485f` 并推送。文档 M1、链接检查、`git diff --check` 通过；独立复核发现的旧 worktree 表述已修正。该提交的 GitHub CI 尚未核验，不引用前一提交的绿灯。
+
+**当前限制与下一步。** `bf98ed87` 已修改图表色阶和画布字体并重采部分截图，但用户指出与概念图仍有明显差距。概念板和真实驾驶舱/费用截图已目检：环图和分组柱的金色面积、明亮蓝使用、图例/柱宽/信息层级仍需逐图审查。已重新打开原视觉工作包；先提交计划与唯一队列，再盘点所有当前图形、图像、图表并实施修正，最终以真实截图和准确 SHA 验收。
+
+**踩坑。** 不能把先前视觉工作包的 completed、`bf98ed87` 的色板替换或旧截图矩阵当作用户要求的视觉终验。路线图和交接的旧段落保留历史，但当前任务只以本节及更新后的唯一队列为准；K3 已取消。
+
+---
+
+## 一、历史任务记录（以下为旧快照，不作为当前队首）
 
 **2026-10-27 分支合并与环境清理（用户指令「干净清爽的环境」）：** 全部活动分支已合并进 main 并删除，**远端现仅剩 `main` 一个分支**。合并序列：① `flow/roadmap-cleanup-20261027`（含 PR #5 视觉语言/K3 批次 129–133 + 路线图规整 v17.17 + publishing-golden 修复 `775f283a`）合入 main（merge `5d2b77f6`）；② PR #6 `codex/metric-system-reference-20261025` union 合入（merge `b70de445`：保留 main 最新状态 + METRIC_SYSTEM_GOALS/20 图核读报告/产品文档增量，「指标体系资料增量」节归档进路线图历史 details）。**publishing-golden CI 失败已修复**（`775f283a`）：`test_visual_export_theme` 硬编码 macOS 字体名而生成器按 `platform.system()` 选择字体，断言改为跟随 `_primary_font()`；本地 5/5 通过，Linux CI 将走 Noto 路径。合并后 main 准确基线 `b70de445`；PR #5 自动标记 MERGED，PR #6 因先删分支记为 CLOSED、已留评论说明内容经 `b70de445` 合入。已删远端分支：`codex/flow-visual-language`、`codex/metric-system-reference-20261025`、`flow/roadmap-cleanup-20261027`、`wip/zto-integration-20260929`（内容早已全在 main）。本地删除 17 个已合并分支并移除 6 个干净 worktree；**保留 3 项**：`.worktrees/readme-visual-main`（11 个 staged 的 10-18 D055 文档暂存，内容均已有 main 更新版，可安全清理但留待用户确认）、`.worktrees/cockpit-visual-completion`（含用户要求保留的 `services/api/flow.sqlite3` 未跟踪文件）、`codex/frontend-consistency-remediation` 本地分支（9-18 的 wip 保存，未全在 main）。主 checkout 仍在 `flow/u04-closeout-20261016`（已全在 main），其 4 个未提交驾驶舱文件保持原样；切回 main 由用户决定。队列状态不变：下一单一动作 = **K3 第 134 批**。
 
@@ -187,7 +199,7 @@ applies_to: repository
 1. **K0 已完成**：Davybase 运行清单实现、微信历史批次严格验收和证据归档已推送。
 2. **K1 已完成**：只读 allowlist scanner 已扫描三个非微信范围；566 篇需人工 triage，可执行候选 0，证据见工作包。
 3. **K2 已完成**：即时稳定工作区快照，验收见知识刷新设计 v1.2。
-4. **K3 当前执行**：registry/baseline/diff 已按 10-26 accepted manifest 重建；当前进行逐条语义路由与 HIGH 精读。
+4. **K3 暂停**：registry/baseline/diff 已按 10-26 accepted manifest 重建；已审至第 162 批，剩余 7,813 条待审，恢复点第 163 批。
 5. **K4** MED/LOW 双审抽样、错误集中度与 coverage 闭合
 6. **K5** 构建 candidate + seal
 7. **K6/战略裁决** 原子激活 release（须用户裁决，Agent 不可代签）
@@ -316,7 +328,7 @@ bash scripts/test_damai_demo_e2e.sh
 | `docs/50_plans/work_items/COCKPIT--cfo-dashboard-implementation.md` | 驾驶舱工作包（completed） |
 | `docs/50_plans/work_items/FINMETRIC--financial-metric-catalog.md` | 指标目录工作包（completed） |
 | `docs/50_plans/work_items/U04--independent-oracle.md` | U04 工作包（completed） |
-| `docs/50_plans/work_items/KNOWLEDGE--refresh-v2.md` | 知识刷新工作包（K0/K1/K2 完成，当前执行 K3） |
+| `docs/50_plans/work_items/KNOWLEDGE--refresh-v2.md` | 知识刷新工作包（K0/K1/K2 完成，K3 按用户裁决暂停） |
 | `docs/60_delivery/verification/2026-10-16--u04-blind-review-rerun-v1.md` | 盲评复评验证文档 |
 | `docs/60_delivery/verification/2026-10-16--cockpit-51-chart-coverage-mapping-v1.md` | 51 图覆盖映射 |
 | `docs/60_delivery/verification/2026-10-12--damai-source-baseline-audit-v1.md` | 来源基线审计 |

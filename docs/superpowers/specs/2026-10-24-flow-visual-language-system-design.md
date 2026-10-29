@@ -3,9 +3,9 @@ doc_id: FLOW-SPEC-VISUAL-LANGUAGE-20261024-001
 title: FLOW 可移植视觉语言与全项目视觉统一设计
 doc_type: specification
 status: approved
-version: 1.1
+version: 1.2
 created_at: 2026-10-24
-updated_at: 2026-10-24
+updated_at: 2026-10-30
 owner: FLOW
 applies_to: product-visual-language
 decision_refs: [D052, D053, D054, D055]
@@ -14,6 +14,8 @@ knowledge_release: flow-knowledge-2026-09-12.1
 ---
 
 # FLOW 可移植视觉语言与全项目视觉统一设计
+
+> **2026-10-30 用户纠偏：** 概念图视觉不是仅供抽象参考的宽泛方向。全项目当前用户可见图形、图像和图表应在不改动真实数据与语义的前提下，尽可能贴近概念板的颜色、字体、形态、密度与表达方式。既有 token 接线和 20 路由可加载验证不足以证明视觉对齐；验收必须逐对象目检、记录差距并用真实页面/输出截图复核。实施范围与顺序见[复工工作包](../../50_plans/work_items/FLOW--portable-visual-language-and-full-project-restyle.md)。
 
 ## 1. 目标
 
