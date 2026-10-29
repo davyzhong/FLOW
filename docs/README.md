@@ -32,7 +32,7 @@ applies_to: docs
 [战略重构设计（D052–D054）](superpowers/specs/2026-09-13-flow-strategic-reset-design.md)是当前最高产品方向：企业内部 AI 财务分析工作台为最终产品，公开财报为独立模块；固定原则见 [PRODUCT_PRINCIPLES](20_product/PRODUCT_PRINCIPLES.md)。[D049 方向与验收](superpowers/specs/2026-09-06-objective-financial-analysis-direction.md)继续约束公开模块；[统一财务事实合同](superpowers/specs/financial-facts-contract.md)、[指标治理规格](superpowers/specs/2026-09-05-flow-metric-dictionary-design.md)和既有领域规格共同约束实现。较晚的已确认决策覆盖旧范围，不因整理文档改变财务公式。
 
 [CURRENT_ROADMAP](50_plans/CURRENT_ROADMAP.md) 是全仓唯一状态与 To-do 入口；
-[可复用视觉语言设计稿](superpowers/specs/2026-10-24-flow-visual-language-system-design.md)和[全项目视觉统一工作包](50_plans/work_items/FLOW--portable-visual-language-and-full-project-restyle.md)保存当前唯一执行项的设计及验收细节。
+[可复用视觉语言设计稿](superpowers/specs/2026-10-24-flow-visual-language-system-design.md)和[全项目视觉统一工作包](50_plans/work_items/FLOW--portable-visual-language-and-full-project-restyle.md)保存已结案视觉线的验收细节；最新交付线为[真实数据导入工作包](50_plans/work_items/FLOW--real-data-import.md)与[导入账套指标补厚](50_plans/work_items/FLOW--importer-rich-metrics.md)（均已关闭，含发布链设计与口径边界）。
 其余旧统一计划、S01、多 Agent、前端、知识刷新及大麦计划均为归档参考，不再作为当前执行合同。
 
 ## 03｜使用与开发

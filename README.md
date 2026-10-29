@@ -106,6 +106,23 @@ FLOW 的视觉方向已经明确：把有来源、有口径、有解释的财务
 
 <div align="center"><sub>实景截图核对与操作边界见 <a href="docs/assets/screenshots/README.md">截图说明</a>。旧版产品截图不是当前视觉验收证据；概念图也不替代真实页面交付。</sub></div>
 
+### 真实数据导入 + 治理发布链 · 2026-10-29 实测
+
+2026-10-28/29 交付「真实数据导入」：上传科目余额表（必选）与利润表、银行流水（可选）模板工作簿，经勾稽/净利润一致性/余额连续性三道门禁发布为治理指标快照（22 项指标目录），九页驾驶舱自动切换到导入账套作为活跃源。下图为 2026-10-29 本机生产构建实测（`make flow`，SQLite 单机栈）：演示数据为大麦物流 synthetic 批次，导入演示为自构样例账套（非真实企业数据）；采集脚本 `apps/web/capture-import-flow.mjs` 真实执行上传→发布→跳转。
+
+<table>
+<tr>
+<td width="50%"><strong>CFO 驾驶舱总览 · 大麦演示批次</strong><br/><img src="docs/assets/screenshots/2026-10-29/cockpit--desktop.png" width="100%" alt="FLOW CFO 驾驶舱总览真实截图：四项核心 KPI、收入与营业利润趋势、经营现金流变动桥、杜邦分析、期间费用结构与行动项"/><br/><sub>真实页面｜快照 <code>01a1863f</code>｜截至 2023-03｜演示数据标注齐全。</sub></td>
+<td width="50%"><strong>真实数据导入 · 模板与上传</strong><br/><img src="docs/assets/screenshots/2026-10-29/data-import--desktop.png" width="100%" alt="FLOW 真实数据导入页：科目余额表/利润表/银行流水三张模板下载与上传入口"/><br/><sub>真实页面｜三模板，上传前空态。</sub></td>
+</tr>
+<tr>
+<td width="50%"><strong>导入成功 → 发布到治理链</strong><br/><img src="docs/assets/screenshots/2026-10-29/data-import--published.png" width="100%" alt="导入成功概览驾驶舱：五项 KPI 与勾稽校验通过，发布到治理链后提示快照份数与活跃源切换"/><br/><sub>真实操作｜发布产生 2 份快照并切换活跃源。</sub></td>
+<td width="50%"><strong>活跃源切换后的总览 · 如实降级</strong><br/><img src="docs/assets/screenshots/2026-10-29/cockpit-imported--desktop.png" width="100%" alt="导入账套成为活跃源后的总览：营业收入与毛利率出真数，营业利润与经营现金流缺失口径如实显示为不可用"/><br/><sub>真实页面｜收入 12,000、毛利率 65%（累计口径）；缺失口径显示「—」不补零；模块面板保留各自快照来源并明示。</sub></td>
+</tr>
+</table>
+
+七个子模块（盈利能力/资产负债/营运资金/费用/现金流/风险/集团合并）同批桌面全页截图见 [docs/assets/screenshots/2026-10-29/](docs/assets/screenshots/2026-10-29/)；采集环境、数据批次与边界见 [截图说明](docs/assets/screenshots/README.md)。
+
 ### 单机运行成果与离线驾驶舱
 
 下图与离线报告来自 2026-10-20 的本机生产构建，代码 SHA `9ec0611562569b33bc3dac28c16445aa9470b150`。它们使用隔离目录中的大麦物流**合成演示批次**（manifest SHA-256 `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`），验证报告 19/19 通过；不可将这些数据当作阿里巴巴、菜鸟或真实客户披露数据。
@@ -237,7 +254,7 @@ flowchart TB
 
 ## 🖥️ 界面导览
 
-当前浏览器入口：`/`（驾驶舱）、`/data`、`/investigations`、`/reports`、`/statements`、`/metric-library`、`/operations`、`/login`。现有页面仍按历史双轨结构（D045，已被 [D053](docs/10_governance/decisions/D053--三层两模块边界与执行顺序.md) 取代）组织：**「数据层」两轨共用**；**「财务分析」轨**（驾驶舱、归因、报告、报表分析、指标库）；**「经营分析」轨**（`/operations` 只读演示页）。全部功能页共享同一左侧工作流导航。主导航与工作流的大规模改造由当前 S01 按三层两模块目标结构推进。
+当前浏览器入口：`/`（驾驶舱）、`/data`、`/data/import`（真实数据导入）、`/investigations`、`/reports`、`/statements`、`/metric-library`、`/operations`、`/login`。现有页面仍按历史双轨结构（D045，已被 [D053](docs/10_governance/decisions/D053--三层两模块边界与执行顺序.md) 取代）组织：**「数据层」两轨共用**；**「财务分析」轨**（驾驶舱、归因、报告、报表分析、指标库）；**「经营分析」轨**（`/operations` 只读演示页）。全部功能页共享同一左侧工作流导航。主导航与工作流的大规模改造由当前 S01 按三层两模块目标结构推进。
 
 ### 1. Finance BP 驾驶舱
 
@@ -263,7 +280,13 @@ flowchart TB
 
 </details>
 
-### 3. Investigation：从发现回到证据
+### 3. 真实数据导入：从自己的账套到治理驾驶舱
+
+`/data/import` 三张中文列模板：**科目余额表**（必选，借贷平衡逐行校验）、**利润表**（可选，项目标准化映射 + 净利润一致性勾稽）、**银行流水**（可选，余额连续性校验）。上传校验失败整批拒绝并逐行定位；通过后生成概览驾驶舱，点「发布到驾驶舱」经发布门禁升格为治理快照（22 项指标目录），九页自动切换活跃源；科目级前缀映射输出货币资金/应收/存货/固定资产净额/应付等结构指标。数据集可整体删除（级联下线发布链，仪表盘回落）。
+
+![真实数据导入：导入成功并发布到治理链](docs/assets/screenshots/2026-10-29/data-import--published.png)
+
+### 4. Investigation：从发现回到证据
 
 调查页提供异常定义、影响金额、驱动桥、计算明细、对账与质量状态、源记录、公式和数据血缘。结论分为**已验证事实、分析判断、待确认问题、建议行动**；批准由状态机控制。
 
@@ -285,7 +308,7 @@ flowchart LR
 
 批准后的证据若被拒绝，或结论被修改，Finding 会退回复核并留下事件记录；没有证据的 Finding 不能批准。已冻结报告保留签发时内容，新的报告版本重新检查当前资格。
 
-### 4. 报告中心：冻结、生成、追踪与下载
+### 5. 报告中心：冻结、生成、追踪与下载
 
 报告中心可以冻结已发布指标快照中的批准 Findings，选择报告版本和输出格式，查看各次生成尝试并下载成功产物。冻结表单已提供可视化快照候选选择器；下图为较早版本，不能用于判断最新交互。
 
@@ -424,7 +447,7 @@ flowchart LR
 
 ## 📍 当前进度
 
-状态以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为唯一权威。长期产品战略由 D052–D054 定义；当前产品交付边界按 [D055](docs/10_governance/decisions/D055--单机单用户验证原型.md) 聚焦单机单用户财务分析验证原型。可复用视觉语言与全项目视觉统一（路线图第 12 项）已结案；原生 200% 缩放保留外部条件受限补验项。当前唯一执行项为知识刷新 K3；10-26 accepted snapshot 下 9,673 来源 registry/baseline 与 9,958 ID 累计 diff 已复验；当前开展全量主题路由和 HIGH 全文审阅；状态和顺序见[唯一路线图](docs/50_plans/CURRENT_ROADMAP.md)、[视觉工作包](docs/50_plans/work_items/FLOW--portable-visual-language-and-full-project-restyle.md)与[覆盖验收](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。
+状态以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为唯一权威。长期产品战略由 D052–D054 定义；当前产品交付边界按 [D055](docs/10_governance/decisions/D055--单机单用户验证原型.md) 聚焦单机单用户财务分析验证原型。可复用视觉语言与全项目视觉统一（路线图第 12 项）已结案；原生 200% 缩放保留外部条件受限补验项。2026-10-28 用户裁决 K3 知识刷新挂起（恢复点第 163 批，pending 7,813），主线转产品功能：**真实数据导入（R1–R5）**与**导入账套指标补厚（M1–M3）**两个工作包已交付关闭——三模板导入、治理发布链桥接、22 项导入指标目录、九页活跃源切换；CI 全绿（`a2510344` run `40651999130`、`90dce69e` run `40665135693`）。当前队首待裁决下一产品方向；状态和顺序见[唯一路线图](docs/50_plans/CURRENT_ROADMAP.md)、[真实数据导入工作包](docs/50_plans/work_items/FLOW--real-data-import.md)与[指标补厚工作包](docs/50_plans/work_items/FLOW--importer-rich-metrics.md)。
 
 | 阶段 | 任务 | 状态 |
 | --- | --- | --- |
@@ -438,7 +461,9 @@ flowchart LR
 | **S01** | 战略边界、Financial Facts V2、安全/RBAC/审计门禁 | ✅ completed |
 | **D 轨** | 大麦物流完整财年演示数据、正式工作流与八页面 E2E | ✅ completed（verify 19/19、E2E 9/9、17 门禁绿；CI 全绿于 `d701c1d`） |
 | **D055 原型交付** | 单机单用户、SQLite + 本地目录、A+C 驾驶舱/报告视觉升级 | ✅ 7a.1–7a.8 已完成并合入 main；PR #4 文档状态 merge commit `b068796f` 的准确 SHA run `40096497668` 为 28/28 success。原型限制见路线图与完结差距审查 |
-| **当前队首** | 知识刷新 K3 语义路由与审阅 | 🚧 在 10-26 accepted snapshot 上只读审阅来源语义；ObsidianWiki 保持只读。唯一顺序见路线图与工作包 |
+| **真实数据导入** | 三模板导入 + 治理发布链 + 九页活跃源切换（R1–R5） | ✅ 已交付关闭（`a2510344` CI 全绿） |
+| **导入指标补厚** | 科目级映射 + 利润表/银行流水接线，指标 7→22（M1–M3） | ✅ 已交付关闭（`90dce69e` CI 全绿）；期间发现并修复跨目录同码定义冲突 |
+| **当前队首** | 下一产品方向待裁决；K3 知识刷新挂起（恢复点第 163 批） | ⏸️ 待用户裁决；ObsidianWiki 保持只读 |
 | **视觉统一** | 可复用视觉语言与全项目页面、图表、报告统一 | ✅ 已结案；原生 200% 缩放待设备/工具条件恢复后补验 |
 | U9–U10 | 内部试点、V1.1 证据决策 | ⏭️ 排队；依赖公开 C 级证据与真实企业数据，轮到后按路线图验收 |
 
@@ -450,7 +475,7 @@ flowchart LR
 
 | 模块 | 当前已实现 | 需要区分的边界 |
 | --- | --- | --- |
-| 数据接入 | 上传、画像、映射覆盖、清洗、警告确认、版本发布、标准化导出 | 任意新批次的指标/分析自动编排尚未接通 |
+| 数据接入 | 上传、画像、映射覆盖、清洗、警告确认、版本发布、标准化导出；**真实数据导入**（三模板 + 勾稽/净利润/余额连续性门禁 + 治理发布链 + 22 项导入指标） | 指标/分析自动编排指大麦工作簿全链；导入账套经独立发布链（九页活跃源切换），损益明细依赖利润表、余额结构依赖科目前缀映射 |
 | 标准数据 | `flow.excel.v1`，10 张交换工作表，公共维度与主题事实 | Excel 是交换格式；单机原型以 `~/.flow/flow.sqlite3` 为业务数据权威源 |
 | 指标引擎 | 物流 15 指标 + 知识库 64 指标定义（v1.1）、Decimal、月/YTD/预算/同比/T12 窗口 | 登记数不等于任意财报可算数 |
 | 指标治理 | 定义、绑定、语义、草稿/验证/激活/退役、审计、影响沙箱和界面（迁移头 `0018_metric_governance`） | 既有字段审计不能证明所有会计分类正确 |
@@ -626,12 +651,13 @@ make damai-demo-verify
 | --- | --- | --- |
 | Web 驾驶舱 | [localhost:3000](http://localhost:3000) | 演示数据浏览与调查 |
 | 数据工作台 | [localhost:3000/data](http://localhost:3000/data) | 模板、上传、映射和发布 |
+| 真实数据导入 | [localhost:3000/data/import](http://localhost:3000/data/import) | 科目余额表/利润表/银行流水模板导入并发布为治理驾驶舱 |
 | 报告中心 | [localhost:3000/reports](http://localhost:3000/reports) | 冻结、生成和下载 |
 | API 文档 | [localhost:8000/docs](http://localhost:8000/docs) | FastAPI 交互式接口文档 |
 | API 健康检查 | [localhost:8000/api/v1/health](http://localhost:8000/api/v1/health) | 进程健康状态 |
 | 本地原始文件与报告 | `~/.flow/objects/` | 内容寻址文件目录；可由 `FLOW_DATA_DIR` 更换 |
 
-`seed_dashboard_demo.py` 默认复用已有演示批次；加 `--fresh-batch` 会创建一个新的演示批次。使用自己的工作簿时，先通过 `/data` 完成数据接入。
+`seed_dashboard_demo.py` 默认复用已有演示批次；加 `--fresh-batch` 会创建一个新的演示批次。要看自己的经营数据：从 [真实数据导入](http://localhost:3000/data/import) 下载模板、按中文列名填数后上传，勾稽通过即可发布为治理驾驶舱活跃源；大麦工作簿全链仍走 `/data` 数据接入。
 
 <details>
 <summary><strong>仅测试用途的历史 Compose 栈</strong></summary>

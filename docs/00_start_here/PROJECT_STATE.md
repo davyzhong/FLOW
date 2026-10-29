@@ -3,14 +3,16 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 14.53
+version: 14.54
 created_at: 2026-09-12
-updated_at: 2026-10-27
+updated_at: 2026-10-29
 owner: FLOW
 applies_to: repository
 ---
 
 # FLOW 当前项目状态（唯一 current state）
+
+2026-10-29 当前状态：产品功能两连交付——**真实数据导入工作包（R1–R5）**与**导入账套指标补厚（M1–M3）**均已交付关闭（CI：`a2510344` run `40651999130`、`90dce69e` run `40665135693` 全绿）。三张中文模板（科目余额表/利润表/银行流水）导入经勾稽、净利润一致性、余额连续性三道门禁发布为治理快照；导入指标目录 22 项（科目级结构、损益明细与毛利率、现金收付口径）；九页驾驶舱经 `DashboardSourceRepository.get_latest` 自动切换活跃源。期间真实环境暴露并修复**跨目录同码定义冲突**（MetricDefinition 注册表按 (code,version) 全局唯一，trial_balance_v1 目录 revenue/gross_profit/gross_margin/net_profit 升 version 2，回归测试 `test_publish_coexists_with_legacy_same_code_definition` 锁定）。README 已更新 2026-10-29 真实截图批次（14 张，单机栈 Playwright 实采，采集后样例数据集已删除恢复演示态）。**下一单一动作：队首待用户裁决下一产品方向**；K3 保持挂起（恢复点第 163 批）。详见[路线图](../50_plans/CURRENT_ROADMAP.md)与仓库根 [HANDOFF](../../HANDOFF.md) v17.13。
 
 2026-10-28 当前状态：用户裁决 K3 挂起转产品功能；知识刷新 K3 已完成批次 134–162 共 2,928 条审阅（routed 1,200 / filtered 660 / pending 7,813 挂起），`CURRENT_RELEASE` 不变。下一单一动作：用户拍板产品功能方向后开工。accepted snapshot `obsidianwiki-20261026T005516+0800-d601b4d5` 已完成来源基线、优先级审阅与错误集中度复核；当前 coverage 9,673 条：routed 790、filtered 425、pending_review 7,813。第162批完成 24 条审阅，18 条保留待核、6 条过滤；四篇图文共 8+16+26+17=67 个本地图像引用按基线规则未解析；本批未审图。ObsidianWiki 保持只读，`CURRENT_RELEASE` 未变。下一步按 accepted baseline ID 顺序执行第163批，完整证据及范围见[路线图](../50_plans/CURRENT_ROADMAP.md)和[知识刷新工作包](../50_plans/work_items/KNOWLEDGE--refresh-v2.md)。
 

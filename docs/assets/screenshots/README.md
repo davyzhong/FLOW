@@ -3,9 +3,9 @@ doc_id: FLOW-INDEX-SCREENSHOTS-001
 title: 项目实测与报告截图索引
 doc_type: navigation
 status: current
-version: 1.6
+version: 1.7
 created_at: 2026-09-04
-updated_at: 2026-10-25
+updated_at: 2026-10-29
 owner: FLOW
 applies_to: repository
 ---
@@ -13,6 +13,15 @@ applies_to: repository
 # 当前界面截图
 
 本文件按采集批次记录真实页面截图；每个批次分别注明代码和数据来源。图片没有替换数值、拼接控件或使用生成图冒充页面。
+
+## 真实数据导入与九页驾驶舱（2026-10-29，2026-10-29/）
+
+采集日期：2026-10-29。本机生产构建（`make flow`，Next.js standalone + FastAPI + SQLite `~/.flow/flow.sqlite3`），入口 `apps/web/capture-readme-screens.mjs` 与 `capture-import-flow.mjs`（Playwright 真实登录/操作，fullPage）。
+
+- 代码基线：main `3d9dd6e6` 工作树 + 同日「跨目录同码定义共存」修复（trial_balance_v1 目录 revenue/gross_profit/gross_margin/net_profit 升 version 2；本次提交包含该修复与采集脚本）。flow_v1 指标目录未改动。
+- 演示数据：大麦物流 synthetic 演示（`make flow-demo` 当日重灌，分析运行 `01a1863f`，截至 2023-03）；导入演示为自构样例账套（科目余额 16 行 + 利润表 10 行 + 银行流水 4 行，期间 2025-01/02），发布产生快照 2 份并成为驾驶舱活跃源；采集完成后该数据集已删除，库恢复演示态。
+- 文件（12 张）：`cockpit--desktop`（大麦总览全页）、七个子模块桌面全页（profitability/balance-sheet/working-capital/expenses/cashflow/risk/consolidation）、`data-import--desktop/-mobile`（导入向导：三模板+上传）、`data-import--uploaded/-published`（导入成功概览与发布到治理链）、`cockpit-imported--desktop`（活跃源切换后的总览：收入/毛利率出真数，缺失口径如实灰态）、`reports--desktop`。
+- 边界：导入态总览的 KPI/趋势来自导入快照（累计口径），模块级面板（现金流桥/杜邦/费用）仍读各自已发布大麦快照——页面横幅与来源面板如实标注，不冒充同源；样例账套为自构演示数据，非真实企业账套。
 
 ## 离线驾驶舱导出主题复采（2026-10-25）
 
