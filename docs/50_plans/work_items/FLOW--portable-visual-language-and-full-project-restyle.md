@@ -2,11 +2,11 @@
 doc_id: FLOW-WI-VISUAL-LANGUAGE-20261024-001
 title: 可复用视觉语言提炼与 FLOW 全项目视觉统一
 doc_type: work-item
-status: active
-version: 2.8
+status: completed
+version: 2.9
 created_at: 2026-10-24
 updated_at: 2026-10-30
-do_not_execute: false
+do_not_execute: true
 owner: FLOW
 depends_on: [FLOW-SPEC-VISUAL-LANGUAGE-20261024-001]
 acceptance_refs: [FLOW-DECISION-D055]
@@ -20,7 +20,15 @@ confidentiality: project-internal
 
 # 可复用视觉语言提炼与 FLOW 全项目视觉统一
 
-## 2026-10-30 复工：概念图逐图视觉对齐
+## 2026-10-30 概念板图表统一收尾结案
+
+- 最终代码提交 `e7e2be03d27ff472894ce35170e534c411a47d67` 已推送 `origin/main`，准确 SHA 的 GitHub Actions run `40985033178` 为 28/28 jobs success。普通趋势去除面积填充，收入/营业利润共用亿元刻度，三项 KPI 使用零基线三期微柱，瀑布增加项统一为翡翠绿，期间分组柱保持本期蓝/上期灰，现金流类别固定为蓝/金/绿。
+- 准确代码 SHA 下完成 20 路由 × 桌面 1440 / 平板 1024 / 手机 390 的 60/60 隔离矩阵：HTTP 200、内容就绪、bad、API 错误、浏览器错误、外部请求及横向溢出均符合门禁；另重新打开并目检 8 张重点截图。最终证据见[概念板图表统一收尾验收](../../60_delivery/verification/2026-10-30--concept-chart-alignment-closeout-v1.md)。
+- Web 40 文件 221/221 测试、typecheck、production build 通过，lint 0 error / 5 条既有 warning；API 定向测试 6/6、Ruff、视觉 token 检查通过。未修改业务事实、指标口径、数据库或 CI 配置。
+- **外部条件限制继续保留：** 原生浏览器 200% 缩放未直接验收，390 CSS px 窄屏矩阵不是替代品；待设备解锁且具备可控缩放工具时补验。
+- 本事项关闭且 `do_not_execute: true`。K3/K4–K6 保持取消，不自动启动后续排队产品项。
+
+## 2026-10-30 复工：概念图逐图视觉对齐（历史过程）
 
 用户明确指出当前饼图、柱状图等图表的色系和视觉表达与 [A+C 概念板](../../assets/cockpit-visual-direction-2026-10-18.png) 有明显差距，要求接手此前 Agent 的全项目图形、图像、图表统一工作。PR #5、`bf98ed87` 的 token 色阶和截图是已完成基线，不能据其历史结案状态宣称当前视觉目标达成。唯一执行项仍为路线图事项 12；K3 全量知识整理已被用户取消，不读取全量知识库。
 

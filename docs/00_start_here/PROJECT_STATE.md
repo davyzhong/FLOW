@@ -3,7 +3,7 @@ doc_id: FLOW-STATE-001
 title: PROJECT_STATE
 doc_type: state
 status: current
-version: 14.55
+version: 14.56
 created_at: 2026-09-12
 updated_at: 2026-10-30
 owner: FLOW
@@ -12,7 +12,7 @@ applies_to: repository
 
 # FLOW 当前项目状态（唯一 current state）
 
-2026-10-30 用户纠偏后的当前状态：K3 全量知识库/文档整理及后续 K4–K6 已取消，不继续扫描全量知识库。唯一队首重新打开[概念图全项目视觉对齐](../50_plans/work_items/FLOW--portable-visual-language-and-full-project-restyle.md)：逐图核对和修正图形、图像、图表的色系、字体、形态和表达，并以真实页面及输出截图复验。此前 `bf98ed87` 的系列色阶与画布字体改动是阶段基线，用户指出仍不符合概念图；功能原型及真实数据导入交付状态不变。唯一路线图为 17 项：完成 11、执行中 1、排队 3、暂停 1、外部条件受限 1；详见[路线图](../50_plans/CURRENT_ROADMAP.md)与[最新交接](../../HANDOFF.md)。
+2026-10-30 概念板图表统一已结案：[视觉工作包](../50_plans/work_items/FLOW--portable-visual-language-and-full-project-restyle.md)最终代码 `e7e2be03d27ff472894ce35170e534c411a47d67` 已推送，准确 SHA CI run `40985033178` 为 28/28 success。普通趋势、KPI 微柱、瀑布、期间分组柱和现金流类别色已统一；20 路由 × 3 视口 60/60 ready，详见[最终验收](../60_delivery/verification/2026-10-30--concept-chart-alignment-closeout-v1.md)。K3/K4–K6 已取消，不继续扫描全量知识库。唯一路线图为 17 项：完成 12、执行中 0、排队 3、暂停 1、外部条件受限 1；当前无活跃执行项，下一产品方向待用户裁决。原生浏览器 200% 缩放仍未直接验收，390 CSS px 不替代；详见[路线图](../50_plans/CURRENT_ROADMAP.md)与[最新交接](../../HANDOFF.md)。
 
 2026-10-29 当前状态：产品功能两连交付——**真实数据导入工作包（R1–R5）**与**导入账套指标补厚（M1–M3）**均已交付关闭（CI：`a2510344` run `40651999130`、`90dce69e` run `40665135693` 全绿）。三张中文模板（科目余额表/利润表/银行流水）导入经勾稽、净利润一致性、余额连续性三道门禁发布为治理快照；导入指标目录 22 项（科目级结构、损益明细与毛利率、现金收付口径）；九页驾驶舱经 `DashboardSourceRepository.get_latest` 自动切换活跃源。期间真实环境暴露并修复**跨目录同码定义冲突**（MetricDefinition 注册表按 (code,version) 全局唯一，trial_balance_v1 目录 revenue/gross_profit/gross_margin/net_profit 升 version 2，回归测试 `test_publish_coexists_with_legacy_same_code_definition` 锁定）。README 已更新 2026-10-29 真实截图批次（14 张，单机栈 Playwright 实采，采集后样例数据集已删除恢复演示态）。**下一单一动作：队首待用户裁决下一产品方向**；K3 保持挂起（恢复点第 163 批）。详见[路线图](../50_plans/CURRENT_ROADMAP.md)与仓库根 [HANDOFF](../../HANDOFF.md) v17.13。
 
@@ -74,7 +74,7 @@ applies_to: repository
 
 ## 当前执行入口
 
-- **[CURRENT_ROADMAP.md](../50_plans/CURRENT_ROADMAP.md)**（唯一主线：状态真相 + 单一串行 To-do）：7a.1–7a.8 已完成，PR #3 已合入 main；当前唯一执行项为知识刷新 K3 语义审阅；K0–K2 已完成。用户已授权在完成该项后继续队列，不需另行启动确认。
+- **[CURRENT_ROADMAP.md](../50_plans/CURRENT_ROADMAP.md)**（唯一主线：状态真相 + 单一串行 To-do）：事项 12 概念板视觉统一已完成；当前无活跃执行项，下一产品方向待用户裁决。K3/K4–K6 已取消，不从历史段落恢复；排队项不自动领取。
 - 旧统一计划、O 系列计划、EXECUTION_TODO 与 2026-09-24/25 三份总计划均已 superseded/archived（保留历史细节与证据，不再作为执行依据）
 - 文档迁移：[迁移实施计划 M0–M6](../superpowers/plans/2026-09-12-static-knowledge-and-document-migration.md) 已全部关闭（bfc1271 / e373e25，用户确认 2026-09-13）
 
