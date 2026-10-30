@@ -14,6 +14,7 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
+from matplotlib.colors import to_rgb  # noqa: E402
 
 from flow_api.visual_tokens import VISUAL_TOKENS
 
@@ -25,11 +26,18 @@ plt.rcParams["font.sans-serif"] = [
 plt.rcParams["axes.unicode_minus"] = False
 
 BLUE = VISUAL_TOKENS["colors-data-revenue"]
-LIGHT_BLUE = VISUAL_TOKENS["colors-data-series4"]
+PRIOR_NEUTRAL = VISUAL_TOKENS["colors-data-series4"]
 ORANGE = VISUAL_TOKENS["colors-brand-gold"]
 GREY = VISUAL_TOKENS["colors-semantic-unavailable"]
 NEG = VISUAL_TOKENS["colors-semantic-negative"]
 GREEN = VISUAL_TOKENS["colors-semantic-positive"]
+EXPENSE_COLORS = {
+    "销售": ORANGE, "销售费用": ORANGE,
+    "管理": VISUAL_TOKENS["colors-data-cash"],
+    "管理费用": VISUAL_TOKENS["colors-data-cash"],
+    "研发": PRIOR_NEUTRAL, "研发费用": PRIOR_NEUTRAL,
+    "财务": BLUE, "财务费用": BLUE,
+}
 
 DPI = 150
 
@@ -67,6 +75,16 @@ def _fmt_scaled(value: float, unit: str) -> str:
     return f"{value:,.0f}"
 
 
+def _donut_label_color(fill: str) -> str:
+    channels = [value / 12.92 if value <= 0.04045 else ((value + 0.055) / 1.055) ** 2.4
+                for value in to_rgb(fill)]
+    luminance = sum(
+        weight * value
+        for weight, value in zip((0.2126, 0.7152, 0.0722), channels, strict=True)
+    )
+    return "#FFFFFF" if luminance < 0.23 else VISUAL_TOKENS["colors-text-primary"]
+
+
 def bar_compare(title: str, current: Decimal | None, prior: Decimal | None,
                 color: str = BLUE) -> bytes:
     values = [prior, current]
@@ -75,7 +93,7 @@ def bar_compare(title: str, current: Decimal | None, prior: Decimal | None,
     floats, unit = _scale(values)
     labels = ["上年同期", "本期"]
     fig, ax = plt.subplots(figsize=(4.6, 2.9))
-    bars = ax.bar(labels, floats, color=[LIGHT_BLUE, color], width=0.5)
+    bars = ax.bar(labels, floats, color=[PRIOR_NEUTRAL, color], width=0.5)
     for bar, scaled in zip(bars, floats, strict=False):
         ax.annotate(_fmt_scaled(scaled, unit),
                     (bar.get_x() + bar.get_width() / 2, bar.get_height()),
@@ -98,7 +116,8 @@ def hbar_structure(title: str, items: list[tuple[str, Decimal]]) -> bytes:
     floats, unit = _scale([value for _, value in pairs])
     fig, ax = plt.subplots(figsize=(6.4, 0.62 * len(pairs) + 1.4))
     y = range(len(pairs))
-    colors = [BLUE if value >= 0 else NEG for _, value in pairs]
+    colors = [EXPENSE_COLORS.get(name, BLUE if value >= 0 else NEG)
+              for name, value in pairs]
     ax.barh(list(y), floats, color=colors, height=0.62)
     ax.set_yticks(list(y))
     ax.set_yticklabels(names, fontsize=10)
@@ -126,21 +145,21 @@ def donut(title: str, items: list[tuple[str, Decimal | None]]) -> bytes:
     names = [name if value / total >= Decimal("0.03") else ""
              for name, value in pairs]
     values = [float(value) for _, value in pairs]
-    palette = [
-        VISUAL_TOKENS[f"chart-series-{index}"] for index in range(1, 7)
-    ] + [VISUAL_TOKENS["colors-semantic-negative"]]
+    palette = [VISUAL_TOKENS[f"chart-series-{index}"] for index in range(1, 7)]
     fig, ax = plt.subplots(figsize=(5.2, 3.6))
+    colors = [EXPENSE_COLORS.get(name, palette[index % len(palette)])
+              for index, (name, _) in enumerate(pairs)]
     wedges, _, autotexts = ax.pie(
         values, labels=names,
         autopct=lambda pct: f"{pct:.1f}%" if pct >= 3 else "",
         startangle=90,
-        colors=palette[: len(pairs)], pctdistance=0.78,
+        colors=colors, pctdistance=0.78,
         wedgeprops=dict(width=0.42, edgecolor="white"),
         textprops=dict(fontsize=9),
     )
-    for text in autotexts:
+    for text, fill in zip(autotexts, colors, strict=True):
         text.set_fontsize(8.5)
-        text.set_color(VISUAL_TOKENS["colors-text-primary"])
+        text.set_color(_donut_label_color(fill))
     ax.set_title(title, fontsize=11)
     return _finish(fig)
 

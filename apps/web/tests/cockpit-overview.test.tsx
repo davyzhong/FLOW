@@ -123,6 +123,28 @@ describe("CockpitOverviewApp", () => {
     expect(screen.getByTestId("cockpit-conclusion")).toBeTruthy();
   });
 
+  it("有三期真实数值时用概念板柱形微图，毛利率用真实比例环形微图", async () => {
+    const data = overview();
+    data.trends![0]!.series![0]!.points!.push({
+      period: "2026-07", snapshot_id: "snapshot-july", value: 110000,
+      display_value: "110,000", status: "ready",
+    });
+    data.kpi_cards!.push({
+      ...data.kpi_cards![0]!, metric_code: "gross_margin", title: "毛利率", unit: "ratio",
+      primary: value("0.25", "25%"),
+    });
+    data.trends![0]!.series!.push({
+      key: "gross_margin", title: "毛利率", unit: "ratio",
+      points: [
+        { period: "2026-05", snapshot_id: "snapshot-may", value: 0.2, display_value: "20%", status: "ready" },
+        { period: "2026-06", snapshot_id: "snapshot-june", value: 0.25, display_value: "25%", status: "ready" },
+      ],
+    });
+    render(<CockpitOverviewApp load={vi.fn().mockResolvedValue(data)} loadSupplement={loadSupplement} />);
+    expect(await screen.findByTestId("cockpit-kpi-bars")).toHaveAttribute("aria-label", expect.stringContaining("最近三期柱状趋势"));
+    expect(screen.getByTestId("cockpit-kpi-ring")).toHaveAttribute("aria-label", expect.stringContaining("25.00%"));
+  });
+
   it("展示演示数据源提示（不解除 C 级门禁）", async () => {
     const load = vi.fn().mockResolvedValue(overview());
     render(<CockpitOverviewApp load={load} loadSupplement={loadSupplement} />);

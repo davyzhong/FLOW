@@ -55,14 +55,14 @@ echarts.use([
 
 /**
  * 语义色与图表字族：全部来自视觉语言包 token（patterns.md「图表视觉规格」）。
- * - 数据系列色阶由概念板四语义色推导：墨蓝(收入)/古金(利润)/翡翠绿(现金，
- *   semantic-positive 提明度)/墨蓝亮·金沙亮·墨蓝深（同色相明暗阶梯，多系列明暗区分）。
+ * - 数据系列色阶由概念板推导：墨蓝/古金/翡翠绿/中性灰绿，
+ *   第五、第六系列使用金沙亮与墨蓝深；分类颜色不冒充正负语义。
  * - chart-font-family 是画布内文字（轴标签/图例/数据标签/tooltip）的统一字族，
  *   不设置会退回浏览器默认 sans-serif，与页面字系脱节。
  */
 export const CHART_THEME = {
   blue: VISUAL_TOKENS["colors-data-revenue"],
-  navyLight: VISUAL_TOKENS["colors-data-series4"],
+  neutral: VISUAL_TOKENS["colors-data-series4"],
   green: VISUAL_TOKENS["colors-semantic-positive"],
   red: VISUAL_TOKENS["colors-semantic-negative"],
   warn: VISUAL_TOKENS["colors-semantic-warning"],
@@ -82,10 +82,18 @@ export const SERIES_PALETTE = [
   CHART_THEME.blue,
   CHART_THEME.gold,
   CHART_THEME.emerald,
-  CHART_THEME.navyLight,
+  CHART_THEME.neutral,
   CHART_THEME.sand,
   CHART_THEME.navyDeep,
 ] as const;
+
+/** 费用类别在环图、堆叠柱和图例中保持同一颜色。 */
+export const EXPENSE_CATEGORY_COLORS: Record<string, string> = {
+  销售: CHART_THEME.gold,
+  管理: CHART_THEME.emerald,
+  研发: CHART_THEME.neutral,
+  财务: CHART_THEME.blue,
+};
 
 /** 通用轴配置（保持所有图表的坐标轴行为一致） */
 export const AXIS = {

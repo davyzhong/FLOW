@@ -6,7 +6,7 @@ import { VISUAL_TOKENS } from "../../../lib/visual-tokens.generated";
 const GRID_COLOR = VISUAL_TOKENS["chart-grid"];
 
 // 利润形成 / 现金桥瀑布图：手写 SVG，无图表库依赖。
-// base/total 柱从零起画，delta 柱悬浮于累计区间；红减绿增、深色为小计。
+// base/total 柱从零起画，delta 柱悬浮于累计区间；减少用中性色，增加用绿，负向结果才用语义红。
 export type WaterfallDatum = { label: string; value: number; kind: "base" | "delta" | "total" };
 
 export function WaterfallChart({
@@ -83,11 +83,13 @@ export function WaterfallChart({
         const cx = padL + (innerW * (index + 0.5)) / bars.length;
         const yTop = y(Math.max(bar.hi, bar.lo));
         const barH = Math.max(2, Math.abs(y(bar.lo) - y(bar.hi)));
-        const color = bar.value < 0
+        const color = bar.kind === "total" && bar.value < 0
           ? VISUAL_TOKENS["colors-semantic-negative"]
-          : bar.kind === "base" || bar.kind === "total"
-            ? VISUAL_TOKENS["colors-data-revenue"]
-            : VISUAL_TOKENS["colors-semantic-positive"];
+          : bar.value < 0
+            ? VISUAL_TOKENS["colors-data-series4"]
+            : bar.kind === "base" || bar.kind === "total"
+              ? VISUAL_TOKENS["colors-data-revenue"]
+              : VISUAL_TOKENS["colors-data-cash"];
         return (
           <g key={bar.label}>
             {index > 0 ? (

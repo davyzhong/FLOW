@@ -1,7 +1,7 @@
 import type { EChartsOption } from "echarts";
 
 import type { CockpitModuleChart } from "../../../lib/api/client";
-import { CHART_THEME, SERIES_PALETTE } from "./echarts-base";
+import { CHART_THEME, EXPENSE_CATEGORY_COLORS, SERIES_PALETTE } from "./echarts-base";
 import { buildCombo, buildDonut, buildRankBar, buildWaterfall } from "./builders";
 import { formatFinancialValue } from "../number-format";
 
@@ -68,6 +68,7 @@ export function buildModuleChartOption(
         name,
         value,
         display: formatFinancialValue(value, { unit }),
+        color: EXPENSE_CATEGORY_COLORS[name],
       }];
     });
     return buildRankBar(rows, unit) as EChartsOption | undefined;
@@ -76,7 +77,7 @@ export function buildModuleChartOption(
   if (chart.type === "ratio_bar" && entries.length > 0 && entries.every(([, value]) => !Array.isArray(value))) {
     const slices = entries.flatMap(([name, raw]) => {
       const value = asNumber(raw);
-      return value === null ? [] : [{ name, value: Math.abs(value) }];
+      return value === null ? [] : [{ name, value: Math.abs(value), color: EXPENSE_CATEGORY_COLORS[name] }];
     });
     return buildDonut(slices, unit) as EChartsOption | undefined;
   }
@@ -97,7 +98,7 @@ export function buildModuleChartOption(
           status: value === null ? "unavailable" : "ready",
         };
       });
-      return { key: title, title, axis: chart.type === "line" ? "line" as const : "bar" as const, unit: normalizedUnit, points };
+      return { key: title, title, axis: chart.type === "line" ? "line" as const : "bar" as const, color: EXPENSE_CATEGORY_COLORS[title], unit: normalizedUnit, points };
     });
     return buildCombo(series) as EChartsOption | undefined;
   }

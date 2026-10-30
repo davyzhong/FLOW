@@ -7,8 +7,16 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const require = createRequire(path.join(repositoryRoot, "apps/web/package.json"));
 const { chromium } = require("playwright");
-const matrixPath = path.join(repositoryRoot, "docs/60_delivery/verification/visual-language-20261024/results.json");
+const sourceMatrixPath = path.join(repositoryRoot, "docs/60_delivery/verification/visual-language-20261024/results.json");
+if (!process.env.FLOW_VISUAL_AUDIT_OUTPUT) {
+  throw new Error("请设置 FLOW_VISUAL_AUDIT_OUTPUT 指向新的结果文件，避免覆盖历史验收截图");
+}
+const matrixPath = path.resolve(process.env.FLOW_VISUAL_AUDIT_OUTPUT);
 const matrixDirectory = path.dirname(matrixPath);
+const historicalDirectory = path.dirname(sourceMatrixPath);
+if (matrixDirectory === historicalDirectory || matrixDirectory.startsWith(`${historicalDirectory}${path.sep}`)) {
+  throw new Error("新结果目录不能位于 2026-10-24 历史验收目录内，避免覆盖截图");
+}
 const baseUrl = process.env.FLOW_VISUAL_AUDIT_URL ?? "http://127.0.0.1:13100";
 const codeCommit = execFileSync("git", ["rev-parse", "HEAD"], { cwd: repositoryRoot, encoding: "utf8" }).trim();
 const viewportSpecs = {
@@ -16,7 +24,8 @@ const viewportSpecs = {
   tablet: { width: 1024, height: 900 },
   mobile: { width: 390, height: 844 },
 };
-const matrix = JSON.parse(await readFile(matrixPath, "utf8"));
+const matrix = JSON.parse(await readFile(sourceMatrixPath, "utf8"));
+await mkdir(matrixDirectory, { recursive: true });
 const browser = await chromium.launch({ headless: true });
 const results = [];
 
@@ -94,6 +103,5 @@ matrix.summary = {
   externalRequests: results.reduce((count, result) => count + result.externalRequests.length, 0),
   horizontalOverflow: results.filter((result) => result.horizontalOverflow).length,
 };
-await mkdir(matrixDirectory, { recursive: true });
 await writeFile(matrixPath, `${JSON.stringify(matrix, null, 2)}\n`);
 console.log(JSON.stringify(matrix.summary));

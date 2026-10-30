@@ -10,7 +10,7 @@ import type {
   CockpitProfitabilityResponse,
 } from "../../lib/api/client";
 import { metricFocusHref, reportsSnapshotHref } from "../../lib/deep-links";
-import { ChartBox, CHART_THEME } from "./charts/echarts-base";
+import { ChartBox, EXPENSE_CATEGORY_COLORS } from "./charts/echarts-base";
 import { buildCombo, type ComboSeries } from "./charts/builders";
 import { buildModuleChartOption } from "./charts/module-options";
 import { formatFinancialValue } from "./number-format";
@@ -99,18 +99,12 @@ export function CockpitOverviewVisuals({
     ? Object.entries(expenseComparison.series as Record<string, unknown>)
     : [];
   const expenseComparisonReady = expenseComparisonPeriods.length > 0 && expenseComparisonSeries.length > 0;
-  const expenseColors: Record<string, string> = {
-    销售: CHART_THEME.blue,
-    管理: CHART_THEME.gold,
-    研发: CHART_THEME.emerald,
-    财务: CHART_THEME.sand,
-  };
   const expenseComparisonOption = expenseComparisonReady ? buildCombo(expenseComparisonSeries.map(([title, values]) => ({
     key: title,
     title,
     axis: "bar" as const,
     stack: "period-expenses",
-    color: expenseColors[title],
+    color: EXPENSE_CATEGORY_COLORS[title],
     unit: expenseComparison?.unit ?? supplements?.expenses?.unit ?? "百万元",
     points: expenseComparisonPeriods.map((period, index) => {
       const rawValue = Array.isArray(values) ? values[index] : null;

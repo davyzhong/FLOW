@@ -1293,6 +1293,9 @@
 .cockpit .kpi.is-near::before { background: #a87d2e; }
 .cockpit .kpi.is-notready::before { background: #9a9b96; }
 .cockpit .kpi__sparkline { color: var(--flow-vl-colors-data-cash); }
+.cockpit .kpi[data-metric="revenue"] .kpi__bars,
+.cockpit .kpi[data-metric="operating_cash_flow"] .kpi__bars { color: var(--flow-vl-colors-data-series4); }
+.cockpit .kpi__ring-track { stroke: var(--flow-vl-colors-line-default); }
 .cockpit .overview-panel,
 .cockpit .kpi,
 .cockpit .action-panel,

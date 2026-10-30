@@ -22,7 +22,7 @@ VISUAL_TOKENS = {
     'colors-data-revenue': '#1F4D70',
     'colors-data-profit': '#A98137',
     'colors-data-cash': '#398C65',
-    'colors-data-series4': '#2E699E',
+    'colors-data-series4': '#9BA6A4',
     'colors-data-series5': '#C7A471',
     'colors-data-series6': '#163B5C',
     'colors-semantic-positive': '#286048',
@@ -86,7 +86,7 @@ VISUAL_TOKENS = {
     'chart-series-1': '#1F4D70',
     'chart-series-2': '#A98137',
     'chart-series-3': '#398C65',
-    'chart-series-4': '#2E699E',
+    'chart-series-4': '#9BA6A4',
     'chart-series-5': '#C7A471',
     'chart-series-6': '#163B5C',
 }

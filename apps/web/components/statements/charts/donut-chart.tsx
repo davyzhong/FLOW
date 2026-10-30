@@ -13,11 +13,7 @@ const COLORS = [
   VISUAL_TOKENS["colors-data-cash"],
   VISUAL_TOKENS["colors-data-series4"],
   VISUAL_TOKENS["colors-data-series5"],
-  VISUAL_TOKENS["colors-semantic-negative"],
   VISUAL_TOKENS["colors-data-series6"],
-  VISUAL_TOKENS["colors-semantic-positive"],
-  VISUAL_TOKENS["colors-semantic-warning"],
-  VISUAL_TOKENS["colors-semantic-unavailable"],
 ];
 
 export function DonutChart({

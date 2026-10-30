@@ -238,10 +238,10 @@ export function buildWaterfall(
           itemStyle: {
             color:
               steps[i].kind === "total"
-                ? CHART_THEME.blue
+                ? steps[i].value < 0 ? CHART_THEME.red : CHART_THEME.blue
                 : steps[i].kind === "up"
                   ? CHART_THEME.green
-                  : CHART_THEME.red,
+                  : CHART_THEME.neutral,
             borderRadius: steps[i].kind === "total" ? ([3, 3, 0, 0] as [number, number, number, number]) : ([2, 2, 2, 2] as [number, number, number, number]),
           },
         })),
@@ -518,7 +518,7 @@ export function buildDupont(
 // ── 9. 排名横条 ──────────────────────────────────────────────────────
 
 export function buildRankBar(
-  rows: { name: string; value: number; display: string; emphasis?: boolean }[],
+  rows: { name: string; value: number; display: string; emphasis?: boolean; color?: string }[],
   unit: string,
 ): ChartOption | undefined {
   const usable = rows.filter((r) => Number.isFinite(r.value));
@@ -542,7 +542,7 @@ export function buildRankBar(
         data: sorted.map((r) => ({
           value: r.value,
           itemStyle: {
-            color: r.emphasis ? CHART_THEME.warn : CHART_THEME.blue,
+            color: r.color ?? (r.emphasis ? CHART_THEME.warn : CHART_THEME.blue),
             borderRadius: [0, 4, 4, 0],
           },
         })),

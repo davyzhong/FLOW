@@ -12,6 +12,8 @@ import {
   buildRankBar,
   buildWaterfall,
 } from "../components/cockpit/charts/builders";
+import { EXPENSE_CATEGORY_COLORS, SERIES_PALETTE } from "../components/cockpit/charts/echarts-base";
+import { buildModuleChartOption } from "../components/cockpit/charts/module-options";
 
 const ready = (period: string, value: number, display = String(value)) => ({
   period,
@@ -22,6 +24,19 @@ const ready = (period: string, value: number, display = String(value)) => ({
 const missing = (period: string) => ({ period, value: 0, display: "—", status: "unavailable" });
 
 describe("chart builders", () => {
+  it("费用环图与年度柱图使用相同分类色，第四系列为概念板中性灰", () => {
+    const series = { 销售: 12, 管理: 55, 研发: 23, 财务: 10 };
+    const donut = buildModuleChartOption({ type: "ratio_bar", unit: "百万元", series }, "百万元") as {
+      series: { data: { name: string; itemStyle: { color: string } }[] }[];
+    };
+    const bars = buildModuleChartOption({ type: "bar", unit: "百万元", periods: ["FY2023"], series: Object.fromEntries(Object.entries(series).map(([name, value]) => [name, [value]])) }, "百万元") as {
+      series: { name: string; itemStyle: { color: string } }[];
+    };
+    expect(donut.series[0].data.map(({ name, itemStyle }) => [name, itemStyle.color])).toEqual(Object.entries(EXPENSE_CATEGORY_COLORS));
+    expect(bars.series.map(({ name, itemStyle }) => [name.replace("（百万元）", ""), itemStyle.color])).toEqual(Object.entries(EXPENSE_CATEGORY_COLORS));
+    expect(SERIES_PALETTE[3]).toBe("#9BA6A4");
+  });
+
   // ── 不补零铁律 ──────────────────────────────────────────────
   it("combo: 全部不可用时返回 undefined（不画假线）", () => {
     const opt = buildCombo([
@@ -124,6 +139,15 @@ describe("chart builders", () => {
     // base: [0, 100, 90, 0]；delta: [100, 20, 30, 90]
     expect(opt.series[0].data).toEqual([0, 100, 90, 0]);
     expect(opt.series[1].data.map((d: number | { value: number }) => (typeof d === "number" ? d : d.value))).toEqual([100, 20, 30, 90]);
+  });
+
+  it("waterfall: 算术减少使用中性色，负向结果才使用语义红", () => {
+    const opt = buildWaterfall([
+      { label: "期初", value: 20, kind: "total" },
+      { label: "期间减少", value: -40, kind: "down" },
+      { label: "期末", value: -20, kind: "total" },
+    ], "万元") as { series: { data: { itemStyle: { color: string } }[] }[] };
+    expect(opt.series[1].data.map((item) => item.itemStyle.color)).toEqual(["#1F4D70", "#9BA6A4", "#B1483E"]);
   });
 
   it("quadrant: 气泡大小按 size 缩放并夹在 10–38", () => {

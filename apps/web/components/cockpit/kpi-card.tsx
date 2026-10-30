@@ -77,11 +77,33 @@ function Comparison({
   );
 }
 
-function KpiSparkline({ series, title }: { series: CockpitTrendSeries; title: string }) {
+function KpiSparkline({ series, title, metricCode }: { series: CockpitTrendSeries; title: string; metricCode: string }) {
   const points = (series.points ?? []).filter((point) => point.status === "ready" && Number.isFinite(point.value));
   if (points.length < 2) return null;
   const unit = series.unit === "ratio" ? "百分比" : series.unit === "CNY" ? "人民币元" : series.unit;
   const values = points.map((point) => point.value);
+  const latest = points.at(-1)!;
+  const percent = series.unit === "ratio" ? latest.value * 100 : latest.value;
+  if (metricCode === "gross_margin" && percent >= 0 && percent <= 100) {
+    return (
+      <svg className="kpi__sparkline kpi__ring" data-testid="cockpit-kpi-ring" viewBox="0 0 60 22" role="img" aria-label={`${title} ${latest.period}，${percent.toFixed(2)}%`}>
+        <circle className="kpi__ring-track" cx="30" cy="11" r="8" fill="none" strokeWidth="4" />
+        <circle cx="30" cy="11" r="8" fill="none" stroke="currentColor" strokeWidth="4" pathLength="100" strokeDasharray={`${percent} ${100 - percent}`} transform="rotate(-90 30 11)" />
+      </svg>
+    );
+  }
+  if (["revenue", "operating_cash_flow"].includes(metricCode) && values.length >= 3 && values.every((value) => value >= 0)) {
+    const recent = points.slice(-3);
+    const peak = Math.max(...recent.map((point) => point.value), 1);
+    return (
+      <svg className="kpi__sparkline kpi__bars" data-testid="cockpit-kpi-bars" viewBox="0 0 60 22" role="img" aria-label={`${title} ${recent[0].period} 至 ${latest.period}，最近三期柱状趋势，单位${unit}`}>
+        {recent.map((point, index) => {
+          const height = Math.max(3, (point.value / peak) * 17);
+          return <rect key={point.period} x={13 + index * 13} y={20 - height} width="6" height={height} rx="1" fill="currentColor" />;
+        })}
+      </svg>
+    );
+  }
   const min = Math.min(...values);
   const max = Math.max(...values);
   const span = max - min || 1;
@@ -164,7 +186,7 @@ export function CockpitKpiCard({
           <div className="kpi__value">
             {formatKpiValue(card.primary.exact_value ?? card.primary.display_value, card.metric_code, card.unit)}
           </div>
-          {trend ? <KpiSparkline series={trend} title={card.title} /> : null}
+          {trend ? <KpiSparkline series={trend} title={card.title} metricCode={card.metric_code} /> : null}
         </div>
         <div className="kpi__cmps">
           <Comparison label="同比" value={card.comparisons.yoy} polarity={card.polarity} metricCode={card.metric_code} />
