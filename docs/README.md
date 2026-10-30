@@ -3,18 +3,18 @@ doc_id: FLOW-NAV-DOCS-001
 title: docs navigation
 doc_type: navigation
 status: current
-version: 1.5
+version: 1.6
 created_at: 2026-09-12
-updated_at: 2026-10-26
+updated_at: 2026-10-30
 owner: FLOW
 applies_to: docs
 ---
 
 > 文档唯一入口：[00_start_here](00_start_here/README.md)（PROJECT_STATE / READING_ORDER / DOCUMENT_MAP）。M1–M5 迁移期间 superpowers/ 与旧目录仍有效，接替关系见 DOCUMENT_MAP。
 
-# FLOW 文档中心｜2026-10-26
+# FLOW 文档中心｜2026-10-30
 
-状态：当前导航。迁移头 `0032_cockpit_action_item`；D055/7a 原型已完成；视觉语言资产与全项目统一已结案，原生 200% 缩放因设备/工具外部条件待补验；当前执行项为知识刷新 K3。可复制主题资产在 [`packages/flow-visual-language`](../packages/flow-visual-language/README.md)，视觉证据及限制见[视觉覆盖报告](60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)。CI 时点见 PROJECT_STATE。
+状态：当前导航。D055/7a 原型和概念板图表统一已结案，2026-10-30 最终代码及三视口证据见[图表收尾验收](60_delivery/verification/2026-10-30--concept-chart-alignment-closeout-v1.md)；可复制视觉资产见 [`packages/flow-visual-language`](../packages/flow-visual-language/README.md)。K3/K4–K6 已按用户要求取消，不读取全量知识库；原生 200% 缩放仍待直接验收。当前队列与 CI 时点见[PROJECT_STATE](00_start_here/PROJECT_STATE.md)。
 
 ## 01｜先看当前结论
 
@@ -23,7 +23,7 @@ applies_to: docs
 | 1 | [当前项目状态](00_start_here/PROJECT_STATE.md) | 已提交能力、真实缺口、CI 时点与下一步 |
 | 2 | [当前路线图](50_plans/CURRENT_ROADMAP.md) | 唯一执行入口；工作包状态与战略边界重构门禁 |
 | 3 | [战略重构设计](superpowers/specs/2026-09-13-flow-strategic-reset-design.md) | D052–D054：三层两模块目标结构与执行顺序 |
-| 4 | [财经分析知识地图与 Obsidian 扫描](knowledge-base/02_research/2026-09-11-finance-knowledge-map.md) | K1–K8、15:46 固定截面 3035 篇正文、采用/拒绝与权限边界 |
+| 4 | [概念板图表统一验收](60_delivery/verification/2026-10-30--concept-chart-alignment-closeout-v1.md) | 当前图表色义、三视口截图、代码与数据来源 |
 | 5 | [文档全量登记](documentation-status.md) | 每份文档的状态、日期、命名和处置 |
 | 6 | [文档治理规则](2026-09-07-documentation-governance.md) | 分类、命名与维护规则；改名映射见[文档全量登记](documentation-status.md) |
 
@@ -47,7 +47,7 @@ applies_to: docs
 | [指标与快照](metrics/flow-v1-metrics.md) | 物流 15 项子集、完整 55 项知识库和版本治理的区别 |
 | [API 索引](api-reference.md) | 从已提交 OpenAPI 生成的完整方法/路径 |
 | [单用户认证](operations/authentication.md) | 服务端凭据、会话与配置加载；不等于多角色权限 |
-| [截图目录](assets/screenshots/README.md) | 历史实际画面及 P5 图形证据，不冒充本次新截图 |
+| [截图目录](assets/screenshots/README.md) | 当前视觉验收截图索引与按日期保存的历史批次 |
 
 ## 04｜历史、证据与档案
 

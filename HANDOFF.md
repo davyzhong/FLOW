@@ -3,7 +3,7 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目交接文档
 doc_type: navigation
 status: current
-version: 17.17
+version: 17.18
 created_at: 2026-09-12
 updated_at: 2026-10-30
 owner: FLOW
@@ -13,6 +13,14 @@ applies_to: repository
 # FLOW 项目交接文档
 
 > 本文档是下一位 Agent 接手的唯一入口。项目唯一权威状态以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为准；本文档提供接手上下文、踩坑记录和下一步操作指引。
+
+---
+
+### 2026-10-30 README 与当前截图同步
+
+用户复查已结案的概念板图表统一工作，并指出 README 仍展示旧视觉批次。已核验最终图表代码 `e7e2be03d27ff472894ce35170e534c411a47d67`、准确 SHA CI run `40985033178`（28/28 success）、[最终矩阵](docs/60_delivery/verification/visual-language-20261030-concept-closeout/results.json)（20 路由 × 3 视口 60/60 ready）与[图表收尾验收](docs/60_delivery/verification/2026-10-30--concept-chart-alignment-closeout-v1.md)。README 首屏、驾驶舱、费用、现金流、盈利、财报、数据、调查、报告与登录页已引用该最终批次真实截图；2026-10-29 导入操作和 2026-10-20 单机原型截图折叠为历史视觉证据，P5 静态报告图注明历史身份。截图索引与 docs 导航同步；README 的 K3 当前队首陈述已改为取消状态。未读取全量知识库、未改应用代码或数据。
+
+本次只是文档追认，图表代码与最终截图的验收结论不变。原生浏览器 200% 缩放仍待直接验收。当前路线图 17 项：完成 12、执行中 0、排队 3、暂停 1、外部条件受限 1；K3/K4–K6 取消，当前无活跃执行项。下一产品方向以用户后续指令为准；旧交接段落均是历史记录，不作为队首。
 
 ---
 

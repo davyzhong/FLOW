@@ -3,9 +3,9 @@ doc_id: FLOW-NAV-ROOT-README-001
 title: FLOW repository README
 doc_type: navigation
 status: current
-version: 2.0
+version: 2.1
 created_at: 2026-08-29
-updated_at: 2026-10-25
+updated_at: 2026-10-30
 owner: FLOW
 applies_to: repository
 # readme-craft v3.0.0-alpha.0 metadata（机器可读，LLM/Agent 友好）
@@ -68,47 +68,52 @@ tags:
 
 <img src="docs/assets/cockpit-visual-direction-2026-10-18.png" width="100%" alt="FLOW 财务经营总览与报告画布的桌面及手机静态概念板：暖纸白画布、墨蓝导航、克制金色重点、收入趋势、现金流桥、杜邦拆解和经营发现；全部指标均为示意数据" />
 
-<sub><strong>概念稿 · 2026-10-18</strong>　A「高管编辑部」× C「财务报告画布」｜指标均为示意数据，页面与功能不代表当前实现状态。</sub>
+<sub><strong>概念稿 · 2026-10-18</strong>　A「高管编辑部」× C「财务报告画布」｜指标均为示意数据；下方另列真实运行页面。</sub>
 
 </div>
 
-FLOW 的视觉方向已经明确：把有来源、有口径、有解释的财务事实组织成可阅读、可追问、可复核的分析画布。概念板展示设计目标；下方实景图记录此前真实运行的页面与公开财报实验。共享视觉语言已推广至全路由，完成对比度/结构语义整改、报告中心双栏与指标库桌面双列、图表语义修正和键盘入口。最新视觉代码 SHA `d554bc317e8c948d776833b9868cdce4a9dd4c81` 下，导出/打印定向测试 27 项、Ruff、视觉 token 检查通过；HTML/PDF/PPTX/XLSX 已按代表性样例检查共享色彩、字体、表格与纸张布局。此前 Web 209 项、typecheck/build、60/60 路由视口矩阵、Axe 20 路由零违规和 19/19 键盘入口仍是已验证证据；界面代码未在本轮变更，矩阵仍绑定其原采集 SHA。原生浏览器 200% 缩放仍未直接验收。CI 按准确 HEAD 判读，实时状态见 [GitHub Actions](https://github.com/davyzhong/FLOW/actions)。最新证据与剩余范围见[视觉覆盖报告](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)；公开截图发布仍暂停。
+FLOW 将有来源、有口径、有解释的财务事实组织成可阅读、可追问、可复核的分析画布。概念板给出暖纸白、墨蓝、古金、翡翠绿和中性灰的视觉方向；下方是 **2026-10-30 生产构建真实页面截图**。图表统一代码 SHA `e7e2be03d27ff472894ce35170e534c411a47d67` 对应 CI run `40985033178`，28/28 jobs success；隔离演示数据下 20 路由 × 3 视口的 60/60 页面内容就绪，API/浏览器错误、外部请求与页面横向溢出均为 0。图表逐项结论见[概念板图表统一验收](docs/60_delivery/verification/2026-10-30--concept-chart-alignment-closeout-v1.md)。原生浏览器 200% 缩放尚未直接验收。
 
 <table>
 <tr>
-<td width="50%"><strong>经营驾驶舱 · 真实页面</strong><br/><img src="docs/assets/screenshots/dashboard.png" width="100%" alt="FLOW 旧版经营驾驶舱真实浏览器截图：经营指标、12 月趋势、利润变动桥、经营发现与产品毛利矩阵"/><br/><sub>真实浏览器截图｜代码基线 c1a59d1｜确定性物流演示数据，非客户数据。保留旧版外观，不能视为当前完成态。</sub></td>
-<td width="50%"><strong>公开财报 · 顺丰 2026Q1</strong><br/><img src="docs/assets/screenshots/p5/sf-overview.png" width="100%" alt="顺丰控股 2026 年第一季度公开财报分析图：关键指标、五季度收入与净利润趋势、利润形成瀑布"/><br/><sub>真实公开披露数据的静态分析报告画面｜原文抽取、勾稽验证和生成期闭合记录见下文。</sub></td>
+<td width="50%"><strong>CFO 驾驶舱 · 当前实景</strong><br/><img src="docs/60_delivery/verification/visual-language-20261030-concept-closeout/cockpit--desktop.png" width="100%" alt="FLOW CFO 驾驶舱当前页面：纸白画布、墨蓝导航、KPI 微柱、收入与利润趋势、现金流桥、杜邦分析和费用结构"/><br/><sub>真实页面｜1440 px 桌面视口｜隔离 synthetic 演示数据｜代码 e7e2be03。</sub></td>
+<td width="50%"><strong>费用分析 · 环图与柱图</strong><br/><img src="docs/60_delivery/verification/visual-language-20261030-concept-closeout/cockpit--expenses--desktop.png" width="100%" alt="FLOW 当前费用页：古金、翡翠绿、中性灰、墨蓝统一的费用环图、年度分组柱和费率趋势"/><br/><sub>真实页面｜1440 px 桌面视口｜隔离 synthetic 演示数据｜同一代码版本。</sub></td>
 </tr>
 <tr>
-<td width="50%"><strong>从异常回到证据</strong><br/><img src="docs/assets/screenshots/investigation.png" width="100%" alt="FLOW Investigation 真实页面截图：异常驱动、证据、源记录、公式与待提交结论"/><br/><sub>浏览器实测页面｜演示数据｜用于展示证据追溯交互。</sub></td>
-<td width="50%"><strong>离线知识资产 · 可直接浏览</strong><br/><img src="docs/assets/screenshots/library-site.png" width="100%" alt="FLOW 静态资料库真实页面截图：离线展示指标、科目、事实库与财报表格"/><br/><sub>项目内静态资料库｜单文件、无需服务｜内容与发布版本见知识治理章节。</sub></td>
+<td width="50%"><strong>公开财报分析 · 当前实景</strong><br/><img src="docs/60_delivery/verification/visual-language-20261030-concept-closeout/statements--desktop.png" width="100%" alt="FLOW 当前公开财报页：期间分组柱、资产与资本结构环图、现金流三类柱和现金桥"/><br/><sub>真实页面｜1440 px 桌面视口｜已导入公开披露数据；图表呈现按同一代码版本采集。</sub></td>
+<td width="50%"><strong>移动端驾驶舱 · 当前实景</strong><br/><img src="docs/60_delivery/verification/visual-language-20261030-concept-closeout/cockpit--mobile.png" width="100%" alt="FLOW 当前 CFO 驾驶舱 390 像素手机视口全页截图，图表与来源按阅读顺序排列"/><br/><sub>真实页面｜390 px CSS 视口｜隔离 synthetic 演示数据；不代表原生 200% 缩放验收。</sub></td>
 </tr>
 </table>
 
 ### 当前 A+C 驾驶舱 · 真实页面实测
 
-下面是概念板方向已经落到产品页面后的本机浏览器实测。桌面总览优先呈现营业收入、营业利润、毛利率和经营现金流；完整趋势、现金流桥、杜邦分解、费用结构、行动项及来源口径均可在同一画布查看。手机截图展示同一数据视图的窄屏排列。
+项目已将 A「高管编辑部」× C「财务报告画布」抽象为可复制的 [FLOW Visual Language 包](packages/flow-visual-language/README.md)。2026-10-30 的最终修正覆盖普通趋势、KPI 微柱、费用环图和柱图、现金流桥及财报期间比较；颜色表示期间或类别，正负数仍通过零轴、方向和数值表达。以下截图均来自同一生产构建，代码 SHA `e7e2be03d27ff472894ce35170e534c411a47d67`；桌面 1440×1000、手机 390×844。隔离演示发行包 manifest SHA-256 为 `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`。完整 60 张截图和结果见[最终矩阵](docs/60_delivery/verification/visual-language-20261030-concept-closeout/results.json)，逐图表结论与限制见[收尾验收](docs/60_delivery/verification/2026-10-30--concept-chart-alignment-closeout-v1.md)。
 
-2026-10-24 起，项目已将 A「高管编辑部」× C「财务报告画布」抽象为可复制的 [FLOW Visual Language 包](packages/flow-visual-language/README.md)，并完成全项目页面、图表与报告输出统一。下图是生产构建的真实页面截图；使用隔离 synthetic 数据，不代表真实企业经营结果。当前路由矩阵与 Axe 结果均绑定代码 SHA `01e8e25dd426ed43ad6a2cad76544bbbe623eb99`：20 路由×3 视口 60/60 ready，页面/API/浏览器错误、外部请求和横向溢出均为 0；Axe 桌面 20 路由零违规。页面/键盘代码 SHA `52418d88c9338b41c59f14f3d699d758c36bf8a1` 下 Web 全量 209 项测试、typecheck 与生产 build 通过；19/19 AppShell 首 Tab/Enter、图谱分层和重复编码深链通过。导出视觉代码 SHA `d554bc317e8c948d776833b9868cdce4a9dd4c81` 完成 HTML/PDF/PPTX/XLSX 代表性版式与打印检查，定向后端测试 27 项通过；原生 200% 缩放未直接验收。CI 结果须与当前 HEAD 对应；实时状态见 [GitHub Actions](https://github.com/davyzhong/FLOW/actions)。完整记录：[视觉覆盖报告](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)；截图数据仅使用隔离 synthetic 批次。
-
-![FLOW A+C 视觉语言实施中的集团财务总览真实页面，展示纸白画布、深海军蓝导航、衬线标题、指标卡、趋势图、现金流桥与来源面板；经营数据为隔离 synthetic 演示数据](docs/60_delivery/verification/visual-language-20261024/cockpit--desktop.png)
+![2026-10-30 当前 CFO 驾驶舱：指标微柱、收入与利润趋势、经营现金流桥、杜邦分析和费用结构；数据为隔离 synthetic 演示发行包](docs/60_delivery/verification/visual-language-20261030-concept-closeout/cockpit--desktop.png)
 
 <table>
 <tr>
-<td width="50%"><strong>集团财务总览 · 桌面全页</strong><br/><img src="docs/assets/screenshots/cockpit-visual/overview-desktop-2026-10-19.png" width="100%" alt="FLOW CFO 财务总览真实浏览器截图，显示四项核心 KPI、收入利润双轴趋势、经营现金流变动桥、杜邦分析、费用结构、来源和行动项"/><br/><sub>真实页面｜1440 px 视口｜大麦物流合成演示数据。</sub></td>
-<td width="50%"><strong>集团财务总览 · 手机全页</strong><br/><img src="docs/assets/screenshots/cockpit-visual/overview-mobile-2026-10-19.png" width="100%" alt="FLOW CFO 财务总览真实手机视口截图，展示核心指标、趋势图、财务分析和来源信息的窄屏布局"/><br/><sub>真实页面｜390 px 视口｜同一演示数据与代码版本。</sub></td>
+<td width="50%"><strong>集团财务总览 · 手机全页</strong><br/><img src="docs/60_delivery/verification/visual-language-20261030-concept-closeout/cockpit--mobile.png" width="100%" alt="FLOW CFO 财务总览当前手机页面：指标、趋势、现金流桥、杜邦、费用、行动项和来源纵向排列"/><br/><sub>真实页面｜390 px CSS 视口｜隔离 synthetic 演示数据。</sub></td>
+<td width="50%"><strong>现金流 · 三类固定色</strong><br/><img src="docs/60_delivery/verification/visual-language-20261030-concept-closeout/cockpit--cashflow--desktop.png" width="100%" alt="FLOW 现金流页当前截图：经营墨蓝、投资古金、筹资翡翠绿，负值保持类别颜色并由零轴表达"/><br/><sub>真实页面｜1440 px 桌面视口｜隔离 synthetic 演示数据。</sub></td>
 </tr>
 <tr>
-<td width="50%"><strong>盈利能力与杜邦分析 · 桌面全页</strong><br/><img src="docs/assets/screenshots/cockpit-visual/profitability-desktop-2026-10-19.png" width="100%" alt="FLOW 盈利能力与杜邦分析真实浏览器页面，展示杜邦关系图、两期财年比较、来源口径表和财报行链接"/><br/><sub>真实页面｜1440 px 视口｜财报快照、指标关系和来源行可追溯。</sub></td>
-<td width="50%"><strong>验收口径</strong><br/>9 个 CFO/数据路由通过 1440 px 与 390 px 图表绘制和溢出检查；总览四项 KPI 趋势明细逐项与 API 对账。此组图片为当前产品页面，不是概念稿；数字来自隔离的大麦物流合成发行包，不是阿里、菜鸟或真实客户财报。</td>
+<td width="50%"><strong>盈利能力与杜邦分析 · 桌面全页</strong><br/><img src="docs/60_delivery/verification/visual-language-20261030-concept-closeout/cockpit--profitability--desktop.png" width="100%" alt="FLOW 当前盈利能力页面：杜邦关系、两期财年比较、来源口径表和财报行链接"/><br/><sub>真实页面｜1440 px 桌面视口｜隔离 synthetic 演示数据。</sub></td>
+<td width="50%"><strong>费用分析 · 环图与分组柱</strong><br/><img src="docs/60_delivery/verification/visual-language-20261030-concept-closeout/cockpit--expenses--desktop.png" width="100%" alt="FLOW 当前费用分析页面：费用类别环图、两期分组柱、费率趋势和同值表"/><br/><sub>真实页面｜1440 px 桌面视口｜隔离 synthetic 演示数据。</sub></td>
 </tr>
 </table>
 
-<div align="center"><sub>实景截图核对与操作边界见 <a href="docs/assets/screenshots/README.md">截图说明</a>。旧版产品截图不是当前视觉验收证据；概念图也不替代真实页面交付。</sub></div>
+<div align="center"><sub>真实截图的代码、数据和视口来源见 <a href="docs/assets/screenshots/README.md">截图说明</a>；旧批次保留为历史记录。</sub></div>
 
-### 真实数据导入 + 治理发布链 · 2026-10-29 实测
+### 真实数据导入 + 治理发布链
 
-2026-10-28/29 交付「真实数据导入」：上传科目余额表（必选）与利润表、银行流水（可选）模板工作簿，经勾稽/净利润一致性/余额连续性三道门禁发布为治理指标快照（22 项指标目录），九页驾驶舱自动切换到导入账套作为活跃源。下图为 2026-10-29 本机生产构建实测（`make flow`，SQLite 单机栈）：演示数据为大麦物流 synthetic 批次，导入演示为自构样例账套（非真实企业数据）；采集脚本 `apps/web/capture-import-flow.mjs` 真实执行上传→发布→跳转。
+2026-10-28/29 交付「真实数据导入」：上传科目余额表（必选）与利润表、银行流水（可选）模板工作簿，经勾稽/净利润一致性/余额连续性三道门禁发布为治理指标快照（22 项指标目录），九页驾驶舱自动切换到导入账套作为活跃源。当前数据工作台页面见下图；2026-10-29 的上传与发布实测保留在折叠历史批次中，不能用于判断当前图表样式。
+
+![2026-10-30 当前数据工作台页面，统一纸白画布、墨蓝导航和古金强调；隔离 synthetic 演示数据](docs/60_delivery/verification/visual-language-20261030-concept-closeout/data--desktop.png)
+
+<details>
+<summary><strong>展开：2026-10-29 导入与发布操作实测（历史视觉批次）</strong></summary>
+
+以下截图由当时的 `make flow` 单机栈与 `apps/web/capture-import-flow.mjs` 真实执行上传→发布→跳转采集；导入演示为自构样例账套，非真实企业数据。图中视觉风格早于 2026-10-30 图表统一。
 
 <table>
 <tr>
@@ -121,9 +126,14 @@ FLOW 的视觉方向已经明确：把有来源、有口径、有解释的财务
 </tr>
 </table>
 
-七个子模块（盈利能力/资产负债/营运资金/费用/现金流/风险/集团合并）同批桌面全页截图见 [docs/assets/screenshots/2026-10-29/](docs/assets/screenshots/2026-10-29/)；采集环境、数据批次与边界见 [截图说明](docs/assets/screenshots/README.md)。
+同批其余截图见 [2026-10-29 历史批次](docs/assets/screenshots/2026-10-29/)；采集环境和边界见 [截图说明](docs/assets/screenshots/README.md)。
 
-### 单机运行成果与离线驾驶舱
+</details>
+
+### 单机运行成果与离线驾驶舱（2026-10-20 历史批次）
+
+<details>
+<summary><strong>展开：早期单机原型与离线截图</strong></summary>
 
 下图与离线报告来自 2026-10-20 的本机生产构建，代码 SHA `9ec0611562569b33bc3dac28c16445aa9470b150`。它们使用隔离目录中的大麦物流**合成演示批次**（manifest SHA-256 `6f3ef9176aaa02009c36080621d40ff6212ab1189c6e2c0695f5ea5f1b688fed`），验证报告 19/19 通过；不可将这些数据当作阿里巴巴、菜鸟或真实客户披露数据。
 
@@ -137,7 +147,9 @@ FLOW 的视觉方向已经明确：把有来源、有口径、有解释的财务
 | [盈利能力与杜邦分析截图](docs/assets/screenshots/cockpit-single-machine/profitability-desktop-2026-10-20.png) | 实际页面全页截图。 |
 | [截图与单机验收说明](docs/assets/screenshots/README.md) | 视口、数据批次、哈希、截图和离线检查结果。 |
 
-本批静态文件以 `file://` 浏览器实测，外部请求为 0、页面错误为 0；生产应用由本机 SQLite 与文件目录驱动。完整命令和当前 GitHub CI 状态以[路线图](docs/50_plans/CURRENT_ROADMAP.md)及[验收记录](docs/60_delivery/verification/2026-10-20--single-machine-visual-static-acceptance-v1.md)为准。
+本批静态文件以 `file://` 浏览器实测，外部请求为 0、页面错误为 0；生产应用由本机 SQLite 与文件目录驱动。这组截图早于 2026-10-30 视觉统一，仅作单机原型历史证据。完整命令和项目状态以[路线图](docs/50_plans/CURRENT_ROADMAP.md)及[当时验收记录](docs/60_delivery/verification/2026-10-20--single-machine-visual-static-acceptance-v1.md)为准。
+
+</details>
 
 > 长期产品方向遵循 [D052–D054](docs/10_governance/DECISION_INDEX.md)；当前交付边界由 [D055](docs/10_governance/decisions/D055--单机单用户验证原型.md) 定义为单机单用户财务分析验证原型。最新状态、实际执行位置与验收证据以 [唯一当前路线图](docs/50_plans/CURRENT_ROADMAP.md) 为准。
 
@@ -149,7 +161,7 @@ FLOW 后续驾驶舱与报告页面统一采用 **A「高管编辑部」主风�
 
 概念板已放在页面首屏，供读者先建立视觉印象；本节保留可执行的视觉原则与逐页验收口径。
 
-可跨项目复用的视觉语言资产现已开始在 [`packages/flow-visual-language/`](packages/flow-visual-language/README.md) 沉淀：语义颜色/字体/间距 token、CSS 导出、页面与图表表达范式，以及无业务数据 specimen。全路由阶段验收与截图索引见[视觉覆盖记录](docs/60_delivery/verification/2026-10-24--flow-visual-language-coverage-v1.md)；全项目视觉工作包已结案，原生 200% 缩放保留明确外部条件限制。
+可跨项目复用的视觉语言资产已沉淀在 [`packages/flow-visual-language/`](packages/flow-visual-language/README.md)：语义颜色、字体、间距 token，CSS 导出，页面与图表表达范式，以及无业务事实的样例。最终全路由矩阵和图表结论见[2026-10-30 收尾验收](docs/60_delivery/verification/2026-10-30--concept-chart-alignment-closeout-v1.md)；原生 200% 缩放保留明确外部条件限制。
 
 
 | 视觉层 | 统一标准 | 页面落实方式 |
@@ -290,7 +302,7 @@ flowchart TB
 
 调查页提供异常定义、影响金额、驱动桥、计算明细、对账与质量状态、源记录、公式和数据血缘。结论分为**已验证事实、分析判断、待确认问题、建议行动**；批准由状态机控制。
 
-![证据优先的 Investigation 页面](docs/assets/screenshots/investigation.png)
+![2026-10-30 当前 Investigation 页面：证据、来源、公式与调查结论；隔离演示数据](docs/60_delivery/verification/visual-language-20261030-concept-closeout/investigations--01a18a60-e6b4-7485-83cd-95e2943d52e1--desktop.png)
 
 **四问工作台的回答闭环**（U7 已交付，方法论权威见知识卡 METHOD-QA-001）——每个异动都走完同一条可审计的递进链：
 
@@ -300,8 +312,8 @@ flowchart LR
     Q2 --> Q3["❸ 会怎样<br/>（情景推演 · 显式标注假设）"]
     Q3 --> Q4["❹ 怎么办<br/>（行动 · 责任人 · 期限）"]
     Q4 -. 复盘后回到事实层 .-> Q1
-    classDef fact fill:#eaf3ff,stroke:#2463eb,color:#14243a
-    classDef infer fill:#fff4df,stroke:#ac761f,color:#14243a
+    classDef fact fill:#F4F0E9,stroke:#22445E,color:#172E3F
+    classDef infer fill:#F7F0DE,stroke:#A77D2E,color:#172E3F
     class Q1 fact
     class Q2,Q3,Q4 infer
 ```
@@ -310,16 +322,16 @@ flowchart LR
 
 ### 5. 报告中心：冻结、生成、追踪与下载
 
-报告中心可以冻结已发布指标快照中的批准 Findings，选择报告版本和输出格式，查看各次生成尝试并下载成功产物。冻结表单已提供可视化快照候选选择器；下图为较早版本，不能用于判断最新交互。
+报告中心可以冻结已发布指标快照中的批准 Findings，选择报告版本和输出格式，查看各次生成尝试并下载成功产物。冻结表单已提供可视化快照候选选择器；下图为 2026-10-30 当前页面实测。
 
-![报告中心的冻结快照与格式选择](docs/assets/screenshots/reports.png)
+![2026-10-30 当前报告中心：冻结快照、格式选择与生成记录](docs/60_delivery/verification/visual-language-20261030-concept-closeout/reports--desktop.png)
 
 <details>
 <summary><strong>展开：登录入口与移动端工作台</strong></summary>
 
-![单用户登录入口页](docs/assets/screenshots/login.png)
+![2026-10-30 当前单用户登录入口页](docs/60_delivery/verification/visual-language-20261030-concept-closeout/login--desktop.png)
 
-<img src="docs/assets/screenshots/data-mobile.png" width="390" alt="390 像素视口下的数据工作台" />
+<img src="docs/60_delivery/verification/visual-language-20261030-concept-closeout/data--mobile.png" width="390" alt="2026-10-30 当前 390 像素 CSS 视口下的数据工作台" />
 
 </details>
 
@@ -356,6 +368,8 @@ python3 scripts/build_static_library_site.py
 ### 顺丰控股 2026Q1：四表可视化分析
 
 从 2026 一季报原文抽取 **163 个报表行项目**（报表内勾稽 20/20、与 FY2025 年报跨文档比对 12/12 一致），生成十个板块的分析视图：
+
+本节至「指标库 v0 评审台」的 `p5/` 图片是当时生成的**历史静态报告与原型截图**，用于展示公开财报分析内容及勾稽证据；当前产品图表配色与布局见上方 [2026-10-30 财报页面截图](docs/60_delivery/verification/visual-language-20261030-concept-closeout/statements--desktop.png) 和 [指标库页面截图](docs/60_delivery/verification/visual-language-20261030-concept-closeout/metric-library--desktop.png)。
 
 ![顺丰 2026Q1：核心指标、五季度趋势与利润形成瀑布](docs/assets/screenshots/p5/sf-overview.png)
 
@@ -447,7 +461,7 @@ flowchart LR
 
 ## 📍 当前进度
 
-状态以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为唯一权威。长期产品战略由 D052–D054 定义；当前产品交付边界按 [D055](docs/10_governance/decisions/D055--单机单用户验证原型.md) 聚焦单机单用户财务分析验证原型。可复用视觉语言与全项目视觉统一（路线图第 12 项）已结案；原生 200% 缩放保留外部条件受限补验项。2026-10-28 用户裁决 K3 知识刷新挂起（恢复点第 163 批，pending 7,813），主线转产品功能：**真实数据导入（R1–R5）**与**导入账套指标补厚（M1–M3）**两个工作包已交付关闭——三模板导入、治理发布链桥接、22 项导入指标目录、九页活跃源切换；CI 全绿（`a2510344` run `40651999130`、`90dce69e` run `40665135693`）。当前队首待裁决下一产品方向；状态和顺序见[唯一路线图](docs/50_plans/CURRENT_ROADMAP.md)、[真实数据导入工作包](docs/50_plans/work_items/FLOW--real-data-import.md)与[指标补厚工作包](docs/50_plans/work_items/FLOW--importer-rich-metrics.md)。
+状态以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为唯一权威。长期产品战略由 D052–D054 定义；当前产品交付边界按 [D055](docs/10_governance/decisions/D055--单机单用户验证原型.md) 聚焦单机单用户财务分析验证原型。**真实数据导入（R1–R5）**与**导入账套指标补厚（M1–M3）**均已交付关闭，九页驾驶舱可切换到导入账套活跃源；可复用视觉语言与全项目图表统一（路线图第 12 项）也已结案。2026-10-30 用户取消 K3/K4–K6 全量知识整理，当前没有活跃执行项；下一产品方向尚未裁决。原生浏览器 200% 缩放保留外部条件受限补验项。代码、CI 和隔离截图证据见[图表收尾验收](docs/60_delivery/verification/2026-10-30--concept-chart-alignment-closeout-v1.md)。
 
 | 阶段 | 任务 | 状态 |
 | --- | --- | --- |
@@ -463,11 +477,17 @@ flowchart LR
 | **D055 原型交付** | 单机单用户、SQLite + 本地目录、A+C 驾驶舱/报告视觉升级 | ✅ 7a.1–7a.8 已完成并合入 main；PR #4 文档状态 merge commit `b068796f` 的准确 SHA run `40096497668` 为 28/28 success。原型限制见路线图与完结差距审查 |
 | **真实数据导入** | 三模板导入 + 治理发布链 + 九页活跃源切换（R1–R5） | ✅ 已交付关闭（`a2510344` CI 全绿） |
 | **导入指标补厚** | 科目级映射 + 利润表/银行流水接线，指标 7→22（M1–M3） | ✅ 已交付关闭（`90dce69e` CI 全绿）；期间发现并修复跨目录同码定义冲突 |
-| **当前队首** | 下一产品方向待裁决；K3 知识刷新挂起（恢复点第 163 批） | ⏸️ 待用户裁决；ObsidianWiki 保持只读 |
-| **视觉统一** | 可复用视觉语言与全项目页面、图表、报告统一 | ✅ 已结案；原生 200% 缩放待设备/工具条件恢复后补验 |
+| **当前执行** | 无活跃执行项；下一产品方向尚未裁决 | — |
+| **K3/K4–K6** | 全量知识整理 | 已取消；不继续读取全量知识库 |
+| **视觉统一** | 可复用视觉语言与全项目页面、图表、报告统一 | ✅ 图表最终代码 `e7e2be03`，CI 28/28；原生 200% 缩放待设备/工具条件恢复后补验 |
 | U9–U10 | 内部试点、V1.1 证据决策 | ⏭️ 排队；依赖公开 C 级证据与真实企业数据，轮到后按路线图验收 |
 
-**2026-10-26 结案：** 页面与交互代码 SHA `52418d88c9338b41c59f14f3d699d758c36bf8a1` 已推送。Web 38 文件/209 项测试、typecheck、production build 通过；lint 0 错误/4 条既有警告。20 路由×3 视口矩阵 60/60 ready，Axe 桌面 20 路由零违规；19/19 个 AppShell 路由键盘跳转通过。图谱常用/全部/专业层级均可操作，重复指标深链可定位；390 CSS px 下无页面溢出、图谱可横向键盘阅读。导出代码 SHA `d554bc317e8c948d776833b9868cdce4a9dd4c81` 下 HTML/PDF/PPTX/XLSX 代表性输出及打印版式已检查，定向后端测试 27 项通过；离线快照已绑定该 SHA 和隔离 synthetic 数据批次。原生浏览器 200% 缩放未能通过浏览器自动化设置，现记录为未直接验收；不以窄视口代理冒充。最终隔离验收：验证器 19/19、可见性矩阵 164/164（154 HTTP 200、10 预期拒绝、0 失败）、Playwright 17/17；最后断言修复 `d01daa11` 独立复核无 P1/P2。原生 200% 缩放受设备锁屏与工具能力限制未直接验收，390/360 CSS px 不替代。当前队首已转入知识刷新 K3；已在 vault 外重取稳定 accepted snapshot，并完成 K3 registry/baseline/累计 diff；当前按序进行全量语义路由与审阅。
+<details>
+<summary><strong>展开：2026-10-26 阶段性视觉验收（历史记录）</strong></summary>
+
+当时代码 SHA `52418d88c9338b41c59f14f3d699d758c36bf8a1` 下 Web 209 项测试、typecheck、production build 通过；20 路由×3 视口矩阵 60/60 ready、Axe 桌面 20 路由零违规、19/19 个 AppShell 路由键盘跳转通过。导出代码 SHA `d554bc317e8c948d776833b9868cdce4a9dd4c81` 下 HTML/PDF/PPTX/XLSX 代表性输出及打印版式已检查。后续图表色义和形态由 2026-10-30 最终验收接替；当时 K3 队首记录已失效。
+
+</details>
 
 已登记的确定性原语：CAGR（n−1 间隔）、可加和守恒桥（残差显式）、经验阈值提示（无普适判定）、口径标签值（登记制）、应收-收入增速联看提示。
 
@@ -601,7 +621,7 @@ flowchart LR
 
 不想装环境？先看真实产出：
 
-- **驾驶舱截图**（真实页面，标注来源 commit）：[dashboard.png](docs/assets/screenshots/dashboard.png)
+- **当前驾驶舱截图**（真实页面，代码 `e7e2be03`）：[桌面总览](docs/60_delivery/verification/visual-language-20261030-concept-closeout/cockpit--desktop.png)
 - **指标库评审台**（64 指标定义的可视化）：见下方「指标库 v0 评审台」
 - **静态资料库**（31 项静态资产，零服务器 / 零数据库）：见下方「静态资料库」章节
 - **接口文档**（FastAPI 自动生成，启动后可见）：`http://localhost:8000/docs`
@@ -831,7 +851,7 @@ FLOW/
 | 全部文档与哪份是最新 | [文档中心](docs/README.md)、[文档状态登记](docs/documentation-status.md) |
 | 产品为什么这样设计 | [战略重构设计（D052–D054）](docs/superpowers/specs/2026-09-13-flow-strategic-reset-design.md)、[D055 单机单用户原型决策](docs/10_governance/decisions/D055--单机单用户验证原型.md)、[A+C 可复用视觉语言设计稿](docs/superpowers/specs/2026-10-24-flow-visual-language-system-design.md)、[固定产品原则](docs/20_product/PRODUCT_PRINCIPLES.md)、[正式 V1 规格](docs/superpowers/specs/2026-08-29-flow-v1-design.md)、[决策索引 D001–D055](docs/10_governance/DECISION_INDEX.md) |
 | 当前完成到哪一步 | [项目状态](docs/00_start_here/PROJECT_STATE.md)、[当前路线图](docs/50_plans/CURRENT_ROADMAP.md) |
-| 新 Agent 接续 | [Agent 起点](docs/knowledge-base/00_start_here/AGENT_START_HERE.md)、[交接指南](docs/knowledge-base/07_handoff/CONTINUATION_GUIDE.md) |
+| 新 Agent 接续 | [项目交接](HANDOFF.md)、[当前状态](docs/00_start_here/PROJECT_STATE.md) |
 | API 方法、路径与类型 | [API 路径索引](docs/api-reference.md)、[OpenAPI](packages/contracts/openapi.json) |
 | 文件如何进入标准数据层 | [Intake 说明](docs/intake/flow-v1-intake.md) |
 | 数字从哪里来 | [指标口径](docs/metrics/flow-v1-metrics.md)、[领域身份](docs/architecture/flow-v1-domain-objects.md) |
@@ -842,12 +862,12 @@ FLOW/
 flowchart LR
     A["已交付基础<br/>公开财报 · 客观指标 · 证据报告"] --> B["D055 / 7a 已结案<br/>单机单用户原型"]
     B --> C["已结案<br/>可移植视觉语言 + 全项目视觉统一"]
-    C --> D["覆盖全部页面、图表、报告与有效文档<br/>逐项视觉验收和准确 SHA CI"]
-    D --> E["当前队首<br/>K3 知识刷新与语义审阅"]
-    style C fill:#fff0cd,stroke:#aa7918,stroke-width:2px
+    C --> D["2026-10-30 图表统一验收<br/>20 路由 × 3 视口 · 60/60"]
+    D --> E["当前无活跃执行项<br/>下一产品方向尚未裁决"]
+    style C fill:#F7F0DE,stroke:#A77D2E,stroke-width:2px
 ```
 
-单机原型与 A+C 可复用视觉语言工作包均已结案：SQLite + 本地文件目录、同步处理、单一启动入口、阶段 7 冷启动/离线展示及全项目视觉统一均已交付。当前唯一执行项是知识刷新 K3；可移植 token、CSS、表达范式与 specimen 已建立，Web 主题、共享外壳、主要页面/图表、离线快照和报告导出映射已接入。页面矩阵和键盘证据绑定 SHA `52418d88c9338b41c59f14f3d699d758c36bf8a1`；导出/打印代码 SHA `d554bc317e8c948d776833b9868cdce4a9dd4c81` 下，HTML/PDF/PPTX/XLSX 代表性版式完成检查、后端定向测试 27 项通过。原生 200% 缩放未直接验收；Mac 锁屏且当前自动化不能操作 Edge 缩放控件，待设备/工具条件恢复后补验。CI 必须按当前 HEAD 精确 SHA 判读，实时状态见 [GitHub Actions](https://github.com/davyzhong/FLOW/actions)。完整状态与队列见 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)。页面演示数据继续标识为合成数据，不冒充真实披露。
+单机原型与 A+C 可复用视觉语言工作包均已结案：SQLite + 本地文件目录、同步处理、单一启动入口、阶段 7 冷启动/离线展示及全项目视觉统一均已交付。可移植 token、CSS、表达范式与 specimen 已建立，Web 页面、图表、离线快照和报告导出映射已接入。最终图表代码 SHA `e7e2be03d27ff472894ce35170e534c411a47d67` 的 20 路由 × 3 视口矩阵为 60/60，准确 SHA CI 28/28；原生浏览器 200% 缩放仍未直接验收。K3/K4–K6 已取消；当前无活跃执行项。完整状态与队列见 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)。页面演示数据继续标识为合成数据。
 
 本仓库尚未提供独立的 LICENSE 文件；使用与分发授权请向项目维护者确认。贡献与协作遵循 [AGENTS.md](AGENTS.md)：先读项目状态和正式决策，保护原始档案，按风险验证，每个完整任务只提交相关文件并推送规范远端。
 
@@ -865,8 +885,8 @@ flowchart LR
 - [x] **U8** — 生产就绪收口（真实存储旅程 + HTTPS 拓扑 + 统一部署验收） ✅ completed；严格冻结门禁通过
 - [x] **S01** — 战略边界 + Financial Facts Contract V2 + 安全/RBAC/审计门禁 ✅
 - [x] **D055 / 7a** — 单机单用户原型、A+C 驾驶舱及离线预览已完成；详见[结案差距审查](docs/60_delivery/verification/2026-10-24--prototype-completion-gap-review-v1.md)
-- [🚧] **可移植视觉语言与全项目统一** — 当前唯一执行项；用户已批准，按工作包逐项实施
-- [ ] **K3** — 当前知识刷新队首；只读核验 accepted manifest 和外部知识库工作区后继续语义路由/审阅，ObsidianWiki 保持只读
+- [x] **可移植视觉语言与全项目统一** — 20 路由三视口 60/60，概念板图表色义与形态已验收；见[收尾记录](docs/60_delivery/verification/2026-10-30--concept-chart-alignment-closeout-v1.md)
+- [x] **K3/K4–K6 取消** — 不再读取或整理全量知识库；历史审阅记录保留
 - [ ] **U4** — 独立全行验证与留出泛化（依赖 oracle 人工录入）⬜ 外部到料即并行
 - [ ] **公开模块 C 级出口** — Go/No-Go 裁决（前置人工项不变）
 - [ ] **U9–U10** — 内部试点 + V1.1 证据决策（⬜ 待授权；按 [D053](docs/10_governance/decisions/D053--三层两模块边界与执行顺序.md) 重新裁决）
