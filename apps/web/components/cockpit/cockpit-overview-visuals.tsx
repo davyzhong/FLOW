@@ -38,7 +38,6 @@ function trendOption(overview: CockpitOverviewResponse) {
       title: series.title,
       axis: "line",
       unit: "亿元",
-      secondaryAxis: series.key === "operating_profit",
       points,
     }];
   });
@@ -143,7 +142,7 @@ export function CockpitOverviewVisuals({
             </div>
             <span className="overview-period-tag">{focusSeries[0]?.points?.[0]?.period ?? "—"} 至 {focusSeries[0]?.points?.at(-1)?.period ?? "—"}</span>
           </header>
-          <p className="overview-panel__note">按 API 已发布期间展示 · 左右轴均为亿元，利润使用独立刻度 · 缺失期间断线，不补零</p>
+          <p className="overview-panel__note">按 API 已发布期间展示 · 收入与利润使用同一亿元刻度 · 缺失期间断线，不补零</p>
           {hasFocusFacts ? <ChartBox
             title=""
             sub=""

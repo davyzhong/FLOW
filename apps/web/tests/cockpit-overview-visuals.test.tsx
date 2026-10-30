@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 
 vi.mock("../components/cockpit/charts/echarts-base", async (importOriginal) => ({
   ...(await importOriginal<typeof import("../components/cockpit/charts/echarts-base")>()),
-  ChartBox: ({ title, testId, ariaLabel, option }: { title: string; testId?: string; ariaLabel?: string; option?: { series?: { stack?: string }[] } }) => <div data-testid={testId} aria-label={ariaLabel} data-stacks={option?.series?.map((item) => item.stack).join(",")}>{title}</div>,
+  ChartBox: ({ title, testId, ariaLabel, option }: { title: string; testId?: string; ariaLabel?: string; option?: { series?: { stack?: string }[]; yAxis?: unknown } }) => <div data-testid={testId} aria-label={ariaLabel} data-stacks={option?.series?.map((item) => item.stack).join(",")} data-y-axis-count={Array.isArray(option?.yAxis) ? option.yAxis.length : 1}>{title}</div>,
 }));
 import { render, screen } from "@testing-library/react";
 
@@ -88,6 +88,13 @@ describe("CockpitOverviewVisuals", () => {
     for (const key of ["revenue", "operating_profit", "gross_margin", "operating_cash_flow"]) {
       expect(screen.getByTestId(`cockpit-overview-trend-row-${key}`)).toBeTruthy();
     }
+  });
+
+  it("收入与营业利润以同一亿元刻度比较，不强制拆成双轴", () => {
+    render(<CockpitOverviewVisuals overview={overview} supplements={supplements} loading={false} />);
+
+    expect(screen.getByTestId("cockpit-overview-revenue-profit-chart").getAttribute("data-y-axis-count")).toBe("1");
+    expect(screen.getByText(/同一亿元刻度/)).toBeTruthy();
   });
 
   it("没有可用的披露补充时明确展示不可用状态，不补造图表", () => {

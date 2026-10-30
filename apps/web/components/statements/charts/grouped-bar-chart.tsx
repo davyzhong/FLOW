@@ -67,7 +67,7 @@ export function GroupedBarChart({
                 y={yTop}
                 width={barW}
                 height={barH}
-                fill={value >= 0 ? fill : VISUAL_TOKENS["colors-semantic-negative"]}
+                fill={fill}
                 rx={3}
               >
                 <title>{`${item.label} ${seriesLabel}：${formatFinancialValue(value, { unit: unitLabel })}`}</title>

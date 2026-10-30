@@ -18,6 +18,10 @@ if (matrixDirectory === historicalDirectory || matrixDirectory.startsWith(`${his
   throw new Error("新结果目录不能位于 2026-10-24 历史验收目录内，避免覆盖截图");
 }
 const baseUrl = process.env.FLOW_VISUAL_AUDIT_URL ?? "http://127.0.0.1:13100";
+const findingId = process.env.FLOW_VISUAL_AUDIT_FINDING_ID;
+if (findingId && !/^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/.test(findingId)) {
+  throw new Error("FLOW_VISUAL_AUDIT_FINDING_ID 必须是隔离数据中的真实 UUID");
+}
 const codeCommit = execFileSync("git", ["rev-parse", "HEAD"], { cwd: repositoryRoot, encoding: "utf8" }).trim();
 const viewportSpecs = {
   desktop: { width: 1440, height: 1000 },
@@ -31,6 +35,10 @@ const results = [];
 
 try {
   for (const previous of matrix.results) {
+    const route = findingId && /^\/investigations\/[0-9a-f-]{36}$/.test(previous.route)
+      ? `/investigations/${findingId}`
+      : previous.route;
+    const screenshot = findingId ? previous.screenshot.replace(/[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}/, findingId) : previous.screenshot;
     const viewport = viewportSpecs[previous.viewport];
     if (!viewport) throw new Error(`未知视口：${previous.viewport}`);
     const context = await browser.newContext({ viewport, deviceScaleFactor: 1 });
@@ -53,7 +61,7 @@ try {
 
     let status = 0;
     try {
-      const response = await page.goto(new URL(previous.route, baseUrl).toString(), { waitUntil: "networkidle", timeout: 30000 });
+      const response = await page.goto(new URL(route, baseUrl).toString(), { waitUntil: "networkidle", timeout: 30000 });
       status = response?.status() ?? 0;
       await page.evaluate(() => document.fonts.ready);
       await page.waitForTimeout(250);
@@ -69,7 +77,7 @@ try {
     }));
     const horizontalOverflow = dimensions.doc > viewport.width || dimensions.body > viewport.width;
     const result = {
-      route: previous.route,
+      route,
       viewport: previous.viewport,
       status,
       ...dimensions,
@@ -79,7 +87,7 @@ try {
       horizontalOverflow,
       contentReady: status >= 200 && status < 300 && dimensions.contentReady,
       bad: status < 200 || status >= 300 || errors.length > 0 || apiErrors.length > 0 || externalRequests.length > 0 || horizontalOverflow,
-      screenshot: previous.screenshot,
+      screenshot,
     };
     await page.screenshot({ path: path.join(matrixDirectory, result.screenshot), fullPage: true });
     results.push(result);

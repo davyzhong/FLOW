@@ -30,7 +30,11 @@ PRIOR_NEUTRAL = VISUAL_TOKENS["colors-data-series4"]
 ORANGE = VISUAL_TOKENS["colors-brand-gold"]
 GREY = VISUAL_TOKENS["colors-semantic-unavailable"]
 NEG = VISUAL_TOKENS["colors-semantic-negative"]
-GREEN = VISUAL_TOKENS["colors-semantic-positive"]
+CASHFLOW_COLORS = {
+    "经营": BLUE,
+    "投资": ORANGE,
+    "筹资": VISUAL_TOKENS["colors-data-cash"],
+}
 EXPENSE_COLORS = {
     "销售": ORANGE, "销售费用": ORANGE,
     "管理": VISUAL_TOKENS["colors-data-cash"],
@@ -172,7 +176,7 @@ def cashflow_bars(operating: Decimal | None, investing: Decimal | None,
         raise ValueError("cashflow_bars 缺少全部数值")
     floats, unit = _scale([value for _, value in present])
     labels = [label for label, _ in present]
-    colors = [GREEN if value >= 0 else NEG for value in floats]
+    colors = [CASHFLOW_COLORS[label] for label in labels]
     fig, ax = plt.subplots(figsize=(2.2 * len(present) + 1.2, 2.9))
     bars = ax.bar(labels, floats, color=colors, width=0.5)
     ax.axhline(0, color=VISUAL_TOKENS["colors-line-strong"], linewidth=0.8)

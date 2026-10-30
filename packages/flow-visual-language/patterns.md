@@ -3,9 +3,9 @@ doc_id: FLOW-VISUAL-LANGUAGE-PATTERNS-20261024-001
 title: FLOW Editorial Finance Canvas 表达范式
 doc_type: design
 status: approved
-version: "1.0"
+version: "1.1"
 created_at: 2026-10-24
-updated_at: 2026-10-24
+updated_at: 2026-10-30
 owner: FLOW
 decision_refs: [D055]
 knowledge_release: flow-knowledge-2026-09-12.1
@@ -67,9 +67,11 @@ applies_to: product-visual-language
 2. **画布内文字字族**：轴标签、图例、数据标签、tooltip、仪表盘文字一律 `chart.fontFamily`（Noto Sans SC Variable / PingFang SC）；图表代码必须消费该 token，不得退回浏览器默认字体。
 3. **网格与轴**：网格线 `chart.grid #E8E3DA`、轴文字 `chart.axis #777F85`、轴线细于 1px 观感；热力分格边界用 `surface-raised`。
 4. **柱形与环形**：柱圆角 ≤4px；环形图内径 48%/外径 72%（玫瑰 28%/72%），标签在环外并带百分比；排名条右端 4px 圆角。
-   瀑布桥的「减少」为中性灰绿，表示算术方向；只有负向结果或真实风险状态才使用负向语义红。报告环图不得把语义红、警示色当作任意分类系列。
-5. **treemap 及任何新增图型**：必须显式绑定本色阶或 semantic token，禁止依赖渲染库默认色板。
-6. 修改系列色阶时：改 `tokens.json` 后运行 `scripts/build_flow_visual_language.py` 重新生成三产物，禁止手改任何生成文件。
+   瀑布桥的「增加」为图表翡翠绿、「减少」为中性灰绿，表示算术方向；只有负向结果或真实风险状态才使用负向语义红。报告环图不得把语义红、警示色当作任意分类系列。
+   现金流量净额等按期间分组的柱图，即使某期值为负也保持本期/上期的墨蓝/中性色；经营/投资/筹资三活动柱分别使用墨蓝/古金/图表翡翠绿。均由零轴位置和带符号数值表达正负，避免把流出方向误画成风险判断。
+5. **趋势与 KPI 微图**：普通趋势线不使用面积填充；收入与营业利润等同单位序列共享纵轴，只有单位不同或确需独立刻度的场景才使用第二轴。收入与经营现金流使用最近三期中性灰微柱，营业利润使用图表翡翠绿微柱；微柱以零线为基线，正值向上、负值向下，毛利率使用真实比例小环图。
+6. **treemap 及任何新增图型**：必须显式绑定本色阶或 semantic token，禁止依赖渲染库默认色板。
+7. 修改系列色阶时：改 `tokens.json` 后运行 `scripts/build_flow_visual_language.py` 重新生成三产物，禁止手改任何生成文件。
 
 ## 响应式与可访问性
 

@@ -92,14 +92,19 @@ function KpiSparkline({ series, title, metricCode }: { series: CockpitTrendSerie
       </svg>
     );
   }
-  if (["revenue", "operating_cash_flow"].includes(metricCode) && values.length >= 3 && values.every((value) => value >= 0)) {
+  if (["revenue", "operating_profit", "operating_cash_flow"].includes(metricCode) && values.length >= 3) {
     const recent = points.slice(-3);
-    const peak = Math.max(...recent.map((point) => point.value), 1);
+    const hasNegative = recent.some((point) => point.value < 0);
+    const baseline = hasNegative ? 11 : 20;
+    const scale = hasNegative ? 8 : 17;
+    const peak = Math.max(...recent.map((point) => Math.abs(point.value)), 1);
     return (
-      <svg className="kpi__sparkline kpi__bars" data-testid="cockpit-kpi-bars" viewBox="0 0 60 22" role="img" aria-label={`${title} ${recent[0].period} 至 ${latest.period}，最近三期柱状趋势，单位${unit}`}>
+      <svg className="kpi__sparkline kpi__bars" data-testid="cockpit-kpi-bars" viewBox="0 0 60 22" role="img" aria-label={`${title} ${recent[0].period} 至 ${latest.period}，最近三期柱状趋势（零基线），单位${unit}`}>
+        {hasNegative ? <line x1="10" y1={baseline} x2="52" y2={baseline} stroke="currentColor" strokeOpacity="0.25" /> : null}
         {recent.map((point, index) => {
-          const height = Math.max(3, (point.value / peak) * 17);
-          return <rect key={point.period} x={13 + index * 13} y={20 - height} width="6" height={height} rx="1" fill="currentColor" />;
+          const height = point.value === 0 ? 1 : Math.max(2, (Math.abs(point.value) / peak) * scale);
+          const y = point.value < 0 ? baseline : baseline - height;
+          return <rect key={point.period} x={13 + index * 13} y={y} width="6" height={height} rx="1" fill="currentColor" />;
         })}
       </svg>
     );

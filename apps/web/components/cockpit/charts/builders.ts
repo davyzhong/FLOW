@@ -102,7 +102,6 @@ export function buildCombo(series: ComboSeries[]): ChartOption | undefined {
         emphasis: { focus: "series" },
         itemStyle: { color },
         lineStyle: isLine ? { width: 2.4, color } : undefined,
-        areaStyle: isLine ? { color: `${color}14` } : undefined,
         symbolSize: 6,
         connectNulls: false,
         barMaxWidth: 26,
@@ -240,7 +239,7 @@ export function buildWaterfall(
               steps[i].kind === "total"
                 ? steps[i].value < 0 ? CHART_THEME.red : CHART_THEME.blue
                 : steps[i].kind === "up"
-                  ? CHART_THEME.green
+                  ? CHART_THEME.emerald
                   : CHART_THEME.neutral,
             borderRadius: steps[i].kind === "total" ? ([3, 3, 0, 0] as [number, number, number, number]) : ([2, 2, 2, 2] as [number, number, number, number]),
           },

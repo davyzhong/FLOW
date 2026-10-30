@@ -58,6 +58,14 @@ describe("chart builders", () => {
     expect(opt.series[0].data).toEqual([10, null]);
   });
 
+  it("combo: 趋势线不使用面积填充，保持概念板的干净细线", () => {
+    const opt = buildCombo([
+      { key: "revenue", title: "营业收入", axis: "line", unit: "亿元", points: [ready("FY2022", 120), ready("FY2023", 150)] },
+    ]) as { series: { areaStyle?: unknown }[] };
+
+    expect(opt.series[0].areaStyle).toBeUndefined();
+  });
+
   it("combo: bar + line 时使用双 Y 轴", () => {
     const opt = buildCombo([
       { key: "rev", title: "收入", axis: "bar", unit: "万元", points: [ready("2026-01", 10)] },
@@ -139,6 +147,14 @@ describe("chart builders", () => {
     // base: [0, 100, 90, 0]；delta: [100, 20, 30, 90]
     expect(opt.series[0].data).toEqual([0, 100, 90, 0]);
     expect(opt.series[1].data.map((d: number | { value: number }) => (typeof d === "number" ? d : d.value))).toEqual([100, 20, 30, 90]);
+  });
+
+  it("waterfall: 增加项与 SVG 瀑布共用概念板翡翠绿", () => {
+    const opt = buildWaterfall([
+      { label: "期间增加", value: 20, kind: "up" },
+    ], "万元") as { series: { data: { itemStyle: { color: string } }[] }[] };
+
+    expect(opt.series[1].data[0].itemStyle.color).toBe(SERIES_PALETTE[2]);
   });
 
   it("waterfall: 算术减少使用中性色，负向结果才使用语义红", () => {

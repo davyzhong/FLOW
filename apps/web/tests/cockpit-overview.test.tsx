@@ -145,6 +145,28 @@ describe("CockpitOverviewApp", () => {
     expect(screen.getByTestId("cockpit-kpi-ring")).toHaveAttribute("aria-label", expect.stringContaining("25.00%"));
   });
 
+  it("营业利润使用最近三期零基线微柱，负值向下而不是退回折线", async () => {
+    const data = overview();
+    data.kpi_cards!.push({
+      ...data.kpi_cards![0]!, metric_code: "operating_profit", title: "营业利润",
+    });
+    data.trends![0]!.series!.push({
+      key: "operating_profit", title: "营业利润", unit: "万元",
+      points: [
+        { period: "2026-05", snapshot_id: "snapshot-may", value: 10000, display_value: "10,000", status: "ready" },
+        { period: "2026-06", snapshot_id: "snapshot-june", value: -5000, display_value: "-5,000", status: "ready" },
+        { period: "2026-07", snapshot_id: "snapshot-july", value: 20000, display_value: "20,000", status: "ready" },
+      ],
+    });
+    const { container } = render(<CockpitOverviewApp load={vi.fn().mockResolvedValue(data)} loadSupplement={loadSupplement} />);
+    await screen.findAllByTestId("cockpit-kpi");
+    const card = container.querySelector('[data-metric="operating_profit"]');
+    const bars = card?.querySelectorAll('[data-testid="cockpit-kpi-bars"] rect');
+    expect(bars).toHaveLength(3);
+    expect(Number(bars?.[0]?.getAttribute("y"))).toBeLessThan(Number(bars?.[1]?.getAttribute("y")));
+    expect(card?.querySelector('[data-testid="cockpit-kpi-sparkline"]')).toBeNull();
+  });
+
   it("展示演示数据源提示（不解除 C 级门禁）", async () => {
     const load = vi.fn().mockResolvedValue(overview());
     render(<CockpitOverviewApp load={load} loadSupplement={loadSupplement} />);
