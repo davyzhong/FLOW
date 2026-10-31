@@ -3,9 +3,9 @@ doc_id: FLOW-HANDOFF-STRATEGY-20260912
 title: FLOW 项目交接文档
 doc_type: navigation
 status: current
-version: 17.18
+version: 17.19
 created_at: 2026-09-12
-updated_at: 2026-10-30
+updated_at: 2026-10-31
 owner: FLOW
 applies_to: repository
 ---
@@ -13,6 +13,20 @@ applies_to: repository
 # FLOW 项目交接文档
 
 > 本文档是下一位 Agent 接手的唯一入口。项目唯一权威状态以 [CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md) 为准；本文档提供接手上下文、踩坑记录和下一步操作指引。
+
+---
+
+### 2026-10-31 会话结束交接（当前有效）
+
+**当前任务与状态。** 本会话的任务是复核概念板图表统一是否完成，并把 README 中旧视觉截图换成最终实测截图；现已完成。`main` 已与 `origin/main` 同步，工作区干净。唯一权威状态见[当前路线图](docs/50_plans/CURRENT_ROADMAP.md)：17 项中完成 12、实际执行中 0、排队 3、暂停 1、外部条件受限 1。K3/K4–K6 已取消，不读取或整理全量知识库；银行流水交叉核对没有启动。当前没有正在执行的产品任务，下一产品方向尚未裁决。
+
+**已经完成。** 图表统一代码 `e7e2be03d27ff472894ce35170e534c411a47d67` 的准确 SHA CI run `40985033178` 为 28/28 success；隔离演示数据的 20 路由 × 3 视口矩阵 60/60 ready，重点截图已人工核看，详见[概念板图表收尾验收](docs/60_delivery/verification/2026-10-30--concept-chart-alignment-closeout-v1.md)。本会话将[README](README.md)的首屏、驾驶舱、费用、现金流、盈利、财报、数据、调查、报告及登录展示换成最终真实截图；旧导入操作、单机原型和 P5 静态报告图标明历史批次，同步[截图索引](docs/assets/screenshots/README.md)与[文档导航](docs/README.md)，修正 README 中仍称 K3 为当前队首的文字。文档提交 `ddaab93bafa8fdaa5fa7068870d823b410011332` 已推送 `origin/main`；准确 SHA CI run `41067606713` success。本地 M6 文档门禁、README 相对链接、`git diff --check` 与独立复核均通过。
+
+**卡住的问题与边界。** 本任务无阻断项。原生浏览器 200% 缩放尚未直接验收，390 CSS px 的手机视口结果不能代替；待设备和可控缩放工具具备条件后单独补验。60/60 矩阵证明对应代码与隔离数据下的页面加载及版面状态，不代表每个交互状态都重新采样。历史截图和历史交接段落保留证据身份，不作为当前视觉或任务状态来源。
+
+**下一步计划。** 接手先 `git pull --ff-only origin main`，只读本节、[PROJECT_STATE](docs/00_start_here/PROJECT_STATE.md)和唯一[CURRENT_ROADMAP](docs/50_plans/CURRENT_ROADMAP.md)。如用户指定新产品方向，先按项目规则更新正式工作包及路线图、通过 M1、提交推送，再实施；不要自行恢复已取消的 K3。若用户要补原生 200% 验收，使用隔离数据和实际浏览器缩放，记录代码 SHA 与可复现的截图/结果，再更新验证文档。
+
+**踩过的坑。** 旧版 README 同时存在 10 月 19/24/29 日截图和“当前界面”表述，单换首屏会留下自相矛盾的后文；本轮同时修正导览、进度表、Mermaid 和结语。10 月 29 日的导入操作截图是真实功能证据，但其图表外观早于最终修正，须折叠并标为历史。README 的 HTML 折叠标签有 `<details open>`，检查成对时应把它计入开启标签。CI 结论须按精确提交 SHA 核对；不能把图表代码 `e7e2be03` 的运行结果当作 README 文档提交 `ddaab93b` 的 CI 结果。
 
 ---
 
