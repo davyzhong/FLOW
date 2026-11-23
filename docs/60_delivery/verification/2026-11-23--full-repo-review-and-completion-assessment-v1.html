@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FLOW 全仓 code review 与完成度评估（2026-11-23）</title>
+<meta name="description" content="基线 f22cb93a 的全仓代码审查、门禁复跑结果与三把尺子的完成度评估">
+<style>
+  :root {
+    --bg: #fbfbf9;
+    --surface: #ffffff;
+    --ink: #1c1e21;
+    --ink-2: #4a5058;
+    --ink-3: #7b838d;
+    --rule: #e2e2dd;
+    --rule-2: #cfd0ca;
+    --p0: #b3261e;
+    --p1: #b06a00;
+    --p2: #2f6b8f;
+    --p3: #6b7280;
+    --ok: #1c6b45;
+    --bad: #b3261e;
+    --na: #7b838d;
+    --accent: #1c1e21;
+    max-width: none;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #16181b;
+      --surface: #1d2024;
+      --ink: #e8e8e4;
+      --ink-2: #b4b8bd;
+      --ink-3: #8b9198;
+      --rule: #2e3237;
+      --rule-2: #3d4248;
+      --p0: #ff6b5f;
+      --p1: #e0a355;
+      --p2: #74b3d8;
+      --p3: #9aa1a9;
+      --ok: #5cc48c;
+      --bad: #ff6b5f;
+      --na: #9aa1a9;
+      --accent: #e8e8e4;
+    }
+  }
+  * { box-sizing: border-box }
+  html { -webkit-text-size-adjust: 100% }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 16px/1.75 -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB",
+          "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    font-variant-numeric: tabular-nums;
+  }
+  code, .mono {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    font-size: .875em;
+  }
+  code { background: color-mix(in srgb, var(--rule) 55%, transparent); padding: .1em .35em; border-radius: 3px }
+  a { color: inherit; text-decoration: underline; text-underline-offset: 2px }
+
+  .wrap { max-width: 840px; margin: 0 auto; padding: 0 24px 96px }
+
+  header.doc {
+    padding: 72px 0 32px;
+    border-bottom: 2px solid var(--accent);
+  }
+  .kicker {
+    font-size: 12px; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--ink-3); margin: 0 0 18px;
+  }
+  h1 { font-size: clamp(28px, 5vw, 40px); line-height: 1.25; margin: 0 0 20px; letter-spacing: -.01em }
+  .lede { font-size: 17.5px; color: var(--ink-2); margin: 0; max-width: 68ch }
+  .meta {
+    display: flex; flex-wrap: wrap; gap: 6px 22px;
+    margin-top: 26px; font-size: 13px; color: var(--ink-3);
+  }
+  .meta span { display: inline-flex; gap: 7px; align-items: baseline }
+  .meta b { color: var(--ink-2); font-weight: 600 }
+
+  h2 {
+    font-size: 21px; line-height: 1.4; margin: 56px 0 6px;
+    padding-top: 22px; border-top: 1px solid var(--rule-2); letter-spacing: -.005em;
+  }
+  h2 .n { color: var(--ink-3); font-weight: 500; margin-right: 10px; font-size: 15px }
+  h3 { font-size: 16px; margin: 34px 0 8px }
+  p { margin: 14px 0 }
+  .sub { color: var(--ink-2); font-size: 15px; margin: 4px 0 0; max-width: 68ch }
+
+  table { width: 100%; border-collapse: collapse; margin: 20px 0 8px; font-size: 14.5px }
+  caption { caption-side: top; text-align: left; font-size: 13px; color: var(--ink-3); padding-bottom: 8px }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--rule); vertical-align: top }
+  thead th { border-bottom: 1.5px solid var(--accent); font-weight: 600; font-size: 13px; color: var(--ink-2) }
+  tbody tr:last-child td { border-bottom: 1px solid var(--rule-2) }
+  td.res { white-space: nowrap; font-weight: 600 }
+  .pass { color: var(--ok) }
+  .fail { color: var(--bad) }
+  .none { color: var(--na); font-weight: 400 }
+
+  .find {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--p3);
+    border-radius: 6px;
+    padding: 20px 22px 18px;
+    margin: 18px 0;
+  }
+  .find.p0 { border-left-color: var(--p0) }
+  .find.p1 { border-left-color: var(--p1) }
+  .find.p2 { border-left-color: var(--p2) }
+  .find > .head { display: flex; flex-wrap: wrap; gap: 10px; align-items: baseline; margin-bottom: 4px }
+  .find h4 { font-size: 16px; margin: 0; line-height: 1.5; flex: 1 1 340px }
+  .badge {
+    font-size: 11px; letter-spacing: .08em; font-weight: 700;
+    padding: 2px 8px; border-radius: 999px; white-space: nowrap;
+    border: 1px solid currentColor;
+  }
+  .badge.p0 { color: var(--p0) } .badge.p1 { color: var(--p1) }
+  .badge.p2 { color: var(--p2) } .badge.p3 { color: var(--p3) }
+  .badge.verified { color: var(--ok); font-weight: 600; letter-spacing: 0 }
+  .badge.relaid { color: var(--na); font-weight: 600; letter-spacing: 0 }
+  .find dl { margin: 12px 0 0 }
+  .find dt { font-size: 12px; letter-spacing: .1em; color: var(--ink-3); margin-top: 14px }
+  .find dd { margin: 2px 0 0; font-size: 15px }
+  .find dd.loc { font-size: 13.5px; color: var(--ink-2); word-break: break-all }
+
+  .list { margin: 16px 0 0; padding-left: 22px }
+  .list li { margin: 9px 0 }
+  .list.tight li { margin: 6px 0; font-size: 15px }
+
+  .callout {
+    background: var(--surface); border: 1px solid var(--rule-2); border-radius: 6px;
+    padding: 18px 22px; margin: 24px 0;
+  }
+  .callout .h { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 8px }
+  .callout p { margin: 8px 0 }
+
+  .next { counter-reset: x; list-style: none; padding: 0; margin: 18px 0 0 }
+  .next li {
+    counter-increment: x; position: relative; padding: 14px 0 14px 46px;
+    border-bottom: 1px solid var(--rule); font-size: 15.5px;
+  }
+  .next li:last-child { border-bottom: 1px solid var(--rule-2) }
+  .next li::before {
+    content: counter(x); position: absolute; left: 0; top: 14px;
+    width: 28px; height: 28px; border: 1px solid var(--rule-2); border-radius: 50%;
+    display: grid; place-items: center; font-size: 13px; color: var(--ink-2);
+    font-variant-numeric: tabular-nums;
+  }
+  .next .eff { font-weight: 700; font-size: 12px; letter-spacing: .06em; margin-right: 8px }
+  .eff.s { color: var(--ok) } .eff.m { color: var(--p1) } .eff.l { color: var(--p0) }
+
+  footer.doc {
+    margin-top: 64px; padding-top: 22px; border-top: 2px solid var(--accent);
+    font-size: 13px; color: var(--ink-3);
+  }
+  @media print {
+    body { background: #fff; font-size: 11pt }
+    .wrap { max-width: none; padding: 0 }
+    .find, .callout, table, .next li { break-inside: avoid }
+    header.doc { padding-top: 0 }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="doc">
+  <p class="kicker">FLOW · 交付验证 · FLOW-VERIFY-FULL-REVIEW-20261123-001</p>
+  <h1>全仓 code review 与完成度评估</h1>
+  <p class="lede">
+    基线 <code>f22cb93a</code>（较上次同步前进 840 个提交、1471 文件、+43 万行）。
+    工程主体已成型且证据纪律高于均值，但<strong>当前 HEAD 在今天的日历下门禁不再全绿</strong>，
+    且新交付的「真实数据导入」子系统整体游离在 RBAC 与审计合同之外。
+  </p>
+  <div class="meta">
+    <span>日期 <b>2026-11-23</b></span>
+    <span>基线 <b>f22cb93a</b></span>
+    <span>结论 <b>可继续推进，两项 P0 需先处置</b></span>
+    <span>同步状态 <b>本地 == origin/main</b></span>
+  </div>
+</header>
+
+<h2 id="s1"><span class="n">01</span>验证边界：我实际跑过的命令</h2>
+<p class="sub">
+  静态质量与文档合同可本地复现且全绿；单元与鉴权一致性两处红灯；数据库型集成 / E2E / 前端构建因本机无
+  Docker、无 Postgres、无 <code>node_modules</code> 而无法复现，48 个 CI run 编号因 <code>gh</code>
+  未认证也无法独立核验——所以「CI 全绿」在本报告中始终是<b>转述，不是证据</b>。
+</p>
+
+<table>
+  <caption>门禁复跑结果（列：命令 / 结果）</caption>
+  <thead><tr><th scope="col">命令</th><th scope="col">结果</th></tr></thead>
+  <tbody>
+    <tr><td><code>ruff check src tests</code></td><td class="res pass">PASS</td></tr>
+    <tr><td><code>mypy src</code></td><td class="res pass">PASS（227 文件）</td></tr>
+    <tr><td><code>python -m unittest discover -s scripts/tests</code></td><td class="res pass">PASS 171/171</td></tr>
+    <tr><td><code>pytest scripts/tests/test_verify_workflow_jobs.py</code></td><td class="res pass">PASS 26/26</td></tr>
+    <tr><td><code>make docs-check</code>（<code>check_docs.py --phase m6</code>）</td><td class="res pass">PASS（358 docs，0 errors）</td></tr>
+    <tr><td><code>plan_views.py --check</code> / <code>links.py --check</code></td><td class="res pass">PASS</td></tr>
+    <tr><td>CI <code>unit</code> job 选择集（同 CI 的 no-DB <code>DATABASE_URL</code>）</td><td class="res fail">3 failed / 39 passed / 1 skipped</td></tr>
+    <tr><td><code>pytest tests/security</code></td><td class="res fail">1 failed / 59 passed</td></tr>
+    <tr><td><code>make contracts-check</code>、<code>pnpm -r lint/typecheck</code>、web e2e、integration/e2e/smoke</td><td class="res none">未能执行（缺依赖与运行时，非代码结论）</td></tr>
+  </tbody>
+</table>
+
+<h2 id="s2"><span class="n">02</span>发现清单</h2>
+<p class="sub">
+  每条标注证据等级：<span class="badge verified">我已核实</span> 表示我亲自复现或直接读码确认；
+  <span class="badge relaid">转述</span> 表示来自并行审计、方向与我读到的代码一致但我未独立复现。
+</p>
+
+<div class="find p0">
+  <div class="head">
+    <span class="badge p0">P0-1</span>
+    <h4>时间依赖型门禁已静默失效：<code>unit</code> job 今天必红</h4>
+    <span class="badge verified">我已核实 · 已复现</span>
+  </div>
+  <dl>
+    <dt>位置</dt>
+    <dd class="loc"><code>services/api/tests/api/test_auth_boundary.py:73,77</code> → <code>services/api/src/flow_api/main.py:51-58</code> · <code>settings.py:26</code></dd>
+    <dt>事实</dt>
+    <dd>默认 <code>flow_legacy_bearer_cutoff = 2026-10-31T15:59:59+00:00</code> 已过 23 天。测试只要注入 <code>AUTH_TOKEN</code> 再 <code>create_app()</code> 就触发 <code>SystemExit(2)</code>，3 条 legacy 边界测试失败。</dd>
+    <dt>为什么没人发现</dt>
+    <dd><code>ci.yml</code> 只在 <code>push</code> / <code>pull_request</code> 触发，<strong>没有 <code>schedule</code></strong>（<code>screenshot.yml</code> 反而有每日 cron）。2026-11-01 起无提交重跑，仓库处于「提交时刻绿、当前红」。</dd>
+    <dt>附带后果</dt>
+    <dd>任何按 <code>.env.example:10</code> 配了 <code>AUTH_TOKEN</code> 的真实部署今天启动即失败。单机默认路径（无 token）只 WARN，不受影响。</dd>
+    <dt>建议</dt>
+    <dd>① 测试显式注入远未来 cutoff（同目录 <code>tests/security/test_principal_resolution.py:37-38</code> 已是这个写法，照抄即可）；② 给 <code>ci.yml</code> 加每日 <code>schedule</code>；③ 把 cutoff 默认值的三处重复（<code>settings.py:26</code>、<code>main.py:127</code>、<code>security/principal.py:106</code>）收敛成单一常量。</dd>
+  </dl>
+</div>
+
+<div class="find p0">
+  <div class="head">
+    <span class="badge p0">P0-2</span>
+    <h4><code>importer</code> 子系统 10 条路由无授权、无审计、无登记</h4>
+    <span class="badge verified">我已核实</span>
+  </div>
+  <dl>
+    <dt>位置</dt>
+    <dd class="loc"><code>services/api/src/flow_api/api/routes/importer.py:38-176</code> · <code>api/router.py:26</code> · <code>docs/40_specs/security/route-inventory-v1.tsv</code></dd>
+    <dt>事实</dt>
+    <dd><code>/api/v1/importer/*</code> 共 10 条端点，router 级只挂 <code>Depends(require_bearer_auth)</code>；handler 签名里<strong>完全没有 Principal</strong>，<code>flow_api/importer/</code> 整个模块对 <code>principal/role/audit</code> 零引用；TSV 中 <code>importer</code> 关键字命中 0 行。</dd>
+    <dt>后果</dt>
+    <dd>任何认证主体（含 <code>ai_analyst</code>）都能 <code>POST /dataset/{id}/publish</code> 发布治理快照、<code>DELETE /dataset/{id}</code> 删数据，且不产生 <code>authorization_decision</code> 审计行。S01 退出条件里的「AI 无发布权」只在四阶段 ABI 那条门上成立，导入链是另一扇门。</dd>
+    <dt>证据</dt>
+    <dd>守卫测试本身已判红——<code>tests/security/test_route_policy.py:151-159</code> 断言 96 条挂载 vs 86 条登记；<code>PENDING_MOUNT_ROUTES</code> 白名单测试（:162-168）为空，说明这 10 条未走「登记先行」过渡。</dd>
+    <dt>建议</dt>
+    <dd>登记 TSV + 接 <code>require_action</code>（发布动作应复用四阶段 ABI 而不是自己 <code>session.commit()</code>），并把 <code>tests/security/</code> 纳入 CI（见 P1-4）。</dd>
+  </dl>
+</div>
+
+<div class="find p1">
+  <div class="head">
+    <span class="badge p1">P1-3</span>
+    <h4>生产报告 HTML 里归母→总额口径静默回退，标签不变</h4>
+    <span class="badge verified">我已读码确认</span>
+  </div>
+  <dl>
+    <dt>位置</dt>
+    <dd class="loc"><code>services/api/src/flow_api/statements/objective_report_html.py:271-276</code></dd>
+    <dt>事实</dt>
+    <dd><code>net_profit = attr_current if attr_current is not None else raw("is.net_profit", ...)</code>，而标签在 <code>:317</code>、<code>:390</code>、<code>:418</code>、<code>:485</code>、<code>:593</code> 硬编码「归母净利润」；<code>:296</code> 的 <code>roe = net_profit / bs.equity</code> 更叠加了「分子随回退漂移、分母恒为含少数股东权益」的口径错配。</dd>
+    <dt>影响</dt>
+    <dd>同一页面在不同报告上，同名标签对应不同口径的实际数值，违反「口径必须显式标注」红线。这是产品链路（发布报告），不只是资料库。</dd>
+    <dt>建议</dt>
+    <dd>回退触发时标签随值切换为「净利润（总额）」，或 payload 带 typed <code>caliber</code> 字段供渲染；禁止固定文案。</dd>
+  </dl>
+</div>
+
+<div class="find p1">
+  <div class="head">
+    <span class="badge p1">P1-4</span>
+    <h4>最关键的一致性守卫不在任何 CI job 里</h4>
+    <span class="badge verified">我已核对 CI 配置</span>
+  </div>
+  <dl>
+    <dt>位置</dt>
+    <dd class="loc"><code>.github/workflows/ci.yml:72</code>（unit 只跑 <code>tests/security/test_authorization.py</code>）· <code>scripts/integration_test_shards.py:16</code>（分片 ROOTS 仅 integration/investigation/copilot/api）</dd>
+    <dt>事实</dt>
+    <dd><code>tests/security/</code> 其余文件与 <code>test_route_policy.py</code> 双向漂移守卫从不被 CI 执行；同目录 <code>test_principal_resolution.py</code> 同样不在任何 job 内。</dd>
+    <dt>影响</dt>
+    <dd>P0-2 的脱钩能长期存在，正是因为这条探针不跑。</dd>
+    <dt>建议</dt>
+    <dd>把 <code>tests/security/</code>（除需 DB 者）并入 unit job；修红后设为 required check。</dd>
+  </dl>
+</div>
+
+<div class="find p1">
+  <div class="head">
+    <span class="badge p1">P1-5</span>
+    <h4>静态资料库把混口径自算均值包装成「行业」结论</h4>
+    <span class="badge verified">我已读码确认</span>
+  </div>
+  <dl>
+    <dt>位置</dt>
+    <dd class="loc"><code>scripts/build_static_library_site.py:1162-1168</code>（<code>??</code> 跨口径回退）、<code>:1108</code>、<code>:1140</code>（同类回退）、<code>:1336</code>（行业领先/平均/末位）、<code>:1371</code>、<code>:1395-1396</code>（ROE 行业均值）；另一生成器 <code>scripts/rich_report.py:231</code></dd>
+    <dt>事实</dt>
+    <dd><code>m["roe"] = ratio(m["attr_net_profit"], m["equity"])</code> —— 分子归母、分母总权益，天然混口径。</dd>
+    <dt>影响</dt>
+    <dd>5 家异行业样本自算均值称「行业均值」并给出领先/末位判定，同时两类口径公司进同一张 ROE 降序榜。</dd>
+    <dt>建议</dt>
+    <dd>改「样本均值」、删判定措辞、缺归母项返回 null 而非回退；口径标签写进渲染文本。</dd>
+  </dl>
+</div>
+
+<div class="find p1">
+  <div class="head">
+    <span class="badge p1">P1-6</span>
+    <h4>多数 e2e / 验收脚本默认打到常驻开发库，护栏未泛化</h4>
+    <span class="badge verified">我已抽查确认</span>
+  </div>
+  <dl>
+    <dt>位置</dt>
+    <dd class="loc"><code>scripts/test_analysis_invariants.sh:6,14</code>（<code>alembic upgrade head</code>）· <code>scripts/test_statements_e2e.sh:5,35-36</code>（迁移 + 写种子）· <code>acceptance.sh:7</code>、<code>test_publishing_golden.sh:7</code>、<code>test_investigation_e2e.sh:4</code>、<code>render_golden.py:39</code>、<code>generate_objective_report_pdfs.py:23</code></dd>
+    <dt>事实</dt>
+    <dd>默认库名均为 <code>/flow</code>；带常驻库 fail-closed 拦截的只有 <code>test_user_closure_e2e.sh</code>、<code>u8d_acceptance.sh</code>、<code>verify_s01_upgrade_from_u8.sh</code>（加 <code>test_dashboard.sh</code>）。CI 全局 env 也写 <code>/flow</code>，本地跑即等同操作真实开发库。</dd>
+    <dt>影响</dt>
+    <dd>与 2026-09-27 误写常驻库事故同模式——教训未被泛化为统一守护。</dd>
+    <dt>建议</dt>
+    <dd>抽一个公共 guard（非 CI 且库名为 <code>flow</code> 时拒绝执行，配显式逃逸变量），或统一默认 <code>flow_test</code>。</dd>
+  </dl>
+</div>
+
+<div class="find p1">
+  <div class="head">
+    <span class="badge p1">P1-7</span>
+    <h4>legacy 冻结身份未按配置生效</h4>
+    <span class="badge relaid">转述 · 方向与我读到的代码一致</span>
+  </div>
+  <dl>
+    <dt>位置</dt>
+    <dd class="loc"><code>services/api/src/flow_api/api/auth.py:333-339</code></dd>
+    <dt>事实</dt>
+    <dd>legacy token 命中后查询「任意一条」active <code>service_account</code> binding，未按 <code>FLOW_LEGACY_ACTOR_ID/ENTERPRISE_ID</code> 过滤；这两个字段全仓仅在 <code>main.py:66</code> 做存在性检查。多条 binding 时 <code>session.scalar</code> 无 <code>ORDER BY</code>，返回不确定行。</dd>
+    <dt>影响</dt>
+    <dd>违反规格 §3.2「完全匹配 binding」。仅在启用 legacy token 时暴露，单机默认路径不触发。</dd>
+  </dl>
+</div>
+
+<div class="find p2">
+  <div class="head">
+    <span class="badge p2">P2</span>
+    <h4>中风险（10 项）</h4>
+  </div>
+  <ul class="list tight">
+    <li><b>8 · 审计写失败缺运维可观测面</b>（<code>security/audit_writer.py:33-53</code>、<code>api/auth.py:59-67</code>）：fail-closed 语义本身正确（未注册 / commit 失败一律 <code>AuditUnavailable</code>→503，且有通过的测试），但 <code>main.py:137-139</code> 注册时不传 <code>on_write_failure</code>，生产 DB 抖动只留 error 日志、计数为零。</li>
+    <li><b>9 · <code>flow_env</code> 默认 <code>development</code> 是 fail-open 默认值</b>（<code>settings.py:14</code>）：忘设生产环境变量会跳过 identity bindings 启动校验；缓解是 dev principal 还需 <code>FLOW_DEV_ACTOR_ID</code> 且该值无默认。建议默认值必填。</li>
+    <li><b>10 · append-only 只在 PostgreSQL 成立</b>（<code>migrations/versions/0026_security_audit.py:130-154</code>）：无 <code>DATABASE_URL</code> 时回退 SQLite，而单机原型正是 SQLite 栈——「审计不可改」在默认交付形态下不成立，需文档明确或加拦截。</li>
+    <li><b>11 · 前端 DELETE 链路 405</b>（<code>apps/web/app/api/v1/[...path]/route.ts:73-83</code> 只导出 GET/POST/PUT）：我已确认 <code>lib/api/client.ts:280</code> 发 DELETE、后端 <code>importer.py:162</code> 有 DELETE、UI 上 <code>components/data/import-wizard.tsx:242</code> 有可见「删除」按钮且 <code>remove()</code> 无 try/catch。vitest 把 api client 整体 mock 掉，所以单测全绿也发现不了。</li>
+    <li><b>12 · 详情页 <code>/investigations/[findingId]</code> 不在 <code>navigation.spec.ts</code> 守护清单</b>（该页确实包裹了 AppShell）。</li>
+    <li><b>13 · 视觉统一只达成于 token/JS 层</b>：<code>components/cockpit/cockpit.css</code> 仍有 132 处硬编码 hex、<code>investigation.css</code> 52 处，且 <code>.kpi__sparkline</code>、<code>--dupont</code> 存在重复选择器块（补丁式追加未清理）。</li>
+    <li><b>14 · 数值格式化三套并存</b>：共享 <code>cockpit/number-format.ts</code> 之外，<code>investigations-index.tsx:29-35</code>、<code>statement-view.ts:39-43</code>、<code>kpi-card.tsx:89</code> 各有本地舍入路径，同一金额跨页可能显示不一致；共享 formatter 归属也错位（放在 <code>components/cockpit/</code> 却被 statements 反向 import）。</li>
+    <li><b>15 · <code>holdout_runs/2026-09-29-adapter-v3</code> 与 <code>…first-run-v3</code> 是零引用孤儿产物</b>。</li>
+    <li><b>16 · 7 个重要生成器无 CI 覆盖</b>（含 <code>build_static_library_site.py</code>、<code>rich_report.py</code>），且 <code>docs/library/index.html</code> 已入库但生成器无 <code>--check</code> 模式——资料库与代码可静默漂移，杜邦问题正是这样长期潜伏。</li>
+    <li><b>17 · 治理文档「唯一真相」机制逼近重构阈值</b>：<code>PROJECT_STATE.md</code> 104 行内堆叠约 20 个日期段，其中 <code>:29</code>、<code>:35</code>、<code>:47</code> 仍以现在时写「唯一执行项/唯一队首」，与顶部 <code>:15</code> 互斥且未逐段标注失效；<code>HANDOFF.md:78</code> 的「队列 18 行 / 暂停 2」与路线图 17 项 / 暂停 1 不一致。派生 <code>views/</code> 与登记表状态核对无冲突，机制未失效，但可读性已在恶化。</li>
+  </ul>
+</div>
+
+<div class="find">
+  <div class="head">
+    <span class="badge p3">P3</span>
+    <h4>低风险 / 信息项（9 项）</h4>
+  </div>
+  <ul class="list tight">
+    <li><b>18</b> 鉴权每请求占 2 条连接（auth session + policy 只读 session）；CI 侧 uvicorn 多 worker 时逼近默认 QueuePool 上限，值得压测。</li>
+    <li><b>19</b> <code>apps/web/lib/api/session.ts:6</code> 的会话签名密钥默认字面量 <code>flow-dev-session-key-1</code> 兜底，生产忘配即「可伪造已鉴权会话」（单机默认 <code>AUTH_TOKEN=""</code> 时不构成漏洞）。</li>
+    <li><b>20</b> 401 审计存 <code>sha256(Authorization)[:12]</code>（<code>auth.py:380</code>），低熵 token 可离线验证摘要。</li>
+    <li><b>21</b> <code>redaction.py:24-29</code> 只脱敏 <code>authorization/cookie/password/token</code> 四个键，同语义变体（<code>accessToken</code>、<code>x-api-key</code>）落原文，建议改子串匹配 + 新增键回归测试。</li>
+    <li><b>22</b> <code>analysis/objective.py:55-61</code> 目录经 <code>Path.cwd()</code> 上溯解析，工作目录敏感；<code>analyze()</code> 不回带 <code>mapping_version</code>，事后追溯依赖当前别名表默认值。</li>
+    <li><b>23</b> <code>dict</code>/<code>metric_library</code> 的 <code>benchmark</code> 自由文本（如 quick_ratio「经验参考约 1」）经 <code>api/routes/metric_library.py:181</code> 透出，多数无行业绑定，属 C06 边缘。</li>
+    <li><b>24</b> <code>scripts/audit_visual_language_accessibility.mjs:14</code> 直接覆写已入库的历史验收工件 <code>visual-language-20261024/axe-results.json</code>（HANDOFF ② 已自曝一次还原）。</li>
+    <li><b>25</b> <code>var/metric_library_audit.jsonl</code> 于 <code>5d085b4a</code> 删除：内容为 189 行 <code>actor:"seed"</code> 重复审计噪声，属 gitignore 下的运行时工件、<strong>不在 AGENTS.md 不可变档案路径内</strong>，但提交信息未单列删除理由。</li>
+    <li><b>26 · 术语订正</b>：本报告早期草稿沿用「C14」指代「无判定措辞」红线，经核 <code>DECISION_INDEX.md</code> <strong>无 C14 决策条目</strong>（唯一命中是竞品文件 <code>docs/knowledge-base/09_competitive/C14-pigment.md</code>）；该红线应引 D049。</li>
+  </ul>
+</div>
+
+<h2 id="s3"><span class="n">03</span>完成度评估：三把尺子给出三个不同答案</h2>
+<table>
+  <caption>列：尺子 / 读数 / 说明</caption>
+  <thead><tr><th scope="col">尺子</th><th scope="col">读数</th><th scope="col">说明</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>路线图口径</td>
+      <td class="res"><strong>12/17 = 71%</strong></td>
+      <td>执行中 0、排队 3、暂停 1、外部受限 1。逐行数表确认，<code>CURRENT_ROADMAP.md:20</code> 宣称与表体一致；队首空转，等用户裁决方向。</td>
+    </tr>
+    <tr>
+      <td>战略目标口径</td>
+      <td class="res"><strong>1/3 达成</strong></td>
+      <td>G1 单机原型已交付；G3 公开 C 级维持 <strong>No-Go</strong>（完整独立 oracle 0/14、泛化留出全败）；G4 内部月度工作台 gated，未启动。</td>
+    </tr>
+    <tr>
+      <td>可复核证据口径</td>
+      <td class="res"><strong>约 8/12<br>CI 宣称 0 项</strong></td>
+      <td>12 项完成中我本地硬核到的约 8 项。抽样 31/31 个被引用 SHA 全部存在且在 main 祖先链上（纪律极好）；但 48 个 CI run 号因 <code>gh</code> 未认证无法查证，今天实际复跑结果见 §01。</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="callout">
+  <p class="h">工程体量快照</p>
+  <p>
+    20 条 Web 路由 · 96 条挂载 API 端点（86 条已登记策略）· 32 个 PostgreSQL 迁移 + 5 个 SQLite 迁移 ·
+    182 个 API 测试文件 / 863 个测试函数 · 20 个 e2e spec / 89 个用例 ·
+    649 份 Markdown 文档（358 份纳入元合同）· 101 份验证工件。
+  </p>
+</div>
+
+<h2 id="s4"><span class="n">04</span>我剔除的三条「审计发现」（诚实登记）</h2>
+<p class="sub">并行审计给出的结论里有三条我复核后判定不成立，未计入上表，避免它们混进后续执行依据。</p>
+<ol class="list">
+  <li><b>「<code>scripts/seed_p5_statements.py</code> 直接创建 <code>super_admin</code> 角色」</b>——该文件不存在（实为 <code>.sh</code>），且全仓 grep <code>super_admin</code> <strong>零命中</strong>；<code>seed_dev_principal.py</code> 只授 <code>analyst</code> 与 <code>service_account</code>，<code>.sh</code> 里还有注释说明 RoleBinding 已单源化。</li>
+  <li><b>「<code>route_policy.py:326</code> 对 <code>audit.read</code> 特殊放行」</b>——全仓 src 零命中 <code>audit.read</code>，引用行号处的代码是 <code>_public_ref()</code>。</li>
+  <li><b>「durable 审计写失败被吞掉、请求照常放行」</b>——与 <code>audit_writer.py:42-53</code> 相反（明确 <code>raise AuditUnavailable</code>），且有通过的 fail-closed 测试；真实缺口是「无告警回调」，已降级为 P2-8。</li>
+</ol>
+
+<h2 id="s5"><span class="n">05</span>强项：值得保留的模式</h2>
+<ul class="list">
+  <li>静态与文档门禁可一键本地全绿；<code>test_verify_workflow_jobs.py</code> 26 项把 CI job 清单<strong>本身</strong>也纳入断言，防「CI 悄悄少跑一件事」。</li>
+  <li>审计链路完整：<code>AuditEvent</code> 带 <code>request_id</code>、<code>reason_code</code>、<code>policy_ref</code>；<code>redaction.py:53</code> 对原文拒绝路径做了「绝不上抛、绝不回退明文」测试；<code>test_fail_closed_when_nothing_configured</code> 实测通过。</li>
+  <li>数值正确性纪律：除零 / 负分母返回 typed 错误（<code>decimal_math.py:83-88</code>、<code>objective.py:184-199</code>），无静默填 0；字典与引擎有双实现互检（<code>test_dictionary_execution_parity.py</code>）；<code>MetricDefinition</code> 同码冲突三层守卫（<code>metrics/models.py:94-121</code> → DB 唯一约束 → <code>persistence.py:64-68</code>）+ 回归测试。</li>
+  <li>红线有真测试而非只有文档：<code>tests/analysis/test_threshold_and_caliber.py:21-34</code> 断言经验阈值对象无 <code>verdict</code> 字段、措辞禁词、无适用范围即拒输出；<code>experience_threshold_hint</code> 目前<strong>零生产调用方</strong>，弱契约处于潜伏态而非在用风险。</li>
+  <li>前端 AppShell 规范真实达成：19 条交互路由在 page.tsx / <code>workflow-nav.tsx</code> / <code>navigation.spec.ts</code> 三处完全一致，且有「每路由恰 1 链接」计数断言。</li>
+  <li>文档的自我否定勇气：路线图明确写了某些 run 是 <code>cancelled</code>/<code>failure</code>、不得描述为全绿；<code>715a2d6d</code> run 被并发取消一事如实自曝；C 级 No-Go 至今未被稀释。</li>
+  <li>原始档案红线：<code>validation/financial_reports/original/</code> 8 份 PDF 实测 SHA-256 与登记一致，未发现违反不可变档案保护的行为。</li>
+</ul>
+
+<h2 id="s6"><span class="n">06</span>建议的下一步（按投入产出排序）</h2>
+<p class="sub">S = 小改动，M = 中等，L = 需要结构性调整。<strong>均未获授权，按串行铁律不得自行启动。</strong></p>
+<ol class="next">
+  <li><span class="eff s">S</span><b>修 P0-1</b>：测试注入远未来 cutoff + <code>ci.yml</code> 加 <code>schedule</code>。这两步就能让「提交时刻绿」变成「持续绿」。</li>
+  <li><span class="eff m">M</span><b>修 P0-2</b>：<code>importer</code> 10 条路由登记 TSV 并接 <code>require_action</code>，发布改走四阶段 ABI；同时把 <code>tests/security/</code> 并入 CI。</li>
+  <li><span class="eff m">M</span><b>修 P1-3 / P1-5</b>：口径回退要么禁止、要么随值改标签；资料库删「行业」措辞、改「样本均值」。</li>
+  <li><span class="eff s">S</span><b>修 P2-11</b>：代理补导出 DELETE，并把该链路加进 e2e（现在被 mock 掩盖）。</li>
+  <li><span class="eff m">M</span><b>统一 <code>DATABASE_URL</code> 护栏</b>（P1-6），避免再次误写常驻库。</li>
+  <li><span class="eff l">L</span><b><code>PROJECT_STATE</code> 重构</b>：历史段落折叠到 <code>knowledge-base/</code> 只读侧车，正文只留当前事实——这是继续用这套状态纪律的前提。</li>
+  <li><b>队首方向待裁决</b>：路线图 / <code>HANDOFF:74</code> 列的 5 个候选里，② 银行流水与余额表交叉核对最贴合已交付链路；① 科目级映射扩展需要先修订「不双源」规则（即先动合同，再动代码）。</li>
+</ol>
+
+<h2 id="s7"><span class="n">07</span>未覆盖范围</h2>
+<p>
+  未连库执行 integration / e2e / smoke / perf / l0-baseline；未复现 web lint / typecheck / vitest /
+  Playwright（依赖未安装，按纪律未擅自安装）；未逐项比对运行时口径与静态页是否同源；
+  GitHub 上 CI 实际红绿状态未查证。
+</p>
+
+<footer class="doc">
+  <p>
+    来源：本报告是
+    <code>docs/60_delivery/verification/2026-11-23--full-repo-review-and-completion-assessment-v1.md</code>
+    （doc_id <code>FLOW-VERIFY-FULL-REVIEW-20261123-001</code>，v1.0，status draft）的 HTML 呈现版。
+    状态真相与执行队列仍以 <code>docs/50_plans/CURRENT_ROADMAP.md</code> 为唯一来源，
+    本文件为审计记录，不承载任务清单。
+  </p>
+  <p>commit_refs <code>f22cb93a</code> · 生成于 <code>2026-11-23</code></p>
+</footer>
+
+</div>
+</body>
+</html>
